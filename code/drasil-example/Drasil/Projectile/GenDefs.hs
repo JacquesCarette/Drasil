@@ -21,26 +21,17 @@ import Drasil.Projectile.TMods (accelerationTM, velocityTM)
 genDefns :: [GenDefn]
 genDefns = [rectVelGD, rectPosGD, velVecGD, posVecGD]
 
+-- TODO: after converting rectVelGD to an EquationalModel, this should be removed
 genDefns0 :: [GenDefn]
-genDefns0 = [rectVelGD, rectPosGD]
+genDefns0 = [rectVelGD]
 
 ----------
 rectVelGD :: GenDefn
 rectVelGD = gd (OthModel rectVelRC) (getUnit speed) (Just rectVelDeriv)
   [makeCiteInfo hibbeler2004 $ Page [8]] "rectVel" [{-Notes-}]
 
+-- TODO: This causes a collision due to `speed` being used by velMag in DataDefs!
 {-
-rectVelQD3 :: QDefinition 
-rectVelQD3 = mkQuantDef' speed (nounPhraseSent $ foldlSent_ 
-            [atStart rectilinear, sParen $ getAcc oneD, phrase velocity,
-             S "as a function" `sOf` phrase time, S "for", phrase QP.constAccel]) rectVelExpr
-
-rectVelQD2 :: QDefinition
-rectVelQD2 = fromEqn' "rectVel" (nounPhraseSent $ foldlSent_ 
-            [atStart rectilinear, sParen $ getAcc oneD, phrase velocity,
-             S "as a function" `sOf` phrase time, S "for", phrase QP.constAccel])
-            EmptyS (eqSymb iSpeed) Real rectVelExpr
-
 rectVelQD :: QDefinition 
 rectVelQD = mkQuantDef' speed (nounPhraseSent $ foldlSent_ 
             [atStart rectilinear, sParen $ getAcc oneD, phrase velocity,
@@ -80,17 +71,16 @@ rectVelDerivEqn2 = defint (eqSymb speed) (sy iSpeed) (sy speed) 1 $=
 
 ----------
 rectPosGD :: GenDefn
-rectPosGD = gd (OthModel rectPosRC) (getUnit scalarPos) (Just rectPosDeriv)
+rectPosGD = gd (EquationalModel rectPosQD) (getUnit scalarPos) (Just rectPosDeriv)
   [makeCiteInfo hibbeler2004 $ Page [8]] "rectPos" [{-Notes-}]
 
-rectPosRC :: RelationConcept
-rectPosRC = makeRC "rectPosRC" (nounPhraseSent $ foldlSent_ 
+rectPosQD :: QDefinition
+rectPosQD = mkQuantDef' scalarPos (nounPhraseSent $ foldlSent_ 
             [atStart rectilinear, sParen $ getAcc oneD, phrase position,
-             S "as a function" `sOf` phrase time, S "for", phrase QP.constAccel])
-            EmptyS rectPosRel
+             S "as a function" `sOf` phrase time, S "for", phrase QP.constAccel]) rectPosExpr
 
-rectPosRel :: Relation
-rectPosRel = sy scalarPos $= sy iPos + sy iSpeed * sy time + sy QP.constAccel * square (sy time) / 2
+rectPosExpr :: Relation 
+rectPosExpr = sy iPos + sy iSpeed * sy time + sy QP.constAccel * square (sy time) / 2
 
 rectPosDeriv :: Derivation
 rectPosDeriv = mkDerivName (phrase rectilinear +:+ phrase position)
@@ -103,7 +93,7 @@ rectPosDerivSents = [rectDeriv position velocity motSent iPos velocityTM,
       motSent = S "The motion" `sIn` makeRef2S velocityTM `sIs` S "now" +:+. phrase oneD
 
 rectPosDerivEqns :: [Expr]
-rectPosDerivEqns = [rectPosDerivEqn1, rectPosDerivEqn2, rectPosDerivEqn3, rectPosRel]
+rectPosDerivEqns = [rectPosDerivEqn1, rectPosDerivEqn2, rectPosDerivEqn3, relat rectPosQD]
 
 rectPosDerivEqn1, rectPosDerivEqn2, rectPosDerivEqn3 :: Expr
 rectPosDerivEqn1 = sy speed $= deriv (sy scalarPos) time

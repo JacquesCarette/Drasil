@@ -112,8 +112,8 @@ si = SI {
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
   _definitions = map (relToQD symbMap) iMods
-                 ++ getEqModQdsFromGd genDefns 
-                 ++ map (relToQD symbMap) genDefns0,
+                 ++ map (relToQD symbMap) genDefns0
+                 ++ getEqModQdsFromGd genDefns,
   _datadefs    = dataDefs,
   _configFiles = [],
   _inputs      = inputs,

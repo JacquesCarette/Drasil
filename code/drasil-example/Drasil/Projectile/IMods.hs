@@ -3,7 +3,7 @@ module Drasil.Projectile.IMods (iMods, landPosIM, messageIM, offsetIM, timeIM) w
 import Prelude hiding (cos, sin)
 
 import Language.Drasil
-import Theory.Drasil (InstanceModel, imNoDerivNoRefs, imNoRefs, qwC, ModelKinds (OthModel))
+import Theory.Drasil (InstanceModel, imNoDerivNoRefs, imNoRefs, qwC, ModelKinds (OthModel, EquationalModel), mkQuantDef')
 import Utils.Drasil
 
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
@@ -121,13 +121,15 @@ landPosDerivEqn3 = sy landPos $= sy launSpeed * cos (sy launAngle) * 2 * sy laun
 
 ---
 offsetIM :: InstanceModel
-offsetIM = imNoDerivNoRefs (OthModel offsetRC)
+offsetIM = imNoDerivNoRefs (EquationalModel offsetQD)
   [qwC landPos $ UpFrom (Exc, 0), qwC targPos $ UpFrom (Exc, 0)]
   (qw offset) [] "offsetIM" [landPosNote, landAndTargPosConsNote]
 
-offsetRC :: RelationConcept
-offsetRC = makeRC "offsetRC" (nounPhraseSP "offset") 
-  EmptyS $ sy offset $= sy landPos - sy targPos
+offsetExpr :: Expr
+offsetExpr = sy landPos - sy targPos 
+
+offsetQD :: QDefinition
+offsetQD = mkQuantDef' offset (nounPhraseSP "offset") offsetExpr
 
 ---
 messageIM :: InstanceModel

@@ -11,7 +11,7 @@ module Theory.Drasil (
   -- InstanceModel
   , InstanceModel
   , im, imNoDeriv, imNoRefs, imNoDerivNoRefs
-  , qwUC, qwC
+  , qwUC, qwC, getEqModQdsFromIm
   -- Theory
   , Theory(..), TheoryModel, tm, tmNoRefs
 ) where

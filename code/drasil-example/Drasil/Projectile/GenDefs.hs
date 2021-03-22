@@ -21,9 +21,9 @@ import Drasil.Projectile.TMods (accelerationTM, velocityTM)
 genDefns :: [GenDefn]
 genDefns = [rectVelGD, rectPosGD, velVecGD, posVecGD]
 
--- TODO: after converting rectVelGD to an EquationalModel, this should be removed
+-- TODO: after converting rectVelGD & rectPosGD to an EquationalModel, this should be removed
 genDefns0 :: [GenDefn]
-genDefns0 = [rectVelGD]
+genDefns0 = [rectVelGD, rectPosGD]
 
 ----------
 rectVelGD :: GenDefn
@@ -71,16 +71,17 @@ rectVelDerivEqn2 = defint (eqSymb speed) (sy iSpeed) (sy speed) 1 $=
 
 ----------
 rectPosGD :: GenDefn
-rectPosGD = gd (EquationalModel rectPosQD) (getUnit scalarPos) (Just rectPosDeriv)
+rectPosGD = gd (OthModel rectPosRC) (getUnit scalarPos) (Just rectPosDeriv)
   [makeCiteInfo hibbeler2004 $ Page [8]] "rectPos" [{-Notes-}]
 
-rectPosQD :: QDefinition
-rectPosQD = mkQuantDef' scalarPos (nounPhraseSent $ foldlSent_ 
+rectPosRC :: RelationConcept
+rectPosRC = makeRC "rectPosRC" (nounPhraseSent $ foldlSent_ 
             [atStart rectilinear, sParen $ getAcc oneD, phrase position,
-             S "as a function" `sOf` phrase time, S "for", phrase QP.constAccel]) rectPosExpr
+             S "as a function" `sOf` phrase time, S "for", phrase QP.constAccel])
+            EmptyS rectPosRel
 
-rectPosExpr :: Relation 
-rectPosExpr = sy iPos + sy iSpeed * sy time + sy QP.constAccel * square (sy time) / 2
+rectPosRel :: Relation
+rectPosRel = sy scalarPos $= sy iPos + sy iSpeed * sy time + sy QP.constAccel * square (sy time) / 2
 
 rectPosDeriv :: Derivation
 rectPosDeriv = mkDerivName (phrase rectilinear +:+ phrase position)
@@ -93,7 +94,7 @@ rectPosDerivSents = [rectDeriv position velocity motSent iPos velocityTM,
       motSent = S "The motion" `sIn` makeRef2S velocityTM `sIs` S "now" +:+. phrase oneD
 
 rectPosDerivEqns :: [Expr]
-rectPosDerivEqns = [rectPosDerivEqn1, rectPosDerivEqn2, rectPosDerivEqn3, relat rectPosQD]
+rectPosDerivEqns = [rectPosDerivEqn1, rectPosDerivEqn2, rectPosDerivEqn3, rectPosRel]
 
 rectPosDerivEqn1, rectPosDerivEqn2, rectPosDerivEqn3 :: Expr
 rectPosDerivEqn1 = sy speed $= deriv (sy scalarPos) time

@@ -1,8 +1,8 @@
 module Data.Drasil.Theories.Physics where
 
 import Language.Drasil
-import Theory.Drasil (DataDefinition, GenDefn, TheoryModel, ddNoRefs, gd, 
-  mkQuantDef, tmNoRefs)
+import Theory.Drasil (DataDefinition, GenDefn, TheoryModel, ddNoRefs, gd,
+  mkQuantDef, tmNoRefs, ModelKinds (OthModel))
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (body, component, constant, material_,
@@ -40,7 +40,7 @@ newtonSLDesc = foldlSent [S "The net", getTandS QP.force, S "on a",
 --
 
 weightGD :: GenDefn
-weightGD = gd weightRC (getUnit QP.weight) (Just weightDeriv) [weightSrc] 
+weightGD = gd (OthModel weightRC) (getUnit QP.weight) (Just weightDeriv) [weightSrc] 
   "weight" [{-Notes-}]
 
 weightRC :: RelationConcept
@@ -100,7 +100,7 @@ weightDerivSpecWeightEqn = sy QP.weight $= sy QPP.vol * sy QPP.specWeight
 --
 
 hsPressureGD :: GenDefn
-hsPressureGD = gd hsPressureRC (getUnit QP.pressure) Nothing
+hsPressureGD = gd (OthModel hsPressureRC) (getUnit QP.pressure) Nothing
   [hsPressureSrc] "hsPressure" [hsPressureNotes]
 
 hsPressureRC :: RelationConcept

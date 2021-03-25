@@ -9,7 +9,7 @@ import Drasil.PDController.References
 import Drasil.PDController.TModel
 
 import Language.Drasil
-import Theory.Drasil (InstanceModel, im, qwC)
+import Theory.Drasil (InstanceModel, im, qwC, ModelKinds (OthModel))
 import Utils.Drasil
 
 instanceModels :: [InstanceModel]
@@ -19,7 +19,7 @@ instanceModels = [imPD]
 
 imPD :: InstanceModel
 imPD
-  = im imPDRC
+  = im (OthModel imPDRC)
       [qwC qdSetPointTD $ UpFrom (Exc, 0), qwC qdPropGain $ UpFrom (Exc, 0),
        qwC qdDerivGain $ UpFrom (Exc, 0)]
       (qw qdProcessVariableTD)

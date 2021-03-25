@@ -5,7 +5,7 @@ module Drasil.SSP.GenDefs (normForcEq, bsShrFEq, resShr, mobShr,
 
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil
-import Theory.Drasil (GenDefn, gd)
+import Theory.Drasil (GenDefn, gd, ModelKinds (OthModel))
 import Utils.Drasil
 
 import Drasil.DocLang.SRS as SRS (physSyst)
@@ -54,29 +54,29 @@ generalDefinitions = [normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD,
 normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, effNormFGD, resShearWOGD, 
   mobShearWOGD, normShrRGD, momentEqlGD, sliceWghtGD, baseWtrFGD, 
   srfWtrFGD :: GenDefn
-normForcEqGD = gd normForcEq (getUnit totNrmForce)   (Just nmFEqDeriv)
+normForcEqGD = gd (OthModel normForcEq) (getUnit totNrmForce)   (Just nmFEqDeriv)
   [makeCite chen2005]                      "normForcEq"  [nmFEqDesc]
-bsShrFEqGD   = gd bsShrFEq   (getUnit mobShrI)       (Just bShFEqDeriv)
+bsShrFEqGD   = gd (OthModel bsShrFEq)   (getUnit mobShrI)       (Just bShFEqDeriv)
   [makeCite chen2005]                      "bsShrFEq"    [bShFEqDesc]
-resShrGD     = gd resShr     (getUnit shrResI)       (Just resShrDeriv)
+resShrGD     = gd (OthModel resShr)     (getUnit shrResI)       (Just resShrDeriv)
   [makeCite chen2005]                      "resShr"      [resShrDesc]
-mobShrGD     = gd mobShr     (getUnit mobShrI)       (Just mobShrDeriv)
+mobShrGD     = gd (OthModel mobShr)     (getUnit mobShrI)       (Just mobShrDeriv)
   [makeCite chen2005]                      "mobShr"      [mobShrDesc]
-effNormFGD   = gd effNormF   (getUnit nrmFSubWat)    (Just effNormFDeriv)
+effNormFGD   = gd (OthModel effNormF)   (getUnit nrmFSubWat)    (Just effNormFDeriv)
   [makeCite chen2005]                      "effNormF"    [effNormFDesc]
-resShearWOGD = gd resShearWO (getUnit shearRNoIntsl) Nothing     
+resShearWOGD = gd (OthModel resShearWO) (getUnit shearRNoIntsl) Nothing     
   (map makeCite[chen2005, karchewski2012]) "resShearWO"  [resShearWODesc]
-mobShearWOGD = gd mobShearWO (getUnit shearFNoIntsl) Nothing
+mobShearWOGD = gd (OthModel mobShearWO) (getUnit shearFNoIntsl) Nothing
   (map makeCite[chen2005, karchewski2012]) "mobShearWO"  [mobShearWODesc]
-normShrRGD   = gd normShrR   (getUnit intShrForce)   Nothing
+normShrRGD   = gd (OthModel normShrR)   (getUnit intShrForce)   Nothing
   [makeCite chen2005]                      "normShrR"    [nmShrRDesc]
-momentEqlGD  = gd momentEql  (Just newton)           (Just momEqlDeriv)
+momentEqlGD  = gd (OthModel momentEql)  (Just newton)           (Just momEqlDeriv)
   [makeCite chen2005]                      "momentEql"   [momEqlDesc]
-sliceWghtGD  = gd sliceWght  (getUnit slcWght)       (Just sliceWghtDeriv)
+sliceWghtGD  = gd (OthModel sliceWght)  (getUnit slcWght)       (Just sliceWghtDeriv)
   [makeCite fredlund1977]                  "sliceWght"   [sliceWghtNotes]
-baseWtrFGD   = gd baseWtrF   (getUnit baseHydroForce) (Just bsWtrFDeriv)
+baseWtrFGD   = gd (OthModel baseWtrF)   (getUnit baseHydroForce) (Just bsWtrFDeriv)
   [makeCite fredlund1977]                  "baseWtrF"    [bsWtrFNotes]
-srfWtrFGD    = gd srfWtrF    (getUnit surfHydroForce) (Just srfWtrFDeriv)
+srfWtrFGD    = gd (OthModel srfWtrF)    (getUnit surfHydroForce) (Just srfWtrFDeriv)
   [makeCite fredlund1977]                  "srfWtrF"     [srfWtrFNotes]
 
 --

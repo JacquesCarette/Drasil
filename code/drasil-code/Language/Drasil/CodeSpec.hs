@@ -111,7 +111,7 @@ codeSpec SI {_sys = sys
 
 -- Converts a chunk with a defining relation to a QDefinition
 relToQD :: ExprRelat c => ChunkDB -> c -> QDefinition
-relToQD sm r = convertRel sm (r ^. relat)
+relToQD sm r = convertRel sm (relat r)
 
 -- Converts an Expr representing a definition (i.e. an equality where the left 
 -- side is just a variable) to a QDefinition.

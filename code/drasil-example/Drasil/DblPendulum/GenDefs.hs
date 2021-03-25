@@ -4,7 +4,7 @@ module Drasil.DblPendulum.GenDefs (genDefns, velocityIXGD, velocityIYGD,
 
 import Prelude hiding (cos, sin, sqrt)
 import Language.Drasil
-import Theory.Drasil (GenDefn, gdNoRefs)
+import Theory.Drasil (GenDefn, gdNoRefs, ModelKinds (OthModel))
 import Utils.Drasil
 
 -- import Data.Drasil.Concepts.Documentation (coordinate, symbol_)
@@ -29,7 +29,7 @@ genDefns = [velocityIXGD, velocityIYGD, accelerationIXGD, accelerationIYGD,
 
 -- ----------
 velocityIXGD :: GenDefn
-velocityIXGD = gdNoRefs velocityIXRC (getUnit velocity)
+velocityIXGD = gdNoRefs (OthModel velocityIXRC) (getUnit velocity)
            (Just velocityIXDeriv) "velocityIX" [{-Notes-}]
 
 velocityIXRC :: RelationConcept
@@ -47,7 +47,7 @@ velocityIXDeriv = mkDerivName (phrase xComp +:+ phrase velocity) [ E velocityIXR
 
 ---------------------
 velocityIYGD :: GenDefn
-velocityIYGD = gdNoRefs velocityIYRC (getUnit velocity)
+velocityIYGD = gdNoRefs (OthModel velocityIYRC) (getUnit velocity)
            (Just velocityIYDeriv) "velocityIY" [{-Notes-}]
 
 velocityIYRC :: RelationConcept
@@ -62,7 +62,7 @@ velocityIYDeriv = mkDerivName (phrase yComp +:+ phrase velocity) [ E velocityIYR
 
 -----------------------
 accelerationIXGD :: GenDefn
-accelerationIXGD = gdNoRefs accelerationIXRC (getUnit acceleration)
+accelerationIXGD = gdNoRefs (OthModel accelerationIXRC) (getUnit acceleration)
            (Just accelerationIXDeriv) "accelerationIX" [{-Notes-}]
 
 accelerationIXRC :: RelationConcept
@@ -78,7 +78,7 @@ accelerationIXDeriv = mkDerivName (phrase xComp +:+ phrase acceleration) [ E acc
 
 -----------------------
 accelerationIYGD :: GenDefn
-accelerationIYGD = gdNoRefs accelerationIYRC (getUnit acceleration)
+accelerationIYGD = gdNoRefs (OthModel accelerationIYRC) (getUnit acceleration)
            (Just accelerationIYDeriv) "accelerationIY" [{-Notes-}]
 
 accelerationIYRC :: RelationConcept
@@ -94,7 +94,7 @@ accelerationIYDeriv = mkDerivName (phrase yComp +:+ phrase acceleration) [ E acc
 
 -------------------------------------Horizontal force acting on the pendulum 
 hForceOnPendulumGD :: GenDefn
-hForceOnPendulumGD = gdNoRefs hForceOnPendulumRC (getUnit force)
+hForceOnPendulumGD = gdNoRefs (OthModel hForceOnPendulumRC) (getUnit force)
            (Just hForceOnPendulumDeriv) "hForceOnPendulum" [{-Notes-}]
 
 hForceOnPendulumRC :: RelationConcept
@@ -110,7 +110,7 @@ hForceOnPendulumDeriv = mkDerivName (phrase force +:+ phrase pendulum) [ E hForc
 
 ----------------------------------------Vertical force acting on the pendulum 
 vForceOnPendulumGD :: GenDefn
-vForceOnPendulumGD = gdNoRefs vForceOnPendulumRC (getUnit force)
+vForceOnPendulumGD = gdNoRefs (OthModel vForceOnPendulumRC) (getUnit force)
            (Just vForceOnPendulumDeriv) "vForceOnPendulum" [{-Notes-}]
 
 vForceOnPendulumRC :: RelationConcept
@@ -126,7 +126,7 @@ vForceOnPendulumDeriv = mkDerivName (phrase force +:+ phrase pendulum) [ E vForc
 --------------------------------------Angular Frequency Of Pendulum
 
 angFrequencyGD :: GenDefn
-angFrequencyGD = gdNoRefs angFrequencyRC (getUnit angularFrequency)
+angFrequencyGD = gdNoRefs (OthModel angFrequencyRC) (getUnit angularFrequency)
            (Just angFrequencyDeriv) "angFrequencyGD" [angFrequencyGDNotes]
 
 angFrequencyRC :: RelationConcept
@@ -188,7 +188,7 @@ angFrequencyGDNotes = S "The" +:+ phrase torque `sIs` definedIn'' newtonSLR  `sA
  --------------------------------Period of Pendulum Motion 
 
 periodPend :: GenDefn
-periodPend = gdNoRefs periodPendRC (getUnit period)
+periodPend = gdNoRefs (OthModel periodPendRC) (getUnit period)
            (Just periodPendDeriv) "periodPend" [periodPendNotes]
 
 periodPendRC :: RelationConcept

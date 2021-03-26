@@ -46,7 +46,7 @@ generate only API documentation targeted towards developers or user manuals.
 
 We propose a new framework, Drasil, alongside a knowledge-centric view of
 software, to help take advantage of inherent redundancy, while avoiding manual
-duplication and syncronization problems. Our approach looks at what underlies
+duplication and synchronization problems. Our approach looks at what underlies
 the problems we solve using software and capturing that "common" or "core"
 knowledge. We then use that knowledge to generate our software artifacts, thus
 gaining the benefits inherent to the generation process: lack of manual
@@ -305,7 +305,7 @@ members (The SWHS and NoPCM case studies) as they have been developed to solve
 similar, or in our case nearly identical, problems.
 
 - inter-project (repetition throughout different views + other patterns.)
-  vs intra-project knowledge (repetition across projects/family memebers,
+  vs intra-project knowledge (repetition across projects/family members,
   minor modifications, but fundamentally the same + other patterns.)
 - Hint at chunkifying/parceling out the fundamental (system/view-agnostic)
 knowledge vs the specific knowledge

@@ -43,7 +43,6 @@ library
     , data-fix (>=0.0.4 && <=1.0)
     , directory >=1.2.6.2
     , drasil-lang
-    , drasil-theory
     , lens >=4.12
     , mtl >=2.2.1
     , parsec >=3.1.9

@@ -15,7 +15,7 @@ defs = [launcher, projectile, target]
 
 duration, flightDur, landingPos, launch, launchAngle, launchSpeed, offset, targetPos :: NamedChunk
 duration   = nc "duration" (nounPhraseSP "duration")
-launch     = nc "launch"   (nounPhraseSP "launch") -- FIXME: Used as adjective
+launch     = nc "launch"   (nounPhraseSP "launch")
 offset     = nc "offset"   (nounPhraseSent $ S "distance between the" +:+ phrase targetPos `andThe` phrase landingPos)
 
 flightDur   = compoundNC (nc "flight"  (nounPhraseSP "flight" )) duration

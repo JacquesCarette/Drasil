@@ -17,8 +17,7 @@ import GOOL.Drasil (CodeType(..))
 
 import Data.Drasil.Quantities.Math (piConst)
 
-import Drasil.Projectile.Body (printSetting, si, srs)
-import Drasil.Projectile.Concepts (projectileTitle)
+import Drasil.Projectile.Body (printSetting, si, srs, projectileTitle)
 
 import Data.List (intercalate)
 

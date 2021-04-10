@@ -3,8 +3,6 @@ module Drasil.Projectile.Concepts where
 import Language.Drasil
 import Utils.Drasil
 
-import Data.Drasil.IdeaDicts (physics)
-
 import Data.Drasil.Concepts.Math (angle)
 import Data.Drasil.Concepts.Physics (position, speed)
 
@@ -14,9 +12,6 @@ concepts = map nw [landingPos, launch, launchAngle, launchSpeed, offset, targetP
 
 defs :: [ConceptChunk]
 defs = [launcher, projectile, target]
-
-projectileTitle :: CI
-projectileTitle = commonIdeaWithDict "projectileTitle" (pn "Projectile") "Projectile" [physics]
 
 duration, flightDur, landingPos, launch, launchAngle, launchSpeed, offset, targetPos :: NamedChunk
 duration   = nc "duration" (nounPhraseSP "duration")

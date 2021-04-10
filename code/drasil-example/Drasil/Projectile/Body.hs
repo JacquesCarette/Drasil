@@ -1,4 +1,4 @@
-module Drasil.Projectile.Body (printSetting, si, srs) where
+module Drasil.Projectile.Body (printSetting, si, srs, projectileTitle) where
 
 import Language.Drasil hiding (Symbol(..), Vector)
 import Language.Drasil.Code (relToQD)
@@ -36,7 +36,7 @@ import Data.Drasil.People (brooks, samCrawford, spencerSmith)
 import Data.Drasil.SI_Units (metre, radian, second)
 
 import Drasil.Projectile.Assumptions (assumptions)
-import Drasil.Projectile.Concepts (concepts, projectileTitle, landingPos,
+import Drasil.Projectile.Concepts (concepts, landingPos,
   launcher, projectile, target)
 import Drasil.Projectile.DataDefs (dataDefs)
 import Drasil.Projectile.Figures (figLaunch)
@@ -102,6 +102,9 @@ justification = foldlSent [atStart projectile, S "motion is a common" +:+.
 scope = foldlSent_ [S "the", phrase analysis `sOf` S "a", phrase twoD,
   sParen (getAcc twoD), phrase projectile, S "motion", phrase problem, S "with",
   phrase constAccel]
+
+projectileTitle :: CI
+projectileTitle = commonIdea "projectileTitle" (pn "Projectile") "Projectile" []
 
 si :: SystemInformation
 si = SI {

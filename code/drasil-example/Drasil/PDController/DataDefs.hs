@@ -9,7 +9,7 @@ import Drasil.PDController.References
 import Drasil.PDController.TModel
 import Language.Drasil
 
-import Theory.Drasil (DataDefinition, dd, mkQuantDef)
+import Theory.Drasil (DataDefinition, dd)
 import Utils.Drasil
 
 dataDefinitions :: [DataDefinition]

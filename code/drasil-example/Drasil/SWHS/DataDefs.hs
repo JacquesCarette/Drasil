@@ -2,7 +2,7 @@ module Drasil.SWHS.DataDefs where --exports all of it
 
 import Language.Drasil
 import Drasil.DocLang (ModelDB, mdb)
-import Theory.Drasil (DataDefinition, dd, ddNoRefs, mkQuantDef)
+import Theory.Drasil (DataDefinition, dd, ddNoRefs)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (value)

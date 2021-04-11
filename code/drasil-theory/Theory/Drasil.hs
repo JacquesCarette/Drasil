@@ -3,7 +3,7 @@ module Theory.Drasil (
   -- Classes
     HasInputs(..), HasOutput(..)
   -- DataDefinition
-  , DataDefinition, mkQuantDef, mkQuantDef', dd, ddNoRefs, qdFromDD
+  , DataDefinition, dd, ddNoRefs, qdFromDD
   -- GenDefn
   , GenDefn, gd, gdNoRefs, getEqModQdsFromGd
   -- ModelKinds
@@ -17,8 +17,7 @@ module Theory.Drasil (
 ) where
 
 import Theory.Drasil.Classes (HasInputs(..), HasOutput(..))
-import Theory.Drasil.DataDefinition (DataDefinition, mkQuantDef, mkQuantDef',
-  dd, ddNoRefs, qdFromDD)
+import Theory.Drasil.DataDefinition (DataDefinition, dd, ddNoRefs, qdFromDD)
 import Theory.Drasil.GenDefn
 import Theory.Drasil.ModelKinds
 import Theory.Drasil.InstanceModel

@@ -2,7 +2,7 @@ module Data.Drasil.Theories.Physics where
 
 import Language.Drasil
 import Theory.Drasil (DataDefinition, GenDefn, TheoryModel, ddNoRefs, gd,
-  mkQuantDef, tmNoRefs, ModelKinds (OthModel))
+  tmNoRefs, ModelKinds (OthModel))
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (body, component, constant, material_,

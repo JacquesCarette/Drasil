@@ -7,8 +7,6 @@ import Data.Drasil.IdeaDicts
 import Data.Drasil.SI_Units (second)
 import Language.Drasil
 
-import Theory.Drasil (mkQuantDef)
-
 acronyms :: [CI]
 acronyms
   = [assumption, dataDefn, genDefn, goalStmt, inModel, physSyst, requirement,

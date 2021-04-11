@@ -2,7 +2,6 @@ module Data.Drasil.Quantities.Math where
 
 import Language.Drasil
 import Language.Drasil.ShortHands
-import Theory.Drasil (mkQuantDef)
 
 import qualified Data.Drasil.Concepts.Math as CM (area, diameter, euclidN, gradient, 
     normalV, orient, perpV, pi_, surArea, surface, unitV)

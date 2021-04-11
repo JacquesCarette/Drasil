@@ -4,7 +4,7 @@ import Prelude hiding (sin, cos)
 import Language.Drasil
 import Utils.Drasil
 
-import Theory.Drasil (DataDefinition, ddNoRefs, mkQuantDef)
+import Theory.Drasil (DataDefinition, ddNoRefs)
 
 import Data.Drasil.Quantities.Physics (speed, iSpeed, ixVel, iyVel, velocity)
 

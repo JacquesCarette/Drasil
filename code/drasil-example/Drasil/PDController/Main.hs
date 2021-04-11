@@ -10,8 +10,7 @@ import Language.Drasil.Code
         InputModule(..), Lang(..), Modularity(..), Structure(..), Verbosity(..),
         Visibility(..), codeSpec, defaultChoices)
 
-import Language.Drasil.Generate (gen, genCode)
-import Language.Drasil.Printers (DocSpec(DocSpec), DocType(SRS, Website))
+import Language.Drasil.Generate (gen, genCode, DocSpec(DocSpec), DocType(SRS, Website))
 
 codeSpecs :: CodeSpec
 codeSpecs = codeSpec si codeChoices []

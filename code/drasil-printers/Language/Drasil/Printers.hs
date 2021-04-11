@@ -1,8 +1,6 @@
 module Language.Drasil.Printers (
   -- Format 
     Format(TeX, HTML)
-  -- Output.Formats
-  , DocSpec(DocSpec), DocType(SRS, MG, MIS, Website), Filename
   -- HTML
     -- Helpers
   , makeCSS
@@ -27,8 +25,6 @@ module Language.Drasil.Printers (
   where
 
 import Language.Drasil.Format (Format(TeX, HTML))
-import Language.Drasil.Output.Formats (DocSpec(DocSpec), DocType(SRS, MG, MIS, Website),
-  Filename)
 import Language.Drasil.HTML.CSS (makeCSS)
 import Language.Drasil.HTML.Print (genHTML)
 import Language.Drasil.Markdown.CreateMd (makeMd, introInfo, verInfo, unsupOS, extLibSec, 

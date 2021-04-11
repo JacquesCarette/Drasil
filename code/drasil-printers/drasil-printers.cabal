@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 1c55ec552fa17c6233d716907a257a0670ba17e84ce08e477f37c348237c44b1
+-- hash: 573a24fdb11bf13c6f7135107b45ec13f9057e6ef18b3a69d090cbe55a2c7d49
 
 name:           drasil-printers
 version:        0.1.10.0
@@ -31,7 +31,6 @@ library
       Language.Drasil.HTML.Monad
       Language.Drasil.HTML.Print
       Language.Drasil.Markdown.CreateMd
-      Language.Drasil.Output.Formats
       Language.Drasil.Plain.Helpers
       Language.Drasil.Plain.Print
       Language.Drasil.Printing.AST
@@ -54,7 +53,6 @@ library
     , containers >=0.5.5.1
     , data-fix (>=0.0.4 && <=1.0)
     , directory >=1.2.6.2
-    , drasil-build
     , drasil-database
     , drasil-lang
     , drasil-utils

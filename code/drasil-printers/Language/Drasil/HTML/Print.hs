@@ -16,7 +16,6 @@ import Language.Drasil.HTML.Helpers (articleTitle, author, ba, body, bold,
   caption, divTag, em, h, headTag, html, image, li, ol, pa,
   paragraph, reflink, reflinkInfo, reflinkURI, refwrap, sub, sup, table, td,
   th, title, tr, ul)
-import qualified Language.Drasil.Output.Formats as F
 import Language.Drasil.HTML.CSS (linkCSS)
 
 import Language.Drasil.Config (StyleGuide(APA, MLA, Chicago), bibStyleH)
@@ -44,8 +43,9 @@ import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintL
 data OpenClose = Open | Close
 
 -- | Generate an HTML document from a Drasil 'Document'
-genHTML :: PrintingInformation -> F.Filename -> L.Document -> Doc
+genHTML :: PrintingInformation -> String -> L.Document -> Doc
 genHTML sm fn doc = build fn (makeDocument sm doc)
+--         ^^ -- should really be of type Filename, but that's not in scope
 
 -- | Build the HTML Document, called by genHTML
 build :: String -> Document -> Doc

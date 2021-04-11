@@ -36,6 +36,7 @@ library:
   source-dirs: ./
   exposed-modules:
   - Language.Drasil.Code
+  - Data.Drasil.ExternalLibraries.ODELibraries
   other-modules:
     - Language.Drasil.Chunk.Code
     - Language.Drasil.Chunk.CodeDefinition

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: fe81bcc0444025c15d6336eb98cf1d80bb868870b9e780464036b8864b472633
+-- hash: a0831d0e8301b0e8ee46b80039c0a0080f3f2a30af4b908151e7c97646ff3893
 
 name:           drasil-data
 version:        0.1.13.0
@@ -35,7 +35,6 @@ library
       Data.Drasil.Concepts.Software
       Data.Drasil.Concepts.Math
       Data.Drasil.Concepts.SolidMechanics
-      Data.Drasil.ExternalLibraries.ODELibraries
       Data.Drasil.Software.Products
       Data.Drasil.Quantities.Thermodynamics
       Data.Drasil.Quantities.PhysicalProperties
@@ -59,8 +58,6 @@ library
     , containers >=0.5.5.1
     , data-fix (>=0.0.4 && <=1.0)
     , directory >=1.2.6.2
-    , drasil-code
-    , drasil-gool
     , drasil-lang
     , drasil-theory
     , drasil-utils

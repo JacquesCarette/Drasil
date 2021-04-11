@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 59b897ea93fe4b853352b0ed94a2d696335f24ceface63f99f8575219bafd04b
+-- hash: 6a9c7472871bdd4d2d14ec1795dab724a9a983fa84ab5c55716cff5ea8f35707
 
 name:           drasil-code
 version:        0.1.9.0
@@ -23,6 +23,7 @@ source-repository head
 library
   exposed-modules:
       Language.Drasil.Code
+      Data.Drasil.ExternalLibraries.ODELibraries
   other-modules:
       Language.Drasil.Chunk.Code
       Language.Drasil.Chunk.CodeDefinition

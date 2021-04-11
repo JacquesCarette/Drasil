@@ -25,7 +25,7 @@ import Data.Drasil.Concepts.Documentation (assumption, column, constraint, corSo
   symbol_, system, theory, typUnc, uncertainty, user, value, variable)
 import Data.Drasil.Concepts.Math (equation, parameter)
 
-import Data.Drasil.IdeaDicts (inModel, thModel)
+import Data.Drasil.TheoryConcepts (inModel, thModel)
 
 import qualified Drasil.DocLang.SRS as SRS
 

@@ -23,7 +23,7 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, assumption
   scpOfReq, scpOfTheProj, solutionCharSpec, specificsystemdescription, srs,
   stakeholder, sysCont, systemConstraint, termAndDef, terminology, traceyMandG,
   tOfSymb, tOfUnit, userCharacteristic)
-import qualified Data.Drasil.IdeaDicts as Doc (dataDefn, genDefn, inModel, thModel)
+import qualified Data.Drasil.TheoryConcepts as Doc (dataDefn, genDefn, inModel, thModel)
 
 -- Local function to keep things looking clean, not exported.
 forTT :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence

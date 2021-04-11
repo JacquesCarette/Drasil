@@ -3,7 +3,7 @@ module Theory.Drasil.DataDefinition where
 
 import Control.Lens (makeLenses, (^.), view)
 import Language.Drasil
-import Data.Drasil.IdeaDicts (dataDefn)
+import Data.Drasil.TheoryConcepts (dataDefn)
 
 newtype Scope = Scp { _spec :: UID } {-indirect reference-}
 

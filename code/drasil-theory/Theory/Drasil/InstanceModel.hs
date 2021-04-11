@@ -7,7 +7,7 @@ module Theory.Drasil.InstanceModel
 
 import Language.Drasil
 import Theory.Drasil.Classes (HasInputs(inputs), HasOutput(..))
-import Data.Drasil.IdeaDicts (inModel)
+import Data.Drasil.TheoryConcepts (inModel)
 
 import Control.Lens (makeLenses, view, lens, (^.), set, Lens', to, _1, _2)
 import Theory.Drasil.ModelKinds (ModelKinds(..), elimMk, setMk, getEqModQds)

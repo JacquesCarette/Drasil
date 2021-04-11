@@ -8,7 +8,8 @@ import Utils.Drasil
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt,
   likelyChg, physSyst, requirement, srs, typUnc, unlikelyChg)
 import Data.Drasil.Concepts.Math (ode, parameter, rightSide)
-import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, materialEng, thModel)
+import Data.Drasil.IdeaDicts (materialEng)
+import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 con :: [ConceptChunk]
 con = [charging, coil, discharging, gaussDiv,

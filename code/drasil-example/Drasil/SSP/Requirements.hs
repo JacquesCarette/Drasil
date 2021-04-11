@@ -12,8 +12,7 @@ import Data.Drasil.Concepts.Documentation (assumption, code,
   output_, physicalConstraint, property, requirement, srs, symbol_,
   traceyMatrix, unlikelyChg, user, value)
 import Data.Drasil.Concepts.Physics (twoD)
-
-import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
+import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 import Drasil.SSP.Defs (crtSlpSrf, slope, slpSrf)
 import Drasil.SSP.IMods (fctSfty, nrmShrFor, intsliceFs, crtSlpId)

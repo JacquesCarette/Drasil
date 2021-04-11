@@ -30,3 +30,4 @@ library:
   source-dirs: ./
   exposed-modules:
   - Theory.Drasil
+  - Data.Drasil.TheoryConcepts

@@ -16,7 +16,7 @@ import Drasil.GamePhysics.TMods (newtonSL, newtonSLR)
 import Drasil.GamePhysics.Unitals (accI, forceI, massA, massI, normalVect,
   timeC, torqueI, velA, velI)
 
-import Data.Drasil.IdeaDicts (inModel)
+import Data.Drasil.TheoryConcepts (inModel)
 
 import Data.Drasil.Concepts.Documentation (condition, goal, output_)
 import Data.Drasil.Concepts.Math (equation, ode)

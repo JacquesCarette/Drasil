@@ -29,7 +29,7 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   softwareSys, srsDomains, symbol_, sysCont, system,
   template, type_, user, value, variable, doccon, doccon')
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-import Data.Drasil.IdeaDicts as Doc (inModel)
+import Data.Drasil.TheoryConcepts as Doc (inModel)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
 import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon, mathcon',
   number)

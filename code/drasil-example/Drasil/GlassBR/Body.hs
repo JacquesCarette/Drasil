@@ -31,8 +31,7 @@ import Data.Drasil.Concepts.Documentation as Doc (appendix, aspect,
   product_, software, softwareConstraint, softwareSys,
   srsDomains, standard, sysCont, system, template, term_, user, value, variable)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
-import qualified Data.Drasil.IdeaDicts as Doc (dataDefn)
+import Data.Drasil.TheoryConcepts as Doc (dataDefn, inModel, thModel)
 import Data.Drasil.Concepts.Education as Edu (civilEng, scndYrCalculus, structuralMechanics,
   educon)
 import Data.Drasil.Concepts.Math (graph, mathcon, mathcon')

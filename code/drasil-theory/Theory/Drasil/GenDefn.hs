@@ -2,7 +2,7 @@
 module Theory.Drasil.GenDefn (GenDefn, gd, gdNoRefs, getEqModQdsFromGd) where
 
 import Language.Drasil
-import Data.Drasil.IdeaDicts (genDefn)
+import Data.Drasil.TheoryConcepts (genDefn)
 import Theory.Drasil.ModelKinds (ModelKinds(..), elimMk, setMk, getEqModQds)
 
 import Control.Lens (makeLenses, view, lens, (^.), set, Lens', to)

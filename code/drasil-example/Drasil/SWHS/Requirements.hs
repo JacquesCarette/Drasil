@@ -18,7 +18,7 @@ import Data.Drasil.Concepts.Thermodynamics as CT (lawConsEnergy, melting)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Physics (energy, time)
 
-import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
+import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 import Drasil.SWHS.DataDefs (waterMass, waterVolume, tankVolume, 
   balanceDecayRate, balanceDecayTime, balanceSolidPCM, balanceLiquidPCM)

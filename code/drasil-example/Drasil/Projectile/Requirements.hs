@@ -10,8 +10,7 @@ import Data.Drasil.Concepts.Documentation (assumption, code, datumConstraint,
   property, requirement, srs, traceyMatrix, unlikelyChg, value, vavPlan)
 import Data.Drasil.Concepts.Math (calculation)
 import Data.Drasil.Concepts.Software (errMsg)
-
-import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
+import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 import Drasil.Projectile.IMods (landPosIM, messageIM, offsetIM, timeIM)
 import Drasil.Projectile.Unitals (flightDur, landPos, message, offset)

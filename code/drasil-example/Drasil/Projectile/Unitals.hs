@@ -2,7 +2,6 @@ module Drasil.Projectile.Unitals where
 
 import Language.Drasil
 import Language.Drasil.ShortHands
-import Data.Drasil.IdeaDicts
 import Utils.Drasil
 
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)

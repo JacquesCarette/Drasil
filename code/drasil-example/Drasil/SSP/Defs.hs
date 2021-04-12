@@ -1,7 +1,7 @@
 module Drasil.SSP.Defs where --export all of this file
 
 import Language.Drasil
-import Data.Drasil.IdeaDicts
+import Data.Drasil.Domains (civilEng)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (analysis, assumption, goalStmt,

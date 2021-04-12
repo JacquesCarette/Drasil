@@ -1,7 +1,6 @@
-module Data.Drasil.IdeaDicts where
+module Data.Drasil.Domains where
 
-import Language.Drasil (IdeaDict, mkIdea)
-import Language.Drasil.NounPhrase (cn')
+import Language.Drasil (IdeaDict, mkIdea, cn')
 
 compScience, softEng, mathematics, progLanguage, physics, civilEng
   , materialEng, documentc, knowledgemng :: IdeaDict

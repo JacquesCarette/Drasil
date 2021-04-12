@@ -1,0 +1,34 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 1fab52f2d65668ebfd695562d5ff02ccf2e717c3058e5495376e724750ce2a68
+
+name:           drasil-metadata
+version:        0.1.1.0
+synopsis:       Meta-data sub-package fro Drasil
+description:    Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+homepage:       https://jacquescarette.github.io/Drasil/
+bug-reports:    https://github.com/JacquesCarette/Drasil/issues
+author:         Jacques Carette
+maintainer:     Jacques Carette
+build-type:     Simple
+
+source-repository head
+  type: git
+  location: https://github.com/JacquesCarette/Drasil
+
+library
+  exposed-modules:
+      Data.Drasil.Domains
+  other-modules:
+      Paths_drasil_metadata
+  hs-source-dirs:
+      ./
+  ghc-options: -Wall -Wredundant-constraints
+  build-depends:
+      base >=4.7 && <5
+    , drasil-lang
+  default-language: Haskell2010

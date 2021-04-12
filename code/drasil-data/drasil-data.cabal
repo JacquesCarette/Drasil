@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: a0831d0e8301b0e8ee46b80039c0a0080f3f2a30af4b908151e7c97646ff3893
+-- hash: 4e734378944196ae13c768c3b7064970b675f59e0b3e61e47108a67fdcee55b1
 
 name:           drasil-data
 version:        0.1.13.0
@@ -59,6 +59,7 @@ library
     , data-fix (>=0.0.4 && <=1.0)
     , directory >=1.2.6.2
     , drasil-lang
+    , drasil-metadata
     , drasil-theory
     , drasil-utils
     , lens >=4.12

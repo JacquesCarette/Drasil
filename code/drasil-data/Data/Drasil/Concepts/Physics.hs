@@ -4,7 +4,7 @@ module Data.Drasil.Concepts.Physics where
 import Language.Drasil
 import Utils.Drasil
 
-import Data.Drasil.IdeaDicts (mathematics, physics)
+import Data.Drasil.Domains (mathematics, physics)
 import Data.Drasil.Concepts.Documentation (property, value)
 import Data.Drasil.Concepts.Math (xComp, xDir, yComp, yDir, point, axis, cartesian)
 import Control.Lens((^.)) --need for parametrization hack

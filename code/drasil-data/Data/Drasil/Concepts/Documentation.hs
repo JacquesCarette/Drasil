@@ -4,7 +4,7 @@ import Language.Drasil hiding (organization, year)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Math (graph, unit_)
-import Data.Drasil.IdeaDicts (documentc, softEng)
+import Data.Drasil.Domains (documentc, softEng)
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 import Control.Lens ((^.))

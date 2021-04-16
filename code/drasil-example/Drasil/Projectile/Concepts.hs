@@ -4,10 +4,10 @@ import Language.Drasil
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Math (angle)
-import Data.Drasil.Concepts.Physics (position, speed)
+import Data.Drasil.Concepts.Physics (position, speed, motion)
 
 concepts :: [IdeaDict]
-concepts = map nw [landingPos, launch, launchAngle, launchSpeed, offset, targetPos]
+concepts = nw projMotion : map nw [landingPos, launch, launchAngle, launchSpeed, offset, targetPos]
   ++ map nw defs
 
 defs :: [ConceptChunk]
@@ -31,3 +31,6 @@ launcher   = dcc "launcher"   (nounPhraseSP "launcher")  ("where the projectile 
                                                           "and the device that does the launching")
 projectile = dcc "projectile" (nounPhraseSP "projectile") "the object to be launched at the target"
 target     = dcc "target"     (nounPhraseSP "target")     "where the projectile should be launched to"
+
+projMotion :: NamedChunk
+projMotion = compoundNC projectile motion

@@ -40,7 +40,7 @@ timeStartZero   = cic "timeStartZero"   timeStartZeroDesc   "timeStartZero"   as
 gravAccelValue  = cic "gravAccelValue"  gravAccelValueDesc  "gravAccelValue"  assumpDom
 
 twoDMotionDesc :: Sentence
-twoDMotionDesc = S "The" +:+ phrase projectile +:+ S "motion" `sIs` phrase twoD +:+. sParen (getAcc twoD)
+twoDMotionDesc = atStartNP (the projectile) +:+ S "motion" `sIs` phrase twoD +:+. sParen (getAcc twoD)
 
 cartSystDesc :: Sentence
 cartSystDesc = S "A" +:+ (phrase cartesian `sIs` S "used") +:+. fromSource neglectCurv
@@ -49,10 +49,10 @@ yAxisGravityDesc :: Sentence
 yAxisGravityDesc = S "direction" `ofThe'` phrase yAxis `sIs` S "directed opposite to" +:+. phrase gravity
 
 launchOriginDesc :: Sentence
-launchOriginDesc = S "The" +:+. (phrase launcher `sIs` S "coincident with the origin")  
+launchOriginDesc = atStartNP (the launcher) `sIs` S "coincident with the origin."
 
 targetXAxisDesc :: Sentence
-targetXAxisDesc = S "The" +:+ phrase target +:+ S "lies on the" +:+ phrase xAxis +:+. fromSource neglectCurv
+targetXAxisDesc = atStartNP (the target) +:+ S "lies on the" +:+ phrase xAxis +:+. fromSource neglectCurv
 
 posXDirectionDesc :: Sentence
 posXDirectionDesc = S "The positive" +:+ phrase xDir `sIs` S "from the" +:+. (phrase launcher `toThe` phrase target)

@@ -37,13 +37,13 @@ pointMass       = cic "pointMass"       pointMassDesc       "pointMass"       as
 freeFlight      = cic "freeFlight"      freeFlightDesc      "freeFlight"      assumpDom
 neglectCurv     = cic "neglectCurv"     neglectCurvDesc     "neglectCurv"     assumpDom
 timeStartZero   = cic "timeStartZero"   timeStartZeroDesc   "timeStartZero"   assumpDom
-gravAccelValue  = cic "gravAccelValue"  gravAccelValueDesc  "gravAccelValue" assumpDom
+gravAccelValue  = cic "gravAccelValue"  gravAccelValueDesc  "gravAccelValue"  assumpDom
 
 twoDMotionDesc :: Sentence
 twoDMotionDesc = S "The" +:+ phrase projectile +:+ S "motion" `sIs` phrase twoD +:+. sParen (getAcc twoD)
 
 cartSystDesc :: Sentence
-cartSystDesc = S "A" +:+ (phrase cartesian `sIs` S "used") +:+. sParen (S "from" +:+ makeRef2S neglectCurv)
+cartSystDesc = S "A" +:+ (phrase cartesian `sIs` S "used") +:+. fromSource neglectCurv
 
 yAxisGravityDesc :: Sentence
 yAxisGravityDesc = S "direction" `ofThe'` phrase yAxis `sIs` S "directed opposite to" +:+. phrase gravity
@@ -52,21 +52,21 @@ launchOriginDesc :: Sentence
 launchOriginDesc = S "The" +:+. (phrase launcher `sIs` S "coincident with the origin")  
 
 targetXAxisDesc :: Sentence
-targetXAxisDesc = S "The" +:+ phrase target +:+ S "lies on the" +:+ phrase xAxis +:+. sParen (S "from" +:+ makeRef2S neglectCurv)
+targetXAxisDesc = S "The" +:+ phrase target +:+ S "lies on the" +:+ phrase xAxis +:+. fromSource neglectCurv
 
 posXDirectionDesc :: Sentence
 posXDirectionDesc = S "The positive" +:+ phrase xDir `sIs` S "from the" +:+. (phrase launcher `toThe` phrase target)
 
 constAccelDesc :: Sentence
 constAccelDesc = S "The" +:+ (phrase acceleration `sIs` S "constant") +:+.
-                 sParen (S "from" +:+ foldlList Comma List (map makeRef2S [accelXZero, accelYGravity, neglectDrag, freeFlight]))
+                 fromSources [accelXZero, accelYGravity, neglectDrag, freeFlight]
 
 accelXZeroDesc :: Sentence
 accelXZeroDesc = S "The" +:+ phrase acceleration +:+. (S "in the" +:+ phrase xDir `sIs` S "zero")
 
 accelYGravityDesc :: Sentence
 accelYGravityDesc = S "The" +:+ phrase acceleration +:+ S "in the" +:+ phrase yDir `isThe` phrase acceleration +:+
-                    S "due to" +:+ phrase gravity +:+. sParen (S "from" +:+ makeRef2S yAxisGravity)
+                    S "due to" +:+ phrase gravity +:+. fromSource yAxisGravity
 
 neglectDragDesc :: Sentence
 neglectDragDesc = S "Air drag" `sIs` S "neglected."
@@ -89,5 +89,4 @@ timeStartZeroDesc = atStart time +:+. S "starts at zero"
 gravAccelValueDesc :: Sentence
 gravAccelValueDesc = S "The" +:+ phrase acceleration +:+ S "due to" +:+
   phrase gravity +:+ S "is assumed to have the" +:+ phrase value +:+ 
-  S "provided in" +:+. makeRef2S (SRS.valsOfAuxCons ([]::[Contents]) 
-  ([]::[Section]))
+  S "provided in" +:+. makeRef2S (SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]))

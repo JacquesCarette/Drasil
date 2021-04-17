@@ -4,7 +4,7 @@ import Language.Drasil
 import Theory.Drasil (TheoryModel, tm, tmNoRefs)
 import Data.Drasil.Quantities.Physics (acceleration, position, time, velocity, acceleration,
        momentOfInertia, angularAccel, torque)
-import Data.Drasil.Equations.Defining.Physics (accelerationEqn, velocityEqn)
+import Data.Drasil.Equations.Defining.Physics (accelerationEqn, velocityEqn, accelerationRC, velocityRC)
 import Data.Drasil.Concepts.Documentation (constant)
 import Drasil.Projectile.References (accelerationWiki, velocityWiki, hibbeler2004)
 import Data.Drasil.Theories.Physics (newtonSL)
@@ -23,18 +23,12 @@ accelerationTM = tm (cw accelerationRC)
   [qw acceleration, qw velocity, qw time] ([] :: [ConceptChunk]) [] [accelerationEqn] []
   [makeCite accelerationWiki, makeCiteInfo hibbeler2004 $ Page [7]] "acceleration" []
 
-accelerationRC :: RelationConcept
-accelerationRC = makeRC "accelerationRC" (cn' "acceleration") EmptyS accelerationEqn
-
 ----------
 
 velocityTM :: TheoryModel
 velocityTM = tm (cw velocityRC)
   [qw velocity, qw position, qw time] ([] :: [ConceptChunk]) [] [velocityEqn] []
   [makeCite velocityWiki, makeCiteInfo hibbeler2004 $ Page [6]] "velocity" []
-
-velocityRC :: RelationConcept
-velocityRC = makeRC "velocityRC" (cn' "velocity") EmptyS velocityEqn
 
 -----------------
 --Newton's second Law of rotation--------------------------

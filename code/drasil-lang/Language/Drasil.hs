@@ -80,7 +80,7 @@ module Language.Drasil (
   -- Chunk.Unitary
   , Unitary(..), UnitaryChunk, unitary, unitary', mkUnitary, unit_symb
   -- Chunk.Relation
-  , RelationConcept, makeRC
+  , RelationConcept, makeRC, addRelToCC
   --Chunk.DefinedQuantity
   , DefinedQuantityDict, dqd, dqd', dqdNoUnit, dqdQd, dqdWr
   -- Chunk.UnitaryConcept
@@ -240,7 +240,7 @@ import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt,
 import Language.Drasil.Chunk.NamedArgument (NamedArgument, narg)
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Chunk.Relation(RelationConcept, makeRC)
+import Language.Drasil.Chunk.Relation(RelationConcept, makeRC, addRelToCC)
 import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, uc, uc', 
   ucStaged, ucs, ucs', ucsWS)

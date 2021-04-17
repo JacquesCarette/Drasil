@@ -46,12 +46,13 @@ library:
   - Data.Drasil.Concepts.Software
   - Data.Drasil.Concepts.Math
   - Data.Drasil.Concepts.SolidMechanics
-  - Data.Drasil.Software.Products
+  - Data.Drasil.Equations.Defining.Physics
   - Data.Drasil.Quantities.Thermodynamics
   - Data.Drasil.Quantities.PhysicalProperties
   - Data.Drasil.Quantities.Physics
   - Data.Drasil.Quantities.Math
   - Data.Drasil.Quantities.SolidMechanics
+  - Data.Drasil.Software.Products
   - Data.Drasil.Units.Thermodynamics
   - Data.Drasil.Units.PhysicalProperties
   - Data.Drasil.Units.Physics

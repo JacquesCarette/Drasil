@@ -14,6 +14,9 @@ import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (density,
   mass, specWeight, vol)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration, 
   force, gravitationalAccel, height, pressure, torque, weight, positionVec)
+import Data.Drasil.Equations.Defining.Physics (newtonSLRel, weightEqn,
+  weightDerivAccelEqn, weightDerivNewtonEqn, weightDerivReplaceMassEqn, weightDerivSpecWeightEqn,
+  hsPressureEqn)
 
 physicsTMs :: [TheoryModel]
 physicsTMs = [newtonSL]
@@ -27,9 +30,6 @@ newtonSL = tmNoRefs (cw newtonSLRC)
 newtonSLRC :: RelationConcept
 newtonSLRC = makeRC "newtonSL" (nounPhraseSP "Newton's second law of motion")
   newtonSLDesc newtonSLRel
-
-newtonSLRel :: Relation
-newtonSLRel = sy QP.force $= sy QPP.mass * sy QP.acceleration
 
 newtonSLDesc :: Sentence
 newtonSLDesc = foldlSent [S "The net", getTandS QP.force, S "on a",
@@ -45,9 +45,6 @@ weightGD = gd (OthModel weightRC) (getUnit QP.weight) (Just weightDeriv) [weight
 
 weightRC :: RelationConcept
 weightRC = makeRC "weight" (nounPhraseSP "weight") EmptyS weightEqn
-
-weightEqn :: Relation
-weightEqn = sy QP.weight $= sy QPP.vol * sy QPP.specWeight
 
 weightSrc :: Reference
 weightSrc = makeURI "weightSrc" "https://en.wikipedia.org/wiki/Weight" $
@@ -84,19 +81,6 @@ weightDerivSpecWeightSentence = [S "Substituting", phrase QPP.specWeight,
   S "as the product" `sOf` phrase QPP.density `sAnd` phrase QP.gravitationalAccel,
   S "yields"]
 
-weightDerivAccelEqn :: Expr
-weightDerivAccelEqn = sy QP.acceleration $= vec2D 0 (sy QP.gravitationalAccel * 
-  sy QM.unitVectj)
-
-weightDerivNewtonEqn :: Expr
-weightDerivNewtonEqn = sy QP.weight $= sy QPP.mass * sy QP.gravitationalAccel
-
-weightDerivReplaceMassEqn :: Expr
-weightDerivReplaceMassEqn = sy QP.weight $= sy QPP.density * sy QPP.vol * sy QP.gravitationalAccel
-
-weightDerivSpecWeightEqn :: Expr
-weightDerivSpecWeightEqn = sy QP.weight $= sy QPP.vol * sy QPP.specWeight
-
 --
 
 hsPressureGD :: GenDefn
@@ -106,9 +90,6 @@ hsPressureGD = gd (OthModel hsPressureRC) (getUnit QP.pressure) Nothing
 hsPressureRC :: RelationConcept
 hsPressureRC = makeRC "hsPressure" (nounPhraseSP "hydrostatic pressure") 
   hsPressureNotes hsPressureEqn
-
-hsPressureEqn :: Relation
-hsPressureEqn = sy QP.pressure $= sy QPP.specWeight * sy QP.height
 
 hsPressureSrc :: Reference
 hsPressureSrc = makeURI "hsPressureSrc" "https://en.wikipedia.org/wiki/Pressure" $

@@ -12,7 +12,7 @@ import Data.Drasil.Concepts.Math (cartesian, xAxis, xDir, yAxis, yDir)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (acceleration, collision, distance, gravity, time, twoD)
 
-import Drasil.Projectile.Concepts (launcher, projectile, target)
+import Drasil.Projectile.Concepts (launcher, projectile, target, projMotion)
 
 assumptions :: [ConceptInstance]
 assumptions = [twoDMotion, cartSyst, yAxisGravity, launchOrigin, targetXAxis, 
@@ -40,7 +40,7 @@ timeStartZero   = cic "timeStartZero"   timeStartZeroDesc   "timeStartZero"   as
 gravAccelValue  = cic "gravAccelValue"  gravAccelValueDesc  "gravAccelValue"  assumpDom
 
 twoDMotionDesc :: Sentence
-twoDMotionDesc = atStartNP (the projectile) +:+ S "motion" `sIs` phrase twoD +:+. sParen (getAcc twoD)
+twoDMotionDesc = atStartNP (the projMotion) `sIs` phrase twoD +:+. sParen (getAcc twoD)
 
 cartSystDesc :: Sentence
 cartSystDesc = S "A" +:+ (phrase cartesian `sIs` S "used") +:+. fromSource neglectCurv

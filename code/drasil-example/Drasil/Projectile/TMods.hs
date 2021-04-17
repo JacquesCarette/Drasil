@@ -6,7 +6,7 @@ import Data.Drasil.Quantities.Physics (acceleration, position, time, velocity)
 import Data.Drasil.Equations.Defining.Physics (accelerationEqn, velocityEqn, accelerationRC,
   velocityRC)
 
-import Drasil.Projectile.References (accelerationWiki, velocityWiki, hibbeler2004)
+import Drasil.Projectile.References (accelerationWiki, velocityWiki)
 
 tMods :: [TheoryModel]
 tMods = [accelerationTM, velocityTM]
@@ -14,11 +14,11 @@ tMods = [accelerationTM, velocityTM]
 accelerationTM :: TheoryModel
 accelerationTM = tm (cw accelerationRC)
   [qw acceleration, qw velocity, qw time] ([] :: [ConceptChunk]) [] [accelerationEqn] []
-  [makeCite accelerationWiki, makeCiteInfo hibbeler2004 $ Page [7]] "acceleration" []
+  [makeCite accelerationWiki] "acceleration" []
 
 ----------
 
 velocityTM :: TheoryModel
 velocityTM = tm (cw velocityRC)
   [qw velocity, qw position, qw time] ([] :: [ConceptChunk]) [] [velocityEqn] []
-  [makeCite velocityWiki, makeCiteInfo hibbeler2004 $ Page [6]] "velocity" []
+  [makeCite velocityWiki] "velocity" []

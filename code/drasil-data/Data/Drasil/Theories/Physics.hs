@@ -9,11 +9,10 @@ import Data.Drasil.Concepts.Documentation (body, component, constant, material_,
   value)
 import Data.Drasil.Concepts.Math (cartesian, equation, vector)
 import Data.Drasil.Concepts.Physics (gravity, twoD)
-import qualified Data.Drasil.Quantities.Math as QM (unitVectj)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (density, 
   mass, specWeight, vol)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration, 
-  force, gravitationalAccel, height, pressure, torque, weight, positionVec)
+  force, gravitationalAccel, pressure, torque, weight, positionVec)
 import Data.Drasil.Equations.Defining.Physics (newtonSLRel, weightEqn,
   weightDerivAccelEqn, weightDerivNewtonEqn, weightDerivReplaceMassEqn, weightDerivSpecWeightEqn,
   hsPressureEqn)

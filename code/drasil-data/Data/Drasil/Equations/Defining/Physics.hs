@@ -3,13 +3,14 @@ module Data.Drasil.Equations.Defining.Physics where
 import Language.Drasil
 
 import qualified Data.Drasil.Quantities.Math as QM (unitVectj)
-import qualified Data.Drasil.Quantities.Physics as QP (acceleration, 
-  force, gravitationalAccel, height, pressure, weight)
+import qualified Data.Drasil.Quantities.Physics as QP (acceleration, time,
+  force, gravitationalAccel, height, pressure, weight, velocity, position)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (density, 
   mass, specWeight, vol)
 
 newtonSLRel, weightEqn, weightDerivAccelEqn, weightDerivNewtonEqn, weightDerivReplaceMassEqn,
-  hsPressureEqn  :: Relation
+  weightDerivSpecWeightEqn,
+  hsPressureEqn, accelerationEqn, velocityEqn  :: Relation
 
 newtonSLRel               = sy QP.force $= sy QPP.mass * sy QP.acceleration
 
@@ -22,3 +23,5 @@ weightDerivAccelEqn       = sy QP.acceleration $= vec2D 0 (sy QP.gravitationalAc
 
 hsPressureEqn             = sy QP.pressure $= sy QPP.specWeight * sy QP.height
 
+velocityEqn               = sy QP.velocity $= deriv (sy QP.position) QP.time
+accelerationEqn           = sy QP.acceleration $= deriv (sy QP.velocity) QP.time

@@ -29,10 +29,10 @@ offset    = constrainedNRV' (dqd  C.offset    (subStr lD "offset") Real metre)  
 targPos   = constrained'    (dqd  C.targPos   (subStr lP "target") Real metre)   [gtZeroConstr] (int 1000)
 
 ---
+-- The output contains a message, as a string, so it needs to be a quantity
 message :: QuantityDict
 message = vc "message" (nounPhraseSent (S "output message as a string")) lS String
 
 ---
 tol :: QDefinition
-tol = mkQuantDef (vcSt "tol" (nounPhraseSP "hit tolerance") (autoStage vEpsilon)
-  Rational) (Perc 2 2)
+tol = mkQuantDef (vcSt "tol" (nounPhraseSP "hit tolerance") (autoStage vEpsilon) Rational) (Perc 2 2)

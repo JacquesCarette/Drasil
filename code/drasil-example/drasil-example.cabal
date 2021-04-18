@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0def5dfacdb93fc5dda59296a25dcbdf38a89f40880beb367fd389ca8a1ae807
+-- hash: 5b40b68d30ca28ac94255c83c25eba66fb630081c0d4b3e2d6013a833a5387bd
 
 name:           drasil-example
 version:        0.1.24.0
@@ -274,7 +274,6 @@ executable projectile
       Drasil.Projectile.IMods
       Drasil.Projectile.References
       Drasil.Projectile.Requirements
-      Drasil.Projectile.TMods
       Drasil.Projectile.Unitals
   hs-source-dirs:
       ./

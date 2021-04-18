@@ -34,6 +34,7 @@ import Data.Drasil.Quantities.Physics (iVel, physicscon)
 
 import Data.Drasil.People (brooks, samCrawford, spencerSmith)
 import Data.Drasil.SI_Units (metre, radian, second)
+import Data.Drasil.Theories.Physics (accelerationTM, velocityTM)
 
 import Drasil.Projectile.Assumptions (assumptions)
 import Drasil.Projectile.Concepts (concepts, landingPos,
@@ -45,10 +46,10 @@ import Drasil.Projectile.Goals (goals)
 import Drasil.Projectile.IMods (iMods)
 import Drasil.Projectile.References (citations)
 import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs)
-import Drasil.Projectile.TMods (tMods)
 import Drasil.Projectile.Unitals (acronyms, constants, constrained, inConstraints,
   inputs, launAngle, outConstraints, outputs, symbols, unitalIdeas, unitalQuants)
-import Theory.Drasil (getEqModQdsFromGd)
+
+import Theory.Drasil (getEqModQdsFromGd, TheoryModel)
 
 srs :: Document
 srs = mkDoc mkSRS (for'' titleize phrase) si
@@ -128,6 +129,9 @@ si = SI {
   _usedinfodb  = usedDB,
    refdb       = refDB
 }
+
+tMods :: [TheoryModel]
+tMods = [accelerationTM, velocityTM]
 
 symbMap :: ChunkDB
 symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants ++ symbols)

@@ -13,10 +13,10 @@ import Data.Drasil.Quantities.Physics (acceleration, constAccelV, iPos, iSpeed,
   iVel, ixPos, ixVel, iyPos, iyVel, position, scalarAccel, scalarPos, speed,
   time, velocity, xAccel, xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel)
 import qualified Data.Drasil.Quantities.Physics as QP (constAccel)
+import Data.Drasil.Theories.Physics (accelerationTM, velocityTM)
 
 import Drasil.Projectile.Assumptions (cartSyst, constAccel, pointMass, timeStartZero, twoDMotion)
 import Drasil.Projectile.References (hibbeler2004)
-import Drasil.Projectile.TMods (accelerationTM, velocityTM)
 
 genDefns :: [GenDefn]
 genDefns = [rectVelGD, rectPosGD, velVecGD, posVecGD]

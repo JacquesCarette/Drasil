@@ -1,6 +1,6 @@
 -- | Routines to help with Symbols and Stages.
 module Language.Drasil.Symbol.Helpers(eqSymb, codeSymb, hasStageSymbol, autoStage,
-  hat, prime, staged, sub, sup, unicodeConv, upperLeft, vec) where
+  hat, prime, staged, sub, subStr, sup, unicodeConv, upperLeft, vec) where
 
 import Data.Char (isLatin1, toLower)
 import Data.Char.Properties.Names (getCharacterName)
@@ -31,6 +31,11 @@ upperLeft b ul = Corners [ul] [] [] [] b
 -- Arguments: Base symbol, then subscripted symbol.
 sub :: Symbol -> Symbol -> Symbol
 sub b lr = Corners [] [] [] [lr] b
+
+-- | Helper for a common case of subscript, with a string
+-- Arguments: Base symbol, then subscript String.
+subStr :: Symbol -> String -> Symbol
+subStr sym substr = sub sym $ Label substr
 
 -- | Helper for creating a symbol with a superscript to the right.
 -- Arguments: Base symbol, then superscripted symbol.

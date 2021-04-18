@@ -139,7 +139,7 @@ module Language.Drasil (
   , Stage(Equational,Implementation)
   -- Symbol.Helpers
   , eqSymb, codeSymb, hasStageSymbol
-  , autoStage, hat, prime, staged, sub, sup , unicodeConv, upperLeft, vec
+  , autoStage, hat, prime, staged, sub, subStr, sup , unicodeConv, upperLeft, vec
   -- Reference
   , makeRef2S, makeCite, makeCiteS, makeRef2, makeCiteInfo, makeCiteInfoS
   -- Label.Type
@@ -267,7 +267,7 @@ import Language.Drasil.Sentence.Extract (sdep, shortdep) -- exported for drasil-
 import Language.Drasil.Reference (makeCite, makeCiteS, makeRef2, makeRef2S, makeCiteInfo, makeCiteInfoS)
 import Language.Drasil.Symbol (Decoration(..), Symbol(..), compsy)
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol,
-  autoStage, hat, prime, staged, sub, sup, unicodeConv, upperLeft, vec)
+  autoStage, hat, prime, staged, sub, subStr, sup, unicodeConv, upperLeft, vec)
 import Language.Drasil.Stages (Stage(..))
 import Language.Drasil.Misc -- all of it
 import Language.Drasil.People (People, Person, person, HasName(..),

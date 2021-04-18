@@ -5,15 +5,14 @@ import Theory.Drasil (DataDefinition, GenDefn, TheoryModel, ddNoRefs, gd,
   tmNoRefs, ModelKinds (OthModel))
 import Utils.Drasil
 
-import Data.Drasil.Concepts.Documentation (body, component, constant, material_,
-  value)
+import Data.Drasil.Concepts.Documentation (component, material_, value)
 import Data.Drasil.Concepts.Math (cartesian, equation, vector)
 import Data.Drasil.Concepts.Physics (gravity, twoD)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (density, 
   mass, specWeight, vol)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration, 
   force, gravitationalAccel, pressure, torque, weight, positionVec)
-import Data.Drasil.Equations.Defining.Physics (newtonSLRel, weightEqn,
+import Data.Drasil.Equations.Defining.Physics (newtonSLRel, newtonSLRC, newtonSLDesc, weightEqn,
   weightDerivAccelEqn, weightDerivNewtonEqn, weightDerivReplaceMassEqn, weightDerivSpecWeightEqn,
   hsPressureEqn)
 
@@ -23,18 +22,7 @@ physicsTMs = [newtonSL]
 newtonSL :: TheoryModel
 newtonSL = tmNoRefs (cw newtonSLRC)
   [qw QP.force, qw QPP.mass, qw QP.acceleration] ([] :: [ConceptChunk])
-  [] [sy QP.force $= sy QPP.mass * sy QP.acceleration] []
-  "NewtonSecLawMot" [newtonSLDesc]
-
-newtonSLRC :: RelationConcept
-newtonSLRC = makeRC "newtonSL" (nounPhraseSP "Newton's second law of motion")
-  newtonSLDesc newtonSLRel
-
-newtonSLDesc :: Sentence
-newtonSLDesc = foldlSent [S "The net", getTandS QP.force, S "on a",
-  phrase body `sIs` S "proportional to", getTandS QP.acceleration `ofThe`
-  phrase body `sC` S "where", ch QPP.mass, S "denotes", phrase QPP.mass `ofThe`
-  phrase body, S "as the", phrase constant `sOf` S "proportionality"]
+  [] [newtonSLRel] [] "NewtonSecLawMot" [newtonSLDesc]
 
 --
 

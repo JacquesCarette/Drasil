@@ -2,21 +2,15 @@ module Drasil.Projectile.Unitals where
 
 import Language.Drasil
 import Language.Drasil.ShortHands
-import Utils.Drasil
 
-import Data.Drasil.Concepts.Math (angle)
-import Data.Drasil.Concepts.Physics (distance)
-
-import Data.Drasil.Quantities.Physics (iSpeed, position, time)
 import Data.Drasil.Quantities.Math (pi_)
 
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (radian, metre, second)
 import Data.Drasil.Units.Physics (velU)
 
-import Drasil.Projectile.Concepts (landingPos, launcher, launchAngle,
-  launchSpeed, projectile, targetPos, target)
-import qualified Drasil.Projectile.Concepts as C (flightDur, offset)
+import qualified Drasil.Projectile.Concepts as C (flightDur, offset,
+  flightDur, landPos, launAngle, launSpeed, offset, targPos)
 
 ---
 landPosUnc, launAngleUnc, launSpeedUnc, offsetUnc, targPosUnc :: UncertQ
@@ -27,39 +21,15 @@ offsetUnc    = uq offset    defaultUncrt
 targPosUnc   = uq targPos   defaultUncrt
 
 flightDur, landPos, launAngle, launSpeed, offset, targPos :: ConstrConcept
-flightDur = constrainedNRV' (dqd  flightDurConcept (unitHelper lT "flight") Real second)  [gtZeroConstr]
-landPos   = constrainedNRV' (dqd  landPosConcept   (unitHelper lP "land"  ) Real metre)   [gtZeroConstr]
-launAngle = constrained'    (dqd' launAngleConcept (autoStage lTheta) Real (Just radian)) [physc $ Bounded (Exc, 0) (Exc, sy pi_ / 2)] (sy pi_ / 4)
-launSpeed = constrained'    (dqd  launSpeedConcept (unitHelper lV "launch") Real velU)    [gtZeroConstr] (int 100)
-offset    = constrainedNRV' (dqd  offsetConcept    (unitHelper lD "offset") Real metre)   [physc $ UpFrom (Exc, negate $ sy landPos) ]
-targPos   = constrained'    (dqd  targPosConcept   (unitHelper lP "target") Real metre)   [gtZeroConstr] (int 1000)
+flightDur = constrainedNRV' (dqd  C.flightDur (unitHelper lT "flight") Real second)  [gtZeroConstr]
+landPos   = constrainedNRV' (dqd  C.landPos   (unitHelper lP "land"  ) Real metre)   [gtZeroConstr]
+launAngle = constrained'    (dqd' C.launAngle (autoStage lTheta) Real (Just radian)) [physc $ Bounded (Exc, 0) (Exc, sy pi_ / 2)] (sy pi_ / 4)
+launSpeed = constrained'    (dqd  C.launSpeed (unitHelper lV "launch") Real velU)    [gtZeroConstr] (int 100)
+offset    = constrainedNRV' (dqd  C.offset    (unitHelper lD "offset") Real metre)   [physc $ UpFrom (Exc, negate $ sy landPos) ]
+targPos   = constrained'    (dqd  C.targPos   (unitHelper lP "target") Real metre)   [gtZeroConstr] (int 1000)
 
 unitHelper :: Symbol -> String -> Symbol
 unitHelper sym substr = sub sym $ Label substr
-
-landPosConcept :: ConceptChunk
-landPosConcept = cc' landingPos
-  (foldlSent_ [S "the", phrase distance, S "from the", phrase launcher, S "to",
-            (S "final" +:+ phrase position) `ofThe` phrase projectile])
-
-launAngleConcept :: ConceptChunk
-launAngleConcept = cc' launchAngle
-  (foldlSent_ [S "the", phrase angle, S "between the", phrase launcher `sAnd` S "a straight line",
-             S "from the", phrase launcher `toThe` phrase target])
-
-launSpeedConcept :: ConceptChunk
-launSpeedConcept = cc' launchSpeed (phrase iSpeed `ofThe` phrase projectile +:+ S "when launched")
-
-offsetConcept :: ConceptChunk
-offsetConcept = cc' C.offset (S "the offset between the" +:+ phrase targetPos `andThe` phrase landingPos)
-
-targPosConcept :: ConceptChunk
-targPosConcept = cc' targetPos
-  (foldlSent_ [S "the", phrase distance, S "from the", phrase launcher `toThe` phrase target])
-
-flightDurConcept :: ConceptChunk
-flightDurConcept = cc' C.flightDur
-  (foldlSent_ [S "the", phrase time, S "when the", phrase projectile, S "lands"])
 
 ---
 message :: QuantityDict

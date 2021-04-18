@@ -42,7 +42,7 @@ import Data.Drasil.Theories.Physics (accelerationTM, velocityTM)
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 import Drasil.Projectile.Assumptions (assumptions)
-import Drasil.Projectile.Concepts (concepts, landingPos,
+import Drasil.Projectile.Concepts (concepts, landingPosNC,
   launcher, projectile, target)
 import Drasil.Projectile.DataDefs (dataDefs)
 import Drasil.Projectile.Figures (figLaunch)
@@ -166,7 +166,7 @@ concIns = assumptions ++ funcReqs ++ goals ++ nonfuncReqs
 
 prob :: Sentence
 prob = foldlSent_ [S "efficiently" `sAnd` S "correctly predict the",
-  phrase landingPos, S "of a", phrase projectile]
+  phrase landingPosNC, S "of a", phrase projectile]
 
 ---------------------------------
 -- Terminology and Definitions --

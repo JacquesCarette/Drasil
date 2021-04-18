@@ -36,6 +36,22 @@ ghc-options:
 - -O2
 
 executables:
+  projectile:
+    main: Drasil.Projectile.Main
+    source-dirs: ./
+    other-modules:
+    - Drasil.Projectile.Assumptions
+    - Drasil.Projectile.Body
+    - Drasil.Projectile.Concepts
+    - Drasil.Projectile.DataDefs
+    - Drasil.Projectile.Figures
+    - Drasil.Projectile.GenDefs
+    - Drasil.Projectile.Goals
+    - Drasil.Projectile.IMods
+    - Drasil.Projectile.References
+    - Drasil.Projectile.Requirements
+    - Drasil.Projectile.Unitals
+
   dblpendulum:
     main: Drasil.DblPendulum.Main
     source-dirs: ./
@@ -145,22 +161,6 @@ executables:
     - Drasil.PDController.SpSysDesc
     - Drasil.PDController.TModel
      
-  projectile:
-    main: Drasil.Projectile.Main
-    source-dirs: ./
-    other-modules:
-    - Drasil.Projectile.Assumptions
-    - Drasil.Projectile.Body
-    - Drasil.Projectile.Concepts
-    - Drasil.Projectile.DataDefs
-    - Drasil.Projectile.Figures
-    - Drasil.Projectile.GenDefs
-    - Drasil.Projectile.Goals
-    - Drasil.Projectile.IMods
-    - Drasil.Projectile.References
-    - Drasil.Projectile.Requirements
-    - Drasil.Projectile.Unitals
-
   ssp:
     main: Drasil.SSP.Main
     source-dirs: ./

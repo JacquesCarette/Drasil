@@ -4,17 +4,11 @@ import Language.Drasil
 import Language.Drasil.ShortHands
 import Utils.Drasil
 
-import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
-import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst,
-  requirement, srs, typUnc)
 import Data.Drasil.Concepts.Math (angle)
-import Data.Drasil.Concepts.Physics (distance, oneD, twoD)
+import Data.Drasil.Concepts.Physics (distance)
 
-import Data.Drasil.Quantities.Physics (acceleration, constAccel,
-  gravitationalAccelConst, iPos, iSpeed, iVel, ixPos, iyPos, ixVel, iyVel,
-  position, scalarPos, speed, time, velocity, xAccel, xConstAccel, xPos,
-  xVel, yAccel, yConstAccel, yPos, yVel)
-import Data.Drasil.Quantities.Math (pi_, piConst)
+import Data.Drasil.Quantities.Physics (iSpeed, position, time)
+import Data.Drasil.Quantities.Math (pi_)
 
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (radian, metre, second)
@@ -23,41 +17,6 @@ import Data.Drasil.Units.Physics (velU)
 import Drasil.Projectile.Concepts (landingPos, launcher, launchAngle,
   launchSpeed, projectile, targetPos, target)
 import qualified Drasil.Projectile.Concepts as C (flightDur, offset)
-
-symbols :: [QuantityDict]
-symbols = qw gravitationalAccelConst : unitalQuants ++ map qw constants ++
-  map qw [acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
-  iyPos, ixVel, iyVel, position, scalarPos, speed, time, velocity, xAccel,
-  xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel]
-
--- FIXME: Move to Defs?
-acronyms :: [CI]
-acronyms = [oneD, twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
-  physSyst, requirement, srs, thModel, typUnc]
-
-constants :: [QDefinition]
-constants = [gravitationalAccelConst, piConst, tol]
-
-inputs :: [QuantityDict]
-inputs = map qw [launSpeed, launAngle, targPos]
-
-outputs :: [QuantityDict]
-outputs = [message, qw offset]
-
-unitalQuants :: [QuantityDict]
-unitalQuants = message : map qw constrained
-
-unitalIdeas :: [IdeaDict]
-unitalIdeas = nw message : map nw constrained
-
-inConstraints :: [UncertQ]
-inConstraints = [launAngleUnc, launSpeedUnc, targPosUnc]
-
-outConstraints :: [UncertQ]
-outConstraints = [landPosUnc, offsetUnc]
-
-constrained :: [ConstrConcept]
-constrained = [flightDur, landPos, launAngle, launSpeed, offset, targPos]
 
 ---
 landPosUnc, launAngleUnc, launSpeedUnc, offsetUnc, targPosUnc :: UncertQ

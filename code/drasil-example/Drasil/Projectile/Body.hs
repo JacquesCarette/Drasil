@@ -21,20 +21,25 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
 
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
-  problem, srsDomains)
+  problem, srsDomains, assumption, goalStmt, physSyst,
+  requirement, typUnc)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Math (cartesian, mathcon)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
-import Data.Drasil.Concepts.Physics (constAccel, gravity, physicCon, physicCon',
-  rectilinear, twoD)
+import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon',
+  rectilinear, oneD, twoD)
 import Data.Drasil.Concepts.Software (errMsg, program)
 
-import Data.Drasil.Quantities.Math (pi_)
-import Data.Drasil.Quantities.Physics (iVel, physicscon)
+import Data.Drasil.Quantities.Math (pi_, piConst)
+import Data.Drasil.Quantities.Physics (acceleration, constAccel,
+  gravitationalAccelConst, iPos, iSpeed, iVel, ixPos, iyPos, ixVel, iyVel,
+  position, scalarPos, speed, time, velocity, xAccel, xConstAccel, xPos,
+  xVel, yAccel, yConstAccel, yPos, yVel, physicscon)
 
 import Data.Drasil.People (brooks, samCrawford, spencerSmith)
 import Data.Drasil.SI_Units (metre, radian, second)
 import Data.Drasil.Theories.Physics (accelerationTM, velocityTM)
+import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 import Drasil.Projectile.Assumptions (assumptions)
 import Drasil.Projectile.Concepts (concepts, landingPos,
@@ -46,8 +51,9 @@ import Drasil.Projectile.Goals (goals)
 import Drasil.Projectile.IMods (iMods)
 import Drasil.Projectile.References (citations)
 import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs)
-import Drasil.Projectile.Unitals (acronyms, constants, constrained, inConstraints,
-  inputs, launAngle, outConstraints, outputs, symbols, unitalIdeas, unitalQuants)
+import Drasil.Projectile.Unitals (launAngle, tol, launSpeed, targPos, message,
+  offset, launSpeedUnc, launAngleUnc,targPosUnc,landPosUnc, offsetUnc, flightDur,
+  landPos)
 
 import Theory.Drasil (getEqModQdsFromGd, TheoryModel)
 
@@ -178,3 +184,41 @@ physSystParts = map foldlSent [
   [S "The", phrase launcher],
   [S "The", phrase projectile, sParen (S "with" +:+ getTandS iVel `sAnd` getTandS launAngle)],
   [S "The", phrase target]]
+
+----------------------------------------------------
+-- Various gathered data that should be automated --
+----------------------------------------------------
+symbols :: [QuantityDict]
+symbols = qw gravitationalAccelConst : unitalQuants ++ map qw constants ++
+  map qw [acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
+  iyPos, ixVel, iyVel, position, scalarPos, speed, time, velocity, xAccel,
+  xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel]
+
+constants :: [QDefinition]
+constants = [gravitationalAccelConst, piConst, tol]
+
+inputs :: [QuantityDict]
+inputs = map qw [launSpeed, launAngle, targPos]
+
+outputs :: [QuantityDict]
+outputs = [message, qw offset]
+
+unitalQuants :: [QuantityDict]
+unitalQuants = message : map qw constrained
+
+unitalIdeas :: [IdeaDict]
+unitalIdeas = nw message : map nw constrained
+
+inConstraints :: [UncertQ]
+inConstraints = [launAngleUnc, launSpeedUnc, targPosUnc]
+
+outConstraints :: [UncertQ]
+outConstraints = [landPosUnc, offsetUnc]
+
+constrained :: [ConstrConcept]
+constrained = [flightDur, landPos, launAngle, launSpeed, offset, targPos]
+
+acronyms :: [CI]
+acronyms = [oneD, twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
+  physSyst, requirement, Doc.srs, thModel, typUnc]
+

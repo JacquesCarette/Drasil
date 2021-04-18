@@ -5,8 +5,7 @@ import Theory.Drasil (TheoryModel, tm)
 import Data.Drasil.Quantities.Physics (acceleration, position, time, velocity)
 import Data.Drasil.Equations.Defining.Physics (accelerationEqn, velocityEqn, accelerationRC,
   velocityRC)
-
-import Drasil.Projectile.References (accelerationWiki, velocityWiki)
+import Data.Drasil.Citations (accelerationWiki, velocityWiki)
 
 tMods :: [TheoryModel]
 tMods = [accelerationTM, velocityTM]

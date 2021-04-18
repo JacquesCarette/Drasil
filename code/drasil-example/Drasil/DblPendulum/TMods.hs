@@ -1,34 +1,17 @@
 module Drasil.DblPendulum.TMods (tMods, accelerationTM, velocityTM, newtonSL, newtonSLR) where
 
 import Language.Drasil
-import Theory.Drasil (TheoryModel, tm, tmNoRefs)
-import Data.Drasil.Quantities.Physics (acceleration, position, time, velocity, acceleration,
-       momentOfInertia, angularAccel, torque)
-import Data.Drasil.Equations.Defining.Physics (accelerationEqn, velocityEqn, accelerationRC, velocityRC)
+import Theory.Drasil (TheoryModel, tmNoRefs)
+import Data.Drasil.Quantities.Physics (momentOfInertia, angularAccel, torque)
 import Data.Drasil.Concepts.Documentation (constant)
-import Drasil.Projectile.References (accelerationWiki, velocityWiki)
-import Data.Drasil.Theories.Physics (newtonSL)
+import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM)
 import Data.Drasil.Concepts.Physics (pendulum)
 import Drasil.DblPendulum.Assumptions (pend2DMotion)
 import Utils.Drasil
 
-
-
 -----------
 tMods :: [TheoryModel]
 tMods = [accelerationTM, velocityTM, newtonSL, newtonSLR]
-
-accelerationTM :: TheoryModel
-accelerationTM = tm (cw accelerationRC)
-  [qw acceleration, qw velocity, qw time] ([] :: [ConceptChunk]) [] [accelerationEqn] []
-  [makeCite accelerationWiki] "acceleration" []
-
-----------
-
-velocityTM :: TheoryModel
-velocityTM = tm (cw velocityRC)
-  [qw velocity, qw position, qw time] ([] :: [ConceptChunk]) [] [velocityEqn] []
-  [makeCite velocityWiki] "velocity" []
 
 -----------------
 --Newton's second Law of rotation--------------------------

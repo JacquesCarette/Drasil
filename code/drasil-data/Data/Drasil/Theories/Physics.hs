@@ -2,19 +2,20 @@ module Data.Drasil.Theories.Physics where
 
 import Language.Drasil
 import Theory.Drasil (DataDefinition, GenDefn, TheoryModel, ddNoRefs, gd,
-  tmNoRefs, ModelKinds (OthModel))
+  tmNoRefs, ModelKinds (OthModel), tm)
 import Utils.Drasil
 
+import Data.Drasil.Citations (velocityWiki, accelerationWiki)
 import Data.Drasil.Concepts.Documentation (component, material_, value)
 import Data.Drasil.Concepts.Math (cartesian, equation, vector)
 import Data.Drasil.Concepts.Physics (gravity, twoD)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (density, 
   mass, specWeight, vol)
-import qualified Data.Drasil.Quantities.Physics as QP (acceleration, 
-  force, gravitationalAccel, pressure, torque, weight, positionVec)
+import qualified Data.Drasil.Quantities.Physics as QP (acceleration, velocity, position,
+  force, gravitationalAccel, pressure, torque, weight, positionVec, time)
 import Data.Drasil.Equations.Defining.Physics (newtonSLRel, newtonSLRC, newtonSLDesc, weightEqn,
   weightDerivAccelEqn, weightDerivNewtonEqn, weightDerivReplaceMassEqn, weightDerivSpecWeightEqn,
-  hsPressureEqn)
+  hsPressureEqn, accelerationEqn, accelerationRC, velocityEqn, velocityRC)
 
 physicsTMs :: [TheoryModel]
 physicsTMs = [newtonSL]
@@ -102,3 +103,17 @@ torqueDesc :: Sentence
 torqueDesc = foldlSent [S "The", phrase torque, 
   S "on a body measures the", S "the tendency" `sOf` S "a", phrase QP.force, 
   S "to rotate the body around an axis or pivot"]
+
+--
+
+accelerationTM :: TheoryModel
+accelerationTM = tm (cw accelerationRC)
+  [qw QP.acceleration, qw QP.velocity, qw QP.time] ([] :: [ConceptChunk]) [] [accelerationEqn] []
+  [makeCite accelerationWiki] "acceleration" []
+
+----------
+
+velocityTM :: TheoryModel
+velocityTM = tm (cw velocityRC)
+  [qw QP.velocity, qw QP.position, qw QP.time] ([] :: [ConceptChunk]) [] [velocityEqn] []
+  [makeCite velocityWiki] "velocity" []

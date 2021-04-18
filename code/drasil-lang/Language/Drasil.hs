@@ -128,8 +128,7 @@ module Language.Drasil (
   , Space(..) , RealInterval(..), Inclusive(..), RTopology(..)
   , DomainDesc(AllDD, BoundedDD), getActorName, getInnerSpace
   -- Symbol
-  , Decoration(..), Symbol(..), autoStage, compsy, hat, prime, staged, sub, sup
-  , unicodeConv, upperLeft, vec
+  , Decoration(..), Symbol(..), compsy
   -- Misc
   , mkTable
   -- People
@@ -140,6 +139,7 @@ module Language.Drasil (
   , Stage(Equational,Implementation)
   -- Symbol.Helpers
   , eqSymb, codeSymb, hasStageSymbol
+  , autoStage, hat, prime, staged, sub, sup , unicodeConv, upperLeft, vec
   -- Reference
   , makeRef2S, makeCite, makeCiteS, makeRef2, makeCiteInfo, makeCiteInfoS
   -- Label.Type
@@ -265,9 +265,9 @@ import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), (+:+),
   (+:+.), (+:), capSent, ch, sC, sDash, sParen)
 import Language.Drasil.Sentence.Extract (sdep, shortdep) -- exported for drasil-database FIXME: move to development package?
 import Language.Drasil.Reference (makeCite, makeCiteS, makeRef2, makeRef2S, makeCiteInfo, makeCiteInfoS)
-import Language.Drasil.Symbol (Decoration(..), Symbol(..), autoStage, compsy,
-  hat, prime, staged, sub, sup, unicodeConv, upperLeft, vec)
-import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol)
+import Language.Drasil.Symbol (Decoration(..), Symbol(..), compsy)
+import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol,
+  autoStage, hat, prime, staged, sub, sup, unicodeConv, upperLeft, vec)
 import Language.Drasil.Stages (Stage(..))
 import Language.Drasil.Misc -- all of it
 import Language.Drasil.People (People, Person, person, HasName(..),

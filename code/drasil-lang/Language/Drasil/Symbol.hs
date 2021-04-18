@@ -2,15 +2,11 @@
 -- gets rendered as a (unique) symbol.  This is actually NOT based on
 -- semantics at all, but just a description of how things look.
 
-module Language.Drasil.Symbol (Decoration(..), Symbol(..), autoStage, compsy,
-  hat, prime, staged, sub, sup, unicodeConv, upperLeft, vec) where
+module Language.Drasil.Symbol (Decoration(..), Symbol(..), compsy) where
 
 import Language.Drasil.Unicode(Special)
-import Language.Drasil.Stages (Stage(..))
 
-import Data.Char (isLatin1, toLower)
-import Data.Char.Properties.Names (getCharacterName)
-import Data.List.Split (splitOn)
+import Data.Char (toLower)
 
 -- | Decorations on symbols/characters such as hats or Vector representations
 -- (bolding/etc)
@@ -124,60 +120,3 @@ compsyLower :: String -> String -> Ordering
 compsyLower x y = case compare (map toLower x) (map toLower y) of
   EQ    -> compare x y 
   other -> other
-
--- | Helper for creating a symbol with a superscript on the left side of the symbol.
--- Arguments: Base symbol, then superscripted symbol.
-upperLeft :: Symbol -> Symbol -> Symbol
-upperLeft b ul = Corners [ul] [] [] [] b
-
--- | Helper for creating a symbol with a subscript to the right.
--- Arguments: Base symbol, then subscripted symbol.
-sub :: Symbol -> Symbol -> Symbol
-sub b lr = Corners [] [] [] [lr] b
-
--- | Helper for creating a symbol with a superscript to the right.
--- Arguments: Base symbol, then superscripted symbol.
-sup :: Symbol -> Symbol -> Symbol
-sup b ur = Corners [] [] [ur] [] b
-
--- | Helper for creating a symbol with a hat ("^") atop it.
-hat :: Symbol -> Symbol
-hat = Atop Hat
-
--- | Helper for creating a Vector symbol.
-vec :: Symbol -> Symbol
-vec = Atop Vector
-
--- | Helper for creating a Vector symbol.
-prime :: Symbol -> Symbol
-prime = Atop Prime
-
--- | Helper for creating a symbol that depends on the stage
-staged :: Symbol -> Symbol -> Stage -> Symbol
-staged eqS _ Equational = eqS
-staged _ impS Implementation = impS 
-
--- | Helper for creating a symbol with Unicode in it.
-autoStage :: Symbol -> (Stage -> Symbol)
-autoStage s = staged s (unicodeConv s)
-
--- | Helper for autoStage that apples unicodeString to all Symbols with Strings
-unicodeConv :: Symbol -> Symbol
-unicodeConv (Variable st) = Variable $ unicodeString st
-unicodeConv (Label    st) = Label    $ unicodeString st
-unicodeConv (Atop    d s) = Atop d   $ unicodeConv s
-unicodeConv (Corners a b c d s) =
-  Corners (map unicodeConv a) (map unicodeConv b) (map unicodeConv c) (map unicodeConv d) (unicodeConv s)
-unicodeConv (Concat ss) = Concat $ map unicodeConv ss
-unicodeConv x = x
-
--- | Helper for unicodeConv that converts each Unicode character to text equivalent
--- If a character is Latin, it it just returned.
--- If a character is Unicode and Greek, just the name of the symbol is returned (eg. theta).
--- Otherwise, an error is thrown.
-unicodeString :: String -> String
-unicodeString = concatMap (\x -> if isLatin1 x then [x] else getName $ nameList x)
-  where
-    nameList = splitOn " " . map toLower . getCharacterName
-    getName ("greek":_:_:name) = unwords name
-    getName _ = error "unicodeString not fully implemented"

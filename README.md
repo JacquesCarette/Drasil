@@ -35,11 +35,11 @@ We wrote a [our position paper](https://github.com/JacquesCarette/Drasil/blob/ma
 If you are on Windows, we recommend you use cygwin (MinGW probably works too, but we have not tested it).  `make` is required as well; on MacOS, you may need to install XCode to get that. Most linux installs have it by default.
 
 1. Ensure you have [Stack](https://www.haskell.org/downloads#stack) installed (if you have the Haskell Platform, you should already have Stack).
-	- Also ensure that your stack version is at least 2.3.1 (latest version); for help, see [Stack Install & Upgrade](docs.haskellstack.org/en/stable/install_and_upgrade/)
+	- Also ensure that your stack version is at least 2.3.1 (latest version); for help, see [Stack Install & Upgrade](https://docs.haskellstack.org/en/stable/install_and_upgrade/)
 2. Run `stack setup` while in **./code/**
 	- Remember to  change your working directory to **./code/** first
 	- Use `cd` to change working directory, `pwd` to print your current working directory
-	- Refer to [File Directory](swcarpentry.github.io/shell-novice/02-filedir/index.html) for further help regarding file directory commands
+	- Refer to [File Directory](https://swcarpentry.github.io/shell-novice/02-filedir/index.html) for further help regarding file directory commands
 	- e.g. **./Users/.../GitHub/Drasil/code** (on MacOS)
 3. Use the `make` command to build the current version of Drasil. Note that this will build and run **all** of the examples as well.
 	- **Warning**: this entire process takes around 10-15 minutes to complete (MacOS estimate)

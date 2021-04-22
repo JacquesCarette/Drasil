@@ -4,7 +4,7 @@ module Drasil.SSP.DataDefs (dataDefs, intersliceWtrF, angleA, angleB, lengthB,
 
 import Prelude hiding (cos, sin, tan)
 import Language.Drasil
-import Theory.Drasil (DataDefinition, dd, mkQuantDef)
+import Theory.Drasil (DataDefinition, dd)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (assumption)

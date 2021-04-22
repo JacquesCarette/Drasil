@@ -10,15 +10,13 @@ import Language.Drasil.Code (Choices(..), Comments(..),
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
   ConstantRepr(..), InputModule(..), CodeConcept(..), matchConcepts, SpaceMatch,
   matchSpaces, AuxFile(..), Visibility(..), defaultChoices, codeSpec)
-import Language.Drasil.Generate (gen, genCode)
-import Language.Drasil.Printers (DocSpec(DocSpec), DocType(SRS, Website))
+import Language.Drasil.Generate (gen, genCode, DocSpec(DocSpec), DocType(SRS, Website))
 
 import GOOL.Drasil (CodeType(..))
 
 import Data.Drasil.Quantities.Math (piConst)
 
-import Drasil.Projectile.Body (printSetting, si, srs)
-import Drasil.Projectile.Concepts (projectileTitle)
+import Drasil.Projectile.Body (printSetting, si, srs, projectileTitle)
 
 import Data.List (intercalate)
 

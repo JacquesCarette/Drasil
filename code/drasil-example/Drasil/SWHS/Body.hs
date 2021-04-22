@@ -22,7 +22,7 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocSection (..),
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-import Data.Drasil.IdeaDicts as Doc (inModel)
+import Data.Drasil.TheoryConcepts as Doc (inModel)
 import Data.Drasil.Concepts.Computation (algorithm, compcon)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition,
   constraint, corSol, datum, document, environment,input_, model, organization, 

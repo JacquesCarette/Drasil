@@ -14,7 +14,6 @@ import qualified Data.Drasil.Concepts.Physics as CP (acceleration, angAccel,
 import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second, hertz)
 import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU, 
     impulseU, momtInertU, torqueU, velU)
-import Theory.Drasil (mkQuantDef)
 
 restitutionCoef :: DefinedQuantityDict
 restitutionCoef = dqdNoUnit CP.restitutionCoef (sub cC (Label "R")) Real

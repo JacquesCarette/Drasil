@@ -3,7 +3,7 @@ module Drasil.GamePhysics.GenDefs (generalDefns, accelGravityGD, impulseGD,
 
 import Language.Drasil
 import Utils.Drasil
-import Theory.Drasil (GenDefn, gd)
+import Theory.Drasil (GenDefn, gd, ModelKinds (OthModel))
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
  gravitationalAccel, gravitationalConst, restitutionCoef, impulseS, force,
  fOfGravity)
@@ -61,7 +61,7 @@ conservationOfMomentDeriv = foldlSent [S "When bodies collide, they exert",
 
 --------------------------Acceleration due to gravity----------------------------
 accelGravityGD :: GenDefn
-accelGravityGD = gd accelGravityRC (getUnit QP.acceleration) (Just accelGravityDeriv)
+accelGravityGD = gd (OthModel accelGravityRC) (getUnit QP.acceleration) (Just accelGravityDeriv)
    [accelGravitySrc] "accelGravity" [accelGravityDesc]
 
 accelGravityRC :: RelationConcept
@@ -147,7 +147,7 @@ accelGravityDerivEqns = [accelGravityDerivEqn1, accelGravityDerivEqn2, accelGrav
 ----------------------------Impulse for Collision--------------------------------------------
 
 impulseGD :: GenDefn
-impulseGD = gd impulseRC (getUnit QP.impulseS) Nothing 
+impulseGD = gd (OthModel impulseRC) (getUnit QP.impulseS) Nothing 
   [impulseSrc] "impulse" [rigidTwoDAssump, rightHandAssump, collisionAssump]
 
 impulseRC :: RelationConcept

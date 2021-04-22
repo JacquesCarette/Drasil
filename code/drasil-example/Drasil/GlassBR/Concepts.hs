@@ -5,7 +5,11 @@ import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, likelyChg,
   notApp, physSyst, response, requirement, srs, type_, typUnc, unlikelyChg)
-import Data.Drasil.IdeaDicts
+import Data.Drasil.TheoryConcepts (dataDefn, inModel, thModel)
+
+{--}
+idglass :: IdeaDict
+idglass      = mkIdea  "glass"          (cn' "Glass")                 Nothing
 
 {--}
 con :: [CI]

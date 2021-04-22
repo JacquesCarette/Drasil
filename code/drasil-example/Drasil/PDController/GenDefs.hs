@@ -11,7 +11,7 @@ import Drasil.PDController.References
 import Drasil.PDController.TModel
 import Language.Drasil
 
-import Theory.Drasil (GenDefn, gd)
+import Theory.Drasil (GenDefn, gd, ModelKinds (OthModel))
 import Utils.Drasil
 
 genDefns :: [GenDefn]
@@ -21,7 +21,7 @@ genDefns = [gdPowerPlant]
 
 gdPowerPlant :: GenDefn
 gdPowerPlant
-  = gd gdPowerPlantRC (Nothing :: Maybe UnitDefn) Nothing
+  = gd (OthModel gdPowerPlantRC) (Nothing :: Maybe UnitDefn) Nothing
       [makeCite pidWiki, makeCite abbasi2015]
       "gdPowerPlant"
       [gdPowerPlantNote]

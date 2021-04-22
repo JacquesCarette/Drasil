@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0a07bf81d67f10f99132646c902235e6bbc53d415c903e0f4ac039e43add77ea
+-- hash: 5b40b68d30ca28ac94255c83c25eba66fb630081c0d4b3e2d6013a833a5387bd
 
 name:           drasil-example
 version:        0.1.24.0
@@ -50,6 +50,7 @@ executable dblpendulum
     , drasil-gen
     , drasil-gool
     , drasil-lang
+    , drasil-metadata
     , drasil-printers
     , drasil-theory
     , drasil-utils
@@ -88,6 +89,7 @@ executable gamephysics
     , drasil-gen
     , drasil-gool
     , drasil-lang
+    , drasil-metadata
     , drasil-printers
     , drasil-theory
     , drasil-utils
@@ -129,6 +131,7 @@ executable glassbr
     , drasil-gen
     , drasil-gool
     , drasil-lang
+    , drasil-metadata
     , drasil-printers
     , drasil-theory
     , drasil-utils
@@ -157,6 +160,7 @@ executable hghc
     , drasil-gen
     , drasil-gool
     , drasil-lang
+    , drasil-metadata
     , drasil-printers
     , drasil-theory
     , drasil-utils
@@ -207,6 +211,7 @@ executable nopcm
     , drasil-gen
     , drasil-gool
     , drasil-lang
+    , drasil-metadata
     , drasil-printers
     , drasil-theory
     , drasil-utils
@@ -246,6 +251,7 @@ executable pdController
     , drasil-gen
     , drasil-gool
     , drasil-lang
+    , drasil-metadata
     , drasil-printers
     , drasil-theory
     , drasil-utils
@@ -268,7 +274,6 @@ executable projectile
       Drasil.Projectile.IMods
       Drasil.Projectile.References
       Drasil.Projectile.Requirements
-      Drasil.Projectile.TMods
       Drasil.Projectile.Unitals
   hs-source-dirs:
       ./
@@ -284,6 +289,7 @@ executable projectile
     , drasil-gen
     , drasil-gool
     , drasil-lang
+    , drasil-metadata
     , drasil-printers
     , drasil-theory
     , drasil-utils
@@ -324,6 +330,7 @@ executable ssp
     , drasil-gen
     , drasil-gool
     , drasil-lang
+    , drasil-metadata
     , drasil-printers
     , drasil-theory
     , drasil-utils
@@ -363,6 +370,7 @@ executable swhs
     , drasil-gen
     , drasil-gool
     , drasil-lang
+    , drasil-metadata
     , drasil-printers
     , drasil-theory
     , drasil-utils
@@ -390,6 +398,7 @@ executable template
     , drasil-gen
     , drasil-gool
     , drasil-lang
+    , drasil-metadata
     , drasil-printers
     , drasil-theory
     , drasil-utils

@@ -1,5 +1,6 @@
 module Drasil.PDController.References where
 import Data.Drasil.Citations (smithLai2005)
+import Data.Drasil.People (wikiAuthors)
 
 import Language.Drasil
 
@@ -10,14 +11,14 @@ pidWiki, johnson2008, abbasi2015, laplaceWiki :: Citation
 
 laplaceWiki
   = cMisc
-      [author [mononym "Wikipedia Contributors"], title "Laplace transform",
+      [author [wikiAuthors], title "Laplace transform",
        howPublishedU "https://en.wikipedia.org/wiki/Laplace_transform",
        month Nov, year 2020]
       "laplaceWiki"
 
 pidWiki
   = cMisc
-      [author [mononym "Wikipedia Contributors"], title "PID controller",
+      [author [wikiAuthors], title "PID controller",
        howPublishedU "https://en.wikipedia.org/wiki/PID_controller", month Oct,
        year 2020]
       "pidWiki"
@@ -36,7 +37,7 @@ johnson2008
 
 abbasi2015
   = cMisc
-      [author [mononym "Nasser M. Abbasi"],
+      [author [personWM "Nasser" ["M"] "Abbasi"],
        title "A differential equation view of closed loop control systems",
        howPublishedU
          "https://www.12000.org/my_notes/connecting_systems/report.htm",

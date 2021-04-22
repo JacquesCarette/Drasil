@@ -24,7 +24,7 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
   section_, simulation, software, softwareSys, srsDomains, system,
   systemConstraint, sysCont, task, template, user, doccon, doccon', property)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-import Data.Drasil.IdeaDicts as Doc (dataDefn, inModel)
+import Data.Drasil.TheoryConcepts as Doc (dataDefn, inModel)
 import Data.Drasil.Concepts.Education (frstYr, highSchoolCalculus,
   highSchoolPhysics, educon)
 import Data.Drasil.Concepts.Software (physLib, softwarecon)

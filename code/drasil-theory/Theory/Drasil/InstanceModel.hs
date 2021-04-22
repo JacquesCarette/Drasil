@@ -1,24 +1,25 @@
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables  #-}
 module Theory.Drasil.InstanceModel
   ( InstanceModel
-  , im, imNoDeriv, imNoRefs, imNoDerivNoRefs
+  , im, imNoDeriv, imNoRefs, imNoDerivNoRefs, getEqModQdsFromIm
   , qwUC, qwC
   ) where
 
 import Language.Drasil
 import Theory.Drasil.Classes (HasInputs(inputs), HasOutput(..))
-import Data.Drasil.IdeaDicts (inModel)
+import Data.Drasil.TheoryConcepts (inModel)
 
-import Control.Lens ((^.), makeLenses, view, _1, _2)
+import Control.Lens (makeLenses, view, lens, (^.), set, Lens', to, _1, _2)
+import Theory.Drasil.ModelKinds (ModelKinds(..), elimMk, setMk, getEqModQds)
 
 type Input = (QuantityDict, Maybe (RealInterval Expr Expr))
 type Inputs = [Input]
 type Output = QuantityDict
 type OutputConstraints = [RealInterval Expr Expr]
 
--- | An Instance Model is a RelationConcept that may have specific input/output
+-- | An Instance Model is a ModelKind that may have specific input/output
 -- constraints. It also has attributes like derivation, source, etc.
-data InstanceModel = IM { _rc :: RelationConcept
+data InstanceModel = IM { _mk :: ModelKinds
                         , _imInputs :: Inputs
                         , _imOutput :: (Output, OutputConstraints)
                         , _ref :: [Reference]
@@ -29,12 +30,19 @@ data InstanceModel = IM { _rc :: RelationConcept
                         }
 makeLenses ''InstanceModel
 
-instance HasUID             InstanceModel where uid = rc . uid
-instance NamedIdea          InstanceModel where term = rc . term
-instance Idea               InstanceModel where getA = getA . view rc
-instance Definition         InstanceModel where defn = rc . defn
-instance ConceptDomain      InstanceModel where cdom = cdom . view rc
-instance ExprRelat          InstanceModel where relat = rc . relat
+lensMk :: forall a. Lens' QDefinition a -> Lens' RelationConcept a -> Lens' InstanceModel a
+lensMk lq lr = lens g s
+    where g :: InstanceModel -> a
+          g im_ = elimMk lq lr (im_ ^. mk)
+          s :: InstanceModel -> a -> InstanceModel
+          s im_ x = set mk (setMk (im_ ^. mk) lq lr x) im_
+
+instance HasUID             InstanceModel where uid = lensMk uid uid
+instance NamedIdea          InstanceModel where term = lensMk term term
+instance Idea               InstanceModel where getA = elimMk (to getA) (to getA) . view mk
+instance Definition         InstanceModel where defn = lensMk defn defn
+instance ConceptDomain      InstanceModel where cdom = elimMk (to cdom) (to cdom) . view mk
+instance ExprRelat          InstanceModel where relat = elimMk (to relat) (to relat) . view mk
 instance HasDerivation      InstanceModel where derivations = deri
 instance HasReference       InstanceModel where getReferences = ref
 instance HasShortName       InstanceModel where shortname = lb
@@ -55,30 +63,30 @@ instance HasSpace           InstanceModel where typ = output . typ
 instance MayHaveUnit        InstanceModel where getUnit = getUnit . view output
 
 -- | Smart constructor for instance models with everything defined
-im :: RelationConcept -> Inputs -> Output -> 
+im :: ModelKinds -> Inputs -> Output -> 
   OutputConstraints -> [Reference] -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
-im rcon _  _ _  [] _  _  = error $ "Source field of " ++ rcon ^. uid ++ " is empty"
-im rcon i o oc r der sn = 
-  IM rcon i (o, oc) r der (shortname' sn) (prependAbrv inModel sn)
+im mkind _  _ _  [] _  _  = error $ "Source field of " ++ mkind ^. uid ++ " is empty"
+im mkind i o oc r der sn = 
+  IM mkind i (o, oc) r der (shortname' sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models; no derivation
-imNoDeriv :: RelationConcept -> Inputs -> Output -> 
+imNoDeriv :: ModelKinds -> Inputs -> Output -> 
   OutputConstraints -> [Reference] -> String -> [Sentence] -> InstanceModel
-imNoDeriv rcon _  _ _ [] _  = error $ "Source field of " ++ rcon ^. uid ++ " is empty"
-imNoDeriv rcon i o oc r sn =
-  IM rcon i (o, oc) r Nothing (shortname' sn) (prependAbrv inModel sn)
+imNoDeriv mkind _  _ _ [] _  = error $ "Source field of " ++ mkind ^. uid ++ " is empty"
+imNoDeriv mkind i o oc r sn =
+  IM mkind i (o, oc) r Nothing (shortname' sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models; no references
-imNoRefs :: RelationConcept -> Inputs -> Output -> 
+imNoRefs :: ModelKinds -> Inputs -> Output -> 
   OutputConstraints -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
-imNoRefs rcon i o oc der sn = 
-  IM rcon i (o, oc) [] der (shortname' sn) (prependAbrv inModel sn)
+imNoRefs mkind i o oc der sn = 
+  IM mkind i (o, oc) [] der (shortname' sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models; no derivations or references
-imNoDerivNoRefs :: RelationConcept -> Inputs -> Output -> 
+imNoDerivNoRefs :: ModelKinds -> Inputs -> Output -> 
   OutputConstraints -> String -> [Sentence] -> InstanceModel
-imNoDerivNoRefs rcon i o oc sn = 
-  IM rcon i (o, oc) [] Nothing (shortname' sn) (prependAbrv inModel sn)
+imNoDerivNoRefs mkind i o oc sn = 
+  IM mkind i (o, oc) [] Nothing (shortname' sn) (prependAbrv inModel sn)
 
 -- | For building a quantity with no constraint
 qwUC :: (Quantity q, MayHaveUnit q) => q -> Input 
@@ -87,3 +95,7 @@ qwUC x = (qw x, Nothing)
 -- | For building a quantity with a constraint
 qwC :: (Quantity q, MayHaveUnit q) => q -> RealInterval Expr Expr -> Input 
 qwC x y = (qw x, Just y)
+
+-- | Grab all related QDefinitions from a list of instance models
+getEqModQdsFromIm :: [InstanceModel] -> [QDefinition]
+getEqModQdsFromIm ims = getEqModQds (map _mk ims)

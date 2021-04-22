@@ -3,7 +3,7 @@ module Drasil.DblPendulum.Concepts where
 import Language.Drasil
 --import Utils.Drasil
 
-import Data.Drasil.IdeaDicts (physics)
+import Data.Drasil.Domains (physics)
 
 --import Data.Drasil.Concepts.Math (angle)
 

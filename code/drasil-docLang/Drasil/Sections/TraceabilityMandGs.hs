@@ -10,7 +10,7 @@ import Drasil.DocumentLanguage.TraceabilityMatrix (generateTraceTableView,
 import Data.Drasil.Concepts.Documentation (assumption, assumpDom, chgProbDom,
   goalStmt, goalStmtDom, requirement, reqDom, item, section_, likelyChg,
   unlikelyChg)
-import qualified Data.Drasil.IdeaDicts as Doc (genDefn, dataDefn, inModel, thModel)
+import qualified Data.Drasil.TheoryConcepts as Doc (genDefn, dataDefn, inModel, thModel)
 import Database.Drasil(SystemInformation, _sysinfodb, gendefTable, dataDefnTable,
   insmodelTable, theoryModelTable)
 import Language.Drasil

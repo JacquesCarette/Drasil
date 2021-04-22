@@ -3,7 +3,7 @@ module Language.Drasil.HTML.Helpers where
 import Prelude hiding ((<>))
 import Text.PrettyPrint (Doc, text, empty, ($$), (<>), (<+>), vcat, hcat, nest,
   cat, hcat)
-import Data.List (intersperse, foldl1)
+import Data.List (intersperse)
 
 import Language.Drasil hiding (Expr)
 

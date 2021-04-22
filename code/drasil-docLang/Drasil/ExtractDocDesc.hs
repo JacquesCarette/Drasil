@@ -57,7 +57,7 @@ exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (conca
     defExp :: DefiningExpr a => [a] -> [Expr]
     defExp = map (^. defnExpr)
     expRel :: ExprRelat a => [a] -> [Expr]
-    expRel = map (^. relat)
+    expRel = map relat
 
 sentToExp :: Sentence -> [Expr]
 sentToExp ((:+:) s1 s2) = sentToExp s1 ++ sentToExp s2

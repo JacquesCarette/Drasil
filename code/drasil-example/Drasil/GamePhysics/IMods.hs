@@ -2,7 +2,7 @@ module Drasil.GamePhysics.IMods (iMods, instModIntro) where
 
 import Language.Drasil
 import Language.Drasil.ShortHands (lI)
-import Theory.Drasil (InstanceModel, imNoDerivNoRefs, qwC)
+import Theory.Drasil (InstanceModel, imNoDerivNoRefs, qwC, ModelKinds (OthModel))
 import Utils.Drasil
 
 import Drasil.GamePhysics.Assumptions (assumpDI, assumpCAJI)
@@ -16,7 +16,7 @@ import Drasil.GamePhysics.TMods (newtonSL, newtonSLR)
 import Drasil.GamePhysics.Unitals (accI, forceI, massA, massI, normalVect,
   timeC, torqueI, velA, velI)
 
-import Data.Drasil.IdeaDicts (inModel)
+import Data.Drasil.TheoryConcepts (inModel)
 
 import Data.Drasil.Concepts.Documentation (condition, goal, output_)
 import Data.Drasil.Concepts.Math (equation, ode)
@@ -30,7 +30,7 @@ iMods = [transMot, rotMot, col2D]
 
 {-- Force on the translational motion  --}
 transMot :: InstanceModel
-transMot = imNoDerivNoRefs transMotRC 
+transMot = imNoDerivNoRefs (OthModel transMotRC) 
   [qwC velI $ UpFrom (Exc, 0)
   ,qwC time $ UpFrom (Exc, 0)
   ,qwC gravitationalAccel $ UpFrom (Exc, 0)
@@ -68,7 +68,7 @@ transMotOutputs = foldlSent [phrase output_ `ofThe'` phrase inModel,
 {-- Rotational Motion --}
 
 rotMot :: InstanceModel
-rotMot = imNoDerivNoRefs rotMotRC 
+rotMot = imNoDerivNoRefs (OthModel rotMotRC) 
   [qwC angularVelocity $ UpFrom (Exc, 0)
   ,qwC time $ UpFrom (Exc, 0)
   ,qwC torqueI $ UpFrom (Exc, 0)
@@ -98,7 +98,7 @@ rotMotDesc = foldlSent [S "The above", phrase equation, S "for",
 {-- 2D Collision --}
 
 col2D :: InstanceModel
-col2D = imNoDerivNoRefs col2DRC
+col2D = imNoDerivNoRefs (OthModel col2DRC)
   [qwC time $ UpFrom (Exc, 0)
   ,qwC impulseS $ UpFrom (Exc, 0)
   ,qwC massA $ UpFrom (Exc, 0)

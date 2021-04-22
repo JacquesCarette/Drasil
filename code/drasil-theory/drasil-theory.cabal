@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 152a151a850f50520e62806a612a2819e43462dc8888f09431ad02a0029c0f21
+-- hash: 9a7338f9871bcf763b4d330178b79fc63e5113749173eb12caab789e093fc864
 
 name:           drasil-theory
 version:        0.1.0.0
@@ -23,11 +23,13 @@ source-repository head
 library
   exposed-modules:
       Theory.Drasil
+      Data.Drasil.TheoryConcepts
   other-modules:
       Theory.Drasil.Classes
       Theory.Drasil.DataDefinition
       Theory.Drasil.GenDefn
       Theory.Drasil.InstanceModel
+      Theory.Drasil.ModelKinds
       Theory.Drasil.Theory
       Paths_drasil_theory
   hs-source-dirs:
@@ -40,6 +42,7 @@ library
     , data-fix (>=0.0.4 && <=1.0)
     , directory >=1.2.6.2
     , drasil-lang
+    , drasil-metadata
     , lens >=4.12
     , mtl >=2.2.1
     , parsec >=3.1.9

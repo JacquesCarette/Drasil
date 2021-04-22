@@ -4,7 +4,7 @@ module Data.Drasil.Concepts.Physics where
 import Language.Drasil
 import Utils.Drasil
 
-import Data.Drasil.IdeaDicts (mathematics, physics)
+import Data.Drasil.Domains (mathematics, physics)
 import Data.Drasil.Concepts.Documentation (property, value)
 import Data.Drasil.Concepts.Math (xComp, xDir, yComp, yDir, point, axis, cartesian)
 import Control.Lens((^.)) --need for parametrization hack
@@ -23,7 +23,7 @@ physicCon = [acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVe
   rigidBody, scalarAccel, scalarPos, space, speed, strain, stress, tension,
   time, torque, velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel,
   yAccel, yConstAccel, yDist, yPos, yVel, momentum, moment, fOfGravity, positionVec,
-  pendulum, body, kinematics, frequency, period]
+  pendulum, body, kinematics, frequency, period, motion]
 
 physicCon' :: [CI]
 physicCon' = [oneD, twoD, threeD]
@@ -38,7 +38,7 @@ acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVelocity, cohes
   space, speed, strain, stress, tension, time, torque, velocity, weight,
   xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
   yPos, yVel, momentum, moment, fOfGravity, positionVec, pendulum, body,
-  kinematics, frequency, period :: ConceptChunk
+  kinematics, frequency, period, motion :: ConceptChunk
 
 oneD, twoD, threeD :: CI
 oneD   = commonIdeaWithDict "oneD"   (cn "one-dimensional")   "1D" [mathematics, physics]
@@ -108,6 +108,8 @@ momentum = dccWDS "momentum" (cn "momentum")
    phrase velocity)
 moment = dccWDS "moment" (cn' "moment")
   (S "A measure of the tendency of a body to rotate about a specific" +:+ phrase point `sOr` phrase axis)
+motion = dccWDS "motion" (cn "motion")
+  (S "change of position of a physical body")
 period = dccWDS "period" (cn' "period")
    (S "the" +:+ phrase time +:+ S "required for one complete cycle of vibration to pass a given point.")
 pendulum = dccWDS "pendulum" (cn "pendulum")

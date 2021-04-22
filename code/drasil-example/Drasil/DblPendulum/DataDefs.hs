@@ -5,7 +5,7 @@ import Prelude hiding (sin, cos, sqrt)
 import Language.Drasil
 import Utils.Drasil
 import Data.Drasil.SI_Units (second)
-import Theory.Drasil (DataDefinition, ddNoRefs, mkQuantDef)
+import Theory.Drasil (DataDefinition, ddNoRefs)
 import Drasil.DblPendulum.Figures (figMotion)
 import qualified Data.Drasil.Quantities.Physics as QP (ixPos, iyPos, position,
       frequency, period, angularFrequency)

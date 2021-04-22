@@ -4,7 +4,7 @@ module Drasil.GamePhysics.DataDefs (dataDefs, ctrOfMassDD, linDispDD, linVelDD,
   collisionAssump, rightHandAssump, rigidTwoDAssump, potEnergyDD) where
 
 import Language.Drasil
-import Theory.Drasil (DataDefinition, dd, ddNoRefs, mkQuantDef, mkQuantDef')
+import Theory.Drasil (DataDefinition, dd, ddNoRefs)
 import Utils.Drasil
 import Control.Lens ((^.))
 

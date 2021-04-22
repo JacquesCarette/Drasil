@@ -2,7 +2,7 @@
 module Theory.Drasil.Theory (Theory(..), TheoryModel, tm, tmNoRefs) where
 
 import Language.Drasil
-import Data.Drasil.IdeaDicts (thModel)
+import Data.Drasil.TheoryConcepts (thModel)
 
 import Control.Lens (Lens', view, makeLenses, (^.))
 

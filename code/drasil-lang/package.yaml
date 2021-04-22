@@ -30,7 +30,6 @@ ghc-options:
 library:
   source-dirs: ./
   exposed-modules:
-  - Data.Drasil.IdeaDicts
   - Language.Drasil
   - Language.Drasil.Development
   - Language.Drasil.ShortHands

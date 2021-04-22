@@ -21,6 +21,7 @@ dependencies:
 - parsec >= 3.1.9
 - data-fix (>= 0.0.4 && <= 1.0)
 - drasil-lang
+- drasil-metadata
 
 ghc-options:
 - -Wall
@@ -30,3 +31,4 @@ library:
   source-dirs: ./
   exposed-modules:
   - Theory.Drasil
+  - Data.Drasil.TheoryConcepts

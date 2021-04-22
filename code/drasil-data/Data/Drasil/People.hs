@@ -1,6 +1,6 @@
 module Data.Drasil.People where
 
-import Language.Drasil (Person, person, person', personWM, personWM')
+import Language.Drasil (Person, person, person', personWM, personWM', mononym)
   
 spencerSmith, henryFrankis, nKoothoor, dParnas, daAruliah, gWilson,
   cTitus, kdHuff, nChueHong, mDavis, rGuy, shdHaddock, imMitchell, mdPlumblet,
@@ -78,3 +78,7 @@ dyZhu         = personWM' "D"         ["Y"]           "Zhu"
 dmWiess       = personWM  ""          []              "Wiess"
 olu           = person    "Olu"                       "Owojaiye"
 rodPierce     = person    "Rod"                       "Pierce"
+
+-- Right now, we have to say this is a 'Person', even though it clearly isn't
+wikiAuthors :: Person
+wikiAuthors   = mononym "Wikipedia Contributors"

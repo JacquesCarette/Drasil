@@ -7,7 +7,7 @@ import Control.Lens ((^.))
 import Language.Drasil
 import Language.Drasil.Code (asVC')
 import Prelude hiding (log, exp, sqrt)
-import Theory.Drasil (DataDefinition, dd, mkQuantDef)
+import Theory.Drasil (DataDefinition, dd)
 import Database.Drasil (Block(Parallel))
 import Utils.Drasil
 

@@ -2,11 +2,10 @@ module Drasil.DblPendulum.Unitals where
 
 import Language.Drasil
 import Language.Drasil.ShortHands
-import Data.Drasil.IdeaDicts
 import Utils.Drasil
 import Data.Drasil.Constraints (gtZeroConstr)
---import Control.Lens((^.))
 
+import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst,
         requirement, srs, typUnc)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)

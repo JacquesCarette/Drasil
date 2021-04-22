@@ -6,7 +6,6 @@ import Utils.Drasil
 import qualified Drasil.DocLang.SRS as SRS (solCharSpec)
 import Data.Drasil.Concepts.Documentation as Doc (body, funcReqDom, input_, 
   nonFuncReqDom, output_, physicalConstraint, physicalSim, property)
-import Data.Drasil.IdeaDicts()
 
 import qualified Data.Drasil.Concepts.Physics as CP (collision, elasticity, 
   friction, rigidBody, space)

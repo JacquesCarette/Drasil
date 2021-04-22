@@ -1,7 +1,7 @@
 module Drasil.SSP.Defs where --export all of this file
 
 import Language.Drasil
-import Data.Drasil.IdeaDicts
+import Data.Drasil.Domains (civilEng)
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (analysis, assumption, goalStmt,
@@ -11,6 +11,7 @@ import Data.Drasil.Concepts.Math (surface)
 import Data.Drasil.Concepts.Physics (twoD, threeD, force, stress)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, len)
 import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, nrmStrss,shearRes)
+import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 ----Acronyms-----
 acronyms :: [CI]

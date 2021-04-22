@@ -11,7 +11,7 @@ import Data.Drasil.ExternalLibraries.ODELibraries
        (apacheODESymbols, arrayVecDepVar, odeintSymbols, osloSymbols,
         scipyODESymbols)
 
-import qualified Data.Drasil.IdeaDicts as IDict (dataDefn)
+import qualified Data.Drasil.TheoryConcepts as IDict (dataDefn)
 import Data.Drasil.Quantities.Physics (physicscon, time)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Quantities.PhysicalProperties (mass)

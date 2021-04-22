@@ -3,11 +3,9 @@ module Drasil.PDController.Concepts where
 import Data.Drasil.Concepts.Documentation
        (assumption, goalStmt, physSyst, requirement, srs, typUnc)
 import Data.Drasil.Constraints (gtZeroConstr)
-import Data.Drasil.IdeaDicts
+import Data.Drasil.TheoryConcepts
 import Data.Drasil.SI_Units (second)
 import Language.Drasil
-
-import Theory.Drasil (mkQuantDef)
 
 acronyms :: [CI]
 acronyms

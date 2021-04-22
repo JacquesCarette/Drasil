@@ -22,7 +22,6 @@ dependencies:
 - data-fix (>= 0.0.4 && <= 1.0)
 - Decimal >= 0.5.1
 - drasil-lang
-- drasil-theory
 
 ghc-options:
 - -Wall

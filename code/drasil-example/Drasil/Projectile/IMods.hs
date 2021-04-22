@@ -47,8 +47,7 @@ timeDeriv :: Derivation
 timeDeriv = mkDerivName (phrase flightDur) (weave [timeDerivSents, map E timeDerivEqns])
 
 timeDerivSents :: [Sentence]
-timeDerivSents = [timeDerivSent1, timeDerivSent2, timeDerivSent3,
-                  timeDerivSent4, timeDerivSent5]
+timeDerivSents = [timeDerivSent1, timeDerivSent2, timeDerivSent3, timeDerivSent4, timeDerivSent5]
 
 timeDerivSent1, timeDerivSent2, timeDerivSent3, timeDerivSent4, timeDerivSent5 :: Sentence
 timeDerivSent1 = foldlSentCol [S "We know that" +:+.

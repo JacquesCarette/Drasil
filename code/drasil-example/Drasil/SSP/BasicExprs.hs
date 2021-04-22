@@ -33,7 +33,7 @@ eqlExprSepG f1_ f2_ _e_ = (inxi slcWght `_e_`
   (negate (sy earthqkLoadFctr) * inxi slcWght - inxi watrForce + inxiM1 watrForce +
   inxi surfHydroForce * sin (inxi surfAngle) +
   inxi surfLoad * sin (inxi impLoadAngle)) * f2_ (inxi baseAngle) - 
-  (- (inxi intNormForce) + inxiM1 intNormForce) * f2_ (inxi baseAngle)
+  (- inxi intNormForce + inxiM1 intNormForce) * f2_ (inxi baseAngle)
 
 eqlExprNSepG :: (Expr -> Expr) -> (Expr -> Expr) -> (Expr -> Expr -> Expr) -> Expr
 eqlExprNSepG f1_ f2_ _e_ = (inxi slcWght `_e_`
@@ -42,21 +42,21 @@ eqlExprNSepG f1_ f2_ _e_ = (inxi slcWght `_e_`
   (negate (sy earthqkLoadFctr) * inxi slcWght - inxi watrForce + inxiM1 watrForce +
   inxi surfHydroForce * sin (inxi surfAngle) +
   inxi surfLoad * sin (inxi impLoadAngle)) * f2_ (inxi baseAngle) +
-  (- (inxi intNormForce) + inxiM1 intNormForce) * f2_ (inxi baseAngle)
+  (- inxi intNormForce + inxiM1 intNormForce) * f2_ (inxi baseAngle)
 
 eqlExprNoKQ :: (Expr -> Expr) -> (Expr -> Expr) -> (Expr -> Expr -> Expr) -> Expr
 eqlExprNoKQ f1_ f2_ _e_ = (inxi slcWght `_e_`
   (inxi surfHydroForce * cos (inxi surfAngle))) * f1_ (inxi baseAngle) -
-  (- (inxi watrForce) + inxiM1 watrForce +
+  (- inxi watrForce + inxiM1 watrForce +
   inxi surfHydroForce * sin (inxi surfAngle)) * f2_ (inxi baseAngle) - 
-  (- (inxi intNormForce) + inxiM1 intNormForce) * f2_ (inxi baseAngle)
+  (- inxi intNormForce + inxiM1 intNormForce) * f2_ (inxi baseAngle)
 
 eqlExprNNoKQ :: (Expr -> Expr) -> (Expr -> Expr) -> (Expr -> Expr -> Expr) -> Expr
 eqlExprNNoKQ f1_ f2_ _e_ = (inxi slcWght `_e_`
   (inxi surfHydroForce * cos (inxi surfAngle))) * f1_ (inxi baseAngle) +
-  (- (inxi watrForce) + inxiM1 watrForce +
+  (- inxi watrForce + inxiM1 watrForce +
   inxi surfHydroForce * sin (inxi surfAngle)) * f2_ (inxi baseAngle) +
-  (- (inxi intNormForce) + inxiM1 intNormForce) * f2_ (inxi baseAngle)
+  (- inxi intNormForce + inxiM1 intNormForce) * f2_ (inxi baseAngle)
 
 sliceExpr :: Integer -> Expr
 sliceExpr n = idx (sy intNormForce) (int n) * idx (sy shrResC) (int n) $= 

@@ -31,4 +31,4 @@ makeRC rID rTerm rDefn = RC (dccWDS rID rTerm rDefn)
 
 -- | Create a new RelationConcept from an old one, a new id and relation
 addRelToCC :: Concept c => c -> UID -> Relation -> RelationConcept
-addRelToCC c rID r = RC (set uid rID (cw c)) r
+addRelToCC c rID = RC (set uid rID (cw c))

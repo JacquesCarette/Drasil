@@ -49,7 +49,7 @@ timeDerivSents = [timeDerivSent1, timeDerivSent2, timeDerivSent3,
 timeDerivSent1, timeDerivSent2, timeDerivSent3, timeDerivSent4, timeDerivSent5 :: Sentence
 timeDerivSent1 = foldlSentCol [S "We know that" +:+.
   foldlList Comma List [eqnWSource (sy iyPos $= 0) launchOrigin,
-  eqnWSource (sy yConstAccel $= - sy gravitationalAccelConst) accelYGravity],
+  eqnWSource (sy yConstAccel $= -sy gravitationalAccelConst) accelYGravity],
   S "Substituting these", plural value, S "into the y-direction" `sOf`
   makeRef2S posVecGD, S "gives us"]
 timeDerivSent2 = foldlSentCol [S "To find the", phrase time, S "that the",

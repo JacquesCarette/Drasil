@@ -32,6 +32,7 @@ resolver:
 packages:
 - .
 - ../drasil-lang
+- ../drasil-metadata
 - ../drasil-theory
 
 # Dependency packages to be pulled from upstream that are not in the resolver.

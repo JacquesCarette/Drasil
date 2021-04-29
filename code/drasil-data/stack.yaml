@@ -34,11 +34,12 @@ packages:
 - ../drasil-code
 - ../drasil-gool
 - ../drasil-lang
-- ../drasil-theory
 - ../drasil-utils
 - ../drasil-build
 - ../drasil-database
+- ../drasil-metadata
 - ../drasil-printers
+- ../drasil-theory
 
 # Dependency packages to be pulled from upstream that are not in the resolver.
 # These entries can reference officially published versions as well as

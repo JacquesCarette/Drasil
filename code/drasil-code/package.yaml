@@ -20,7 +20,7 @@ dependencies:
 - split >= 0.2.3.1
 - MissingH >= 1.4.0.1
 - parsec >= 3.1.9
-- drasil-lang 
+- drasil-lang
 - drasil-utils
 - drasil-build
 - drasil-theory

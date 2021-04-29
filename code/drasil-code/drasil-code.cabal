@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 6a9c7472871bdd4d2d14ec1795dab724a9a983fa84ab5c55716cff5ea8f35707
+-- hash: e1ef900d66ab33dbfd54c8f4473845894f308f81b5aed1cf74b235a8feb0f420
 
 name:           drasil-code
 version:        0.1.9.0
@@ -75,8 +75,7 @@ library
       ./
   ghc-options: -Wall -Wredundant-constraints
   build-depends:
-      MissingH >=1.4.0.1
-    , base >=4.7 && <5
+      base >=4.7 && <5
     , containers >=0.5.5.1
     , directory >=1.2.6.2
     , drasil-build
@@ -153,8 +152,7 @@ executable codegenTest
       ./
   ghc-options: -Wall -Wredundant-constraints -threaded -O2 -main-is Test.Main
   build-depends:
-      MissingH >=1.4.0.1
-    , base >=4.7 && <5
+      base >=4.7 && <5
     , containers >=0.5.5.1
     , directory >=1.2.6.2
     , drasil-build

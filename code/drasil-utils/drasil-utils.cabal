@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0393f61ebcb94a49435f829c357555b5cab68877ed0d959da6b01cc9e3d648dd
+-- hash: 6dfd0ee5c6c1cf1b1cd85f8c4f91ae00b73ac3c8888a683d1b6e9a4a8c5023dd
 
 name:           drasil-utils
 version:        0.1.1.0
@@ -37,7 +37,6 @@ library
   ghc-options: -Wall -Wredundant-constraints
   build-depends:
       Decimal >=0.5.1
-    , MissingH >=1.4.0.1
     , base >=4.7 && <5
     , containers >=0.5.5.1
     , data-fix (>=0.0.4 && <=1.0)

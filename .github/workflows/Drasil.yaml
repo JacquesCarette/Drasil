@@ -2,7 +2,7 @@ on:
   push:
     branches-ignore: master
   pull_request:
-    branches-ignore: master
+    branches: master
 name: Drasil
 defaults:
   run:

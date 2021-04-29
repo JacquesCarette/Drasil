@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 573a24fdb11bf13c6f7135107b45ec13f9057e6ef18b3a69d090cbe55a2c7d49
+-- hash: fdaeb82b2e43e71dd9fd44383e009b6d31d6f8d9610051bbc4dbb62132893d05
 
 name:           drasil-printers
 version:        0.1.10.0
@@ -48,8 +48,7 @@ library
       ./
   ghc-options: -Wall -Wredundant-constraints
   build-depends:
-      MissingH >=1.4.0.1
-    , base >=4.7 && <5
+      base >=4.7 && <5
     , containers >=0.5.5.1
     , data-fix (>=0.0.4 && <=1.0)
     , directory >=1.2.6.2

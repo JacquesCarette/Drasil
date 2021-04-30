@@ -1,12 +1,13 @@
 {-# LANGUAGE OverloadedStrings, TupleSections #-}
 
+module Main where
+
 import Control.Monad (filterM)
 import Data.Char (toUpper)
-import Data.List (isInfixOf, sort, zip4, groupBy)
+import Data.List (isInfixOf, isSuffixOf, sort, zip4, groupBy)
 import Data.Maybe (fromMaybe, fromJust, isJust)
-import Data.Monoid ((<>))
-import Data.String.Utils (rstrip, endswith)
 import Hakyll
+import StringUtils (rstrip)
 import System.Directory (doesDirectoryExist, doesFileExist, findFiles, listDirectory)
 import System.Environment (getEnv, lookupEnv)
 import System.FilePath (takeBaseName, takeDirectory, takeExtension)
@@ -34,7 +35,7 @@ getExtensionName _ = error "Expected some extension."
 
 -- returns a list of tuples, where each tuple is (Name, string) where string is "HTML" or "PDF"
 getSRS :: [Name] -> SRSVariants
-getSRS = map (\x -> (x, getExtensionName $ takeExtension x)) . filter (\x -> any (`endswith` x) [".pdf", ".html"])
+getSRS = map (\x -> (x, getExtensionName $ takeExtension x)) . filter (\x -> any (`isSuffixOf` x) [".pdf", ".html"])
 
 -- returns a CodeSource with the path to the source code, doxygen page, version name if the corresponding example has multiple versions, and the name of the language
 getSrc :: [String] -> String -> FilePath -> CodeSource
@@ -158,7 +159,7 @@ mkExampleCtx exampleDir srsDir doxDir =
 
 mkGraphs :: FilePath -> IO [FilePath]
 -- returns an IO list of the paths to all graphs based on an input path
-mkGraphs path = sort . filter (endswith ".pdf") <$> listDirectory path
+mkGraphs path = sort . filter (isSuffixOf ".pdf") <$> listDirectory path
 
 mkGraphCtx :: FilePath -> Context FilePath
 mkGraphCtx graphRoot =

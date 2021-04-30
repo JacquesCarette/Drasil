@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 9c3f319366ce286d21d4a8998dd64e557e2b1274a5b5fcee3761bef2e750cd1e
+-- hash: 03e1c2ab4370f7a796c42d0a6148910f5840c22dd407bafaf5622a0c9b9d1160
 
 name:           website
 version:        0.1.0.0
@@ -20,15 +20,15 @@ source-repository head
   location: https://github.com/JacquesCarette/Drasil
 
 executable website
-  main-is: site.hs
+  main-is: Main.hs
   other-modules:
+      StringUtils
       Paths_website
   hs-source-dirs:
       ./
   ghc-options: -Wall -Wredundant-constraints -threaded
   build-depends:
-      MissingH
-    , base >=4.7 && <5
+      base >=4.7 && <5
     , directory
     , filepath
     , hakyll ==4.13.*

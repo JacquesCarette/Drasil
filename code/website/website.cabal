@@ -1,14 +1,35 @@
-name:               website
-version:            0.1.0.0
-build-type:         Simple
-cabal-version:      >= 1.10
+cabal-version: 1.12
 
-executable site
-  main-is:          site.hs
-  build-depends:    base == 4.*
-                  , hakyll == 4.13.*
-                  , directory >= 1.3.0.2
-                  , MissingH >= 1.4.0
-                  , filepath >= 1.4.1
-  ghc-options:      -threaded
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 03e1c2ab4370f7a796c42d0a6148910f5840c22dd407bafaf5622a0c9b9d1160
+
+name:           website
+version:        0.1.0.0
+synopsis:       A framework for code and document generation for scientific software - Utils SubPackage
+description:    Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+homepage:       https://jacquescarette.github.io/Drasil/
+bug-reports:    https://github.com/JacquesCarette/Drasil/issues
+maintainer:     Jacques Carette
+build-type:     Simple
+
+source-repository head
+  type: git
+  location: https://github.com/JacquesCarette/Drasil
+
+executable website
+  main-is: Main.hs
+  other-modules:
+      StringUtils
+      Paths_website
+  hs-source-dirs:
+      ./
+  ghc-options: -Wall -Wredundant-constraints -threaded
+  build-depends:
+      base >=4.7 && <5
+    , directory
+    , filepath
+    , hakyll ==4.13.*
   default-language: Haskell2010

@@ -50,7 +50,6 @@ packages:
 - drasil-example/
 - drasil-docLang/
 - drasil-metadata/
-- website/
 
 # Dependency packages to be pulled from upstream that are not in the resolver
 # (e.g., acme-missiles-0.3)

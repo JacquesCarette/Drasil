@@ -11,7 +11,7 @@ extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
-- pretty >= 1.1.1.1
+- pretty
 - drasil-lang
 
 ghc-options:

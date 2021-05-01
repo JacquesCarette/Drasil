@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 38dbe9902805ec7c4ba0a284ecc23eaa170a31a7244e98cf2fad703871ef36a4
+-- hash: a66fc1dd99658187a5fe62a5cda4c43ba29e84dce6f22f0b37b85288ae0858bf
 
 name:           drasil-lang
 version:        0.1.60.0
@@ -83,14 +83,7 @@ library
   ghc-options: -Wall -Wredundant-constraints
   build-depends:
       base >=4.7 && <5
-    , containers >=0.5.5.1
-    , data-fix (>=0.0.4 && <=1.0)
-    , directory >=1.2.6.2
-    , lens >=4.12
-    , mtl >=2.2.1
-    , parsec >=3.1.9
-    , pretty >=1.1.1.1
-    , split >=0.2.3.1
+    , lens
+    , split
     , unicode-names >=3.2.0.0
-    , unicode-properties >=3.2.0.0
   default-language: Haskell2010

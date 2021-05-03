@@ -78,6 +78,7 @@ data Expr where
   Case     :: Completeness -> [(Expr,Relation)] -> Expr
   Matrix   :: [[Expr]] -> Expr
   
+  -- | Unary functions/operations
   UnaryOp    :: UFunc -> Expr -> Expr
   UnaryOpB   :: UFuncB -> Expr -> Expr
   UnaryOpVec :: UFuncVec -> Expr -> Expr

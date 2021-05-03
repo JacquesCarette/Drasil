@@ -8,6 +8,7 @@ module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
 
 import Language.Drasil hiding (Ref, int, log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
+import Language.Drasil.Development (UFuncB(..), UFuncVec(..))
 import Database.Drasil (symbResolve)
 import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)

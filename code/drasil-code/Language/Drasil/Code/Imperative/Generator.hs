@@ -3,7 +3,7 @@ module Language.Drasil.Code.Imperative.Generator (
   generator, generateCode
 ) where
 
-import Language.Drasil
+import Language.Drasil hiding (not)
 import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
 import Language.Drasil.Code.Imperative.SpaceMatch (chooseSpace)

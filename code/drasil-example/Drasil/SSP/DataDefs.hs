@@ -2,7 +2,7 @@ module Drasil.SSP.DataDefs (dataDefs, intersliceWtrF, angleA, angleB, lengthB,
   lengthLb, lengthLs, slcHeight, normStressDD, tangStressDD, ratioVariation, 
   convertFunc1, convertFunc2, nrmForceSumDD, watForceSumDD) where 
 
-import Prelude hiding (cos, sin, tan)
+import Prelude hiding (cos, sin, tan, not)
 import Language.Drasil
 import Theory.Drasil (DataDefinition, dd)
 import Utils.Drasil
@@ -192,7 +192,7 @@ ratioVarEqn = completeCase [case1, case2]
   where case1 = (1, sy constF)
 
         case2 = (sin (sy QM.pi_ * ((inxi slipDist - idx (sy slipDist) 0) /
-                (indxn slipDist - idx (sy slipDist) 0))), UnaryOpB Not (sy constF))
+                (indxn slipDist - idx (sy slipDist) 0))), not (sy constF))
 
 --DD convertFunc1: first function for incorporating interslice forces into shear force
 

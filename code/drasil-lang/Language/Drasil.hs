@@ -8,7 +8,7 @@ module Language.Drasil (
   , dep
   -- Expr.Math
   , log, ln, abs, sin, cos, tan, sec, csc, cot, arcsin, arccos, arctan, exp
-  , sqrt, square, euclidean
+  , sqrt, square, euclidean, norm, not
   , dim, idx, int, dbl, str, perc, isin, completeCase, incompleteCase
   , sumAll, defsum, prodAll, defprod, defint, intAll
   , realInterval
@@ -180,14 +180,15 @@ module Language.Drasil (
   , unitWrapper, getCu, MayHaveUnit(getUnit)
 ) where
 
-import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
+import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product, not)
 import Language.Drasil.Expr (Expr(..), BinOp(..), UFunc(..), UFuncB(..), UFuncVec(..),
           ArithOper(..), DerivType(..), BoolOper(..), Completeness(..), Relation,
           ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.))
 import Language.Drasil.Expr.Extract (dep) -- exported for drasil-database FIXME: move to development package?
 import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec, 
           csc, cot, arcsin, arccos, arctan, exp,
-          dim, idx, int, dbl, str, perc, isin, completeCase, incompleteCase,
+          dim, norm, not, idx, int, dbl, str, perc, isin,
+          completeCase, incompleteCase,
           sumAll, defsum, prodAll, defprod,
           realInterval,
           apply, apply1, apply2, applyWithNamedArgs,

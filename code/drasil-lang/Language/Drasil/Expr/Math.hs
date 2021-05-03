@@ -62,13 +62,17 @@ arctan = UnaryOp Arctan
 exp :: Expr -> Expr
 exp = UnaryOp Exp
 
--- | Smart constructor for the dimension of a vector
+-- | Smart constructor for calculating the dimension of a vector
 dim :: Expr -> Expr
 dim = UnaryOpVec Dim
 
--- | Smart constructor the the normal form of a vector
+-- | Smart constructor for calculating the normal form of a vector
 norm :: Expr -> Expr
 norm = UnaryOpVec Norm
+
+-- | Smart constructor for applying logical negation to an expression
+not :: Expr -> Expr
+not = UnaryOpB Not
 
 -- | Smart constructor for indexing
 idx :: Expr -> Expr -> Expr

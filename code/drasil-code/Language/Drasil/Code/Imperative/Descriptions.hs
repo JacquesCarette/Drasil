@@ -9,7 +9,7 @@ module Language.Drasil.Code.Imperative.Descriptions (
 
 import Utils.Drasil (stringList)
 
-import Language.Drasil
+import Language.Drasil hiding (not)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..), 
   inMod)
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), quantvar)

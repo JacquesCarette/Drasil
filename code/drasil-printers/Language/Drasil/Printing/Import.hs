@@ -72,7 +72,7 @@ digitsProcess [] pos coun ex
   | ex /= 0 = [P.MO P.Point, P.Int 0, P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
   | otherwise = [P.MO P.Point, P.Int 0]
 
--- THis function takes the exponent and the [Int] of base and give out
+-- This function takes the exponent and the [Int] of base and give out
 -- the decimal point position and processed exponent
 -- This function supports transferring scientific notation to
 -- engineering notation.

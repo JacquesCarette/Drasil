@@ -192,7 +192,7 @@ ratioVarEqn = completeCase [case1, case2]
   where case1 = (1, sy constF)
 
         case2 = (sin (sy QM.pi_ * ((inxi slipDist - idx (sy slipDist) 0) /
-                (indxn slipDist - idx (sy slipDist) 0))), UnaryOp Not (sy constF))
+                (indxn slipDist - idx (sy slipDist) 0))), not_ (sy constF))
 
 --DD convertFunc1: first function for incorporating interslice forces into shear force
 

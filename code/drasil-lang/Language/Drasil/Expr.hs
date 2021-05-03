@@ -26,16 +26,23 @@ data BinOp = Frac | Pow | Subt | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | I
   | Dot | Cross
   deriving Eq
 
-data ArithOper = Add | Mul deriving (Eq)
+data ArithOper = Add | Mul
+  deriving Eq
 
-data BoolOper = And | Or deriving (Eq)
+data BoolOper = And | Or
+  deriving Eq
 
 -- | Unary functions
-data UFunc = Norm | Abs | Log | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin
-  | Arccos | Arctan | Exp | Sqrt | Not | Neg | Dim
+data UFunc = Abs | Log | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin
+  | Arccos | Arctan | Exp | Sqrt | Neg
+
+data UFuncB = Not
+
+data UFuncVec = Norm | Dim
 
 -- | For case expressions
-data Completeness = Complete | Incomplete deriving (Eq)
+data Completeness = Complete | Incomplete
+  deriving Eq
 
 -- | Drasil Expressions
 data Expr where
@@ -70,8 +77,14 @@ data Expr where
   -- | For multi-case expressions, each pair represents one case
   Case     :: Completeness -> [(Expr,Relation)] -> Expr
   Matrix   :: [[Expr]] -> Expr
-  UnaryOp  :: UFunc -> Expr -> Expr
+  
+  -- | Unary functions/operations
+  UnaryOp    :: UFunc -> Expr -> Expr
+  UnaryOpB   :: UFuncB -> Expr -> Expr
+  UnaryOpVec :: UFuncVec -> Expr -> Expr
+
   BinaryOp :: BinOp -> Expr -> Expr -> Expr
+  
   -- | Operators are generalized arithmetic operators over a |DomainDesc|
   --   of an |Expr|.  Could be called |BigOp|.
   --   ex: Summation is represented via |Add| over a discrete domain
@@ -102,7 +115,8 @@ a $|| b = AssocB Or  [a,b]
 
 type Variable = String
 
-data DerivType = Part | Total deriving Eq
+data DerivType = Part | Total
+  deriving Eq
 
 instance Num Expr where
   (Int 0) + b = b

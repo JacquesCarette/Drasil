@@ -8,6 +8,7 @@ module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
 
 import Language.Drasil hiding (Ref, int, log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
+import Language.Drasil.Development (UFuncB(..), UFuncVec(..))
 import Database.Drasil (symbResolve)
 import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
@@ -314,6 +315,8 @@ convExpr (Field o f) = do
   v <- mkVar (ccObjVar ob fld)
   return $ valueOf v
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
+convExpr (UnaryOpB o u) = fmap (unopB o) (convExpr u)
+convExpr (UnaryOpVec o u) = fmap (unopVec o) (convExpr u)
 convExpr (BinaryOp Frac (Int a) (Int b)) = do -- hack to deal with integer division
   sm <- spaceCodeType Rational
   let getLiteral Double = litDouble (fromIntegral a) #/ litDouble (fromIntegral b)
@@ -396,10 +399,14 @@ unop Cot  = cot
 unop Arcsin = arcsin
 unop Arccos = arccos
 unop Arctan = arctan
-unop Dim  = listSize
-unop Norm = error "unop: Norm not implemented"
-unop Not  = (?!)
 unop Neg  = (#~)
+
+unopB :: (OOProg r) => UFuncB -> (SValue r -> SValue r)
+unopB Not = (?!)
+
+unopVec :: (OOProg r) => UFuncVec -> (SValue r -> SValue r)
+unopVec Dim = listSize
+unopVec Norm = error "unop: Norm not implemented" -- TODO
 
 -- Maps a BinOp to the corresponding GOOL binary function
 bfunc :: (OOProg r) => BinOp -> (SValue r -> SValue r -> SValue r)

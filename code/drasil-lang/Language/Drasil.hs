@@ -1,7 +1,7 @@
 {- re-export many things to simplify external use -}
 module Language.Drasil (
   -- Expr
-  Expr(..), BinOp(..), UFunc(..), ArithOper(..), BoolOper(..), DerivType(..)
+  Expr(..), BinOp(..), UFunc(..), UFuncB(..), UFuncVec(..), ArithOper(..), BoolOper(..), DerivType(..)
   , Completeness(..), Relation
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   -- Expr.Extract
@@ -181,8 +181,8 @@ module Language.Drasil (
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
-import Language.Drasil.Expr (Expr(..), BinOp(..), UFunc(..), ArithOper(..), 
-          DerivType(..), BoolOper(..), Completeness(..), Relation,
+import Language.Drasil.Expr (Expr(..), BinOp(..), UFunc(..), UFuncB(..), UFuncVec(..),
+          ArithOper(..), DerivType(..), BoolOper(..), Completeness(..), Relation,
           ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.))
 import Language.Drasil.Expr.Extract (dep) -- exported for drasil-database FIXME: move to development package?
 import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec, 

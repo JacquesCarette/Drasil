@@ -1,7 +1,7 @@
 module Language.Drasil.Expr.Precedence where
 
 import Language.Drasil.Expr (BinOp(..), BoolOper(..), ArithOper(..),
-  UFunc(..), Expr(..))
+  UFunc(..), Expr(..), UFuncB(..), UFuncVec(..))
 
 -- These precedences are inspired from Haskell/F# 
 -- as documented at http://kevincantu.org/code/operators.html
@@ -38,8 +38,15 @@ precB Or = 110
 prec1 :: UFunc -> Int
 prec1 Neg = 230
 prec1 Exp = 200
-prec1 Not = 230
 prec1 _ = 250
+
+-- | prec1B - precedence of boolean-related unary operators
+prec1B :: UFuncB -> Int
+prec1B Not = 230
+
+-- | prec1Vec - precedence of vector-related unary operators
+prec1Vec :: UFuncVec -> Int
+prec1Vec _ = 250
 
 -- | eprec - "Expression" precedence
 eprec :: Expr -> Int
@@ -58,6 +65,8 @@ eprec Field{}           = 210
 eprec Case{}            = 200
 eprec Matrix{}          = 220
 eprec (UnaryOp fn _)    = prec1 fn
+eprec (UnaryOpB fn _)   = prec1B fn
+eprec (UnaryOpVec fn _) = prec1Vec fn
 eprec (Operator o _ _)  = precA o
 eprec (BinaryOp bo _ _) = prec2 bo
 eprec IsIn{}            = 170

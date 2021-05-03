@@ -24,6 +24,8 @@ names (Message a m x ns) = a : m : concatMap names x ++ map fst ns ++
 names (Field o f)        = [o, f]
 names (Case _ ls)        = concatMap (names . fst) ls ++ concatMap (names . snd) ls
 names (UnaryOp _ u)      = names u
+names (UnaryOpB _ u)     = names u
+names (UnaryOpVec _ u)   = names u
 names (BinaryOp _ a b)   = names a ++ names b
 names (Operator _ _ e)   = names e
 names (IsIn  a _)        = names a
@@ -57,6 +59,8 @@ names' (Field o f)        = [o, f]
 names' (Case _ ls)        = concatMap (names' . fst) ls ++ 
                             concatMap (names' . snd) ls
 names' (UnaryOp _ u)      = names' u
+names' (UnaryOpB _ u)     = names' u
+names' (UnaryOpVec _ u)   = names' u
 names' (BinaryOp _ a b)   = names' a ++ names' b
 names' (Operator _ _ e)   = names' e
 names' (IsIn  a _)        = names' a

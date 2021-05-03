@@ -29,7 +29,7 @@ import Drasil.DblPendulum.Figures (figMotion)
 import Data.Drasil.Concepts.Math (mathcon, cartesian)
 import Data.Drasil.Quantities.Math (unitVect, unitVectj)
 import Drasil.DblPendulum.Assumptions (assumptions)
-import Drasil.DblPendulum.Concepts (pendulumTitle)
+import Drasil.DblPendulum.Concepts ()
 import Drasil.DblPendulum.Goals (goals, goalsInputs)
 import Drasil.DblPendulum.DataDefs (dataDefs)
 import Drasil.DblPendulum.TMods (tMods)
@@ -96,6 +96,9 @@ scope :: Sentence
 scope = foldlSent [S "the", phrase analysis `sOf` S "a", phrase twoD, 
   sParen (getAcc twoD), phrase pendulum, S "motion", phrase problem,
                    S "with various initial conditions"]
+
+pendulumTitle :: CI
+pendulumTitle = commonIdeaWithDict "pendulumTitle" (pn "Pendulum") "Pendulum" [physics]
 
 si :: SystemInformation
 si = SI {

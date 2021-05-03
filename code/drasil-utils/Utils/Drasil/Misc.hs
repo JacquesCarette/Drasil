@@ -7,7 +7,7 @@ module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, checkValidStr,
   showingCxnBw, sortBySymbol, sortBySymbolTuple, substitute, tAndDOnly,
   tAndDWAcc, tAndDWSym, typUncr, underConsidertn, unwrap, weave, zipSentList) where
 
-import Language.Drasil hiding (not)
+import Language.Drasil
 import Utils.Drasil.Fold (FoldType(List), SepType(Comma), foldlList, foldlSent)
 import Utils.Drasil.Sentence (sAre, sIn, sIs, toThe)
 

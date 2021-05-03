@@ -71,8 +71,8 @@ norm :: Expr -> Expr
 norm = UnaryOpVec Norm
 
 -- | Smart constructor for applying logical negation to an expression
-not :: Expr -> Expr
-not = UnaryOpB Not
+not_ :: Expr -> Expr
+not_ = UnaryOpB Not
 
 -- | Smart constructor for indexing
 idx :: Expr -> Expr -> Expr

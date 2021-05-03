@@ -1,6 +1,6 @@
 module Drasil.DocumentLanguage.TraceabilityMatrix where
 
-import Language.Drasil hiding (not)
+import Language.Drasil
 import Database.Drasil(ChunkDB, SystemInformation, UMap, _sysinfodb, asOrderedList,
   conceptinsTable, defResolve, refbyTable, traceTable, traceLookup)
 import Utils.Drasil

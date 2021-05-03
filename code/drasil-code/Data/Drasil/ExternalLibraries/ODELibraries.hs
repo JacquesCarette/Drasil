@@ -602,6 +602,8 @@ modifiedODESyst sufx info = map replaceDepVar (odeSyst info)
         replaceDepVar (Case c cs) = Case c (map (over _1 replaceDepVar) cs)
         replaceDepVar (Matrix es) = Matrix $ map (map replaceDepVar) es
         replaceDepVar (UnaryOp u e) = UnaryOp u $ replaceDepVar e
+        replaceDepVar (UnaryOpB u e) = UnaryOpB u $ replaceDepVar e
+        replaceDepVar (UnaryOpVec u e) = UnaryOpVec u $ replaceDepVar e
         replaceDepVar (BinaryOp b e1 e2) = BinaryOp b (replaceDepVar e1) 
           (replaceDepVar e2)
         replaceDepVar (Operator ao dd e) = Operator ao dd $ replaceDepVar e 

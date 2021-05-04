@@ -7,6 +7,7 @@ import Language.Drasil.Generate (gen, DocSpec(DocSpec), DocType(SRS, Website))
 import Drasil.DblPendulum.Body (srs, printSetting)
 
 
+
 main :: IO()
 main = do
   setLocaleEncoding utf8

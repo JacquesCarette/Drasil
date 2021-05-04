@@ -13,6 +13,7 @@ import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian, he
 import Data.Drasil.Concepts.Software (program, errMsg)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum, twoD)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM, newtonSLR)
+import Data.Drasil.Domains (physics) 
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (mass, len, physicalcon)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
@@ -31,7 +32,6 @@ import Drasil.DblPendulum.Figures (figMotion)
 import Data.Drasil.Concepts.Math (mathcon, cartesian)
 import Data.Drasil.Quantities.Math (unitVect, unitVectj)
 import Drasil.DblPendulum.Assumptions (assumptions)
-import Drasil.DblPendulum.Concepts (pendulumTitle)
 import Drasil.DblPendulum.Goals (goals, goalsInputs)
 import Drasil.DblPendulum.DataDefs (dataDefs)
 import Drasil.DblPendulum.IMods (iMods)
@@ -97,6 +97,9 @@ scope :: Sentence
 scope = foldlSent [S "the", phrase analysis `sOf` S "a", phrase twoD, 
   sParen (getAcc twoD), phrase pendulum, S "motion", phrase problem,
                    S "with various initial conditions"]
+
+pendulumTitle :: CI
+pendulumTitle = commonIdeaWithDict "pendulumTitle" (pn "Pendulum") "Pendulum" [physics]
 
 si :: SystemInformation
 si = SI {

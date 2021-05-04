@@ -38,7 +38,8 @@ import Drasil.DblPendulum.GenDefs (genDefns)
 import Drasil.DblPendulum.Unitals (symbols, inputs, outputs,
   inConstraints, outConstraints, acronyms)
 import Drasil.DblPendulum.Requirements (funcReqs, nonFuncReqs)
-import Drasil.DblPendulum.References (citations)
+import Data.Drasil.Citations (cartesianWiki, accelerationWiki, velocityWiki)
+import Drasil.Projectile.References (hibbeler2004)
 
 
 srs :: Document
@@ -140,6 +141,9 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns
+
+citations :: BibRef
+citations = [accelerationWiki, velocityWiki, hibbeler2004, cartesianWiki]
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ funcReqs ++ nonFuncReqs

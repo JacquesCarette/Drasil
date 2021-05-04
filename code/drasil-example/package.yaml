@@ -62,7 +62,6 @@ executables:
     - Drasil.DblPendulum.TMods
     - Drasil.Projectile.References
     - Drasil.DblPendulum.GenDefs
-    - Drasil.DblPendulum.References
     - Drasil.DblPendulum.IMods
     - Drasil.DblPendulum.Requirements
 

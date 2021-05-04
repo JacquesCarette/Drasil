@@ -1,6 +1,7 @@
 module Drasil.DblPendulum.Body where
 
 import Language.Drasil hiding (Symbol(..), Vector)
+import Theory.Drasil (TheoryModel)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
@@ -11,6 +12,7 @@ import Data.Drasil.People (olu)
 import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian, hertz)
 import Data.Drasil.Concepts.Software (program, errMsg)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum, twoD)
+import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM, newtonSLR)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (mass, len, physicalcon)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
@@ -32,7 +34,6 @@ import Drasil.DblPendulum.Assumptions (assumptions)
 import Drasil.DblPendulum.Concepts (pendulumTitle)
 import Drasil.DblPendulum.Goals (goals, goalsInputs)
 import Drasil.DblPendulum.DataDefs (dataDefs)
-import Drasil.DblPendulum.TMods (tMods)
 import Drasil.DblPendulum.IMods (iMods)
 import Drasil.DblPendulum.GenDefs (genDefns)
 import Drasil.DblPendulum.Unitals (symbols, inputs, outputs,
@@ -156,6 +157,9 @@ prob = foldlSent_ [ S "is needed to efficiently and correctly to predict the mot
 
 terms :: [ConceptChunk]
 terms = [gravity, cartesian]
+
+tMods :: [TheoryModel]
+tMods = [accelerationTM, velocityTM, newtonSL, newtonSLR]
 
 
 -- ---------------------------------

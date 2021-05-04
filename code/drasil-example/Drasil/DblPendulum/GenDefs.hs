@@ -15,7 +15,7 @@ import Data.Drasil.Quantities.Physics(velocity, angularVelocity, xVel, yVel,
     momentOfInertia, period, frequency)
 import Data.Drasil.Concepts.Physics(pendulum, weight)
 import Data.Drasil.Quantities.PhysicalProperties(mass)
-import Drasil.DblPendulum.TMods(newtonSLR)
+import Data.Drasil.Theories.Physics(newtonSLR)
 import Drasil.DblPendulum.DataDefs(frequencyDD, periodSHMDD, angFrequencyDD)
 import qualified Data.Drasil.Quantities.Math as QM (pi_)
 
@@ -158,7 +158,7 @@ angFrequencyDerivEqn1, angFrequencyDerivEqn2, angFrequencyDerivEqn3, angFrequenc
 
 angFrequencyDerivSent1 = foldlSentCol [S "Consider the", phrase torque `sC` S "on a", phrase pendulum, definedIn'' newtonSLR `sC`
                   S "the", phrase force, S "providing the restoring" +:+ phrase torque `sIs` S "the component of the",
-                  phrase weight `ofThe` phrase pendulum, S "bob that acts along the arc length" +:+
+                  phrase weight `ofThe` phrase pendulum, S "bob that acts along the arc length." +:+
                   S "The", phrase torque `isThe` S "length" `ofThe` S "string", ch lenRod +:+ S "multiplied by the component"
                   `ofThe` S "net", phrase force +:+ S "that is perpendicular to the radius" `ofThe` S "arc." +:+
                   S "The minus sign indicates the" +:+ phrase torque +:+ S "acts in the opposite direction of the", phrase angularDisplacement]

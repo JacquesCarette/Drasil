@@ -4,7 +4,8 @@ import GHC.IO.Encoding
 
 import Language.Drasil.Generate (gen, DocSpec(DocSpec), DocType(SRS, Website))
 
-import Drasil.DblPendulum.Body (srs, printSetting, pendulumTitle)
+import Drasil.DblPendulum.Body (srs, printSetting)
+
 
 main :: IO()
 main = do

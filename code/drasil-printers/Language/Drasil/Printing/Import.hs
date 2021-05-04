@@ -273,12 +273,12 @@ sFormat Prime  s = P.Row [symbol s, P.MO P.Prime]
 
 -- | Helper for properly rendering exponents
 pow :: PrintingInformation -> Expr -> Expr -> P.Expr
-pow sm a@(AssocA Add _)  b     = P.Row [parens (expr a sm), P.Sup (expr b sm)]
-pow sm a@(AssocA Mul _)  b     = P.Row [parens (expr a sm), P.Sup (expr b sm)]
+pow sm a@(AssocA Add _)      b = P.Row [parens (expr a sm), P.Sup (expr b sm)]
+pow sm a@(AssocA Mul _)      b = P.Row [parens (expr a sm), P.Sup (expr b sm)]
 pow sm a@(BinaryOp Subt _ _) b = P.Row [parens (expr a sm), P.Sup (expr b sm)]
 pow sm a@(BinaryOp Frac _ _) b = P.Row [parens (expr a sm), P.Sup (expr b sm)]
 pow sm a@(BinaryOp Pow _ _)  b = P.Row [parens (expr a sm), P.Sup (expr b sm)]
-pow sm a                b      = P.Row [expr a sm, P.Sup (expr b sm)]
+pow sm a                     b = P.Row [expr a sm, P.Sup (expr b sm)]
 
 -- | Print a RealInterval
 renderRealInt :: PrintingInformation -> Symbol -> RealInterval Expr Expr -> P.Expr

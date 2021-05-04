@@ -3,7 +3,7 @@ module Language.Drasil.Printing.Import (space, expr, symbol, spec,
 
 import Language.Drasil hiding (sec, symbol)
 import Language.Drasil.Development (UFuncB(..), UFuncVec(..)
-  , EqBinOp(..)
+  , BoolBinOp(..), EqBinOp(..)
   , precA, precB, eprec)
 import Database.Drasil
 import Utils.Drasil
@@ -92,76 +92,80 @@ processExpo a
 
 -- | expr translation function from Drasil to layout AST
 expr :: Expr -> PrintingInformation -> P.Expr
-expr (Dbl d)              sm = case sm ^. getSetting of
+expr (Dbl d)                 sm = case sm ^. getSetting of
   Engineering -> P.Row $ digitsProcess (map toInteger $ fst $ floatToDigits 10 d)
      (fst $ processExpo $ snd $ floatToDigits 10 d) 0
      (toInteger $ snd $ processExpo $ snd $ floatToDigits 10 d)
   Scientific  ->  P.Dbl d
-expr (Int i)               _ = P.Int i
-expr (Str s)               _ = P.Str s
-expr (Perc a b)           sm = P.Row [expr (Dbl val) sm, P.MO P.Perc]
+expr (Int i)                  _ = P.Int i
+expr (Str s)                  _ = P.Str s
+expr (Perc a b)              sm = P.Row [expr (Dbl val) sm, P.MO P.Perc]
   where
     val = fromIntegral a / (10 ** fromIntegral (b - 2))
-expr (AssocB And l)       sm = P.Row $ intersperse (P.MO P.And) $ map (expr' sm (precB And)) l
-expr (AssocB Or l)        sm = P.Row $ intersperse (P.MO P.Or ) $ map (expr' sm (precB Or)) l
-expr (AssocA Add l)       sm = P.Row $ intersperse (P.MO P.Add) $ map (expr' sm (precA Add)) l
-expr (AssocA Mul l)       sm = P.Row $ mulExpr l sm
-expr (Deriv Part a b)     sm =
+expr (AssocB And l)          sm = 
+  P.Row $ intersperse (P.MO P.And) $ map (expr' sm (precB And)) l
+expr (AssocB Or l)           sm = 
+  P.Row $ intersperse (P.MO P.Or ) $ map (expr' sm (precB Or)) l
+expr (AssocA Add l)          sm = 
+  P.Row $ intersperse (P.MO P.Add) $ map (expr' sm (precA Add)) l
+expr (AssocA Mul l)          sm = P.Row $ mulExpr l sm
+expr (Deriv Part a b)        sm =
   P.Div (P.Row [P.Spc P.Thin, P.Spec Partial, expr a sm])
         (P.Row [P.Spc P.Thin, P.Spec Partial,
                 symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b])
-expr (Deriv Total a b)    sm =
+expr (Deriv Total a b)       sm =
   P.Div (P.Row [P.Spc P.Thin, P.Ident "d", expr a sm])
         (P.Row [P.Spc P.Thin, P.Ident "d",
                 symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b])
-expr (C c)                sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
-expr (FCall f [x] [])     sm = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f,
-  parens $ expr x sm]
-expr (FCall f l ns)       sm = call sm f l ns
-expr (New c l ns)         sm = call sm c l ns
-expr (Message a m l ns)   sm = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) a,
-  P.MO P.Point, call sm m l ns]
-expr (Field o f)          sm = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) o,
+expr (C c)                   sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
+expr (FCall f [x] [])        sm = 
+  P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f, parens $ expr x sm]
+expr (FCall f l ns)          sm = call sm f l ns
+expr (New c l ns)            sm = call sm c l ns
+expr (Message a m l ns)      sm = 
+  P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) a, P.MO P.Point, call sm m l ns]
+expr (Field o f)             sm = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) o,
   P.MO P.Point, symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f]
-expr (Case _ ps)          sm = if length ps < 2 then
-                    error "Attempting to use multi-case expr incorrectly"
-                    else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
-expr (Matrix a)           sm = P.Mtx $ map (map (`expr` sm)) a
-expr (UnaryOp Log u)      sm = mkCall sm P.Log u
-expr (UnaryOp Ln u)       sm = mkCall sm P.Ln u
-expr (UnaryOp Sin u)      sm = mkCall sm P.Sin u
-expr (UnaryOp Cos u)      sm = mkCall sm P.Cos u
-expr (UnaryOp Tan u)      sm = mkCall sm P.Tan u
-expr (UnaryOp Sec u)      sm = mkCall sm P.Sec u
-expr (UnaryOp Csc u)      sm = mkCall sm P.Csc u
-expr (UnaryOp Cot u)      sm = mkCall sm P.Cot u
-expr (UnaryOp Arcsin u)   sm = mkCall sm P.Arcsin u
-expr (UnaryOp Arccos u)   sm = mkCall sm P.Arccos u
-expr (UnaryOp Arctan u)   sm = mkCall sm P.Arctan u
-expr (UnaryOp Exp u)      sm = P.Row [P.MO P.Exp, P.Sup $ expr u sm]
-expr (UnaryOp Abs u)      sm = P.Fenced P.Abs P.Abs $ expr u sm
-expr (UnaryOpB Not u)     sm = P.Row [P.MO P.Not, expr u sm]
-expr (UnaryOpVec Norm u)  sm = P.Fenced P.Norm P.Norm $ expr u sm
-expr (UnaryOpVec Dim u)   sm = mkCall sm P.Dim u
-expr (UnaryOp Sqrt u)     sm = P.Sqrt $ expr u sm
-expr (UnaryOp Neg u)      sm = neg sm u
-expr (BinaryOp Frac a b)  sm = P.Div (expr a sm) (expr b sm)
-expr (BinaryOp Cross a b) sm = mkBOp sm P.Cross a b
-expr (BinaryOp Dot a b)   sm = mkBOp sm P.Dot a b
-expr (BinaryOp Lt a b)    sm = mkBOp sm P.Lt a b
-expr (BinaryOp Gt a b)    sm = mkBOp sm P.Gt a b
-expr (BinaryOp LEq a b)   sm = mkBOp sm P.LEq a b
-expr (BinaryOp GEq a b)   sm = mkBOp sm P.GEq a b
-expr (BinaryOp Impl a b)  sm = mkBOp sm P.Impl a b
-expr (BinaryOp Iff a b)   sm = mkBOp sm P.Iff a b
-expr (BinaryOp Index a b) sm = indx sm a b
-expr (BinaryOp Pow a b)   sm = pow sm a b
-expr (BinaryOp Subt a b)  sm = P.Row [expr a sm, P.MO P.Subt, expr b sm]
-expr (EqBinaryOp Eq a b)  sm = mkBOp sm P.Eq a b
-expr (EqBinaryOp NEq a b) sm = mkBOp sm P.NEq a b
-expr (Operator o d e)     sm = eop sm o d e
-expr (IsIn  a b)          sm = P.Row [expr a sm, P.MO P.IsIn, space sm b]
-expr (RealI c ri)         sm = renderRealInt sm (lookupC (sm ^. stg)
+expr (Case _ ps)             sm =
+  if length ps < 2 
+    then error "Attempting to use multi-case expr incorrectly"
+    else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
+expr (Matrix a)              sm = P.Mtx $ map (map (`expr` sm)) a
+expr (UnaryOp Log u)         sm = mkCall sm P.Log u
+expr (UnaryOp Ln u)          sm = mkCall sm P.Ln u
+expr (UnaryOp Sin u)         sm = mkCall sm P.Sin u
+expr (UnaryOp Cos u)         sm = mkCall sm P.Cos u
+expr (UnaryOp Tan u)         sm = mkCall sm P.Tan u
+expr (UnaryOp Sec u)         sm = mkCall sm P.Sec u
+expr (UnaryOp Csc u)         sm = mkCall sm P.Csc u
+expr (UnaryOp Cot u)         sm = mkCall sm P.Cot u
+expr (UnaryOp Arcsin u)      sm = mkCall sm P.Arcsin u
+expr (UnaryOp Arccos u)      sm = mkCall sm P.Arccos u
+expr (UnaryOp Arctan u)      sm = mkCall sm P.Arctan u
+expr (UnaryOp Exp u)         sm = P.Row [P.MO P.Exp, P.Sup $ expr u sm]
+expr (UnaryOp Abs u)         sm = P.Fenced P.Abs P.Abs $ expr u sm
+expr (UnaryOpB Not u)        sm = P.Row [P.MO P.Not, expr u sm]
+expr (UnaryOpVec Norm u)     sm = P.Fenced P.Norm P.Norm $ expr u sm
+expr (UnaryOpVec Dim u)      sm = mkCall sm P.Dim u
+expr (UnaryOp Sqrt u)        sm = P.Sqrt $ expr u sm
+expr (UnaryOp Neg u)         sm = neg sm u
+expr (BinaryOp Frac a b)     sm = P.Div (expr a sm) (expr b sm)
+expr (BinaryOp Cross a b)    sm = mkBOp sm P.Cross a b
+expr (BinaryOp Dot a b)      sm = mkBOp sm P.Dot a b
+expr (BinaryOp Lt a b)       sm = mkBOp sm P.Lt a b
+expr (BinaryOp Gt a b)       sm = mkBOp sm P.Gt a b
+expr (BinaryOp LEq a b)      sm = mkBOp sm P.LEq a b
+expr (BinaryOp GEq a b)      sm = mkBOp sm P.GEq a b
+expr (BoolBinaryOp Impl a b) sm = mkBOp sm P.Impl a b
+expr (BoolBinaryOp Iff a b)  sm = mkBOp sm P.Iff a b
+expr (BinaryOp Index a b)    sm = indx sm a b
+expr (BinaryOp Pow a b)      sm = pow sm a b
+expr (BinaryOp Subt a b)     sm = P.Row [expr a sm, P.MO P.Subt, expr b sm]
+expr (EqBinaryOp Eq a b)     sm = mkBOp sm P.Eq a b
+expr (EqBinaryOp NEq a b)    sm = mkBOp sm P.NEq a b
+expr (Operator o d e)        sm = eop sm o d e
+expr (IsIn  a b)             sm = P.Row [expr a sm, P.MO P.IsIn, space sm b]
+expr (RealI c ri)            sm = renderRealInt sm (lookupC (sm ^. stg)
   (sm ^. ckdb) c) ri
 
 lookupC :: Stage -> ChunkDB -> UID -> Symbol

@@ -23,11 +23,13 @@ infixr 9 $||
 -- TODO: Move the below to a separate file somehow. How to go about it?
 
 -- | Binary functions
-data BinOp = Frac | Pow | Subt | Lt | Gt | LEq | GEq | Impl | Iff | Index
+data BinOp = Frac | Pow | Subt | Lt | Gt | LEq | GEq | Index
   | Dot | Cross
   deriving Eq
 
 data EqBinOp = Eq | NEq
+
+data BoolBinOp = Impl | Iff
 
 data AssocArithOper = Add | Mul
   deriving Eq
@@ -86,8 +88,9 @@ data Expr where
   UnaryOpB   :: UFuncB -> Expr -> Expr
   UnaryOpVec :: UFuncVec -> Expr -> Expr
 
-  BinaryOp :: BinOp -> Expr -> Expr -> Expr
-  EqBinaryOp :: EqBinOp -> Expr -> Expr -> Expr
+  BinaryOp     :: BinOp -> Expr -> Expr -> Expr
+  BoolBinaryOp :: BoolBinOp -> Expr -> Expr -> Expr
+  EqBinaryOp   :: EqBinOp -> Expr -> Expr -> Expr
 
   -- | Operators are generalized arithmetic operators over a |DomainDesc|
   --   of an |Expr|.  Could be called |BigOp|.
@@ -98,16 +101,15 @@ data Expr where
   -- | a different kind of 'element of'
   RealI    :: UID -> RealInterval Expr Expr -> Expr
 
-($=), ($!=), ($<), ($>), ($<=), ($>=), ($=>), ($<=>), ($.), ($-),
-  ($/), ($^) :: Expr -> Expr -> Expr
+($=), ($!=) :: Expr -> Expr -> Expr
 ($=)   = EqBinaryOp Eq
 ($!=)  = EqBinaryOp NEq
+
+($<), ($>), ($<=), ($>=), ($.), ($-), ($/), ($^) :: Expr -> Expr -> Expr
 ($<)   = BinaryOp Lt
 ($>)   = BinaryOp Gt
 ($<=)  = BinaryOp LEq
 ($>=)  = BinaryOp GEq
-($=>)  = BinaryOp Impl
-($<=>) = BinaryOp Iff
 ($.)   = BinaryOp Dot
 ($-)   = BinaryOp Subt
 ($/)   = BinaryOp Frac
@@ -116,6 +118,10 @@ data Expr where
 ($&&), ($||) :: Expr -> Expr -> Expr
 a $&& b = AssocB And [a,b]
 a $|| b = AssocB Or  [a,b]
+
+($=>), ($<=>) :: Expr -> Expr -> Expr
+($=>)  = BoolBinaryOp Impl
+($<=>) = BoolBinaryOp Iff
 
 type Variable = String
 

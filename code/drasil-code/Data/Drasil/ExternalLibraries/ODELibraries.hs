@@ -588,26 +588,22 @@ diffCodeChunk c = quantvar $ implVar' ("d" ++ c ^. uid)
 -- and the array version must have a distinct UID so it can be stored in the DB
 modifiedODESyst :: String -> ODEInfo -> [Expr]
 modifiedODESyst sufx info = map replaceDepVar (odeSyst info)
-  where replaceDepVar (C c) = if c == depVar info ^. uid 
-          then C (c ++ "_" ++ sufx) else C c
-        replaceDepVar (AssocA a es) = AssocA a (map replaceDepVar es)
-        replaceDepVar (AssocB b es) = AssocB b (map replaceDepVar es)
-        replaceDepVar (Deriv dt e u) = Deriv dt (replaceDepVar e) u
-        replaceDepVar (FCall u es nes) = FCall u (map replaceDepVar es) 
-          (map (over _2 replaceDepVar) nes)
-        replaceDepVar (New u es nes) = New u (map replaceDepVar es) 
-          (map (over _2 replaceDepVar) nes)
-        replaceDepVar (Message au mu es nes) = Message au mu 
-          (map replaceDepVar es) (map (over _2 replaceDepVar) nes)
-        replaceDepVar (Case c cs) = Case c (map (over _1 replaceDepVar) cs)
-        replaceDepVar (Matrix es) = Matrix $ map (map replaceDepVar) es
-        replaceDepVar (UnaryOp u e) = UnaryOp u $ replaceDepVar e
-        replaceDepVar (UnaryOpB u e) = UnaryOpB u $ replaceDepVar e
-        replaceDepVar (UnaryOpVec u e) = UnaryOpVec u $ replaceDepVar e
-        replaceDepVar (BinaryOp b e1 e2) = BinaryOp b (replaceDepVar e1) 
-          (replaceDepVar e2)
-        replaceDepVar (EqBinaryOp b e1 e2) = EqBinaryOp b (replaceDepVar e1) 
-          (replaceDepVar e2)
-        replaceDepVar (Operator ao dd e) = Operator ao dd $ replaceDepVar e 
-        replaceDepVar (IsIn e s) = IsIn (replaceDepVar e) s
-        replaceDepVar e = e
+  where
+    replaceDepVar (C c) = if c == depVar info ^. uid then C (c ++ "_" ++ sufx) else C c
+    replaceDepVar (AssocA a es) = AssocA a (map replaceDepVar es)
+    replaceDepVar (AssocB b es) = AssocB b (map replaceDepVar es)
+    replaceDepVar (Deriv dt e u) = Deriv dt (replaceDepVar e) u
+    replaceDepVar (FCall u es nes) = FCall u (map replaceDepVar es) (map (over _2 replaceDepVar) nes)
+    replaceDepVar (New u es nes) = New u (map replaceDepVar es) (map (over _2 replaceDepVar) nes)
+    replaceDepVar (Message au mu es nes) = Message au mu (map replaceDepVar es) (map (over _2 replaceDepVar) nes)
+    replaceDepVar (Case c cs) = Case c (map (over _1 replaceDepVar) cs)
+    replaceDepVar (Matrix es) = Matrix $ map (map replaceDepVar) es
+    replaceDepVar (UnaryOp u e) = UnaryOp u $ replaceDepVar e
+    replaceDepVar (UnaryOpB u e) = UnaryOpB u $ replaceDepVar e
+    replaceDepVar (UnaryOpVec u e) = UnaryOpVec u $ replaceDepVar e
+    replaceDepVar (BinaryOp b e1 e2) = BinaryOp b (replaceDepVar e1) (replaceDepVar e2)
+    replaceDepVar (BoolBinaryOp b e1 e2) = BoolBinaryOp b (replaceDepVar e1) (replaceDepVar e2)
+    replaceDepVar (EqBinaryOp b e1 e2) = EqBinaryOp b (replaceDepVar e1) (replaceDepVar e2)
+    replaceDepVar (Operator ao dd e) = Operator ao dd $ replaceDepVar e 
+    replaceDepVar (IsIn e s) = IsIn (replaceDepVar e) s
+    replaceDepVar e = e

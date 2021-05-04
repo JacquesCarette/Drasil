@@ -589,7 +589,8 @@ diffCodeChunk c = quantvar $ implVar' ("d" ++ c ^. uid)
 modifiedODESyst :: String -> ODEInfo -> [Expr]
 modifiedODESyst sufx info = map replaceDepVar (odeSyst info)
   where
-    replaceDepVar (C c) = if c == depVar info ^. uid then C (c ++ "_" ++ sufx) else C c
+    replaceDepVar (C c) = if c == depVar info ^. uid
+      then C (c ++ "_" ++ sufx) else C c
     replaceDepVar (AssocA a es)          = AssocA a (map replaceDepVar es)
     replaceDepVar (AssocB b es)          = AssocB b (map replaceDepVar es)
     replaceDepVar (Deriv dt e u)         = Deriv dt (replaceDepVar e) u

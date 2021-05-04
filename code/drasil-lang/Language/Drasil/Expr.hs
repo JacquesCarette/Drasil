@@ -22,66 +22,15 @@ infixr 9 $||
 -- Known math functions.
 -- TODO: Move the below to a separate file somehow. How to go about it?
 
-{- Expectations of usage (through types), so I know how I should be grouping them together...
-
--- TODO: What is the type of Vectors? How are they instantiated in the expression language?
---       What about things like proj_i for values of a vector?
-
-Add     :: numType -> numType -> numType
-Mul     :: numType -> numType -> numType
-Subt    :: numType -> numType -> numType
-
--- TODO: Bitwise operations?
-
--- TODO: Do we want to do integer and floating point division?
-Frac    :: numType -> numType -> numType
-
-Pow     :: numType -> numType -> numType
-
--- TODO: Do we want all things to be "equatable"?
-Eq      :: x -> x -> Bool
-NEq     :: x -> x -> Bool
-
-Lt      :: x -> x -> Bool
-Gt      :: x -> x -> Bool
-
-LEq     :: x -> x -> Bool
-GEq     :: x -> x -> Bool
-
-And     :: Bool -> Bool -> Bool
-Or      :: Bool -> Bool -> Bool
-Impl    :: Bool -> Bool -> Bool
-Iff     :: Bool -> Bool -> Bool
-
--- List indexing or Vector indexing? Both?
-Index   :: 
-
-
-Dot     :: Vector numType -> Vector numType -> numType        -- TODO: ?
-Cross   :: Vector numType -> Vector numType -> Vector numType
-
--- TODO: Set logic?
--- TODO: Numeric type casting?
-
--- TODO: Do we ever need to worry about side-effects with function calls?
---       If so, it might be a bit odd to implement _some_ things like `xor` which require 
---              observing at least one of the values twice?
-
--- TODO: Some things are not yet implemented (e.g., vector norm, cross, and dot, and, logical implication, iff).
---       Should we be "sticking to the walls" and only doing the things that are implemented to start off with
---       first, and then add later, or should we be adding as we go along, creating default "not implemented errors"
---       as we go along (just essentially laying out the typing information)?
-
--}
-
+-- | Binary functions
 data BinOp = Frac | Pow | Subt | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | Index
   | Dot | Cross
   deriving Eq
 
-data ArithOper = Add | Mul
+data AssocArithOper = Add | Mul
   deriving Eq
 
-data BoolOper = And | Or
+data AssocBoolOper = And | Or
   deriving Eq
 
 -- | Unary functions
@@ -102,8 +51,8 @@ data Expr where
   Int      :: Integer -> Expr
   Str      :: String -> Expr
   Perc     :: Integer -> Integer -> Expr
-  AssocA   :: ArithOper -> [Expr] -> Expr
-  AssocB   :: BoolOper  -> [Expr] -> Expr
+  AssocA   :: AssocArithOper -> [Expr] -> Expr
+  AssocB   :: AssocBoolOper  -> [Expr] -> Expr
   -- | Derivative, syntax is:
   --   Type (Partial or total) -> principal part of change -> with respect to
   --   For example: Deriv Part y x1 would be (dy/dx1)
@@ -140,7 +89,7 @@ data Expr where
   -- | Operators are generalized arithmetic operators over a |DomainDesc|
   --   of an |Expr|.  Could be called |BigOp|.
   --   ex: Summation is represented via |Add| over a discrete domain
-  Operator :: ArithOper -> DomainDesc Expr Expr -> Expr -> Expr
+  Operator :: AssocArithOper -> DomainDesc Expr Expr -> Expr -> Expr
   -- | element of
   IsIn     :: Expr -> Space -> Expr 
   -- | a different kind of 'element of'

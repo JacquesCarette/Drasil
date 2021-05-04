@@ -2,7 +2,9 @@ module Language.Drasil.Printing.Import (space, expr, symbol, spec,
   makeDocument) where
 
 import Language.Drasil hiding (sec, symbol)
-import Language.Drasil.Development ( UFuncB(..), UFuncVec(..), precA, precB, eprec )
+import Language.Drasil.Development (UFuncB(..), UFuncVec(..)
+  , EqBinOp(..)
+  , precA, precB, eprec)
 import Database.Drasil
 import Utils.Drasil
 
@@ -146,8 +148,6 @@ expr (UnaryOp Neg u)      sm = neg sm u
 expr (BinaryOp Frac a b)  sm = P.Div (expr a sm) (expr b sm)
 expr (BinaryOp Cross a b) sm = mkBOp sm P.Cross a b
 expr (BinaryOp Dot a b)   sm = mkBOp sm P.Dot a b
-expr (BinaryOp Eq a b)    sm = mkBOp sm P.Eq a b
-expr (BinaryOp NEq a b)   sm = mkBOp sm P.NEq a b
 expr (BinaryOp Lt a b)    sm = mkBOp sm P.Lt a b
 expr (BinaryOp Gt a b)    sm = mkBOp sm P.Gt a b
 expr (BinaryOp LEq a b)   sm = mkBOp sm P.LEq a b
@@ -157,6 +157,8 @@ expr (BinaryOp Iff a b)   sm = mkBOp sm P.Iff a b
 expr (BinaryOp Index a b) sm = indx sm a b
 expr (BinaryOp Pow a b)   sm = pow sm a b
 expr (BinaryOp Subt a b)  sm = P.Row [expr a sm, P.MO P.Subt, expr b sm]
+expr (EqBinaryOp Eq a b)  sm = mkBOp sm P.Eq a b
+expr (EqBinaryOp NEq a b) sm = mkBOp sm P.NEq a b
 expr (Operator o d e)     sm = eop sm o d e
 expr (IsIn  a b)          sm = P.Row [expr a sm, P.MO P.IsIn, space sm b]
 expr (RealI c ri)         sm = renderRealInt sm (lookupC (sm ^. stg)
@@ -272,9 +274,9 @@ sFormat Prime  s = P.Row [symbol s, P.MO P.Prime]
 -- | Helper for properly rendering exponents
 pow :: PrintingInformation -> Expr -> Expr -> P.Expr
 pow sm a@(AssocA Add _)  b     = P.Row [parens (expr a sm), P.Sup (expr b sm)]
+pow sm a@(AssocA Mul _)  b     = P.Row [parens (expr a sm), P.Sup (expr b sm)]
 pow sm a@(BinaryOp Subt _ _) b = P.Row [parens (expr a sm), P.Sup (expr b sm)]
 pow sm a@(BinaryOp Frac _ _) b = P.Row [parens (expr a sm), P.Sup (expr b sm)]
-pow sm a@(AssocA Mul _)  b     = P.Row [parens (expr a sm), P.Sup (expr b sm)]
 pow sm a@(BinaryOp Pow _ _)  b = P.Row [parens (expr a sm), P.Sup (expr b sm)]
 pow sm a                b      = P.Row [expr a sm, P.Sup (expr b sm)]
 

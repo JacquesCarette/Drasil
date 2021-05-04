@@ -23,9 +23,11 @@ infixr 9 $||
 -- TODO: Move the below to a separate file somehow. How to go about it?
 
 -- | Binary functions
-data BinOp = Frac | Pow | Subt | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | Index
+data BinOp = Frac | Pow | Subt | Lt | Gt | LEq | GEq | Impl | Iff | Index
   | Dot | Cross
   deriving Eq
+
+data EqBinOp = Eq | NEq
 
 data AssocArithOper = Add | Mul
   deriving Eq
@@ -65,10 +67,10 @@ data Expr where
   --   F(x,y) would be (FCall F [x,y]) or sim.
   --   F(x,n=y) would be (FCall F [x] [(n,y)]).
   FCall    :: UID -> [Expr] -> [(UID, Expr)] -> Expr
-  -- | Actor creation given UID and parameters 
-  New      :: UID -> [Expr] -> [(UID, Expr)] -> Expr 
-  -- | Message an actor: 
-  --   1st UID is the actor, 
+  -- | Actor creation given UID and parameters
+  New      :: UID -> [Expr] -> [(UID, Expr)] -> Expr
+  -- | Message an actor:
+  --   1st UID is the actor,
   --   2nd UID is the method
   Message  :: UID -> UID -> [Expr] -> [(UID, Expr)] -> Expr
   -- | Access a field of an actor:
@@ -85,20 +87,21 @@ data Expr where
   UnaryOpVec :: UFuncVec -> Expr -> Expr
 
   BinaryOp :: BinOp -> Expr -> Expr -> Expr
-  
+  EqBinaryOp :: EqBinOp -> Expr -> Expr -> Expr
+
   -- | Operators are generalized arithmetic operators over a |DomainDesc|
   --   of an |Expr|.  Could be called |BigOp|.
   --   ex: Summation is represented via |Add| over a discrete domain
   Operator :: AssocArithOper -> DomainDesc Expr Expr -> Expr -> Expr
   -- | element of
-  IsIn     :: Expr -> Space -> Expr 
+  IsIn     :: Expr -> Space -> Expr
   -- | a different kind of 'element of'
-  RealI    :: UID -> RealInterval Expr Expr -> Expr 
+  RealI    :: UID -> RealInterval Expr Expr -> Expr
 
 ($=), ($!=), ($<), ($>), ($<=), ($>=), ($=>), ($<=>), ($.), ($-),
   ($/), ($^) :: Expr -> Expr -> Expr
-($=)   = BinaryOp Eq
-($!=)  = BinaryOp NEq
+($=)   = EqBinaryOp Eq
+($!=)  = EqBinaryOp NEq
 ($<)   = BinaryOp Lt
 ($>)   = BinaryOp Gt
 ($<=)  = BinaryOp LEq

@@ -14,7 +14,7 @@ import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Drasil.DblPendulum.Unitals (lenRod, pendDisplacementAngle , initialPendAngle)
 import Data.Drasil.Concepts.Math (constraint, equation)
 import Data.Drasil.Concepts.Physics (pendulum)
-import Drasil.DblPendulum.TMods (newtonSLR)
+import Data.Drasil.Theories.Physics (newtonSLR)
 import Drasil.DblPendulum.GenDefs (angFrequencyGD)
 
 

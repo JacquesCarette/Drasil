@@ -220,7 +220,7 @@ The instance models that govern Pendulum are presented in \hyperref[Sec:IMs]{Sec
 This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
 
 \begin{itemize}
-\item[pend2DMotion:\phantomsection\label{pend2DMotion}]{The pendulum motion is two-dimensional (2D). (RefBy: \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}.)}
+\item[pend2DMotion:\phantomsection\label{pend2DMotion}]{The pendulum motion is two-dimensional (2D).}
 \item[cartCoord:\phantomsection\label{cartCoord}]{A Cartesian coordinate system is used}
 \item[cartCoordRight:\phantomsection\label{cartCoordRight}]{The Cartesian coordinate system is right-handed where positive $x$-axis. and $y$-axis point right up}
 \item[yAxisDir:\phantomsection\label{yAxisDir}]{The The direction of the $y$-axis is directed opposite to gravity.}
@@ -338,7 +338,7 @@ Description & \begin{symbDescription}
               \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The net torque $\mathbf{τ}$ on a pendulum is proportional to its angular acceleration $α$, where $\mathbf{I}$ denotes the moment of inertia of the pendulum as the constant of proportionality We also assume that pendulum motion is two-dimensional \hyperref[pend2DMotion]{A: pend2DMotion}.
+Notes & The net torque $\mathbf{τ}$ on a rigid body is proportional to its angular acceleration $α$, where $\mathbf{I}$ denotes the moment of inertia of the rigid body as the constant of proportionality.
         
 \\ \midrule \\
 Source & --
@@ -617,7 +617,7 @@ RefBy & \hyperref[GD:periodPend]{GD: periodPend} and \hyperref[IM:calOfAngularDi
 \end{minipage}
 \paragraph{Detailed derivation of angular frequency pendulum:}
 \label{GD:angFrequencyGDDeriv}
-Consider the torque, on a pendulum defined in \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}, the force providing the restoring torque is the component of the the weight of the pendulum bob that acts along the arc length The the torque is the length of the string the ${L_{\text{rod}}}$ multiplied by the component of the net the force that is perpendicular to the radius of the arc. The minus sign indicates the torque acts in the opposite direction of the angular displacement:
+Consider the torque, on a pendulum defined in \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}, the force providing the restoring torque is the component of the the weight of the pendulum bob that acts along the arc length. The the torque is the length of the string the ${L_{\text{rod}}}$ multiplied by the component of the net the force that is perpendicular to the radius of the arc. The minus sign indicates the torque acts in the opposite direction of the angular displacement:
 
 \begin{displaymath}
 \mathbf{τ}=-{L_{\text{rod}}} m \mathbf{g} \sin\left({θ_{p}}\right)
@@ -1106,7 +1106,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot} &  &  &  &  & 
 \\
-\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} & X &  &  &  & 
+\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} &  &  &  &  & 
 \\
 \hyperref[GD:velocityIX]{GD: velocityIX} &  &  &  &  & 
 \\

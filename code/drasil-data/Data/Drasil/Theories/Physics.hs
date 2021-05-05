@@ -6,13 +6,14 @@ import Theory.Drasil (DataDefinition, GenDefn, TheoryModel, ddNoRefs, gd,
 import Utils.Drasil
 
 import Data.Drasil.Citations (velocityWiki, accelerationWiki)
-import Data.Drasil.Concepts.Documentation (component, material_, value)
+import Data.Drasil.Concepts.Documentation (component, material_, value, constant)
 import Data.Drasil.Concepts.Math (cartesian, equation, vector)
-import Data.Drasil.Concepts.Physics (gravity, twoD)
+import Data.Drasil.Concepts.Physics (gravity, twoD, rigidBody)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (density, 
   mass, specWeight, vol)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration, velocity, position,
-  force, gravitationalAccel, pressure, torque, weight, positionVec, time)
+  force, gravitationalAccel, pressure, torque, weight, positionVec, time, momentOfInertia,
+  angularAccel)
 import Data.Drasil.Equations.Defining.Physics (newtonSLRel, newtonSLRC, newtonSLDesc, weightEqn,
   weightDerivAccelEqn, weightDerivNewtonEqn, weightDerivReplaceMassEqn, weightDerivSpecWeightEqn,
   hsPressureEqn, accelerationEqn, accelerationRC, velocityEqn, velocityRC)
@@ -104,6 +105,25 @@ torqueDesc = foldlSent [S "The", phrase torque,
   S "on a body measures the", S "the tendency" `sOf` S "a", phrase QP.force, 
   S "to rotate the body around an axis or pivot"]
 
+--
+newtonSLR :: TheoryModel
+newtonSLR = tmNoRefs (cw newtonSLRRC)
+  [qw QP.torque, qw QP.momentOfInertia, qw QP.angularAccel] 
+  ([] :: [ConceptChunk]) [] [newtonSLRRel] [] "NewtonSecLawRotMot" newtonSLRNotes
+
+newtonSLRRC :: RelationConcept
+newtonSLRRC = makeRC "newtonSLRRC" 
+  (nounPhraseSP "Newton's second law for rotational motion") EmptyS newtonSLRRel
+
+newtonSLRRel :: Relation
+newtonSLRRel = sy QP.torque $= sy QP.momentOfInertia * sy QP.angularAccel
+
+newtonSLRNotes :: [Sentence]
+newtonSLRNotes = map foldlSent [
+  [S "The net", getTandS QP.torque, S "on a", phrase rigidBody `sIs`
+   S "proportional to its", getTandS QP.angularAccel `sC` S "where",
+   ch QP.momentOfInertia, S "denotes", phrase QP.momentOfInertia `ofThe`
+   phrase rigidBody, S "as the", phrase constant `sOf` S "proportionality"]]
 --
 
 accelerationTM :: TheoryModel

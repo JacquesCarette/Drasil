@@ -1,4 +1,4 @@
-on:
+on: 
   push:
     branches-ignore: master
   pull_request:

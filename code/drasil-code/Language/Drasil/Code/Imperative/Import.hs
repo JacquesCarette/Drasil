@@ -326,7 +326,7 @@ convExpr (BinaryOp Frac (Int a) (Int b)) = do -- hack to deal with integer divis
 convExpr (BinaryOp o a b)  = liftM2 (bfunc o) (convExpr a) (convExpr b)
 convExpr (Case c l)      = doit l -- FIXME this is sub-optimal
   where
-    doit [] = error "should never happen"
+    doit [] = error "should never happen" -- TODO: change error message?
     doit [(e,_)] = convExpr e -- should always be the else clause
     doit ((e,cond):xs) = liftM3 inlineIf (convExpr cond) (convExpr e) 
       (convExpr (Case c xs))

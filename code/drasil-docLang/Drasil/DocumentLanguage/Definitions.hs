@@ -5,7 +5,7 @@ module Drasil.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(..),
   instanceModel, tmodel) where
 
 import Data.Map (keys)
-import Data.List (elem, nub)
+import Data.List (nub)
 import Data.Maybe (mapMaybe)
 import Control.Lens ((^.))
 

@@ -5,7 +5,7 @@ import Prelude hiding (sqrt)
 import Control.Lens ((^.))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Expr (Expr(..), Relation, DerivType(..), ($^), BinOp(..),
-  ArithOper(..), UFunc(..), UFuncB(..), UFuncVec(..), Completeness(..))
+  AssocArithOper(..), UFunc(..), UFuncB(..), UFuncVec(..), Completeness(..))
 import Language.Drasil.Space (Space, RTopology(..), DomainDesc(..), RealInterval)
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
 import Language.Drasil.Classes (IsArgumentName)

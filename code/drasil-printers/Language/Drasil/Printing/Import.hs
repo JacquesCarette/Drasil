@@ -72,7 +72,7 @@ digitsProcess [] pos coun ex
   | ex /= 0 = [P.MO P.Point, P.Int 0, P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
   | otherwise = [P.MO P.Point, P.Int 0]
 
--- THis function takes the exponent and the [Int] of base and give out
+-- This function takes the exponent and the [Int] of base and give out
 -- the decimal point position and processed exponent
 -- This function supports transferring scientific notation to
 -- engineering notation.
@@ -229,7 +229,7 @@ call sm f ps ns = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f,
   P.MO P.Eq, expr a sm]) (map fst ns) (map snd ns)]
 
 -- | Helper function for translating 'EOperator's
-eop :: PrintingInformation -> ArithOper -> DomainDesc Expr Expr -> Expr -> P.Expr
+eop :: PrintingInformation -> AssocArithOper -> DomainDesc Expr Expr -> Expr -> P.Expr
 eop sm Mul (BoundedDD v Discrete l h) e =
   P.Row [P.MO P.Prod, P.Sub (P.Row [symbol v, P.MO P.Eq, expr l sm]), P.Sup (expr h sm),
          P.Row [expr e sm]]
@@ -271,12 +271,12 @@ sFormat Prime  s = P.Row [symbol s, P.MO P.Prime]
 
 -- | Helper for properly rendering exponents
 pow :: PrintingInformation -> Expr -> Expr -> P.Expr
-pow sm a@(AssocA Add _)  b = P.Row [parens (expr a sm), P.Sup (expr b sm)]
+pow sm a@(AssocA Add _)  b     = P.Row [parens (expr a sm), P.Sup (expr b sm)]
 pow sm a@(BinaryOp Subt _ _) b = P.Row [parens (expr a sm), P.Sup (expr b sm)]
 pow sm a@(BinaryOp Frac _ _) b = P.Row [parens (expr a sm), P.Sup (expr b sm)]
-pow sm a@(AssocA Mul _)  b = P.Row [parens (expr a sm), P.Sup (expr b sm)]
+pow sm a@(AssocA Mul _)  b     = P.Row [parens (expr a sm), P.Sup (expr b sm)]
 pow sm a@(BinaryOp Pow _ _)  b = P.Row [parens (expr a sm), P.Sup (expr b sm)]
-pow sm a                b = P.Row [expr a sm, P.Sup (expr b sm)]
+pow sm a                b      = P.Row [expr a sm, P.Sup (expr b sm)]
 
 -- | Print a RealInterval
 renderRealInt :: PrintingInformation -> Symbol -> RealInterval Expr Expr -> P.Expr

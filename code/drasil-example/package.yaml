@@ -59,7 +59,6 @@ executables:
     - Drasil.DblPendulum.Goals
     - Drasil.DblPendulum.DataDefs
     - Drasil.DblPendulum.Unitals
-    - Drasil.DblPendulum.TMods
     - Drasil.Projectile.References
     - Drasil.DblPendulum.GenDefs
     - Drasil.DblPendulum.IMods

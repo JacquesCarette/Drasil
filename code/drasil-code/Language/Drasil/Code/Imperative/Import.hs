@@ -8,7 +8,7 @@ module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
 
 import Language.Drasil hiding (Ref, int, log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
-import Language.Drasil.Development (UFuncB(..), UFuncVec(..))
+import Language.Drasil.Development (UFuncB(..), UFuncVec(..), EqBinOp(..))
 import Database.Drasil (symbResolve)
 import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
@@ -310,7 +310,7 @@ convExpr (Message a m x ns) = do
     (\_ n t -> objMethodCallMixedArgs t o n)
 convExpr (Field o f) = do
   g <- get
-  let ob = quantvar (lookupC g o)
+  let ob  = quantvar (lookupC g o)
       fld = quantvar (lookupC g f)
   v <- mkVar (ccObjVar ob fld)
   return $ valueOf v
@@ -323,8 +323,9 @@ convExpr (BinaryOp Frac (Int a) (Int b)) = do -- hack to deal with integer divis
       getLiteral Float = litFloat (fromIntegral a) #/ litFloat (fromIntegral b)
       getLiteral _ = error "convExpr: Rational space matched to invalid CodeType; should be Double or Float"
   return $ getLiteral sm
-convExpr (BinaryOp o a b)  = liftM2 (bfunc o) (convExpr a) (convExpr b)
-convExpr (Case c l)      = doit l -- FIXME this is sub-optimal
+convExpr (BinaryOp o a b)   = liftM2 (bfunc o) (convExpr a) (convExpr b)
+convExpr (EqBinaryOp o a b) = liftM2 (eqBfunc o) (convExpr a) (convExpr b)
+convExpr (Case c l)         = doit l -- FIXME this is sub-optimal
   where
     doit [] = error "should never happen" -- TODO: change error message?
     doit [(e,_)] = convExpr e -- should always be the else clause
@@ -410,8 +411,6 @@ unopVec Norm = error "unop: Norm not implemented" -- TODO
 
 -- Maps a BinOp to the corresponding GOOL binary function
 bfunc :: (OOProg r) => BinOp -> (SValue r -> SValue r -> SValue r)
-bfunc Eq    = (?==)
-bfunc NEq   = (?!=)
 bfunc Gt    = (?>)
 bfunc Lt    = (?<)
 bfunc LEq   = (?<=)
@@ -424,6 +423,10 @@ bfunc Iff   = error "convExpr :<=>"
 bfunc Dot   = error "convExpr DotProduct"
 bfunc Frac  = (#/)
 bfunc Index = listAccess
+
+eqBfunc :: (OOProg r) => EqBinOp -> (SValue r -> SValue r -> SValue r)
+eqBfunc Eq    = (?==)
+eqBfunc NEq   = (?!=)
 
 -- medium hacks --
 

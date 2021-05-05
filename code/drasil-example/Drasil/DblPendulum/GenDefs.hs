@@ -15,7 +15,7 @@ import Data.Drasil.Quantities.Physics(velocity, angularVelocity, xVel, yVel,
     momentOfInertia, period, frequency)
 import Data.Drasil.Concepts.Physics(pendulum, weight)
 import Data.Drasil.Quantities.PhysicalProperties(mass)
-import Drasil.DblPendulum.TMods(newtonSLR)
+import Data.Drasil.Theories.Physics(newtonSLR)
 import Drasil.DblPendulum.DataDefs(frequencyDD, periodSHMDD, angFrequencyDD)
 import qualified Data.Drasil.Quantities.Math as QM (pi_)
 

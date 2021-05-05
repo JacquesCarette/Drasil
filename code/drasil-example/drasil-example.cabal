@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 7386be2245a1b45884c4ba862b0b19dba0d7e03612059ebc232ee58d5c5df483
+-- hash: ff5b072bc1679dfabec5e91a626d8b32c45d41f73b8f972143bd0819d4963cc2
 
 name:           drasil-example
 version:        0.1.24.0
@@ -32,7 +32,6 @@ executable dblpendulum
       Drasil.DblPendulum.Unitals
       Drasil.Projectile.References
       Drasil.DblPendulum.GenDefs
-      Drasil.DblPendulum.References
       Drasil.DblPendulum.IMods
       Drasil.DblPendulum.Requirements
   hs-source-dirs:

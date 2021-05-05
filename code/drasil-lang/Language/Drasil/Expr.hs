@@ -19,17 +19,18 @@ infixr 4 $=
 infixr 9 $&&
 infixr 9 $||
 
---Known math functions.
+-- Known math functions.
 -- TODO: Move the below to a separate file somehow. How to go about it?
 
+-- | Binary functions
 data BinOp = Frac | Pow | Subt | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | Index
   | Dot | Cross
   deriving Eq
 
-data ArithOper = Add | Mul
+data AssocArithOper = Add | Mul
   deriving Eq
 
-data BoolOper = And | Or
+data AssocBoolOper = And | Or
   deriving Eq
 
 -- | Unary functions
@@ -50,8 +51,8 @@ data Expr where
   Int      :: Integer -> Expr
   Str      :: String -> Expr
   Perc     :: Integer -> Integer -> Expr
-  AssocA   :: ArithOper -> [Expr] -> Expr
-  AssocB   :: BoolOper  -> [Expr] -> Expr
+  AssocA   :: AssocArithOper -> [Expr] -> Expr
+  AssocB   :: AssocBoolOper  -> [Expr] -> Expr
   -- | Derivative, syntax is:
   --   Type (Partial or total) -> principal part of change -> with respect to
   --   For example: Deriv Part y x1 would be (dy/dx1)
@@ -88,7 +89,7 @@ data Expr where
   -- | Operators are generalized arithmetic operators over a |DomainDesc|
   --   of an |Expr|.  Could be called |BigOp|.
   --   ex: Summation is represented via |Add| over a discrete domain
-  Operator :: ArithOper -> DomainDesc Expr Expr -> Expr -> Expr
+  Operator :: AssocArithOper -> DomainDesc Expr Expr -> Expr -> Expr
   -- | element of
   IsIn     :: Expr -> Space -> Expr 
   -- | a different kind of 'element of'
@@ -119,21 +120,23 @@ data DerivType = Part | Total
   deriving Eq
 
 instance Num Expr where
-  (Int 0) + b = b
-  a + (Int 0) = a
+  (Int 0)        + b              = b
+  a              + (Int 0)        = a
   (AssocA Add l) + (AssocA Add m) = AssocA Add (l ++ m)
-  (AssocA Add l) + b = AssocA Add (l ++ [b])
-  a + (AssocA Add l) = AssocA Add (a : l)
-  a + b = AssocA Add [a, b]
+  (AssocA Add l) + b              = AssocA Add (l ++ [b])
+  a              + (AssocA Add l) = AssocA Add (a : l)
+  a              + b              = AssocA Add [a, b]
 
-  (AssocA Mul l)*(AssocA Mul m) = AssocA Mul (l ++ m)
-  (AssocA Mul l)*b = AssocA Mul (l ++ [b])
-  a*(AssocA Mul l) = AssocA Mul (a : l)
-  a * b = AssocA Mul [a, b]
+  (AssocA Mul l) * (AssocA Mul m) = AssocA Mul (l ++ m)
+  (AssocA Mul l) * b              = AssocA Mul (l ++ [b])
+  a              * (AssocA Mul l) = AssocA Mul (a : l)
+  a              * b              = AssocA Mul [a, b]
+
   a - b = BinaryOp Subt a b
+  
   fromInteger = Int
-  abs = UnaryOp Abs
-  negate = UnaryOp Neg
+  abs         = UnaryOp Abs
+  negate      = UnaryOp Neg
 
   -- this is a Num wart
   signum _ = error "should not use signum in expressions"

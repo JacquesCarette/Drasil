@@ -90,7 +90,7 @@ justification :: Sentence
 justification = foldlSent [S "A", phrase pendulum, S "consists" `sOf` S "mass", 
                             S "attached to the end of a rod" `andIts` S "moving curve" `sIs`
                             S "highly sensitive to initial conditions.", S "Therefore" `sC`
-                            S "it is useful to have a", phrase program, S "to simulate the motion"
+                            S "it is useful to have a", phrase program, S "to simulate", S "motion"
                             `ofThe` phrase pendulum, S "to exhibit its chaotic characteristics.",
                             S "The", phrase program, S "documented here is called", phrase pendulum]
 scope :: Sentence
@@ -154,7 +154,7 @@ concIns = assumptions ++ goals ++ funcReqs ++ nonFuncReqs
 ------------------------------------
 
 prob :: Sentence
-prob = foldlSent_ [ S "is needed to efficiently and correctly to predict the motion of a",  
+prob = foldlSent_ [ S "efficiently and correctly to predict the motion of a",  
                    phrase pendulum]
 
 ---------------------------------

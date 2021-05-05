@@ -17,7 +17,7 @@ goalsInputs = [phrase CPP.mass `sAnd` phrase CPP.len  `ofThe` (S "rod" `sC` phra
 
 motionMass :: ConceptInstance
 motionMass = cic "motionMass" 
-  (S "Calculate" +:+ S "motion" `ofThe` phrase CPP.mass)
+  (S "Calculate" +:+ (S "motion" `ofThe` phrase CPP.mass))
   "Motion-of-the-mass" goalStmtDom
 
 

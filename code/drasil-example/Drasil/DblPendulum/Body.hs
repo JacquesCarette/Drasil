@@ -88,10 +88,10 @@ mkSRS = [RefSec $      --This creates the Reference section of the SRS
 
 justification :: Sentence
 justification = foldlSent [S "A", phrase pendulum, S "consists" `sOf` S "mass", 
-                            S "attached to the end of a rod" `sC` S "its moving curve" `sIs`
-                            S "highly sensitive to initial conditions" +:+ S "Therefore" `sC`
+                            S "attached to the end of a rod" `andIts` S "moving curve" `sIs`
+                            S "highly sensitive to initial conditions.", S "Therefore" `sC`
                             S "it is useful to have a", phrase program, S "to simulate the motion"
-                            `ofThe` phrase pendulum, S "to exhibit the chaotic characteristics" `sOf` S "it",
+                            `ofThe` phrase pendulum, S "to exhibit its chaotic characteristics.",
                             S "The", phrase program, S "documented here is called", phrase pendulum]
 scope :: Sentence
 scope = foldlSent [S "the", phrase analysis `sOf` S "a", phrase twoD, 
@@ -154,7 +154,7 @@ concIns = assumptions ++ goals ++ funcReqs ++ nonFuncReqs
 ------------------------------------
 
 prob :: Sentence
-prob = foldlSent_ [ S "is needed to efficiently and correctly to predict the motion",  
+prob = foldlSent_ [ S "is needed to efficiently and correctly to predict the motion of a",  
                    phrase pendulum]
 
 ---------------------------------

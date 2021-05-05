@@ -1,4 +1,6 @@
-on: 
+on:
+  push:
+    branches-ignore: master
   pull_request:
     branches: master
   workflow_dispatch:
@@ -10,6 +12,10 @@ defaults:
 jobs:
   build:
     name: "Build"
+    if: |
+      github.event_name == 'pull_request'
+      || github.event_name == 'workflow_dispatch'
+      || (github.event_name == 'push' && contains(github.event.head_commit.message, '[workflow-trigger]'))
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

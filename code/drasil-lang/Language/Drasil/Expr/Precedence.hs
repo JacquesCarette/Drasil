@@ -1,6 +1,6 @@
 module Language.Drasil.Expr.Precedence where
 
-import Language.Drasil.Expr (BinOp(..), BoolOper(..), ArithOper(..),
+import Language.Drasil.Expr (BinOp(..), AssocBoolOper(..), AssocArithOper(..),
   UFunc(..), Expr(..), UFuncB(..), UFuncVec(..))
 
 -- These precedences are inspired from Haskell/F# 
@@ -25,11 +25,11 @@ prec2 Dot = 190
 prec2 Cross = 190
 
 -- | prec - precedence for Binary-Associative (Commutative) operators
-precA :: ArithOper -> Int
+precA :: AssocArithOper -> Int
 precA Mul = 190
 precA Add = 180
 
-precB :: BoolOper -> Int
+precB :: AssocBoolOper -> Int
 precB And = 120
 precB Or = 110
 

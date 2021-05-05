@@ -90,6 +90,10 @@ processExpo a
   | mod (a-1) 3 == 2 = (3, a-3)
   | otherwise = error "The cases of processExpo should be exhaustive!"
 
+-- | Common method of converting associative operations into layout AST
+assocExpr :: P.Ops -> Int -> [Expr] -> PrintingInformation -> P.Expr
+assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ map (expr' sm prec) exprs
+
 -- | expr translation function from Drasil to layout AST
 expr :: Expr -> PrintingInformation -> P.Expr
 expr (Dbl d)                 sm = case sm ^. getSetting of
@@ -102,12 +106,9 @@ expr (Str s)                  _ = P.Str s
 expr (Perc a b)              sm = P.Row [expr (Dbl val) sm, P.MO P.Perc]
   where
     val = fromIntegral a / (10 ** fromIntegral (b - 2))
-expr (AssocB And l)          sm = 
-  P.Row $ intersperse (P.MO P.And) $ map (expr' sm (precB And)) l
-expr (AssocB Or l)           sm = 
-  P.Row $ intersperse (P.MO P.Or ) $ map (expr' sm (precB Or)) l
-expr (AssocA Add l)          sm = 
-  P.Row $ intersperse (P.MO P.Add) $ map (expr' sm (precA Add)) l
+expr (AssocB And l)          sm = assocExpr P.And (precB And) l sm
+expr (AssocB Or l)           sm = assocExpr P.Or (precB Or) l sm
+expr (AssocA Add l)          sm = assocExpr P.Add (precA Add) l sm
 expr (AssocA Mul l)          sm = P.Row $ mulExpr l sm
 expr (Deriv Part a b)        sm =
   P.Div (P.Row [P.Spc P.Thin, P.Spec Partial, expr a sm])

@@ -8,7 +8,8 @@ module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
 
 import Language.Drasil hiding (Ref, int, log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
-import Language.Drasil.Development (UFuncB(..), UFuncVec(..), EqBinOp(..))
+import Language.Drasil.Development (UFuncB(..), UFuncVec(..), 
+  EqBinOp(..), BoolBinOp(..))
 import Database.Drasil (symbResolve)
 import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
@@ -322,9 +323,10 @@ convExpr (BinaryOp Frac (Int a) (Int b)) = do -- hack to deal with integer divis
       getLiteral Float = litFloat (fromIntegral a) #/ litFloat (fromIntegral b)
       getLiteral _ = error "convExpr: Rational space matched to invalid CodeType; should be Double or Float"
   return $ getLiteral sm
-convExpr (BinaryOp o a b)   = liftM2 (bfunc o) (convExpr a) (convExpr b)
-convExpr (EqBinaryOp o a b) = liftM2 (eqBfunc o) (convExpr a) (convExpr b)
-convExpr (Case c l)         = doit l -- FIXME this is sub-optimal
+convExpr (BinaryOp o a b)     = liftM2 (bfunc o) (convExpr a) (convExpr b)
+convExpr (BoolBinaryOp o a b) = liftM2 (boolBfunc o) (convExpr a) (convExpr b)
+convExpr (EqBinaryOp o a b)   = liftM2 (eqBfunc o) (convExpr a) (convExpr b)
+convExpr (Case c l)           = doit l -- FIXME this is sub-optimal
   where
     doit [] = error "should never happen" -- TODO: change error message?
     doit [(e,_)] = convExpr e -- should always be the else clause
@@ -417,15 +419,19 @@ bfunc GEq   = (?>=)
 bfunc Cross = error "bfunc: Cross not implemented"
 bfunc Pow   = (#^)
 bfunc Subt  = (#-)
-bfunc Impl  = error "convExpr :=>"
-bfunc Iff   = error "convExpr :<=>"
 bfunc Dot   = error "convExpr DotProduct"
 bfunc Frac  = (#/)
 bfunc Index = listAccess
 
+-- Maps a BoolBinOp to the corresponding GOOL binary function
+boolBfunc :: (OOProg r) => BoolBinOp -> (SValue r -> SValue r -> SValue r)
+boolBfunc Impl = error "convExpr :=>"
+boolBfunc Iff  = error "convExpr :<=>"
+
+-- Maps an EqBinOp to the corresponding GOOL binary function
 eqBfunc :: (OOProg r) => EqBinOp -> (SValue r -> SValue r -> SValue r)
-eqBfunc Eq    = (?==)
-eqBfunc NEq   = (?!=)
+eqBfunc Eq  = (?==)
+eqBfunc NEq = (?!=)
 
 -- medium hacks --
 

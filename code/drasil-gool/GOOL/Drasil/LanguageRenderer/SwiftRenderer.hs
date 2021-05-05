@@ -93,7 +93,6 @@ import GOOL.Drasil.State (MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
-import Control.Applicative (Applicative)
 import Control.Monad.State (modify)
 import Data.Composition ((.:))
 import Data.List (intercalate, sort)

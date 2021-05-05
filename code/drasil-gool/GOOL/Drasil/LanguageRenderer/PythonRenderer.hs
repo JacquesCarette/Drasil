@@ -84,7 +84,6 @@ import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS,
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
 import Control.Lens.Zoom (zoom)
-import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (modify)
 import Data.List (intercalate, sort)

@@ -6,7 +6,6 @@ import Data.List (transpose, partition)
 import Text.PrettyPrint (integer, text, (<+>))
 import qualified Text.PrettyPrint as TP
 import Numeric (showEFloat)
-import Control.Applicative (pure)
 import Control.Arrow (second)
 
 import qualified Language.Drasil as L (CitationKind(..), Decoration(Prime, Hat, Vector),

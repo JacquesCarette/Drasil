@@ -26,7 +26,7 @@ traceMGF refs trailing otherContents = SRS.traceyMandG (traceMIntro refs trailin
 -- generally found in this section (in order of being mentioned)
 traceMIntro :: [LabelledContent] -> [Sentence] -> Contents
 traceMIntro refs trailings = UlC $ ulcc $ Paragraph $ foldlSent [phrase purpose
-        `ofThe'` plural traceyMatrix, S "is to provide easy", plural reference, 
+        `the_ofThe'` plural traceyMatrix, S "is to provide easy", plural reference, 
         S "on what has to be additionally modified if a certain",
         phrase component, S "is changed. Every time a", phrase component, 
         S "is changed, the", plural item, S "in the column of that", 
@@ -37,7 +37,7 @@ traceMIntro refs trailings = UlC $ ulcc $ Paragraph $ foldlSent [phrase purpose
 -- generally found in this section (in order of being mentioned)
 traceGIntro :: [LabelledContent] -> [Sentence] -> [UnlabelledContent]
 traceGIntro refs trailings = map ulcc [Paragraph $ foldlSent
-        [phrase purpose `ofThe'` plural traceyGraph,
+        [phrase purpose `the_ofThe'` plural traceyGraph,
         S "is also to provide easy", plural reference, S "on what has to be",
         S "additionally modified if a certain", phrase component +:+. S "is changed", 
         S "The arrows in the", plural graph, S "represent" +:+. plural dependency,

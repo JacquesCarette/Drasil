@@ -22,7 +22,7 @@ module Utils.Drasil (
   compoundNCP1, compoundNCPlPh, compoundNCPlPl, for, for', for'', of_, of_',
   of_'', of__, ofA, ofN_, the, the', theCustom, with,
   -- Sentence
-  andIts, andThe, fromThe, inThe, isExpctdToHv, isThe, ofGiv, ofGiv', ofThe, ofThe',
+  andIts, andThe, fromThe, inThe, isExpctdToHv, isThe, ofGiv, ofGiv', ofThe, the_ofThe, the_ofThe',
   sOf, sOr, sVersus, sAnd, sAre, sIn, sIs, toThe
 ) where
 

@@ -311,7 +311,7 @@ physSystParts :: [Sentence]
 physSystParts = map foldlSent_ [physSyst1 tank water, physSyst2 coil tank htFluxC]
 
 goalInputs :: [Sentence]
-goalInputs = [phrase temp `ofThe` phrase coil,
+goalInputs = [phrase temp `the_ofThe` phrase coil,
   S "the initial" +:+ phrase tempW, S "the" +:+ plural materialProprty]
 
 ------------------------------------------------------

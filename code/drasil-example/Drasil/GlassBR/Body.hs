@@ -245,7 +245,7 @@ orgOfDocIntro = foldlSent [S "The", phrase organization, S "of this",
   S "16", makeCiteS rbrtsn2012]
 
 orgOfDocIntroEnd = foldlSent_ [atStartNP' (the Doc.dataDefn) `sAre`
-  S "used to support", plural definition `ofThe` S "different", plural model]
+  S "used to support", plural definition `the_ofThe` S "different", plural model]
 
 {--STAKEHOLDERS--}
 
@@ -337,8 +337,8 @@ physSystParts = [S "The" +:+. phrase glaSlab,
 {--Goal Statements--}
 
 goalInputs :: [Sentence]
-goalInputs = [plural dimension `ofThe` phrase glaPlane, S "the" +:+ phrase glassTy,
-  plural characteristic `ofThe` phrase explosion, S "the" +:+ phrase pbTol]
+goalInputs = [plural dimension `the_ofThe` phrase glaPlane, S "the" +:+ phrase glassTy,
+  plural characteristic `the_ofThe` phrase explosion, S "the" +:+ phrase pbTol]
 
 {--SOLUTION CHARACTERISTICS SPECIFICATION--}
 

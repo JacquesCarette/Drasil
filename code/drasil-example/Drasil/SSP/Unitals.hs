@@ -357,7 +357,7 @@ shrStress = uc' "tau_i" (cn "shear strength")
   "the strength of a material against shear failure" (sup lTau (Label"f")) pascal
 
 sliceHght = makeUCWDS "h_z,i" (cn "heights of interslice normal forces")
-  ((plural height `inThe` phrase yDir) `ofThe` S "interslice normal forces on each slice")
+  ((plural height `inThe` phrase yDir) `the_ofThe` S "interslice normal forces on each slice")
   (subZ (vec lH)) metre
 
 sliceHghtW = makeUCWDS "h_z,w,i" (cn "heights of the water table")

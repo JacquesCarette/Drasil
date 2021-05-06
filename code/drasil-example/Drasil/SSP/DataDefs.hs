@@ -318,7 +318,7 @@ resShr_deriv_sentences_ssp_s1 = [S "The", phrase shrResI, S "of a slice is",
   S "of", makeRef2S effStress, S "shown in", eqN 1]
 
 resShr_deriv_sentences_ssp_s2 :: [Sentence]
-resShr_deriv_sentences_ssp_s2 = [plural value `ofThe'` S "interslice forces",
+resShr_deriv_sentences_ssp_s2 = [plural value `the_ofThe'` S "interslice forces",
   ch intNormForce `sAnd` ch intShrForce, S "in the", phrase equation,
   S "are unknown, while the other", plural value,
   S "are found from the physical force", plural definition, S "of",
@@ -388,7 +388,7 @@ resShrDerivation = [
   eqUnR' $ (inxi nrmFSubWat) $= eqlExpr cos sin (\x y -> x -
   inxiM1 intShrForce + inxi intShrForce + y) - inxi baseHydroForce,
   
-  foldlSP [plural value `ofThe'` S "interslice forces",
+  foldlSP [plural value `the_ofThe'` S "interslice forces",
   ch intNormForce `sAnd` ch intShrForce, S "in the", phrase equation,
   S "are unknown, while the other", plural value,
   S "are found from the physical force", plural definition, S "of",

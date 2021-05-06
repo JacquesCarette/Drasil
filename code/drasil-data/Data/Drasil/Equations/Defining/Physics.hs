@@ -3,7 +3,7 @@ module Data.Drasil.Equations.Defining.Physics where
 -- We define both some basic equations of physics, and their wrappers as concepts
 --
 import Language.Drasil
-import Utils.Drasil (foldlSent, getTandS, sIs, sOf, ofThe)
+import Utils.Drasil (foldlSent, getTandS, sIs, sOf, the_ofThe)
 
 import qualified Data.Drasil.Quantities.Math as QM (unitVectj)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration, time,
@@ -47,8 +47,8 @@ newtonSLRC = makeRC "newtonSL" (nounPhraseSP "Newton's second law of motion")
 
 newtonSLDesc :: Sentence
 newtonSLDesc = foldlSent [S "The net", getTandS QP.force, S "on a",
-  phrase body `sIs` S "proportional to", getTandS QP.acceleration `ofThe`
-  phrase body `sC` S "where", ch QPP.mass, S "denotes", phrase QPP.mass `ofThe`
+  phrase body `sIs` S "proportional to", getTandS QP.acceleration `the_ofThe`
+  phrase body `sC` S "where", ch QPP.mass, S "denotes", phrase QPP.mass `the_ofThe`
   phrase body, S "as the", phrase constant `sOf` S "proportionality"]
 
 

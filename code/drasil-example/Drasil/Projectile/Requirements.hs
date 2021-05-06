@@ -49,7 +49,7 @@ nonfuncReqs = [correct, verifiable, understandable, reusable, maintainable, port
 
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
-  plural output_ `ofThe'` phrase code, S "have the",
+  plural output_ `the_ofThe'` phrase code, S "have the",
   plural property, S "described in", makeRef2S (propCorSol [] [])
   ]) "Correct" nonFuncReqDom
  

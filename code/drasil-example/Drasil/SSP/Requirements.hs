@@ -63,12 +63,12 @@ displayInput = cic "displayInput" ( foldlSent [
   "Display-Input" funcReqDom
 
 displayGraph = cic "displayGraph" ( foldlSent [
-  S "Display", phrase crtSlpSrf `ofThe` short twoD, phrase slope `sC` 
+  S "Display", phrase crtSlpSrf `the_ofThe` short twoD, phrase slope `sC` 
   S "as determined from", makeRef2S crtSlpId `sC` S "graphically"]) 
   "Display-Graph" funcReqDom
 
 displayFS = cic "displayFS" ( foldlSent [
-  S "Display", phrase value `ofThe` phrase fs, S "for the", 
+  S "Display", phrase value `the_ofThe` phrase fs, S "for the", 
   phrase crtSlpSrf `sC` S "as determined from", usingIMs]) 
   "Display-Factor-of-Safety" funcReqDom
 
@@ -109,7 +109,7 @@ nonFuncReqs = [correct, understandable, reusable, maintainable]
 
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
-  plural output_ `ofThe'` phrase code, S "have the",
+  plural output_ `the_ofThe'` phrase code, S "have the",
   plural property, S "described in", makeRef2S (propCorSol [] [])
   ]) "Correct" nonFuncReqDom
 

@@ -1,14 +1,9 @@
 *.sh text eol=lf
-People/* linguist-documentation
-FamilyOfGamePhysicsEngines/* linguist-documentation
-notes/* linguist-documentation
+People/** linguist-documentation
+FamilyOfGamePhysicsEngines/** linguist-documentation
+notes/** linguist-documentation
 Presentations/** linguist-documentation
-code/stable/**/* linguist-generated=true
-**/datafiles/** linguist-vendored
+code/stable/** linguist-generated
 code/datafiles/NoPCM/cpp/** linguist-vendored
 code/datafiles/NoPCM/csharp/** linguist-vendored
 code/datafiles/NoPCM/java/** linguist-vendored
-**/*.java linguist-generated
-**/*.cpp linguist-generated
-**/*.hpp linguist-generated
-**/*.cs linguist-generated

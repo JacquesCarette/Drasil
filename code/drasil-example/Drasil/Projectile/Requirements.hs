@@ -34,14 +34,13 @@ verifyParamsDesc = foldlSent [S "Check the entered", plural inValue,
   S "an", phrase errMsg, S "is displayed" `andThe` plural calculation, S "stop"]
 calcValuesDesc = foldlSent [S "Calculate the following" +: plural value,
   foldlList Comma List [
-    ch flightDur +:+ sParen (S "from" +:+ makeRef2S timeIM),
-    ch landPos   +:+ sParen (S "from" +:+ makeRef2S landPosIM),
-    ch offset    +:+ sParen (S "from" +:+ makeRef2S offsetIM),
-    ch message   +:+ sParen (S "from" +:+ makeRef2S messageIM)
+    ch flightDur +:+ fromSource timeIM,
+    ch landPos   +:+ fromSource landPosIM,
+    ch offset    +:+ fromSource offsetIM,
+    ch message   +:+ fromSource messageIM
   ]]
 outputValuesDesc = foldlSent [atStart output_, ch message,
-  sParen (S "from" +:+ makeRef2S messageIM) `sAnd` ch offset,
-  sParen (S "from" +:+ makeRef2S offsetIM)]
+  fromSource messageIM `sAnd` ch offset, fromSource offsetIM]
 
 {--Nonfunctional Requirements--}
 
@@ -56,17 +55,16 @@ correct = cic "correct" (foldlSent [
  
 verifiable :: ConceptInstance
 verifiable = cic "verifiable" (foldlSent [
-  S "The", phrase code, S "is tested with complete",
+  atStartNP (the code), S "is tested with complete",
   phrase vavPlan]) "Verifiable" nonFuncReqDom
 
 understandable :: ConceptInstance
 understandable = cic "understandable" (foldlSent [
-  S "The", phrase code, S "is modularized with complete",
+  atStartNP (the code), S "is modularized with complete",
   phrase mg `sAnd` phrase mis]) "Understandable" nonFuncReqDom
 
 reusable :: ConceptInstance
-reusable = cic "reusable" (foldlSent [
-  S "The", phrase code, S "is modularized"]) "Reusable" nonFuncReqDom
+reusable = cic "reusable" (foldlSent [atStartNP (the code), S "is modularized"]) "Reusable" nonFuncReqDom
 
 maintainable :: ConceptInstance
 maintainable = cic "maintainable" (foldlSent [
@@ -77,6 +75,6 @@ maintainable = cic "maintainable" (foldlSent [
 
 portable :: ConceptInstance
 portable = cic "portable" (foldlSent [
-  S "The", phrase code, S "is able to be run in different", plural environment])
+  atStartNP (the code), S "is able to be run in different", plural environment])
   "Portable" nonFuncReqDom
 

@@ -92,7 +92,7 @@ justification = foldlSent [S "A", phrase pendulum, S "consists" `sOf` S "mass",
                             S "attached to the end of a rod" `andIts` S "moving curve" `sIs`
                             S "highly sensitive to initial conditions.", S "Therefore" `sC`
                             S "it is useful to have a", phrase program, S "to simulate", S "motion"
-                            `ofThe` phrase pendulum, S "to exhibit its chaotic characteristics.",
+                            `the_ofThe` phrase pendulum, S "to exhibit its chaotic characteristics.",
                             S "The", phrase program, S "documented here is called", phrase pendulum]
 scope :: Sentence
 scope = foldlSent [S "the", phrase analysis `sOf` S "a", phrase twoD, 

@@ -82,7 +82,7 @@ newtonLawNote :: UnitalChunk -> ConceptInstance -> ConceptChunk -> Sentence
 newtonLawNote u a c = foldlSent [ch u `sIs` S "found by assuming that",
   phrase lawConvCooling, S "applies" +:+. sParen (makeRef2S a), S "This law",
   sParen (S "defined" `sIn` makeRef2S nwtnCooling) `sIs` S "used on",
-  phrase surface `ofThe` phrase c]
+  phrase surface `the_ofThe` phrase c]
 
 --------------------------------------
 --  General Definitions Derivation  --
@@ -102,7 +102,7 @@ rocTempDerivInteg = [S "Integrating", makeRef2S consThermE, S "over a",
 
 rocTempDerivGauss :: [Sentence]
 rocTempDerivGauss = [S "Applying", titleize gaussDiv, S "to the first term over",
-  (phrase surface +:+ ch surface `ofThe` phrase vol) `sC` S "with",
+  (phrase surface +:+ ch surface `the_ofThe` phrase vol) `sC` S "with",
   ch thFluxVect, S "as the", phrase thFluxVect, S "for the",
   phrase surface `sAnd` ch uNormalVect, S "as a", phrase unit_,
   S "outward", phrase uNormalVect, S "for a", phrase surface]

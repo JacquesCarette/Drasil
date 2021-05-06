@@ -144,7 +144,7 @@ latentHtENotes = map foldlSent [
    S "with respect to", phrase time, ch tau],
   [ch time `isThe` phrase time, S "elapsed" `sC` S "as long as the",
    phrase phaseChange, S "is not complete"],
-  [S "status" `ofThe'` phrase phaseChange, S "depends on the",
+  [S "status" `the_ofThe'` phrase phaseChange, S "depends on the",
    phrase meltFrac, sParen (S "from" +:+ makeRef2S ddMeltFrac)],
   [atStart latentHeat :+: S "ing stops when all material has changed to the new phase"]]
 

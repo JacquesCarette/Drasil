@@ -201,7 +201,7 @@ startIntro = foldlSent [S "A", phrase slope, S "of geological",
   plural loss, atStart slope, S "stability is of", phrase interest,
   S "both when analysing natural", plural slope `sC`
   S "and when designing an excavated" +:+.  phrase slope, atStart ssa `sIs`
-  (S "assessment" `ofThe` S "safety of a" +:+ phrase slope) `sC`
+  (S "assessment" `the_ofThe` S "safety of a" +:+ phrase slope) `sC`
   S "identifying the", phrase surface,
   S "most likely to experience", phrase slip `sAnd`
   S "an index of its relative stability known as the", phrase fs]
@@ -321,7 +321,7 @@ sysConstraints = foldlSP [S "The", phrase morPrice, phrase method_,
 -- SECTION 4.1 --
 prob :: Sentence
 prob = foldlSent_ [S "evaluate the", phrase fs `sOf` S "a", phrasePoss slope,
-  phrase slpSrf `sAnd` S "identify", phrase crtSlpSrf `ofThe` phrase slope `sC`
+  phrase slpSrf `sAnd` S "identify", phrase crtSlpSrf `the_ofThe` phrase slope `sC`
   S "as well as the", phrase intrslce, phrase normForce `sAnd` phrase shearForce,
   S "along the", phrase crtSlpSrf]
 
@@ -382,8 +382,8 @@ figForceActing = llcc (makeFigRef "ForceDiagram") $
 
 -- SECTION 4.1.3 --
 goalsInputs :: [Sentence]
-goalsInputs = [phrase shape `ofThe` phrase soil +:+ S "mass",
-  S "location" `ofThe` phrase waterTable, plural mtrlPrpty `ofThe` phrase soil]
+goalsInputs = [phrase shape `the_ofThe` phrase soil +:+ S "mass",
+  S "location" `the_ofThe` phrase waterTable, plural mtrlPrpty `the_ofThe` phrase soil]
 
 -- SECTION 4.2 --
 

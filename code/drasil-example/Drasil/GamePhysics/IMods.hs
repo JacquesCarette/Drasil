@@ -51,13 +51,13 @@ transMotRel = sy accj $= deriv (apply1 velj time) time
 
 transMotDesc, transMotOutputs :: Sentence
 transMotDesc = foldlSent [S "The above", phrase equation, S "expresses",
-  (S "total" +:+ phrase acceleration) `ofThe` phrase rigidBody, P lJ,
+  (S "total" +:+ phrase acceleration) `the_ofThe` phrase rigidBody, P lJ,
   S "as the sum" `sOf` phrase gravitationalAccel, fromSource accelGravityGD `sAnd`
   phrase acceleration, S "due to applied", phrase force, E (apply1 forcej time) +:+.
   fromSource newtonSL, S "The resultant", plural output_ `sAre`
   S "then obtained from this", phrase equation, S "using",
   foldlList Comma List (map makeRef2S [linDispDD, linVelDD, linAccDD])]
-transMotOutputs = foldlSent [phrase output_ `ofThe'` phrase inModel,
+transMotOutputs = foldlSent [phrase output_ `the_ofThe'` phrase inModel,
  S "will be the functions" `sOf` phrase position `sAnd` phrase velocity,
  S "over time that satisfy the", getAcc ode, S "for the", phrase acceleration `sC`
  S "with the given initial", plural condition, S "for" +:+. (phrase position `sAnd`
@@ -90,7 +90,7 @@ rotMotRel = sy angularAccel $= deriv
 
 rotMotDesc :: Sentence
 rotMotDesc = foldlSent [S "The above", phrase equation, S "for",
-  (S "total" +:+ phrase angularAccel) `ofThe` phrase rigidBody, P lJ `sIs`
+  (S "total" +:+ phrase angularAccel) `the_ofThe` phrase rigidBody, P lJ `sIs`
   S "derived from", makeRef2S newtonSLR `sC` EmptyS `andThe` S "resultant",
   plural output_ `sAre` S "then obtained from this", phrase equation, S "using",
   foldlList Comma List (map makeRef2S [angDispDD, angVelDD, angAccelDD])]
@@ -122,7 +122,7 @@ col2DRel = apply1 velA timeC $= apply1 velA time +
 
 
 col2DOutputs, impulseNote :: Sentence
-col2DOutputs = foldlSent [phrase output_ `ofThe'` phrase inModel,
+col2DOutputs = foldlSent [phrase output_ `the_ofThe'` phrase inModel,
   S "will be the functions" `sOf` vals,  S "over time that satisfy the",
   plural equation, S "for the", phrase velocity `sAnd` phrase angularAccel `sC`
   S "with the given initial", plural condition, S "for" +:+. vals, S

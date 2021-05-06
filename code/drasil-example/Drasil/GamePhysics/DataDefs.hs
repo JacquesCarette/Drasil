@@ -203,9 +203,9 @@ chaslesEqn = sy velO + cross (sy  QP.angularVelocity) (sy rOB)
 chaslesThmNote :: Sentence
 chaslesThmNote = foldlSent [S "The", phrase QP.linearVelocity,
   ch velB `sOf` S "any point B in a", phrase rigidBody `isThe` S "sum" `sOf`
-  ((phrase QP.linearVelocity +:+ ch velO) `ofThe` phrase rigidBody),
+  ((phrase QP.linearVelocity +:+ ch velO) `the_ofThe` phrase rigidBody),
   S "at the origin (axis of rotation)" `andThe` S "resultant vector from",
-  S "cross product" `ofThe` phrasePoss rigidBody,
+  S "cross product" `the_ofThe` phrasePoss rigidBody,
   getTandS QP.angularVelocity `andThe` getTandS rOB]
 
 ---------------DD10 Impulse(Vector)-----------------------------------------------------------------------

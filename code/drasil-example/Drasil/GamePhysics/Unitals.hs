@@ -179,7 +179,7 @@ posj = ucs' (dccWDS "p_j" (compoundPhrase' (QP.position ^. term)
                (cn "vector of the j-th particle")) (phrase QP.position))
                (sub (eqSymb QP.position) lJ) Real metre
 
-accj = ucs' (dccWDS "accj" (compoundPhrase' (cn "the j-th body's")
+accj = ucs' (dccWDS "accj" (compoundPhrase' (cn "j-th body's")
                (QP.acceleration ^. term)) (phrase QP.acceleration))
                (sub (eqSymb QP.acceleration) lJ) Real accelU
 

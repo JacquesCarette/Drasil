@@ -46,7 +46,7 @@ cartSystDesc :: Sentence
 cartSystDesc = S "A" +:+ (phrase cartesian `sIs` S "used") +:+. fromSource neglectCurv
 
 yAxisGravityDesc :: Sentence
-yAxisGravityDesc = S "direction" `ofThe'` phrase yAxis `sIs` S "directed opposite to" +:+. phrase gravity
+yAxisGravityDesc = S "direction" `the_ofThe'` phrase yAxis `sIs` S "directed opposite to" +:+. phrase gravity
 
 launchOriginDesc :: Sentence
 launchOriginDesc = atStartNP (the launcher) `sIs` S "coincident with the origin."
@@ -72,16 +72,16 @@ neglectDragDesc :: Sentence
 neglectDragDesc = S "Air drag" `sIs` S "neglected."
 
 pointMassDesc :: Sentence
-pointMassDesc = (S "size" `sAnd` S "shape") `ofThe'` phrase projectile `sAre`
+pointMassDesc = (S "size" `sAnd` S "shape") `the_ofThe'` phrase projectile `sAre`
                 S "negligible" `sC` S "so that it can be modelled as a point" +:+. phrase mass
 
 freeFlightDesc :: Sentence
 freeFlightDesc = S "The flight" `sIs` S "free; there" `sAre` S "no" +:+ plural collision +:+
-                 S "during" +:+. (S "trajectory" `ofThe` phrase projectile)
+                 S "during" +:+. (S "trajectory" `the_ofThe` phrase projectile)
 
 neglectCurvDesc :: Sentence
 neglectCurvDesc = S "The" +:+ phrase distance `sIs` S "small enough that" +:+.
-                  (S "curvature" `ofThe` S "Earth can be neglected")
+                  (S "curvature" `the_ofThe` S "Earth can be neglected")
 
 timeStartZeroDesc :: Sentence
 timeStartZeroDesc = atStart time +:+. S "starts at zero"

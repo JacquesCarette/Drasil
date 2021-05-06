@@ -30,7 +30,7 @@ cartCoordRightDesc = S "The" +:+ phrase cartesian `sIs` S "right-handed where po
                          phrase xAxis `sAnd` phrase yAxis +:+ S "point right up"
 
 yAxisDirDesc :: Sentence
-yAxisDirDesc = S "The direction" `ofThe'` phrase yAxis `sIs` S "directed opposite to" +:+. phrase gravity
+yAxisDirDesc = S "direction" `ofThe'` phrase yAxis `sIs` S "directed opposite to" +:+. phrase gravity
 
 startOriginDesc :: Sentence
 startOriginDesc = S "The" +:+. (phrase pendulum `sIs` S "attached" `toThe` S "origin")

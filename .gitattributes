@@ -1,6 +1,6 @@
 *.sh text eol=lf
-*.cls linguist-generated
-*.bst linguist-generated
+*.cls linguist-vendored
+*.bst linguist-vendored
 People/** linguist-documentation
 Presentations/** linguist-documentation
 code/stable/** linguist-generated

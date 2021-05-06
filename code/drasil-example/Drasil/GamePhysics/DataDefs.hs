@@ -43,7 +43,7 @@ ctrOfMass = mkQuantDef posCM ctrOfMassEqn
 
 -- FIXME (Variable "i") is a horrible hack
 ctrOfMassEqn :: Expr
-ctrOfMassEqn = sumAll (Variable "i") (sy massj * sy posj) / sy mTot
+ctrOfMassEqn = sumAll (Variable "j") (sy massj * sy posj) / sy mTot
 
 -- DD2 : Linear displacement --
 
@@ -319,7 +319,7 @@ momentOfInertia :: QDefinition
 momentOfInertia = mkQuantDef QP.momentOfInertia momentOfInertiaEqn
 
 momentOfInertiaEqn :: Expr
-momentOfInertiaEqn = sumAll (Variable "i") $ sy massj * (sy rRot $^ 2)
+momentOfInertiaEqn = sumAll (Variable "j") $ sy massj * (sy rRot $^ 2)
 
 momentOfInertiaDesc :: Sentence
 momentOfInertiaDesc = foldlSent [S "The", getTandS QP.momentOfInertia,

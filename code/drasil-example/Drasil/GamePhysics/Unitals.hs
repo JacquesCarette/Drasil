@@ -179,17 +179,17 @@ posj = ucs' (dccWDS "p_j" (compoundPhrase' (QP.position ^. term)
                (cn "vector of the j-th particle")) (phrase QP.position))
                (sub (eqSymb QP.position) lJ) Real metre
 
-accj = ucs' (dccWDS "accj" (compoundPhrase' (cn "the i-th body's")
+accj = ucs' (dccWDS "accj" (compoundPhrase' (cn "the j-th body's")
                (QP.acceleration ^. term)) (phrase QP.acceleration))
-               (sub (eqSymb QP.acceleration) lI) Real accelU
+               (sub (eqSymb QP.acceleration) lJ) Real accelU
 
 velj = ucs' (dccWDS "velj" (compoundPhrase' (QP.velocity ^. term) 
-               (cn "of the i-th body's velocity")) (phrase QP.velocity))
-               (sub (eqSymb QP.velocity) lI) Real velU
+               (cn "of the j-th body's velocity")) (phrase QP.velocity))
+               (sub (eqSymb QP.velocity) lJ) Real velU
 
 torquej = ucs' (dccWDS "torquej" 
-               (cn "torque applied to the i-th body")
-               (phrase QP.torque)) (sub (eqSymb QP.torque) lI) Real torqueU
+               (cn "torque applied to the j-th body")
+               (phrase QP.torque)) (sub (eqSymb QP.torque) lJ) Real torqueU
 
 mTot = ucs' (dccWDS "M_T" (compoundPhrase' (cn "total mass of the") 
                  (CP.rigidBody ^. term)) (phrase QPP.mass))
@@ -212,8 +212,8 @@ finRelVel = ucs' (dccWDS "v_f^AB" (compoundPhrase'
                  (sup (sub (eqSymb QP.velocity) QP.final) (Concat [lBodyA, lBodyB])) Real velU
 
 massIRigidBody = ucs' (dccWDS "massj" (compoundPhrase' (QPP.mass ^. term) 
-                (cn "of the i-th rigid body")) (phrase QPP.mass)) 
-                (sub (eqSymb QPP.mass) lI) Real kilogram
+                (cn "of the j-th rigid body")) (phrase QPP.mass)) 
+                (sub (eqSymb QPP.mass) lJ) Real kilogram
 normalLen = ucs' (dccWDS "length of the normal vector" (compoundPhrase'
                   (cn "length of the") (QM.normalVect ^. term)) 
                   (phrase QM.normalVect))
@@ -237,8 +237,8 @@ collisionImpulse = ucs' (dccWDS "collisionImp" (compoundPhrase'
                 (eqSymb QP.impulseS) Real impulseU
 
 forcej = ucs' (dccWDS "forcej" (compoundPhrase' 
-      (QP.force ^. term) (cn "applied to the i-th body at time t")) 
-      (phrase QP.force)) (sub (eqSymb QP.force) lI) Real newton
+      (QP.force ^. term) (cn "applied to the j-th body at time t")) 
+      (phrase QP.force)) (sub (eqSymb QP.force) lJ) Real newton
 
 velAP = ucs' (dccWDS "v^AP" (compoundPhrase' (QP.velocity ^. term)
               (cn "of the point of collision P in body A")) 

@@ -1,7 +1,7 @@
 module Drasil.GamePhysics.IMods (iMods, instModIntro) where
 
 import Language.Drasil
-import Language.Drasil.ShortHands (lI)
+import Language.Drasil.ShortHands (lJ)
 import Theory.Drasil (InstanceModel, imNoDerivNoRefs, qwC, ModelKinds (OthModel))
 import Utils.Drasil
 
@@ -51,7 +51,7 @@ transMotRel = sy accj $= deriv (apply1 velj time) time
 
 transMotDesc, transMotOutputs :: Sentence
 transMotDesc = foldlSent [S "The above", phrase equation, S "expresses",
-  (S "total" +:+ phrase acceleration) `ofThe` phrase rigidBody, P lI,
+  (S "total" +:+ phrase acceleration) `ofThe` phrase rigidBody, P lJ,
   S "as the sum" `sOf` phrase gravitationalAccel, fromSource accelGravityGD `sAnd`
   phrase acceleration, S "due to applied", phrase force, E (apply1 forcej time) +:+.
   fromSource newtonSL, S "The resultant", plural output_ `sAre`
@@ -90,7 +90,7 @@ rotMotRel = sy angularAccel $= deriv
 
 rotMotDesc :: Sentence
 rotMotDesc = foldlSent [S "The above", phrase equation, S "for",
-  (S "total" +:+ phrase angularAccel) `ofThe` phrase rigidBody, P lI `sIs`
+  (S "total" +:+ phrase angularAccel) `ofThe` phrase rigidBody, P lJ `sIs`
   S "derived from", makeRef2S newtonSLR `sC` EmptyS `andThe` S "resultant",
   plural output_ `sAre` S "then obtained from this", phrase equation, S "using",
   foldlList Comma List (map makeRef2S [angDispDD, angVelDD, angAccelDD])]

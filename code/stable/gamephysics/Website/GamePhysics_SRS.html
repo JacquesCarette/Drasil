@@ -91,8 +91,8 @@
                   <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
                 </tr>
                 <tr>
-                  <td><em><b>a</b><sub>i</sub></em></td>
-                  <td>The I-Th Body's Acceleration</td>
+                  <td><em><b>a</b><sub>j</sub></em></td>
+                  <td>The J-Th Body's Acceleration</td>
                   <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
                 </tr>
                 <tr>
@@ -140,8 +140,8 @@
                   <td><em>N</em></td>
                 </tr>
                 <tr>
-                  <td><em><b>F</b><sub>i</sub></em></td>
-                  <td>Force Applied to the I-Th Body at Time T</td>
+                  <td><em><b>F</b><sub>j</sub></em></td>
+                  <td>Force Applied to the J-Th Body at Time T</td>
                   <td><em>N</em></td>
                 </tr>
                 <tr>
@@ -340,13 +340,13 @@
                   <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
                 </tr>
                 <tr>
-                  <td><em><b>v</b><sub>i</sub></em></td>
-                  <td>Velocity of the I-Th Body's Velocity</td>
+                  <td><em><b>v</b><sub>i</sub><sup>AB</sup></em></td>
+                  <td>Initial Relative Velocity Between Rigid Bodies of A and B</td>
                   <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
                 </tr>
                 <tr>
-                  <td><em><b>v</b><sub>i</sub><sup>AB</sup></em></td>
-                  <td>Initial Relative Velocity Between Rigid Bodies of A and B</td>
+                  <td><em><b>v</b><sub>j</sub></em></td>
+                  <td>Velocity of the J-Th Body's Velocity</td>
                   <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
                 </tr>
                 <tr>
@@ -401,8 +401,8 @@
                   <td><em>Nm</em></td>
                 </tr>
                 <tr>
-                  <td><em><b>τ</b><sub>i</sub></em></td>
-                  <td>Torque applied to the i-th body</td>
+                  <td><em><b>τ</b><sub>j</sub></em></td>
+                  <td>Torque applied to the j-th body</td>
                   <td><em>Nm</em></td>
                 </tr>
                 <tr>
@@ -2081,21 +2081,21 @@
                       <th>Input</th>
                       <td>
                         <p class="paragraph">
-                          <em><b>v</b><sub>i</sub></em>, <em>t</em>, <em><b>g</b></em>, <em><b>F</b><sub>i</sub></em>, <em>m<sub>j</sub></em>
+                          <em><b>v</b><sub>j</sub></em>, <em>t</em>, <em><b>g</b></em>, <em><b>F</b><sub>j</sub></em>, <em>m<sub>j</sub></em>
                         </p>
                       </td>
                     </tr>
                     <tr>
                       <th>Output</th>
-                      <td><p class="paragraph"><em><b>a</b><sub>i</sub></em></p></td>
+                      <td><p class="paragraph"><em><b>a</b><sub>j</sub></em></p></td>
                     </tr>
                     <tr>
                       <th>Input Constraints</th>
                       <td>
-                        \[{\mathbf{v}_{i}}\gt{}0\]
+                        \[{\mathbf{v}_{j}}\gt{}0\]
                         \[t\gt{}0\]
                         \[\mathbf{g}\gt{}0\]
-                        \[{\mathbf{F}_{i}}\gt{}0\]
+                        \[{\mathbf{F}_{j}}\gt{}0\]
                         \[{m_{j}}\gt{}0\]
                       </td>
                     </tr>
@@ -2106,7 +2106,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{\mathbf{a}_{i}}=\frac{\,d{\mathbf{v}_{i}}\left(t\right)}{\,dt}=\mathbf{g}+\frac{{\mathbf{F}_{i}}\left(t\right)}{{m_{j}}}\]
+                        \[{\mathbf{a}_{j}}=\frac{\,d{\mathbf{v}_{j}}\left(t\right)}{\,dt}=\mathbf{g}+\frac{{\mathbf{F}_{j}}\left(t\right)}{{m_{j}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -2114,17 +2114,17 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em><b>a</b><sub>i</sub></em> is the the i-th body's acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
+                            <em><b>a</b><sub>j</sub></em> is the the j-th body's acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
                           </li>
                           <li><em>t</em> is the time (<em>s</em>)</li>
                           <li>
-                            <em><b>v</b><sub>i</sub></em> is the velocity of the i-th body's velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                            <em><b>v</b><sub>j</sub></em> is the velocity of the j-th body's velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                           <li>
                             <em><b>g</b></em> is the gravitational acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
                           </li>
                           <li>
-                            <em><b>F</b><sub>i</sub></em> is the force applied to the i-th body at time t (<em>N</em>)
+                            <em><b>F</b><sub>j</sub></em> is the force applied to the j-th body at time t (<em>N</em>)
                           </li>
                           <li>
                             <em>m<sub>j</sub></em> is the mass of the j-th particle (<em>kg</em>)
@@ -2136,7 +2136,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The above equation expresses the total acceleration of the rigid body <em>i</em> as the sum of gravitational acceleration (from <a href=#GD:accelGravity>GD: accelGravity</a>) and acceleration due to applied force <em><b>F</b><sub>i</sub>(t)</em> (from <a href=#TM:NewtonSecLawMot>TM: NewtonSecLawMot</a>). The resultant outputs are then obtained from this equation using <a href=#DD:linDisp>DD: linDisp</a>, <a href=#DD:linVel>DD: linVel</a>, and <a href=#DD:linAcc>DD: linAcc</a>.
+                          The above equation expresses the total acceleration of the rigid body <em>j</em> as the sum of gravitational acceleration (from <a href=#GD:accelGravity>GD: accelGravity</a>) and acceleration due to applied force <em><b>F</b><sub>j</sub>(t)</em> (from <a href=#TM:NewtonSecLawMot>TM: NewtonSecLawMot</a>). The resultant outputs are then obtained from this equation using <a href=#DD:linDisp>DD: linDisp</a>, <a href=#DD:linVel>DD: linVel</a>, and <a href=#DD:linAcc>DD: linAcc</a>.
                         </p>
                         <p class="paragraph">
                           The output of the instance model will be the functions of position and velocity over time that satisfy the ODE for the acceleration, with the given initial conditions for position and velocity. The motion is translational, so the position and velocity functions are for the centre of mass (from <a href=#DD:ctrOfMass>DD: ctrOfMass</a>).
@@ -2178,7 +2178,7 @@
                       <th>Input</th>
                       <td>
                         <p class="paragraph">
-                          <em>ω</em>, <em>t</em>, <em><b>τ</b><sub>i</sub></em>, <em><b>I</b></em>
+                          <em>ω</em>, <em>t</em>, <em><b>τ</b><sub>j</sub></em>, <em><b>I</b></em>
                         </p>
                       </td>
                     </tr>
@@ -2191,7 +2191,7 @@
                       <td>
                         \[ω\gt{}0\]
                         \[t\gt{}0\]
-                        \[{\mathbf{τ}_{i}}\gt{}0\]
+                        \[{\mathbf{τ}_{j}}\gt{}0\]
                         \[\mathbf{I}\gt{}0\]
                       </td>
                     </tr>
@@ -2202,7 +2202,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[α=\frac{\,dω\left(t\right)}{\,dt}=\frac{{\mathbf{τ}_{i}}\left(t\right)}{\mathbf{I}}\]
+                        \[α=\frac{\,dω\left(t\right)}{\,dt}=\frac{{\mathbf{τ}_{j}}\left(t\right)}{\mathbf{I}}\]
                       </td>
                     </tr>
                     <tr>
@@ -2217,7 +2217,7 @@
                             <em>ω</em> is the angular velocity (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
                           </li>
                           <li>
-                            <em><b>τ</b><sub>i</sub></em> is the torque applied to the i-th body (<em>Nm</em>)
+                            <em><b>τ</b><sub>j</sub></em> is the torque applied to the j-th body (<em>Nm</em>)
                           </li>
                           <li>
                             <em><b>I</b></em> is the moment of inertia (<em>kgm<sup>2</sup></em>)
@@ -2229,7 +2229,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The above equation for the total angular acceleration of the rigid body <em>i</em> is derived from <a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a>, and the resultant outputs are then obtained from this equation using <a href=#DD:angDisp>DD: angDisp</a>, <a href=#DD:angVel>DD: angVel</a>, and <a href=#DD:angAccel>DD: angAccel</a>.
+                          The above equation for the total angular acceleration of the rigid body <em>j</em> is derived from <a href=#TM:NewtonSecLawRotMot>TM: NewtonSecLawRotMot</a>, and the resultant outputs are then obtained from this equation using <a href=#DD:angDisp>DD: angDisp</a>, <a href=#DD:angVel>DD: angVel</a>, and <a href=#DD:angAccel>DD: angAccel</a>.
                         </p>
                         <p class="paragraph">
                           All bodies are assumed to be rigid (from <a href=#assumpOT>A: objectTy</a>) and two-dimensional (from <a href=#assumpOD>A: objectDimension</a>).

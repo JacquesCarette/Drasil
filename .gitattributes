@@ -1,9 +1,9 @@
 *.sh text eol=lf
 People/** linguist-documentation
-FamilyOfGamePhysicsEngines/** linguist-documentation
-notes/** linguist-documentation
 Presentations/** linguist-documentation
 code/stable/** linguist-generated
 code/datafiles/NoPCM/cpp/** linguist-vendored
 code/datafiles/NoPCM/csharp/** linguist-vendored
 code/datafiles/NoPCM/java/** linguist-vendored
+doc/** linguist-documentation
+notes/** linguist-documentation

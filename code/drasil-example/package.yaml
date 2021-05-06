@@ -40,6 +40,7 @@ executables:
     - Drasil.Projectile.Body
     - Drasil.Projectile.Concepts
     - Drasil.Projectile.DataDefs
+    - Drasil.Projectile.Expressions
     - Drasil.Projectile.Figures
     - Drasil.Projectile.GenDefs
     - Drasil.Projectile.Goals

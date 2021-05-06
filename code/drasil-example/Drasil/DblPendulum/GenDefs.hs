@@ -34,7 +34,7 @@ velocityIXGD = gdNoRefs (OthModel velocityIXRC) (getUnit velocity)
 
 velocityIXRC :: RelationConcept
 velocityIXRC =  makeRC "velocityIXRC" (nounPhraseSent $ foldlSent_ 
-            [ phrase xComp `sOf` phrase velocity `ofThe` phrase pendulum])
+            [ phrase xComp `sOf` phrase velocity `the_ofThe` phrase pendulum])
             EmptyS velocityIXRel
 
 velocityIXRel :: Relation             
@@ -52,7 +52,7 @@ velocityIYGD = gdNoRefs (OthModel velocityIYRC) (getUnit velocity)
 
 velocityIYRC :: RelationConcept
 velocityIYRC = makeRC "velocityIYRC" (nounPhraseSent $ foldlSent_ 
-            [ phrase yComp `sOf` phrase velocity `ofThe` phrase pendulum]) EmptyS velocityIYRel
+            [ phrase yComp `sOf` phrase velocity `the_ofThe` phrase pendulum]) EmptyS velocityIYRel
  
 velocityIYRel :: Relation             
 velocityIYRel = sy yVel $= sy angularVelocity * sy lenRod * cos (sy pendDisplacementAngle)
@@ -67,7 +67,7 @@ accelerationIXGD = gdNoRefs (OthModel accelerationIXRC) (getUnit acceleration)
 
 accelerationIXRC :: RelationConcept
 accelerationIXRC = makeRC "accelerationIXRC" (nounPhraseSent $ foldlSent_ 
-            [ phrase xComp `sOf` phrase acceleration `ofThe` phrase pendulum]) EmptyS accelerationIXRel
+            [ phrase xComp `sOf` phrase acceleration `the_ofThe` phrase pendulum]) EmptyS accelerationIXRel
  
 accelerationIXRel :: Relation             
 accelerationIXRel = sy xAccel $= negate (sy angularVelocity * sy lenRod * sin (sy pendDisplacementAngle))
@@ -83,7 +83,7 @@ accelerationIYGD = gdNoRefs (OthModel accelerationIYRC) (getUnit acceleration)
 
 accelerationIYRC :: RelationConcept
 accelerationIYRC = makeRC "accelerationIYRC" (nounPhraseSent $ foldlSent_ 
-            [ phrase yComp `sOf` phrase acceleration `ofThe` phrase pendulum]) EmptyS accelerationIYRel
+            [ phrase yComp `sOf` phrase acceleration `the_ofThe` phrase pendulum]) EmptyS accelerationIYRel
  
 accelerationIYRel :: Relation             
 accelerationIYRel = sy yAccel $= (sy angularVelocity * sy lenRod * cos (sy pendDisplacementAngle))
@@ -131,7 +131,7 @@ angFrequencyGD = gdNoRefs (OthModel angFrequencyRC) (getUnit angularFrequency)
 
 angFrequencyRC :: RelationConcept
 angFrequencyRC = makeRC "angFrequencyRC" (nounPhraseSent $ foldlSent_ 
-            [ S "The" +:+ phrase angularFrequency `ofThe` phrase pendulum]) EmptyS angFrequencyRel
+            [ phrase angularFrequency `the_ofThe` phrase pendulum]) EmptyS angFrequencyRel
  
 angFrequencyRel :: Relation             
 angFrequencyRel = sy angularFrequency $= sqrt (sy gravitationalAccel / sy lenRod )
@@ -156,11 +156,11 @@ angFrequencyDerivEqn1, angFrequencyDerivEqn2, angFrequencyDerivEqn3, angFrequenc
 
                                  
 
-angFrequencyDerivSent1 = foldlSentCol [S "Consider the", phrase torque `sC` S "on a", phrase pendulum, definedIn'' newtonSLR `sC`
-                  S "the", phrase force, S "providing the restoring" +:+ phrase torque `sIs` S "the component of the",
-                  phrase weight `ofThe` phrase pendulum, S "bob that acts along the arc length." +:+
-                  S "The", phrase torque `isThe` S "length" `ofThe` S "string", ch lenRod +:+ S "multiplied by the component"
-                  `ofThe` S "net", phrase force +:+ S "that is perpendicular to the radius" `ofThe` S "arc." +:+
+angFrequencyDerivSent1 = foldlSentCol [S "Consider the", phrase torque, S "on a", phrase pendulum +:+. definedIn'' newtonSLR,
+                  S "The", phrase force, S "providing the restoring" +:+ phrase torque `sIs`(S "component of" +:+
+                  phrase weight `the_ofThe` phrase pendulum) +:+. S "bob that acts along the arc length",
+                  (phrase torque `isThe` S "length") `the_ofThe'` S "string", ch lenRod +:+ S "multiplied by", S "component"
+                  `the_ofThe` S "net", phrase force +:+ S "that is perpendicular to", S "radius" `the_ofThe` S "arc." +:+
                   S "The minus sign indicates the" +:+ phrase torque +:+ S "acts in the opposite direction of the", phrase angularDisplacement]
 
 
@@ -211,7 +211,7 @@ periodPendDerivEqns = [periodPendDerivEqn1, periodPendDerivEqn2]
 
 periodPendDerivEqn1, periodPendDerivEqn2 :: Expr 
 
-periodPendDerivSent1 = S "The" +:+ phrase period `ofThe` phrase pendulum +:+ S "can be defined from" +:+
+periodPendDerivSent1 = phrase period `the_ofThe'` phrase pendulum +:+ S "can be defined from" +:+
                 makeRef2S angFrequencyGD +:+ phrase equation
 periodPendDerivEqn1 = sy angularFrequency $= sqrt (sy gravitationalAccel / sy lenRod)
 periodPendDerivSent2 =  S "Therefore from the" +:+ phrase equation +:+ makeRef2S angFrequencyDD `sC` S "we have"

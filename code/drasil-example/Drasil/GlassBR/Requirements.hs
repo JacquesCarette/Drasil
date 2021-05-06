@@ -49,7 +49,7 @@ outputValues               = cic "outputValues"               outputValuesDesc  
 inReqDesc, sysSetValsFollowingAssumpsDesc, checkInputWithDataConsDesc, outputValsAndKnownValuesDesc, checkGlassSafetyDesc :: Sentence
 
 inReqDesc = foldlList Comma List [S "the" +:+ phrase glass +:+ plural dimension,
-  phrase type_ `sOf` phrase glass, phrase pbTolfail, plural characteristic `ofThe` phrase blast]
+  phrase type_ `sOf` phrase glass, phrase pbTolfail, plural characteristic `the_ofThe` phrase blast]
 
 sysSetValsFollowingAssumpsDesc = foldlSent [S "The", phrase system, S "shall set the known",
     plural value, S "as described in", makeRef2S sysSetValsFollowingAssumpsTable]
@@ -98,7 +98,7 @@ nonfuncReqs = [correct, verifiable, understandable, reusable, maintainable, port
 
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
-  plural output_ `ofThe'` phrase code, S "have the",
+  plural output_ `the_ofThe'` phrase code, S "have the",
   plural property, S "described in", makeRef2S (propCorSol [] [])
   ]) "Correct" nonFuncReqDom
  

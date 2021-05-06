@@ -247,7 +247,7 @@ calofDemandDesc =
   phrase standOffDist, S "as defined in", makeRef2S standOffDis]
 
 aGrtrThanB :: Sentence
-aGrtrThanB = ch plateLen `sAnd` ch plateWidth `sAre` (plural dimension `ofThe` S "plate") `sC`
+aGrtrThanB = ch plateLen `sAnd` ch plateWidth `sAre` (plural dimension `the_ofThe` S "plate") `sC`
   S "where" +:+. sParen (E (sy plateLen $>= sy plateWidth))
 
 anGlass :: Sentence

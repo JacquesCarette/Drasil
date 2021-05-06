@@ -311,7 +311,7 @@ sysCntxtFig = llcc (makeFigRef "SysCon") $ fig (foldlSent_
 sysCntxtRespIntro :: CI -> Contents
 sysCntxtRespIntro pro = foldlSPCol [short pro +:+. S "is mostly self-contained",
   S "The only external interaction is through the", phrase user +:+.
-  S "interface", S "responsibilities" `ofThe'` phrase user `andThe`
+  S "interface", S "responsibilities" `the_ofThe'` phrase user `andThe`
   phrase system `sAre` S "as follows"]
 
 systContRespBullets :: Contents

@@ -9,20 +9,6 @@ citations = [pidWiki, laplaceWiki, johnson2008, abbasi2015, smithLai2005]
 
 pidWiki, johnson2008, abbasi2015, laplaceWiki :: Citation
 
-laplaceWiki
-  = cMisc
-      [author [wikiAuthors], title "Laplace transform",
-       howPublishedU "https://en.wikipedia.org/wiki/Laplace_transform",
-       month Nov, year 2020]
-      "laplaceWiki"
-
-pidWiki
-  = cMisc
-      [author [wikiAuthors], title "PID controller",
-       howPublishedU "https://en.wikipedia.org/wiki/PID_controller", month Oct,
-       year 2020]
-      "pidWiki"
-
 pidCtrlEditor1, pidCtrlEditor2 :: Person
 pidCtrlEditor1 = personWM "Michael" ["A"] "Johnson"
 pidCtrlEditor2 = personWM "Mohammad" ["H"] "Moradi"

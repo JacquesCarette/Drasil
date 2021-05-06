@@ -1,4 +1,4 @@
 {
-    "editor.renderWhitespace": "none",
+    "editor.renderWhitespace": "all",
     "diffEditor.ignoreTrimWhitespace": false
 }

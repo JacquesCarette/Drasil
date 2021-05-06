@@ -27,9 +27,9 @@ defSymbols = map dqdWr unitSymbs ++ map dqdWr inputConstraints ++
 
 unitSymbs :: [UnitaryConceptDict]
 unitSymbs = map ucw unitalChunks ++ map ucw [iVect, jVect, normalVect,
- force_1, force_2, forceI, mass_1, mass_2, 
+ force_1, force_2, forcej, mass_1, mass_2, 
   dispNorm, sqrDist, velA, velB, velO, rOB, angVelA, angVelB,
-  posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 
+  posCM, massj, posj, accj, mTot, velj, torquej, timeC, initRelVel, 
   massA, massB, massIRigidBody, normalLen, contDispA, contDispB, 
   perpLenA, momtInertA, perpLenB, momtInertB, timeT, inittime, 
   momtInertK, pointOfCollision, contDispK, collisionImpulse, velAP,
@@ -59,9 +59,9 @@ outputSymbols = map qw [QP.position, QP.velocity, QM.orientation,
 unitalChunks :: [UnitalChunk]
 unitalChunks = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel, 
   QP.impulseV, QP.impulseS, iVect, jVect, normalVect, QP.distance, QP.displacement, 
-  QP.time, QP.angularDisplacement, posCM, posI, massI, mTot, accI, velI,
+  QP.time, QP.angularDisplacement, posCM, posj, massj, mTot, accj, velj,
   QP.linearDisplacement, QP.linearVelocity, QP.linearAccel, initRelVel, normalLen,
-  perpLenA, perpLenB, forceI, torqueI, timeC, velA, velB, massA, massB,
+  perpLenA, perpLenB, forcej, torquej, timeC, velA, velB, massA, massB,
   angVelA, angVelB, force_1, force_2, mass_1, mass_2, 
   dispNorm, sqrDist, velO, rOB, massIRigidBody, contDispA, contDispB, 
   momtInertA, momtInertB, timeT, inittime, momtInertK, pointOfCollision, 
@@ -129,9 +129,9 @@ velParam n w = ucs'
 -- CHUNKS WITH UNITS --
 -----------------------
 
-iVect, jVect, normalVect, force_1, force_2, forceI, mass_1, mass_2, 
+iVect, jVect, normalVect, force_1, force_2, forcej, mass_1, mass_2, 
   dispNorm, sqrDist, velA, velB, velO, rOB, angVelA, angVelB,
-  posCM, massI, posI, accI, mTot, velI, torqueI, timeC, initRelVel, 
+  posCM, massj, posj, accj, mTot, velj, torquej, timeC, initRelVel, 
   massA, massB, massIRigidBody, normalLen, contDispA, contDispB, 
   perpLenA, momtInertA, perpLenB, momtInertB, timeT, inittime, 
   momtInertK, pointOfCollision, contDispK, collisionImpulse, finRelVel,
@@ -171,23 +171,23 @@ posCM = ucs "p_CM" (nounPhraseSP "Center of Mass")
   "FIXME: Define this or remove the need for definitions" 
   (sub (eqSymb QP.position) lCMass) Real metre
 
-massI = ucs' (dccWDS "m_j" (compoundPhrase' (QPP.mass ^. term)
+massj = ucs' (dccWDS "m_j" (compoundPhrase' (QPP.mass ^. term)
                 (cn "of the j-th particle")) (phrase QPP.mass)) 
                 (sub (eqSymb QPP.mass) lJ) Real kilogram
 
-posI = ucs' (dccWDS "p_j" (compoundPhrase' (QP.position ^. term) 
+posj = ucs' (dccWDS "p_j" (compoundPhrase' (QP.position ^. term) 
                (cn "vector of the j-th particle")) (phrase QP.position))
                (sub (eqSymb QP.position) lJ) Real metre
 
-accI = ucs' (dccWDS "accI" (compoundPhrase' (cn "the i-th body's")
+accj = ucs' (dccWDS "accj" (compoundPhrase' (cn "the i-th body's")
                (QP.acceleration ^. term)) (phrase QP.acceleration))
                (sub (eqSymb QP.acceleration) lI) Real accelU
 
-velI = ucs' (dccWDS "velI" (compoundPhrase' (QP.velocity ^. term) 
+velj = ucs' (dccWDS "velj" (compoundPhrase' (QP.velocity ^. term) 
                (cn "of the i-th body's velocity")) (phrase QP.velocity))
                (sub (eqSymb QP.velocity) lI) Real velU
 
-torqueI = ucs' (dccWDS "torqueI" 
+torquej = ucs' (dccWDS "torquej" 
                (cn "torque applied to the i-th body")
                (phrase QP.torque)) (sub (eqSymb QP.torque) lI) Real torqueU
 
@@ -211,7 +211,7 @@ finRelVel = ucs' (dccWDS "v_f^AB" (compoundPhrase'
                  (cn "between rigid bodies of A and B")) (phrase QP.velocity))
                  (sup (sub (eqSymb QP.velocity) QP.final) (Concat [lBodyA, lBodyB])) Real velU
 
-massIRigidBody = ucs' (dccWDS "massI" (compoundPhrase' (QPP.mass ^. term) 
+massIRigidBody = ucs' (dccWDS "massj" (compoundPhrase' (QPP.mass ^. term) 
                 (cn "of the i-th rigid body")) (phrase QPP.mass)) 
                 (sub (eqSymb QPP.mass) lI) Real kilogram
 normalLen = ucs' (dccWDS "length of the normal vector" (compoundPhrase'
@@ -236,7 +236,7 @@ collisionImpulse = ucs' (dccWDS "collisionImp" (compoundPhrase'
                 (cn "collision") (QP.impulseS ^. term)) (phrase QP.impulseS)) 
                 (eqSymb QP.impulseS) Real impulseU
 
-forceI = ucs' (dccWDS "forceI" (compoundPhrase' 
+forcej = ucs' (dccWDS "forcej" (compoundPhrase' 
       (QP.force ^. term) (cn "applied to the i-th body at time t")) 
       (phrase QP.force)) (sub (eqSymb QP.force) lI) Real newton
 

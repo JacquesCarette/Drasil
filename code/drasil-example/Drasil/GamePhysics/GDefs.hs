@@ -182,7 +182,7 @@ momentOfInertiaDesc :: Sentence
 momentOfInertiaDesc = foldlSent []
 
 
---[momentOfInertia, numOfParticles, massI, distanceBtwParticleI]
+--[momentOfInertia, numOfParticles, massj, distanceBtwParticleI]
 
 momentOfInertiaRel :: Relation
 momentOfInertiaRel = FCall (C thFluxVect) [C QP.time] := C htTransCoeff :*

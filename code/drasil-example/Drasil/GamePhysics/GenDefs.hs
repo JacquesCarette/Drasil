@@ -107,7 +107,7 @@ accelGravityDerivSentence2 = [S "The above equation governs the gravitational at
 
 accelGravityDerivSentence3 :: [Sentence]
 accelGravityDerivSentence3 =  [S "Given the above assumptions" `sC` S "let", ch mLarger `sAnd` ch QPP.mass, 
-        S "be the", phrase QPP.mass `the_ofThe` S "massive and light body respectively.",
+        S "be", phrase QPP.mass `the_ofThe` S "massive and light body respectively.",
         S "Equating", ch QP.force, S "above with Newton's second law",
         S "for the", phrase QP.force, S "experienced by the light body" `sC` S "we get"]
                               

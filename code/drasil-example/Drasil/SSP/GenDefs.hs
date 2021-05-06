@@ -186,7 +186,7 @@ effNormFDeriv :: Derivation
 effNormFDeriv = mkDerivNoHeader [foldlSent [
   S "Derived by substituting", makeRef2S normStressDD, S "into", 
   makeRef2S effStress `sAnd` S "multiplying both sides of the", phrase equation,
-  S "by the", phrase genericA `the_ofThe` phrase slice, S "in the shear-" :+: 
+  S "by", phrase genericA `the_ofThe` phrase slice, S "in the shear-" :+: 
   ch zcoord +:+. S "plane", S "Since the", phrase slope, 
   S "is assumed to extend infinitely in the", phrase zDir,
   sParen (makeRef2S assumpPSC) `sC` S "the resulting", plural force,
@@ -555,7 +555,7 @@ sliceWghtDerivDryCaseSliceEqn = inxi slcWght $= inxi baseWthX * 0.5 *
 sliceWghtDerivMixCaseIntroSentence = [S "For the case where the", 
   phrase waterTable, S "is between the", phrase slopeSrf `sAnd` 
   phrase slpSrf `sC` S "the", phrase slcWght, S "are the sums of", 
-  plural weight `the_ofThe` S "dry portions"  `sAnd` plural weight `the_ofThe`
+  plural weight `the_ofThe` S "dry portions"  `sAnd` plural weight `ofThe`
   S "saturated portions of the" +:+. phrase soil,
   S "Substituting", plural value, S "for dry and saturated", phrase soil, 
   S "into the", phrase equation, S "for", phrase weight, S "from", 

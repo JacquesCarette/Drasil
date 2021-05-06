@@ -118,7 +118,7 @@ pendulum = dccWDS "pendulum" (cn "pendulum")
 position = dcc "position" (cn' "position")
   "an object's location relative to a reference point"
 positionVec = dccWDS " positionVec" (cn' "position vector")
-   (S "a vector from the origin" `the_ofThe` phrase cartesian +:+ S "defined"
+   (S "a vector from the origin" `ofThe` phrase cartesian +:+ S "defined"
     `toThe` phrase point +:+ S "where the" +:+ phrase force +:+ S "is applied")
 potEnergy = dccWDS "potEnergy" (cn "potential energy")
   (S "measure" `the_ofThe` phrase energy +:+ S "held by an object because of its" +:+ phrase position)

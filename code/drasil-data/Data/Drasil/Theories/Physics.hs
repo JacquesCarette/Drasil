@@ -102,7 +102,7 @@ torqueEqn = cross (sy QP.positionVec) (sy QP.force)
 
 torqueDesc :: Sentence
 torqueDesc = foldlSent [S "The", phrase torque, 
-  S "on a body measures the", S "the tendency" `sOf` S "a", phrase QP.force, 
+  S "on a body measures the", S "tendency" `sOf` S "a", phrase QP.force, 
   S "to rotate the body around an axis or pivot"]
 
 --

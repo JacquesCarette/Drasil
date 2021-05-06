@@ -10,8 +10,8 @@ import Control.Lens ((^.))
 
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI)
 import Drasil.GamePhysics.References (chaslesWiki)
-import Drasil.GamePhysics.Unitals (initRelVel, massI, mTot, normalVect,
-  posCM, posI, velB, velO, rOB, finRelVel,
+import Drasil.GamePhysics.Unitals (initRelVel, massj, mTot, normalVect,
+  posCM, posj, velB, velO, rOB, finRelVel,
   velAP, velBP, rRot, velo_1, velo_2, timeT, time_1, time_2)
 
 import Data.Drasil.Concepts.Math (rightHand)
@@ -43,7 +43,7 @@ ctrOfMass = mkQuantDef posCM ctrOfMassEqn
 
 -- FIXME (Variable "i") is a horrible hack
 ctrOfMassEqn :: Expr
-ctrOfMassEqn = sumAll (Variable "i") (sy massI * sy posI) / sy mTot
+ctrOfMassEqn = sumAll (Variable "j") (sy massj * sy posj) / sy mTot
 
 -- DD2 : Linear displacement --
 
@@ -319,7 +319,7 @@ momentOfInertia :: QDefinition
 momentOfInertia = mkQuantDef QP.momentOfInertia momentOfInertiaEqn
 
 momentOfInertiaEqn :: Expr
-momentOfInertiaEqn = sumAll (Variable "i") $ sy massI * (sy rRot $^ 2)
+momentOfInertiaEqn = sumAll (Variable "j") $ sy massj * (sy rRot $^ 2)
 
 momentOfInertiaDesc :: Sentence
 momentOfInertiaDesc = foldlSent [S "The", getTandS QP.momentOfInertia,

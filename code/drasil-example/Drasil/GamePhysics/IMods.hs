@@ -1,7 +1,7 @@
 module Drasil.GamePhysics.IMods (iMods, instModIntro) where
 
 import Language.Drasil
-import Language.Drasil.ShortHands (lI)
+import Language.Drasil.ShortHands (lJ)
 import Theory.Drasil (InstanceModel, imNoDerivNoRefs, qwC, ModelKinds (OthModel))
 import Utils.Drasil
 
@@ -13,8 +13,8 @@ import Drasil.GamePhysics.DataDefs (ctrOfMassDD, linDispDD, linVelDD, linAccDD,
 import Drasil.GamePhysics.GenDefs (accelGravityGD, impulseGD)
 import Drasil.GamePhysics.Goals (linearGS, angularGS)
 import Drasil.GamePhysics.TMods (newtonSL, newtonSLR)
-import Drasil.GamePhysics.Unitals (accI, forceI, massA, massI, normalVect,
-  timeC, torqueI, velA, velI)
+import Drasil.GamePhysics.Unitals (accj, forcej, massA, massj, normalVect,
+  timeC, torquej, velA, velj)
 
 import Data.Drasil.TheoryConcepts (inModel)
 
@@ -31,13 +31,13 @@ iMods = [transMot, rotMot, col2D]
 {-- Force on the translational motion  --}
 transMot :: InstanceModel
 transMot = imNoDerivNoRefs (OthModel transMotRC) 
-  [qwC velI $ UpFrom (Exc, 0)
+  [qwC velj $ UpFrom (Exc, 0)
   ,qwC time $ UpFrom (Exc, 0)
   ,qwC gravitationalAccel $ UpFrom (Exc, 0)
-  ,qwC forceI $ UpFrom (Exc, 0)
-  ,qwC massI $ UpFrom (Exc, 0)
+  ,qwC forcej $ UpFrom (Exc, 0)
+  ,qwC massj $ UpFrom (Exc, 0)
   ]
-  (qw accI) [] "transMot" [transMotDesc, transMotOutputs, rigidTwoDAssump, noDampConsAssumps]
+  (qw accj) [] "transMot" [transMotDesc, transMotOutputs, rigidTwoDAssump, noDampConsAssumps]
 
 transMotRC :: RelationConcept
 transMotRC = makeRC "transMotRC" transMotNP EmptyS transMotRel
@@ -46,14 +46,14 @@ transMotNP :: NP
 transMotNP = nounPhraseSP "Force on the translational motion of a set of 2D rigid bodies"
 
 transMotRel :: Relation -- FIXME: add proper equation
-transMotRel = sy accI $= deriv (apply1 velI time) time
-  $= sy gravitationalAccel + (apply1 forceI time / sy massI)
+transMotRel = sy accj $= deriv (apply1 velj time) time
+  $= sy gravitationalAccel + (apply1 forcej time / sy massj)
 
 transMotDesc, transMotOutputs :: Sentence
 transMotDesc = foldlSent [S "The above", phrase equation, S "expresses",
-  (S "total" +:+ phrase acceleration) `the_ofThe` phrase rigidBody, P lI,
+  (S "total" +:+ phrase acceleration) `the_ofThe` phrase rigidBody, P lJ,
   S "as the sum" `sOf` phrase gravitationalAccel, fromSource accelGravityGD `sAnd`
-  phrase acceleration, S "due to applied", phrase force, E (apply1 forceI time) +:+.
+  phrase acceleration, S "due to applied", phrase force, E (apply1 forcej time) +:+.
   fromSource newtonSL, S "The resultant", plural output_ `sAre`
   S "then obtained from this", phrase equation, S "using",
   foldlList Comma List (map makeRef2S [linDispDD, linVelDD, linAccDD])]
@@ -71,7 +71,7 @@ rotMot :: InstanceModel
 rotMot = imNoDerivNoRefs (OthModel rotMotRC) 
   [qwC angularVelocity $ UpFrom (Exc, 0)
   ,qwC time $ UpFrom (Exc, 0)
-  ,qwC torqueI $ UpFrom (Exc, 0)
+  ,qwC torquej $ UpFrom (Exc, 0)
   ,qwC momentOfInertia $ UpFrom (Exc, 0)
   ]
     (qw angularAccel) [UpFrom (Exc, 0)] "rotMot"
@@ -86,11 +86,11 @@ rotMotNP =  nounPhraseSP "Force on the rotational motion of a set of 2D rigid bo
 rotMotRel :: Relation
 rotMotRel = sy angularAccel $= deriv
   (apply1 angularVelocity time) time $= 
-     (apply1 torqueI time / sy momentOfInertia)
+     (apply1 torquej time / sy momentOfInertia)
 
 rotMotDesc :: Sentence
 rotMotDesc = foldlSent [S "The above", phrase equation, S "for",
-  (S "total" +:+ phrase angularAccel) `the_ofThe` phrase rigidBody, P lI `sIs`
+  (S "total" +:+ phrase angularAccel) `the_ofThe` phrase rigidBody, P lJ `sIs`
   S "derived from", makeRef2S newtonSLR `sC` EmptyS `andThe` S "resultant",
   plural output_ `sAre` S "then obtained from this", phrase equation, S "using",
   foldlList Comma List (map makeRef2S [angDispDD, angVelDD, angAccelDD])]

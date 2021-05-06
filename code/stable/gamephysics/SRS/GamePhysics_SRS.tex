@@ -73,7 +73,7 @@ $\mathbf{a}$ & Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $\mathbf{a}\text{(}t\text{)}$ & Linear Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
-${\mathbf{a}_{i}}$ & I-Th Body's Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+${\mathbf{a}_{j}}$ & J-Th Body's Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 ${C_{\text{R}}}$ & Coefficient of restitution & --
 \\
@@ -91,7 +91,7 @@ ${\mathbf{F}_{2}}$ & Force exerted by the second body (on another body) & ${\tex
 \\
 ${\mathbf{F}_{\mathbf{g}}}$ & Force of gravity & ${\text{N}}$
 \\
-${\mathbf{F}_{i}}$ & Force Applied to the I-Th Body at Time T & ${\text{N}}$
+${\mathbf{F}_{j}}$ & Force Applied to the J-Th Body at Time T & ${\text{N}}$
 \\
 $G$ & Gravitational constant & $\frac{\text{m}^{3}}{\text{kg}\text{s}^{2}}$
 \\
@@ -171,9 +171,9 @@ ${\mathbf{v}_{\text{B}}}$ & Velocity at Point B & $\frac{\text{m}}{\text{s}}$
 \\
 ${{\mathbf{v}_{\text{f}}}^{\text{A}\text{B}}}$ & Final Relative Velocity Between Rigid Bodies of A and B & $\frac{\text{m}}{\text{s}}$
 \\
-${\mathbf{v}_{i}}$ & Velocity of the I-Th Body's Velocity & $\frac{\text{m}}{\text{s}}$
-\\
 ${{\mathbf{v}_{\text{i}}}^{\text{A}\text{B}}}$ & Initial Relative Velocity Between Rigid Bodies of A and B & $\frac{\text{m}}{\text{s}}$
+\\
+${\mathbf{v}_{j}}$ & Velocity of the J-Th Body's Velocity & $\frac{\text{m}}{\text{s}}$
 \\
 ${\mathbf{v}_{\text{O}}}$ & Velocity at Point Origin & $\frac{\text{m}}{\text{s}}$
 \\
@@ -193,7 +193,7 @@ $θ$ & Angular Displacement & ${\text{rad}}$
 \\
 $\mathbf{τ}$ & Torque & $\text{N}\text{m}$
 \\
-${\mathbf{τ}_{i}}$ & Torque applied to the i-th body & $\text{N}\text{m}$
+${\mathbf{τ}_{j}}$ & Torque applied to the j-th body & $\text{N}\text{m}$
 \\
 $ω$ & Angular Velocity & $\frac{\text{rad}}{\text{s}}$
 \\
@@ -1245,14 +1245,14 @@ The goal \hyperref[linearGS]{GS: Determine-Linear-Properties} is met by \hyperre
 Label & Force on the translational motion of a set of 2D rigid bodies
         
 \\ \midrule \\
-Input & ${\mathbf{v}_{i}}$, $t$, $\mathbf{g}$, ${\mathbf{F}_{i}}$, ${m_{j}}$
+Input & ${\mathbf{v}_{j}}$, $t$, $\mathbf{g}$, ${\mathbf{F}_{j}}$, ${m_{j}}$
         
 \\ \midrule \\
-Output & ${\mathbf{a}_{i}}$
+Output & ${\mathbf{a}_{j}}$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {\mathbf{v}_{i}}\gt{}0
+                    {\mathbf{v}_{j}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
                     t\gt{}0
@@ -1261,7 +1261,7 @@ Input Constraints & \begin{displaymath}
                     \mathbf{g}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    {\mathbf{F}_{i}}\gt{}0
+                    {\mathbf{F}_{j}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
                     {m_{j}}\gt{}0
@@ -1270,19 +1270,19 @@ Input Constraints & \begin{displaymath}
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {\mathbf{a}_{i}}=\frac{\,d{\mathbf{v}_{i}}\left(t\right)}{\,dt}=\mathbf{g}+\frac{{\mathbf{F}_{i}}\left(t\right)}{{m_{j}}}
+           {\mathbf{a}_{j}}=\frac{\,d{\mathbf{v}_{j}}\left(t\right)}{\,dt}=\mathbf{g}+\frac{{\mathbf{F}_{j}}\left(t\right)}{{m_{j}}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${\mathbf{a}_{i}}$ is the i-th body's acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${\mathbf{a}_{j}}$ is the j-th body's acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$t$ is the time (${\text{s}}$)}
-              \item{${\mathbf{v}_{i}}$ is the velocity of the i-th body's velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{${\mathbf{v}_{j}}$ is the velocity of the j-th body's velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{$\mathbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
-              \item{${\mathbf{F}_{i}}$ is the force applied to the i-th body at time t (${\text{N}}$)}
+              \item{${\mathbf{F}_{j}}$ is the force applied to the j-th body at time t (${\text{N}}$)}
               \item{${m_{j}}$ is the mass of the j-th particle (${\text{kg}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The above equation expresses the total acceleration of the rigid body $i$ as the sum of gravitational acceleration (from \hyperref[GD:accelGravity]{GD: accelGravity}) and acceleration due to applied force ${\mathbf{F}_{i}}\left(t\right)$ (from \hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}). The resultant outputs are then obtained from this equation using \hyperref[DD:linDisp]{DD: linDisp}, \hyperref[DD:linVel]{DD: linVel}, and \hyperref[DD:linAcc]{DD: linAcc}.
+Notes & The above equation expresses the total acceleration of the rigid body $j$ as the sum of gravitational acceleration (from \hyperref[GD:accelGravity]{GD: accelGravity}) and acceleration due to applied force ${\mathbf{F}_{j}}\left(t\right)$ (from \hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}). The resultant outputs are then obtained from this equation using \hyperref[DD:linDisp]{DD: linDisp}, \hyperref[DD:linVel]{DD: linVel}, and \hyperref[DD:linAcc]{DD: linAcc}.
         
         The output of the instance model will be the functions of position and velocity over time that satisfy the ODE for the acceleration, with the given initial conditions for position and velocity. The motion is translational, so the position and velocity functions are for the centre of mass (from \hyperref[DD:ctrOfMass]{DD: ctrOfMass}).
         
@@ -1310,7 +1310,7 @@ RefBy &
 Label & Force on the rotational motion of a set of 2D rigid body
         
 \\ \midrule \\
-Input & $ω$, $t$, ${\mathbf{τ}_{i}}$, $\mathbf{I}$
+Input & $ω$, $t$, ${\mathbf{τ}_{j}}$, $\mathbf{I}$
         
 \\ \midrule \\
 Output & $α$
@@ -1323,7 +1323,7 @@ Input Constraints & \begin{displaymath}
                     t\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    {\mathbf{τ}_{i}}\gt{}0
+                    {\mathbf{τ}_{j}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
                     \mathbf{I}\gt{}0
@@ -1334,18 +1334,18 @@ Output Constraints & \begin{displaymath}
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
-           α=\frac{\,dω\left(t\right)}{\,dt}=\frac{{\mathbf{τ}_{i}}\left(t\right)}{\mathbf{I}}
+           α=\frac{\,dω\left(t\right)}{\,dt}=\frac{{\mathbf{τ}_{j}}\left(t\right)}{\mathbf{I}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
               \item{$t$ is the time (${\text{s}}$)}
               \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
-              \item{${\mathbf{τ}_{i}}$ is the torque applied to the i-th body ($\text{N}\text{m}$)}
+              \item{${\mathbf{τ}_{j}}$ is the torque applied to the j-th body ($\text{N}\text{m}$)}
               \item{$\mathbf{I}$ is the moment of inertia ($\text{kg}\text{m}^{2}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The above equation for the total angular acceleration of the rigid body $i$ is derived from \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}, and the resultant outputs are then obtained from this equation using \hyperref[DD:angDisp]{DD: angDisp}, \hyperref[DD:angVel]{DD: angVel}, and \hyperref[DD:angAccel]{DD: angAccel}.
+Notes & The above equation for the total angular acceleration of the rigid body $j$ is derived from \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}, and the resultant outputs are then obtained from this equation using \hyperref[DD:angDisp]{DD: angDisp}, \hyperref[DD:angVel]{DD: angVel}, and \hyperref[DD:angAccel]{DD: angAccel}.
         
         All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}) and two-dimensional (from \hyperref[assumpOD]{A: objectDimension}).
         

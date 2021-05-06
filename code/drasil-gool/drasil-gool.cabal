@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: ae8be669e69befdfc509a6677c71cc2abd0d3d0938a32035905e70249059d450
+-- hash: bc4d9c2026a30622f7d3d0cf67e8a1cce5cdf5b41910e6fe7f98db4278b9ba37
 
 name:           drasil-gool
 version:        0.1.1.0
@@ -49,17 +49,12 @@ library
       ./
   ghc-options: -Wall -Wredundant-constraints
   build-depends:
-      MissingH >=1.4.0.1
-    , base >=4.7 && <5
+      base >=4.7 && <5
     , composition
-    , containers >=0.5.5.1
-    , data-fix (>=0.0.4 && <=1.0)
-    , data-ordlist >=0.4.7.0
-    , directory >=1.2.6.2
+    , containers
+    , data-ordlist
     , drasil-utils
-    , filepath >=1.4.1
-    , lens >=4.12
-    , mtl >=2.2.1
-    , pretty >=1.1.1.1
-    , split >=0.2.3.1
+    , lens
+    , mtl
+    , pretty
   default-language: Haskell2010

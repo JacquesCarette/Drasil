@@ -165,7 +165,7 @@ Uncert. & Typical Uncertainty
 \end{longtable}
 \section{Introduction}
 \label{Sec:Intro}
-A pendulum consists of mass attached to the end of a rod, its moving curve is highly sensitive to initial conditions Therefore, it is useful to have a program the to simulate the motion of the pendulum to exhibit the chaotic characteristics of it The program documented here is called pendulum.
+A pendulum consists of mass attached to the end of a rod and its moving curve is highly sensitive to initial conditions. Therefore, it is useful to have a program to simulate the motion of the pendulum to exhibit its chaotic characteristics. The program documented here is called pendulum.
 
 The following section provides an overview of the Software Requirements Specification (SRS) for Pendulum. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
 
@@ -179,7 +179,7 @@ This section first presents the problem description, which gives a high-level vi
 
 \subsection{Problem Description}
 \label{Sec:ProbDesc}
-A system is needed to is needed to efficiently and correctly to predict the motion pendulum.
+A system is needed to efficiently and correctly to predict the motion of a pendulum.
 
 \subsubsection{Terminology and Definitions}
 \label{Sec:TermDefs}
@@ -206,10 +206,10 @@ The physical system of Pendulum, as shown in \hyperref[Figure:pendulum]{Fig:pend
 \end{figure}
 \subsubsection{Goal Statements}
 \label{Sec:GoalStmt}
-Given the the mass length of the rod, initial angle of the mass and the gravitational constant, the goal statements are:
+Given the mass and length of the rod, initial angle of the mass and the gravitational constant, the goal statements are:
 
 \begin{itemize}
-\item[Motion-of-the-mass:\phantomsection\label{motionMass}]{the Calculate the motion of the mass}
+\item[Motion-of-the-mass:\phantomsection\label{motionMass}]{Calculate the motion of the mass}
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
@@ -220,11 +220,11 @@ The instance models that govern Pendulum are presented in \hyperref[Sec:IMs]{Sec
 This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
 
 \begin{itemize}
-\item[pend2DMotion:\phantomsection\label{pend2DMotion}]{The Pendulum motion is two-dimensional (2D). (RefBy: \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}.)}
+\item[pend2DMotion:\phantomsection\label{pend2DMotion}]{The pendulum motion is two-dimensional (2D).}
 \item[cartCoord:\phantomsection\label{cartCoord}]{A Cartesian coordinate system is used}
 \item[cartCoordRight:\phantomsection\label{cartCoordRight}]{The Cartesian coordinate system is right-handed where positive $x$-axis. and $y$-axis point right up}
-\item[yAxisDir:\phantomsection\label{yAxisDir}]{The The direction of the $y$-axis is directed opposite to gravity.}
-\item[startOrigin:\phantomsection\label{startOrigin}]{The Pendulum is attached to the origin.}
+\item[yAxisDir:\phantomsection\label{yAxisDir}]{The direction of the $y$-axis is directed opposite to gravity.}
+\item[startOrigin:\phantomsection\label{startOrigin}]{The pendulum is attached to the origin.}
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -338,7 +338,7 @@ Description & \begin{symbDescription}
               \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The net torque $\mathbf{τ}$ on a pendulum is proportional to its angular acceleration $α$, where $\mathbf{I}$ denotes the moment of inertia of the pendulum as the constant of proportionality We also assume that pendulum motion is two-dimensional \hyperref[pend2DMotion]{A: pend2DMotion}.
+Notes & The net torque $\mathbf{τ}$ on a rigid body is proportional to its angular acceleration $α$, where $\mathbf{I}$ denotes the moment of inertia of the rigid body as the constant of proportionality.
         
 \\ \midrule \\
 Source & --
@@ -588,7 +588,7 @@ RefBy &
 \phantomsection 
 \label{GD:angFrequencyGD}
 \\ \midrule \\
-Label & The The angular frequency of the pendulum
+Label & The angular frequency of the pendulum
         
 \\ \midrule \\
 Units & ${\text{s}}$
@@ -617,7 +617,7 @@ RefBy & \hyperref[GD:periodPend]{GD: periodPend} and \hyperref[IM:calOfAngularDi
 \end{minipage}
 \paragraph{Detailed derivation of angular frequency pendulum:}
 \label{GD:angFrequencyGDDeriv}
-Consider the torque, on a pendulum defined in \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}, the force providing the restoring torque is the component of the the weight of the pendulum bob that acts along the arc length The the torque is the length of the string the ${L_{\text{rod}}}$ multiplied by the component of the net the force that is perpendicular to the radius of the arc. The minus sign indicates the torque acts in the opposite direction of the angular displacement:
+Consider the torque on a pendulum defined in \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}. The force providing the restoring torque is the component of weight of the pendulum bob that acts along the arc length. The torque is the length of the string ${L_{\text{rod}}}$ multiplied by the component of the net force that is perpendicular to the radius of the arc. The minus sign indicates the torque acts in the opposite direction of the angular displacement:
 
 \begin{displaymath}
 \mathbf{τ}=-{L_{\text{rod}}} m \mathbf{g} \sin\left({θ_{p}}\right)
@@ -689,7 +689,7 @@ RefBy &
 \end{minipage}
 \paragraph{Detailed derivation of period pendulum:}
 \label{GD:periodPendDeriv}
-the The period of the pendulum can be defined from \hyperref[GD:angFrequencyGD]{GD: angFrequencyGD} equation
+The period of the pendulum can be defined from \hyperref[GD:angFrequencyGD]{GD: angFrequencyGD} equation
 
 \begin{displaymath}
 Ω=\sqrt{\frac{\mathbf{g}}{{L_{\text{rod}}}}}
@@ -1106,7 +1106,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot} &  &  &  &  & 
 \\
-\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} & X &  &  &  & 
+\hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot} &  &  &  &  & 
 \\
 \hyperref[GD:velocityIX]{GD: velocityIX} &  &  &  &  & 
 \\

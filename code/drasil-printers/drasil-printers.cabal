@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 573a24fdb11bf13c6f7135107b45ec13f9057e6ef18b3a69d090cbe55a2c7d49
+-- hash: 4d682a5f8646dd4b02881b977f282c2a5596931fc71793550f81c10d32fe3b6a
 
 name:           drasil-printers
 version:        0.1.10.0
@@ -48,17 +48,10 @@ library
       ./
   ghc-options: -Wall -Wredundant-constraints
   build-depends:
-      MissingH >=1.4.0.1
-    , base >=4.7 && <5
-    , containers >=0.5.5.1
-    , data-fix (>=0.0.4 && <=1.0)
-    , directory >=1.2.6.2
+      base >=4.7 && <5
     , drasil-database
     , drasil-lang
     , drasil-utils
-    , lens >=4.12
-    , mtl >=2.2.1
-    , parsec >=3.1.9
-    , pretty >=1.1.1.1
-    , split >=0.2.3.1
+    , lens
+    , pretty
   default-language: Haskell2010

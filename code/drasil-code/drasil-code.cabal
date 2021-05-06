@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 6a9c7472871bdd4d2d14ec1795dab724a9a983fa84ab5c55716cff5ea8f35707
+-- hash: a9a50a45f3a9e998f60776d2574553d0a145ad3e40e1f2062e6fec85b9bbc3ee
 
 name:           drasil-code
 version:        0.1.9.0
@@ -75,10 +75,9 @@ library
       ./
   ghc-options: -Wall -Wredundant-constraints
   build-depends:
-      MissingH >=1.4.0.1
-    , base >=4.7 && <5
-    , containers >=0.5.5.1
-    , directory >=1.2.6.2
+      base >=4.7 && <5
+    , containers
+    , directory
     , drasil-build
     , drasil-database
     , drasil-gool
@@ -86,12 +85,11 @@ library
     , drasil-printers
     , drasil-theory
     , drasil-utils
-    , filepath >=1.4.1
-    , lens >=4.12
-    , mtl >=2.2.1
-    , parsec >=3.1.9
-    , pretty >=1.1.1.1
-    , split >=0.2.3.1
+    , filepath
+    , lens
+    , mtl
+    , pretty
+    , split
   default-language: Haskell2010
 
 executable codegenTest
@@ -153,10 +151,9 @@ executable codegenTest
       ./
   ghc-options: -Wall -Wredundant-constraints -threaded -O2 -main-is Test.Main
   build-depends:
-      MissingH >=1.4.0.1
-    , base >=4.7 && <5
-    , containers >=0.5.5.1
-    , directory >=1.2.6.2
+      base >=4.7 && <5
+    , containers
+    , directory
     , drasil-build
     , drasil-code
     , drasil-database
@@ -165,10 +162,9 @@ executable codegenTest
     , drasil-printers
     , drasil-theory
     , drasil-utils
-    , filepath >=1.4.1
-    , lens >=4.12
-    , mtl >=2.2.1
-    , parsec >=3.1.9
-    , pretty >=1.1.1.1
-    , split >=0.2.3.1
+    , filepath
+    , lens
+    , mtl
+    , pretty
+    , split
   default-language: Haskell2010

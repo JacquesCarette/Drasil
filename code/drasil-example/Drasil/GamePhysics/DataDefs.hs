@@ -285,7 +285,7 @@ coeffRestitution :: QDefinition
 coeffRestitution = mkQuantDef QP.restitutionCoef coeffRestitutionEqn
 
 coeffRestitutionEqn :: Expr
-coeffRestitutionEqn = - sy finRelVel $.
+coeffRestitutionEqn = -sy finRelVel $.
   sy normalVect / sy initRelVel $.
   sy normalVect
 

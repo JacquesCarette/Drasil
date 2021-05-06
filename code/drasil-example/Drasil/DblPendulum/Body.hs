@@ -1,6 +1,7 @@
 module Drasil.DblPendulum.Body where
 
 import Language.Drasil hiding (Symbol(..), Vector)
+import Theory.Drasil (TheoryModel)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
@@ -11,6 +12,8 @@ import Data.Drasil.People (olu)
 import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian, hertz)
 import Data.Drasil.Concepts.Software (program, errMsg)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum, twoD)
+import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM, newtonSLR)
+import Data.Drasil.Domains (physics) 
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (mass, len, physicalcon)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
@@ -29,16 +32,15 @@ import Drasil.DblPendulum.Figures (figMotion)
 import Data.Drasil.Concepts.Math (mathcon, cartesian)
 import Data.Drasil.Quantities.Math (unitVect, unitVectj)
 import Drasil.DblPendulum.Assumptions (assumptions)
-import Drasil.DblPendulum.Concepts (pendulumTitle)
 import Drasil.DblPendulum.Goals (goals, goalsInputs)
 import Drasil.DblPendulum.DataDefs (dataDefs)
-import Drasil.DblPendulum.TMods (tMods)
 import Drasil.DblPendulum.IMods (iMods)
 import Drasil.DblPendulum.GenDefs (genDefns)
 import Drasil.DblPendulum.Unitals (symbols, inputs, outputs,
   inConstraints, outConstraints, acronyms)
 import Drasil.DblPendulum.Requirements (funcReqs, nonFuncReqs)
-import Drasil.DblPendulum.References (citations)
+import Data.Drasil.Citations (cartesianWiki, accelerationWiki, velocityWiki)
+import Drasil.Projectile.References (hibbeler2004)
 
 
 srs :: Document
@@ -87,15 +89,18 @@ mkSRS = [RefSec $      --This creates the Reference section of the SRS
 
 justification :: Sentence
 justification = foldlSent [S "A", phrase pendulum, S "consists" `sOf` S "mass", 
-                            S "attached to the end of a rod" `sC` S "its moving curve" `sIs`
-                            S "highly sensitive to initial conditions" +:+ S "Therefore" `sC`
-                            S "it is useful to have a", phrase program, S "to simulate the motion"
-                            `ofThe` phrase pendulum, S "to exhibit the chaotic characteristics" `sOf` S "it",
+                            S "attached to the end of a rod" `andIts` S "moving curve" `sIs`
+                            S "highly sensitive to initial conditions.", S "Therefore" `sC`
+                            S "it is useful to have a", phrase program, S "to simulate", S "motion"
+                            `ofThe` phrase pendulum, S "to exhibit its chaotic characteristics.",
                             S "The", phrase program, S "documented here is called", phrase pendulum]
 scope :: Sentence
 scope = foldlSent [S "the", phrase analysis `sOf` S "a", phrase twoD, 
   sParen (getAcc twoD), phrase pendulum, S "motion", phrase problem,
                    S "with various initial conditions"]
+
+pendulumTitle :: CI
+pendulumTitle = commonIdeaWithDict "pendulumTitle" (pn "Pendulum") "Pendulum" [physics]
 
 si :: SystemInformation
 si = SI {
@@ -138,6 +143,9 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 refDB :: ReferenceDB
 refDB = rdb citations concIns
 
+citations :: BibRef
+citations = [accelerationWiki, velocityWiki, hibbeler2004, cartesianWiki]
+
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ funcReqs ++ nonFuncReqs
 -- ++ likelyChgs ++ unlikelyChgs
@@ -147,7 +155,7 @@ concIns = assumptions ++ goals ++ funcReqs ++ nonFuncReqs
 ------------------------------------
 
 prob :: Sentence
-prob = foldlSent_ [ S "is needed to efficiently and correctly to predict the motion",  
+prob = foldlSent_ [ S "efficiently and correctly to predict the motion of a",  
                    phrase pendulum]
 
 ---------------------------------
@@ -156,6 +164,9 @@ prob = foldlSent_ [ S "is needed to efficiently and correctly to predict the mot
 
 terms :: [ConceptChunk]
 terms = [gravity, cartesian]
+
+tMods :: [TheoryModel]
+tMods = [accelerationTM, velocityTM, newtonSL, newtonSLR]
 
 
 -- ---------------------------------

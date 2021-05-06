@@ -2,7 +2,7 @@ module Drasil.DblPendulum.Assumptions (pend2DMotion, cartCoord, cartCoordRight, 
     
 import Language.Drasil
 import Utils.Drasil
-import Drasil.DblPendulum.Concepts (pendulumTitle)
+import Drasil.DblPendulum.Concepts (pendulum) 
 import Data.Drasil.Concepts.Documentation (assumpDom) 
 import Data.Drasil.Concepts.Math (cartesian, xAxis, yAxis)
 import Data.Drasil.Concepts.Physics (gravity, twoD)
@@ -20,7 +20,7 @@ yAxisDir        = cic "yAxisDir"          yAxisDirDesc        "yAxisDir"        
 startOrigin     = cic "startOrigin"       startOriginDesc     "startOrigin"     assumpDom
 
 pend2DMotionDesc :: Sentence
-pend2DMotionDesc = S "The" +:+ phrase pendulumTitle +:+ S "motion" `sIs` phrase twoD +:+. sParen (getAcc twoD)
+pend2DMotionDesc = S "The" +:+ phrase pendulum +:+ S "motion" `sIs` phrase twoD +:+. sParen (getAcc twoD)
 
 cartCoordDesc :: Sentence
 cartCoordDesc = S "A" +:+ (phrase cartesian `sIs` S "used") 
@@ -30,8 +30,8 @@ cartCoordRightDesc = S "The" +:+ phrase cartesian `sIs` S "right-handed where po
                          phrase xAxis `sAnd` phrase yAxis +:+ S "point right up"
 
 yAxisDirDesc :: Sentence
-yAxisDirDesc = S "The direction" `ofThe'` phrase yAxis `sIs` S "directed opposite to" +:+. phrase gravity
+yAxisDirDesc = S "direction" `ofThe'` phrase yAxis `sIs` S "directed opposite to" +:+. phrase gravity
 
 startOriginDesc :: Sentence
-startOriginDesc = S "The" +:+. (phrase pendulumTitle `sIs` S "attached" `toThe` S "origin")
+startOriginDesc = S "The" +:+. (phrase pendulum `sIs` S "attached" `toThe` S "origin")
 

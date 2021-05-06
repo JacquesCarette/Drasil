@@ -8,6 +8,8 @@ module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
 
 import Language.Drasil hiding (Ref, int, log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
+import Language.Drasil.Development (UFuncB(..), UFuncVec(..), 
+  EqBinOp(..), BoolBinOp(..))
 import Database.Drasil (symbResolve)
 import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
@@ -47,7 +49,6 @@ import Prelude hiding (sin, cos, tan, log, exp)
 import Data.List ((\\), intersect)
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (maybe)
-import Control.Applicative ((<$>))
 import Control.Monad (liftM2,liftM3)
 import Control.Monad.State (get)
 import Control.Lens ((^.))
@@ -309,21 +310,25 @@ convExpr (Message a m x ns) = do
     (\_ n t -> objMethodCallMixedArgs t o n)
 convExpr (Field o f) = do
   g <- get
-  let ob = quantvar (lookupC g o)
+  let ob  = quantvar (lookupC g o)
       fld = quantvar (lookupC g f)
   v <- mkVar (ccObjVar ob fld)
   return $ valueOf v
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
+convExpr (UnaryOpB o u) = fmap (unopB o) (convExpr u)
+convExpr (UnaryOpVec o u) = fmap (unopVec o) (convExpr u)
 convExpr (BinaryOp Frac (Int a) (Int b)) = do -- hack to deal with integer division
   sm <- spaceCodeType Rational
   let getLiteral Double = litDouble (fromIntegral a) #/ litDouble (fromIntegral b)
       getLiteral Float = litFloat (fromIntegral a) #/ litFloat (fromIntegral b)
       getLiteral _ = error "convExpr: Rational space matched to invalid CodeType; should be Double or Float"
   return $ getLiteral sm
-convExpr (BinaryOp o a b)  = liftM2 (bfunc o) (convExpr a) (convExpr b)
-convExpr (Case c l)      = doit l -- FIXME this is sub-optimal
+convExpr (BinaryOp o a b)     = liftM2 (bfunc o) (convExpr a) (convExpr b)
+convExpr (BoolBinaryOp o a b) = liftM2 (boolBfunc o) (convExpr a) (convExpr b)
+convExpr (EqBinaryOp o a b)   = liftM2 (eqBfunc o) (convExpr a) (convExpr b)
+convExpr (Case c l)           = doit l -- FIXME this is sub-optimal
   where
-    doit [] = error "should never happen"
+    doit [] = error "should never happen" -- TODO: change error message?
     doit [(e,_)] = convExpr e -- should always be the else clause
     doit ((e,cond):xs) = liftM3 inlineIf (convExpr cond) (convExpr e) 
       (convExpr (Case c xs))
@@ -396,15 +401,17 @@ unop Cot  = cot
 unop Arcsin = arcsin
 unop Arccos = arccos
 unop Arctan = arctan
-unop Dim  = listSize
-unop Norm = error "unop: Norm not implemented"
-unop Not  = (?!)
 unop Neg  = (#~)
+
+unopB :: (OOProg r) => UFuncB -> (SValue r -> SValue r)
+unopB Not = (?!)
+
+unopVec :: (OOProg r) => UFuncVec -> (SValue r -> SValue r)
+unopVec Dim = listSize
+unopVec Norm = error "unop: Norm not implemented" -- TODO
 
 -- Maps a BinOp to the corresponding GOOL binary function
 bfunc :: (OOProg r) => BinOp -> (SValue r -> SValue r -> SValue r)
-bfunc Eq    = (?==)
-bfunc NEq   = (?!=)
 bfunc Gt    = (?>)
 bfunc Lt    = (?<)
 bfunc LEq   = (?<=)
@@ -412,11 +419,19 @@ bfunc GEq   = (?>=)
 bfunc Cross = error "bfunc: Cross not implemented"
 bfunc Pow   = (#^)
 bfunc Subt  = (#-)
-bfunc Impl  = error "convExpr :=>"
-bfunc Iff   = error "convExpr :<=>"
 bfunc Dot   = error "convExpr DotProduct"
 bfunc Frac  = (#/)
 bfunc Index = listAccess
+
+-- Maps a BoolBinOp to the corresponding GOOL binary function
+boolBfunc :: (OOProg r) => BoolBinOp -> (SValue r -> SValue r -> SValue r)
+boolBfunc Impl = error "convExpr :=>"
+boolBfunc Iff  = error "convExpr :<=>"
+
+-- Maps an EqBinOp to the corresponding GOOL binary function
+eqBfunc :: (OOProg r) => EqBinOp -> (SValue r -> SValue r -> SValue r)
+eqBfunc Eq  = (?==)
+eqBfunc NEq = (?!=)
 
 -- medium hacks --
 

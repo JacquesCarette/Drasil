@@ -2,7 +2,9 @@ module Language.Drasil.Printing.Import (space, expr, symbol, spec,
   makeDocument) where
 
 import Language.Drasil hiding (sec, symbol)
-import Language.Drasil.Development (precA, precB, eprec)
+import Language.Drasil.Development (UFuncB(..), UFuncVec(..)
+  , BoolBinOp(..), EqBinOp(..)
+  , precA, precB, eprec)
 import Database.Drasil
 import Utils.Drasil
 
@@ -63,16 +65,16 @@ mulExpr []       sm     = [expr' sm (precA Mul) (Int 1)]
 digitsProcess :: [Integer] -> Int -> Int -> Integer -> [P.Expr]
 digitsProcess [0] _ _ _ = [P.Int 0, P.MO P.Point, P.Int 0]
 digitsProcess ds pos _ (-3) = [P.Int 0, P.MO P.Point] ++ replicate (3 - pos) (P.Int 0) ++ map P.Int ds
-digitsProcess (hd:tl) pos coun ex 
+digitsProcess (hd:tl) pos coun ex
   | pos /= coun = P.Int hd : digitsProcess tl pos (coun + 1) ex
   | ex /= 0 = [P.MO P.Point, P.Int hd] ++ map P.Int tl ++ [P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
   | otherwise = [P.MO P.Point, P.Int hd] ++ map P.Int tl
-digitsProcess [] pos coun ex 
+digitsProcess [] pos coun ex
   | pos > coun = P.Int 0 : digitsProcess [] pos (coun+1) ex
   | ex /= 0 = [P.MO P.Point, P.Int 0, P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
   | otherwise = [P.MO P.Point, P.Int 0]
 
--- THis function takes the exponent and the [Int] of base and give out
+-- This function takes the exponent and the [Int] of base and give out
 -- the decimal point position and processed exponent
 -- This function supports transferring scientific notation to
 -- engineering notation.
@@ -82,84 +84,89 @@ digitsProcess [] pos coun ex
 -- https://www.calculatorsoup.com/calculators/math/scientific-notation-converter.php
 -- https://en.wikipedia.org/wiki/Scientific_notation
 processExpo :: Int -> (Int, Int)
-processExpo a 
+processExpo a
   | mod (a-1) 3 == 0 = (1, a-1)
   | mod (a-1) 3 == 1 = (2, a-2)
   | mod (a-1) 3 == 2 = (3, a-3)
   | otherwise = error "The cases of processExpo should be exhaustive!"
 
+-- | Common method of converting associative operations into layout AST
+assocExpr :: P.Ops -> Int -> [Expr] -> PrintingInformation -> P.Expr
+assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ map (expr' sm prec) exprs
+
 -- | expr translation function from Drasil to layout AST
 expr :: Expr -> PrintingInformation -> P.Expr
-expr (Dbl d)           sm = case sm ^. getSetting of
+expr (Dbl d)                 sm = case sm ^. getSetting of
   Engineering -> P.Row $ digitsProcess (map toInteger $ fst $ floatToDigits 10 d)
      (fst $ processExpo $ snd $ floatToDigits 10 d) 0
      (toInteger $ snd $ processExpo $ snd $ floatToDigits 10 d)
   Scientific  ->  P.Dbl d
-expr (Int i)            _ = P.Int i
-expr (Str s)            _ = P.Str s
-expr (Perc a b)        sm = P.Row [expr (Dbl val) sm, P.MO P.Perc]
+expr (Int i)                  _ = P.Int i
+expr (Str s)                  _ = P.Str s
+expr (Perc a b)              sm = P.Row [expr (Dbl val) sm, P.MO P.Perc]
   where
     val = fromIntegral a / (10 ** fromIntegral (b - 2))
-expr (AssocB And l)    sm = P.Row $ intersperse (P.MO P.And) $ map (expr' sm (precB And)) l
-expr (AssocB Or l)     sm = P.Row $ intersperse (P.MO P.Or ) $ map (expr' sm (precB Or)) l
-expr (AssocA Add l)    sm = P.Row $ intersperse (P.MO P.Add) $ map (expr' sm (precA Add)) l
-expr (AssocA Mul l)    sm = P.Row $ mulExpr l sm
-expr (Deriv Part a b)  sm =
+expr (AssocB And l)          sm = assocExpr P.And (precB And) l sm
+expr (AssocB Or l)           sm = assocExpr P.Or (precB Or) l sm
+expr (AssocA Add l)          sm = assocExpr P.Add (precA Add) l sm
+expr (AssocA Mul l)          sm = P.Row $ mulExpr l sm
+expr (Deriv Part a b)        sm =
   P.Div (P.Row [P.Spc P.Thin, P.Spec Partial, expr a sm])
         (P.Row [P.Spc P.Thin, P.Spec Partial,
                 symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b])
-expr (Deriv Total a b)sm =
+expr (Deriv Total a b)       sm =
   P.Div (P.Row [P.Spc P.Thin, P.Ident "d", expr a sm])
-        (P.Row [P.Spc P.Thin, P.Ident "d", 
-                symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b]) 
-expr (C c)            sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
-expr (FCall f [x] []) sm = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f, 
-  parens $ expr x sm]
-expr (FCall f l ns)   sm = call sm f l ns
-expr (New c l ns)     sm = call sm c l ns
-expr (Message a m l ns) sm = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) a,
-  P.MO P.Point, call sm m l ns]
-expr (Field o f)      sm = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) o,
+        (P.Row [P.Spc P.Thin, P.Ident "d",
+                symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b])
+expr (C c)                   sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
+expr (FCall f [x] [])        sm = 
+  P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f, parens $ expr x sm]
+expr (FCall f l ns)          sm = call sm f l ns
+expr (New c l ns)            sm = call sm c l ns
+expr (Message a m l ns)      sm = 
+  P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) a, P.MO P.Point, call sm m l ns]
+expr (Field o f)             sm = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) o,
   P.MO P.Point, symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f]
-expr (Case _ ps)      sm = if length ps < 2 then
-                    error "Attempting to use multi-case expr incorrectly"
-                    else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
-expr (Matrix a)         sm = P.Mtx $ map (map (`expr` sm)) a
-expr (UnaryOp Log u)    sm = mkCall sm P.Log u
-expr (UnaryOp Ln u)     sm = mkCall sm P.Ln u
-expr (UnaryOp Sin u)    sm = mkCall sm P.Sin u
-expr (UnaryOp Cos u)    sm = mkCall sm P.Cos u
-expr (UnaryOp Tan u)    sm = mkCall sm P.Tan u
-expr (UnaryOp Sec u)    sm = mkCall sm P.Sec u
-expr (UnaryOp Csc u)    sm = mkCall sm P.Csc u
-expr (UnaryOp Cot u)    sm = mkCall sm P.Cot u
-expr (UnaryOp Arcsin u) sm = mkCall sm P.Arcsin u
-expr (UnaryOp Arccos u) sm = mkCall sm P.Arccos u
-expr (UnaryOp Arctan u) sm = mkCall sm P.Arctan u
-expr (UnaryOp Dim u)    sm = mkCall sm P.Dim u
-expr (UnaryOp Not u)    sm = P.Row [P.MO P.Not, expr u sm]
-expr (UnaryOp Exp u)    sm = P.Row [P.MO P.Exp, P.Sup $ expr u sm]
-expr (UnaryOp Abs u)    sm = P.Fenced P.Abs P.Abs $ expr u sm
-expr (UnaryOp Norm u)   sm = P.Fenced P.Norm P.Norm $ expr u sm
-expr (UnaryOp Sqrt u)   sm = P.Sqrt $ expr u sm
-expr (UnaryOp Neg u)    sm = neg sm u
-expr (BinaryOp Frac a b)  sm = P.Div (expr a sm) (expr b sm)
-expr (BinaryOp Cross a b) sm = mkBOp sm P.Cross a b
-expr (BinaryOp Dot a b)   sm = mkBOp sm P.Dot a b
-expr (BinaryOp Eq a b)    sm = mkBOp sm P.Eq a b
-expr (BinaryOp NEq a b)   sm = mkBOp sm P.NEq a b
-expr (BinaryOp Lt a b)    sm = mkBOp sm P.Lt a b
-expr (BinaryOp Gt a b)    sm = mkBOp sm P.Gt a b
-expr (BinaryOp LEq a b)   sm = mkBOp sm P.LEq a b
-expr (BinaryOp GEq a b)   sm = mkBOp sm P.GEq a b
-expr (BinaryOp Impl a b)  sm = mkBOp sm P.Impl a b
-expr (BinaryOp Iff a b)   sm = mkBOp sm P.Iff a b
-expr (BinaryOp Index a b) sm = indx sm a b
-expr (BinaryOp Pow a b)   sm = pow sm a b
-expr (BinaryOp Subt a b)  sm = P.Row [expr a sm, P.MO P.Subt, expr b sm]
-expr (Operator o d e)     sm = eop sm o d e
-expr (IsIn  a b)          sm = P.Row [expr a sm, P.MO P.IsIn, space sm b]
-expr (RealI c ri)         sm = renderRealInt sm (lookupC (sm ^. stg) 
+expr (Case _ ps)             sm =
+  if length ps < 2 
+    then error "Attempting to use multi-case expr incorrectly"
+    else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
+expr (Matrix a)              sm = P.Mtx $ map (map (`expr` sm)) a
+expr (UnaryOp Log u)         sm = mkCall sm P.Log u
+expr (UnaryOp Ln u)          sm = mkCall sm P.Ln u
+expr (UnaryOp Sin u)         sm = mkCall sm P.Sin u
+expr (UnaryOp Cos u)         sm = mkCall sm P.Cos u
+expr (UnaryOp Tan u)         sm = mkCall sm P.Tan u
+expr (UnaryOp Sec u)         sm = mkCall sm P.Sec u
+expr (UnaryOp Csc u)         sm = mkCall sm P.Csc u
+expr (UnaryOp Cot u)         sm = mkCall sm P.Cot u
+expr (UnaryOp Arcsin u)      sm = mkCall sm P.Arcsin u
+expr (UnaryOp Arccos u)      sm = mkCall sm P.Arccos u
+expr (UnaryOp Arctan u)      sm = mkCall sm P.Arctan u
+expr (UnaryOp Exp u)         sm = P.Row [P.MO P.Exp, P.Sup $ expr u sm]
+expr (UnaryOp Abs u)         sm = P.Fenced P.Abs P.Abs $ expr u sm
+expr (UnaryOpB Not u)        sm = P.Row [P.MO P.Not, expr u sm]
+expr (UnaryOpVec Norm u)     sm = P.Fenced P.Norm P.Norm $ expr u sm
+expr (UnaryOpVec Dim u)      sm = mkCall sm P.Dim u
+expr (UnaryOp Sqrt u)        sm = P.Sqrt $ expr u sm
+expr (UnaryOp Neg u)         sm = neg sm u
+expr (BinaryOp Frac a b)     sm = P.Div (expr a sm) (expr b sm)
+expr (BinaryOp Cross a b)    sm = mkBOp sm P.Cross a b
+expr (BinaryOp Dot a b)      sm = mkBOp sm P.Dot a b
+expr (BinaryOp Lt a b)       sm = mkBOp sm P.Lt a b
+expr (BinaryOp Gt a b)       sm = mkBOp sm P.Gt a b
+expr (BinaryOp LEq a b)      sm = mkBOp sm P.LEq a b
+expr (BinaryOp GEq a b)      sm = mkBOp sm P.GEq a b
+expr (BoolBinaryOp Impl a b) sm = mkBOp sm P.Impl a b
+expr (BoolBinaryOp Iff a b)  sm = mkBOp sm P.Iff a b
+expr (BinaryOp Index a b)    sm = indx sm a b
+expr (BinaryOp Pow a b)      sm = pow sm a b
+expr (BinaryOp Subt a b)     sm = P.Row [expr a sm, P.MO P.Subt, expr b sm]
+expr (EqBinaryOp Eq a b)     sm = mkBOp sm P.Eq a b
+expr (EqBinaryOp NEq a b)    sm = mkBOp sm P.NEq a b
+expr (Operator o d e)        sm = eop sm o d e
+expr (IsIn  a b)             sm = P.Row [expr a sm, P.MO P.IsIn, space sm b]
+expr (RealI c ri)            sm = renderRealInt sm (lookupC (sm ^. stg)
   (sm ^. ckdb) c) ri
 
 lookupC :: Stage -> ChunkDB -> UID -> Symbol
@@ -196,6 +203,8 @@ neg' Operator{}           = True
 neg' (AssocA Mul _)       = True
 neg' (BinaryOp Index _ _) = True
 neg' (UnaryOp _ _)        = True
+neg' (UnaryOpB _ _)       = True
+neg' (UnaryOpVec _ _)     = True
 neg' (C _)                = True
 neg' _                    = False
 
@@ -222,12 +231,12 @@ indx sm a i = P.Row [P.Row [expr a sm], P.Sub $ expr i sm]
 -- | For printing expressions that call something
 call :: PrintingInformation -> UID -> [Expr] -> [(UID,Expr)] -> P.Expr
 call sm f ps ns = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f,
-  parens $ P.Row $ intersperse (P.MO P.Comma) $ map (`expr` sm) ps ++ 
-  zipWith (\n a -> P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) n, 
+  parens $ P.Row $ intersperse (P.MO P.Comma) $ map (`expr` sm) ps ++
+  zipWith (\n a -> P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) n,
   P.MO P.Eq, expr a sm]) (map fst ns) (map snd ns)]
 
 -- | Helper function for translating 'EOperator's
-eop :: PrintingInformation -> ArithOper -> DomainDesc Expr Expr -> Expr -> P.Expr
+eop :: PrintingInformation -> AssocArithOper -> DomainDesc Expr Expr -> Expr -> P.Expr
 eop sm Mul (BoundedDD v Discrete l h) e =
   P.Row [P.MO P.Prod, P.Sub (P.Row [symbol v, P.MO P.Eq, expr l sm]), P.Sup (expr h sm),
          P.Row [expr e sm]]
@@ -238,7 +247,7 @@ eop sm Add (BoundedDD v Continuous l h) e =
   P.Row [P.MO P.Inte, P.Sub (expr l sm), P.Sup (expr h sm),
          P.Row [expr e sm], P.Spc P.Thin, P.Ident "d", symbol v]
 eop sm Add (AllDD v Continuous) e =
-  P.Row [P.MO P.Inte, P.Sub (symbol v), P.Row [expr e sm], P.Spc P.Thin, 
+  P.Row [P.MO P.Inte, P.Sub (symbol v), P.Row [expr e sm], P.Spc P.Thin,
          P.Ident "d", symbol v]
 eop sm Add (BoundedDD v Discrete l h) e =
   P.Row [P.MO P.Summ, P.Sub (P.Row [symbol v, P.MO P.Eq, expr l sm]), P.Sup (expr h sm),
@@ -269,16 +278,16 @@ sFormat Prime  s = P.Row [symbol s, P.MO P.Prime]
 
 -- | Helper for properly rendering exponents
 pow :: PrintingInformation -> Expr -> Expr -> P.Expr
-pow sm a@(AssocA Add _)  b = P.Row [parens (expr a sm), P.Sup (expr b sm)]
+pow sm a@(AssocA Add _)      b = P.Row [parens (expr a sm), P.Sup (expr b sm)]
+pow sm a@(AssocA Mul _)      b = P.Row [parens (expr a sm), P.Sup (expr b sm)]
 pow sm a@(BinaryOp Subt _ _) b = P.Row [parens (expr a sm), P.Sup (expr b sm)]
 pow sm a@(BinaryOp Frac _ _) b = P.Row [parens (expr a sm), P.Sup (expr b sm)]
-pow sm a@(AssocA Mul _)  b = P.Row [parens (expr a sm), P.Sup (expr b sm)]
 pow sm a@(BinaryOp Pow _ _)  b = P.Row [parens (expr a sm), P.Sup (expr b sm)]
-pow sm a                b = P.Row [expr a sm, P.Sup (expr b sm)]
+pow sm a                     b = P.Row [expr a sm, P.Sup (expr b sm)]
 
 -- | Print a RealInterval
 renderRealInt :: PrintingInformation -> Symbol -> RealInterval Expr Expr -> P.Expr
-renderRealInt st s (Bounded (Inc,a) (Inc,b)) = 
+renderRealInt st s (Bounded (Inc,a) (Inc,b)) =
   P.Row [expr a st, P.MO P.LEq, symbol s, P.MO P.LEq, expr b st]
 renderRealInt st s (Bounded (Inc,a) (Exc,b)) =
   P.Row [expr a st, P.MO P.LEq, symbol s, P.MO P.Lt, expr b st]
@@ -299,7 +308,7 @@ spec sm (EmptyS :+: b) = spec sm b
 spec sm (a :+: EmptyS) = spec sm a
 spec sm (a :+: b)      = spec sm a P.:+: spec sm b
 spec _ (S s)           = either error P.S $ checkValidStr s invalidChars
-  where invalidChars   = ['<', '>', '\"', '&', '#', '$', '%', '&', '~', '^', '\\', '{', '}'] 
+  where invalidChars   = ['<', '>', '\"', '&', '#', '$', '%', '&', '~', '^', '\\', '{', '}']
 spec _ (Sy s)          = P.E $ pUnit s
 spec _ Percent         = P.E $ P.MO P.Perc
 spec _ (P s)           = P.E $ symbol s
@@ -307,11 +316,11 @@ spec sm (Ch SymbolStyle s)  = P.E $ symbol $ lookupC (sm ^. stg) (sm ^. ckdb) s
 spec sm (Ch TermStyle s)    = spec sm $ lookupT (sm ^. ckdb) s
 spec sm (Ch ShortStyle s)   = spec sm $ lookupS (sm ^. ckdb) s
 spec sm (Ch PluralTerm s)   = spec sm $ lookupP (sm ^. ckdb) s
-spec sm (Ref (Reference _ (RP rp ra) sn _)) = 
+spec sm (Ref (Reference _ (RP rp ra) sn _)) =
   P.Ref P.Internal ra $ spec sm $ renderShortName (sm ^. ckdb) rp sn
-spec sm (Ref (Reference _ (Citation ra) _ r)) = 
+spec sm (Ref (Reference _ (Citation ra) _ r)) =
   P.Ref P.Cite2    ra (spec sm (renderCitInfo r))
-spec sm (Ref (Reference _ (URI ra) sn _)) = 
+spec sm (Ref (Reference _ (URI ra) sn _)) =
   P.Ref P.External    ra $ spec sm $ renderURI sm sn
 spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
@@ -377,24 +386,24 @@ sec sm depth x@(Section titleLb contents _) = --FIXME: should ShortName be used 
 -- Called internally by layout.
 lay :: PrintingInformation -> Contents -> T.LayoutObj
 lay sm (LlC x) = layLabelled sm x
-lay sm (UlC x) = layUnlabelled sm (x ^. accessContents) 
+lay sm (UlC x) = layUnlabelled sm (x ^. accessContents)
 
 layLabelled :: PrintingInformation -> LabelledContent -> T.LayoutObj
 layLabelled sm x@(LblC _ (Table hdr lls t b)) = T.Table ["table"]
   (map (spec sm) hdr : map (map (spec sm)) lls)
   (P.S $ getRefAdd x)
   b (spec sm t)
-layLabelled sm x@(LblC _ (EqnBlock c))          = T.HDiv ["equation"] 
-  [T.EqnBlock (P.E (expr c sm))] 
+layLabelled sm x@(LblC _ (EqnBlock c))          = T.HDiv ["equation"]
+  [T.EqnBlock (P.E (expr c sm))]
   (P.S $ getRefAdd x)
-layLabelled sm x@(LblC _ (Figure c f wp))     = T.Figure 
+layLabelled sm x@(LblC _ (Figure c f wp))     = T.Figure
   (P.S $ getRefAdd x)
   (spec sm c) f wp
-layLabelled sm x@(LblC _ (Graph ps w h t))    = T.Graph 
+layLabelled sm x@(LblC _ (Graph ps w h t))    = T.Graph
   (map (bimap (spec sm) (spec sm)) ps) w h (spec sm t)
   (P.S $ getRefAdd x)
-layLabelled sm x@(LblC _ (Defini dtyp pairs)) = T.Definition 
-  dtyp (layPairs pairs) 
+layLabelled sm x@(LblC _ (Defini dtyp pairs)) = T.Definition
+  dtyp (layPairs pairs)
   (P.S $ getRefAdd x)
   where layPairs = map (second (map (lay sm)))
 layLabelled sm (LblC _ (Paragraph c))    = T.Paragraph (spec sm c)

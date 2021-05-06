@@ -299,7 +299,7 @@ fctSftyDerivEqn11 = indx1 intNormForce * indx1 shrResC $=
   sy fs * indx1 shearFNoIntsl - indx1 shearRNoIntsl
 
 fctSftyDerivEqn12 :: Expr
-fctSftyDerivEqn12 = - (sy fs * indxn shearFNoIntsl - indxn shearRNoIntsl) /
+fctSftyDerivEqn12 = -(sy fs * indxn shearFNoIntsl - indxn shearRNoIntsl) /
   idx (sy mobShrC) (sy numbSlices - int 1) $= 
   idx (sy intNormForce) (sy numbSlices - int 1) * 
   idx (sy shrResC) (sy numbSlices - int 1)
@@ -329,7 +329,7 @@ fctSftyDerivEqn15 = idx (sy intNormForce) (sy numbSlices - int 1) *
 
 -- Ellipses needed here too
 fctSftyDerivEqn16 :: Expr
-fctSftyDerivEqn16 = - (sy fs * indxn shearFNoIntsl - indxn shearRNoIntsl) /
+fctSftyDerivEqn16 = -(sy fs * indxn shearFNoIntsl - indxn shearRNoIntsl) /
   idx (sy mobShrC) (sy numbSlices - int 1) $= idx (sy mobShrC) (sy numbSlices - 
   int 2) * (idx (sy mobShrC) (sy numbSlices - int 3) * (idx (sy mobShrC) 1 * 
   (sy fs * idx (sy shearFNoIntsl) 1 - idx (sy shearRNoIntsl) 1) + sy fs * 
@@ -341,7 +341,7 @@ fctSftyDerivEqn16 = - (sy fs * indxn shearFNoIntsl - indxn shearRNoIntsl) /
 
 -- Ellipses needed here too
 fctSftyDerivEqn17 :: Expr
-fctSftyDerivEqn17 = - (sy fs * indxn shearFNoIntsl - indxn shearRNoIntsl) $=
+fctSftyDerivEqn17 = -(sy fs * indxn shearFNoIntsl - indxn shearRNoIntsl) $=
   idx (sy mobShrC) (sy numbSlices - int 1) * idx (sy mobShrC) (sy numbSlices - int 2) * idx (sy mobShrC) 1 * (sy fs * indx1 shearFNoIntsl - 
   indx1 shearRNoIntsl) + idx (sy mobShrC) (sy numbSlices - int 1) * idx (sy mobShrC) (sy numbSlices - int 2) * idx (sy mobShrC) 2 * (sy fs * 
   idx (sy shearFNoIntsl) 2 - idx (sy shearRNoIntsl) 2) +

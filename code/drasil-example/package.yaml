@@ -11,21 +11,17 @@ extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
-- lens >= 4.12
-- containers >= 0.5.5.1
-- pretty >= 1.1.1.1
-- mtl >= 2.2.1
-- directory >= 1.2.6.2
-- split >= 0.2.3.1
-- drasil-lang
-- drasil-metadata
-- drasil-data
+- lens
+- directory
 - drasil-code
+- drasil-data
 - drasil-database
-- drasil-printers
+- drasil-docLang
 - drasil-gen
 - drasil-gool
-- drasil-docLang
+- drasil-lang
+- drasil-metadata
+- drasil-printers
 - drasil-theory
 - drasil-utils
 
@@ -64,10 +60,8 @@ executables:
     - Drasil.DblPendulum.Goals
     - Drasil.DblPendulum.DataDefs
     - Drasil.DblPendulum.Unitals
-    - Drasil.DblPendulum.TMods
     - Drasil.Projectile.References
     - Drasil.DblPendulum.GenDefs
-    - Drasil.DblPendulum.References
     - Drasil.DblPendulum.IMods
     - Drasil.DblPendulum.Requirements
 

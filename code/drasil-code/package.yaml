@@ -11,16 +11,14 @@ extra-source-files: []
 
 dependencies:
 - base >= 4.7 && < 5
-- lens >= 4.12
-- containers >= 0.5.5.1
-- pretty >= 1.1.1.1
-- mtl >= 2.2.1
-- directory >= 1.2.6.2
-- filepath >= 1.4.1
-- split >= 0.2.3.1
-- MissingH >= 1.4.0.1
-- parsec >= 3.1.9
-- drasil-lang 
+- lens
+- containers
+- pretty
+- mtl
+- directory
+- filepath
+- split
+- drasil-lang
 - drasil-utils
 - drasil-build
 - drasil-theory
@@ -145,5 +143,5 @@ executables:
     ghc-options:
     - -threaded
     - -O2
-    dependencies:	
+    dependencies:
     - drasil-code

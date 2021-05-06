@@ -1,5 +1,7 @@
 module Drasil.PDController.Main (main) where
 
+import GHC.IO.Encoding (setLocaleEncoding, utf8)
+
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODELSodaPkg)
 
 import Drasil.PDController.Body (pidODEInfo, printSetting, si, srs)
@@ -31,7 +33,8 @@ codeChoices
                    odeLib = [scipyODELSodaPkg], odes = [pidODEInfo]}
 
 main :: IO ()
-main
-  = do gen (DocSpec SRS "PDController_SRS") srs printSetting
-       gen (DocSpec Website "PDController_SRS") srs printSetting
-       genCode codeChoices codeSpecs
+main = do
+  setLocaleEncoding utf8
+  gen (DocSpec SRS "PDController_SRS") srs printSetting
+  gen (DocSpec Website "PDController_SRS") srs printSetting
+  genCode codeChoices codeSpecs

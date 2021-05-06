@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 56d4019723a645515190e903e7f8778e175be8df515b6e12aad1e270c4817a3e
+-- hash: 6f978264fbfc29f81be470962339098152c6c923043130ebd7d8a21ddf9e3ea2
 
 name:           drasil-docLang
 version:        0.1.26.0
@@ -51,22 +51,16 @@ library
       ./
   ghc-options: -Wall -Wredundant-constraints
   build-depends:
-      MissingH >=1.4.0.1
-    , base >=4.7 && <5
-    , containers >=0.5.5.1
-    , data-fix (>=0.0.4 && <=1.0)
-    , directory >=1.2.6.2
+      base >=4.7 && <5
+    , containers
     , drasil-data
     , drasil-database
     , drasil-lang
     , drasil-printers
     , drasil-theory
     , drasil-utils
-    , lens >=4.12
-    , mtl >=2.2.1
-    , multiplate >=0.0.2
-    , parsec >=3.1.9
-    , pretty >=1.1.1.1
-    , split >=0.2.3.1
-    , transformers >=0.4.2.0
+    , lens
+    , multiplate
+    , pretty
+    , transformers
   default-language: Haskell2010

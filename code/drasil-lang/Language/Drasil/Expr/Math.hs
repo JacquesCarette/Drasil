@@ -5,7 +5,7 @@ import Prelude hiding (sqrt)
 import Control.Lens ((^.))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Expr (Expr(..), Relation, DerivType(..), ($^), BinOp(..),
-  ArithOper(..), UFunc(..), Completeness(..))
+  AssocArithOper(..), UFunc(..), UFuncB(..), UFuncVec(..), Completeness(..))
 import Language.Drasil.Space (Space, RTopology(..), DomainDesc(..), RealInterval)
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
 import Language.Drasil.Classes (IsArgumentName)
@@ -62,9 +62,17 @@ arctan = UnaryOp Arctan
 exp :: Expr -> Expr
 exp = UnaryOp Exp
 
--- | Smart constructor for the dimension of a vector
+-- | Smart constructor for calculating the dimension of a vector
 dim :: Expr -> Expr
-dim = UnaryOp Dim
+dim = UnaryOpVec Dim
+
+-- | Smart constructor for calculating the normal form of a vector
+norm :: Expr -> Expr
+norm = UnaryOpVec Norm
+
+-- | Smart constructor for applying logical negation to an expression
+not_ :: Expr -> Expr
+not_ = UnaryOpB Not
 
 -- | Smart constructor for indexing
 idx :: Expr -> Expr -> Expr

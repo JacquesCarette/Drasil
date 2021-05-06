@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 2346791986374e197b6a3643f1c113e953ec01f26ca147b17d6fea067c526980
+-- hash: ff5b072bc1679dfabec5e91a626d8b32c45d41f73b8f972143bd0819d4963cc2
 
 name:           drasil-example
 version:        0.1.24.0
@@ -30,10 +30,8 @@ executable dblpendulum
       Drasil.DblPendulum.Goals
       Drasil.DblPendulum.DataDefs
       Drasil.DblPendulum.Unitals
-      Drasil.DblPendulum.TMods
       Drasil.Projectile.References
       Drasil.DblPendulum.GenDefs
-      Drasil.DblPendulum.References
       Drasil.DblPendulum.IMods
       Drasil.DblPendulum.Requirements
   hs-source-dirs:
@@ -41,8 +39,7 @@ executable dblpendulum
   ghc-options: -Wall -Wredundant-constraints -threaded -O2 -main-is Drasil.DblPendulum.Main
   build-depends:
       base >=4.7 && <5
-    , containers >=0.5.5.1
-    , directory >=1.2.6.2
+    , directory
     , drasil-code
     , drasil-data
     , drasil-database
@@ -54,10 +51,7 @@ executable dblpendulum
     , drasil-printers
     , drasil-theory
     , drasil-utils
-    , lens >=4.12
-    , mtl >=2.2.1
-    , pretty >=1.1.1.1
-    , split >=0.2.3.1
+    , lens
   default-language: Haskell2010
 
 executable gamephysics
@@ -80,8 +74,7 @@ executable gamephysics
   ghc-options: -Wall -Wredundant-constraints -threaded -O2 -main-is Drasil.GamePhysics.Main
   build-depends:
       base >=4.7 && <5
-    , containers >=0.5.5.1
-    , directory >=1.2.6.2
+    , directory
     , drasil-code
     , drasil-data
     , drasil-database
@@ -93,10 +86,7 @@ executable gamephysics
     , drasil-printers
     , drasil-theory
     , drasil-utils
-    , lens >=4.12
-    , mtl >=2.2.1
-    , pretty >=1.1.1.1
-    , split >=0.2.3.1
+    , lens
   default-language: Haskell2010
 
 executable glassbr
@@ -122,8 +112,7 @@ executable glassbr
   ghc-options: -Wall -Wredundant-constraints -threaded -O2 -main-is Drasil.GlassBR.Main
   build-depends:
       base >=4.7 && <5
-    , containers >=0.5.5.1
-    , directory >=1.2.6.2
+    , directory
     , drasil-code
     , drasil-data
     , drasil-database
@@ -135,10 +124,7 @@ executable glassbr
     , drasil-printers
     , drasil-theory
     , drasil-utils
-    , lens >=4.12
-    , mtl >=2.2.1
-    , pretty >=1.1.1.1
-    , split >=0.2.3.1
+    , lens
   default-language: Haskell2010
 
 executable hghc
@@ -151,8 +137,7 @@ executable hghc
   ghc-options: -Wall -Wredundant-constraints -threaded -O2 -main-is Drasil.HGHC.Main
   build-depends:
       base >=4.7 && <5
-    , containers >=0.5.5.1
-    , directory >=1.2.6.2
+    , directory
     , drasil-code
     , drasil-data
     , drasil-database
@@ -164,10 +149,7 @@ executable hghc
     , drasil-printers
     , drasil-theory
     , drasil-utils
-    , lens >=4.12
-    , mtl >=2.2.1
-    , pretty >=1.1.1.1
-    , split >=0.2.3.1
+    , lens
   default-language: Haskell2010
 
 executable nopcm
@@ -202,8 +184,7 @@ executable nopcm
   ghc-options: -Wall -Wredundant-constraints -threaded -O2 -main-is Drasil.NoPCM.Main
   build-depends:
       base >=4.7 && <5
-    , containers >=0.5.5.1
-    , directory >=1.2.6.2
+    , directory
     , drasil-code
     , drasil-data
     , drasil-database
@@ -215,10 +196,7 @@ executable nopcm
     , drasil-printers
     , drasil-theory
     , drasil-utils
-    , lens >=4.12
-    , mtl >=2.2.1
-    , pretty >=1.1.1.1
-    , split >=0.2.3.1
+    , lens
   default-language: Haskell2010
 
 executable pdController
@@ -242,8 +220,7 @@ executable pdController
   ghc-options: -Wall -Wredundant-constraints -threaded -O2 -main-is Drasil.PDController.Main
   build-depends:
       base >=4.7 && <5
-    , containers >=0.5.5.1
-    , directory >=1.2.6.2
+    , directory
     , drasil-code
     , drasil-data
     , drasil-database
@@ -255,10 +232,7 @@ executable pdController
     , drasil-printers
     , drasil-theory
     , drasil-utils
-    , lens >=4.12
-    , mtl >=2.2.1
-    , pretty >=1.1.1.1
-    , split >=0.2.3.1
+    , lens
   default-language: Haskell2010
 
 executable projectile
@@ -268,7 +242,6 @@ executable projectile
       Drasil.Projectile.Body
       Drasil.Projectile.Concepts
       Drasil.Projectile.DataDefs
-      Drasil.Projectile.Expressions
       Drasil.Projectile.Figures
       Drasil.Projectile.GenDefs
       Drasil.Projectile.Goals
@@ -281,8 +254,7 @@ executable projectile
   ghc-options: -Wall -Wredundant-constraints -threaded -O2 -main-is Drasil.Projectile.Main
   build-depends:
       base >=4.7 && <5
-    , containers >=0.5.5.1
-    , directory >=1.2.6.2
+    , directory
     , drasil-code
     , drasil-data
     , drasil-database
@@ -294,10 +266,7 @@ executable projectile
     , drasil-printers
     , drasil-theory
     , drasil-utils
-    , lens >=4.12
-    , mtl >=2.2.1
-    , pretty >=1.1.1.1
-    , split >=0.2.3.1
+    , lens
   default-language: Haskell2010
 
 executable ssp
@@ -322,8 +291,7 @@ executable ssp
   ghc-options: -Wall -Wredundant-constraints -threaded -O2 -main-is Drasil.SSP.Main
   build-depends:
       base >=4.7 && <5
-    , containers >=0.5.5.1
-    , directory >=1.2.6.2
+    , directory
     , drasil-code
     , drasil-data
     , drasil-database
@@ -335,10 +303,7 @@ executable ssp
     , drasil-printers
     , drasil-theory
     , drasil-utils
-    , lens >=4.12
-    , mtl >=2.2.1
-    , pretty >=1.1.1.1
-    , split >=0.2.3.1
+    , lens
   default-language: Haskell2010
 
 executable swhs
@@ -362,8 +327,7 @@ executable swhs
   ghc-options: -Wall -Wredundant-constraints -threaded -O2 -main-is Drasil.SWHS.Main
   build-depends:
       base >=4.7 && <5
-    , containers >=0.5.5.1
-    , directory >=1.2.6.2
+    , directory
     , drasil-code
     , drasil-data
     , drasil-database
@@ -375,10 +339,7 @@ executable swhs
     , drasil-printers
     , drasil-theory
     , drasil-utils
-    , lens >=4.12
-    , mtl >=2.2.1
-    , pretty >=1.1.1.1
-    , split >=0.2.3.1
+    , lens
   default-language: Haskell2010
 
 executable template
@@ -390,8 +351,7 @@ executable template
   ghc-options: -Wall -Wredundant-constraints -threaded -O2 -main-is Drasil.Template.Main
   build-depends:
       base >=4.7 && <5
-    , containers >=0.5.5.1
-    , directory >=1.2.6.2
+    , directory
     , drasil-code
     , drasil-data
     , drasil-database
@@ -403,8 +363,5 @@ executable template
     , drasil-printers
     , drasil-theory
     , drasil-utils
-    , lens >=4.12
-    , mtl >=2.2.1
-    , pretty >=1.1.1.1
-    , split >=0.2.3.1
+    , lens
   default-language: Haskell2010

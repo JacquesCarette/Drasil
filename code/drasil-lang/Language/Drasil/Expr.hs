@@ -19,23 +19,35 @@ infixr 4 $=
 infixr 9 $&&
 infixr 9 $||
 
---Known math functions.
+-- Known math functions.
 -- TODO: Move the below to a separate file somehow. How to go about it?
 
-data BinOp = Frac | Pow | Subt | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | Index
+-- | Binary functions
+data BinOp = Frac | Pow | Subt | Lt | Gt | LEq | GEq | Index
   | Dot | Cross
   deriving Eq
 
-data ArithOper = Add | Mul deriving (Eq)
+data EqBinOp = Eq | NEq
 
-data BoolOper = And | Or deriving (Eq)
+data BoolBinOp = Impl | Iff
+
+data AssocArithOper = Add | Mul
+  deriving Eq
+
+data AssocBoolOper = And | Or
+  deriving Eq
 
 -- | Unary functions
-data UFunc = Norm | Abs | Log | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin
-  | Arccos | Arctan | Exp | Sqrt | Not | Neg | Dim
+data UFunc = Abs | Log | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin
+  | Arccos | Arctan | Exp | Sqrt | Neg
+
+data UFuncB = Not
+
+data UFuncVec = Norm | Dim
 
 -- | For case expressions
-data Completeness = Complete | Incomplete deriving (Eq)
+data Completeness = Complete | Incomplete
+  deriving Eq
 
 -- | Drasil Expressions
 data Expr where
@@ -43,8 +55,8 @@ data Expr where
   Int      :: Integer -> Expr
   Str      :: String -> Expr
   Perc     :: Integer -> Integer -> Expr
-  AssocA   :: ArithOper -> [Expr] -> Expr
-  AssocB   :: BoolOper  -> [Expr] -> Expr
+  AssocA   :: AssocArithOper -> [Expr] -> Expr
+  AssocB   :: AssocBoolOper  -> [Expr] -> Expr
   -- | Derivative, syntax is:
   --   Type (Partial or total) -> principal part of change -> with respect to
   --   For example: Deriv Part y x1 would be (dy/dx1)
@@ -57,10 +69,10 @@ data Expr where
   --   F(x,y) would be (FCall F [x,y]) or sim.
   --   F(x,n=y) would be (FCall F [x] [(n,y)]).
   FCall    :: UID -> [Expr] -> [(UID, Expr)] -> Expr
-  -- | Actor creation given UID and parameters 
-  New      :: UID -> [Expr] -> [(UID, Expr)] -> Expr 
-  -- | Message an actor: 
-  --   1st UID is the actor, 
+  -- | Actor creation given UID and parameters
+  New      :: UID -> [Expr] -> [(UID, Expr)] -> Expr
+  -- | Message an actor:
+  --   1st UID is the actor,
   --   2nd UID is the method
   Message  :: UID -> UID -> [Expr] -> [(UID, Expr)] -> Expr
   -- | Access a field of an actor:
@@ -70,27 +82,34 @@ data Expr where
   -- | For multi-case expressions, each pair represents one case
   Case     :: Completeness -> [(Expr,Relation)] -> Expr
   Matrix   :: [[Expr]] -> Expr
-  UnaryOp  :: UFunc -> Expr -> Expr
-  BinaryOp :: BinOp -> Expr -> Expr -> Expr
+  
+  -- | Unary functions/operations
+  UnaryOp    :: UFunc -> Expr -> Expr
+  UnaryOpB   :: UFuncB -> Expr -> Expr
+  UnaryOpVec :: UFuncVec -> Expr -> Expr
+
+  BinaryOp     :: BinOp -> Expr -> Expr -> Expr
+  BoolBinaryOp :: BoolBinOp -> Expr -> Expr -> Expr
+  EqBinaryOp   :: EqBinOp -> Expr -> Expr -> Expr
+
   -- | Operators are generalized arithmetic operators over a |DomainDesc|
   --   of an |Expr|.  Could be called |BigOp|.
   --   ex: Summation is represented via |Add| over a discrete domain
-  Operator :: ArithOper -> DomainDesc Expr Expr -> Expr -> Expr
+  Operator :: AssocArithOper -> DomainDesc Expr Expr -> Expr -> Expr
   -- | element of
-  IsIn     :: Expr -> Space -> Expr 
+  IsIn     :: Expr -> Space -> Expr
   -- | a different kind of 'element of'
-  RealI    :: UID -> RealInterval Expr Expr -> Expr 
+  RealI    :: UID -> RealInterval Expr Expr -> Expr
 
-($=), ($!=), ($<), ($>), ($<=), ($>=), ($=>), ($<=>), ($.), ($-),
-  ($/), ($^) :: Expr -> Expr -> Expr
-($=)   = BinaryOp Eq
-($!=)  = BinaryOp NEq
+($=), ($!=) :: Expr -> Expr -> Expr
+($=)   = EqBinaryOp Eq
+($!=)  = EqBinaryOp NEq
+
+($<), ($>), ($<=), ($>=), ($.), ($-), ($/), ($^) :: Expr -> Expr -> Expr
 ($<)   = BinaryOp Lt
 ($>)   = BinaryOp Gt
 ($<=)  = BinaryOp LEq
 ($>=)  = BinaryOp GEq
-($=>)  = BinaryOp Impl
-($<=>) = BinaryOp Iff
 ($.)   = BinaryOp Dot
 ($-)   = BinaryOp Subt
 ($/)   = BinaryOp Frac
@@ -100,26 +119,33 @@ data Expr where
 a $&& b = AssocB And [a,b]
 a $|| b = AssocB Or  [a,b]
 
+($=>), ($<=>) :: Expr -> Expr -> Expr
+($=>)  = BoolBinaryOp Impl
+($<=>) = BoolBinaryOp Iff
+
 type Variable = String
 
-data DerivType = Part | Total deriving Eq
+data DerivType = Part | Total
+  deriving Eq
 
 instance Num Expr where
-  (Int 0) + b = b
-  a + (Int 0) = a
+  (Int 0)        + b              = b
+  a              + (Int 0)        = a
   (AssocA Add l) + (AssocA Add m) = AssocA Add (l ++ m)
-  (AssocA Add l) + b = AssocA Add (l ++ [b])
-  a + (AssocA Add l) = AssocA Add (a : l)
-  a + b = AssocA Add [a, b]
+  (AssocA Add l) + b              = AssocA Add (l ++ [b])
+  a              + (AssocA Add l) = AssocA Add (a : l)
+  a              + b              = AssocA Add [a, b]
 
-  (AssocA Mul l)*(AssocA Mul m) = AssocA Mul (l ++ m)
-  (AssocA Mul l)*b = AssocA Mul (l ++ [b])
-  a*(AssocA Mul l) = AssocA Mul (a : l)
-  a * b = AssocA Mul [a, b]
+  (AssocA Mul l) * (AssocA Mul m) = AssocA Mul (l ++ m)
+  (AssocA Mul l) * b              = AssocA Mul (l ++ [b])
+  a              * (AssocA Mul l) = AssocA Mul (a : l)
+  a              * b              = AssocA Mul [a, b]
+
   a - b = BinaryOp Subt a b
+  
   fromInteger = Int
-  abs = UnaryOp Abs
-  negate = UnaryOp Neg
+  abs         = UnaryOp Abs
+  negate      = UnaryOp Neg
 
   -- this is a Num wart
   signum _ = error "should not use signum in expressions"

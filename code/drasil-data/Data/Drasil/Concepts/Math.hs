@@ -1,6 +1,6 @@
 module Data.Drasil.Concepts.Math where
 
-import Language.Drasil hiding (number)
+import Language.Drasil hiding (number, norm)
 import Language.Drasil.ShortHands (lX, lY, lZ)
 import Data.Drasil.Domains (mathematics)
 import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource)

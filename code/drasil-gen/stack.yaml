@@ -36,6 +36,7 @@ packages:
 - ../drasil-database
 - ../drasil-gool
 - ../drasil-lang
+- ../drasil-metadata
 - ../drasil-printers
 - ../drasil-theory
 - ../drasil-utils

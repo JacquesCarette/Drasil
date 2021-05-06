@@ -1,6 +1,7 @@
 # This script may be a little overzealous in testing deploy (without actually deploying) based on what git diff returns.
 
 if [ -z "$TRAVIS_PULL_REQUEST_BRANCH" ]; then
+  echo "Missing TRAVIS_PULL_REQUEST_BRANCH."
   exit 0
 fi
 

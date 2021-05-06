@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 9a7338f9871bcf763b4d330178b79fc63e5113749173eb12caab789e093fc864
+-- hash: 3cc05d5aac512ed3b6a641929f6bd7928cfed2a17c9f8d713503812e9764cabd
 
 name:           drasil-theory
 version:        0.1.0.0
@@ -36,16 +36,8 @@ library
       ./
   ghc-options: -Wall -Wredundant-constraints
   build-depends:
-      MissingH >=1.4.0.1
-    , base >=4.7 && <5
-    , containers >=0.5.5.1
-    , data-fix (>=0.0.4 && <=1.0)
-    , directory >=1.2.6.2
+      base >=4.7 && <5
     , drasil-lang
     , drasil-metadata
-    , lens >=4.12
-    , mtl >=2.2.1
-    , parsec >=3.1.9
-    , pretty >=1.1.1.1
-    , split >=0.2.3.1
+    , lens
   default-language: Haskell2010

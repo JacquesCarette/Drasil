@@ -35,7 +35,7 @@ likeChgUTP = cic "likeChgUTP" (
 --
 likeChgTCVOD = cic "likeChgTCVOD" (
   foldlSent [chgsStart assumpTHCCoT (S "The"), phrase tempC, S "will change over",
-  S "course" `ofThe` S "day, depending", S "on the", phrase energy,
+  S "course" `the_ofThe` S "day, depending", S "on the", phrase energy,
   S "received from the sun"]) "Temperature-Coil-Variable-Over-Day" likeChgDom
 --
 likeChgTCVOL = cic "likeChgTCVOL" (
@@ -50,7 +50,7 @@ likeChgDT = cic "likeChgDT" (
 --
 likeChgDITPW = cic "likeChgDITPW" (
   foldlSent [chgsStart assumpSITWP (S "To add more flexibility to the"),
-  phrase simulation `sC` (phrase tempInit `ofThe` phrase water) `andThe`
+  phrase simulation `sC` (phrase tempInit `the_ofThe` phrase water) `andThe`
   short phsChgMtrl, S "could be allowed to have different",
   plural value] ) "Different-Initial-Temps-PCM-Water" likeChgDom
 --

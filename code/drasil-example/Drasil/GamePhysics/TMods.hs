@@ -92,7 +92,7 @@ newtonSLRNotes :: [Sentence]
 newtonSLRNotes = map foldlSent [
   [S "The net", getTandS torque, S "on a", phrase rigidBody `sIs`
    S "proportional to its", getTandS angularAccel `sC` S "where",
-   ch momentOfInertia, S "denotes", phrase momentOfInertia `ofThe`
+   ch momentOfInertia, S "denotes", phrase momentOfInertia `the_ofThe`
    phrase rigidBody, S "as the", phrase constant `sOf` S "proportionality"],
   [S "We also assume that all", plural rigidBody, S "involved" `sAre`
    phrase twoD, fromSource assumpOD]]

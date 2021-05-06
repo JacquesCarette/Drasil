@@ -104,13 +104,13 @@ assumpS11 = foldlSent [
   S "constant; they do not decrease. This implies that the",
   phrase tempInit, Ref $ makeRef2 assumpSITWP, S "is less than (or equal)"
   `toThe` phrase tempC]
-assumpS12 = foldlSent [phrase tempInit `ofThe'` phrase water `andThe`
+assumpS12 = foldlSent [phrase tempInit `the_ofThe'` phrase water `andThe`
   short phsChgMtrl `isThe` S "same"]
 assumpS13 = foldlSent [
   S "The", phrase simulation, S "will start with the",
   short phsChgMtrl, S "in a", solid ^. defn]
 assumpS14 mat = foldlSent [
-  (S "operating" +:+ phrase temp +:+ S "range") `ofThe'` phrase system,
+  (S "operating" +:+ phrase temp +:+ S "range") `the_ofThe'` phrase system,
   S "is such that the", mat,
   S "is always in" +:+. (liquid ^. defn), S "That is" `sC`
   S "the", phrase temp, S "will not drop below the",
@@ -125,7 +125,7 @@ assumpS16 = foldlSent [
   phrase water `sOr` S "the", short phsChgMtrl :+:
   S "; therefore" `sC` S "the", phrase volHtGen, S "is zero"]
 assumpS17 = foldlSent [
-  (phrase vol +:+ phrase change) `ofThe'` short phsChgMtrl,
+  (phrase vol +:+ phrase change) `the_ofThe'` short phsChgMtrl,
   S "due to", phrase CT.melting, S "is negligible"]
 assumpS18 = foldlSent [
   S "The", short phsChgMtrl `sIs` S "either in a", liquid ^. defn,
@@ -137,7 +137,7 @@ assumpS19 = foldlSent [
   Sy (unit_symb temp) `sC` S "respectively"]
 assumpS20 = foldlSent [
   S "When considering the", phrase wVol `sIn` S "the",
-  phrase tank `sC` (phrase vol `ofThe` phrase coil),
+  phrase tank `sC` (phrase vol `the_ofThe` phrase coil),
   S "is assumed to be negligible"]
   --FIXME , sSqBr $ makeRefS req2]
 

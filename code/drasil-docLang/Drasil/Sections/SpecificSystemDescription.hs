@@ -74,7 +74,7 @@ physSystDesc progName parts fg other = SRS.physSyst (intro : bullets : LlC fg : 
                 S "as shown in", makeRef2S fg `sC` S "includes the following", plural element]
         bullets = enumSimpleU 1 (short physSyst) parts
 
---List all the given inputs. Might be possible to use ofThe combinator from utils.hs
+--List all the given inputs. Might be possible to use the_ofThe combinator from utils.hs
 goalStmtF :: [Sentence] -> [Contents] -> Section
 goalStmtF givenInputs otherContents = SRS.goalStmt (intro:otherContents) []
   where intro = mkParagraph $ S "Given" +:+ foldlList Comma List givenInputs `sC` S "the" +:+ 
@@ -85,7 +85,7 @@ solutionCharSpecIntro :: (Idea a) => a -> Section -> Contents
 solutionCharSpecIntro progName instModelSection = foldlSP [S "The", plural inModel, 
   S "that govern", short progName, S "are presented in" +:+. 
   makeRef2S instModelSection, S "The", phrase information, S "to understand", 
-  S "meaning" `ofThe` plural inModel, 
+  S "meaning" `the_ofThe` plural inModel, 
   S "and their derivation is also presented, so that the", plural inModel, 
   S "can be verified"]
 
@@ -175,7 +175,7 @@ uncertSent = foldlSent [S "The", phrase uncertainty, phrase column,
 
 conservConsSent :: Sentence
 conservConsSent = foldlSent [S "The", plural constraint `sAre` S "conservative" `sC`
-  S "to give", phrase user `ofThe` phrase model,
+  S "to give", phrase user `the_ofThe` phrase model,
   S "the flexibility to experiment with unusual situations"]
 
 typValSent :: Sentence
@@ -184,7 +184,7 @@ typValSent = foldlSent [S "The", phrase column `sOf` S "typical",
 
 auxSpecSent :: Sentence
 auxSpecSent = foldlSent [makeRef2S $ SRS.valsOfAuxCons [] [], S "gives",
-  plural value `ofThe` phrase specification, plural parameter, S "used in",
+  plural value `the_ofThe` phrase specification, plural parameter, S "used in",
   makeRef2S $ inDataConstTbl ([] :: [UncertQ])]
 
 mkDataConstraintTable :: [(Sentence, [Sentence])] -> String -> Sentence -> LabelledContent

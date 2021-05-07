@@ -69,7 +69,7 @@ accelGravityRC = makeRC "accelGravityRC" (nounPhraseSP "Acceleration due to grav
   accelGravityDesc accelGravityRel
 
 accelGravityDesc :: Sentence
-accelGravityDesc = foldlSent [S "If one of the", plural QPP.mass, S "is much larger than the other",
+accelGravityDesc = foldlSent [S "If one of the", plural QPP.mass, S "is much larger than the other" `sC`
   S "it is convenient to define a gravitational field around the larger mass as shown above.",
   S "The negative sign in the equation indicates that the", phrase QP.force, S "is an attractive",
   phrase QP.force]

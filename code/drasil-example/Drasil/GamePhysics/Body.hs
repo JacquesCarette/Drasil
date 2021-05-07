@@ -223,7 +223,7 @@ organizationOfDocumentsIntro = foldlSent
 sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
   [makeRef2S sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
-   S "A circle represents an external entity outside the" +:+ phrase software
+   S "A circle represents an entity external to the" +:+ phrase software
    `sC` S "the", phrase user, S "in this case. A rectangle represents the",
    phrase softwareSys, S "itself", sParen (short gamePhysics) +:+. EmptyS,
    S "Arrows are used to show the data flow between the" +:+ phrase system,

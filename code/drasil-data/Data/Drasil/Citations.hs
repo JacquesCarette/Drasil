@@ -63,7 +63,7 @@ pointSource = cMisc
   "pointSource"
 
 -- Wikipedia
-dampingSource, accelerationWiki, velocityWiki, cartesianWiki :: Citation
+dampingSource, accelerationWiki, velocityWiki, cartesianWiki, laplaceWiki, pidWiki :: Citation
 
 dampingSource = cMisc
   [author [wikiAuthors], title "Damping",
@@ -86,6 +86,20 @@ cartesianWiki = cMisc
   howPublishedU "https://en.wikipedia.org/wiki/Cartesian_coordinate_system",
   month Jun, year 2019]
   "cartesianWiki"
+
+laplaceWiki
+  = cMisc
+      [author [wikiAuthors], title "Laplace transform",
+       howPublishedU "https://en.wikipedia.org/wiki/Laplace_transform",
+       month Nov, year 2020]
+      "laplaceWiki"
+
+pidWiki
+  = cMisc
+      [author [wikiAuthors], title "PID controller",
+       howPublishedU "https://en.wikipedia.org/wiki/PID_controller", month Oct,
+       year 2020]
+      "pidWiki"
 
 ------------------------
 -- COMMON CITE-FIELDS --

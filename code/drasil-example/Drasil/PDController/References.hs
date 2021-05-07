@@ -1,27 +1,12 @@
 module Drasil.PDController.References where
-import Data.Drasil.Citations (smithLai2005)
-import Data.Drasil.People (wikiAuthors)
+import Data.Drasil.Citations (smithLai2005, laplaceWiki, pidWiki)
 
 import Language.Drasil
 
 citations :: BibRef
-citations = [pidWiki, laplaceWiki, johnson2008, abbasi2015, smithLai2005]
+citations = [johnson2008, abbasi2015, smithLai2005, laplaceWiki, pidWiki]
 
-pidWiki, johnson2008, abbasi2015, laplaceWiki :: Citation
-
-laplaceWiki
-  = cMisc
-      [author [wikiAuthors], title "Laplace transform",
-       howPublishedU "https://en.wikipedia.org/wiki/Laplace_transform",
-       month Nov, year 2020]
-      "laplaceWiki"
-
-pidWiki
-  = cMisc
-      [author [wikiAuthors], title "PID controller",
-       howPublishedU "https://en.wikipedia.org/wiki/PID_controller", month Oct,
-       year 2020]
-      "pidWiki"
+johnson2008, abbasi2015 :: Citation
 
 pidCtrlEditor1, pidCtrlEditor2 :: Person
 pidCtrlEditor1 = personWM "Michael" ["A"] "Johnson"

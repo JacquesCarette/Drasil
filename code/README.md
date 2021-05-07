@@ -62,8 +62,8 @@ More to come as questions arise.
 -------------------------------------------------
 
 See the 
-[cheat sheet on Data Types](https://github.com/JacquesCarette/Drasil/blob/master/Dan/DataTypes.xlsx) 
-(located in ../Dan/DataTypes.xlsx) for more information on which chunk types are instances
+[cheat sheet on Data Types](https://github.com/JacquesCarette/Drasil/blob/master/People/Dan/DataTypes.xlsx) 
+(located in ../People/Dan/DataTypes.xlsx) for more information on which chunk types are instances
 of which classes.
 
 -------------------------------------------------

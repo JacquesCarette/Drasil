@@ -61,7 +61,7 @@ inputInitialCondsDesc = foldlSent [S "Input the initial", foldlList Comma List
   plural CP.rigidBody]
 
 inputSurfacePropsDesc = foldlSent [S "Input", (phrase CM.surface +:+
-  plural property) `ofThe` plural body, S "such as", phrase CP.friction `sOr`
+  plural property) `the_ofThe` plural body, S "such as", phrase CP.friction `sOr`
   phrase CP.elasticity]
 
 verifyPhysConsDesc = foldlSent [S "Verify that the", plural input_,
@@ -130,6 +130,6 @@ understandability = cic "understandability" (foldlSent [
 
 maintainability :: ConceptInstance
 maintainability = cic "maintainability" (foldlSent [
-  S "development time for any " `ofThe'` S "likely changes should not exceed", 
+  S "development time for any " `the_ofThe'` S "likely changes should not exceed", 
   addPercent (10 :: Integer), S "percent of the original development time"
   ]) "Maintainability" nonFuncReqDom

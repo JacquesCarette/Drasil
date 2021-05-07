@@ -1,10 +1,7 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: June 17, 2019
+Last updated: May 7, 2021
 --------------------------------------------------
-
-**src**
-  - Manually created source code for Projectile
 
 Assumptions.hs
   - The assumptions for Projectile

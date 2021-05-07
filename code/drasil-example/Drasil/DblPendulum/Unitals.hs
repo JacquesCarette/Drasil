@@ -12,7 +12,7 @@ import Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
 import Data.Drasil.SI_Units (metre, degree, radian)
 import qualified Data.Drasil.Quantities.Physics as QP (position, ixPos, force, velocity,
   angularVelocity, angularAccel, gravitationalAccel, tension, acceleration, yAccel,
-  xAccel, yVel, xVel, iyPos, time, position, torque, momentOfInertia, angularDisplacement,
+  xAccel, yVel, xVel, iyPos, time, torque, momentOfInertia, angularDisplacement,
   angularFrequency, frequency, period)
 import Data.Drasil.Concepts.Physics (pendulum, twoD)
 import Data.Drasil.Concepts.Math as CM (angle)

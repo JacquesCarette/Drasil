@@ -1,15 +1,11 @@
 module Drasil.GlassBR.TMods (tMods, pbIsSafe, lrIsSafe) where
 
 import Language.Drasil
-import Language.Drasil.Code (relToQD) -- FIXME, this should not be needed
-import Database.Drasil (cdb)
 import Theory.Drasil (TheoryModel, tm)
 
-import Drasil.GlassBR.IMods (symb)
 import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (isSafeLoad, isSafeProb, pbTolfail, probFail,
   tmDemand, tmLRe)
-import Drasil.GlassBR.Symbols (thisSymbols)
 
 {--}
 
@@ -40,16 +36,16 @@ lrIsSafeDesc :: Sentence
 lrIsSafeDesc = tModDesc isSafeLoad
 
 pbIsSafe :: TheoryModel
-pbIsSafe = tm (cw pbIsSafeRC) 
+pbIsSafe = tm (cw pbIsSafeQD) 
   [qw isSafeProb, qw probFail, qw pbTolfail] ([] :: [ConceptChunk])
-  [relToQD locSymbMap pbIsSafeRC] [sy isSafeProb $= sy probFail $< sy pbTolfail] [] [makeCite astm2009]
+  [pbIsSafeQD] [sy isSafeProb $= pbIsSafeExpr] [] [makeCite astm2009]
   "isSafeProb" [pbIsSafeDesc]
-  where locSymbMap = cdb thisSymbols ([] :: [IdeaDict]) symb
-                          ([] :: [UnitDefn]) [] [] [] [] [] [] []
 
-pbIsSafeRC :: RelationConcept
-pbIsSafeRC = makeRC "safetyProbability" (nounPhraseSP "Safety Probability")
-  pbIsSafeDesc (sy isSafeProb $= sy probFail $< sy pbTolfail)
+pbIsSafeQD :: QDefinition
+pbIsSafeQD = mkQuantDef' isSafeProb (nounPhraseSP "Safety Probability") pbIsSafeExpr
+
+pbIsSafeExpr :: Expr
+pbIsSafeExpr = sy probFail $< sy pbTolfail
 
 pbIsSafeDesc :: Sentence
 pbIsSafeDesc = tModDesc isSafeProb

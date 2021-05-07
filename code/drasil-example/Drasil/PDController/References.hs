@@ -1,10 +1,10 @@
 module Drasil.PDController.References where
-import Data.Drasil.Citations (smithLai2005)
+import Data.Drasil.Citations (smithLai2005, laplaceWiki, pidWiki)
 
 import Language.Drasil
 
 citations :: BibRef
-citations = [johnson2008, abbasi2015, smithLai2005]
+citations = [johnson2008, abbasi2015, smithLai2005, laplaceWiki, pidWiki]
 
 johnson2008, abbasi2015 :: Citation
 

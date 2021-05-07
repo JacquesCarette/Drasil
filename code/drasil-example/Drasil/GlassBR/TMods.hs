@@ -27,10 +27,8 @@ tMods = [pbIsSafe, lrIsSafe]
 lrIsSafe :: TheoryModel
 lrIsSafe = tm (cw lrIsSafeQD)
    [qw isSafeLoad, qw tmLRe, qw tmDemand] ([] :: [ConceptChunk])
-   [relToQD locSymbMap lrIsSafeQD] [sy isSafeLoad $= lrIsSafeExpr] [] [makeCite astm2009] 
+   [lrIsSafeQD] [sy isSafeLoad $= lrIsSafeExpr] [] [makeCite astm2009] 
    "isSafeLoad" [lrIsSafeDesc]
-   where locSymbMap = cdb thisSymbols ([] :: [IdeaDict]) symb
-                          ([] :: [UnitDefn]) [] [] [] [] [] [] []
 
 lrIsSafeQD :: QDefinition
 lrIsSafeQD = mkQuantDef' isSafeLoad (nounPhraseSP "Safety Load") lrIsSafeExpr

@@ -48,7 +48,6 @@ import qualified GOOL.Drasil as C (CodeType(List, Array))
 import Prelude hiding (sin, cos, tan, log, exp)
 import Data.List ((\\), intersect)
 import qualified Data.Map as Map (lookup)
-import Data.Maybe (maybe)
 import Control.Monad (liftM2,liftM3)
 import Control.Monad.State (get)
 import Control.Lens ((^.))
@@ -424,7 +423,7 @@ bfunc Frac  = (#/)
 bfunc Index = listAccess
 
 -- Maps a BoolBinOp to the corresponding GOOL binary function
-boolBfunc :: (OOProg r) => BoolBinOp -> (SValue r -> SValue r -> SValue r)
+boolBfunc :: BoolBinOp -> (SValue r -> SValue r -> SValue r)
 boolBfunc Impl = error "convExpr :=>"
 boolBfunc Iff  = error "convExpr :<=>"
 

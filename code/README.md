@@ -80,14 +80,14 @@ the *.stack-work* folder), for example:
 
 ```
 Updating Haddock index for local packages in
-C:\Users\Dan\...\literate-scientific-software\code\.stack-work\...\doc\index.html
+C:\Users\Dan\...\literate-scientific-software\code\website\index.html
 ```
 
 or
 
 ```
 Updating Haddock index for local packages in
-/.../literate-scientific-software/code/.stack-work/.../doc/index.html
+/.../literate-scientific-software/code/website/index.html
 ```
 
 --------------------------------------------------

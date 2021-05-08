@@ -11,7 +11,7 @@ import Control.Lens ((^.),makeLenses,view)
 
 import Language.Drasil
 import Database.Drasil (ChunkDB, symbResolve)
-import Language.Drasil.Development (dep, names')
+import Language.Drasil.Development ( names')
 
 import Language.Drasil.Printers (symbolDoc, toPlainName)
 

@@ -60,7 +60,7 @@ stepTime = dcc "stepTime" (nounPhraseSP "Step Time") "Simulation step time"
 simulationTime
   = dcc "simulationTime" (nounPhraseSP "Simulation Time") 
       "Total execution time of the PD simulation"
-
+      
 processVariable
   = dcc "processVariable" (nounPhraseSP "Process Variable") 
       "The output value from the power plant"
@@ -323,13 +323,13 @@ qdInvLaplaceTransform
       Real
 
 qdDampingCoeff
-  = vc "qdDampingCoeff" (nounPhraseSent (S "Damping coeffecient of the spring"))
+  = vc "qdDampingCoeff" (nounPhraseSent (S "Damping coefficient of the spring"))
       symDampingCoeff
       Real
 
 qdStiffnessCoeff
   = mkQuant "qdTimeConst"
-      (nounPhraseSent (S "Stiffness coeffecient of the spring"))
+      (nounPhraseSent (S "Stiffness coefficient of the spring"))
       symStifnessCoeff
       Real
       (Just second)

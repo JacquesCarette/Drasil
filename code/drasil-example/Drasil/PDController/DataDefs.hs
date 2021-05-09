@@ -130,4 +130,3 @@ ddCtrlNote
          <> makeRef2S aDecoupled
          <> S ") form of the PD equation is"
          +:+ S "used in this document"]
-

@@ -15,6 +15,7 @@ import Theory.Drasil (GenDefn, gd, ModelKinds (OthModel))
 import Utils.Drasil
 
 import Data.Drasil.Citations ( pidWiki )
+import Drasil.PDcontroller.Unitals
 
 genDefns :: [GenDefn]
 genDefns = [gdPowerPlant]

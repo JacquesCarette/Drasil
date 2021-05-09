@@ -71,6 +71,7 @@ import Language.Drasil.Code
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import Utils.Drasil
+import Drasil.PDcontroller.Unitals
 
 naveen :: Person
 naveen = person "Naveen Ganesh" "Muralidharan"

@@ -16,6 +16,7 @@ import Theory.Drasil (TheoryModel, tm)
 import Utils.Drasil
 
 import Data.Drasil.Citations(laplaceWiki)
+import Drasil.PDcontroller.Unitals
 
 theoreticalModels :: [TheoryModel]
 theoreticalModels = [tmLaplace, tmInvLaplace, tmSOSystem]

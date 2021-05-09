@@ -71,7 +71,7 @@ controlVariable
 
 setPoint
   = dcc "setPoint" (nounPhraseSP "Set-Point") 
-      ("The desired value that the control system must reach. This also knows "
+      ("The desired value that the control system must reach. This is also known "
          ++ "as the reference variable")
 
 propGain
@@ -114,7 +114,7 @@ ccDampingCoeff
       "Quantity that characterizes a second order system's oscillatory response"
 
 ccStiffCoeff
-  = dcc "stiffnessCoeff" (nounPhraseSP "Stifness Coeffecient")
+  = dcc "stiffnessCoeff" (nounPhraseSP "Stiffness Coeffecient")
       "Quantity that characterizes a spring's stiffness"
 
 concepts :: [IdeaDict]
@@ -329,7 +329,7 @@ qdDampingCoeff
 
 qdStiffnessCoeff
   = mkQuant "qdTimeConst"
-      (nounPhraseSent (S "Stifness coeffecient of the spring"))
+      (nounPhraseSent (S "Stiffness coeffecient of the spring"))
       symStifnessCoeff
       Real
       (Just second)

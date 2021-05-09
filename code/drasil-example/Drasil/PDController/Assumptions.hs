@@ -41,11 +41,11 @@ aUnfilteredDerivative
 aMass = cic "massSpring" aMassDesc "Spring Mass" assumpDom
 
 aDampingCoeff
-  = cic "dampingCoeffSpring" aDampingCoeffDesc "Spring Damping Coeffecient"
+  = cic "dampingCoeffSpring" aDampingCoeffDesc "Spring Damping Coefficient"
       assumpDom
 
 aStiffnessCoeff
-  = cic "stiffnessCoeffSpring" aStiffnessCoeffDesc "Spring Stiffness Coeffecient"
+  = cic "stiffnessCoeffSpring" aStiffnessCoeffDesc "Spring Stiffness Coefficient"
       assumpDom
 
 pwrPlantDesc, aDecoupledDesc, aSPDesc, aExtDisturbDesc, aManualTuningDesc,

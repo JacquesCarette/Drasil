@@ -155,6 +155,7 @@ executables:
     - Drasil.PDController.Requirements
     - Drasil.PDController.SpSysDesc
     - Drasil.PDController.TModel
+    - Drasil.PDcontroller.Unitals
      
   ssp:
     main: Drasil.SSP.Main

@@ -215,6 +215,7 @@ executable pdController
       Drasil.PDController.Requirements
       Drasil.PDController.SpSysDesc
       Drasil.PDController.TModel
+      Drasil.PDcontroller.Unitals
   hs-source-dirs:
       ./
   ghc-options: -Wall -Wredundant-constraints -threaded -O2 -main-is Drasil.PDController.Main

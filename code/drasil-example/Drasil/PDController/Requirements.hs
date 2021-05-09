@@ -82,4 +82,3 @@ verifiability
          [S "The code shall be verifiable against a Verification and Validation plan"])
       "Verifiable"
       nonFuncReqDom
-

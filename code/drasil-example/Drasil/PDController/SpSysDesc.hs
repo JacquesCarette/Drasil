@@ -43,4 +43,3 @@ sysProcessVariable
             +:+ S " over time"])
       "Process-Variable"
       goalStmtDom
-

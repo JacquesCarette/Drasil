@@ -1,28 +1,22 @@
 module Drasil.PDController.Body where
 
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
-
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Math (mathcon)
-
 import Data.Drasil.Concepts.Software (program)
-
 import Data.Drasil.ExternalLibraries.ODELibraries
        (apacheODESymbols, arrayVecDepVar, odeintSymbols, osloSymbols,
         scipyODESymbols)
-
 import qualified Data.Drasil.TheoryConcepts as IDict (dataDefn)
 import Data.Drasil.Quantities.Physics (physicscon, time)
 import Data.Drasil.Concepts.PhysicalProperties (physicalcon)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
-
 import Data.Drasil.SI_Units (second, kilogram)
 import Database.Drasil
        (Block, ChunkDB, ReferenceDB, SystemInformation(SI), _authors, _concepts,
         _configFiles, _constants, _constraints, _datadefs, _defSequence,
         _definitions, _inputs, _kind, _outputs, _purpose, _quants, _sys,
         _sysinfodb, _usedinfodb, cdb, rdb, refdb)
-
 import Drasil.DocLang
        (DerivationDisplay(..),
         DocSection(Bibliography, GSDSec, IntroSec, LCsSec, RefSec, ReqrmntSec,
@@ -33,41 +27,27 @@ import Drasil.DocLang
         SRSDecl, SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec),
         SolChSpec(SCSProg), TSIntro(..), TraceabilitySec(TraceabilityProg),
         Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb)
-
 import qualified Drasil.DocLang.SRS as SRS (inModel)
-
 import Drasil.PDController.Assumptions (assumptions)
-
 import Drasil.PDController.Changes
-
 import Drasil.PDController.Concepts
 import Drasil.PDController.DataDefs (dataDefinitions)
-
 import Drasil.PDController.GenDefs
-
 import Drasil.PDController.GenSysDesc
        (gsdSysContextFig, gsdSysContextList, gsdSysContextP1, gsdSysContextP2,
         gsduserCharacteristics)
 import Drasil.PDController.IModel
-
 import Drasil.PDController.IntroSection
        (introDocOrg, introPara, introPurposeOfDoc, introUserChar1,
         introUserChar2, introscopeOfReq)
-
 import Drasil.PDController.References (citations)
-
 import Drasil.PDController.Requirements
-
 import Drasil.PDController.SpSysDesc
        (goals, sysFigure, sysGoalInput, sysParts, sysProblemDesc)
-
 import Drasil.PDController.TModel (theoreticalModels)
-
 import Language.Drasil hiding (Symbol(..), Vector)
-
 import Language.Drasil.Code
        (ODEInfo, ODEMethod(..), ODEOptions, odeInfo, odeOptions, quantvar)
-
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import Utils.Drasil
@@ -192,7 +172,7 @@ pidODEOptions
   = odeOptions RK45 (sy odeAbsTolConst) (sy odeRelTolConst) (sy qdStepTime) (dbl 0)
 
 -- This is a second order ODE. The equation should be in the form of
--- variable subsitution, i.e. u = y'. However here the the equation
+-- variable substitution, i.e. u = y'. However here the equation
 -- can be defined in terms of the dependent variable itself because of the 
 -- way scipy expects the function in python. 
 pidODEInfo :: ODEInfo

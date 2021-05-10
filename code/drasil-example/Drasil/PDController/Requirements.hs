@@ -1,12 +1,9 @@
 module Drasil.PDController.Requirements where
 
 import Data.Drasil.Concepts.Documentation (funcReqDom, nonFuncReqDom)
-
 import Drasil.DocLang.SRS (datCon)
-
 import Drasil.PDController.Concepts
 import Drasil.PDController.IModel
-
 import Language.Drasil
 import Utils.Drasil
 

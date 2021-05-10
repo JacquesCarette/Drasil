@@ -2,19 +2,13 @@ module Drasil.PDController.TModel where
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 
 import Data.Drasil.Quantities.Physics (time)
-
 import Drasil.PDController.Assumptions
 import Drasil.PDController.Concepts
-
 import Drasil.PDController.References
-
 import Language.Drasil
 import qualified Language.Drasil as DrasilLang
-
 import Theory.Drasil (TheoryModel, tm)
-
 import Utils.Drasil
-
 import Data.Drasil.Citations(laplaceWiki)
 
 theoreticalModels :: [TheoryModel]

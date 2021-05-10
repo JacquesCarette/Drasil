@@ -2,7 +2,6 @@ module Drasil.PDController.Changes where
 
 import Data.Drasil.Concepts.Documentation (likeChgDom)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
-
 import Drasil.PDController.Assumptions
 import Drasil.PDController.Concepts
 import Language.Drasil

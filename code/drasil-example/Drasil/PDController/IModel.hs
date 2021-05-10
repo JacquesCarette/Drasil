@@ -7,7 +7,6 @@ import Drasil.PDController.DataDefs
 import Drasil.PDController.GenDefs
 import Drasil.PDController.References
 import Drasil.PDController.TModel
-
 import Language.Drasil
 import Theory.Drasil (InstanceModel, im, qwC, ModelKinds (OthModel))
 import Utils.Drasil

@@ -114,7 +114,7 @@ ccDampingCoeff
       "Quantity that characterizes a second order system's oscillatory response"
 
 ccStiffCoeff
-  = dcc "stiffnessCoeff" (nounPhraseSP "Stifness Coeffecient")
+  = dcc "stiffnessCoeff" (nounPhraseSP "Stiffness Coefficient")
       "Quantity that characterizes a spring's stiffness"
 
 concepts :: [IdeaDict]
@@ -323,13 +323,13 @@ qdInvLaplaceTransform
       Real
 
 qdDampingCoeff
-  = vc "qdDampingCoeff" (nounPhraseSent (S "Damping coeffecient of the spring"))
+  = vc "qdDampingCoeff" (nounPhraseSent (S "Damping coefficient of the spring"))
       symDampingCoeff
       Real
 
 qdStiffnessCoeff
   = mkQuant "qdTimeConst"
-      (nounPhraseSent (S "Stifness coeffecient of the spring"))
+      (nounPhraseSent (S "Stiffness coefficient of the spring"))
       symStifnessCoeff
       Real
       (Just second)

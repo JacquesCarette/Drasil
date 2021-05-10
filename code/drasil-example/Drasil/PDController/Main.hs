@@ -1,17 +1,13 @@
 module Drasil.PDController.Main (main) where
 
 import GHC.IO.Encoding (setLocaleEncoding, utf8)
-
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODELSodaPkg)
-
 import Drasil.PDController.Body (pidODEInfo, printSetting, si, srs)
-
 import Language.Drasil.Code
        (AuxFile(..), Choices(..), CodeSpec, Comments(..), ConstantRepr(..),
         ConstantStructure(..), ConstraintBehaviour(..), ImplementationType(..),
         InputModule(..), Lang(..), Modularity(..), Structure(..), Verbosity(..),
         Visibility(..), codeSpec, defaultChoices)
-
 import Language.Drasil.Generate (gen, genCode, DocSpec(DocSpec), DocType(SRS, Website))
 
 codeSpecs :: CodeSpec

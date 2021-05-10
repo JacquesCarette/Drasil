@@ -18,7 +18,6 @@ import Control.Lens ((^.))
 import Data.Bifunctor (bimap, second)
 import Data.List (intersperse, partition)
 import Data.Maybe (fromMaybe)
-import Data.Tuple (fst, snd)
 import Numeric (floatToDigits)
 
 -- | Render a Space

@@ -25,6 +25,15 @@ angle, area, axis, calculation, cartesian, centre, change, constraint, diameter,
   rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xCoord, xComp, xDir,
   yAxis, yCoord,  yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle :: ConceptChunk
 
+symbols :: [QuantityDict]
+symbols = [qdNegInf, qdPosInf, qdInvLaplaceTransform] 
+qdNegInf, qdPosInf, qdInvLaplaceTransform :: QuantityDict
+
+symnegInf, symposInf, syminvLaplace :: Symbol
+symnegInf = Variable "-∞"
+symposInf = Variable "∞"
+syminvLaplace = Variable "L⁻¹[F(s)]"
+
 
 angle       = dcc "angle"        (cn' "angle")                   "the amount of rotation needed to bring one line or plane into coincidence with another"
 area        = dcc "area"         (cn' "area")                    "a part of an object or surface"
@@ -100,3 +109,8 @@ perpV   = dcc "perp_vect"     (compoundPhrase' (perp ^. term) (vector ^. term)) 
 rOfChng = dcc "rOfChng"       (rate `of_` change) "ratio between a change in one variable relative to a corresponding change in another"
 surArea = dcc "surArea"       (compoundPhrase' (surface ^. term) (area ^. term)) "a measure of the total area that the surface of the object occupies"
 unitV   = dcc "unit_vect"     (compoundPhrase' (unit_ ^. term) (vector ^. term)) "a vector that has a magnitude of one"
+
+
+qdPosInf              = vc "qdPosInf"             (nounPhraseSent (S "Infinity"))                                symposInf     Real
+qdInvLaplaceTransform = vc "qInvLaplaceTransform" (nounPhraseSent (S "Inverse Laplace Transform of a function")) syminvLaplace Real
+qdNegInf              = vc "qdNegInf"             (nounPhraseSent (S "Negative Infinity"))                       symnegInf    Real

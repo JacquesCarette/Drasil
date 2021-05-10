@@ -89,7 +89,7 @@ mkSRS = [RefSec $      --This creates the Reference section of the SRS
 
 justification :: Sentence
 justification = foldlSent [S "A", phrase pendulum, S "consists" `sOf` S "mass", 
-                            S "attached to the end of a", phraseNP rod `andIts` S "moving curve" `sIs`
+                            S "attached to the end of a", phrase rod `andIts` S "moving curve" `sIs`
                             S "highly sensitive to initial conditions.", S "Therefore" `sC`
                             S "it is useful to have a", phrase program, S "to simulate", S "motion"
                             `the_ofThe` phrase pendulum, S "to exhibit its chaotic characteristics.",
@@ -175,7 +175,7 @@ tMods = [accelerationTM, velocityTM, newtonSL, newtonSLR]
 
 physSystParts :: [Sentence]
 physSystParts = map foldlSent [
-  [S "The", phraseNP rod],
+  [S "The", phrase rod],
   [S "The", phrase mass]]
   
 

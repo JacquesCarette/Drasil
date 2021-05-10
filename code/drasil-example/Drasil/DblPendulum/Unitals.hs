@@ -45,7 +45,7 @@ unitalChunks = [lenRod, QPP.mass, QP.force, QP.ixPos,
 lenRod, pendDisplacementAngle, initialPendAngle :: UnitalChunk
 
 lenRod = makeUCWDS "l_rod" (cn "length of rod")
-        (phrase len `the_ofThe`phraseNP rod)
+        (phrase len `the_ofThe`phrase rod)
         (sub cL lRod) metre
 
 pendDisplacementAngle = makeUCWDS "pendDisplacementAngle" (cn "displacement angle of pendulum")
@@ -56,8 +56,8 @@ initialPendAngle = makeUCWDS "initialPendAngle" (cn "initial pendulum angle")
         (S "the initial angle of" +:+ phrase pendulum)
         (sub lTheta lI) radian
 
-rod :: NP
-rod = cn' "rod"
+rod :: NamedChunk
+rod = nc "rod" (cn' "rod")
 
 unitless :: [DefinedQuantityDict]
 unitless = [QM.unitVect, QM.unitVectj, QM.pi_]

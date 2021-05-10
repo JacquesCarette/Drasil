@@ -57,7 +57,7 @@ velocityIDerivEqn1,velocityIXDerivEqn2,velocityIXDerivEqn3,velocityIXDerivEqn4 :
 velocityIDerivSent1 = S "At a given point in time" `sC` phrase velocity +:+ S "may be defined as"
 velocityIDerivEqn1 = sy velocity $= deriv (sy position) time
 velocityIXDerivSent2 = S "We also know the horizontal" +:+ phrase position
-velocityIXDerivEqn2 = sy xPos $= sy lenRod * sin (sy pendDisplacementAngle) --FIXME xPos
+velocityIXDerivEqn2 = sy xPos $= sy lenRod * sin (sy pendDisplacementAngle) 
 velocityIXDerivSent3 = S "Applying this,"
 velocityIXDerivEqn3 = sy xVel $= deriv (sy lenRod * sin (sy pendDisplacementAngle)) time
 velocityIXDerivSent4 = E (sy lenRod) `sIs` S "constant with respect to time, so"
@@ -91,7 +91,7 @@ velocityIYDerivSent2,velocityIYDerivSent3,velocityIYDerivSent4,velocityIYDerivSe
 velocityIYDerivEqn2,velocityIYDerivEqn3,velocityIYDerivEqn4 :: Expr
 
 velocityIYDerivSent2 = S "We also know the vertical" +:+ phrase position
-velocityIYDerivEqn2 = sy yPos $= negate (sy lenRod * cos (sy pendDisplacementAngle)) --FIXME yPos
+velocityIYDerivEqn2 = sy yPos $= negate (sy lenRod * cos (sy pendDisplacementAngle)) 
 velocityIYDerivSent3 = S "Applying this again,"
 velocityIYDerivEqn3 = sy yVel $= negate (deriv (sy lenRod * cos (sy pendDisplacementAngle)) time)
 velocityIYDerivSent4 = E (sy lenRod) `sIs` S "constant with respect to time, so"

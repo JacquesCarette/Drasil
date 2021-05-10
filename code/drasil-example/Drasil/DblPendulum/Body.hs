@@ -37,7 +37,7 @@ import Drasil.DblPendulum.DataDefs (dataDefs)
 import Drasil.DblPendulum.IMods (iMods)
 import Drasil.DblPendulum.GenDefs (genDefns)
 import Drasil.DblPendulum.Unitals (symbols, inputs, outputs,
-  inConstraints, outConstraints, acronyms)
+  inConstraints, outConstraints, acronyms, rod)
 import Drasil.DblPendulum.Requirements (funcReqs, nonFuncReqs)
 import Data.Drasil.Citations (cartesianWiki, accelerationWiki, velocityWiki)
 import Drasil.Projectile.References (hibbeler2004)
@@ -89,7 +89,7 @@ mkSRS = [RefSec $      --This creates the Reference section of the SRS
 
 justification :: Sentence
 justification = foldlSent [S "A", phrase pendulum, S "consists" `sOf` S "mass", 
-                            S "attached to the end of a rod" `andIts` S "moving curve" `sIs`
+                            S "attached to the end of a", phraseNP rod `andIts` S "moving curve" `sIs`
                             S "highly sensitive to initial conditions.", S "Therefore" `sC`
                             S "it is useful to have a", phrase program, S "to simulate", S "motion"
                             `the_ofThe` phrase pendulum, S "to exhibit its chaotic characteristics.",
@@ -175,7 +175,7 @@ tMods = [accelerationTM, velocityTM, newtonSL, newtonSLR]
 
 physSystParts :: [Sentence]
 physSystParts = map foldlSent [
-  [S "The rod"],
+  [S "The", phraseNP rod],
   [S "The", phrase mass]]
   
 

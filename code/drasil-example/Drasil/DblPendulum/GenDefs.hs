@@ -133,7 +133,7 @@ accelerationIXDerivSent3 = S "Applying this to our equation for" +:+ phrase acce
 accelerationIXDerivEqn3 = sy xAccel $= deriv (sy angularVelocity * sy lenRod * cos (sy pendDisplacementAngle)) time
 accelerationIXDerivSent4 = S "By the product and chain rules, we find"
 accelerationIXDerivEqn4 = sy xAccel $= (deriv (sy angularVelocity) time) * sy lenRod * cos (sy pendDisplacementAngle)
-                        + negate (sy angularVelocity * sy lenRod * sin (sy pendDisplacementAngle) * deriv (sy pendDisplacementAngle) time)
+                        - (sy angularVelocity * sy lenRod * sin (sy pendDisplacementAngle) * deriv (sy pendDisplacementAngle) time)
 accelerationIXDerivSent5 = S "Simplifying,"
 
 -----------------------

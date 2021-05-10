@@ -3,7 +3,7 @@ module Drasil.GamePhysics.GenDefs (generalDefns, accelGravityGD, impulseGD,
 
 import Language.Drasil
 import Utils.Drasil
-import Theory.Drasil (GenDefn, gd, ModelKinds (OthModel))
+import Theory.Drasil (GenDefn, gd, ModelKinds (OthModel, EquationalModel))
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
  gravitationalAccel, gravitationalConst, restitutionCoef, impulseS, force,
  fOfGravity)
@@ -61,12 +61,11 @@ conservationOfMomentDeriv = foldlSent [S "When bodies collide, they exert",
 
 --------------------------Acceleration due to gravity----------------------------
 accelGravityGD :: GenDefn
-accelGravityGD = gd (OthModel accelGravityRC) (getUnit QP.acceleration) (Just accelGravityDeriv)
+accelGravityGD = gd (EquationalModel accelGravityQD) (getUnit QP.acceleration) (Just accelGravityDeriv)
    [accelGravitySrc] "accelGravity" [accelGravityDesc]
 
-accelGravityRC :: RelationConcept
-accelGravityRC = makeRC "accelGravityRC" (nounPhraseSP "Acceleration due to gravity") 
-  accelGravityDesc accelGravityRel
+accelGravityQD :: QDefinition
+accelGravityQD = mkQuantDef' QP.gravitationalAccel (nounPhraseSP "Acceleration due to gravity") accelGravityExpr
 
 accelGravityDesc :: Sentence
 accelGravityDesc = foldlSent [S "If one of the", plural QPP.mass, S "is much larger than the other" `sC`
@@ -74,9 +73,9 @@ accelGravityDesc = foldlSent [S "If one of the", plural QPP.mass, S "is much lar
   S "The negative sign in the equation indicates that the", phrase QP.force, S "is an attractive",
   phrase QP.force]
 
-accelGravityRel :: Relation
-accelGravityRel = sy QP.gravitationalAccel $= negate (sy QP.gravitationalConst * sy mLarger/
-                  (sy dispNorm $^ 2) * sy dVect)
+accelGravityExpr :: Relation
+accelGravityExpr = negate $ sy QP.gravitationalConst * sy mLarger /
+  (sy dispNorm $^ 2) * sy dVect
 
 accelGravitySrc :: Reference
 accelGravitySrc = makeURI "accelGravitySrc" "https://en.wikipedia.org/wiki/Gravitational_acceleration" $

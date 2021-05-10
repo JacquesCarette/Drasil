@@ -1,20 +1,15 @@
 module Drasil.PDController.GenDefs where
 
 import Data.Drasil.Quantities.PhysicalProperties (mass)
-
 import Drasil.PDController.Assumptions
-
 import Drasil.PDController.Concepts
-
 import Drasil.PDController.References
-
 import Drasil.PDController.TModel
 import Language.Drasil
-
 import Theory.Drasil (GenDefn, gd, ModelKinds (OthModel))
 import Utils.Drasil
-
 import Data.Drasil.Citations ( pidWiki )
+import Drasil.PDController.Unitals
 
 genDefns :: [GenDefn]
 genDefns = [gdPowerPlant]

@@ -1,14 +1,10 @@
 module Drasil.PDController.DataDefs where
 
 import Drasil.PDController.Assumptions
-
-import Drasil.PDController.Concepts
-
+import Drasil.PDController.Unitals
 import Drasil.PDController.References
-
 import Drasil.PDController.TModel
 import Language.Drasil
-
 import Theory.Drasil (DataDefinition, dd)
 import Utils.Drasil
 

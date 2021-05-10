@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: ce61a7b12ca80823a858de62abeb01ae25b58bc56890074b771777ea1d89e07d
+-- hash: e57a9d6a3417a0f6152eee665ac3ca9cda0198b8afb65a79eac66a77ccae621a
 
 name:           drasil-example
 version:        0.1.24.0
@@ -215,6 +215,7 @@ executable pdController
       Drasil.PDController.Requirements
       Drasil.PDController.SpSysDesc
       Drasil.PDController.TModel
+      Drasil.PDController.Unitals
   hs-source-dirs:
       ./
   ghc-options: -Wall -Wredundant-constraints -threaded -O2 -main-is Drasil.PDController.Main

@@ -132,7 +132,7 @@ accelerationIXDerivEqn2 = velocityIXRel
 accelerationIXDerivSent3 = S "Applying this to our equation for" +:+ phrase acceleration
 accelerationIXDerivEqn3 = sy xAccel $= deriv (sy angularVelocity * sy lenRod * cos (sy pendDisplacementAngle)) time
 accelerationIXDerivSent4 = S "By the product and chain rules, we find"
-accelerationIXDerivEqn4 = sy xAccel $= (deriv (sy angularVelocity) time) * sy lenRod * cos (sy pendDisplacementAngle)
+accelerationIXDerivEqn4 = sy xAccel $= deriv (sy angularVelocity) time * sy lenRod * cos (sy pendDisplacementAngle)
                         - (sy angularVelocity * sy lenRod * sin (sy pendDisplacementAngle) * deriv (sy pendDisplacementAngle) time)
 accelerationIXDerivSent5 = S "Simplifying,"
 
@@ -168,7 +168,7 @@ accelerationIYDerivEqn2 = velocityIYRel
 accelerationIYDerivSent3 = S "Applying this to our equation for" +:+ phrase acceleration
 accelerationIYDerivEqn3 = sy yAccel $= deriv (sy angularVelocity * sy lenRod * sin (sy pendDisplacementAngle)) time
 accelerationIYDerivSent4 = S "By the product and chain rules, we find"
-accelerationIYDerivEqn4 = sy yAccel $= (deriv (sy angularVelocity) time) * sy lenRod * sin (sy pendDisplacementAngle)
+accelerationIYDerivEqn4 = sy yAccel $= deriv (sy angularVelocity) time * sy lenRod * sin (sy pendDisplacementAngle)
                         + sy angularVelocity * sy lenRod * cos (sy pendDisplacementAngle) * deriv (sy pendDisplacementAngle) time
 accelerationIYDerivSent5 = S "Simplifying,"
 

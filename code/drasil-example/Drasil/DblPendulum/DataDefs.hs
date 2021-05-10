@@ -42,7 +42,7 @@ positionIYQD :: QDefinition
 positionIYQD = mkQuantDef QP.iyPos positionIYEqn
 
 positionIYEqn :: Expr
-positionIYEqn = sy lenRod * cos (sy initialPendAngle)
+positionIYEqn = negate (sy lenRod * cos (sy initialPendAngle))
 
 figReff :: Sentence
 figReff = ch QP.iyPos `sIs` S "shown in" +:+. makeRef2S figMotion

@@ -62,7 +62,7 @@ velocityIXDerivSent3 = S "Applying this,"
 velocityIXDerivEqn3 = sy xVel $= deriv (sy lenRod * sin (sy pendDisplacementAngle)) time
 velocityIXDerivSent4 = E (sy lenRod) `sIs` S "constant with respect to time, so"
 velocityIXDerivEqn4 = sy xVel $= sy lenRod * deriv (sin (sy pendDisplacementAngle)) time
-velocityIXDerivSent5 = S "Therefore,"
+velocityIXDerivSent5 = S "Therefore, using the chain rule,"
 
 ---------------------
 velocityIYGD :: GenDefn
@@ -74,7 +74,7 @@ velocityIYRC = makeRC "velocityIYRC" (nounPhraseSent $ foldlSent_
             [ phrase yComp `sOf` phrase velocity `the_ofThe` phrase pendulum]) EmptyS velocityIYRel
  
 velocityIYRel :: Relation             
-velocityIYRel = sy yVel $= negate (sy angularVelocity * sy lenRod * sin (sy pendDisplacementAngle))
+velocityIYRel = sy yVel $= sy angularVelocity * sy lenRod * sin (sy pendDisplacementAngle)
 
 velocityIYDeriv :: Derivation
 velocityIYDeriv = mkDerivName (phrase yComp +:+ phrase velocity) (weave [velocityIYDerivSents, map E velocityIYDerivEqns])
@@ -91,12 +91,12 @@ velocityIYDerivSent2,velocityIYDerivSent3,velocityIYDerivSent4,velocityIYDerivSe
 velocityIYDerivEqn2,velocityIYDerivEqn3,velocityIYDerivEqn4 :: Expr
 
 velocityIYDerivSent2 = S "We also know the vertical" +:+ phrase position
-velocityIYDerivEqn2 = sy iyPos $= sy lenRod * cos (sy pendDisplacementAngle) --FIXME yPos
+velocityIYDerivEqn2 = sy iyPos $= negate (sy lenRod * cos (sy pendDisplacementAngle)) --FIXME yPos
 velocityIYDerivSent3 = S "Applying this again,"
-velocityIYDerivEqn3 = sy yVel $= deriv (sy lenRod * cos (sy pendDisplacementAngle)) time
+velocityIYDerivEqn3 = sy yVel $= negate (deriv (sy lenRod * cos (sy pendDisplacementAngle)) time)
 velocityIYDerivSent4 = E (sy lenRod) `sIs` S "constant with respect to time, so"
-velocityIYDerivEqn4 = sy yVel $= sy lenRod * deriv (cos (sy pendDisplacementAngle)) time
-velocityIYDerivSent5 = S "Therefore,"
+velocityIYDerivEqn4 = sy yVel $= negate (sy lenRod * deriv (cos (sy pendDisplacementAngle)) time)
+velocityIYDerivSent5 = S "Therefore, using the chain rule,"
 
 -----------------------
 accelerationIXGD :: GenDefn
@@ -108,11 +108,33 @@ accelerationIXRC = makeRC "accelerationIXRC" (nounPhraseSent $ foldlSent_
             [ phrase xComp `sOf` phrase acceleration `the_ofThe` phrase pendulum]) EmptyS accelerationIXRel
  
 accelerationIXRel :: Relation             
-accelerationIXRel = sy xAccel $= negate (sy angularVelocity * sy lenRod * sin (sy pendDisplacementAngle))
+accelerationIXRel = sy xAccel $= negate (square (sy angularVelocity) * sy lenRod * sin (sy pendDisplacementAngle))
                     + sy angularAccel * sy lenRod * cos (sy pendDisplacementAngle)
 
 accelerationIXDeriv :: Derivation
-accelerationIXDeriv = mkDerivName (phrase xComp +:+ phrase acceleration) [ E accelerationIXRel]
+accelerationIXDeriv = mkDerivName (phrase xComp +:+ phrase acceleration) (weave [accelerationIXDerivSents, map E accelerationIXDerivEqns])
+
+accelerationIXDerivSents :: [Sentence]
+accelerationIXDerivSents = [accelerationIDerivSent1, accelerationIXDerivSent2, accelerationIXDerivSent3,
+    accelerationIXDerivSent4, accelerationIXDerivSent5]
+
+accelerationIXDerivEqns :: [Expr]
+accelerationIXDerivEqns = [accelerationIDerivEqn1, accelerationIXDerivEqn2, accelerationIXDerivEqn3, accelerationIXDerivEqn4, accelerationIXRel]
+
+accelerationIDerivSent1, accelerationIXDerivSent2, accelerationIXDerivSent3,
+     accelerationIXDerivSent4, accelerationIXDerivSent5 :: Sentence
+accelerationIDerivEqn1, accelerationIXDerivEqn2, accelerationIXDerivEqn3, accelerationIXDerivEqn4 :: Expr
+
+accelerationIDerivSent1 = S "Our" +:+ phrase acceleration +: S "is"
+accelerationIDerivEqn1 = sy acceleration $= deriv (sy velocity) time 
+accelerationIXDerivSent2 = S "Earlier" `sC` S "we found the horizontal" +:+ phrase velocity +:+ S "to be"
+accelerationIXDerivEqn2 = velocityIXRel
+accelerationIXDerivSent3 = S "Applying this to our equation for" +:+ phrase acceleration
+accelerationIXDerivEqn3 = sy xAccel $= deriv (sy angularVelocity * sy lenRod * cos (sy pendDisplacementAngle)) time
+accelerationIXDerivSent4 = S "By the product and chain rules, we find"
+accelerationIXDerivEqn4 = sy xAccel $= (deriv (sy angularVelocity) time) * sy lenRod * cos (sy pendDisplacementAngle)
+                        + negate (sy angularVelocity * sy lenRod * sin (sy pendDisplacementAngle) * deriv (sy pendDisplacementAngle) time)
+accelerationIXDerivSent5 = S "Simplifying,"
 
 -----------------------
 accelerationIYGD :: GenDefn
@@ -124,11 +146,31 @@ accelerationIYRC = makeRC "accelerationIYRC" (nounPhraseSent $ foldlSent_
             [ phrase yComp `sOf` phrase acceleration `the_ofThe` phrase pendulum]) EmptyS accelerationIYRel
  
 accelerationIYRel :: Relation             
-accelerationIYRel = sy yAccel $= (sy angularVelocity * sy lenRod * cos (sy pendDisplacementAngle))
+accelerationIYRel = sy yAccel $= (square (sy angularVelocity) * sy lenRod * cos (sy pendDisplacementAngle))
                     + sy angularAccel * sy lenRod * sin (sy pendDisplacementAngle)
 
 accelerationIYDeriv :: Derivation
-accelerationIYDeriv = mkDerivName (phrase yComp +:+ phrase acceleration) [ E accelerationIYRel]
+accelerationIYDeriv = mkDerivName (phrase yComp +:+ phrase acceleration) (weave [accelerationIYDerivSents, map E accelerationIYDerivEqns])
+
+accelerationIYDerivSents :: [Sentence]
+accelerationIYDerivSents = [accelerationIDerivSent1, accelerationIYDerivSent2, accelerationIYDerivSent3,
+    accelerationIYDerivSent4, accelerationIYDerivSent5]
+
+accelerationIYDerivEqns :: [Expr]
+accelerationIYDerivEqns = [accelerationIDerivEqn1, accelerationIYDerivEqn2, accelerationIYDerivEqn3, accelerationIYDerivEqn4, accelerationIYRel]
+
+accelerationIYDerivSent2, accelerationIYDerivSent3, accelerationIYDerivSent4, 
+    accelerationIYDerivSent5 :: Sentence
+accelerationIYDerivEqn2, accelerationIYDerivEqn3, accelerationIYDerivEqn4 :: Expr
+
+accelerationIYDerivSent2 = S "Earlier" `sC` S "we found the vertical" +:+ phrase velocity +:+ S "to be"
+accelerationIYDerivEqn2 = velocityIYRel
+accelerationIYDerivSent3 = S "Applying this to our equation for" +:+ phrase acceleration
+accelerationIYDerivEqn3 = sy yAccel $= deriv (sy angularVelocity * sy lenRod * sin (sy pendDisplacementAngle)) time
+accelerationIYDerivSent4 = S "By the product and chain rules, we find"
+accelerationIYDerivEqn4 = sy yAccel $= (deriv (sy angularVelocity) time) * sy lenRod * sin (sy pendDisplacementAngle)
+                        + sy angularVelocity * sy lenRod * cos (sy pendDisplacementAngle) * deriv (sy pendDisplacementAngle) time
+accelerationIYDerivSent5 = S "Simplifying,"
 
 -------------------------------------Horizontal force acting on the pendulum 
 hForceOnPendulumGD :: GenDefn

@@ -9,7 +9,7 @@ import Utils.Drasil
 
 -- import Data.Drasil.Concepts.Documentation (coordinate, symbol_)
 import Data.Drasil.Concepts.Math (xComp, yComp, equation)
-import Data.Drasil.Quantities.Physics(velocity, angularVelocity, xVel, yVel,
+import Data.Drasil.Quantities.Physics(ixPos, iyPos, velocity, angularVelocity, xVel, yVel,
     angularAccel, xAccel, yAccel, acceleration, force, tension, gravitationalAccel,
     angularFrequency, torque, momentOfInertia, angularDisplacement, time,
     momentOfInertia, period, frequency, position)
@@ -44,18 +44,17 @@ velocityIXDeriv :: Derivation
 velocityIXDeriv = mkDerivName (phrase xComp +:+ phrase velocity) (weave [velocityIXDerivSents, map E velocityIXDerivEqns])
 
 velocityIXDerivSents :: [Sentence]
-velocityIXDerivSents = [velocityIDerivSent1,velocityIDerivSent2,velocityIDerivSent3,velocityIDerivSent4,
-                            velocityIDerivSent5,velocityIDerivSent6,velocityIXDerivSent7]
+velocityIXDerivSents = [velocityIDerivSent1,velocityIXDerivSent2,velocityIXDerivSent3,velocityIXDerivSent4,
+                            velocityIXDerivSent5]
 
 velocityIXDerivEqns :: [Expr]
-velocityIXDerivEqns = [velocityIDerivEqn1,velocityIDerivEqn2,velocityIDerivEqn3,
-                            velocityIDerivEqn4,velocityIDerivEqn5,velocityIDerivEqn6,velocityIXRel]
+velocityIXDerivEqns = [velocityIDerivEqn1,velocityIXDerivEqn2,velocityIXDerivEqn3,
+                            velocityIXDerivEqn4,velocityIXRel]
 
-velocityIDerivSent1,velocityIDerivSent2,velocityIDerivSent3,velocityIDerivSent4,
-            velocityIDerivSent5,velocityIDerivSent6,velocityIXDerivSent7,velocityIYDerivSent7 :: Sentence
-velocityIDerivEqn1,velocityIDerivEqn2,velocityIDerivEqn3,velocityIDerivEqn4,velocityIDerivEqn5,velocityIDerivEqn6 :: Expr
+velocityIDerivSent1,velocityIXDerivSent2,velocityIXDerivSent3,velocityIXDerivSent4,velocityIXDerivSent5 :: Sentence
+velocityIDerivEqn1,velocityIXDerivEqn2,velocityIXDerivEqn3,velocityIXDerivEqn4 :: Expr
 
-velocityIDerivSent1 = S "Using the formula for arc length" `sC` (phrase position `the_ofThe` phrase pendulum) +: S "may be defined as"
+{-velocityIDerivSent1 = S "Using the formula for arc length" `sC` (phrase position `the_ofThe` phrase pendulum) +: S "may be defined as"
 velocityIDerivEqn1 = sy position $= sy pendDisplacementAngle * sy lenRod
 velocityIDerivSent2 = S "Then" `sC` S "the" +:+ phrase velocity `ofThe` phrase pendulum +:+ S "at a given time will be"
 velocityIDerivEqn2 = sy velocity $= deriv (sy position) time 
@@ -68,8 +67,18 @@ velocityIDerivEqn5 = sy angularVelocity $= deriv (sy pendDisplacementAngle) time
 velocityIDerivSent6 = S "So,"
 velocityIDerivEqn6 = sy velocity $= sy angularVelocity * sy lenRod
 velocityIXDerivSent7 = S "For the x-component of" +: phrase velocity 
-velocityIYDerivSent7 = S "For the y-componet of" +: phrase velocity
+velocityIYDerivSent7 = S "For the y-component of" +: phrase velocity-}
 
+velocityIDerivSent1 = S "At a given point in time, velocity may be defined as"
+velocityIDerivEqn1 = sy velocity $= deriv (sy position) time
+velocityIXDerivSent2 = S "We also know that at a given horizontal position,"
+velocityIXDerivEqn2 = sy ixPos $= sy lenRod * sin (sy pendDisplacementAngle)
+velocityIXDerivSent3 = S "Applying this,"
+velocityIXDerivEqn3 = sy xVel $= deriv (sy lenRod * sin (sy pendDisplacementAngle)) time
+velocityIXDerivSent4 = E (sy lenRod) `sIs` S "constant with respect to time, so"
+velocityIXDerivEqn4 = sy xVel $= sy lenRod * deriv (sin (sy pendDisplacementAngle)) time
+velocityIXDerivSent5 = S "Therefore,"
+--velocityIXDerivEqn5 = sy xVel $= sy lenRod * cos (sy pendDisplacementAngle)
 
 ---------------------
 velocityIYGD :: GenDefn
@@ -81,18 +90,30 @@ velocityIYRC = makeRC "velocityIYRC" (nounPhraseSent $ foldlSent_
             [ phrase yComp `sOf` phrase velocity `the_ofThe` phrase pendulum]) EmptyS velocityIYRel
  
 velocityIYRel :: Relation             
-velocityIYRel = sy yVel $= sy angularVelocity * sy lenRod * sin (sy pendDisplacementAngle)
+velocityIYRel = sy yVel $= negate (sy angularVelocity * sy lenRod * sin (sy pendDisplacementAngle))
 
 velocityIYDeriv :: Derivation
 velocityIYDeriv = mkDerivName (phrase yComp +:+ phrase velocity) (weave [velocityIYDerivSents, map E velocityIYDerivEqns])
 
 velocityIYDerivSents :: [Sentence]
-velocityIYDerivSents = [velocityIDerivSent1,velocityIDerivSent2,velocityIDerivSent3,velocityIDerivSent4,
-                            velocityIDerivSent5,velocityIDerivSent5,velocityIYDerivSent7]
+velocityIYDerivSents = [velocityIDerivSent1,velocityIYDerivSent2,velocityIYDerivSent3,velocityIYDerivSent4,
+                            velocityIYDerivSent5,velocityIYDerivSent5]
 
 velocityIYDerivEqns :: [Expr]
-velocityIYDerivEqns = [velocityIDerivEqn1,velocityIDerivEqn2,velocityIDerivEqn3,
-                            velocityIDerivEqn4,velocityIDerivEqn5,velocityIDerivEqn6,velocityIYRel]
+velocityIYDerivEqns = [velocityIDerivEqn1,velocityIYDerivEqn2,velocityIYDerivEqn3,
+                            velocityIYDerivEqn4,velocityIYRel]
+
+velocityIYDerivSent2,velocityIYDerivSent3,velocityIYDerivSent4,velocityIYDerivSent5 :: Sentence
+velocityIYDerivEqn2,velocityIYDerivEqn3,velocityIYDerivEqn4 :: Expr
+
+velocityIYDerivSent2 = S "We also know that at a given horizontal position,"
+velocityIYDerivEqn2 = sy iyPos $= sy lenRod * cos (sy pendDisplacementAngle)
+velocityIYDerivSent3 = S "Applying this again,"
+velocityIYDerivEqn3 = sy yVel $= deriv (sy lenRod * cos (sy pendDisplacementAngle)) time
+velocityIYDerivSent4 = E (sy lenRod) `sIs` S "constant with respect to time, so"
+velocityIYDerivEqn4 = sy yVel $= sy lenRod * deriv (cos (sy pendDisplacementAngle)) time
+velocityIYDerivSent5 = S "Therefore,"
+--velocityIYDerivEqn5 = sy yVel $= sy angularVelocity * sy lenRod * sin (sy pendDisplacementAngle)
 
 -----------------------
 accelerationIXGD :: GenDefn

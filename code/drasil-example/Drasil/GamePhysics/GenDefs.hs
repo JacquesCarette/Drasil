@@ -3,7 +3,7 @@ module Drasil.GamePhysics.GenDefs (generalDefns, accelGravityGD, impulseGD,
 
 import Language.Drasil
 import Utils.Drasil
-import Theory.Drasil (GenDefn, gd, ModelKinds (OthModel, EquationalModel))
+import Theory.Drasil (GenDefn, gd, ModelKinds (EquationalModel))
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
  gravitationalAccel, gravitationalConst, restitutionCoef, impulseS, force,
  fOfGravity)
@@ -146,15 +146,14 @@ accelGravityDerivEqns = [accelGravityDerivEqn1, accelGravityDerivEqn2, accelGrav
 ----------------------------Impulse for Collision--------------------------------------------
 
 impulseGD :: GenDefn
-impulseGD = gd (OthModel impulseRC) (getUnit QP.impulseS) Nothing 
+impulseGD = gd (EquationalModel impulseQD) (getUnit QP.impulseS) Nothing 
   [impulseSrc] "impulse" [rigidTwoDAssump, rightHandAssump, collisionAssump]
 
-impulseRC :: RelationConcept
-impulseRC = makeRC "impulseRC" (nounPhraseSP "Impulse for Collision") 
-  impulseDesc impulseRel
+impulseQD :: QDefinition
+impulseQD = mkQuantDef' QP.impulseS (nounPhraseSP "Impulse for Collision") impulseExpr
 
-impulseRel :: Relation
-impulseRel = sy QP.impulseS $= (negate (1 + sy QP.restitutionCoef) * sy initRelVel $.
+impulseExpr :: Expr
+impulseExpr = (negate (1 + sy QP.restitutionCoef) * sy initRelVel $.
   sy normalVect) / (((1 / sy massA) + (1 / sy massB)) *
   (sy normalLen $^ 2) +
   ((sy perpLenA $^ 2) / sy momtInertA) +
@@ -163,6 +162,3 @@ impulseRel = sy QP.impulseS $= (negate (1 + sy QP.restitutionCoef) * sy initRelV
 impulseSrc :: Reference
 impulseSrc = makeURI "impulseSrc" "http://www.chrishecker.com/images/e/e7/Gdmphys3.pdf" $
   shortname' "Impulse for Collision Ref"
-
-impulseDesc :: Sentence
-impulseDesc = foldlSent [S "Impulse for Collision"]

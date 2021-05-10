@@ -36,17 +36,17 @@ simSpaceDesc, inputInitialCondsDesc,
   calcTransOverTimeDesc, calcRotOverTimeDesc,
   deterCollsDesc, deterCollRespOverTimeDesc :: Sentence
 
-  -- | template for requirements
+-- | template for requirements
 requirementTemplate :: Sentence -> Sentence -> Sentence -> Sentence -> Sentence
 requirementTemplate a b x z = foldlSent [S "Determine the", a `sAnd` b, 
   S "over a period of", phrase QP.time, S "of the", x, z]
 
-  -- | with added constraint
+-- | with added constraint
 requirementS :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence -> Sentence
 requirementS a b = requirementTemplate (plural a) (plural b) (getAcc twoD
   +:+ plural CP.rigidBody)
 
-  -- | without added constraint
+-- | without added constraint
 requirementS' :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence
 requirementS' a b = requirementS a b EmptyS 
 

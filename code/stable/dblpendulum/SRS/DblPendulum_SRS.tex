@@ -91,7 +91,11 @@ ${L_{\text{rod}}}$ & Length of rod & ${\text{m}}$
 \\
 $m$ & Mass & ${\text{kg}}$
 \\
+${p_{\text{x}}}$ & $x$-component of position & ${\text{m}}$
+\\
 ${{p_{\text{x}}}^{\text{i}}}$ & $x$-component of initial position & ${\text{m}}$
+\\
+${p_{\text{y}}}$ & $y$-component of position & ${\text{m}}$
 \\
 ${{p_{\text{y}}}^{\text{i}}}$ & $y$-component of initial position & ${\text{m}}$
 \\
@@ -387,6 +391,28 @@ RefBy &
 \end{minipage}
 \paragraph{Detailed derivation of $x$-component velocity:}
 \label{GD:velocityIXDeriv}
+At a given point in time, velocity may be defined as
+
+\begin{displaymath}
+\mathbf{v}=\frac{\,d\mathbf{p}}{\,dt}
+\end{displaymath}
+We also know the horizontal position
+
+\begin{displaymath}
+{p_{\text{x}}}={L_{\text{rod}}} \sin\left({θ_{p}}\right)
+\end{displaymath}
+Applying this,
+
+\begin{displaymath}
+{v_{\text{x}}}=\frac{\,d{L_{\text{rod}}} \sin\left({θ_{p}}\right)}{\,dt}
+\end{displaymath}
+${L_{\text{rod}}}$ is constant with respect to time, so
+
+\begin{displaymath}
+{v_{\text{x}}}={L_{\text{rod}}} \frac{\,d\sin\left({θ_{p}}\right)}{\,dt}
+\end{displaymath}
+Therefore, using the chain rule,
+
 \begin{displaymath}
 {v_{\text{x}}}=ω {L_{\text{rod}}} \cos\left({θ_{p}}\right)
 \end{displaymath}
@@ -405,7 +431,7 @@ Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {v_{\text{y}}}=ω {L_{\text{rod}}} \cos\left({θ_{p}}\right)
+           {v_{\text{y}}}=ω {L_{\text{rod}}} \sin\left({θ_{p}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -424,9 +450,33 @@ RefBy &
 \end{minipage}
 \paragraph{Detailed derivation of $y$-component velocity:}
 \label{GD:velocityIYDeriv}
+At a given point in time, velocity may be defined as
+
 \begin{displaymath}
-{v_{\text{y}}}=ω {L_{\text{rod}}} \cos\left({θ_{p}}\right)
+\mathbf{v}=\frac{\,d\mathbf{p}}{\,dt}
 \end{displaymath}
+We also know the vertical position
+
+\begin{displaymath}
+{p_{\text{y}}}=-{L_{\text{rod}}} \cos\left({θ_{p}}\right)
+\end{displaymath}
+Applying this again,
+
+\begin{displaymath}
+{v_{\text{y}}}=-\left(\frac{\,d{L_{\text{rod}}} \cos\left({θ_{p}}\right)}{\,dt}\right)
+\end{displaymath}
+${L_{\text{rod}}}$ is constant with respect to time, so
+
+\begin{displaymath}
+{v_{\text{y}}}=-{L_{\text{rod}}} \frac{\,d\cos\left({θ_{p}}\right)}{\,dt}
+\end{displaymath}
+Therefore, using the chain rule,
+
+\begin{displaymath}
+{v_{\text{y}}}=ω {L_{\text{rod}}} \sin\left({θ_{p}}\right)
+\end{displaymath}
+Therefore, using the chain rule,
+
 \vspace{\baselineskip}
 \noindent
 \begin{minipage}{\textwidth}
@@ -442,7 +492,7 @@ Units & $\frac{\text{m}}{\text{s}^{2}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {a_{\text{x}}}=-ω {L_{\text{rod}}} \sin\left({θ_{p}}\right)+α {L_{\text{rod}}} \cos\left({θ_{p}}\right)
+           {a_{\text{x}}}=-ω^{2} {L_{\text{rod}}} \sin\left({θ_{p}}\right)+α {L_{\text{rod}}} \cos\left({θ_{p}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -462,8 +512,30 @@ RefBy &
 \end{minipage}
 \paragraph{Detailed derivation of $x$-component acceleration:}
 \label{GD:accelerationIXDeriv}
+Our acceleration is:
+
 \begin{displaymath}
-{a_{\text{x}}}=-ω {L_{\text{rod}}} \sin\left({θ_{p}}\right)+α {L_{\text{rod}}} \cos\left({θ_{p}}\right)
+\mathbf{a}=\frac{\,d\mathbf{v}}{\,dt}
+\end{displaymath}
+Earlier, we found the horizontal velocity to be
+
+\begin{displaymath}
+{v_{\text{x}}}=ω {L_{\text{rod}}} \cos\left({θ_{p}}\right)
+\end{displaymath}
+Applying this to our equation for acceleration
+
+\begin{displaymath}
+{a_{\text{x}}}=\frac{\,dω {L_{\text{rod}}} \cos\left({θ_{p}}\right)}{\,dt}
+\end{displaymath}
+By the product and chain rules, we find
+
+\begin{displaymath}
+{a_{\text{x}}}=\frac{\,dω}{\,dt} {L_{\text{rod}}} \cos\left({θ_{p}}\right)-ω {L_{\text{rod}}} \sin\left({θ_{p}}\right) \frac{\,d{θ_{p}}}{\,dt}
+\end{displaymath}
+Simplifying,
+
+\begin{displaymath}
+{a_{\text{x}}}=-ω^{2} {L_{\text{rod}}} \sin\left({θ_{p}}\right)+α {L_{\text{rod}}} \cos\left({θ_{p}}\right)
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -480,7 +552,7 @@ Units & $\frac{\text{m}}{\text{s}^{2}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {a_{\text{y}}}=ω {L_{\text{rod}}} \cos\left({θ_{p}}\right)+α {L_{\text{rod}}} \sin\left({θ_{p}}\right)
+           {a_{\text{y}}}=ω^{2} {L_{\text{rod}}} \cos\left({θ_{p}}\right)+α {L_{\text{rod}}} \sin\left({θ_{p}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -500,8 +572,30 @@ RefBy &
 \end{minipage}
 \paragraph{Detailed derivation of $y$-component acceleration:}
 \label{GD:accelerationIYDeriv}
+Our acceleration is:
+
 \begin{displaymath}
-{a_{\text{y}}}=ω {L_{\text{rod}}} \cos\left({θ_{p}}\right)+α {L_{\text{rod}}} \sin\left({θ_{p}}\right)
+\mathbf{a}=\frac{\,d\mathbf{v}}{\,dt}
+\end{displaymath}
+Earlier, we found the vertical velocity to be
+
+\begin{displaymath}
+{v_{\text{y}}}=ω {L_{\text{rod}}} \sin\left({θ_{p}}\right)
+\end{displaymath}
+Applying this to our equation for acceleration
+
+\begin{displaymath}
+{a_{\text{y}}}=\frac{\,dω {L_{\text{rod}}} \sin\left({θ_{p}}\right)}{\,dt}
+\end{displaymath}
+By the product and chain rules, we find
+
+\begin{displaymath}
+{a_{\text{y}}}=\frac{\,dω}{\,dt} {L_{\text{rod}}} \sin\left({θ_{p}}\right)+ω {L_{\text{rod}}} \cos\left({θ_{p}}\right) \frac{\,d{θ_{p}}}{\,dt}
+\end{displaymath}
+Simplifying,
+
+\begin{displaymath}
+{a_{\text{y}}}=ω^{2} {L_{\text{rod}}} \cos\left({θ_{p}}\right)+α {L_{\text{rod}}} \sin\left({θ_{p}}\right)
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -761,7 +855,7 @@ Units & ${\text{m}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {{p_{\text{y}}}^{\text{i}}}={L_{\text{rod}}} \cos\left({θ_{i}}\right)
+           {{p_{\text{y}}}^{\text{i}}}=-{L_{\text{rod}}} \cos\left({θ_{i}}\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}

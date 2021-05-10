@@ -10,9 +10,9 @@ import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst,
         requirement, srs, typUnc)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
 import Data.Drasil.SI_Units (metre, degree, radian)
-import qualified Data.Drasil.Quantities.Physics as QP (position, ixPos, force, velocity,
+import qualified Data.Drasil.Quantities.Physics as QP (position, ixPos, xPos, force, velocity,
   angularVelocity, angularAccel, gravitationalAccel, tension, acceleration, yAccel,
-  xAccel, yVel, xVel, iyPos, time, position, torque, momentOfInertia, angularDisplacement,
+  xAccel, yVel, xVel, iyPos, yPos, time, torque, momentOfInertia, angularDisplacement,
   angularFrequency, frequency, period)
 import Data.Drasil.Concepts.Physics (pendulum, twoD)
 import Data.Drasil.Concepts.Math as CM (angle)
@@ -36,7 +36,7 @@ units :: [UnitaryConceptDict]
 units = map ucw unitalChunks ++ map ucw [lenRod, pendDisplacementAngle, initialPendAngle]
 
 unitalChunks :: [UnitalChunk]
-unitalChunks = [lenRod, QPP.mass, QP.force, QP.ixPos,
+unitalChunks = [lenRod, QPP.mass, QP.force, QP.ixPos, QP.xPos, QP.yPos,
    QP.angularVelocity, QP.angularAccel, QP.gravitationalAccel, QP.tension, QP.acceleration,
    QP.yAccel, QP.xAccel, QP.yVel, QP.xVel, QP.iyPos, QP.time, QP.velocity, QP.position, QP.torque,
    QP.momentOfInertia, QP.angularDisplacement, QP.angularVelocity, initialPendAngle,

@@ -3,6 +3,7 @@ module Language.Drasil.Code.Imperative.Helpers (
 ) where
 
 import Language.Drasil
+import Language.Drasil.Development (OrdBinOp(Lt))
 import Database.Drasil (symbResolve)
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
@@ -15,7 +16,7 @@ liftS = fmap (: [])
 
 -- For an expression using a less than operator, gets the upper bound
 getUpperBound :: Expr -> Expr
-getUpperBound (BinaryOp Lt _ b) = b
+getUpperBound (OrdBinaryOp Lt _ b) = b
 getUpperBound _ = error "Attempt to get upper bound of invalid expression"
 
 -- Gets the QuantityDict corresponding to a UID

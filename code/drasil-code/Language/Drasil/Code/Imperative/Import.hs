@@ -9,7 +9,7 @@ module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
 import Language.Drasil hiding (Ref, int, log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
 import Language.Drasil.Development (UFuncB(..), UFuncVec(..), 
-  EqBinOp(..), BoolBinOp(..))
+  EqBinOp(..), BoolBinOp(..), OrdBinOp(..))
 import Database.Drasil (symbResolve)
 import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
@@ -325,6 +325,7 @@ convExpr (BinaryOp Frac (Int a) (Int b)) = do -- hack to deal with integer divis
 convExpr (BinaryOp o a b)     = liftM2 (bfunc o) (convExpr a) (convExpr b)
 convExpr (BoolBinaryOp o a b) = liftM2 (boolBfunc o) (convExpr a) (convExpr b)
 convExpr (EqBinaryOp o a b)   = liftM2 (eqBfunc o) (convExpr a) (convExpr b)
+convExpr (OrdBinaryOp o a b)  = liftM2 (ordBfunc o) (convExpr a) (convExpr b)
 convExpr (Case c l)           = doit l -- FIXME this is sub-optimal
   where
     doit [] = error "should never happen" -- TODO: change error message?
@@ -411,10 +412,6 @@ unopVec Norm = error "unop: Norm not implemented" -- TODO
 
 -- Maps a BinOp to the corresponding GOOL binary function
 bfunc :: (OOProg r) => BinOp -> (SValue r -> SValue r -> SValue r)
-bfunc Gt    = (?>)
-bfunc Lt    = (?<)
-bfunc LEq   = (?<=)
-bfunc GEq   = (?>=)
 bfunc Cross = error "bfunc: Cross not implemented"
 bfunc Pow   = (#^)
 bfunc Subt  = (#-)
@@ -431,6 +428,13 @@ boolBfunc Iff  = error "convExpr :<=>"
 eqBfunc :: (OOProg r) => EqBinOp -> (SValue r -> SValue r -> SValue r)
 eqBfunc Eq  = (?==)
 eqBfunc NEq = (?!=)
+
+-- Maps an OrdBinOp to the corresponding GOOL binary function
+ordBfunc :: (OOProg r) => OrdBinOp -> (SValue r -> SValue r -> SValue r)
+ordBfunc Gt  = (?>)
+ordBfunc Lt  = (?<)
+ordBfunc LEq = (?<=)
+ordBfunc GEq = (?>=)
 
 -- medium hacks --
 

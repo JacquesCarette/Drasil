@@ -1,7 +1,7 @@
 module Language.Drasil.Expr.Precedence where
 
 import Language.Drasil.Expr (BinOp(..), AssocBoolOper(..), AssocArithOper(..),
-  UFunc(..), Expr(..), UFuncB(..), UFuncVec(..), EqBinOp(..), BoolBinOp)
+  UFunc(..), Expr(..), UFuncB(..), UFuncVec(..), EqBinOp(..), BoolBinOp, OrdBinOp)
 
 -- These precedences are inspired from Haskell/F# 
 -- as documented at http://kevincantu.org/code/operators.html
@@ -12,10 +12,6 @@ prec2 :: BinOp -> Int
 prec2 Frac = 190
 prec2 Pow = 200
 prec2 Subt = 180
-prec2 Lt  = 130
-prec2 Gt  = 130
-prec2 LEq  = 130
-prec2 GEq  = 130
 prec2 Index = 250
 prec2 Dot = 190
 prec2 Cross = 190
@@ -27,6 +23,10 @@ prec2Bool _ = 130
 -- | prec2Eq - precedence for equality-related binary operations
 prec2Eq :: EqBinOp -> Int
 prec2Eq _  = 130
+
+-- | prec2Ord - precedence for order-related binary operations
+prec2Ord :: OrdBinOp -> Int
+prec2Ord _  = 130
 
 -- | prec - precedence for Binary-Associative (Commutative) operators
 precA :: AssocArithOper -> Int
@@ -75,5 +75,6 @@ eprec (Operator o _ _)      = precA o
 eprec (BinaryOp bo _ _)     = prec2 bo
 eprec (BoolBinaryOp bo _ _) = prec2Bool bo
 eprec (EqBinaryOp bo _ _)   = prec2Eq bo
+eprec (OrdBinaryOp bo _ _)  = prec2Ord bo
 eprec IsIn{}                = 170
 eprec RealI{}               = 170

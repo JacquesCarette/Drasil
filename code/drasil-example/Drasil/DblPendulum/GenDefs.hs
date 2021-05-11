@@ -102,15 +102,15 @@ velocityIYDerivSent5 = S "Therefore, using the chain rule,"
 
 -----------------------
 accelerationIXGD :: GenDefn
-accelerationIXGD = gdNoRefs (OthModel accelerationIXRC) (getUnit acceleration)
+accelerationIXGD = gdNoRefs (EquationalModel accelerationIXQD) (getUnit acceleration)
            (Just accelerationIXDeriv) "accelerationIX" [{-Notes-}]
 
-accelerationIXRC :: RelationConcept
-accelerationIXRC = makeRC "accelerationIXRC" (nounPhraseSent $ foldlSent_ 
-            [ phrase xComp `sOf` phrase acceleration `the_ofThe` phrase pendulum]) EmptyS accelerationIXRel
+accelerationIXQD :: QDefinition
+accelerationIXQD = mkQuantDef' xAccel (nounPhraseSent $ foldlSent_ 
+    [phrase xComp `sOf` phrase acceleration `the_ofThe` phrase pendulum]) accelerationIXExpr
  
-accelerationIXRel :: Relation             
-accelerationIXRel = sy xAccel $= negate (square (sy angularVelocity) * sy lenRod * sin (sy pendDisplacementAngle))
+accelerationIXExpr :: Expr             
+accelerationIXExpr = negate (square (sy angularVelocity) * sy lenRod * sin (sy pendDisplacementAngle))
                     + sy angularAccel * sy lenRod * cos (sy pendDisplacementAngle)
 
 accelerationIXDeriv :: Derivation
@@ -121,7 +121,7 @@ accelerationIXDerivSents = [accelerationIDerivSent1, accelerationIXDerivSent2, a
     accelerationIXDerivSent4, accelerationIXDerivSent5]
 
 accelerationIXDerivEqns :: [Expr]
-accelerationIXDerivEqns = [accelerationIDerivEqn1, accelerationIXDerivEqn2, accelerationIXDerivEqn3, accelerationIXDerivEqn4, accelerationIXRel]
+accelerationIXDerivEqns = [accelerationIDerivEqn1, accelerationIXDerivEqn2, accelerationIXDerivEqn3, accelerationIXDerivEqn4, relat accelerationIXQD]
 
 accelerationIDerivSent1, accelerationIXDerivSent2, accelerationIXDerivSent3,
      accelerationIXDerivSent4, accelerationIXDerivSent5 :: Sentence

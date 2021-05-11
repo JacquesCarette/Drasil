@@ -57,7 +57,7 @@ initialPendAngle = makeUCWDS "initialPendAngle" (cn "initial pendulum angle")
         (sub lTheta lI) radian
 
 concepts :: [IdeaDict]
-concepts = map nw [rod] 
+concepts = [nw rod] 
        
 rod :: NamedChunk
 rod = nc "rod" (cn' "rod")

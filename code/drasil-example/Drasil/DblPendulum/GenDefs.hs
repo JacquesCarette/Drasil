@@ -4,7 +4,7 @@ module Drasil.DblPendulum.GenDefs (genDefns, velocityIXGD, velocityIYGD,
 
 import Prelude hiding (cos, sin, sqrt)
 import Language.Drasil
-import Theory.Drasil (GenDefn, gdNoRefs, ModelKinds (OthModel))
+import Theory.Drasil (GenDefn, gdNoRefs, ModelKinds (OthModel, EquationalModel))
 import Utils.Drasil
 
 -- import Data.Drasil.Concepts.Documentation (coordinate, symbol_)
@@ -29,16 +29,16 @@ genDefns = [velocityIXGD, velocityIYGD, accelerationIXGD, accelerationIYGD,
 
 -- ----------
 velocityIXGD :: GenDefn
-velocityIXGD = gdNoRefs (OthModel velocityIXRC) (getUnit velocity)
+velocityIXGD = gdNoRefs (EquationalModel velocityIXQD) (getUnit velocity)
            (Just velocityIXDeriv) "velocityIX" [{-Notes-}]
 
-velocityIXRC :: RelationConcept
-velocityIXRC =  makeRC "velocityIXRC" (nounPhraseSent $ foldlSent_ 
-            [ phrase xComp `sOf` phrase velocity `the_ofThe` phrase pendulum])
-            EmptyS velocityIXRel
+velocityIXQD :: QDefinition
+velocityIXQD = mkQuantDef' xVel (nounPhraseSent $ foldlSent_ 
+    [phrase xComp `sOf` phrase velocity `the_ofThe` phrase pendulum])
+    velocityIXExpr
 
-velocityIXRel :: Relation             
-velocityIXRel = sy xVel $= sy angularVelocity * sy lenRod * cos (sy pendDisplacementAngle)
+velocityIXExpr :: Expr             
+velocityIXExpr = sy angularVelocity * sy lenRod * cos (sy pendDisplacementAngle)
 
 velocityIXDeriv :: Derivation
 velocityIXDeriv = mkDerivName (phrase xComp +:+ phrase velocity) (weave [velocityIXDerivSents, map E velocityIXDerivEqns])
@@ -49,7 +49,7 @@ velocityIXDerivSents = [velocityIDerivSent1,velocityIXDerivSent2,velocityIXDeriv
 
 velocityIXDerivEqns :: [Expr]
 velocityIXDerivEqns = [velocityIDerivEqn1,velocityIXDerivEqn2,velocityIXDerivEqn3,
-                            velocityIXDerivEqn4,velocityIXRel]
+                            velocityIXDerivEqn4, relat velocityIXQD]
 
 velocityIDerivSent1,velocityIXDerivSent2,velocityIXDerivSent3,velocityIXDerivSent4,velocityIXDerivSent5 :: Sentence
 velocityIDerivEqn1,velocityIXDerivEqn2,velocityIXDerivEqn3,velocityIXDerivEqn4 :: Expr
@@ -66,26 +66,28 @@ velocityIXDerivSent5 = S "Therefore, using the chain rule,"
 
 ---------------------
 velocityIYGD :: GenDefn
-velocityIYGD = gdNoRefs (OthModel velocityIYRC) (getUnit velocity)
+velocityIYGD = gdNoRefs (EquationalModel velocityIYQD) (getUnit velocity)
            (Just velocityIYDeriv) "velocityIY" [{-Notes-}]
 
-velocityIYRC :: RelationConcept
-velocityIYRC = makeRC "velocityIYRC" (nounPhraseSent $ foldlSent_ 
-            [ phrase yComp `sOf` phrase velocity `the_ofThe` phrase pendulum]) EmptyS velocityIYRel
+velocityIYQD :: QDefinition
+velocityIYQD = mkQuantDef' yVel (nounPhraseSent $ foldlSent_
+    [phrase yComp `sOf` phrase velocity `the_ofThe` phrase pendulum]) velocityIYExpr
  
-velocityIYRel :: Relation             
-velocityIYRel = sy yVel $= sy angularVelocity * sy lenRod * sin (sy pendDisplacementAngle)
+velocityIYExpr :: Expr             
+velocityIYExpr = sy angularVelocity * sy lenRod * sin (sy pendDisplacementAngle)
 
 velocityIYDeriv :: Derivation
 velocityIYDeriv = mkDerivName (phrase yComp +:+ phrase velocity) (weave [velocityIYDerivSents, map E velocityIYDerivEqns])
 
 velocityIYDerivSents :: [Sentence]
-velocityIYDerivSents = [velocityIDerivSent1,velocityIYDerivSent2,velocityIYDerivSent3,velocityIYDerivSent4,
-                            velocityIYDerivSent5,velocityIYDerivSent5]
+velocityIYDerivSents = [velocityIDerivSent1, velocityIYDerivSent2,
+                        velocityIYDerivSent3, velocityIYDerivSent4,
+                        velocityIYDerivSent5, velocityIYDerivSent5]
 
 velocityIYDerivEqns :: [Expr]
-velocityIYDerivEqns = [velocityIDerivEqn1,velocityIYDerivEqn2,velocityIYDerivEqn3,
-                            velocityIYDerivEqn4,velocityIYRel]
+velocityIYDerivEqns = [velocityIDerivEqn1, velocityIYDerivEqn2,
+                       velocityIYDerivEqn3, velocityIYDerivEqn4,
+                       relat velocityIYQD]
 
 velocityIYDerivSent2,velocityIYDerivSent3,velocityIYDerivSent4,velocityIYDerivSent5 :: Sentence
 velocityIYDerivEqn2,velocityIYDerivEqn3,velocityIYDerivEqn4 :: Expr
@@ -128,7 +130,7 @@ accelerationIDerivEqn1, accelerationIXDerivEqn2, accelerationIXDerivEqn3, accele
 accelerationIDerivSent1 = S "Our" +:+ phrase acceleration +: S "is"
 accelerationIDerivEqn1 = sy acceleration $= deriv (sy velocity) time 
 accelerationIXDerivSent2 = S "Earlier" `sC` S "we found the horizontal" +:+ phrase velocity +:+ S "to be"
-accelerationIXDerivEqn2 = velocityIXRel
+accelerationIXDerivEqn2 = relat velocityIXQD
 accelerationIXDerivSent3 = S "Applying this to our equation for" +:+ phrase acceleration
 accelerationIXDerivEqn3 = sy xAccel $= deriv (sy angularVelocity * sy lenRod * cos (sy pendDisplacementAngle)) time
 accelerationIXDerivSent4 = S "By the product and chain rules, we find"
@@ -164,7 +166,7 @@ accelerationIYDerivSent2, accelerationIYDerivSent3, accelerationIYDerivSent4,
 accelerationIYDerivEqn2, accelerationIYDerivEqn3, accelerationIYDerivEqn4 :: Expr
 
 accelerationIYDerivSent2 = S "Earlier" `sC` S "we found the vertical" +:+ phrase velocity +:+ S "to be"
-accelerationIYDerivEqn2 = velocityIYRel
+accelerationIYDerivEqn2 = relat velocityIYQD
 accelerationIYDerivSent3 = S "Applying this to our equation for" +:+ phrase acceleration
 accelerationIYDerivEqn3 = sy yAccel $= deriv (sy angularVelocity * sy lenRod * sin (sy pendDisplacementAngle)) time
 accelerationIYDerivSent4 = S "By the product and chain rules, we find"

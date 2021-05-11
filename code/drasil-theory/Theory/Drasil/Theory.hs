@@ -1,6 +1,8 @@
 {-# Language TemplateHaskell #-}
 module Theory.Drasil.Theory (Theory(..), TheoryModel, tm, tmNoRefs) where
 
+import Theory.Drasil.ModelKinds (ModelKinds)
+
 import Language.Drasil
 import Data.Drasil.TheoryConcepts (thModel)
 
@@ -67,18 +69,18 @@ instance Referable TheoryModel where
 -- This "smart" constructor is really quite awful, it takes way too many arguments.
 -- This should likely be re-arranged somehow. Especially since since of the arguments
 -- have the same type!
-tm :: (Concept c0, Quantity q, MayHaveUnit q, Concept c1) => c0 ->
-    [q] -> [c1] -> [QDefinition] ->
+tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKinds ->
+    [q] -> [c] -> [QDefinition] ->
     [Relation] -> [QDefinition] -> [Reference] ->
     String -> [Sentence] -> TheoryModel
-tm c _ _ _ _ _ [] _         = error $ "Source field of " ++ c ^. uid ++ " is empty"
-tm c0 q c1 dq inv dfn r lbe = 
-  TM (cw c0) [] [] (map qw q) (map cw c1) dq inv dfn r (shortname' lbe)
+tm mk _ _ _ _ _ [] _         = error $ "Source field of " ++ mk ^. uid ++ " is empty"
+tm mk q c dq inv dfn r lbe = 
+  TM (cw mk) [] [] (map qw q) (map cw c) dq inv dfn r (shortname' lbe)
       (prependAbrv thModel lbe)
 
-tmNoRefs :: (Concept c0, Quantity q, MayHaveUnit q, Concept c1) => c0 ->
-    [q] -> [c1] -> [QDefinition] -> [Relation] -> [QDefinition] -> 
+tmNoRefs :: (Quantity q, MayHaveUnit q, Concept c) => ModelKinds ->
+    [q] -> [c] -> [QDefinition] -> [Relation] -> [QDefinition] -> 
     String -> [Sentence] -> TheoryModel
-tmNoRefs c0 q c1 dq inv dfn lbe = 
-  TM (cw c0) [] [] (map qw q) (map cw c1) dq inv dfn [] (shortname' lbe)
+tmNoRefs mk q c dq inv dfn lbe = 
+  TM (cw mk) [] [] (map qw q) (map cw c) dq inv dfn [] (shortname' lbe)
       (prependAbrv thModel lbe)

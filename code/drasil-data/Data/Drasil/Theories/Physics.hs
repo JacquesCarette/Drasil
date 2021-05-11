@@ -22,7 +22,7 @@ physicsTMs :: [TheoryModel]
 physicsTMs = [newtonSL]
 
 newtonSL :: TheoryModel
-newtonSL = tmNoRefs (cw newtonSLRC)
+newtonSL = tmNoRefs (OthModel newtonSLRC)
   [qw QP.force, qw QPP.mass, qw QP.acceleration] ([] :: [ConceptChunk])
   [] [newtonSLRel] [] "NewtonSecLawMot" [newtonSLDesc]
 
@@ -107,7 +107,7 @@ torqueDesc = foldlSent [S "The", phrase torque,
 
 --
 newtonSLR :: TheoryModel
-newtonSLR = tmNoRefs (cw newtonSLRRC)
+newtonSLR = tmNoRefs (OthModel newtonSLRRC)
   [qw QP.torque, qw QP.momentOfInertia, qw QP.angularAccel] 
   ([] :: [ConceptChunk]) [] [newtonSLRRel] [] "NewtonSecLawRotMot" newtonSLRNotes
 
@@ -127,13 +127,13 @@ newtonSLRNotes = map foldlSent [
 --
 
 accelerationTM :: TheoryModel
-accelerationTM = tm (cw accelerationRC)
+accelerationTM = tm (OthModel accelerationRC)
   [qw QP.acceleration, qw QP.velocity, qw QP.time] ([] :: [ConceptChunk]) [] [accelerationEqn] []
   [makeCite accelerationWiki] "acceleration" []
 
 ----------
 
 velocityTM :: TheoryModel
-velocityTM = tm (cw velocityRC)
+velocityTM = tm (OthModel velocityRC)
   [qw QP.velocity, qw QP.position, qw QP.time] ([] :: [ConceptChunk]) [] [velocityEqn] []
   [makeCite velocityWiki] "velocity" []

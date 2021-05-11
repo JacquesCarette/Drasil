@@ -1,7 +1,7 @@
 module Drasil.GlassBR.TMods (tMods, pbIsSafe, lrIsSafe) where
 
 import Language.Drasil
-import Theory.Drasil (TheoryModel, tm)
+import Theory.Drasil (TheoryModel, tm, ModelKinds(EquationalModel))
 
 import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (isSafeLoad, isSafeProb, pbTolfail, probFail,
@@ -21,7 +21,7 @@ tMods = [pbIsSafe, lrIsSafe]
 
 
 lrIsSafe :: TheoryModel
-lrIsSafe = tm (cw lrIsSafeQD)
+lrIsSafe = tm (EquationalModel lrIsSafeQD)
    [qw isSafeLoad, qw tmLRe, qw tmDemand] ([] :: [ConceptChunk])
    [lrIsSafeQD] [sy isSafeLoad $= lrIsSafeExpr] [] [makeCite astm2009] 
    "isSafeLoad" [lrIsSafeDesc]
@@ -36,7 +36,7 @@ lrIsSafeDesc :: Sentence
 lrIsSafeDesc = tModDesc isSafeLoad
 
 pbIsSafe :: TheoryModel
-pbIsSafe = tm (cw pbIsSafeQD) 
+pbIsSafe = tm (EquationalModel pbIsSafeQD) 
   [qw isSafeProb, qw probFail, qw pbTolfail] ([] :: [ConceptChunk])
   [pbIsSafeQD] [sy isSafeProb $= pbIsSafeExpr] [] [makeCite astm2009]
   "isSafeProb" [pbIsSafeDesc]

@@ -66,26 +66,28 @@ velocityIXDerivSent5 = S "Therefore, using the chain rule,"
 
 ---------------------
 velocityIYGD :: GenDefn
-velocityIYGD = gdNoRefs (OthModel velocityIYRC) (getUnit velocity)
+velocityIYGD = gdNoRefs (EquationalModel velocityIYQD) (getUnit velocity)
            (Just velocityIYDeriv) "velocityIY" [{-Notes-}]
 
-velocityIYRC :: RelationConcept
-velocityIYRC = makeRC "velocityIYRC" (nounPhraseSent $ foldlSent_ 
-            [ phrase yComp `sOf` phrase velocity `the_ofThe` phrase pendulum]) EmptyS velocityIYRel
+velocityIYQD :: QDefinition
+velocityIYQD = mkQuantDef' yVel (nounPhraseSent $ foldlSent_
+    [phrase yComp `sOf` phrase velocity `the_ofThe` phrase pendulum]) velocityIYExpr
  
-velocityIYRel :: Relation             
-velocityIYRel = sy yVel $= sy angularVelocity * sy lenRod * sin (sy pendDisplacementAngle)
+velocityIYExpr :: Expr             
+velocityIYExpr = sy angularVelocity * sy lenRod * sin (sy pendDisplacementAngle)
 
 velocityIYDeriv :: Derivation
 velocityIYDeriv = mkDerivName (phrase yComp +:+ phrase velocity) (weave [velocityIYDerivSents, map E velocityIYDerivEqns])
 
 velocityIYDerivSents :: [Sentence]
-velocityIYDerivSents = [velocityIDerivSent1,velocityIYDerivSent2,velocityIYDerivSent3,velocityIYDerivSent4,
-                            velocityIYDerivSent5,velocityIYDerivSent5]
+velocityIYDerivSents = [velocityIDerivSent1, velocityIYDerivSent2,
+                        velocityIYDerivSent3, velocityIYDerivSent4,
+                        velocityIYDerivSent5, velocityIYDerivSent5]
 
 velocityIYDerivEqns :: [Expr]
-velocityIYDerivEqns = [velocityIDerivEqn1,velocityIYDerivEqn2,velocityIYDerivEqn3,
-                            velocityIYDerivEqn4,velocityIYRel]
+velocityIYDerivEqns = [velocityIDerivEqn1, velocityIYDerivEqn2,
+                       velocityIYDerivEqn3, velocityIYDerivEqn4,
+                       relat velocityIYQD]
 
 velocityIYDerivSent2,velocityIYDerivSent3,velocityIYDerivSent4,velocityIYDerivSent5 :: Sentence
 velocityIYDerivEqn2,velocityIYDerivEqn3,velocityIYDerivEqn4 :: Expr
@@ -164,7 +166,7 @@ accelerationIYDerivSent2, accelerationIYDerivSent3, accelerationIYDerivSent4,
 accelerationIYDerivEqn2, accelerationIYDerivEqn3, accelerationIYDerivEqn4 :: Expr
 
 accelerationIYDerivSent2 = S "Earlier" `sC` S "we found the vertical" +:+ phrase velocity +:+ S "to be"
-accelerationIYDerivEqn2 = velocityIYRel
+accelerationIYDerivEqn2 = relat velocityIYQD
 accelerationIYDerivSent3 = S "Applying this to our equation for" +:+ phrase acceleration
 accelerationIYDerivEqn3 = sy yAccel $= deriv (sy angularVelocity * sy lenRod * sin (sy pendDisplacementAngle)) time
 accelerationIYDerivSent4 = S "By the product and chain rules, we find"

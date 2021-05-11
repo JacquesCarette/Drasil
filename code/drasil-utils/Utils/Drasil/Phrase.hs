@@ -4,7 +4,7 @@ import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Control.Lens ((^.))
 
-import Utils.Drasil.Sentence (sAnd, sOf)
+import Utils.Drasil.Sentence (sAnd, sOf, ofThe)
 
 -- | Creates an NP by combining two 'NamedIdea's with the word "and" between
 -- their terms. Plural is defaulted to @(phrase t1) "of" (plural t2)@
@@ -89,6 +89,14 @@ ofA t1 t2 = nounPhrase''
   (plural t1 +:+ S "of a" +:+ phrase t2)
   (Replace (atStart' t1 +:+ S "of a" +:+ phrase t2))
   (Replace (titleize' t1 +:+ S "of a" +:+ titleize t2))
+
+-- | Same as of_, except combining Sentence piece is "of the"
+ofThe' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+ofThe' t1 t2 = nounPhrase'' 
+  (phrase t1 `ofThe` phrase t2)
+  (plural t1 `ofThe` phrase t2)
+  (Replace (atStart' t1 `ofThe` phrase t2))
+  (Replace (titleize' t1 `ofThe` titleize t2))
 
 --FIXME: As mentioned in issue #487, the following should be re-examined later,
 --       as they may embody a deeper idea in some cases.

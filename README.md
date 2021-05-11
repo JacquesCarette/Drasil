@@ -32,7 +32,7 @@ We wrote a [our position paper](https://github.com/JacquesCarette/Drasil/blob/ma
 
 ## Quick Start
 
-If you are on Windows, we recommend you use cygwin (MinGW probably works too, but we have not tested it).  `make` is required as well; on MacOS, you may need to install XCode to get that. Most linux installs have it by default.
+If you are on Windows, we recommend you use [cygwin](https://cygwin.com/install.html) (MinGW probably works too, but we have not tested it).  `make` is required as well and can be installed following [these steps](https://stackoverflow.com/questions/32127524/how-to-install-and-use-make-in-windows) ; on MacOS, you may need to install XCode to get that. Most linux installs have it by default. You may also need to install [git](https://git-scm.com/downloads).
 
 1. Ensure you have [Stack](https://www.haskell.org/downloads#stack) installed (if you have the Haskell Platform, you should already have Stack).
 	- Also ensure that your stack version is at least 2.3.1 (latest version); for help, see [Stack Install & Upgrade](https://docs.haskellstack.org/en/stable/install_and_upgrade/)

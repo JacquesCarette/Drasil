@@ -175,9 +175,7 @@ tMods = [accelerationTM, velocityTM, newtonSL, newtonSLR]
 -- ---------------------------------
 
 physSystParts :: [Sentence]
-physSystParts = map foldlSent [
-  [S "The", phrase rod],
-  [S "The", phrase mass]]
+physSystParts = map phraseNP [the rod, the mass]
   
 
 

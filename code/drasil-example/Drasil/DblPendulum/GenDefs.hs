@@ -140,15 +140,15 @@ accelerationIXDerivSent5 = S "Simplifying,"
 
 -----------------------
 accelerationIYGD :: GenDefn
-accelerationIYGD = gdNoRefs (OthModel accelerationIYRC) (getUnit acceleration)
+accelerationIYGD = gdNoRefs (EquationalModel accelerationIYQD) (getUnit acceleration)
            (Just accelerationIYDeriv) "accelerationIY" [{-Notes-}]
 
-accelerationIYRC :: RelationConcept
-accelerationIYRC = makeRC "accelerationIYRC" (nounPhraseSent $ foldlSent_ 
-            [ phrase yComp `sOf` phrase acceleration `the_ofThe` phrase pendulum]) EmptyS accelerationIYRel
- 
-accelerationIYRel :: Relation             
-accelerationIYRel = sy yAccel $= (square (sy angularVelocity) * sy lenRod * cos (sy pendDisplacementAngle))
+accelerationIYQD :: QDefinition
+accelerationIYQD = mkQuantDef' yAccel (nounPhraseSent $ foldlSent_
+    [phrase yComp `sOf` phrase acceleration `the_ofThe` phrase pendulum]) accelerationIYExpr
+
+accelerationIYExpr :: Expr             
+accelerationIYExpr = (square (sy angularVelocity) * sy lenRod * cos (sy pendDisplacementAngle))
                     + sy angularAccel * sy lenRod * sin (sy pendDisplacementAngle)
 
 accelerationIYDeriv :: Derivation
@@ -159,7 +159,7 @@ accelerationIYDerivSents = [accelerationIDerivSent1, accelerationIYDerivSent2, a
     accelerationIYDerivSent4, accelerationIYDerivSent5]
 
 accelerationIYDerivEqns :: [Expr]
-accelerationIYDerivEqns = [accelerationIDerivEqn1, accelerationIYDerivEqn2, accelerationIYDerivEqn3, accelerationIYDerivEqn4, accelerationIYRel]
+accelerationIYDerivEqns = [accelerationIDerivEqn1, accelerationIYDerivEqn2, accelerationIYDerivEqn3, accelerationIYDerivEqn4, relat accelerationIYQD]
 
 accelerationIYDerivSent2, accelerationIYDerivSent3, accelerationIYDerivSent4, 
     accelerationIYDerivSent5 :: Sentence

@@ -1,12 +1,11 @@
 
 {-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables  #-}
-module Theory.Drasil.ModelKinds ( ModelKinds(..), setMk, elimMk, lensMk, getEqModQds ) where
+module Theory.Drasil.ModelKinds (ModelKinds(..), setMk, elimMk, lensMk, getEqModQds) where
 
-import Language.Drasil
-    ( QDefinition, RelationConcept, ConceptDomain(..), Definition(..), 
-    ExprRelat(..), Idea(..), NamedIdea(..), HasUID(..) )
-import Control.Lens
-    ( Lens', (^.), to, lens, set, makeLenses, Getter, Setter' )
+import Language.Drasil (QDefinition, RelationConcept, ConceptDomain(..),
+                        Definition(..), ExprRelat(..), Idea(..), 
+                        NamedIdea(..), HasUID(..))
+import Control.Lens (Lens', (^.), to, lens, set, makeLenses, Getter, Setter')
 import Data.Maybe (mapMaybe)
 
 data ModelKinds = EquationalModel QDefinition

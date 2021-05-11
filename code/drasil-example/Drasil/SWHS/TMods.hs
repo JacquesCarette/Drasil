@@ -3,7 +3,7 @@ module Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, latentHtE,
 
 import Language.Drasil
 import Control.Lens ((^.))
-import Theory.Drasil (TheoryModel, tm)
+import Theory.Drasil (TheoryModel, tm, ModelKinds(OthModel))
 import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (system)
@@ -32,7 +32,7 @@ tMods = [consThermE, sensHtE, latentHtE, nwtnCooling]
 -- Theoretical Model 1 --
 -------------------------
 consThermE :: TheoryModel
-consThermE = tm consThermERC
+consThermE = tm (OthModel consThermERC)
   [qw thFluxVect, qw gradient, qw volHtGen, 
     qw density, qw heatCapSpec, qw temp, qw time] ([] :: [ConceptChunk])
   [] [consThermERel] [] [consThemESrc] "consThermE" consThermENotes
@@ -69,7 +69,7 @@ data PhaseChange = AllPhases
                  | Liquid
 
 sensHtETemplate :: PhaseChange -> Sentence -> TheoryModel
-sensHtETemplate pc desc = tm (sensHtERC pc eqn desc)
+sensHtETemplate pc desc = tm (OthModel $ sensHtERC pc eqn desc)
   [qw sensHeat, qw htCapS, qw mass, 
     qw deltaT, qw meltPt, qw temp, qw htCapL, qw boilPt, qw htCapV] ([] :: [ConceptChunk])
   [] [eqn] [] [sensHtESrc] "sensHtE" [desc] where
@@ -118,7 +118,7 @@ sensHtEdesc = foldlSent [
 -- Theoretical Model 3 --
 -------------------------
 latentHtE :: TheoryModel
-latentHtE = tm latentHtERC
+latentHtE = tm (OthModel latentHtERC)
   [qw latentHeat, qw time, qw tau] ([] :: [ConceptChunk])
   [] [latHtEEqn] [] [latHtESrc] "latentHtE" latentHtENotes
 
@@ -152,7 +152,7 @@ latentHtENotes = map foldlSent [
 -- Theoretical Model 4 --
 -------------------------
 nwtnCooling :: TheoryModel
-nwtnCooling = tm nwtnCoolingRC
+nwtnCooling = tm (OthModel nwtnCoolingRC)
   [qw latentHeat, qw time, qw htTransCoeff, qw deltaT] ([] :: [ConceptChunk])
   [] [nwtnCoolingEqn] [] [makeCiteInfo incroperaEtAl2007 $ Page [8]]
   "nwtnCooling" nwtnCoolingNotes

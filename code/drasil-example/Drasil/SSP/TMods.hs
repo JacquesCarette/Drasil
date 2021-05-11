@@ -3,7 +3,7 @@ module Drasil.SSP.TMods (tMods, factOfSafety, equilibrium, mcShrStrgth, effStres
 
 import Prelude hiding (tan)
 import Language.Drasil
-import Theory.Drasil (TheoryModel, tm)
+import Theory.Drasil (TheoryModel, tm, ModelKinds(EquationalModel, OthModel))
 import Utils.Drasil
 
 import Data.Drasil.Quantities.Physics (distance, force)
@@ -28,7 +28,7 @@ tMods = [factOfSafety, equilibrium, mcShrStrgth, effStress, newtonSL]
 
 ------------- New Chunk -----------
 factOfSafety :: TheoryModel
-factOfSafety = tm (cw factOfSafetyQD)
+factOfSafety = tm (EquationalModel factOfSafetyQD)
   [qw fs, qw resistiveShear, qw mobilizedShear] ([] :: [ConceptChunk])
   [] [relat factOfSafetyQD] [] [makeCite fredlund1977] "factOfSafety" []
 
@@ -42,7 +42,7 @@ factOfSafetyExpr = sy resistiveShear / sy mobilizedShear
 --
 ------------- New Chunk -----------
 equilibrium :: TheoryModel
-equilibrium = tm (cw equilibriumRC)
+equilibrium = tm (OthModel equilibriumRC)
   [qw fx] ([] :: [ConceptChunk])
   [] [eqRel] [] [makeCite fredlund1977] "equilibrium" [eqDesc]
 
@@ -65,7 +65,7 @@ eqDesc = foldlSent [S "For a body in static equilibrium, the net",
 --
 ------------- New Chunk -----------
 mcShrStrgth :: TheoryModel
-mcShrStrgth = tm (cw mcShrStrgthRC)
+mcShrStrgth = tm (OthModel mcShrStrgthRC)
   [qw shrStress, qw effNormStress, qw fricAngle, qw effCohesion] 
   ([] :: [ConceptChunk])
   [] [mcShrStrgthRel] [] [makeCite fredlund1977] "mcShrStrgth" [mcShrStrgthDesc]
@@ -95,7 +95,7 @@ mcShrStrgthDesc = foldlSent [S "In this", phrase model, S "the",
 --
 ------------- New Chunk -----------
 effStress :: TheoryModel
-effStress = tm (cw effStressRC)
+effStress = tm (OthModel effStressRC)
   [qw effectiveStress, qw totNormStress, qw porePressure] 
   ([] :: [ConceptChunk])
   [] [effStressRel] [] [makeCite fredlund1977] "effStress" [effStressDesc]

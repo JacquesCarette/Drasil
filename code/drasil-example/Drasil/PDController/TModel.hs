@@ -7,7 +7,7 @@ import Drasil.PDController.Concepts
 import Drasil.PDController.References
 import Language.Drasil
 import qualified Language.Drasil as DrasilLang
-import Theory.Drasil (TheoryModel, tm)
+import Theory.Drasil (TheoryModel, tm, ModelKinds(OthModel))
 import Utils.Drasil
 import Data.Drasil.Citations(laplaceWiki)
 import Drasil.PDController.Unitals
@@ -17,7 +17,7 @@ theoreticalModels = [tmLaplace, tmInvLaplace, tmSOSystem]
 
 tmLaplace :: TheoryModel
 tmLaplace
-  = tm (cw laplaceRC)
+  = tm (OthModel laplaceRC)
       [qw qdLaplaceTransform, qw qdFreqDomain, qw time, qw qdPosInf,
        qw qdFxnTDomain]
       ([] :: [ConceptChunk])
@@ -51,7 +51,7 @@ laplaceDesc
 
 tmInvLaplace :: TheoryModel
 tmInvLaplace
-  = tm (cw invlaplaceRC)
+  = tm (OthModel invlaplaceRC)
       [qw qdLaplaceTransform, qw qdFreqDomain, qw time, qw qdPosInf,
        qw qdFxnTDomain]
       ([] :: [ConceptChunk])
@@ -83,7 +83,7 @@ invLaplaceDesc
 
 tmSOSystem :: TheoryModel
 tmSOSystem
-  = tm (cw tmSOSystemRC)
+  = tm (OthModel tmSOSystemRC)
       [qw mass, qw qdDampingCoeff, qw qdStiffnessCoeff, qw qdFreqDomain]
       ([] :: [ConceptChunk])
       []

@@ -56,8 +56,7 @@ jobs:
       - name: "Install dependencies"
         run: stack --no-terminal test --bench --only-dependencies
       - name: "Build"
-        # TODO: Add back -Werror flag to stackArgs
-        run: make prog stackArgs="--no-terminal"
+        run: make prog stackArgs="--no-terminal" GHCFLAGS="-Werror"
       - name: "Stable"
         run: make stackArgs="--no-terminal" NOISY=yes
       - name: "TeX"

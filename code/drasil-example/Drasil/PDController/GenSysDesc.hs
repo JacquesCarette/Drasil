@@ -2,7 +2,6 @@ module Drasil.PDController.GenSysDesc where
 
 import Data.Drasil.Concepts.Documentation
        (environment, software, softwareSys, sysCont, system, user)
-
 import Drasil.PDController.Concepts
 import Language.Drasil
 import Utils.Drasil

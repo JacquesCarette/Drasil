@@ -1,7 +1,6 @@
 module Drasil.PDController.SpSysDesc where
 
 import Data.Drasil.Concepts.Documentation (goalStmtDom, physicalSystem)
-
 import Drasil.PDController.Concepts
 import Language.Drasil
 import Utils.Drasil
@@ -43,4 +42,3 @@ sysProcessVariable
             +:+ S " over time"])
       "Process-Variable"
       goalStmtDom
-

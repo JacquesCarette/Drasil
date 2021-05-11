@@ -108,11 +108,11 @@ ccTransferFxn
          ++ " functions in the Frequency Domain")
 
 ccDampingCoeff
-  = dcc "dampingCoeff" (nounPhraseSP "Damping Coeffecient")
+  = dcc "dampingCoeff" (nounPhraseSP "Damping Coefficient")
       "Quantity that characterizes a second order system's oscillatory response"
 
 ccStiffCoeff
-  = dcc "stiffnessCoeff" (nounPhraseSP "Stifness Coeffecient")
+  = dcc "stiffnessCoeff" (nounPhraseSP "Stiffness Coefficient")
       "Quantity that characterizes a spring's stiffness"
 
 concepts :: [IdeaDict]

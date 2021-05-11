@@ -5,7 +5,6 @@ import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (second)
 import Language.Drasil
 
-
 syms, symFS, symFt, symnegInf, symposInf, syminvLaplace, symKd, symKp,
        symYT, symYS, symYrT, symYrS, symET, symES, symPS, symDS, symHS,
        symCT, symCS, symTStep, symTSim, symAbsTol, symRelTol,
@@ -201,13 +200,13 @@ qdInvLaplaceTransform
       Real
 
 qdDampingCoeff
-  = vc "qdDampingCoeff" (nounPhraseSent (S "Damping coeffecient of the spring"))
+  = vc "qdDampingCoeff" (nounPhraseSent (S "Damping coefficient of the spring"))
       symDampingCoeff
       Real
 
 qdStiffnessCoeff
   = mkQuant "qdTimeConst"
-      (nounPhraseSent (S "Stifness coeffecient of the spring"))
+      (nounPhraseSent (S "Stiffness coefficient of the spring"))
       symStifnessCoeff
       Real
       (Just second)

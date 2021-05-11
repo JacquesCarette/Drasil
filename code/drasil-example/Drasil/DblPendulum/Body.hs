@@ -175,8 +175,8 @@ tMods = [accelerationTM, velocityTM, newtonSL, newtonSLR]
 -- ---------------------------------
 
 physSystParts :: [Sentence]
-physSystParts = map phraseNP [the rod, the mass]
-  
+physSystParts = map (\x -> atStartNP x :+: S ".") [the rod, the mass]
+--(\x -> sentenceCase x phraseNP :+: S ".")  
 
 
  

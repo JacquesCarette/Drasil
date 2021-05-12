@@ -23,8 +23,10 @@ infixr 9 $||
 -- TODO: Move the below to a separate file somehow. How to go about it?
 
 -- | Binary functions
-data BinOp = Frac | Pow | Subt | Index | Dot | Cross
+data BinOp = Index | Dot | Cross
   deriving Eq
+
+data ArithBinOp = Frac | Pow | Subt
 
 data EqBinOp = Eq | NEq
 
@@ -79,19 +81,21 @@ data Expr where
   -- | Access a field of an actor:
   --   1st UID is the actor,
   --   2nd UID is the field
-  Field :: UID -> UID -> Expr
+  Field    :: UID -> UID -> Expr
   -- | For multi-case expressions, each pair represents one case
   Case     :: Completeness -> [(Expr,Relation)] -> Expr
   Matrix   :: [[Expr]] -> Expr
   
   -- | Unary functions/operations
-  UnaryOp    :: UFunc -> Expr -> Expr
-  UnaryOpB   :: UFuncB -> Expr -> Expr
-  UnaryOpVec :: UFuncVec -> Expr -> Expr
+  UnaryOp       :: UFunc -> Expr -> Expr
+  UnaryOpB      :: UFuncB -> Expr -> Expr
+  UnaryOpVec    :: UFuncVec -> Expr -> Expr
 
-  BinaryOp     :: BinOp -> Expr -> Expr -> Expr
-  BoolBinaryOp :: BoolBinOp -> Expr -> Expr -> Expr
-  EqBinaryOp   :: EqBinOp -> Expr -> Expr -> Expr
+  -- | Binary functions/operations
+  BinaryOp      :: BinOp -> Expr -> Expr -> Expr
+  ArithBinaryOp :: ArithBinOp -> Expr -> Expr -> Expr
+  BoolBinaryOp  :: BoolBinOp -> Expr -> Expr -> Expr
+  EqBinaryOp    :: EqBinOp -> Expr -> Expr -> Expr
   OrdBinaryOp   :: OrdBinOp -> Expr -> Expr -> Expr
 
   -- | Operators are generalized arithmetic operators over a |DomainDesc|
@@ -104,28 +108,30 @@ data Expr where
   RealI    :: UID -> RealInterval Expr Expr -> Expr
 
 ($=), ($!=) :: Expr -> Expr -> Expr
-($=)   = EqBinaryOp Eq
-($!=)  = EqBinaryOp NEq
+($=)  = EqBinaryOp Eq
+($!=) = EqBinaryOp NEq
 
 ($<), ($>), ($<=), ($>=) :: Expr -> Expr -> Expr
-($<)   = OrdBinaryOp Lt
-($>)   = OrdBinaryOp Gt
-($<=)  = OrdBinaryOp LEq
-($>=)  = OrdBinaryOp GEq
+($<)  = OrdBinaryOp Lt
+($>)  = OrdBinaryOp Gt
+($<=) = OrdBinaryOp LEq
+($>=) = OrdBinaryOp GEq
 
-($.), ($-), ($/), ($^) :: Expr -> Expr -> Expr
-($.)   = BinaryOp Dot
-($-)   = BinaryOp Subt
-($/)   = BinaryOp Frac
-($^)   = BinaryOp Pow
+($.) :: Expr -> Expr -> Expr
+($.) = BinaryOp Dot
 
-($&&), ($||) :: Expr -> Expr -> Expr
-a $&& b = AssocB And [a,b]
-a $|| b = AssocB Or  [a,b]
+($-), ($/), ($^) :: Expr -> Expr -> Expr
+($-) = ArithBinaryOp Subt
+($/) = ArithBinaryOp Frac
+($^) = ArithBinaryOp Pow
 
 ($=>), ($<=>) :: Expr -> Expr -> Expr
 ($=>)  = BoolBinaryOp Impl
 ($<=>) = BoolBinaryOp Iff
+
+($&&), ($||) :: Expr -> Expr -> Expr
+a $&& b = AssocB And [a,b]
+a $|| b = AssocB Or  [a,b]
 
 type Variable = String
 
@@ -145,7 +151,7 @@ instance Num Expr where
   a              * (AssocA Mul l) = AssocA Mul (a : l)
   a              * b              = AssocA Mul [a, b]
 
-  a - b = BinaryOp Subt a b
+  a - b = ArithBinaryOp Subt a b
   
   fromInteger = Int
   abs         = UnaryOp Abs
@@ -169,6 +175,6 @@ instance Eq Expr where
   _              == _              =   False
 
 instance Fractional Expr where
-  a / b = BinaryOp Frac a b
-  fromRational r = BinaryOp Frac (fromInteger $ numerator   r)
-                                 (fromInteger $ denominator r)
+  a / b = ArithBinaryOp Frac a b
+  fromRational r = ArithBinaryOp Frac (fromInteger $ numerator   r)
+                                      (fromInteger $ denominator r)

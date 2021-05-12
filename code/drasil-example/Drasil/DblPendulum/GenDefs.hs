@@ -240,7 +240,7 @@ angFrequencyDerivSent1 = foldlSentCol [S "Consider the", phrase torque, S "on a"
                   S "The", phrase force, S "providing the restoring" +:+ phrase torque `sIs`(S "component of" +:+
                   phrase weight `the_ofThe` phrase pendulum) +:+. S "bob that acts along the arc length",
                   (phrase torque `isThe` S "length") `the_ofThe'` S "string", ch lenRod +:+ S "multiplied by", S "component"
-                  `the_ofThe` S "net", phrase force +:+ S "that is perpendicular to", S "radius" `the_ofThe` S "arc." +:+
+                  `the_ofThe` S "net", phrase force +:+ S "that is perpendicular to", S "radius" `the_ofThe` ((+.) (S "arc")) +:+
                   S "The minus sign indicates the" +:+ phrase torque +:+ S "acts in the opposite direction of the", phrase angularDisplacement]
 
 

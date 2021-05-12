@@ -2,7 +2,7 @@
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
 -- | Contains Sentences and helpers
 module Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), (+:+),
-  (+:+.), (+:), capSent, ch, sC, sDash, sentencePlural, sentenceShort,
+  (+:+.), (+:), (+.), capSent, ch, sC, sDash, sentencePlural, sentenceShort,
   sentenceSymb, sentenceTerm, sParen) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
@@ -84,9 +84,9 @@ a `sC` b = a :+: S "," +:+ b
 (+:+.) :: Sentence -> Sentence -> Sentence
 a +:+. b = a +:+ b :+: S "."
 
--- Helper which appends a period to the end of a sentence
---(+.) :: Sentence -> Sentence
---((+.) a) = a :+: S "."
+-- | Helper which appends a period to the end of a sentence
+(+.) :: Sentence -> Sentence
+(+.) a = a :+: S "."
 
 -- | Helper which concatenates two sentences using '+:+' then adds a colon to
 -- the end.

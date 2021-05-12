@@ -32,7 +32,7 @@ import Drasil.DblPendulum.Figures (figMotion)
 import Data.Drasil.Concepts.Math (mathcon, cartesian)
 import Data.Drasil.Quantities.Math (unitVect, unitVectj)
 import Drasil.DblPendulum.Assumptions (assumptions)
-import Drasil.DblPendulum.Concepts (rod, concepts)
+import Drasil.DblPendulum.Concepts (rod, concepts, motion)
 import Drasil.DblPendulum.Goals (goals, goalsInputs)
 import Drasil.DblPendulum.DataDefs (dataDefs)
 import Drasil.DblPendulum.IMods (iMods)
@@ -89,15 +89,15 @@ mkSRS = [RefSec $      --This creates the Reference section of the SRS
   ]
 
 justification :: Sentence
-justification = foldlSent [S "A", phrase pendulum, S "consists" `sOf` S "mass", 
+justification = foldlSent [S "A", phrase pendulum, S "consists" `sOf` phrase mass, 
                             S "attached to the end of a", phrase rod `andIts` S "moving curve" `sIs`
                             S "highly sensitive to initial conditions.", S "Therefore" `sC`
-                            S "it is useful to have a", phrase program, S "to simulate", S "motion"
+                            S "it is useful to have a", phrase program, S "to simulate", phrase motion
                             `the_ofThe` phrase pendulum, S "to exhibit its chaotic characteristics.",
                             S "The", phrase program, S "documented here is called", phrase pendulum]
 scope :: Sentence
 scope = foldlSent [S "the", phrase analysis `sOf` S "a", phrase twoD, 
-  sParen (getAcc twoD), phrase pendulum, S "motion", phrase problem,
+  sParen (getAcc twoD), phrase pendulum, phrase motion, phrase problem,
                    S "with various initial conditions"]
 
 pendulumTitle :: CI
@@ -156,7 +156,7 @@ concIns = assumptions ++ goals ++ funcReqs ++ nonFuncReqs
 ------------------------------------
 
 prob :: Sentence
-prob = foldlSent_ [ S "efficiently and correctly to predict the motion of a",  
+prob = foldlSent_ [ S "efficiently and correctly to predict the", phrase motion, S "of a",  
                    phrase pendulum]
 
 ---------------------------------

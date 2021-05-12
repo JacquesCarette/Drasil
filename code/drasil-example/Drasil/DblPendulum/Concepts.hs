@@ -9,12 +9,16 @@ pendulum :: CI
 pendulum = commonIdeaWithDict "pendulum" (pn "Pendulum") "Pendulum" [physics]
 
 concepts :: [IdeaDict]
-concepts = [nw rod] 
+concepts = map nw [rod, horizontal, vertical] ++ map nw defs 
        
-rod :: NamedChunk
+rod, horizontal, vertical :: NamedChunk
 rod = nc "rod" (cn' "rod")
 horizontal = nc "horizontal" (cn "horizontal") 
 vertical = nc "vertical" (cn "vertical") 
+---
+
+defs:: [ConceptChunk]
+defs = [shm, amplitude, component, arcLen, motion]
 
 shm, amplitude, component, arcLen, motion :: ConceptChunk
 shm = dcc "SHM" (nounPhraseSP "simple harmonic motion") ("repetitive movement back and forth through" ++
@@ -23,10 +27,9 @@ shm = dcc "SHM" (nounPhraseSP "simple harmonic motion") ("repetitive movement ba
                                                          "displacement on the other side")
 amplitude = dcc "amplitude" (nounPhraseSP "amplitude") ("the maximum displacement of a body measured from" ++
                                                         "its equilibrium position")
-
-component
-arcLen
-motion
+component = dcc "component" (nounPhrase "component" "components") "one part or direction of a vector"
+arcLen = dcc "arc length" (nounPhraseSP "arc length") "the distance between two points on a curve"
+motion = dcc "motion" (nounPhraseSP "motion") "the act of changing position from one place to another"
 
 
 

@@ -1,0 +1,23 @@
+Languages selected as Python.
+Modularity selected as Modular Combined.
+Input Structure selected as Unbundled.
+Constant Structure selected as Store Bundled.
+Constant Representation selected as Const.
+Implementation Type selected as Program.
+Software Constraint Behaviour selected as Exception.
+Physical Constraint Behaviour selected as Exception.
+Comments selected as CommentFunc CommentClass CommentMod.
+Dox Verbosity selected as Verbose.
+Dates selected as Hide.
+Log File Name selected as log.txt.
+Logging selected as.
+Auxiliary Files selected as SampleInput ../../datafiles/PDController/sampleInput.txt ReadME.
+Successfully selected first choice ODE Library package SciPy.
+Successfully matched String with String.
+Successfully matched Actor "Constants" with Object "Constants".
+Successfully matched Actor "InputParameters" with Object "InputParameters".
+Successfully matched Real with Double.
+Successfully matched Vect Rational with List Double.
+Successfully matched Rational with Double.
+Successfully matched Array Real with Array Double.
+Successfully matched Actor "numpyArray" with Object "numpyArray".

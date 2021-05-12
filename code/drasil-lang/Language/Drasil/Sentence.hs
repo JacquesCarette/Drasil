@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs #-}
+{-# LANGUAGE GADTs, PostfixOperators #-}
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
 -- | Contains Sentences and helpers
 module Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), (+:+),
@@ -83,6 +83,10 @@ a `sC` b = a :+: S "," +:+ b
 -- the end.
 (+:+.) :: Sentence -> Sentence -> Sentence
 a +:+. b = a +:+ b :+: S "."
+
+-- Helper which appends a period to the end of a sentence
+--(+.) :: Sentence -> Sentence
+--((+.) a) = a :+: S "."
 
 -- | Helper which concatenates two sentences using '+:+' then adds a colon to
 -- the end.

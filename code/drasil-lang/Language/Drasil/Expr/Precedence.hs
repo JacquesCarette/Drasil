@@ -1,9 +1,9 @@
 module Language.Drasil.Expr.Precedence where
 
-import Language.Drasil.Expr (Expr(..), 
+import Language.Drasil.Expr (Expr(..),
   BinOp(..), ArithBinOp(..), EqBinOp(..), BoolBinOp, OrdBinOp,
-  UFunc(..), UFuncB(..), UFuncVec(..), 
-  AssocBoolOper(..), AssocArithOper(..))
+  UFunc(..), UFuncB(..), UFuncVec(..),
+  AssocBoolOper(..), AssocArithOper(..), VVVBinOp)
 
 -- These precedences are inspired from Haskell/F# 
 -- as documented at http://kevincantu.org/code/operators.html
@@ -13,7 +13,6 @@ import Language.Drasil.Expr (Expr(..),
 prec2 :: BinOp -> Int
 prec2 Index = 250
 prec2 Dot = 190
-prec2 Cross = 190
 
 -- | prec2Arith - precedence for arithmetic-related binary operations
 prec2Arith :: ArithBinOp -> Int
@@ -33,15 +32,18 @@ prec2Eq _  = 130
 prec2Ord :: OrdBinOp -> Int
 prec2Ord _  = 130
 
--- | prec - precedence for Binary-Associative (Commutative) operators
+prec2VVV :: VVVBinOp -> Int
+prec2VVV _ = 190
+
+-- | precA - precedence for arithmetic-related Binary-Associative (Commutative) operators
 precA :: AssocArithOper -> Int
 precA Mul = 190
 precA Add = 180
 
+-- | precB - precedence for boolean-related Binary-Associative (Commutative) operators
 precB :: AssocBoolOper -> Int
 precB And = 120
 precB Or = 110
-
 
 -- | prec1 - precedence of unary operators
 prec1 :: UFunc -> Int
@@ -82,5 +84,6 @@ eprec (ArithBinaryOp bo _ _) = prec2Arith bo
 eprec (BoolBinaryOp bo _ _)  = prec2Bool bo
 eprec (EqBinaryOp bo _ _)    = prec2Eq bo
 eprec (OrdBinaryOp bo _ _)   = prec2Ord bo
+eprec (VVVBinaryOp bo _ _)   = prec2VVV bo
 eprec IsIn{}                 = 170
 eprec RealI{}                = 170

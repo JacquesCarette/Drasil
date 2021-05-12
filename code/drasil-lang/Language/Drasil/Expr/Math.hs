@@ -5,7 +5,7 @@ import Prelude hiding (sqrt)
 import Control.Lens ((^.))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Expr (Expr(..), Relation, DerivType(..), ($^), BinOp(..),
-  AssocArithOper(..), UFunc(..), UFuncB(..), UFuncVec(..), Completeness(..))
+  AssocArithOper(..), UFunc(..), UFuncB(..), UFuncVec(..), Completeness(..), VVVBinOp(..))
 import Language.Drasil.Space (Space, RTopology(..), DomainDesc(..), RealInterval)
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
 import Language.Drasil.Classes (IsArgumentName)
@@ -125,7 +125,7 @@ sum' = foldr1 (+)
   
 -- | Smart constructor to cross product two expressions
 cross :: Expr -> Expr -> Expr
-cross = BinaryOp Cross
+cross = VVVBinaryOp Cross
 
 -- | Smart constructor for case statement with complete set of cases
 completeCase :: [(Expr,Relation)] -> Expr

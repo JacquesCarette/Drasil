@@ -32,6 +32,7 @@ import Drasil.DblPendulum.Figures (figMotion)
 import Data.Drasil.Concepts.Math (mathcon, cartesian)
 import Data.Drasil.Quantities.Math (unitVect, unitVectj)
 import Drasil.DblPendulum.Assumptions (assumptions)
+import Drasil.DblPendulum.Concepts (rod, concepts)
 import Drasil.DblPendulum.Goals (goals, goalsInputs)
 import Drasil.DblPendulum.DataDefs (dataDefs)
 import Drasil.DblPendulum.IMods (iMods)
@@ -89,7 +90,7 @@ mkSRS = [RefSec $      --This creates the Reference section of the SRS
 
 justification :: Sentence
 justification = foldlSent [S "A", phrase pendulum, S "consists" `sOf` S "mass", 
-                            S "attached to the end of a rod" `andIts` S "moving curve" `sIs`
+                            S "attached to the end of a", phrase rod `andIts` S "moving curve" `sIs`
                             S "highly sensitive to initial conditions.", S "Therefore" `sC`
                             S "it is useful to have a", phrase program, S "to simulate", S "motion"
                             `the_ofThe` phrase pendulum, S "to exhibit its chaotic characteristics.",
@@ -128,7 +129,7 @@ symbMap = cdb (map qw iMods ++ map qw symbols)
   (nw pendulumTitle : nw mass : nw len : nw kilogram : nw inValue : nw newton : nw degree : nw radian
     : nw unitVect : nw unitVectj : [nw errMsg, nw program] ++ map nw symbols ++
    map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon  ++ map nw physicCon' ++
-   map nw physicscon ++ map nw physicalcon ++ map nw acronyms ++ map nw symbols ++ map nw [metre, hertz])
+   map nw physicscon ++ concepts ++ map nw physicalcon ++ map nw acronyms ++ map nw symbols ++ map nw [metre, hertz])
   (map cw iMods ++ srsDomains) (map unitWrapper [metre, second, newton, kilogram, degree, radian, hertz]) dataDefs
   iMods genDefns tMods concIns [] []
 
@@ -174,10 +175,7 @@ tMods = [accelerationTM, velocityTM, newtonSL, newtonSLR]
 -- ---------------------------------
 
 physSystParts :: [Sentence]
-physSystParts = map foldlSent [
-  [S "The rod"],
-  [S "The", phrase mass]]
-  
+physSystParts = map ((+:+.) EmptyS . atStartNP) [the rod, the mass]
 
 
  

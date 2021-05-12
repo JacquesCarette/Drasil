@@ -4,7 +4,7 @@ module Language.Drasil.Development (
     NounPhrase(phraseNP,pluralNP)
   -- Expr
   , UFuncB(..), UFuncVec(..)
-  , ArithBinOp(..), BoolBinOp(..), EqBinOp(..), OrdBinOp(..)
+  , ArithBinOp(..), BoolBinOp(..), EqBinOp(..), OrdBinOp(..), VVVBinOp(..)
   -- Expr.Extract
   , dep, names, names', namesRI
   -- Sentence.Extract
@@ -15,7 +15,7 @@ module Language.Drasil.Development (
 
 import Language.Drasil.NounPhrase (NounPhrase(phraseNP,pluralNP))
 import Language.Drasil.Expr (UFuncB(..), UFuncVec(..)
-  , ArithBinOp(..), BoolBinOp(..), EqBinOp(..), OrdBinOp(..))
+  , ArithBinOp(..), BoolBinOp(..), EqBinOp(..), OrdBinOp(..), VVVBinOp(..))
 import Language.Drasil.Expr.Extract (dep, names', names, namesRI)
 import Language.Drasil.Expr.Precedence (precA, precB, eprec)
 import Language.Drasil.Sentence.Extract(sdep, lnames, lnames')

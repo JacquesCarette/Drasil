@@ -23,7 +23,7 @@ infixr 9 $||
 -- TODO: Move the below to a separate file somehow. How to go about it?
 
 -- | Binary functions
-data BinOp = Index | Dot | Cross
+data BinOp = Index | Dot
   deriving Eq
 
 data ArithBinOp = Frac | Pow | Subt
@@ -33,6 +33,9 @@ data EqBinOp = Eq | NEq
 data BoolBinOp = Impl | Iff
 
 data OrdBinOp = Lt | Gt | LEq | GEq
+
+-- Vector x Vector -> Vector binary operations
+data VVVBinOp = Cross
 
 data AssocArithOper = Add | Mul
   deriving Eq
@@ -97,6 +100,7 @@ data Expr where
   BoolBinaryOp  :: BoolBinOp -> Expr -> Expr -> Expr
   EqBinaryOp    :: EqBinOp -> Expr -> Expr -> Expr
   OrdBinaryOp   :: OrdBinOp -> Expr -> Expr -> Expr
+  VVVBinaryOp   :: VVVBinOp -> Expr -> Expr -> Expr
 
   -- | Operators are generalized arithmetic operators over a |DomainDesc|
   --   of an |Expr|.  Could be called |BigOp|.

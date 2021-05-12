@@ -9,7 +9,7 @@ module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
 import Language.Drasil hiding (Ref, int, log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
 import Language.Drasil.Development (UFuncB(..), UFuncVec(..), 
-  ArithBinOp(..), BoolBinOp(..), EqBinOp(..), OrdBinOp(..))
+  ArithBinOp(..), BoolBinOp(..), EqBinOp(..), OrdBinOp(..), VVVBinOp(..))
 import Database.Drasil (symbResolve)
 import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
@@ -327,6 +327,7 @@ convExpr (ArithBinaryOp o a b) = liftM2 (arithBfunc o) (convExpr a) (convExpr b)
 convExpr (BoolBinaryOp o a b)  = liftM2 (boolBfunc o) (convExpr a) (convExpr b)
 convExpr (EqBinaryOp o a b)    = liftM2 (eqBfunc o) (convExpr a) (convExpr b)
 convExpr (OrdBinaryOp o a b)   = liftM2 (ordBfunc o) (convExpr a) (convExpr b)
+convExpr (VVVBinaryOp o a b)   = liftM2 (vecVecVecBfunc o) (convExpr a) (convExpr b)
 convExpr (Case c l)            = doit l -- FIXME this is sub-optimal
   where
     doit [] = error "should never happen" -- TODO: change error message?
@@ -413,7 +414,6 @@ unopVec Norm = error "unop: Norm not implemented" -- TODO
 
 -- Maps a BinOp to it's corresponding GOOL binary function
 bfunc :: (OOProg r) => BinOp -> (SValue r -> SValue r -> SValue r)
-bfunc Cross = error "bfunc: Cross not implemented"
 bfunc Dot   = error "convExpr DotProduct"
 bfunc Index = listAccess
 
@@ -439,6 +439,9 @@ ordBfunc Gt  = (?>)
 ordBfunc Lt  = (?<)
 ordBfunc LEq = (?<=)
 ordBfunc GEq = (?>=)
+
+vecVecVecBfunc :: VVVBinOp -> (SValue r -> SValue r -> SValue r)
+vecVecVecBfunc Cross = error "bfunc: Cross not implemented"
 
 -- medium hacks --
 

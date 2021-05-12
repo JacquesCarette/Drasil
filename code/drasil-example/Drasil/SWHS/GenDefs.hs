@@ -73,8 +73,6 @@ htFluxPCMFromWater = gd (EquationalModel htFluxPCMFromWaterQD) (getUnit htFluxP)
 
 htFluxPCMFromWaterQD :: QDefinition
 htFluxPCMFromWaterQD = mkQuantDef htFluxP htFluxPCMFromWaterExpr
--- makeRC "htFluxPCMFromWaterRC" (htFluxP ^. term)
---   EmptyS htFluxPCMFromWaterRel
 
 htFluxPCMFromWaterExpr :: Expr
 htFluxPCMFromWaterExpr = sy pcmHTC * (apply1 tempW time - apply1 tempPCM time)

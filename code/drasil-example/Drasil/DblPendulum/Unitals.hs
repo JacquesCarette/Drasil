@@ -17,6 +17,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (position, ixPos, xPos, fo
 import Data.Drasil.Concepts.Physics (pendulum, twoD)
 import Data.Drasil.Concepts.Math as CM (angle)
 import Data.Drasil.Quantities.Math as QM (unitVect, unitVectj, pi_)
+import Drasil.DblPendulum.Concepts (rod)
 
 
 symbols:: [QuantityDict]
@@ -45,7 +46,7 @@ unitalChunks = [lenRod, QPP.mass, QP.force, QP.ixPos, QP.xPos, QP.yPos,
 lenRod, pendDisplacementAngle, initialPendAngle :: UnitalChunk
 
 lenRod = makeUCWDS "l_rod" (cn "length of rod")
-        (phrase len `the_ofThe` S "rod")
+        (phrase len `the_ofThe` phrase rod)
         (sub cL lRod) metre
 
 pendDisplacementAngle = makeUCWDS "pendDisplacementAngle" (cn "displacement angle of pendulum")

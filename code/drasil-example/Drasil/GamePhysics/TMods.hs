@@ -1,7 +1,7 @@
 module Drasil.GamePhysics.TMods (tMods, newtonSL, newtonSLR, newtonTL, newtonLUG) where
 
 import Language.Drasil
-import Theory.Drasil (TheoryModel, tmNoRefs, ModelKinds(OthModel))
+import Theory.Drasil (TheoryModel, tmNoRefs, ModelKinds(OthModel, EquationalModel))
 import Utils.Drasil
 
 import Drasil.GamePhysics.Assumptions (assumpOD)
@@ -25,15 +25,14 @@ tMods = [newtonSL, newtonTL, newtonLUG, newtonSLR]
 -- T2 : Newton's third law of motion --
 
 newtonTL :: TheoryModel
-newtonTL = tmNoRefs (OthModel newtonTLRC) [qw force_1, qw force_2]
-  ([] :: [ConceptChunk]) [] [newtonTLRel] [] "NewtonThirdLawMot" [newtonTLNote]
+newtonTL = tmNoRefs (EquationalModel newtonTLQD) [qw force_1, qw force_2]
+  ([] :: [ConceptChunk]) [] [relat newtonTLQD] [] "NewtonThirdLawMot" [newtonTLNote]
 
-newtonTLRC :: RelationConcept
-newtonTLRC = makeRC "newtonTLRC" (nounPhraseSP "Newton's third law of motion")
-  EmptyS newtonTLRel
+newtonTLQD :: QDefinition
+newtonTLQD = mkQuantDef' force_1 (nounPhraseSP "Newton's third law of motion") newtonTLExpr
 
-newtonTLRel :: Relation
-newtonTLRel = sy force_1 $= negate (sy force_2)
+newtonTLExpr :: Expr
+newtonTLExpr = negate (sy force_2)
 
 newtonTLNote :: Sentence
 newtonTLNote = foldlSent [S "Every action has an equal and opposite reaction.",

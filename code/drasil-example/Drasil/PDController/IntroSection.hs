@@ -27,7 +27,7 @@ introscopeOfReq
            [phrase pidC, S "a" +:+ phrase summingPt,
             S "a" +:+ phrase powerPlant],
        S "Only " +:+
-         S "the Proportional and Derivative controllers are used in this sofware;"
+         S "the Proportional and Derivative controllers are used in this software;"
          +:+ S " the Integral controller is beyond the scope of this project."
          +:+ S "Additionally, this software is intended to aid with the manual "
          +:+ S "tuning of the",

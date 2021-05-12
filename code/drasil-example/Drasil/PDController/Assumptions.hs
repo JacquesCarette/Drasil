@@ -25,7 +25,7 @@ aDecoupled = cic "decoupled" aDecoupledDesc "Decoupled equation" assumpDom
 aSP = cic "setPoint" aSPDesc "Set-Point" assumpDom
 
 aExtDisturb
-  = cic "externalDistub" aExtDisturbDesc "External disturbance" assumpDom
+  = cic "externalDisturb" aExtDisturbDesc "External disturbance" assumpDom
 
 aInitialValue = cic "initialValue" aInitialValueDesc "Initial Value" assumpDom
 
@@ -41,11 +41,11 @@ aUnfilteredDerivative
 aMass = cic "massSpring" aMassDesc "Spring Mass" assumpDom
 
 aDampingCoeff
-  = cic "damingCoeffSpring" aDampingCoeffDesc "Spring Damping Coffecient"
+  = cic "dampingCoeffSpring" aDampingCoeffDesc "Spring Damping Coefficient"
       assumpDom
 
 aStiffnessCoeff
-  = cic "stifnessCoeffSpring" aStiffnessCoeffDesc "Spring Stifness Coffecient"
+  = cic "stiffnessCoeffSpring" aStiffnessCoeffDesc "Spring Stiffness Coefficient"
       assumpDom
 
 pwrPlantDesc, aDecoupledDesc, aSPDesc, aExtDisturbDesc, aManualTuningDesc,

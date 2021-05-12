@@ -173,7 +173,7 @@ pidODEOptions
   = odeOptions RK45 (sy odeAbsTolConst) (sy odeRelTolConst) (sy qdStepTime) (dbl 0)
 
 -- This is a second order ODE. The equation should be in the form of
--- variable subsitution, i.e. u = y'. However here the the equation
+-- variable substitution, i.e. u = y'. However here the the equation
 -- can be defined in terms of the dependent variable itself because of the 
 -- way scipy expects the function in python. 
 pidODEInfo :: ODEInfo

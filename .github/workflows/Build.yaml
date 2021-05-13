@@ -2,7 +2,7 @@ on:
   push:
     branches: master
   workflow_dispatch:
-name: Deploy
+name: Build
 defaults:
   run:
     shell: bash

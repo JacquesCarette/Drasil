@@ -4,7 +4,7 @@ on:
   pull_request:
     branches: master
   workflow_dispatch:
-name: Drasil
+name: Test
 defaults:
   run:
     shell: bash

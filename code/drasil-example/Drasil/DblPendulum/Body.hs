@@ -7,7 +7,7 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
   _datadefs, _configFiles, _definitions, _defSequence, _inputs, _kind, _outputs, 
   _quants, _sys, _sysinfodb, _usedinfodb)
-import qualified Utils.Drasil as S
+import Utils.Drasil
 import Data.Drasil.People (olu)
 import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian, hertz)
 import Data.Drasil.Concepts.Software (program, errMsg)
@@ -44,7 +44,7 @@ import Drasil.Projectile.References (hibbeler2004)
 
 
 srs :: Document
-srs = mkDoc mkSRS (S.for'' titleize phrase) si
+srs = mkDoc mkSRS (for'' titleize phrase) si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
@@ -88,14 +88,14 @@ mkSRS = [RefSec $      --This creates the Reference section of the SRS
   ]
 
 justification :: Sentence
-justification = S.foldlSent [S "A", phrase pendulum, S "consists" `S.sOf` S "mass", 
-                            S "attached to the end of a rod" `S.andIts` S "moving curve" `S.sIs`
+justification = foldlSent [S "A", phrase pendulum, S "consists" `sOf` S "mass", 
+                            S "attached to the end of a rod" `andIts` S "moving curve" `sIs`
                             S "highly sensitive to initial conditions.", S "Therefore" `sC`
                             S "it is useful to have a", phrase program, S "to simulate", S "motion"
-                            `S.the_ofThe` phrase pendulum, S "to exhibit its chaotic characteristics.",
+                            `the_ofThe` phrase pendulum, S "to exhibit its chaotic characteristics.",
                             S "The", phrase program, S "documented here is called", phrase pendulum]
 scope :: Sentence
-scope = S.foldlSent [S "the", phrase analysis `S.sOf` S "a", phrase twoD, 
+scope = foldlSent [S "the", phrase analysis `sOf` S "a", phrase twoD, 
   sParen (getAcc twoD), phrase pendulum, S "motion", phrase problem,
                    S "with various initial conditions"]
 
@@ -155,7 +155,7 @@ concIns = assumptions ++ goals ++ funcReqs ++ nonFuncReqs
 ------------------------------------
 
 prob :: Sentence
-prob = S.foldlSent_ [ S "efficiently and correctly to predict the motion of a",  
+prob = foldlSent_ [ S "efficiently and correctly to predict the motion of a",  
                    phrase pendulum]
 
 ---------------------------------
@@ -174,7 +174,7 @@ tMods = [accelerationTM, velocityTM, newtonSL, newtonSLR]
 -- ---------------------------------
 
 physSystParts :: [Sentence]
-physSystParts = map S.foldlSent [
+physSystParts = map foldlSent [
   [S "The rod"],
   [S "The", phrase mass]]
   

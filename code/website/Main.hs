@@ -182,16 +182,16 @@ main = do
   -- Env variables relating to variables exposed on CI.
   -- Because we want to be able to test site building locally, we fill in these stubs with
   -- (sometimes correct) assumptions.
-  travisRepoSlug <- fromMaybe "JacquesCarette/Drasil" <$> lookupEnv "TRAVIS_REPO_SLUG"
-  travisCommit <- fromMaybe "master" <$> lookupEnv "GITHUB_SHA"
+  repoSlug <- fromMaybe "JacquesCarette/Drasil" <$> lookupEnv "GITHUB_REPOSITORY"
+  commit <- fromMaybe "master" <$> lookupEnv "GITHUB_SHA"
   -- Next two are metadata used to produce the footer.
-  travisBuildNumber <- fromMaybe "0" <$> lookupEnv "GITHUB_RUN_NUMBER"
-  travisBuildId <- lookupEnv "GITHUB_RUN_ID"
+  buildNumber <- fromMaybe "0" <$> lookupEnv "GITHUB_RUN_NUMBER"
+  buildId <- lookupEnv "GITHUB_RUN_ID"
 
-  let repoCommitRoot = "https://github.com/" ++ travisRepoSlug ++ "/tree/" ++ travisCommit ++ "/"
+  let repoCommitRoot = "https://github.com/" ++ repoSlug ++ "/tree/" ++ commit ++ "/"
   let docsPath = docsRoot ++ "index.html"
 
-  let travisBuildPath = "https://travis-ci.com/" ++ travisRepoSlug ++ maybe "" ("/builds/" ++) travisBuildId
+  let buildPath = "https://github.com/" ++ repoSlug ++ "/actions" ++ maybe "" ("/runs/" ++) buildId
 
   doesDocsExist <- doesFileExist $ deployLocation ++ docsPath
   examples <- mkExamples repoCommitRoot (deployLocation ++ exampleRoot) srsDir
@@ -215,9 +215,9 @@ main = do
         let indexCtx = listField "examples" (mkExampleCtx exampleRoot srsDir doxDir) (mapM makeItem examples) <>
                        listField "graphs" (mkGraphCtx graphRoot) (mapM makeItem graphs) <>
                        (if doesDocsExist then field "docsUrl" (return . const docsPath) else mempty) <>
-                       field "buildNumber" (return . const travisBuildNumber) <>
-                       field "buildUrl" (return . const travisBuildPath) <>
-                       field "commit" (return . const travisCommit) <>
+                       field "buildNumber" (return . const buildNumber) <>
+                       field "buildUrl" (return . const buildPath) <>
+                       field "commit" (return . const commit) <>
                        field "commitUrl" (return . const repoCommitRoot) <>
                        defaultContext
 

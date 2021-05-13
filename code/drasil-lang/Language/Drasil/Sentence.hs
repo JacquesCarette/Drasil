@@ -84,10 +84,6 @@ a `sC` b = a :+: S "," +:+ b
 (+:+.) :: Sentence -> Sentence -> Sentence
 a +:+. b = a +:+ b :+: S "."
 
--- | Helper which appends a period to the end of a sentence
---(+.) :: Sentence -> Sentence
---(+.) a = a :+: S "."
-
 -- | Helper which concatenates two sentences using '+:+' then adds a colon to
 -- the end.
 (+:) :: Sentence -> Sentence -> Sentence

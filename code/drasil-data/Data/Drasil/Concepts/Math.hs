@@ -12,7 +12,7 @@ mathcon :: [ConceptChunk]
 
 mathcon = [angle, area, axis, calculation, cartesian, centre, change, constraint, diameter,
   equation, euclidN, euclidSpace, gradient, graph, law, line, matrix, norm, normal,
-  normalV, number, orient, parameter, perp, perpV, pi_, point, probability, rOfChng,
+  normalV, number, orient, parameter, perp, perpV, pi_, qdNegInf, qdPosInf, point, probability, rOfChng,
   rate, rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xCoord, xComp,
   xDir, yAxis, yCoord, yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle]
 
@@ -21,7 +21,7 @@ mathcon' = [de, leftSide, ode, pde, rightSide]
 
 angle, area, axis, calculation, cartesian, centre, change, constraint, diameter, equation,
   euclidN, euclidSpace, gradient, graph, law, line, matrix, norm, normal, normalV,
-  number, orient, parameter, perp, perpV, pi_, point, probability, rOfChng, rate,
+  number, orient, parameter, perp, perpV, pi_, qdNegInf, qdPosInf, point, probability, rOfChng, rate,
   rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xCoord, xComp, xDir,
   yAxis, yCoord,  yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle :: ConceptChunk
 
@@ -57,6 +57,8 @@ parameter   = dcc "parameter"    (cn' "parameter")               "a quantity who
 --FIXME: Should "parameter" be in math?
 perp         = dcc "perp"         (cn' "perpendicular")           "At right angles"
 pi_          = dcc "pi"           (cn' "ratio of circumference to diameter for any circle") "The ratio of a circle's circumference to its diameter"
+qdPosInf     = dcc "qdPosInf"     (cn' "Positive Infinity")     "the limit of a sequence or function that eventually exceeds any prescribed bound"
+qdNegInf     = dcc "qdNegInf"     (cn' "Negative Infinity")     "Opposite of positive infinity"
 point        = dccWDS "point"     (pn' "point")                   $ S "An exact location, it has no size, only position" +:+
                                                                   sParen (S "from" +:+ makeRef2S pointSource)
 probability  = dcc "probability"  (cnIES "probability")           "The likelihood of an event to occur"

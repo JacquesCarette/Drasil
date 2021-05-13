@@ -49,7 +49,7 @@ lenRod = makeUCWDS "l_rod" (cn "length of rod")
         (sub cL lRod) metre
 
 pendDisplacementAngle = makeUCWDS "pendDisplacementAngle" (cn "displacement angle of pendulum")
-        ( S "the" +:+ phraseNP ((angle `ofThe'` pendulum)))
+        (phrase angle `the_ofThe` phrase pendulum)
         (sub lTheta lP) degree
 
 initialPendAngle = makeUCWDS "initialPendAngle" (cn "initial pendulum angle")

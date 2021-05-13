@@ -12,7 +12,7 @@ mathcon :: [ConceptChunk]
 
 mathcon = [angle, area, axis, calculation, cartesian, centre, change, constraint, diameter,
   equation, euclidN, euclidSpace, gradient, graph, law, line, matrix, norm, normal,
-  normalV, number, orient, parameter, perp, perpV, pi_, point, probability, rOfChng,
+  normalV, number, orient, parameter, perp, perpV, pi_, negInf, posInf, point, probability, rOfChng,
   rate, rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xCoord, xComp,
   xDir, yAxis, yCoord, yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle]
 
@@ -21,7 +21,7 @@ mathcon' = [de, leftSide, ode, pde, rightSide]
 
 angle, area, axis, calculation, cartesian, centre, change, constraint, diameter, equation,
   euclidN, euclidSpace, gradient, graph, law, line, matrix, norm, normal, normalV,
-  number, orient, parameter, perp, perpV, pi_, point, probability, rOfChng, rate,
+  number, orient, parameter, perp, perpV, pi_, negInf, posInf, point, probability, rOfChng, rate,
   rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xCoord, xComp, xDir,
   yAxis, yCoord,  yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle :: ConceptChunk
 
@@ -55,17 +55,19 @@ number      = dcc "number"       (cn' "number")                  "a mathematical
 orient      = dcc "orientation"  (cn' "orientation")             "the relative physical position or direction of something"
 parameter   = dcc "parameter"    (cn' "parameter")               "a quantity whose value is selected depending on particular circumstances"
 --FIXME: Should "parameter" be in math?
-perp         = dcc "perp"         (cn' "perpendicular")           "At right angles"
+perp         = dcc "perp"         (cn' "perpendicular")          "At right angles"
 pi_          = dcc "pi"           (cn' "ratio of circumference to diameter for any circle") "The ratio of a circle's circumference to its diameter"
+posInf       = dcc "PosInf"       (cn' "Positive Infinity")      "the limit of a sequence or function that eventually exceeds any prescribed bound"
+negInf       = dcc "NegInf"       (cn' "Negative Infinity")      "Opposite of positive infinity"
 point        = dccWDS "point"     (pn' "point")                   $ S "An exact location, it has no size, only position" +:+
                                                                   sParen (S "from" +:+ makeRef2S pointSource)
-probability  = dcc "probability"  (cnIES "probability")           "The likelihood of an event to occur"
-rate         = dcc "rate"         (cn' "rate")                    "Ratio that compares two quantities having different units of measure"
+probability  = dcc "probability"  (cnIES "probability")          "The likelihood of an event to occur"
+rate         = dcc "rate"         (cn' "rate")                   "Ratio that compares two quantities having different units of measure"
 rightHand    = dcc "rightHand"    (cn' "right-handed coordinate system")  "A coordinate system where the positive z-axis comes out of the screen."
-shape        = dcc "shape"        (cn' "shape")                   "The outline of an area or figure"
-surface      = dcc "surface"      (cn' "surface")                 "The outer or topmost boundary of an object"
-unit_        = dcc "unit"         (cn' "unit")                    "Identity element"
-vector       = dcc "vector"       (cn' "vector")                  "Object with magnitude and direction"
+shape        = dcc "shape"        (cn' "shape")                  "The outline of an area or figure"
+surface      = dcc "surface"      (cn' "surface")                "The outer or topmost boundary of an object"
+unit_        = dcc "unit"         (cn' "unit")                   "Identity element"
+vector       = dcc "vector"       (cn' "vector")                 "Object with magnitude and direction"
 
 xAxis = dcc "xAxis" (nounPhraseSent $ P lX :+: S "-axis") "the primary axis of a system of coordinates"
 yAxis = dcc "yAxis" (nounPhraseSent $ P lY :+: S "-axis") "the secondary axis of a system of coordinates"

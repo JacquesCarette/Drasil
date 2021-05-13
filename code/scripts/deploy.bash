@@ -19,17 +19,6 @@ if [ "$GITHUB_REF" = "$DEPLOY_BRANCH" ]; then
   exit 1
 fi
 
-# if [ -z "$BOT_TOKEN" ]; then
-#   echo "Secure variables unavailable."
-#   echo "Failing build for this."
-#   exit 1
-# fi
-
-if [ -z "$BOT_EMAIL" ]; then
-  echo "Assuming dummy email"
-  BOT_EMAIL="drasil-bot@local"
-fi
-
 try_deploy() {
   # Cleanup the deploy folder if it already exists.
   rm -rf "$DEPLOY_FOLDER" >/dev/null 2>&1

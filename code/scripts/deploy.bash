@@ -63,20 +63,7 @@ try_deploy() {
     echo "Making the deploy folder failed! Failing deploy."
     return $MAKE_RET
   fi
-  cd "$DEPLOY_FOLDER"
-
-  git config user.email "$BOT_EMAIL"
-  git config user.name "drasil-bot"
-  # git add -A .
-  # We overwrite history because the artifacts we keep in here are moderately large and would pollute history otherwise.
-  # git commit -q --allow-empty -m "drasil-bot deploy of $SOURCE_BRANCH@$GITHUB_SHA"
-  # git push --quiet "https://$BOT_TOKEN@github.com/$GITHUB_REPOSITORY.git" "$DEPLOY_BRANCH"
-  PUSH_RET=$?
-  # Perform some cleanup so we can (optionally retry)
-  cd "$CUR_DIR"
-  # rm -rf "$DEPLOY_FOLDER"
-  # git push returns >0 if push fails (i.e. we would need to force push)
-  return $PUSH_RET
+  return $MAKE_RET
 }
 
 try_deploy

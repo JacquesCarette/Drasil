@@ -59,7 +59,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: "Deploy to gh-pages"
+      - name: "Build website"
         run: |
           LABEL_FILE=/tmp/ci_build_failures \
             MANAGED_LABEL_FILE=/tmp/ci_managed_labels \

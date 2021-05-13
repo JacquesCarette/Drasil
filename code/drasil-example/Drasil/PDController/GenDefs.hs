@@ -1,3 +1,4 @@
+{-# LANGUAGE PostfixOperators #-}
 module Drasil.PDController.GenDefs where
 
 import Data.Drasil.Quantities.PhysicalProperties (mass)
@@ -62,7 +63,7 @@ gdPowerPlantNote
          S "domain by applying the Laplace"
          +:+ S "transform (from "
          <> makeRef2S tmLaplace
-         <> S ").",
+         <> (S ")" !.),
        S "Additionally, there are no external disturbances to the power plant"
          +:+ S "(from "
          <> makeRef2S aExtDisturb

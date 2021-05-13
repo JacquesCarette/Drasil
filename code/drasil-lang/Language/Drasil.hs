@@ -102,7 +102,7 @@ module Language.Drasil (
   -- Chunk.Citation
   , HasCitation(getCitations)
   -- Sentence
-  , Sentence(..), SentenceStyle(..), (+:+), (+:+.), (+:), capSent, ch, sC, sDash, sParen  
+  , Sentence(..), SentenceStyle(..), (+:+), (+:+.), (+:), (!.), capSent, ch, sC, sDash, sParen  
   -- Sentence.Extract
   , sdep, shortdep
   -- RefProg
@@ -175,7 +175,7 @@ module Language.Drasil (
   -- Chunk.UnitDefn
   , UnitDefn(..)
   , fromUDefn, unitCon, makeDerU
-  , (^:), (/:), (*:), (*$), (/$),(^$), newUnit
+  , (^:), (/:), (*:), (*$), (/$), (^$), newUnit
   , scale, shift
   , derUC, derUC', derUC''
   , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
@@ -267,7 +267,7 @@ import Language.Drasil.ShortName (ShortName, shortname', getStringSN)
 import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..), 
   RTopology(..), DomainDesc(AllDD, BoundedDD), getActorName, getInnerSpace)
 import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), (+:+),
-  (+:+.), (+:), capSent, ch, sC, sDash, sParen)
+  (+:+.), (+:), (!.), capSent, ch, sC, sDash, sParen)
 import Language.Drasil.Sentence.Extract (sdep, shortdep) -- exported for drasil-database FIXME: move to development package?
 import Language.Drasil.Reference (makeCite, makeCiteS, makeRef2, makeRef2S, makeCiteInfo, makeCiteInfoS)
 import Language.Drasil.Symbol (Decoration(..), Symbol(..), compsy)

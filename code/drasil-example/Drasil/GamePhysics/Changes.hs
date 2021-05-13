@@ -1,3 +1,4 @@
+{-# LANGUAGE PostfixOperators #-}
 module Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs) where
 
 --A list of likely and unlikely changes for GamePhysics
@@ -50,10 +51,10 @@ likelyChgs = [lcVODES, lcEC, lcID, lcIJC]
 
 unlikelyChangesStmt1, unlikelyChangesStmt2, unlikelyChangesStmt3, unlikelyChangesStmt4 :: Sentence
 
-unlikelyChangesStmt1 = S "The goal of the system is to simulate the interactions of rigid bodies."
-unlikelyChangesStmt2 = S "There will always be a source of input data external to the software."
-unlikelyChangesStmt3 = S "A Cartesian Coordinate system is used."
-unlikelyChangesStmt4 = S "All objects are rigid bodies."
+unlikelyChangesStmt1 = (S "The goal of the system is to simulate the interactions of rigid bodies" !.)
+unlikelyChangesStmt2 = (S "There will always be a source of input data external to the software" !.)
+unlikelyChangesStmt3 = (S "A Cartesian Coordinate system is used" !.)
+unlikelyChangesStmt4 = (S "All objects are rigid bodies" !.)
 
 ucSRB, ucEI, ucCCS, ucORB :: ConceptInstance
 

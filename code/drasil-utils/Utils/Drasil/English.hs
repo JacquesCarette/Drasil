@@ -7,7 +7,7 @@ capitalize :: String -> String
 capitalize [] = error "capitalize called on an empty String"
 capitalize (c:cs) = toUpper c:map toLower cs
 
--- Comma separated list with "and" before final item
+-- | Comma separated list with "and" before final item
 stringList :: [String] -> String
 stringList s = mkStr (filter (not . null) s)
   where mkStr [] = ""

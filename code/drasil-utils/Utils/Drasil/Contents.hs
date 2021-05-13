@@ -6,26 +6,30 @@ import Utils.Drasil.Misc (bulletFlat, mkEnumAbbrevList)
 
 import Control.Lens ((^.))
 
+-- | Constructs LabelledContent from an expression and a reference
 eqUnR :: Expr -> Reference -> LabelledContent
 eqUnR e lbl = llcc lbl $ EqnBlock e
 
+-- | Same as 'eqUnR' except content is unlabelled
 eqUnR' :: Expr -> Contents
 eqUnR' e = UlC $ ulcc $ EqnBlock e
 
--- | enumBullet apply Enumeration, Bullet and Flat to a list
+-- | enumBullet applies 'Enumeration', 'Bullet' and 'Flat' to a list
 enumBullet :: Reference -> [Sentence] -> LabelledContent --FIXME: should Enumeration be labelled?
 enumBullet lb s = llcc lb $ Enumeration $ bulletFlat s
 
+-- | same as 'enumBullet' but unlabelled
 enumBulletU :: [Sentence] -> Contents --FIXME: should Enumeration be labelled?
 enumBulletU s =  UlC $ ulcc $ Enumeration $ bulletFlat s
 
--- | enumSimple enumerates a list and applies simple and enumeration to it
--- s - start index for the enumeration
--- t - title of the list
--- l - list to be enumerated
+-- | enumSimple enumerates a list and applies `Simple` and `Enumeration` to it:
+-- s - start index for the enumeration,
+-- t - title of the list,
+-- l - list to be enumerated,
 enumSimple :: Reference -> Integer -> Sentence -> [Sentence] -> LabelledContent --FIXME: should Enumeration be labelled?
 enumSimple lb s t l = llcc lb $ Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevList s t l
 
+-- | same as 'enumSimple' but unlabelled
 enumSimpleU :: Integer -> Sentence -> [Sentence] -> Contents --FIXME: should Enumeration be labelled?
 enumSimpleU s t l = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevList s t l
 

@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs #-}
+{-# LANGUAGE GADTs, PostfixOperators #-}
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
 -- | Contains Sentences and helpers
 module Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), (+:+),
@@ -41,7 +41,7 @@ data Sentence where
   Percent :: Sentence               -- % symbol
                                     
   -- Direct concatenation of two Sentences (no implicit spaces!)
-  (:+:) :: Sentence -> Sentence -> Sentence   
+  (:+:) :: Sentence -> Sentence -> Sentence  
   EmptyS :: Sentence
 
 -- The HasSymbol is redundant, but on purpose

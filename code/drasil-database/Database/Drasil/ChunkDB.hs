@@ -127,8 +127,8 @@ labelledconLookup = uMapLookup "LabelledContent" "LabelledContentMap"
 asOrderedList :: UMap a -> [a]
 asOrderedList = map fst . sortOn snd . map snd . Map.toList
 
--- | Our chunk databases. \Must contain all maps used in an example.\
--- In turn, these maps must contain every chunk definition used in its respective example.
+-- | Our chunk databases. \Must contain all maps needed in an example.\
+-- In turn, these maps must contain every chunk definition or concept used in its respective example.
 data ChunkDB = CDB { symbolTable :: SymbolMap
                    , termTable :: TermMap 
                    , defTable  :: ConceptMap

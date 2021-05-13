@@ -1,8 +1,8 @@
 {- re-export many things to simplify external use -}
 module Language.Drasil (
   -- Expr
-  Expr(..), BinOp(..), UFunc(..), UFuncB, UFuncVec
-  , ArithBinOp, BoolBinOp, EqBinOp, OrdBinOp, VVVBinOp
+  Expr(..), UFunc(..), UFuncB, UFuncVec
+  , ArithBinOp, BoolBinOp, EqBinOp, LABinOp, OrdBinOp, VVVBinOp, VVNBinOp
   , AssocArithOper(..), AssocBoolOper(..)
   , DerivType(..), Completeness(..), Relation
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
@@ -183,8 +183,8 @@ module Language.Drasil (
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
-import Language.Drasil.Expr (Expr(..), BinOp(..), UFunc(..), UFuncB, UFuncVec,
-          ArithBinOp, BoolBinOp, EqBinOp, OrdBinOp, VVVBinOp,
+import Language.Drasil.Expr (Expr(..), UFunc(..), UFuncB, UFuncVec,
+          ArithBinOp, BoolBinOp, EqBinOp, LABinOp, OrdBinOp, VVVBinOp, VVNBinOp,
           AssocArithOper(..), AssocBoolOper(..), 
           DerivType(..), Completeness(..), Relation,
           ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.))

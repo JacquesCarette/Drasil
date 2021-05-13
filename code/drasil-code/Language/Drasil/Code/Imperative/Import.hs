@@ -1,5 +1,4 @@
-{-# LANGUAGE PostfixOperators #-}
-{-# LANGUAGE Rank2Types #-}
+{-# LANGUAGE PostfixOperators, Rank2Types #-}
 module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType, 
   publicFunc, privateMethod, publicInOutFunc, privateInOutMethod, 
   genConstructor, mkVar, mkVal, convExpr, convStmt, genModDef, genModFuncs, 
@@ -9,7 +8,7 @@ module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
 import Language.Drasil hiding (Ref, int, log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
 import Language.Drasil.Development (UFuncB(..), UFuncVec(..), 
-  ArithBinOp(..), BoolBinOp(..), EqBinOp(..), OrdBinOp(..), VVVBinOp(..))
+  ArithBinOp(..), BoolBinOp(..), EqBinOp(..), LABinOp(..), OrdBinOp(..), VVNBinOp(..), VVVBinOp(..))
 import Database.Drasil (symbResolve)
 import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
@@ -322,12 +321,13 @@ convExpr (ArithBinaryOp Frac (Int a) (Int b)) = do -- hack to deal with integer 
       getLiteral Float = litFloat (fromIntegral a) #/ litFloat (fromIntegral b)
       getLiteral _ = error "convExpr: Rational space matched to invalid CodeType; should be Double or Float"
   return $ getLiteral sm
-convExpr (BinaryOp o a b)      = liftM2 (bfunc o) (convExpr a) (convExpr b)
 convExpr (ArithBinaryOp o a b) = liftM2 (arithBfunc o) (convExpr a) (convExpr b)
 convExpr (BoolBinaryOp o a b)  = liftM2 (boolBfunc o) (convExpr a) (convExpr b)
+convExpr (LABinaryOp o a b)    = liftM2 (laBfunc o) (convExpr a) (convExpr b)
 convExpr (EqBinaryOp o a b)    = liftM2 (eqBfunc o) (convExpr a) (convExpr b)
 convExpr (OrdBinaryOp o a b)   = liftM2 (ordBfunc o) (convExpr a) (convExpr b)
 convExpr (VVVBinaryOp o a b)   = liftM2 (vecVecVecBfunc o) (convExpr a) (convExpr b)
+convExpr (VVNBinaryOp o a b)   = liftM2 (vecVecNumBfunc o) (convExpr a) (convExpr b)
 convExpr (Case c l)            = doit l -- FIXME this is sub-optimal
   where
     doit [] = error "should never happen" -- TODO: change error message?
@@ -412,11 +412,6 @@ unopVec :: (OOProg r) => UFuncVec -> (SValue r -> SValue r)
 unopVec Dim = listSize
 unopVec Norm = error "unop: Norm not implemented" -- TODO
 
--- Maps a BinOp to it's corresponding GOOL binary function
-bfunc :: (OOProg r) => BinOp -> (SValue r -> SValue r -> SValue r)
-bfunc Dot   = error "convExpr DotProduct"
-bfunc Index = listAccess
-
 -- Maps an ArithBinOp to it's corresponding GOOL binary function
 arithBfunc :: (OOProg r) => ArithBinOp -> (SValue r -> SValue r -> SValue r)
 arithBfunc Pow  = (#^)
@@ -433,6 +428,10 @@ eqBfunc :: (OOProg r) => EqBinOp -> (SValue r -> SValue r -> SValue r)
 eqBfunc Eq  = (?==)
 eqBfunc NEq = (?!=)
 
+-- Maps an LABinOp to it's corresponding GOOL binary function
+laBfunc :: (OOProg r) => LABinOp -> (SValue r -> SValue r -> SValue r)
+laBfunc Index = listAccess
+
 -- Maps an OrdBinOp to it's corresponding GOOL binary function
 ordBfunc :: (OOProg r) => OrdBinOp -> (SValue r -> SValue r -> SValue r)
 ordBfunc Gt  = (?>)
@@ -440,8 +439,13 @@ ordBfunc Lt  = (?<)
 ordBfunc LEq = (?<=)
 ordBfunc GEq = (?>=)
 
+-- Maps a VVVBinOp to it's corresponding GOOL binary function
 vecVecVecBfunc :: VVVBinOp -> (SValue r -> SValue r -> SValue r)
 vecVecVecBfunc Cross = error "bfunc: Cross not implemented"
+
+-- Maps a VVNBinOp to it's corresponding GOOL binary function
+vecVecNumBfunc :: VVNBinOp -> (SValue r -> SValue r -> SValue r)
+vecVecNumBfunc Dot = error "convExpr DotProduct"
 
 -- medium hacks --
 

@@ -22,10 +22,11 @@ data PluralRule =
   | IrregPlur (String -> String) -- ^ Apply the given function to
                                                -- the noun phrase to get the plural.
 
+-- | For nouns and NounPhrases
 data NP =
-    ProperNoun String PluralRule
-  | CommonNoun String PluralRule CapitalizationRule
-  | Phrase     Sentence PluralForm CapitalizationRule CapitalizationRule
+    ProperNoun String PluralRule -- ^ Stores a proper noun and its pluralization
+  | CommonNoun String PluralRule CapitalizationRule -- ^ Stores a common noun and its pluralization
+  | Phrase     Sentence PluralForm CapitalizationRule CapitalizationRule -- ^ Stores noun phrase and its pluralization
   --Phrase plurals can get very odd, so it seems best (for now) to encode
   --them directly. FIXME: If the singular/plural phrase has special (replace)
   --capitalization, one of the two cannot be capitalized right now.

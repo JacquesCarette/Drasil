@@ -66,4 +66,4 @@ jobs:
           branch: gh-pages
           folder: code/deploy
           git-config-name: "drasil-bot"
-          commit-message: "drasil-bot deploy of master@${{ GITHUB_SHA }}"
+          commit-message: "drasil-bot deploy of master@${{ github.sha }}"

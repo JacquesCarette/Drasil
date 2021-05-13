@@ -11,7 +11,7 @@ sentHelper :: String -> Sentence -> Sentence -> Sentence
 -- | Inserts a String between two Sentences
 sentHelper inStr a b = a +:+ S inStr +:+ b
 
-andIts, andThe, fromThe, inThe, isExpctdToHv, isThe, ofGiv, ofGiv', ofThe, the_ofThe, the_ofThe', sOf,
+andIts, andThe, fromThe, inThe, isExpctdToHv, isThe, ofGiv, ofGiv', ofThe, the_ofThe, the_ofThe', sOf, sOfA,
   sOr, sVersus, sAnd, sAre, sIn, sIs, toThe, sFor :: Sentence -> Sentence -> Sentence
 
 -- | Inserts the words "and its" between two Sentences

@@ -1,5 +1,5 @@
 module Utils.Drasil.Sentence (andIts, andThe, fromThe, inThe, isExpctdToHv, isThe, ofGiv,
-  ofGiv', ofThe, the_ofThe, the_ofThe', sOf, sOr, sVersus, sAnd, sAre, sIn, sIs, toThe, sFor, sFor', sFor'') where
+  ofGiv', ofThe, the_ofThe, the_ofThe', sOf, sOfA, sOr, sVersus, sAnd, sAre, sIn, sIs, toThe, sFor, sFor', sFor'') where
 
 import Language.Drasil
 
@@ -34,6 +34,8 @@ sIn     = sentHelper "in"
 sIs     = sentHelper "is"
 -- | Inserts the word "of" between two Sentences
 sOf     = sentHelper "of"
+-- | Inserts the words "of a" between two Sentences
+sOfA    = sentHelper "of a"
 -- | Inserts the word "or" between two Sentences
 sOr     = sentHelper "or"
 -- | Inserts the word "versus" between two Sentences
@@ -42,10 +44,13 @@ sVersus = sentHelper "versus"
 toThe   = sentHelper "to the"
 -- | Inserts the words "of the" between two Sentences
 ofThe   = sentHelper "of the"
+-- | Inserts the word "for" between two Sentences
 sFor    = sentHelper "for"
 
+-- | Similar to 'sFor', but both terms are 'titleize'd
 sFor' :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
 sFor' t1 t2 = titleize t1 +:+ S "for" +:+ titleize t2
+-- | Similar to 'sFor'', but takes two arguments (for capitalization or pluralization) to apply to the two terms respectively
 sFor'' :: (c -> Sentence) -> (d -> Sentence) -> c -> d -> Sentence
 sFor'' f1 f2 t1 t2 = f1 t1 +:+ S "for" +:+ f2 t2   
 

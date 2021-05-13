@@ -58,8 +58,8 @@ ofN_ t1 t2 = nounPhrase''
   (Replace (atStart t1 `sOf` phraseNP t2))
   (Replace (titleize t1 `sOf` titleizeNP t2))
 
--- | Creates a noun phrase by combining two 'NamedIdea's with the word "of" between
--- them. 'phrase' is defaulted to @(phrase t1) "of" (plural t2)@. Plural is the same.
+-- | Similar to 'of_', but 'phrase' is defaulted to 
+-- @(phrase t1) "of" (plural t2)@. Plural is the same.
 of_' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 of_' t1 t2 = nounPhrase'' 
   (phrase t1 `sOf` plural t2)
@@ -107,8 +107,8 @@ ofThe' t1 t2 = nounPhrase''
 -- 1. t1 `for` t2 means that t1 is a view of part of the reason behind t2
 -- 2. t1 `of_` t2 means that t1 is a view of part of the structure of t2
 
--- | Inserts the word "for" between the titleized versions of
--- two terms
+-- | Creates a noun phrase by combining two 'NamedIdea's with the word "for" between
+-- their terms. Plural is defaulted to @(plural t1) "of" (phrase t2)@
 for :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 for t1 t2 = nounPhrase'' 
   (phrase t1 +:+ S "for" +:+ phrase t2)
@@ -124,17 +124,17 @@ for' f1 f2 t1 t2 = nounPhrase''
   (Replace (atStart t1 +:+ S "for" +:+ phrase t2))
   (Replace (f1 t1 +:+ S "for" +:+ f2 t2))
 
--- | Prepends "the" to a titleized `NamedIdea`
-the' :: (NamedIdea t) => t -> NP
-the' t = nounPhrase'' (S "the" +:+ titleize t) (S "the" +:+ titleize' t) CapWords CapWords
-
 -- | Prepends "the" to a `NamedIdea`. Similar to 'the'', but not titleized
 the :: (NamedIdea t) => t -> NP
 the t = nounPhrase'' (S "the" +:+ phrase t) (S "the" +:+ plural t) CapWords CapWords
 
+-- | Prepends "the" to a titleized `NamedIdea`
+the' :: (NamedIdea t) => t -> NP
+the' t = nounPhrase'' (S "the" +:+ titleize t) (S "the" +:+ titleize' t) CapWords CapWords
+
 -- | A customizable version of 'the'
-theCustom :: (t -> Sentence) -> t -> NP
-theCustom f t = nounPhrase''(S "the" +:+ f t) (S "the" +:+ f t) CapFirst CapWords
+the'' :: (t -> Sentence) -> t -> NP
+the'' f t = nounPhrase''(S "the" +:+ f t) (S "the" +:+ f t) CapFirst CapWords
 
 -- | Combinator for combining two 'NamedChunk's into one.
 -- /Does not preserve abbreviations/

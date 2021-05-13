@@ -27,8 +27,8 @@ and_' t1 t2 = nounPhrase''
 andRT :: (NamedIdea c, NamedIdea d) => 
   (c -> Sentence) -> (d -> Sentence) -> c -> d -> NP
 andRT f1 f2 t1 t2 = nounPhrase''
-  (phrase t1 `sAnd` plural t2)
   (phrase t1 `sAnd` phrase t2)
+  (phrase t1 `sAnd` plural t2)
   (Replace (atStart t1 `sAnd` phrase t2))
   (Replace (f1 t1 `sAnd` f2 t2))
 
@@ -100,18 +100,20 @@ ofA t1 t2 = nounPhrase''
 
 -- | Inserts the word "for" between the titleized versions of
 -- two terms
-for :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
-for t1 t2 = titleize t1 +:+ S "for" +:+ titleize t2
+for :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+for t1 t2 = nounPhrase'' 
+  (phrase t1 +:+ S "for" +:+ phrase t2)
+  (plural t1 +:+ S "for" +:+ phrase t2)
+  (Replace (atStart t1 +:+ S "for" +:+ phrase t2))
+  (Replace (titleize t1 +:+ S "for" +:+ titleize t2))
 
--- | Similar to 'for', but uses titleized version of term 1 with the abbreviation
--- (if it exists, phrase otherwise) for term 2
-for' :: (NamedIdea c, Idea d) => c -> d -> Sentence
-for' t1 t2 = titleize t1 +:+ S "for" +:+ short t2
-
--- | Similar to 'for', but allows one to specify the function to use on each term
--- before inserting for. For example one could use @for'' phrase plural t1 t2@
-for'' :: (c -> Sentence) -> (d -> Sentence) -> c -> d -> Sentence
-for'' f1 f2 t1 t2 = f1 t1 +:+ S "for" +:+ f2 t2
+-- | Similar to 'for', but takes two functions that determine the 'titleCase'
+for' :: (NamedIdea c, Idea d) => (c -> Sentence) -> (d -> Sentence) -> c -> d -> NP
+for' f1 f2 t1 t2 = nounPhrase'' 
+  (phrase t1 +:+ S "for" +:+ phrase t2)
+  (plural t1 +:+ S "for" +:+ phrase t2)
+  (Replace (atStart t1 +:+ S "for" +:+ phrase t2))
+  (Replace (f1 t1 +:+ S "for" +:+ f2 t2))
 
 the' :: (NamedIdea t) => t -> NP
 the' t = nounPhrase'' (S "the" +:+ titleize t) (S "the" +:+ titleize' t) CapWords CapWords
@@ -139,9 +141,6 @@ compoundNC'' f1 f2 t1 t2 = nc
 
 compoundNCPlPh :: NamedChunk -> NamedChunk -> NamedChunk
 compoundNCPlPh = compoundNC'' D.pluralNP D.phraseNP
-
-compoundNCPlPl :: NamedChunk -> NamedChunk -> NamedChunk
-compoundNCPlPl = compoundNC'' D.pluralNP D.pluralNP
 
 -- hack for Solution Characteristics Specification, calling upon plural will pluralize
 -- Characteristics as it is the end of the first term (solutionCharacteristic)

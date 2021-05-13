@@ -53,7 +53,7 @@ import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
 import Drasil.GamePhysics.GenDefs (generalDefns)
 
 srs :: Document
-srs = mkDoc mkSRS for' si
+srs = mkDoc mkSRS (sFor'' titleize short) si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration

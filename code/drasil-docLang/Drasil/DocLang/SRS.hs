@@ -27,10 +27,10 @@ import qualified Data.Drasil.TheoryConcepts as Doc (dataDefn, genDefn, inModel, 
 
 -- Local function to keep things looking clean, not exported.
 forTT :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
-forTT = for'' titleize' titleize
+forTT = sFor'' titleize' titleize
 
 forTT' :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
-forTT' = for'' titleize' titleize'
+forTT' = sFor'' titleize' titleize'
 
 -- | SRS document constructor. 
 -- Create the SRS from given system name, authors, and sections

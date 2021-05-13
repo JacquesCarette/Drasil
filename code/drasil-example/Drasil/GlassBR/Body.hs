@@ -106,7 +106,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
   StkhldrSec $
     StkhldrProg
       [Client glassBR $ S "a" +:+ phrase company
-        +:+ S "named Entuitive. It is developed by Dr." +:+ S (name mCampidelli),
+        +:+. S "named Entuitive" +:+ S "It is developed by Dr." +:+ S (name mCampidelli),
       Cstmr glassBR],
   GSDSec $ GSDProg [SysCntxt [sysCtxIntro, LlC sysCtxFig, sysCtxDesc, sysCtxList],
     UsrChars [userCharacteristicsIntro], SystCons [] [] ],

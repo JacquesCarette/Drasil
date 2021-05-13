@@ -18,7 +18,7 @@ dataDefs :: [DataDefinition]
 dataDefs = [positionIX, positionIY, frequencyDD, angFrequencyDD, periodSHMDD]
 
 
-----------
+------------------------------------------------------
 positionIX :: DataDefinition
 positionIX = ddNoRefs positionIXQD Nothing "positionIX" [positionRef, figRef]
 
@@ -34,7 +34,7 @@ figRef = ch QP.ixPos `sIs` S "shown in" +:+. makeRef2S figMotion
 positionRef :: Sentence
 positionRef = ch QP.ixPos `isThe` S "horizontal" +:+ phrase QP.position
 
---------------------------------------------
+------------------------------------------------------
 positionIY :: DataDefinition
 positionIY = ddNoRefs positionIYQD Nothing "positionIY" [positionReff, figReff]
 
@@ -50,7 +50,7 @@ figReff = ch QP.iyPos `sIs` S "shown in" +:+. makeRef2S figMotion
 positionReff :: Sentence
 positionReff = ch QP.iyPos `isThe` S "vertical" +:+ phrase QP.position
 
-----------------------------------------------
+------------------------------------------------------
 
 frequencyDD :: DataDefinition
 frequencyDD = ddNoRefs frequencyDDQD Nothing "frequencyDD" [frequencyRef]
@@ -65,7 +65,6 @@ frequencyDDEqn = 1 / sy QP.period
 frequencyRef :: Sentence
 frequencyRef = ch QP.frequency `isThe` S "number of back and forth swings in one" +:+ phrase second
 
-
 ------------------------------------------------------
 
 angFrequencyDD :: DataDefinition
@@ -75,12 +74,12 @@ angFrequencyDDQD :: QDefinition
 angFrequencyDDQD = mkQuantDef QP.angularFrequency angFrequencyDDEqn
 
 angFrequencyDDEqn :: Expr
-angFrequencyDDEqn = cross (2 * sy QM.pi_)  (1/sy QP.period) $= 2 * sy QM.pi_ /sy QP.period
-
+angFrequencyDDEqn = 2 * sy QM.pi_ / sy QP.period
 
 angFrequencyRef :: Sentence
 angFrequencyRef = ch QP.period `sIs` S "from" +:+ makeRef2S periodSHMDD
-----------------------------------------------------------
+
+------------------------------------------------------
 
 periodSHMDD :: DataDefinition
 periodSHMDD = ddNoRefs periodSHMDDQD Nothing "periodSHMDD" [periodSHMRef]
@@ -93,5 +92,3 @@ periodSHMDDEqn = 1 / sy QP.frequency
 
 periodSHMRef :: Sentence
 periodSHMRef = ch QP.period `sIs` S "from" +:+ makeRef2S frequencyDD
-
-

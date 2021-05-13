@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 628bab8f4dc8526daf25de7a6331190555e2134717f52bb05c67fe8a4eaacf03
+-- hash: c99edbf8279b1a6faabe9d1ce4a8b15fde9713a4cd3b9b63b3e7209fb0781389
 
 name:           drasil-utils
 version:        0.1.1.0
@@ -24,7 +24,6 @@ library
   exposed-modules:
       Utils.Drasil
   other-modules:
-      Utils.Drasil.Concepts
       Utils.Drasil.Contents
       Utils.Drasil.Document
       Utils.Drasil.English

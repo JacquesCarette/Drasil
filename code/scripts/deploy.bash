@@ -4,8 +4,8 @@ DEPLOY_FOLDER="deploy/"
 BUILD_NUMBER_FILE=".build-num"
 COMMIT_HASH_FILE=".commit-hash"
 
-if [ "$GITHUB_REF" != "$SOURCE_BRANCH" ]; then
-  echo "Only perform deploys for $SOURCE_BRANCH."
+if [ "$GITHUB_REF" != "refs/heads/$SOURCE_BRANCH" ]; then
+  echo "Only perform deploys for $SOURCE_BRANCH (attempted on: $GITHUB_REF)."
   echo "Skipping."
   exit 0
 fi

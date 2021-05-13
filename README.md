@@ -117,13 +117,10 @@ See the [README](https://github.com/JacquesCarette/Drasil/tree/master/code#build
   - Assorted general/administrative notes
 
 .gitattributes
-  - Used by git
+  - Used by git (set language attributes so GitHub Linguist calculates code statistics as desired)
   
 .gitignore
   - Used by git (specifies which file(type)s to ignore when committing)
-  
-.travis.yml
-  - Used for continuous integration with Travis CI
   
 LICENSE
   - License information

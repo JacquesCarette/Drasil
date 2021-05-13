@@ -1,3 +1,4 @@
+{-# LANGUAGE PostfixOperators #-}
 module Drasil.SSP.DataDefs (dataDefs, intersliceWtrF, angleA, angleB, lengthB,
   lengthLb, lengthLs, slcHeight, normStressDD, tangStressDD, ratioVariation, 
   convertFunc1, convertFunc2, nrmForceSumDD, watForceSumDD) where 
@@ -154,7 +155,7 @@ slcHeightNotes = [S "This" +:+ phrase equation +:+ S "is based on the" +:+
   S "are straight lines" +:+. sParen (makeRef2S assumpSBSBISL), 
   ch sliceHghtRight `sAnd` ch sliceHghtLeft +:+ S "are defined in" +:+
   makeRef2S sliceHghtRightDD `sAnd` makeRef2S sliceHghtLeftDD `sC` 
-  S "respectively."]
+  (S "respectively" !.)]
 
 --DD normStress: total normal stress
 

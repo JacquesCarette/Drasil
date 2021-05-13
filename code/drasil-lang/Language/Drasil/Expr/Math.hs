@@ -4,8 +4,8 @@ module Language.Drasil.Expr.Math where
 import Prelude hiding (sqrt)
 import Control.Lens ((^.))
 import Language.Drasil.Symbol (Symbol)
-import Language.Drasil.Expr (Expr(..), Relation, DerivType(..), ($^), BinOp(..),
-  AssocArithOper(..), UFunc(..), UFuncB(..), UFuncVec(..), Completeness(..), VVVBinOp(..))
+import Language.Drasil.Expr (Expr(..), Relation, DerivType(..), ($^), AssocArithOper(..),
+  LABinOp(..), VVVBinOp(..), UFunc(..), UFuncB(..), UFuncVec(..), Completeness(..))
 import Language.Drasil.Space (Space, RTopology(..), DomainDesc(..), RealInterval)
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
 import Language.Drasil.Classes (IsArgumentName)
@@ -76,7 +76,7 @@ not_ = UnaryOpB Not
 
 -- | Smart constructor for indexing
 idx :: Expr -> Expr -> Expr
-idx = BinaryOp Index
+idx = LABinaryOp Index
 
 -- | Smart constructors for integers, doubles, strings, percents
 int :: Integer -> Expr

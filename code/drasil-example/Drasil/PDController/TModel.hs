@@ -1,3 +1,4 @@
+{-# LANGUAGE PostfixOperators #-}
 module Drasil.PDController.TModel where
 
 import Data.Drasil.Quantities.PhysicalProperties (mass)
@@ -40,7 +41,7 @@ laplaceRel
 laplaceDesc :: Sentence
 laplaceDesc
   = foldlSent
-      [S "Bilateral Laplace Transform.",
+      [(S "Bilateral Laplace Transform" !.),
        S "The Laplace transforms are " +:+
          S "typically inferred from a pre-computed table of Laplace Transforms"
          +:+ S " ("
@@ -72,7 +73,7 @@ invLaplaceRel = sy qdFxnTDomain $= sy qdInvLaplaceTransform
 invLaplaceDesc :: Sentence
 invLaplaceDesc
   = foldlSent
-      [S "Inverse Laplace Transform of F(S).",
+      [(S "Inverse Laplace Transform of F(S)" !.),
        S "The Inverse Laplace transforms are " +:+
          S "typically inferred from a pre-computed table of Laplace Transforms"
          +:+ S " ("

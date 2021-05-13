@@ -6,7 +6,7 @@ module Utils.Drasil.Fold (EnumType(..), WrapType(..), SepType(..), FoldType(..),
 import Language.Drasil
 import Utils.Drasil.Sentence (sAnd, sOr)
 
--- | fold helper functions applies f to all but the last element, applies g to
+-- | Fold helper function that applies f to all but the last element, applies g to
 -- last element and the accumulator
 foldle :: (a -> a -> a) -> (a -> a -> a) -> a -> [a] -> a
 foldle _ _ z []     = z
@@ -14,7 +14,7 @@ foldle _ g z [x]    = g z x
 foldle f g z [x,y]  = g (f z x) y
 foldle f g z (x:xs) = foldle f g (f z x) xs
 
--- | fold helper functions applied f to all but last element, applies g to last
+-- | Fold helper function that applies f to all but last element, applies g to last
 -- element and accumulator without starting value, does not work for empty list
 foldle1 :: (a -> a -> a) -> (a -> a -> a) -> [a] -> a
 foldle1 _ _ []       = error "foldle1 cannot be used with empty list"
@@ -22,7 +22,7 @@ foldle1 _ _ [x]      = x
 foldle1 _ g [x,y]    = g x y
 foldle1 f g (x:y:xs) = foldle f g (f x y) xs
 
--- | helper for formatting constraints
+-- | Helper for formatting constraints
 foldConstraints :: (Quantity c) => c -> [Constraint] -> Sentence
 foldConstraints _ [] = EmptyS
 foldConstraints c e  = E $ foldl1 ($&&) $ map constraintToExpr e
@@ -32,29 +32,31 @@ foldConstraints c e  = E $ foldl1 ($&&) $ map constraintToExpr e
     constraintToExpr (EnumeratedStr _ l)  = isin (sy c) (DiscreteS l)
 
 {--** Sentence Folding **--}
--- | partial function application of foldle for sentences specifically
+-- | Partial function application of foldle for sentences specifically. folds with spaces and adds "." at the end.
 foldlSent :: [Sentence] -> Sentence
 foldlSent = foldle (+:+) (+:+.) EmptyS
 
--- | foldlSent but does not end with period
+-- | 'foldlSent' but does not end with period
 foldlSent_ :: [Sentence] -> Sentence
 foldlSent_ = foldl (+:+) EmptyS
 
--- | foldlSent but ends with colon
+-- | 'foldlSent' but ends with colon
 foldlSentCol :: [Sentence] -> Sentence
 foldlSentCol = foldle (+:+) (+:) EmptyS
 
--- | fold sentences then turns into content
+-- | Fold sentences then turns into content using 'foldlSent'
 foldlSP :: [Sentence] -> Contents
 foldlSP = mkParagraph . foldlSent
 
+-- | Same as 'foldlSP' but uses 'foldlSent_'
 foldlSP_ :: [Sentence] -> Contents
 foldlSP_ = mkParagraph . foldlSent_
 
+-- | Same as 'foldlSP' but uses 'foldlSentCol'
 foldlSPCol :: [Sentence] -> Contents
 foldlSPCol = mkParagraph . foldlSentCol
 
--- | creates a list of elements separated by commas, including the last element
+-- | Folds a list of elements separated by commas, including the last element
 foldlsC :: [Sentence] -> Sentence 
 foldlsC [] = EmptyS
 foldlsC xs = foldl1 sC xs
@@ -64,7 +66,13 @@ data WrapType = Parens | Period
 data SepType  = Comma  | SemiCol
 data FoldType = List   | Options
 
--- | creates an list of elements with "enumerators" in "wrappers" using foldlList
+-- | Creates a list of elements separated by a "separator", ending with "and" or "or"
+foldlList :: SepType -> FoldType -> [Sentence] -> Sentence
+foldlList _ _ []     = EmptyS
+foldlList _ f [a, b] = end f a b
+foldlList s f lst    = foldle1 (sep s) (\a b -> end f (sep s a EmptyS) b) lst
+
+-- | Creates a list of elements with "enumerators" in "wrappers" using foldlList
 foldlEnumList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Sentence
 foldlEnumList e w s l lst = foldlList s l $ zipWith (+:+) (enumList e w $ length lst) lst
   where
@@ -75,17 +83,12 @@ foldlEnumList e w s l lst = foldlList s l $ zipWith (+:+) (enumList e w $ length
     wrap Parens x = sParen x
     wrap Period x = x :+: S "."
 
--- | creates a list of elements separated by a "separator", ending with "and" or "or"
-foldlList :: SepType -> FoldType -> [Sentence] -> Sentence
-foldlList _ _ []     = EmptyS
-foldlList _ f [a, b] = end f a b
-foldlList s f lst    = foldle1 (sep s) (\a b -> end f (sep s a EmptyS) b) lst
-
---Helper functions to foldlList - not exported
+-- | Ending type helper functions to foldlList - not exported
 end :: FoldType -> (Sentence -> Sentence -> Sentence)
 end List    = sAnd
 end Options = sOr
 
+-- | Separator type helper function to foldlList - not exported
 sep :: SepType -> (Sentence -> Sentence -> Sentence)
 sep Comma   = sC
 sep SemiCol = \a b -> a :+: S ";" +:+ b
@@ -113,6 +116,6 @@ numList s (y:z:xs)
       | n == b + 1 = range a n ns
       | otherwise  = rangeSep a b s : numList s l
 
--- | Helper for numList that rangeSepenates
+-- | Helper for numList that concatenates integers to strings
 rangeSep :: Int -> Int -> String -> String
 rangeSep p q s = show p ++ s ++ show q

@@ -1,3 +1,4 @@
+{-# LANGUAGE PostfixOperators #-}
 module Drasil.Projectile.Assumptions (accelYGravity, accelXZero, cartSyst,
   assumptions, constAccel, gravAccelValue, launchOrigin, pointMass, 
   posXDirection, targetXAxis, timeStartZero, twoDMotion, yAxisGravity) where
@@ -49,7 +50,7 @@ yAxisGravityDesc :: Sentence
 yAxisGravityDesc = S "direction" `the_ofThe'` phrase yAxis `sIs` S "directed opposite to" +:+. phrase gravity
 
 launchOriginDesc :: Sentence
-launchOriginDesc = atStartNP (the launcher) `sIs` S "coincident with the origin."
+launchOriginDesc = (atStartNP (the launcher) `sIs` S "coincident with the origin" !.)
 
 targetXAxisDesc :: Sentence
 targetXAxisDesc = atStartNP (the target) +:+ S "lies on the" +:+ phrase xAxis +:+. fromSource neglectCurv
@@ -69,7 +70,7 @@ accelYGravityDesc = S "The" +:+ phrase acceleration +:+ S "in the" +:+ phrase yD
                     S "due to" +:+ phrase gravity +:+. fromSource yAxisGravity
 
 neglectDragDesc :: Sentence
-neglectDragDesc = S "Air drag" `sIs` S "neglected."
+neglectDragDesc = (S "Air drag" `sIs` S "neglected" !.)
 
 pointMassDesc :: Sentence
 pointMassDesc = (S "size" `sAnd` S "shape") `the_ofThe'` phrase projectile `sAre`

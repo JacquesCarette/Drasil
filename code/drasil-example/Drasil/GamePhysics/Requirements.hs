@@ -1,3 +1,4 @@
+{-# LANGUAGE PostfixOperators #-}
 module Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs) where
 
 import Language.Drasil hiding (Vector, organization)
@@ -122,8 +123,8 @@ usability = cic "usability" (foldlSent [
 
 understandability :: ConceptInstance
 understandability = cic "understandability" (foldlSent [
-  S "Users" `sOf` S "Tamias2D shall be able to learn the software with ease.", 
-  S "Users shall be able to easily create a small program using the library.", 
+  (S "Users" `sOf` S "Tamias2D shall be able to learn the software with ease" !.), 
+  (S "Users shall be able to easily create a small program using the library" !.), 
   S "Creating a small program to simulate the movement of 2 bodies" `sIn` 
   S "space should take no less that 60 minutes"
   ]) "Understandability" nonFuncReqDom

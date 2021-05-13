@@ -1,7 +1,5 @@
 on:
   push:
-    branches-ignore: master
-  pull_request:
     branches: master
   workflow_dispatch:
 name: Drasil
@@ -11,10 +9,6 @@ defaults:
     working-directory: code
 jobs:
   auto-cancel:
-    if: |
-      github.event_name == 'pull_request'
-      || github.event_name == 'workflow_dispatch'
-      || (github.event_name == 'push' && contains(github.event.head_commit.message, '[workflow-trigger]'))
     runs-on: ubuntu-latest
     steps:
       - name: Cancel Previous Runs
@@ -37,16 +31,6 @@ jobs:
           enable-stack: true
           stack-no-global: true
           stack-version: 'latest'
-      - name: "Cache dependencies"
-        uses: actions/cache@v2
-        with:
-          path: |
-            ~/.stack
-            ~/.cabal/packages
-            ~/.cabal/store
-            code/.stack-work/
-            ~/.local/bin/graphmod
-          key: ${{ runner.os }}-store-${{ hashFiles('code/stack.yaml') }}
       - name: "Update PATH"
         run: |
           echo "$HOME/.local/bin" >> $GITHUB_PATH
@@ -69,3 +53,20 @@ jobs:
         run: make docs haddockArgs="--no-haddock-deps --no-haddock-hyperlink-source"
       - name: "Graphs"
         run: make graphs
+  deploy:
+    needs: build
+    name: "Deploy"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: "Deploy to gh-pages"
+        run: LABEL_FILE=/tmp/ci_build_failures \
+             MANAGED_LABEL_FILE=/tmp/ci_managed_labels \
+             ALL_FUNCTIONS_FILE=$(mktemp) \
+             SHELL_OPTS_FILE=$(mktemp) \
+             bash scripts/deploy_wrapper.bash
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@4.1.3
+        with:
+          branch: gh-pages
+          folder: deploy

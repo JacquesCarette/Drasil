@@ -183,10 +183,10 @@ main = do
   -- Because we want to be able to test site building locally, we fill in these stubs with
   -- (sometimes correct) assumptions.
   travisRepoSlug <- fromMaybe "JacquesCarette/Drasil" <$> lookupEnv "TRAVIS_REPO_SLUG"
-  travisCommit <- fromMaybe "master" <$> lookupEnv "TRAVIS_COMMIT"
+  travisCommit <- fromMaybe "master" <$> lookupEnv "GITHUB_SHA"
   -- Next two are metadata used to produce the footer.
-  travisBuildNumber <- fromMaybe "0" <$> lookupEnv "TRAVIS_BUILD_NUMBER"
-  travisBuildId <- lookupEnv "TRAVIS_BUILD_ID"
+  travisBuildNumber <- fromMaybe "0" <$> lookupEnv "GITHUB_RUN_NUMBER"
+  travisBuildId <- lookupEnv "GITHUB_RUN_ID"
 
   let repoCommitRoot = "https://github.com/" ++ travisRepoSlug ++ "/tree/" ++ travisCommit ++ "/"
   let docsPath = docsRoot ++ "index.html"

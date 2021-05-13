@@ -1,0 +1,11 @@
+LABEL_FILE=/tmp/ci_build_failures \
+MANAGED_LABEL_FILE=/tmp/ci_managed_labels \
+ALL_FUNCTIONS_FILE=$(mktemp) \
+SHELL_OPTS_FILE=$(mktemp) \
+GITHUB_REF=master \
+BOT_TOKEN=test \
+GITHUB_RUN_ID=10001 \
+GITHUB_RUN_NUMBER=10012 \
+GITHUB_SHA="5fbcb79c17aa8c7820abac644ddb23a38ea1ee64" \
+GITHUB_REPOSITORY=balacij/Drasil \
+bash scripts/deploy_wrapper.bash

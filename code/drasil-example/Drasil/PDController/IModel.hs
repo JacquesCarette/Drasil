@@ -60,13 +60,12 @@ derivStmt1 :: Sentence
 derivStmt1
   = foldlSent
       [S "The Process Variable (Y(S)) in a" +:+ phrase pidCL +:+
-         S "is the product of the Process Error (from "
-         <> makeRef2S ddErrSig
-         <> S "), Control Variable (from "
-         <> makeRef2S ddCtrlVar
-         <> S "), and the Power-Plant (from "
-         <> makeRef2S gdPowerPlant
-         <> S ")"]
+         S "is the product of the Process Error", sParen (S "from" +:+
+         makeRef2S ddErrSig) `sC`
+         S "Control Variable", sParen (S "from" +:+
+         makeRef2S ddCtrlVar) `sC`
+         S "and the Power-Plant", sParen (S "from" +:+
+          makeRef2S gdPowerPlant)]
 
 derivEqn1 :: Expr
 derivEqn1
@@ -76,7 +75,7 @@ derivEqn1
       * (1 / (square (sy qdFreqDomain) + sy qdFreqDomain + 20))
 
 derivStmt2 :: Sentence
-derivStmt2 = foldlSent [S "Substituting the values and rearranging the equation"]
+derivStmt2 = (S "Substituting the values and rearranging the equation" !.)
 
 derivEqn2 :: Expr
 derivEqn2
@@ -88,9 +87,9 @@ derivEqn2
 
 derivStmt3 :: Sentence
 derivStmt3
-  = S "Computing the" +:+ phrase qdInvLaplaceTransform +:+ S "(from " <>
-      makeRef2S tmInvLaplace
-      <> (S ") of the equation" !.)
+  = S "Computing the" +:+ phrase qdInvLaplaceTransform +:+ sParen (S "from" +:+
+      makeRef2S tmInvLaplace) +:+
+      (S "of the equation" !.)
 
 derivEqn3 :: Expr
 derivEqn3
@@ -103,13 +102,11 @@ derivEqn3
 derivStmt4 :: Sentence
 derivStmt4
   = foldlSent_
-      [S "The Set point (r(t)) is a step function, and a constant " +:+
-         S "(from "
-         <> makeRef2S aSP
-         <> (S ")" !.),
-       S "Therefore the" +:+
-         S " differential of the set point is zero. Hence the equation "
-         +:+ S "reduces to,"]
+      [S "The Set point (r(t)) is a step function, and a constant" +:+.
+         sParen (S "from" +:+ makeRef2S aSP),
+       S "Therefore the",
+         S "differential of the set point is zero. Hence the equation",
+         S "reduces to,"]
 
 derivEqn4 :: Expr
 derivEqn4

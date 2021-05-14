@@ -9,9 +9,9 @@ import Utils.Drasil
 sysProblemDesc :: Sentence
 sysProblemDesc
   = foldlSent_
-      [S "provide a model of a" +:+ phrase pidC +:+
-         S " that can be used for the tuning of the gain constants before"
-         +:+ S " the deployment of the controller"]
+      [S "provide a model of a", phrase pidC,
+         S "that can be used for the tuning of the gain constants before",
+         S "the deployment of the controller"]
 
 sysParts :: [Sentence]
 sysParts
@@ -38,9 +38,9 @@ sysProcessVariable :: ConceptInstance
 sysProcessVariable
   = cic "processVariable"
       (foldlSent
-         [S "Calculate the" +:+ S "output of the" +:+ phrase powerPlant +:+
-            sParen (phrase processVariable)
-            +:+ S " over time"])
+         [S "Calculate the", S "output of the", phrase powerPlant,
+            sParen (phrase processVariable),
+            S "over time"])
       "Process-Variable"
       goalStmtDom
 

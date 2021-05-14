@@ -54,45 +54,41 @@ pwrPlantDesc, aDecoupledDesc, aSPDesc, aExtDisturbDesc, aManualTuningDesc,
               aStiffnessCoeffDesc :: Sentence
 pwrPlantDesc
   = foldlSent
-      [S "The" +:+ phrase powerPlant +:+ S "and the Sensor are coupled" +:+
-         S "as a single unit"]
+      [S "The", phrase powerPlant, S "and the Sensor are coupled as a single unit"]
 
 apwrPlantTxFnxDesc
   = foldlSent
-      [S "The combined" +:+ phrase powerPlant +:+ S "and Sensor " +:+
-         sParen (makeRef2S aPwrPlant)         
-         +:+ S " are characterized by a Second Order mass-spring-damper"
-         +:+ S " System"]
+      [S "The combined", phrase powerPlant, S "and Sensor",
+         sParen (makeRef2S aPwrPlant),        
+         S "are characterized by a Second Order mass-spring-damper System"]
 
 aDecoupledDesc
   = foldlSent
-      [S "The decoupled form of the" +:+ phrase pidC +:+
-         S "equation used in this"
-         +:+ phrase simulation]
+      [S "The decoupled form of the", phrase pidC,
+         S "equation used in this", phrase simulation]
 
 aSPDesc
   = foldlSent
-      [S "The" +:+ phrase setPoint +:+ S "is constant throughout the" +:+
+      [S "The", phrase setPoint, S "is constant throughout the",
          phrase simulation]
 
 aExtDisturbDesc
   = foldlSent
-      [S "There are no external disturbances to the" +:+ phrase powerPlant +:+
-         S "during the"
-         +:+ phrase simulation]
+      [S "There are no external disturbances to the", phrase powerPlant,
+         S "during the", phrase simulation]
 
 aManualTuningDesc
   = foldlSent
-      [S "This model will be used for  manual tuning of the" +:+ phrase pidC]
+      [S "This model will be used for manual tuning of the", phrase pidC]
 
 aInitialValueDesc
   = foldlSent
-      [S "The initial value of the" +:+ phrase processVariable +:+
+      [S "The initial value of the", phrase processVariable,
          S "is assumed to be zero"]
 
 aParallelEqDesc
   = foldlSent
-      [S "The Parallel form of the equation is used for the" +:+ phrase pidC]
+      [S "The Parallel form of the equation is used for the", phrase pidC]
 
 aUnfilteredDerivativeDesc
   = foldlSent
@@ -102,21 +98,21 @@ aUnfilteredDerivativeDesc
 aMassDesc
   = foldlSent
       [S "The", phrase mass,
-       S "of the spring in the mass-spring-damper system ",
+       S "of the spring in the mass-spring-damper system",
        sParen (makeRef2S aPwrPlant),
-       S " is assumed to be 1", 
+       S "is assumed to be 1", 
        phrase kilogram]
 
 aDampingCoeffDesc
   = foldlSent
       [S "The", phrase ccDampingCoeff,
-       S "of the spring in the mass-spring-damper system ",
+       S "of the spring in the mass-spring-damper system",
        sParen (makeRef2S aPwrPlant), 
-       S " is assumed to be 1"]
+       S "is assumed to be 1"]
 
 aStiffnessCoeffDesc
   = foldlSent
       [S "The", phrase ccStiffCoeff,
-       S " of the spring in the mass-spring-damper system ",
+       S "of the spring in the mass-spring-damper system",
        sParen (makeRef2S aPwrPlant), 
-       S ") is assumed to be 20"]
+       S "is assumed to be 20"]

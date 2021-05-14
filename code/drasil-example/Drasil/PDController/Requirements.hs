@@ -1,3 +1,4 @@
+{-#LANGUAGE PostfixOperators#-}
 module Drasil.PDController.Requirements where
 
 import Data.Drasil.Concepts.Documentation (funcReqDom, nonFuncReqDom)
@@ -24,23 +25,21 @@ verifyInputsDesc, calculateValuesDesc, outputValuesDesc :: Sentence
 
 verifyInputsDesc
   = foldlSent_
-      [S "Ensure that the input values are within the" +:+
+      [S "Ensure that the input values are within the",
          S "limits specified in"
          +:+. makeRef2S (datCon ([] :: [Contents]) ([] :: [Section]))]
 
 calculateValuesDesc
   = foldlSent
-      [S "Calculate the" +:+ phrase processVariable +:+ S "(from " <>
-         makeRef2S imPD
-         <> S ") over "
-         +:+ S "the simulation time"]
+      [S "Calculate the", phrase processVariable, sParen (S "from" +:+
+         makeRef2S imPD),
+         S "over the simulation time"]
 
 outputValuesDesc
   = foldlSent
-      [S "Output the" +:+ phrase processVariable +:+ S "(from " <>
-         makeRef2S imPD
-         <> S ") over "
-         +:+ S "the simulation time"]
+      [S "Output the", phrase processVariable, sParen (S "from" +:+
+         makeRef2S imPD),
+         S "over the simulation time"]
 
 -----------------------------------------------------------------------------
 
@@ -50,7 +49,7 @@ nonfuncReqs = [portability, security, maintainability, verifiability]
 portability :: ConceptInstance
 portability
   = cic "portability"
-      (foldlSent [S "The code shall be portable to multiple Operating Systems"])
+      (S "The code shall be portable to multiple Operating Systems" !.)
       "Portable"
       nonFuncReqDom
 
@@ -58,8 +57,7 @@ security :: ConceptInstance
 security
   = cic "security"
       (foldlSent
-         [S "The code shall be immune to common security problems such as memory"
-            +:+
+         [S "The code shall be immune to common security problems such as memory",
             S "leaks, divide by zero errors, and the square root of negative numbers"])
       "Secure"
       nonFuncReqDom
@@ -68,9 +66,8 @@ maintainability :: ConceptInstance
 maintainability
   = cic "maintainability"
       (foldlSent
-         [S "The dependencies among the instance models, requirements," +:+
-            S "likely changes, assumptions and all other relevant sections of"
-            +:+
+         [S "The dependencies among the instance models, requirements,",
+            S "likely changes, assumptions and all other relevant sections of",
             S "this document shall be traceable to each other in the trace matrix"])
       "Maintainable"
       nonFuncReqDom
@@ -78,8 +75,7 @@ maintainability
 verifiability :: ConceptInstance
 verifiability
   = cic "verifiability"
-      (foldlSent
-         [S "The code shall be verifiable against a Verification and Validation plan"])
+      (S "The code shall be verifiable against a Verification and Validation plan" !.)
       "Verifiable"
       nonFuncReqDom
 

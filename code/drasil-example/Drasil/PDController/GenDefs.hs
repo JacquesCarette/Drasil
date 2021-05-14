@@ -38,33 +38,29 @@ gdPowerPlantEqn
 gdPowerPlantNote :: Sentence
 gdPowerPlantNote
   = foldlSent
-      [S "The " +:+ phrase ccTransferFxn +:+ S "of the" +:+
-         phrase secondOrderSystem
-         +:+ S "(from "
-         <> makeRef2S tmSOSystem
-         <> S ") is reduced to this equation by substituting the"
-         +:+ phrase mass
-         +:+ S "(m)"
-         +:+ S "to 1 Kg (from "
-         <> makeRef2S aMass
-         <> S "), the"
-         +:+ phrase ccDampingCoeff
-         +:+ S "("
-         <> P symDampingCoeff
-         <> S ") to 1 (from "
-         <> makeRef2S aDampingCoeff
-         <> S "), and the"
-         +:+ phrase ccStiffCoeff
-         +:+ S "("
-         <> P symStifnessCoeff
-         <> S ") to 20 (from "
-         <> makeRef2S aStiffnessCoeff
-         <> S "). The equation is" +:+ S "converted to the frequency" +:+
-         S "domain by applying the Laplace"
-         +:+ S "transform (from "
-         <> makeRef2S tmLaplace
-         <> (S ")" !.),
-       S "Additionally, there are no external disturbances to the power plant"
-         +:+ S "(from "
-         <> makeRef2S aExtDisturb
-         <> S ")"]
+      [S "The ", phrase ccTransferFxn `ofThe`
+         phrase secondOrderSystem,
+         sParen (S "from" +:+
+         makeRef2S tmSOSystem),
+         S "is reduced to this equation by substituting the",
+         phrase mass,
+         S "(m)",
+         S "to 1 Kg", sParen (S "from" +:+
+         makeRef2S aMass) `sC`
+         S "the",
+         phrase ccDampingCoeff,
+         sParen (P symDampingCoeff),
+         S "to 1", sParen (S "from" +:+
+         makeRef2S aDampingCoeff) `sC`
+         S "and the",
+         phrase ccStiffCoeff,
+         sParen (P symStifnessCoeff),
+         S "to 20" +:+. sParen (S "from" +:+
+         makeRef2S aStiffnessCoeff),
+         S "The equation is converted to the frequency",
+         S "domain by applying the Laplace",
+         S "transform" +:+. sParen (S "from" +:+
+         makeRef2S tmLaplace),
+       S "Additionally, there are no external disturbances to the power plant",
+         sParen (S "from" +:+
+         makeRef2S aExtDisturb)]

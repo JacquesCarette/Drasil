@@ -42,11 +42,9 @@ laplaceDesc :: Sentence
 laplaceDesc
   = foldlSent
       [(S "Bilateral Laplace Transform" !.),
-       S "The Laplace transforms are " +:+
-         S "typically inferred from a pre-computed table of Laplace Transforms"
-         +:+ S " ("
-         <> makeCiteS laplaceWiki
-         <> S ")"]
+       S "The Laplace transforms are",
+         S "typically inferred from a pre-computed table of Laplace Transforms",
+         sParen (makeCiteS laplaceWiki)]
 
 --------
 
@@ -74,11 +72,9 @@ invLaplaceDesc :: Sentence
 invLaplaceDesc
   = foldlSent
       [(S "Inverse Laplace Transform of F(S)" !.),
-       S "The Inverse Laplace transforms are " +:+
-         S "typically inferred from a pre-computed table of Laplace Transforms"
-         +:+ S " ("
-         <> makeCiteS laplaceWiki
-         <> S ")"]
+       S "The Inverse Laplace transforms are",
+         S "typically inferred from a pre-computed table of Laplace Transforms",
+         sParen (makeCiteS laplaceWiki)]
 
 --------
 
@@ -109,10 +105,10 @@ soSystemRel
 soSystemDesc :: Sentence
 soSystemDesc
   = foldlSent
-      [S "The ", phrase ccTransferFxn, 
-        S "(from " <> makeRef2S apwrPlantTxFnx <> S ")",
+      [S "The", phrase ccTransferFxn, 
+        sParen (S "from" +:+ makeRef2S apwrPlantTxFnx),
         S "of a", phrase secondOrderSystem,
-        S "(mass-spring-damper)", 
+        sParen (S "mass-spring-damper"), 
         S "is characterized by this equation"]
 
        --------

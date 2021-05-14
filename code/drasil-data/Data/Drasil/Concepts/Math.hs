@@ -10,22 +10,23 @@ import Control.Lens ((^.))
 
 mathcon :: [ConceptChunk]
 
-mathcon = [angle, area, axis, calculation, cartesian, centre, change, constraint, diameter,
-  equation, euclidN, euclidSpace, gradient, graph, law, line, matrix, norm, normal,
-  normalV, number, orient, parameter, perp, perpV, pi_, point, probability, rOfChng,
-  rate, rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xCoord, xComp,
-  xDir, yAxis, yCoord, yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle]
+mathcon = [amplitude, angle, area, axis, calculation, cartesian, centre, change, component,
+  constraint, diameter,equation, euclidN, euclidSpace, gradient, graph, law, line, matrix, 
+  norm, normal, normalV, number, orient, parameter, perp, perpV, pi_, point, probability, 
+  rOfChng, rate, rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xCoord, 
+  xComp, xDir, yAxis, yCoord, yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle]
 
 mathcon' :: [CI]
 mathcon' = [de, leftSide, ode, pde, rightSide]
 
-angle, area, axis, calculation, cartesian, centre, change, constraint, diameter, equation,
-  euclidN, euclidSpace, gradient, graph, law, line, matrix, norm, normal, normalV,
-  number, orient, parameter, perp, perpV, pi_, point, probability, rOfChng, rate,
-  rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xCoord, xComp, xDir,
+amplitude, angle, area, axis, calculation, cartesian, centre, change, component, constraint, 
+  diameter, equation, euclidN, euclidSpace, gradient, graph, law, line, matrix, norm, 
+  normal, normalV, number, orient, parameter, perp, perpV, pi_, point, probability, rOfChng, 
+  rate, rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xCoord, xComp, xDir,
   yAxis, yCoord,  yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle :: ConceptChunk
 
-
+  
+amplitude   = dcc "amplitude"    (nounPhraseSP "amplitude")      "The peak deviation of a function from zero"
 angle       = dcc "angle"        (cn' "angle")                   "the amount of rotation needed to bring one line or plane into coincidence with another"
 area        = dcc "area"         (cn' "area")                    "a part of an object or surface"
 axis        = dcc "axis"         (cn' "axis")                    "a fixed reference line for the measurement of coordinates" 
@@ -36,6 +37,8 @@ cartesian   = dccWDS "cartesian" (pn' "Cartesian coordinate system") $ S "a coor
                                                                   sParen (S "from" +:+ makeRef2S cartesianWiki)
 centre       = dcc "centre"       (cn' "centre")                  "the middle point of an object"
 change       = dcc "change"       (cn' "change")                  "Difference between relative start and end states of an object"
+component    = dcc "component"    (nounPhrase "component" "components") ("The scalar quantity defining the contribution " ++
+                                                                  "of a vector in one of the coordinate directions")
 constraint   = dcc "constraint"   (cn' "constraint")              "A condition that the solution must satisfy"
 diameter     = dcc "diameter"     (cn' "diameter")                ("Any straight line segment that passes through the center of the circle" ++
                                                                   "and whose endpoints lie on the circle.")

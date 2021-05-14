@@ -20,7 +20,7 @@ physicCon = [acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVe
   iSpeed, iVel, impulseS, impulseV, isotropy, ixPos, ixVel, iyPos, iyVel,
   joint, kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy,
   momentOfInertia, position, potEnergy, pressure, restitutionCoef, rectilinear,
-  rigidBody, scalarAccel, scalarPos, space, speed, strain, stress, tension,
+  rigidBody, scalarAccel, scalarPos, shm, space, speed, strain, stress, tension,
   time, torque, velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel,
   yAccel, yConstAccel, yDist, yPos, yVel, momentum, moment, fOfGravity, positionVec,
   pendulum, body, kinematics, frequency, period, motion]
@@ -34,7 +34,7 @@ acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVelocity, cohes
   gravitationalAccel, gravitationalConst, height, iPos, iSpeed, iVel, impulseS,
   impulseV, isotropy, ixPos, ixVel, iyPos, iyVel, joint, kEnergy, linAccel,
   linDisp, linVelo, linear, mechEnergy, momentOfInertia, position, potEnergy,
-  pressure, rectilinear, restitutionCoef, rigidBody, scalarAccel, scalarPos,
+  pressure, rectilinear, restitutionCoef, rigidBody, scalarAccel, scalarPos, shm,
   space, speed, strain, stress, tension, time, torque, velocity, weight,
   xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
   yPos, yVel, momentum, moment, fOfGravity, positionVec, pendulum, body,
@@ -109,7 +109,7 @@ momentum = dccWDS "momentum" (cn "momentum")
 moment = dccWDS "moment" (cn' "moment")
   (S "A measure of the tendency of a body to rotate about a specific" +:+ phrase point `sOr` phrase axis)
 motion = dccWDS "motion" (cn "motion")
-  (S "change of position of a physical body")
+  (S "change in position of a physical body over time")
 period = dccWDS "period" (cn' "period")
    (S "the" +:+ phrase time +:+ S "required for one complete cycle of vibration to pass a given point.")
 pendulum = dccWDS "pendulum" (cn "pendulum")
@@ -134,6 +134,9 @@ scalarAccel = dccWDS "scalarAccel" (cn' "scalar acceleration")
   (S "magnitude" `the_ofThe` phrase acceleration +:+ S "vector")
 scalarPos = dccWDS "scalarPos" (cn' "scalar position")
   (S "magnitude" `the_ofThe` phrase position +:+ S "vector")
+shm = dcc "SHM" (nounPhraseSP "simple harmonic motion") ("Periodic motion through an equilibrium position. " ++ 
+                                                        "The motion is sinusoidal in time and demonstrates a" ++ 
+                                                        " single resonant frequency") -- source: Wikipedia 
 speed = dccWDS "speed" (cn' "speed")
   (S "magnitude" `the_ofThe` phrase velocity +:+ S "vector")
 strain = dccWDS "strain" (cn' "strain") 

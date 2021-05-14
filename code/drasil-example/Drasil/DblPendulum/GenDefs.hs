@@ -8,12 +8,12 @@ import Theory.Drasil (GenDefn, gdNoRefs, ModelKinds (OthModel, EquationalModel))
 import Utils.Drasil
 
 -- import Data.Drasil.Concepts.Documentation (coordinate, symbol_)
-import Data.Drasil.Concepts.Math (xComp, yComp, equation)
+import Data.Drasil.Concepts.Math (xComp, yComp, equation, component)
 import Data.Drasil.Quantities.Physics(xPos, yPos, velocity, angularVelocity, xVel, yVel,
     angularAccel, xAccel, yAccel, acceleration, force, tension, gravitationalAccel,
     angularFrequency, torque, momentOfInertia, angularDisplacement, time,
     momentOfInertia, period, frequency, position)
-import Data.Drasil.Concepts.Physics(pendulum, weight)
+import Data.Drasil.Concepts.Physics(pendulum, weight, shm)
 import Data.Drasil.Quantities.PhysicalProperties(mass)
 import Data.Drasil.Theories.Physics(newtonSLR)
 import Drasil.DblPendulum.DataDefs(frequencyDD, periodSHMDD, angFrequencyDD)
@@ -21,7 +21,7 @@ import qualified Data.Drasil.Quantities.Math as QM (pi_)
 
 -- import Drasil.Projectile.Assumptions (cartSyst, constAccel, pointMass, timeStartZero, twoDMotion)
 import Drasil.DblPendulum.Unitals (lenRod, pendDisplacementAngle)
-import Drasil.DblPendulum.Concepts (shm, horizontal, vertical, component, arcLen)
+import Drasil.DblPendulum.Concepts (horizontal, vertical, arcLen)
 
 genDefns :: [GenDefn]
 genDefns = [velocityIXGD, velocityIYGD, accelerationIXGD, accelerationIYGD,

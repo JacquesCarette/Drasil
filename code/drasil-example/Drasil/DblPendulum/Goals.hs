@@ -4,9 +4,9 @@ import Language.Drasil
 import Utils.Drasil
 import Data.Drasil.Concepts.Documentation (goalStmtDom)
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (mass, len)
-import Data.Drasil.Concepts.Physics (gravitationalConst)
+import Data.Drasil.Concepts.Physics (gravitationalConst, motion)
 import Data.Drasil.Concepts.Math (iAngle)
-import Drasil.DblPendulum.Concepts (rod, motion)
+import Drasil.DblPendulum.Concepts (rod)
 
 
 goals :: [ConceptInstance]

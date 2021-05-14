@@ -23,7 +23,7 @@ module Utils.Drasil (
   of_'', of__, ofA, ofN_, the, the', the'', with, ofThe',
   -- Sentence
   --andIts, andThe, fromThe, inThe, isExpctdToHv, isThe, ofGiv, ofGiv', ofThe, the_ofThe, the_ofThe',
-  --sOf, sOfA, sOr, sVersus, sAnd, sAre, sIn, sIs, toThe, sFor, sFor', sFor''
+  --sOf, sOfA, sOr, sVersus, sAnd, sAre, sIn, sIs, toThe, sFor, sFor', sFor'', forTT, forTT'
   -- Concepts
   insertStringNP, prependStringNP, insertSentNP, prependSentNP,
   theNP, theNP', aNP, aNP', ofTheNP, ofTheNP', ofTheNP'', the_ofTheNP, the_ofTheNP', the_ofTheNP'',

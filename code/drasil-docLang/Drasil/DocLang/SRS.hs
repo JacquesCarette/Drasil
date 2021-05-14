@@ -26,12 +26,6 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, assumption
   tOfSymb, tOfUnit, userCharacteristic)
 import qualified Data.Drasil.TheoryConcepts as Doc (dataDefn, genDefn, inModel, thModel)
 
--- Local function to keep things looking clean, not exported.
-forTT :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
-forTT = sFor'' titleize' titleize
-
-forTT' :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
-forTT' = sFor'' titleize' titleize'
 
 -- | SRS document constructor. 
 -- Create the SRS from given system name, authors, and sections

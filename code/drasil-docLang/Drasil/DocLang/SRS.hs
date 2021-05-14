@@ -14,6 +14,7 @@ module Drasil.DocLang.SRS (appendix, assumpt, assumptLabel, charOfIR, datCon,
 
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
   charOfIR, client, customer, consVals, datumConstraint, functionalRequirement,

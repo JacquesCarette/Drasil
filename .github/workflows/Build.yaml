@@ -68,4 +68,4 @@ jobs:
           token: ${{ secrets.BOT_TOKEN }}
           branch: gh-pages
           folder: code/deploy
-          commit-message: "drasil-bot deploy of master@${{ github.sha }}"
+          commit-message: "${{ secrets.BOT_NAME }} deploy of master@${{ github.sha }}"

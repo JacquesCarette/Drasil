@@ -22,17 +22,30 @@ infixr 9 $||
 -- Known math functions.
 -- TODO: Move the below to a separate file somehow. How to go about it?
 
--- | Binary functions
-data BinOp = Index | Dot | Cross
-  deriving Eq
+-- Binary functions
 
 data ArithBinOp = Frac | Pow | Subt
+  deriving Eq
 
 data EqBinOp = Eq | NEq
+  deriving Eq
 
 data BoolBinOp = Impl | Iff
+  deriving Eq
+
+data LABinOp = Index
+  deriving Eq
 
 data OrdBinOp = Lt | Gt | LEq | GEq
+  deriving Eq
+
+-- Vector x Vector -> Vector binary operations
+data VVVBinOp = Cross
+  deriving Eq
+
+-- Vector x Vector -> Number binary operations
+data VVNBinOp = Dot
+  deriving Eq
 
 data AssocArithOper = Add | Mul
   deriving Eq
@@ -43,10 +56,13 @@ data AssocBoolOper = And | Or
 -- | Unary functions
 data UFunc = Abs | Log | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin
   | Arccos | Arctan | Exp | Sqrt | Neg
+  deriving Eq
 
 data UFuncB = Not
+  deriving Eq
 
 data UFuncVec = Norm | Dim
+  deriving Eq
 
 -- | For case expressions
 data Completeness = Complete | Incomplete
@@ -92,11 +108,13 @@ data Expr where
   UnaryOpVec    :: UFuncVec -> Expr -> Expr
 
   -- | Binary functions/operations
-  BinaryOp      :: BinOp -> Expr -> Expr -> Expr
   ArithBinaryOp :: ArithBinOp -> Expr -> Expr -> Expr
   BoolBinaryOp  :: BoolBinOp -> Expr -> Expr -> Expr
   EqBinaryOp    :: EqBinOp -> Expr -> Expr -> Expr
+  LABinaryOp    :: LABinOp -> Expr -> Expr -> Expr
   OrdBinaryOp   :: OrdBinOp -> Expr -> Expr -> Expr
+  VVVBinaryOp   :: VVVBinOp -> Expr -> Expr -> Expr
+  VVNBinaryOp   :: VVNBinOp -> Expr -> Expr -> Expr
 
   -- | Operators are generalized arithmetic operators over a |DomainDesc|
   --   of an |Expr|.  Could be called |BigOp|.
@@ -118,7 +136,7 @@ data Expr where
 ($>=) = OrdBinaryOp GEq
 
 ($.) :: Expr -> Expr -> Expr
-($.) = BinaryOp Dot
+($.) = VVNBinaryOp Dot
 
 ($-), ($/), ($^) :: Expr -> Expr -> Expr
 ($-) = ArithBinaryOp Subt
@@ -161,18 +179,27 @@ instance Num Expr where
   signum _ = error "should not use signum in expressions"
 
 instance Eq Expr where
-  Dbl a          == Dbl b          =   a == b
-  Int a          == Int b          =   a == b
-  Str a          == Str b          =   a == b
-  AssocA o1 l1   == AssocA o2 l2   =  o1 == o2 && l1 == l2
-  AssocB o1 l1   == AssocB o2 l2   =  o1 == o2 && l1 == l2
-  Deriv t1 a b   == Deriv t2 c d   =  t1 == t2 && a == c && b == d
-  C a            == C b            =   a == b
-  FCall a b c    == FCall d e f    =   a == d && b == e && c == f
-  Case a b       == Case c d       =   a == c && b == d 
-  IsIn  a b      == IsIn  c d      =   a == c && b == d
-  BinaryOp o a b == BinaryOp p c d =   o == p && a == c && b == d
-  _              == _              =   False
+  Dbl a               == Dbl b               =   a == b
+  Int a               == Int b               =   a == b
+  Str a               == Str b               =   a == b
+  AssocA o1 l1        == AssocA o2 l2        =  o1 == o2 && l1 == l2
+  AssocB o1 l1        == AssocB o2 l2        =  o1 == o2 && l1 == l2
+  Deriv t1 a b        == Deriv t2 c d        =  t1 == t2 && a == c && b == d
+  C a                 == C b                 =   a == b
+  FCall a b c         == FCall d e f         =   a == d && b == e && c == f
+  Case a b            == Case c d            =   a == c && b == d 
+  IsIn a b            == IsIn c d            =   a == c && b == d
+  UnaryOp a b         == UnaryOp c d         =   a == c && b == d
+  UnaryOpB a b        == UnaryOpB c d        =   a == c && b == d
+  UnaryOpVec a b      == UnaryOpVec c d      =   a == c && b == d
+  ArithBinaryOp o a b == ArithBinaryOp p c d =   o == p && a == c && b == d
+  BoolBinaryOp o a b  == BoolBinaryOp p c d  =   o == p && a == c && b == d
+  EqBinaryOp o a b    == EqBinaryOp p c d    =   o == p && a == c && b == d
+  OrdBinaryOp o a b   == OrdBinaryOp p c d   =   o == p && a == c && b == d
+  LABinaryOp o a b    == LABinaryOp p c d    =   o == p && a == c && b == d
+  VVVBinaryOp o a b   == VVVBinaryOp p c d   =   o == p && a == c && b == d
+  VVNBinaryOp o a b   == VVNBinaryOp p c d   =   o == p && a == c && b == d
+  _                   == _                   =   False
 
 instance Fractional Expr where
   a / b = ArithBinaryOp Frac a b

@@ -1,3 +1,4 @@
+{-# LANGUAGE PostfixOperators #-}
 module Drasil.DblPendulum.Body where
 
 import Language.Drasil hiding (Symbol(..), Vector)
@@ -91,9 +92,9 @@ mkSRS = [RefSec $      --This creates the Reference section of the SRS
 justification :: Sentence
 justification = foldlSent [S "A", phrase pendulum, S "consists" `sOf` phrase mass, 
                             S "attached to the end of a", phrase rod `andIts` S "moving curve" `sIs`
-                            S "highly sensitive to initial conditions.", S "Therefore" `sC`
+                            (S "highly sensitive to initial conditions" !.), S "Therefore" `sC`
                             S "it is useful to have a", phrase program, S "to simulate", phrase motion
-                            `the_ofThe` phrase pendulum, S "to exhibit its chaotic characteristics.",
+                            `the_ofThe` phrase pendulum, (S "to exhibit its chaotic characteristics" !.),
                             S "The", phrase program, S "documented here is called", phrase pendulum]
 scope :: Sentence
 scope = foldlSent [S "the", phrase analysis `sOf` S "a", phrase twoD, 
@@ -175,7 +176,7 @@ tMods = [accelerationTM, velocityTM, newtonSL, newtonSLR]
 -- ---------------------------------
 
 physSystParts :: [Sentence]
-physSystParts = map ((+:+.) EmptyS . atStartNP) [the rod, the mass]
+physSystParts = map ((!.) . atStartNP) [the rod, the mass]
 
 
  

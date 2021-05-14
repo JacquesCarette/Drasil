@@ -1,3 +1,4 @@
+{-# LANGUAGE PostfixOperators #-}
 module Drasil.PDController.IModel where
 
 import Data.Drasil.Quantities.Physics (time)
@@ -89,7 +90,7 @@ derivStmt3 :: Sentence
 derivStmt3
   = S "Computing the" +:+ phrase qdInvLaplaceTransform +:+ S "(from " <>
       makeRef2S tmInvLaplace
-      <> S ") of the equation."
+      <> (S ") of the equation" !.)
 
 derivEqn3 :: Expr
 derivEqn3
@@ -105,7 +106,7 @@ derivStmt4
       [S "The Set point (r(t)) is a step function, and a constant " +:+
          S "(from "
          <> makeRef2S aSP
-         <> S ").",
+         <> (S ")" !.),
        S "Therefore the" +:+
          S " differential of the set point is zero. Hence the equation "
          +:+ S "reduces to,"]

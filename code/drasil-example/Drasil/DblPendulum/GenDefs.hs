@@ -1,3 +1,4 @@
+{-# LANGUAGE PostfixOperators #-}
 module Drasil.DblPendulum.GenDefs (genDefns, velocityIXGD, velocityIYGD,
          accelerationIXGD, accelerationIYGD, hForceOnPendulumGD, vForceOnPendulumGD,
          angFrequencyGD, periodPend) where
@@ -243,7 +244,7 @@ angFrequencyDerivSent1 = foldlSentCol [S "Consider the", phrase torque, S "on a"
                   S "The", phrase force, S "providing the restoring", phrase torque `sIs` (phrase component `sOf`
                   phrase weight `the_ofThe` phrase pendulum), S "bob that acts along the" +:+. phrase arcLen,
                   (phrase torque `isThe` S "length") `the_ofThe'` S "string", ch lenRod, S "multiplied by", S "component"
-                  `the_ofThe` S "net", phrase force, S "that is perpendicular to" +:+. (S "radius" `the_ofThe` S "arc"),
+                  `the_ofThe` S "net", phrase force, S "that is perpendicular to", S "radius" `the_ofThe` (S "arc" !.),
                   S "The minus sign indicates the", phrase torque, S "acts in the opposite direction of the", phrase angularDisplacement]
 
 
@@ -261,7 +262,7 @@ angFrequencyDerivEqn5 = deriv (deriv (sy pendDisplacementAngle) time) time $= ne
 angFrequencyDerivSent6 = S "For small angles, we approximate" +:+ S "sin" +:+ ch pendDisplacementAngle +:+ S "to" +:+ ch pendDisplacementAngle
 angFrequencyDerivEqn6 = deriv (deriv (sy pendDisplacementAngle) time) time $= negate(sy gravitationalAccel/ sy lenRod) * sy pendDisplacementAngle
 angFrequencyDerivSent7 = S "Because this" +:+ phrase equation `sC` S "has the same form as the" +:+ phrase equation +:+
-                  S "for" +:+ phrase shm +:+ S "the solution is easy to find." +:+ S " The" +:+ phrase angularFrequency
+                  S "for" +:+ phrase shm +:+. S "the solution is easy to find" +:+ S " The" +:+ phrase angularFrequency
 angFrequencyDerivEqn7 = sy angularFrequency $= sqrt (sy gravitationalAccel / sy lenRod)
 angFrequencyGDNotes :: Sentence
 angFrequencyGDNotes = S "The" +:+ phrase torque `sIs` definedIn'' newtonSLR  `sAnd` phrase frequency `sIs` definedIn frequencyDD

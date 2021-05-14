@@ -21,14 +21,14 @@ gsdSysContextP1
          phrase software
          `sC` S "the",
        phrase user, S "in this case. The rectangle represents the",
-       phrase softwareSys, S "itself,", phrase pidC +:+ S "in this case.",
+       phrase softwareSys, S "itself,", phrase pidC +:+. S "in this case",
        S "Arrows are used to show the data flow between the" +:+ phrase system,
        S "and its" +:+ phrase environment]
 
 gsdSysContextP2
   = foldlSPCol
       [phrase pidC +:+ S " is self-contained. The only external interaction is "
-         +:+ S " with the user.",
+         +:+. S " with the user",
        S "The responsibilities of the " +:+ phrase user +:+ S " and the " +:+
          phrase system
          +:+ S " are as follows"]

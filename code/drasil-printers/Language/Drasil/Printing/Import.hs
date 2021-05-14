@@ -3,7 +3,8 @@ module Language.Drasil.Printing.Import (space, expr, symbol, spec,
 
 import Language.Drasil hiding (sec, symbol)
 import Language.Drasil.Development (UFuncB(..), UFuncVec(..)
-  , ArithBinOp(..), BoolBinOp(..), EqBinOp(..), OrdBinOp(..)
+  , ArithBinOp(..), BoolBinOp(..), EqBinOp(..), LABinOp(..)
+  , OrdBinOp(..), VVNBinOp(..), VVVBinOp(..)
   , precA, precB, eprec)
 import Database.Drasil
 import Utils.Drasil
@@ -149,9 +150,6 @@ expr (UnaryOpVec Norm u)      sm = P.Fenced P.Norm P.Norm $ expr u sm
 expr (UnaryOpVec Dim u)       sm = mkCall sm P.Dim u
 expr (UnaryOp Sqrt u)         sm = P.Sqrt $ expr u sm
 expr (UnaryOp Neg u)          sm = neg sm u
-expr (BinaryOp Cross a b)     sm = mkBOp sm P.Cross a b
-expr (BinaryOp Dot a b)       sm = mkBOp sm P.Dot a b
-expr (BinaryOp Index a b)     sm = indx sm a b
 expr (ArithBinaryOp Frac a b) sm = P.Div (expr a sm) (expr b sm)
 expr (ArithBinaryOp Pow a b)  sm = pow sm a b
 expr (ArithBinaryOp Subt a b) sm = P.Row [expr a sm, P.MO P.Subt, expr b sm]
@@ -159,10 +157,13 @@ expr (BoolBinaryOp Impl a b)  sm = mkBOp sm P.Impl a b
 expr (BoolBinaryOp Iff a b)   sm = mkBOp sm P.Iff a b
 expr (EqBinaryOp Eq a b)      sm = mkBOp sm P.Eq a b
 expr (EqBinaryOp NEq a b)     sm = mkBOp sm P.NEq a b
+expr (LABinaryOp Index a b)   sm = indx sm a b
 expr (OrdBinaryOp Lt a b)     sm = mkBOp sm P.Lt a b
 expr (OrdBinaryOp Gt a b)     sm = mkBOp sm P.Gt a b
 expr (OrdBinaryOp LEq a b)    sm = mkBOp sm P.LEq a b
 expr (OrdBinaryOp GEq a b)    sm = mkBOp sm P.GEq a b
+expr (VVNBinaryOp Dot a b)    sm = mkBOp sm P.Dot a b
+expr (VVVBinaryOp Cross a b)  sm = mkBOp sm P.Cross a b
 expr (Operator o d e)         sm = eop sm o d e
 expr (IsIn  a b)              sm = P.Row [expr a sm, P.MO P.IsIn, space sm b]
 expr (RealI c ri)             sm = renderRealInt sm (lookupC (sm ^. stg)
@@ -196,16 +197,16 @@ expr' s p e = fence $ expr e s
 
 -- | Helper for properly rendering negation of expressions
 neg' :: Expr -> Bool
-neg' (Dbl     _)          = True
-neg' (Int     _)          = True
-neg' Operator{}           = True
-neg' (AssocA Mul _)       = True
-neg' (BinaryOp Index _ _) = True
-neg' (UnaryOp _ _)        = True
-neg' (UnaryOpB _ _)       = True
-neg' (UnaryOpVec _ _)     = True
-neg' (C _)                = True
-neg' _                    = False
+neg' (Dbl     _)            = True
+neg' (Int     _)            = True
+neg' Operator{}             = True
+neg' (AssocA Mul _)         = True
+neg' (LABinaryOp Index _ _) = True
+neg' (UnaryOp _ _)          = True
+neg' (UnaryOpB _ _)         = True
+neg' (UnaryOpVec _ _)       = True
+neg' (C _)                  = True
+neg' _                      = False
 
 -- | Render negated expressions
 neg :: PrintingInformation -> Expr -> P.Expr

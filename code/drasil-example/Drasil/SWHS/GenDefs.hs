@@ -2,7 +2,7 @@ module Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater,
   rocTempSimp, rocTempSimpDeriv, rocTempSimpRC) where
 
 import Language.Drasil
-import Theory.Drasil (GenDefn, gd, gdNoRefs, ModelKinds (OthModel))
+import Theory.Drasil (GenDefn, gd, gdNoRefs, ModelKinds (OthModel, EquationalModel))
 import Utils.Drasil
 
 import Control.Lens ((^.))
@@ -67,16 +67,15 @@ htFluxWaterFromCoilRel = sy htFluxC $= sy coilHTC * (sy tempC - apply1 tempW tim
 ----
 
 htFluxPCMFromWater :: GenDefn
-htFluxPCMFromWater = gd (OthModel htFluxPCMFromWaterRC) (getUnit htFluxP) Nothing
+htFluxPCMFromWater = gd (EquationalModel htFluxPCMFromWaterQD) (getUnit htFluxP) Nothing
   [makeCite koothoor2013] "htFluxPCMFromWater"
   [newtonLawNote htFluxP assumpLCCWP phaseChangeMaterial]
 
-htFluxPCMFromWaterRC :: RelationConcept
-htFluxPCMFromWaterRC = makeRC "htFluxPCMFromWaterRC" (htFluxP ^. term)
-  EmptyS htFluxPCMFromWaterRel
+htFluxPCMFromWaterQD :: QDefinition
+htFluxPCMFromWaterQD = mkQuantDef htFluxP htFluxPCMFromWaterExpr
 
-htFluxPCMFromWaterRel :: Relation
-htFluxPCMFromWaterRel = sy htFluxP $= sy pcmHTC * (apply1 tempW time - apply1 tempPCM time)
+htFluxPCMFromWaterExpr :: Expr
+htFluxPCMFromWaterExpr = sy pcmHTC * (apply1 tempW time - apply1 tempPCM time)
 
 newtonLawNote :: UnitalChunk -> ConceptInstance -> ConceptChunk -> Sentence
 newtonLawNote u a c = foldlSent [ch u `sIs` S "found by assuming that",

@@ -20,7 +20,7 @@ module Utils.Drasil (
   -- Phrase
   and_, and_', andRT, compoundNC, compoundNC', compoundNC'', compoundNC''',
   compoundNCP1, compoundNCPlPh, compoundNCPlPl, for, for', for'', of_, of_',
-  of_'', of__, ofA, ofN_, the, the', theCustom, with,
+  of_'', of__, ofA, ofN_, the, the', theCustom, with, ofThe',
   -- Sentence
   andIts, andThe, fromThe, inThe, isExpctdToHv, isThe, ofGiv, ofGiv', ofThe, the_ofThe, the_ofThe',
   sOf, sOr, sVersus, sAnd, sAre, sIn, sIs, toThe

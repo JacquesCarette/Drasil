@@ -9,7 +9,7 @@ cA,cB,cC,cD,cE,cF,cG,cH,cI,cJ,cK,cL,cM,cN,cO,cP,cQ,cR,cS,cT,cU,cV,cW,cX,cY,cZ,
   lW,lX,lY,lZ,lAlpha,cAlpha,lBeta,cBeta,lGamma,cGamma,lDelta,cDelta,lEpsilon,vEpsilon, 
   cEpsilon,lZeta,cZeta,lEta,cEta,lTheta,cTheta,lIota,cIota,lKappa,cKappa,lLambda,cLambda,
   lMu,cMu,lNu,cNu,lXi,cXi,lOmicron,cOmicron,lPi,cPi,lRho,cRho,lSigma,cSigma,lTau,cTau,
-  lUpsilon,cUpsilon,lPhi,vPhi,cPhi,lChi,cChi,lPsi,cPsi,lOmega,cOmega,lNabla,lEll :: Symbol
+  lUpsilon,cUpsilon,lPhi,vPhi,cPhi,lChi,cChi,lPsi,cPsi,lOmega,cOmega,lNabla,lEll, lPosInf, lNegInf :: Symbol
 
 cA = Variable "A"
 cB = Variable "B"
@@ -115,3 +115,5 @@ lOmega = Variable "ω"
 cOmega = Variable "Ω"
 lNabla = Variable "∇"
 lEll = Variable "ℓ"
+lNegInf = Variable "-∞"
+lPosInf = Variable "∞"

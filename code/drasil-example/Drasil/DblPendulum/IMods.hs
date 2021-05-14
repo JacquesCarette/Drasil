@@ -60,9 +60,9 @@ angularDisplacementDerivSent2 = foldlSentCol [S "Where", ch torque +:+ S "denote
 angularDisplacementDerivSent3 = foldlSentCol [S "And rearranged as" ] 
 
 angularDisplacementDerivSent4 = foldlSentCol [S "If the", phrase amplitude `sOf` phrase angularDisplacement, S "is small enough" `sC`
-  S "we can approximate", E (sin (sy pendDisplacementAngle) $= sy pendDisplacementAngle), S "for the purpose of a simple", phrase pendulum,
-  S "at very small angles." :+:
-  S " Then the", phrase equation `sOf` phrase motion, S "reduces to the", phrase equation `sOf` phrase shm]                                       
+  S "we can approximate", E (sin (sy pendDisplacementAngle) $= sy pendDisplacementAngle), S "for the purpose of a simple", phrase pendulum +:+.
+  S "at very small angles",
+  S "Then the", phrase equation `sOf` phrase motion, S "reduces to the", phrase equation `sOf` phrase shm]                                       
 
 angularDisplacementDerivSent5 = foldlSentCol [S "Thus the", phrase shm, S "is" ] 
 

@@ -13,7 +13,7 @@ introPara
          +:+ S "in a variety of applications such as thermostats, automobile "
          +:+
          S "cruise-control, etc. The gains of a controller in an application "
-         +:+ S "must be tuned before the controller is ready for production.",
+         +:+. S "must be tuned before the controller is ready for production",
        S "Therefore a simulation of the " +:+ phrase pidC +:+ S " with a " +:+
          phrase secondOrderSystem
          +:+ S "is created in this project that can be "
@@ -27,8 +27,8 @@ introscopeOfReq
            [phrase pidC, S "a" +:+ phrase summingPt,
             S "a" +:+ phrase powerPlant],
        S "Only " +:+
-         S "the Proportional and Derivative controllers are used in this sofware;"
-         +:+ S " the Integral controller is beyond the scope of this project."
+         S "the Proportional and Derivative controllers are used in this software;"
+         +:+. S " the Integral controller is beyond the scope of this project"
          +:+ S "Additionally, this software is intended to aid with the manual "
          +:+ S "tuning of the",
        phrase pidC]

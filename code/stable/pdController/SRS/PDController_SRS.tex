@@ -67,7 +67,7 @@ $AbsTol$ & Absolute Tolerance & --
 \\
 ${C_{\text{s}}}$ & Control Variable in the frequency domain & --
 \\
-$c$ & Damping coeffecient of the spring & --
+$c$ & Damping coefficient of the spring & --
 \\
 ${c_{\text{t}}}$ & Control Variable in the time domain & --
 \\
@@ -87,7 +87,7 @@ ${K_{\text{d}}}$ & Derivative Gain & --
 \\
 ${K_{\text{p}}}$ & Proportional Gain & --
 \\
-$k$ & Stifness coeffecient of the spring & ${\text{s}}$
+$k$ & Stiffness coefficient of the spring & ${\text{s}}$
 \\
 $L⁻¹[F(s)]$ & Inverse Laplace Transform of a function & --
 \\
@@ -173,7 +173,7 @@ The purpose of this document is to capture all the necessary  information includ
 
 \subsection{Scope of Requirements}
 \label{Sec:ReqsScope}
-The scope of the requirements includes a PD Control Loop  with three subsystems namely a  PD Controller, a Summing Point, and a Power Plant. Only  the Proportional and Derivative controllers are used in this sofware;  the Integral controller is beyond the scope of this project. Additionally, this software is intended to aid with the manual  tuning of the PD Controller.
+The scope of the requirements includes a PD Control Loop  with three subsystems namely a  PD Controller, a Summing Point, and a Power Plant. Only  the Proportional and Derivative controllers are used in this software;  the Integral controller is beyond the scope of this project. Additionally, this software is intended to aid with the manual  tuning of the PD Controller.
 
 \subsection{Characteristics of Intended Reader}
 \label{Sec:ReaderChars}
@@ -254,8 +254,8 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Absolute Tolerance: Absolute tolerance for the integrator.}
 \item{Relative Tolerance: Relative tolerance for the integrator.}
 \item{Transfer Function: The Transfer Function of a system is the ratio of the output to the input functions in the Frequency Domain.}
-\item{Damping Coeffecient: Quantity that characterizes a second order system's oscillatory response.}
-\item{Stifness Coeffecient: Quantity that characterizes a spring's stiffness.}
+\item{Damping Coefficient: Quantity that characterizes a second order system's oscillatory response.}
+\item{Stiffness Coefficient: Quantity that characterizes a spring's stiffness.}
 \end{itemize}
 \subsubsection{Physical System Description}
 \label{Sec:PhysSyst}
@@ -289,17 +289,17 @@ The instance models that govern PD Controller are presented in \hyperref[Sec:IMs
 This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
 
 \begin{itemize}
-\item[Power plant:\phantomsection\label{pwrPlant}]{The Power Plant and the Sensor are coupled as a single unit. (RefBy: \hyperref[stifnessCoeffSpring]{A: Spring Stifness Coffecient}, \hyperref[pwrPlantTxFnx]{A: Transfer Function}, \hyperref[massSpring]{A: Spring Mass}, and \hyperref[damingCoeffSpring]{A: Spring Damping Coffecient}.)}
+\item[Power plant:\phantomsection\label{pwrPlant}]{The Power Plant and the Sensor are coupled as a single unit. (RefBy: \hyperref[stiffnessCoeffSpring]{A: Spring Stiffness Coefficient}, \hyperref[pwrPlantTxFnx]{A: Transfer Function}, \hyperref[massSpring]{A: Spring Mass}, and \hyperref[dampingCoeffSpring]{A: Spring Damping Coefficient}.)}
 \item[Decoupled equation:\phantomsection\label{decoupled}]{The decoupled form of the PD Controller equation used in this simulation. (RefBy: \hyperref[DD:ddCtrlVar]{DD: ddCtrlVar}.)}
 \item[Set-Point:\phantomsection\label{setPoint}]{The Set-Point is constant throughout the simulation. (RefBy: \hyperref[DD:ddProcessError]{DD: ddProcessError} and \hyperref[IM:pdEquationIM]{IM: pdEquationIM}.)}
-\item[External disturbance:\phantomsection\label{externalDistub}]{There are no external disturbances to the Power Plant during the simulation. (RefBy: \hyperref[GD:gdPowerPlant]{GD: gdPowerPlant}.)}
+\item[External disturbance:\phantomsection\label{externalDisturb}]{There are no external disturbances to the Power Plant during the simulation. (RefBy: \hyperref[GD:gdPowerPlant]{GD: gdPowerPlant}.)}
 \item[Initial Value:\phantomsection\label{initialValue}]{The initial value of the Process Variable is assumed to be zero. (RefBy: \hyperref[DD:ddProcessError]{DD: ddProcessError}.)}
 \item[Parallel Equation:\phantomsection\label{parallelEq}]{The Parallel form of the equation is used for the PD Controller. (RefBy: \hyperref[DD:ddCtrlVar]{DD: ddCtrlVar}.)}
 \item[Unfiltered Derivative:\phantomsection\label{unfilteredDerivative}]{A pure derivative function is used for this simulation; there are no filters applied. (RefBy: \hyperref[DD:ddDerivCtrl]{DD: ddDerivCtrl}.)}
 \item[Transfer Function:\phantomsection\label{pwrPlantTxFnx}]{The combined Power Plant and Sensor  (\hyperref[pwrPlant]{A: Power plant})  are characterized by a Second Order mass-spring-damper  System. (RefBy: \hyperref[TM:tmSOSystem]{TM: tmSOSystem}.)}
 \item[Spring Mass:\phantomsection\label{massSpring}]{The mass of the spring in the mass-spring-damper system  (\hyperref[pwrPlant]{A: Power plant})  is assumed to be 1 kilogram. (RefBy: \hyperref[likeChgPP]{LC: DC Gain and Time Constant} and \hyperref[GD:gdPowerPlant]{GD: gdPowerPlant}.)}
-\item[Spring Damping Coffecient:\phantomsection\label{damingCoeffSpring}]{The Damping Coeffecient of the spring in the mass-spring-damper system  (\hyperref[pwrPlant]{A: Power plant})  is assumed to be 1. (RefBy: \hyperref[likeChgPP]{LC: DC Gain and Time Constant} and \hyperref[GD:gdPowerPlant]{GD: gdPowerPlant}.)}
-\item[Spring Stifness Coffecient:\phantomsection\label{stifnessCoeffSpring}]{The Stifness Coeffecient  of the spring in the mass-spring-damper system  (\hyperref[pwrPlant]{A: Power plant}) ) is assumed to be 20. (RefBy: \hyperref[likeChgPP]{LC: DC Gain and Time Constant} and \hyperref[GD:gdPowerPlant]{GD: gdPowerPlant}.)}
+\item[Spring Damping Coefficient:\phantomsection\label{dampingCoeffSpring}]{The Damping Coefficient of the spring in the mass-spring-damper system  (\hyperref[pwrPlant]{A: Power plant})  is assumed to be 1. (RefBy: \hyperref[likeChgPP]{LC: DC Gain and Time Constant} and \hyperref[GD:gdPowerPlant]{GD: gdPowerPlant}.)}
+\item[Spring Stiffness Coefficient:\phantomsection\label{stiffnessCoeffSpring}]{The Stiffness Coefficient  of the spring in the mass-spring-damper system  (\hyperref[pwrPlant]{A: Power plant}) ) is assumed to be 20. (RefBy: \hyperref[likeChgPP]{LC: DC Gain and Time Constant} and \hyperref[GD:gdPowerPlant]{GD: gdPowerPlant}.)}
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -387,8 +387,8 @@ Equation & \begin{displaymath}
 Description & \begin{symbDescription}
               \item{$m$ is the mass (${\text{kg}}$)}
               \item{$s$ is the Complex frequency-domain parameter (Unitless)}
-              \item{$c$ is the Damping coeffecient of the spring (Unitless)}
-              \item{$k$ is the Stifness coeffecient of the spring (${\text{s}}$)}
+              \item{$c$ is the Damping coefficient of the spring (Unitless)}
+              \item{$k$ is the Stiffness coefficient of the spring (${\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & The  Transfer Function (from \hyperref[pwrPlantTxFnx]{A: Transfer Function}) of a Second Order System (mass-spring-damper) is characterized by this equation.
@@ -425,7 +425,7 @@ Description & \begin{symbDescription}
               \item{$s$ is the Complex frequency-domain parameter (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The  Transfer Function of the Second Order System (from \hyperref[TM:tmSOSystem]{TM: tmSOSystem}) is reduced to this equation by substituting the mass (m) to 1 Kg (from \hyperref[massSpring]{A: Spring Mass}), the Damping Coeffecient ($c$) to 1 (from \hyperref[damingCoeffSpring]{A: Spring Damping Coffecient}), and the Stifness Coeffecient ($k$) to 20 (from \hyperref[stifnessCoeffSpring]{A: Spring Stifness Coffecient}). The equation is converted to the frequency domain by applying the Laplace transform (from \hyperref[TM:laplaceTransform]{TM: laplaceTransform}). Additionally, there are no external disturbances to the power plant (from \hyperref[externalDistub]{A: External disturbance}).
+Notes & The  Transfer Function of the Second Order System (from \hyperref[TM:tmSOSystem]{TM: tmSOSystem}) is reduced to this equation by substituting the mass (m) to 1 Kg (from \hyperref[massSpring]{A: Spring Mass}), the Damping Coefficient ($c$) to 1 (from \hyperref[dampingCoeffSpring]{A: Spring Damping Coefficient}), and the Stiffness Coefficient ($k$) to 20 (from \hyperref[stiffnessCoeffSpring]{A: Spring Stiffness Coefficient}). The equation is converted to the frequency domain by applying the Laplace transform (from \hyperref[TM:laplaceTransform]{TM: laplaceTransform}). Additionally, there are no external disturbances to the power plant (from \hyperref[externalDisturb]{A: External disturbance}).
         
 \\ \midrule \\
 Source & \cite{pidWiki} and \cite{abbasi2015}
@@ -749,7 +749,7 @@ This section provides the non-functional requirements, the qualities that the so
 This section lists the likely changes to be made to the software.
 
 \begin{itemize}
-\item[DC Gain and Time Constant:\phantomsection\label{likeChgPP}]{The mass ,  Damping Coeffecient  and the Stifness Coeffecient may be changed to be supplied by the user (from  \hyperref[massSpring]{A: Spring Mass}, \hyperref[damingCoeffSpring]{A: Spring Damping Coffecient}, and \hyperref[stifnessCoeffSpring]{A: Spring Stifness Coffecient}).}
+\item[DC Gain and Time Constant:\phantomsection\label{likeChgPP}]{The mass ,  Damping Coefficient  and the Stiffness Coefficient may be changed to be supplied by the user (from  \hyperref[massSpring]{A: Spring Mass}, \hyperref[dampingCoeffSpring]{A: Spring Damping Coefficient}, and \hyperref[stiffnessCoeffSpring]{A: Spring Stiffness Coefficient}).}
 \end{itemize}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
@@ -757,7 +757,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 
 \begin{longtable}{l l l l l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[pwrPlant]{A: Power plant}} & \textbf{\hyperref[decoupled]{A: Decoupled equation}} & \textbf{\hyperref[setPoint]{A: Set-Point}} & \textbf{\hyperref[externalDistub]{A: External disturbance}} & \textbf{\hyperref[initialValue]{A: Initial Value}} & \textbf{\hyperref[parallelEq]{A: Parallel Equation}} & \textbf{\hyperref[unfilteredDerivative]{A: Unfiltered Derivative}} & \textbf{\hyperref[pwrPlantTxFnx]{A: Transfer Function}} & \textbf{\hyperref[massSpring]{A: Spring Mass}} & \textbf{\hyperref[damingCoeffSpring]{A: Spring Damping Coffecient}} & \textbf{\hyperref[stifnessCoeffSpring]{A: Spring Stifness Coffecient}}
+\textbf{} & \textbf{\hyperref[pwrPlant]{A: Power plant}} & \textbf{\hyperref[decoupled]{A: Decoupled equation}} & \textbf{\hyperref[setPoint]{A: Set-Point}} & \textbf{\hyperref[externalDisturb]{A: External disturbance}} & \textbf{\hyperref[initialValue]{A: Initial Value}} & \textbf{\hyperref[parallelEq]{A: Parallel Equation}} & \textbf{\hyperref[unfilteredDerivative]{A: Unfiltered Derivative}} & \textbf{\hyperref[pwrPlantTxFnx]{A: Transfer Function}} & \textbf{\hyperref[massSpring]{A: Spring Mass}} & \textbf{\hyperref[dampingCoeffSpring]{A: Spring Damping Coefficient}} & \textbf{\hyperref[stiffnessCoeffSpring]{A: Spring Stiffness Coefficient}}
 \\
 \midrule
 \endhead
@@ -767,7 +767,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[setPoint]{A: Set-Point} &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[externalDistub]{A: External disturbance} &  &  &  &  &  &  &  &  &  &  & 
+\hyperref[externalDisturb]{A: External disturbance} &  &  &  &  &  &  &  &  &  &  & 
 \\
 \hyperref[initialValue]{A: Initial Value} &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -779,9 +779,9 @@ The purpose of the traceability matrices is to provide easy references on what h
 \\
 \hyperref[massSpring]{A: Spring Mass} & X &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[damingCoeffSpring]{A: Spring Damping Coffecient} & X &  &  &  &  &  &  &  &  &  & 
+\hyperref[dampingCoeffSpring]{A: Spring Damping Coefficient} & X &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[stifnessCoeffSpring]{A: Spring Stifness Coffecient} & X &  &  &  &  &  &  &  &  &  & 
+\hyperref[stiffnessCoeffSpring]{A: Spring Stiffness Coefficient} & X &  &  &  &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Assumptions dependence of each other.}
@@ -789,7 +789,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l}
 \toprule
-\textbf{} & \textbf{\hyperref[pwrPlant]{A: Power plant}} & \textbf{\hyperref[decoupled]{A: Decoupled equation}} & \textbf{\hyperref[setPoint]{A: Set-Point}} & \textbf{\hyperref[externalDistub]{A: External disturbance}} & \textbf{\hyperref[initialValue]{A: Initial Value}} & \textbf{\hyperref[parallelEq]{A: Parallel Equation}} & \textbf{\hyperref[unfilteredDerivative]{A: Unfiltered Derivative}} & \textbf{\hyperref[pwrPlantTxFnx]{A: Transfer Function}} & \textbf{\hyperref[massSpring]{A: Spring Mass}} & \textbf{\hyperref[damingCoeffSpring]{A: Spring Damping Coffecient}} & \textbf{\hyperref[stifnessCoeffSpring]{A: Spring Stifness Coffecient}}
+\textbf{} & \textbf{\hyperref[pwrPlant]{A: Power plant}} & \textbf{\hyperref[decoupled]{A: Decoupled equation}} & \textbf{\hyperref[setPoint]{A: Set-Point}} & \textbf{\hyperref[externalDisturb]{A: External disturbance}} & \textbf{\hyperref[initialValue]{A: Initial Value}} & \textbf{\hyperref[parallelEq]{A: Parallel Equation}} & \textbf{\hyperref[unfilteredDerivative]{A: Unfiltered Derivative}} & \textbf{\hyperref[pwrPlantTxFnx]{A: Transfer Function}} & \textbf{\hyperref[massSpring]{A: Spring Mass}} & \textbf{\hyperref[dampingCoeffSpring]{A: Spring Damping Coefficient}} & \textbf{\hyperref[stiffnessCoeffSpring]{A: Spring Stiffness Coefficient}}
 \\
 \midrule
 \endhead

@@ -9,13 +9,13 @@ import Theory.Drasil (GenDefn, gdNoRefs, ModelKinds (OthModel, EquationalModel))
 import Utils.Drasil
 
 -- import Data.Drasil.Concepts.Documentation (coordinate, symbol_)
-import Data.Drasil.Concepts.Math (xComp, yComp, equation, component)
+import Data.Drasil.Concepts.Math (xComp, yComp, equation, component, angle)
 import Data.Drasil.Quantities.Physics(xPos, yPos, velocity, angularVelocity, xVel, yVel,
     angularAccel, xAccel, yAccel, acceleration, force, tension, gravitationalAccel,
     angularFrequency, torque, momentOfInertia, angularDisplacement, time,
     momentOfInertia, period, frequency, position)
 import Data.Drasil.Concepts.Physics(pendulum, weight, shm)
-import Data.Drasil.Quantities.PhysicalProperties(mass)
+import Data.Drasil.Quantities.PhysicalProperties(mass, len)
 import Data.Drasil.Theories.Physics(newtonSLR)
 import Drasil.DblPendulum.DataDefs(frequencyDD, periodSHMDD, angFrequencyDD)
 import qualified Data.Drasil.Quantities.Math as QM (pi_)
@@ -243,7 +243,7 @@ angFrequencyDerivEqn1, angFrequencyDerivEqn2, angFrequencyDerivEqn3, angFrequenc
 angFrequencyDerivSent1 = foldlSentCol [S "Consider the", phrase torque, S "on a", phrase pendulum +:+. definedIn'' newtonSLR,
                   S "The", phrase force, S "providing the restoring", phrase torque `sIs` (phrase component `sOf`
                   phrase weight `the_ofThe` phrase pendulum), S "bob that acts along the" +:+. phrase arcLen,
-                  (phrase torque `isThe` S "length") `the_ofThe'` S "string", ch lenRod, S "multiplied by", S "component"
+                  (phrase torque `isThe` phrase len) `the_ofThe'` S "string", ch lenRod, S "multiplied by", S "component"
                   `the_ofThe` S "net", phrase force, S "that is perpendicular to", S "radius" `the_ofThe` (S "arc" !.),
                   S "The minus sign indicates the", phrase torque, S "acts in the opposite direction of the", phrase angularDisplacement]
 
@@ -259,7 +259,7 @@ angFrequencyDerivEqn4 = sy mass * sy lenRod $^ 2 * deriv (deriv (sy pendDisplace
              * sy mass * sy gravitationalAccel * sin (sy pendDisplacementAngle)
 angFrequencyDerivSent5 = S "Crossing out" +:+ ch mass `sAnd` ch lenRod +:+ S "we have"
 angFrequencyDerivEqn5 = deriv (deriv (sy pendDisplacementAngle) time) time $= negate(sy gravitationalAccel/ sy lenRod) * sin (sy pendDisplacementAngle)
-angFrequencyDerivSent6 = S "For small angles, we approximate" +:+ S "sin" +:+ ch pendDisplacementAngle +:+ S "to" +:+ ch pendDisplacementAngle
+angFrequencyDerivSent6 = S "For small" +:+ plural angle `sC` S "we approximate" +:+ S "sin" +:+ ch pendDisplacementAngle +:+ S "to" +:+ ch pendDisplacementAngle
 angFrequencyDerivEqn6 = deriv (deriv (sy pendDisplacementAngle) time) time $= negate(sy gravitationalAccel/ sy lenRod) * sy pendDisplacementAngle
 angFrequencyDerivSent7 = S "Because this" +:+ phrase equation `sC` S "has the same form as the" +:+ phrase equation +:+
                   S "for" +:+ phrase shm +:+. S "the solution is easy to find" +:+ S " The" +:+ phrase angularFrequency

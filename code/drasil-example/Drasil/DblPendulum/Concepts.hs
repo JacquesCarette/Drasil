@@ -1,10 +1,11 @@
 module Drasil.DblPendulum.Concepts where
 
 import Language.Drasil
+import Data.Drasil.Theories.Physics (newtonSLRRC)
 
 
 concepts :: [IdeaDict]
-concepts = map nw [rod, horizontal, vertical] ++ map nw defs 
+concepts = nw newtonSLRRC : map nw [rod, horizontal, vertical] ++ map nw defs
        
 rod, horizontal, vertical :: NamedChunk
 rod = nc "rod" (cn' "rod")

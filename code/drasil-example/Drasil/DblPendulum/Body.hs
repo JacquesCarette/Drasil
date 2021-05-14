@@ -12,7 +12,7 @@ import Utils.Drasil
 import Data.Drasil.People (olu)
 import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian, hertz)
 import Data.Drasil.Concepts.Software (program, errMsg)
-import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum, twoD)
+import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum, twoD, motion)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM, newtonSLR)
 import Data.Drasil.Domains (physics) 
 import Data.Drasil.Quantities.Physics (physicscon)
@@ -90,15 +90,15 @@ mkSRS = [RefSec $      --This creates the Reference section of the SRS
   ]
 
 justification :: Sentence
-justification = foldlSent [S "A", phrase pendulum, S "consists" `sOf` S "mass", 
+justification = foldlSent [S "A", phrase pendulum, S "consists" `sOf` phrase mass, 
                             S "attached to the end of a", phrase rod `andIts` S "moving curve" `sIs`
                             (S "highly sensitive to initial conditions" !.), S "Therefore" `sC`
-                            S "it is useful to have a", phrase program, S "to simulate", S "motion"
+                            S "it is useful to have a", phrase program, S "to simulate", phrase motion
                             `the_ofThe` phrase pendulum, (S "to exhibit its chaotic characteristics" !.),
                             S "The", phrase program, S "documented here is called", phrase pendulum]
 scope :: Sentence
 scope = foldlSent [S "the", phrase analysis `sOf` S "a", phrase twoD, 
-  sParen (getAcc twoD), phrase pendulum, S "motion", phrase problem,
+  sParen (getAcc twoD), phrase pendulum, phrase motion, phrase problem,
                    S "with various initial conditions"]
 
 pendulumTitle :: CI
@@ -157,7 +157,7 @@ concIns = assumptions ++ goals ++ funcReqs ++ nonFuncReqs
 ------------------------------------
 
 prob :: Sentence
-prob = foldlSent_ [ S "efficiently and correctly to predict the motion of a",  
+prob = foldlSent_ [ S "efficiently and correctly to predict the", phrase motion, S "of a",  
                    phrase pendulum]
 
 ---------------------------------

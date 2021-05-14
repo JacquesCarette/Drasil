@@ -4,6 +4,7 @@ module Drasil.GamePhysics.TMods (tMods, newtonSL, newtonSLR, newtonTL, newtonLUG
 import Language.Drasil
 import Theory.Drasil (TheoryModel, tmNoRefs, ModelKinds(OthModel, EquationalModel))
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Drasil.GamePhysics.Assumptions (assumpOD)
 import Drasil.GamePhysics.Unitals (dispNorm, dVect, force_1, force_2,

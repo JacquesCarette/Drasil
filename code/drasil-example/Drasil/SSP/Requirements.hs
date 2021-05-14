@@ -2,6 +2,7 @@ module Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs) where
 
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Drasil.DocLang (mkInputPropsTable)
 import Drasil.DocLang.SRS (datCon, propCorSol) 

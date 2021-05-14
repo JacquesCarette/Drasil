@@ -3,6 +3,7 @@ module Drasil.SWHS.Assumptions where --all of this file is exported
 import Language.Drasil
 import Control.Lens ((^.))
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Data.Drasil.Concepts.Documentation (system, simulation, model, 
   problem, assumpDom)

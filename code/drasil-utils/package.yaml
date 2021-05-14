@@ -24,3 +24,4 @@ library:
   source-dirs: ./
   exposed-modules:
   - Utils.Drasil
+  - Utils.Drasil.Sentence

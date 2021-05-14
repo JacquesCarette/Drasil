@@ -4,6 +4,7 @@ import Language.Drasil
 import Language.Drasil.ShortHands (lJ)
 import Theory.Drasil (InstanceModel, imNoDerivNoRefs, qwC, ModelKinds (OthModel))
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Drasil.GamePhysics.Assumptions (assumpDI, assumpCAJI)
 import Drasil.GamePhysics.Concepts (centreMass)

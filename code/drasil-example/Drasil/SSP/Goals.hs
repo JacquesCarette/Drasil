@@ -2,7 +2,7 @@ module Drasil.SSP.Goals (goals, identifyCritAndFSGS, determineNormalFGS,
   determineShearFGS) where
 
 import Language.Drasil
-import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Data.Drasil.Concepts.Documentation (goalStmtDom)
 

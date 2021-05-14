@@ -5,6 +5,7 @@ module Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs) where
 
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Data.Drasil.Concepts.Documentation as Doc (library, likeChgDom, unlikeChgDom)
 import qualified Data.Drasil.Concepts.Math as CM (ode, constraint)

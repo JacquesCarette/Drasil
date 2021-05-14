@@ -1,7 +1,8 @@
 module Drasil.DblPendulum.Assumptions (pend2DMotion, cartCoord, cartCoordRight, yAxisDir, startOrigin, assumptions) where
     
 import Language.Drasil
-import Utils.Drasil 
+import Utils.Drasil.Sentence
+
 import Data.Drasil.Concepts.Documentation (assumpDom) 
 import Data.Drasil.Concepts.Math (cartesian, xAxis, yAxis)
 import Data.Drasil.Concepts.Physics (gravity, twoD, pendulum, motion)

@@ -2,6 +2,7 @@ module Drasil.SWHS.Requirements where --all of this file is exported
 
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Drasil.DocLang (inReq)
 import Drasil.DocLang.SRS (datCon, propCorSol) 

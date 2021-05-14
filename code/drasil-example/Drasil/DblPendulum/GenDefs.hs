@@ -7,6 +7,7 @@ import Prelude hiding (cos, sin, sqrt)
 import Language.Drasil
 import Theory.Drasil (GenDefn, gdNoRefs, ModelKinds (OthModel, EquationalModel))
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 -- import Data.Drasil.Concepts.Documentation (coordinate, symbol_)
 import Data.Drasil.Concepts.Math (xComp, yComp, equation, component, angle)

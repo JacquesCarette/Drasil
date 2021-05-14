@@ -2,7 +2,7 @@ module Data.Drasil.Concepts.Physics where
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
 import Language.Drasil
-import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Data.Drasil.Domains (mathematics, physics)
 import Data.Drasil.Concepts.Documentation (property, value)

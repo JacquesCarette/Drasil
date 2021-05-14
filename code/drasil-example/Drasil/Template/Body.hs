@@ -7,7 +7,7 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   _datadefs, _configFiles, _definitions, _defSequence, _inputs, _kind, _outputs, 
   _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
-import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Drasil.DocLang (SRSDecl, mkDoc)
 

@@ -12,7 +12,7 @@ fi
 
 # This check is seemingly redundant, but we want to be certain we're not deploying for the gh-pages branch as
 # that could cause an infinite recursion.
-if [ "$GITHUB_REF" = "$DEPLOY_BRANCH" ]; then
+if [ "$GITHUB_REF" = "refs/heads/$DEPLOY_BRANCH" ]; then
   echo "Tried to deploy for the deploy target."
   echo "This should never happen. Something is really off."
   echo "Failing build."

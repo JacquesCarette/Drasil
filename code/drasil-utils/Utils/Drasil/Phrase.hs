@@ -108,7 +108,7 @@ ofThe' t1 t2 = nounPhrase''
 -- 2. t1 `of_` t2 means that t1 is a view of part of the structure of t2
 
 -- | Creates a noun phrase by combining two 'NamedIdea's with the word "for" between
--- their terms. Plural is defaulted to @(plural t1) "of" (phrase t2)@
+-- their terms. Plural is defaulted to @(plural t1) "for" (phrase t2)@
 for :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 for t1 t2 = nounPhrase'' 
   (phrase t1 +:+ S "for" +:+ phrase t2)

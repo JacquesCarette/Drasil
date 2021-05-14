@@ -63,8 +63,9 @@ jobs:
       - name: "Deploy 🚀"
         uses: JamesIves/github-pages-deploy-action@4.1.3
         with:
+          git-config-name: ${{ secrets.BOT_NAME }}
+          git-config-email: ${{ secrets.BOT_EMAIL }}
           token: ${{ secrets.BOT_TOKEN }}
           branch: gh-pages
           folder: code/deploy
-          git-config-name: "drasil-bot"
           commit-message: "drasil-bot deploy of master@${{ github.sha }}"

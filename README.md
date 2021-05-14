@@ -1,4 +1,4 @@
-Drasil [![Build Status](actions/workflows/Build.yaml/badge.svg?branch=master)](actions/workflows/Build.yaml)
+Drasil [![Build Status](https://github.com/JacquesCarette/Drasil/actions/workflows/Build.yaml/badge.svg?branch=master)](https://github.com/JacquesCarette/Drasil/actions/workflows/Build.yaml)
 [![DOI](https://zenodo.org/badge/23760783.svg)](https://zenodo.org/badge/latestdoi/23760783)
 ====================================================
 

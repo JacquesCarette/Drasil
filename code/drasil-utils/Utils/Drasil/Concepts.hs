@@ -25,21 +25,21 @@ prependSentNP s t1 = nounPhrase'' (s +:+ phraseNP t1) (s +:+ pluralNP t1) CapFir
 
 -- | Prepends "the" to a 'NP'
 theNP :: NP -> NP
-theNP t1 = prependStringNP "the" t1
+theNP = prependStringNP "the" 
 -- | Similar to 'theNP', but accepts a function that determines the plural case
 theNP' :: (NP -> Sentence) -> NP -> NP
 theNP' f1 t1 = nounPhrase'' (S "the" +:+ phraseNP t1) (S "the" +:+ f1 t1) CapFirst CapWords
 
 -- | Prepends "a" to a 'NP'
 aNP :: NP -> NP
-aNP t1 = prependStringNP "a" t1
+aNP = prependStringNP "a" 
 -- | Similar to 'aNP', but accepts a function that determines the plural case
 aNP' :: (NP -> Sentence) -> NP -> NP
 aNP' f1 t1 = nounPhrase'' (S "a" +:+ phraseNP t1) (S "a" +:+ f1 t1) CapFirst CapWords
 
 -- | Inserts "of the" between two 'NP's
 ofTheNP :: NP -> NP -> NP
-ofTheNP t1 t2 = insertStringNP "of the" t1 t2
+ofTheNP = insertStringNP "of the"
 -- | Similar to 'ofTheNP', but the plural case is now @pluralNP t1 `ofThe` phraseNP t2@
 ofTheNP' :: NP -> NP -> NP
 ofTheNP' t1 t2 = nounPhrase'' (phraseNP t1 `ofThe` phraseNP t2) (pluralNP t1 `ofThe` phraseNP t2) CapFirst CapWords
@@ -55,11 +55,11 @@ the_ofTheNP' :: NP -> NP -> NP
 the_ofTheNP' t1 t2 = theNP t1 `ofTheNP'` t2
 -- | Similar to 'the_ofTheNP'', but takes two functions for the plural case
 the_ofTheNP'' :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-the_ofTheNP'' f1 f2 t1 t2 = ofTheNP'' f1 f2 (theNP t1) t2
+the_ofTheNP'' f1 f2 t1 = ofTheNP'' f1 f2 (theNP t1)
 
 -- | Inserts "for" between two 'NP's
 forNP :: NP -> NP -> NP
-forNP t1 t2 = insertStringNP "for" t1 t2 
+forNP = insertStringNP "for"
 --FIXME: Change "for" to sFor
 -- | Same as 'forNP', but plural case is now @pluralNP t1 `sFor` phraseNP t2@
 forNP' :: NP -> NP -> NP
@@ -70,7 +70,7 @@ forNP'' f1 f2 t1 t2 = nounPhrase'' (phraseNP t1 +:+ S "for" +:+ phraseNP t2) (f1
 
 -- | Inserts "of" between two 'NP's
 ofNP :: NP -> NP -> NP
-ofNP t1 t2 = insertStringNP "of" t1 t2
+ofNP = insertStringNP "of"
 -- | Same as 'ofNP', but plural case is now @pluralNP t1 `sOf` phraseNP t2@
 ofNP' :: NP -> NP -> NP
 ofNP' t1 t2 = nounPhrase'' (phraseNP t1 `sOf` phraseNP t2) (pluralNP t1 `sOf` phraseNP t2) CapFirst CapWords
@@ -83,11 +83,11 @@ ofNP''' f1 f2 p1 p2 t1 t2 = nounPhrase'' (f1 t1 `sOf` f2 t2) (p1 t1 `sOf` p2 t2)
 
 -- | Inserts "with" between two 'NP's
 withNP :: NP -> NP -> NP
-withNP t1 t2 = insertStringNP "with" t1 t2
+withNP = insertStringNP "with"
 
 -- | Inserts "and" between two 'NP's
 andNP :: NP -> NP -> NP
-andNP t1 t2 = insertStringNP "and" t1 t2
+andNP = insertStringNP "and"
 -- | Same as 'andNP', but plural case is now @pluralNP t1 `sAnd` phraseNP t2@
 andNP' :: NP -> NP -> NP
 andNP' t1 t2 = nounPhrase'' (phraseNP t1 `sAnd` phraseNP t2) (pluralNP t1 `sAnd` phraseNP t2) CapFirst CapWords

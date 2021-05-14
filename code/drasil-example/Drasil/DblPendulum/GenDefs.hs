@@ -9,7 +9,7 @@ import Theory.Drasil (GenDefn, gdNoRefs, ModelKinds (OthModel, EquationalModel))
 import Utils.Drasil
 
 -- import Data.Drasil.Concepts.Documentation (coordinate, symbol_)
-import Data.Drasil.Concepts.Math (xComp, yComp, equation, component)
+import Data.Drasil.Concepts.Math (xComp, yComp, equation, component, direction)
 import Data.Drasil.Quantities.Physics(xPos, yPos, velocity, angularVelocity, xVel, yVel,
     angularAccel, xAccel, yAccel, acceleration, force, tension, gravitationalAccel,
     angularFrequency, torque, momentOfInertia, angularDisplacement, time,
@@ -245,7 +245,7 @@ angFrequencyDerivSent1 = foldlSentCol [S "Consider the", phrase torque, S "on a"
                   phrase weight `the_ofThe` phrase pendulum), S "bob that acts along the" +:+. phrase arcLen,
                   (phrase torque `isThe` S "length") `the_ofThe'` S "string", ch lenRod, S "multiplied by", S "component"
                   `the_ofThe` S "net", phrase force, S "that is perpendicular to", S "radius" `the_ofThe` (S "arc" !.),
-                  S "The minus sign indicates the", phrase torque, S "acts in the opposite direction of the", phrase angularDisplacement]
+                  S "The minus sign indicates the", phrase torque, S "acts in the opposite", phrase direction `ofThe` phrase angularDisplacement]
 
 
 angFrequencyDerivEqn1 = sy torque $= negate (sy lenRod) * (sy mass * sy gravitationalAccel * sin (sy pendDisplacementAngle))

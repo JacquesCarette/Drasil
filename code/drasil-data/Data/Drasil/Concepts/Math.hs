@@ -11,17 +11,17 @@ import Control.Lens ((^.))
 mathcon :: [ConceptChunk]
 
 mathcon = [amplitude, angle, area, axis, calculation, cartesian, centre, change, component,
-  constraint, diameter,equation, euclidN, euclidSpace, gradient, graph, law, line, matrix,
-  norm, normal, normalV, number, orient, parameter, perp, perpV, pi_, negInf, posInf, point,
-  probability, rOfChng, rate, rightHand, shape, surArea, surface, unitV, unit_, vector, 
+  constraint, diameter, direction, equation, euclidN, euclidSpace, gradient, graph, law, line, matrix,
+  norm, normal, normalV, number, orient, origin, parameter, perp, perpV, pi_, negInf, posInf, positive, negative,
+  point, probability, rOfChng, rate, rightHand, shape, surArea, surface, unitV, unit_, vector, 
   xAxis, xCoord, xComp, xDir, yAxis, yCoord, yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle]
 
 mathcon' :: [CI]
 mathcon' = [de, leftSide, ode, pde, rightSide]
 
 amplitude, angle, area, axis, calculation, cartesian, centre, change, component, constraint,
-  diameter, equation, euclidN, euclidSpace, gradient, graph, law, line, matrix, norm,
-  normal, normalV, number, orient, parameter, perp, perpV, pi_, negInf, posInf, point, probability,
+  diameter, direction, equation, euclidN, euclidSpace, gradient, graph, law, line, matrix, norm, normal, normalV, 
+  number, orient, origin, parameter, perp, perpV, pi_, negInf, posInf, positive, negative, point, probability,
   rOfChng, rate, rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xCoord, xComp, xDir,
   yAxis, yCoord,  yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle :: ConceptChunk
 
@@ -42,6 +42,7 @@ component    = dcc "component"    (nounPhrase "component" "components") ("The sc
 constraint   = dcc "constraint"   (cn' "constraint")              "A condition that the solution must satisfy"
 diameter     = dcc "diameter"     (cn' "diameter")                ("Any straight line segment that passes through the center of the circle" ++
                                                                   "and whose endpoints lie on the circle.")
+direction    = dcc "direction"    (cn' "direction")               "'which way' a vector points, extending from the tail to the tip" --Need a better defn
 equation     = dcc "equation"     (cn' "equation")                "A statement that the values of two mathematical expressions are equal "
 euclidSpace  = dcc "euclidSpace"  (cn' "Euclidean")               ("Denoting the system of geometry corresponding to the geometry of ordinary" ++
                                                                   "experience")
@@ -56,12 +57,15 @@ norm        = dcc "norm"         (cn' "norm")                    "the positive l
 normal      = dcc "normal"       (cn' "normal" )                 "an object that is perpendicular to a given object"
 number      = dcc "number"       (cn' "number")                  "a mathematical object used to count, measure, and label"
 orient      = dcc "orientation"  (cn' "orientation")             "the relative physical position or direction of something"
+origin      = dcc "origin"       (cn' "origin")                  "a fixed point of reference for the geometry of the surrounding space"
 parameter   = dcc "parameter"    (cn' "parameter")               "a quantity whose value is selected depending on particular circumstances"
 --FIXME: Should "parameter" be in math?
 perp         = dcc "perp"         (cn' "perpendicular")          "At right angles"
 pi_          = dcc "pi"           (cn' "ratio of circumference to diameter for any circle") "The ratio of a circle's circumference to its diameter"
 posInf       = dcc "PosInf"       (cn' "Positive Infinity")      "the limit of a sequence or function that eventually exceeds any prescribed bound"
 negInf       = dcc "NegInf"       (cn' "Negative Infinity")      "Opposite of positive infinity"
+positive     = dcc "positive"     (cn' "positive")               "greater than zero"
+negative     = dcc "negative"     (cn' "negative")               "less than zero"
 point        = dccWDS "point"     (pn' "point")                   $ S "An exact location, it has no size, only position" +:+
                                                                   sParen (S "from" +:+ makeRef2S pointSource)
 probability  = dcc "probability"  (cnIES "probability")          "The likelihood of an event to occur"

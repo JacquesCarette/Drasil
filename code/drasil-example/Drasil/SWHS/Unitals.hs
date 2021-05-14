@@ -117,7 +117,7 @@ thFluxVect = uc' "thFluxVect" (nounPhraseSP "thermal flux vector")
   "vector denoting the direction of thermal flux through a surface"
   (vec lQ) UT.thermalFlux
 
-htFluxC = uc' "htFluxWC"
+htFluxC = uc' "htFluxC"
   (nounPhraseSP "heat flux into the water from the coil")
   "the rate of heat energy transfer into the water from the coil per unit time"
   (sub (eqSymb htFlux) lCoil) UT.thermalFlux
@@ -130,7 +130,7 @@ htFluxOut = uc' "htFluxOut" (nounPhraseSP "heat flux output")
   "the rate of heat energy transfer into an object per unit time"
   (sub (eqSymb htFlux) lOut) UT.thermalFlux
 
-htFluxP = uc' "htFluxPW" (nounPhraseSP "heat flux into the PCM from water")
+htFluxP = uc' "htFluxP" (nounPhraseSP "heat flux into the PCM from water")
   ("the rate of heat energy transfer into the phase" ++
   "change material from the water per unit time")
   (sub (eqSymb htFlux) lPCM) UT.thermalFlux

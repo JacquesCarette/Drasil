@@ -1,4 +1,4 @@
-module Utils.Drasil.Sentence (andIts, andThe, fromThe, inThe, isExpctdToHv, isThe, ofGiv,
+module Utils.Drasil.Sentence (andIts, andThe, fromThe, inThe, isExpctdToHv, isThe, ofGiv, forTT, forTT',
   ofGiv', ofThe, the_ofThe, the_ofThe', sOf, sOfA, sOr, sVersus, sAnd, sAre, sIn, sIs, toThe, sFor, sFor', sFor'') where
 
 import Language.Drasil
@@ -53,6 +53,13 @@ sFor' t1 t2 = titleize t1 +:+ S "for" +:+ titleize t2
 -- | Similar to 'sFor'', but takes two arguments (for capitalization or pluralization) to apply to the two terms respectively
 sFor'' :: (c -> Sentence) -> (d -> Sentence) -> c -> d -> Sentence
 sFor'' f1 f2 t1 t2 = f1 t1 +:+ S "for" +:+ f2 t2   
+
+-- | Similar to 'sFor', but used for titles and first 'NamedIdea' is pluralized
+forTT :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
+forTT = sFor'' titleize' titleize
+-- | Similar to 'forTT', but both 'NamedIdea's are pluralized
+forTT' :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
+forTT' = sFor'' titleize' titleize'
 
 -- | Prepends "The" and inserts "is expected to have" between two Sentences
 isExpctdToHv a b = S "The" +:+ sentHelper "is expected to have" a b

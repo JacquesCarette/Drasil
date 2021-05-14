@@ -13,6 +13,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (ixPos, iyPos, position,
 import Drasil.DblPendulum.Unitals (lenRod, initialPendAngle)
 --import Data.Drasil.Concepts.Physics (pendulum)
 import qualified Data.Drasil.Quantities.Math as QM (pi_)
+import Drasil.DblPendulum.Concepts (horizontal, vertical)
 
 
 dataDefs :: [DataDefinition]
@@ -33,7 +34,7 @@ figRef :: Sentence
 figRef = ch QP.ixPos `sIs` S "shown in" +:+. makeRef2S figMotion
 
 positionRef :: Sentence
-positionRef = ch QP.ixPos `isThe` S "horizontal" +:+ phrase QP.position
+positionRef = ch QP.ixPos `isThe` phrase horizontal +:+ phrase QP.position
 
 ------------------------------------------------------
 positionIY :: DataDefinition
@@ -49,7 +50,7 @@ figReff :: Sentence
 figReff = ch QP.iyPos `sIs` S "shown in" +:+. makeRef2S figMotion
 
 positionReff :: Sentence
-positionReff = ch QP.iyPos `isThe` S "vertical" +:+ phrase QP.position
+positionReff = ch QP.iyPos `isThe` phrase vertical +:+ phrase QP.position
 
 ------------------------------------------------------
 

@@ -35,9 +35,9 @@ dataStruct, dataStruct', dataType, dataType',
   computerLiteracy, computerApp :: NamedChunk
 
 dataStruct       = compoundNCPlPh datum structure
-dataStruct'      = compoundNCPlPl datum structure
+dataStruct'      = compoundNC' datum structure
 dataType         = compoundNCPlPh datum type_
-dataType'        = compoundNCPlPl datum type_
+dataType'        = compoundNC' datum type_
 inDatum          = compoundNC input_ datum
 outDatum         = compoundNC output_ datum
 inParam          = compoundNC input_ parameter

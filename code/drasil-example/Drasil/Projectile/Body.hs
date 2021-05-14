@@ -59,7 +59,7 @@ import Drasil.Projectile.Unitals (launAngle, tol, launSpeed, targPos, message,
 import Theory.Drasil (getEqModQdsFromGd, TheoryModel)
 
 srs :: Document
-srs = mkDoc mkSRS (for'' titleize phrase) si
+srs = mkDoc mkSRS (sFor'' titleize phrase) si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration

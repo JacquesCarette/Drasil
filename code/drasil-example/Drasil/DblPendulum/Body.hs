@@ -47,7 +47,7 @@ import Drasil.Projectile.References (hibbeler2004)
 
 
 srs :: Document
-srs = mkDoc mkSRS (for'' titleize phrase) si
+srs = mkDoc mkSRS (sFor'' titleize phrase) si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration

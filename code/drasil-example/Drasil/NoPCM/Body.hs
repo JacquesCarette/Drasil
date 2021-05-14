@@ -83,7 +83,7 @@ import Drasil.NoPCM.Unitals (inputs, constrained, unconstrained,
   specParamValList)
 
 srs :: Document
-srs = mkDoc mkSRS for si
+srs = mkDoc mkSRS sFor' si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration

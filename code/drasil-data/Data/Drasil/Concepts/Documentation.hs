@@ -229,7 +229,7 @@ traceyMandG  = nc "traceyMandG"  (andRT titleize' titleize' traceyMatrix graph)
 vav          = nc "vav"          (verification `and_` validation)
 
 scpOfTheProj :: (NamedChunk -> Sentence) -> NamedChunk
-scpOfTheProj oper = nc "scpOfTheProj" (scope `ofN_` theCustom oper project) -- reasonable hack?
+scpOfTheProj oper = nc "scpOfTheProj" (scope `ofN_` the'' oper project) -- reasonable hack?
 
 -- compounds
 

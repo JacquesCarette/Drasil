@@ -4,6 +4,7 @@ import Language.Drasil
 import Database.Drasil(ChunkDB, SystemInformation, UMap, _sysinfodb, asOrderedList,
   conceptinsTable, defResolve, refbyTable, traceTable, traceLookup)
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Data.Drasil.Concepts.Documentation (purpose, component, dependency,
   item, reference, traceyGraph, traceyMatrix)

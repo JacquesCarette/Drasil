@@ -7,6 +7,7 @@ import Drasil.DocLang (inReq, mkQRTuple, mkQRTupleRef, mkValsSourceTable)
 import Drasil.DocLang.SRS (datCon, propCorSol)
 import Theory.Drasil (DataDefinition)
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (assumption, characteristic, code,

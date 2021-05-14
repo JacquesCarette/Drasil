@@ -2,6 +2,7 @@ module Drasil.NoPCM.Assumptions where --all of this file is exported
 
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Data.Drasil.Concepts.Documentation (model, assumpDom, material_)
 

@@ -4,6 +4,7 @@ import Prelude hiding (cos, sin)
 import Language.Drasil
 import Theory.Drasil (GenDefn, TheoryModel, gd, gdNoRefs, ModelKinds(OthModel, EquationalModel))
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Data.Drasil.Concepts.Documentation (coordinate, symbol_)
 import Data.Drasil.Concepts.Math (cartesian, equation, vector)

@@ -163,17 +163,17 @@ Uncert. & Typical Uncertainty
 \end{longtable}
 \section{Introduction}
 \label{Sec:Intro}
-Automatic process control with a controller (P/PI/PD/PID) is used  in a variety of applications such as thermostats, automobile  cruise-control, etc. The gains of a controller in an application  must be tuned before the controller is ready for production. Therefore a simulation of the  PD Controller  with a  Second Order System is created in this project that can be  used to tune the gain constants.
+Automatic process control with a controller (P/PI/PD/PID) is used in a variety of applications such as thermostats, automobile cruise-control, etc. The gains of a controller in an application must be tuned before the controller is ready for production. Therefore a simulation of the PD Controller with a Second Order System is created in this project that can be used to tune the gain constants.
 
 The following section provides an overview of the Software Requirements Specification (SRS) for PD Controller. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
 
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
-The purpose of this document is to capture all the necessary  information including assumptions, data definitions, constraints,  models, and requirements to facilitate an unambiguous development  of the PD controller software and test procedures.
+The purpose of this document is to capture all the necessary information including assumptions, data definitions, constraints, models, and requirements to facilitate an unambiguous development of the PD controller software and test procedures.
 
 \subsection{Scope of Requirements}
 \label{Sec:ReqsScope}
-The scope of the requirements includes a PD Control Loop  with three subsystems namely a  PD Controller, a Summing Point, and a Power Plant. Only  the Proportional and Derivative controllers are used in this software;  the Integral controller is beyond the scope of this project. Additionally, this software is intended to aid with the manual  tuning of the PD Controller.
+The scope of the requirements includes a PD Control Loop with three subsystems namely a PD Controller, a Summing Point, and a Power Plant. Only the Proportional and Derivative controllers are used in this software; the Integral controller is beyond the scope of this project. Additionally, this software is intended to aid with the manual tuning of the PD Controller.
 
 \subsection{Characteristics of Intended Reader}
 \label{Sec:ReaderChars}
@@ -181,9 +181,9 @@ Reviewers of this documentation should have an understanding of control systems 
 
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
-The sections in this document are based on  \cite{smithLai2005}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in \hyperref[Sec:IMs]{Section: Instance Models} and trace back to find any additional information they require.
+The sections in this document are based on \cite{smithLai2005}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in \hyperref[Sec:IMs]{Section: Instance Models} and trace back to find any additional information they require.
 
-The goal statements (\hyperref[Sec:GoalStmt]{Section: Goal Statements}) are refined to the theoretical models and the theoretical models (\hyperref[Sec:TMs]{Section: Theoretical Models}) to the instance models (\hyperref[Sec:IMs]{Section: Instance Models}). The instance model referred as \hyperref[IM:pdEquationIM]{IM: pdEquationIM}  provides an Ordinary Differential Equation (ODE) that   models the PD Controller.
+The goal statements (\hyperref[Sec:GoalStmt]{Section: Goal Statements}) are refined to the theoretical models and the theoretical models (\hyperref[Sec:TMs]{Section: Theoretical Models}) to the instance models (\hyperref[Sec:IMs]{Section: Instance Models}). The instance model referred as \hyperref[IM:pdEquationIM]{IM: pdEquationIM} provides an Ordinary Differential Equation (ODE) that models the PD Controller.
 
 \section{General System Description}
 \label{Sec:GenSysDesc}
@@ -200,24 +200,24 @@ This section provides general information about the system. It identifies the in
 \label{Figure:systemContextDiag}
 \end{center}
 \end{figure}
-PD Controller  is self-contained. The only external interaction is   with the user. The responsibilities of the  user  and the  system  are as follows:
+PD Controller is self-contained. The only external interaction is with the user. The responsibilities of the user and the system are as follows:
 
 \begin{itemize}
 \item{User Responsibilities}
 \begin{itemize}
 \item{Feed inputs to the model}
-\item{Review the response of the  Power Plant}
+\item{Review the response of the Power Plant}
 \item{Tune the controller gains}
 \end{itemize}
 \item{PD Controller Responsibilities}
 \begin{itemize}
 \item{Check the validity of the inputs}
-\item{Calculate the outputs of the  PD Controller  and  Power Plant}
+\item{Calculate the outputs of the PD Controller and Power Plant}
 \end{itemize}
 \end{itemize}
 \subsection{User Characteristics}
 \label{Sec:UserChars}
-The end-user of  PD Controller  is expected to have taken a course on Control Systems at an  undergraduate level.
+The end-user of PD Controller is expected to have taken a course on Control Systems at an undergraduate level.
 
 \subsection{System Constraints}
 \label{Sec:SysConstraints}
@@ -229,7 +229,7 @@ This section first presents the problem description, which gives a high-level vi
 
 \subsection{Problem Description}
 \label{Sec:ProbDesc}
-A system is needed to provide a model of a PD Controller  that can be used for the tuning of the gain constants before  the deployment of the controller.
+A system is needed to provide a model of a PD Controller that can be used for the tuning of the gain constants before the deployment of the controller.
 
 \subsubsection{Terminology and Definitions}
 \label{Sec:TermDefs}
@@ -278,7 +278,7 @@ The physical system of PD Controller, as shown in \hyperref[Figure:pidSysDiagram
 Given Set-Point, Simulation Time, Proportional Gain, Derivative Gain, and Step Time, the goal statements are:
 
 \begin{itemize}
-\item[Process-Variable:\phantomsection\label{processVariable}]{Calculate the output of the Power Plant (Process Variable)  over time.}
+\item[Process-Variable:\phantomsection\label{processVariable}]{Calculate the output of the Power Plant (Process Variable) over time.}
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
@@ -296,10 +296,10 @@ This section simplifies the original problem and helps in developing the theoret
 \item[Initial Value:\phantomsection\label{initialValue}]{The initial value of the Process Variable is assumed to be zero. (RefBy: \hyperref[DD:ddProcessError]{DD: ddProcessError}.)}
 \item[Parallel Equation:\phantomsection\label{parallelEq}]{The Parallel form of the equation is used for the PD Controller. (RefBy: \hyperref[DD:ddCtrlVar]{DD: ddCtrlVar}.)}
 \item[Unfiltered Derivative:\phantomsection\label{unfilteredDerivative}]{A pure derivative function is used for this simulation; there are no filters applied. (RefBy: \hyperref[DD:ddDerivCtrl]{DD: ddDerivCtrl}.)}
-\item[Transfer Function:\phantomsection\label{pwrPlantTxFnx}]{The combined Power Plant and Sensor  (\hyperref[pwrPlant]{A: Power plant})  are characterized by a Second Order mass-spring-damper  System. (RefBy: \hyperref[TM:tmSOSystem]{TM: tmSOSystem}.)}
-\item[Spring Mass:\phantomsection\label{massSpring}]{The mass of the spring in the mass-spring-damper system  (\hyperref[pwrPlant]{A: Power plant})  is assumed to be 1 kilogram. (RefBy: \hyperref[likeChgPP]{LC: DC Gain and Time Constant} and \hyperref[GD:gdPowerPlant]{GD: gdPowerPlant}.)}
-\item[Spring Damping Coefficient:\phantomsection\label{dampingCoeffSpring}]{The Damping Coefficient of the spring in the mass-spring-damper system  (\hyperref[pwrPlant]{A: Power plant})  is assumed to be 1. (RefBy: \hyperref[likeChgPP]{LC: DC Gain and Time Constant} and \hyperref[GD:gdPowerPlant]{GD: gdPowerPlant}.)}
-\item[Spring Stiffness Coefficient:\phantomsection\label{stiffnessCoeffSpring}]{The Stiffness Coefficient  of the spring in the mass-spring-damper system  (\hyperref[pwrPlant]{A: Power plant}) ) is assumed to be 20. (RefBy: \hyperref[likeChgPP]{LC: DC Gain and Time Constant} and \hyperref[GD:gdPowerPlant]{GD: gdPowerPlant}.)}
+\item[Transfer Function:\phantomsection\label{pwrPlantTxFnx}]{The combined Power Plant and Sensor (\hyperref[pwrPlant]{A: Power plant}) are characterized by a Second Order mass-spring-damper System. (RefBy: \hyperref[TM:tmSOSystem]{TM: tmSOSystem}.)}
+\item[Spring Mass:\phantomsection\label{massSpring}]{The mass of the spring in the mass-spring-damper system (\hyperref[pwrPlant]{A: Power plant}) is assumed to be 1 kilogram. (RefBy: \hyperref[likeChgPP]{LC: DC Gain and Time Constant} and \hyperref[GD:gdPowerPlant]{GD: gdPowerPlant}.)}
+\item[Spring Damping Coefficient:\phantomsection\label{dampingCoeffSpring}]{The Damping Coefficient of the spring in the mass-spring-damper system (\hyperref[pwrPlant]{A: Power plant}) is assumed to be 1. (RefBy: \hyperref[likeChgPP]{LC: DC Gain and Time Constant} and \hyperref[GD:gdPowerPlant]{GD: gdPowerPlant}.)}
+\item[Spring Stiffness Coefficient:\phantomsection\label{stiffnessCoeffSpring}]{The Stiffness Coefficient of the spring in the mass-spring-damper system (\hyperref[pwrPlant]{A: Power plant}) is assumed to be 20. (RefBy: \hyperref[likeChgPP]{LC: DC Gain and Time Constant} and \hyperref[GD:gdPowerPlant]{GD: gdPowerPlant}.)}
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -327,7 +327,7 @@ Description & \begin{symbDescription}
               \item{$t$ is the time (${\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & Bilateral Laplace Transform. The Laplace transforms are  typically inferred from a pre-computed table of Laplace Transforms  (\cite{laplaceWiki}).
+Notes & Bilateral Laplace Transform. The Laplace transforms are typically inferred from a pre-computed table of Laplace Transforms (\cite{laplaceWiki}).
         
 \\ \midrule \\
 Source & \cite{laplaceWiki}
@@ -358,7 +358,7 @@ Description & \begin{symbDescription}
               \item{$L⁻¹[F(s)]$ is the Inverse Laplace Transform of a function (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & Inverse Laplace Transform of F(S). The Inverse Laplace transforms are  typically inferred from a pre-computed table of Laplace Transforms  (\cite{laplaceWiki}).
+Notes & Inverse Laplace Transform of F(S). The Inverse Laplace transforms are typically inferred from a pre-computed table of Laplace Transforms (\cite{laplaceWiki}).
         
 \\ \midrule \\
 Source & \cite{laplaceWiki}
@@ -391,7 +391,7 @@ Description & \begin{symbDescription}
               \item{$k$ is the Stiffness coefficient of the spring (${\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The  Transfer Function (from \hyperref[pwrPlantTxFnx]{A: Transfer Function}) of a Second Order System (mass-spring-damper) is characterized by this equation.
+Notes & The Transfer Function (from \hyperref[pwrPlantTxFnx]{A: Transfer Function}) of a Second Order System (mass-spring-damper) is characterized by this equation.
         
 \\ \midrule \\
 Source & \cite{abbasi2015}
@@ -425,7 +425,7 @@ Description & \begin{symbDescription}
               \item{$s$ is the Complex frequency-domain parameter (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The  Transfer Function of the Second Order System (from \hyperref[TM:tmSOSystem]{TM: tmSOSystem}) is reduced to this equation by substituting the mass (m) to 1 Kg (from \hyperref[massSpring]{A: Spring Mass}), the Damping Coefficient ($c$) to 1 (from \hyperref[dampingCoeffSpring]{A: Spring Damping Coefficient}), and the Stiffness Coefficient ($k$) to 20 (from \hyperref[stiffnessCoeffSpring]{A: Spring Stiffness Coefficient}). The equation is converted to the frequency domain by applying the Laplace transform (from \hyperref[TM:laplaceTransform]{TM: laplaceTransform}). Additionally, there are no external disturbances to the power plant (from \hyperref[externalDisturb]{A: External disturbance}).
+Notes & The Transfer Function of the Second Order System (from \hyperref[TM:tmSOSystem]{TM: tmSOSystem}) is reduced to this equation by substituting the mass (m) to 1 Kg (from \hyperref[massSpring]{A: Spring Mass}), the Damping Coefficient ($c$) to 1 (from \hyperref[dampingCoeffSpring]{A: Spring Damping Coefficient}), and the Stiffness Coefficient ($k$) to 20 (from \hyperref[stiffnessCoeffSpring]{A: Spring Stiffness Coefficient}). The equation is converted to the frequency domain by applying the Laplace transform (from \hyperref[TM:laplaceTransform]{TM: laplaceTransform}). Additionally, there are no external disturbances to the power plant (from \hyperref[externalDisturb]{A: External disturbance}).
         
 \\ \midrule \\
 Source & \cite{pidWiki} and \cite{abbasi2015}
@@ -671,7 +671,7 @@ Computing the Inverse Laplace Transform of a function (from \hyperref[TM:invLapl
 \begin{displaymath}
 \frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {y_{\text{t}}}-{K_{\text{d}}} \frac{\,d{r_{\text{t}}}}{\,dt}-{r_{\text{t}}} {K_{\text{p}}}=0
 \end{displaymath}
-The Set point (r(t)) is a step function, and a constant  (from \hyperref[setPoint]{A: Set-Point}). Therefore the  differential of the set point is zero. Hence the equation  reduces to,
+The Set point (r(t)) is a step function, and a constant (from \hyperref[setPoint]{A: Set-Point}). Therefore the differential of the set point is zero. Hence the equation reduces to,
 
 \begin{displaymath}
 \frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {y_{\text{t}}}-{r_{\text{t}}} {K_{\text{p}}}=0
@@ -711,8 +711,8 @@ This section provides the functional requirements, the tasks and behaviours that
 \begin{itemize}
 \item[Input-Values:\phantomsection\label{inputValues}]{Input the values from \hyperref[Table:ReqInputs]{Table:ReqInputs}.}
 \item[Verify-Input-Values:\phantomsection\label{verifyInputs}]{Ensure that the input values are within the limits specified in \hyperref[Sec:DataConstraints]{Section: Data Constraints}.}
-\item[Calculate-Values:\phantomsection\label{calculateValues}]{Calculate the Process Variable (from \hyperref[IM:pdEquationIM]{IM: pdEquationIM}) over  the simulation time.}
-\item[Output-Values:\phantomsection\label{outputValues}]{Output the Process Variable (from \hyperref[IM:pdEquationIM]{IM: pdEquationIM}) over  the simulation time.}
+\item[Calculate-Values:\phantomsection\label{calculateValues}]{Calculate the Process Variable (from \hyperref[IM:pdEquationIM]{IM: pdEquationIM}) over the simulation time.}
+\item[Output-Values:\phantomsection\label{outputValues}]{Output the Process Variable (from \hyperref[IM:pdEquationIM]{IM: pdEquationIM}) over the simulation time.}
 \end{itemize}
 \begin{longtable}{l l l}
 \toprule
@@ -749,7 +749,7 @@ This section provides the non-functional requirements, the qualities that the so
 This section lists the likely changes to be made to the software.
 
 \begin{itemize}
-\item[DC Gain and Time Constant:\phantomsection\label{likeChgPP}]{The mass ,  Damping Coefficient  and the Stiffness Coefficient may be changed to be supplied by the user (from  \hyperref[massSpring]{A: Spring Mass}, \hyperref[dampingCoeffSpring]{A: Spring Damping Coefficient}, and \hyperref[stiffnessCoeffSpring]{A: Spring Stiffness Coefficient}).}
+\item[DC Gain and Time Constant:\phantomsection\label{likeChgPP}]{The mass, Damping Coefficient and the Stiffness Coefficient may be changed to be supplied by the user (from \hyperref[massSpring]{A: Spring Mass}, \hyperref[dampingCoeffSpring]{A: Spring Damping Coefficient}, and \hyperref[stiffnessCoeffSpring]{A: Spring Stiffness Coefficient}).}
 \end{itemize}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}

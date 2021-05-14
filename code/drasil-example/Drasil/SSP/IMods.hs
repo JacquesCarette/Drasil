@@ -5,6 +5,7 @@ import Prelude hiding (tan, product, sin, cos)
 import Language.Drasil
 import Theory.Drasil (InstanceModel, im, imNoDeriv, qwUC, ModelKinds (OthModel))
 import Utils.Drasil
+import Utils.Drasil.Sentence
 import Drasil.DocLang.SRS (propCorSol) 
 
 -- Needed for derivations

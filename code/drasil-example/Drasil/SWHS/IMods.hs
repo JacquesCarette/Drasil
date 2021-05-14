@@ -4,6 +4,7 @@ module Drasil.SWHS.IMods (iMods, eBalanceOnWtr, eBalanceOnWtrDerivDesc1,
 import Language.Drasil
 import Theory.Drasil (InstanceModel, im, imNoDeriv, qwUC, qwC, ModelKinds (OthModel))
 import Utils.Drasil
+import Utils.Drasil.Sentence
 import Control.Lens((^.))
 
 import Data.Drasil.Concepts.Documentation (assumption, condition, constraint,

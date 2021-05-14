@@ -19,11 +19,15 @@ module Utils.Drasil (
   tAndDWAcc, tAndDWSym, typUncr, underConsidertn, unwrap, weave, zipSentList,
   -- Phrase
   and_, and_', andRT, compoundNC, compoundNC', compoundNC'', compoundNC''',
-  compoundNCP1, compoundNCPlPh, compoundNCPlPl, for, for', for'', of_, of_',
-  of_'', of__, ofA, ofN_, the, the', theCustom, with,
+  compoundNCP1, compoundNCPlPh, for, for', of_, of_',
+  of_'', of__, ofA, ofN_, the, the', the'', with, ofThe',
   -- Sentence
-  andIts, andThe, fromThe, inThe, isExpctdToHv, isThe, ofGiv, ofGiv', ofThe, the_ofThe, the_ofThe',
-  sOf, sOr, sVersus, sAnd, sAre, sIn, sIs, toThe
+  --andIts, andThe, fromThe, inThe, isExpctdToHv, isThe, ofGiv, ofGiv', ofThe, the_ofThe, the_ofThe',
+  --sOf, sOfA, sOr, sVersus, sAnd, sAre, sIn, sIs, toThe, sFor, sFor', sFor'', forTT, forTT'
+  -- Concepts
+  insertStringNP, prependStringNP, insertSentNP, prependSentNP,
+  theNP, theNP', aNP, aNP', ofTheNP, ofTheNP', ofTheNP'', the_ofTheNP, the_ofTheNP', the_ofTheNP'',
+  forNP, forNP', forNP'', ofNP, ofNP', ofNP'', ofNP''', withNP, andNP, andNP', andNP'', andNP'''
 ) where
 
 import Utils.Drasil.Contents
@@ -32,4 +36,5 @@ import Utils.Drasil.English
 import Utils.Drasil.Fold
 import Utils.Drasil.Misc
 import Utils.Drasil.Phrase
-import Utils.Drasil.Sentence
+import Utils.Drasil.Concepts
+--import Utils.Drasil.Sentence

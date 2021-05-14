@@ -50,14 +50,14 @@ import Language.Drasil.Code
        (ODEInfo, ODEMethod(..), ODEOptions, odeInfo, odeOptions, quantvar)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
-import Utils.Drasil
+import Utils.Drasil.Sentence
 import Drasil.PDController.Unitals
 
 naveen :: Person
 naveen = person "Naveen Ganesh" "Muralidharan"
 
 srs :: Document
-srs = mkDoc mkSRS (for'' titleize phrase) si
+srs = mkDoc mkSRS (sFor'' titleize phrase) si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
@@ -71,9 +71,9 @@ mkSRS
           IChar introUserChar1 introUserChar2 [],
           IOrgSec introDocOrg IDict.dataDefn (SRS.inModel [] [])
             (S "The instance model referred as" +:+ makeRef2S imPD +:+
-               S " provides an"
-               +:+ S "Ordinary Differential Equation (ODE) that "
-               +:+ S " models the"
+               S "provides an"
+               +:+ S "Ordinary Differential Equation (ODE) that"
+               +:+ S "models the"
                +:+ phrase pidC)],
      GSDSec $
        GSDProg

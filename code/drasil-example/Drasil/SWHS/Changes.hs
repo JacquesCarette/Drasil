@@ -2,6 +2,7 @@ module Drasil.SWHS.Changes (likelyChgs, likeChgTCVOD, likeChgTCVOL, likeChgTLH, 
 
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Data.Drasil.Concepts.Documentation (assumption, value, simulation,
   model, likeChgDom, unlikeChgDom)

@@ -4,6 +4,7 @@ module Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs) where
 
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Data.Drasil.Concepts.Documentation (condition, goal, input_, likeChgDom,
   software, system, unlikeChgDom, value, variable)

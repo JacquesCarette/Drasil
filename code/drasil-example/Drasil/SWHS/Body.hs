@@ -8,6 +8,7 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB,
   _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (GenDefn, InstanceModel)
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Control.Lens ((^.))
 
@@ -68,7 +69,7 @@ import Drasil.SWHS.Unitals (absTol, coilHTC, coilSA, consTol, constrained,
 -------------------------------------------------------------------------------
 
 srs :: Document
-srs = mkDoc mkSRS for si
+srs = mkDoc mkSRS sFor' si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration

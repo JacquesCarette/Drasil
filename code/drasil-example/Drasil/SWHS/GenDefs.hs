@@ -4,6 +4,7 @@ module Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater,
 import Language.Drasil
 import Theory.Drasil (GenDefn, gd, gdNoRefs, ModelKinds (OthModel, EquationalModel))
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Data.Drasil.Concepts.Math (rOfChng, unit_)
 import Data.Drasil.Concepts.Thermodynamics (lawConvCooling)

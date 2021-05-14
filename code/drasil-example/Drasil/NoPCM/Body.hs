@@ -8,6 +8,7 @@ import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
   _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (TheoryModel)
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Language.Drasil.Code (quantvar, listToArray, ODEInfo, odeInfo, 
   ODEOptions, odeOptions, ODEMethod(..))
@@ -82,7 +83,7 @@ import Drasil.NoPCM.Unitals (inputs, constrained, unconstrained,
   specParamValList)
 
 srs :: Document
-srs = mkDoc mkSRS for si
+srs = mkDoc mkSRS sFor' si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration

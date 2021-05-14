@@ -4,6 +4,7 @@ import Control.Lens((^.))
 
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Data.Drasil.Concepts.Documentation (assumption, item, physicalSystem,
   requirement, section_, sysCont, traceyMatrix)

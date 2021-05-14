@@ -1,8 +1,10 @@
+{-# LANGUAGE PostfixOperators #-}
 module Drasil.GamePhysics.TMods (tMods, newtonSL, newtonSLR, newtonTL, newtonLUG) where
 
 import Language.Drasil
 import Theory.Drasil (TheoryModel, tmNoRefs, ModelKinds(OthModel, EquationalModel))
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Drasil.GamePhysics.Assumptions (assumpOD)
 import Drasil.GamePhysics.Unitals (dispNorm, dVect, force_1, force_2,
@@ -35,7 +37,7 @@ newtonTLExpr :: Expr
 newtonTLExpr = negate (sy force_2)
 
 newtonTLNote :: Sentence
-newtonTLNote = foldlSent [S "Every action has an equal and opposite reaction.",
+newtonTLNote = foldlSent [(S "Every action has an equal and opposite reaction" !.),
   S "In other words, the", phrase force, ch force_1, S "exerted on the second",
   phrase rigidBody, S "by the first is equal in magnitude and in the opposite direction" `toThe`
   phrase force, ch force_2, S "exerted on the first", phrase rigidBody, S "by the second"]

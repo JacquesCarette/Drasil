@@ -3,7 +3,7 @@ module Drasil.DblPendulum.DataDefs (dataDefs, positionIY, positionIX, angFrequen
 
 import Prelude hiding (sin, cos, sqrt)
 import Language.Drasil
-import Utils.Drasil
+import Utils.Drasil.Sentence
 import Data.Drasil.SI_Units (second)
 import Theory.Drasil (DataDefinition, ddNoRefs)
 import Drasil.DblPendulum.Figures (figMotion)
@@ -12,13 +12,14 @@ import qualified Data.Drasil.Quantities.Physics as QP (ixPos, iyPos, position,
 import Drasil.DblPendulum.Unitals (lenRod, initialPendAngle)
 --import Data.Drasil.Concepts.Physics (pendulum)
 import qualified Data.Drasil.Quantities.Math as QM (pi_)
+import Drasil.DblPendulum.Concepts (horizontal, vertical)
 
 
 dataDefs :: [DataDefinition]
 dataDefs = [positionIX, positionIY, frequencyDD, angFrequencyDD, periodSHMDD]
 
 
-----------
+------------------------------------------------------
 positionIX :: DataDefinition
 positionIX = ddNoRefs positionIXQD Nothing "positionIX" [positionRef, figRef]
 
@@ -32,9 +33,9 @@ figRef :: Sentence
 figRef = ch QP.ixPos `sIs` S "shown in" +:+. makeRef2S figMotion
 
 positionRef :: Sentence
-positionRef = ch QP.ixPos `isThe` S "horizontal" +:+ phrase QP.position
+positionRef = ch QP.ixPos `isThe` phrase horizontal +:+ phrase QP.position
 
---------------------------------------------
+------------------------------------------------------
 positionIY :: DataDefinition
 positionIY = ddNoRefs positionIYQD Nothing "positionIY" [positionReff, figReff]
 
@@ -48,9 +49,9 @@ figReff :: Sentence
 figReff = ch QP.iyPos `sIs` S "shown in" +:+. makeRef2S figMotion
 
 positionReff :: Sentence
-positionReff = ch QP.iyPos `isThe` S "vertical" +:+ phrase QP.position
+positionReff = ch QP.iyPos `isThe` phrase vertical +:+ phrase QP.position
 
-----------------------------------------------
+------------------------------------------------------
 
 frequencyDD :: DataDefinition
 frequencyDD = ddNoRefs frequencyDDQD Nothing "frequencyDD" [frequencyRef]
@@ -65,7 +66,6 @@ frequencyDDEqn = 1 / sy QP.period
 frequencyRef :: Sentence
 frequencyRef = ch QP.frequency `isThe` S "number of back and forth swings in one" +:+ phrase second
 
-
 ------------------------------------------------------
 
 angFrequencyDD :: DataDefinition
@@ -75,12 +75,12 @@ angFrequencyDDQD :: QDefinition
 angFrequencyDDQD = mkQuantDef QP.angularFrequency angFrequencyDDEqn
 
 angFrequencyDDEqn :: Expr
-angFrequencyDDEqn = cross (2 * sy QM.pi_)  (1/sy QP.period) $= 2 * sy QM.pi_ /sy QP.period
-
+angFrequencyDDEqn = 2 * sy QM.pi_ / sy QP.period
 
 angFrequencyRef :: Sentence
 angFrequencyRef = ch QP.period `sIs` S "from" +:+ makeRef2S periodSHMDD
-----------------------------------------------------------
+
+------------------------------------------------------
 
 periodSHMDD :: DataDefinition
 periodSHMDD = ddNoRefs periodSHMDDQD Nothing "periodSHMDD" [periodSHMRef]
@@ -93,5 +93,3 @@ periodSHMDDEqn = 1 / sy QP.frequency
 
 periodSHMRef :: Sentence
 periodSHMRef = ch QP.period `sIs` S "from" +:+ makeRef2S frequencyDD
-
-

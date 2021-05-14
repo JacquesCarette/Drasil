@@ -10,6 +10,7 @@ import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI),
   _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (Theory(defined_fun, defined_quant))
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   DocSection(..), Field(..), Fields, GSDSec(..), GSDSub(..),
@@ -65,7 +66,7 @@ import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   sD, termsWithAccDefn, termsWithDefsOnly, terms)
 
 srs :: Document
-srs = mkDoc mkSRS (for'' titleize phrase) si
+srs = mkDoc mkSRS  (sFor'' titleize phrase) si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
@@ -106,7 +107,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
   StkhldrSec $
     StkhldrProg
       [Client glassBR $ S "a" +:+ phrase company
-        +:+ S "named Entuitive. It is developed by Dr." +:+ S (name mCampidelli),
+        +:+. S "named Entuitive" +:+ S "It is developed by Dr." +:+ S (name mCampidelli),
       Cstmr glassBR],
   GSDSec $ GSDProg [SysCntxt [sysCtxIntro, LlC sysCtxFig, sysCtxDesc, sysCtxList],
     UsrChars [userCharacteristicsIntro], SystCons [] [] ],

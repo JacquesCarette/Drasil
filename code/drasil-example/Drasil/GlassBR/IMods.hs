@@ -4,6 +4,7 @@ import Prelude hiding (exp)
 import Language.Drasil
 import Theory.Drasil (InstanceModel, imNoDeriv, qwC, ModelKinds (OthModel))
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Drasil.GlassBR.DataDefs (probOfBreak, calofCapacity, calofDemand,
   pbTolUsr, qRef)

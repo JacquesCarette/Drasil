@@ -10,6 +10,7 @@ import Theory.Drasil (qdFromDD)
 
 import Prelude hiding (sin, cos, tan)
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Drasil.DocLang (DocSection(..), IntroSec(..), IntroSub(..),
   LFunc(..), RefSec(..), RefTab(..), TConvention(..),
@@ -66,7 +67,7 @@ import Drasil.SSP.Unitals (constrained, effCohesion, fricAngle, fs, index,
 --Document Setup--
 
 srs :: Document
-srs = mkDoc mkSRS for si
+srs = mkDoc mkSRS sFor' si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration

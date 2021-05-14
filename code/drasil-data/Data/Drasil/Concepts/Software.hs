@@ -13,16 +13,22 @@ softwarecon = [correctness, verifiability, physLib,
   understandability, reusability, maintainability, portability,
   performance, program, errMsg, accuracy, correctness, reliability]
 
-c, errMsg, physLib, program :: ConceptChunk
+c, errMsg, physLib, program, modularity, constStructure, impType:: ConceptChunk
 
-c       = dcc "c" (pn "C") 
+c              = dcc "c"              (pn "C") 
   "the C programming language"
-physLib = dcc "physLib" (cnIES "physics library") 
+physLib        = dcc "physLib"        (cnIES "physics library") 
   "a programming library which provides functions for modelling physical phenomenon"
-program = dcc "program" (cn' "program")
+program        = dcc "program"        (cn' "program")
   "a series of coded software instructions to control the operation of a computer or other machine"
-errMsg  = dcc "errMsg" (cn' "error message") 
+errMsg         = dcc "errMsg"         (cn' "error message") 
   "a message that indicates an incorrect instruction has been given, or that there is an error resulting from faulty software"
+modularity     = dcc "modularity"     (cn' "modularity")
+  "Structure of Inputs (bundled or not)"
+constStructure = dcc "constStructure" (cn' "constant structure") 
+  "Representation of constants (as variables or as constants)"
+impType        = dcc "impType"        (cn' "implementation type") 
+  "Preferentially-ordered list ODE libraries to try"
 
 -- Non-functional requirements  
 

@@ -17,8 +17,8 @@ likeChgPP = cic "likeChgPP" likeChgPPDesc "DC Gain and Time Constant" likeChgDom
 likeChgPPDesc :: Sentence
 likeChgPPDesc
   = foldlSent
-      [S "The", phrase mass, S ", ", phrase ccDampingCoeff, S " and the",
+      [S "The", phrase mass `sC` phrase ccDampingCoeff, S "and the",
        phrase ccStiffCoeff,
-       S "may be changed to be supplied by the user (from ",
+       S "may be changed to be supplied by the user", sParen (S "from" +:+
        foldlList Comma List [makeRef2S aMass, makeRef2S aDampingCoeff,
-       makeRef2S aStiffnessCoeff] <> S ")"]
+       makeRef2S aStiffnessCoeff])]

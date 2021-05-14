@@ -2,7 +2,6 @@ module Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs) where
 
 import Language.Drasil
 import Utils.Drasil
-import Utils.Drasil.Sentence
 
 import Data.Drasil.Concepts.Documentation (model, likeChgDom, unlikeChgDom)
 import Data.Drasil.Concepts.Thermodynamics (temp)

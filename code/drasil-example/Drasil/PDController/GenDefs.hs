@@ -9,7 +9,6 @@ import Drasil.PDController.TModel
 import Language.Drasil
 import Theory.Drasil (GenDefn, gd, ModelKinds (OthModel))
 import Utils.Drasil
-import Utils.Drasil.Sentence
 import Data.Drasil.Citations ( pidWiki )
 import Drasil.PDController.Unitals
 

@@ -8,7 +8,6 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import Utils.Drasil
-import Utils.Drasil.Sentence
 
 import Drasil.DocLang (SRSDecl, mkDoc)
 

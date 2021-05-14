@@ -2,7 +2,6 @@ module Drasil.GamePhysics.Assumptions where
 
 import Language.Drasil hiding (organization)
 import Utils.Drasil
-import Utils.Drasil.Sentence
 
 import Data.Drasil.Concepts.Documentation as Doc (simulation, assumpDom)
 import qualified Data.Drasil.Concepts.Physics as CP (collision, damping, force,

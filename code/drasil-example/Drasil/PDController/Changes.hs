@@ -7,7 +7,6 @@ import Drasil.PDController.Assumptions
 import Drasil.PDController.Concepts
 import Language.Drasil
 import Utils.Drasil
-import Utils.Drasil.Sentence
 
 likelyChgs :: [ConceptInstance]
 likelyChgs = [likeChgPP]

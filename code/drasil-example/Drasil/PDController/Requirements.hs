@@ -9,7 +9,6 @@ import Drasil.PDController.IModel
 
 import Language.Drasil
 import Utils.Drasil
-import Utils.Drasil.Sentence
 
 funcReqs :: [ConceptInstance]
 funcReqs = [verifyInputs, calculateValues, outputValues]

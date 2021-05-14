@@ -22,7 +22,6 @@ import Drasil.TraceTable (generateTraceMap)
 import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
                                                      -- Vector - Name conflict (defined in file)
 import Utils.Drasil
-import Utils.Drasil.Sentence
 
 import Database.Drasil(ChunkDB, SystemInformation(SI), _authors, _kind,
   _quants, _sys, _sysinfodb, _usedinfodb, ccss, ccss', citeDB, collectUnits,

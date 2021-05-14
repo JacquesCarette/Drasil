@@ -1,7 +1,6 @@
 module Drasil.DblPendulum.Goals (goals, goalsInputs) where
 
 import Language.Drasil
-import Utils.Drasil
 import Utils.Drasil.Sentence
 import Data.Drasil.Concepts.Documentation (goalStmtDom)
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (mass, len)

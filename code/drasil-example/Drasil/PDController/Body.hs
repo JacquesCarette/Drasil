@@ -51,7 +51,6 @@ import Language.Drasil.Code
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import Utils.Drasil
-import Utils.Drasil.Sentence
 import Drasil.PDController.Unitals
 
 naveen :: Person

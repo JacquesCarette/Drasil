@@ -3,7 +3,6 @@ module Drasil.NoPCM.DataDefs where --exports all of it
 import Language.Drasil
 import Theory.Drasil (DataDefinition, ddNoRefs)
 import Utils.Drasil
-import Utils.Drasil.Sentence
 
 import Drasil.SWHS.Assumptions (assumpVCN)
 import Drasil.SWHS.DataDefs (balanceDecayRate, balanceDecayRateQD, tankVolume, 

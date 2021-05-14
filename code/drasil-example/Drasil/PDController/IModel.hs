@@ -11,7 +11,6 @@ import Drasil.PDController.TModel
 import Language.Drasil
 import Theory.Drasil (InstanceModel, im, qwC, ModelKinds (OthModel))
 import Utils.Drasil
-import Utils.Drasil.Sentence
 import Drasil.PDController.Unitals
 
 instanceModels :: [InstanceModel]

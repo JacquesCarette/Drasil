@@ -7,7 +7,6 @@ import Data.Drasil.SI_Units (kilogram)
 import Drasil.PDController.Concepts
 import Language.Drasil
 import Utils.Drasil
-import Utils.Drasil.Sentence
 
 assumptions :: [ConceptInstance]
 assumptions

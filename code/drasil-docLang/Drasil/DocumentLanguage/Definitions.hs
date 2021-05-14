@@ -18,7 +18,6 @@ import Database.Drasil (SystemInformation, _sysinfodb, citeDB, conceptinsLookup,
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(invariants),
   TheoryModel, HasInputs(inputs), HasOutput(output, out_constraints))
 import Utils.Drasil
-import Utils.Drasil.Sentence
 
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
 

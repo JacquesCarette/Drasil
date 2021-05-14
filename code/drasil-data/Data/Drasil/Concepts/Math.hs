@@ -11,7 +11,7 @@ import Control.Lens ((^.))
 mathcon :: [ConceptChunk]
 
 mathcon = [amplitude, angle, area, axis, calculation, cartesian, centre, change, component,
-  constraint, diameter,equation, euclidN, euclidSpace, gradient, graph, law, line, matrix,
+  constraint, diameter,equation, euclidN, euclidSpace, gradient, graph, laplaceTransform, law, line, matrix,
   norm, normal, normalV, number, orient, parameter, perp, perpV, pi_, negInf, posInf, point,
   probability, rOfChng, rate, rightHand, shape, surArea, surface, unitV, unit_, vector, 
   xAxis, xCoord, xComp, xDir, yAxis, yCoord, yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle]
@@ -20,9 +20,10 @@ mathcon' :: [CI]
 mathcon' = [de, leftSide, ode, pde, rightSide]
 
 amplitude, angle, area, axis, calculation, cartesian, centre, change, component, constraint,
-  diameter, equation, euclidN, euclidSpace, gradient, graph, law, line, matrix, norm,
+  diameter, equation, euclidN, euclidSpace, gradient, graph, laplaceTransform, law, line, matrix, norm,
   normal, normalV, number, orient, parameter, perp, perpV, pi_, negInf, posInf, point, probability,
   rOfChng, rate, rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xCoord, xComp, xDir,
+
   yAxis, yCoord,  yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle :: ConceptChunk
 
   
@@ -47,6 +48,8 @@ euclidSpace  = dcc "euclidSpace"  (cn' "Euclidean")               ("Denoting the
                                                                   "experience")
 gradient     = dcc "gradient"     (cn' "gradient")                "degree of steepness of a graph at any point"
 graph        = dcc "graph"        (cn' "graph")                   "A diagram showing the relation between variable quantities"
+laplaceTransform = dcc "laplaceTransform" (cn' "laplace transform") ("An integral transform that converts a function of a real variable t " ++
+                                                                     "(often time) to a function of a complex variable s (complex frequency)")
 law          = dcc "law"          (cn' "law")                     "a generalization based on a fact or event perceived to be recurrent"
 line         = dccWDS "line"      (pn' "line")                    $ S "An interval between two points" +:+
                                                                   sParen (S "from" +:+ makeRef2S lineSource)

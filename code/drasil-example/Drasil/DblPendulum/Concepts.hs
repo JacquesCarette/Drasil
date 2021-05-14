@@ -5,7 +5,7 @@ import Data.Drasil.Theories.Physics (newtonSLRRC)
 
 
 concepts :: [IdeaDict]
-concepts = map nw [rod, horizontal, vertical] ++ map nw defs ++ [nw newtonSLRRC] 
+concepts = nw newtonSLRRC : map nw [rod, horizontal, vertical] ++ map nw defs
        
 rod, horizontal, vertical :: NamedChunk
 rod = nc "rod" (cn' "rod")

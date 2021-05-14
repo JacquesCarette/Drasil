@@ -15,13 +15,13 @@ import Data.Drasil.Concepts.Education (mechanics)
 
 physicCon :: [ConceptChunk]
 physicCon = [acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVelocity,
-  cohesion, collision, compression, constAccel, constAccelV, damping,
+  cohesion, collision, compression, constAccel, constAccelV, damping, dampingCoeff,
   displacement, distance, elasticity, energy, fSpeed, fVel, fbd, force,
   friction, gravity, gravitationalAccel, gravitationalConst, height, iPos,
   iSpeed, iVel, impulseS, impulseV, isotropy, ixPos, ixVel, iyPos, iyVel,
   joint, kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy,
   momentOfInertia, position, potEnergy, pressure, restitutionCoef, rectilinear,
-  rigidBody, scalarAccel, scalarPos, space, speed, strain, stress, tension,
+  rigidBody, scalarAccel, scalarPos, space, speed, stiffCoeff, strain, stress, tension,
   time, torque, velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel,
   yAccel, yConstAccel, yDist, yPos, yVel, momentum, moment, fOfGravity, positionVec,
   pendulum, body, kinematics, frequency, period, motion]
@@ -30,13 +30,13 @@ physicCon' :: [CI]
 physicCon' = [oneD, twoD, threeD]
 
 acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVelocity, cohesion,
-  collision, compression, constAccel, constAccelV, damping, displacement,
+  collision, compression, constAccel, constAccelV, damping, dampingCoeff, displacement,
   distance, elasticity, energy, fSpeed, fVel, fbd, force, friction, gravity,
   gravitationalAccel, gravitationalConst, height, iPos, iSpeed, iVel, impulseS,
   impulseV, isotropy, ixPos, ixVel, iyPos, iyVel, joint, kEnergy, linAccel,
   linDisp, linVelo, linear, mechEnergy, momentOfInertia, position, potEnergy,
   pressure, rectilinear, restitutionCoef, rigidBody, scalarAccel, scalarPos,
-  space, speed, strain, stress, tension, time, torque, velocity, weight,
+  space, speed, stiffCoeff, strain, stress, tension, time, torque, velocity, weight,
   xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
   yPos, yVel, momentum, moment, fOfGravity, positionVec, pendulum, body,
   kinematics, frequency, period, motion :: ConceptChunk
@@ -63,6 +63,8 @@ compression = dccWDS "compression" (cn' "compression")
 damping = dccWDS "damping" (pn' "damping")
   $ S "an influence within or upon an oscillatory system that has the effect of reducing," +:+
   S "restricting or preventing its oscillations" +:+ sParen (S "from" +:+ makeRef2S dampingSource)
+dampingCoeff = dcc "dampingCoeff" (cn' "damping coefficient")
+ "Quantity that characterizes a second order system's oscillatory response"
 displacement = dccWDS "displacement" (cn' "displacement")
   (S "the change in" +:+ (position ^. defn))
 distance = dcc "distance" (cn' "distance")
@@ -137,6 +139,8 @@ scalarPos = dccWDS "scalarPos" (cn' "scalar position")
   (S "magnitude" `the_ofThe` phrase position +:+ S "vector")
 speed = dccWDS "speed" (cn' "speed")
   (S "magnitude" `the_ofThe` phrase velocity +:+ S "vector")
+stiffCoeff = dcc "stiffnessCoeff" (cn' "stiffness coefficient") 
+ "Quantity that characterizes a spring's stiffness"
 strain = dccWDS "strain" (cn' "strain") 
   (S "a measure of deformation representing the" +:+ phrase displacement +:+
    S "between particles in the body relative to a reference length")

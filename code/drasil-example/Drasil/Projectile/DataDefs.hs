@@ -3,6 +3,7 @@ module Drasil.Projectile.DataDefs (dataDefs, speedIX, speedIY) where
 import Prelude hiding (sin, cos)
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Theory.Drasil (DataDefinition, ddNoRefs)
 

@@ -1,12 +1,11 @@
-module Utils.Drasil.Concepts where
+module Utils.Drasil.Concepts (insertStringNP, prependStringNP, insertSentNP, prependSentNP,
+theNP, theNP', aNP, aNP', ofTheNP, ofTheNP', ofTheNP'', the_ofTheNP, the_ofTheNP', the_ofTheNP'',
+forNP, forNP', forNP'', ofNP, ofNP', ofNP'', ofNP''', withNP, andNP, andNP', andNP'', andNP''' )where
 
 import Language.Drasil
-import Utils.Drasil.Phrase
+--import Utils.Drasil.Phrase
 import Utils.Drasil.Sentence
 
------------------
--- TO DO -> NOUNPHRASE HAS WRONG TYPE FOR THIS, NEED NOUNPHRASE''
-----------------
 
 --Maybe add more generalized versions of these?
 -- | Helper function that places a string in between two 'NP's. Plural is defaulted to
@@ -80,7 +79,7 @@ ofNP'' :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
 ofNP'' f1 f2 t1 t2 = nounPhrase'' (phraseNP t1 `sOf` phraseNP t2) (f1 t1 `sOf` f2 t2) CapFirst CapWords
 -- | Same as 'ofNP', but takes two functions for the singular case and two for the plural case
 ofNP''' :: (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-ofNP''' f1 f2 p1 p2 t1 t2 = nounPhrase'' (f1 t1 `sOf` f1 t2) (p1 t1 `sOf` p2 t2) CapFirst CapWords
+ofNP''' f1 f2 p1 p2 t1 t2 = nounPhrase'' (f1 t1 `sOf` f2 t2) (p1 t1 `sOf` p2 t2) CapFirst CapWords
 
 -- | Inserts "with" between two 'NP's
 withNP :: NP -> NP -> NP
@@ -97,4 +96,4 @@ andNP'' :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
 andNP'' f1 f2 t1 t2 = nounPhrase'' (phraseNP t1 `sAnd` phraseNP t2) (f1 t1 `sAnd` f2 t2) CapFirst CapWords
 -- | Same as 'andNP', but takes two functions for the singular case and two for the plural case
 andNP''' :: (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-andNP''' f1 f2 p1 p2 t1 t2 = nounPhrase'' (f1 t1 `sAnd` f1 t2) (p1 t1 `sAnd` p2 t2) CapFirst CapWords
+andNP''' f1 f2 p1 p2 t1 t2 = nounPhrase'' (f1 t1 `sAnd` f2 t2) (p1 t1 `sAnd` p2 t2) CapFirst CapWords

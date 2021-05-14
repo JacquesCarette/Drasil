@@ -2,6 +2,7 @@ module Drasil.GamePhysics.Goals (goals, linearGS, angularGS) where
 
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Data.Drasil.Concepts.Documentation (goalStmtDom)
 import Data.Drasil.Concepts.Physics (time)

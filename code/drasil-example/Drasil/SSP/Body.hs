@@ -10,6 +10,7 @@ import Theory.Drasil (qdFromDD)
 
 import Prelude hiding (sin, cos, tan)
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Drasil.DocLang (DocSection(..), IntroSec(..), IntroSub(..),
   LFunc(..), RefSec(..), RefTab(..), TConvention(..),

@@ -3,6 +3,7 @@ module Drasil.SWHS.Goals (goals, waterTempGS, pcmTempGS, waterEnergyGS,
 
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Data.Drasil.Concepts.Documentation (goalStmtDom)
 import Data.Drasil.Concepts.Physics (time)

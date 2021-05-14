@@ -10,6 +10,7 @@ import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI),
   _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (Theory(defined_fun, defined_quant))
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   DocSection(..), Field(..), Fields, GSDSec(..), GSDSub(..),

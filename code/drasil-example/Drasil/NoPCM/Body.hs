@@ -8,6 +8,7 @@ import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
   _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (TheoryModel)
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Language.Drasil.Code (quantvar, listToArray, ODEInfo, odeInfo, 
   ODEOptions, odeOptions, ODEMethod(..))

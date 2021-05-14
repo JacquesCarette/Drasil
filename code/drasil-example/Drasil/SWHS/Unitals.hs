@@ -3,6 +3,7 @@ module Drasil.SWHS.Unitals where -- all of this file is exported
 import Language.Drasil
 import Language.Drasil.ShortHands
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Data.Drasil.Concepts.Documentation (simulation)
 import Data.Drasil.Constraints (gtZeroConstr)

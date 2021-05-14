@@ -3,6 +3,7 @@ module Drasil.NoPCM.IMods (eBalanceOnWtr, iMods, instModIntro) where
 import Language.Drasil
 import Theory.Drasil (InstanceModel, im, qwC, qwUC, ModelKinds (OthModel))
 import Utils.Drasil
+import Utils.Drasil.Sentence
 import Control.Lens ((^.))
 
 import Data.Drasil.Concepts.Documentation (goal)

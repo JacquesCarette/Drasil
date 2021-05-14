@@ -3,6 +3,7 @@ module Data.Drasil.Concepts.Physics where
 --  up with a better one.
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Data.Drasil.Domains (mathematics, physics)
 import Data.Drasil.Concepts.Documentation (property, value)

@@ -5,6 +5,7 @@ import Language.Drasil.ShortHands (lX, lY, lZ)
 import Data.Drasil.Domains (mathematics)
 import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource)
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Control.Lens ((^.))
 

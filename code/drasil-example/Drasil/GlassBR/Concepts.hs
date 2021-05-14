@@ -2,6 +2,7 @@ module Drasil.GlassBR.Concepts where --whole file is used
 
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, likelyChg,
   notApp, physSyst, response, requirement, srs, type_, typUnc, unlikelyChg)

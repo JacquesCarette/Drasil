@@ -8,6 +8,7 @@ import Drasil.PDController.TModel
 import Language.Drasil
 import Theory.Drasil (DataDefinition, dd)
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 dataDefinitions :: [DataDefinition]
 dataDefinitions = [ddErrSig, ddPropCtrl, ddDerivCtrl, ddCtrlVar]

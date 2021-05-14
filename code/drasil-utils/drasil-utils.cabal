@@ -23,6 +23,7 @@ source-repository head
 library
   exposed-modules:
       Utils.Drasil
+      Utils.Drasil.Sentence
   other-modules:
       Utils.Drasil.Concepts
       Utils.Drasil.Contents
@@ -31,7 +32,6 @@ library
       Utils.Drasil.Fold
       Utils.Drasil.Misc
       Utils.Drasil.Phrase
-      Utils.Drasil.Sentence
       Paths_drasil_utils
   hs-source-dirs:
       ./

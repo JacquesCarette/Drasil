@@ -10,6 +10,7 @@ import Prelude hiding (log, exp, sqrt)
 import Theory.Drasil (DataDefinition, dd)
 import Database.Drasil (Block(Parallel))
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Data.Drasil.Concepts.Documentation (datum, user)
 import Data.Drasil.Concepts.Math (parameter)

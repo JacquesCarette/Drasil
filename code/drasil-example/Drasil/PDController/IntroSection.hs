@@ -5,6 +5,7 @@ import Data.Drasil.Citations (smithLai2005)
 import Drasil.PDController.Concepts
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 introPara, introPurposeOfDoc, introscopeOfReq :: Sentence
 introPara

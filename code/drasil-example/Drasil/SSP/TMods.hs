@@ -5,6 +5,7 @@ import Prelude hiding (tan)
 import Language.Drasil
 import Theory.Drasil (TheoryModel, tm, ModelKinds(EquationalModel, OthModel))
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Data.Drasil.Quantities.Physics (distance, force)
 

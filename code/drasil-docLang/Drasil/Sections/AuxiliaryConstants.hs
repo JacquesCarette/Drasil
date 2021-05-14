@@ -3,6 +3,7 @@ module Drasil.Sections.AuxiliaryConstants
 
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Sentence
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
 import Drasil.DocumentLanguage.Units (toSentence)
 import Data.Drasil.Concepts.Documentation (value, description, symbol_)

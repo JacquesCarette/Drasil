@@ -2,6 +2,8 @@ module Drasil.DblPendulum.Assumptions (pend2DMotion, cartCoord, cartCoordRight, 
     
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Sentence
+
 import Drasil.DblPendulum.Concepts (pendulum) 
 import Data.Drasil.Concepts.Documentation (assumpDom) 
 import Data.Drasil.Concepts.Math (cartesian, xAxis, yAxis)

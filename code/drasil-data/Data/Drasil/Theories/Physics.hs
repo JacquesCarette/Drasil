@@ -4,6 +4,7 @@ import Language.Drasil
 import Theory.Drasil (DataDefinition, GenDefn, TheoryModel, ddNoRefs, gd,
   tmNoRefs, ModelKinds (OthModel), tm)
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Data.Drasil.Citations (velocityWiki, accelerationWiki)
 import Data.Drasil.Concepts.Documentation (component, material_, value, constant)

@@ -3,6 +3,7 @@ module Drasil.DblPendulum.Unitals where
 import Language.Drasil
 import Language.Drasil.ShortHands
 import Utils.Drasil
+import Utils.Drasil.Sentence
 import Data.Drasil.Constraints (gtZeroConstr)
 
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)

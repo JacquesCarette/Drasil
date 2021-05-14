@@ -6,6 +6,7 @@ import Language.Drasil
 import Theory.Drasil (InstanceModel, imNoRefs, qwC, ModelKinds (OthModel)) 
   --imNoDerivNoRefs, )
 import Utils.Drasil
+import Utils.Drasil.Sentence
 import Data.Drasil.Quantities.Physics (gravitationalAccel,
          angularAccel, momentOfInertia,
          time, angularDisplacement, angularFrequency, torque, angularDisplacement, time)

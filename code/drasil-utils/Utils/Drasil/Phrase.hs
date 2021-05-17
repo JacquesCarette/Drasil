@@ -134,7 +134,16 @@ the' t = nounPhrase'' (S "the" +:+ titleize t) (S "the" +:+ titleize' t) CapWord
 
 -- | A customizable version of 'the'
 the'' :: (t -> Sentence) -> t -> NP
-the'' f t = nounPhrase''(S "the" +:+ f t) (S "the" +:+ f t) CapFirst CapWords
+the'' f t = nounPhrase'' (S "the" +:+ f t) (S "the" +:+ f t) CapFirst CapWords
+
+-- | Creates a noun phrase by combining two 'NamedIdea's with the words "in the" between
+-- their terms. Plural is defaulted to @(plural t1) "in the" (phrase t2)@
+inThe' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+inThe' t1 t2 = nounPhrase'' 
+  (phrase t1 +:+ S "in the" +:+ phrase t2) 
+  (plural t1 +:+ S "in the" +:+ phrase t2)
+  (Replace (atStart t1 +:+ S "in the" +:+ phrase t2))
+  (Replace (titleize t1 +:+ S "in the" +:+ titleize t2))
 
 -- | Combinator for combining two 'NamedChunk's into one.
 -- /Does not preserve abbreviations/

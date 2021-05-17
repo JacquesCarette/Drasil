@@ -1,5 +1,5 @@
 module Utils.Drasil.Concepts (insertStringNP, prependStringNP, insertSentNP, prependSentNP,
-theNP, theNP', aNP, aNP', ofTheNP, ofTheNP', ofTheNP'', the_ofTheNP, the_ofTheNP', the_ofTheNP'',
+theNP, theNP', aNP, aNP', ofTheNP, ofTheNP', ofTheNP'', inTheNP, inTheNP', inTheNP'', the_ofTheNP, the_ofTheNP', the_ofTheNP'',
 forNP, forNP', forNP'', ofNP, ofNP', ofNP'', ofNP''', withNP, andNP, andNP', andNP'', andNP''' )where
 
 import Language.Drasil
@@ -46,6 +46,16 @@ ofTheNP' t1 t2 = nounPhrase'' (phraseNP t1 `ofThe` phraseNP t2) (pluralNP t1 `of
 -- | Similar to 'ofTheNP', but accepts two functions for the plural case
 ofTheNP'' :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
 ofTheNP'' f1 f2 t1 t2 = nounPhrase'' (phraseNP t1 `ofThe` phraseNP t2) (f1 t1 `ofThe` f2 t2) CapFirst CapWords
+
+-- | Inserts "in the" between two 'NP's
+inTheNP :: NP -> NP -> NP
+inTheNP = insertStringNP "in the"
+-- | Similar to 'ofTheNP', but the plural case is now @pluralNP t1 `inThe` phraseNP t2@
+inTheNP' :: NP -> NP -> NP
+inTheNP' t1 t2 = nounPhrase'' (phraseNP t1 `inThe` phraseNP t2) (pluralNP t1 `inThe` phraseNP t2) CapFirst CapWords
+-- | Similar to 'ofTheNP', but accepts two functions for the plural case
+inTheNP'' :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
+inTheNP'' f1 f2 t1 t2 = nounPhrase'' (phraseNP t1 `inThe` phraseNP t2) (f1 t1 `inThe` f2 t2) CapFirst CapWords
 
 -- | Prepends "the" and inserts "of the"
 the_ofTheNP :: NP -> NP -> NP

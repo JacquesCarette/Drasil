@@ -22,7 +22,7 @@ import Language.Drasil.Stages (Stage)
 import Language.Drasil.Symbol (Symbol)
 
 -- | ConstrainedChunks are 'Symbolic Quantities'
--- with 'Constraints' and maybe typical value
+-- with 'Constraints' and maybe a typical value
 data ConstrainedChunk = ConstrainedChunk { _qd :: QuantityDict
                                          , _constr :: [Constraint]
                                          , _reasV :: Maybe Expr

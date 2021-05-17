@@ -6,8 +6,6 @@ import Theory.Drasil (GenDefn, gd, gdNoRefs, ModelKinds (OthModel, EquationalMod
 import Utils.Drasil
 import Utils.Drasil.Sentence
 
-import Control.Lens ((^.))
-
 import Data.Drasil.Concepts.Math (rOfChng, unit_)
 import Data.Drasil.Concepts.Thermodynamics (lawConvCooling)
 
@@ -53,16 +51,15 @@ rocTempSimpRel = sy QPP.mass * sy QT.heatCapSpec *
 ----
 
 htFluxWaterFromCoil :: GenDefn
-htFluxWaterFromCoil = gd (OthModel htFluxWaterFromCoilRC) (getUnit htFluxC) Nothing
+htFluxWaterFromCoil = gd (EquationalModel htFluxWaterFromCoilQD) (getUnit htFluxC) Nothing
   [makeCite koothoor2013] "htFluxWaterFromCoil"
   [newtonLawNote htFluxC assumpLCCCW coil, makeRef2S assumpTHCCoT]
 
-htFluxWaterFromCoilRC :: RelationConcept
-htFluxWaterFromCoilRC = makeRC "htFluxWaterFromCoilRC" (htFluxC ^. term)
-  EmptyS htFluxWaterFromCoilRel
+htFluxWaterFromCoilQD :: QDefinition
+htFluxWaterFromCoilQD = mkQuantDef htFluxC htFluxWaterFromCoilExpr
 
-htFluxWaterFromCoilRel :: Relation
-htFluxWaterFromCoilRel = sy htFluxC $= sy coilHTC * (sy tempC - apply1 tempW time)
+htFluxWaterFromCoilExpr :: Expr
+htFluxWaterFromCoilExpr = sy coilHTC * (sy tempC - apply1 tempW time)
 
 --Can't include info in description beyond definition of variables?
 ----

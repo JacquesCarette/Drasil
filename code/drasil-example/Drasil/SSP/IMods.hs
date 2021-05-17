@@ -5,7 +5,7 @@ import Prelude hiding (tan, product, sin, cos)
 import Language.Drasil
 import Theory.Drasil (InstanceModel, im, imNoDeriv, qwUC, ModelKinds (OthModel))
 import Utils.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 import Drasil.DocLang.SRS (propCorSol) 
 
 -- Needed for derivations
@@ -121,29 +121,29 @@ fctSftyDerivSentence4 = [S "Since the" +:+ phrase intShrForce +:+
   S "are unknown, they are separated from the other terms as follows"]
 
 fctSftyDerivSentence5 :: [Sentence]
-fctSftyDerivSentence5 = [S "Applying assumptions" +:+ makeRef2S assumpSF `sAnd`
+fctSftyDerivSentence5 = [S "Applying assumptions" +:+ makeRef2S assumpSF `S.sAnd`
   makeRef2S assumpSL `sC` S "which state that the" +:+
-  phrase earthqkLoadFctr `andThe` phrase surfLoad `sC`
+  phrase earthqkLoadFctr `S.andThe` phrase surfLoad `sC`
   S "respectively, are zero, allows for further simplification as shown below"]
 
 fctSftyDerivSentence6 :: [Sentence]
 fctSftyDerivSentence6 = [S "The definitions of" +:+ makeRef2S resShearWOGD 
-  `sAnd` makeRef2S mobShearWOGD +:+ S "are present in this equation, and" +:+
-  S "thus can be replaced by" +:+ E (inxi shearRNoIntsl) `sAnd`
+  `S.sAnd` makeRef2S mobShearWOGD +:+ S "are present in this equation, and" +:+
+  S "thus can be replaced by" +:+ E (inxi shearRNoIntsl) `S.sAnd`
   E (inxi shearFNoIntsl) `sC` S "respectively"]
 
 fctSftyDerivSentence7 :: [Sentence]
 fctSftyDerivSentence7 = [S "The" +:+ phrase intShrForce +:+ ch intShrForce +:+
   S "can be expressed in terms of the" +:+ phrase intNormForce +:+
-  ch intNormForce +:+ S "using" +:+ makeRef2S assumpINSFL `sAnd`
+  ch intNormForce +:+ S "using" +:+ makeRef2S assumpINSFL `S.sAnd`
   makeRef2S normShrRGD `sC` S "resulting in"]
 
 fctSftyDerivSentence8 :: [Sentence]
 fctSftyDerivSentence8 = [S "Rearranging yields the following"]
 
 fctSftyDerivSentence9 :: [Sentence]
-fctSftyDerivSentence9 = [S "The definitions for" +:+ ch shrResC `sAnd`
-  ch mobShrC +:+ S "from" +:+ makeRef2S convertFunc1 `sAnd` 
+fctSftyDerivSentence9 = [S "The definitions for" +:+ ch shrResC `S.sAnd`
+  ch mobShrC +:+ S "from" +:+ makeRef2S convertFunc1 `S.sAnd` 
   makeRef2S convertFunc2 +:+ S "simplify the above to", eqN 3]
 
 fctSftyDerivSentence10 :: [Sentence]
@@ -155,7 +155,7 @@ fctSftyDerivEllipsis = S "..."
 
 fctSftyDerivSentence11 :: [Sentence]
 fctSftyDerivSentence11 = [S "Applying", makeRef2S assumpES `sC`
-  S "which says that", E (idx (sy intNormForce) 0) `sAnd`
+  S "which says that", E (idx (sy intNormForce) 0) `S.sAnd`
   E (indxn intNormForce), S "are zero, results in the following special cases:",eqN 8, S "for the first slice"]
 
 fctSftyDerivSentence12 :: [Sentence]
@@ -174,11 +174,11 @@ fctSftyDerivSentence15 = [S "and so on until", eqN 12, S "is obtained from",   e
 
 fctSftyDerivSentence16 :: [Sentence]
 fctSftyDerivSentence16 = [eqN 9, S "can then be substituted into the",
-  phrase leftSide `sOf` eqN 12 `sC` S "resulting in"]
+  phrase leftSide `S.sOf` eqN 12 `sC` S "resulting in"]
 
 fctSftyDerivSentence17 :: [Sentence]
 fctSftyDerivSentence17 = [S "This can be rearranged by multiplying both sides",
-  S "by", E (idx (sy mobShrC) (sy numbSlices - int 1)) `sAnd`
+  S "by", E (idx (sy mobShrC) (sy numbSlices - int 1)) `S.sAnd`
   S "then distributing the multiplication of each", ch mobShrC,
   S "over addition to obtain"]
 
@@ -200,7 +200,7 @@ fctSftyDerivSentence19 = [S "Isolating the", phrase fs, S "on the left-hand",
 
 fctSftyDerivSentence20 :: [Sentence]
 fctSftyDerivSentence20 = [ch fs +:+ S "depends on the unknowns" +:+ 
-  ch normToShear +:+ sParen (makeRef2S nrmShrFor) `sAnd` ch intNormForce +:+.
+  ch normToShear +:+ sParen (makeRef2S nrmShrFor) `S.sAnd` ch intNormForce +:+.
   sParen (makeRef2S intsliceFs)]
 
 fctSftyDerivEqn1 :: Expr
@@ -382,7 +382,7 @@ nrmShrFRel = sy normToShear $= sum1toN (inxi nrmShearNum) / sum1toN (inxi nrmShe
 
 nrmShrFDesc :: Sentence
 nrmShrFDesc = foldlSent [ch nrmShearNum, S "is defined in", 
-  makeRef2S nrmShrForNum `sAnd` ch nrmShearDen, S "is defined in",
+  makeRef2S nrmShrForNum `S.sAnd` ch nrmShearDen, S "is defined in",
   makeRef2S nrmShrForDen]
 
 nrmShrDeriv :: Derivation
@@ -390,9 +390,9 @@ nrmShrDeriv = mkDerivNoHeader (weave [nrmShrDerivationSentences, map E nrmShrDer
   nrmShrDerivSentence5)
 
 nrmShrDerivSentence1 :: [Sentence]
-nrmShrDerivSentence1 = [S "From the", phrase momentEqlGD `sOf`
+nrmShrDerivSentence1 = [S "From the", phrase momentEqlGD `S.sOf`
   makeRef2S momentEqlGD, S "with the primary", phrase assumption, 
-  S "for the Morgenstern-Price method of", makeRef2S assumpINSFL `sAnd`
+  S "for the Morgenstern-Price method of", makeRef2S assumpINSFL `S.sAnd`
   S "associated", phrase definition, makeRef2S normShrRGD `sC` eqN 14, 
   S "can be derived"]
 
@@ -402,8 +402,8 @@ nrmShrDerivSentence2 = [S "Rearranging the", phrase equation, S "in terms of",
 
 nrmShrDerivSentence3 :: [Sentence]
 nrmShrDerivSentence3 = [S "This", phrase equation, S "can be simplified by",
-  S "applying", plural assumption, makeRef2S assumpSF `sAnd` 
-  makeRef2S assumpSL `sC` S "which state that the seismic" `sAnd` 
+  S "applying", plural assumption, makeRef2S assumpSF `S.sAnd` 
+  makeRef2S assumpSL `sC` S "which state that the seismic" `S.sAnd` 
   plural surfLoad `sC` S "respectively" `sC` S "are zero"]
 
 nrmShrDerivSentence4 :: [Sentence]
@@ -478,7 +478,7 @@ nrmShrFNumRel = inxi nrmShearNum $= incompleteCase [case1,case2,case3]
 
 nrmShrFNumDeriv :: Derivation
 nrmShrFNumDeriv = mkDerivNoHeader [foldlSent [S "See", makeRef2S nrmShrFor,
-  S "for the derivation" `sOf` ch nrmShearNum]]
+  S "for the derivation" `S.sOf` ch nrmShearNum]]
 
 nrmShrFNumDesc :: Sentence
 nrmShrFNumDesc = foldlSent [ch baseWthX, S "is defined in", 
@@ -512,11 +512,11 @@ nrmShrFDenRel = inxi nrmShearDen $= incompleteCase [
 
 nrmShrFDenDeriv :: Derivation
 nrmShrFDenDeriv = mkDerivNoHeader [foldlSent [S "See", makeRef2S nrmShrFor,
-  S "for the derivation" `sOf` ch nrmShearDen]]
+  S "for the derivation" `S.sOf` ch nrmShearDen]]
 
 nrmShrFDenDesc :: Sentence
 nrmShrFDenDesc = foldlSent [ch baseWthX, S "is defined in", 
-  makeRef2S lengthB `sAnd` ch scalFunc, S "is defined in",
+  makeRef2S lengthB `S.sAnd` ch scalFunc, S "is defined in",
   makeRef2S ratioVariation]
 
 --------------------------------------------------------------------------
@@ -564,9 +564,9 @@ intrSlcDerivSentence3 = [S "The cases shown in" +:+ makeRef2S intsliceFs +:+
   S "for when" +:+ E (sy index $= 0) `sC` E (sy index $= 1) `sC` S "or" +:+
   E (sy index $= sy numbSlices) +:+ S "are derived by applying" +:+
   makeRef2S assumpES `sC` S "which says that" +:+
-  E (idx (sy intNormForce) 0) `sAnd` E (indxn intNormForce) +:+ 
+  E (idx (sy intNormForce) 0) `S.sAnd` E (indxn intNormForce) +:+ 
   S "are zero" `sC` S "to" +:+. eqN 17 +:+ ch intNormForce +:+
-  S "depends on the unknowns" +:+ ch fs +:+ sParen (makeRef2S fctSfty) `sAnd`
+  S "depends on the unknowns" +:+ ch fs +:+ sParen (makeRef2S fctSfty) `S.sAnd`
   ch normToShear +:+. sParen (makeRef2S nrmShrFor)]
 
 intrSlcDerivationSentences :: [Sentence]
@@ -603,26 +603,26 @@ crtSlpIdRel = sy fsMin $= apply minFunction [sy slopeDist,
 crtSlpIdDesc :: Sentence
 crtSlpIdDesc = foldlSent [S "The", phrase minFunction, S "must enforce the",
   plural constraint, S "on the", phrase crtSlpSrf, S "expressed in" +:+.
-  (makeRef2S assumpSSC `sAnd` makeRef2S (propCorSol [] [])), 
-  S "The sizes of", ch waterDist `sAnd` ch waterHght +:+. 
-  S "must be equal and not 1", S "The", S "sizes of", ch slopeDist `sAnd` 
-  ch slopeHght +:+. (S "must be equal" `sAnd` S "at least 2"),
-  S "The", phrase first `sAnd` S "last", ch waterDist, 
-  plural value, S "must be equal to the", phrase first `sAnd` S "last",
-  ch slopeDist +:+. plural value, ch waterDist `sAnd` ch slopeDist, 
+  (makeRef2S assumpSSC `S.sAnd` makeRef2S (propCorSol [] [])), 
+  S "The sizes of", ch waterDist `S.sAnd` ch waterHght +:+. 
+  S "must be equal and not 1", S "The", S "sizes of", ch slopeDist `S.sAnd` 
+  ch slopeHght +:+. (S "must be equal" `S.sAnd` S "at least 2"),
+  S "The", phrase first `S.sAnd` S "last", ch waterDist, 
+  plural value, S "must be equal to the", phrase first `S.sAnd` S "last",
+  ch slopeDist +:+. plural value, ch waterDist `S.sAnd` ch slopeDist, 
   plural value +:+. S "must be monotonically increasing", ch xMaxExtSlip `sC`
   ch xMaxEtrSlip `sC` ch xMinExtSlip `sC` S "and", ch xMinEtrSlip, S "must be",
   S "between or equal to the minimum and maximum", ch slopeDist +:+. 
   plural value, ch yMaxSlip, S "cannot be below the minimum", ch slopeHght +:+.
   phrase value, ch yMinSlip, S "cannot be above the maximum", ch slopeHght +:+.
-  phrase value, S "All", ch xi, plural value `sOf` ch critCoords, S "must be",
-  S "between" +:+. (ch xMinEtrSlip `sAnd` ch xMaxExtSlip), S "All", ch yi, 
-  plural value `sOf` ch critCoords, S "must not be below" +:+. ch yMinSlip, 
+  phrase value, S "All", ch xi, plural value `S.sOf` ch critCoords, S "must be",
+  S "between" +:+. (ch xMinEtrSlip `S.sAnd` ch xMaxExtSlip), S "All", ch yi, 
+  plural value `S.sOf` ch critCoords, S "must not be below" +:+. ch yMinSlip, 
   S "For any given vertex in", ch critCoords, S "the", ch yi, phrase value, 
   S "must not exceed the", ch slopeHght, phrase value, S "corresponding to the",
-  S "same", ch xi +:+. phrase value, S "The", phrase first `sAnd` S "last",
+  S "same", ch xi +:+. phrase value, S "The", phrase first `S.sAnd` S "last",
   S "vertices in", ch critCoords, S "must each be equal to one of the vertices",
-  S "formed by" +:+. (ch slopeDist `sAnd` ch slopeHght), S "The slope between",
+  S "formed by" +:+. (ch slopeDist `S.sAnd` ch slopeHght), S "The slope between",
   S "consecutive vertices must be always increasing as", ch xi +:+.
   S "increases", S "The internal", phrase angle, S "between consecutive",
   S "vertices in", ch critCoords +:+ S "must not be below 110 degrees"]
@@ -637,9 +637,9 @@ instModIntro = [instModIntro1, instModIntro2]
 instModIntro1, instModIntro2 :: Sentence
 
 instModIntro1 = foldlSent [S "The", plural goal, foldlList Comma List
-  (map makeRef2S goals) `sAre` S "met by the simultaneous" +:+. (phrase solution `sOf`
+  (map makeRef2S goals) `S.sAre` S "met by the simultaneous" +:+. (phrase solution `S.sOf`
   foldlList Comma List (map makeRef2S [fctSfty, nrmShrFor, intsliceFs])), S "The",
-  phrase goal, makeRef2S identifyCritAndFSGS `sIs` S "also contributed to by",
+  phrase goal, makeRef2S identifyCritAndFSGS `S.sIs` S "also contributed to by",
   makeRef2S crtSlpId]
 
 instModIntro2 = foldlSent [S "The", titleize morPrice,
@@ -648,13 +648,13 @@ instModIntro2 = foldlSent [S "The", titleize morPrice,
   S "breaking the assumed", phrase slpSrf,
   S "into a series of vertical", plural slice, S "of" +:+. phrase mass,
   S "Static equilibrium analysis is performed, using two", phrase force,
-  plural equation `sAnd` S "one moment", phrase equation, S "as in" +:+. makeRef2S equilibrium,
+  plural equation `S.sAnd` S "one moment", phrase equation, S "as in" +:+. makeRef2S equilibrium,
   S "The", phrase problem, S "is statically indeterminate with only these 3",
   plural equation, S "and one constitutive", phrase equation,
   sParen $ S "the Mohr Coulomb shear strength of" +:+
   makeRef2S mcShrStrgth, S "so the", phrase assumption, 
-  makeRef2S normShrRGD `sAnd` S "corresponding equation", 
+  makeRef2S normShrRGD `S.sAnd` S "corresponding equation", 
   makeRef2S normShrRGD +:+. S "are used",
   S "The", phrase force, S "equilibrium", plural equation, S "can be modified",
   S "to be expressed only in terms of known", phrase physical, plural value `sC`
-  S "as done in", makeRef2S resShearWOGD `sAnd` makeRef2S mobShearWOGD]
+  S "as done in", makeRef2S resShearWOGD `S.sAnd` makeRef2S mobShearWOGD]

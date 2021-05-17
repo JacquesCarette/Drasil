@@ -4,7 +4,7 @@ module Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater,
 import Language.Drasil
 import Theory.Drasil (GenDefn, gd, gdNoRefs, ModelKinds (OthModel, EquationalModel))
 import Utils.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 
 import Control.Lens ((^.))
 
@@ -79,17 +79,17 @@ htFluxPCMFromWaterExpr :: Expr
 htFluxPCMFromWaterExpr = sy pcmHTC * (apply1 tempW time - apply1 tempPCM time)
 
 newtonLawNote :: UnitalChunk -> ConceptInstance -> ConceptChunk -> Sentence
-newtonLawNote u a c = foldlSent [ch u `sIs` S "found by assuming that",
+newtonLawNote u a c = foldlSent [ch u `S.sIs` S "found by assuming that",
   phrase lawConvCooling, S "applies" +:+. sParen (makeRef2S a), S "This law",
-  sParen (S "defined" `sIn` makeRef2S nwtnCooling) `sIs` S "used on",
-  phrase surface `the_ofThe` phrase c]
+  sParen (S "defined" `S.sIn` makeRef2S nwtnCooling) `S.sIs` S "used on",
+  phrase surface `S.the_ofThe` phrase c]
 
 --------------------------------------
 --  General Definitions Derivation  --
 --------------------------------------
 
 rocTempSimpDeriv :: Sentence -> [ConceptInstance] -> Derivation
-rocTempSimpDeriv s a = mkDerivName (S "simplified" +:+ phrase rOfChng `sOf` phrase temp)
+rocTempSimpDeriv s a = mkDerivName (S "simplified" +:+ phrase rOfChng `S.sOf` phrase temp)
   (weave [rocTempSimpDerivSent s a, map E rocTempSimpDerivEqns])
 
 rocTempSimpDerivSent :: Sentence -> [ConceptInstance] -> [Sentence]
@@ -102,9 +102,9 @@ rocTempDerivInteg = [S "Integrating", makeRef2S consThermE, S "over a",
 
 rocTempDerivGauss :: [Sentence]
 rocTempDerivGauss = [S "Applying", titleize gaussDiv, S "to the first term over",
-  (phrase surface +:+ ch surface `the_ofThe` phrase vol) `sC` S "with",
+  (phrase surface +:+ ch surface `S.the_ofThe` phrase vol) `sC` S "with",
   ch thFluxVect, S "as the", phrase thFluxVect, S "for the",
-  phrase surface `sAnd` ch uNormalVect, S "as a", phrase unit_,
+  phrase surface `S.sAnd` ch uNormalVect, S "as a", phrase unit_,
   S "outward", phrase uNormalVect, S "for a", phrase surface]
 
 rocTempDerivArbVol :: [Sentence]
@@ -122,7 +122,7 @@ rocTempDerivConsFlx s assumps = [S "Where",
 rocTempDerivConsFlxSWHS :: Sentence
 rocTempDerivConsFlxSWHS = foldlSent [S "The integral over the", phrase surface,
   S "could be simplified because the thermal flux is assumed constant over",
-  ch inSA `sAnd` ch outSA `sAnd` E 0, S "on all other" +:+. plural surface,
+  ch inSA `S.sAnd` ch outSA `S.sAnd` E 0, S "on all other" +:+. plural surface,
   S "Outward flux is considered positive"]
 
 rocTempDerivDens :: [Sentence]

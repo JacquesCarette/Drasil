@@ -7,7 +7,7 @@ import Prelude hiding (sin, cos, tan)
 import Language.Drasil
 import Theory.Drasil (GenDefn, gd, ModelKinds (OthModel))
 import Utils.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 
 import Drasil.DocLang.SRS as SRS (physSyst)
 
@@ -98,9 +98,9 @@ nmFEqDesc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
   makeRef2S angleA]
 
 nmFEqDeriv :: Derivation
-nmFEqDeriv = mkDerivNoHeader [foldlSent [atStart normForcEq `sIs`
-  S "derived from the free body diagram" `sOf`
-  (makeRef2S figForceActing `sIn` makeRef2S (SRS.physSyst [] []))]]
+nmFEqDeriv = mkDerivNoHeader [foldlSent [atStart normForcEq `S.sIs`
+  S "derived from the free body diagram" `S.sOf`
+  (makeRef2S figForceActing `S.sIn` makeRef2S (SRS.physSyst [] []))]]
 
 --
 bsShrFEq :: RelationConcept
@@ -120,9 +120,9 @@ bShFEqDesc = foldlSent [S "This equation satisfies", makeRef2S equilibrium +:+.
   makeRef2S angleA]
 
 bShFEqDeriv :: Derivation
-bShFEqDeriv = mkDerivNoHeader [foldlSent [atStart bsShrFEq `sIs`
-  S "derived from the free body diagram" `sOf`
-  (makeRef2S figForceActing `sIn` makeRef2S (SRS.physSyst [] []))]]
+bShFEqDeriv = mkDerivNoHeader [foldlSent [atStart bsShrFEq `S.sIs`
+  S "derived from the free body diagram" `S.sOf`
+  (makeRef2S figForceActing `S.sIn` makeRef2S (SRS.physSyst [] []))]]
 --
 shrResEqn :: Expr
 shrResEqn = inxi nrmFSubWat * tan (inxi fricAngle) + inxi effCohesion *
@@ -142,14 +142,14 @@ resShrDeriv :: Derivation
 resShrDeriv = mkDerivNoHeader [foldlSent [S "Derived by substituting",
   makeRef2S normStressDD, S "and", makeRef2S tangStressDD, S "into the Mohr-Coulomb", phrase shrStress `sC`
   makeRef2S mcShrStrgth `sC` S "and multiplying both sides of the",
-  phrase equation, S "by",  phrase genericA `the_ofThe` phrase slice `sIn`
+  phrase equation, S "by",  phrase genericA `S.the_ofThe` phrase slice `S.sIn`
   S "the shear-" :+: ch zcoord +:+. S "plane", S "Since the", phrase slope,
   S "is assumed to extend infinitely in the", phrase zDir,
   sParen (makeRef2S assumpPSC) `sC` S "the resulting", plural force,
   S "are expressed per", phrase metre, S "in the" +:+. phrase zDir, S "The",
-  getTandS fricAngle `andThe` getTandS effCohesion, S "are not indexed by",
+  getTandS fricAngle `S.andThe` getTandS effCohesion, S "are not indexed by",
   ch index, S "because they are assumed to be isotropic", 
-  sParen (makeRef2S assumpSLI) `andThe` phrase soil, S "is assumed to be",
+  sParen (makeRef2S assumpSLI) `S.andThe` phrase soil, S "is assumed to be",
   S "homogeneous, with", phrase constant, plural soilPrpty, S "throughout",
   sParen (makeRef2S assumpSLH `sC` makeRef2S assumpSP)]]
 
@@ -165,9 +165,9 @@ mobShrDesc :: Sentence
 mobShrDesc = foldlSent [ch baseLngth, S "is defined in", makeRef2S lengthLb]
 
 mobShrDeriv :: Derivation
-mobShrDeriv = mkDerivNoHeader [foldlSent_ [atStart mobShrI `sIs` S "derived by dividing",
-  phrase definition `the_ofThe` ch shrResI, S "from" +:+. makeRef2S resShrGD,
-  S "by", phrase definition `the_ofThe` phrase fs, S "from" +:+.
+mobShrDeriv = mkDerivNoHeader [foldlSent_ [atStart mobShrI `S.sIs` S "derived by dividing",
+  phrase definition `S.the_ofThe` ch shrResI, S "from" +:+. makeRef2S resShrGD,
+  S "by", phrase definition `S.the_ofThe` phrase fs, S "from" +:+.
   makeRef2S factOfSafety, S "The", getTandS fs, S "is not indexed by", ch index,
   S "because it is assumed to be", phrase constant, S "for the entire",
   phrase slpSrf +:+. sParen (makeRef2S assumpFOSL)]]
@@ -186,8 +186,8 @@ effNormFDesc = ch baseHydroForce +:+ S "is defined in" +:+. makeRef2S baseWtrFGD
 effNormFDeriv :: Derivation
 effNormFDeriv = mkDerivNoHeader [foldlSent [
   S "Derived by substituting", makeRef2S normStressDD, S "into", 
-  makeRef2S effStress `sAnd` S "multiplying both sides of the", phrase equation,
-  S "by", phrase genericA `the_ofThe` phrase slice, S "in the shear-" :+: 
+  makeRef2S effStress `S.sAnd` S "multiplying both sides of the", phrase equation,
+  S "by", phrase genericA `S.the_ofThe` phrase slice, S "in the shear-" :+: 
   ch zcoord +:+. S "plane", S "Since the", phrase slope, 
   S "is assumed to extend infinitely in the", phrase zDir,
   sParen (makeRef2S assumpPSC) `sC` S "the resulting", plural force,
@@ -317,9 +317,9 @@ momEqlDerivMomentSentence = [S "Considering one dimension, with",
   S "and replacing the", phrase torque, S "symbol with the", phrase genericM, 
   S "symbol, the", phrase equation, S "simplifies to"]
 
-momEqlDerivNormaliSentence = [S "where", ch rotForce `isThe`
-  phrase rotForce `sAnd` ch momntArm `isThe` phrase momntArm `sC`
-  S "or the distance between the", phrase force `andThe` S "axis about" +:+.
+momEqlDerivNormaliSentence = [S "where", ch rotForce `S.isThe`
+  phrase rotForce `S.sAnd` ch momntArm `S.isThe` phrase momntArm `sC`
+  S "or the distance between the", phrase force `S.andThe` S "axis about" +:+.
   S "which the rotation acts",
   S "To represent the", phrase momentEqlGD `sC` S "the", plural genericM,
   S "from each", phrase force, S "acting on a", phrase slice +:+. 
@@ -332,20 +332,20 @@ momEqlDerivNormaliSentence = [S "where", ch rotForce `isThe`
   S "acting on", phrase slice, S "interface", ch index `sC` S "the", 
   phrase genericM, S "is negative because the", phrase force, 
   S "tends to rotate the", phrase slice, S "in a counterclockwise",
-  S "direction" `sC` S "and the", phrase momntArm `sIs` (S "height" `the_ofThe`
+  S "direction" `sC` S "and the", phrase momntArm `S.sIs` (S "height" `S.the_ofThe`
   phrase force), S "plus the difference in height between the base at", 
-  phrase slice, S "interface", ch index `andThe` S "base at the midpoint of",
+  phrase slice, S "interface", ch index `S.andThe` S "base at the midpoint of",
   phrase slice +:+. ch index, 
   S "Thus, the", phrase genericM, S "is expressed as"]
 
 momEqlDerivNormaliM1Sentence = [S "For the", E (sy index - 1) :+: S "th",
-  phrase slice, S "interface" `sC` S "the", phrase genericM `sIs`
+  phrase slice, S "interface" `sC` S "the", phrase genericM `S.sIs`
   S "similar but in the opposite direction"]
 
 momEqlDerivWateriSentence = [S "Next, the", phrase intrslce, S "normal water",
   phrase force +:+. S "is considered", S "This", phrase force, S "is zero at",
-  S "height" `the_ofThe` phrase waterTable `sC` S "then increases linearly towards",
-  S "base" `the_ofThe` phrase slice, S "due to the increasing water" +:+.
+  S "height" `S.the_ofThe` phrase waterTable `sC` S "then increases linearly towards",
+  S "base" `S.the_ofThe` phrase slice, S "due to the increasing water" +:+.
   phrase pressure, S "For such a triangular distribution, the resultant", 
   phrase force +:+. S "acts at one-third of the height", S "Thus, for the",
   phrase intrslce, S "normal water", phrase force, S "acting on", phrase slice, 
@@ -359,7 +359,7 @@ momEqlDerivSheariSentence = [S "The", phrase intrslce, phrase shearForce,
   S "at", phrase slice, S "interface", ch index, S "tends to rotate in the",
   S "clockwise direction, and the", phrase momntArm, S "is the", phrase len, 
   S "from the", phrase slice, S "edge to the", phrase slice, S "midpoint" `sC`
-  S "equivalent to half of", S "width" `the_ofThe` phrase slice `sC` S "so the",
+  S "equivalent to half of", S "width" `S.the_ofThe` phrase slice `sC` S "so the",
   phrase genericM, S "is"]
 
 momEqlDerivSheariM1Sentence = [S "The", phrase intrslce, phrase shearForce,
@@ -374,7 +374,7 @@ momEqlDerivSeismicIntSentence = [S "Seismic", plural force, S "act over the",
   E (sy earthqkLoadFctr * inxi slcWght), S "where", E (inxi slcWght),
   S "can be expressed as", E (sy genericSpWght * inxi baseWthX * sy yi),
   S "using", makeRef2S weightGD, S "where", E (sy yi), S "is the height of" +:+.
-  S "the segment under consideration", S "The corresponding", phrase momntArm `sIs`
+  S "the segment under consideration", S "The corresponding", phrase momntArm `S.sIs`
   ch yi `sC` S "the height from the base of the", phrase slice +:+.
   S "to the segment under consideration", S "In reality, the", plural force, 
   S "near the surface of the", phrase soil, S "mass are slightly different",
@@ -398,21 +398,21 @@ momEqlDerivHydroSentence = [S "The surface hydrostatic", phrase force,
   S "Thus, the vertical", phrase component, S "of the", phrase force,
   S "acts directly towards the point of rotation, and has a",
   phrase genericM +:+. S "of zero", S "The horizontal", phrase component, 
-  S "of the", phrase force, S "tends to rotate in a clockwise direction" `sAnd` 
+  S "of the", phrase force, S "tends to rotate in a clockwise direction" `S.sAnd` 
   S "the", phrase momntArm, S "is the entire height of the" +:+. phrase slice,
   S "Thus, the", phrase genericM, S "is"]
 
 momEqlDerivExtSentence = [S "The external", phrase force, S "again acts into",
-  S "midpoint" `the_ofThe` phrase slice, S "surface, so the vertical", 
+  S "midpoint" `S.the_ofThe` phrase slice, S "surface, so the vertical", 
   phrase component, S "does not contribute to the", phrase genericM `sC`
   S "and the", phrase momntArm, S "is again the entire height of the" +:+.
   phrase slice, S "The", phrase genericM, S "is"]
 
-momEqlDerivFinalSentence = [S "The base hydrostatic", phrase force `sAnd`
+momEqlDerivFinalSentence = [S "The base hydrostatic", phrase force `S.sAnd`
   phrase slice, phrase weight, S "both act in the direction of the point of",
   S "rotation", sParen (makeRef2S assumpHFSM) `sC` S "therefore both have",
   plural genericM +:+. S "of zero", S "Thus, all of the", plural genericM +:+.
-  S "have been determined", S "The", phrase momentEqlGD `sIs`
+  S "have been determined", S "The", phrase momentEqlGD `S.sIs`
   S "then represented by the sum of all", plural genericM]
 
 momEqlDerivTorqueEqn = sy torque $= cross (sy displacement) (sy force)
@@ -479,7 +479,7 @@ sliceWghtNotes :: Sentence
 sliceWghtNotes = foldlSent [S "This", phrase equation, S "is based on the", 
   phrase assumption, S "that the surface and the base of a", phrase slice, 
   S "are straight lines" +:+. sParen (makeRef2S assumpSBSBISL), S "The", 
-  getTandS dryWeight `andThe` getTandS satWeight, S "are not indexed by", 
+  getTandS dryWeight `S.andThe` getTandS satWeight, S "are not indexed by", 
   ch index, S "because the", phrase soil, S "is assumed to be homogeneous" `sC`
   S "with", phrase constant, plural soilPrpty, S "throughout" +:+. 
   sParen (makeRef2S assumpSLH), ch baseWthX +:+ S "is defined in",
@@ -511,21 +511,21 @@ sliceWghtDerivSatCaseWeightEqn, sliceWghtDerivSatCaseSliceEqn,
 
 sliceWghtDerivSatCaseIntroSentence = [S "For the case where the", 
   phrase waterTable, S "is above the", phrase slopeSrf `sC` S "the", 
-  phrase slcWght, S "come from", phrase weight `the_ofThe` S "saturated" +:+. 
+  phrase slcWght, S "come from", phrase weight `S.the_ofThe` S "saturated" +:+. 
   phrase soil,
   S "Substituting", plural value, S "for saturated", phrase soil, S "into the",
   phrase equation, S "for", phrase weight, S "from", makeRef2S weightGD, 
   S "yields"] 
 
 sliceWghtDerivSatCase2DSentence = [S "Due to", makeRef2S assumpPSC `sC` 
-  S "only two dimensions are considered, so the", plural area `sOf` 
+  S "only two dimensions are considered, so the", plural area `S.sOf` 
   S "saturated", phrase soil, S "are considered instead of the" +:+. 
   phrase satVol, 
   S "Any given", phrase slice +:+. S "has a trapezoidal shape", S "The", 
   phrase area, S "of a trapezoid is the average of",
-  plural len `the_ofThe` S "parallel sides multiplied by the", phrase len +:+.
+  plural len `S.the_ofThe` S "parallel sides multiplied by the", phrase len +:+.
   S "between the parallel sides", S "The parallel sides in this case are the",
-  phrase intrslce, S "edges and the", phrase len, S "between them" `isThe` 
+  phrase intrslce, S "edges and the", phrase len, S "between them" `S.isThe` 
   S "width of the" +:+. phrase slice, S "Thus" `sC` S "the", phrase slcWght, 
   S "are defined as"]
 
@@ -536,13 +536,13 @@ sliceWghtDerivSatCaseSliceEqn = inxi slcWght $= inxi baseWthX * 0.5 *
 
 sliceWghtDerivDryCaseIntroSentence = [S "For the case where the", 
   phrase waterTable, S "is below the", phrase slpSrf `sC` S "the", 
-  phrase slcWght, S "come from", phrase weight `the_ofThe` S "dry" +:+. phrase soil,
+  phrase slcWght, S "come from", phrase weight `S.the_ofThe` S "dry" +:+. phrase soil,
   S "Substituting", plural value, S "for dry", phrase soil, S "into the",
   phrase equation, S "for", phrase weight, S "from", makeRef2S weightGD, 
   S "yields"] 
 
 sliceWghtDerivDryCase2DSentence = [makeRef2S assumpPSC, S "again allows for",
-  phrase twoD, phrase analysis, S "so the", plural area `sOf` S "dry", 
+  phrase twoD, phrase analysis, S "so the", plural area `S.sOf` S "dry", 
   phrase soil, S "are considered instead of the" +:+. phrase dryVol, 
   S "The trapezoidal", phrase slice, 
   S "shape is the same as in the previous case" `sC` S "so the", phrase slcWght,
@@ -554,27 +554,27 @@ sliceWghtDerivDryCaseSliceEqn = inxi slcWght $= inxi baseWthX * 0.5 *
   ((inxi slopeHght - inxi slipHght) + (inxiM1 slopeHght - inxiM1 slipHght)) * sy dryWeight
 
 sliceWghtDerivMixCaseIntroSentence = [S "For the case where the", 
-  phrase waterTable, S "is between the", phrase slopeSrf `sAnd` 
+  phrase waterTable, S "is between the", phrase slopeSrf `S.sAnd` 
   phrase slpSrf `sC` S "the", phrase slcWght, S "are the sums of", 
-  plural weight `the_ofThe` S "dry portions"  `sAnd` plural weight `ofThe`
+  plural weight `S.the_ofThe` S "dry portions"  `S.sAnd` plural weight `S.ofThe`
   S "saturated portions of the" +:+. phrase soil,
   S "Substituting", plural value, S "for dry and saturated", phrase soil, 
   S "into the", phrase equation, S "for", phrase weight, S "from", 
   makeRef2S weightGD, S "and adding them together yields"] 
 
 sliceWghtDerivMixCase2DSentence = [makeRef2S assumpPSC, S "again allows for",
-  phrase twoD, phrase analysis, S "so the", plural area `sOf` S "dry", 
-  phrase soil `sAnd` plural area `sOf` S "saturated", phrase soil, 
-  S "are considered instead of the" +:+. (phrase dryVol `sAnd` phrase satVol), 
+  phrase twoD, phrase analysis, S "so the", plural area `S.sOf` S "dry", 
+  phrase soil `S.sAnd` plural area `S.sOf` S "saturated", phrase soil, 
+  S "are considered instead of the" +:+. (phrase dryVol `S.sAnd` phrase satVol), 
   S "The", phrase waterTable, S "is assumed to only intersect a", phrase slice,
   S "surface or base at a", phrase slice, S "edge", 
   sParen (makeRef2S assumpWISE `sC` makeRef2S assumpWIBE) `sC` S "so the" +:+. 
   S "dry and saturated portions each have trapezoidal shape", S "For the dry",
   S "portion, the parallel sides of the trapezoid are the", plural len,
-  S "between the", phrase slopeSrf `sAnd` phrase waterTable, S "at the",
+  S "between the", phrase slopeSrf `S.sAnd` phrase waterTable, S "at the",
   phrase slice +:+. S "edges", S "For the saturated portion, the parallel",
   S "sides of the trapezoid are the", plural len, S "between the", 
-  phrase waterTable `sAnd` phrase slpSrf, S "at the", phrase slice +:+. 
+  phrase waterTable `S.sAnd` phrase slpSrf, S "at the", phrase slice +:+. 
   S "edges", S "Thus" `sC` S "the", phrase slcWght,  S "are defined as"]
 
 sliceWghtDerivMixCaseWeightEqn = inxi slcWght $= inxi dryVol * sy dryWeight + 
@@ -635,12 +635,12 @@ bsWtrFDerivHeightSentence = [S "The", phrase specWeight, S "in this case is",
   S "the" +:+. getTandS waterWeight,
   S "The", phrase height, S "in this case is the height from the", phrase slice,
   S "base to the" +:+. phrase waterTable,
-  S "This", phrase height, S "is measured from", S "midpoint" `the_ofThe` 
+  S "This", phrase height, S "is measured from", S "midpoint" `S.the_ofThe` 
   phrase slice, S "because the resultant hydrostatic", phrase force,
   S "is assumed to act at the", phrase slice, S "midpoint" +:+.
   sParen (makeRef2S assumpHFSM),
   S "The", phrase height, S "at the midpoint is the average of the", 
-  phrase height, S "at", phrase slice, S "interface", ch index `andThe`
+  phrase height, S "at", phrase slice, S "interface", ch index `S.andThe`
   phrase height, S "at", phrase slice, S "interface", E (sy index - 1)]
 
 bsWtrFDeriv2DSentence = [S "Due to", makeRef2S assumpPSC `sC` 
@@ -652,14 +652,14 @@ bsWtrFDeriv2DSentence = [S "Due to", makeRef2S assumpPSC `sC`
   S "assuming the", phrase waterTable, S "does not intersect a", phrase slice,
   S "base except at a", phrase slice, S "edge" +:+. 
   sParen (makeRef2S assumpWIBE), 
-  S "Thus, in the case where", S "height" `the_ofThe` phrase waterTable, 
-  S "is above", S "height" `the_ofThe` phrase slpSrf `sC` S "the",
+  S "Thus, in the case where", S "height" `S.the_ofThe` phrase waterTable, 
+  S "is above", S "height" `S.the_ofThe` phrase slpSrf `sC` S "the",
   phrase baseHydroForce, S "are defined as"]
 
-bsWtrFDerivEndSentence = [foldlSent [S "This", phrase equation `sIs`
+bsWtrFDerivEndSentence = [foldlSent [S "This", phrase equation `S.sIs`
   S "the non-zero case of" +:+. makeRef2S baseWtrFGD,
-  S "The zero case is when", S "height" `the_ofThe` phrase waterTable,
-  S "is below", S "height" `the_ofThe` phrase slpSrf `sC` S "so there is no",
+  S "The zero case is when", S "height" `S.the_ofThe` phrase waterTable,
+  S "is below", S "height" `S.the_ofThe` phrase slpSrf `sC` S "so there is no",
   S "hydrostatic", phrase force]]
 
 bsWtrFDerivWeightEqn = sy pressure $= sy specWeight * sy height
@@ -718,12 +718,12 @@ srfWtrFDerivHeightSentence = [S "The", phrase specWeight, S "in this case is",
   S "the" +:+. getTandS waterWeight,
   S "The", phrase height, S "in this case is the height from the", phrase slice,
   S "surface to the" +:+. phrase waterTable,
-  S "This", phrase height, S "is measured from", S "midpoint" `the_ofThe` 
+  S "This", phrase height, S "is measured from", S "midpoint" `S.the_ofThe` 
   phrase slice, S "because the resultant hydrostatic", phrase force,
   S "is assumed to act at the", phrase slice, S "midpoint" +:+.
   sParen (makeRef2S assumpHFSM),
   S "The", phrase height, S "at the midpoint is the average of the", 
-  phrase height, S "at", phrase slice, S "interface", ch index `andThe`
+  phrase height, S "at", phrase slice, S "interface", ch index `S.andThe`
   phrase height, S "at", phrase slice, S "interface", E (sy index - 1)]
 
 srfWtrFDeriv2DSentence = [S "Due to", makeRef2S assumpPSC `sC` 
@@ -735,14 +735,14 @@ srfWtrFDeriv2DSentence = [S "Due to", makeRef2S assumpPSC `sC`
   S "assuming the", phrase waterTable, S "does not intersect a", phrase slice,
   S "surface except at a", phrase slice, S "edge" +:+. 
   sParen (makeRef2S assumpWISE), 
-  S "Thus, in the case where", S "height" `the_ofThe` phrase waterTable, 
-  S "is above", S "height" `the_ofThe` phrase slopeSrf `sC` S "the",
+  S "Thus, in the case where", S "height" `S.the_ofThe` phrase waterTable, 
+  S "is above", S "height" `S.the_ofThe` phrase slopeSrf `sC` S "the",
   phrase surfHydroForce, S "are defined as"]
 
-srfWtrFDerivEndSentence = [foldlSent [S "This" +:+ phrase equation `sIs`
+srfWtrFDerivEndSentence = [foldlSent [S "This" +:+ phrase equation `S.sIs`
   S "the non-zero case of" +:+. makeRef2S srfWtrFGD,
-  S "The zero case is when", S "height" `the_ofThe` phrase waterTable,
-  S "is below", S "height" `the_ofThe` phrase slopeSrf `sC` S "so there is no",
+  S "The zero case is when", S "height" `S.the_ofThe` phrase waterTable,
+  S "is below", S "height" `S.the_ofThe` phrase slopeSrf `sC` S "so there is no",
   S "hydrostatic", phrase force]]
 
 srfWtrFDerivWeightEqn = sy pressure $= sy specWeight * sy height

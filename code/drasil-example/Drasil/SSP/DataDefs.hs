@@ -7,7 +7,7 @@ import Prelude hiding (cos, sin, tan)
 import Language.Drasil
 import Theory.Drasil (DataDefinition, dd)
 import Utils.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (assumption)
 import Data.Drasil.Concepts.Math (equation)
@@ -118,7 +118,7 @@ lengthLbEqn = inxi baseWthX * sec (inxi baseAngle)
 
 lengthLbNotes :: Sentence
 lengthLbNotes = foldlSent [ch baseWthX, S "is defined in", 
-  makeRef2S lengthB `sAnd` ch baseAngle, S "is defined in", makeRef2S angleA]
+  makeRef2S lengthB `S.sAnd` ch baseAngle, S "is defined in", makeRef2S angleA]
 
 --DD lengthLs: surface lengths of slices
 
@@ -135,7 +135,7 @@ lengthLsEqn = inxi baseWthX * sec (inxi surfAngle)
 
 lengthLsNotes :: Sentence
 lengthLsNotes = foldlSent [ch baseWthX, S "is defined in", 
-  makeRef2S lengthB `sAnd` ch surfAngle, S "is defined in", makeRef2S angleB]
+  makeRef2S lengthB `S.sAnd` ch surfAngle, S "is defined in", makeRef2S angleB]
   
 
 --DD slcHeight: y-direction heights of slices
@@ -152,10 +152,10 @@ slcHeightEqn = 0.5 * (sy sliceHghtRight + sy sliceHghtLeft)
 
 slcHeightNotes :: [Sentence]
 slcHeightNotes = [S "This" +:+ phrase equation +:+ S "is based on the" +:+ 
-  phrase assumption +:+ S "that the surface" `sAnd` S "base of a slice" +:+ 
+  phrase assumption +:+ S "that the surface" `S.sAnd` S "base of a slice" +:+ 
   S "are straight lines" +:+. sParen (makeRef2S assumpSBSBISL), 
-  ch sliceHghtRight `sAnd` ch sliceHghtLeft +:+ S "are defined in" +:+
-  makeRef2S sliceHghtRightDD `sAnd` makeRef2S sliceHghtLeftDD `sC` 
+  ch sliceHghtRight `S.sAnd` ch sliceHghtLeft +:+ S "are defined in" +:+
+  makeRef2S sliceHghtRightDD `S.sAnd` makeRef2S sliceHghtLeftDD `sC` 
   (S "respectively" !.)]
 
 --DD normStress: total normal stress
@@ -212,7 +212,7 @@ convertFunc1Eqn = (sy normToShear * inxi scalFunc *
   cos (inxi baseAngle)) * sy fs
 
 convertFunc1Notes :: Sentence
-convertFunc1Notes = foldlSent [ch scalFunc, S "is defined in", makeRef2S ratioVariation `sAnd` ch baseAngle, S "is defined in", makeRef2S angleA]
+convertFunc1Notes = foldlSent [ch scalFunc, S "is defined in", makeRef2S ratioVariation `S.sAnd` ch baseAngle, S "is defined in", makeRef2S angleA]
 
 --DD convertFunc2: second function for incorporating interslice forces into shear force
 
@@ -321,7 +321,7 @@ resShr_deriv_sentences_ssp_s1 = [S "The", phrase shrResI, S "of a slice is",
 
 resShr_deriv_sentences_ssp_s2 :: [Sentence]
 resShr_deriv_sentences_ssp_s2 = [plural value `the_ofThe'` S "interslice forces",
-  ch intNormForce `sAnd` ch intShrForce, S "in the", phrase equation,
+  ch intNormForce `S.sAnd` ch intShrForce, S "in the", phrase equation,
   S "are unknown, while the other", plural value,
   S "are found from the physical force", plural definition, S "of",
   makeRef2S sliceWght, S "to" +:+. makeRef2S lengthLs,
@@ -391,7 +391,7 @@ resShrDerivation = [
   inxiM1 intShrForce + inxi intShrForce + y) - inxi baseHydroForce,
   
   foldlSP [plural value `the_ofThe'` S "interslice forces",
-  ch intNormForce `sAnd` ch intShrForce, S "in the", phrase equation,
+  ch intNormForce `S.sAnd` ch intShrForce, S "in the", phrase equation,
   S "are unknown, while the other", plural value,
   S "are found from the physical force", plural definition, S "of",
   makeRef2S sliceWght, S "to" +:+. makeRef2S lengthLs,
@@ -490,7 +490,7 @@ mobShrDerivation = [
   (inxi watrForceDif) + (inxi surfHydroForce) * sin (inxi surfAngle) +
   (inxi surfLoad) * (sin (inxi impLoadAngle))) * (cos (inxi baseAngle)),
   
-  foldlSP [S "The", plural value, S "of", ch shearRNoIntsl `sAnd`
+  foldlSP [S "The", plural value, S "of", ch shearRNoIntsl `S.sAnd`
   ch shearFNoIntsl, S "are now defined completely in terms of the",
   S "known force property", plural value, S "of", makeRef2S sliceWght, S "to", 
   makeRef2S lengthLs]

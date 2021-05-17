@@ -5,7 +5,7 @@ import Language.Drasil
 import Control.Lens ((^.))
 import Theory.Drasil (TheoryModel, tm, ModelKinds(OthModel, EquationalModel))
 import Utils.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (system)
 import Data.Drasil.Concepts.Math (equation, rate, rOfChng)
@@ -56,9 +56,9 @@ consThermENotes :: [Sentence]
 consThermENotes = map foldlSent [
   [S "The above", phrase equation, S "gives the", phrase lawConsEnergy,
    S "for", phrase transient, phrase heatTrans, S "in a given material"],
-  [S "For this", phrase equation, S "to apply" `sC` S "other forms" `sOf`
+  [S "For this", phrase equation, S "to apply" `sC` S "other forms" `S.sOf`
    phrase energy `sC` S "such as", phrase mechEnergy `sC` S "are assumed",
-   S "to be negligible" `inThe` phrase system, sParen (makeRef2S assumpTEO)]]
+   S "to be negligible" `S.inThe` phrase system, sParen (makeRef2S assumpTEO)]]
 
 -------------------------
 -- Theoretical Model 2 --
@@ -108,7 +108,7 @@ sensHtEdesc :: Sentence
 sensHtEdesc = foldlSent [
   atStart sensHeat :+: S "ing occurs as long as the material does not reach a",
   phrase temp, S "where a", phrase phaseChange, S "occurs. A", phrase phaseChange,
-  S "occurs if" +:+. (E (sy temp $= sy boilPt) `sOr` E (sy temp $= sy meltPt)),
+  S "occurs if" +:+. (E (sy temp $= sy boilPt) `S.sOr` E (sy temp $= sy meltPt)),
   S "If this is the case" `sC` S "refer to", makeRef2S latentHtE]
 
 --How to have new lines in the description?
@@ -142,13 +142,13 @@ latHtESrc = makeURI "latHtESrc" "http://en.wikipedia.org/wiki/Latent_heat" $
 
 latentHtENotes :: [Sentence]
 latentHtENotes = map foldlSent [
-  [ch latentHeat `isThe` S "change" `sIn` phrase thermalEnergy,
+  [ch latentHeat `S.isThe` S "change" `S.sIn` phrase thermalEnergy,
    sParen (phrase latentHeat +:+ phrase energy)],
-  [E latHtEEqn `isThe` phrase rOfChng `sOf` ch latentHeat,
+  [E latHtEEqn `S.isThe` phrase rOfChng `S.sOf` ch latentHeat,
    S "with respect to", phrase time, ch tau],
-  [ch time `isThe` phrase time, S "elapsed" `sC` S "as long as the",
+  [ch time `S.isThe` phrase time, S "elapsed" `sC` S "as long as the",
    phrase phaseChange, S "is not complete"],
-  [S "status" `the_ofThe'` phrase phaseChange, S "depends on the",
+  [S "status" `S.the_ofThe'` phrase phaseChange, S "depends on the",
    phrase meltFrac, sParen (S "from" +:+ makeRef2S ddMeltFrac)],
   [atStart latentHeat :+: S "ing stops when all material has changed to the new phase"]]
 
@@ -171,9 +171,9 @@ nwtnCoolingEqn = apply1 htFlux time $= sy htTransCoeff * apply1 deltaT time
 nwtnCoolingNotes :: [Sentence]
 nwtnCoolingNotes = map foldlSent [
   [atStart lawConvCooling +:+. S "describes convective cooling from a surface" +:
-   S "The law is stated as", S "the", phrase rate `sOf` S "heat loss from a body" `sIs`
+   S "The law is stated as", S "the", phrase rate `S.sOf` S "heat loss from a body" `S.sIs`
    S "proportional to the difference in", plural temp, S "between the body and its surroundings"],
-  [ch htTransCoeff, S "is assumed to be independent" `sOf` ch temp,
+  [ch htTransCoeff, S "is assumed to be independent" `S.sOf` ch temp,
    sParen (S "from" +:+ makeRef2S assumpHTCC)],
-  [E (apply1 deltaT time $= apply1 temp time - apply1 tempEnv time) `isThe`
+  [E (apply1 deltaT time $= apply1 temp time - apply1 tempEnv time) `S.isThe`
    S "time-dependant thermal gradient between the environment and the object"]]

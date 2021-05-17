@@ -1,7 +1,7 @@
 module Language.Drasil.Printing.Import (space, expr, symbol, spec,
   makeDocument) where
 
-import Language.Drasil hiding (sec, symbol)
+import Language.Drasil hiding (neg, sec, symbol)
 import Language.Drasil.Development (UFuncB(..), UFuncVec(..)
   , ArithBinOp(..), BoolBinOp(..), EqBinOp(..), LABinOp(..)
   , OrdBinOp(..), VVNBinOp(..), VVVBinOp(..)
@@ -52,13 +52,13 @@ p_space (DiscreteS a)  = "{" ++ (concat $ intersperse ", " a) ++ "}"
 parens :: P.Expr -> P.Expr
 parens = P.Fenced P.Paren P.Paren
 
-mulExpr ::  [Expr] -> PrintingInformation -> [P.Expr]
-mulExpr (hd1:hd2:tl) sm = case (hd1, hd2) of
-  (a, Int _) ->  [expr' sm (precA Mul) a , P.MO P.Dot] ++ mulExpr (hd2 : tl) sm
-  (a, Dbl _) ->  [expr' sm (precA Mul) a , P.MO P.Dot] ++ mulExpr (hd2 : tl) sm
-  (a, _)     ->  [expr' sm (precA Mul) a , P.MO P.Mul] ++ mulExpr (hd2 : tl) sm
-mulExpr [hd]     sm     = [expr' sm (precA Mul) hd]
-mulExpr []       sm     = [expr' sm (precA Mul) (Int 1)]
+mulExpr ::  [Expr] -> AssocArithOper -> PrintingInformation -> [P.Expr]
+mulExpr (hd1:hd2:tl) o sm = case (hd1, hd2) of
+  (a, Int _) ->  [expr' sm (precA o) a , P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
+  (a, Dbl _) ->  [expr' sm (precA o) a , P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
+  (a, _)     ->  [expr' sm (precA o) a , P.MO P.Mul] ++ mulExpr (hd2 : tl) o sm
+mulExpr [hd]         o sm = [expr' sm (precA o) hd]
+mulExpr []           o sm = [expr' sm (precA o) (Int 1)]
 
 --This function takes the digits form `floatToDigits` function
 -- and decimal point position and a counter and exponent
@@ -108,8 +108,10 @@ expr (Perc a b)               sm = P.Row [expr (Dbl val) sm, P.MO P.Perc]
     val = fromIntegral a / (10 ** fromIntegral (b - 2))
 expr (AssocB And l)           sm = assocExpr P.And (precB And) l sm
 expr (AssocB Or l)            sm = assocExpr P.Or (precB Or) l sm
-expr (AssocA Add l)           sm = assocExpr P.Add (precA Add) l sm
-expr (AssocA Mul l)           sm = P.Row $ mulExpr l sm
+expr (AssocA AddI l)          sm = assocExpr P.Add (precA AddI) l sm
+expr (AssocA AddRe l)         sm = assocExpr P.Add (precA AddRe) l sm
+expr (AssocA MulI l)          sm = P.Row $ mulExpr l MulI sm
+expr (AssocA MulRe l)         sm = P.Row $ mulExpr l MulRe sm
 expr (Deriv Part a b)         sm =
   P.Div (P.Row [P.Spc P.Thin, P.Spec Partial, expr a sm])
         (P.Row [P.Spc P.Thin, P.Spec Partial,
@@ -200,7 +202,8 @@ neg' :: Expr -> Bool
 neg' (Dbl     _)            = True
 neg' (Int     _)            = True
 neg' Operator{}             = True
-neg' (AssocA Mul _)         = True
+neg' (AssocA MulI _)        = True
+neg' (AssocA MulRe _)       = True
 neg' (LABinaryOp Index _ _) = True
 neg' (UnaryOp _ _)          = True
 neg' (UnaryOpB _ _)         = True
@@ -235,24 +238,33 @@ call sm f ps ns = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f,
   zipWith (\n a -> P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) n,
   P.MO P.Eq, expr a sm]) (map fst ns) (map snd ns)]
 
--- | Helper function for translating 'EOperator's
-eop :: PrintingInformation -> AssocArithOper -> DomainDesc Expr Expr -> Expr -> P.Expr
-eop sm Mul (BoundedDD v Discrete l h) e =
-  P.Row [P.MO P.Prod, P.Sub (P.Row [symbol v, P.MO P.Eq, expr l sm]), P.Sup (expr h sm),
-         P.Row [expr e sm]]
-eop sm Mul (AllDD _ Discrete) e = P.Row [P.MO P.Prod, P.Row[expr e sm]]
-eop _  Mul (AllDD _ Continuous) _ = error "Printing/Import.hs Product-Integral not implemented."
-eop _  Mul (BoundedDD _ Continuous _ _) _ = error "Printing/Import.hs Product-Integral not implemented."
-eop sm Add (BoundedDD v Continuous l h) e =
+eopAdds :: PrintingInformation -> DomainDesc Expr Expr -> Expr -> P.Expr
+eopAdds sm (BoundedDD v Continuous l h) e =
   P.Row [P.MO P.Inte, P.Sub (expr l sm), P.Sup (expr h sm),
          P.Row [expr e sm], P.Spc P.Thin, P.Ident "d", symbol v]
-eop sm Add (AllDD v Continuous) e =
+eopAdds sm (AllDD v Continuous) e =
   P.Row [P.MO P.Inte, P.Sub (symbol v), P.Row [expr e sm], P.Spc P.Thin,
          P.Ident "d", symbol v]
-eop sm Add (BoundedDD v Discrete l h) e =
+eopAdds sm (BoundedDD v Discrete l h) e =
   P.Row [P.MO P.Summ, P.Sub (P.Row [symbol v, P.MO P.Eq, expr l sm]), P.Sup (expr h sm),
          P.Row [expr e sm]]
-eop sm Add (AllDD _ Discrete) e = P.Row [P.MO P.Summ, P.Row [expr e sm]]
+eopAdds sm (AllDD _ Discrete) e = P.Row [P.MO P.Summ, P.Row [expr e sm]]
+
+eopMuls :: PrintingInformation -> DomainDesc Expr Expr -> Expr -> P.Expr
+eopMuls sm (BoundedDD v Discrete l h) e =
+  P.Row [P.MO P.Prod, P.Sub (P.Row [symbol v, P.MO P.Eq, expr l sm]), P.Sup (expr h sm),
+         P.Row [expr e sm]]
+eopMuls sm (AllDD _ Discrete) e = P.Row [P.MO P.Prod, P.Row [expr e sm]]
+eopMuls _ (AllDD _ Continuous) _ = error "Printing/Import.hs Product-Integral not implemented."
+eopMuls _ (BoundedDD _ Continuous _ _) _ = error "Printing/Import.hs Product-Integral not implemented."
+
+
+-- | Helper function for translating 'EOperator's
+eop :: PrintingInformation -> AssocArithOper -> DomainDesc Expr Expr -> Expr -> P.Expr
+eop sm AddI = eopAdds sm
+eop sm AddRe = eopAdds sm
+eop sm MulI = eopMuls sm
+eop sm MulRe = eopMuls sm
 
 symbol :: Symbol -> P.Expr
 symbol (Variable s) = P.Ident s
@@ -281,8 +293,10 @@ withParens prI a b = P.Row [parens (expr a prI), P.Sup (expr b prI)]
 
 -- | Helper for properly rendering exponents
 pow :: PrintingInformation -> Expr -> Expr -> P.Expr
-pow prI a@(AssocA Add _)           b = withParens prI a b
-pow prI a@(AssocA Mul _)           b = withParens prI a b
+pow prI a@(AssocA AddI _)          b = withParens prI a b
+pow prI a@(AssocA AddRe _)         b = withParens prI a b
+pow prI a@(AssocA MulI _)          b = withParens prI a b
+pow prI a@(AssocA MulRe _)         b = withParens prI a b
 pow prI a@(ArithBinaryOp Subt _ _) b = withParens prI a b
 pow prI a@(ArithBinaryOp Frac _ _) b = withParens prI a b
 pow prI a@(ArithBinaryOp Pow _ _)  b = withParens prI a b

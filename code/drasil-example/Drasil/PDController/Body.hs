@@ -184,7 +184,7 @@ pidODEInfo
       (sy qdSimTime)
       (dbl 0)
       [idx (sy opProcessVariable) (int 1),
-      - (1 + sy qdDerivGain) * idx (sy opProcessVariable) (int 1)
-      - (20 + sy qdPropGain) * idx (sy opProcessVariable) (int 0)
-      + sy qdSetPointTD * sy qdPropGain]
+      neg (dbl 1 `addRe` sy qdDerivGain) `mulRe` idx (sy opProcessVariable) (int 1)
+      $- (dbl 20 `addRe` sy qdPropGain) `mulRe` idx (sy opProcessVariable) (int 0)
+      `addRe` sy qdSetPointTD `mulRe` sy qdPropGain]
       pidODEOptions

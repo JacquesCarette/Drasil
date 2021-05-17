@@ -5,10 +5,18 @@ import Prelude hiding (sqrt)
 import Control.Lens ((^.))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Expr (Expr(..), Relation, DerivType(..), ($^), AssocArithOper(..),
-  LABinOp(..), VVVBinOp(..), UFunc(..), UFuncB(..), UFuncVec(..), Completeness(..))
+  LABinOp(..), VVVBinOp(..), UFunc(..), UFuncB(..), UFuncVec(..), Completeness(..), addRe)
 import Language.Drasil.Space (Space, RTopology(..), DomainDesc(..), RealInterval)
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
 import Language.Drasil.Classes (IsArgumentName)
+
+-- | Smart constructor for taking the absolute value of an  expression
+abs_ :: Expr -> Expr
+abs_ = UnaryOp Abs
+
+-- | Smart constructor for negating an expression
+neg :: Expr -> Expr 
+neg = UnaryOp Neg
 
 -- | Smart constructor to take the log of an expression
 log :: Expr -> Expr
@@ -101,14 +109,15 @@ isin = IsIn
 defint, defsum, defprod :: Symbol -> Expr -> Expr -> Expr -> Expr
 intAll, sumAll, prodAll :: Symbol -> Expr -> Expr
 
-defint v low high = Operator Add (BoundedDD v Continuous low high)
-intAll v = Operator Add (AllDD v Continuous)
+defint v low high = Operator AddRe (BoundedDD v Continuous low high)
+intAll v = Operator AddRe (AllDD v Continuous)
 
-defsum v low high = Operator Add (BoundedDD v Discrete low high)
-sumAll v = Operator Add (AllDD v Discrete)
+defsum v low high = Operator AddRe (BoundedDD v Discrete low high)
+sumAll v = Operator AddRe (AllDD v Discrete)
 
-defprod v low high = Operator Mul (BoundedDD v Discrete low high)
-prodAll v = Operator Mul (AllDD v Discrete)
+defprod v low high = Operator MulRe (BoundedDD v Discrete low high)
+prodAll v = Operator MulRe (AllDD v Discrete)
+-- TODO: Above only does for Reals
 
 -- | Smart constructor for 'real interval' membership
 realInterval :: HasUID c => c -> RealInterval Expr Expr -> Expr
@@ -116,7 +125,7 @@ realInterval c = RealI (c ^. uid)
 
 -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares
 euclidean :: [Expr] -> Expr
-euclidean = sqrt . sum' . map square
+euclidean = sqrt . foldr1 addRe . map square
 
 {-# ANN sum' "HLint: ignore Use sum" #-}
 -- | Used by 'euclidean' function (in place of 'sum') to fix representation of computation
@@ -136,7 +145,7 @@ incompleteCase :: [(Expr,Relation)] -> Expr
 incompleteCase = Case Incomplete
 
 square :: Expr -> Expr
-square x = x $^ 2
+square x = x $^ Int 2
 
 -- some matrix helper functions
 m2x2 :: Expr -> Expr -> Expr -> Expr -> Expr

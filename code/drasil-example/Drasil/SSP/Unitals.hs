@@ -149,7 +149,7 @@ effCohesion = uqc "c'" (cn "effective cohesion")
 fricAngle = uqc "varphi'" (cn "effective angle of friction")
   ("the angle of inclination with respect to the horizontal axis of " ++
   "the Mohr-Coulomb shear resistance line") --http://www.geotechdata.info
-  (prime vPhi) degree Real [physc $ Bounded (Exc,0) (Exc,90)]
+  (prime vPhi) degree Real [physc $ Bounded (Exc, dbl 0) (Exc, dbl 90)]
   (dbl 25) defaultUncrt
 
 dryWeight = uqc "gamma" (cn "soil dry unit weight")
@@ -494,7 +494,7 @@ index = dqd' (dcc "index" (nounPhraseSP "index")
 
 --FIXME: possibly move to Language/Drasil/Expr.hs
 indx1 :: (Quantity a) => a -> Expr
-indx1 a = idx (sy a) 1
+indx1 a = idx (sy a) (int 1)
 
 indxn :: (Quantity a) => a -> Expr
 indxn a = idx (sy a) (sy numbSlices)
@@ -506,12 +506,12 @@ inxiM1 e = inx e (-1)
 
 inx :: Quantity e => e -> Integer -> Expr
 inx e n 
-  | n < 0     = idx (sy e) (sy index - int (-n))
+  | n < 0     = idx (sy e) (sy index $- int (-n))
   | n == 0    = idx (sy e) (sy index)
-  | otherwise = idx (sy e) (sy index + int n)
+  | otherwise = idx (sy e) (sy index `addI` int n)
 
 sum1toN :: Expr -> Expr
-sum1toN = defsum (eqSymb index) 1 (sy numbSlices)
+sum1toN = defsum (eqSymb index) (int 1) (sy numbSlices)
 
 -- Labels
 

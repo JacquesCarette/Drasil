@@ -23,8 +23,8 @@ speedIY = ddNoRefs speedIYQD Nothing "speedIY" [speedRef, figRef]
 
 vecMagQD, speedIXQD, speedIYQD :: QDefinition
 vecMagQD  = mkQuantDef speed speedE
-speedIXQD = mkQuantDef ixVel $ sy iSpeed * cos (sy launAngle)
-speedIYQD = mkQuantDef iyVel $ sy iSpeed * sin (sy launAngle)
+speedIXQD = mkQuantDef ixVel $ sy iSpeed `mulRe` cos (sy launAngle)
+speedIYQD = mkQuantDef iyVel $ sy iSpeed `mulRe` sin (sy launAngle)
 
 speedE :: Expr
 speedE = UnaryOp Abs $ sy velocity

@@ -128,7 +128,7 @@ rectDeriv c1 c2 motSent initc ctm = foldlSent_ [
   sParen (S "of negligible size" `sAnd` S "shape" `sC` S "from" +:+ makeRef2S pointMass) :+:
   S ";" +:+. (S "that is" `sC` S "motion" `sIn` S "a straight line"), S "The" +:+.
   (phrase c1 `sIs` getScalar c1 `andThe` phrase c2 `sIs` getScalar c2), motSent,
-  S "The", phrase initc, sParen (S "at" +:+ E (sy time $= 0) `sC` S "from" +:+
+  S "The", phrase initc, sParen (S "at" +:+ E (sy time $= dbl 0) `sC` S "from" +:+
   makeRef2S timeStartZero) `sIs` S "represented by" +:+. getScalar initc,
   S "From", makeRef2S ctm `sC` S "using the above", plural symbol_ +: S "we have"]
   where
@@ -152,7 +152,7 @@ vecDeriv vecs gdef = foldlSentCol [
   (map (\(c, e) -> foldlSent_ [phraseNP (the c), phrase vector, S "as", E e]) vecs),
   atStartNP (the acceleration) `sIs` S "assumed to be constant", sParen (makeRef2S constAccel) `andThe`
   phrase constAccelV `sIs` S "represented as" +:+. E E.constAccelXY, 
-  atStartNP (the iVel) +:+ sParen (S "at" +:+ E (sy time $= 0) `sC` S "from" +:+ makeRef2S timeStartZero) `sIs`
+  atStartNP (the iVel) +:+ sParen (S "at" +:+ E (sy time $= dbl 0) `sC` S "from" +:+ makeRef2S timeStartZero) `sIs`
   S "represented by" +:+. E (sy iVel $= vec2D (sy ixVel) (sy iyVel)), 
   S "Since we have a",
   phrase cartesian `sC` makeRef2S gdef, S "can be applied to each", phrase coordinate `sOf`

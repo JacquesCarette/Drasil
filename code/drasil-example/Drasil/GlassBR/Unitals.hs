@@ -78,11 +78,11 @@ plateLen = uqcND "plateLen" (nounPhraseSP "plate length (long dimension)")
 
 plateWidth = uqcND "plateWidth" (nounPhraseSP "plate width (short dimension)")
   lB metre Real
-  [ physc $ Bounded (Exc, 0) (Inc, sy plateLen),
+  [ physc $ Bounded (Exc, dbl 0) (Inc, sy plateLen),
     sfwrc $ Bounded (Inc, sy dimMin) (Inc, sy dimMax)] (dbl 1.2) defaultUncrt
 
 aspectRatio = uq (constrained' (dqdNoUnit aspectRatioCon (Variable "AR") Real)
-  [ physc $ UpFrom (Inc, 1), 
+  [ physc $ UpFrom (Inc, dbl 1), 
     sfwrc $ UpTo (Inc, sy arMax)] (dbl 1.5)) defaultUncrt
 
 pbTol = uvc "pbTol" (nounPhraseSP "tolerable probability of breakage") 
@@ -107,7 +107,7 @@ nomThick = cuc "nomThick"
   (nounPhraseSent $ S "nominal thickness" +:+ displayDblConstrntsAsSet 
     nomThick nominalThicknesses)
   lT millimetre {-DiscreteD nominalThicknesses-} Rational 
-  [enumc nominalThicknesses] 8
+  [enumc nominalThicknesses] $ dbl 8
 
 glassTypeCon  = constrainedNRV' (dqdNoUnit glassTy lG String) 
   [EnumeratedStr Software $ map (getAccStr . snd) glassType]
@@ -126,7 +126,7 @@ probBr = cvc "probBr" (nounPhraseSP "probability of breakage")
   [probConstr] (Just $ dbl 0.4)
 
 stressDistFac = cvc "stressDistFac" (nounPhraseSP "stress distribution factor (Function)") 
-  cJ Real [physc $ Bounded (Inc, sy stressDistFacMin) (Inc, sy stressDistFacMax)] (Just 15.0)
+  cJ Real [physc $ Bounded (Inc, sy stressDistFacMin) (Inc, sy stressDistFacMax)] (Just $ dbl 15.0)
 
 probFail = cvc "probFail" (nounPhraseSP "probability of failure")
   (sub cP lFail) Rational

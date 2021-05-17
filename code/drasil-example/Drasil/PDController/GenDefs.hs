@@ -34,7 +34,7 @@ gdPowerPlantRC
 
 gdPowerPlantEqn :: Expr
 gdPowerPlantEqn
-  = 1 / (square (sy qdFreqDomain) + sy qdFreqDomain + 20)
+  = dbl 1 $/ (square (sy qdFreqDomain) `addRe` sy qdFreqDomain `addRe` dbl 20)
 
 gdPowerPlantNote :: Sentence
 gdPowerPlantNote

@@ -52,9 +52,9 @@ eBalanceOnWtrRC = makeRC "eBalanceOnWtrRC" (nounPhraseSP $ "Energy balance on " 
   -- eBalanceOnWtrL
 
 balWtrRel :: Relation
-balWtrRel = deriv (sy tempW) time $= 1 / sy tauW *
-  ((sy tempC - apply1 tempW time) +
-  sy eta * (apply1 tempPCM time - apply1 tempW time))
+balWtrRel = deriv (sy tempW) time $= dbl 1 $/ sy tauW `mulRe`
+  ((sy tempC $- apply1 tempW time) `addRe`
+  sy eta `mulRe` (apply1 tempPCM time $- apply1 tempW time))
 
 balWtrDesc :: [Sentence]
 balWtrDesc = map foldlSent [
@@ -66,9 +66,9 @@ balWtrDesc = map foldlSent [
   [S "The initial", plural condition, S "for the", getAcc ode `sAre` 
    E (apply tempW [Int 0] $= apply tempPCM [Int 0] $= sy tempInit) `follows` assumpSITWP],
   [S "The", getAcc ode, S "applies as long as the", phrase water `sIs` EmptyS `sIn`
-   phrase liquid, S "form" `sC` E (realInterval tempW (Bounded (Exc,0) (Exc,100))),
-   sParen (unwrap $ getUnit tempW), S "where", E 0, sParen (unwrap $ getUnit tempW) `sAnd`
-   E 100, sParen (unwrap $ getUnit tempW) `sAre` S "the", phrase melting `sAnd`
+   phrase liquid, S "form" `sC` E (realInterval tempW (Bounded (Exc, dbl 0) (Exc, dbl 100))),
+   sParen (unwrap $ getUnit tempW), S "where", E (dbl 0), sParen (unwrap $ getUnit tempW) `sAnd`
+   E (dbl 100), sParen (unwrap $ getUnit tempW) `sAre` S "the", phrase melting `sAnd`
    plural boilPt `sOf` phrase water `sC` S "respectively",
    sParen (S "from" +:+ makeRef2S assumpWAL `sAnd` makeRef2S assumpAPT)]]
 
@@ -97,7 +97,7 @@ eBalanceOnWtrDerivDesc1 htEnd oa ea htA = foldlSentCol [
   phrase tank `sC` S "since it has been assumed to be perfectly insulated" +:+.
   sParen (makeRef2S assumpPIT), S "Since the", phrase assumption,
   S "is made that no internal heat is generated" +:+. (sParen (makeRef2S htA) `sC`
-  E (sy volHtGen $= 0)), S "Therefore" `sC` S "the", phrase equation, S "for",
+  E (sy volHtGen $= dbl 0)), S "Therefore" `sC` S "the", phrase equation, S "for",
   makeRef2S rocTempSimp, S "can be written as"]
 
 htTransEnd :: Sentence
@@ -138,44 +138,44 @@ eBalanceOnWtrDerivDesc7 eq22 = foldlSentCol [S "Finally, factoring out", E eq22 
   S "we are left with the governing", getAcc ode, S "for", makeRef2S eBalanceOnWtr]
 
 eq1, eq2 :: Expr
-eq1 = sy wMass * sy htCapW
-eq2 = 1 / sy tauW
+eq1 = sy wMass `mulRe` sy htCapW
+eq2 = dbl 1 $/ sy tauW
 
 eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3,
  eBalanceOnWtrDerivEqn4, eBalanceOnWtrDerivEqn5, eBalanceOnWtrDerivEqn6, eBalanceOnWtrDerivEqn7 :: Expr
 
-eBalanceOnWtrDerivEqn1 = sy wMass * sy htCapW * deriv (sy tempW) time $= 
-  sy htFluxC * sy coilSA - sy htFluxP * sy pcmSA
+eBalanceOnWtrDerivEqn1 = sy wMass `mulRe` sy htCapW `mulRe` deriv (sy tempW) time $= 
+  sy htFluxC `mulRe` sy coilSA $- sy htFluxP `mulRe` sy pcmSA
 
-eBalanceOnWtrDerivEqn2 = sy wMass * sy htCapW * deriv (sy tempW) time $= 
-  sy coilHTC * sy coilSA * (sy tempC - sy tempW) -
-  sy pcmHTC * sy pcmSA * (sy tempW - sy tempPCM)
+eBalanceOnWtrDerivEqn2 = sy wMass `mulRe` sy htCapW `mulRe` deriv (sy tempW) time $= 
+  sy coilHTC `mulRe` sy coilSA `mulRe` (sy tempC $- sy tempW) $-
+  sy pcmHTC `mulRe` sy pcmSA `mulRe` (sy tempW $- sy tempPCM)
 
 eBalanceOnWtrDerivEqn3 = deriv (sy tempW) time $= 
-  (sy coilHTC * sy coilSA / 
-  (sy wMass * sy htCapW)) * (sy tempC - sy tempW) -
-  (sy pcmHTC * sy pcmSA / 
-  (sy wMass * sy htCapW)) * (sy tempW - sy tempPCM)
+  (sy coilHTC `mulRe` sy coilSA $/ 
+  (sy wMass `mulRe` sy htCapW)) `mulRe` (sy tempC $- sy tempW) $-
+  (sy pcmHTC `mulRe` sy pcmSA $/ 
+  (sy wMass `mulRe` sy htCapW)) `mulRe` (sy tempW $- sy tempPCM)
 
 eBalanceOnWtrDerivEqn4 = deriv (sy tempW) time $= 
-  (sy coilHTC * sy coilSA / 
-  (sy wMass * sy htCapW)) *  (sy tempC - sy tempW) +
-  (sy coilHTC * sy coilSA / 
-  (sy coilHTC * sy coilSA)) * (sy pcmHTC * sy pcmSA / 
-  (sy wMass * sy htCapW)) * (sy tempPCM - sy tempW)
+  (sy coilHTC `mulRe` sy coilSA $/ 
+  (sy wMass `mulRe` sy htCapW)) `mulRe`  (sy tempC $- sy tempW) `addRe`
+  (sy coilHTC `mulRe` sy coilSA $/ 
+  (sy coilHTC `mulRe` sy coilSA)) `mulRe` (sy pcmHTC `mulRe` sy pcmSA $/ 
+  (sy wMass `mulRe` sy htCapW)) `mulRe` (sy tempPCM $- sy tempW)
 
 eBalanceOnWtrDerivEqn5 = deriv (sy tempW) time $= 
-  (sy coilHTC * sy coilSA / 
-  (sy wMass * sy htCapW)) *  (sy tempC - sy tempW) +
-  (sy pcmHTC * sy pcmSA / 
-  (sy coilHTC * sy coilSA)) * (sy coilHTC * sy coilSA / 
-  (sy wMass * sy htCapW)) * (sy tempPCM - sy tempW)
+  (sy coilHTC `mulRe` sy coilSA $/ 
+  (sy wMass `mulRe` sy htCapW)) `mulRe`  (sy tempC $- sy tempW) `addRe`
+  (sy pcmHTC `mulRe` sy pcmSA $/ 
+  (sy coilHTC `mulRe` sy coilSA)) `mulRe` (sy coilHTC `mulRe` sy coilSA $/ 
+  (sy wMass `mulRe` sy htCapW)) `mulRe` (sy tempPCM $- sy tempW)
 
 eBalanceOnWtrDerivEqn6 = deriv (sy tempW) time $= 
-  1 / sy tauW * (sy tempC - sy tempW) + sy eta / sy tauW * (sy tempPCM - sy tempW)
+  dbl 1 $/ sy tauW `mulRe` (sy tempC $- sy tempW) `addRe` sy eta $/ sy tauW `mulRe` (sy tempPCM $- sy tempW)
 
 eBalanceOnWtrDerivEqn7 = deriv (sy tempW) time $=
-  1 / sy tauW * ((sy tempC - sy tempW) + sy eta * (sy tempPCM - sy tempW))
+  dbl 1 $/ sy tauW `mulRe` ((sy tempC $- sy tempW) `addRe` sy eta `mulRe` (sy tempPCM $- sy tempW))
 
 eBalanceOnWtrDerivEqnsIM1 :: [Expr]
 eBalanceOnWtrDerivEqnsIM1 = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2,
@@ -199,11 +199,11 @@ eBalanceOnPCMRC = makeRC "eBalanceOnPCMRC" (nounPhraseSP
 
 balPCMRel :: Relation
 balPCMRel = deriv (sy tempPCM) time $= completeCase [case1, case2, case3]
-  where case1 = ((1 / sy tauSP) * (apply1 tempW time -
+  where case1 = ((dbl 1 $/ sy tauSP) `mulRe` (apply1 tempW time $-
           apply1 tempPCM time), realInterval tempPCM (UpTo (Exc, sy tempMeltP)))
-        case2 = ((1 / sy tauLP) * (apply1 tempW time -
+        case2 = ((dbl 1 $/ sy tauLP) `mulRe` (apply1 tempW time $-
           apply1 tempPCM time), realInterval tempPCM (UpFrom (Exc,sy tempMeltP)))
-        case3 = (0, sy tempPCM $= sy tempMeltP $&& realInterval meltFrac (Bounded (Exc,0) (Exc,1)))
+        case3 = (dbl 0, sy tempPCM $= sy tempMeltP $&& realInterval meltFrac (Bounded (Exc, dbl 0) (Exc, dbl 1)))
 
 balPCMNotes :: [Sentence]
 balPCMNotes = map foldlSent [
@@ -213,7 +213,7 @@ balPCMNotes = map foldlSent [
   [S "The", phrase temp, S "remains constant at", ch tempMeltP `sC`
    S "even with the heating", sParen (S "or cooling") `sC` S "until the",
    phrase phaseChange, S "has occurred for all" `sOf` S "the material; that" `sIs`
-   S "as long as" +:+. E (0 $< sy meltFrac $< 1), ch meltFrac,
+   S "as long as" +:+. E (dbl 0 $< sy meltFrac $< dbl 1), ch meltFrac,
    sParen (S "from" +:+ makeRef2S ddMeltFrac) `sIs`
    S "determined as part" `sOf` S "the", phrase heat, phrase energy `sIn`
    S "the", getAcc phsChgMtrl `sC` S "as given" `sIn` sParen (makeRef2S heatEInPCM)],
@@ -249,7 +249,7 @@ eBalanceOnPCMDerivDesc1 = foldlSentCol [
   phrase water `sIs` S "fully mixed" +:+. sParen (makeRef2S assumpCWTAT),
   S "There is no", phrase htFlux, phrase output_, S "from the" +:+. getAcc phsChgMtrl,
   S "Assuming no volumetric", phrase heat, S "generation per unit", phrase vol,
-  sParen (makeRef2S assumpNIHGBWP) `sC` E (sy volHtGen $= 0) `sC` 
+  sParen (makeRef2S assumpNIHGBWP) `sC` E (sy volHtGen $= dbl 0) `sC` 
   S "the equation for", makeRef2S rocTempSimp, S "can be written as"]
 
 eBalanceOnPCMDerivDesc2 :: Sentence
@@ -294,17 +294,17 @@ eq6_2 = (deriv (sy tempPCM) time) $= 0
 
 eBalanceOnPCMEqn1, eBalanceOnPCMEqn2, eBalanceOnPCMEqn3, eBalanceOnPCMEqn4 :: Expr
 
-eBalanceOnPCMEqn1 = sy pcmMass * sy htCapSP * deriv (sy tempPCM) time $= 
-  sy htFluxP * sy pcmSA
+eBalanceOnPCMEqn1 = sy pcmMass `mulRe` sy htCapSP `mulRe` deriv (sy tempPCM) time $= 
+  sy htFluxP `mulRe` sy pcmSA
 
-eBalanceOnPCMEqn2 = sy pcmMass * sy htCapSP * deriv (sy tempPCM) time $= 
-  sy pcmHTC * sy pcmSA * (sy tempW - sy tempPCM)
+eBalanceOnPCMEqn2 = sy pcmMass `mulRe` sy htCapSP `mulRe` deriv (sy tempPCM) time $= 
+  sy pcmHTC `mulRe` sy pcmSA `mulRe` (sy tempW $- sy tempPCM)
 
 eBalanceOnPCMEqn3 = deriv (sy tempPCM) time $= 
-  ((sy pcmHTC * sy pcmSA) / (sy pcmMass * sy htCapSP)) *  (sy tempW - sy tempPCM)
+  ((sy pcmHTC `mulRe` sy pcmSA) $/ (sy pcmMass `mulRe` sy htCapSP)) `mulRe`  (sy tempW $- sy tempPCM)
 
 eBalanceOnPCMEqn4 = deriv (sy tempPCM) time $= 
-  (1 / sy tauSP) * (sy tempW - sy tempPCM)
+  (dbl 1 $/ sy tauSP) `mulRe` (sy tempW $- sy tempPCM)
 
 eBalanceOnPCMDerivEqnsIM2 :: [Expr]
 eBalanceOnPCMDerivEqnsIM2 = [eBalanceOnPCMEqn1, eBalanceOnPCMEqn2,
@@ -324,8 +324,8 @@ heatEInWtrRC = makeRC "heatEInWtrRC" (nounPhraseSP "Heat energy in the water")
   (watE ^. defn) htWtrRel -- heatEInWtrL
 
 htWtrRel :: Relation
-htWtrRel = apply1 watE time $= sy htCapW * sy wMass *
-  (apply1 tempW time - sy tempInit)
+htWtrRel = apply1 watE time $= sy htCapW `mulRe` sy wMass `mulRe`
+  (apply1 tempW time $- sy tempInit)
 
 htWtrNotes :: [Sentence]
 htWtrNotes = map foldlSent [
@@ -334,7 +334,7 @@ htWtrNotes = map foldlSent [
    phrase temp, S "at", phrase time, ch time, sParen (unwrap $ getUnit tInitMelt) `sC`
   ch tempW `andThe` phrase tempInit `sC` ch tempInit, sParen (unwrap $ getUnit tempInit)],
   [S "This", phrase equation, S "applies as long as",
-   E (realInterval tempW (Bounded (Exc,0) (Exc,100))) :+:
+   E (realInterval tempW (Bounded (Exc, dbl 0) (Exc, dbl 100))) :+:
   unwrap (getUnit tempW), sParen $ makeRef2S assumpWAL `sC` makeRef2S assumpAPT]]
 
 ---------
@@ -354,15 +354,15 @@ heatEInPCMRC = makeRC "heatEInPCMRC" (nounPhraseSP "Heat energy in the PCM")
 
 htPCMRel :: Relation
 htPCMRel = sy pcmE $= completeCase [case1, case2, case3]
-  where case1 = (sy htCapSP * sy pcmMass * (apply1 tempPCM time -
+  where case1 = (sy htCapSP `mulRe` sy pcmMass `mulRe` (apply1 tempPCM time $-
           sy tempInit), realInterval tempPCM (UpTo (Exc, sy tempMeltP)))
 
-        case2 = (sy pcmInitMltE + (sy htFusion * sy pcmMass) +
-          (sy htCapLP * sy pcmMass * (apply1 tempPCM time -
+        case2 = (sy pcmInitMltE `addRe` (sy htFusion `mulRe` sy pcmMass) `addRe`
+          (sy htCapLP `mulRe` sy pcmMass `mulRe` (apply1 tempPCM time $-
           sy tempMeltP)), realInterval tempPCM (UpFrom (Exc, sy tempMeltP)))
 
-        case3 = (sy pcmInitMltE + apply1 latentEP time,
-          sy tempPCM $= sy tempMeltP $&& realInterval meltFrac (Bounded (Exc,0) (Exc,1)))
+        case3 = (sy pcmInitMltE `addRe` apply1 latentEP time,
+          sy tempPCM $= sy tempMeltP $&& realInterval meltFrac (Bounded (Exc, dbl 0) (Exc, dbl 1)))
 
 htPCMNotes :: [Sentence]
 htPCMNotes = map foldlSent [
@@ -378,9 +378,9 @@ htPCMNotes = map foldlSent [
    short phsChgMtrl, S "plus the", phrase energy, S "when", phrase melting, S "starts" `sC`
    S "plus", (phrase energy +:+ S "required to melt all") `the_ofThe` short phsChgMtrl], 
   [S "The", phrase energy, S "required to melt all of the", short phsChgMtrl `sIs`
-   E (sy htFusion * sy pcmMass), sParen (unwrap $ getUnit pcmInitMltE),
+   E (sy htFusion `mulRe` sy pcmMass), sParen (unwrap $ getUnit pcmInitMltE),
    sParen (S "from" +:+ makeRef2S ddHtFusion)],
-  [S "The", phrase change `sIn` phrase temp `sIs` E (sy tempPCM - sy tempMeltP),
+  [S "The", phrase change `sIn` phrase temp `sIs` E (sy tempPCM $- sy tempMeltP),
    sParen (unwrap $ getUnit tempMeltP)],
   [ch pcmE, S "during", phrase melting, S "of the", short phsChgMtrl,
    S "is found using the", phrase energy, S "required at", S "instant" +:+

@@ -79,7 +79,7 @@ ipPropGainUnc = uq ipPropGain defaultUncrt
 qdPropGain = qw ipPropGain
 
 ipDerivGain
-  = constrained' (dqdNoUnit derGain symKd Real) [physc $ UpFrom (Inc, 0)]
+  = constrained' (dqdNoUnit derGain symKd Real) [physc $ UpFrom (Inc, dbl 0)]
       (dbl 1)
 ipDerGainUnc = uq ipDerivGain defaultUncrt
 qdDerivGain = qw ipDerivGain
@@ -90,14 +90,14 @@ qdSetPointTD = qw ipSetPt
 
 ipStepTime
   = constrained' (dqd stepTime symTStep Real second)
-      [physc $ Bounded (Inc, 0.01  ) (Exc, sy ipSimTime)]
+      [physc $ Bounded (Inc, dbl 0.01) (Exc, sy ipSimTime)]
       (dbl 0.01  )
 ipStepTimeUnc = uq ipStepTime defaultUncrt
 qdStepTime = qw ipStepTime
 
 ipSimTime
   = constrained' (dqd simulationTime symTSim Real second)
-      [physc $ Bounded (Inc, 1) (Inc, 60)]
+      [physc $ Bounded (Inc, dbl 1) (Inc, dbl 60)]
       (dbl 10)
 ipSimTimeUnc = uq ipSimTime defaultUncrt
 qdSimTime = qw ipSimTime

@@ -34,7 +34,7 @@ newtonTLQD :: QDefinition
 newtonTLQD = mkQuantDef' force_1 (nounPhraseSP "Newton's third law of motion") newtonTLExpr
 
 newtonTLExpr :: Expr
-newtonTLExpr = negate (sy force_2)
+newtonTLExpr = neg (sy force_2)
 
 newtonTLNote :: Sentence
 newtonTLNote = foldlSent [(S "Every action has an equal and opposite reaction" !.),
@@ -56,17 +56,17 @@ newtonLUGRC = makeRC "newtonLUGRC"
 
 newtonLUGRel :: Relation
 newtonLUGRel = sy force $=
-  sy gravitationalConst * (sy mass_1 * sy mass_2 /
-  (sy dispNorm $^ 2)) * sy dVect $=
-  sy gravitationalConst * (sy mass_1 * sy mass_2 /
-  (sy dispNorm $^ 2)) * (sy distMass / sy dispNorm)
+  sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/
+  (sy dispNorm $^ int 2)) `mulRe` sy dVect $=
+  sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/
+  (sy dispNorm $^ int 2)) `mulRe` (sy distMass $/ sy dispNorm)
 
 -- Can't include fractions within a sentence (in the part where 'r denotes the
 -- unit displacement vector, equivalent to r/||r||' (line 184)). Changed to a
 -- verbal description instead.
 
 -- Can't properly include the gravitational constant in a sentence (in the last
--- sentence, supposed to include "6.673 * 10^{-11} m/kgs^2" (line 187)).
+-- sentence, supposed to include "6.673 `mulRe` 10^{-11} m/kgs^2" (line 187)).
 
 newtonLUGNotes :: [Sentence]
 newtonLUGNotes = map foldlSent [
@@ -87,7 +87,7 @@ newtonSLRRC = makeRC "newtonSLRRC"
   (nounPhraseSP "Newton's second law for rotational motion") EmptyS newtonSLRRel
 
 newtonSLRRel :: Relation
-newtonSLRRel = sy torque $= sy momentOfInertia * sy angularAccel
+newtonSLRRel = sy torque $= sy momentOfInertia `mulRe` sy angularAccel
 
 newtonSLRNotes :: [Sentence]
 newtonSLRNotes = map foldlSent [

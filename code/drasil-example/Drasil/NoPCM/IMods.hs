@@ -46,16 +46,16 @@ eBalanceOnWtrRC = makeRC "eBalanceOnWtrRC" (nounPhraseSP $ "Energy balance on " 
   -- (mkLabelSame "eBalnaceOnWtr" (Def Instance))
 
 balWtrRel :: Relation
-balWtrRel = deriv (sy tempW) time $= 1 / sy tauW *
-  (sy tempC - apply1 tempW time)
+balWtrRel = deriv (sy tempW) time $= dbl 1 $/ sy tauW `mulRe`
+  (sy tempC $- apply1 tempW time)
 
 balWtrNotes :: [Sentence]
 balWtrNotes = map foldlSent [
   [ch tauW `sIs` S "calculated from", makeRef2S balanceDecayRate],
   [S "The above", phrase equation, S "applies as long as the", phrase water,
-   S "is in", phrase liquid, S "form" `sC` E (0 $< sy tempW $< 100),
-   sParen (unwrap $ getUnit tempW), S "where", E 0,
-   sParen (unwrap $ getUnit tempW) `sAnd` E 100,
+   S "is in", phrase liquid, S "form" `sC` E (dbl 0 $< sy tempW $< dbl 100),
+   sParen (unwrap $ getUnit tempW), S "where", E (dbl 0),
+   sParen (unwrap $ getUnit tempW) `sAnd` E (dbl 100),
    sParen (unwrap $ getUnit tempW), S "are the", phrase melting `sAnd`
    plural boilPt `sOf` phrase water `sC` S "respectively", sParen (makeRef2S assumpWAL)]]
 
@@ -79,18 +79,18 @@ eBalanceOnWtrDerivDesc4 = substitute [balanceDecayRate]
 
 eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3, eBalanceOnWtrDerivEqn4 :: Expr
 
-eBalanceOnWtrDerivEqn1 = sy wMass * sy htCapW * deriv (sy tempW) time $= 
-  sy htFluxC * sy coilSA
+eBalanceOnWtrDerivEqn1 = sy wMass `mulRe` sy htCapW `mulRe` deriv (sy tempW) time $= 
+  sy htFluxC `mulRe` sy coilSA
 
-eBalanceOnWtrDerivEqn2 = sy wMass * sy htCapW * deriv (sy tempW) time $= 
-  sy coilHTC * sy coilSA *  (sy tempC - sy tempW)
+eBalanceOnWtrDerivEqn2 = sy wMass `mulRe` sy htCapW `mulRe` deriv (sy tempW) time $= 
+  sy coilHTC `mulRe` sy coilSA `mulRe`  (sy tempC $- sy tempW)
 
 eBalanceOnWtrDerivEqn3 = deriv (sy tempW) time $= 
-  (sy coilHTC * sy coilSA / 
-  (sy wMass * sy htCapW)) *  (sy tempC - sy tempW)
+  (sy coilHTC `mulRe` sy coilSA $/ 
+  (sy wMass `mulRe` sy htCapW)) `mulRe`  (sy tempC $- sy tempW)
 
 eBalanceOnWtrDerivEqn4 =  
-  deriv (sy tempW) time $= 1 / sy tauW * (sy tempC - sy tempW)
+  deriv (sy tempW) time $= dbl 1 $/ sy tauW `mulRe` (sy tempC $- sy tempW)
 
 eBalanceOnWtrDerivEqns :: [Expr]
 eBalanceOnWtrDerivEqns = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3, eBalanceOnWtrDerivEqn4]

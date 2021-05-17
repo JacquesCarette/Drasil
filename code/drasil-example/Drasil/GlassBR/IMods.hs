@@ -26,7 +26,7 @@ symb = map dqdWr [plateLen, plateWidth, charWeight, standOffDist] ++
 
 pbIsSafe :: InstanceModel
 pbIsSafe = imNoDeriv (OthModel pbIsSafeRC)
-  [qwC probBr $ UpFrom (Exc, 0), qwC pbTol $ UpFrom (Exc, 0)]
+  [qwC probBr $ UpFrom (Exc, dbl 0), qwC pbTol $ UpFrom (Exc, dbl 0)]
   (qw isSafePb) []
   [makeCite astm2009] "isSafePb"
   [pbIsSafeDesc, probBRRef, pbTolUsr]
@@ -40,7 +40,7 @@ pbIsSafeRC = makeRC "safetyReqPb" (nounPhraseSP "Safety Req-Pb")
 
 lrIsSafe :: InstanceModel
 lrIsSafe = imNoDeriv (OthModel lrIsSafeRC) 
-  [qwC lRe $ UpFrom (Exc, 0), qwC demand $ UpFrom (Exc, 0)]
+  [qwC lRe $ UpFrom (Exc, dbl 0), qwC demand $ UpFrom (Exc, dbl 0)]
   (qw isSafeLR) []
   [makeCite astm2009] "isSafeLR"
   [lrIsSafeDesc, capRef, qRef] 

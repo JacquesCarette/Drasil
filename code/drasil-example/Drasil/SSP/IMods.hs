@@ -59,11 +59,11 @@ fctSftyRC :: RelationConcept
 fctSftyRC = makeRC "fctSftyRC" factorOfSafety fctSftyDesc fctSftyRel -- fctSftyL
 
 fctSftyRel :: Relation
-fctSftyRel = sy fs $= sumOp shearRNoIntsl / sumOp shearFNoIntsl
-  where prodOp = defprod (eqSymb varblV) (sy index) (sy numbSlices - 1)
+fctSftyRel = sy fs $= sumOp shearRNoIntsl $/ sumOp shearFNoIntsl
+  where prodOp = defprod (eqSymb varblV) (sy index) (sy numbSlices $- int 1)
           (idx (sy mobShrC) (sy varblV))
-        sumOp sym = defsum (eqSymb index) 1 (sy numbSlices - 1)
-          (idx (sy sym) (sy index) * prodOp) + idx (sy sym) (sy numbSlices)
+        sumOp sym = defsum (eqSymb index) (int 1) (sy numbSlices $- int 1)
+          (idx (sy sym) (sy index) `mulRe` prodOp) `addRe` idx (sy sym) (sy numbSlices)
 
 fctSftyDesc :: Sentence
 fctSftyDesc = foldlSent_ [ch shearRNoIntsl, S "is defined in", makeRef2S 
@@ -155,7 +155,7 @@ fctSftyDerivEllipsis = S "..."
 
 fctSftyDerivSentence11 :: [Sentence]
 fctSftyDerivSentence11 = [S "Applying", makeRef2S assumpES `sC`
-  S "which says that", E (idx (sy intNormForce) 0) `sAnd`
+  S "which says that", E (idx (sy intNormForce) (int 0)) `sAnd`
   E (indxn intNormForce), S "are zero, results in the following special cases:",eqN 8, S "for the first slice"]
 
 fctSftyDerivSentence12 :: [Sentence]
@@ -178,7 +178,7 @@ fctSftyDerivSentence16 = [eqN 9, S "can then be substituted into the",
 
 fctSftyDerivSentence17 :: [Sentence]
 fctSftyDerivSentence17 = [S "This can be rearranged by multiplying both sides",
-  S "by", E (idx (sy mobShrC) (sy numbSlices - int 1)) `sAnd`
+  S "by", E (idx (sy mobShrC) (sy numbSlices $- int 1)) `sAnd`
   S "then distributing the multiplication of each", ch mobShrC,
   S "over addition to obtain"]
 
@@ -205,64 +205,64 @@ fctSftyDerivSentence20 = [ch fs +:+ S "depends on the unknowns" +:+
 
 fctSftyDerivEqn1 :: Expr
 fctSftyDerivEqn1 = --FIXME: pull the right side of this from GD4
-  eqlExpr sin cos (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y)
-  $= (inxi nrmFSubWat * tan (sy fricAngle) + sy effCohesion *
-  inxi baseLngth) / sy fs
+  eqlExpr sin cos (\x y -> x $- inxiM1 intShrForce `addRe` inxi intShrForce `addRe` y)
+  $= (inxi nrmFSubWat `mulRe` tan (sy fricAngle) `addRe` sy effCohesion `mulRe`
+  inxi baseLngth) $/ sy fs
 
 fctSftyDerivEqn2 :: Expr
-fctSftyDerivEqn2 = inxi nrmFSubWat $= eqlExprN cos sin (\x y -> x -
-  inxiM1 intShrForce + inxi intShrForce + y) - inxi baseHydroForce
+fctSftyDerivEqn2 = inxi nrmFSubWat $= eqlExprN cos sin (\x y -> x $-
+  inxiM1 intShrForce `addRe` inxi intShrForce `addRe` y) $- inxi baseHydroForce
 
 fctSftyDerivEqn3 :: Expr
-fctSftyDerivEqn3 = eqlExpr sin cos (\x y -> x - inxiM1 intShrForce + 
-  inxi intShrForce + y) $= ((eqlExprN cos sin (\x y -> x -
-  inxiM1 intShrForce + inxi intShrForce + y) - inxi baseHydroForce) * 
-  tan (sy fricAngle) + sy effCohesion * inxi baseLngth) / sy fs
+fctSftyDerivEqn3 = eqlExpr sin cos (\x y -> x $- inxiM1 intShrForce `addRe` 
+  inxi intShrForce `addRe` y) $= ((eqlExprN cos sin (\x y -> x $-
+  inxiM1 intShrForce `addRe` inxi intShrForce `addRe` y) $- inxi baseHydroForce) `mulRe` 
+  tan (sy fricAngle) `addRe` sy effCohesion `mulRe` inxi baseLngth) $/ sy fs
 
 fctSftyDerivEqn4 :: Expr
-fctSftyDerivEqn4 = eqlExprSepG sin cos (+) + 
-  (- inxiM1 intShrForce + inxi intShrForce) * sin (inxi baseAngle) $= 
-  ((eqlExprNSepG cos sin (+) + 
-  (- inxiM1 intShrForce + inxi intShrForce) * cos (inxi baseAngle) - 
-  inxi baseHydroForce) * 
-  tan (sy fricAngle) + sy effCohesion * inxi baseLngth) / sy fs
+fctSftyDerivEqn4 = eqlExprSepG sin cos addRe `addRe` 
+  (neg (inxiM1 intShrForce) `addRe` inxi intShrForce) `mulRe` sin (inxi baseAngle) $= 
+  ((eqlExprNSepG cos sin addRe `addRe` 
+  (neg (inxiM1 intShrForce) `addRe` inxi intShrForce) `mulRe` cos (inxi baseAngle) $- 
+  inxi baseHydroForce) `mulRe` 
+  tan (sy fricAngle) `addRe` sy effCohesion `mulRe` inxi baseLngth) $/ sy fs
 
 fctSftyDerivEqn5 :: Expr
-fctSftyDerivEqn5 = eqlExprNoKQ sin cos (+) + 
-  (- inxiM1 intShrForce + inxi intShrForce) * sin (inxi baseAngle) $= 
-  ((eqlExprNNoKQ cos sin (+) + 
-  (- inxiM1 intShrForce + inxi intShrForce) * cos (inxi baseAngle) - 
-  inxi baseHydroForce) * 
-  tan (sy fricAngle) + sy effCohesion * inxi baseLngth) / sy fs
+fctSftyDerivEqn5 = eqlExprNoKQ sin cos addRe `addRe` 
+  (neg (inxiM1 intShrForce) `addRe` inxi intShrForce) `mulRe` sin (inxi baseAngle) $= 
+  ((eqlExprNNoKQ cos sin addRe `addRe` 
+  (neg (inxiM1 intShrForce) `addRe` inxi intShrForce) `mulRe` cos (inxi baseAngle) $- 
+  inxi baseHydroForce) `mulRe` 
+  tan (sy fricAngle) `addRe` sy effCohesion `mulRe` inxi baseLngth) $/ sy fs
 
 fctSftyDerivEqn6 :: Expr
-fctSftyDerivEqn6 = (inxi shearFNoIntsl + (- inxiM1 intShrForce + 
-  inxi intShrForce) * sin (inxi baseAngle) - (- inxi intNormForce +
-  inxiM1 intNormForce) * cos (inxi baseAngle)) $= (inxi shearRNoIntsl + 
-  ((- inxiM1 intShrForce + inxi intShrForce) * cos (inxi baseAngle) + 
-  (- inxi intNormForce + inxiM1 intNormForce) * sin (inxi baseAngle)) * 
-  tan (sy fricAngle)) / sy fs
+fctSftyDerivEqn6 = (inxi shearFNoIntsl `addRe` (neg (inxiM1 intShrForce) `addRe` 
+  inxi intShrForce) `mulRe` sin (inxi baseAngle) $- (neg (inxi intNormForce) `addRe`
+  inxiM1 intNormForce) `mulRe` cos (inxi baseAngle)) $= (inxi shearRNoIntsl `addRe` 
+  ((neg (inxiM1 intShrForce) `addRe` inxi intShrForce) `mulRe` cos (inxi baseAngle) `addRe` 
+  (neg (inxi intNormForce) `addRe` inxiM1 intNormForce) `mulRe` sin (inxi baseAngle)) `mulRe` 
+  tan (sy fricAngle)) $/ sy fs
 
 fctSftyDerivEqn7 :: Expr
-fctSftyDerivEqn7 = (inxi shearFNoIntsl + (- sy normToShear * inxiM1 scalFunc *  
-  inxiM1 intNormForce + sy normToShear * inxi scalFunc * inxi intNormForce) * sin (inxi baseAngle) - (- inxi intNormForce + inxiM1 intNormForce) * cos (inxi baseAngle)) $= (inxi shearRNoIntsl + ((- sy normToShear * 
-  inxiM1 scalFunc * inxiM1 intNormForce + sy normToShear * inxi scalFunc * 
-  inxi intNormForce) * cos (inxi baseAngle) + (- inxi intNormForce + inxiM1 intNormForce) * sin (inxi baseAngle)) * tan (sy fricAngle)) / 
+fctSftyDerivEqn7 = (inxi shearFNoIntsl `addRe` (neg (sy normToShear) `mulRe` inxiM1 scalFunc `mulRe`  
+  inxiM1 intNormForce `addRe` sy normToShear `mulRe` inxi scalFunc `mulRe` inxi intNormForce) `mulRe` sin (inxi baseAngle) $- (neg (inxi intNormForce) `addRe` inxiM1 intNormForce) `mulRe` cos (inxi baseAngle)) $= (inxi shearRNoIntsl `addRe` ((neg (sy normToShear) `mulRe` 
+  inxiM1 scalFunc `mulRe` inxiM1 intNormForce `addRe` sy normToShear `mulRe` inxi scalFunc `mulRe` 
+  inxi intNormForce) `mulRe` cos (inxi baseAngle) `addRe` (neg (inxi intNormForce) `addRe` inxiM1 intNormForce) `mulRe` sin (inxi baseAngle)) `mulRe` tan (sy fricAngle)) $/ 
   sy fs
 
 fctSftyDerivEqn8 :: Expr
-fctSftyDerivEqn8 = (inxi intNormForce * ((sy normToShear * inxi scalFunc * 
-  cos (inxi baseAngle) - sin (inxi baseAngle)) * tan (sy fricAngle) - 
-  (sy normToShear * inxi scalFunc * sin (inxi baseAngle) + 
-  cos (inxi baseAngle)) * sy fs)) $= (inxiM1 intNormForce * 
-  ((sy normToShear * inxiM1 scalFunc * cos (inxi baseAngle) - 
-  sin (inxi baseAngle)) * tan (sy fricAngle) - (sy normToShear * 
-  inxiM1 scalFunc * sin (inxi baseAngle) + cos (inxi baseAngle)) * 
-  sy fs) + sy fs * inxi shearFNoIntsl - inxi shearRNoIntsl)
+fctSftyDerivEqn8 = (inxi intNormForce `mulRe` ((sy normToShear `mulRe` inxi scalFunc `mulRe` 
+  cos (inxi baseAngle) $- sin (inxi baseAngle)) `mulRe` tan (sy fricAngle) $- 
+  (sy normToShear `mulRe` inxi scalFunc `mulRe` sin (inxi baseAngle) `addRe` 
+  cos (inxi baseAngle)) `mulRe` sy fs)) $= (inxiM1 intNormForce `mulRe` 
+  ((sy normToShear `mulRe` inxiM1 scalFunc `mulRe` cos (inxi baseAngle) $- 
+  sin (inxi baseAngle)) `mulRe` tan (sy fricAngle) $- (sy normToShear `mulRe` 
+  inxiM1 scalFunc `mulRe` sin (inxi baseAngle) `addRe` cos (inxi baseAngle)) `mulRe` 
+  sy fs) `addRe` sy fs `mulRe` inxi shearFNoIntsl $- inxi shearRNoIntsl)
 
 fctSftyDerivEqn9 :: Expr
-fctSftyDerivEqn9 = (inxi intNormForce * inxi shrResC) $= (inxiM1 mobShrC * 
-  inxiM1 intNormForce * inxiM1 shrResC + sy fs * inxi shearFNoIntsl -
+fctSftyDerivEqn9 = (inxi intNormForce `mulRe` inxi shrResC) $= (inxiM1 mobShrC `mulRe` 
+  inxiM1 intNormForce `mulRe` inxiM1 shrResC `addRe` sy fs `mulRe` inxi shearFNoIntsl $-
   inxi shearRNoIntsl)
 
 fctSftyDerivEqn10a :: Expr
@@ -275,95 +275,95 @@ fctSftyDerivEqn10c :: Expr
 fctSftyDerivEqn10c = sliceExpr 3
 
 fctSftyDerivEqn10d :: Expr
-fctSftyDerivEqn10d = idx (sy intNormForce) (sy numbSlices - int 2) * 
-  idx (sy shrResC) (sy numbSlices - int 2) $= idx (sy mobShrC) (sy numbSlices - int 3) * idx (sy intNormForce) (sy numbSlices - int 3) * 
-  idx (sy shrResC) (sy numbSlices - int 3) + sy fs * 
-  idx (sy shearFNoIntsl) (sy numbSlices - int 2) - 
-  idx (sy shearRNoIntsl) (sy numbSlices - int 2)
+fctSftyDerivEqn10d = idx (sy intNormForce) (sy numbSlices $- int 2) `mulRe` 
+  idx (sy shrResC) (sy numbSlices $- int 2) $= idx (sy mobShrC) (sy numbSlices $- int 3) `mulRe` idx (sy intNormForce) (sy numbSlices $- int 3) `mulRe` 
+  idx (sy shrResC) (sy numbSlices $- int 3) `addRe` sy fs `mulRe` 
+  idx (sy shearFNoIntsl) (sy numbSlices $- int 2) $- 
+  idx (sy shearRNoIntsl) (sy numbSlices $- int 2)
 
 fctSftyDerivEqn10e :: Expr
-fctSftyDerivEqn10e = idx (sy intNormForce) (sy numbSlices - int 1) * 
-  idx (sy shrResC) (sy numbSlices - int 1) $= idx (sy mobShrC) (sy numbSlices - int 2) * idx (sy intNormForce) (sy numbSlices - int 2) * 
-  idx (sy shrResC) (sy numbSlices - int 2) + sy fs * 
-  idx (sy shearFNoIntsl) (sy numbSlices - int 1) - 
-  idx (sy shearRNoIntsl) (sy numbSlices - int 1)
+fctSftyDerivEqn10e = idx (sy intNormForce) (sy numbSlices $- int 1) `mulRe` 
+  idx (sy shrResC) (sy numbSlices $- int 1) $= idx (sy mobShrC) (sy numbSlices $- int 2) `mulRe` idx (sy intNormForce) (sy numbSlices $- int 2) `mulRe` 
+  idx (sy shrResC) (sy numbSlices $- int 2) `addRe` sy fs `mulRe` 
+  idx (sy shearFNoIntsl) (sy numbSlices $- int 1) $- 
+  idx (sy shearRNoIntsl) (sy numbSlices $- int 1)
 
 fctSftyDerivEqn10f :: Expr
-fctSftyDerivEqn10f = idx (sy intNormForce) (sy numbSlices) * 
-  idx (sy shrResC) (sy numbSlices) $= idx (sy mobShrC) (sy numbSlices - int 1) * idx (sy intNormForce) (sy numbSlices - int 1) * 
-  idx (sy shrResC) (sy numbSlices - int 1) + sy fs * 
-  idx (sy shearFNoIntsl) (sy numbSlices) - 
+fctSftyDerivEqn10f = idx (sy intNormForce) (sy numbSlices) `mulRe` 
+  idx (sy shrResC) (sy numbSlices) $= idx (sy mobShrC) (sy numbSlices $- int 1) `mulRe` idx (sy intNormForce) (sy numbSlices $- int 1) `mulRe` 
+  idx (sy shrResC) (sy numbSlices $- int 1) `addRe` sy fs `mulRe` 
+  idx (sy shearFNoIntsl) (sy numbSlices) $- 
   idx (sy shearRNoIntsl) (sy numbSlices)
 
 fctSftyDerivEqn11 :: Expr
-fctSftyDerivEqn11 = indx1 intNormForce * indx1 shrResC $= 
-  sy fs * indx1 shearFNoIntsl - indx1 shearRNoIntsl
+fctSftyDerivEqn11 = indx1 intNormForce `mulRe` indx1 shrResC $= 
+  sy fs `mulRe` indx1 shearFNoIntsl $- indx1 shearRNoIntsl
 
 fctSftyDerivEqn12 :: Expr
-fctSftyDerivEqn12 = -(sy fs * indxn shearFNoIntsl - indxn shearRNoIntsl) /
-  idx (sy mobShrC) (sy numbSlices - int 1) $= 
-  idx (sy intNormForce) (sy numbSlices - int 1) * 
-  idx (sy shrResC) (sy numbSlices - int 1)
+fctSftyDerivEqn12 = neg (sy fs `mulRe` indxn shearFNoIntsl $- indxn shearRNoIntsl) $/
+  idx (sy mobShrC) (sy numbSlices $- int 1) $= 
+  idx (sy intNormForce) (sy numbSlices $- int 1) `mulRe` 
+  idx (sy shrResC) (sy numbSlices $- int 1)
 
 fctSftyDerivEqn13 :: Expr
-fctSftyDerivEqn13 = idx (sy intNormForce) 2 * idx (sy shrResC) 2 $= 
-  idx (sy mobShrC) 1 * (sy fs * idx (sy shearFNoIntsl) 1 -
-  idx (sy shearRNoIntsl) 1) + sy fs * idx (sy shearFNoIntsl) 2 - 
-  idx (sy shearRNoIntsl) 2
+fctSftyDerivEqn13 = idx (sy intNormForce) (int 2) `mulRe` idx (sy shrResC) (int 2) $= 
+  idx (sy mobShrC) (int 1) `mulRe` (sy fs `mulRe` idx (sy shearFNoIntsl) (int 1) $-
+  idx (sy shearRNoIntsl) (int 1)) `addRe` sy fs `mulRe` idx (sy shearFNoIntsl) (int 2) $- 
+  idx (sy shearRNoIntsl) (int 2)
 
 fctSftyDerivEqn14 :: Expr
-fctSftyDerivEqn14 = idx (sy intNormForce) 3 * idx (sy shrResC) 3 $= 
-  idx (sy mobShrC) 2 * (idx (sy mobShrC) 1 * (sy fs * idx (sy shearFNoIntsl) 1 -
-  idx (sy shearRNoIntsl) 1) + sy fs * idx (sy shearFNoIntsl) 2 - 
-  idx (sy shearRNoIntsl) 2) + sy fs * idx (sy shearFNoIntsl) 3 - 
-  idx (sy shearRNoIntsl) 3
+fctSftyDerivEqn14 = idx (sy intNormForce) (int 3) `mulRe` idx (sy shrResC) (int 3) $= 
+  idx (sy mobShrC) (int 2) `mulRe` (idx (sy mobShrC) (int 1) `mulRe` (sy fs `mulRe` idx (sy shearFNoIntsl) (int 1) $-
+  idx (sy shearRNoIntsl) (int 1)) `addRe` sy fs `mulRe` idx (sy shearFNoIntsl) (int 2) $- 
+  idx (sy shearRNoIntsl) (int 2)) `addRe` sy fs `mulRe` idx (sy shearFNoIntsl) (int 3) $- 
+  idx (sy shearRNoIntsl) (int 3)
 
 -- Need to add ellipses where appropriate
 fctSftyDerivEqn15 :: Expr
-fctSftyDerivEqn15 = idx (sy intNormForce) (sy numbSlices - int 1) * 
-  idx (sy shrResC) (sy numbSlices - int 1) $= idx (sy mobShrC) (sy numbSlices - int 2) * (idx (sy mobShrC) (sy numbSlices - int 3) * (idx (sy mobShrC) 1 * (sy fs * idx (sy shearFNoIntsl) 1 - idx (sy shearRNoIntsl) 1) + sy fs * 
-  idx (sy shearFNoIntsl) 2 - idx (sy shearRNoIntsl) 2) + sy fs * 
-  idx (sy shearFNoIntsl) (sy numbSlices - int 2) - 
-  idx (sy shearRNoIntsl) (sy numbSlices - int 2)) + sy fs *
-  idx (sy shearFNoIntsl) (sy numbSlices - int 1) - 
-  idx (sy shearRNoIntsl) (sy numbSlices - int 1)
+fctSftyDerivEqn15 = idx (sy intNormForce) (sy numbSlices $- int 1) `mulRe` 
+  idx (sy shrResC) (sy numbSlices $- int 1) $= idx (sy mobShrC) (sy numbSlices $- int 2) `mulRe` (idx (sy mobShrC) (sy numbSlices $- int 3) `mulRe` (idx (sy mobShrC) (int 1) `mulRe` (sy fs `mulRe` idx (sy shearFNoIntsl) (int 1) $- idx (sy shearRNoIntsl) (int 1)) `addRe` sy fs `mulRe` 
+  idx (sy shearFNoIntsl) (int 2) $- idx (sy shearRNoIntsl) (int 2)) `addRe` sy fs `mulRe` 
+  idx (sy shearFNoIntsl) (sy numbSlices $- int 2) $- 
+  idx (sy shearRNoIntsl) (sy numbSlices $- int 2)) `addRe` sy fs `mulRe`
+  idx (sy shearFNoIntsl) (sy numbSlices $- int 1) $- 
+  idx (sy shearRNoIntsl) (sy numbSlices $- int 1)
 
 -- Ellipses needed here too
 fctSftyDerivEqn16 :: Expr
-fctSftyDerivEqn16 = -(sy fs * indxn shearFNoIntsl - indxn shearRNoIntsl) /
-  idx (sy mobShrC) (sy numbSlices - int 1) $= idx (sy mobShrC) (sy numbSlices - 
-  int 2) * (idx (sy mobShrC) (sy numbSlices - int 3) * (idx (sy mobShrC) 1 * 
-  (sy fs * idx (sy shearFNoIntsl) 1 - idx (sy shearRNoIntsl) 1) + sy fs * 
-  idx (sy shearFNoIntsl) 2 - idx (sy shearRNoIntsl) 2) + sy fs * 
-  idx (sy shearFNoIntsl) (sy numbSlices - int 2) - 
-  idx (sy shearRNoIntsl) (sy numbSlices - int 2)) + sy fs *
-  idx (sy shearFNoIntsl) (sy numbSlices - int 1) - 
-  idx (sy shearRNoIntsl) (sy numbSlices - int 1)
+fctSftyDerivEqn16 = neg (sy fs `mulRe` indxn shearFNoIntsl $- indxn shearRNoIntsl) $/
+  idx (sy mobShrC) (sy numbSlices $- int 1) $= idx (sy mobShrC) (sy numbSlices $- 
+  int 2) `mulRe` (idx (sy mobShrC) (sy numbSlices $- int 3) `mulRe` (idx (sy mobShrC) (int 1) `mulRe` 
+  (sy fs `mulRe` idx (sy shearFNoIntsl) (int 1) $- idx (sy shearRNoIntsl) (int 1)) `addRe` sy fs `mulRe` 
+  idx (sy shearFNoIntsl) (int 2) $- idx (sy shearRNoIntsl) (int 2)) `addRe` sy fs `mulRe` 
+  idx (sy shearFNoIntsl) (sy numbSlices $- int 2) $- 
+  idx (sy shearRNoIntsl) (sy numbSlices $- int 2)) `addRe` sy fs `mulRe`
+  idx (sy shearFNoIntsl) (sy numbSlices $- int 1) $- 
+  idx (sy shearRNoIntsl) (sy numbSlices $- int 1)
 
 -- Ellipses needed here too
 fctSftyDerivEqn17 :: Expr
-fctSftyDerivEqn17 = -(sy fs * indxn shearFNoIntsl - indxn shearRNoIntsl) $=
-  idx (sy mobShrC) (sy numbSlices - int 1) * idx (sy mobShrC) (sy numbSlices - int 2) * idx (sy mobShrC) 1 * (sy fs * indx1 shearFNoIntsl - 
-  indx1 shearRNoIntsl) + idx (sy mobShrC) (sy numbSlices - int 1) * idx (sy mobShrC) (sy numbSlices - int 2) * idx (sy mobShrC) 2 * (sy fs * 
-  idx (sy shearFNoIntsl) 2 - idx (sy shearRNoIntsl) 2) +
-  idx (sy mobShrC) (sy numbSlices - int 1) * (sy fs * 
-  idx (sy shearFNoIntsl) (sy numbSlices - int 1) - 
-  idx (sy shearRNoIntsl) (sy numbSlices - int 1))
+fctSftyDerivEqn17 = neg (sy fs `mulRe` indxn shearFNoIntsl $- indxn shearRNoIntsl) $=
+  idx (sy mobShrC) (sy numbSlices $- int 1) `mulRe` idx (sy mobShrC) (sy numbSlices $- int 2) `mulRe` idx (sy mobShrC) (int 1) `mulRe` (sy fs `mulRe` indx1 shearFNoIntsl $- 
+  indx1 shearRNoIntsl) `addRe` idx (sy mobShrC) (sy numbSlices $- int 1) `mulRe` idx (sy mobShrC) (sy numbSlices $- int 2) `mulRe` idx (sy mobShrC) (int 2) `mulRe` (sy fs `mulRe` 
+  idx (sy shearFNoIntsl) (int 2) $- idx (sy shearRNoIntsl) (int 2)) `addRe`
+  idx (sy mobShrC) (sy numbSlices $- int 1) `mulRe` (sy fs `mulRe` 
+  idx (sy shearFNoIntsl) (sy numbSlices $- int 1) $- 
+  idx (sy shearRNoIntsl) (sy numbSlices $- int 1))
 
 -- Ellipses needed here too
 fctSftyDerivEqn18 :: Expr
-fctSftyDerivEqn18 = sy fs * (idx (sy mobShrC) (sy numbSlices - int 1) * 
-  idx (sy mobShrC) (sy numbSlices - int 2) * idx (sy mobShrC) 1 * 
-  idx (sy shearFNoIntsl) 1 + idx (sy mobShrC) (sy numbSlices - int 1) * 
-  idx (sy mobShrC) (sy numbSlices - int 2) * idx (sy mobShrC) 2 *
-  idx (sy shearFNoIntsl) 2 + idx (sy mobShrC) (sy numbSlices - int 1) *
-  idx (sy shearFNoIntsl) (sy numbSlices - int 1) + indxn shearFNoIntsl) $=
-  idx (sy mobShrC) (sy numbSlices - int 1) * 
-  idx (sy mobShrC) (sy numbSlices - int 2) * idx (sy mobShrC) 1 * 
-  idx (sy shearRNoIntsl) 1 + idx (sy mobShrC) (sy numbSlices - int 1) * 
-  idx (sy mobShrC) (sy numbSlices - int 2) * idx (sy mobShrC) 2 *
-  idx (sy shearRNoIntsl) 2 + idx (sy mobShrC) (sy numbSlices - int 1) *
-  idx (sy shearRNoIntsl) (sy numbSlices - int 1) + indxn shearRNoIntsl
+fctSftyDerivEqn18 = sy fs `mulRe` (idx (sy mobShrC) (sy numbSlices $- int 1) `mulRe` 
+  idx (sy mobShrC) (sy numbSlices $- int 2) `mulRe` idx (sy mobShrC) (int 1) `mulRe` 
+  idx (sy shearFNoIntsl) (int 1) `addRe` idx (sy mobShrC) (sy numbSlices $- int 1) `mulRe` 
+  idx (sy mobShrC) (sy numbSlices $- int 2) `mulRe` idx (sy mobShrC) (int 2) `mulRe`
+  idx (sy shearFNoIntsl) (int 2) `addRe` idx (sy mobShrC) (sy numbSlices $- int 1) `mulRe`
+  idx (sy shearFNoIntsl) (sy numbSlices $- int 1) `addRe` indxn shearFNoIntsl) $=
+  idx (sy mobShrC) (sy numbSlices $- int 1) `mulRe` 
+  idx (sy mobShrC) (sy numbSlices $- int 2) `mulRe` idx (sy mobShrC) (int 1) `mulRe` 
+  idx (sy shearRNoIntsl) (int 1) `addRe` idx (sy mobShrC) (sy numbSlices $- int 1) `mulRe` 
+  idx (sy mobShrC) (sy numbSlices $- int 2) `mulRe` idx (sy mobShrC) (int 2) `mulRe`
+  idx (sy shearRNoIntsl) (int 2) `addRe` idx (sy mobShrC) (sy numbSlices $- int 1) `mulRe`
+  idx (sy shearRNoIntsl) (sy numbSlices $- int 1) `addRe` indxn shearRNoIntsl
 
 ------------------------------------------------------------------------
 
@@ -378,7 +378,7 @@ nrmShrForRC = makeRC "nrmShrForRC" (nounPhraseSP "normal and shear force proport
   nrmShrFDesc nrmShrFRel -- nrmShrForL
 
 nrmShrFRel :: Relation
-nrmShrFRel = sy normToShear $= sum1toN (inxi nrmShearNum) / sum1toN (inxi nrmShearDen)
+nrmShrFRel = sy normToShear $= sum1toN (inxi nrmShearNum) $/ sum1toN (inxi nrmShearDen)
 
 nrmShrFDesc :: Sentence
 nrmShrFDesc = foldlSent [ch nrmShearNum, S "is defined in", 
@@ -409,8 +409,8 @@ nrmShrDerivSentence3 = [S "This", phrase equation, S "can be simplified by",
 nrmShrDerivSentence4 :: [Sentence]
 nrmShrDerivSentence4 = [S "Taking the summation of all", plural slice `sC`
   S "and applying", makeRef2S assumpES, S "to set", 
-  E (idx (sy intNormForce) 0) `sC` E (indxn intNormForce) `sC`
-  E (idx (sy watrForce) 0) `sC` S "and", E (indxn watrForce), 
+  E (idx (sy intNormForce) (int 0)) `sC` E (indxn intNormForce) `sC`
+  E (idx (sy watrForce) (int 0)) `sC` S "and", E (indxn watrForce), 
   S "equal to zero" `sC` S "a general", phrase equation, S "for the", 
   getTandS normToShear, S "is developed in", eqN 16 `sC` S "which combines", makeRef2S nrmShrFor `sC` makeRef2S nrmShrForNum `sC` S "and",
   makeRef2S nrmShrForDen]
@@ -430,25 +430,25 @@ nrmShrDerivEqns = [nrmShrDerivEqn1, nrmShrDerivEqn2, nrmShrDerivEqn3,
   nrmShrDerivEqn4]
 
 nrmShrDerivEqn1, nrmShrDerivEqn2, nrmShrDerivEqn3, nrmShrDerivEqn4 :: Expr
-nrmShrDerivEqn1 = 0 $=
-  momExpr (\ x y -> x + (sy normToShear * (inxi baseWthX / 2) * 
-  (inxi intNormForce * inxi scalFunc + inxiM1 intNormForce *
-  inxiM1 scalFunc)) + y)
+nrmShrDerivEqn1 = dbl 0 $=
+  momExpr (\ x y -> x `addRe` (sy normToShear `mulRe` (inxi baseWthX $/ dbl 2) `mulRe` 
+  (inxi intNormForce `mulRe` inxi scalFunc `addRe` inxiM1 intNormForce `mulRe`
+  inxiM1 scalFunc)) `addRe` y)
 
-nrmShrDerivEqn2 = sy normToShear $= momExpr (+)
-  / negate ((inxi baseWthX / 2) * (inxi intNormForce * inxi scalFunc +
-  inxiM1 intNormForce * inxiM1 scalFunc))
+nrmShrDerivEqn2 = sy normToShear $= momExpr addRe
+  $/ neg ((inxi baseWthX $/ int 2) `mulRe` (inxi intNormForce `mulRe` inxi scalFunc  `addRe`
+  inxiM1 intNormForce `mulRe` inxiM1 scalFunc))
 
-nrmShrDerivEqn3 = sy normToShear $= momExprNoKQ (+)
-  / negate ((inxi baseWthX / 2) * (inxi intNormForce * inxi scalFunc +
-  inxiM1 intNormForce * inxiM1 scalFunc))
+nrmShrDerivEqn3 = sy normToShear $= momExprNoKQ addRe
+  $/ neg ((inxi baseWthX $/ int 2) `mulRe` (inxi intNormForce `mulRe` inxi scalFunc  `addRe`
+  inxiM1 intNormForce `mulRe` inxiM1 scalFunc))
 
 nrmShrDerivEqn4 = sy normToShear $= sum1toN
-  (inxi baseWthX * (sy nrmForceSum + sy watForceSum) * tan (inxi baseAngle) +
-  inxi midpntHght * negate (2 * inxi surfHydroForce * sin (inxi surfAngle)))
-  / sum1toN
-  (inxi baseWthX * (inxi intNormForce * inxi scalFunc +
-  inxiM1 intNormForce * inxiM1 scalFunc))
+  (inxi baseWthX `mulRe` (sy nrmForceSum `addRe` sy watForceSum) `mulRe` tan (inxi baseAngle)  `addRe`
+  inxi midpntHght `mulRe` neg (int 2 `mulRe` inxi surfHydroForce `mulRe` sin (inxi surfAngle)))
+  $/ sum1toN
+  (inxi baseWthX `mulRe` (inxi intNormForce `mulRe` inxi scalFunc `addRe`
+  inxiM1 intNormForce `mulRe` inxiM1 scalFunc))
 
 ---------------------------------------------------------------------
 
@@ -464,17 +464,17 @@ nrmShrForNumRC = makeRC "nrmShrForNumRC" (nounPhraseSP "normal and shear force p
 
 nrmShrFNumRel :: Relation
 nrmShrFNumRel = inxi nrmShearNum $= incompleteCase [case1,case2,case3]
-  where case1 = (indx1 baseWthX * (indx1 intNormForce + indx1 watrForce) *
-          tan (indx1 baseAngle), sy index $= 1)
-        case2 = (inxi baseWthX *
-          (sy nrmForceSum + sy watForceSum)
-           * tan (inxi baseAngle) + sy midpntHght * (negate
-          2 * inxi surfHydroForce * sin (inxi surfAngle)),
-          2 $<= sy index $<= (sy numbSlices - 1))
-        case3 = (indxn baseWthX * (idx (sy intNormForce)
-          (sy numbSlices -1) + idx (sy watrForce)
-          (sy numbSlices - 1)) * tan (idx (sy baseAngle)
-          (sy numbSlices - 1)), sy index $= sy numbSlices)
+  where case1 = (indx1 baseWthX `mulRe` (indx1 intNormForce `addRe` indx1 watrForce) `mulRe`
+          tan (indx1 baseAngle), sy index $= int 1)
+        case2 = (inxi baseWthX `mulRe`
+          (sy nrmForceSum `addRe` sy watForceSum)
+           `mulRe` tan (inxi baseAngle) `addRe` sy midpntHght `mulRe` (neg
+          (dbl 2) `mulRe` inxi surfHydroForce `mulRe` sin (inxi surfAngle)),
+          dbl 2 $<= sy index $<= (sy numbSlices $- int 1))
+        case3 = (indxn baseWthX `mulRe` (idx (sy intNormForce)
+          (sy numbSlices $- int 1) `addRe` idx (sy watrForce)
+          (sy numbSlices $- int 1)) `mulRe` tan (idx (sy baseAngle)
+          (sy numbSlices $- int 1)), sy index $= sy numbSlices)
 
 nrmShrFNumDeriv :: Derivation
 nrmShrFNumDeriv = mkDerivNoHeader [foldlSent [S "See", makeRef2S nrmShrFor,
@@ -502,12 +502,12 @@ nrmShrForDenRC = makeRC "nrmShrForDenRC" (nounPhraseSP "normal and shear force p
 
 nrmShrFDenRel :: Relation
 nrmShrFDenRel = inxi nrmShearDen $= incompleteCase [
-  (indx1 baseWthX * indx1 scalFunc * indx1 intNormForce, sy index $= 1),
-  (inxi baseWthX * (inxi scalFunc * inxi intNormForce +
-    inxiM1 scalFunc  * inxiM1 intNormForce),
-    2 $<= sy index $<= (sy numbSlices - 1)),
-  (indxn baseWthX * idx (sy intNormForce) (sy numbSlices - 1) *
-    idx (sy scalFunc) (sy numbSlices - 1), sy index $= sy numbSlices)
+  (indx1 baseWthX `mulRe` indx1 scalFunc `mulRe` indx1 intNormForce, sy index $= int 1),
+  (inxi baseWthX `mulRe` (inxi scalFunc `mulRe` inxi intNormForce `addRe`
+    inxiM1 scalFunc  `mulRe` inxiM1 intNormForce),
+    int 2 $<= sy index $<= (sy numbSlices $- int 1)),
+  (indxn baseWthX `mulRe` idx (sy intNormForce) (sy numbSlices $- int 1) `mulRe`
+    idx (sy scalFunc) (sy numbSlices $- int 1), sy index $= sy numbSlices)
   ]
 
 nrmShrFDenDeriv :: Derivation
@@ -533,12 +533,12 @@ intsliceFsRC = makeRC "intsliceFsRC" (nounPhraseSP "interslice normal forces")
 
 sliceFsRel :: Relation
 sliceFsRel = inxi intNormForce $= incompleteCase [
-  ((sy fs * indx1 shearFNoIntsl - indx1 shearRNoIntsl) / indx1 shrResC,
-    sy index $= 1),
-  ((inxiM1 mobShrC * inxiM1 intNormForce +
-    sy fs * inxi shearFNoIntsl - inxi shearRNoIntsl) / inxi shrResC,
-    2 $<= sy index $<= (sy numbSlices - 1)),
-  (0, sy index $= 0 $|| sy index $= sy numbSlices)]  
+  ((sy fs `mulRe` indx1 shearFNoIntsl $- indx1 shearRNoIntsl) $/ indx1 shrResC,
+    sy index $= int 1),
+  ((inxiM1 mobShrC `mulRe` inxiM1 intNormForce `addRe`
+    sy fs `mulRe` inxi shearFNoIntsl $- inxi shearRNoIntsl) $/ inxi shrResC,
+    int 2 $<= sy index $<= (sy numbSlices $- int 1)),
+  (int 0, sy index $= int 0 $|| sy index $= sy numbSlices)]  
   -- FIXME: Use index i as part of condition
 
 sliceFsDesc :: Sentence
@@ -561,10 +561,10 @@ intrSlcDerivSentence2 = [S "A simple rearrangement of", eqN 3, S "leads to",
 
 intrSlcDerivSentence3 :: [Sentence]
 intrSlcDerivSentence3 = [S "The cases shown in" +:+ makeRef2S intsliceFs +:+
-  S "for when" +:+ E (sy index $= 0) `sC` E (sy index $= 1) `sC` S "or" +:+
+  S "for when" +:+ E (sy index $= int 0) `sC` E (sy index $= int 1) `sC` S "or" +:+
   E (sy index $= sy numbSlices) +:+ S "are derived by applying" +:+
   makeRef2S assumpES `sC` S "which says that" +:+
-  E (idx (sy intNormForce) 0) `sAnd` E (indxn intNormForce) +:+ 
+  E (idx (sy intNormForce) (int 0)) `sAnd` E (indxn intNormForce) +:+ 
   S "are zero" `sC` S "to" +:+. eqN 17 +:+ ch intNormForce +:+
   S "depends on the unknowns" +:+ ch fs +:+ sParen (makeRef2S fctSfty) `sAnd`
   ch normToShear +:+. sParen (makeRef2S nrmShrFor)]
@@ -578,8 +578,8 @@ intrSlcDerivEqns = [fctSftyDerivEqn9, intrSlcDerivEqn]
 
 intrSlcDerivEqn :: Expr
 intrSlcDerivEqn = inxi intNormForce $= 
-  (inxiM1 mobShrC * inxiM1 intNormForce +
-  sy fs * inxi shearFNoIntsl - inxi shearRNoIntsl) / inxi shrResC
+  (inxiM1 mobShrC `mulRe` inxiM1 intNormForce `addRe`
+  sy fs `mulRe` inxi shearFNoIntsl $- inxi shearRNoIntsl) $/ inxi shrResC
 
 --------------------------------------------------------------------------
 crtSlpId :: InstanceModel

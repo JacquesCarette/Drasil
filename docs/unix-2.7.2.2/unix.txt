@@ -290,20 +290,20 @@ module System.Posix.Error
 
 -- | as <a>throwErrno</a>, but exceptions include the given path when
 --   appropriate.
-throwErrnoPath :: () => String -> FilePath -> IO a
+throwErrnoPath :: String -> FilePath -> IO a
 
 -- | as <a>throwErrnoIf</a>, but exceptions include the given path when
 --   appropriate.
-throwErrnoPathIf :: () => (a -> Bool) -> String -> FilePath -> IO a -> IO a
+throwErrnoPathIf :: (a -> Bool) -> String -> FilePath -> IO a -> IO a
 
 -- | as <a>throwErrnoIf_</a>, but exceptions include the given path when
 --   appropriate.
-throwErrnoPathIf_ :: () => (a -> Bool) -> String -> FilePath -> IO a -> IO ()
+throwErrnoPathIf_ :: (a -> Bool) -> String -> FilePath -> IO a -> IO ()
 throwErrnoPathIfRetry :: (a -> Bool) -> String -> FilePath -> IO a -> IO a
 
 -- | as <a>throwErrnoIfNull</a>, but exceptions include the given path when
 --   appropriate.
-throwErrnoPathIfNull :: () => String -> FilePath -> IO (Ptr a) -> IO (Ptr a)
+throwErrnoPathIfNull :: String -> FilePath -> IO (Ptr a) -> IO (Ptr a)
 throwErrnoPathIfNullRetry :: String -> FilePath -> IO (Ptr a) -> IO (Ptr a)
 
 -- | as <a>throwErrnoIfMinus1</a>, but exceptions include the given path

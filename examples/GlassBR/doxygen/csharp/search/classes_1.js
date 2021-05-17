@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['derivedvalues',['DerivedValues',['../class_derived_values.html',1,'']]]
+  ['derivedvalues_42',['DerivedValues',['../class_derived_values.html',1,'']]]
 ];

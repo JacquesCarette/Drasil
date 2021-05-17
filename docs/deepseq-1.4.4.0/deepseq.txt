@@ -73,7 +73,7 @@ module Control.DeepSeq
 class NFData a
 
 -- | <a>rnf</a> should reduce its argument to normal form (that is, fully
---   evaluate all sub-components), and then return '()'.
+--   evaluate all sub-components), and then return <tt>()</tt>.
 --   
 --   <h3><a>Generic</a> <a>NFData</a> deriving</h3>
 --   
@@ -150,7 +150,7 @@ class NFData a
 rnf :: NFData a => a -> ()
 
 -- | <a>rnf</a> should reduce its argument to normal form (that is, fully
---   evaluate all sub-components), and then return '()'.
+--   evaluate all sub-components), and then return <tt>()</tt>.
 --   
 --   <h3><a>Generic</a> <a>NFData</a> deriving</h3>
 --   
@@ -319,14 +319,14 @@ class NFData1 f
 
 -- | <a>liftRnf</a> should reduce its argument to normal form (that is,
 --   fully evaluate all sub-components), given an argument to reduce
---   <tt>a</tt> arguments, and then return '()'.
+--   <tt>a</tt> arguments, and then return <tt>()</tt>.
 --   
 --   See <a>rnf</a> for the generic deriving.
 liftRnf :: NFData1 f => (a -> ()) -> f a -> ()
 
 -- | <a>liftRnf</a> should reduce its argument to normal form (that is,
 --   fully evaluate all sub-components), given an argument to reduce
---   <tt>a</tt> arguments, and then return '()'.
+--   <tt>a</tt> arguments, and then return <tt>()</tt>.
 --   
 --   See <a>rnf</a> for the generic deriving.
 liftRnf :: (NFData1 f, Generic1 f, GNFData One (Rep1 f)) => (a -> ()) -> f a -> ()
@@ -340,7 +340,7 @@ class NFData2 p
 -- | <a>liftRnf2</a> should reduce its argument to normal form (that is,
 --   fully evaluate all sub-components), given functions to reduce
 --   <tt>a</tt> and <tt>b</tt> arguments respectively, and then return
---   '()'.
+--   <tt>()</tt>.
 --   
 --   <b>Note</b>: Unlike for the unary <a>liftRnf</a>, there is currently
 --   no support for generically deriving <a>liftRnf2</a>.
@@ -432,7 +432,7 @@ instance Control.DeepSeq.NFData GHC.Word.Word64
 instance Control.DeepSeq.NFData GHC.IO.MaskingState
 instance forall k (a :: k). Control.DeepSeq.NFData (Data.Proxy.Proxy a)
 instance forall k (a :: k) (b :: k). Control.DeepSeq.NFData (a Data.Type.Equality.:~: b)
-instance forall k2 k1 (a :: k1) (b :: k2). Control.DeepSeq.NFData (a Data.Type.Equality.:~~: b)
+instance forall k1 k2 (a :: k1) (b :: k2). Control.DeepSeq.NFData (a Data.Type.Equality.:~~: b)
 instance Control.DeepSeq.NFData a => Control.DeepSeq.NFData (Data.Functor.Identity.Identity a)
 instance Control.DeepSeq.NFData Data.Void.Void
 instance Control.DeepSeq.NFData GHC.Natural.Natural

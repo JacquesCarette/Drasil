@@ -75,7 +75,7 @@ isFullTBQueue :: TBQueue a -> STM Bool
 instance GHC.Classes.Eq (Control.Concurrent.STM.TBQueue.TBQueue a)
 
 
--- | TChan: Transactional channels (GHC only)
+-- | (GHC only)
 module Control.Concurrent.STM.TChan
 
 -- | <a>TChan</a> is an abstract type representing an unbounded FIFO
@@ -152,7 +152,7 @@ isEmptyTChan :: TChan a -> STM Bool
 instance GHC.Classes.Eq (Control.Concurrent.STM.TChan.TChan a)
 
 
--- | TMVar: Transactional MVars, for use in the STM monad (GHC only)
+-- | (GHC only)
 module Control.Concurrent.STM.TMVar
 
 -- | A <a>TMVar</a> is a synchronising variable, used for communication
@@ -279,22 +279,21 @@ isEmptyTQueue :: TQueue a -> STM Bool
 instance GHC.Classes.Eq (Control.Concurrent.STM.TQueue.TQueue a)
 
 
--- | TVar: Transactional variables
 module Control.Concurrent.STM.TVar
 
 -- | Shared memory locations that support atomic memory transactions.
 data TVar a
 
 -- | Create a new <a>TVar</a> holding a value supplied
-newTVar :: () => a -> STM (TVar a)
+newTVar :: a -> STM (TVar a)
 
 -- | <tt>IO</tt> version of <a>newTVar</a>. This is useful for creating
 --   top-level <a>TVar</a>s using <a>unsafePerformIO</a>, because using
 --   <a>atomically</a> inside <a>unsafePerformIO</a> isn't possible.
-newTVarIO :: () => a -> IO (TVar a)
+newTVarIO :: a -> IO (TVar a)
 
 -- | Return the current value stored in a <a>TVar</a>.
-readTVar :: () => TVar a -> STM a
+readTVar :: TVar a -> STM a
 
 -- | Return the current value stored in a <a>TVar</a>. This is equivalent
 --   to
@@ -305,10 +304,10 @@ readTVar :: () => TVar a -> STM a
 --   
 --   but works much faster, because it doesn't perform a complete
 --   transaction, it just reads the current value of the <a>TVar</a>.
-readTVarIO :: () => TVar a -> IO a
+readTVarIO :: TVar a -> IO a
 
 -- | Write the supplied value into a <a>TVar</a>.
-writeTVar :: () => TVar a -> a -> STM ()
+writeTVar :: TVar a -> a -> STM ()
 
 -- | Mutate the contents of a <a>TVar</a>. <i>N.B.</i>, this version is
 --   non-strict.
@@ -335,7 +334,6 @@ registerDelay :: Int -> IO (TVar Bool)
 mkWeakTVar :: TVar a -> IO () -> IO (Weak (TVar a))
 
 
--- | TArrays: transactional arrays, for use in the STM monad
 module Control.Concurrent.STM.TArray
 
 -- | TArray is a transactional array, supporting the usual <a>MArray</a>
@@ -388,20 +386,20 @@ data STM a
 --   
 --   However, there are functions for creating transactional variables that
 --   can always be safely called in <a>unsafePerformIO</a>. See:
---   <a>newTVarIO</a>, <tt>newTChanIO</tt>, <tt>newBroadcastTChanIO</tt>,
---   <tt>newTQueueIO</tt>, <tt>newTBQueueIO</tt>, and <tt>newTMVarIO</tt>.
+--   <a>newTVarIO</a>, <a>newTChanIO</a>, <a>newBroadcastTChanIO</a>,
+--   <a>newTQueueIO</a>, <a>newTBQueueIO</a>, and <a>newTMVarIO</a>.
 --   
 --   Using <a>unsafePerformIO</a> inside of <a>atomically</a> is also
 --   dangerous but for different reasons. See <a>unsafeIOToSTM</a> for more
 --   on this.
-atomically :: () => STM a -> IO a
+atomically :: STM a -> IO a
 
 -- | Retry execution of the current memory transaction because it has seen
 --   values in <a>TVar</a>s which mean that it should not continue (e.g.
 --   the <a>TVar</a>s represent a shared buffer that is now empty). The
 --   implementation may block the thread until one of the <a>TVar</a>s that
 --   it has read from has been updated. (GHC only)
-retry :: () => STM a
+retry :: STM a
 
 -- | Compose two alternative STM actions (GHC only).
 --   
@@ -409,7 +407,7 @@ retry :: () => STM a
 --   result of the <a>orElse</a>. Otherwise, if the first action retries,
 --   then the second action is tried in its place. If both actions retry
 --   then the <a>orElse</a> as a whole retries.
-orElse :: () => STM a -> STM a -> STM a
+orElse :: STM a -> STM a -> STM a
 
 -- | Check that the boolean condition is true and, if not, <a>retry</a>.
 --   
@@ -420,7 +418,13 @@ check :: Bool -> STM ()
 --   monad.
 --   
 --   Throwing an exception in <tt>STM</tt> aborts the transaction and
---   propagates the exception.
+--   propagates the exception. If the exception is caught via
+--   <a>catchSTM</a>, only the changes enclosed by the catch are rolled
+--   back; changes made outside of <a>catchSTM</a> persist.
+--   
+--   If the exception is not caught inside of the <a>STM</a>, it is
+--   re-thrown by <a>atomically</a>, and the entire <a>STM</a> is rolled
+--   back.
 --   
 --   Although <a>throwSTM</a> has a type that is an instance of the type of
 --   <a>throw</a>, the two functions are subtly different:
@@ -440,6 +444,11 @@ check :: Bool -> STM ()
 throwSTM :: Exception e => e -> STM a
 
 -- | Exception handling within STM actions.
+--   
+--   <tt><a>catchSTM</a> m f</tt> catches any exception thrown by
+--   <tt>m</tt> using <a>throwSTM</a>, using the function <tt>f</tt> to
+--   handle the exception. If an exception is thrown, any changes made by
+--   <tt>m</tt> are rolled back, but changes prior to <tt>m</tt> persist.
 catchSTM :: Exception e => STM a -> (e -> STM a) -> STM a
 instance Control.Monad.Fix.MonadFix GHC.Conc.Sync.STM
 

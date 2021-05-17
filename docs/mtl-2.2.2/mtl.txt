@@ -375,7 +375,7 @@ type State s = StateT s Identity
 
 -- | Unwrap a state monad computation as a function. (The inverse of
 --   <a>state</a>.)
-runState :: () => State s a -> s -> (a, s)
+runState :: State s a -> s -> (a, s)
 
 -- | Evaluate a state computation with the given initial state and return
 --   the final value, discarding the final state.
@@ -384,7 +384,7 @@ runState :: () => State s a -> s -> (a, s)
 --   <li><pre><a>evalState</a> m s = <a>fst</a> (<a>runState</a> m
 --   s)</pre></li>
 --   </ul>
-evalState :: () => State s a -> s -> a
+evalState :: State s a -> s -> a
 
 -- | Evaluate a state computation with the given initial state and return
 --   the final state, discarding the final value.
@@ -393,7 +393,7 @@ evalState :: () => State s a -> s -> a
 --   <li><pre><a>execState</a> m s = <a>snd</a> (<a>runState</a> m
 --   s)</pre></li>
 --   </ul>
-execState :: () => State s a -> s -> s
+execState :: State s a -> s -> s
 
 -- | Map both the return value and final state of a computation using the
 --   given function.
@@ -402,7 +402,7 @@ execState :: () => State s a -> s -> s
 --   <li><pre><a>runState</a> (<a>mapState</a> f m) = f . <a>runState</a>
 --   m</pre></li>
 --   </ul>
-mapState :: () => ((a, s) -> (b, s)) -> State s a -> State s b
+mapState :: ((a, s) -> (b, s)) -> State s a -> State s b
 
 -- | <tt><a>withState</a> f m</tt> executes action <tt>m</tt> on a state
 --   modified by applying <tt>f</tt>.
@@ -410,7 +410,7 @@ mapState :: () => ((a, s) -> (b, s)) -> State s a -> State s b
 --   <ul>
 --   <li><pre><a>withState</a> f m = <a>modify</a> f &gt;&gt; m</pre></li>
 --   </ul>
-withState :: () => (s -> s) -> State s a -> State s a
+withState :: (s -> s) -> State s a -> State s a
 
 -- | A state transformer monad parameterized by:
 --   
@@ -423,7 +423,7 @@ withState :: () => (s -> s) -> State s a -> State s a
 --   <tt>&gt;&gt;=</tt> uses the final state of the first computation as
 --   the initial state of the second.
 newtype StateT s (m :: Type -> Type) a
-StateT :: (s -> m (a, s)) -> StateT s a
+StateT :: (s -> m (a, s)) -> StateT s (m :: Type -> Type) a
 runStateT :: StateT s m a -> s -> m (a, s)
 
 -- | Evaluate a state computation with the given initial state and return
@@ -451,7 +451,7 @@ execStateT :: Monad m => StateT s m a -> s -> m s
 --   <li><pre><a>runStateT</a> (<a>mapStateT</a> f m) = f .
 --   <a>runStateT</a> m</pre></li>
 --   </ul>
-mapStateT :: () => (m (a, s) -> n (b, s)) -> StateT s m a -> StateT s n b
+mapStateT :: (m (a, s) -> n (b, s)) -> StateT s m a -> StateT s n b
 
 -- | <tt><a>withStateT</a> f m</tt> executes action <tt>m</tt> on a state
 --   modified by applying <tt>f</tt>.
@@ -459,7 +459,7 @@ mapStateT :: () => (m (a, s) -> n (b, s)) -> StateT s m a -> StateT s n b
 --   <ul>
 --   <li><pre><a>withStateT</a> f m = <a>modify</a> f &gt;&gt; m</pre></li>
 --   </ul>
-withStateT :: () => (s -> s) -> StateT s m a -> StateT s m a
+withStateT :: forall s (m :: Type -> Type) a. (s -> s) -> StateT s m a -> StateT s m a
 
 
 -- | Lazy state monads.
@@ -515,7 +515,7 @@ type State s = StateT s Identity
 
 -- | Unwrap a state monad computation as a function. (The inverse of
 --   <a>state</a>.)
-runState :: () => State s a -> s -> (a, s)
+runState :: State s a -> s -> (a, s)
 
 -- | Evaluate a state computation with the given initial state and return
 --   the final value, discarding the final state.
@@ -524,7 +524,7 @@ runState :: () => State s a -> s -> (a, s)
 --   <li><pre><a>evalState</a> m s = <a>fst</a> (<a>runState</a> m
 --   s)</pre></li>
 --   </ul>
-evalState :: () => State s a -> s -> a
+evalState :: State s a -> s -> a
 
 -- | Evaluate a state computation with the given initial state and return
 --   the final state, discarding the final value.
@@ -533,7 +533,7 @@ evalState :: () => State s a -> s -> a
 --   <li><pre><a>execState</a> m s = <a>snd</a> (<a>runState</a> m
 --   s)</pre></li>
 --   </ul>
-execState :: () => State s a -> s -> s
+execState :: State s a -> s -> s
 
 -- | Map both the return value and final state of a computation using the
 --   given function.
@@ -542,7 +542,7 @@ execState :: () => State s a -> s -> s
 --   <li><pre><a>runState</a> (<a>mapState</a> f m) = f . <a>runState</a>
 --   m</pre></li>
 --   </ul>
-mapState :: () => ((a, s) -> (b, s)) -> State s a -> State s b
+mapState :: ((a, s) -> (b, s)) -> State s a -> State s b
 
 -- | <tt><a>withState</a> f m</tt> executes action <tt>m</tt> on a state
 --   modified by applying <tt>f</tt>.
@@ -550,7 +550,7 @@ mapState :: () => ((a, s) -> (b, s)) -> State s a -> State s b
 --   <ul>
 --   <li><pre><a>withState</a> f m = <a>modify</a> f &gt;&gt; m</pre></li>
 --   </ul>
-withState :: () => (s -> s) -> State s a -> State s a
+withState :: (s -> s) -> State s a -> State s a
 
 -- | A state transformer monad parameterized by:
 --   
@@ -563,7 +563,7 @@ withState :: () => (s -> s) -> State s a -> State s a
 --   <tt>&gt;&gt;=</tt> uses the final state of the first computation as
 --   the initial state of the second.
 newtype StateT s (m :: Type -> Type) a
-StateT :: (s -> m (a, s)) -> StateT s a
+StateT :: (s -> m (a, s)) -> StateT s (m :: Type -> Type) a
 runStateT :: StateT s m a -> s -> m (a, s)
 
 -- | Evaluate a state computation with the given initial state and return
@@ -591,7 +591,7 @@ execStateT :: Monad m => StateT s m a -> s -> m s
 --   <li><pre><a>runStateT</a> (<a>mapStateT</a> f m) = f .
 --   <a>runStateT</a> m</pre></li>
 --   </ul>
-mapStateT :: () => (m (a, s) -> n (b, s)) -> StateT s m a -> StateT s n b
+mapStateT :: (m (a, s) -> n (b, s)) -> StateT s m a -> StateT s n b
 
 -- | <tt><a>withStateT</a> f m</tt> executes action <tt>m</tt> on a state
 --   modified by applying <tt>f</tt>.
@@ -599,7 +599,7 @@ mapStateT :: () => (m (a, s) -> n (b, s)) -> StateT s m a -> StateT s n b
 --   <ul>
 --   <li><pre><a>withStateT</a> f m = <a>modify</a> f &gt;&gt; m</pre></li>
 --   </ul>
-withStateT :: () => (s -> s) -> StateT s m a -> StateT s m a
+withStateT :: forall s (m :: Type -> Type) a. (s -> s) -> StateT s m a -> StateT s m a
 
 
 -- | State monads.
@@ -665,7 +665,7 @@ type Reader r = ReaderT r Identity
 
 -- | Runs a <tt>Reader</tt> and extracts the final value from it. (The
 --   inverse of <a>reader</a>.)
-runReader :: () => Reader r a -> r -> a
+runReader :: Reader r a -> r -> a
 
 -- | Transform the value returned by a <tt>Reader</tt>.
 --   
@@ -673,7 +673,7 @@ runReader :: () => Reader r a -> r -> a
 --   <li><pre><a>runReader</a> (<a>mapReader</a> f m) = f .
 --   <a>runReader</a> m</pre></li>
 --   </ul>
-mapReader :: () => (a -> b) -> Reader r a -> Reader r b
+mapReader :: (a -> b) -> Reader r a -> Reader r b
 
 -- | Execute a computation in a modified environment (a specialization of
 --   <a>withReaderT</a>).
@@ -682,7 +682,7 @@ mapReader :: () => (a -> b) -> Reader r a -> Reader r b
 --   <li><pre><a>runReader</a> (<a>withReader</a> f m) = <a>runReader</a> m
 --   . f</pre></li>
 --   </ul>
-withReader :: () => (r' -> r) -> Reader r a -> Reader r' a
+withReader :: (r' -> r) -> Reader r a -> Reader r' a
 
 -- | The reader monad transformer, which adds a read-only environment to
 --   the given monad.
@@ -691,7 +691,7 @@ withReader :: () => (r' -> r) -> Reader r a -> Reader r' a
 --   <tt>&gt;&gt;=</tt> passes the inherited environment to both
 --   subcomputations.
 newtype ReaderT r (m :: Type -> Type) a
-ReaderT :: (r -> m a) -> ReaderT r a
+ReaderT :: (r -> m a) -> ReaderT r (m :: Type -> Type) a
 runReaderT :: ReaderT r m a -> r -> m a
 
 -- | Transform the computation inside a <tt>ReaderT</tt>.
@@ -700,7 +700,7 @@ runReaderT :: ReaderT r m a -> r -> m a
 --   <li><pre><a>runReaderT</a> (<a>mapReaderT</a> f m) = f .
 --   <a>runReaderT</a> m</pre></li>
 --   </ul>
-mapReaderT :: () => (m a -> n b) -> ReaderT r m a -> ReaderT r n b
+mapReaderT :: (m a -> n b) -> ReaderT r m a -> ReaderT r n b
 
 -- | Execute a computation in a modified environment (a more general
 --   version of <a>local</a>).
@@ -709,7 +709,7 @@ mapReaderT :: () => (m a -> n b) -> ReaderT r m a -> ReaderT r n b
 --   <li><pre><a>runReaderT</a> (<a>withReaderT</a> f m) =
 --   <a>runReaderT</a> m . f</pre></li>
 --   </ul>
-withReaderT :: () => (r' -> r) -> ReaderT r m a -> ReaderT r' m a
+withReaderT :: forall r' r (m :: Type -> Type) a. (r' -> r) -> ReaderT r m a -> ReaderT r' m a
 
 
 -- | The List monad.
@@ -720,8 +720,8 @@ module Control.Monad.List
 --   <i>Note:</i> this does not yield a monad unless the argument monad is
 --   commutative.
 newtype ListT (m :: Type -> Type) a
-ListT :: m [a] -> ListT a
-[runListT] :: ListT a -> m [a]
+ListT :: m [a] -> ListT (m :: Type -> Type) a
+[runListT] :: ListT (m :: Type -> Type) a -> m [a]
 
 -- | Map between <a>ListT</a> computations.
 --   
@@ -729,7 +729,7 @@ ListT :: m [a] -> ListT a
 --   <li><pre><a>runListT</a> (<a>mapListT</a> f m) = f (<a>runListT</a>
 --   m)</pre></li>
 --   </ul>
-mapListT :: () => (m [a] -> n [b]) -> ListT m a -> ListT n b
+mapListT :: (m [a] -> n [b]) -> ListT m a -> ListT n b
 
 
 -- | <ul>
@@ -802,7 +802,7 @@ liftEither :: MonadError e m => Either e a -> m a
 --   given value, while <tt>&gt;&gt;=</tt> sequences two subcomputations,
 --   exiting on the first exception.
 newtype ExceptT e (m :: Type -> Type) a
-ExceptT :: m (Either e a) -> ExceptT e a
+ExceptT :: m (Either e a) -> ExceptT e (m :: Type -> Type) a
 
 -- | The parameterizable exception monad.
 --   
@@ -815,7 +815,7 @@ ExceptT :: m (Either e a) -> ExceptT e a
 type Except e = ExceptT e Identity
 
 -- | The inverse of <a>ExceptT</a>.
-runExceptT :: () => ExceptT e m a -> m (Either e a)
+runExceptT :: ExceptT e m a -> m (Either e a)
 
 -- | Map the unwrapped computation using the given function.
 --   
@@ -823,15 +823,15 @@ runExceptT :: () => ExceptT e m a -> m (Either e a)
 --   <li><pre><a>runExceptT</a> (<a>mapExceptT</a> f m) = f
 --   (<a>runExceptT</a> m)</pre></li>
 --   </ul>
-mapExceptT :: () => (m (Either e a) -> n (Either e' b)) -> ExceptT e m a -> ExceptT e' n b
+mapExceptT :: (m (Either e a) -> n (Either e' b)) -> ExceptT e m a -> ExceptT e' n b
 
 -- | Transform any exceptions thrown by the computation using the given
 --   function.
-withExceptT :: Functor m => (e -> e') -> ExceptT e m a -> ExceptT e' m a
+withExceptT :: forall (m :: Type -> Type) e e' a. Functor m => (e -> e') -> ExceptT e m a -> ExceptT e' m a
 
 -- | Extractor for computations in the exception monad. (The inverse of
 --   <a>except</a>).
-runExcept :: () => Except e a -> Either e a
+runExcept :: Except e a -> Either e a
 
 -- | Map the unwrapped computation using the given function.
 --   
@@ -839,11 +839,11 @@ runExcept :: () => Except e a -> Either e a
 --   <li><pre><a>runExcept</a> (<a>mapExcept</a> f m) = f (<a>runExcept</a>
 --   m)</pre></li>
 --   </ul>
-mapExcept :: () => (Either e a -> Either e' b) -> Except e a -> Except e' b
+mapExcept :: (Either e a -> Either e' b) -> Except e a -> Except e' b
 
 -- | Transform any exceptions thrown by the computation using the given
 --   function (a specialization of <a>withExceptT</a>).
-withExcept :: () => (e -> e') -> Except e a -> Except e' a
+withExcept :: (e -> e') -> Except e a -> Except e' a
 
 
 -- | <ul>
@@ -925,7 +925,7 @@ strMsg :: Error a => String -> a
 --   <tt>&gt;&gt;=</tt> sequences two subcomputations, failing on the first
 --   error.
 newtype ErrorT e (m :: Type -> Type) a
-ErrorT :: m (Either e a) -> ErrorT e a
+ErrorT :: m (Either e a) -> ErrorT e (m :: Type -> Type) a
 runErrorT :: ErrorT e m a -> m (Either e a)
 
 -- | Map the unwrapped computation using the given function.
@@ -934,7 +934,7 @@ runErrorT :: ErrorT e m a -> m (Either e a)
 --   <li><pre><a>runErrorT</a> (<a>mapErrorT</a> f m) = f (<a>runErrorT</a>
 --   m)</pre></li>
 --   </ul>
-mapErrorT :: () => (m (Either e a) -> n (Either e' b)) -> ErrorT e m a -> ErrorT e' n b
+mapErrorT :: (m (Either e a) -> n (Either e' b)) -> ErrorT e m a -> ErrorT e' n b
 
 
 -- | <ul>
@@ -1003,11 +1003,11 @@ type Cont r = ContT r Identity
 
 -- | Construct a continuation-passing computation from a function. (The
 --   inverse of <a>runCont</a>)
-cont :: () => ((a -> r) -> r) -> Cont r a
+cont :: ((a -> r) -> r) -> Cont r a
 
 -- | The result of running a CPS computation with a given final
 --   continuation. (The inverse of <a>cont</a>)
-runCont :: () => Cont r a -> (a -> r) -> r
+runCont :: Cont r a -> (a -> r) -> r
 
 -- | Apply a function to transform the result of a continuation-passing
 --   computation.
@@ -1016,7 +1016,7 @@ runCont :: () => Cont r a -> (a -> r) -> r
 --   <li><pre><a>runCont</a> (<a>mapCont</a> f m) = f . <a>runCont</a>
 --   m</pre></li>
 --   </ul>
-mapCont :: () => (r -> r) -> Cont r a -> Cont r a
+mapCont :: (r -> r) -> Cont r a -> Cont r a
 
 -- | Apply a function to transform the continuation passed to a CPS
 --   computation.
@@ -1025,7 +1025,7 @@ mapCont :: () => (r -> r) -> Cont r a -> Cont r a
 --   <li><pre><a>runCont</a> (<a>withCont</a> f m) = <a>runCont</a> m .
 --   f</pre></li>
 --   </ul>
-withCont :: () => ((b -> r) -> a -> r) -> Cont r a -> Cont r b
+withCont :: ((b -> r) -> a -> r) -> Cont r a -> Cont r b
 
 -- | The continuation monad transformer. Can be used to add continuation
 --   handling to any type constructor: the <a>Monad</a> instance and most
@@ -1033,8 +1033,8 @@ withCont :: () => ((b -> r) -> a -> r) -> Cont r a -> Cont r b
 --   
 --   <a>ContT</a> is not a functor on the category of monads, and many
 --   operations cannot be lifted through it.
-newtype ContT (r :: k) (m :: k -> Type) a :: forall k. () => k -> k -> Type -> Type -> Type
-ContT :: ((a -> m r) -> m r) -> ContT a
+newtype ContT (r :: k) (m :: k -> Type) a
+ContT :: ((a -> m r) -> m r) -> ContT (r :: k) (m :: k -> Type) a
 runContT :: ContT r m a -> (a -> m r) -> m r
 
 -- | Apply a function to transform the result of a continuation-passing
@@ -1046,7 +1046,7 @@ runContT :: ContT r m a -> (a -> m r) -> m r
 --   <li><pre><a>runContT</a> (<a>mapContT</a> f m) = f . <a>runContT</a>
 --   m</pre></li>
 --   </ul>
-mapContT :: () => (m r -> m r) -> ContT r m a -> ContT r m a
+mapContT :: forall k m (r :: k) a. (m r -> m r) -> ContT r m a -> ContT r m a
 
 -- | Apply a function to transform the continuation passed to a CPS
 --   computation.
@@ -1055,7 +1055,7 @@ mapContT :: () => (m r -> m r) -> ContT r m a -> ContT r m a
 --   <li><pre><a>runContT</a> (<a>withContT</a> f m) = <a>runContT</a> m .
 --   f</pre></li>
 --   </ul>
-withContT :: () => ((b -> m r) -> a -> m r) -> ContT r m a -> ContT r m b
+withContT :: forall k b m (r :: k) a. ((b -> m r) -> a -> m r) -> ContT r m a -> ContT r m b
 
 
 -- | The MonadWriter class.
@@ -1146,18 +1146,18 @@ type RWS r w s = RWST r w s Identity
 
 -- | Construct an RWS computation from a function. (The inverse of
 --   <a>runRWS</a>.)
-rws :: () => (r -> s -> (a, s, w)) -> RWS r w s a
+rws :: (r -> s -> (a, s, w)) -> RWS r w s a
 
 -- | Unwrap an RWS computation as a function. (The inverse of <a>rws</a>.)
-runRWS :: () => RWS r w s a -> r -> s -> (a, s, w)
+runRWS :: RWS r w s a -> r -> s -> (a, s, w)
 
 -- | Evaluate a computation with the given initial state and environment,
 --   returning the final value and output, discarding the final state.
-evalRWS :: () => RWS r w s a -> r -> s -> (a, w)
+evalRWS :: RWS r w s a -> r -> s -> (a, w)
 
 -- | Evaluate a computation with the given initial state and environment,
 --   returning the final state and output, discarding the final value.
-execRWS :: () => RWS r w s a -> r -> s -> (s, w)
+execRWS :: RWS r w s a -> r -> s -> (s, w)
 
 -- | Map the return value, final state and output of a computation using
 --   the given function.
@@ -1166,7 +1166,7 @@ execRWS :: () => RWS r w s a -> r -> s -> (s, w)
 --   <li><pre><a>runRWS</a> (<a>mapRWS</a> f m) r s = f (<a>runRWS</a> m r
 --   s)</pre></li>
 --   </ul>
-mapRWS :: () => ((a, s, w) -> (b, s, w')) -> RWS r w s a -> RWS r w' s b
+mapRWS :: ((a, s, w) -> (b, s, w')) -> RWS r w s a -> RWS r w' s b
 
 -- | <tt><a>withRWS</a> f m</tt> executes action <tt>m</tt> with an initial
 --   environment and state modified by applying <tt>f</tt>.
@@ -1175,13 +1175,13 @@ mapRWS :: () => ((a, s, w) -> (b, s, w')) -> RWS r w s a -> RWS r w' s b
 --   <li><pre><a>runRWS</a> (<a>withRWS</a> f m) r s = <a>uncurry</a>
 --   (<a>runRWS</a> m) (f r s)</pre></li>
 --   </ul>
-withRWS :: () => (r' -> s -> (r, s)) -> RWS r w s a -> RWS r' w s a
+withRWS :: (r' -> s -> (r, s)) -> RWS r w s a -> RWS r' w s a
 
 -- | A monad transformer adding reading an environment of type <tt>r</tt>,
 --   collecting an output of type <tt>w</tt> and updating a state of type
 --   <tt>s</tt> to an inner monad <tt>m</tt>.
 newtype RWST r w s (m :: Type -> Type) a
-RWST :: (r -> s -> m (a, s, w)) -> RWST r w s a
+RWST :: (r -> s -> m (a, s, w)) -> RWST r w s (m :: Type -> Type) a
 runRWST :: RWST r w s m a -> r -> s -> m (a, s, w)
 
 -- | Evaluate a computation with the given initial state and environment,
@@ -1198,7 +1198,7 @@ execRWST :: Monad m => RWST r w s m a -> r -> s -> m (s, w)
 --   <li><pre><a>runRWST</a> (<a>mapRWST</a> f m) r s = f (<a>runRWST</a> m
 --   r s)</pre></li>
 --   </ul>
-mapRWST :: () => (m (a, s, w) -> n (b, s, w')) -> RWST r w s m a -> RWST r w' s n b
+mapRWST :: (m (a, s, w) -> n (b, s, w')) -> RWST r w s m a -> RWST r w' s n b
 
 -- | <tt><a>withRWST</a> f m</tt> executes action <tt>m</tt> with an
 --   initial environment and state modified by applying <tt>f</tt>.
@@ -1207,7 +1207,7 @@ mapRWST :: () => (m (a, s, w) -> n (b, s, w')) -> RWST r w s m a -> RWST r w' s 
 --   <li><pre><a>runRWST</a> (<a>withRWST</a> f m) r s = <a>uncurry</a>
 --   (<a>runRWST</a> m) (f r s)</pre></li>
 --   </ul>
-withRWST :: () => (r' -> s -> (r, s)) -> RWST r w s m a -> RWST r' w s m a
+withRWST :: forall r' s r w (m :: Type -> Type) a. (r' -> s -> (r, s)) -> RWST r w s m a -> RWST r' w s m a
 
 
 -- | Lazy RWS monad.
@@ -1224,18 +1224,18 @@ type RWS r w s = RWST r w s Identity
 
 -- | Construct an RWS computation from a function. (The inverse of
 --   <a>runRWS</a>.)
-rws :: () => (r -> s -> (a, s, w)) -> RWS r w s a
+rws :: (r -> s -> (a, s, w)) -> RWS r w s a
 
 -- | Unwrap an RWS computation as a function. (The inverse of <a>rws</a>.)
-runRWS :: () => RWS r w s a -> r -> s -> (a, s, w)
+runRWS :: RWS r w s a -> r -> s -> (a, s, w)
 
 -- | Evaluate a computation with the given initial state and environment,
 --   returning the final value and output, discarding the final state.
-evalRWS :: () => RWS r w s a -> r -> s -> (a, w)
+evalRWS :: RWS r w s a -> r -> s -> (a, w)
 
 -- | Evaluate a computation with the given initial state and environment,
 --   returning the final state and output, discarding the final value.
-execRWS :: () => RWS r w s a -> r -> s -> (s, w)
+execRWS :: RWS r w s a -> r -> s -> (s, w)
 
 -- | Map the return value, final state and output of a computation using
 --   the given function.
@@ -1244,7 +1244,7 @@ execRWS :: () => RWS r w s a -> r -> s -> (s, w)
 --   <li><pre><a>runRWS</a> (<a>mapRWS</a> f m) r s = f (<a>runRWS</a> m r
 --   s)</pre></li>
 --   </ul>
-mapRWS :: () => ((a, s, w) -> (b, s, w')) -> RWS r w s a -> RWS r w' s b
+mapRWS :: ((a, s, w) -> (b, s, w')) -> RWS r w s a -> RWS r w' s b
 
 -- | <tt><a>withRWS</a> f m</tt> executes action <tt>m</tt> with an initial
 --   environment and state modified by applying <tt>f</tt>.
@@ -1253,13 +1253,13 @@ mapRWS :: () => ((a, s, w) -> (b, s, w')) -> RWS r w s a -> RWS r w' s b
 --   <li><pre><a>runRWS</a> (<a>withRWS</a> f m) r s = <a>uncurry</a>
 --   (<a>runRWS</a> m) (f r s)</pre></li>
 --   </ul>
-withRWS :: () => (r' -> s -> (r, s)) -> RWS r w s a -> RWS r' w s a
+withRWS :: (r' -> s -> (r, s)) -> RWS r w s a -> RWS r' w s a
 
 -- | A monad transformer adding reading an environment of type <tt>r</tt>,
 --   collecting an output of type <tt>w</tt> and updating a state of type
 --   <tt>s</tt> to an inner monad <tt>m</tt>.
 newtype RWST r w s (m :: Type -> Type) a
-RWST :: (r -> s -> m (a, s, w)) -> RWST r w s a
+RWST :: (r -> s -> m (a, s, w)) -> RWST r w s (m :: Type -> Type) a
 runRWST :: RWST r w s m a -> r -> s -> m (a, s, w)
 
 -- | Evaluate a computation with the given initial state and environment,
@@ -1276,7 +1276,7 @@ execRWST :: Monad m => RWST r w s m a -> r -> s -> m (s, w)
 --   <li><pre><a>runRWST</a> (<a>mapRWST</a> f m) r s = f (<a>runRWST</a> m
 --   r s)</pre></li>
 --   </ul>
-mapRWST :: () => (m (a, s, w) -> n (b, s, w')) -> RWST r w s m a -> RWST r w' s n b
+mapRWST :: (m (a, s, w) -> n (b, s, w')) -> RWST r w s m a -> RWST r w' s n b
 
 -- | <tt><a>withRWST</a> f m</tt> executes action <tt>m</tt> with an
 --   initial environment and state modified by applying <tt>f</tt>.
@@ -1285,7 +1285,7 @@ mapRWST :: () => (m (a, s, w) -> n (b, s, w')) -> RWST r w s m a -> RWST r w' s 
 --   <li><pre><a>runRWST</a> (<a>withRWST</a> f m) r s = <a>uncurry</a>
 --   (<a>runRWST</a> m) (f r s)</pre></li>
 --   </ul>
-withRWST :: () => (r' -> s -> (r, s)) -> RWST r w s m a -> RWST r' w s m a
+withRWST :: forall r' s r w (m :: Type -> Type) a. (r' -> s -> (r, s)) -> RWST r w s m a -> RWST r' w s m a
 
 
 -- | Declaration of the MonadRWS class.
@@ -1352,7 +1352,7 @@ type Writer w = WriterT w Identity
 
 -- | Unwrap a writer computation as a (result, output) pair. (The inverse
 --   of <a>writer</a>.)
-runWriter :: () => Writer w a -> (a, w)
+runWriter :: Writer w a -> (a, w)
 
 -- | Extract the output from a writer computation.
 --   
@@ -1360,7 +1360,7 @@ runWriter :: () => Writer w a -> (a, w)
 --   <li><pre><a>execWriter</a> m = <a>snd</a> (<a>runWriter</a>
 --   m)</pre></li>
 --   </ul>
-execWriter :: () => Writer w a -> w
+execWriter :: Writer w a -> w
 
 -- | Map both the return value and output of a computation using the given
 --   function.
@@ -1369,7 +1369,7 @@ execWriter :: () => Writer w a -> w
 --   <li><pre><a>runWriter</a> (<a>mapWriter</a> f m) = f (<a>runWriter</a>
 --   m)</pre></li>
 --   </ul>
-mapWriter :: () => ((a, w) -> (b, w')) -> Writer w a -> Writer w' b
+mapWriter :: ((a, w) -> (b, w')) -> Writer w a -> Writer w' b
 
 -- | A writer monad parameterized by:
 --   
@@ -1382,7 +1382,7 @@ mapWriter :: () => ((a, w) -> (b, w')) -> Writer w a -> Writer w' b
 --   <tt>&gt;&gt;=</tt> combines the outputs of the subcomputations using
 --   <a>mappend</a>.
 newtype WriterT w (m :: Type -> Type) a
-WriterT :: m (a, w) -> WriterT w a
+WriterT :: m (a, w) -> WriterT w (m :: Type -> Type) a
 runWriterT :: WriterT w m a -> m (a, w)
 
 -- | Extract the output from a writer computation.
@@ -1400,7 +1400,7 @@ execWriterT :: Monad m => WriterT w m a -> m w
 --   <li><pre><a>runWriterT</a> (<a>mapWriterT</a> f m) = f
 --   (<a>runWriterT</a> m)</pre></li>
 --   </ul>
-mapWriterT :: () => (m (a, w) -> n (b, w')) -> WriterT w m a -> WriterT w' n b
+mapWriterT :: (m (a, w) -> n (b, w')) -> WriterT w m a -> WriterT w' n b
 
 
 -- | The MonadWriter class.
@@ -1467,7 +1467,7 @@ type Writer w = WriterT w Identity
 
 -- | Unwrap a writer computation as a (result, output) pair. (The inverse
 --   of <a>writer</a>.)
-runWriter :: () => Writer w a -> (a, w)
+runWriter :: Writer w a -> (a, w)
 
 -- | Extract the output from a writer computation.
 --   
@@ -1475,7 +1475,7 @@ runWriter :: () => Writer w a -> (a, w)
 --   <li><pre><a>execWriter</a> m = <a>snd</a> (<a>runWriter</a>
 --   m)</pre></li>
 --   </ul>
-execWriter :: () => Writer w a -> w
+execWriter :: Writer w a -> w
 
 -- | Map both the return value and output of a computation using the given
 --   function.
@@ -1484,7 +1484,7 @@ execWriter :: () => Writer w a -> w
 --   <li><pre><a>runWriter</a> (<a>mapWriter</a> f m) = f (<a>runWriter</a>
 --   m)</pre></li>
 --   </ul>
-mapWriter :: () => ((a, w) -> (b, w')) -> Writer w a -> Writer w' b
+mapWriter :: ((a, w) -> (b, w')) -> Writer w a -> Writer w' b
 
 -- | A writer monad parameterized by:
 --   
@@ -1497,8 +1497,8 @@ mapWriter :: () => ((a, w) -> (b, w')) -> Writer w a -> Writer w' b
 --   <tt>&gt;&gt;=</tt> combines the outputs of the subcomputations using
 --   <a>mappend</a>.
 newtype WriterT w (m :: Type -> Type) a
-WriterT :: m (a, w) -> WriterT w a
-[runWriterT] :: WriterT w a -> m (a, w)
+WriterT :: m (a, w) -> WriterT w (m :: Type -> Type) a
+[runWriterT] :: WriterT w (m :: Type -> Type) a -> m (a, w)
 
 -- | Extract the output from a writer computation.
 --   
@@ -1515,4 +1515,4 @@ execWriterT :: Monad m => WriterT w m a -> m w
 --   <li><pre><a>runWriterT</a> (<a>mapWriterT</a> f m) = f
 --   (<a>runWriterT</a> m)</pre></li>
 --   </ul>
-mapWriterT :: () => (m (a, w) -> n (b, w')) -> WriterT w m a -> WriterT w' n b
+mapWriterT :: (m (a, w) -> n (b, w')) -> WriterT w m a -> WriterT w' n b

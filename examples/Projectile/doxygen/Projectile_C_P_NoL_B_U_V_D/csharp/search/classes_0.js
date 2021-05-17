@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['calculations',['Calculations',['../class_calculations.html',1,'']]],
-  ['control',['Control',['../class_control.html',1,'']]]
+  ['calculations_14',['Calculations',['../class_calculations.html',1,'']]],
+  ['control_15',['Control',['../class_control.html',1,'']]]
 ];

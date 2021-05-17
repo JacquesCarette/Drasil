@@ -48,6 +48,40 @@ integerLog2# :: Integer -> Int#
 integerLogBase# :: Integer -> Integer -> Int#
 
 
+-- | Fast <a>Integer</a> logarithms to base 2. <a>integerLog2#</a> and
+--   <a>wordLog2#</a> are of general usefulness, the others are only needed
+--   for a fast implementation of <tt>fromRational</tt>. Since they are
+--   needed in <a>GHC.Float</a>, we must expose this module, but it should
+--   not show up in the docs.
+--   
+--   See <a>https://ghc.haskell.org/trac/ghc/ticket/5122</a> for the origin
+--   of the code in this module
+module GHC.Integer.Logarithms.Internals
+
+-- | Compute base-2 log of <a>Word#</a>
+--   
+--   This is internally implemented as count-leading-zeros machine
+--   instruction.
+wordLog2# :: Word# -> Int#
+
+-- | Extended version of <a>integerLog2#</a>
+--   
+--   Assumption: Integer is strictly positive
+--   
+--   First component of result is <tt>log2 n</tt>, second is <tt>0#</tt>
+--   iff <i>n</i> is a power of two.
+integerLog2IsPowerOf2# :: Integer -> (# Int#, Int# #)
+
+-- | Calculate the integer base 2 logarithm of an <a>Integer</a>. The
+--   calculation is more efficient than for the general case, on platforms
+--   with 32- or 64-bit words much more efficient.
+--   
+--   The argument must be strictly positive, that condition is <i>not</i>
+--   checked.
+integerLog2# :: Integer -> Int#
+roundingMode# :: Integer -> Int# -> Int#
+
+
 -- | The <a>Integer</a> type.
 --   
 --   This module exposes the <i>portable</i> <a>Integer</a> API. See
@@ -161,6 +195,14 @@ shiftRInteger :: Integer -> Int# -> Integer
 
 -- | Test if <i>n</i>-th bit is set.
 testBitInteger :: Integer -> Int# -> Bool
+
+-- | Count number of set bits. For negative arguments returns negative
+--   population count of negated argument.
+popCountInteger :: Integer -> Int#
+
+-- | <a>Integer</a> for which only <i>n</i>-th bit is set. Undefined
+--   behaviour for negative <i>n</i> values.
+bitInteger :: Int# -> Integer
 hashInteger :: Integer -> Int#
 
 
@@ -204,14 +246,6 @@ Jn# :: {-# UNPACK #-} !BigNat -> Integer
 --   This operation is mostly useful for test-suites and/or code which
 --   constructs <a>Integer</a> values directly.
 isValidInteger# :: Integer -> Int#
-
--- | <a>Integer</a> for which only <i>n</i>-th bit is set. Undefined
---   behaviour for negative <i>n</i> values.
-bitInteger :: Int# -> Integer
-
--- | Count number of set bits. For negative arguments returns negative
---   population count of negated argument.
-popCountInteger :: Integer -> Int#
 
 -- | Compute greatest common divisor.
 gcdInteger :: Integer -> Integer -> Integer

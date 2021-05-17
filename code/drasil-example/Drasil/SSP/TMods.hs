@@ -5,7 +5,7 @@ import Prelude hiding (tan)
 import Language.Drasil
 import Theory.Drasil (TheoryModel, tm, ModelKinds(EquationalModel, OthModel))
 import Utils.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Quantities.Physics (distance, force)
 
@@ -58,7 +58,7 @@ eqRel = foldr (($=) . sumAll (Variable "i") . sy) (int 0) [fx, fy, genericM]
 eqDesc :: Sentence
 eqDesc = foldlSent [S "For a body in static equilibrium, the net",
   plural force, S "and", plural genericM +:+. S "acting on the body will cancel out",
-  S "Assuming a 2D problem", sParen (makeRef2S assumpENSL) `sC` S "the", getTandS fx `sAnd`
+  S "Assuming a 2D problem", sParen (makeRef2S assumpENSL) `sC` S "the", getTandS fx `S.sAnd`
   getTandS fy, S "will be equal to" +:+. E (int 0), S "All", plural force,
   S "and their", phrase distance, S "from the chosen point of rotation",
   S "will create a net", phrase genericM, S "equal to" +:+ E (int 0)]

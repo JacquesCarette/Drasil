@@ -4,7 +4,7 @@ import Language.Drasil
 import Language.Drasil.ShortHands (lJ)
 import Theory.Drasil (InstanceModel, imNoDerivNoRefs, qwC, ModelKinds (OthModel))
 import Utils.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 
 import Drasil.GamePhysics.Assumptions (assumpDI, assumpCAJI)
 import Drasil.GamePhysics.Concepts (centreMass)
@@ -52,18 +52,18 @@ transMotRel = sy accj $= deriv (apply1 velj time) time
 
 transMotDesc, transMotOutputs :: Sentence
 transMotDesc = foldlSent [S "The above", phrase equation, S "expresses",
-  (S "total" +:+ phrase acceleration) `the_ofThe` phrase rigidBody, P lJ,
-  S "as the sum" `sOf` phrase gravitationalAccel, fromSource accelGravityGD `sAnd`
+  (S "total" +:+ phrase acceleration) `S.the_ofThe` phrase rigidBody, P lJ,
+  S "as the sum" `S.sOf` phrase gravitationalAccel, fromSource accelGravityGD `S.sAnd`
   phrase acceleration, S "due to applied", phrase force, E (apply1 forcej time) +:+.
-  fromSource newtonSL, S "The resultant", plural output_ `sAre`
+  fromSource newtonSL, S "The resultant", plural output_ `S.sAre`
   S "then obtained from this", phrase equation, S "using",
   foldlList Comma List (map makeRef2S [linDispDD, linVelDD, linAccDD])]
-transMotOutputs = foldlSent [phrase output_ `the_ofThe'` phrase inModel,
- S "will be the functions" `sOf` phrase position `sAnd` phrase velocity,
+transMotOutputs = foldlSent [phrase output_ `S.the_ofThe'` phrase inModel,
+ S "will be the functions" `S.sOf` phrase position `S.sAnd` phrase velocity,
  S "over time that satisfy the", getAcc ode, S "for the", phrase acceleration `sC`
- S "with the given initial", plural condition, S "for" +:+. (phrase position `sAnd`
+ S "with the given initial", plural condition, S "for" +:+. (phrase position `S.sAnd`
  phrase velocity), S "The motion is translational" `sC` S "so the",
- phrase position `sAnd` phrase velocity, S "functions are for the",
+ phrase position `S.sAnd` phrase velocity, S "functions are for the",
  phrase centreMass, fromSource ctrOfMassDD]
 
 {-- Rotational Motion --}
@@ -91,9 +91,9 @@ rotMotRel = sy angularAccel $= deriv
 
 rotMotDesc :: Sentence
 rotMotDesc = foldlSent [S "The above", phrase equation, S "for",
-  (S "total" +:+ phrase angularAccel) `the_ofThe` phrase rigidBody, P lJ `sIs`
-  S "derived from", makeRef2S newtonSLR `sC` EmptyS `andThe` S "resultant",
-  plural output_ `sAre` S "then obtained from this", phrase equation, S "using",
+  (S "total" +:+ phrase angularAccel) `S.the_ofThe` phrase rigidBody, P lJ `S.sIs`
+  S "derived from", makeRef2S newtonSLR `sC` EmptyS `S.andThe` S "resultant",
+  plural output_ `S.sAre` S "then obtained from this", phrase equation, S "using",
   foldlList Comma List (map makeRef2S [angDispDD, angVelDD, angAccelDD])]
 
 {-- 2D Collision --}
@@ -123,15 +123,15 @@ col2DRel = apply1 velA timeC $= apply1 velA time `addRe`
 
 
 col2DOutputs, impulseNote :: Sentence
-col2DOutputs = foldlSent [phrase output_ `the_ofThe'` phrase inModel,
-  S "will be the functions" `sOf` vals,  S "over time that satisfy the",
-  plural equation, S "for the", phrase velocity `sAnd` phrase angularAccel `sC`
+col2DOutputs = foldlSent [phrase output_ `S.the_ofThe'` phrase inModel,
+  S "will be the functions" `S.sOf` vals,  S "over time that satisfy the",
+  plural equation, S "for the", phrase velocity `S.sAnd` phrase angularAccel `sC`
   S "with the given initial", plural condition, S "for" +:+. vals, S
   "The motion is translational" `sC` S "so the", vals, S "functions are for the",
   phrase centreMass, fromSource ctrOfMassDD]
     where vals = foldlList Comma List (map phrase [position, velocity,
                                                    orientation, angularAccel])
-impulseNote = ch impulseS `sIs` definedIn'' impulseGD
+impulseNote = ch impulseS `S.sIs` definedIn'' impulseGD
 
 {--S "Ik is the moment of inertia of the k-th rigid body (kg m2)",
   S "t is a point in time, t0 denotes the initial time" `sC` 
@@ -148,12 +148,12 @@ impulseNote = ch impulseS `sIs` definedIn'' impulseGD
 
 instModIntro :: Sentence
 instModIntro = foldlSent [S "The", phrase goal, makeRef2S linearGS, 
-  S "is met by" +:+. (makeRef2S transMot `sAnd` makeRef2S col2D),
+  S "is met by" +:+. (makeRef2S transMot `S.sAnd` makeRef2S col2D),
   S "The", phrase goal, makeRef2S angularGS, S "is met by",
-  makeRef2S rotMot `sAnd` makeRef2S col2D]
+  makeRef2S rotMot `S.sAnd` makeRef2S col2D]
 
 {- Notes -}
 noDampConsAssumps :: Sentence
 noDampConsAssumps = foldlSent [S "It is currently assumed that no damping",
-  S "occurs during the simulation", fromSource assumpDI `sAnd` S "that no", 
+  S "occurs during the simulation", fromSource assumpDI `S.sAnd` S "that no", 
   S "constraints are involved", fromSource assumpCAJI]

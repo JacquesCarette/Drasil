@@ -8,7 +8,7 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB,
   _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (GenDefn, InstanceModel)
 import Utils.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 
 import Control.Lens ((^.))
 
@@ -69,7 +69,7 @@ import Drasil.SWHS.Unitals (absTol, coilHTC, coilSA, consTol, constrained,
 -------------------------------------------------------------------------------
 
 srs :: Document
-srs = mkDoc mkSRS sFor' si
+srs = mkDoc mkSRS S.sFor' si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
@@ -196,15 +196,15 @@ priorityNFReqs = [correctness, verifiability, understandability, reusability,
 
 introStart :: Sentence
 introStart = foldlSent [S "Due to", foldlList Comma List (map S
-  ["increasing costs", "diminishing availability", "negative environmental impact"]) `sOf`
-  S "fossil fuels" `sC` S "the demand is high for renewable", plural enerSrc `sAnd`
+  ["increasing costs", "diminishing availability", "negative environmental impact"]) `S.sOf`
+  S "fossil fuels" `sC` S "the demand is high for renewable", plural enerSrc `S.sAnd`
   phrase energy, S "storage technology"]
 
 introStartSWHS :: Sentence
 introStartSWHS = foldlSent [capSent (swhsPCM ^. defn), sParen (short phsChgMtrl),
-  S "use a renewable", phrase enerSrc `sAnd` S "provide a novel way of storing" +:+.
+  S "use a renewable", phrase enerSrc `S.sAnd` S "provide a novel way of storing" +:+.
   phrase energy, atStart swhsPCM, S "improve over the traditional", plural progName,
-  S "because of their smaller size. The smaller size is possible because of the ability" `sOf`
+  S "because of their smaller size. The smaller size is possible because of the ability" `S.sOf`
   short phsChgMtrl, S "to store", phrase thermalEnergy, S "as", phrase latentHeat `sC`
   S "which allows higher", phrase thermalEnergy, S "storage capacity per",
   phrase unit_, S "weight"]
@@ -227,9 +227,9 @@ introEnd progSent pro = foldlSent_ [EmptyS +:+. progSent, S "The developed",
 ---------------------------------
 
 scope :: Sentence
-scope = foldlSent_ [phrase thermalAnalysis `sOf` S "a single" +:+. phrase tankPCM,
-  S "This entire", phrase document `sIs` S "written assuming that the substances inside the",
-  phrase sWHT `sAre` phrase water `sAnd` short phsChgMtrl]
+scope = foldlSent_ [phrase thermalAnalysis `S.sOf` S "a single" +:+. phrase tankPCM,
+  S "This entire", phrase document `S.sIs` S "written assuming that the substances inside the",
+  phrase sWHT `S.sAre` phrase water `S.sAnd` short phsChgMtrl]
 
 -- There is a similar paragraph in each example, but there's a lot of specific
 -- info here. Would need to abstract out the object of analysis (i.e. solar
@@ -261,14 +261,14 @@ charReaderDE = plural de +:+ S "from level 1 and 2" +:+ phrase calculus
 orgDocIntro :: Sentence
 orgDocIntro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the template for an", short Doc.srs,
-  S "for", phrase sciCompS, S "proposed by", makeCiteS koothoor2013 `sAnd`
+  S "for", phrase sciCompS, S "proposed by", makeCiteS koothoor2013 `S.sAnd`
   makeCiteS smithLai2005]
 
 orgDocEnd :: Sentence
 orgDocEnd = foldlSent_ [S "The", plural inModel, 
   S "to be solved are referred to as" +:+. 
   foldlList Comma List (map makeRef2S iMods), S "The", plural inModel,
-  S "provide the", plural ode, sParen (short ode :+: S "s") `sAnd` 
+  S "provide the", plural ode, sParen (short ode :+: S "s") `S.sAnd` 
   S "algebraic", plural equation, S "that", phrase model, S "the" +:+. 
   phrase swhsPCM, short progName, S "solves these", short ode :+: S "s"]
 
@@ -302,7 +302,7 @@ sysCntxtDesc pro = foldlSP [makeRef2S sysCntxtFig, S "shows the" +:+.
   phrase software `sC` S "the", phrase user +:+. S "in this case",
   S "A rectangle represents the", phrase softwareSys, S "itself" +:+.
   sParen (short pro), S "Arrows are used to show the", plural datum,
-  S "flow between the", phrase system `sAnd` S "its", phrase environment]
+  S "flow between the", phrase system `S.sAnd` S "its", phrase environment]
 
 sysCntxtFig :: LabelledContent
 sysCntxtFig = llcc (makeFigRef "SysCon") $ fig (foldlSent_
@@ -312,8 +312,8 @@ sysCntxtFig = llcc (makeFigRef "SysCon") $ fig (foldlSent_
 sysCntxtRespIntro :: CI -> Contents
 sysCntxtRespIntro pro = foldlSPCol [short pro +:+. S "is mostly self-contained",
   S "The only external interaction is through the", phrase user +:+.
-  S "interface", S "responsibilities" `the_ofThe'` phrase user `andThe`
-  phrase system `sAre` S "as follows"]
+  S "interface", S "responsibilities" `S.the_ofThe'` phrase user `S.andThe`
+  phrase system `S.sAre` S "as follows"]
 
 systContRespBullets :: Contents
 systContRespBullets = UlC $ ulcc $ Enumeration $ bulletNested
@@ -322,7 +322,7 @@ systContRespBullets = UlC $ ulcc $ Enumeration $ bulletNested
 
 userResp :: [Sentence]
 userResp = map foldlSent_ [
-  [S "Provide the", phrase input_, plural datum `toThe`
+  [S "Provide the", phrase input_, plural datum `S.toThe`
     phrase system `sC` S "ensuring no errors in the", plural datum, S "entry"],
   [S "Take care that consistent", plural unit_, S "are used for",
     phrase input_, plural variable]
@@ -330,10 +330,10 @@ userResp = map foldlSent_ [
 
 swhsResp :: [Sentence]
 swhsResp = map foldlSent_ [
-  [S "Detect", plural datum, S "type mismatch, such as a string" `sOf`
+  [S "Detect", plural datum, S "type mismatch, such as a string" `S.sOf`
     S "characters instead of a floating point number"],
   [S "Determine if the", plural input_, S "satisfy the required",
-    phrase physical `sAnd` phrase software, plural constraint],
+    phrase physical `S.sAnd` phrase software, plural constraint],
   [S "Calculate the required", plural output_]
   ]
 
@@ -342,8 +342,8 @@ swhsResp = map foldlSent_ [
 --------------------------------
 
 userChars :: CI -> Contents
-userChars pro = foldlSP [S "The end", phrase user `sOf` short pro,
-  S "should have an understanding of undergraduate Level 1 Calculus" `sAnd`
+userChars pro = foldlSP [S "The end", phrase user `S.sOf` short pro,
+  S "should have an understanding of undergraduate Level 1 Calculus" `S.sAnd`
   titleize Doc.physics]
 
 -- Some of these course names are repeated between examples, could potentially
@@ -361,7 +361,7 @@ userChars pro = foldlSP [S "The end", phrase user `sOf` short pro,
 -- 4.1 : Problem Description --
 -------------------------------
 probDescIntro :: Sentence
-probDescIntro = foldlSent_ [S "investigate the effect" `sOf` S "employing",
+probDescIntro = foldlSent_ [S "investigate the effect" `S.sOf` S "employing",
   short phsChgMtrl, S "within a", phrase sWHT]
 
 -----------------------------------------
@@ -395,8 +395,8 @@ physSyst2 co ta hfc = [atStart co, S "at bottom of" +:+. phrase ta,
 
 figTank :: LabelledContent
 figTank = llcc (makeFigRef "Tank") $ fig (
-  foldlSent_ [atStart sWHT `sC` S "with", phrase htFluxC `sOf`
-  ch htFluxC `sAnd` phrase htFluxP `sOf` ch htFluxP])
+  foldlSent_ [atStart sWHT `sC` S "with", phrase htFluxC `S.sOf`
+  ch htFluxC `S.sAnd` phrase htFluxP `S.sOf` ch htFluxP])
   $ resourcePath ++ "Tank.png"
 
 -----------------------------
@@ -405,7 +405,7 @@ figTank = llcc (makeFigRef "Tank") $ fig (
 
 goalInputs :: [Sentence]
 goalInputs  = [S "the" +:+ phrase tempC,
-  S "the initial" +:+ plural condition +:+ S "for the" +:+ phrase tempW `andThe` phrase tempPCM,
+  S "the initial" +:+ plural condition +:+ S "for the" +:+ phrase tempW `S.andThe` phrase tempPCM,
   S "the material" +:+ plural property]
 
 -- 2 examples include this paragraph, 2 don't. The "givens" would need to be
@@ -470,7 +470,7 @@ dataConTail = dataContMid +:+ dataContFooter
 
 dataContMid :: Sentence
 dataContMid = foldlSent [S "The", phrase column, S "for", phrase software,
-  plural constraint, S "restricts the range" `sOf` plural input_,
+  plural constraint, S "restricts the range" `S.sOf` plural input_,
   S "to reasonable", plural value]
 
 dataContFooter :: Sentence
@@ -484,9 +484,9 @@ dataContFooter = foldlSent_ $ map foldlSent [
 
   [sParen (S "++"), S "The", plural constraint, S "on the", phrase surArea,
   S "are calculated by considering the", phrase surArea, S "to", phrase vol +:+.
-  S "ratio", S "The", phrase assumption, S "is that the lowest ratio is 1" `sAnd`
+  S "ratio", S "The", phrase assumption, S "is that the lowest ratio is 1" `S.sAnd`
   S "the highest possible is", E (dbl 2 $/ sy thickness) `sC` S "where", ch thickness,
-  S "is the thickness of a" +:+. (Quote (S "sheet") `sOf` short phsChgMtrl),
+  S "is the thickness of a" +:+. (Quote (S "sheet") `S.sOf` short phsChgMtrl),
   S "A thin sheet has the greatest", phrase surArea, S "to", phrase vol, S "ratio"],
 
   [sParen (S "**"), S "The", phrase constraint, S "on the maximum", phrase time,
@@ -531,10 +531,10 @@ propCorSolDeriv1 lce ewat en co pcmat g1hfc g2hfp su ht  =
   foldlSPCol [S "A", phrase corSol, S "must exhibit the" +:+.
   phrase lce, S "This means that the", phrase ewat,
   S "should equal the difference between the total", phrase en,
-  phrase input_, S "from the", phrase co `sAnd` S "the",
+  phrase input_, S "from the", phrase co `S.sAnd` S "the",
   phrase en, phrase output_, S "to the" +:+. short pcmat,
   S "This can be shown as an", phrase equation, S "by taking",
-  makeRef2S g1hfc `sAnd` makeRef2S g2hfp `sC`
+  makeRef2S g1hfc `S.sAnd` makeRef2S g2hfp `sC`
   S "multiplying each by their respective", phrase su,
   S "area of", phrase ht `sC` S "and integrating each",
   S "over the", phrase simTime `sC` S "as follows"]
@@ -561,10 +561,10 @@ propCorSolDeriv4 = eqUnR'
 
 propCorSolDeriv5 :: ConceptChunk -> CI -> CI -> Contents
 propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)" 
-  `sAnd` S "(FIXME: Equation 8) can be used as", Quote (S "sanity") +:+
+  `S.sAnd` S "(FIXME: Equation 8) can be used as", Quote (S "sanity") +:+
   S "checks to gain confidence in any", phrase solution,
   S "computed by" +:+. short pro, S "The relative",
-  S "error between the results computed by", short pro `sAnd`
+  S "error between the results computed by", short pro `S.sAnd`
   S "the results calculated from the", short rs, S "of these",
   plural eq, S "should be less than", ch consTol, makeRef2S verifyEnergyOutput]
 

@@ -3,7 +3,7 @@ module Drasil.DblPendulum.Requirements where
 import Language.Drasil
 import Drasil.DocLang.SRS (datCon, propCorSol)
 import Utils.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (datumConstraint, funcReqDom,
@@ -33,7 +33,7 @@ verifyInptValsDesc = foldlSent [S "Check the entered", plural inValue,
   S "to ensure that they do not exceed the", plural datumConstraint,
   S "mentioned in" +:+. makeRef2S (datCon ([]::[Contents]) ([]::[Section])), 
   S "If any of the", plural inValue, S "are out of bounds" `sC`
-  S "an", phrase errMsg, S "is displayed" `andThe` plural calculation, S "stop"]
+  S "an", phrase errMsg, S "is displayed" `S.andThe` plural calculation, S "stop"]
 
 calcAngPosDesc = foldlSent [S "Calculate the following" +: plural value,
   foldlList Comma List [
@@ -41,7 +41,7 @@ calcAngPosDesc = foldlSent [S "Calculate the following" +: plural value,
     ch pendDisplacementAngle   +:+ sParen (S "from" +:+ makeRef2S angularDisplacementIM)
   ]]
 outputValuesDesc = foldlSent [atStart output_, ch lenRod,
-  sParen (S "from" +:+ makeRef2S angularDisplacementIM) `sAnd` ch lenRod,
+  sParen (S "from" +:+ makeRef2S angularDisplacementIM) `S.sAnd` ch lenRod,
   sParen (S "from" +:+ makeRef2S angularDisplacementIM)]
 
 
@@ -53,7 +53,7 @@ nonFuncReqs = [correct, portable]
 
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
- plural output_ `the_ofThe'` phrase code, S "have the",
+ plural output_ `S.the_ofThe'` phrase code, S "have the",
  plural property, S "described in", makeRef2S (propCorSol [] [])
  ]) "Correct" nonFuncReqDom
 

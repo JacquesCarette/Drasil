@@ -1,10 +1,10 @@
 module Drasil.DblPendulum.Assumptions (pend2DMotion, cartCoord, cartCoordRight, yAxisDir, startOrigin, assumptions) where
     
 import Language.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (assumpDom) 
-import Data.Drasil.Concepts.Math (cartesian, xAxis, yAxis)
+import Data.Drasil.Concepts.Math (cartesian, xAxis, yAxis, direction, origin, positive)
 import Data.Drasil.Concepts.Physics (gravity, twoD, pendulum, motion)
 
 
@@ -20,18 +20,18 @@ yAxisDir        = cic "yAxisDir"          yAxisDirDesc        "yAxisDir"        
 startOrigin     = cic "startOrigin"       startOriginDesc     "startOrigin"     assumpDom
 
 pend2DMotionDesc :: Sentence
-pend2DMotionDesc = S "The" +:+ phrase pendulum +:+ phrase motion `sIs` phrase twoD +:+. sParen (getAcc twoD)
+pend2DMotionDesc = S "The" +:+ phrase pendulum +:+ phrase motion `S.sIs` phrase twoD +:+. sParen (getAcc twoD)
 
 cartCoordDesc :: Sentence
-cartCoordDesc = S "A" +:+ (phrase cartesian `sIs` S "used") 
+cartCoordDesc = S "A" +:+ (phrase cartesian `S.sIs` S "used") 
 
 cartCoordRightDesc :: Sentence
-cartCoordRightDesc = S "The" +:+ phrase cartesian `sIs` S "right-handed where positive" +:+.
-                         phrase xAxis `sAnd` phrase yAxis +:+ S "point right up"
+cartCoordRightDesc = S "The" +:+ phrase cartesian `S.sIs` S "right-handed where" +:+ phrase positive +:+.
+                         phrase xAxis `S.sAnd` phrase yAxis +:+ S "point right up"
 
 yAxisDirDesc :: Sentence
-yAxisDirDesc = S "direction" `the_ofThe'` phrase yAxis `sIs` S "directed opposite to" +:+. phrase gravity
+yAxisDirDesc = phrase direction `S.the_ofThe'` phrase yAxis `S.sIs` S "directed opposite to" +:+. phrase gravity
 
 startOriginDesc :: Sentence
-startOriginDesc = S "The" +:+. (phrase pendulum `sIs` S "attached" `toThe` S "origin")
+startOriginDesc = S "The" +:+. (phrase pendulum `S.sIs` S "attached" `S.toThe` phrase origin)
 

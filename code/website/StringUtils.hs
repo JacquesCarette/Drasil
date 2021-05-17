@@ -8,8 +8,8 @@ strip :: String -> String
 strip = rstrip . lstrip
 
 lstrip :: String -> String
-lstrip (c:cs) | c `elem` " \t\r\n" = lstrip cs
-              | otherwise          = cs
+lstrip it@(c:cs) | c `elem` " \t\r\n" = lstrip cs
+                 | otherwise          = it
 lstrip [] = ""
 
 rstrip :: String -> String

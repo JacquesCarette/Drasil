@@ -8,7 +8,7 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   _datadefs, _configFiles, _definitions, _defSequence, _inputs, _kind, 
   _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Utils.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 
 import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   DerivationDisplay(ShowDerivation),
@@ -59,7 +59,7 @@ import Drasil.Projectile.Unitals (launAngle, tol, launSpeed, targPos, message,
 import Theory.Drasil (getEqModQdsFromGd, TheoryModel)
 
 srs :: Document
-srs = mkDoc mkSRS (sFor'' titleize phrase) si
+srs = mkDoc mkSRS (S.sFor'' titleize phrase) si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
@@ -80,7 +80,7 @@ mkSRS = [
       [ SSDProblem $ PDProg prob []
         [ TermsAndDefs Nothing terms
         , PhySysDesc projectileTitle physSystParts figLaunch []
-        , Goals [(phrase iVel +:+ S "vector") `the_ofThe` phrase projectile]]
+        , Goals [(phrase iVel +:+ S "vector") `S.the_ofThe` phrase projectile]]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields)
@@ -104,10 +104,10 @@ mkSRS = [
 
 justification, scope :: Sentence
 justification = foldlSent [atStart projectile, S "motion is a common" +:+.
-  (phrase problem `sIn` phrase physics), S "Therefore, it is useful to have a",
+  (phrase problem `S.sIn` phrase physics), S "Therefore, it is useful to have a",
   phrase program, S "to solve and model these types of" +:+. plural problem,
   S "The", phrase program, S "documented here is called", phrase projectileTitle]
-scope = foldlSent_ [S "the", phrase analysis `sOf` S "a", phrase twoD,
+scope = foldlSent_ [S "the", phrase analysis `S.sOf` S "a", phrase twoD,
   sParen (getAcc twoD), phrase projectile, S "motion", phrase problem, S "with",
   phrase constAccel]
 
@@ -166,7 +166,7 @@ concIns = assumptions ++ funcReqs ++ goals ++ nonfuncReqs
 -------------------------
 
 prob :: Sentence
-prob = foldlSent_ [S "efficiently" `sAnd` S "correctly predict the",
+prob = foldlSent_ [S "efficiently" `S.sAnd` S "correctly predict the",
   phrase landingPosNC, S "of a", phrase projectile]
 
 ---------------------------------
@@ -183,7 +183,7 @@ terms = [launcher, projectile, target, gravity, cartesian, rectilinear]
 physSystParts :: [Sentence]
 physSystParts = map foldlSent [
   [S "The", phrase launcher],
-  [S "The", phrase projectile, sParen (S "with" +:+ getTandS iVel `sAnd` getTandS launAngle)],
+  [S "The", phrase projectile, sParen (S "with" +:+ getTandS iVel `S.sAnd` getTandS launAngle)],
   [S "The", phrase target]]
 
 ----------------------------------------------------

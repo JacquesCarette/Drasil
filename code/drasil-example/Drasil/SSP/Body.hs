@@ -10,7 +10,7 @@ import Theory.Drasil (qdFromDD)
 
 import Prelude hiding (sin, cos, tan)
 import Utils.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 
 import Drasil.DocLang (DocSection(..), IntroSec(..), IntroSub(..),
   LFunc(..), RefSec(..), RefTab(..), TConvention(..),
@@ -67,7 +67,7 @@ import Drasil.SSP.Unitals (constrained, effCohesion, fricAngle, fs, index,
 --Document Setup--
 
 srs :: Document
-srs = mkDoc mkSRS sFor' si
+srs = mkDoc mkSRS S.sFor' si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
@@ -184,7 +184,7 @@ refDB = rdb citations concIns
 tableOfSymbIntro :: [TSIntro]
 tableOfSymbIntro = [TSPurpose, TypogConvention [Verb $ foldlSent_
   [S "a subscript", ch index, S "indicates that the", phrase value, 
-  S "will be taken at, and analyzed at, a", phrase slice `sOr` phrase slice, 
+  S "will be taken at, and analyzed at, a", phrase slice `S.sOr` phrase slice, 
   S "interface composing the total slip", phrase mass]], VectorUnits]
 
 -- SECTION 1.3 --
@@ -194,17 +194,17 @@ tableOfSymbIntro = [TSPurpose, TypogConvention [Verb $ foldlSent_
 startIntro, kSent :: Sentence
 startIntro = foldlSent [S "A", phrase slope, S "of geological",
   phrase mass `sC` S "composed of", phrase soil, S "and rock and sometimes",
-  S "water, is subject to the influence" `sOf` phrase gravity +:+ S "on the" +:+.
-  phrase mass, S "This can cause instability in the form" `sOf` phrase soil +:+.
-  S "or rock movement", S "The", plural effect `sOf` phrase soil +:+
+  S "water, is subject to the influence" `S.sOf` phrase gravity +:+ S "on the" +:+.
+  phrase mass, S "This can cause instability in the form" `S.sOf` phrase soil +:+.
+  S "or rock movement", S "The", plural effect `S.sOf` phrase soil +:+
   S "or rock movement can range from inconvenient to",
   S "seriously hazardous, resulting in significant life and economic" +:+.
   plural loss, atStart slope, S "stability is of", phrase interest,
   S "both when analysing natural", plural slope `sC`
-  S "and when designing an excavated" +:+.  phrase slope, atStart ssa `sIs`
-  (S "assessment" `the_ofThe` S "safety of a" +:+ phrase slope) `sC`
+  S "and when designing an excavated" +:+.  phrase slope, atStart ssa `S.sIs`
+  (S "assessment" `S.the_ofThe` S "safety of a" +:+ phrase slope) `sC`
   S "identifying the", phrase surface,
-  S "most likely to experience", phrase slip `sAnd`
+  S "most likely to experience", phrase slip `S.sAnd`
   S "an index of its relative stability known as the", phrase fs]
 
 kSent = keySent ssa ssp
@@ -224,8 +224,8 @@ scope :: Sentence
 scope = foldlSent_ [phrase stabAnalysis, S "of a", phrase twoD, sParen (getAcc twoD),
   phrase soil, phrase mass `sC` S "composed of a single homogeneous", phrase layer,
   S "with", phrase constant +:+. plural mtrlPrpty, S "The", phrase soil,
-  phrase mass `sIs` S "assumed to extend infinitely in the third" +:+.
-  phrase dimension, S "The", phrase analysis, S "will be at an instant" `sIn`
+  phrase mass `S.sIs` S "assumed to extend infinitely in the third" +:+.
+  phrase dimension, S "The", phrase analysis, S "will be at an instant" `S.sIn`
   phrase time :+: S ";", plural factor, S "that may change the", plural soilPrpty,
   S "over", phrase time, S "will not be considered"]
 
@@ -238,7 +238,7 @@ orgSecStart, orgSecEnd :: Sentence
 orgSecStart = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the", phrase template, S "for an",
   short Doc.srs, S "for", phrase sciCompS,
-  S "proposed by Koothoor", makeRef2S koothoor2013, S "as well as Smith" `sAnd`
+  S "proposed by Koothoor", makeRef2S koothoor2013, S "as well as Smith" `S.sAnd`
   S "Lai", makeRef2S smithLai2005]
 orgSecEnd   = foldlSent_ [S "The", plural inModel, S "provide the set of",
   S "algebraic", plural equation, S "that must be solved"]
@@ -279,11 +279,11 @@ sysCtxSysResp = [S "Detect data" +:+ phrase type_ +:+ S "mismatch, such as" +:+
   S "a string of characters" +:+ phrase input_ +:+ S "instead of a floating" +:+
   S "point" +:+ phrase number,
   S "Verify that the" +:+ plural input_ +:+ S "satisfy the required" +:+
-  phrase physical `sAnd` S "other data" +:+ plural constraint +:+ sParen (makeRef2S $ SRS.datCon ([]::[Contents]) ([]::[Section])),
+  phrase physical `S.sAnd` S "other data" +:+ plural constraint +:+ sParen (makeRef2S $ SRS.datCon ([]::[Contents]) ([]::[Section])),
   S "Identify the" +:+ phrase crtSlpSrf +:+ S "within the possible" +:+
   phrase input_ +:+ S "range",
   S "Find the" +:+ phrase fsConcept +:+ S "for the" +:+ phrase slope,
-  S "Find the" +:+ phrase intrslce +:+ phrase normForce `sAnd` phrase shearForce +:+ S "along the" +:+ phrase crtSlpSrf]
+  S "Find the" +:+ phrase intrslce +:+ phrase normForce `S.sAnd` phrase shearForce +:+ S "along the" +:+ phrase crtSlpSrf]
   
 sysCtxResp :: [Sentence]
 sysCtxResp = [titleize user +:+ S "Responsibilities",
@@ -304,7 +304,7 @@ userCharIntro = userChar ssp [S "Calculus", titleize Doc.physics]
 
 userChar :: (Idea a) => a -> [Sentence] -> [Sentence] -> [Sentence] -> Contents
 userChar pname understandings familiarities specifics = foldlSP [
-  S "The", phrase endUser `sOf` short pname,
+  S "The", phrase endUser `S.sOf` short pname,
   S "should have an understanding of undergraduate Level 1",
   foldlList Comma List understandings `sC`
   S "and be familiar with", foldlList Comma List familiarities `sC` 
@@ -321,9 +321,9 @@ sysConstraints = foldlSP [S "The", phrase morPrice, phrase method_,
 
 -- SECTION 4.1 --
 prob :: Sentence
-prob = foldlSent_ [S "evaluate the", phrase fs `sOf` S "a", phrasePoss slope,
-  phrase slpSrf `sAnd` S "identify", phrase crtSlpSrf `the_ofThe` phrase slope `sC`
-  S "as well as the", phrase intrslce, phrase normForce `sAnd` phrase shearForce,
+prob = foldlSent_ [S "evaluate the", phrase fs `S.sOf` S "a", phrasePoss slope,
+  phrase slpSrf `S.sAnd` S "identify", phrase crtSlpSrf `S.the_ofThe` phrase slope `sC`
+  S "as well as the", phrase intrslce, phrase normForce `S.sAnd` phrase shearForce,
   S "along the", phrase crtSlpSrf]
 
 {-
@@ -362,29 +362,29 @@ physSysConv = foldlSP [atStart morPrice, phrase analysis, makeRef2S morgenstern1
   makeRef2S figIndexConv `sC` S "the", phrase index, ch index, S "is used to denote a",
   phrase value, S "for a single", phrase slice `sC` S "and an", phrase intrslce, 
   phrase value, S "at a given", phrase index, ch index, S "refers to the",
-  phrase value, S "between", phrase slice, ch index `sAnd` S "adjacent", phrase slice,
+  phrase value, S "between", phrase slice, ch index `S.sAnd` S "adjacent", phrase slice,
   E $ sy index `addRe` int 1]
 
 figIndexConv :: LabelledContent
 figIndexConv = llcc (makeFigRef "IndexConvention") $ 
-  fig (foldlSent_ [S "Index convention for", phrase slice `sAnd` 
+  fig (foldlSent_ [S "Index convention for", phrase slice `S.sAnd` 
   phrase intrslce, plural value]) (resourcePath ++ "IndexConvention.png")
 
 physSysFbd :: Contents
 physSysFbd = foldlSP [S "A", phrase fbd, S "of the", plural force, S "acting on a",
-  phrase slice `sIs` S "displayed in" +:+. makeRef2S figForceActing, S "The specific",
-  plural force `sAnd` plural symbol_, S "will be discussed in detail in",
-  makeRef2S (SRS.genDefn [] []) `sAnd` makeRef2S (SRS.dataDefn [] [])]
+  phrase slice `S.sIs` S "displayed in" +:+. makeRef2S figForceActing, S "The specific",
+  plural force `S.sAnd` plural symbol_, S "will be discussed in detail in",
+  makeRef2S (SRS.genDefn [] []) `S.sAnd` makeRef2S (SRS.dataDefn [] [])]
 
 figForceActing :: LabelledContent
 figForceActing = llcc (makeFigRef "ForceDiagram") $
-  fig (atStart fbd `sOf` plural force +:+ S "acting on a" +:+
+  fig (atStart fbd `S.sOf` plural force +:+ S "acting on a" +:+
   phrase slice) (resourcePath ++ "ForceDiagram.png")
 
 -- SECTION 4.1.3 --
 goalsInputs :: [Sentence]
-goalsInputs = [phrase shape `the_ofThe` phrase soil +:+ S "mass",
-  S "location" `the_ofThe` phrase waterTable, plural mtrlPrpty `the_ofThe` phrase soil]
+goalsInputs = [phrase shape `S.the_ofThe` phrase soil +:+ S "mass",
+  S "location" `S.the_ofThe` phrase waterTable, plural mtrlPrpty `S.the_ofThe` phrase soil]
 
 -- SECTION 4.2 --
 

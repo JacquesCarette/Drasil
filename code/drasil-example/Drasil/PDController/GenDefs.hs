@@ -9,7 +9,7 @@ import Drasil.PDController.TModel
 import Language.Drasil
 import Theory.Drasil (GenDefn, gd, ModelKinds (OthModel))
 import Utils.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 import Data.Drasil.Citations ( pidWiki )
 import Drasil.PDController.Unitals
 
@@ -39,7 +39,7 @@ gdPowerPlantEqn
 gdPowerPlantNote :: Sentence
 gdPowerPlantNote
   = foldlSent
-      [S "The", phrase ccTransferFxn `ofThe`
+      [S "The", phrase ccTransferFxn `S.ofThe`
          phrase secondOrderSystem,
          sParen (S "from" +:+
          makeRef2S tmSOSystem),

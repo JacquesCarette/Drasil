@@ -50,14 +50,14 @@ import Language.Drasil.Code
        (ODEInfo, ODEMethod(..), ODEOptions, odeInfo, odeOptions, quantvar)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 import Drasil.PDController.Unitals
 
 naveen :: Person
 naveen = person "Naveen Ganesh" "Muralidharan"
 
 srs :: Document
-srs = mkDoc mkSRS (sFor'' titleize phrase) si
+srs = mkDoc mkSRS (S.sFor'' titleize phrase) si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration

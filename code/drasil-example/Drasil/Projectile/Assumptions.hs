@@ -5,7 +5,7 @@ module Drasil.Projectile.Assumptions (accelYGravity, accelXZero, cartSyst,
 
 import Language.Drasil
 import Utils.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
 
@@ -42,48 +42,48 @@ timeStartZero   = cic "timeStartZero"   timeStartZeroDesc   "timeStartZero"   as
 gravAccelValue  = cic "gravAccelValue"  gravAccelValueDesc  "gravAccelValue"  assumpDom
 
 twoDMotionDesc :: Sentence
-twoDMotionDesc = atStartNP (the projMotion) `sIs` phrase twoD +:+. sParen (getAcc twoD)
+twoDMotionDesc = atStartNP (the projMotion) `S.sIs` phrase twoD +:+. sParen (getAcc twoD)
 
 cartSystDesc :: Sentence
-cartSystDesc = S "A" +:+ (phrase cartesian `sIs` S "used") +:+. fromSource neglectCurv
+cartSystDesc = S "A" +:+ (phrase cartesian `S.sIs` S "used") +:+. fromSource neglectCurv
 
 yAxisGravityDesc :: Sentence
-yAxisGravityDesc = S "direction" `the_ofThe'` phrase yAxis `sIs` S "directed opposite to" +:+. phrase gravity
+yAxisGravityDesc = S "direction" `S.the_ofThe'` phrase yAxis `S.sIs` S "directed opposite to" +:+. phrase gravity
 
 launchOriginDesc :: Sentence
-launchOriginDesc = (atStartNP (the launcher) `sIs` S "coincident with the origin" !.)
+launchOriginDesc = (atStartNP (the launcher) `S.sIs` S "coincident with the origin" !.)
 
 targetXAxisDesc :: Sentence
 targetXAxisDesc = atStartNP (the target) +:+ S "lies on the" +:+ phrase xAxis +:+. fromSource neglectCurv
 
 posXDirectionDesc :: Sentence
-posXDirectionDesc = S "The positive" +:+ phrase xDir `sIs` S "from the" +:+. (phrase launcher `toThe` phrase target)
+posXDirectionDesc = S "The positive" +:+ phrase xDir `S.sIs` S "from the" +:+. (phrase launcher `S.toThe` phrase target)
 
 constAccelDesc :: Sentence
-constAccelDesc = S "The" +:+ (phrase acceleration `sIs` S "constant") +:+.
+constAccelDesc = S "The" +:+ (phrase acceleration `S.sIs` S "constant") +:+.
                  fromSources [accelXZero, accelYGravity, neglectDrag, freeFlight]
 
 accelXZeroDesc :: Sentence
-accelXZeroDesc = S "The" +:+ phrase acceleration +:+. (S "in the" +:+ phrase xDir `sIs` S "zero")
+accelXZeroDesc = S "The" +:+ phrase acceleration +:+. (S "in the" +:+ phrase xDir `S.sIs` S "zero")
 
 accelYGravityDesc :: Sentence
-accelYGravityDesc = S "The" +:+ phrase acceleration +:+ S "in the" +:+ phrase yDir `isThe` phrase acceleration +:+
+accelYGravityDesc = S "The" +:+ phrase acceleration +:+ S "in the" +:+ phrase yDir `S.isThe` phrase acceleration +:+
                     S "due to" +:+ phrase gravity +:+. fromSource yAxisGravity
 
 neglectDragDesc :: Sentence
-neglectDragDesc = (S "Air drag" `sIs` S "neglected" !.)
+neglectDragDesc = (S "Air drag" `S.sIs` S "neglected" !.)
 
 pointMassDesc :: Sentence
-pointMassDesc = (S "size" `sAnd` S "shape") `the_ofThe'` phrase projectile `sAre`
+pointMassDesc = (S "size" `S.sAnd` S "shape") `S.the_ofThe'` phrase projectile `S.sAre`
                 S "negligible" `sC` S "so that it can be modelled as a point" +:+. phrase mass
 
 freeFlightDesc :: Sentence
-freeFlightDesc = S "The flight" `sIs` S "free; there" `sAre` S "no" +:+ plural collision +:+
-                 S "during" +:+. (S "trajectory" `the_ofThe` phrase projectile)
+freeFlightDesc = S "The flight" `S.sIs` S "free; there" `S.sAre` S "no" +:+ plural collision +:+
+                 S "during" +:+. (S "trajectory" `S.the_ofThe` phrase projectile)
 
 neglectCurvDesc :: Sentence
-neglectCurvDesc = S "The" +:+ phrase distance `sIs` S "small enough that" +:+.
-                  (S "curvature" `the_ofThe` S "Earth can be neglected")
+neglectCurvDesc = S "The" +:+ phrase distance `S.sIs` S "small enough that" +:+.
+                  (S "curvature" `S.the_ofThe` S "Earth can be neglected")
 
 timeStartZeroDesc :: Sentence
 timeStartZeroDesc = atStart time +:+. S "starts at zero"

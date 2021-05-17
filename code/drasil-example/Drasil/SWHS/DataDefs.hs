@@ -4,7 +4,7 @@ import Language.Drasil
 import Drasil.DocLang (ModelDB, mdb)
 import Theory.Drasil (DataDefinition, dd, ddNoRefs)
 import Utils.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (value)
 import Data.Drasil.Concepts.Thermodynamics (heat)
@@ -164,7 +164,7 @@ meltFracEqn = sy latentEP $/ (sy htFusion `mulRe` sy pcmMass)
 ddMeltFrac :: DataDefinition
 ddMeltFrac = dd ddMeltFracQD [makeCite koothoor2013]
   Nothing "meltFrac" [meltFracConst, makeRef2S ddHtFusion]
-  where meltFracConst = S "The" +:+ phrase value `sOf` E (sy meltFrac) `sIs`
+  where meltFracConst = S "The" +:+ phrase value `S.sOf` E (sy meltFrac) `S.sIs`
                         S "constrained to" +:+. E (dbl 0 $<= sy meltFrac $<= dbl 1)
 
 ----

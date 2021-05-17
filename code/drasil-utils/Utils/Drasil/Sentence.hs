@@ -1,5 +1,6 @@
 module Utils.Drasil.Sentence (andIts, andThe, fromThe, inThe, isExpctdToHv, isThe, ofGiv, forTT, forTT',
-  ofGiv', ofThe, the_ofThe, the_ofThe', sOf, sOfA, sOr, sVersus, sAnd, sAre, sIn, sIs, toThe, sFor, sFor', sFor'') where
+  ofGiv', ofThe, the_ofThe, the_ofThe', sOf, sOfA, sOr, sVersus, sAnd, sAre, sIn, sIs, toThe, sFor, sFor', sFor'',
+  denotes, wrt, defnAs) where
 
 import Language.Drasil
 
@@ -12,7 +13,7 @@ sentHelper :: String -> Sentence -> Sentence -> Sentence
 sentHelper inStr a b = a +:+ S inStr +:+ b
 
 andIts, andThe, fromThe, inThe, isExpctdToHv, isThe, ofGiv, ofGiv', ofThe, the_ofThe, the_ofThe', sOf, sOfA,
-  sOr, sVersus, sAnd, sAre, sIn, sIs, toThe, sFor :: Sentence -> Sentence -> Sentence
+  sOr, sVersus, sAnd, sAre, sIn, sIs, toThe, sFor, denotes, wrt, defnAs :: Sentence -> Sentence -> Sentence
 
 -- | Inserts the words "and its" between two Sentences
 andIts  = sentHelper "and its"
@@ -46,6 +47,12 @@ toThe   = sentHelper "to the"
 ofThe   = sentHelper "of the"
 -- | Inserts the word "for" between two Sentences
 sFor    = sentHelper "for"
+-- | Inserts the words "denotes the" between two Sentences
+denotes = sentHelper "denotes the"
+-- | Inserts the words "with respect to" between two Sentences
+wrt     = sentHelper "with respect to"
+-- | Inserts the words "defined as" between two Sentences
+defnAs  = sentHelper "defined as"
 
 -- | Similar to 'sFor', but both terms are 'titleize'd
 sFor' :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence

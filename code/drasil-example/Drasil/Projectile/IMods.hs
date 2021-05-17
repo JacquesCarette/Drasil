@@ -136,7 +136,7 @@ angleConstraintNote, gravitationalAccelConstNote, landAndTargPosConsNote, landPo
   timeConsNote, tolNote :: Sentence
 
 angleConstraintNote = foldlSent [S "The", phrase constraint,
-  E (int 0 $< sy launAngle $< (sy pi_ $/ int 2)) `sIs` S "from",
+  E (int 0 $< sy launAngle $< (sy pi_ $/ int 2)) `S.sIs` S "from",
   makeRef2S posXDirection `S.sAnd` makeRef2S yAxisGravity `sC`
   S "and is shown" `S.sIn` makeRef2S figLaunch]
 
@@ -144,7 +144,7 @@ gravitationalAccelConstNote = ch gravitationalAccelConst `S.sIs`
   S "defined in" +:+. makeRef2S gravAccelValue
 
 landAndTargPosConsNote = S "The" +:+ plural constraint +:+
-  E (sy landPos $> int 0) `sAnd` E (sy targPos $> int 0) `S.sAre` S "from" +:+. makeRef2S posXDirection
+  E (sy landPos $> int 0) `S.sAnd` E (sy targPos $> int 0) `S.sAre` S "from" +:+. makeRef2S posXDirection
 
 landPosNote = ch landPos `S.sIs` S "from" +:+. makeRef2S landPosIM
 

@@ -58,8 +58,8 @@ htFluxWaterFromCoil = gd (EquationalModel htFluxWaterFromCoilQD) (getUnit htFlux
 htFluxWaterFromCoilQD :: QDefinition
 htFluxWaterFromCoilQD = mkQuantDef htFluxC htFluxWaterFromCoilExpr
 
-htFluxWaterFromCoilRel :: Relation
-htFluxWaterFromCoilRel = sy coilHTC `mulRe` (sy tempC $- apply1 tempW time)
+htFluxWaterFromCoilExpr :: Relation
+htFluxWaterFromCoilExpr = sy coilHTC `mulRe` (sy tempC $- apply1 tempW time)
 
 --Can't include info in description beyond definition of variables?
 ----

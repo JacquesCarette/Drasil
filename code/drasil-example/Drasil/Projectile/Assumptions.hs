@@ -5,6 +5,7 @@ module Drasil.Projectile.Assumptions (accelYGravity, accelXZero, cartSyst,
 
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
 

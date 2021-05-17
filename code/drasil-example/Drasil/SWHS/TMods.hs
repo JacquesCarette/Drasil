@@ -5,6 +5,7 @@ import Language.Drasil
 import Control.Lens ((^.))
 import Theory.Drasil (TheoryModel, tm, ModelKinds(OthModel, EquationalModel))
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Data.Drasil.Concepts.Documentation (system)
 import Data.Drasil.Concepts.Math (equation, rate, rOfChng)

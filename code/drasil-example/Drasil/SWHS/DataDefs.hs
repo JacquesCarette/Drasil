@@ -4,6 +4,7 @@ import Language.Drasil
 import Drasil.DocLang (ModelDB, mdb)
 import Theory.Drasil (DataDefinition, dd, ddNoRefs)
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Data.Drasil.Concepts.Documentation (value)
 import Data.Drasil.Concepts.Thermodynamics (heat)

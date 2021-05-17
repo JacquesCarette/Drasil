@@ -2,6 +2,7 @@ module Drasil.SSP.Assumptions where
 
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Drasil.SSP.Defs (plnStrn, slpSrf, slopeSrf, slope,
   soil, soilPrpty, intrslce, slice, waterTable)

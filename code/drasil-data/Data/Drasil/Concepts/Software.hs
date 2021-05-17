@@ -2,6 +2,8 @@ module Data.Drasil.Concepts.Software where
 
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Sentence
+
 import Data.Drasil.Concepts.Computation (algorithm, dataStruct, inParam)
 import Data.Drasil.Concepts.Documentation (input_, physical, physicalConstraint,
   srs, softwareConstraint, quantity)

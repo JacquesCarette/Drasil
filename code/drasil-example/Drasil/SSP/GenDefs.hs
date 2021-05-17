@@ -7,6 +7,7 @@ import Prelude hiding (sin, cos, tan)
 import Language.Drasil
 import Theory.Drasil (GenDefn, gd, ModelKinds (OthModel))
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Drasil.DocLang.SRS as SRS (physSyst)
 

@@ -5,6 +5,7 @@ import Prelude hiding (cos, sin)
 import Language.Drasil
 import Theory.Drasil (InstanceModel, imNoDerivNoRefs, imNoRefs, qwC, ModelKinds (OthModel))
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
 

@@ -16,6 +16,7 @@ module Drasil.Sections.SpecificSystemDescription
 
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Data.Drasil.Concepts.Documentation (assumption, column, constraint, corSol,
   datum, datumConstraint, definition, element, general, goalStmt, information,

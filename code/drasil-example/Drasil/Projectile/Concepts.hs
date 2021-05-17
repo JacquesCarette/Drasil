@@ -2,6 +2,7 @@ module Drasil.Projectile.Concepts where
 
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Data.Drasil.Concepts.Math (angle)
 import Data.Drasil.Concepts.Physics (position, speed, motion, distance, iSpeed, time,

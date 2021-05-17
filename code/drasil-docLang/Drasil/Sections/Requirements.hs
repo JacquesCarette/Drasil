@@ -3,6 +3,7 @@ module Drasil.Sections.Requirements (fReqF, fullReqs, fullTables, inReq, inTable
 
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
 import Data.Drasil.Concepts.Documentation (description, funcReqDom,
   functionalRequirement, input_, nonfunctionalRequirement, {-output_,-} section_,

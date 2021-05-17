@@ -52,7 +52,7 @@ monotonicF, slopeS, homogeneousL, isotropicP, linearS, planeS, largeN,
   waterSIntersect, negligibleSlopeEffect, hydrostaticFMidpoint :: Sentence
 
 monotonicF = foldlSent [S "The", phrase slpSrf,
-  S "is concave with respect to", S "the" +:+. phrase slopeSrf, S "The",
+  S "is concave" `wrt` S "the" +:+. phrase slopeSrf, S "The",
   sParen (ch slipDist `sC` ch slipHght) +:+ S "coordinates", S "of a", 
   phrase slpSrf, S "follow a concave up function"]
 

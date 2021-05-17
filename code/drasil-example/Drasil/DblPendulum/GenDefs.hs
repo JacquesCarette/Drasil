@@ -63,7 +63,7 @@ velocityIXDerivSent2 = S "We also know the" +:+ phrase horizontal +:+ phrase pos
 velocityIXDerivEqn2 = sy xPos $= sy lenRod * sin (sy pendDisplacementAngle) 
 velocityIXDerivSent3 = S "Applying this,"
 velocityIXDerivEqn3 = sy xVel $= deriv (sy lenRod * sin (sy pendDisplacementAngle)) time
-velocityIXDerivSent4 = E (sy lenRod) `sIs` S "constant with respect to time, so"
+velocityIXDerivSent4 = E (sy lenRod) `sIs` S "constant" `wrt` S  "time, so"
 velocityIXDerivEqn4 = sy xVel $= sy lenRod * deriv (sin (sy pendDisplacementAngle)) time
 velocityIXDerivSent5 = S "Therefore, using the chain rule,"
 
@@ -99,7 +99,7 @@ velocityIYDerivSent2 = S "We also know the" +:+ phrase vertical +:+ phrase posit
 velocityIYDerivEqn2 = sy yPos $= negate (sy lenRod * cos (sy pendDisplacementAngle)) 
 velocityIYDerivSent3 = S "Applying this again,"
 velocityIYDerivEqn3 = sy yVel $= negate (deriv (sy lenRod * cos (sy pendDisplacementAngle)) time)
-velocityIYDerivSent4 = E (sy lenRod) `sIs` S "constant with respect to time, so"
+velocityIYDerivSent4 = E (sy lenRod) `sIs` S "constant" `wrt` S "time, so"
 velocityIYDerivEqn4 = sy yVel $= negate (sy lenRod * deriv (cos (sy pendDisplacementAngle)) time)
 velocityIYDerivSent5 = S "Therefore, using the chain rule,"
 

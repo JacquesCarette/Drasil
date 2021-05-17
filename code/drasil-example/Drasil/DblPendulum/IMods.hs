@@ -1,3 +1,4 @@
+{-# LANGUAGE PostfixOperators #-}
 module Drasil.DblPendulum.IMods (iMods, angularDisplacementIM) where
 
 import Prelude hiding (cos, sin)
@@ -53,9 +54,9 @@ angularDisplacementDerivSent1 = foldlSentCol [S "When the", phrase pendulum `sIs
                                        S "the", phrase equation `sOf` phrase motion, S "for the", phrase pendulum, S "may be obtained"]
        
  
-angularDisplacementDerivSent2 = foldlSentCol [S "Where", ch torque +:+ S "denotes the", phrase torque `sC`
-                                    ch momentOfInertia +:+ S "denotes the", phrase momentOfInertia `sAnd` ch angularAccel +:+ 
-                                    S "denotes the", phrase angularAccel +:+  S "This implies"]
+angularDisplacementDerivSent2 = foldlSentCol [S "Where", ch torque `denotes` phrase torque `sC`
+                                    ch momentOfInertia `denotes` phrase momentOfInertia `sAnd` ch angularAccel `denotes`
+                                    (phrase angularAccel !.), S "This implies"]
                  
 
 angularDisplacementDerivSent3 = foldlSentCol [S "And rearranged as" ] 

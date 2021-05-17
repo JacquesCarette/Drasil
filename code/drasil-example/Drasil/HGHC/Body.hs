@@ -12,7 +12,7 @@ import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
   rdb, refdb, _authors, _concepts, _constants, _constraints, _purpose,
   _datadefs, _configFiles,_definitions, _defSequence, _inputs, _kind, _outputs, _quants, 
   _sys, _sysinfodb, _usedinfodb)
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 
 import Drasil.HGHC.HeatTransfer (fp, hghc, dataDefs, htInputs, htOutputs, 
     nuclearPhys, symbols)
@@ -23,7 +23,7 @@ import Data.Drasil.Concepts.Documentation (doccon, doccon')
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
   
 srs :: Document
-srs = mkDoc mkSRS sFor' si
+srs = mkDoc mkSRS S.sFor' si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration

@@ -10,7 +10,7 @@ import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI),
   _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (Theory(defined_fun, defined_quant))
 import Utils.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   DocSection(..), Field(..), Fields, GSDSec(..), GSDSub(..),
@@ -66,7 +66,7 @@ import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   sD, termsWithAccDefn, termsWithDefsOnly, terms)
 
 srs :: Document
-srs = mkDoc mkSRS  (sFor'' titleize phrase) si
+srs = mkDoc mkSRS  (S.sFor'' titleize phrase) si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
@@ -210,7 +210,7 @@ priorityNFReqs = [correctness, verifiability, understandability,
 
 startIntro :: NamedChunk -> Sentence -> CI -> Sentence
 startIntro prgm sfwrPredicts progName = foldlSent [
-  atStart prgm, S "is helpful to efficiently" `sAnd` S "correctly predict the"
+  atStart prgm, S "is helpful to efficiently" `S.sAnd` S "correctly predict the"
   +:+. sfwrPredicts, underConsidertn blast,
   S "The", phrase prgm `sC` S "herein called", short progName `sC`
   S "aims to predict the", sfwrPredicts, S "using an intuitive",
@@ -218,10 +218,10 @@ startIntro prgm sfwrPredicts progName = foldlSent [
 
 undIR, appStanddIR :: [Sentence]
 undIR = [phrase scndYrCalculus, phrase structuralMechanics, phrase glBreakage,
-  phrase blastRisk, plural computerApp `sIn` phrase Edu.civilEng]
+  phrase blastRisk, plural computerApp `S.sIn` phrase Edu.civilEng]
 appStanddIR = [S "applicable" +:+ plural standard +:+
   S "for constructions using glass from" +:+ foldlList Comma List
-  (map makeCiteS [astm2009, astm2012, astm2016]) `sIn`
+  (map makeCiteS [astm2009, astm2012, astm2016]) `S.sIn`
   makeRef2S (SRS.reference ([]::[Contents]) ([]::[Section]))]
 
 scope :: Sentence
@@ -241,12 +241,12 @@ orgOfDocIntro, orgOfDocIntroEnd :: Sentence
 orgOfDocIntro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the", phrase template, S "for an", short Doc.srs,
   S "for", phrase sciCompS, S "proposed by" +:+ makeCiteS koothoor2013
-  `sAnd` makeCiteS smithLai2005 `sC` S "with some", 
+  `S.sAnd` makeCiteS smithLai2005 `sC` S "with some", 
   plural aspect, S "taken from Volere", phrase template,
   S "16", makeCiteS rbrtsn2012]
 
-orgOfDocIntroEnd = foldlSent_ [atStartNP' (the Doc.dataDefn) `sAre`
-  S "used to support", plural definition `the_ofThe` S "different", plural model]
+orgOfDocIntroEnd = foldlSent_ [atStartNP' (the Doc.dataDefn) `S.sAre`
+  S "used to support", plural definition `S.the_ofThe` S "different", plural model]
 
 {--STAKEHOLDERS--}
 
@@ -275,7 +275,7 @@ sysCtxDesc = foldlSPCol
    
 sysCtxUsrResp :: [Sentence]
 sysCtxUsrResp = [S "Provide the" +:+ plural inDatum +:+ S "related to the" +:+
-  phrase glaSlab `sAnd` phrase blastTy `sC` S "ensuring no errors in the" +:+
+  phrase glaSlab `S.sAnd` phrase blastTy `sC` S "ensuring no errors in the" +:+
   plural datum +:+. S "entry",
   S "Ensure that consistent units are used for" +:+ phrase input_ +:+. plural variable,
   S "Ensure required" +:+ phrase software +:+ plural assumption +:+
@@ -287,7 +287,7 @@ sysCtxSysResp :: [Sentence]
 sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters" +:+
   phrase input_ +:+. S "instead of a floating point number",
   S "Determine if the" +:+ plural input_ +:+ S "satisfy the required" +:+.
-  (phrase physical `sAnd` plural softwareConstraint),
+  (phrase physical `S.sAnd` plural softwareConstraint),
   S "Predict whether the" +:+ phrase glaSlab +:+. S "is safe or not"]
   
 sysCtxResp :: [Sentence]
@@ -317,7 +317,7 @@ userCharacteristicsIntro = LlC $ enumBullet characteristicsLabel $ map foldlSent
 {--PROBLEM DESCRIPTION--}
 
 prob :: Sentence
-prob = foldlSent_ [S "efficiently" `sAnd` S "correctly predict whether a",
+prob = foldlSent_ [S "efficiently" `S.sAnd` S "correctly predict whether a",
   phrase glaSlab, S "can withstand a", phrase blast, S "under given",
   plural condition]
 
@@ -332,14 +332,14 @@ termsAndDesc = termDefnF' (Just (S "All of the" +:+ plural term_ +:+
 physSystParts :: [Sentence]
 physSystParts = [S "The" +:+. phrase glaSlab,
   foldlSent [S "The" +:+. phrase ptOfExplsn, S "Where the", phrase bomb `sC`
-  S "or", (blast ^. defn) `sC` S "is located. The", phrase sD `isThe`
-  phrase distance, S "between the", phrase ptOfExplsn `sAnd` S "the glass"]]
+  S "or", (blast ^. defn) `sC` S "is located. The", phrase sD `S.isThe`
+  phrase distance, S "between the", phrase ptOfExplsn `S.sAnd` S "the glass"]]
 
 {--Goal Statements--}
 
 goalInputs :: [Sentence]
-goalInputs = [plural dimension `the_ofThe` phrase glaPlane, S "the" +:+ phrase glassTy,
-  plural characteristic `the_ofThe` phrase explosion, S "the" +:+ phrase pbTol]
+goalInputs = [plural dimension `S.the_ofThe` phrase glaPlane, S "the" +:+ phrase glassTy,
+  plural characteristic `S.the_ofThe` phrase explosion, S "the" +:+ phrase pbTol]
 
 {--SOLUTION CHARACTERISTICS SPECIFICATION--}
 
@@ -374,7 +374,7 @@ goalInputs = [plural dimension `the_ofThe` phrase glaPlane, S "the" +:+ phrase g
 appdxIntro :: Contents
 appdxIntro = foldlSP [
   S "This", phrase appendix, S "holds the", plural graph,
-  sParen (makeRef2S demandVsSDFig `sAnd` makeRef2S dimlessloadVsARFig),
+  sParen (makeRef2S demandVsSDFig `S.sAnd` makeRef2S dimlessloadVsARFig),
   S "used for interpolating", plural value, S "needed in the", plural model]
 
 blstRskInvWGlassSlab :: Sentence

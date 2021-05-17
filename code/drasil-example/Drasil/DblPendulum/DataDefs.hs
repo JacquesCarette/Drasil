@@ -3,7 +3,7 @@ module Drasil.DblPendulum.DataDefs (dataDefs, positionIY, positionIX, angFrequen
 
 import Prelude hiding (sin, cos, sqrt)
 import Language.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 import Data.Drasil.SI_Units (second)
 import Theory.Drasil (DataDefinition, ddNoRefs)
 import Drasil.DblPendulum.Figures (figMotion)
@@ -30,10 +30,10 @@ positionIXEqn :: Expr
 positionIXEqn = sy lenRod * sin (sy initialPendAngle)
 
 figRef :: Sentence
-figRef = ch QP.ixPos `sIs` S "shown in" +:+. makeRef2S figMotion
+figRef = ch QP.ixPos `S.sIs` S "shown in" +:+. makeRef2S figMotion
 
 positionRef :: Sentence
-positionRef = ch QP.ixPos `isThe` phrase horizontal +:+ phrase QP.position
+positionRef = ch QP.ixPos `S.isThe` phrase horizontal +:+ phrase QP.position
 
 ------------------------------------------------------
 positionIY :: DataDefinition
@@ -46,10 +46,10 @@ positionIYEqn :: Expr
 positionIYEqn = negate (sy lenRod * cos (sy initialPendAngle))
 
 figReff :: Sentence
-figReff = ch QP.iyPos `sIs` S "shown in" +:+. makeRef2S figMotion
+figReff = ch QP.iyPos `S.sIs` S "shown in" +:+. makeRef2S figMotion
 
 positionReff :: Sentence
-positionReff = ch QP.iyPos `isThe` phrase vertical +:+ phrase QP.position
+positionReff = ch QP.iyPos `S.isThe` phrase vertical +:+ phrase QP.position
 
 ------------------------------------------------------
 
@@ -64,7 +64,7 @@ frequencyDDEqn = 1 / sy QP.period
 
 
 frequencyRef :: Sentence
-frequencyRef = ch QP.frequency `isThe` S "number of back and forth swings in one" +:+ phrase second
+frequencyRef = ch QP.frequency `S.isThe` S "number of back and forth swings in one" +:+ phrase second
 
 ------------------------------------------------------
 
@@ -78,7 +78,7 @@ angFrequencyDDEqn :: Expr
 angFrequencyDDEqn = 2 * sy QM.pi_ / sy QP.period
 
 angFrequencyRef :: Sentence
-angFrequencyRef = ch QP.period `sIs` S "from" +:+ makeRef2S periodSHMDD
+angFrequencyRef = ch QP.period `S.sIs` S "from" +:+ makeRef2S periodSHMDD
 
 ------------------------------------------------------
 
@@ -92,4 +92,4 @@ periodSHMDDEqn :: Expr
 periodSHMDDEqn = 1 / sy QP.frequency
 
 periodSHMRef :: Sentence
-periodSHMRef = ch QP.period `sIs` S "from" +:+ makeRef2S frequencyDD
+periodSHMRef = ch QP.period `S.sIs` S "from" +:+ makeRef2S frequencyDD

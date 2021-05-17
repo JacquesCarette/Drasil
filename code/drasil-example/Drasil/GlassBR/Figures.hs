@@ -4,7 +4,7 @@ import Control.Lens((^.))
 
 import Language.Drasil
 import Utils.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (assumption, item, physicalSystem,
   requirement, section_, sysCont, traceyMatrix)
@@ -29,20 +29,20 @@ traceItemSecsFig = llcc (makeFigRef "TraceyItemSecs") $ fig (showingCxnBw tracey
   (resourcePath ++ "Trace.png")
 
 traceReqsItemsFig = llcc (makeFigRef "TraceyReqsItems") $ fig (showingCxnBw traceyMatrix $
-  titleize' requirement `sAnd` S "Other" +:+ titleize' item)
+  titleize' requirement `S.sAnd` S "Other" +:+ titleize' item)
   (resourcePath ++ "RTrace.png")
 
 traceAssumpsOthersFig = llcc (makeFigRef "TraceyAssumpsOthers") $ fig (showingCxnBw traceyMatrix $
-  titleize' assumption `sAnd` S "Other" +:+ titleize' item)
+  titleize' assumption `S.sAnd` S "Other" +:+ titleize' item)
   (resourcePath ++ "ATrace.png")
 
 demandVsSDFig = llcc (makeFigRef "demandVSsod") $ fig ((demandq ^. defn) +:+
-  sParen (ch demand) `sVersus` atStart sD +:+ sParen (getAcc stdOffDist)
-  `sVersus` atStart charWeight +:+ sParen (ch charWeight))
+  sParen (ch demand) `S.sVersus` atStart sD +:+ sParen (getAcc stdOffDist)
+  `S.sVersus` atStart charWeight +:+ sParen (ch charWeight))
   (resourcePath ++ "ASTM_F2248-09.png")
 
 dimlessloadVsARFig = llcc (makeFigRef "dimlessloadVSaspect") $ fig (S "Non dimensional" +:+
   phrase lateralLoad +:+ sParen (ch dimlessLoad)
-  `sVersus` titleize aspectRatio +:+ sParen (getAcc aR)
-  `sVersus` atStart stressDistFac +:+ sParen (ch stressDistFac))
+  `S.sVersus` titleize aspectRatio +:+ sParen (getAcc aR)
+  `S.sVersus` atStart stressDistFac +:+ sParen (ch stressDistFac))
   (resourcePath ++ "ASTM_F2248-09_BeasonEtAl.png")

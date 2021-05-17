@@ -4,7 +4,7 @@ module Drasil.GamePhysics.TMods (tMods, newtonSL, newtonSLR, newtonTL, newtonLUG
 import Language.Drasil
 import Theory.Drasil (TheoryModel, tmNoRefs, ModelKinds(OthModel, EquationalModel))
 import Utils.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 
 import Drasil.GamePhysics.Assumptions (assumpOD)
 import Drasil.GamePhysics.Unitals (dispNorm, dVect, force_1, force_2,
@@ -39,7 +39,7 @@ newtonTLExpr = negate (sy force_2)
 newtonTLNote :: Sentence
 newtonTLNote = foldlSent [(S "Every action has an equal and opposite reaction" !.),
   S "In other words, the", phrase force, ch force_1, S "exerted on the second",
-  phrase rigidBody, S "by the first is equal in magnitude and in the opposite direction" `toThe`
+  phrase rigidBody, S "by the first is equal in magnitude and in the opposite direction" `S.toThe`
   phrase force, ch force_2, S "exerted on the first", phrase rigidBody, S "by the second"]
 
 -- T3 : Newton's law of universal gravitation --
@@ -70,10 +70,10 @@ newtonLUGRel = sy force $=
 
 newtonLUGNotes :: [Sentence]
 newtonLUGNotes = map foldlSent [
-  [S "Two", plural rigidBody `inThe` S "universe attract each other with a",
+  [S "Two", plural rigidBody `S.inThe` S "universe attract each other with a",
    getTandS force, S "that is directly proportional to the product of their",
-   plural mass `sC` ch mass_1 `sAnd` ch mass_2 `sC` EmptyS `sAnd`
-   S "inversely proportional" `toThe` getTandS sqrDist, S "between them"]]
+   plural mass `sC` ch mass_1 `S.sAnd` ch mass_2 `sC` EmptyS `S.sAnd`
+   S "inversely proportional" `S.toThe` getTandS sqrDist, S "between them"]]
 
 -- T4 : Newton's second law for rotational motion --
 
@@ -91,9 +91,9 @@ newtonSLRRel = sy torque $= sy momentOfInertia * sy angularAccel
 
 newtonSLRNotes :: [Sentence]
 newtonSLRNotes = map foldlSent [
-  [S "The net", getTandS torque, S "on a", phrase rigidBody `sIs`
+  [S "The net", getTandS torque, S "on a", phrase rigidBody `S.sIs`
    S "proportional to its", getTandS angularAccel `sC` S "where",
-   ch momentOfInertia, S "denotes", phrase momentOfInertia `the_ofThe`
-   phrase rigidBody, S "as the", phrase constant `sOf` S "proportionality"],
-  [S "We also assume that all", plural rigidBody, S "involved" `sAre`
+   ch momentOfInertia, S "denotes", phrase momentOfInertia `S.the_ofThe`
+   phrase rigidBody, S "as the", phrase constant `S.sOf` S "proportionality"],
+  [S "We also assume that all", plural rigidBody, S "involved" `S.sAre`
    phrase twoD, fromSource assumpOD]]

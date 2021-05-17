@@ -2,7 +2,7 @@ module Drasil.SSP.Goals (goals, identifyCritAndFSGS, determineNormalFGS,
   determineShearFGS) where
 
 import Language.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (goalStmtDom)
 
@@ -29,10 +29,10 @@ determineShearFGS = cic "determineShearF" (determineF intShrForce)
   "Determine-Shear-Forces" goalStmtDom
 
 identifyCritAndFS :: Sentence
-identifyCritAndFS = S "Identify the" +:+ phrase crtSlpSrf `andThe` 
+identifyCritAndFS = S "Identify the" +:+ phrase crtSlpSrf `S.andThe` 
   S "corresponding" +:+. phrase fsConcept
   
 determineF :: (NamedIdea a) => a -> Sentence
 determineF what = S "Determine the" +:+ phrase what +:+
-  S "between each pair of vertical" +:+ plural slice +:+ S "of the" +:+.
-  phrase slope
+  S "between each pair of vertical" +:+. (plural slice `S.ofThe`
+  phrase slope)

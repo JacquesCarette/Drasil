@@ -3,7 +3,7 @@ module Drasil.NoPCM.IMods (eBalanceOnWtr, iMods, instModIntro) where
 import Language.Drasil
 import Theory.Drasil (InstanceModel, im, qwC, qwUC, ModelKinds (OthModel))
 import Utils.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 import Control.Lens ((^.))
 
 import Data.Drasil.Concepts.Documentation (goal)
@@ -51,13 +51,13 @@ balWtrRel = deriv (sy tempW) time $= 1 / sy tauW *
 
 balWtrNotes :: [Sentence]
 balWtrNotes = map foldlSent [
-  [ch tauW `sIs` S "calculated from", makeRef2S balanceDecayRate],
+  [ch tauW `S.sIs` S "calculated from", makeRef2S balanceDecayRate],
   [S "The above", phrase equation, S "applies as long as the", phrase water,
    S "is in", phrase liquid, S "form" `sC` E (0 $< sy tempW $< 100),
    sParen (unwrap $ getUnit tempW), S "where", E 0,
-   sParen (unwrap $ getUnit tempW) `sAnd` E 100,
-   sParen (unwrap $ getUnit tempW), S "are the", phrase melting `sAnd`
-   plural boilPt `sOf` phrase water `sC` S "respectively", sParen (makeRef2S assumpWAL)]]
+   sParen (unwrap $ getUnit tempW) `S.sAnd` E 100,
+   sParen (unwrap $ getUnit tempW), S "are the", phrase melting `S.sAnd`
+   plural boilPt `S.sOf` phrase water `sC` S "respectively", sParen (makeRef2S assumpWAL)]]
 
 ----------------------------------------------
 --    Derivation of eBalanceOnWtr           --
@@ -101,5 +101,5 @@ eBalanceOnWtrDerivEqns = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalan
 
 instModIntro :: Sentence
 instModIntro = foldlSent [S "The", phrase goal, makeRef2S waterTempGS,
-  S "is met by", makeRef2S eBalanceOnWtr `andThe` phrase goal,
+  S "is met by", makeRef2S eBalanceOnWtr `S.andThe` phrase goal,
   makeRef2S waterEnergyGS, S "is met by", makeRef2S heatEInWtr]

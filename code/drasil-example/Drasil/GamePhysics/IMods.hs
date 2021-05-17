@@ -32,11 +32,11 @@ iMods = [transMot, rotMot, col2D]
 {-- Force on the translational motion  --}
 transMot :: InstanceModel
 transMot = imNoDerivNoRefs (OthModel transMotRC) 
-  [qwC velj $ UpFrom (Exc, dbl 0)
-  ,qwC time $ UpFrom (Exc, dbl 0)
-  ,qwC gravitationalAccel $ UpFrom (Exc, dbl 0)
-  ,qwC forcej $ UpFrom (Exc, dbl 0)
-  ,qwC massj $ UpFrom (Exc, dbl 0)
+  [qwC velj $ UpFrom (Exc, int 0)
+  ,qwC time $ UpFrom (Exc, int 0)
+  ,qwC gravitationalAccel $ UpFrom (Exc, int 0)
+  ,qwC forcej $ UpFrom (Exc, int 0)
+  ,qwC massj $ UpFrom (Exc, int 0)
   ]
   (qw accj) [] "transMot" [transMotDesc, transMotOutputs, rigidTwoDAssump, noDampConsAssumps]
 
@@ -70,12 +70,12 @@ transMotOutputs = foldlSent [phrase output_ `S.the_ofThe'` phrase inModel,
 
 rotMot :: InstanceModel
 rotMot = imNoDerivNoRefs (OthModel rotMotRC) 
-  [qwC angularVelocity $ UpFrom (Exc, dbl 0)
-  ,qwC time $ UpFrom (Exc, dbl 0)
-  ,qwC torquej $ UpFrom (Exc, dbl 0)
-  ,qwC momentOfInertia $ UpFrom (Exc, dbl 0)
+  [qwC angularVelocity $ UpFrom (Exc, int 0)
+  ,qwC time $ UpFrom (Exc, int 0)
+  ,qwC torquej $ UpFrom (Exc, int 0)
+  ,qwC momentOfInertia $ UpFrom (Exc, int 0)
   ]
-    (qw angularAccel) [UpFrom (Exc, dbl 0)] "rotMot"
+    (qw angularAccel) [UpFrom (Exc, int 0)] "rotMot"
   [rotMotDesc, rigidTwoDAssump, rightHandAssump]
 
 rotMotRC :: RelationConcept
@@ -100,14 +100,14 @@ rotMotDesc = foldlSent [S "The above", phrase equation, S "for",
 
 col2D :: InstanceModel
 col2D = imNoDerivNoRefs (OthModel col2DRC)
-  [qwC time $ UpFrom (Exc, dbl 0)
-  ,qwC impulseS $ UpFrom (Exc, dbl 0)
-  ,qwC massA $ UpFrom (Exc, dbl 0)
-  ,qwC normalVect $ UpFrom (Exc, dbl 0)
+  [qwC time $ UpFrom (Exc, int 0)
+  ,qwC impulseS $ UpFrom (Exc, int 0)
+  ,qwC massA $ UpFrom (Exc, int 0)
+  ,qwC normalVect $ UpFrom (Exc, int 0)
   ]
   -- why a constraint on velA if velA is not an output?
   -- (qw timeC) [sy velA $> 0, sy timeC $> 0] "col2D"
-  (qw timeC) [UpFrom (Exc, dbl 0)] "col2D"
+  (qw timeC) [UpFrom (Exc, int 0)] "col2D"
   [col2DOutputs, rigidTwoDAssump, rightHandAssump, collisionAssump,
     noDampConsAssumps, impulseNote]
 
@@ -119,7 +119,7 @@ col2DNP =  nounPhraseSP "Collisions on 2D rigid bodies"
 
 col2DRel {-, im3Rel2, im3Rel3, im3Rel4 -} :: Relation -- FIXME: add proper equation
 col2DRel = apply1 velA timeC $= apply1 velA time `addRe`
-  (sy impulseS $/ sy massA) `mulRe` sy normalVect
+  ((sy impulseS $/ sy massA) `mulRe` sy normalVect)
 
 
 col2DOutputs, impulseNote :: Sentence

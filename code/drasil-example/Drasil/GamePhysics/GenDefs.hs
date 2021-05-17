@@ -76,8 +76,8 @@ accelGravityDesc = foldlSent [S "If one of the", plural QPP.mass, S "is much lar
   phrase QP.force]
 
 accelGravityExpr :: Relation
-accelGravityExpr = neg $ sy QP.gravitationalConst `mulRe` sy mLarger $/
-  (sy dispNorm $^ int 2) `mulRe` sy dVect
+accelGravityExpr = neg ((sy QP.gravitationalConst `mulRe` sy mLarger $/
+  (sy dispNorm $^ int 2)) `mulRe` sy dVect)
 
 accelGravitySrc :: Reference
 accelGravitySrc = makeURI "accelGravitySrc" "https://en.wikipedia.org/wiki/Gravitational_acceleration" $
@@ -88,9 +88,9 @@ accelGravityDeriv = mkDerivName (phrase QP.gravitationalAccel)
                       (weave [accelGravityDerivSentences, map E accelGravityDerivEqns])
 
 accelGravityDerivSentences :: [Sentence]
-accelGravityDerivSentences = map foldlSentCol [accelGravityDerivSentence1, 
+accelGravityDerivSentences = map foldlSentCol [accelGravityDerivSentence1,
  accelGravityDerivSentence2, accelGravityDerivSentence3, accelGravityDerivSentence4,
- accelGravityDerivSentence5] 
+ accelGravityDerivSentence5]
 
 accelGravityDerivSentence1 :: [Sentence]
 accelGravityDerivSentence1 = [S "From Newton's law of universal gravitation", sParen(makeRef2S newtonLUG), S "we have"]
@@ -99,19 +99,19 @@ accelGravityDerivSentence1 = [S "From Newton's law of universal gravitation", sP
 accelGravityDerivSentence2 :: [Sentence]
 accelGravityDerivSentence2 = [(S "The above equation governs the gravitational attraction between two bodies" !.),
         S "Suppose that one of the bodies is significantly more massive than the other" `sC`
-        S "so that we concern ourselves with the", phrase QP.force, 
+        S "so that we concern ourselves with the", phrase QP.force,
         S "the massive body",
         (S "exerts on the lighter body" !.), S "Further" `sC` S "suppose that the", phrase cartesian `S.sIs`
-        S "chosen such that this", phrase QP.force, S "acts on a", phrase line, 
-        (S "which lies along one of the principal axes" !.), 
+        S "chosen such that this", phrase QP.force, S "acts on a", phrase line,
+        (S "which lies along one of the principal axes" !.),
         S "Then our", getTandS dVect, S "for the x or y axes is"]
 
 accelGravityDerivSentence3 :: [Sentence]
-accelGravityDerivSentence3 =  [S "Given the above assumptions" `sC` S "let", ch mLarger `S.sAnd` ch QPP.mass, 
+accelGravityDerivSentence3 =  [S "Given the above assumptions" `sC` S "let", ch mLarger `S.sAnd` ch QPP.mass,
         S "be", phrase QPP.mass `S.the_ofThe` (S "massive and light body respectively" !.),
         S "Equating", ch QP.force, S "above with Newton's second law",
         S "for the", phrase QP.force, S "experienced by the light body" `sC` S "we get"]
-                              
+
 accelGravityDerivSentence4 :: [Sentence]
 accelGravityDerivSentence4 =  [S "where", (ch QP.gravitationalAccel `S.isThe` phrase QP.gravitationalAccel !.),
         S "Dividing the above equation by", ch QPP.mass `sC` S " we have"]
@@ -134,10 +134,10 @@ accelGravityDerivEqn3 = sy QP.fOfGravity $= sy QP.gravitationalConst `mulRe`
 
 accelGravityDerivEqn4 :: Expr
 accelGravityDerivEqn4 = sy QP.gravitationalConst `mulRe`  (sy mLarger $/ sy sqrDist) `mulRe` sy dVect $= sy QP.gravitationalAccel
-                        
+
 accelGravityDerivEqn5 :: Expr
 accelGravityDerivEqn5 = sy QP.gravitationalAccel $= neg (sy QP.gravitationalConst `mulRe`  (sy mLarger $/ sy sqrDist)) `mulRe` sy dVect
-                      
+
 accelGravityDerivEqns :: [Expr]
 accelGravityDerivEqns = [accelGravityDerivEqn1, accelGravityDerivEqn2, accelGravityDerivEqn3,
                          accelGravityDerivEqn4, accelGravityDerivEqn5]
@@ -147,15 +147,15 @@ accelGravityDerivEqns = [accelGravityDerivEqn1, accelGravityDerivEqn2, accelGrav
 ----------------------------Impulse for Collision--------------------------------------------
 
 impulseGD :: GenDefn
-impulseGD = gd (EquationalModel impulseQD) (getUnit QP.impulseS) Nothing 
+impulseGD = gd (EquationalModel impulseQD) (getUnit QP.impulseS) Nothing
   [impulseSrc] "impulse" [rigidTwoDAssump, rightHandAssump, collisionAssump]
 
 impulseQD :: QDefinition
 impulseQD = mkQuantDef' QP.impulseS (nounPhraseSP "Impulse for Collision") impulseExpr
 
 impulseExpr :: Expr
-impulseExpr = (neg (dbl 1 `addRe` sy QP.restitutionCoef) `mulRe` sy initRelVel $.
-  sy normalVect) $/ (((dbl 1 $/ sy massA) `addRe` (dbl 1 $/ sy massB)) `mulRe`
+impulseExpr = (neg (int 1 `addRe` sy QP.restitutionCoef) `mulRe` sy initRelVel $.
+  sy normalVect) $/ (((int 1 $/ sy massA) `addRe` (int 1 $/ sy massB)) `mulRe`
   (sy normalLen $^ int 2) `addRe`
   ((sy perpLenA $^ int 2) $/ sy momtInertA) `addRe`
   ((sy perpLenB $^ int 2) $/ sy momtInertB))

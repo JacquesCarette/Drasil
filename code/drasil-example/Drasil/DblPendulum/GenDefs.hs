@@ -239,8 +239,6 @@ angFrequencyDerivEqns = [angFrequencyDerivEqn1, angFrequencyDerivEqn2, angFreque
 angFrequencyDerivEqn1, angFrequencyDerivEqn2, angFrequencyDerivEqn3, angFrequencyDerivEqn4,
                    angFrequencyDerivEqn5, angFrequencyDerivEqn6, angFrequencyDerivEqn7 :: Expr
 
-                                 
-
 angFrequencyDerivSent1 = foldlSentCol [S "Consider the", phrase torque, S "on a", phrase pendulum +:+. definedIn'' newtonSLR,
                   S "The", phrase force, S "providing the restoring", phrase torque `S.sIs` (phrase component `S.sOf`
                   phrase weight `S.the_ofThe` phrase pendulum), S "bob that acts along the" +:+. phrase arcLen,
@@ -280,8 +278,8 @@ periodPendRC :: RelationConcept
 periodPendRC = makeRC "periodPendRC" (nounPhraseSent $ foldlSent_ 
             [ S "The", phrase period, S "on the", phrase pendulum]) EmptyS periodPendRel
  
-periodPendRel :: Relation             
-periodPendRel = sy period $= dbl 2 `mulRe` sy QM.pi_ `mulRe` sqrt (sy lenRod $/ sy gravitationalAccel)
+periodPendRel :: Relation
+periodPendRel = sy period $= int 2 `mulRe` sy QM.pi_ `mulRe` sqrt (sy lenRod $/ sy gravitationalAccel)
 
 periodPendDeriv :: Derivation
 periodPendDeriv = mkDerivName (phrase period +:+ phrase pendulum) (weave [periodPendDerivSents, map E periodPendDerivEqns])    
@@ -301,7 +299,7 @@ periodPendDerivSent1 = phrase period `S.the_ofThe'` phrase pendulum +:+ S "can b
 periodPendDerivEqn1 = sy angularFrequency $= sqrt (sy gravitationalAccel $/ sy lenRod)
 periodPendDerivSent2 =  S "Therefore from the" +:+ phrase equation +:+ makeRef2S angFrequencyDD `sC` S "we have"
 
-periodPendDerivEqn2 = sy period $= dbl 2 `mulRe` sy QM.pi_ `mulRe` sqrt (sy lenRod $/ sy gravitationalAccel)
+periodPendDerivEqn2 = sy period $= int 2 `mulRe` sy QM.pi_ `mulRe` sqrt (sy lenRod $/ sy gravitationalAccel)
 
 periodPendNotes :: Sentence
 periodPendNotes = S "The" +:+ phrase frequency `S.sAnd` phrase period +:+ S "are defined in" +:+ makeRef2S frequencyDD +:+

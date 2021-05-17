@@ -144,8 +144,8 @@ latentHtENotes :: [Sentence]
 latentHtENotes = map foldlSent [
   [ch latentHeat `S.isThe` S "change" `S.sIn` phrase thermalEnergy,
    sParen (phrase latentHeat +:+ phrase energy)],
-  [E latHtEEqn `S.isThe` phrase rOfChng `S.sOf` ch latentHeat,
-   S "with respect to", phrase time, ch tau],
+  [E latHtEEqn `S.isThe` phrase rOfChng `S.sOf` ch latentHeat `wrt` 
+   phrase time, ch tau],
   [ch time `S.isThe` phrase time, S "elapsed" `sC` S "as long as the",
    phrase phaseChange, S "is not complete"],
   [S "status" `S.the_ofThe'` phrase phaseChange, S "depends on the",

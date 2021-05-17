@@ -10,7 +10,7 @@ import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 
 -- import Data.Drasil.Concepts.Documentation (coordinate, symbol_)
-import Data.Drasil.Concepts.Math (xComp, yComp, equation, component, angle)
+import Data.Drasil.Concepts.Math (xComp, yComp, equation, component, direction, angle)
 import Data.Drasil.Quantities.Physics(xPos, yPos, velocity, angularVelocity, xVel, yVel,
     angularAccel, xAccel, yAccel, acceleration, force, tension, gravitationalAccel,
     angularFrequency, torque, momentOfInertia, angularDisplacement, time,
@@ -63,7 +63,7 @@ velocityIXDerivSent2 = S "We also know the" +:+ phrase horizontal +:+ phrase pos
 velocityIXDerivEqn2 = sy xPos $= sy lenRod * sin (sy pendDisplacementAngle) 
 velocityIXDerivSent3 = S "Applying this,"
 velocityIXDerivEqn3 = sy xVel $= deriv (sy lenRod * sin (sy pendDisplacementAngle)) time
-velocityIXDerivSent4 = E (sy lenRod) `S.sIs` S "constant with respect to time, so"
+velocityIXDerivSent4 = E (sy lenRod) `S.sIs` S "constant" `wrt` S  "time, so"
 velocityIXDerivEqn4 = sy xVel $= sy lenRod * deriv (sin (sy pendDisplacementAngle)) time
 velocityIXDerivSent5 = S "Therefore, using the chain rule,"
 
@@ -99,7 +99,7 @@ velocityIYDerivSent2 = S "We also know the" +:+ phrase vertical +:+ phrase posit
 velocityIYDerivEqn2 = sy yPos $= negate (sy lenRod * cos (sy pendDisplacementAngle)) 
 velocityIYDerivSent3 = S "Applying this again,"
 velocityIYDerivEqn3 = sy yVel $= negate (deriv (sy lenRod * cos (sy pendDisplacementAngle)) time)
-velocityIYDerivSent4 = E (sy lenRod) `S.sIs` S "constant with respect to time, so"
+velocityIYDerivSent4 = E (sy lenRod) `S.sIs` S "constant" `wrt` S "time, so"
 velocityIYDerivEqn4 = sy yVel $= negate (sy lenRod * deriv (cos (sy pendDisplacementAngle)) time)
 velocityIYDerivSent5 = S "Therefore, using the chain rule,"
 
@@ -246,7 +246,7 @@ angFrequencyDerivSent1 = foldlSentCol [S "Consider the", phrase torque, S "on a"
                   phrase weight `S.the_ofThe` phrase pendulum), S "bob that acts along the" +:+. phrase arcLen,
                   (phrase torque `S.isThe` phrase len) `S.the_ofThe'` S "string", ch lenRod, S "multiplied by", S "component"
                   `S.the_ofThe` S "net", phrase force, S "that is perpendicular to", S "radius" `S.the_ofThe` (S "arc" !.),
-                  S "The minus sign indicates the", phrase torque, S "acts in the opposite direction of the", phrase angularDisplacement]
+                  S "The minus sign indicates the", phrase torque, S "acts in the opposite", phrase direction `S.ofThe` phrase angularDisplacement]
 
 
 angFrequencyDerivEqn1 = sy torque $= negate (sy lenRod) * (sy mass * sy gravitationalAccel * sin (sy pendDisplacementAngle))

@@ -4,7 +4,7 @@ import Language.Drasil
 import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (assumpDom) 
-import Data.Drasil.Concepts.Math (cartesian, xAxis, yAxis)
+import Data.Drasil.Concepts.Math (cartesian, xAxis, yAxis, direction, origin, positive)
 import Data.Drasil.Concepts.Physics (gravity, twoD, pendulum, motion)
 
 
@@ -26,12 +26,12 @@ cartCoordDesc :: Sentence
 cartCoordDesc = S "A" +:+ (phrase cartesian `S.sIs` S "used") 
 
 cartCoordRightDesc :: Sentence
-cartCoordRightDesc = S "The" +:+ phrase cartesian `S.sIs` S "right-handed where positive" +:+.
+cartCoordRightDesc = S "The" +:+ phrase cartesian `S.sIs` S "right-handed where" +:+ phrase positive +:+.
                          phrase xAxis `S.sAnd` phrase yAxis +:+ S "point right up"
 
 yAxisDirDesc :: Sentence
-yAxisDirDesc = S "direction" `S.the_ofThe'` phrase yAxis `S.sIs` S "directed opposite to" +:+. phrase gravity
+yAxisDirDesc = phrase direction `S.the_ofThe'` phrase yAxis `S.sIs` S "directed opposite to" +:+. phrase gravity
 
 startOriginDesc :: Sentence
-startOriginDesc = S "The" +:+. (phrase pendulum `S.sIs` S "attached" `S.toThe` S "origin")
+startOriginDesc = S "The" +:+. (phrase pendulum `S.sIs` S "attached" `S.toThe` phrase origin)
 

@@ -20,13 +20,13 @@ module Utils.Drasil (
   -- Phrase
   and_, and_', andRT, compoundNC, compoundNC', compoundNC'', compoundNC''',
   compoundNCP1, compoundNCPlPh, for, for', of_, of_',
-  of_'', of__, ofA, ofN_, the, the', the'', with, ofThe',
+  of_'', of__, ofA, ofN_, the, the', the'', inThe', with, ofThe',
   -- Sentence
   --andIts, andThe, fromThe, inThe, isExpctdToHv, isThe, ofGiv, ofGiv', ofThe, the_ofThe, the_ofThe',
   --sOf, sOfA, sOr, sVersus, sAnd, sAre, sIn, sIs, toThe, sFor, sFor', sFor'', forTT, forTT'
   -- Concepts
   insertStringNP, prependStringNP, insertSentNP, prependSentNP,
-  theNP, theNP', aNP, aNP', ofTheNP, ofTheNP', ofTheNP'', the_ofTheNP, the_ofTheNP', the_ofTheNP'',
+  theNP, theNP', aNP, aNP', ofTheNP, ofTheNP', ofTheNP'', inTheNP, inTheNP', inTheNP'', the_ofTheNP, the_ofTheNP', the_ofTheNP'',
   forNP, forNP', forNP'', ofNP, ofNP', ofNP'', ofNP''', withNP, andNP, andNP', andNP'', andNP'''
 ) where
 

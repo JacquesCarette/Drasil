@@ -28,7 +28,7 @@ ddErrSigEqn = sy qdSetPointFD - sy qdProcessVariableFD
 ddErrSigNote :: Sentence
 ddErrSigNote
   = foldlSent
-      [S "The Process Error is the difference between the Set-Point and " +:+.
+      [S "The Process Error is the difference between the Set-Point and" +:+.
          S "Process Variable",
        S "The equation is converted to the frequency" +:+
          S "domain by applying the Laplace transform" +:+. sParen (S "from" +:+

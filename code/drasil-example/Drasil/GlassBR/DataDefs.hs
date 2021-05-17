@@ -10,7 +10,7 @@ import Prelude hiding (log, exp, sqrt)
 import Theory.Drasil (DataDefinition, dd)
 import Database.Drasil (Block(Parallel))
 import Utils.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (datum, user)
 import Data.Drasil.Concepts.Math (parameter)
@@ -240,41 +240,41 @@ calofDemand = dd calofDemandQD [makeCite astm2009] Nothing "calofDemand" [calofD
 --Additional Notes--
 calofDemandDesc :: Sentence
 calofDemandDesc = 
-  foldlSent [ch demand `sC` EmptyS `sOr` phrase demandq `sC` EmptyS `isThe`
+  foldlSent [ch demand `sC` EmptyS `S.sOr` phrase demandq `sC` EmptyS `S.isThe`
   (demandq ^. defn), S "obtained from", makeRef2S demandVsSDFig,
   S "by interpolation using", phrase standOffDist, sParen (ch standOffDist) 
-  `sAnd` ch eqTNTWeight, S "as" +:+. plural parameter, ch eqTNTWeight,
-  S "is defined in" +:+. makeRef2S eqTNTWDD, ch standOffDist `isThe`
+  `S.sAnd` ch eqTNTWeight, S "as" +:+. plural parameter, ch eqTNTWeight,
+  S "is defined in" +:+. makeRef2S eqTNTWDD, ch standOffDist `S.isThe`
   phrase standOffDist, S "as defined in", makeRef2S standOffDis]
 
 aGrtrThanB :: Sentence
-aGrtrThanB = ch plateLen `sAnd` ch plateWidth `sAre` (plural dimension `the_ofThe` S "plate") `sC`
+aGrtrThanB = ch plateLen `S.sAnd` ch plateWidth `S.sAre` (plural dimension `S.the_ofThe` S "plate") `sC`
   S "where" +:+. sParen (E (sy plateLen $>= sy plateWidth))
 
 anGlass :: Sentence
-anGlass = getAcc annealed `sIs` phrase annealed +:+. phrase glass
+anGlass = getAcc annealed `S.sIs` phrase annealed +:+. phrase glass
 
 ftGlass :: Sentence
-ftGlass = getAcc fullyT `sIs` phrase fullyT +:+. phrase glass
+ftGlass = getAcc fullyT `S.sIs` phrase fullyT +:+. phrase glass
 
 hMin :: Sentence
-hMin = ch nomThick `sIs` S "a function that maps from the nominal thickness"
-  +:+. (sParen (ch minThick) `toThe` phrase minThick)
+hMin = ch nomThick `S.sIs` S "a function that maps from the nominal thickness"
+  +:+. (sParen (ch minThick) `S.toThe` phrase minThick)
 
 hsGlass :: Sentence
-hsGlass = getAcc heatS `sIs` phrase heatS +:+. phrase glass
+hsGlass = getAcc heatS `S.sIs` phrase heatS +:+. phrase glass
 
 ldfConst :: Sentence
-ldfConst = ch lDurFac `sIs` S "assumed to be constant" +:+. fromSource assumpLDFC
+ldfConst = ch lDurFac `S.sIs` S "assumed to be constant" +:+. fromSource assumpLDFC
 
 lrCap :: Sentence
 lrCap = ch lRe +:+. S "is also called capacity"
 
 pbTolUsr :: Sentence
-pbTolUsr = ch pbTol `sIs` S "entered by the" +:+. phrase user
+pbTolUsr = ch pbTol `S.sIs` S "entered by the" +:+. phrase user
 
 qRef :: Sentence
-qRef = ch demand `isThe` (demandq ^. defn) `sC` S "as given in" +:+. makeRef2S calofDemand
+qRef = ch demand `S.isThe` (demandq ^. defn) `sC` S "as given in" +:+. makeRef2S calofDemand
 
 arRef, gtfRef, hRef, jRef, jtolRef, ldfRef, nonFLRef, qHtRef, qHtTlTolRef, riskRef :: Sentence
 arRef       = definedIn  aspRat
@@ -294,8 +294,8 @@ configFp = ["SDF.txt", "TSD.txt"]
 
 --- Helpers
 interpolating :: (HasUID s, HasSymbol s, Referable f, HasShortName f) => s -> f -> Sentence
-interpolating s f = foldlSent [ch s `sIs` S "obtained by interpolating from",
-  plural datum, S "shown" `sIn` makeRef2S f]
+interpolating s f = foldlSent [ch s `S.sIs` S "obtained by interpolating from",
+  plural datum, S "shown" `S.sIn` makeRef2S f]
 
 stdVals :: (HasSymbol s, HasUID s) => [s] -> Sentence
 stdVals s = foldlList Comma List (map ch s) +:+ sent +:+. makeRef2S assumpSV

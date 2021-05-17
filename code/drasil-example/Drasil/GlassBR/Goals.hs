@@ -2,7 +2,7 @@ module Drasil.GlassBR.Goals (goals, willBreakGS) where
 
 import Language.Drasil
 import Utils.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (goalStmtDom, userInput)
 import Data.Drasil.Concepts.Thermodynamics (degree_')
@@ -14,8 +14,8 @@ goals :: [ConceptInstance]
 goals = [willBreakGS]
 
 willBreakGS :: ConceptInstance
-willBreakGS = cic "willBreakGS" (foldlSent [S "Analyze" `sAnd`
+willBreakGS = cic "willBreakGS" (foldlSent [S "Analyze" `S.sAnd`
   S "predict whether the", phrase glaSlab, S "under consideration will be able",
-  S "to withstand the", phrase explosion `sOf` S "a certain", phrase degree_',
+  S "to withstand the", phrase explosion `S.sOf` S "a certain", phrase degree_',
   S "which is calculated based on", phrase userInput])
   "Predict-Glass-Withstands-Explosion" goalStmtDom

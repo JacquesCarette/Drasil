@@ -5,7 +5,7 @@ module Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs) where
 
 import Language.Drasil
 import Utils.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation as Doc (library, likeChgDom, unlikeChgDom)
 import qualified Data.Drasil.Concepts.Math as CM (ode, constraint)
@@ -34,7 +34,7 @@ likelyChangesStmt3 = chgsStart assumpDI $ phrase library `maybeExpanded` (
   S "to include motion with" +:+ phrase CP.damping)
 
 likelyChangesStmt4 = chgsStart assumpCAJI $ phrase library `maybeExpanded` (
-  S "to include" +:+ plural CP.joint `sAnd` plural CM.constraint)
+  S "to include" +:+ plural CP.joint `S.sAnd` plural CM.constraint)
 
 lcVODES, lcEC, lcID, lcIJC :: ConceptInstance
 

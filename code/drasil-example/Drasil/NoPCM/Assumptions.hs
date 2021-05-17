@@ -2,7 +2,7 @@ module Drasil.NoPCM.Assumptions where --all of this file is exported
 
 import Language.Drasil
 import Utils.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (model, assumpDom, material_)
 
@@ -33,7 +33,7 @@ assumpDWCoW, assumpSHECoW, assumpCTNTD, assumpNIHGBW, assumpAPT,
 
 assumpS3 = 
   foldlSent [S "The", phrase water, S "in the", phrase tank,
-  S "is fully mixed, so the", phrase tempW `isThe`
+  S "is fully mixed, so the", phrase tempW `S.isThe`
   S "same throughout the entire", phrase tank]
 
 assumpS4 = 
@@ -71,8 +71,8 @@ assumpWAL = cic "assumpWAL" (assumpS14 $ phrase material_ +:+
 
 assumpS13 = 
   S "The pressure in the" +:+ phrase tank +:+ S "is atmospheric, so the" +:+
-  phrase meltPt `sAnd` phrase boilPt +:+ S "of water are" +:+
-  S (show (0 :: Integer)) :+: Sy (unit_symb QT.temp) `sAnd`
+  phrase meltPt `S.sAnd` phrase boilPt +:+ S "of water are" +:+
+  S (show (0 :: Integer)) :+: Sy (unit_symb QT.temp) `S.sAnd`
   S (show (100 :: Integer)) :+: Sy (unit_symb QT.temp) `sC` S "respectively"
 
 assumpAPT = cic "assumpAPT" assumpS13

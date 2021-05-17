@@ -6,7 +6,7 @@ module Drasil.GamePhysics.DataDefs (dataDefs, ctrOfMassDD, linDispDD, linVelDD,
 import Language.Drasil
 import Theory.Drasil (DataDefinition, dd, ddNoRefs)
 import Utils.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 import Control.Lens ((^.))
 
 import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, assumpDI)
@@ -203,11 +203,11 @@ chaslesEqn = sy velO + cross (sy  QP.angularVelocity) (sy rOB)
 
 chaslesThmNote :: Sentence
 chaslesThmNote = foldlSent [S "The", phrase QP.linearVelocity,
-  ch velB `sOf` S "any point B in a", phrase rigidBody `isThe` S "sum" `sOf`
-  ((phrase QP.linearVelocity +:+ ch velO) `the_ofThe` phrase rigidBody),
-  S "at the origin (axis of rotation)" `andThe` S "resultant vector from",
-  S "cross product" `the_ofThe` phrasePoss rigidBody,
-  getTandS QP.angularVelocity `andThe` getTandS rOB]
+  ch velB `S.sOf` S "any point B in a", phrase rigidBody `S.isThe` S "sum" `S.sOf`
+  ((phrase QP.linearVelocity +:+ ch velO) `S.the_ofThe` phrase rigidBody),
+  S "at the origin (axis of rotation)" `S.andThe` S "resultant vector from",
+  S "cross product" `S.the_ofThe` phrasePoss rigidBody,
+  getTandS QP.angularVelocity `S.andThe` getTandS rOB]
 
 ---------------DD10 Impulse(Vector)-----------------------------------------------------------------------
 impulseVDD :: DataDefinition
@@ -222,7 +222,7 @@ impulseVEqn = sy QPP.mass * sy QP.chgInVelocity
 
 impulseVDesc :: Sentence
 impulseVDesc = foldlSent [S "An", getTandS QP.impulseV, S "occurs when a",
-  getTandS QP.force, S "acts over a body over an interval" `sOf` phrase QP.time]
+  getTandS QP.force, S "acts over a body over an interval" `S.sOf` phrase QP.time]
 
 impulseVDeriv :: Derivation
 impulseVDeriv = mkDerivName (phrase QP.impulseV) (weave [impulseVDerivSentences, map E impulseVDerivEqns])
@@ -271,7 +271,7 @@ reVelInCollEqn = sy velAP - sy velBP
 reVelInCollDesc :: Sentence
 reVelInCollDesc = foldlSent [S "In a collision, the", phrase QP.velocity,
   S "of a", phrase rigidBody, S "A colliding with another", phrase rigidBody,
-  S "B relative to that body", ch initRelVel `isThe` S "difference between the",
+  S "B relative to that body", ch initRelVel `S.isThe` S "difference between the",
   plural QP.velocity, S "of A and B at point P"]
 -----------------DD13 Torque-------------------------------------------------------------------------------
 
@@ -309,7 +309,7 @@ kEnergyEqn :: Expr
 kEnergyEqn = (sy QPP.mass * sy QP.velocity $^ 2) / 2
 
 kEnergyDesc :: Sentence
-kEnergyDesc = foldlSent [atStart QP.kEnergy `sIs` (QP.kEnergy ^. defn)]
+kEnergyDesc = foldlSent [atStart QP.kEnergy `S.sIs` (QP.kEnergy ^. defn)]
 -----------------------DD16 Moment Of Inertia--------------------------------------------------------
 
 momentOfInertiaDD :: DataDefinition
@@ -340,8 +340,8 @@ potEnergyEqn :: Expr
 potEnergyEqn = sy QPP.mass * sy QP.gravitationalAccel * sy QP.height
 
 potEnergyDesc :: Sentence
-potEnergyDesc = foldlSent [S "The", phrase QP.potEnergy `sOf`
-  S "an object" `isThe` phrase QP.energy, S "held by an object because of its",
+potEnergyDesc = foldlSent [S "The", phrase QP.potEnergy `S.sOf`
+  S "an object" `S.isThe` phrase QP.energy, S "held by an object because of its",
   phrase QP.position, S "to other objects"]
 
 ---
@@ -349,7 +349,7 @@ potEnergyDesc = foldlSent [S "The", phrase QP.potEnergy `sOf`
 collisionAssump, noDampingAssump, rightHandAssump, rigidBodyAssump, rigidTwoDAssump :: Sentence
 collisionAssump = S "All collisions are vertex-to-edge" +:+. fromSource assumpCT
 noDampingAssump = S "No damping occurs during the simulation" +:+. fromSource assumpDI
-rightHandAssump = S "A" +:+ phrase rightHand `sIs` S "used" +:+. fromSource assumpAD
+rightHandAssump = S "A" +:+ phrase rightHand `S.sIs` S "used" +:+. fromSource assumpAD
 rigidBodyAssump = S "All bodies are assumed to be rigid" +:+. fromSource assumpOT
 rigidTwoDAssump = foldlSent [S "All bodies are assumed to be rigid",
-  fromSource assumpOT `sAnd` phrase twoD, fromSource assumpOD]
+  fromSource assumpOT `S.sAnd` phrase twoD, fromSource assumpOD]

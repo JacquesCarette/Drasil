@@ -78,11 +78,11 @@ plateLen = uqcND "plateLen" (nounPhraseSP "plate length (long dimension)")
 
 plateWidth = uqcND "plateWidth" (nounPhraseSP "plate width (short dimension)")
   lB metre Real
-  [ physc $ Bounded (Exc, dbl 0) (Inc, sy plateLen),
+  [ physc $ Bounded (Exc, int 0) (Inc, sy plateLen),
     sfwrc $ Bounded (Inc, sy dimMin) (Inc, sy dimMax)] (dbl 1.2) defaultUncrt
 
 aspectRatio = uq (constrained' (dqdNoUnit aspectRatioCon (Variable "AR") Real)
-  [ physc $ UpFrom (Inc, dbl 1), 
+  [ physc $ UpFrom (Inc, int 1), 
     sfwrc $ UpTo (Inc, sy arMax)] (dbl 1.5)) defaultUncrt
 
 pbTol = uvc "pbTol" (nounPhraseSP "tolerable probability of breakage") 

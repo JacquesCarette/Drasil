@@ -47,9 +47,9 @@ qDefns = Parallel hFromtQD {-DD2-} [glaTyFacQD {-DD6-}] : --can be calculated on
 --DD1--
 
 riskEq :: Expr
-riskEq = sy sflawParamK $/
-  mulRe (sy plateLen) (sy plateWidth) $^ (sy sflawParamM $- dbl 1) `mulRe`
-  (sy modElas `mulRe` square (sy minThick)) $^ sy sflawParamM `mulRe` sy lDurFac `mulRe` exp (sy stressDistFac)
+riskEq = (sy sflawParamK $/
+  (mulRe (sy plateLen) (sy plateWidth) $^ (sy sflawParamM $- int 1))) `mulRe`
+  ((sy modElas `mulRe` square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac `mulRe` exp (sy stressDistFac)
 
 -- FIXME [4] !!!
 riskQD :: QDefinition
@@ -64,7 +64,7 @@ risk = dd riskQD
 --DD2--
 
 hFromtEq :: Relation
-hFromtEq = mulRe (dbl $ 1/1000) (incompleteCase (zipWith hFromtHelper
+hFromtEq = mulRe (int 1 $/ int 1000) (incompleteCase (zipWith hFromtHelper
   actualThicknesses nominalThicknesses))
 
 hFromtHelper :: Double -> Double -> (Expr, Relation)
@@ -159,10 +159,10 @@ tolPre = dd tolPreQD [makeCite astm2009] Nothing "tolLoad"
 --DD9--
 
 tolStrDisFacEq :: Expr
-tolStrDisFacEq = ln (ln (dbl 1 $/ (dbl 1 $- sy pbTol))
-  `mulRe` ((sy plateLen `mulRe` sy plateWidth) $^ (sy sflawParamM $- dbl 1) $/
-    (sy sflawParamK `mulRe` (sy modElas `mulRe`
-    square (sy minThick)) $^ sy sflawParamM `mulRe` sy lDurFac)))
+tolStrDisFacEq = ln (ln (int 1 $/ (int 1 $- sy pbTol))
+  `mulRe` ((sy plateLen `mulRe` sy plateWidth) $^ (sy sflawParamM $- int 1) $/
+    (sy sflawParamK `mulRe` ((sy modElas `mulRe`
+    square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac)))
 
 tolStrDisFacQD :: QDefinition
 tolStrDisFacQD = mkQuantDef sdfTol tolStrDisFacEq

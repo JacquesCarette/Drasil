@@ -276,7 +276,7 @@ diam = uqc "diam" (nounPhraseSP "diameter of tank")
 pcmVol = uqc "pcmVol" (nounPhraseSP "volume of PCM")
   "the amount of space occupied by a given quantity of phase change material"
   (sub (eqSymb vol) lPCM) m_3 Rational
-  [physc $ Bounded (Exc, dbl 0) (Exc, sy tankVol),
+  [physc $ Bounded (Exc, int 0) (Exc, sy tankVol),
    sfwrc $ UpFrom (Inc, sy fracMin `mulRe` sy tankVol)] 
   (dbl 0.05) defaultUncrt
   -- needs to add (D,L)*minfract to end of last constraint

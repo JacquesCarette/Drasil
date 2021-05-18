@@ -47,8 +47,8 @@ htTransCladCool = fromEqn "htTransCladCool" (nounPhraseSP
   EmptyS (sub lH lClad) Real heatTransferCoef htTransCladCoolEq
 
 htTransCladCoolEq =
-  int 2 `mulRe` sy cladCond `mulRe` sy coolFilmCond $/ (int 2 `mulRe` sy cladCond `addRe` sy cladThick 
-  `mulRe` sy coolFilmCond)
+  int 2 `mulRe` sy cladCond `mulRe` sy coolFilmCond $/ (int 2 `mulRe` sy cladCond `addRe` (sy cladThick 
+  `mulRe` sy coolFilmCond))
 
 ---
 

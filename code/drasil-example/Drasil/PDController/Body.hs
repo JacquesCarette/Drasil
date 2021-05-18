@@ -170,7 +170,7 @@ stdFields
 
 pidODEOptions :: ODEOptions
 pidODEOptions
-  = odeOptions RK45 (sy odeAbsTolConst) (sy odeRelTolConst) (sy qdStepTime) (int 0)
+  = odeOptions RK45 (sy odeAbsTolConst) (sy odeRelTolConst) (sy qdStepTime) (dbl 0)
 
 -- This is a second order ODE. The equation should be in the form of
 -- variable substitution, i.e. u = y'. However here the the equation
@@ -180,11 +180,11 @@ pidODEInfo :: ODEInfo
 pidODEInfo
   = odeInfo (quantvar time) (quantvar opProcessVariable)
       [quantvar ipPropGain, quantvar ipDerivGain, quantvar ipSetPt]
-      (int 0)
+      (dbl 0)
       (sy qdSimTime)
-      (int 0)
+      (dbl 0)
       [idx (sy opProcessVariable) (int 1),
       neg (int 1 `addRe` sy qdDerivGain) `mulRe` idx (sy opProcessVariable) (int 1)
-      $- (int 20 `addRe` sy qdPropGain) `mulRe` idx (sy opProcessVariable) (int 0)
-      `addRe` sy qdSetPointTD `mulRe` sy qdPropGain]
+      $- ((int 20 `addRe` sy qdPropGain) `mulRe` idx (sy opProcessVariable) (int 0))
+      `addRe` (sy qdSetPointTD `mulRe` sy qdPropGain)]
       pidODEOptions

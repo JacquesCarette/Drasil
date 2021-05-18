@@ -103,7 +103,7 @@ ddCtrlVarDefn = mkQuantDef qdCtrlVarFD ddCtrlEqn
 ddCtrlEqn :: Expr
 ddCtrlEqn
   =  sy qdProcessErrorFD `mulRe` (sy qdPropGain `addRe` 
-        sy qdDerivGain `mulRe` sy qdFreqDomain)
+        (sy qdDerivGain `mulRe` sy qdFreqDomain))
 
 ddCtrlNote :: Sentence
 ddCtrlNote

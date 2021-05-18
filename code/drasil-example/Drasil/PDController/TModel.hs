@@ -99,7 +99,7 @@ soSystemRel :: Relation
 soSystemRel
   = int 1 
     $/ (sy mass `mulRe` square (sy qdFreqDomain) 
-    `addRe` sy qdDampingCoeff `mulRe` sy qdFreqDomain
+    `addRe` (sy qdDampingCoeff `mulRe` sy qdFreqDomain)
     `addRe` sy qdStiffnessCoeff)
 
 soSystemDesc :: Sentence

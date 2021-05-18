@@ -291,7 +291,7 @@ pcmSA = uqc "pcmSA"
   "area covered by the outermost layer of the phase change material"
   (sub cA lPCM) m_2 Rational
   [gtZeroConstr,
-  sfwrc $ Bounded (Inc, sy pcmVol) (Inc, (dbl 2 $/ sy thickness) `mulRe` sy tankVol)]
+  sfwrc $ Bounded (Inc, sy pcmVol) (Inc, (int 2 $/ sy thickness) `mulRe` sy tankVol)]
   (dbl 1.2) defaultUncrt
 
 -- Constraint 5
@@ -306,7 +306,7 @@ tempMeltP = uqc "tempMeltP"
   (nounPhraseSP "melting point temperature for PCM")
   "temperature at which the phase change material transitions from a solid to a liquid"
   (sup (sub (eqSymb temp) lMelt) lPCM) centigrade Rational
-  [physc $ Bounded (Exc, dbl 0) (Exc, sy tempC)] (dbl 44.2) defaultUncrt
+  [physc $ Bounded (Exc, int 0) (Exc, sy tempC)] (dbl 44.2) defaultUncrt
 
 -- Constraint 7
 htCapSP = uqc "htCapSP"
@@ -349,7 +349,7 @@ coilSA = uqc "coilSA"
 tempC = uqc "tempC" (nounPhraseSP "temperature of the heating coil")
   "the average kinetic energy of the particles within the coil"
   (sub (eqSymb temp) lCoil) centigrade Rational
-  [physc $ Bounded (Exc, dbl 0) (Exc, dbl 100)] (dbl 50) defaultUncrt
+  [physc $ Bounded (Exc, int 0) (Exc, int 100)] (dbl 50) defaultUncrt
 
 -- Constraint 12
 wDensity = uq (cuc'' "wDensity" (density `of_` water)
@@ -388,7 +388,7 @@ pcmHTC = uqc "pcmHTC"
 tempInit = uqc "tempInit" (nounPhraseSP "initial temperature")
   "the temperature at the beginning of the simulation"
   (sub (eqSymb temp) lInit) centigrade Rational
-  [physc $ Bounded (Exc, dbl 0) (Exc, sy meltPt)] (dbl 40) defaultUncrt
+  [physc $ Bounded (Exc, int 0) (Exc, sy meltPt)] (dbl 40) defaultUncrt
   
 -- Constraint 17
 timeFinal = uqc "timeFinal" (nounPhraseSP "final time")
@@ -402,7 +402,7 @@ timeStep = uqc "timeStep" (nounPhraseSP "time step for simulation")
   ("the finite discretization of time used in the numerical method " ++
    "for solving the computational model")
   (sub (eqSymb time) lStep) second Rational
-  [physc $ Bounded (Exc, dbl 0) (Exc, sy timeFinal)]
+  [physc $ Bounded (Exc, int 0) (Exc, sy timeFinal)]
   (dbl 0.01) defaultUncrt
   
 -- Output Constraints
@@ -415,26 +415,26 @@ tempW = cuc' "tempW"
   (nounPhraseSP "temperature of the water")
   "the average kinetic energy of the particles within the water" 
   (sub (eqSymb temp) lWater) centigrade (Vect Rational)
-  [physc $ Bounded (Inc, sy tempInit) (Inc, sy tempC)] (dbl 0)
+  [physc $ Bounded (Inc, sy tempInit) (Inc, sy tempC)] (int 0)
 
 -- Constraint 19
 tempPCM = cuc' "tempPCM"
   (nounPhraseSP "temperature of the phase change material")
   "the average kinetic energy of the particles within the phase change material"
   (sub (eqSymb temp) lPCM) centigrade Rational
-  [physc $ Bounded (Inc, sy tempInit) (Inc, sy tempC)] (dbl 0)
+  [physc $ Bounded (Inc, sy tempInit) (Inc, sy tempC)] (int 0)
   
 -- Constraint 20
 watE = cuc' "watE" (nounPhraseSP "change in heat energy in the water")
   "change in thermal energy within the water" 
   (sub (eqSymb sensHeat) lWater) joule Rational
-  [physc $ UpFrom (Inc, dbl 0)] (dbl 0)
+  [physc $ UpFrom (Inc, int 0)] (int 0)
   
 -- Constraint 21
 pcmE = cuc' "pcmE" (nounPhraseSP "change in heat energy in the PCM")
   "change in thermal energy within the phase change material" 
   (sub (eqSymb sensHeat) lPCM) joule Rational
-  [physc $ UpFrom (Inc, dbl 0)] (dbl 0)
+  [physc $ UpFrom (Inc, int 0)] (int 0)
 
 ---------------------------------
 -- Uncertainties with no Units --
@@ -444,12 +444,12 @@ absTol, relTol :: UncertainChunk
 
 absTol = uvc "absTol" (nounPhraseSP "absolute tolerance") 
   (sub cA lTol) Real
-  [physc $ Bounded (Exc, dbl 0) (Exc, dbl 1)] 
+  [physc $ Bounded (Exc, int 0) (Exc, int 1)] 
    (dbl (10.0**(-10))) (uncty 0.01 Nothing)
 
 relTol = uvc "relTol" (nounPhraseSP "relative tolerance") 
   (sub cR lTol) Real
-  [physc $ Bounded (Exc, dbl 0) (Exc, dbl 1)] 
+  [physc $ Bounded (Exc, int 0) (Exc, int 1)] 
   (dbl (10.0**(-10))) (uncty 0.01 Nothing)
 
 -------------------------
@@ -474,109 +474,109 @@ consTolAux = mkQuantDef consTol $ perc 1 5
 -- Used in Constraint 1
 tankLengthMin = mkQuantDef (unitary "tankLengthMin"
   (nounPhraseSP "minimum length of tank")
-  (subMin (eqSymb tankLength)) metre Rational) (dbl 0.1)
+  (subMin (eqSymb tankLength)) metre Rational) $ dbl 0.1
 
 tankLengthMax = mkQuantDef (unitary "tankLengthMax"
   (nounPhraseSP "maximum length of tank")
-  (subMax (eqSymb tankLength)) metre Rational) $ dbl 50
+  (subMax (eqSymb tankLength)) metre Rational) $ int 50
 
 fracMinAux = mkQuantDef fracMin $ dbl 1.0e-6
 
 arMin = mkQuantDef aspectRatioMin $ dbl 0.01
-arMax = mkQuantDef aspectRatioMax $ dbl 100
+arMax = mkQuantDef aspectRatioMax $ int 100
 
 -- Used in Constraint 5
 pcmDensityMin = mkQuantDef (unitary' "pcmDensityMin"
   (nounPhraseSP "minimum density of PCM") (staged (supMin (eqSymb pcmDensity)) 
-  (subMin (unicodeConv $ eqSymb pcmDensity))) densityU Rational) $ dbl 500
+  (subMin (unicodeConv $ eqSymb pcmDensity))) densityU Rational) $ int 500
 
 pcmDensityMax = mkQuantDef (unitary' "pcmDensityMax"
   (nounPhraseSP "maximum density of PCM") (staged (supMax (eqSymb pcmDensity)) 
-  (subMax (unicodeConv $ eqSymb pcmDensity))) densityU Rational) $ dbl 20000
+  (subMax (unicodeConv $ eqSymb pcmDensity))) densityU Rational) $ int 20000
 
 -- Used in Constraint 7
 htCapSPMin = mkQuantDef (unitary "htCapSPMin"
   (nounPhraseSP "minimum specific heat capacity of PCM as a solid")
-  (subMin (eqSymb htCapSP)) UT.heatCapSpec Rational) $ dbl 100
+  (subMin (eqSymb htCapSP)) UT.heatCapSpec Rational) $ int 100
 
 htCapSPMax = mkQuantDef (unitary "htCapSPMax"
   (nounPhraseSP "maximum specific heat capacity of PCM as a solid")
-  (subMax (eqSymb htCapSP)) UT.heatCapSpec Rational) $ dbl 4000
+  (subMax (eqSymb htCapSP)) UT.heatCapSpec Rational) $ int 4000
 
 -- Used in Constraint 8
 htCapLPMin = mkQuantDef (unitary "htCapLPMin"
   (nounPhraseSP "minimum specific heat capacity of PCM as a liquid")
-  (subMin (eqSymb htCapLP)) UT.heatCapSpec Rational) $ dbl 100
+  (subMin (eqSymb htCapLP)) UT.heatCapSpec Rational) $ int 100
 
 htCapLPMax = mkQuantDef (unitary "htCapLPMax"
   (nounPhraseSP "maximum specific heat capacity of PCM as a liquid")
-  (subMax (eqSymb htCapLP)) UT.heatCapSpec Rational) $ dbl 5000
+  (subMax (eqSymb htCapLP)) UT.heatCapSpec Rational) $ int 5000
 
 -- Used in Constraint 9
 htFusionMin = mkQuantDef (unitary "htFusionMin"
   (nounPhraseSP "minimum specific latent heat of fusion")
-  (subMin (eqSymb htFusion)) UT.heatCapSpec Rational) $ dbl 0 
+  (subMin (eqSymb htFusion)) UT.heatCapSpec Rational) $ int 0 
 
 htFusionMax = mkQuantDef (unitary "htFusionMax"
   (nounPhraseSP "maximum specific latent heat of fusion")
-  (subMax (eqSymb htFusion)) UT.heatCapSpec Rational) $ dbl 1000000 
+  (subMax (eqSymb htFusion)) UT.heatCapSpec Rational) $ int 1000000 
 
 -- Used in Constraint 10
 coilSAMax = mkQuantDef (unitary' "coilSAMax"
   (nounPhraseSP "maximum surface area of coil") (staged (supMax (eqSymb coilSA))
-  (subMax (eqSymb coilSA))) m_2 Rational) $ dbl 100000
+  (subMax (eqSymb coilSA))) m_2 Rational) $ int 100000
 
 -- Used in Constraint 12
 wDensityMin = mkQuantDef (unitary' "wDensityMin"
   (nounPhraseSP "minimum density of water") (staged (supMin (eqSymb wDensity)) 
-  (subMin (unicodeConv $ eqSymb wDensity))) densityU Rational) $ dbl 950
+  (subMin (unicodeConv $ eqSymb wDensity))) densityU Rational) $ int 950
 
 wDensityMax = mkQuantDef (unitary' "wDensityMax"
   (nounPhraseSP "maximum density of water") (staged (supMax (eqSymb wDensity)) 
-  (subMax (unicodeConv $ eqSymb wDensity))) densityU Rational) $ dbl 1000
+  (subMax (unicodeConv $ eqSymb wDensity))) densityU Rational) $ int 1000
   
 -- Used in Constraint 13
 htCapWMin = mkQuantDef (unitary' "htCapWMin"
   (nounPhraseSP "minimum specific heat capacity of water")
   (staged (supMin (eqSymb htCapW)) (subMin (eqSymb htCapW))) UT.heatCapSpec 
-  Rational) $ dbl 4170
+  Rational) $ int 4170
 
 htCapWMax = mkQuantDef (unitary' "htCapWMax"
   (nounPhraseSP "maximum specific heat capacity of water")
   (staged (supMax (eqSymb htCapW)) (subMax (eqSymb htCapW))) UT.heatCapSpec 
-  Rational) $ dbl 4210
+  Rational) $ int 4210
 
 -- Used in Constraint 14
 coilHTCMin = mkQuantDef (unitary' "coilHTCMin"
   (nounPhraseSP $ "minimum convective heat " ++
   "transfer coefficient between coil and water")
   (staged (supMin (eqSymb coilHTC)) (subMin (eqSymb coilHTC))) 
-  UT.heatTransferCoef Rational) $ dbl 10
+  UT.heatTransferCoef Rational) $ int 10
 
 coilHTCMax = mkQuantDef (unitary' "coilHTCMax"
   (nounPhraseSP $ "maximum convective heat " ++
   "transfer coefficient between coil and water")
   (staged (supMax (eqSymb coilHTC)) (subMax (eqSymb coilHTC))) 
-  UT.heatTransferCoef Rational) $ dbl 10000
+  UT.heatTransferCoef Rational) $ int 10000
   
 -- Used in Constraint 15
 pcmHTCMin = mkQuantDef (unitary' "pcmHTCMin"
   (nounPhraseSP $ "minimum convective heat " ++
   "transfer coefficient between PCM and water")
   (staged (supMin (eqSymb pcmHTC)) (subMin (eqSymb pcmHTC))) 
-  UT.heatTransferCoef Rational) $ dbl 10
+  UT.heatTransferCoef Rational) $ int 10
 
 pcmHTCMax = mkQuantDef (unitary' "pcmHTCMax"
   (nounPhraseSP $ "maximum convective heat " ++
   "transfer coefficient between PCM and water")
   (staged (supMax (eqSymb pcmHTC)) (subMax (eqSymb pcmHTC))) 
-  UT.heatTransferCoef Rational) $ dbl 10000
+  UT.heatTransferCoef Rational) $ int 10000
   
 -- Used in Constraint 17
 timeFinalMax = mkQuantDef (unitary' "timeFinalMax"
   (nounPhraseSP "maximum final time")
   (staged (supMax (eqSymb timeFinal)) (subMax (eqSymb timeFinal))) second 
-  Rational) $ dbl 86400
+  Rational) $ int 86400
 
 -- Labels
 lCoil, lEnv, lFinal, lFusion, lIn, lInit, lLiquid, lMelt, lOut, lPCM, lSolid,

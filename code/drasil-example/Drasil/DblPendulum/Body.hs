@@ -94,12 +94,12 @@ justification :: Sentence
 justification = foldlSent [S "A", phrase pendulum, S "consists" `S.sOf` phrase mass, 
                             S "attached to the end of a", phrase rod `S.andIts` S "moving curve" `S.sIs`
                             (S "highly sensitive to initial conditions" !.), S "Therefore" `sC`
-                            S "it is useful to have a", phrase program, S "to simulate", phrase motion
-                            `S.the_ofThe` phrase pendulum, (S "to exhibit its chaotic characteristics" !.),
+                            S "it is useful to have a", phrase program, S "to simulate", phraseNP (motion
+                            `the_ofThe''` pendulum), (S "to exhibit its chaotic characteristics" !.),
                             S "The", phrase program, S "documented here is called", phrase pendulum]
 scope :: Sentence
 scope = foldlSent [S "the", phrase analysis `S.sOfA` phrase twoD, 
-  sParen (getAcc twoD), phrase pendulum, phrase motion, phrase problem,
+  sParen (getAcc twoD), phrase (compoundNC pendulum motion), phrase problem,
                    S "with various initial conditions"]
 
 pendulumTitle :: CI
@@ -158,8 +158,8 @@ concIns = assumptions ++ goals ++ funcReqs ++ nonFuncReqs
 ------------------------------------
 
 prob :: Sentence
-prob = foldlSent_ [ S "efficiently and correctly to predict the", phrase motion `S.sOfA`  
-                   phrase pendulum]
+prob = foldlSent_ [ S "efficiently and correctly to predict the", phraseNP (motion `ofA`  
+                   pendulum)]
 
 ---------------------------------
 -- Terminology and Definitions --

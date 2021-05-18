@@ -4,6 +4,7 @@ module Drasil.DblPendulum.DataDefs (dataDefs, positionIY, positionIX, angFrequen
 import Prelude hiding (sin, cos, sqrt)
 import Language.Drasil
 import qualified Utils.Drasil.Sentence as S
+import Utils.Drasil
 import Data.Drasil.SI_Units (second)
 import Theory.Drasil (DataDefinition, ddNoRefs)
 import Drasil.DblPendulum.Figures (figMotion)
@@ -33,7 +34,7 @@ figRef :: Sentence
 figRef = ch QP.ixPos `S.sIs` S "shown in" +:+. makeRef2S figMotion
 
 positionRef :: Sentence
-positionRef = ch QP.ixPos `S.isThe` phrase horizontal +:+ phrase QP.position
+positionRef = ch QP.ixPos `S.isThe` phrase (compoundNC horizontal QP.position)
 
 ------------------------------------------------------
 positionIY :: DataDefinition
@@ -49,7 +50,7 @@ figReff :: Sentence
 figReff = ch QP.iyPos `S.sIs` S "shown in" +:+. makeRef2S figMotion
 
 positionReff :: Sentence
-positionReff = ch QP.iyPos `S.isThe` phrase vertical +:+ phrase QP.position
+positionReff = ch QP.iyPos `S.isThe` phrase (compoundNC vertical QP.position)
 
 ------------------------------------------------------
 

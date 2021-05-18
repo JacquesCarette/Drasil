@@ -4,7 +4,7 @@ import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Control.Lens ((^.))
 
-import Utils.Drasil.Sentence (sAnd, sOf, ofThe)
+import Utils.Drasil.Sentence (sAnd, sOf, ofThe, the_ofThe, onThe)
 
 -- | Creates a NP by combining two 'NamedIdea's with the word "and" between
 -- their terms. Plural is defaulted to @(phrase t1) "of" (plural t2)@
@@ -83,14 +83,23 @@ of__ t1 t2 = nounPhrase''
   (Replace (atStart' t1 `sOf` phrase t2))
   (Replace (titleize' t1 `sOf` titleize t2))
 
--- | Same as 'of__', except combining Sentence piece is "of a"
+-- | Same as 'of_''', except combining Sentence piece is "of a"
 ofA :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 ofA t1 t2 = nounPhrase'' 
+  (phrase t1 +:+ S "of a" +:+ phrase t2)
+  (plural t1 +:+ S "of a" +:+ phrase t2)
+  (Replace (atStart t1 +:+ S "of a" +:+ phrase t2))
+  (Replace (titleize t1 +:+ S "of a" +:+ titleize t2))
+
+-- | Same as 'ofA', except phrase defaults to @(plural t1) "of a" (phrase t2)@
+ofA' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+ofA' t1 t2 = nounPhrase'' 
   (plural t1 +:+ S "of a" +:+ phrase t2)
   (plural t1 +:+ S "of a" +:+ phrase t2)
   (Replace (atStart' t1 +:+ S "of a" +:+ phrase t2))
   (Replace (titleize' t1 +:+ S "of a" +:+ titleize t2))
 
+-- These next two need a better name (too similar to their Sentence variants)
 -- | Same as 'of_', except combining Sentence piece is "of the"
 ofThe' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 ofThe' t1 t2 = nounPhrase'' 
@@ -98,6 +107,24 @@ ofThe' t1 t2 = nounPhrase''
   (plural t1 `ofThe` phrase t2)
   (Replace (atStart' t1 `ofThe` phrase t2))
   (Replace (titleize' t1 `ofThe` titleize t2))
+
+-- | Same as 'ofThe'', except prepends "the"
+the_ofThe'' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+the_ofThe'' t1 t2 = nounPhrase'' 
+  (phrase t1 `the_ofThe` phrase t2)
+  (plural t1 `the_ofThe` phrase t2)
+  CapFirst CapWords
+
+-- These next two need a better name (too similar to their Sentence variants)
+-- | Same as 'of_', except combining Sentence piece is "of the"
+onThe' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+onThe' t1 t2 = nounPhrase'' 
+  (phrase t1 `onThe` phrase t2)
+  (plural t1 `onThe` phrase t2)
+  (Replace (atStart t1 `onThe` phrase t2))
+  (Replace (titleize t1 `onThe` titleize t2))
+
+
 
 --FIXME: As mentioned in issue #487, the following should be re-examined later,
 --       as they may embody a deeper idea in some cases.
@@ -124,17 +151,25 @@ for' f1 f2 t1 t2 = nounPhrase''
   (Replace (atStart t1 +:+ S "for" +:+ phrase t2))
   (Replace (f1 t1 +:+ S "for" +:+ f2 t2))
 
--- | Prepends "the" to a `NamedIdea`. Similar to 'the'', but not titleized
+-- | Prepends "the" to a 'NamedIdea'. Similar to 'the'', but not titleized
 the :: (NamedIdea t) => t -> NP
-the t = nounPhrase'' (S "the" +:+ phrase t) (S "the" +:+ plural t) CapWords CapWords
+the t = nounPhrase'' (S "the" +:+ phrase t) (S "the" +:+ plural t) CapFirst CapWords
 
--- | Prepends "the" to a titleized `NamedIdea`
+-- | Prepends "the" to a titleized 'NamedIdea'
 the' :: (NamedIdea t) => t -> NP
-the' t = nounPhrase'' (S "the" +:+ titleize t) (S "the" +:+ titleize' t) CapWords CapWords
+the' t = nounPhrase'' (S "the" +:+ titleize t) (S "the" +:+ titleize' t) CapFirst CapWords
 
 -- | A customizable version of 'the'
 the'' :: (t -> Sentence) -> t -> NP
 the'' f t = nounPhrase'' (S "the" +:+ f t) (S "the" +:+ f t) CapFirst CapWords
+
+-- | Prepends "a" to a 'NamedIdea' (similar to 'the')
+aNINP :: (NamedIdea c) => c -> NP
+aNINP t = nounPhrase'' (S "a" +:+ phrase t) (S "a" +:+ plural t) CapFirst CapWords
+
+-- | Customizable version of 'aNINP'
+aNINP' :: (c -> Sentence) -> c -> NP
+aNINP' f t = nounPhrase'' (S "a" +:+ f t) (S "a" +:+ f t) CapFirst CapWords
 
 -- | Creates a noun phrase by combining two 'NamedIdea's with the words "in the" between
 -- their terms. Plural is defaulted to @(plural t1) "in the" (phrase t2)@

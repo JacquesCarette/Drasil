@@ -63,5 +63,6 @@ lnames (Quote _)      = []
 lnames (E _)          = []
 lnames EmptyS         = []
 
+-- | Get reference UIDs from Sentences
 lnames'  :: [Sentence] -> [UID]
 lnames' = concatMap lnames 

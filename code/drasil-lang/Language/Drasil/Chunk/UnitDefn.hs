@@ -64,7 +64,7 @@ derCUC a b c s ue = UD (dcc a (cn b) c) (DerivedSI (US [(s,1)]) (usymb ue) (USyn
 -- | Similar to 'derCUC', but the created 'NP' has the 'AddS' plural rule.
 derCUC' a b c s ue = UD (dcc a (cn' b) c) (DerivedSI (US [(s,1)]) (usymb ue) (USynonym $ usymb ue)) [a]
  
--- Create a derived unit chunk from an id, term (as 'String'), definition,
+-- | Create a derived unit chunk from an id, term (as 'String'), definition,
 -- symbol, and unit equation
 derUC, derUC' :: String -> String -> String -> Symbol -> UDefn -> UnitDefn
 -- | Uses self-plural term

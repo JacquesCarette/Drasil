@@ -30,7 +30,7 @@ type MaxWidthPercent = Float
 
 type Title    = Sentence
 type Author   = Sentence
-type Header   = Sentence -- Used when creating sublists
+type Header   = Sentence -- ^ Used when creating sublists
 type Depth    = Int
 type Width    = Float
 type Height   = Float
@@ -68,10 +68,12 @@ data RawContent = Table [Sentence] [[Sentence]] Title Bool
                -- ^ TODO: Fill this one in.
 type Identifier = String
 
+-- | Contains a 'Reference' and 'RawContent'
 data LabelledContent = LblC { _ref :: Reference
                             , _ctype :: RawContent
                             }
 
+-- | Only contains 'RawContent'                            
 newtype UnlabelledContent = UnlblC { _cntnts :: RawContent }
 
 makeLenses ''LabelledContent

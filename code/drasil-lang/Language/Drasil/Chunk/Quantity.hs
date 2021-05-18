@@ -55,7 +55,7 @@ implVar i des sp sym = vcSt i des f sp
     f Implementation = sym
     f Equational = Empty
 
--- | Like implVar but allows specification of abbreviation and unit 
+-- | Similar to 'implVar' but allows specification of abbreviation and unit 
 implVar' :: String -> NP -> Maybe String -> Space -> Symbol -> 
   Maybe UnitDefn -> QuantityDict
 implVar' s np a t sym = mkQuant' s np a t f
@@ -71,11 +71,11 @@ vc i des sym space = QD (nw $ nc i des) space (const sym) Nothing
 vcUnit :: String -> NP -> Symbol -> Space -> UnitDefn -> QuantityDict
 vcUnit i des sym space u = QD (nw $ nc i des) space (const sym) (Just u)
 
--- | Similar to vc, but creates a 'QuantityDict' from something that knows about stages
+-- | Similar to 'vc', but creates a 'QuantityDict' from something that knows about stages
 vcSt :: String -> NP -> (Stage -> Symbol) -> Space -> QuantityDict
 vcSt i des sym space = QD (nw $ nc i des) space sym Nothing
 
--- | Makes a QuantityDict from an 'Idea', 'Symbol', and 'Space'. 'Symbol' is implementation-only
+-- | Makes a 'QuantityDict' from an 'Idea', 'Symbol', and 'Space'. 'Symbol' is implementation-only
 codeVC :: Idea c => c -> Symbol -> Space -> QuantityDict
 codeVC n s t = QD (nw n) t f Nothing
   where

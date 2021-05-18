@@ -25,9 +25,9 @@ class HasUID c where
 class HasShortName  s where
   shortname :: s -> ShortName
 
--- | A HasSymbol is anything which has a Symbol
+-- | A HasSymbol is anything which has a 'Symbol'
 class HasSymbol c where
-  -- | Provides the Symbol --  for a particular stage of generation
+  -- | Provides the 'Symbol' for a particular stage of generation
   symbol  :: c -> Stage -> Symbol
  
 -- | For a "Reference Address", we just need a getter.

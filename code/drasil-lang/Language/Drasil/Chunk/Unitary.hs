@@ -34,17 +34,18 @@ instance Quantity      UnitaryChunk where
 instance Unitary       UnitaryChunk where unit x = x ^. un
 instance MayHaveUnit   UnitaryChunk where getUnit u = Just $ u ^. un
 
--- Builds the Quantity part from the uid, term, symbol and space.
--- assumes there's no abbreviation.
+-- | Builds the 'Quantity' part from the 'UID', term ('NP'), 'Symbol' and 'Space'.
+-- Assumes there's no abbreviation.
 unitary :: (IsUnit u) => String -> NP -> Symbol -> u -> Space -> UnitaryChunk
 unitary i t s u space = UC (mkQuant i t s space (Just uu) Nothing) uu -- Unit doesn't have a unitDefn, so [] is passed in
   where uu = unitWrapper u
 
--- Same as unitary but with a symbol that changes based on the stage
+-- | Same as 'unitary' but with a 'Symbol' that changes based on the 'Stage'
 unitary' :: (IsUnit u) => String -> NP -> (Stage -> Symbol) -> u -> Space -> UnitaryChunk
 unitary' i t s u space = UC (mkQuant' i t Nothing space s (Just uu)) uu -- Unit doesn't have a unitDefn, so [] is passed in
   where uu = unitWrapper u
 
+-- | Makes a 'UnitaryChunk' from a unit with a quantity
 mkUnitary :: (Unitary u, MayHaveUnit u) => u -> UnitaryChunk
 mkUnitary u = UC (qw u) (unit u)
 

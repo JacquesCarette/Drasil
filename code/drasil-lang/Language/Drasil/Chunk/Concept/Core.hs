@@ -23,9 +23,9 @@ sDom d = error $ "Expected ConceptDomain to have a single domain, found " ++
   show (length d) ++ " instead."
 
 -- | The ConceptChunk datatype is a Concept
-data ConceptChunk = ConDict { _idea :: IdeaDict
-                            , _defn' :: Sentence
-                            , cdom' :: [UID]
+data ConceptChunk = ConDict { _idea :: IdeaDict -- ^ Contains the idea of the concept
+                            , _defn' :: Sentence -- ^ The definition of the concept
+                            , cdom' :: [UID] -- ^ List of 'UID's in the concept
                             }
 makeLenses ''ConceptChunk
 

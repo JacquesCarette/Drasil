@@ -11,6 +11,7 @@ import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
 
+-- | Contains a 'UnitaryChunk', a definition, and a list of related 'UID's
 data UnitaryConceptDict = UCC { _unitary :: UnitaryChunk
                               , _defn' :: Sentence
                               , cdom' :: [UID]
@@ -29,5 +30,6 @@ instance Eq            UnitaryConceptDict where a == b = (a ^. uid) == (b ^. uid
 instance MayHaveUnit   UnitaryConceptDict where getUnit u = getUnit $ u ^. unitary
 instance Unitary       UnitaryConceptDict where unit x = unit (x ^. unitary)
 
+-- | Constructs a UnitaryConceptDict from a 'Concept' with 'Units'
 ucw :: (Unitary c, Concept c, MayHaveUnit c) => c -> UnitaryConceptDict
 ucw c = UCC (mkUnitary c) (c ^. defn) (cdom c)

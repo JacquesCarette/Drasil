@@ -76,13 +76,15 @@ class ConceptDomain c where
 -- | Concepts are 'Idea's with definitions and domains
 type Concept c = (Idea c, Definition c, ConceptDomain c)
 
--- | HasSpace is anything which has a Space...
+-- | HasSpace is anything which has a 'Space'...
 class HasSpace c where
   typ      :: Lens' c Space
 
+-- | A class that contains a list of 'Reference's
 class HasReference c where
   getReferences :: Lens' c [Reference]
 
+-- | A class that might have a 'Derivation'
 class HasDerivation c where
   derivations :: Lens' c (Maybe Derivation)
 
@@ -106,20 +108,23 @@ class HasReasVal c where
 -- all sorts of import cycles (or lots of orphans)
 class (Idea c, HasSpace c, HasSymbol c) => Quantity c where
 
--- | An UncertainQuantity is just a Quantity with some uncertainty associated to it.
+--  An UncertainQuantity is just a Quantity with some uncertainty associated to it.
 -- This uncertainty is represented as a decimal value between 0 and 1 (percentage).
-
+--
 -- class Quantity c => UncertainQuantity c where
 --   uncert :: Lens' c (Uncertainty)
 --   replaced with HasUncertainty
 
+-- | HasUncertainty is just a chunk with some uncertainty associated to it.
+-- This uncertainty is represented as a decimal value between 0 and 1 (percentage).
 class HasUncertainty c where
   unc  :: Lens' c Uncertainty
 
+-- | Has the ability to be referenced
 class HasUID s => Referable s where
-  refAdd    :: s -> String  -- The referencing address (what we're linking to).
+  refAdd    :: s -> String  -- ^ The referencing address (what we're linking to).
                             -- Only visible in the source (tex/html).
-  renderRef :: s -> LblType -- alternate
+  renderRef :: s -> LblType -- ^ alternate form
 
 -- | Some chunks can be called like functions
 class (HasSymbol c) => Callable c
@@ -130,23 +135,26 @@ class (HasSymbol c) => Callable c
 class HasUnitSymbol u where
    usymb ::u -> USymb
 
--- | Units are Ideas with a Definition which store a unit symbol.
+-- | Units are 'Idea's with a 'Definition' which store a unit symbol.
 -- They must also be explicitly declared to be instances of IsUnit
 class (Idea u, Definition u, HasUnitSymbol u) => IsUnit u where
    udefn :: u -> Maybe UDefn
    getUnits :: u -> [UID]
 
 -- Investigate (TODO): is this really needed?
+-- | Contains a 'UDefn'
 class UnitEq u where
    uniteq :: Lens' u UDefn
 
 -----------------------------------------------------
 -- TODO: It is ok to be able to view a (defining?) 'Relation', but not necessarily
 -- to 'set' it,  as it might just not be settable. So Getter it is.
+-- | Has a function that turns into a 'Relation'
 class ExprRelat c where
   relat :: c -> Relation
 
 -- This is the 'correct' version of ExprRelat.
+-- | A better version of 'ExprRelat'
 class DefiningExpr c where
   defnExpr :: Lens' c Expr
 

@@ -12,6 +12,7 @@ import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
 
+-- | For a 'ConceptChunk' that also has a 'Relation' attached
 data RelationConcept = RC { _conc :: ConceptChunk
                           , rel :: Relation
                           }
@@ -25,10 +26,10 @@ instance ConceptDomain RelationConcept where cdom = cdom . view conc
 instance ExprRelat     RelationConcept where relat = rel
 instance Eq            RelationConcept where a == b = (a ^. uid) == (b ^. uid)
 
--- | Create a RelationConcept from a given id, term, defn, and relation.
+-- | Create a 'RelationConcept' from a given 'UID', term, defn, and relation.
 makeRC :: UID -> NP -> Sentence -> Relation -> RelationConcept
 makeRC rID rTerm rDefn = RC (dccWDS rID rTerm rDefn)
 
--- | Create a new RelationConcept from an old one, a new id and relation
+-- | Create a new 'RelationConcept' from an old 'Concept'. Takes a 'Concept', new 'UID' and relation.
 addRelToCC :: Concept c => c -> UID -> Relation -> RelationConcept
 addRelToCC c rID = RC (set uid rID (cw c))

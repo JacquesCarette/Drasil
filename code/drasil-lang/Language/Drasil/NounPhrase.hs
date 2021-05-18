@@ -16,15 +16,15 @@ import Language.Drasil.Sentence (Sentence((:+:), S), (+:+))
 -- it is fleshed out and/or we do more with it, it will likely be a good fit
 
 class NounPhrase n where
-  phraseNP :: n -> Sentence -- ex. "the quick brown fox"
-  pluralNP :: n -> PluralForm -- ex. "the quick brown foxes" 
+  phraseNP :: n -> Sentence -- ^ ex. "the quick brown fox"
+  pluralNP :: n -> PluralForm -- ^ ex. "the quick brown foxes" 
     --Could replace plural string with a function.
   sentenceCase :: n -> (NP -> Sentence) -> Capitalization 
     --Should this be replaced with a data type instead?
-    --example: "The quick brown fox" 
+    -- ^ example: "The quick brown fox" 
     --Data types should use functions to determine capitalization based
     -- on rules.
-  titleCase :: n -> (NP -> Sentence) -> Capitalization
+  titleCase :: n -> (NP -> Sentence) -> Capitalization -- ^ ex. "The Quick Brown Fox"
 
 type Capitalization = Sentence  --Using type synonyms for clarity.
 type PluralString   = String
@@ -73,13 +73,13 @@ cn''  n = CommonNoun n AddE CapFirst
 cn''' n = CommonNoun n AddES CapFirst
 
 -- | Common noun that pluralizes by dropping the last letter and adding an "ies"
--- | ending (ex. body -> bodies)
+-- ending (ex. body -> bodies)
 cnIES :: String -> NP
 cnIES n = CommonNoun n (IrregPlur (\x -> init x ++ "ies")) CapFirst
 
 --FIXME: Shouldn't this just be drop one and add "ces"?
 -- | Common noun that pluralizes by dropping the last two letters and adding an 
--- | "ices" ending (ex. matrix -> matrices)
+-- "ices" ending (ex. matrix -> matrices)
 cnICES :: String -> NP
 cnICES n = CommonNoun n (IrregPlur (\x -> init (init x) ++ "ices")) CapFirst
 
@@ -143,7 +143,7 @@ compoundPhrase' :: NP -> NP -> NP
 compoundPhrase' t1 t2 = Phrase
   (phraseNP t1 +:+ phraseNP t2) (phraseNP t1 +:+ pluralNP t2) CapWords CapWords
 
--- | Similar to 'compoundPhrase\'', but which accepts functions to be used for
+-- | Similar to 'compoundPhrase'', but which accepts functions to be used for
 -- constructing the plural form. For example 
 -- @compoundPhrase'' plural phrase system constraint@ would have the plural
 -- form "systems constraint". 
@@ -154,7 +154,7 @@ compoundPhrase'' f1 f2 t1 t2 = Phrase
 --More primes might not be wanted but fixes two issues
 -- pluralization problem with software requirements specification (Documentation.hs)
 -- SWHS program not being about to use a compound to create the NamedChunk
---Used when you need a special function apllied to the first term (eg. short or plural)
+-- | Used when you need a special function apllied to the first term (eg. short or plural)
 compoundPhrase''' :: (NP -> Sentence) -> NP -> NP -> NP
 compoundPhrase''' f1 t1 t2 = Phrase 
   (f1 t1 +:+ phraseNP t2) (f1 t1 +:+ pluralNP t2) CapFirst CapWords
@@ -212,6 +212,7 @@ capString s f g = S . findHyph g . unwords $ process (words s)
     process (x:xs) = f x : map g xs
     process []     = []
 
+-- | Finds hyphens in a 'String'
 findHyph :: (String -> String) -> String -> String
 findHyph _ "" = ""
 findHyph _ [x] = [x]
@@ -219,6 +220,7 @@ findHyph f (x:xs)
   | x == '-'  = '-' : findHyph f (f xs)
   | otherwise = x : findHyph f xs
 
+-- | Capitalize first word of a 'String'
 capFirstWord :: String -> String
 capFirstWord "" = ""
 capFirstWord w@(c:cs)
@@ -226,6 +228,7 @@ capFirstWord w@(c:cs)
   | not (isLatin1 c) = w
   | otherwise        = toUpper c : cs
 
+-- | Capitalize all words of a 'String' (unless they are prepositions, articles, or conjunctions)
 capWords :: String -> String
 capWords "" = ""
 capWords w@(c:cs)
@@ -234,6 +237,7 @@ capWords w@(c:cs)
   | w `elem` doNotCaps = toLower c : cs
   | otherwise          = toUpper c : cs
 
+-- | Words that should not be capitalized in a title (prepositions, articles, or conjunctions)
 doNotCaps :: [String]
 doNotCaps = ["a", "an", "the", "at", "by", "for", "in", "of",
   "on", "to", "up", "and", "as", "but", "or", "nor"] --Ref http://grammar.yourdictionary.com

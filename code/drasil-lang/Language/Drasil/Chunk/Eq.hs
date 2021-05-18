@@ -42,36 +42,36 @@ instance MayHaveUnit   QDefinition where getUnit = getUnit . view qua
 instance ExprRelat     QDefinition where relat z = sy z $= z ^. equat
 instance ConceptDomain QDefinition where cdom = cd
 
--- | Create a 'QDefinition' with a uid, noun phrase (term), definition, symbol,
--- unit, and defining equation.
+-- | Create a 'QDefinition' with a 'UID', term ('NP'), definition ('Sentence'), 'Symbol',
+-- 'Space', unit, and defining equation.
 fromEqn :: (IsUnit u) => String -> NP -> Sentence -> Symbol -> Space -> u -> Expr -> QDefinition
 fromEqn nm desc def symb sp un expr =
   EC (mkQuant nm desc symb sp (Just $ unitWrapper un) Nothing) def expr []
 
--- | Same as fromEqn, but has no units.
+-- | Same as 'fromEqn', but has no units.
 fromEqn' :: String -> NP -> Sentence -> Symbol -> Space -> Expr -> QDefinition
 fromEqn' nm desc def symb sp expr =
   EC (mkQuant nm desc symb sp Nothing Nothing) def expr []
 
--- | Same as fromEqn, but symbol depends on stage
+-- | Same as 'fromEqn', but symbol depends on stage
 fromEqnSt :: (IsUnit u) => String -> NP -> Sentence -> (Stage -> Symbol) ->
   Space -> u -> Expr -> QDefinition
 fromEqnSt nm desc def symb sp un expr =
   EC (mkQuant' nm desc Nothing sp symb (Just $ unitWrapper un)) def expr []
 
--- | Same as fromEqn', but symbol depends on stage
+-- | Same as 'fromEqn'', but symbol depends on stage
 fromEqnSt' :: String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> Expr ->
   QDefinition
 fromEqnSt' nm desc def symb sp expr =
   EC (mkQuant' nm desc Nothing sp symb Nothing) def expr []
 
--- Used to help make Qdefinitions when uid, term, and symbol come from the same source
+-- | Used to help make 'Qdefinition's when 'UID', term, and 'Symbol' come from the same source
 mkQuantDef :: (Quantity c, MayHaveUnit c) => c -> Expr -> QDefinition
 mkQuantDef c e = datadef $ getUnit c
   where datadef (Just a) = fromEqnSt  (c ^. uid) (c ^. term) EmptyS (symbol c) (c ^. typ) a e
         datadef Nothing  = fromEqnSt' (c ^. uid) (c ^. term) EmptyS (symbol c) (c ^. typ) e
 
--- Used to help make Qdefinitions when uid and symbol come from the same source, with the term is separate
+-- | Used to help make 'Qdefinition's when 'UID' and 'Symbol' come from the same source, with the term separate
 mkQuantDef' :: (Quantity c, MayHaveUnit c) => c -> NP -> Expr -> QDefinition
 mkQuantDef' c t e = datadef $ getUnit c
   where datadef (Just a) = fromEqnSt  (c ^. uid) t EmptyS (symbol c) (c ^. typ) a e

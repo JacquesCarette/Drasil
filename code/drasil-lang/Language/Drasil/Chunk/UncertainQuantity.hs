@@ -21,8 +21,7 @@ import Control.Lens ((^.), makeLenses, view)
 
 {- The order of the following two implementations is the same as in Constrained -}
 
--- | UncertQ is a chunk which is an instance of UncertainQuantity. It takes a 
--- ConstrainedChunk and an Uncertainty.
+-- | UncertainChunk is a chunk that contains a 'ConstrainedChunk' and an 'Uncertainty'.
 data UncertainChunk  = UCh { _conc :: ConstrainedChunk , _unc' :: Uncertainty }
 makeLenses ''UncertainChunk
 
@@ -43,17 +42,15 @@ uncrtnChunk :: (Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) =>
   c -> Uncertainty -> UncertainChunk
 uncrtnChunk q = UCh (cnstrw q)
 
--- | Creates an uncertain varchunk
+-- | Creates an uncertain variable chunk. Takes 'UID', term ('NP'), 'Symbol', 'Space', 'Constrains', 'Expr', and 'Uncertainty'
 uvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Expr -> Uncertainty -> UncertainChunk
 uvc nam trm sym space cs val = uncrtnChunk (cvc nam trm sym space cs (Just val))
 
--- | projection
+-- | Projection function into an 'UncertainChunk' from 'UncertQ' or an 'UncertainChunk'
 uncrtnw :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> UncertainChunk
 uncrtnw c = UCh (cnstrw c) (c ^. unc)
 
--- | UncertQ is a chunk which is an instance of UncertainQuantity. It takes a 
--- ConstrConcept and an Uncertainty.
-
+-- | UncertQ is a chunk that contains a 'ConstrConcept' and an 'Uncertainty'.
 data UncertQ = UQ { _coco :: ConstrConcept , _unc'' :: Uncertainty }
 makeLenses ''UncertQ
   
@@ -78,11 +75,12 @@ uq :: (Quantity c, Constrained c, Concept c, HasReasVal c, MayHaveUnit c) =>
 uq q = UQ (ConstrConcept (dqdWr q) (q ^. constraints) (q ^. reasVal))
 
 --FIXME: this is kind of crazy and probably shouldn't be used!
+-- | Uncertainty quantity ('uq') but with a constraint
 uqc :: (IsUnit u) => String -> NP -> String -> Symbol -> u -> Space
                 -> [Constraint] -> Expr -> Uncertainty -> UncertQ
 uqc nam trm desc sym un space cs val = uq (cuc' nam trm desc sym un space cs val)
 
---uncertainty quantity constraint no description
+-- | Uncertainty quantity constraint ('uqc') with no description 
 uqcND :: (IsUnit u) => String -> NP -> Symbol -> u -> Space -> [Constraint]
                   -> Expr -> Uncertainty -> UncertQ
 uqcND nam trm sym un space cs val = uq (cuc' nam trm "" sym un space cs val)

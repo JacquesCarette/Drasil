@@ -14,17 +14,19 @@ data Constraint where
   EnumeratedStr  :: ConstraintReason -> [String]               -> Constraint
 
 -- by default, physical and software constraints are ranges
+-- | Range of 'Physical' constraints
 physc :: RealInterval Expr Expr -> Constraint
 physc = Range Physical
-
+-- | Range of 'Software' constraints
 sfwrc :: RealInterval Expr Expr -> Constraint
 sfwrc = Range Software
 
 -- but also for enumeration of values; right now, always physical
+-- | Enumeration of values, default to 'Physical'
 enumc :: [Double] -> Constraint
 enumc = EnumeratedReal Physical
 
--- helpful for filtering for Physical / Software constraints
+-- | Helpful for filtering for Physical / Software constraints
 isPhysC, isSfwrC :: Constraint -> Bool
 isPhysC (Range Physical _) = True
 isPhysC (EnumeratedReal Physical _) = True

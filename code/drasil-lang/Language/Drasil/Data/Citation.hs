@@ -22,7 +22,7 @@ import Language.Drasil.Data.Date (Month(..))
 -- | Fields used in citations.
 data CiteField = Address      String
                | Author       People
-               | BookTitle    String -- Used for 'InCollection' references only.
+               | BookTitle    String -- ^ Used for 'InCollection' references only.
                | Chapter      Int
                | Edition      Int
                | Editor       People
@@ -33,12 +33,12 @@ data CiteField = Address      String
                | Note         String
                | Number       Int
                | Organization String
-               | Pages        [Int] -- Range of pages (ex1. 1-32; ex2. 7,31,52-55)
+               | Pages        [Int] -- ^ Range of pages (ex1. 1-32; ex2. 7,31,52-55)
                | Publisher    String
                | School       String
                | Series       String
                | Title        String
-               | Type         String -- BibTeX "type" field
+               | Type         String -- ^ BibTeX "type" field
                | Volume       Int
                | Year         Int
 

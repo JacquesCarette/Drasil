@@ -86,16 +86,19 @@ not_ = UnaryOpB Not
 idx :: Expr -> Expr -> Expr
 idx = LABinaryOp Index
 
--- | Smart constructors for integers, doubles, strings, percents
+-- | Smart constructor for integers
 int :: Integer -> Expr
 int = Int
 
+-- | Smart constructor for doubles
 dbl :: Double -> Expr
 dbl = Dbl
 
+-- | Smart constructor for strings
 str :: String -> Expr
 str = Str
 
+-- | Smart constructors for percents
 perc :: Integer -> Integer -> Expr
 perc = Perc
 
@@ -144,16 +147,17 @@ completeCase = Case Complete
 incompleteCase :: [(Expr,Relation)] -> Expr
 incompleteCase = Case Incomplete
 
+-- | Smart constructor to square a function
 square :: Expr -> Expr
 square x = x $^ Int 2
 
--- some matrix helper functions
+-- | Matrix helper function
 m2x2 :: Expr -> Expr -> Expr -> Expr -> Expr
 m2x2 a b c d = Matrix [[a,b],[c,d]]
-
+-- | Matrix helper function
 vec2D :: Expr -> Expr -> Expr
 vec2D a b    = Matrix [[a],[b]]
-
+-- | Matrix helper function
 dgnl2x2 :: Expr -> Expr -> Expr
 dgnl2x2 a  = m2x2 a (Int 0) (Int 0)
 
@@ -177,10 +181,12 @@ applyWithNamedArgs f ps ns = FCall (f ^. uid) ps (zip (map ((^. uid) . fst) ns)
   (map snd ns))
 
 -- Note how |sy| 'enforces' having a symbol
+-- | Get an 'Expr' from a 'Symbol'
 sy :: (HasUID c, HasSymbol c) => c -> Expr
 sy x = C (x ^. uid)
 
 -- This also wants a symbol constraint.
+-- | Gets the derivative of an 'Expr' with respect to a 'Symbol'
 deriv, pderiv :: (HasUID c, HasSymbol c) => Expr -> c -> Expr
 deriv e c = Deriv Total e (c^.uid)
 pderiv e c = Deriv Part e (c^.uid)

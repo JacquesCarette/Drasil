@@ -25,8 +25,8 @@ import Language.Drasil.UID (UID)
 
 import Control.Lens (makeLenses, (^.))
 
-type BibRef = [Citation]
-type EntryID = String -- Should contain no spaces
+type BibRef = [Citation] -- ^ A list of 'Citation's
+type EntryID = String -- ^ Should contain no spaces
 
 -- | All citations require a unique identifier used by the Drasil chunk.
 -- We will re-use the UID part as an EntryID (String) used for creating reference links.
@@ -91,10 +91,10 @@ cInBookECP ed t chap pgs pub yr opt = cite InBook
 cInBookAC, cInBookEC :: People -> String -> Int ->
   String -> Int -> [CiteField] -> String -> Citation
 
--- | Otherwise ientical to 'cInBookACP'
+-- | Otherwise identical to 'cInBookACP'
 cInBookAC auth t chap pub yr opt = cite InBook 
   (author auth : chapter chap : stdFields t pub yr opt)
--- | Otherwise ientical to 'cInBookECP'
+-- | Otherwise identical to 'cInBookECP'
 cInBookEC ed t chap pub yr opt = cite InBook 
   (editor ed : chapter chap : stdFields t pub yr opt)
 
@@ -102,10 +102,10 @@ cInBookEC ed t chap pub yr opt = cite InBook
 cInBookAP, cInBookEP :: People -> String -> [Int] ->
   String -> Int -> [CiteField] -> String -> Citation
 
--- | Otherwise ientical to 'cInBookACP'
+-- | Otherwise identical to 'cInBookACP'
 cInBookAP auth t pgs pub yr opt = cite InBook 
   (author auth : pages pgs : stdFields t pub yr opt)
--- | Otherwise ientical to 'cInBookECP'
+-- | Otherwise identical to 'cInBookECP'
 cInBookEP ed t pgs pub yr opt = cite InBook 
   (editor ed : pages pgs : stdFields t pub yr opt)
 

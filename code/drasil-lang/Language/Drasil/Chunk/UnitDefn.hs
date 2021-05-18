@@ -23,10 +23,10 @@ import Language.Drasil.UnitLang (USymb(US), UDefn(UScale, USynonym, UShift),
   compUSymb, fromUDefn, getUSymb, getDefn, UnitSymbol(BaseSI, DerivedSI, Defined))
 import Language.Drasil.UID
 
--- | for defining units
--- It is a concept chunk (defined what kind of unit it is),
+-- | For defining units.
+-- It has a 'ConceptChunk' (that defines what kind of unit it is),
 -- has a unit symbol, maybe another (when it is a synonym),
--- perhaps a definition, and the list of UID of the units that make up
+-- perhaps a definition, and a list of 'UID' of the units that make up
 -- the definition.
 data UnitDefn = UD { _vc :: ConceptChunk 
                    , _cas :: UnitSymbol
@@ -50,6 +50,7 @@ data UnitEquation = UE {_contributingUnit :: [UID]
 makeLenses ''UnitEquation
 instance HasUnitSymbol UnitEquation where usymb u = u ^. us
 
+-- | Get a list of 'UID' of the units that make up the 'UnitEquation'
 getCu :: UnitEquation -> [UID]
 getCu = view contributingUnit
 
@@ -57,11 +58,12 @@ getCu = view contributingUnit
 makeDerU :: ConceptChunk -> UnitEquation -> UnitDefn
 makeDerU concept eqn = UD concept (Defined (usymb eqn) (USynonym $ usymb eqn)) (getCu eqn)
 
--- | Create a SI_Unit with two symbol representations
 derCUC, derCUC' :: String -> String -> String -> Symbol -> UnitEquation -> UnitDefn
+-- | Create a 'SI_Unit' with two 'Symbol' representations. The created 'NP' is self-plural
 derCUC a b c s ue = UD (dcc a (cn b) c) (DerivedSI (US [(s,1)]) (usymb ue) (USynonym $ usymb ue)) [a]
+-- | Similar to 'derCUC', but the created 'NP' has the 'AddS' plural rule.
 derCUC' a b c s ue = UD (dcc a (cn' b) c) (DerivedSI (US [(s,1)]) (usymb ue) (USynonym $ usymb ue)) [a]
--- | 
+ 
 -- | Create a derived unit chunk from an id, term (as 'String'), definition,
 -- symbol, and unit equation
 derUC, derUC' :: String -> String -> String -> Symbol -> UDefn -> UnitDefn

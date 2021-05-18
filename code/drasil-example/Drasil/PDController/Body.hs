@@ -184,7 +184,7 @@ pidODEInfo
       (sy qdSimTime)
       (dbl 0)
       [idx (sy opProcessVariable) (int 1),
-      neg (int 1 `addRe` sy qdDerivGain) `mulRe` idx (sy opProcessVariable) (int 1)
+      neg ((int 1 `addRe` sy qdDerivGain) `mulRe` idx (sy opProcessVariable) (int 1))   -- ? CHECK: Seems like `neg` does not generate generate sufficient parentheses?
       $- ((int 20 `addRe` sy qdPropGain) `mulRe` idx (sy opProcessVariable) (int 0))
       `addRe` (sy qdSetPointTD `mulRe` sy qdPropGain)]
       pidODEOptions

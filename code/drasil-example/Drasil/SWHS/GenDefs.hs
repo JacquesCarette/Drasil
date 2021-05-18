@@ -45,8 +45,8 @@ rocTempSimpRC = makeRC "rocTempSimpRC" (nounPhraseSP $ "Simplified rate " ++
 
 rocTempSimpRel :: Relation
 rocTempSimpRel = sy QPP.mass `mulRe` sy QT.heatCapSpec `mulRe`
-  deriv (sy QT.temp) QP.time $= sy htFluxIn `mulRe` sy inSA $-
-  sy htFluxOut `mulRe` sy outSA `addRe` sy volHtGen `mulRe` sy QPP.vol
+  deriv (sy QT.temp) QP.time $= (sy htFluxIn `mulRe` sy inSA $-
+  (sy htFluxOut `mulRe` sy outSA)) `addRe` (sy volHtGen `mulRe` sy QPP.vol)
 
 ----
 
@@ -139,17 +139,17 @@ rocTempDerivGaussEq = neg (intAll (eqSymb surface) (sy thFluxVect $. sy uNormalV
   intAll (eqSymb vol)
   (sy density `mulRe` sy QT.heatCapSpec `mulRe` pderiv (sy QT.temp) time)
 
-rocTempDerivArbVolEq = sy htFluxIn `mulRe` sy inSA $- sy htFluxOut `mulRe`
-  sy outSA `addRe` sy volHtGen `mulRe` sy vol $= 
+rocTempDerivArbVolEq = (sy htFluxIn `mulRe` sy inSA $- (sy htFluxOut `mulRe`
+  sy outSA)) `addRe` (sy volHtGen `mulRe` sy vol) $= 
   intAll (eqSymb vol) (sy density `mulRe` sy QT.heatCapSpec `mulRe` pderiv (sy QT.temp) time)
 
 rocTempDerivConsFlxEq = sy density `mulRe` sy QT.heatCapSpec `mulRe` sy vol `mulRe` deriv
-  (sy QT.temp) time $= sy htFluxIn `mulRe` sy inSA $- sy htFluxOut `mulRe`
-  sy outSA `addRe` sy volHtGen `mulRe` sy vol
+  (sy QT.temp) time $= (sy htFluxIn `mulRe` sy inSA $- (sy htFluxOut `mulRe`
+  sy outSA)) `addRe` (sy volHtGen `mulRe` sy vol)
 
 rocTempDerivDensEq = sy mass `mulRe` sy QT.heatCapSpec `mulRe` deriv (sy QT.temp)
-  time $= sy htFluxIn `mulRe` sy inSA $- sy htFluxOut
-  `mulRe` sy outSA `addRe` sy volHtGen `mulRe` sy vol
+  time $= (sy htFluxIn `mulRe` sy inSA $- (sy htFluxOut
+  `mulRe` sy outSA)) `addRe` (sy volHtGen `mulRe` sy vol)
 
 rocTempSimpDerivEqns :: [Expr]
 rocTempSimpDerivEqns = [rocTempDerivIntegEq, rocTempDerivGaussEq, rocTempDerivArbVolEq, rocTempDerivConsFlxEq,

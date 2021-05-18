@@ -35,9 +35,9 @@ iMods = [timeIM, landPosIM, offsetIM, messageIM]
 ---
 timeIM :: InstanceModel
 timeIM = imNoRefs (OthModel timeRC) 
-  [qwC launSpeed $ UpFrom (Exc, dbl 0)
-  ,qwC launAngle $ Bounded (Exc, dbl 0) (Exc, sy pi_ $/ dbl 2)]
-  (qw flightDur) [UpFrom (Exc, dbl 0)]
+  [qwC launSpeed $ UpFrom (Exc, int 0)
+  ,qwC launAngle $ Bounded (Exc, int 0) (Exc, sy pi_ $/ int 2)]
+  (qw flightDur) [UpFrom (Exc, int 0)]
   (Just timeDeriv) "calOfLandingTime" [angleConstraintNote, gravitationalAccelConstNote, timeConsNote]
 
 timeRC :: RelationConcept
@@ -63,7 +63,7 @@ timeDerivSent2 = foldlSentCol [S "To find the", phrase time, S "that the",
   phrase target `S.sIs` S "on the" +:+ phrase xAxis +:+ S "from" +:+ makeRef2S targetXAxis),
   S "From the", phrase equation, S "above",S "we get"]
 timeDerivSent3 = foldlSentCol [S "Dividing by", ch flightDur,
-  sParen (S "with the" +:+ phrase constraint +:+ E (sy flightDur $> dbl 0)),
+  sParen (S "with the" +:+ phrase constraint +:+ E (sy flightDur $> int 0)),
   S "gives us"]
 timeDerivSent4 = S "Solving for" +:+ ch flightDur +: S "gives us"
 timeDerivSent5 = foldlSentCol [S "From", makeRef2S speedIY,
@@ -75,9 +75,9 @@ timeDerivEqns = [E.timeDerivEqn1, E.timeDerivEqn2, E.timeDerivEqn3, E.timeDerivE
 ---
 landPosIM :: InstanceModel
 landPosIM = imNoRefs (OthModel landPosRC) 
-  [qwC launSpeed $ UpFrom (Exc, dbl 0), 
-   qwC launAngle $ Bounded (Exc, dbl 0) (Exc, sy pi_ $/ dbl 2)]
-  (qw landPos) [UpFrom (Exc, dbl 0)]
+  [qwC launSpeed $ UpFrom (Exc, int 0), 
+   qwC launAngle $ Bounded (Exc, int 0) (Exc, sy pi_ $/ int 2)]
+  (qw landPos) [UpFrom (Exc, int 0)]
   (Just landPosDeriv) "calOfLandingDist" [angleConstraintNote, gravitationalAccelConstNote, landPosConsNote]
 
 landPosRC :: RelationConcept
@@ -110,8 +110,8 @@ landPosDerivEqns = [E.landPosDerivEqn1, E.landPosDerivEqn2, E.landPosDerivEqn3, 
 ---
 offsetIM :: InstanceModel
 offsetIM = imNoDerivNoRefs (OthModel offsetRC)
-  [qwC landPos $ UpFrom (Exc, dbl 0)
-  ,qwC targPos $ UpFrom (Exc, dbl 0)]
+  [qwC landPos $ UpFrom (Exc, int 0)
+  ,qwC targPos $ UpFrom (Exc, int 0)]
   (qw offset) [] "offsetIM" [landPosNote, landAndTargPosConsNote]
 
 offsetRC :: RelationConcept
@@ -121,7 +121,7 @@ offsetRC = makeRC "offsetRC" (nounPhraseSP "offset") EmptyS $ sy offset $= E.off
 messageIM :: InstanceModel
 messageIM = imNoDerivNoRefs (OthModel messageRC) 
   [qwC offset $ UpFrom (Exc, neg (sy landPos))
-  ,qwC targPos $ UpFrom (Exc, dbl 0)]
+  ,qwC targPos $ UpFrom (Exc, int 0)]
   (qw message)
   [] "messageIM" [offsetNote, targPosConsNote, offsetConsNote, tolNote]
 

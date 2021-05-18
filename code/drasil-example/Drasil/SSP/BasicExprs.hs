@@ -11,20 +11,20 @@ import Drasil.SSP.Unitals (baseAngle, baseWthX, earthqkLoadFctr, fs,
 eqlExpr :: (Expr -> Expr) -> (Expr -> Expr) -> (Expr -> Expr -> Expr) -> Expr
 eqlExpr f1_ f2_ _e_ = (inxi slcWght `_e_`
   (inxi surfHydroForce `mulRe` cos (inxi surfAngle)) `addRe`
-  inxi surfLoad `mulRe` cos (inxi impLoadAngle)) `mulRe` f1_ (inxi baseAngle) $-
-  (neg (sy earthqkLoadFctr) `mulRe` inxi slcWght $- inxi intNormForce `addRe`
+  (inxi surfLoad `mulRe` cos (inxi impLoadAngle))) `mulRe` f1_ (inxi baseAngle) $-
+  (((neg (sy earthqkLoadFctr) `mulRe` inxi slcWght) $- inxi intNormForce `addRe`
   inxiM1 intNormForce $- inxi watrForce `addRe` inxiM1 watrForce `addRe`
-  inxi surfHydroForce `mulRe` sin (inxi surfAngle) `addRe`
-  inxi surfLoad `mulRe` sin (inxi impLoadAngle)) `mulRe` f2_ (inxi baseAngle)
+  (inxi surfHydroForce `mulRe` sin (inxi surfAngle)) `addRe`
+  (inxi surfLoad `mulRe` sin (inxi impLoadAngle))) `mulRe` f2_ (inxi baseAngle))
 
 eqlExprN :: (Expr -> Expr) -> (Expr -> Expr) -> (Expr -> Expr -> Expr) -> Expr
 eqlExprN f1_ f2_ _e_ = (inxi slcWght `_e_`
   (inxi surfHydroForce `mulRe` cos (inxi surfAngle)) `addRe`
-  inxi surfLoad `mulRe` cos (inxi impLoadAngle)) `mulRe` f1_ (inxi baseAngle) `addRe`
-  (neg (sy earthqkLoadFctr) `mulRe` inxi slcWght $- inxi intNormForce `addRe`
+  (inxi surfLoad `mulRe` cos (inxi impLoadAngle)) `mulRe` f1_ (inxi baseAngle)) `addRe`
+  (((neg (sy earthqkLoadFctr) `mulRe` inxi slcWght $- inxi intNormForce `addRe`
   inxiM1 intNormForce $- inxi watrForce `addRe` inxiM1 watrForce `addRe`
-  inxi surfHydroForce `mulRe` sin (inxi surfAngle) `addRe`
-  inxi surfLoad `mulRe` sin (inxi impLoadAngle)) `mulRe` f2_ (inxi baseAngle)
+  (inxi surfHydroForce `mulRe` sin (inxi surfAngle))) `addRe`
+  (inxi surfLoad `mulRe` sin (inxi impLoadAngle))) `mulRe` f2_ (inxi baseAngle))
 
 eqlExprSepG :: (Expr -> Expr) -> (Expr -> Expr) -> (Expr -> Expr -> Expr) -> Expr
 eqlExprSepG f1_ f2_ _e_ = (inxi slcWght `_e_`
@@ -66,20 +66,20 @@ sliceExpr n = idx (sy intNormForce) (int n) `mulRe` idx (sy shrResC) (int n) $=
 
 momExpr :: (Expr -> Expr -> Expr) -> Expr
 momExpr _e_ = (neg (inxi intNormForce) `mulRe` (inxi sliceHght `addRe`
-  inxi baseWthX $/ dbl 2 `mulRe`  tan (inxi baseAngle)) `addRe` inxiM1 intNormForce `mulRe`
-  (inxiM1 sliceHght $- inxi baseWthX $/ dbl 2 `mulRe` tan (inxi baseAngle)) $-
-  inxi watrForce `mulRe` (dbl (1/3) `mulRe` inxi sliceHghtW `addRe` inxi baseWthX $/ dbl 2 `mulRe`
-  tan (inxi baseAngle)) `addRe` inxiM1 watrForce `mulRe` (dbl (1/3) `mulRe` inxiM1 sliceHghtW $-
-  inxi baseWthX $/ dbl 2 `mulRe` tan (inxi baseAngle))) `_e_`
-  (neg (sy earthqkLoadFctr) `mulRe` inxi slcWght `mulRe` inxi midpntHght $/ dbl 2 `addRe`
+  inxi baseWthX $/ int 2 `mulRe`  tan (inxi baseAngle)) `addRe` inxiM1 intNormForce `mulRe`
+  (inxiM1 sliceHght $- inxi baseWthX $/ int 2 `mulRe` tan (inxi baseAngle)) $-
+  inxi watrForce `mulRe` ((int 1 $/ int 3) `mulRe` inxi sliceHghtW `addRe` inxi baseWthX $/ int 2 `mulRe`
+  tan (inxi baseAngle)) `addRe` inxiM1 watrForce `mulRe` ((int 1 $/ int 3) `mulRe` inxiM1 sliceHghtW $-
+  inxi baseWthX $/ int 2 `mulRe` tan (inxi baseAngle))) `_e_`
+  (neg (sy earthqkLoadFctr) `mulRe` inxi slcWght `mulRe` inxi midpntHght $/ int 2 `addRe`
   inxi surfHydroForce `mulRe` sin (inxi surfAngle) `mulRe` inxi midpntHght `addRe`
   inxi surfLoad `mulRe` sin (inxi impLoadAngle) `mulRe` inxi midpntHght)
 
 momExprNoKQ :: (Expr -> Expr -> Expr) -> Expr
 momExprNoKQ _e_ = (neg (inxi intNormForce) `mulRe` (inxi sliceHght `addRe`
-  inxi baseWthX $/ dbl 2 `mulRe`  tan (inxi baseAngle)) `addRe` inxiM1 intNormForce `mulRe`
-  (inxiM1 sliceHght $- inxi baseWthX $/ dbl 2 `mulRe` tan (inxi baseAngle)) $-
-  inxi watrForce `mulRe` (dbl (1/3) `mulRe` inxi sliceHghtW `addRe` inxi baseWthX $/ dbl 2 `mulRe`
-  tan (inxi baseAngle)) `addRe` inxiM1 watrForce `mulRe` (dbl (1/3) `mulRe` inxiM1 sliceHghtW $-
-  inxi baseWthX $/ dbl 2 `mulRe` tan (inxi baseAngle))) `_e_`
+  inxi baseWthX $/ int 2 `mulRe`  tan (inxi baseAngle)) `addRe` inxiM1 intNormForce `mulRe`
+  (inxiM1 sliceHght $- inxi baseWthX $/ int 2 `mulRe` tan (inxi baseAngle)) $-
+  inxi watrForce `mulRe` ((int 1 $/ int 3) `mulRe` inxi sliceHghtW `addRe` inxi baseWthX $/ int 2 `mulRe`
+  tan (inxi baseAngle)) `addRe` inxiM1 watrForce `mulRe` ((int 1 $/ int 3) `mulRe` inxiM1 sliceHghtW $-
+  inxi baseWthX $/ int 2 `mulRe` tan (inxi baseAngle))) `_e_`
   (inxi surfHydroForce `mulRe` sin (inxi surfAngle) `mulRe` inxi midpntHght)

@@ -44,14 +44,14 @@ intersliceWtrFQD = mkQuantDef watrForce intersliceWtrFEqn
 
 intersliceWtrFEqn :: Expr
 intersliceWtrFEqn = completeCase [case1,case2,case3]
-  where case1 = ((inxi slopeHght $- inxi slipHght) $^ int 2 $/ int 2  `mulRe`
-          sy waterWeight `addRe` (inxi waterHght $- inxi slopeHght) $^ int 2 `mulRe`
-          sy waterWeight, inxi waterHght $>= inxi slopeHght)
+  where case1 = (((inxi slopeHght $- inxi slipHght) $^ int 2 $/ int 2) `mulRe`
+          sy waterWeight `addRe` ((inxi waterHght $- inxi slopeHght) $^ int 2 `mulRe`
+          sy waterWeight), inxi waterHght $>= inxi slopeHght)
 
-        case2 = ((inxi waterHght $- inxi slipHght) $^ int 2 $/ dbl 2  `mulRe` sy waterWeight,
+        case2 = (((inxi waterHght $- inxi slipHght) $^ int 2 $/ int 2)  `mulRe` sy waterWeight,
                 inxi slopeHght $> inxi waterHght $> inxi slipHght)
 
-        case3 = (dbl 0, inxi waterHght $<= inxi slipHght)
+        case3 = (int 0, inxi waterHght $<= inxi slipHght)
 
 --DD angleA: base angles
 
@@ -148,7 +148,7 @@ slcHeightQD :: QDefinition
 slcHeightQD = mkQuantDef midpntHght slcHeightEqn
 
 slcHeightEqn :: Expr
-slcHeightEqn = dbl 0.5 `mulRe` (sy sliceHghtRight `addRe` sy sliceHghtLeft) 
+slcHeightEqn = (int 1 $/ int 2) `mulRe` (sy sliceHghtRight `addRe` sy sliceHghtLeft) 
 
 slcHeightNotes :: [Sentence]
 slcHeightNotes = [S "This" +:+ phrase equation +:+ S "is based on the" +:+ 
@@ -191,7 +191,7 @@ ratioVarQD = mkQuantDef scalFunc ratioVarEqn
 
 ratioVarEqn :: Expr
 ratioVarEqn = completeCase [case1, case2]
-  where case1 = (dbl 1, sy constF)
+  where case1 = (int 1, sy constF)
 
         case2 = (sin (sy QM.pi_ `mulRe` ((inxi slipDist $- idx (sy slipDist) (int 0)) $/
                 (indxn slipDist $- idx (sy slipDist) (int 0)))), not_ (sy constF))
@@ -207,9 +207,9 @@ convertFunc1QD = mkQuantDef shrResC convertFunc1Eqn
 
 convertFunc1Eqn :: Expr
 convertFunc1Eqn = (sy normToShear `mulRe` inxi scalFunc `mulRe` 
-  cos (inxi baseAngle) $- sin (inxi baseAngle)) `mulRe` tan (sy fricAngle) $- 
-  (sy normToShear `mulRe` inxi scalFunc `mulRe` sin (inxi baseAngle) `addRe` 
-  cos (inxi baseAngle)) `mulRe` sy fs
+  cos (inxi baseAngle) $- sin (inxi baseAngle)) `mulRe` tan (sy fricAngle) $-
+  ((sy normToShear `mulRe` inxi scalFunc `mulRe` sin (inxi baseAngle) `addRe` 
+  cos (inxi baseAngle)) `mulRe` sy fs)
 
 convertFunc1Notes :: Sentence
 convertFunc1Notes = foldlSent [ch scalFunc, S "is defined in", makeRef2S ratioVariation `S.sAnd` ch baseAngle, S "is defined in", makeRef2S angleA]
@@ -225,9 +225,9 @@ convertFunc2QD = mkQuantDef mobShrC convertFunc2Eqn
 
 convertFunc2Eqn :: Expr
 convertFunc2Eqn = ((sy normToShear `mulRe` inxi scalFunc `mulRe` 
-  cos (inxi baseAngle) $- sin (inxi baseAngle)) `mulRe` tan (sy fricAngle) $- 
-  (sy normToShear `mulRe` inxi scalFunc `mulRe` sin (inxi baseAngle) `addRe` 
-  cos (inxi baseAngle)) `mulRe` sy fs) $/ 
+  cos (inxi baseAngle) $- sin (inxi baseAngle)) `mulRe` tan (sy fricAngle) $-
+  ((sy normToShear `mulRe` inxi scalFunc `mulRe` sin (inxi baseAngle) `addRe` 
+  cos (inxi baseAngle)) `mulRe` sy fs)) $/ 
   inxiM1 shrResC
 
 convertFunc2Notes :: Sentence

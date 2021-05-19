@@ -7,7 +7,8 @@ import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (assumpDom) 
 import Data.Drasil.Concepts.Math (cartesian, xAxis, yAxis, direction, origin, positive)
-import Data.Drasil.Concepts.Physics (gravity, twoD, pendulum, motion)
+import Data.Drasil.Concepts.Physics (gravity, twoD, pendulum)
+import Drasil.DblPendulum.Concepts (pendMotion)
 
 
 assumptions :: [ConceptInstance]
@@ -22,7 +23,7 @@ yAxisDir        = cic "yAxisDir"          yAxisDirDesc        "yAxisDir"        
 startOrigin     = cic "startOrigin"       startOriginDesc     "startOrigin"     assumpDom
 
 pend2DMotionDesc :: Sentence
-pend2DMotionDesc = atStartNP (the (compoundNC pendulum motion)) `S.sIs` phrase twoD +:+. sParen (getAcc twoD)
+pend2DMotionDesc = atStartNP (the pendMotion) `S.sIs` phrase twoD +:+. sParen (getAcc twoD)
 
 cartCoordDesc :: Sentence
 cartCoordDesc = atStartNP (aNINP cartesian) `S.sIs` (S "used" !.)

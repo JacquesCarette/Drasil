@@ -9,17 +9,24 @@ import Data.Drasil.Concepts.Physics (pendulum, motion, position, velocity, force
 
 
 concepts :: [IdeaDict]
-concepts = nw newtonSLRRC : map nw [rod, horizontal, vertical] 
-  ++ map nw defs ++ map nw [compoundNC pendulum motion, 
-  compoundNC horizontal position, compoundNC vertical position,
-  compoundNC horizontal velocity, compoundNC vertical velocity,
-  compoundNC horizontal force, compoundNC vertical force] 
-  --The compoundNC stuff is used in various files and should probably be put into ChunkDB from there
+concepts = nw newtonSLRRC : map nw [rod, horizontal, vertical,
+  pendMotion, horizontalPos, verticalPos, horizontalVel,
+  verticalVel, horizontalForce, verticalForce] 
+  ++ map nw defs 
        
 rod, horizontal, vertical :: NamedChunk
 rod = nc "rod" (cn' "rod")
 horizontal = nc "horizontal" (cn "horizontal") 
 vertical = nc "vertical" (cn "vertical") 
+
+pendMotion, horizontalPos, verticalPos, horizontalVel, verticalVel, horizontalForce, verticalForce :: NamedChunk
+pendMotion = compoundNC pendulum motion
+horizontalPos = compoundNC horizontal position
+verticalPos = compoundNC vertical position
+horizontalVel = compoundNC horizontal velocity
+verticalVel = compoundNC vertical velocity
+horizontalForce = compoundNC horizontal force
+verticalForce = compoundNC vertical force
 ---
 
 defs :: [ConceptChunk]

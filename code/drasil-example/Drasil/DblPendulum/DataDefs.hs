@@ -4,16 +4,15 @@ module Drasil.DblPendulum.DataDefs (dataDefs, positionIY, positionIX, angFrequen
 import Prelude hiding (sin, cos, sqrt)
 import Language.Drasil
 import qualified Utils.Drasil.Sentence as S
-import Utils.Drasil
 import Data.Drasil.SI_Units (second)
 import Theory.Drasil (DataDefinition, ddNoRefs)
 import Drasil.DblPendulum.Figures (figMotion)
-import qualified Data.Drasil.Quantities.Physics as QP (ixPos, iyPos, position,
+import qualified Data.Drasil.Quantities.Physics as QP (ixPos, iyPos,
       frequency, period, angularFrequency)
 import Drasil.DblPendulum.Unitals (lenRod, initialPendAngle)
 --import Data.Drasil.Concepts.Physics (pendulum)
 import qualified Data.Drasil.Quantities.Math as QM (pi_)
-import Drasil.DblPendulum.Concepts (horizontal, vertical)
+import Drasil.DblPendulum.Concepts (horizontalPos, verticalPos)
 
 
 dataDefs :: [DataDefinition]
@@ -34,7 +33,7 @@ figRef :: Sentence
 figRef = ch QP.ixPos `S.sIs` S "shown in" +:+. makeRef2S figMotion
 
 positionRef :: Sentence
-positionRef = ch QP.ixPos `S.isThe` phrase (compoundNC horizontal QP.position)
+positionRef = ch QP.ixPos `S.isThe` phrase horizontalPos
 
 ------------------------------------------------------
 positionIY :: DataDefinition
@@ -50,7 +49,7 @@ figReff :: Sentence
 figReff = ch QP.iyPos `S.sIs` S "shown in" +:+. makeRef2S figMotion
 
 positionReff :: Sentence
-positionReff = ch QP.iyPos `S.isThe` phrase (compoundNC vertical QP.position)
+positionReff = ch QP.iyPos `S.isThe` phrase verticalPos
 
 ------------------------------------------------------
 

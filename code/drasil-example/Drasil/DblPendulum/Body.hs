@@ -34,7 +34,7 @@ import Drasil.DblPendulum.Figures (figMotion)
 import Data.Drasil.Concepts.Math (mathcon, cartesian)
 import Data.Drasil.Quantities.Math (unitVect, unitVectj)
 import Drasil.DblPendulum.Assumptions (assumptions)
-import Drasil.DblPendulum.Concepts (rod, concepts)
+import Drasil.DblPendulum.Concepts (rod, concepts, pendMotion)
 import Drasil.DblPendulum.Goals (goals, goalsInputs)
 import Drasil.DblPendulum.DataDefs (dataDefs)
 import Drasil.DblPendulum.IMods (iMods)
@@ -99,7 +99,7 @@ justification = foldlSent [S "A", phrase pendulum, S "consists" `S.sOf` phrase m
                             S "The", phrase program, S "documented here is called", phrase pendulum]
 scope :: Sentence
 scope = foldlSent [S "the", phrase analysis `S.sOfA` phrase twoD, 
-  sParen (getAcc twoD), phrase (compoundNC pendulum motion), phrase problem,
+  sParen (getAcc twoD), phrase pendMotion, phrase problem,
                    S "with various initial conditions"]
 
 pendulumTitle :: CI

@@ -23,7 +23,8 @@ import qualified Data.Drasil.Quantities.Math as QM (pi_)
 
 -- import Drasil.Projectile.Assumptions (cartSyst, constAccel, pointMass, timeStartZero, twoDMotion)
 import Drasil.DblPendulum.Unitals (lenRod, pendDisplacementAngle)
-import Drasil.DblPendulum.Concepts (horizontal, vertical, arcLen)
+import Drasil.DblPendulum.Concepts (arcLen, horizontalPos,
+    verticalPos, horizontalVel, verticalVel, horizontalForce, verticalForce)
 
 genDefns :: [GenDefn]
 genDefns = [velocityIXGD, velocityIYGD, accelerationIXGD, accelerationIYGD,
@@ -58,7 +59,7 @@ velocityIDerivEqn1,velocityIXDerivEqn2,velocityIXDerivEqn3,velocityIXDerivEqn4 :
 
 velocityIDerivSent1 = S "At a given point in time" `sC` phrase velocity +:+ S "may be defined as"
 velocityIDerivEqn1 = sy velocity $= deriv (sy position) time
-velocityIXDerivSent2 = S "We also know the" +:+ phrase (compoundNC horizontal position)
+velocityIXDerivSent2 = S "We also know the" +:+ phrase horizontalPos
 velocityIXDerivEqn2 = sy xPos $= sy lenRod * sin (sy pendDisplacementAngle) 
 velocityIXDerivSent3 = S "Applying this,"
 velocityIXDerivEqn3 = sy xVel $= deriv (sy lenRod * sin (sy pendDisplacementAngle)) time
@@ -93,7 +94,7 @@ velocityIYDerivEqns = [velocityIDerivEqn1, velocityIYDerivEqn2,
 velocityIYDerivSent2,velocityIYDerivSent3,velocityIYDerivSent4,velocityIYDerivSent5 :: Sentence
 velocityIYDerivEqn2,velocityIYDerivEqn3,velocityIYDerivEqn4 :: Expr
 
-velocityIYDerivSent2 = S "We also know the" +:+ phrase (compoundNC vertical position)
+velocityIYDerivSent2 = S "We also know the" +:+ phrase verticalPos
 velocityIYDerivEqn2 = sy yPos $= negate (sy lenRod * cos (sy pendDisplacementAngle)) 
 velocityIYDerivSent3 = S "Applying this again,"
 velocityIYDerivEqn3 = sy yVel $= negate (deriv (sy lenRod * cos (sy pendDisplacementAngle)) time)
@@ -129,7 +130,7 @@ accelerationIDerivEqn1, accelerationIXDerivEqn2, accelerationIXDerivEqn3, accele
 
 accelerationIDerivSent1 = S "Our" +:+ phrase acceleration +: S "is"
 accelerationIDerivEqn1 = sy acceleration $= deriv (sy velocity) time 
-accelerationIXDerivSent2 = S "Earlier" `sC` S "we found the" +:+ phrase (compoundNC horizontal velocity) +:+ S "to be"
+accelerationIXDerivSent2 = S "Earlier" `sC` S "we found the" +:+ phrase horizontalVel +:+ S "to be"
 accelerationIXDerivEqn2 = relat velocityIXQD
 accelerationIXDerivSent3 = S "Applying this to our equation for" +:+ phrase acceleration
 accelerationIXDerivEqn3 = sy xAccel $= deriv (sy angularVelocity * sy lenRod * cos (sy pendDisplacementAngle)) time
@@ -164,7 +165,7 @@ accelerationIYDerivSent2, accelerationIYDerivSent3, accelerationIYDerivSent4,
     accelerationIYDerivSent5 :: Sentence
 accelerationIYDerivEqn2, accelerationIYDerivEqn3, accelerationIYDerivEqn4 :: Expr
 
-accelerationIYDerivSent2 = S "Earlier" `sC` S "we found the" +:+ phrase (compoundNC vertical velocity) +:+ S "to be"
+accelerationIYDerivSent2 = S "Earlier" `sC` S "we found the" +:+ phrase verticalVel +:+ S "to be"
 accelerationIYDerivEqn2 = relat velocityIYQD
 accelerationIYDerivSent3 = S "Applying this to our equation for" +:+ phrase acceleration
 accelerationIYDerivEqn3 = sy yAccel $= deriv (sy angularVelocity * sy lenRod * sin (sy pendDisplacementAngle)) time
@@ -179,7 +180,7 @@ hForceOnPendulumGD = gdNoRefs (OthModel hForceOnPendulumRC) (getUnit force)
            (Just hForceOnPendulumDeriv) "hForceOnPendulum" [{-Notes-}]
 
 hForceOnPendulumRC :: RelationConcept
-hForceOnPendulumRC = makeRC "hForceOnPendulumRC" (compoundNC horizontal force `onThe'` pendulum)
+hForceOnPendulumRC = makeRC "hForceOnPendulumRC" (horizontalForce `onThe'` pendulum)
            EmptyS hForceOnPendulumRel
  
 hForceOnPendulumRel :: Relation             
@@ -195,7 +196,7 @@ vForceOnPendulumGD = gdNoRefs (OthModel vForceOnPendulumRC) (getUnit force)
            (Just vForceOnPendulumDeriv) "vForceOnPendulum" [{-Notes-}]
 
 vForceOnPendulumRC :: RelationConcept
-vForceOnPendulumRC = makeRC "vForceOnPendulumRC" (compoundNC vertical force `onThe'` pendulum) 
+vForceOnPendulumRC = makeRC "vForceOnPendulumRC" (verticalForce `onThe'` pendulum) 
            EmptyS vForceOnPendulumRel
  
 vForceOnPendulumRel :: Relation             

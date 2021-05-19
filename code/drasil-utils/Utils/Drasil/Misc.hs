@@ -5,7 +5,7 @@ module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, checkValidStr,
   itemRefToSent, makeListRef, makeTMatrix, maybeChanged, maybeExpanded,
   maybeWOVerb, mkEnumAbbrevList, mkTableFromColumns, noRefs, refineChain,
   showingCxnBw, sortBySymbol, sortBySymbolTuple, substitute, tAndDOnly,
-  tAndDWAcc, tAndDWSym, typUncr, underConsidertn, unwrap, weave, zipSentList) where
+  tAndDWAcc, tAndDWSym, typUncr, underConsidertn, unwrap, weave, zipSentList, fterms) where
 
 import Language.Drasil
 import Utils.Drasil.Fold (FoldType(List), SepType(Comma), foldlList, foldlSent)
@@ -227,3 +227,10 @@ checkValidStr s [] = Right s
 checkValidStr s (x:xs)
   | x `elem` s = Left $ "Invalid character: \'" ++ [x] ++ "\' in string \"" ++ s ++ ['\"']
   | otherwise  = checkValidStr s xs
+
+-- FIXME: fterms is here instead of Utils because of cyclic import
+-- | Apply a binary function to the terms of two named ideas, instead of to the named
+-- ideas themselves. Ex. @fterms compoundPhrase t1 t2@ instead of
+-- @compoundPhrase (t1 ^. term) (t2 ^. term)@
+fterms :: (NamedIdea c, NamedIdea d) => (NP -> NP -> t) -> c -> d -> t
+fterms f a b = f (a ^. term) (b ^. term)

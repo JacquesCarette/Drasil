@@ -3,6 +3,7 @@ module Data.Drasil.Concepts.Physics where
 --  up with a better one.
 import Language.Drasil
 import Utils.Drasil.Sentence
+import Utils.Drasil
 
 import Data.Drasil.Domains (mathematics, physics)
 import Data.Drasil.Concepts.Documentation (property, value)
@@ -196,19 +197,19 @@ yConstAccel = dccWDS "yConstAccel" (nounPhraseSent $ phrase yComp `sOf` phrase c
 
 
 --FIXME: COMBINATION HACK (for all below)
-angDisp = dcc "angularDisplacement" (compoundPhrase' (angular ^. term) (displacement ^. term))
+angDisp = dcc "angularDisplacement" (fterms compoundPhrase' angular displacement)
   "the angle through which an object moves on a circular path"
-angVelo = dcc "angularVelocity" (compoundPhrase' (angular ^. term) (velocity ^. term))
+angVelo = dcc "angularVelocity" (fterms compoundPhrase' angular velocity)
   "the rate of change of angular position of a rotating body"
-angAccel = dcc "angularAcceleration" (compoundPhrase' (angular ^. term) (acceleration ^. term))
+angAccel = dcc "angularAcceleration" (fterms compoundPhrase' angular acceleration)
   "the rate of change of angular velocity"
 constAccel = dcc "constantAcceleration" (cn "constant acceleration")
   "a one-dimensional acceleration that is constant"
-linDisp = dcc "linearDisplacement" (compoundPhrase' (linear ^. term) (displacement ^. term)) 
+linDisp = dcc "linearDisplacement" (fterms compoundPhrase' linear displacement) 
   "movement in one direction along a single axis"
-linVelo = dcc "linearVelocity" (compoundPhrase' (linear ^. term) (velocity ^. term)) 
+linVelo = dcc "linearVelocity" (fterms compoundPhrase' linear velocity) 
   "the speed of a moving object, dependent on the perspective taken"
-linAccel = dcc "linearAcceleration" (compoundPhrase' (linear ^. term) (acceleration ^. term)) 
+linAccel = dcc "linearAcceleration" (fterms compoundPhrase' linear acceleration) 
   "the rate of change of velocity without a change in direction"
 
 -- The following feel like they're missing something/need to be more

@@ -1,11 +1,12 @@
 module Data.Drasil.Concepts.Thermodynamics where
 
 import Language.Drasil
+import Utils.Drasil
 
 import Data.Drasil.Concepts.Documentation (source, theory)
 import Data.Drasil.Concepts.Physics (energy)
 
-import Control.Lens((^.))
+--import Control.Lens((^.))
 
 thermocon :: [ConceptChunk]
 thermocon = [boilPt, boiling, degree_', enerSrc, heat, heatCapSpec, heatTrans,
@@ -67,8 +68,8 @@ thermalConductor  = dcc "thermalConductor"  (cn' "thermal conductor")
 thermalEnergy     = dcc "thermalEnergy"     (cnIES "thermal energy")
                       "the energy that comes from heat"
 
-enerSrc           = dcc "enerSrc"     (compoundPhrase' (energy ^. term)    (source ^. term))
+enerSrc           = dcc "enerSrc"     (fterms compoundPhrase' energy source)
                       "a source from which useful energy can be extracted"
-htTransTheo       = dcc "htTransTheo" (compoundPhrase' (heatTrans ^. term) (theory ^. term))
+htTransTheo       = dcc "htTransTheo" (fterms compoundPhrase' heatTrans theory)
                       ("the theory predicting the energy transfer that may take " ++
                       "place between material bodies as a result of temperature difference")

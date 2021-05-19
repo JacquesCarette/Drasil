@@ -57,9 +57,9 @@ newtonLUGRC = makeRC "newtonLUGRC"
 newtonLUGRel :: Relation
 newtonLUGRel = sy force $=
   sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/
-  (sy dispNorm $^ int 2)) `mulRe` sy dVect $=
+  (sy dispNorm $^ dbl 2)) `mulRe` sy dVect $=
   sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/
-  (sy dispNorm $^ int 2)) `mulRe` (sy distMass $/ sy dispNorm)
+  (sy dispNorm $^ dbl 2)) `mulRe` (sy distMass $/ sy dispNorm)
 
 -- Can't include fractions within a sentence (in the part where 'r denotes the
 -- unit displacement vector, equivalent to r/||r||' (line 184)). Changed to a

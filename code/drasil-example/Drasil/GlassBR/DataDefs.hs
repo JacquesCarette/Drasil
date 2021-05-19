@@ -48,7 +48,7 @@ qDefns = Parallel hFromtQD {-DD2-} [glaTyFacQD {-DD6-}] : --can be calculated on
 
 riskEq :: Expr
 riskEq = (sy sflawParamK $/
-  (mulRe (sy plateLen) (sy plateWidth) $^ (sy sflawParamM $- int 1))) `mulRe`
+  (mulRe (sy plateLen) (sy plateWidth) $^ (sy sflawParamM $- dbl 1))) `mulRe`
   ((sy modElas `mulRe` square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac `mulRe` exp (sy stressDistFac)
 
 -- FIXME [4] !!!
@@ -79,7 +79,7 @@ hFromt = dd hFromtQD [makeCite astm2009] Nothing "minThick" [hMin]
 --DD3-- (#749)
 
 loadDFEq :: Expr
-loadDFEq = (sy loadDur $/ int 60) $^ (sy sflawParamM $/ int 16)
+loadDFEq = (sy loadDur $/ dbl 60) $^ (sy sflawParamM $/ dbl 16)
 
 loadDFQD :: QDefinition
 loadDFQD = mkQuantDef lDurFac loadDFEq
@@ -105,7 +105,7 @@ strDisFac = dd strDisFacQD [makeCite astm2009] Nothing "stressDistFac"
 --DD5--
 
 nonFLEq :: Expr
-nonFLEq = mulRe (mulRe (sy tolLoad) (sy modElas)) (sy minThick $^ int 4) $/
+nonFLEq = mulRe (mulRe (sy tolLoad) (sy modElas)) (sy minThick $^ dbl 4) $/
   square (mulRe (sy plateLen) (sy plateWidth))
 
 nonFLQD :: QDefinition
@@ -134,7 +134,7 @@ glaTyFac = dd glaTyFacQD [makeCite astm2009] Nothing "gTF"
 
 dimLLEq :: Expr
 dimLLEq = mulRe (sy demand) (square (mulRe (sy plateLen) (sy plateWidth)))
-  $/ mulRe (mulRe (sy modElas) (sy minThick $^ int 4)) (sy gTF)
+  $/ mulRe (mulRe (sy modElas) (sy minThick $^ dbl 4)) (sy gTF)
 
 dimLLQD :: QDefinition
 dimLLQD = mkQuantDef dimlessLoad dimLLEq
@@ -160,7 +160,7 @@ tolPre = dd tolPreQD [makeCite astm2009] Nothing "tolLoad"
 
 tolStrDisFacEq :: Expr
 tolStrDisFacEq = ln (ln (int 1 $/ (int 1 $- sy pbTol))
-  `mulRe` ((sy plateLen `mulRe` sy plateWidth) $^ (sy sflawParamM $- int 1) $/
+  `mulRe` ((sy plateLen `mulRe` sy plateWidth) $^ (sy sflawParamM $- dbl 1) $/
     (sy sflawParamK `mulRe` ((sy modElas `mulRe`
     square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac)))
 
@@ -175,7 +175,7 @@ tolStrDisFac = dd tolStrDisFacQD [makeCite astm2009] Nothing "sdfTol"
 --DD10--
 
 standOffDisEq :: Expr
-standOffDisEq = sqrt (addRe (addRe (sy sdx $^ int 2) (sy sdy $^ int 2)) (sy sdz $^ int 2)) -- TODO: int exponents?
+standOffDisEq = sqrt ((sy sdx $^ dbl 2) `addRe` (sy sdy $^ dbl 2) `addRe` (sy sdz $^ dbl 2))
 
 standOffDisQD :: QDefinition
 standOffDisQD = mkQuantDef standOffDist standOffDisEq
@@ -206,7 +206,7 @@ eqTNTWDD = dd eqTNTWQD [makeCite astm2009] Nothing "eqTNTW" []
 
 --DD13--
 probOfBreakEq :: Expr
-probOfBreakEq = int 1 $- exp (neg (sy risk))
+probOfBreakEq = dbl 1 $- exp (neg (sy risk))
 
 probOfBreakQD :: QDefinition
 probOfBreakQD = mkQuantDef probBr probOfBreakEq

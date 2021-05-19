@@ -119,7 +119,7 @@ rocTempDerivConsFlx s assumps = [S "Where",
 rocTempDerivConsFlxSWHS :: Sentence
 rocTempDerivConsFlxSWHS = foldlSent [S "The integral over the", phrase surface,
   S "could be simplified because the thermal flux is assumed constant over",
-  ch inSA `S.sAnd` ch outSA `S.sAnd` E (int 0), S "on all other" +:+. plural surface,
+  ch inSA `S.sAnd` ch outSA `S.sAnd` E (dbl 0), S "on all other" +:+. plural surface,
   S "Outward flux is considered positive"]
 
 rocTempDerivDens :: [Sentence]

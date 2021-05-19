@@ -149,7 +149,7 @@ effCohesion = uqc "c'" (cn "effective cohesion")
 fricAngle = uqc "varphi'" (cn "effective angle of friction")
   ("the angle of inclination with respect to the horizontal axis of " ++
   "the Mohr-Coulomb shear resistance line") --http://www.geotechdata.info
-  (prime vPhi) degree Real [physc $ Bounded (Exc, int 0) (Exc, int 90)]
+  (prime vPhi) degree Real [physc $ Bounded (Exc, dbl 0) (Exc, dbl 90)]
   (dbl 25) defaultUncrt
 
 dryWeight = uqc "gamma" (cn "soil dry unit weight")

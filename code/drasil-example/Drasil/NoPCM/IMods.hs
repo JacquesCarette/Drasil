@@ -46,16 +46,16 @@ eBalanceOnWtrRC = makeRC "eBalanceOnWtrRC" (nounPhraseSP $ "Energy balance on " 
   -- (mkLabelSame "eBalnaceOnWtr" (Def Instance))
 
 balWtrRel :: Relation
-balWtrRel = deriv (sy tempW) time $= (int 1 $/ sy tauW) `mulRe`
+balWtrRel = deriv (sy tempW) time $= (dbl 1 $/ sy tauW) `mulRe`
   (sy tempC $- apply1 tempW time)
 
 balWtrNotes :: [Sentence]
 balWtrNotes = map foldlSent [
   [ch tauW `S.sIs` S "calculated from", makeRef2S balanceDecayRate],
   [S "The above", phrase equation, S "applies as long as the", phrase water,
-   S "is in", phrase liquid, S "form" `sC` E (int 0 $< sy tempW $< int 100),
-   sParen (unwrap $ getUnit tempW), S "where", E (int 0),
-   sParen (unwrap $ getUnit tempW) `S.sAnd` E (int 100),
+   S "is in", phrase liquid, S "form" `sC` E (dbl 0 $< sy tempW $< dbl 100),
+   sParen (unwrap $ getUnit tempW), S "where", E (dbl 0),
+   sParen (unwrap $ getUnit tempW) `S.sAnd` E (dbl 100),
    sParen (unwrap $ getUnit tempW), S "are the", phrase melting `S.sAnd`
    plural boilPt `S.sOf` phrase water `sC` S "respectively", sParen (makeRef2S assumpWAL)]]
 
@@ -90,7 +90,7 @@ eBalanceOnWtrDerivEqn3 = deriv (sy tempW) time $=
   (sy wMass `mulRe` sy htCapW)) `mulRe`  (sy tempC $- sy tempW)
 
 eBalanceOnWtrDerivEqn4 =  
-  deriv (sy tempW) time $= (int 1 $/ sy tauW) `mulRe` (sy tempC $- sy tempW)
+  deriv (sy tempW) time $= (dbl 1 $/ sy tauW) `mulRe` (sy tempC $- sy tempW)
 
 eBalanceOnWtrDerivEqns :: [Expr]
 eBalanceOnWtrDerivEqns = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3, eBalanceOnWtrDerivEqn4]

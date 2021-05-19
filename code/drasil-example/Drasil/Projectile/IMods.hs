@@ -35,9 +35,9 @@ iMods = [timeIM, landPosIM, offsetIM, messageIM]
 ---
 timeIM :: InstanceModel
 timeIM = imNoRefs (OthModel timeRC) 
-  [qwC launSpeed $ UpFrom (Exc, int 0)
-  ,qwC launAngle $ Bounded (Exc, int 0) (Exc, sy pi_ $/ int 2)]
-  (qw flightDur) [UpFrom (Exc, int 0)]
+  [qwC launSpeed $ UpFrom (Exc, dbl 0)
+  ,qwC launAngle $ Bounded (Exc, dbl 0) (Exc, sy pi_ $/ int 2)]
+  (qw flightDur) [UpFrom (Exc, dbl 0)]
   (Just timeDeriv) "calOfLandingTime" [angleConstraintNote, gravitationalAccelConstNote, timeConsNote]
 
 timeRC :: RelationConcept
@@ -59,11 +59,11 @@ timeDerivSent1 = foldlSentCol [S "We know that" +:+.
   makeRef2S posVecGD, S "gives us"]
 timeDerivSent2 = foldlSentCol [S "To find the", phrase time, S "that the",
   phrase projectile, S "lands" `sC` S "we want to find the", ch time, phrase value,
-  sParen (ch flightDur), S "where", E (sy yPos $= int 0) +:+. sParen (S "since the" +:+
+  sParen (ch flightDur), S "where", E (sy yPos $= dbl 0) +:+. sParen (S "since the" +:+
   phrase target `S.sIs` S "on the" +:+ phrase xAxis +:+ S "from" +:+ makeRef2S targetXAxis),
   S "From the", phrase equation, S "above",S "we get"]
 timeDerivSent3 = foldlSentCol [S "Dividing by", ch flightDur,
-  sParen (S "with the" +:+ phrase constraint +:+ E (sy flightDur $> int 0)),
+  sParen (S "with the" +:+ phrase constraint +:+ E (sy flightDur $> dbl 0)),
   S "gives us"]
 timeDerivSent4 = S "Solving for" +:+ ch flightDur +: S "gives us"
 timeDerivSent5 = foldlSentCol [S "From", makeRef2S speedIY,
@@ -75,9 +75,9 @@ timeDerivEqns = [E.timeDerivEqn1, E.timeDerivEqn2, E.timeDerivEqn3, E.timeDerivE
 ---
 landPosIM :: InstanceModel
 landPosIM = imNoRefs (OthModel landPosRC) 
-  [qwC launSpeed $ UpFrom (Exc, int 0), 
-   qwC launAngle $ Bounded (Exc, int 0) (Exc, sy pi_ $/ int 2)]
-  (qw landPos) [UpFrom (Exc, int 0)]
+  [qwC launSpeed $ UpFrom (Exc, dbl 0), 
+   qwC launAngle $ Bounded (Exc, dbl 0) (Exc, sy pi_ $/ int 2)]
+  (qw landPos) [UpFrom (Exc, dbl 0)]
   (Just landPosDeriv) "calOfLandingDist" [angleConstraintNote, gravitationalAccelConstNote, landPosConsNote]
 
 landPosRC :: RelationConcept
@@ -93,8 +93,8 @@ landPosDerivSents = [landPosDerivSent1, landPosDerivSent2, landPosDerivSent3, la
 landPosDerivSent1, landPosDerivSent2, landPosDerivSent3, landPosDerivSent4 :: Sentence
 landPosDerivSent1 = foldlSentCol [S "We know that" +:+.
   foldlList Comma List 
-    [eqnWSource (sy ixPos $= int 0) launchOrigin,
-     eqnWSource (sy xConstAccel $= int 0) accelXZero],
+    [eqnWSource (sy ixPos $= dbl 0) launchOrigin,
+     eqnWSource (sy xConstAccel $= dbl 0) accelXZero],
   S "Substituting these", plural value, S "into the x-direction" `S.sOf`
   makeRef2S posVecGD, S "gives us"]
 landPosDerivSent2 = foldlSentCol [S "To find the", phrase landPos `sC`
@@ -110,8 +110,8 @@ landPosDerivEqns = [E.landPosDerivEqn1, E.landPosDerivEqn2, E.landPosDerivEqn3, 
 ---
 offsetIM :: InstanceModel
 offsetIM = imNoDerivNoRefs (OthModel offsetRC)
-  [qwC landPos $ UpFrom (Exc, int 0)
-  ,qwC targPos $ UpFrom (Exc, int 0)]
+  [qwC landPos $ UpFrom (Exc, dbl 0)
+  ,qwC targPos $ UpFrom (Exc, dbl 0)]
   (qw offset) [] "offsetIM" [landPosNote, landAndTargPosConsNote]
 
 offsetRC :: RelationConcept
@@ -121,7 +121,7 @@ offsetRC = makeRC "offsetRC" (nounPhraseSP "offset") EmptyS $ sy offset $= E.off
 messageIM :: InstanceModel
 messageIM = imNoDerivNoRefs (OthModel messageRC) 
   [qwC offset $ UpFrom (Exc, neg (sy landPos))
-  ,qwC targPos $ UpFrom (Exc, int 0)]
+  ,qwC targPos $ UpFrom (Exc, dbl 0)]
   (qw message)
   [] "messageIM" [offsetNote, targPosConsNote, offsetConsNote, tolNote]
 
@@ -136,7 +136,7 @@ angleConstraintNote, gravitationalAccelConstNote, landAndTargPosConsNote, landPo
   timeConsNote, tolNote :: Sentence
 
 angleConstraintNote = foldlSent [S "The", phrase constraint,
-  E (int 0 $< sy launAngle $< (sy pi_ $/ int 2)) `S.sIs` S "from",
+  E (dbl 0 $< sy launAngle $< (sy pi_ $/ int 2)) `S.sIs` S "from",
   makeRef2S posXDirection `S.sAnd` makeRef2S yAxisGravity `sC`
   S "and is shown" `S.sIn` makeRef2S figLaunch]
 
@@ -144,22 +144,22 @@ gravitationalAccelConstNote = ch gravitationalAccelConst `S.sIs`
   S "defined in" +:+. makeRef2S gravAccelValue
 
 landAndTargPosConsNote = S "The" +:+ plural constraint +:+
-  E (sy landPos $> int 0) `S.sAnd` E (sy targPos $> int 0) `S.sAre` S "from" +:+. makeRef2S posXDirection
+  E (sy landPos $> dbl 0) `S.sAnd` E (sy targPos $> dbl 0) `S.sAre` S "from" +:+. makeRef2S posXDirection
 
 landPosNote = ch landPos `S.sIs` S "from" +:+. makeRef2S landPosIM
 
 landPosConsNote = S "The" +:+ phrase constraint +:+
-  E (sy landPos $> int 0) `S.sIs` S "from" +:+. makeRef2S posXDirection
+  E (sy landPos $> dbl 0) `S.sIs` S "from" +:+. makeRef2S posXDirection
 
 offsetNote = ch offset `S.sIs` S "from" +:+. makeRef2S offsetIM
 
 offsetConsNote = foldlSent [S "The", phrase constraint, E (sy offset $> neg (sy landPos)) `S.sIs`
-  S "from the fact that", E (sy landPos $> int 0) `sC` S "from", makeRef2S posXDirection]
+  S "from the fact that", E (sy landPos $> dbl 0) `sC` S "from", makeRef2S posXDirection]
 
 targPosConsNote = S "The" +:+ phrase constraint +:+
-  E (sy targPos $> int 0) `S.sIs` S "from" +:+. makeRef2S posXDirection
+  E (sy targPos $> dbl 0) `S.sIs` S "from" +:+. makeRef2S posXDirection
 
 timeConsNote = S "The" +:+ phrase constraint +:+
-  E (sy flightDur $> int 0) `S.sIs` S "from" +:+. makeRef2S timeStartZero
+  E (sy flightDur $> dbl 0) `S.sIs` S "from" +:+. makeRef2S timeStartZero
 
 tolNote = ch tol `S.sIs` S "defined in" +:+. makeRef2S (SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]))

@@ -210,7 +210,7 @@ noPCMODEOpts = odeOptions RK45 (sy absTol) (sy relTol) (sy timeStep) (dbl 0)
 noPCMODEInfo :: ODEInfo
 noPCMODEInfo = odeInfo (quantvar time) (quantvar tempW)
   [quantvar tauW, quantvar tempC] (dbl 0) (sy timeFinal) (sy tempInit) 
-  [(int 1 $/ sy tauW) `mulRe` (sy tempC $- idx (sy tempW) (int 0))] noPCMODEOpts
+  [(dbl 1 $/ sy tauW) `mulRe` (sy tempC $- idx (sy tempW) (int 0))] noPCMODEOpts
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns

@@ -246,7 +246,7 @@ impulseVDerivEqn1 =  sy QP.force $= sy QPP.mass `mulRe` sy QP.acceleration
 
 impulseVDerivEqn2 :: Expr
 impulseVDerivEqn2 = defint (eqSymb timeT) (sy time_1) (sy time_2) (sy QP.force) $=
-                    sy QPP.mass `mulRe` defint (eqSymb QP.velocity) (sy velo_1) (sy velo_2) (int 1)
+                    sy QPP.mass `mulRe` defint (eqSymb QP.velocity) (sy velo_1) (sy velo_2) (dbl 1)
 
 
 impulseVDerivEqn3 :: Expr
@@ -295,9 +295,9 @@ coeffRestitutionDesc :: Sentence
 coeffRestitutionDesc = foldlSent [S "The", getTandS QP.restitutionCoef,
   S "determines the elasticity of a collision between two" +:+. plural rigidBody,
   foldlList Comma List [
-  E (sy QP.restitutionCoef $= int 1) +:+ S "results in an elastic collision",
-  E (sy QP.restitutionCoef $< int 1) +:+ S "results in an inelastic collision",
-  E (sy QP.restitutionCoef $= int 0) +:+ S "results in a totally inelastic collision"]]
+  E (sy QP.restitutionCoef $= dbl 1) +:+ S "results in an elastic collision",
+  E (sy QP.restitutionCoef $< dbl 1) +:+ S "results in an inelastic collision",
+  E (sy QP.restitutionCoef $= dbl 0) +:+ S "results in a totally inelastic collision"]]
 -----------------------DD15 Kinetic Energy--------------------------------  
 kEnergyDD :: DataDefinition
 kEnergyDD = ddNoRefs kEnergy Nothing "kEnergy"
@@ -307,7 +307,7 @@ kEnergy :: QDefinition
 kEnergy = mkQuantDef QP.kEnergy kEnergyEqn
 
 kEnergyEqn :: Expr
-kEnergyEqn = sy QPP.mass `mulRe` (sy QP.velocity $^ int 2) $/ int 2
+kEnergyEqn = sy QPP.mass `mulRe` (sy QP.velocity $^ dbl 2) $/ dbl 2
 
 kEnergyDesc :: Sentence
 kEnergyDesc = foldlSent [atStart QP.kEnergy `S.sIs` (QP.kEnergy ^. defn)]
@@ -321,7 +321,7 @@ momentOfInertia :: QDefinition
 momentOfInertia = mkQuantDef QP.momentOfInertia momentOfInertiaEqn
 
 momentOfInertiaEqn :: Expr
-momentOfInertiaEqn = sumAll (Variable "j") $ sy massj `mulRe` (sy rRot $^ int 2)
+momentOfInertiaEqn = sumAll (Variable "j") $ sy massj `mulRe` (sy rRot $^ dbl 2)
 
 momentOfInertiaDesc :: Sentence
 momentOfInertiaDesc = foldlSent [S "The", getTandS QP.momentOfInertia,

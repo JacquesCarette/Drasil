@@ -71,7 +71,7 @@ tankVolumeQD :: QDefinition
 tankVolumeQD = mkQuantDef tankVol tankVolumeEqn
 
 tankVolumeEqn :: Expr
-tankVolumeEqn = sy pi_ `mulRe` ((sy diam $/ int 2) $^ int 2) `mulRe` sy tankLength
+tankVolumeEqn = sy pi_ `mulRe` ((sy diam $/ dbl 2) $^ dbl 2) `mulRe` sy tankLength
 
 tankVolume :: DataDefinition
 tankVolume = ddNoRefs tankVolumeQD Nothing "tankVolume" []
@@ -165,7 +165,7 @@ ddMeltFrac :: DataDefinition
 ddMeltFrac = dd ddMeltFracQD [makeCite koothoor2013]
   Nothing "meltFrac" [meltFracConst, makeRef2S ddHtFusion]
   where meltFracConst = S "The" +:+ phrase value `S.sOf` E (sy meltFrac) `S.sIs`
-                        S "constrained to" +:+. E (int 0 $<= sy meltFrac $<= int 1)
+                        S "constrained to" +:+. E (dbl 0 $<= sy meltFrac $<= dbl 1)
 
 ----
 

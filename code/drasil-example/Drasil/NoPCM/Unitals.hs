@@ -25,7 +25,7 @@ tempInit :: UncertQ
 tempInit = uqc "tempInit" (nounPhraseSP "initial temperature")
   "the temperature at the beginning of the simulation"
   (sub (eqSymb temp) lInit) centigrade Real
-  [physc $ Bounded (Exc, int 0) (Exc, int 100)] (dbl 40) defaultUncrt
+  [physc $ Bounded (Exc, dbl 0) (Exc, dbl 100)] (dbl 40) defaultUncrt
 
 specParamValList :: [QDefinition]
 specParamValList = [tankLengthMin, tankLengthMax,

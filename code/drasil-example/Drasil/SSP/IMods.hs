@@ -434,22 +434,22 @@ nrmShrDerivEqns = [nrmShrDerivEqn1, nrmShrDerivEqn2, nrmShrDerivEqn3,
   nrmShrDerivEqn4]
 
 nrmShrDerivEqn1, nrmShrDerivEqn2, nrmShrDerivEqn3, nrmShrDerivEqn4 :: Expr
-nrmShrDerivEqn1 = int 0 $=
-  momExpr (\ x y -> x `addRe` (sy normToShear `mulRe` (inxi baseWthX $/ int 2) `mulRe`
+nrmShrDerivEqn1 = dbl 0 $=
+  momExpr (\ x y -> x `addRe` (sy normToShear `mulRe` (inxi baseWthX $/ dbl 2) `mulRe`
   (inxi intNormForce `mulRe` inxi scalFunc `addRe` (inxiM1 intNormForce `mulRe`
   inxiM1 scalFunc))) `addRe` y)
 
 nrmShrDerivEqn2 = sy normToShear $= momExpr addRe
-  $/ neg ((inxi baseWthX $/ int 2) `mulRe` (inxi intNormForce `mulRe` inxi scalFunc `addRe`
+  $/ neg ((inxi baseWthX $/ dbl 2) `mulRe` (inxi intNormForce `mulRe` inxi scalFunc `addRe`
   (inxiM1 intNormForce `mulRe` inxiM1 scalFunc)))
 
 nrmShrDerivEqn3 = sy normToShear $= momExprNoKQ addRe
-  $/ neg ((inxi baseWthX $/ int 2) `mulRe` (inxi intNormForce `mulRe` inxi scalFunc `addRe`
+  $/ neg ((inxi baseWthX $/ dbl 2) `mulRe` (inxi intNormForce `mulRe` inxi scalFunc `addRe`
   (inxiM1 intNormForce `mulRe` inxiM1 scalFunc)))
 
 nrmShrDerivEqn4 = sy normToShear $= sum1toN
   (inxi baseWthX `mulRe` (sy nrmForceSum `addRe` sy watForceSum) `mulRe` tan (inxi baseAngle) `addRe`
-  (inxi midpntHght `mulRe` neg (int 2 `mulRe` inxi surfHydroForce `mulRe` sin (inxi surfAngle))))
+  (inxi midpntHght `mulRe` neg (dbl 2 `mulRe` inxi surfHydroForce `mulRe` sin (inxi surfAngle))))
   $/ sum1toN
   (inxi baseWthX `mulRe` (inxi intNormForce `mulRe` inxi scalFunc `addRe`
   (inxiM1 intNormForce `mulRe` inxiM1 scalFunc)))
@@ -473,7 +473,7 @@ nrmShrFNumRel = inxi nrmShearNum $= incompleteCase [case1,case2,case3]
         case2 = ((inxi baseWthX `mulRe`
           (sy nrmForceSum `addRe` sy watForceSum)
            `mulRe` tan (inxi baseAngle)) `addRe` (sy midpntHght `mulRe` (neg
-          (int 2) `mulRe` inxi surfHydroForce `mulRe` sin (inxi surfAngle))),
+          (dbl 2) `mulRe` inxi surfHydroForce `mulRe` sin (inxi surfAngle))),
           int 2 $<= sy index $<= (sy numbSlices $- int 1))
         case3 = (indxn baseWthX `mulRe` (idx (sy intNormForce)
           (sy numbSlices $- int 1) `addRe` idx (sy watrForce)

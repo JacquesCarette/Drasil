@@ -60,7 +60,7 @@ frequencyDDQD :: QDefinition
 frequencyDDQD = mkQuantDef QP.frequency frequencyDDEqn
 
 frequencyDDEqn :: Expr
-frequencyDDEqn = int 1 $/ sy QP.period
+frequencyDDEqn = dbl 1 $/ sy QP.period
 
 
 frequencyRef :: Sentence
@@ -75,7 +75,7 @@ angFrequencyDDQD :: QDefinition
 angFrequencyDDQD = mkQuantDef QP.angularFrequency angFrequencyDDEqn
 
 angFrequencyDDEqn :: Expr
-angFrequencyDDEqn = int 2 `mulRe` sy QM.pi_ $/ sy QP.period
+angFrequencyDDEqn = dbl 2 `mulRe` sy QM.pi_ $/ sy QP.period
 
 angFrequencyRef :: Sentence
 angFrequencyRef = ch QP.period `S.sIs` S "from" +:+ makeRef2S periodSHMDD
@@ -89,7 +89,7 @@ periodSHMDDQD :: QDefinition
 periodSHMDDQD = mkQuantDef QP.period periodSHMDDEqn
 
 periodSHMDDEqn :: Expr
-periodSHMDDEqn = int 1 $/ sy QP.frequency
+periodSHMDDEqn = dbl 1 $/ sy QP.frequency
 
 periodSHMRef :: Sentence
 periodSHMRef = ch QP.period `S.sIs` S "from" +:+ makeRef2S frequencyDD

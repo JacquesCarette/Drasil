@@ -254,7 +254,7 @@ angFrequencyDerivSent3 = S "Therefore,"
 angFrequencyDerivEqn3 = sy momentOfInertia `mulRe` deriv (deriv (sy pendDisplacementAngle) time) time $= neg (sy lenRod)
              `mulRe` sy mass `mulRe` sy gravitationalAccel `mulRe` sin (sy pendDisplacementAngle)
 angFrequencyDerivSent4 = S "Substituting for" +:+ ch momentOfInertia
-angFrequencyDerivEqn4 = (sy mass `mulRe` (sy lenRod $^ int 2)) `mulRe` deriv (deriv (sy pendDisplacementAngle) time) time $= neg (sy lenRod)
+angFrequencyDerivEqn4 = (sy mass `mulRe` (sy lenRod $^ dbl 2)) `mulRe` deriv (deriv (sy pendDisplacementAngle) time) time $= neg (sy lenRod)
              `mulRe` sy mass `mulRe` sy gravitationalAccel `mulRe` sin (sy pendDisplacementAngle)
 angFrequencyDerivSent5 = S "Crossing out" +:+ ch mass `S.sAnd` ch lenRod +:+ S "we have"
 angFrequencyDerivEqn5 = deriv (deriv (sy pendDisplacementAngle) time) time $= neg (sy gravitationalAccel $/ sy lenRod) `mulRe` sin (sy pendDisplacementAngle)
@@ -279,7 +279,7 @@ periodPendRC = makeRC "periodPendRC" (nounPhraseSent $ foldlSent_
             [ S "The", phrase period, S "on the", phrase pendulum]) EmptyS periodPendRel
  
 periodPendRel :: Relation
-periodPendRel = sy period $= int 2 `mulRe` sy QM.pi_ `mulRe` sqrt (sy lenRod $/ sy gravitationalAccel)
+periodPendRel = sy period $= dbl 2 `mulRe` sy QM.pi_ `mulRe` sqrt (sy lenRod $/ sy gravitationalAccel)
 
 periodPendDeriv :: Derivation
 periodPendDeriv = mkDerivName (phrase period +:+ phrase pendulum) (weave [periodPendDerivSents, map E periodPendDerivEqns])    
@@ -299,7 +299,7 @@ periodPendDerivSent1 = phrase period `S.the_ofThe'` phrase pendulum +:+ S "can b
 periodPendDerivEqn1 = sy angularFrequency $= sqrt (sy gravitationalAccel $/ sy lenRod)
 periodPendDerivSent2 =  S "Therefore from the" +:+ phrase equation +:+ makeRef2S angFrequencyDD `sC` S "we have"
 
-periodPendDerivEqn2 = sy period $= int 2 `mulRe` sy QM.pi_ `mulRe` sqrt (sy lenRod $/ sy gravitationalAccel)
+periodPendDerivEqn2 = sy period $= dbl 2 `mulRe` sy QM.pi_ `mulRe` sqrt (sy lenRod $/ sy gravitationalAccel)
 
 periodPendNotes :: Sentence
 periodPendNotes = S "The" +:+ phrase frequency `S.sAnd` phrase period +:+ S "are defined in" +:+ makeRef2S frequencyDD +:+

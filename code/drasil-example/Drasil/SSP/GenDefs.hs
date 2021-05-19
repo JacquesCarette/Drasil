@@ -257,8 +257,8 @@ momentEql = makeRC "momentEql" (nounPhraseSP "moment equilibrium")
   momEqlDesc momEqlRel -- genDef6Label
 
 momEqlRel :: Relation
-momEqlRel = int 0 $= momExpr (\ x y -> x `addRe`
-  ((inxi baseWthX $/ int 2) `mulRe` (inxi intShrForce `addRe` inxiM1 intShrForce)) `addRe` y)
+momEqlRel = dbl 0 $= momExpr (\ x y -> x `addRe`
+  ((inxi baseWthX $/ dbl 2) `mulRe` (inxi intShrForce `addRe` inxiM1 intShrForce)) `addRe` y)
 
 momEqlDesc :: Sentence
 momEqlDesc = foldlSent [S "This", phrase equation, S "satisfies",
@@ -420,37 +420,37 @@ momEqlDerivTorqueEqn = sy torque $= cross (sy displacement) (sy force)
 momEqlDerivMomentEqn = sy genericM $= sy rotForce `mulRe` sy momntArm
 
 momEqlDerivNormaliEqn = neg (inxi intNormForce) `mulRe` (inxi sliceHght `addRe`
-  ((inxi baseWthX $/ int 2) `mulRe` tan (inxi baseAngle)))
+  ((inxi baseWthX $/ dbl 2) `mulRe` tan (inxi baseAngle)))
 
 momEqlDerivNormaliM1Eqn = inxiM1 intNormForce `mulRe` (inxiM1 sliceHght $-
-  ((inxi baseWthX $/ int 2) `mulRe` tan (inxi baseAngle)))
+  ((inxi baseWthX $/ dbl 2) `mulRe` tan (inxi baseAngle)))
 
 momEqlDerivWateriEqn = neg (inxi watrForce) `mulRe` ((int 1 $/ int 3) `mulRe` inxi sliceHghtW `addRe`
-  ((inxi baseWthX $/ int 2) `mulRe` tan (inxi baseAngle)))
+  ((inxi baseWthX $/ dbl 2) `mulRe` tan (inxi baseAngle)))
 
 momEqlDerivWateriM1Eqn = inxiM1 watrForce `mulRe` ((int 1 $/ int 3) `mulRe` inxiM1 sliceHghtW `addRe`
-  ((inxi baseWthX $/ int 2) `mulRe` tan (inxi baseAngle)))
+  ((inxi baseWthX $/ dbl 2) `mulRe` tan (inxi baseAngle)))
 
-momEqlDerivSheariEqn = inxi intShrForce `mulRe` (inxi baseWthX $/ int 2)
+momEqlDerivSheariEqn = inxi intShrForce `mulRe` (inxi baseWthX $/ dbl 2)
 
-momEqlDerivSheariM1Eqn = inxiM1 intShrForce `mulRe` (inxi baseWthX $/ int 2)
+momEqlDerivSheariM1Eqn = inxiM1 intShrForce `mulRe` (inxi baseWthX $/ dbl 2)
 
-momEqlDerivSeismicIntEqn = neg $ defint (eqSymb yi) (int 0) (inxi midpntHght)
+momEqlDerivSeismicIntEqn = neg $ defint (eqSymb yi) (dbl 0) (inxi midpntHght)
   (sy earthqkLoadFctr `mulRe` sy genericSpWght `mulRe` inxi baseWthX `mulRe` sy yi)
 
 momEqlDerivSeismicEqn = neg $ sy earthqkLoadFctr `mulRe` sy genericSpWght `mulRe`
-  inxi baseWthX `mulRe` (inxi midpntHght $^ int 2 $/ int 2)
+  inxi baseWthX `mulRe` (inxi midpntHght $^ dbl 2 $/ dbl 2)
 
 momEqlDerivSeismicWEqn = neg $ sy earthqkLoadFctr `mulRe` inxi slcWght `mulRe`
-  (inxi midpntHght $/ int 2)
+  (inxi midpntHght $/ dbl 2)
 
 momEqlDerivHydroEqn = inxi surfHydroForce `mulRe` sin (inxi surfAngle) `mulRe`
   inxi midpntHght
 
 momEqlDerivExtEqn = inxi surfLoad `mulRe` sin (inxi impLoadAngle) `mulRe` inxi midpntHght
 
-momEqlDerivFinalEqn = int 0 $= momExpr (\ x y -> x `addRe`
-  ((inxi baseWthX $/ int 2) `mulRe` (inxi intShrForce `addRe` inxiM1 intShrForce)) `addRe` y)
+momEqlDerivFinalEqn = dbl 0 $= momExpr (\ x y -> x `addRe`
+  ((inxi baseWthX $/ dbl 2) `mulRe` (inxi intShrForce `addRe` inxiM1 intShrForce)) `addRe` y)
 
 --
 
@@ -599,7 +599,7 @@ bsWtrFEqn = inxi baseHydroForce $= inxi baseLngth `mulRe` sy waterWeight `mulRe`
           (inxiM1 waterHght $- inxiM1 slipHght),
           (inxi waterHght $> inxi slipHght) $||
           (inxiM1 waterHght $> inxiM1 slipHght))
-        case2 = (int 0, (inxi waterHght $<= inxi slipHght) $&&
+        case2 = (dbl 0, (inxi waterHght $<= inxi slipHght) $&&
           (inxiM1 waterHght $<= inxiM1 slipHght))
 
 bsWtrFNotes :: Sentence
@@ -682,7 +682,7 @@ srfWtrFEqn = inxi surfHydroForce $= inxi surfLngth `mulRe` sy waterWeight `mulRe
           (inxiM1 waterHght $- inxiM1 slopeHght),
           (inxi waterHght $> inxi slopeHght) $||
           (inxiM1 waterHght $> inxiM1 slopeHght))
-        case2 = (int 0, (inxi waterHght $<= inxi slopeHght) $&&
+        case2 = (dbl 0, (inxi waterHght $<= inxi slopeHght) $&&
           (inxiM1 waterHght $<= inxiM1 slopeHght))
 
 srfWtrFNotes :: Sentence

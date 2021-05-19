@@ -44,14 +44,14 @@ intersliceWtrFQD = mkQuantDef watrForce intersliceWtrFEqn
 
 intersliceWtrFEqn :: Expr
 intersliceWtrFEqn = completeCase [case1,case2,case3]
-  where case1 = (((inxi slopeHght $- inxi slipHght) $^ int 2 $/ int 2) `mulRe`
-          sy waterWeight `addRe` (((inxi waterHght $- inxi slopeHght) $^ int 2) `mulRe`
+  where case1 = (((inxi slopeHght $- inxi slipHght) $^ dbl 2 $/ dbl 2) `mulRe`
+          sy waterWeight `addRe` (((inxi waterHght $- inxi slopeHght) $^ dbl 2) `mulRe`
           sy waterWeight), inxi waterHght $>= inxi slopeHght)
 
-        case2 = (((inxi waterHght $- inxi slipHght) $^ int 2 $/ int 2)  `mulRe` sy waterWeight,
+        case2 = (((inxi waterHght $- inxi slipHght) $^ dbl 2 $/ dbl 2)  `mulRe` sy waterWeight,
                 inxi slopeHght $> inxi waterHght $> inxi slipHght)
 
-        case3 = (int 0, inxi waterHght $<= inxi slipHght)
+        case3 = (dbl 0, inxi waterHght $<= inxi slipHght)
 
 --DD angleA: base angles
 
@@ -191,7 +191,7 @@ ratioVarQD = mkQuantDef scalFunc ratioVarEqn
 
 ratioVarEqn :: Expr
 ratioVarEqn = completeCase [case1, case2]
-  where case1 = (int 1, sy constF)
+  where case1 = (dbl 1, sy constF)
 
         case2 = (sin (sy QM.pi_ `mulRe` ((inxi slipDist $- idx (sy slipDist) (int 0)) $/
                 (indxn slipDist $- idx (sy slipDist) (int 0)))), not_ (sy constF))

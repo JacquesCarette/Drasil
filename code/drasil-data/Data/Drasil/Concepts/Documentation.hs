@@ -297,9 +297,3 @@ unlikeChgDom  = ccs (mkIdea "unlikeChgDom"  (unlikelyChg ^. term)              $
 srsDomains :: [ConceptChunk]
 srsDomains = [cw srsDom, goalStmtDom, reqDom, funcReqDom, nonFuncReqDom, assumpDom, chgProbDom, likeChgDom, unlikeChgDom]
 
--- FIXME: fterms is here instead of Utils because of cyclic import
--- | Apply a binary function to the terms of two named ideas, instead of to the named
--- ideas themselves. Ex. @fterms compoundPhrase t1 t2@ instead of
--- @compoundPhrase (t1 ^. term) (t2 ^. term)@
-fterms :: (NamedIdea c, NamedIdea d) => (NP -> NP -> t) -> c -> d -> t
-fterms f a b = f (a ^. term) (b ^. term)

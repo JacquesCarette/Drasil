@@ -7,7 +7,6 @@ import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource)
 import Utils.Drasil
 import Utils.Drasil.Sentence
 
-import Control.Lens ((^.))
 
 mathcon :: [ConceptChunk]
 
@@ -106,9 +105,9 @@ leftSide  = commonIdeaWithDict "leftSide"  (nounPhrase "left hand side"  "left h
 rightSide = commonIdeaWithDict "rightSide" (nounPhrase "right hand side" "right hand sides") "RHS" [mathematics]
 
 --FIXME: COMBINATION HACK (all below)
-euclidN = dcc "euclidNorm"    (compoundPhrase' (euclidSpace ^. term) (norm ^. term)) "euclidean norm"
-normalV = dcc "normal vector" (compoundPhrase' (normal ^. term) (vector ^. term)) "unit outward normal vector for a surface"
-perpV   = dcc "perp_vect"     (compoundPhrase' (perp ^. term) (vector ^. term)) "vector perpendicular or 90 degrees to another vector"
+euclidN = dcc "euclidNorm"    (fterms compoundPhrase' euclidSpace norm) "euclidean norm"
+normalV = dcc "normal vector" (fterms compoundPhrase' normal vector) "unit outward normal vector for a surface"
+perpV   = dcc "perp_vect"     (fterms compoundPhrase' perp vector) "vector perpendicular or 90 degrees to another vector"
 rOfChng = dcc "rOfChng"       (rate `of_` change) "ratio between a change in one variable relative to a corresponding change in another"
-surArea = dcc "surArea"       (compoundPhrase' (surface ^. term) (area ^. term)) "a measure of the total area that the surface of the object occupies"
-unitV   = dcc "unit_vect"     (compoundPhrase' (unit_ ^. term) (vector ^. term)) "a vector that has a magnitude of one"
+surArea = dcc "surArea"       (fterms compoundPhrase' surface area) "a measure of the total area that the surface of the object occupies"
+unitV   = dcc "unit_vect"     (fterms compoundPhrase' unit_ vector) "a vector that has a magnitude of one"

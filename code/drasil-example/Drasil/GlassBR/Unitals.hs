@@ -106,7 +106,7 @@ standOffDist = uq (constrained' (dqd sD (Variable "SD") Real metre)
 nomThick = cuc "nomThick" 
   (nounPhraseSent $ S "nominal thickness" +:+ displayDblConstrntsAsSet 
     nomThick nominalThicknesses)
-  lT millimetre {-DiscreteD nominalThicknesses-} Rational 
+  lT millimetre {-Discrete nominalThicknesses, but not implemented-} Rational 
   [enumc nominalThicknesses] $ dbl 8
 
 glassTypeCon  = constrainedNRV' (dqdNoUnit glassTy lG String) 

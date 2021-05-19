@@ -7,7 +7,6 @@ import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource)
 import Utils.Drasil
 import Utils.Drasil.Sentence
 
---import Control.Lens ((^.))
 
 mathcon :: [ConceptChunk]
 

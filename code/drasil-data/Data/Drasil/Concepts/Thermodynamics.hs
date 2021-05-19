@@ -6,7 +6,6 @@ import Utils.Drasil
 import Data.Drasil.Concepts.Documentation (source, theory)
 import Data.Drasil.Concepts.Physics (energy)
 
---import Control.Lens((^.))
 
 thermocon :: [ConceptChunk]
 thermocon = [boilPt, boiling, degree_', enerSrc, heat, heatCapSpec, heatTrans,

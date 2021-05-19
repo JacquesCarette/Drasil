@@ -420,7 +420,7 @@ momEqlDerivTorqueEqn = sy torque $= cross (sy displacement) (sy force)
 momEqlDerivMomentEqn = sy genericM $= sy rotForce `mulRe` sy momntArm
 
 momEqlDerivNormaliEqn = neg (inxi intNormForce) `mulRe` (inxi sliceHght `addRe`
-  (inxi baseWthX $/ int 2) `mulRe` tan (inxi baseAngle))
+  ((inxi baseWthX $/ int 2) `mulRe` tan (inxi baseAngle)))
 
 momEqlDerivNormaliM1Eqn = inxiM1 intNormForce `mulRe` (inxiM1 sliceHght $-
   ((inxi baseWthX $/ int 2) `mulRe` tan (inxi baseAngle)))

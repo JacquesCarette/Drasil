@@ -1654,7 +1654,6 @@ Radians :: Space
 Vect :: Space -> Space
 Array :: Space -> Space
 Actor :: String -> Space
-DiscreteI :: [Int] -> Space
 DiscreteD :: [Double] -> Space
 DiscreteS :: [String] -> Space
 Void :: Space

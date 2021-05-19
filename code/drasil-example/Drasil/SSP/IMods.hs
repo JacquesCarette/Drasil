@@ -269,14 +269,14 @@ fctSftyDerivEqn7 = (inxi shearFNoIntsl `addRe` ((neg (sy normToShear) `mulRe` in
   `mulRe` sin (inxi baseAngle))) `mulRe` tan (sy fricAngle))) $/ sy fs
 
 fctSftyDerivEqn8 :: Expr
-fctSftyDerivEqn8 = (inxi intNormForce `mulRe` ((sy normToShear `mulRe` inxi scalFunc `mulRe`
-  cos (inxi baseAngle) $- sin (inxi baseAngle)) `mulRe` tan (sy fricAngle) $-
-  (sy normToShear `mulRe` inxi scalFunc `mulRe` sin (inxi baseAngle) `addRe`
-  cos (inxi baseAngle)) `mulRe` sy fs)) $= (inxiM1 intNormForce `mulRe`
-  ((sy normToShear `mulRe` inxiM1 scalFunc `mulRe` cos (inxi baseAngle) $-
-  sin (inxi baseAngle)) `mulRe` tan (sy fricAngle) $- (sy normToShear `mulRe`
+fctSftyDerivEqn8 = (inxi intNormForce `mulRe` ((sy normToShear `mulRe` inxi scalFunc `mulRe` 
+  cos (inxi baseAngle) $- sin (inxi baseAngle)) `mulRe` tan (sy fricAngle) $- 
+  ((sy normToShear `mulRe` inxi scalFunc `mulRe` sin (inxi baseAngle) `addRe` 
+  cos (inxi baseAngle)) `mulRe` sy fs))) $= (inxiM1 intNormForce `mulRe`
+  ((sy normToShear `mulRe` inxiM1 scalFunc `mulRe` cos (inxi baseAngle) $- 
+  sin (inxi baseAngle)) `mulRe` tan (sy fricAngle) $- ((sy normToShear `mulRe`
   inxiM1 scalFunc `mulRe` sin (inxi baseAngle) `addRe` cos (inxi baseAngle)) `mulRe`
-  sy fs) `addRe` sy fs `mulRe` inxi shearFNoIntsl $- inxi shearRNoIntsl)
+  sy fs)) `addRe` (sy fs `mulRe` inxi shearFNoIntsl) $- inxi shearRNoIntsl)
 
 fctSftyDerivEqn9 :: Expr
 fctSftyDerivEqn9 = (inxi intNormForce `mulRe` inxi shrResC) $= (inxiM1 mobShrC `mulRe`

@@ -341,6 +341,11 @@ weave :: [[a]] -> [a]
 --   S<a>Hello</a>, S"World]]
 zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]]
 
+-- | Apply a binary function to the terms of two named ideas, instead of to
+--   the named ideas themselves. Ex. <tt>fterms compoundPhrase t1 t2</tt>
+--   instead of <tt>compoundPhrase (t1 ^. term) (t2 ^. term)</tt>.
+fterms :: (NamedIdea c, NamedIdea d) => (NP -> NP -> t) -> c -> d -> t
+
 -- | Creates a NP by combining two <a>NamedIdea</a>s with the word "and"
 --   between their terms. Plural is defaulted to <tt>(phrase t1) "of"
 --   (plural t2)</tt>

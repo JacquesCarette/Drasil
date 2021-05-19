@@ -371,11 +371,6 @@ unlikeChgDom :: ConceptChunk
 -- | List of SRS-related concepts, including SRS
 srsDomains :: [ConceptChunk]
 
--- | Apply a binary function to the terms of two named ideas, instead of to
---   the named ideas themselves. Ex. <tt>fterms compoundPhrase t1 t2</tt>
---   instead of <tt>compoundPhrase (t1 ^. term) (t2 ^. term)</tt>
-fterms :: (NamedIdea c, NamedIdea d) => (NP -> NP -> t) -> c -> d -> t
-
 module Data.Drasil.Concepts.PhysicalProperties
 physicalcon :: [ConceptChunk]
 gaseous :: ConceptChunk

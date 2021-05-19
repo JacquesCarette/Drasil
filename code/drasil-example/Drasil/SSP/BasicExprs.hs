@@ -39,9 +39,9 @@ eqlExprNSepG :: (Expr -> Expr) -> (Expr -> Expr) -> (Expr -> Expr -> Expr) -> Ex
 eqlExprNSepG f1_ f2_ _e_ = (inxi slcWght `_e_`
   (inxi surfHydroForce `mulRe` cos (inxi surfAngle)) `addRe`
   (inxi surfLoad `mulRe` cos (inxi impLoadAngle))) `mulRe` f1_ (inxi baseAngle) `addRe`
-  (neg (sy earthqkLoadFctr) `mulRe` inxi slcWght $- inxi watrForce `addRe` inxiM1 watrForce `addRe`
+  ((neg (sy earthqkLoadFctr) `mulRe` inxi slcWght $- inxi watrForce `addRe` inxiM1 watrForce `addRe`
   (inxi surfHydroForce `mulRe` sin (inxi surfAngle)) `addRe`
-  (inxi surfLoad `mulRe` sin (inxi impLoadAngle))) `mulRe` f2_ (inxi baseAngle) `addRe`
+  (inxi surfLoad `mulRe` sin (inxi impLoadAngle))) `mulRe` f2_ (inxi baseAngle)) `addRe`
   ((neg (inxi intNormForce) `addRe` inxiM1 intNormForce) `mulRe` f2_ (inxi baseAngle))
 
 eqlExprNoKQ :: (Expr -> Expr) -> (Expr -> Expr) -> (Expr -> Expr -> Expr) -> Expr

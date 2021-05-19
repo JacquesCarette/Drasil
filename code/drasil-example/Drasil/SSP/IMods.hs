@@ -235,22 +235,6 @@ fctSftyDerivEqn5 = eqlExprNoKQ sin cos addRe `addRe`
   inxi baseHydroForce) `mulRe`
   tan (sy fricAngle) `addRe` (sy effCohesion `mulRe` inxi baseLngth)) $/ sy fs
 
--- fctSftyDerivEqn4 :: Expr
--- fctSftyDerivEqn4 = eqlExprSepG sin cos addRe `addRe`
---   (neg (inxiM1 intShrForce) `addRe` inxi intShrForce) `mulRe` sin (inxi baseAngle) $=
---   ((eqlExprNSepG cos sin addRe `addRe`
---   (neg (inxiM1 intShrForce) `addRe` inxi intShrForce) `mulRe` cos (inxi baseAngle) $-
---   inxi baseHydroForce) `mulRe`
---   tan (sy fricAngle) `addRe` (sy effCohesion `mulRe` inxi baseLngth)) $/ sy fs
-
--- fctSftyDerivEqn5 :: Expr
--- fctSftyDerivEqn5 = eqlExprNoKQ sin cos addRe `addRe`
---   (neg (inxiM1 intShrForce) `addRe` inxi intShrForce) `mulRe` sin (inxi baseAngle) $=
---   ((eqlExprNNoKQ cos sin addRe `addRe`
---   (neg (inxiM1 intShrForce) `addRe` inxi intShrForce) `mulRe` cos (inxi baseAngle) $-
---   inxi baseHydroForce) `mulRe`
---   tan (sy fricAngle) `addRe` (sy effCohesion `mulRe` inxi baseLngth)) $/ sy fs
-
 fctSftyDerivEqn6 :: Expr
 fctSftyDerivEqn6 = (inxi shearFNoIntsl `addRe` ((neg (inxiM1 intShrForce) `addRe`
   inxi intShrForce) `mulRe` sin (inxi baseAngle)) $- ((neg (inxi intNormForce) `addRe`

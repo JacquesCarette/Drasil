@@ -105,12 +105,12 @@ public class InputConstraints {
             System.out.println(".");
             throw new Exception("InputError");
         }
-        if (!(0 < inParams.b && inParams.b <= inParams.a)) {
+        if (!(0.0 < inParams.b && inParams.b <= inParams.a)) {
             System.out.print("b has value ");
             System.out.print(inParams.b);
             System.out.print(", but is expected to be ");
             System.out.print("between ");
-            System.out.print(0);
+            System.out.print(0.0);
             System.out.print(" and ");
             System.out.print(inParams.a);
             System.out.print(" (a)");
@@ -155,12 +155,12 @@ public class InputConstraints {
             System.out.println(".");
             throw new Exception("InputError");
         }
-        if (!(inParams.AR >= 1)) {
+        if (!(inParams.AR >= 1.0)) {
             System.out.print("AR has value ");
             System.out.print(inParams.AR);
             System.out.print(", but is expected to be ");
             System.out.print("above ");
-            System.out.print(1);
+            System.out.print(1.0);
             System.out.println(".");
             throw new Exception("InputError");
         }

@@ -350,7 +350,7 @@ RefBy & \hyperref[GD:velVec]{GD: velVec} and \hyperref[GD:rectPos]{GD: rectPos}
 \end{minipage}
 \paragraph{Detailed derivation of rectilinear velocity:}
 \label{GD:rectVelDeriv}
-Assume we have rectilinear motion of a particle (of negligible size and shape, from \hyperref[pointMass]{A: pointMass}); that is, motion in a straight line. The velocity is $v$ and the acceleration is $a$. The motion in \hyperref[TM:acceleration]{TM: acceleration} is now one-dimensional with a constant acceleration, represented by ${a^{c}}$. The initial velocity (at $t=0$, from \hyperref[timeStartZero]{A: timeStartZero}) is represented by ${v^{\text{i}}}$. From \hyperref[TM:acceleration]{TM: acceleration}, using the above symbols we have:
+Assume we have rectilinear motion of a particle (of negligible size and shape, from \hyperref[pointMass]{A: pointMass}); that is, motion in a straight line. The velocity is $v$ and the acceleration is $a$. The motion in \hyperref[TM:acceleration]{TM: acceleration} is now one-dimensional with a constant acceleration, represented by ${a^{c}}$. The initial velocity (at $t=0.0$, from \hyperref[timeStartZero]{A: timeStartZero}) is represented by ${v^{\text{i}}}$. From \hyperref[TM:acceleration]{TM: acceleration}, using the above symbols we have:
 
 \begin{displaymath}
 {a^{c}}=\frac{\,dv}{\,dt}
@@ -358,7 +358,7 @@ Assume we have rectilinear motion of a particle (of negligible size and shape, f
 Rearranging and integrating, we have:
 
 \begin{displaymath}
-\int_{{v^{\text{i}}}}^{v}{1}\,dv=\int_{0}^{t}{{a^{c}}}\,dt
+\int_{{v^{\text{i}}}}^{v}{1.0}\,dv=\int_{0.0}^{t}{{a^{c}}}\,dt
 \end{displaymath}
 Performing the integration, we have the required equation:
 
@@ -380,7 +380,7 @@ Units & ${\text{m}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           p={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2}
+           p={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2.0}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -401,7 +401,7 @@ RefBy & \hyperref[GD:posVec]{GD: posVec}
 \end{minipage}
 \paragraph{Detailed derivation of rectilinear position:}
 \label{GD:rectPosDeriv}
-Assume we have rectilinear motion of a particle (of negligible size and shape, from \hyperref[pointMass]{A: pointMass}); that is, motion in a straight line. The position is $p$ and the velocity is $v$. The motion in \hyperref[TM:velocity]{TM: velocity} is now one-dimensional. The initial position (at $t=0$, from \hyperref[timeStartZero]{A: timeStartZero}) is represented by ${p^{\text{i}}}$. From \hyperref[TM:velocity]{TM: velocity}, using the above symbols we have:
+Assume we have rectilinear motion of a particle (of negligible size and shape, from \hyperref[pointMass]{A: pointMass}); that is, motion in a straight line. The position is $p$ and the velocity is $v$. The motion in \hyperref[TM:velocity]{TM: velocity} is now one-dimensional. The initial position (at $t=0.0$, from \hyperref[timeStartZero]{A: timeStartZero}) is represented by ${p^{\text{i}}}$. From \hyperref[TM:velocity]{TM: velocity}, using the above symbols we have:
 
 \begin{displaymath}
 v=\frac{\,dp}{\,dt}
@@ -409,17 +409,17 @@ v=\frac{\,dp}{\,dt}
 Rearranging and integrating, we have:
 
 \begin{displaymath}
-\int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{v}\,dt
+\int_{{p^{\text{i}}}}^{p}{1.0}\,dp=\int_{0.0}^{t}{v}\,dt
 \end{displaymath}
 From \hyperref[GD:rectVel]{GD: rectVel} we can replace $v$:
 
 \begin{displaymath}
-\int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{{v^{\text{i}}}+{a^{c}} t}\,dt
+\int_{{p^{\text{i}}}}^{p}{1.0}\,dp=\int_{0.0}^{t}{{v^{\text{i}}}+{a^{c}} t}\,dt
 \end{displaymath}
 Performing the integration, we have the required equation:
 
 \begin{displaymath}
-p={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2}
+p={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2.0}
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -469,10 +469,10 @@ For a two-dimensional Cartesian coordinate system (\hyperref[twoDMotion]{A: twoD
                                                                                                                                                                                                                                              \end{bmatrix}$. The acceleration is assumed to be constant (\hyperref[constAccel]{A: constAccel}) and the constant acceleration vector is represented as ${\mathbf{a}^{\text{c}}}=\begin{bmatrix}
                                                                                                                                                                                                                                                                                                                                                                                                                                {{a_{\text{x}}}^{\text{c}}}\\
                                                                                                                                                                                                                                                                                                                                                                                                                                {{a_{\text{y}}}^{\text{c}}}
-                                                                                                                                                                                                                                                                                                                                                                                                                               \end{bmatrix}$. The initial velocity (at $t=0$, from \hyperref[timeStartZero]{A: timeStartZero}) is represented by ${\mathbf{v}^{\text{i}}}=\begin{bmatrix}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           {{v_{\text{x}}}^{\text{i}}}\\
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           {{v_{\text{y}}}^{\text{i}}}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           \end{bmatrix}$. Since we have a Cartesian coordinate system, \hyperref[GD:rectVel]{GD: rectVel} can be applied to each coordinate of the velocity vector to yield the required equation:
+                                                                                                                                                                                                                                                                                                                                                                                                                               \end{bmatrix}$. The initial velocity (at $t=0.0$, from \hyperref[timeStartZero]{A: timeStartZero}) is represented by ${\mathbf{v}^{\text{i}}}=\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             {{v_{\text{x}}}^{\text{i}}}\\
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             {{v_{\text{y}}}^{\text{i}}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             \end{bmatrix}$. Since we have a Cartesian coordinate system, \hyperref[GD:rectVel]{GD: rectVel} can be applied to each coordinate of the velocity vector to yield the required equation:
 
 \begin{displaymath}
 \mathbf{v}=\begin{bmatrix}
@@ -496,8 +496,8 @@ Units & ${\text{m}}$
 \\ \midrule \\
 Equation & \begin{displaymath}
            \mathbf{p}=\begin{bmatrix}
-                      {{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}} t+\frac{{{a_{\text{x}}}^{\text{c}}} t^{2}}{2}\\
-                      {{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}} t+\frac{{{a_{\text{y}}}^{\text{c}}} t^{2}}{2}
+                      {{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}} t+\frac{{{a_{\text{x}}}^{\text{c}}} t^{2}}{2.0}\\
+                      {{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}} t+\frac{{{a_{\text{y}}}^{\text{c}}} t^{2}}{2.0}
                       \end{bmatrix}
            \end{displaymath}
 \\ \midrule \\
@@ -534,15 +534,15 @@ For a two-dimensional Cartesian coordinate system (\hyperref[twoDMotion]{A: twoD
                                                                                                                                                                                                                                                                                                  \end{bmatrix}$. The acceleration is assumed to be constant (\hyperref[constAccel]{A: constAccel}) and the constant acceleration vector is represented as ${\mathbf{a}^{\text{c}}}=\begin{bmatrix}
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    {{a_{\text{x}}}^{\text{c}}}\\
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    {{a_{\text{y}}}^{\text{c}}}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   \end{bmatrix}$. The initial velocity (at $t=0$, from \hyperref[timeStartZero]{A: timeStartZero}) is represented by ${\mathbf{v}^{\text{i}}}=\begin{bmatrix}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               {{v_{\text{x}}}^{\text{i}}}\\
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               {{v_{\text{y}}}^{\text{i}}}
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               \end{bmatrix}$. Since we have a Cartesian coordinate system, \hyperref[GD:rectPos]{GD: rectPos} can be applied to each coordinate of the position vector to yield the required equation:
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   \end{bmatrix}$. The initial velocity (at $t=0.0$, from \hyperref[timeStartZero]{A: timeStartZero}) is represented by ${\mathbf{v}^{\text{i}}}=\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 {{v_{\text{x}}}^{\text{i}}}\\
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 {{v_{\text{y}}}^{\text{i}}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 \end{bmatrix}$. Since we have a Cartesian coordinate system, \hyperref[GD:rectPos]{GD: rectPos} can be applied to each coordinate of the position vector to yield the required equation:
 
 \begin{displaymath}
 \mathbf{p}=\begin{bmatrix}
-           {{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}} t+\frac{{{a_{\text{x}}}^{\text{c}}} t^{2}}{2}\\
-           {{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}} t+\frac{{{a_{\text{y}}}^{\text{c}}} t^{2}}{2}
+           {{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}} t+\frac{{{a_{\text{x}}}^{\text{c}}} t^{2}}{2.0}\\
+           {{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}} t+\frac{{{a_{\text{y}}}^{\text{c}}} t^{2}}{2.0}
            \end{bmatrix}
 \end{displaymath}
 \subsubsection{Data Definitions}
@@ -691,18 +691,18 @@ Output & ${t_{\text{flight}}}$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {v_{\text{launch}}}\gt{}0
+                    {v_{\text{launch}}}\gt{}0.0
                     \end{displaymath}
                     \begin{displaymath}
-                    0\lt{}θ\lt{}\frac{π}{2}
+                    0.0\lt{}θ\lt{}\frac{π}{2}
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & \begin{displaymath}
-                     {t_{\text{flight}}}\gt{}0
+                     {t_{\text{flight}}}\gt{}0.0
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{\mathbf{g}}
+           {t_{\text{flight}}}=\frac{2.0 {v_{\text{launch}}} \sin\left(θ\right)}{\mathbf{g}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -712,11 +712,11 @@ Description & \begin{symbDescription}
               \item{$\mathbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The constraint $0\lt{}θ\lt{}\frac{π}{2}$ is from \hyperref[posXDirection]{A: posXDirection} and \hyperref[yAxisGravity]{A: yAxisGravity}, and is shown in \hyperref[Figure:Launch]{Fig:Launch}.
+Notes & The constraint $0.0\lt{}θ\lt{}\frac{π}{2}$ is from \hyperref[posXDirection]{A: posXDirection} and \hyperref[yAxisGravity]{A: yAxisGravity}, and is shown in \hyperref[Figure:Launch]{Fig:Launch}.
         
         $\mathbf{g}$ is defined in \hyperref[gravAccelValue]{A: gravAccelValue}.
         
-        The constraint ${t_{\text{flight}}}\gt{}0$ is from \hyperref[timeStartZero]{A: timeStartZero}.
+        The constraint ${t_{\text{flight}}}\gt{}0.0$ is from \hyperref[timeStartZero]{A: timeStartZero}.
         
 \\ \midrule \\
 Source & --
@@ -729,30 +729,30 @@ RefBy & \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} and \hyperref[calcV
 \end{minipage}
 \paragraph{Detailed derivation of flight duration:}
 \label{IM:calOfLandingTimeDeriv}
-We know that ${{p_{\text{y}}}^{\text{i}}}=0$ (\hyperref[launchOrigin]{A: launchOrigin}) and ${{a_{\text{y}}}^{\text{c}}}=-\mathbf{g}$ (\hyperref[accelYGravity]{A: accelYGravity}). Substituting these values into the y-direction of \hyperref[GD:posVec]{GD: posVec} gives us:
+We know that ${{p_{\text{y}}}^{\text{i}}}=0.0$ (\hyperref[launchOrigin]{A: launchOrigin}) and ${{a_{\text{y}}}^{\text{c}}}=-\mathbf{g}$ (\hyperref[accelYGravity]{A: accelYGravity}). Substituting these values into the y-direction of \hyperref[GD:posVec]{GD: posVec} gives us:
 
 \begin{displaymath}
-{p_{\text{y}}}={{v_{\text{y}}}^{\text{i}}} t-\frac{\mathbf{g} t^{2}}{2}
+{p_{\text{y}}}={{v_{\text{y}}}^{\text{i}}} t-\frac{\mathbf{g} t^{2}}{2.0}
 \end{displaymath}
-To find the time that the projectile lands, we want to find the $t$ value (${t_{\text{flight}}}$) where ${p_{\text{y}}}=0$ (since the target is on the $x$-axis from \hyperref[targetXAxis]{A: targetXAxis}). From the equation above we get:
+To find the time that the projectile lands, we want to find the $t$ value (${t_{\text{flight}}}$) where ${p_{\text{y}}}=0.0$ (since the target is on the $x$-axis from \hyperref[targetXAxis]{A: targetXAxis}). From the equation above we get:
 
 \begin{displaymath}
-{{v_{\text{y}}}^{\text{i}}} {t_{\text{flight}}}-\frac{\mathbf{g} {t_{\text{flight}}}^{2}}{2}=0
+{{v_{\text{y}}}^{\text{i}}} {t_{\text{flight}}}-\frac{\mathbf{g} {t_{\text{flight}}}^{2}}{2.0}=0.0
 \end{displaymath}
-Dividing by ${t_{\text{flight}}}$ (with the constraint ${t_{\text{flight}}}\gt{}0$) gives us:
+Dividing by ${t_{\text{flight}}}$ (with the constraint ${t_{\text{flight}}}\gt{}0.0$) gives us:
 
 \begin{displaymath}
-{{v_{\text{y}}}^{\text{i}}}-\frac{\mathbf{g} {t_{\text{flight}}}}{2}=0
+{{v_{\text{y}}}^{\text{i}}}-\frac{\mathbf{g} {t_{\text{flight}}}}{2.0}=0.0
 \end{displaymath}
 Solving for ${t_{\text{flight}}}$ gives us:
 
 \begin{displaymath}
-{t_{\text{flight}}}=\frac{2 {{v_{\text{y}}}^{\text{i}}}}{\mathbf{g}}
+{t_{\text{flight}}}=\frac{2.0 {{v_{\text{y}}}^{\text{i}}}}{\mathbf{g}}
 \end{displaymath}
 From \hyperref[DD:speedIY]{DD: speedIY} (with ${v^{\text{i}}}={v_{\text{launch}}}$) we can replace ${{v_{\text{y}}}^{\text{i}}}$:
 
 \begin{displaymath}
-{t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{\mathbf{g}}
+{t_{\text{flight}}}=\frac{2.0 {v_{\text{launch}}} \sin\left(θ\right)}{\mathbf{g}}
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -772,18 +772,18 @@ Output & ${p_{\text{land}}}$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {v_{\text{launch}}}\gt{}0
+                    {v_{\text{launch}}}\gt{}0.0
                     \end{displaymath}
                     \begin{displaymath}
-                    0\lt{}θ\lt{}\frac{π}{2}
+                    0.0\lt{}θ\lt{}\frac{π}{2}
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & \begin{displaymath}
-                     {p_{\text{land}}}\gt{}0
+                     {p_{\text{land}}}\gt{}0.0
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{\mathbf{g}}
+           {p_{\text{land}}}=\frac{2.0 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{\mathbf{g}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -793,11 +793,11 @@ Description & \begin{symbDescription}
               \item{$\mathbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The constraint $0\lt{}θ\lt{}\frac{π}{2}$ is from \hyperref[posXDirection]{A: posXDirection} and \hyperref[yAxisGravity]{A: yAxisGravity}, and is shown in \hyperref[Figure:Launch]{Fig:Launch}.
+Notes & The constraint $0.0\lt{}θ\lt{}\frac{π}{2}$ is from \hyperref[posXDirection]{A: posXDirection} and \hyperref[yAxisGravity]{A: yAxisGravity}, and is shown in \hyperref[Figure:Launch]{Fig:Launch}.
         
         $\mathbf{g}$ is defined in \hyperref[gravAccelValue]{A: gravAccelValue}.
         
-        The constraint ${p_{\text{land}}}\gt{}0$ is from \hyperref[posXDirection]{A: posXDirection}.
+        The constraint ${p_{\text{land}}}\gt{}0.0$ is from \hyperref[posXDirection]{A: posXDirection}.
         
 \\ \midrule \\
 Source & --
@@ -810,7 +810,7 @@ RefBy & \hyperref[IM:offsetIM]{IM: offsetIM} and \hyperref[calcValues]{FR: Calcu
 \end{minipage}
 \paragraph{Detailed derivation of landing position:}
 \label{IM:calOfLandingDistDeriv}
-We know that ${{p_{\text{x}}}^{\text{i}}}=0$ (\hyperref[launchOrigin]{A: launchOrigin}) and ${{a_{\text{x}}}^{\text{c}}}=0$ (\hyperref[accelXZero]{A: accelXZero}). Substituting these values into the x-direction of \hyperref[GD:posVec]{GD: posVec} gives us:
+We know that ${{p_{\text{x}}}^{\text{i}}}=0.0$ (\hyperref[launchOrigin]{A: launchOrigin}) and ${{a_{\text{x}}}^{\text{c}}}=0.0$ (\hyperref[accelXZero]{A: accelXZero}). Substituting these values into the x-direction of \hyperref[GD:posVec]{GD: posVec} gives us:
 
 \begin{displaymath}
 {p_{\text{x}}}={{v_{\text{x}}}^{\text{i}}} t
@@ -818,17 +818,17 @@ We know that ${{p_{\text{x}}}^{\text{i}}}=0$ (\hyperref[launchOrigin]{A: launchO
 To find the landing position, we want to find the ${p_{\text{x}}}$ value (${p_{\text{land}}}$) at flight duration (from \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}):
 
 \begin{displaymath}
-{p_{\text{land}}}=\frac{{{v_{\text{x}}}^{\text{i}}}\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{\mathbf{g}}
+{p_{\text{land}}}=\frac{{{v_{\text{x}}}^{\text{i}}}\cdot{}2.0 {v_{\text{launch}}} \sin\left(θ\right)}{\mathbf{g}}
 \end{displaymath}
 From \hyperref[DD:speedIX]{DD: speedIX} (with ${v^{\text{i}}}={v_{\text{launch}}}$) we can replace ${{v_{\text{x}}}^{\text{i}}}$:
 
 \begin{displaymath}
-{p_{\text{land}}}=\frac{{v_{\text{launch}}} \cos\left(θ\right)\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{\mathbf{g}}
+{p_{\text{land}}}=\frac{{v_{\text{launch}}} \cos\left(θ\right)\cdot{}2.0 {v_{\text{launch}}} \sin\left(θ\right)}{\mathbf{g}}
 \end{displaymath}
 Rearranging this gives us the required equation:
 
 \begin{displaymath}
-{p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{\mathbf{g}}
+{p_{\text{land}}}=\frac{2.0 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{\mathbf{g}}
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -848,10 +848,10 @@ Output & ${d_{\text{offset}}}$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {p_{\text{land}}}\gt{}0
+                    {p_{\text{land}}}\gt{}0.0
                     \end{displaymath}
                     \begin{displaymath}
-                    {p_{\text{target}}}\gt{}0
+                    {p_{\text{target}}}\gt{}0.0
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & 
@@ -868,7 +868,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & ${p_{\text{land}}}$ is from \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.
         
-        The constraints ${p_{\text{land}}}\gt{}0$ and ${p_{\text{target}}}\gt{}0$ are from \hyperref[posXDirection]{A: posXDirection}.
+        The constraints ${p_{\text{land}}}\gt{}0.0$ and ${p_{\text{target}}}\gt{}0.0$ are from \hyperref[posXDirection]{A: posXDirection}.
         
 \\ \midrule \\
 Source & --
@@ -901,7 +901,7 @@ Input Constraints & \begin{displaymath}
                     {d_{\text{offset}}}\gt{}-{p_{\text{land}}}
                     \end{displaymath}
                     \begin{displaymath}
-                    {p_{\text{target}}}\gt{}0
+                    {p_{\text{target}}}\gt{}0.0
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & 
@@ -909,8 +909,8 @@ Output Constraints &
 Equation & \begin{displaymath}
            s=\begin{cases}
              \text{``The target was hit.''}, & |\frac{{d_{\text{offset}}}}{{p_{\text{target}}}}|\lt{}ε\\
-             \text{``The projectile fell short.''}, & {d_{\text{offset}}}\lt{}0\\
-             \text{``The projectile went long.''}, & {d_{\text{offset}}}\gt{}0
+             \text{``The projectile fell short.''}, & {d_{\text{offset}}}\lt{}0.0\\
+             \text{``The projectile went long.''}, & {d_{\text{offset}}}\gt{}0.0
              \end{cases}
            \end{displaymath}
 \\ \midrule \\
@@ -923,9 +923,9 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & ${d_{\text{offset}}}$ is from \hyperref[IM:offsetIM]{IM: offsetIM}.
         
-        The constraint ${p_{\text{target}}}\gt{}0$ is from \hyperref[posXDirection]{A: posXDirection}.
+        The constraint ${p_{\text{target}}}\gt{}0.0$ is from \hyperref[posXDirection]{A: posXDirection}.
         
-        The constraint ${d_{\text{offset}}}\gt{}-{p_{\text{land}}}$ is from the fact that ${p_{\text{land}}}\gt{}0$, from \hyperref[posXDirection]{A: posXDirection}.
+        The constraint ${d_{\text{offset}}}\gt{}-{p_{\text{land}}}$ is from the fact that ${p_{\text{land}}}\gt{}0.0$, from \hyperref[posXDirection]{A: posXDirection}.
         
         $ε$ is defined in \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants}.
         
@@ -949,11 +949,11 @@ RefBy & \hyperref[outputValues]{FR: Output-Values} and \hyperref[calcValues]{FR:
 \\
 \midrule
 \endhead
-${p_{\text{target}}}$ & ${p_{\text{target}}}\gt{}0$ & $1000$ ${\text{m}}$ & 10$\%$
+${p_{\text{target}}}$ & ${p_{\text{target}}}\gt{}0$ & $1.0\cdot{}10^{3}$ ${\text{m}}$ & 10$\%$
 \\
-${v_{\text{launch}}}$ & ${v_{\text{launch}}}\gt{}0$ & $100$ $\frac{\text{m}}{\text{s}}$ & 10$\%$
+${v_{\text{launch}}}$ & ${v_{\text{launch}}}\gt{}0$ & $100.0$ $\frac{\text{m}}{\text{s}}$ & 10$\%$
 \\
-$θ$ & $0\lt{}θ\lt{}\frac{π}{2}$ & $\frac{π}{4}$ ${\text{rad}}$ & 10$\%$
+$θ$ & $0.0\lt{}θ\lt{}\frac{π}{2}$ & $\frac{π}{4}$ ${\text{rad}}$ & 10$\%$
 \\
 \bottomrule
 \caption{Input Data Constraints}

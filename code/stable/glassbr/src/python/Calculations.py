@@ -16,7 +16,7 @@ def func_J_tol(inParams):
     print("  }", file=outfile)
     outfile.close()
     
-    return math.log(math.log(1 / (1 - inParams.P_btol)) * ((inParams.a * inParams.b) ** (7.0 - 1) / (2.86e-53 * (7.17e10 * inParams.h ** 2) ** 7.0 * inParams.LDF)))
+    return math.log(math.log(1 / (1 - inParams.P_btol)) * ((inParams.a * inParams.b) ** (7.0 - 1.0) / (2.86e-53 * (7.17e10 * inParams.h ** 2) ** 7.0 * inParams.LDF)))
 
 ## \brief Calculates applied load (demand): 3 second duration equivalent pressure (Pa)
 # \param inParams structure holding the input values
@@ -46,7 +46,7 @@ def func_q_hat(inParams, q):
     print("  }", file=outfile)
     outfile.close()
     
-    return q * (inParams.a * inParams.b) ** 2 / (7.17e10 * inParams.h ** 4 * inParams.GTF)
+    return q * (inParams.a * inParams.b) ** 2 / (7.17e10 * inParams.h ** 4.0 * inParams.GTF)
 
 ## \brief Calculates tolerable load
 # \param inParams structure holding the input values
@@ -97,7 +97,7 @@ def func_NFL(inParams, q_hat_tol):
     print("  }", file=outfile)
     outfile.close()
     
-    return q_hat_tol * 7.17e10 * inParams.h ** 4 / (inParams.a * inParams.b) ** 2
+    return q_hat_tol * 7.17e10 * inParams.h ** 4.0 / (inParams.a * inParams.b) ** 2
 
 ## \brief Calculates risk of failure
 # \param inParams structure holding the input values
@@ -114,7 +114,7 @@ def func_B(inParams, J):
     print("  }", file=outfile)
     outfile.close()
     
-    return 2.86e-53 / (inParams.a * inParams.b) ** (7.0 - 1) * (7.17e10 * inParams.h ** 2) ** 7.0 * inParams.LDF * math.exp(J)
+    return 2.86e-53 / (inParams.a * inParams.b) ** (7.0 - 1.0) * (7.17e10 * inParams.h ** 2) ** 7.0 * inParams.LDF * math.exp(J)
 
 ## \brief Calculates load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
 # \param inParams structure holding the input values
@@ -161,7 +161,7 @@ def func_P_b(B):
     print("  }", file=outfile)
     outfile.close()
     
-    return 1 - math.exp(-B)
+    return 1.0 - math.exp(-B)
 
 ## \brief Calculates probability of glass breakage safety requirement
 # \param inParams structure holding the input values

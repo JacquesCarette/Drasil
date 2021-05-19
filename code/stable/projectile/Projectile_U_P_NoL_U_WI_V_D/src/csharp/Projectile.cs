@@ -33,7 +33,7 @@ public class Projectile {
         \return flight duration: the time when the projectile lands (s)
     */
     public static double func_t_flight(double v_launch, double theta, double g_vect) {
-        return 2 * v_launch * Math.Sin(theta) / g_vect;
+        return 2.0 * v_launch * Math.Sin(theta) / g_vect;
     }
     
     /** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
@@ -43,7 +43,7 @@ public class Projectile {
         \return landing position: the distance from the launcher to the final position of the projectile (m)
     */
     public static double func_p_land(double v_launch, double theta, double g_vect) {
-        return 2 * Math.Pow(v_launch, 2) * Math.Sin(theta) * Math.Cos(theta) / g_vect;
+        return 2.0 * Math.Pow(v_launch, 2) * Math.Sin(theta) * Math.Cos(theta) / g_vect;
     }
     
     /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
@@ -65,7 +65,7 @@ public class Projectile {
         if (Math.Abs(d_offset / p_target) < epsilon) {
             return "The target was hit.";
         }
-        else if (d_offset < 0) {
+        else if (d_offset < 0.0) {
             return "The projectile fell short.";
         }
         else {
@@ -106,13 +106,13 @@ public class Projectile {
             Console.Write(0);
             Console.WriteLine(".");
         }
-        if (!(0 < theta && theta < Math.PI / 2)) {
+        if (!(0.0 < theta && theta < Math.PI / 2)) {
             Console.Write("Warning: ");
             Console.Write("theta has value ");
             Console.Write(theta);
             Console.Write(", but is suggested to be ");
             Console.Write("between ");
-            Console.Write(0);
+            Console.Write(0.0);
             Console.Write(" and ");
             Console.Write(Math.PI / 2);
             Console.Write(" ((pi)/(2))");

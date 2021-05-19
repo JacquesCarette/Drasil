@@ -17,13 +17,13 @@ func input_constraints(_ v_launch: Float, _ theta: Float, _ p_target: Float) -> 
         print(0, terminator: "")
         print(".")
     }
-    if !(Float(0) < theta && Double(theta) < Double.pi / Double(2)) {
+    if !(0.0 < theta && Double(theta) < Double.pi / Double(2)) {
         print("Warning: ", terminator: "")
         print("theta has value ", terminator: "")
         print(theta, terminator: "")
         print(", but is suggested to be ", terminator: "")
         print("between ", terminator: "")
-        print(0, terminator: "")
+        print(0.0, terminator: "")
         print(" and ", terminator: "")
         print(Double.pi / Double(2), terminator: "")
         print(" ((pi)/(2))", terminator: "")

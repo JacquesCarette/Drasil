@@ -25,7 +25,7 @@ public class Calculations {
         outfile.println("  }");
         outfile.close();
         
-        return Math.log(Math.log(1 / (1 - inParams.P_btol)) * (Math.pow(inParams.a * inParams.b, 7.0 - 1) / (2.86e-53 * Math.pow(7.17e10 * Math.pow(inParams.h, 2), 7.0) * inParams.LDF)));
+        return Math.log(Math.log(1 / (1 - inParams.P_btol)) * (Math.pow(inParams.a * inParams.b, 7.0 - 1.0) / (2.86e-53 * Math.pow(7.17e10 * Math.pow(inParams.h, 2), 7.0) * inParams.LDF)));
     }
     
     /** \brief Calculates applied load (demand): 3 second duration equivalent pressure (Pa)
@@ -61,7 +61,7 @@ public class Calculations {
         outfile.println("  }");
         outfile.close();
         
-        return q * Math.pow(inParams.a * inParams.b, 2) / (7.17e10 * Math.pow(inParams.h, 4) * inParams.GTF);
+        return q * Math.pow(inParams.a * inParams.b, 2) / (7.17e10 * Math.pow(inParams.h, 4.0) * inParams.GTF);
     }
     
     /** \brief Calculates tolerable load
@@ -121,7 +121,7 @@ public class Calculations {
         outfile.println("  }");
         outfile.close();
         
-        return q_hat_tol * 7.17e10 * Math.pow(inParams.h, 4) / Math.pow(inParams.a * inParams.b, 2);
+        return q_hat_tol * 7.17e10 * Math.pow(inParams.h, 4.0) / Math.pow(inParams.a * inParams.b, 2);
     }
     
     /** \brief Calculates risk of failure
@@ -141,7 +141,7 @@ public class Calculations {
         outfile.println("  }");
         outfile.close();
         
-        return 2.86e-53 / Math.pow(inParams.a * inParams.b, 7.0 - 1) * Math.pow(7.17e10 * Math.pow(inParams.h, 2), 7.0) * inParams.LDF * Math.exp(J);
+        return 2.86e-53 / Math.pow(inParams.a * inParams.b, 7.0 - 1.0) * Math.pow(7.17e10 * Math.pow(inParams.h, 2), 7.0) * inParams.LDF * Math.exp(J);
     }
     
     /** \brief Calculates load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)
@@ -197,7 +197,7 @@ public class Calculations {
         outfile.println("  }");
         outfile.close();
         
-        return 1 - Math.exp(-B);
+        return 1.0 - Math.exp(-B);
     }
     
     /** \brief Calculates probability of glass breakage safety requirement

@@ -381,7 +381,7 @@ Label & Second Order Mass-Spring-Damper System
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \frac{1}{m s^{2}+c s+k}
+           \frac{1.0}{m s^{2}+c s+k}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -418,7 +418,7 @@ Label & The Transfer Function of the Power Plant.
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \frac{1}{s^{2}+s+20}
+           \frac{1.0}{s^{2}+s+20.0}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -621,21 +621,21 @@ Output & ${y_{\text{t}}}$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {r_{\text{t}}}\gt{}0
+                    {r_{\text{t}}}\gt{}0.0
                     \end{displaymath}
                     \begin{displaymath}
-                    {K_{\text{p}}}\gt{}0
+                    {K_{\text{p}}}\gt{}0.0
                     \end{displaymath}
                     \begin{displaymath}
-                    {K_{\text{d}}}\gt{}0
+                    {K_{\text{d}}}\gt{}0.0
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & \begin{displaymath}
-                     {y_{\text{t}}}\gt{}0
+                     {y_{\text{t}}}\gt{}0.0
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {y_{\text{t}}}-{r_{\text{t}}} {K_{\text{p}}}=0
+           \frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1.0+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20.0+{K_{\text{p}}}\right) {y_{\text{t}}}-{r_{\text{t}}} {K_{\text{p}}}=0.0
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -659,22 +659,22 @@ RefBy & \hyperref[outputValues]{FR: Output-Values} and \hyperref[calculateValues
 The Process Variable (Y(S)) in a PD Control Loop is the product of the Process Error (from \hyperref[DD:ddProcessError]{DD: ddProcessError}), Control Variable (from \hyperref[DD:ddCtrlVar]{DD: ddCtrlVar}), and the Power-Plant (from \hyperref[GD:gdPowerPlant]{GD: gdPowerPlant}).
 
 \begin{displaymath}
-{Y_{\text{s}}}=\left({R_{\text{s}}}-{Y_{\text{s}}}\right) \left({K_{\text{p}}}+{K_{\text{d}}} s\right) \frac{1}{s^{2}+s+20}
+{Y_{\text{s}}}=\left({R_{\text{s}}}-{Y_{\text{s}}}\right) \left({K_{\text{p}}}+{K_{\text{d}}} s\right) \frac{1.0}{s^{2}+s+20.0}
 \end{displaymath}
 Substituting the values and rearranging the equation.
 
 \begin{displaymath}
-s^{2} {Y_{\text{s}}}+\left(1+{K_{\text{d}}}\right) {Y_{\text{s}}} s+\left(20+{K_{\text{p}}}\right) {Y_{\text{s}}}-{R_{\text{s}}} s {K_{\text{d}}}-{R_{\text{s}}} {K_{\text{p}}}=0
+s^{2} {Y_{\text{s}}}+\left(1.0+{K_{\text{d}}}\right) {Y_{\text{s}}} s+\left(20.0+{K_{\text{p}}}\right) {Y_{\text{s}}}-{R_{\text{s}}} s {K_{\text{d}}}-{R_{\text{s}}} {K_{\text{p}}}=0.0
 \end{displaymath}
 Computing the Inverse Laplace Transform of a function (from \hyperref[TM:invLaplaceTransform]{TM: invLaplaceTransform}) of the equation.
 
 \begin{displaymath}
-\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {y_{\text{t}}}-{K_{\text{d}}} \frac{\,d{r_{\text{t}}}}{\,dt}-{r_{\text{t}}} {K_{\text{p}}}=0
+\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1.0+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20.0+{K_{\text{p}}}\right) {y_{\text{t}}}-{K_{\text{d}}} \frac{\,d{r_{\text{t}}}}{\,dt}-{r_{\text{t}}} {K_{\text{p}}}=0.0
 \end{displaymath}
 The Set point (r(t)) is a step function, and a constant (from \hyperref[setPoint]{A: Set-Point}). Therefore the differential of the set point is zero. Hence the equation reduces to,
 
 \begin{displaymath}
-\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {y_{\text{t}}}-{r_{\text{t}}} {K_{\text{p}}}=0
+\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1.0+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20.0+{K_{\text{p}}}\right) {y_{\text{t}}}-{r_{\text{t}}} {K_{\text{p}}}=0.0
 \end{displaymath}
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
@@ -686,13 +686,13 @@ The Set point (r(t)) is a step function, and a constant (from \hyperref[setPoint
 \\
 \midrule
 \endhead
-${K_{\text{d}}}$ & ${K_{\text{d}}}\geq{}0$ & $1.0$ & 10$\%$
+${K_{\text{d}}}$ & ${K_{\text{d}}}\geq{}0.0$ & $1.0$ & 10$\%$
 \\
 ${K_{\text{p}}}$ & ${K_{\text{p}}}\gt{}0$ & $20.0$ & 10$\%$
 \\
 ${r_{\text{t}}}$ & ${r_{\text{t}}}\gt{}0$ & $1.0$ & 10$\%$
 \\
-${t_{\text{sim}}}$ & $1\leq{}{t_{\text{sim}}}\leq{}60$ & $10.0$ ${\text{s}}$ & 10$\%$
+${t_{\text{sim}}}$ & $1.0\leq{}{t_{\text{sim}}}\leq{}60.0$ & $10.0$ ${\text{s}}$ & 10$\%$
 \\
 ${t_{\text{step}}}$ & $\frac{1}{100}\leq{}{t_{\text{step}}}\lt{}{t_{\text{sim}}}$ & $0.01$ ${\text{s}}$ & 10$\%$
 \\

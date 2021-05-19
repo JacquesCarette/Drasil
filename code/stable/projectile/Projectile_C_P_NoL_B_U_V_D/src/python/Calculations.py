@@ -8,14 +8,14 @@ import math
 # \param g_vect gravitational acceleration (m/s^2)
 # \return flight duration: the time when the projectile lands (s)
 def func_t_flight(inParams, g_vect):
-    return 2 * inParams.v_launch * math.sin(inParams.theta) / g_vect
+    return 2.0 * inParams.v_launch * math.sin(inParams.theta) / g_vect
 
 ## \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
 # \param inParams structure holding the input values
 # \param g_vect gravitational acceleration (m/s^2)
 # \return landing position: the distance from the launcher to the final position of the projectile (m)
 def func_p_land(inParams, g_vect):
-    return 2 * inParams.v_launch ** 2 * math.sin(inParams.theta) * math.cos(inParams.theta) / g_vect
+    return 2.0 * inParams.v_launch ** 2 * math.sin(inParams.theta) * math.cos(inParams.theta) / g_vect
 
 ## \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
 # \param inParams structure holding the input values
@@ -32,7 +32,7 @@ def func_d_offset(inParams, p_land):
 def func_s(inParams, epsilon, d_offset):
     if (math.fabs(d_offset / inParams.p_target) < epsilon) :
         return "The target was hit."
-    elif (d_offset < 0) :
+    elif (d_offset < 0.0) :
         return "The projectile fell short."
     else :
         return "The projectile went long."

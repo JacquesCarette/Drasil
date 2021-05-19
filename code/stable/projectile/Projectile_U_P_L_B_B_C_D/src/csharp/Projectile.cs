@@ -59,7 +59,7 @@ public class Projectile {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return 2 * inParams.v_launch * Math.Sin(inParams.theta) / Constants.g_vect;
+        return 2.0 * inParams.v_launch * Math.Sin(inParams.theta) / Constants.g_vect;
     }
     
     /** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
@@ -75,7 +75,7 @@ public class Projectile {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return 2 * Math.Pow(inParams.v_launch, 2) * Math.Sin(inParams.theta) * Math.Cos(inParams.theta) / Constants.g_vect;
+        return 2.0 * Math.Pow(inParams.v_launch, 2) * Math.Sin(inParams.theta) * Math.Cos(inParams.theta) / Constants.g_vect;
     }
     
     /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
@@ -118,7 +118,7 @@ public class Projectile {
         if (Math.Abs(d_offset / inParams.p_target) < Constants.epsilon) {
             return "The target was hit.";
         }
-        else if (d_offset < 0) {
+        else if (d_offset < 0.0) {
             return "The projectile fell short.";
         }
         else {
@@ -231,13 +231,13 @@ public class InputParameters {
             Console.Write(0);
             Console.WriteLine(".");
         }
-        if (!(0 < this.theta && this.theta < Math.PI / 2)) {
+        if (!(0.0 < this.theta && this.theta < Math.PI / 2)) {
             Console.Write("Warning: ");
             Console.Write("theta has value ");
             Console.Write(this.theta);
             Console.Write(", but is suggested to be ");
             Console.Write("between ");
-            Console.Write(0);
+            Console.Write(0.0);
             Console.Write(" and ");
             Console.Write(Math.PI / 2);
             Console.Write(" ((pi)/(2))");

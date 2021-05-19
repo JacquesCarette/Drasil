@@ -10,7 +10,7 @@ import Foundation
     - Returns: flight duration: the time when the projectile lands (s)
 */
 func func_t_flight(_ inParams: inout InputParameters, _ g_vect: Double) -> Double {
-    return Double(2) * inParams.v_launch * sin(inParams.theta) / g_vect
+    return 2.0 * inParams.v_launch * sin(inParams.theta) / g_vect
 }
 
 /** Calculates landing position: the distance from the launcher to the final position of the projectile (m)
@@ -19,7 +19,7 @@ func func_t_flight(_ inParams: inout InputParameters, _ g_vect: Double) -> Doubl
     - Returns: landing position: the distance from the launcher to the final position of the projectile (m)
 */
 func func_p_land(_ inParams: inout InputParameters, _ g_vect: Double) -> Double {
-    return Double(2) * pow(inParams.v_launch, 2) * sin(inParams.theta) * cos(inParams.theta) / g_vect
+    return 2.0 * pow(inParams.v_launch, 2) * sin(inParams.theta) * cos(inParams.theta) / g_vect
 }
 
 /** Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
@@ -41,7 +41,7 @@ func func_s(_ inParams: inout InputParameters, _ epsilon: Double, _ d_offset: Do
     if abs(d_offset / inParams.p_target) < epsilon {
         return "The target was hit."
     }
-    else if d_offset < Double(0) {
+    else if d_offset < 0.0 {
         return "The projectile fell short."
     }
     else {

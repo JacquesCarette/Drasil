@@ -100,12 +100,12 @@ void input_constraints(InputParameters &inParams) {
         std::cout << "." << std::endl;
         throw("InputError");
     }
-    if (!(0 < inParams.b && inParams.b <= inParams.a)) {
+    if (!(0.0 < inParams.b && inParams.b <= inParams.a)) {
         std::cout << "b has value ";
         std::cout << inParams.b;
         std::cout << ", but is expected to be ";
         std::cout << "between ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << " and ";
         std::cout << inParams.a;
         std::cout << " (a)";
@@ -150,12 +150,12 @@ void input_constraints(InputParameters &inParams) {
         std::cout << "." << std::endl;
         throw("InputError");
     }
-    if (!(inParams.AR >= 1)) {
+    if (!(inParams.AR >= 1.0)) {
         std::cout << "AR has value ";
         std::cout << inParams.AR;
         std::cout << ", but is expected to be ";
         std::cout << "above ";
-        std::cout << 1;
+        std::cout << 1.0;
         std::cout << "." << std::endl;
         throw("InputError");
     }

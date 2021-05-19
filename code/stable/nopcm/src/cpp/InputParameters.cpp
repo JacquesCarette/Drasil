@@ -60,7 +60,7 @@ void get_input(string filename, double &A_C, double &C_W, double &h_C, double &T
 double derived_values(double D, double L) {
     double V_tank;
     
-    V_tank = Constants::pi * pow(D / 2, 2) * L;
+    V_tank = Constants::pi * pow(D / 2.0, 2.0) * L;
     
     return V_tank;
 }
@@ -179,15 +179,15 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << 0;
         std::cout << "." << std::endl;
     }
-    if (!(0 < T_init && T_init < 100)) {
+    if (!(0.0 < T_init && T_init < 100.0)) {
         std::cout << "Warning: ";
         std::cout << "T_init has value ";
         std::cout << T_init;
         std::cout << ", but is suggested to be ";
         std::cout << "between ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << " and ";
-        std::cout << 100;
+        std::cout << 100.0;
         std::cout << "." << std::endl;
     }
     if (!(t_final > 0)) {
@@ -208,24 +208,24 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << 0;
         std::cout << "." << std::endl;
     }
-    if (!(0 < T_C && T_C < 100)) {
+    if (!(0.0 < T_C && T_C < 100.0)) {
         std::cout << "Warning: ";
         std::cout << "T_C has value ";
         std::cout << T_C;
         std::cout << ", but is suggested to be ";
         std::cout << "between ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << " and ";
-        std::cout << 100;
+        std::cout << 100.0;
         std::cout << "." << std::endl;
     }
-    if (!(0 < t_step && t_step < t_final)) {
+    if (!(0.0 < t_step && t_step < t_final)) {
         std::cout << "Warning: ";
         std::cout << "t_step has value ";
         std::cout << t_step;
         std::cout << ", but is suggested to be ";
         std::cout << "between ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << " and ";
         std::cout << t_final;
         std::cout << " (t_final)";
@@ -249,13 +249,13 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << 0;
         std::cout << "." << std::endl;
     }
-    if (!(E_W >= 0)) {
+    if (!(E_W >= 0.0)) {
         std::cout << "Warning: ";
         std::cout << "E_W has value ";
         std::cout << E_W;
         std::cout << ", but is suggested to be ";
         std::cout << "above ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << "." << std::endl;
     }
 }

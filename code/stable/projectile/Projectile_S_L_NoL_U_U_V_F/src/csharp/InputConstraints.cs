@@ -21,13 +21,13 @@ public class InputConstraints {
             Console.Write(0);
             Console.WriteLine(".");
         }
-        if (!(0 < theta && theta < Math.PI / 2)) {
+        if (!(0.0f < theta && theta < Math.PI / 2)) {
             Console.Write("Warning: ");
             Console.Write("theta has value ");
             Console.Write(theta);
             Console.Write(", but is suggested to be ");
             Console.Write("between ");
-            Console.Write(0);
+            Console.Write(0.0f);
             Console.Write(" and ");
             Console.Write(Math.PI / 2);
             Console.Write(" ((pi)/(2))");

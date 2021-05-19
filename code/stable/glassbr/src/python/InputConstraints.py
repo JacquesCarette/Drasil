@@ -86,12 +86,12 @@ def input_constraints(inParams):
         print(" (b)", end="")
         print(".")
         raise Exception("InputError")
-    if (not(0 < inParams.b and inParams.b <= inParams.a)) :
+    if (not(0.0 < inParams.b and inParams.b <= inParams.a)) :
         print("b has value ", end="")
         print(inParams.b, end="")
         print(", but is expected to be ", end="")
         print("between ", end="")
-        print(0, end="")
+        print(0.0, end="")
         print(" and ", end="")
         print(inParams.a, end="")
         print(" (a)", end="")
@@ -131,11 +131,11 @@ def input_constraints(inParams):
         print(0, end="")
         print(".")
         raise Exception("InputError")
-    if (not(inParams.AR >= 1)) :
+    if (not(inParams.AR >= 1.0)) :
         print("AR has value ", end="")
         print(inParams.AR, end="")
         print(", but is expected to be ", end="")
         print("above ", end="")
-        print(1, end="")
+        print(1.0, end="")
         print(".")
         raise Exception("InputError")

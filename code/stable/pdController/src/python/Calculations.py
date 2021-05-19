@@ -13,7 +13,7 @@ import scipy.integrate
 # \return Process Variable: The output value from the power plant
 def func_y_t(K_d, K_p, r_t, t_sim, t_step):
     def f(y_t, t):
-        return [y_t[1], -(1 + K_d) * y_t[1] - (20 + K_p) * y_t[0] + r_t * K_p]
+        return [y_t[1], -(1.0 + K_d) * y_t[1] - (20.0 + K_p) * y_t[0] + r_t * K_p]
     
     x_axis = numpy.arange(0.0, t_sim, t_step)
     u_t = scipy.integrate.odeint(f, [0.0, 0.0], x_axis)

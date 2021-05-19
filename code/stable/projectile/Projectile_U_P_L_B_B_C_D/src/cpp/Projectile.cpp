@@ -84,13 +84,13 @@ void InputParameters::input_constraints() {
         std::cout << 0;
         std::cout << "." << std::endl;
     }
-    if (!(0 < this->theta && this->theta < M_PI / 2)) {
+    if (!(0.0 < this->theta && this->theta < M_PI / 2)) {
         std::cout << "Warning: ";
         std::cout << "theta has value ";
         std::cout << this->theta;
         std::cout << ", but is suggested to be ";
         std::cout << "between ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << " and ";
         std::cout << (M_PI / 2);
         std::cout << " ((pi)/(2))";
@@ -162,7 +162,7 @@ double func_t_flight(InputParameters &inParams) {
     outfile << "  }" << std::endl;
     outfile.close();
     
-    return 2 * inParams.v_launch * sin(inParams.theta) / Constants::g_vect;
+    return 2.0 * inParams.v_launch * sin(inParams.theta) / Constants::g_vect;
 }
 
 double func_p_land(InputParameters &inParams) {
@@ -174,7 +174,7 @@ double func_p_land(InputParameters &inParams) {
     outfile << "  }" << std::endl;
     outfile.close();
     
-    return 2 * pow(inParams.v_launch, 2) * sin(inParams.theta) * cos(inParams.theta) / Constants::g_vect;
+    return 2.0 * pow(inParams.v_launch, 2) * sin(inParams.theta) * cos(inParams.theta) / Constants::g_vect;
 }
 
 double func_d_offset(InputParameters &inParams, double p_land) {
@@ -207,7 +207,7 @@ string func_s(InputParameters &inParams, double d_offset) {
     if (fabs(d_offset / inParams.p_target) < Constants::epsilon) {
         return "The target was hit.";
     }
-    else if (d_offset < 0) {
+    else if (d_offset < 0.0) {
         return "The projectile fell short.";
     }
     else {

@@ -1203,7 +1203,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[{V_{\text{tank}}}=π \left(\frac{D}{2}\right)^{2} L\]</td>
+                      <td>\[{V_{\text{tank}}}=π \left(\frac{D}{2.0}\right)^{2.0} L\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1348,7 +1348,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)\]
+                        \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1.0}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1375,7 +1375,7 @@
                           <em>τ<sub>W</sub></em> is calculated from <a href=#DD:balanceDecayRate>DD: balanceDecayRate</a>.
                         </p>
                         <p class="paragraph">
-                          The above equation applies as long as the water is in liquid form, <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em> (<em>&deg;C</em>) where <em>0</em> (<em>&deg;C</em>) and <em>100</em> (<em>&deg;C</em>) are the melting and boiling point temperatures of water, respectively (<a href=#assumpWAL>A: Water-Always-Liquid</a>).
+                          The above equation applies as long as the water is in liquid form, <em>0.0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100.0</em> (<em>&deg;C</em>) where <em>0.0</em> (<em>&deg;C</em>) and <em>100.0</em> (<em>&deg;C</em>) are the melting and boiling point temperatures of water, respectively (<a href=#assumpWAL>A: Water-Always-Liquid</a>).
                         </p>
                       </td>
                     </tr>
@@ -1401,7 +1401,7 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of the energy balance on water:</h4>
                     <p class="paragraph">
-                      To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water in the tank <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity, <em>C<sub>W</sub></em>. Heat transfer occurs in the water from the heating coil as <em>q<sub>C</sub></em> (<a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a>), over area <em>A<sub>C</sub></em>. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#assumpPIT>A: Perfect-Insulation-Tank</a>). Since the assumption is made that no internal heat is generated (<a href=#assumpNIHGBW>A: No-Internal-Heat-Generation-By-Water</a>), <em>g = 0</em>. Therefore, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
+                      To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water in the tank <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity, <em>C<sub>W</sub></em>. Heat transfer occurs in the water from the heating coil as <em>q<sub>C</sub></em> (<a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a>), over area <em>A<sub>C</sub></em>. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#assumpPIT>A: Perfect-Insulation-Tank</a>). Since the assumption is made that no internal heat is generated (<a href=#assumpNIHGBW>A: No-Internal-Heat-Generation-By-Water</a>), <em>g = 0.0</em>. Therefore, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
                     </p>
                     \[{m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={q_{\text{C}}} {A_{\text{C}}}\]
                     <p class="paragraph">
@@ -1415,7 +1415,7 @@
                     <p class="paragraph">
                       By substituting <em>τ<sub>W</sub></em> (from <a href=#DD:balanceDecayRate>DD: balanceDecayRate</a>), this can be written as:
                     </p>
-                    \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)\]
+                    \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1.0}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)\]
                   </div>
                 </div>
                 <div id="IM:heatEInWtr">
@@ -1485,7 +1485,7 @@
                           The change in temperature is the difference between the temperature at time <em>t</em> (<em>s</em>), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (<em>&deg;C</em>).
                         </p>
                         <p class="paragraph">
-                          This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em><em>&deg;C</em> (<a href=#assumpWAL>A: Water-Always-Liquid</a>, <a href=#assumpAPT>A: Atmospheric-Pressure-Tank</a>).
+                          This equation applies as long as <em>0.0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100.0</em><em>&deg;C</em> (<a href=#assumpWAL>A: Water-Always-Liquid</a>, <a href=#assumpAPT>A: Atmospheric-Pressure-Tank</a>).
                         </p>
                       </td>
                     </tr>
@@ -1575,7 +1575,7 @@
                     <tr>
                       <td><em>T<sub>C</sub></em></td>
                       <td>
-                        <em>0&thinsp;&lt;&thinsp;T<sub>C</sub>&thinsp;&lt;&thinsp;100</em>
+                        <em>0.0&thinsp;&lt;&thinsp;T<sub>C</sub>&thinsp;&lt;&thinsp;100.0</em>
                       </td>
                       <td>--</td>
                       <td><em>50.0</em> <em>&deg;C</em></td>
@@ -1584,7 +1584,7 @@
                     <tr>
                       <td><em>T<sub>init</sub></em></td>
                       <td>
-                        <em>0&thinsp;&lt;&thinsp;T<sub>init</sub>&thinsp;&lt;&thinsp;100</em>
+                        <em>0.0&thinsp;&lt;&thinsp;T<sub>init</sub>&thinsp;&lt;&thinsp;100.0</em>
                       </td>
                       <td>--</td>
                       <td><em>40.0</em> <em>&deg;C</em></td>
@@ -1602,7 +1602,7 @@
                     <tr>
                       <td><em>t<sub>step</sub></em></td>
                       <td>
-                        <em>0&thinsp;&lt;&thinsp;t<sub>step</sub>&thinsp;&lt;&thinsp;t<sub>final</sub></em>
+                        <em>0.0&thinsp;&lt;&thinsp;t<sub>step</sub>&thinsp;&lt;&thinsp;t<sub>final</sub></em>
                       </td>
                       <td>--</td>
                       <td><em>0.01</em> <em>s</em></td>
@@ -1644,7 +1644,7 @@
                     </tr>
                     <tr>
                       <td><em>E<sub>W</sub></em></td>
-                      <td><em>E<sub>W</sub>&thinsp;&ge;&thinsp;0</em></td>
+                      <td><em>E<sub>W</sub>&thinsp;&ge;&thinsp;0.0</em></td>
                     </tr>
                   </table>
                   <p class="caption">Output Data Constraints</p>
@@ -3263,13 +3263,13 @@
             <tr>
               <td><em>A<sub>C</sub><sup>max</sup></em></td>
               <td>maximum surface area of coil</td>
-              <td><em>100000</em></td>
+              <td><em>100.0&sdot;10<sup>3</sup></em></td>
               <td><em>m<sup>2</sup></em></td>
             </tr>
             <tr>
               <td><em>AR<sub>max</sub></em></td>
               <td>maximum aspect ratio</td>
-              <td><em>100</em></td>
+              <td><em>100.0</em></td>
               <td>--</td>
             </tr>
             <tr>
@@ -3281,13 +3281,13 @@
             <tr>
               <td><em>C<sub>W</sub><sup>max</sup></em></td>
               <td>maximum specific heat capacity of water</td>
-              <td><em>4210</em></td>
+              <td><em>4.21&sdot;10<sup>3</sup></em></td>
               <td><em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em></td>
             </tr>
             <tr>
               <td><em>C<sub>W</sub><sup>min</sup></em></td>
               <td>minimum specific heat capacity of water</td>
-              <td><em>4170</em></td>
+              <td><em>4.17&sdot;10<sup>3</sup></em></td>
               <td><em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em></td>
             </tr>
             <tr>
@@ -3295,7 +3295,7 @@
               <td>
                 maximum convective heat transfer coefficient between coil and water
               </td>
-              <td><em>10000</em></td>
+              <td><em>10.0&sdot;10<sup>3</sup></em></td>
               <td>
                 <em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>
               </td>
@@ -3305,7 +3305,7 @@
               <td>
                 minimum convective heat transfer coefficient between coil and water
               </td>
-              <td><em>10</em></td>
+              <td><em>10.0</em></td>
               <td>
                 <em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>
               </td>
@@ -3313,7 +3313,7 @@
             <tr>
               <td><em>L<sub>max</sub></em></td>
               <td>maximum length of tank</td>
-              <td><em>50</em></td>
+              <td><em>50.0</em></td>
               <td><em>m</em></td>
             </tr>
             <tr>
@@ -3325,19 +3325,19 @@
             <tr>
               <td><em>t<sub>final</sub><sup>max</sup></em></td>
               <td>maximum final time</td>
-              <td><em>86400</em></td>
+              <td><em>86.4&sdot;10<sup>3</sup></em></td>
               <td><em>s</em></td>
             </tr>
             <tr>
               <td><em>ρ<sub>W</sub><sup>max</sup></em></td>
               <td>maximum density of water</td>
-              <td><em>1000</em></td>
+              <td><em>1.0&sdot;10<sup>3</sup></em></td>
               <td><em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em></td>
             </tr>
             <tr>
               <td><em>ρ<sub>W</sub><sup>min</sup></em></td>
               <td>minimum density of water</td>
-              <td><em>950</em></td>
+              <td><em>950.0</em></td>
               <td><em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em></td>
             </tr>
           </table>

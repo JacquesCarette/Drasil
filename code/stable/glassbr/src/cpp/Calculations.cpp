@@ -20,7 +20,7 @@ double func_J_tol(InputParameters &inParams) {
     outfile << "  }" << std::endl;
     outfile.close();
     
-    return log(log(1 / (1 - inParams.P_btol)) * (pow(inParams.a * inParams.b, 7.0 - 1) / (2.86e-53 * pow(7.17e10 * pow(inParams.h, 2), 7.0) * inParams.LDF)));
+    return log(log(1 / (1 - inParams.P_btol)) * (pow(inParams.a * inParams.b, 7.0 - 1.0) / (2.86e-53 * pow(7.17e10 * pow(inParams.h, 2), 7.0) * inParams.LDF)));
 }
 
 double func_q(InputParameters &inParams) {
@@ -47,7 +47,7 @@ double func_q_hat(InputParameters &inParams, double q) {
     outfile << "  }" << std::endl;
     outfile.close();
     
-    return q * pow(inParams.a * inParams.b, 2) / (7.17e10 * pow(inParams.h, 4) * inParams.GTF);
+    return q * pow(inParams.a * inParams.b, 2) / (7.17e10 * pow(inParams.h, 4.0) * inParams.GTF);
 }
 
 double func_q_hat_tol(InputParameters &inParams, double J_tol) {
@@ -92,7 +92,7 @@ double func_NFL(InputParameters &inParams, double q_hat_tol) {
     outfile << "  }" << std::endl;
     outfile.close();
     
-    return q_hat_tol * 7.17e10 * pow(inParams.h, 4) / pow(inParams.a * inParams.b, 2);
+    return q_hat_tol * 7.17e10 * pow(inParams.h, 4.0) / pow(inParams.a * inParams.b, 2);
 }
 
 double func_B(InputParameters &inParams, double J) {
@@ -107,7 +107,7 @@ double func_B(InputParameters &inParams, double J) {
     outfile << "  }" << std::endl;
     outfile.close();
     
-    return 2.86e-53 / pow(inParams.a * inParams.b, 7.0 - 1) * pow(7.17e10 * pow(inParams.h, 2), 7.0) * inParams.LDF * exp(J);
+    return 2.86e-53 / pow(inParams.a * inParams.b, 7.0 - 1.0) * pow(7.17e10 * pow(inParams.h, 2), 7.0) * inParams.LDF * exp(J);
 }
 
 double func_LR(InputParameters &inParams, double NFL) {
@@ -149,7 +149,7 @@ double func_P_b(double B) {
     outfile << "  }" << std::endl;
     outfile.close();
     
-    return 1 - exp(-B);
+    return 1.0 - exp(-B);
 }
 
 bool func_is_safePb(InputParameters &inParams, double P_b) {

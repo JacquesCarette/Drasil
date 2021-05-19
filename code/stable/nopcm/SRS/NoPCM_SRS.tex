@@ -663,7 +663,7 @@ Units & ${\text{m}^{3}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {V_{\text{tank}}}=π \left(\frac{D}{2}\right)^{2} L
+           {V_{\text{tank}}}=π \left(\frac{D}{2.0}\right)^{2.0} L
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -750,7 +750,7 @@ Input Constraints & \begin{displaymath}
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)
+           \frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1.0}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -762,7 +762,7 @@ Description & \begin{symbDescription}
 \\ \midrule \\
 Notes & ${τ_{\text{W}}}$ is calculated from \hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}.
         
-        The above equation applies as long as the water is in liquid form, $0\lt{}{T_{\text{W}}}\lt{}100$ (${{}^{\circ}\text{C}}$) where $0$ (${{}^{\circ}\text{C}}$) and $100$ (${{}^{\circ}\text{C}}$) are the melting and boiling point temperatures of water, respectively (\hyperref[assumpWAL]{A: Water-Always-Liquid}).
+        The above equation applies as long as the water is in liquid form, $0.0\lt{}{T_{\text{W}}}\lt{}100.0$ (${{}^{\circ}\text{C}}$) where $0.0$ (${{}^{\circ}\text{C}}$) and $100.0$ (${{}^{\circ}\text{C}}$) are the melting and boiling point temperatures of water, respectively (\hyperref[assumpWAL]{A: Water-Always-Liquid}).
         
 \\ \midrule \\
 Source & \cite[(with PCM removed)]{koothoor2013}
@@ -775,7 +775,7 @@ RefBy & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation}, \hyperref[fin
 \end{minipage}
 \paragraph{Detailed derivation of the energy balance on water:}
 \label{IM:eBalanceOnWtrDeriv}
-To find the rate of change of ${T_{\text{W}}}$, we look at the energy balance on water. The volume being considered is the volume of water in the tank ${V_{\text{W}}}$, which has mass ${m_{\text{W}}}$ and specific heat capacity, ${C_{\text{W}}}$. Heat transfer occurs in the water from the heating coil as ${q_{\text{C}}}$ (\hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil}), over area ${A_{\text{C}}}$. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (\hyperref[assumpPIT]{A: Perfect-Insulation-Tank}). Since the assumption is made that no internal heat is generated (\hyperref[assumpNIHGBW]{A: No-Internal-Heat-Generation-By-Water}), $g=0$. Therefore, the equation for \hyperref[GD:rocTempSimp]{GD: rocTempSimp} can be written as:
+To find the rate of change of ${T_{\text{W}}}$, we look at the energy balance on water. The volume being considered is the volume of water in the tank ${V_{\text{W}}}$, which has mass ${m_{\text{W}}}$ and specific heat capacity, ${C_{\text{W}}}$. Heat transfer occurs in the water from the heating coil as ${q_{\text{C}}}$ (\hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil}), over area ${A_{\text{C}}}$. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (\hyperref[assumpPIT]{A: Perfect-Insulation-Tank}). Since the assumption is made that no internal heat is generated (\hyperref[assumpNIHGBW]{A: No-Internal-Heat-Generation-By-Water}), $g=0.0$. Therefore, the equation for \hyperref[GD:rocTempSimp]{GD: rocTempSimp} can be written as:
 
 \begin{displaymath}
 {m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={q_{\text{C}}} {A_{\text{C}}}
@@ -793,7 +793,7 @@ Dividing Equation (2) by ${m_{\text{W}}} {C_{\text{W}}}$, we obtain:
 By substituting ${τ_{\text{W}}}$ (from \hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}), this can be written as:
 
 \begin{displaymath}
-\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)
+\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1.0}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -833,7 +833,7 @@ Notes & The above equation is derived using \hyperref[TM:sensHtE]{TM: sensHtE}.
         
         The change in temperature is the difference between the temperature at time $t$ (${\text{s}}$), ${T_{\text{W}}}$ and the initial temperature, ${T_{\text{init}}}$ (${{}^{\circ}\text{C}}$).
         
-        This equation applies as long as $0\lt{}{T_{\text{W}}}\lt{}100$${{}^{\circ}\text{C}}$ (\hyperref[assumpWAL]{A: Water-Always-Liquid}, \hyperref[assumpAPT]{A: Atmospheric-Pressure-Tank}).
+        This equation applies as long as $0.0\lt{}{T_{\text{W}}}\lt{}100.0$${{}^{\circ}\text{C}}$ (\hyperref[assumpWAL]{A: Water-Always-Liquid}, \hyperref[assumpAPT]{A: Atmospheric-Pressure-Tank}).
         
 \\ \midrule \\
 Source & \cite{koothoor2013}
@@ -865,13 +865,13 @@ ${h_{\text{C}}}$ & ${h_{\text{C}}}\gt{}0$ & ${{h_{\text{C}}}^{\text{min}}}\leq{}
 \\
 $L$ & $L\gt{}0$ & ${L_{\text{min}}}\leq{}L\leq{}{L_{\text{max}}}$ & $1.5$ ${\text{m}}$ & 10$\%$
 \\
-${T_{\text{C}}}$ & $0\lt{}{T_{\text{C}}}\lt{}100$ & -- & $50.0$ ${{}^{\circ}\text{C}}$ & 10$\%$
+${T_{\text{C}}}$ & $0.0\lt{}{T_{\text{C}}}\lt{}100.0$ & -- & $50.0$ ${{}^{\circ}\text{C}}$ & 10$\%$
 \\
-${T_{\text{init}}}$ & $0\lt{}{T_{\text{init}}}\lt{}100$ & -- & $40.0$ ${{}^{\circ}\text{C}}$ & 10$\%$
+${T_{\text{init}}}$ & $0.0\lt{}{T_{\text{init}}}\lt{}100.0$ & -- & $40.0$ ${{}^{\circ}\text{C}}$ & 10$\%$
 \\
 ${t_{\text{final}}}$ & ${t_{\text{final}}}\gt{}0$ & ${t_{\text{final}}}\lt{}{{t_{\text{final}}}^{\text{max}}}$ & $50.0\cdot{}10^{3}$ ${\text{s}}$ & 10$\%$
 \\
-${t_{\text{step}}}$ & $0\lt{}{t_{\text{step}}}\lt{}{t_{\text{final}}}$ & -- & $0.01$ ${\text{s}}$ & 10$\%$
+${t_{\text{step}}}$ & $0.0\lt{}{t_{\text{step}}}\lt{}{t_{\text{final}}}$ & -- & $0.01$ ${\text{s}}$ & 10$\%$
 \\
 ${ρ_{\text{W}}}$ & ${ρ_{\text{W}}}\gt{}0$ & ${{ρ_{\text{W}}}^{\text{min}}}\lt{}{ρ_{\text{W}}}\leq{}{{ρ_{\text{W}}}^{\text{max}}}$ & $1.0\cdot{}10^{3}$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10$\%$
 \\
@@ -891,7 +891,7 @@ ${ρ_{\text{W}}}$ & ${ρ_{\text{W}}}\gt{}0$ & ${{ρ_{\text{W}}}^{\text{min}}}\lt
 \endhead
 ${T_{\text{W}}}$ & ${T_{\text{init}}}\leq{}{T_{\text{W}}}\leq{}{T_{\text{C}}}$
 \\
-${E_{\text{W}}}$ & ${E_{\text{W}}}\geq{}0$
+${E_{\text{W}}}$ & ${E_{\text{W}}}\geq{}0.0$
 \\
 \bottomrule
 \caption{Output Data Constraints}
@@ -1162,29 +1162,29 @@ This section contains the standard values that are used for calculations in SWHS
 \\
 \midrule
 \endhead
-${{A_{\text{C}}}^{\text{max}}}$ & maximum surface area of coil & $100000$ & ${\text{m}^{2}}$
+${{A_{\text{C}}}^{\text{max}}}$ & maximum surface area of coil & $100.0\cdot{}10^{3}$ & ${\text{m}^{2}}$
 \\
-${AR_{\text{max}}}$ & maximum aspect ratio & $100$ & --
+${AR_{\text{max}}}$ & maximum aspect ratio & $100.0$ & --
 \\
 ${AR_{\text{min}}}$ & minimum aspect ratio & $0.01$ & --
 \\
-${{C_{\text{W}}}^{\text{max}}}$ & maximum specific heat capacity of water & $4210$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+${{C_{\text{W}}}^{\text{max}}}$ & maximum specific heat capacity of water & $4.21\cdot{}10^{3}$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
-${{C_{\text{W}}}^{\text{min}}}$ & minimum specific heat capacity of water & $4170$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+${{C_{\text{W}}}^{\text{min}}}$ & minimum specific heat capacity of water & $4.17\cdot{}10^{3}$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
-${{h_{\text{C}}}^{\text{max}}}$ & maximum convective heat transfer coefficient between coil and water & $10000$ & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
+${{h_{\text{C}}}^{\text{max}}}$ & maximum convective heat transfer coefficient between coil and water & $10.0\cdot{}10^{3}$ & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
 \\
-${{h_{\text{C}}}^{\text{min}}}$ & minimum convective heat transfer coefficient between coil and water & $10$ & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
+${{h_{\text{C}}}^{\text{min}}}$ & minimum convective heat transfer coefficient between coil and water & $10.0$ & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
 \\
-${L_{\text{max}}}$ & maximum length of tank & $50$ & ${\text{m}}$
+${L_{\text{max}}}$ & maximum length of tank & $50.0$ & ${\text{m}}$
 \\
 ${L_{\text{min}}}$ & minimum length of tank & $0.1$ & ${\text{m}}$
 \\
-${{t_{\text{final}}}^{\text{max}}}$ & maximum final time & $86400$ & ${\text{s}}$
+${{t_{\text{final}}}^{\text{max}}}$ & maximum final time & $86.4\cdot{}10^{3}$ & ${\text{s}}$
 \\
-${{ρ_{\text{W}}}^{\text{max}}}$ & maximum density of water & $1000$ & $\frac{\text{kg}}{\text{m}^{3}}$
+${{ρ_{\text{W}}}^{\text{max}}}$ & maximum density of water & $1.0\cdot{}10^{3}$ & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
-${{ρ_{\text{W}}}^{\text{min}}}$ & minimum density of water & $950$ & $\frac{\text{kg}}{\text{m}^{3}}$
+${{ρ_{\text{W}}}^{\text{min}}}$ & minimum density of water & $950.0$ & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
 \bottomrule
 \caption{Auxiliary Constants}

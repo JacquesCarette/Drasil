@@ -16,13 +16,13 @@ def input_constraints(v_launch, theta, p_target):
         print("above ", end="")
         print(0, end="")
         print(".")
-    if (not(0 < theta and theta < math.pi / 2)) :
+    if (not(0.0 < theta and theta < math.pi / 2)) :
         print("Warning: ", end="")
         print("theta has value ", end="")
         print(theta, end="")
         print(", but is suggested to be ", end="")
         print("between ", end="")
-        print(0, end="")
+        print(0.0, end="")
         print(" and ", end="")
         print(math.pi / 2, end="")
         print(" ((pi)/(2))", end="")

@@ -65,7 +65,7 @@ public class Projectile {
         outfile.println("  }");
         outfile.close();
         
-        return 2 * inParams.v_launch * Math.sin(inParams.theta) / Constants.g_vect;
+        return 2.0 * inParams.v_launch * Math.sin(inParams.theta) / Constants.g_vect;
     }
     
     /** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
@@ -81,7 +81,7 @@ public class Projectile {
         outfile.println("  }");
         outfile.close();
         
-        return 2 * Math.pow(inParams.v_launch, 2) * Math.sin(inParams.theta) * Math.cos(inParams.theta) / Constants.g_vect;
+        return 2.0 * Math.pow(inParams.v_launch, 2) * Math.sin(inParams.theta) * Math.cos(inParams.theta) / Constants.g_vect;
     }
     
     /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
@@ -124,7 +124,7 @@ public class Projectile {
         if (Math.abs(d_offset / inParams.p_target) < Constants.epsilon) {
             return "The target was hit.";
         }
-        else if (d_offset < 0) {
+        else if (d_offset < 0.0) {
             return "The projectile fell short.";
         }
         else {
@@ -237,13 +237,13 @@ class InputParameters {
             System.out.print(0);
             System.out.println(".");
         }
-        if (!(0 < this.theta && this.theta < Math.PI / 2)) {
+        if (!(0.0 < this.theta && this.theta < Math.PI / 2)) {
             System.out.print("Warning: ");
             System.out.print("theta has value ");
             System.out.print(this.theta);
             System.out.print(", but is suggested to be ");
             System.out.print("between ");
-            System.out.print(0);
+            System.out.print(0.0);
             System.out.print(" and ");
             System.out.print(Math.PI / 2);
             System.out.print(" ((pi)/(2))");

@@ -41,11 +41,11 @@ int main(int argc, const char *argv[]) {
 }
 
 double func_t_flight(double v_launch, double theta, double g_vect) {
-    return 2 * v_launch * sin(theta) / g_vect;
+    return 2.0 * v_launch * sin(theta) / g_vect;
 }
 
 double func_p_land(double v_launch, double theta, double g_vect) {
-    return 2 * pow(v_launch, 2) * sin(theta) * cos(theta) / g_vect;
+    return 2.0 * pow(v_launch, 2) * sin(theta) * cos(theta) / g_vect;
 }
 
 double func_d_offset(double p_target, double p_land) {
@@ -56,7 +56,7 @@ string func_s(double p_target, double epsilon, double d_offset) {
     if (fabs(d_offset / p_target) < epsilon) {
         return "The target was hit.";
     }
-    else if (d_offset < 0) {
+    else if (d_offset < 0.0) {
         return "The projectile fell short.";
     }
     else {
@@ -89,13 +89,13 @@ void input_constraints(double v_launch, double theta, double p_target) {
         std::cout << 0;
         std::cout << "." << std::endl;
     }
-    if (!(0 < theta && theta < M_PI / 2)) {
+    if (!(0.0 < theta && theta < M_PI / 2)) {
         std::cout << "Warning: ";
         std::cout << "theta has value ";
         std::cout << theta;
         std::cout << ", but is suggested to be ";
         std::cout << "between ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << " and ";
         std::cout << (M_PI / 2);
         std::cout << " ((pi)/(2))";

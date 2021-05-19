@@ -849,7 +849,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\mathbf{F}=G \frac{{m_{1}} {m_{2}}}{\text{||}\mathbf{d}\text{||}^{2}} \mathbf{\hat{d}}=G \frac{{m_{1}} {m_{2}}}{\text{||}\mathbf{d}\text{||}^{2}} \frac{\mathbf{d}}{\text{||}\mathbf{d}\text{||}}\]
+                        \[\mathbf{F}=G \frac{{m_{1}} {m_{2}}}{\text{||}\mathbf{d}\text{||}^{2.0}} \mathbf{\hat{d}}=G \frac{{m_{1}} {m_{2}}}{\text{||}\mathbf{d}\text{||}^{2.0}} \frac{\mathbf{d}}{\text{||}\mathbf{d}\text{||}}\]
                       </td>
                     </tr>
                     <tr>
@@ -978,7 +978,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\mathbf{g}=-\frac{G M}{\text{||}\mathbf{d}\text{||}^{2}} \mathbf{\hat{d}}\]
+                        \[\mathbf{g}=-\frac{G M}{\text{||}\mathbf{d}\text{||}^{2.0}} \mathbf{\hat{d}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1069,7 +1069,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[j=\frac{-\left(1+{C_{\text{R}}}\right) {{\mathbf{v}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\mathbf{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right) \text{||}\mathbf{n}\text{||}^{2}+\frac{\text{||}{\mathbf{u}_{\text{A}\text{P}}}\text{*}\mathbf{n}\text{||}^{2}}{{\mathbf{I}_{\text{A}}}}+\frac{\text{||}{\mathbf{u}_{\text{B}\text{P}}}\text{*}\mathbf{n}\text{||}^{2}}{{\mathbf{I}_{\text{B}}}}}\]
+                        \[j=\frac{-\left(1.0+{C_{\text{R}}}\right) {{\mathbf{v}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\mathbf{n}}{\left(\frac{1.0}{{m_{\text{A}}}}+\frac{1.0}{{m_{\text{B}}}}\right) \text{||}\mathbf{n}\text{||}^{2.0}+\frac{\text{||}{\mathbf{u}_{\text{A}\text{P}}}\text{*}\mathbf{n}\text{||}^{2.0}}{{\mathbf{I}_{\text{A}}}}+\frac{\text{||}{\mathbf{u}_{\text{B}\text{P}}}\text{*}\mathbf{n}\text{||}^{2.0}}{{\mathbf{I}_{\text{B}}}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1695,7 +1695,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[KE=\frac{m \mathbf{v}^{2}}{2}\]</td>
+                      <td>\[KE=\frac{m \mathbf{v}^{2.0}}{2.0}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1781,7 +1781,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The coefficient of restitution <em>C<sub>R</sub></em> determines the elasticity of a collision between two rigid bodies. <em>C<sub>R</sub> = 1</em> results in an elastic collision, <em>C<sub>R</sub>&thinsp;&lt;&thinsp;1</em> results in an inelastic collision, and <em>C<sub>R</sub> = 0</em> results in a totally inelastic collision.
+                          The coefficient of restitution <em>C<sub>R</sub></em> determines the elasticity of a collision between two rigid bodies. <em>C<sub>R</sub> = 1.0</em> results in an elastic collision, <em>C<sub>R</sub>&thinsp;&lt;&thinsp;1.0</em> results in an inelastic collision, and <em>C<sub>R</sub> = 0.0</em> results in a totally inelastic collision.
                         </p>
                       </td>
                     </tr>
@@ -1927,7 +1927,7 @@
                     <p class="paragraph">Newton's second law of motion states:</p>
                     \[\mathbf{F}=m \mathbf{a}=m \frac{\,d\mathbf{v}}{\,dt}\]
                     <p class="paragraph">Rearranging :</p>
-                    \[\int_{{t_{1}}}^{{t_{2}}}{\mathbf{F}}\,dt=m \left(\int_{{\mathbf{v}_{1}}}^{{\mathbf{v}_{2}}}{1}\,d\mathbf{v}\right)\]
+                    \[\int_{{t_{1}}}^{{t_{2}}}{\mathbf{F}}\,dt=m \left(\int_{{\mathbf{v}_{1}}}^{{\mathbf{v}_{2}}}{1.0}\,d\mathbf{v}\right)\]
                     <p class="paragraph">Integrating the right hand side :</p>
                     \[\int_{{t_{1}}}^{{t_{2}}}{\mathbf{F}}\,dt=m {\mathbf{v}_{2}}-m {\mathbf{v}_{1}}=m Δ\mathbf{v}\]
                   </div>
@@ -2012,7 +2012,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\mathbf{I}=\displaystyle\sum{{m_{j}} {d_{j}}^{2}}\]</td>
+                      <td>\[\mathbf{I}=\displaystyle\sum{{m_{j}} {d_{j}}^{2.0}}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -2092,11 +2092,11 @@
                     <tr>
                       <th>Input Constraints</th>
                       <td>
-                        \[{\mathbf{v}_{j}}\gt{}0\]
-                        \[t\gt{}0\]
-                        \[\mathbf{g}\gt{}0\]
-                        \[{\mathbf{F}_{j}}\gt{}0\]
-                        \[{m_{j}}\gt{}0\]
+                        \[{\mathbf{v}_{j}}\gt{}0.0\]
+                        \[t\gt{}0.0\]
+                        \[\mathbf{g}\gt{}0.0\]
+                        \[{\mathbf{F}_{j}}\gt{}0.0\]
+                        \[{m_{j}}\gt{}0.0\]
                       </td>
                     </tr>
                     <tr>
@@ -2189,15 +2189,15 @@
                     <tr>
                       <th>Input Constraints</th>
                       <td>
-                        \[ω\gt{}0\]
-                        \[t\gt{}0\]
-                        \[{\mathbf{τ}_{j}}\gt{}0\]
-                        \[\mathbf{I}\gt{}0\]
+                        \[ω\gt{}0.0\]
+                        \[t\gt{}0.0\]
+                        \[{\mathbf{τ}_{j}}\gt{}0.0\]
+                        \[\mathbf{I}\gt{}0.0\]
                       </td>
                     </tr>
                     <tr>
                       <th>Output Constraints</th>
-                      <td>\[α\gt{}0\]</td>
+                      <td>\[α\gt{}0.0\]</td>
                     </tr>
                     <tr>
                       <th>Equation</th>
@@ -2275,15 +2275,15 @@
                     <tr>
                       <th>Input Constraints</th>
                       <td>
-                        \[t\gt{}0\]
-                        \[j\gt{}0\]
-                        \[{m_{\text{A}}}\gt{}0\]
-                        \[\mathbf{n}\gt{}0\]
+                        \[t\gt{}0.0\]
+                        \[j\gt{}0.0\]
+                        \[{m_{\text{A}}}\gt{}0.0\]
+                        \[\mathbf{n}\gt{}0.0\]
                       </td>
                     </tr>
                     <tr>
                       <th>Output Constraints</th>
-                      <td>\[{t_{\text{c}}}\gt{}0\]</td>
+                      <td>\[{t_{\text{c}}}\gt{}0.0\]</td>
                     </tr>
                     <tr>
                       <th>Equation</th>
@@ -2366,7 +2366,7 @@
                     <tr>
                       <td><em>C<sub>R</sub></em></td>
                       <td>
-                        <em>0&thinsp;&le;&thinsp;C<sub>R</sub>&thinsp;&le;&thinsp;1</em>
+                        <em>0.0&thinsp;&le;&thinsp;C<sub>R</sub>&thinsp;&le;&thinsp;1.0</em>
                       </td>
                       <td>--</td>
                       <td><em>0.8</em></td>
@@ -2441,7 +2441,7 @@
                       <td><em>ϕ</em></td>
                       <td>--</td>
                       <td>
-                        <em>0&thinsp;&le;&thinsp;ϕ&thinsp;&le;&thinsp;2&#8239;π</em>
+                        <em>0.0&thinsp;&le;&thinsp;ϕ&thinsp;&le;&thinsp;2.0&#8239;π</em>
                       </td>
                       <td><em>\(\frac{π}{2}\)</em> <em>rad</em></td>
                       <td>10<em>%</em></td>

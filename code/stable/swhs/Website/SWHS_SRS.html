@@ -1002,7 +1002,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[Q\left(t\right)=\int_{0}^{t}{\frac{\,dQ\left(τ\right)}{\,dτ}}\,dτ\]
+                        \[Q\left(t\right)=\int_{0.0}^{t}{\frac{\,dQ\left(τ\right)}{\,dτ}}\,dτ\]
                       </td>
                     </tr>
                     <tr>
@@ -1024,7 +1024,7 @@
                           <em>Q</em> is the change in thermal energy (latent heat energy).
                         </p>
                         <p class="paragraph">
-                          <em>Q(t) = &int;<sub>0</sub><sup>t</sup>\(\frac{\,dQ\left(τ\right)}{\,dτ}\)&#8239;dτ</em> is the rate of change of <em>Q</em> with respect to time <em>τ</em>.
+                          <em>Q(t) = &int;<sub>0.0</sub><sup>t</sup>\(\frac{\,dQ\left(τ\right)}{\,dτ}\)&#8239;dτ</em> is the rate of change of <em>Q</em> with respect to time <em>τ</em>.
                         </p>
                         <p class="paragraph">
                           <em>t</em> is the time elapsed, as long as the phase change is not complete.
@@ -1203,7 +1203,7 @@
                     </p>
                     \[{q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV\]
                     <p class="paragraph">
-                      Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in <a href=#GD:rocTempSimp>GD: rocTempSimp</a>. The integral over the surface could be simplified because the thermal flux is assumed constant over <em>A<sub>in</sub></em> and <em>A<sub>out</sub></em> and <em>0</em> on all other surfaces. Outward flux is considered positive. Assuming <em>ρ</em>, <em>C</em>, and <em>T</em> are constant over the volume, which is true in our case by <a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>, <a href=#assumpTPCAV>A: Temp-PCM-Constant-Across-Volume</a>, <a href=#assumpDWPCoV>A: Density-Water-PCM-Constant-over-Volume</a>, and <a href=#assumpSHECov>A: Specific-Heat-Energy-Constant-over-Volume</a>, we have:
+                      Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in <a href=#GD:rocTempSimp>GD: rocTempSimp</a>. The integral over the surface could be simplified because the thermal flux is assumed constant over <em>A<sub>in</sub></em> and <em>A<sub>out</sub></em> and <em>0.0</em> on all other surfaces. Outward flux is considered positive. Assuming <em>ρ</em>, <em>C</em>, and <em>T</em> are constant over the volume, which is true in our case by <a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>, <a href=#assumpTPCAV>A: Temp-PCM-Constant-Across-Volume</a>, <a href=#assumpDWPCoV>A: Density-Water-PCM-Constant-over-Volume</a>, and <a href=#assumpSHECov>A: Specific-Heat-Energy-Constant-over-Volume</a>, we have:
                     </p>
                     \[ρ C V \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V\]
                     <p class="paragraph">
@@ -1487,7 +1487,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[{V_{\text{tank}}}=π \left(\frac{D}{2}\right)^{2} L\]</td>
+                      <td>\[{V_{\text{tank}}}=π \left(\frac{D}{2.0}\right)^{2.0} L\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1885,7 +1885,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The value of <em>ϕ</em> is constrained to <em>0&thinsp;&le;&thinsp;ϕ&thinsp;&le;&thinsp;1</em>.
+                          The value of <em>ϕ</em> is constrained to <em>0.0&thinsp;&le;&thinsp;ϕ&thinsp;&le;&thinsp;1.0</em>.
                         </p>
                         <p class="paragraph"><a href=#DD:htFusion>DD: htFusion</a></p>
                       </td>
@@ -1998,7 +1998,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)+η \left({T_{\text{P}}}\left(t\right)-{T_{\text{W}}}\left(t\right)\right)\right)\]
+                        \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1.0}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)+η \left({T_{\text{P}}}\left(t\right)-{T_{\text{W}}}\left(t\right)\right)\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -2040,10 +2040,10 @@
                           <em>η</em> is calculated from <a href=#DD:balanceDecayTime>DD: balanceDecayTime</a>.
                         </p>
                         <p class="paragraph">
-                          The initial conditions for the ODE are <em>T<sub>W</sub>(0) = T<sub>P</sub>(0) = T<sub>init</sub></em> following <a href=#assumpSITWP>A: Same-Initial-Temp-Water-PCM</a>.
+                          The initial conditions for the ODE are <em>T<sub>W</sub>(0.0) = T<sub>P</sub>(0.0) = T<sub>init</sub></em> following <a href=#assumpSITWP>A: Same-Initial-Temp-Water-PCM</a>.
                         </p>
                         <p class="paragraph">
-                          The ODE applies as long as the water is in liquid form, <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em> (<em>&deg;C</em>) where <em>0</em> (<em>&deg;C</em>) and <em>100</em> (<em>&deg;C</em>) are the melting and boiling point temperatures of water, respectively (from <a href=#assumpWAL>A: Water-Always-Liquid</a> and <a href=#assumpAPT>A: Atmospheric-Pressure-Tank</a>).
+                          The ODE applies as long as the water is in liquid form, <em>0.0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100.0</em> (<em>&deg;C</em>) where <em>0.0</em> (<em>&deg;C</em>) and <em>100.0</em> (<em>&deg;C</em>) are the melting and boiling point temperatures of water, respectively (from <a href=#assumpWAL>A: Water-Always-Liquid</a> and <a href=#assumpAPT>A: Atmospheric-Pressure-Tank</a>).
                         </p>
                       </td>
                     </tr>
@@ -2067,7 +2067,7 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of the energy balance on water:</h4>
                     <p class="paragraph">
-                      To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water in the tank <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity, <em>C<sub>W</sub></em>. Heat transfer occurs in the water from the heating coil as <em>q<sub>C</sub></em> (<a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a>) and from the water into the PCM as <em>q<sub>P</sub></em> (<a href=#GD:htFluxPCMFromWater>GD: htFluxPCMFromWater</a>), over areas <em>A<sub>C</sub></em> and <em>A<sub>P</sub></em>, respectively. The thermal flux is constant over <em>A<sub>C</sub></em>, since the temperature of the heating coil is assumed to not vary along its length (<a href=#assumpTHCCoL>A: Temp-Heating-Coil-Constant-over-Length</a>), and the thermal flux is constant over <em>A<sub>P</sub></em>, since the temperature of the PCM is the same throughout its volume (<a href=#assumpTPCAV>A: Temp-PCM-Constant-Across-Volume</a>) and the water is fully mixed (<a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>). No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#assumpPIT>A: Perfect-Insulation-Tank</a>). Since the assumption is made that no internal heat is generated (<a href=#assumpNIHGBWP>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em>. Therefore, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
+                      To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water in the tank <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity, <em>C<sub>W</sub></em>. Heat transfer occurs in the water from the heating coil as <em>q<sub>C</sub></em> (<a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a>) and from the water into the PCM as <em>q<sub>P</sub></em> (<a href=#GD:htFluxPCMFromWater>GD: htFluxPCMFromWater</a>), over areas <em>A<sub>C</sub></em> and <em>A<sub>P</sub></em>, respectively. The thermal flux is constant over <em>A<sub>C</sub></em>, since the temperature of the heating coil is assumed to not vary along its length (<a href=#assumpTHCCoL>A: Temp-Heating-Coil-Constant-over-Length</a>), and the thermal flux is constant over <em>A<sub>P</sub></em>, since the temperature of the PCM is the same throughout its volume (<a href=#assumpTPCAV>A: Temp-PCM-Constant-Across-Volume</a>) and the water is fully mixed (<a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>). No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#assumpPIT>A: Perfect-Insulation-Tank</a>). Since the assumption is made that no internal heat is generated (<a href=#assumpNIHGBWP>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0.0</em>. Therefore, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
                     </p>
                     \[{m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={q_{\text{C}}} {A_{\text{C}}}-{q_{\text{P}}} {A_{\text{P}}}\]
                     <p class="paragraph">
@@ -2087,11 +2087,11 @@
                     <p class="paragraph">
                       By substituting <em>τ<sub>W</sub></em> (from <a href=#DD:balanceDecayRate>DD: balanceDecayRate</a>) and <em>η</em> (from <a href=#DD:balanceDecayTime>DD: balanceDecayTime</a>), this can be written as:
                     </p>
-                    \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)+\frac{η}{{τ_{\text{W}}}} \left({T_{\text{P}}}-{T_{\text{W}}}\right)\]
+                    \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1.0}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)+\frac{η}{{τ_{\text{W}}}} \left({T_{\text{P}}}-{T_{\text{W}}}\right)\]
                     <p class="paragraph">
-                      Finally, factoring out <em>\(\frac{1}{{τ_{\text{W}}}}\)</em>, we are left with the governing ODE for <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>:
+                      Finally, factoring out <em>\(\frac{1.0}{{τ_{\text{W}}}}\)</em>, we are left with the governing ODE for <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>:
                     </p>
-                    \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}+η \left({T_{\text{P}}}-{T_{\text{W}}}\right)\right)\]
+                    \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1.0}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}+η \left({T_{\text{P}}}-{T_{\text{W}}}\right)\right)\]
                   </div>
                 </div>
                 <div id="IM:eBalanceOnPCM">
@@ -2132,9 +2132,9 @@
                       <th>Equation</th>
                       <td>
                         \[\frac{\,d{T_{\text{P}}}}{\,dt}=\begin{cases}
-                                                         \frac{1}{{{τ_{\text{P}}}^{\text{S}}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}\lt{}{{T_{\text{melt}}}^{\text{P}}}\\
-                                                         \frac{1}{{{τ_{\text{P}}}^{\text{L}}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}\gt{}{{T_{\text{melt}}}^{\text{P}}}\\
-                                                         0, & {T_{\text{P}}}={{T_{\text{melt}}}^{\text{P}}}\land{}0\lt{}ϕ\lt{}1
+                                                         \frac{1.0}{{{τ_{\text{P}}}^{\text{S}}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}\lt{}{{T_{\text{melt}}}^{\text{P}}}\\
+                                                         \frac{1.0}{{{τ_{\text{P}}}^{\text{L}}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}\gt{}{{T_{\text{melt}}}^{\text{P}}}\\
+                                                         0.0, & {T_{\text{P}}}={{T_{\text{melt}}}^{\text{P}}}\land{}0.0\lt{}ϕ\lt{}1.0
                                                          \end{cases}\]
                       </td>
                     </tr>
@@ -2172,7 +2172,7 @@
                           The input constraint <em>T<sub>init</sub>&thinsp;&le;&thinsp;T<sub>melt</sub><sup>P</sup></em> comes from <a href=#assumpPIS>A: PCM-Initially-Solid</a>.
                         </p>
                         <p class="paragraph">
-                          The temperature remains constant at <em>T<sub>melt</sub><sup>P</sup></em>, even with the heating (or cooling), until the phase change has occurred for all of the material; that is as long as <em>0&thinsp;&lt;&thinsp;ϕ&thinsp;&lt;&thinsp;1</em>. <em>ϕ</em> (from <a href=#DD:meltFrac>DD: meltFrac</a>) is determined as part of the heat energy in the PCM, as given in (<a href=#IM:heatEInPCM>IM: heatEInPCM</a>).
+                          The temperature remains constant at <em>T<sub>melt</sub><sup>P</sup></em>, even with the heating (or cooling), until the phase change has occurred for all of the material; that is as long as <em>0.0&thinsp;&lt;&thinsp;ϕ&thinsp;&lt;&thinsp;1.0</em>. <em>ϕ</em> (from <a href=#DD:meltFrac>DD: meltFrac</a>) is determined as part of the heat energy in the PCM, as given in (<a href=#IM:heatEInPCM>IM: heatEInPCM</a>).
                         </p>
                         <p class="paragraph">
                           <em>τ<sub>P</sub><sup>S</sup></em> is calculated in <a href=#DD:balanceSolidPCM>DD: balanceSolidPCM</a>.
@@ -2181,7 +2181,7 @@
                           <em>τ<sub>P</sub><sup>L</sup></em> is calculated in <a href=#DD:balanceLiquidPCM>DD: balanceLiquidPCM</a>.
                         </p>
                         <p class="paragraph">
-                          The initial conditions for the ODE are <em>T<sub>W</sub>(0) = T<sub>P</sub>(0) = T<sub>init</sub></em> following <a href=#assumpSITWP>A: Same-Initial-Temp-Water-PCM</a>.
+                          The initial conditions for the ODE are <em>T<sub>W</sub>(0.0) = T<sub>P</sub>(0.0) = T<sub>init</sub></em> following <a href=#assumpSITWP>A: Same-Initial-Temp-Water-PCM</a>.
                         </p>
                       </td>
                     </tr>
@@ -2207,7 +2207,7 @@
                       Detailed derivation of the energy balance on the PCM during sensible heating phase:
                     </h4>
                     <p class="paragraph">
-                      To find the rate of change of <em>T<sub>P</sub></em>, we look at the energy balance on the PCM. The volume being considered is the volume of PCM (<em>V<sub>P</sub></em>). The derivation that follows is initially for the solid PCM. The mass of phase change material is <em>m<sub>P</sub></em> and the specific heat capacity of PCM as a solid is <em>C<sub>P</sub><sup>S</sup></em>. The heat flux into the PCM from water is <em>q<sub>P</sub></em> (<a href=#GD:htFluxPCMFromWater>GD: htFluxPCMFromWater</a>) over phase change material surface area <em>A<sub>P</sub></em>. The thermal flux is constant over <em>A<sub>P</sub></em>, since the temperature of the PCM is the same throughout its volume (<a href=#assumpTPCAV>A: Temp-PCM-Constant-Across-Volume</a>) and the water is fully mixed (<a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>). There is no heat flux output from the PCM. Assuming no volumetric heat generation per unit volume (<a href=#assumpNIHGBWP>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0</em>, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
+                      To find the rate of change of <em>T<sub>P</sub></em>, we look at the energy balance on the PCM. The volume being considered is the volume of PCM (<em>V<sub>P</sub></em>). The derivation that follows is initially for the solid PCM. The mass of phase change material is <em>m<sub>P</sub></em> and the specific heat capacity of PCM as a solid is <em>C<sub>P</sub><sup>S</sup></em>. The heat flux into the PCM from water is <em>q<sub>P</sub></em> (<a href=#GD:htFluxPCMFromWater>GD: htFluxPCMFromWater</a>) over phase change material surface area <em>A<sub>P</sub></em>. The thermal flux is constant over <em>A<sub>P</sub></em>, since the temperature of the PCM is the same throughout its volume (<a href=#assumpTPCAV>A: Temp-PCM-Constant-Across-Volume</a>) and the water is fully mixed (<a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>). There is no heat flux output from the PCM. Assuming no volumetric heat generation per unit volume (<a href=#assumpNIHGBWP>A: No-Internal-Heat-Generation-By-Water-PCM</a>), <em>g = 0.0</em>, the equation for <a href=#GD:rocTempSimp>GD: rocTempSimp</a> can be written as:
                     </p>
                     \[{m_{\text{P}}} {{C_{\text{P}}}^{\text{S}}} \frac{\,d{T_{\text{P}}}}{\,dt}={q_{\text{P}}} {A_{\text{P}}}\]
                     <p class="paragraph">
@@ -2221,7 +2221,7 @@
                     <p class="paragraph">
                       By substituting <em>τ<sub>P</sub><sup>S</sup></em> (from <a href=#DD:balanceSolidPCM>DD: balanceSolidPCM</a>), this can be written as:
                     </p>
-                    \[\frac{\,d{T_{\text{P}}}}{\,dt}=\frac{1}{{{τ_{\text{P}}}^{\text{S}}}} \left({T_{\text{W}}}-{T_{\text{P}}}\right)\]
+                    \[\frac{\,d{T_{\text{P}}}}{\,dt}=\frac{1.0}{{{τ_{\text{P}}}^{\text{S}}}} \left({T_{\text{W}}}-{T_{\text{P}}}\right)\]
                     <p class="paragraph">
                       Equation (4) applies for the solid PCM. In the case where all of the PCM is melted, the same derivation applies, except that <em>C<sub>P</sub><sup>S</sup></em> is replaced by <em>C<sub>P</sub><sup>L</sup></em>, and thus <em>τ<sub>P</sub><sup>S</sup></em> is replaced by <em>τ<sub>P</sub><sup>L</sup></em>. Although a small change in surface area would be expected with melting, this is not included, since the volume change of the PCM with melting is assumed to be negligible (<a href=#assumpVCMPN>A: Volume-Change-Melting-PCM-Negligible</a>).
                     </p>
@@ -2300,7 +2300,7 @@
                           The change in temperature is the difference between the temperature at time <em>t</em> (<em>s</em>), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (<em>&deg;C</em>).
                         </p>
                         <p class="paragraph">
-                          This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em><em>&deg;C</em> (<a href=#assumpWAL>A: Water-Always-Liquid</a>, <a href=#assumpAPT>A: Atmospheric-Pressure-Tank</a>).
+                          This equation applies as long as <em>0.0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100.0</em><em>&deg;C</em> (<a href=#assumpWAL>A: Water-Always-Liquid</a>, <a href=#assumpAPT>A: Atmospheric-Pressure-Tank</a>).
                         </p>
                       </td>
                     </tr>
@@ -2357,7 +2357,7 @@
                         \[{E_{\text{P}}}=\begin{cases}
                                          {{C_{\text{P}}}^{\text{S}}} {m_{\text{P}}} \left({T_{\text{P}}}\left(t\right)-{T_{\text{init}}}\right), & {T_{\text{P}}}\lt{}{{T_{\text{melt}}}^{\text{P}}}\\
                                          {{{E_{\text{P}}}_{\text{melt}}}^{\text{init}}}+{H_{\text{f}}} {m_{\text{P}}}+{{C_{\text{P}}}^{\text{L}}} {m_{\text{P}}} \left({T_{\text{P}}}\left(t\right)-{{T_{\text{melt}}}^{\text{P}}}\right), & {T_{\text{P}}}\gt{}{{T_{\text{melt}}}^{\text{P}}}\\
-                                         {{{E_{\text{P}}}_{\text{melt}}}^{\text{init}}}+{Q_{\text{P}}}\left(t\right), & {T_{\text{P}}}={{T_{\text{melt}}}^{\text{P}}}\land{}0\lt{}ϕ\lt{}1
+                                         {{{E_{\text{P}}}_{\text{melt}}}^{\text{init}}}+{Q_{\text{P}}}\left(t\right), & {T_{\text{P}}}={{T_{\text{melt}}}^{\text{P}}}\land{}0.0\lt{}ϕ\lt{}1.0
                                          \end{cases}\]
                       </td>
                     </tr>
@@ -2449,7 +2449,7 @@
               <div class="subsubsection">
                 <h3>Data Constraints</h3>
                 <p class="paragraph">
-                  <a href=#Table:InDataConstraints>Table:InDataConstraints</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (<a href=#assumpPIS>A: PCM-Initially-Solid</a>). (++) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is <em>\(\frac{2}{{h_{\text{min}}}}\)</em>, where <em>h<sub>min</sub></em> is the thickness of a "sheet" of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of seconds in one day.
+                  <a href=#Table:InDataConstraints>Table:InDataConstraints</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (<a href=#assumpPIS>A: PCM-Initially-Solid</a>). (++) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is <em>\(\frac{2.0}{{h_{\text{min}}}}\)</em>, where <em>h<sub>min</sub></em> is the thickness of a "sheet" of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of seconds in one day.
                 </p>
                 <div id="Table:InDataConstraints">
                   <table class="table">
@@ -2473,7 +2473,7 @@
                       <td><em>A<sub>P</sub></em></td>
                       <td><em>A<sub>P</sub>&thinsp;&gt;&thinsp;0</em></td>
                       <td>
-                        <em>V<sub>P</sub>&thinsp;&le;&thinsp;A<sub>P</sub>&thinsp;&le;&thinsp;\(\frac{2}{{h_{\text{min}}}}\)&#8239;V<sub>tank</sub></em>
+                        <em>V<sub>P</sub>&thinsp;&le;&thinsp;A<sub>P</sub>&thinsp;&le;&thinsp;\(\frac{2.0}{{h_{\text{min}}}}\)&#8239;V<sub>tank</sub></em>
                       </td>
                       <td><em>1.2</em> <em>m<sup>2</sup></em></td>
                       <td>10<em>%</em></td>
@@ -2565,7 +2565,7 @@
                     <tr>
                       <td><em>T<sub>C</sub></em></td>
                       <td>
-                        <em>0&thinsp;&lt;&thinsp;T<sub>C</sub>&thinsp;&lt;&thinsp;100</em>
+                        <em>0.0&thinsp;&lt;&thinsp;T<sub>C</sub>&thinsp;&lt;&thinsp;100.0</em>
                       </td>
                       <td>--</td>
                       <td><em>50.0</em> <em>&deg;C</em></td>
@@ -2574,7 +2574,7 @@
                     <tr>
                       <td><em>T<sub>init</sub></em></td>
                       <td>
-                        <em>0&thinsp;&lt;&thinsp;T<sub>init</sub>&thinsp;&lt;&thinsp;T<sub>melt</sub></em>
+                        <em>0.0&thinsp;&lt;&thinsp;T<sub>init</sub>&thinsp;&lt;&thinsp;T<sub>melt</sub></em>
                       </td>
                       <td>--</td>
                       <td><em>40.0</em> <em>&deg;C</em></td>
@@ -2583,7 +2583,7 @@
                     <tr>
                       <td><em>T<sub>melt</sub><sup>P</sup></em></td>
                       <td>
-                        <em>0&thinsp;&lt;&thinsp;T<sub>melt</sub><sup>P</sup>&thinsp;&lt;&thinsp;T<sub>C</sub></em>
+                        <em>0.0&thinsp;&lt;&thinsp;T<sub>melt</sub><sup>P</sup>&thinsp;&lt;&thinsp;T<sub>C</sub></em>
                       </td>
                       <td>--</td>
                       <td><em>44.2</em> <em>&deg;C</em></td>
@@ -2601,7 +2601,7 @@
                     <tr>
                       <td><em>t<sub>step</sub></em></td>
                       <td>
-                        <em>0&thinsp;&lt;&thinsp;t<sub>step</sub>&thinsp;&lt;&thinsp;t<sub>final</sub></em>
+                        <em>0.0&thinsp;&lt;&thinsp;t<sub>step</sub>&thinsp;&lt;&thinsp;t<sub>final</sub></em>
                       </td>
                       <td>--</td>
                       <td><em>0.01</em> <em>s</em></td>
@@ -2610,7 +2610,7 @@
                     <tr>
                       <td><em>V<sub>P</sub></em></td>
                       <td>
-                        <em>0&thinsp;&lt;&thinsp;V<sub>P</sub>&thinsp;&lt;&thinsp;V<sub>tank</sub></em>
+                        <em>0.0&thinsp;&lt;&thinsp;V<sub>P</sub>&thinsp;&lt;&thinsp;V<sub>tank</sub></em>
                       </td>
                       <td>
                         <em>V<sub>P</sub>&thinsp;&ge;&thinsp;MINFRACT&#8239;V<sub>tank</sub></em>
@@ -2671,11 +2671,11 @@
                     </tr>
                     <tr>
                       <td><em>E<sub>W</sub></em></td>
-                      <td><em>E<sub>W</sub>&thinsp;&ge;&thinsp;0</em></td>
+                      <td><em>E<sub>W</sub>&thinsp;&ge;&thinsp;0.0</em></td>
                     </tr>
                     <tr>
                       <td><em>E<sub>P</sub></em></td>
-                      <td><em>E<sub>P</sub>&thinsp;&ge;&thinsp;0</em></td>
+                      <td><em>E<sub>P</sub>&thinsp;&ge;&thinsp;0.0</em></td>
                     </tr>
                   </table>
                   <p class="caption">Output Data Constraints</p>
@@ -2683,11 +2683,11 @@
                 <p class="paragraph">
                   A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking <a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a> and <a href=#GD:htFluxPCMFromWater>GD: htFluxPCMFromWater</a>, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
                 </p>
-                \[{E_{\text{W}}}=\int_{0}^{t}{{h_{\text{C}}} {A_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)}\,dt-\int_{0}^{t}{{h_{\text{P}}} {A_{\text{P}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right)}\,dt\]
+                \[{E_{\text{W}}}=\int_{0.0}^{t}{{h_{\text{C}}} {A_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)}\,dt-\int_{0.0}^{t}{{h_{\text{P}}} {A_{\text{P}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right)}\,dt\]
                 <p class="paragraph">
                   In addition, the change in heat energy in the PCM should equal the energy input to the PCM from the water. This can be expressed as
                 </p>
-                \[{E_{\text{P}}}=\int_{0}^{t}{{h_{\text{P}}} {A_{\text{P}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right)}\,dt\]
+                \[{E_{\text{P}}}=\int_{0.0}^{t}{{h_{\text{P}}} {A_{\text{P}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right)}\,dt\]
                 <p class="paragraph">
                   Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as "sanity" checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than <em>C<sub>tol</sub></em> <a href=#verifyEnergyOutput>FR: Verify-Energy-Output-Follow-Conservation-of-Energy</a>.
                 </p>
@@ -6103,13 +6103,13 @@
             <tr>
               <td><em>A<sub>C</sub><sup>max</sup></em></td>
               <td>maximum surface area of coil</td>
-              <td><em>100000</em></td>
+              <td><em>100.0&sdot;10<sup>3</sup></em></td>
               <td><em>m<sup>2</sup></em></td>
             </tr>
             <tr>
               <td><em>AR<sub>max</sub></em></td>
               <td>maximum aspect ratio</td>
-              <td><em>100</em></td>
+              <td><em>100.0</em></td>
               <td>--</td>
             </tr>
             <tr>
@@ -6127,49 +6127,49 @@
             <tr>
               <td><em>C<sub>W</sub><sup>max</sup></em></td>
               <td>maximum specific heat capacity of water</td>
-              <td><em>4210</em></td>
+              <td><em>4.21&sdot;10<sup>3</sup></em></td>
               <td><em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em></td>
             </tr>
             <tr>
               <td><em>C<sub>W</sub><sup>min</sup></em></td>
               <td>minimum specific heat capacity of water</td>
-              <td><em>4170</em></td>
+              <td><em>4.17&sdot;10<sup>3</sup></em></td>
               <td><em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em></td>
             </tr>
             <tr>
               <td><em>C<sub>P</sub><sup>L</sup><sub>max</sub></em></td>
               <td>maximum specific heat capacity of PCM as a liquid</td>
-              <td><em>5000</em></td>
+              <td><em>5.0&sdot;10<sup>3</sup></em></td>
               <td><em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em></td>
             </tr>
             <tr>
               <td><em>C<sub>P</sub><sup>L</sup><sub>min</sub></em></td>
               <td>minimum specific heat capacity of PCM as a liquid</td>
-              <td><em>100</em></td>
+              <td><em>100.0</em></td>
               <td><em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em></td>
             </tr>
             <tr>
               <td><em>C<sub>P</sub><sup>S</sup><sub>max</sub></em></td>
               <td>maximum specific heat capacity of PCM as a solid</td>
-              <td><em>4000</em></td>
+              <td><em>4.0&sdot;10<sup>3</sup></em></td>
               <td><em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em></td>
             </tr>
             <tr>
               <td><em>C<sub>P</sub><sup>S</sup><sub>min</sub></em></td>
               <td>minimum specific heat capacity of PCM as a solid</td>
-              <td><em>100</em></td>
+              <td><em>100.0</em></td>
               <td><em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em></td>
             </tr>
             <tr>
               <td><em>H<sub>f</sub><sub>max</sub></em></td>
               <td>maximum specific latent heat of fusion</td>
-              <td><em>1000000</em></td>
+              <td><em>1.0&sdot;10<sup>6</sup></em></td>
               <td><em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em></td>
             </tr>
             <tr>
               <td><em>H<sub>f</sub><sub>min</sub></em></td>
               <td>minimum specific latent heat of fusion</td>
-              <td><em>0</em></td>
+              <td><em>0.0</em></td>
               <td><em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em></td>
             </tr>
             <tr>
@@ -6177,7 +6177,7 @@
               <td>
                 maximum convective heat transfer coefficient between coil and water
               </td>
-              <td><em>10000</em></td>
+              <td><em>10.0&sdot;10<sup>3</sup></em></td>
               <td>
                 <em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>
               </td>
@@ -6187,7 +6187,7 @@
               <td>
                 minimum convective heat transfer coefficient between coil and water
               </td>
-              <td><em>10</em></td>
+              <td><em>10.0</em></td>
               <td>
                 <em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>
               </td>
@@ -6197,7 +6197,7 @@
               <td>
                 maximum convective heat transfer coefficient between PCM and water
               </td>
-              <td><em>10000</em></td>
+              <td><em>10.0&sdot;10<sup>3</sup></em></td>
               <td>
                 <em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>
               </td>
@@ -6207,7 +6207,7 @@
               <td>
                 minimum convective heat transfer coefficient between PCM and water
               </td>
-              <td><em>10</em></td>
+              <td><em>10.0</em></td>
               <td>
                 <em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>
               </td>
@@ -6215,7 +6215,7 @@
             <tr>
               <td><em>L<sub>max</sub></em></td>
               <td>maximum length of tank</td>
-              <td><em>50</em></td>
+              <td><em>50.0</em></td>
               <td><em>m</em></td>
             </tr>
             <tr>
@@ -6233,31 +6233,31 @@
             <tr>
               <td><em>t<sub>final</sub><sup>max</sup></em></td>
               <td>maximum final time</td>
-              <td><em>86400</em></td>
+              <td><em>86.4&sdot;10<sup>3</sup></em></td>
               <td><em>s</em></td>
             </tr>
             <tr>
               <td><em>ρ<sub>P</sub><sup>max</sup></em></td>
               <td>maximum density of PCM</td>
-              <td><em>20000</em></td>
+              <td><em>20.0&sdot;10<sup>3</sup></em></td>
               <td><em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em></td>
             </tr>
             <tr>
               <td><em>ρ<sub>P</sub><sup>min</sup></em></td>
               <td>minimum density of PCM</td>
-              <td><em>500</em></td>
+              <td><em>500.0</em></td>
               <td><em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em></td>
             </tr>
             <tr>
               <td><em>ρ<sub>W</sub><sup>max</sup></em></td>
               <td>maximum density of water</td>
-              <td><em>1000</em></td>
+              <td><em>1.0&sdot;10<sup>3</sup></em></td>
               <td><em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em></td>
             </tr>
             <tr>
               <td><em>ρ<sub>W</sub><sup>min</sup></em></td>
               <td>minimum density of water</td>
-              <td><em>950</em></td>
+              <td><em>950.0</em></td>
               <td><em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em></td>
             </tr>
           </table>

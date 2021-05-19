@@ -126,12 +126,12 @@ func input_constraints(_ inParams: inout InputParameters) throws -> Void {
         print(".")
         throw "InputError"
     }
-    if !(Double(0) < inParams.b && inParams.b <= inParams.a) {
+    if !(0.0 < inParams.b && inParams.b <= inParams.a) {
         print("b has value ", terminator: "")
         print(inParams.b, terminator: "")
         print(", but is expected to be ", terminator: "")
         print("between ", terminator: "")
-        print(0, terminator: "")
+        print(0.0, terminator: "")
         print(" and ", terminator: "")
         print(inParams.a, terminator: "")
         print(" (a)", terminator: "")
@@ -176,12 +176,12 @@ func input_constraints(_ inParams: inout InputParameters) throws -> Void {
         print(".")
         throw "InputError"
     }
-    if !(inParams.AR >= Double(1)) {
+    if !(inParams.AR >= 1.0) {
         print("AR has value ", terminator: "")
         print(inParams.AR, terminator: "")
         print(", but is expected to be ", terminator: "")
         print("above ", terminator: "")
-        print(1, terminator: "")
+        print(1.0, terminator: "")
         print(".")
         throw "InputError"
     }

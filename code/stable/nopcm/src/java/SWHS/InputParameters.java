@@ -97,7 +97,7 @@ public class InputParameters {
     public static double derived_values(double D, double L) {
         double V_tank;
         
-        V_tank = Constants.pi * Math.pow(D / 2, 2) * L;
+        V_tank = Constants.pi * Math.pow(D / 2.0, 2.0) * L;
         
         return V_tank;
     }
@@ -229,15 +229,15 @@ public class InputParameters {
             System.out.print(0);
             System.out.println(".");
         }
-        if (!(0 < T_init && T_init < 100)) {
+        if (!(0.0 < T_init && T_init < 100.0)) {
             System.out.print("Warning: ");
             System.out.print("T_init has value ");
             System.out.print(T_init);
             System.out.print(", but is suggested to be ");
             System.out.print("between ");
-            System.out.print(0);
+            System.out.print(0.0);
             System.out.print(" and ");
-            System.out.print(100);
+            System.out.print(100.0);
             System.out.println(".");
         }
         if (!(t_final > 0)) {
@@ -258,24 +258,24 @@ public class InputParameters {
             System.out.print(0);
             System.out.println(".");
         }
-        if (!(0 < T_C && T_C < 100)) {
+        if (!(0.0 < T_C && T_C < 100.0)) {
             System.out.print("Warning: ");
             System.out.print("T_C has value ");
             System.out.print(T_C);
             System.out.print(", but is suggested to be ");
             System.out.print("between ");
-            System.out.print(0);
+            System.out.print(0.0);
             System.out.print(" and ");
-            System.out.print(100);
+            System.out.print(100.0);
             System.out.println(".");
         }
-        if (!(0 < t_step && t_step < t_final)) {
+        if (!(0.0 < t_step && t_step < t_final)) {
             System.out.print("Warning: ");
             System.out.print("t_step has value ");
             System.out.print(t_step);
             System.out.print(", but is suggested to be ");
             System.out.print("between ");
-            System.out.print(0);
+            System.out.print(0.0);
             System.out.print(" and ");
             System.out.print(t_final);
             System.out.print(" (t_final)");
@@ -299,13 +299,13 @@ public class InputParameters {
             System.out.print(0);
             System.out.println(".");
         }
-        if (!(E_W >= 0)) {
+        if (!(E_W >= 0.0)) {
             System.out.print("Warning: ");
             System.out.print("E_W has value ");
             System.out.print(E_W);
             System.out.print(", but is suggested to be ");
             System.out.print("above ");
-            System.out.print(0);
+            System.out.print(0.0);
             System.out.println(".");
         }
     }

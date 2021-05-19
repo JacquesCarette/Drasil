@@ -68,13 +68,13 @@ class InputParameters:
             print("above ", end="")
             print(0, end="")
             print(".")
-        if (not(0 < self.theta and self.theta < math.pi / 2)) :
+        if (not(0.0 < self.theta and self.theta < math.pi / 2)) :
             print("Warning: ", end="")
             print("theta has value ", end="")
             print(self.theta, end="")
             print(", but is suggested to be ", end="")
             print("between ", end="")
-            print(0, end="")
+            print(0.0, end="")
             print(" and ", end="")
             print(math.pi / 2, end="")
             print(" ((pi)/(2))", end="")
@@ -104,7 +104,7 @@ def func_t_flight(inParams):
     print("  }", file=outfile)
     outfile.close()
     
-    return 2 * inParams.v_launch * math.sin(inParams.theta) / Constants.g_vect
+    return 2.0 * inParams.v_launch * math.sin(inParams.theta) / Constants.g_vect
 
 ## \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
 # \param inParams structure holding the input values
@@ -117,7 +117,7 @@ def func_p_land(inParams):
     print("  }", file=outfile)
     outfile.close()
     
-    return 2 * inParams.v_launch ** 2 * math.sin(inParams.theta) * math.cos(inParams.theta) / Constants.g_vect
+    return 2.0 * inParams.v_launch ** 2 * math.sin(inParams.theta) * math.cos(inParams.theta) / Constants.g_vect
 
 ## \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
 # \param inParams structure holding the input values
@@ -153,7 +153,7 @@ def func_s(inParams, d_offset):
     
     if (math.fabs(d_offset / inParams.p_target) < Constants.epsilon) :
         return "The target was hit."
-    elif (d_offset < 0) :
+    elif (d_offset < 0.0) :
         return "The projectile fell short."
     else :
         return "The projectile went long."

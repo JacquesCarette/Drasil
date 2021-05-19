@@ -13,7 +13,7 @@ public class Calculations {
         \return flight duration: the time when the projectile lands (s)
     */
     public static float func_t_flight(float v_launch, float theta, float g_vect) {
-        return 2 * v_launch * (float)(Math.sin(theta)) / g_vect;
+        return 2.0f * v_launch * (float)(Math.sin(theta)) / g_vect;
     }
     
     /** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
@@ -23,7 +23,7 @@ public class Calculations {
         \return landing position: the distance from the launcher to the final position of the projectile (m)
     */
     public static float func_p_land(float v_launch, float theta, float g_vect) {
-        return 2 * (float)(Math.pow(v_launch, 2)) * (float)(Math.sin(theta)) * (float)(Math.cos(theta)) / g_vect;
+        return 2.0f * (float)(Math.pow(v_launch, 2)) * (float)(Math.sin(theta)) * (float)(Math.cos(theta)) / g_vect;
     }
     
     /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
@@ -45,7 +45,7 @@ public class Calculations {
         if (Math.abs(d_offset / p_target) < epsilon) {
             return "The target was hit.";
         }
-        else if (d_offset < 0) {
+        else if (d_offset < 0.0f) {
             return "The projectile fell short.";
         }
         else {

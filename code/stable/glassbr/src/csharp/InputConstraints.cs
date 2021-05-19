@@ -101,12 +101,12 @@ public class InputConstraints {
             Console.WriteLine(".");
             throw new Exception("InputError");
         }
-        if (!(0 < inParams.b && inParams.b <= inParams.a)) {
+        if (!(0.0 < inParams.b && inParams.b <= inParams.a)) {
             Console.Write("b has value ");
             Console.Write(inParams.b);
             Console.Write(", but is expected to be ");
             Console.Write("between ");
-            Console.Write(0);
+            Console.Write(0.0);
             Console.Write(" and ");
             Console.Write(inParams.a);
             Console.Write(" (a)");
@@ -151,12 +151,12 @@ public class InputConstraints {
             Console.WriteLine(".");
             throw new Exception("InputError");
         }
-        if (!(inParams.AR >= 1)) {
+        if (!(inParams.AR >= 1.0)) {
             Console.Write("AR has value ");
             Console.Write(inParams.AR);
             Console.Write(", but is expected to be ");
             Console.Write("above ");
-            Console.Write(1);
+            Console.Write(1.0);
             Console.WriteLine(".");
             throw new Exception("InputError");
         }

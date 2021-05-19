@@ -60,9 +60,9 @@ eqlExprNNoKQ f1_ f2_ _e_ = (inxi slcWght `_e_`
 
 sliceExpr :: Integer -> Expr
 sliceExpr n = idx (sy intNormForce) (int n) `mulRe` idx (sy shrResC) (int n) $=
-  idx (sy mobShrC) (int (n-1)) `mulRe` idx (sy intNormForce) (int (n-1)) `mulRe`
-  idx (sy shrResC) (int (n-1)) `addRe` sy fs `mulRe` idx (sy shearFNoIntsl) (int n) $-
-  idx (sy shearRNoIntsl) (int n)
+  (idx (sy mobShrC) (int (n-1)) `mulRe` idx (sy intNormForce) (int (n-1)) `mulRe`
+  idx (sy shrResC) (int (n-1)) `addRe` (sy fs `mulRe` idx (sy shearFNoIntsl) (int n)) $-
+  idx (sy shearRNoIntsl) (int n))
 
 momExpr :: (Expr -> Expr -> Expr) -> Expr
 momExpr _e_ = (neg (inxi intNormForce) `mulRe` (inxi sliceHght `addRe`((inxi baseWthX $/ int 2)

@@ -276,47 +276,47 @@ fctSftyDerivEqn10c = sliceExpr 3
 
 fctSftyDerivEqn10d :: Expr
 fctSftyDerivEqn10d = idx (sy intNormForce) (sy numbSlices $- int 2) `mulRe` 
-  idx (sy shrResC) (sy numbSlices $- int 2) $= idx (sy mobShrC) (sy numbSlices $- int 3) `mulRe` idx (sy intNormForce) (sy numbSlices $- int 3) `mulRe` 
-  idx (sy shrResC) (sy numbSlices $- int 3) `addRe` sy fs `mulRe` 
-  idx (sy shearFNoIntsl) (sy numbSlices $- int 2) $- 
-  idx (sy shearRNoIntsl) (sy numbSlices $- int 2)
+  idx (sy shrResC) (sy numbSlices $- int 2) $= (idx (sy mobShrC) (sy numbSlices $- int 3) `mulRe` idx (sy intNormForce) (sy numbSlices $- int 3) `mulRe` 
+  idx (sy shrResC) (sy numbSlices $- int 3) `addRe` (sy fs `mulRe` 
+  idx (sy shearFNoIntsl) (sy numbSlices $- int 2)) $- 
+  idx (sy shearRNoIntsl) (sy numbSlices $- int 2))
 
 fctSftyDerivEqn10e :: Expr
 fctSftyDerivEqn10e = idx (sy intNormForce) (sy numbSlices $- int 1) `mulRe` 
-  idx (sy shrResC) (sy numbSlices $- int 1) $= idx (sy mobShrC) (sy numbSlices $- int 2) `mulRe` idx (sy intNormForce) (sy numbSlices $- int 2) `mulRe` 
-  idx (sy shrResC) (sy numbSlices $- int 2) `addRe` sy fs `mulRe` 
-  idx (sy shearFNoIntsl) (sy numbSlices $- int 1) $- 
-  idx (sy shearRNoIntsl) (sy numbSlices $- int 1)
+  idx (sy shrResC) (sy numbSlices $- int 1) $= (idx (sy mobShrC) (sy numbSlices $- int 2) `mulRe` idx (sy intNormForce) (sy numbSlices $- int 2) `mulRe` 
+  idx (sy shrResC) (sy numbSlices $- int 2) `addRe` (sy fs `mulRe` 
+  idx (sy shearFNoIntsl) (sy numbSlices $- int 1)) $- 
+  idx (sy shearRNoIntsl) (sy numbSlices $- int 1))
 
 fctSftyDerivEqn10f :: Expr
 fctSftyDerivEqn10f = idx (sy intNormForce) (sy numbSlices) `mulRe` 
-  idx (sy shrResC) (sy numbSlices) $= idx (sy mobShrC) (sy numbSlices $- int 1) `mulRe` idx (sy intNormForce) (sy numbSlices $- int 1) `mulRe` 
-  idx (sy shrResC) (sy numbSlices $- int 1) `addRe` sy fs `mulRe` 
-  idx (sy shearFNoIntsl) (sy numbSlices) $- 
-  idx (sy shearRNoIntsl) (sy numbSlices)
+  idx (sy shrResC) (sy numbSlices) $= (idx (sy mobShrC) (sy numbSlices $- int 1) `mulRe` idx (sy intNormForce) (sy numbSlices $- int 1) `mulRe` 
+  idx (sy shrResC) (sy numbSlices $- int 1) `addRe` (sy fs `mulRe` 
+  idx (sy shearFNoIntsl) (sy numbSlices)) $- 
+  idx (sy shearRNoIntsl) (sy numbSlices))
 
 fctSftyDerivEqn11 :: Expr
-fctSftyDerivEqn11 = indx1 intNormForce `mulRe` indx1 shrResC $= 
-  sy fs `mulRe` indx1 shearFNoIntsl $- indx1 shearRNoIntsl
+fctSftyDerivEqn11 = (indx1 intNormForce `mulRe` indx1 shrResC) $= 
+  (sy fs `mulRe` indx1 shearFNoIntsl $- indx1 shearRNoIntsl)
 
 fctSftyDerivEqn12 :: Expr
-fctSftyDerivEqn12 = neg (sy fs `mulRe` indxn shearFNoIntsl $- indxn shearRNoIntsl) $/
-  idx (sy mobShrC) (sy numbSlices $- int 1) $= 
-  idx (sy intNormForce) (sy numbSlices $- int 1) `mulRe` 
-  idx (sy shrResC) (sy numbSlices $- int 1)
+fctSftyDerivEqn12 = neg ((sy fs `mulRe` indxn shearFNoIntsl $- indxn shearRNoIntsl) $/
+  idx (sy mobShrC) (sy numbSlices $- int 1)) $= 
+  (idx (sy intNormForce) (sy numbSlices $- int 1) `mulRe` 
+  idx (sy shrResC) (sy numbSlices $- int 1))
 
 fctSftyDerivEqn13 :: Expr
-fctSftyDerivEqn13 = idx (sy intNormForce) (int 2) `mulRe` idx (sy shrResC) (int 2) $= 
-  idx (sy mobShrC) (int 1) `mulRe` (sy fs `mulRe` idx (sy shearFNoIntsl) (int 1) $-
-  idx (sy shearRNoIntsl) (int 1)) `addRe` sy fs `mulRe` idx (sy shearFNoIntsl) (int 2) $- 
-  idx (sy shearRNoIntsl) (int 2)
+fctSftyDerivEqn13 = idx (sy intNormForce) (int 2) `mulRe` idx (sy shrResC) (int 2) $=
+  (idx (sy mobShrC) (int 1) `mulRe` (sy fs `mulRe` idx (sy shearFNoIntsl) (int 1) $-
+  idx (sy shearRNoIntsl) (int 1)) `addRe` (sy fs `mulRe` idx (sy shearFNoIntsl) (int 2)) $- 
+  idx (sy shearRNoIntsl) (int 2))
 
 fctSftyDerivEqn14 :: Expr
-fctSftyDerivEqn14 = idx (sy intNormForce) (int 3) `mulRe` idx (sy shrResC) (int 3) $= 
-  idx (sy mobShrC) (int 2) `mulRe` (idx (sy mobShrC) (int 1) `mulRe` (sy fs `mulRe` idx (sy shearFNoIntsl) (int 1) $-
-  idx (sy shearRNoIntsl) (int 1)) `addRe` sy fs `mulRe` idx (sy shearFNoIntsl) (int 2) $- 
-  idx (sy shearRNoIntsl) (int 2)) `addRe` sy fs `mulRe` idx (sy shearFNoIntsl) (int 3) $- 
-  idx (sy shearRNoIntsl) (int 3)
+fctSftyDerivEqn14 = idx (sy intNormForce) (int 3) `mulRe` idx (sy shrResC) (int 3) $=
+  (idx (sy mobShrC) (int 2) `mulRe` (idx (sy mobShrC) (int 1) `mulRe` (sy fs `mulRe` idx (sy shearFNoIntsl) (int 1) $-
+  idx (sy shearRNoIntsl) (int 1)) `addRe` (sy fs `mulRe` idx (sy shearFNoIntsl) (int 2)) $- 
+  idx (sy shearRNoIntsl) (int 2)) `addRe` (sy fs `mulRe` idx (sy shearFNoIntsl) (int 3)) $- 
+  idx (sy shearRNoIntsl) (int 3))
 
 -- Need to add ellipses where appropriate
 fctSftyDerivEqn15 :: Expr

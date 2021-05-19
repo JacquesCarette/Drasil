@@ -85,25 +85,14 @@ filename = var "filename" "name of file with x y and z data"
 -- Some semantic functions
 
 -- Given two points (x1,y1) and (x2,y2), return the slope of the line going through them
-slope :: (Fractional a) => (a, a) -> (a, a) -> a
-slope (x1,y1) (x2,y2) = (y2 - y1) / (x2 - x1)
+slope :: (Expr, Expr) -> (Expr, Expr) -> Expr
+slope (x1, y1) (x2, y2) = (y2 $- y1) $/ (x2 $- x1)
 
 -- Given two points (x1,y1) and (x2,y2), and an x ordinate, return
 -- extrapoled y on the straight line in between
-onLine :: (Fractional a) => (a, a) -> (a, a) -> a -> a
-onLine p1@(x1,y1) p2 x_ = 
+onLine :: (Expr, Expr) -> (Expr, Expr) -> Expr -> Expr
+onLine p1@(x1, y1) p2 x_ = 
   let m = slope p1 p2 in
-  m * (x_ - x1) + y1
-
--- Given two points (x1,y1) and (x2,y2), return the slope of the line going through them
-slope' :: (Expr, Expr) -> (Expr, Expr) -> Expr
-slope' (x1, y1) (x2, y2) = (y2 $- y1) $/ (x2 $- x1)
-
--- Given two points (x1,y1) and (x2,y2), and an x ordinate, return
--- extrapoled y on the straight line in between
-onLine' :: (Expr, Expr) -> (Expr, Expr) -> Expr -> Expr
-onLine' p1@(x1, y1) p2 x_ = 
-  let m = slope' p1 p2 in
   addRe (mulRe m (x_ $- x1)) y1
 
 ------------------------------------------------------------------------------------------
@@ -143,7 +132,7 @@ interpOver ptx pty ind vv =
 linInterpCT :: Func
 linInterpCT = funcDef "lin_interp" "Performs linear interpolation" 
   [x_1, y_1, x_2, y_2, x] Real (Just "y value interpolated at given x value")
-  [ FRet $ onLine' (sy x_1, sy y_1) (sy x_2, sy y_2) (sy x) ]
+  [ FRet $ onLine (sy x_1, sy y_1) (sy x_2, sy y_2) (sy x) ]
 
 findCT :: Func
 findCT = funcDef "find" 

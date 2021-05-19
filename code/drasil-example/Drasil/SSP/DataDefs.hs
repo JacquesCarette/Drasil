@@ -45,7 +45,7 @@ intersliceWtrFQD = mkQuantDef watrForce intersliceWtrFEqn
 intersliceWtrFEqn :: Expr
 intersliceWtrFEqn = completeCase [case1,case2,case3]
   where case1 = (((inxi slopeHght $- inxi slipHght) $^ int 2 $/ int 2) `mulRe`
-          sy waterWeight `addRe` ((inxi waterHght $- inxi slopeHght) $^ int 2 `mulRe`
+          sy waterWeight `addRe` (((inxi waterHght $- inxi slopeHght) $^ int 2) `mulRe`
           sy waterWeight), inxi waterHght $>= inxi slopeHght)
 
         case2 = (((inxi waterHght $- inxi slipHght) $^ int 2 $/ int 2)  `mulRe` sy waterWeight,

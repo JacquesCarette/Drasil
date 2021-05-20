@@ -227,10 +227,10 @@ deploy: analysis graphs docs tex doxygen
 
 # follow two are for cleaning things out
 $(filter $(CLEAN_GF_PREFIX)%, $(CLEAN_FOLDERS)): $(CLEAN_GF_PREFIX)%:
-	- rm -r "./$*"
+	- rm -rf "./$*"
 
 clean: $(CLEAN_FOLDERS)
 	- stack clean
-	- rm "$(CACHED_MSV_FILE)"
+	- rm -f "$(CACHED_MSV_FILE)"
 
 .PHONY: clean code analysis tex doc debug prog test graphs graphmod check_stack graphs deploy_code_path deploy deploy_lite all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)

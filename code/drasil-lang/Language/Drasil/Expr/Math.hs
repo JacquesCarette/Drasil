@@ -100,7 +100,7 @@ exactDbl = ExactDbl
 
 -- | Smart constructor for fractions
 frac :: Integer -> Integer -> Expr
-frac l r = int l $/ int r
+frac l r = exactDbl l $/ exactDbl r
 
 -- | Smart constructor for strings
 str :: String -> Expr
@@ -157,7 +157,7 @@ incompleteCase = Case Incomplete
 
 -- | Smart constructor to square a function
 square :: Expr -> Expr
-square x = x $^ Int 2
+square x = x $^ exactDbl 2
 
 -- | Matrix helper function
 m2x2 :: Expr -> Expr -> Expr -> Expr -> Expr

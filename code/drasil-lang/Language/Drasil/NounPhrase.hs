@@ -21,9 +21,9 @@ class NounPhrase n where
     --Could replace plural string with a function.
   sentenceCase :: n -> (NP -> Sentence) -> Capitalization 
     --Should this be replaced with a data type instead?
-    -- ^ example: "The quick brown fox" 
     --Data types should use functions to determine capitalization based
     -- on rules.
+    -- ^ example: "The quick brown fox" 
   titleCase :: n -> (NP -> Sentence) -> Capitalization -- ^ ex. "The Quick Brown Fox"
 
 type Capitalization = Sentence  --Using type synonyms for clarity.

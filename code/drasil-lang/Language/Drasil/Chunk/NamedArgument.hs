@@ -9,7 +9,7 @@ import Language.Drasil.Chunk.UnitDefn(MayHaveUnit(getUnit))
 
 import Control.Lens ((^.), makeLenses, view)
 
--- | Any quantity can be a named argument
+-- | Any quantity can be a named argument (wrapper for 'QuantityDict')
 newtype NamedArgument = NA {_qtd :: QuantityDict}
 makeLenses ''NamedArgument
 
@@ -23,6 +23,6 @@ instance IsArgumentName NamedArgument where
 instance Eq             NamedArgument where a == b = (a ^. uid) == (b ^. uid)
 instance MayHaveUnit    NamedArgument where getUnit = getUnit . view qtd
   
--- | 'NamedArgument' constructor
+-- | Smart constructor for 'NamedArgument' 
 narg :: (Quantity q, MayHaveUnit q) => q -> NamedArgument
 narg = NA . qw

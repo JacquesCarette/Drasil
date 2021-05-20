@@ -15,7 +15,7 @@ import Language.Drasil.Symbol (Symbol)
 
 import Control.Lens ((^.), makeLenses, view)
 
--- | DefinedQuantity is the combinatino of a Concept and Quantity
+-- | DefinedQuantityDict is the combination of a 'Concept' and a 'Quantity'. Contains a 'ConceptChunk', a 'Symbol' dependent on 'Stage', a 'Space', and maybe a 'UnitDefn'.
 data DefinedQuantityDict = DQD { _con :: ConceptChunk
                                , _symb :: Stage -> Symbol
                                , _spa :: Space
@@ -25,29 +25,38 @@ data DefinedQuantityDict = DQD { _con :: ConceptChunk
 makeLenses ''DefinedQuantityDict
 
 instance HasUID        DefinedQuantityDict where uid = con . uid
+-- ^ Finds the 'UID' of the 'ConceptChunk' used to make the 'DefinedQuantityDIct'.
 instance Eq            DefinedQuantityDict where a == b = (a ^. uid) == (b ^. uid)
+-- Equal if 'UID's are equal.
 instance NamedIdea     DefinedQuantityDict where term = con . term
+-- ^ Finds the term ('NP') of the 'ConceptChunk' used to make the 'DefinedQuantityDIct'.
 instance Idea          DefinedQuantityDict where getA = getA . view con
+-- ^ Finds the idea contained in the 'ConceptChunk' used to make the 'DefinedQuantityDIct'.
 instance Definition    DefinedQuantityDict where defn = con . defn
+-- ^ Finds the definition contained in the 'ConceptChunk' used to make the 'DefinedQuantityDIct'.
 instance ConceptDomain DefinedQuantityDict where cdom = cdom . view con
+-- ^ Finds the domain of the 'ConceptChunk' used to make the 'DefinedQuantityDIct'.
 instance HasSpace      DefinedQuantityDict where typ = spa
+-- ^ Finds the 'Space' of the 'DefinedQuantityDict'.
 instance HasSymbol     DefinedQuantityDict where symbol = view symb
+-- ^ Finds the 'Stage' -> 'Symbol' of the 'DefinedQuantityDict'.
 instance Quantity      DefinedQuantityDict where 
 instance MayHaveUnit   DefinedQuantityDict where getUnit = view unit'
+-- ^ Finds the units of the 'DefinedQuantityDict'.
 
--- | For when the symbol is constant through stages
+-- | Smart constructor that creates a DefinedQuantityDict with a 'ConceptChunk', a 'Symbol' independent of 'Stage', a 'Space', and a unit.
 dqd :: (IsUnit u) => ConceptChunk -> Symbol -> Space -> u -> DefinedQuantityDict
 dqd c s sp = DQD c (const s) sp . Just . unitWrapper
 
--- | Similar to 'dqd', but without any units
+-- | Similar to 'dqd', but without any units.
 dqdNoUnit :: ConceptChunk -> Symbol -> Space -> DefinedQuantityDict
 dqdNoUnit c s sp = DQD c (const s) sp Nothing
 
--- | For when the symbol changes depending on the stage
+-- | Similar to 'dqd', but the 'Symbol' is now dependent on the 'Stage'.
 dqd' :: ConceptChunk -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> DefinedQuantityDict
 dqd' = DQD
 
--- | When the input already has all the necessary information. A 'projection' operator
+-- | When the input already has all the necessary information. A 'projection' operator from some a type with instances of listed classes to a 'DefinedQuantityDict'.
 dqdWr :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
 dqdWr c = DQD (cw c) (symbol c) (c ^. typ) (getUnit c)
 

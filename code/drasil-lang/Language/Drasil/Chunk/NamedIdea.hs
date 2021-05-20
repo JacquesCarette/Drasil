@@ -19,7 +19,7 @@ instance HasUID    NamedChunk where uid = uu
 instance NamedIdea NamedChunk where term = np
 instance Idea      NamedChunk where getA _ = Nothing
   
--- | 'NamedChunk' constructor, takes an uid and a term.
+-- | 'NamedChunk' constructor, takes a 'UID' and a term.
 nc :: String -> NP -> NamedChunk
 nc = NC
 

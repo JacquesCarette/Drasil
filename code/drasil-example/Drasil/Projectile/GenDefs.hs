@@ -28,7 +28,7 @@ genDefns = [rectVelGD, rectPosGD, velVecGD, posVecGD]
 
 -- TODO: after converting rectVelGD & rectPosGD to an EquationalModel, this should be removed
 genDefns0 :: [GenDefn]
-genDefns0 = [rectVelGD, rectPosGD]
+genDefns0 = [rectVelGD]
 
 ----------
 rectVelGD :: GenDefn

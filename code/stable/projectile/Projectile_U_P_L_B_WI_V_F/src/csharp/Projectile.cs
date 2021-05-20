@@ -233,7 +233,7 @@ public class InputParameters {
             Console.Write(0.0f);
             Console.WriteLine(".");
         }
-        if (!(0.0f < this.theta && this.theta < Math.PI / 2)) {
+        if (!(0.0f < this.theta && this.theta < Math.PI / 2.0f)) {
             Console.Write("Warning: ");
             Console.Write("theta has value ");
             Console.Write(this.theta);
@@ -241,7 +241,7 @@ public class InputParameters {
             Console.Write("between ");
             Console.Write(0.0f);
             Console.Write(" and ");
-            Console.Write(Math.PI / 2);
+            Console.Write(Math.PI / 2.0f);
             Console.Write(" ((pi)/(2))");
             Console.WriteLine(".");
         }

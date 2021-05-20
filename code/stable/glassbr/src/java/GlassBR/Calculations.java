@@ -25,7 +25,7 @@ public class Calculations {
         outfile.println("  }");
         outfile.close();
         
-        return Math.log(Math.log(1 / (1 - inParams.P_btol)) * (Math.pow(inParams.a * inParams.b, 7.0 - 1.0) / (2.86e-53 * Math.pow(7.17e10 * Math.pow(inParams.h, 2.0), 7.0) * inParams.LDF)));
+        return Math.log(Math.log(1.0 / (1.0 - inParams.P_btol)) * (Math.pow(inParams.a * inParams.b, 7.0 - 1.0) / (2.86e-53 * Math.pow(7.17e10 * Math.pow(inParams.h, 2.0), 7.0) * inParams.LDF)));
     }
     
     /** \brief Calculates applied load (demand): 3 second duration equivalent pressure (Pa)

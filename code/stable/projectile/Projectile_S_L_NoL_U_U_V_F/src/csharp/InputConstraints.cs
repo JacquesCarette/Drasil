@@ -21,7 +21,7 @@ public class InputConstraints {
             Console.Write(0.0f);
             Console.WriteLine(".");
         }
-        if (!(0.0f < theta && theta < Math.PI / 2)) {
+        if (!(0.0f < theta && theta < Math.PI / 2.0f)) {
             Console.Write("Warning: ");
             Console.Write("theta has value ");
             Console.Write(theta);
@@ -29,7 +29,7 @@ public class InputConstraints {
             Console.Write("between ");
             Console.Write(0.0f);
             Console.Write(" and ");
-            Console.Write(Math.PI / 2);
+            Console.Write(Math.PI / 2.0f);
             Console.Write(" ((pi)/(2))");
             Console.WriteLine(".");
         }

@@ -16,7 +16,7 @@ def input_constraints(v_launch, theta, p_target):
         print("above ", end="")
         print(0.0, end="")
         print(".")
-    if (not(0.0 < theta and theta < math.pi / 2)) :
+    if (not(0.0 < theta and theta < math.pi / 2.0)) :
         print("Warning: ", end="")
         print("theta has value ", end="")
         print(theta, end="")
@@ -24,7 +24,7 @@ def input_constraints(v_launch, theta, p_target):
         print("between ", end="")
         print(0.0, end="")
         print(" and ", end="")
-        print(math.pi / 2, end="")
+        print(math.pi / 2.0, end="")
         print(" ((pi)/(2))", end="")
         print(".")
     if (not(p_target > 0.0)) :

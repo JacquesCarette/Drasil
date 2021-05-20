@@ -84,7 +84,7 @@ void InputParameters::input_constraints() {
         std::cout << 0.0f;
         std::cout << "." << std::endl;
     }
-    if (!(0.0f < this->theta && this->theta < M_PI / 2)) {
+    if (!(0.0f < this->theta && this->theta < M_PI / 2.0f)) {
         std::cout << "Warning: ";
         std::cout << "theta has value ";
         std::cout << this->theta;
@@ -92,7 +92,7 @@ void InputParameters::input_constraints() {
         std::cout << "between ";
         std::cout << 0.0f;
         std::cout << " and ";
-        std::cout << (M_PI / 2);
+        std::cout << (M_PI / 2.0f);
         std::cout << " ((pi)/(2))";
         std::cout << "." << std::endl;
     }

@@ -683,7 +683,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[p={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2.0}\]
+                        \[p={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2}\]
                       </td>
                     </tr>
                     <tr>
@@ -734,7 +734,7 @@
                     <p class="paragraph">
                       Performing the integration, we have the required equation:
                     </p>
-                    \[p={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2.0}\]
+                    \[p={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2}\]
                   </div>
                 </div>
                 <div id="GD:velVec">
@@ -845,8 +845,8 @@
                       <th>Equation</th>
                       <td>
                         \[\mathbf{p}=\begin{bmatrix}
-                                     {{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}} t+\frac{{{a_{\text{x}}}^{\text{c}}} t^{2}}{2.0}\\
-                                     {{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}} t+\frac{{{a_{\text{y}}}^{\text{c}}} t^{2}}{2.0}
+                                     {{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}} t+\frac{{{a_{\text{x}}}^{\text{c}}} t^{2}}{2}\\
+                                     {{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}} t+\frac{{{a_{\text{y}}}^{\text{c}}} t^{2}}{2}
                                      \end{bmatrix}\]
                       </td>
                     </tr>
@@ -913,8 +913,8 @@
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    \end{bmatrix}\)</em>. Since we have a Cartesian coordinate system, <a href=#GD:rectPos>GD: rectPos</a> can be applied to each coordinate of the position vector to yield the required equation:
                     </p>
                     \[\mathbf{p}=\begin{bmatrix}
-                                 {{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}} t+\frac{{{a_{\text{x}}}^{\text{c}}} t^{2}}{2.0}\\
-                                 {{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}} t+\frac{{{a_{\text{y}}}^{\text{c}}} t^{2}}{2.0}
+                                 {{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}} t+\frac{{{a_{\text{x}}}^{\text{c}}} t^{2}}{2}\\
+                                 {{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}} t+\frac{{{a_{\text{y}}}^{\text{c}}} t^{2}}{2}
                                  \end{bmatrix}\]
                   </div>
                 </div>
@@ -1168,7 +1168,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{t_{\text{flight}}}=\frac{2.0 {v_{\text{launch}}} \sin\left(θ\right)}{\mathbf{g}}\]
+                        \[{t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{\mathbf{g}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1222,23 +1222,23 @@
                     <p class="paragraph">
                       We know that <em>p<sub>y</sub><sup>i</sup> = 0.0</em> (<a href=#launchOrigin>A: launchOrigin</a>) and <em>a<sub>y</sub><sup>c</sup> = &minus;<b>g</b></em> (<a href=#accelYGravity>A: accelYGravity</a>). Substituting these values into the y-direction of <a href=#GD:posVec>GD: posVec</a> gives us:
                     </p>
-                    \[{p_{\text{y}}}={{v_{\text{y}}}^{\text{i}}} t-\frac{\mathbf{g} t^{2}}{2.0}\]
+                    \[{p_{\text{y}}}={{v_{\text{y}}}^{\text{i}}} t-\frac{\mathbf{g} t^{2}}{2}\]
                     <p class="paragraph">
                       To find the time that the projectile lands, we want to find the <em>t</em> value (<em>t<sub>flight</sub></em>) where <em>p<sub>y</sub> = 0.0</em> (since the target is on the <em>x</em>-axis from <a href=#targetXAxis>A: targetXAxis</a>). From the equation above we get:
                     </p>
-                    \[{{v_{\text{y}}}^{\text{i}}} {t_{\text{flight}}}-\frac{\mathbf{g} {t_{\text{flight}}}^{2}}{2.0}=0.0\]
+                    \[{{v_{\text{y}}}^{\text{i}}} {t_{\text{flight}}}-\frac{\mathbf{g} {t_{\text{flight}}}^{2}}{2.0}=0\]
                     <p class="paragraph">
                       Dividing by <em>t<sub>flight</sub></em> (with the constraint <em>t<sub>flight</sub>&thinsp;&gt;&thinsp;0.0</em>) gives us:
                     </p>
-                    \[{{v_{\text{y}}}^{\text{i}}}-\frac{\mathbf{g} {t_{\text{flight}}}}{2.0}=0.0\]
+                    \[{{v_{\text{y}}}^{\text{i}}}-\frac{\mathbf{g} {t_{\text{flight}}}}{2}=0\]
                     <p class="paragraph">
                       Solving for <em>t<sub>flight</sub></em> gives us:
                     </p>
-                    \[{t_{\text{flight}}}=\frac{2.0 {{v_{\text{y}}}^{\text{i}}}}{\mathbf{g}}\]
+                    \[{t_{\text{flight}}}=\frac{2 {{v_{\text{y}}}^{\text{i}}}}{\mathbf{g}}\]
                     <p class="paragraph">
                       From <a href=#DD:speedIY>DD: speedIY</a> (with <em>v<sup>i</sup> = v<sub>launch</sub></em>) we can replace <em>v<sub>y</sub><sup>i</sup></em>:
                     </p>
-                    \[{t_{\text{flight}}}=\frac{2.0 {v_{\text{launch}}} \sin\left(θ\right)}{\mathbf{g}}\]
+                    \[{t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{\mathbf{g}}\]
                   </div>
                 </div>
                 <div id="IM:calOfLandingDist">
@@ -1275,7 +1275,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{p_{\text{land}}}=\frac{2.0 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{\mathbf{g}}\]
+                        \[{p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{\mathbf{g}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1333,15 +1333,15 @@
                     <p class="paragraph">
                       To find the landing position, we want to find the <em>p<sub>x</sub></em> value (<em>p<sub>land</sub></em>) at flight duration (from <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>):
                     </p>
-                    \[{p_{\text{land}}}=\frac{{{v_{\text{x}}}^{\text{i}}}\cdot{}2.0 {v_{\text{launch}}} \sin\left(θ\right)}{\mathbf{g}}\]
+                    \[{p_{\text{land}}}=\frac{{{v_{\text{x}}}^{\text{i}}}\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{\mathbf{g}}\]
                     <p class="paragraph">
                       From <a href=#DD:speedIX>DD: speedIX</a> (with <em>v<sup>i</sup> = v<sub>launch</sub></em>) we can replace <em>v<sub>x</sub><sup>i</sup></em>:
                     </p>
-                    \[{p_{\text{land}}}=\frac{{v_{\text{launch}}} \cos\left(θ\right)\cdot{}2.0 {v_{\text{launch}}} \sin\left(θ\right)}{\mathbf{g}}\]
+                    \[{p_{\text{land}}}=\frac{{v_{\text{launch}}} \cos\left(θ\right)\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{\mathbf{g}}\]
                     <p class="paragraph">
                       Rearranging this gives us the required equation:
                     </p>
-                    \[{p_{\text{land}}}=\frac{2.0 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{\mathbf{g}}\]
+                    \[{p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{\mathbf{g}}\]
                   </div>
                 </div>
                 <div id="IM:offsetIM">

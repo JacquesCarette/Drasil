@@ -16,7 +16,7 @@ def func_J_tol(inParams):
     print("  }", file=outfile)
     outfile.close()
     
-    return math.log(math.log(1 / (1 - inParams.P_btol)) * ((inParams.a * inParams.b) ** (7.0 - 1.0) / (2.86e-53 * (7.17e10 * inParams.h ** 2.0) ** 7.0 * inParams.LDF)))
+    return math.log(math.log(1.0 / (1.0 - inParams.P_btol)) * ((inParams.a * inParams.b) ** (7.0 - 1.0) / (2.86e-53 * (7.17e10 * inParams.h ** 2.0) ** 7.0 * inParams.LDF)))
 
 ## \brief Calculates applied load (demand): 3 second duration equivalent pressure (Pa)
 # \param inParams structure holding the input values

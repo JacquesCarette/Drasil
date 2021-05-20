@@ -795,7 +795,7 @@ Units & ${\text{m}^{3}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {V_{\text{tank}}}=π \left(\frac{D}{2.0}\right)^{2.0} L
+           {V_{\text{tank}}}=π \left(\frac{D}{2}\right)^{2} L
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -1112,7 +1112,7 @@ Input Constraints & \begin{displaymath}
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           \frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1.0}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)+η \left({T_{\text{P}}}\left(t\right)-{T_{\text{W}}}\left(t\right)\right)\right)
+           \frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)+η \left({T_{\text{P}}}\left(t\right)-{T_{\text{W}}}\left(t\right)\right)\right)
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -1175,12 +1175,12 @@ Rearraging this equation gives us:
 By substituting ${τ_{\text{W}}}$ (from \hyperref[DD:balanceDecayRate]{DD: balanceDecayRate}) and $η$ (from \hyperref[DD:balanceDecayTime]{DD: balanceDecayTime}), this can be written as:
 
 \begin{displaymath}
-\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1.0}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)+\frac{η}{{τ_{\text{W}}}} \left({T_{\text{P}}}-{T_{\text{W}}}\right)
+\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)+\frac{η}{{τ_{\text{W}}}} \left({T_{\text{P}}}-{T_{\text{W}}}\right)
 \end{displaymath}
-Finally, factoring out $\frac{1.0}{{τ_{\text{W}}}}$, we are left with the governing ODE for \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}:
+Finally, factoring out $\frac{1}{{τ_{\text{W}}}}$, we are left with the governing ODE for \hyperref[IM:eBalanceOnWtr]{IM: eBalanceOnWtr}:
 
 \begin{displaymath}
-\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1.0}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}+η \left({T_{\text{P}}}-{T_{\text{W}}}\right)\right)
+\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}+η \left({T_{\text{P}}}-{T_{\text{W}}}\right)\right)
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -1207,9 +1207,9 @@ Output Constraints &
 \\ \midrule \\
 Equation & \begin{displaymath}
            \frac{\,d{T_{\text{P}}}}{\,dt}=\begin{cases}
-                                          \frac{1.0}{{{τ_{\text{P}}}^{\text{S}}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}\lt{}{{T_{\text{melt}}}^{\text{P}}}\\
-                                          \frac{1.0}{{{τ_{\text{P}}}^{\text{L}}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}\gt{}{{T_{\text{melt}}}^{\text{P}}}\\
-                                          0.0, & {T_{\text{P}}}={{T_{\text{melt}}}^{\text{P}}}\land{}0.0\lt{}ϕ\lt{}1.0
+                                          \frac{1}{{{τ_{\text{P}}}^{\text{S}}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}\lt{}{{T_{\text{melt}}}^{\text{P}}}\\
+                                          \frac{1}{{{τ_{\text{P}}}^{\text{L}}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}\gt{}{{T_{\text{melt}}}^{\text{P}}}\\
+                                          0, & {T_{\text{P}}}={{T_{\text{melt}}}^{\text{P}}}\land{}0.0\lt{}ϕ\lt{}1.0
                                           \end{cases}
            \end{displaymath}
 \\ \midrule \\
@@ -1264,7 +1264,7 @@ Dividing by ${m_{\text{P}}}$ ${{C_{\text{P}}}^{\text{S}}}$ we obtain:
 By substituting ${{τ_{\text{P}}}^{\text{S}}}$ (from \hyperref[DD:balanceSolidPCM]{DD: balanceSolidPCM}), this can be written as:
 
 \begin{displaymath}
-\frac{\,d{T_{\text{P}}}}{\,dt}=\frac{1.0}{{{τ_{\text{P}}}^{\text{S}}}} \left({T_{\text{W}}}-{T_{\text{P}}}\right)
+\frac{\,d{T_{\text{P}}}}{\,dt}=\frac{1}{{{τ_{\text{P}}}^{\text{S}}}} \left({T_{\text{W}}}-{T_{\text{P}}}\right)
 \end{displaymath}
 Equation (4) applies for the solid PCM. In the case where all of the PCM is melted, the same derivation applies, except that ${{C_{\text{P}}}^{\text{S}}}$ is replaced by ${{C_{\text{P}}}^{\text{L}}}$, and thus ${{τ_{\text{P}}}^{\text{S}}}$ is replaced by ${{τ_{\text{P}}}^{\text{L}}}$. Although a small change in surface area would be expected with melting, this is not included, since the volume change of the PCM with melting is assumed to be negligible (\hyperref[assumpVCMPN]{A: Volume-Change-Melting-PCM-Negligible}).
 
@@ -1394,7 +1394,7 @@ RefBy & \hyperref[unlikeChgNGS]{UC: No-Gaseous-State}, \hyperref[findMass]{FR: F
 
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
-\hyperref[Table:InDataConstraints]{Table:InDataConstraints} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (\hyperref[assumpPIS]{A: PCM-Initially-Solid}). (++) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is $\frac{2.0}{{h_{\text{min}}}}$, where ${h_{\text{min}}}$ is the thickness of a ``sheet'' of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of seconds in one day.
+\hyperref[Table:InDataConstraints]{Table:InDataConstraints} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (\hyperref[assumpPIS]{A: PCM-Initially-Solid}). (++) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is $\frac{2}{{h_{\text{min}}}}$, where ${h_{\text{min}}}$ is the thickness of a ``sheet'' of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of seconds in one day.
 
 \begin{longtabu}{l l X[l] l l}
 \toprule
@@ -1404,7 +1404,7 @@ RefBy & \hyperref[unlikeChgNGS]{UC: No-Gaseous-State}, \hyperref[findMass]{FR: F
 \endhead
 ${A_{\text{C}}}$ & ${A_{\text{C}}}\gt{}0.0$ & ${A_{\text{C}}}\leq{}{{A_{\text{C}}}^{\text{max}}}$ & $0.12$ ${\text{m}^{2}}$ & 10$\%$
 \\
-${A_{\text{P}}}$ & ${A_{\text{P}}}\gt{}0.0$ & ${V_{\text{P}}}\leq{}{A_{\text{P}}}\leq{}\frac{2.0}{{h_{\text{min}}}} {V_{\text{tank}}}$ & $1.2$ ${\text{m}^{2}}$ & 10$\%$
+${A_{\text{P}}}$ & ${A_{\text{P}}}\gt{}0.0$ & ${V_{\text{P}}}\leq{}{A_{\text{P}}}\leq{}\frac{2}{{h_{\text{min}}}} {V_{\text{tank}}}$ & $1.2$ ${\text{m}^{2}}$ & 10$\%$
 \\
 ${{C_{\text{P}}}^{\text{L}}}$ & ${{C_{\text{P}}}^{\text{L}}}\gt{}0.0$ & ${{{C_{\text{P}}}^{\text{L}}}_{\text{min}}}\lt{}{{C_{\text{P}}}^{\text{L}}}\lt{}{{{C_{\text{P}}}^{\text{L}}}_{\text{max}}}$ & $2.27\cdot{}10^{3}$ $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$ & 10$\%$
 \\

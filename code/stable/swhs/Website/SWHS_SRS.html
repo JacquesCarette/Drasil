@@ -1487,7 +1487,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[{V_{\text{tank}}}=π \left(\frac{D}{2.0}\right)^{2.0} L\]</td>
+                      <td>\[{V_{\text{tank}}}=π \left(\frac{D}{2}\right)^{2} L\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1998,7 +1998,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1.0}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)+η \left({T_{\text{P}}}\left(t\right)-{T_{\text{W}}}\left(t\right)\right)\right)\]
+                        \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)+η \left({T_{\text{P}}}\left(t\right)-{T_{\text{W}}}\left(t\right)\right)\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -2087,11 +2087,11 @@
                     <p class="paragraph">
                       By substituting <em>τ<sub>W</sub></em> (from <a href=#DD:balanceDecayRate>DD: balanceDecayRate</a>) and <em>η</em> (from <a href=#DD:balanceDecayTime>DD: balanceDecayTime</a>), this can be written as:
                     </p>
-                    \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1.0}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)+\frac{η}{{τ_{\text{W}}}} \left({T_{\text{P}}}-{T_{\text{W}}}\right)\]
+                    \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}\right)+\frac{η}{{τ_{\text{W}}}} \left({T_{\text{P}}}-{T_{\text{W}}}\right)\]
                     <p class="paragraph">
-                      Finally, factoring out <em>\(\frac{1.0}{{τ_{\text{W}}}}\)</em>, we are left with the governing ODE for <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>:
+                      Finally, factoring out <em>\(\frac{1}{{τ_{\text{W}}}}\)</em>, we are left with the governing ODE for <a href=#IM:eBalanceOnWtr>IM: eBalanceOnWtr</a>:
                     </p>
-                    \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1.0}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}+η \left({T_{\text{P}}}-{T_{\text{W}}}\right)\right)\]
+                    \[\frac{\,d{T_{\text{W}}}}{\,dt}=\frac{1}{{τ_{\text{W}}}} \left({T_{\text{C}}}-{T_{\text{W}}}+η \left({T_{\text{P}}}-{T_{\text{W}}}\right)\right)\]
                   </div>
                 </div>
                 <div id="IM:eBalanceOnPCM">
@@ -2132,9 +2132,9 @@
                       <th>Equation</th>
                       <td>
                         \[\frac{\,d{T_{\text{P}}}}{\,dt}=\begin{cases}
-                                                         \frac{1.0}{{{τ_{\text{P}}}^{\text{S}}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}\lt{}{{T_{\text{melt}}}^{\text{P}}}\\
-                                                         \frac{1.0}{{{τ_{\text{P}}}^{\text{L}}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}\gt{}{{T_{\text{melt}}}^{\text{P}}}\\
-                                                         0.0, & {T_{\text{P}}}={{T_{\text{melt}}}^{\text{P}}}\land{}0.0\lt{}ϕ\lt{}1.0
+                                                         \frac{1}{{{τ_{\text{P}}}^{\text{S}}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}\lt{}{{T_{\text{melt}}}^{\text{P}}}\\
+                                                         \frac{1}{{{τ_{\text{P}}}^{\text{L}}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}\gt{}{{T_{\text{melt}}}^{\text{P}}}\\
+                                                         0, & {T_{\text{P}}}={{T_{\text{melt}}}^{\text{P}}}\land{}0.0\lt{}ϕ\lt{}1.0
                                                          \end{cases}\]
                       </td>
                     </tr>
@@ -2221,7 +2221,7 @@
                     <p class="paragraph">
                       By substituting <em>τ<sub>P</sub><sup>S</sup></em> (from <a href=#DD:balanceSolidPCM>DD: balanceSolidPCM</a>), this can be written as:
                     </p>
-                    \[\frac{\,d{T_{\text{P}}}}{\,dt}=\frac{1.0}{{{τ_{\text{P}}}^{\text{S}}}} \left({T_{\text{W}}}-{T_{\text{P}}}\right)\]
+                    \[\frac{\,d{T_{\text{P}}}}{\,dt}=\frac{1}{{{τ_{\text{P}}}^{\text{S}}}} \left({T_{\text{W}}}-{T_{\text{P}}}\right)\]
                     <p class="paragraph">
                       Equation (4) applies for the solid PCM. In the case where all of the PCM is melted, the same derivation applies, except that <em>C<sub>P</sub><sup>S</sup></em> is replaced by <em>C<sub>P</sub><sup>L</sup></em>, and thus <em>τ<sub>P</sub><sup>S</sup></em> is replaced by <em>τ<sub>P</sub><sup>L</sup></em>. Although a small change in surface area would be expected with melting, this is not included, since the volume change of the PCM with melting is assumed to be negligible (<a href=#assumpVCMPN>A: Volume-Change-Melting-PCM-Negligible</a>).
                     </p>
@@ -2449,7 +2449,7 @@
               <div class="subsubsection">
                 <h3>Data Constraints</h3>
                 <p class="paragraph">
-                  <a href=#Table:InDataConstraints>Table:InDataConstraints</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (<a href=#assumpPIS>A: PCM-Initially-Solid</a>). (++) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is <em>\(\frac{2.0}{{h_{\text{min}}}}\)</em>, where <em>h<sub>min</sub></em> is the thickness of a "sheet" of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of seconds in one day.
+                  <a href=#Table:InDataConstraints>Table:InDataConstraints</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (<a href=#assumpPIS>A: PCM-Initially-Solid</a>). (++) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is <em>\(\frac{2}{{h_{\text{min}}}}\)</em>, where <em>h<sub>min</sub></em> is the thickness of a "sheet" of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of seconds in one day.
                 </p>
                 <div id="Table:InDataConstraints">
                   <table class="table">
@@ -2473,7 +2473,7 @@
                       <td><em>A<sub>P</sub></em></td>
                       <td><em>A<sub>P</sub>&thinsp;&gt;&thinsp;0.0</em></td>
                       <td>
-                        <em>V<sub>P</sub>&thinsp;&le;&thinsp;A<sub>P</sub>&thinsp;&le;&thinsp;\(\frac{2.0}{{h_{\text{min}}}}\)&#8239;V<sub>tank</sub></em>
+                        <em>V<sub>P</sub>&thinsp;&le;&thinsp;A<sub>P</sub>&thinsp;&le;&thinsp;\(\frac{2}{{h_{\text{min}}}}\)&#8239;V<sub>tank</sub></em>
                       </td>
                       <td><em>1.2</em> <em>m<sup>2</sup></em></td>
                       <td>10<em>%</em></td>

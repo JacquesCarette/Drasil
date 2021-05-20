@@ -68,7 +68,7 @@ class InputParameters:
             print("above ", end="")
             print(0.0, end="")
             print(".")
-        if (not(0.0 < self.theta and self.theta < math.pi / 2)) :
+        if (not(0.0 < self.theta and self.theta < math.pi / 2.0)) :
             print("Warning: ", end="")
             print("theta has value ", end="")
             print(self.theta, end="")
@@ -76,7 +76,7 @@ class InputParameters:
             print("between ", end="")
             print(0.0, end="")
             print(" and ", end="")
-            print(math.pi / 2, end="")
+            print(math.pi / 2.0, end="")
             print(" ((pi)/(2))", end="")
             print(".")
         if (not(self.p_target > 0.0)) :

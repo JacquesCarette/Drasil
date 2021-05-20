@@ -126,7 +126,7 @@ public class Projectile {
             System.out.print(0.0);
             System.out.println(".");
         }
-        if (!(0.0 < theta && theta < Math.PI / 2)) {
+        if (!(0.0 < theta && theta < Math.PI / 2.0)) {
             System.out.print("Warning: ");
             System.out.print("theta has value ");
             System.out.print(theta);
@@ -134,7 +134,7 @@ public class Projectile {
             System.out.print("between ");
             System.out.print(0.0);
             System.out.print(" and ");
-            System.out.print(Math.PI / 2);
+            System.out.print(Math.PI / 2.0);
             System.out.print(" ((pi)/(2))");
             System.out.println(".");
         }

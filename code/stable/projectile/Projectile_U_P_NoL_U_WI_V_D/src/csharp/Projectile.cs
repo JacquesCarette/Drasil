@@ -106,7 +106,7 @@ public class Projectile {
             Console.Write(0.0);
             Console.WriteLine(".");
         }
-        if (!(0.0 < theta && theta < Math.PI / 2)) {
+        if (!(0.0 < theta && theta < Math.PI / 2.0)) {
             Console.Write("Warning: ");
             Console.Write("theta has value ");
             Console.Write(theta);
@@ -114,7 +114,7 @@ public class Projectile {
             Console.Write("between ");
             Console.Write(0.0);
             Console.Write(" and ");
-            Console.Write(Math.PI / 2);
+            Console.Write(Math.PI / 2.0);
             Console.Write(" ((pi)/(2))");
             Console.WriteLine(".");
         }

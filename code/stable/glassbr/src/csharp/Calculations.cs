@@ -20,7 +20,7 @@ public class Calculations {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return Math.Log(Math.Log(1 / (1 - inParams.P_btol)) * (Math.Pow(inParams.a * inParams.b, 7.0 - 1.0) / (2.86e-53 * Math.Pow(7.17e10 * Math.Pow(inParams.h, 2.0), 7.0) * inParams.LDF)));
+        return Math.Log(Math.Log(1.0 / (1.0 - inParams.P_btol)) * (Math.Pow(inParams.a * inParams.b, 7.0 - 1.0) / (2.86e-53 * Math.Pow(7.17e10 * Math.Pow(inParams.h, 2.0), 7.0) * inParams.LDF)));
     }
     
     /** \brief Calculates applied load (demand): 3 second duration equivalent pressure (Pa)

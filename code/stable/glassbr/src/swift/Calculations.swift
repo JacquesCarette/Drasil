@@ -45,7 +45,7 @@ func func_J_tol(_ inParams: inout InputParameters) throws -> Double {
         throw "Error closing file."
     }
     
-    return log(log(Double(1) / (Double(1) - inParams.P_btol)) * (pow(inParams.a * inParams.b, 7.0 - 1.0) / (2.86e-53 * pow(7.17e10 * pow(inParams.h, 2.0), 7.0) * inParams.LDF)))
+    return log(log(1.0 / (1.0 - inParams.P_btol)) * (pow(inParams.a * inParams.b, 7.0 - 1.0) / (2.86e-53 * pow(7.17e10 * pow(inParams.h, 2.0), 7.0) * inParams.LDF)))
 }
 
 /** Calculates applied load (demand): 3 second duration equivalent pressure (Pa)

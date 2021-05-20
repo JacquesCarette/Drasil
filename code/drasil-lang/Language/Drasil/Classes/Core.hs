@@ -19,7 +19,7 @@ class HasUID c where
   -- | Provides a /unique/ id for internal Drasil use
   uid :: Lens' c UID
 
--- A ShortName is the text to be displayed for a link.
+-- | A ShortName is the text to be displayed for a link.
 -- Used for referencing within a document that can include symbols and whatnot if required.
 -- Visible in the typeset documents (pdf)
 class HasShortName  s where

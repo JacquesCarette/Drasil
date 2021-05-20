@@ -19,7 +19,7 @@ func func_t_flight(_ inParams: inout InputParameters, _ g_vect: Double) -> Doubl
     - Returns: landing position: the distance from the launcher to the final position of the projectile (m)
 */
 func func_p_land(_ inParams: inout InputParameters, _ g_vect: Double) -> Double {
-    return 2.0 * pow(inParams.v_launch, 2) * sin(inParams.theta) * cos(inParams.theta) / g_vect
+    return 2.0 * pow(inParams.v_launch, 2.0) * sin(inParams.theta) * cos(inParams.theta) / g_vect
 }
 
 /** Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)

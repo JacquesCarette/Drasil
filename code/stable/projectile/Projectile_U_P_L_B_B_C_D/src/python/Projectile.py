@@ -60,13 +60,13 @@ class InputParameters:
         print("  }", file=outfile)
         outfile.close()
         
-        if (not(self.v_launch > 0)) :
+        if (not(self.v_launch > 0.0)) :
             print("Warning: ", end="")
             print("v_launch has value ", end="")
             print(self.v_launch, end="")
             print(", but is suggested to be ", end="")
             print("above ", end="")
-            print(0, end="")
+            print(0.0, end="")
             print(".")
         if (not(0.0 < self.theta and self.theta < math.pi / 2)) :
             print("Warning: ", end="")
@@ -79,13 +79,13 @@ class InputParameters:
             print(math.pi / 2, end="")
             print(" ((pi)/(2))", end="")
             print(".")
-        if (not(self.p_target > 0)) :
+        if (not(self.p_target > 0.0)) :
             print("Warning: ", end="")
             print("p_target has value ", end="")
             print(self.p_target, end="")
             print(", but is suggested to be ", end="")
             print("above ", end="")
-            print(0, end="")
+            print(0.0, end="")
             print(".")
 
 ## \brief Structure for holding the constant values
@@ -117,7 +117,7 @@ def func_p_land(inParams):
     print("  }", file=outfile)
     outfile.close()
     
-    return 2.0 * inParams.v_launch ** 2 * math.sin(inParams.theta) * math.cos(inParams.theta) / Constants.g_vect
+    return 2.0 * inParams.v_launch ** 2.0 * math.sin(inParams.theta) * math.cos(inParams.theta) / Constants.g_vect
 
 ## \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
 # \param inParams structure holding the input values

@@ -9,13 +9,13 @@
 using std::string;
 
 void input_constraints(float v_launch, float theta, float p_target) {
-    if (!(v_launch > 0)) {
+    if (!(v_launch > 0.0f)) {
         std::cout << "Warning: ";
         std::cout << "v_launch has value ";
         std::cout << v_launch;
         std::cout << ", but is suggested to be ";
         std::cout << "above ";
-        std::cout << 0;
+        std::cout << 0.0f;
         std::cout << "." << std::endl;
     }
     if (!(0.0f < theta && theta < M_PI / 2)) {
@@ -30,13 +30,13 @@ void input_constraints(float v_launch, float theta, float p_target) {
         std::cout << " ((pi)/(2))";
         std::cout << "." << std::endl;
     }
-    if (!(p_target > 0)) {
+    if (!(p_target > 0.0f)) {
         std::cout << "Warning: ";
         std::cout << "p_target has value ";
         std::cout << p_target;
         std::cout << ", but is suggested to be ";
         std::cout << "above ";
-        std::cout << 0;
+        std::cout << 0.0f;
         std::cout << "." << std::endl;
     }
 }

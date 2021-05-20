@@ -45,7 +45,7 @@ double func_t_flight(double v_launch, double theta, double g_vect) {
 }
 
 double func_p_land(double v_launch, double theta, double g_vect) {
-    return 2.0 * pow(v_launch, 2) * sin(theta) * cos(theta) / g_vect;
+    return 2.0 * pow(v_launch, 2.0) * sin(theta) * cos(theta) / g_vect;
 }
 
 double func_d_offset(double p_target, double p_land) {
@@ -80,13 +80,13 @@ void get_input(string filename, double &v_launch, double &theta, double &p_targe
 }
 
 void input_constraints(double v_launch, double theta, double p_target) {
-    if (!(v_launch > 0)) {
+    if (!(v_launch > 0.0)) {
         std::cout << "Warning: ";
         std::cout << "v_launch has value ";
         std::cout << v_launch;
         std::cout << ", but is suggested to be ";
         std::cout << "above ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << "." << std::endl;
     }
     if (!(0.0 < theta && theta < M_PI / 2)) {
@@ -101,13 +101,13 @@ void input_constraints(double v_launch, double theta, double p_target) {
         std::cout << " ((pi)/(2))";
         std::cout << "." << std::endl;
     }
-    if (!(p_target > 0)) {
+    if (!(p_target > 0.0)) {
         std::cout << "Warning: ";
         std::cout << "p_target has value ";
         std::cout << p_target;
         std::cout << ", but is suggested to be ";
         std::cout << "above ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << "." << std::endl;
     }
 }

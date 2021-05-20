@@ -20,7 +20,7 @@ public class Calculations {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return Math.Log(Math.Log(1 / (1 - inParams.P_btol)) * (Math.Pow(inParams.a * inParams.b, 7.0 - 1.0) / (2.86e-53 * Math.Pow(7.17e10 * Math.Pow(inParams.h, 2), 7.0) * inParams.LDF)));
+        return Math.Log(Math.Log(1 / (1 - inParams.P_btol)) * (Math.Pow(inParams.a * inParams.b, 7.0 - 1.0) / (2.86e-53 * Math.Pow(7.17e10 * Math.Pow(inParams.h, 2.0), 7.0) * inParams.LDF)));
     }
     
     /** \brief Calculates applied load (demand): 3 second duration equivalent pressure (Pa)
@@ -56,7 +56,7 @@ public class Calculations {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return q * Math.Pow(inParams.a * inParams.b, 2) / (7.17e10 * Math.Pow(inParams.h, 4.0) * inParams.GTF);
+        return q * Math.Pow(inParams.a * inParams.b, 2.0) / (7.17e10 * Math.Pow(inParams.h, 4.0) * inParams.GTF);
     }
     
     /** \brief Calculates tolerable load
@@ -116,7 +116,7 @@ public class Calculations {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return q_hat_tol * 7.17e10 * Math.Pow(inParams.h, 4.0) / Math.Pow(inParams.a * inParams.b, 2);
+        return q_hat_tol * 7.17e10 * Math.Pow(inParams.h, 4.0) / Math.Pow(inParams.a * inParams.b, 2.0);
     }
     
     /** \brief Calculates risk of failure
@@ -136,7 +136,7 @@ public class Calculations {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return 2.86e-53 / Math.Pow(inParams.a * inParams.b, 7.0 - 1.0) * Math.Pow(7.17e10 * Math.Pow(inParams.h, 2), 7.0) * inParams.LDF * Math.Exp(J);
+        return 2.86e-53 / Math.Pow(inParams.a * inParams.b, 7.0 - 1.0) * Math.Pow(7.17e10 * Math.Pow(inParams.h, 2.0), 7.0) * inParams.LDF * Math.Exp(J);
     }
     
     /** \brief Calculates load resistance: the uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in (pp. 1 and 53) Ref: astm2009 (Pa)

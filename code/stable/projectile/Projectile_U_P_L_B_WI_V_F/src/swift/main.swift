@@ -221,13 +221,13 @@ class InputParameters {
             throw "Error closing file."
         }
         
-        if !(self.v_launch > Float(0)) {
+        if !(self.v_launch > 0.0) {
             print("Warning: ", terminator: "")
             print("v_launch has value ", terminator: "")
             print(self.v_launch, terminator: "")
             print(", but is suggested to be ", terminator: "")
             print("above ", terminator: "")
-            print(0, terminator: "")
+            print(0.0, terminator: "")
             print(".")
         }
         if !(0.0 < self.theta && Double(self.theta) < Double.pi / Double(2)) {
@@ -242,13 +242,13 @@ class InputParameters {
             print(" ((pi)/(2))", terminator: "")
             print(".")
         }
-        if !(self.p_target > Float(0)) {
+        if !(self.p_target > 0.0) {
             print("Warning: ", terminator: "")
             print("p_target has value ", terminator: "")
             print(self.p_target, terminator: "")
             print(", but is suggested to be ", terminator: "")
             print("above ", terminator: "")
-            print(0, terminator: "")
+            print(0.0, terminator: "")
             print(".")
         }
     }
@@ -339,7 +339,7 @@ func func_p_land(_ inParams: inout InputParameters) throws -> Float {
         throw "Error closing file."
     }
     
-    return 2.0 * pow(inParams.v_launch, 2) * sin(inParams.theta) * cos(inParams.theta) / inParams.g_vect
+    return 2.0 * pow(inParams.v_launch, 2.0) * sin(inParams.theta) * cos(inParams.theta) / inParams.g_vect
 }
 
 /** Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)

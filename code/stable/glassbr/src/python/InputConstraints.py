@@ -69,12 +69,12 @@ def input_constraints(inParams):
         print(".")
         raise Exception("InputError")
     
-    if (not(inParams.a > 0)) :
+    if (not(inParams.a > 0.0)) :
         print("a has value ", end="")
         print(inParams.a, end="")
         print(", but is expected to be ", end="")
         print("above ", end="")
-        print(0, end="")
+        print(0.0, end="")
         print(".")
         raise Exception("InputError")
     if (not(inParams.a >= inParams.b)) :
@@ -97,38 +97,38 @@ def input_constraints(inParams):
         print(" (a)", end="")
         print(".")
         raise Exception("InputError")
-    if (not(inParams.w > 0)) :
+    if (not(inParams.w > 0.0)) :
         print("w has value ", end="")
         print(inParams.w, end="")
         print(", but is expected to be ", end="")
         print("above ", end="")
-        print(0, end="")
+        print(0.0, end="")
         print(".")
         raise Exception("InputError")
-    if (not(0 <= inParams.P_btol and inParams.P_btol <= 1)) :
+    if (not(0.0 <= inParams.P_btol and inParams.P_btol <= 1.0)) :
         print("P_btol has value ", end="")
         print(inParams.P_btol, end="")
         print(", but is expected to be ", end="")
         print("between ", end="")
-        print(0, end="")
+        print(0.0, end="")
         print(" and ", end="")
-        print(1, end="")
+        print(1.0, end="")
         print(".")
         raise Exception("InputError")
-    if (not(inParams.TNT > 0)) :
+    if (not(inParams.TNT > 0.0)) :
         print("TNT has value ", end="")
         print(inParams.TNT, end="")
         print(", but is expected to be ", end="")
         print("above ", end="")
-        print(0, end="")
+        print(0.0, end="")
         print(".")
         raise Exception("InputError")
-    if (not(inParams.SD > 0)) :
+    if (not(inParams.SD > 0.0)) :
         print("SD has value ", end="")
         print(inParams.SD, end="")
         print(", but is expected to be ", end="")
         print("above ", end="")
-        print(0, end="")
+        print(0.0, end="")
         print(".")
         raise Exception("InputError")
     if (not(inParams.AR >= 1.0)) :

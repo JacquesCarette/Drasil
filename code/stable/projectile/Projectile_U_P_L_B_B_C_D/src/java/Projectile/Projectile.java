@@ -81,7 +81,7 @@ public class Projectile {
         outfile.println("  }");
         outfile.close();
         
-        return 2.0 * Math.pow(inParams.v_launch, 2) * Math.sin(inParams.theta) * Math.cos(inParams.theta) / Constants.g_vect;
+        return 2.0 * Math.pow(inParams.v_launch, 2.0) * Math.sin(inParams.theta) * Math.cos(inParams.theta) / Constants.g_vect;
     }
     
     /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
@@ -228,13 +228,13 @@ class InputParameters {
         outfile.println("  }");
         outfile.close();
         
-        if (!(this.v_launch > 0)) {
+        if (!(this.v_launch > 0.0)) {
             System.out.print("Warning: ");
             System.out.print("v_launch has value ");
             System.out.print(this.v_launch);
             System.out.print(", but is suggested to be ");
             System.out.print("above ");
-            System.out.print(0);
+            System.out.print(0.0);
             System.out.println(".");
         }
         if (!(0.0 < this.theta && this.theta < Math.PI / 2)) {
@@ -249,13 +249,13 @@ class InputParameters {
             System.out.print(" ((pi)/(2))");
             System.out.println(".");
         }
-        if (!(this.p_target > 0)) {
+        if (!(this.p_target > 0.0)) {
             System.out.print("Warning: ");
             System.out.print("p_target has value ");
             System.out.print(this.p_target);
             System.out.print(", but is suggested to be ");
             System.out.print("above ");
-            System.out.print(0);
+            System.out.print(0.0);
             System.out.println(".");
         }
     }

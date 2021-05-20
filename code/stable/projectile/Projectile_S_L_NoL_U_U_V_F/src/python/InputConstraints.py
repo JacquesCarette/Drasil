@@ -8,13 +8,13 @@ import math
 # \param theta launch angle: the angle between the launcher and a straight line from the launcher to the target (rad)
 # \param p_target target position: the distance from the launcher to the target (m)
 def input_constraints(v_launch, theta, p_target):
-    if (not(v_launch > 0)) :
+    if (not(v_launch > 0.0)) :
         print("Warning: ", end="")
         print("v_launch has value ", end="")
         print(v_launch, end="")
         print(", but is suggested to be ", end="")
         print("above ", end="")
-        print(0, end="")
+        print(0.0, end="")
         print(".")
     if (not(0.0 < theta and theta < math.pi / 2)) :
         print("Warning: ", end="")
@@ -27,11 +27,11 @@ def input_constraints(v_launch, theta, p_target):
         print(math.pi / 2, end="")
         print(" ((pi)/(2))", end="")
         print(".")
-    if (not(p_target > 0)) :
+    if (not(p_target > 0.0)) :
         print("Warning: ", end="")
         print("p_target has value ", end="")
         print(p_target, end="")
         print(", but is suggested to be ", end="")
         print("above ", end="")
-        print(0, end="")
+        print(0.0, end="")
         print(".")

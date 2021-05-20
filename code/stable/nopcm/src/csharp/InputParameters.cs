@@ -168,31 +168,31 @@ public class InputParameters {
             Console.WriteLine(".");
         }
         
-        if (!(A_C > 0)) {
+        if (!(A_C > 0.0)) {
             Console.Write("Warning: ");
             Console.Write("A_C has value ");
             Console.Write(A_C);
             Console.Write(", but is suggested to be ");
             Console.Write("above ");
-            Console.Write(0);
+            Console.Write(0.0);
             Console.WriteLine(".");
         }
-        if (!(C_W > 0)) {
+        if (!(C_W > 0.0)) {
             Console.Write("Warning: ");
             Console.Write("C_W has value ");
             Console.Write(C_W);
             Console.Write(", but is suggested to be ");
             Console.Write("above ");
-            Console.Write(0);
+            Console.Write(0.0);
             Console.WriteLine(".");
         }
-        if (!(h_C > 0)) {
+        if (!(h_C > 0.0)) {
             Console.Write("Warning: ");
             Console.Write("h_C has value ");
             Console.Write(h_C);
             Console.Write(", but is suggested to be ");
             Console.Write("above ");
-            Console.Write(0);
+            Console.Write(0.0);
             Console.WriteLine(".");
         }
         if (!(0.0 < T_init && T_init < 100.0)) {
@@ -206,22 +206,22 @@ public class InputParameters {
             Console.Write(100.0);
             Console.WriteLine(".");
         }
-        if (!(t_final > 0)) {
+        if (!(t_final > 0.0)) {
             Console.Write("Warning: ");
             Console.Write("t_final has value ");
             Console.Write(t_final);
             Console.Write(", but is suggested to be ");
             Console.Write("above ");
-            Console.Write(0);
+            Console.Write(0.0);
             Console.WriteLine(".");
         }
-        if (!(L > 0)) {
+        if (!(L > 0.0)) {
             Console.Write("Warning: ");
             Console.Write("L has value ");
             Console.Write(L);
             Console.Write(", but is suggested to be ");
             Console.Write("above ");
-            Console.Write(0);
+            Console.Write(0.0);
             Console.WriteLine(".");
         }
         if (!(0.0 < T_C && T_C < 100.0)) {
@@ -247,22 +247,22 @@ public class InputParameters {
             Console.Write(" (t_final)");
             Console.WriteLine(".");
         }
-        if (!(rho_W > 0)) {
+        if (!(rho_W > 0.0)) {
             Console.Write("Warning: ");
             Console.Write("rho_W has value ");
             Console.Write(rho_W);
             Console.Write(", but is suggested to be ");
             Console.Write("above ");
-            Console.Write(0);
+            Console.Write(0.0);
             Console.WriteLine(".");
         }
-        if (!(D > 0)) {
+        if (!(D > 0.0)) {
             Console.Write("Warning: ");
             Console.Write("D has value ");
             Console.Write(D);
             Console.Write(", but is suggested to be ");
             Console.Write("above ");
-            Console.Write(0);
+            Console.Write(0.0);
             Console.WriteLine(".");
         }
         if (!(E_W >= 0.0)) {

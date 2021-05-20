@@ -43,7 +43,7 @@ public class Projectile {
         \return landing position: the distance from the launcher to the final position of the projectile (m)
     */
     public static double func_p_land(double v_launch, double theta, double g_vect) {
-        return 2.0 * Math.Pow(v_launch, 2) * Math.Sin(theta) * Math.Cos(theta) / g_vect;
+        return 2.0 * Math.Pow(v_launch, 2.0) * Math.Sin(theta) * Math.Cos(theta) / g_vect;
     }
     
     /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
@@ -97,13 +97,13 @@ public class Projectile {
         \param p_target target position: the distance from the launcher to the target (m)
     */
     public static void input_constraints(double v_launch, double theta, double p_target) {
-        if (!(v_launch > 0)) {
+        if (!(v_launch > 0.0)) {
             Console.Write("Warning: ");
             Console.Write("v_launch has value ");
             Console.Write(v_launch);
             Console.Write(", but is suggested to be ");
             Console.Write("above ");
-            Console.Write(0);
+            Console.Write(0.0);
             Console.WriteLine(".");
         }
         if (!(0.0 < theta && theta < Math.PI / 2)) {
@@ -118,13 +118,13 @@ public class Projectile {
             Console.Write(" ((pi)/(2))");
             Console.WriteLine(".");
         }
-        if (!(p_target > 0)) {
+        if (!(p_target > 0.0)) {
             Console.Write("Warning: ");
             Console.Write("p_target has value ");
             Console.Write(p_target);
             Console.Write(", but is suggested to be ");
             Console.Write("above ");
-            Console.Write(0);
+            Console.Write(0.0);
             Console.WriteLine(".");
         }
     }

@@ -10,7 +10,7 @@ float func_t_flight(float v_launch, float theta, float g_vect) {
 }
 
 float func_p_land(float v_launch, float theta, float g_vect) {
-    return 2.0f * pow(v_launch, 2) * sin(theta) * cos(theta) / g_vect;
+    return 2.0f * pow(v_launch, 2.0f) * sin(theta) * cos(theta) / g_vect;
 }
 
 float func_d_offset(float p_target, float p_land) {

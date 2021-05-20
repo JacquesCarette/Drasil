@@ -12,13 +12,13 @@ public class InputConstraints {
         \param p_target target position: the distance from the launcher to the target (m)
     */
     public static void input_constraints(float v_launch, float theta, float p_target) {
-        if (!(v_launch > 0)) {
+        if (!(v_launch > 0.0f)) {
             Console.Write("Warning: ");
             Console.Write("v_launch has value ");
             Console.Write(v_launch);
             Console.Write(", but is suggested to be ");
             Console.Write("above ");
-            Console.Write(0);
+            Console.Write(0.0f);
             Console.WriteLine(".");
         }
         if (!(0.0f < theta && theta < Math.PI / 2)) {
@@ -33,13 +33,13 @@ public class InputConstraints {
             Console.Write(" ((pi)/(2))");
             Console.WriteLine(".");
         }
-        if (!(p_target > 0)) {
+        if (!(p_target > 0.0f)) {
             Console.Write("Warning: ");
             Console.Write("p_target has value ");
             Console.Write(p_target);
             Console.Write(", but is suggested to be ");
             Console.Write("above ");
-            Console.Write(0);
+            Console.Write(0.0f);
             Console.WriteLine(".");
         }
     }

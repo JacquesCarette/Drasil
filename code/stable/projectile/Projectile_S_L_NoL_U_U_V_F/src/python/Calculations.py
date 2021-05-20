@@ -17,7 +17,7 @@ def func_t_flight(v_launch, theta, g_vect):
 # \param g_vect gravitational acceleration (m/s^2)
 # \return landing position: the distance from the launcher to the final position of the projectile (m)
 def func_p_land(v_launch, theta, g_vect):
-    return 2.0 * v_launch ** 2 * math.sin(theta) * math.cos(theta) / g_vect
+    return 2.0 * v_launch ** 2.0 * math.sin(theta) * math.cos(theta) / g_vect
 
 ## \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
 # \param p_target target position: the distance from the launcher to the target (m)

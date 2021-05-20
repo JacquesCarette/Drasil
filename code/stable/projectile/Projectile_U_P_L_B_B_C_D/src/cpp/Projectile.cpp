@@ -75,13 +75,13 @@ void InputParameters::input_constraints() {
     outfile << "  }" << std::endl;
     outfile.close();
     
-    if (!(this->v_launch > 0)) {
+    if (!(this->v_launch > 0.0)) {
         std::cout << "Warning: ";
         std::cout << "v_launch has value ";
         std::cout << this->v_launch;
         std::cout << ", but is suggested to be ";
         std::cout << "above ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << "." << std::endl;
     }
     if (!(0.0 < this->theta && this->theta < M_PI / 2)) {
@@ -96,13 +96,13 @@ void InputParameters::input_constraints() {
         std::cout << " ((pi)/(2))";
         std::cout << "." << std::endl;
     }
-    if (!(this->p_target > 0)) {
+    if (!(this->p_target > 0.0)) {
         std::cout << "Warning: ";
         std::cout << "p_target has value ";
         std::cout << this->p_target;
         std::cout << ", but is suggested to be ";
         std::cout << "above ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << "." << std::endl;
     }
 }
@@ -174,7 +174,7 @@ double func_p_land(InputParameters &inParams) {
     outfile << "  }" << std::endl;
     outfile.close();
     
-    return 2.0 * pow(inParams.v_launch, 2) * sin(inParams.theta) * cos(inParams.theta) / Constants::g_vect;
+    return 2.0 * pow(inParams.v_launch, 2.0) * sin(inParams.theta) * cos(inParams.theta) / Constants::g_vect;
 }
 
 double func_d_offset(InputParameters &inParams, double p_land) {

@@ -81,12 +81,12 @@ void input_constraints(InputParameters &inParams) {
         throw("InputError");
     }
     
-    if (!(inParams.a > 0)) {
+    if (!(inParams.a > 0.0)) {
         std::cout << "a has value ";
         std::cout << inParams.a;
         std::cout << ", but is expected to be ";
         std::cout << "above ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << "." << std::endl;
         throw("InputError");
     }
@@ -112,41 +112,41 @@ void input_constraints(InputParameters &inParams) {
         std::cout << "." << std::endl;
         throw("InputError");
     }
-    if (!(inParams.w > 0)) {
+    if (!(inParams.w > 0.0)) {
         std::cout << "w has value ";
         std::cout << inParams.w;
         std::cout << ", but is expected to be ";
         std::cout << "above ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << "." << std::endl;
         throw("InputError");
     }
-    if (!(0 <= inParams.P_btol && inParams.P_btol <= 1)) {
+    if (!(0.0 <= inParams.P_btol && inParams.P_btol <= 1.0)) {
         std::cout << "P_btol has value ";
         std::cout << inParams.P_btol;
         std::cout << ", but is expected to be ";
         std::cout << "between ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << " and ";
-        std::cout << 1;
+        std::cout << 1.0;
         std::cout << "." << std::endl;
         throw("InputError");
     }
-    if (!(inParams.TNT > 0)) {
+    if (!(inParams.TNT > 0.0)) {
         std::cout << "TNT has value ";
         std::cout << inParams.TNT;
         std::cout << ", but is expected to be ";
         std::cout << "above ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << "." << std::endl;
         throw("InputError");
     }
-    if (!(inParams.SD > 0)) {
+    if (!(inParams.SD > 0.0)) {
         std::cout << "SD has value ";
         std::cout << inParams.SD;
         std::cout << ", but is expected to be ";
         std::cout << "above ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << "." << std::endl;
         throw("InputError");
     }

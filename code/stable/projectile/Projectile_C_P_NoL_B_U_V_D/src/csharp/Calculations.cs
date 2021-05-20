@@ -21,7 +21,7 @@ public class Calculations {
         \return landing position: the distance from the launcher to the final position of the projectile (m)
     */
     public static double func_p_land(InputParameters inParams, double g_vect) {
-        return 2.0 * Math.Pow(inParams.v_launch, 2) * Math.Sin(inParams.theta) * Math.Cos(inParams.theta) / g_vect;
+        return 2.0 * Math.Pow(inParams.v_launch, 2.0) * Math.Sin(inParams.theta) * Math.Cos(inParams.theta) / g_vect;
     }
     
     /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)

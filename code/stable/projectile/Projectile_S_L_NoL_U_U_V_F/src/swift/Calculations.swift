@@ -21,7 +21,7 @@ func func_t_flight(_ v_launch: Float, _ theta: Float, _ g_vect: Float) -> Float 
     - Returns: landing position: the distance from the launcher to the final position of the projectile (m)
 */
 func func_p_land(_ v_launch: Float, _ theta: Float, _ g_vect: Float) -> Float {
-    return 2.0 * pow(v_launch, 2) * sin(theta) * cos(theta) / g_vect
+    return 2.0 * pow(v_launch, 2.0) * sin(theta) * cos(theta) / g_vect
 }
 
 /** Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)

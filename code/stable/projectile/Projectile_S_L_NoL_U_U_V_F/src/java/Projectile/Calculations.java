@@ -23,7 +23,7 @@ public class Calculations {
         \return landing position: the distance from the launcher to the final position of the projectile (m)
     */
     public static float func_p_land(float v_launch, float theta, float g_vect) {
-        return 2.0f * (float)(Math.pow(v_launch, 2)) * (float)(Math.sin(theta)) * (float)(Math.cos(theta)) / g_vect;
+        return 2.0f * (float)(Math.pow(v_launch, 2.0f)) * (float)(Math.sin(theta)) * (float)(Math.cos(theta)) / g_vect;
     }
     
     /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)

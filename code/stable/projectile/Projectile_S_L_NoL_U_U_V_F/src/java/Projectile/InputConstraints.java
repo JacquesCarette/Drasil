@@ -12,13 +12,13 @@ public class InputConstraints {
         \param p_target target position: the distance from the launcher to the target (m)
     */
     public static void input_constraints(float v_launch, float theta, float p_target) {
-        if (!(v_launch > 0)) {
+        if (!(v_launch > 0.0f)) {
             System.out.print("Warning: ");
             System.out.print("v_launch has value ");
             System.out.print(v_launch);
             System.out.print(", but is suggested to be ");
             System.out.print("above ");
-            System.out.print(0);
+            System.out.print(0.0f);
             System.out.println(".");
         }
         if (!(0.0f < theta && theta < Math.PI / 2)) {
@@ -33,13 +33,13 @@ public class InputConstraints {
             System.out.print(" ((pi)/(2))");
             System.out.println(".");
         }
-        if (!(p_target > 0)) {
+        if (!(p_target > 0.0f)) {
             System.out.print("Warning: ");
             System.out.print("p_target has value ");
             System.out.print(p_target);
             System.out.print(", but is suggested to be ");
             System.out.print("above ");
-            System.out.print(0);
+            System.out.print(0.0f);
             System.out.println(".");
         }
     }

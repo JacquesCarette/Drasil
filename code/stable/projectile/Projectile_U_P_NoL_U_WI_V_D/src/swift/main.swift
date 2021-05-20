@@ -23,7 +23,7 @@ func func_t_flight(_ v_launch: Double, _ theta: Double, _ g_vect: Double) -> Dou
     - Returns: landing position: the distance from the launcher to the final position of the projectile (m)
 */
 func func_p_land(_ v_launch: Double, _ theta: Double, _ g_vect: Double) -> Double {
-    return 2.0 * pow(v_launch, 2) * sin(theta) * cos(theta) / g_vect
+    return 2.0 * pow(v_launch, 2.0) * sin(theta) * cos(theta) / g_vect
 }
 
 /** Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
@@ -85,13 +85,13 @@ func get_input(_ filename: String) throws -> (Double, Double, Double) {
     - Parameter p_target: target position: the distance from the launcher to the target (m)
 */
 func input_constraints(_ v_launch: Double, _ theta: Double, _ p_target: Double) -> Void {
-    if !(v_launch > Double(0)) {
+    if !(v_launch > 0.0) {
         print("Warning: ", terminator: "")
         print("v_launch has value ", terminator: "")
         print(v_launch, terminator: "")
         print(", but is suggested to be ", terminator: "")
         print("above ", terminator: "")
-        print(0, terminator: "")
+        print(0.0, terminator: "")
         print(".")
     }
     if !(0.0 < theta && theta < Double.pi / Double(2)) {
@@ -106,13 +106,13 @@ func input_constraints(_ v_launch: Double, _ theta: Double, _ p_target: Double) 
         print(" ((pi)/(2))", terminator: "")
         print(".")
     }
-    if !(p_target > Double(0)) {
+    if !(p_target > 0.0) {
         print("Warning: ", terminator: "")
         print("p_target has value ", terminator: "")
         print(p_target, terminator: "")
         print(", but is suggested to be ", terminator: "")
         print("above ", terminator: "")
-        print(0, terminator: "")
+        print(0.0, terminator: "")
         print(".")
     }
 }

@@ -52,7 +52,7 @@ eBalanceOnWtrRC = makeRC "eBalanceOnWtrRC" (nounPhraseSP $ "Energy balance on " 
   -- eBalanceOnWtrL
 
 balWtrRel :: Relation
-balWtrRel = deriv (sy tempW) time $= (dbl 1 $/ sy tauW) `mulRe`
+balWtrRel = deriv (sy tempW) time $= (exactDbl 1 $/ sy tauW) `mulRe`
   ((sy tempC $- apply1 tempW time) `addRe`
   (sy eta `mulRe` (apply1 tempPCM time $- apply1 tempW time)))
 
@@ -139,7 +139,7 @@ eBalanceOnWtrDerivDesc7 eq22 = foldlSentCol [S "Finally, factoring out", E eq22 
 
 eq1, eq2 :: Expr
 eq1 = sy wMass `mulRe` sy htCapW
-eq2 = dbl 1 $/ sy tauW
+eq2 = exactDbl 1 $/ sy tauW
 
 eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3,
  eBalanceOnWtrDerivEqn4, eBalanceOnWtrDerivEqn5, eBalanceOnWtrDerivEqn6, eBalanceOnWtrDerivEqn7 :: Expr
@@ -172,10 +172,10 @@ eBalanceOnWtrDerivEqn5 = deriv (sy tempW) time $=
   (sy wMass `mulRe` sy htCapW)) `mulRe` (sy tempPCM $- sy tempW))
 
 eBalanceOnWtrDerivEqn6 = deriv (sy tempW) time $= 
-  (dbl 1 $/ sy tauW) `mulRe` (sy tempC $- sy tempW) `addRe` ((sy eta $/ sy tauW) `mulRe` (sy tempPCM $- sy tempW))
+  (exactDbl 1 $/ sy tauW) `mulRe` (sy tempC $- sy tempW) `addRe` ((sy eta $/ sy tauW) `mulRe` (sy tempPCM $- sy tempW))
 
 eBalanceOnWtrDerivEqn7 = deriv (sy tempW) time $=
-  (dbl 1 $/ sy tauW) `mulRe` ((sy tempC $- sy tempW) `addRe` (sy eta `mulRe` (sy tempPCM $- sy tempW)))
+  (exactDbl 1 $/ sy tauW) `mulRe` ((sy tempC $- sy tempW) `addRe` (sy eta `mulRe` (sy tempPCM $- sy tempW)))
 
 eBalanceOnWtrDerivEqnsIM1 :: [Expr]
 eBalanceOnWtrDerivEqnsIM1 = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2,
@@ -199,11 +199,11 @@ eBalanceOnPCMRC = makeRC "eBalanceOnPCMRC" (nounPhraseSP
 
 balPCMRel :: Relation
 balPCMRel = deriv (sy tempPCM) time $= completeCase [case1, case2, case3]
-  where case1 = ((dbl 1 $/ sy tauSP) `mulRe` (apply1 tempW time $-
+  where case1 = ((exactDbl 1 $/ sy tauSP) `mulRe` (apply1 tempW time $-
           apply1 tempPCM time), realInterval tempPCM (UpTo (Exc, sy tempMeltP)))
-        case2 = ((dbl 1 $/ sy tauLP) `mulRe` (apply1 tempW time $-
+        case2 = ((exactDbl 1 $/ sy tauLP) `mulRe` (apply1 tempW time $-
           apply1 tempPCM time), realInterval tempPCM (UpFrom (Exc,sy tempMeltP)))
-        case3 = (dbl 0, sy tempPCM $= sy tempMeltP $&& realInterval meltFrac (Bounded (Exc, dbl 0) (Exc, dbl 1)))
+        case3 = (exactDbl 0, sy tempPCM $= sy tempMeltP $&& realInterval meltFrac (Bounded (Exc, dbl 0) (Exc, dbl 1)))
 
 balPCMNotes :: [Sentence]
 balPCMNotes = map foldlSent [

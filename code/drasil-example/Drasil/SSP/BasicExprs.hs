@@ -68,8 +68,8 @@ momExpr :: (Expr -> Expr -> Expr) -> Expr
 momExpr _e_ = (neg (inxi intNormForce) `mulRe` (inxi sliceHght `addRe`((inxi baseWthX $/ dbl 2)
   `mulRe`  tan (inxi baseAngle))) `addRe` (inxiM1 intNormForce `mulRe` (inxiM1 sliceHght $-
   ((inxi baseWthX $/ dbl 2) `mulRe` tan (inxi baseAngle)))) $-
-  (inxi watrForce `mulRe` (frac 1 3 `mulRe` inxi sliceHghtW `addRe` ((inxi baseWthX $/ dbl 2) `mulRe`
-  tan (inxi baseAngle)))) `addRe` (inxiM1 watrForce `mulRe` (frac 1 3 `mulRe` inxiM1 sliceHghtW $-
+  (inxi watrForce `mulRe` (oneThird `mulRe` inxi sliceHghtW `addRe` ((inxi baseWthX $/ dbl 2) `mulRe`
+  tan (inxi baseAngle)))) `addRe` (inxiM1 watrForce `mulRe` (oneThird `mulRe` inxiM1 sliceHghtW $-
   ((inxi baseWthX $/ dbl 2) `mulRe` tan (inxi baseAngle))))) `_e_`
   ((neg (sy earthqkLoadFctr) `mulRe` inxi slcWght `mulRe` inxi midpntHght $/ dbl 2) `addRe`
   (inxi surfHydroForce `mulRe` sin (inxi surfAngle) `mulRe` inxi midpntHght `addRe`
@@ -79,7 +79,7 @@ momExprNoKQ :: (Expr -> Expr -> Expr) -> Expr
 momExprNoKQ _e_ = (neg (inxi intNormForce) `mulRe` (inxi sliceHght `addRe`((inxi baseWthX $/ dbl 2)
   `mulRe`  tan (inxi baseAngle))) `addRe` (inxiM1 intNormForce `mulRe` (inxiM1 sliceHght $-
   ((inxi baseWthX $/ dbl 2) `mulRe` tan (inxi baseAngle)))) $-
-  (inxi watrForce `mulRe` (frac 1 3 `mulRe` inxi sliceHghtW `addRe` ((inxi baseWthX $/ dbl 2) `mulRe`
-  tan (inxi baseAngle)))) `addRe` (inxiM1 watrForce `mulRe` (frac 1 3 `mulRe` inxiM1 sliceHghtW $-
+  (inxi watrForce `mulRe` (oneThird `mulRe` inxi sliceHghtW `addRe` ((inxi baseWthX $/ dbl 2) `mulRe`
+  tan (inxi baseAngle)))) `addRe` (inxiM1 watrForce `mulRe` (oneThird `mulRe` inxiM1 sliceHghtW $-
   ((inxi baseWthX $/ dbl 2) `mulRe` tan (inxi baseAngle))))) `_e_`
   (inxi surfHydroForce `mulRe` sin (inxi surfAngle) `mulRe` inxi midpntHght)

@@ -159,6 +159,15 @@ incompleteCase = Case Incomplete
 square :: Expr -> Expr
 square x = x $^ exactDbl 2
 
+half :: Expr -> Expr
+half x = x $/ exactDbl 2
+
+oneHalf :: Expr
+oneHalf = frac 1 2
+
+oneThird :: Expr
+oneThird = frac 1 3
+
 -- | Matrix helper function
 m2x2 :: Expr -> Expr -> Expr -> Expr -> Expr
 m2x2 a b c d = Matrix [[a,b],[c,d]]

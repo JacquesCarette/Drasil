@@ -16,22 +16,22 @@ import Data.Drasil.Quantities.Physics (gravitationalAccelConst, ixVel, iyVel, xP
 import Drasil.Projectile.Unitals (launAngle, launSpeed, targPos, tol, landPos, flightDur, offset)
 
 flightDur', iyPos, yConstAccel, iSpeed :: Expr
-flightDur' = dbl 2 `mulRe` sy launSpeed `mulRe` sin (sy launAngle) $/ sy gravitationalAccelConst
+flightDur' = exactDbl 2 `mulRe` sy launSpeed `mulRe` sin (sy launAngle) $/ sy gravitationalAccelConst
 iyPos = dbl 0                                   -- launchOrigin
 yConstAccel = neg $ sy gravitationalAccelConst  -- accelYGravity
 iSpeed = sy launSpeed
 
 timeDerivEqn1, timeDerivEqn2, timeDerivEqn3, timeDerivEqn4 :: Expr
-timeDerivEqn1 = sy yPos $= (sy iyVel `mulRe` sy time) $- ((sy gravitationalAccelConst `mulRe` square (sy time)) $/ dbl 2)
-timeDerivEqn2 = (sy iyVel `mulRe` sy flightDur) $- ((sy gravitationalAccelConst `mulRe` square (sy flightDur)) $/ dbl 2) $= dbl 0
-timeDerivEqn3 = sy iyVel $- ((sy gravitationalAccelConst `mulRe` sy flightDur) $/ dbl 2) $= dbl 0
-timeDerivEqn4 = sy flightDur $= dbl 2 `mulRe` sy iyVel $/ sy gravitationalAccelConst
+timeDerivEqn1 = sy yPos $= (sy iyVel `mulRe` sy time) $- half (sy gravitationalAccelConst `mulRe` square (sy time))
+timeDerivEqn2 = (sy iyVel `mulRe` sy flightDur) $- ((sy gravitationalAccelConst `mulRe` square (sy flightDur)) $/ dbl 2) $= exactDbl 0
+timeDerivEqn3 = sy iyVel $- half (sy gravitationalAccelConst `mulRe` sy flightDur) $= exactDbl 0
+timeDerivEqn4 = sy flightDur $= exactDbl 2 `mulRe` sy iyVel $/ sy gravitationalAccelConst
 
 landPosExpr, landPosDerivEqn1, landPosDerivEqn2, landPosDerivEqn3 :: Expr
-landPosExpr = dbl 2 `mulRe` square (sy launSpeed) `mulRe` sin (sy launAngle) `mulRe` cos (sy launAngle) $/ sy gravitationalAccelConst
+landPosExpr = exactDbl 2 `mulRe` square (sy launSpeed) `mulRe` sin (sy launAngle) `mulRe` cos (sy launAngle) $/ sy gravitationalAccelConst
 landPosDerivEqn1 = sy xPos    $= sy ixVel `mulRe` sy time
-landPosDerivEqn2 = sy landPos $= sy ixVel `mulRe` dbl 2 `mulRe` sy launSpeed `mulRe` sin (sy launAngle) $/ sy gravitationalAccelConst
-landPosDerivEqn3 = sy landPos $= sy launSpeed `mulRe` cos (sy launAngle) `mulRe` dbl 2 `mulRe` sy launSpeed `mulRe` sin (sy launAngle) $/ sy gravitationalAccelConst
+landPosDerivEqn2 = sy landPos $= sy ixVel `mulRe` exactDbl 2 `mulRe` sy launSpeed `mulRe` sin (sy launAngle) $/ sy gravitationalAccelConst
+landPosDerivEqn3 = sy landPos $= sy launSpeed `mulRe` cos (sy launAngle) `mulRe` exactDbl 2 `mulRe` sy launSpeed `mulRe` sin (sy launAngle) $/ sy gravitationalAccelConst
 
 offset' :: Expr
 offset' = sy landPos $- sy targPos
@@ -52,7 +52,7 @@ rectVelDerivEqn2 = defint (eqSymb speed) (sy QP.iSpeed) (sy speed) (dbl 1) $=
                    defint (eqSymb time) (dbl 0) (sy time) (sy QP.constAccel)
 
 scalarPos' :: Expr
-scalarPos' = sy iPos `addRe` (sy QP.iSpeed `mulRe` sy time `addRe` ((sy QP.constAccel `mulRe` square (sy time)) $/ dbl 2))
+scalarPos' = sy iPos `addRe` (sy QP.iSpeed `mulRe` sy time `addRe` half (sy QP.constAccel `mulRe` square (sy time)))
 
 rectPosDerivEqn1, rectPosDerivEqn2, rectPosDerivEqn3 :: Expr
 rectPosDerivEqn1 = sy speed $= deriv (sy scalarPos) time
@@ -66,10 +66,10 @@ velVecExpr :: Expr
 velVecExpr = vec2D (sy ixVel `addRe` (sy QP.xConstAccel `mulRe` sy time)) (sy iyVel `addRe` (sy QP.yConstAccel `mulRe` sy time))
 
 --
-posVecExpr :: Expr 
+posVecExpr :: Expr
 posVecExpr = vec2D
-              (sy QP.ixPos `addRe` (sy ixVel `mulRe` sy time) `addRe` ((sy QP.xConstAccel `mulRe` square (sy time)) $/ dbl 2))
-              (sy QP.iyPos `addRe` (sy iyVel `mulRe` sy time) `addRe` ((sy QP.yConstAccel `mulRe` square (sy time)) $/ dbl 2))
+              (sy QP.ixPos `addRe` (sy ixVel `mulRe` sy time) `addRe` half (sy QP.xConstAccel `mulRe` square (sy time)))
+              (sy QP.iyPos `addRe` (sy iyVel `mulRe` sy time) `addRe` half (sy QP.yConstAccel `mulRe` square (sy time)))
 
 -- Helper expressions that represent the vectors of quantities as components
 positionXY, velocityXY, accelerationXY, constAccelXY :: Expr

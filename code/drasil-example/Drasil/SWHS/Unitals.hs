@@ -291,7 +291,7 @@ pcmSA = uqc "pcmSA"
   "area covered by the outermost layer of the phase change material"
   (sub cA lPCM) m_2 Rational
   [gtZeroConstr,
-  sfwrc $ Bounded (Inc, sy pcmVol) (Inc, (dbl 2 $/ sy thickness) `mulRe` sy tankVol)]
+  sfwrc $ Bounded (Inc, sy pcmVol) (Inc, (exactDbl 2 $/ sy thickness) `mulRe` sy tankVol)]
   (dbl 1.2) defaultUncrt
 
 -- Constraint 5

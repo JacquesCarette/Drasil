@@ -97,7 +97,7 @@ tmSOSystemRC
 
 soSystemRel :: Relation
 soSystemRel
-  = dbl 1 
+  = exactDbl 1 
     $/ (sy mass `mulRe` square (sy qdFreqDomain) 
     `addRe` (sy qdDampingCoeff `mulRe` sy qdFreqDomain)
     `addRe` sy qdStiffnessCoeff)

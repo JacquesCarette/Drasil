@@ -307,7 +307,7 @@ kEnergy :: QDefinition
 kEnergy = mkQuantDef QP.kEnergy kEnergyEqn
 
 kEnergyEqn :: Expr
-kEnergyEqn = sy QPP.mass `mulRe` square (sy QP.velocity) $/ dbl 2
+kEnergyEqn = sy QPP.mass `mulRe` half (square (sy QP.velocity))
 
 kEnergyDesc :: Sentence
 kEnergyDesc = foldlSent [atStart QP.kEnergy `S.sIs` (QP.kEnergy ^. defn)]

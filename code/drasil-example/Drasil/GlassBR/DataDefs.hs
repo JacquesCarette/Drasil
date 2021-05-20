@@ -206,7 +206,7 @@ eqTNTWDD = dd eqTNTWQD [makeCite astm2009] Nothing "eqTNTW" []
 
 --DD13--
 probOfBreakEq :: Expr
-probOfBreakEq = dbl 1 $- exp (neg (sy risk))
+probOfBreakEq = exactDbl 1 $- exp (neg (sy risk))
 
 probOfBreakQD :: QDefinition
 probOfBreakQD = mkQuantDef probBr probOfBreakEq

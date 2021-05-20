@@ -34,9 +34,9 @@ iMods = [timeIM, landPosIM, offsetIM, messageIM]
 
 ---
 timeIM :: InstanceModel
-timeIM = imNoRefs (OthModel timeRC) 
+timeIM = imNoRefs (OthModel timeRC)
   [qwC launSpeed $ UpFrom (Exc, dbl 0)
-  ,qwC launAngle $ Bounded (Exc, dbl 0) (Exc, sy pi_ $/ int 2)]
+  ,qwC launAngle $ Bounded (Exc, dbl 0) (Exc, half $ sy pi_)]
   (qw flightDur) [UpFrom (Exc, dbl 0)]
   (Just timeDeriv) "calOfLandingTime" [angleConstraintNote, gravitationalAccelConstNote, timeConsNote]
 
@@ -52,7 +52,7 @@ timeDerivSents = [timeDerivSent1, timeDerivSent2, timeDerivSent3, timeDerivSent4
 
 timeDerivSent1, timeDerivSent2, timeDerivSent3, timeDerivSent4, timeDerivSent5 :: Sentence
 timeDerivSent1 = foldlSentCol [S "We know that" +:+.
-  foldlList Comma List 
+  foldlList Comma List
     [eqnWSource (sy iyPos $= E.iyPos) launchOrigin,
      eqnWSource (sy yConstAccel $= E.yConstAccel) accelYGravity],
   S "Substituting these", plural value, S "into the y-direction" `S.sOf`
@@ -74,9 +74,9 @@ timeDerivEqns = [E.timeDerivEqn1, E.timeDerivEqn2, E.timeDerivEqn3, E.timeDerivE
 
 ---
 landPosIM :: InstanceModel
-landPosIM = imNoRefs (OthModel landPosRC) 
-  [qwC launSpeed $ UpFrom (Exc, dbl 0), 
-   qwC launAngle $ Bounded (Exc, dbl 0) (Exc, sy pi_ $/ int 2)]
+landPosIM = imNoRefs (OthModel landPosRC)
+  [qwC launSpeed $ UpFrom (Exc, dbl 0),
+   qwC launAngle $ Bounded (Exc, dbl 0) (Exc, half $ sy pi_)]
   (qw landPos) [UpFrom (Exc, dbl 0)]
   (Just landPosDeriv) "calOfLandingDist" [angleConstraintNote, gravitationalAccelConstNote, landPosConsNote]
 
@@ -92,7 +92,7 @@ landPosDerivSents = [landPosDerivSent1, landPosDerivSent2, landPosDerivSent3, la
 
 landPosDerivSent1, landPosDerivSent2, landPosDerivSent3, landPosDerivSent4 :: Sentence
 landPosDerivSent1 = foldlSentCol [S "We know that" +:+.
-  foldlList Comma List 
+  foldlList Comma List
     [eqnWSource (sy ixPos $= dbl 0) launchOrigin,
      eqnWSource (sy xConstAccel $= dbl 0) accelXZero],
   S "Substituting these", plural value, S "into the x-direction" `S.sOf`
@@ -119,14 +119,14 @@ offsetRC = makeRC "offsetRC" (nounPhraseSP "offset") EmptyS $ sy offset $= E.off
 
 ---
 messageIM :: InstanceModel
-messageIM = imNoDerivNoRefs (OthModel messageRC) 
+messageIM = imNoDerivNoRefs (OthModel messageRC)
   [qwC offset $ UpFrom (Exc, neg (sy landPos))
   ,qwC targPos $ UpFrom (Exc, dbl 0)]
   (qw message)
   [] "messageIM" [offsetNote, targPosConsNote, offsetConsNote, tolNote]
 
 messageRC :: RelationConcept
-messageRC = makeRC "messageRC" (nounPhraseSP "output message") 
+messageRC = makeRC "messageRC" (nounPhraseSP "output message")
   EmptyS $ sy message $= E.message
 
 --- Notes
@@ -136,7 +136,7 @@ angleConstraintNote, gravitationalAccelConstNote, landAndTargPosConsNote, landPo
   timeConsNote, tolNote :: Sentence
 
 angleConstraintNote = foldlSent [S "The", phrase constraint,
-  E (dbl 0 $< sy launAngle $< (sy pi_ $/ int 2)) `S.sIs` S "from",
+  E (dbl 0 $< sy launAngle $< half (sy pi_)) `S.sIs` S "from",
   makeRef2S posXDirection `S.sAnd` makeRef2S yAxisGravity `sC`
   S "and is shown" `S.sIn` makeRef2S figLaunch]
 

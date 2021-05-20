@@ -221,17 +221,17 @@ fctSftyDerivEqn3 = eqlExpr sin cos (\x y -> x $- inxiM1 intShrForce `addRe`
 
 fctSftyDerivEqn4 :: Expr
 fctSftyDerivEqn4 = eqlExprSepG sin cos addRe `addRe`
-  ((neg (inxiM1 intShrForce) `addRe` inxi intShrForce) `mulRe` sin (inxi baseAngle)) $= 
-  ((eqlExprNSepG cos sin addRe `addRe` 
-  (((neg (inxiM1 intShrForce) `addRe` inxi intShrForce) `mulRe` cos (inxi baseAngle)) $- 
-  inxi baseHydroForce) `mulRe` 
+  ((neg (inxiM1 intShrForce) `addRe` inxi intShrForce) `mulRe` sin (inxi baseAngle)) $=
+  ((eqlExprNSepG cos sin addRe `addRe`
+  (((neg (inxiM1 intShrForce) `addRe` inxi intShrForce) `mulRe` cos (inxi baseAngle)) $-
+  inxi baseHydroForce) `mulRe`
   tan (sy fricAngle)) `addRe` (sy effCohesion `mulRe` inxi baseLngth)) $/ sy fs
 
 fctSftyDerivEqn5 :: Expr
 fctSftyDerivEqn5 = eqlExprNoKQ sin cos addRe `addRe`
-  ((neg (inxiM1 intShrForce) `addRe` inxi intShrForce) `mulRe` sin (inxi baseAngle)) $= 
-  ((eqlExprNNoKQ cos sin addRe `addRe` 
-  ((neg (inxiM1 intShrForce) `addRe` inxi intShrForce) `mulRe` cos (inxi baseAngle)) $- 
+  ((neg (inxiM1 intShrForce) `addRe` inxi intShrForce) `mulRe` sin (inxi baseAngle)) $=
+  ((eqlExprNNoKQ cos sin addRe `addRe`
+  ((neg (inxiM1 intShrForce) `addRe` inxi intShrForce) `mulRe` cos (inxi baseAngle)) $-
   inxi baseHydroForce) `mulRe`
   tan (sy fricAngle) `addRe` (sy effCohesion `mulRe` inxi baseLngth)) $/ sy fs
 
@@ -253,11 +253,11 @@ fctSftyDerivEqn7 = (inxi shearFNoIntsl `addRe` ((neg (sy normToShear) `mulRe` in
   `mulRe` sin (inxi baseAngle))) `mulRe` tan (sy fricAngle))) $/ sy fs
 
 fctSftyDerivEqn8 :: Expr
-fctSftyDerivEqn8 = (inxi intNormForce `mulRe` ((sy normToShear `mulRe` inxi scalFunc `mulRe` 
-  cos (inxi baseAngle) $- sin (inxi baseAngle)) `mulRe` tan (sy fricAngle) $- 
-  ((sy normToShear `mulRe` inxi scalFunc `mulRe` sin (inxi baseAngle) `addRe` 
+fctSftyDerivEqn8 = (inxi intNormForce `mulRe` ((sy normToShear `mulRe` inxi scalFunc `mulRe`
+  cos (inxi baseAngle) $- sin (inxi baseAngle)) `mulRe` tan (sy fricAngle) $-
+  ((sy normToShear `mulRe` inxi scalFunc `mulRe` sin (inxi baseAngle) `addRe`
   cos (inxi baseAngle)) `mulRe` sy fs))) $= (inxiM1 intNormForce `mulRe`
-  ((sy normToShear `mulRe` inxiM1 scalFunc `mulRe` cos (inxi baseAngle) $- 
+  ((sy normToShear `mulRe` inxiM1 scalFunc `mulRe` cos (inxi baseAngle) $-
   sin (inxi baseAngle)) `mulRe` tan (sy fricAngle) $- ((sy normToShear `mulRe`
   inxiM1 scalFunc `mulRe` sin (inxi baseAngle) `addRe` cos (inxi baseAngle)) `mulRe`
   sy fs)) `addRe` (sy fs `mulRe` inxi shearFNoIntsl) $- inxi shearRNoIntsl)
@@ -434,22 +434,22 @@ nrmShrDerivEqns = [nrmShrDerivEqn1, nrmShrDerivEqn2, nrmShrDerivEqn3,
   nrmShrDerivEqn4]
 
 nrmShrDerivEqn1, nrmShrDerivEqn2, nrmShrDerivEqn3, nrmShrDerivEqn4 :: Expr
-nrmShrDerivEqn1 = dbl 0 $=
-  momExpr (\ x y -> x `addRe` (sy normToShear `mulRe` (inxi baseWthX $/ dbl 2) `mulRe`
+nrmShrDerivEqn1 = exactDbl 0 $=
+  momExpr (\ x y -> x `addRe` (sy normToShear `mulRe` half (inxi baseWthX) `mulRe`
   (inxi intNormForce `mulRe` inxi scalFunc `addRe` (inxiM1 intNormForce `mulRe`
   inxiM1 scalFunc))) `addRe` y)
 
 nrmShrDerivEqn2 = sy normToShear $= momExpr addRe
-  $/ neg ((inxi baseWthX $/ dbl 2) `mulRe` (inxi intNormForce `mulRe` inxi scalFunc `addRe`
+  $/ neg (half (inxi baseWthX) `mulRe` (inxi intNormForce `mulRe` inxi scalFunc `addRe`
   (inxiM1 intNormForce `mulRe` inxiM1 scalFunc)))
 
 nrmShrDerivEqn3 = sy normToShear $= momExprNoKQ addRe
-  $/ neg ((inxi baseWthX $/ dbl 2) `mulRe` (inxi intNormForce `mulRe` inxi scalFunc `addRe`
+  $/ neg (half (inxi baseWthX) `mulRe` (inxi intNormForce `mulRe` inxi scalFunc `addRe`
   (inxiM1 intNormForce `mulRe` inxiM1 scalFunc)))
 
 nrmShrDerivEqn4 = sy normToShear $= sum1toN
   (inxi baseWthX `mulRe` (sy nrmForceSum `addRe` sy watForceSum) `mulRe` tan (inxi baseAngle) `addRe`
-  (inxi midpntHght `mulRe` neg (dbl 2 `mulRe` inxi surfHydroForce `mulRe` sin (inxi surfAngle))))
+  (inxi midpntHght `mulRe` neg (exactDbl 2 `mulRe` inxi surfHydroForce `mulRe` sin (inxi surfAngle))))
   $/ sum1toN
   (inxi baseWthX `mulRe` (inxi intNormForce `mulRe` inxi scalFunc `addRe`
   (inxiM1 intNormForce `mulRe` inxiM1 scalFunc)))
@@ -473,7 +473,7 @@ nrmShrFNumRel = inxi nrmShearNum $= incompleteCase [case1,case2,case3]
         case2 = ((inxi baseWthX `mulRe`
           (sy nrmForceSum `addRe` sy watForceSum)
            `mulRe` tan (inxi baseAngle)) `addRe` (sy midpntHght `mulRe` (neg
-          (dbl 2) `mulRe` inxi surfHydroForce `mulRe` sin (inxi surfAngle))),
+          (exactDbl 2) `mulRe` inxi surfHydroForce `mulRe` sin (inxi surfAngle))),
           int 2 $<= sy index $<= (sy numbSlices $- int 1))
         case3 = (indxn baseWthX `mulRe` (idx (sy intNormForce)
           (sy numbSlices $- int 1) `addRe` idx (sy watrForce)

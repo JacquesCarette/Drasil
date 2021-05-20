@@ -46,7 +46,7 @@ eBalanceOnWtrRC = makeRC "eBalanceOnWtrRC" (nounPhraseSP $ "Energy balance on " 
   -- (mkLabelSame "eBalnaceOnWtr" (Def Instance))
 
 balWtrRel :: Relation
-balWtrRel = deriv (sy tempW) time $= (dbl 1 $/ sy tauW) `mulRe`
+balWtrRel = deriv (sy tempW) time $= (exactDbl 1 $/ sy tauW) `mulRe`
   (sy tempC $- apply1 tempW time)
 
 balWtrNotes :: [Sentence]
@@ -90,7 +90,7 @@ eBalanceOnWtrDerivEqn3 = deriv (sy tempW) time $=
   (sy wMass `mulRe` sy htCapW)) `mulRe`  (sy tempC $- sy tempW)
 
 eBalanceOnWtrDerivEqn4 =  
-  deriv (sy tempW) time $= (dbl 1 $/ sy tauW) `mulRe` (sy tempC $- sy tempW)
+  deriv (sy tempW) time $= (exactDbl 1 $/ sy tauW) `mulRe` (sy tempC $- sy tempW)
 
 eBalanceOnWtrDerivEqns :: [Expr]
 eBalanceOnWtrDerivEqns = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3, eBalanceOnWtrDerivEqn4]

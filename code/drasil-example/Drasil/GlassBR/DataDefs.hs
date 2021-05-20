@@ -48,7 +48,7 @@ qDefns = Parallel hFromtQD {-DD2-} [glaTyFacQD {-DD6-}] : --can be calculated on
 
 riskEq :: Expr
 riskEq = (sy sflawParamK $/
-  (mulRe (sy plateLen) (sy plateWidth) $^ (sy sflawParamM $- dbl 1))) `mulRe`
+  (mulRe (sy plateLen) (sy plateWidth) $^ (sy sflawParamM $- exactDbl 1))) `mulRe`
   ((sy modElas `mulRe` square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac `mulRe` exp (sy stressDistFac)
 
 -- FIXME [4] !!!
@@ -160,7 +160,7 @@ tolPre = dd tolPreQD [makeCite astm2009] Nothing "tolLoad"
 
 tolStrDisFacEq :: Expr
 tolStrDisFacEq = ln (ln (exactDbl 1 $/ (exactDbl 1 $- sy pbTol))
-  `mulRe` ((sy plateLen `mulRe` sy plateWidth) $^ (sy sflawParamM $- dbl 1) $/
+  `mulRe` ((sy plateLen `mulRe` sy plateWidth) $^ (sy sflawParamM $- exactDbl 1) $/
     (sy sflawParamK `mulRe` ((sy modElas `mulRe`
     square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac)))
 

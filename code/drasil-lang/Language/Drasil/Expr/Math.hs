@@ -4,7 +4,7 @@ module Language.Drasil.Expr.Math where
 import Prelude hiding (sqrt)
 import Control.Lens ((^.))
 import Language.Drasil.Symbol (Symbol)
-import Language.Drasil.Expr (Expr(..), Relation, DerivType(..), ($^), AssocArithOper(..),
+import Language.Drasil.Expr (Expr(..), Relation, DerivType(..), ($^), ($/), AssocArithOper(..),
   LABinOp(..), VVVBinOp(..), UFunc(..), UFuncB(..), UFuncVec(..), Completeness(..), addRe)
 import Language.Drasil.Space (Space, RTopology(..), DomainDesc(..), RealInterval)
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
@@ -93,6 +93,10 @@ int = Int
 -- | Smart constructor for doubles
 dbl :: Double -> Expr
 dbl = Dbl
+
+-- | Smart constructor for fractions
+frac :: Integer -> Integer -> Expr
+frac l r = int l $/ int r
 
 -- | Smart constructor for strings
 str :: String -> Expr

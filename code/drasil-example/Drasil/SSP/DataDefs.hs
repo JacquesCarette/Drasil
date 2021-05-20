@@ -148,7 +148,7 @@ slcHeightQD :: QDefinition
 slcHeightQD = mkQuantDef midpntHght slcHeightEqn
 
 slcHeightEqn :: Expr
-slcHeightEqn = (int 1 $/ int 2) `mulRe` (sy sliceHghtRight `addRe` sy sliceHghtLeft) 
+slcHeightEqn = frac 1 2 `mulRe` (sy sliceHghtRight `addRe` sy sliceHghtLeft) 
 
 slcHeightNotes :: [Sentence]
 slcHeightNotes = [S "This" +:+ phrase equation +:+ S "is based on the" +:+ 

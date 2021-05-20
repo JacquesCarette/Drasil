@@ -90,7 +90,7 @@ qdSetPointTD = qw ipSetPt
 
 ipStepTime
   = constrained' (dqd stepTime symTStep Real second)
-      [physc $ Bounded (Inc, int 1 $/ int 100) (Exc, sy ipSimTime)]
+      [physc $ Bounded (Inc, frac 1 100) (Exc, sy ipSimTime)]
       (dbl 0.01)
 ipStepTimeUnc = uq ipStepTime defaultUncrt
 qdStepTime = qw ipStepTime

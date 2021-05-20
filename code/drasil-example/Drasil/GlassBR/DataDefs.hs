@@ -64,7 +64,7 @@ risk = dd riskQD
 --DD2--
 
 hFromtEq :: Relation
-hFromtEq = mulRe (int 1 $/ int 1000) (incompleteCase (zipWith hFromtHelper
+hFromtEq = frac 1 1000 `mulRe` (incompleteCase (zipWith hFromtHelper
   actualThicknesses nominalThicknesses))
 
 hFromtHelper :: Double -> Double -> (Expr, Relation)

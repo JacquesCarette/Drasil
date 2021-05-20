@@ -51,7 +51,7 @@ instance MayHaveUnit   QDefinition where getUnit = getUnit . view qua
 instance ExprRelat     QDefinition where relat z = sy z $= z ^. equat
 -- ^ Finds the relation given by the expression in 'QDefinition'.
 instance ConceptDomain QDefinition where cdom = cd
--- ^ Finds the domain of 'QDefinition'
+-- ^ Finds the domain of 'QDefinition'.
 
 -- | Create a 'QDefinition' with a 'UID', term ('NP'), definition ('Sentence'), 'Symbol',
 -- 'Space', unit, and defining expression.
@@ -87,7 +87,7 @@ mkQuantDef' :: (Quantity c, MayHaveUnit c) => c -> NP -> Expr -> QDefinition
 mkQuantDef' c t e = datadef $ getUnit c
   where datadef (Just a) = fromEqnSt  (c ^. uid) t EmptyS (symbol c) (c ^. typ) a e
         datadef Nothing  = fromEqnSt' (c ^. uid) t EmptyS (symbol c) (c ^. typ) e
-        
+
 -- HACK - makes the definition EmptyS !!! FIXME
 -- | Smart constructor for QDefinitions. Requires a quantity and its defining 
 -- equation. 

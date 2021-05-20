@@ -25,17 +25,17 @@ data DefinedQuantityDict = DQD { _con :: ConceptChunk
 makeLenses ''DefinedQuantityDict
 
 instance HasUID        DefinedQuantityDict where uid = con . uid
--- ^ Finds the 'UID' of the 'ConceptChunk' used to make the 'DefinedQuantityDIct'.
+-- ^ Finds the 'UID' of the 'ConceptChunk' used to make the 'DefinedQuantityDict'.
 instance Eq            DefinedQuantityDict where a == b = (a ^. uid) == (b ^. uid)
--- Equal if 'UID's are equal.
+-- ^ Equal if 'UID's are equal.
 instance NamedIdea     DefinedQuantityDict where term = con . term
--- ^ Finds the term ('NP') of the 'ConceptChunk' used to make the 'DefinedQuantityDIct'.
+-- ^ Finds the term ('NP') of the 'ConceptChunk' used to make the 'DefinedQuantityDict'.
 instance Idea          DefinedQuantityDict where getA = getA . view con
--- ^ Finds the idea contained in the 'ConceptChunk' used to make the 'DefinedQuantityDIct'.
+-- ^ Finds the idea contained in the 'ConceptChunk' used to make the 'DefinedQuantityDict'.
 instance Definition    DefinedQuantityDict where defn = con . defn
--- ^ Finds the definition contained in the 'ConceptChunk' used to make the 'DefinedQuantityDIct'.
+-- ^ Finds the definition contained in the 'ConceptChunk' used to make the 'DefinedQuantityDict'.
 instance ConceptDomain DefinedQuantityDict where cdom = cdom . view con
--- ^ Finds the domain of the 'ConceptChunk' used to make the 'DefinedQuantityDIct'.
+-- ^ Finds the domain of the 'ConceptChunk' used to make the 'DefinedQuantityDict'.
 instance HasSpace      DefinedQuantityDict where typ = spa
 -- ^ Finds the 'Space' of the 'DefinedQuantityDict'.
 instance HasSymbol     DefinedQuantityDict where symbol = view symb

@@ -39,9 +39,9 @@ instance NamedIdea     ConceptChunk where term = idea . term
 instance Idea          ConceptChunk where getA = getA . view idea 
 -- ^ Finds the idea contained in the 'IdeaDict' used to make the 'ConceptChunk'.
 instance Definition    ConceptChunk where defn = defn' 
--- ^ Finds definition from record of the datatype.
+-- ^ Finds definition of a 'ConceptChunk'.
 instance ConceptDomain ConceptChunk where cdom = cdom' 
--- ^ Finds domain of 'UID's from record of the datatype.
+-- ^ Finds the domain of 'UID's of a 'ConceptChunk'.
 
 -- | Contains a common idea ('CI') with a definition ('Sentence').
 data CommonConcept = ComConDict { _comm :: CI, _def :: Sentence}
@@ -56,7 +56,7 @@ instance NamedIdea     CommonConcept where term = comm . term
 instance Idea          CommonConcept where getA = getA . view comm 
 -- ^ Finds the idea contained in the 'CI' used to make the 'CommonConcept'.
 instance Definition    CommonConcept where defn = def 
--- ^ Finds definition from record of the datatype.
+-- ^ Finds definition of a 'CommonConcept'.
 instance CommonIdea    CommonConcept where abrv = abrv . view comm 
 -- ^ Finds the abbreviation contained in the 'CI' used to make the 'CommonConcept'.
 instance ConceptDomain CommonConcept where cdom = cdom . view comm 
@@ -79,12 +79,12 @@ instance Definition    ConceptInstance where defn = cc . defn'
 instance ConceptDomain ConceptInstance where cdom = cdom' . view cc 
 -- ^ Finds the domain contained in the 'ConceptChunk' used to make the 'ConceptInstance'.
 instance HasShortName  ConceptInstance where shortname = shnm 
--- ^ Finds the 'ShortName' contained in the record of the datatype.
+-- ^ Finds the 'ShortName' contained in a 'ConceptInstance'.
 instance HasRefAddress ConceptInstance where getRefAdd = ra 
--- ^ Finds the reference address contained in the record of the datatype.
+-- ^ Finds the reference address contained in a 'ConceptInstance'.
 instance Referable     ConceptInstance where
   refAdd      = ra 
-  -- ^ Finds the reference address contained in the record of the datatype.
+  -- ^ Finds the reference address contained in a 'ConceptInstance'.
   renderRef l = RP (defer (sDom $ cdom l) +::+ raw ": " +::+ name) (ra l) 
   -- ^ Finds the reference address but in a diferent form.
 

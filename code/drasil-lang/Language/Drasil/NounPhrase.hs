@@ -17,17 +17,17 @@ import Language.Drasil.Sentence (Sentence((:+:), S), (+:+))
 
 class NounPhrase n where
   phraseNP :: n -> Sentence -- ^ ex. "the quick brown fox"
-  pluralNP :: n -> PluralForm -- ^ ex. "the quick brown foxes" 
+  pluralNP :: n -> PluralForm -- ^ ex. "the quick brown foxes"
     --Could replace plural string with a function.
   sentenceCase :: n -> (NP -> Sentence) -> Capitalization 
     --Should this be replaced with a data type instead?
     --Data types should use functions to determine capitalization based
     -- on rules.
-    -- ^ example: "The quick brown fox" 
+    -- ^ example: "The quick brown fox"
   titleCase :: n -> (NP -> Sentence) -> Capitalization -- ^ ex. "The Quick Brown Fox"
 
-type Capitalization = Sentence  --Using type synonyms for clarity.
-type PluralString   = String
+type Capitalization = Sentence  -- ^ Using type synonyms for clarity.
+type PluralString   = String -- ^ Type synonym for 'String'.
 
 instance NounPhrase NP where
   phraseNP (ProperNoun n _)           = S n

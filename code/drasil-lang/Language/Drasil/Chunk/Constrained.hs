@@ -62,7 +62,7 @@ cvc i des sym space = ConstrainedChunk (qw (vc i des sym space))
 cnstrw :: (Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> ConstrainedChunk
 cnstrw c = ConstrainedChunk (qw c) (c ^. constraints) (c ^. reasVal)
 
--- | ConstrConcepts are Conceptual Symbolic Quantities ('DefinedQuantityDict')
+-- | ConstrConcepts are conceptual symbolic quantities ('DefinedQuantityDict')
 -- with 'Constraint's and maybe a reasonable value (no units!).
 data ConstrConcept = ConstrConcept { _defq :: DefinedQuantityDict
                                    , _constr' :: [Constraint]
@@ -84,7 +84,7 @@ instance Quantity      ConstrConcept where
 instance Definition    ConstrConcept where defn = defq . defn
 -- ^ Finds definition of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
 instance ConceptDomain ConstrConcept where cdom = cdom . view defq
--- ^ Finds domain contained in the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
+-- ^ Finds the domain contained in the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
 instance Constrained   ConstrConcept where constraints  = constr'
 -- ^ Finds the 'Constraint's of a 'ConstrConcept'.
 instance HasReasVal    ConstrConcept where reasVal      = reasV'

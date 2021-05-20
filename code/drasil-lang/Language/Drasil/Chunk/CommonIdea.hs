@@ -23,11 +23,11 @@ instance HasUID        CI where uid  = cid
 instance NamedIdea     CI where term = ni
 -- ^ Finds term ('NP') of 'CI'.
 instance Idea          CI where getA = Just . view ab
--- ^ Finds idea of 'CI' (abbreviation).
+-- ^ Finds the idea of a 'CI' (abbreviation).
 instance CommonIdea    CI where abrv = view ab
--- ^ Finds idea of 'CI' (abbreviation).
+-- ^ Finds the idea of a 'CI' (abbreviation).
 instance ConceptDomain CI where cdom = cdom'
--- ^ Finds domain of 'CI'.
+-- ^ Finds the domain of a 'CI'.
   
 -- | The commonIdea smart constructor requires a chunk id ('UID'), a
 -- term ('NP'), an abbreviation ('String'), and a domain (['UID']).

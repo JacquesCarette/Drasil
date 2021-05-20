@@ -304,7 +304,7 @@ eBalanceOnPCMEqn3 = deriv (sy tempPCM) time $=
   ((sy pcmHTC `mulRe` sy pcmSA) $/ (sy pcmMass `mulRe` sy htCapSP)) `mulRe`  (sy tempW $- sy tempPCM)
 
 eBalanceOnPCMEqn4 = deriv (sy tempPCM) time $= 
-  (dbl 1 $/ sy tauSP) `mulRe` (sy tempW $- sy tempPCM)
+  (exactDbl 1 $/ sy tauSP) `mulRe` (sy tempW $- sy tempPCM)
 
 eBalanceOnPCMDerivEqnsIM2 :: [Expr]
 eBalanceOnPCMDerivEqnsIM2 = [eBalanceOnPCMEqn1, eBalanceOnPCMEqn2,

@@ -144,11 +144,11 @@ opsDoc Perc = text "%"
 fenceDocL :: Fence -> Doc
 fenceDocL Paren = text "("
 fenceDocL Curly = text "{"
-fenceDocL Norm = text "||"
+fenceDocL Norm = text "\\|"
 fenceDocL Abs = text "|"
 
 fenceDocR :: Fence -> Doc
 fenceDocR Paren = text ")"
 fenceDocR Curly = text "}"
-fenceDocR Norm = text "||"
+fenceDocR Norm = text "\\|"
 fenceDocR Abs = text "|"

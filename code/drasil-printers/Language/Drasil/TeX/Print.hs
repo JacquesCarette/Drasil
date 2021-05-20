@@ -177,7 +177,7 @@ fence Close Paren = texSym "right)"
 fence Open Curly  = texSym "{"
 fence Close Curly = texSym "}"
 fence _ Abs       = pure $ text "|"
-fence _ Norm      = pure $ text "||"
+fence _ Norm      = pure $ text "\\|"
 
 -- | For printing Matrix
 pMatrix :: [[Expr]] -> D

@@ -88,7 +88,7 @@ propControl
 derControl
   = dcc "derControl" (nounPhraseSP "Derivative Control")
       ("monitors the rate of change of the error signal and contributes a component" ++ 
-      "of the output signal (proportional to a derivative of the error signal).")
+      "of the output signal (proportional to a derivative of the error signal)")
 
 simulation
   = dcc "simulation" (nounPhraseSP "simulation") 

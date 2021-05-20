@@ -26,7 +26,6 @@ spaceToCodeType S.String        = [String]
 spaceToCodeType (S.Vect s)      = map List (spaceToCodeType s)
 spaceToCodeType (S.Array s)     = map Array (spaceToCodeType s)
 spaceToCodeType (S.Actor s)     = [Object s]
-spaceToCodeType (S.DiscreteI _) = map List (spaceToCodeType S.Integer)
 spaceToCodeType (S.DiscreteD _) = map List (spaceToCodeType S.Rational)
 spaceToCodeType (S.DiscreteS _) = map List (spaceToCodeType S.String)
 spaceToCodeType S.Void          = [Void]

@@ -10,7 +10,7 @@ data CapitalizationRule =
     CapFirst -- ^ Capitalize the first letter of the first word only.
   | CapWords -- ^ Capitalize the first letter of each word.
   | Replace Sentence -- ^ Replace the noun phrase with the
-                                           -- given Sentence. Used for custom
+                                           -- given 'Sentence'. Used for custom
                                            -- capitalization.
 
 -- | Pluralization rules.

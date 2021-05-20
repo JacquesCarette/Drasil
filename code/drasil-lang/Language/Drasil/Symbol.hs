@@ -1,7 +1,3 @@
--- | A 'Symbol' is actually going to be a graphical description of what
--- gets rendered as a (unique) symbol.  This is actually NOT based on
--- semantics at all, but just a description of how things look.
-
 module Language.Drasil.Symbol (Decoration(..), Symbol(..), compsy) where
 
 import Language.Drasil.Unicode(Special)
@@ -12,13 +8,18 @@ import Data.Char (toLower)
 -- (bolding/etc)
 data Decoration = Hat | Vector | Prime deriving (Eq, Ord)
 
--- | Symbols can be:
--- - variable (string such as "x" that represent a value that can vary)
--- - label (strings such as "max" or "target" that represent a single idea)
--- - special characters (ex. unicode)
--- - Decorated symbols
--- - Concatenations of symbols, including subscripts and superscripts
--- - empty! (this is to give this a monoid-like flavour)
+-- | A 'Symbol' is actually going to be a graphical description of what
+-- gets rendered as a (unique) symbol.  This is actually NOT based on
+-- semantics at all, but just a description of how things look.
+-- 
+-- Symbols can be:
+-- 
+--     * @'Variable'@ (string such as "x" that represent a value that can vary) 
+--     * @'Label'@ (strings such as "max" or "target" that represent a single idea)
+--     * @'Special'@ characters (ex. unicode)
+--     * @Decorated@ symbols
+--     * @Concatenations@ of symbols, including subscripts and superscripts
+--     * @'Empty'@! (this is to give this a monoid-like flavour)
 data Symbol =
     Variable String
   | Label    String
@@ -26,13 +27,18 @@ data Symbol =
   | Special  Special
   | Atop     Decoration Symbol
   | Corners  [Symbol] [Symbol] [Symbol] [Symbol] Symbol
-          -- upleft   lowleft  upright  lowright base
-          -- [1]      [2]      [3]      [4]      [5]
+          -- ^ In order: upleft   lowleft  upright  lowright base
+          --
+          -- >Corners [1]   [2]   [3]   [4]   [5]
+          -- @
           --  Visually:  [1]   [3]
-          --    (out)       [5]
+          --
+          --                [5]
+          --
           --             [2]   [4]
+          -- @
   | Concat   [Symbol]
-          -- [s1, s2] -> s1s2
+          -- ^ @[s1, s2] -> s1s2@
   | Empty
   deriving Eq
 
@@ -43,13 +49,14 @@ instance Monoid Symbol where
   mempty = Empty
   mappend a b = Concat [a , b]
 
+-- | Gives an 'Ordering' of a list of two 'Symbol's
 complsy :: [Symbol] -> [Symbol] -> Ordering
 complsy [] [] = EQ
 complsy [] _  = LT
 complsy _  [] = GT
 complsy (x : xs) (y : ys) = compsy x y `mappend` complsy xs ys
 
--- |The default compare function sorts all the lower case after the upper case.
+-- | The default compare function sorts all the lower case after the upper case.
 -- Comparation is used twice for each `Atomic` case,
 -- once for making sure they are the same letter, once for case sensitive.
 -- As far as this comparison is considered, `Δ` is a "decoration" and ignored
@@ -116,6 +123,7 @@ compsy (Label _) _    = LT
 compsy _ (Label _)    = GT
 compsy Empty Empty    = EQ
 
+-- | Helper for 'compsy'
 compsyLower :: String -> String -> Ordering
 compsyLower x y = case compare (map toLower x) (map toLower y) of
   EQ    -> compare x y 

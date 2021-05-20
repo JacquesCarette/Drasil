@@ -28,7 +28,7 @@ genDefns = [rectVelGD, rectPosGD, velVecGD, posVecGD]
 
 -- TODO: after converting rectVelGD & rectPosGD to an EquationalModel, this should be removed
 genDefns0 :: [GenDefn]
-genDefns0 = [rectVelGD, rectPosGD]
+genDefns0 = [rectVelGD]
 
 ----------
 rectVelGD :: GenDefn
@@ -65,14 +65,14 @@ rectVelDerivEqns = [E.rectVelDerivEqn1, E.rectVelDerivEqn2, sy speed $= E.speed'
 
 ----------
 rectPosGD :: GenDefn
-rectPosGD = gd (OthModel rectPosRC) (getUnit scalarPos) (Just rectPosDeriv)
+rectPosGD = gd (EquationalModel rectPosQD) (getUnit scalarPos) (Just rectPosDeriv)
   [makeCiteInfo hibbeler2004 $ Page [8]] "rectPos" [{-Notes-}]
 
-rectPosRC :: RelationConcept
-rectPosRC = makeRC "rectPosRC" (nounPhraseSent $ foldlSent_ 
+rectPosQD :: QDefinition
+rectPosQD = mkQuantDef' scalarPos (nounPhraseSent $ foldlSent_ 
             [atStart rectilinear, sParen $ getAcc oneD, phrase position,
              S "as a function" `S.sOf` phrase time, S "for", phrase QP.constAccel])
-            EmptyS $ sy scalarPos $= E.scalarPos'
+            E.scalarPos'
 
 rectPosDeriv :: Derivation
 rectPosDeriv = mkDerivName (phrase rectilinear +:+ phrase position)

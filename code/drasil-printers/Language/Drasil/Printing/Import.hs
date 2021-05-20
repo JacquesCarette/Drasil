@@ -52,9 +52,10 @@ parens = P.Fenced P.Paren P.Paren
 
 mulExpr ::  [Expr] -> AssocArithOper -> PrintingInformation -> [P.Expr]
 mulExpr (hd1:hd2:tl) o sm = case (hd1, hd2) of
-  (a, Int _) ->  [expr' sm (precA o) a , P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
-  (a, Dbl _) ->  [expr' sm (precA o) a , P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
-  (a, _)     ->  [expr' sm (precA o) a , P.MO P.Mul] ++ mulExpr (hd2 : tl) o sm
+  (a, Int _)      ->  [expr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
+  (a, ExactDbl _) ->  [expr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
+  (a, Dbl _)      ->  [expr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
+  (a, _)          ->  [expr' sm (precA o) a, P.MO P.Mul] ++ mulExpr (hd2 : tl) o sm
 mulExpr [hd]         o sm = [expr' sm (precA o) hd]
 mulExpr []           o sm = [expr' sm (precA o) (Int 1)]
 
@@ -102,7 +103,7 @@ expr (Dbl d)                  sm = case sm ^. getSetting of
 expr (Int i)                   _ = P.Int i
 expr (ExactDbl d)             _  = P.Int d
 expr (Str s)                   _ = P.Str s
-expr (Perc a b)               sm = P.Row [expr (Dbl val) sm, P.MO P.Perc]
+expr (Perc a b)               sm = P.Row [expr (dbl val) sm, P.MO P.Perc]
   where
     val = fromIntegral a / (10 ** fromIntegral (b - 2))
 expr (AssocB And l)           sm = assocExpr P.And (precB And) l sm

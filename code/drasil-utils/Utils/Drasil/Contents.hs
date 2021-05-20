@@ -6,50 +6,52 @@ import Utils.Drasil.Misc (bulletFlat, mkEnumAbbrevList)
 
 import Control.Lens ((^.))
 
--- | Constructs LabelledContent from an expression and a reference
+-- | Constructs 'LabelledContent' from an expression and a reference.
 eqUnR :: Expr -> Reference -> LabelledContent
 eqUnR e lbl = llcc lbl $ EqnBlock e
 
--- | Same as 'eqUnR' except content is unlabelled
+-- | Same as 'eqUnR' except content is unlabelled.
 eqUnR' :: Expr -> Contents
 eqUnR' e = UlC $ ulcc $ EqnBlock e
 
--- | enumBullet applies 'Enumeration', 'Bullet' and 'Flat' to a list
+-- | Applies 'Enumeration', 'Bullet' and 'Flat' to a list.
 enumBullet :: Reference -> [Sentence] -> LabelledContent --FIXME: should Enumeration be labelled?
 enumBullet lb s = llcc lb $ Enumeration $ bulletFlat s
 
--- | same as 'enumBullet' but unlabelled
+-- | Same as 'enumBullet' but unlabelled.
 enumBulletU :: [Sentence] -> Contents --FIXME: should Enumeration be labelled?
 enumBulletU s =  UlC $ ulcc $ Enumeration $ bulletFlat s
 
--- | enumSimple enumerates a list and applies `Simple` and `Enumeration` to it:
--- s - start index for the enumeration,
--- t - title of the list,
--- l - list to be enumerated,
+-- | Enumerates a list and applies `Simple` and `Enumeration` to it:
+--
+--     * lb - Reference,
+--     * s - start index for the enumeration,
+--     * t - title of the list,
+--     * l - list to be enumerated.
 enumSimple :: Reference -> Integer -> Sentence -> [Sentence] -> LabelledContent --FIXME: should Enumeration be labelled?
 enumSimple lb s t l = llcc lb $ Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevList s t l
 
--- | same as 'enumSimple' but unlabelled
+-- | Same as 'enumSimple' but unlabelled.
 enumSimpleU :: Integer -> Sentence -> [Sentence] -> Contents --FIXME: should Enumeration be labelled?
 enumSimpleU s t l = UlC $ ulcc $ Enumeration $ Simple $ noRefsLT $ mkEnumAbbrevList s t l
 
--- | noRefsLT converts lists of tuples containing a title and ItemType into
--- a ListTuple which can be used with Contents but not directly referable.
+-- | Converts lists of tuples containing a title ('Sentence') and 'ItemType' into
+-- a 'ListTuple' which can be used with 'Contents' but not directly referable.
 noRefsLT :: [(Sentence, ItemType)] -> [ListTuple]
 noRefsLT a = uncurry zip3 (unzip a) $ repeat Nothing
 
--- | mkEnumSimpleD is a convenience function for transforming types which are
--- instances of the constraints Referable, HasShortName, and Definition, into
--- Simple-type Enumerations.
+-- | Convenience function for transforming types which are
+-- instances of the constraints 'Referable', 'HasShortName', and 'Definition', into
+-- Simple-type 'Enumeration's.
 mkEnumSimpleD :: (Referable c, HasShortName c, Definition c) => [c] -> [Contents]
 mkEnumSimpleD = mkEnumSimple $ mkListTuple (\x -> Flat $ x ^. defn)
 
--- | mkEnumSimple is a convenience function for converting lists into
--- Simple-type Enumerations.
+-- | Convenience function for converting lists into
+-- Simple-type 'Enumeration's.
 mkEnumSimple :: (a -> ListTuple) -> [a] -> [Contents]
 mkEnumSimple f = replicate 1 . UlC . ulcc . Enumeration . Simple . map f
 
--- | Creates a list tuple filling in the title with a ShortName and filling
+-- | Creates a 'ListTuple', filling in the title with a 'ShortName' and filling
 -- reference information.
 mkListTuple :: (Referable c, HasShortName c) => (c -> ItemType) -> c -> ListTuple
 mkListTuple f x = (S . getStringSN $ shortname x, f x, Just $ refAdd x)

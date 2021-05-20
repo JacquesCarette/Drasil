@@ -22,10 +22,10 @@ integralCI          = commonIdeaWithDict "integralCI"      (pn "Integral")      
 pidCI               = commonIdeaWithDict "pidCI"           (pn "Proportional Integral Derivative") "PID"           []
 
 pidC, pidCL, summingPt, powerPlant, secondOrderSystem, processError,
-      simulationTime, processVariable, setPoint, propGain, derGain, simulation,
-      ccFrequencyDomain, ccLaplaceTransform, controlVariable, stepTime,
-      ccAbsTolerance, ccRelTolerance, ccTransferFxn, ccDampingCoeff,
-      ccStiffCoeff :: ConceptChunk
+      simulationTime, processVariable, setPoint, propGain, derGain, 
+      propControl, derControl, simulation,ccFrequencyDomain, 
+      ccLaplaceTransform, controlVariable, stepTime, ccAbsTolerance, 
+      ccRelTolerance, ccTransferFxn, ccDampingCoeff, ccStiffCoeff :: ConceptChunk
 pidCL
   = dcc "pdCtrlLoop" (nounPhraseSP "PD Control Loop") ("Closed-Loop control " ++
         "system with PD Controller, Summing Point and Power Plant")
@@ -79,6 +79,16 @@ propGain
 derGain
   = dcc "derGain" (nounPhraseSP "Derivative Gain") 
       "Gain constant of the derivative controller"
+
+propControl
+  = dcc "propControl" (nounPhraseSP "Proportional Control")
+      ("a linear feedback control system were correction is applied to the controlled" ++
+      "variable which is proportional to the difference between desired and measured values")
+
+derControl
+  = dcc "derControl" (nounPhraseSP "Derivative Control")
+      ("monitors the rate of change of the error signal and contributes a component" ++ 
+      "of the output signal (proportional to a derivative of the error signal).")
 
 simulation
   = dcc "simulation" (nounPhraseSP "simulation") 

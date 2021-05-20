@@ -67,8 +67,9 @@ prec1Vec _ = 250
 
 -- | eprec - "Expression" precedence
 eprec :: Expr -> Int
-eprec Dbl{}                  = 500
 eprec Int{}                  = 500
+eprec Dbl{}                  = 500
+eprec ExactDbl{}             = 500
 eprec Str{}                  = 500
 eprec Perc{}                 = 500
 eprec (AssocA op _)          = precA op

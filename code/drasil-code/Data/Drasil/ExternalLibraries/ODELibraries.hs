@@ -94,7 +94,7 @@ scipyLSodaCall info = externalLibCall [
       basicArgFill (Matrix [[initVal info, initValFstOrd $ odeOpts info]]),
       basicArgFill (sy xAxis)],
   mandatoryStepFill $ initSolWithValFill (depVar info) 
-      (idx (sy transpose) (Int 0))
+      (idx (sy transpose) (int 0))
     ]
 
 scipyImport :: String

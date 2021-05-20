@@ -94,6 +94,10 @@ int = Int
 dbl :: Double -> Expr
 dbl = Dbl
 
+-- | Smart constructor for exact doubles
+exactDbl :: Integer -> Expr
+exactDbl = ExactDbl
+
 -- | Smart constructor for fractions
 frac :: Integer -> Integer -> Expr
 frac l r = int l $/ int r

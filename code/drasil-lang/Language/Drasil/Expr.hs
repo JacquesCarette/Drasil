@@ -71,6 +71,7 @@ data Completeness = Complete | Incomplete
 data Expr where
   Dbl      :: Double -> Expr
   Int      :: Integer -> Expr
+  ExactDbl :: Integer -> Expr
   Str      :: String -> Expr
   Perc     :: Integer -> Integer -> Expr
   AssocA   :: AssocArithOper -> [Expr] -> Expr

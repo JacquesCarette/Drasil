@@ -100,6 +100,7 @@ expr (Dbl d)                  sm = case sm ^. getSetting of
      (toInteger $ snd $ processExpo $ snd $ floatToDigits 10 d)
   Scientific  ->  P.Dbl d
 expr (Int i)                   _ = P.Int i
+expr (ExactDbl d)             _  = P.Int d
 expr (Str s)                   _ = P.Str s
 expr (Perc a b)               sm = P.Row [expr (Dbl val) sm, P.MO P.Perc]
   where

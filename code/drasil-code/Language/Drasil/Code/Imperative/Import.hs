@@ -278,8 +278,9 @@ convExpr (Dbl d) = do
       getLiteral Float = litFloat (realToFrac d)
       getLiteral _ = error "convExpr: Real space matched to invalid CodeType; should be Double or Float"
   return $ getLiteral sm
-convExpr (Int i) = return $ litInt i
-convExpr (Str s) = return $ litString s
+convExpr (ExactDbl d) = convExpr $ dbl $ fromInteger d
+convExpr (Int i)      = return $ litInt i
+convExpr (Str s)      = return $ litString s
 convExpr (Perc a b) = do
   sm <- spaceCodeType Rational
   let getLiteral Double = litDouble

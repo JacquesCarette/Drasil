@@ -11,334 +11,375 @@
 
 module Utils.Drasil.Sentence
 
--- | Inserts the words "and its" between two Sentences
+-- | Inserts the words "and its" between two Sentences.
 andIts :: Sentence -> Sentence -> Sentence
 
--- | Inserts the words "and the" between two Sentences
+-- | Inserts the words "and the" between two Sentences.
 andThe :: Sentence -> Sentence -> Sentence
 
--- | Inserts the words "from the" between two Sentences
+-- | Inserts the words "from the" between two Sentences.
 fromThe :: Sentence -> Sentence -> Sentence
 
--- | Inserts the words "in the" between two Sentences
+-- | Inserts the words "in the" between two Sentences.
 inThe :: Sentence -> Sentence -> Sentence
 
--- | Prepends <a>The</a> and inserts "is expected to have" between two
---   Sentences
+-- | Prepends "The" and inserts "is expected to have" between two
+--   Sentences.
 isExpctdToHv :: Sentence -> Sentence -> Sentence
 
--- | Inserts the words "is the" between two Sentences
+-- | Inserts the words "is the" between two Sentences.
 isThe :: Sentence -> Sentence -> Sentence
 
--- | Prepends "the" and inserts "of a given" between two Sentences
+-- | Prepends "the" and inserts "of a given" between two Sentences.
 ofGiv :: Sentence -> Sentence -> Sentence
 
 -- | Similar to <a>sFor</a>, but used for titles and first <a>NamedIdea</a>
---   is pluralized
+--   is pluralized.
 forTT :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
 
--- | Similar to <a>forTT</a>, but both <a>NamedIdea</a>s are pluralized
+-- | Similar to <a>forTT</a>, but both <a>NamedIdea</a>s are pluralized.
 forTT' :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
 
--- | Same as <a>ofGiv</a>, except first "the" is capitalized
+-- | Same as <a>ofGiv</a>, except first "the" is capitalized.
 ofGiv' :: Sentence -> Sentence -> Sentence
 
--- | Inserts the words "of the" between two Sentences
+-- | Inserts the words "of the" between two Sentences.
 ofThe :: Sentence -> Sentence -> Sentence
 
 -- | Same as <a>ofThe</a>, but inserts "the" at the beginning of the
---   Sentence
+--   Sentence.
 the_ofThe :: Sentence -> Sentence -> Sentence
 
--- | Same as <a>the_ofThe</a>, except first "the" is capitalized
+-- | Same as <a>the_ofThe</a>, except first "the" is capitalized.
 the_ofThe' :: Sentence -> Sentence -> Sentence
 
--- | Inserts the word "of" between two Sentences
+-- | Inserts the word "of" between two Sentences.
 sOf :: Sentence -> Sentence -> Sentence
 
--- | Inserts the words "of a" between two Sentences
+-- | Inserts the words "of a" between two Sentences.
 sOfA :: Sentence -> Sentence -> Sentence
 
--- | Inserts the word "or" between two Sentences
+-- | Inserts the word "or" between two Sentences.
 sOr :: Sentence -> Sentence -> Sentence
 
--- | Inserts the word "versus" between two Sentences
+-- | Inserts the word "versus" between two Sentences.
 sVersus :: Sentence -> Sentence -> Sentence
 
--- | Inserts the word "and" between two Sentences
+-- | Inserts the word "and" between two Sentences.
 sAnd :: Sentence -> Sentence -> Sentence
 
--- | Inserts the word "are" between two Sentences
+-- | Inserts the word "are" between two Sentences.
 sAre :: Sentence -> Sentence -> Sentence
 
--- | Inserts the word "in" between two Sentences
+-- | Inserts the word "in" between two Sentences.
 sIn :: Sentence -> Sentence -> Sentence
 
--- | Inserts the word "is" between two Sentences
+-- | Inserts the word "is" between two Sentences.
 sIs :: Sentence -> Sentence -> Sentence
 
--- | Inserts the words "to the" between two Sentences
+-- | Inserts the words "to the" between two Sentences.
 toThe :: Sentence -> Sentence -> Sentence
 
--- | Inserts the word "for" between two Sentences
+-- | Inserts the word "for" between two Sentences.
 sFor :: Sentence -> Sentence -> Sentence
 
--- | Similar to <a>sFor</a>, but both terms are <a>titleize</a>d
+-- | Similar to <a>sFor</a>, but both terms are <a>titleize</a>d.
 sFor' :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
 
 -- | Similar to <a>sFor'</a>, but takes two arguments (for capitalization
---   or pluralization) to apply to the two terms respectively
+--   or pluralization) to apply to the two terms respectively.
 sFor'' :: (c -> Sentence) -> (d -> Sentence) -> c -> d -> Sentence
 
--- | Inserts the words "denotes the" between two Sentences
+-- | Inserts the words "denotes the" between two Sentences.
 denotes :: Sentence -> Sentence -> Sentence
 
--- | Inserts the words "with respect to" between two Sentences
+-- | Inserts the words "with respect to" between two Sentences.
 wrt :: Sentence -> Sentence -> Sentence
 
--- | Inserts the words "defined as" between two Sentences
+-- | Inserts the words "defined as" between two Sentences.
 defnAs :: Sentence -> Sentence -> Sentence
 
 module Utils.Drasil
 
--- | enumBullet applies <a>Enumeration</a>, <a>Bullet</a> and <a>Flat</a>
---   to a list
+-- | Applies <a>Enumeration</a>, <a>Bullet</a> and <a>Flat</a> to a list.
 enumBullet :: Reference -> [Sentence] -> LabelledContent
 
--- | same as <a>enumBullet</a> but unlabelled
+-- | Same as <a>enumBullet</a> but unlabelled.
 enumBulletU :: [Sentence] -> Contents
 
--- | enumSimple enumerates a list and applies <a>Simple</a> and
---   <a>Enumeration</a> to it: s - start index for the enumeration, t -
---   title of the list, l - list to be enumerated,
+-- | Enumerates a list and applies <a>Simple</a> and <a>Enumeration</a> to
+--   it:
+--   
+--   <ul>
+--   <li>lb - Reference,</li>
+--   <li>s - start index for the enumeration,</li>
+--   <li>t - title of the list,</li>
+--   <li>l - list to be enumerated.</li>
+--   </ul>
 enumSimple :: Reference -> Integer -> Sentence -> [Sentence] -> LabelledContent
 
--- | same as <a>enumSimple</a> but unlabelled
+-- | Same as <a>enumSimple</a> but unlabelled.
 enumSimpleU :: Integer -> Sentence -> [Sentence] -> Contents
 
--- | Constructs LabelledContent from an expression and a reference
+-- | Constructs <a>LabelledContent</a> from an expression and a reference.
 eqUnR :: Expr -> Reference -> LabelledContent
 
--- | Same as <a>eqUnR</a> except content is unlabelled
+-- | Same as <a>eqUnR</a> except content is unlabelled.
 eqUnR' :: Expr -> Contents
 
--- | mkEnumSimpleD is a convenience function for transforming types which
---   are instances of the constraints Referable, HasShortName, and
---   Definition, into Simple-type Enumerations.
+-- | Convenience function for transforming types which are instances of the
+--   constraints <a>Referable</a>, <a>HasShortName</a>, and
+--   <a>Definition</a>, into Simple-type <a>Enumeration</a>s.
 mkEnumSimpleD :: (Referable c, HasShortName c, Definition c) => [c] -> [Contents]
+
+-- | Creates a blank document with no text.
 blank :: Doc
+
+-- | Indents a document (by 4 spaces).
 indent :: Doc -> Doc
+
+-- | Indents a list of Docs and combines into one Doc.
 indentList :: [Doc] -> Doc
 
--- | String capitalization
+-- | String capitalization.
 capitalize :: String -> String
 
--- | Comma separated list with "and" before final item
+-- | Comma separated list with "and" before final item.
 stringList :: [String] -> String
+
+-- | Type that helps determine enumeration method. Can use either numbers,
+--   uppercase letters, or lowercase letters.
 data EnumType
 Numb :: EnumType
 Upper :: EnumType
 Lower :: EnumType
+
+-- | Type to help wrap a sentence with parenthesis or to add a period at
+--   the end.
 data WrapType
 Parens :: WrapType
 Period :: WrapType
+
+-- | Type to help separate words with commas or semicolons.
 data SepType
 Comma :: SepType
 SemiCol :: SepType
+
+-- | Type to help fold differently between listed items, or if there are
+--   options (ex. using "and" or "or" at the end of a list of words).
 data FoldType
 List :: FoldType
 Options :: FoldType
 
--- | Helper for formatting constraints
+-- | Helper for formatting constraints.
 foldConstraints :: Quantity c => c -> [Constraint] -> Sentence
 
 -- | Creates a list of elements with "enumerators" in "wrappers" using
---   foldlList
+--   foldlList.
 foldlEnumList :: EnumType -> WrapType -> SepType -> FoldType -> [Sentence] -> Sentence
 
 -- | Creates a list of elements separated by a "separator", ending with
---   "and" or "or"
+--   "and" or "or".
 foldlList :: SepType -> FoldType -> [Sentence] -> Sentence
 
--- | Fold sentences then turns into content using <a>foldlSent</a>
+-- | Fold sentences then turns into content using <a>foldlSent</a>.
 foldlSP :: [Sentence] -> Contents
 
--- | Same as <a>foldlSP</a> but uses <a>foldlSent_</a>
+-- | Same as <a>foldlSP</a> but uses <a>foldlSent_</a>.
 foldlSP_ :: [Sentence] -> Contents
 
--- | Same as <a>foldlSP</a> but uses <a>foldlSentCol</a>
+-- | Same as <a>foldlSP</a> but uses <a>foldlSentCol</a>.
 foldlSPCol :: [Sentence] -> Contents
 
 -- | Partial function application of foldle for sentences specifically.
 --   folds with spaces and adds "." at the end.
 foldlSent :: [Sentence] -> Sentence
 
--- | <a>foldlSent</a> but does not end with period
+-- | <a>foldlSent</a> but does not end with period.
 foldlSent_ :: [Sentence] -> Sentence
 
--- | <a>foldlSent</a> but ends with colon
+-- | <a>foldlSent</a> but ends with colon.
 foldlSentCol :: [Sentence] -> Sentence
 
 -- | Folds a list of elements separated by commas, including the last
---   element
+--   element.
 foldlsC :: [Sentence] -> Sentence
 
 -- | Parses a list of integers into a nice sentence (ie. S "1, 4-7, and
---   13")
+--   13").
 foldNums :: String -> [Int] -> Sentence
 
 -- | Parses a list of integers into a list of strings (ie. ["1", "4-7",
---   "13"])
+--   "13"]).
 numList :: String -> [Int] -> [String]
 
--- | Converts input to a Sentence and appends %
+-- | Converts input to a <a>Sentence</a> and appends %.
 addPercent :: Show a => a -> Sentence
 
 -- | Applies <a>Bullet</a> and <a>Flat</a> to a list.
 bulletFlat :: [Sentence] -> ListType
 
--- | Applies <a>Bullet</a>s and headers to a <a>Nested</a> <a>ListType</a>:
---   t - Headers of the <a>Nested</a> lists, l - Lists of <a>ListType</a>
+-- | Applies <a>Bullet</a>s and headers to a <a>Nested</a> <a>ListType</a>.
+--   The first argument is the headers of the <a>Nested</a> lists.
 bulletNested :: [Sentence] -> [ListType] -> ListType
 
--- | Uses an Either type to check if a string is valid - Left with error
---   message if invalid Char in String, else Right with String
+-- | Uses an <a>Either</a> type to check if a <a>String</a> is valid -
+--   <a>Left</a> with error message if there is an invalid <a>Char</a> in
+--   <a>String</a>, else <a>Right</a> with <a>String</a>.
 checkValidStr :: String -> String -> Either String String
 
--- | Output is of the form "reference - sentence"
+-- | Output is of the form "<tt>reference - sentence</tt>".
 chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence
 
--- | Takes a HasSymbol that is also Referable and outputs as a Sentence
---   "<tt>symbol</tt> is defined in <tt>reference</tt>"
+-- | Takes a <a>HasSymbol</a> that is also <a>Referable</a> and outputs as
+--   a <a>Sentence</a>: "<tt>symbol</tt> is defined in <tt>reference</tt>."
 definedIn :: (Referable r, HasShortName r, HasSymbol r) => r -> Sentence
 
--- | Same as definedIn, but allows for addition information to be appended
+-- | Same as <a>definedIn</a>, but allows for additional information to be
+--   appended to the <a>Sentence</a>.
 definedIn' :: (Referable r, HasShortName r, HasSymbol r) => r -> Sentence -> Sentence
 
--- | Takes a Referable and outputs as a Sentence "defined in
---   <tt>reference</tt>" (no HasSymbol)
+-- | Takes a <a>Referable</a> and outputs as a <a>Sentence</a> "defined in
+--   <tt>reference</tt>" (no <a>HasSymbol</a>).
 definedIn'' :: (Referable r, HasShortName r) => r -> Sentence
 
--- | Produces a sentence that displays the constraints in a {}.
+-- | Produces a <a>Sentence</a> that displays the constraints in a set {}.
 displayStrConstrntsAsSet :: Quantity a => a -> [String] -> Sentence
 
--- | Produces a sentence that displays the constraints in a {}.
+-- | Produces a <a>Sentence</a> that displays the constraints in a set {}.
 displayDblConstrntsAsSet :: Quantity a => a -> [Double] -> Sentence
 
--- | Prepends the word <a>Equation</a> to an <a>Int</a>
+-- | Prepends the word <a>Equation</a> to an <a>Int</a>.
 eqN :: Int -> Sentence
 
--- | Takes an expression and a referable and outputs as a Sentence
---   "expression (source)"
+-- | Takes an expression and a <a>Referable</a> and outputs as a Sentence
+--   "expression (source)".
 eqnWSource :: (Referable r, HasShortName r) => Expr -> r -> Sentence
 
--- | Takes a referable source and a <a>UnitalChunk</a> and outputs as a
---   Sentence "From <tt>source</tt> we can replace <tt>symbol</tt>"
+-- | Takes a <a>Referable</a> source and a <a>UnitalChunk</a> and outputs
+--   as a <a>Sentence</a>: "From <tt>source</tt> we can replace
+--   <tt>symbol</tt>:".
 fromReplace :: (Referable r, HasShortName r) => r -> UnitalChunk -> Sentence
 
--- | Wraps "from <tt>reference</tt>" in parentheses
+-- | Wraps "from <tt>reference</tt>" in parentheses.
 fromSource :: (Referable r, HasShortName r) => r -> Sentence
 
--- | Similar to <a>fromSource</a> but takes a list of references
+-- | Similar to <a>fromSource</a> but takes a list of references instead of
+--   one.
 fromSources :: (Referable r, HasShortName r) => [r] -> Sentence
 
--- | Takes an amount and adds a unit to it: n - sentenc representing an
---   amount, u - unit we want to attach to amount
+-- | Takes an amount as a <a>Sentence</a> and appends a unit to it.
 fmtU :: MayHaveUnit a => Sentence -> a -> Sentence
 
--- | Appends "following <tt>reference</tt>" to the end of a Sentence
+-- | Appends "following <tt>reference</tt>" to the end of a
+--   <a>Sentence</a>.
 follows :: (Referable r, HasShortName r) => Sentence -> r -> Sentence
 
 -- | Used when you want to say a term followed by its symbol. ex. "...using
---   the Force F in..."
+--   the Force F in...".
 getTandS :: Quantity a => a -> Sentence
 
--- | Makes Sentences from an item and its reference: a - String title of
---   reference, b - Sentence containing the full reference
+-- | Makes <a>Sentence</a>s from an item and its reference. Takes the title
+--   of reference as a <a>String</a> and a <a>Sentence</a> containing the
+--   full reference. Wraps the full reference in parenthesis.
 itemRefToSent :: String -> Sentence -> Sentence
 
--- | Takes a list and a reference, generates references to match the length
---   of the list: l - list whos length is to be matched
+-- | Takes a list and a reference, then generates references to match the
+--   length of the list.
 makeListRef :: [a] -> Section -> [Sentence]
 
--- | Makes a traceability matrix from a list of row titles, list of rows of
---   "checked" columns, and a list of columns.
+-- | Makes a traceability matrix from a list of row titles, a list of rows
+--   of "checked" columns, and a list of columns.
 makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
 
 -- | Helper functions for making likely change statements. Uses form
---   <tt><a>likelyFrame</a> parameter1 _ parameter2</tt>
+--   <tt><a>likelyFrame</a> parameter1 _ parameter2</tt>.
 maybeChanged :: Sentence -> Sentence -> Sentence
 
 -- | Helper functions for making likely change statements. Uses form
---   <tt><a>likelyFrame</a> parameter1 _ parameter2</tt>
+--   <tt><a>likelyFrame</a> parameter1 _ parameter2</tt>.
 maybeExpanded :: Sentence -> Sentence -> Sentence
 
 -- | Helper functions for making likely change statements. Uses form
---   <tt><a>likelyFrame</a> parameter1 _ parameter2</tt>
+--   <tt><a>likelyFrame</a> parameter1 _ parameter2</tt>.
 maybeWOVerb :: Sentence -> Sentence -> Sentence
 
--- | Zip helper function enumerates abbreviation and zips it with list of
---   ItemType: s - the number from which the enumeration should start from,
---   t - the title of the list, l - the list to be enumerated
+-- | Zip helper function enumerates abbreviations and zips it with list of
+--   <a>ItemType</a>:
+--   
+--   <ul>
+--   <li>s - the number from which the enumeration should start from
+--   (<a>Integer</a>),</li>
+--   <li>t - the title of the list (<a>Sentence</a>),</li>
+--   <li>l - the list to be enumerated ([<a>Sentence</a>]).</li>
+--   </ul>
 mkEnumAbbrevList :: Integer -> Sentence -> [Sentence] -> [(Sentence, ItemType)]
 
--- | Helper for making a table from a columns
+-- | Helper for making a table from a columns.
 mkTableFromColumns :: [(Sentence, [Sentence])] -> ([Sentence], [[Sentence]])
 
 -- | Converts lists of simple <a>ItemType</a>s into a list which may be
---   used in Contents but is not directly referable.
+--   used in <a>Contents</a> but is not directly referable.
 noRefs :: [ItemType] -> [(ItemType, Maybe String)]
 
 -- | Create a list in the pattern of "The __ are refined to the __". Note:
 --   Order matters!
 refineChain :: NamedIdea c => [(c, Section)] -> Sentence
 
--- | Returns the Sentence "<tt>aNamedIdea</tt> Showing the Connections
---   Between <tt>contents</tt>"
+-- | Returns the <a>Sentence</a> "<tt>(<a>titleize</a> aNamedIdea)</tt>
+--   Showing the Connections Between <tt>contents</tt>".
 showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence
 
--- | Sorts a list of <tt>HasSymbols</tt> by Symbol
+-- | Sorts a list of <tt>HasSymbols</tt> by Symbol.
 sortBySymbol :: HasSymbol a => [a] -> [a]
 
--- | Sorts a tuple list of <tt>HasSymbols</tt> by first Symbol in the tuple
+-- | Sorts a tuple list of <tt>HasSymbols</tt> by first Symbol in the
+--   tuple.
 sortBySymbolTuple :: HasSymbol a => [(a, b)] -> [(a, b)]
 
--- | Takes a list of Referables and Symbols and outputs as a Sentence "By
---   substituting <tt>symbols</tt>, this can be written as"
+-- | Takes a list of <a>Referable</a>s and <a>Symbol</a>s and outputs as a
+--   Sentence "By substituting <tt>symbols</tt>, this can be written as:".
 substitute :: (Referable r, HasShortName r, HasSymbol r) => [r] -> Sentence
 
--- | Helpful combinators for making Sentences for Terminologies with
---   Definitions. term - definition
+-- | Helpful combinators for making <a>Sentence</a>s into Terminologies
+--   with Definitions. Returns of the form: "<tt>term -
+--   termDefinition</tt>".
 tAndDOnly :: Concept s => s -> ItemType
 
--- | Helpful combinators for making Sentences for Terminologies with
---   Definitions. term (acc) - definition
+-- | Helpful combinators for making <a>Sentence</a>s into Terminologies
+--   with Definitions. Returns of the form: "<tt>term (abbreviation) -
+--   termDefinition</tt>".
 tAndDWAcc :: Concept s => s -> ItemType
 
--- | Helpful combinators for making Sentences for Terminologies with
---   Definitions. term (symbol) - definition
+-- | Helpful combinators for making <a>Sentence</a>s into Terminologies
+--   with Definitions. Returns of the form: "<tt>term (symbol) -
+--   termDefinition</tt>".
 tAndDWSym :: (Concept s, Quantity a) => s -> a -> ItemType
 
 -- | Extracts the typical uncertainty to be displayed from something that
---   has an uncertainty
+--   has an uncertainty.
 typUncr :: HasUncertainty c => c -> Sentence
 
--- | Returns the Sentence "The <tt>chunk</tt> under consideration is
---   <tt>definition</tt>"
+-- | Returns the <a>Sentence</a> "The <tt>chunk</tt> under consideration is
+--   <tt>chunkDefinition</tt>".
 underConsidertn :: ConceptChunk -> Sentence
 
--- | Get a unit symbol if there is one
+-- | Get a unit symbol if there is one.
 unwrap :: Maybe UnitDefn -> Sentence
 
--- | Interweaves two lists together [[a,b,c],[d,e,f]] -&gt; [a,d,b,e,c,f]
+-- | Interweaves two lists together <tt>[[a,b,c],[d,e,f]] -&gt;
+--   [a,d,b,e,c,f]</tt>.
 weave :: [[a]] -> [a]
 
 -- | Distributes a list of Sentences by prepending individual Sentences
---   once to an existing list of Sentences. For example: &gt;&gt;&gt;
---   zipSentList [S <a>Hi</a>, S <a>Hey</a>, S <a>Hi</a>] [[S<a>Hello</a>],
---   [S<a>World</a>], [S<a>Hello</a>, S"World]] [[S <a>Hi</a>,
---   S<a>Hello</a>], [S <a>Hey</a>, S<a>World</a>], [S <a>Hi</a>,
---   S<a>Hello</a>, S"World]]
+--   once to an existing list of Sentences.
+--   
+--   For example:
+--   
+--   <pre>
+--   &gt;&gt;&gt; zipSentList [S "Hi", S "Hey", S "Hi"] [[S"Hello"], [S"World"], [S"Hello", S"World]]
+--   [[S "Hi", S"Hello"], [S "Hey", S"World"], [S "Hi", S"Hello", S"World]]
+--   </pre>
 zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]]
 
 -- | Apply a binary function to the terms of two named ideas, instead of to
@@ -346,191 +387,207 @@ zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]]
 --   instead of <tt>compoundPhrase (t1 ^. term) (t2 ^. term)</tt>.
 fterms :: (NamedIdea c, NamedIdea d) => (NP -> NP -> t) -> c -> d -> t
 
--- | Creates a NP by combining two <a>NamedIdea</a>s with the word "and"
---   between their terms. Plural is defaulted to <tt>(phrase t1) "of"
---   (plural t2)</tt>
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the word
+--   "and" between their terms. Plural case is <tt>(phrase t1) "and"
+--   (plural t2)</tt>.
 and_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
--- | Same as <a>and_</a> combinator, except phrase default of second term
---   is plural instead of phrase
+-- | Same as <a>and_</a> combinator, except both singular and plural case
+--   are <tt>(phrase t1) "and" (plural t2)</tt>.
 and_' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Customizable <a>and_</a> combinator (takes two title case
 --   capitalization rules and two NamedIdeas)
 andRT :: (NamedIdea c, NamedIdea d) => (c -> Sentence) -> (d -> Sentence) -> c -> d -> NP
 
--- | Combinator for combining two <a>NamedChunk</a>s into one. <i>Does not
---   preserve abbreviations</i>
+-- | Combinator for combining two <tt>NamedIdeas</tt>s into a
+--   <a>NamedChunk</a>. Plural case only makes second term plural. See
+--   <a>compoundPhrase</a> for more on plural behaviour. <i>Does not
+--   preserve abbreviations</i>.
 compoundNC :: (NamedIdea a, NamedIdea b) => a -> b -> NamedChunk
 
--- | Similar to <a>compoundNC</a> but uses <a>pluralNP</a> for plural cases
+-- | Similar to <a>compoundNC</a> but both terms are pluralized for plural
+--   case.
 compoundNC' :: (NamedIdea a, NamedIdea b) => a -> b -> NamedChunk
 
--- | Similar to <a>compoundNC</a>, except plural cases are customizable
+-- | Similar to <a>compoundNC</a>, except plural cases are customizable.
 compoundNC'' :: (NamedIdea a, NamedIdea b) => (NP -> Sentence) -> (NP -> Sentence) -> a -> b -> NamedChunk
+
+-- | Similar to <a>compoundNC</a>, but takes a function that is applied to
+--   the first term (eg. <a>short</a> or <a>plural</a>)
 compoundNC''' :: (NamedIdea a, NamedIdea b) => (NP -> Sentence) -> a -> b -> NamedChunk
 
 -- | Similar to <a>compoundNC'''</a> but sets first parameter function to
 --   plural
 compoundNCP1 :: NamedChunk -> NamedChunk -> NamedChunk
 
--- | Similar to <a>compoundNC</a>, except first parameter gets pluralized
---   while second one stays singular
+-- | Similar to <a>compoundNC</a>, except for plural case, first parameter
+--   gets pluralized while second one stays singular.
 compoundNCPlPh :: NamedChunk -> NamedChunk -> NamedChunk
 
--- | Creates a noun phrase by combining two <a>NamedIdea</a>s with the word
---   "for" between their terms. Plural is defaulted to <tt>(plural t1)
---   "for" (phrase t2)</tt>
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the word
+--   "for" between their terms. Plural case is <tt>(plural t1) "for"
+--   (phrase t2)</tt>.
 for :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Similar to <a>for</a>, but takes two functions that determine the
---   <a>titleCase</a>
+--   <a>titleCase</a>.
 for' :: (NamedIdea c, Idea d) => (c -> Sentence) -> (d -> Sentence) -> c -> d -> NP
 
--- | Creates a noun phrase by combining two <a>NamedIdea</a>s with the word
---   "of" between their terms. Plural is defaulted to <tt>(phrase t1) "of"
---   (plural t2)</tt>
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the word
+--   "of" between their terms. Plural case is <tt>(phrase t1) "of" (plural
+--   t2)</tt>.
 of_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
--- | Similar to <a>of_</a>, but <a>phrase</a> is defaulted to <tt>(phrase
---   t1) "of" (plural t2)</tt>. Plural is the same.
+-- | Similar to <a>of_</a>, but singular case is <tt>(phrase t1) "of"
+--   (plural t2)</tt>. Plural case is the same.
 of_' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
--- | Same as <a>of_</a>, except plural is defaulted to <tt>(plural t1) "of"
---   (phrase t2)</tt>
+-- | Same as <a>of_</a>, except plural case is <tt>(plural t1) "of" (phrase
+--   t2)</tt>.
 of_'' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
--- | Same as <a>of_</a>, except phrase and plural default to <tt>(plural
---   t1) "of" (phrase t2)</tt>
+-- | Same as <a>of_</a>, except singular and plural cases are both
+--   <tt>(plural t1) "of" (phrase t2)</tt>.
 of__ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
--- | Same as <a>of__</a>, except combining Sentence piece is "of a"
+-- | Same as <a>of__</a>, except combining <a>Sentence</a> piece is "of a".
 ofA :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
--- | Same as <a>of_</a> but second argument is a <a>NounPhrase</a>
+-- | Same as <a>of_</a> but second argument is a <a>NounPhrase</a>.
 ofN_ :: (NamedIdea c, NounPhrase d) => c -> d -> NP
 
 -- | Prepends "the" to a <a>NamedIdea</a>. Similar to <a>the'</a>, but not
---   titleized
+--   titleized.
 the :: NamedIdea t => t -> NP
 
--- | Prepends "the" to a titleized <a>NamedIdea</a>
+-- | Prepends "the" to a titleized <a>NamedIdea</a>.
 the' :: NamedIdea t => t -> NP
 
--- | A customizable version of <a>the</a>
+-- | A customizable version of <a>the</a>. The given function is applied to
+--   both singular and plural cases.
 the'' :: (t -> Sentence) -> t -> NP
 
--- | Creates a noun phrase by combining two <a>NamedIdea</a>s with the
---   words "in the" between their terms. Plural is defaulted to <tt>(plural
---   t1) "in the" (phrase t2)</tt>
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
+--   "in the" between their terms. Plural case is <tt>(plural t1) "in the"
+--   (phrase t2)</tt>.
 inThe' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
--- | Case with "T1s with T2", as opposed to "T1 with T2", i.e. phrase
---   defaults to <tt>(plural t1) "with" (phrase t2)</tt> while plural
+-- | Case with "T1s with T2", as opposed to "T1 with T2", i.e. singular
+--   case is <tt>(plural t1) "with" (phrase t2)</tt> while the plural case
 --   pluralizes both.
 with :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
--- | Same as <a>of_</a>, except combining Sentence piece is "of the"
+-- | Same as <a>of_</a>, except combining <a>Sentence</a> piece is "of
+--   the". Plural case is <tt>(plural t1) <a>ofThe</a> (phrase t2)</tt>.
 ofThe' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
--- | Helper function that places a string in between two <a>NP</a>s. Plural
---   is defaulted to <tt>phraseNP t1 +:+ S s +:+ pluralNP t2</tt>
+-- | Helper function that places a <a>String</a> in between two <a>NP</a>s.
+--   Plural case is <tt>(phraseNP t1) +:+ S s +:+ (pluralNP t2)</tt>.
 insertStringNP :: String -> NP -> NP -> NP
 
--- | Helper function that prepends a string to a <a>NP</a>
+-- | Helper function that prepends a <a>String</a> to a <a>NP</a>.
 prependStringNP :: String -> NP -> NP
 
--- | Helper function that places a Sentence in between two <a>NP</a>s.
---   Plural is defaulted to <tt>phraseNP t1 +:+ s +:+ pluralNP t2</tt>
+-- | Helper function that places a <a>Sentence</a> in between two
+--   <a>NP</a>s. Plural case is <tt>(phraseNP t1) +:+ s +:+ (pluralNP
+--   t2)</tt>.
 insertSentNP :: Sentence -> NP -> NP -> NP
 
--- | Helper function that prepends a <a>Sentence</a> to a <a>NP</a>
+-- | Helper function that prepends a <a>Sentence</a> to a <a>NP</a>.
 prependSentNP :: Sentence -> NP -> NP
 
--- | Prepends "the" to a <a>NP</a>
+-- | Prepends "the" to a <a>NP</a>.
 theNP :: NP -> NP
 
 -- | Similar to <a>theNP</a>, but accepts a function that determines the
---   plural case
+--   plural case.
 theNP' :: (NP -> Sentence) -> NP -> NP
 
--- | Prepends "a" to a <a>NP</a>
+-- | Prepends "a" to a <a>NP</a>.
 aNP :: NP -> NP
 
 -- | Similar to <a>aNP</a>, but accepts a function that determines the
---   plural case
+--   plural case.
 aNP' :: (NP -> Sentence) -> NP -> NP
 
--- | Inserts "of the" between two <a>NP</a>s
+-- | Inserts "of the" between two <a>NP</a>s. Plural case is <tt>(phraseNP
+--   t1) +:+ "of the" +:+ (pluralNP t2)</tt>.
 ofTheNP :: NP -> NP -> NP
 
--- | Similar to <a>ofTheNP</a>, but the plural case is now <tt>pluralNP t1
---   <a>ofThe</a> phraseNP t2</tt>
+-- | Similar to <a>ofTheNP</a>, but the plural case is now <tt>(pluralNP
+--   t1) <a>ofThe</a> (phraseNP t2)</tt>.
 ofTheNP' :: NP -> NP -> NP
 
 -- | Similar to <a>ofTheNP</a>, but accepts two functions for the plural
---   case
+--   case.
 ofTheNP'' :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
 
--- | Inserts "in the" between two <a>NP</a>s
+-- | Inserts "in the" between two <a>NP</a>s. Plural case is <tt>(phraseNP
+--   t1) +:+ "in the" +:+ (pluralNP t2)</tt>.
 inTheNP :: NP -> NP -> NP
 
--- | Similar to <a>ofTheNP</a>, but the plural case is now <tt>pluralNP t1
---   <a>inThe</a> phraseNP t2</tt>
+-- | Similar to <a>ofTheNP</a>, but the plural case is now <tt>(pluralNP
+--   t1) <a>inThe</a> (phraseNP t2)</tt>.
 inTheNP' :: NP -> NP -> NP
 
 -- | Similar to <a>ofTheNP</a>, but accepts two functions for the plural
---   case
+--   case.
 inTheNP'' :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
 
--- | Prepends "the" and inserts "of the"
+-- | Prepends "the" and inserts "of the". Plural case is <tt>"the" +:+
+--   (phraseNP t1) +:+ "of the" +:+ (pluralNP t2)</tt>.
 the_ofTheNP :: NP -> NP -> NP
 
 -- | Similar to <a>the_ofTheNP</a>, but the plural case is now <tt> S "the"
---   +:+ pluralNP t1 <a>ofThe</a> phraseNP t2</tt>
+--   +:+ (pluralNP t1) <a>ofThe</a> (phraseNP t2)</tt>.
 the_ofTheNP' :: NP -> NP -> NP
 
 -- | Similar to <a>the_ofTheNP'</a>, but takes two functions for the plural
---   case
+--   case.
 the_ofTheNP'' :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
 
--- | Inserts "for" between two <a>NP</a>s
+-- | Inserts "for" between two <a>NP</a>s. Plural case is <tt>(phraseNP t1)
+--   +:+ "for" +:+ (pluralNP t2)</tt>.
 forNP :: NP -> NP -> NP
 
--- | Same as <a>forNP</a>, but plural case is now <tt>pluralNP t1
---   <a>sFor</a> phraseNP t2</tt>
+-- | Same as <a>forNP</a>, but plural case is now <tt>(pluralNP t1)
+--   <a>sFor</a> (phraseNP t2)</tt>.
 forNP' :: NP -> NP -> NP
 
--- | Same as <a>forNP'</a>, but takes two functions for the plural case
+-- | Same as <a>forNP'</a>, but takes two functions for the plural case.
 forNP'' :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
 
--- | Inserts "of" between two <a>NP</a>s
+-- | Inserts "of" between two <a>NP</a>s. Plural case is <tt>(phraseNP t1)
+--   +:+ "of" +:+ (pluralNP t2)</tt>.
 ofNP :: NP -> NP -> NP
 
--- | Same as <a>ofNP</a>, but plural case is now <tt>pluralNP t1 <a>sOf</a>
---   phraseNP t2</tt>
+-- | Same as <a>ofNP</a>, but plural case is now <tt>(pluralNP t1)
+--   <a>sOf</a> (phraseNP t2)</tt>.
 ofNP' :: NP -> NP -> NP
 
--- | Same as <a>ofNP</a>, but takes two functions for the plural case
+-- | Same as <a>ofNP</a>, but takes two functions for the plural case.
 ofNP'' :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
 
 -- | Same as <a>ofNP</a>, but takes two functions for the singular case and
---   two for the plural case
+--   two for the plural case.
 ofNP''' :: (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
 
--- | Inserts "with" between two <a>NP</a>s
+-- | Inserts "with" between two <a>NP</a>s. Plural case is <tt>(phraseNP
+--   t1) +:+ "with" +:+ (pluralNP t2)</tt>.
 withNP :: NP -> NP -> NP
 
--- | Inserts "and" between two <a>NP</a>s
+-- | Inserts "and" between two <a>NP</a>s. Plural case is <tt>(phraseNP t1)
+--   +:+ "and" +:+ (pluralNP t2)</tt>.
 andNP :: NP -> NP -> NP
 
--- | Same as <a>andNP</a>, but plural case is now <tt>pluralNP t1
---   <a>sAnd</a> phraseNP t2</tt>
+-- | Same as <a>andNP</a>, but plural case is now <tt>(pluralNP t1)
+--   <a>sAnd</a> (phraseNP t2)</tt>.
 andNP' :: NP -> NP -> NP
 
--- | Same as <a>andNP</a>, but takes two functions for the plural case
+-- | Same as <a>andNP</a>, but takes two functions for the plural case.
 andNP'' :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
 
 -- | Same as <a>andNP</a>, but takes two functions for the singular case
---   and two for the plural case
+--   and two for the plural case.
 andNP''' :: (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP

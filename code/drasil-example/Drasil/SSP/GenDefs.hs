@@ -439,7 +439,7 @@ momEqlDerivSeismicIntEqn = neg $ defint (eqSymb yi) (dbl 0) (inxi midpntHght)
   (sy earthqkLoadFctr `mulRe` sy genericSpWght `mulRe` inxi baseWthX `mulRe` sy yi)
 
 momEqlDerivSeismicEqn = neg $ sy earthqkLoadFctr `mulRe` sy genericSpWght `mulRe`
-  inxi baseWthX `mulRe` (inxi midpntHght $^ dbl 2 $/ dbl 2)
+  inxi baseWthX `mulRe` (square (inxi midpntHght) $/ dbl 2)
 
 momEqlDerivSeismicWEqn = neg $ sy earthqkLoadFctr `mulRe` inxi slcWght `mulRe`
   (inxi midpntHght $/ dbl 2)

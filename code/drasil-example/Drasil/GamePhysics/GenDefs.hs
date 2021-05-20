@@ -77,7 +77,7 @@ accelGravityDesc = foldlSent [S "If one of the", plural QPP.mass, S "is much lar
 
 accelGravityExpr :: Relation
 accelGravityExpr = neg ((sy QP.gravitationalConst `mulRe` sy mLarger $/
-  (sy dispNorm $^ dbl 2)) `mulRe` sy dVect)
+  square (sy dispNorm)) `mulRe` sy dVect)
 
 accelGravitySrc :: Reference
 accelGravitySrc = makeURI "accelGravitySrc" "https://en.wikipedia.org/wiki/Gravitational_acceleration" $
@@ -121,7 +121,7 @@ accelGravityDerivSentence5 =  [S "and thus the negative sign indicates that the"
                                S "an attractive", phrase QP.force]
 
 accelGravityDerivEqn1 :: Expr
-accelGravityDerivEqn1 = sy QP.force $= (sy QP.gravitationalConst `mulRe` (sy mass_1 `mulRe`  sy mass_2) $/
+accelGravityDerivEqn1 = sy QP.force $= (sy QP.gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2) $/
                         sy sqrDist) `mulRe` sy dVect
 
 accelGravityDerivEqn2 :: Expr
@@ -156,9 +156,9 @@ impulseQD = mkQuantDef' QP.impulseS (nounPhraseSP "Impulse for Collision") impul
 impulseExpr :: Expr
 impulseExpr = (neg (dbl 1 `addRe` sy QP.restitutionCoef) `mulRe` sy initRelVel $.
   sy normalVect) $/ (((dbl 1 $/ sy massA) `addRe` (dbl 1 $/ sy massB)) `mulRe`
-  (sy normalLen $^ dbl 2) `addRe`
-  ((sy perpLenA $^ dbl 2) $/ sy momtInertA) `addRe`
-  ((sy perpLenB $^ dbl 2) $/ sy momtInertB))
+  square (sy normalLen) `addRe`
+  (square (sy perpLenA) $/ sy momtInertA) `addRe`
+  (square (sy perpLenB) $/ sy momtInertB))
 
 impulseSrc :: Reference
 impulseSrc = makeURI "impulseSrc" "http://www.chrishecker.com/images/e/e7/Gdmphys3.pdf" $

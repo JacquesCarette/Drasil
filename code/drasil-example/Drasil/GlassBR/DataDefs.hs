@@ -105,7 +105,7 @@ strDisFac = dd strDisFacQD [makeCite astm2009] Nothing "stressDistFac"
 --DD5--
 
 nonFLEq :: Expr
-nonFLEq = mulRe (mulRe (sy tolLoad) (sy modElas)) (sy minThick $^ dbl 4) $/
+nonFLEq = mulRe (mulRe (sy tolLoad) (sy modElas)) (sy minThick $^ exactDbl 4) $/
   square (mulRe (sy plateLen) (sy plateWidth))
 
 nonFLQD :: QDefinition
@@ -134,7 +134,7 @@ glaTyFac = dd glaTyFacQD [makeCite astm2009] Nothing "gTF"
 
 dimLLEq :: Expr
 dimLLEq = mulRe (sy demand) (square (mulRe (sy plateLen) (sy plateWidth)))
-  $/ mulRe (mulRe (sy modElas) (sy minThick $^ dbl 4)) (sy gTF)
+  $/ mulRe (mulRe (sy modElas) (sy minThick $^ exactDbl 4)) (sy gTF)
 
 dimLLQD :: QDefinition
 dimLLQD = mkQuantDef dimlessLoad dimLLEq
@@ -159,7 +159,7 @@ tolPre = dd tolPreQD [makeCite astm2009] Nothing "tolLoad"
 --DD9--
 
 tolStrDisFacEq :: Expr
-tolStrDisFacEq = ln (ln (int 1 $/ (int 1 $- sy pbTol))
+tolStrDisFacEq = ln (ln (exactDbl 1 $/ (exactDbl 1 $- sy pbTol))
   `mulRe` ((sy plateLen `mulRe` sy plateWidth) $^ (sy sflawParamM $- dbl 1) $/
     (sy sflawParamK `mulRe` ((sy modElas `mulRe`
     square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac)))
@@ -175,7 +175,7 @@ tolStrDisFac = dd tolStrDisFacQD [makeCite astm2009] Nothing "sdfTol"
 --DD10--
 
 standOffDisEq :: Expr
-standOffDisEq = sqrt ((sy sdx $^ dbl 2) `addRe` (sy sdy $^ dbl 2) `addRe` (sy sdz $^ dbl 2))
+standOffDisEq = sqrt (square (sy sdx) `addRe` square (sy sdy) `addRe` square (sy sdz))
 
 standOffDisQD :: QDefinition
 standOffDisQD = mkQuantDef standOffDist standOffDisEq

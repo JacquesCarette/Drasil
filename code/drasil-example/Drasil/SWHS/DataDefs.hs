@@ -71,7 +71,7 @@ tankVolumeQD :: QDefinition
 tankVolumeQD = mkQuantDef tankVol tankVolumeEqn
 
 tankVolumeEqn :: Expr
-tankVolumeEqn = sy pi_ `mulRe` ((sy diam $/ dbl 2) $^ dbl 2) `mulRe` sy tankLength
+tankVolumeEqn = sy pi_ `mulRe` square (sy diam $/ dbl 2) `mulRe` sy tankLength
 
 tankVolume :: DataDefinition
 tankVolume = ddNoRefs tankVolumeQD Nothing "tankVolume" []

@@ -307,7 +307,7 @@ kEnergy :: QDefinition
 kEnergy = mkQuantDef QP.kEnergy kEnergyEqn
 
 kEnergyEqn :: Expr
-kEnergyEqn = sy QPP.mass `mulRe` (sy QP.velocity $^ dbl 2) $/ dbl 2
+kEnergyEqn = sy QPP.mass `mulRe` square (sy QP.velocity) $/ dbl 2
 
 kEnergyDesc :: Sentence
 kEnergyDesc = foldlSent [atStart QP.kEnergy `S.sIs` (QP.kEnergy ^. defn)]
@@ -321,7 +321,7 @@ momentOfInertia :: QDefinition
 momentOfInertia = mkQuantDef QP.momentOfInertia momentOfInertiaEqn
 
 momentOfInertiaEqn :: Expr
-momentOfInertiaEqn = sumAll (Variable "j") $ sy massj `mulRe` (sy rRot $^ dbl 2)
+momentOfInertiaEqn = sumAll (Variable "j") $ sy massj `mulRe` square (sy rRot)
 
 momentOfInertiaDesc :: Sentence
 momentOfInertiaDesc = foldlSent [S "The", getTandS QP.momentOfInertia,

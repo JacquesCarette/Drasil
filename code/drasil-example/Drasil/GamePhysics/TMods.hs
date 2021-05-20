@@ -51,15 +51,15 @@ newtonLUG = tmNoRefs (OthModel newtonLUGRC)
   [] [newtonLUGRel] [] "UniversalGravLaw" newtonLUGNotes
 
 newtonLUGRC :: RelationConcept
-newtonLUGRC = makeRC "newtonLUGRC" 
+newtonLUGRC = makeRC "newtonLUGRC"
   (nounPhraseSP "Newton's law of universal gravitation") EmptyS newtonLUGRel
 
 newtonLUGRel :: Relation
 newtonLUGRel = sy force $=
   sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/
-  (sy dispNorm $^ dbl 2)) `mulRe` sy dVect $=
+  square (sy dispNorm)) `mulRe` sy dVect $=
   sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/
-  (sy dispNorm $^ dbl 2)) `mulRe` (sy distMass $/ sy dispNorm)
+  square (sy dispNorm)) `mulRe` (sy distMass $/ sy dispNorm)
 
 -- Can't include fractions within a sentence (in the part where 'r denotes the
 -- unit displacement vector, equivalent to r/||r||' (line 184)). Changed to a
@@ -79,11 +79,11 @@ newtonLUGNotes = map foldlSent [
 
 newtonSLR :: TheoryModel
 newtonSLR = tmNoRefs (OthModel newtonSLRRC)
-  [qw torque, qw momentOfInertia, qw angularAccel] 
+  [qw torque, qw momentOfInertia, qw angularAccel]
   ([] :: [ConceptChunk]) [] [newtonSLRRel] [] "NewtonSecLawRotMot" newtonSLRNotes
 
 newtonSLRRC :: RelationConcept
-newtonSLRRC = makeRC "newtonSLRRC" 
+newtonSLRRC = makeRC "newtonSLRRC"
   (nounPhraseSP "Newton's second law for rotational motion") EmptyS newtonSLRRel
 
 newtonSLRRel :: Relation

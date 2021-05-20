@@ -1,7 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.SSP.DataDefs (dataDefs, intersliceWtrF, angleA, angleB, lengthB,
-  lengthLb, lengthLs, slcHeight, normStressDD, tangStressDD, ratioVariation, 
-  convertFunc1, convertFunc2, nrmForceSumDD, watForceSumDD) where 
+  lengthLb, lengthLs, slcHeight, normStressDD, tangStressDD, ratioVariation,
+  convertFunc1, convertFunc2, nrmForceSumDD, watForceSumDD) where
 
 import Prelude hiding (cos, sin, tan)
 import Language.Drasil
@@ -17,10 +17,10 @@ import Data.Drasil.Theories.Physics (torqueDD)
 import Drasil.SSP.Assumptions (assumpSBSBISL)
 import Drasil.SSP.Defs (slice)
 import Drasil.SSP.References (chen2005, fredlund1977, karchewski2012, huston2008)
-import Drasil.SSP.Unitals (baseAngle, baseLngth, baseWthX, constF, fricAngle, 
-  fs, genericA, intNormForce, indxn, inx, inxi, inxiM1, midpntHght, 
-  fn, ft, mobShrC, normToShear, scalFunc, shrResC, slipDist, slipHght, slopeDist, 
-  slopeHght, surfAngle, surfLngth, totNormStress, tangStress, nrmForceSum, 
+import Drasil.SSP.Unitals (baseAngle, baseLngth, baseWthX, constF, fricAngle,
+  fs, genericA, intNormForce, indxn, inx, inxi, inxiM1, midpntHght,
+  fn, ft, mobShrC, normToShear, scalFunc, shrResC, slipDist, slipHght, slopeDist,
+  slopeHght, surfAngle, surfLngth, totNormStress, tangStress, nrmForceSum,
   watForceSum, sliceHghtRight, sliceHghtLeft, waterHght, waterWeight, watrForce)
 
 ------------------------
@@ -29,7 +29,7 @@ import Drasil.SSP.Unitals (baseAngle, baseLngth, baseWthX, constF, fricAngle,
 
 dataDefs :: [DataDefinition]
 dataDefs = [intersliceWtrF, angleA, angleB, lengthB, lengthLb, lengthLs,
-  slcHeight, normStressDD, tangStressDD, torqueDD, ratioVariation, convertFunc1, 
+  slcHeight, normStressDD, tangStressDD, torqueDD, ratioVariation, convertFunc1,
   convertFunc2, nrmForceSumDD, watForceSumDD, sliceHghtRightDD, sliceHghtLeftDD]
 
 --DD intersliceWtrF: interslice normal water forces
@@ -44,11 +44,11 @@ intersliceWtrFQD = mkQuantDef watrForce intersliceWtrFEqn
 
 intersliceWtrFEqn :: Expr
 intersliceWtrFEqn = completeCase [case1,case2,case3]
-  where case1 = (((inxi slopeHght $- inxi slipHght) $^ dbl 2 $/ dbl 2) `mulRe`
-          sy waterWeight `addRe` (((inxi waterHght $- inxi slopeHght) $^ dbl 2) `mulRe`
+  where case1 = ((square (inxi slopeHght $- inxi slipHght) $/ dbl 2) `mulRe`
+          sy waterWeight `addRe` (square (inxi waterHght $- inxi slopeHght) `mulRe`
           sy waterWeight), inxi waterHght $>= inxi slopeHght)
 
-        case2 = (((inxi waterHght $- inxi slipHght) $^ dbl 2 $/ dbl 2)  `mulRe` sy waterWeight,
+        case2 = ((square (inxi waterHght $- inxi slipHght) $/ dbl 2)  `mulRe` sy waterWeight,
                 inxi slopeHght $> inxi waterHght $> inxi slipHght)
 
         case3 = (dbl 0, inxi waterHght $<= inxi slipHght)
@@ -56,7 +56,7 @@ intersliceWtrFEqn = completeCase [case1,case2,case3]
 --DD angleA: base angles
 
 angleA :: DataDefinition
-angleA = dd angleAQD [makeCite fredlund1977] Nothing "angleA" 
+angleA = dd angleAQD [makeCite fredlund1977] Nothing "angleA"
   [angleANotes]
 --FIXME: fill empty lists in
 
@@ -117,7 +117,7 @@ lengthLbEqn :: Expr
 lengthLbEqn = inxi baseWthX `mulRe` sec (inxi baseAngle)
 
 lengthLbNotes :: Sentence
-lengthLbNotes = foldlSent [ch baseWthX, S "is defined in", 
+lengthLbNotes = foldlSent [ch baseWthX, S "is defined in",
   makeRef2S lengthB `S.sAnd` ch baseAngle, S "is defined in", makeRef2S angleA]
 
 --DD lengthLs: surface lengths of slices
@@ -134,9 +134,9 @@ lengthLsEqn :: Expr
 lengthLsEqn = inxi baseWthX `mulRe` sec (inxi surfAngle)
 
 lengthLsNotes :: Sentence
-lengthLsNotes = foldlSent [ch baseWthX, S "is defined in", 
+lengthLsNotes = foldlSent [ch baseWthX, S "is defined in",
   makeRef2S lengthB `S.sAnd` ch surfAngle, S "is defined in", makeRef2S angleB]
-  
+
 
 --DD slcHeight: y-direction heights of slices
 
@@ -148,14 +148,14 @@ slcHeightQD :: QDefinition
 slcHeightQD = mkQuantDef midpntHght slcHeightEqn
 
 slcHeightEqn :: Expr
-slcHeightEqn = frac 1 2 `mulRe` (sy sliceHghtRight `addRe` sy sliceHghtLeft) 
+slcHeightEqn = frac 1 2 `mulRe` (sy sliceHghtRight `addRe` sy sliceHghtLeft)
 
 slcHeightNotes :: [Sentence]
-slcHeightNotes = [S "This" +:+ phrase equation +:+ S "is based on the" +:+ 
-  phrase assumption +:+ S "that the surface" `S.sAnd` S "base of a slice" +:+ 
-  S "are straight lines" +:+. sParen (makeRef2S assumpSBSBISL), 
+slcHeightNotes = [S "This" +:+ phrase equation +:+ S "is based on the" +:+
+  phrase assumption +:+ S "that the surface" `S.sAnd` S "base of a slice" +:+
+  S "are straight lines" +:+. sParen (makeRef2S assumpSBSBISL),
   ch sliceHghtRight `S.sAnd` ch sliceHghtLeft +:+ S "are defined in" +:+
-  makeRef2S sliceHghtRightDD `S.sAnd` makeRef2S sliceHghtLeftDD `sC` 
+  makeRef2S sliceHghtRightDD `S.sAnd` makeRef2S sliceHghtLeftDD `sC`
   (S "respectively" !.)]
 
 --DD normStress: total normal stress
@@ -183,7 +183,7 @@ tangStressEqn = sy ft $/ sy genericA
 --DD ratioVariation: interslice normal to shear force ratio variation function
 
 ratioVariation :: DataDefinition
-ratioVariation = dd ratioVarQD [makeCite fredlund1977] Nothing 
+ratioVariation = dd ratioVarQD [makeCite fredlund1977] Nothing
   "ratioVariation" []
 
 ratioVarQD :: QDefinition
@@ -206,9 +206,9 @@ convertFunc1QD :: QDefinition
 convertFunc1QD = mkQuantDef shrResC convertFunc1Eqn
 
 convertFunc1Eqn :: Expr
-convertFunc1Eqn = (sy normToShear `mulRe` inxi scalFunc `mulRe` 
+convertFunc1Eqn = (sy normToShear `mulRe` inxi scalFunc `mulRe`
   cos (inxi baseAngle) $- sin (inxi baseAngle)) `mulRe` tan (sy fricAngle) $-
-  ((sy normToShear `mulRe` inxi scalFunc `mulRe` sin (inxi baseAngle) `addRe` 
+  ((sy normToShear `mulRe` inxi scalFunc `mulRe` sin (inxi baseAngle) `addRe`
   cos (inxi baseAngle)) `mulRe` sy fs)
 
 convertFunc1Notes :: Sentence
@@ -224,16 +224,16 @@ convertFunc2QD :: QDefinition
 convertFunc2QD = mkQuantDef mobShrC convertFunc2Eqn
 
 convertFunc2Eqn :: Expr
-convertFunc2Eqn = ((sy normToShear `mulRe` inxi scalFunc `mulRe` 
+convertFunc2Eqn = ((sy normToShear `mulRe` inxi scalFunc `mulRe`
   cos (inxi baseAngle) $- sin (inxi baseAngle)) `mulRe` tan (sy fricAngle) $-
-  ((sy normToShear `mulRe` inxi scalFunc `mulRe` sin (inxi baseAngle) `addRe` 
-  cos (inxi baseAngle)) `mulRe` sy fs)) $/ 
+  ((sy normToShear `mulRe` inxi scalFunc `mulRe` sin (inxi baseAngle) `addRe`
+  cos (inxi baseAngle)) `mulRe` sy fs)) $/
   inxiM1 shrResC
 
 convertFunc2Notes :: Sentence
-convertFunc2Notes = foldlSent [ch scalFunc, S "is defined in", 
-  makeRef2S ratioVariation `sC` ch baseAngle, S "is defined in", 
-  makeRef2S angleA `sC` S "and", ch shrResC, S "is defined in", 
+convertFunc2Notes = foldlSent [ch scalFunc, S "is defined in",
+  makeRef2S ratioVariation `sC` ch baseAngle, S "is defined in",
+  makeRef2S angleA `sC` S "and", ch shrResC, S "is defined in",
   makeRef2S convertFunc1]
 
 {--DD10
@@ -282,15 +282,15 @@ mobShr_deriv_ssp = (weave [mobShrDerivation_sentence, map E mobShr_deriv_eqns_ss
 -- Hacks --------
 -----------------
 
-nrmForceSumDD, watForceSumDD, sliceHghtRightDD, 
+nrmForceSumDD, watForceSumDD, sliceHghtRightDD,
   sliceHghtLeftDD :: DataDefinition
-nrmForceSumDD = dd nrmForceSumQD [makeCite fredlund1977] Nothing 
+nrmForceSumDD = dd nrmForceSumQD [makeCite fredlund1977] Nothing
   "nrmForceSumDD" []--Notes
-watForceSumDD = dd watForceSumQD [makeCite fredlund1977] Nothing 
+watForceSumDD = dd watForceSumQD [makeCite fredlund1977] Nothing
   "watForceSumDD" []--Notes
-sliceHghtRightDD = dd sliceHghtRightQD [makeCite fredlund1977] Nothing 
+sliceHghtRightDD = dd sliceHghtRightQD [makeCite fredlund1977] Nothing
   "sliceHghtRightDD" []--Notes
-sliceHghtLeftDD = dd sliceHghtLeftQD [makeCite fredlund1977] Nothing 
+sliceHghtLeftDD = dd sliceHghtLeftQD [makeCite fredlund1977] Nothing
   "sliceHghtLeftDD" []--Notes
 
 nrmForceSumQD :: QDefinition

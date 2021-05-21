@@ -1385,22 +1385,22 @@ titleCase :: NounPhrase n => n -> (NP -> Sentence) -> Capitalization
 -- | For nouns and NounPhrases
 data NP
 
--- | Self plural
+-- | Self plural.
 --   
 --   Construct a Proper Noun, it is always capitalized as written.
 pn :: String -> NP
 
--- | Plural form simply adds "s" (ex. Henderson -&gt; Hendersons)
+-- | Plural form simply adds "s" (ex. Henderson -&gt; Hendersons).
 --   
 --   Construct a Proper Noun, it is always capitalized as written.
 pn' :: String -> NP
 
--- | Plural form adds "e"
+-- | Plural form adds "e".
 --   
 --   Construct a Proper Noun, it is always capitalized as written.
 pn'' :: String -> NP
 
--- | Plural form adds "es" (ex. Bush -&gt; Bushes)
+-- | Plural form adds "es" (ex. Bush -&gt; Bushes).
 --   
 --   Construct a Proper Noun, it is always capitalized as written.
 pn''' :: String -> NP
@@ -1410,61 +1410,61 @@ pn''' :: String -> NP
 --   second is the rule.
 pnIrr :: String -> PluralRule -> NP
 
--- | Self plural
+-- | Self plural.
 --   
 --   Construct a common noun which capitalizes the first letter of the
 --   first word at the beginning of a sentence.
 cn :: String -> NP
 
--- | Plural form simply adds "s" (ex. dog -&gt; dogs)
+-- | Plural form simply adds "s" (ex. dog -&gt; dogs).
 --   
 --   Construct a common noun which capitalizes the first letter of the
 --   first word at the beginning of a sentence.
 cn' :: String -> NP
 
--- | Plural form adds "e" (ex. formula -&gt; formulae)
+-- | Plural form adds "e" (ex. formula -&gt; formulae).
 --   
 --   Construct a common noun which capitalizes the first letter of the
 --   first word at the beginning of a sentence.
 cn'' :: String -> NP
 
--- | Plural form adds "es" (ex. bush -&gt; bushes)
+-- | Plural form adds "es" (ex. bush -&gt; bushes).
 --   
 --   Construct a common noun which capitalizes the first letter of the
 --   first word at the beginning of a sentence.
 cn''' :: String -> NP
 
 -- | Common noun that allows you to specify the pluralization rule (as in
---   <a>pnIrr</a>)
+--   <a>pnIrr</a>).
 cnIP :: String -> PluralRule -> NP
 
 -- | Common noun that allows you to specify both the pluralization rule and
 --   the capitalization rule for sentence case (if the noun is used at the
---   beginning of a sentence)
+--   beginning of a sentence).
 cnIrr :: String -> PluralRule -> CapitalizationRule -> NP
 
 -- | Common noun that pluralizes by dropping the last letter and adding an
---   "ies" ending (ex. body -&gt; bodies)
+--   "ies" ending (ex. body -&gt; bodies).
 cnIES :: String -> NP
 
 -- | Common noun that pluralizes by dropping the last two letters and
---   adding an "ices" ending (ex. matrix -&gt; matrices)
+--   adding an "ices" ending (ex. matrix -&gt; matrices).
 cnICES :: String -> NP
 
 -- | Common noun that pluralizes by dropping the last two letters and
---   adding "es" (ex. analysis -&gt; analyses)
+--   adding "es" (ex. analysis -&gt; analyses).
 cnIS :: String -> NP
 
 -- | Common noun that pluralizes by dropping the last two letters and
---   adding "a" (ex. datum -&gt; data)
+--   adding "a" (ex. datum -&gt; data).
 cnUM :: String -> NP
 
--- | Noun phrase with a given singular and plural form that capitalizes the
---   first letter of the first word for sentence case
+-- | Creates a <a>NP</a> with a given singular and plural form that
+--   capitalizes the first letter of the first word for sentence case.
 nounPhrase :: String -> PluralString -> NP
 
 -- | Similar to <a>nounPhrase</a>, but following a given capitalization
---   rule for sentence case
+--   rule for sentence case.
 nounPhrase' :: String -> PluralString -> CapitalizationRule -> NP
 
 -- | Capitalization rules.
@@ -1513,7 +1513,7 @@ IrregPlur :: (String -> String) -> PluralRule
 --   followed by plural of t2. Uses standard CapFirst sentence case and
 --   CapWords title case. For example: <tt>compoundPhrase system
 --   constraint</tt> will have singular form "system constraint" and plural
---   "system constraints"
+--   "system constraints".
 compoundPhrase :: (NounPhrase a, NounPhrase b) => a -> b -> NP
 
 -- | Similar to <a>compoundPhrase</a>, but where the sentence case is the
@@ -1526,8 +1526,8 @@ compoundPhrase' :: NP -> NP -> NP
 --   the plural form "systems constraint".
 compoundPhrase'' :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
 
--- | Used when you need a special function apllied to the first term (eg.
---   short or plural)
+-- | Used when you need a special function apllied to the first term of
+--   both cases (eg. short or plural).
 compoundPhrase''' :: (NP -> Sentence) -> NP -> NP -> NP
 compoundPhraseP1 :: NP -> NP -> NP
 
@@ -1543,11 +1543,11 @@ titleizeNP' :: NounPhrase n => n -> Capitalization
 
 -- | Custom noun phrase constructor that takes a singular form, plural
 --   form, sentence case capitalization rule, and title case capitalization
---   rule
+--   rule.
 nounPhrase'' :: Sentence -> PluralForm -> CapitalizationRule -> CapitalizationRule -> NP
 
 -- | For things that should not be pluralized. Works like
---   <a>nounPhrase</a>, but with only the first argument
+--   <a>nounPhrase</a>, but with only the first argument.
 nounPhraseSP :: String -> NP
 
 -- | For Reuirements, Assumptions, LikelyChanges, etc. to allow for

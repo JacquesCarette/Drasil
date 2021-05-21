@@ -23,6 +23,9 @@ fromThe :: Sentence -> Sentence -> Sentence
 -- | Inserts the words "in the" between two Sentences.
 inThe :: Sentence -> Sentence -> Sentence
 
+-- | Inserts the words "on the" between two Sentences.
+onThe :: Sentence -> Sentence -> Sentence
+
 -- | Prepends "The" and inserts "is expected to have" between two
 --   Sentences.
 isExpctdToHv :: Sentence -> Sentence -> Sentence
@@ -397,7 +400,7 @@ and_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 and_' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Customizable <a>and_</a> combinator (takes two title case
---   capitalization rules and two NamedIdeas)
+--   capitalization rules and two <tt>NamedIdeas</tt>).
 andRT :: (NamedIdea c, NamedIdea d) => (c -> Sentence) -> (d -> Sentence) -> c -> d -> NP
 
 -- | Combinator for combining two <tt>NamedIdeas</tt>s into a
@@ -414,11 +417,11 @@ compoundNC' :: (NamedIdea a, NamedIdea b) => a -> b -> NamedChunk
 compoundNC'' :: (NamedIdea a, NamedIdea b) => (NP -> Sentence) -> (NP -> Sentence) -> a -> b -> NamedChunk
 
 -- | Similar to <a>compoundNC</a>, but takes a function that is applied to
---   the first term (eg. <a>short</a> or <a>plural</a>)
+--   the first term (eg. <a>short</a> or <a>plural</a>).
 compoundNC''' :: (NamedIdea a, NamedIdea b) => (NP -> Sentence) -> a -> b -> NamedChunk
 
 -- | Similar to <a>compoundNC'''</a> but sets first parameter function to
---   plural
+--   plural.
 compoundNCP1 :: NamedChunk -> NamedChunk -> NamedChunk
 
 -- | Similar to <a>compoundNC</a>, except for plural case, first parameter
@@ -451,8 +454,13 @@ of_'' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 --   <tt>(plural t1) "of" (phrase t2)</tt>.
 of__ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
--- | Same as <a>of__</a>, except combining <a>Sentence</a> piece is "of a".
+-- | Same as <a>of_''</a>, except combining <a>Sentence</a> piece is "of
+--   a".
 ofA :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Same as <a>ofA</a>, except phrase case is <tt>(plural t1) "of a"
+--   (phrase t2)</tt>.
+ofA' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Same as <a>of_</a> but second argument is a <a>NounPhrase</a>.
 ofN_ :: (NamedIdea c, NounPhrase d) => c -> d -> NP
@@ -468,6 +476,12 @@ the' :: NamedIdea t => t -> NP
 --   both singular and plural cases.
 the'' :: (t -> Sentence) -> t -> NP
 
+-- | Prepends "a" to a <a>NamedIdea</a> (similar to <a>the</a>).
+aNINP :: NamedIdea c => c -> NP
+
+-- | Customizable version of <a>aNINP</a>.
+aNINP' :: (c -> Sentence) -> c -> NP
+
 -- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
 --   "in the" between their terms. Plural case is <tt>(plural t1) "in the"
 --   (phrase t2)</tt>.
@@ -481,6 +495,12 @@ with :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 -- | Same as <a>of_</a>, except combining <a>Sentence</a> piece is "of
 --   the". Plural case is <tt>(plural t1) <a>ofThe</a> (phrase t2)</tt>.
 ofThe' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Same as <a>ofThe'</a>, except prepends "the".
+the_ofThe'' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Same as <a>of_</a>, except combining Sentence piece is "of the".
+onThe' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Helper function that places a <a>String</a> in between two <a>NP</a>s.
 --   Plural case is <tt>(phraseNP t1) +:+ S s +:+ (pluralNP t2)</tt>.
@@ -591,3 +611,12 @@ andNP'' :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
 -- | Same as <a>andNP</a>, but takes two functions for the singular case
 --   and two for the plural case.
 andNP''' :: (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
+
+-- | Helper function that combines a <a>NamedIdea</a> and a <a>NP</a>
+--   without any words in between. Plural case is <tt>phrase t1 +:+
+--   pluralNP t2</tt>
+combineNINP :: NamedIdea c => c -> NP -> NP
+
+-- | Similar to <a>combineNINP</a> but takes in a <a>NP</a> first and a
+--   <a>NamedIdea</a> second.
+combineNPNI :: NamedIdea c => NP -> c -> NP

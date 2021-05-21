@@ -27,7 +27,7 @@ speedIXQD = mkQuantDef ixVel $ sy iSpeed `mulRe` cos (sy launAngle)
 speedIYQD = mkQuantDef iyVel $ sy iSpeed `mulRe` sin (sy launAngle)
 
 speedE :: Expr
-speedE = UnaryOp Abs $ sy velocity
+speedE = norm $ sy velocity
 ----------
 magNote :: Sentence
 magNote = foldlSent [S "For a given", phrase velocity, S "vector", ch velocity `sC`

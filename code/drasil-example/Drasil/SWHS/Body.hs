@@ -541,9 +541,9 @@ propCorSolDeriv1 lce ewat en co pcmat g1hfc g2hfp su ht  =
 
 propCorSolDeriv2 :: Contents
 propCorSolDeriv2 = eqUnR'
-  (sy watE $= defint (eqSymb time) (dbl 0) (sy time)
+  (sy watE $= defint (eqSymb time) (exactDbl 0) (sy time)
   (sy coilHTC `mulRe` sy coilSA `mulRe` (sy tempC $- apply1 tempW time))
-  $- defint (eqSymb time) (dbl 0) (sy time)
+  $- defint (eqSymb time) (exactDbl 0) (sy time)
   (sy pcmHTC `mulRe` sy pcmSA `mulRe` (apply1 tempW time $-
   apply1 tempPCM time)))
 
@@ -555,7 +555,7 @@ propCorSolDeriv3 epcm en pcmat wa =
 
 propCorSolDeriv4 :: Contents
 propCorSolDeriv4 = eqUnR'
-  (sy pcmE $= defint (eqSymb time) (dbl 0) (sy time)
+  (sy pcmE $= defint (eqSymb time) (exactDbl 0) (sy time)
   (sy pcmHTC `mulRe` sy pcmSA `mulRe` (apply1 tempW time $- 
   apply1 tempPCM time)))
 

@@ -39,8 +39,8 @@ offset' = sy landPos $- sy targPos
 message :: Expr
 message = completeCase [case1, case2, case3]
   where case1 = (Str "The target was hit.",        abs_ (sy offset $/ sy targPos) $< sy tol)
-        case2 = (Str "The projectile fell short.", sy offset $< dbl 0)
-        case3 = (Str "The projectile went long.",  sy offset $> dbl 0)
+        case2 = (Str "The projectile fell short.", sy offset $< exactDbl 0)
+        case3 = (Str "The projectile went long.",  sy offset $> exactDbl 0)
 
 --
 speed' :: Expr
@@ -48,18 +48,18 @@ speed' = sy QP.iSpeed `addRe` (sy QP.constAccel `mulRe` sy time)
 
 rectVelDerivEqn1, rectVelDerivEqn2 :: Expr
 rectVelDerivEqn1 = sy QP.constAccel $= deriv (sy speed) time
-rectVelDerivEqn2 = defint (eqSymb speed) (sy QP.iSpeed) (sy speed) (dbl 1) $=
-                   defint (eqSymb time) (dbl 0) (sy time) (sy QP.constAccel)
+rectVelDerivEqn2 = defint (eqSymb speed) (sy QP.iSpeed) (sy speed) (exactDbl 1) $=
+                   defint (eqSymb time) (exactDbl 0) (sy time) (sy QP.constAccel)
 
 scalarPos' :: Expr
 scalarPos' = sy iPos `addRe` (sy QP.iSpeed `mulRe` sy time `addRe` half (sy QP.constAccel `mulRe` square (sy time)))
 
 rectPosDerivEqn1, rectPosDerivEqn2, rectPosDerivEqn3 :: Expr
 rectPosDerivEqn1 = sy speed $= deriv (sy scalarPos) time
-rectPosDerivEqn2 = defint (eqSymb scalarPos) (sy iPos) (sy scalarPos) (dbl 1) $=
-                   defint (eqSymb time) (dbl 0) (sy time) (sy speed)
-rectPosDerivEqn3 = defint (eqSymb scalarPos) (sy iPos) (sy scalarPos) (dbl 1) $=
-                   defint (eqSymb time) (dbl 0) (sy time) (sy QP.iSpeed `addRe` (sy QP.constAccel `mulRe` sy time))
+rectPosDerivEqn2 = defint (eqSymb scalarPos) (sy iPos) (sy scalarPos) (exactDbl 1) $=
+                   defint (eqSymb time) (exactDbl 0) (sy time) (sy speed)
+rectPosDerivEqn3 = defint (eqSymb scalarPos) (sy iPos) (sy scalarPos) (exactDbl 1) $=
+                   defint (eqSymb time) (exactDbl 0) (sy time) (sy QP.iSpeed `addRe` (sy QP.constAccel `mulRe` sy time))
 
 --
 velVecExpr :: Expr

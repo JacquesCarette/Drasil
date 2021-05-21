@@ -1002,7 +1002,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[Q\left(t\right)=\int_{0.0}^{t}{\frac{\,dQ\left(τ\right)}{\,dτ}}\,dτ\]
+                        \[Q\left(t\right)=\int_{0}^{t}{\frac{\,dQ\left(τ\right)}{\,dτ}}\,dτ\]
                       </td>
                     </tr>
                     <tr>
@@ -1024,7 +1024,7 @@
                           <em>Q</em> is the change in thermal energy (latent heat energy).
                         </p>
                         <p class="paragraph">
-                          <em>Q(t) = &int;<sub>0.0</sub><sup>t</sup>\(\frac{\,dQ\left(τ\right)}{\,dτ}\)&#8239;dτ</em> is the rate of change of <em>Q</em> with respect to time <em>τ</em>.
+                          <em>Q(t) = &int;<sub>0</sub><sup>t</sup>\(\frac{\,dQ\left(τ\right)}{\,dτ}\)&#8239;dτ</em> is the rate of change of <em>Q</em> with respect to time <em>τ</em>.
                         </p>
                         <p class="paragraph">
                           <em>t</em> is the time elapsed, as long as the phase change is not complete.
@@ -2683,11 +2683,11 @@
                 <p class="paragraph">
                   A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking <a href=#GD:htFluxWaterFromCoil>GD: htFluxWaterFromCoil</a> and <a href=#GD:htFluxPCMFromWater>GD: htFluxPCMFromWater</a>, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
                 </p>
-                \[{E_{\text{W}}}=\int_{0.0}^{t}{{h_{\text{C}}} {A_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)}\,dt-\int_{0.0}^{t}{{h_{\text{P}}} {A_{\text{P}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right)}\,dt\]
+                \[{E_{\text{W}}}=\int_{0}^{t}{{h_{\text{C}}} {A_{\text{C}}} \left({T_{\text{C}}}-{T_{\text{W}}}\left(t\right)\right)}\,dt-\int_{0}^{t}{{h_{\text{P}}} {A_{\text{P}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right)}\,dt\]
                 <p class="paragraph">
                   In addition, the change in heat energy in the PCM should equal the energy input to the PCM from the water. This can be expressed as
                 </p>
-                \[{E_{\text{P}}}=\int_{0.0}^{t}{{h_{\text{P}}} {A_{\text{P}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right)}\,dt\]
+                \[{E_{\text{P}}}=\int_{0}^{t}{{h_{\text{P}}} {A_{\text{P}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right)}\,dt\]
                 <p class="paragraph">
                   Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as "sanity" checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than <em>C<sub>tol</sub></em> <a href=#verifyEnergyOutput>FR: Verify-Energy-Output-Follow-Conservation-of-Energy</a>.
                 </p>

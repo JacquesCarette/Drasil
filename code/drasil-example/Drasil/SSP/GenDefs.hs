@@ -435,7 +435,7 @@ momEqlDerivSheariEqn = inxi intShrForce `mulRe` half (inxi baseWthX)
 
 momEqlDerivSheariM1Eqn = inxiM1 intShrForce `mulRe` half (inxi baseWthX)
 
-momEqlDerivSeismicIntEqn = neg $ defint (eqSymb yi) (dbl 0) (inxi midpntHght)
+momEqlDerivSeismicIntEqn = neg $ defint (eqSymb yi) (exactDbl 0) (inxi midpntHght)
   (sy earthqkLoadFctr `mulRe` sy genericSpWght `mulRe` inxi baseWthX `mulRe` sy yi)
 
 momEqlDerivSeismicEqn = neg $ sy earthqkLoadFctr `mulRe` sy genericSpWght `mulRe`

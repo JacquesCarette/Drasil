@@ -655,7 +655,7 @@
                     </p>
                     \[{a^{c}}=\frac{\,dv}{\,dt}\]
                     <p class="paragraph">Rearranging and integrating, we have:</p>
-                    \[\int_{{v^{\text{i}}}}^{v}{1.0}\,dv=\int_{0.0}^{t}{{a^{c}}}\,dt\]
+                    \[\int_{{v^{\text{i}}}}^{v}{1}\,dv=\int_{0}^{t}{{a^{c}}}\,dt\]
                     <p class="paragraph">
                       Performing the integration, we have the required equation:
                     </p>
@@ -726,11 +726,11 @@
                     </p>
                     \[v=\frac{\,dp}{\,dt}\]
                     <p class="paragraph">Rearranging and integrating, we have:</p>
-                    \[\int_{{p^{\text{i}}}}^{p}{1.0}\,dp=\int_{0.0}^{t}{v}\,dt\]
+                    \[\int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{v}\,dt\]
                     <p class="paragraph">
                       From <a href=#GD:rectVel>GD: rectVel</a> we can replace <em>v</em>:
                     </p>
-                    \[\int_{{p^{\text{i}}}}^{p}{1.0}\,dp=\int_{0.0}^{t}{{v^{\text{i}}}+{a^{c}} t}\,dt\]
+                    \[\int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{{v^{\text{i}}}+{a^{c}} t}\,dt\]
                     <p class="paragraph">
                       Performing the integration, we have the required equation:
                     </p>
@@ -1463,8 +1463,8 @@
                       <td>
                         \[s=\begin{cases}
                             \text{``The target was hit.''}, & |\frac{{d_{\text{offset}}}}{{p_{\text{target}}}}|\lt{}ε\\
-                            \text{``The projectile fell short.''}, & {d_{\text{offset}}}\lt{}0.0\\
-                            \text{``The projectile went long.''}, & {d_{\text{offset}}}\gt{}0.0
+                            \text{``The projectile fell short.''}, & {d_{\text{offset}}}\lt{}0\\
+                            \text{``The projectile went long.''}, & {d_{\text{offset}}}\gt{}0
                             \end{cases}\]
                       </td>
                     </tr>

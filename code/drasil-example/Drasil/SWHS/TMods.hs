@@ -132,7 +132,7 @@ latentHtERC = makeRC "latentHtERC"
 
 latHtEEqn :: Relation
 latHtEEqn = apply1 latentHeat time $=
-  defint (eqSymb tau) (dbl 0) (sy time) (deriv (apply1 latentHeat tau) tau)
+  defint (eqSymb tau) (exactDbl 0) (sy time) (deriv (apply1 latentHeat tau) tau)
 
 -- Integrals need dTau at end
 

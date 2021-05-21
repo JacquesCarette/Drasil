@@ -74,31 +74,31 @@ ipPropGain, ipDerivGain, ipSetPt, ipStepTime, ipSimTime, opProcessVariable ::
 ipSetPtUnc, ipPropGainUnc, ipDerGainUnc, ipStepTimeUnc, ipSimTimeUnc :: UncertQ
 
 ipPropGain
-  = constrained' (dqdNoUnit propGain symKp Real) [gtZeroConstr] (dbl 20)
+  = constrained' (dqdNoUnit propGain symKp Real) [gtZeroConstr] (exactDbl 20)
 ipPropGainUnc = uq ipPropGain defaultUncrt
 qdPropGain = qw ipPropGain
 
 ipDerivGain
-  = constrained' (dqdNoUnit derGain symKd Real) [physc $ UpFrom (Inc, 0)]
-      (dbl 1)
+  = constrained' (dqdNoUnit derGain symKd Real) [physc $ UpFrom (Inc, exactDbl 0)]
+      (exactDbl 1)
 ipDerGainUnc = uq ipDerivGain defaultUncrt
 qdDerivGain = qw ipDerivGain
 
-ipSetPt = constrained' (dqdNoUnit setPoint symYrT Real) [gtZeroConstr] (dbl 1)
+ipSetPt = constrained' (dqdNoUnit setPoint symYrT Real) [gtZeroConstr] (exactDbl 1)
 ipSetPtUnc = uq ipSetPt defaultUncrt
 qdSetPointTD = qw ipSetPt
 
 ipStepTime
   = constrained' (dqd stepTime symTStep Real second)
-      [physc $ Bounded (Inc, 0.01  ) (Exc, sy ipSimTime)]
-      (dbl 0.01  )
+      [physc $ Bounded (Inc, frac 1 100) (Exc, sy ipSimTime)]
+      (dbl 0.01)
 ipStepTimeUnc = uq ipStepTime defaultUncrt
 qdStepTime = qw ipStepTime
 
 ipSimTime
   = constrained' (dqd simulationTime symTSim Real second)
-      [physc $ Bounded (Inc, 1) (Inc, 60)]
-      (dbl 10)
+      [physc $ Bounded (Inc, exactDbl 1) (Inc, exactDbl 60)]
+      (exactDbl 10)
 ipSimTimeUnc = uq ipSimTime defaultUncrt
 qdSimTime = qw ipSimTime
 
@@ -115,13 +115,13 @@ pidDqdConstants = [dqdAbsTol, dqdRelTol]
 dqdAbsTol = dqdNoUnit ccAbsTolerance symAbsTol Real
 dqdRelTol = dqdNoUnit ccRelTolerance symRelTol Real
 
-odeAbsTolConst = mkQuantDef dqdAbsTol (Dbl 1.0e-10)
-odeRelTolConst = mkQuantDef dqdRelTol (Dbl 1.0e-10)
+odeAbsTolConst = mkQuantDef dqdAbsTol (dbl 1.0e-10)
+odeRelTolConst = mkQuantDef dqdRelTol (dbl 1.0e-10)
 
 opProcessVariable
   = constrained' (dqdNoUnit processVariable symYT (Vect Rational))
       [gtZeroConstr]
-      (dbl 1)
+      (exactDbl 1)
 qdProcessVariableTD = qw opProcessVariable
 
 qdSetPointFD

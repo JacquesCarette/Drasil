@@ -6,12 +6,14 @@ module Language.Drasil (
   , AssocArithOper(..), AssocBoolOper(..)
   , DerivType(..), Completeness(..), Relation
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
+  , ($-), ($/), addI, addRe, mulI, mulRe
   -- Expr.Extract
   , dep
   -- Expr.Math
-  , log, ln, abs, sin, cos, tan, sec, csc, cot, arcsin, arccos, arctan, exp
-  , sqrt, square, euclidean, norm, not_
-  , dim, idx, int, dbl, str, perc, isin, completeCase, incompleteCase
+  , abs_, neg, log, ln, abs, sin, cos, tan, sec, csc, cot, arcsin, arccos, arctan, exp
+  , sqrt, euclidean, norm, not_
+  , square, half, oneHalf, oneThird, recip_
+  , dim, idx, int, dbl, exactDbl, frac, str, perc, isin, completeCase, incompleteCase
   , sumAll, defsum, prodAll, defprod, defint, intAll
   , realInterval
   , deriv, pderiv
@@ -187,11 +189,13 @@ import Language.Drasil.Expr (Expr(..), UFunc(..), UFuncB, UFuncVec,
           ArithBinOp, BoolBinOp, EqBinOp, LABinOp, OrdBinOp, VVVBinOp, VVNBinOp,
           AssocArithOper(..), AssocBoolOper(..), 
           DerivType(..), Completeness(..), Relation,
-          ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.))
+          ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.),
+          ($-), ($/), addI, addRe, mulI, mulRe)
 import Language.Drasil.Expr.Extract (dep) -- exported for drasil-database FIXME: move to development package?
-import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec, 
+import Language.Drasil.Expr.Math (abs_, neg, log, ln, sin, cos, tan, sqrt, sec, 
           csc, cot, arcsin, arccos, arctan, exp,
-          dim, norm, not_, idx, int, dbl, str, perc, isin,
+          dim, norm, not_, idx, int, dbl, exactDbl, frac, str, perc, isin,
+          square, half, oneHalf, oneThird, recip_,
           completeCase, incompleteCase,
           sumAll, defsum, prodAll, defprod,
           realInterval,

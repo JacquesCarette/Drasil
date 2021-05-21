@@ -60,7 +60,7 @@ scipyCall info = externalLibCall [
       [initVal info, tInit info],
     initSolListWithValFill (depVar info) (initVal info),
     solveAndPopulateWhileFill (libCallFill []) (tFinal info) 
-      (libCallFill [basicArgFill (field r t + stepSize (odeOpts info))]) 
+      (libCallFill [basicArgFill (addI (field r t) (stepSize (odeOpts info)))])
       (depVar info)]]
   where chooseMethod Adams = (0, solveMethodFill)
         chooseMethod BDF = (1, solveMethodFill)
@@ -94,7 +94,7 @@ scipyLSodaCall info = externalLibCall [
       basicArgFill (Matrix [[initVal info, initValFstOrd $ odeOpts info]]),
       basicArgFill (sy xAxis)],
   mandatoryStepFill $ initSolWithValFill (depVar info) 
-      (idx (sy transpose) (Int 0))
+      (idx (sy transpose) (int 0))
     ]
 
 scipyImport :: String

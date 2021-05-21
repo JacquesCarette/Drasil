@@ -30,7 +30,7 @@ public class DerivedValues {
         outfile.println(" in module DerivedValues");
         outfile.close();
         
-        inParams.LDF = Math.pow(3.0 / 60, 7.0 / 16);
+        inParams.LDF = Math.pow(3.0 / 60.0, 7.0 / 16.0);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'inParams.LDF' assigned ");
         outfile.print(inParams.LDF);
@@ -65,7 +65,7 @@ public class DerivedValues {
             throw new Exception("Undefined case encountered in function GTF");
         }
         
-        inParams.SD = Math.sqrt(Math.pow(inParams.SD_x, 2) + Math.pow(inParams.SD_y, 2) + Math.pow(inParams.SD_z, 2));
+        inParams.SD = Math.sqrt(Math.pow(inParams.SD_x, 2.0) + Math.pow(inParams.SD_y, 2.0) + Math.pow(inParams.SD_z, 2.0));
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
         outfile.print("var 'inParams.SD' assigned ");
         outfile.print(inParams.SD);

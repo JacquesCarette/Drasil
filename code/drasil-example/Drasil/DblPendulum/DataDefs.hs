@@ -27,7 +27,7 @@ positionIXQD :: QDefinition
 positionIXQD = mkQuantDef QP.ixPos positionIXEqn
 
 positionIXEqn :: Expr
-positionIXEqn = sy lenRod * sin (sy initialPendAngle)
+positionIXEqn = sy lenRod `mulRe` sin (sy initialPendAngle)
 
 figRef :: Sentence
 figRef = ch QP.ixPos `S.is` S "shown in" +:+. makeRef2S figMotion
@@ -43,7 +43,7 @@ positionIYQD :: QDefinition
 positionIYQD = mkQuantDef QP.iyPos positionIYEqn
 
 positionIYEqn :: Expr
-positionIYEqn = negate (sy lenRod * cos (sy initialPendAngle))
+positionIYEqn = neg (sy lenRod `mulRe` cos (sy initialPendAngle))
 
 figReff :: Sentence
 figReff = ch QP.iyPos `S.is` S "shown in" +:+. makeRef2S figMotion
@@ -60,7 +60,7 @@ frequencyDDQD :: QDefinition
 frequencyDDQD = mkQuantDef QP.frequency frequencyDDEqn
 
 frequencyDDEqn :: Expr
-frequencyDDEqn = 1 / sy QP.period
+frequencyDDEqn = recip_ $ sy QP.period
 
 
 frequencyRef :: Sentence
@@ -75,7 +75,7 @@ angFrequencyDDQD :: QDefinition
 angFrequencyDDQD = mkQuantDef QP.angularFrequency angFrequencyDDEqn
 
 angFrequencyDDEqn :: Expr
-angFrequencyDDEqn = 2 * sy QM.pi_ / sy QP.period
+angFrequencyDDEqn = exactDbl 2 `mulRe` sy QM.pi_ $/ sy QP.period
 
 angFrequencyRef :: Sentence
 angFrequencyRef = ch QP.period `S.is` S "from" +:+ makeRef2S periodSHMDD
@@ -89,7 +89,7 @@ periodSHMDDQD :: QDefinition
 periodSHMDDQD = mkQuantDef QP.period periodSHMDDEqn
 
 periodSHMDDEqn :: Expr
-periodSHMDDEqn = 1 / sy QP.frequency
+periodSHMDDEqn = recip_ $ sy QP.frequency
 
 periodSHMRef :: Sentence
 periodSHMRef = ch QP.period `S.is` S "from" +:+ makeRef2S frequencyDD

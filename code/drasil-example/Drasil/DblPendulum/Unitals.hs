@@ -85,6 +85,6 @@ lenRodCons     = constrained' lenRod        [gtZeroConstr] (dbl 44.2)
 initialPendAngleCons  = constrained' initialPendAngle    [gtZeroConstr] (dbl 2.1)
 --gravAccelCons  = constrained' QP.gravitationalAccel    [gtZeroConstr] (dbl 9.8)
 pendDisplacementAngleOutCons  = constrained' pendDisplacementAngle    [gtZeroConstr] (dbl 2.1)
-angAccelOutCons    = constrained' QP.angularAccel    [gtZeroConstr] (dbl 0.0)
+angAccelOutCons    = constrained' QP.angularAccel    [gtZeroConstr] (exactDbl 0)
 
 

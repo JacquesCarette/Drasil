@@ -43,8 +43,8 @@ consThermERC = makeRC "consThermERC"
   (nounPhraseSP "Conservation of thermal energy") (lawConsEnergy ^. defn) consThermERel
 
 consThermERel :: Relation
-consThermERel = negate (sy gradient) $. sy thFluxVect + sy volHtGen $=
-  sy density * sy heatCapSpec * pderiv (sy temp) time
+consThermERel = neg (sy gradient) $. sy thFluxVect `addRe` sy volHtGen $=
+  sy density `mulRe` sy heatCapSpec `mulRe` pderiv (sy temp) time
 
 -- the second argument is a 'ShortName'...
 consThemESrc :: Reference
@@ -93,12 +93,12 @@ sensHtESrc = makeURI "sensHtESrc"
 sensHtEEqn :: PhaseChange -> Expr
 sensHtEEqn pChange = case pChange of
   Liquid -> liquidFormula
-  AllPhases -> incompleteCase [(sy htCapS * sy mass * sy deltaT,
+  AllPhases -> incompleteCase [(sy htCapS `mulRe` sy mass `mulRe` sy deltaT,
       sy temp $< sy meltPt), (liquidFormula, sy meltPt $< sy temp $<
-      sy boilPt), (sy htCapV * sy mass *
+      sy boilPt), (sy htCapV `mulRe` sy mass `mulRe`
       sy deltaT, sy boilPt $< sy temp)]
   where
-    liquidFormula = sy htCapL * sy mass * sy deltaT
+    liquidFormula = sy htCapL `mulRe` sy mass `mulRe` sy deltaT
 
 --When to call with C? When to call with U, S, Sy, etc? Sometimes confusing.
 
@@ -132,7 +132,7 @@ latentHtERC = makeRC "latentHtERC"
 
 latHtEEqn :: Relation
 latHtEEqn = apply1 latentHeat time $=
-  defint (eqSymb tau) 0 (sy time) (deriv (apply1 latentHeat tau) tau)
+  defint (eqSymb tau) (exactDbl 0) (sy time) (deriv (apply1 latentHeat tau) tau)
 
 -- Integrals need dTau at end
 
@@ -166,7 +166,7 @@ nwtnCoolingRC = makeRC "nwtnCoolingRC" (nounPhraseSP "Newton's law of cooling")
   EmptyS nwtnCoolingEqn -- nwtnCoolingL
 
 nwtnCoolingEqn :: Relation
-nwtnCoolingEqn = apply1 htFlux time $= sy htTransCoeff * apply1 deltaT time
+nwtnCoolingEqn = apply1 htFlux time $= sy htTransCoeff `mulRe` apply1 deltaT time
 
 nwtnCoolingNotes :: [Sentence]
 nwtnCoolingNotes = map foldlSent [
@@ -175,5 +175,5 @@ nwtnCoolingNotes = map foldlSent [
    S "proportional to the difference in", plural temp, S "between the body and its surroundings"],
   [ch htTransCoeff, S "is assumed to be independent" `S.of_` ch temp,
    sParen (S "from" +:+ makeRef2S assumpHTCC)],
-  [E (apply1 deltaT time $= apply1 temp time - apply1 tempEnv time) `S.isThe`
+  [E (apply1 deltaT time $= apply1 temp time $- apply1 tempEnv time) `S.isThe`
    S "time-dependant thermal gradient between the environment and the object"]]

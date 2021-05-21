@@ -117,7 +117,7 @@ newtonSLRRC = makeRC "newtonSLRRC"
   (nounPhraseSP "Newton's second law for rotational motion") EmptyS newtonSLRRel
 
 newtonSLRRel :: Relation
-newtonSLRRel = sy QP.torque $= sy QP.momentOfInertia * sy QP.angularAccel
+newtonSLRRel = sy QP.torque $= mulRe (sy QP.momentOfInertia) (sy QP.angularAccel)
 
 newtonSLRNotes :: [Sentence]
 newtonSLRNotes = map foldlSent [

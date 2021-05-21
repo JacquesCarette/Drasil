@@ -278,18 +278,21 @@ convExpr (Dbl d) = do
       getLiteral Float = litFloat (realToFrac d)
       getLiteral _ = error "convExpr: Real space matched to invalid CodeType; should be Double or Float"
   return $ getLiteral sm
-convExpr (Int i) = return $ litInt i
-convExpr (Str s) = return $ litString s
+convExpr (ExactDbl d) = convExpr $ dbl $ fromInteger d
+convExpr (Int i)      = return $ litInt i
+convExpr (Str s)      = return $ litString s
 convExpr (Perc a b) = do
   sm <- spaceCodeType Rational
   let getLiteral Double = litDouble
       getLiteral Float = litFloat . realToFrac
       getLiteral _ = error "convExpr: Rational space matched to invalid CodeType; should be Double or Float"
   return $ getLiteral sm (fromIntegral a / (10 ** fromIntegral b))
-convExpr (AssocA Add l) = foldl1 (#+)  <$> mapM convExpr l
-convExpr (AssocA Mul l) = foldl1 (#*)  <$> mapM convExpr l
-convExpr (AssocB And l) = foldl1 (?&&) <$> mapM convExpr l
-convExpr (AssocB Or l)  = foldl1 (?||) <$> mapM convExpr l
+convExpr (AssocA AddI l)  = foldl1 (#+)  <$> mapM convExpr l
+convExpr (AssocA AddRe l) = foldl1 (#+)  <$> mapM convExpr l
+convExpr (AssocA MulI l)  = foldl1 (#*)  <$> mapM convExpr l
+convExpr (AssocA MulRe l) = foldl1 (#*)  <$> mapM convExpr l
+convExpr (AssocB And l)   = foldl1 (?&&) <$> mapM convExpr l
+convExpr (AssocB Or l)    = foldl1 (?||) <$> mapM convExpr l
 convExpr Deriv{} = return $ litString "**convExpr :: Deriv unimplemented**"
 convExpr (C c)   = do
   g <- get

@@ -21,10 +21,10 @@ instanceModels = [imPD]
 imPD :: InstanceModel
 imPD
   = im (OthModel imPDRC)
-      [qwC qdSetPointTD $ UpFrom (Exc, 0), qwC qdPropGain $ UpFrom (Exc, 0),
-       qwC qdDerivGain $ UpFrom (Exc, 0)]
+      [qwC qdSetPointTD $ UpFrom (Exc, exactDbl 0), qwC qdPropGain $ UpFrom (Exc, exactDbl 0),
+       qwC qdDerivGain $ UpFrom (Exc, exactDbl 0)]
       (qw qdProcessVariableTD)
-      [UpFrom (Exc, 0)]
+      [UpFrom (Exc, exactDbl 0)]
       [makeCite abbasi2015, makeCite johnson2008]
       (Just imDeriv)
       "pdEquationIM"
@@ -40,10 +40,10 @@ imPDRC
 
 eqn :: Expr
 eqn
-  = deriv (deriv (sy qdProcessVariableTD) time) time +
-      (1 + sy qdDerivGain) * deriv (sy qdProcessVariableTD) time
-      + (20 + sy qdPropGain) * sy qdProcessVariableTD
-      - sy qdSetPointTD * sy qdPropGain $= 0
+  = deriv (deriv (sy qdProcessVariableTD) time) time `addRe`
+      ((exactDbl 1 `addRe` sy qdDerivGain) `mulRe` deriv (sy qdProcessVariableTD) time)
+      `addRe` ((exactDbl 20 `addRe` sy qdPropGain) `mulRe` sy qdProcessVariableTD)
+      $- (sy qdSetPointTD `mulRe` sy qdPropGain) $= exactDbl 0
 
 imDeriv :: Derivation
 imDeriv
@@ -70,20 +70,20 @@ derivStmt1
 derivEqn1 :: Expr
 derivEqn1
   = sy qdProcessVariableFD
-      $= (sy qdSetPointFD - sy qdProcessVariableFD)
-      * (sy qdPropGain + sy qdDerivGain * sy qdFreqDomain)
-      * (1 / (square (sy qdFreqDomain) + sy qdFreqDomain + 20))
+      $= (sy qdSetPointFD $- sy qdProcessVariableFD)
+      `mulRe` (sy qdPropGain `addRe` (sy qdDerivGain `mulRe` sy qdFreqDomain))
+      `mulRe` recip_ (square (sy qdFreqDomain) `addRe` sy qdFreqDomain `addRe` exactDbl 20)
 
 derivStmt2 :: Sentence
 derivStmt2 = (S "Substituting the values and rearranging the equation" !.)
 
 derivEqn2 :: Expr
 derivEqn2
-  = square (sy qdFreqDomain) * sy qdProcessVariableFD 
-      + (1 + sy qdDerivGain) * sy qdProcessVariableFD * sy qdFreqDomain
-      + (20 + sy qdPropGain) * sy qdProcessVariableFD
-      - sy qdSetPointFD * sy qdFreqDomain * sy qdDerivGain
-      - sy qdSetPointFD * sy qdPropGain $= 0
+  = square (sy qdFreqDomain) `mulRe` sy qdProcessVariableFD
+      `addRe` ((exactDbl 1 `addRe` sy qdDerivGain) `mulRe` sy qdProcessVariableFD `mulRe` sy qdFreqDomain)
+      `addRe` ((exactDbl 20 `addRe` sy qdPropGain) `mulRe` sy qdProcessVariableFD)
+      $- (sy qdSetPointFD `mulRe` sy qdFreqDomain `mulRe` sy qdDerivGain)
+      $- (sy qdSetPointFD `mulRe` sy qdPropGain) $= exactDbl 0
 
 derivStmt3 :: Sentence
 derivStmt3
@@ -93,11 +93,11 @@ derivStmt3
 
 derivEqn3 :: Expr
 derivEqn3
-  = deriv (deriv (sy qdProcessVariableTD) time) time +
-      ((1 + sy qdDerivGain) * deriv (sy qdProcessVariableTD) time)
-      + ((20 + sy qdPropGain) * sy qdProcessVariableTD)
-      - sy qdDerivGain * deriv (sy qdSetPointTD) time
-      - sy qdSetPointTD * sy qdPropGain $= 0
+  = deriv (deriv (sy qdProcessVariableTD) time) time `addRe`
+      (((exactDbl 1 `addRe` sy qdDerivGain) `mulRe` deriv (sy qdProcessVariableTD) time)
+      `addRe` ((exactDbl 20 `addRe` sy qdPropGain) `mulRe` sy qdProcessVariableTD))
+      $- (sy qdDerivGain `mulRe` deriv (sy qdSetPointTD) time)
+      $- (sy qdSetPointTD `mulRe` sy qdPropGain) $= exactDbl 0
 
 derivStmt4 :: Sentence
 derivStmt4
@@ -110,7 +110,7 @@ derivStmt4
 
 derivEqn4 :: Expr
 derivEqn4
-  = deriv (deriv (sy qdProcessVariableTD) time) time +
-      (1 + sy qdDerivGain) * deriv (sy qdProcessVariableTD) time
-      + (20 + sy qdPropGain) * sy qdProcessVariableTD
-      - sy qdSetPointTD * sy qdPropGain $= 0
+  = deriv (deriv (sy qdProcessVariableTD) time) time `addRe`
+      ((exactDbl 1 `addRe` sy qdDerivGain) `mulRe` deriv (sy qdProcessVariableTD) time)
+      `addRe` ((exactDbl 20 `addRe` sy qdPropGain) `mulRe` sy qdProcessVariableTD)
+      $- (sy qdSetPointTD `mulRe` sy qdPropGain) $= exactDbl 0

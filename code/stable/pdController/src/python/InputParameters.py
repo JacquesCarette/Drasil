@@ -31,28 +31,28 @@ def get_input(filename):
 # \param t_step Step Time: Simulation step time (s)
 # \param t_sim Simulation Time: Total execution time of the PD simulation (s)
 def input_constraints(r_t, K_d, K_p, t_step, t_sim):
-    if (not(r_t > 0)) :
+    if (not(r_t > 0.0)) :
         print("r_t has value ", end="")
         print(r_t, end="")
         print(", but is expected to be ", end="")
         print("above ", end="")
-        print(0, end="")
+        print(0.0, end="")
         print(".")
         raise Exception("InputError")
-    if (not(K_d >= 0)) :
+    if (not(K_d >= 0.0)) :
         print("K_d has value ", end="")
         print(K_d, end="")
         print(", but is expected to be ", end="")
         print("above ", end="")
-        print(0, end="")
+        print(0.0, end="")
         print(".")
         raise Exception("InputError")
-    if (not(K_p > 0)) :
+    if (not(K_p > 0.0)) :
         print("K_p has value ", end="")
         print(K_p, end="")
         print(", but is expected to be ", end="")
         print("above ", end="")
-        print(0, end="")
+        print(0.0, end="")
         print(".")
         raise Exception("InputError")
     if (not(1.0 / 100.0 <= t_step and t_step < t_sim)) :
@@ -67,13 +67,13 @@ def input_constraints(r_t, K_d, K_p, t_step, t_sim):
         print(" (t_sim)", end="")
         print(".")
         raise Exception("InputError")
-    if (not(1 <= t_sim and t_sim <= 60)) :
+    if (not(1.0 <= t_sim and t_sim <= 60.0)) :
         print("t_sim has value ", end="")
         print(t_sim, end="")
         print(", but is expected to be ", end="")
         print("between ", end="")
-        print(1, end="")
+        print(1.0, end="")
         print(" and ", end="")
-        print(60, end="")
+        print(60.0, end="")
         print(".")
         raise Exception("InputError")

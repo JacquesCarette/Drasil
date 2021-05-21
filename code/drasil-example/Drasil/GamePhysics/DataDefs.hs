@@ -246,7 +246,7 @@ impulseVDerivEqn1 =  sy QP.force $= sy QPP.mass `mulRe` sy QP.acceleration
 
 impulseVDerivEqn2 :: Expr
 impulseVDerivEqn2 = defint (eqSymb timeT) (sy time_1) (sy time_2) (sy QP.force) $=
-                    sy QPP.mass `mulRe` defint (eqSymb QP.velocity) (sy velo_1) (sy velo_2) (dbl 1)
+                    sy QPP.mass `mulRe` defint (eqSymb QP.velocity) (sy velo_1) (sy velo_2) (exactDbl 1)
 
 
 impulseVDerivEqn3 :: Expr

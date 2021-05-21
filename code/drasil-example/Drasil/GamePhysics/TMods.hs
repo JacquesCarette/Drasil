@@ -46,28 +46,20 @@ newtonTLNote = foldlSent [(S "Every action has an equal and opposite reaction" !
 
 -- T3 : Newton's law of universal gravitation --
 
-newtonLUG :: TheoryModel
-newtonLUG = tmNoRefs (EquationalRealm newtonForceQuant $ NE.fromList [
+newtonLUGModel :: ModelKinds
+newtonLUGModel = EquationalRealm newtonForceQuant $ NE.fromList [
     RV EmptyS (sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/ square (sy dispNorm)) `mulRe` sy dVect) [],
     RV EmptyS (sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/ square (sy dispNorm)) `mulRe` (sy distMass $/ sy dispNorm)) []
-  ])
+  ]
+
+newtonLUG :: TheoryModel
+newtonLUG = tmNoRefs newtonLUGModel
   [qw force, qw gravitationalConst, qw mass_1, qw mass_2,
   qw dispNorm, qw dVect, qw distMass] ([] :: [ConceptChunk])
-  [] [newtonLUGRel] [] "UniversalGravLaw" newtonLUGNotes
+  [] [relat newtonLUGModel] [] "UniversalGravLaw" newtonLUGNotes
 
 newtonForceQuant :: QuantityDict
 newtonForceQuant = mkQuant' "force" (nounPhraseSP "Newton's law of universal gravitation") Nothing Real (symbol force) Nothing
-
--- newtonLUGRC :: RelationConcept
--- newtonLUGRC = makeRC "newtonLUGRC"
-  -- (nounPhraseSP "Newton's law of universal gravitation") EmptyS newtonLUGRel
-
-newtonLUGRel :: Relation
-newtonLUGRel = sy force $=
-  sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/
-  square (sy dispNorm)) `mulRe` sy dVect $=
-  sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/
-  square (sy dispNorm)) `mulRe` (sy distMass $/ sy dispNorm)
 
 -- Can't include fractions within a sentence (in the part where 'r denotes the
 -- unit displacement vector, equivalent to r/||r||' (line 184)). Changed to a

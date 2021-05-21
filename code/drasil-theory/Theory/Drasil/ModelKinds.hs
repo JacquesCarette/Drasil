@@ -1,26 +1,29 @@
 
 {-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables, PostfixOperators  #-}
-module Theory.Drasil.ModelKinds (ModelKinds(..), RealmVariant(..), 
+module Theory.Drasil.ModelKinds (ModelKinds(..), RealmVariant(..),
   setMk, elimMk, lensMk, getEqModQds) where
 
-import Language.Drasil
-
-import Control.Lens (Lens', (^.), to, lens, set, makeLenses, Getter, Setter')
+import Control.Lens ((^.), to, lens, set, makeLenses, makeLensesFor,
+  Getter, Lens', Setter')
 import Data.Maybe (mapMaybe)
-import Data.List.NonEmpty
+import qualified Data.List.NonEmpty as NE
 
+import Language.Drasil (($=), sy, Expr, RelationConcept, 
+  NamedIdea(..), HasUID(..), ExprRelat(..), ConceptDomain(..), Definition(..),
+  Idea(..), UID, Sentence, QDefinition, QuantityDict)
+
+-- TODO: How do we want to instantiate RealmVariants?
+-- Maybe we should move it into it's own model entirely?
 data RealmVariant = RV {
   _desc :: Sentence,
   _expr :: Expr,
   _cd :: [UID]
 }
 
--- TODO
--- makeLenses ''RealmVariant
+makeLensesFor [("_expr", "expr")] ''RealmVariant
 
 data ModelKinds = EquationalModel QDefinition
-                -- EquationalRealm [QDefinition]
-                | EquationalRealm QuantityDict (NonEmpty RealmVariant)
+                | EquationalRealm QuantityDict (NE.NonEmpty RealmVariant)
                 | DEModel RelationConcept
                 | OthModel RelationConcept
 
@@ -31,7 +34,11 @@ instance NamedIdea     ModelKinds where term  = lensMk term term term
 instance Idea          ModelKinds where getA  = elimMk (to getA) (to getA) (to getA)
 instance Definition    ModelKinds where defn  = lensMk defn (error "ambiguous defn in EquationalRealm") defn
 instance ConceptDomain ModelKinds where cdom  = elimMk (to cdom) (error "ambiguous concept domain for EquationalRealm") (to cdom)
-instance ExprRelat     ModelKinds where relat = elimMk (to relat) (error "ambiguous relation for EquationalRealm") (to relat)
+instance ExprRelat     ModelKinds where 
+  relat (EquationalRealm q rs) = sy q $= foldr1 ($=) (NE.map (^. expr) rs)
+  relat (EquationalModel q)    = relat q
+  relat (DEModel q)            = relat q
+  relat (OthModel q)           = relat q
 
 -- | Retrieve internal data from QDefinitions/RelationConcepts
 elimMk :: Getter QDefinition a -> Getter QuantityDict a -> Getter RelationConcept a -> ModelKinds -> a
@@ -43,7 +50,7 @@ elimMk _ _ l (OthModel q)          = q ^. l
 -- | Map into internal QDefinitions/RelationConcepts
 setMk :: ModelKinds -> Setter' QDefinition a -> Setter' QuantityDict a -> Setter' RelationConcept a -> a -> ModelKinds
 setMk (EquationalModel q)    f _ _ x = EquationalModel $ set f x q
-setMk (EquationalRealm q vs) _ f _ x = EquationalRealm (set f x q) vs 
+setMk (EquationalRealm q vs) _ f _ x = EquationalRealm (set f x q) vs
 setMk (DEModel q)            _ _ g x = DEModel $ set g x q
 setMk (OthModel q)           _ _ g x = OthModel $ set g x q
 

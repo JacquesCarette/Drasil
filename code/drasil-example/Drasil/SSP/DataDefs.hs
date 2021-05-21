@@ -44,14 +44,14 @@ intersliceWtrFQD = mkQuantDef watrForce intersliceWtrFEqn
 
 intersliceWtrFEqn :: Expr
 intersliceWtrFEqn = completeCase [case1,case2,case3]
-  where case1 = ((square (inxi slopeHght $- inxi slipHght) $/ dbl 2) `mulRe`
+  where case1 = (half (square (inxi slopeHght $- inxi slipHght)) `mulRe`
           sy waterWeight `addRe` (square (inxi waterHght $- inxi slopeHght) `mulRe`
           sy waterWeight), inxi waterHght $>= inxi slopeHght)
 
-        case2 = ((square (inxi waterHght $- inxi slipHght) $/ dbl 2)  `mulRe` sy waterWeight,
+        case2 = (half (square (inxi waterHght $- inxi slipHght))  `mulRe` sy waterWeight,
                 inxi slopeHght $> inxi waterHght $> inxi slipHght)
 
-        case3 = (dbl 0, inxi waterHght $<= inxi slipHght)
+        case3 = (exactDbl 0, inxi waterHght $<= inxi slipHght)
 
 --DD angleA: base angles
 

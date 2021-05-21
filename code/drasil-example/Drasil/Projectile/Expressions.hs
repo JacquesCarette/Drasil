@@ -23,7 +23,7 @@ iSpeed = sy launSpeed
 
 timeDerivEqn1, timeDerivEqn2, timeDerivEqn3, timeDerivEqn4 :: Expr
 timeDerivEqn1 = sy yPos $= (sy iyVel `mulRe` sy time) $- half (sy gravitationalAccelConst `mulRe` square (sy time))
-timeDerivEqn2 = (sy iyVel `mulRe` sy flightDur) $- ((sy gravitationalAccelConst `mulRe` square (sy flightDur)) $/ dbl 2) $= exactDbl 0
+timeDerivEqn2 = (sy iyVel `mulRe` sy flightDur) $- half (sy gravitationalAccelConst `mulRe` square (sy flightDur)) $= exactDbl 0
 timeDerivEqn3 = sy iyVel $- half (sy gravitationalAccelConst `mulRe` sy flightDur) $= exactDbl 0
 timeDerivEqn4 = sy flightDur $= exactDbl 2 `mulRe` sy iyVel $/ sy gravitationalAccelConst
 

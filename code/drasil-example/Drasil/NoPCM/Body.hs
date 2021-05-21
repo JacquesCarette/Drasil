@@ -83,7 +83,7 @@ import Drasil.NoPCM.Unitals (inputs, constrained, unconstrained,
   specParamValList)
 
 srs :: Document
-srs = mkDoc mkSRS S.sFor' si
+srs = mkDoc mkSRS S.forTT si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
@@ -246,7 +246,7 @@ introStartNoPCM = atStart' progName +:+ S "provide a novel way of storing" +:+. 
 -------------------------------------
 
 scope :: Sentence
-scope = phrase thermalAnalysis `S.sOf` S "a single" +:+ phrase sWHT
+scope = phrase thermalAnalysis `S.of_` S "a single" +:+ phrase sWHT
 
 --------------------------------------------------
 --Section 2.3 : CHARACTERISTICS Of INTENDED READER
@@ -298,14 +298,14 @@ orgDocEnd = foldlSent_ [S "The", phrase inModel,
 -----------------------------------
 
 probDescIntro :: Sentence
-probDescIntro = foldlSent_ [S "investigate the heating" `S.sOf` phrase water, S "in a", phrase sWHT]
+probDescIntro = foldlSent_ [S "investigate the heating" `S.of_` phrase water, S "in a", phrase sWHT]
 
 terms :: [ConceptChunk]
 terms = [htFlux, heatCapSpec, thermalConduction, transient]
   
 figTank :: LabelledContent
 figTank = llcc (makeFigRef "Tank") $ fig (atStart sWHT `sC` S "with" +:+ phrase htFlux +:+
-  S "from" +:+ phrase coil `S.sOf` ch htFluxC)
+  S "from" +:+ phrase coil `S.of_` ch htFluxC)
   $ resourcePath ++ "TankWaterOnly.png"
 
 physSystParts :: [Sentence]

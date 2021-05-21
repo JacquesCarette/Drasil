@@ -41,7 +41,7 @@ calcAngPosDesc = foldlSent [S "Calculate the following" +: plural value,
     ch pendDisplacementAngle   +:+ sParen (S "from" +:+ makeRef2S angularDisplacementIM)
   ]]
 outputValuesDesc = foldlSent [atStart output_, ch lenRod,
-  sParen (S "from" +:+ makeRef2S angularDisplacementIM) `S.sAnd` ch lenRod,
+  sParen (S "from" +:+ makeRef2S angularDisplacementIM) `S.and_` ch lenRod,
   sParen (S "from" +:+ makeRef2S angularDisplacementIM)]
 
 

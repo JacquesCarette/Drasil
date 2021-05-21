@@ -50,7 +50,7 @@ outputValues               = cic "outputValues"               outputValuesDesc  
 inReqDesc, sysSetValsFollowingAssumpsDesc, checkInputWithDataConsDesc, outputValsAndKnownValuesDesc, checkGlassSafetyDesc :: Sentence
 
 inReqDesc = foldlList Comma List [S "the" +:+ phrase glass +:+ plural dimension,
-  phrase type_ `S.sOf` phrase glass, phrase pbTolfail, plural characteristic `S.the_ofThe` phrase blast]
+  phrase type_ `S.of_` phrase glass, phrase pbTolfail, plural characteristic `S.the_ofThe` phrase blast]
 
 sysSetValsFollowingAssumpsDesc = foldlSent [S "The", phrase system, S "shall set the known",
     plural value, S "as described in", makeRef2S sysSetValsFollowingAssumpsTable]
@@ -69,7 +69,7 @@ sysSetValsFollowingAssumpsTable = mkValsSourceTable (mkQRTupleRef r2AQs r2ARs ++
 checkInputWithDataConsDesc = foldlSent [S "The", phrase system, S "shall check the entered",
   plural inValue, S "to ensure that they do not exceed the", plural datumConstraint,
   S "mentioned in" +:+. makeRef2S (datCon ([]::[Contents]) ([]::[Section])), 
-  S "If any" `S.ofThe` plural inValue, S "are out" `S.sOf` S "bounds" `sC`
+  S "If any" `S.ofThe` plural inValue, S "are out" `S.of_` S "bounds" `sC`
   S "an", phrase errMsg, S "is displayed" `S.andThe` plural calculation, S "stop"]
 
 outputValsAndKnownValuesDesc = foldlSent [titleize output_, S "the", plural inValue,
@@ -77,7 +77,7 @@ outputValsAndKnownValuesDesc = foldlSent [titleize output_, S "the", plural inVa
   S "from", makeRef2S sysSetValsFollowingAssumps]
 
 checkGlassSafetyDesc = foldlSent_ [S "If", E (sy isSafePb $&& sy isSafeLR),
-  sParen (S "from" +:+ makeRef2S pbIsSafe `S.sAnd` makeRef2S lrIsSafe) `sC`
+  sParen (S "from" +:+ makeRef2S pbIsSafe `S.and_` makeRef2S lrIsSafe) `sC`
   phrase output_, S "the", phrase message, Quote (safeMessage ^. defn),
   S "If the", phrase condition, S "is false, then", phrase output_,
   S "the", phrase message, Quote (notSafe ^. defn)]
@@ -99,7 +99,7 @@ nonfuncReqs = [correct, verifiable, understandable, reusable, maintainable, port
 
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
-  plural output_ `S.the_ofThe'` phrase code, S "have the",
+  plural output_ `S.the_ofTheC` phrase code, S "have the",
   plural property, S "described in", makeRef2S (propCorSol [] [])
   ]) "Correct" nonFuncReqDom
  
@@ -111,7 +111,7 @@ verifiable = cic "verifiable" (foldlSent [
 understandable :: ConceptInstance
 understandable = cic "understandable" (foldlSent [
   S "The", phrase code, S "is modularized with complete",
-  phrase mg `S.sAnd` phrase mis]) "Understandable" nonFuncReqDom
+  phrase mg `S.and_` phrase mis]) "Understandable" nonFuncReqDom
 
 reusable :: ConceptInstance
 reusable = cic "reusable" (foldlSent [
@@ -122,7 +122,7 @@ maintainable = cic "maintainable" (foldlSent [
   S "The traceability between", foldlList Comma List [plural requirement,
   plural assumption, plural thModel, plural genDefn, plural dataDefn, plural inModel,
   plural likelyChg, plural unlikelyChg, plural module_], S "is completely recorded in",
-  plural traceyMatrix `S.inThe` getAcc srs `S.sAnd` phrase mg]) "Maintainable" nonFuncReqDom
+  plural traceyMatrix `S.inThe` getAcc srs `S.and_` phrase mg]) "Maintainable" nonFuncReqDom
 
 portable :: ConceptInstance
 portable = cic "portable" (foldlSent [

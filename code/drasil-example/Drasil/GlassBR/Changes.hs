@@ -68,7 +68,7 @@ accAlteredGlass           = cic "accAlteredGlass"           accAlteredGlassDesc 
 
 predictWithstandOfCertDegDesc, accAlteredGlassDesc :: Sentence
 
-predictWithstandOfCertDegDesc = foldlSent [phrase goal `S.the_ofThe'` phrase system,
+predictWithstandOfCertDegDesc = foldlSent [phrase goal `S.the_ofTheC` phrase system,
   S "is to predict whether the", phrase glaSlab, S "under consideration can",
   S "withstand an", phrase explosion, S "of a certain degree"]
 

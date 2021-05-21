@@ -23,18 +23,18 @@ yAxisDir        = cic "yAxisDir"          yAxisDirDesc        "yAxisDir"        
 startOrigin     = cic "startOrigin"       startOriginDesc     "startOrigin"     assumpDom
 
 pend2DMotionDesc :: Sentence
-pend2DMotionDesc = atStartNP (the pendMotion) `S.sIs` phrase twoD +:+. sParen (getAcc twoD)
+pend2DMotionDesc = atStartNP (the pendMotion) `S.is` phrase twoD +:+. sParen (getAcc twoD)
 
 cartCoordDesc :: Sentence
-cartCoordDesc = atStartNP (aNINP cartesian) `S.sIs` (S "used" !.)
+cartCoordDesc = atStartNP (aNINP cartesian) `S.is` (S "used" !.)
 
 cartCoordRightDesc :: Sentence
-cartCoordRightDesc = atStartNP (the cartesian) `S.sIs` S "right-handed where" +:+ 
+cartCoordRightDesc = atStartNP (the cartesian) `S.is` S "right-handed where" +:+ 
     phraseNP (combineNINP positive (xAxis `and_` yAxis)) +:+. S "point right up"
 
 yAxisDirDesc :: Sentence
-yAxisDirDesc = atStartNP (direction `the_ofThe''` yAxis) `S.sIs` S "directed opposite to" +:+. phrase gravity
+yAxisDirDesc = atStartNP (direction `the_ofThe''` yAxis) `S.is` S "directed opposite to" +:+. phrase gravity
 
 startOriginDesc :: Sentence
-startOriginDesc = atStartNP (the pendulum) `S.sIs` S "attached" `S.toThe` (phrase origin !.)
+startOriginDesc = atStartNP (the pendulum) `S.is` S "attached" `S.toThe` (phrase origin !.)
 

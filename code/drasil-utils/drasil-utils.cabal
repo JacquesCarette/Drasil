@@ -24,6 +24,7 @@ library
   exposed-modules:
       Utils.Drasil
       Utils.Drasil.Sentence
+      Utils.Drasil.NounPhrase
   other-modules:
       Utils.Drasil.Concepts
       Utils.Drasil.Contents
@@ -31,7 +32,6 @@ library
       Utils.Drasil.English
       Utils.Drasil.Fold
       Utils.Drasil.Misc
-      Utils.Drasil.Phrase
       Paths_drasil_utils
   hs-source-dirs:
       ./

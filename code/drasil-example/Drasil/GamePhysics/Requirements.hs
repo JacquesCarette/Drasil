@@ -40,7 +40,7 @@ simSpaceDesc, inputInitialCondsDesc,
 
 -- | template for requirements
 requirementTemplate :: Sentence -> Sentence -> Sentence -> Sentence -> Sentence
-requirementTemplate a b x z = foldlSent [S "Determine the", a `S.sAnd` b, 
+requirementTemplate a b x z = foldlSent [S "Determine the", a `S.and_` b, 
   S "over a period of", phrase QP.time, S "of the", x, z]
 
 -- | with added constraint
@@ -59,11 +59,11 @@ simSpaceDesc = foldlSent [S "Create a", phrase CP.space, S "for all of the",
 
 inputInitialCondsDesc = foldlSent [S "Input the initial", foldlList Comma List
   [plural QPP.mass, plural QP.velocity, plural QM.orientation,
-  plural QP.angularVelocity `S.sOf` EmptyS, plural QP.force +:+ S "applied on"],
+  plural QP.angularVelocity `S.of_` EmptyS, plural QP.force +:+ S "applied on"],
   plural CP.rigidBody]
 
 inputSurfacePropsDesc = foldlSent [S "Input", (phrase CM.surface +:+
-  plural property) `S.the_ofThe` plural body, S "such as", phrase CP.friction `S.sOr`
+  plural property) `S.the_ofThe` plural body, S "such as", phrase CP.friction `S.or_`
   phrase CP.elasticity]
 
 verifyPhysConsDesc = foldlSent [S "Verify that the", plural input_,
@@ -109,29 +109,29 @@ performance = cic "performance" (foldlSent [
 
 correctness :: ConceptInstance
 correctness = cic "correctness" (foldlSent [
-  S "The", phrase output_ `S.sOf` S "simulation results shall be compared to", 
+  S "The", phrase output_ `S.of_` S "simulation results shall be compared to", 
   S "an existing implementation like Pymunk (please refer to:", 
   S "http://www.pymunk.org/en/latest/)"
   ]) "Correctness" nonFuncReqDom
  
 usability :: ConceptInstance
 usability = cic "usability" (foldlSent [
-  S "Software shall be easy to learn" `S.sAnd` S "use. Usability shall be measured by", 
+  S "Software shall be easy to learn" `S.and_` S "use. Usability shall be measured by", 
   S "how long it takes a user to learn how to use the library to create a small program", 
-  S "to simulate the movement" `S.sOf` S "2 bodies over time in space. Creating a program", 
+  S "to simulate the movement" `S.of_` S "2 bodies over time in space. Creating a program", 
   S "should take no less than 30 to 60 minutes for an intermediate to experienced programmer"
   ]) "Usability" nonFuncReqDom
 
 understandability :: ConceptInstance
 understandability = cic "understandability" (foldlSent [
-  (S "Users" `S.sOf` S "Tamias2D shall be able to learn the software with ease" !.), 
+  (S "Users" `S.of_` S "Tamias2D shall be able to learn the software with ease" !.), 
   (S "Users shall be able to easily create a small program using the library" !.), 
-  S "Creating a small program to simulate the movement of 2 bodies" `S.sIn` 
+  S "Creating a small program to simulate the movement of 2 bodies" `S.in_` 
   S "space should take no less that 60 minutes"
   ]) "Understandability" nonFuncReqDom
 
 maintainability :: ConceptInstance
 maintainability = cic "maintainability" (foldlSent [
-  S "development time for any " `S.the_ofThe'` S "likely changes should not exceed", 
+  S "development time for any " `S.the_ofTheC` S "likely changes should not exceed", 
   addPercent (10 :: Integer), S "percent of the original development time"
   ]) "Maintainability" nonFuncReqDom

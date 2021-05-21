@@ -3,6 +3,7 @@ module Drasil.DblPendulum.Unitals where
 import Language.Drasil
 import Language.Drasil.ShortHands
 import Utils.Drasil
+import Utils.Drasil.NounPhrase as NP
 import Data.Drasil.Constraints (gtZeroConstr)
 
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
@@ -54,7 +55,7 @@ pendDisplacementAngle = makeUCWDS "pendDisplacementAngle" (cn "displacement angl
         (sub lTheta lP) degree
 
 initialPendAngle = makeUCWDS "initialPendAngle" (cn "initial pendulum angle")
-        (phraseNP (theNP (CM.iAngle `of_` pendulum)))
+        (phraseNP (NP.the (CM.iAngle `of_` pendulum)))
         (sub lTheta lI) radian
 
 

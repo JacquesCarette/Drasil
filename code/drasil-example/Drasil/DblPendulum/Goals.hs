@@ -2,6 +2,7 @@ module Drasil.DblPendulum.Goals (goals, goalsInputs) where
 
 import Language.Drasil
 import qualified Utils.Drasil.Sentence as S
+import qualified Utils.Drasil.NounPhrase as NP
 import Utils.Drasil
 import Data.Drasil.Concepts.Documentation (goalStmtDom)
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (mass, len)
@@ -15,8 +16,8 @@ goals = [motionMass]
 
 
 goalsInputs :: [Sentence]
-goalsInputs = [phraseNP (the CPP.mass `andNP` (CPP.len  `ofThe'` rod)) `sC` 
-        phraseNP (iAngle `ofThe'` CPP.mass) `S.sAnd` phraseNP (the gravitationalConst) ]
+goalsInputs = [phraseNP (the CPP.mass `NP.and_` (CPP.len  `ofThe'` rod)) `sC` 
+        phraseNP (iAngle `ofThe'` CPP.mass) `S.and_` phraseNP (the gravitationalConst) ]
 
 motionMass :: ConceptInstance
 motionMass = cic "motionMass" 

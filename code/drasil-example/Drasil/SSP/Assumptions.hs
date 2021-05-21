@@ -66,11 +66,11 @@ propertiesS = foldlSent [S "The", plural soilPrpty, S "are independent of dry or
   plural condition `sC` S "with the exception of", phrase unit_, S "weight"]
 
 isotropicP = foldlSent [S "The", phrase soil, S "mass is treated as if the", 
-  phrase effCohesion `S.sAnd` phrase fricAngle, S "are isotropic properties"]
+  phrase effCohesion `S.and_` phrase fricAngle, S "are isotropic properties"]
 
 linearS = foldlSent [S "Following the", phrase assumption, S "of Morgenstern",
   S "and Price", sParen (makeRef2S morgenstern1965) `sC` 
-  phrase intNormForce `S.sAnd` phrase intShrForce,
+  phrase intNormForce `S.and_` phrase intShrForce,
   S "have a proportional relationship, depending on a proportionality",
   phrase constant, sParen (ch normToShear), S "and a function", 
   sParen (ch scalFunc), S "describing variation depending on", ch xi, 
@@ -89,7 +89,7 @@ straightS = foldlSent [S "The", phrase surface, S "and base of a",
   phrase slice, S "are approximated as straight lines"]
 
 edgeS = foldlSent [S "The", phrase intrslce, plural force, 
-  S "at the 0th" `S.sAnd` ch numbSlices :+: S "th", phrase intrslce,
+  S "at the 0th" `S.and_` ch numbSlices :+: S "th", phrase intrslce,
   plural interface, S "are zero"]
 
 seismicF = foldlSent [S "There is no seismic", phrase force, S "acting on the", phrase slope]

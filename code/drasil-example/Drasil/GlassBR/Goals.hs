@@ -14,8 +14,8 @@ goals :: [ConceptInstance]
 goals = [willBreakGS]
 
 willBreakGS :: ConceptInstance
-willBreakGS = cic "willBreakGS" (foldlSent [S "Analyze" `S.sAnd`
+willBreakGS = cic "willBreakGS" (foldlSent [S "Analyze" `S.and_`
   S "predict whether the", phrase glaSlab, S "under consideration will be able",
-  S "to withstand the", phrase explosion `S.sOf` S "a certain", phrase degree_',
+  S "to withstand the", phrase explosion `S.of_` S "a certain", phrase degree_',
   S "which is calculated based on", phrase userInput])
   "Predict-Glass-Withstands-Explosion" goalStmtDom

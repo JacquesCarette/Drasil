@@ -74,7 +74,7 @@ unlikeChgWPFS = cic "unlikeChgWPFS" (
 
 unlikeChgNIHG = cic "unlikeChgNIHG" (
   foldlSent [chgsStart assumpNIHGBWP (S "Is used for the derivations of"),
-  makeRef2S eBalanceOnWtr `S.sAnd` makeRef2S eBalanceOnPCM] )
+  makeRef2S eBalanceOnWtr `S.and_` makeRef2S eBalanceOnPCM] )
   "No-Internal-Heat-Generation" unlikeChgDom
 
 unlikeChgNGS = cic "unlikeChgNGS" (

@@ -71,8 +71,8 @@ assumpWAL = cic "assumpWAL" (assumpS14 $ phrase material_ +:+
 
 assumpS13 = 
   S "The pressure in the" +:+ phrase tank +:+ S "is atmospheric, so the" +:+
-  phrase meltPt `S.sAnd` phrase boilPt +:+ S "of water are" +:+
-  S (show (0 :: Integer)) :+: Sy (unit_symb QT.temp) `S.sAnd`
+  phrase meltPt `S.and_` phrase boilPt +:+ S "of water are" +:+
+  S (show (0 :: Integer)) :+: Sy (unit_symb QT.temp) `S.and_`
   S (show (100 :: Integer)) :+: Sy (unit_symb QT.temp) `sC` S "respectively"
 
 assumpAPT = cic "assumpAPT" assumpS13

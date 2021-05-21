@@ -61,10 +61,10 @@ ssa = compoundNC slope stabAnalysis
 effFandS, slpSrf, crtSlpSrf, plnStrn, fsConcept, waterTable :: ConceptChunk
 effFandS = dccWDS "effective forces and stresses" 
   (cn "effective forces and stresses") 
-  (S "The" +:+ phrase normForce `S.sOr` phrase nrmStrss +:+
+  (S "The" +:+ phrase normForce `S.or_` phrase nrmStrss +:+
   S "carried by the" +:+ phrase soil +:+ S "skeleton" `sC`
-  S "composed of the effective" +:+ phrase force `S.sOr` phrase stress `S.andThe`
-  phrase force `S.sOr` phrase stress +:+ S "exerted by water")
+  S "composed of the effective" +:+ phrase force `S.or_` phrase stress `S.andThe`
+  phrase force `S.or_` phrase stress +:+ S "exerted by water")
 
 slpSrf = dccWDS "slip surface" (cn' "slip surface") (S "A" +:+
   phrase surface +:+ S "within a" +:+ phrase slope +:+ S "that has the" +:+

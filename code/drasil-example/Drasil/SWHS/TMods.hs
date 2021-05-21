@@ -56,7 +56,7 @@ consThermENotes :: [Sentence]
 consThermENotes = map foldlSent [
   [S "The above", phrase equation, S "gives the", phrase lawConsEnergy,
    S "for", phrase transient, phrase heatTrans, S "in a given material"],
-  [S "For this", phrase equation, S "to apply" `sC` S "other forms" `S.sOf`
+  [S "For this", phrase equation, S "to apply" `sC` S "other forms" `S.of_`
    phrase energy `sC` S "such as", phrase mechEnergy `sC` S "are assumed",
    S "to be negligible" `S.inThe` phrase system, sParen (makeRef2S assumpTEO)]]
 
@@ -108,7 +108,7 @@ sensHtEdesc :: Sentence
 sensHtEdesc = foldlSent [
   atStart sensHeat :+: S "ing occurs as long as the material does not reach a",
   phrase temp, S "where a", phrase phaseChange, S "occurs. A", phrase phaseChange,
-  S "occurs if" +:+. (E (sy temp $= sy boilPt) `S.sOr` E (sy temp $= sy meltPt)),
+  S "occurs if" +:+. (E (sy temp $= sy boilPt) `S.or_` E (sy temp $= sy meltPt)),
   S "If this is the case" `sC` S "refer to", makeRef2S latentHtE]
 
 --How to have new lines in the description?
@@ -142,13 +142,13 @@ latHtESrc = makeURI "latHtESrc" "http://en.wikipedia.org/wiki/Latent_heat" $
 
 latentHtENotes :: [Sentence]
 latentHtENotes = map foldlSent [
-  [ch latentHeat `S.isThe` S "change" `S.sIn` phrase thermalEnergy,
+  [ch latentHeat `S.isThe` S "change" `S.in_` phrase thermalEnergy,
    sParen (phrase latentHeat +:+ phrase energy)],
-  [E latHtEEqn `S.isThe` phrase rOfChng `S.sOf` ch latentHeat `S.wrt` 
+  [E latHtEEqn `S.isThe` phrase rOfChng `S.of_` ch latentHeat `S.wrt` 
    phrase time, ch tau],
   [ch time `S.isThe` phrase time, S "elapsed" `sC` S "as long as the",
    phrase phaseChange, S "is not complete"],
-  [S "status" `S.the_ofThe'` phrase phaseChange, S "depends on the",
+  [S "status" `S.the_ofTheC` phrase phaseChange, S "depends on the",
    phrase meltFrac, sParen (S "from" +:+ makeRef2S ddMeltFrac)],
   [atStart latentHeat :+: S "ing stops when all material has changed to the new phase"]]
 
@@ -171,9 +171,9 @@ nwtnCoolingEqn = apply1 htFlux time $= sy htTransCoeff * apply1 deltaT time
 nwtnCoolingNotes :: [Sentence]
 nwtnCoolingNotes = map foldlSent [
   [atStart lawConvCooling +:+. S "describes convective cooling from a surface" +:
-   S "The law is stated as", S "the", phrase rate `S.sOf` S "heat loss from a body" `S.sIs`
+   S "The law is stated as", S "the", phrase rate `S.of_` S "heat loss from a body" `S.is`
    S "proportional to the difference in", plural temp, S "between the body and its surroundings"],
-  [ch htTransCoeff, S "is assumed to be independent" `S.sOf` ch temp,
+  [ch htTransCoeff, S "is assumed to be independent" `S.of_` ch temp,
    sParen (S "from" +:+ makeRef2S assumpHTCC)],
   [E (apply1 deltaT time $= apply1 temp time - apply1 tempEnv time) `S.isThe`
    S "time-dependant thermal gradient between the environment and the object"]]

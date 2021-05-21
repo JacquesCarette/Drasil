@@ -34,7 +34,7 @@ likelyChangesStmt3 = chgsStart assumpDI $ phrase library `maybeExpanded` (
   S "to include motion with" +:+ phrase CP.damping)
 
 likelyChangesStmt4 = chgsStart assumpCAJI $ phrase library `maybeExpanded` (
-  S "to include" +:+ plural CP.joint `S.sAnd` plural CM.constraint)
+  S "to include" +:+ plural CP.joint `S.and_` plural CM.constraint)
 
 lcVODES, lcEC, lcID, lcIJC :: ConceptInstance
 

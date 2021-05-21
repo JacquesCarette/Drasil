@@ -16,7 +16,7 @@ module Drasil.Sections.SpecificSystemDescription
 
 import Language.Drasil
 import Utils.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (assumption, column, constraint, corSol,
   datum, datumConstraint, definition, element, general, goalStmt, information,
@@ -48,14 +48,14 @@ intro_ = mkParagraph $ foldlSent [S "This", phrase section_, S "first presents t
 
 -- describe what a system is needed to accomplist
 probDescF :: Sentence -> [Section] -> Section
-probDescF prob = SRS.probDesc [mkParagraph $ foldlSent [S "A", phrase system `sIs` S "needed to", prob]]
+probDescF prob = SRS.probDesc [mkParagraph $ foldlSent [S "A", phrase system `S.is` S "needed to", prob]]
                   
 --can take a (Just sentence) if needed or Nothing if not
 termDefnF :: Concept c => Maybe Sentence -> [c] -> Section
 termDefnF end lst = SRS.termAndDefn [intro, enumBulletU $ map termDef lst] []
   where intro = foldlSP_ [
                   S "This subsection provides a list of terms that are used in the subsequent",
-                  plural section_ `sAnd` S "their meaning, with the", phrase purpose `sOf`
+                  plural section_ `S.and_` S "their meaning, with the", phrase purpose `S.of_`
                   S "reducing ambiguity and making it easier to correctly understand the" +:+.
                   plural requirement, fromMaybe EmptyS end]
         termDef x = atStart x +: EmptyS +:+. capSent (x ^. defn)
@@ -71,11 +71,11 @@ termDefnF' end otherContents = SRS.termAndDefn (intro : otherContents) []
 --general introduction for Physical System Description
 physSystDesc :: Idea a => a -> [Sentence] -> LabelledContent -> [Contents] -> Section
 physSystDesc progName parts fg other = SRS.physSyst (intro : bullets : LlC fg : other) []
-  where intro = mkParagraph $ foldlSentCol [S "The", phrase physicalSystem `sOf` short progName `sC`
+  where intro = mkParagraph $ foldlSentCol [S "The", phrase physicalSystem `S.of_` short progName `sC`
                 S "as shown in", makeRef2S fg `sC` S "includes the following", plural element]
         bullets = enumSimpleU 1 (short physSyst) parts
 
---List all the given inputs. Might be possible to use the_ofThe combinator from utils.hs
+--List all the given inputs. Might be possible to use S.the_ofThe combinator from utils.hs
 goalStmtF :: [Sentence] -> [Contents] -> Section
 goalStmtF givenInputs otherContents = SRS.goalStmt (intro:otherContents) []
   where intro = mkParagraph $ S "Given" +:+ foldlList Comma List givenInputs `sC` S "the" +:+ 
@@ -86,7 +86,7 @@ solutionCharSpecIntro :: (Idea a) => a -> Section -> Contents
 solutionCharSpecIntro progName instModelSection = foldlSP [S "The", plural inModel, 
   S "that govern", short progName, S "are presented in" +:+. 
   makeRef2S instModelSection, S "The", phrase information, S "to understand", 
-  S "meaning" `the_ofThe` plural inModel, 
+  S "meaning" `S.the_ofThe` plural inModel, 
   S "and their derivation is also presented, so that the", plural inModel, 
   S "can be verified"]
 
@@ -109,7 +109,7 @@ thModF progName otherContents = SRS.thModel (thModIntro progName : otherContents
 -- generalized theoretical model introduction: identifies key word pertaining to topic
 thModIntro :: (Idea a) => a -> Contents
 thModIntro progName = foldlSP [S "This", phrase section_, S "focuses on the",
-  phrase general, plural equation `sAnd` S "laws that", short progName, S "is based on"]
+  phrase general, plural equation `S.and_` S "laws that", short progName, S "is based on"]
 
 -- just supply the other contents for General Definition. Use empty list if none needed
 genDefnF :: [Contents] -> Section
@@ -144,7 +144,7 @@ inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_,
   S "transforms the", phrase problem, S "defined in", makeRef2S r1,
   S "into one which is expressed in mathematical terms. It uses concrete", 
   plural symbol_, S "defined in", makeRef2S r2, S "to replace the abstract",
-  plural symbol_, S "in the", plural model, S "identified in", makeRef2S r3 `sAnd`
+  plural symbol_, S "in the", plural model, S "identified in", makeRef2S r3 `S.and_`
   makeRef2S r4]
 
 -- wrapper for datConPar
@@ -165,7 +165,7 @@ inputTableSent = foldlSent [makeRef2S $ inDataConstTbl ([] :: [UncertQ]), S "sho
 physConsSent :: Sentence
 physConsSent = foldlSent [S "The", phrase column, S "for", phrase physical,
   plural constraint, S "gives the",  phrase physical, plural limitation,
-  S "on the range" `sOf` plural value, S "that can be taken by the", phrase variable]
+  S "on the range" `S.of_` plural value, S "that can be taken by the", phrase variable]
 
 uncertSent :: Sentence
 uncertSent = foldlSent [S "The", phrase uncertainty, phrase column,
@@ -175,17 +175,17 @@ uncertSent = foldlSent [S "The", phrase uncertainty, phrase column,
   phrase uncertainty, S "quantification exercise"]
 
 conservConsSent :: Sentence
-conservConsSent = foldlSent [S "The", plural constraint `sAre` S "conservative" `sC`
-  S "to give", phrase user `the_ofThe` phrase model,
+conservConsSent = foldlSent [S "The", plural constraint `S.are` S "conservative" `sC`
+  S "to give", phrase user `S.the_ofThe` phrase model,
   S "the flexibility to experiment with unusual situations"]
 
 typValSent :: Sentence
-typValSent = foldlSent [S "The", phrase column `sOf` S "typical",
-  plural value `sIs` S "intended to provide a feel for a common scenario"]
+typValSent = foldlSent [S "The", phrase column `S.of_` S "typical",
+  plural value `S.is` S "intended to provide a feel for a common scenario"]
 
 auxSpecSent :: Sentence
 auxSpecSent = foldlSent [makeRef2S $ SRS.valsOfAuxCons [] [], S "gives",
-  plural value `the_ofThe` phrase specification, plural parameter, S "used in",
+  plural value `S.the_ofThe` phrase specification, plural parameter, S "used in",
   makeRef2S $ inDataConstTbl ([] :: [UncertQ])]
 
 mkDataConstraintTable :: [(Sentence, [Sentence])] -> String -> Sentence -> LabelledContent

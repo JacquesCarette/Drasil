@@ -9,7 +9,7 @@ module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, checkValidStr,
 
 import Language.Drasil
 import Utils.Drasil.Fold (FoldType(List), SepType(Comma), foldlList, foldlSent)
-import Utils.Drasil.Sentence (sAre, sIn, sIs, toThe)
+import qualified Utils.Drasil.Sentence as S (are, in_, is, toThe)
 
 import Control.Lens ((^.))
 
@@ -50,15 +50,15 @@ substitute s = S "By substituting" +: (foldlList Comma List l `sC` S "this can b
 
 -- | Takes a 'HasSymbol' that is also 'Referable' and outputs as a 'Sentence': "@symbol@ is defined in @reference@."
 definedIn :: (Referable r, HasShortName r, HasSymbol r) => r -> Sentence
-definedIn q = ch q `sIs` S "defined in" +:+. makeRef2S q
+definedIn q = ch q `S.is` S "defined in" +:+. makeRef2S q
 
 -- | Same as 'definedIn', but allows for additional information to be appended to the 'Sentence'.
 definedIn' :: (Referable r, HasShortName r, HasSymbol r) => r -> Sentence -> Sentence
-definedIn' q info = ch q `sIs` S "defined" `sIn` makeRef2S q +:+. info 
+definedIn' q info = ch q `S.is` S "defined" `S.in_` makeRef2S q +:+. info 
 
 -- | Takes a 'Referable' and outputs as a 'Sentence' "defined in @reference@" (no 'HasSymbol').
 definedIn'' :: (Referable r, HasShortName r) => r -> Sentence
-definedIn'' q =  S "defined" `sIn` makeRef2S q
+definedIn'' q =  S "defined" `S.in_` makeRef2S q
 
 -- | Zip helper function enumerates abbreviations and zips it with list of 'ItemType':
 --
@@ -160,13 +160,13 @@ underConsidertn chunk = S "The" +:+ phrase chunk +:+
 -- | Create a list in the pattern of "The \_\_ are refined to the \_\_".
 -- Note: Order matters!
 refineChain :: NamedIdea c => [(c, Section)] -> Sentence
-refineChain [x,y] = S "The" +:+ plural (fst x) +:+ sParen (makeRef2S $ snd x) `sAre` S "refined" `toThe` plural (fst y)
+refineChain [x,y] = S "The" +:+ plural (fst x) +:+ sParen (makeRef2S $ snd x) `S.are` S "refined" `S.toThe` plural (fst y)
 refineChain (x:y:xs) = foldlList Comma List (refineChain [x,y] : rc (y : xs))
   where
     rc [a, b]   = [rcSent a b +:+. sParen (makeRef2S $ snd b)]
     rc (a:b:as) =  rcSent a b : rc (b : as)
     rc _        = error "refineChain helper encountered an unexpected empty list"
-    rcSent a b  = S "the" +:+ plural (fst a) +:+ sParen (makeRef2S $ snd a) `toThe` plural (fst b)
+    rcSent a b  = S "the" +:+ plural (fst a) +:+ sParen (makeRef2S $ snd a) `S.toThe` plural (fst b)
 refineChain _ = error "refineChain encountered an unexpected empty list"
 
 -- | Helper functions for making likely change statements. Outputs "The @firstSentence@ may be @someVerb@ @thirdSentence@".

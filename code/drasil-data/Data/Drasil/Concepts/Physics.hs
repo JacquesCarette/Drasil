@@ -2,7 +2,7 @@ module Data.Drasil.Concepts.Physics where
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
 import Language.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 import Utils.Drasil
 
 import Data.Drasil.Domains (mathematics, physics)
@@ -53,7 +53,7 @@ angular = dcc "angular" (cn' "angular")
 body = dccWDS "body" (cnIES "body")
   (S "an object with" +:+ phrase QPP.mass)
 chgInVelocity = dccWDS "chgInVelocity" (cn "change in velocity")
-  (S "the" +:+ phrase chgInVelocity `sOf` S "a" +:+ phrase rigidBody)
+  (S "the" +:+ phrase chgInVelocity `S.of_` S "a" +:+ phrase rigidBody)
 collision = dcc "collision" (cn' "collision")
   "an encounter between particles resulting in an exchange or transformation of energy"
 cohesion = dccWDS "cohesion" (cn "cohesion")
@@ -93,38 +93,38 @@ gravitationalConst = dcc "gravitationalConst" (cn "gravitational constant")
 height = dccWDS "height" (cn' "height")
   (S "the" +:+ phrase distance +:+ S "above a reference point for a point of interest")
 isotropy = dccWDS "isotropy" (cn "isotropy")
-  (S "a condition where the" +:+ phrase value `sOf` S "a" +:+ phrase property `sIs`
+  (S "a condition where the" +:+ phrase value `S.of_` S "a" +:+ phrase property `S.is`
    S "independent of the direction in which it is measured")
 joint = dcc "joint" (cn' "joint")
   "a connection between two rigid bodies which allows movement with one or more degrees of freedom"
 kEnergy = dccWDS "kEnergy" (cn "kinetic energy")
-  (S "measure" `the_ofThe` phrase energy +:+ S "a body possesses due to its motion")
+  (S "measure" `S.the_ofThe` phrase energy +:+ S "a body possesses due to its motion")
 kinematics = dccWDS "kinematics" (cn "kinematics")
-  (S "branch" `sOf` phrase mechanics +:+ S "that describes the motion" `sOf` 
+  (S "branch" `S.of_` phrase mechanics +:+ S "that describes the motion" `S.of_` 
     S "objects without reference to the causes of motion")
 linear = dcc "linear" (cn' "linear")
   "arranged in or extending along a straight or nearly straight line"
 mechEnergy = dcc "mechEnergy" (cn "mechanical energy")
   "the energy that comes from motion and position"
 momentum = dccWDS "momentum" (cn "momentum")
-  ( S "the quantity of motion" `sOf` S "a moving body, measured as a product" `sOf` phrase QPP.mass `sAnd`
+  ( S "the quantity of motion" `S.of_` S "a moving body, measured as a product" `S.of_` phrase QPP.mass `S.and_`
    phrase velocity)
 moment = dccWDS "moment" (cn' "moment")
-  (S "A measure of the tendency of a body to rotate about a specific" +:+ phrase point `sOr` phrase axis)
+  (S "A measure of the tendency of a body to rotate about a specific" +:+ phrase point `S.or_` phrase axis)
 motion = dccWDS "motion" (cn "motion")
   (S "change in position of a physical body over time")
 period = dccWDS "period" (cn' "period")
    (S "the" +:+ phrase time +:+ S "required for one complete cycle of vibration to pass a given point.")
 pendulum = dccWDS "pendulum" (cn "pendulum")
  (S "a body suspended from a fixed support so that it swings freely back and forth under the influence" 
-       `sOf` phrase gravity)
+       `S.of_` phrase gravity)
 position = dcc "position" (cn' "position")
   "an object's location relative to a reference point"
 positionVec = dccWDS " positionVec" (cn' "position vector")
-   (S "a vector from the origin" `ofThe` phrase cartesian +:+ S "defined"
-    `toThe` phrase point +:+ S "where the" +:+ phrase force +:+ S "is applied")
+   (S "a vector from the origin" `S.ofThe` phrase cartesian +:+ S "defined"
+    `S.toThe` phrase point +:+ S "where the" +:+ phrase force +:+ S "is applied")
 potEnergy = dccWDS "potEnergy" (cn "potential energy")
-  (S "measure" `the_ofThe` phrase energy +:+ S "held by an object because of its" +:+ phrase position)
+  (S "measure" `S.the_ofThe` phrase energy +:+ S "held by an object because of its" +:+ phrase position)
 pressure = dccWDS "pressure" (cn' "pressure")
   (S "a" +:+ phrase force +:+ S "exerted over an area")
 rectilinear = dcc "rectilinear" (cn "rectilinear")
@@ -134,14 +134,14 @@ rigidBody = dcc "rigidBody" (cnIES "rigid body")
 space = dcc "space" (cn' "space")
   "a two-dimensional extent where objects and events have relative positions and directions"
 scalarAccel = dccWDS "scalarAccel" (cn' "scalar acceleration")
-  (S "magnitude" `the_ofThe` phrase acceleration +:+ S "vector")
+  (S "magnitude" `S.the_ofThe` phrase acceleration +:+ S "vector")
 scalarPos = dccWDS "scalarPos" (cn' "scalar position")
-  (S "magnitude" `the_ofThe` phrase position +:+ S "vector")
+  (S "magnitude" `S.the_ofThe` phrase position +:+ S "vector")
 shm = dcc "SHM" (nounPhraseSP "simple harmonic motion") ("Periodic motion through an equilibrium position. " ++ 
                                                         "The motion is sinusoidal in time and demonstrates a" ++ 
                                                         " single resonant frequency") -- source: Wikipedia 
 speed = dccWDS "speed" (cn' "speed")
-  (S "magnitude" `the_ofThe` phrase velocity +:+ S "vector")
+  (S "magnitude" `S.the_ofThe` phrase velocity +:+ S "vector")
 stiffCoeff = dcc "stiffnessCoeff" (cn' "stiffness coefficient") 
  "Quantity that characterizes a spring's stiffness"
 strain = dccWDS "strain" (cn' "strain") 
@@ -171,29 +171,29 @@ xDist = dccWDS "xDist" (nounPhraseSent $ phrase distance +:+ S "in the" +:+ phra
 yDist = dccWDS "yDist" (nounPhraseSent $ phrase distance +:+ S "in the" +:+ phrase yDir) (atStart distance +:+ S "in the" +:+ phrase yDir)
 
 iPos = dccWDS "iPos" (cn "initial position") (S "The" +:+ phrase position +:+ S "at the body's initial point")
-xPos = dccWDS "xPos" (nounPhraseSent $ phrase xComp `sOf` phrase position) (S "The" +:+ phrase xComp `sOf` phrase position)
-yPos = dccWDS "yPos" (nounPhraseSent $ phrase yComp `sOf` phrase position) (S "The" +:+ phrase yComp `sOf` phrase position)
+xPos = dccWDS "xPos" (nounPhraseSent $ phrase xComp `S.of_` phrase position) (S "The" +:+ phrase xComp `S.of_` phrase position)
+yPos = dccWDS "yPos" (nounPhraseSent $ phrase yComp `S.of_` phrase position) (S "The" +:+ phrase yComp `S.of_` phrase position)
 
-ixPos = dccWDS "ixPos" (nounPhraseSent $ phrase xComp `sOf` phrase iPos) (S "The" +:+ phrase xComp `sOf` phrase iPos)
-iyPos = dccWDS "iyPos" (nounPhraseSent $ phrase yComp `sOf` phrase iPos) (S "The" +:+ phrase yComp `sOf` phrase iPos)
+ixPos = dccWDS "ixPos" (nounPhraseSent $ phrase xComp `S.of_` phrase iPos) (S "The" +:+ phrase xComp `S.of_` phrase iPos)
+iyPos = dccWDS "iyPos" (nounPhraseSent $ phrase yComp `S.of_` phrase iPos) (S "The" +:+ phrase yComp `S.of_` phrase iPos)
 
 fSpeed = dccWDS "fSpeed" (cn "final speed")   (S "The" +:+ phrase speed +:+ S "at the body's final point")
 iSpeed = dccWDS "iSpeed" (cn "initial speed") (S "The" +:+ phrase speed +:+ S "at the body's initial point")
 
 fVel = dccWDS "fVel" (cn "final velocity")   (S "The" +:+ phrase velocity +:+ S "at the body's final point")
 iVel = dccWDS "iVel" (cn "initial velocity") (S "The" +:+ phrase velocity +:+ S "at the body's initial point")
-xVel = dccWDS "xVel" (nounPhraseSent $ phrase xComp `sOf` phrase velocity) (S "The" +:+ phrase xComp `sOf` phrase velocity)
-yVel = dccWDS "yVel" (nounPhraseSent $ phrase yComp `sOf` phrase velocity) (S "The" +:+ phrase yComp `sOf` phrase velocity)
+xVel = dccWDS "xVel" (nounPhraseSent $ phrase xComp `S.of_` phrase velocity) (S "The" +:+ phrase xComp `S.of_` phrase velocity)
+yVel = dccWDS "yVel" (nounPhraseSent $ phrase yComp `S.of_` phrase velocity) (S "The" +:+ phrase yComp `S.of_` phrase velocity)
 
-ixVel = dccWDS "ixVel" (nounPhraseSent $ phrase xComp `sOf` phrase iVel) (S "The" +:+ phrase xComp `sOf` phrase iVel)
-iyVel = dccWDS "iyVel" (nounPhraseSent $ phrase yComp `sOf` phrase iVel) (S "The" +:+ phrase yComp `sOf` phrase iVel)
+ixVel = dccWDS "ixVel" (nounPhraseSent $ phrase xComp `S.of_` phrase iVel) (S "The" +:+ phrase xComp `S.of_` phrase iVel)
+iyVel = dccWDS "iyVel" (nounPhraseSent $ phrase yComp `S.of_` phrase iVel) (S "The" +:+ phrase yComp `S.of_` phrase iVel)
 
-xAccel = dccWDS "xScalAcc" (nounPhraseSent $ phrase xComp `sOf` phrase acceleration) (S "The" +:+ phrase xComp `sOf` phrase acceleration)
-yAccel = dccWDS "yScalAcc" (nounPhraseSent $ phrase yComp `sOf` phrase acceleration) (S "The" +:+ phrase yComp `sOf` phrase acceleration)
+xAccel = dccWDS "xScalAcc" (nounPhraseSent $ phrase xComp `S.of_` phrase acceleration) (S "The" +:+ phrase xComp `S.of_` phrase acceleration)
+yAccel = dccWDS "yScalAcc" (nounPhraseSent $ phrase yComp `S.of_` phrase acceleration) (S "The" +:+ phrase yComp `S.of_` phrase acceleration)
 
 constAccelV = dccWDS "constAccelV" (cn "constant acceleration vector") (S "The" +:+ phrase constAccel +:+ S "vector")
-xConstAccel = dccWDS "xConstAccel" (nounPhraseSent $ phrase xComp `sOf` phrase constAccel) (S "The" +:+ phrase xComp `sOf` phrase constAccel)
-yConstAccel = dccWDS "yConstAccel" (nounPhraseSent $ phrase yComp `sOf` phrase constAccel) (S "The" +:+ phrase yComp `sOf` phrase constAccel)
+xConstAccel = dccWDS "xConstAccel" (nounPhraseSent $ phrase xComp `S.of_` phrase constAccel) (S "The" +:+ phrase xComp `S.of_` phrase constAccel)
+yConstAccel = dccWDS "yConstAccel" (nounPhraseSent $ phrase yComp `S.of_` phrase constAccel) (S "The" +:+ phrase yComp `S.of_` phrase constAccel)
 
 
 --FIXME: COMBINATION HACK (for all below)

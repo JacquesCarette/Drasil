@@ -29,20 +29,20 @@ traceItemSecsFig = llcc (makeFigRef "TraceyItemSecs") $ fig (showingCxnBw tracey
   (resourcePath ++ "Trace.png")
 
 traceReqsItemsFig = llcc (makeFigRef "TraceyReqsItems") $ fig (showingCxnBw traceyMatrix $
-  titleize' requirement `S.sAnd` S "Other" +:+ titleize' item)
+  titleize' requirement `S.and_` S "Other" +:+ titleize' item)
   (resourcePath ++ "RTrace.png")
 
 traceAssumpsOthersFig = llcc (makeFigRef "TraceyAssumpsOthers") $ fig (showingCxnBw traceyMatrix $
-  titleize' assumption `S.sAnd` S "Other" +:+ titleize' item)
+  titleize' assumption `S.and_` S "Other" +:+ titleize' item)
   (resourcePath ++ "ATrace.png")
 
 demandVsSDFig = llcc (makeFigRef "demandVSsod") $ fig ((demandq ^. defn) +:+
-  sParen (ch demand) `S.sVersus` atStart sD +:+ sParen (getAcc stdOffDist)
-  `S.sVersus` atStart charWeight +:+ sParen (ch charWeight))
+  sParen (ch demand) `S.versus` atStart sD +:+ sParen (getAcc stdOffDist)
+  `S.versus` atStart charWeight +:+ sParen (ch charWeight))
   (resourcePath ++ "ASTM_F2248-09.png")
 
 dimlessloadVsARFig = llcc (makeFigRef "dimlessloadVSaspect") $ fig (S "Non dimensional" +:+
   phrase lateralLoad +:+ sParen (ch dimlessLoad)
-  `S.sVersus` titleize aspectRatio +:+ sParen (getAcc aR)
-  `S.sVersus` atStart stressDistFac +:+ sParen (ch stressDistFac))
+  `S.versus` titleize aspectRatio +:+ sParen (getAcc aR)
+  `S.versus` atStart stressDistFac +:+ sParen (ch stressDistFac))
   (resourcePath ++ "ASTM_F2248-09_BeasonEtAl.png")

@@ -41,7 +41,7 @@ calcValuesDesc = foldlSent [S "Calculate the following" +: plural value,
     ch message   +:+ fromSource messageIM
   ]]
 outputValuesDesc = foldlSent [atStart output_, ch message,
-  fromSource messageIM `S.sAnd` ch offset, fromSource offsetIM]
+  fromSource messageIM `S.and_` ch offset, fromSource offsetIM]
 
 {--Nonfunctional Requirements--}
 
@@ -50,7 +50,7 @@ nonfuncReqs = [correct, verifiable, understandable, reusable, maintainable, port
 
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
-  plural output_ `S.the_ofThe'` phrase code, S "have the",
+  plural output_ `S.the_ofTheC` phrase code, S "have the",
   plural property, S "described in", makeRef2S (propCorSol [] [])
   ]) "Correct" nonFuncReqDom
  
@@ -62,7 +62,7 @@ verifiable = cic "verifiable" (foldlSent [
 understandable :: ConceptInstance
 understandable = cic "understandable" (foldlSent [
   atStartNP (the code), S "is modularized with complete",
-  phrase mg `S.sAnd` phrase mis]) "Understandable" nonFuncReqDom
+  phrase mg `S.and_` phrase mis]) "Understandable" nonFuncReqDom
 
 reusable :: ConceptInstance
 reusable = cic "reusable" (foldlSent [atStartNP (the code), S "is modularized"]) "Reusable" nonFuncReqDom
@@ -72,7 +72,7 @@ maintainable = cic "maintainable" (foldlSent [
   S "The traceability between", foldlList Comma List [plural requirement,
   plural assumption, plural thModel, plural genDefn, plural dataDefn, plural inModel,
   plural likelyChg, plural unlikelyChg, plural module_], S "is completely recorded in",
-  plural traceyMatrix, S "in the", getAcc srs `S.sAnd` phrase mg]) "Maintainable" nonFuncReqDom
+  plural traceyMatrix, S "in the", getAcc srs `S.and_` phrase mg]) "Maintainable" nonFuncReqDom
 
 portable :: ConceptInstance
 portable = cic "portable" (foldlSent [

@@ -4,7 +4,7 @@ import Language.Drasil
 import Database.Drasil(ChunkDB, SystemInformation, UMap, _sysinfodb, asOrderedList,
   conceptinsTable, defResolve, refbyTable, traceTable, traceLookup)
 import Utils.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (purpose, component, dependency,
   item, reference, traceyGraph, traceyMatrix)
@@ -27,7 +27,7 @@ traceMGF refs trailing otherContents = SRS.traceyMandG (traceMIntro refs trailin
 -- generally found in this section (in order of being mentioned)
 traceMIntro :: [LabelledContent] -> [Sentence] -> Contents
 traceMIntro refs trailings = UlC $ ulcc $ Paragraph $ foldlSent [phrase purpose
-        `the_ofThe'` plural traceyMatrix, S "is to provide easy", plural reference, 
+        `S.the_ofTheC` plural traceyMatrix, S "is to provide easy", plural reference, 
         S "on what has to be additionally modified if a certain",
         phrase component, S "is changed. Every time a", phrase component, 
         S "is changed, the", plural item, S "in the column of that", 
@@ -38,7 +38,7 @@ traceMIntro refs trailings = UlC $ ulcc $ Paragraph $ foldlSent [phrase purpose
 -- generally found in this section (in order of being mentioned)
 traceGIntro :: [LabelledContent] -> [Sentence] -> [UnlabelledContent]
 traceGIntro refs trailings = map ulcc [Paragraph $ foldlSent
-        [phrase purpose `the_ofThe'` plural traceyGraph,
+        [phrase purpose `S.the_ofTheC` plural traceyGraph,
         S "is also to provide easy", plural reference, S "on what has to be",
         S "additionally modified if a certain", phrase component +:+. S "is changed", 
         S "The arrows in the", plural graph, S "represent" +:+. plural dependency,
@@ -66,7 +66,7 @@ traceMColumns :: ([UID] -> [UID]) -> ([UID] -> [UID]) -> ChunkDB -> [[UID]]
 traceMColumns fc fr c = map ((\u -> filter (`elem` u) $ fc u) . flip traceLookup (c ^. traceTable)) $ traceMReferrers fr c
 
 tableShows :: LabelledContent -> Sentence -> Sentence
-tableShows ref end = makeRef2S ref +:+ S "shows the" +:+ plural dependency `sOf` end
+tableShows ref end = makeRef2S ref +:+ S "shows the" +:+ plural dependency `S.of_` end
 
 generateTraceTableView :: UID -> Sentence -> [TraceViewCat] -> [TraceViewCat] -> SystemInformation -> LabelledContent
 generateTraceTableView u _ [] _ _ = error $ "Expected non-empty list of column-view categories for traceability matrix " ++ u

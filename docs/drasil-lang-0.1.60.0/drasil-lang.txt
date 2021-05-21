@@ -400,6 +400,7 @@ module Language.Drasil
 data Expr
 [Dbl] :: Double -> Expr
 [Int] :: Integer -> Expr
+[ExactDbl] :: Integer -> Expr
 [Str] :: String -> Expr
 [Perc] :: Integer -> Integer -> Expr
 [AssocA] :: AssocArithOper -> [Expr] -> Expr
@@ -484,8 +485,10 @@ data OrdBinOp
 data VVVBinOp
 data VVNBinOp
 data AssocArithOper
-Add :: AssocArithOper
-Mul :: AssocArithOper
+AddI :: AssocArithOper
+AddRe :: AssocArithOper
+MulI :: AssocArithOper
+MulRe :: AssocArithOper
 data AssocBoolOper
 And :: AssocBoolOper
 Or :: AssocBoolOper
@@ -513,9 +516,22 @@ infixr 9 $||
 ($=>) :: Expr -> Expr -> Expr
 ($<=>) :: Expr -> Expr -> Expr
 ($.) :: Expr -> Expr -> Expr
+($-) :: Expr -> Expr -> Expr
+($/) :: Expr -> Expr -> Expr
+infixl 7 $/
+addI :: Expr -> Expr -> Expr
+addRe :: Expr -> Expr -> Expr
+mulI :: Expr -> Expr -> Expr
+mulRe :: Expr -> Expr -> Expr
 
 -- | Get dependencies from an equation
 dep :: Expr -> [String]
+
+-- | Smart constructor for taking the absolute value of an expression
+abs_ :: Expr -> Expr
+
+-- | Smart constructor for negating an expression
+neg :: Expr -> Expr
 
 -- | Smart constructor to take the log of an expression
 log :: Expr -> Expr
@@ -559,9 +575,6 @@ exp :: Expr -> Expr
 -- | Smart constructor to take the square root of an expression
 sqrt :: Expr -> Expr
 
--- | Smart constructor to square a function
-square :: Expr -> Expr
-
 -- | Euclidean function : takes a vector and returns the sqrt of the
 --   sum-of-squares
 euclidean :: [Expr] -> Expr
@@ -571,6 +584,15 @@ norm :: Expr -> Expr
 
 -- | Smart constructor for applying logical negation to an expression
 not_ :: Expr -> Expr
+
+-- | Smart constructor to square a function
+square :: Expr -> Expr
+half :: Expr -> Expr
+oneHalf :: Expr
+oneThird :: Expr
+
+-- | Smart constructor for 1/x expressions
+recip_ :: Expr -> Expr
 
 -- | Smart constructor for calculating the dimension of a vector
 dim :: Expr -> Expr
@@ -583,6 +605,12 @@ int :: Integer -> Expr
 
 -- | Smart constructor for doubles
 dbl :: Double -> Expr
+
+-- | Smart constructor for exact doubles
+exactDbl :: Integer -> Expr
+
+-- | Smart constructor for fractions
+frac :: Integer -> Integer -> Expr
 
 -- | Smart constructor for strings
 str :: String -> Expr

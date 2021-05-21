@@ -155,7 +155,7 @@ impulseQD = mkQuantDef' QP.impulseS (nounPhraseSP "Impulse for Collision") impul
 
 impulseExpr :: Expr
 impulseExpr = (neg (dbl 1 `addRe` sy QP.restitutionCoef) `mulRe` sy initRelVel $.
-  sy normalVect) $/ (((exactDbl 1 $/ sy massA) `addRe` (exactDbl 1 $/ sy massB)) `mulRe`
+  sy normalVect) $/ ((recip_ (sy massA) `addRe` recip_ (sy massB)) `mulRe`
   square (sy normalLen) `addRe`
   (square (sy perpLenA) $/ sy momtInertA) `addRe`
   (square (sy perpLenB) $/ sy momtInertB))

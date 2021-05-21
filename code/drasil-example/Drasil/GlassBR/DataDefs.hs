@@ -159,7 +159,7 @@ tolPre = dd tolPreQD [makeCite astm2009] Nothing "tolLoad"
 --DD9--
 
 tolStrDisFacEq :: Expr
-tolStrDisFacEq = ln (ln (exactDbl 1 $/ (exactDbl 1 $- sy pbTol))
+tolStrDisFacEq = ln (ln (recip_ (exactDbl 1 $- sy pbTol))
   `mulRe` ((sy plateLen `mulRe` sy plateWidth) $^ (sy sflawParamM $- exactDbl 1) $/
     (sy sflawParamK `mulRe` ((sy modElas `mulRe`
     square (sy minThick)) $^ sy sflawParamM) `mulRe` sy lDurFac)))

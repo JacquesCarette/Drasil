@@ -32,12 +32,12 @@ iMods = [eBalanceOnWtr, heatEInWtr]
 ---------
 -- FIXME: comment on reference?
 eBalanceOnWtr :: InstanceModel
-eBalanceOnWtr = im (OthModel eBalanceOnWtrRC) 
+eBalanceOnWtr = im (OthModel eBalanceOnWtrRC)
   [qwC tempC $ UpFrom (Inc, sy tempInit)
-  , qwUC tempInit, qwUC timeFinal, qwUC coilSA, qwUC coilHTC, qwUC htCapW, qwUC wMass] 
+  , qwUC tempInit, qwUC timeFinal, qwUC coilSA, qwUC coilHTC, qwUC htCapW, qwUC wMass]
   (qw tempW) []
   --Tw(0) cannot be presented, there is one more constraint Tw(0) = Tinit
-  [makeCiteInfo koothoor2013 $ RefNote "with PCM removed"] 
+  [makeCiteInfo koothoor2013 $ RefNote "with PCM removed"]
   (Just eBalanceOnWtrDeriv) "eBalanceOnWtr" balWtrNotes
 
 eBalanceOnWtrRC :: RelationConcept
@@ -46,7 +46,7 @@ eBalanceOnWtrRC = makeRC "eBalanceOnWtrRC" (nounPhraseSP $ "Energy balance on " 
   -- (mkLabelSame "eBalnaceOnWtr" (Def Instance))
 
 balWtrRel :: Relation
-balWtrRel = deriv (sy tempW) time $= (exactDbl 1 $/ sy tauW) `mulRe`
+balWtrRel = deriv (sy tempW) time $= recip_ (sy tauW) `mulRe`
   (sy tempC $- apply1 tempW time)
 
 balWtrNotes :: [Sentence]
@@ -79,18 +79,18 @@ eBalanceOnWtrDerivDesc4 = substitute [balanceDecayRate]
 
 eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3, eBalanceOnWtrDerivEqn4 :: Expr
 
-eBalanceOnWtrDerivEqn1 = sy wMass `mulRe` sy htCapW `mulRe` deriv (sy tempW) time $= 
+eBalanceOnWtrDerivEqn1 = sy wMass `mulRe` sy htCapW `mulRe` deriv (sy tempW) time $=
   sy htFluxC `mulRe` sy coilSA
 
-eBalanceOnWtrDerivEqn2 = sy wMass `mulRe` sy htCapW `mulRe` deriv (sy tempW) time $= 
+eBalanceOnWtrDerivEqn2 = sy wMass `mulRe` sy htCapW `mulRe` deriv (sy tempW) time $=
   sy coilHTC `mulRe` sy coilSA `mulRe`  (sy tempC $- sy tempW)
 
-eBalanceOnWtrDerivEqn3 = deriv (sy tempW) time $= 
-  (sy coilHTC `mulRe` sy coilSA $/ 
+eBalanceOnWtrDerivEqn3 = deriv (sy tempW) time $=
+  (sy coilHTC `mulRe` sy coilSA $/
   (sy wMass `mulRe` sy htCapW)) `mulRe`  (sy tempC $- sy tempW)
 
-eBalanceOnWtrDerivEqn4 =  
-  deriv (sy tempW) time $= (exactDbl 1 $/ sy tauW) `mulRe` (sy tempC $- sy tempW)
+eBalanceOnWtrDerivEqn4 =
+  deriv (sy tempW) time $= recip_ (sy tauW) `mulRe` (sy tempC $- sy tempW)
 
 eBalanceOnWtrDerivEqns :: [Expr]
 eBalanceOnWtrDerivEqns = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalanceOnWtrDerivEqn3, eBalanceOnWtrDerivEqn4]

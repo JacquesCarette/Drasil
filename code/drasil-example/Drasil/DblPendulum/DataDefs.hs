@@ -60,7 +60,7 @@ frequencyDDQD :: QDefinition
 frequencyDDQD = mkQuantDef QP.frequency frequencyDDEqn
 
 frequencyDDEqn :: Expr
-frequencyDDEqn = exactDbl 1 $/ sy QP.period
+frequencyDDEqn = recip_ $ sy QP.period
 
 
 frequencyRef :: Sentence
@@ -89,7 +89,7 @@ periodSHMDDQD :: QDefinition
 periodSHMDDQD = mkQuantDef QP.period periodSHMDDEqn
 
 periodSHMDDEqn :: Expr
-periodSHMDDEqn = exactDbl 1 $/ sy QP.frequency
+periodSHMDDEqn = recip_ $ sy QP.frequency
 
 periodSHMRef :: Sentence
 periodSHMRef = ch QP.period `S.sIs` S "from" +:+ makeRef2S frequencyDD

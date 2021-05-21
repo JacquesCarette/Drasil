@@ -102,6 +102,10 @@ exactDbl = ExactDbl
 frac :: Integer -> Integer -> Expr
 frac l r = exactDbl l $/ exactDbl r
 
+-- | Smart constructor for 1/x expressions
+recip_ :: Expr -> Expr
+recip_ denom = exactDbl 1 $/ denom
+
 -- | Smart constructor for strings
 str :: String -> Expr
 str = Str

@@ -14,7 +14,7 @@ module Drasil.DocLang.SRS (appendix, assumpt, assumptLabel, charOfIR, datCon,
 
 import Language.Drasil
 import Utils.Drasil.Concepts
-import qualified Utils.Drasil.Sentence as S (forTTPS, forTTPP)
+import qualified Utils.Drasil.Sentence as S (forTPS, forTPP)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
   charOfIR, client, customer, consVals, datumConstraint, functionalRequirement,
@@ -30,9 +30,9 @@ import qualified Data.Drasil.TheoryConcepts as Doc (dataDefn, genDefn, inModel, 
 -- | SRS document constructor. 
 -- Create the SRS from given system name, authors, and sections
 doc, doc' :: NamedIdea c => c -> Sentence -> [Section] -> Document
-doc  sys = Document (Doc.srs `S.forTTPS` sys)
+doc  sys = Document (Doc.srs `S.forTPS` sys)
 -- | Uses plural of system for title.
-doc' sys = Document (Doc.srs `S.forTTPP` sys)
+doc' sys = Document (Doc.srs `S.forTPP` sys)
 
 -- | Standard SRS section builders
 intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, 

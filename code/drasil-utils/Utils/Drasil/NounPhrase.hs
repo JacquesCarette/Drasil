@@ -1,5 +1,5 @@
 module Utils.Drasil.NounPhrase (insertString, prependString, insertSent, prependSent,
-the, theGen, a, aGen, ofThe, ofThePS, ofTheGen, inThe, inThePS, inTheGen, the_ofThe, the_ofThePS, the_ofTheGen,
+the, theGen, a_, a_Gen, ofThe, ofThePS, ofTheGen, inThe, inThePS, inTheGen, the_ofThe, the_ofThePS, the_ofTheGen,
 for, forPS, forGen, of_, of_PS, of_Gen, of_GenGen, with, and_, and_PS, and_Gen, and_GenGen) where
 
 import Language.Drasil
@@ -32,11 +32,11 @@ theGen :: (NP -> Sentence) -> NP -> NP
 theGen f1 t1 = nounPhrase'' (S "the" +:+ phraseNP t1) (S "the" +:+ f1 t1) CapFirst CapWords
 
 -- | Prepends "a" to a 'NP'.
-a :: NP -> NP
-a = prependString "a" 
+a_ :: NP -> NP
+a_ = prependString "a" 
 -- | Similar to 'a', but accepts a function that determines the plural case.
-aGen :: (NP -> Sentence) -> NP -> NP
-aGen f1 t1 = nounPhrase'' (S "a" +:+ phraseNP t1) (S "a" +:+ f1 t1) CapFirst CapWords
+a_Gen :: (NP -> Sentence) -> NP -> NP
+a_Gen f1 t1 = nounPhrase'' (S "a" +:+ phraseNP t1) (S "a" +:+ f1 t1) CapFirst CapWords
 
 -- | Inserts "of the" between two 'NP's. Plural case is @(phraseNP t1) +:+ "of the" +:+ (pluralNP t2)@.
 ofThe :: NP -> NP -> NP

@@ -69,7 +69,7 @@ import Drasil.SWHS.Unitals (absTol, coilHTC, coilSA, consTol, constrained,
 -------------------------------------------------------------------------------
 
 srs :: Document
-srs = mkDoc mkSRS S.forTT si
+srs = mkDoc mkSRS S.forT si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration

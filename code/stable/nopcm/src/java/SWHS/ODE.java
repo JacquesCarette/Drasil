@@ -34,6 +34,6 @@ public class ODE implements FirstOrderDifferentialEquations {
         \param dT_W change in temperature of the water (degreeC)
     */
     public void computeDerivatives(double t, double[] T_W, double[] dT_W) {
-        dT_W[0] = 1 / tau_W * (T_C - T_W[0]);
+        dT_W[0] = 1.0 / tau_W * (T_C - T_W[0]);
     }
 }

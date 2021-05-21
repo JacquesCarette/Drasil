@@ -41,34 +41,34 @@ class InputParameters {
     /** Verifies that input values satisfy the physical constraints
     */
     private func input_constraints() -> Void {
-        if !(self.v_launch > Double(0)) {
+        if !(self.v_launch > 0.0) {
             print("Warning: ", terminator: "")
             print("v_launch has value ", terminator: "")
             print(self.v_launch, terminator: "")
             print(", but is suggested to be ", terminator: "")
             print("above ", terminator: "")
-            print(0, terminator: "")
+            print(0.0, terminator: "")
             print(".")
         }
-        if !(Double(0) < self.theta && self.theta < Double.pi / Double(2)) {
+        if !(0.0 < self.theta && self.theta < Double.pi / 2.0) {
             print("Warning: ", terminator: "")
             print("theta has value ", terminator: "")
             print(self.theta, terminator: "")
             print(", but is suggested to be ", terminator: "")
             print("between ", terminator: "")
-            print(0, terminator: "")
+            print(0.0, terminator: "")
             print(" and ", terminator: "")
-            print(Double.pi / Double(2), terminator: "")
+            print(Double.pi / 2.0, terminator: "")
             print(" ((pi)/(2))", terminator: "")
             print(".")
         }
-        if !(self.p_target > Double(0)) {
+        if !(self.p_target > 0.0) {
             print("Warning: ", terminator: "")
             print("p_target has value ", terminator: "")
             print(self.p_target, terminator: "")
             print(", but is suggested to be ", terminator: "")
             print("above ", terminator: "")
-            print(0, terminator: "")
+            print(0.0, terminator: "")
             print(".")
         }
     }

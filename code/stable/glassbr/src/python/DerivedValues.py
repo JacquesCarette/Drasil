@@ -20,7 +20,7 @@ def derived_values(inParams):
     print(" in module DerivedValues", file=outfile)
     outfile.close()
     
-    inParams.LDF = (3.0 / 60) ** (7.0 / 16)
+    inParams.LDF = (3.0 / 60.0) ** (7.0 / 16.0)
     outfile = open("log.txt", "a")
     print("var 'inParams.LDF' assigned ", end="", file=outfile)
     print(inParams.LDF, end="", file=outfile)
@@ -51,7 +51,7 @@ def derived_values(inParams):
     else :
         raise Exception("Undefined case encountered in function GTF")
     
-    inParams.SD = math.sqrt(inParams.SD_x ** 2 + inParams.SD_y ** 2 + inParams.SD_z ** 2)
+    inParams.SD = math.sqrt(inParams.SD_x ** 2.0 + inParams.SD_y ** 2.0 + inParams.SD_z ** 2.0)
     outfile = open("log.txt", "a")
     print("var 'inParams.SD' assigned ", end="", file=outfile)
     print(inParams.SD, end="", file=outfile)

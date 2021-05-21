@@ -38,7 +38,7 @@ factOfSafetyQD :: QDefinition
 factOfSafetyQD = mkQuantDef' fs factorOfSafety factOfSafetyExpr
 
 factOfSafetyExpr :: Expr
-factOfSafetyExpr = sy resistiveShear / sy mobilizedShear
+factOfSafetyExpr = sy resistiveShear $/ sy mobilizedShear
 
 --
 ------------- New Chunk -----------
@@ -53,15 +53,15 @@ equilibriumRC = makeRC "equilibriumRC" (nounPhraseSP "equilibrium") eqDesc eqRel
 
 -- FIXME: Variable "i" is a hack.  But we need to sum over something!
 eqRel :: Relation
-eqRel = foldr (($=) . sumAll (Variable "i") . sy) 0 [fx, fy, genericM]
+eqRel = foldr (($=) . sumAll (Variable "i") . sy) (int 0) [fx, fy, genericM]
 
 eqDesc :: Sentence
 eqDesc = foldlSent [S "For a body in static equilibrium, the net",
   plural force, S "and", plural genericM +:+. S "acting on the body will cancel out",
   S "Assuming a 2D problem", sParen (makeRef2S assumpENSL) `sC` S "the", getTandS fx `S.sAnd`
-  getTandS fy, S "will be equal to" +:+. E 0, S "All", plural force,
+  getTandS fy, S "will be equal to" +:+. E (exactDbl 0), S "All", plural force,
   S "and their", phrase distance, S "from the chosen point of rotation",
-  S "will create a net", phrase genericM, S "equal to" +:+ E 0]
+  S "will create a net", phrase genericM, S "equal to" +:+ E (exactDbl 0)]
 
 --
 ------------- New Chunk -----------
@@ -77,7 +77,7 @@ mcShrStrgthRC = makeRC "mcShrStrgthRC" (nounPhraseSP "Mohr-Coulumb shear strengt
   mcShrStrgthDesc mcShrStrgthRel
 
 mcShrStrgthRel :: Relation
-mcShrStrgthRel = sy shrStress $= (sy effNormStress * tan (sy fricAngle) + sy effCohesion)
+mcShrStrgthRel = sy shrStress $= (sy effNormStress `mulRe` tan (sy fricAngle) `addRe` sy effCohesion)
 
 mcShrStrgthDesc :: Sentence
 mcShrStrgthDesc = foldlSent [S "In this", phrase model, S "the",
@@ -107,7 +107,7 @@ effStressRC = makeRC "effStressRC"
   (nounPhraseSP "effective stress") effStressDesc effStressRel -- l4
 
 effStressRel :: Relation
-effStressRel = sy effectiveStress $= sy totNormStress - sy porePressure
+effStressRel = sy effectiveStress $= sy totNormStress $- sy porePressure
 
 effStressDesc :: Sentence
 effStressDesc = foldlSent [ch totNormStress, S "is defined in", makeRef2S normStressDD]

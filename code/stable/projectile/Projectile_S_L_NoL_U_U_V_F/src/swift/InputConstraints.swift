@@ -8,34 +8,34 @@
     - Parameter p_target: target position: the distance from the launcher to the target (m)
 */
 func input_constraints(_ v_launch: Float, _ theta: Float, _ p_target: Float) -> Void {
-    if !(v_launch > Float(0)) {
+    if !(v_launch > 0.0) {
         print("Warning: ", terminator: "")
         print("v_launch has value ", terminator: "")
         print(v_launch, terminator: "")
         print(", but is suggested to be ", terminator: "")
         print("above ", terminator: "")
-        print(0, terminator: "")
+        print(0.0, terminator: "")
         print(".")
     }
-    if !(Float(0) < theta && Double(theta) < Double.pi / Double(2)) {
+    if !(0.0 < theta && Double(theta) < Double.pi / Double(2.0)) {
         print("Warning: ", terminator: "")
         print("theta has value ", terminator: "")
         print(theta, terminator: "")
         print(", but is suggested to be ", terminator: "")
         print("between ", terminator: "")
-        print(0, terminator: "")
+        print(0.0, terminator: "")
         print(" and ", terminator: "")
-        print(Double.pi / Double(2), terminator: "")
+        print(Double.pi / Double(2.0), terminator: "")
         print(" ((pi)/(2))", terminator: "")
         print(".")
     }
-    if !(p_target > Float(0)) {
+    if !(p_target > 0.0) {
         print("Warning: ", terminator: "")
         print("p_target has value ", terminator: "")
         print(p_target, terminator: "")
         print(", but is suggested to be ", terminator: "")
         print("above ", terminator: "")
-        print(0, terminator: "")
+        print(0.0, terminator: "")
         print(".")
     }
 }

@@ -485,7 +485,7 @@ dataContFooter = foldlSent_ $ map foldlSent [
   [sParen (S "++"), S "The", plural constraint, S "on the", phrase surArea,
   S "are calculated by considering the", phrase surArea, S "to", phrase vol +:+.
   S "ratio", S "The", phrase assumption, S "is that the lowest ratio is 1" `S.sAnd`
-  S "the highest possible is", E (2 / sy thickness) `sC` S "where", ch thickness,
+  S "the highest possible is", E (exactDbl 2 $/ sy thickness) `sC` S "where", ch thickness,
   S "is the thickness of a" +:+. (Quote (S "sheet") `S.sOf` short phsChgMtrl),
   S "A thin sheet has the greatest", phrase surArea, S "to", phrase vol, S "ratio"],
 
@@ -541,10 +541,10 @@ propCorSolDeriv1 lce ewat en co pcmat g1hfc g2hfp su ht  =
 
 propCorSolDeriv2 :: Contents
 propCorSolDeriv2 = eqUnR'
-  (sy watE $= defint (eqSymb time) 0 (sy time)
-  (sy coilHTC * sy coilSA * (sy tempC - apply1 tempW time))
-  - defint (eqSymb time) 0 (sy time)
-  (sy pcmHTC * sy pcmSA * (apply1 tempW time -
+  (sy watE $= defint (eqSymb time) (exactDbl 0) (sy time)
+  (sy coilHTC `mulRe` sy coilSA `mulRe` (sy tempC $- apply1 tempW time))
+  $- defint (eqSymb time) (exactDbl 0) (sy time)
+  (sy pcmHTC `mulRe` sy pcmSA `mulRe` (apply1 tempW time $-
   apply1 tempPCM time)))
 
 propCorSolDeriv3 :: NamedIdea a => a -> UnitalChunk -> CI -> ConceptChunk -> Contents
@@ -555,8 +555,8 @@ propCorSolDeriv3 epcm en pcmat wa =
 
 propCorSolDeriv4 :: Contents
 propCorSolDeriv4 = eqUnR'
-  (sy pcmE $= defint (eqSymb time) 0 (sy time)
-  (sy pcmHTC * sy pcmSA * (apply1 tempW time - 
+  (sy pcmE $= defint (eqSymb time) (exactDbl 0) (sy time)
+  (sy pcmHTC `mulRe` sy pcmSA `mulRe` (apply1 tempW time $- 
   apply1 tempPCM time)))
 
 propCorSolDeriv5 :: ConceptChunk -> CI -> CI -> Contents

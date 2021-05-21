@@ -2,7 +2,6 @@
 -- | The Drasil Expression language
 module Language.Drasil.Expr where
 
-import Data.Ratio (denominator, numerator)
 import Prelude hiding (sqrt)
 
 import Language.Drasil.Space (Space(..), DomainDesc, RealInterval)
@@ -47,7 +46,7 @@ data VVVBinOp = Cross
 data VVNBinOp = Dot
   deriving Eq
 
-data AssocArithOper = Add | Mul
+data AssocArithOper = AddI | AddRe | MulI | MulRe
   deriving Eq
 
 data AssocBoolOper = And | Or
@@ -72,6 +71,7 @@ data Completeness = Complete | Incomplete
 data Expr where
   Dbl      :: Double -> Expr
   Int      :: Integer -> Expr
+  ExactDbl :: Integer -> Expr
   Str      :: String -> Expr
   Perc     :: Integer -> Integer -> Expr
   AssocA   :: AssocArithOper -> [Expr] -> Expr
@@ -138,6 +138,35 @@ data Expr where
 ($.) :: Expr -> Expr -> Expr
 ($.) = VVNBinaryOp Dot
 
+-- Generate below 4 functions with TH?
+addI :: Expr -> Expr -> Expr
+addI l (Int 0) = l
+addI (Int 0) r = r
+addI (AssocA AddI l) (AssocA AddI r) = AssocA AddI (l ++ r)
+addI (AssocA AddI l) r = AssocA AddI (l ++ [r])
+addI l (AssocA AddI r) = AssocA AddI (l : r)
+addI l r = AssocA AddI [l, r]
+
+addRe :: Expr -> Expr -> Expr
+addRe l (Int 0) = l
+addRe (Int 0) r = r
+addRe (AssocA AddRe l) (AssocA AddRe r) = AssocA AddRe (l ++ r)
+addRe (AssocA AddRe l) r = AssocA AddRe (l ++ [r])
+addRe l (AssocA AddRe r) = AssocA AddRe (l : r)
+addRe l r = AssocA AddRe [l, r]
+
+mulI :: Expr -> Expr -> Expr
+mulI (AssocA MulI l) (AssocA MulI r) = AssocA MulI (l ++ r)
+mulI (AssocA MulI l) r = AssocA MulI (l ++ [r])
+mulI l (AssocA MulI r) = AssocA MulI (l : r)
+mulI l r = AssocA MulI [l, r]
+
+mulRe :: Expr -> Expr -> Expr
+mulRe (AssocA MulRe l) (AssocA MulRe r) = AssocA MulRe (l ++ r)
+mulRe (AssocA MulRe l) r = AssocA MulRe (l ++ [r])
+mulRe l (AssocA MulRe r) = AssocA MulRe (l : r)
+mulRe l r = AssocA MulRe [l, r]
+
 ($-), ($/), ($^) :: Expr -> Expr -> Expr
 ($-) = ArithBinaryOp Subt
 ($/) = ArithBinaryOp Frac
@@ -156,27 +185,27 @@ type Variable = String
 data DerivType = Part | Total
   deriving Eq
 
-instance Num Expr where
-  (Int 0)        + b              = b
-  a              + (Int 0)        = a
-  (AssocA Add l) + (AssocA Add m) = AssocA Add (l ++ m)
-  (AssocA Add l) + b              = AssocA Add (l ++ [b])
-  a              + (AssocA Add l) = AssocA Add (a : l)
-  a              + b              = AssocA Add [a, b]
+-- instance Num Expr where
+--   (Int 0)        + b              = b
+--   a              + (Int 0)        = a
+--   (AssocA Add l) + (AssocA Add m) = AssocA Add (l ++ m)
+--   (AssocA Add l) + b              = AssocA Add (l ++ [b])
+--   a              + (AssocA Add l) = AssocA Add (a : l)
+--   a              + b              = AssocA Add [a, b]
 
-  (AssocA Mul l) * (AssocA Mul m) = AssocA Mul (l ++ m)
-  (AssocA Mul l) * b              = AssocA Mul (l ++ [b])
-  a              * (AssocA Mul l) = AssocA Mul (a : l)
-  a              * b              = AssocA Mul [a, b]
+--   (AssocA Mul l) * (AssocA Mul m) = AssocA Mul (l ++ m)
+--   (AssocA Mul l) * b              = AssocA Mul (l ++ [b])
+--   a              * (AssocA Mul l) = AssocA Mul (a : l)
+--   a              * b              = AssocA Mul [a, b]
 
-  a - b = ArithBinaryOp Subt a b
+--   a - b = ArithBinaryOp Subt a b
   
-  fromInteger = Int
-  abs         = UnaryOp Abs
-  negate      = UnaryOp Neg
+--   fromInteger = Int
+--   abs         = UnaryOp Abs
+--   negate      = UnaryOp Neg
 
-  -- this is a Num wart
-  signum _ = error "should not use signum in expressions"
+--   -- this is a Num wart
+--   signum _ = error "should not use signum in expressions"
 
 instance Eq Expr where
   Dbl a               == Dbl b               =   a == b
@@ -201,7 +230,7 @@ instance Eq Expr where
   VVNBinaryOp o a b   == VVNBinaryOp p c d   =   o == p && a == c && b == d
   _                   == _                   =   False
 
-instance Fractional Expr where
-  a / b = ArithBinaryOp Frac a b
-  fromRational r = ArithBinaryOp Frac (fromInteger $ numerator   r)
-                                      (fromInteger $ denominator r)
+-- instance Fractional Expr where
+--   a / b = ArithBinaryOp Frac a b
+--   fromRational r = ArithBinaryOp Frac (fromInteger $ numerator   r)
+--                                       (fromInteger $ denominator r)

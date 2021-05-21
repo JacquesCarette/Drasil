@@ -4,7 +4,7 @@ module Drasil.DblPendulum.IMods (iMods, angularDisplacementIM) where
 import Prelude hiding (cos, sin)
 
 import Language.Drasil
-import Theory.Drasil (InstanceModel, imNoRefs, qwC, ModelKinds (OthModel)) 
+import Theory.Drasil (InstanceModel, imNoRefs, qwC, ModelKinds (OthModel))
   --imNoDerivNoRefs, )
 import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
@@ -25,20 +25,20 @@ iMods = [angularDisplacementIM]
 
 ---
 angularDisplacementIM :: InstanceModel
-angularDisplacementIM = imNoRefs (OthModel angularDisplacementRC) 
-  [qwC lenRod $ UpFrom (Exc, 0)
-  ,qwC initialPendAngle $ UpFrom (Exc, 0)
-  , qwC gravitationalAccel $ UpFrom (Exc, 0)]
-  (qw pendDisplacementAngle) [UpFrom (Exc, 0)]
+angularDisplacementIM = imNoRefs (OthModel angularDisplacementRC)
+  [qwC lenRod $ UpFrom (Exc, exactDbl 0)
+  ,qwC initialPendAngle $ UpFrom (Exc, exactDbl 0)
+  , qwC gravitationalAccel $ UpFrom (Exc, exactDbl 0)]
+  (qw pendDisplacementAngle) [UpFrom (Exc, exactDbl 0)]
   (Just angularDisplacementDeriv) "calOfAngularDisplacement" [angularDispConstraintNote]
-  
+
 
 angularDisplacementRC :: RelationConcept
 angularDisplacementRC = makeRC "angularDisplacementRC" (nounPhraseSP "calculation of angular displacement")
-  EmptyS $ apply1 pendDisplacementAngle time $= sy initialPendAngle * cos ( sy angularFrequency * sy time)
-  
+  EmptyS $ apply1 pendDisplacementAngle time $= sy initialPendAngle `mulRe` cos ( sy angularFrequency `mulRe` sy time)
 
-angularDisplacementDeriv :: Derivation 
+
+angularDisplacementDeriv :: Derivation
 angularDisplacementDeriv = mkDerivName (phrase angularDisplacement) (weave [angularDisplacementDerivSents, map E angularDisplacementDerivEqns])
 
 angularDisplacementDerivSents :: [Sentence]
@@ -57,16 +57,16 @@ angularDisplacementDerivSent1 = foldlSentCol [S "When", phraseNP (the pendulum) 
 angularDisplacementDerivSent2 = foldlSentCol [S "Where", ch torque `S.denotes` phrase torque `sC`
                                     ch momentOfInertia `S.denotes` phrase momentOfInertia `S.sAnd` ch angularAccel `S.denotes`
                                     (phrase angularAccel !.), S "This implies"]
-                 
 
-angularDisplacementDerivSent3 = foldlSentCol [S "And rearranged as" ] 
+
+angularDisplacementDerivSent3 = foldlSentCol [S "And rearranged as" ]
 
 angularDisplacementDerivSent4 = foldlSentCol [S "If", phraseNP (theNP (amplitude `of_` angularDisplacement)), S "is small enough" `sC`
   S "we can approximate", E (sin (sy pendDisplacementAngle) $= sy pendDisplacementAngle), S "for the purpose of a simple", phrase pendulum,
   S "at very small" +:+. plural angle,
   S "Then", phraseNP (theNP (equation `of_` motion)), S "reduces to", phraseNP (theNP (equation `of_` shm))]                                       
 
-angularDisplacementDerivSent5 = foldlSentCol [S "Thus the", phrase shm, S "is" ] 
+angularDisplacementDerivSent5 = foldlSentCol [S "Thus the", phrase shm, S "is" ]
 
 angularDisplacementDerivEqns :: [Expr]
 angularDisplacementDerivEqns = [angularDisplacementDerivEqn1, angularDisplacementDerivEqn2, angularDisplacementDerivEqn3,
@@ -75,20 +75,20 @@ angularDisplacementDerivEqns = [angularDisplacementDerivEqn1, angularDisplacemen
 angularDisplacementDerivEqn1, angularDisplacementDerivEqn2, angularDisplacementDerivEqn3,
  angularDisplacementDerivEqn4, angularDisplacementDerivEqn5 :: Expr
 
-angularDisplacementDerivEqn1 = sy torque $= sy momentOfInertia * sy angularAccel
+angularDisplacementDerivEqn1 = sy torque $= sy momentOfInertia `mulRe` sy angularAccel
 
-angularDisplacementDerivEqn2 = negate (sy mass * sy gravitationalAccel * sin (sy pendDisplacementAngle) * sy lenRod) $= sy mass * sy lenRod $^ 2 
-                                * deriv (deriv (sy pendDisplacementAngle) time) time 
-                                                   
-angularDisplacementDerivEqn3 = deriv (deriv (sy pendDisplacementAngle) time) time + sy gravitationalAccel/ sy lenRod * sin (sy pendDisplacementAngle) $= 0
+angularDisplacementDerivEqn2 = neg (sy mass `mulRe` sy gravitationalAccel `mulRe` sin (sy pendDisplacementAngle) `mulRe` sy lenRod) $= (sy mass `mulRe` square (sy lenRod))
+                                `mulRe` deriv (deriv (sy pendDisplacementAngle) time) time
 
-angularDisplacementDerivEqn4 = deriv (deriv (sy pendDisplacementAngle) time) time + sy gravitationalAccel/ sy lenRod * sy pendDisplacementAngle $= 0
+angularDisplacementDerivEqn3 = deriv (deriv (sy pendDisplacementAngle) time) time `addRe` ((sy gravitationalAccel $/ sy lenRod) `mulRe` sin (sy pendDisplacementAngle)) $= exactDbl 0
 
-angularDisplacementDerivEqn5 = apply1 pendDisplacementAngle time $= sy initialPendAngle * cos ( sy angularFrequency * sy time)
+angularDisplacementDerivEqn4 = deriv (deriv (sy pendDisplacementAngle) time) time `addRe` ((sy gravitationalAccel $/ sy lenRod) `mulRe` sy pendDisplacementAngle) $= exactDbl 0
+
+angularDisplacementDerivEqn5 = apply1 pendDisplacementAngle time $= sy initialPendAngle `mulRe` cos ( sy angularFrequency `mulRe` sy time)
 
 ----------------------
-    
- 
+
+
 
 
 -- Notes
@@ -97,7 +97,7 @@ angularDispConstraintNote :: Sentence
 
 
 angularDispConstraintNote = S "The" +:+ phrase constraint +:+
-     E ( sy initialPendAngle $> 0) `S.sIs` S "required" +:+.
+     E ( sy initialPendAngle $> exactDbl 0) `S.sIs` S "required" +:+.
      S "The" +:+ phrase angularFrequency `S.sIs` definedIn'' angFrequencyGD
 
 --gravitationalAccelConstNote, landAndTargPosConsNote, landPosNote,

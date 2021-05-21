@@ -221,34 +221,34 @@ class InputParameters {
             throw "Error closing file."
         }
         
-        if !(self.v_launch > Float(0)) {
+        if !(self.v_launch > 0.0) {
             print("Warning: ", terminator: "")
             print("v_launch has value ", terminator: "")
             print(self.v_launch, terminator: "")
             print(", but is suggested to be ", terminator: "")
             print("above ", terminator: "")
-            print(0, terminator: "")
+            print(0.0, terminator: "")
             print(".")
         }
-        if !(Float(0) < self.theta && Double(self.theta) < Double.pi / Double(2)) {
+        if !(0.0 < self.theta && Double(self.theta) < Double.pi / Double(2.0)) {
             print("Warning: ", terminator: "")
             print("theta has value ", terminator: "")
             print(self.theta, terminator: "")
             print(", but is suggested to be ", terminator: "")
             print("between ", terminator: "")
-            print(0, terminator: "")
+            print(0.0, terminator: "")
             print(" and ", terminator: "")
-            print(Double.pi / Double(2), terminator: "")
+            print(Double.pi / Double(2.0), terminator: "")
             print(" ((pi)/(2))", terminator: "")
             print(".")
         }
-        if !(self.p_target > Float(0)) {
+        if !(self.p_target > 0.0) {
             print("Warning: ", terminator: "")
             print("p_target has value ", terminator: "")
             print(self.p_target, terminator: "")
             print(", but is suggested to be ", terminator: "")
             print("above ", terminator: "")
-            print(0, terminator: "")
+            print(0.0, terminator: "")
             print(".")
         }
     }
@@ -295,7 +295,7 @@ func func_t_flight(_ inParams: inout InputParameters) throws -> Float {
         throw "Error closing file."
     }
     
-    return Float(2) * inParams.v_launch * sin(inParams.theta) / inParams.g_vect
+    return 2.0 * inParams.v_launch * sin(inParams.theta) / inParams.g_vect
 }
 
 /** Calculates landing position: the distance from the launcher to the final position of the projectile (m)
@@ -339,7 +339,7 @@ func func_p_land(_ inParams: inout InputParameters) throws -> Float {
         throw "Error closing file."
     }
     
-    return Float(2) * pow(inParams.v_launch, 2) * sin(inParams.theta) * cos(inParams.theta) / inParams.g_vect
+    return 2.0 * pow(inParams.v_launch, 2.0) * sin(inParams.theta) * cos(inParams.theta) / inParams.g_vect
 }
 
 /** Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
@@ -464,7 +464,7 @@ func func_s(_ inParams: inout InputParameters, _ d_offset: Float) throws -> Stri
     if abs(d_offset / inParams.p_target) < inParams.epsilon {
         return "The target was hit."
     }
-    else if d_offset < Float(0) {
+    else if d_offset < 0.0 {
         return "The projectile fell short."
     }
     else {

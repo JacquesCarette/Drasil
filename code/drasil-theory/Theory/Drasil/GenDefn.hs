@@ -21,16 +21,16 @@ makeLenses ''GenDefn
 lensMk :: forall a. Lens' QDefinition a -> Lens' RelationConcept a -> Lens' GenDefn a
 lensMk lq lr = lens g s
     where g :: GenDefn -> a
-          g gd_ = elimMk lq lr (gd_ ^. mk)
+          g gd_ = elimMk lq undefined lr (gd_ ^. mk)
           s :: GenDefn -> a -> GenDefn
-          s gd_ x = set mk (setMk (gd_ ^. mk) lq lr x) gd_
+          s gd_ x = set mk (setMk (gd_ ^. mk) lq undefined lr x) gd_
 
 instance HasUID             GenDefn where uid = lensMk uid uid
 instance NamedIdea          GenDefn where term = lensMk term term
-instance Idea               GenDefn where getA = elimMk (to getA) (to getA) . view mk
+instance Idea               GenDefn where getA = elimMk (to getA) (to getA) (to getA) . view mk
 instance Definition         GenDefn where defn = lensMk defn defn
-instance ConceptDomain      GenDefn where cdom = elimMk (to cdom) (to cdom) . view mk
-instance ExprRelat          GenDefn where relat = elimMk (to relat) (to relat) . view mk
+instance ConceptDomain      GenDefn where cdom = elimMk (to cdom) undefined (to cdom) . view mk
+instance ExprRelat          GenDefn where relat = elimMk (to relat) undefined (to relat) . view mk
 instance HasDerivation      GenDefn where derivations = deri
 instance HasReference       GenDefn where getReferences = ref
 instance HasShortName       GenDefn where shortname = view sn
@@ -46,12 +46,14 @@ instance Referable          GenDefn where
 gd :: (IsUnit u) => ModelKinds -> Maybe u ->
   Maybe Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
 gd mkind _   _     []   _  = error $ "Source field of " ++ mkind ^. uid ++ " is empty"
+gd (EquationalRealm q _) _ _ _ _ = error $ q ^. uid ++ ": GenDefn's do not support EquationalRealms"
 gd mkind u derivs refs sn_ = 
   GD mkind (fmap unitWrapper u) derivs refs (shortname' sn_) (prependAbrv genDefn sn_)
 
 -- | Smart constructor for general definitions; no references
 gdNoRefs :: (IsUnit u) => ModelKinds -> Maybe u ->
   Maybe Derivation -> String -> [Sentence] -> GenDefn
+gdNoRefs (EquationalRealm q _) _ _ _ = error $ q ^. uid ++ ": GenDefn's do not support EquationalRealms"
 gdNoRefs mkind u derivs sn_ = 
   GD mkind (fmap unitWrapper u) derivs [] (shortname' sn_) (prependAbrv genDefn sn_)
 

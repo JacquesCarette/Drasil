@@ -30,19 +30,19 @@ data InstanceModel = IM { _mk :: ModelKinds
                         }
 makeLenses ''InstanceModel
 
-lensMk :: forall a. Lens' QDefinition a -> Lens' RelationConcept a -> Lens' InstanceModel a
-lensMk lq lr = lens g s
+lensMk :: forall a. Lens' QDefinition a -> Lens' QuantityDict a -> Lens' RelationConcept a -> Lens' InstanceModel a
+lensMk lq lqd lr = lens g s
     where g :: InstanceModel -> a
-          g im_ = elimMk lq lr (im_ ^. mk)
+          g im_ = elimMk lq lqd lr (im_ ^. mk)
           s :: InstanceModel -> a -> InstanceModel
-          s im_ x = set mk (setMk (im_ ^. mk) lq lr x) im_
+          s im_ x = set mk (setMk (im_ ^. mk) lq lqd lr x) im_
 
-instance HasUID             InstanceModel where uid = lensMk uid uid
-instance NamedIdea          InstanceModel where term = lensMk term term
-instance Idea               InstanceModel where getA = elimMk (to getA) (to getA) . view mk
-instance Definition         InstanceModel where defn = lensMk defn defn
-instance ConceptDomain      InstanceModel where cdom = elimMk (to cdom) (to cdom) . view mk
-instance ExprRelat          InstanceModel where relat = elimMk (to relat) (to relat) . view mk
+instance HasUID             InstanceModel where uid = lensMk uid uid uid
+instance NamedIdea          InstanceModel where term = lensMk term term term
+instance Idea               InstanceModel where getA = elimMk (to getA) (to getA) (to getA) . view mk
+instance Definition         InstanceModel where defn = lensMk defn (error "ambiguous defn in EquationalRealm") defn
+instance ConceptDomain      InstanceModel where cdom = elimMk (to cdom) (error "ambiguous concept domain for EquationalRealm") (to cdom) . view mk
+instance ExprRelat          InstanceModel where relat = elimMk (to relat) (error "ambiguous relation for EquationalRealm") (to relat) . view mk
 instance HasDerivation      InstanceModel where derivations = deri
 instance HasReference       InstanceModel where getReferences = ref
 instance HasShortName       InstanceModel where shortname = lb

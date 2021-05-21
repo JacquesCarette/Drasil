@@ -1,8 +1,10 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.GamePhysics.TMods (tMods, newtonSL, newtonSLR, newtonTL, newtonLUG) where
 
+import qualified Data.List.NonEmpty as NE
+
 import Language.Drasil
-import Theory.Drasil (TheoryModel, tmNoRefs, ModelKinds(OthModel, EquationalModel))
+import Theory.Drasil
 import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 
@@ -45,14 +47,20 @@ newtonTLNote = foldlSent [(S "Every action has an equal and opposite reaction" !
 -- T3 : Newton's law of universal gravitation --
 
 newtonLUG :: TheoryModel
-newtonLUG = tmNoRefs (OthModel newtonLUGRC)
+newtonLUG = tmNoRefs (EquationalRealm newtonForceQuant $ NE.fromList [
+    RV EmptyS (sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/ square (sy dispNorm)) `mulRe` sy dVect) [],
+    RV EmptyS (sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/ square (sy dispNorm)) `mulRe` (sy distMass $/ sy dispNorm)) []
+  ])
   [qw force, qw gravitationalConst, qw mass_1, qw mass_2,
   qw dispNorm, qw dVect, qw distMass] ([] :: [ConceptChunk])
   [] [newtonLUGRel] [] "UniversalGravLaw" newtonLUGNotes
 
-newtonLUGRC :: RelationConcept
-newtonLUGRC = makeRC "newtonLUGRC"
-  (nounPhraseSP "Newton's law of universal gravitation") EmptyS newtonLUGRel
+newtonForceQuant :: QuantityDict
+newtonForceQuant = mkQuant' "force" (nounPhraseSP "Newton's law of universal gravitation") Nothing Real (symbol force) Nothing
+
+-- newtonLUGRC :: RelationConcept
+-- newtonLUGRC = makeRC "newtonLUGRC"
+  -- (nounPhraseSP "Newton's law of universal gravitation") EmptyS newtonLUGRel
 
 newtonLUGRel :: Relation
 newtonLUGRel = sy force $=

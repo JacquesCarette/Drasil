@@ -8,6 +8,7 @@ module Theory.Drasil (
   , GenDefn, gd, gdNoRefs, getEqModQdsFromGd
   -- ModelKinds
   , ModelKinds(..), getEqModQds
+  , RealmVariant(..)
   -- InstanceModel
   , InstanceModel
   , im, imNoDeriv, imNoRefs, imNoDerivNoRefs

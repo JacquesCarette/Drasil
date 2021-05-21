@@ -1,7 +1,7 @@
 module Data.Drasil.Concepts.Education where
 
 import Language.Drasil hiding (year)
-import Utils.Drasil
+import Utils.Drasil.Concepts
 
 import Data.Drasil.Concepts.Documentation (first, physics, second_, year)
 import Data.Drasil.Concepts.PhysicalProperties (solid)

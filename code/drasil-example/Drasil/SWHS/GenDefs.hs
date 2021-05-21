@@ -76,9 +76,9 @@ htFluxPCMFromWaterExpr :: Expr
 htFluxPCMFromWaterExpr = sy pcmHTC `mulRe` (apply1 tempW time $- apply1 tempPCM time)
 
 newtonLawNote :: UnitalChunk -> ConceptInstance -> ConceptChunk -> Sentence
-newtonLawNote u a c = foldlSent [ch u `S.sIs` S "found by assuming that",
+newtonLawNote u a c = foldlSent [ch u `S.is` S "found by assuming that",
   phrase lawConvCooling, S "applies" +:+. sParen (makeRef2S a), S "This law",
-  sParen (S "defined" `S.sIn` makeRef2S nwtnCooling) `S.sIs` S "used on",
+  sParen (S "defined" `S.in_` makeRef2S nwtnCooling) `S.is` S "used on",
   phrase surface `S.the_ofThe` phrase c]
 
 --------------------------------------
@@ -86,7 +86,7 @@ newtonLawNote u a c = foldlSent [ch u `S.sIs` S "found by assuming that",
 --------------------------------------
 
 rocTempSimpDeriv :: Sentence -> [ConceptInstance] -> Derivation
-rocTempSimpDeriv s a = mkDerivName (S "simplified" +:+ phrase rOfChng `S.sOf` phrase temp)
+rocTempSimpDeriv s a = mkDerivName (S "simplified" +:+ phrase rOfChng `S.of_` phrase temp)
   (weave [rocTempSimpDerivSent s a, map E rocTempSimpDerivEqns])
 
 rocTempSimpDerivSent :: Sentence -> [ConceptInstance] -> [Sentence]
@@ -101,7 +101,7 @@ rocTempDerivGauss :: [Sentence]
 rocTempDerivGauss = [S "Applying", titleize gaussDiv, S "to the first term over",
   (phrase surface +:+ ch surface `S.the_ofThe` phrase vol) `sC` S "with",
   ch thFluxVect, S "as the", phrase thFluxVect, S "for the",
-  phrase surface `S.sAnd` ch uNormalVect, S "as a", phrase unit_,
+  phrase surface `S.and_` ch uNormalVect, S "as a", phrase unit_,
   S "outward", phrase uNormalVect, S "for a", phrase surface]
 
 rocTempDerivArbVol :: [Sentence]
@@ -119,7 +119,7 @@ rocTempDerivConsFlx s assumps = [S "Where",
 rocTempDerivConsFlxSWHS :: Sentence
 rocTempDerivConsFlxSWHS = foldlSent [S "The integral over the", phrase surface,
   S "could be simplified because the thermal flux is assumed constant over",
-  ch inSA `S.sAnd` ch outSA `S.sAnd` E (exactDbl 0), S "on all other" +:+. plural surface,
+  ch inSA `S.and_` ch outSA `S.and_` E (exactDbl 0), S "on all other" +:+. plural surface,
   S "Outward flux is considered positive"]
 
 rocTempDerivDens :: [Sentence]

@@ -203,7 +203,7 @@ chaslesEqn = sy velO `addRe` cross (sy  QP.angularVelocity) (sy rOB)
 
 chaslesThmNote :: Sentence
 chaslesThmNote = foldlSent [S "The", phrase QP.linearVelocity,
-  ch velB `S.sOf` S "any point B in a", phrase rigidBody `S.isThe` S "sum" `S.sOf`
+  ch velB `S.of_` S "any point B in a", phrase rigidBody `S.isThe` S "sum" `S.of_`
   ((phrase QP.linearVelocity +:+ ch velO) `S.the_ofThe` phrase rigidBody),
   S "at the origin (axis of rotation)" `S.andThe` S "resultant vector from",
   S "cross product" `S.the_ofThe` phrasePoss rigidBody,
@@ -222,7 +222,7 @@ impulseVEqn = sy QPP.mass `mulRe` sy QP.chgInVelocity
 
 impulseVDesc :: Sentence
 impulseVDesc = foldlSent [S "An", getTandS QP.impulseV, S "occurs when a",
-  getTandS QP.force, S "acts over a body over an interval" `S.sOf` phrase QP.time]
+  getTandS QP.force, S "acts over a body over an interval" `S.of_` phrase QP.time]
 
 impulseVDeriv :: Derivation
 impulseVDeriv = mkDerivName (phrase QP.impulseV) (weave [impulseVDerivSentences, map E impulseVDerivEqns])
@@ -310,7 +310,7 @@ kEnergyEqn :: Expr
 kEnergyEqn = sy QPP.mass `mulRe` half (square (sy QP.velocity))
 
 kEnergyDesc :: Sentence
-kEnergyDesc = foldlSent [atStart QP.kEnergy `S.sIs` (QP.kEnergy ^. defn)]
+kEnergyDesc = foldlSent [atStart QP.kEnergy `S.is` (QP.kEnergy ^. defn)]
 -----------------------DD16 Moment Of Inertia--------------------------------------------------------
 
 momentOfInertiaDD :: DataDefinition
@@ -341,7 +341,7 @@ potEnergyEqn :: Expr
 potEnergyEqn = sy QPP.mass `mulRe` sy QP.gravitationalAccel `mulRe` sy QP.height
 
 potEnergyDesc :: Sentence
-potEnergyDesc = foldlSent [S "The", phrase QP.potEnergy `S.sOf`
+potEnergyDesc = foldlSent [S "The", phrase QP.potEnergy `S.of_`
   S "an object" `S.isThe` phrase QP.energy, S "held by an object because of its",
   phrase QP.position, S "to other objects"]
 
@@ -350,7 +350,7 @@ potEnergyDesc = foldlSent [S "The", phrase QP.potEnergy `S.sOf`
 collisionAssump, noDampingAssump, rightHandAssump, rigidBodyAssump, rigidTwoDAssump :: Sentence
 collisionAssump = S "All collisions are vertex-to-edge" +:+. fromSource assumpCT
 noDampingAssump = S "No damping occurs during the simulation" +:+. fromSource assumpDI
-rightHandAssump = S "A" +:+ phrase rightHand `S.sIs` S "used" +:+. fromSource assumpAD
+rightHandAssump = S "A" +:+ phrase rightHand `S.is` S "used" +:+. fromSource assumpAD
 rigidBodyAssump = S "All bodies are assumed to be rigid" +:+. fromSource assumpOT
 rigidTwoDAssump = foldlSent [S "All bodies are assumed to be rigid",
-  fromSource assumpOT `S.sAnd` phrase twoD, fromSource assumpOD]
+  fromSource assumpOT `S.and_` phrase twoD, fromSource assumpOD]

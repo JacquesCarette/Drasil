@@ -51,13 +51,13 @@ balWtrRel = deriv (sy tempW) time $= recip_ (sy tauW) `mulRe`
 
 balWtrNotes :: [Sentence]
 balWtrNotes = map foldlSent [
-  [ch tauW `S.sIs` S "calculated from", makeRef2S balanceDecayRate],
+  [ch tauW `S.is` S "calculated from", makeRef2S balanceDecayRate],
   [S "The above", phrase equation, S "applies as long as the", phrase water,
    S "is in", phrase liquid, S "form" `sC` E (exactDbl 0 $< sy tempW $< exactDbl 100),
    sParen (unwrap $ getUnit tempW), S "where", E (exactDbl 0),
-   sParen (unwrap $ getUnit tempW) `S.sAnd` E (exactDbl 100),
-   sParen (unwrap $ getUnit tempW), S "are the", phrase melting `S.sAnd`
-   plural boilPt `S.sOf` phrase water `sC` S "respectively", sParen (makeRef2S assumpWAL)]]
+   sParen (unwrap $ getUnit tempW) `S.and_` E (exactDbl 100),
+   sParen (unwrap $ getUnit tempW), S "are the", phrase melting `S.and_`
+   plural boilPt `S.of_` phrase water `sC` S "respectively", sParen (makeRef2S assumpWAL)]]
 
 ----------------------------------------------
 --    Derivation of eBalanceOnWtr           --

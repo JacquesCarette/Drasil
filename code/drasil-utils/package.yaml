@@ -25,3 +25,5 @@ library:
   exposed-modules:
   - Utils.Drasil
   - Utils.Drasil.Sentence
+  - Utils.Drasil.NounPhrase
+  - Utils.Drasil.Concepts

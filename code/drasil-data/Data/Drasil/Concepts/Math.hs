@@ -5,8 +5,8 @@ import Language.Drasil.ShortHands (lX, lY, lZ)
 import Data.Drasil.Domains (mathematics)
 import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource)
 import Utils.Drasil
-import Utils.Drasil.Sentence
-
+import qualified Utils.Drasil.Sentence as S
+import Utils.Drasil.Concepts
 
 mathcon :: [ConceptChunk]
 
@@ -31,7 +31,7 @@ angle       = dcc "angle"        (cn' "angle")                   "the amount of 
 area        = dcc "area"         (cn' "area")                    "a part of an object or surface"
 axis        = dcc "axis"         (cn' "axis")                    "a fixed reference line for the measurement of coordinates" 
 calculation = dcc "calculation"  (cn' "calculation")             "a mathematical determination of the size or number of something"
-cartesian   = dccWDS "cartesian" (pn' "Cartesian coordinate system") $ S "a coordinate system that specifies each point uniquely in a plane by a set" `sOf`
+cartesian   = dccWDS "cartesian" (pn' "Cartesian coordinate system") $ S "a coordinate system that specifies each point uniquely in a plane by a set" `S.of_`
                                                                   S "numerical coordinates, which are the signed distances to the point from" +:+
                                                                   S "two fixed perpendicular oriented lines, measured in the same unit of length" +:+
                                                                   sParen (S "from" +:+ makeRef2S cartesianWiki)

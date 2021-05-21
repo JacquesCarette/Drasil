@@ -35,7 +35,7 @@ magNote = foldlSent [S "For a given", phrase velocity, S "vector", ch velocity `
   S "scalar called", phrase speed]
 
 speedRef :: Sentence
-speedRef = ch iSpeed `S.sIs` S "from" +:+. makeRef2S vecMag
+speedRef = ch iSpeed `S.is` S "from" +:+. makeRef2S vecMag
 
 figRef :: Sentence
-figRef = ch launAngle `S.sIs` S "shown in" +:+. makeRef2S figLaunch
+figRef = ch launAngle `S.is` S "shown in" +:+. makeRef2S figLaunch

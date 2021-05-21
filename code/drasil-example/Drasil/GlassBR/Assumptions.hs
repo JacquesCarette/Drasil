@@ -40,13 +40,13 @@ assumpLDFC         = cic "assumpLDFC" (ldfConstantDesc lDurFac)         "ldfCons
 glassTypeDesc :: Sentence
 glassTypeDesc = foldlSent [S "The standard E1300-09a for",
   phrase calculation, S "applies only to", foldlList Comma Options $ map S ["monolithic",
-  "laminated", "insulating"], S "glass constructions" `S.sOf` S "rectangular", phrase shape, 
+  "laminated", "insulating"], S "glass constructions" `S.of_` S "rectangular", phrase shape, 
   S "with continuous", phrase lateral, S "support along",
   foldlList Comma Options (map S ["one", "two", "three", "four"]) +:+.
   plural edge, S "This", phrase practice +: S "assumes that",
   foldlEnumList Numb Parens SemiCol List $ map foldlSent_
-  [[S "the supported glass", plural edge, S "for two, three" `S.sAnd`
-  S "four-sided support", plural condition, S "are simply supported" `S.sAnd`
+  [[S "the supported glass", plural edge, S "for two, three" `S.and_`
+  S "four-sided support", plural condition, S "are simply supported" `S.and_`
   S "free to slip in", phrase plane], 
   [S "glass supported on two sides acts as a simply supported", phrase beam], 
   [S "glass supported on one side acts as a", phrase cantilever]]]
@@ -55,7 +55,7 @@ glassConditionDesc :: Sentence
 glassConditionDesc = foldlSent [S "Following", makeCiteInfoS astm2009 (Page [1]) `sC` 
   S "this", phrase practice, S "does not apply to any form of", foldlList Comma Options $ map S ["wired",
   "patterned", "etched", "sandblasted", "drilled", "notched", "grooved glass"], S "with", 
-  phrase surface `S.sAnd` S "edge treatments that alter the glass strength"]
+  phrase surface `S.and_` S "edge treatments that alter the glass strength"]
 
 explainScenarioDesc :: Sentence
 explainScenarioDesc = foldlSent [S "This", phrase system, S "only considers the external", 
@@ -64,13 +64,13 @@ explainScenarioDesc = foldlSent [S "This", phrase system, S "only considers the 
 standardValuesDesc :: UnitaryChunk -> Sentence
 standardValuesDesc mainIdea = foldlSent [S "The", plural value, S "provided in",
   makeRef2S $ SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]), S "are assumed for the", phrase mainIdea, 
-  sParen (ch mainIdea) `sC` S "and the", plural materialProprty `S.sOf` 
+  sParen (ch mainIdea) `sC` S "and the", plural materialProprty `S.of_` 
   foldlList Comma List (map ch (take 3 assumptionConstants))]
 
 glassLiteDesc :: Sentence
 glassLiteDesc = foldlSent [atStart glass, S "under consideration is assumed to be a single", 
-  S "lite; hence, the", phrase value `S.sOf` short lShareFac, S "is equal to 1 for all",
-  plural calculation `S.sIn` short glassBR]
+  S "lite; hence, the", phrase value `S.of_` short lShareFac, S "is equal to 1 for all",
+  plural calculation `S.in_` short glassBR]
 
 boundaryConditionsDesc :: Sentence
 boundaryConditionsDesc = foldlSent [S "Boundary", plural condition, S "for the",
@@ -83,6 +83,6 @@ responseTypeDesc = foldlSent [S "The", phrase responseTy, S "considered in",
 
 ldfConstantDesc :: QuantityDict -> Sentence
 ldfConstantDesc mainConcept = foldlSent [S "With", phrase reference, S "to",
-  makeRef2S assumpSV `sC` S "the", phrase value `S.sOf`
+  makeRef2S assumpSV `sC` S "the", phrase value `S.of_`
   phrase mainConcept, sParen (ch mainConcept), S "is a", phrase constant,
   S "in", short glassBR]

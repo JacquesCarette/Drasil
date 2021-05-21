@@ -14,7 +14,7 @@ import Drasil.DocLang (SRSDecl, mkDoc)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 
 srs :: Document
-srs = mkDoc mkSRS (S.sFor'' titleize phrase) si
+srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration

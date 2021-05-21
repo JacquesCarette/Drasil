@@ -51,7 +51,7 @@ lrIsSafeRC = makeRC "safetyReqLR" (nounPhraseSP "Safety Req-LR")
   
 iModDesc :: QuantityDict -> Sentence -> Sentence
 iModDesc main s = foldlSent [S "If", ch main `sC` S "the glass is" +:+.
-    S "considered safe", s `S.sAre` S "either both True or both False"]
+    S "considered safe", s `S.are` S "either both True or both False"]
   
 -- Intro --
 
@@ -66,11 +66,11 @@ capRef = definedIn' calofCapacity (S "and is also called capacity")
 
 lrIsSafeDesc :: Sentence
 lrIsSafeDesc = iModDesc isSafeLR
-  (ch isSafePb +:+ fromSource pbIsSafe `S.sAnd` ch isSafeLR)
+  (ch isSafePb +:+ fromSource pbIsSafe `S.and_` ch isSafeLR)
 
 pbIsSafeDesc :: Sentence
 pbIsSafeDesc = iModDesc isSafePb
-  (ch isSafePb `S.sAnd` ch isSafePb +:+ fromSource lrIsSafe)
+  (ch isSafePb `S.and_` ch isSafePb +:+ fromSource lrIsSafe)
 
 probBRRef :: Sentence
 probBRRef = definedIn probOfBreak

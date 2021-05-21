@@ -24,14 +24,14 @@ library
   exposed-modules:
       Utils.Drasil
       Utils.Drasil.Sentence
-  other-modules:
+      Utils.Drasil.NounPhrase
       Utils.Drasil.Concepts
+  other-modules:
       Utils.Drasil.Contents
       Utils.Drasil.Document
       Utils.Drasil.English
       Utils.Drasil.Fold
       Utils.Drasil.Misc
-      Utils.Drasil.Phrase
       Paths_drasil_utils
   hs-source-dirs:
       ./

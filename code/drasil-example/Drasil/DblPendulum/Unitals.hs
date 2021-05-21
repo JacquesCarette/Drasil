@@ -2,7 +2,8 @@ module Drasil.DblPendulum.Unitals where
 
 import Language.Drasil
 import Language.Drasil.ShortHands
-import Utils.Drasil
+import Utils.Drasil.Concepts
+import qualified Utils.Drasil.NounPhrase as NP
 import Data.Drasil.Constraints (gtZeroConstr)
 
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
@@ -46,15 +47,15 @@ unitalChunks = [lenRod, QPP.mass, QP.force, QP.ixPos, QP.xPos, QP.yPos,
 lenRod, pendDisplacementAngle, initialPendAngle :: UnitalChunk
 
 lenRod = makeUCWDS "l_rod" (cn "length of rod")
-        (phraseNP (len `the_ofThe''` rod))
+        (phraseNP (len `the_ofThe` rod))
         (sub cL lRod) metre
 
 pendDisplacementAngle = makeUCWDS "pendDisplacementAngle" (cn "displacement angle of pendulum")
-        (phraseNP (angle `the_ofThe''` pendulum))
+        (phraseNP (angle `the_ofThe` pendulum))
         (sub lTheta lP) degree
 
 initialPendAngle = makeUCWDS "initialPendAngle" (cn "initial pendulum angle")
-        (phraseNP (theNP (CM.iAngle `of_` pendulum)))
+        (phraseNP (NP.the (CM.iAngle `of_` pendulum)))
         (sub lTheta lI) radian
 
 

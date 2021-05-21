@@ -6,7 +6,7 @@ import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq,
   charOfIR, orgOfDoc, goalStmt, thModel, inModel, sysCon)
 import Drasil.DocumentLanguage.Definitions(Verbosity(..))
 import Utils.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, characteristic,
@@ -44,7 +44,7 @@ developmentProcessParagraph = foldlSent [S "This", phrase document,
 
 -- | Sentence containing the subsections of the introduction
 introductionSubsections :: Sentence
-introductionSubsections = foldlList Comma List (map (uncurry the_ofThe) 
+introductionSubsections = foldlList Comma List (map (uncurry S.the_ofThe) 
   [(phrase scope, plural requirement), 
   (plural characteristic, phrase intReader),
   (phrase Doc.organization, phrase document)])
@@ -79,7 +79,7 @@ purpDocPara1 proName = foldlSent [S "The primary purpose of this", phrase docume
   atStart' goal `sC` plural assumption `sC` plural thModel `sC` 
   plural definition `sC` S "and other", phrase model, S "derivation",
   phrase information, S "are specified" `sC` S "allowing the reader to fully",
-  S "understand" `sAnd` S "verify the", phrase purpose `sAnd` S "scientific",
+  S "understand" `S.and_` S "verify the", phrase purpose `S.and_` S "scientific",
   S "basis of" +:+. short proName, S "With the exception of", 
   plural systemConstraint, S "in", makeRef2S (SRS.sysCon [] []) `sC` S "this",
   short Doc.srs, S "will remain abstract, describing what", phrase problem,
@@ -100,7 +100,7 @@ purposeOfDoc _ = SRS.prpsOfDoc [mkParagraph developmentProcessParagraph] []
 -- req - the main requirement for the program
 scopeOfRequirements :: Sentence -> Section
 scopeOfRequirements req = SRS.scpOfReq [foldlSP
-  [phrase scope `the_ofThe'` plural requirement, S "includes", req]] []
+  [phrase scope `S.the_ofTheC` plural requirement, S "includes", req]] []
 
 -- | constructor for characteristics of the intended reader subsection
 -- progName
@@ -124,8 +124,8 @@ intReaderIntro progName assumed topic asset sectionRef =
   [foldlSP [S "Reviewers of this", phrase documentation,
   S "should have an understanding of" +:+.
   foldlList Comma List (assumed ++ topic), assetSent, S "The",
-  plural user `sOf` short progName, S "can have a lower level" `sOf`
-  S "expertise, as explained" `sIn` makeRef2S sectionRef]]
+  plural user `S.of_` short progName, S "can have a lower level" `S.of_`
+  S "expertise, as explained" `S.in_` makeRef2S sectionRef]]
   where
     assetSent = case asset of
       [] -> EmptyS
@@ -142,7 +142,7 @@ orgIntro intro bottom bottomSec trailingSentence = [foldlSP [
   intro, S "The presentation follows the standard pattern of presenting" +:+.
   foldlList Comma List (map plural [nw Doc.goal, nw theory, nw definition, nw assumption]),
   S "For readers that would like a more bottom up approach" `sC`
-  S "they can start reading the", plural bottom `sIn` makeRef2S bottomSec `sAnd`
+  S "they can start reading the", plural bottom `S.in_` makeRef2S bottomSec `S.and_`
   S "trace back to find any additional information they require"],
   folder [refineChain (zip [goalStmt, thModel, inModel]
          [SRS.goalStmt [] [], SRS.thModel [] [], SRS.inModel [] []]), trailingSentence]]

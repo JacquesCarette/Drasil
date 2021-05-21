@@ -164,7 +164,7 @@ meltFracEqn = sy latentEP $/ (sy htFusion `mulRe` sy pcmMass)
 ddMeltFrac :: DataDefinition
 ddMeltFrac = dd ddMeltFracQD [makeCite koothoor2013]
   Nothing "meltFrac" [meltFracConst, makeRef2S ddHtFusion]
-  where meltFracConst = S "The" +:+ phrase value `S.sOf` E (sy meltFrac) `S.sIs`
+  where meltFracConst = S "The" +:+ phrase value `S.of_` E (sy meltFrac) `S.is`
                         S "constrained to" +:+. E (exactDbl 0 $<= sy meltFrac $<= exactDbl 1)
 
 ----

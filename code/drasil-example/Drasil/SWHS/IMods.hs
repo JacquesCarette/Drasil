@@ -58,19 +58,19 @@ balWtrRel = deriv (sy tempW) time $= recip_ (sy tauW) `mulRe`
 
 balWtrDesc :: [Sentence]
 balWtrDesc = map foldlSent [
-  [E (sy tempPCM) `S.sIs` S "defined by", makeRef2S eBalanceOnPCM],
+  [E (sy tempPCM) `S.is` S "defined by", makeRef2S eBalanceOnPCM],
   [S "The", phrase input_, phrase constraint, E $ sy tempInit $<= sy tempC,
    S "comes from", makeRef2S assumpCTNOD],
-  [ch tauW `S.sIs` S "calculated from", makeRef2S balanceDecayRate],
-  [ch eta  `S.sIs` S "calculated from", makeRef2S balanceDecayTime],
-  [S "The initial", plural condition, S "for the", getAcc ode `S.sAre`
+  [ch tauW `S.is` S "calculated from", makeRef2S balanceDecayRate],
+  [ch eta  `S.is` S "calculated from", makeRef2S balanceDecayTime],
+  [S "The initial", plural condition, S "for the", getAcc ode `S.are`
    E (apply tempW [exactDbl 0] $= apply tempPCM [exactDbl 0] $= sy tempInit) `follows` assumpSITWP],
-  [S "The", getAcc ode, S "applies as long as the", phrase water `S.sIs` EmptyS `S.sIn`
+  [S "The", getAcc ode, S "applies as long as the", phrase water `S.is` EmptyS `S.in_`
    phrase liquid, S "form" `sC` E (realInterval tempW (Bounded (Exc, exactDbl 0) (Exc, exactDbl 100))),
-   sParen (unwrap $ getUnit tempW), S "where", E (exactDbl 0), sParen (unwrap $ getUnit tempW) `S.sAnd`
-   E (exactDbl 100), sParen (unwrap $ getUnit tempW) `S.sAre` S "the", phrase melting `S.sAnd`
-   plural boilPt `S.sOf` phrase water `sC` S "respectively",
-   sParen (S "from" +:+ makeRef2S assumpWAL `S.sAnd` makeRef2S assumpAPT)]]
+   sParen (unwrap $ getUnit tempW), S "where", E (exactDbl 0), sParen (unwrap $ getUnit tempW) `S.and_`
+   E (exactDbl 100), sParen (unwrap $ getUnit tempW) `S.are` S "the", phrase melting `S.and_`
+   plural boilPt `S.of_` phrase water `sC` S "respectively",
+   sParen (S "from" +:+ makeRef2S assumpWAL `S.and_` makeRef2S assumpAPT)]]
 
 ----------------------------------------------
 --    Derivation of eBalanceOnWtr           --
@@ -87,10 +87,10 @@ eBalanceOnWtrDerivSentences = [eBalanceOnWtrDerivDesc1 htTransEnd overAreas extr
 
 eBalanceOnWtrDerivDesc1 :: Sentence -> Sentence-> Sentence -> ConceptInstance -> Sentence
 eBalanceOnWtrDerivDesc1 htEnd oa ea htA = foldlSentCol [
-  S "To find the", phrase rOfChng `S.sOf` E (sy tempW) `sC`
+  S "To find the", phrase rOfChng `S.of_` E (sy tempW) `sC`
   S "we look at the", phrase energy, S "balance on" +:+. phrase water, S "The",
-  phrase vol, S "being considered" `S.isThe` (phrase vol `S.sOf` phrase water), S "in the",
-  phrase tank, E (sy wVol) `sC` S "which has", phrase mass +:+. (E (sy wMass) `S.sAnd`
+  phrase vol, S "being considered" `S.isThe` (phrase vol `S.of_` phrase water), S "in the",
+  phrase tank, E (sy wVol) `sC` S "which has", phrase mass +:+. (E (sy wMass) `S.and_`
   phrase heatCapSpec `sC` E (sy htCapW)), atStart heatTrans, S "occurs in the",
   phrase water, S "from the", phrase coil, S "as", E $ sy htFluxC,
   sParen (makeRef2S htFluxWaterFromCoil) +:+ htEnd `sC` EmptyS +:+. oa, ea, S "No", phrase heatTrans, S "occurs to", S "outside" `S.the_ofThe`
@@ -105,26 +105,26 @@ htTransEnd = foldlSent_ [S "and from the", phrase water, S "into the",
   getAcc phsChgMtrl, S "as", ch htFluxP, sParen (makeRef2S htFluxPCMFromWater)]
 
 overAreas :: Sentence
-overAreas = S "over areas" +:+ ch coilSA `S.sAnd` ch pcmSA `sC` S "respectively"
+overAreas = S "over areas" +:+ ch coilSA `S.and_` ch pcmSA `sC` S "respectively"
 
 extraAssumps :: Sentence
 extraAssumps = foldlSent [S "The thermal flux is constant over", ch coilSA `sC`
-  S "since", phrase temp `S.the_ofThe` phrase coil `S.sIs` S "assumed to not vary along its length",
+  S "since", phrase temp `S.the_ofThe` phrase coil `S.is` S "assumed to not vary along its length",
   sParen (makeRef2S assumpTHCCoL) `sC` EmptyS `S.andThe` S "thermal flux is constant over",
   ch pcmSA `sC` S "since", phrase temp `S.the_ofThe` getAcc phsChgMtrl `S.isThe`
   S "same throughout its", phrase vol, sParen (makeRef2S assumpTPCAV) `S.andThe`
-  phrase water `S.sIs` S "fully mixed", sParen (makeRef2S assumpCWTAT)]
+  phrase water `S.is` S "fully mixed", sParen (makeRef2S assumpCWTAT)]
 
 eBalanceOnWtrDerivDesc2 :: Sentence
 eBalanceOnWtrDerivDesc2 = foldlSentCol [S "Using", makeRef2S htFluxWaterFromCoil, S "for",
-  ch htFluxC `S.sAnd` makeRef2S htFluxPCMFromWater, S "for", ch htFluxP `sC` S "this can be written as"]
+  ch htFluxC `S.and_` makeRef2S htFluxPCMFromWater, S "for", ch htFluxP `sC` S "this can be written as"]
 
 eBalanceOnWtrDerivDesc3 :: Sentence
 eBalanceOnWtrDerivDesc3 = foldlSentCol [S "Dividing", eqN 2, S "by", E eq1 `sC` S "we obtain"]
 
 eBalanceOnWtrDerivDesc4 :: Sentence
-eBalanceOnWtrDerivDesc4 = foldlSentCol [S "Factoring the negative sign out" `S.sOf`
-  (S "second term" `S.the_ofThe` short rightSide) `S.sOf` eqN 3 `S.sAnd`
+eBalanceOnWtrDerivDesc4 = foldlSentCol [S "Factoring the negative sign out" `S.of_`
+  (S "second term" `S.the_ofThe` short rightSide) `S.of_` eqN 3 `S.and_`
   S "multiplying it by", ch coilHTC, ch coilSA, S "/", ch coilHTC, ch coilSA, S "yields"]
 
 eBalanceOnWtrDerivDesc5 :: Sentence
@@ -207,19 +207,19 @@ balPCMRel = deriv (sy tempPCM) time $= completeCase [case1, case2, case3]
 
 balPCMNotes :: [Sentence]
 balPCMNotes = map foldlSent [
-  [ch tempW `S.sIs` S "defined by", makeRef2S eBalanceOnWtr],
+  [ch tempW `S.is` S "defined by", makeRef2S eBalanceOnWtr],
   [S "The", phrase input_, phrase constraint, E $ sy tempInit $<= sy tempMeltP,
    S "comes from", makeRef2S assumpPIS],
   [S "The", phrase temp, S "remains constant at", ch tempMeltP `sC`
    S "even with the heating", sParen (S "or cooling") `sC` S "until the",
-   phrase phaseChange, S "has occurred for all" `S.sOf` S "the material; that" `S.sIs`
+   phrase phaseChange, S "has occurred for all" `S.of_` S "the material; that" `S.is`
    S "as long as" +:+. E (exactDbl 0 $< sy meltFrac $< exactDbl 1), ch meltFrac,
-   sParen (S "from" +:+ makeRef2S ddMeltFrac) `S.sIs`
-   S "determined as part" `S.sOf` S "the", phrase heat, phrase energy `S.sIn`
-   S "the", getAcc phsChgMtrl `sC` S "as given" `S.sIn` sParen (makeRef2S heatEInPCM)],
-  [ch tauSP `S.sIs` S "calculated" `S.sIn` makeRef2S balanceSolidPCM],
-  [ch tauLP `S.sIs` S "calculated" `S.sIn` makeRef2S balanceLiquidPCM],
-  [S "The initial", plural condition, S "for the", getAcc ode `S.sAre`
+   sParen (S "from" +:+ makeRef2S ddMeltFrac) `S.is`
+   S "determined as part" `S.of_` S "the", phrase heat, phrase energy `S.in_`
+   S "the", getAcc phsChgMtrl `sC` S "as given" `S.in_` sParen (makeRef2S heatEInPCM)],
+  [ch tauSP `S.is` S "calculated" `S.in_` makeRef2S balanceSolidPCM],
+  [ch tauLP `S.is` S "calculated" `S.in_` makeRef2S balanceLiquidPCM],
+  [S "The initial", plural condition, S "for the", getAcc ode `S.are`
    E (apply tempW [exactDbl 0] $= apply tempPCM [exactDbl 0] $= sy tempInit) `follows` assumpSITWP]]
 
  ----------------------------------------------
@@ -237,16 +237,16 @@ eBalanceOnPCMDerivSentences = [eBalanceOnPCMDerivDesc1, eBalanceOnPCMDerivDesc2,
 
 eBalanceOnPCMDerivDesc1 :: Sentence
 eBalanceOnPCMDerivDesc1 = foldlSentCol [
-  S "To find the", phrase rOfChng `S.sOf` ch tempPCM `sC` S "we look at the",
+  S "To find the", phrase rOfChng `S.of_` ch tempPCM `sC` S "we look at the",
   phrase energy, S "balance on the" +:+. getAcc phsChgMtrl, S "The", phrase vol,
   S "being considered" `S.isThe` phrase pcmVol +:+. sParen (ch pcmVol),
   S "The derivation that follows is initially for the solid" +:+. getAcc phsChgMtrl,
-  S "The" +:+. (phrase pcmMass `S.sIs` ch pcmMass `S.andThe` phrase htCapSP `S.sIs` ch htCapSP),
-  S "The", phrase htFluxP `S.sIs` ch htFluxP, sParen (makeRef2S htFluxPCMFromWater),
+  S "The" +:+. (phrase pcmMass `S.is` ch pcmMass `S.andThe` phrase htCapSP `S.is` ch htCapSP),
+  S "The", phrase htFluxP `S.is` ch htFluxP, sParen (makeRef2S htFluxPCMFromWater),
   S "over", phrase pcmSA +:+. ch pcmSA, S "The thermal flux is constant over",
   ch pcmSA `sC` S "since", phrase temp `S.the_ofThe` getAcc phsChgMtrl `S.isThe`
   S "same throughout its", phrase vol, sParen (makeRef2S assumpTPCAV) `S.andThe`
-  phrase water `S.sIs` S "fully mixed" +:+. sParen (makeRef2S assumpCWTAT),
+  phrase water `S.is` S "fully mixed" +:+. sParen (makeRef2S assumpCWTAT),
   S "There is no", phrase htFlux, phrase output_, S "from the" +:+. getAcc phsChgMtrl,
   S "Assuming no volumetric", phrase heat, S "generation per unit", phrase vol,
   sParen (makeRef2S assumpNIHGBWP) `sC` E (sy volHtGen $= exactDbl 0) `sC`
@@ -265,16 +265,16 @@ eBalanceOnPCMDerivDesc4 = substitute [balanceSolidPCM]
 eBalanceOnPCMDerivDesc5 :: Sentence
 eBalanceOnPCMDerivDesc5 = foldlSent [
   eqN 4, S "applies for the", phrase solid +:+. getAcc phsChgMtrl, S "In the case where all of the",
-  getAcc phsChgMtrl `S.sIs` S "melted" `sC` S "the same derivation applies" `sC` S "except that",
+  getAcc phsChgMtrl `S.is` S "melted" `sC` S "the same derivation applies" `sC` S "except that",
   htCapSP `isReplacedBy` htCapLP `sC` S "and thus" +:+. (tauSP `isReplacedBy` tauLP),
   S "Although a small change in", phrase surArea, S "would be expected with", phrase melting `sC`
   S "this is not included" `sC` S "since the", phrase vol, S "change of the", getAcc phsChgMtrl,
   S "with", phrase melting, S "is assumed to be negligible", sParen (makeRef2S assumpVCMPN)]
-  where isReplacedBy a b = ch a `S.sIs` S "replaced by" +:+ ch b
+  where isReplacedBy a b = ch a `S.is` S "replaced by" +:+ ch b
 
 eBalanceOnPCMDerivDesc6 :: Sentence
 eBalanceOnPCMDerivDesc6 = foldlSent [
-  S "In the case where", E eq6_1 `S.sAnd` S "not all of the", getAcc phsChgMtrl `S.sIs`
+  S "In the case where", E eq6_1 `S.and_` S "not all of the", getAcc phsChgMtrl `S.is`
   S "melted" `sC` S "the", phrase tempPCM +:+. S "does not change", S "Therefore" `sC` eq6_2]
 
 eBalanceOnPCMDerivDesc7 :: Sentence
@@ -330,7 +330,7 @@ htWtrRel = apply1 watE time $= sy htCapW `mulRe` sy wMass `mulRe`
 htWtrNotes :: [Sentence]
 htWtrNotes = map foldlSent [
   [S "The above", phrase equation, S "is derived using", makeRef2S sensHtE],
-  [S "The", phrase change `S.sIn` phrase temp `S.isThe` S "difference between the",
+  [S "The", phrase change `S.in_` phrase temp `S.isThe` S "difference between the",
    phrase temp, S "at", phrase time, ch time, sParen (unwrap $ getUnit tInitMelt) `sC`
   ch tempW `S.andThe` phrase tempInit `sC` ch tempInit, sParen (unwrap $ getUnit tempInit)],
   [S "This", phrase equation, S "applies as long as",
@@ -366,8 +366,8 @@ htPCMRel = sy pcmE $= completeCase [case1, case2, case3]
 
 htPCMNotes :: [Sentence]
 htPCMNotes = map foldlSent [
-  [S "The above", phrase equation `S.sIs` S "derived using",
-   makeRef2S sensHtE `S.sAnd` makeRef2S latentHtE],
+  [S "The above", phrase equation `S.is` S "derived using",
+   makeRef2S sensHtE `S.and_` makeRef2S latentHtE],
   [ch pcmE, S "for the", phrase solid, short phsChgMtrl, S "is found using",
    makeRef2S sensHtE, S "for", phrase sensHeat :+: S "ing, with",
    phrase heatCapSpec `S.the_ofThe` phrase solid, short phsChgMtrl `sC` ch htCapSP,
@@ -377,10 +377,10 @@ htPCMNotes = map foldlSent [
    S "is found using", makeRef2S sensHtE, S "for", phrase sensHeat, S "of the", phrase liquid,
    short phsChgMtrl, S "plus the", phrase energy, S "when", phrase melting, S "starts" `sC`
    S "plus", (phrase energy +:+ S "required to melt all") `S.the_ofThe` short phsChgMtrl],
-  [S "The", phrase energy, S "required to melt all of the", short phsChgMtrl `S.sIs`
+  [S "The", phrase energy, S "required to melt all of the", short phsChgMtrl `S.is`
    E (sy htFusion `mulRe` sy pcmMass), sParen (unwrap $ getUnit pcmInitMltE),
    sParen (S "from" +:+ makeRef2S ddHtFusion)],
-  [S "The", phrase change `S.sIn` phrase temp `S.sIs` E (sy tempPCM $- sy tempMeltP),
+  [S "The", phrase change `S.in_` phrase temp `S.is` E (sy tempPCM $- sy tempMeltP),
    sParen (unwrap $ getUnit tempMeltP)],
   [ch pcmE, S "during", phrase melting, S "of the", short phsChgMtrl,
    S "is found using the", phrase energy, S "required at", S "instant" +:+
@@ -390,7 +390,7 @@ htPCMNotes = map foldlSent [
    phrase melting, S "began", ch tInitMelt, sParen (unwrap $ getUnit tInitMelt)],
   [S "The", phrase heat, phrase energy, S "for", phrase boiling, S "of the", short phsChgMtrl,
    S "is not detailed" `sC` S "since the", short phsChgMtrl, S "is assumed to either be in a",
-   phrase solid `S.sOr` phrase liquid, S "state", sParen (makeRef2S assumpNGSP),
+   phrase solid `S.or_` phrase liquid, S "state", sParen (makeRef2S assumpNGSP),
    sParen (makeRef2S assumpPIS)]]
 
 -----------
@@ -399,13 +399,13 @@ htPCMNotes = map foldlSent [
 
 instModIntro :: Sentence
 instModIntro = foldlSent [S "The", plural goal, foldlList Comma List
-  (map makeRef2S [waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS]) `S.sAre`
+  (map makeRef2S [waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS]) `S.are`
   S "solved by" +:+. foldlList Comma List (map makeRef2S
   [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]), S "The",
-  plural solution, S "for", makeRef2S eBalanceOnWtr `S.sAnd`
-  makeRef2S eBalanceOnPCM `S.sAre` S "coupled since the", plural solution,
-  S "for", ch tempW `S.sAnd` ch tempPCM +:+. S "depend on one another",
+  plural solution, S "for", makeRef2S eBalanceOnWtr `S.and_`
+  makeRef2S eBalanceOnPCM `S.are` S "coupled since the", plural solution,
+  S "for", ch tempW `S.and_` ch tempPCM +:+. S "depend on one another",
   makeRef2S heatEInWtr, S "can be solved once", makeRef2S eBalanceOnWtr +:+.
-  S "has been solved", S "The", plural solution `S.sOf` makeRef2S eBalanceOnPCM `S.sAnd`
-  makeRef2S heatEInPCM `S.sAre` S "also coupled" `sC` S "since the",
+  S "has been solved", S "The", plural solution `S.of_` makeRef2S eBalanceOnPCM `S.and_`
+  makeRef2S heatEInPCM `S.are` S "also coupled" `sC` S "since the",
   phrase tempPCM `S.andThe` phrase pcmE,S "depend on the", phrase phaseChange]

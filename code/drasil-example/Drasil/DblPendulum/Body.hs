@@ -9,6 +9,7 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   _datadefs, _configFiles, _definitions, _defSequence, _inputs, _kind, _outputs, 
   _quants, _sys, _sysinfodb, _usedinfodb)
 import Utils.Drasil
+import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 import Data.Drasil.People (olu)
 import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian, hertz)
@@ -47,7 +48,7 @@ import Drasil.Projectile.References (hibbeler2004)
 
 
 srs :: Document
-srs = mkDoc mkSRS (S.sFor'' titleize phrase) si
+srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
@@ -91,14 +92,14 @@ mkSRS = [RefSec $      --This creates the Reference section of the SRS
   ]
 
 justification :: Sentence
-justification = foldlSent [S "A", phrase pendulum, S "consists" `S.sOf` phrase mass, 
-                            S "attached to the end of a", phrase rod `S.andIts` S "moving curve" `S.sIs`
+justification = foldlSent [S "A", phrase pendulum, S "consists" `S.of_` phrase mass, 
+                            S "attached to the end of a", phrase rod `S.andIts` S "moving curve" `S.is`
                             (S "highly sensitive to initial conditions" !.), S "Therefore" `sC`
                             S "it is useful to have a", phrase program, S "to simulate", phraseNP (motion
-                            `the_ofThe''` pendulum), (S "to exhibit its chaotic characteristics" !.),
+                            `the_ofThe` pendulum), (S "to exhibit its chaotic characteristics" !.),
                             S "The", phrase program, S "documented here is called", phrase pendulum]
 scope :: Sentence
-scope = foldlSent [S "the", phrase analysis `S.sOfA` phrase twoD, 
+scope = foldlSent [S "the", phrase analysis `S.ofA` phrase twoD, 
   sParen (getAcc twoD), phrase pendMotion, phrase problem,
                    S "with various initial conditions"]
 

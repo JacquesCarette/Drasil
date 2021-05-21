@@ -95,20 +95,20 @@ slopeDist, slopeHght, waterDist, waterHght, xMaxExtSlip, xMaxEtrSlip,
 --FIXME: add constraints to coordinate unitals when that is possible (constraints currently in the Notes section of the crtSlpId IM instead)
 
 slopeDist = uq (constrained' (makeUCWDS "x_slope,i"
-  (nounPhraseSent $ plural xCoord `S.sOf` S "the slope")
-  (plural xCoord `S.sOf` S "points on the soil slope")
+  (nounPhraseSent $ plural xCoord `S.of_` S "the slope")
+  (plural xCoord `S.of_` S "points on the soil slope")
   (sub (vec lX) lSlope) metre) [] (exactDbl 0)) defaultUncrt
 
 slopeHght = uq (constrained' (makeUCWDS "y_slope,i"
-  (nounPhraseSent $ plural yCoord `S.sOf` S "the slope")
-  (plural yCoord `S.sOf` S "points on the soil slope")
+  (nounPhraseSent $ plural yCoord `S.of_` S "the slope")
+  (plural yCoord `S.of_` S "points on the soil slope")
   (sub (vec lY) lSlope) metre) [] (exactDbl 0)) defaultUncrt
 
-waterDist = uqc "x_wt,i" (nounPhraseSent $ plural xCoord `S.sOf` S "the water table")
+waterDist = uqc "x_wt,i" (nounPhraseSent $ plural xCoord `S.of_` S "the water table")
   "x-positions of the water table"
   (sub (vec lX) lWatTab) metre Real [] (exactDbl 0) defaultUncrt
 
-waterHght = uqc "y_wt,i" (nounPhraseSent $ plural yCoord `S.sOf` S "the water table")
+waterHght = uqc "y_wt,i" (nounPhraseSent $ plural yCoord `S.of_` S "the water table")
   "heights of the water table"
   (sub (vec lY) lWatTab) metre Real [] (exactDbl 0) defaultUncrt
 
@@ -134,12 +134,12 @@ xMinEtrSlip = uq (constrained' (makeUCWDS "x_slip^minEtr"
 
 yMaxSlip = uq (constrained' (makeUCWDS "y_slip^max"
   (nounPhraseSent $ S "maximum" +:+ phrase yCoord)
-  (S "the maximum potential" +:+ phrase yCoord `S.sOf` S "a point on a slip surface")
+  (S "the maximum potential" +:+ phrase yCoord `S.of_` S "a point on a slip surface")
   (supMax (sub lY lSlip)) metre) [] (exactDbl 30)) defaultUncrt
 
 yMinSlip = uq (constrained' (makeUCWDS "y_slip^min"
   (nounPhraseSent $ S "minimum" +:+ phrase yCoord)
-  (S "the minimum potential" +:+ phrase yCoord `S.sOf` S "a point on a slip surface")
+  (S "the minimum potential" +:+ phrase yCoord `S.of_` S "a point on a slip surface")
   (supMin (sub lY lSlip)) metre) [] (exactDbl 0)) defaultUncrt
 
 effCohesion = uqc "c'" (cn "effective cohesion")
@@ -186,7 +186,7 @@ fsMin = dqd' (dcc "fsMin" (cn "minimum factor of safety")
 
 coords = constrainedNRV' (dqd' (dccWDS "(x,y)" (cn "cartesian position coordinates")
   (P lY +:+ S "is considered parallel to the direction of the force of" +:+
-   phrase gravity `S.sAnd` P lX +:+ S "is considered perpendicular to" +:+ P lY))
+   phrase gravity `S.and_` P lX +:+ S "is considered perpendicular to" +:+ P lY))
   (const lCoords) Real (Just metre)) []
 
 ---------------------------
@@ -229,7 +229,7 @@ slipHght = uc' "y_slip,i" (nounPhraseSent $ plural yCoord +:+ S "of the slip sur
   (sub (vec lY) lSlip) metre
 
 slipDist = makeUCWDS "x_slip,i" (nounPhraseSent $ plural xCoord +:+ S "of the slip surface")
-  (plural xCoord `S.sOf` S "points on the slip surface")
+  (plural xCoord `S.of_` S "points on the slip surface")
   (sub (vec lX) lSlip) metre
 
 xi     = makeUCWDS "x_i" (nounPhraseSent $ phrase xCoord)
@@ -244,7 +244,7 @@ zcoord = makeUCWDS "z"   (nounPhraseSent $ phrase zCoord)
 -- FIXME: the 'symbol' for this should not have { and } embedded in it.
 -- They have been removed now, but we need a reasonable notation.
 critCoords = makeUCWDS "(xcs,ycs)" (cn "critical slip surface coordinates")
-  (S "the set" `S.sOf` plural xCoord `S.sAnd` plural yCoord +:+
+  (S "the set" `S.of_` plural xCoord `S.and_` plural yCoord +:+
    S "that describe the vertices of the critical slip surface")
   (Concat [sub (vec lX) lCSlip, Label ",", sub (vec lY) lCSlip]) metre
 
@@ -252,7 +252,7 @@ mobilizedShear = uc' "mobilizedShear" (cn' "mobilized shear force")
   "the shear force in the direction of potential motion" cS newton
 
 resistiveShear = makeUCWDS "resistiveShear" (cn' "resistive shear force")
-  (S "the Mohr Coulomb frictional force that describes the limit" `S.sOf`
+  (S "the Mohr Coulomb frictional force that describes the limit" `S.of_`
     phrase mobilizedShear +:+ S "that can be withstood before failure")
   cP newton
 
@@ -266,7 +266,7 @@ mobShrI = makeUCWDS "mobShr" (cn "mobilized shear forces")
 
 shrResI = makeUCWDS "shrRes" (cn "resistive shear forces")
   (S "the Mohr Coulomb frictional forces per meter" `S.inThe` phrase zDir +:+
-   S "for each slice that describe the limit" `S.sOf` phrase mobilizedShear +:+
+   S "for each slice that describe the limit" `S.of_` phrase mobilizedShear +:+
    S "the slice can withstand before failure")
   (vec cP) forcePerMeterU --FIXME: DUE TO ID THIS WILL SHARE THE SAME SYMBOL AS CSM.shearRes
               -- This is fine for now, as they are the same concept, but when this
@@ -456,7 +456,7 @@ normToShear = dqd' (dcc "lambda" (nounPhraseSP "proportionality constant")
 
 scalFunc = dqd' (dccWDS "f_i" 
   (nounPhraseSP "interslice normal to shear force ratio variation function")
-  (S "a function" `S.sOf` phrase distance `S.inThe` phrase xDir +:+
+  (S "a function" `S.of_` phrase distance `S.inThe` phrase xDir +:+
    S "that describes the variation of the interslice normal to shear ratio"))
   (const (vec lF)) Real Nothing 
 

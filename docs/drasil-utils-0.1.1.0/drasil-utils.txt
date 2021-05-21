@@ -28,23 +28,24 @@ onThe :: Sentence -> Sentence -> Sentence
 
 -- | Prepends "The" and inserts "is expected to have" between two
 --   Sentences.
-isExpctdToHv :: Sentence -> Sentence -> Sentence
+the_isExpctdToHvC :: Sentence -> Sentence -> Sentence
 
 -- | Inserts the words "is the" between two Sentences.
 isThe :: Sentence -> Sentence -> Sentence
 
 -- | Prepends "the" and inserts "of a given" between two Sentences.
-ofGiv :: Sentence -> Sentence -> Sentence
+the_ofGiv :: Sentence -> Sentence -> Sentence
 
--- | Similar to <a>sFor</a>, but used for titles and first <a>NamedIdea</a>
+-- | Similar to <a>for</a>, but used for titles and first <a>NamedIdea</a>
 --   is pluralized.
-forTT :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
+forTPS :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
 
--- | Similar to <a>forTT</a>, but both <a>NamedIdea</a>s are pluralized.
-forTT' :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
+-- | Similar to <tt>forTTPS</tt>, but both <a>NamedIdea</a>s are
+--   pluralized.
+forTPP :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
 
--- | Same as <a>ofGiv</a>, except first "the" is capitalized.
-ofGiv' :: Sentence -> Sentence -> Sentence
+-- | Same as <tt>ofGiv</tt>, except first "the" is capitalized.
+the_ofGivC :: Sentence -> Sentence -> Sentence
 
 -- | Inserts the words "of the" between two Sentences.
 ofThe :: Sentence -> Sentence -> Sentence
@@ -54,44 +55,44 @@ ofThe :: Sentence -> Sentence -> Sentence
 the_ofThe :: Sentence -> Sentence -> Sentence
 
 -- | Same as <a>the_ofThe</a>, except first "the" is capitalized.
-the_ofThe' :: Sentence -> Sentence -> Sentence
+the_ofTheC :: Sentence -> Sentence -> Sentence
 
 -- | Inserts the word "of" between two Sentences.
-sOf :: Sentence -> Sentence -> Sentence
+of_ :: Sentence -> Sentence -> Sentence
 
 -- | Inserts the words "of a" between two Sentences.
-sOfA :: Sentence -> Sentence -> Sentence
+ofA :: Sentence -> Sentence -> Sentence
 
 -- | Inserts the word "or" between two Sentences.
-sOr :: Sentence -> Sentence -> Sentence
+or_ :: Sentence -> Sentence -> Sentence
 
 -- | Inserts the word "versus" between two Sentences.
-sVersus :: Sentence -> Sentence -> Sentence
+versus :: Sentence -> Sentence -> Sentence
 
 -- | Inserts the word "and" between two Sentences.
-sAnd :: Sentence -> Sentence -> Sentence
+and_ :: Sentence -> Sentence -> Sentence
 
 -- | Inserts the word "are" between two Sentences.
-sAre :: Sentence -> Sentence -> Sentence
+are :: Sentence -> Sentence -> Sentence
 
 -- | Inserts the word "in" between two Sentences.
-sIn :: Sentence -> Sentence -> Sentence
+in_ :: Sentence -> Sentence -> Sentence
 
 -- | Inserts the word "is" between two Sentences.
-sIs :: Sentence -> Sentence -> Sentence
+is :: Sentence -> Sentence -> Sentence
 
 -- | Inserts the words "to the" between two Sentences.
 toThe :: Sentence -> Sentence -> Sentence
 
 -- | Inserts the word "for" between two Sentences.
-sFor :: Sentence -> Sentence -> Sentence
+for :: Sentence -> Sentence -> Sentence
 
--- | Similar to <a>sFor</a>, but both terms are <a>titleize</a>d.
-sFor' :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
+-- | Similar to <a>for</a>, but both terms are <a>titleize</a>d.
+forT :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
 
--- | Similar to <a>sFor'</a>, but takes two arguments (for capitalization
+-- | Similar to <tt>forTT</tt>, but takes two arguments (for capitalization
 --   or pluralization) to apply to the two terms respectively.
-sFor'' :: (c -> Sentence) -> (d -> Sentence) -> c -> d -> Sentence
+forGen :: (c -> Sentence) -> (d -> Sentence) -> c -> d -> Sentence
 
 -- | Inserts the words "denotes the" between two Sentences.
 denotes :: Sentence -> Sentence -> Sentence
@@ -101,6 +102,118 @@ wrt :: Sentence -> Sentence -> Sentence
 
 -- | Inserts the words "defined as" between two Sentences.
 defnAs :: Sentence -> Sentence -> Sentence
+
+module Utils.Drasil.NounPhrase
+
+-- | Helper function that places a <a>String</a> in between two <a>NP</a>s.
+--   Plural case is <tt>(phraseNP t1) +:+ S s +:+ (pluralNP t2)</tt>.
+insertString :: String -> NP -> NP -> NP
+
+-- | Helper function that prepends a <a>String</a> to a <a>NP</a>.
+prependString :: String -> NP -> NP
+
+-- | Helper function that places a <a>Sentence</a> in between two
+--   <a>NP</a>s. Plural case is <tt>(phraseNP t1) +:+ s +:+ (pluralNP
+--   t2)</tt>.
+insertSent :: Sentence -> NP -> NP -> NP
+
+-- | Helper function that prepends a <a>Sentence</a> to a <a>NP</a>.
+prependSent :: Sentence -> NP -> NP
+
+-- | Prepends "the" to a <a>NP</a>.
+the :: NP -> NP
+
+-- | Similar to <a>the</a>, but accepts a function that determines the
+--   plural case.
+theGen :: (NP -> Sentence) -> NP -> NP
+
+-- | Prepends "a" to a <a>NP</a>.
+a_ :: NP -> NP
+
+-- | Similar to <tt>a</tt>, but accepts a function that determines the
+--   plural case.
+a_Gen :: (NP -> Sentence) -> NP -> NP
+
+-- | Inserts "of the" between two <a>NP</a>s. Plural case is <tt>(phraseNP
+--   t1) +:+ "of the" +:+ (pluralNP t2)</tt>.
+ofThe :: NP -> NP -> NP
+
+-- | Similar to <a>ofThe</a>, but the plural case is now <tt>(pluralNP t1)
+--   <a>ofThe</a> (phraseNP t2)</tt>.
+ofThePS :: NP -> NP -> NP
+
+-- | Similar to <a>ofThe</a>, but accepts two functions for the plural
+--   case.
+ofTheGen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
+
+-- | Inserts "in the" between two <a>NP</a>s. Plural case is <tt>(phraseNP
+--   t1) +:+ "in the" +:+ (pluralNP t2)</tt>.
+inThe :: NP -> NP -> NP
+
+-- | Similar to <a>ofThe</a>, but the plural case is now <tt>(pluralNP t1)
+--   <a>inThe</a> (phraseNP t2)</tt>.
+inThePS :: NP -> NP -> NP
+
+-- | Similar to <a>ofThe</a>, but accepts two functions for the plural
+--   case.
+inTheGen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
+
+-- | Prepends "the" and inserts "of the". Plural case is <tt>"the" +:+
+--   (phraseNP t1) +:+ "of the" +:+ (pluralNP t2)</tt>.
+the_ofThe :: NP -> NP -> NP
+
+-- | Similar to <a>the_ofThe</a>, but the plural case is now <tt> S "the"
+--   +:+ (pluralNP t1) <a>ofThe</a> (phraseNP t2)</tt>.
+the_ofThePS :: NP -> NP -> NP
+
+-- | Similar to <tt>the_ofThe'</tt>, but takes two functions for the plural
+--   case.
+the_ofTheGen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
+
+-- | Inserts "for" between two <a>NP</a>s. Plural case is <tt>(phraseNP t1)
+--   +:+ "for" +:+ (pluralNP t2)</tt>.
+for :: NP -> NP -> NP
+
+-- | Same as <a>for</a>, but plural case is now <tt>(pluralNP t1)
+--   <a>for</a> (phraseNP t2)</tt>.
+forPS :: NP -> NP -> NP
+
+-- | Same as <tt>for'</tt>, but takes two functions for the plural case.
+forGen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
+
+-- | Inserts "of" between two <a>NP</a>s. Plural case is <tt>(phraseNP t1)
+--   +:+ "of" +:+ (pluralNP t2)</tt>.
+of_ :: NP -> NP -> NP
+
+-- | Same as <a>of_</a>, but plural case is now <tt>(pluralNP t1)
+--   <a>of_</a> (phraseNP t2)</tt>.
+of_PS :: NP -> NP -> NP
+
+-- | Same as <a>of_</a>, but takes two functions for the plural case.
+of_Gen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
+
+-- | Same as <a>of_</a>, but takes two functions for the singular case and
+--   two for the plural case.
+of_GenGen :: (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
+
+-- | Inserts "with" between two <a>NP</a>s. Plural case is <tt>(phraseNP
+--   t1) +:+ "with" +:+ (pluralNP t2)</tt>.
+with :: NP -> NP -> NP
+
+-- | Inserts "and" between two <a>NP</a>s. Plural case is <tt>(phraseNP t1)
+--   +:+ "and" +:+ (pluralNP t2)</tt>.
+and_ :: NP -> NP -> NP
+
+-- | Same as <a>and_</a>, but plural case is now <tt>(pluralNP t1)
+--   <a>and_</a> (phraseNP t2)</tt>.
+and_PS :: NP -> NP -> NP
+
+-- | Same as <a>and_</a>, but takes two functions for the plural case.
+and_Gen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
+
+-- | Same as <a>and_</a>, but takes two functions for the singular case and
+--   two for the plural case.
+and_GenGen :: (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
 
 module Utils.Drasil
 
@@ -390,6 +503,8 @@ zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]]
 --   instead of <tt>compoundPhrase (t1 ^. term) (t2 ^. term)</tt>.
 fterms :: (NamedIdea c, NamedIdea d) => (NP -> NP -> t) -> c -> d -> t
 
+module Utils.Drasil.Concepts
+
 -- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the word
 --   "and" between their terms. Plural case is <tt>(phrase t1) "and"
 --   (plural t2)</tt>.
@@ -397,11 +512,85 @@ and_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Same as <a>and_</a> combinator, except both singular and plural case
 --   are <tt>(phrase t1) "and" (plural t2)</tt>.
-and_' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+and_TSP :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Customizable <a>and_</a> combinator (takes two title case
 --   capitalization rules and two <tt>NamedIdeas</tt>).
-andRT :: (NamedIdea c, NamedIdea d) => (c -> Sentence) -> (d -> Sentence) -> c -> d -> NP
+andTGen :: (NamedIdea c, NamedIdea d) => (c -> Sentence) -> (d -> Sentence) -> c -> d -> NP
+
+-- | Case with "T1s with T2", as opposed to "T1 with T2", i.e. singular
+--   case is <tt>(plural t1) "with" (phrase t2)</tt> while the plural case
+--   pluralizes both.
+with :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the word
+--   "of" between their terms. Plural case is <tt>(phrase t1) "of" (plural
+--   t2)</tt>.
+of_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Same as <a>of_</a> but second argument is a <a>NounPhrase</a>.
+of_NINP :: (NamedIdea c, NounPhrase d) => c -> d -> NP
+
+-- | Similar to <a>of_</a>, but singular case is <tt>(phrase t1) "of"
+--   (plural t2)</tt>. Plural case is the same.
+of_TSP :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Same as <a>of_</a>, except plural case is <tt>(plural t1) "of" (phrase
+--   t2)</tt>.
+of_PS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Same as <a>of_</a>, except singular and plural cases are both
+--   <tt>(plural t1) "of" (phrase t2)</tt>.
+of_TPS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Same as <a>of_PS</a>, except combining <a>Sentence</a> piece is "of
+--   a".
+ofA :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Same as <a>ofA</a>, except phrase case is <tt>(plural t1) "of a"
+--   (phrase t2)</tt>.
+ofATPS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Same as <a>of_</a>, except combining <a>Sentence</a> piece is "of
+--   the". Plural case is <tt>(plural t1) <a>ofThe</a> (phrase t2)</tt>.
+ofThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Same as <a>ofThe'</a>, except prepends "the".
+the_ofThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Same as <a>of_</a>, except combining Sentence piece is "of the".
+onThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the word
+--   "for" between their terms. Plural case is <tt>(phrase t1) "for"
+--   (plural t2)</tt>.
+for :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Similar to <a>for</a>, but takes two functions that determine the
+--   <a>titleCase</a>.
+forTGen :: (NamedIdea c, Idea d) => (c -> Sentence) -> (d -> Sentence) -> c -> d -> NP
+
+-- | Prepends "the" to a <a>NamedIdea</a>. Similar to <tt>the'</tt>, but
+--   not titleized.
+the :: NamedIdea t => t -> NP
+
+-- | Prepends "the" to a titleized <a>NamedIdea</a>.
+theT :: NamedIdea t => t -> NP
+
+-- | A customizable version of <a>the</a>. The given function is applied to
+--   both singular and plural cases.
+theGen :: (t -> Sentence) -> t -> NP
+
+-- | Prepends "a" to a <a>NamedIdea</a> (similar to <a>the</a>).
+a_ :: NamedIdea c => c -> NP
+
+-- | Customizable version of <tt>a</tt>.
+a_Gen :: (c -> Sentence) -> c -> NP
+
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
+--   "in the" between their terms. Plural case is <tt>(phrase t1) "in the"
+--   (plural t2)</tt>.
+inThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Combinator for combining two <tt>NamedIdeas</tt>s into a
 --   <a>NamedChunk</a>. Plural case only makes second term plural. See
@@ -411,210 +600,26 @@ compoundNC :: (NamedIdea a, NamedIdea b) => a -> b -> NamedChunk
 
 -- | Similar to <a>compoundNC</a> but both terms are pluralized for plural
 --   case.
-compoundNC' :: (NamedIdea a, NamedIdea b) => a -> b -> NamedChunk
+compoundNCPP :: (NamedIdea a, NamedIdea b) => a -> b -> NamedChunk
 
 -- | Similar to <a>compoundNC</a>, except plural cases are customizable.
-compoundNC'' :: (NamedIdea a, NamedIdea b) => (NP -> Sentence) -> (NP -> Sentence) -> a -> b -> NamedChunk
+compoundNCGen :: (NamedIdea a, NamedIdea b) => (NP -> Sentence) -> (NP -> Sentence) -> a -> b -> NamedChunk
+
+-- | Similar to <a>compoundNC</a>, except for plural case, where first
+--   parameter gets pluralized while second one stays singular.
+compoundNCPS :: NamedChunk -> NamedChunk -> NamedChunk
+
+-- | Similar to <a>compoundNCGenP</a> but sets first parameter function to
+--   plural.
+compoundNCPSPP :: NamedChunk -> NamedChunk -> NamedChunk
 
 -- | Similar to <a>compoundNC</a>, but takes a function that is applied to
 --   the first term (eg. <a>short</a> or <a>plural</a>).
-compoundNC''' :: (NamedIdea a, NamedIdea b) => (NP -> Sentence) -> a -> b -> NamedChunk
-
--- | Similar to <a>compoundNC'''</a> but sets first parameter function to
---   plural.
-compoundNCP1 :: NamedChunk -> NamedChunk -> NamedChunk
-
--- | Similar to <a>compoundNC</a>, except for plural case, first parameter
---   gets pluralized while second one stays singular.
-compoundNCPlPh :: NamedChunk -> NamedChunk -> NamedChunk
-
--- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the word
---   "for" between their terms. Plural case is <tt>(plural t1) "for"
---   (phrase t2)</tt>.
-for :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-
--- | Similar to <a>for</a>, but takes two functions that determine the
---   <a>titleCase</a>.
-for' :: (NamedIdea c, Idea d) => (c -> Sentence) -> (d -> Sentence) -> c -> d -> NP
-
--- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the word
---   "of" between their terms. Plural case is <tt>(phrase t1) "of" (plural
---   t2)</tt>.
-of_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-
--- | Similar to <a>of_</a>, but singular case is <tt>(phrase t1) "of"
---   (plural t2)</tt>. Plural case is the same.
-of_' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-
--- | Same as <a>of_</a>, except plural case is <tt>(plural t1) "of" (phrase
---   t2)</tt>.
-of_'' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-
--- | Same as <a>of_</a>, except singular and plural cases are both
---   <tt>(plural t1) "of" (phrase t2)</tt>.
-of__ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-
--- | Same as <a>of_''</a>, except combining <a>Sentence</a> piece is "of
---   a".
-ofA :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-
--- | Same as <a>ofA</a>, except phrase case is <tt>(plural t1) "of a"
---   (phrase t2)</tt>.
-ofA' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-
--- | Same as <a>of_</a> but second argument is a <a>NounPhrase</a>.
-ofN_ :: (NamedIdea c, NounPhrase d) => c -> d -> NP
-
--- | Prepends "the" to a <a>NamedIdea</a>. Similar to <a>the'</a>, but not
---   titleized.
-the :: NamedIdea t => t -> NP
-
--- | Prepends "the" to a titleized <a>NamedIdea</a>.
-the' :: NamedIdea t => t -> NP
-
--- | A customizable version of <a>the</a>. The given function is applied to
---   both singular and plural cases.
-the'' :: (t -> Sentence) -> t -> NP
-
--- | Prepends "a" to a <a>NamedIdea</a> (similar to <a>the</a>).
-aNINP :: NamedIdea c => c -> NP
-
--- | Customizable version of <a>aNINP</a>.
-aNINP' :: (c -> Sentence) -> c -> NP
-
--- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
---   "in the" between their terms. Plural case is <tt>(plural t1) "in the"
---   (phrase t2)</tt>.
-inThe' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-
--- | Case with "T1s with T2", as opposed to "T1 with T2", i.e. singular
---   case is <tt>(plural t1) "with" (phrase t2)</tt> while the plural case
---   pluralizes both.
-with :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-
--- | Same as <a>of_</a>, except combining <a>Sentence</a> piece is "of
---   the". Plural case is <tt>(plural t1) <a>ofThe</a> (phrase t2)</tt>.
-ofThe' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-
--- | Same as <a>ofThe'</a>, except prepends "the".
-the_ofThe'' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-
--- | Same as <a>of_</a>, except combining Sentence piece is "of the".
-onThe' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-
--- | Helper function that places a <a>String</a> in between two <a>NP</a>s.
---   Plural case is <tt>(phraseNP t1) +:+ S s +:+ (pluralNP t2)</tt>.
-insertStringNP :: String -> NP -> NP -> NP
-
--- | Helper function that prepends a <a>String</a> to a <a>NP</a>.
-prependStringNP :: String -> NP -> NP
-
--- | Helper function that places a <a>Sentence</a> in between two
---   <a>NP</a>s. Plural case is <tt>(phraseNP t1) +:+ s +:+ (pluralNP
---   t2)</tt>.
-insertSentNP :: Sentence -> NP -> NP -> NP
-
--- | Helper function that prepends a <a>Sentence</a> to a <a>NP</a>.
-prependSentNP :: Sentence -> NP -> NP
-
--- | Prepends "the" to a <a>NP</a>.
-theNP :: NP -> NP
-
--- | Similar to <a>theNP</a>, but accepts a function that determines the
---   plural case.
-theNP' :: (NP -> Sentence) -> NP -> NP
-
--- | Prepends "a" to a <a>NP</a>.
-aNP :: NP -> NP
-
--- | Similar to <a>aNP</a>, but accepts a function that determines the
---   plural case.
-aNP' :: (NP -> Sentence) -> NP -> NP
-
--- | Inserts "of the" between two <a>NP</a>s. Plural case is <tt>(phraseNP
---   t1) +:+ "of the" +:+ (pluralNP t2)</tt>.
-ofTheNP :: NP -> NP -> NP
-
--- | Similar to <a>ofTheNP</a>, but the plural case is now <tt>(pluralNP
---   t1) <a>ofThe</a> (phraseNP t2)</tt>.
-ofTheNP' :: NP -> NP -> NP
-
--- | Similar to <a>ofTheNP</a>, but accepts two functions for the plural
---   case.
-ofTheNP'' :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-
--- | Inserts "in the" between two <a>NP</a>s. Plural case is <tt>(phraseNP
---   t1) +:+ "in the" +:+ (pluralNP t2)</tt>.
-inTheNP :: NP -> NP -> NP
-
--- | Similar to <a>ofTheNP</a>, but the plural case is now <tt>(pluralNP
---   t1) <a>inThe</a> (phraseNP t2)</tt>.
-inTheNP' :: NP -> NP -> NP
-
--- | Similar to <a>ofTheNP</a>, but accepts two functions for the plural
---   case.
-inTheNP'' :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-
--- | Prepends "the" and inserts "of the". Plural case is <tt>"the" +:+
---   (phraseNP t1) +:+ "of the" +:+ (pluralNP t2)</tt>.
-the_ofTheNP :: NP -> NP -> NP
-
--- | Similar to <a>the_ofTheNP</a>, but the plural case is now <tt> S "the"
---   +:+ (pluralNP t1) <a>ofThe</a> (phraseNP t2)</tt>.
-the_ofTheNP' :: NP -> NP -> NP
-
--- | Similar to <a>the_ofTheNP'</a>, but takes two functions for the plural
---   case.
-the_ofTheNP'' :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-
--- | Inserts "for" between two <a>NP</a>s. Plural case is <tt>(phraseNP t1)
---   +:+ "for" +:+ (pluralNP t2)</tt>.
-forNP :: NP -> NP -> NP
-
--- | Same as <a>forNP</a>, but plural case is now <tt>(pluralNP t1)
---   <a>sFor</a> (phraseNP t2)</tt>.
-forNP' :: NP -> NP -> NP
-
--- | Same as <a>forNP'</a>, but takes two functions for the plural case.
-forNP'' :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-
--- | Inserts "of" between two <a>NP</a>s. Plural case is <tt>(phraseNP t1)
---   +:+ "of" +:+ (pluralNP t2)</tt>.
-ofNP :: NP -> NP -> NP
-
--- | Same as <a>ofNP</a>, but plural case is now <tt>(pluralNP t1)
---   <a>sOf</a> (phraseNP t2)</tt>.
-ofNP' :: NP -> NP -> NP
-
--- | Same as <a>ofNP</a>, but takes two functions for the plural case.
-ofNP'' :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-
--- | Same as <a>ofNP</a>, but takes two functions for the singular case and
---   two for the plural case.
-ofNP''' :: (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-
--- | Inserts "with" between two <a>NP</a>s. Plural case is <tt>(phraseNP
---   t1) +:+ "with" +:+ (pluralNP t2)</tt>.
-withNP :: NP -> NP -> NP
-
--- | Inserts "and" between two <a>NP</a>s. Plural case is <tt>(phraseNP t1)
---   +:+ "and" +:+ (pluralNP t2)</tt>.
-andNP :: NP -> NP -> NP
-
--- | Same as <a>andNP</a>, but plural case is now <tt>(pluralNP t1)
---   <a>sAnd</a> (phraseNP t2)</tt>.
-andNP' :: NP -> NP -> NP
-
--- | Same as <a>andNP</a>, but takes two functions for the plural case.
-andNP'' :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
-
--- | Same as <a>andNP</a>, but takes two functions for the singular case
---   and two for the plural case.
-andNP''' :: (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
+compoundNCGenP :: (NamedIdea a, NamedIdea b) => (NP -> Sentence) -> a -> b -> NamedChunk
 
 -- | Helper function that combines a <a>NamedIdea</a> and a <a>NP</a>
---   without any words in between. Plural case is <tt>phrase t1 +:+
---   pluralNP t2</tt>
+--   without any words in between. Plural case is <tt>(phrase t1) +:+
+--   (pluralNP t2)</tt>.
 combineNINP :: NamedIdea c => c -> NP -> NP
 
 -- | Similar to <a>combineNINP</a> but takes in a <a>NP</a> first and a

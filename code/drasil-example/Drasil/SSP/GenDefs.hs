@@ -257,7 +257,7 @@ momentEql = makeRC "momentEql" (nounPhraseSP "moment equilibrium")
   momEqlDesc momEqlRel -- genDef6Label
 
 momEqlRel :: Relation
-momEqlRel = dbl 0 $= momExpr (\ x y -> x `addRe`
+momEqlRel = exactDbl 0 $= momExpr (\ x y -> x `addRe`
   (half (inxi baseWthX) `mulRe` (inxi intShrForce `addRe` inxiM1 intShrForce)) `addRe` y)
 
 momEqlDesc :: Sentence
@@ -449,7 +449,7 @@ momEqlDerivHydroEqn = inxi surfHydroForce `mulRe` sin (inxi surfAngle) `mulRe`
 
 momEqlDerivExtEqn = inxi surfLoad `mulRe` sin (inxi impLoadAngle) `mulRe` inxi midpntHght
 
-momEqlDerivFinalEqn = dbl 0 $= momExpr (\ x y -> x `addRe`
+momEqlDerivFinalEqn = exactDbl 0 $= momExpr (\ x y -> x `addRe`
   (half (inxi baseWthX) `mulRe` (inxi intShrForce `addRe` inxiM1 intShrForce)) `addRe` y)
 
 --
@@ -599,7 +599,7 @@ bsWtrFEqn = inxi baseHydroForce $= inxi baseLngth `mulRe` sy waterWeight `mulRe`
           (inxiM1 waterHght $- inxiM1 slipHght),
           (inxi waterHght $> inxi slipHght) $||
           (inxiM1 waterHght $> inxiM1 slipHght))
-        case2 = (dbl 0, (inxi waterHght $<= inxi slipHght) $&&
+        case2 = (exactDbl 0, (inxi waterHght $<= inxi slipHght) $&&
           (inxiM1 waterHght $<= inxiM1 slipHght))
 
 bsWtrFNotes :: Sentence
@@ -682,7 +682,7 @@ srfWtrFEqn = inxi surfHydroForce $= inxi surfLngth `mulRe` sy waterWeight `mulRe
           (inxiM1 waterHght $- inxiM1 slopeHght),
           (inxi waterHght $> inxi slopeHght) $||
           (inxiM1 waterHght $> inxiM1 slopeHght))
-        case2 = (dbl 0, (inxi waterHght $<= inxi slopeHght) $&&
+        case2 = (exactDbl 0, (inxi waterHght $<= inxi slopeHght) $&&
           (inxiM1 waterHght $<= inxiM1 slopeHght))
 
 srfWtrFNotes :: Sentence

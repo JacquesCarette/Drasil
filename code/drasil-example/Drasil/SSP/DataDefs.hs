@@ -191,7 +191,7 @@ ratioVarQD = mkQuantDef scalFunc ratioVarEqn
 
 ratioVarEqn :: Expr
 ratioVarEqn = completeCase [case1, case2]
-  where case1 = (dbl 1, sy constF)
+  where case1 = (exactDbl 1, sy constF)
 
         case2 = (sin (sy QM.pi_ `mulRe` ((inxi slipDist $- idx (sy slipDist) (int 0)) $/
                 (indxn slipDist $- idx (sy slipDist) (int 0)))), not_ (sy constF))

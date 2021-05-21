@@ -27,7 +27,7 @@ weightDerivNewtonEqn      = sy QP.weight $= mulRe (sy QPP.mass) (sy QP.gravitati
 weightDerivReplaceMassEqn = sy QP.weight $= mulRe (sy QPP.density) (mulRe (sy QPP.vol) (sy QP.gravitationalAccel))
 weightDerivSpecWeightEqn  = sy QP.weight $= mulRe (sy QPP.vol) (sy QPP.specWeight)
 
-weightDerivAccelEqn       = sy QP.acceleration $= vec2D (dbl 0) (mulRe (sy QP.gravitationalAccel) (sy QM.unitVectj))
+weightDerivAccelEqn       = sy QP.acceleration $= vec2D (exactDbl 0) (mulRe (sy QP.gravitationalAccel) (sy QM.unitVectj))
 
 hsPressureEqn             = sy QP.pressure $= mulRe (sy QPP.specWeight) (sy QP.height)
 

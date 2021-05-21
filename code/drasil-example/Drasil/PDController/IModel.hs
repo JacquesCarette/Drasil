@@ -21,10 +21,10 @@ instanceModels = [imPD]
 imPD :: InstanceModel
 imPD
   = im (OthModel imPDRC)
-      [qwC qdSetPointTD $ UpFrom (Exc, dbl 0), qwC qdPropGain $ UpFrom (Exc, dbl 0),
-       qwC qdDerivGain $ UpFrom (Exc, dbl 0)]
+      [qwC qdSetPointTD $ UpFrom (Exc, exactDbl 0), qwC qdPropGain $ UpFrom (Exc, exactDbl 0),
+       qwC qdDerivGain $ UpFrom (Exc, exactDbl 0)]
       (qw qdProcessVariableTD)
-      [UpFrom (Exc, dbl 0)]
+      [UpFrom (Exc, exactDbl 0)]
       [makeCite abbasi2015, makeCite johnson2008]
       (Just imDeriv)
       "pdEquationIM"
@@ -41,9 +41,9 @@ imPDRC
 eqn :: Expr
 eqn
   = deriv (deriv (sy qdProcessVariableTD) time) time `addRe`
-      ((dbl 1 `addRe` sy qdDerivGain) `mulRe` deriv (sy qdProcessVariableTD) time)
-      `addRe` ((dbl 20 `addRe` sy qdPropGain) `mulRe` sy qdProcessVariableTD)
-      $- (sy qdSetPointTD `mulRe` sy qdPropGain) $= dbl 0
+      ((exactDbl 1 `addRe` sy qdDerivGain) `mulRe` deriv (sy qdProcessVariableTD) time)
+      `addRe` ((exactDbl 20 `addRe` sy qdPropGain) `mulRe` sy qdProcessVariableTD)
+      $- (sy qdSetPointTD `mulRe` sy qdPropGain) $= exactDbl 0
 
 imDeriv :: Derivation
 imDeriv

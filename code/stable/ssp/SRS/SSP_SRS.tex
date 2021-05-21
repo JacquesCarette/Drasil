@@ -522,7 +522,7 @@ Description & \begin{symbDescription}
               \item{$M$ is the moment ($\text{N}\text{m}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & For a body in static equilibrium, the net forces and moments acting on the body will cancel out. Assuming a 2D problem (\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large}), the $x$-coordinate of the force ${F_{\text{x}}}$ and $y$-coordinate of the force ${F_{\text{y}}}$ will be equal to $0.0$. All forces and their distance from the chosen point of rotation will create a net moment equal to $0.0$.
+Notes & For a body in static equilibrium, the net forces and moments acting on the body will cancel out. Assuming a 2D problem (\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large}), the $x$-coordinate of the force ${F_{\text{x}}}$ and $y$-coordinate of the force ${F_{\text{y}}}$ will be equal to $0$. All forces and their distance from the chosen point of rotation will create a net moment equal to $0$.
         
 \\ \midrule \\
 Source & \cite{fredlund1977}
@@ -991,7 +991,7 @@ Units & ${\text{N}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           0.0=-{\mathbf{G}}_{i} \left({\mathbf{h}_{\text{z},i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{G}}_{i-1} \left({\mathbf{h}_{\text{z},i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)-{\mathbf{H}}_{i} \left(\frac{1}{3} {\mathbf{h}_{\text{z,w},i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{H}}_{i-1} \left(\frac{1}{3} {\mathbf{h}_{\text{z,w},i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+\frac{{\mathbf{b}}_{i}}{2} \left({\mathbf{X}}_{i}+{\mathbf{X}}_{i-1}\right)+\frac{-{K_{\text{c}}} {\mathbf{W}}_{i} {\mathbf{h}}_{i}}{2}+{\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right) {\mathbf{h}}_{i}+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right) {\mathbf{h}}_{i}
+           0=-{\mathbf{G}}_{i} \left({\mathbf{h}_{\text{z},i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{G}}_{i-1} \left({\mathbf{h}_{\text{z},i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)-{\mathbf{H}}_{i} \left(\frac{1}{3} {\mathbf{h}_{\text{z,w},i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{H}}_{i-1} \left(\frac{1}{3} {\mathbf{h}_{\text{z,w},i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+\frac{{\mathbf{b}}_{i}}{2} \left({\mathbf{X}}_{i}+{\mathbf{X}}_{i-1}\right)+\frac{-{K_{\text{c}}} {\mathbf{W}}_{i} {\mathbf{h}}_{i}}{2}+{\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right) {\mathbf{h}}_{i}+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right) {\mathbf{h}}_{i}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -1093,7 +1093,7 @@ The external force again acts into the midpoint of the slice surface, so the ver
 The base hydrostatic force and slice weight both act in the direction of the point of rotation (\hyperref[assumpHFSM]{A: Hydrostatic-Force-Slice-Midpoint}), therefore both have moments of zero. Thus, all of the moments have been determined. The moment equilibrium is then represented by the sum of all moments:
 
 \begin{displaymath}
-0.0=-{\mathbf{G}}_{i} \left({\mathbf{h}_{\text{z},i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{G}}_{i-1} \left({\mathbf{h}_{\text{z},i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)-{\mathbf{H}}_{i} \left(\frac{1}{3} {\mathbf{h}_{\text{z,w},i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{H}}_{i-1} \left(\frac{1}{3} {\mathbf{h}_{\text{z,w},i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+\frac{{\mathbf{b}}_{i}}{2} \left({\mathbf{X}}_{i}+{\mathbf{X}}_{i-1}\right)+\frac{-{K_{\text{c}}} {\mathbf{W}}_{i} {\mathbf{h}}_{i}}{2}+{\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right) {\mathbf{h}}_{i}+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right) {\mathbf{h}}_{i}
+0=-{\mathbf{G}}_{i} \left({\mathbf{h}_{\text{z},i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{G}}_{i-1} \left({\mathbf{h}_{\text{z},i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)-{\mathbf{H}}_{i} \left(\frac{1}{3} {\mathbf{h}_{\text{z,w},i}}+\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+{\mathbf{H}}_{i-1} \left(\frac{1}{3} {\mathbf{h}_{\text{z,w},i-1}}-\frac{{\mathbf{b}}_{i}}{2} \tan\left({\mathbf{α}}_{i}\right)\right)+\frac{{\mathbf{b}}_{i}}{2} \left({\mathbf{X}}_{i}+{\mathbf{X}}_{i-1}\right)+\frac{-{K_{\text{c}}} {\mathbf{W}}_{i} {\mathbf{h}}_{i}}{2}+{\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right) {\mathbf{h}}_{i}+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right) {\mathbf{h}}_{i}
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -1133,7 +1133,7 @@ Under the influence of gravity, and assuming a 2D Cartesian coordinate system wi
 
 \begin{displaymath}
 \mathbf{a}=\begin{bmatrix}
-           0.0\\
+           0\\
            \mathbf{g} \mathbf{\hat{j}}
            \end{bmatrix}
 \end{displaymath}
@@ -1281,7 +1281,7 @@ Units & $\frac{\text{N}}{\text{m}}$
 Equation & \begin{displaymath}
            {\mathbf{U}_{\text{b},i}}={\mathbf{ℓ}_{b,i}} {γ_{w}} \frac{1}{2} \begin{cases}
                                                                             {\mathbf{y}_{\text{wt},i}}-{\mathbf{y}_{\text{slip},i}}+{\mathbf{y}_{\text{wt},i-1}}-{\mathbf{y}_{\text{slip},i-1}}, & {\mathbf{y}_{\text{wt},i}}\gt{}{\mathbf{y}_{\text{slip},i}}\lor{}{\mathbf{y}_{\text{wt},i-1}}\gt{}{\mathbf{y}_{\text{slip},i-1}}\\
-                                                                            0.0, & {\mathbf{y}_{\text{wt},i}}\leq{}{\mathbf{y}_{\text{slip},i}}\land{}{\mathbf{y}_{\text{wt},i-1}}\leq{}{\mathbf{y}_{\text{slip},i-1}}
+                                                                            0, & {\mathbf{y}_{\text{wt},i}}\leq{}{\mathbf{y}_{\text{slip},i}}\land{}{\mathbf{y}_{\text{wt},i-1}}\leq{}{\mathbf{y}_{\text{slip},i-1}}
                                                                             \end{cases}
            \end{displaymath}
 \\ \midrule \\
@@ -1341,7 +1341,7 @@ Units & $\frac{\text{N}}{\text{m}}$
 Equation & \begin{displaymath}
            {\mathbf{U}_{\text{g},i}}={\mathbf{ℓ}_{s,i}} {γ_{w}} \frac{1}{2} \begin{cases}
                                                                             {\mathbf{y}_{\text{wt},i}}-{\mathbf{y}_{\text{slope},i}}+{\mathbf{y}_{\text{wt},i-1}}-{\mathbf{y}_{\text{slope},i-1}}, & {\mathbf{y}_{\text{wt},i}}\gt{}{\mathbf{y}_{\text{slope},i}}\lor{}{\mathbf{y}_{\text{wt},i-1}}\gt{}{\mathbf{y}_{\text{slope},i-1}}\\
-                                                                            0.0, & {\mathbf{y}_{\text{wt},i}}\leq{}{\mathbf{y}_{\text{slope},i}}\land{}{\mathbf{y}_{\text{wt},i-1}}\leq{}{\mathbf{y}_{\text{slope},i-1}}
+                                                                            0, & {\mathbf{y}_{\text{wt},i}}\leq{}{\mathbf{y}_{\text{slope},i}}\land{}{\mathbf{y}_{\text{wt},i-1}}\leq{}{\mathbf{y}_{\text{slope},i-1}}
                                                                             \end{cases}
            \end{displaymath}
 \\ \midrule \\
@@ -1798,7 +1798,7 @@ Units & Unitless
 \\ \midrule \\
 Equation & \begin{displaymath}
            \mathbf{f}=\begin{cases}
-                      1.0, & const_f\\
+                      1, & const_f\\
                       \sin\left(π \frac{{\mathbf{x}_{\text{slip},i}}-{\mathbf{x}_{\text{slip},0}}}{{\mathbf{x}_{\text{slip},n}}-{\mathbf{x}_{\text{slip},0}}}\right), & \neg{}const_f
                       \end{cases}
            \end{displaymath}
@@ -2528,35 +2528,35 @@ RefBy & \hyperref[displayGraph]{FR: Display-Graph} and \hyperref[determineCritSl
 \\
 \midrule
 \endhead
-$c'$ & $c'\gt{}0.0$ & $10.0\cdot{}10^{3}$ ${\text{Pa}}$ & 10$\%$
+$c'$ & $c'\gt{}0$ & $10.0\cdot{}10^{3}$ ${\text{Pa}}$ & 10$\%$
 \\
-${{x_{\text{slip}}}^{\text{maxEtr}}}$ & -- & $20.0$ ${\text{m}}$ & 10$\%$
+${{x_{\text{slip}}}^{\text{maxEtr}}}$ & -- & $20$ ${\text{m}}$ & 10$\%$
 \\
-${{x_{\text{slip}}}^{\text{maxExt}}}$ & -- & $100.0$ ${\text{m}}$ & 10$\%$
+${{x_{\text{slip}}}^{\text{maxExt}}}$ & -- & $100$ ${\text{m}}$ & 10$\%$
 \\
-${{x_{\text{slip}}}^{\text{minEtr}}}$ & -- & $0.0$ ${\text{m}}$ & 10$\%$
+${{x_{\text{slip}}}^{\text{minEtr}}}$ & -- & $0$ ${\text{m}}$ & 10$\%$
 \\
-${{x_{\text{slip}}}^{\text{minExt}}}$ & -- & $50.0$ ${\text{m}}$ & 10$\%$
+${{x_{\text{slip}}}^{\text{minExt}}}$ & -- & $50$ ${\text{m}}$ & 10$\%$
 \\
-${\mathbf{x}_{\text{slope}}}$ & -- & $0.0$ ${\text{m}}$ & 10$\%$
+${\mathbf{x}_{\text{slope}}}$ & -- & $0$ ${\text{m}}$ & 10$\%$
 \\
-${\mathbf{x}_{\text{wt}}}$ & -- & $0.0$ ${\text{m}}$ & 10$\%$
+${\mathbf{x}_{\text{wt}}}$ & -- & $0$ ${\text{m}}$ & 10$\%$
 \\
-${{y_{\text{slip}}}^{\text{max}}}$ & -- & $30.0$ ${\text{m}}$ & 10$\%$
+${{y_{\text{slip}}}^{\text{max}}}$ & -- & $30$ ${\text{m}}$ & 10$\%$
 \\
-${{y_{\text{slip}}}^{\text{min}}}$ & -- & $0.0$ ${\text{m}}$ & 10$\%$
+${{y_{\text{slip}}}^{\text{min}}}$ & -- & $0$ ${\text{m}}$ & 10$\%$
 \\
-${\mathbf{y}_{\text{slope}}}$ & -- & $0.0$ ${\text{m}}$ & 10$\%$
+${\mathbf{y}_{\text{slope}}}$ & -- & $0$ ${\text{m}}$ & 10$\%$
 \\
-${\mathbf{y}_{\text{wt}}}$ & -- & $0.0$ ${\text{m}}$ & 10$\%$
+${\mathbf{y}_{\text{wt}}}$ & -- & $0$ ${\text{m}}$ & 10$\%$
 \\
-${γ_{\text{dry}}}$ & ${γ_{\text{dry}}}\gt{}0.0$ & $20.0\cdot{}10^{3}$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
+${γ_{\text{dry}}}$ & ${γ_{\text{dry}}}\gt{}0$ & $20.0\cdot{}10^{3}$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
 \\
-${γ_{\text{sat}}}$ & ${γ_{\text{sat}}}\gt{}0.0$ & $20.0\cdot{}10^{3}$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
+${γ_{\text{sat}}}$ & ${γ_{\text{sat}}}\gt{}0$ & $20.0\cdot{}10^{3}$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
 \\
-${γ_{w}}$ & ${γ_{w}}\gt{}0.0$ & $9.8\cdot{}10^{3}$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
+${γ_{w}}$ & ${γ_{w}}\gt{}0$ & $9.8\cdot{}10^{3}$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
 \\
-$φ'$ & $0.0\lt{}φ'\lt{}90.0$ & $25.0$ ${{}^{\circ}}$ & 10$\%$
+$φ'$ & $0\lt{}φ'\lt{}90$ & $25$ ${{}^{\circ}}$ & 10$\%$
 \\
 \bottomrule
 \caption{Input Data Constraints}
@@ -2572,7 +2572,7 @@ $φ'$ & $0.0\lt{}φ'\lt{}90.0$ & $25.0$ ${{}^{\circ}}$ & 10$\%$
 \\
 \midrule
 \endhead
-${F_{\text{S}}}$ & ${F_{\text{S}}}\gt{}0.0$
+${F_{\text{S}}}$ & ${F_{\text{S}}}\gt{}0$
 \\
 $\text{(x,y)}$ & --
 \\

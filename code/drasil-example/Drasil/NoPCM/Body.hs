@@ -205,11 +205,11 @@ si = SI {
 }
 
 noPCMODEOpts :: ODEOptions
-noPCMODEOpts = odeOptions RK45 (sy absTol) (sy relTol) (sy timeStep) (dbl 0)
+noPCMODEOpts = odeOptions RK45 (sy absTol) (sy relTol) (sy timeStep) (exactDbl 0)
 
 noPCMODEInfo :: ODEInfo
 noPCMODEInfo = odeInfo (quantvar time) (quantvar tempW)
-  [quantvar tauW, quantvar tempC] (dbl 0) (sy timeFinal) (sy tempInit)
+  [quantvar tauW, quantvar tempC] (exactDbl 0) (sy timeFinal) (sy tempInit)
   [recip_ (sy tauW) `mulRe` (sy tempC $- idx (sy tempW) (int 0))] noPCMODEOpts
 
 refDB :: ReferenceDB

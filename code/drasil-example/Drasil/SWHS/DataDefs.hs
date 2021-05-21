@@ -165,7 +165,7 @@ ddMeltFrac :: DataDefinition
 ddMeltFrac = dd ddMeltFracQD [makeCite koothoor2013]
   Nothing "meltFrac" [meltFracConst, makeRef2S ddHtFusion]
   where meltFracConst = S "The" +:+ phrase value `S.sOf` E (sy meltFrac) `S.sIs`
-                        S "constrained to" +:+. E (dbl 0 $<= sy meltFrac $<= dbl 1)
+                        S "constrained to" +:+. E (exactDbl 0 $<= sy meltFrac $<= exactDbl 1)
 
 ----
 

@@ -578,7 +578,7 @@ Units & $\text{N}\text{s}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           j=\frac{-\left(1.0+{C_{\text{R}}}\right) {{\mathbf{v}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\mathbf{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right) \text{||}\mathbf{n}\text{||}^{2}+\frac{\text{||}{\mathbf{u}_{\text{A}\text{P}}}\text{*}\mathbf{n}\text{||}^{2}}{{\mathbf{I}_{\text{A}}}}+\frac{\text{||}{\mathbf{u}_{\text{B}\text{P}}}\text{*}\mathbf{n}\text{||}^{2}}{{\mathbf{I}_{\text{B}}}}}
+           j=\frac{-\left(1+{C_{\text{R}}}\right) {{\mathbf{v}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\mathbf{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right) \text{||}\mathbf{n}\text{||}^{2}+\frac{\text{||}{\mathbf{u}_{\text{A}\text{P}}}\text{*}\mathbf{n}\text{||}^{2}}{{\mathbf{I}_{\text{A}}}}+\frac{\text{||}{\mathbf{u}_{\text{B}\text{P}}}\text{*}\mathbf{n}\text{||}^{2}}{{\mathbf{I}_{\text{B}}}}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -1038,7 +1038,7 @@ Description & \begin{symbDescription}
               \item{${{\mathbf{v}_{\text{i}}}^{\text{A}\text{B}}}$ is the initial relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The coefficient of restitution ${C_{\text{R}}}$ determines the elasticity of a collision between two rigid bodies. ${C_{\text{R}}}=1.0$ results in an elastic collision, ${C_{\text{R}}}\lt{}1.0$ results in an inelastic collision, and ${C_{\text{R}}}=0.0$ results in a totally inelastic collision.
+Notes & The coefficient of restitution ${C_{\text{R}}}$ determines the elasticity of a collision between two rigid bodies. ${C_{\text{R}}}=1$ results in an elastic collision, ${C_{\text{R}}}\lt{}1$ results in an inelastic collision, and ${C_{\text{R}}}=0$ results in a totally inelastic collision.
         
 \\ \midrule \\
 Source & --
@@ -1252,19 +1252,19 @@ Output & ${\mathbf{a}_{j}}$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {\mathbf{v}_{j}}\gt{}0.0
+                    {\mathbf{v}_{j}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    t\gt{}0.0
+                    t\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    \mathbf{g}\gt{}0.0
+                    \mathbf{g}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    {\mathbf{F}_{j}}\gt{}0.0
+                    {\mathbf{F}_{j}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    {m_{j}}\gt{}0.0
+                    {m_{j}}\gt{}0
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & 
@@ -1317,20 +1317,20 @@ Output & $α$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    ω\gt{}0.0
+                    ω\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    t\gt{}0.0
+                    t\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    {\mathbf{τ}_{j}}\gt{}0.0
+                    {\mathbf{τ}_{j}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    \mathbf{I}\gt{}0.0
+                    \mathbf{I}\gt{}0
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & \begin{displaymath}
-                     α\gt{}0.0
+                     α\gt{}0
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
@@ -1378,20 +1378,20 @@ Output & ${t_{\text{c}}}$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    t\gt{}0.0
+                    t\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    j\gt{}0.0
+                    j\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    {m_{\text{A}}}\gt{}0.0
+                    {m_{\text{A}}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    \mathbf{n}\gt{}0.0
+                    \mathbf{n}\gt{}0
                     \end{displaymath}
 \\ \midrule \\
 Output Constraints & \begin{displaymath}
-                     {t_{\text{c}}}\gt{}0.0
+                     {t_{\text{c}}}\gt{}0
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
@@ -1438,17 +1438,17 @@ RefBy &
 \\
 \midrule
 \endhead
-${C_{\text{R}}}$ & $0.0\leq{}{C_{\text{R}}}\leq{}1.0$ & -- & $0.8$ & 10$\%$
+${C_{\text{R}}}$ & $0\leq{}{C_{\text{R}}}\leq{}1$ & -- & $0.8$ & 10$\%$
 \\
 $\mathbf{F}$ & -- & -- & $98.1$ ${\text{N}}$ & 10$\%$
 \\
 $G$ & -- & -- & $66.743\cdot{}10^{-12}$ $\frac{\text{m}^{3}}{\text{kg}\text{s}^{2}}$ & 10$\%$
 \\
-$\mathbf{I}$ & $\mathbf{I}\gt{}0.0$ & -- & $74.5$ $\text{kg}\text{m}^{2}$ & 10$\%$
+$\mathbf{I}$ & $\mathbf{I}\gt{}0$ & -- & $74.5$ $\text{kg}\text{m}^{2}$ & 10$\%$
 \\
-$L$ & $L\gt{}0.0$ & -- & $44.2$ ${\text{m}}$ & 10$\%$
+$L$ & $L\gt{}0$ & -- & $44.2$ ${\text{m}}$ & 10$\%$
 \\
-$m$ & $m\gt{}0.0$ & -- & $56.2$ ${\text{kg}}$ & 10$\%$
+$m$ & $m\gt{}0$ & -- & $56.2$ ${\text{kg}}$ & 10$\%$
 \\
 $\mathbf{p}$ & -- & -- & $0.412$ ${\text{m}}$ & 10$\%$
 \\
@@ -1458,7 +1458,7 @@ $\mathbf{τ}$ & -- & -- & $200.0$ $\text{N}\text{m}$ & 10$\%$
 \\
 $ω$ & -- & -- & $2.1$ $\frac{\text{rad}}{\text{s}}$ & 10$\%$
 \\
-$ϕ$ & -- & $0.0\leq{}ϕ\leq{}2 π$ & $\frac{π}{2}$ ${\text{rad}}$ & 10$\%$
+$ϕ$ & -- & $0\leq{}ϕ\leq{}2 π$ & $\frac{π}{2}$ ${\text{rad}}$ & 10$\%$
 \\
 \bottomrule
 \caption{Input Data Constraints}

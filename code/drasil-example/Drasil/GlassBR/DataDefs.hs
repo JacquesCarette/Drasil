@@ -79,7 +79,7 @@ hFromt = dd hFromtQD [makeCite astm2009] Nothing "minThick" [hMin]
 --DD3-- (#749)
 
 loadDFEq :: Expr
-loadDFEq = (sy loadDur $/ dbl 60) $^ (sy sflawParamM $/ dbl 16)
+loadDFEq = (sy loadDur $/ exactDbl 60) $^ (sy sflawParamM $/ dbl 16)
 
 loadDFQD :: QDefinition
 loadDFQD = mkQuantDef lDurFac loadDFEq

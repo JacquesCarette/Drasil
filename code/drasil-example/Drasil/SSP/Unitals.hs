@@ -97,50 +97,50 @@ slopeDist, slopeHght, waterDist, waterHght, xMaxExtSlip, xMaxEtrSlip,
 slopeDist = uq (constrained' (makeUCWDS "x_slope,i"
   (nounPhraseSent $ plural xCoord `S.sOf` S "the slope")
   (plural xCoord `S.sOf` S "points on the soil slope")
-  (sub (vec lX) lSlope) metre) [] (dbl 0)) defaultUncrt
+  (sub (vec lX) lSlope) metre) [] (exactDbl 0)) defaultUncrt
 
 slopeHght = uq (constrained' (makeUCWDS "y_slope,i"
   (nounPhraseSent $ plural yCoord `S.sOf` S "the slope")
   (plural yCoord `S.sOf` S "points on the soil slope")
-  (sub (vec lY) lSlope) metre) [] (dbl 0)) defaultUncrt
+  (sub (vec lY) lSlope) metre) [] (exactDbl 0)) defaultUncrt
 
 waterDist = uqc "x_wt,i" (nounPhraseSent $ plural xCoord `S.sOf` S "the water table")
   "x-positions of the water table"
-  (sub (vec lX) lWatTab) metre Real [] (dbl 0) defaultUncrt
+  (sub (vec lX) lWatTab) metre Real [] (exactDbl 0) defaultUncrt
 
 waterHght = uqc "y_wt,i" (nounPhraseSent $ plural yCoord `S.sOf` S "the water table")
   "heights of the water table"
-  (sub (vec lY) lWatTab) metre Real [] (dbl 0) defaultUncrt
+  (sub (vec lY) lWatTab) metre Real [] (exactDbl 0) defaultUncrt
 
 xMaxExtSlip = uq (constrained' (makeUCWDS "x_slip^maxExt"
   (nounPhraseSent $ S "maximum exit" +:+ phrase xCoord)
   (S "the maximum potential" +:+ phrase xCoord +:+ S "for the exit point of a slip surface")
-  (sup (sub lX lSlip) lMaxExt) metre) [] (dbl 100)) defaultUncrt
+  (sup (sub lX lSlip) lMaxExt) metre) [] (exactDbl 100)) defaultUncrt
 
 xMaxEtrSlip = uq (constrained' (makeUCWDS "x_slip^maxEtr" 
   (nounPhraseSent $ S "maximum entry" +:+ phrase xCoord)
   (S "the maximum potential" +:+ phrase xCoord +:+ S "for the entry point of a slip surface")
-  (sup (sub lX lSlip) lMaxEtr) metre) [] (dbl 20)) defaultUncrt
+  (sup (sub lX lSlip) lMaxEtr) metre) [] (exactDbl 20)) defaultUncrt
   
 xMinExtSlip = uq (constrained' (makeUCWDS "x_slip^minExt"
   (nounPhraseSent $ S "minimum exit" +:+ phrase xCoord)
   (S "the minimum potential" +:+ phrase xCoord +:+ S "for the exit point of a slip surface")
-  (sup (sub lX lSlip) lMinExt) metre) [] (dbl 50)) defaultUncrt
+  (sup (sub lX lSlip) lMinExt) metre) [] (exactDbl 50)) defaultUncrt
 
 xMinEtrSlip = uq (constrained' (makeUCWDS "x_slip^minEtr"
   (nounPhraseSent $ S "minimum entry" +:+ phrase xCoord)
   (S "the minimum potential" +:+ phrase xCoord +:+ S "for the entry point of a slip surface")
-  (sup (sub lX lSlip) lMinEtr) metre) [] (dbl 0)) defaultUncrt
+  (sup (sub lX lSlip) lMinEtr) metre) [] (exactDbl 0)) defaultUncrt
 
 yMaxSlip = uq (constrained' (makeUCWDS "y_slip^max"
   (nounPhraseSent $ S "maximum" +:+ phrase yCoord)
   (S "the maximum potential" +:+ phrase yCoord `S.sOf` S "a point on a slip surface")
-  (supMax (sub lY lSlip)) metre) [] (dbl 30)) defaultUncrt
+  (supMax (sub lY lSlip)) metre) [] (exactDbl 30)) defaultUncrt
 
 yMinSlip = uq (constrained' (makeUCWDS "y_slip^min"
   (nounPhraseSent $ S "minimum" +:+ phrase yCoord)
   (S "the minimum potential" +:+ phrase yCoord `S.sOf` S "a point on a slip surface")
-  (supMin (sub lY lSlip)) metre) [] (dbl 0)) defaultUncrt
+  (supMin (sub lY lSlip)) metre) [] (exactDbl 0)) defaultUncrt
 
 effCohesion = uqc "c'" (cn "effective cohesion")
   "the internal pressure that sticks particles of soil together"
@@ -149,8 +149,8 @@ effCohesion = uqc "c'" (cn "effective cohesion")
 fricAngle = uqc "varphi'" (cn "effective angle of friction")
   ("the angle of inclination with respect to the horizontal axis of " ++
   "the Mohr-Coulomb shear resistance line") --http://www.geotechdata.info
-  (prime vPhi) degree Real [physc $ Bounded (Exc, dbl 0) (Exc, dbl 90)]
-  (dbl 25) defaultUncrt
+  (prime vPhi) degree Real [physc $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 90)]
+  (exactDbl 25) defaultUncrt
 
 dryWeight = uqc "gamma" (cn "soil dry unit weight")
   "the weight of a dry soil/ground layer divided by the volume of the layer"
@@ -175,7 +175,7 @@ constF = dqd' (dcc "const_f" (nounPhraseSP "decision on f")
 {-Output Variables-} --FIXME: See if there should be typical values
 fs, coords  :: ConstrConcept
 fs = constrained' (dqd' fsConcept (const $ sub cF lSafety) Real Nothing)
-  [gtZeroConstr] (dbl 1)
+  [gtZeroConstr] (exactDbl 1)
 
 fsMin :: DefinedQuantityDict -- This is a hack to remove the use of indexing for 'min'.
 fsMin = dqd' (dcc "fsMin" (cn "minimum factor of safety") 

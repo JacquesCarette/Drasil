@@ -78,11 +78,11 @@ plateLen = uqcND "plateLen" (nounPhraseSP "plate length (long dimension)")
 
 plateWidth = uqcND "plateWidth" (nounPhraseSP "plate width (short dimension)")
   lB metre Real
-  [ physc $ Bounded (Exc, dbl 0) (Inc, sy plateLen),
+  [ physc $ Bounded (Exc, exactDbl 0) (Inc, sy plateLen),
     sfwrc $ Bounded (Inc, sy dimMin) (Inc, sy dimMax)] (dbl 1.2) defaultUncrt
 
 aspectRatio = uq (constrained' (dqdNoUnit aspectRatioCon (Variable "AR") Real)
-  [ physc $ UpFrom (Inc, dbl 1), 
+  [ physc $ UpFrom (Inc, exactDbl 1), 
     sfwrc $ UpTo (Inc, sy arMax)] (dbl 1.5)) defaultUncrt
 
 pbTol = uvc "pbTol" (nounPhraseSP "tolerable probability of breakage") 
@@ -93,21 +93,21 @@ charWeight = uqcND "charWeight" (nounPhraseSP "charge weight")
   lW kilogram Real
   [ gtZeroConstr,
     sfwrc $ Bounded (Inc, sy cWeightMin) (Inc, sy cWeightMax)]
-    (dbl 42) defaultUncrt
+    (exactDbl 42) defaultUncrt
 
 tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
   (Variable "TNT") Real
-  [ gtZeroConstr ] (dbl 1.0) defaultUncrt
+  [ gtZeroConstr ] (exactDbl 1) defaultUncrt
 
 standOffDist = uq (constrained' (dqd sD (Variable "SD") Real metre)
   [ gtZeroConstr,
-    sfwrc $ Bounded (Inc, sy sdMin) (Inc, sy sdMax)] (dbl 45)) defaultUncrt
+    sfwrc $ Bounded (Inc, sy sdMin) (Inc, sy sdMax)] (exactDbl 45)) defaultUncrt
 
 nomThick = cuc "nomThick" 
   (nounPhraseSent $ S "nominal thickness" +:+ displayDblConstrntsAsSet 
     nomThick nominalThicknesses)
   lT millimetre {-Discrete nominalThicknesses, but not implemented-} Rational 
-  [enumc nominalThicknesses] $ dbl 8
+  [enumc nominalThicknesses] $ exactDbl 8
 
 glassTypeCon  = constrainedNRV' (dqdNoUnit glassTy lG String) 
   [EnumeratedStr Software $ map (getAccStr . snd) glassType]
@@ -126,7 +126,7 @@ probBr = cvc "probBr" (nounPhraseSP "probability of breakage")
   [probConstr] (Just $ dbl 0.4)
 
 stressDistFac = cvc "stressDistFac" (nounPhraseSP "stress distribution factor (Function)") 
-  cJ Real [physc $ Bounded (Inc, sy stressDistFacMin) (Inc, sy stressDistFacMax)] (Just $ dbl 15.0)
+  cJ Real [physc $ Bounded (Inc, sy stressDistFacMin) (Inc, sy stressDistFacMax)] (Just $ exactDbl 15)
 
 probFail = cvc "probFail" (nounPhraseSP "probability of failure")
   (sub cP lFail) Rational
@@ -150,7 +150,7 @@ dimMax, dimMin, arMax, cWeightMax, cWeightMin, sdMax, stressDistFacMin, stressDi
 
 dimMax     = mkQuantDef (unitary "dimMax"
   (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
-  (subMax lD) metre Real) (dbl 5)
+  (subMax lD) metre Real) (exactDbl 5)
 
 dimMin     = mkQuantDef (unitary "dimMin"
   (nounPhraseSP "minimum value for one of the dimensions of the glass plate") 
@@ -158,11 +158,11 @@ dimMin     = mkQuantDef (unitary "dimMin"
 
 arMax     = mkQuantDef (vc "arMax"
   (nounPhraseSP "maximum aspect ratio")
-  (subMax (Variable "AR")) Rational) (dbl 5)
+  (subMax (Variable "AR")) Rational) (exactDbl 5)
 
 cWeightMax = mkQuantDef (unitary "cWeightMax" 
   (nounPhraseSP "maximum permissible input charge weight")
-  (subMax (eqSymb charWeight)) kilogram Rational) (dbl 910)
+  (subMax (eqSymb charWeight)) kilogram Rational) (exactDbl 910)
 
 cWeightMin = mkQuantDef (unitary "cWeightMin"
   (nounPhraseSP "minimum permissible input charge weight")
@@ -170,17 +170,17 @@ cWeightMin = mkQuantDef (unitary "cWeightMin"
 
 sdMax     = mkQuantDef (unitary "sdMax"
   (nounPhraseSP "maximum stand off distance permissible for input")
-  (subMax (eqSymb standOffDist)) metre Real) (dbl 130)
+  (subMax (eqSymb standOffDist)) metre Real) (exactDbl 130)
 
 sdMin     = mkQuantDef (unitary "sdMin"
   (nounPhraseSP "minimum stand off distance permissible for input") 
-  (subMin (eqSymb standOffDist)) metre Real) (dbl 6)
+  (subMin (eqSymb standOffDist)) metre Real) (exactDbl 6)
 
 stressDistFacMin = mkQuantDef (vc "stressDistFacMin" (nounPhraseSP "minimum value for the stress distribution factor") 
-  (subMin (eqSymb stressDistFac)) Real) (dbl 1.0)
+  (subMin (eqSymb stressDistFac)) Real) (exactDbl 1)
 
 stressDistFacMax = mkQuantDef (vc "stressDistFacMax" (nounPhraseSP "maximum value for the stress distribution factor") 
-  (subMax (eqSymb stressDistFac)) Real) (dbl 32.0)
+  (subMax (eqSymb stressDistFac)) Real) (exactDbl 32)
 {--}
 
 symbols :: [UnitaryChunk]
@@ -383,10 +383,10 @@ constants = [constantM, constantK, constantModElas, constantLoadDur, constantLoa
 
 constantM, constantK, constantModElas, constantLoadDur, constantLoadSF :: QDefinition
 constantK       = mkQuantDef sflawParamK $ dbl 2.86e-53
-constantM       = mkQuantDef sflawParamM $ dbl 7
+constantM       = mkQuantDef sflawParamM $ exactDbl 7
 constantModElas = mkQuantDef modElas     $ dbl 7.17e10
-constantLoadDur = mkQuantDef loadDur     $ dbl 3
-constantLoadSF  = mkQuantDef loadSF      $ dbl 1.0
+constantLoadDur = mkQuantDef loadDur     $ exactDbl 3
+constantLoadSF  = mkQuantDef loadSF      $ exactDbl 1
 --Equations--
 
 sdVectorSent :: Sentence

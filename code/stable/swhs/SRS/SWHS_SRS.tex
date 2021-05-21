@@ -610,7 +610,7 @@ We consider an arbitrary volume. The volumetric heat generation per unit volume 
 \begin{displaymath}
 {q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV
 \end{displaymath}
-Where ${q_{\text{in}}}$, ${q_{\text{out}}}$, ${A_{\text{in}}}$, and ${A_{\text{out}}}$ are explained in \hyperref[GD:rocTempSimp]{GD: rocTempSimp}. The integral over the surface could be simplified because the thermal flux is assumed constant over ${A_{\text{in}}}$ and ${A_{\text{out}}}$ and $0.0$ on all other surfaces. Outward flux is considered positive. Assuming $ρ$, $C$, and $T$ are constant over the volume, which is true in our case by \hyperref[assumpCWTAT]{A: Constant-Water-Temp-Across-Tank}, \hyperref[assumpTPCAV]{A: Temp-PCM-Constant-Across-Volume}, \hyperref[assumpDWPCoV]{A: Density-Water-PCM-Constant-over-Volume}, and \hyperref[assumpSHECov]{A: Specific-Heat-Energy-Constant-over-Volume}, we have:
+Where ${q_{\text{in}}}$, ${q_{\text{out}}}$, ${A_{\text{in}}}$, and ${A_{\text{out}}}$ are explained in \hyperref[GD:rocTempSimp]{GD: rocTempSimp}. The integral over the surface could be simplified because the thermal flux is assumed constant over ${A_{\text{in}}}$ and ${A_{\text{out}}}$ and $0$ on all other surfaces. Outward flux is considered positive. Assuming $ρ$, $C$, and $T$ are constant over the volume, which is true in our case by \hyperref[assumpCWTAT]{A: Constant-Water-Temp-Across-Tank}, \hyperref[assumpTPCAV]{A: Temp-PCM-Constant-Across-Volume}, \hyperref[assumpDWPCoV]{A: Density-Water-PCM-Constant-over-Volume}, and \hyperref[assumpSHECov]{A: Specific-Heat-Energy-Constant-over-Volume}, we have:
 
 \begin{displaymath}
 ρ C V \frac{\,dT}{\,dt}={q_{\text{in}}} {A_{\text{in}}}-{q_{\text{out}}} {A_{\text{out}}}+g V
@@ -1033,7 +1033,7 @@ Description & \begin{symbDescription}
               \item{${m_{\text{P}}}$ is the mass of phase change material (${\text{kg}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The value of $ϕ$ is constrained to $0.0\leq{}ϕ\leq{}1.0$.
+Notes & The value of $ϕ$ is constrained to $0\leq{}ϕ\leq{}1$.
         
         \hyperref[DD:htFusion]{DD: htFusion}
         
@@ -1132,9 +1132,9 @@ Notes & ${T_{\text{P}}}$ is defined by \hyperref[IM:eBalanceOnPCM]{IM: eBalanceO
         
         $η$ is calculated from \hyperref[DD:balanceDecayTime]{DD: balanceDecayTime}.
         
-        The initial conditions for the ODE are ${T_{\text{W}}}\left(0.0\right)={T_{\text{P}}}\left(0.0\right)={T_{\text{init}}}$ following \hyperref[assumpSITWP]{A: Same-Initial-Temp-Water-PCM}.
+        The initial conditions for the ODE are ${T_{\text{W}}}\left(0\right)={T_{\text{P}}}\left(0\right)={T_{\text{init}}}$ following \hyperref[assumpSITWP]{A: Same-Initial-Temp-Water-PCM}.
         
-        The ODE applies as long as the water is in liquid form, $0.0\lt{}{T_{\text{W}}}\lt{}100.0$ (${{}^{\circ}\text{C}}$) where $0.0$ (${{}^{\circ}\text{C}}$) and $100.0$ (${{}^{\circ}\text{C}}$) are the melting and boiling point temperatures of water, respectively (from \hyperref[assumpWAL]{A: Water-Always-Liquid} and \hyperref[assumpAPT]{A: Atmospheric-Pressure-Tank}).
+        The ODE applies as long as the water is in liquid form, $0\lt{}{T_{\text{W}}}\lt{}100$ (${{}^{\circ}\text{C}}$) where $0$ (${{}^{\circ}\text{C}}$) and $100$ (${{}^{\circ}\text{C}}$) are the melting and boiling point temperatures of water, respectively (from \hyperref[assumpWAL]{A: Water-Always-Liquid} and \hyperref[assumpAPT]{A: Atmospheric-Pressure-Tank}).
         
 \\ \midrule \\
 Source & \cite{koothoor2013}
@@ -1147,7 +1147,7 @@ RefBy & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation}, \hyperref[fin
 \end{minipage}
 \paragraph{Detailed derivation of the energy balance on water:}
 \label{IM:eBalanceOnWtrDeriv}
-To find the rate of change of ${T_{\text{W}}}$, we look at the energy balance on water. The volume being considered is the volume of water in the tank ${V_{\text{W}}}$, which has mass ${m_{\text{W}}}$ and specific heat capacity, ${C_{\text{W}}}$. Heat transfer occurs in the water from the heating coil as ${q_{\text{C}}}$ (\hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil}) and from the water into the PCM as ${q_{\text{P}}}$ (\hyperref[GD:htFluxPCMFromWater]{GD: htFluxPCMFromWater}), over areas ${A_{\text{C}}}$ and ${A_{\text{P}}}$, respectively. The thermal flux is constant over ${A_{\text{C}}}$, since the temperature of the heating coil is assumed to not vary along its length (\hyperref[assumpTHCCoL]{A: Temp-Heating-Coil-Constant-over-Length}), and the thermal flux is constant over ${A_{\text{P}}}$, since the temperature of the PCM is the same throughout its volume (\hyperref[assumpTPCAV]{A: Temp-PCM-Constant-Across-Volume}) and the water is fully mixed (\hyperref[assumpCWTAT]{A: Constant-Water-Temp-Across-Tank}). No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (\hyperref[assumpPIT]{A: Perfect-Insulation-Tank}). Since the assumption is made that no internal heat is generated (\hyperref[assumpNIHGBWP]{A: No-Internal-Heat-Generation-By-Water-PCM}), $g=0.0$. Therefore, the equation for \hyperref[GD:rocTempSimp]{GD: rocTempSimp} can be written as:
+To find the rate of change of ${T_{\text{W}}}$, we look at the energy balance on water. The volume being considered is the volume of water in the tank ${V_{\text{W}}}$, which has mass ${m_{\text{W}}}$ and specific heat capacity, ${C_{\text{W}}}$. Heat transfer occurs in the water from the heating coil as ${q_{\text{C}}}$ (\hyperref[GD:htFluxWaterFromCoil]{GD: htFluxWaterFromCoil}) and from the water into the PCM as ${q_{\text{P}}}$ (\hyperref[GD:htFluxPCMFromWater]{GD: htFluxPCMFromWater}), over areas ${A_{\text{C}}}$ and ${A_{\text{P}}}$, respectively. The thermal flux is constant over ${A_{\text{C}}}$, since the temperature of the heating coil is assumed to not vary along its length (\hyperref[assumpTHCCoL]{A: Temp-Heating-Coil-Constant-over-Length}), and the thermal flux is constant over ${A_{\text{P}}}$, since the temperature of the PCM is the same throughout its volume (\hyperref[assumpTPCAV]{A: Temp-PCM-Constant-Across-Volume}) and the water is fully mixed (\hyperref[assumpCWTAT]{A: Constant-Water-Temp-Across-Tank}). No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (\hyperref[assumpPIT]{A: Perfect-Insulation-Tank}). Since the assumption is made that no internal heat is generated (\hyperref[assumpNIHGBWP]{A: No-Internal-Heat-Generation-By-Water-PCM}), $g=0$. Therefore, the equation for \hyperref[GD:rocTempSimp]{GD: rocTempSimp} can be written as:
 
 \begin{displaymath}
 {m_{\text{W}}} {C_{\text{W}}} \frac{\,d{T_{\text{W}}}}{\,dt}={q_{\text{C}}} {A_{\text{C}}}-{q_{\text{P}}} {A_{\text{P}}}
@@ -1209,7 +1209,7 @@ Equation & \begin{displaymath}
            \frac{\,d{T_{\text{P}}}}{\,dt}=\begin{cases}
                                           \frac{1}{{{τ_{\text{P}}}^{\text{S}}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}\lt{}{{T_{\text{melt}}}^{\text{P}}}\\
                                           \frac{1}{{{τ_{\text{P}}}^{\text{L}}}} \left({T_{\text{W}}}\left(t\right)-{T_{\text{P}}}\left(t\right)\right), & {T_{\text{P}}}\gt{}{{T_{\text{melt}}}^{\text{P}}}\\
-                                          0, & {T_{\text{P}}}={{T_{\text{melt}}}^{\text{P}}}\land{}0.0\lt{}ϕ\lt{}1.0
+                                          0, & {T_{\text{P}}}={{T_{\text{melt}}}^{\text{P}}}\land{}0\lt{}ϕ\lt{}1
                                           \end{cases}
            \end{displaymath}
 \\ \midrule \\
@@ -1227,13 +1227,13 @@ Notes & ${T_{\text{W}}}$ is defined by \hyperref[IM:eBalanceOnWtr]{IM: eBalanceO
         
         The input constraint ${T_{\text{init}}}\leq{}{{T_{\text{melt}}}^{\text{P}}}$ comes from \hyperref[assumpPIS]{A: PCM-Initially-Solid}.
         
-        The temperature remains constant at ${{T_{\text{melt}}}^{\text{P}}}$, even with the heating (or cooling), until the phase change has occurred for all of the material; that is as long as $0.0\lt{}ϕ\lt{}1.0$. $ϕ$ (from \hyperref[DD:meltFrac]{DD: meltFrac}) is determined as part of the heat energy in the PCM, as given in (\hyperref[IM:heatEInPCM]{IM: heatEInPCM}).
+        The temperature remains constant at ${{T_{\text{melt}}}^{\text{P}}}$, even with the heating (or cooling), until the phase change has occurred for all of the material; that is as long as $0\lt{}ϕ\lt{}1$. $ϕ$ (from \hyperref[DD:meltFrac]{DD: meltFrac}) is determined as part of the heat energy in the PCM, as given in (\hyperref[IM:heatEInPCM]{IM: heatEInPCM}).
         
         ${{τ_{\text{P}}}^{\text{S}}}$ is calculated in \hyperref[DD:balanceSolidPCM]{DD: balanceSolidPCM}.
         
         ${{τ_{\text{P}}}^{\text{L}}}$ is calculated in \hyperref[DD:balanceLiquidPCM]{DD: balanceLiquidPCM}.
         
-        The initial conditions for the ODE are ${T_{\text{W}}}\left(0.0\right)={T_{\text{P}}}\left(0.0\right)={T_{\text{init}}}$ following \hyperref[assumpSITWP]{A: Same-Initial-Temp-Water-PCM}.
+        The initial conditions for the ODE are ${T_{\text{W}}}\left(0\right)={T_{\text{P}}}\left(0\right)={T_{\text{init}}}$ following \hyperref[assumpSITWP]{A: Same-Initial-Temp-Water-PCM}.
         
 \\ \midrule \\
 Source & \cite{koothoor2013}
@@ -1246,7 +1246,7 @@ RefBy & \hyperref[unlikeChgNIHG]{UC: No-Internal-Heat-Generation}, \hyperref[unl
 \end{minipage}
 \paragraph{Detailed derivation of the energy balance on the PCM during sensible heating phase:}
 \label{IM:eBalanceOnPCMDeriv}
-To find the rate of change of ${T_{\text{P}}}$, we look at the energy balance on the PCM. The volume being considered is the volume of PCM (${V_{\text{P}}}$). The derivation that follows is initially for the solid PCM. The mass of phase change material is ${m_{\text{P}}}$ and the specific heat capacity of PCM as a solid is ${{C_{\text{P}}}^{\text{S}}}$. The heat flux into the PCM from water is ${q_{\text{P}}}$ (\hyperref[GD:htFluxPCMFromWater]{GD: htFluxPCMFromWater}) over phase change material surface area ${A_{\text{P}}}$. The thermal flux is constant over ${A_{\text{P}}}$, since the temperature of the PCM is the same throughout its volume (\hyperref[assumpTPCAV]{A: Temp-PCM-Constant-Across-Volume}) and the water is fully mixed (\hyperref[assumpCWTAT]{A: Constant-Water-Temp-Across-Tank}). There is no heat flux output from the PCM. Assuming no volumetric heat generation per unit volume (\hyperref[assumpNIHGBWP]{A: No-Internal-Heat-Generation-By-Water-PCM}), $g=0.0$, the equation for \hyperref[GD:rocTempSimp]{GD: rocTempSimp} can be written as:
+To find the rate of change of ${T_{\text{P}}}$, we look at the energy balance on the PCM. The volume being considered is the volume of PCM (${V_{\text{P}}}$). The derivation that follows is initially for the solid PCM. The mass of phase change material is ${m_{\text{P}}}$ and the specific heat capacity of PCM as a solid is ${{C_{\text{P}}}^{\text{S}}}$. The heat flux into the PCM from water is ${q_{\text{P}}}$ (\hyperref[GD:htFluxPCMFromWater]{GD: htFluxPCMFromWater}) over phase change material surface area ${A_{\text{P}}}$. The thermal flux is constant over ${A_{\text{P}}}$, since the temperature of the PCM is the same throughout its volume (\hyperref[assumpTPCAV]{A: Temp-PCM-Constant-Across-Volume}) and the water is fully mixed (\hyperref[assumpCWTAT]{A: Constant-Water-Temp-Across-Tank}). There is no heat flux output from the PCM. Assuming no volumetric heat generation per unit volume (\hyperref[assumpNIHGBWP]{A: No-Internal-Heat-Generation-By-Water-PCM}), $g=0$, the equation for \hyperref[GD:rocTempSimp]{GD: rocTempSimp} can be written as:
 
 \begin{displaymath}
 {m_{\text{P}}} {{C_{\text{P}}}^{\text{S}}} \frac{\,d{T_{\text{P}}}}{\,dt}={q_{\text{P}}} {A_{\text{P}}}
@@ -1310,7 +1310,7 @@ Notes & The above equation is derived using \hyperref[TM:sensHtE]{TM: sensHtE}.
         
         The change in temperature is the difference between the temperature at time $t$ (${\text{s}}$), ${T_{\text{W}}}$ and the initial temperature, ${T_{\text{init}}}$ (${{}^{\circ}\text{C}}$).
         
-        This equation applies as long as $0.0\lt{}{T_{\text{W}}}\lt{}100.0$${{}^{\circ}\text{C}}$ (\hyperref[assumpWAL]{A: Water-Always-Liquid}, \hyperref[assumpAPT]{A: Atmospheric-Pressure-Tank}).
+        This equation applies as long as $0\lt{}{T_{\text{W}}}\lt{}100$${{}^{\circ}\text{C}}$ (\hyperref[assumpWAL]{A: Water-Always-Liquid}, \hyperref[assumpAPT]{A: Atmospheric-Pressure-Tank}).
         
 \\ \midrule \\
 Source & \cite{koothoor2013}
@@ -1349,7 +1349,7 @@ Equation & \begin{displaymath}
            {E_{\text{P}}}=\begin{cases}
                           {{C_{\text{P}}}^{\text{S}}} {m_{\text{P}}} \left({T_{\text{P}}}\left(t\right)-{T_{\text{init}}}\right), & {T_{\text{P}}}\lt{}{{T_{\text{melt}}}^{\text{P}}}\\
                           {{{E_{\text{P}}}_{\text{melt}}}^{\text{init}}}+{H_{\text{f}}} {m_{\text{P}}}+{{C_{\text{P}}}^{\text{L}}} {m_{\text{P}}} \left({T_{\text{P}}}\left(t\right)-{{T_{\text{melt}}}^{\text{P}}}\right), & {T_{\text{P}}}\gt{}{{T_{\text{melt}}}^{\text{P}}}\\
-                          {{{E_{\text{P}}}_{\text{melt}}}^{\text{init}}}+{Q_{\text{P}}}\left(t\right), & {T_{\text{P}}}={{T_{\text{melt}}}^{\text{P}}}\land{}0.0\lt{}ϕ\lt{}1.0
+                          {{{E_{\text{P}}}_{\text{melt}}}^{\text{init}}}+{Q_{\text{P}}}\left(t\right), & {T_{\text{P}}}={{T_{\text{melt}}}^{\text{P}}}\land{}0\lt{}ϕ\lt{}1
                           \end{cases}
            \end{displaymath}
 \\ \midrule \\
@@ -1402,41 +1402,41 @@ RefBy & \hyperref[unlikeChgNGS]{UC: No-Gaseous-State}, \hyperref[findMass]{FR: F
 \\
 \midrule
 \endhead
-${A_{\text{C}}}$ & ${A_{\text{C}}}\gt{}0.0$ & ${A_{\text{C}}}\leq{}{{A_{\text{C}}}^{\text{max}}}$ & $0.12$ ${\text{m}^{2}}$ & 10$\%$
+${A_{\text{C}}}$ & ${A_{\text{C}}}\gt{}0$ & ${A_{\text{C}}}\leq{}{{A_{\text{C}}}^{\text{max}}}$ & $0.12$ ${\text{m}^{2}}$ & 10$\%$
 \\
-${A_{\text{P}}}$ & ${A_{\text{P}}}\gt{}0.0$ & ${V_{\text{P}}}\leq{}{A_{\text{P}}}\leq{}\frac{2}{{h_{\text{min}}}} {V_{\text{tank}}}$ & $1.2$ ${\text{m}^{2}}$ & 10$\%$
+${A_{\text{P}}}$ & ${A_{\text{P}}}\gt{}0$ & ${V_{\text{P}}}\leq{}{A_{\text{P}}}\leq{}\frac{2}{{h_{\text{min}}}} {V_{\text{tank}}}$ & $1.2$ ${\text{m}^{2}}$ & 10$\%$
 \\
-${{C_{\text{P}}}^{\text{L}}}$ & ${{C_{\text{P}}}^{\text{L}}}\gt{}0.0$ & ${{{C_{\text{P}}}^{\text{L}}}_{\text{min}}}\lt{}{{C_{\text{P}}}^{\text{L}}}\lt{}{{{C_{\text{P}}}^{\text{L}}}_{\text{max}}}$ & $2.27\cdot{}10^{3}$ $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$ & 10$\%$
+${{C_{\text{P}}}^{\text{L}}}$ & ${{C_{\text{P}}}^{\text{L}}}\gt{}0$ & ${{{C_{\text{P}}}^{\text{L}}}_{\text{min}}}\lt{}{{C_{\text{P}}}^{\text{L}}}\lt{}{{{C_{\text{P}}}^{\text{L}}}_{\text{max}}}$ & $2.27\cdot{}10^{3}$ $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$ & 10$\%$
 \\
-${{C_{\text{P}}}^{\text{S}}}$ & ${{C_{\text{P}}}^{\text{S}}}\gt{}0.0$ & ${{{C_{\text{P}}}^{\text{S}}}_{\text{min}}}\lt{}{{C_{\text{P}}}^{\text{S}}}\lt{}{{{C_{\text{P}}}^{\text{S}}}_{\text{max}}}$ & $1.76\cdot{}10^{3}$ $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$ & 10$\%$
+${{C_{\text{P}}}^{\text{S}}}$ & ${{C_{\text{P}}}^{\text{S}}}\gt{}0$ & ${{{C_{\text{P}}}^{\text{S}}}_{\text{min}}}\lt{}{{C_{\text{P}}}^{\text{S}}}\lt{}{{{C_{\text{P}}}^{\text{S}}}_{\text{max}}}$ & $1.76\cdot{}10^{3}$ $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$ & 10$\%$
 \\
-${C_{\text{W}}}$ & ${C_{\text{W}}}\gt{}0.0$ & ${{C_{\text{W}}}^{\text{min}}}\lt{}{C_{\text{W}}}\lt{}{{C_{\text{W}}}^{\text{max}}}$ & $4.186\cdot{}10^{3}$ $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$ & 10$\%$
+${C_{\text{W}}}$ & ${C_{\text{W}}}\gt{}0$ & ${{C_{\text{W}}}^{\text{min}}}\lt{}{C_{\text{W}}}\lt{}{{C_{\text{W}}}^{\text{max}}}$ & $4.186\cdot{}10^{3}$ $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$ & 10$\%$
 \\
-$D$ & $D\gt{}0.0$ & ${AR_{\text{min}}}\leq{}D\leq{}{AR_{\text{max}}}$ & $0.412$ ${\text{m}}$ & 10$\%$
+$D$ & $D\gt{}0$ & ${AR_{\text{min}}}\leq{}D\leq{}{AR_{\text{max}}}$ & $0.412$ ${\text{m}}$ & 10$\%$
 \\
-${H_{\text{f}}}$ & ${H_{\text{f}}}\gt{}0.0$ & ${{H_{\text{f}}}_{\text{min}}}\lt{}{H_{\text{f}}}\lt{}{{H_{\text{f}}}_{\text{max}}}$ & $211.6\cdot{}10^{3}$ $\frac{\text{J}}{\text{kg}}$ & 10$\%$
+${H_{\text{f}}}$ & ${H_{\text{f}}}\gt{}0$ & ${{H_{\text{f}}}_{\text{min}}}\lt{}{H_{\text{f}}}\lt{}{{H_{\text{f}}}_{\text{max}}}$ & $211.6\cdot{}10^{3}$ $\frac{\text{J}}{\text{kg}}$ & 10$\%$
 \\
-${h_{\text{C}}}$ & ${h_{\text{C}}}\gt{}0.0$ & ${{h_{\text{C}}}^{\text{min}}}\leq{}{h_{\text{C}}}\leq{}{{h_{\text{C}}}^{\text{max}}}$ & $1.0\cdot{}10^{3}$ $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$ & 10$\%$
+${h_{\text{C}}}$ & ${h_{\text{C}}}\gt{}0$ & ${{h_{\text{C}}}^{\text{min}}}\leq{}{h_{\text{C}}}\leq{}{{h_{\text{C}}}^{\text{max}}}$ & $1.0\cdot{}10^{3}$ $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$ & 10$\%$
 \\
-${h_{\text{P}}}$ & ${h_{\text{P}}}\gt{}0.0$ & ${{h_{\text{P}}}^{\text{min}}}\leq{}{h_{\text{P}}}\leq{}{{h_{\text{P}}}^{\text{max}}}$ & $1.0\cdot{}10^{3}$ $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$ & 10$\%$
+${h_{\text{P}}}$ & ${h_{\text{P}}}\gt{}0$ & ${{h_{\text{P}}}^{\text{min}}}\leq{}{h_{\text{P}}}\leq{}{{h_{\text{P}}}^{\text{max}}}$ & $1.0\cdot{}10^{3}$ $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$ & 10$\%$
 \\
-$L$ & $L\gt{}0.0$ & ${L_{\text{min}}}\leq{}L\leq{}{L_{\text{max}}}$ & $1.5$ ${\text{m}}$ & 10$\%$
+$L$ & $L\gt{}0$ & ${L_{\text{min}}}\leq{}L\leq{}{L_{\text{max}}}$ & $1.5$ ${\text{m}}$ & 10$\%$
 \\
-${T_{\text{C}}}$ & $0.0\lt{}{T_{\text{C}}}\lt{}100.0$ & -- & $50.0$ ${{}^{\circ}\text{C}}$ & 10$\%$
+${T_{\text{C}}}$ & $0\lt{}{T_{\text{C}}}\lt{}100$ & -- & $50$ ${{}^{\circ}\text{C}}$ & 10$\%$
 \\
-${T_{\text{init}}}$ & $0.0\lt{}{T_{\text{init}}}\lt{}{T_{\text{melt}}}$ & -- & $40.0$ ${{}^{\circ}\text{C}}$ & 10$\%$
+${T_{\text{init}}}$ & $0\lt{}{T_{\text{init}}}\lt{}{T_{\text{melt}}}$ & -- & $40$ ${{}^{\circ}\text{C}}$ & 10$\%$
 \\
-${{T_{\text{melt}}}^{\text{P}}}$ & $0.0\lt{}{{T_{\text{melt}}}^{\text{P}}}\lt{}{T_{\text{C}}}$ & -- & $44.2$ ${{}^{\circ}\text{C}}$ & 10$\%$
+${{T_{\text{melt}}}^{\text{P}}}$ & $0\lt{}{{T_{\text{melt}}}^{\text{P}}}\lt{}{T_{\text{C}}}$ & -- & $44.2$ ${{}^{\circ}\text{C}}$ & 10$\%$
 \\
-${t_{\text{final}}}$ & ${t_{\text{final}}}\gt{}0.0$ & ${t_{\text{final}}}\lt{}{{t_{\text{final}}}^{\text{max}}}$ & $50.0\cdot{}10^{3}$ ${\text{s}}$ & 10$\%$
+${t_{\text{final}}}$ & ${t_{\text{final}}}\gt{}0$ & ${t_{\text{final}}}\lt{}{{t_{\text{final}}}^{\text{max}}}$ & $50.0\cdot{}10^{3}$ ${\text{s}}$ & 10$\%$
 \\
-${t_{\text{step}}}$ & $0.0\lt{}{t_{\text{step}}}\lt{}{t_{\text{final}}}$ & -- & $0.01$ ${\text{s}}$ & 10$\%$
+${t_{\text{step}}}$ & $0\lt{}{t_{\text{step}}}\lt{}{t_{\text{final}}}$ & -- & $0.01$ ${\text{s}}$ & 10$\%$
 \\
-${V_{\text{P}}}$ & $0.0\lt{}{V_{\text{P}}}\lt{}{V_{\text{tank}}}$ & ${V_{\text{P}}}\geq{}MINFRACT {V_{\text{tank}}}$ & $0.05$ ${\text{m}^{3}}$ & 10$\%$
+${V_{\text{P}}}$ & $0\lt{}{V_{\text{P}}}\lt{}{V_{\text{tank}}}$ & ${V_{\text{P}}}\geq{}MINFRACT {V_{\text{tank}}}$ & $0.05$ ${\text{m}^{3}}$ & 10$\%$
 \\
-${ρ_{\text{P}}}$ & ${ρ_{\text{P}}}\gt{}0.0$ & ${{ρ_{\text{P}}}^{\text{min}}}\lt{}{ρ_{\text{P}}}\lt{}{{ρ_{\text{P}}}^{\text{max}}}$ & $1.007\cdot{}10^{3}$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10$\%$
+${ρ_{\text{P}}}$ & ${ρ_{\text{P}}}\gt{}0$ & ${{ρ_{\text{P}}}^{\text{min}}}\lt{}{ρ_{\text{P}}}\lt{}{{ρ_{\text{P}}}^{\text{max}}}$ & $1.007\cdot{}10^{3}$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10$\%$
 \\
-${ρ_{\text{W}}}$ & ${ρ_{\text{W}}}\gt{}0.0$ & ${{ρ_{\text{W}}}^{\text{min}}}\lt{}{ρ_{\text{W}}}\leq{}{{ρ_{\text{W}}}^{\text{max}}}$ & $1.0\cdot{}10^{3}$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10$\%$
+${ρ_{\text{W}}}$ & ${ρ_{\text{W}}}\gt{}0$ & ${{ρ_{\text{W}}}^{\text{min}}}\lt{}{ρ_{\text{W}}}\leq{}{{ρ_{\text{W}}}^{\text{max}}}$ & $1.0\cdot{}10^{3}$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10$\%$
 \\
 \bottomrule
 \caption{Input Data Constraints}
@@ -1456,9 +1456,9 @@ ${T_{\text{W}}}$ & ${T_{\text{init}}}\leq{}{T_{\text{W}}}\leq{}{T_{\text{C}}}$
 \\
 ${T_{\text{P}}}$ & ${T_{\text{init}}}\leq{}{T_{\text{P}}}\leq{}{T_{\text{C}}}$
 \\
-${E_{\text{W}}}$ & ${E_{\text{W}}}\geq{}0.0$
+${E_{\text{W}}}$ & ${E_{\text{W}}}\geq{}0$
 \\
-${E_{\text{P}}}$ & ${E_{\text{P}}}\geq{}0.0$
+${E_{\text{P}}}$ & ${E_{\text{P}}}\geq{}0$
 \\
 \bottomrule
 \caption{Output Data Constraints}
@@ -1849,51 +1849,51 @@ This section contains the standard values that are used for calculations in SWHS
 \endhead
 ${{A_{\text{C}}}^{\text{max}}}$ & maximum surface area of coil & $100.0\cdot{}10^{3}$ & ${\text{m}^{2}}$
 \\
-${AR_{\text{max}}}$ & maximum aspect ratio & $100.0$ & --
+${AR_{\text{max}}}$ & maximum aspect ratio & $100$ & --
 \\
 ${AR_{\text{min}}}$ & minimum aspect ratio & $0.01$ & --
 \\
 ${C_{\text{tol}}}$ & relative tolerance for conservation of energy & $0.001\%$ & --
 \\
-${{C_{\text{W}}}^{\text{max}}}$ & maximum specific heat capacity of water & $4.21\cdot{}10^{3}$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+${{C_{\text{W}}}^{\text{max}}}$ & maximum specific heat capacity of water & $4210$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
-${{C_{\text{W}}}^{\text{min}}}$ & minimum specific heat capacity of water & $4.17\cdot{}10^{3}$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+${{C_{\text{W}}}^{\text{min}}}$ & minimum specific heat capacity of water & $4170$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
-${{{C_{\text{P}}}^{\text{L}}}_{\text{max}}}$ & maximum specific heat capacity of PCM as a liquid & $5.0\cdot{}10^{3}$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+${{{C_{\text{P}}}^{\text{L}}}_{\text{max}}}$ & maximum specific heat capacity of PCM as a liquid & $5000$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
-${{{C_{\text{P}}}^{\text{L}}}_{\text{min}}}$ & minimum specific heat capacity of PCM as a liquid & $100.0$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+${{{C_{\text{P}}}^{\text{L}}}_{\text{min}}}$ & minimum specific heat capacity of PCM as a liquid & $100$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
-${{{C_{\text{P}}}^{\text{S}}}_{\text{max}}}$ & maximum specific heat capacity of PCM as a solid & $4.0\cdot{}10^{3}$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+${{{C_{\text{P}}}^{\text{S}}}_{\text{max}}}$ & maximum specific heat capacity of PCM as a solid & $4000$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
-${{{C_{\text{P}}}^{\text{S}}}_{\text{min}}}$ & minimum specific heat capacity of PCM as a solid & $100.0$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+${{{C_{\text{P}}}^{\text{S}}}_{\text{min}}}$ & minimum specific heat capacity of PCM as a solid & $100$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
 ${{H_{\text{f}}}_{\text{max}}}$ & maximum specific latent heat of fusion & $1.0\cdot{}10^{6}$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
-${{H_{\text{f}}}_{\text{min}}}$ & minimum specific latent heat of fusion & $0.0$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+${{H_{\text{f}}}_{\text{min}}}$ & minimum specific latent heat of fusion & $0$ & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
-${{h_{\text{C}}}^{\text{max}}}$ & maximum convective heat transfer coefficient between coil and water & $10.0\cdot{}10^{3}$ & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
+${{h_{\text{C}}}^{\text{max}}}$ & maximum convective heat transfer coefficient between coil and water & $10000$ & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
 \\
-${{h_{\text{C}}}^{\text{min}}}$ & minimum convective heat transfer coefficient between coil and water & $10.0$ & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
+${{h_{\text{C}}}^{\text{min}}}$ & minimum convective heat transfer coefficient between coil and water & $10$ & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
 \\
-${{h_{\text{P}}}^{\text{max}}}$ & maximum convective heat transfer coefficient between PCM and water & $10.0\cdot{}10^{3}$ & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
+${{h_{\text{P}}}^{\text{max}}}$ & maximum convective heat transfer coefficient between PCM and water & $10000$ & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
 \\
-${{h_{\text{P}}}^{\text{min}}}$ & minimum convective heat transfer coefficient between PCM and water & $10.0$ & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
+${{h_{\text{P}}}^{\text{min}}}$ & minimum convective heat transfer coefficient between PCM and water & $10$ & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
 \\
-${L_{\text{max}}}$ & maximum length of tank & $50.0$ & ${\text{m}}$
+${L_{\text{max}}}$ & maximum length of tank & $50$ & ${\text{m}}$
 \\
 ${L_{\text{min}}}$ & minimum length of tank & $0.1$ & ${\text{m}}$
 \\
 $MINFRACT$ & minimum fraction of the tank volume taken up by the PCM & $1.0\cdot{}10^{-6}$ & --
 \\
-${{t_{\text{final}}}^{\text{max}}}$ & maximum final time & $86.4\cdot{}10^{3}$ & ${\text{s}}$
+${{t_{\text{final}}}^{\text{max}}}$ & maximum final time & $86400$ & ${\text{s}}$
 \\
-${{ρ_{\text{P}}}^{\text{max}}}$ & maximum density of PCM & $20.0\cdot{}10^{3}$ & $\frac{\text{kg}}{\text{m}^{3}}$
+${{ρ_{\text{P}}}^{\text{max}}}$ & maximum density of PCM & $20000$ & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
-${{ρ_{\text{P}}}^{\text{min}}}$ & minimum density of PCM & $500.0$ & $\frac{\text{kg}}{\text{m}^{3}}$
+${{ρ_{\text{P}}}^{\text{min}}}$ & minimum density of PCM & $500$ & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
-${{ρ_{\text{W}}}^{\text{max}}}$ & maximum density of water & $1.0\cdot{}10^{3}$ & $\frac{\text{kg}}{\text{m}^{3}}$
+${{ρ_{\text{W}}}^{\text{max}}}$ & maximum density of water & $1000$ & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
-${{ρ_{\text{W}}}^{\text{min}}}$ & minimum density of water & $950.0$ & $\frac{\text{kg}}{\text{m}^{3}}$
+${{ρ_{\text{W}}}^{\text{min}}}$ & minimum density of water & $950$ & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
 \bottomrule
 \caption{Auxiliary Constants}

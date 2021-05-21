@@ -17,7 +17,7 @@ import Drasil.Projectile.Unitals (launAngle, launSpeed, targPos, tol, landPos, f
 
 flightDur', iyPos, yConstAccel, iSpeed :: Expr
 flightDur' = exactDbl 2 `mulRe` sy launSpeed `mulRe` sin (sy launAngle) $/ sy gravitationalAccelConst
-iyPos = dbl 0                                   -- launchOrigin
+iyPos = exactDbl 0                              -- launchOrigin
 yConstAccel = neg $ sy gravitationalAccelConst  -- accelYGravity
 iSpeed = sy launSpeed
 

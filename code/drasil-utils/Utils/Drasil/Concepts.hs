@@ -1,6 +1,7 @@
 module Utils.Drasil.Concepts (insertStringNP, prependStringNP, insertSentNP, prependSentNP,
 theNP, theNP', aNP, aNP', ofTheNP, ofTheNP', ofTheNP'', inTheNP, inTheNP', inTheNP'', the_ofTheNP, the_ofTheNP', the_ofTheNP'',
-forNP, forNP', forNP'', ofNP, ofNP', ofNP'', ofNP''', withNP, andNP, andNP', andNP'', andNP''' )where
+forNP, forNP', forNP'', ofNP, ofNP', ofNP'', ofNP''', withNP, andNP, andNP', andNP'', andNP''',
+combineNINP, combineNPNI)where
 
 import Language.Drasil
 --import Utils.Drasil.Phrase
@@ -22,6 +23,14 @@ insertSentNP s t1 t2 = nounPhrase'' (phraseNP t1 +:+ s +:+ phraseNP t2) (phraseN
 -- | Helper function that prepends a 'Sentence' to a 'NP'.
 prependSentNP :: Sentence -> NP -> NP
 prependSentNP s t1 = nounPhrase'' (s +:+ phraseNP t1) (s +:+ pluralNP t1) CapFirst CapWords
+
+-- | Helper function that combines a 'NamedIdea' and a 'NP' without any words in between.
+-- Plural case is @phrase t1 +:+ pluralNP t2@
+combineNINP :: (NamedIdea c) => c -> NP -> NP
+combineNINP t1 t2 = nounPhrase'' (phrase t1 +:+ phraseNP t2) (phrase t1 +:+ pluralNP t2) CapFirst CapWords
+-- | Similar to 'combineNINP' but takes in a 'NP' first and a 'NamedIdea' second.
+combineNPNI :: (NamedIdea c) => NP -> c -> NP
+combineNPNI t1 t2 = nounPhrase'' (phraseNP t1 +:+ phrase t2) (phraseNP t1 +:+ plural t2) CapFirst CapWords
 
 -- | Prepends "the" to a 'NP'.
 theNP :: NP -> NP

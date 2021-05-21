@@ -48,10 +48,10 @@ angularDisplacementDerivSents = [angularDisplacementDerivSent1, angularDisplacem
 angularDisplacementDerivSent1, angularDisplacementDerivSent2, angularDisplacementDerivSent3,
   angularDisplacementDerivSent4, angularDisplacementDerivSent5 :: Sentence
 
-angularDisplacementDerivSent1 = foldlSentCol [S "When the", phrase pendulum `S.sIs` S "displaced to an", phrase iAngle `S.sAnd` S "released" `sC`
-                                       S "the", phrase pendulum, S "swings back and forth with periodic" +:+. phrase motion,
+angularDisplacementDerivSent1 = foldlSentCol [S "When", phraseNP (the pendulum) `S.sIs` S "displaced to an", phrase iAngle `S.sAnd` S "released" `sC`
+                                       phraseNP (the pendulum), S "swings back and forth with periodic" +:+. phrase motion,
                                        S "By applying", phrase newtonSLRRC `S.sIn` makeRef2S newtonSLR `sC`
-                                       S "the", phrase equation `S.sOf` phrase motion, S "for the", phrase pendulum, S "may be obtained"]
+                                       phraseNP (theNP (equation `of_` motion) `forNP` the pendulum), S "may be obtained"]
        
  
 angularDisplacementDerivSent2 = foldlSentCol [S "Where", ch torque `S.denotes` phrase torque `sC`
@@ -61,10 +61,10 @@ angularDisplacementDerivSent2 = foldlSentCol [S "Where", ch torque `S.denotes` p
 
 angularDisplacementDerivSent3 = foldlSentCol [S "And rearranged as" ] 
 
-angularDisplacementDerivSent4 = foldlSentCol [S "If the", phrase amplitude `S.sOf` phrase angularDisplacement, S "is small enough" `sC`
+angularDisplacementDerivSent4 = foldlSentCol [S "If", phraseNP (theNP (amplitude `of_` angularDisplacement)), S "is small enough" `sC`
   S "we can approximate", E (sin (sy pendDisplacementAngle) $= sy pendDisplacementAngle), S "for the purpose of a simple", phrase pendulum,
   S "at very small" +:+. plural angle,
-  S "Then the", phrase equation `S.sOf` phrase motion, S "reduces to the", phrase equation `S.sOf` phrase shm]                                       
+  S "Then", phraseNP (theNP (equation `of_` motion)), S "reduces to", phraseNP (theNP (equation `of_` shm))]                                       
 
 angularDisplacementDerivSent5 = foldlSentCol [S "Thus the", phrase shm, S "is" ] 
 

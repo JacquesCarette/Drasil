@@ -53,12 +53,12 @@ nonFuncReqs = [correct, portable]
 
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
- plural output_ `S.the_ofThe'` phrase code, S "have the",
+ atStartNP' (output_ `the_ofThe''` code), S "have the",
  plural property, S "described in", makeRef2S (propCorSol [] [])
  ]) "Correct" nonFuncReqDom
 
 portable :: ConceptInstance
 portable = cic "portable" (foldlSent [
-  S "The", phrase code, S "is able to be run in different", plural environment])
+  atStartNP (the code), S "is able to be run in different", plural environment])
   "Portable" nonFuncReqDom
  

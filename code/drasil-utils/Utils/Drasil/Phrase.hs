@@ -4,7 +4,7 @@ import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Control.Lens ((^.))
 
-import Utils.Drasil.Sentence (sAnd, sOf, ofThe)
+import Utils.Drasil.Sentence (sAnd, sOf, ofThe, the_ofThe, onThe)
 
 -- | Creates a 'NP' by combining two 'NamedIdea's with the word "and" between
 -- their terms. Plural case is @(phrase t1) "and" (plural t2)@.
@@ -23,7 +23,7 @@ and_' t1 t2 = nounPhrase''
   (Replace (atStart t1 `sAnd` plural t2))
   (Replace (titleize t1 `sAnd` titleize' t2))
 
--- | Customizable `and_` combinator (takes two title case capitalization rules and two NamedIdeas)
+-- | Customizable `and_` combinator (takes two title case capitalization rules and two 'NamedIdeas').
 andRT :: (NamedIdea c, NamedIdea d) => 
   (c -> Sentence) -> (d -> Sentence) -> c -> d -> NP
 andRT f1 f2 t1 t2 = nounPhrase''
@@ -83,9 +83,17 @@ of__ t1 t2 = nounPhrase''
   (Replace (atStart' t1 `sOf` phrase t2))
   (Replace (titleize' t1 `sOf` titleize t2))
 
--- | Same as 'of__', except combining 'Sentence' piece is "of a".
+-- | Same as 'of_''', except combining 'Sentence' piece is "of a".
 ofA :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 ofA t1 t2 = nounPhrase'' 
+  (phrase t1 +:+ S "of a" +:+ phrase t2)
+  (plural t1 +:+ S "of a" +:+ phrase t2)
+  (Replace (atStart t1 +:+ S "of a" +:+ phrase t2))
+  (Replace (titleize t1 +:+ S "of a" +:+ titleize t2))
+
+-- | Same as 'ofA', except phrase case is @(plural t1) "of a" (phrase t2)@.
+ofA' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+ofA' t1 t2 = nounPhrase'' 
   (plural t1 +:+ S "of a" +:+ phrase t2)
   (plural t1 +:+ S "of a" +:+ phrase t2)
   (Replace (atStart' t1 +:+ S "of a" +:+ phrase t2))
@@ -98,6 +106,23 @@ ofThe' t1 t2 = nounPhrase''
   (plural t1 `ofThe` phrase t2)
   (Replace (atStart' t1 `ofThe` phrase t2))
   (Replace (titleize' t1 `ofThe` titleize t2))
+
+-- | Same as 'ofThe'', except prepends "the".
+the_ofThe'' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+the_ofThe'' t1 t2 = nounPhrase'' 
+  (phrase t1 `the_ofThe` phrase t2)
+  (plural t1 `the_ofThe` phrase t2)
+  CapFirst CapWords
+
+-- | Same as 'of_', except combining Sentence piece is "of the".
+onThe' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+onThe' t1 t2 = nounPhrase'' 
+  (phrase t1 `onThe` phrase t2)
+  (plural t1 `onThe` phrase t2)
+  (Replace (atStart t1 `onThe` phrase t2))
+  (Replace (titleize t1 `onThe` titleize t2))
+
+
 
 --FIXME: As mentioned in issue #487, the following should be re-examined later,
 --       as they may embody a deeper idea in some cases.
@@ -126,15 +151,23 @@ for' f1 f2 t1 t2 = nounPhrase''
 
 -- | Prepends "the" to a 'NamedIdea'. Similar to 'the'', but not titleized.
 the :: (NamedIdea t) => t -> NP
-the t = nounPhrase'' (S "the" +:+ phrase t) (S "the" +:+ plural t) CapWords CapWords
+the t = nounPhrase'' (S "the" +:+ phrase t) (S "the" +:+ plural t) CapFirst CapWords
 
 -- | Prepends "the" to a titleized 'NamedIdea'.
 the' :: (NamedIdea t) => t -> NP
-the' t = nounPhrase'' (S "the" +:+ titleize t) (S "the" +:+ titleize' t) CapWords CapWords
+the' t = nounPhrase'' (S "the" +:+ titleize t) (S "the" +:+ titleize' t) CapFirst CapWords
 
 -- | A customizable version of 'the'. The given function is applied to both singular and plural cases.
 the'' :: (t -> Sentence) -> t -> NP
 the'' f t = nounPhrase'' (S "the" +:+ f t) (S "the" +:+ f t) CapFirst CapWords
+
+-- | Prepends "a" to a 'NamedIdea' (similar to 'the').
+aNINP :: (NamedIdea c) => c -> NP
+aNINP t = nounPhrase'' (S "a" +:+ phrase t) (S "a" +:+ plural t) CapFirst CapWords
+
+-- | Customizable version of 'aNINP'.
+aNINP' :: (c -> Sentence) -> c -> NP
+aNINP' f t = nounPhrase'' (S "a" +:+ f t) (S "a" +:+ f t) CapFirst CapWords
 
 -- | Creates a 'NP' by combining two 'NamedIdea's with the words "in the" between
 -- their terms. Plural case is @(plural t1) "in the" (phrase t2)@.
@@ -170,12 +203,12 @@ compoundNCPlPh = compoundNC'' D.pluralNP D.phraseNP
 
 -- hack for Solution Characteristics Specification, calling upon plural will pluralize
 -- Characteristics as it is the end of the first term (solutionCharacteristic)
--- | Similar to 'compoundNC', but takes a function that is applied to the first term (eg. 'short' or 'plural')
+-- | Similar to 'compoundNC', but takes a function that is applied to the first term (eg. 'short' or 'plural').
 compoundNC''' :: (NamedIdea a, NamedIdea b) => (NP -> Sentence) -> a -> b -> NamedChunk
 compoundNC''' f1 t1 t2 = nc
   (t1 ^. uid ++ t2 ^. uid) (compoundPhrase''' f1 (t1 ^. term) (t2 ^. term))
 
 -- FIXME: Same as above function
--- | Similar to 'compoundNC'''' but sets first parameter function to plural
+-- | Similar to 'compoundNC'''' but sets first parameter function to plural.
 compoundNCP1 :: NamedChunk -> NamedChunk -> NamedChunk
 compoundNCP1 = compoundNC''' D.pluralNP

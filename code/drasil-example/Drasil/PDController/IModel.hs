@@ -72,14 +72,14 @@ derivEqn1
   = sy qdProcessVariableFD
       $= (sy qdSetPointFD $- sy qdProcessVariableFD)
       `mulRe` (sy qdPropGain `addRe` (sy qdDerivGain `mulRe` sy qdFreqDomain))
-      `mulRe` (recip_ (square (sy qdFreqDomain) `addRe` sy qdFreqDomain `addRe` exactDbl 20))
+      `mulRe` recip_ (square (sy qdFreqDomain) `addRe` sy qdFreqDomain `addRe` exactDbl 20)
 
 derivStmt2 :: Sentence
 derivStmt2 = (S "Substituting the values and rearranging the equation" !.)
 
 derivEqn2 :: Expr
 derivEqn2
-  = square (sy qdFreqDomain) `mulRe` sy qdProcessVariableFD 
+  = square (sy qdFreqDomain) `mulRe` sy qdProcessVariableFD
       `addRe` ((exactDbl 1 `addRe` sy qdDerivGain) `mulRe` sy qdProcessVariableFD `mulRe` sy qdFreqDomain)
       `addRe` ((exactDbl 20 `addRe` sy qdPropGain) `mulRe` sy qdProcessVariableFD)
       $- (sy qdSetPointFD `mulRe` sy qdFreqDomain `mulRe` sy qdDerivGain)

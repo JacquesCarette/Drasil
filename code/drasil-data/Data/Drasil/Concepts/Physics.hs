@@ -2,6 +2,7 @@ module Data.Drasil.Concepts.Physics where
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
 import Language.Drasil
+import Utils.Drasil.Sentence
 import Utils.Drasil
 
 import Data.Drasil.Domains (mathematics, physics)
@@ -14,13 +15,13 @@ import Data.Drasil.Concepts.Education (mechanics)
 
 physicCon :: [ConceptChunk]
 physicCon = [acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVelocity,
-  cohesion, collision, compression, constAccel, constAccelV, damping,
+  cohesion, collision, compression, constAccel, constAccelV, damping, dampingCoeff,
   displacement, distance, elasticity, energy, fSpeed, fVel, fbd, force,
   friction, gravity, gravitationalAccel, gravitationalConst, height, iPos,
   iSpeed, iVel, impulseS, impulseV, isotropy, ixPos, ixVel, iyPos, iyVel,
   joint, kEnergy, linAccel, linDisp, linVelo, linear, mechEnergy,
   momentOfInertia, position, potEnergy, pressure, restitutionCoef, rectilinear,
-  rigidBody, scalarAccel, scalarPos, space, speed, strain, stress, tension,
+  rigidBody, scalarAccel, scalarPos, shm, space, speed, stiffCoeff, strain, stress, tension,
   time, torque, velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel,
   yAccel, yConstAccel, yDist, yPos, yVel, momentum, moment, fOfGravity, positionVec,
   pendulum, body, kinematics, frequency, period, motion]
@@ -29,13 +30,13 @@ physicCon' :: [CI]
 physicCon' = [oneD, twoD, threeD]
 
 acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVelocity, cohesion,
-  collision, compression, constAccel, constAccelV, damping, displacement,
+  collision, compression, constAccel, constAccelV, damping, dampingCoeff, displacement,
   distance, elasticity, energy, fSpeed, fVel, fbd, force, friction, gravity,
   gravitationalAccel, gravitationalConst, height, iPos, iSpeed, iVel, impulseS,
   impulseV, isotropy, ixPos, ixVel, iyPos, iyVel, joint, kEnergy, linAccel,
   linDisp, linVelo, linear, mechEnergy, momentOfInertia, position, potEnergy,
-  pressure, rectilinear, restitutionCoef, rigidBody, scalarAccel, scalarPos,
-  space, speed, strain, stress, tension, time, torque, velocity, weight,
+  pressure, rectilinear, restitutionCoef, rigidBody, scalarAccel, scalarPos, shm,
+  space, speed, stiffCoeff, strain, stress, tension, time, torque, velocity, weight,
   xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
   yPos, yVel, momentum, moment, fOfGravity, positionVec, pendulum, body,
   kinematics, frequency, period, motion :: ConceptChunk
@@ -62,6 +63,8 @@ compression = dccWDS "compression" (cn' "compression")
 damping = dccWDS "damping" (pn' "damping")
   $ S "an influence within or upon an oscillatory system that has the effect of reducing," +:+
   S "restricting or preventing its oscillations" +:+ sParen (S "from" +:+ makeRef2S dampingSource)
+dampingCoeff = dcc "dampingCoeff" (cn' "damping coefficient")
+ "Quantity that characterizes a second order system's oscillatory response"
 displacement = dccWDS "displacement" (cn' "displacement")
   (S "the change in" +:+ (position ^. defn))
 distance = dcc "distance" (cn' "distance")
@@ -109,7 +112,7 @@ momentum = dccWDS "momentum" (cn "momentum")
 moment = dccWDS "moment" (cn' "moment")
   (S "A measure of the tendency of a body to rotate about a specific" +:+ phrase point `sOr` phrase axis)
 motion = dccWDS "motion" (cn "motion")
-  (S "change of position of a physical body")
+  (S "change in position of a physical body over time")
 period = dccWDS "period" (cn' "period")
    (S "the" +:+ phrase time +:+ S "required for one complete cycle of vibration to pass a given point.")
 pendulum = dccWDS "pendulum" (cn "pendulum")
@@ -134,8 +137,13 @@ scalarAccel = dccWDS "scalarAccel" (cn' "scalar acceleration")
   (S "magnitude" `the_ofThe` phrase acceleration +:+ S "vector")
 scalarPos = dccWDS "scalarPos" (cn' "scalar position")
   (S "magnitude" `the_ofThe` phrase position +:+ S "vector")
+shm = dcc "SHM" (nounPhraseSP "simple harmonic motion") ("Periodic motion through an equilibrium position. " ++ 
+                                                        "The motion is sinusoidal in time and demonstrates a" ++ 
+                                                        " single resonant frequency") -- source: Wikipedia 
 speed = dccWDS "speed" (cn' "speed")
   (S "magnitude" `the_ofThe` phrase velocity +:+ S "vector")
+stiffCoeff = dcc "stiffnessCoeff" (cn' "stiffness coefficient") 
+ "Quantity that characterizes a spring's stiffness"
 strain = dccWDS "strain" (cn' "strain") 
   (S "a measure of deformation representing the" +:+ phrase displacement +:+
    S "between particles in the body relative to a reference length")
@@ -189,19 +197,19 @@ yConstAccel = dccWDS "yConstAccel" (nounPhraseSent $ phrase yComp `sOf` phrase c
 
 
 --FIXME: COMBINATION HACK (for all below)
-angDisp = dcc "angularDisplacement" (compoundPhrase' (angular ^. term) (displacement ^. term))
+angDisp = dcc "angularDisplacement" (fterms compoundPhrase' angular displacement)
   "the angle through which an object moves on a circular path"
-angVelo = dcc "angularVelocity" (compoundPhrase' (angular ^. term) (velocity ^. term))
+angVelo = dcc "angularVelocity" (fterms compoundPhrase' angular velocity)
   "the rate of change of angular position of a rotating body"
-angAccel = dcc "angularAcceleration" (compoundPhrase' (angular ^. term) (acceleration ^. term))
+angAccel = dcc "angularAcceleration" (fterms compoundPhrase' angular acceleration)
   "the rate of change of angular velocity"
 constAccel = dcc "constantAcceleration" (cn "constant acceleration")
   "a one-dimensional acceleration that is constant"
-linDisp = dcc "linearDisplacement" (compoundPhrase' (linear ^. term) (displacement ^. term)) 
+linDisp = dcc "linearDisplacement" (fterms compoundPhrase' linear displacement) 
   "movement in one direction along a single axis"
-linVelo = dcc "linearVelocity" (compoundPhrase' (linear ^. term) (velocity ^. term)) 
+linVelo = dcc "linearVelocity" (fterms compoundPhrase' linear velocity) 
   "the speed of a moving object, dependent on the perspective taken"
-linAccel = dcc "linearAcceleration" (compoundPhrase' (linear ^. term) (acceleration ^. term)) 
+linAccel = dcc "linearAcceleration" (fterms compoundPhrase' linear acceleration) 
   "the rate of change of velocity without a change in direction"
 
 -- The following feel like they're missing something/need to be more

@@ -15,7 +15,7 @@ import Data.List (sortOn)
 import Data.Maybe (fromMaybe, mapMaybe)
 import qualified Data.Map as Map
 
--- The misnomers below are not actually a bad thing, we want to ensure data can't
+-- | The misnomers below are not actually a bad thing, we want to ensure data can't
 -- be added to a map if it's not coming from a chunk, and there's no point confusing
 -- what the map is for. One is for symbols + their units, and the others are for
 -- what they state.
@@ -127,7 +127,8 @@ labelledconLookup = uMapLookup "LabelledContent" "LabelledContentMap"
 asOrderedList :: UMap a -> [a]
 asOrderedList = map fst . sortOn snd . map snd . Map.toList
 
--- | Our chunk databases. Should contain all the maps we will need.
+-- | Our chunk databases. \Must contain all maps needed in an example.\
+-- In turn, these maps must contain every chunk definition or concept used in its respective example.
 data ChunkDB = CDB { symbolTable :: SymbolMap
                    , termTable :: TermMap 
                    , defTable  :: ConceptMap

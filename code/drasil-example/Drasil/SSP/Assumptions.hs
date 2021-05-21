@@ -2,6 +2,7 @@ module Drasil.SSP.Assumptions where
 
 import Language.Drasil
 import Utils.Drasil
+import qualified Utils.Drasil.Sentence as S
 
 import Drasil.SSP.Defs (plnStrn, slpSrf, slopeSrf, slope,
   soil, soilPrpty, intrslce, slice, waterTable)
@@ -51,7 +52,7 @@ monotonicF, slopeS, homogeneousL, isotropicP, linearS, planeS, largeN,
   waterSIntersect, negligibleSlopeEffect, hydrostaticFMidpoint :: Sentence
 
 monotonicF = foldlSent [S "The", phrase slpSrf,
-  S "is concave with respect to", S "the" +:+. phrase slopeSrf, S "The",
+  S "is concave" `S.wrt` S "the" +:+. phrase slopeSrf, S "The",
   sParen (ch slipDist `sC` ch slipHght) +:+ S "coordinates", S "of a", 
   phrase slpSrf, S "follow a concave up function"]
 
@@ -65,11 +66,11 @@ propertiesS = foldlSent [S "The", plural soilPrpty, S "are independent of dry or
   plural condition `sC` S "with the exception of", phrase unit_, S "weight"]
 
 isotropicP = foldlSent [S "The", phrase soil, S "mass is treated as if the", 
-  phrase effCohesion `sAnd` phrase fricAngle, S "are isotropic properties"]
+  phrase effCohesion `S.sAnd` phrase fricAngle, S "are isotropic properties"]
 
 linearS = foldlSent [S "Following the", phrase assumption, S "of Morgenstern",
   S "and Price", sParen (makeRef2S morgenstern1965) `sC` 
-  phrase intNormForce `sAnd` phrase intShrForce,
+  phrase intNormForce `S.sAnd` phrase intShrForce,
   S "have a proportional relationship, depending on a proportionality",
   phrase constant, sParen (ch normToShear), S "and a function", 
   sParen (ch scalFunc), S "describing variation depending on", ch xi, 
@@ -88,7 +89,7 @@ straightS = foldlSent [S "The", phrase surface, S "and base of a",
   phrase slice, S "are approximated as straight lines"]
 
 edgeS = foldlSent [S "The", phrase intrslce, plural force, 
-  S "at the 0th" `sAnd` ch numbSlices :+: S "th", phrase intrslce,
+  S "at the 0th" `S.sAnd` ch numbSlices :+: S "th", phrase intrslce,
   plural interface, S "are zero"]
 
 seismicF = foldlSent [S "There is no seismic", phrase force, S "acting on the", phrase slope]
@@ -107,6 +108,6 @@ negligibleSlopeEffect = foldlSent [S "The", phrase effect,
   phrase force, S "is assumed to be negligible"]
 
 hydrostaticFMidpoint = foldlSent [S "The resultant", phrase surfHydroForce,
-  S "act into the midpoint of each", phrase slice, S "surface" `andThe`
+  S "act into the midpoint of each", phrase slice, S "surface" `S.andThe`
   S "resultant", phrase baseHydroForce, S "act into the midpoint of each",
   phrase slice, S "base"]

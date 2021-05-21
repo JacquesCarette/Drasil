@@ -3,6 +3,7 @@ module Drasil.Projectile.DataDefs (dataDefs, speedIX, speedIY) where
 import Prelude hiding (sin, cos)
 import Language.Drasil
 import Utils.Drasil
+import qualified Utils.Drasil.Sentence as S
 
 import Theory.Drasil (DataDefinition, ddNoRefs)
 
@@ -30,11 +31,11 @@ speedE = UnaryOp Abs $ sy velocity
 ----------
 magNote :: Sentence
 magNote = foldlSent [S "For a given", phrase velocity, S "vector", ch velocity `sC`
-  S "the magnitude of the vector", sParen (E speedE) `isThe`
+  S "the magnitude of the vector", sParen (E speedE) `S.isThe`
   S "scalar called", phrase speed]
 
 speedRef :: Sentence
-speedRef = ch iSpeed `sIs` S "from" +:+. makeRef2S vecMag
+speedRef = ch iSpeed `S.sIs` S "from" +:+. makeRef2S vecMag
 
 figRef :: Sentence
-figRef = ch launAngle `sIs` S "shown in" +:+. makeRef2S figLaunch
+figRef = ch launAngle `S.sIs` S "shown in" +:+. makeRef2S figLaunch

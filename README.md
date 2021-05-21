@@ -1,4 +1,4 @@
-Drasil [![Build Status](https://travis-ci.com/JacquesCarette/Drasil.svg?branch=master)](https://travis-ci.com/JacquesCarette/Drasil)
+Drasil [![Build Status](https://github.com/JacquesCarette/Drasil/actions/workflows/Build.yaml/badge.svg?branch=master)](https://github.com/JacquesCarette/Drasil/actions/workflows/Build.yaml)
 [![DOI](https://zenodo.org/badge/23760783.svg)](https://zenodo.org/badge/latestdoi/23760783)
 ====================================================
 
@@ -117,13 +117,10 @@ See the [README](https://github.com/JacquesCarette/Drasil/tree/master/code#build
   - Assorted general/administrative notes
 
 .gitattributes
-  - Used by git
+  - Used by git (set language attributes so GitHub Linguist calculates code statistics as desired)
   
 .gitignore
   - Used by git (specifies which file(type)s to ignore when committing)
-  
-.travis.yml
-  - Used for continuous integration with Travis CI
   
 LICENSE
   - License information

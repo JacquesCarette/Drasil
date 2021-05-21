@@ -1,8 +1,10 @@
+{-# LANGUAGE PostfixOperators #-}
 module Drasil.GamePhysics.GenDefs (generalDefns, accelGravityGD, impulseGD,
  ) where
 
 import Language.Drasil
 import Utils.Drasil
+import qualified Utils.Drasil.Sentence as S
 import Theory.Drasil (GenDefn, gd, ModelKinds (EquationalModel))
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
  gravitationalAccel, gravitationalConst, restitutionCoef, impulseS, force,
@@ -69,7 +71,7 @@ accelGravityQD = mkQuantDef' QP.gravitationalAccel (nounPhraseSP "Acceleration d
 
 accelGravityDesc :: Sentence
 accelGravityDesc = foldlSent [S "If one of the", plural QPP.mass, S "is much larger than the other" `sC`
-  S "it is convenient to define a gravitational field around the larger mass as shown above.",
+  (S "it is convenient to define a gravitational field around the larger mass as shown above" !.),
   S "The negative sign in the equation indicates that the", phrase QP.force, S "is an attractive",
   phrase QP.force]
 
@@ -95,28 +97,27 @@ accelGravityDerivSentence1 = [S "From Newton's law of universal gravitation", sP
 
 
 accelGravityDerivSentence2 :: [Sentence]
-accelGravityDerivSentence2 = [S "The above equation governs the gravitational attraction between two bodies.",
+accelGravityDerivSentence2 = [(S "The above equation governs the gravitational attraction between two bodies" !.),
         S "Suppose that one of the bodies is significantly more massive than the other" `sC`
         S "so that we concern ourselves with the", phrase QP.force, 
         S "the massive body",
-        S "exerts on the lighter body.", S "Further" `sC` S "suppose that the", phrase cartesian `sIs`
+        (S "exerts on the lighter body" !.), S "Further" `sC` S "suppose that the", phrase cartesian `S.sIs`
         S "chosen such that this", phrase QP.force, S "acts on a", phrase line, 
-        S "which lies along one of the principal axes.", 
+        (S "which lies along one of the principal axes" !.), 
         S "Then our", getTandS dVect, S "for the x or y axes is"]
 
 accelGravityDerivSentence3 :: [Sentence]
-accelGravityDerivSentence3 =  [S "Given the above assumptions" `sC` S "let", ch mLarger `sAnd` ch QPP.mass, 
-        S "be", phrase QPP.mass `the_ofThe` S "massive and light body respectively.",
+accelGravityDerivSentence3 =  [S "Given the above assumptions" `sC` S "let", ch mLarger `S.sAnd` ch QPP.mass, 
+        S "be", phrase QPP.mass `S.the_ofThe` (S "massive and light body respectively" !.),
         S "Equating", ch QP.force, S "above with Newton's second law",
         S "for the", phrase QP.force, S "experienced by the light body" `sC` S "we get"]
                               
 accelGravityDerivSentence4 :: [Sentence]
-accelGravityDerivSentence4 =  [S "where", ch QP.gravitationalAccel `isThe` phrase QP.gravitationalAccel :+:
-        S ".",
+accelGravityDerivSentence4 =  [S "where", (ch QP.gravitationalAccel `S.isThe` phrase QP.gravitationalAccel !.),
         S "Dividing the above equation by", ch QPP.mass `sC` S " we have"]
 
 accelGravityDerivSentence5 :: [Sentence]
-accelGravityDerivSentence5 =  [S "and thus the negative sign indicates that the", phrase QP.force `sIs`
+accelGravityDerivSentence5 =  [S "and thus the negative sign indicates that the", phrase QP.force `S.sIs`
                                S "an attractive", phrase QP.force]
 
 accelGravityDerivEqn1 :: Expr

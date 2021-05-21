@@ -605,15 +605,19 @@ modifiedODESyst sufx info = map replaceDepVar (odeSyst info)
     replaceDepVar (UnaryOp u e)           = UnaryOp u $ replaceDepVar e
     replaceDepVar (UnaryOpB u e)          = UnaryOpB u $ replaceDepVar e
     replaceDepVar (UnaryOpVec u e)        = UnaryOpVec u $ replaceDepVar e
-    replaceDepVar (BinaryOp b e1 e2)      = BinaryOp b
-      (replaceDepVar e1) (replaceDepVar e2)
     replaceDepVar (ArithBinaryOp b e1 e2) = ArithBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
     replaceDepVar (BoolBinaryOp b e1 e2)  = BoolBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
     replaceDepVar (EqBinaryOp b e1 e2)    = EqBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
+    replaceDepVar (LABinaryOp b e1 e2)    = LABinaryOp b
+      (replaceDepVar e1) (replaceDepVar e2)
     replaceDepVar (OrdBinaryOp b e1 e2)   = OrdBinaryOp b
+      (replaceDepVar e1) (replaceDepVar e2)
+    replaceDepVar (VVNBinaryOp b e1 e2)   = VVNBinaryOp b
+      (replaceDepVar e1) (replaceDepVar e2)
+    replaceDepVar (VVVBinaryOp b e1 e2)   = VVVBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
     replaceDepVar (Operator ao dd e)      = Operator ao dd $ replaceDepVar e 
     replaceDepVar (IsIn e s)              = IsIn (replaceDepVar e) s

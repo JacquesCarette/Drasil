@@ -1,8 +1,8 @@
-{-# LANGUAGE GADTs #-}
+{-# LANGUAGE GADTs, PostfixOperators #-}
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
 -- | Contains Sentences and helpers
 module Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), (+:+),
-  (+:+.), (+:), capSent, ch, sC, sDash, sentencePlural, sentenceShort,
+  (+:+.), (+:), (!.), capSent, ch, sC, sDash, sentencePlural, sentenceShort,
   sentenceSymb, sentenceTerm, sParen) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
@@ -16,13 +16,14 @@ import Control.Lens ((^.))
 
 import Data.Char (toUpper)
 
--- | For writing "sentences" via combining smaller elements
+-- | For writing "sentences" via combining smaller elements.
 -- Sentences are made up of some known vocabulary of things:
--- - units (their visual representation)
--- - words (via String)
--- - special characters
--- - accented letters
--- - References to specific layout objects
+--
+--     * units (their visual representation)
+--     * words (via String)
+--     * special characters
+--     * accented letters
+--     * References to specific layout objects
 data SentenceStyle = PluralTerm
                    | SymbolStyle
                    | TermStyle
@@ -32,19 +33,20 @@ infixr 5 :+:
 data Sentence where
   Ch    :: SentenceStyle -> UID -> Sentence
   Sy    :: USymb -> Sentence
-  S     :: String -> Sentence       -- Strings, used for Descriptions in Chunks
+  S     :: String -> Sentence       -- ^ Strings, used for Descriptions in Chunks
   P     :: Symbol -> Sentence       -- should not be used in examples?
   E     :: Expr -> Sentence
   Ref   :: Reference -> Sentence
 
-  Quote :: Sentence -> Sentence     -- Adds quotation marks around a sentence
-  Percent :: Sentence               -- % symbol
+  Quote :: Sentence -> Sentence     -- ^ Adds quotation marks around a sentence
+  Percent :: Sentence               -- ^ % symbol
                                     
-  -- Direct concatenation of two Sentences (no implicit spaces!)
-  (:+:) :: Sentence -> Sentence -> Sentence   
+  -- | Direct concatenation of two Sentences (no implicit spaces!)
+  (:+:) :: Sentence -> Sentence -> Sentence  
   EmptyS :: Sentence
 
 -- The HasSymbol is redundant, but on purpose
+-- | Gets a symbol and places in a 'Sentence'
 ch :: (HasUID c, HasSymbol c) => c -> Sentence
 ch x = Ch SymbolStyle (x ^. uid)
 
@@ -55,6 +57,7 @@ instance Monoid Sentence where
   mempty = EmptyS
   mappend = (:+:)
 
+-- | Smart constructors for turning a 'UID' into a 'Sentence'
 sentencePlural, sentenceShort, sentenceSymb, sentenceTerm :: UID -> Sentence
 sentencePlural = Ch PluralTerm
 sentenceShort  = Ch ShortStyle
@@ -83,6 +86,10 @@ a `sC` b = a :+: S "," +:+ b
 -- the end.
 (+:+.) :: Sentence -> Sentence -> Sentence
 a +:+. b = a +:+ b :+: S "."
+
+-- | Helper which appends a period to the end of a sentence
+(!.) :: Sentence -> Sentence
+(!.) a = a :+: S "."
 
 -- | Helper which concatenates two sentences using '+:+' then adds a colon to
 -- the end.

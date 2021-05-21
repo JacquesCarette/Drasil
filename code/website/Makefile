@@ -4,7 +4,7 @@ build:
 	stack build --ghc-options="-Wall" website
 
 run: build
-	stack exec -- site rebuild
+	stack exec -- website rebuild
 
 clean:
 	-rm -r _site

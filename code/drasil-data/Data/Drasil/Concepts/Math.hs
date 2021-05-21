@@ -5,27 +5,28 @@ import Language.Drasil.ShortHands (lX, lY, lZ)
 import Data.Drasil.Domains (mathematics)
 import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource)
 import Utils.Drasil
+import Utils.Drasil.Sentence
 
-import Control.Lens ((^.))
 
 mathcon :: [ConceptChunk]
 
-mathcon = [angle, area, axis, calculation, cartesian, centre, change, constraint, diameter,
-  equation, euclidN, euclidSpace, gradient, graph, law, line, matrix, norm, normal,
-  normalV, number, orient, parameter, perp, perpV, pi_, point, probability, rOfChng,
-  rate, rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xCoord, xComp,
-  xDir, yAxis, yCoord, yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle]
+mathcon = [amplitude, angle, area, axis, calculation, cartesian, centre, change, component,
+  constraint, diameter, direction, equation, euclidN, euclidSpace, gradient, graph, laplaceTransform, law, line, matrix,
+  norm, normal, normalV, number, orient, origin, parameter, perp, perpV, pi_, negInf, posInf, positive, negative,
+  point, probability, rOfChng, rate, rightHand, shape, surArea, surface, unitV, unit_, vector, 
+  xAxis, xCoord, xComp, xDir, yAxis, yCoord, yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle]
 
 mathcon' :: [CI]
 mathcon' = [de, leftSide, ode, pde, rightSide]
 
-angle, area, axis, calculation, cartesian, centre, change, constraint, diameter, equation,
-  euclidN, euclidSpace, gradient, graph, law, line, matrix, norm, normal, normalV,
-  number, orient, parameter, perp, perpV, pi_, point, probability, rOfChng, rate,
-  rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xCoord, xComp, xDir,
+amplitude, angle, area, axis, calculation, cartesian, centre, change, component, constraint, diameter,
+  direction, equation, euclidN, euclidSpace, gradient, graph, laplaceTransform, law, line, matrix, norm, normal, normalV, 
+  number, orient, origin, parameter, perp, perpV, pi_, negInf, posInf, positive, negative, point, probability,
+  rOfChng, rate, rightHand, shape, surArea, surface, unitV, unit_, vector, xAxis, xCoord, xComp, xDir,
   yAxis, yCoord,  yComp, yDir, zAxis, zCoord, zComp, zDir, iAngle :: ConceptChunk
 
-
+  
+amplitude   = dcc "amplitude"    (nounPhraseSP "amplitude")      "The peak deviation of a function from zero"
 angle       = dcc "angle"        (cn' "angle")                   "the amount of rotation needed to bring one line or plane into coincidence with another"
 area        = dcc "area"         (cn' "area")                    "a part of an object or surface"
 axis        = dcc "axis"         (cn' "axis")                    "a fixed reference line for the measurement of coordinates" 
@@ -36,14 +37,19 @@ cartesian   = dccWDS "cartesian" (pn' "Cartesian coordinate system") $ S "a coor
                                                                   sParen (S "from" +:+ makeRef2S cartesianWiki)
 centre       = dcc "centre"       (cn' "centre")                  "the middle point of an object"
 change       = dcc "change"       (cn' "change")                  "Difference between relative start and end states of an object"
+component    = dcc "component"    (nounPhrase "component" "components") ("The scalar quantity defining the contribution " ++
+                                                                  "of a vector in one of the coordinate directions")
 constraint   = dcc "constraint"   (cn' "constraint")              "A condition that the solution must satisfy"
 diameter     = dcc "diameter"     (cn' "diameter")                ("Any straight line segment that passes through the center of the circle" ++
                                                                   "and whose endpoints lie on the circle.")
+direction    = dcc "direction"    (cn' "direction")               "'which way' a vector points, extending from the tail to the tip"
 equation     = dcc "equation"     (cn' "equation")                "A statement that the values of two mathematical expressions are equal "
 euclidSpace  = dcc "euclidSpace"  (cn' "Euclidean")               ("Denoting the system of geometry corresponding to the geometry of ordinary" ++
                                                                   "experience")
 gradient     = dcc "gradient"     (cn' "gradient")                "degree of steepness of a graph at any point"
 graph        = dcc "graph"        (cn' "graph")                   "A diagram showing the relation between variable quantities"
+laplaceTransform = dcc "laplaceTransform" (cn' "laplace transform") ("An integral transform that converts a function of a real variable t " ++
+                                                                     "(often time) to a function of a complex variable s (complex frequency)")
 law          = dcc "law"          (cn' "law")                     "a generalization based on a fact or event perceived to be recurrent"
 line         = dccWDS "line"      (pn' "line")                    $ S "An interval between two points" +:+
                                                                   sParen (S "from" +:+ makeRef2S lineSource)
@@ -53,19 +59,24 @@ norm        = dcc "norm"         (cn' "norm")                    "the positive l
 normal      = dcc "normal"       (cn' "normal" )                 "an object that is perpendicular to a given object"
 number      = dcc "number"       (cn' "number")                  "a mathematical object used to count, measure, and label"
 orient      = dcc "orientation"  (cn' "orientation")             "the relative physical position or direction of something"
+origin      = dcc "origin"       (cn' "origin")                  "a fixed point of reference for the geometry of the surrounding space"
 parameter   = dcc "parameter"    (cn' "parameter")               "a quantity whose value is selected depending on particular circumstances"
 --FIXME: Should "parameter" be in math?
-perp         = dcc "perp"         (cn' "perpendicular")           "At right angles"
+perp         = dcc "perp"         (cn' "perpendicular")          "At right angles"
 pi_          = dcc "pi"           (cn' "ratio of circumference to diameter for any circle") "The ratio of a circle's circumference to its diameter"
+posInf       = dcc "PosInf"       (cn' "Positive Infinity")      "the limit of a sequence or function that eventually exceeds any prescribed bound"
+negInf       = dcc "NegInf"       (cn' "Negative Infinity")      "Opposite of positive infinity"
+positive     = dcc "positive"     (cn' "positive")               "greater than zero"
+negative     = dcc "negative"     (cn' "negative")               "less than zero"
 point        = dccWDS "point"     (pn' "point")                   $ S "An exact location, it has no size, only position" +:+
                                                                   sParen (S "from" +:+ makeRef2S pointSource)
-probability  = dcc "probability"  (cnIES "probability")           "The likelihood of an event to occur"
-rate         = dcc "rate"         (cn' "rate")                    "Ratio that compares two quantities having different units of measure"
+probability  = dcc "probability"  (cnIES "probability")          "The likelihood of an event to occur"
+rate         = dcc "rate"         (cn' "rate")                   "Ratio that compares two quantities having different units of measure"
 rightHand    = dcc "rightHand"    (cn' "right-handed coordinate system")  "A coordinate system where the positive z-axis comes out of the screen."
-shape        = dcc "shape"        (cn' "shape")                   "The outline of an area or figure"
-surface      = dcc "surface"      (cn' "surface")                 "The outer or topmost boundary of an object"
-unit_        = dcc "unit"         (cn' "unit")                    "Identity element"
-vector       = dcc "vector"       (cn' "vector")                  "Object with magnitude and direction"
+shape        = dcc "shape"        (cn' "shape")                  "The outline of an area or figure"
+surface      = dcc "surface"      (cn' "surface")                "The outer or topmost boundary of an object"
+unit_        = dcc "unit"         (cn' "unit")                   "Identity element"
+vector       = dcc "vector"       (cn' "vector")                 "Object with magnitude and direction"
 
 xAxis = dcc "xAxis" (nounPhraseSent $ P lX :+: S "-axis") "the primary axis of a system of coordinates"
 yAxis = dcc "yAxis" (nounPhraseSent $ P lY :+: S "-axis") "the secondary axis of a system of coordinates"
@@ -94,9 +105,9 @@ leftSide  = commonIdeaWithDict "leftSide"  (nounPhrase "left hand side"  "left h
 rightSide = commonIdeaWithDict "rightSide" (nounPhrase "right hand side" "right hand sides") "RHS" [mathematics]
 
 --FIXME: COMBINATION HACK (all below)
-euclidN = dcc "euclidNorm"    (compoundPhrase' (euclidSpace ^. term) (norm ^. term)) "euclidean norm"
-normalV = dcc "normal vector" (compoundPhrase' (normal ^. term) (vector ^. term)) "unit outward normal vector for a surface"
-perpV   = dcc "perp_vect"     (compoundPhrase' (perp ^. term) (vector ^. term)) "vector perpendicular or 90 degrees to another vector"
+euclidN = dcc "euclidNorm"    (fterms compoundPhrase' euclidSpace norm) "euclidean norm"
+normalV = dcc "normal vector" (fterms compoundPhrase' normal vector) "unit outward normal vector for a surface"
+perpV   = dcc "perp_vect"     (fterms compoundPhrase' perp vector) "vector perpendicular or 90 degrees to another vector"
 rOfChng = dcc "rOfChng"       (rate `of_` change) "ratio between a change in one variable relative to a corresponding change in another"
-surArea = dcc "surArea"       (compoundPhrase' (surface ^. term) (area ^. term)) "a measure of the total area that the surface of the object occupies"
-unitV   = dcc "unit_vect"     (compoundPhrase' (unit_ ^. term) (vector ^. term)) "a vector that has a magnitude of one"
+surArea = dcc "surArea"       (fterms compoundPhrase' surface area) "a measure of the total area that the surface of the object occupies"
+unitV   = dcc "unit_vect"     (fterms compoundPhrase' unit_ vector) "a vector that has a magnitude of one"

@@ -5,6 +5,7 @@ import Prelude hiding (cos, sin)
 import Language.Drasil
 import Theory.Drasil (InstanceModel, imNoDerivNoRefs, imNoRefs, qwC, ModelKinds (OthModel))
 import Utils.Drasil
+import qualified Utils.Drasil.Sentence as S
 
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
 
@@ -54,12 +55,12 @@ timeDerivSent1 = foldlSentCol [S "We know that" +:+.
   foldlList Comma List 
     [eqnWSource (sy iyPos $= E.iyPos) launchOrigin,
      eqnWSource (sy yConstAccel $= E.yConstAccel) accelYGravity],
-  S "Substituting these", plural value, S "into the y-direction" `sOf`
+  S "Substituting these", plural value, S "into the y-direction" `S.sOf`
   makeRef2S posVecGD, S "gives us"]
 timeDerivSent2 = foldlSentCol [S "To find the", phrase time, S "that the",
   phrase projectile, S "lands" `sC` S "we want to find the", ch time, phrase value,
   sParen (ch flightDur), S "where", E (sy yPos $= 0) +:+. sParen (S "since the" +:+
-  phrase target `sIs` S "on the" +:+ phrase xAxis +:+ S "from" +:+ makeRef2S targetXAxis),
+  phrase target `S.sIs` S "on the" +:+ phrase xAxis +:+ S "from" +:+ makeRef2S targetXAxis),
   S "From the", phrase equation, S "above",S "we get"]
 timeDerivSent3 = foldlSentCol [S "Dividing by", ch flightDur,
   sParen (S "with the" +:+ phrase constraint +:+ E (sy flightDur $> 0)),
@@ -94,7 +95,7 @@ landPosDerivSent1 = foldlSentCol [S "We know that" +:+.
   foldlList Comma List 
     [eqnWSource (sy ixPos $= 0) launchOrigin,
      eqnWSource (sy xConstAccel $= 0) accelXZero],
-  S "Substituting these", plural value, S "into the x-direction" `sOf`
+  S "Substituting these", plural value, S "into the x-direction" `S.sOf`
   makeRef2S posVecGD, S "gives us"]
 landPosDerivSent2 = foldlSentCol [S "To find the", phrase landPos `sC`
   S "we want to find the", ch xPos, phrase value, sParen (ch landPos),
@@ -135,30 +136,30 @@ angleConstraintNote, gravitationalAccelConstNote, landAndTargPosConsNote, landPo
   timeConsNote, tolNote :: Sentence
 
 angleConstraintNote = foldlSent [S "The", phrase constraint,
-  E (0 $< sy launAngle $< (sy pi_ / 2)) `sIs` S "from",
-  makeRef2S posXDirection `sAnd` makeRef2S yAxisGravity `sC`
-  S "and is shown" `sIn` makeRef2S figLaunch]
+  E (0 $< sy launAngle $< (sy pi_ / 2)) `S.sIs` S "from",
+  makeRef2S posXDirection `S.sAnd` makeRef2S yAxisGravity `sC`
+  S "and is shown" `S.sIn` makeRef2S figLaunch]
 
-gravitationalAccelConstNote = ch gravitationalAccelConst `sIs`
+gravitationalAccelConstNote = ch gravitationalAccelConst `S.sIs`
   S "defined in" +:+. makeRef2S gravAccelValue
 
 landAndTargPosConsNote = S "The" +:+ plural constraint +:+
-  E (sy landPos $> 0) `sAnd` E (sy targPos $> 0) `sAre` S "from" +:+. makeRef2S posXDirection
+  E (sy landPos $> 0) `S.sAnd` E (sy targPos $> 0) `S.sAre` S "from" +:+. makeRef2S posXDirection
 
-landPosNote = ch landPos `sIs` S "from" +:+. makeRef2S landPosIM
+landPosNote = ch landPos `S.sIs` S "from" +:+. makeRef2S landPosIM
 
 landPosConsNote = S "The" +:+ phrase constraint +:+
-  E (sy landPos $> 0) `sIs` S "from" +:+. makeRef2S posXDirection
+  E (sy landPos $> 0) `S.sIs` S "from" +:+. makeRef2S posXDirection
 
-offsetNote = ch offset `sIs` S "from" +:+. makeRef2S offsetIM
+offsetNote = ch offset `S.sIs` S "from" +:+. makeRef2S offsetIM
 
-offsetConsNote = foldlSent [S "The", phrase constraint, E (sy offset $> negate (sy landPos)) `sIs`
+offsetConsNote = foldlSent [S "The", phrase constraint, E (sy offset $> negate (sy landPos)) `S.sIs`
   S "from the fact that", E (sy landPos $> 0) `sC` S "from", makeRef2S posXDirection]
 
 targPosConsNote = S "The" +:+ phrase constraint +:+
-  E (sy targPos $> 0) `sIs` S "from" +:+. makeRef2S posXDirection
+  E (sy targPos $> 0) `S.sIs` S "from" +:+. makeRef2S posXDirection
 
 timeConsNote = S "The" +:+ phrase constraint +:+
-  E (sy flightDur $> 0) `sIs` S "from" +:+. makeRef2S timeStartZero
+  E (sy flightDur $> 0) `S.sIs` S "from" +:+. makeRef2S timeStartZero
 
-tolNote = ch tol `sIs` S "defined in" +:+. makeRef2S (SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]))
+tolNote = ch tol `S.sIs` S "defined in" +:+. makeRef2S (SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]))

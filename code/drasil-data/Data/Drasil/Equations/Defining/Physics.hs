@@ -3,7 +3,8 @@ module Data.Drasil.Equations.Defining.Physics where
 -- We define both some basic equations of physics, and their wrappers as concepts
 --
 import Language.Drasil
-import Utils.Drasil (foldlSent, getTandS, sIs, sOf, the_ofThe)
+import Utils.Drasil (foldlSent, getTandS)
+import Utils.Drasil.Sentence (sIs, sOf, the_ofThe)
 
 import qualified Data.Drasil.Quantities.Math as QM (unitVectj)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration, time,

@@ -4,8 +4,8 @@ module Language.Drasil.Expr.Math where
 import Prelude hiding (sqrt)
 import Control.Lens ((^.))
 import Language.Drasil.Symbol (Symbol)
-import Language.Drasil.Expr (Expr(..), Relation, DerivType(..), ($^), BinOp(..),
-  AssocArithOper(..), UFunc(..), UFuncB(..), UFuncVec(..), Completeness(..))
+import Language.Drasil.Expr (Expr(..), Relation, DerivType(..), ($^), AssocArithOper(..),
+  LABinOp(..), VVVBinOp(..), UFunc(..), UFuncB(..), UFuncVec(..), Completeness(..))
 import Language.Drasil.Space (Space, RTopology(..), DomainDesc(..), RealInterval)
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
 import Language.Drasil.Classes (IsArgumentName)
@@ -76,18 +76,21 @@ not_ = UnaryOpB Not
 
 -- | Smart constructor for indexing
 idx :: Expr -> Expr -> Expr
-idx = BinaryOp Index
+idx = LABinaryOp Index
 
--- | Smart constructors for integers, doubles, strings, percents
+-- | Smart constructor for integers
 int :: Integer -> Expr
 int = Int
 
+-- | Smart constructor for doubles
 dbl :: Double -> Expr
 dbl = Dbl
 
+-- | Smart constructor for strings
 str :: String -> Expr
 str = Str
 
+-- | Smart constructors for percents
 perc :: Integer -> Integer -> Expr
 perc = Perc
 
@@ -125,7 +128,7 @@ sum' = foldr1 (+)
   
 -- | Smart constructor to cross product two expressions
 cross :: Expr -> Expr -> Expr
-cross = BinaryOp Cross
+cross = VVVBinaryOp Cross
 
 -- | Smart constructor for case statement with complete set of cases
 completeCase :: [(Expr,Relation)] -> Expr
@@ -135,16 +138,17 @@ completeCase = Case Complete
 incompleteCase :: [(Expr,Relation)] -> Expr
 incompleteCase = Case Incomplete
 
+-- | Smart constructor to square a function
 square :: Expr -> Expr
 square x = x $^ 2
 
--- some matrix helper functions
+-- | Matrix helper function
 m2x2 :: Expr -> Expr -> Expr -> Expr -> Expr
 m2x2 a b c d = Matrix [[a,b],[c,d]]
-
+-- | Matrix helper function
 vec2D :: Expr -> Expr -> Expr
 vec2D a b    = Matrix [[a],[b]]
-
+-- | Matrix helper function
 dgnl2x2 :: Expr -> Expr -> Expr
 dgnl2x2 a  = m2x2 a (Int 0) (Int 0)
 
@@ -168,10 +172,12 @@ applyWithNamedArgs f ps ns = FCall (f ^. uid) ps (zip (map ((^. uid) . fst) ns)
   (map snd ns))
 
 -- Note how |sy| 'enforces' having a symbol
+-- | Get an 'Expr' from a 'Symbol'
 sy :: (HasUID c, HasSymbol c) => c -> Expr
 sy x = C (x ^. uid)
 
 -- This also wants a symbol constraint.
+-- | Gets the derivative of an 'Expr' with respect to a 'Symbol'
 deriv, pderiv :: (HasUID c, HasSymbol c) => Expr -> c -> Expr
 deriv e c = Deriv Total e (c^.uid)
 pderiv e c = Deriv Part e (c^.uid)

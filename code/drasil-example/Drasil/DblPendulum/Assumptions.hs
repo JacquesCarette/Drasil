@@ -1,11 +1,14 @@
+{-# LANGUAGE PostfixOperators #-}
 module Drasil.DblPendulum.Assumptions (pend2DMotion, cartCoord, cartCoordRight, yAxisDir, startOrigin, assumptions) where
     
 import Language.Drasil
+import qualified Utils.Drasil.Sentence as S
 import Utils.Drasil
-import Drasil.DblPendulum.Concepts (pendulum) 
+
 import Data.Drasil.Concepts.Documentation (assumpDom) 
-import Data.Drasil.Concepts.Math (cartesian, xAxis, yAxis)
-import Data.Drasil.Concepts.Physics (gravity, twoD)
+import Data.Drasil.Concepts.Math (cartesian, xAxis, yAxis, direction, origin, positive)
+import Data.Drasil.Concepts.Physics (gravity, twoD, pendulum)
+import Drasil.DblPendulum.Concepts (pendMotion)
 
 
 assumptions :: [ConceptInstance]
@@ -20,18 +23,18 @@ yAxisDir        = cic "yAxisDir"          yAxisDirDesc        "yAxisDir"        
 startOrigin     = cic "startOrigin"       startOriginDesc     "startOrigin"     assumpDom
 
 pend2DMotionDesc :: Sentence
-pend2DMotionDesc = S "The" +:+ phrase pendulum +:+ S "motion" `sIs` phrase twoD +:+. sParen (getAcc twoD)
+pend2DMotionDesc = atStartNP (the pendMotion) `S.sIs` phrase twoD +:+. sParen (getAcc twoD)
 
 cartCoordDesc :: Sentence
-cartCoordDesc = S "A" +:+ (phrase cartesian `sIs` S "used") 
+cartCoordDesc = atStartNP (aNINP cartesian) `S.sIs` (S "used" !.)
 
 cartCoordRightDesc :: Sentence
-cartCoordRightDesc = S "The" +:+ phrase cartesian `sIs` S "right-handed where positive" +:+.
-                         phrase xAxis `sAnd` phrase yAxis +:+ S "point right up"
+cartCoordRightDesc = atStartNP (the cartesian) `S.sIs` S "right-handed where" +:+ 
+    phraseNP (combineNINP positive (xAxis `and_` yAxis)) +:+. S "point right up"
 
 yAxisDirDesc :: Sentence
-yAxisDirDesc = S "direction" `the_ofThe'` phrase yAxis `sIs` S "directed opposite to" +:+. phrase gravity
+yAxisDirDesc = atStartNP (direction `the_ofThe''` yAxis) `S.sIs` S "directed opposite to" +:+. phrase gravity
 
 startOriginDesc :: Sentence
-startOriginDesc = S "The" +:+. (phrase pendulum `sIs` S "attached" `toThe` S "origin")
+startOriginDesc = atStartNP (the pendulum) `S.sIs` S "attached" `S.toThe` (phrase origin !.)
 

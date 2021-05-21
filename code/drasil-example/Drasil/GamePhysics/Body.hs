@@ -8,6 +8,7 @@ import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB, SystemInformation
   _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (qdFromDD)
 import Utils.Drasil
+import qualified Utils.Drasil.Sentence as S
 import Drasil.DocLang (DerivationDisplay(..), DocSection(..), Emphasis(..),
   Field(..), Fields, InclUnits(IncludeUnits), IntroSec(..), IntroSub(..),
   RefSec(..), RefTab(..), SCSSub(..), SRSDecl, SSDSec(SSDProg), SSDSub(..),
@@ -53,7 +54,7 @@ import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
 import Drasil.GamePhysics.GenDefs (generalDefns)
 
 srs :: Document
-srs = mkDoc mkSRS for' si
+srs = mkDoc mkSRS (S.sFor'' titleize short) si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
@@ -74,7 +75,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
    SSDSec $ SSDProg
       [ SSDProblem $ PDProg probDescIntro []
         [ TermsAndDefs Nothing terms
-        , Goals [S "the kinematic" +:+ plural property :+: S ", and" +:+ plural QP.force +:+
+        , Goals [S "the kinematic" +:+ plural property `sC` S "and" +:+ plural QP.force +:+
                  sParen (S "including any" +:+ phrase CP.collision +:+ plural QP.force) +:+
                  S "applied on a set of" +:+ plural CP.rigidBody]]
       , SSDSolChSpec $ SCSProg
@@ -83,7 +84,7 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
         , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
         , IMs [instModIntro] ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) ShowDerivation
-        , Constraints (S "FIXME") inputConstraints
+        , Constraints EmptyS inputConstraints
         , CorrSolnPpties outputConstraints []
         ]
       ],
@@ -190,7 +191,7 @@ para1_introduction_intro = foldlSent
 -- 2.2 : Scope of Requirements --
 ---------------------------------
 scope :: Sentence
-scope = foldlSent_ [S "the", phrase physicalSim `sOf` getAcc twoD,
+scope = foldlSent_ [S "the", phrase physicalSim `S.sOf` getAcc twoD,
   plural CP.rigidBody, S "acted on by", plural QP.force]
 
 --scope_of_requirements_intro_p2 = EmptyS
@@ -210,7 +211,7 @@ organizationOfDocumentsIntro :: Sentence
 organizationOfDocumentsIntro = foldlSent 
   [S "The", phrase organization, S "of this", phrase document, 
   S "follows the", phrase template, S "for an", getAcc Doc.srs, S "for", 
-  phrase sciCompS, S "proposed by", makeCiteS koothoor2013 `sAnd`
+  phrase sciCompS, S "proposed by", makeCiteS koothoor2013 `S.sAnd`
   makeCiteS smithLai2005]
 
 --------------------------------------------
@@ -254,7 +255,7 @@ sysCtxUsrResp = [S "Provide initial" +:+ plural condition +:+ S "of the" +:+
 sysCtxSysResp :: [Sentence]
 sysCtxSysResp = [S "Determine if the" +:+ plural input_ +:+ S "and" +:+
     phrase simulation +:+ S "state satisfy the required" +:+
-    (phrase physical `sAnd` plural systemConstraint) +:+. sParen(makeRef2S $ SRS.datCon ([]::[Contents]) ([]::[Section])),
+    (phrase physical `S.sAnd` plural systemConstraint) +:+. sParen(makeRef2S $ SRS.datCon ([]::[Contents]) ([]::[Section])),
   S "Calculate the new state of all" +:+ plural CP.rigidBody +:+
     S "within the" +:+ phrase simulation +:+ S "at each" +:+
     phrase simulation +:+. S "step",
@@ -276,9 +277,9 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
 
 userCharacteristicsIntro :: Contents
 userCharacteristicsIntro = foldlSP
-  [S "The", phrase endUser `sOf` short gamePhysics,
+  [S "The", phrase endUser `S.sOf` short gamePhysics,
   S "should have an understanding of", phrase frstYr, S "programming",
-  plural concept `sAnd` S "an understanding of", phrase highSchoolPhysics]
+  plural concept `S.sAnd` S "an understanding of", phrase highSchoolPhysics]
 
 -------------------------------
 -- 3.3 : System Constraints  --
@@ -299,15 +300,15 @@ probDescIntro :: Sentence
 probDescIntro = foldlSent_
   [S "create a", foldlList Comma List $ map S ["simple", "lightweight", "fast", "portable"],
   getAcc twoD, phrase CP.rigidBody, phrase physLib `sC` S "which will allow for more accessible",
-  phrase game, S "development" `sAnd` S "the production of higher quality" +:+. plural product_,
+  phrase game, S "development" `S.sAnd` S "the production of higher quality" +:+. plural product_,
   S "Creating a gaming", phrase physLib, S "is a difficult" +:+. phrase task, titleize' game,
   S "need",  plural physLib, S "that simulate", plural object, S "acting under various", phrase physical,
   plural condition `sC` S "while simultaneously being fast and efficient enough to work in soft",
   phrase realtime, S "during the" +:+. phrase game, S "Developing a", 
-  phrase physLib, S "from scratch takes a long period" `sOf` phrase QP.time `sAnd`
+  phrase physLib, S "from scratch takes a long period" `S.sOf` phrase QP.time `S.sAnd`
   S "is very costly" `sC` S "presenting barriers of entry which make it difficult for",
   phrase game, S "developers to include", phrase Doc.physics, S "in their" +:+. 
-  plural product_, S "There are a few free" `sC` phrase openSource `sAnd` S "high quality",
+  plural product_, S "There are a few free" `sC` phrase openSource `S.sAnd` S "high quality",
   plural physLib, S "available to be used for", phrase consumer, plural product_,
   sParen (makeRef2S $ SRS.offShelfSol ([] :: [Contents]) ([] :: [Section]))]
   
@@ -342,7 +343,7 @@ generalDefinitionsIntro :: Contents
 -- general_definitions_GDefs :: [Contents]
 
 generalDefinitionsIntro = foldlSP 
-  [S "This", phrase section_, S "collects the", plural CM.law `sAnd` 
+  [S "This", phrase section_, S "collects the", plural CM.law `S.sAnd` 
   plural CM.equation, S "that will be used in deriving the", 
   plural dataDefn `sC` S "which in turn will be used to build the", 
   plural inModel]
@@ -359,7 +360,7 @@ general_definitions_GDefs = map (Definition . General) gDefs)
 
 dataDefinitionsIntro :: Sentence
 dataDefinitionsIntro = foldlSent [S "The", phrase CPP.dimension
-   `sOf` S "each", phrase quantity, S "is also given"]
+   `S.sOf` S "each", phrase quantity, S "is also given"]
 
 -----------------------------
 -- 4.2.5 : Instance Models --

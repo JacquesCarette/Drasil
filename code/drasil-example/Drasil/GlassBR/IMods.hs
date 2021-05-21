@@ -4,6 +4,7 @@ import Prelude hiding (exp)
 import Language.Drasil
 import Theory.Drasil (InstanceModel, imNoDeriv, qwC, ModelKinds (OthModel))
 import Utils.Drasil
+import qualified Utils.Drasil.Sentence as S
 
 import Drasil.GlassBR.DataDefs (probOfBreak, calofCapacity, calofDemand,
   pbTolUsr, qRef)
@@ -50,7 +51,7 @@ lrIsSafeRC = makeRC "safetyReqLR" (nounPhraseSP "Safety Req-LR")
   
 iModDesc :: QuantityDict -> Sentence -> Sentence
 iModDesc main s = foldlSent [S "If", ch main `sC` S "the glass is" +:+.
-    S "considered safe", s `sAre` S "either both True or both False"]
+    S "considered safe", s `S.sAre` S "either both True or both False"]
   
 -- Intro --
 
@@ -65,11 +66,11 @@ capRef = definedIn' calofCapacity (S "and is also called capacity")
 
 lrIsSafeDesc :: Sentence
 lrIsSafeDesc = iModDesc isSafeLR
-  (ch isSafePb +:+ fromSource pbIsSafe `sAnd` ch isSafeLR)
+  (ch isSafePb +:+ fromSource pbIsSafe `S.sAnd` ch isSafeLR)
 
 pbIsSafeDesc :: Sentence
 pbIsSafeDesc = iModDesc isSafePb
-  (ch isSafePb `sAnd` ch isSafePb +:+ fromSource lrIsSafe)
+  (ch isSafePb `S.sAnd` ch isSafePb +:+ fromSource lrIsSafe)
 
 probBRRef :: Sentence
 probBRRef = definedIn probOfBreak

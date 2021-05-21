@@ -1,18 +1,39 @@
 module Drasil.DblPendulum.Concepts where
 
 import Language.Drasil
+import Data.Drasil.Theories.Physics (newtonSLRRC)
 
-import Data.Drasil.Domains (physics)
+--below imports needed compoundNC part to work
+import Utils.Drasil
+import Data.Drasil.Concepts.Physics (pendulum, motion, position, velocity, force)
 
-
-pendulum :: CI
-pendulum = commonIdeaWithDict "pendulum" (pn "Pendulum") "Pendulum" [physics]
 
 concepts :: [IdeaDict]
-concepts = [nw rod] 
+concepts = nw newtonSLRRC : map nw [rod, horizontal, vertical,
+  pendMotion, horizontalPos, verticalPos, horizontalVel,
+  verticalVel, horizontalForce, verticalForce] 
+  ++ map nw defs 
        
-rod :: NamedChunk
+rod, horizontal, vertical :: NamedChunk
 rod = nc "rod" (cn' "rod")
+horizontal = nc "horizontal" (cn "horizontal") 
+vertical = nc "vertical" (cn "vertical") 
+
+pendMotion, horizontalPos, verticalPos, horizontalVel, verticalVel, horizontalForce, verticalForce :: NamedChunk
+pendMotion = compoundNC pendulum motion
+horizontalPos = compoundNC horizontal position
+verticalPos = compoundNC vertical position
+horizontalVel = compoundNC horizontal velocity
+verticalVel = compoundNC vertical velocity
+horizontalForce = compoundNC horizontal force
+verticalForce = compoundNC vertical force
+---
+
+defs :: [ConceptChunk]
+defs = [arcLen]
+
+arcLen :: ConceptChunk
+arcLen = dcc "arc length" (nounPhraseSP "arc length") "the distance between two points on a curve"
 
 
 

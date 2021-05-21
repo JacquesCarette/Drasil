@@ -4,6 +4,7 @@ module Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs) where
 
 import Language.Drasil
 import Utils.Drasil
+import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (condition, goal, input_, likeChgDom,
   software, system, unlikeChgDom, value, variable)
@@ -67,7 +68,7 @@ accAlteredGlass           = cic "accAlteredGlass"           accAlteredGlassDesc 
 
 predictWithstandOfCertDegDesc, accAlteredGlassDesc :: Sentence
 
-predictWithstandOfCertDegDesc = foldlSent [phrase goal `the_ofThe'` phrase system,
+predictWithstandOfCertDegDesc = foldlSent [phrase goal `S.the_ofThe'` phrase system,
   S "is to predict whether the", phrase glaSlab, S "under consideration can",
   S "withstand an", phrase explosion, S "of a certain degree"]
 

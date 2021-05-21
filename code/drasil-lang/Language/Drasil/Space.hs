@@ -20,7 +20,6 @@ data Space =
   | Vect Space
   | Array Space
   | Actor String
-  | DiscreteI [Int]  --ex. let A = {1, 2, 4, 7}
   | DiscreteD [Double]
   | DiscreteS [String] --ex. let Meal = {"breakfast", "lunch", "dinner"}
   | Void

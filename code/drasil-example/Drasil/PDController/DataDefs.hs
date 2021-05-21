@@ -1,3 +1,4 @@
+{-# LANGUAGE PostfixOperators #-}
 module Drasil.PDController.DataDefs where
 
 import Drasil.PDController.Assumptions
@@ -27,20 +28,17 @@ ddErrSigEqn = sy qdSetPointFD - sy qdProcessVariableFD
 ddErrSigNote :: Sentence
 ddErrSigNote
   = foldlSent
-      [S "The Process Error is the difference between the Set-Point and " +:+
-         S "Process Variable.",
+      [S "The Process Error is the difference between the Set-Point and" +:+.
+         S "Process Variable",
        S "The equation is converted to the frequency" +:+
-         S "domain by applying the Laplace transform (from "
-         <> makeRef2S tmLaplace
-         <> S ").",
+         S "domain by applying the Laplace transform" +:+. sParen (S "from" +:+
+         makeRef2S tmLaplace),
        S "The Set-Point is assumed to be constant throughout the" +:+
-         S "simulation (from "
-         <> makeRef2S aSP
-         <> S ").",
+         S "simulation" +:+. sParen (S "from" +:+
+         makeRef2S aSP),
        S "The initial value of the Process Variable is assumed" +:+
-         S "to be zero (from "
-         <> makeRef2S aInitialValue
-         <> S ")"]
+         S "to be zero", sParen (S "from" +:+
+         makeRef2S aInitialValue)]
 
 ----------------------------------------------
 
@@ -58,14 +56,12 @@ ddPropCtrlEqn = sy qdPropGain * sy qdProcessErrorFD
 ddPropCtrlNote :: Sentence
 ddPropCtrlNote
   = foldlSent
-      [S "The Proportional Controller is the product of the Proportional Gain"
-         +:+ S "and the Process Error (from "
-         <> makeRef2S ddErrSig
-         <> S ").",
-       S "The equation is converted to the frequency" +:+
-         S "domain by applying the Laplace transform (from "
-         <> makeRef2S tmLaplace
-         <> S ")"]
+      [S "The Proportional Controller is the product of the Proportional Gain",
+         S "and the Process Error" +:+. sParen (S "from" +:+
+         makeRef2S ddErrSig),
+       S "The equation is converted to the frequency",
+         S "domain by applying the Laplace transform", sParen (S "from" +:+
+         makeRef2S tmLaplace)]
 
 ----------------------------------------------
 
@@ -84,19 +80,16 @@ ddDerivCtrlEqn
 ddDerivCtrlNote :: Sentence
 ddDerivCtrlNote
   = foldlSent
-      [S "The Derivative Controller is the product of the Derivative Gain" +:+
-         S "and the differential of the Process Error (from "
-         <> makeRef2S ddErrSig
-         <> S ").",
-       S "The equation is" +:+ S "converted to the frequency" +:+
-         S "domain by applying the Laplace"
-         +:+ S "transform (from "
-         <> makeRef2S tmLaplace
-         <> S ").",
-       S "A pure form of the Derivative controller is used in this" +:+
-         S "application (from "
-         <> makeRef2S aUnfilteredDerivative
-         <> S ")"]
+      [S "The Derivative Controller is the product of the Derivative Gain",
+         S "and the differential of the Process Error" +:+. sParen (S "from" +:+
+         makeRef2S ddErrSig),
+       S "The equation is converted to the frequency",
+         S "domain by applying the Laplace",
+         S "transform" +:+. sParen (S "from" +:+
+         makeRef2S tmLaplace),
+       S "A pure form of the Derivative controller is used in this",
+         S "application", sParen (S "from" +:+
+         makeRef2S aUnfilteredDerivative)]
 
 ----------------------------------------------
 
@@ -115,15 +108,15 @@ ddCtrlEqn
 ddCtrlNote :: Sentence
 ddCtrlNote
   = foldlSent
-      [S "The Control Variable is the output of the controller.",
-       S "In this case," +:+ S "it is the sum of the Proportional (from " <>
-         makeRef2S ddPropCtrl
-         <> S ") and Derivative (from "
-         <> makeRef2S ddDerivCtrl
-         <> S ") controllers.",
-       S "The parallel (from " <> makeRef2S aParallelEq <>
-         S ") and de-coupled (from "
-         <> makeRef2S aDecoupled
-         <> S ") form of the PD equation is"
-         +:+ S "used in this document"]
+      [(S "The Control Variable is the output of the controller" !.),
+       S "In this case" `sC` S "it is the sum of the Proportional", sParen (S "from" +:+
+         makeRef2S ddPropCtrl),
+         S "and Derivative", sParen (S "from" +:+
+         makeRef2S ddDerivCtrl) +:+.
+         S "controllers",
+       S "The parallel", sParen (S "from" +:+ makeRef2S aParallelEq),
+         S "and de-coupled", sParen (S "from" +:+
+         makeRef2S aDecoupled),
+         S "form of the PD equation is",
+         S "used in this document"]
 

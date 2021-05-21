@@ -2,6 +2,7 @@ module Drasil.SWHS.Requirements where --all of this file is exported
 
 import Language.Drasil
 import Utils.Drasil
+import qualified Utils.Drasil.Sentence as S
 
 import Drasil.DocLang (inReq)
 import Drasil.DocLang.SRS (datCon, propCorSol) 
@@ -59,7 +60,7 @@ findMass = findMassConstruct (inReq EmptyS) (plural mass) iMods
 findMassConstruct :: (Referable r, HasShortName r, Referable s, HasShortName s,
   Referable t, HasShortName t) => r -> Sentence -> [s] -> [t] -> ConceptInstance
 findMassConstruct fr m ims ddefs = cic "findMass" (foldlSent [
-  S "Use the", plural input_ `sIn` makeRef2S fr, S "to find the", 
+  S "Use the", plural input_ `S.sIn` makeRef2S fr, S "to find the", 
   m, S "needed for", foldlList Comma List (map makeRef2S ims) `sC`
   S "using", foldlList Comma List (map makeRef2S ddefs)])
   "Find-Mass" funcReqDom
@@ -73,8 +74,8 @@ outputInputDerivVals = oIDQConstruct oIDQVals
 
 oIDQConstruct :: [Sentence] -> ConceptInstance
 oIDQConstruct x = cic "outputInputDerivVals" (foldlSentCol [
-  titleize output_, S "the", plural inValue `sAnd`
-  S "derived", plural value `inThe` S "following list"] +:+.
+  titleize output_, S "the", plural inValue `S.sAnd`
+  S "derived", plural value `S.inThe` S "following list"] +:+.
   foldlList Comma List x) "Output-Input-Derived-Values" funcReqDom
 
 oIDQVals :: [Sentence]
@@ -114,7 +115,7 @@ calcChgHeatEnergyPCMOverTime = cic "calcChgHeatEnergyPCMOverTime" (foldlSent [
 --
 verifyEnergyOutput = cic "verifyEnergyOutput" (foldlSent [
   S "Verify that the", phrase energy, plural output_,
-  sParen (ch watE :+: sParen (ch time) `sAnd` ch pcmE :+:
+  sParen (ch watE :+: sParen (ch time) `S.sAnd` ch pcmE :+:
   sParen (ch time)), S "follow the", phrase CT.lawConsEnergy `sC`
   S "as outlined in", makeRef2S (propCorSol [] []) `sC`
   S "with relative error no greater than", ch consTol])
@@ -146,7 +147,7 @@ nfRequirements = [correct, verifiable, understandable, reusable, maintainable]
 
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
-  plural output_ `the_ofThe'` phrase code, S "have the",
+  plural output_ `S.the_ofThe'` phrase code, S "have the",
   plural property, S "described in", makeRef2S (propCorSol [] [])
   ]) "Correct" nonFuncReqDom
  
@@ -158,7 +159,7 @@ verifiable = cic "verifiable" (foldlSent [
 understandable :: ConceptInstance
 understandable = cic "understandable" (foldlSent [
   S "The", phrase code, S "is modularized with complete",
-  phrase mg `sAnd` phrase mis]) "Understandable" nonFuncReqDom
+  phrase mg `S.sAnd` phrase mis]) "Understandable" nonFuncReqDom
 
 reusable :: ConceptInstance
 reusable = cic "reusable" (foldlSent [
@@ -169,7 +170,7 @@ maintainable = cic "maintainable" (foldlSent [
   S "The traceability between", foldlList Comma List [plural requirement,
   plural assumption, plural thModel, plural genDefn, plural dataDefn, plural inModel,
   plural likelyChg, plural unlikelyChg, plural module_], S "is completely recorded in",
-  plural traceyMatrix, S "in the", getAcc srs `sAnd` phrase mg]) "Maintainable" nonFuncReqDom
+  plural traceyMatrix, S "in the", getAcc srs `S.sAnd` phrase mg]) "Maintainable" nonFuncReqDom
 
 -- The second sentence of the above paragraph is repeated in all examples (not
 -- exactly, but the general idea is). The first sentence is not always

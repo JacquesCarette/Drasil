@@ -47,14 +47,15 @@ ulcc :: RawContent -> UnlabelledContent
 ulcc = UnlblC
 
 ---------------------------------------------------------------------------
--- smart constructors needed for LabelledContent
+-- | Smart constructor needed for LabelledContent
 mkParagraph :: Sentence -> Contents
 mkParagraph x = UlC $ ulcc $ Paragraph x
-
+-- | Smart constructor needed for LabelledContent
 mkFig :: Reference -> RawContent -> Contents
 mkFig x y = LlC $ llcc x y
 
 --Fixme: use mkRawLc or llcc?
+-- | Smart constructor needed for LabelledContent
 mkRawLC :: RawContent -> Reference -> LabelledContent
 mkRawLC x lb = llcc lb x
 

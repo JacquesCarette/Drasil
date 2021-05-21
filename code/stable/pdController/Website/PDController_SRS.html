@@ -280,7 +280,7 @@
       <div class="section">
         <h1>Introduction</h1>
         <p class="paragraph">
-          Automatic process control with a controller (P/PI/PD/PID) is used  in a variety of applications such as thermostats, automobile  cruise-control, etc. The gains of a controller in an application  must be tuned before the controller is ready for production. Therefore a simulation of the  PD Controller  with a  Second Order System is created in this project that can be  used to tune the gain constants.
+          Automatic process control with a controller (P/PI/PD/PID) is used in a variety of applications such as thermostats, automobile cruise-control, etc. The gains of a controller in an application must be tuned before the controller is ready for production. Therefore a simulation of the PD Controller with a Second Order System is created in this project that can be used to tune the gain constants.
         </p>
         <p class="paragraph">
           The following section provides an overview of the Software Requirements Specification (SRS) for PD Controller. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
@@ -289,7 +289,7 @@
           <div class="subsection">
             <h2>Purpose of Document</h2>
             <p class="paragraph">
-              The purpose of this document is to capture all the necessary  information including assumptions, data definitions, constraints,  models, and requirements to facilitate an unambiguous development  of the PD controller software and test procedures.
+              The purpose of this document is to capture all the necessary information including assumptions, data definitions, constraints, models, and requirements to facilitate an unambiguous development of the PD controller software and test procedures.
             </p>
           </div>
         </div>
@@ -297,7 +297,7 @@
           <div class="subsection">
             <h2>Scope of Requirements</h2>
             <p class="paragraph">
-              The scope of the requirements includes a PD Control Loop  with three subsystems namely a  PD Controller, a Summing Point, and a Power Plant. Only  the Proportional and Derivative controllers are used in this software;  the Integral controller is beyond the scope of this project. Additionally, this software is intended to aid with the manual  tuning of the PD Controller.
+              The scope of the requirements includes a PD Control Loop with three subsystems namely a PD Controller, a Summing Point, and a Power Plant. Only the Proportional and Derivative controllers are used in this software; the Integral controller is beyond the scope of this project. Additionally, this software is intended to aid with the manual tuning of the PD Controller.
             </p>
           </div>
         </div>
@@ -313,10 +313,10 @@
           <div class="subsection">
             <h2>Organization of Document</h2>
             <p class="paragraph">
-              The sections in this document are based on  <a href=#smithLai2005>smithLai2005</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in <a href=#Sec:IMs>Section: Instance Models</a> and trace back to find any additional information they require.
+              The sections in this document are based on <a href=#smithLai2005>smithLai2005</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in <a href=#Sec:IMs>Section: Instance Models</a> and trace back to find any additional information they require.
             </p>
             <p class="paragraph">
-              The goal statements (<a href=#Sec:GoalStmt>Section: Goal Statements</a>) are refined to the theoretical models and the theoretical models (<a href=#Sec:TMs>Section: Theoretical Models</a>) to the instance models (<a href=#Sec:IMs>Section: Instance Models</a>). The instance model referred as <a href=#IM:pdEquationIM>IM: pdEquationIM</a>  provides an Ordinary Differential Equation (ODE) that   models the PD Controller.
+              The goal statements (<a href=#Sec:GoalStmt>Section: Goal Statements</a>) are refined to the theoretical models and the theoretical models (<a href=#Sec:TMs>Section: Theoretical Models</a>) to the instance models (<a href=#Sec:IMs>Section: Instance Models</a>). The instance model referred as <a href=#IM:pdEquationIM>IM: pdEquationIM</a> provides an Ordinary Differential Equation (ODE) that models the PD Controller.
             </p>
           </div>
         </div>
@@ -341,14 +341,14 @@
               </figure>
             </div>
             <p class="paragraph">
-              PD Controller  is self-contained. The only external interaction is   with the user. The responsibilities of the  user  and the  system  are as follows:
+              PD Controller is self-contained. The only external interaction is with the user. The responsibilities of the user and the system are as follows:
             </p>
             <ul class="list">
               <li>
                 User Responsibilities
                 <ul class="list">
                   <li>Feed inputs to the model</li>
-                  <li>Review the response of the  Power Plant</li>
+                  <li>Review the response of the Power Plant</li>
                   <li>Tune the controller gains</li>
                 </ul>
               </li>
@@ -356,9 +356,7 @@
                 PD Controller Responsibilities
                 <ul class="list">
                   <li>Check the validity of the inputs</li>
-                  <li>
-                    Calculate the outputs of the  PD Controller  and  Power Plant
-                  </li>
+                  <li>Calculate the outputs of the PD Controller and Power Plant</li>
                 </ul>
               </li>
             </ul>
@@ -368,7 +366,7 @@
           <div class="subsection">
             <h2>User Characteristics</h2>
             <p class="paragraph">
-              The end-user of  PD Controller  is expected to have taken a course on Control Systems at an  undergraduate level.
+              The end-user of PD Controller is expected to have taken a course on Control Systems at an undergraduate level.
             </p>
           </div>
         </div>
@@ -390,7 +388,7 @@
           <div class="subsection">
             <h2>Problem Description</h2>
             <p class="paragraph">
-              A system is needed to provide a model of a PD Controller  that can be used for the tuning of the gain constants before  the deployment of the controller.
+              A system is needed to provide a model of a PD Controller that can be used for the tuning of the gain constants before the deployment of the controller.
             </p>
             <div id="Sec:TermDefs">
               <div class="subsubsection">
@@ -478,7 +476,7 @@
                 <div class="list">
                   <p>
                     <div id="processVariable">
-                      Process-Variable: Calculate the output of the Power Plant (Process Variable)  over time.
+                      Process-Variable: Calculate the output of the Power Plant (Process Variable) over time.
                     </div>
                   </p>
                 </div>
@@ -536,22 +534,22 @@
                   </p>
                   <p>
                     <div id="pwrPlantTxFnx">
-                      Transfer Function: The combined Power Plant and Sensor  (<a href=#pwrPlant>A: Power plant</a>)  are characterized by a Second Order mass-spring-damper  System. (RefBy: <a href=#TM:tmSOSystem>TM: tmSOSystem</a>.)
+                      Transfer Function: The combined Power Plant and Sensor (<a href=#pwrPlant>A: Power plant</a>) are characterized by a Second Order mass-spring-damper System. (RefBy: <a href=#TM:tmSOSystem>TM: tmSOSystem</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="massSpring">
-                      Spring Mass: The mass of the spring in the mass-spring-damper system  (<a href=#pwrPlant>A: Power plant</a>)  is assumed to be 1 kilogram. (RefBy: <a href=#likeChgPP>LC: DC Gain and Time Constant</a> and <a href=#GD:gdPowerPlant>GD: gdPowerPlant</a>.)
+                      Spring Mass: The mass of the spring in the mass-spring-damper system (<a href=#pwrPlant>A: Power plant</a>) is assumed to be 1 kilogram. (RefBy: <a href=#likeChgPP>LC: DC Gain and Time Constant</a> and <a href=#GD:gdPowerPlant>GD: gdPowerPlant</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="dampingCoeffSpring">
-                      Spring Damping Coefficient: The Damping Coefficient of the spring in the mass-spring-damper system  (<a href=#pwrPlant>A: Power plant</a>)  is assumed to be 1. (RefBy: <a href=#likeChgPP>LC: DC Gain and Time Constant</a> and <a href=#GD:gdPowerPlant>GD: gdPowerPlant</a>.)
+                      Spring Damping Coefficient: The Damping Coefficient of the spring in the mass-spring-damper system (<a href=#pwrPlant>A: Power plant</a>) is assumed to be 1. (RefBy: <a href=#likeChgPP>LC: DC Gain and Time Constant</a> and <a href=#GD:gdPowerPlant>GD: gdPowerPlant</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="stiffnessCoeffSpring">
-                      Spring Stiffness Coefficient: The Stiffness Coefficient  of the spring in the mass-spring-damper system  (<a href=#pwrPlant>A: Power plant</a>) ) is assumed to be 20. (RefBy: <a href=#likeChgPP>LC: DC Gain and Time Constant</a> and <a href=#GD:gdPowerPlant>GD: gdPowerPlant</a>.)
+                      Spring Stiffness Coefficient: The Stiffness Coefficient of the spring in the mass-spring-damper system (<a href=#pwrPlant>A: Power plant</a>) is assumed to be 20. (RefBy: <a href=#likeChgPP>LC: DC Gain and Time Constant</a> and <a href=#GD:gdPowerPlant>GD: gdPowerPlant</a>.)
                     </div>
                   </p>
                 </div>
@@ -600,7 +598,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          Bilateral Laplace Transform. The Laplace transforms are  typically inferred from a pre-computed table of Laplace Transforms  (<a href=#laplaceWiki>laplaceWiki</a>).
+                          Bilateral Laplace Transform. The Laplace transforms are typically inferred from a pre-computed table of Laplace Transforms (<a href=#laplaceWiki>laplaceWiki</a>).
                         </p>
                       </td>
                     </tr>
@@ -651,7 +649,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          Inverse Laplace Transform of F(S). The Inverse Laplace transforms are  typically inferred from a pre-computed table of Laplace Transforms  (<a href=#laplaceWiki>laplaceWiki</a>).
+                          Inverse Laplace Transform of F(S). The Inverse Laplace transforms are typically inferred from a pre-computed table of Laplace Transforms (<a href=#laplaceWiki>laplaceWiki</a>).
                         </p>
                       </td>
                     </tr>
@@ -708,7 +706,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The  Transfer Function (from <a href=#pwrPlantTxFnx>A: Transfer Function</a>) of a Second Order System (mass-spring-damper) is characterized by this equation.
+                          The Transfer Function (from <a href=#pwrPlantTxFnx>A: Transfer Function</a>) of a Second Order System (mass-spring-damper) is characterized by this equation.
                         </p>
                       </td>
                     </tr>
@@ -766,7 +764,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The  Transfer Function of the Second Order System (from <a href=#TM:tmSOSystem>TM: tmSOSystem</a>) is reduced to this equation by substituting the mass (m) to 1 Kg (from <a href=#massSpring>A: Spring Mass</a>), the Damping Coefficient (<em>c</em>) to 1 (from <a href=#dampingCoeffSpring>A: Spring Damping Coefficient</a>), and the Stiffness Coefficient (<em>k</em>) to 20 (from <a href=#stiffnessCoeffSpring>A: Spring Stiffness Coefficient</a>). The equation is converted to the frequency domain by applying the Laplace transform (from <a href=#TM:laplaceTransform>TM: laplaceTransform</a>). Additionally, there are no external disturbances to the power plant (from <a href=#externalDisturb>A: External disturbance</a>).
+                          The Transfer Function of the Second Order System (from <a href=#TM:tmSOSystem>TM: tmSOSystem</a>) is reduced to this equation by substituting the mass (m) to 1 Kg (from <a href=#massSpring>A: Spring Mass</a>), the Damping Coefficient (<em>c</em>) to 1 (from <a href=#dampingCoeffSpring>A: Spring Damping Coefficient</a>), and the Stiffness Coefficient (<em>k</em>) to 20 (from <a href=#stiffnessCoeffSpring>A: Spring Stiffness Coefficient</a>). The equation is converted to the frequency domain by applying the Laplace transform (from <a href=#TM:laplaceTransform>TM: laplaceTransform</a>). Additionally, there are no external disturbances to the power plant (from <a href=#externalDisturb>A: External disturbance</a>).
                         </p>
                       </td>
                     </tr>
@@ -840,7 +838,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The Process Error is the difference between the Set-Point and  Process Variable. The equation is converted to the frequency domain by applying the Laplace transform (from <a href=#TM:laplaceTransform>TM: laplaceTransform</a>). The Set-Point is assumed to be constant throughout the simulation (from <a href=#setPoint>A: Set-Point</a>). The initial value of the Process Variable is assumed to be zero (from <a href=#initialValue>A: Initial Value</a>).
+                          The Process Error is the difference between the Set-Point and Process Variable. The equation is converted to the frequency domain by applying the Laplace transform (from <a href=#TM:laplaceTransform>TM: laplaceTransform</a>). The Set-Point is assumed to be constant throughout the simulation (from <a href=#setPoint>A: Set-Point</a>). The initial value of the Process Variable is assumed to be zero (from <a href=#initialValue>A: Initial Value</a>).
                         </p>
                       </td>
                     </tr>
@@ -1155,7 +1153,7 @@
                     </p>
                     \[\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {y_{\text{t}}}-{K_{\text{d}}} \frac{\,d{r_{\text{t}}}}{\,dt}-{r_{\text{t}}} {K_{\text{p}}}=0\]
                     <p class="paragraph">
-                      The Set point (r(t)) is a step function, and a constant  (from <a href=#setPoint>A: Set-Point</a>). Therefore the  differential of the set point is zero. Hence the equation  reduces to,
+                      The Set point (r(t)) is a step function, and a constant (from <a href=#setPoint>A: Set-Point</a>). Therefore the differential of the set point is zero. Hence the equation reduces to,
                     </p>
                     \[\frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {y_{\text{t}}}-{r_{\text{t}}} {K_{\text{p}}}=0\]
                   </div>
@@ -1244,12 +1242,12 @@
               </p>
               <p>
                 <div id="calculateValues">
-                  Calculate-Values: Calculate the Process Variable (from <a href=#IM:pdEquationIM>IM: pdEquationIM</a>) over  the simulation time.
+                  Calculate-Values: Calculate the Process Variable (from <a href=#IM:pdEquationIM>IM: pdEquationIM</a>) over the simulation time.
                 </div>
               </p>
               <p>
                 <div id="outputValues">
-                  Output-Values: Output the Process Variable (from <a href=#IM:pdEquationIM>IM: pdEquationIM</a>) over  the simulation time.
+                  Output-Values: Output the Process Variable (from <a href=#IM:pdEquationIM>IM: pdEquationIM</a>) over the simulation time.
                 </div>
               </p>
             </div>
@@ -1333,7 +1331,7 @@
         <div class="list">
           <p>
             <div id="likeChgPP">
-              DC Gain and Time Constant: The mass ,  Damping Coefficient  and the Stiffness Coefficient may be changed to be supplied by the user (from  <a href=#massSpring>A: Spring Mass</a>, <a href=#dampingCoeffSpring>A: Spring Damping Coefficient</a>, and <a href=#stiffnessCoeffSpring>A: Spring Stiffness Coefficient</a>).
+              DC Gain and Time Constant: The mass, Damping Coefficient and the Stiffness Coefficient may be changed to be supplied by the user (from <a href=#massSpring>A: Spring Mass</a>, <a href=#dampingCoeffSpring>A: Spring Damping Coefficient</a>, and <a href=#stiffnessCoeffSpring>A: Spring Stiffness Coefficient</a>).
             </div>
           </p>
         </div>

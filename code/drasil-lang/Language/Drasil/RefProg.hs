@@ -16,8 +16,8 @@ data RefInfo = None
 
 data Reference = Reference
   { _ui :: UID
-  ,  ra :: LblType   -- the main string of the reference address
-  ,  sn :: ShortName -- the human-readable short name
+  ,  ra :: LblType   -- ^ the main string of the reference address
+  ,  sn :: ShortName -- ^ the human-readable short name
   ,  refInfo :: RefInfo }
 makeLenses ''Reference
 

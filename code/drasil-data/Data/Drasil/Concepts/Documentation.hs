@@ -218,7 +218,7 @@ consVals     = nc "consVals"     (cn "values of auxiliary constants")
 corSol       = nc "corSol"       (cn' "correct solution")
 charOfIR     = nc "charOfIR"     (characteristic `of__` intReader)
 orgOfDoc     = nc "orgOfDoc"     (organization `of_` document)
-propOfCorSol = nc "propOfCorSol" (property `ofA` corSol)
+propOfCorSol = nc "propOfCorSol" (property `ofA'` corSol)
 prpsOfDoc    = nc "prpsOfDoc"    (purpose `of_` document)
 refmat       = nc "refmat"       (cn' "reference material")
 scpOfReq     = nc "scpOfReq"     (scope `of_'` requirement)
@@ -229,7 +229,7 @@ traceyMandG  = nc "traceyMandG"  (andRT titleize' titleize' traceyMatrix graph)
 vav          = nc "vav"          (verification `and_` validation)
 
 scpOfTheProj :: (NamedChunk -> Sentence) -> NamedChunk
-scpOfTheProj oper = nc "scpOfTheProj" (scope `ofN_` theCustom oper project) -- reasonable hack?
+scpOfTheProj oper = nc "scpOfTheProj" (scope `ofN_` the'' oper project) -- reasonable hack?
 
 -- compounds
 
@@ -297,9 +297,3 @@ unlikeChgDom  = ccs (mkIdea "unlikeChgDom"  (unlikelyChg ^. term)              $
 srsDomains :: [ConceptChunk]
 srsDomains = [cw srsDom, goalStmtDom, reqDom, funcReqDom, nonFuncReqDom, assumpDom, chgProbDom, likeChgDom, unlikeChgDom]
 
--- FIXME: fterms is here instead of Utils because of cyclic import
--- | Apply a binary function to the terms of two named ideas, instead of to the named
--- ideas themselves. Ex. @fterms compoundPhrase t1 t2@ instead of
--- @compoundPhrase (t1 ^. term) (t2 ^. term)@
-fterms :: (NamedIdea c, NamedIdea d) => (NP -> NP -> t) -> c -> d -> t
-fterms f a b = f (a ^. term) (b ^. term)

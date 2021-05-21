@@ -1,3 +1,4 @@
+{-# LANGUAGE PostfixOperators #-}
 module Drasil.DblPendulum.IMods (iMods, angularDisplacementIM) where
 
 import Prelude hiding (cos, sin)
@@ -6,15 +7,16 @@ import Language.Drasil
 import Theory.Drasil (InstanceModel, imNoRefs, qwC, ModelKinds (OthModel)) 
   --imNoDerivNoRefs, )
 import Utils.Drasil
+import qualified Utils.Drasil.Sentence as S
 import Data.Drasil.Quantities.Physics (gravitationalAccel,
          angularAccel, momentOfInertia,
          time, angularDisplacement, angularFrequency, torque, angularDisplacement, time)
 --import Data.Drasil.Theories.Physics (newtonSL)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
-import Drasil.DblPendulum.Unitals (lenRod, pendDisplacementAngle , initialPendAngle)
-import Data.Drasil.Concepts.Math (constraint, equation)
-import Data.Drasil.Concepts.Physics (pendulum)
-import Data.Drasil.Theories.Physics (newtonSLR)
+import Drasil.DblPendulum.Unitals (lenRod, pendDisplacementAngle, initialPendAngle)
+import Data.Drasil.Concepts.Math (constraint, equation, amplitude, iAngle, angle)
+import Data.Drasil.Concepts.Physics (pendulum, motion, shm)
+import Data.Drasil.Theories.Physics (newtonSLR, newtonSLRRC)
 import Drasil.DblPendulum.GenDefs (angFrequencyGD)
 
 
@@ -46,25 +48,25 @@ angularDisplacementDerivSents = [angularDisplacementDerivSent1, angularDisplacem
 angularDisplacementDerivSent1, angularDisplacementDerivSent2, angularDisplacementDerivSent3,
   angularDisplacementDerivSent4, angularDisplacementDerivSent5 :: Sentence
 
-angularDisplacementDerivSent1 = foldlSentCol [S "When the", phrase pendulum `sIs` S "displaced to an initial angle and released" `sC`
-                                       S "the", phrase pendulum, S "swings back and forth with periodic motion" +:+
-                                       S "By applying Newton's Second Law for Rotation" `sIn` makeRef2S newtonSLR `sC`
-                                       S "the equation of motion for the", phrase pendulum, S "may be obtained"]
+angularDisplacementDerivSent1 = foldlSentCol [S "When", phraseNP (the pendulum) `S.sIs` S "displaced to an", phrase iAngle `S.sAnd` S "released" `sC`
+                                       phraseNP (the pendulum), S "swings back and forth with periodic" +:+. phrase motion,
+                                       S "By applying", phrase newtonSLRRC `S.sIn` makeRef2S newtonSLR `sC`
+                                       phraseNP (theNP (equation `of_` motion) `forNP` the pendulum), S "may be obtained"]
        
  
-angularDisplacementDerivSent2 = foldlSentCol [S "Where", ch torque +:+ S "denotes the", phrase torque `sC`
-                                    ch momentOfInertia +:+ S "denotes the", phrase momentOfInertia `sAnd` ch angularAccel +:+ 
-                                    S "denotes the", phrase angularAccel +:+  S "This implies"]
+angularDisplacementDerivSent2 = foldlSentCol [S "Where", ch torque `S.denotes` phrase torque `sC`
+                                    ch momentOfInertia `S.denotes` phrase momentOfInertia `S.sAnd` ch angularAccel `S.denotes`
+                                    (phrase angularAccel !.), S "This implies"]
                  
 
 angularDisplacementDerivSent3 = foldlSentCol [S "And rearranged as" ] 
 
-angularDisplacementDerivSent4 = foldlSentCol [S "If the amplitude of", phrase angularDisplacement, S "is small enough" `sC`
+angularDisplacementDerivSent4 = foldlSentCol [S "If", phraseNP (theNP (amplitude `of_` angularDisplacement)), S "is small enough" `sC`
   S "we can approximate", E (sin (sy pendDisplacementAngle) $= sy pendDisplacementAngle), S "for the purpose of a simple", phrase pendulum,
-  S "at very small angles." :+:
-  S " Then the", phrase equation, S "of motion reduces to the", phrase equation, S "of simple harmonic motion"]                                       
+  S "at very small" +:+. plural angle,
+  S "Then", phraseNP (theNP (equation `of_` motion)), S "reduces to", phraseNP (theNP (equation `of_` shm))]                                       
 
-angularDisplacementDerivSent5 = foldlSentCol [S "Thus the simple harmonic motion is" ] 
+angularDisplacementDerivSent5 = foldlSentCol [S "Thus the", phrase shm, S "is" ] 
 
 angularDisplacementDerivEqns :: [Expr]
 angularDisplacementDerivEqns = [angularDisplacementDerivEqn1, angularDisplacementDerivEqn2, angularDisplacementDerivEqn3,
@@ -95,8 +97,8 @@ angularDispConstraintNote :: Sentence
 
 
 angularDispConstraintNote = S "The" +:+ phrase constraint +:+
-     E ( sy initialPendAngle $> 0) `sIs` S "required" +:+.
-     S "The" +:+ phrase angularFrequency `sIs` definedIn'' angFrequencyGD
+     E ( sy initialPendAngle $> 0) `S.sIs` S "required" +:+.
+     S "The" +:+ phrase angularFrequency `S.sIs` definedIn'' angFrequencyGD
 
 --gravitationalAccelConstNote, landAndTargPosConsNote, landPosNote,
 --   landPosConsNote, offsetNote, offsetConsNote, targPosConsNote,

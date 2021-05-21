@@ -3,6 +3,7 @@ module Drasil.Projectile.Requirements (funcReqs, nonfuncReqs) where
 import Language.Drasil
 import Drasil.DocLang.SRS (datCon, propCorSol)
 import Utils.Drasil
+import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (assumption, code, datumConstraint,
@@ -31,7 +32,7 @@ verifyParamsDesc = foldlSent [S "Check the entered", plural inValue,
   S "to ensure that they do not exceed the", plural datumConstraint,
   S "mentioned in" +:+. makeRef2S (datCon ([]::[Contents]) ([]::[Section])), 
   S "If any of the", plural inValue, S "are out of bounds" `sC`
-  S "an", phrase errMsg, S "is displayed" `andThe` plural calculation, S "stop"]
+  S "an", phrase errMsg, S "is displayed" `S.andThe` plural calculation, S "stop"]
 calcValuesDesc = foldlSent [S "Calculate the following" +: plural value,
   foldlList Comma List [
     ch flightDur +:+ fromSource timeIM,
@@ -40,7 +41,7 @@ calcValuesDesc = foldlSent [S "Calculate the following" +: plural value,
     ch message   +:+ fromSource messageIM
   ]]
 outputValuesDesc = foldlSent [atStart output_, ch message,
-  fromSource messageIM `sAnd` ch offset, fromSource offsetIM]
+  fromSource messageIM `S.sAnd` ch offset, fromSource offsetIM]
 
 {--Nonfunctional Requirements--}
 
@@ -49,7 +50,7 @@ nonfuncReqs = [correct, verifiable, understandable, reusable, maintainable, port
 
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
-  plural output_ `the_ofThe'` phrase code, S "have the",
+  plural output_ `S.the_ofThe'` phrase code, S "have the",
   plural property, S "described in", makeRef2S (propCorSol [] [])
   ]) "Correct" nonFuncReqDom
  
@@ -61,7 +62,7 @@ verifiable = cic "verifiable" (foldlSent [
 understandable :: ConceptInstance
 understandable = cic "understandable" (foldlSent [
   atStartNP (the code), S "is modularized with complete",
-  phrase mg `sAnd` phrase mis]) "Understandable" nonFuncReqDom
+  phrase mg `S.sAnd` phrase mis]) "Understandable" nonFuncReqDom
 
 reusable :: ConceptInstance
 reusable = cic "reusable" (foldlSent [atStartNP (the code), S "is modularized"]) "Reusable" nonFuncReqDom
@@ -71,7 +72,7 @@ maintainable = cic "maintainable" (foldlSent [
   S "The traceability between", foldlList Comma List [plural requirement,
   plural assumption, plural thModel, plural genDefn, plural dataDefn, plural inModel,
   plural likelyChg, plural unlikelyChg, plural module_], S "is completely recorded in",
-  plural traceyMatrix, S "in the", getAcc srs `sAnd` phrase mg]) "Maintainable" nonFuncReqDom
+  plural traceyMatrix, S "in the", getAcc srs `S.sAnd` phrase mg]) "Maintainable" nonFuncReqDom
 
 portable :: ConceptInstance
 portable = cic "portable" (foldlSent [

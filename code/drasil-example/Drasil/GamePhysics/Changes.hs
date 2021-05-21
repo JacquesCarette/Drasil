@@ -1,9 +1,11 @@
+{-# LANGUAGE PostfixOperators #-}
 module Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs) where
 
 --A list of likely and unlikely changes for GamePhysics
 
 import Language.Drasil
 import Utils.Drasil
+import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation as Doc (library, likeChgDom, unlikeChgDom)
 import qualified Data.Drasil.Concepts.Math as CM (ode, constraint)
@@ -32,7 +34,7 @@ likelyChangesStmt3 = chgsStart assumpDI $ phrase library `maybeExpanded` (
   S "to include motion with" +:+ phrase CP.damping)
 
 likelyChangesStmt4 = chgsStart assumpCAJI $ phrase library `maybeExpanded` (
-  S "to include" +:+ plural CP.joint `sAnd` plural CM.constraint)
+  S "to include" +:+ plural CP.joint `S.sAnd` plural CM.constraint)
 
 lcVODES, lcEC, lcID, lcIJC :: ConceptInstance
 
@@ -50,10 +52,10 @@ likelyChgs = [lcVODES, lcEC, lcID, lcIJC]
 
 unlikelyChangesStmt1, unlikelyChangesStmt2, unlikelyChangesStmt3, unlikelyChangesStmt4 :: Sentence
 
-unlikelyChangesStmt1 = S "The goal of the system is to simulate the interactions of rigid bodies."
-unlikelyChangesStmt2 = S "There will always be a source of input data external to the software."
-unlikelyChangesStmt3 = S "A Cartesian Coordinate system is used."
-unlikelyChangesStmt4 = S "All objects are rigid bodies."
+unlikelyChangesStmt1 = (S "The goal of the system is to simulate the interactions of rigid bodies" !.)
+unlikelyChangesStmt2 = (S "There will always be a source of input data external to the software" !.)
+unlikelyChangesStmt3 = (S "A Cartesian Coordinate system is used" !.)
+unlikelyChangesStmt4 = (S "All objects are rigid bodies" !.)
 
 ucSRB, ucEI, ucCCS, ucORB :: ConceptInstance
 

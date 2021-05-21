@@ -23,7 +23,7 @@ ddErrSigDefn :: QDefinition
 ddErrSigDefn = mkQuantDef qdProcessErrorFD ddErrSigEqn
 
 ddErrSigEqn :: Expr
-ddErrSigEqn = sy qdSetPointFD - sy qdProcessVariableFD
+ddErrSigEqn = sy qdSetPointFD $- sy qdProcessVariableFD
 
 ddErrSigNote :: Sentence
 ddErrSigNote
@@ -51,7 +51,7 @@ ddPropCtrlDefn :: QDefinition
 ddPropCtrlDefn = mkQuantDef qdPropControlFD ddPropCtrlEqn
 
 ddPropCtrlEqn :: Expr
-ddPropCtrlEqn = sy qdPropGain * sy qdProcessErrorFD
+ddPropCtrlEqn = sy qdPropGain `mulRe` sy qdProcessErrorFD
 
 ddPropCtrlNote :: Sentence
 ddPropCtrlNote
@@ -75,7 +75,7 @@ ddDerivCtrlDefn = mkQuantDef qdDerivativeControlFD ddDerivCtrlEqn
 
 ddDerivCtrlEqn :: Expr
 ddDerivCtrlEqn
-  =  sy qdDerivGain * sy qdProcessErrorFD * sy qdFreqDomain
+  =  sy qdDerivGain `mulRe` sy qdProcessErrorFD `mulRe` sy qdFreqDomain
 
 ddDerivCtrlNote :: Sentence
 ddDerivCtrlNote
@@ -102,8 +102,8 @@ ddCtrlVarDefn = mkQuantDef qdCtrlVarFD ddCtrlEqn
 
 ddCtrlEqn :: Expr
 ddCtrlEqn
-  =  sy qdProcessErrorFD * (sy qdPropGain + 
-        sy qdDerivGain * sy qdFreqDomain)
+  =  sy qdProcessErrorFD `mulRe` (sy qdPropGain `addRe` 
+        (sy qdDerivGain `mulRe` sy qdFreqDomain))
 
 ddCtrlNote :: Sentence
 ddCtrlNote

@@ -85,28 +85,28 @@ filename = var "filename" "name of file with x y and z data"
 -- Some semantic functions
 
 -- Given two points (x1,y1) and (x2,y2), return the slope of the line going through them
-slope :: (Fractional a) => (a, a) -> (a, a) -> a
-slope (x1,y1) (x2,y2) = (y2 - y1) / (x2 - x1)
+slope :: (Expr, Expr) -> (Expr, Expr) -> Expr
+slope (x1, y1) (x2, y2) = (y2 $- y1) $/ (x2 $- x1)
 
 -- Given two points (x1,y1) and (x2,y2), and an x ordinate, return
 -- extrapoled y on the straight line in between
-onLine :: (Fractional a) => (a, a) -> (a, a) -> a -> a
-onLine p1@(x1,y1) p2 x_ = 
+onLine :: (Expr, Expr) -> (Expr, Expr) -> Expr -> Expr
+onLine p1@(x1, y1) p2 x_ = 
   let m = slope p1 p2 in
-  m * (x_ - x1) + y1
+  addRe (mulRe m (x_ $- x1)) y1
 
 ------------------------------------------------------------------------------------------
 -- Code Template helper functions
 
 vLook :: (HasSymbol a, HasSymbol i, HasUID a, HasUID i) => a -> i -> Expr -> Expr
-vLook a i_ p = idx (sy a) (sy i_ + p)
+vLook a i_ p = idx (sy a) (addI (sy i_) p)
 
 aLook :: (HasSymbol a, HasSymbol i, HasSymbol j, HasUID a, HasUID i, HasUID j) =>
   a -> i -> j -> Expr
 aLook a i_ j_ = idx (idx (sy a) (sy i_)) (sy j_)
 
 getCol :: (HasSymbol a, HasSymbol i, HasUID a, HasUID i) => a -> i -> Expr -> Expr
-getCol a_ i_ p = apply (asVC extractColumnCT) [sy a_, sy i_ + p]
+getCol a_ i_ p = apply (asVC extractColumnCT) [sy a_, addI (sy i_) p]
 
 call :: Func -> [QuantityDict] -> FuncStmt
 call f l = FVal $ apply (asVC f) $ map sy l
@@ -121,8 +121,8 @@ interpOver :: (HasUID ptx, HasUID pty, HasUID ind, HasUID vv,
   HasSymbol ptx, HasSymbol pty, HasSymbol ind, HasSymbol vv) =>
   ptx -> pty -> ind -> vv -> [Expr]
 interpOver ptx pty ind vv =
-  [ vLook ptx ind 0, vLook pty ind 0
-  , vLook ptx ind 1, vLook pty ind 1
+  [ vLook ptx ind (int 0), vLook pty ind (int 0)
+  , vLook ptx ind (int 1), vLook pty ind (int 1)
   , sy vv ]
 ------------------------------------------------------------------------------------------
 -- Code Templates
@@ -139,8 +139,8 @@ findCT = funcDef "find"
   "Finds the array index for a value closest to the given value" 
   [arr, v] Natural (Just "index of given value in given array")
   [
-    ffor i (sy i $< (dim (sy arr) - 1))
-      [ FCond ((vLook arr i 0 $<= sy v) $&& (sy v $<= vLook arr i 1))
+    ffor i (sy i $< (dim (sy arr) $- int 1))
+      [ FCond ((vLook arr i (int 0) $<= sy v) $&& (sy v $<= vLook arr i (int 1)))
         [ FRet $ sy i ] [] ],
     FThrow "Bound error"
   ]
@@ -169,17 +169,17 @@ interpY = funcDef "interpY"
   call readTable [filename, zVector, xMatrix, yMatrix],
   -- endhack
     i     $:= find zVector z,
-    x_z_1 $:= getCol xMatrix i 0,
-    y_z_1 $:= getCol yMatrix i 0,
-    x_z_2 $:= getCol xMatrix i 1,
-    y_z_2 $:= getCol yMatrix i 1,
+    x_z_1 $:= getCol xMatrix i (int 0),
+    y_z_1 $:= getCol yMatrix i (int 0),
+    x_z_2 $:= getCol xMatrix i (int 1),
+    y_z_2 $:= getCol yMatrix i (int 1),
     FTry
       [ j $:= find x_z_1 x,
         k $:= find x_z_2 x ]
       [ FThrow "Interpolation of y failed" ],
     y_1 $:= linInterp (interpOver x_z_1 y_z_1 j x),
     y_2 $:= linInterp (interpOver x_z_2 y_z_2 k x),
-    FRet $ linInterp [ vLook zVector i 0, sy y_1, vLook zVector i 1, sy y_2, sy z ]
+    FRet $ linInterp [ vLook zVector i (int 0), sy y_1, vLook zVector i (int 1), sy y_2, sy z ]
   ]
 
 interpZ :: Func
@@ -194,12 +194,12 @@ interpZ = funcDef "interpZ"
   --
   call readTable [filename, zVector, xMatrix, yMatrix],
   -- endhack
-    ffor i (sy i $< (dim (sy zVector) - 1))
+    ffor i (sy i $< (dim (sy zVector) $- int 1))
       [
-        x_z_1 $:= getCol xMatrix i 0,
-        y_z_1 $:= getCol yMatrix i 0,
-        x_z_2 $:= getCol xMatrix i 1,
-        y_z_2 $:= getCol yMatrix i 1,
+        x_z_1 $:= getCol xMatrix i (int 0),
+        y_z_1 $:= getCol yMatrix i (int 0),
+        x_z_2 $:= getCol xMatrix i (int 1),
+        y_z_2 $:= getCol yMatrix i (int 1),
         FTry
           [ j $:= find x_z_1 x,
             k $:= find x_z_2 x ]
@@ -207,7 +207,7 @@ interpZ = funcDef "interpZ"
         y_1 $:= linInterp (interpOver x_z_1 y_z_1 j x),
         y_2 $:= linInterp (interpOver x_z_2 y_z_2 k x),
         FCond ((sy y_1 $<= sy y) $&& (sy y $<= sy y_2))
-          [ FRet $ linInterp [ sy y_1, vLook zVector i 0, sy y_2, vLook zVector i 1, sy y ]
+          [ FRet $ linInterp [ sy y_1, vLook zVector i (int 0), sy y_2, vLook zVector i (int 1), sy y ]
           ] []
       ],
     FThrow "Interpolation of z failed"

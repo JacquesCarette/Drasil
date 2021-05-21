@@ -12,7 +12,7 @@ public class Calculations {
         \return flight duration: the time when the projectile lands (s)
     */
     public static double func_t_flight(InputParameters inParams, double g_vect) {
-        return 2 * inParams.v_launch * Math.Sin(inParams.theta) / g_vect;
+        return 2.0 * inParams.v_launch * Math.Sin(inParams.theta) / g_vect;
     }
     
     /** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
@@ -21,7 +21,7 @@ public class Calculations {
         \return landing position: the distance from the launcher to the final position of the projectile (m)
     */
     public static double func_p_land(InputParameters inParams, double g_vect) {
-        return 2 * Math.Pow(inParams.v_launch, 2) * Math.Sin(inParams.theta) * Math.Cos(inParams.theta) / g_vect;
+        return 2.0 * Math.Pow(inParams.v_launch, 2.0) * Math.Sin(inParams.theta) * Math.Cos(inParams.theta) / g_vect;
     }
     
     /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
@@ -43,7 +43,7 @@ public class Calculations {
         if (Math.Abs(d_offset / inParams.p_target) < epsilon) {
             return "The target was hit.";
         }
-        else if (d_offset < 0) {
+        else if (d_offset < 0.0) {
             return "The projectile fell short.";
         }
         else {

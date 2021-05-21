@@ -73,7 +73,7 @@ func derived_values(_ inParams: InputParameters) throws -> Void {
         throw "Error closing file."
     }
     
-    inParams.LDF = pow(3.0 / Double(60), 7.0 / Double(16))
+    inParams.LDF = pow(3.0 / 60.0, 7.0 / 16.0)
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
         try outfile.seekToEnd()
@@ -196,7 +196,7 @@ func derived_values(_ inParams: InputParameters) throws -> Void {
         throw "Undefined case encountered in function GTF"
     }
     
-    inParams.SD = sqrt(pow(inParams.SD_x, 2) + pow(inParams.SD_y, 2) + pow(inParams.SD_z, 2))
+    inParams.SD = sqrt(pow(inParams.SD_x, 2.0) + pow(inParams.SD_y, 2.0) + pow(inParams.SD_z, 2.0))
     do {
         outfile = try FileHandle(forWritingTo: FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!.appendingPathComponent("log.txt"))
         try outfile.seekToEnd()

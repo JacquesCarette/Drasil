@@ -107,12 +107,12 @@ func input_constraints(_ inParams: inout InputParameters) throws -> Void {
         throw "InputError"
     }
     
-    if !(inParams.a > Double(0)) {
+    if !(inParams.a > 0.0) {
         print("a has value ", terminator: "")
         print(inParams.a, terminator: "")
         print(", but is expected to be ", terminator: "")
         print("above ", terminator: "")
-        print(0, terminator: "")
+        print(0.0, terminator: "")
         print(".")
         throw "InputError"
     }
@@ -126,62 +126,62 @@ func input_constraints(_ inParams: inout InputParameters) throws -> Void {
         print(".")
         throw "InputError"
     }
-    if !(Double(0) < inParams.b && inParams.b <= inParams.a) {
+    if !(0.0 < inParams.b && inParams.b <= inParams.a) {
         print("b has value ", terminator: "")
         print(inParams.b, terminator: "")
         print(", but is expected to be ", terminator: "")
         print("between ", terminator: "")
-        print(0, terminator: "")
+        print(0.0, terminator: "")
         print(" and ", terminator: "")
         print(inParams.a, terminator: "")
         print(" (a)", terminator: "")
         print(".")
         throw "InputError"
     }
-    if !(inParams.w > Double(0)) {
+    if !(inParams.w > 0.0) {
         print("w has value ", terminator: "")
         print(inParams.w, terminator: "")
         print(", but is expected to be ", terminator: "")
         print("above ", terminator: "")
-        print(0, terminator: "")
+        print(0.0, terminator: "")
         print(".")
         throw "InputError"
     }
-    if !(Double(0) <= inParams.P_btol && inParams.P_btol <= Double(1)) {
+    if !(0.0 <= inParams.P_btol && inParams.P_btol <= 1.0) {
         print("P_btol has value ", terminator: "")
         print(inParams.P_btol, terminator: "")
         print(", but is expected to be ", terminator: "")
         print("between ", terminator: "")
-        print(0, terminator: "")
+        print(0.0, terminator: "")
         print(" and ", terminator: "")
-        print(1, terminator: "")
+        print(1.0, terminator: "")
         print(".")
         throw "InputError"
     }
-    if !(inParams.TNT > Double(0)) {
+    if !(inParams.TNT > 0.0) {
         print("TNT has value ", terminator: "")
         print(inParams.TNT, terminator: "")
         print(", but is expected to be ", terminator: "")
         print("above ", terminator: "")
-        print(0, terminator: "")
+        print(0.0, terminator: "")
         print(".")
         throw "InputError"
     }
-    if !(inParams.SD > Double(0)) {
+    if !(inParams.SD > 0.0) {
         print("SD has value ", terminator: "")
         print(inParams.SD, terminator: "")
         print(", but is expected to be ", terminator: "")
         print("above ", terminator: "")
-        print(0, terminator: "")
+        print(0.0, terminator: "")
         print(".")
         throw "InputError"
     }
-    if !(inParams.AR >= Double(1)) {
+    if !(inParams.AR >= 1.0) {
         print("AR has value ", terminator: "")
         print(inParams.AR, terminator: "")
         print(", but is expected to be ", terminator: "")
         print("above ", terminator: "")
-        print(1, terminator: "")
+        print(1.0, terminator: "")
         print(".")
         throw "InputError"
     }

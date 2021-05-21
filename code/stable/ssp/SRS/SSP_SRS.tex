@@ -2313,7 +2313,7 @@ Output Constraints &
 Equation & \begin{displaymath}
            {\mathbf{C}_{\text{num},i}}=\begin{cases}
                                        {\mathbf{b}}_{1} \left({\mathbf{G}}_{1}+{\mathbf{H}}_{1}\right) \tan\left({\mathbf{α}}_{1}\right), & i=1\\
-                                       {\mathbf{b}}_{i} \left({{\mathbf{F}_{\text{x}}}^{\text{G}}}+{{\mathbf{F}_{\text{x}}}^{\text{H}}}\right) \tan\left({\mathbf{α}}_{i}\right)+\mathbf{h} -2 {\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right), & 2\leq{}i\leq{}n-1\\
+                                       {\mathbf{b}}_{i} \left({{\mathbf{F}_{\text{x}}}^{\text{G}}}+{{\mathbf{F}_{\text{x}}}^{\text{H}}}\right) \tan\left({\mathbf{α}}_{i}\right)+\mathbf{h} -\left(2\right) {\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right), & 2\leq{}i\leq{}n-1\\
                                        {\mathbf{b}}_{n} \left({\mathbf{G}}_{n-1}+{\mathbf{H}}_{n-1}\right) \tan\left({\mathbf{α}}_{n-1}\right), & i=n
                                        \end{cases}
            \end{displaymath}
@@ -2528,35 +2528,35 @@ RefBy & \hyperref[displayGraph]{FR: Display-Graph} and \hyperref[determineCritSl
 \\
 \midrule
 \endhead
-$c'$ & $c'\gt{}0$ & $10.0\cdot{}10^{3}$ ${\text{Pa}}$ & 10$\%$
+$c'$ & $c'\gt{}0$ & $10000$ ${\text{Pa}}$ & 10$\%$
 \\
-${{x_{\text{slip}}}^{\text{maxEtr}}}$ & -- & $20.0$ ${\text{m}}$ & 10$\%$
+${{x_{\text{slip}}}^{\text{maxEtr}}}$ & -- & $20$ ${\text{m}}$ & 10$\%$
 \\
-${{x_{\text{slip}}}^{\text{maxExt}}}$ & -- & $100.0$ ${\text{m}}$ & 10$\%$
+${{x_{\text{slip}}}^{\text{maxExt}}}$ & -- & $100$ ${\text{m}}$ & 10$\%$
 \\
-${{x_{\text{slip}}}^{\text{minEtr}}}$ & -- & $0.0$ ${\text{m}}$ & 10$\%$
+${{x_{\text{slip}}}^{\text{minEtr}}}$ & -- & $0$ ${\text{m}}$ & 10$\%$
 \\
-${{x_{\text{slip}}}^{\text{minExt}}}$ & -- & $50.0$ ${\text{m}}$ & 10$\%$
+${{x_{\text{slip}}}^{\text{minExt}}}$ & -- & $50$ ${\text{m}}$ & 10$\%$
 \\
-${\mathbf{x}_{\text{slope}}}$ & -- & $0.0$ ${\text{m}}$ & 10$\%$
+${\mathbf{x}_{\text{slope}}}$ & -- & $0$ ${\text{m}}$ & 10$\%$
 \\
-${\mathbf{x}_{\text{wt}}}$ & -- & $0.0$ ${\text{m}}$ & 10$\%$
+${\mathbf{x}_{\text{wt}}}$ & -- & $0$ ${\text{m}}$ & 10$\%$
 \\
-${{y_{\text{slip}}}^{\text{max}}}$ & -- & $30.0$ ${\text{m}}$ & 10$\%$
+${{y_{\text{slip}}}^{\text{max}}}$ & -- & $30$ ${\text{m}}$ & 10$\%$
 \\
-${{y_{\text{slip}}}^{\text{min}}}$ & -- & $0.0$ ${\text{m}}$ & 10$\%$
+${{y_{\text{slip}}}^{\text{min}}}$ & -- & $0$ ${\text{m}}$ & 10$\%$
 \\
-${\mathbf{y}_{\text{slope}}}$ & -- & $0.0$ ${\text{m}}$ & 10$\%$
+${\mathbf{y}_{\text{slope}}}$ & -- & $0$ ${\text{m}}$ & 10$\%$
 \\
-${\mathbf{y}_{\text{wt}}}$ & -- & $0.0$ ${\text{m}}$ & 10$\%$
+${\mathbf{y}_{\text{wt}}}$ & -- & $0$ ${\text{m}}$ & 10$\%$
 \\
-${γ_{\text{dry}}}$ & ${γ_{\text{dry}}}\gt{}0$ & $20.0\cdot{}10^{3}$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
+${γ_{\text{dry}}}$ & ${γ_{\text{dry}}}\gt{}0$ & $20000$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
 \\
-${γ_{\text{sat}}}$ & ${γ_{\text{sat}}}\gt{}0$ & $20.0\cdot{}10^{3}$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
+${γ_{\text{sat}}}$ & ${γ_{\text{sat}}}\gt{}0$ & $20000$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
 \\
-${γ_{w}}$ & ${γ_{w}}\gt{}0$ & $9.8\cdot{}10^{3}$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
+${γ_{w}}$ & ${γ_{w}}\gt{}0$ & $9800$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
 \\
-$φ'$ & $0\lt{}φ'\lt{}90$ & $25.0$ ${{}^{\circ}}$ & 10$\%$
+$φ'$ & $0\lt{}φ'\lt{}90$ & $25$ ${{}^{\circ}}$ & 10$\%$
 \\
 \bottomrule
 \caption{Input Data Constraints}

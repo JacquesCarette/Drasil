@@ -315,16 +315,16 @@ mmntOfInCons   = constrained' QP.momentOfInertia    [gtZeroConstr] (dbl 74.5)
 gravAccelCons  = constrained' QP.gravitationalConst [] (QP.gravitationalConstValue ^. defnExpr)
 posCons        = constrained' QP.position           [] (dbl 0.412) --FIXME: should be (0.412, 0.502) vector
 veloCons       = constrained' QP.velocity           [] (dbl 2.51)
-orientCons     = constrained' QM.orientation        [sfwrc $ Bounded (Inc, 0) (Inc, 2 * sy QM.pi_)] (sy QM.pi_ / 2) -- physical constraint not needed space is radians
+orientCons     = constrained' QM.orientation        [sfwrc $ Bounded (Inc, exactDbl 0) (Inc, exactDbl 2 `mulRe` sy QM.pi_)] (half $ sy QM.pi_) -- physical constraint not needed space is radians
 angVeloCons    = constrained' QP.angularVelocity    [] (dbl 2.1)
 forceCons      = constrained' QP.force              [] (dbl 98.1)
-torqueCons     = constrained' QP.torque             [] (dbl 200)
-restCoefCons   = constrained' QP.restitutionCoef    [physc $ Bounded (Inc,0) (Inc,1)] (dbl 0.8)
+torqueCons     = constrained' QP.torque             [] (exactDbl 200)
+restCoefCons   = constrained' QP.restitutionCoef    [physc $ Bounded (Inc, exactDbl 0) (Inc, exactDbl 1)] (dbl 0.8)
 
-posOutCons        = constrained' QP.position           [] (dbl 0.0)
-veloOutCons       = constrained' QP.velocity           [] (dbl 0.0)
-orientOutCons     = constrained' QM.orientation        [] (dbl 0)
-angVeloOutCons    = constrained' QP.angularVelocity    [] (dbl 0.0)
+posOutCons        = constrained' QP.position           [] (exactDbl 0)
+veloOutCons       = constrained' QP.velocity           [] (exactDbl 0)
+orientOutCons     = constrained' QM.orientation        [] (exactDbl 0)
+angVeloOutCons    = constrained' QP.angularVelocity    [] (exactDbl 0)
 
 ---------------------
 -- INSTANCE MODELS --

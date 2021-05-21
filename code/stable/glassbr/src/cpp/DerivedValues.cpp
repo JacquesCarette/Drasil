@@ -26,7 +26,7 @@ void derived_values(InputParameters &inParams) {
     outfile << " in module DerivedValues" << std::endl;
     outfile.close();
     
-    inParams.LDF = pow(3.0 / 60, 7.0 / 16);
+    inParams.LDF = pow(3.0 / 60.0, 7.0 / 16.0);
     outfile.open("log.txt", std::fstream::app);
     outfile << "var 'inParams.LDF' assigned ";
     outfile << inParams.LDF;
@@ -61,7 +61,7 @@ void derived_values(InputParameters &inParams) {
         throw("Undefined case encountered in function GTF");
     }
     
-    inParams.SD = sqrt(pow(inParams.SD_x, 2) + pow(inParams.SD_y, 2) + pow(inParams.SD_z, 2));
+    inParams.SD = sqrt(pow(inParams.SD_x, 2.0) + pow(inParams.SD_y, 2.0) + pow(inParams.SD_z, 2.0));
     outfile.open("log.txt", std::fstream::app);
     outfile << "var 'inParams.SD' assigned ";
     outfile << inParams.SD;

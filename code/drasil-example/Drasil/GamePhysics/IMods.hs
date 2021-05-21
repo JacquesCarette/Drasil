@@ -32,11 +32,11 @@ iMods = [transMot, rotMot, col2D]
 {-- Force on the translational motion  --}
 transMot :: InstanceModel
 transMot = imNoDerivNoRefs (OthModel transMotRC) 
-  [qwC velj $ UpFrom (Exc, 0)
-  ,qwC time $ UpFrom (Exc, 0)
-  ,qwC gravitationalAccel $ UpFrom (Exc, 0)
-  ,qwC forcej $ UpFrom (Exc, 0)
-  ,qwC massj $ UpFrom (Exc, 0)
+  [qwC velj $ UpFrom (Exc, exactDbl 0)
+  ,qwC time $ UpFrom (Exc, exactDbl 0)
+  ,qwC gravitationalAccel $ UpFrom (Exc, exactDbl 0)
+  ,qwC forcej $ UpFrom (Exc, exactDbl 0)
+  ,qwC massj $ UpFrom (Exc, exactDbl 0)
   ]
   (qw accj) [] "transMot" [transMotDesc, transMotOutputs, rigidTwoDAssump, noDampConsAssumps]
 
@@ -48,7 +48,7 @@ transMotNP = nounPhraseSP "Force on the translational motion of a set of 2D rigi
 
 transMotRel :: Relation -- FIXME: add proper equation
 transMotRel = sy accj $= deriv (apply1 velj time) time
-  $= sy gravitationalAccel + (apply1 forcej time / sy massj)
+  $= sy gravitationalAccel `addRe` (apply1 forcej time $/ sy massj)
 
 transMotDesc, transMotOutputs :: Sentence
 transMotDesc = foldlSent [S "The above", phrase equation, S "expresses",
@@ -70,12 +70,12 @@ transMotOutputs = foldlSent [phrase output_ `S.the_ofThe'` phrase inModel,
 
 rotMot :: InstanceModel
 rotMot = imNoDerivNoRefs (OthModel rotMotRC) 
-  [qwC angularVelocity $ UpFrom (Exc, 0)
-  ,qwC time $ UpFrom (Exc, 0)
-  ,qwC torquej $ UpFrom (Exc, 0)
-  ,qwC momentOfInertia $ UpFrom (Exc, 0)
+  [qwC angularVelocity $ UpFrom (Exc, exactDbl 0)
+  ,qwC time $ UpFrom (Exc, exactDbl 0)
+  ,qwC torquej $ UpFrom (Exc, exactDbl 0)
+  ,qwC momentOfInertia $ UpFrom (Exc, exactDbl 0)
   ]
-    (qw angularAccel) [UpFrom (Exc, 0)] "rotMot"
+    (qw angularAccel) [UpFrom (Exc, exactDbl 0)] "rotMot"
   [rotMotDesc, rigidTwoDAssump, rightHandAssump]
 
 rotMotRC :: RelationConcept
@@ -87,7 +87,7 @@ rotMotNP =  nounPhraseSP "Force on the rotational motion of a set of 2D rigid bo
 rotMotRel :: Relation
 rotMotRel = sy angularAccel $= deriv
   (apply1 angularVelocity time) time $= 
-     (apply1 torquej time / sy momentOfInertia)
+     (apply1 torquej time $/ sy momentOfInertia)
 
 rotMotDesc :: Sentence
 rotMotDesc = foldlSent [S "The above", phrase equation, S "for",
@@ -100,14 +100,14 @@ rotMotDesc = foldlSent [S "The above", phrase equation, S "for",
 
 col2D :: InstanceModel
 col2D = imNoDerivNoRefs (OthModel col2DRC)
-  [qwC time $ UpFrom (Exc, 0)
-  ,qwC impulseS $ UpFrom (Exc, 0)
-  ,qwC massA $ UpFrom (Exc, 0)
-  ,qwC normalVect $ UpFrom (Exc, 0)
+  [qwC time $ UpFrom (Exc, exactDbl 0)
+  ,qwC impulseS $ UpFrom (Exc, exactDbl 0)
+  ,qwC massA $ UpFrom (Exc, exactDbl 0)
+  ,qwC normalVect $ UpFrom (Exc, exactDbl 0)
   ]
   -- why a constraint on velA if velA is not an output?
   -- (qw timeC) [sy velA $> 0, sy timeC $> 0] "col2D"
-  (qw timeC) [UpFrom (Exc, 0)] "col2D"
+  (qw timeC) [UpFrom (Exc, exactDbl 0)] "col2D"
   [col2DOutputs, rigidTwoDAssump, rightHandAssump, collisionAssump,
     noDampConsAssumps, impulseNote]
 
@@ -118,8 +118,8 @@ col2DNP :: NP
 col2DNP =  nounPhraseSP "Collisions on 2D rigid bodies"
 
 col2DRel {-, im3Rel2, im3Rel3, im3Rel4 -} :: Relation -- FIXME: add proper equation
-col2DRel = apply1 velA timeC $= apply1 velA time +
-  (sy impulseS / sy massA) * sy normalVect
+col2DRel = apply1 velA timeC $= apply1 velA time `addRe`
+  ((sy impulseS $/ sy massA) `mulRe` sy normalVect)
 
 
 col2DOutputs, impulseNote :: Sentence

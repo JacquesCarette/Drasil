@@ -41,8 +41,10 @@ prec2VVN _ = 190
 
 -- | precA - precedence for arithmetic-related Binary-Associative (Commutative) operators
 precA :: AssocArithOper -> Int
-precA Mul = 190
-precA Add = 180
+precA MulI = 190
+precA MulRe = 190
+precA AddI = 180
+precA AddRe = 180
 
 -- | precB - precedence for boolean-related Binary-Associative (Commutative) operators
 precB :: AssocBoolOper -> Int
@@ -65,8 +67,9 @@ prec1Vec _ = 250
 
 -- | eprec - "Expression" precedence
 eprec :: Expr -> Int
-eprec Dbl{}                  = 500
 eprec Int{}                  = 500
+eprec Dbl{}                  = 500
+eprec ExactDbl{}             = 500
 eprec Str{}                  = 500
 eprec Perc{}                 = 500
 eprec (AssocA op _)          = precA op

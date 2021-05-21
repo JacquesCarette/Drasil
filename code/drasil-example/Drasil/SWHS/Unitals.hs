@@ -299,7 +299,7 @@ pcmDensity = uq (cuc'' "pcmDensity" (nounPhraseSP "density of PCM")
   "Mass per unit volume of the phase change material"
   (autoStage $ sub (eqSymb density) lPCM) densityU Rational
   [gtZeroConstr, sfwrc $ Bounded (Exc, sy pcmDensityMin) (Exc, sy pcmDensityMax)]
-  (dbl 1007)) defaultUncrt
+  (exactDbl 1007)) defaultUncrt
 
 -- Constraint 6
 tempMeltP = uqc "tempMeltP"
@@ -316,7 +316,7 @@ htCapSP = uqc "htCapSP"
   (sup (sub (eqSymb heatCapSpec) lPCM) lSolid) UT.heatCapSpec Rational
   [gtZeroConstr,
   sfwrc $ Bounded (Exc, sy htCapSPMin) (Exc, sy htCapSPMax)]
-  (dbl 1760) defaultUncrt
+  (exactDbl 1760) defaultUncrt
 
 -- Constraint 8
 htCapLP = uqc "htCapLP"
@@ -326,14 +326,14 @@ htCapLP = uqc "htCapLP"
   (sup (sub (eqSymb heatCapSpec) lPCM) lLiquid) UT.heatCapSpec Rational
   [gtZeroConstr,
   sfwrc $ Bounded (Exc, sy htCapLPMin) (Exc, sy htCapLPMax )]
-  (dbl 2270) defaultUncrt
+  (exactDbl 2270) defaultUncrt
 
 --Constraint 9
 htFusion = uqc "htFusion" (nounPhraseSP "specific latent heat of fusion")
   "amount of thermal energy required to completely melt a unit mass of a substance"
   (sub cH lFusion) specificE Rational
   [gtZeroConstr,
-  sfwrc $ Bounded (Exc, sy htFusionMin) (Exc, sy htFusionMax)] (dbl 211600) defaultUncrt
+  sfwrc $ Bounded (Exc, sy htFusionMin) (Exc, sy htFusionMax)] (exactDbl 211600) defaultUncrt
 
 -- Constraint 10
 -- The "S "heating coil" " should be replaced by "phrase coil",
@@ -355,7 +355,7 @@ tempC = uqc "tempC" (nounPhraseSP "temperature of the heating coil")
 wDensity = uq (cuc'' "wDensity" (density `of_` water)
   "nass per unit volume of water" (autoStage $ sub (eqSymb density) lWater) densityU Rational
   [gtZeroConstr, sfwrc $ Bounded (Exc, sy wDensityMin) (Inc, sy wDensityMax)]
-  (dbl 1000)) defaultUncrt
+  (exactDbl 1000)) defaultUncrt
 
 -- Constraint 13
 htCapW = uqc "htCapW" (heatCapSpec `of_` water)
@@ -363,7 +363,7 @@ htCapW = uqc "htCapW" (heatCapSpec `of_` water)
    "temperature of a given unit mass of water by a given amount")
   (sub (eqSymb heatCapSpec) lWater) UT.heatCapSpec Rational
   [gtZeroConstr,
-  sfwrc $ Bounded (Exc, sy htCapWMin) (Exc, sy htCapWMax)] (dbl 4186) defaultUncrt
+  sfwrc $ Bounded (Exc, sy htCapWMin) (Exc, sy htCapWMax)] (exactDbl 4186) defaultUncrt
   
 -- Constraint 14
 coilHTC = uqc "coilHTC" (nounPhraseSP
@@ -373,7 +373,7 @@ coilHTC = uqc "coilHTC" (nounPhraseSP
   (sub (eqSymb htTransCoeff) lCoil)
   UT.heatTransferCoef Rational
   [gtZeroConstr,
-  sfwrc $ Bounded (Inc, sy coilHTCMin) (Inc, sy coilHTCMax)] (dbl 1000) defaultUncrt
+  sfwrc $ Bounded (Inc, sy coilHTCMin) (Inc, sy coilHTCMax)] (exactDbl 1000) defaultUncrt
 
 -- Constraint 15
 pcmHTC = uqc "pcmHTC"
@@ -382,7 +382,7 @@ pcmHTC = uqc "pcmHTC"
    "the thermal flux from the phase change material to the surrounding water")
   (sub lH lPCM) UT.heatTransferCoef Rational
   [gtZeroConstr,
-  sfwrc $ Bounded (Inc, sy pcmHTCMin) (Inc, sy pcmHTCMax)] (dbl 1000) defaultUncrt
+  sfwrc $ Bounded (Inc, sy pcmHTCMin) (Inc, sy pcmHTCMax)] (exactDbl 1000) defaultUncrt
   
 -- Constraint 16
 tempInit = uqc "tempInit" (nounPhraseSP "initial temperature")
@@ -396,7 +396,7 @@ timeFinal = uqc "timeFinal" (nounPhraseSP "final time")
    "simulation to its conclusion") (sub (eqSymb time) 
   lFinal) second Rational
   [gtZeroConstr,
-  sfwrc $ UpTo (Exc, sy timeFinalMax)] (dbl 50000) defaultUncrt
+  sfwrc $ UpTo (Exc, sy timeFinalMax)] (exactDbl 50000) defaultUncrt
 
 timeStep = uqc "timeStep" (nounPhraseSP "time step for simulation")
   ("the finite discretization of time used in the numerical method " ++
@@ -519,12 +519,12 @@ htFusionMin = mkQuantDef (unitary "htFusionMin"
 
 htFusionMax = mkQuantDef (unitary "htFusionMax"
   (nounPhraseSP "maximum specific latent heat of fusion")
-  (subMax (eqSymb htFusion)) UT.heatCapSpec Rational) $ dbl 1000000 
+  (subMax (eqSymb htFusion)) UT.heatCapSpec Rational) $ exactDbl 1000000 
 
 -- Used in Constraint 10
 coilSAMax = mkQuantDef (unitary' "coilSAMax"
   (nounPhraseSP "maximum surface area of coil") (staged (supMax (eqSymb coilSA))
-  (subMax (eqSymb coilSA))) m_2 Rational) $ dbl 100000
+  (subMax (eqSymb coilSA))) m_2 Rational) $ exactDbl 100000
 
 -- Used in Constraint 12
 wDensityMin = mkQuantDef (unitary' "wDensityMin"

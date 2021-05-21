@@ -318,7 +318,7 @@ veloCons       = constrained' QP.velocity           [] (dbl 2.51)
 orientCons     = constrained' QM.orientation        [sfwrc $ Bounded (Inc, exactDbl 0) (Inc, exactDbl 2 `mulRe` sy QM.pi_)] (half $ sy QM.pi_) -- physical constraint not needed space is radians
 angVeloCons    = constrained' QP.angularVelocity    [] (dbl 2.1)
 forceCons      = constrained' QP.force              [] (dbl 98.1)
-torqueCons     = constrained' QP.torque             [] (dbl 200)
+torqueCons     = constrained' QP.torque             [] (exactDbl 200)
 restCoefCons   = constrained' QP.restitutionCoef    [physc $ Bounded (Inc, exactDbl 0) (Inc, exactDbl 1)] (dbl 0.8)
 
 posOutCons        = constrained' QP.position           [] (exactDbl 0)

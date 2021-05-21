@@ -144,7 +144,7 @@ yMinSlip = uq (constrained' (makeUCWDS "y_slip^min"
 
 effCohesion = uqc "c'" (cn "effective cohesion")
   "the internal pressure that sticks particles of soil together"
-  (prime $ Variable "c") pascal Real [gtZeroConstr] (dbl 10000) defaultUncrt
+  (prime $ Variable "c") pascal Real [gtZeroConstr] (exactDbl 10000) defaultUncrt
 
 fricAngle = uqc "varphi'" (cn "effective angle of friction")
   ("the angle of inclination with respect to the horizontal axis of " ++
@@ -155,17 +155,17 @@ fricAngle = uqc "varphi'" (cn "effective angle of friction")
 dryWeight = uqc "gamma" (cn "soil dry unit weight")
   "the weight of a dry soil/ground layer divided by the volume of the layer"
   (sub lGamma lDry) specificWeight Real [gtZeroConstr]
-  (dbl 20000) defaultUncrt
+  (exactDbl 20000) defaultUncrt
 
 satWeight = uqc "gamma_sat" (cn "soil saturated unit weight")
   "the weight of saturated soil/ground layer divided by the volume of the layer"
   (sub lGamma lSat) specificWeight Real [gtZeroConstr]
-  (dbl 20000) defaultUncrt
+  (exactDbl 20000) defaultUncrt
 
 waterWeight = uqc "gamma_w" (cn "unit weight of water")
   "the weight of one cubic meter of water"
   (sub lGamma lW) specificWeight Real [gtZeroConstr]
-  (dbl 9800) defaultUncrt
+  (exactDbl 9800) defaultUncrt
 
 constF :: DefinedQuantityDict
 constF = dqd' (dcc "const_f" (nounPhraseSP "decision on f") 

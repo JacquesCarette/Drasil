@@ -4,7 +4,7 @@ import Language.Drasil
 import Data.Drasil.Theories.Physics (newtonSLRRC)
 
 --below imports needed compoundNC part to work
-import Utils.Drasil
+import Utils.Drasil.Concepts
 import Data.Drasil.Concepts.Physics (pendulum, motion, position, velocity, force)
 
 

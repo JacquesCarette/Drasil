@@ -3,6 +3,7 @@ module Drasil.Projectile.Requirements (funcReqs, nonfuncReqs) where
 import Language.Drasil
 import Drasil.DocLang.SRS (datCon, propCorSol)
 import Utils.Drasil
+import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Computation (inValue)

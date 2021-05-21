@@ -25,8 +25,8 @@ library
       Utils.Drasil
       Utils.Drasil.Sentence
       Utils.Drasil.NounPhrase
-  other-modules:
       Utils.Drasil.Concepts
+  other-modules:
       Utils.Drasil.Contents
       Utils.Drasil.Document
       Utils.Drasil.English

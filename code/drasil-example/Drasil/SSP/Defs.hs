@@ -2,7 +2,7 @@ module Drasil.SSP.Defs where --export all of this file
 
 import Language.Drasil
 import Data.Drasil.Domains (civilEng)
-import Utils.Drasil
+import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (analysis, assumption, goalStmt,
@@ -102,4 +102,4 @@ factor :: NamedChunk --FIXME: this is here becuase this phrase is
 factor = nc "factor" (cn' "factor") -- possible use this everywhere
                                       -- (fs, fs_rc, fsConcept...)
 factorOfSafety :: NP
-factorOfSafety = factor `of_''` safety
+factorOfSafety = factor `of_PS` safety

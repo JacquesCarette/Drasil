@@ -2,7 +2,7 @@ module Drasil.DblPendulum.Unitals where
 
 import Language.Drasil
 import Language.Drasil.ShortHands
-import qualified Utils.Drasil.Sentence as S
+import Utils.Drasil
 import Data.Drasil.Constraints (gtZeroConstr)
 
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
@@ -15,7 +15,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (position, ixPos, xPos, fo
   xAccel, yVel, xVel, iyPos, yPos, time, torque, momentOfInertia, angularDisplacement,
   angularFrequency, frequency, period)
 import Data.Drasil.Concepts.Physics (pendulum, twoD)
-import Data.Drasil.Concepts.Math as CM (angle)
+import Data.Drasil.Concepts.Math as CM (angle, iAngle)
 import Data.Drasil.Quantities.Math as QM (unitVect, unitVectj, pi_)
 import Drasil.DblPendulum.Concepts (rod)
 
@@ -46,15 +46,15 @@ unitalChunks = [lenRod, QPP.mass, QP.force, QP.ixPos, QP.xPos, QP.yPos,
 lenRod, pendDisplacementAngle, initialPendAngle :: UnitalChunk
 
 lenRod = makeUCWDS "l_rod" (cn "length of rod")
-        (phrase len `S.the_ofThe` phrase rod)
+        (phraseNP (len `the_ofThe''` rod))
         (sub cL lRod) metre
 
 pendDisplacementAngle = makeUCWDS "pendDisplacementAngle" (cn "displacement angle of pendulum")
-        (phrase angle `S.the_ofThe` phrase pendulum)
+        (phraseNP (angle `the_ofThe''` pendulum))
         (sub lTheta lP) degree
 
 initialPendAngle = makeUCWDS "initialPendAngle" (cn "initial pendulum angle")
-        (S "the initial angle of" +:+ phrase pendulum)
+        (phraseNP (theNP (CM.iAngle `of_` pendulum)))
         (sub lTheta lI) radian
 
 

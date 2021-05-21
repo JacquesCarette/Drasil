@@ -46,13 +46,13 @@ instance NounPhrase NP where
 -- ===Constructors=== --
 -- | Construct a Proper Noun, it is always capitalized as written.
 pn, pn', pn'', pn''' :: String -> NP
--- | Self plural
+-- | Self plural.
 pn    n = ProperNoun n SelfPlur
--- | Plural form simply adds "s" (ex. Henderson -> Hendersons)
+-- | Plural form simply adds "s" (ex. Henderson -> Hendersons).
 pn'   n = ProperNoun n AddS
--- | Plural form adds "e"
+-- | Plural form adds "e".
 pn''  n = ProperNoun n AddE
--- | Plural form adds "es" (ex. Bush -> Bushes)
+-- | Plural form adds "es" (ex. Bush -> Bushes).
 pn''' n = ProperNoun n AddES
 
 -- | Construct a Proper Noun. Meant for use with IrregPlur from 'PluralRule'.
@@ -63,64 +63,64 @@ pnIrr = ProperNoun
 -- | Construct a common noun which capitalizes the first letter of the first word
 -- at the beginning of a sentence.
 cn, cn', cn'', cn''' :: String -> NP
--- | Self plural
+-- | Self plural.
 cn    n = CommonNoun n SelfPlur CapFirst
--- | Plural form simply adds "s" (ex. dog -> dogs)
+-- | Plural form simply adds "s" (ex. dog -> dogs).
 cn'   n = CommonNoun n AddS CapFirst
--- | Plural form adds "e" (ex. formula -> formulae)
+-- | Plural form adds "e" (ex. formula -> formulae).
 cn''  n = CommonNoun n AddE CapFirst
--- | Plural form adds "es" (ex. bush -> bushes)
+-- | Plural form adds "es" (ex. bush -> bushes).
 cn''' n = CommonNoun n AddES CapFirst
 
 -- | Common noun that pluralizes by dropping the last letter and adding an "ies"
--- ending (ex. body -> bodies)
+-- ending (ex. body -> bodies).
 cnIES :: String -> NP
 cnIES n = CommonNoun n (IrregPlur (\x -> init x ++ "ies")) CapFirst
 
 --FIXME: Shouldn't this just be drop one and add "ces"?
 -- | Common noun that pluralizes by dropping the last two letters and adding an 
--- "ices" ending (ex. matrix -> matrices)
+-- "ices" ending (ex. matrix -> matrices).
 cnICES :: String -> NP
 cnICES n = CommonNoun n (IrregPlur (\x -> init (init x) ++ "ices")) CapFirst
 
 -- | Common noun that pluralizes by dropping the last two letters and adding
--- "es" (ex. analysis -> analyses)
+-- "es" (ex. analysis -> analyses).
 cnIS :: String -> NP
 cnIS n = CommonNoun n (IrregPlur (\x -> init (init x) ++ "es")) CapFirst
 
 -- | Common noun that pluralizes by dropping the last two letters and adding "a"
--- (ex. datum -> data)
+-- (ex. datum -> data).
 cnUM :: String -> NP
 cnUM n = CommonNoun n (IrregPlur (\x -> init (init x) ++ "a")) CapFirst
 
 -- | Common noun that allows you to specify the pluralization rule 
--- (as in 'pnIrr')
+-- (as in 'pnIrr').
 cnIP :: String -> PluralRule -> NP
 cnIP n p = CommonNoun n p CapFirst
 
 -- | Common noun that allows you to specify both the pluralization rule and the
 -- capitalization rule for sentence case (if the noun is used at the beginning
--- of a sentence)
+-- of a sentence).
 cnIrr :: String -> PluralRule -> CapitalizationRule -> NP
 cnIrr = CommonNoun 
 
--- | Noun phrase with a given singular and plural form that capitalizes the first
--- letter of the first word for sentence case
+-- | Creates a 'NP' with a given singular and plural form that capitalizes the first
+-- letter of the first word for sentence case.
 nounPhrase :: String -> PluralString -> NP
 nounPhrase s p = Phrase (S s) (S p) CapFirst CapWords
 
 -- | Similar to 'nounPhrase', but following a given capitalization rule for 
--- sentence case
+-- sentence case.
 nounPhrase' :: String -> PluralString -> CapitalizationRule -> NP
 nounPhrase' s p c = Phrase (S s) (S p) c CapWords
 
 -- | Custom noun phrase constructor that takes a singular form, plural form, 
--- sentence case capitalization rule, and title case capitalization rule
+-- sentence case capitalization rule, and title case capitalization rule.
 nounPhrase'' :: Sentence -> PluralForm -> CapitalizationRule -> CapitalizationRule -> NP
 nounPhrase'' = Phrase
 
 -- | For things that should not be pluralized. Works like 'nounPhrase', but with
--- only the first argument
+-- only the first argument.
 nounPhraseSP :: String -> NP
 nounPhraseSP s = Phrase (S s) (S s) CapFirst CapWords
 
@@ -132,7 +132,7 @@ nounPhraseSent s = Phrase s (sPlur s AddS) CapFirst CapWords
 -- by phrase of t2. The plural becomes phrase of t1 followed by plural of t2.
 -- Uses standard CapFirst sentence case and CapWords title case.
 -- For example: @compoundPhrase system constraint@ will have singular form
--- "system constraint" and plural "system constraints"
+-- "system constraint" and plural "system constraints".
 compoundPhrase :: (NounPhrase a, NounPhrase b) => a -> b -> NP
 compoundPhrase t1 t2 = Phrase 
   (phraseNP t1 +:+ phraseNP t2) (phraseNP t1 +:+ pluralNP t2) CapFirst CapWords
@@ -154,7 +154,7 @@ compoundPhrase'' f1 f2 t1 t2 = Phrase
 --More primes might not be wanted but fixes two issues
 -- pluralization problem with software requirements specification (Documentation.hs)
 -- SWHS program not being about to use a compound to create the NamedChunk
--- | Used when you need a special function apllied to the first term (eg. short or plural)
+-- | Used when you need a special function apllied to the first term of both cases (eg. short or plural).
 compoundPhrase''' :: (NP -> Sentence) -> NP -> NP -> NP
 compoundPhrase''' f1 t1 t2 = Phrase 
   (f1 t1 +:+ phraseNP t2) (f1 t1 +:+ pluralNP t2) CapFirst CapWords
@@ -212,7 +212,7 @@ capString s f g = S . findHyph g . unwords $ process (words s)
     process (x:xs) = f x : map g xs
     process []     = []
 
--- | Finds hyphens in a 'String'
+-- | Finds hyphens in a 'String'.
 findHyph :: (String -> String) -> String -> String
 findHyph _ "" = ""
 findHyph _ [x] = [x]
@@ -220,7 +220,7 @@ findHyph f (x:xs)
   | x == '-'  = '-' : findHyph f (f xs)
   | otherwise = x : findHyph f xs
 
--- | Capitalize first word of a 'String'
+-- | Capitalize first word of a 'String'.
 capFirstWord :: String -> String
 capFirstWord "" = ""
 capFirstWord w@(c:cs)
@@ -228,7 +228,7 @@ capFirstWord w@(c:cs)
   | not (isLatin1 c) = w
   | otherwise        = toUpper c : cs
 
--- | Capitalize all words of a 'String' (unless they are prepositions, articles, or conjunctions)
+-- | Capitalize all words of a 'String' (unless they are prepositions, articles, or conjunctions).
 capWords :: String -> String
 capWords "" = ""
 capWords w@(c:cs)
@@ -237,7 +237,7 @@ capWords w@(c:cs)
   | w `elem` doNotCaps = toLower c : cs
   | otherwise          = toUpper c : cs
 
--- | Words that should not be capitalized in a title (prepositions, articles, or conjunctions)
+-- | Words that should not be capitalized in a title (prepositions, articles, or conjunctions).
 doNotCaps :: [String]
 doNotCaps = ["a", "an", "the", "at", "by", "for", "in", "of",
   "on", "to", "up", "and", "as", "but", "or", "nor"] --Ref http://grammar.yourdictionary.com

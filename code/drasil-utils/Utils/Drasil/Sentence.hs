@@ -1,4 +1,4 @@
-module Utils.Drasil.Sentence (andIts, andThe, fromThe, inThe, isExpctdToHv, isThe, ofGiv, forTT, forTT',
+module Utils.Drasil.Sentence (andIts, andThe, fromThe, inThe, onThe, isExpctdToHv, isThe, ofGiv, forTT, forTT',
   ofGiv', ofThe, the_ofThe, the_ofThe', sOf, sOfA, sOr, sVersus, sAnd, sAre, sIn, sIs, toThe, sFor, sFor', sFor'',
   denotes, wrt, defnAs) where
 
@@ -12,7 +12,7 @@ sentHelper :: String -> Sentence -> Sentence -> Sentence
 -- | Inserts a String between two Sentences
 sentHelper inStr a b = a +:+ S inStr +:+ b
 
-andIts, andThe, fromThe, inThe, isExpctdToHv, isThe, ofGiv, ofGiv', ofThe, the_ofThe, the_ofThe', sOf, sOfA,
+andIts, andThe, fromThe, inThe, isExpctdToHv, isThe, onThe, ofGiv, ofGiv', ofThe, the_ofThe, the_ofThe', sOf, sOfA,
   sOr, sVersus, sAnd, sAre, sIn, sIs, toThe, sFor, denotes, wrt, defnAs :: Sentence -> Sentence -> Sentence
 
 -- | Inserts the words "and its" between two Sentences.
@@ -25,6 +25,8 @@ fromThe = sentHelper "from the"
 inThe   = sentHelper "in the"
 -- | Inserts the words "is the" between two Sentences.
 isThe   = sentHelper "is the"
+-- | Inserts the words "on the" between two Sentences.
+onThe   = sentHelper "on the"
 -- | Inserts the word "and" between two Sentences.
 sAnd    = sentHelper "and"
 -- | Inserts the word "are" between two Sentences.

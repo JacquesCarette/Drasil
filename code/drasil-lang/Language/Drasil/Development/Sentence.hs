@@ -12,7 +12,7 @@ import Language.Drasil.Sentence ((+:+), Sentence((:+:), S), sParen, sentenceTerm
   sentencePlural, sentenceShort)
 import qualified Language.Drasil.NounPhrase as NP
 
--- | Get short form (if it exists), else get term.
+-- | Get short form (if it exists), else get term of an 'Idea'.
 short :: (Idea c, HasUID c) => c -> Sentence
 short c = sentenceShort (c ^. uid)
 
@@ -23,7 +23,7 @@ introduceAbb :: Idea n => n -> Sentence
 introduceAbb n = NP.titleizeNP (n ^. term) +:+ sParen (short n)
 
 -- | Helper function for getting the sentence case of a noun phrase from a 
--- NamedIdea.
+-- 'NamedIdea'.
 atStart, atStart' :: NamedIdea n => n -> Sentence
 -- | Singular sentence case.
 atStart  n = NP.atStartNP (n ^. term)
@@ -31,22 +31,23 @@ atStart  n = NP.atStartNP (n ^. term)
 atStart' n = NP.atStartNP' (n ^. term)
 
 -- | Helper function for getting the title case of a noun phrase from a 
--- NamedIdea.
+-- 'NamedIdea'.
 titleize, titleize' :: NamedIdea n => n -> Sentence
 -- | Singular title case.
 titleize  n = NP.titleizeNP (n ^. term)
 -- | Plural title case.
 titleize' n = NP.titleizeNP' (n ^. term)
 
--- | Helper for getting the phrase from a NamedIdea.
+-- | Helper for getting the phrase from a 'NamedIdea'.
 phrase :: (HasUID n, NamedIdea n) => n -> Sentence
 phrase n = sentenceTerm (n ^. uid) --NP.phrase (n ^. term)
 
--- | Helper for getting the plural of a phrase from a NamedIdea
+-- | Helper for getting the plural of a phrase from a 'NamedIdea'.
 plural :: (HasUID n, NamedIdea n) => n -> Sentence
 plural n = sentencePlural (n ^. uid)
 --plural n = NP.plural (n ^. term)
 
+-- | Helper for getting the possesive cases from the term of a 'NamedIdea'.
 phrasePoss, pluralPoss :: NamedIdea n => n -> Sentence
 -- | Singular possesive function
 phrasePoss a = phrase a :+: S "'s"

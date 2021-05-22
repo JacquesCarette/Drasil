@@ -362,36 +362,42 @@ Cross :: VVVBinOp
 data VVNBinOp
 Dot :: VVNBinOp
 
--- | Get dependencies from an equation
+-- | Get dependencies from an equation.
 dep :: Expr -> [String]
 
--- | Generic traverse of all positions that could lead to names
+-- | Generic traverse of all expressions that could lead to names.
 names :: Expr -> [String]
 
--- | Generic traverse of all positions that could lead to names, without
+-- | Generic traverse of all positions that could lead to names without
 --   functions. FIXME : this should really be done via post-facto
 --   filtering, but right now the information needed to do this is not
 --   available!
 names' :: Expr -> [String]
+
+-- | Generic traversal of everything that could come from an interval to
+--   names. (Similar to <a>names</a>)
 namesRI :: RealInterval Expr Expr -> [String]
+
+-- | This is to collect <a>UID</a>s that are printed out as a
+--   <tt>Symbol</tt>.
 sdep :: Sentence -> [UID]
 
--- | Generic traverse of all positions that could lead to reference UID
---   from sentences
+-- | Generic traverse of all positions that could lead to reference
+--   <a>UID</a>s from <a>Sentence</a>s.
 lnames :: Sentence -> [UID]
 
--- | Get reference UIDs from Sentences
+-- | Get reference <a>UID</a>s from <a>Sentence</a>s.
 lnames' :: [Sentence] -> [UID]
 
 -- | precA - precedence for arithmetic-related Binary-Associative
---   (Commutative) operators
+--   (Commutative) operators.
 precA :: AssocArithOper -> Int
 
 -- | precB - precedence for boolean-related Binary-Associative
---   (Commutative) operators
+--   (Commutative) operators.
 precB :: AssocBoolOper -> Int
 
--- | eprec - <a>Expression</a> precedence
+-- | eprec - <a>Expression</a> precedence.
 eprec :: Expr -> Int
 
 module Language.Drasil
@@ -524,149 +530,172 @@ addRe :: Expr -> Expr -> Expr
 mulI :: Expr -> Expr -> Expr
 mulRe :: Expr -> Expr -> Expr
 
--- | Get dependencies from an equation
+-- | Get dependencies from an equation.
 dep :: Expr -> [String]
 
--- | Smart constructor for taking the absolute value of an expression
+-- | Smart constructor for taking the absolute value of an expression.
 abs_ :: Expr -> Expr
 
--- | Smart constructor for negating an expression
+-- | Smart constructor for negating an expression.
 neg :: Expr -> Expr
 
--- | Smart constructor to take the log of an expression
+-- | Smart constructor to take the log of an expression.
 log :: Expr -> Expr
 
--- | Smart constructor to take the ln of an expression
+-- | Smart constructor to take the ln of an expression.
 ln :: Expr -> Expr
 
 -- | Absolute value.
 abs :: Num a => a -> a
 
--- | Smart constructor to apply sin to an expression
+-- | Smart constructor to apply sin to an expression.
 sin :: Expr -> Expr
 
--- | Smart constructor to apply cos to an expression
+-- | Smart constructor to apply cos to an expression.
 cos :: Expr -> Expr
 
--- | Smart constructor to apply tan to an expression
+-- | Smart constructor to apply tan to an expression.
 tan :: Expr -> Expr
 
--- | Smart constructor to apply sec to an expression
+-- | Smart constructor to apply sec to an expression.
 sec :: Expr -> Expr
 
--- | Smart constructor to apply csc to an expression
+-- | Smart constructor to apply csc to an expression.
 csc :: Expr -> Expr
 
--- | Smart constructor to apply cot to an expression
+-- | Smart constructor to apply cot to an expression.
 cot :: Expr -> Expr
 
--- | Smart constructor to apply arcsin to an expression
+-- | Smart constructor to apply arcsin to an expression.
 arcsin :: Expr -> Expr
 
--- | Smart constructor to apply arccos to an expression
+-- | Smart constructor to apply arccos to an expression.
 arccos :: Expr -> Expr
 
--- | Smart constructor to apply arctan to an expression
+-- | Smart constructor to apply arctan to an expression.
 arctan :: Expr -> Expr
 
--- | Smart constructor for the exponential (base e) function
+-- | Smart constructor for the exponential (base e) function.
 exp :: Expr -> Expr
 
--- | Smart constructor to take the square root of an expression
+-- | Smart constructor to take the square root of an expression.
 sqrt :: Expr -> Expr
 
 -- | Euclidean function : takes a vector and returns the sqrt of the
---   sum-of-squares
+--   sum-of-squares.
 euclidean :: [Expr] -> Expr
 
--- | Smart constructor for calculating the normal form of a vector
+-- | Smart constructor for calculating the normal form of a vector.
 norm :: Expr -> Expr
 
--- | Smart constructor for applying logical negation to an expression
+-- | Smart constructor for applying logical negation to an expression.
 not_ :: Expr -> Expr
 
--- | Smart constructor to square a function
+-- | Smart constructor to square a function.
 square :: Expr -> Expr
+
+-- | Smart constructor to half a function exactly.
 half :: Expr -> Expr
+
+-- | Constructs 1/2.
 oneHalf :: Expr
+
+-- | Constructs 1/3.
 oneThird :: Expr
 
--- | Smart constructor for 1/x expressions
+-- | Smart constructor for rational expressions (only in 1/x form).
 recip_ :: Expr -> Expr
 
--- | Smart constructor for calculating the dimension of a vector
+-- | Smart constructor for calculating the dimension of a vector.
 dim :: Expr -> Expr
 
--- | Smart constructor for indexing
+-- | Smart constructor for indexing.
 idx :: Expr -> Expr -> Expr
 
--- | Smart constructor for integers
+-- | Smart constructor for integers.
 int :: Integer -> Expr
 
--- | Smart constructor for doubles
+-- | Smart constructor for doubles.
 dbl :: Double -> Expr
 
--- | Smart constructor for exact doubles
+-- | Smart constructor for exact doubles.
 exactDbl :: Integer -> Expr
 
--- | Smart constructor for fractions
+-- | Smart constructor for fractions.
 frac :: Integer -> Integer -> Expr
 
--- | Smart constructor for strings
+-- | Smart constructor for strings.
 str :: String -> Expr
 
--- | Smart constructors for percents
+-- | Smart constructors for percents.
 perc :: Integer -> Integer -> Expr
 
--- | Smart constructor for set membership FIXME: first argument really
+-- | Smart constructor for set membership. FIXME: first argument really
 --   ought to be restricted to a <tt>variable</tt>, as IsIn should only be
 --   used as a type proxy
 isin :: Expr -> Space -> Expr
 
--- | Smart constructor for case statement with complete set of cases
+-- | Smart constructor for case statement with complete set of cases.
 completeCase :: [(Expr, Relation)] -> Expr
 
--- | Smart constructor for case statement with incomplete set of cases
+-- | Smart constructor for case statement with incomplete set of cases.
 incompleteCase :: [(Expr, Relation)] -> Expr
+
+-- | Smart constructor for the summation, product, and integrals.
 sumAll :: Symbol -> Expr -> Expr
 
--- | Smart constructor for the summation, product, and integrals
+-- | Smart constructor for the summation, product, and integrals.
 defsum :: Symbol -> Expr -> Expr -> Expr -> Expr
+
+-- | Smart constructor for the summation, product, and integrals.
 prodAll :: Symbol -> Expr -> Expr
 
--- | Smart constructor for the summation, product, and integrals
+-- | Smart constructor for the summation, product, and integrals.
 defprod :: Symbol -> Expr -> Expr -> Expr -> Expr
 
--- | Smart constructor for the summation, product, and integrals
+-- | Smart constructor for the summation, product, and integrals.
 defint :: Symbol -> Expr -> Expr -> Expr -> Expr
+
+-- | Smart constructor for the summation, product, and integrals.
 intAll :: Symbol -> Expr -> Expr
 
--- | Smart constructor for 'real interval' membership
+-- | Smart constructor for 'real interval' membership.
 realInterval :: HasUID c => c -> RealInterval Expr Expr -> Expr
 
--- | Gets the derivative of an <a>Expr</a> with respect to a <a>Symbol</a>
+-- | Gets the derivative of an <a>Expr</a> with respect to a <a>Symbol</a>.
 deriv :: (HasUID c, HasSymbol c) => Expr -> c -> Expr
 
--- | Gets the derivative of an <a>Expr</a> with respect to a <a>Symbol</a>
+-- | Gets the derivative of an <a>Expr</a> with respect to a <a>Symbol</a>.
 pderiv :: (HasUID c, HasSymbol c) => Expr -> c -> Expr
 
 -- | Get an <a>Expr</a> from a <a>Symbol</a>
 sy :: (HasUID c, HasSymbol c) => c -> Expr
+
+-- | Applies a given function with a list of parameters.
 apply :: (HasUID f, HasSymbol f) => f -> [Expr] -> Expr
+
+-- | Similar to <a>apply</a>, but converts second argument into
+--   <a>Symbol</a>s.
 apply1 :: (HasUID f, HasSymbol f, HasUID a, HasSymbol a) => f -> a -> Expr
+
+-- | Similar to <a>apply</a>, but the applied function takes two parameters
+--   (which are both <a>Symbol</a>s).
 apply2 :: (HasUID f, HasSymbol f, HasUID a, HasSymbol a, HasUID b, HasSymbol b) => f -> a -> b -> Expr
+
+-- | Similar to <a>apply</a>, but takes a relation to apply to
+--   <a>FCall</a>.
 applyWithNamedArgs :: (HasUID f, HasSymbol f, HasUID a, IsArgumentName a) => f -> [Expr] -> [(a, Expr)] -> Expr
 
--- | Smart constructor to cross product two expressions
+-- | Smart constructor to cross product two expressions.
 cross :: Expr -> Expr -> Expr
 
--- | Matrix helper function
+-- | Matrix helper function.
 m2x2 :: Expr -> Expr -> Expr -> Expr -> Expr
 
--- | Matrix helper function
+-- | Matrix helper function.
 vec2D :: Expr -> Expr -> Expr
 
--- | Matrix helper function
+-- | Matrix helper function.
 dgnl2x2 :: Expr -> Expr -> Expr
 
 -- | Special characters including partial derivatives, degree circle, and
@@ -680,15 +709,15 @@ class RenderSpecial r
 special :: RenderSpecial r => Special -> r
 type UID = String
 
--- | The most basic item: having a unique key, here a UID
+-- | The most basic item: having a unique identifier key, here a UID.
 class HasUID c
 
--- | Provides a <i>unique</i> id for internal Drasil use
+-- | Provides a <i>unique</i> id for internal Drasil use.
 uid :: HasUID c => Lens' c UID
 
--- | A ShortName is the text to be displayed for a link. Used for
+-- | A <a>ShortName</a> is the text to be displayed for a link. Used for
 --   referencing within a document that can include symbols and whatnot if
---   required. Visible in the typeset documents (pdf)
+--   required. Visible in the typeset documents (pdf).
 class HasShortName s
 shortname :: HasShortName s => s -> ShortName
 
@@ -696,13 +725,13 @@ shortname :: HasShortName s => s -> ShortName
 class HasRefAddress b
 getRefAdd :: HasRefAddress b => b -> String
 
--- | A HasSymbol is anything which has a <a>Symbol</a>
+-- | A HasSymbol is anything which has a <a>Symbol</a>.
 class HasSymbol c
 
--- | Provides the <a>Symbol</a> for a particular stage of generation
+-- | Provides the <a>Symbol</a> for a particular stage of generation.
 symbol :: HasSymbol c => c -> Stage -> Symbol
 
--- | Citations have Fields
+-- | <tt>Citation</tt>s should have a fields (<a>CiteField</a>).
 class HasFields c
 getFields :: HasFields c => Lens' c [CiteField]
 
@@ -849,7 +878,7 @@ narg :: (Quantity q, MayHaveUnit q) => q -> NamedArgument
 --   Contains a <a>UID</a> and a term (<a>NP</a>).
 data NamedChunk
 
--- | Get short form (if it exists), else get term.
+-- | Get short form (if it exists), else get term of an <a>Idea</a>.
 short :: (Idea c, HasUID c) => c -> Sentence
 
 -- | <a>NamedChunk</a> constructor, takes a <a>UID</a> and a term.
@@ -1331,7 +1360,7 @@ cTechReport :: People -> String -> String -> Int -> [CiteField] -> String -> Cit
 --   can be month and year. Implicitly uses the EntryID as the chunk id.
 cUnpublished :: People -> String -> String -> [CiteField] -> String -> Citation
 
--- | Some documents, as well as some pieces of knowledge, have citations
+-- | Some documents, as well as some pieces of knowledge, have citations.
 class HasCitation c
 getCitations :: HasCitation c => Lens' c [Citation]
 data Sentence
@@ -1395,6 +1424,9 @@ sDash :: Sentence -> Sentence -> Sentence
 
 -- | Helper for wrapping sentences in parentheses.
 sParen :: Sentence -> Sentence
+
+-- | This is to collect <a>UID</a>s that are printed out as a
+--   <tt>Symbol</tt>.
 sdep :: Sentence -> [UID]
 shortdep :: Sentence -> [UID]
 data Reference
@@ -1410,7 +1442,9 @@ pluralNP :: NounPhrase n => n -> PluralForm
 sentenceCase :: NounPhrase n => n -> (NP -> Sentence) -> Capitalization
 titleCase :: NounPhrase n => n -> (NP -> Sentence) -> Capitalization
 
--- | For nouns and NounPhrases
+-- | For nouns and <tt>NounPhrase</tt>s. May be constructed from a proper
+--   noun, common noun, or phrase (<a>Sentence</a>) and their respective
+--   pluralization and capitalization rules.
 data NP
 
 -- | Self plural.
@@ -1615,30 +1649,34 @@ LlC :: LabelledContent -> Contents
 data SecCons
 Sub :: Section -> SecCons
 Con :: Contents -> SecCons
+
+-- | Denotes the different possible types that can be used as a list.
 data ListType
 
--- | Bulleted list
+-- | Bulleted list.
 Bullet :: [(ItemType, Maybe String)] -> ListType
 
--- | Enumerated List
+-- | Enumerated list.
 Numeric :: [(ItemType, Maybe String)] -> ListType
 
--- | Simple list with items denoted by <tt>-</tt>
+-- | Simple list with items denoted by <tt>-</tt>.
 Simple :: [ListTuple] -> ListType
 
--- | Descriptive list, renders as "Title: Item" (see <a>ListTuple</a>)
+-- | Descriptive list, renders as "Title: Item" (see <a>ListTuple</a>).
 Desc :: [ListTuple] -> ListType
 
--- | Renders a list of "<tt>Title</tt> is the <tt>Item</tt>"
+-- | Renders a list of "<tt><a>Title</a></tt> is the <tt>Item</tt>".
 Definitions :: [ListTuple] -> ListType
+
+-- | Denotes how something should behave in a list (<a>ListType</a>).
 data ItemType
 
--- | Standard singular item
+-- | Standard singular item.
 Flat :: Sentence -> ItemType
 
--- | Nest a list as an item
+-- | Nest a list (<a>ListType</a>) as an item.
 Nested :: Header -> ListType -> ItemType
-type ListTuple = (Title, ItemType, Maybe String) " Title: Item"
+type ListTuple = (Title, ItemType, Maybe String) " Formats as Title: Item."
 
 -- | Contains a <a>Reference</a> and <a>RawContent</a>
 data LabelledContent
@@ -1676,7 +1714,7 @@ figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
 
 -- | MaxWidthPercent should be kept in the range 1-100. Values outside this
 --   range may have unexpected results. Used for specifying max figure
---   width as pagewidth*MaxWidthPercent/100.
+--   width as <tt>pagewidth*MaxWidthPercent/100</tt>.
 type MaxWidthPercent = Float
 class HasContents c
 accessContents :: HasContents c => Lens' c RawContent
@@ -1868,13 +1906,13 @@ data Stage
 Equational :: Stage
 Implementation :: Stage
 
--- | Helper function for getting a symbol in the Equational Stage
+-- | Helper function for getting a symbol in the Equational Stage.
 eqSymb :: HasSymbol q => q -> Symbol
 
--- | Helper function for getting a symbol in the Implementation Stage
+-- | Helper function for getting a symbol in the Implementation Stage.
 codeSymb :: HasSymbol q => q -> Symbol
 
--- | Is a Stage symbol real or Empty?
+-- | Finds if a <a>Stage</a> symbol is real or Empty. True if real.
 hasStageSymbol :: HasSymbol q => q -> Stage -> Bool
 
 -- | Helper for creating a symbol with Unicode in it.
@@ -1886,7 +1924,7 @@ hat :: Symbol -> Symbol
 -- | Helper for creating a Vector symbol.
 prime :: Symbol -> Symbol
 
--- | Helper for creating a symbol that depends on the stage
+-- | Helper for creating a symbol that depends on the stage.
 staged :: Symbol -> Symbol -> Stage -> Symbol
 
 -- | Helper for creating a symbol with a subscript to the right. Arguments:
@@ -1894,15 +1932,15 @@ staged :: Symbol -> Symbol -> Stage -> Symbol
 sub :: Symbol -> Symbol -> Symbol
 
 -- | Helper for a common case of subscript, with a string Arguments: Base
---   symbol, then subscript String.
+--   symbol, then subscript <a>String</a>.
 subStr :: Symbol -> String -> Symbol
 
 -- | Helper for creating a symbol with a superscript to the right.
 --   Arguments: Base symbol, then superscripted symbol.
 sup :: Symbol -> Symbol -> Symbol
 
--- | Helper for autoStage that apples unicodeString to all Symbols with
---   Strings
+-- | Helper for autoStage that applies unicodeString to all <a>Symbol</a>s
+--   with <a>String</a>s.
 unicodeConv :: Symbol -> Symbol
 
 -- | Helper for creating a symbol with a superscript on the left side of
@@ -1918,10 +1956,10 @@ makeRef2 :: (Referable l, HasShortName l) => l -> Reference
 makeCiteInfo :: Citation -> RefInfo -> Reference
 makeCiteInfoS :: Citation -> RefInfo -> Sentence
 
--- | Retrieves the <a>String</a> contained in a <a>LblType</a>
+-- | Retrieves the <a>String</a> contained in a <a>LblType</a>.
 getAdd :: LblType -> String
 
--- | Prepends a <a>String</a> to an <a>IRefProg</a>
+-- | Prepends a <a>String</a> to an <a>IRefProg</a>.
 prepend :: String -> IRefProg
 
 -- | Applying different pieces of information for a reference. An RP is a
@@ -1932,7 +1970,7 @@ RP :: IRefProg -> String -> LblType
 Citation :: String -> LblType
 URI :: String -> LblType
 
--- | Used in <a>LblType</a>
+-- | Created for different forms of references. Used in <a>LblType</a>.
 data IRefProg
 
 -- | Deferred lookup; done later
@@ -1952,52 +1990,59 @@ Name :: IRefProg
 --   parentheses.
 introduceAbb :: Idea n => n -> Sentence
 
--- | Helper for getting the phrase from a NamedIdea.
+-- | Helper for getting the phrase from a <a>NamedIdea</a>.
 phrase :: (HasUID n, NamedIdea n) => n -> Sentence
 
--- | Helper for getting the plural of a phrase from a NamedIdea
+-- | Helper for getting the plural of a phrase from a <a>NamedIdea</a>.
 plural :: (HasUID n, NamedIdea n) => n -> Sentence
 
 -- | Singular possesive function
+--   
+--   Helper for getting the possesive cases from the term of a
+--   <a>NamedIdea</a>.
 phrasePoss :: NamedIdea n => n -> Sentence
 
 -- | Plural possesive function
+--   
+--   Helper for getting the possesive cases from the term of a
+--   <a>NamedIdea</a>.
 pluralPoss :: NamedIdea n => n -> Sentence
 
 -- | Singular sentence case.
 --   
 --   Helper function for getting the sentence case of a noun phrase from a
---   NamedIdea.
+--   <a>NamedIdea</a>.
 atStart :: NamedIdea n => n -> Sentence
 
 -- | Plural sentence case.
 --   
 --   Helper function for getting the sentence case of a noun phrase from a
---   NamedIdea.
+--   <a>NamedIdea</a>.
 atStart' :: NamedIdea n => n -> Sentence
 
 -- | Singular title case.
 --   
 --   Helper function for getting the title case of a noun phrase from a
---   NamedIdea.
+--   <a>NamedIdea</a>.
 titleize :: NamedIdea n => n -> Sentence
 
 -- | Plural title case.
 --   
 --   Helper function for getting the title case of a noun phrase from a
---   NamedIdea.
+--   <a>NamedIdea</a>.
 titleize' :: NamedIdea n => n -> Sentence
 
--- | May contain an uncertainty value and <a>Maybe</a> <a>Int</a>
+-- | Something that may contain an uncertainty value and <a>Maybe</a> an
+--   <a>Int</a>.
 data Uncertainty
 
--- | Smart constructor for values with uncertainty
+-- | Smart constructor for values with uncertainty.
 uncty :: Double -> Maybe Int -> Uncertainty
 defaultUncrt :: Uncertainty
 uncVal :: HasUncertainty x => x -> Double
 uncPrec :: HasUncertainty x => x -> Maybe Int
 
--- | Smart constructor for exact values
+-- | Smart constructor for exact values (no uncertainty).
 exact :: Uncertainty
 
 -- | Language of units (how to build them up) UName for the base cases,
@@ -2007,7 +2052,7 @@ exact :: Uncertainty
 newtype USymb
 US :: [(Symbol, Integer)] -> USymb
 
--- | Month abbreviations
+-- | Custom type for months (abbreviated).
 data Month
 Jan :: Month
 Feb :: Month
@@ -2032,6 +2077,8 @@ BookTitle :: String -> CiteField
 Chapter :: Int -> CiteField
 Edition :: Int -> CiteField
 Editor :: People -> CiteField
+
+-- | Can be published via URL or something else.
 HowPublished :: HP -> CiteField
 Institution :: String -> CiteField
 Journal :: String -> CiteField
@@ -2052,13 +2099,13 @@ Type :: String -> CiteField
 Volume :: Int -> CiteField
 Year :: Int -> CiteField
 
--- | How Published. Necessary for URLs to work properly.
+-- | How something is published. Necessary for URLs to work properly.
 data HP
 URL :: String -> HP
 Verb :: String -> HP
 
 -- | External references come in many flavours. Articles, Books, etc. (we
---   are using the types available in Bibtex)
+--   are using the types available in Bibtex).
 data CitationKind
 Article :: CitationKind
 Book :: CitationKind
@@ -2089,7 +2136,9 @@ bookTitle :: String -> CiteField
 -- | Smart field constructor
 howPublished :: String -> CiteField
 
--- | Smart field constructor
+-- | URL version of <a>howPublished</a>
+--   
+--   Smart field constructor
 howPublishedU :: String -> CiteField
 
 -- | Smart field constructor

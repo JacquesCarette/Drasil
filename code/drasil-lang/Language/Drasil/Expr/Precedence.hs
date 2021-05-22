@@ -9,63 +9,63 @@ import Language.Drasil.Expr (Expr(..),
 -- as documented at http://kevincantu.org/code/operators.html
 -- They are all multiplied by 10, to leave room to weave things in between
 
--- | prec2Arith - precedence for arithmetic-related binary operations
+-- | prec2Arith - precedence for arithmetic-related binary operations.
 prec2Arith :: ArithBinOp -> Int
 prec2Arith Frac = 190
 prec2Arith Pow = 200
 prec2Arith Subt = 180
 
--- | prec2Bool - precedence for boolean-related binary operations
+-- | prec2Bool - precedence for boolean-related binary operations.
 prec2Bool :: BoolBinOp -> Int
 prec2Bool _ = 130
 
--- | prec2Eq - precedence for equality-related binary operations
+-- | prec2Eq - precedence for equality-related binary operations.
 prec2Eq :: EqBinOp -> Int
 prec2Eq _  = 130
 
--- | prec2LA - precedence for access-related binary operations
+-- | prec2LA - precedence for access-related binary operations.
 prec2LA :: LABinOp -> Int
 prec2LA _ = 250
 
--- | prec2Ord - precedence for order-related binary operations
+-- | prec2Ord - precedence for order-related binary operations.
 prec2Ord :: OrdBinOp -> Int
 prec2Ord _  = 130
 
--- | prec2VVV - precedence for Vec->Vec->Vec-related binary operations
+-- | prec2VVV - precedence for Vec->Vec->Vec-related binary operations.
 prec2VVV :: VVVBinOp -> Int
 prec2VVV _ = 190
 
--- | prec2VVN - precedence for Vec->Vec->Num-related binary operations
+-- | prec2VVN - precedence for Vec->Vec->Num-related binary operations.
 prec2VVN :: VVNBinOp -> Int
 prec2VVN _ = 190
 
--- | precA - precedence for arithmetic-related Binary-Associative (Commutative) operators
+-- | precA - precedence for arithmetic-related Binary-Associative (Commutative) operators.
 precA :: AssocArithOper -> Int
 precA MulI = 190
 precA MulRe = 190
 precA AddI = 180
 precA AddRe = 180
 
--- | precB - precedence for boolean-related Binary-Associative (Commutative) operators
+-- | precB - precedence for boolean-related Binary-Associative (Commutative) operators.
 precB :: AssocBoolOper -> Int
 precB And = 120
 precB Or = 110
 
--- | prec1 - precedence of unary operators
+-- | prec1 - precedence of unary operators.
 prec1 :: UFunc -> Int
 prec1 Neg = 230
 prec1 Exp = 200
 prec1 _ = 250
 
--- | prec1B - precedence of boolean-related unary operators
+-- | prec1B - precedence of boolean-related unary operators.
 prec1B :: UFuncB -> Int
 prec1B Not = 230
 
--- | prec1Vec - precedence of vector-related unary operators
+-- | prec1Vec - precedence of vector-related unary operators.
 prec1Vec :: UFuncVec -> Int
 prec1Vec _ = 250
 
--- | eprec - "Expression" precedence
+-- | eprec - "Expression" precedence.
 eprec :: Expr -> Int
 eprec Int{}                  = 500
 eprec Dbl{}                  = 500

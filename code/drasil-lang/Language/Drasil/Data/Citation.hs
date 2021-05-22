@@ -26,7 +26,7 @@ data CiteField = Address      String
                | Chapter      Int
                | Edition      Int
                | Editor       People
-               | HowPublished HP
+               | HowPublished HP     -- ^ Can be published via URL or something else.
                | Institution  String
                | Journal      String
                | Month        Month
@@ -42,12 +42,12 @@ data CiteField = Address      String
                | Volume       Int
                | Year         Int
 
--- | How Published. Necessary for URLs to work properly.
+-- | How something is published. Necessary for URLs to work properly.
 data HP = URL String
         | Verb String
 
 -- | External references come in many flavours. Articles, Books, etc.
--- (we are using the types available in Bibtex)
+-- (we are using the types available in Bibtex).
 data CitationKind = Article
                   | Book
                   | Booklet
@@ -61,6 +61,7 @@ data CitationKind = Article
                   | Proceedings
                   | TechReport
                   | Unpublished
+
 -- | Smart field constructor
 author, editor :: People -> CiteField
 author = Author
@@ -74,6 +75,7 @@ address, bookTitle, institution, journal,
 address       = Address
 bookTitle     = BookTitle
 howPublished  = HowPublished . Verb
+-- | URL version of 'howPublished'
 howPublishedU = HowPublished . URL
 institution   = Institution
 journal       = Journal

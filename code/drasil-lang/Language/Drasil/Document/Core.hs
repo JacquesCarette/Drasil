@@ -13,28 +13,30 @@ import Language.Drasil.Sentence (Sentence)
 
 import Control.Lens ((^.), makeLenses, Lens', set, view)
 
-data ListType = Bullet [(ItemType,Maybe String)] -- ^ Bulleted list
-              | Numeric [(ItemType,Maybe String)] -- ^ Enumerated List
-              | Simple [ListTuple] -- ^ Simple list with items denoted by @-@
-              | Desc [ListTuple] -- ^ Descriptive list, renders as "Title: Item" (see 'ListTuple')
-              | Definitions [ListTuple] -- ^ Renders a list of "@Title@ is the @Item@"
+-- | Denotes the different possible types that can be used as a list.
+data ListType = Bullet [(ItemType,Maybe String)] -- ^ Bulleted list.
+              | Numeric [(ItemType,Maybe String)] -- ^ Enumerated list.
+              | Simple [ListTuple] -- ^ Simple list with items denoted by @-@.
+              | Desc [ListTuple] -- ^ Descriptive list, renders as "Title: Item" (see 'ListTuple').
+              | Definitions [ListTuple] -- ^ Renders a list of "@'Title'@ is the @Item@".
 
-data ItemType = Flat Sentence -- ^ Standard singular item
-              | Nested Header ListType -- ^ Nest a list as an item
+-- | Denotes how something should behave in a list ('ListType').
+data ItemType = Flat Sentence -- ^ Standard singular item.
+              | Nested Header ListType -- ^ Nest a list ('ListType') as an item.
 
 -- | MaxWidthPercent should be kept in the range 1-100.
 -- Values outside this range may have unexpected results.
 -- Used for specifying max figure width as
--- pagewidth*MaxWidthPercent/100.
+-- @pagewidth*MaxWidthPercent/100@.
 type MaxWidthPercent = Float
 
 type Title    = Sentence
 type Author   = Sentence
-type Header   = Sentence -- ^ Used when creating sublists
+type Header   = Sentence -- ^ Used when creating sublists.
 type Depth    = Int
 type Width    = Float
 type Height   = Float
-type ListTuple = (Title,ItemType,Maybe String) -- ^ Title: Item
+type ListTuple = (Title,ItemType,Maybe String) -- ^ Formats as Title: Item.
 type Filepath = String
 type Lbl      = Sentence
 

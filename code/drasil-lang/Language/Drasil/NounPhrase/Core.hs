@@ -3,6 +3,7 @@ module Language.Drasil.NounPhrase.Core (CapitalizationRule(..), NP(..),
 
 import Language.Drasil.Sentence (Sentence)
 
+-- | Synonym for 'Sentence' typically used for plural forms.
 type PluralForm = Sentence  -- These might change.
 
 -- | Capitalization rules.
@@ -22,7 +23,9 @@ data PluralRule =
   | IrregPlur (String -> String) -- ^ Apply the given function to
                                                -- the noun phrase to get the plural.
 
--- | For nouns and NounPhrases
+-- | For nouns and 'NounPhrase's. May be constructed from a
+-- proper noun, common noun, or phrase ('Sentence') and their
+-- respective pluralization and capitalization rules.
 data NP =
     ProperNoun String PluralRule -- ^ Stores a proper noun and its pluralization
   | CommonNoun String PluralRule CapitalizationRule -- ^ Stores a common noun and its pluralization

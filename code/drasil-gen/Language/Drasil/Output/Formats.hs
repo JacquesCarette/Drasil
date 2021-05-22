@@ -9,7 +9,7 @@ import Build.Drasil ((+:+), Command, makeS, mkCheckedCommand, mkCommand, mkFreeV
 -- the generated output (specified /without/ a file extension)
 type Filename = String
 
-data DocType = SRS | MG | MIS | Website
+data DocType = SRS | MG | MIS | Website | Jupyter
 
 data DocSpec = DocSpec DocType Filename
 
@@ -25,6 +25,7 @@ instance RuleTransformer DocSpec where
         pdfName = makeS $ fn ++ ".pdf"
 
 instance Show DocType where
+  show Jupyter  = "Jupyter"
   show SRS      = "SRS"
   show MG       = "MG"
   show MIS      = "MIS"

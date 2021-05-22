@@ -1,4 +1,4 @@
-module Language.Drasil.Generate (gen, genCode, DocType(SRS, Website), DocSpec(DocSpec)) where
+module Language.Drasil.Generate (gen, genCode, DocType(SRS, Website, Jupyter), DocSpec(DocSpec)) where
 
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (Doc, render)
@@ -10,12 +10,12 @@ import Data.Time.Calendar (showGregorian)
 
 import Build.Drasil (genMake)
 import Language.Drasil
-import Language.Drasil.Printers (Format(TeX, HTML), 
- makeCSS, genHTML, genTeX, PrintingInformation)
+import Language.Drasil.Printers (Format(TeX, HTML, JSON), 
+ makeCSS, genHTML, genTeX, genJSON, PrintingInformation)
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
   Lang(..), getSampleData, readWithDataDesc, sampleInputDD, 
   unPP, unJP, unCSP, unCPPP, unSP)
-import Language.Drasil.Output.Formats( DocType(SRS, MG, MIS, Website), Filename, DocSpec(DocSpec))
+import Language.Drasil.Output.Formats( DocType(SRS, MG, MIS, Website, Jupyter), Filename, DocSpec(DocSpec))
 
 import GOOL.Drasil (unJC, unPC, unCSC, unCPPC, unSC)
 
@@ -30,6 +30,8 @@ prnt sm dt@(DocSpec Website fn) body =
      outh2 <- openFile ("Website/" ++ fn ++ ".css") WriteMode
      hPutStrLn outh2 $ render (makeCSS body)
      hClose outh2
+prnt sm dt@(DocSpec Jupyter _) body =
+  do prntDoc dt body sm
 prnt sm dt@(DocSpec _ _) body =
   do prntDoc dt body sm
      prntMake dt
@@ -41,6 +43,7 @@ prntDoc (DocSpec dt fn) = prntDoc' dt fn (fmt dt)
         fmt MG  = TeX
         fmt MIS = TeX
         fmt Website = HTML
+        fmt Jupyter = JSON
 
 prntDoc' :: Show a => a -> String -> Format -> Document -> PrintingInformation -> IO ()
 prntDoc' dt' fn format body' sm = do
@@ -50,6 +53,7 @@ prntDoc' dt' fn format body' sm = do
   hClose outh
   where getExt TeX  = ".tex"
         getExt HTML = ".html"
+        getExt JSON = ".ipynb"
         getExt _    = error "we can only write TeX/HTML (for now)"
 
 -- | Helper for writing the Makefile(s)
@@ -63,6 +67,7 @@ prntMake ds@(DocSpec dt _) =
 writeDoc :: PrintingInformation -> Format -> Filename -> Document -> Doc
 writeDoc s TeX  _  doc = genTeX doc s
 writeDoc s HTML fn doc = genHTML s fn doc
+writeDoc s JSON _ doc  = genJSON s doc
 writeDoc _    _  _   _ = error "we can only write TeX/HTML (for now)"
 
 -- | Calls the code generator

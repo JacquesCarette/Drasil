@@ -24,7 +24,7 @@ doccon = [abbreviation, analysis, appendix, aspect, body, charOfIR, characterist
   organization, output_, physical, physicalConstraint, physicalProperty, physicalSim,
   physicalSystem, physics, plan, practice, priority, problem, problemDescription,
   prodUCTable, productUC, product_, project, procForAnls, propOfCorSol, property, prpsOfDoc,
-  purpose, quantity, realtime, recap, reference, refmat, requirement_, response, result,
+  purpose, quantity, realtime, review, reference, refmat, requirement_, response, result,
   reviewer, safety, safetyReq, scenario, scope, scpOfReq, scpOfTheProjS, second_,
   section_, simulation, software, softwareConstraint, softwareDoc, softwareReq,
   softwareSys, softwareVAV, softwareVerif, solution, solutionCharSpec,
@@ -78,7 +78,7 @@ abbreviation, analysis, appendix, aspect, body, characteristic, class_, client,
   loss, label, library, limitation, literacy, material_, message, method_, module_,
   model, name_, nonfunctional, object, offShelf, open, organization, output_,
   physics, physical, plan, practice, priority, problem, product_, project,
-  property, purpose, quantity, realtime, recap, reference, requirement_, response, 
+  property, purpose, quantity, realtime, review, reference, requirement_, response, 
   result, reviewer, safety, scope, scpOfTheProjS, second_, section_, scenario,
   source, simulation, software, solution, summary, specific, specification, stakeholder,
   standard, statement, symbol_, system, table_, task, template, term_, terminology,
@@ -171,7 +171,7 @@ property        = nc "property"       (cnIES  "property"           )
 purpose         = nc "purpose"        (cn'    "purpose"            )
 quantity        = nc "quantity"       (cnIES  "quantity"           ) --general enough to be in documentaion.hs?
 realtime        = nc "real-time"      (cn'    "real-time"          )
-recap           = nc "recap"          (cn'    "recap"              )
+review          = nc "review"         (cn'    "review"             )
 reference       = nc "reference"      (cn'    "reference"          )
 requirement_    = nc "requirement"    (cn'    "requirement"        ) --FIXME: Eventually only have one requirement
 response        = nc "response"       (cn'    "response"           )

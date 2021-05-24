@@ -131,9 +131,9 @@ concepts = map nw defs
 defs :: [ConceptChunk]
 defs
   = [pidCL, pidC, summingPt, powerPlant, secondOrderSystem, processError,
-     simulationTime, processVariable, setPoint, propGain, derGain,
-     ccFrequencyDomain, ccLaplaceTransform, controlVariable, stepTime,
-     ccAbsTolerance, ccRelTolerance, ccTransferFxn, ccDampingCoeff,
-     ccStiffCoeff]
+     simulationTime, processVariable, setPoint, propGain, derGain, propControl, 
+     derControl, ccFrequencyDomain, ccLaplaceTransform, controlVariable, 
+     stepTime, ccAbsTolerance, ccRelTolerance, ccTransferFxn, 
+     ccDampingCoeff, ccStiffCoeff]
 
 

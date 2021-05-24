@@ -1,8 +1,8 @@
-module Drasil.Projectile.GenDefs (genDefns, genDefns0, posVecGD) where
+module Drasil.Projectile.GenDefs (genDefns, posVecGD) where
 
 import Prelude hiding (cos, sin)
 import Language.Drasil
-import Theory.Drasil (GenDefn, TheoryModel, gd, gdNoRefs, ModelKinds(OthModel, EquationalModel))
+import Theory.Drasil (GenDefn, TheoryModel, gd, gdNoRefs, ModelKinds(EquationalModel))
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -12,7 +12,7 @@ import Data.Drasil.Concepts.Math (cartesian, equation, vector)
 import Data.Drasil.Concepts.Physics (oneD, rectilinear, twoD)
 
 import Data.Drasil.Quantities.Physics (acceleration, constAccelV, iPos, iSpeed,
-  iVel, ixVel, iyVel, position, scalarAccel, scalarPos, speed,
+  iVel, ixVel, iyVel, position, scalarAccel, scalarPos,
   time, velocity, positionVec)
 import qualified Data.Drasil.Quantities.Physics as QP (constAccel)
 import Data.Drasil.Theories.Physics (accelerationTM, velocityTM)
@@ -23,33 +23,21 @@ import qualified Drasil.Projectile.Expressions as E (speed', rectVelDerivEqn1, r
   scalarPos', rectPosDerivEqn1, rectPosDerivEqn2, rectPosDerivEqn3, velVecExpr, posVecExpr,
   positionXY, velocityXY, accelerationXY, constAccelXY)
 import Drasil.Projectile.References (hibbeler2004)
+import Drasil.Projectile.Unitals (speed1DAcc)
 
 genDefns :: [GenDefn]
 genDefns = [rectVelGD, rectPosGD, velVecGD, posVecGD]
 
--- TODO: after converting rectVelGD & rectPosGD to an EquationalModel, this should be removed
-genDefns0 :: [GenDefn]
-genDefns0 = [rectVelGD]
-
 ----------
 rectVelGD :: GenDefn
-rectVelGD = gd (OthModel rectVelRC) (getUnit speed) (Just rectVelDeriv)
+rectVelGD = gd (EquationalModel rectVelQD) (getUnit speed1DAcc) (Just rectVelDeriv)
   [makeCiteInfo hibbeler2004 $ Page [8]] "rectVel" [{-Notes-}]
 
--- TODO: This causes a collision due to `speed` being used by velMag in DataDefs!
-{-
 rectVelQD :: QDefinition 
-rectVelQD = mkQuantDef' speed (nounPhraseSent $ foldlSent_ 
+rectVelQD = mkQuantDef' speed1DAcc (nounPhraseSent $ foldlSent_ 
             [atStart rectilinear, sParen $ getAcc oneD, phrase velocity,
              S "as a function" `S.of_` phrase time, S "for", phrase QP.constAccel])
-            rectVelExpr
--}
-
-rectVelRC :: RelationConcept
-rectVelRC = makeRC "rectVelRC" (nounPhraseSent $ foldlSent_ 
-            [atStart rectilinear, sParen $ getAcc oneD, phrase velocity,
-             S "as a function" `S.of_` phrase time, S "for", phrase QP.constAccel])
-            EmptyS $ sy speed $= E.speed'
+            E.speed'
 
 rectVelDeriv :: Derivation
 rectVelDeriv = mkDerivName (phrase rectVel)
@@ -62,7 +50,7 @@ rectVelDerivSents = [rectDeriv velocity acceleration motSent iVel accelerationTM
                          S "with a", phrase QP.constAccel `sC` S "represented by", E (sy QP.constAccel)]
 
 rectVelDerivEqns :: [Expr]
-rectVelDerivEqns = [E.rectVelDerivEqn1, E.rectVelDerivEqn2, sy speed $= E.speed']
+rectVelDerivEqns = [E.rectVelDerivEqn1, E.rectVelDerivEqn2, sy speed1DAcc $= E.speed']
 
 ----------
 rectPosGD :: GenDefn
@@ -81,7 +69,7 @@ rectPosDeriv = mkDerivName (phrase rectilinear +:+ phrase position)
 
 rectPosDerivSents :: [Sentence]
 rectPosDerivSents = [rectDeriv position velocity motSent iPos velocityTM,
-  rearrAndIntSent, fromReplace rectVelGD speed, performIntSent]
+  rearrAndIntSent, fromReplace rectVelGD speed1DAcc, performIntSent]
     where
       motSent = S "The motion" `S.in_` makeRef2S velocityTM `S.is` S "now" +:+. phrase oneD
 
@@ -135,7 +123,7 @@ rectDeriv c1 c2 motSent initc ctm = foldlSent_ [
   where
     getScalar c
       | c == position     = E (sy scalarPos)
-      | c == velocity     = E (sy speed)
+      | c == velocity     = E (sy speed1DAcc)
       | c == acceleration = E (sy scalarAccel)
       | c == iPos         = E (sy iPos)
       | c == iVel         = E (sy iSpeed)

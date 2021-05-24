@@ -31,13 +31,16 @@ projMotion = compoundNC projectile motion
 ---
 
 defs :: [ConceptChunk]
-defs = [launcher, projectile, target]
+defs = [launcher, projectile, target, velVecSpeed, speed1DAcc]
 
-launcher, projectile, target :: ConceptChunk
+launcher, projectile, target, velVecSpeed, speed1DAcc :: ConceptChunk
 launcher   = dcc "launcher"   (nounPhraseSP "launcher")  ("where the projectile is launched from " ++
                                                           "and the device that does the launching")
 projectile = dcc "projectile" (nounPhraseSP "projectile") "the object to be launched at the target"
 target     = dcc "target"     (nounPhraseSP "target")     "where the projectile should be launched to"
+
+velVecSpeed = dccWDS "velVecSpeed" (cn' "speed") (S "magnitude" `S.the_ofThe` phrase velocity +:+ S "vector")
+speed1DAcc  = dccWDS "speed1DAcc"  (cn' "speed") (S "1D speed under constant acceleration")
 
 landPos, launAngle, launSpeed, offset, targPos, flightDur :: ConceptChunk
 landPos = cc' landingPosNC

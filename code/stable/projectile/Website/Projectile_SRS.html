@@ -185,6 +185,11 @@
                   <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
                 </tr>
                 <tr>
+                  <td><em>v<sup>f</sup></em></td>
+                  <td>Speed</td>
+                  <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
+                </tr>
+                <tr>
                   <td><em>v<sup>i</sup></em></td>
                   <td>Initial speed</td>
                   <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
@@ -464,7 +469,7 @@
                   </p>
                   <p>
                     <div id="pointMass">
-                      pointMass: The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: <a href=#GD:rectPos>GD: rectPos</a> and <a href=#GD:rectVel>GD: rectVel</a>.)
+                      pointMass: The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: <a href=#GD:rectVel>GD: rectVel</a> and <a href=#GD:rectPos>GD: rectPos</a>.)
                     </div>
                   </p>
                   <p>
@@ -479,7 +484,7 @@
                   </p>
                   <p>
                     <div id="timeStartZero">
-                      timeStartZero: Time starts at zero. (RefBy: <a href=#GD:velVec>GD: velVec</a>, <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>, <a href=#GD:rectPos>GD: rectPos</a>, <a href=#GD:rectVel>GD: rectVel</a>, and <a href=#GD:posVec>GD: posVec</a>.)
+                      timeStartZero: Time starts at zero. (RefBy: <a href=#GD:velVec>GD: velVec</a>, <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>, <a href=#GD:rectVel>GD: rectVel</a>, <a href=#GD:rectPos>GD: rectPos</a>, and <a href=#GD:posVec>GD: posVec</a>.)
                     </div>
                   </p>
                   <p>
@@ -610,14 +615,14 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[v={v^{\text{i}}}+{a^{c}} t\]</td>
+                      <td>\[{v^{\text{f}}}={v^{\text{i}}}+{a^{c}} t\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em>v</em> is the speed (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                            <em>v<sup>f</sup></em> is the speed (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                           <li>
                             <em>v<sup>i</sup></em> is the initial speed (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
@@ -651,15 +656,15 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of rectilinear velocity:</h4>
                     <p class="paragraph">
-                      Assume we have rectilinear motion of a particle (of negligible size and shape, from <a href=#pointMass>A: pointMass</a>); that is, motion in a straight line. The velocity is <em>v</em> and the acceleration is <em>a</em>. The motion in <a href=#TM:acceleration>TM: acceleration</a> is now one-dimensional with a constant acceleration, represented by <em>a<sup>c</sup></em>. The initial velocity (at <em>t = 0</em>, from <a href=#timeStartZero>A: timeStartZero</a>) is represented by <em>v<sup>i</sup></em>. From <a href=#TM:acceleration>TM: acceleration</a>, using the above symbols we have:
+                      Assume we have rectilinear motion of a particle (of negligible size and shape, from <a href=#pointMass>A: pointMass</a>); that is, motion in a straight line. The velocity is <em>v<sup>f</sup></em> and the acceleration is <em>a</em>. The motion in <a href=#TM:acceleration>TM: acceleration</a> is now one-dimensional with a constant acceleration, represented by <em>a<sup>c</sup></em>. The initial velocity (at <em>t = 0</em>, from <a href=#timeStartZero>A: timeStartZero</a>) is represented by <em>v<sup>i</sup></em>. From <a href=#TM:acceleration>TM: acceleration</a>, using the above symbols we have:
                     </p>
-                    \[{a^{c}}=\frac{\,dv}{\,dt}\]
+                    \[{a^{c}}=\frac{\,d{v^{\text{f}}}}{\,dt}\]
                     <p class="paragraph">Rearranging and integrating, we have:</p>
-                    \[\int_{{v^{\text{i}}}}^{v}{1}\,dv=\int_{0}^{t}{{a^{c}}}\,dt\]
+                    \[\int_{{v^{\text{i}}}}^{{v^{\text{f}}}}{1}\,d{v^{\text{f}}}=\int_{0}^{t}{{a^{c}}}\,dt\]
                     <p class="paragraph">
                       Performing the integration, we have the required equation:
                     </p>
-                    \[v={v^{\text{i}}}+{a^{c}} t\]
+                    \[{v^{\text{f}}}={v^{\text{i}}}+{a^{c}} t\]
                   </div>
                 </div>
                 <div id="GD:rectPos">
@@ -722,13 +727,13 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of rectilinear position:</h4>
                     <p class="paragraph">
-                      Assume we have rectilinear motion of a particle (of negligible size and shape, from <a href=#pointMass>A: pointMass</a>); that is, motion in a straight line. The position is <em>p</em> and the velocity is <em>v</em>. The motion in <a href=#TM:velocity>TM: velocity</a> is now one-dimensional. The initial position (at <em>t = 0</em>, from <a href=#timeStartZero>A: timeStartZero</a>) is represented by <em>p<sup>i</sup></em>. From <a href=#TM:velocity>TM: velocity</a>, using the above symbols we have:
+                      Assume we have rectilinear motion of a particle (of negligible size and shape, from <a href=#pointMass>A: pointMass</a>); that is, motion in a straight line. The position is <em>p</em> and the velocity is <em>v<sup>f</sup></em>. The motion in <a href=#TM:velocity>TM: velocity</a> is now one-dimensional. The initial position (at <em>t = 0</em>, from <a href=#timeStartZero>A: timeStartZero</a>) is represented by <em>p<sup>i</sup></em>. From <a href=#TM:velocity>TM: velocity</a>, using the above symbols we have:
                     </p>
-                    \[v=\frac{\,dp}{\,dt}\]
+                    \[{v^{\text{f}}}=\frac{\,dp}{\,dt}\]
                     <p class="paragraph">Rearranging and integrating, we have:</p>
-                    \[\int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{v}\,dt\]
+                    \[\int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{{v^{\text{f}}}}\,dt\]
                     <p class="paragraph">
-                      From <a href=#GD:rectVel>GD: rectVel</a> we can replace <em>v</em>:
+                      From <a href=#GD:rectVel>GD: rectVel</a> we can replace <em>v<sup>f</sup></em>:
                     </p>
                     \[\int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{{v^{\text{i}}}+{a^{c}} t}\,dt\]
                     <p class="paragraph">

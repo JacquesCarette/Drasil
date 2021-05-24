@@ -10,10 +10,10 @@ import Language.Drasil
 import qualified Data.Drasil.Quantities.Physics as QP (iSpeed,
   constAccel, xConstAccel, yConstAccel, ixPos, iyPos)
 import Data.Drasil.Quantities.Physics (gravitationalAccelConst, ixVel, iyVel, xPos, yPos, time,
-  speed, iPos, scalarPos, xVel, yVel, xAccel, yAccel, position, velocity, acceleration,
+  iPos, scalarPos, xVel, yVel, xAccel, yAccel, position, velocity, acceleration,
   constAccelV)
 
-import Drasil.Projectile.Unitals (launAngle, launSpeed, targPos, tol, landPos, flightDur, offset)
+import Drasil.Projectile.Unitals (launAngle, launSpeed, targPos, tol, landPos, flightDur, offset, speed1DAcc)
 
 flightDur', iyPos, yConstAccel, iSpeed :: Expr
 flightDur' = exactDbl 2 `mulRe` sy launSpeed `mulRe` sin (sy launAngle) $/ sy gravitationalAccelConst
@@ -47,17 +47,17 @@ speed' :: Expr
 speed' = sy QP.iSpeed `addRe` (sy QP.constAccel `mulRe` sy time)
 
 rectVelDerivEqn1, rectVelDerivEqn2 :: Expr
-rectVelDerivEqn1 = sy QP.constAccel $= deriv (sy speed) time
-rectVelDerivEqn2 = defint (eqSymb speed) (sy QP.iSpeed) (sy speed) (exactDbl 1) $=
+rectVelDerivEqn1 = sy QP.constAccel $= deriv (sy speed1DAcc) time
+rectVelDerivEqn2 = defint (eqSymb speed1DAcc) (sy QP.iSpeed) (sy speed1DAcc) (exactDbl 1) $=
                    defint (eqSymb time) (exactDbl 0) (sy time) (sy QP.constAccel)
 
 scalarPos' :: Expr
 scalarPos' = sy iPos `addRe` (sy QP.iSpeed `mulRe` sy time `addRe` half (sy QP.constAccel `mulRe` square (sy time)))
 
 rectPosDerivEqn1, rectPosDerivEqn2, rectPosDerivEqn3 :: Expr
-rectPosDerivEqn1 = sy speed $= deriv (sy scalarPos) time
+rectPosDerivEqn1 = sy speed1DAcc $= deriv (sy scalarPos) time
 rectPosDerivEqn2 = defint (eqSymb scalarPos) (sy iPos) (sy scalarPos) (exactDbl 1) $=
-                   defint (eqSymb time) (exactDbl 0) (sy time) (sy speed)
+                   defint (eqSymb time) (exactDbl 0) (sy time) (sy speed1DAcc)
 rectPosDerivEqn3 = defint (eqSymb scalarPos) (sy iPos) (sy scalarPos) (exactDbl 1) $=
                    defint (eqSymb time) (exactDbl 0) (sy time) (sy QP.iSpeed `addRe` (sy QP.constAccel `mulRe` sy time))
 

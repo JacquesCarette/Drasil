@@ -109,6 +109,8 @@ ${t_{\text{flight}}}$ & Flight duration & ${\text{s}}$
 \\
 $v$ & Speed & $\frac{\text{m}}{\text{s}}$
 \\
+${v^{\text{f}}}$ & Speed & $\frac{\text{m}}{\text{s}}$
+\\
 ${v^{\text{i}}}$ & Initial speed & $\frac{\text{m}}{\text{s}}$
 \\
 ${v_{\text{launch}}}$ & Launch speed & $\frac{\text{m}}{\text{s}}$
@@ -243,10 +245,10 @@ This section simplifies the original problem and helps in developing the theoret
 \item[accelXZero:\phantomsection\label{accelXZero}]{The acceleration in the $x$-direction is zero. (RefBy: \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} and \hyperref[constAccel]{A: constAccel}.)}
 \item[accelYGravity:\phantomsection\label{accelYGravity}]{The acceleration in the $y$-direction is the acceleration due to gravity (from \hyperref[yAxisGravity]{A: yAxisGravity}). (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} and \hyperref[constAccel]{A: constAccel}.)}
 \item[neglectDrag:\phantomsection\label{neglectDrag}]{Air drag is neglected. (RefBy: \hyperref[constAccel]{A: constAccel}.)}
-\item[pointMass:\phantomsection\label{pointMass}]{The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: \hyperref[GD:rectPos]{GD: rectPos} and \hyperref[GD:rectVel]{GD: rectVel}.)}
+\item[pointMass:\phantomsection\label{pointMass}]{The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: \hyperref[GD:rectVel]{GD: rectVel} and \hyperref[GD:rectPos]{GD: rectPos}.)}
 \item[freeFlight:\phantomsection\label{freeFlight}]{The flight is free; there are no collisions during the trajectory of the projectile. (RefBy: \hyperref[constAccel]{A: constAccel}.)}
 \item[neglectCurv:\phantomsection\label{neglectCurv}]{The distance is small enough that the curvature of the Earth can be neglected. (RefBy: \hyperref[targetXAxis]{A: targetXAxis} and \hyperref[cartSyst]{A: cartSyst}.)}
-\item[timeStartZero:\phantomsection\label{timeStartZero}]{Time starts at zero. (RefBy: \hyperref[GD:velVec]{GD: velVec}, \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}, \hyperref[GD:rectPos]{GD: rectPos}, \hyperref[GD:rectVel]{GD: rectVel}, and \hyperref[GD:posVec]{GD: posVec}.)}
+\item[timeStartZero:\phantomsection\label{timeStartZero}]{Time starts at zero. (RefBy: \hyperref[GD:velVec]{GD: velVec}, \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}, \hyperref[GD:rectVel]{GD: rectVel}, \hyperref[GD:rectPos]{GD: rectPos}, and \hyperref[GD:posVec]{GD: posVec}.)}
 \item[gravAccelValue:\phantomsection\label{gravAccelValue}]{The acceleration due to gravity is assumed to have the value provided in \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants}. (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} and \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.)}
 \end{itemize}
 \subsubsection{Theoretical Models}
@@ -330,11 +332,11 @@ Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           v={v^{\text{i}}}+{a^{c}} t
+           {v^{\text{f}}}={v^{\text{i}}}+{a^{c}} t
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$v$ is the speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{${v^{\text{f}}}$ is the speed ($\frac{\text{m}}{\text{s}}$)}
               \item{${v^{\text{i}}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
               \item{${a^{c}}$ is the constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$t$ is the time (${\text{s}}$)}
@@ -350,20 +352,20 @@ RefBy & \hyperref[GD:velVec]{GD: velVec} and \hyperref[GD:rectPos]{GD: rectPos}
 \end{minipage}
 \paragraph{Detailed derivation of rectilinear velocity:}
 \label{GD:rectVelDeriv}
-Assume we have rectilinear motion of a particle (of negligible size and shape, from \hyperref[pointMass]{A: pointMass}); that is, motion in a straight line. The velocity is $v$ and the acceleration is $a$. The motion in \hyperref[TM:acceleration]{TM: acceleration} is now one-dimensional with a constant acceleration, represented by ${a^{c}}$. The initial velocity (at $t=0$, from \hyperref[timeStartZero]{A: timeStartZero}) is represented by ${v^{\text{i}}}$. From \hyperref[TM:acceleration]{TM: acceleration}, using the above symbols we have:
+Assume we have rectilinear motion of a particle (of negligible size and shape, from \hyperref[pointMass]{A: pointMass}); that is, motion in a straight line. The velocity is ${v^{\text{f}}}$ and the acceleration is $a$. The motion in \hyperref[TM:acceleration]{TM: acceleration} is now one-dimensional with a constant acceleration, represented by ${a^{c}}$. The initial velocity (at $t=0$, from \hyperref[timeStartZero]{A: timeStartZero}) is represented by ${v^{\text{i}}}$. From \hyperref[TM:acceleration]{TM: acceleration}, using the above symbols we have:
 
 \begin{displaymath}
-{a^{c}}=\frac{\,dv}{\,dt}
+{a^{c}}=\frac{\,d{v^{\text{f}}}}{\,dt}
 \end{displaymath}
 Rearranging and integrating, we have:
 
 \begin{displaymath}
-\int_{{v^{\text{i}}}}^{v}{1}\,dv=\int_{0}^{t}{{a^{c}}}\,dt
+\int_{{v^{\text{i}}}}^{{v^{\text{f}}}}{1}\,d{v^{\text{f}}}=\int_{0}^{t}{{a^{c}}}\,dt
 \end{displaymath}
 Performing the integration, we have the required equation:
 
 \begin{displaymath}
-v={v^{\text{i}}}+{a^{c}} t
+{v^{\text{f}}}={v^{\text{i}}}+{a^{c}} t
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -401,17 +403,17 @@ RefBy & \hyperref[GD:posVec]{GD: posVec}
 \end{minipage}
 \paragraph{Detailed derivation of rectilinear position:}
 \label{GD:rectPosDeriv}
-Assume we have rectilinear motion of a particle (of negligible size and shape, from \hyperref[pointMass]{A: pointMass}); that is, motion in a straight line. The position is $p$ and the velocity is $v$. The motion in \hyperref[TM:velocity]{TM: velocity} is now one-dimensional. The initial position (at $t=0$, from \hyperref[timeStartZero]{A: timeStartZero}) is represented by ${p^{\text{i}}}$. From \hyperref[TM:velocity]{TM: velocity}, using the above symbols we have:
+Assume we have rectilinear motion of a particle (of negligible size and shape, from \hyperref[pointMass]{A: pointMass}); that is, motion in a straight line. The position is $p$ and the velocity is ${v^{\text{f}}}$. The motion in \hyperref[TM:velocity]{TM: velocity} is now one-dimensional. The initial position (at $t=0$, from \hyperref[timeStartZero]{A: timeStartZero}) is represented by ${p^{\text{i}}}$. From \hyperref[TM:velocity]{TM: velocity}, using the above symbols we have:
 
 \begin{displaymath}
-v=\frac{\,dp}{\,dt}
+{v^{\text{f}}}=\frac{\,dp}{\,dt}
 \end{displaymath}
 Rearranging and integrating, we have:
 
 \begin{displaymath}
-\int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{v}\,dt
+\int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{{v^{\text{f}}}}\,dt
 \end{displaymath}
-From \hyperref[GD:rectVel]{GD: rectVel} we can replace $v$:
+From \hyperref[GD:rectVel]{GD: rectVel} we can replace ${v^{\text{f}}}$:
 
 \begin{displaymath}
 \int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{{v^{\text{i}}}+{a^{c}} t}\,dt

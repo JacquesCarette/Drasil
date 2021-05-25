@@ -5,6 +5,8 @@ module Drasil.GlassBR.Assumptions (assumpGT, assumpGC, assumpES, assumpSV,
 import Language.Drasil hiding (organization)
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
 import Utils.Drasil
+import Utils.Drasil.Concepts
+import qualified Utils.Drasil.NounPhrase as NP
 import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation as Doc (assumpDom, condition,
@@ -59,10 +61,10 @@ glassConditionDesc = foldlSent [S "Following", makeCiteInfoS astm2009 (Page [1])
 
 explainScenarioDesc :: Sentence
 explainScenarioDesc = foldlSent [S "This", phrase system, S "only considers the external", 
-  phrase explosion, phrase scenario, S "for its", plural calculation]
+  phraseNP (combineNINI explosion scenario), S "for its", plural calculation]
 
 standardValuesDesc :: UnitaryChunk -> Sentence
-standardValuesDesc mainIdea = foldlSent [S "The", plural value, S "provided in",
+standardValuesDesc mainIdea = foldlSent [atStartNP' (the value), S "provided in",
   makeRef2S $ SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]), S "are assumed for the", phrase mainIdea, 
   sParen (ch mainIdea) `sC` S "and the", plural materialProprty `S.of_` 
   foldlList Comma List (map ch (take 3 assumptionConstants))]
@@ -78,11 +80,11 @@ boundaryConditionsDesc = foldlSent [S "Boundary", plural condition, S "for the",
   plural calculation]
 
 responseTypeDesc :: Sentence
-responseTypeDesc = foldlSent [S "The", phrase responseTy, S "considered in",
+responseTypeDesc = foldlSent [atStartNP (the responseTy), S "considered in",
   short glassBR, S "is flexural"]
 
 ldfConstantDesc :: QuantityDict -> Sentence
 ldfConstantDesc mainConcept = foldlSent [S "With", phrase reference, S "to",
-  makeRef2S assumpSV `sC` S "the", phrase value `S.of_`
-  phrase mainConcept, sParen (ch mainConcept), S "is a", phrase constant,
-  S "in", short glassBR]
+  makeRef2S assumpSV `sC` phraseNP (NP.the (value `of_`
+  mainConcept)), sParen (ch mainConcept) `S.is` phraseNP (a_ constant)
+  `S.in_` short glassBR]

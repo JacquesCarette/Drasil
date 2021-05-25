@@ -44,10 +44,15 @@ DOX_DEST=doxygen/
 EXAMPLE_DEST=examples/
 CUR_DIR="$PWD/"
 
-if [ ! -d "$DOC_DIR"]; then
-  echo "Missing $DOC_DIR folder."
+if [ ! -d "$DOC_DEST" ]; then
+  echo "Missing $DOC_DEST folder artifacts."
   exit 1
 fi
+
+copy_docs() {
+  rm -rf "$DOC_DEST"
+  cp -r "$CUR_DIR$DOC_DEST" "$DOC_DEST"
+}
 
 copy_datafiles() {
   echo "FIXME: Drasil should copy needed images and resources to the appropriate output directory to avoid needing the entirety of datafiles (for HTML)."

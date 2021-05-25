@@ -15,12 +15,12 @@ import Language.Drasil.UID (UID)
 import Control.Lens (makeLenses, view)
 
 -- | Section Contents are split into subsections or contents, where contents
--- are standard layout objects (see 'Contents')
+-- are standard layout objects (see 'Contents').
 data SecCons = Sub   Section
              | Con   Contents
 
--- | Sections have a title ('Sentence') and a list of contents ('SecCons')
--- and its shortname
+-- | Sections have a title ('Sentence'), a list of contents ('SecCons')
+-- and a shortname ('Reference').
 data Section = Section 
              { tle  :: Title 
              , cons :: [SecCons]
@@ -28,8 +28,11 @@ data Section = Section
              }
 makeLenses ''Section
 
+-- | Finds the 'UID' of a 'Section'.
 instance HasUID        Section where uid = lab . uid
+-- | Finds the short name of a 'Section'.
 instance HasShortName  Section where shortname = shortname . view lab
+-- | Finds the reference address of a 'Section'.
 instance Referable Section where
   refAdd    (Section _ _ lb ) = getRefAdd lb
   renderRef (Section _ _ lb)  = RP (raw "Section: " +::+ name) (getRefAdd lb)

@@ -65,15 +65,15 @@ $-∞$ & Negative Infinity & --
 \\
 $AbsTol$ & Absolute Tolerance & --
 \\
-${C_{\text{s}}}$ & Control Variable in the frequency domain & --
+${C_{\text{s}}}$ & Control Variable in the Frequency Domain & --
 \\
 $c$ & Damping coefficient of the spring & --
 \\
 ${c_{\text{t}}}$ & Control Variable in the time domain & --
 \\
-${D_{\text{s}}}$ & Derivative control in the frequency domain & --
+${D_{\text{s}}}$ & Derivative Control in the Frequency Domain & --
 \\
-${E_{\text{s}}}$ & Process Error in the frequency domain & --
+${E_{\text{s}}}$ & Process Error in the Frequency Domain & --
 \\
 ${e_{\text{t}}}$ & Process Error in the time domain & --
 \\
@@ -81,7 +81,7 @@ ${F_{\text{s}}}$ & Laplace Transform of a function & --
 \\
 ${f_{\text{t}}}$ & Function in the time domain & --
 \\
-${H_{\text{s}}}$ & Transfer Function in the frequency domain & --
+${H_{\text{s}}}$ & Transfer Function in the Frequency Domain & --
 \\
 ${K_{\text{d}}}$ & Derivative Gain & --
 \\
@@ -93,9 +93,9 @@ $L⁻¹[F(s)]$ & Inverse Laplace Transform of a function & --
 \\
 $m$ & Mass & ${\text{kg}}$
 \\
-${P_{\text{s}}}$ & Proportional control in the frequency domain & --
+${P_{\text{s}}}$ & Proportional Control in the Frequency Domain & --
 \\
-${R_{\text{s}}}$ & Set-Point in the frequency domain & --
+${R_{\text{s}}}$ & Set-Point in the Frequency Domain & --
 \\
 ${r_{\text{t}}}$ & Set-Point & --
 \\
@@ -109,7 +109,7 @@ ${t_{\text{sim}}}$ & Simulation Time & ${\text{s}}$
 \\
 ${t_{\text{step}}}$ & Step Time & ${\text{s}}$
 \\
-${Y_{\text{s}}}$ & Process Variable in the frequency domain & --
+${Y_{\text{s}}}$ & Process Variable in the Frequency Domain & --
 \\
 ${y_{\text{t}}}$ & Process Variable & --
 \\
@@ -247,6 +247,8 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Set-Point: The desired value that the control system must reach. This also knows as the reference variable.}
 \item{Proportional Gain: Gain constant of the proportional controller.}
 \item{Derivative Gain: Gain constant of the derivative controller.}
+\item{Proportional Control: A linear feedback control system were correction is applied to the controlledvariable which is proportional to the difference between desired and measured values.}
+\item{Derivative Control: Monitors the rate of change of the error signal and contributes a componentof the output signal (proportional to a derivative of the error signal).}
 \item{Frequency Domain: The analysis of mathematical functions in terms of frequency, instead of time.}
 \item{Laplace transform: An integral transform that converts a function of a real variable t (often time) to a function of a complex variable s (complex frequency).}
 \item{Control Variable: The Control Variable is the output of the PD controller.}
@@ -448,7 +450,7 @@ This section collects and defines all the data needed to build the instance mode
 \phantomsection 
 \label{DD:ddProcessError}
 \\ \midrule \\
-Label & Process Error in the frequency domain
+Label & Process Error in the Frequency Domain
         
 \\ \midrule \\
 Symbol & ${E_{\text{s}}}$
@@ -462,9 +464,9 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${E_{\text{s}}}$ is the Process Error in the frequency domain (Unitless)}
-              \item{${R_{\text{s}}}$ is the Set-Point in the frequency domain (Unitless)}
-              \item{${Y_{\text{s}}}$ is the Process Variable in the frequency domain (Unitless)}
+              \item{${E_{\text{s}}}$ is the Process Error in the Frequency Domain (Unitless)}
+              \item{${R_{\text{s}}}$ is the Set-Point in the Frequency Domain (Unitless)}
+              \item{${Y_{\text{s}}}$ is the Process Variable in the Frequency Domain (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & The Process Error is the difference between the Set-Point and Process Variable. The equation is converted to the frequency domain by applying the Laplace transform (from \hyperref[TM:laplaceTransform]{TM: laplaceTransform}). The Set-Point is assumed to be constant throughout the simulation (from \hyperref[setPoint]{A: Set-Point}). The initial value of the Process Variable is assumed to be zero (from \hyperref[initialValue]{A: Initial Value}).
@@ -487,7 +489,7 @@ RefBy & \hyperref[DD:ddPropCtrl]{DD: ddPropCtrl}, \hyperref[DD:ddDerivCtrl]{DD: 
 \phantomsection 
 \label{DD:ddPropCtrl}
 \\ \midrule \\
-Label & Proportional control in the frequency domain
+Label & Proportional Control in the Frequency Domain
         
 \\ \midrule \\
 Symbol & ${P_{\text{s}}}$
@@ -501,9 +503,9 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${P_{\text{s}}}$ is the Proportional control in the frequency domain (Unitless)}
+              \item{${P_{\text{s}}}$ is the Proportional Control in the Frequency Domain (Unitless)}
               \item{${K_{\text{p}}}$ is the Proportional Gain (Unitless)}
-              \item{${E_{\text{s}}}$ is the Process Error in the frequency domain (Unitless)}
+              \item{${E_{\text{s}}}$ is the Process Error in the Frequency Domain (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
 Notes & The Proportional Controller is the product of the Proportional Gain and the Process Error (from \hyperref[DD:ddProcessError]{DD: ddProcessError}). The equation is converted to the frequency domain by applying the Laplace transform (from \hyperref[TM:laplaceTransform]{TM: laplaceTransform}).
@@ -526,7 +528,7 @@ RefBy & \hyperref[DD:ddCtrlVar]{DD: ddCtrlVar}
 \phantomsection 
 \label{DD:ddDerivCtrl}
 \\ \midrule \\
-Label & Derivative control in the frequency domain
+Label & Derivative Control in the Frequency Domain
         
 \\ \midrule \\
 Symbol & ${D_{\text{s}}}$
@@ -540,9 +542,9 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${D_{\text{s}}}$ is the Derivative control in the frequency domain (Unitless)}
+              \item{${D_{\text{s}}}$ is the Derivative Control in the Frequency Domain (Unitless)}
               \item{${K_{\text{d}}}$ is the Derivative Gain (Unitless)}
-              \item{${E_{\text{s}}}$ is the Process Error in the frequency domain (Unitless)}
+              \item{${E_{\text{s}}}$ is the Process Error in the Frequency Domain (Unitless)}
               \item{$s$ is the Complex frequency-domain parameter (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
@@ -566,7 +568,7 @@ RefBy & \hyperref[DD:ddCtrlVar]{DD: ddCtrlVar}
 \phantomsection 
 \label{DD:ddCtrlVar}
 \\ \midrule \\
-Label & Control Variable in the frequency domain
+Label & Control Variable in the Frequency Domain
         
 \\ \midrule \\
 Symbol & ${C_{\text{s}}}$
@@ -580,8 +582,8 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${C_{\text{s}}}$ is the Control Variable in the frequency domain (Unitless)}
-              \item{${E_{\text{s}}}$ is the Process Error in the frequency domain (Unitless)}
+              \item{${C_{\text{s}}}$ is the Control Variable in the Frequency Domain (Unitless)}
+              \item{${E_{\text{s}}}$ is the Process Error in the Frequency Domain (Unitless)}
               \item{${K_{\text{p}}}$ is the Proportional Gain (Unitless)}
               \item{${K_{\text{d}}}$ is the Derivative Gain (Unitless)}
               \item{$s$ is the Complex frequency-domain parameter (Unitless)}

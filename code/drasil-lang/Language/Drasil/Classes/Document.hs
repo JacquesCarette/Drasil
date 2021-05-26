@@ -9,4 +9,5 @@ import Control.Lens (Lens')
 
 -- | Some documents, as well as some pieces of knowledge, have citations.
 class HasCitation c where
+  -- | Provides a 'Lens' to the citations.
   getCitations :: Lens' c [Citation]

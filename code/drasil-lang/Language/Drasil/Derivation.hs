@@ -7,12 +7,12 @@ import Language.Drasil.Sentence (Sentence(EmptyS, S), (+:))
 -- the derivation.
 data Derivation = Derivation Sentence [Sentence]
 
--- | Smart constructor for 'Derivation'
+-- | Smart constructor for creating a 'Derivation'.
 mkDeriv :: Sentence -> [Sentence] -> Derivation
 mkDeriv = Derivation
--- | Similar to mkDeriv, but prepends "Detailed derivation of" to the header
+-- | Similar to 'mkDeriv', but prepends "Detailed derivation of" to the header.
 mkDerivName :: Sentence -> [Sentence] -> Derivation
 mkDerivName s = Derivation (S "Detailed derivation of" +: s)
--- | Similar to mkDeriv, but without a header 'Sentence'
+-- | Similar to 'mkDeriv', but without a header 'Sentence'.
 mkDerivNoHeader :: [Sentence] -> Derivation
 mkDerivNoHeader = Derivation EmptyS

@@ -32,7 +32,8 @@ instance HasSpace      UnitaryConceptDict where typ = unitary . typ
 -- ^ Finds the 'Space' of the 'UnitaryChunk' used to make the 'UnitaryConceptDict'.
 instance HasSymbol     UnitaryConceptDict where symbol c = symbol (c^.unitary)
 -- ^ Finds the 'Symbol' of the 'UnitaryChunk' used to make the 'UnitaryConceptDict'.
-instance Quantity      UnitaryConceptDict where 
+instance Quantity      UnitaryConceptDict where
+-- ^ 'UnitaryConceptDict's have a 'Quantity'. 
 instance Eq            UnitaryConceptDict where a == b = (a ^. uid) == (b ^. uid)
 -- ^ Equal if 'UID's are equal.
 instance MayHaveUnit   UnitaryConceptDict where getUnit u = getUnit $ u ^. unitary

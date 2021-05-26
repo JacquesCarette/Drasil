@@ -33,12 +33,12 @@ data CiteField = Address      String
                | Note         String
                | Number       Int
                | Organization String
-               | Pages        [Int] -- ^ Range of pages (ex1. 1-32; ex2. 7,31,52-55)
+               | Pages        [Int] -- ^ Range of pages (ex1. 1-32; ex2. 7,31,52-55).
                | Publisher    String
                | School       String
                | Series       String
                | Title        String
-               | Type         String -- ^ BibTeX "type" field
+               | Type         String -- ^ BibTeX "type" field.
                | Volume       Int
                | Year         Int
 
@@ -62,12 +62,12 @@ data CitationKind = Article
                   | TechReport
                   | Unpublished
 
--- | Smart field constructor
+-- | Smart field constructor for a 'CiteField'.
 author, editor :: People -> CiteField
 author = Author
 editor = Editor
 
--- | Smart field constructor
+-- | Smart field constructor for a 'CiteField'.
 address, bookTitle, institution, journal,
   howPublished, howPublishedU, note, organization, publisher, school, series, title,
   typeField :: String -> CiteField
@@ -75,7 +75,7 @@ address, bookTitle, institution, journal,
 address       = Address
 bookTitle     = BookTitle
 howPublished  = HowPublished . Verb
--- | URL version of 'howPublished'
+-- | URL version of 'howPublished'.
 howPublishedU = HowPublished . URL
 institution   = Institution
 journal       = Journal
@@ -87,7 +87,7 @@ series        = Series
 title         = Title
 typeField     = Type
 
--- | Smart field constructor
+-- | Smart field constructor for a 'CiteField'.
 chapter, edition, number, volume, year :: Int -> CiteField
 
 chapter = Chapter
@@ -96,10 +96,10 @@ number = Number
 volume = Volume
 year = Year
 
--- | Smart field constructor
+-- | Smart field constructor for a 'CiteField'.
 pages :: [Int] -> CiteField
 pages = Pages
 
--- | Smart field constructor
+-- | Smart field constructor for a 'CiteField'.
 month :: Month -> CiteField
 month = Month

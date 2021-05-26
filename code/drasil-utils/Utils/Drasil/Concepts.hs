@@ -1,5 +1,5 @@
 module Utils.Drasil.Concepts (and_, and_TSP, and_PS, and_PP, andTGen, andIts, andThe, with, of_, of_NINP, of_TSP, of_PS, of_TPS, ofA,
-ofATPS, ofThe, ofThePS, the_ofThe, the_ofThePS, onThe, inThe, inThePS, for, forTGen, in_, in_PS, the, theT, theGen, a_, a_Gen, inThe,
+ofATPS, ofThe, ofThePS, the_ofThe, the_ofThePS, onThe, inThe, inThePS, for, forTGen, in_, in_PS, the, theT, theGen, a_, a_Gen,
 compoundNC, compoundNCPP, compoundNCGen, compoundNCPS, compoundNCPSPP, compoundNCGenP, combineNINP, combineNPNI, combineNINI) where
 
 import Language.Drasil

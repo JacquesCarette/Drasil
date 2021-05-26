@@ -140,7 +140,7 @@ assumpS19 = foldlSent [
   Sy (unit_symb temp) `sC` S "respectively"]
 assumpS20 = foldlSent [
   S "When considering the", phraseNP (wVol `inThe` tank)
-  `sC` (phraseNP (vol `the_ofThe` coil)),
+  `sC` phraseNP (vol `the_ofThe` coil),
   S "is assumed to be negligible"]
   --FIXME , sSqBr $ makeRefS req2]
 

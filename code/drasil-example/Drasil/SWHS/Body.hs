@@ -534,8 +534,8 @@ propCorSolDeriv1 lce ewat en co pcmat g1hfc g2hfp su ht  =
   foldlSPCol [atStartNP (a_ corSol), S "must exhibit" +:+.
   phraseNP (the lce), S "This means that", phraseNP (the ewat),
   S "should equal the difference between the total", phrase en,
-  phrase input_, S "from", phraseNP ((the co) `NP.andThe`
-  (combineNINI en output_)), S "to the" +:+. short pcmat,
+  phrase input_, S "from", phraseNP (the co `NP.andThe`
+  combineNINI en output_), S "to the" +:+. short pcmat,
   S "This can be shown as an", phrase equation, S "by taking",
   makeRef2S g1hfc `S.and_` makeRef2S g2hfp `sC`
   S "multiplying each by their respective", phrase su,

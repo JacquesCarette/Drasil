@@ -41,6 +41,8 @@ jobs:
             code/.stack-work/
             ~/.local/bin/graphmod
           key: ${{ runner.os }}-store-${{ hashFiles('code/stack.yaml') }}
+      - name: "Clean previous run"
+        run: make clean
       - name: "Update PATH"
         run: |
           echo "$HOME/.local/bin" >> $GITHUB_PATH

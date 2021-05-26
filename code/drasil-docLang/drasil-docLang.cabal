@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 6f978264fbfc29f81be470962339098152c6c923043130ebd7d8a21ddf9e3ea2
+-- hash: 959b8d65d9d5c1afea29ace890f800b161e03a51410286826562a151c92d29ab
 
 name:           drasil-docLang
 version:        0.1.26.0
@@ -46,7 +46,6 @@ library
       Drasil.Sections.TableOfUnits
       Drasil.Sections.TraceabilityMandGs
       Drasil.TraceTable
-      Paths_drasil_docLang
   hs-source-dirs:
       ./
   ghc-options: -Wall -Wredundant-constraints
@@ -63,4 +62,7 @@ library
     , multiplate
     , pretty
     , transformers
+  if false
+    other-modules:
+        Paths_drasil_docLang
   default-language: Haskell2010

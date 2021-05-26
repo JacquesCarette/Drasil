@@ -28,3 +28,6 @@ library:
   source-dirs: ./
   exposed-modules:
   - Language.Drasil.Generate
+  when:
+  - condition: false
+    other-modules: Paths_drasil_gen

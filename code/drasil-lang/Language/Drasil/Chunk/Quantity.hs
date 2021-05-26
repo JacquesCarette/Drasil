@@ -33,7 +33,8 @@ instance HasSpace      QuantityDict where typ = typ'
 -- ^ Finds the 'Space' of the 'QuantityDict'.
 instance HasSymbol     QuantityDict where symbol = view symb'
 -- ^ Finds the 'Stage' dependent 'Symbol' of the 'QuantityDict'.
-instance Quantity      QuantityDict where 
+instance Quantity      QuantityDict where
+-- ^ 'QuantityDict's have a 'Quantity'. 
 instance Eq            QuantityDict where a == b = (a ^. uid) == (b ^. uid)
 -- ^ Equal if 'UID's are equal.
 instance MayHaveUnit   QuantityDict where getUnit = view unit'

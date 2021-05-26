@@ -39,6 +39,7 @@ instance HasSpace      UnitalChunk where typ = defq' . typ
 instance HasSymbol     UnitalChunk where symbol c = symbol (c^.defq')
 -- ^ Finds the 'Symbol' of the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
 instance Quantity      UnitalChunk where 
+-- ^ 'UnitalChunk's have a 'Quantity'.
 instance Unitary       UnitalChunk where unit = view uni
 -- ^ Finds the unit definition of a 'UnitalChunk'.
 instance MayHaveUnit   UnitalChunk where getUnit = Just . view uni

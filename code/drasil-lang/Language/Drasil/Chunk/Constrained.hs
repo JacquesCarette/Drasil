@@ -39,7 +39,8 @@ instance HasSpace      ConstrainedChunk where typ = qd . typ
 -- ^ Finds the 'Space' of the 'QuantityDict' used to make the 'ConstrainedChunk'.
 instance HasSymbol     ConstrainedChunk where symbol c = symbol (c^.qd)
 -- ^ Finds the 'Symbol' of the 'QuantityDict' used to make the 'ConstrainedChunk'.
-instance Quantity      ConstrainedChunk where 
+instance Quantity      ConstrainedChunk where
+-- ^ 'ConstrainedChunk's have a 'Quantity'. 
 instance Constrained   ConstrainedChunk where constraints = constr
 -- ^ Finds the 'Constraint's of a 'ConstrainedChunk'.
 instance HasReasVal    ConstrainedChunk where reasVal     = reasV
@@ -80,7 +81,8 @@ instance HasSpace      ConstrConcept where typ = defq . typ
 -- ^ Finds the 'Space' of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
 instance HasSymbol     ConstrConcept where symbol c = symbol (c^.defq)
 -- ^ Finds the 'Symbol' of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
-instance Quantity      ConstrConcept where 
+instance Quantity      ConstrConcept where
+-- ^ 'ConstrConcept's have a 'Quantity'. 
 instance Definition    ConstrConcept where defn = defq . defn
 -- ^ Finds definition of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
 instance ConceptDomain ConstrConcept where cdom = cdom . view defq

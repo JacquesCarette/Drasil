@@ -39,7 +39,7 @@ names (IsIn  a _)           = names a
 names (Matrix a)            = concatMap (concatMap names) a
 names (RealI c b)           = c : namesRI b
 
--- | Generic traversal of everything that could come from an interval to names. (Similar to 'names')
+-- | Generic traversal of everything that could come from an interval to names (similar to 'names').
 namesRI :: RealInterval Expr Expr -> [String]
 namesRI (Bounded (_,il) (_,iu)) = names il ++ names iu
 namesRI (UpTo (_,iu))       = names iu
@@ -82,7 +82,7 @@ names' (IsIn  a _)           = names' a
 names' (Matrix a)            = concatMap (concatMap names') a
 names' (RealI c b)           = c : namesRI' b
 
--- | Generic traversal of everything that could come from an interval to names without functions. (Similar to 'names'')
+-- | Generic traversal of everything that could come from an interval to names without functions (similar to 'names'').
 namesRI' :: RealInterval Expr Expr -> [String]
 namesRI' (Bounded il iu) = names' (snd il) ++ names' (snd iu)
 namesRI' (UpTo iu)       = names' (snd iu)

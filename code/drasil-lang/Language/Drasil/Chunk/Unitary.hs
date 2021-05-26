@@ -35,7 +35,8 @@ instance HasSpace      UnitaryChunk where typ = quant . typ
 -- ^ Finds the 'Space' of the 'QuantityDict' used to make the 'UnitaryChunk'.
 instance HasSymbol     UnitaryChunk where symbol u = symbol (u^.quant)
 -- ^ Finds the 'Symbol' of the 'QuantityDict' used to make the 'UnitaryChunk'.
-instance Quantity      UnitaryChunk where 
+instance Quantity      UnitaryChunk where
+-- ^ 'UnitaryChunk's have a 'Quantity'.
 instance Unitary       UnitaryChunk where unit x = x ^. un
 -- ^ Finds the unit definition of a 'UnitaryChunk'.
 instance MayHaveUnit   UnitaryChunk where getUnit u = Just $ u ^. un

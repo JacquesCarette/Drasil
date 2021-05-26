@@ -20,13 +20,13 @@ mkTable _     []  = []
 mkTable []     _  = error "Attempting to make table without data"
 mkTable fl (c:cl) = map ($ c) fl : mkTable fl cl
 
--- | Returns the string if it doesn't contain spaces and throws an error if it does
+-- | Returns the given string if it doesn't contain spaces and throws an error if it does.
 noSpaces :: String -> String
 noSpaces s
   | ' ' `notElem` s = s
   | otherwise          = error "String has at least one space in it."
 
--- | repUnd - Replace Underscore (with '.').
+-- | Replace underscores in a string with '.'.
 repUnd :: String -> String
 repUnd = map rep
   where

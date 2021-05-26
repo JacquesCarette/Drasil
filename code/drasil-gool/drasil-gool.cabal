@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: bc4d9c2026a30622f7d3d0cf67e8a1cce5cdf5b41910e6fe7f98db4278b9ba37
+-- hash: 5a0b328c117c3657697e6ee4a86bb584ebf63d0093089238a1af21efccbe1d7d
 
 name:           drasil-gool
 version:        0.1.1.0
@@ -44,7 +44,6 @@ library
       GOOL.Drasil.LanguageRenderer.SwiftRenderer
       GOOL.Drasil.RendererClasses
       GOOL.Drasil.State
-      Paths_drasil_gool
   hs-source-dirs:
       ./
   ghc-options: -Wall -Wredundant-constraints
@@ -57,4 +56,7 @@ library
     , lens
     , mtl
     , pretty
+  if false
+    other-modules:
+        Paths_drasil_gool
   default-language: Haskell2010

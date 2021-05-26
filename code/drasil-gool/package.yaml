@@ -27,3 +27,6 @@ library:
   source-dirs: ./
   exposed-modules:
   - GOOL.Drasil
+  when:
+  - condition: false
+    other-modules: Paths_drasil_gool

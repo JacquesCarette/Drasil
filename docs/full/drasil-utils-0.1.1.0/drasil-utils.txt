@@ -875,8 +875,12 @@ ofThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 --   <a>ofThe</a> (phrase t2)</tt>.
 ofThePS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
--- | Same as <a>ofThe'</a>, except prepends "the".
+-- | Same as <a>ofThe</a>, except prepends "the".
 the_ofThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Same as <a>the_ofThe</a>, except plural case is <tt>(plural t1)
+--   <a>the_ofThe</a> (phrase t2)</tt>
+the_ofThePS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Same as <a>of_</a>, except combining Sentence piece is "of the".
 onThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
@@ -899,6 +903,15 @@ for :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 -- | Similar to <a>for</a>, but takes two functions that determine the
 --   <a>titleCase</a>.
 forTGen :: (NamedIdea c, Idea d) => (c -> Sentence) -> (d -> Sentence) -> c -> d -> NP
+
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the word
+--   "in" between their terms. Plural case is <tt>(phrase t1) "in" (plural
+--   t2)</tt>.
+in_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Same as <a>in_</a>, except plural case is <tt>(plural t1) "in" (phrase
+--   t2)</tt>.
+in_PS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Prepends "the" to a <a>NamedIdea</a>. Similar to <tt>the'</tt>, but
 --   not titleized.

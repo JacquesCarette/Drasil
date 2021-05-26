@@ -4,6 +4,7 @@ module Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater,
 import Language.Drasil
 import Theory.Drasil (GenDefn, gd, gdNoRefs, ModelKinds (OthModel, EquationalModel))
 import Utils.Drasil
+import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Math (rOfChng, unit_)
@@ -79,14 +80,14 @@ newtonLawNote :: UnitalChunk -> ConceptInstance -> ConceptChunk -> Sentence
 newtonLawNote u a c = foldlSent [ch u `S.is` S "found by assuming that",
   phrase lawConvCooling, S "applies" +:+. sParen (makeRef2S a), S "This law",
   sParen (S "defined" `S.in_` makeRef2S nwtnCooling) `S.is` S "used on",
-  phrase surface `S.the_ofThe` phrase c]
+  phraseNP (surface `the_ofThe` c)]
 
 --------------------------------------
 --  General Definitions Derivation  --
 --------------------------------------
 
 rocTempSimpDeriv :: Sentence -> [ConceptInstance] -> Derivation
-rocTempSimpDeriv s a = mkDerivName (S "simplified" +:+ phrase rOfChng `S.of_` phrase temp)
+rocTempSimpDeriv s a = mkDerivName (S "simplified" +:+ phraseNP (rOfChng `of_` temp))
   (weave [rocTempSimpDerivSent s a, map E rocTempSimpDerivEqns])
 
 rocTempSimpDerivSent :: Sentence -> [ConceptInstance] -> [Sentence]
@@ -105,8 +106,8 @@ rocTempDerivGauss = [S "Applying", titleize gaussDiv, S "to the first term over"
   S "outward", phrase uNormalVect, S "for a", phrase surface]
 
 rocTempDerivArbVol :: [Sentence]
-rocTempDerivArbVol = [S "We consider an arbitrary" +:+. phrase vol, S "The",
-  phrase volHtGen, S "is assumed constant. Then", eqN 1, S "can be written as"]
+rocTempDerivArbVol = [S "We consider an arbitrary" +:+. phrase vol,
+  atStartNP (the volHtGen), S "is assumed constant. Then", eqN 1, S "can be written as"]
 
 rocTempDerivConsFlx :: Sentence -> [ConceptInstance] -> [Sentence]
 rocTempDerivConsFlx s assumps = [S "Where", 

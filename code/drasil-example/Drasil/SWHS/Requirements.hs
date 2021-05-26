@@ -2,6 +2,8 @@ module Drasil.SWHS.Requirements where --all of this file is exported
 
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Concepts
+import qualified Utils.Drasil.NounPhrase as NP
 import qualified Utils.Drasil.Sentence as S
 
 import Drasil.DocLang (inReq)
@@ -41,7 +43,7 @@ import Drasil.SWHS.Unitals (consTol, pcmE, tFinalMelt, tInitMelt, tempPCM,
 -----------------------------------
 
 inReqDesc :: Sentence
-inReqDesc = foldlList Comma List [S "the" +:+ phrase tank +:+ plural parameter,
+inReqDesc = foldlList Comma List [pluralNP (NP.the (combineNINI tank parameter)),
   plural materialProprty, S "initial" +:+ plural condition]
 
 funcReqs :: [ConceptInstance]
@@ -66,7 +68,7 @@ findMassConstruct fr m ims ddefs = cic "findMass" (foldlSent [
   "Find-Mass" funcReqDom
 --
 checkWithPhysConsts = cic "checkWithPhysConsts" (foldlSent [
-  S "Verify that the", plural input_, S "satisfy the required",
+  S "Verify that", pluralNP (the input_), S "satisfy the required",
   plural physicalConstraint, S "shown in", makeRef2S (datCon ([]::[Contents]) ([]::[Section]))])
   "Check-Input-with-Physical_Constraints" funcReqDom
 --
@@ -74,14 +76,14 @@ outputInputDerivVals = oIDQConstruct oIDQVals
 
 oIDQConstruct :: [Sentence] -> ConceptInstance
 oIDQConstruct x = cic "outputInputDerivVals" (foldlSentCol [
-  titleize output_, S "the", plural inValue `S.and_`
+  titleize output_, pluralNP (the inValue) `S.and_`
   S "derived", plural value `S.inThe` S "following list"] +:+.
   foldlList Comma List x) "Output-Input-Derived-Values" funcReqDom
 
 oIDQVals :: [Sentence]
 oIDQVals = map foldlSent_ [
-  [S "the", plural value, S "from", makeRef2S (inReq EmptyS)],
-  [S "the", plural mass, S "from", makeRef2S findMass],
+  [pluralNP (the value), S "from", makeRef2S (inReq EmptyS)],
+  [pluralNP (the mass), S "from", makeRef2S findMass],
   [ch balanceDecayRate, sParen (S "from" +:+ makeRef2S balanceDecayRate)],
   [ch balanceDecayTime, sParen (S "from" +:+ makeRef2S balanceDecayTime)],
   [ch balanceSolidPCM,  sParen (S "from" +:+ makeRef2S balanceSolidPCM)],
@@ -90,27 +92,27 @@ oIDQVals = map foldlSent_ [
   
 --
 calcTempWtrOverTime = cic "calcTempWtrOverTime" (foldlSent [
-  S "Calculate and", phrase output_, S "the", phrase tempW,
+  S "Calculate and", phrase output_, phraseNP (the tempW),
   sParen (ch tempW :+: sParen (ch time)), S "over the",
   phrase simulation, phrase time, sParen (S "from" +:+ makeRef2S eBalanceOnWtr)])
   "Calculate-Temperature-Water-Over-Time" funcReqDom
 --
 calcTempPCMOverTime = cic "calcTempPCMOverTime" (foldlSent [
-  S "Calculate and", phrase output_, S "the", phrase tempPCM,
-  sParen (ch tempPCM :+: sParen (ch time)), S "over the",
-  phrase simulation, phrase time, sParen (S "from" +:+ makeRef2S eBalanceOnPCM)])
+  S "Calculate and", phrase output_, phraseNP (the tempPCM),
+  sParen (ch tempPCM :+: sParen (ch time)), S "over",
+  phraseNP (NP.the (combineNINI simulation time)), sParen (S "from" +:+ makeRef2S eBalanceOnPCM)])
   "Calculate-Temperature-PCM-Over-Time" funcReqDom
 --
 calcChgHeatEnergyWtrOverTime = cic "calcChgHeatEnergyWtrOverTime" (foldlSent [
-  S "Calculate and", phrase output_, S "the", phrase watE,
-  sParen (ch watE :+: sParen (ch time)), S "over the",
-  phrase simulation, phrase time, sParen (S "from" +:+ makeRef2S heatEInWtr)])
+  S "Calculate and", phrase output_, phraseNP (the watE),
+  sParen (ch watE :+: sParen (ch time)), S "over",
+  phraseNP (NP.the (combineNINI simulation time)), sParen (S "from" +:+ makeRef2S heatEInWtr)])
   "Calculate-Change-Heat_Energy-Water-Over-Time" funcReqDom
 --
 calcChgHeatEnergyPCMOverTime = cic "calcChgHeatEnergyPCMOverTime" (foldlSent [
-  S "Calculate and", phrase output_, S "the", phrase pcmE,
-  sParen (ch pcmE :+: sParen (ch time)), S "over the",
-  phrase simulation, phrase time, sParen (S "from" +:+ makeRef2S heatEInPCM)])
+  S "Calculate and", phrase output_, phraseNP (the pcmE),
+  sParen (ch pcmE :+: sParen (ch time)), S "over",
+  phraseNP (NP.the (combineNINI simulation time)), sParen (S "from" +:+ makeRef2S heatEInPCM)])
   "Calculate-Change-Heat_Energy-PCM-Over-Time" funcReqDom
 --
 verifyEnergyOutput = cic "verifyEnergyOutput" (foldlSent [
@@ -122,13 +124,13 @@ verifyEnergyOutput = cic "verifyEnergyOutput" (foldlSent [
   "Verify-Energy-Output-Follow-Conservation-of-Energy" funcReqDom
 --
 calcPCMMeltBegin = cic "calcPCMMeltBegin" (foldlSent [
-  S "Calculate and", phrase output_, S "the", phrase time,
+  S "Calculate and", phrase output_, phraseNP (the time),
   S "at which the", short phsChgMtrl, S "begins to melt",
   ch tInitMelt, sParen (S "from" +:+ makeRef2S eBalanceOnPCM)])
   "Calculate-PCM-Melt-Begin-Time" funcReqDom
 --
 calcPCMMeltEnd = cic "calcPCMMeltEnd" (foldlSent [
-  S "Calculate and", phrase output_, S "the", phrase time,
+  S "Calculate and", phrase output_, phraseNP (the time),
   S "at which the", short phsChgMtrl, S "stops", phrase CT.melting,
   ch tFinalMelt, sParen (S "from" +:+ makeRef2S eBalanceOnPCM)])
   "Calculate-PCM-Melt-End-Time" funcReqDom
@@ -146,24 +148,24 @@ nfRequirements :: [ConceptInstance]
 nfRequirements = [correct, verifiable, understandable, reusable, maintainable]
 
 correct :: ConceptInstance
-correct = cic "correct" (foldlSent [
-  plural output_ `S.the_ofTheC` phrase code, S "have the",
+correct = cic "correct" (foldlSent [atStartNP'
+  (output_ `the_ofThePS` code), S "have the",
   plural property, S "described in", makeRef2S (propCorSol [] [])
   ]) "Correct" nonFuncReqDom
  
 verifiable :: ConceptInstance
 verifiable = cic "verifiable" (foldlSent [
-  S "The", phrase code, S "is tested with complete",
+  atStartNP (the code), S "is tested with complete",
   phrase vavPlan]) "Verifiable" nonFuncReqDom
 
 understandable :: ConceptInstance
 understandable = cic "understandable" (foldlSent [
-  S "The", phrase code, S "is modularized with complete",
+  atStartNP (the code), S "is modularized with complete",
   phrase mg `S.and_` phrase mis]) "Understandable" nonFuncReqDom
 
 reusable :: ConceptInstance
 reusable = cic "reusable" (foldlSent [
-  S "The", phrase code, S "is modularized"]) "Reusable" nonFuncReqDom
+  atStartNP (the code), S "is modularized"]) "Reusable" nonFuncReqDom
 
 maintainable :: ConceptInstance
 maintainable = cic "maintainable" (foldlSent [

@@ -4,6 +4,7 @@ import Language.Drasil
 import Drasil.DocLang (ModelDB, mdb)
 import Theory.Drasil (DataDefinition, dd, ddNoRefs)
 import Utils.Drasil
+import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (value)
@@ -143,7 +144,7 @@ ddHtFusion = dd ddHtFusionQD [makeCiteInfo bueche1986 $ Page [282]]
   Nothing "htFusion" [htFusionNote]
 
 htFusionNote :: Sentence
-htFusionNote = foldlSent [S "The", phrase htFusion,
+htFusionNote = foldlSent [atStartNP (the htFusion),
   sParen (S "also known as the enthalpy of fusion"), S "of a substance is the",
   phrase heat, phrase energy, S "required", sParen (ch latentHeat), S "to change the state of a unit of the",
   phrase mass, sParen (ch mass), S "of the substance from solid to liquid" `sC`
@@ -164,7 +165,7 @@ meltFracEqn = sy latentEP $/ (sy htFusion `mulRe` sy pcmMass)
 ddMeltFrac :: DataDefinition
 ddMeltFrac = dd ddMeltFracQD [makeCite koothoor2013]
   Nothing "meltFrac" [meltFracConst, makeRef2S ddHtFusion]
-  where meltFracConst = S "The" +:+ phrase value `S.of_` E (sy meltFrac) `S.is`
+  where meltFracConst = atStartNP (the value) `S.of_` E (sy meltFrac) `S.is`
                         S "constrained to" +:+. E (exactDbl 0 $<= sy meltFrac $<= exactDbl 1)
 
 ----

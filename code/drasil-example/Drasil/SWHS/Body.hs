@@ -1,3 +1,4 @@
+{-# LANGUAGE PostfixOperators #-}
 module Drasil.SWHS.Body where
 
 import Language.Drasil hiding (Symbol(..), organization, section)
@@ -8,6 +9,8 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB,
   _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (GenDefn, InstanceModel)
 import Utils.Drasil
+import Utils.Drasil.Concepts
+import qualified Utils.Drasil.NounPhrase as NP
 import qualified Utils.Drasil.Sentence as S
 
 import Control.Lens ((^.))
@@ -197,8 +200,8 @@ priorityNFReqs = [correctness, verifiability, understandability, reusability,
 introStart :: Sentence
 introStart = foldlSent [S "Due to", foldlList Comma List (map S
   ["increasing costs", "diminishing availability", "negative environmental impact"]) `S.of_`
-  S "fossil fuels" `sC` S "the demand is high for renewable", plural enerSrc `S.and_`
-  phrase energy, S "storage technology"]
+  S "fossil fuels" `sC` S "the demand is high for renewable", pluralNP (enerSrc `and_PS`
+  energy), S "storage technology"]
 
 introStartSWHS :: Sentence
 introStartSWHS = foldlSent [capSent (swhsPCM ^. defn), sParen (short phsChgMtrl),
@@ -210,7 +213,7 @@ introStartSWHS = foldlSent [capSent (swhsPCM ^. defn), sParen (short phsChgMtrl)
   phrase unit_, S "weight"]
 
 introEnd :: Sentence -> CI -> Sentence
-introEnd progSent pro = foldlSent_ [EmptyS +:+. progSent, S "The developed",
+introEnd progSent pro = foldlSent_ [(progSent !.), S "The developed",
   phrase program, S "will be referred to as", titleize pro, sParen (short pro)]
   -- SSP has same style sentence here
 
@@ -229,7 +232,7 @@ introEnd progSent pro = foldlSent_ [EmptyS +:+. progSent, S "The developed",
 scope :: Sentence
 scope = foldlSent_ [phrase thermalAnalysis `S.of_` S "a single" +:+. phrase tankPCM,
   S "This entire", phrase document `S.is` S "written assuming that the substances inside the",
-  phrase sWHT `S.are` phrase water `S.and_` short phsChgMtrl]
+  phrase sWHT `S.are` phraseNP (and_Gen phrase short water phsChgMtrl)]
 
 -- There is a similar paragraph in each example, but there's a lot of specific
 -- info here. Would need to abstract out the object of analysis (i.e. solar
@@ -259,18 +262,18 @@ charReaderDE = plural de +:+ S "from level 1 and 2" +:+ phrase calculus
 ------------------------------------
 
 orgDocIntro :: Sentence
-orgDocIntro = foldlSent [S "The", phrase organization, S "of this",
-  phrase document, S "follows the template for an", short Doc.srs,
-  S "for", phrase sciCompS, S "proposed by", makeCiteS koothoor2013 `S.and_`
+orgDocIntro = foldlSent [atStartNP (the organization), S "of this",
+  phrase document, S "follows the template for an", short Doc.srs
+  `S.for` phrase sciCompS, S "proposed by", makeCiteS koothoor2013 `S.and_`
   makeCiteS smithLai2005]
 
 orgDocEnd :: Sentence
-orgDocEnd = foldlSent_ [S "The", plural inModel, 
+orgDocEnd = foldlSent_ [atStartNP' (the inModel), 
   S "to be solved are referred to as" +:+. 
   foldlList Comma List (map makeRef2S iMods), S "The", plural inModel,
   S "provide the", plural ode, sParen (short ode :+: S "s") `S.and_` 
-  S "algebraic", plural equation, S "that", phrase model, S "the" +:+. 
-  phrase swhsPCM, short progName, S "solves these", short ode :+: S "s"]
+  S "algebraic", plural equation, S "that", phrase model, 
+  (phraseNP (the swhsPCM) !.), short progName, S "solves these", short ode :+: S "s"]
 
 -- This paragraph is mostly general (besides program name and number of IMs),
 -- but there are some differences between the examples that I'm not sure how to
@@ -299,10 +302,10 @@ orgDocEnd = foldlSent_ [S "The", plural inModel,
 sysCntxtDesc :: CI -> Contents
 sysCntxtDesc pro = foldlSP [makeRef2S sysCntxtFig, S "shows the" +:+.
   phrase sysCont, S "A circle represents an external entity outside the",
-  phrase software `sC` S "the", phrase user +:+. S "in this case",
+  phrase software `sC` phraseNP (the user) +:+. S "in this case",
   S "A rectangle represents the", phrase softwareSys, S "itself" +:+.
   sParen (short pro), S "Arrows are used to show the", plural datum,
-  S "flow between the", phrase system `S.and_` S "its", phrase environment]
+  S "flow between the", phraseNP (system `andIts` environment)]
 
 sysCntxtFig :: LabelledContent
 sysCntxtFig = llcc (makeFigRef "SysCon") $ fig (foldlSent_
@@ -312,8 +315,8 @@ sysCntxtFig = llcc (makeFigRef "SysCon") $ fig (foldlSent_
 sysCntxtRespIntro :: CI -> Contents
 sysCntxtRespIntro pro = foldlSPCol [short pro +:+. S "is mostly self-contained",
   S "The only external interaction is through the", phrase user +:+.
-  S "interface", S "responsibilities" `S.the_ofTheC` phrase user `S.andThe`
-  phrase system `S.are` S "as follows"]
+  S "interface", S "responsibilities" `S.the_ofTheC` phraseNP (user `andThe`
+  system) `S.are` S "as follows"]
 
 systContRespBullets :: Contents
 systContRespBullets = UlC $ ulcc $ Enumeration $ bulletNested
@@ -333,7 +336,7 @@ swhsResp = map foldlSent_ [
   [S "Detect", plural datum, S "type mismatch, such as a string" `S.of_`
     S "characters instead of a floating point number"],
   [S "Determine if the", plural input_, S "satisfy the required",
-    phrase physical `S.and_` phrase software, plural constraint],
+    phraseNP (physical `and_` software), plural constraint],
   [S "Calculate the required", plural output_]
   ]
 
@@ -404,8 +407,8 @@ figTank = llcc (makeFigRef "Tank") $ fig (
 -----------------------------
 
 goalInputs :: [Sentence]
-goalInputs  = [S "the" +:+ phrase tempC,
-  S "the initial" +:+ plural condition +:+ S "for the" +:+ phrase tempW `S.andThe` phrase tempPCM,
+goalInputs  = [phraseNP (the tempC),
+  S "the initial" +:+ plural condition +:+ S "for the" +:+ phraseNP (tempW `andThe` tempPCM),
   S "the material" +:+ plural property]
 
 -- 2 examples include this paragraph, 2 don't. The "givens" would need to be
@@ -469,8 +472,8 @@ dataConTail :: Sentence
 dataConTail = dataContMid +:+ dataContFooter
 
 dataContMid :: Sentence
-dataContMid = foldlSent [S "The", phrase column, S "for", phrase software,
-  plural constraint, S "restricts the range" `S.of_` plural input_,
+dataContMid = foldlSent [atStartNP (the column) `S.for` pluralNP (combineNINI software
+  constraint), S "restricts the range" `S.of_` plural input_,
   S "to reasonable", plural value]
 
 dataContFooter :: Sentence
@@ -482,14 +485,14 @@ dataContFooter = foldlSent_ $ map foldlSent [
   [sParen (S "+"), S "These", plural quantity, S "cannot be zero" `sC`
   S "or there would be freezing", sParen (makeRef2S assumpPIS)],
 
-  [sParen (S "++"), S "The", plural constraint, S "on the", phrase surArea,
+  [sParen (S "++"), atStartNP' (NP.the (constraint `onThePS` surArea)),
   S "are calculated by considering the", phrase surArea, S "to", phrase vol +:+.
-  S "ratio", S "The", phrase assumption, S "is that the lowest ratio is 1" `S.and_`
+  S "ratio", atStartNP (the assumption), S "is that the lowest ratio is 1" `S.and_`
   S "the highest possible is", E (exactDbl 2 $/ sy thickness) `sC` S "where", ch thickness,
   S "is the thickness of a" +:+. (Quote (S "sheet") `S.of_` short phsChgMtrl),
   S "A thin sheet has the greatest", phrase surArea, S "to", phrase vol, S "ratio"],
 
-  [sParen (S "**"), S "The", phrase constraint, S "on the maximum", phrase time,
+  [sParen (S "**"), atStartNP (the constraint), S "on the maximum", phrase time,
   S "at the end of the simulation is the total number of seconds in one day"]
   
   ]
@@ -528,11 +531,11 @@ propsDeriv = [
 propCorSolDeriv1 :: (NamedIdea b, NamedIdea h) => ConceptChunk -> b -> UnitalChunk ->
   ConceptChunk -> CI -> GenDefn -> GenDefn -> h -> ConceptChunk -> Contents
 propCorSolDeriv1 lce ewat en co pcmat g1hfc g2hfp su ht  =
-  foldlSPCol [S "A", phrase corSol, S "must exhibit the" +:+.
-  phrase lce, S "This means that the", phrase ewat,
+  foldlSPCol [atStartNP (a_ corSol), S "must exhibit" +:+.
+  phraseNP (the lce), S "This means that", phraseNP (the ewat),
   S "should equal the difference between the total", phrase en,
-  phrase input_, S "from the", phrase co `S.and_` S "the",
-  phrase en, phrase output_, S "to the" +:+. short pcmat,
+  phrase input_, S "from", phraseNP ((the co) `NP.andThe`
+  (combineNINI en output_)), S "to the" +:+. short pcmat,
   S "This can be shown as an", phrase equation, S "by taking",
   makeRef2S g1hfc `S.and_` makeRef2S g2hfp `sC`
   S "multiplying each by their respective", phrase su,

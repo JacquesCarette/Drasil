@@ -226,7 +226,7 @@ scpOfReq     = nc "scpOfReq"     (scope `of_TSP` requirement)
 termAndDef   = nc "termAndDef"   (terminology `and_TSP` definition)
 tOfSymb      = nc "tOfSymb"      (table_ `of_TSP` symbol_)
 tOfUnit      = nc "tOfUnit"      (table_ `of_TSP` unit_)
-traceyMandG  = nc "traceyMandG"  (andTGen titleize' titleize' traceyMatrix graph)
+traceyMandG  = nc "traceyMandG"  (and_TGen titleize' titleize' traceyMatrix graph)
 vav          = nc "vav"          (verification `and_` validation)
 
 scpOfTheProj :: (NamedChunk -> Sentence) -> NamedChunk

@@ -1,12 +1,12 @@
-module Utils.Drasil.Concepts (and_, and_TSP, and_PS, and_PP, andTGen, andIts, andThe, with, of_, of_NINP, of_PSNPNI, of_TSP, of_PS, of_TPS, ofA,
-ofATPS, ofThe, ofThePS, the_ofThe, the_ofThePS, onThe, inThe, inThePS, for, forTGen, in_, in_PS, inA, the, theT, theGen, a_, a_Gen,
+module Utils.Drasil.Concepts (and_, and_TSP, and_PS, and_PP, and_TGen, and_Gen, andIts, andThe, with, of_, of_NINP, of_PSNPNI, of_TSP, of_PS, of_TPS, ofA,
+ofATPS, ofThe, ofThePS, the_ofThe, the_ofThePS, onThe, onThePS, inThe, inThePS, for, forTGen, in_, in_PS, inA, is, the, theT, theGen, a_, a_Gen,
 compoundNC, compoundNCPP, compoundNCGen, compoundNCPS, compoundNCPSPP, compoundNCGenP, combineNINP, combineNPNI, combineNINI) where
 
 import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Control.Lens ((^.))
 
-import qualified Utils.Drasil.Sentence as S (and_, andIts, andThe, of_, ofA, ofThe, the_ofThe, onThe, for, inThe, in_) 
+import qualified Utils.Drasil.Sentence as S (and_, andIts, andThe, of_, ofA, ofThe, the_ofThe, onThe, for, inThe, in_, is) 
 
 -----------
 --FIXME: Find out why CapFirst and CapWords can't just be used instead of Replace constructor.
@@ -47,10 +47,18 @@ and_PP t1 t2 = nounPhrase''
   CapFirst
   CapWords
 
+-- | Customizable `and_` combinator. Both plural and singular cases are dermined by the two given functions
+and_Gen :: (c -> Sentence) -> (d -> Sentence) -> c -> d -> NP
+and_Gen f1 f2 t1 t2 = nounPhrase''
+  (f1 t1 `S.and_` f2 t2)
+  (f1 t1 `S.and_` f2 t2)
+  CapFirst
+  CapWords
+
 -- | Customizable `and_` combinator (takes two title case capitalization rules and two 'NamedIdeas').
-andTGen :: (NamedIdea c, NamedIdea d) => 
+and_TGen :: (NamedIdea c, NamedIdea d) => 
   (c -> Sentence) -> (d -> Sentence) -> c -> d -> NP
-andTGen f1 f2 t1 t2 = nounPhrase''
+and_TGen f1 f2 t1 t2 = nounPhrase''
   (phrase t1 `S.and_` phrase t2)
   (phrase t1 `S.and_` plural t2)
   (Replace (atStart t1 `S.and_` phrase t2))
@@ -182,13 +190,21 @@ the_ofThePS t1 t2 = nounPhrase''
   CapFirst
   CapWords
 
--- | Same as 'of_', except combining Sentence piece is "of the".
+-- | Same as 'of_', except combining Sentence piece is "on the".
 onThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 onThe t1 t2 = nounPhrase'' 
   (phrase t1 `S.onThe` phrase t2)
   (phrase t1 `S.onThe` plural t2)
   (Replace (atStart t1 `S.onThe` phrase t2))
   (Replace (titleize t1 `S.onThe` titleize t2))
+
+-- | Same as 'onThe', except plural case is (plural t1) S.onThe (phrase t2)
+onThePS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+onThePS t1 t2 = nounPhrase'' 
+  (phrase t1 `S.onThe` phrase t2)
+  (plural t1 `S.onThe` phrase t2)
+  CapFirst
+  CapWords
 
 -- | Creates a 'NP' by combining two 'NamedIdea's with the words "in the" between
 -- their terms. Plural case is @(phrase t1) "in the" (plural t2)@.
@@ -256,6 +272,15 @@ inA :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 inA t1 t2 = nounPhrase'' 
   (phrase t1 +:+ S "in a" +:+ phrase t2) 
   (phrase t1 +:+ S "in a" +:+ plural t2)
+  CapFirst
+  CapWords
+
+-- | Creates a 'NP' by combining two 'NamedIdea's with the word "is" between
+-- their terms. Plural case is @(phrase t1) "is" (plural t2)@.
+is :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+is t1 t2 = nounPhrase'' 
+  (phrase t1 `S.is` phrase t2)
+  (phrase t1 `S.is` plural t2)
   CapFirst
   CapWords
 

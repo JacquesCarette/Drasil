@@ -1,6 +1,6 @@
 module Utils.Drasil.NounPhrase (insertString, prependString, insertSent, prependSent,
 the, theGen, a_, a_Gen, ofThe, ofThePS, ofTheGen, inThe, inThePS, inTheGen, the_ofThe, the_ofThePS, the_ofTheGen,
-for, forPS, forGen, of_, of_PS, of_Gen, of_GenGen, with, and_, and_PS, and_Gen, and_GenGen) where
+for, forPS, forGen, of_, of_PS, of_Gen, of_GenGen, with, and_, and_PS, and_Gen, and_GenGen, andThe) where
 
 import Language.Drasil
 --import Utils.Drasil.Phrase
@@ -107,3 +107,7 @@ and_Gen f1 f2 t1 t2 = nounPhrase'' (phraseNP t1 `S.and_` phraseNP t2) (f1 t1 `S.
 -- | Same as 'and_', but takes two functions for the singular case and two for the plural case.
 and_GenGen :: (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
 and_GenGen f1 f2 p1 p2 t1 t2 = nounPhrase'' (f1 t1 `S.and_` f2 t2) (p1 t1 `S.and_` p2 t2) CapFirst CapWords
+
+-- | Inserts "and the" between two 'NP's. Plural case is @(phraseNP t1) +:+ "and the" +:+ (pluralNP t2)@.
+andThe :: NP -> NP -> NP
+andThe = insertString "and the"

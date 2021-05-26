@@ -21,6 +21,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: "Debug: Swift on CI"
+        run: |
+          echo "print(\"Hello World\")" > ~/test.swift
+          swiftc ~/test.swift -o test_swift
+          ./test_swift
+          rm ./test_swift
       - name: "Update apt package list"
         run: sudo apt-get update
       - name: "Install system requirements"

@@ -81,13 +81,13 @@ derGain
       "Gain constant of the derivative controller"
 
 propControl
-  = dcc "propControl" (nounPhraseSP "Proportional Control")
-      ("a linear feedback control system were correction is applied to the controlled" ++
+  = dcc "propControl" (nounPhraseSP "Proportional control")
+      ("A linear feedback control system where correction is applied to the controlled " ++
       "variable which is proportional to the difference between desired and measured values")
 
 derControl
-  = dcc "derControl" (nounPhraseSP "Derivative Control")
-      ("monitors the rate of change of the error signal and contributes a component" ++ 
+  = dcc "derControl" (nounPhraseSP "Derivative control")
+      ("Monitors the rate of change of the error signal and contributes a component " ++ 
       "of the output signal (proportional to a derivative of the error signal)")
 
 simulation
@@ -95,7 +95,7 @@ simulation
       "Simulation of the PD controller"
 
 ccFrequencyDomain
-  = dcc "frequencyDomain" (nounPhraseSP "Frequency Domain") 
+  = dcc "frequencyDomain" (nounPhraseSP "frequency domain") 
       ("The analysis of mathematical functions in terms of frequency, instead "
          ++ "of time")
 
@@ -115,7 +115,7 @@ ccRelTolerance
 ccTransferFxn
   = dcc "transferFxn" (nounPhraseSP "Transfer Function")
       ("The Transfer Function of a system is the ratio of the output to the input"
-         ++ " functions in the Frequency Domain")
+         ++ " functions in the frequency domain")
 
 ccDampingCoeff
   = dcc "dampingCoeff" (nounPhraseSP "Damping Coefficient")
@@ -131,8 +131,8 @@ concepts = map nw defs
 defs :: [ConceptChunk]
 defs
   = [pidCL, pidC, summingPt, powerPlant, secondOrderSystem, processError,
-     simulationTime, processVariable, setPoint, propGain, derGain, propControl
-    ,derControl, ccFrequencyDomain, ccLaplaceTransform, controlVariable, stepTime,
+     simulationTime, processVariable, setPoint, propGain, derGain, propControl,
+    derControl, ccFrequencyDomain, ccLaplaceTransform, controlVariable, stepTime,
      ccAbsTolerance, ccRelTolerance, ccTransferFxn, ccDampingCoeff,
      ccStiffCoeff]
 

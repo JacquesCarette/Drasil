@@ -39,6 +39,7 @@ jobs:
             ~/.cabal/packages
             ~/.cabal/store
             code/.stack-work/
+            code/website/.stack-work/
             ~/.local/bin/graphmod
           key: ${{ runner.os }}-store-${{ hashFiles('code/stack.yaml') }}
       - name: "Clean previous run"

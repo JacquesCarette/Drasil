@@ -25,3 +25,6 @@ library:
   source-dirs: ./
   exposed-modules:
   - Language.Drasil.Printers
+  when:
+  - condition: false
+    other-modules: Paths_drasil_printers

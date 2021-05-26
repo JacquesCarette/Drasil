@@ -171,11 +171,8 @@ analysis: check_stack
 	@mkdir -p $(ANALYSIS_FOLDER)
 	cd $(SCRIPT_FOLDER) && stack exec -- runghc DataTableGen.hs
 
-# use stack to build the documentation too
-$(filter %$(DOC_P_SUFFIX), $(DOC_PACKAGES)): %$(DOC_P_SUFFIX): check_stack
-	stack haddock "drasil-$*" $(haddockArgs)
-
-docs: $(DOC_PACKAGES)
+docs: check_stack
+	sh scripts/make_docs.sh
 
 %$(TEX_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(TEX_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)

@@ -50,7 +50,7 @@ jobs:
       - name: "Doxygen"
         run: make doxygen
       - name: "Docs"
-        run: make docs haddockArgs="--no-haddock-deps --no-haddock-hyperlink-source"
+        run: make docs
       - name: "Graphs"
         run: make graphs
       - name: "Build website"

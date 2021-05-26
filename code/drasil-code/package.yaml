@@ -82,6 +82,9 @@ library:
     - Language.Drasil.CodeExpr
     - Language.Drasil.CodeSpec
     - Language.Drasil.Mod
+  when:
+  - condition: false
+    other-modules: Paths_drasil_code
 
 executables:
   codegenTest:

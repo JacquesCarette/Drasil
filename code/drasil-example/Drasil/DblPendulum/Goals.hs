@@ -1,3 +1,4 @@
+{-# LANGUAGE PostfixOperators#-}
 module Drasil.DblPendulum.Goals (goals, goalsInputs) where
 
 import Language.Drasil
@@ -22,7 +23,7 @@ goalsInputs = [phraseNP (the CPP.mass `NP.and_` (CPP.len  `ofThe` rod)) `sC`
 
 motionMass :: ConceptInstance
 motionMass = cic "motionMass" 
-  (S "Calculate" +:+ phraseNP (motion `the_ofThe` CPP.mass))
+  (S "Calculate" +:+ phraseNP (motion `the_ofThe` CPP.mass) !.)
   "Motion-of-the-mass" goalStmtDom
 
 

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 1a1bb141778cbdd79ef6f3b712d9e73bf6b0a527c10889de868f32565e70cfed
+-- hash: 505fea915d5f809dbbaa1a880d3850369e342069fdc3ac2b9293735435a973f0
 
 name:           drasil-gen
 version:        0.1.3.0
@@ -25,7 +25,6 @@ library
       Language.Drasil.Generate
   other-modules:
       Language.Drasil.Output.Formats
-      Paths_drasil_gen
   hs-source-dirs:
       ./
   ghc-options: -Wall -Wredundant-constraints
@@ -39,4 +38,7 @@ library
     , drasil-printers
     , pretty
     , time
+  if false
+    other-modules:
+        Paths_drasil_gen
   default-language: Haskell2010

@@ -13,7 +13,7 @@ import Data.Drasil.Concepts.Physics (oneD, rectilinear, twoD)
 
 import Data.Drasil.Quantities.Physics (acceleration, constAccelV, iPos, iSpeed,
   iVel, ixVel, iyVel, position, scalarAccel, scalarPos,
-  time, velocity, positionVec)
+  time, velocity, positionVec, speed)
 import qualified Data.Drasil.Quantities.Physics as QP (constAccel)
 import Data.Drasil.Theories.Physics (accelerationTM, velocityTM)
 
@@ -44,7 +44,7 @@ rectVelDeriv = mkDerivName (phrase rectVel)
                (weave [rectVelDerivSents, map E rectVelDerivEqns])
 
 rectVelDerivSents :: [Sentence]
-rectVelDerivSents = [rectDeriv velocity acceleration motSent iVel accelerationTM, rearrAndIntSent, performIntSent]
+rectVelDerivSents = [rectDeriv velocity acceleration motSent iVel accelerationTM, rearrAndIntSent, performIntSent $ Just $ S "replacing" +:+ E (sy speed) +:+ S "with" +:+ E (sy speed1DAcc)]
   where
     motSent = foldlSent [S "The motion" `S.in_` makeRef2S accelerationTM `S.is` S "now", phrase oneD,
                          S "with a", phrase QP.constAccel `sC` S "represented by", E (sy QP.constAccel)]
@@ -69,7 +69,7 @@ rectPosDeriv = mkDerivName (phrase rectilinear +:+ phrase position)
 
 rectPosDerivSents :: [Sentence]
 rectPosDerivSents = [rectDeriv position velocity motSent iPos velocityTM,
-  rearrAndIntSent, fromReplace rectVelGD speed1DAcc, performIntSent]
+  rearrAndIntSent, fromReplace rectVelGD speed, performIntSent Nothing]
     where
       motSent = S "The motion" `S.in_` makeRef2S velocityTM `S.is` S "now" +:+. phrase oneD
 
@@ -123,15 +123,18 @@ rectDeriv c1 c2 motSent initc ctm = foldlSent_ [
   where
     getScalar c
       | c == position     = E (sy scalarPos)
-      | c == velocity     = E (sy speed1DAcc)
+      | c == velocity     = E (sy speed)
       | c == acceleration = E (sy scalarAccel)
       | c == iPos         = E (sy iPos)
       | c == iVel         = E (sy iSpeed)
       | otherwise         = error "Not implemented in getScalar"
 
-rearrAndIntSent, performIntSent :: Sentence
-rearrAndIntSent   = S "Rearranging" `S.and_` S "integrating" `sC` S "we" +: S "have"
-performIntSent    = S "Performing the integration" `sC` S "we have the required" +: phrase equation
+rearrAndIntSent :: Sentence
+rearrAndIntSent = S "Rearranging" `S.and_` S "integrating" `sC` S "we" +: S "have"
+
+performIntSent :: Maybe Sentence -> Sentence
+performIntSent ms = S "Performing the integration" :+: extra `sC` S "we have the required" +: phrase equation
+  where extra = maybe mempty (\s -> S "," +:+ s) ms
 
 -- Helper for making vector derivations
 vecDeriv :: [(UnitalChunk, Expr)] -> GenDefn -> Sentence

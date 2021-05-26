@@ -12,7 +12,7 @@ import Data.Drasil.Units.Physics (velU)
 import qualified Drasil.Projectile.Concepts as C
 
 velVecSpeed, speed1DAcc :: UnitalChunk
-velVecSpeed = uc C.velVecSpeed lV velU
+velVecSpeed = uc C.velVecSpeed (sup (vec lV) $ Label "speed") velU
 speed1DAcc  = uc C.speed1DAcc  (sup lV $ Label "f") velU
 
 ---

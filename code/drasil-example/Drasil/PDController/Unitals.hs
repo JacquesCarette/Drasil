@@ -4,7 +4,7 @@ import Drasil.PDController.Concepts
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (second)
 import Language.Drasil
-
+import Utils.Drasil.Concepts
 
 syms, symFS, symFt, symnegInf, symposInf, syminvLaplace, symKd, symKp,
        symYT, symYS, symYrT, symYrS, symET, symES, symPS, symDS, symHS,
@@ -125,15 +125,9 @@ opProcessVariable
 qdProcessVariableTD = qw opProcessVariable
 
 qdSetPointFD
-  = vc "qdSetPointFD" (nounPhraseSent (S "Set-Point in the frequency domain"))
-      symYrS
-      Real
+  = vc "qdSetPointFD" (setPoint `inThe` ccFrequencyDomain) symYrS Real
 
-qdProcessVariableFD
-  = vc "qdProcessVariableFD"
-      (nounPhraseSent (S "Process Variable in the frequency domain"))
-      symYS
-      Real
+qdProcessVariableFD = vc "qdProcessVariableFD" (processVariable `inThe` ccFrequencyDomain) symYS Real
 
 qdProcessErrorTD
   = vc "qdProcessErrorTD"
@@ -141,50 +135,32 @@ qdProcessErrorTD
       symET
       Real
 
-qdProcessErrorFD
-  = vc "qdProcessErrorFD"
-      (nounPhraseSent (S "Process Error in the frequency domain"))
-      symES
-      Real
+qdProcessErrorFD = vc "qdProcessErrorFD" (processError `inThe` ccFrequencyDomain) symES Real
 
-qdPropControlFD
-  = vc "qdPropControlFD"
-      (nounPhraseSent (S "Proportional control in the frequency domain"))
-      symPS
-      Real
+qdPropControlFD  = vc "qdPropControlFD" (propControl `inThe` ccFrequencyDomain) symPS Real
 
-qdDerivativeControlFD
-  = vc "qdDerivativeControlFD"
-      (nounPhraseSent (S "Derivative control in the frequency domain"))
-      symDS
-      Real
+qdDerivativeControlFD = vc "qdDerivativeControlFD" (derControl  `inThe` ccFrequencyDomain) symDS Real
 
-qdTransferFunctionFD
-  = vc "qdTransferFunctionFD"
-      (nounPhraseSent (S "Transfer Function in the frequency domain"))
-      symHS
-      Real
+qdTransferFunctionFD = vc "qdTransferFunctionFD" (ccTransferFxn  `inThe` ccFrequencyDomain) symHS Real
 
 qdCtrlVarTD
   = vc "qdCtrlVarTD" (nounPhraseSent (S "Control Variable in the time domain"))
       symCT
       Real
 
-qdCtrlVarFD
-  = vc "qdCtrlVarFD"
-      (nounPhraseSent (S "Control Variable in the frequency domain"))
-      symCS
-      Real
+qdCtrlVarFD = vc "qdCtrlVarFD" (controlVariable `inThe` ccFrequencyDomain) symCS Real
 
 qdLaplaceTransform
   = vc "qLaplaceTransform"
       (nounPhraseSent (S "Laplace Transform of a function"))
       symFS
       Real
+
 qdFreqDomain
   = vc "qFreqDomain" (nounPhraseSent (S "Complex frequency-domain parameter"))
       syms
       Real
+      
 qdFxnTDomain
   = vc "qdFxnTDomain" (nounPhraseSent (S "Function in the time domain")) symFt
       Real

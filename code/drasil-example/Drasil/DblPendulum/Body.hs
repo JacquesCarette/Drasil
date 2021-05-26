@@ -10,6 +10,7 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   _quants, _sys, _sysinfodb, _usedinfodb)
 import Utils.Drasil
 import Utils.Drasil.Concepts
+import qualified Utils.Drasil.NounPhrase as NP
 import qualified Utils.Drasil.Sentence as S
 import Data.Drasil.People (olu)
 import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian, hertz)
@@ -92,14 +93,14 @@ mkSRS = [RefSec $      --This creates the Reference section of the SRS
   ]
 
 justification :: Sentence
-justification = foldlSent [S "A", phrase pendulum, S "consists" `S.of_` phrase mass, 
-                            S "attached to the end of a", phrase rod `S.andIts` S "moving curve" `S.is`
+justification = foldlSent [ atStartNP (a_ pendulum), S "consists" `S.of_` phrase mass, 
+                            S "attached to the end" `S.ofA` phrase rod `S.andIts` S "moving curve" `S.is`
                             (S "highly sensitive to initial conditions" !.), S "Therefore" `sC`
                             S "it is useful to have a", phrase program, S "to simulate", phraseNP (motion
                             `the_ofThe` pendulum), (S "to exhibit its chaotic characteristics" !.),
-                            S "The", phrase program, S "documented here is called", phrase pendulum]
+                            atStartNP (the program), S "documented here is called", phrase pendulum]
 scope :: Sentence
-scope = foldlSent [S "the", phrase analysis `S.ofA` phrase twoD, 
+scope = foldlSent [phraseNP (NP.the (analysis `ofA` twoD)), 
   sParen (getAcc twoD), phrase pendMotion, phrase problem,
                    S "with various initial conditions"]
 

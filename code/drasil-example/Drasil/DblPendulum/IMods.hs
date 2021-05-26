@@ -98,9 +98,9 @@ angularDisplacementDerivEqn5 = apply1 pendDisplacementAngle time $= sy initialPe
 angularDispConstraintNote :: Sentence
 
 
-angularDispConstraintNote = S "The" +:+ phrase constraint +:+
-     E ( sy initialPendAngle $> exactDbl 0) `S.is` S "required" +:+.
-     S "The" +:+ phrase angularFrequency `S.is` definedIn'' angFrequencyGD
+angularDispConstraintNote = foldlSent [atStartNP (the constraint),
+     E ( sy initialPendAngle $> exactDbl 0) `S.is` (S "required" !.),
+     atStartNP (the angularFrequency) `S.is` definedIn'' angFrequencyGD]
 
 --gravitationalAccelConstNote, landAndTargPosConsNote, landPosNote,
 --   landPosConsNote, offsetNote, offsetConsNote, targPosConsNote,

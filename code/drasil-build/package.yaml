@@ -22,3 +22,6 @@ library:
   source-dirs: ./
   exposed-modules:
   - Build.Drasil
+  when:
+  - condition: false
+    other-modules: Paths_drasil_build

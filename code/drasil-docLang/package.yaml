@@ -33,3 +33,6 @@ library:
   - Drasil.DocLang
   - Drasil.DocLang.SRS
   - Drasil.DocumentLanguage.Units
+  when:
+  - condition: false
+    other-modules: Paths_drasil_docLang

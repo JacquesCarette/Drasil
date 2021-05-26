@@ -46,7 +46,7 @@ velocityIXExpr :: Expr
 velocityIXExpr = sy angularVelocity `mulRe` sy lenRod `mulRe` cos (sy pendDisplacementAngle)
 
 velocityIXDeriv :: Derivation
-velocityIXDeriv = mkDerivName (phrase xComp +:+ phrase velocity) (weave [velocityIXDerivSents, map E velocityIXDerivEqns])
+velocityIXDeriv = mkDerivName (phraseNP (NP.the (xComp `of_` velocity))) (weave [velocityIXDerivSents, map E velocityIXDerivEqns])
 
 velocityIXDerivSents :: [Sentence]
 velocityIXDerivSents = [velocityIDerivSent1,velocityIXDerivSent2,velocityIXDerivSent3,velocityIXDerivSent4,
@@ -81,7 +81,7 @@ velocityIYExpr :: Expr
 velocityIYExpr = sy angularVelocity `mulRe` sy lenRod `mulRe` sin (sy pendDisplacementAngle)
 
 velocityIYDeriv :: Derivation
-velocityIYDeriv = mkDerivName (phrase yComp +:+ phrase velocity) (weave [velocityIYDerivSents, map E velocityIYDerivEqns])
+velocityIYDeriv = mkDerivName (phraseNP (NP.the (yComp `of_` velocity))) (weave [velocityIYDerivSents, map E velocityIYDerivEqns])
 
 velocityIYDerivSents :: [Sentence]
 velocityIYDerivSents = [velocityIDerivSent1, velocityIYDerivSent2,
@@ -117,7 +117,7 @@ accelerationIXExpr = neg (square (sy angularVelocity) `mulRe` sy lenRod `mulRe` 
                     `addRe` (sy angularAccel `mulRe` sy lenRod `mulRe` cos (sy pendDisplacementAngle))
 
 accelerationIXDeriv :: Derivation
-accelerationIXDeriv = mkDerivName (phrase xComp +:+ phrase acceleration) (weave [accelerationIXDerivSents, map E accelerationIXDerivEqns])
+accelerationIXDeriv = mkDerivName (phraseNP (NP.the (xComp `of_` acceleration))) (weave [accelerationIXDerivSents, map E accelerationIXDerivEqns])
 
 accelerationIXDerivSents :: [Sentence]
 accelerationIXDerivSents = [accelerationIDerivSent1, accelerationIXDerivSent2, accelerationIXDerivSent3,
@@ -154,7 +154,7 @@ accelerationIYExpr = (square (sy angularVelocity) `mulRe` sy lenRod `mulRe` cos 
                     `addRe` (sy angularAccel `mulRe` sy lenRod `mulRe` sin (sy pendDisplacementAngle))
 
 accelerationIYDeriv :: Derivation
-accelerationIYDeriv = mkDerivName (phrase yComp +:+ phrase acceleration) (weave [accelerationIYDerivSents, map E accelerationIYDerivEqns])
+accelerationIYDeriv = mkDerivName (phraseNP (NP.the (yComp `of_` acceleration))) (weave [accelerationIYDerivSents, map E accelerationIYDerivEqns])
 
 accelerationIYDerivSents :: [Sentence]
 accelerationIYDerivSents = [accelerationIDerivSent1, accelerationIYDerivSent2, accelerationIYDerivSent3,
@@ -190,7 +190,7 @@ hForceOnPendulumRel = sy force $= sy mass `mulRe` sy xAccel $= neg (sy tension `
                      
 
 hForceOnPendulumDeriv :: Derivation
-hForceOnPendulumDeriv = mkDerivName (phrase force +:+ phrase pendulum) [ E hForceOnPendulumRel]
+hForceOnPendulumDeriv = mkDerivName (phraseNP (force `onThe` pendulum)) [ E hForceOnPendulumRel]
 
 ----------------------------------------Vertical force acting on the pendulum 
 vForceOnPendulumGD :: GenDefn
@@ -205,7 +205,7 @@ vForceOnPendulumRel :: Relation
 vForceOnPendulumRel = sy force $= sy mass `mulRe` sy yAccel $= sy tension `mulRe` cos (sy pendDisplacementAngle) $- (sy mass `mulRe` sy gravitationalAccel)
 
 vForceOnPendulumDeriv :: Derivation
-vForceOnPendulumDeriv = mkDerivName (phrase force +:+ phrase pendulum) [ E vForceOnPendulumRel]
+vForceOnPendulumDeriv = mkDerivName (phraseNP (force `onThe` pendulum)) [ E vForceOnPendulumRel]
 
 --------------------------------------Angular Frequency Of Pendulum
 
@@ -221,7 +221,7 @@ angFrequencyRel :: Relation
 angFrequencyRel = sy angularFrequency $= sqrt (sy gravitationalAccel $/ sy lenRod)
 
 angFrequencyDeriv :: Derivation
-angFrequencyDeriv = mkDerivName (phrase angularFrequency +:+ phrase pendulum) (weave [angFrequencyDerivSents, map E angFrequencyDerivEqns])
+angFrequencyDeriv = mkDerivName (phraseNP (angularFrequency `the_ofThe` pendulum)) (weave [angFrequencyDerivSents, map E angFrequencyDerivEqns])
 
 
 angFrequencyDerivSents :: [Sentence]
@@ -274,14 +274,14 @@ periodPend = gdNoRefs (OthModel periodPendRC) (getUnit period)
            (Just periodPendDeriv) "periodPend" [periodPendNotes]
 
 periodPendRC :: RelationConcept
-periodPendRC = makeRC "periodPendRC" (NP.the (period `onThe` pendulum)) 
+periodPendRC = makeRC "periodPendRC" (NP.the (period `ofThe` pendulum)) 
            EmptyS periodPendRel
  
 periodPendRel :: Relation
 periodPendRel = sy period $= exactDbl 2 `mulRe` sy QM.pi_ `mulRe` sqrt (sy lenRod $/ sy gravitationalAccel)
 
 periodPendDeriv :: Derivation
-periodPendDeriv = mkDerivName (phrase period +:+ phrase pendulum) (weave [periodPendDerivSents, map E periodPendDerivEqns])
+periodPendDeriv = mkDerivName (phraseNP (NP.the (period `ofThe` pendulum))) (weave [periodPendDerivSents, map E periodPendDerivEqns])
 
 periodPendDerivSents :: [Sentence]
 periodPendDerivSents = [periodPendDerivSent1, periodPendDerivSent2]

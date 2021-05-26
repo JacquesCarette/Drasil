@@ -4,7 +4,7 @@ module Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs) where
 
 import Language.Drasil
 import Utils.Drasil
-import qualified Utils.Drasil.Sentence as S
+import Utils.Drasil.Concepts
 
 import Data.Drasil.Concepts.Documentation (condition, goal, input_, likeChgDom,
   software, system, unlikeChgDom, value, variable)
@@ -43,7 +43,7 @@ varValsOfmkEDesc = foldlSent [makeRef2S assumpSV `sC` chgsStart assumpLDFC (S "C
   plural value, S "for", foldlList Comma List (map ch (take 3 assumptionConstants)),
   S "are assumed to be the same for all" +:+. phrase glass,
   S "In the future, these", plural value, S "can be changed to",
-  phrase variable, plural input_]
+  pluralNP (combineNINI variable input_)]
 
 accMoreThanSingleLiteDesc = foldlSent [chgsStart assumpGL (S "The"), phrase software,
   S "may be changed to accommodate more than a single", phrase lite]
@@ -68,7 +68,7 @@ accAlteredGlass           = cic "accAlteredGlass"           accAlteredGlassDesc 
 
 predictWithstandOfCertDegDesc, accAlteredGlassDesc :: Sentence
 
-predictWithstandOfCertDegDesc = foldlSent [phrase goal `S.the_ofTheC` phrase system,
+predictWithstandOfCertDegDesc = foldlSent [atStartNP (goal `the_ofThe` system),
   S "is to predict whether the", phrase glaSlab, S "under consideration can",
   S "withstand an", phrase explosion, S "of a certain degree"]
 

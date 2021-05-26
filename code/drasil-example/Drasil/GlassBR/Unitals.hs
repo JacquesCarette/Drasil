@@ -194,21 +194,21 @@ demand, tmDemand, lRe, tmLRe, nonFactorL, eqTNTWeight :: UnitalChunk
 
 demand      = ucs' demandq lQ Rational pascal --correct Space used?
 
-tmDemand      = ucs' load (Variable "Load") Rational pascal --correct Space used?
+tmDemand    = ucs' load (Variable "Load") Rational pascal --correct Space used?
   
-lRe      = ucs' loadResis (Variable "LR") Rational pascal --correct Space used?
+lRe         = ucs' loadResis (Variable "LR") Rational pascal --correct Space used?
 
-tmLRe      = ucs' capacity (Variable "capacity") Rational pascal --correct Space used?
+tmLRe       = ucs' capacity (Variable "capacity") Rational pascal --correct Space used?
 
-nonFactorL      = ucs' nonFactoredL (Variable "NFL") Rational pascal --correct Space used?
+nonFactorL  = ucs' nonFactoredL (Variable "NFL") Rational pascal --correct Space used?
 
 eqTNTWeight = ucs' eqTNTChar (sub (eqSymb charWeight) (eqSymb tNT)) Real 
   kilogram
 
-loadDur    = unitary "loadDur"    (nounPhraseSP "duration of load")
+loadDur     = unitary "loadDur"    (nounPhraseSP "duration of load")
   (sub lT lDur) second Real
 
-minThick   = unitary "minThick"   (nounPhraseSP "minimum thickness")
+minThick    = unitary "minThick"   (nounPhraseSP "minimum thickness")
   lH metre Rational
 
 sdx         = unitary "sdx" (nounPhraseSent $ phrase standOffDist +:+ sParen (phrase xComp))

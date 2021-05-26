@@ -30,6 +30,7 @@ class HasSymbol c where
   -- | Provides the 'Symbol' for a particular stage of generation.
   symbol  :: c -> Stage -> Symbol
  
--- | For a "Reference Address", we just need a getter.
+-- | Members must have a reference address.
 class HasRefAddress b where
+  -- | Provides the ability to hold a reference address.
   getRefAdd :: b -> String

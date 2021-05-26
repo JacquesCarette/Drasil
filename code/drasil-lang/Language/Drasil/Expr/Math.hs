@@ -116,13 +116,13 @@ perc = Perc
 
 -- | Smart constructor for set membership.
 -- FIXME: first argument really ought to be restricted to a
--- 'variable', as IsIn should only be used as a type proxy
+-- 'Variable', as 'IsIn' should only be used as a type proxy.
 isin :: Expr -> Space -> Expr
 isin = IsIn
 
--- | Smart constructor for the summation, product, and integrals.
+-- | Smart constructor for the summation, product, and integral functions over an interval.
 defint, defsum, defprod :: Symbol -> Expr -> Expr -> Expr -> Expr
--- | Smart constructor for the summation, product, and integrals.
+-- | Smart constructor for the summation, product, and integral functions over all Real numbers.
 intAll, sumAll, prodAll :: Symbol -> Expr -> Expr
 
 defint v low high = Operator AddRe (BoundedDD v Continuous low high)
@@ -210,7 +210,7 @@ applyWithNamedArgs f ps ns = FCall (f ^. uid) ps (zip (map ((^. uid) . fst) ns)
   (map snd ns))
 
 -- Note how |sy| 'enforces' having a symbol
--- | Get an 'Expr' from a 'Symbol'
+-- | Get an 'Expr' from a 'Symbol'.
 sy :: (HasUID c, HasSymbol c) => c -> Expr
 sy x = C (x ^. uid)
 

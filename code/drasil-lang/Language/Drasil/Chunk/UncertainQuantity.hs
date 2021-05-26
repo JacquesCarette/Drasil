@@ -38,7 +38,8 @@ instance HasSpace          UncertainChunk where typ = conc . typ
 -- ^ Finds the 'Space' of the 'ConstrainedChunk' used to make the 'UncertainChunk'.
 instance HasSymbol         UncertainChunk where symbol c = symbol (c^.conc)
 -- ^ Finds the 'Symbol' of the 'ConstrainedChunk' used to make the 'UncertainChunk'.
-instance Quantity          UncertainChunk where 
+instance Quantity          UncertainChunk where
+-- ^ 'UncertainChunk's have a 'Quantity'.
 instance Constrained       UncertainChunk where constraints = conc . constraints
 -- ^ Finds the 'Constraint's of the 'ConstrainedChunk' used to make the 'UncertainChunk'.
 instance HasReasVal        UncertainChunk where reasVal = conc . reasVal
@@ -81,6 +82,7 @@ instance HasSpace       UncertQ where typ = coco . typ
 instance HasSymbol      UncertQ where symbol c = symbol (c^.coco)
 -- ^ Finds the 'Symbol' of the 'ConstrConcept' used to make the 'UncertQ'.
 instance Quantity       UncertQ where 
+-- ^ 'UncertQ's have a 'Quantity'.
 instance HasUncertainty UncertQ where unc = unc''
 -- ^ Finds the uncertainty of an 'UncertQ'.
 instance Constrained    UncertQ where constraints = coco . constraints

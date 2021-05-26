@@ -53,14 +53,16 @@ module Language.Drasil.Misc
 --   </pre>
 mkTable :: [a -> b] -> [a] -> [[b]]
 
--- | Returns the string if it doesn't contain spaces and throws an error if
---   it does
+-- | Returns the given string if it doesn't contain spaces and throws an
+--   error if it does.
 noSpaces :: String -> String
 
--- | repUnd - Replace Underscore (with <a>.</a>).
+-- | Replace underscores in a string with <a>.</a>.
 repUnd :: String -> String
 
 module Language.Drasil.People
+
+-- | People is a synonymn for many <a>Person</a>s.
 type People = [Person]
 
 -- | A person can have a given name, middle name(s), and surname, as well
@@ -74,7 +76,7 @@ person :: String -> String -> Person
 
 -- | Constructor for a person using Eastern naming conventions. Used for a
 --   person with only a given name and surname. Arguments are in the order:
---   surname, given name
+--   surname, given name.
 person' :: String -> String -> Person
 
 -- | Constructor for a person using Western naming conventions. Similar to
@@ -83,30 +85,50 @@ person' :: String -> String -> Person
 personWM :: String -> [String] -> String -> Person
 
 -- | Constructor for a person using Eastern naming conventions. Similar to
---   the 'person'' constructor, except the middle argument is a list of
---   middle names.
+--   the <a>person'</a> constructor, except the middle argument is a list
+--   of middle names.
 personWM' :: String -> [String] -> String -> Person
 
 -- | Constructor for a person with a mononym (only one name).
 mononym :: String -> Person
+
+-- | Members of this class must have a name.
 class HasName p
+
+-- | Gets the name of a <a>Person</a>. Adds a dot after any initials.
 name :: HasName n => n -> String
+
+-- | Provides the ability to hold a name.
 nameStr :: HasName p => p -> String
 
 -- | Naming conventions.
---   
---   Western style conventions are given name followed by middle names,
---   followed by surname. Eastern style conventions are surname followed by
---   middle names, followed by given name. Mononyms are for those people
---   who have only one name (ex. Madonna)
 data Conv
+
+-- | Western style conventions are given name followed by middle names,
+--   followed by surname.
 Western :: Conv
+
+-- | Eastern style conventions are surname followed by middle names,
+--   followed by given name.
 Eastern :: Conv
+
+-- | Mononyms are for those people who have only one name (ex. Madonna).
 Mono :: Conv
+
+-- | Gets the last name of a <a>Person</a>.
 lstName :: Person -> String
+
+-- | Gets a <a>Person</a>'s name in the form: Last, First Middle.
 rendPersLFM :: Person -> String
+
+-- | Gets a <a>Person</a>'s name in the form: Last, F. M.
 rendPersLFM' :: Person -> String
+
+-- | Gets a <a>Person</a>'s name in the form: Last, First M.
 rendPersLFM'' :: Person -> String
+
+-- | Orderes different groups of <a>Person</a>s. If two lists are the same
+--   up to a point, the citation with more <a>Person</a>s will go last.
 comparePeople :: [Person] -> [Person] -> Ordering
 instance GHC.Classes.Eq Language.Drasil.People.Person
 instance GHC.Classes.Eq Language.Drasil.People.Conv
@@ -134,14 +156,14 @@ Note :: String -> CiteField
 Number :: Int -> CiteField
 Organization :: String -> CiteField
 
--- | Range of pages (ex1. 1-32; ex2. 7,31,52-55)
+-- | Range of pages (ex1. 1-32; ex2. 7,31,52-55).
 Pages :: [Int] -> CiteField
 Publisher :: String -> CiteField
 School :: String -> CiteField
 Series :: String -> CiteField
 Title :: String -> CiteField
 
--- | BibTeX "type" field
+-- | BibTeX "type" field.
 Type :: String -> CiteField
 Volume :: Int -> CiteField
 Year :: Int -> CiteField
@@ -168,72 +190,72 @@ Proceedings :: CitationKind
 TechReport :: CitationKind
 Unpublished :: CitationKind
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 author :: People -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 editor :: People -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 address :: String -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 bookTitle :: String -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 howPublished :: String -> CiteField
 
--- | URL version of <a>howPublished</a>
+-- | URL version of <a>howPublished</a>.
 --   
---   Smart field constructor
+--   Smart field constructor for a <a>CiteField</a>.
 howPublishedU :: String -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 institution :: String -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 journal :: String -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 note :: String -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 organization :: String -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 publisher :: String -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 school :: String -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 series :: String -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 title :: String -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 typeField :: String -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 chapter :: Int -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 edition :: Int -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 number :: Int -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 volume :: Int -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 year :: Int -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 pages :: [Int] -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 month :: Month -> CiteField
 
 
@@ -242,6 +264,8 @@ module Language.Drasil.Classes.Citations
 
 -- | <tt>Citation</tt>s should have a fields (<a>CiteField</a>).
 class HasFields c
+
+-- | Provides a <tt>Lens</tt> to <a>CiteField</a>s.
 getFields :: HasFields c => Lens' c [CiteField]
 
 module Language.Drasil.ShortName
@@ -490,38 +514,62 @@ instance GHC.Classes.Eq Language.Drasil.Space.Space
 
 -- | The Drasil Expression language
 module Language.Drasil.Expr
+
+-- | A relation is just an expression (<a>Expr</a>).
 type Relation = Expr
+
+-- | Arithmetic operators (fractional, power, and subtraction).
 data ArithBinOp
 Frac :: ArithBinOp
 Pow :: ArithBinOp
 Subt :: ArithBinOp
+
+-- | Equality operators (equal or not equal).
 data EqBinOp
 Eq :: EqBinOp
 NEq :: EqBinOp
+
+-- | Conditional and Biconditional operators (Expressions can imply one
+--   another, or exist if and only if another expression exists).
 data BoolBinOp
 Impl :: BoolBinOp
 Iff :: BoolBinOp
+
+-- | Index operator.
 data LABinOp
 Index :: LABinOp
+
+-- | Ordered binary operators (less than, greater than, less than or equal
+--   to, greater than or equal to).
 data OrdBinOp
 Lt :: OrdBinOp
 Gt :: OrdBinOp
 LEq :: OrdBinOp
 GEq :: OrdBinOp
+
+-- | <tt>Vector x Vector -&gt; Vector</tt> binary operations (cross
+--   product).
 data VVVBinOp
 Cross :: VVVBinOp
+
+-- | <tt>Vector x Vector -&gt; Number</tt> binary operations (dot product).
 data VVNBinOp
 Dot :: VVNBinOp
+
+-- | Associative operators (adding and multiplication). Also specifies
+--   whether it is for integers or for real numbers.
 data AssocArithOper
 AddI :: AssocArithOper
 AddRe :: AssocArithOper
 MulI :: AssocArithOper
 MulRe :: AssocArithOper
+
+-- | Associative boolean operators (and, or).
 data AssocBoolOper
 And :: AssocBoolOper
 Or :: AssocBoolOper
 
--- | Unary functions
+-- | Unary functions (abs, log, ln, sin, etc.).
 data UFunc
 Abs :: UFunc
 Log :: UFunc
@@ -538,102 +586,211 @@ Arctan :: UFunc
 Exp :: UFunc
 Sqrt :: UFunc
 Neg :: UFunc
+
+-- | Negation operator (not).
 data UFuncB
 Not :: UFuncB
+
+-- | Data for vectors (normal, dimensions).
 data UFuncVec
 Norm :: UFuncVec
 Dim :: UFuncVec
 
--- | For case expressions
+-- | For case expressions (either complete or incomplete).
 data Completeness
 Complete :: Completeness
 Incomplete :: Completeness
 
--- | Drasil Expressions
+-- | Drasil expressions.
 data Expr
+
+-- | Turns a decimal value (<a>Double</a>) into an expression.
 [Dbl] :: Double -> Expr
+
+-- | Turns an integer into an expression.
 [Int] :: Integer -> Expr
+
+-- | Represents decimal values that are exact as integers.
 [ExactDbl] :: Integer -> Expr
+
+-- | Turns a string into an expression.
 [Str] :: String -> Expr
+
+-- | Turns two integers into a fraction (or percent).
 [Perc] :: Integer -> Integer -> Expr
+
+-- | Takes an associative aritmetic operator with a list of expressions.
 [AssocA] :: AssocArithOper -> [Expr] -> Expr
+
+-- | Takes an associative boolean operator with a list of expressions.
 [AssocB] :: AssocBoolOper -> [Expr] -> Expr
 
--- | Derivative, syntax is: Type (Partial or total) -&gt; principal part of
---   change -&gt; with respect to For example: Deriv Part y x1 would be
---   (dy/dx1)
+-- | Derivative syntax is: Type (<a>Part</a>ial or <a>Total</a>) -&gt;
+--   principal part of change -&gt; with respect to For example: Deriv Part
+--   y x1 would be (dy/dx1).
 [Deriv] :: DerivType -> Expr -> UID -> Expr
 
 -- | C stands for <a>Chunk</a>, for referring to a chunk in an expression.
---   Implicitly assumes has a symbol.
+--   Implicitly assumes that the chunk has a symbol.
 [C] :: UID -> Expr
 
--- | F(x) is (FCall F [x] []) or similar. FCall accepts a list of params
---   and a list of named params. F(x,y) would be (FCall F [x,y]) or sim.
---   F(x,n=y) would be (FCall F [x] [(n,y)]).
+-- | A function call accepts a list of parameters and a list of named
+--   parameters. For example
+--   
+--   <ul>
+--   <li>F(x) is (FCall F [x] []).</li>
+--   <li>F(x,y) would be (FCall F [x,y]).</li>
+--   <li>F(x,n=y) would be (FCall F [x] [(n,y)]).</li>
+--   </ul>
 [FCall] :: UID -> [Expr] -> [(UID, Expr)] -> Expr
 
--- | Actor creation given UID and parameters
+-- | Actor creation given <a>UID</a>, parameters, and named parameters.
 [New] :: UID -> [Expr] -> [(UID, Expr)] -> Expr
 
--- | Message an actor: 1st UID is the actor, 2nd UID is the method
+-- | Message an actor:
+--   
+--   <ul>
+--   <li>1st <a>UID</a> is the actor,</li>
+--   <li>2nd <a>UID</a> is the method.</li>
+--   </ul>
 [Message] :: UID -> UID -> [Expr] -> [(UID, Expr)] -> Expr
 
--- | Access a field of an actor: 1st UID is the actor, 2nd UID is the field
+-- | Access a field of an actor:
+--   
+--   <ul>
+--   <li>1st <a>UID</a> is the actor,</li>
+--   <li>2nd <a>UID</a> is the field.</li>
+--   </ul>
 [Field] :: UID -> UID -> Expr
 
--- | For multi-case expressions, each pair represents one case
+-- | For multi-case expressions, each pair represents one case.
 [Case] :: Completeness -> [(Expr, Relation)] -> Expr
+
+-- | Represents a matrix of expressions.
 [Matrix] :: [[Expr]] -> Expr
 
--- | Unary functions/operations
+-- | Unary operation for most functions (eg. sin, cos, log, etc.).
 [UnaryOp] :: UFunc -> Expr -> Expr
+
+-- | Unary operation for negation.
 [UnaryOpB] :: UFuncB -> Expr -> Expr
+
+-- | Unary operation for vectors (holds whether a vector is normal or used
+--   for dimensions).
 [UnaryOpVec] :: UFuncVec -> Expr -> Expr
 
--- | Binary functions/operations
+-- | Binary operator for arithmetic between expressions (fractional, power,
+--   and subtraction).
 [ArithBinaryOp] :: ArithBinOp -> Expr -> Expr -> Expr
+
+-- | Binary operator for boolean operators (implies, iff).
 [BoolBinaryOp] :: BoolBinOp -> Expr -> Expr -> Expr
+
+-- | Binary operator for equality between expressions.
 [EqBinaryOp] :: EqBinOp -> Expr -> Expr -> Expr
+
+-- | Binary operator for indexing two expressions.
 [LABinaryOp] :: LABinOp -> Expr -> Expr -> Expr
+
+-- | Binary operator for ordering expressions (less than, greater than,
+--   etc.).
 [OrdBinaryOp] :: OrdBinOp -> Expr -> Expr -> Expr
+
+-- | Binary operator for <tt>Vector x Vector -&gt; Vector</tt> operations
+--   (cross product).
 [VVVBinaryOp] :: VVVBinOp -> Expr -> Expr -> Expr
+
+-- | Binary operator for <tt>Vector x Vector -&gt; Number</tt> operations
+--   (dot product).
 [VVNBinaryOp] :: VVNBinOp -> Expr -> Expr -> Expr
 
--- | Operators are generalized arithmetic operators over a |DomainDesc| of
---   an |Expr|. Could be called |BigOp|. ex: Summation is represented via
---   |Add| over a discrete domain
+-- | Operators are generalized arithmetic operators over a
+--   <a>DomainDesc</a> of an <a>Expr</a>. Could be called BigOp. ex:
+--   Summation is represented via <tt>Add</tt> over a discrete domain.
 [Operator] :: AssocArithOper -> DomainDesc Expr Expr -> Expr -> Expr
 
--- | element of
+-- | The expression is an element of a space.
 [IsIn] :: Expr -> Space -> Expr
 
--- | a different kind of 'element of'
+-- | A different kind of <a>IsIn</a>. A <a>UID</a> is an element of an
+--   interval.
 [RealI] :: UID -> RealInterval Expr Expr -> Expr
+
+-- | Smart constructor for equating two expressions.
 ($=) :: Expr -> Expr -> Expr
 infixr 4 $=
+
+-- | Smart constructor for showing that two expressions are not equal.
 ($!=) :: Expr -> Expr -> Expr
+
+-- | Less than.
+--   
+--   Smart constructor for ordering two equations.
 ($<) :: Expr -> Expr -> Expr
+
+-- | Greater than.
+--   
+--   Smart constructor for ordering two equations.
 ($>) :: Expr -> Expr -> Expr
+
+-- | Less than or equal to.
+--   
+--   Smart constructor for ordering two equations.
 ($<=) :: Expr -> Expr -> Expr
+
+-- | Greater than or equal to.
+--   
+--   Smart constructor for ordering two equations.
 ($>=) :: Expr -> Expr -> Expr
+
+-- | Smart constructor for the dot product of two equations.
 ($.) :: Expr -> Expr -> Expr
+
+-- | Add two expressions (Integers).
 addI :: Expr -> Expr -> Expr
+
+-- | Add two expressions (Real numbers).
 addRe :: Expr -> Expr -> Expr
+
+-- | Multiply two expressions (Integers).
 mulI :: Expr -> Expr -> Expr
+
+-- | Multiply two expressions (Real numbers).
 mulRe :: Expr -> Expr -> Expr
+
+-- | Smart constructor for subtracting two expressions.
 ($-) :: Expr -> Expr -> Expr
+
+-- | Smart constructor for dividing two expressions.
 ($/) :: Expr -> Expr -> Expr
 infixl 7 $/
+
+-- | Smart constructor for rasing the first expression to the power of the
+--   second.
 ($^) :: Expr -> Expr -> Expr
 infixr 8 $^
+
+-- | Smart constructor to show that one expression implies the other
+--   (conditional operator).
 ($=>) :: Expr -> Expr -> Expr
+
+-- | Smart constructor to show that an expression exists if and only if
+--   another expression exists (biconditional operator).
 ($<=>) :: Expr -> Expr -> Expr
+
+-- | Smart constructor for the boolean <i>and</i> operator.
 ($&&) :: Expr -> Expr -> Expr
 infixr 9 $&&
+
+-- | Smart constructor for the boolean <i>or</i> operator.
 ($||) :: Expr -> Expr -> Expr
 infixr 9 $||
+
+-- | The variable type is just a renamed <a>String</a>.
 type Variable = String
+
+-- | Determines the type of the derivative (either a partial derivative or
+--   a total derivative).
 data DerivType
 Part :: DerivType
 Total :: DerivType
@@ -713,31 +870,43 @@ names :: Expr -> [String]
 names' :: Expr -> [String]
 
 -- | Generic traversal of everything that could come from an interval to
---   names. (Similar to <a>names</a>)
+--   names (similar to <a>names</a>).
 namesRI :: RealInterval Expr Expr -> [String]
 
 module Language.Drasil.Constraint
+
+-- | Holds constraints. May occur between an interval of <a>Expr</a>, a
+--   list of <a>Double</a>s, or a list of <a>String</a>s.
 data Constraint
+
+-- | By default, physical and software constraints are ranges.
 [Range] :: ConstraintReason -> RealInterval Expr Expr -> Constraint
 [EnumeratedReal] :: ConstraintReason -> [Double] -> Constraint
 [EnumeratedStr] :: ConstraintReason -> [String] -> Constraint
+
+-- | The reason behind the constraint's existence.
 data ConstraintReason
 Physical :: ConstraintReason
 Software :: ConstraintReason
 
--- | Range of <a>Physical</a> constraints
+-- | Smart constructor for range of <a>Physical</a> constraints between two
+--   given expressions.
 physc :: RealInterval Expr Expr -> Constraint
 
--- | Range of <a>Software</a> constraints
+-- | Smart constructor for range of <a>Software</a> constraints between two
+--   given expressions.
 sfwrc :: RealInterval Expr Expr -> Constraint
 
--- | Enumeration of values, default to <a>Physical</a>
+-- | Smart constructor for enumeration of values, default reason for
+--   constraint is <a>Physical</a>.
 enumc :: [Double] -> Constraint
 
--- | Helpful for filtering for Physical / Software constraints
+-- | Helpful for filtering for Physical constraints. True if constraint is
+--   <a>Physical</a>.
 isPhysC :: Constraint -> Bool
 
--- | Helpful for filtering for Physical / Software constraints
+-- | Helpful for filtering for Software constraints. True if constraint is
+--   <a>Software</a>.
 isSfwrC :: Constraint -> Bool
 
 
@@ -1078,8 +1247,10 @@ uid :: HasUID c => Lens' c UID
 class HasShortName s
 shortname :: HasShortName s => s -> ShortName
 
--- | For a "Reference Address", we just need a getter.
+-- | Members must have a reference address.
 class HasRefAddress b
+
+-- | Provides the ability to hold a reference address.
 getRefAdd :: HasRefAddress b => b -> String
 
 -- | A HasSymbol is anything which has a <a>Symbol</a>.
@@ -1298,13 +1469,13 @@ Replace :: Sentence -> CapitalizationRule
 --   pluralization and capitalization rules.
 data NP
 
--- | Stores a proper noun and its pluralization
+-- | Stores a proper noun and its pluralization.
 ProperNoun :: String -> PluralRule -> NP
 
--- | Stores a common noun and its pluralization
+-- | Stores a common noun and its pluralization.
 CommonNoun :: String -> PluralRule -> CapitalizationRule -> NP
 
--- | Stores noun phrase and its pluralization Phrase plurals can get very
+-- | Stores noun phrase and its pluralization. Phrase plurals can get very
 --   odd, so it seems best (for now) to encode them directly. FIXME: If the
 --   singular/plural phrase has special (replace) capitalization, one of
 --   the two cannot be capitalized right now. The two capitalization rules
@@ -1334,9 +1505,21 @@ IrregPlur :: (String -> String) -> PluralRule
 
 module Language.Drasil.NounPhrase
 class NounPhrase n
+
+-- | Retrieves singular form of term. Ex. "the quick brown fox".
 phraseNP :: NounPhrase n => n -> Sentence
+
+-- | Retrieves plural form of term. Ex. "the quick brown foxes".
 pluralNP :: NounPhrase n => n -> PluralForm
+
+-- | Retrieves the singular form and applies a captalization rule (usually
+--   capitalizes the first word) to produce a <a>Sentence</a>. Ex. "The
+--   quick brown fox".
 sentenceCase :: NounPhrase n => n -> (NP -> Sentence) -> Capitalization
+
+-- | Retrieves the singular form and applies a captalization rule (usually
+--   capitalizes all words) to produce a <a>Sentence</a>. Ex. "The Quick
+--   Brown Fox".
 titleCase :: NounPhrase n => n -> (NP -> Sentence) -> Capitalization
 
 -- | For nouns and <tt>NounPhrase</tt>s. May be constructed from a proper
@@ -1378,20 +1561,20 @@ cn'' :: String -> NP
 --   first word at the beginning of a sentence.
 cn''' :: String -> NP
 
--- | Common noun that pluralizes by dropping the last two letters and
---   adding an "ices" ending (ex. matrix -&gt; matrices).
+-- | Construct a common noun that pluralizes by dropping the last two
+--   letters and adding an "ices" ending (ex. matrix -&gt; matrices).
 cnICES :: String -> NP
 
--- | Common noun that pluralizes by dropping the last letter and adding an
---   "ies" ending (ex. body -&gt; bodies).
+-- | Construct a common noun that pluralizes by dropping the last letter
+--   and adding an "ies" ending (ex. body -&gt; bodies).
 cnIES :: String -> NP
 
--- | Common noun that allows you to specify the pluralization rule (as in
---   <a>pnIrr</a>).
+-- | Construct a common noun that allows you to specify the pluralization
+--   rule (as in <a>pnIrr</a>).
 cnIP :: String -> PluralRule -> NP
 
--- | Common noun that pluralizes by dropping the last two letters and
---   adding "es" (ex. analysis -&gt; analyses).
+-- | Construct a common noun that pluralizes by dropping the last two
+--   letters and adding "es" (ex. analysis -&gt; analyses).
 cnIS :: String -> NP
 
 -- | Common noun that allows you to specify both the pluralization rule and
@@ -1399,52 +1582,58 @@ cnIS :: String -> NP
 --   beginning of a sentence).
 cnIrr :: String -> PluralRule -> CapitalizationRule -> NP
 
--- | Common noun that pluralizes by dropping the last two letters and
---   adding "a" (ex. datum -&gt; data).
+-- | Construct a common noun that pluralizes by dropping the last two
+--   letters and adding "a" (ex. datum -&gt; data).
 cnUM :: String -> NP
 
 -- | Combine two noun phrases. The singular form becomes <tt>phrase</tt>
---   from t1 followed by phrase of t2. The plural becomes phrase of t1
---   followed by plural of t2. Uses standard CapFirst sentence case and
---   CapWords title case. For example: <tt>compoundPhrase system
---   constraint</tt> will have singular form "system constraint" and plural
---   "system constraints".
+--   from t1 followed by <tt>phrase</tt> of t2. The plural becomes
+--   <tt>phrase</tt> of t1 followed by <tt>plural</tt> of t2. Uses standard
+--   <a>CapFirst</a> sentence case and <a>CapWords</a> title case. For
+--   example: <tt>compoundPhrase system constraint</tt> will have singular
+--   form "system constraint" and plural "system constraints".
 compoundPhrase :: (NounPhrase a, NounPhrase b) => a -> b -> NP
 
--- | Similar to <a>compoundPhrase</a>, but where the sentence case is the
---   same as the title case (CapWords).
+-- | Similar to <a>compoundPhrase</a>, but the sentence case is the same as
+--   the title case (<a>CapWords</a>).
 compoundPhrase' :: NP -> NP -> NP
 
--- | Similar to <a>compoundPhrase'</a>, but which accepts functions to be
---   used for constructing the plural form. For example
+-- | Similar to <a>compoundPhrase'</a>, but accepts two functions that will
+--   be used to construct the plural form. For example,
 --   <tt>compoundPhrase'' plural phrase system constraint</tt> would have
 --   the plural form "systems constraint".
 compoundPhrase'' :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
 
--- | Used when you need a special function apllied to the first term of
---   both cases (eg. short or plural).
+-- | Similar to <a>compoundPhrase</a>, but used when you need a special
+--   function applied to the first term of both singular and pluralcases
+--   (eg. short or plural).
 compoundPhrase''' :: (NP -> Sentence) -> NP -> NP -> NP
+
+-- | Similar to <a>compoundPhrase</a>, but pluralizes the first <a>NP</a>
+--   for both singular and plural cases.
 compoundPhraseP1 :: NP -> NP -> NP
 
--- | Creates a <a>NP</a> with a given singular and plural form that
---   capitalizes the first letter of the first word for sentence case.
+-- | Creates a <a>NP</a> with a given singular and plural form (as
+--   <a>String</a>s) that capitalizes the first letter of the first word
+--   for sentence case.
 nounPhrase :: String -> PluralString -> NP
 
--- | Similar to <a>nounPhrase</a>, but following a given capitalization
---   rule for sentence case.
+-- | Similar to <a>nounPhrase</a>, but takes a specified capitalization
+--   rule.
 nounPhrase' :: String -> PluralString -> CapitalizationRule -> NP
 
--- | Custom noun phrase constructor that takes a singular form, plural
---   form, sentence case capitalization rule, and title case capitalization
---   rule.
+-- | Custom noun phrase constructor that takes a singular form
+--   (<a>Sentence</a>), plural form (<a>Sentence</a>), sentence case
+--   capitalization rule, and title case capitalization rule.
 nounPhrase'' :: Sentence -> PluralForm -> CapitalizationRule -> CapitalizationRule -> NP
 
--- | For things that should not be pluralized. Works like
---   <a>nounPhrase</a>, but with only the first argument.
+-- | For things that should not be pluralized (or are self-plural). Works
+--   like <a>nounPhrase</a>, but with only the first argument.
 nounPhraseSP :: String -> NP
 
--- | For Reuirements, Assumptions, LikelyChanges, etc. to allow for
---   referencing.
+-- | Similar to nounPhrase, except it only accepts one <a>Sentence</a>.
+--   Used for Requirements, Assumptions, LikelyChanges, etc. to allow for
+--   referencing. Plural case is just <a>AddS</a>.
 nounPhraseSent :: Sentence -> NP
 
 -- | Self plural.
@@ -1467,9 +1656,9 @@ pn'' :: String -> NP
 --   Construct a Proper Noun, it is always capitalized as written.
 pn''' :: String -> NP
 
--- | Construct a Proper Noun. Meant for use with IrregPlur from
---   <a>PluralRule</a>. First argument is the String representing the noun,
---   second is the rule.
+-- | Construct a <a>ProperNoun</a> with a custom plural rule (using
+--   <a>IrregPlur</a> from <a>PluralRule</a>). First argument is the String
+--   representing the noun, second is the rule.
 pnIrr :: String -> PluralRule -> NP
 
 -- | Singular title case.
@@ -1516,32 +1705,57 @@ instance Language.Drasil.NounPhrase.NounPhrase Language.Drasil.NounPhrase.Core.N
 
 module Language.Drasil.Development
 class NounPhrase n
+
+-- | Retrieves singular form of term. Ex. "the quick brown fox".
 phraseNP :: NounPhrase n => n -> Sentence
+
+-- | Retrieves plural form of term. Ex. "the quick brown foxes".
 pluralNP :: NounPhrase n => n -> PluralForm
+
+-- | Negation operator (not).
 data UFuncB
 Not :: UFuncB
+
+-- | Data for vectors (normal, dimensions).
 data UFuncVec
 Norm :: UFuncVec
 Dim :: UFuncVec
+
+-- | Arithmetic operators (fractional, power, and subtraction).
 data ArithBinOp
 Frac :: ArithBinOp
 Pow :: ArithBinOp
 Subt :: ArithBinOp
+
+-- | Conditional and Biconditional operators (Expressions can imply one
+--   another, or exist if and only if another expression exists).
 data BoolBinOp
 Impl :: BoolBinOp
 Iff :: BoolBinOp
+
+-- | Equality operators (equal or not equal).
 data EqBinOp
 Eq :: EqBinOp
 NEq :: EqBinOp
+
+-- | Index operator.
 data LABinOp
 Index :: LABinOp
+
+-- | Ordered binary operators (less than, greater than, less than or equal
+--   to, greater than or equal to).
 data OrdBinOp
 Lt :: OrdBinOp
 Gt :: OrdBinOp
 LEq :: OrdBinOp
 GEq :: OrdBinOp
+
+-- | <tt>Vector x Vector -&gt; Vector</tt> binary operations (cross
+--   product).
 data VVVBinOp
 Cross :: VVVBinOp
+
+-- | <tt>Vector x Vector -&gt; Number</tt> binary operations (dot product).
 data VVNBinOp
 Dot :: VVNBinOp
 
@@ -1558,7 +1772,7 @@ names :: Expr -> [String]
 names' :: Expr -> [String]
 
 -- | Generic traversal of everything that could come from an interval to
---   names. (Similar to <a>names</a>)
+--   names (similar to <a>names</a>).
 namesRI :: RealInterval Expr Expr -> [String]
 
 -- | This is to collect <a>UID</a>s that are printed out as a
@@ -1591,72 +1805,98 @@ module Language.Drasil.Derivation
 data Derivation
 Derivation :: Sentence -> [Sentence] -> Derivation
 
--- | Smart constructor for <a>Derivation</a>
+-- | Smart constructor for creating a <a>Derivation</a>.
 mkDeriv :: Sentence -> [Sentence] -> Derivation
 
--- | Similar to mkDeriv, but prepends "Detailed derivation of" to the
---   header
+-- | Similar to <a>mkDeriv</a>, but prepends "Detailed derivation of" to
+--   the header.
 mkDerivName :: Sentence -> [Sentence] -> Derivation
 
--- | Similar to mkDeriv, but without a header <a>Sentence</a>
+-- | Similar to <a>mkDeriv</a>, but without a header <a>Sentence</a>.
 mkDerivNoHeader :: [Sentence] -> Derivation
 
 
 -- | Defining all the classes which represent knowledge-about-knowledge
 module Language.Drasil.Classes
 
--- | A NamedIdea is a <a>term</a> that we've identified (has an <a>id</a>)
+-- | A NamedIdea is a <a>term</a> that we've identified (has a <a>UID</a>)
 --   as being worthy of naming.
 class HasUID c => NamedIdea c
 
--- | Lens to the term (a noun phrase)
+-- | Lens to the term (a noun phrase).
 term :: NamedIdea c => Lens' c NP
 
--- | HasSpace is anything which has a <a>Space</a>...
+-- | HasSpace is anything which has a <a>Space</a>.
 class HasSpace c
+
+-- | Provides a <tt>Lens</tt> to the <a>Space</a>.
 typ :: HasSpace c => Lens' c Space
 
--- | Some chunks store a unit symbol
+-- | Some chunks store a unit symbol.
 class HasUnitSymbol u
+
+-- | Provides the ability to hold a unit symbol (<a>USymb</a>).
 usymb :: HasUnitSymbol u => u -> USymb
 
--- | A class that contains a list of <a>Reference</a>s
+-- | A class that contains a list of <a>Reference</a>s.
 class HasReference c
+
+-- | Provides a <tt>Lens</tt> to the <a>Reference</a>s.
 getReferences :: HasReference c => Lens' c [Reference]
 
--- | A HasReasVal is a <a>Quantity</a> that could have a reasonable value
+-- | A <a>Quantity</a> that could have a reasonable value.
 class HasReasVal c
+
+-- | Provides a <tt>Lens</tt> to the possible reasonable value.
 reasVal :: HasReasVal c => Lens' c (Maybe Expr)
 
--- | A class that might have a <a>Derivation</a>
+-- | A class that might have a <a>Derivation</a>.
 class HasDerivation c
+
+-- | Provides a <tt>Lens</tt> to a possible derivation.
 derivations :: HasDerivation c => Lens' c (Maybe Derivation)
+
+-- | Records any additional notes needed to avoid losing information
 class HasAdditionalNotes c
+
+-- | Provides a <tt>Lens</tt> to the notes.
 getNotes :: HasAdditionalNotes c => Lens' c [Sentence]
 
--- | An |Idea| is the <tt>meet</tt> of |NamedIdea| and |CommonIdea|. In
---   other words, it <i>may</i> have an acronym/abbreviation.
+-- | An <a>Idea</a> is the combination of a <a>NamedIdea</a> and a
+--   <a>CommonIdea</a>. In other words, it <i>may</i> have an
+--   acronym/abbreviation.
 class NamedIdea c => Idea c
+
+-- | Gets the acronym/abbreviation.
 getA :: Idea c => c -> Maybe String
+
+-- | Defines a chunk.
 class Definition c
 
--- | defn provides (a <tt>Lens</tt> to) the definition for a chunk
+-- | Provides (a <tt>Lens</tt> to) the definition for a chunk.
 defn :: Definition c => Lens' c Sentence
+
+-- | Some concepts have a domain (related information encoded in
+--   <a>UID</a>s to other chunks).
 class ConceptDomain c
 
--- | cdom provides Getter for the concept domain tags for a chunk
+-- | Provides Getter for the concept domain tags for a chunk
 --   
 --   <i>cdom</i> should be exported for use by the Drasil framework, but
 --   should not be exported beyond that.
 cdom :: ConceptDomain c => c -> [UID]
 
--- | A Constrained is a <a>Quantity</a> that has value constraints but do
---   not enforce Quantity at this point
+-- | The Constrained class is a <a>Quantity</a> that has value constraints.
+--   It does not enforce <a>Quantity</a> at this point.
 class Constrained c
+
+-- | Provides a <tt>Lens</tt> to the <a>Constraint</a>s.
 constraints :: Constrained c => Lens' c [Constraint]
 
--- | Has a function that turns into a <a>Relation</a>
+-- | Has a function that turns into a <a>Relation</a>.
 class ExprRelat c
+
+-- | Holds a relation.
 relat :: ExprRelat c => c -> Relation
 
 -- | CommonIdea is a <a>NamedIdea</a> with the additional constraint that
@@ -1666,42 +1906,60 @@ class NamedIdea c => CommonIdea c
 -- | Introduces abrv which necessarily provides an abbreviation.
 abrv :: CommonIdea c => c -> String
 
--- | A better version of <a>ExprRelat</a>
+-- | A better version of <a>ExprRelat</a> that holds an <a>Expr</a>.
 class DefiningExpr c
+
+-- | Provides a <tt>Lens</tt> to the expression.
 defnExpr :: DefiningExpr c => Lens' c Expr
 
--- | A Quantity is an <a>Idea</a> with a <a>Space</a> and a symbol. In
---   theory, it should also have MayHaveUnit, but that causes all sorts of
---   import cycles (or lots of orphans)
+-- | A Quantity is an <a>Idea</a> with a <a>Space</a> and a
+--   <tt>Symbol</tt>. In theory, it should also restrict to being a part of
+--   <tt>MayHaveUnit</tt>, but that causes all sorts of import cycles (or
+--   lots of orphans).
 class (Idea c, HasSpace c, HasSymbol c) => Quantity c
 
 -- | HasUncertainty is just a chunk with some uncertainty associated to it.
 --   This uncertainty is represented as a decimal value between 0 and 1
 --   (percentage).
 class HasUncertainty c
+
+-- | Provides the <tt>Lens</tt> to an <a>Uncertainty</a>.
 unc :: HasUncertainty c => Lens' c Uncertainty
 
--- | Concepts are <a>Idea</a>s with definitions and domains
+-- | Concepts are <a>Idea</a>s with definitions and domains.
 type Concept c = (Idea c, Definition c, ConceptDomain c)
 
--- | Has the ability to be referenced
+-- | Members of this class have the ability to be referenced.
 class HasUID s => Referable s
+
+-- | The referencing address (what we're linking to). Only visible in the
+--   source (tex/html).
 refAdd :: Referable s => s -> String
+
+-- | Alternate form of reference.
 renderRef :: Referable s => s -> LblType
 
--- | Some chunks can be called like functions
+-- | Some chunks can be called like functions.
 class (HasSymbol c) => Callable c
+
+-- | Members must have a named argument.
 class (HasSymbol c) => IsArgumentName c
 
 -- | Units are <a>Idea</a>s with a <a>Definition</a> which store a unit
 --   symbol. They must also be explicitly declared to be instances of
---   IsUnit
+--   IsUnit.
 class (Idea u, Definition u, HasUnitSymbol u) => IsUnit u
+
+-- | May have a unit definition.
 udefn :: IsUnit u => u -> Maybe UDefn
+
+-- | Holds units as a list of <a>UID</a>.
 getUnits :: IsUnit u => u -> [UID]
 
 -- | Contains a <a>UDefn</a>
 class UnitEq u
+
+-- | Provides the <tt>Lens</tt> to a unit definition.
 uniteq :: UnitEq u => Lens' u UDefn
 
 module Language.Drasil.Uncertainty
@@ -1796,26 +2054,32 @@ str :: String -> Expr
 perc :: Integer -> Integer -> Expr
 
 -- | Smart constructor for set membership. FIXME: first argument really
---   ought to be restricted to a <tt>variable</tt>, as IsIn should only be
---   used as a type proxy
+--   ought to be restricted to a <tt>Variable</tt>, as <a>IsIn</a> should
+--   only be used as a type proxy.
 isin :: Expr -> Space -> Expr
 
--- | Smart constructor for the summation, product, and integrals.
+-- | Smart constructor for the summation, product, and integral functions
+--   over an interval.
 defint :: Symbol -> Expr -> Expr -> Expr -> Expr
 
--- | Smart constructor for the summation, product, and integrals.
+-- | Smart constructor for the summation, product, and integral functions
+--   over an interval.
 defsum :: Symbol -> Expr -> Expr -> Expr -> Expr
 
--- | Smart constructor for the summation, product, and integrals.
+-- | Smart constructor for the summation, product, and integral functions
+--   over an interval.
 defprod :: Symbol -> Expr -> Expr -> Expr -> Expr
 
--- | Smart constructor for the summation, product, and integrals.
+-- | Smart constructor for the summation, product, and integral functions
+--   over all Real numbers.
 intAll :: Symbol -> Expr -> Expr
 
--- | Smart constructor for the summation, product, and integrals.
+-- | Smart constructor for the summation, product, and integral functions
+--   over all Real numbers.
 sumAll :: Symbol -> Expr -> Expr
 
--- | Smart constructor for the summation, product, and integrals.
+-- | Smart constructor for the summation, product, and integral functions
+--   over all Real numbers.
 prodAll :: Symbol -> Expr -> Expr
 
 -- | Smart constructor for 'real interval' membership.
@@ -1874,7 +2138,7 @@ apply2 :: (HasUID f, HasSymbol f, HasUID a, HasSymbol a, HasUID b, HasSymbol b) 
 --   <a>FCall</a>.
 applyWithNamedArgs :: (HasUID f, HasSymbol f, HasUID a, IsArgumentName a) => f -> [Expr] -> [(a, Expr)] -> Expr
 
--- | Get an <a>Expr</a> from a <a>Symbol</a>
+-- | Get an <a>Expr</a> from a <a>Symbol</a>.
 sy :: (HasUID c, HasSymbol c) => c -> Expr
 
 -- | Gets the derivative of an <a>Expr</a> with respect to a <a>Symbol</a>.
@@ -2288,55 +2552,75 @@ type Height = Float
 type ListTuple = (Title, ItemType, Maybe String) " Formats as Title: Item."
 type Filepath = String
 type Lbl = Sentence
+
+-- | Contents may be labelled or unlabelled.
 data Contents
 UlC :: UnlabelledContent -> Contents
 LlC :: LabelledContent -> Contents
 
--- | Types of definitions
+-- | Types of definitions (general, instance, theory, or data).
 data DType
 General :: DType
 Instance :: DType
 Theory :: DType
 Data :: DType
 
--- | Types of layout objects we deal with explicitly
+-- | Types of layout objects we deal with explicitly.
 data RawContent
 
--- | table has: header-row data(rows) label/caption showlabel?
+-- | table has: header-row, data(rows), label/caption, and a bool that
+--   determines whether or not to show label.
 Table :: [Sentence] -> [[Sentence]] -> Title -> Bool -> RawContent
 
 -- | Paragraphs are just sentences.
 Paragraph :: Sentence -> RawContent
+
+-- | Block of Equations holds an expression.
 EqnBlock :: Expr -> RawContent
+
+-- | Grants the ability to label a group of <a>RawContent</a>.
 DerivBlock :: Sentence -> [RawContent] -> RawContent
 
--- | Lists
+-- | For enumerated lists.
 Enumeration :: ListType -> RawContent
+
+-- | Defines something with a type, identifier, and <a>Contents</a>.
 Defini :: DType -> [(Identifier, [Contents])] -> RawContent
 
 -- | Should use relative file path.
 Figure :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
+
+-- | Grants the ability to reference something.
 Bib :: BibRef -> RawContent
 
--- | TODO: Fill this one in.
+-- | Contain a graph with coordinates (<a>Sentence</a>s), maybe a width and
+--   height, and a label (<a>Sentence</a>). TODO: Fill this one in. | An
+--   identifier is just a <a>String</a>.
 Graph :: [(Sentence, Sentence)] -> Maybe Width -> Maybe Height -> Lbl -> RawContent
 type Identifier = String
 
--- | Contains a <a>Reference</a> and <a>RawContent</a>
+-- | Contains a <a>Reference</a> and <a>RawContent</a>.
 data LabelledContent
 LblC :: Reference -> RawContent -> LabelledContent
 [_ref] :: LabelledContent -> Reference
 [_ctype] :: LabelledContent -> RawContent
 
--- | Only contains <a>RawContent</a>
+-- | Only contains <a>RawContent</a>.
 newtype UnlabelledContent
 UnlblC :: RawContent -> UnlabelledContent
 [_cntnts] :: UnlabelledContent -> RawContent
 ref :: Lens' LabelledContent Reference
 ctype :: Lens' LabelledContent RawContent
 cntnts :: Iso' UnlabelledContent RawContent
+
+-- | Members of this class must have <a>RawContent</a>.
 class HasContents c
+
+-- | Provides a <tt>Lens</tt> to the <a>RawContent</a>.
 accessContents :: HasContents c => Lens' c RawContent
+
+-- | Reference the different types of <a>RawContent</a> in different
+--   manners.
 refLabelledCon :: RawContent -> IRefProg
 instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.LabelledContent
 instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.UnlabelledContent
@@ -2351,13 +2635,13 @@ instance Language.Drasil.Classes.Referable Language.Drasil.Document.Core.Labelle
 module Language.Drasil.Document
 
 -- | Section Contents are split into subsections or contents, where
---   contents are standard layout objects (see <a>Contents</a>)
+--   contents are standard layout objects (see <a>Contents</a>).
 data SecCons
 Sub :: Section -> SecCons
 Con :: Contents -> SecCons
 
--- | Sections have a title (<a>Sentence</a>) and a list of contents
---   (<a>SecCons</a>) and its shortname
+-- | Sections have a title (<a>Sentence</a>), a list of contents
+--   (<a>SecCons</a>) and a shortname (<a>Reference</a>).
 data Section
 Section :: Title -> [SecCons] -> Reference -> Section
 [tle] :: Section -> Title
@@ -2366,43 +2650,69 @@ Section :: Title -> [SecCons] -> Reference -> Section
 lab :: Lens' Section Reference
 
 -- | A Document has a Title (<a>Sentence</a>), Author(s) (<a>Sentence</a>),
---   and Sections which hold the contents of the document
+--   and <a>Section</a>s which hold the contents of the document.
 data Document
 Document :: Title -> Author -> [Section] -> Document
 
--- | Smart constructor for labelled content chunks
+-- | Smart constructor for labelled content chunks.
 llcc :: Reference -> RawContent -> LabelledContent
 
--- | Smart constructor for unlabelled content chunks
+-- | Smart constructor for unlabelled content chunks (no <a>Reference</a>).
 ulcc :: RawContent -> UnlabelledContent
 
--- | Smart constructor needed for LabelledContent
+-- | Smart constructor that wraps <a>UnlabelledContent</a> into
+--   <a>Contents</a>.
 mkParagraph :: Sentence -> Contents
 
--- | Smart constructor needed for LabelledContent
+-- | Smart constructor that wraps <a>LabelledContent</a> into
+--   <a>Contents</a>.
 mkFig :: Reference -> RawContent -> Contents
 
--- | Smart constructor needed for LabelledContent
+-- | Smart constructor similar to <a>llcc</a>, but takes in
+--   <a>RawContent</a> first.
 mkRawLC :: RawContent -> Reference -> LabelledContent
 
--- | Smart constructor for creating Sections with introductory contents
---   (ie. paragraphs, tables, etc.) and a list of subsections.
+-- | Smart constructor for creating <a>Section</a>s with a title
+--   (<a>Sentence</a>), introductory contents (ie. paragraphs, tables,
+--   etc.), a list of subsections, and a shortname (<a>Reference</a>).
 section :: Sentence -> [Contents] -> [Section] -> Reference -> Section
+
+-- | Smart constructor for retrieving the contents (<a>Section</a>s) from a
+--   <a>Document</a>.
 extractSection :: Document -> [Section]
+
+-- | Smart constructor for retrieving the subsections (<a>Section</a>s)
+--   within a <a>Section</a>.
 getSec :: Section -> [Section]
+
+-- | Helper to retrieve subsections (<a>Section</a>s) from section contents
+--   (<a>SecCons</a>).
 getSecCons :: SecCons -> [Section]
 
--- | Figure smart constructor. Assumes 100% of page width as max width.
+-- | <a>Figure</a> smart constructor with a <a>Lbl</a> and a
+--   <a>Filepath</a>. Assumes 100% of page width as max width.
 fig :: Lbl -> Filepath -> RawContent
 
--- | Figure smart constructor for customized max widths.
+-- | <a>Figure</a> smart constructor that allows for customized max widths.
 figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
+
+-- | Create a reference for a table. Takes in the name of a table (which
+--   will also be used for its shortname).
 makeTabRef :: String -> Reference
+
+-- | Create a reference for a figure. Takes in the name of a figure (which
+--   will also be used for its shortname).
 makeFigRef :: String -> Reference
+
+-- | Create a reference for a section. Takes in the name of a section and a
+--   shortname for the section.
 makeSecRef :: String -> String -> Reference
+
+-- | Create a reference for a list. Takes in the name of the list and a
+--   shortname for the list.
 makeLstRef :: String -> String -> Reference
 
--- | Create a reference for a URI
+-- | Create a reference for a <a>URI</a>.
 makeURI :: UID -> String -> ShortName -> Reference
 instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Document.Section
 instance Language.Drasil.Classes.Core.HasShortName Language.Drasil.Document.Section
@@ -2414,6 +2724,8 @@ module Language.Drasil.Classes.Document
 
 -- | Some documents, as well as some pieces of knowledge, have citations.
 class HasCitation c
+
+-- | Provides a <tt>Lens</tt> to the citations.
 getCitations :: HasCitation c => Lens' c [Citation]
 
 module Language.Drasil.Chunk.UnitDefn
@@ -2517,8 +2829,10 @@ getUnit :: MayHaveUnit u => u -> Maybe UnitDefn
 
 -- | Units are <a>Idea</a>s with a <a>Definition</a> which store a unit
 --   symbol. They must also be explicitly declared to be instances of
---   IsUnit
+--   IsUnit.
 class (Idea u, Definition u, HasUnitSymbol u) => IsUnit u
+
+-- | Holds units as a list of <a>UID</a>.
 getUnits :: IsUnit u => u -> [UID]
 instance Language.Drasil.Classes.HasUnitSymbol Language.Drasil.Chunk.UnitDefn.UnitEquation
 instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.UnitDefn.UnitDefn
@@ -2648,7 +2962,7 @@ newtype NamedArgument
 NA :: QuantityDict -> NamedArgument
 [_qtd] :: NamedArgument -> QuantityDict
 
--- | Smart constructor for <a>NamedArgument</a>
+-- | Smart constructor for <a>NamedArgument</a> .
 narg :: (Quantity q, MayHaveUnit q) => q -> NamedArgument
 instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.NamedArgument.NamedArgument
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.NamedArgument.NamedArgument
@@ -2930,69 +3244,122 @@ instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Uncert
 
 module Language.Drasil
 
--- | Drasil Expressions
+-- | Drasil expressions.
 data Expr
+
+-- | Turns a decimal value (<a>Double</a>) into an expression.
 [Dbl] :: Double -> Expr
+
+-- | Turns an integer into an expression.
 [Int] :: Integer -> Expr
+
+-- | Represents decimal values that are exact as integers.
 [ExactDbl] :: Integer -> Expr
+
+-- | Turns a string into an expression.
 [Str] :: String -> Expr
+
+-- | Turns two integers into a fraction (or percent).
 [Perc] :: Integer -> Integer -> Expr
+
+-- | Takes an associative aritmetic operator with a list of expressions.
 [AssocA] :: AssocArithOper -> [Expr] -> Expr
+
+-- | Takes an associative boolean operator with a list of expressions.
 [AssocB] :: AssocBoolOper -> [Expr] -> Expr
 
--- | Derivative, syntax is: Type (Partial or total) -&gt; principal part of
---   change -&gt; with respect to For example: Deriv Part y x1 would be
---   (dy/dx1)
+-- | Derivative syntax is: Type (<a>Part</a>ial or <a>Total</a>) -&gt;
+--   principal part of change -&gt; with respect to For example: Deriv Part
+--   y x1 would be (dy/dx1).
 [Deriv] :: DerivType -> Expr -> UID -> Expr
 
 -- | C stands for <a>Chunk</a>, for referring to a chunk in an expression.
---   Implicitly assumes has a symbol.
+--   Implicitly assumes that the chunk has a symbol.
 [C] :: UID -> Expr
 
--- | F(x) is (FCall F [x] []) or similar. FCall accepts a list of params
---   and a list of named params. F(x,y) would be (FCall F [x,y]) or sim.
---   F(x,n=y) would be (FCall F [x] [(n,y)]).
+-- | A function call accepts a list of parameters and a list of named
+--   parameters. For example
+--   
+--   <ul>
+--   <li>F(x) is (FCall F [x] []).</li>
+--   <li>F(x,y) would be (FCall F [x,y]).</li>
+--   <li>F(x,n=y) would be (FCall F [x] [(n,y)]).</li>
+--   </ul>
 [FCall] :: UID -> [Expr] -> [(UID, Expr)] -> Expr
 
--- | Actor creation given UID and parameters
+-- | Actor creation given <a>UID</a>, parameters, and named parameters.
 [New] :: UID -> [Expr] -> [(UID, Expr)] -> Expr
 
--- | Message an actor: 1st UID is the actor, 2nd UID is the method
+-- | Message an actor:
+--   
+--   <ul>
+--   <li>1st <a>UID</a> is the actor,</li>
+--   <li>2nd <a>UID</a> is the method.</li>
+--   </ul>
 [Message] :: UID -> UID -> [Expr] -> [(UID, Expr)] -> Expr
 
--- | Access a field of an actor: 1st UID is the actor, 2nd UID is the field
+-- | Access a field of an actor:
+--   
+--   <ul>
+--   <li>1st <a>UID</a> is the actor,</li>
+--   <li>2nd <a>UID</a> is the field.</li>
+--   </ul>
 [Field] :: UID -> UID -> Expr
 
--- | For multi-case expressions, each pair represents one case
+-- | For multi-case expressions, each pair represents one case.
 [Case] :: Completeness -> [(Expr, Relation)] -> Expr
+
+-- | Represents a matrix of expressions.
 [Matrix] :: [[Expr]] -> Expr
 
--- | Unary functions/operations
+-- | Unary operation for most functions (eg. sin, cos, log, etc.).
 [UnaryOp] :: UFunc -> Expr -> Expr
+
+-- | Unary operation for negation.
 [UnaryOpB] :: UFuncB -> Expr -> Expr
+
+-- | Unary operation for vectors (holds whether a vector is normal or used
+--   for dimensions).
 [UnaryOpVec] :: UFuncVec -> Expr -> Expr
 
--- | Binary functions/operations
+-- | Binary operator for arithmetic between expressions (fractional, power,
+--   and subtraction).
 [ArithBinaryOp] :: ArithBinOp -> Expr -> Expr -> Expr
+
+-- | Binary operator for boolean operators (implies, iff).
 [BoolBinaryOp] :: BoolBinOp -> Expr -> Expr -> Expr
+
+-- | Binary operator for equality between expressions.
 [EqBinaryOp] :: EqBinOp -> Expr -> Expr -> Expr
+
+-- | Binary operator for indexing two expressions.
 [LABinaryOp] :: LABinOp -> Expr -> Expr -> Expr
+
+-- | Binary operator for ordering expressions (less than, greater than,
+--   etc.).
 [OrdBinaryOp] :: OrdBinOp -> Expr -> Expr -> Expr
+
+-- | Binary operator for <tt>Vector x Vector -&gt; Vector</tt> operations
+--   (cross product).
 [VVVBinaryOp] :: VVVBinOp -> Expr -> Expr -> Expr
+
+-- | Binary operator for <tt>Vector x Vector -&gt; Number</tt> operations
+--   (dot product).
 [VVNBinaryOp] :: VVNBinOp -> Expr -> Expr -> Expr
 
--- | Operators are generalized arithmetic operators over a |DomainDesc| of
---   an |Expr|. Could be called |BigOp|. ex: Summation is represented via
---   |Add| over a discrete domain
+-- | Operators are generalized arithmetic operators over a
+--   <a>DomainDesc</a> of an <a>Expr</a>. Could be called BigOp. ex:
+--   Summation is represented via <tt>Add</tt> over a discrete domain.
 [Operator] :: AssocArithOper -> DomainDesc Expr Expr -> Expr -> Expr
 
--- | element of
+-- | The expression is an element of a space.
 [IsIn] :: Expr -> Space -> Expr
 
--- | a different kind of 'element of'
+-- | A different kind of <a>IsIn</a>. A <a>UID</a> is an element of an
+--   interval.
 [RealI] :: UID -> RealInterval Expr Expr -> Expr
 
--- | Unary functions
+-- | Unary functions (abs, log, ln, sin, etc.).
 data UFunc
 Abs :: UFunc
 Log :: UFunc
@@ -3009,53 +3376,129 @@ Arctan :: UFunc
 Exp :: UFunc
 Sqrt :: UFunc
 Neg :: UFunc
+
+-- | Negation operator (not).
 data UFuncB
+
+-- | Data for vectors (normal, dimensions).
 data UFuncVec
+
+-- | Arithmetic operators (fractional, power, and subtraction).
 data ArithBinOp
+
+-- | Conditional and Biconditional operators (Expressions can imply one
+--   another, or exist if and only if another expression exists).
 data BoolBinOp
+
+-- | Equality operators (equal or not equal).
 data EqBinOp
+
+-- | Index operator.
 data LABinOp
+
+-- | Ordered binary operators (less than, greater than, less than or equal
+--   to, greater than or equal to).
 data OrdBinOp
+
+-- | <tt>Vector x Vector -&gt; Vector</tt> binary operations (cross
+--   product).
 data VVVBinOp
+
+-- | <tt>Vector x Vector -&gt; Number</tt> binary operations (dot product).
 data VVNBinOp
+
+-- | Associative operators (adding and multiplication). Also specifies
+--   whether it is for integers or for real numbers.
 data AssocArithOper
 AddI :: AssocArithOper
 AddRe :: AssocArithOper
 MulI :: AssocArithOper
 MulRe :: AssocArithOper
+
+-- | Associative boolean operators (and, or).
 data AssocBoolOper
 And :: AssocBoolOper
 Or :: AssocBoolOper
+
+-- | Determines the type of the derivative (either a partial derivative or
+--   a total derivative).
 data DerivType
 Part :: DerivType
 Total :: DerivType
 
--- | For case expressions
+-- | For case expressions (either complete or incomplete).
 data Completeness
 Complete :: Completeness
 Incomplete :: Completeness
+
+-- | A relation is just an expression (<a>Expr</a>).
 type Relation = Expr
+
+-- | Smart constructor for equating two expressions.
 ($=) :: Expr -> Expr -> Expr
 infixr 4 $=
+
+-- | Less than.
+--   
+--   Smart constructor for ordering two equations.
 ($<) :: Expr -> Expr -> Expr
+
+-- | Less than or equal to.
+--   
+--   Smart constructor for ordering two equations.
 ($<=) :: Expr -> Expr -> Expr
+
+-- | Greater than.
+--   
+--   Smart constructor for ordering two equations.
 ($>) :: Expr -> Expr -> Expr
+
+-- | Greater than or equal to.
+--   
+--   Smart constructor for ordering two equations.
 ($>=) :: Expr -> Expr -> Expr
+
+-- | Smart constructor for rasing the first expression to the power of the
+--   second.
 ($^) :: Expr -> Expr -> Expr
 infixr 8 $^
+
+-- | Smart constructor for the boolean <i>and</i> operator.
 ($&&) :: Expr -> Expr -> Expr
 infixr 9 $&&
+
+-- | Smart constructor for the boolean <i>or</i> operator.
 ($||) :: Expr -> Expr -> Expr
 infixr 9 $||
+
+-- | Smart constructor to show that one expression implies the other
+--   (conditional operator).
 ($=>) :: Expr -> Expr -> Expr
+
+-- | Smart constructor to show that an expression exists if and only if
+--   another expression exists (biconditional operator).
 ($<=>) :: Expr -> Expr -> Expr
+
+-- | Smart constructor for the dot product of two equations.
 ($.) :: Expr -> Expr -> Expr
+
+-- | Smart constructor for subtracting two expressions.
 ($-) :: Expr -> Expr -> Expr
+
+-- | Smart constructor for dividing two expressions.
 ($/) :: Expr -> Expr -> Expr
 infixl 7 $/
+
+-- | Add two expressions (Integers).
 addI :: Expr -> Expr -> Expr
+
+-- | Add two expressions (Real numbers).
 addRe :: Expr -> Expr -> Expr
+
+-- | Multiply two expressions (Integers).
 mulI :: Expr -> Expr -> Expr
+
+-- | Multiply two expressions (Real numbers).
 mulRe :: Expr -> Expr -> Expr
 
 -- | Get dependencies from an equation.
@@ -3159,8 +3602,8 @@ str :: String -> Expr
 perc :: Integer -> Integer -> Expr
 
 -- | Smart constructor for set membership. FIXME: first argument really
---   ought to be restricted to a <tt>variable</tt>, as IsIn should only be
---   used as a type proxy
+--   ought to be restricted to a <tt>Variable</tt>, as <a>IsIn</a> should
+--   only be used as a type proxy.
 isin :: Expr -> Space -> Expr
 
 -- | Smart constructor for case statement with complete set of cases.
@@ -3169,22 +3612,28 @@ completeCase :: [(Expr, Relation)] -> Expr
 -- | Smart constructor for case statement with incomplete set of cases.
 incompleteCase :: [(Expr, Relation)] -> Expr
 
--- | Smart constructor for the summation, product, and integrals.
+-- | Smart constructor for the summation, product, and integral functions
+--   over all Real numbers.
 sumAll :: Symbol -> Expr -> Expr
 
--- | Smart constructor for the summation, product, and integrals.
+-- | Smart constructor for the summation, product, and integral functions
+--   over an interval.
 defsum :: Symbol -> Expr -> Expr -> Expr -> Expr
 
--- | Smart constructor for the summation, product, and integrals.
+-- | Smart constructor for the summation, product, and integral functions
+--   over all Real numbers.
 prodAll :: Symbol -> Expr -> Expr
 
--- | Smart constructor for the summation, product, and integrals.
+-- | Smart constructor for the summation, product, and integral functions
+--   over an interval.
 defprod :: Symbol -> Expr -> Expr -> Expr -> Expr
 
--- | Smart constructor for the summation, product, and integrals.
+-- | Smart constructor for the summation, product, and integral functions
+--   over an interval.
 defint :: Symbol -> Expr -> Expr -> Expr -> Expr
 
--- | Smart constructor for the summation, product, and integrals.
+-- | Smart constructor for the summation, product, and integral functions
+--   over all Real numbers.
 intAll :: Symbol -> Expr -> Expr
 
 -- | Smart constructor for 'real interval' membership.
@@ -3196,7 +3645,7 @@ deriv :: (HasUID c, HasSymbol c) => Expr -> c -> Expr
 -- | Gets the derivative of an <a>Expr</a> with respect to a <a>Symbol</a>.
 pderiv :: (HasUID c, HasSymbol c) => Expr -> c -> Expr
 
--- | Get an <a>Expr</a> from a <a>Symbol</a>
+-- | Get an <a>Expr</a> from a <a>Symbol</a>.
 sy :: (HasUID c, HasSymbol c) => c -> Expr
 
 -- | Applies a given function with a list of parameters.
@@ -3249,8 +3698,10 @@ uid :: HasUID c => Lens' c UID
 class HasShortName s
 shortname :: HasShortName s => s -> ShortName
 
--- | For a "Reference Address", we just need a getter.
+-- | Members must have a reference address.
 class HasRefAddress b
+
+-- | Provides the ability to hold a reference address.
 getRefAdd :: HasRefAddress b => b -> String
 
 -- | A HasSymbol is anything which has a <a>Symbol</a>.
@@ -3261,60 +3712,86 @@ symbol :: HasSymbol c => c -> Stage -> Symbol
 
 -- | <tt>Citation</tt>s should have a fields (<a>CiteField</a>).
 class HasFields c
+
+-- | Provides a <tt>Lens</tt> to <a>CiteField</a>s.
 getFields :: HasFields c => Lens' c [CiteField]
 
--- | A NamedIdea is a <a>term</a> that we've identified (has an <a>id</a>)
+-- | A NamedIdea is a <a>term</a> that we've identified (has a <a>UID</a>)
 --   as being worthy of naming.
 class HasUID c => NamedIdea c
 
--- | Lens to the term (a noun phrase)
+-- | Lens to the term (a noun phrase).
 term :: NamedIdea c => Lens' c NP
+
+-- | Records any additional notes needed to avoid losing information
 class HasAdditionalNotes c
+
+-- | Provides a <tt>Lens</tt> to the notes.
 getNotes :: HasAdditionalNotes c => Lens' c [Sentence]
 
--- | HasSpace is anything which has a <a>Space</a>...
+-- | HasSpace is anything which has a <a>Space</a>.
 class HasSpace c
+
+-- | Provides a <tt>Lens</tt> to the <a>Space</a>.
 typ :: HasSpace c => Lens' c Space
 
--- | Some chunks store a unit symbol
+-- | Some chunks store a unit symbol.
 class HasUnitSymbol u
+
+-- | Provides the ability to hold a unit symbol (<a>USymb</a>).
 usymb :: HasUnitSymbol u => u -> USymb
 
--- | A class that contains a list of <a>Reference</a>s
+-- | A class that contains a list of <a>Reference</a>s.
 class HasReference c
+
+-- | Provides a <tt>Lens</tt> to the <a>Reference</a>s.
 getReferences :: HasReference c => Lens' c [Reference]
 
--- | A HasReasVal is a <a>Quantity</a> that could have a reasonable value
+-- | A <a>Quantity</a> that could have a reasonable value.
 class HasReasVal c
+
+-- | Provides a <tt>Lens</tt> to the possible reasonable value.
 reasVal :: HasReasVal c => Lens' c (Maybe Expr)
 
--- | A class that might have a <a>Derivation</a>
+-- | A class that might have a <a>Derivation</a>.
 class HasDerivation c
+
+-- | Provides a <tt>Lens</tt> to a possible derivation.
 derivations :: HasDerivation c => Lens' c (Maybe Derivation)
 
--- | An |Idea| is the <tt>meet</tt> of |NamedIdea| and |CommonIdea|. In
---   other words, it <i>may</i> have an acronym/abbreviation.
+-- | An <a>Idea</a> is the combination of a <a>NamedIdea</a> and a
+--   <a>CommonIdea</a>. In other words, it <i>may</i> have an
+--   acronym/abbreviation.
 class NamedIdea c => Idea c
+
+-- | Gets the acronym/abbreviation.
 getA :: Idea c => c -> Maybe String
+
+-- | Defines a chunk.
 class Definition c
 
--- | defn provides (a <tt>Lens</tt> to) the definition for a chunk
+-- | Provides (a <tt>Lens</tt> to) the definition for a chunk.
 defn :: Definition c => Lens' c Sentence
+
+-- | Some concepts have a domain (related information encoded in
+--   <a>UID</a>s to other chunks).
 class ConceptDomain c
 
--- | cdom provides Getter for the concept domain tags for a chunk
+-- | Provides Getter for the concept domain tags for a chunk
 --   
 --   <i>cdom</i> should be exported for use by the Drasil framework, but
 --   should not be exported beyond that.
 cdom :: ConceptDomain c => c -> [UID]
 
--- | Concepts are <a>Idea</a>s with definitions and domains
+-- | Concepts are <a>Idea</a>s with definitions and domains.
 type Concept c = (Idea c, Definition c, ConceptDomain c)
 
 -- | Units are <a>Idea</a>s with a <a>Definition</a> which store a unit
 --   symbol. They must also be explicitly declared to be instances of
---   IsUnit
+--   IsUnit.
 class (Idea u, Definition u, HasUnitSymbol u) => IsUnit u
+
+-- | Holds units as a list of <a>UID</a>.
 getUnits :: IsUnit u => u -> [UID]
 
 -- | CommonIdea is a <a>NamedIdea</a> with the additional constraint that
@@ -3324,32 +3801,43 @@ class NamedIdea c => CommonIdea c
 -- | Introduces abrv which necessarily provides an abbreviation.
 abrv :: CommonIdea c => c -> String
 
--- | A Constrained is a <a>Quantity</a> that has value constraints but do
---   not enforce Quantity at this point
+-- | The Constrained class is a <a>Quantity</a> that has value constraints.
+--   It does not enforce <a>Quantity</a> at this point.
 class Constrained c
+
+-- | Provides a <tt>Lens</tt> to the <a>Constraint</a>s.
 constraints :: Constrained c => Lens' c [Constraint]
 
--- | Has a function that turns into a <a>Relation</a>
+-- | Has a function that turns into a <a>Relation</a>.
 class ExprRelat c
+
+-- | Holds a relation.
 relat :: ExprRelat c => c -> Relation
 
--- | A better version of <a>ExprRelat</a>
+-- | A better version of <a>ExprRelat</a> that holds an <a>Expr</a>.
 class DefiningExpr c
+
+-- | Provides a <tt>Lens</tt> to the expression.
 defnExpr :: DefiningExpr c => Lens' c Expr
 
 -- | HasUncertainty is just a chunk with some uncertainty associated to it.
 --   This uncertainty is represented as a decimal value between 0 and 1
 --   (percentage).
 class HasUncertainty c
+
+-- | Provides the <tt>Lens</tt> to an <a>Uncertainty</a>.
 unc :: HasUncertainty c => Lens' c Uncertainty
 
--- | A Quantity is an <a>Idea</a> with a <a>Space</a> and a symbol. In
---   theory, it should also have MayHaveUnit, but that causes all sorts of
---   import cycles (or lots of orphans)
+-- | A Quantity is an <a>Idea</a> with a <a>Space</a> and a
+--   <tt>Symbol</tt>. In theory, it should also restrict to being a part of
+--   <tt>MayHaveUnit</tt>, but that causes all sorts of import cycles (or
+--   lots of orphans).
 class (Idea c, HasSpace c, HasSymbol c) => Quantity c
 
--- | Some chunks can be called like functions
+-- | Some chunks can be called like functions.
 class (HasSymbol c) => Callable c
+
+-- | Members must have a named argument.
 class (HasSymbol c) => IsArgumentName c
 
 -- | For projecting out to the <a>ConceptChunk</a> data-type.
@@ -3398,7 +3886,7 @@ prependAbrv :: CommonIdea c => c -> String -> String
 -- | Any quantity can be a named argument (wrapper for <a>QuantityDict</a>)
 data NamedArgument
 
--- | Smart constructor for <a>NamedArgument</a>
+-- | Smart constructor for <a>NamedArgument</a> .
 narg :: (Quantity q, MayHaveUnit q) => q -> NamedArgument
 
 -- | Note that a <a>NamedChunk</a> does not have an acronym/abbreviation as
@@ -3428,24 +3916,36 @@ mkIdea :: String -> NP -> Maybe String -> IdeaDict
 --   <a>IdeaDict</a> with <a>Nothing</a> for an abbreviation.
 nw :: Idea c => c -> IdeaDict
 
--- | Range of <a>Physical</a> constraints
+-- | Smart constructor for range of <a>Physical</a> constraints between two
+--   given expressions.
 physc :: RealInterval Expr Expr -> Constraint
 
--- | Range of <a>Software</a> constraints
+-- | Smart constructor for range of <a>Software</a> constraints between two
+--   given expressions.
 sfwrc :: RealInterval Expr Expr -> Constraint
 
--- | Enumeration of values, default to <a>Physical</a>
+-- | Smart constructor for enumeration of values, default reason for
+--   constraint is <a>Physical</a>.
 enumc :: [Double] -> Constraint
 
--- | Helpful for filtering for Physical / Software constraints
+-- | Helpful for filtering for Physical constraints. True if constraint is
+--   <a>Physical</a>.
 isPhysC :: Constraint -> Bool
 
--- | Helpful for filtering for Physical / Software constraints
+-- | Helpful for filtering for Software constraints. True if constraint is
+--   <a>Software</a>.
 isSfwrC :: Constraint -> Bool
+
+-- | Holds constraints. May occur between an interval of <a>Expr</a>, a
+--   list of <a>Double</a>s, or a list of <a>String</a>s.
 data Constraint
+
+-- | By default, physical and software constraints are ranges.
 [Range] :: ConstraintReason -> RealInterval Expr Expr -> Constraint
 [EnumeratedReal] :: ConstraintReason -> [Double] -> Constraint
 [EnumeratedStr] :: ConstraintReason -> [String] -> Constraint
+
+-- | The reason behind the constraint's existence.
 data ConstraintReason
 Physical :: ConstraintReason
 Software :: ConstraintReason
@@ -3756,14 +4256,14 @@ data UnitaryConceptDict
 data Derivation
 Derivation :: Sentence -> [Sentence] -> Derivation
 
--- | Smart constructor for <a>Derivation</a>
+-- | Smart constructor for creating a <a>Derivation</a>.
 mkDeriv :: Sentence -> [Sentence] -> Derivation
 
--- | Similar to mkDeriv, but prepends "Detailed derivation of" to the
---   header
+-- | Similar to <a>mkDeriv</a>, but prepends "Detailed derivation of" to
+--   the header.
 mkDerivName :: Sentence -> [Sentence] -> Derivation
 
--- | Similar to mkDeriv, but without a header <a>Sentence</a>
+-- | Similar to <a>mkDeriv</a>, but without a header <a>Sentence</a>.
 mkDerivNoHeader :: [Sentence] -> Derivation
 data ShortName
 shortname' :: String -> ShortName
@@ -3890,6 +4390,8 @@ cUnpublished :: People -> String -> String -> [CiteField] -> String -> Citation
 
 -- | Some documents, as well as some pieces of knowledge, have citations.
 class HasCitation c
+
+-- | Provides a <tt>Lens</tt> to the citations.
 getCitations :: HasCitation c => Lens' c [Citation]
 data Sentence
 [Ch] :: SentenceStyle -> UID -> Sentence
@@ -3965,9 +4467,21 @@ Equation :: [Int] -> RefInfo
 Page :: [Int] -> RefInfo
 RefNote :: String -> RefInfo
 class NounPhrase n
+
+-- | Retrieves singular form of term. Ex. "the quick brown fox".
 phraseNP :: NounPhrase n => n -> Sentence
+
+-- | Retrieves plural form of term. Ex. "the quick brown foxes".
 pluralNP :: NounPhrase n => n -> PluralForm
+
+-- | Retrieves the singular form and applies a captalization rule (usually
+--   capitalizes the first word) to produce a <a>Sentence</a>. Ex. "The
+--   quick brown fox".
 sentenceCase :: NounPhrase n => n -> (NP -> Sentence) -> Capitalization
+
+-- | Retrieves the singular form and applies a captalization rule (usually
+--   capitalizes all words) to produce a <a>Sentence</a>. Ex. "The Quick
+--   Brown Fox".
 titleCase :: NounPhrase n => n -> (NP -> Sentence) -> Capitalization
 
 -- | For nouns and <tt>NounPhrase</tt>s. May be constructed from a proper
@@ -3995,9 +4509,9 @@ pn'' :: String -> NP
 --   Construct a Proper Noun, it is always capitalized as written.
 pn''' :: String -> NP
 
--- | Construct a Proper Noun. Meant for use with IrregPlur from
---   <a>PluralRule</a>. First argument is the String representing the noun,
---   second is the rule.
+-- | Construct a <a>ProperNoun</a> with a custom plural rule (using
+--   <a>IrregPlur</a> from <a>PluralRule</a>). First argument is the String
+--   representing the noun, second is the rule.
 pnIrr :: String -> PluralRule -> NP
 
 -- | Self plural.
@@ -4024,8 +4538,8 @@ cn'' :: String -> NP
 --   first word at the beginning of a sentence.
 cn''' :: String -> NP
 
--- | Common noun that allows you to specify the pluralization rule (as in
---   <a>pnIrr</a>).
+-- | Construct a common noun that allows you to specify the pluralization
+--   rule (as in <a>pnIrr</a>).
 cnIP :: String -> PluralRule -> NP
 
 -- | Common noun that allows you to specify both the pluralization rule and
@@ -4033,28 +4547,29 @@ cnIP :: String -> PluralRule -> NP
 --   beginning of a sentence).
 cnIrr :: String -> PluralRule -> CapitalizationRule -> NP
 
--- | Common noun that pluralizes by dropping the last letter and adding an
---   "ies" ending (ex. body -&gt; bodies).
+-- | Construct a common noun that pluralizes by dropping the last letter
+--   and adding an "ies" ending (ex. body -&gt; bodies).
 cnIES :: String -> NP
 
--- | Common noun that pluralizes by dropping the last two letters and
---   adding an "ices" ending (ex. matrix -&gt; matrices).
+-- | Construct a common noun that pluralizes by dropping the last two
+--   letters and adding an "ices" ending (ex. matrix -&gt; matrices).
 cnICES :: String -> NP
 
--- | Common noun that pluralizes by dropping the last two letters and
---   adding "es" (ex. analysis -&gt; analyses).
+-- | Construct a common noun that pluralizes by dropping the last two
+--   letters and adding "es" (ex. analysis -&gt; analyses).
 cnIS :: String -> NP
 
--- | Common noun that pluralizes by dropping the last two letters and
---   adding "a" (ex. datum -&gt; data).
+-- | Construct a common noun that pluralizes by dropping the last two
+--   letters and adding "a" (ex. datum -&gt; data).
 cnUM :: String -> NP
 
--- | Creates a <a>NP</a> with a given singular and plural form that
---   capitalizes the first letter of the first word for sentence case.
+-- | Creates a <a>NP</a> with a given singular and plural form (as
+--   <a>String</a>s) that capitalizes the first letter of the first word
+--   for sentence case.
 nounPhrase :: String -> PluralString -> NP
 
--- | Similar to <a>nounPhrase</a>, but following a given capitalization
---   rule for sentence case.
+-- | Similar to <a>nounPhrase</a>, but takes a specified capitalization
+--   rule.
 nounPhrase' :: String -> PluralString -> CapitalizationRule -> NP
 
 -- | Capitalization rules.
@@ -4099,26 +4614,30 @@ SelfPlur :: PluralRule
 IrregPlur :: (String -> String) -> PluralRule
 
 -- | Combine two noun phrases. The singular form becomes <tt>phrase</tt>
---   from t1 followed by phrase of t2. The plural becomes phrase of t1
---   followed by plural of t2. Uses standard CapFirst sentence case and
---   CapWords title case. For example: <tt>compoundPhrase system
---   constraint</tt> will have singular form "system constraint" and plural
---   "system constraints".
+--   from t1 followed by <tt>phrase</tt> of t2. The plural becomes
+--   <tt>phrase</tt> of t1 followed by <tt>plural</tt> of t2. Uses standard
+--   <a>CapFirst</a> sentence case and <a>CapWords</a> title case. For
+--   example: <tt>compoundPhrase system constraint</tt> will have singular
+--   form "system constraint" and plural "system constraints".
 compoundPhrase :: (NounPhrase a, NounPhrase b) => a -> b -> NP
 
--- | Similar to <a>compoundPhrase</a>, but where the sentence case is the
---   same as the title case (CapWords).
+-- | Similar to <a>compoundPhrase</a>, but the sentence case is the same as
+--   the title case (<a>CapWords</a>).
 compoundPhrase' :: NP -> NP -> NP
 
--- | Similar to <a>compoundPhrase'</a>, but which accepts functions to be
---   used for constructing the plural form. For example
+-- | Similar to <a>compoundPhrase'</a>, but accepts two functions that will
+--   be used to construct the plural form. For example,
 --   <tt>compoundPhrase'' plural phrase system constraint</tt> would have
 --   the plural form "systems constraint".
 compoundPhrase'' :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
 
--- | Used when you need a special function apllied to the first term of
---   both cases (eg. short or plural).
+-- | Similar to <a>compoundPhrase</a>, but used when you need a special
+--   function applied to the first term of both singular and pluralcases
+--   (eg. short or plural).
 compoundPhrase''' :: (NP -> Sentence) -> NP -> NP -> NP
+
+-- | Similar to <a>compoundPhrase</a>, but pluralizes the first <a>NP</a>
+--   for both singular and plural cases.
 compoundPhraseP1 :: NP -> NP -> NP
 
 -- | Singular title case.
@@ -4131,49 +4650,57 @@ titleizeNP :: NounPhrase n => n -> Capitalization
 --   Helper function for getting the title case of a noun phrase.
 titleizeNP' :: NounPhrase n => n -> Capitalization
 
--- | Custom noun phrase constructor that takes a singular form, plural
---   form, sentence case capitalization rule, and title case capitalization
---   rule.
+-- | Custom noun phrase constructor that takes a singular form
+--   (<a>Sentence</a>), plural form (<a>Sentence</a>), sentence case
+--   capitalization rule, and title case capitalization rule.
 nounPhrase'' :: Sentence -> PluralForm -> CapitalizationRule -> CapitalizationRule -> NP
 
--- | For things that should not be pluralized. Works like
---   <a>nounPhrase</a>, but with only the first argument.
+-- | For things that should not be pluralized (or are self-plural). Works
+--   like <a>nounPhrase</a>, but with only the first argument.
 nounPhraseSP :: String -> NP
 
--- | For Reuirements, Assumptions, LikelyChanges, etc. to allow for
---   referencing.
+-- | Similar to nounPhrase, except it only accepts one <a>Sentence</a>.
+--   Used for Requirements, Assumptions, LikelyChanges, etc. to allow for
+--   referencing. Plural case is just <a>AddS</a>.
 nounPhraseSent :: Sentence -> NP
 
--- | Has the ability to be referenced
+-- | Members of this class have the ability to be referenced.
 class HasUID s => Referable s
+
+-- | The referencing address (what we're linking to). Only visible in the
+--   source (tex/html).
 refAdd :: Referable s => s -> String
+
+-- | Alternate form of reference.
 renderRef :: Referable s => s -> LblType
 
 -- | A Document has a Title (<a>Sentence</a>), Author(s) (<a>Sentence</a>),
---   and Sections which hold the contents of the document
+--   and <a>Section</a>s which hold the contents of the document.
 data Document
 Document :: Title -> Author -> [Section] -> Document
 
--- | Types of definitions
+-- | Types of definitions (general, instance, theory, or data).
 data DType
 General :: DType
 Instance :: DType
 Theory :: DType
 Data :: DType
 
--- | Sections have a title (<a>Sentence</a>) and a list of contents
---   (<a>SecCons</a>) and its shortname
+-- | Sections have a title (<a>Sentence</a>), a list of contents
+--   (<a>SecCons</a>) and a shortname (<a>Reference</a>).
 data Section
 Section :: Title -> [SecCons] -> Reference -> Section
 [tle] :: Section -> Title
 [cons] :: Section -> [SecCons]
 [_lab] :: Section -> Reference
+
+-- | Contents may be labelled or unlabelled.
 data Contents
 UlC :: UnlabelledContent -> Contents
 LlC :: LabelledContent -> Contents
 
 -- | Section Contents are split into subsections or contents, where
---   contents are standard layout objects (see <a>Contents</a>)
+--   contents are standard layout objects (see <a>Contents</a>).
 data SecCons
 Sub :: Section -> SecCons
 Con :: Contents -> SecCons
@@ -4206,77 +4733,112 @@ Flat :: Sentence -> ItemType
 Nested :: Header -> ListType -> ItemType
 type ListTuple = (Title, ItemType, Maybe String) " Formats as Title: Item."
 
--- | Contains a <a>Reference</a> and <a>RawContent</a>
+-- | Contains a <a>Reference</a> and <a>RawContent</a>.
 data LabelledContent
 LblC :: Reference -> RawContent -> LabelledContent
 [_ref] :: LabelledContent -> Reference
 [_ctype] :: LabelledContent -> RawContent
 
--- | Only contains <a>RawContent</a>
+-- | Only contains <a>RawContent</a>.
 newtype UnlabelledContent
 UnlblC :: RawContent -> UnlabelledContent
 [_cntnts] :: UnlabelledContent -> RawContent
+
+-- | Smart constructor for retrieving the contents (<a>Section</a>s) from a
+--   <a>Document</a>.
 extractSection :: Document -> [Section]
 
--- | Smart constructor needed for LabelledContent
+-- | Smart constructor that wraps <a>UnlabelledContent</a> into
+--   <a>Contents</a>.
 mkParagraph :: Sentence -> Contents
 
--- | Smart constructor needed for LabelledContent
+-- | Smart constructor similar to <a>llcc</a>, but takes in
+--   <a>RawContent</a> first.
 mkRawLC :: RawContent -> Reference -> LabelledContent
 
--- | Smart constructor for labelled content chunks
+-- | Smart constructor for labelled content chunks.
 llcc :: Reference -> RawContent -> LabelledContent
 
--- | Smart constructor for unlabelled content chunks
+-- | Smart constructor for unlabelled content chunks (no <a>Reference</a>).
 ulcc :: RawContent -> UnlabelledContent
 
--- | Smart constructor for creating Sections with introductory contents
---   (ie. paragraphs, tables, etc.) and a list of subsections.
+-- | Smart constructor for creating <a>Section</a>s with a title
+--   (<a>Sentence</a>), introductory contents (ie. paragraphs, tables,
+--   etc.), a list of subsections, and a shortname (<a>Reference</a>).
 section :: Sentence -> [Contents] -> [Section] -> Reference -> Section
 
--- | Figure smart constructor. Assumes 100% of page width as max width.
+-- | <a>Figure</a> smart constructor with a <a>Lbl</a> and a
+--   <a>Filepath</a>. Assumes 100% of page width as max width.
 fig :: Lbl -> Filepath -> RawContent
 
--- | Figure smart constructor for customized max widths.
+-- | <a>Figure</a> smart constructor that allows for customized max widths.
 figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
 
 -- | MaxWidthPercent should be kept in the range 1-100. Values outside this
 --   range may have unexpected results. Used for specifying max figure
 --   width as <tt>pagewidth*MaxWidthPercent/100</tt>.
 type MaxWidthPercent = Float
+
+-- | Members of this class must have <a>RawContent</a>.
 class HasContents c
+
+-- | Provides a <tt>Lens</tt> to the <a>RawContent</a>.
 accessContents :: HasContents c => Lens' c RawContent
 
--- | Types of layout objects we deal with explicitly
+-- | Types of layout objects we deal with explicitly.
 data RawContent
 
--- | table has: header-row data(rows) label/caption showlabel?
+-- | table has: header-row, data(rows), label/caption, and a bool that
+--   determines whether or not to show label.
 Table :: [Sentence] -> [[Sentence]] -> Title -> Bool -> RawContent
 
 -- | Paragraphs are just sentences.
 Paragraph :: Sentence -> RawContent
+
+-- | Block of Equations holds an expression.
 EqnBlock :: Expr -> RawContent
+
+-- | Grants the ability to label a group of <a>RawContent</a>.
 DerivBlock :: Sentence -> [RawContent] -> RawContent
 
--- | Lists
+-- | For enumerated lists.
 Enumeration :: ListType -> RawContent
+
+-- | Defines something with a type, identifier, and <a>Contents</a>.
 Defini :: DType -> [(Identifier, [Contents])] -> RawContent
 
 -- | Should use relative file path.
 Figure :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
+
+-- | Grants the ability to reference something.
 Bib :: BibRef -> RawContent
 
--- | TODO: Fill this one in.
+-- | Contain a graph with coordinates (<a>Sentence</a>s), maybe a width and
+--   height, and a label (<a>Sentence</a>). TODO: Fill this one in. | An
+--   identifier is just a <a>String</a>.
 Graph :: [(Sentence, Sentence)] -> Maybe Width -> Maybe Height -> Lbl -> RawContent
 
--- | Smart constructor needed for LabelledContent
+-- | Smart constructor that wraps <a>LabelledContent</a> into
+--   <a>Contents</a>.
 mkFig :: Reference -> RawContent -> Contents
+
+-- | Create a reference for a table. Takes in the name of a table (which
+--   will also be used for its shortname).
 makeTabRef :: String -> Reference
+
+-- | Create a reference for a figure. Takes in the name of a figure (which
+--   will also be used for its shortname).
 makeFigRef :: String -> Reference
+
+-- | Create a reference for a section. Takes in the name of a section and a
+--   shortname for the section.
 makeSecRef :: String -> String -> Reference
+
+-- | Create a reference for a list. Takes in the name of the list and a
+--   shortname for the list.
 makeLstRef :: String -> String -> Reference
 
--- | Create a reference for a URI
+-- | Create a reference for a <a>URI</a>.
 makeURI :: UID -> String -> ShortName -> Reference
 
 -- | Spaces
@@ -4392,6 +4954,8 @@ compsy :: Symbol -> Symbol -> Ordering
 --   | 3 | 15 |
 --   </pre>
 mkTable :: [a -> b] -> [a] -> [[b]]
+
+-- | People is a synonymn for many <a>Person</a>s.
 type People = [Person]
 
 -- | A person can have a given name, middle name(s), and surname, as well
@@ -4402,12 +4966,16 @@ data Person
 --   person with only a given name and surname. Arguments are in the order:
 --   given name, surname.
 person :: String -> String -> Person
+
+-- | Members of this class must have a name.
 class HasName p
+
+-- | Gets the name of a <a>Person</a>. Adds a dot after any initials.
 name :: HasName n => n -> String
 
 -- | Constructor for a person using Eastern naming conventions. Used for a
 --   person with only a given name and surname. Arguments are in the order:
---   surname, given name
+--   surname, given name.
 person' :: String -> String -> Person
 
 -- | Constructor for a person using Western naming conventions. Similar to
@@ -4416,16 +4984,27 @@ person' :: String -> String -> Person
 personWM :: String -> [String] -> String -> Person
 
 -- | Constructor for a person using Eastern naming conventions. Similar to
---   the 'person'' constructor, except the middle argument is a list of
---   middle names.
+--   the <a>person'</a> constructor, except the middle argument is a list
+--   of middle names.
 personWM' :: String -> [String] -> String -> Person
 
 -- | Constructor for a person with a mononym (only one name).
 mononym :: String -> Person
+
+-- | Provides the ability to hold a name.
 nameStr :: HasName p => p -> String
+
+-- | Gets a <a>Person</a>'s name in the form: Last, First Middle.
 rendPersLFM :: Person -> String
+
+-- | Gets a <a>Person</a>'s name in the form: Last, F. M.
 rendPersLFM' :: Person -> String
+
+-- | Gets a <a>Person</a>'s name in the form: Last, First M.
 rendPersLFM'' :: Person -> String
+
+-- | Orderes different groups of <a>Person</a>s. If two lists are the same
+--   up to a point, the citation with more <a>Person</a>s will go last.
 comparePeople :: [Person] -> [Person] -> Ordering
 
 -- | Stages correspond to what we're trying to look up. They range from
@@ -4615,14 +5194,14 @@ Note :: String -> CiteField
 Number :: Int -> CiteField
 Organization :: String -> CiteField
 
--- | Range of pages (ex1. 1-32; ex2. 7,31,52-55)
+-- | Range of pages (ex1. 1-32; ex2. 7,31,52-55).
 Pages :: [Int] -> CiteField
 Publisher :: String -> CiteField
 School :: String -> CiteField
 Series :: String -> CiteField
 Title :: String -> CiteField
 
--- | BibTeX "type" field
+-- | BibTeX "type" field.
 Type :: String -> CiteField
 Volume :: Int -> CiteField
 Year :: Int -> CiteField
@@ -4649,72 +5228,72 @@ Proceedings :: CitationKind
 TechReport :: CitationKind
 Unpublished :: CitationKind
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 author :: People -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 editor :: People -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 address :: String -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 bookTitle :: String -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 howPublished :: String -> CiteField
 
--- | URL version of <a>howPublished</a>
+-- | URL version of <a>howPublished</a>.
 --   
---   Smart field constructor
+--   Smart field constructor for a <a>CiteField</a>.
 howPublishedU :: String -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 institution :: String -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 journal :: String -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 note :: String -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 organization :: String -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 publisher :: String -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 school :: String -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 series :: String -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 title :: String -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 typeField :: String -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 chapter :: Int -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 edition :: Int -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 number :: Int -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 volume :: Int -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 year :: Int -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 pages :: [Int] -> CiteField
 
--- | Smart field constructor
+-- | Smart field constructor for a <a>CiteField</a>.
 month :: Month -> CiteField
 
 -- | For defining units. It has a <a>ConceptChunk</a> (that defines what

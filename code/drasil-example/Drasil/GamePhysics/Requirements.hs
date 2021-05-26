@@ -3,6 +3,7 @@ module Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs) where
 
 import Language.Drasil hiding (Vector, organization)
 import Utils.Drasil
+import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 
 import qualified Drasil.DocLang.SRS as SRS (solCharSpec)
@@ -54,7 +55,7 @@ requirementS' a b = requirementS a b EmptyS
 
 -- some requirements look like they could be parametrized
 simSpaceDesc = foldlSent [S "Create a", phrase CP.space, S "for all of the",
-  plural CP.rigidBody, S "in the", phrase physicalSim, 
+  pluralNP (CP.rigidBody `inThePS` physicalSim), 
   S "to interact in"]
 
 inputInitialCondsDesc = foldlSent [S "Input the initial", foldlList Comma List
@@ -62,8 +63,8 @@ inputInitialCondsDesc = foldlSent [S "Input the initial", foldlList Comma List
   plural QP.angularVelocity `S.of_` EmptyS, plural QP.force +:+ S "applied on"],
   plural CP.rigidBody]
 
-inputSurfacePropsDesc = foldlSent [S "Input", (phrase CM.surface +:+
-  plural property) `S.the_ofThe` plural body, S "such as", phrase CP.friction `S.or_`
+inputSurfacePropsDesc = foldlSent [S "Input", pluralNP (combineNINI CM.surface
+  property) `S.the_ofThe` plural body, S "such as", phrase CP.friction `S.or_`
   phrase CP.elasticity]
 
 verifyPhysConsDesc = foldlSent [S "Verify that the", plural input_,
@@ -109,7 +110,7 @@ performance = cic "performance" (foldlSent [
 
 correctness :: ConceptInstance
 correctness = cic "correctness" (foldlSent [
-  S "The", phrase output_ `S.of_` S "simulation results shall be compared to", 
+  atStartNP (the output_) `S.of_` S "simulation results shall be compared to", 
   S "an existing implementation like Pymunk (please refer to:", 
   S "http://www.pymunk.org/en/latest/)"
   ]) "Correctness" nonFuncReqDom
@@ -132,6 +133,6 @@ understandability = cic "understandability" (foldlSent [
 
 maintainability :: ConceptInstance
 maintainability = cic "maintainability" (foldlSent [
-  S "development time for any " `S.the_ofTheC` S "likely changes should not exceed", 
+  S "development time for any" `S.the_ofTheC` S "likely changes should not exceed", 
   addPercent (10 :: Integer), S "percent of the original development time"
   ]) "Maintainability" nonFuncReqDom

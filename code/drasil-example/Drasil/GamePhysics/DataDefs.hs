@@ -6,6 +6,7 @@ module Drasil.GamePhysics.DataDefs (dataDefs, ctrOfMassDD, linDispDD, linVelDD,
 import Language.Drasil
 import Theory.Drasil (DataDefinition, dd, ddNoRefs)
 import Utils.Drasil
+import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 import Control.Lens ((^.))
 
@@ -202,9 +203,9 @@ chaslesEqn :: Expr
 chaslesEqn = sy velO `addRe` cross (sy  QP.angularVelocity) (sy rOB)
 
 chaslesThmNote :: Sentence
-chaslesThmNote = foldlSent [S "The", phrase QP.linearVelocity,
-  ch velB `S.of_` S "any point B in a", phrase rigidBody `S.isThe` S "sum" `S.of_`
-  ((phrase QP.linearVelocity +:+ ch velO) `S.the_ofThe` phrase rigidBody),
+chaslesThmNote = foldlSent [atStartNP (the QP.linearVelocity),
+  ch velB `S.of_` S "any point B in a", phrase rigidBody `S.isThe` S "sum" `S.ofThe`
+  phrase QP.linearVelocity +:+ ch velO `S.ofThe` phrase rigidBody,
   S "at the origin (axis of rotation)" `S.andThe` S "resultant vector from",
   S "cross product" `S.the_ofThe` phrasePoss rigidBody,
   getTandS QP.angularVelocity `S.andThe` getTandS rOB]
@@ -235,10 +236,10 @@ impulseVDerivSentence1 :: [Sentence]
 impulseVDerivSentence1 = [S "Newton's second law of motion states"]
 
 impulseVDerivSentence2 :: [Sentence]
-impulseVDerivSentence2 = [S "Rearranging "] 
+impulseVDerivSentence2 = [S "Rearranging"] 
 
 impulseVDerivSentence3 :: [Sentence]
-impulseVDerivSentence3 = [S "Integrating the right hand side "] 
+impulseVDerivSentence3 = [S "Integrating the right hand side"] 
 
 impulseVDerivEqn1 :: Expr
 impulseVDerivEqn1 =  sy QP.force $= sy QPP.mass `mulRe` sy QP.acceleration
@@ -269,8 +270,8 @@ reVelInCollEqn :: Expr
 reVelInCollEqn = sy velAP $- sy velBP
 
 reVelInCollDesc :: Sentence
-reVelInCollDesc = foldlSent [S "In a collision, the", phrase QP.velocity,
-  S "of a", phrase rigidBody, S "A colliding with another", phrase rigidBody,
+reVelInCollDesc = foldlSent [S "In a collision, the", phraseNP (QP.velocity
+  `ofA` rigidBody), S "A colliding with another", phrase rigidBody,
   S "B relative to that body", ch initRelVel `S.isThe` S "difference between the",
   plural QP.velocity, S "of A and B at point P"]
 -----------------DD13 Torque-------------------------------------------------------------------------------
@@ -341,7 +342,7 @@ potEnergyEqn :: Expr
 potEnergyEqn = sy QPP.mass `mulRe` sy QP.gravitationalAccel `mulRe` sy QP.height
 
 potEnergyDesc :: Sentence
-potEnergyDesc = foldlSent [S "The", phrase QP.potEnergy `S.of_`
+potEnergyDesc = foldlSent [atStartNP (the QP.potEnergy) `S.of_`
   S "an object" `S.isThe` phrase QP.energy, S "held by an object because of its",
   phrase QP.position, S "to other objects"]
 

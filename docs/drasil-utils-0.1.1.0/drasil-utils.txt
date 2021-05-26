@@ -514,9 +514,29 @@ and_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 --   are <tt>(phrase t1) "and" (plural t2)</tt>.
 and_TSP :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the word
+--   "and" between their terms. Plural case is <tt>(plural t1) "and"
+--   (phrase t2)</tt>.
+and_PS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the word
+--   "and" between their terms. Plural case is <tt>(plural t1) "and"
+--   (plural t2)</tt>.
+and_PP :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
 -- | Customizable <a>and_</a> combinator (takes two title case
 --   capitalization rules and two <tt>NamedIdeas</tt>).
 andTGen :: (NamedIdea c, NamedIdea d) => (c -> Sentence) -> (d -> Sentence) -> c -> d -> NP
+
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
+--   "and its" between their terms. Plural case is <tt>(phrase t1) "and
+--   its" (plural t2)</tt>.
+andIts :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
+--   "and the" between their terms. Plural case is <tt>(phrase t1) "and
+--   the" (plural t2)</tt>.
+andThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Case with "T1s with T2", as opposed to "T1 with T2", i.e. singular
 --   case is <tt>(plural t1) "with" (phrase t2)</tt> while the plural case
@@ -552,14 +572,28 @@ ofA :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 ofATPS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Same as <a>of_</a>, except combining <a>Sentence</a> piece is "of
---   the". Plural case is <tt>(plural t1) <a>ofThe</a> (phrase t2)</tt>.
+--   the". Plural case is <tt>(phrase t1) <a>ofThe</a> (plural t2)</tt>.
 ofThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Same as <a>ofThe</a>, except plural case is <tt>(plural t1)
+--   <a>ofThe</a> (phrase t2)</tt>.
+ofThePS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Same as <a>ofThe'</a>, except prepends "the".
 the_ofThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Same as <a>of_</a>, except combining Sentence piece is "of the".
 onThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
+--   "in the" between their terms. Plural case is <tt>(phrase t1) "in the"
+--   (plural t2)</tt>.
+inThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
+--   "in the" between their terms. Plural case is <tt>(plural t1) "in the"
+--   (phrase t2)</tt>.
+inThePS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the word
 --   "for" between their terms. Plural case is <tt>(phrase t1) "for"
@@ -586,11 +620,6 @@ a_ :: NamedIdea c => c -> NP
 
 -- | Customizable version of <tt>a</tt>.
 a_Gen :: (c -> Sentence) -> c -> NP
-
--- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
---   "in the" between their terms. Plural case is <tt>(phrase t1) "in the"
---   (plural t2)</tt>.
-inThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Combinator for combining two <tt>NamedIdeas</tt>s into a
 --   <a>NamedChunk</a>. Plural case only makes second term plural. See
@@ -625,3 +654,6 @@ combineNINP :: NamedIdea c => c -> NP -> NP
 -- | Similar to <a>combineNINP</a> but takes in a <a>NP</a> first and a
 --   <a>NamedIdea</a> second.
 combineNPNI :: NamedIdea c => NP -> c -> NP
+
+-- | Similar to <a>combineNINP</a> but takes two <a>NamedIdea</a>s.
+combineNINI :: (NamedIdea c, NamedIdea d) => c -> d -> NP

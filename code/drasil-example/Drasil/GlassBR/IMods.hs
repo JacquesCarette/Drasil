@@ -4,6 +4,7 @@ import Prelude hiding (exp)
 import Language.Drasil
 import Theory.Drasil (InstanceModel, imNoDeriv, qwC, ModelKinds (OthModel))
 import Utils.Drasil
+import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 
 import Drasil.GlassBR.DataDefs (probOfBreak, calofCapacity, calofDemand,
@@ -56,7 +57,7 @@ iModDesc main s = foldlSent [S "If", ch main `sC` S "the glass is" +:+.
 -- Intro --
 
 instModIntro :: Sentence
-instModIntro = foldlSent [S "The", phrase goal, makeRef2S willBreakGS, 
+instModIntro = foldlSent [atStartNP (the goal), makeRef2S willBreakGS, 
   S "is met by", makeRef2S pbIsSafe `sC` makeRef2S lrIsSafe]
 
 -- Notes --

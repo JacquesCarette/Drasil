@@ -54,7 +54,7 @@ nonFuncReqs = [correct, portable]
 
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
- atStartNP' (output_ `the_ofThe` code), S "have the",
+ atStartNP' (output_ `the_ofThePS` code), S "have the",
  plural property, S "described in", makeRef2S (propCorSol [] [])
  ]) "Correct" nonFuncReqDom
 

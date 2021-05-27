@@ -46,14 +46,14 @@ instance Referable          GenDefn where
 gd :: (IsUnit u) => ModelKinds -> Maybe u ->
   Maybe Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
 gd mkind _   _     []   _  = error $ "Source field of " ++ mkind ^. uid ++ " is empty"
-gd (EquationalRealm q _) _ _ _ _ = error $ q ^. uid ++ ": GenDefn's do not support EquationalRealms"
+gd (EquationalRealm q _ _) _ _ _ _ = error $ q ^. uid ++ ": GenDefn's do not support EquationalRealms"
 gd mkind u derivs refs sn_ = 
   GD mkind (fmap unitWrapper u) derivs refs (shortname' sn_) (prependAbrv genDefn sn_)
 
 -- | Smart constructor for general definitions; no references
 gdNoRefs :: (IsUnit u) => ModelKinds -> Maybe u ->
   Maybe Derivation -> String -> [Sentence] -> GenDefn
-gdNoRefs (EquationalRealm q _) _ _ _ = error $ q ^. uid ++ ": GenDefn's do not support EquationalRealms"
+gdNoRefs (EquationalRealm q _ _) _ _ _ = error $ q ^. uid ++ ": GenDefn's do not support EquationalRealms"
 gdNoRefs mkind u derivs sn_ = 
   GD mkind (fmap unitWrapper u) derivs [] (shortname' sn_) (prependAbrv genDefn sn_)
 

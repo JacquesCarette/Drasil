@@ -46,10 +46,11 @@ newtonTLNote = foldlSent [(S "Every action has an equal and opposite reaction" !
 
 -- T3 : Newton's law of universal gravitation --
 
+-- FIXME: Missing ConceptDomain!
 newtonLUGModel :: ModelKinds
-newtonLUGModel = EquationalRealm newtonForceQuant $ NE.fromList [
-    RV EmptyS (sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/ square (sy dispNorm)) `mulRe` sy dVect) [],
-    RV EmptyS (sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/ square (sy dispNorm)) `mulRe` (sy distMass $/ sy dispNorm)) []
+newtonLUGModel = EquationalRealm newtonForceQuant [] $ NE.fromList [
+    RV EmptyS (sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/ square (sy dispNorm)) `mulRe` sy dVect),
+    RV EmptyS (sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/ square (sy dispNorm)) `mulRe` (sy distMass $/ sy dispNorm))
   ]
 
 newtonLUG :: TheoryModel

@@ -58,6 +58,11 @@ extra-deps:
 - unicode-names-3.2.0.0@sha256:fef7241d93170e26265e84553090253a5e8ee207645d47cf271816f5834d07d2
 - unicode-properties-3.2.0.0@sha256:239766a6ac4322329353f6b9cd546024fd8c5f0235c8e32b3cba2d6bd245a699
 
+# Used only for a basic set of flags for haddock
+build:
+  haddock-deps: false
+  haddock-hyperlink-source: false
+
 # Override default flag values for local packages and extra-deps
 flags: {}
 
@@ -81,3 +86,5 @@ require-stack-version: ">=2.3.1"
 #
 # Allow a newer minor version of GHC than the snapshot specifies
 # compiler-check: newer-minor
+
+dump-logs: all

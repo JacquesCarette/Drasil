@@ -108,7 +108,7 @@ override GHCTHREADS = 2
 endif
 
 override GHCFLAGS += -Wall -j$(GHCTHREADS)
-override stackArgs += --ghc-options="$(GHCFLAGS)" --dump-logs --interleaved-output
+override stackArgs += --ghc-options="$(GHCFLAGS)"
 
 #  Output amount control
 NOISY=no
@@ -172,7 +172,7 @@ analysis: check_stack
 	cd $(SCRIPT_FOLDER) && stack exec -- runghc DataTableGen.hs
 
 docs: check_stack
-	sh scripts/make_docs.sh
+	GHC_FLAGS="$(GHCFLAGS)" sh scripts/make_docs.sh
 
 %$(TEX_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(TEX_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)

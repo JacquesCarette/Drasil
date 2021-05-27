@@ -71,30 +71,22 @@ of which classes.
 -------------------------------------------------
 
 To build the documentation for Drasil, simply type `make docs`.
+It will build 2 variants of the Haddock documentation; a normal external 
+documentation set, and an internal documentation set with all modules fully exposed.
 
-Upon completion you should receive several messages stating the haddock for certain
-packages has been updated. You will also get the path to the index file(s).
+Upon completion, you should receive several messages stating the Haddock for certain
+packages has been updated, as well as directory locations for the related generated Haddock docs.
 
-The drasil documentation will be on the path for **local packages** (normally in
-the *.stack-work* folder), for example:
-
-```
-Updating Haddock index for local packages in
-C:\Users\Dan\...\literate-scientific-software\code\website\index.html
-```
-
-or
-
-```
-Updating Haddock index for local packages in
-/.../literate-scientific-software/code/website/index.html
-```
+The generated Haddock documentation will be placed inside of a newly created `code/docs/` folder.
+You should open up the `code/docs/index.html` file with your web browser if you'd like to view 
+the external documentation set. Alternatively, if you would like to view the internal documentation set,
+you should instead open the `code/docs/full/index.html` file.
 
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
 --------------------------------------------------
 
-**data-files**
+**datafiles**
   - Contains additional "helper" files for each of the examples
 
 **drasil-build**

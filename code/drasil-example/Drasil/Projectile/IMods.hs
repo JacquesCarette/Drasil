@@ -5,6 +5,7 @@ import Prelude hiding (cos, sin)
 import Language.Drasil
 import Theory.Drasil (InstanceModel, imNoDerivNoRefs, imNoRefs, qwC, ModelKinds (OthModel))
 import Utils.Drasil
+import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
@@ -61,7 +62,7 @@ timeDerivSent2 = foldlSentCol [S "To find the", phrase time, S "that the",
   phrase projectile, S "lands" `sC` S "we want to find the", ch time, phrase value,
   sParen (ch flightDur), S "where", E (sy yPos $= exactDbl 0) +:+. sParen (S "since the" +:+
   phrase target `S.is` S "on the" +:+ phrase xAxis +:+ S "from" +:+ makeRef2S targetXAxis),
-  S "From the", phrase equation, S "above",S "we get"]
+  S "From the", phrase equation, S "above we get"]
 timeDerivSent3 = foldlSentCol [S "Dividing by", ch flightDur,
   sParen (S "with the" +:+ phrase constraint +:+ E (sy flightDur $> exactDbl 0)),
   S "gives us"]
@@ -99,7 +100,7 @@ landPosDerivSent1 = foldlSentCol [S "We know that" +:+.
   makeRef2S posVecGD, S "gives us"]
 landPosDerivSent2 = foldlSentCol [S "To find the", phrase landPos `sC`
   S "we want to find the", ch xPos, phrase value, sParen (ch landPos),
-  S "at", phrase flightDur, sParen (S "from" +:+ makeRef2S timeIM)]
+  S "at", phrase flightDur, fromSource timeIM]
 landPosDerivSent3 = foldlSentCol [S "From", makeRef2S speedIX,
   sParen (S "with" +:+ E (sy iSpeed $= sy launSpeed)), S "we can replace", ch ixVel]
 landPosDerivSent4 = S "Rearranging this gives us the required" +: phrase equation
@@ -135,7 +136,7 @@ angleConstraintNote, gravitationalAccelConstNote, landAndTargPosConsNote, landPo
   landPosConsNote, offsetNote, offsetConsNote, targPosConsNote,
   timeConsNote, tolNote :: Sentence
 
-angleConstraintNote = foldlSent [S "The", phrase constraint,
+angleConstraintNote = foldlSent [atStartNP (the constraint),
   E (exactDbl 0 $< sy launAngle $< half (sy pi_)) `S.is` S "from",
   makeRef2S posXDirection `S.and_` makeRef2S yAxisGravity `sC`
   S "and is shown" `S.in_` makeRef2S figLaunch]
@@ -143,23 +144,23 @@ angleConstraintNote = foldlSent [S "The", phrase constraint,
 gravitationalAccelConstNote = ch gravitationalAccelConst `S.is`
   S "defined in" +:+. makeRef2S gravAccelValue
 
-landAndTargPosConsNote = S "The" +:+ plural constraint +:+
+landAndTargPosConsNote = atStartNP' (the constraint) +:+
   E (sy landPos $> exactDbl 0) `S.and_` E (sy targPos $> exactDbl 0) `S.are` S "from" +:+. makeRef2S posXDirection
 
 landPosNote = ch landPos `S.is` S "from" +:+. makeRef2S landPosIM
 
-landPosConsNote = S "The" +:+ phrase constraint +:+
+landPosConsNote = atStartNP (the constraint) +:+
   E (sy landPos $> exactDbl 0) `S.is` S "from" +:+. makeRef2S posXDirection
 
 offsetNote = ch offset `S.is` S "from" +:+. makeRef2S offsetIM
 
-offsetConsNote = foldlSent [S "The", phrase constraint, E (sy offset $> neg (sy landPos)) `S.is`
+offsetConsNote = foldlSent [atStartNP (the constraint), E (sy offset $> neg (sy landPos)) `S.is`
   S "from the fact that", E (sy landPos $> exactDbl 0) `sC` S "from", makeRef2S posXDirection]
 
-targPosConsNote = S "The" +:+ phrase constraint +:+
+targPosConsNote = atStartNP (the constraint) +:+
   E (sy targPos $> exactDbl 0) `S.is` S "from" +:+. makeRef2S posXDirection
 
-timeConsNote = S "The" +:+ phrase constraint +:+
+timeConsNote = atStartNP (the constraint) +:+
   E (sy flightDur $> exactDbl 0) `S.is` S "from" +:+. makeRef2S timeStartZero
 
 tolNote = ch tol `S.is` S "defined in" +:+. makeRef2S (SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]))

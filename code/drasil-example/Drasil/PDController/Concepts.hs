@@ -100,7 +100,7 @@ ccFrequencyDomain
          ++ "of time")
 
 ccLaplaceTransform
-  = dcc "laplaceTransform" (nounPhraseSP "Laplace transform") 
+  = dcc "laplaceTransform" (cn' "Laplace transform") 
       ("An integral transform that converts a function of a real variable t " ++
          "(often time) to a function of a complex variable s (complex frequency)")
 

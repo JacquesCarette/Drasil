@@ -5,6 +5,8 @@ import Data.Drasil.Citations (smithLai2005)
 import Drasil.PDController.Concepts
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Concepts
+import qualified Utils.Drasil.Sentence as S
 
 introPara, introPurposeOfDoc, introscopeOfReq :: Sentence
 introPara
@@ -20,24 +22,21 @@ introPara
 
 introscopeOfReq
   = foldlSent_
-      [S "a", phrase pidCL,
-       S "with three subsystems namely a" +:+.
-         foldlList Comma List
-           [phrase pidC, S "a" +:+ phrase summingPt,
-            S "a" +:+ phrase powerPlant],
-       S "Only",
-         S "the Proportional and Derivative controllers are used in this software;"
-         +:+. S "the Integral controller is beyond the scope of this project",
-         S "Additionally, this software is intended to aid with the manual",
-         S "tuning of the",
-       phrase pidC]
+      [phraseNP (a_ pidCL),
+       S "with three subsystems, namely:" +:+.
+          foldlList Comma List (map (phraseNP.a_)
+           [pidC, summingPt, powerPlant]),
+       S "Only the Proportional and Derivative controllers are used in this software;" +:+.
+         S "the Integral controller is beyond the scope of this project",
+       S "Additionally, this software is intended to aid with the manual",
+         S "tuning of the", phrase pidC]
 
 introPurposeOfDoc
   = foldlSent
       [S "The purpose of this document is to capture all the necessary",
          S "information including assumptions, data definitions, constraints,",
-         S "models, and requirements to facilitate an unambiguous development",
-         S "of the PD controller software and test procedures"]
+         S "models, and requirements to facilitate an unambiguous development"
+         `S.ofThe` phrase pidC, S "software and test procedures"]
 
 introUserChar1, introUserChar2 :: [Sentence]
 introUserChar1

@@ -72,7 +72,7 @@ newtonLUGNotes :: [Sentence]
 newtonLUGNotes = map foldlSent [
   [S "Two", plural rigidBody `S.inThe` S "universe attract each other with a",
    getTandS force, S "that is directly proportional to the product of their",
-   plural mass `sC` ch mass_1 `S.sAnd` ch mass_2 `sC` EmptyS `S.sAnd`
+   plural mass `sC` ch mass_1 `S.and_` ch mass_2 `sC` EmptyS `S.and_`
    S "inversely proportional" `S.toThe` getTandS sqrDist, S "between them"]]
 
 -- T4 : Newton's second law for rotational motion --
@@ -91,9 +91,9 @@ newtonSLRRel = sy torque $= sy momentOfInertia `mulRe` sy angularAccel
 
 newtonSLRNotes :: [Sentence]
 newtonSLRNotes = map foldlSent [
-  [S "The net", getTandS torque, S "on a", phrase rigidBody `S.sIs`
+  [S "The net", getTandS torque, S "on a", phrase rigidBody `S.is`
    S "proportional to its", getTandS angularAccel `sC` S "where",
    ch momentOfInertia, S "denotes", phrase momentOfInertia `S.the_ofThe`
-   phrase rigidBody, S "as the", phrase constant `S.sOf` S "proportionality"],
-  [S "We also assume that all", plural rigidBody, S "involved" `S.sAre`
+   phrase rigidBody, S "as the", phrase constant `S.of_` S "proportionality"],
+  [S "We also assume that all", plural rigidBody, S "involved" `S.are`
    phrase twoD, fromSource assumpOD]]

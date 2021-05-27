@@ -25,3 +25,6 @@ library:
   - Language.Drasil
   - Language.Drasil.Development
   - Language.Drasil.ShortHands
+  when:
+  - condition: false
+    other-modules: Paths_drasil_lang

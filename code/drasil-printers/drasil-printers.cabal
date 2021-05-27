@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 4d682a5f8646dd4b02881b977f282c2a5596931fc71793550f81c10d32fe3b6a
+-- hash: d16a8ade5934f82bf4fb426cd06188cc156bc02fc55bab96b822df4c13c051df
 
 name:           drasil-printers
 version:        0.1.10.0
@@ -43,7 +43,6 @@ library
       Language.Drasil.TeX.Monad
       Language.Drasil.TeX.Preamble
       Language.Drasil.TeX.Print
-      Paths_drasil_printers
   hs-source-dirs:
       ./
   ghc-options: -Wall -Wredundant-constraints
@@ -54,4 +53,7 @@ library
     , drasil-utils
     , lens
     , pretty
+  if false
+    other-modules:
+        Paths_drasil_printers
   default-language: Haskell2010

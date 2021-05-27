@@ -14,22 +14,23 @@ import Language.Drasil.UID (UID)
 
 import Control.Lens (Lens')
 
--- | The most basic item: having a unique key, here a UID
+-- | The most basic item: having a unique identifier key, here a UID.
 class HasUID c where
-  -- | Provides a /unique/ id for internal Drasil use
+  -- | Provides a /unique/ id for internal Drasil use.
   uid :: Lens' c UID
 
--- | A ShortName is the text to be displayed for a link.
+-- | A 'ShortName' is the text to be displayed for a link.
 -- Used for referencing within a document that can include symbols and whatnot if required.
--- Visible in the typeset documents (pdf)
+-- Visible in the typeset documents (pdf).
 class HasShortName  s where
   shortname :: s -> ShortName
 
--- | A HasSymbol is anything which has a 'Symbol'
+-- | A HasSymbol is anything which has a 'Symbol'.
 class HasSymbol c where
-  -- | Provides the 'Symbol' for a particular stage of generation
+  -- | Provides the 'Symbol' for a particular stage of generation.
   symbol  :: c -> Stage -> Symbol
  
--- | For a "Reference Address", we just need a getter.
+-- | Members must have a reference address.
 class HasRefAddress b where
+  -- | Provides the ability to hold a reference address.
   getRefAdd :: b -> String

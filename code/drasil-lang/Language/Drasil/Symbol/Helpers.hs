@@ -10,15 +10,15 @@ import Language.Drasil.Classes.Core (HasSymbol(symbol))
 import Language.Drasil.Symbol (Symbol(..), Decoration(..))
 import Language.Drasil.Stages (Stage(Equational,Implementation))
 
--- | Helper function for getting a symbol in the Equational Stage
+-- | Helper function for getting a symbol in the Equational Stage.
 eqSymb :: HasSymbol q => q -> Symbol
 eqSymb c = symbol c Equational
 
--- | Helper function for getting a symbol in the Implementation Stage
+-- | Helper function for getting a symbol in the Implementation Stage.
 codeSymb :: HasSymbol q => q -> Symbol
 codeSymb c = symbol c Implementation
 
--- | Is a Stage symbol real or Empty?
+-- | Finds if a 'Stage' symbol is real or Empty. True if real.
 hasStageSymbol :: HasSymbol q => q -> Stage -> Bool
 hasStageSymbol q st = symbol q st /= Empty
 
@@ -33,7 +33,7 @@ sub :: Symbol -> Symbol -> Symbol
 sub b lr = Corners [] [] [] [lr] b
 
 -- | Helper for a common case of subscript, with a string
--- Arguments: Base symbol, then subscript String.
+-- Arguments: Base symbol, then subscript 'String'.
 subStr :: Symbol -> String -> Symbol
 subStr sym substr = sub sym $ Label substr
 
@@ -54,7 +54,7 @@ vec = Atop Vector
 prime :: Symbol -> Symbol
 prime = Atop Prime
 
--- | Helper for creating a symbol that depends on the stage
+-- | Helper for creating a symbol that depends on the stage.
 staged :: Symbol -> Symbol -> Stage -> Symbol
 staged eqS _ Equational = eqS
 staged _ impS Implementation = impS 
@@ -63,7 +63,7 @@ staged _ impS Implementation = impS
 autoStage :: Symbol -> (Stage -> Symbol)
 autoStage s = staged s (unicodeConv s)
 
--- | Helper for autoStage that apples unicodeString to all Symbols with Strings
+-- | Helper for autoStage that applies unicodeString to all 'Symbol's with 'String's.
 unicodeConv :: Symbol -> Symbol
 unicodeConv (Variable st) = Variable $ unicodeString st
 unicodeConv (Label    st) = Label    $ unicodeString st
@@ -73,7 +73,7 @@ unicodeConv (Corners a b c d s) =
 unicodeConv (Concat ss) = Concat $ map unicodeConv ss
 unicodeConv x = x
 
--- | Helper for unicodeConv that converts each Unicode character to text equivalent
+-- | Helper for 'unicodeConv' that converts each Unicode character to text equivalent.
 -- If a character is Latin, it it just returned.
 -- If a character is Unicode and Greek, just the name of the symbol is returned (eg. theta).
 -- Otherwise, an error is thrown.

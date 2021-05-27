@@ -49,12 +49,12 @@ determineCritSlip = cic "determineCritSlip" ( foldlSent [
   S "Determine the", phrase crtSlpSrf, S "for the", phrase input_, 
   phrase slope `sC` S "corresponding to the minimum", phrase fs `sC` 
   S "by using", usingIMs, S "to calculate the", phrase fs, S "for a", 
-  phrase slpSrf `S.sAnd` S "using", makeRef2S crtSlpId, S "to find the", 
+  phrase slpSrf `S.and_` S "using", makeRef2S crtSlpId, S "to find the", 
   phrase slpSrf, S "that minimizes it"]) 
   "Determine-Critical-Slip-Surface" funcReqDom
 
 verifyOutput = cic "verifyOutput" ( foldlSent [
-  S "Verify that the", phrase fsMin `S.sAnd` phrase crtSlpSrf, S "satisfy the",
+  S "Verify that the", phrase fsMin `S.and_` phrase crtSlpSrf, S "satisfy the",
   plural physicalConstraint, S "shown in", makeRef2S (propCorSol [] [])])
   "Verify-Output" funcReqDom
 
@@ -110,14 +110,14 @@ nonFuncReqs = [correct, understandable, reusable, maintainable]
 
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
-  plural output_ `S.the_ofThe'` phrase code, S "have the",
+  plural output_ `S.the_ofTheC` phrase code, S "have the",
   plural property, S "described in", makeRef2S (propCorSol [] [])
   ]) "Correct" nonFuncReqDom
 
 understandable :: ConceptInstance
 understandable = cic "understandable" (foldlSent [
   S "The", phrase code, S "is modularized with complete",
-  phrase mg `S.sAnd` phrase mis]) "Understandable" nonFuncReqDom
+  phrase mg `S.and_` phrase mis]) "Understandable" nonFuncReqDom
 
 reusable :: ConceptInstance
 reusable = cic "reusable" (foldlSent [
@@ -128,4 +128,4 @@ maintainable = cic "maintainable" (foldlSent [
   S "The traceability between", foldlList Comma List [plural requirement,
   plural assumption, plural thModel, plural genDefn, plural dataDefn, plural inModel,
   plural likelyChg, plural unlikelyChg, plural module_], S "is completely recorded in",
-  plural traceyMatrix, S "in the", getAcc srs `S.sAnd` phrase mg]) "Maintainable" nonFuncReqDom
+  plural traceyMatrix, S "in the", getAcc srs `S.and_` phrase mg]) "Maintainable" nonFuncReqDom

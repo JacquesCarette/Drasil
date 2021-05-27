@@ -3,7 +3,7 @@ module Drasil.Sections.Requirements (fReqF, fullReqs, fullTables, inReq, inTable
 
 import Language.Drasil
 import Utils.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (description, funcReqDom,
   functionalRequirement, input_, nonfunctionalRequirement, {-output_,-} section_,
@@ -60,7 +60,7 @@ nfrReqIntroBody = foldlSent_ [S "the", plural nonfunctionalRequirement `sC`
 
 --generalized requirements introduction
 reqIntro :: Contents
-reqIntro = mkParagraph $ reqIntroStart +:+. (frReqIntroBody `sC` EmptyS `sAnd` nfrReqIntroBody)
+reqIntro = mkParagraph $ reqIntroStart +:+. (frReqIntroBody `sC` EmptyS `S.and_` nfrReqIntroBody)
 
 --generalized functional requirements introduction
 fReqIntro :: Contents

@@ -58,7 +58,7 @@ eqRel = foldr (($=) . sumAll (Variable "i") . sy) (int 0) [fx, fy, genericM]
 eqDesc :: Sentence
 eqDesc = foldlSent [S "For a body in static equilibrium, the net",
   plural force, S "and", plural genericM +:+. S "acting on the body will cancel out",
-  S "Assuming a 2D problem", sParen (makeRef2S assumpENSL) `sC` S "the", getTandS fx `S.sAnd`
+  S "Assuming a 2D problem", sParen (makeRef2S assumpENSL) `sC` S "the", getTandS fx `S.and_`
   getTandS fy, S "will be equal to" +:+. E (exactDbl 0), S "All", plural force,
   S "and their", phrase distance, S "from the chosen point of rotation",
   S "will create a net", phrase genericM, S "equal to" +:+ E (exactDbl 0)]

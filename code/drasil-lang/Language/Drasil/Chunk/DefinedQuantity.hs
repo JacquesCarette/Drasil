@@ -40,7 +40,8 @@ instance HasSpace      DefinedQuantityDict where typ = spa
 -- ^ Finds the 'Space' of the 'DefinedQuantityDict'.
 instance HasSymbol     DefinedQuantityDict where symbol = view symb
 -- ^ Finds the 'Stage' -> 'Symbol' of the 'DefinedQuantityDict'.
-instance Quantity      DefinedQuantityDict where 
+instance Quantity      DefinedQuantityDict where
+-- ^ 'DefinedQuantityDict's have a 'Quantity'. 
 instance MayHaveUnit   DefinedQuantityDict where getUnit = view unit'
 -- ^ Finds the units of the 'DefinedQuantityDict'.
 

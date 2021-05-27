@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: a9a50a45f3a9e998f60776d2574553d0a145ad3e40e1f2062e6fec85b9bbc3ee
+-- hash: ef3d221e344d6b4913db63661032e6a726132b5f039fb4119c05d54692b53eb6
 
 name:           drasil-code
 version:        0.1.9.0
@@ -90,6 +90,9 @@ library
     , mtl
     , pretty
     , split
+  if false
+    other-modules:
+        Paths_drasil_code
   default-language: Haskell2010
 
 executable codegenTest

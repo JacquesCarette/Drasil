@@ -23,13 +23,15 @@ instance HasSpace       NamedArgument where typ = qtd . typ
 -- ^ Finds the 'Space' of the 'QuantityDict' used to make the 'NamedArgument'.
 instance HasSymbol      NamedArgument where symbol = symbol . view qtd
 -- ^ Finds the 'Symbol' of the 'QuantityDict' used to make the 'NamedArgument'.
-instance Quantity       NamedArgument where 
+instance Quantity       NamedArgument where
+-- ^ 'NamedArgument's have a 'Quantity'.
 instance IsArgumentName NamedArgument where
+-- ^ 'NamedArgument's have an argument name.
 instance Eq             NamedArgument where a == b = (a ^. uid) == (b ^. uid)
 -- ^ Equal if 'UID's are equal.
 instance MayHaveUnit    NamedArgument where getUnit = getUnit . view qtd
 -- ^ Finds the units of the 'QuantityDict' used to make the 'NamedArgument'.
   
--- | Smart constructor for 'NamedArgument' 
+-- | Smart constructor for 'NamedArgument' .
 narg :: (Quantity q, MayHaveUnit q) => q -> NamedArgument
 narg = NA . qw

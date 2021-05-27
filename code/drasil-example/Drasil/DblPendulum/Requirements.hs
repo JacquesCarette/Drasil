@@ -3,6 +3,7 @@ module Drasil.DblPendulum.Requirements where
 import Language.Drasil
 import Drasil.DocLang.SRS (datCon, propCorSol)
 import Utils.Drasil
+import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Computation (inValue)
@@ -41,7 +42,7 @@ calcAngPosDesc = foldlSent [S "Calculate the following" +: plural value,
     ch pendDisplacementAngle   +:+ sParen (S "from" +:+ makeRef2S angularDisplacementIM)
   ]]
 outputValuesDesc = foldlSent [atStart output_, ch lenRod,
-  sParen (S "from" +:+ makeRef2S angularDisplacementIM) `S.sAnd` ch lenRod,
+  sParen (S "from" +:+ makeRef2S angularDisplacementIM) `S.and_` ch lenRod,
   sParen (S "from" +:+ makeRef2S angularDisplacementIM)]
 
 
@@ -53,7 +54,7 @@ nonFuncReqs = [correct, portable]
 
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
- atStartNP' (output_ `the_ofThe''` code), S "have the",
+ atStartNP' (output_ `the_ofThePS` code), S "have the",
  plural property, S "described in", makeRef2S (propCorSol [] [])
  ]) "Correct" nonFuncReqDom
 

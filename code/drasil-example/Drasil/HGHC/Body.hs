@@ -23,7 +23,7 @@ import Data.Drasil.Concepts.Documentation (doccon, doccon')
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
   
 srs :: Document
-srs = mkDoc mkSRS S.sFor' si
+srs = mkDoc mkSRS S.forT si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration

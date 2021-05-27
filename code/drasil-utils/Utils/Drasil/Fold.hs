@@ -4,7 +4,7 @@ module Utils.Drasil.Fold (EnumType(..), WrapType(..), SepType(..), FoldType(..),
   foldlSent, foldlSent_, foldlSentCol, foldlsC, foldNums, numList) where
 
 import Language.Drasil
-import Utils.Drasil.Sentence (sAnd, sOr)
+import qualified Utils.Drasil.Sentence as S (and_, or_)
 
 -- | Fold helper function that applies f to all but the last element, applies g to
 -- last element and the accumulator.
@@ -89,8 +89,8 @@ foldlEnumList e w s l lst = foldlList s l $ zipWith (+:+) (enumList e w $ length
 
 -- | Ending type helper functions to foldlList - not exported.
 end :: FoldType -> (Sentence -> Sentence -> Sentence)
-end List    = sAnd
-end Options = sOr
+end List    = S.and_
+end Options = S.or_
 
 -- | Separator type helper function to foldlList - not exported.
 sep :: SepType -> (Sentence -> Sentence -> Sentence)

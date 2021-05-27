@@ -25,3 +25,8 @@ library:
   exposed-modules:
   - Utils.Drasil
   - Utils.Drasil.Sentence
+  - Utils.Drasil.NounPhrase
+  - Utils.Drasil.Concepts
+  when:
+  - condition: false
+    other-modules: Paths_drasil_utils

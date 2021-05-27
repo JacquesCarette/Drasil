@@ -2,6 +2,7 @@ module Data.Drasil.Concepts.Documentation where
 
 import Language.Drasil hiding (organization, year)
 import Utils.Drasil
+import Utils.Drasil.Concepts
 
 import Data.Drasil.Concepts.Math (graph, unit_)
 import Data.Drasil.Domains (documentc, softEng)
@@ -216,20 +217,20 @@ charOfIR, consVals, corSol, orgOfDoc, propOfCorSol, prpsOfDoc, refmat,
 
 consVals     = nc "consVals"     (cn "values of auxiliary constants")
 corSol       = nc "corSol"       (cn' "correct solution")
-charOfIR     = nc "charOfIR"     (characteristic `of__` intReader)
+charOfIR     = nc "charOfIR"     (characteristic `of_TPS` intReader)
 orgOfDoc     = nc "orgOfDoc"     (organization `of_` document)
-propOfCorSol = nc "propOfCorSol" (property `ofA'` corSol)
+propOfCorSol = nc "propOfCorSol" (property `ofATPS` corSol)
 prpsOfDoc    = nc "prpsOfDoc"    (purpose `of_` document)
 refmat       = nc "refmat"       (cn' "reference material")
-scpOfReq     = nc "scpOfReq"     (scope `of_'` requirement)
-termAndDef   = nc "termAndDef"   (terminology `and_'` definition)
-tOfSymb      = nc "tOfSymb"      (table_ `of_'` symbol_)
-tOfUnit      = nc "tOfUnit"      (table_ `of_'` unit_)
-traceyMandG  = nc "traceyMandG"  (andRT titleize' titleize' traceyMatrix graph)
+scpOfReq     = nc "scpOfReq"     (scope `of_TSP` requirement)
+termAndDef   = nc "termAndDef"   (terminology `and_TSP` definition)
+tOfSymb      = nc "tOfSymb"      (table_ `of_TSP` symbol_)
+tOfUnit      = nc "tOfUnit"      (table_ `of_TSP` unit_)
+traceyMandG  = nc "traceyMandG"  (and_TGen titleize' titleize' traceyMatrix graph)
 vav          = nc "vav"          (verification `and_` validation)
 
 scpOfTheProj :: (NamedChunk -> Sentence) -> NamedChunk
-scpOfTheProj oper = nc "scpOfTheProj" (scope `ofN_` the'' oper project) -- reasonable hack?
+scpOfTheProj oper = nc "scpOfTheProj" (scope `of_NINP` theGen oper project) -- reasonable hack?
 
 -- compounds
 
@@ -242,7 +243,7 @@ designDoc, fullForm, generalSystemDescription, moduleInterface, indPRCase,
   solutionCharacteristic, offShelfSolution, physicalSim, productUC, 
   useCaseTable, physicalProperty, vavPlan, uncertCol, userInput :: NamedChunk
  
-datumConstraint              = compoundNC' datum constraint
+datumConstraint              = compoundNCPP datum constraint
 designDoc                    = compoundNC design document
 fullForm                     = compoundNC full form
 functionalRequirement        = compoundNC functional requirement_
@@ -261,11 +262,11 @@ productUC                    = compoundNC product_ useCase
 safetyReq                    = compoundNC safety requirement_
 softwareConstraint           = compoundNC software constraint
 softwareDoc                  = compoundNC software documentation
-softwareReq                  = compoundNC' software requirement_
+softwareReq                  = compoundNCPP software requirement_
 softwareSys                  = compoundNC software system
 softwareVAV                  = compoundNC software vav
 softwareVerif                = compoundNC software verification
-solutionCharSpec             = compoundNCP1 solutionCharacteristic specification
+solutionCharSpec             = compoundNCPSPP solutionCharacteristic specification
 solutionCharacteristic       = compoundNC solution characteristic
 specificsystemdescription    = compoundNC specific systemdescription
 sysCont                      = compoundNC system context

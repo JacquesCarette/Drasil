@@ -8,6 +8,7 @@ import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB, SystemInformation
   _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (qdFromDD)
 import Utils.Drasil
+import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 import Drasil.DocLang (DerivationDisplay(..), DocSection(..), Emphasis(..),
   Field(..), Fields, InclUnits(IncludeUnits), IntroSec(..), IntroSub(..),
@@ -54,7 +55,7 @@ import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
 import Drasil.GamePhysics.GenDefs (generalDefns)
 
 srs :: Document
-srs = mkDoc mkSRS (S.sFor'' titleize short) si
+srs = mkDoc mkSRS (S.forGen titleize short) si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
@@ -191,7 +192,7 @@ para1_introduction_intro = foldlSent
 -- 2.2 : Scope of Requirements --
 ---------------------------------
 scope :: Sentence
-scope = foldlSent_ [S "the", phrase physicalSim `S.sOf` getAcc twoD,
+scope = foldlSent_ [phraseNP (the physicalSim) `S.of_` getAcc twoD,
   plural CP.rigidBody, S "acted on by", plural QP.force]
 
 --scope_of_requirements_intro_p2 = EmptyS
@@ -209,9 +210,9 @@ scope = foldlSent_ [S "the", phrase physicalSim `S.sOf` getAcc twoD,
 
 organizationOfDocumentsIntro :: Sentence
 organizationOfDocumentsIntro = foldlSent 
-  [S "The", phrase organization, S "of this", phrase document, 
+  [atStartNP (the organization), S "of this", phrase document, 
   S "follows the", phrase template, S "for an", getAcc Doc.srs, S "for", 
-  phrase sciCompS, S "proposed by", makeCiteS koothoor2013 `S.sAnd`
+  phrase sciCompS, S "proposed by", makeCiteS koothoor2013 `S.and_`
   makeCiteS smithLai2005]
 
 --------------------------------------------
@@ -223,26 +224,26 @@ organizationOfDocumentsIntro = foldlSent
 
 sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
-  [makeRef2S sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
-   S "A circle represents an entity external to the" +:+ phrase software
-   `sC` S "the", phrase user, S "in this case. A rectangle represents the",
+  [makeRef2S sysCtxFig1, S "shows the" +:+. phrase sysCont,
+   S "A circle represents an entity external to the", phrase software
+   `sC` phraseNP (the user), S "in this case. A rectangle represents the",
    phrase softwareSys, S "itself", sParen (short gamePhysics) +:+. EmptyS,
-   S "Arrows are used to show the data flow between the" +:+ phrase system,
-   S "and its" +:+ phrase environment]
+   S "Arrows are used to show the data flow between the", phraseNP (system
+   `andIts` environment)]
 
 sysCtxFig1 :: LabelledContent
 sysCtxFig1 = llcc (makeFigRef "sysCtxDiag") $ fig (titleize sysCont) 
   (resourcePath ++ "sysctx.png")
 
 sysCtxDesc :: Contents
-sysCtxDesc = foldlSPCol [S "The interaction between the", phrase product_,
-   S "and the", phrase user, S "is through an application programming" +:+.
-   phrase interface, S "The responsibilities of the", phrase user, 
-   S "and the", phrase system, S "are as follows"]
+sysCtxDesc = foldlSPCol [S "The interaction between the", phraseNP (product_
+   `andThe` user), S "is through an application programming" +:+.
+   phrase interface, S "The responsibilities of the", phraseNP (user 
+   `andThe` system), S "are as follows"]
 
 sysCtxUsrResp :: [Sentence]
-sysCtxUsrResp = [S "Provide initial" +:+ plural condition +:+ S "of the" +:+
-  phrase physical +:+ S"state of the" +:+ phrase simulation `sC`
+sysCtxUsrResp = [S "Provide initial" +:+ pluralNP (condition `ofThePS`
+  physical) +:+ S "state of the" +:+ phrase simulation `sC`
   plural CP.rigidBody +:+ S "present, and" +:+ plural QP.force +:+.
   S "applied to them",
   S "Ensure application programming" +:+ phrase interface +:+
@@ -250,12 +251,12 @@ sysCtxUsrResp = [S "Provide initial" +:+ plural condition +:+ S "of the" +:+
   S "Ensure required" +:+ phrase software +:+ plural assumption +:+
   sParen (makeRef2S $ SRS.assumpt ([]::[Contents]) ([]::[Section])) +:+ 
   S "are appropriate for any particular" +:+
-  phrase problem +:+ S "the" +:+ phrase software +:+. S "addresses"]
+  phrase problem +:+ phraseNP (the software) +:+. S "addresses"]
 
 sysCtxSysResp :: [Sentence]
-sysCtxSysResp = [S "Determine if the" +:+ plural input_ +:+ S "and" +:+
-    phrase simulation +:+ S "state satisfy the required" +:+
-    (phrase physical `S.sAnd` plural systemConstraint) +:+. sParen(makeRef2S $ SRS.datCon ([]::[Contents]) ([]::[Section])),
+sysCtxSysResp = [S "Determine if the" +:+ pluralNP (input_ `and_PS`
+    simulation) +:+ S "state satisfy the required" +:+
+    (phrase physical `S.and_` plural systemConstraint) +:+. sParen(makeRef2S $ SRS.datCon ([]::[Contents]) ([]::[Section])),
   S "Calculate the new state of all" +:+ plural CP.rigidBody +:+
     S "within the" +:+ phrase simulation +:+ S "at each" +:+
     phrase simulation +:+. S "step",
@@ -277,9 +278,9 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
 
 userCharacteristicsIntro :: Contents
 userCharacteristicsIntro = foldlSP
-  [S "The", phrase endUser `S.sOf` short gamePhysics,
+  [S "The", phrase endUser `S.of_` short gamePhysics,
   S "should have an understanding of", phrase frstYr, S "programming",
-  plural concept `S.sAnd` S "an understanding of", phrase highSchoolPhysics]
+  plural concept `S.and_` S "an understanding of", phrase highSchoolPhysics]
 
 -------------------------------
 -- 3.3 : System Constraints  --
@@ -300,15 +301,15 @@ probDescIntro :: Sentence
 probDescIntro = foldlSent_
   [S "create a", foldlList Comma List $ map S ["simple", "lightweight", "fast", "portable"],
   getAcc twoD, phrase CP.rigidBody, phrase physLib `sC` S "which will allow for more accessible",
-  phrase game, S "development" `S.sAnd` S "the production of higher quality" +:+. plural product_,
+  phrase game, S "development" `S.and_` S "the production of higher quality" +:+. plural product_,
   S "Creating a gaming", phrase physLib, S "is a difficult" +:+. phrase task, titleize' game,
   S "need",  plural physLib, S "that simulate", plural object, S "acting under various", phrase physical,
   plural condition `sC` S "while simultaneously being fast and efficient enough to work in soft",
   phrase realtime, S "during the" +:+. phrase game, S "Developing a", 
-  phrase physLib, S "from scratch takes a long period" `S.sOf` phrase QP.time `S.sAnd`
+  phrase physLib, S "from scratch takes a long period" `S.of_` phrase QP.time `S.and_`
   S "is very costly" `sC` S "presenting barriers of entry which make it difficult for",
   phrase game, S "developers to include", phrase Doc.physics, S "in their" +:+. 
-  plural product_, S "There are a few free" `sC` phrase openSource `S.sAnd` S "high quality",
+  plural product_, S "There are a few free" `sC` phrase openSource `S.and_` S "high quality",
   plural physLib, S "available to be used for", phrase consumer, plural product_,
   sParen (makeRef2S $ SRS.offShelfSol ([] :: [Contents]) ([] :: [Section]))]
   
@@ -343,8 +344,8 @@ generalDefinitionsIntro :: Contents
 -- general_definitions_GDefs :: [Contents]
 
 generalDefinitionsIntro = foldlSP 
-  [S "This", phrase section_, S "collects the", plural CM.law `S.sAnd` 
-  plural CM.equation, S "that will be used in deriving the", 
+  [S "This", phrase section_, S "collects the", pluralNP (CM.law `and_PP` 
+  CM.equation), S "that will be used in deriving the", 
   plural dataDefn `sC` S "which in turn will be used to build the", 
   plural inModel]
 
@@ -359,8 +360,8 @@ general_definitions_GDefs = map (Definition . General) gDefs)
 ------------------------------
 
 dataDefinitionsIntro :: Sentence
-dataDefinitionsIntro = foldlSent [S "The", phrase CPP.dimension
-   `S.sOf` S "each", phrase quantity, S "is also given"]
+dataDefinitionsIntro = foldlSent [atStartNP (the CPP.dimension)
+   `S.of_` S "each", phrase quantity, S "is also given"]
 
 -----------------------------
 -- 4.2.5 : Instance Models --

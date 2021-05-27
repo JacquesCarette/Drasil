@@ -16,19 +16,32 @@ import Language.Drasil.Sentence (Sentence((:+:), S), (+:+))
 -- it is fleshed out and/or we do more with it, it will likely be a good fit
 
 class NounPhrase n where
-  phraseNP :: n -> Sentence -- ^ ex. "the quick brown fox"
-  pluralNP :: n -> PluralForm -- ^ ex. "the quick brown foxes"
+  -- | Retrieves singular form of term. Ex. "the quick brown fox".
+  phraseNP :: n -> Sentence 
+  -- | Retrieves plural form of term. Ex. "the quick brown foxes".
+  pluralNP :: n -> PluralForm
     --Could replace plural string with a function.
+  -- | Retrieves the singular form and applies a captalization 
+  -- rule (usually capitalizes the first word) to produce a 'Sentence'.
+  -- Ex. "The quick brown fox".
   sentenceCase :: n -> (NP -> Sentence) -> Capitalization 
     --Should this be replaced with a data type instead?
     --Data types should use functions to determine capitalization based
     -- on rules.
-    -- ^ example: "The quick brown fox"
-  titleCase :: n -> (NP -> Sentence) -> Capitalization -- ^ ex. "The Quick Brown Fox"
+  -- | Retrieves the singular form and applies a captalization 
+  -- rule (usually capitalizes all words) to produce a 'Sentence'.
+  -- Ex. "The Quick Brown Fox".
+  titleCase :: n -> (NP -> Sentence) -> Capitalization 
 
-type Capitalization = Sentence  -- ^ Using type synonyms for clarity.
-type PluralString   = String -- ^ Type synonym for 'String'.
+-- | Type synonym for 'Sentence'.
+type Capitalization = Sentence
+-- | Type synonym for 'String'.
+type PluralString   = String
 
+-- | Defines NP as a NounPhrase. 
+-- Default capitalization rules for proper and common nouns
+-- are 'CapFirst' for sentence case and 'CapWords' for title case.
+-- Also accepts a 'Phrase' where the capitalization case may be specified.
 instance NounPhrase NP where
   phraseNP (ProperNoun n _)           = S n
   phraseNP (CommonNoun n _ _)         = S n
@@ -55,7 +68,7 @@ pn''  n = ProperNoun n AddE
 -- | Plural form adds "es" (ex. Bush -> Bushes).
 pn''' n = ProperNoun n AddES
 
--- | Construct a Proper Noun. Meant for use with IrregPlur from 'PluralRule'.
+-- | Construct a 'ProperNoun' with a custom plural rule (using 'IrregPlur' from 'PluralRule').
 -- First argument is the String representing the noun, second is the rule.
 pnIrr :: String -> PluralRule -> NP
 pnIrr = ProperNoun
@@ -72,28 +85,28 @@ cn''  n = CommonNoun n AddE CapFirst
 -- | Plural form adds "es" (ex. bush -> bushes).
 cn''' n = CommonNoun n AddES CapFirst
 
--- | Common noun that pluralizes by dropping the last letter and adding an "ies"
+-- | Construct a common noun that pluralizes by dropping the last letter and adding an "ies"
 -- ending (ex. body -> bodies).
 cnIES :: String -> NP
 cnIES n = CommonNoun n (IrregPlur (\x -> init x ++ "ies")) CapFirst
 
 --FIXME: Shouldn't this just be drop one and add "ces"?
--- | Common noun that pluralizes by dropping the last two letters and adding an 
+-- | Construct a common noun that pluralizes by dropping the last two letters and adding an 
 -- "ices" ending (ex. matrix -> matrices).
 cnICES :: String -> NP
 cnICES n = CommonNoun n (IrregPlur (\x -> init (init x) ++ "ices")) CapFirst
 
--- | Common noun that pluralizes by dropping the last two letters and adding
+-- | Construct a common noun that pluralizes by dropping the last two letters and adding
 -- "es" (ex. analysis -> analyses).
 cnIS :: String -> NP
 cnIS n = CommonNoun n (IrregPlur (\x -> init (init x) ++ "es")) CapFirst
 
--- | Common noun that pluralizes by dropping the last two letters and adding "a"
+-- | Construct a common noun that pluralizes by dropping the last two letters and adding "a"
 -- (ex. datum -> data).
 cnUM :: String -> NP
 cnUM n = CommonNoun n (IrregPlur (\x -> init (init x) ++ "a")) CapFirst
 
--- | Common noun that allows you to specify the pluralization rule 
+-- | Construct a common noun that allows you to specify the pluralization rule 
 -- (as in 'pnIrr').
 cnIP :: String -> PluralRule -> NP
 cnIP n p = CommonNoun n p CapFirst
@@ -104,47 +117,48 @@ cnIP n p = CommonNoun n p CapFirst
 cnIrr :: String -> PluralRule -> CapitalizationRule -> NP
 cnIrr = CommonNoun 
 
--- | Creates a 'NP' with a given singular and plural form that capitalizes the first
+-- | Creates a 'NP' with a given singular and plural form (as 'String's) that capitalizes the first
 -- letter of the first word for sentence case.
 nounPhrase :: String -> PluralString -> NP
 nounPhrase s p = Phrase (S s) (S p) CapFirst CapWords
 
--- | Similar to 'nounPhrase', but following a given capitalization rule for 
--- sentence case.
+-- | Similar to 'nounPhrase', but takes a specified capitalization rule.
 nounPhrase' :: String -> PluralString -> CapitalizationRule -> NP
 nounPhrase' s p c = Phrase (S s) (S p) c CapWords
 
--- | Custom noun phrase constructor that takes a singular form, plural form, 
+-- | Custom noun phrase constructor that takes a singular form ('Sentence'), plural form ('Sentence'), 
 -- sentence case capitalization rule, and title case capitalization rule.
 nounPhrase'' :: Sentence -> PluralForm -> CapitalizationRule -> CapitalizationRule -> NP
 nounPhrase'' = Phrase
 
--- | For things that should not be pluralized. Works like 'nounPhrase', but with
+-- | For things that should not be pluralized (or are self-plural). Works like 'nounPhrase', but with
 -- only the first argument.
 nounPhraseSP :: String -> NP
 nounPhraseSP s = Phrase (S s) (S s) CapFirst CapWords
 
--- | For Reuirements, Assumptions, LikelyChanges, etc. to allow for referencing.
+-- | Similar to nounPhrase, except it only accepts one 'Sentence'. Used for Requirements,
+-- Assumptions, LikelyChanges, etc. to allow for referencing.
+-- Plural case is just 'AddS'.
 nounPhraseSent :: Sentence -> NP
 nounPhraseSent s = Phrase s (sPlur s AddS) CapFirst CapWords
 
 -- | Combine two noun phrases. The singular form becomes 'phrase' from t1 followed
--- by phrase of t2. The plural becomes phrase of t1 followed by plural of t2.
--- Uses standard CapFirst sentence case and CapWords title case.
+-- by 'phrase' of t2. The plural becomes 'phrase' of t1 followed by 'plural' of t2.
+-- Uses standard 'CapFirst' sentence case and 'CapWords' title case.
 -- For example: @compoundPhrase system constraint@ will have singular form
 -- "system constraint" and plural "system constraints".
 compoundPhrase :: (NounPhrase a, NounPhrase b) => a -> b -> NP
 compoundPhrase t1 t2 = Phrase 
   (phraseNP t1 +:+ phraseNP t2) (phraseNP t1 +:+ pluralNP t2) CapFirst CapWords
   
--- | Similar to 'compoundPhrase', but where the sentence case is the same
--- as the title case (CapWords).
+-- | Similar to 'compoundPhrase', but the sentence case is the same
+-- as the title case ('CapWords').
 compoundPhrase' :: NP -> NP -> NP
 compoundPhrase' t1 t2 = Phrase
   (phraseNP t1 +:+ phraseNP t2) (phraseNP t1 +:+ pluralNP t2) CapWords CapWords
 
--- | Similar to 'compoundPhrase'', but which accepts functions to be used for
--- constructing the plural form. For example 
+-- | Similar to 'compoundPhrase'', but accepts two functions that will be used to
+-- construct the plural form. For example,
 -- @compoundPhrase'' plural phrase system constraint@ would have the plural
 -- form "systems constraint". 
 compoundPhrase'' :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
@@ -154,13 +168,14 @@ compoundPhrase'' f1 f2 t1 t2 = Phrase
 --More primes might not be wanted but fixes two issues
 -- pluralization problem with software requirements specification (Documentation.hs)
 -- SWHS program not being about to use a compound to create the NamedChunk
--- | Used when you need a special function apllied to the first term of both cases (eg. short or plural).
+-- | Similar to 'compoundPhrase', but used when you need a special function applied 
+-- to the first term of both singular and pluralcases (eg. short or plural).
 compoundPhrase''' :: (NP -> Sentence) -> NP -> NP -> NP
 compoundPhrase''' f1 t1 t2 = Phrase 
   (f1 t1 +:+ phraseNP t2) (f1 t1 +:+ pluralNP t2) CapFirst CapWords
 
 --For Data.Drasil.Documentation
---Pluralizes the first word in two phrases
+-- | Similar to 'compoundPhrase', but pluralizes the first 'NP' for both singular and plural cases.
 compoundPhraseP1 :: NP -> NP -> NP
 compoundPhraseP1 = compoundPhrase''' pluralNP
 
@@ -190,7 +205,7 @@ sPlur (S sts) (IrregPlur f) = S $ f sts --Custom pluralization
 sPlur (a :+: b) pt = a :+: sPlur b pt
 sPlur a _ = S "MISSING PLURAL FOR:" +:+ a
 
--- | Capitalization helper function.
+-- | Capitalization helper function given a sent.
 cap :: Sentence -> CapitalizationRule -> Sentence
 cap _ (Replace s) = s
 cap (S (s:ss)) CapFirst = S (toUpper s : ss)
@@ -200,12 +215,13 @@ cap (s1 :+: s2) CapWords = cap s1 CapWords +:+ capTail s2
 cap (s1 :+: s2) CapFirst = cap s1 CapFirst :+: s2
 cap a _ = a
 
--- | Helper for cap for the end of a Sentence (Assumes CapWords).
+-- | Helper for cap and for capitalizing the end of a 'Sentence' (assumes 'CapWords').
 capTail :: Sentence -> Sentence
 capTail (S s) = capString s capWords capWords
 capTail (a :+: b) = capTail a :+: capTail b
 capTail x = x
 
+-- | Helper for capitalizing a string.
 capString :: String -> (String -> String) -> (String -> String) -> Sentence 
 capString s f g = S . findHyph g . unwords $ process (words s)
   where

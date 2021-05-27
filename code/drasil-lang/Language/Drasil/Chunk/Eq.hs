@@ -42,6 +42,7 @@ instance HasSymbol     QDefinition where symbol e = symbol (e ^. qua)
 instance Definition    QDefinition where defn = defn'
 -- ^ Finds the definition of 'QDefinition'.
 instance Quantity      QDefinition where
+-- ^ 'QDefinition's have a 'Quantity'.
 instance DefiningExpr  QDefinition where defnExpr = equat
 -- ^ Finds the defining expression of 'QDefinition'.
 instance Eq            QDefinition where a == b = (a ^. uid) == (b ^. uid)

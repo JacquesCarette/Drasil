@@ -31,6 +31,19 @@ jobs:
           enable-stack: true
           stack-no-global: true
           stack-version: 'latest'
+      - name: "Cache dependencies"
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.stack
+            ~/.cabal/packages
+            ~/.cabal/store
+            code/.stack-work/
+            code/website/.stack-work/
+            ~/.local/bin/graphmod
+          key: ${{ runner.os }}-store-${{ hashFiles('code/stack.yaml') }}
+      - name: "Clean previous run"
+        run: make clean
       - name: "Update PATH"
         run: |
           echo "$HOME/.local/bin" >> $GITHUB_PATH
@@ -50,7 +63,7 @@ jobs:
       - name: "Doxygen"
         run: make doxygen
       - name: "Docs"
-        run: make docs haddockArgs="--no-haddock-deps --no-haddock-hyperlink-source"
+        run: make docs
       - name: "Graphs"
         run: make graphs
       - name: "Build website"

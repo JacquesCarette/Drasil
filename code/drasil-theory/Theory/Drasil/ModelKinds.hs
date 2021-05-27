@@ -29,7 +29,7 @@ instance HasUID        ModelKinds where uid      = lensMk uid uid uid
 instance NamedIdea     ModelKinds where term     = lensMk term term term
 instance Idea          ModelKinds where getA     = elimMk (to getA) (to getA) (to getA)
 instance Definition    ModelKinds where defn     = lensMk defn (error "ambiguous definition (defn) in EquationalRealm") defn
-instance ConceptDomain ModelKinds where cdom     = elimMk (to cdom) (error "ambiguous concept domain for EquationalRealm") (to cdom)
+instance ConceptDomain ModelKinds where cdom     = elimMk (to cdom) (error "ambiguous concept domain (cdom) for EquationalRealm") (to cdom)
 instance DefiningExpr  ModelKinds where defnExpr = lensMk defnExpr (error "ambiguous defining expression (defnExpr) for EquationalRealm") defnExpr
 instance ExprRelat     ModelKinds where 
   relat (EquationalRealm q _ rs) = sy q $= foldr1 ($=) (NE.map (^. expr) rs)

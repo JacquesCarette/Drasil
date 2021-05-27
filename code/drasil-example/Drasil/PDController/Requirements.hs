@@ -31,14 +31,12 @@ verifyInputsDesc
 
 calculateValuesDesc
   = foldlSent
-      [S "Calculate the", phrase processVariable, sParen (S "from" +:+
-         makeRef2S imPD),
+      [S "Calculate the", phrase processVariable, fromSource imPD,
          S "over the simulation time"]
 
 outputValuesDesc
   = foldlSent
-      [S "Output the", phrase processVariable, sParen (S "from" +:+
-         makeRef2S imPD),
+      [S "Output the", phrase processVariable, fromSource imPD,
          S "over the simulation time"]
 
 -----------------------------------------------------------------------------

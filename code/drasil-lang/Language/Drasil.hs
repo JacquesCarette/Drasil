@@ -1,4 +1,4 @@
-{- re-export many things to simplify external use -}
+{- re-exports modules to simplify external use.-}
 module Language.Drasil (
   -- Expr
   Expr(..), UFunc(..), UFuncB, UFuncVec

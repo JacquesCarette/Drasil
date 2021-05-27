@@ -3,7 +3,7 @@ module Language.Drasil.Uncertainty.Core (Uncertainty, uncert, prec, uncty, exact
 
 import Control.Lens (makeLenses)
 
--- | Something that may contain an uncertainty value and 'Maybe' an 'Int'.
+-- | Something that may contain an uncertainty value and a precision value.
 data Uncertainty = Uncert { _uncert :: Maybe Double, _prec :: Maybe Int }
 makeLenses ''Uncertainty
 

@@ -7,6 +7,8 @@ import Data.Drasil.SI_Units (kilogram)
 import Drasil.PDController.Concepts
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Concepts
+import qualified Utils.Drasil.Sentence as S
 
 assumptions :: [ConceptInstance]
 assumptions
@@ -54,11 +56,11 @@ pwrPlantDesc, aDecoupledDesc, aSPDesc, aExtDisturbDesc, aManualTuningDesc,
               aStiffnessCoeffDesc :: Sentence
 pwrPlantDesc
   = foldlSent
-      [S "The", phrase powerPlant, S "and the Sensor are coupled as a single unit"]
+      [atStartNP (the powerPlant) `S.andThe` S "Sensor are coupled as a single unit"]
 
 apwrPlantTxFnxDesc
   = foldlSent
-      [S "The combined", phrase powerPlant, S "and Sensor",
+      [S "The combined", phrase powerPlant `S.and_` S "Sensor",
          sParen (makeRef2S aPwrPlant),        
          S "are characterized by a Second Order mass-spring-damper System"]
 
@@ -69,8 +71,8 @@ aDecoupledDesc
 
 aSPDesc
   = foldlSent
-      [S "The", phrase setPoint, S "is constant throughout the",
-         phrase simulation]
+      [atStartNP (the setPoint), S "is constant throughout",
+         phraseNP (the simulation)]
 
 aExtDisturbDesc
   = foldlSent
@@ -97,7 +99,7 @@ aUnfilteredDerivativeDesc
 
 aMassDesc
   = foldlSent
-      [S "The", phrase mass,
+      [atStartNP (the mass),
        S "of the spring in the mass-spring-damper system",
        sParen (makeRef2S aPwrPlant),
        S "is assumed to be 1", 
@@ -105,14 +107,14 @@ aMassDesc
 
 aDampingCoeffDesc
   = foldlSent
-      [S "The", phrase ccDampingCoeff,
+      [atStartNP (the ccDampingCoeff),
        S "of the spring in the mass-spring-damper system",
        sParen (makeRef2S aPwrPlant), 
        S "is assumed to be 1"]
 
 aStiffnessCoeffDesc
   = foldlSent
-      [S "The", phrase ccStiffCoeff,
+      [atStartNP (the ccStiffCoeff),
        S "of the spring in the mass-spring-damper system",
        sParen (makeRef2S aPwrPlant), 
        S "is assumed to be 20"]

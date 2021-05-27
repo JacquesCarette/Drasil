@@ -8,7 +8,7 @@ mkdir -p $FULL_DOCS_FOLDER
 # Get location of buildable docs location
 
 # Build full variant
-stack haddock --no-haddock-deps --no-haddock-hyperlink-source --haddock-arguments "--show-all"
+stack haddock --haddock-arguments "--show-all" --ghc-options="$GHC_FLAGS"
 
 # Get doc folder
 DOCS_LOC="$(stack path --local-install-root)/doc"
@@ -21,7 +21,7 @@ cp -rf "$DOCS_LOC/." "$FULL_DOCS_FOLDER"
 stack clean
 
 # Build small variant
-stack haddock --no-haddock-deps --no-haddock-hyperlink-source
+stack haddock --ghc-options="$GHC_FLAGS" 
 
 # Find new docs folder
 DOCS_LOC="$(stack path --local-install-root)/doc"
@@ -29,4 +29,7 @@ DOCS_LOC="$(stack path --local-install-root)/doc"
 # Copy over small docs
 cp -rf "$DOCS_LOC/." "$DOCS_FOLDER"
 
-
+echo "-------------------------------------------"
+echo "- Docs: ./$DOCS_FOLDER"
+echo "- Full docs: ./$FULL_DOCS_FOLDER"
+echo "-------------------------------------------"

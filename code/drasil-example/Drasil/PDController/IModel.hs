@@ -11,6 +11,8 @@ import Drasil.PDController.TModel
 import Language.Drasil
 import Theory.Drasil (InstanceModel, im, qwC, ModelKinds (OthModel))
 import Utils.Drasil
+import Utils.Drasil.Concepts
+import qualified Utils.Drasil.Sentence as S
 import Drasil.PDController.Unitals
 
 instanceModels :: [InstanceModel]
@@ -34,7 +36,7 @@ imPDRC :: RelationConcept
 imPDRC
   = makeRC "imPDRC"
       (nounPhraseSP
-         "Computation of the Process Variable as a function of time.")
+         "Computation of the Process Variable as a function of time")
       EmptyS
       eqn
 
@@ -59,13 +61,10 @@ imDerivEqns = [derivEqn1, derivEqn2, derivEqn3, derivEqn4]
 derivStmt1 :: Sentence
 derivStmt1
   = foldlSent
-      [S "The Process Variable (Y(S)) in a" +:+ phrase pidCL +:+
-         S "is the product of the Process Error", sParen (S "from" +:+
-         makeRef2S ddErrSig) `sC`
-         S "Control Variable", sParen (S "from" +:+
-         makeRef2S ddCtrlVar) `sC`
-         S "and the Power-Plant", sParen (S "from" +:+
-          makeRef2S gdPowerPlant)]
+      [atStartNP (the processVariable), E (sy qdProcessVariableFD), S "in a", phrase pidCL +:+
+         S "is the product of the", phrase processError, fromSource ddErrSig `sC`
+         phrase controlVariable, fromSource ddCtrlVar `sC` EmptyS
+         `S.andThe` phrase powerPlant, fromSource gdPowerPlant]
 
 derivEqn1 :: Expr
 derivEqn1
@@ -87,9 +86,8 @@ derivEqn2
 
 derivStmt3 :: Sentence
 derivStmt3
-  = S "Computing the" +:+ phrase qdInvLaplaceTransform +:+ sParen (S "from" +:+
-      makeRef2S tmInvLaplace) +:+
-      (S "of the equation" !.)
+  = S "Computing the" +:+ phrase qdInvLaplaceTransform +:+
+     fromSource tmInvLaplace +:+. S "of the equation"
 
 derivEqn3 :: Expr
 derivEqn3
@@ -102,11 +100,11 @@ derivEqn3
 derivStmt4 :: Sentence
 derivStmt4
   = foldlSent_
-      [S "The Set point (r(t)) is a step function, and a constant" +:+.
-         sParen (S "from" +:+ makeRef2S aSP),
+      [atStartNP (the setPoint), E (sy qdSetPointTD), S "is a step function and a constant" +:+.
+         fromSource aSP,
        S "Therefore the",
          S "differential of the set point is zero. Hence the equation",
-         S "reduces to,"]
+         S "reduces to"]
 
 derivEqn4 :: Expr
 derivEqn4

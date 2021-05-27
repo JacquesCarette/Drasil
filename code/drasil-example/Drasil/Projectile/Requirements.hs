@@ -51,7 +51,7 @@ nonfuncReqs = [correct, verifiable, understandable, reusable, maintainable, port
 
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
-  plural output_ `S.the_ofTheC` phrase code, S "have the",
+  atStartNP' (output_ `the_ofThePS` code), S "have the",
   plural property, S "described in", makeRef2S (propCorSol [] [])
   ]) "Correct" nonFuncReqDom
  
@@ -63,7 +63,7 @@ verifiable = cic "verifiable" (foldlSent [
 understandable :: ConceptInstance
 understandable = cic "understandable" (foldlSent [
   atStartNP (the code), S "is modularized with complete",
-  phrase mg `S.and_` phrase mis]) "Understandable" nonFuncReqDom
+  phraseNP (mg `and_` mis)]) "Understandable" nonFuncReqDom
 
 reusable :: ConceptInstance
 reusable = cic "reusable" (foldlSent [atStartNP (the code), S "is modularized"]) "Reusable" nonFuncReqDom

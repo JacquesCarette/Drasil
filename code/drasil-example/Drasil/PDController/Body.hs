@@ -2,7 +2,7 @@ module Drasil.PDController.Body where
 
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-import Data.Drasil.Concepts.Math (mathcon)
+import Data.Drasil.Concepts.Math (mathcon, mathcon', ode)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.ExternalLibraries.ODELibraries
        (apacheODESymbols, arrayVecDepVar, odeintSymbols, osloSymbols,
@@ -72,8 +72,8 @@ mkSRS
           IOrgSec introDocOrg IDict.dataDefn (SRS.inModel [] [])
             (S "The instance model referred as" +:+ makeRef2S imPD +:+
                S "provides an"
-               +:+ S "Ordinary Differential Equation (ODE) that"
-               +:+ S "models the"
+               +:+ titleize ode +:+ sParen (short ode)
+               +:+ S "that models the"
                +:+ phrase pidC)],
      GSDSec $
        GSDProg
@@ -132,9 +132,10 @@ symbMap
              map nw doccon' ++
                concepts ++
                  map nw mathcon ++
-                   map nw [second, kilogram] ++
-                     map nw symbols ++ map nw physicscon ++ map nw acronyms
-                     ++ map nw physicalcon)
+                   map nw mathcon' ++
+                     map nw [second, kilogram] ++
+                       map nw symbols ++ map nw physicscon ++ map nw acronyms
+                       ++ map nw physicalcon)
       (map cw inpConstrained ++ srsDomains)
       (map unitWrapper [second, kilogram])
       dataDefinitions

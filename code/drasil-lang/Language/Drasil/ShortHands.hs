@@ -3,7 +3,7 @@ module Language.Drasil.ShortHands where
 
 import Language.Drasil.Symbol (Symbol(Variable))
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means /capital/; l means /lowercase/.
 cA,cB,cC,cD,cE,cF,cG,cH,cI,cJ,cK,cL,cM,cN,cO,cP,cQ,cR,cS,cT,cU,cV,cW,cX,cY,cZ,
   lA,lB,lC,lD,lE,lF,lG,lH,lI,lJ,lK,lL,lM,lN,lO,lP,lQ,lR,lS,lT,lU,lV,
   lW,lX,lY,lZ,lAlpha,cAlpha,lBeta,cBeta,lGamma,cGamma,lDelta,cDelta,lEpsilon,vEpsilon, 

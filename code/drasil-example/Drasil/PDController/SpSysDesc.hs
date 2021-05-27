@@ -16,9 +16,8 @@ sysProblemDesc
 
 sysParts :: [Sentence]
 sysParts
-  = map foldlSent
-      [[S "The", phrase summingPt], [S "The", phrase pidC],
-       [S "The", phrase powerPlant]]
+  = map ((!.) . atStartNP . the)
+      [summingPt, pidC, powerPlant]
 
 sysFigure :: LabelledContent
 sysFigure
@@ -39,7 +38,7 @@ sysProcessVariable :: ConceptInstance
 sysProcessVariable
   = cic "processVariable"
       (foldlSent
-         [S "Calculate the", S "output of the", phrase powerPlant,
+         [S "Calculate the output of the", phrase powerPlant,
             sParen (phrase processVariable),
             S "over time"])
       "Process-Variable"

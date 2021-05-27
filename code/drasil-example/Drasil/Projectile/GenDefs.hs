@@ -158,5 +158,5 @@ vecDeriv vecs gdef = foldlSentCol [
   S "represented by" +:+. E (sy iVel $= vec2D (sy ixVel) (sy iyVel)), 
   S "Since we have a",
   phrase cartesian `sC` makeRef2S gdef, S "can be applied to each", phraseNP (coordinate `ofThe`
-  ((fst . head) vecs)), phrase vector, S "to yield the required", phrase equation]
+  (fst . head) vecs), phrase vector, S "to yield the required", phrase equation]
 

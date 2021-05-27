@@ -59,7 +59,7 @@ targetXAxisDesc :: Sentence
 targetXAxisDesc = atStartNP (the target) +:+ S "lies on the" +:+ phrase xAxis +:+. fromSource neglectCurv
 
 posXDirectionDesc :: Sentence
-posXDirectionDesc = atStartNP (NP.the (combineNINI positive xDir)) `S.is` S "from the" +:+. (phrase launcher `S.toThe` phrase target)
+posXDirectionDesc = atStartNP (NP.the (combineNINI positive xDir)) `S.is` S "from the" +:+. phraseNP (launcher `toThe` target)
 
 constAccelDesc :: Sentence
 constAccelDesc = atStartNP (the acceleration) `S.is` S "constant" +:+.

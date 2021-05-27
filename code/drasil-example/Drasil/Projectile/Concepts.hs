@@ -42,14 +42,14 @@ target     = dcc "target"     (nounPhraseSP "target")     "where the projectile 
 landPos, launAngle, launSpeed, offset, targPos, flightDur :: ConceptChunk
 landPos = cc' landingPosNC
   (foldlSent_ [phraseNP (the distance) `S.fromThe` phrase launcher `S.toThe`
-            (S "final" +:+ phrase position) `S.ofThe` phrase projectile])
+            S "final", phraseNP (position `ofThe` projectile)])
 
 launAngle = cc' launchAngleNC
   (foldlSent_ [phraseNP (the angle), S "between the", phrase launcher `S.and_` S "a straight line"
-             `S.fromThe` phrase launcher `S.toThe` phrase target])
+             `S.fromThe` phraseNP (launcher `toThe` target)])
 
 launSpeed = cc' launchSpeedNC (phraseNP (iSpeed `the_ofThe` projectile) +:+ S "when launched")
 offset = cc' offsetNC (S "the offset between the" +:+ phraseNP (targetPosNC `andThe` landingPosNC))
-targPos = cc' targetPosNC (phraseNP (the distance) `S.fromThe` phrase launcher `S.toThe` phrase target)
+targPos = cc' targetPosNC (phraseNP (the distance) `S.fromThe` phraseNP (launcher `toThe` target))
 flightDur = cc' flightDurNC (foldlSent_ [phraseNP (the time), S "when the", phrase projectile, S "lands"])
 

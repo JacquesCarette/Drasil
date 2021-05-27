@@ -169,11 +169,11 @@ The following section provides an overview of the Software Requirements Specific
 
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
-The purpose of this document is to capture all the necessary information including assumptions, data definitions, constraints, models, and requirements to facilitate an unambiguous development of the PD controller software and test procedures.
+The purpose of this document is to capture all the necessary information including assumptions, data definitions, constraints, models, and requirements to facilitate an unambiguous development of the PD Controller software and test procedures.
 
 \subsection{Scope of Requirements}
 \label{Sec:ReqsScope}
-The scope of the requirements includes a PD Control Loop with three subsystems namely a PD Controller, a Summing Point, and a Power Plant. Only the Proportional and Derivative controllers are used in this software; the Integral controller is beyond the scope of this project. Additionally, this software is intended to aid with the manual tuning of the PD Controller.
+The scope of the requirements includes a PD Control Loop with three subsystems, namely: a PD Controller, a Summing Point, and a Power Plant. Only the Proportional and Derivative controllers are used in this software; the Integral controller is beyond the scope of this project. Additionally, this software is intended to aid with the manual tuning of the PD Controller.
 
 \subsection{Characteristics of Intended Reader}
 \label{Sec:ReaderChars}
@@ -416,7 +416,7 @@ This section collects the laws and equations that will be used to build the inst
 \phantomsection 
 \label{GD:gdPowerPlant}
 \\ \midrule \\
-Label & The Transfer Function of the Power Plant.
+Label & The Transfer Function of the Power Plant
         
 \\ \midrule \\
 Equation & \begin{displaymath}
@@ -613,7 +613,7 @@ This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: 
 \phantomsection 
 \label{IM:pdEquationIM}
 \\ \midrule \\
-Label & Computation of the Process Variable as a function of time.
+Label & Computation of the Process Variable as a function of time
         
 \\ \midrule \\
 Input & ${r_{\text{t}}}$, ${K_{\text{p}}}$, ${K_{\text{d}}}$
@@ -658,7 +658,7 @@ RefBy & \hyperref[outputValues]{FR: Output-Values} and \hyperref[calculateValues
 \end{minipage}
 \paragraph{Detailed derivation of Process Variable:}
 \label{IM:pdEquationIMDeriv}
-The Process Variable (Y(S)) in a PD Control Loop is the product of the Process Error (from \hyperref[DD:ddProcessError]{DD: ddProcessError}), Control Variable (from \hyperref[DD:ddCtrlVar]{DD: ddCtrlVar}), and the Power-Plant (from \hyperref[GD:gdPowerPlant]{GD: gdPowerPlant}).
+The Process Variable ${Y_{\text{s}}}$ in a PD Control Loop is the product of the Process Error (from \hyperref[DD:ddProcessError]{DD: ddProcessError}), Control Variable (from \hyperref[DD:ddCtrlVar]{DD: ddCtrlVar}), and the Power Plant (from \hyperref[GD:gdPowerPlant]{GD: gdPowerPlant}).
 
 \begin{displaymath}
 {Y_{\text{s}}}=\left({R_{\text{s}}}-{Y_{\text{s}}}\right) \left({K_{\text{p}}}+{K_{\text{d}}} s\right) \frac{1}{s^{2}+s+20}
@@ -673,7 +673,7 @@ Computing the Inverse Laplace Transform of a function (from \hyperref[TM:invLapl
 \begin{displaymath}
 \frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {y_{\text{t}}}-{K_{\text{d}}} \frac{\,d{r_{\text{t}}}}{\,dt}-{r_{\text{t}}} {K_{\text{p}}}=0
 \end{displaymath}
-The Set point (r(t)) is a step function, and a constant (from \hyperref[setPoint]{A: Set-Point}). Therefore the differential of the set point is zero. Hence the equation reduces to,
+The Set-Point ${r_{\text{t}}}$ is a step function and a constant (from \hyperref[setPoint]{A: Set-Point}). Therefore the differential of the set point is zero. Hence the equation reduces to
 
 \begin{displaymath}
 \frac{\,d\frac{\,d{y_{\text{t}}}}{\,dt}}{\,dt}+\left(1+{K_{\text{d}}}\right) \frac{\,d{y_{\text{t}}}}{\,dt}+\left(20+{K_{\text{p}}}\right) {y_{\text{t}}}-{r_{\text{t}}} {K_{\text{p}}}=0

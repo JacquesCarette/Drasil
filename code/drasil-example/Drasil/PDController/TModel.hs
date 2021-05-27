@@ -10,6 +10,8 @@ import Language.Drasil
 import qualified Language.Drasil as DrasilLang
 import Theory.Drasil (TheoryModel, tm, ModelKinds(OthModel))
 import Utils.Drasil
+import Utils.Drasil.Concepts
+import qualified Utils.Drasil.Sentence as S
 import Data.Drasil.Citations(laplaceWiki)
 import Drasil.PDController.Unitals
 
@@ -42,8 +44,8 @@ laplaceDesc :: Sentence
 laplaceDesc
   = foldlSent
       [(S "Bilateral Laplace Transform" !.),
-       S "The Laplace transforms are",
-         S "typically inferred from a pre-computed table of Laplace Transforms",
+       atStartNP (theGen atStart' ccLaplaceTransform),
+         S "are typically inferred from a pre-computed table of", titleize' ccLaplaceTransform,
          sParen (makeCiteS laplaceWiki)]
 
 --------
@@ -105,9 +107,9 @@ soSystemRel
 soSystemDesc :: Sentence
 soSystemDesc
   = foldlSent
-      [S "The", phrase ccTransferFxn, 
-        sParen (S "from" +:+ makeRef2S apwrPlantTxFnx),
-        S "of a", phrase secondOrderSystem,
+      [atStartNP (the ccTransferFxn), 
+        fromSource apwrPlantTxFnx
+        `S.ofA` phrase secondOrderSystem,
         sParen (S "mass-spring-damper"), 
         S "is characterized by this equation"]
 

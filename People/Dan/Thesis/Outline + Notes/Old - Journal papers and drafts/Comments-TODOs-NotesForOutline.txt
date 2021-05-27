@@ -1,0 +1,166 @@
+============================== Notes ===========================================
+Things I want to touch on
+  - Synonyms can cause headaches, especially if they're not caught / curated into
+  the right part of the KB.
+  
+===============OLD STUFF (Not part of current paper yet)========================
+JC: I will put my comments inline below, but with all lines prefixed with JC.
+DS: Responses to comments/questions will be prefixed with DS.
+
+==Background==
+-- Software Artifacts --
+
+- Here we give a list of what we mean when we refer to all software artifacts.
+  Brief description of each and their audience (in terms of stakeholders?).
+  - Requirements
+    - All stakeholders - What problem are we solving?
+    - What do we need to do?
+  - Design
+    - All stakeholders
+      - business - budget concerns;
+      - technical - implementation/platform concerns
+    - How are we going to do it?
+  - Build instructions
+    - For the machine
+    - How to build the software from source
+  - Implementation
+    - For the machine
+    - What is built/ what is the system doing?
+  - Implementation guide
+    - For the humans
+    - What did we actually build?
+  - Test plan
+    - For the humans
+    - How do we test it?
+  - Test results (?)
+    - For the humans
+    - How did our tests go?
+  - User guide
+    - For the humans
+    - How do you use the software?
+  - ... {Let's figure out all the ones we agree on}
+
+-- Software Re-Use and Software Families --
+
+        - We want to see more software re-use, but the reality is its often
+          faster (or cheaper) to re-develop a particular tool, algorithm, etc.
+          rather than find an existing project to adapt
+            (re-word previous, it's not quite what I want to say)
+JC: Good point. Leads to justification for 'knowledge capture' via current
+  artifacts of SE
+JC: perhaps not being the 'right' ones. Some libraries (and frameworks) have had
+  huge success
+JC: regarding re-use, while others have flopped completely. No obvious trend.
+        - Significant efforts can be made to develop a software variant that is
+        very similar to an existing project
+          - These variants are members of the same software family, typically
+          with minor changes
+JC: need to be more concrete. The linux kernel here is an interesting example -
+  it is a huge software family. No one really knows which of the variants
+  actually work!
+DS: That's a great example.
+            - Can happen when it seems easier to create a new variant as a
+              stand-alone rather than attempt to update old code and docs
+            - Also influenced by lack of documentation around existing software,
+              confusing APIs, lack of subject-matter-experts, etc.
+JC: Do you have citations to back that up? Proper science needs its citations.
+DS: Yes, just need to re-find them.
+
+-- Literate Programming --
+- Fairly code-centric view as mentioned in intro. Lots of examples
+    (wiki: Comparison of documentation generators)
+- One source, multiple views.
+- Somewhat redundant b/c of natural-language descriptions + code.
+
+-- Generative Programming --
+
+
+== Understanding Commonality and the source of redundancy==
+- Breakdown our process of working through each of the case studies and
+developing our "common" / "core" knowledge for each example.
+- Breakdown the process of working through each case study and developing the
+"recipe" for each artifact.
+
+== Drasil ==
+  - Drasil is a framework we've developed for generating *ALL* software
+  artifacts (in their desired format) from a single source using transformations
+  and projections.
+      - Core knowledge (not system-specific) is reusable inter- and
+        intra-project
+      - No manual duplication - reduced redundancy.
+      - Consistent by construction
+
+    - Leveraged our understanding of generative software & software development
+    principles and practices in dev
+    - Development of Drasil has been practical and example-driven
+    - Guiding principle: If software artifacts are views of the same
+    information, we should be able to abstract out the core knowledge, then
+    generate the views as necessary
+      - Remove the need for manual duplication
+      - Use transformations to format knowledge appropriately
+        - Ex. Code-views vs. document-views of calculations
+        look very different, even across similar languages, but say the
+        same thing
+          - Figure: A calculation in C# code, python code, LaTeX, and HTML
+      - Ensure consistency & traceability
+JC: agreed on all points above (leveraged ... here).
+
+    - "Recipes" used to create our views, can be thought of as "little programs"
+    that assemble our artifacts.
+      - Based off of document templates, and similar to code templating, but
+      much broader configuration scope(or something?)
+    - Includes KC mechanisms for creating a 'living database' of common
+    information
+JC: not sure about mentioning KC *here*. Agree that it is part of our ideas.
+DS: KC was just being used as a descriptor, doesn't need to be here.
+      - Currently hand-curated
+      - Expands as needed, all projects share it
+      - Very low-level, system-specific information stored elsewhere to avoid
+        pollution
+        - Easy to move around if determined to be 'general-enough' for the
+        common knowledge base (KB)
+    - Captured knowledge acts as a uniform source for artifact generation
+    - Structure of a project in Drasil can be broken down (generally) as:
+      [Core knowledge], [Specific knowledge], & [Recipes]
+JC: on Recipes and 'living database': this is all true, and important. But I am
+  not quite "feeling it" as far as how/when to say this.
+DS: This is where I'm explaining the key parts of our design/impl.
+DS: It's as good a place as any to introduce the concepts. We can get into more
+DS: detail later on.
+
+  - What Drasil isn't
+    - Not the be-all, end-all of software development
+    - Only useful (and useable) in well-understood domains
+      - We need to know how to capture and structure knowledge effectively
+        - Ex. Science/math
+    - One tool with a specific set of possible outputs and limited scope
+    - Will not replace human developers, only help remove some of the tedium of
+      following good software development practices
+    - Not complete - Dev is still in progress
+JC: Right. We don't want to over-emphasize, but do want to say.
+
+  - Our examples - SWHS, GlassBR, SSP, Gamephys, Tiny, and NoPCM
+    - Drove our practical approach
+    - All re-developed to follow the SmithEtAl artifact templates using modern
+    SE approaches
+      - Gives us consistent views
+        - Knowledge is easier to extract
+        - We know what we want the generator to create from our Recipes
+        - Gives a base structure to our recipes
+JC: Right.
+    - SWHS and NoPCM are software family members
+      - Model solar water heating sys with/without phase change material (PCM)
+    - GlassBR
+      - Models whether glass panes will break due to force of explosions
+    - SSP
+      - Models slope stability
+    - Gamephys
+      - Reduced-scope section of the Chipmunk2D game physics engine
+      - Simulates rigid-body physics
+    - Tiny
+      - Toy example taken from a model of a fuel-pin in a nuclear reactor
+      - Used for proof of concept mainly, and as a test case to ensure
+      updates to Drasil don't create any unwanted behaviours
+    - Examples share common baseline math/science knowledge
+      - Gives us a starting point for the common KB
+JC: Right.

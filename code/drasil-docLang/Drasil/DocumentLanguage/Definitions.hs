@@ -5,7 +5,7 @@ module Drasil.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(..),
   instanceModel, tmodel) where
 
 import Data.Map (keys)
-import Data.List (elem, nub)
+import Data.List (nub)
 import Data.Maybe (mapMaybe)
 import Control.Lens ((^.))
 
@@ -155,9 +155,9 @@ mkGDField :: GenDefn -> SystemInformation -> Field -> ModRow -> ModRow
 mkGDField g _ l@Label fs = (show l, [mkParagraph $ atStart g]) : fs
 mkGDField g _ l@Units fs = 
   maybe fs (\udef -> (show l, [mkParagraph . Sy $ usymb udef]) : fs) (getUnit g)
-mkGDField g _ l@DefiningEquation fs = (show l, [eqUnR' $ g ^. relat]) : fs
+mkGDField g _ l@DefiningEquation fs = (show l, [eqUnR' $ relat g]) : fs
 mkGDField g m l@(Description v u) fs = (show l,
-  buildDescription v u (g ^. relat) m []) : fs
+  buildDescription v u (relat g) m []) : fs
 mkGDField g m l@RefBy fs = (show l, [mkParagraph $ helperRefs g m]) : fs --FIXME: fill this in
 mkGDField g _ l@Source fs = (show l, helperSources $ g ^. getReferences) : fs
 mkGDField g _ l@Notes fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (g ^. getNotes)
@@ -166,9 +166,9 @@ mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
 -- | Create the fields for an instance model from an 'InstanceModel' chunk
 mkIMField :: InstanceModel -> SystemInformation -> Field -> ModRow -> ModRow
 mkIMField i _ l@Label fs  = (show l, [mkParagraph $ atStart i]) : fs
-mkIMField i _ l@DefiningEquation fs = (show l, [eqUnR' $ i ^. relat]) : fs
+mkIMField i _ l@DefiningEquation fs = (show l, [eqUnR' $ relat i]) : fs
 mkIMField i m l@(Description v u) fs = (show l,
-  foldr (\x -> buildDescription v u x m) [] [i ^. relat]) : fs
+  foldr (\x -> buildDescription v u x m) [] [relat i]) : fs
 mkIMField i m l@RefBy fs = (show l, [mkParagraph $ helperRefs i m]) : fs --FIXME: fill this in
 mkIMField i _ l@Source fs = (show l, helperSources $ i ^. getReferences) : fs
 mkIMField i _ l@Output fs = (show l, [mkParagraph x]) : fs

@@ -1,14 +1,17 @@
+{-# LANGUAGE PostfixOperators #-}
 module Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs) where
 
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Concepts
+import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (model, likeChgDom, unlikeChgDom)
 import Data.Drasil.Concepts.Thermodynamics (temp)
 
 import Drasil.NoPCM.Assumptions (assumpCTNTD, assumpNIHGBW, assumpWAL)
 import Drasil.NoPCM.IMods (eBalanceOnWtr)
-import Drasil.SWHS.Concepts (water)
+import Drasil.SWHS.Concepts (tank, water)
 --------------------------------
 -- Section 6 : LIKELY CHANGES --
 --------------------------------
@@ -20,8 +23,8 @@ likeChgDT :: ConceptInstance
 likeChgDT = cic "likeChgDT" (
   foldlSent [chgsStart assumpCTNTD (S "The"), phrase model,
   S "currently only accounts for charging of the tank. That is, increasing the",
-  phrase temp, S "of the water to match the", phrase temp +:+. S "of the coil",
-  S "A more complete", phrase model, S "would also account for discharging of the tank"]) 
+  phraseNP (temp `ofThe` water), S "to match the",(phrase temp `S.ofThe` S "coil" !.),
+  S "A more complete", phrase model, S "would also account for discharging of", phraseNP (the tank)]) 
   "Discharging-Tank" likeChgDom
 
 

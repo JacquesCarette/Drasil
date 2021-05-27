@@ -5,4 +5,5 @@ data Lang = Cpp
           | CSharp
           | Java
           | Python
+          | Swift
           deriving (Eq, Show)

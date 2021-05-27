@@ -3,20 +3,22 @@ module Theory.Drasil (
   -- Classes
     HasInputs(..), HasOutput(..)
   -- DataDefinition
-  , DataDefinition, mkQuantDef, mkQuantDef', dd, ddNoRefs, qdFromDD
+  , DataDefinition, dd, ddNoRefs, qdFromDD
   -- GenDefn
-  , GenDefn, gd, gdNoRefs
+  , GenDefn, gd, gdNoRefs, getEqModQdsFromGd
+  -- ModelKinds
+  , ModelKinds(..), getEqModQds
   -- InstanceModel
   , InstanceModel
   , im, imNoDeriv, imNoRefs, imNoDerivNoRefs
-  , qwUC, qwC
+  , qwUC, qwC, getEqModQdsFromIm
   -- Theory
   , Theory(..), TheoryModel, tm, tmNoRefs
 ) where
 
 import Theory.Drasil.Classes (HasInputs(..), HasOutput(..))
-import Theory.Drasil.DataDefinition (DataDefinition, mkQuantDef, mkQuantDef',
-  dd, ddNoRefs, qdFromDD)
+import Theory.Drasil.DataDefinition (DataDefinition, dd, ddNoRefs, qdFromDD)
 import Theory.Drasil.GenDefn
+import Theory.Drasil.ModelKinds
 import Theory.Drasil.InstanceModel
 import Theory.Drasil.Theory

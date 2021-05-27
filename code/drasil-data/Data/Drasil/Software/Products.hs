@@ -1,12 +1,12 @@
 module Data.Drasil.Software.Products where
 
 import Language.Drasil
-import Utils.Drasil
+import Utils.Drasil.Concepts
 
 import Data.Drasil.Concepts.Documentation (game, video, open, source)
 import Data.Drasil.Concepts.Computation (computer)
 import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.IdeaDicts
+import Data.Drasil.Domains (progLanguage)
 
 
 prodtcon :: [NamedChunk]

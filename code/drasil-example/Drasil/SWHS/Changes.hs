@@ -2,6 +2,8 @@ module Drasil.SWHS.Changes (likelyChgs, likeChgTCVOD, likeChgTCVOL, likeChgTLH, 
 
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Concepts
+import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (assumption, value, simulation,
   model, likeChgDom, unlikeChgDom)
@@ -35,7 +37,7 @@ likeChgUTP = cic "likeChgUTP" (
 --
 likeChgTCVOD = cic "likeChgTCVOD" (
   foldlSent [chgsStart assumpTHCCoT (S "The"), phrase tempC, S "will change over",
-  S "course" `ofThe` S "day, depending", S "on the", phrase energy,
+  S "course" `S.the_ofThe` S "day, depending", S "on the", phrase energy,
   S "received from the sun"]) "Temperature-Coil-Variable-Over-Day" likeChgDom
 --
 likeChgTCVOL = cic "likeChgTCVOL" (
@@ -50,7 +52,7 @@ likeChgDT = cic "likeChgDT" (
 --
 likeChgDITPW = cic "likeChgDITPW" (
   foldlSent [chgsStart assumpSITWP (S "To add more flexibility to the"),
-  phrase simulation `sC` (phrase tempInit `ofThe` phrase water) `andThe`
+  phrase simulation `sC` phraseNP (tempInit `the_ofThe` water) `S.andThe`
   short phsChgMtrl, S "could be allowed to have different",
   plural value] ) "Different-Initial-Temps-PCM-Water" likeChgDom
 --
@@ -73,7 +75,7 @@ unlikeChgWPFS = cic "unlikeChgWPFS" (
 
 unlikeChgNIHG = cic "unlikeChgNIHG" (
   foldlSent [chgsStart assumpNIHGBWP (S "Is used for the derivations of"),
-  makeRef2S eBalanceOnWtr `sAnd` makeRef2S eBalanceOnPCM] )
+  makeRef2S eBalanceOnWtr `S.and_` makeRef2S eBalanceOnPCM] )
   "No-Internal-Heat-Generation" unlikeChgDom
 
 unlikeChgNGS = cic "unlikeChgNGS" (

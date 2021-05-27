@@ -12,7 +12,7 @@ import GOOL.Drasil.CodeType (CodeType(..))
 import GOOL.Drasil.ClassInterface (Label, Library, VSType, SVariable, SValue, 
   VSFunction, MSStatement, MixedCtorCall, OOProg, ProgramSym(..), FileSym(..), 
   PermanenceSym(..), BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..), 
-  VariableSym(..), VariableElim(..), ValueSym(..), Literal(..), 
+  VariableSym(..), VariableElim(..), ValueSym(..), Argument(..), Literal(..), 
   MathConstant(..), VariableValue(..), CommandLineArgs(..), 
   NumericExpression(..), BooleanExpression(..), Comparison(..), 
   ValueExpression(..), funcApp, selfFuncApp, extFuncApp, extNewObj, 
@@ -36,7 +36,7 @@ import GOOL.Drasil.RendererClasses (RenderSym, RenderFile(..), ImportSym(..),
   BlockCommentSym(..), BlockCommentElim)
 import qualified GOOL.Drasil.RendererClasses as RC (import', perm, body, block, 
   type', uOp, bOp, variable, value, function, statement, scope, parameter,
-  method, stateVar, class', module', blockComment', intClass)
+  method, stateVar, class', module', blockComment')
 import GOOL.Drasil.LanguageRenderer (classDec, dot, ifLabel, elseLabel, 
   forLabel, inLabel, whileLabel, tryLabel, importLabel, exceptionObj', listSep',
   argv, printLabel, listSep, piLabel, access, functionDox, variableList, 
@@ -84,7 +84,6 @@ import GOOL.Drasil.State (MS, VS, lensGStoFS, lensMStoVS, lensVStoMS,
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Data.Maybe (fromMaybe)
 import Control.Lens.Zoom (zoom)
-import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (modify)
 import Data.List (intercalate, sort)
@@ -196,6 +195,7 @@ instance TypeElim PythonCode where
   getTypeString = typeString . unPC
 
 instance RenderType PythonCode where
+  multiType _ = typeFromData Void "" empty
   typeFromData t s d = toState $ toCode $ td t s d
 
 instance InternalTypeElim PythonCode where
@@ -273,6 +273,9 @@ instance RenderVariable PythonCode where
 instance ValueSym PythonCode where
   type Value PythonCode = ValData
   valueType = onCodeValue valType
+
+instance Argument PythonCode where
+  pointerArg = id
 
 instance Literal PythonCode where
   litTrue = mkStateVal bool pyTrue

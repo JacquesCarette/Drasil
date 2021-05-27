@@ -33,34 +33,34 @@ void InputParameters::get_input(string filename) {
 }
 
 void InputParameters::input_constraints() {
-    if (!(this->v_launch > 0)) {
+    if (!(this->v_launch > 0.0)) {
         std::cout << "Warning: ";
         std::cout << "v_launch has value ";
         std::cout << this->v_launch;
         std::cout << ", but is suggested to be ";
         std::cout << "above ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << "." << std::endl;
     }
-    if (!(0 < this->theta && this->theta < M_PI / 2)) {
+    if (!(0.0 < this->theta && this->theta < M_PI / 2.0)) {
         std::cout << "Warning: ";
         std::cout << "theta has value ";
         std::cout << this->theta;
         std::cout << ", but is suggested to be ";
         std::cout << "between ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << " and ";
-        std::cout << (M_PI / 2);
+        std::cout << (M_PI / 2.0);
         std::cout << " ((pi)/(2))";
         std::cout << "." << std::endl;
     }
-    if (!(this->p_target > 0)) {
+    if (!(this->p_target > 0.0)) {
         std::cout << "Warning: ";
         std::cout << "p_target has value ";
         std::cout << this->p_target;
         std::cout << ", but is suggested to be ";
         std::cout << "above ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << "." << std::endl;
     }
 }

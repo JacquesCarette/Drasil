@@ -2,7 +2,6 @@ module Language.Drasil.TeX.Helpers where
 
 import Text.PrettyPrint (text)
 import qualified Text.PrettyPrint as TP
-import Control.Applicative (pure)
 
 import Language.Drasil (MaxWidthPercent)
 

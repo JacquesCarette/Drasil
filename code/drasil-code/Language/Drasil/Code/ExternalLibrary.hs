@@ -11,7 +11,7 @@ module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step(..),
   implementation, constructorInfo, methodInfo, methodInfoNoReturn, 
   appendCurrSol, populateSolList, assignArrayIndex, assignSolFromObj, 
   initSolListFromArray, initSolListWithVal, solveAndPopulateWhile, 
-  returnExprList, fixedReturn
+  returnExprList, fixedReturn, initSolWithVal
 ) where
 
 import Language.Drasil
@@ -304,3 +304,9 @@ statementStep = Statement
 -- Specifies a statement that is not use-case-dependent
 lockedStatement :: FuncStmt -> Step
 lockedStatement s = Statement (\_ _ -> s)
+
+-- Specifies a statement where a single solution is initialized with a value.
+initSolWithVal :: Step
+initSolWithVal = statementStep (\cdchs es -> case (cdchs, es) of
+  ([s],[v]) -> FDecDef s v
+  (_,_) -> error "Fill for initSolWithVal should provide one CodeChunk and one Expr")

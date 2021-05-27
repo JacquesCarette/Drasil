@@ -2,6 +2,7 @@ module Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs) where
 
 import Language.Drasil
 import Utils.Drasil
+import qualified Utils.Drasil.Sentence as S
 
 import Drasil.DocLang (mkInputPropsTable)
 import Drasil.DocLang.SRS (datCon, propCorSol) 
@@ -12,8 +13,7 @@ import Data.Drasil.Concepts.Documentation (assumption, code,
   output_, physicalConstraint, property, requirement, srs, symbol_,
   traceyMatrix, unlikelyChg, user, value)
 import Data.Drasil.Concepts.Physics (twoD)
-
-import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, thModel)
+import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 import Drasil.SSP.Defs (crtSlpSrf, slope, slpSrf)
 import Drasil.SSP.IMods (fctSfty, nrmShrFor, intsliceFs, crtSlpId)
@@ -49,12 +49,12 @@ determineCritSlip = cic "determineCritSlip" ( foldlSent [
   S "Determine the", phrase crtSlpSrf, S "for the", phrase input_, 
   phrase slope `sC` S "corresponding to the minimum", phrase fs `sC` 
   S "by using", usingIMs, S "to calculate the", phrase fs, S "for a", 
-  phrase slpSrf `sAnd` S "using", makeRef2S crtSlpId, S "to find the", 
+  phrase slpSrf `S.and_` S "using", makeRef2S crtSlpId, S "to find the", 
   phrase slpSrf, S "that minimizes it"]) 
   "Determine-Critical-Slip-Surface" funcReqDom
 
 verifyOutput = cic "verifyOutput" ( foldlSent [
-  S "Verify that the", phrase fsMin `sAnd` phrase crtSlpSrf, S "satisfy the",
+  S "Verify that the", phrase fsMin `S.and_` phrase crtSlpSrf, S "satisfy the",
   plural physicalConstraint, S "shown in", makeRef2S (propCorSol [] [])])
   "Verify-Output" funcReqDom
 
@@ -64,12 +64,12 @@ displayInput = cic "displayInput" ( foldlSent [
   "Display-Input" funcReqDom
 
 displayGraph = cic "displayGraph" ( foldlSent [
-  S "Display", phrase crtSlpSrf `ofThe` short twoD, phrase slope `sC` 
+  S "Display", phrase crtSlpSrf `S.the_ofThe` short twoD, phrase slope `sC` 
   S "as determined from", makeRef2S crtSlpId `sC` S "graphically"]) 
   "Display-Graph" funcReqDom
 
 displayFS = cic "displayFS" ( foldlSent [
-  S "Display", phrase value `ofThe` phrase fs, S "for the", 
+  S "Display", phrase value `S.the_ofThe` phrase fs, S "for the", 
   phrase crtSlpSrf `sC` S "as determined from", usingIMs]) 
   "Display-Factor-of-Safety" funcReqDom
 
@@ -110,14 +110,14 @@ nonFuncReqs = [correct, understandable, reusable, maintainable]
 
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
-  plural output_ `ofThe'` phrase code, S "have the",
+  plural output_ `S.the_ofTheC` phrase code, S "have the",
   plural property, S "described in", makeRef2S (propCorSol [] [])
   ]) "Correct" nonFuncReqDom
 
 understandable :: ConceptInstance
 understandable = cic "understandable" (foldlSent [
   S "The", phrase code, S "is modularized with complete",
-  phrase mg `sAnd` phrase mis]) "Understandable" nonFuncReqDom
+  phrase mg `S.and_` phrase mis]) "Understandable" nonFuncReqDom
 
 reusable :: ConceptInstance
 reusable = cic "reusable" (foldlSent [
@@ -128,4 +128,4 @@ maintainable = cic "maintainable" (foldlSent [
   S "The traceability between", foldlList Comma List [plural requirement,
   plural assumption, plural thModel, plural genDefn, plural dataDefn, plural inModel,
   plural likelyChg, plural unlikelyChg, plural module_], S "is completely recorded in",
-  plural traceyMatrix, S "in the", getAcc srs `sAnd` phrase mg]) "Maintainable" nonFuncReqDom
+  plural traceyMatrix, S "in the", getAcc srs `S.and_` phrase mg]) "Maintainable" nonFuncReqDom

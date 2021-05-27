@@ -3,13 +3,14 @@ module Drasil.SSP.Body (srs, si, symbMap, printSetting) where
 import Language.Drasil hiding (Symbol(..), Verb, number, organization, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
-  SystemInformation(SI), cdb, rdb, refdb, _authors, _concepts, _constants,
-  _constraints, _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs,
-  _quants, _sys, _sysinfodb, _usedinfodb)
+  SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts, _constants,
+  _constraints, _datadefs, _configFiles, _definitions, _defSequence, _inputs, 
+  _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (qdFromDD)
 
 import Prelude hiding (sin, cos, tan)
 import Utils.Drasil
+import qualified Utils.Drasil.Sentence as S
 
 import Drasil.DocLang (DocSection(..), IntroSec(..), IntroSub(..),
   LFunc(..), RefSec(..), RefTab(..), TConvention(..),
@@ -29,7 +30,7 @@ import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   softwareSys, srsDomains, symbol_, sysCont, system,
   template, type_, user, value, variable, doccon, doccon')
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-import Data.Drasil.IdeaDicts as Doc (inModel)
+import Data.Drasil.TheoryConcepts as Doc (inModel)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
 import Data.Drasil.Concepts.Math (equation, shape, surface, mathcon, mathcon',
   number)
@@ -66,7 +67,7 @@ import Drasil.SSP.Unitals (constrained, effCohesion, fricAngle, fs, index,
 --Document Setup--
 
 srs :: Document
-srs = mkDoc mkSRS for si
+srs = mkDoc mkSRS S.forT si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
@@ -79,10 +80,12 @@ si = SI {
   _sys = ssp, 
   _kind = Doc.srs, 
   _authors = [henryFrankis, brooks],
+  _purpose = purpDoc ssp Verbose,
   _quants = symbols,
   _concepts = [] :: [DefinedQuantityDict],
   _definitions = [] :: [QDefinition],
   _datadefs = SSP.dataDefs,
+  _configFiles = [],
   _inputs = map qw inputs,
   _outputs = map qw outputs,
   _defSequence = [(\x -> Parallel (head x) (tail x)) $ map qdFromDD SSP.dataDefs],
@@ -181,7 +184,7 @@ refDB = rdb citations concIns
 tableOfSymbIntro :: [TSIntro]
 tableOfSymbIntro = [TSPurpose, TypogConvention [Verb $ foldlSent_
   [S "a subscript", ch index, S "indicates that the", phrase value, 
-  S "will be taken at, and analyzed at, a", phrase slice `sOr` phrase slice, 
+  S "will be taken at, and analyzed at, a", phrase slice `S.or_` phrase slice, 
   S "interface composing the total slip", phrase mass]], VectorUnits]
 
 -- SECTION 1.3 --
@@ -191,17 +194,17 @@ tableOfSymbIntro = [TSPurpose, TypogConvention [Verb $ foldlSent_
 startIntro, kSent :: Sentence
 startIntro = foldlSent [S "A", phrase slope, S "of geological",
   phrase mass `sC` S "composed of", phrase soil, S "and rock and sometimes",
-  S "water, is subject to the influence" `sOf` phrase gravity +:+ S "on the" +:+.
-  phrase mass, S "This can cause instability in the form" `sOf` phrase soil +:+.
-  S "or rock movement", S "The", plural effect `sOf` phrase soil +:+
+  S "water, is subject to the influence" `S.of_` phrase gravity +:+ S "on the" +:+.
+  phrase mass, S "This can cause instability in the form" `S.of_` phrase soil +:+.
+  S "or rock movement", S "The", plural effect `S.of_` phrase soil +:+
   S "or rock movement can range from inconvenient to",
   S "seriously hazardous, resulting in significant life and economic" +:+.
   plural loss, atStart slope, S "stability is of", phrase interest,
   S "both when analysing natural", plural slope `sC`
-  S "and when designing an excavated" +:+.  phrase slope, atStart ssa `sIs`
-  (S "assessment" `ofThe` S "safety of a" +:+ phrase slope) `sC`
+  S "and when designing an excavated" +:+.  phrase slope, atStart ssa `S.is`
+  (S "assessment" `S.the_ofThe` S "safety of a" +:+ phrase slope) `sC`
   S "identifying the", phrase surface,
-  S "most likely to experience", phrase slip `sAnd`
+  S "most likely to experience", phrase slip `S.and_`
   S "an index of its relative stability known as the", phrase fs]
 
 kSent = keySent ssa ssp
@@ -221,8 +224,8 @@ scope :: Sentence
 scope = foldlSent_ [phrase stabAnalysis, S "of a", phrase twoD, sParen (getAcc twoD),
   phrase soil, phrase mass `sC` S "composed of a single homogeneous", phrase layer,
   S "with", phrase constant +:+. plural mtrlPrpty, S "The", phrase soil,
-  phrase mass `sIs` S "assumed to extend infinitely in the third" +:+.
-  phrase dimension, S "The", phrase analysis, S "will be at an instant" `sIn`
+  phrase mass `S.is` S "assumed to extend infinitely in the third" +:+.
+  phrase dimension, S "The", phrase analysis, S "will be at an instant" `S.in_`
   phrase time :+: S ";", plural factor, S "that may change the", plural soilPrpty,
   S "over", phrase time, S "will not be considered"]
 
@@ -235,7 +238,7 @@ orgSecStart, orgSecEnd :: Sentence
 orgSecStart = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the", phrase template, S "for an",
   short Doc.srs, S "for", phrase sciCompS,
-  S "proposed by Koothoor", makeRef2S koothoor2013, S "as well as Smith" `sAnd`
+  S "proposed by Koothoor", makeRef2S koothoor2013, S "as well as Smith" `S.and_`
   S "Lai", makeRef2S smithLai2005]
 orgSecEnd   = foldlSent_ [S "The", plural inModel, S "provide the set of",
   S "algebraic", plural equation, S "that must be solved"]
@@ -276,11 +279,11 @@ sysCtxSysResp = [S "Detect data" +:+ phrase type_ +:+ S "mismatch, such as" +:+
   S "a string of characters" +:+ phrase input_ +:+ S "instead of a floating" +:+
   S "point" +:+ phrase number,
   S "Verify that the" +:+ plural input_ +:+ S "satisfy the required" +:+
-  phrase physical `sAnd` S "other data" +:+ plural constraint +:+ sParen (makeRef2S $ SRS.datCon ([]::[Contents]) ([]::[Section])),
+  phrase physical `S.and_` S "other data" +:+ plural constraint +:+ sParen (makeRef2S $ SRS.datCon ([]::[Contents]) ([]::[Section])),
   S "Identify the" +:+ phrase crtSlpSrf +:+ S "within the possible" +:+
   phrase input_ +:+ S "range",
   S "Find the" +:+ phrase fsConcept +:+ S "for the" +:+ phrase slope,
-  S "Find the" +:+ phrase intrslce +:+ phrase normForce `sAnd` phrase shearForce +:+ S "along the" +:+ phrase crtSlpSrf]
+  S "Find the" +:+ phrase intrslce +:+ phrase normForce `S.and_` phrase shearForce +:+ S "along the" +:+ phrase crtSlpSrf]
   
 sysCtxResp :: [Sentence]
 sysCtxResp = [titleize user +:+ S "Responsibilities",
@@ -301,7 +304,7 @@ userCharIntro = userChar ssp [S "Calculus", titleize Doc.physics]
 
 userChar :: (Idea a) => a -> [Sentence] -> [Sentence] -> [Sentence] -> Contents
 userChar pname understandings familiarities specifics = foldlSP [
-  S "The", phrase endUser `sOf` short pname,
+  S "The", phrase endUser `S.of_` short pname,
   S "should have an understanding of undergraduate Level 1",
   foldlList Comma List understandings `sC`
   S "and be familiar with", foldlList Comma List familiarities `sC` 
@@ -318,9 +321,9 @@ sysConstraints = foldlSP [S "The", phrase morPrice, phrase method_,
 
 -- SECTION 4.1 --
 prob :: Sentence
-prob = foldlSent_ [S "evaluate the", phrase fs `sOf` S "a", phrasePoss slope,
-  phrase slpSrf `sAnd` S "identify", phrase crtSlpSrf `ofThe` phrase slope `sC`
-  S "as well as the", phrase intrslce, phrase normForce `sAnd` phrase shearForce,
+prob = foldlSent_ [S "evaluate the", phrase fs `S.of_` S "a", phrasePoss slope,
+  phrase slpSrf `S.and_` S "identify", phrase crtSlpSrf `S.the_ofThe` phrase slope `sC`
+  S "as well as the", phrase intrslce, phrase normForce `S.and_` phrase shearForce,
   S "along the", phrase crtSlpSrf]
 
 {-
@@ -359,29 +362,29 @@ physSysConv = foldlSP [atStart morPrice, phrase analysis, makeRef2S morgenstern1
   makeRef2S figIndexConv `sC` S "the", phrase index, ch index, S "is used to denote a",
   phrase value, S "for a single", phrase slice `sC` S "and an", phrase intrslce, 
   phrase value, S "at a given", phrase index, ch index, S "refers to the",
-  phrase value, S "between", phrase slice, ch index `sAnd` S "adjacent", phrase slice,
-  E $ sy index + 1]
+  phrase value, S "between", phrase slice, ch index `S.and_` S "adjacent", phrase slice,
+  E $ sy index `addI` int 1]
 
 figIndexConv :: LabelledContent
 figIndexConv = llcc (makeFigRef "IndexConvention") $ 
-  fig (foldlSent_ [S "Index convention for", phrase slice `sAnd` 
+  fig (foldlSent_ [S "Index convention for", phrase slice `S.and_` 
   phrase intrslce, plural value]) (resourcePath ++ "IndexConvention.png")
 
 physSysFbd :: Contents
 physSysFbd = foldlSP [S "A", phrase fbd, S "of the", plural force, S "acting on a",
-  phrase slice `sIs` S "displayed in" +:+. makeRef2S figForceActing, S "The specific",
-  plural force `sAnd` plural symbol_, S "will be discussed in detail in",
-  makeRef2S (SRS.genDefn [] []) `sAnd` makeRef2S (SRS.dataDefn [] [])]
+  phrase slice `S.is` S "displayed in" +:+. makeRef2S figForceActing, S "The specific",
+  plural force `S.and_` plural symbol_, S "will be discussed in detail in",
+  makeRef2S (SRS.genDefn [] []) `S.and_` makeRef2S (SRS.dataDefn [] [])]
 
 figForceActing :: LabelledContent
 figForceActing = llcc (makeFigRef "ForceDiagram") $
-  fig (atStart fbd `sOf` plural force +:+ S "acting on a" +:+
+  fig (atStart fbd `S.of_` plural force +:+ S "acting on a" +:+
   phrase slice) (resourcePath ++ "ForceDiagram.png")
 
 -- SECTION 4.1.3 --
 goalsInputs :: [Sentence]
-goalsInputs = [phrase shape `ofThe` phrase soil +:+ S "mass",
-  S "location" `ofThe` phrase waterTable, plural mtrlPrpty `ofThe` phrase soil]
+goalsInputs = [phrase shape `S.the_ofThe` phrase soil +:+ S "mass",
+  S "location" `S.the_ofThe` phrase waterTable, plural mtrlPrpty `S.the_ofThe` phrase soil]
 
 -- SECTION 4.2 --
 

@@ -59,7 +59,7 @@ public class Projectile {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return 2 * inParams.v_launch * (float)(Math.Sin(inParams.theta)) / inParams.g_vect;
+        return 2.0f * inParams.v_launch * (float)(Math.Sin(inParams.theta)) / inParams.g_vect;
     }
     
     /** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
@@ -75,7 +75,7 @@ public class Projectile {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return 2 * (float)(Math.Pow(inParams.v_launch, 2)) * (float)(Math.Sin(inParams.theta)) * (float)(Math.Cos(inParams.theta)) / inParams.g_vect;
+        return 2.0f * (float)(Math.Pow(inParams.v_launch, 2.0f)) * (float)(Math.Sin(inParams.theta)) * (float)(Math.Cos(inParams.theta)) / inParams.g_vect;
     }
     
     /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
@@ -118,7 +118,7 @@ public class Projectile {
         if (Math.Abs(d_offset / inParams.p_target) < inParams.epsilon) {
             return "The target was hit.";
         }
-        else if (d_offset < 0) {
+        else if (d_offset < 0.0f) {
             return "The projectile fell short.";
         }
         else {
@@ -224,34 +224,34 @@ public class InputParameters {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        if (!(this.v_launch > 0)) {
+        if (!(this.v_launch > 0.0f)) {
             Console.Write("Warning: ");
             Console.Write("v_launch has value ");
             Console.Write(this.v_launch);
             Console.Write(", but is suggested to be ");
             Console.Write("above ");
-            Console.Write(0);
+            Console.Write(0.0f);
             Console.WriteLine(".");
         }
-        if (!(0 < this.theta && this.theta < Math.PI / 2)) {
+        if (!(0.0f < this.theta && this.theta < Math.PI / 2.0f)) {
             Console.Write("Warning: ");
             Console.Write("theta has value ");
             Console.Write(this.theta);
             Console.Write(", but is suggested to be ");
             Console.Write("between ");
-            Console.Write(0);
+            Console.Write(0.0f);
             Console.Write(" and ");
-            Console.Write(Math.PI / 2);
+            Console.Write(Math.PI / 2.0f);
             Console.Write(" ((pi)/(2))");
             Console.WriteLine(".");
         }
-        if (!(this.p_target > 0)) {
+        if (!(this.p_target > 0.0f)) {
             Console.Write("Warning: ");
             Console.Write("p_target has value ");
             Console.Write(this.p_target);
             Console.Write(", but is suggested to be ");
             Console.Write("above ");
-            Console.Write(0);
+            Console.Write(0.0f);
             Console.WriteLine(".");
         }
     }

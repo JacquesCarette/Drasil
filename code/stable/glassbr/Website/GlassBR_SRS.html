@@ -2104,14 +2104,14 @@
                       <td>
                         <em>SD<sub>min</sub>&thinsp;&le;&thinsp;SD&thinsp;&le;&thinsp;SD<sub>max</sub></em>
                       </td>
-                      <td><em>45.0</em> <em>m</em></td>
+                      <td><em>45</em> <em>m</em></td>
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
                       <td><em>TNT</em></td>
                       <td><em>TNT&thinsp;&gt;&thinsp;0</em></td>
                       <td>--</td>
-                      <td><em>1.0</em></td>
+                      <td><em>1</em></td>
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
@@ -2120,7 +2120,7 @@
                       <td>
                         <em>w<sub>min</sub>&thinsp;&le;&thinsp;w&thinsp;&le;&thinsp;w<sub>max</sub></em>
                       </td>
-                      <td><em>42.0</em> <em>kg</em></td>
+                      <td><em>42</em> <em>kg</em></td>
                       <td>10<em>%</em></td>
                     </tr>
                   </table>
@@ -2520,8 +2520,114 @@
       <div class="section">
         <h1>Traceability Matrices and Graphs</h1>
         <p class="paragraph">
-          The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an "X" should be modified as well. <a href=#Table:TraceMatAvsAll>Table:TraceMatAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href=#Table:TraceMatRefvsRef>Table:TraceMatRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. <a href=#Table:TraceMatAllvsR>Table:TraceMatAllvsR</a> shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
+          The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an "X" should be modified as well. <a href=#Table:TraceMatAvsA>Table:TraceMatAvsA</a> shows the dependencies of assumptions on the assumptions. <a href=#Table:TraceMatAvsAll>Table:TraceMatAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href=#Table:TraceMatRefvsRef>Table:TraceMatRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. <a href=#Table:TraceMatAllvsR>Table:TraceMatAllvsR</a> shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
         </p>
+        <div id="Table:TraceMatAvsA">
+          <table class="table">
+            <tr>
+              <th></th>
+              <th><a href=#assumpGT>A: glassType</a></th>
+              <th><a href=#assumpGC>A: glassCondition</a></th>
+              <th><a href=#assumpES>A: explainScenario</a></th>
+              <th><a href=#assumpSV>A: standardValues</a></th>
+              <th><a href=#assumpGL>A: glassLite</a></th>
+              <th><a href=#assumpBC>A: boundaryConditions</a></th>
+              <th><a href=#assumpRT>A: responseType</a></th>
+              <th><a href=#assumpLDFC>A: ldfConstant</a></th>
+            </tr>
+            <tr>
+              <td><a href=#assumpGT>A: glassType</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#assumpGC>A: glassCondition</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#assumpES>A: explainScenario</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#assumpSV>A: standardValues</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#assumpGL>A: glassLite</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#assumpBC>A: boundaryConditions</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#assumpRT>A: responseType</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#assumpLDFC>A: ldfConstant</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </table>
+          <p class="caption">
+            Traceability Matrix Showing the Connections Between Assumptions dependence of each other.
+          </p>
+        </div>
         <div id="Table:TraceMatAvsAll">
           <table class="table">
             <tr>
@@ -3937,13 +4043,13 @@
             <tr>
               <td><em>AR<sub>max</sub></em></td>
               <td>maximum aspect ratio</td>
-              <td><em>5.0</em></td>
+              <td><em>5</em></td>
               <td>--</td>
             </tr>
             <tr>
               <td><em>d<sub>max</sub></em></td>
               <td>maximum value for one of the dimensions of the glass plate</td>
-              <td><em>5.0</em></td>
+              <td><em>5</em></td>
               <td><em>m</em></td>
             </tr>
             <tr>
@@ -3961,13 +4067,13 @@
             <tr>
               <td><em>J<sub>max</sub></em></td>
               <td>maximum value for the stress distribution factor</td>
-              <td><em>32.0</em></td>
+              <td><em>32</em></td>
               <td>--</td>
             </tr>
             <tr>
               <td><em>J<sub>min</sub></em></td>
               <td>minimum value for the stress distribution factor</td>
-              <td><em>1.0</em></td>
+              <td><em>1</em></td>
               <td>--</td>
             </tr>
             <tr>
@@ -3985,31 +4091,31 @@
             <tr>
               <td><em>m</em></td>
               <td>surface flaw parameter</td>
-              <td><em>7.0</em></td>
+              <td><em>7</em></td>
               <td><em>\(\frac{\text{m}^{12}}{\text{N}^{7}}\)</em></td>
             </tr>
             <tr>
               <td><em>SD<sub>max</sub></em></td>
               <td>maximum stand off distance permissible for input</td>
-              <td><em>130.0</em></td>
+              <td><em>130</em></td>
               <td><em>m</em></td>
             </tr>
             <tr>
               <td><em>SD<sub>min</sub></em></td>
               <td>minimum stand off distance permissible for input</td>
-              <td><em>6.0</em></td>
+              <td><em>6</em></td>
               <td><em>m</em></td>
             </tr>
             <tr>
               <td><em>t<sub>d</sub></em></td>
               <td>duration of load</td>
-              <td><em>3.0</em></td>
+              <td><em>3</em></td>
               <td><em>s</em></td>
             </tr>
             <tr>
               <td><em>w<sub>max</sub></em></td>
               <td>maximum permissible input charge weight</td>
-              <td><em>910.0</em></td>
+              <td><em>910</em></td>
               <td><em>kg</em></td>
             </tr>
             <tr>

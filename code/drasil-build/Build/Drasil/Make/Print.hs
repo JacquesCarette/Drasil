@@ -1,7 +1,6 @@
 module Build.Drasil.Make.Print where
 
 import Prelude hiding ((<>))
-import Data.List (elem)
 import Text.PrettyPrint (Doc, empty, text, (<>), (<+>), ($+$), ($$), hsep, vcat)
 
 import Build.Drasil.Make.AST (Command(C), CommandOpts(IgnoreReturnCode),

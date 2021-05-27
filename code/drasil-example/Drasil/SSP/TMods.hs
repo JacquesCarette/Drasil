@@ -3,8 +3,9 @@ module Drasil.SSP.TMods (tMods, factOfSafety, equilibrium, mcShrStrgth, effStres
 
 import Prelude hiding (tan)
 import Language.Drasil
-import Theory.Drasil (TheoryModel, tm)
+import Theory.Drasil (TheoryModel, tm, ModelKinds(EquationalModel, OthModel))
 import Utils.Drasil
+import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Quantities.Physics (distance, force)
 
@@ -28,21 +29,21 @@ tMods = [factOfSafety, equilibrium, mcShrStrgth, effStress, newtonSL]
 
 ------------- New Chunk -----------
 factOfSafety :: TheoryModel
-factOfSafety = tm (cw factOfSafetyRC)
+factOfSafety = tm (EquationalModel factOfSafetyQD)
   [qw fs, qw resistiveShear, qw mobilizedShear] ([] :: [ConceptChunk])
-  [] [factOfSafetyRel] [] [makeCite fredlund1977] "factOfSafety" []
+  [] [relat factOfSafetyQD] [] [makeCite fredlund1977] "factOfSafety" []
 
 ------------------------------------
-factOfSafetyRC :: RelationConcept
-factOfSafetyRC = makeRC "factOfSafetyRC" factorOfSafety EmptyS factOfSafetyRel
+factOfSafetyQD :: QDefinition
+factOfSafetyQD = mkQuantDef' fs factorOfSafety factOfSafetyExpr
 
-factOfSafetyRel :: Relation
-factOfSafetyRel = sy fs $= sy resistiveShear / sy mobilizedShear
+factOfSafetyExpr :: Expr
+factOfSafetyExpr = sy resistiveShear $/ sy mobilizedShear
 
 --
 ------------- New Chunk -----------
 equilibrium :: TheoryModel
-equilibrium = tm (cw equilibriumRC)
+equilibrium = tm (OthModel equilibriumRC)
   [qw fx] ([] :: [ConceptChunk])
   [] [eqRel] [] [makeCite fredlund1977] "equilibrium" [eqDesc]
 
@@ -52,20 +53,20 @@ equilibriumRC = makeRC "equilibriumRC" (nounPhraseSP "equilibrium") eqDesc eqRel
 
 -- FIXME: Variable "i" is a hack.  But we need to sum over something!
 eqRel :: Relation
-eqRel = foldr (($=) . sumAll (Variable "i") . sy) 0 [fx, fy, genericM]
+eqRel = foldr (($=) . sumAll (Variable "i") . sy) (int 0) [fx, fy, genericM]
 
 eqDesc :: Sentence
 eqDesc = foldlSent [S "For a body in static equilibrium, the net",
   plural force, S "and", plural genericM +:+. S "acting on the body will cancel out",
-  S "Assuming a 2D problem", sParen (makeRef2S assumpENSL) `sC` S "the", getTandS fx `sAnd`
-  getTandS fy, S "will be equal to" +:+. E 0, S "All", plural force,
+  S "Assuming a 2D problem", sParen (makeRef2S assumpENSL) `sC` S "the", getTandS fx `S.and_`
+  getTandS fy, S "will be equal to" +:+. E (exactDbl 0), S "All", plural force,
   S "and their", phrase distance, S "from the chosen point of rotation",
-  S "will create a net", phrase genericM, S "equal to" +:+ E 0]
+  S "will create a net", phrase genericM, S "equal to" +:+ E (exactDbl 0)]
 
 --
 ------------- New Chunk -----------
 mcShrStrgth :: TheoryModel
-mcShrStrgth = tm (cw mcShrStrgthRC)
+mcShrStrgth = tm (OthModel mcShrStrgthRC)
   [qw shrStress, qw effNormStress, qw fricAngle, qw effCohesion] 
   ([] :: [ConceptChunk])
   [] [mcShrStrgthRel] [] [makeCite fredlund1977] "mcShrStrgth" [mcShrStrgthDesc]
@@ -76,7 +77,7 @@ mcShrStrgthRC = makeRC "mcShrStrgthRC" (nounPhraseSP "Mohr-Coulumb shear strengt
   mcShrStrgthDesc mcShrStrgthRel
 
 mcShrStrgthRel :: Relation
-mcShrStrgthRel = sy shrStress $= (sy effNormStress * tan (sy fricAngle) + sy effCohesion)
+mcShrStrgthRel = sy shrStress $= (sy effNormStress `mulRe` tan (sy fricAngle) `addRe` sy effCohesion)
 
 mcShrStrgthDesc :: Sentence
 mcShrStrgthDesc = foldlSent [S "In this", phrase model, S "the",
@@ -95,7 +96,7 @@ mcShrStrgthDesc = foldlSent [S "In this", phrase model, S "the",
 --
 ------------- New Chunk -----------
 effStress :: TheoryModel
-effStress = tm (cw effStressRC)
+effStress = tm (OthModel effStressRC)
   [qw effectiveStress, qw totNormStress, qw porePressure] 
   ([] :: [ConceptChunk])
   [] [effStressRel] [] [makeCite fredlund1977] "effStress" [effStressDesc]
@@ -106,7 +107,7 @@ effStressRC = makeRC "effStressRC"
   (nounPhraseSP "effective stress") effStressDesc effStressRel -- l4
 
 effStressRel :: Relation
-effStressRel = sy effectiveStress $= sy totNormStress - sy porePressure
+effStressRel = sy effectiveStress $= sy totNormStress $- sy porePressure
 
 effStressDesc :: Sentence
 effStressDesc = foldlSent [ch totNormStress, S "is defined in", makeRef2S normStressDD]

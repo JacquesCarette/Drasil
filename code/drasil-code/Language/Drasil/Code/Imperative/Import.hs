@@ -1,5 +1,4 @@
-{-# LANGUAGE PostfixOperators #-}
-{-# LANGUAGE Rank2Types #-}
+{-# LANGUAGE PostfixOperators, Rank2Types #-}
 module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType, 
   publicFunc, privateMethod, publicInOutFunc, privateInOutMethod, 
   genConstructor, mkVar, mkVal, convExpr, convStmt, genModDef, genModFuncs, 
@@ -8,6 +7,8 @@ module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
 
 import Language.Drasil hiding (Ref, int, log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
+import Language.Drasil.Development (UFuncB(..), UFuncVec(..), 
+  ArithBinOp(..), BoolBinOp(..), EqBinOp(..), LABinOp(..), OrdBinOp(..), VVNBinOp(..), VVVBinOp(..))
 import Database.Drasil (symbResolve)
 import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
@@ -46,8 +47,6 @@ import qualified GOOL.Drasil as C (CodeType(List, Array))
 import Prelude hiding (sin, cos, tan, log, exp)
 import Data.List ((\\), intersect)
 import qualified Data.Map as Map (lookup)
-import Data.Maybe (maybe)
-import Control.Applicative ((<$>))
 import Control.Monad (liftM2,liftM3)
 import Control.Monad.State (get)
 import Control.Lens ((^.))
@@ -279,18 +278,21 @@ convExpr (Dbl d) = do
       getLiteral Float = litFloat (realToFrac d)
       getLiteral _ = error "convExpr: Real space matched to invalid CodeType; should be Double or Float"
   return $ getLiteral sm
-convExpr (Int i) = return $ litInt i
-convExpr (Str s) = return $ litString s
+convExpr (ExactDbl d) = convExpr $ dbl $ fromInteger d
+convExpr (Int i)      = return $ litInt i
+convExpr (Str s)      = return $ litString s
 convExpr (Perc a b) = do
   sm <- spaceCodeType Rational
   let getLiteral Double = litDouble
       getLiteral Float = litFloat . realToFrac
       getLiteral _ = error "convExpr: Rational space matched to invalid CodeType; should be Double or Float"
   return $ getLiteral sm (fromIntegral a / (10 ** fromIntegral b))
-convExpr (AssocA Add l) = foldl1 (#+)  <$> mapM convExpr l
-convExpr (AssocA Mul l) = foldl1 (#*)  <$> mapM convExpr l
-convExpr (AssocB And l) = foldl1 (?&&) <$> mapM convExpr l
-convExpr (AssocB Or l)  = foldl1 (?||) <$> mapM convExpr l
+convExpr (AssocA AddI l)  = foldl1 (#+)  <$> mapM convExpr l
+convExpr (AssocA AddRe l) = foldl1 (#+)  <$> mapM convExpr l
+convExpr (AssocA MulI l)  = foldl1 (#*)  <$> mapM convExpr l
+convExpr (AssocA MulRe l) = foldl1 (#*)  <$> mapM convExpr l
+convExpr (AssocB And l)   = foldl1 (?&&) <$> mapM convExpr l
+convExpr (AssocB Or l)    = foldl1 (?||) <$> mapM convExpr l
 convExpr Deriv{} = return $ litString "**convExpr :: Deriv unimplemented**"
 convExpr (C c)   = do
   g <- get
@@ -309,21 +311,29 @@ convExpr (Message a m x ns) = do
     (\_ n t -> objMethodCallMixedArgs t o n)
 convExpr (Field o f) = do
   g <- get
-  let ob = quantvar (lookupC g o)
+  let ob  = quantvar (lookupC g o)
       fld = quantvar (lookupC g f)
   v <- mkVar (ccObjVar ob fld)
   return $ valueOf v
-convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
-convExpr (BinaryOp Frac (Int a) (Int b)) = do -- hack to deal with integer division
+convExpr (UnaryOp o u)    = fmap (unop o) (convExpr u)
+convExpr (UnaryOpB o u)   = fmap (unopB o) (convExpr u)
+convExpr (UnaryOpVec o u) = fmap (unopVec o) (convExpr u)
+convExpr (ArithBinaryOp Frac (Int a) (Int b)) = do -- hack to deal with integer division
   sm <- spaceCodeType Rational
   let getLiteral Double = litDouble (fromIntegral a) #/ litDouble (fromIntegral b)
       getLiteral Float = litFloat (fromIntegral a) #/ litFloat (fromIntegral b)
       getLiteral _ = error "convExpr: Rational space matched to invalid CodeType; should be Double or Float"
   return $ getLiteral sm
-convExpr (BinaryOp o a b)  = liftM2 (bfunc o) (convExpr a) (convExpr b)
-convExpr (Case c l)      = doit l -- FIXME this is sub-optimal
+convExpr (ArithBinaryOp o a b) = liftM2 (arithBfunc o) (convExpr a) (convExpr b)
+convExpr (BoolBinaryOp o a b)  = liftM2 (boolBfunc o) (convExpr a) (convExpr b)
+convExpr (LABinaryOp o a b)    = liftM2 (laBfunc o) (convExpr a) (convExpr b)
+convExpr (EqBinaryOp o a b)    = liftM2 (eqBfunc o) (convExpr a) (convExpr b)
+convExpr (OrdBinaryOp o a b)   = liftM2 (ordBfunc o) (convExpr a) (convExpr b)
+convExpr (VVVBinaryOp o a b)   = liftM2 (vecVecVecBfunc o) (convExpr a) (convExpr b)
+convExpr (VVNBinaryOp o a b)   = liftM2 (vecVecNumBfunc o) (convExpr a) (convExpr b)
+convExpr (Case c l)            = doit l -- FIXME this is sub-optimal
   where
-    doit [] = error "should never happen"
+    doit [] = error "should never happen" -- TODO: change error message?
     doit [(e,_)] = convExpr e -- should always be the else clause
     doit ((e,cond):xs) = liftM3 inlineIf (convExpr cond) (convExpr e) 
       (convExpr (Case c xs))
@@ -396,27 +406,49 @@ unop Cot  = cot
 unop Arcsin = arcsin
 unop Arccos = arccos
 unop Arctan = arctan
-unop Dim  = listSize
-unop Norm = error "unop: Norm not implemented"
-unop Not  = (?!)
 unop Neg  = (#~)
 
--- Maps a BinOp to the corresponding GOOL binary function
-bfunc :: (OOProg r) => BinOp -> (SValue r -> SValue r -> SValue r)
-bfunc Eq    = (?==)
-bfunc NEq   = (?!=)
-bfunc Gt    = (?>)
-bfunc Lt    = (?<)
-bfunc LEq   = (?<=)
-bfunc GEq   = (?>=)
-bfunc Cross = error "bfunc: Cross not implemented"
-bfunc Pow   = (#^)
-bfunc Subt  = (#-)
-bfunc Impl  = error "convExpr :=>"
-bfunc Iff   = error "convExpr :<=>"
-bfunc Dot   = error "convExpr DotProduct"
-bfunc Frac  = (#/)
-bfunc Index = listAccess
+unopB :: (OOProg r) => UFuncB -> (SValue r -> SValue r)
+unopB Not = (?!)
+
+unopVec :: (OOProg r) => UFuncVec -> (SValue r -> SValue r)
+unopVec Dim = listSize
+unopVec Norm = error "unop: Norm not implemented" -- TODO
+
+-- Maps an ArithBinOp to it's corresponding GOOL binary function
+arithBfunc :: (OOProg r) => ArithBinOp -> (SValue r -> SValue r -> SValue r)
+arithBfunc Pow  = (#^)
+arithBfunc Subt = (#-)
+arithBfunc Frac = (#/)
+
+-- Maps a BoolBinOp to it's corresponding GOOL binary function
+boolBfunc :: BoolBinOp -> (SValue r -> SValue r -> SValue r)
+boolBfunc Impl = error "convExpr :=>"
+boolBfunc Iff  = error "convExpr :<=>"
+
+-- Maps an EqBinOp to it's corresponding GOOL binary function
+eqBfunc :: (OOProg r) => EqBinOp -> (SValue r -> SValue r -> SValue r)
+eqBfunc Eq  = (?==)
+eqBfunc NEq = (?!=)
+
+-- Maps an LABinOp to it's corresponding GOOL binary function
+laBfunc :: (OOProg r) => LABinOp -> (SValue r -> SValue r -> SValue r)
+laBfunc Index = listAccess
+
+-- Maps an OrdBinOp to it's corresponding GOOL binary function
+ordBfunc :: (OOProg r) => OrdBinOp -> (SValue r -> SValue r -> SValue r)
+ordBfunc Gt  = (?>)
+ordBfunc Lt  = (?<)
+ordBfunc LEq = (?<=)
+ordBfunc GEq = (?>=)
+
+-- Maps a VVVBinOp to it's corresponding GOOL binary function
+vecVecVecBfunc :: VVVBinOp -> (SValue r -> SValue r -> SValue r)
+vecVecVecBfunc Cross = error "bfunc: Cross not implemented"
+
+-- Maps a VVNBinOp to it's corresponding GOOL binary function
+vecVecNumBfunc :: VVNBinOp -> (SValue r -> SValue r -> SValue r)
+vecVecNumBfunc Dot = error "convExpr DotProduct"
 
 -- medium hacks --
 

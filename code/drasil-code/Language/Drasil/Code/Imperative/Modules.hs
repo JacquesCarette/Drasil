@@ -52,7 +52,6 @@ import Data.List (intersperse, intercalate, partition)
 import Data.Map ((!), elems, member)
 import qualified Data.Map as Map (lookup, filter)
 import Data.Maybe (maybeToList, catMaybes)
-import Control.Applicative ((<$>))
 import Control.Monad (liftM2, zipWithM)
 import Control.Monad.State (get, gets)
 import Control.Lens ((^.))
@@ -402,11 +401,12 @@ printConstraint c = do
 -- redundant (the values are already printed by printConstraint)
 -- If expression is more than just a literal, print it in parentheses
 printExpr :: (OOProg r) => Expr -> ChunkDB -> [MSStatement r]
-printExpr (Dbl _) _ = []
-printExpr (Int _) _ = []
-printExpr (Str _) _ = []
-printExpr e db = [printStr $ " (" ++ render (exprDoc db Implementation Linear e)
-  ++ ")"]
+printExpr (Dbl _)      _ = []
+printExpr (ExactDbl _) _ = []
+printExpr (Int _)      _ = []
+printExpr (Str _)      _ = []
+printExpr e           db = [printStr $ " (" ++
+  render (exprDoc db Implementation Linear e) ++ ")"]
 
 -- Generates a function for reading inputs from a file.
 genInputFormat :: (OOProg r) => ScopeTag -> 
@@ -439,12 +439,12 @@ genDataDesc = do
 
 -- Generates a sample input file compatible with the generated program, 
 -- if the user chose to.
-genSampleInput :: (AuxiliarySym r) => GenState [r (Auxiliary r)]
+genSampleInput :: (AuxiliarySym r) => GenState (Maybe (r (Auxiliary r)))
 genSampleInput = do
   g <- get
   dd <- genDataDesc
-  return [sampleInput (sysinfodb $ codeSpec g) dd (sampleData g) | 
-    hasSampleInput (auxiliaries g)]
+  if hasSampleInput (auxiliaries g) then (return . Just) $ sampleInput 
+    (sysinfodb $ codeSpec g) dd (sampleData g) else return Nothing
 
 ----- CONSTANTS -----
 

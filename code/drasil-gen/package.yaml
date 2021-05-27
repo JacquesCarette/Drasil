@@ -1,0 +1,33 @@
+name:                drasil-gen
+version:             0.1.3.0
+author:              "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
+maintainer:          "Jacques Carette"
+synopsis:	           A framework for code and document generation for scientific software - Utils SubPackage
+github:              JacquesCarette/Drasil
+homepage:            https://jacquescarette.github.io/Drasil/
+description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+
+extra-source-files: []
+
+dependencies:
+- base >= 4.7 && < 5
+- pretty
+- directory
+- time
+- drasil-lang
+- drasil-gool
+- drasil-build
+- drasil-code
+- drasil-printers
+
+ghc-options:
+- -Wall
+- -Wredundant-constraints
+
+library:
+  source-dirs: ./
+  exposed-modules:
+  - Language.Drasil.Generate
+  when:
+  - condition: false
+    other-modules: Paths_drasil_gen

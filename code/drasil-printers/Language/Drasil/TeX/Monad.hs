@@ -8,7 +8,6 @@ import qualified Text.PrettyPrint as TP
 import Language.Drasil
 
 import Control.Applicative hiding (empty)
-import Data.Monoid (Monoid(..))
 
 import qualified Language.Drasil.Printing.Helpers as H
 

@@ -2,8 +2,10 @@ module Drasil.SWHS.DataDefs where --exports all of it
 
 import Language.Drasil
 import Drasil.DocLang (ModelDB, mdb)
-import Theory.Drasil (DataDefinition, dd, ddNoRefs, mkQuantDef)
+import Theory.Drasil (DataDefinition, dd, ddNoRefs)
 import Utils.Drasil
+import Utils.Drasil.Concepts
+import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (value)
 import Data.Drasil.Concepts.Thermodynamics (heat)
@@ -40,7 +42,7 @@ waterMassQD :: QDefinition
 waterMassQD = mkQuantDef wMass waterMassEqn
 
 waterMassEqn :: Expr
-waterMassEqn = sy wVol * sy wDensity
+waterMassEqn = sy wVol `mulRe` sy wDensity
 
 waterMassNotes :: Sentence
 waterMassNotes = foldlSent [ch wVol, S "is defined in", makeRef2S waterVolume]
@@ -54,7 +56,7 @@ waterVolumeQD :: QDefinition
 waterVolumeQD = mkQuantDef wVol waterVolumeEqn
 
 waterVolumeEqn :: Expr
-waterVolumeEqn = sy tankVol - sy pcmVol
+waterVolumeEqn = sy tankVol $- sy pcmVol
 
 waterVolumeNotes :: Sentence
 waterVolumeNotes = foldlSent [S "Based on" +:+. makeRef2S assumpVCN, 
@@ -70,7 +72,7 @@ tankVolumeQD :: QDefinition
 tankVolumeQD = mkQuantDef tankVol tankVolumeEqn
 
 tankVolumeEqn :: Expr
-tankVolumeEqn = sy pi_ * ((sy diam / 2) $^ 2) * sy tankLength
+tankVolumeEqn = sy pi_ `mulRe` square (half $ sy diam) `mulRe` sy tankLength
 
 tankVolume :: DataDefinition
 tankVolume = ddNoRefs tankVolumeQD Nothing "tankVolume" []
@@ -81,7 +83,7 @@ balanceDecayRateQD :: QDefinition
 balanceDecayRateQD = mkQuantDef tauW balanceDecayRateEqn
 
 balanceDecayRateEqn :: Expr
-balanceDecayRateEqn = sy wMass * sy htCapW / (sy coilHTC * sy coilSA)
+balanceDecayRateEqn = sy wMass `mulRe` sy htCapW $/ (sy coilHTC `mulRe` sy coilSA)
 
 balanceDecayRateNotes :: Sentence
 balanceDecayRateNotes = foldlSent [ch wMass, S "is defined in", 
@@ -97,7 +99,7 @@ balanceDecayTimeQD :: QDefinition
 balanceDecayTimeQD = mkQuantDef eta balanceDecayTimeEqn
 
 balanceDecayTimeEqn :: Expr
-balanceDecayTimeEqn = sy pcmHTC * sy pcmSA / (sy coilHTC * sy coilSA)
+balanceDecayTimeEqn = sy pcmHTC `mulRe` sy pcmSA $/ (sy coilHTC `mulRe` sy coilSA)
 
 balanceDecayTime :: DataDefinition
 balanceDecayTime = dd balanceDecayTimeQD [makeCite koothoor2013]
@@ -109,8 +111,8 @@ balanceSolidPCMQD :: QDefinition
 balanceSolidPCMQD = mkQuantDef tauSP balanceSolidPCMEqn
 
 balanceSolidPCMEqn :: Expr
-balanceSolidPCMEqn = (sy pcmMass * sy htCapSP) /
-  (sy pcmHTC * sy pcmSA)
+balanceSolidPCMEqn = (sy pcmMass `mulRe` sy htCapSP) $/
+  (sy pcmHTC `mulRe` sy pcmSA)
 
 balanceSolidPCM :: DataDefinition
 balanceSolidPCM = dd balanceSolidPCMQD [makeCite lightstone2012]
@@ -122,8 +124,8 @@ balanceLiquidPCMQD :: QDefinition
 balanceLiquidPCMQD = mkQuantDef tauLP balanceLiquidPCMEqn
 
 balanceLiquidPCMEqn :: Expr
-balanceLiquidPCMEqn = (sy pcmMass * sy htCapLP) /
-  (sy pcmHTC * sy pcmSA)
+balanceLiquidPCMEqn = (sy pcmMass `mulRe` sy htCapLP) $/
+  (sy pcmHTC `mulRe` sy pcmSA)
 
 balanceLiquidPCM :: DataDefinition
 balanceLiquidPCM = dd balanceLiquidPCMQD [makeCite lightstone2012]
@@ -135,14 +137,14 @@ ddHtFusionQD :: QDefinition
 ddHtFusionQD = mkQuantDef htFusion htFusionEqn
 
 htFusionEqn :: Expr
-htFusionEqn = sy latentHeat / sy mass
+htFusionEqn = sy latentHeat $/ sy mass
 
 ddHtFusion :: DataDefinition
 ddHtFusion = dd ddHtFusionQD [makeCiteInfo bueche1986 $ Page [282]]
   Nothing "htFusion" [htFusionNote]
 
 htFusionNote :: Sentence
-htFusionNote = foldlSent [S "The", phrase htFusion,
+htFusionNote = foldlSent [atStartNP (the htFusion),
   sParen (S "also known as the enthalpy of fusion"), S "of a substance is the",
   phrase heat, phrase energy, S "required", sParen (ch latentHeat), S "to change the state of a unit of the",
   phrase mass, sParen (ch mass), S "of the substance from solid to liquid" `sC`
@@ -158,13 +160,13 @@ ddMeltFracQD = mkQuantDef meltFrac meltFracEqn
   -- produced according to CaseStudies' original
 
 meltFracEqn :: Expr
-meltFracEqn = sy latentEP / (sy htFusion * sy pcmMass)
+meltFracEqn = sy latentEP $/ (sy htFusion `mulRe` sy pcmMass)
 
 ddMeltFrac :: DataDefinition
 ddMeltFrac = dd ddMeltFracQD [makeCite koothoor2013]
   Nothing "meltFrac" [meltFracConst, makeRef2S ddHtFusion]
-  where meltFracConst = S "The" +:+ phrase value `sOf` E (sy meltFrac) `sIs`
-                        S "constrained to" +:+. E (0 $<= sy meltFrac $<= 1)
+  where meltFracConst = atStartNP (the value) `S.of_` E (sy meltFrac) `S.is`
+                        S "constrained to" +:+. E (exactDbl 0 $<= sy meltFrac $<= exactDbl 1)
 
 ----
 
@@ -172,7 +174,7 @@ aspRatQD :: QDefinition
 aspRatQD = mkQuantDef aspectRatio aspRatEq
 
 aspRatEq :: Expr
-aspRatEq = sy diam / sy tankLength
+aspRatEq = sy diam $/ sy tankLength
 
 aspRat :: DataDefinition
 aspRat = ddNoRefs aspRatQD Nothing "aspectRatio" []

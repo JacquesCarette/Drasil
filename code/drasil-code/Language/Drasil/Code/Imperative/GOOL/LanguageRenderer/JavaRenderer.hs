@@ -7,11 +7,11 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.JavaRenderer (
 ) where
 
 import Language.Drasil.Choices (ImplementationType(..))
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), 
-  AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
+  PackageSym(..), AuxiliarySym(..))
 import qualified 
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as 
-  G (doxConfig, readMe, sampleInput, makefile, noRunIfLib)
+  G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig, docIfEnabled)
 import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
   packD)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, BuildName(..), 
@@ -20,7 +20,7 @@ import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, BuildName(..),
   mainModuleFile, packSep, withExt)
 import Language.Drasil.Code.Imperative.Doxygen.Import (yes)
 
-import GOOL.Drasil (onCodeList, jName)
+import GOOL.Drasil (onCodeList, jName, jVersion)
 
 import Data.List (intercalate)
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
@@ -53,13 +53,16 @@ instance AuxiliarySym JavaProject where
   type Auxiliary JavaProject = AuxData
   type AuxHelper JavaProject = Doc
   doxConfig = G.doxConfig optimizeDox
-  readMe imp libs n = G.readMe jName "14" Nothing imp libs n
+  readMe rmi =
+    G.readMe rmi {
+        langName = jName,
+        langVersion = jVersion}
   sampleInput = G.sampleInput
 
   optimizeDox = return yes
 
-  makefile fs it = G.makefile (jBuildConfig fs it) 
-    (G.noRunIfLib it (jRunnable fs))
+  makefile fs it cms = G.makefile (jBuildConfig fs it) 
+    (G.noRunIfLib it (jRunnable fs)) (G.docIfEnabled cms G.doxDocConfig)
 
   auxHelperDoc = unJP
   auxFromData fp d = return $ ad fp d

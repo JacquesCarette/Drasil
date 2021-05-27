@@ -4,9 +4,9 @@ module Language.Drasil.CodeSpec where
 
 import Language.Drasil
 import Database.Drasil (ChunkDB, SystemInformation(SI), symbResolve,
-  _authors, _constants, _constraints, _datadefs, _definitions, _inputs,
-  _outputs, _sys, _sysinfodb)
-import Language.Drasil.Development (namesRI)
+  _authors, _constants, _constraints, _datadefs, _configFiles,
+  _definitions, _inputs, _outputs, _sys, _sysinfodb)
+import Language.Drasil.Development (namesRI, EqBinOp(Eq))
 import Theory.Drasil (DataDefinition, qdFromDD)
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeIdea(codeChunk),
@@ -44,6 +44,8 @@ data CodeSpec where
   derivedInputs :: [Derived],
   -- All outputs
   outputs :: [Output],
+  -- List of files that must be in same directory for running the executable
+  configFiles :: [FilePath],
   -- Mathematical definitions, ordered so that they form a path from inputs to 
   -- outputs.
   execOrder :: [Def],
@@ -73,6 +75,7 @@ codeSpec SI {_sys = sys
               , _authors = as
               , _definitions = defs'
               , _datadefs = ddefs
+              , _configFiles = cfp
               , _inputs = ins
               , _outputs = outs
               , _constraints = cs
@@ -95,6 +98,7 @@ codeSpec SI {_sys = sys
         extInputs = inputs',
         derivedInputs = map qtov derived,
         outputs = outs',
+        configFiles = cfp,
         execOrder = exOrder,
         cMap = constraintMap cs,
         constants = const',
@@ -107,12 +111,12 @@ codeSpec SI {_sys = sys
 
 -- Converts a chunk with a defining relation to a QDefinition
 relToQD :: ExprRelat c => ChunkDB -> c -> QDefinition
-relToQD sm r = convertRel sm (r ^. relat)
+relToQD sm r = convertRel sm (relat r)
 
 -- Converts an Expr representing a definition (i.e. an equality where the left 
 -- side is just a variable) to a QDefinition.
 convertRel :: ChunkDB -> Expr -> QDefinition
-convertRel sm (BinaryOp Eq (C x) r) = ec (symbResolve sm x) r
+convertRel sm (EqBinaryOp Eq (C x) r) = ec (symbResolve sm x) r
 convertRel _ _ = error "Conversion failed"
 
 -- | Convert a Func to an implementation-stage QuantityDict representing the 

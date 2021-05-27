@@ -1,13 +1,14 @@
-module Drasil.Projectile.Body (printSetting, si, srs) where
+module Drasil.Projectile.Body (printSetting, si, srs, projectileTitle) where
 
 import Language.Drasil hiding (Symbol(..), Vector)
 import Language.Drasil.Code (relToQD)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
-  cdb, rdb, refdb, _authors, _concepts, _constants, _constraints, _datadefs,
-  _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys,
-  _sysinfodb, _usedinfodb)
+  cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
+  _datadefs, _configFiles, _definitions, _defSequence, _inputs, _kind, 
+  _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Utils.Drasil
+import qualified Utils.Drasil.Sentence as S
 
 import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   DerivationDisplay(ShowDerivation),
@@ -21,36 +22,44 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
 
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
-  problem, srsDomains)
+  problem, srsDomains, assumption, goalStmt, physSyst,
+  requirement, typUnc)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Math (cartesian, mathcon)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
-import Data.Drasil.Concepts.Physics (constAccel, gravity, physicCon, physicCon',
-  rectilinear, twoD)
+import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon',
+  rectilinear, oneD, twoD)
 import Data.Drasil.Concepts.Software (errMsg, program)
 
-import Data.Drasil.Quantities.Math (pi_)
-import Data.Drasil.Quantities.Physics (iVel, physicscon)
+import Data.Drasil.Quantities.Math (pi_, piConst)
+import Data.Drasil.Quantities.Physics (acceleration, constAccel,
+  gravitationalAccelConst, iPos, iSpeed, iVel, ixPos, iyPos, ixVel, iyVel,
+  position, scalarPos, speed, time, velocity, xAccel, xConstAccel, xPos,
+  xVel, yAccel, yConstAccel, yPos, yVel, physicscon)
 
 import Data.Drasil.People (brooks, samCrawford, spencerSmith)
 import Data.Drasil.SI_Units (metre, radian, second)
+import Data.Drasil.Theories.Physics (accelerationTM, velocityTM)
+import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 import Drasil.Projectile.Assumptions (assumptions)
-import Drasil.Projectile.Concepts (concepts, projectileTitle, landingPos,
+import Drasil.Projectile.Concepts (concepts, landingPosNC,
   launcher, projectile, target)
 import Drasil.Projectile.DataDefs (dataDefs)
 import Drasil.Projectile.Figures (figLaunch)
-import Drasil.Projectile.GenDefs (genDefns)
+import Drasil.Projectile.GenDefs (genDefns, genDefns0)
 import Drasil.Projectile.Goals (goals)
 import Drasil.Projectile.IMods (iMods)
 import Drasil.Projectile.References (citations)
 import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs)
-import Drasil.Projectile.TMods (tMods)
-import Drasil.Projectile.Unitals (acronyms, constants, constrained, inConstraints,
-  inputs, launAngle, outConstraints, outputs, symbols, unitalIdeas, unitalQuants)
+import Drasil.Projectile.Unitals (launAngle, tol, launSpeed, targPos, message,
+  offset, launSpeedUnc, launAngleUnc,targPosUnc,landPosUnc, offsetUnc, flightDur,
+  landPos)
+
+import Theory.Drasil (getEqModQdsFromGd, TheoryModel)
 
 srs :: Document
-srs = mkDoc mkSRS (for'' titleize phrase) si
+srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
@@ -71,7 +80,7 @@ mkSRS = [
       [ SSDProblem $ PDProg prob []
         [ TermsAndDefs Nothing terms
         , PhySysDesc projectileTitle physSystParts figLaunch []
-        , Goals [(phrase iVel +:+ S "vector") `ofThe` phrase projectile]]
+        , Goals [(phrase iVel +:+ S "vector") `S.the_ofThe` phrase projectile]]
       , SSDSolChSpec $ SCSProg
         [ Assumptions
         , TMs [] (Label : stdFields)
@@ -95,23 +104,29 @@ mkSRS = [
 
 justification, scope :: Sentence
 justification = foldlSent [atStart projectile, S "motion is a common" +:+.
-  (phrase problem `sIn` phrase physics), S "Therefore, it is useful to have a",
+  (phrase problem `S.in_` phrase physics), S "Therefore, it is useful to have a",
   phrase program, S "to solve and model these types of" +:+. plural problem,
   S "The", phrase program, S "documented here is called", phrase projectileTitle]
-scope = foldlSent_ [S "the", phrase analysis `sOf` S "a", phrase twoD,
+scope = foldlSent_ [S "the", phrase analysis `S.of_` S "a", phrase twoD,
   sParen (getAcc twoD), phrase projectile, S "motion", phrase problem, S "with",
   phrase constAccel]
+
+projectileTitle :: CI
+projectileTitle = commonIdea "projectileTitle" (pn "Projectile") "Projectile" []
 
 si :: SystemInformation
 si = SI {
   _sys         = projectileTitle,
   _kind        = Doc.srs,
   _authors     = [samCrawford, brooks, spencerSmith],
+  _purpose     = [],
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
-  _definitions = map (relToQD symbMap) iMods ++
-                 map (relToQD symbMap) genDefns,
+  _definitions = map (relToQD symbMap) iMods
+                 ++ map (relToQD symbMap) genDefns0
+                 ++ getEqModQdsFromGd genDefns,
   _datadefs    = dataDefs,
+  _configFiles = [],
   _inputs      = inputs,
   _outputs     = outputs,
   _defSequence = [] :: [Block QDefinition],
@@ -121,6 +136,9 @@ si = SI {
   _usedinfodb  = usedDB,
    refdb       = refDB
 }
+
+tMods :: [TheoryModel]
+tMods = [accelerationTM, velocityTM]
 
 symbMap :: ChunkDB
 symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants ++ symbols)
@@ -148,8 +166,8 @@ concIns = assumptions ++ funcReqs ++ goals ++ nonfuncReqs
 -------------------------
 
 prob :: Sentence
-prob = foldlSent_ [S "efficiently" `sAnd` S "correctly predict the",
-  phrase landingPos, S "of a", phrase projectile]
+prob = foldlSent_ [S "efficiently" `S.and_` S "correctly predict the",
+  phrase landingPosNC, S "of a", phrase projectile]
 
 ---------------------------------
 -- Terminology and Definitions --
@@ -165,5 +183,43 @@ terms = [launcher, projectile, target, gravity, cartesian, rectilinear]
 physSystParts :: [Sentence]
 physSystParts = map foldlSent [
   [S "The", phrase launcher],
-  [S "The", phrase projectile, sParen (S "with" +:+ getTandS iVel `sAnd` getTandS launAngle)],
+  [S "The", phrase projectile, sParen (S "with" +:+ getTandS iVel `S.and_` getTandS launAngle)],
   [S "The", phrase target]]
+
+----------------------------------------------------
+-- Various gathered data that should be automated --
+----------------------------------------------------
+symbols :: [QuantityDict]
+symbols = qw gravitationalAccelConst : unitalQuants ++ map qw constants ++
+  map qw [acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
+  iyPos, ixVel, iyVel, position, scalarPos, speed, time, velocity, xAccel,
+  xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel]
+
+constants :: [QDefinition]
+constants = [gravitationalAccelConst, piConst, tol]
+
+inputs :: [QuantityDict]
+inputs = map qw [launSpeed, launAngle, targPos]
+
+outputs :: [QuantityDict]
+outputs = [message, qw offset]
+
+unitalQuants :: [QuantityDict]
+unitalQuants = message : map qw constrained
+
+unitalIdeas :: [IdeaDict]
+unitalIdeas = nw message : map nw constrained
+
+inConstraints :: [UncertQ]
+inConstraints = [launAngleUnc, launSpeedUnc, targPosUnc]
+
+outConstraints :: [UncertQ]
+outConstraints = [landPosUnc, offsetUnc]
+
+constrained :: [ConstrConcept]
+constrained = [flightDur, landPos, launAngle, launSpeed, offset, targPos]
+
+acronyms :: [CI]
+acronyms = [oneD, twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
+  physSyst, requirement, Doc.srs, thModel, typUnc]
+

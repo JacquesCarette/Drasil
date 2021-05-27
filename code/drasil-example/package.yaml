@@ -1,0 +1,201 @@
+name:                drasil-example
+version:             0.1.24.0
+author:              "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
+maintainer:          "Jacques Carette"
+synopsis:	           A framework for code and document generation for scientific software - Example SubPackage
+github:              JacquesCarette/Drasil
+homepage:            https://jacquescarette.github.io/Drasil/
+description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+
+extra-source-files: []
+
+dependencies:
+- base >= 4.7 && < 5
+- lens
+- directory
+- drasil-code
+- drasil-data
+- drasil-database
+- drasil-docLang
+- drasil-gen
+- drasil-gool
+- drasil-lang
+- drasil-metadata
+- drasil-printers
+- drasil-theory
+- drasil-utils
+
+ghc-options:
+- -Wall
+- -Wredundant-constraints
+- -threaded
+- -O2
+
+executables:
+  projectile:
+    main: Drasil.Projectile.Main
+    source-dirs: ./
+    other-modules:
+    - Drasil.Projectile.Assumptions
+    - Drasil.Projectile.Body
+    - Drasil.Projectile.Concepts
+    - Drasil.Projectile.DataDefs
+    - Drasil.Projectile.Expressions
+    - Drasil.Projectile.Figures
+    - Drasil.Projectile.GenDefs
+    - Drasil.Projectile.Goals
+    - Drasil.Projectile.IMods
+    - Drasil.Projectile.References
+    - Drasil.Projectile.Requirements
+    - Drasil.Projectile.Unitals
+
+  dblpendulum:
+    main: Drasil.DblPendulum.Main
+    source-dirs: ./
+    other-modules:
+    - Drasil.DblPendulum.Body
+    - Drasil.DblPendulum.Figures
+    - Drasil.DblPendulum.Concepts
+    - Drasil.DblPendulum.Assumptions
+    - Drasil.DblPendulum.Goals
+    - Drasil.DblPendulum.DataDefs
+    - Drasil.DblPendulum.Unitals
+    - Drasil.Projectile.References
+    - Drasil.DblPendulum.GenDefs
+    - Drasil.DblPendulum.IMods
+    - Drasil.DblPendulum.Requirements
+
+  gamephysics:
+    main: Drasil.GamePhysics.Main
+    source-dirs: ./
+    other-modules:
+    - Drasil.GamePhysics.Assumptions
+    - Drasil.GamePhysics.Body
+    - Drasil.GamePhysics.Changes
+    - Drasil.GamePhysics.Concepts
+    - Drasil.GamePhysics.DataDefs
+    - Drasil.GamePhysics.GenDefs
+    - Drasil.GamePhysics.Goals
+    - Drasil.GamePhysics.TMods
+    - Drasil.GamePhysics.Unitals
+    - Drasil.GamePhysics.IMods
+    - Drasil.GamePhysics.References
+    - Drasil.GamePhysics.Requirements
+  
+  glassbr:
+    main: Drasil.GlassBR.Main
+    source-dirs: ./
+    other-modules:
+    - Drasil.GlassBR.Assumptions
+    - Drasil.GlassBR.Body
+    - Drasil.GlassBR.Changes
+    - Drasil.GlassBR.Concepts
+    - Drasil.GlassBR.DataDefs
+    - Drasil.GlassBR.Figures
+    - Drasil.GlassBR.Goals
+    - Drasil.GlassBR.ModuleDefs
+    - Drasil.GlassBR.IMods
+    - Drasil.GlassBR.References
+    - Drasil.GlassBR.Requirements
+    - Drasil.GlassBR.Symbols
+    - Drasil.GlassBR.TMods
+    - Drasil.GlassBR.Unitals
+    - Drasil.GlassBR.Units
+
+  hghc:
+    main: Drasil.HGHC.Main
+    source-dirs: ./
+    other-modules:
+    - Drasil.HGHC.HeatTransfer
+    - Drasil.HGHC.Body
+
+  nopcm:
+    main: Drasil.NoPCM.Main
+    source-dirs: ./
+    other-modules:
+    - Drasil.NoPCM.Assumptions
+    - Drasil.NoPCM.Body
+    - Drasil.NoPCM.Changes
+    - Drasil.NoPCM.Unitals
+    - Drasil.NoPCM.DataDefs
+    - Drasil.NoPCM.Definitions
+    - Drasil.NoPCM.IMods
+    - Drasil.NoPCM.GenDefs
+    - Drasil.NoPCM.Goals
+    - Drasil.NoPCM.Requirements
+    - Drasil.NoPCM.References
+    - Drasil.SWHS.Assumptions
+    - Drasil.SWHS.Body
+    - Drasil.SWHS.Changes
+    - Drasil.SWHS.Concepts
+    - Drasil.SWHS.DataDefs
+    - Drasil.SWHS.GenDefs
+    - Drasil.SWHS.Goals
+    - Drasil.SWHS.Changes
+    - Drasil.SWHS.References
+    - Drasil.SWHS.Requirements
+    - Drasil.SWHS.TMods
+    - Drasil.SWHS.IMods
+    - Drasil.SWHS.Unitals
+
+  pdController:
+    main: Drasil.PDController.Main
+    source-dirs: ./
+    other-modules:
+    - Drasil.PDController.Assumptions
+    - Drasil.PDController.Body
+    - Drasil.PDController.Changes
+    - Drasil.PDController.Concepts
+    - Drasil.PDController.DataDefs
+    - Drasil.PDController.GenDefs
+    - Drasil.PDController.IModel
+    - Drasil.PDController.IntroSection
+    - Drasil.PDController.GenSysDesc
+    - Drasil.PDController.References
+    - Drasil.PDController.Requirements
+    - Drasil.PDController.SpSysDesc
+    - Drasil.PDController.TModel
+    - Drasil.PDController.Unitals
+     
+  ssp:
+    main: Drasil.SSP.Main
+    source-dirs: ./
+    other-modules:
+    - Drasil.SSP.Assumptions
+    - Drasil.SSP.BasicExprs
+    - Drasil.SSP.Body
+    - Drasil.SSP.Changes
+    - Drasil.SSP.DataDefs
+    - Drasil.SSP.Defs
+    - Drasil.SSP.Figures
+    - Drasil.SSP.GenDefs
+    - Drasil.SSP.Goals
+    - Drasil.SSP.IMods
+    - Drasil.SSP.References
+    - Drasil.SSP.Requirements
+    - Drasil.SSP.TMods
+    - Drasil.SSP.Unitals
+
+  swhs:
+    main: Drasil.SWHS.Main
+    source-dirs: ./
+    other-modules:
+    - Drasil.SWHS.Assumptions
+    - Drasil.SWHS.Body
+    - Drasil.SWHS.Changes
+    - Drasil.SWHS.Concepts
+    - Drasil.SWHS.DataDefs
+    - Drasil.SWHS.GenDefs
+    - Drasil.SWHS.Generate
+    - Drasil.SWHS.Goals
+    - Drasil.SWHS.IMods
+    - Drasil.SWHS.References
+    - Drasil.SWHS.Requirements
+    - Drasil.SWHS.TMods
+    - Drasil.SWHS.Unitals
+
+  template:
+    main: Drasil.Template.Main
+    source-dirs: ./
+    other-modules:
+    - Drasil.Template.Body

@@ -5,15 +5,18 @@ module Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..),
 
 import Language.Drasil
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
-import Language.Drasil.Choices (Comments(..), ImplementationType, hasReadMe)
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
+  AuxiliarySym(..))
+import Language.Drasil.Choices (Comments(..), AuxFile(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
-import Language.Drasil.Mod (Name, Version, Description, Import)
+import Language.Drasil.Mod (Name, Description, Import)
   
 import GOOL.Drasil (SFile, VSType, SVariable, SValue, MSStatement, SMethod, 
-  CSStateVar, SClass, NamedArgs, OOProg, FileSym(..), ValueExpression(..), 
-  FuncAppStatement(..), ClassSym(..), ModuleSym(..), GOOLState)
+  CSStateVar, SClass, NamedArgs, OOProg, FileSym(..), TypeElim(..), 
+  ValueSym(..), Argument(..), ValueExpression(..), FuncAppStatement(..), 
+  ClassSym(..), ModuleSym(..), CodeType(..), GOOLState)
 
+import Data.Bifunctor (second)
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (catMaybes)
 import Control.Monad.State (get, modify)
@@ -47,21 +50,22 @@ genModule :: (OOProg r) => Name -> Description ->
 genModule n desc = genModuleWithImports n desc []
 
 -- Generates a Doxygen configuration file, if the user has comments enabled
-genDoxConfig :: (AuxiliarySym r) => GOOLState ->
-  GenState [r (Auxiliary r)]
+genDoxConfig :: (AuxiliarySym r) => GOOLState -> GenState (Maybe (r (Auxiliary r)))
 genDoxConfig s = do
   g <- get
   let n = pName $ codeSpec g
       cms = commented g
       v = doxOutput g
-  return [doxConfig n s v | not (null cms)]
+  return $ if not (null cms) then Just (doxConfig n s v) else Nothing
 
-genReadMe :: (AuxiliarySym r) => ImplementationType -> [(Name,Version)] ->
-  GenState [r (Auxiliary r)]
-genReadMe imp libnms = do 
+genReadMe :: (AuxiliarySym r) => ReadMeInfo -> GenState (Maybe (r (Auxiliary r)))
+genReadMe rmi = do 
   g <- get
   let n = pName $ codeSpec g
-  return [readMe imp libnms n | hasReadMe (auxiliaries g)]
+  return $ getReadMe (auxiliaries g) rmi {caseName = n}
+
+getReadMe :: (AuxiliarySym r) => [AuxFile] -> ReadMeInfo -> Maybe (r (Auxiliary r))
+getReadMe auxl rmi = if ReadME `elem` auxl then Just (readMe rmi) else Nothing
 
 data ClassType = Primary | Auxiliary
 
@@ -97,6 +101,28 @@ auxClass :: (OOProg r) => Name -> Maybe Name -> Description ->
   GenState (SClass r)
 auxClass = mkClass Auxiliary
 
+-- Converts lists or objects to pointer arguments, since we use pointerParam 
+-- for list or object-type parameters.
+mkArg :: (OOProg r) => SValue r -> SValue r
+mkArg v = do
+  vl <- v
+  let mkArg' (List _) = pointerArg
+      mkArg' (Object _) = pointerArg
+      mkArg' _ = id
+  mkArg' (getType $ valueType vl) (return vl)
+
+
+-- To be called by more specific function call generators (fApp and ctorCall)
+-- Gets the current module and calls mkArg on the arguments.
+fCall :: (OOProg r) => (Name -> [SValue r] -> NamedArgs r -> SValue r) ->
+  [SValue r] -> NamedArgs r -> GenState (SValue r)
+fCall f vl ns = do
+  g <- get
+  let cm = currentModule g
+      args = map mkArg vl
+      nargs = map (second mkArg) ns
+  return $ f cm args nargs
+
 -- m parameter is the module where the function is defined
 -- if m is not current module, use GOOL's function for calling functions from 
 --   external modules
@@ -109,20 +135,17 @@ fApp :: (OOProg r) => Name -> Name -> VSType r -> [SValue r] ->
   NamedArgs r -> GenState (SValue r)
 fApp m s t vl ns = do
   g <- get
-  let cm = currentModule g
-  return $ if m /= cm then extFuncAppMixedArgs m s t vl ns else if Map.lookup s 
-    (eMap g) == Just cm then funcAppMixedArgs s t vl ns else 
-    selfFuncAppMixedArgs s t vl ns
+  fCall (\cm args nargs -> 
+    if m /= cm then extFuncAppMixedArgs m s t args nargs else 
+      if Map.lookup s (eMap g) == Just cm then funcAppMixedArgs s t args nargs
+      else selfFuncAppMixedArgs s t args nargs) vl ns
 
 -- Logic similar to fApp above, but self case not required here 
 -- (because constructor will never be private)
 ctorCall :: (OOProg r) => Name -> VSType r -> [SValue r] -> NamedArgs r 
   -> GenState (SValue r)
-ctorCall m t vl ns = do
-  g <- get
-  let cm = currentModule g
-  return $ if m /= cm then extNewObjMixedArgs m t vl ns else 
-    newObjMixedArgs t vl ns
+ctorCall m t = fCall (\cm args nargs -> if m /= cm then 
+  extNewObjMixedArgs m t args nargs else newObjMixedArgs t args nargs)
 
 -- Logic similar to fApp above
 fAppInOut :: (OOProg r) => Name -> Name -> [SValue r] -> 

@@ -153,7 +153,7 @@ $\mathbf{R}$ & Resistive Shear Forces Without the Influence of Interslice Forces
 \\
 $r$ & Length of the Moment Arm: The distance between a force causing rotation and the axis of rotation. & ${\text{m}}$
 \\
-$\mathbf{r}$ & Position Vector: The a vector from the origin of the Cartesian coordinate system defined to the point where the force is applied. & ${\text{m}}$
+$\mathbf{r}$ & Position Vector: A vector from the origin of the Cartesian coordinate system defined to the point where the force is applied. & ${\text{m}}$
 \\
 $S$ & Mobilized Shear Force: The shear force in the direction of potential motion. & ${\text{N}}$
 \\
@@ -853,7 +853,7 @@ RefBy &
 \end{minipage}
 \paragraph{}
 \label{GD:effNormFDeriv}
-Derived by substituting \hyperref[DD:normStress]{DD: normStress} into \hyperref[TM:effStress]{TM: effStress} and multiplying both sides of the equation by the the area of the slice in the shear-$z$ plane. Since the slope is assumed to extend infinitely in the $z$-direction (\hyperref[assumpPSC]{A: Plane-Strain-Conditions}), the resulting forces are expressed per metre in the $z$-direction.
+Derived by substituting \hyperref[DD:normStress]{DD: normStress} into \hyperref[TM:effStress]{TM: effStress} and multiplying both sides of the equation by the area of the slice in the shear-$z$ plane. Since the slope is assumed to extend infinitely in the $z$-direction (\hyperref[assumpPSC]{A: Plane-Strain-Conditions}), the resulting forces are expressed per metre in the $z$-direction.
 
 \vspace{\baselineskip}
 \noindent
@@ -1218,7 +1218,7 @@ For the case where the water table is below the slip surface, the weights come f
 \begin{displaymath}
 {\mathbf{W}}_{i}={\mathbf{b}}_{i} \frac{1}{2} \left({\mathbf{y}_{\text{slope},i}}-{\mathbf{y}_{\text{slip},i}}+{\mathbf{y}_{\text{slope},i-1}}-{\mathbf{y}_{\text{slip},i-1}}\right) {γ_{\text{dry}}}
 \end{displaymath}
-For the case where the water table is between the slope surface and slip surface, the weights are the sums of the the weights of the dry portions and weights of the saturated portions of the soil. Substituting values for dry and saturated soil into the equation for weight from \hyperref[GD:weight]{GD: weight} and adding them together yields:
+For the case where the water table is between the slope surface and slip surface, the weights are the sums of the weights of the dry portions and weights of the saturated portions of the soil. Substituting values for dry and saturated soil into the equation for weight from \hyperref[GD:weight]{GD: weight} and adding them together yields:
 
 \begin{displaymath}
 {\mathbf{W}}_{i}={\mathbf{V}_{\text{dry},i}} {γ_{\text{dry}}}+{\mathbf{V}_{\text{sat},i}} {γ_{\text{sat}}}
@@ -1767,7 +1767,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{F}$ is the force (${\text{N}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The torque on a body measures the the tendency of a force to rotate the body around an axis or pivot.
+Notes & The torque on a body measures the tendency of a force to rotate the body around an axis or pivot.
         
 \\ \midrule \\
 Source & --
@@ -2313,7 +2313,7 @@ Output Constraints &
 Equation & \begin{displaymath}
            {\mathbf{C}_{\text{num},i}}=\begin{cases}
                                        {\mathbf{b}}_{1} \left({\mathbf{G}}_{1}+{\mathbf{H}}_{1}\right) \tan\left({\mathbf{α}}_{1}\right), & i=1\\
-                                       {\mathbf{b}}_{i} \left({{\mathbf{F}_{\text{x}}}^{\text{G}}}+{{\mathbf{F}_{\text{x}}}^{\text{H}}}\right) \tan\left({\mathbf{α}}_{i}\right)+\mathbf{h} -2 {\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right), & 2\leq{}i\leq{}n-1\\
+                                       {\mathbf{b}}_{i} \left({{\mathbf{F}_{\text{x}}}^{\text{G}}}+{{\mathbf{F}_{\text{x}}}^{\text{H}}}\right) \tan\left({\mathbf{α}}_{i}\right)+\mathbf{h} -\left(2\right) {\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right), & 2\leq{}i\leq{}n-1\\
                                        {\mathbf{b}}_{n} \left({\mathbf{G}}_{n-1}+{\mathbf{H}}_{n-1}\right) \tan\left({\mathbf{α}}_{n-1}\right), & i=n
                                        \end{cases}
            \end{displaymath}
@@ -2528,35 +2528,35 @@ RefBy & \hyperref[displayGraph]{FR: Display-Graph} and \hyperref[determineCritSl
 \\
 \midrule
 \endhead
-$c'$ & $c'\gt{}0$ & $10.0\cdot{}10^{3}$ ${\text{Pa}}$ & 10$\%$
+$c'$ & $c'\gt{}0$ & $10000$ ${\text{Pa}}$ & 10$\%$
 \\
-${{x_{\text{slip}}}^{\text{maxEtr}}}$ & -- & $20.0$ ${\text{m}}$ & 10$\%$
+${{x_{\text{slip}}}^{\text{maxEtr}}}$ & -- & $20$ ${\text{m}}$ & 10$\%$
 \\
-${{x_{\text{slip}}}^{\text{maxExt}}}$ & -- & $100.0$ ${\text{m}}$ & 10$\%$
+${{x_{\text{slip}}}^{\text{maxExt}}}$ & -- & $100$ ${\text{m}}$ & 10$\%$
 \\
-${{x_{\text{slip}}}^{\text{minEtr}}}$ & -- & $0.0$ ${\text{m}}$ & 10$\%$
+${{x_{\text{slip}}}^{\text{minEtr}}}$ & -- & $0$ ${\text{m}}$ & 10$\%$
 \\
-${{x_{\text{slip}}}^{\text{minExt}}}$ & -- & $50.0$ ${\text{m}}$ & 10$\%$
+${{x_{\text{slip}}}^{\text{minExt}}}$ & -- & $50$ ${\text{m}}$ & 10$\%$
 \\
-${\mathbf{x}_{\text{slope}}}$ & -- & $0.0$ ${\text{m}}$ & 10$\%$
+${\mathbf{x}_{\text{slope}}}$ & -- & $0$ ${\text{m}}$ & 10$\%$
 \\
-${\mathbf{x}_{\text{wt}}}$ & -- & $0.0$ ${\text{m}}$ & 10$\%$
+${\mathbf{x}_{\text{wt}}}$ & -- & $0$ ${\text{m}}$ & 10$\%$
 \\
-${{y_{\text{slip}}}^{\text{max}}}$ & -- & $30.0$ ${\text{m}}$ & 10$\%$
+${{y_{\text{slip}}}^{\text{max}}}$ & -- & $30$ ${\text{m}}$ & 10$\%$
 \\
-${{y_{\text{slip}}}^{\text{min}}}$ & -- & $0.0$ ${\text{m}}$ & 10$\%$
+${{y_{\text{slip}}}^{\text{min}}}$ & -- & $0$ ${\text{m}}$ & 10$\%$
 \\
-${\mathbf{y}_{\text{slope}}}$ & -- & $0.0$ ${\text{m}}$ & 10$\%$
+${\mathbf{y}_{\text{slope}}}$ & -- & $0$ ${\text{m}}$ & 10$\%$
 \\
-${\mathbf{y}_{\text{wt}}}$ & -- & $0.0$ ${\text{m}}$ & 10$\%$
+${\mathbf{y}_{\text{wt}}}$ & -- & $0$ ${\text{m}}$ & 10$\%$
 \\
-${γ_{\text{dry}}}$ & ${γ_{\text{dry}}}\gt{}0$ & $20.0\cdot{}10^{3}$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
+${γ_{\text{dry}}}$ & ${γ_{\text{dry}}}\gt{}0$ & $20000$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
 \\
-${γ_{\text{sat}}}$ & ${γ_{\text{sat}}}\gt{}0$ & $20.0\cdot{}10^{3}$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
+${γ_{\text{sat}}}$ & ${γ_{\text{sat}}}\gt{}0$ & $20000$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
 \\
-${γ_{w}}$ & ${γ_{w}}\gt{}0$ & $9.8\cdot{}10^{3}$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
+${γ_{w}}$ & ${γ_{w}}\gt{}0$ & $9800$ $\frac{\text{N}}{\text{m}^{3}}$ & 10$\%$
 \\
-$φ'$ & $0\lt{}φ'\lt{}90$ & $25.0$ ${{}^{\circ}}$ & 10$\%$
+$φ'$ & $0\lt{}φ'\lt{}90$ & $25$ ${{}^{\circ}}$ & 10$\%$
 \\
 \bottomrule
 \caption{Input Data Constraints}
@@ -2697,8 +2697,50 @@ This section lists the unlikely changes to be made to the software.
 \end{itemize}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsAll]{Table:TraceMatAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Table:TraceMatRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. \hyperref[Table:TraceMatAllvsR]{Table:TraceMatAllvsR} shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsA]{Table:TraceMatAvsA} shows the dependencies of assumptions on the assumptions. \hyperref[Table:TraceMatAvsAll]{Table:TraceMatAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Table:TraceMatRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. \hyperref[Table:TraceMatAllvsR]{Table:TraceMatAllvsR} shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
 
+\begin{longtable}{l l l l l l l l l l l l l l l l l}
+\toprule
+\textbf{} & \textbf{\hyperref[assumpSSC]{A: Slip-Surface-Concave}} & \textbf{\hyperref[assumpFOS]{A: Factor-of-Safety}} & \textbf{\hyperref[assumpSLH]{A: Soil-Layer-Homogeneous}} & \textbf{\hyperref[assumpSP]{A: Soil-Properties}} & \textbf{\hyperref[assumpSLI]{A: Soil-Layers-Isotropic}} & \textbf{\hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear}} & \textbf{\hyperref[assumpPSC]{A: Plane-Strain-Conditions}} & \textbf{\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large}} & \textbf{\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}} & \textbf{\hyperref[assumpES]{A: Edge-Slices}} & \textbf{\hyperref[assumpSF]{A: Seismic-Force}} & \textbf{\hyperref[assumpSL]{A: Surface-Load}} & \textbf{\hyperref[assumpWIBE]{A: Water-Intersects-Base-Edge}} & \textbf{\hyperref[assumpWISE]{A: Water-Intersects-Surface-Edge}} & \textbf{\hyperref[assumpNESSS]{A: Negligible-Effect-Surface-Slope-Seismic}} & \textbf{\hyperref[assumpHFSM]{A: Hydrostatic-Force-Slice-Midpoint}}
+\\
+\midrule
+\endhead
+\hyperref[assumpSSC]{A: Slip-Surface-Concave} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpFOS]{A: Factor-of-Safety} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpSLH]{A: Soil-Layer-Homogeneous} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpSP]{A: Soil-Properties} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpSLI]{A: Soil-Layers-Isotropic} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpPSC]{A: Plane-Strain-Conditions} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpES]{A: Edge-Slices} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpSF]{A: Seismic-Force} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpSL]{A: Surface-Load} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpWIBE]{A: Water-Intersects-Base-Edge} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpWISE]{A: Water-Intersects-Surface-Edge} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpNESSS]{A: Negligible-Effect-Surface-Slope-Seismic} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[assumpHFSM]{A: Hydrostatic-Force-Slice-Midpoint} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\bottomrule
+\caption{Traceability Matrix Showing the Connections Between Assumptions dependence of each other.}
+\label{Table:TraceMatAvsA}
+\end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l}
 \toprule
 \textbf{} & \textbf{\hyperref[assumpSSC]{A: Slip-Surface-Concave}} & \textbf{\hyperref[assumpFOS]{A: Factor-of-Safety}} & \textbf{\hyperref[assumpSLH]{A: Soil-Layer-Homogeneous}} & \textbf{\hyperref[assumpSP]{A: Soil-Properties}} & \textbf{\hyperref[assumpSLI]{A: Soil-Layers-Isotropic}} & \textbf{\hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear}} & \textbf{\hyperref[assumpPSC]{A: Plane-Strain-Conditions}} & \textbf{\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large}} & \textbf{\hyperref[assumpSBSBISL]{A: Surface-Base-Slice-between-Interslice-Straight-Lines}} & \textbf{\hyperref[assumpES]{A: Edge-Slices}} & \textbf{\hyperref[assumpSF]{A: Seismic-Force}} & \textbf{\hyperref[assumpSL]{A: Surface-Load}} & \textbf{\hyperref[assumpWIBE]{A: Water-Intersects-Base-Edge}} & \textbf{\hyperref[assumpWISE]{A: Water-Intersects-Surface-Edge}} & \textbf{\hyperref[assumpNESSS]{A: Negligible-Effect-Surface-Slope-Seismic}} & \textbf{\hyperref[assumpHFSM]{A: Hydrostatic-Force-Slice-Midpoint}}

@@ -9,10 +9,10 @@ import Drasil.DocLang (DocSection(RefSec, SSDSec), Literature(Lit, Manual),
     SSDSec(SSDProg))
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
-  rdb, refdb, _authors, _concepts, _constants, _constraints,
-  _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs, _quants, 
+  rdb, refdb, _authors, _concepts, _constants, _constraints, _purpose,
+  _datadefs, _configFiles,_definitions, _defSequence, _inputs, _kind, _outputs, _quants, 
   _sys, _sysinfodb, _usedinfodb)
-import Utils.Drasil
+import qualified Utils.Drasil.Sentence as S
 
 import Drasil.HGHC.HeatTransfer (fp, hghc, dataDefs, htInputs, htOutputs, 
     nuclearPhys, symbols)
@@ -23,7 +23,7 @@ import Data.Drasil.Concepts.Documentation (doccon, doccon')
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
   
 srs :: Document
-srs = mkDoc mkSRS for si
+srs = mkDoc mkSRS S.forT si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
@@ -34,9 +34,11 @@ si = SI {
   _kind = Doc.srs,
   _authors = [spencerSmith],
   _quants = symbols,
+  _purpose = [],
   _concepts = [] :: [UnitaryConceptDict],
   _definitions = [] :: [QDefinition],
   _datadefs = dataDefs,
+  _configFiles = [],
   _inputs = htInputs,
   _outputs = htOutputs,
   _defSequence = [] :: [Block QDefinition],

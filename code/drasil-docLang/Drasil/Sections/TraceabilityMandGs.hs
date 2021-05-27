@@ -10,7 +10,7 @@ import Drasil.DocumentLanguage.TraceabilityMatrix (generateTraceTableView,
 import Data.Drasil.Concepts.Documentation (assumption, assumpDom, chgProbDom,
   goalStmt, goalStmtDom, requirement, reqDom, item, section_, likelyChg,
   unlikelyChg)
-import qualified Data.Drasil.IdeaDicts as Doc (genDefn, dataDefn, inModel, thModel)
+import qualified Data.Drasil.TheoryConcepts as Doc (genDefn, dataDefn, inModel, thModel)
 import Database.Drasil(SystemInformation, _sysinfodb, gendefTable, dataDefnTable,
   insmodelTable, theoryModelTable)
 import Language.Drasil
@@ -46,6 +46,11 @@ tvReqs = traceViewCC reqDom
 tvChanges :: TraceViewCat
 tvChanges = traceViewCC chgProbDom
 
+traceMatAssumpAssump :: TraceConfig
+traceMatAssumpAssump = TraceConfig "TraceMatAvsA" [plural assumption +:+
+  S "on the" +:+. plural assumption] (titleize' assumption +:+.
+  S "dependence of each other") [tvAssumps] [tvAssumps]
+
 traceMatAssumpOther :: TraceConfig
 traceMatAssumpOther = TraceConfig "TraceMatAvsAll" [plural Doc.dataDefn,
   plural Doc.thModel, plural Doc.genDefn, plural Doc.inModel, plural requirement,
@@ -74,5 +79,5 @@ traceMatOtherReq si = TraceConfig "TraceMatAllvsR" [x plural +:+ S "on the" +:+
     sC' a b = sC a b
 
 traceMatStandard :: SystemInformation -> [TraceConfig]
-traceMatStandard s = map ($ s) [const traceMatAssumpOther, const traceMatRefinement,
+traceMatStandard s = map ($ s) [const traceMatAssumpAssump, const traceMatAssumpOther, const traceMatRefinement,
   traceMatOtherReq]

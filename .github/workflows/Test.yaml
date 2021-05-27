@@ -1,0 +1,73 @@
+on:
+  push:
+    branches-ignore: master
+  pull_request:
+    branches: master
+  workflow_dispatch:
+name: Test
+defaults:
+  run:
+    shell: bash
+    working-directory: code
+jobs:
+  auto-cancel:
+    if: |
+      github.event_name == 'pull_request'
+      || github.event_name == 'workflow_dispatch'
+      || (github.event_name == 'push' && contains(github.event.head_commit.message, '[workflow-trigger]'))
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.9.0
+        with:
+          access_token: ${{ github.token }}
+  build:
+    needs: auto-cancel
+    name: "Build"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: "Update apt package list"
+        run: sudo apt-get update
+      - name: "Install system requirements"
+        run: sudo apt-get install -y libgmp-dev python3 graphviz doxygen fonts-lmodern texlive-bibtex-extra texlive-latex-extra texlive-science texlive-xetex texlive-luatex g++ default-jdk mono-devel
+      - name: "Install Stack"
+        uses: haskell/actions/setup@v1
+        with:
+          enable-stack: true
+          stack-no-global: true
+          stack-version: 'latest'
+      - name: "Cache dependencies"
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.stack
+            ~/.cabal/packages
+            ~/.cabal/store
+            code/.stack-work/
+            ~/.local/bin/graphmod
+          key: ${{ runner.os }}-store-${{ hashFiles('code/stack.yaml') }}
+      - name: "Clean previous run"
+        run: make clean
+      - name: "Update PATH"
+        run: |
+          echo "$HOME/.local/bin" >> $GITHUB_PATH
+          echo "$HOME/.swift/usr/bin" >> $GITHUB_PATH
+      - name: "HLint"
+        run: curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
+      - name: "Install dependencies"
+        run: stack --no-terminal test --bench --only-dependencies
+      - name: "Build"
+        run: make prog stackArgs="--no-terminal" GHCFLAGS="-Werror"
+      - name: "Stable"
+        run: make stackArgs="--no-terminal" NOISY=yes
+      - name: "TeX"
+        run: make tex SUMMARIZE_TEX=yes
+      - name: "Code"
+        run: make code
+      - name: "Doxygen"
+        run: make doxygen
+      - name: "Docs"
+        run: make docs
+      - name: "Graphs"
+        run: make graphs

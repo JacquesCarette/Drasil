@@ -14,10 +14,10 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   VSFunction, MSStatement, MSParameter, SMethod, OOProg, ProgramSym(..), 
   FileSym(..), PermanenceSym(..), BodySym(..), oneLiner, BlockSym(..), 
   TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), ValueSym(..), 
-  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), 
-  NumericExpression(..), BooleanExpression(..), Comparison(..), 
-  ValueExpression(..), funcApp, selfFuncApp, extFuncApp, newObj, 
-  InternalValueExp(..), objMethodCallNoParams, FunctionSym(..), ($.), 
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..), 
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
+  Comparison(..), ValueExpression(..), funcApp, selfFuncApp, extFuncApp, 
+  newObj, InternalValueExp(..), objMethodCallNoParams, FunctionSym(..), ($.), 
   GetSet(..), List(..), InternalList(..), StatementSym(..), 
   AssignStatement(..), (&=), DeclStatement(..), IOStatement(..), 
   StringStatement(..), FuncAppStatement(..), CommentStatement(..), 
@@ -74,7 +74,7 @@ import qualified GOOL.Drasil.LanguageRenderer.CLike as C (float, double, char,
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
   decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for, while, 
-  intFunc, multiAssignError, multiReturnError)
+  intFunc, multiAssignError, multiReturnError, multiTypeError)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (ifExists, 
   runStrategy, listSlice, stringListVals, stringListLists, forRange, 
   notifyObservers, checkState)
@@ -91,7 +91,6 @@ import GOOL.Drasil.State (VS, lensGStoFS, lensMStoVS, modifyReturn, revFiles,
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Control.Lens.Zoom (zoom)
-import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (modify)
 import Data.Composition ((.:))
@@ -205,6 +204,7 @@ instance TypeElim CSharpCode where
   getTypeString = typeString . unCSC
   
 instance RenderType CSharpCode where
+  multiType _ = error $ C.multiTypeError csName
   typeFromData t s d = toState $ toCode $ td t s d
 
 instance InternalTypeElim CSharpCode where
@@ -280,6 +280,9 @@ instance RenderVariable CSharpCode where
 instance ValueSym CSharpCode where
   type Value CSharpCode = ValData
   valueType = onCodeValue valType
+
+instance Argument CSharpCode where
+  pointerArg = id
 
 instance Literal CSharpCode where
   litTrue = C.litTrue

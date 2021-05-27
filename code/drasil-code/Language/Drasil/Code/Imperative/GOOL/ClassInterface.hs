@@ -3,6 +3,7 @@
 -- | Defines a package extension for GOOL, with functions for pairing a GOOL 
 -- program with auxiliary, non-source-code files.
 module Language.Drasil.Code.Imperative.GOOL.ClassInterface (
+  ReadMeInfo(..),
   -- Typeclasses
   PackageSym(..), AuxiliarySym(..)
 ) where
@@ -25,7 +26,7 @@ class AuxiliarySym r where
   type Auxiliary r
   type AuxHelper r
   doxConfig :: String -> GOOLState -> Verbosity -> r (Auxiliary r)
-  readMe ::  ImplementationType -> [(Name,Version)] -> String -> r (Auxiliary r)
+  readMe ::  ReadMeInfo -> r (Auxiliary r)
   sampleInput :: ChunkDB -> DataDesc -> [Expr] -> r (Auxiliary r)
 
   optimizeDox :: r (AuxHelper r)
@@ -35,3 +36,19 @@ class AuxiliarySym r where
 
   auxHelperDoc :: r (AuxHelper r) -> Doc
   auxFromData :: FilePath -> Doc -> r (Auxiliary r)
+
+type LangAbbrev = String
+type LangVers = String
+type CaseName = String
+type Contributer = String
+data ReadMeInfo = ReadMeInfo {
+  langName :: LangAbbrev,
+  langVersion :: LangVers,
+  invalidOS :: Maybe String,
+  implementType :: ImplementationType,
+  extLibNV :: [(Name,Version)],
+  extLibFP :: [FilePath],
+  contributors :: [Contributer], 
+  configFP :: [FilePath],
+  caseName :: CaseName
+}

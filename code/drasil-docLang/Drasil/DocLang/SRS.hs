@@ -13,7 +13,8 @@ module Drasil.DocLang.SRS (appendix, assumpt, assumptLabel, charOfIR, datCon,
 --May want to combine SRS-specific functions into this file as well (ie. OrganizationOfSRS) to make it more Recipe-like.
 
 import Language.Drasil
-import Utils.Drasil
+import Utils.Drasil.Concepts
+import qualified Utils.Drasil.Sentence as S (forTPS, forTPP)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
   charOfIR, client, customer, consVals, datumConstraint, functionalRequirement,
@@ -23,21 +24,15 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, assumption
   scpOfReq, scpOfTheProj, solutionCharSpec, specificsystemdescription, srs,
   stakeholder, sysCont, systemConstraint, termAndDef, terminology, traceyMandG,
   tOfSymb, tOfUnit, userCharacteristic)
-import qualified Data.Drasil.IdeaDicts as Doc (dataDefn, genDefn, inModel, thModel)
+import qualified Data.Drasil.TheoryConcepts as Doc (dataDefn, genDefn, inModel, thModel)
 
--- Local function to keep things looking clean, not exported.
-forTT :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
-forTT = for'' titleize' titleize
-
-forTT' :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
-forTT' = for'' titleize' titleize'
 
 -- | SRS document constructor. 
 -- Create the SRS from given system name, authors, and sections
 doc, doc' :: NamedIdea c => c -> Sentence -> [Section] -> Document
-doc  sys = Document (Doc.srs `forTT` sys)
+doc  sys = Document (Doc.srs `S.forTPS` sys)
 -- | Uses plural of system for title.
-doc' sys = Document (Doc.srs `forTT'` sys)
+doc' sys = Document (Doc.srs `S.forTPP` sys)
 
 -- | Standard SRS section builders
 intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, 
@@ -54,8 +49,8 @@ charOfIR  cs ss = section' (titleize' Doc.charOfIR)    cs ss "ReaderChars"
 orgOfDoc  cs ss = section' (titleize Doc.orgOfDoc)     cs ss "DocOrg"
 
 stakeholder cs ss = section' (titleize' Doc.stakeholder)      cs ss "Stakeholder"
-theCustomer cs ss = section' (titleizeNP $ the' Doc.customer) cs ss "Customer"
-theClient   cs ss = section' (titleizeNP $ the' Doc.client)   cs ss "Client"
+theCustomer cs ss = section' (titleizeNP $ theT Doc.customer) cs ss "Customer"
+theClient   cs ss = section' (titleizeNP $ theT Doc.client)   cs ss "Client"
 
 genSysDes cs ss = section' (titleize Doc.generalSystemDescription) cs ss "GenSysDesc"
 sysCont   cs ss = section' (titleize Doc.sysCont)                  cs ss "SysContext"

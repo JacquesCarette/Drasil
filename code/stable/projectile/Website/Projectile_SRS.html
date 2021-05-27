@@ -464,7 +464,7 @@
                   </p>
                   <p>
                     <div id="pointMass">
-                      pointMass: The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: <a href=#GD:rectVel>GD: rectVel</a> and <a href=#GD:rectPos>GD: rectPos</a>.)
+                      pointMass: The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: <a href=#GD:rectPos>GD: rectPos</a> and <a href=#GD:rectVel>GD: rectVel</a>.)
                     </div>
                   </p>
                   <p>
@@ -479,7 +479,7 @@
                   </p>
                   <p>
                     <div id="timeStartZero">
-                      timeStartZero: Time starts at zero. (RefBy: <a href=#GD:velVec>GD: velVec</a>, <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>, <a href=#GD:rectVel>GD: rectVel</a>, <a href=#GD:rectPos>GD: rectPos</a>, and <a href=#GD:posVec>GD: posVec</a>.)
+                      timeStartZero: Time starts at zero. (RefBy: <a href=#GD:velVec>GD: velVec</a>, <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>, <a href=#GD:rectPos>GD: rectPos</a>, <a href=#GD:rectVel>GD: rectVel</a>, and <a href=#GD:posVec>GD: posVec</a>.)
                     </div>
                   </p>
                   <p>
@@ -528,7 +528,7 @@
                       <th>Source</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#accelerationWiki>accelerationWiki</a> and <a href=#hibbeler2004>hibbeler2004</a> (pg. 7)
+                          <a href=#accelerationWiki>accelerationWiki</a>
                         </p>
                       </td>
                     </tr>
@@ -569,9 +569,7 @@
                     <tr>
                       <th>Source</th>
                       <td>
-                        <p class="paragraph">
-                          <a href=#velocityWiki>velocityWiki</a> and <a href=#hibbeler2004>hibbeler2004</a> (pg. 6)
-                        </p>
+                        <p class="paragraph"><a href=#velocityWiki>velocityWiki</a></p>
                       </td>
                     </tr>
                     <tr>
@@ -950,7 +948,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[v=|\mathbf{v}|\]</td>
+                      <td>\[v=\|\mathbf{v}\|\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -969,7 +967,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          For a given velocity vector <em><b>v</b></em>, the magnitude of the vector (<em>|<b>v</b>|</em>) is the scalar called speed.
+                          For a given velocity vector <em><b>v</b></em>, the magnitude of the vector (<em>||<b>v</b>||</em>) is the scalar called speed.
                         </p>
                       </td>
                     </tr>
@@ -1694,8 +1692,303 @@
       <div class="section">
         <h1>Traceability Matrices and Graphs</h1>
         <p class="paragraph">
-          The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an "X" should be modified as well. <a href=#Table:TraceMatAvsAll>Table:TraceMatAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href=#Table:TraceMatRefvsRef>Table:TraceMatRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. <a href=#Table:TraceMatAllvsR>Table:TraceMatAllvsR</a> shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
+          The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an "X" should be modified as well. <a href=#Table:TraceMatAvsA>Table:TraceMatAvsA</a> shows the dependencies of assumptions on the assumptions. <a href=#Table:TraceMatAvsAll>Table:TraceMatAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href=#Table:TraceMatRefvsRef>Table:TraceMatRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. <a href=#Table:TraceMatAllvsR>Table:TraceMatAllvsR</a> shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
         </p>
+        <div id="Table:TraceMatAvsA">
+          <table class="table">
+            <tr>
+              <th></th>
+              <th><a href=#twoDMotion>A: twoDMotion</a></th>
+              <th><a href=#cartSyst>A: cartSyst</a></th>
+              <th><a href=#yAxisGravity>A: yAxisGravity</a></th>
+              <th><a href=#launchOrigin>A: launchOrigin</a></th>
+              <th><a href=#targetXAxis>A: targetXAxis</a></th>
+              <th><a href=#posXDirection>A: posXDirection</a></th>
+              <th><a href=#constAccel>A: constAccel</a></th>
+              <th><a href=#accelXZero>A: accelXZero</a></th>
+              <th><a href=#accelYGravity>A: accelYGravity</a></th>
+              <th><a href=#neglectDrag>A: neglectDrag</a></th>
+              <th><a href=#pointMass>A: pointMass</a></th>
+              <th><a href=#freeFlight>A: freeFlight</a></th>
+              <th><a href=#neglectCurv>A: neglectCurv</a></th>
+              <th><a href=#timeStartZero>A: timeStartZero</a></th>
+              <th><a href=#gravAccelValue>A: gravAccelValue</a></th>
+            </tr>
+            <tr>
+              <td><a href=#twoDMotion>A: twoDMotion</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#cartSyst>A: cartSyst</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#yAxisGravity>A: yAxisGravity</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#launchOrigin>A: launchOrigin</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#targetXAxis>A: targetXAxis</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#posXDirection>A: posXDirection</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#constAccel>A: constAccel</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td>X</td>
+              <td>X</td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#accelXZero>A: accelXZero</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#accelYGravity>A: accelYGravity</a></td>
+              <td></td>
+              <td></td>
+              <td>X</td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#neglectDrag>A: neglectDrag</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#pointMass>A: pointMass</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#freeFlight>A: freeFlight</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#neglectCurv>A: neglectCurv</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#timeStartZero>A: timeStartZero</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#gravAccelValue>A: gravAccelValue</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </table>
+          <p class="caption">
+            Traceability Matrix Showing the Connections Between Assumptions dependence of each other.
+          </p>
+        </div>
         <div id="Table:TraceMatAvsAll">
           <table class="table">
             <tr>

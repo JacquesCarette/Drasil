@@ -20,7 +20,7 @@ PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 
 # Current list of examples
 SRC_EXAMPLES = glassbr nopcm projectile
-EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template
+EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template dblpendulum pdController
 GOOLTEST = gooltest
 
 # where they live
@@ -33,11 +33,14 @@ GAMEPHYSICS_DIR  = GamePhysics
 PROJECTILE_DIR = Projectile
 TEMPLATE_DIR = Template
 GOOLTEST_DIR = GOOLTest
+DBLPENDULUM_DIR = DblPendulum
+PDCONTROLLER_DIR = PDController
 
 MULTI_SRC_DIRS = $(PROJECTILE_DIR) # Directories for examples with multiple src versions
 
 EXAMPLE_DIRS = $(MULTI_SRC_DIRS) $(HGHC_DIR) $(GLASSBR_DIR) $(NOPCM_DIR) \
-  $(SWHS_DIR) $(SSP_DIR) $(GAMEPHYSICS_DIR) # All example directories
+  $(SWHS_DIR) $(SSP_DIR) $(GAMEPHYSICS_DIR)  $(DBLPENDULUM_DIR) \
+  $(PDCONTROLLER_DIR) # All example directories
 
 # and the name of their executables
 HGHC_EXE  = hghc
@@ -49,6 +52,8 @@ GAMEPHYSICS_EXE  = gamephysics
 PROJECTILE_EXE = projectile
 TEMPLATE_EXE = template
 GOOLTEST_EXE = codegenTest
+DBLPENDULUM_EXE = dblpendulum
+PDCONTROLLER_EXE = pdController
 
 # and the associated per-example information generated
 GEN_E_SUFFIX = _gen
@@ -65,7 +70,7 @@ DCP_EXAMPLES = $(addsuffix $(DCP_E_SUFFIX), $(EXAMPLES))
 
 EXAMPLE_GEN_TARGET = GEN TEST TEX CODE DCP
 
-GENNED_FOLDERS = $(LOG_FOLDER_NAME) $(BUILD_FOLDER_NAME) $(GRAPH_FOLDER_NAME) $(DEPLOY_FOLDER_NAME)
+GENNED_FOLDERS = $(LOG_FOLDER_NAME) $(BUILD_FOLDER_NAME) $(GRAPH_FOLDER_NAME) $(DEPLOY_FOLDER_NAME) $(ANALYSIS_FOLDER)
 CLEAN_GF_PREFIX = clean_
 CLEAN_FOLDERS = $(addprefix $(CLEAN_GF_PREFIX), $(GENNED_FOLDERS))
 
@@ -87,6 +92,8 @@ LOG_FOLDER = $(LOG_FOLDER_NAME)/
 SCRIPT_FOLDER = scripts/
 GRAPH_FOLDER_NAME = graphs
 GRAPH_FOLDER = $(GRAPH_FOLDER_NAME)/
+ANALYSIS_FOLDER_NAME = analysis
+ANALYSIS_FOLDER = $(ANALYSIS_FOLDER_NAME)/
 DEPLOY_FOLDER_NAME = deploy
 DEPLOY_FOLDER = $(DEPLOY_FOLDER_NAME)/
 DEPLOY_CODE_PATH_KV_SEP = :
@@ -96,9 +103,12 @@ PROFALL = --executable-profiling --library-profiling
 PROFEXEC = +RTS -xc -P
 
 #  GHC build options
-GHCTHREADS += 2
+ifndef GHCTHREADS
+override GHCTHREADS = 2
+endif
+
 override GHCFLAGS += -Wall -j$(GHCTHREADS)
-override stackArgs += -j3 --ghc-options="$(GHCFLAGS)" --dump-logs --interleaved-output
+override stackArgs += --ghc-options="$(GHCFLAGS)" --dump-logs --interleaved-output
 
 #  Output amount control
 NOISY=no
@@ -157,11 +167,12 @@ $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): check_stack
 graphs: $(GRAPH_PACKAGES)
 ###
 
-# use stack to build the documentation too
-$(filter %$(DOC_P_SUFFIX), $(DOC_PACKAGES)): %$(DOC_P_SUFFIX): check_stack
-	stack haddock "drasil-$*" $(haddockArgs)
+analysis: check_stack
+	@mkdir -p $(ANALYSIS_FOLDER)
+	cd $(SCRIPT_FOLDER) && stack exec -- runghc DataTableGen.hs
 
-docs: $(DOC_PACKAGES)
+docs: check_stack
+	sh scripts/make_docs.sh
 
 %$(TEX_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(TEX_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
@@ -199,7 +210,7 @@ deploy_code_path: $(DCP_EXAMPLES)
 deploy_lite:
 	@mkdir -p "$(DEPLOY_FOLDER)"
 	@BUILD_FOLDER="$(BUILD_FOLDER)" DEPLOY_FOLDER="$(DEPLOY_FOLDER)" GRAPH_FOLDER="$(GRAPH_FOLDER)" \
-	EXAMPLE_DIRS="$(EXAMPLE_DIRS)" MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" \
+	EXAMPLE_DIRS="$(EXAMPLE_DIRS)" MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" ANALYSIS_FOLDER="$(ANALYSIS_FOLDER)" \
 	DEPLOY_CODE_PATH_KV_SEP="$(DEPLOY_CODE_PATH_KV_SEP)" MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"deploy_stage.sh
 
 # This rule is for use with developing deployment layout locally. As part of it, it ensures all needed
@@ -207,16 +218,16 @@ deploy_lite:
 # files appear newer and thus PDF's are regenerated. If you want to "just generate the structure,
 # everything exists," (or you've run `deploy` once already) then `deploy_lite` does just that and is
 # what `deploy.bash` calls. 
-deploy: graphs docs tex doxygen
+deploy: analysis graphs docs tex doxygen
 	"$(MAKE)" deploy_lite
 
 
 # follow two are for cleaning things out
 $(filter $(CLEAN_GF_PREFIX)%, $(CLEAN_FOLDERS)): $(CLEAN_GF_PREFIX)%:
-	- rm -r "./$*"
+	- rm -rf "./$*"
 
 clean: $(CLEAN_FOLDERS)
 	- stack clean
-	- rm "$(CACHED_MSV_FILE)"
+	- rm -f "$(CACHED_MSV_FILE)"
 
-.PHONY: clean code tex doc debug prog test graphs graphmod check_stack graphs deploy_code_path deploy deploy_lite all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)
+.PHONY: clean code analysis tex doc debug prog test graphs graphmod check_stack graphs deploy_code_path deploy deploy_lite all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)

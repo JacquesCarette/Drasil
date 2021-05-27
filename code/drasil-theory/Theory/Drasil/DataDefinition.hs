@@ -3,7 +3,7 @@ module Theory.Drasil.DataDefinition where
 
 import Control.Lens (makeLenses, (^.), view)
 import Language.Drasil
-import Data.Drasil.IdeaDicts (dataDefn)
+import Data.Drasil.TheoryConcepts (dataDefn)
 
 newtype Scope = Scp { _spec :: UID } {-indirect reference-}
 
@@ -54,16 +54,3 @@ ddNoRefs q der sn = DatDef q Global [] der (shortname' sn) (prependAbrv dataDefn
 
 qdFromDD :: DataDefinition -> QDefinition
 qdFromDD d = d ^. qd
-
--- Used to help make Qdefinitions when uid, term, and symbol come from the same source
-mkQuantDef :: (Quantity c, MayHaveUnit c) => c -> Expr -> QDefinition
-mkQuantDef c e = datadef $ getUnit c
-  where datadef (Just a) = fromEqnSt  (c ^. uid) (c ^. term) EmptyS (symbol c) (c^.typ) a e
-        datadef Nothing  = fromEqnSt' (c ^. uid) (c ^. term) EmptyS (symbol c) (c^.typ) e
-
--- Used to help make Qdefinitions when uid and symbol come from the same source, with the term is separate
-mkQuantDef' :: (Quantity c, MayHaveUnit c) => c -> NP -> Expr -> QDefinition
-mkQuantDef' c t e = datadef $ getUnit c
-  where datadef (Just a) = fromEqnSt  (c ^. uid) t EmptyS (symbol c) (c^.typ) a e
-        datadef Nothing  = fromEqnSt' (c ^. uid) t EmptyS (symbol c) (c^.typ) e
-

@@ -27,14 +27,15 @@ module GOOL.Drasil.State (
   isOutputsDeclared, addException, addExceptions, getExceptions, addCall, 
   setMainDoc, getMainDoc, setScope, getScope, setCurrMainFunc, getCurrMainFunc, 
   setThrowUsed, getThrowUsed, setErrorDefined, getErrorDefined, addIter, 
-  getIter, resetIter
+  getIter, resetIter, incrementLine, incrementWord, getLineIndex, getWordIndex, 
+  resetIndices
 ) where
 
 import GOOL.Drasil.AST (FileType(..), ScopeTag(..), QualifiedName, qualName)
 import GOOL.Drasil.CodeAnalysis (Exception, ExceptionType, printExc, hasLoc)
 import GOOL.Drasil.CodeType (ClassName)
 
-import Control.Lens (Lens', (^.), lens, makeLenses, over, set)
+import Control.Lens (Lens', (^.), lens, makeLenses, over, set, _1, _2)
 import Control.Monad.State (State, modify, gets)
 import Data.List (nub, delete)
 import Data.List.Ordered (nubSort)
@@ -55,9 +56,9 @@ data GOOLState = GS {
   _methodExceptionMap :: Map QualifiedName [ExceptionType], -- Method to exceptions thrown
   _callMap :: Map QualifiedName [QualifiedName], -- Method to other methods it calls
 
-  -- Only used for Swift, to add codes so Strings can be used as Errors
-  _throwUsed :: Bool,
-  _errorDefined :: Bool
+  -- Only used for Swift
+  _throwUsed :: Bool, -- to add code so Strings can be used as Errors
+  _errorDefined :: Bool -- to avoid duplicating that code
 } 
 makeLenses ''GOOLState
 
@@ -96,6 +97,8 @@ data ClassState = CS {
 }
 makeLenses ''ClassState
 
+type Index = Integer
+
 data MethodState = MS {
   _classState :: ClassState,
   _currParameters :: [String], -- Used to get parameter names when generating 
@@ -111,7 +114,12 @@ data MethodState = MS {
                           -- documentation to function in C++
   _currMainFunc :: Bool, -- Used by C++ to put documentation for the main
                         -- function in source instead of header file
-  _iterators :: [String]
+  _iterators :: [String],
+
+  -- Only used for Swift
+  _contentsIndices :: (Index, Index) -- Used to keep track of the current place
+                                     -- in a file being read. First Int is the 
+                                     -- line number, second is the word number.
 }
 makeLenses ''MethodState
 
@@ -249,7 +257,9 @@ initialMS = MS {
 
   _currScope = Priv,
   _currMainFunc = False,
-  _iterators = []
+  _iterators = [],
+
+  _contentsIndices = (0,0)
 }
 
 initialVS :: ValueState
@@ -521,6 +531,21 @@ getIter = gets (^. iterators)
 
 resetIter :: String -> MethodState -> MethodState
 resetIter st = over iterators (delete st)
+
+incrementLine :: MethodState -> MethodState
+incrementLine = over (contentsIndices . _1) (+1)  . set (contentsIndices . _2) 0
+
+incrementWord :: MethodState -> MethodState
+incrementWord = over (contentsIndices . _2) (+1)
+
+getLineIndex :: MS Index
+getLineIndex = gets (^. (contentsIndices . _1))
+
+getWordIndex :: MS Index
+getWordIndex = gets (^. (contentsIndices . _2))
+
+resetIndices :: MethodState -> MethodState
+resetIndices = set contentsIndices (0,0)
 
 -- Helpers
 

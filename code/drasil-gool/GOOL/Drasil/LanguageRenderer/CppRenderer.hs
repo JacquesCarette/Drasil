@@ -15,7 +15,7 @@ import GOOL.Drasil.ClassInterface (Label, MSBody, VSType, SVariable, SValue,
   VSFunction, MSStatement, MSParameter, SMethod, CSStateVar, NamedArgs, OOProg, 
   ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), bodyStatements, 
   oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), 
-  VariableElim(..), ValueSym(..), Literal(..), MathConstant(..), 
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..), 
   VariableValue(..), CommandLineArgs(..), NumericExpression(..), 
   BooleanExpression(..), Comparison(..), ValueExpression(..), funcApp, 
   selfFuncApp, extFuncApp, InternalValueExp(..), objMethodCall, FunctionSym(..),
@@ -73,8 +73,8 @@ import qualified GOOL.Drasil.LanguageRenderer.CommonPseudoOO as CP (int,
 import qualified GOOL.Drasil.LanguageRenderer.CLike as C (charRender, float, 
   double, char, listType, void, notOp, andOp, orOp, self, litTrue, litFalse, 
   litFloat, inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, 
-  increment1, decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for, 
-  while, intFunc, multiAssignError, multiReturnError)
+  increment1, decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, 
+  for, while, intFunc, multiAssignError, multiReturnError, multiTypeError)
 import qualified GOOL.Drasil.LanguageRenderer.Macros as M (runStrategy, 
   listSlice, stringListVals, stringListLists, forRange, notifyObservers)
 import GOOL.Drasil.AST (Terminator(..), ScopeTag(..), Binding(..), onBinding, 
@@ -100,7 +100,6 @@ import GOOL.Drasil.State (CS, MS, VS, lensGStoFS, lensFStoCS, lensFStoMS,
 
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,pi,const,log,exp,mod,max)
 import Control.Lens.Zoom (zoom)
-import Control.Applicative (Applicative)
 import Control.Monad (join)
 import Control.Monad.State (State, modify)
 import Data.Composition ((.:))
@@ -216,6 +215,7 @@ instance (Pair p) => TypeElim (p CppSrcCode CppHdrCode) where
   getTypeString s = getTypeString $ pfst s
   
 instance (Pair p) => RenderType (p CppSrcCode CppHdrCode) where
+  multiType = pair1List multiType multiType
   typeFromData t s d = on2StateValues pair (typeFromData t s d) (typeFromData t s d)
 
 instance (Pair p) => InternalTypeElim (p CppSrcCode CppHdrCode) where
@@ -290,6 +290,9 @@ instance (Pair p) => RenderVariable (p CppSrcCode CppHdrCode) where
 instance (Pair p) => ValueSym (p CppSrcCode CppHdrCode) where
   type Value (p CppSrcCode CppHdrCode) = ValData
   valueType v = pair (valueType $ pfst v) (valueType $ psnd v)
+
+instance (Pair p) => Argument (p CppSrcCode CppHdrCode) where
+  pointerArg = pair1 pointerArg pointerArg
 
 instance (Pair p) => Literal (p CppSrcCode CppHdrCode) where
   litTrue = on2StateValues pair litTrue litTrue
@@ -1065,6 +1068,7 @@ instance TypeElim CppSrcCode where
   getTypeString = typeString . unCPPSC
   
 instance RenderType CppSrcCode where
+  multiType _ = error $ C.multiTypeError cppName
   typeFromData t s d = toState (toCode $ td t s d)
 
 instance InternalTypeElim CppSrcCode where
@@ -1153,6 +1157,9 @@ instance RenderVariable CppSrcCode where
 instance ValueSym CppSrcCode where
   type Value CppSrcCode = ValData
   valueType = onCodeValue valType
+
+instance Argument CppSrcCode where
+  pointerArg = id
 
 instance Literal CppSrcCode where
   litTrue = C.litTrue
@@ -1718,6 +1725,7 @@ instance TypeElim CppHdrCode where
   getTypeString = typeString . unCPPHC
   
 instance RenderType CppHdrCode where
+  multiType _ = error $ C.multiTypeError cppName
   typeFromData t s d = toState $ toCode $ td t s d
 
 instance InternalTypeElim CppHdrCode where
@@ -1793,6 +1801,9 @@ instance RenderVariable CppHdrCode where
 instance ValueSym CppHdrCode where
   type Value CppHdrCode = ValData
   valueType = onCodeValue valType
+
+instance Argument CppHdrCode where
+  pointerArg = id
 
 instance Literal CppHdrCode where
   litTrue = C.litTrue

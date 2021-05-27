@@ -1,0 +1,21 @@
+ifeq "$(OS)" "Windows_NT"
+    TARGET_EXTENSION=.exe
+else
+    UNAME_S := $(shell uname -s)
+    ifeq ($(UNAME_S), Linux)
+        TARGET_EXTENSION=
+    endif
+    ifeq ($(UNAME_S), Darwin)
+        TARGET_EXTENSION=
+    endif
+endif
+
+build: FileTests$(TARGET_EXTENSION)
+
+FileTests$(TARGET_EXTENSION): main.swift
+	swiftc main.swift -o FileTests$(TARGET_EXTENSION)
+
+run: build
+	./FileTests$(TARGET_EXTENSION) $(RUNARGS)
+
+.PHONY: build run

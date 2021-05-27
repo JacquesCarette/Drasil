@@ -8,7 +8,8 @@ module Language.Drasil.Code.ExternalLibraryCall (ExternalLibraryCall,
   userDefinedParamFill, customClassFill, implementationFill, 
   constructorInfoFill, methodInfoFill, appendCurrSolFill, populateSolListFill, 
   assignArrayIndexFill, assignSolFromObjFill, initSolListFromArrayFill, 
-  initSolListWithValFill, solveAndPopulateWhileFill, returnExprListFill, fixedStatementFill
+  initSolListWithValFill, solveAndPopulateWhileFill, returnExprListFill, 
+  fixedStatementFill, initSolWithValFill
 ) where
 
 import Language.Drasil
@@ -195,3 +196,9 @@ statementStepFill = StatementF
 -- No parameters because the statement is not use-case-dependent.
 fixedStatementFill :: StepFill
 fixedStatementFill = StatementF [] []
+
+-- Corresponds to ExternalLibrary's initSolWithVal. Provides the 
+-- CodeVarChunk for one solution and one Expr for the initial element of 
+-- the solution list
+initSolWithValFill :: CodeVarChunk -> Expr -> StepFill
+initSolWithValFill s v = statementStepFill [s] [v]

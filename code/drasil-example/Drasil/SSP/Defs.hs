@@ -1,8 +1,9 @@
 module Drasil.SSP.Defs where --export all of this file
 
 import Language.Drasil
-import Data.Drasil.IdeaDicts
-import Utils.Drasil
+import Data.Drasil.Domains (civilEng)
+import Utils.Drasil.Concepts
+import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (analysis, assumption, goalStmt,
   likelyChg, physSyst, property, requirement, safety, srs, typUnc, unlikelyChg)
@@ -11,6 +12,7 @@ import Data.Drasil.Concepts.Math (surface)
 import Data.Drasil.Concepts.Physics (twoD, threeD, force, stress)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, len)
 import Data.Drasil.Concepts.SolidMechanics (mobShear, normForce, nrmStrss,shearRes)
+import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 ----Acronyms-----
 acronyms :: [CI]
@@ -59,10 +61,10 @@ ssa = compoundNC slope stabAnalysis
 effFandS, slpSrf, crtSlpSrf, plnStrn, fsConcept, waterTable :: ConceptChunk
 effFandS = dccWDS "effective forces and stresses" 
   (cn "effective forces and stresses") 
-  (S "The" +:+ phrase normForce `sOr` phrase nrmStrss +:+
+  (S "The" +:+ phrase normForce `S.or_` phrase nrmStrss +:+
   S "carried by the" +:+ phrase soil +:+ S "skeleton" `sC`
-  S "composed of the effective" +:+ phrase force `sOr` phrase stress `andThe`
-  phrase force `sOr` phrase stress +:+ S "exerted by water")
+  S "composed of the effective" +:+ phrase force `S.or_` phrase stress `S.andThe`
+  phrase force `S.or_` phrase stress +:+ S "exerted by water")
 
 slpSrf = dccWDS "slip surface" (cn' "slip surface") (S "A" +:+
   phrase surface +:+ S "within a" +:+ phrase slope +:+ S "that has the" +:+
@@ -100,4 +102,4 @@ factor :: NamedChunk --FIXME: this is here becuase this phrase is
 factor = nc "factor" (cn' "factor") -- possible use this everywhere
                                       -- (fs, fs_rc, fsConcept...)
 factorOfSafety :: NP
-factorOfSafety = factor `of_''` safety
+factorOfSafety = factor `of_PS` safety

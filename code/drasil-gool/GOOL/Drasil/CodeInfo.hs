@@ -6,7 +6,7 @@ module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement, 
   SMethod, OOProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
   BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), 
-  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), 
+  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..), 
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
   Comparison(..), ValueExpression(..), InternalValueExp(..), FunctionSym(..), 
   GetSet(..), List(..), InternalList(..), StatementSym(..), 
@@ -19,10 +19,10 @@ import GOOL.Drasil.AST (ScopeTag(..), qualName)
 import GOOL.Drasil.CodeAnalysis (ExceptionType(..))
 import GOOL.Drasil.Helpers (toCode, toState)
 import GOOL.Drasil.State (GOOLState, VS, lensGStoFS, lensFStoCS, lensFStoMS,
-  lensCStoMS, lensMStoFS, lensMStoVS, lensVStoFS, lensCStoFS, 
-  modifyReturn, setClassName, setModuleName, getModuleName, addClass, updateClassMap, 
-  addException, updateMethodExcMap, updateCallMap, addCall, callMapTransClosure, 
-  updateMEMWithCalls)
+  lensCStoMS, lensMStoVS, lensVStoFS, lensCStoFS, modifyReturn, 
+  setClassName, getClassName, setModuleName, getModuleName, addClass, 
+  updateClassMap, addException, updateMethodExcMap, updateCallMap, addCall, 
+  callMapTransClosure, updateMEMWithCalls)
 
 import Control.Monad.State (State, modify)
 import qualified Control.Monad.State as S (get)
@@ -117,6 +117,9 @@ instance VariableElim CodeInfo where
 instance ValueSym CodeInfo where
   type Value CodeInfo = ()
   valueType _ = toCode ""
+
+instance Argument CodeInfo where
+  pointerArg = id
 
 instance Literal CodeInfo where
   litTrue     = noInfo
@@ -354,8 +357,8 @@ instance MethodSym CodeInfo where
   constructor _ il b = do
     mapM_ (zoom lensMStoVS . snd) il
     _ <- b
-    mn <- zoom lensMStoFS getModuleName
-    modify (updateCallMap mn . updateMethodExcMap mn)
+    cn <- getClassName
+    modify (updateCallMap cn . updateMethodExcMap cn)
     noInfo
 
   docMain = updateMEMandCM "main"
@@ -394,7 +397,6 @@ instance ClassSym CodeInfo where
     modify (addClass n . setClassName n)
     mapM_ (zoom lensCStoMS) ms
     noInfo
-
 
   docClass _ c = do
     _ <- c

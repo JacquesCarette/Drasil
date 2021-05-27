@@ -369,7 +369,7 @@
                 <tr>
                   <td><em><b>r</b></em></td>
                   <td>
-                    Position Vector: The a vector from the origin of the Cartesian coordinate system defined to the point where the force is applied.
+                    Position Vector: A vector from the origin of the Cartesian coordinate system defined to the point where the force is applied.
                   </td>
                   <td><em>m</em></td>
                 </tr>
@@ -1781,7 +1781,7 @@
                   <div class="subsubsubsection">
                     <h4></h4>
                     <p class="paragraph">
-                      Derived by substituting <a href=#DD:normStress>DD: normStress</a> into <a href=#TM:effStress>TM: effStress</a> and multiplying both sides of the equation by the the area of the slice in the shear-<em>z</em> plane. Since the slope is assumed to extend infinitely in the <em>z</em>-direction (<a href=#assumpPSC>A: Plane-Strain-Conditions</a>), the resulting forces are expressed per metre in the <em>z</em>-direction.
+                      Derived by substituting <a href=#DD:normStress>DD: normStress</a> into <a href=#TM:effStress>TM: effStress</a> and multiplying both sides of the equation by the area of the slice in the shear-<em>z</em> plane. Since the slope is assumed to extend infinitely in the <em>z</em>-direction (<a href=#assumpPSC>A: Plane-Strain-Conditions</a>), the resulting forces are expressed per metre in the <em>z</em>-direction.
                     </p>
                   </div>
                 </div>
@@ -2321,7 +2321,7 @@
                     </p>
                     \[{\mathbf{W}}_{i}={\mathbf{b}}_{i} \frac{1}{2} \left({\mathbf{y}_{\text{slope},i}}-{\mathbf{y}_{\text{slip},i}}+{\mathbf{y}_{\text{slope},i-1}}-{\mathbf{y}_{\text{slip},i-1}}\right) {γ_{\text{dry}}}\]
                     <p class="paragraph">
-                      For the case where the water table is between the slope surface and slip surface, the weights are the sums of the the weights of the dry portions and weights of the saturated portions of the soil. Substituting values for dry and saturated soil into the equation for weight from <a href=#GD:weight>GD: weight</a> and adding them together yields:
+                      For the case where the water table is between the slope surface and slip surface, the weights are the sums of the weights of the dry portions and weights of the saturated portions of the soil. Substituting values for dry and saturated soil into the equation for weight from <a href=#GD:weight>GD: weight</a> and adding them together yields:
                     </p>
                     \[{\mathbf{W}}_{i}={\mathbf{V}_{\text{dry},i}} {γ_{\text{dry}}}+{\mathbf{V}_{\text{sat},i}} {γ_{\text{sat}}}\]
                     <p class="paragraph">
@@ -3156,7 +3156,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The torque on a body measures the the tendency of a force to rotate the body around an axis or pivot.
+                          The torque on a body measures the tendency of a force to rotate the body around an axis or pivot.
                         </p>
                       </td>
                     </tr>
@@ -3947,7 +3947,7 @@
                       <td>
                         \[{\mathbf{C}_{\text{num},i}}=\begin{cases}
                                                       {\mathbf{b}}_{1} \left({\mathbf{G}}_{1}+{\mathbf{H}}_{1}\right) \tan\left({\mathbf{α}}_{1}\right), & i=1\\
-                                                      {\mathbf{b}}_{i} \left({{\mathbf{F}_{\text{x}}}^{\text{G}}}+{{\mathbf{F}_{\text{x}}}^{\text{H}}}\right) \tan\left({\mathbf{α}}_{i}\right)+\mathbf{h} -2 {\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right), & 2\leq{}i\leq{}n-1\\
+                                                      {\mathbf{b}}_{i} \left({{\mathbf{F}_{\text{x}}}^{\text{G}}}+{{\mathbf{F}_{\text{x}}}^{\text{H}}}\right) \tan\left({\mathbf{α}}_{i}\right)+\mathbf{h} -\left(2\right) {\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right), & 2\leq{}i\leq{}n-1\\
                                                       {\mathbf{b}}_{n} \left({\mathbf{G}}_{n-1}+{\mathbf{H}}_{n-1}\right) \tan\left({\mathbf{α}}_{n-1}\right), & i=n
                                                       \end{cases}\]
                       </td>
@@ -4334,91 +4334,85 @@
                     <tr>
                       <td><em>c&prime;</em></td>
                       <td><em>c&prime;&thinsp;&gt;&thinsp;0</em></td>
-                      <td><em>10.0&sdot;10<sup>3</sup></em> <em>Pa</em></td>
+                      <td><em>10000</em> <em>Pa</em></td>
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
                       <td><em>x<sub>slip</sub><sup>maxEtr</sup></em></td>
                       <td>--</td>
-                      <td><em>20.0</em> <em>m</em></td>
+                      <td><em>20</em> <em>m</em></td>
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
                       <td><em>x<sub>slip</sub><sup>maxExt</sup></em></td>
                       <td>--</td>
-                      <td><em>100.0</em> <em>m</em></td>
+                      <td><em>100</em> <em>m</em></td>
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
                       <td><em>x<sub>slip</sub><sup>minEtr</sup></em></td>
                       <td>--</td>
-                      <td><em>0.0</em> <em>m</em></td>
+                      <td><em>0</em> <em>m</em></td>
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
                       <td><em>x<sub>slip</sub><sup>minExt</sup></em></td>
                       <td>--</td>
-                      <td><em>50.0</em> <em>m</em></td>
+                      <td><em>50</em> <em>m</em></td>
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
                       <td><em><b>x</b><sub>slope</sub></em></td>
                       <td>--</td>
-                      <td><em>0.0</em> <em>m</em></td>
+                      <td><em>0</em> <em>m</em></td>
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
                       <td><em><b>x</b><sub>wt</sub></em></td>
                       <td>--</td>
-                      <td><em>0.0</em> <em>m</em></td>
+                      <td><em>0</em> <em>m</em></td>
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
                       <td><em>y<sub>slip</sub><sup>max</sup></em></td>
                       <td>--</td>
-                      <td><em>30.0</em> <em>m</em></td>
+                      <td><em>30</em> <em>m</em></td>
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
                       <td><em>y<sub>slip</sub><sup>min</sup></em></td>
                       <td>--</td>
-                      <td><em>0.0</em> <em>m</em></td>
+                      <td><em>0</em> <em>m</em></td>
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
                       <td><em><b>y</b><sub>slope</sub></em></td>
                       <td>--</td>
-                      <td><em>0.0</em> <em>m</em></td>
+                      <td><em>0</em> <em>m</em></td>
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
                       <td><em><b>y</b><sub>wt</sub></em></td>
                       <td>--</td>
-                      <td><em>0.0</em> <em>m</em></td>
+                      <td><em>0</em> <em>m</em></td>
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
                       <td><em>γ<sub>dry</sub></em></td>
                       <td><em>γ<sub>dry</sub>&thinsp;&gt;&thinsp;0</em></td>
-                      <td>
-                        <em>20.0&sdot;10<sup>3</sup></em> <em>\(\frac{\text{N}}{\text{m}^{3}}\)</em>
-                      </td>
+                      <td><em>20000</em> <em>\(\frac{\text{N}}{\text{m}^{3}}\)</em></td>
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
                       <td><em>γ<sub>sat</sub></em></td>
                       <td><em>γ<sub>sat</sub>&thinsp;&gt;&thinsp;0</em></td>
-                      <td>
-                        <em>20.0&sdot;10<sup>3</sup></em> <em>\(\frac{\text{N}}{\text{m}^{3}}\)</em>
-                      </td>
+                      <td><em>20000</em> <em>\(\frac{\text{N}}{\text{m}^{3}}\)</em></td>
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
                       <td><em>γ<sub>w</sub></em></td>
                       <td><em>γ<sub>w</sub>&thinsp;&gt;&thinsp;0</em></td>
-                      <td>
-                        <em>9.8&sdot;10<sup>3</sup></em> <em>\(\frac{\text{N}}{\text{m}^{3}}\)</em>
-                      </td>
+                      <td><em>9800</em> <em>\(\frac{\text{N}}{\text{m}^{3}}\)</em></td>
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
@@ -4426,7 +4420,7 @@
                       <td>
                         <em>0&thinsp;&lt;&thinsp;φ&prime;&thinsp;&lt;&thinsp;90</em>
                       </td>
-                      <td><em>25.0</em> <em>&deg;</em></td>
+                      <td><em>25</em> <em>&deg;</em></td>
                       <td>10<em>%</em></td>
                     </tr>
                   </table>
@@ -4740,8 +4734,354 @@
       <div class="section">
         <h1>Traceability Matrices and Graphs</h1>
         <p class="paragraph">
-          The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an "X" should be modified as well. <a href=#Table:TraceMatAvsAll>Table:TraceMatAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href=#Table:TraceMatRefvsRef>Table:TraceMatRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. <a href=#Table:TraceMatAllvsR>Table:TraceMatAllvsR</a> shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
+          The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an "X" should be modified as well. <a href=#Table:TraceMatAvsA>Table:TraceMatAvsA</a> shows the dependencies of assumptions on the assumptions. <a href=#Table:TraceMatAvsAll>Table:TraceMatAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href=#Table:TraceMatRefvsRef>Table:TraceMatRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. <a href=#Table:TraceMatAllvsR>Table:TraceMatAllvsR</a> shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
         </p>
+        <div id="Table:TraceMatAvsA">
+          <table class="table">
+            <tr>
+              <th></th>
+              <th><a href=#assumpSSC>A: Slip-Surface-Concave</a></th>
+              <th><a href=#assumpFOS>A: Factor-of-Safety</a></th>
+              <th><a href=#assumpSLH>A: Soil-Layer-Homogeneous</a></th>
+              <th><a href=#assumpSP>A: Soil-Properties</a></th>
+              <th><a href=#assumpSLI>A: Soil-Layers-Isotropic</a></th>
+              <th>
+                <a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a>
+              </th>
+              <th><a href=#assumpPSC>A: Plane-Strain-Conditions</a></th>
+              <th><a href=#assumpENSL>A: Effective-Norm-Stress-Large</a></th>
+              <th>
+                <a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>
+              </th>
+              <th><a href=#assumpES>A: Edge-Slices</a></th>
+              <th><a href=#assumpSF>A: Seismic-Force</a></th>
+              <th><a href=#assumpSL>A: Surface-Load</a></th>
+              <th><a href=#assumpWIBE>A: Water-Intersects-Base-Edge</a></th>
+              <th><a href=#assumpWISE>A: Water-Intersects-Surface-Edge</a></th>
+              <th>
+                <a href=#assumpNESSS>A: Negligible-Effect-Surface-Slope-Seismic</a>
+              </th>
+              <th>
+                <a href=#assumpHFSM>A: Hydrostatic-Force-Slice-Midpoint</a>
+              </th>
+            </tr>
+            <tr>
+              <td><a href=#assumpSSC>A: Slip-Surface-Concave</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#assumpFOS>A: Factor-of-Safety</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#assumpSLH>A: Soil-Layer-Homogeneous</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#assumpSP>A: Soil-Properties</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#assumpSLI>A: Soil-Layers-Isotropic</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                <a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#assumpPSC>A: Plane-Strain-Conditions</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#assumpENSL>A: Effective-Norm-Stress-Large</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                <a href=#assumpSBSBISL>A: Surface-Base-Slice-between-Interslice-Straight-Lines</a>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#assumpES>A: Edge-Slices</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#assumpSF>A: Seismic-Force</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#assumpSL>A: Surface-Load</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#assumpWIBE>A: Water-Intersects-Base-Edge</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#assumpWISE>A: Water-Intersects-Surface-Edge</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                <a href=#assumpNESSS>A: Negligible-Effect-Surface-Slope-Seismic</a>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                <a href=#assumpHFSM>A: Hydrostatic-Force-Slice-Midpoint</a>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </table>
+          <p class="caption">
+            Traceability Matrix Showing the Connections Between Assumptions dependence of each other.
+          </p>
+        </div>
         <div id="Table:TraceMatAvsAll">
           <table class="table">
             <tr>

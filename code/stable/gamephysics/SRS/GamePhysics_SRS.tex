@@ -73,7 +73,7 @@ $\mathbf{a}$ & Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $\mathbf{a}\text{(}t\text{)}$ & Linear Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
-${\mathbf{a}_{i}}$ & The I-Th Body's Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+${\mathbf{a}_{j}}$ & J-Th Body's Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 ${C_{\text{R}}}$ & Coefficient of restitution & --
 \\
@@ -91,7 +91,7 @@ ${\mathbf{F}_{2}}$ & Force exerted by the second body (on another body) & ${\tex
 \\
 ${\mathbf{F}_{\mathbf{g}}}$ & Force of gravity & ${\text{N}}$
 \\
-${\mathbf{F}_{i}}$ & Force Applied to the I-Th Body at Time T & ${\text{N}}$
+${\mathbf{F}_{j}}$ & Force Applied to the J-Th Body at Time T & ${\text{N}}$
 \\
 $G$ & Gravitational constant & $\frac{\text{m}^{3}}{\text{kg}\text{s}^{2}}$
 \\
@@ -171,9 +171,9 @@ ${\mathbf{v}_{\text{B}}}$ & Velocity at Point B & $\frac{\text{m}}{\text{s}}$
 \\
 ${{\mathbf{v}_{\text{f}}}^{\text{A}\text{B}}}$ & Final Relative Velocity Between Rigid Bodies of A and B & $\frac{\text{m}}{\text{s}}$
 \\
-${\mathbf{v}_{i}}$ & Velocity of the I-Th Body's Velocity & $\frac{\text{m}}{\text{s}}$
-\\
 ${{\mathbf{v}_{\text{i}}}^{\text{A}\text{B}}}$ & Initial Relative Velocity Between Rigid Bodies of A and B & $\frac{\text{m}}{\text{s}}$
+\\
+${\mathbf{v}_{j}}$ & Velocity of the J-Th Body's Velocity & $\frac{\text{m}}{\text{s}}$
 \\
 ${\mathbf{v}_{\text{O}}}$ & Velocity at Point Origin & $\frac{\text{m}}{\text{s}}$
 \\
@@ -193,7 +193,7 @@ $θ$ & Angular Displacement & ${\text{rad}}$
 \\
 $\mathbf{τ}$ & Torque & $\text{N}\text{m}$
 \\
-${\mathbf{τ}_{i}}$ & Torque applied to the i-th body & $\text{N}\text{m}$
+${\mathbf{τ}_{j}}$ & Torque applied to the j-th body & $\text{N}\text{m}$
 \\
 $ω$ & Angular Velocity & $\frac{\text{rad}}{\text{s}}$
 \\
@@ -279,7 +279,7 @@ This section provides general information about the system. It identifies the in
 
 \subsection{System Context}
 \label{Sec:SysContext}
-\hyperref[Figure:sysCtxDiag]{Fig:sysCtxDiag} shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (Game Physics). Arrows are used to show the data flow between the system and its environment.
+\hyperref[Figure:sysCtxDiag]{Fig:sysCtxDiag} shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (Game Physics). Arrows are used to show the data flow between the system and its environment.
 
 \begin{figure}
 \begin{center}
@@ -525,7 +525,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{\hat{d}}$ is the unit vector directed from the center of the large mass to the center of the smaller mass (${\text{m}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & If one of the masses is much larger than the other it is convenient to define a gravitational field around the larger mass as shown above. The negative sign in the equation indicates that the force is an attractive force.
+Notes & If one of the masses is much larger than the other, it is convenient to define a gravitational field around the larger mass as shown above. The negative sign in the equation indicates that the force is an attractive force.
         
 \\ \midrule \\
 Source & \hyperref{https://en.wikipedia.org/wiki/Gravitational_acceleration}{}{}{Definition of Gravitational Acceleration}
@@ -548,7 +548,7 @@ The above equation governs the gravitational attraction between two bodies. Supp
 \begin{displaymath}
 \mathbf{\hat{d}}=\frac{\mathbf{d}}{\text{||}\mathbf{d}\text{||}}
 \end{displaymath}
-Given the above assumptions, let $M$ and $m$ be the the mass of the massive and light body respectively. Equating $\mathbf{F}$ above with Newton's second law for the force experienced by the light body, we get:
+Given the above assumptions, let $M$ and $m$ be the mass of the massive and light body respectively. Equating $\mathbf{F}$ above with Newton's second law for the force experienced by the light body, we get:
 
 \begin{displaymath}
 {\mathbf{F}_{\mathbf{g}}}=G \frac{M m}{{\text{||}\mathbf{d}\text{||}^{2}}} \mathbf{\hat{d}}=m \mathbf{g}
@@ -957,7 +957,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{F}$ is the force (${\text{N}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The torque on a body measures the the tendency of a force to rotate the body around an axis or pivot.
+Notes & The torque on a body measures the tendency of a force to rotate the body around an axis or pivot.
         
 \\ \midrule \\
 Source & --
@@ -986,7 +986,7 @@ Units & ${\text{J}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           KE=\frac{m \mathbf{v}^{2}}{2}
+           KE=m \frac{\mathbf{v}^{2}}{2}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -1135,12 +1135,12 @@ Newton's second law of motion states:
 \begin{displaymath}
 \mathbf{F}=m \mathbf{a}=m \frac{\,d\mathbf{v}}{\,dt}
 \end{displaymath}
-Rearranging :
+Rearranging:
 
 \begin{displaymath}
 \int_{{t_{1}}}^{{t_{2}}}{\mathbf{F}}\,dt=m \left(\int_{{\mathbf{v}_{1}}}^{{\mathbf{v}_{2}}}{1}\,d\mathbf{v}\right)
 \end{displaymath}
-Integrating the right hand side :
+Integrating the right hand side:
 
 \begin{displaymath}
 \int_{{t_{1}}}^{{t_{2}}}{\mathbf{F}}\,dt=m {\mathbf{v}_{2}}-m {\mathbf{v}_{1}}=m Δ\mathbf{v}
@@ -1242,17 +1242,17 @@ The goal \hyperref[linearGS]{GS: Determine-Linear-Properties} is met by \hyperre
 \phantomsection 
 \label{IM:transMot}
 \\ \midrule \\
-Label & Force on the translational motion of a set of 2d rigid bodies
+Label & Force on the translational motion of a set of 2D rigid bodies
         
 \\ \midrule \\
-Input & ${\mathbf{v}_{i}}$, $t$, $\mathbf{g}$, ${\mathbf{F}_{i}}$, ${m_{j}}$
+Input & ${\mathbf{v}_{j}}$, $t$, $\mathbf{g}$, ${\mathbf{F}_{j}}$, ${m_{j}}$
         
 \\ \midrule \\
-Output & ${\mathbf{a}_{i}}$
+Output & ${\mathbf{a}_{j}}$
          
 \\ \midrule \\
 Input Constraints & \begin{displaymath}
-                    {\mathbf{v}_{i}}\gt{}0
+                    {\mathbf{v}_{j}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
                     t\gt{}0
@@ -1261,7 +1261,7 @@ Input Constraints & \begin{displaymath}
                     \mathbf{g}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    {\mathbf{F}_{i}}\gt{}0
+                    {\mathbf{F}_{j}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
                     {m_{j}}\gt{}0
@@ -1270,19 +1270,19 @@ Input Constraints & \begin{displaymath}
 Output Constraints & 
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {\mathbf{a}_{i}}=\frac{\,d{\mathbf{v}_{i}}\left(t\right)}{\,dt}=\mathbf{g}+\frac{{\mathbf{F}_{i}}\left(t\right)}{{m_{j}}}
+           {\mathbf{a}_{j}}=\frac{\,d{\mathbf{v}_{j}}\left(t\right)}{\,dt}=\mathbf{g}+\frac{{\mathbf{F}_{j}}\left(t\right)}{{m_{j}}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${\mathbf{a}_{i}}$ is the the i-th body's acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${\mathbf{a}_{j}}$ is the j-th body's acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$t$ is the time (${\text{s}}$)}
-              \item{${\mathbf{v}_{i}}$ is the velocity of the i-th body's velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{${\mathbf{v}_{j}}$ is the velocity of the j-th body's velocity ($\frac{\text{m}}{\text{s}}$)}
               \item{$\mathbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
-              \item{${\mathbf{F}_{i}}$ is the force applied to the i-th body at time t (${\text{N}}$)}
+              \item{${\mathbf{F}_{j}}$ is the force applied to the j-th body at time t (${\text{N}}$)}
               \item{${m_{j}}$ is the mass of the j-th particle (${\text{kg}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The above equation expresses the total acceleration of the rigid body $i$ as the sum of gravitational acceleration (from \hyperref[GD:accelGravity]{GD: accelGravity}) and acceleration due to applied force ${\mathbf{F}_{i}}\left(t\right)$ (from \hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}). The resultant outputs are then obtained from this equation using \hyperref[DD:linDisp]{DD: linDisp}, \hyperref[DD:linVel]{DD: linVel}, and \hyperref[DD:linAcc]{DD: linAcc}.
+Notes & The above equation expresses the total acceleration of the rigid body $j$ as the sum of gravitational acceleration (from \hyperref[GD:accelGravity]{GD: accelGravity}) and acceleration due to applied force ${\mathbf{F}_{j}}\left(t\right)$ (from \hyperref[TM:NewtonSecLawMot]{TM: NewtonSecLawMot}). The resultant outputs are then obtained from this equation using \hyperref[DD:linDisp]{DD: linDisp}, \hyperref[DD:linVel]{DD: linVel}, and \hyperref[DD:linAcc]{DD: linAcc}.
         
         The output of the instance model will be the functions of position and velocity over time that satisfy the ODE for the acceleration, with the given initial conditions for position and velocity. The motion is translational, so the position and velocity functions are for the centre of mass (from \hyperref[DD:ctrOfMass]{DD: ctrOfMass}).
         
@@ -1310,7 +1310,7 @@ RefBy &
 Label & Force on the rotational motion of a set of 2D rigid body
         
 \\ \midrule \\
-Input & $ω$, $t$, ${\mathbf{τ}_{i}}$, $\mathbf{I}$
+Input & $ω$, $t$, ${\mathbf{τ}_{j}}$, $\mathbf{I}$
         
 \\ \midrule \\
 Output & $α$
@@ -1323,7 +1323,7 @@ Input Constraints & \begin{displaymath}
                     t\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
-                    {\mathbf{τ}_{i}}\gt{}0
+                    {\mathbf{τ}_{j}}\gt{}0
                     \end{displaymath}
                     \begin{displaymath}
                     \mathbf{I}\gt{}0
@@ -1334,18 +1334,18 @@ Output Constraints & \begin{displaymath}
                      \end{displaymath}
 \\ \midrule \\
 Equation & \begin{displaymath}
-           α=\frac{\,dω\left(t\right)}{\,dt}=\frac{{\mathbf{τ}_{i}}\left(t\right)}{\mathbf{I}}
+           α=\frac{\,dω\left(t\right)}{\,dt}=\frac{{\mathbf{τ}_{j}}\left(t\right)}{\mathbf{I}}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$α$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)}
               \item{$t$ is the time (${\text{s}}$)}
               \item{$ω$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)}
-              \item{${\mathbf{τ}_{i}}$ is the torque applied to the i-th body ($\text{N}\text{m}$)}
+              \item{${\mathbf{τ}_{j}}$ is the torque applied to the j-th body ($\text{N}\text{m}$)}
               \item{$\mathbf{I}$ is the moment of inertia ($\text{kg}\text{m}^{2}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The above equation for the total angular acceleration of the rigid body $i$ is derived from \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}, and the resultant outputs are then obtained from this equation using \hyperref[DD:angDisp]{DD: angDisp}, \hyperref[DD:angVel]{DD: angVel}, and \hyperref[DD:angAccel]{DD: angAccel}.
+Notes & The above equation for the total angular acceleration of the rigid body $j$ is derived from \hyperref[TM:NewtonSecLawRotMot]{TM: NewtonSecLawRotMot}, and the resultant outputs are then obtained from this equation using \hyperref[DD:angDisp]{DD: angDisp}, \hyperref[DD:angVel]{DD: angVel}, and \hyperref[DD:angAccel]{DD: angAccel}.
         
         All bodies are assumed to be rigid (from \hyperref[assumpOT]{A: objectTy}) and two-dimensional (from \hyperref[assumpOD]{A: objectDimension}).
         
@@ -1430,7 +1430,7 @@ RefBy &
 
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
-\hyperref[Table:InDataConstraints]{Table:InDataConstraints} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. FIXME
+\hyperref[Table:InDataConstraints]{Table:InDataConstraints} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
 
 \begin{longtable}{l l l l l}
 \toprule
@@ -1454,7 +1454,7 @@ $\mathbf{p}$ & -- & -- & $0.412$ ${\text{m}}$ & 10$\%$
 \\
 $\mathbf{v}$ & -- & -- & $2.51$ $\frac{\text{m}}{\text{s}}$ & 10$\%$
 \\
-$\mathbf{τ}$ & -- & -- & $200.0$ $\text{N}\text{m}$ & 10$\%$
+$\mathbf{τ}$ & -- & -- & $200$ $\text{N}\text{m}$ & 10$\%$
 \\
 $ω$ & -- & -- & $2.1$ $\frac{\text{rad}}{\text{s}}$ & 10$\%$
 \\
@@ -1513,7 +1513,7 @@ This section provides the non-functional requirements, the qualities that the so
 \item[Correctness:\phantomsection\label{correctness}]{The output of simulation results shall be compared to an existing implementation like Pymunk (please refer to: http://www.pymunk.org/en/latest/).}
 \item[Usability:\phantomsection\label{usability}]{Software shall be easy to learn and use. Usability shall be measured by how long it takes a user to learn how to use the library to create a small program to simulate the movement of 2 bodies over time in space. Creating a program should take no less than 30 to 60 minutes for an intermediate to experienced programmer.}
 \item[Understandability:\phantomsection\label{understandability}]{Users of Tamias2D shall be able to learn the software with ease. Users shall be able to easily create a small program using the library. Creating a small program to simulate the movement of 2 bodies in space should take no less that 60 minutes.}
-\item[Maintainability:\phantomsection\label{maintainability}]{The development time for any  of the likely changes should not exceed 10$\%$ percent of the original development time.}
+\item[Maintainability:\phantomsection\label{maintainability}]{The development time for any of the likely changes should not exceed 10$\%$ percent of the original development time.}
 \end{itemize}
 \section{Likely Changes}
 \label{Sec:LCs}
@@ -1552,8 +1552,32 @@ Free open source 3D game physics libraries include:
 \end{itemize}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsAll]{Table:TraceMatAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Table:TraceMatRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. \hyperref[Table:TraceMatAllvsR]{Table:TraceMatAllvsR} shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsA]{Table:TraceMatAvsA} shows the dependencies of assumptions on the assumptions. \hyperref[Table:TraceMatAvsAll]{Table:TraceMatAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Table:TraceMatRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. \hyperref[Table:TraceMatAllvsR]{Table:TraceMatAllvsR} shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
 
+\begin{longtable}{l l l l l l l l}
+\toprule
+\textbf{} & \textbf{\hyperref[assumpOT]{A: objectTy}} & \textbf{\hyperref[assumpOD]{A: objectDimension}} & \textbf{\hyperref[assumpCST]{A: coordinateSystemTy}} & \textbf{\hyperref[assumpAD]{A: axesDefined}} & \textbf{\hyperref[assumpCT]{A: collisionType}} & \textbf{\hyperref[assumpDI]{A: dampingInvolvement}} & \textbf{\hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement}}
+\\
+\midrule
+\endhead
+\hyperref[assumpOT]{A: objectTy} &  &  &  &  &  &  & 
+\\
+\hyperref[assumpOD]{A: objectDimension} &  &  &  &  &  &  & 
+\\
+\hyperref[assumpCST]{A: coordinateSystemTy} &  &  &  &  &  &  & 
+\\
+\hyperref[assumpAD]{A: axesDefined} &  &  &  &  &  &  & 
+\\
+\hyperref[assumpCT]{A: collisionType} &  &  &  &  &  &  & 
+\\
+\hyperref[assumpDI]{A: dampingInvolvement} &  &  &  &  &  &  & 
+\\
+\hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement} &  &  &  &  &  &  & 
+\\
+\bottomrule
+\caption{Traceability Matrix Showing the Connections Between Assumptions dependence of each other.}
+\label{Table:TraceMatAvsA}
+\end{longtable}
 \begin{longtable}{l l l l l l l l}
 \toprule
 \textbf{} & \textbf{\hyperref[assumpOT]{A: objectTy}} & \textbf{\hyperref[assumpOD]{A: objectDimension}} & \textbf{\hyperref[assumpCST]{A: coordinateSystemTy}} & \textbf{\hyperref[assumpAD]{A: axesDefined}} & \textbf{\hyperref[assumpCT]{A: collisionType}} & \textbf{\hyperref[assumpDI]{A: dampingInvolvement}} & \textbf{\hyperref[assumpCAJI]{A: constraintsAndJointsInvolvement}}

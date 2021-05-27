@@ -7,11 +7,12 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.CSharpRenderer (
 ) where
 
 import Language.Drasil.Choices (ImplementationType(..))
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), 
-  AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
+  PackageSym(..), AuxiliarySym(..))
 import qualified 
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as 
-  G (doxConfig, readMe, sampleInput, makefile, noRunIfLib)
+  G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig, 
+  docIfEnabled)
 import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
   packD)
 import Language.Drasil.Code.Imperative.Build.AST (BuildConfig, Runnable, 
@@ -45,13 +46,17 @@ instance AuxiliarySym CSharpProject where
   type Auxiliary CSharpProject = AuxData
   type AuxHelper CSharpProject = Doc
   doxConfig = G.doxConfig optimizeDox
-  readMe imp libs n = G.readMe csName csVersion (Just "All OS's except Windows") 
-    imp libs n
+  readMe rmi =
+    G.readMe rmi {
+        langName = csName,
+        langVersion = csVersion,
+        invalidOS = Just "All OS's except Windows"}
   sampleInput = G.sampleInput
 
   optimizeDox = return no
 
-  makefile fs it = G.makefile (csBuildConfig fs it) (G.noRunIfLib it csRunnable)
+  makefile fs it cms = G.makefile (csBuildConfig fs it) 
+    (G.noRunIfLib it csRunnable) (G.docIfEnabled cms G.doxDocConfig)
 
   auxHelperDoc = unCSP
   auxFromData fp d = return $ ad fp d

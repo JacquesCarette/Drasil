@@ -6,7 +6,8 @@ import Language.Drasil
 import Data.Drasil.Citations (cartesianWiki, koothoor2013, parnasClements1986,
   smithLai2005, lineSource, pointSource, dampingSource)
 import Data.Drasil.People (bWaugh, cTitus, dParnas, daAruliah, epWhite, gWilson,
-  imMitchell, jBueche, kdHuff, mDavis, mdPlumblet, nChueHong, pWilson, rGuy, shdHaddock)
+  imMitchell, jBueche, kdHuff, mDavis, mdPlumblet, nChueHong, pWilson, rGuy, shdHaddock,
+  wikiAuthors)
 
 chaslesWiki, jfBeucheIntro, parnas1978, sciComp2013 :: Citation
 
@@ -17,7 +18,7 @@ citations = [parnas1978, sciComp2013, chaslesWiki, parnasClements1986,
 
 --FIXME: check for references made within document
 
-chaslesWiki = cMisc [author [mononym "Wikipedia Contributors"],
+chaslesWiki = cMisc [author [wikiAuthors],
   title "Chasles' theorem (kinematics)",
   howPublishedU "https://en.wikipedia.org/wiki/Chasles'_theorem_(kinematics)",
   month Nov, year 2018] "chaslesWiki"

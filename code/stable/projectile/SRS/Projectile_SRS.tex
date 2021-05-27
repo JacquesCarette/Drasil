@@ -243,10 +243,10 @@ This section simplifies the original problem and helps in developing the theoret
 \item[accelXZero:\phantomsection\label{accelXZero}]{The acceleration in the $x$-direction is zero. (RefBy: \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} and \hyperref[constAccel]{A: constAccel}.)}
 \item[accelYGravity:\phantomsection\label{accelYGravity}]{The acceleration in the $y$-direction is the acceleration due to gravity (from \hyperref[yAxisGravity]{A: yAxisGravity}). (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} and \hyperref[constAccel]{A: constAccel}.)}
 \item[neglectDrag:\phantomsection\label{neglectDrag}]{Air drag is neglected. (RefBy: \hyperref[constAccel]{A: constAccel}.)}
-\item[pointMass:\phantomsection\label{pointMass}]{The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: \hyperref[GD:rectVel]{GD: rectVel} and \hyperref[GD:rectPos]{GD: rectPos}.)}
+\item[pointMass:\phantomsection\label{pointMass}]{The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: \hyperref[GD:rectPos]{GD: rectPos} and \hyperref[GD:rectVel]{GD: rectVel}.)}
 \item[freeFlight:\phantomsection\label{freeFlight}]{The flight is free; there are no collisions during the trajectory of the projectile. (RefBy: \hyperref[constAccel]{A: constAccel}.)}
 \item[neglectCurv:\phantomsection\label{neglectCurv}]{The distance is small enough that the curvature of the Earth can be neglected. (RefBy: \hyperref[targetXAxis]{A: targetXAxis} and \hyperref[cartSyst]{A: cartSyst}.)}
-\item[timeStartZero:\phantomsection\label{timeStartZero}]{Time starts at zero. (RefBy: \hyperref[GD:velVec]{GD: velVec}, \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}, \hyperref[GD:rectVel]{GD: rectVel}, \hyperref[GD:rectPos]{GD: rectPos}, and \hyperref[GD:posVec]{GD: posVec}.)}
+\item[timeStartZero:\phantomsection\label{timeStartZero}]{Time starts at zero. (RefBy: \hyperref[GD:velVec]{GD: velVec}, \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}, \hyperref[GD:rectPos]{GD: rectPos}, \hyperref[GD:rectVel]{GD: rectVel}, and \hyperref[GD:posVec]{GD: posVec}.)}
 \item[gravAccelValue:\phantomsection\label{gravAccelValue}]{The acceleration due to gravity is assumed to have the value provided in \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants}. (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} and \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.)}
 \end{itemize}
 \subsubsection{Theoretical Models}
@@ -274,7 +274,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Source & \cite{accelerationWiki} and \cite[(pg. 7)]{hibbeler2004}
+Source & \cite{accelerationWiki}
          
 \\ \midrule \\
 RefBy & \hyperref[GD:rectVel]{GD: rectVel}
@@ -303,7 +303,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{p}$ is the position (${\text{m}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Source & \cite{velocityWiki} and \cite[(pg. 6)]{hibbeler2004}
+Source & \cite{velocityWiki}
          
 \\ \midrule \\
 RefBy & \hyperref[GD:rectPos]{GD: rectPos}
@@ -567,7 +567,7 @@ Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           v=|\mathbf{v}|
+           v=\|\mathbf{v}\|
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
@@ -575,7 +575,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & For a given velocity vector $\mathbf{v}$, the magnitude of the vector ($|\mathbf{v}|$) is the scalar called speed.
+Notes & For a given velocity vector $\mathbf{v}$, the magnitude of the vector ($\|\mathbf{v}\|$) is the scalar called speed.
         
 \\ \midrule \\
 Source & --
@@ -1021,8 +1021,48 @@ This section provides the non-functional requirements, the qualities that the so
 \end{itemize}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsAll]{Table:TraceMatAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Table:TraceMatRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. \hyperref[Table:TraceMatAllvsR]{Table:TraceMatAllvsR} shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsA]{Table:TraceMatAvsA} shows the dependencies of assumptions on the assumptions. \hyperref[Table:TraceMatAvsAll]{Table:TraceMatAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Table:TraceMatRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. \hyperref[Table:TraceMatAllvsR]{Table:TraceMatAllvsR} shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
 
+\begin{longtable}{l l l l l l l l l l l l l l l l}
+\toprule
+\textbf{} & \textbf{\hyperref[twoDMotion]{A: twoDMotion}} & \textbf{\hyperref[cartSyst]{A: cartSyst}} & \textbf{\hyperref[yAxisGravity]{A: yAxisGravity}} & \textbf{\hyperref[launchOrigin]{A: launchOrigin}} & \textbf{\hyperref[targetXAxis]{A: targetXAxis}} & \textbf{\hyperref[posXDirection]{A: posXDirection}} & \textbf{\hyperref[constAccel]{A: constAccel}} & \textbf{\hyperref[accelXZero]{A: accelXZero}} & \textbf{\hyperref[accelYGravity]{A: accelYGravity}} & \textbf{\hyperref[neglectDrag]{A: neglectDrag}} & \textbf{\hyperref[pointMass]{A: pointMass}} & \textbf{\hyperref[freeFlight]{A: freeFlight}} & \textbf{\hyperref[neglectCurv]{A: neglectCurv}} & \textbf{\hyperref[timeStartZero]{A: timeStartZero}} & \textbf{\hyperref[gravAccelValue]{A: gravAccelValue}}
+\\
+\midrule
+\endhead
+\hyperref[twoDMotion]{A: twoDMotion} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[cartSyst]{A: cartSyst} &  &  &  &  &  &  &  &  &  &  &  &  & X &  & 
+\\
+\hyperref[yAxisGravity]{A: yAxisGravity} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[launchOrigin]{A: launchOrigin} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[targetXAxis]{A: targetXAxis} &  &  &  &  &  &  &  &  &  &  &  &  & X &  & 
+\\
+\hyperref[posXDirection]{A: posXDirection} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[constAccel]{A: constAccel} &  &  &  &  &  &  &  & X & X & X &  & X &  &  & 
+\\
+\hyperref[accelXZero]{A: accelXZero} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[accelYGravity]{A: accelYGravity} &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[neglectDrag]{A: neglectDrag} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[pointMass]{A: pointMass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[freeFlight]{A: freeFlight} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[neglectCurv]{A: neglectCurv} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[timeStartZero]{A: timeStartZero} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[gravAccelValue]{A: gravAccelValue} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\bottomrule
+\caption{Traceability Matrix Showing the Connections Between Assumptions dependence of each other.}
+\label{Table:TraceMatAvsA}
+\end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l}
 \toprule
 \textbf{} & \textbf{\hyperref[twoDMotion]{A: twoDMotion}} & \textbf{\hyperref[cartSyst]{A: cartSyst}} & \textbf{\hyperref[yAxisGravity]{A: yAxisGravity}} & \textbf{\hyperref[launchOrigin]{A: launchOrigin}} & \textbf{\hyperref[targetXAxis]{A: targetXAxis}} & \textbf{\hyperref[posXDirection]{A: posXDirection}} & \textbf{\hyperref[constAccel]{A: constAccel}} & \textbf{\hyperref[accelXZero]{A: accelXZero}} & \textbf{\hyperref[accelYGravity]{A: accelYGravity}} & \textbf{\hyperref[neglectDrag]{A: neglectDrag}} & \textbf{\hyperref[pointMass]{A: pointMass}} & \textbf{\hyperref[freeFlight]{A: freeFlight}} & \textbf{\hyperref[neglectCurv]{A: neglectCurv}} & \textbf{\hyperref[timeStartZero]{A: timeStartZero}} & \textbf{\hyperref[gravAccelValue]{A: gravAccelValue}}

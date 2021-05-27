@@ -10,7 +10,7 @@ import Database.Drasil.ChunkDB (ChunkDB)
 
 import Control.Lens ((^.), makeLenses)
 import Data.Function (on)
-import Data.List (concatMap, find, groupBy, sortBy)
+import Data.List (find, groupBy, sortBy)
 import qualified Data.Map as Map
 
 -- | Data structure for holding all of the requisite information about a system
@@ -27,10 +27,12 @@ data SystemInformation where
   { _sys :: a
   , _kind :: b
   , _authors :: [c]
+  , _purpose :: d
   , _quants :: [e]
   , _concepts :: [f]
   , _definitions :: [QDefinition] --FIXME: will be removed upon migration to use of [DataDefinition] below
   , _datadefs :: [DataDefinition]
+  , _configFiles :: [String]
   , _inputs :: [h]
   , _outputs :: [i]
   , _defSequence :: [Block QDefinition]

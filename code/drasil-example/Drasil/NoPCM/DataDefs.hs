@@ -1,7 +1,7 @@
 module Drasil.NoPCM.DataDefs where --exports all of it
 
 import Language.Drasil
-import Theory.Drasil (DataDefinition, ddNoRefs, mkQuantDef)
+import Theory.Drasil (DataDefinition, ddNoRefs)
 import Utils.Drasil
 
 import Drasil.SWHS.Assumptions (assumpVCN)

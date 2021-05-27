@@ -3,12 +3,13 @@ module Drasil.SWHS.Concepts where --all of this file is exported
 import Control.Lens ((^.))
 
 import Language.Drasil
-import Utils.Drasil
+import Utils.Drasil.Concepts
 
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt,
   likelyChg, physSyst, requirement, srs, typUnc, unlikelyChg)
 import Data.Drasil.Concepts.Math (ode, parameter, rightSide)
-import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, materialEng, thModel)
+import Data.Drasil.Domains (materialEng)
+import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 con :: [ConceptChunk]
 con = [charging, coil, discharging, gaussDiv,

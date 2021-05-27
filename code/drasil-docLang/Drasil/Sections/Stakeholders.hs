@@ -2,6 +2,8 @@ module Drasil.Sections.Stakeholders (stakeholderIntro, tClientF, tCustomerF) whe
 
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Concepts
+import qualified Utils.Drasil.Sentence as S
 
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Documentation (client, customer, endUser, interest,
@@ -11,7 +13,7 @@ import Data.Drasil.Concepts.Documentation (client, customer, endUser, interest,
 stakeholderIntro :: Contents
 stakeholderIntro = foldlSP [S "This", phrase section_,
             S "describes the" +: plural stakeholder, S "the people who have an",
-            phrase interest `sIn` phraseNP (the product_)]
+            phrase interest `S.in_` phraseNP (the product_)]
 
 tClientF :: (Idea a) => a -> Sentence ->  Section
 tClientF kWord details = SRS.theClient [clientIntro kWord details] []
@@ -27,4 +29,4 @@ tCustomerF kWord = SRS.theCustomer [customerIntro kWord] []
 
 customerIntro :: (Idea a) => a -> Contents
 customerIntro kWord = foldlSP [atStartNP' $ the customer,
-  S "are the", phrase endUser `sOf` short kWord]
+  S "are the", phrase endUser `S.of_` short kWord]

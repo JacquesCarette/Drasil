@@ -684,7 +684,7 @@
                   </p>
                   <p>
                     <div id="assumpCTNTD">
-                      Charging-Tank-No-Temp-Discharge: The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil. (RefBy: <a href=#likeChgDT>LC: Discharging-Tank</a>.)
+                      Charging-Tank-No-Temp-Discharge: The model only accounts for charging the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil. (RefBy: <a href=#likeChgDT>LC: Discharging-Tank</a>.)
                     </div>
                   </p>
                   <p>
@@ -704,7 +704,7 @@
                   </p>
                   <p>
                     <div id="assumpAPT">
-                      Atmospheric-Pressure-Tank: The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature of water are 0<em>&deg;C</em> and 100<em>&deg;C</em>, respectively (RefBy: <a href=#IM:heatEInWtr>IM: heatEInWtr</a>.)
+                      Atmospheric-Pressure-Tank: The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature of water are 0<em>&deg;C</em> and 100<em>&deg;C</em>, respectively. (RefBy: <a href=#IM:heatEInWtr>IM: heatEInWtr</a>.)
                     </div>
                   </p>
                   <p>
@@ -1539,7 +1539,7 @@
                         <em>C<sub>W</sub><sup>min</sup>&thinsp;&lt;&thinsp;C<sub>W</sub>&thinsp;&lt;&thinsp;C<sub>W</sub><sup>max</sup></em>
                       </td>
                       <td>
-                        <em>4.186&sdot;10<sup>3</sup></em> <em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>
+                        <em>4186</em> <em>\(\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}\)</em>
                       </td>
                       <td>10<em>%</em></td>
                     </tr>
@@ -1559,7 +1559,7 @@
                         <em>h<sub>C</sub><sup>min</sup>&thinsp;&le;&thinsp;h<sub>C</sub>&thinsp;&le;&thinsp;h<sub>C</sub><sup>max</sup></em>
                       </td>
                       <td>
-                        <em>1.0&sdot;10<sup>3</sup></em> <em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>
+                        <em>1000</em> <em>\(\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}\)</em>
                       </td>
                       <td>10<em>%</em></td>
                     </tr>
@@ -1578,7 +1578,7 @@
                         <em>0&thinsp;&lt;&thinsp;T<sub>C</sub>&thinsp;&lt;&thinsp;100</em>
                       </td>
                       <td>--</td>
-                      <td><em>50.0</em> <em>&deg;C</em></td>
+                      <td><em>50</em> <em>&deg;C</em></td>
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
@@ -1587,7 +1587,7 @@
                         <em>0&thinsp;&lt;&thinsp;T<sub>init</sub>&thinsp;&lt;&thinsp;100</em>
                       </td>
                       <td>--</td>
-                      <td><em>40.0</em> <em>&deg;C</em></td>
+                      <td><em>40</em> <em>&deg;C</em></td>
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
@@ -1596,7 +1596,7 @@
                       <td>
                         <em>t<sub>final</sub>&thinsp;&lt;&thinsp;t<sub>final</sub><sup>max</sup></em>
                       </td>
-                      <td><em>50.0&sdot;10<sup>3</sup></em> <em>s</em></td>
+                      <td><em>50000</em> <em>s</em></td>
                       <td>10<em>%</em></td>
                     </tr>
                     <tr>
@@ -1614,9 +1614,7 @@
                       <td>
                         <em>ρ<sub>W</sub><sup>min</sup>&thinsp;&lt;&thinsp;ρ<sub>W</sub>&thinsp;&le;&thinsp;ρ<sub>W</sub><sup>max</sup></em>
                       </td>
-                      <td>
-                        <em>1.0&sdot;10<sup>3</sup></em> <em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em>
-                      </td>
+                      <td><em>1000</em> <em>\(\frac{\text{kg}}{\text{m}^{3}}\)</em></td>
                       <td>10<em>%</em></td>
                     </tr>
                   </table>
@@ -1685,7 +1683,7 @@
               </p>
               <p>
                 <div id="outputInputDerivVals">
-                  Output-Input-Derived-Values: Output the input values and derived values in the following list: the values from <a href=#inputInitVals>FR: Input-Initial-Values</a>, the mass from <a href=#findMass>FR: Find-Mass</a>, and <em>τ<sub>W</sub></em> (from <a href=#DD:balanceDecayRate>DD: balanceDecayRate</a>).
+                  Output-Input-Derived-Values: Output the input values and derived values in the following list: the values (from <a href=#inputInitVals>FR: Input-Initial-Values</a>), the mass (from <a href=#findMass>FR: Find-Mass</a>), and <em>τ<sub>W</sub></em> (from <a href=#DD:balanceDecayRate>DD: balanceDecayRate</a>).
                 </div>
               </p>
               <p>
@@ -1864,8 +1862,302 @@
       <div class="section">
         <h1>Traceability Matrices and Graphs</h1>
         <p class="paragraph">
-          The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an "X" should be modified as well. <a href=#Table:TraceMatAvsAll>Table:TraceMatAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href=#Table:TraceMatRefvsRef>Table:TraceMatRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. <a href=#Table:TraceMatAllvsR>Table:TraceMatAllvsR</a> shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
+          The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an "X" should be modified as well. <a href=#Table:TraceMatAvsA>Table:TraceMatAvsA</a> shows the dependencies of assumptions on the assumptions. <a href=#Table:TraceMatAvsAll>Table:TraceMatAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href=#Table:TraceMatRefvsRef>Table:TraceMatRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. <a href=#Table:TraceMatAllvsR>Table:TraceMatAllvsR</a> shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
         </p>
+        <div id="Table:TraceMatAvsA">
+          <table class="table">
+            <tr>
+              <th></th>
+              <th><a href=#assumpTEO>A: Thermal-Energy-Only</a></th>
+              <th><a href=#assumpHTCC>A: Heat-Transfer-Coeffs-Constant</a></th>
+              <th>
+                <a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>
+              </th>
+              <th>
+                <a href=#assumpDWCoW>A: Density-Water-Constant-over-Volume</a>
+              </th>
+              <th>
+                <a href=#assumpSHECoW>A: Specific-Heat-Energy-Constant-over-Volume</a>
+              </th>
+              <th>
+                <a href=#assumpLCCCW>A: Newton-Law-Convective-Cooling-Coil-Water</a>
+              </th>
+              <th>
+                <a href=#assumpTHCCoT>A: Temp-Heating-Coil-Constant-over-Time</a>
+              </th>
+              <th>
+                <a href=#assumpTHCCoL>A: Temp-Heating-Coil-Constant-over-Length</a>
+              </th>
+              <th>
+                <a href=#assumpCTNTD>A: Charging-Tank-No-Temp-Discharge</a>
+              </th>
+              <th><a href=#assumpWAL>A: Water-Always-Liquid</a></th>
+              <th><a href=#assumpPIT>A: Perfect-Insulation-Tank</a></th>
+              <th>
+                <a href=#assumpNIHGBW>A: No-Internal-Heat-Generation-By-Water</a>
+              </th>
+              <th><a href=#assumpAPT>A: Atmospheric-Pressure-Tank</a></th>
+              <th><a href=#assumpVCN>A: Volume-Coil-Negligible</a></th>
+            </tr>
+            <tr>
+              <td><a href=#assumpTEO>A: Thermal-Energy-Only</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#assumpHTCC>A: Heat-Transfer-Coeffs-Constant</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                <a href=#assumpCWTAT>A: Constant-Water-Temp-Across-Tank</a>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                <a href=#assumpDWCoW>A: Density-Water-Constant-over-Volume</a>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                <a href=#assumpSHECoW>A: Specific-Heat-Energy-Constant-over-Volume</a>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                <a href=#assumpLCCCW>A: Newton-Law-Convective-Cooling-Coil-Water</a>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                <a href=#assumpTHCCoT>A: Temp-Heating-Coil-Constant-over-Time</a>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                <a href=#assumpTHCCoL>A: Temp-Heating-Coil-Constant-over-Length</a>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                <a href=#assumpCTNTD>A: Charging-Tank-No-Temp-Discharge</a>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#assumpWAL>A: Water-Always-Liquid</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#assumpPIT>A: Perfect-Insulation-Tank</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td>
+                <a href=#assumpNIHGBW>A: No-Internal-Heat-Generation-By-Water</a>
+              </td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#assumpAPT>A: Atmospheric-Pressure-Tank</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr>
+              <td><a href=#assumpVCN>A: Volume-Coil-Negligible</a></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </table>
+          <p class="caption">
+            Traceability Matrix Showing the Connections Between Assumptions dependence of each other.
+          </p>
+        </div>
         <div id="Table:TraceMatAvsAll">
           <table class="table">
             <tr>

@@ -28,7 +28,6 @@ import qualified GOOL.Drasil.RendererClasses as RC (BodyElim(..),
 import GOOL.Drasil.Helpers (toCode, onStateValue, on2StateValues)
 import GOOL.Drasil.State (MS, lensMStoVS)
 
-import Data.List (lookup)
 import Data.Maybe (fromMaybe)
 import Control.Lens.Zoom (zoom)
 import Text.PrettyPrint.HughesPJ (Doc, vcat)

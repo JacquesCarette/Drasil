@@ -1,0 +1,10 @@
+#Set-Point (Unitless)
+1
+#Derivative-Gain (Unitless)
+1
+#Proportional-Gain (Unitless)
+20
+#tstep	(s)
+0.01
+#TSim	(s)
+10

@@ -215,6 +215,10 @@ and_Gen :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
 --   two for the plural case.
 and_GenGen :: (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
 
+-- | Inserts "and the" between two <a>NP</a>s. Plural case is <tt>(phraseNP
+--   t1) +:+ "and the" +:+ (pluralNP t2)</tt>.
+andThe :: NP -> NP -> NP
+
 module Utils.Drasil
 
 -- | Applies <a>Enumeration</a>, <a>Bullet</a> and <a>Flat</a> to a list.
@@ -526,7 +530,11 @@ and_PP :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Customizable <a>and_</a> combinator (takes two title case
 --   capitalization rules and two <tt>NamedIdeas</tt>).
-andTGen :: (NamedIdea c, NamedIdea d) => (c -> Sentence) -> (d -> Sentence) -> c -> d -> NP
+and_TGen :: (NamedIdea c, NamedIdea d) => (c -> Sentence) -> (d -> Sentence) -> c -> d -> NP
+
+-- | Customizable <a>and_</a> combinator. Both plural and singular cases
+--   are dermined by the two given functions
+and_Gen :: (c -> Sentence) -> (d -> Sentence) -> c -> d -> NP
 
 -- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
 --   "and its" between their terms. Plural case is <tt>(phrase t1) "and
@@ -550,6 +558,10 @@ of_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Same as <a>of_</a> but second argument is a <a>NounPhrase</a>.
 of_NINP :: (NamedIdea c, NounPhrase d) => c -> d -> NP
+
+-- | Same as <a>of_</a> but first argument is a <a>NounPhrase</a> and
+--   plural case is <tt>(plural t1) "of" (phrase t2)</tt>.
+of_PSNPNI :: (NounPhrase c, NamedIdea d) => c -> d -> NP
 
 -- | Similar to <a>of_</a>, but singular case is <tt>(phrase t1) "of"
 --   (plural t2)</tt>. Plural case is the same.
@@ -586,8 +598,12 @@ the_ofThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 --   <a>the_ofThe</a> (phrase t2)</tt>
 the_ofThePS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
--- | Same as <a>of_</a>, except combining Sentence piece is "of the".
+-- | Same as <a>of_</a>, except combining Sentence piece is "on the".
 onThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Same as <a>onThe</a>, except plural case is (plural t1) S.onThe
+--   (phrase t2)
+onThePS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
 --   "in the" between their terms. Plural case is <tt>(phrase t1) "in the"
@@ -617,11 +633,21 @@ in_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 --   t2)</tt>.
 in_PS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
--- | Prepends "the" to a <a>NamedIdea</a>. Similar to <tt>the'</tt>, but
---   not titleized.
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
+--   "in a" between their terms. Plural case is <tt>(phrase t1) "in a"
+--   (plural t2)</tt>.
+inA :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the word
+--   "is" between their terms. Plural case is <tt>(phrase t1) "is" (plural
+--   t2)</tt>.
+is :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Prepends "the" to a <a>NamedIdea</a>.
 the :: NamedIdea t => t -> NP
 
--- | Prepends "the" to a titleized <a>NamedIdea</a>.
+-- | Prepends "the" to a titleized <a>NamedIdea</a>. Similar to <a>the</a>,
+--   but titleized.
 theT :: NamedIdea t => t -> NP
 
 -- | A customizable version of <a>the</a>. The given function is applied to

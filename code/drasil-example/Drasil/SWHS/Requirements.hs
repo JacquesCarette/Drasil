@@ -82,37 +82,37 @@ oIDQConstruct x = cic "outputInputDerivVals" (foldlSentCol [
 
 oIDQVals :: [Sentence]
 oIDQVals = map foldlSent_ [
-  [pluralNP (the value), S "from", makeRef2S (inReq EmptyS)],
-  [pluralNP (the mass), S "from", makeRef2S findMass],
-  [ch balanceDecayRate, sParen (S "from" +:+ makeRef2S balanceDecayRate)],
-  [ch balanceDecayTime, sParen (S "from" +:+ makeRef2S balanceDecayTime)],
-  [ch balanceSolidPCM,  sParen (S "from" +:+ makeRef2S balanceSolidPCM)],
-  [ch balanceLiquidPCM, sParen (S "from" +:+ makeRef2S balanceLiquidPCM)]
+  [pluralNP (the value), fromSource (inReq EmptyS)],
+  [pluralNP (the mass), fromSource findMass],
+  [ch balanceDecayRate, fromSource balanceDecayRate],
+  [ch balanceDecayTime, fromSource balanceDecayTime],
+  [ch balanceSolidPCM,  fromSource balanceSolidPCM],
+  [ch balanceLiquidPCM, fromSource balanceLiquidPCM]
   ]
   
 --
 calcTempWtrOverTime = cic "calcTempWtrOverTime" (foldlSent [
   S "Calculate and", phrase output_, phraseNP (the tempW),
   sParen (ch tempW :+: sParen (ch time)), S "over the",
-  phrase simulation, phrase time, sParen (S "from" +:+ makeRef2S eBalanceOnWtr)])
+  phrase simulation, phrase time, fromSource eBalanceOnWtr])
   "Calculate-Temperature-Water-Over-Time" funcReqDom
 --
 calcTempPCMOverTime = cic "calcTempPCMOverTime" (foldlSent [
   S "Calculate and", phrase output_, phraseNP (the tempPCM),
   sParen (ch tempPCM :+: sParen (ch time)), S "over",
-  phraseNP (NP.the (combineNINI simulation time)), sParen (S "from" +:+ makeRef2S eBalanceOnPCM)])
+  phraseNP (NP.the (combineNINI simulation time)), fromSource eBalanceOnPCM])
   "Calculate-Temperature-PCM-Over-Time" funcReqDom
 --
 calcChgHeatEnergyWtrOverTime = cic "calcChgHeatEnergyWtrOverTime" (foldlSent [
   S "Calculate and", phrase output_, phraseNP (the watE),
   sParen (ch watE :+: sParen (ch time)), S "over",
-  phraseNP (NP.the (combineNINI simulation time)), sParen (S "from" +:+ makeRef2S heatEInWtr)])
+  phraseNP (NP.the (combineNINI simulation time)), fromSource heatEInWtr])
   "Calculate-Change-Heat_Energy-Water-Over-Time" funcReqDom
 --
 calcChgHeatEnergyPCMOverTime = cic "calcChgHeatEnergyPCMOverTime" (foldlSent [
   S "Calculate and", phrase output_, phraseNP (the pcmE),
   sParen (ch pcmE :+: sParen (ch time)), S "over",
-  phraseNP (NP.the (combineNINI simulation time)), sParen (S "from" +:+ makeRef2S heatEInPCM)])
+  phraseNP (NP.the (combineNINI simulation time)), fromSource heatEInPCM])
   "Calculate-Change-Heat_Energy-PCM-Over-Time" funcReqDom
 --
 verifyEnergyOutput = cic "verifyEnergyOutput" (foldlSent [
@@ -126,13 +126,13 @@ verifyEnergyOutput = cic "verifyEnergyOutput" (foldlSent [
 calcPCMMeltBegin = cic "calcPCMMeltBegin" (foldlSent [
   S "Calculate and", phrase output_, phraseNP (the time),
   S "at which the", short phsChgMtrl, S "begins to melt",
-  ch tInitMelt, sParen (S "from" +:+ makeRef2S eBalanceOnPCM)])
+  ch tInitMelt, fromSource eBalanceOnPCM])
   "Calculate-PCM-Melt-Begin-Time" funcReqDom
 --
 calcPCMMeltEnd = cic "calcPCMMeltEnd" (foldlSent [
   S "Calculate and", phrase output_, phraseNP (the time),
   S "at which the", short phsChgMtrl, S "stops", phrase CT.melting,
-  ch tFinalMelt, sParen (S "from" +:+ makeRef2S eBalanceOnPCM)])
+  ch tFinalMelt, fromSource eBalanceOnPCM])
   "Calculate-PCM-Melt-End-Time" funcReqDom
 
 -- List structure same between all examples

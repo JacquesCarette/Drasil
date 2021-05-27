@@ -40,9 +40,9 @@ findMass = findMassConstruct inputInitVals (phrase mass) [eBalanceOnWtr]
 --
 oIDQVals :: [Sentence]
 oIDQVals = map foldlSent_ [
-  [pluralNP (the value), S "from", makeRef2S inputInitVals],
-  [phraseNP (the mass), S "from", makeRef2S findMass],
-  [ch balanceDecayRate, sParen (S "from" +:+ makeRef2S balanceDecayRate)]
+  [pluralNP (the value), fromSource inputInitVals],
+  [phraseNP (the mass), fromSource findMass],
+  [ch balanceDecayRate, fromSource balanceDecayRate]
   ]
 
 inputInitValsTable :: LabelledContent

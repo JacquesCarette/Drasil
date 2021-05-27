@@ -72,7 +72,7 @@ balWtrDesc = map foldlSent [
    sParen (unwrap $ getUnit tempW), S "where", E (exactDbl 0), sParen (unwrap $ getUnit tempW) `S.and_`
    E (exactDbl 100), sParen (unwrap $ getUnit tempW) `S.are` pluralNP (NP.the ((melting `and_`
    boilPt) `of_PSNPNI` water)) `sC` S "respectively",
-   sParen (S "from" +:+ makeRef2S assumpWAL `S.and_` makeRef2S assumpAPT)]]
+   fromSources [assumpWAL, assumpAPT]]]
 
 ----------------------------------------------
 --    Derivation of eBalanceOnWtr           --
@@ -216,7 +216,7 @@ balPCMNotes = map foldlSent [
    S "even with the heating", sParen (S "or cooling") `sC` S "until the",
    phrase phaseChange, S "has occurred for all" `S.of_` S "the material; that" `S.is`
    S "as long as" +:+. E (exactDbl 0 $< sy meltFrac $< exactDbl 1), ch meltFrac,
-   sParen (S "from" +:+ makeRef2S ddMeltFrac) `S.is`
+   fromSource ddMeltFrac `S.is`
    S "determined as part" `S.ofThe` phrase heat, phrase energy `S.inThe`
    getAcc phsChgMtrl `sC` S "as given" `S.in_` sParen (makeRef2S heatEInPCM)],
   [ch tauSP `S.is` S "calculated" `S.in_` makeRef2S balanceSolidPCM],
@@ -228,7 +228,7 @@ balPCMNotes = map foldlSent [
 --    Derivation of eBalanceOnPCM          --
 ----------------------------------------------
 eBalanceOnPCMDeriv :: Derivation
-eBalanceOnPCMDeriv = mkDerivName (S "the" +:+ phrase energy +:+
+eBalanceOnPCMDeriv = mkDerivName (phraseNP (the energy) +:+
   S "balance on the PCM during sensible heating phase")
   (weave [eBalanceOnPCMDerivSentences, map E eBalanceOnPCMDerivEqnsIM2]
   ++ [eBalanceOnPCMDerivDesc5, eBalanceOnPCMDerivDesc6, eBalanceOnPCMDerivDesc7])
@@ -381,7 +381,7 @@ htPCMNotes = map foldlSent [
    S "plus", (phrase energy +:+ S "required to melt all") `S.the_ofThe` short phsChgMtrl],
   [atStartNP (the energy), S "required to melt all of the", short phsChgMtrl `S.is`
    E (sy htFusion `mulRe` sy pcmMass), sParen (unwrap $ getUnit pcmInitMltE),
-   sParen (S "from" +:+ makeRef2S ddHtFusion)],
+   fromSource ddHtFusion],
   [atStartNP (NP.the (change `in_` temp)) `S.is` E (sy tempPCM $- sy tempMeltP),
    sParen (unwrap $ getUnit tempMeltP)],
   [ch pcmE, S "during", phrase melting `S.ofThe` short phsChgMtrl,

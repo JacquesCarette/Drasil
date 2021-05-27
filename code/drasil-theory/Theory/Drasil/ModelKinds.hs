@@ -11,8 +11,6 @@ import Language.Drasil (($=), sy, Expr, RelationConcept,
   NamedIdea(..), HasUID(..), ExprRelat(..), ConceptDomain(..), Definition(..),
   Idea(..), DefiningExpr(..), UID, Sentence, QDefinition, QuantityDict)
 
--- TODO: How do we want to instantiate RealmVariants?
--- Maybe we should move it into it's own model entirely?
 data RealmVariant = RV {
   _desc :: Sentence,
   _expr :: Expr

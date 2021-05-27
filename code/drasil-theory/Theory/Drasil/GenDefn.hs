@@ -9,7 +9,7 @@ import Control.Lens (makeLenses, view, lens, (^.), set, Lens')
 
 -- | A GenDefn is a ModelKind that may have units
 data GenDefn = GD { _mk :: ModelKinds
-                  , gdUnit :: Maybe UnitDefn                  
+                  , gdUnit :: Maybe UnitDefn -- TODO: Should be derived from the ModelKinds
                   , _deri  :: Maybe Derivation
                   , _ref   :: [Reference]
                   , _sn    :: ShortName

@@ -4,7 +4,7 @@ module Drasil.GamePhysics.TMods (tMods, newtonSL, newtonSLR, newtonTL, newtonLUG
 import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
-import Theory.Drasil
+import Theory.Drasil (tmNoRefs, ModelKinds(..), RealmVariant(..), TheoryModel)
 import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 

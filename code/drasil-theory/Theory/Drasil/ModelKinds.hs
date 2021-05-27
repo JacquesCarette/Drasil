@@ -7,7 +7,7 @@ import Control.Lens ((^.), to, lens, set, makeLenses, makeLensesFor,
 import Data.Maybe (mapMaybe)
 import qualified Data.List.NonEmpty as NE
 
-import Language.Drasil (($=), sy, Expr, RelationConcept, 
+import Language.Drasil (($=), sy, Expr, RelationConcept,
   NamedIdea(..), HasUID(..), ExprRelat(..), ConceptDomain(..), Definition(..),
   Idea(..), DefiningExpr(..), UID, Sentence, QDefinition, QuantityDict)
 
@@ -38,6 +38,7 @@ instance ExprRelat     ModelKinds where
   relat (EquationalModel q)      = relat q
   relat (DEModel q)              = relat q
   relat (OthModel q)             = relat q
+-- TODO: implement MayHaveUnit for ModelKinds once we've sufficiently removed OthModels (else we'd be breaking too much of `stable`)
 
 -- | Retrieve internal data from QDefinitions/RelationConcepts
 elimMk :: Getter QDefinition a -> Getter QuantityDict a -> Getter RelationConcept a -> ModelKinds -> a

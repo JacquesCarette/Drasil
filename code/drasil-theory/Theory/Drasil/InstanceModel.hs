@@ -44,12 +44,6 @@ instance Definition         InstanceModel where defn = lensMk defn undefined def
 instance ConceptDomain      InstanceModel where cdom = cdom . (^. mk)
 instance ExprRelat          InstanceModel where relat = relat . (^. mk)
 instance DefiningExpr       InstanceModel where defnExpr = lensMk defnExpr undefined defnExpr
---  defnExpr = lens g s
---    where g :: InstanceModel -> Expr
---          g = (^. (mk . defnExpr))
---          s :: InstanceModel -> Expr -> InstanceModel
---          s im_ e = im _ _ _ _ _ _ _ _
-
 instance HasDerivation      InstanceModel where derivations = deri
 instance HasReference       InstanceModel where getReferences = ref
 instance HasShortName       InstanceModel where shortname = lb

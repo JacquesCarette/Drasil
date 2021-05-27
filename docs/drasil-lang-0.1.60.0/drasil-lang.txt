@@ -13,322 +13,428 @@
 -- | Alphabet of capital/lowercase English letters as symbols
 module Language.Drasil.ShortHands
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cA :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cB :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cC :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cD :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cE :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cF :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cG :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cH :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cI :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cJ :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cK :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cL :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cM :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cN :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cO :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cP :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cQ :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cR :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cS :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cT :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cU :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cV :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cW :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cX :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cY :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cZ :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lA :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lB :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lC :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lD :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lE :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lF :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lG :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lH :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lI :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lJ :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lK :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lL :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lM :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lN :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lO :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lP :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lQ :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lR :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lS :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lT :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lU :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lV :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lW :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lX :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lY :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lZ :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lAlpha :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cAlpha :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lBeta :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cBeta :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lGamma :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cGamma :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lDelta :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cDelta :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lEpsilon :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 vEpsilon :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cEpsilon :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lZeta :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cZeta :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lEta :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cEta :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lTheta :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cTheta :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lIota :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cIota :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lKappa :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cKappa :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lLambda :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cLambda :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lMu :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cMu :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lNu :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cNu :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lXi :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cXi :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lOmicron :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cOmicron :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lPi :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cPi :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lRho :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cRho :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lSigma :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cSigma :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lTau :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cTau :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lUpsilon :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cUpsilon :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lPhi :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 vPhi :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cPhi :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lChi :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cChi :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lPsi :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cPsi :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lOmega :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 cOmega :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lNabla :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lEll :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lPosInf :: Symbol
 
--- | c_ means capital _; l_ means lowercase _
+-- | Short forms of various variable names. c means <i>capital</i>; l means
+--   <i>lowercase</i>.
 lNegInf :: Symbol
 
 module Language.Drasil.Development
@@ -858,15 +964,17 @@ vec2D :: Expr -> Expr -> Expr
 -- | Matrix helper function.
 dgnl2x2 :: Expr -> Expr -> Expr
 
--- | Special characters including partial derivatives, degree circle, and
---   underscores
+-- | Special characters include partial derivatives and the degree circle.
 data Special
 Partial :: Special
 Circle :: Special
 
--- | Class for rendering special characters
+-- | Class for rendering special characters.
 class RenderSpecial r
 special :: RenderSpecial r => Special -> r
+
+-- | A <tt>UID</tt> is a 'unique identifier' for things that we will put
+--   into our database of information.
 type UID = String
 
 -- | The most basic item: having a unique identifier key, here a UID.
@@ -1448,8 +1556,15 @@ mkDerivName :: Sentence -> [Sentence] -> Derivation
 
 -- | Similar to <a>mkDeriv</a>, but without a header <a>Sentence</a>.
 mkDerivNoHeader :: [Sentence] -> Derivation
+
+-- | Used for holding the short form of a name (as a String with a
+--   wrapper).
 data ShortName
+
+-- | Smart constructor for making a <a>String</a> into a <a>ShortName</a>.
 shortname' :: String -> ShortName
+
+-- | Pulls the short form (as a <a>String</a>) out of a <a>ShortName</a>.
 getStringSN :: ShortName -> String
 
 -- | All citations require a unique identifier used by the Drasil chunk. We
@@ -1576,74 +1691,107 @@ class HasCitation c
 
 -- | Provides a <tt>Lens</tt> to the citations.
 getCitations :: HasCitation c => Lens' c [Citation]
-data Sentence
-[Ch] :: SentenceStyle -> UID -> Sentence
-[Sy] :: USymb -> Sentence
-[S] :: String -> Sentence
-[P] :: Symbol -> Sentence
-[E] :: Expr -> Sentence
-[Ref] :: Reference -> Sentence
-[Quote] :: Sentence -> Sentence
-[Percent] :: Sentence
 
--- | Direct concatenation of two Sentences (no implicit spaces!)
-[:+:] :: Sentence -> Sentence -> Sentence
-[EmptyS] :: Sentence
-infixr 5 :+:
-
--- | For writing "sentences" via combining smaller elements. Sentences are
---   made up of some known vocabulary of things:
+-- | For writing <a>Sentence</a>s via combining smaller elements.
+--   <a>Sentence</a>s are made up of some known vocabulary of things:
 --   
 --   <ul>
 --   <li>units (their visual representation)</li>
---   <li>words (via String)</li>
+--   <li>words (via <a>String</a>s)</li>
 --   <li>special characters</li>
 --   <li>accented letters</li>
---   <li>References to specific layout objects</li>
+--   <li>references to specific layout objects</li>
 --   </ul>
+data Sentence
+
+-- | Among other things, Ch allows Sentences to hold plural forms of
+--   <tt>NounPhrase</tt>s and <tt>NamedIdea</tt>s.
+[Ch] :: SentenceStyle -> UID -> Sentence
+
+-- | Converts a unit symbol into a usable Sentence form.
+[Sy] :: USymb -> Sentence
+
+-- | Constructor for <a>String</a>s, used often for descriptions in Chunks.
+[S] :: String -> Sentence
+
+-- | Converts the graphical representation of a symbol into a usable
+--   Sentence form.
+[P] :: Symbol -> Sentence
+
+-- | Lifts an expression into a Sentence.
+[E] :: Expr -> Sentence
+
+-- | Lifts a Reference into a Sentence.
+[Ref] :: Reference -> Sentence
+
+-- | Adds quotation marks around a Sentence.
+[Quote] :: Sentence -> Sentence
+
+-- | Used for a % symbol.
+[Percent] :: Sentence
+
+-- | Direct concatenation of two Sentences (no implicit spaces!).
+[:+:] :: Sentence -> Sentence -> Sentence
+
+-- | Empty Sentence.
+[EmptyS] :: Sentence
+infixr 5 :+:
+
+-- | Used in <a>Ch</a> constructor to determine the state of a
+--   <a>Sentence</a> (can record whether something is in plural form, a
+--   symbol, a singular term, or in short form).
 data SentenceStyle
 PluralTerm :: SentenceStyle
 SymbolStyle :: SentenceStyle
 TermStyle :: SentenceStyle
 ShortStyle :: SentenceStyle
 
--- | Helper for concatenating two sentences with a space between them.
+-- | Helper for concatenating two <a>Sentence</a>s with a space between
+--   them.
 (+:+) :: Sentence -> Sentence -> Sentence
 
--- | Helper which concatenates two sentences using <a>+:+</a> then adds a
---   period to the end.
+-- | Helper which concatenates two <a>Sentence</a>s using <a>+:+</a> and
+--   appends a period.
 (+:+.) :: Sentence -> Sentence -> Sentence
 
--- | Helper which concatenates two sentences using <a>+:+</a> then adds a
---   colon to the end.
+-- | Helper which concatenates two sentences using <a>+:+</a> and appends a
+--   colon.
 (+:) :: Sentence -> Sentence -> Sentence
 
--- | Helper which appends a period to the end of a sentence
+-- | Helper which appends a period to the end of a <a>Sentence</a> (used
+--   often as a post-fix operator).
 (!.) :: Sentence -> Sentence
 
 -- | Capitalizes a Sentence.
 capSent :: Sentence -> Sentence
 
--- | Gets a symbol and places in a <a>Sentence</a>
+-- | Gets a symbol and places it in a <a>Sentence</a>.
 ch :: (HasUID c, HasSymbol c) => c -> Sentence
 
--- | Helper for concatenating two sentences with a comma and space between
---   them.
+-- | Helper for concatenating two <a>Sentence</a>s with a comma and space
+--   between them.
 sC :: Sentence -> Sentence -> Sentence
 
--- | Helper for concatenating two sentences with a space-surrounded dash
---   between them.
+-- | Helper for concatenating two <a>Sentence</a>s with a space-surrounded
+--   dash between them.
 sDash :: Sentence -> Sentence -> Sentence
 
--- | Helper for wrapping sentences in parentheses.
+-- | Helper for wrapping <a>Sentence</a>s in parentheses.
 sParen :: Sentence -> Sentence
 
 -- | This is to collect <a>UID</a>s that are printed out as a
 --   <tt>Symbol</tt>.
 sdep :: Sentence -> [UID]
 shortdep :: Sentence -> [UID]
+
+-- | A Reference contains the identifier (<a>UID</a>), a reference address
+--   (<a>LblType</a>), a human-readable shortname (<a>ShortName</a>), and
+--   any extra information about the reference (<a>RefInfo</a>).
 data Reference
 Reference :: UID -> LblType -> ShortName -> RefInfo -> Reference
+
+-- | Holds any extra information needed for a <a>Reference</a>, be it an
+--   equation, pages, a note, or nothing.
 data RefInfo
 None :: RefInfo
 Equation :: [Int] -> RefInfo
@@ -1674,54 +1822,54 @@ data NP
 
 -- | Self plural.
 --   
---   Construct a Proper Noun, it is always capitalized as written.
+--   Constructs a Proper Noun, it is always capitalized as written.
 pn :: String -> NP
 
 -- | Plural form simply adds "s" (ex. Henderson -&gt; Hendersons).
 --   
---   Construct a Proper Noun, it is always capitalized as written.
+--   Constructs a Proper Noun, it is always capitalized as written.
 pn' :: String -> NP
 
 -- | Plural form adds "e".
 --   
---   Construct a Proper Noun, it is always capitalized as written.
+--   Constructs a Proper Noun, it is always capitalized as written.
 pn'' :: String -> NP
 
 -- | Plural form adds "es" (ex. Bush -&gt; Bushes).
 --   
---   Construct a Proper Noun, it is always capitalized as written.
+--   Constructs a Proper Noun, it is always capitalized as written.
 pn''' :: String -> NP
 
--- | Construct a <a>ProperNoun</a> with a custom plural rule (using
+-- | Constructs a <a>ProperNoun</a> with a custom plural rule (using
 --   <a>IrregPlur</a> from <a>PluralRule</a>). First argument is the String
 --   representing the noun, second is the rule.
 pnIrr :: String -> PluralRule -> NP
 
 -- | Self plural.
 --   
---   Construct a common noun which capitalizes the first letter of the
+--   Constructs a common noun which capitalizes the first letter of the
 --   first word at the beginning of a sentence.
 cn :: String -> NP
 
 -- | Plural form simply adds "s" (ex. dog -&gt; dogs).
 --   
---   Construct a common noun which capitalizes the first letter of the
+--   Constructs a common noun which capitalizes the first letter of the
 --   first word at the beginning of a sentence.
 cn' :: String -> NP
 
 -- | Plural form adds "e" (ex. formula -&gt; formulae).
 --   
---   Construct a common noun which capitalizes the first letter of the
+--   Constructs a common noun which capitalizes the first letter of the
 --   first word at the beginning of a sentence.
 cn'' :: String -> NP
 
 -- | Plural form adds "es" (ex. bush -&gt; bushes).
 --   
---   Construct a common noun which capitalizes the first letter of the
+--   Constructs a common noun which capitalizes the first letter of the
 --   first word at the beginning of a sentence.
 cn''' :: String -> NP
 
--- | Construct a common noun that allows you to specify the pluralization
+-- | Constructs a common noun that allows you to specify the pluralization
 --   rule (as in <a>pnIrr</a>).
 cnIP :: String -> PluralRule -> NP
 
@@ -1730,7 +1878,7 @@ cnIP :: String -> PluralRule -> NP
 --   beginning of a sentence).
 cnIrr :: String -> PluralRule -> CapitalizationRule -> NP
 
--- | Construct a common noun that pluralizes by dropping the last letter
+-- | Constructs a common noun that pluralizes by dropping the last letter
 --   and adding an "ies" ending (ex. body -&gt; bodies).
 cnIES :: String -> NP
 
@@ -1738,11 +1886,11 @@ cnIES :: String -> NP
 --   letters and adding an "ices" ending (ex. matrix -&gt; matrices).
 cnICES :: String -> NP
 
--- | Construct a common noun that pluralizes by dropping the last two
+-- | Constructs a common noun that pluralizes by dropping the last two
 --   letters and adding "es" (ex. analysis -&gt; analyses).
 cnIS :: String -> NP
 
--- | Construct a common noun that pluralizes by dropping the last two
+-- | Constructs a common noun that pluralizes by dropping the last two
 --   letters and adding "a" (ex. datum -&gt; data).
 cnUM :: String -> NP
 
@@ -2024,7 +2172,11 @@ makeLstRef :: String -> String -> Reference
 -- | Create a reference for a <a>URI</a>.
 makeURI :: UID -> String -> ShortName -> Reference
 
--- | Spaces
+-- | The difference kinds of spaces that may exist. This type holds
+--   numerical spaces (such as the set of integers, rationals, etc.), a
+--   space for booleans, a space for characters, dimensional spaces
+--   (vectors, arrays, etc.), a space for Actors, discrete sets (both for
+--   numbers and strings), and a void space.
 data Space
 Integer :: Space
 Rational :: Space
@@ -2041,13 +2193,15 @@ DiscreteD :: [Double] -> Space
 DiscreteS :: [String] -> Space
 Void :: Space
 
--- | RealInterval. A |RealInterval| is a subset of |Real| (as a |Space|).
---   These come in different flavours. For now, embed |Expr| for the
+-- | A RealInterval is a subset of <a>Real</a> (as a <a>Space</a>). These
+--   come in different flavours. For now, we embed <tt>Expr</tt> for the
 --   bounds, but that will change as well.
 data RealInterval a b
 [Bounded] :: (Inclusive, a) -> (Inclusive, b) -> RealInterval a b
 [UpTo] :: (Inclusive, a) -> RealInterval a b
 [UpFrom] :: (Inclusive, b) -> RealInterval a b
+
+-- | Inclusitivity of a <a>Space</a>.
 data Inclusive
 Inc :: Inclusive
 Exc :: Inclusive
@@ -2056,14 +2210,21 @@ Exc :: Inclusive
 data RTopology
 Continuous :: RTopology
 Discrete :: RTopology
+
+-- | Describes the domain of a <a>Symbol</a> given a topology. Can be
+--   bounded or encase all of the domain.
 data DomainDesc a b
 [BoundedDD] :: Symbol -> RTopology -> a -> b -> DomainDesc a b
 [AllDD] :: Symbol -> RTopology -> DomainDesc a b
+
+-- | Gets the name of an <a>Actor</a>.
 getActorName :: Space -> String
+
+-- | Gets the inner <a>Space</a> of a vector.
 getInnerSpace :: Space -> Space
 
 -- | Decorations on symbols/characters such as hats or Vector
---   representations (bolding/etc)
+--   representations (determines bolding, italics, etc).
 data Decoration
 Hat :: Decoration
 Vector :: Decoration
@@ -2094,7 +2255,7 @@ Integ :: Int -> Symbol
 Special :: Special -> Symbol
 Atop :: Decoration -> Symbol -> Symbol
 
--- | In order: upleft lowleft upright lowright base
+-- | Order of Symbols: upleft lowleft upright lowright base
 --   
 --   <pre>
 --   Corners [1]   [2]   [3]   [4]   [5]
@@ -2109,18 +2270,26 @@ Atop :: Decoration -> Symbol -> Symbol
 --   </pre>
 Corners :: [Symbol] -> [Symbol] -> [Symbol] -> [Symbol] -> Symbol -> Symbol
 
--- | <pre>
---   [s1, s2] -&gt; s1s2
---   </pre>
+-- | Concatentation of two symbols: <tt>[s1, s2] -&gt; s1s2</tt>
 Concat :: [Symbol] -> Symbol
 Empty :: Symbol
 
--- | The default compare function sorts all the lower case after the upper
---   case. Comparation is used twice for each <tt>Atomic</tt> case, once
---   for making sure they are the same letter, once for case sensitive. As
---   far as this comparison is considered, <tt>Δ</tt> is a "decoration" and
+-- | The default compare function that sorts all the lower case symbols
+--   after the upper case ones.
+--   
+--   Comparation is used twice for each <tt>Atomic</tt> case, once for
+--   making sure they are the same letter, once for case sensitive. As far
+--   as this comparison is considered, <tt>Δ</tt> is a "decoration" and
 --   ignored unless the compared symbols are the exact same, in which case
 --   it is ordered after the undecorated symbol.
+--   
+--   Superscripts and subscripts are ordered after the base symbols
+--   (because they add additional context to a symbol). For example:
+--   `v_f^{AB}` (expressed in LaTeX notation for clarity), where
+--   <tt>v_f</tt> is a final velocity, and the `^{AB}` adds context that it
+--   is the final velocity between points <tt>A</tt> and <tt>B</tt>. In
+--   these cases, the sorting of `v_f^{AB}` should be following
+--   <tt>v_f</tt> as it is logical to place it with its parent concept.
 compsy :: Symbol -> Symbol -> Ordering
 
 -- | Create a table body (not including header row) by applying the given
@@ -2191,7 +2360,9 @@ rendPersLFM'' :: Person -> String
 comparePeople :: [Person] -> [Person] -> Ordering
 
 -- | Stages correspond to what we're trying to look up. They range from
---   abstract to concrete.
+--   abstract to concrete. Equational stages are more theoretical and
+--   oriented towards abstract design while the Implementation stages are
+--   more oriented towards detailed design.
 data Stage
 Equational :: Stage
 Implementation :: Stage
@@ -2239,11 +2410,28 @@ upperLeft :: Symbol -> Symbol -> Symbol
 
 -- | Helper for creating a Vector symbol.
 vec :: Symbol -> Symbol
+
+-- | Makes a reference from the given argument and then wraps it into a
+--   <a>Sentence</a>.
 makeRef2S :: (Referable l, HasShortName l) => l -> Sentence
+
+-- | Similar to <a>makeRef2</a>, but only turns a citation into a
+--   reference.
 makeCite :: Citation -> Reference
+
+-- | Similar to <a>makeRef2S</a>, but only takes a citation.
 makeCiteS :: Citation -> Sentence
+
+-- | Projector function that creates a <a>Reference</a> from something
+--   <a>Referable</a>.
 makeRef2 :: (Referable l, HasShortName l) => l -> Reference
+
+-- | Makes a <a>Reference</a> from a <a>Citation</a> with additional
+--   information.
 makeCiteInfo :: Citation -> RefInfo -> Reference
+
+-- | Makes a <a>Reference</a> from a <a>Citation</a> with additional
+--   information and then wraps into <a>Sentence</a> form.
 makeCiteInfoS :: Citation -> RefInfo -> Sentence
 
 -- | Retrieves the <a>String</a> contained in a <a>LblType</a>.
@@ -2322,23 +2510,27 @@ titleize :: NamedIdea n => n -> Sentence
 --   <a>NamedIdea</a>.
 titleize' :: NamedIdea n => n -> Sentence
 
--- | Something that may contain an uncertainty value and <a>Maybe</a> an
---   <a>Int</a>.
+-- | Something that may contain an uncertainty value and a precision value.
 data Uncertainty
 
 -- | Smart constructor for values with uncertainty.
 uncty :: Double -> Maybe Int -> Uncertainty
+
+-- | The default uncertainty is set to 0.1.
 defaultUncrt :: Uncertainty
+
+-- | Accessor for uncertainty value from something that has an uncertainty.
 uncVal :: HasUncertainty x => x -> Double
+
+-- | Accessor for precision value from something that has an uncertainty.
 uncPrec :: HasUncertainty x => x -> Maybe Int
 
 -- | Smart constructor for exact values (no uncertainty).
 exact :: Uncertainty
 
--- | Language of units (how to build them up) UName for the base cases,
---   otherwise build up. Probably a 7-vector would be better (less
---   error-prone!) | Language of unit equations, to define a unit relative
---   to another
+-- | Language of units (how to build them up into a unit symbol). Of the
+--   form (<a>Symbol</a> ^ <a>Integer</a>). The <a>Integer</a> may be
+--   negative, but should not be zero.
 newtype USymb
 US :: [(Symbol, Integer)] -> USymb
 
@@ -2489,7 +2681,7 @@ UD :: ConceptChunk -> UnitSymbol -> [UID] -> UnitDefn
 [_cas] :: UnitDefn -> UnitSymbol
 [_cu] :: UnitDefn -> [UID]
 
--- | Can generate a default symbol
+-- | Generates a default unit symbol.
 fromUDefn :: UDefn -> USymb
 
 -- | Helper for fundamental unit concept chunk creation. Uses the same

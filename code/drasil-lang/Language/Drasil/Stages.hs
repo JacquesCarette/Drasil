@@ -1,7 +1,8 @@
 module Language.Drasil.Stages( Stage(..)) where
 -- FIXME: More fine-grained stages.
 -- | Stages correspond to what we're trying to look up. They range from abstract
--- to concrete.                  
+-- to concrete. Equational stages are more theoretical and oriented towards abstract design
+-- while the Implementation stages are more oriented towards detailed design.                  
 data Stage = Equational -- AKA Theoretical / Abstract-design
            | Implementation -- AKA Implementation / Detailed-design
 

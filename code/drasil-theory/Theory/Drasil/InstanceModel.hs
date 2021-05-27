@@ -9,7 +9,7 @@ import Language.Drasil
 import Theory.Drasil.Classes (HasInputs(inputs), HasOutput(..))
 import Data.Drasil.TheoryConcepts (inModel)
 
-import Control.Lens (makeLenses, view, lens, (^.), set, Lens', to, _1, _2)
+import Control.Lens (set, (^.), lens, view, makeLenses, Lens', _1, _2) 
 import Theory.Drasil.ModelKinds (ModelKinds(..), elimMk, setMk, getEqModQds)
 
 type Input = (QuantityDict, Maybe (RealInterval Expr Expr))
@@ -39,10 +39,17 @@ lensMk lq lqd lr = lens g s
 
 instance HasUID             InstanceModel where uid = lensMk uid uid uid
 instance NamedIdea          InstanceModel where term = lensMk term term term
-instance Idea               InstanceModel where getA = elimMk (to getA) (to getA) (to getA) . view mk
-instance Definition         InstanceModel where defn = lensMk defn (error "ambiguous defn in EquationalRealm") defn
-instance ConceptDomain      InstanceModel where cdom = elimMk (to cdom) (error "ambiguous concept domain for EquationalRealm") (to cdom) . view mk
-instance ExprRelat          InstanceModel where relat = elimMk (to relat) (error "ambiguous relation for EquationalRealm") (to relat) . view mk
+instance Idea               InstanceModel where getA = getA . (^. mk)
+instance Definition         InstanceModel where defn = lensMk defn undefined defn
+instance ConceptDomain      InstanceModel where cdom = cdom . (^. mk)
+instance ExprRelat          InstanceModel where relat = relat . (^. mk)
+instance DefiningExpr       InstanceModel where defnExpr = lensMk defnExpr undefined defnExpr
+--  defnExpr = lens g s
+--    where g :: InstanceModel -> Expr
+--          g = (^. (mk . defnExpr))
+--          s :: InstanceModel -> Expr -> InstanceModel
+--          s im_ e = im _ _ _ _ _ _ _ _
+
 instance HasDerivation      InstanceModel where derivations = deri
 instance HasReference       InstanceModel where getReferences = ref
 instance HasShortName       InstanceModel where shortname = lb
@@ -63,37 +70,37 @@ instance HasSpace           InstanceModel where typ = output . typ
 instance MayHaveUnit        InstanceModel where getUnit = getUnit . view output
 
 -- | Smart constructor for instance models with everything defined
-im :: ModelKinds -> Inputs -> Output -> 
+im :: ModelKinds -> Inputs -> Output ->
   OutputConstraints -> [Reference] -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
 im mkind _  _ _  [] _  _  = error $ "Source field of " ++ mkind ^. uid ++ " is empty"
-im mkind i o oc r der sn = 
+im mkind i o oc r der sn =
   IM mkind i (o, oc) r der (shortname' sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models; no derivation
-imNoDeriv :: ModelKinds -> Inputs -> Output -> 
+imNoDeriv :: ModelKinds -> Inputs -> Output ->
   OutputConstraints -> [Reference] -> String -> [Sentence] -> InstanceModel
 imNoDeriv mkind _  _ _ [] _  = error $ "Source field of " ++ mkind ^. uid ++ " is empty"
 imNoDeriv mkind i o oc r sn =
   IM mkind i (o, oc) r Nothing (shortname' sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models; no references
-imNoRefs :: ModelKinds -> Inputs -> Output -> 
+imNoRefs :: ModelKinds -> Inputs -> Output ->
   OutputConstraints -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
-imNoRefs mkind i o oc der sn = 
+imNoRefs mkind i o oc der sn =
   IM mkind i (o, oc) [] der (shortname' sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models; no derivations or references
-imNoDerivNoRefs :: ModelKinds -> Inputs -> Output -> 
+imNoDerivNoRefs :: ModelKinds -> Inputs -> Output ->
   OutputConstraints -> String -> [Sentence] -> InstanceModel
-imNoDerivNoRefs mkind i o oc sn = 
+imNoDerivNoRefs mkind i o oc sn =
   IM mkind i (o, oc) [] Nothing (shortname' sn) (prependAbrv inModel sn)
 
 -- | For building a quantity with no constraint
-qwUC :: (Quantity q, MayHaveUnit q) => q -> Input 
+qwUC :: (Quantity q, MayHaveUnit q) => q -> Input
 qwUC x = (qw x, Nothing)
 
 -- | For building a quantity with a constraint
-qwC :: (Quantity q, MayHaveUnit q) => q -> RealInterval Expr Expr -> Input 
+qwC :: (Quantity q, MayHaveUnit q) => q -> RealInterval Expr Expr -> Input
 qwC x y = (qw x, Just y)
 
 -- | Grab all related QDefinitions from a list of instance models

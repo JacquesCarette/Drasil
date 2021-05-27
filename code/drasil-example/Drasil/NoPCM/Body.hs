@@ -8,6 +8,7 @@ import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
   _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (TheoryModel)
 import Utils.Drasil
+import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 
 import Language.Drasil.Code (quantvar, listToArray, ODEInfo, odeInfo,
@@ -257,9 +258,9 @@ scope = phrase thermalAnalysis `S.of_` S "a single" +:+ phrase sWHT
 ---------------------------------------
 
 orgDocEnd :: Sentence
-orgDocEnd = foldlSent_ [S "The", phrase inModel,
+orgDocEnd = foldlSent_ [atStartNP (the inModel),
   S "to be solved is referred to as" +:+. makeRef2S eBalanceOnWtr,
-  S "The", phrase inModel, S "provides the", titleize ode,
+  atStartNP (the inModel), S "provides the", titleize ode,
   sParen (short ode), S "that models the" +:+. phrase progName,
   short progName, S "solves this", short ode]
 
@@ -298,7 +299,7 @@ orgDocEnd = foldlSent_ [S "The", phrase inModel,
 -----------------------------------
 
 probDescIntro :: Sentence
-probDescIntro = foldlSent_ [S "investigate the heating" `S.of_` phrase water, S "in a", phrase sWHT]
+probDescIntro = foldlSent_ [S "investigate the heating" `S.of_` phraseNP (water `inA` sWHT)]
 
 terms :: [ConceptChunk]
 terms = [htFlux, heatCapSpec, thermalConduction, transient]
@@ -312,8 +313,8 @@ physSystParts :: [Sentence]
 physSystParts = map foldlSent_ [physSyst1 tank water, physSyst2 coil tank htFluxC]
 
 goalInputs :: [Sentence]
-goalInputs = [phrase temp `S.the_ofThe` phrase coil,
-  S "the initial" +:+ phrase tempW, S "the" +:+ plural materialProprty]
+goalInputs = [phraseNP (temp `the_ofThe` coil),
+  S "the initial" +:+ phrase tempW, pluralNP (the materialProprty)]
 
 ------------------------------------------------------
 --Section 4.2 : SOLUTION CHARACTERISTICS SPECIFICATION

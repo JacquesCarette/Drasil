@@ -1,3 +1,4 @@
+{-# LANGUAGE PostfixOperators #-}
 module Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, latentHtE,
   nwtnCooling, sensHtE, sensHtETemplate, tMods) where
 
@@ -5,6 +6,7 @@ import Language.Drasil
 import Control.Lens ((^.))
 import Theory.Drasil (TheoryModel, tm, ModelKinds(OthModel, EquationalModel))
 import Utils.Drasil
+import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (system)
@@ -107,7 +109,7 @@ sensHtEEqn pChange = case pChange of
 sensHtEdesc :: Sentence
 sensHtEdesc = foldlSent [
   atStart sensHeat :+: S "ing occurs as long as the material does not reach a",
-  phrase temp, S "where a", phrase phaseChange, S "occurs. A", phrase phaseChange,
+  phrase temp, S "where a", phrase phaseChange, (S "occurs" !.), atStartNP (a_ phaseChange),
   S "occurs if" +:+. (E (sy temp $= sy boilPt) `S.or_` E (sy temp $= sy meltPt)),
   S "If this is the case" `sC` S "refer to", makeRef2S latentHtE]
 

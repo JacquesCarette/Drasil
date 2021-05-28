@@ -784,7 +784,7 @@ module Data.Drasil.Theories.Physics
 physicsTMs :: [TheoryModel]
 newtonSL :: TheoryModel
 weightGD :: GenDefn
-weightRC :: RelationConcept
+weightQD :: QDefinition
 weightSrc :: Reference
 weightDeriv :: Derivation
 weightDerivSentences :: [Sentence]
@@ -794,7 +794,7 @@ weightDerivNewtonSentence :: [Sentence]
 weightDerivReplaceMassSentence :: [Sentence]
 weightDerivSpecWeightSentence :: [Sentence]
 hsPressureGD :: GenDefn
-hsPressureRC :: RelationConcept
+hsPressureQD :: QDefinition
 hsPressureSrc :: Reference
 hsPressureNotes :: Sentence
 torqueDD :: DataDefinition

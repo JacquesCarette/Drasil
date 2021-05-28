@@ -74,12 +74,11 @@ weightDerivSpecWeightSentence = [S "Substituting", phrase QPP.specWeight,
 --
 
 hsPressureGD :: GenDefn
-hsPressureGD = gd (OthModel hsPressureRC) (getUnit QP.pressure) Nothing
+hsPressureGD = gd (EquationalModel hsPressureQD) (getUnit QP.pressure) Nothing
   [hsPressureSrc] "hsPressure" [hsPressureNotes]
 
-hsPressureRC :: RelationConcept
-hsPressureRC = makeRC "hsPressure" (nounPhraseSP "hydrostatic pressure") 
-  hsPressureNotes hsPressureEqn
+hsPressureQD :: QDefinition
+hsPressureQD = mkQuantDef' QP.pressure (nounPhraseSP "hydrostatic pressure") hsPressureEqn
 
 hsPressureSrc :: Reference
 hsPressureSrc = makeURI "hsPressureSrc" "https://en.wikipedia.org/wiki/Pressure" $

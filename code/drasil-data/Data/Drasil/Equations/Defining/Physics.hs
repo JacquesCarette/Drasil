@@ -8,7 +8,7 @@ import qualified Utils.Drasil.Sentence as S (is, of_, the_ofThe)
 
 import qualified Data.Drasil.Quantities.Math as QM (unitVectj)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration, time,
-  force, gravitationalAccel, height, pressure, weight, velocity, position)
+  force, gravitationalAccel, height, weight, velocity, position)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (density, 
   mass, specWeight, vol)
 import Data.Drasil.Concepts.Documentation (body, constant)
@@ -29,7 +29,7 @@ weightDerivSpecWeightEqn  = sy QP.weight $= mulRe (sy QPP.vol) (sy QPP.specWeigh
 
 weightDerivAccelEqn       = sy QP.acceleration $= vec2D (exactDbl 0) (mulRe (sy QP.gravitationalAccel) (sy QM.unitVectj))
 
-hsPressureEqn             = sy QP.pressure $= mulRe (sy QPP.specWeight) (sy QP.height)
+hsPressureEqn             = sy QPP.specWeight `mulRe` sy QP.height
 
 speedEqn                  = norm (sy QP.velocity)
 velocityEqn               = sy QP.velocity $= deriv (sy QP.position) QP.time

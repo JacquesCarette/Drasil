@@ -191,7 +191,7 @@ physSystParts = map (!.)
 symbols :: [QuantityDict]
 symbols = qw gravitationalAccelConst : unitalQuants ++ map qw constants ++
   map qw [acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
-  iyPos, ixVel, iyVel, position, scalarPos, velVecSpeed, speed1DAcc, time, velocity, xAccel,
+  iyPos, ixVel, iyVel, position, scalarPos, projSpeed, time, velocity, xAccel,
   xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel]
 
 constants :: [QDefinition]

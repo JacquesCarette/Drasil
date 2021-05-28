@@ -24,18 +24,18 @@ import qualified Drasil.Projectile.Expressions as E (speed', rectVelDerivEqn1, r
   scalarPos', rectPosDerivEqn1, rectPosDerivEqn2, rectPosDerivEqn3, velVecExpr, posVecExpr,
   positionXY, velocityXY, accelerationXY, constAccelXY)
 import Drasil.Projectile.References (hibbeler2004)
-import Drasil.Projectile.Unitals (speed1DAcc)
+import Drasil.Projectile.Unitals (projSpeed)
 
 genDefns :: [GenDefn]
 genDefns = [rectVelGD, rectPosGD, velVecGD, posVecGD]
 
 ----------
 rectVelGD :: GenDefn
-rectVelGD = gd (EquationalModel rectVelQD) (getUnit speed1DAcc) (Just rectVelDeriv)
+rectVelGD = gd (EquationalModel rectVelQD) (getUnit projSpeed) (Just rectVelDeriv)
   [makeCiteInfo hibbeler2004 $ Page [8]] "rectVel" [{-Notes-}]
 
 rectVelQD :: QDefinition 
-rectVelQD = mkQuantDef' speed1DAcc (nounPhraseSent $ foldlSent_ 
+rectVelQD = mkQuantDef' projSpeed (nounPhraseSent $ foldlSent_ 
             [atStart rectilinear, sParen $ getAcc oneD, phrase velocity,
              S "as a function" `S.of_` phraseNP (time `for` QP.constAccel)])
             E.speed'
@@ -45,13 +45,13 @@ rectVelDeriv = mkDerivName (phrase rectVel)
                (weave [rectVelDerivSents, map E rectVelDerivEqns])
 
 rectVelDerivSents :: [Sentence]
-rectVelDerivSents = [rectDeriv velocity acceleration motSent iVel accelerationTM, rearrAndIntSent, performIntSent $ Just $ S "replacing" +:+ E (sy speed) +:+ S "with" +:+ E (sy speed1DAcc)]
+rectVelDerivSents = [rectDeriv velocity acceleration motSent iVel accelerationTM, rearrAndIntSent, performIntSent $ Just $ S "replacing" +:+ E (sy speed) +:+ S "with" +:+ E (sy projSpeed)]
   where
     motSent = foldlSent [atStartNP (the motion) `S.in_` makeRef2S accelerationTM `S.is` S "now", phrase oneD,
                          S "with a", phrase QP.constAccel `sC` S "represented by", E (sy QP.constAccel)]
 
 rectVelDerivEqns :: [Expr]
-rectVelDerivEqns = [E.rectVelDerivEqn1, E.rectVelDerivEqn2, sy speed1DAcc $= E.speed']
+rectVelDerivEqns = [E.rectVelDerivEqn1, E.rectVelDerivEqn2, relat rectVelQD]
 
 ----------
 rectPosGD :: GenDefn

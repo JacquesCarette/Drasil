@@ -3,6 +3,7 @@ module Drasil.NoPCM.IMods (eBalanceOnWtr, iMods, instModIntro) where
 import Language.Drasil
 import Theory.Drasil (InstanceModel, im, qwC, qwUC, ModelKinds (OthModel))
 import Utils.Drasil
+import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 import Control.Lens ((^.))
 
@@ -56,14 +57,14 @@ balWtrNotes = map foldlSent [
    S "is in", phrase liquid, S "form" `sC` E (exactDbl 0 $< sy tempW $< exactDbl 100),
    sParen (unwrap $ getUnit tempW), S "where", E (exactDbl 0),
    sParen (unwrap $ getUnit tempW) `S.and_` E (exactDbl 100),
-   sParen (unwrap $ getUnit tempW), S "are the", phrase melting `S.and_`
-   plural boilPt `S.of_` phrase water `sC` S "respectively", sParen (makeRef2S assumpWAL)]]
+   sParen (unwrap $ getUnit tempW), S "are the", pluralNP ((melting `and_`
+   boilPt) `of_PSNPNI` water) `sC` S "respectively", sParen (makeRef2S assumpWAL)]]
 
 ----------------------------------------------
 --    Derivation of eBalanceOnWtr           --
 ----------------------------------------------
 eBalanceOnWtrDeriv :: Derivation
-eBalanceOnWtrDeriv = mkDerivName (S "the" +:+ phrase energy +:+ S "balance on water")
+eBalanceOnWtrDeriv = mkDerivName (phraseNP (the energy) +:+ S "balance on water")
   (weave [eBalanceOnWtrDerivSentences, map E eBalanceOnWtrDerivEqns])
 
 eBalanceOnWtrDerivSentences :: [Sentence]
@@ -71,7 +72,7 @@ eBalanceOnWtrDerivSentences = [eBalanceOnWtrDerivDesc1 EmptyS (S "over area" +:+
   eBalanceOnWtrDerivDesc2, eBalanceOnWtrDerivDesc3, eBalanceOnWtrDerivDesc4]
 
 eBalanceOnWtrDerivDesc2 :: Sentence
-eBalanceOnWtrDerivDesc2 = foldlSentCol [S "Using", makeRef2S htFluxWaterFromCoil, S "for",
+eBalanceOnWtrDerivDesc2 = foldlSentCol [S "Using", makeRef2S htFluxWaterFromCoil `S.for`
   ch htFluxC `sC` S "this can be written as"]
 
 eBalanceOnWtrDerivDesc4 :: Sentence
@@ -100,6 +101,6 @@ eBalanceOnWtrDerivEqns = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalan
 -----------
 
 instModIntro :: Sentence
-instModIntro = foldlSent [S "The", phrase goal, makeRef2S waterTempGS,
+instModIntro = foldlSent [atStartNP (the goal), makeRef2S waterTempGS,
   S "is met by", makeRef2S eBalanceOnWtr `S.andThe` phrase goal,
   makeRef2S waterEnergyGS, S "is met by", makeRef2S heatEInWtr]

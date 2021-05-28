@@ -8,6 +8,8 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   _datadefs, _configFiles, _definitions, _defSequence, _inputs, _kind, 
   _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Utils.Drasil
+import Utils.Drasil.Concepts
+import qualified Utils.Drasil.NounPhrase as NP
 import qualified Utils.Drasil.Sentence as S
 
 import Drasil.DocLang (AuxConstntSec(AuxConsProg),
@@ -28,7 +30,7 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Math (cartesian, mathcon)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon',
-  rectilinear, oneD, twoD)
+  rectilinear, oneD, twoD, motion)
 import Data.Drasil.Concepts.Software (errMsg, program)
 
 import Data.Drasil.Quantities.Math (pi_, piConst)
@@ -101,12 +103,12 @@ mkSRS = [
   ]
 
 justification, scope :: Sentence
-justification = foldlSent [atStart projectile, S "motion is a common" +:+.
-  (phrase problem `S.in_` phrase physics), S "Therefore, it is useful to have a",
+justification = foldlSent [atStart projectile, phrase motion, S "is a common" +:+.
+  phraseNP (problem `in_` physics), S "Therefore, it is useful to have a",
   phrase program, S "to solve and model these types of" +:+. plural problem,
-  S "The", phrase program, S "documented here is called", phrase projectileTitle]
-scope = foldlSent_ [S "the", phrase analysis `S.of_` S "a", phrase twoD,
-  sParen (getAcc twoD), phrase projectile, S "motion", phrase problem, S "with",
+  atStartNP (the program), S "documented here is called", phrase projectileTitle]
+scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)),
+  sParen (getAcc twoD), phraseNP (combineNINI projectile motion), phrase problem, S "with",
   phrase constAccel]
 
 projectileTitle :: CI
@@ -164,7 +166,7 @@ concIns = assumptions ++ funcReqs ++ goals ++ nonfuncReqs
 
 prob :: Sentence
 prob = foldlSent_ [S "efficiently" `S.and_` S "correctly predict the",
-  phrase landingPosNC, S "of a", phrase projectile]
+  phraseNP (landingPosNC `ofA` projectile)]
 
 ---------------------------------
 -- Terminology and Definitions --
@@ -178,10 +180,10 @@ terms = [launcher, projectile, target, gravity, cartesian, rectilinear]
 ---------------------------------
 
 physSystParts :: [Sentence]
-physSystParts = map foldlSent [
-  [S "The", phrase launcher],
-  [S "The", phrase projectile, sParen (S "with" +:+ getTandS iVel `S.and_` getTandS launAngle)],
-  [S "The", phrase target]]
+physSystParts = map (!.)
+  [atStartNP (the launcher),
+  atStartNP (the projectile) +:+ sParen (S "with" +:+ getTandS iVel `S.and_` getTandS launAngle),
+  atStartNP (the target)]
 
 ----------------------------------------------------
 -- Various gathered data that should be automated --

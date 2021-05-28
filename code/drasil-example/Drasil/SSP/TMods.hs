@@ -1,3 +1,4 @@
+{-# LANGUAGE PostfixOperators #-}
 module Drasil.SSP.TMods (tMods, factOfSafety, equilibrium, mcShrStrgth, effStress) 
   where
 
@@ -5,6 +6,7 @@ import Prelude hiding (tan)
 import Language.Drasil
 import Theory.Drasil (TheoryModel, tm, ModelKinds(EquationalModel, OthModel))
 import Utils.Drasil
+import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Quantities.Physics (distance, force)
@@ -57,7 +59,7 @@ eqRel = foldr (($=) . sumAll (Variable "i") . sy) (int 0) [fx, fy, genericM]
 
 eqDesc :: Sentence
 eqDesc = foldlSent [S "For a body in static equilibrium, the net",
-  plural force, S "and", plural genericM +:+. S "acting on the body will cancel out",
+  pluralNP (force `and_PP` genericM) +:+. S "acting on the body will cancel out",
   S "Assuming a 2D problem", sParen (makeRef2S assumpENSL) `sC` S "the", getTandS fx `S.and_`
   getTandS fy, S "will be equal to" +:+. E (exactDbl 0), S "All", plural force,
   S "and their", phrase distance, S "from the chosen point of rotation",
@@ -110,4 +112,4 @@ effStressRel :: Relation
 effStressRel = sy effectiveStress $= sy totNormStress $- sy porePressure
 
 effStressDesc :: Sentence
-effStressDesc = foldlSent [ch totNormStress, S "is defined in", makeRef2S normStressDD]
+effStressDesc = (totNormStress `definedIn'''` normStressDD !.)

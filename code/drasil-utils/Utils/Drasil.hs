@@ -11,7 +11,7 @@ module Utils.Drasil (
   foldlSent_,foldlSentCol, foldlsC, foldNums, numList,
   -- Misc
   addPercent, bulletFlat, bulletNested, checkValidStr, chgsStart, definedIn,
-  definedIn', definedIn'',  displayStrConstrntsAsSet, displayDblConstrntsAsSet, eqN,
+  definedIn', definedIn'', definedIn''', displayStrConstrntsAsSet, displayDblConstrntsAsSet, eqN,
   eqnWSource, fromReplace, fromSource, fromSources, fmtU, follows, getTandS,
   itemRefToSent, makeListRef, makeTMatrix, maybeChanged, maybeExpanded,
   maybeWOVerb, mkEnumAbbrevList, mkTableFromColumns, noRefs, refineChain,

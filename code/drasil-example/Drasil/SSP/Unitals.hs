@@ -2,6 +2,8 @@ module Drasil.SSP.Unitals where --export all of it
 
 import Language.Drasil
 import Language.Drasil.ShortHands
+import Utils.Drasil.Concepts
+import qualified Utils.Drasil.NounPhrase as NP
 import qualified Utils.Drasil.Sentence as S
 
 import Drasil.SSP.Defs (fsConcept)
@@ -233,18 +235,18 @@ slipDist = makeUCWDS "x_slip,i" (nounPhraseSent $ plural xCoord +:+ S "of the sl
   (sub (vec lX) lSlip) metre
 
 xi     = makeUCWDS "x_i" (nounPhraseSent $ phrase xCoord)
-  (S "the" +:+ phrase xCoord `S.inThe` phrase cartesian) lX metre
+  (phraseNP (NP.the (xCoord `inThe` cartesian))) lX metre
 
 yi     = makeUCWDS "y_i" (nounPhraseSent $ phrase yCoord)
-  (S "the" +:+ phrase yCoord `S.inThe` phrase cartesian) lY metre
+  (phraseNP (NP.the (yCoord `inThe` cartesian))) lY metre
 
 zcoord = makeUCWDS "z"   (nounPhraseSent $ phrase zCoord)
-  (S "the" +:+ phrase zCoord `S.inThe` phrase cartesian) lZ metre
+  (phraseNP (NP.the (zCoord `inThe` cartesian))) lZ metre
 
 -- FIXME: the 'symbol' for this should not have { and } embedded in it.
 -- They have been removed now, but we need a reasonable notation.
 critCoords = makeUCWDS "(xcs,ycs)" (cn "critical slip surface coordinates")
-  (S "the set" `S.of_` plural xCoord `S.and_` plural yCoord +:+
+  (S "the set" `S.of_` pluralNP (xCoord `and_PP` yCoord) +:+
    S "that describe the vertices of the critical slip surface")
   (Concat [sub (vec lX) lCSlip, Label ",", sub (vec lY) lCSlip]) metre
 
@@ -257,7 +259,7 @@ resistiveShear = makeUCWDS "resistiveShear" (cn' "resistive shear force")
   cP newton
 
 mobShrI = makeUCWDS "mobShr" (cn "mobilized shear forces")
-  (S "the" +:+ plural mobilizedShear +:+ S "per meter" `S.inThe` phrase zDir +:+
+  (pluralNP (the mobilizedShear) +:+ S "per meter" `S.inThe` phrase zDir +:+
    S "for each slice")
   (vec cS) forcePerMeterU --FIXME: DUE TO ID THIS WILL SHARE THE SAME SYMBOL AS CSM.mobShear
               -- This is fine for now, as they are the same concept, but when this
@@ -274,12 +276,12 @@ shrResI = makeUCWDS "shrRes" (cn "resistive shear forces")
               -- Expr.
 
 shearFNoIntsl = makeUCWDS "T_i" (cn ("mobilized shear forces " ++ wiif)) 
-  (S "the" +:+ plural mobilizedShear +:+ S "per meter" +:+ S wiif `S.inThe`
+  (pluralNP (the mobilizedShear) +:+ S "per meter" +:+ S wiif `S.inThe`
    phrase zDir +:+  S "for each slice")
   (vec cT) forcePerMeterU
 
 shearRNoIntsl = makeUCWDS "R_i" (cn ("resistive shear forces " ++ wiif))
-  (S "the" +:+ plural resistiveShear +:+ S "per meter" +:+ S wiif `S.inThe`
+  (pluralNP (the resistiveShear) +:+ S "per meter" +:+ S wiif `S.inThe`
    phrase zDir +:+ S "for each slice")
   (vec cR) forcePerMeterU
 
@@ -357,7 +359,7 @@ shrStress = uc' "tau_i" (cn "shear strength")
   "the strength of a material against shear failure" (sup lTau (Label"f")) pascal
 
 sliceHght = makeUCWDS "h_z,i" (cn "heights of interslice normal forces")
-  ((plural height `S.inThe` phrase yDir) `S.the_ofThe` S "interslice normal forces on each slice")
+  (pluralNP (height `inThePS` yDir) `S.the_ofThe` S "interslice normal forces on each slice")
   (subZ (vec lH)) metre
 
 sliceHghtW = makeUCWDS "h_z,w,i" (cn "heights of the water table")
@@ -456,7 +458,7 @@ normToShear = dqd' (dcc "lambda" (nounPhraseSP "proportionality constant")
 
 scalFunc = dqd' (dccWDS "f_i" 
   (nounPhraseSP "interslice normal to shear force ratio variation function")
-  (S "a function" `S.of_` phrase distance `S.inThe` phrase xDir +:+
+  (S "a function" `S.of_` phraseNP (distance `inThe` xDir) +:+
    S "that describes the variation of the interslice normal to shear ratio"))
   (const (vec lF)) Real Nothing 
 

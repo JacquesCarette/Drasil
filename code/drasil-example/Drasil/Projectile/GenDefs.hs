@@ -45,7 +45,7 @@ rectVelDeriv = mkDerivName (phrase rectVel)
                (weave [rectVelDerivSents, map E rectVelDerivEqns])
 
 rectVelDerivSents :: [Sentence]
-rectVelDerivSents = [rectDeriv velocity acceleration motSent iVel accelerationTM, rearrAndIntSent, performIntSent $ Just $ S "replacing" +:+ E (sy speed) +:+ S "with" +:+ E (sy projSpeed)]
+rectVelDerivSents = [rectDeriv velocity acceleration motSent iVel accelerationTM, rearrAndIntSent, performIntSent]
   where
     motSent = foldlSent [atStartNP (the motion) `S.in_` makeRef2S accelerationTM `S.is` S "now", phrase oneD,
                          S "with a", phrase QP.constAccel `sC` S "represented by", E (sy QP.constAccel)]
@@ -70,7 +70,7 @@ rectPosDeriv = mkDerivName (phrase rectilinear +:+ phrase position)
 
 rectPosDerivSents :: [Sentence]
 rectPosDerivSents = [rectDeriv position velocity motSent iPos velocityTM,
-  rearrAndIntSent, fromReplace rectVelGD speed, performIntSent Nothing]
+  rearrAndIntSent, fromReplace rectVelGD speed, performIntSent]
     where
       motSent = atStartNP (the motion) `S.in_` makeRef2S velocityTM `S.is` S "now" +:+. phrase oneD
 
@@ -130,12 +130,9 @@ rectDeriv c1 c2 motSent initc ctm = foldlSent_ [
       | c == iVel         = E (sy iSpeed)
       | otherwise         = error "Not implemented in getScalar"
 
-rearrAndIntSent :: Sentence
+rearrAndIntSent, performIntSent :: Sentence
 rearrAndIntSent = S "Rearranging" `S.and_` S "integrating" `sC` S "we" +: S "have"
-
-performIntSent :: Maybe Sentence -> Sentence
-performIntSent ms = S "Performing the integration" :+: extra `sC` S "we have the required" +: phrase equation
-  where extra = maybe mempty (\s -> S "," +:+ s) ms
+performIntSent  = S "Performing the integration" `sC` S "we have the required" +: phrase equation
 
 -- Helper for making vector derivations
 vecDeriv :: [(UnitalChunk, Expr)] -> GenDefn -> Sentence

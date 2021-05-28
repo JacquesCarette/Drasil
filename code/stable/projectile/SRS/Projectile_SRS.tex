@@ -109,8 +109,6 @@ ${t_{\text{flight}}}$ & Flight duration & ${\text{s}}$
 \\
 $v$ & Speed & $\frac{\text{m}}{\text{s}}$
 \\
-${v^{\text{f}}}$ & Final speed & $\frac{\text{m}}{\text{s}}$
-\\
 ${v^{\text{i}}}$ & Initial speed & $\frac{\text{m}}{\text{s}}$
 \\
 ${v_{\text{launch}}}$ & Launch speed & $\frac{\text{m}}{\text{s}}$
@@ -125,9 +123,9 @@ ${{v_{\text{y}}}^{\text{i}}}$ & $y$-component of initial velocity & $\frac{\text
 \\
 $\mathbf{v}$ & Velocity & $\frac{\text{m}}{\text{s}}$
 \\
-${\mathbf{v}^{\text{i}}}$ & Initial velocity & $\frac{\text{m}}{\text{s}}$
+$\mathbf{v}\text{(}t\text{)}$ & 1D speed & $\frac{\text{m}}{\text{s}}$
 \\
-${\mathbf{v}^{\text{speed}}}$ & Vector speed & $\frac{\text{m}}{\text{s}}$
+${\mathbf{v}^{\text{i}}}$ & Initial velocity & $\frac{\text{m}}{\text{s}}$
 \\
 $ε$ & Hit tolerance & --
 \\
@@ -247,10 +245,10 @@ This section simplifies the original problem and helps in developing the theoret
 \item[accelXZero:\phantomsection\label{accelXZero}]{The acceleration in the $x$-direction is zero. (RefBy: \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist} and \hyperref[constAccel]{A: constAccel}.)}
 \item[accelYGravity:\phantomsection\label{accelYGravity}]{The acceleration in the $y$-direction is the acceleration due to gravity (from \hyperref[yAxisGravity]{A: yAxisGravity}). (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} and \hyperref[constAccel]{A: constAccel}.)}
 \item[neglectDrag:\phantomsection\label{neglectDrag}]{Air drag is neglected. (RefBy: \hyperref[constAccel]{A: constAccel}.)}
-\item[pointMass:\phantomsection\label{pointMass}]{The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: \hyperref[GD:rectVel]{GD: rectVel} and \hyperref[GD:rectPos]{GD: rectPos}.)}
+\item[pointMass:\phantomsection\label{pointMass}]{The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: \hyperref[GD:rectPos]{GD: rectPos} and \hyperref[GD:rectVel]{GD: rectVel}.)}
 \item[freeFlight:\phantomsection\label{freeFlight}]{The flight is free; there are no collisions during the trajectory of the projectile. (RefBy: \hyperref[constAccel]{A: constAccel}.)}
 \item[neglectCurv:\phantomsection\label{neglectCurv}]{The distance is small enough that the curvature of the Earth can be neglected. (RefBy: \hyperref[targetXAxis]{A: targetXAxis} and \hyperref[cartSyst]{A: cartSyst}.)}
-\item[timeStartZero:\phantomsection\label{timeStartZero}]{Time starts at zero. (RefBy: \hyperref[GD:velVec]{GD: velVec}, \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}, \hyperref[GD:rectVel]{GD: rectVel}, \hyperref[GD:rectPos]{GD: rectPos}, and \hyperref[GD:posVec]{GD: posVec}.)}
+\item[timeStartZero:\phantomsection\label{timeStartZero}]{Time starts at zero. (RefBy: \hyperref[GD:velVec]{GD: velVec}, \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime}, \hyperref[GD:rectPos]{GD: rectPos}, \hyperref[GD:rectVel]{GD: rectVel}, and \hyperref[GD:posVec]{GD: posVec}.)}
 \item[gravAccelValue:\phantomsection\label{gravAccelValue}]{The acceleration due to gravity is assumed to have the value provided in \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants}. (RefBy: \hyperref[IM:calOfLandingTime]{IM: calOfLandingTime} and \hyperref[IM:calOfLandingDist]{IM: calOfLandingDist}.)}
 \end{itemize}
 \subsubsection{Theoretical Models}
@@ -334,11 +332,11 @@ Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {v^{\text{f}}}={v^{\text{i}}}+{a^{c}} t
+           \mathbf{v}\text{(}t\text{)}={v^{\text{i}}}+{a^{c}} t
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${v^{\text{f}}}$ is the final speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{$\mathbf{v}\text{(}t\text{)}$ is the 1D speed ($\frac{\text{m}}{\text{s}}$)}
               \item{${v^{\text{i}}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
               \item{${a^{c}}$ is the constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$t$ is the time (${\text{s}}$)}
@@ -364,10 +362,10 @@ Rearranging and integrating, we have:
 \begin{displaymath}
 \int_{{v^{\text{i}}}}^{v}{1}\,dv=\int_{0}^{t}{{a^{c}}}\,dt
 \end{displaymath}
-Performing the integration, replacing $v$ with ${v^{\text{f}}}$, we have the required equation:
+Performing the integration, we have the required equation:
 
 \begin{displaymath}
-{v^{\text{f}}}={v^{\text{i}}}+{a^{c}} t
+\mathbf{v}\text{(}t\text{)}={v^{\text{i}}}+{a^{c}} t
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -561,21 +559,21 @@ This section collects and defines all the data needed to build the instance mode
 \phantomsection 
 \label{DD:vecMag}
 \\ \midrule \\
-Label & Vector speed
+Label & Speed
         
 \\ \midrule \\
-Symbol & ${\mathbf{v}^{\text{speed}}}$
+Symbol & $v$
          
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           {\mathbf{v}^{\text{speed}}}=\|\mathbf{v}\|
+           v=\|\mathbf{v}\|
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{${\mathbf{v}^{\text{speed}}}$ is the vector speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{$v$ is the speed ($\frac{\text{m}}{\text{s}}$)}
               \item{$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
               \end{symbDescription}
 \\ \midrule \\

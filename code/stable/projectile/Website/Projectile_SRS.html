@@ -185,11 +185,6 @@
                   <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
                 </tr>
                 <tr>
-                  <td><em>v<sup>f</sup></em></td>
-                  <td>Final speed</td>
-                  <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
-                </tr>
-                <tr>
                   <td><em>v<sup>i</sup></em></td>
                   <td>Initial speed</td>
                   <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
@@ -225,13 +220,13 @@
                   <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
                 </tr>
                 <tr>
-                  <td><em><b>v</b><sup>i</sup></em></td>
-                  <td>Initial velocity</td>
+                  <td><em><b>v</b>(t)</em></td>
+                  <td>1D speed</td>
                   <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
                 </tr>
                 <tr>
-                  <td><em><b>v</b><sup>speed</sup></em></td>
-                  <td>Vector speed</td>
+                  <td><em><b>v</b><sup>i</sup></em></td>
+                  <td>Initial velocity</td>
                   <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
                 </tr>
                 <tr>
@@ -474,7 +469,7 @@
                   </p>
                   <p>
                     <div id="pointMass">
-                      pointMass: The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: <a href=#GD:rectVel>GD: rectVel</a> and <a href=#GD:rectPos>GD: rectPos</a>.)
+                      pointMass: The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: <a href=#GD:rectPos>GD: rectPos</a> and <a href=#GD:rectVel>GD: rectVel</a>.)
                     </div>
                   </p>
                   <p>
@@ -489,7 +484,7 @@
                   </p>
                   <p>
                     <div id="timeStartZero">
-                      timeStartZero: Time starts at zero. (RefBy: <a href=#GD:velVec>GD: velVec</a>, <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>, <a href=#GD:rectVel>GD: rectVel</a>, <a href=#GD:rectPos>GD: rectPos</a>, and <a href=#GD:posVec>GD: posVec</a>.)
+                      timeStartZero: Time starts at zero. (RefBy: <a href=#GD:velVec>GD: velVec</a>, <a href=#IM:calOfLandingTime>IM: calOfLandingTime</a>, <a href=#GD:rectPos>GD: rectPos</a>, <a href=#GD:rectVel>GD: rectVel</a>, and <a href=#GD:posVec>GD: posVec</a>.)
                     </div>
                   </p>
                   <p>
@@ -620,14 +615,14 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[{v^{\text{f}}}={v^{\text{i}}}+{a^{c}} t\]</td>
+                      <td>\[\mathbf{v}\text{(}t\text{)}={v^{\text{i}}}+{a^{c}} t\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em>v<sup>f</sup></em> is the final speed (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                            <em><b>v</b>(t)</em> is the 1D speed (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                           <li>
                             <em>v<sup>i</sup></em> is the initial speed (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
@@ -667,9 +662,9 @@
                     <p class="paragraph">Rearranging and integrating, we have:</p>
                     \[\int_{{v^{\text{i}}}}^{v}{1}\,dv=\int_{0}^{t}{{a^{c}}}\,dt\]
                     <p class="paragraph">
-                      Performing the integration, replacing <em>v</em> with <em>v<sup>f</sup></em>, we have the required equation:
+                      Performing the integration, we have the required equation:
                     </p>
-                    \[{v^{\text{f}}}={v^{\text{i}}}+{a^{c}} t\]
+                    \[\mathbf{v}\text{(}t\text{)}={v^{\text{i}}}+{a^{c}} t\]
                   </div>
                 </div>
                 <div id="GD:rectPos">
@@ -944,11 +939,11 @@
                     </tr>
                     <tr>
                       <th>Label</th>
-                      <td><p class="paragraph">Vector speed</p></td>
+                      <td><p class="paragraph">Speed</p></td>
                     </tr>
                     <tr>
                       <th>Symbol</th>
-                      <td><p class="paragraph"><em><b>v</b><sup>speed</sup></em></p></td>
+                      <td><p class="paragraph"><em>v</em></p></td>
                     </tr>
                     <tr>
                       <th>Units</th>
@@ -958,14 +953,14 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[{\mathbf{v}^{\text{speed}}}=\|\mathbf{v}\|\]</td>
+                      <td>\[v=\|\mathbf{v}\|\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em><b>v</b><sup>speed</sup></em> is the vector speed (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                            <em>v</em> is the speed (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
                           </li>
                           <li>
                             <em><b>v</b></em> is the velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)

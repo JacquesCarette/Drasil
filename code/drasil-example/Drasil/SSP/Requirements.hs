@@ -2,6 +2,7 @@ module Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs) where
 
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 
 import Drasil.DocLang (mkInputPropsTable)
@@ -59,7 +60,7 @@ verifyOutput = cic "verifyOutput" ( foldlSent [
   "Verify-Output" funcReqDom
 
 displayInput = cic "displayInput" ( foldlSent [
-  S "Display as", phrase output_, S "the", phrase user :+: S "-supplied",
+  S "Display as", phrase output_, phraseNP (the user) :+: S "-supplied",
   plural input_, S "listed in", makeRef2S inputsToOutputTable])
   "Display-Input" funcReqDom
 
@@ -110,22 +111,22 @@ nonFuncReqs = [correct, understandable, reusable, maintainable]
 
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
-  plural output_ `S.the_ofTheC` phrase code, S "have the",
+  atStartNP' (output_ `the_ofThePS` code), S "have the",
   plural property, S "described in", makeRef2S (propCorSol [] [])
   ]) "Correct" nonFuncReqDom
 
 understandable :: ConceptInstance
 understandable = cic "understandable" (foldlSent [
-  S "The", phrase code, S "is modularized with complete",
+  atStartNP (the code), S "is modularized with complete",
   phrase mg `S.and_` phrase mis]) "Understandable" nonFuncReqDom
 
 reusable :: ConceptInstance
 reusable = cic "reusable" (foldlSent [
-  S "The", phrase code, S "is modularized"]) "Reusable" nonFuncReqDom
+  atStartNP (the code), S "is modularized"]) "Reusable" nonFuncReqDom
 
 maintainable :: ConceptInstance
 maintainable = cic "maintainable" (foldlSent [
   S "The traceability between", foldlList Comma List [plural requirement,
   plural assumption, plural thModel, plural genDefn, plural dataDefn, plural inModel,
   plural likelyChg, plural unlikelyChg, plural module_], S "is completely recorded in",
-  plural traceyMatrix, S "in the", getAcc srs `S.and_` phrase mg]) "Maintainable" nonFuncReqDom
+  plural traceyMatrix `S.inThe` getAcc srs `S.and_` phrase mg]) "Maintainable" nonFuncReqDom

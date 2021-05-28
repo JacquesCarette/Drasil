@@ -1,12 +1,12 @@
 module Utils.Drasil.Concepts (and_, and_TSP, and_PS, and_PP, and_TGen, and_Gen, andIts, andThe, with, of_, of_NINP, of_PSNPNI, of_TSP, of_PS, of_TPS, ofA,
-ofATPS, ofThe, ofThePS, the_ofThe, the_ofThePS, onThe, onThePS, inThe, inThePS, toThe, for, forTGen, in_, in_PS, inA, is, the, theT, theGen, a_, a_Gen,
+ofATPS, ofThe, ofThePS, the_ofThe, the_ofThePS, onThe, onThePS, inThe, inThePS, isThe, toThe, for, forTGen, in_, in_PS, inA, is, the, theT, theGen, a_, a_Gen,
 compoundNC, compoundNCPP, compoundNCGen, compoundNCPS, compoundNCPSPP, compoundNCGenP, combineNINP, combineNPNI, combineNINI) where
 
 import Language.Drasil
 import qualified Language.Drasil.Development as D
 import Control.Lens ((^.))
 
-import qualified Utils.Drasil.Sentence as S (and_, andIts, andThe, of_, ofA, ofThe, the_ofThe, onThe, for, inThe, in_, is, toThe) 
+import qualified Utils.Drasil.Sentence as S (and_, andIts, andThe, of_, ofA, ofThe, the_ofThe, onThe, for, inThe, in_, is, toThe, isThe) 
 
 -----------
 --FIXME: Find out why CapFirst and CapWords can't just be used instead of Replace constructor.
@@ -221,6 +221,15 @@ inThePS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 inThePS t1 t2 = nounPhrase'' 
   (phrase t1 `S.inThe` phrase t2) 
   (plural t1 `S.inThe` phrase t2)
+  CapFirst
+  CapWords
+
+-- | Creates a 'NP' by combining two 'NamedIdea's with the words "is the" between
+-- their terms. Plural case is @(phrase t1) "is the" (plural t2)@.
+isThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+isThe t1 t2 = nounPhrase'' 
+  (phrase t1 `S.isThe` phrase t2) 
+  (phrase t1 `S.isThe` plural t2)
   CapFirst
   CapWords
 

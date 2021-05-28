@@ -2,6 +2,7 @@ module Drasil.SSP.Goals (goals, identifyCritAndFSGS, determineNormalFGS,
   determineShearFGS) where
 
 import Language.Drasil
+import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (goalStmtDom)
@@ -34,5 +35,5 @@ identifyCritAndFS = S "Identify the" +:+ phrase crtSlpSrf `S.andThe`
   
 determineF :: (NamedIdea a) => a -> Sentence
 determineF what = S "Determine the" +:+ phrase what +:+
-  S "between each pair of vertical" +:+. (plural slice `S.ofThe`
-  phrase slope)
+  S "between each pair of vertical" +:+. pluralNP (slice `ofThePS`
+  slope)

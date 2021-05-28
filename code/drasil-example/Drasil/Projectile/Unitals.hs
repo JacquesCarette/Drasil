@@ -12,7 +12,7 @@ import Data.Drasil.Units.Physics (velU)
 import qualified Drasil.Projectile.Concepts as C
 
 projSpeed :: UnitalChunk
-projSpeed  = uc C.projSpeed lV velU
+projSpeed  = uc C.projSpeed (Concat [vec lV, Label "(", lT, Label ")"]) velU
 
 ---
 landPosUnc, launAngleUnc, launSpeedUnc, offsetUnc, targPosUnc :: UncertQ

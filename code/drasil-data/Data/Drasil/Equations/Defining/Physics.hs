@@ -22,7 +22,7 @@ newtonSLRel, weightEqn, weightDerivAccelEqn, weightDerivNewtonEqn, weightDerivRe
 
 newtonSLRel               = sy QP.force $= mulRe (sy QPP.mass) (sy QP.acceleration)
 
-weightEqn                 = sy QP.weight $= mulRe (sy QPP.vol) (sy QPP.specWeight)
+weightEqn                 = sy QPP.vol `mulRe` sy QPP.specWeight
 weightDerivNewtonEqn      = sy QP.weight $= mulRe (sy QPP.mass) (sy QP.gravitationalAccel)
 weightDerivReplaceMassEqn = sy QP.weight $= mulRe (sy QPP.density) (mulRe (sy QPP.vol) (sy QP.gravitationalAccel))
 weightDerivSpecWeightEqn  = sy QP.weight $= mulRe (sy QPP.vol) (sy QPP.specWeight)

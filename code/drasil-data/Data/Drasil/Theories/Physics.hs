@@ -2,7 +2,7 @@ module Data.Drasil.Theories.Physics where
 
 import Language.Drasil
 import Theory.Drasil (DataDefinition, GenDefn, TheoryModel, ddNoRefs, gd,
-  tmNoRefs, ModelKinds (OthModel), tm)
+  tmNoRefs, ModelKinds (OthModel, EquationalModel), tm)
 import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 
@@ -30,11 +30,11 @@ newtonSL = tmNoRefs (OthModel newtonSLRC)
 --
 
 weightGD :: GenDefn
-weightGD = gd (OthModel weightRC) (getUnit QP.weight) (Just weightDeriv) [weightSrc] 
+weightGD = gd (EquationalModel weightQD) (getUnit QP.weight) (Just weightDeriv) [weightSrc] 
   "weight" [{-Notes-}]
 
-weightRC :: RelationConcept
-weightRC = makeRC "weight" (nounPhraseSP "weight") EmptyS weightEqn
+weightQD :: QDefinition
+weightQD = mkQuantDef' QP.weight (nounPhraseSP "weight") weightEqn
 
 weightSrc :: Reference
 weightSrc = makeURI "weightSrc" "https://en.wikipedia.org/wiki/Weight" $

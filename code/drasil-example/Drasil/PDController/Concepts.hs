@@ -23,7 +23,7 @@ pidCI               = commonIdeaWithDict "pidCI"           (pn "Proportional Int
 
 pidC, pidCL, summingPt, powerPlant, secondOrderSystem, processError,
       simulationTime, processVariable, setPoint, propGain, derGain, 
-      propControl, derControl, simulation,ccFrequencyDomain, 
+      propControl, derControl, simulation,ccFrequencyDomain, ccTimeDomain,
       ccLaplaceTransform, controlVariable, stepTime, ccAbsTolerance, 
       ccRelTolerance, ccTransferFxn, ccDampingCoeff, ccStiffCoeff :: ConceptChunk
 pidCL
@@ -99,6 +99,10 @@ ccFrequencyDomain
       ("The analysis of mathematical functions in terms of frequency, instead "
          ++ "of time")
 
+ccTimeDomain 
+  = dcc "timeDomain" (nounPhraseSP "time domain")
+      "The analysis of mathematical functions in terms of time"
+
 ccLaplaceTransform
   = dcc "laplaceTransform" (cn' "Laplace transform") 
       ("An integral transform that converts a function of a real variable t " ++
@@ -132,7 +136,7 @@ defs :: [ConceptChunk]
 defs
   = [pidCL, pidC, summingPt, powerPlant, secondOrderSystem, processError,
      simulationTime, processVariable, setPoint, propGain, derGain, propControl,
-    derControl, ccFrequencyDomain, ccLaplaceTransform, controlVariable, stepTime,
+    derControl, ccFrequencyDomain, ccTimeDomain, ccLaplaceTransform, controlVariable, stepTime,
      ccAbsTolerance, ccRelTolerance, ccTransferFxn, ccDampingCoeff,
      ccStiffCoeff]
 

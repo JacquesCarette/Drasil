@@ -18,7 +18,7 @@ import Data.Drasil.Concepts.Documentation (body, constant)
 
 newtonSLRel, weightEqn, weightDerivAccelEqn, weightDerivNewtonEqn, weightDerivReplaceMassEqn,
   weightDerivSpecWeightEqn,
-  hsPressureEqn, accelerationEqn, velocityEqn  :: Relation
+  hsPressureEqn, speedEqn, velocityEqn, accelerationEqn  :: Relation
 
 newtonSLRel               = sy QP.force $= mulRe (sy QPP.mass) (sy QP.acceleration)
 
@@ -31,6 +31,7 @@ weightDerivAccelEqn       = sy QP.acceleration $= vec2D (exactDbl 0) (mulRe (sy 
 
 hsPressureEqn             = sy QP.pressure $= mulRe (sy QPP.specWeight) (sy QP.height)
 
+speedEqn                  = norm (sy QP.velocity)
 velocityEqn               = sy QP.velocity $= deriv (sy QP.position) QP.time
 accelerationEqn           = sy QP.acceleration $= deriv (sy QP.velocity) QP.time
 
@@ -51,5 +52,3 @@ newtonSLDesc = foldlSent [S "The net", getTandS QP.force, S "on a",
   phrase body `S.is` S "proportional to", getTandS QP.acceleration `S.the_ofThe`
   phrase body `sC` S "where", ch QPP.mass, S "denotes", phrase QPP.mass `S.the_ofThe`
   phrase body, S "as the", phrase constant `S.of_` S "proportionality"]
-
-

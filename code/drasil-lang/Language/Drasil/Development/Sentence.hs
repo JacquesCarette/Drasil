@@ -2,7 +2,7 @@
 -- Various helpers for building Sentences from other bits.
 -- Really ought to be moved out to (likely) docLang, but is here for now.
 module Language.Drasil.Development.Sentence (short, introduceAbb, atStart,
-  atStart', titleize, titleize', phrase, plural, phrasePoss, pluralPoss) where
+  atStart', titleize, titleize', phrase, phrase', plural, phrasePoss, pluralPoss) where
 
 import Control.Lens ((^.))
 
@@ -38,9 +38,13 @@ titleize  n = NP.titleizeNP (n ^. term)
 -- | Plural title case.
 titleize' n = NP.titleizeNP' (n ^. term)
 
--- | Helper for getting the phrase from a 'NamedIdea'.
+-- | Helper for getting the phrase from a 'NamedIdea' using it's UID.
 phrase :: (HasUID n, NamedIdea n) => n -> Sentence
-phrase n = sentenceTerm (n ^. uid) --NP.phrase (n ^. term)
+phrase n = sentenceTerm (n ^. uid)
+
+-- | Helper for getting the phrase from a 'NamedIdea'.
+phrase' :: NamedIdea n => n -> Sentence
+phrase' n = NP.phraseNP (n ^. term)
 
 -- | Helper for getting the plural of a phrase from a 'NamedIdea'.
 plural :: (HasUID n, NamedIdea n) => n -> Sentence

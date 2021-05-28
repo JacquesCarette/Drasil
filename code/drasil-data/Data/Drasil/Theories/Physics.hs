@@ -98,7 +98,7 @@ torque :: QDefinition
 torque = mkQuantDef QP.torque torqueEqn
 
 torqueEqn :: Expr
-torqueEqn = cross (sy QP.positionVec) (sy QP.force)
+torqueEqn = sy QP.positionVec `cross` sy QP.force
 
 torqueDesc :: Sentence
 torqueDesc = foldlSent [S "The", phrase torque, 
@@ -120,16 +120,15 @@ vecMag = ddNoRefs vecMagQD Nothing "vecMag" [magNote]
 
 --
 newtonSLR :: TheoryModel
-newtonSLR = tmNoRefs (OthModel newtonSLRRC)
+newtonSLR = tmNoRefs (EquationalModel newtonSLRQD)
   [qw QP.torque, qw QP.momentOfInertia, qw QP.angularAccel] 
-  ([] :: [ConceptChunk]) [] [newtonSLRRel] [] "NewtonSecLawRotMot" newtonSLRNotes
+  ([] :: [ConceptChunk]) [] [relat newtonSLRQD] [] "NewtonSecLawRotMot" newtonSLRNotes
 
-newtonSLRRC :: RelationConcept
-newtonSLRRC = makeRC "newtonSLRRC" 
-  (nounPhraseSP "Newton's second law for rotational motion") EmptyS newtonSLRRel
+newtonSLRQD :: QDefinition
+newtonSLRQD = mkQuantDef' QP.torque (nounPhraseSP "Newton's second law for rotational motion") newtonSLRExpr
 
-newtonSLRRel :: Relation
-newtonSLRRel = sy QP.torque $= mulRe (sy QP.momentOfInertia) (sy QP.angularAccel)
+newtonSLRExpr :: Expr
+newtonSLRExpr = sy QP.momentOfInertia `mulRe` sy QP.angularAccel
 
 newtonSLRNotes :: [Sentence]
 newtonSLRNotes = map foldlSent [

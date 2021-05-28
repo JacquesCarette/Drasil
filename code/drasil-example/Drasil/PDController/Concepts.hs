@@ -101,7 +101,7 @@ ccFrequencyDomain
 
 ccTimeDomain 
   = dcc "timeDomain" (nounPhraseSP "time domain")
-      ("The analysis of mathematical functions in terms of time")
+      "The analysis of mathematical functions in terms of time"
 
 ccLaplaceTransform
   = dcc "laplaceTransform" (cn' "Laplace transform") 

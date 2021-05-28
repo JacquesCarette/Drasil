@@ -772,8 +772,9 @@ weightDerivNewtonEqn :: Relation
 weightDerivReplaceMassEqn :: Relation
 weightDerivSpecWeightEqn :: Relation
 hsPressureEqn :: Relation
-accelerationEqn :: Relation
+speedEqn :: Relation
 velocityEqn :: Relation
+accelerationEqn :: Relation
 accelerationRC :: RelationConcept
 velocityRC :: RelationConcept
 newtonSLRC :: RelationConcept
@@ -800,6 +801,9 @@ torqueDD :: DataDefinition
 torque :: QDefinition
 torqueEqn :: Expr
 torqueDesc :: Sentence
+vecMagQD :: QDefinition
+magNote :: Sentence
+vecMag :: DataDefinition
 newtonSLR :: TheoryModel
 newtonSLRRC :: RelationConcept
 newtonSLRRel :: Relation

@@ -36,7 +36,7 @@ import Data.Drasil.Concepts.Software (errMsg, program)
 import Data.Drasil.Quantities.Math (pi_, piConst)
 import Data.Drasil.Quantities.Physics (acceleration, constAccel,
   gravitationalAccelConst, iPos, iSpeed, iVel, ixPos, iyPos, ixVel, iyVel,
-  position, scalarPos, speed, time, velocity, xAccel, xConstAccel, xPos,
+  position, scalarPos, time, velocity, xAccel, xConstAccel, xPos,
   xVel, yAccel, yConstAccel, yPos, yVel, physicscon)
 
 import Data.Drasil.People (brooks, samCrawford, spencerSmith)
@@ -49,14 +49,12 @@ import Drasil.Projectile.Concepts (concepts, landingPosNC,
   launcher, projectile, target)
 import Drasil.Projectile.DataDefs (dataDefs)
 import Drasil.Projectile.Figures (figLaunch)
-import Drasil.Projectile.GenDefs (genDefns, genDefns0)
+import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
 import Drasil.Projectile.IMods (iMods)
 import Drasil.Projectile.References (citations)
 import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs)
-import Drasil.Projectile.Unitals (launAngle, tol, launSpeed, targPos, message,
-  offset, launSpeedUnc, launAngleUnc,targPosUnc,landPosUnc, offsetUnc, flightDur,
-  landPos)
+import Drasil.Projectile.Unitals
 
 import Theory.Drasil (getEqModQdsFromGd, TheoryModel)
 
@@ -125,7 +123,6 @@ si = SI {
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
   _definitions = map (relToQD symbMap) iMods
-                 ++ map (relToQD symbMap) genDefns0
                  ++ getEqModQdsFromGd genDefns,
   _datadefs    = dataDefs,
   _configFiles = [],
@@ -194,7 +191,7 @@ physSystParts = map (!.)
 symbols :: [QuantityDict]
 symbols = qw gravitationalAccelConst : unitalQuants ++ map qw constants ++
   map qw [acceleration, constAccel, iPos, iSpeed, iVel, ixPos,
-  iyPos, ixVel, iyVel, position, scalarPos, speed, time, velocity, xAccel,
+  iyPos, ixVel, iyVel, position, scalarPos, projSpeed, time, velocity, xAccel,
   xConstAccel, xPos, xVel, yAccel, yConstAccel, yPos, yVel]
 
 constants :: [QDefinition]

@@ -41,7 +41,7 @@ eqnWSource a b = E a +:+ sParen (makeRef2S b)
 
 -- | Takes a 'Referable' source and a 'UnitalChunk' and outputs as a 'Sentence': "From @source@ we can replace @symbol@:".
 fromReplace :: (Referable r, HasShortName r) => r -> UnitalChunk -> Sentence
-fromReplace src c = S "From" +:+ makeRef2S src +:+ S "we can replace" +: ch c
+fromReplace src c = S "From" +:+ makeRef2S src `sC` S "we can replace" +: ch c
 
 -- | Takes a list of 'Referable's and 'Symbol's and outputs as a Sentence "By substituting @symbols@, this can be written as:".
 substitute :: (Referable r, HasShortName r, HasSymbol r) => [r] -> Sentence

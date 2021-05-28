@@ -14,10 +14,10 @@ import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (density,
   mass, specWeight, vol)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration, velocity, position,
   force, gravitationalAccel, pressure, torque, weight, positionVec, time, momentOfInertia,
-  angularAccel)
+  angularAccel, speed)
 import Data.Drasil.Equations.Defining.Physics (newtonSLRel, newtonSLRC, newtonSLDesc, weightEqn,
   weightDerivAccelEqn, weightDerivNewtonEqn, weightDerivReplaceMassEqn, weightDerivSpecWeightEqn,
-  hsPressureEqn, accelerationEqn, accelerationRC, velocityEqn, velocityRC)
+  hsPressureEqn, accelerationEqn, accelerationRC, velocityEqn, velocityRC, speedEqn)
 
 physicsTMs :: [TheoryModel]
 physicsTMs = [newtonSL]
@@ -105,6 +105,19 @@ torqueDesc :: Sentence
 torqueDesc = foldlSent [S "The", phrase torque, 
   S "on a body measures the", S "tendency" `S.of_` S "a", phrase QP.force, 
   S "to rotate the body around an axis or pivot"]
+
+--
+
+vecMagQD :: QDefinition
+vecMagQD = mkQuantDef QP.speed speedEqn
+
+magNote :: Sentence
+magNote = foldlSent [S "For a given", phrase QP.velocity, S "vector", ch QP.velocity `sC`
+  S "the magnitude of the vector", sParen (E speedEqn) `S.isThe`
+  S "scalar called", phrase QP.speed]
+
+vecMag :: DataDefinition
+vecMag = ddNoRefs vecMagQD Nothing "vecMag" [magNote]
 
 --
 newtonSLR :: TheoryModel

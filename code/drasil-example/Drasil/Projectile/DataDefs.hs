@@ -2,12 +2,12 @@ module Drasil.Projectile.DataDefs (dataDefs, speedIX, speedIY) where
 
 import Prelude hiding (sin, cos)
 import Language.Drasil
-import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 
 import Theory.Drasil (DataDefinition, ddNoRefs)
 
-import Data.Drasil.Quantities.Physics (speed, iSpeed, ixVel, iyVel, velocity)
+import Data.Drasil.Quantities.Physics (iSpeed, ixVel, iyVel)
+import Data.Drasil.Theories.Physics (vecMag)
 
 import Drasil.Projectile.Figures (figLaunch)
 import Drasil.Projectile.Unitals (launAngle)
@@ -16,23 +16,15 @@ dataDefs :: [DataDefinition]
 dataDefs = [vecMag, speedIX, speedIY]
 
 ----------
-vecMag, speedIX, speedIY :: DataDefinition
-vecMag  = ddNoRefs vecMagQD  Nothing "vecMag"  [magNote]
+speedIX, speedIY :: DataDefinition
 speedIX = ddNoRefs speedIXQD Nothing "speedIX" [speedRef, figRef]
 speedIY = ddNoRefs speedIYQD Nothing "speedIY" [speedRef, figRef]
 
-vecMagQD, speedIXQD, speedIYQD :: QDefinition
-vecMagQD  = mkQuantDef speed speedE
+speedIXQD, speedIYQD :: QDefinition
 speedIXQD = mkQuantDef ixVel $ sy iSpeed `mulRe` cos (sy launAngle)
 speedIYQD = mkQuantDef iyVel $ sy iSpeed `mulRe` sin (sy launAngle)
 
-speedE :: Expr
-speedE = norm $ sy velocity
 ----------
-magNote :: Sentence
-magNote = foldlSent [S "For a given", phrase velocity, S "vector", ch velocity `sC`
-  S "the magnitude of the vector", sParen (E speedE) `S.isThe`
-  S "scalar called", phrase speed]
 
 speedRef :: Sentence
 speedRef = ch iSpeed `S.is` S "from" +:+. makeRef2S vecMag

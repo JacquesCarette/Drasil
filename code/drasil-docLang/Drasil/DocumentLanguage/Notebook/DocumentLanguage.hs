@@ -8,7 +8,7 @@ import Notebook.Core (AppndxSec(..), NBDesc, DocSection(..),
 import qualified Drasil.DocLang.Notebook as NB (appendix, body)
 
 import qualified Drasil.NBSections.Introduction as Intro (introductionSection)
-import qualified Drasil.NBSections.Body as Body (bodyIntro)
+import qualified Drasil.NBSections.Body as Body (bodyIntro, reviewSec, motionSec, mthdAndanls)
 
 -- | Creates a document from a document description and system information
 mkDoc :: NBDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
@@ -45,6 +45,6 @@ mkBodySec (BodyProg l) = NB.body [Body.bodyIntro] $ map mkSubs l
     mkSubs :: BodySub -> Section
     mkSubs (Review cs )                 = Body.reviewSec cs 
     mkSubs (Motion cntnts subsec)       = Body.motionSec cntnts subsec
-    mkSubs (MethsAndAnls cntnts subsec) = Body.systCon cntnts subsec
+    mkSubs (MethsAndAnls cntnts subsec) = Body.mthdAndanls cntnts subsec
 
     

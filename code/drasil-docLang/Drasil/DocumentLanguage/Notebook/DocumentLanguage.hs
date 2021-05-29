@@ -5,6 +5,11 @@ import Drasil.DocDecl (NBDecl, mkNBDesc)
 import Notebook.Core (AppndxSec(..), NBDesc, DocSection(..), 
   IntroSec(..), IntroSub(..), BodySec(..), BodySub(..), SmmrySec(..))
 
+import qualified Drasil.DocLang.Notebook as NB (appendix, body)
+
+import qualified Drasil.NBSections.Introduction as Intro (introductionSection)
+import qualified Drasil.NBSections.Body as Body (bodyIntro)
+
 -- | Creates a document from a document description and system information
 mkDoc :: NBDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
 mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
@@ -22,3 +27,24 @@ mkSections si dd = map doit dd
     doit Bibliography        = mkBib (citeDB si)
     doit (SmmrySec ss)       = mkSmmrySec ss
     doit (AppndxSec a)       = mkAppndxSec a
+
+
+-- | Helper for making the 'Introduction' section
+-- **** Add intro subsections
+mkIntroSec :: SystemInformation -> IntroSec -> Section
+mkIntroSec si (IntroProg probIntro progDefn l) =
+  Intro.introductionSection probIntro progDefn $ map (mkSubIntro si) l
+  where
+    mkSubIntro :: SystemInformation -> IntroSub -> Section
+    mkSubIntro _ (IPurpose intro) = Intro.purposeOfDoc intro
+
+-- | Helper for making the 'Body' section
+mkBodySec :: BodySec -> Section
+mkBodySec (BodyProg l) = NB.body [Body.bodyIntro] $ map mkSubs l
+  where
+    mkSubs :: BodySub -> Section
+    mkSubs (Review cs )                 = Body.reviewSec cs 
+    mkSubs (Motion cntnts subsec)       = Body.motionSec cntnts subsec
+    mkSubs (MethsAndAnls cntnts subsec) = Body.systCon cntnts subsec
+
+    

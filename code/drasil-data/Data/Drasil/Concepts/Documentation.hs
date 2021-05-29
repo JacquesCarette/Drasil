@@ -19,7 +19,7 @@ doccon = [abbreviation, analysis, appendix, aspect, body, charOfIR, characterist
   functionalRequirement, game, general, generalSystemDescription, goal, guide,
   implementation, indPRCase, individual, information, input_, instance_, intReader,
   interest, interface, introduction, issue, item, label, library, limitation,
-  literacy, loss, material_, message, method_, model, module_, name_, nonfunctional,
+  literacy, loss, material_, message, method_, model, motion, module_, name_, nonfunctional,
   nonfunctionalRequirement, object, offShelf, offShelfSolution, open, orgOfDoc,
   organization, output_, physical, physicalConstraint, physicalProperty, physicalSim,
   physicalSystem, physics, plan, practice, priority, problem, problemDescription,
@@ -76,7 +76,7 @@ abbreviation, analysis, appendix, aspect, body, characteristic, class_, client,
   functional, game, general, goal, guide, implementation, individual, information, 
   interest, interface, input_, instance_, intReader, introduction, issue, item, 
   loss, label, library, limitation, literacy, material_, message, method_, module_,
-  model, name_, nonfunctional, object, offShelf, open, organization, output_,
+  model, motion, name_, nonfunctional, object, offShelf, open, organization, output_,
   physics, physical, plan, practice, priority, problem, product_, project,
   property, purpose, quantity, realtime, review, reference, requirement_, response, 
   result, reviewer, safety, scope, scpOfTheProjS, second_, section_, scenario,
@@ -152,6 +152,7 @@ message         = nc "message"        (cn'    "message"            )
 method_         = nc "method"         (cn'    "method"             )
 module_         = nc "module"         (cn'    "module"             )
 model           = nc "model"          (cn'    "model"              )
+motion          = nc "motion"         (cn'    "motion"             )
 name_           = nc "name"           (cn'    "name"               )
 nonfunctional   = nc "non-functional" (cn'    "non-functional"     ) --FIXME: Adjective
 object          = nc "object"         (cn'    "object"             )

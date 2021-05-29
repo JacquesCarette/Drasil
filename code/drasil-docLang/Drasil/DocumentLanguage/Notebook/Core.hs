@@ -2,8 +2,7 @@ module Drasil.DocumentLanguage.Notebook.Core where
 
 import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))
 
-type DocDesc = [DocSection]
-
+type NBDesc = [DocSection]
 
 data DocSection = IntroSec IntroSec
                 | BodySec BodySec
@@ -11,12 +10,12 @@ data DocSection = IntroSec IntroSec
                 | Bibliography
                 | AppndxSec AppndxSec
 
+-- **** Work on detail structure of notebooks
+
 {--}
 
--- | Introduction section. Contents are top level followed by a list of
--- subsections.
+-- | Introduction section. Contents are top level followed by a list of subsections.
 data IntroSec = IntroProg Sentence Sentence [IntroSub]
-  -- ^ Temporary, will be modified once we've figured out more about the section.
 
 -- | Introduction subsections
 data IntroSub where
@@ -28,7 +27,8 @@ data IntroSub where
 newtype BodySec = BodyProg [BodySub]
 
 data BodySub where
-  Review       :: [Contents] -> [Section] -> BodySub 
+  Review       :: [Contents] -> BodySub
+  Motion       :: [Contents] -> [Section] -> BodySub
   MethsAndAnls :: [Contents] -> [Section] -> BodySub
 
 {--}

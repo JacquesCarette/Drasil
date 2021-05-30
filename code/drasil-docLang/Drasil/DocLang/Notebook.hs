@@ -3,7 +3,7 @@ module Drasil.DocLang.Notebook where
 import Language.Drasil
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (notebook, introduction, 
-  prpsOfDoc, review, body, motion, procForAnls, summary, method_, example, result, reference)
+  prpsOfDoc, review, body, motion, procForAnls, summary, method_, example, result, appendix, reference)
 
 -- | Notebook constructor. 
 -- Create the notebook from given system name, authors, and sections
@@ -11,7 +11,7 @@ doc :: NamedIdea c => c -> Sentence -> [Section] -> Document
 doc  sys = Document (Doc.notebook `forTT` sys)
 
 intro, prpsOfDoc, body, review, motion, procForAnls, summary, method, example, result, 
-  reference :: [Contents] -> [Section] -> Section
+  appendix, reference :: [Contents] -> [Section] -> Section
   
 intro       cs ss = section' (titleize Doc.introduction) cs ss "Intro"
 prpsOfDoc   cs ss = section' (titleize Doc.prpsOfDoc)    cs ss "DocPurpose"
@@ -27,6 +27,8 @@ procForAnls cs ss = section  (titleize Doc.procForAnls)  cs ss AnlsProcLabel
 example     cs ss = section' (titleize Doc.example)      cs ss "Example"
 
 result      cs ss = section' (titleize Doc.result)       cs ss "Result"
+
+appendix      cs ss = section' (titleize Doc.appendix)     cs ss "Appendix"
 
 reference   cs ss = section  (titleize' Doc.reference)   cs ss referenceLabel
 

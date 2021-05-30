@@ -5,8 +5,9 @@ import Drasil.DocDecl (NBDecl, mkNBDesc)
 import Notebook.Core (AppndxSec(..), NBDesc, DocSection(..), 
   IntroSec(..), IntroSub(..), BodySec(..), BodySub(..), SmmrySec(..))
 
-import qualified Drasil.DocLang.Notebook as NB (appendix, body)
+import Language.Drasil
 
+import qualified Drasil.DocLang.Notebook as NB (appendix, body, reference, summary)
 import qualified Drasil.NBSections.Introduction as Intro (introductionSection)
 import qualified Drasil.NBSections.Body as Body (bodyIntro, reviewSec, motionSec, mthdAndanls)
 
@@ -46,5 +47,17 @@ mkBodySec (BodyProg l) = NB.body [Body.bodyIntro] $ map mkSubs l
     mkSubs (Review cs )                 = Body.reviewSec cs 
     mkSubs (Motion cntnts subsec)       = Body.motionSec cntnts subsec
     mkSubs (MethsAndAnls cntnts subsec) = Body.mthdAndanls cntnts subsec
+
+-- | Helper for making the 'Summary' section
+mkSmmrySec :: SmmrySec -> Section
+mkSmmrySec (SmmryProg cs) = NB.summary cs []
+
+-- | Helper for making the 'Bibliography' section
+mkBib :: BibRef -> Section
+mkBib bib = NB.reference [UlC $ ulcc (Bib bib)] []
+
+-- | Helper for making the 'Appendix' section
+mkAppndxSec :: AppndxSec -> Section
+mkAppndxSec (AppndxProg cs) = NB.appendix cs []
 
     

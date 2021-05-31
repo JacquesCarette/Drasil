@@ -44,7 +44,7 @@ code/stable/*/src/*/latex
 code/website/_cache
 code/website/_site
 
-# PDF generation, TeX caches, ctc (misc. file types)
+# PDF generation, TeX caches, and misc. file types
 *.aux
 *.log
 *.blg

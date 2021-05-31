@@ -70,7 +70,7 @@ DCP_EXAMPLES = $(addsuffix $(DCP_E_SUFFIX), $(EXAMPLES))
 
 EXAMPLE_GEN_TARGET = GEN TEST TEX CODE DCP
 
-GENNED_FOLDERS = $(ANALYSIS_FOLDER) $(BUILD_FOLDER) $(DEPLOY_FOLDER) $(DOCS_FOLDER) $(GRAPH_FOLDER) $(LOG_FOLDER)
+GENNED_FOLDERS = $(ANALYSIS_FOLDER_NAME) $(BUILD_FOLDER_NAME) $(DEPLOY_FOLDER_NAME) $(DOCS_FOLDER_NAME) $(GRAPH_FOLDER_NAME) $(LOG_FOLDER_NAME)
 CLEAN_GF_PREFIX = clean_
 CLEAN_FOLDERS = $(addprefix $(CLEAN_GF_PREFIX), $(GENNED_FOLDERS))
 
@@ -226,10 +226,10 @@ deploy: analysis graphs docs tex doxygen
 
 # follow two are for cleaning things out
 $(filter $(CLEAN_GF_PREFIX)%, $(CLEAN_FOLDERS)): $(CLEAN_GF_PREFIX)%:
-	- rm -rf "./$*"
+	- rm -rf "./$*/"
 
 clean: $(CLEAN_FOLDERS)
-	- stack clean
 	- rm -f "$(CACHED_MSV_FILE)"
+	- stack clean
 
 .PHONY: clean code analysis tex doc debug prog test graphs graphmod check_stack graphs deploy_code_path deploy deploy_lite all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)

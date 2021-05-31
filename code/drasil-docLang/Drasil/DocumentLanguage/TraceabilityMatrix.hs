@@ -101,7 +101,7 @@ layoutUIDs a c e = filter (`elem` (Map.keys $ c ^. traceTable)) $ concatMap (\x 
 traceViewFilt :: HasUID a => (a -> Bool) -> Getting (UMap a) ChunkDB (UMap a) -> TraceViewCat
 traceViewFilt f table _ = map (^. uid) . filter f . asOrderedList . (^. table)
 
--- | Helper that is similar to 'traveViewFilt', but the filter is always 'True'.
+-- | Helper that is similar to 'traceViewFilt', but the filter is always 'True'.
 traceView :: HasUID a => Getting (UMap a) ChunkDB (UMap a) -> TraceViewCat
 traceView = traceViewFilt (const True)
 

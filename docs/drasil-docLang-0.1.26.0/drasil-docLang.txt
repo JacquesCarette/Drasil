@@ -277,8 +277,11 @@ valsOfAuxConsLabel :: Reference
 
 module Drasil.DocumentLanguage.Units
 
--- | Get the units, if they exist, and wrap them as a Sentence
+-- | Get the units, if they exist, and wrap them as a <a>Sentence</a>.
+--   Default value is "--".
 toSentence :: MayHaveUnit u => u -> Sentence
+
+-- | Similar to <a>toSentence</a>, except default value is "Unitless".
 toSentenceUnitless :: MayHaveUnit u => u -> Sentence
 
 module Drasil.DocLang
@@ -557,27 +560,51 @@ Succinct :: Verbosity
 --   symbols, and a <a>QDefinition</a> (called automatically by
 --   <tt>SCSSub</tt> program).
 ddefn :: Fields -> SystemInformation -> DataDefinition -> LabelledContent
+
+-- | A database that contains <a>TheoryModel</a>s, <a>GenDefn</a>s,
+--   <a>DataDefinition</a>s, and <a>InstanceModel</a>s.
 data ModelDB
 ddRefDB :: ModelDB -> RefMap DataDefinition
+
+-- | Constructor for creating a <a>ModelDB</a>.
 mdb :: [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> ModelDB
+
+-- | Combines <a>purpDocPara1</a> and <a>developmentProcessParagraph</a>.
+--   Verbosity controls if the <a>developmentProcessParagraph</a> is added
+--   or not.
 purpDoc :: CI -> Verbosity -> [Sentence]
 
--- | Default reference section introduction
+-- | Default Reference section introduction.
 intro :: Contents
+
+-- | Creates a <a>ConceptInstance</a> of input values.
 inReq :: Sentence -> ConceptInstance
+
+-- | Creates a generalized input-value table for the Requirements section.
 inTable :: (Quantity i, MayHaveUnit i) => [i] -> LabelledContent
 
--- | takes a list of wrapped variables and creates an Input Data Table for
---   uses in Functional Requirments
+-- | Creates an Input Data Table for use in the Functional Requirments
+--   section. Takes a list of wrapped variables and something that is
+--   <a>Referable</a>.
 mkInputPropsTable :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => [i] -> r -> LabelledContent
 mkQRTuple :: (Quantity i, MayHaveUnit i, HasShortName i, Referable i) => [i] -> [(QuantityDict, Sentence)]
 mkQRTupleRef :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => [i] -> [r] -> [(QuantityDict, Sentence)]
 
--- | takes a list of tuples of variables and sources and creates an table
---   for uses in Functional Requirments
+-- | Creates a table for use in the Functional Requirments section. Takes a
+--   list of tuples containing variables and sources, a label, and a
+--   caption.
 mkValsSourceTable :: (Quantity i, MayHaveUnit i) => [(i, Sentence)] -> String -> Sentence -> LabelledContent
+
+-- | General <a>Sentence</a> that describes some auxiliary specifications
+--   of the system.
 auxSpecSent :: Sentence
+
+-- | Similar to <a>termDefnF</a>, except does not take definitions from the
+--   list of terms.
 termDefnF' :: Maybe Sentence -> [Contents] -> Section
+
+-- | Contains traceability matrix assumptions, other assumptions,
+--   refinement, and other requirements.
 traceMatStandard :: SystemInformation -> [TraceConfig]
 getDocDesc :: DocDesc -> [Sentence]
 egetDocDesc :: DocDesc -> [Expr]

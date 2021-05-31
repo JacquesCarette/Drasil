@@ -70,7 +70,7 @@ DCP_EXAMPLES = $(addsuffix $(DCP_E_SUFFIX), $(EXAMPLES))
 
 EXAMPLE_GEN_TARGET = GEN TEST TEX CODE DCP
 
-GENNED_FOLDERS = $(LOG_FOLDER_NAME) $(BUILD_FOLDER_NAME) $(GRAPH_FOLDER_NAME) $(DEPLOY_FOLDER_NAME) $(ANALYSIS_FOLDER)
+GENNED_FOLDERS = $(ANALYSIS_FOLDER) $(BUILD_FOLDER) $(DEPLOY_FOLDER) $(DOCS_FOLDER) $(GRAPH_FOLDER) $(LOG_FOLDER)
 CLEAN_GF_PREFIX = clean_
 CLEAN_FOLDERS = $(addprefix $(CLEAN_GF_PREFIX), $(GENNED_FOLDERS))
 
@@ -97,6 +97,8 @@ ANALYSIS_FOLDER = $(ANALYSIS_FOLDER_NAME)/
 DEPLOY_FOLDER_NAME = deploy
 DEPLOY_FOLDER = $(DEPLOY_FOLDER_NAME)/
 DEPLOY_CODE_PATH_KV_SEP = :
+DOCS_FOLDER_NAME = docs
+DOCS_FOLDER = $(DOCS_FOLDER_NAME)/
 # make command line options
 #  GHC debug options
 PROFALL = --executable-profiling --library-profiling
@@ -172,7 +174,7 @@ analysis: check_stack
 	cd $(SCRIPT_FOLDER) && stack exec -- runghc DataTableGen.hs
 
 docs: check_stack
-	GHC_FLAGS="$(GHCFLAGS)" sh scripts/make_docs.sh
+	DOCS_FOLDER="$(DOCS_FOLDER)" GHC_FLAGS="$(GHCFLAGS)" sh scripts/make_docs.sh
 
 %$(TEX_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(TEX_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)

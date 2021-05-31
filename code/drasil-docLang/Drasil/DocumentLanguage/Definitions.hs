@@ -21,10 +21,10 @@ import Utils.Drasil
 
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
 
--- | Synonym for a list of 'Field'
+-- | Synonym for a list of 'Field's.
 type Fields = [Field]
 
--- | Fields that should be displayed in definitions
+-- | Fields that should be displayed in definitions.
 data Field = Label
            | Symbol
            | Units
@@ -39,35 +39,37 @@ data Field = Label
               -- will be modified across applications; the underlying knowledge won't.
            | RefBy --TODO: Fill in the field.
 
-data Verbosity = Verbose  -- Full Descriptions
-               | Succinct -- Simple Description (do not redefine other symbols)
+-- | Refers to the verbosity of statements.
+data Verbosity = Verbose  -- ^ Full Descriptions.
+               | Succinct -- ^ Simple Description (do not redefine other symbols).
 
-data InclUnits = IncludeUnits -- In description field (for other symbols)
+-- | Determines whether to include or ignore units.
+data InclUnits = IncludeUnits -- ^ In description field (for other symbols).
                | IgnoreUnits
 
 -- | Create a theoretical model using a list of fields to be displayed, a database of symbols,
--- and a RelationConcept (called automatically by 'SCSSub' program)
+-- and a 'RelationConcept' (called automatically by 'SCSSub' program).
 tmodel :: Fields -> SystemInformation -> TheoryModel -> LabelledContent
 tmodel fs m t = mkRawLC (Defini Theory (foldr (mkTMField t m) [] fs)) (makeRef2 t)
 
 -- | Create a data definition using a list of fields, a database of symbols, and a
--- QDefinition (called automatically by 'SCSSub' program)
+-- 'QDefinition' (called automatically by 'SCSSub' program).
 ddefn :: Fields -> SystemInformation -> DataDefinition -> LabelledContent
 ddefn fs m d = mkRawLC (Defini Data (foldr (mkDDField d m) [] fs)) (makeRef2 d)
 
 -- | Create a general definition using a list of fields, database of symbols,
 -- and a 'GenDefn' (general definition) chunk (called automatically by 'SCSSub'
--- program)
+-- program).
 gdefn :: Fields -> SystemInformation -> GenDefn -> LabelledContent
 gdefn fs m g = mkRawLC (Defini General (foldr (mkGDField g m) [] fs)) (makeRef2 g)
 
 -- | Create an instance model using a list of fields, database of symbols,
--- and an 'InstanceModel' chunk (called automatically by 'SCSSub' program)
+-- and an 'InstanceModel' chunk (called automatically by 'SCSSub' program).
 instanceModel :: Fields -> SystemInformation -> InstanceModel -> LabelledContent
 instanceModel fs m i = mkRawLC (Defini Instance (foldr (mkIMField i m) [] fs)) (makeRef2 i)
 
 -- | Create a derivation from a chunk's attributes. This follows the TM, DD, GD,
--- or IM definition automatically (called automatically by 'SCSSub' program)
+-- or IM definition automatically (called automatically by 'SCSSub' program).
 derivation :: (HasDerivation c, HasShortName c, Referable c) => c -> Contents
 derivation c = maybe (mkParagraph EmptyS)
   (\(Derivation h d) -> LlC $ llcc (makeRef2 c) $ DerivBlock h $ map makeDerivCons d) $ c ^. derivations
@@ -78,15 +80,15 @@ makeDerivCons :: Sentence -> RawContent
 makeDerivCons (E e) = EqnBlock e
 makeDerivCons s     = Paragraph s
 
--- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs
+-- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs.
 type ModRow = [(String, [Contents])]
 
--- | nonEmpty is like |maybe| but for lists
+-- | Similar to 'maybe' but for lists.
 nonEmpty :: b -> ([a] -> b) -> [a] -> b
 nonEmpty def _ [] = def
 nonEmpty _   f xs = f xs
 
--- | Create the fields for a model from a relation concept (used by tmodel)
+-- | Create the fields for a model from a relation concept (used by tmodel).
 mkTMField :: TheoryModel -> SystemInformation -> Field -> ModRow -> ModRow
 mkTMField t _ l@Label fs  = (show l, [mkParagraph $ atStart t]) : fs
 mkTMField t _ l@DefiningEquation fs =

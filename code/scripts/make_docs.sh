@@ -1,9 +1,13 @@
-DOCS_FOLDER=docs/
-FULL_DOCS_FOLDER=docs/full/
+if [ -z "$DOCS_FOLDER" ]; then
+  echo "Missing DOCS_FOLDER environment variable, defaulting to 'docs/'"
+  DOCS_FOLDER="docs/"
+fi
+
+FULL_DOCS_FOLDER="${DOCS_FOLDER}full/"
 
 # Clean workspace
-rm -rf $DOCS_FOLDER
-mkdir -p $FULL_DOCS_FOLDER
+rm -rf "$DOCS_FOLDER"
+mkdir -p "$FULL_DOCS_FOLDER"
 
 # Get location of buildable docs location
 

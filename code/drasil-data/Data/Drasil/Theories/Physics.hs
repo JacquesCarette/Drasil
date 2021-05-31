@@ -1,8 +1,7 @@
 module Data.Drasil.Theories.Physics where
 
 import Language.Drasil
-import Theory.Drasil (DataDefinition, GenDefn, TheoryModel, ddNoRefs, gd,
-  tmNoRefs, ModelKinds (OthModel, EquationalModel), tm)
+import Theory.Drasil
 import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 
@@ -120,7 +119,7 @@ vecMag = ddNoRefs vecMagQD Nothing "vecMag" [magNote]
 
 --
 newtonSLR :: TheoryModel
-newtonSLR = tmNoRefs (EquationalModel newtonSLRQD)
+newtonSLR = tmNoRefs' "newtonSLR" (EquationalModel newtonSLRQD)
   [qw QP.torque, qw QP.momentOfInertia, qw QP.angularAccel] 
   ([] :: [ConceptChunk]) [] [relat newtonSLRQD] [] "NewtonSecLawRotMot" newtonSLRNotes
 

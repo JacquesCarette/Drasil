@@ -18,7 +18,7 @@ import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Drasil.DblPendulum.Unitals (lenRod, pendDisplacementAngle, initialPendAngle)
 import Data.Drasil.Concepts.Math (constraint, equation, amplitude, iAngle, angle)
 import Data.Drasil.Concepts.Physics (pendulum, motion, shm)
-import Data.Drasil.Theories.Physics (newtonSLR, newtonSLRQD)
+import Data.Drasil.Theories.Physics (newtonSLR)
 import Drasil.DblPendulum.GenDefs (angFrequencyGD)
 
 
@@ -52,7 +52,7 @@ angularDisplacementDerivSent1, angularDisplacementDerivSent2, angularDisplacemen
 
 angularDisplacementDerivSent1 = foldlSentCol [S "When", phraseNP (the pendulum) `S.is` S "displaced to an", phrase iAngle `S.and_` S "released" `sC`
                                        phraseNP (the pendulum), S "swings back and forth with periodic" +:+. phrase motion,
-                                       S "By applying", phrase' newtonSLRQD `S.in_` makeRef2S newtonSLR `sC`
+                                       S "By applying", phrase newtonSLR `S.in_` makeRef2S newtonSLR `sC`
                                        phraseNP (NP.the (equation `of_` motion) `NP.for` the pendulum), S "may be obtained"]
        
  

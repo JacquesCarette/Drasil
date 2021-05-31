@@ -29,7 +29,7 @@ Right now, neither the definition context (vctx) nor the
 spaces (spc) are ever defined.
 -}
 data TheoryModel = TM 
-  { _tUid   :: UID
+  { _tUid  :: UID
   , _con   :: ConceptChunk
   , _vctx  :: [TheoryModel]
   , _spc   :: [SpaceDefn]

@@ -138,7 +138,7 @@ newtonSLRNotes = map foldlSent [
 --
 
 accelerationTM :: TheoryModel
-accelerationTM = tm (EquationalModel accelerationQD)
+accelerationTM = tm' "accelerationTM" (EquationalModel accelerationQD)
   [qw QP.acceleration, qw QP.velocity, qw QP.time] ([] :: [ConceptChunk]) [] [relat accelerationQD] []
   [makeCite accelerationWiki] "acceleration" []
 

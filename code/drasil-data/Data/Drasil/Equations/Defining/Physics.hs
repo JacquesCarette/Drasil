@@ -32,7 +32,7 @@ weightDerivAccelEqn       = sy QP.acceleration $= vec2D (exactDbl 0) (mulRe (sy 
 hsPressureEqn             = sy QPP.specWeight `mulRe` sy QP.height
 
 speedEqn                  = norm (sy QP.velocity)
-velocityEqn               = sy QP.velocity $= deriv (sy QP.position) QP.time
+velocityEqn               = deriv (sy QP.position) QP.time
 accelerationEqn           = deriv (sy QP.velocity) QP.time
 
 ------------------------------------------------------------------------------------------------------
@@ -41,8 +41,8 @@ accelerationEqn           = deriv (sy QP.velocity) QP.time
 accelerationQD :: QDefinition
 accelerationQD = mkQuantDef QP.acceleration accelerationEqn
 
-velocityRC :: RelationConcept
-velocityRC = addRelToCC QP.velocity "velocityRC" velocityEqn
+velocityQD :: QDefinition
+velocityQD = mkQuantDef QP.velocity velocityEqn
 
 newtonSLRC :: RelationConcept
 newtonSLRC = makeRC "newtonSL" (nounPhraseSP "Newton's second law of motion")

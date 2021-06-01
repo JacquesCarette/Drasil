@@ -33,14 +33,15 @@ hsPressureEqn             = sy QPP.specWeight `mulRe` sy QP.height
 
 speedEqn                  = norm (sy QP.velocity)
 velocityEqn               = sy QP.velocity $= deriv (sy QP.position) QP.time
-accelerationEqn           = sy QP.acceleration $= deriv (sy QP.velocity) QP.time
+accelerationEqn           = deriv (sy QP.velocity) QP.time
 
 ------------------------------------------------------------------------------------------------------
 -- The concepts
 
-accelerationRC, velocityRC :: RelationConcept
+accelerationQD :: QDefinition
+accelerationQD = mkQuantDef QP.acceleration accelerationEqn
 
-accelerationRC = addRelToCC QP.acceleration "accelerationRC" accelerationEqn
+velocityRC :: RelationConcept
 velocityRC = addRelToCC QP.velocity "velocityRC" velocityEqn
 
 newtonSLRC :: RelationConcept

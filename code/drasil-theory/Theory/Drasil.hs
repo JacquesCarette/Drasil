@@ -13,7 +13,7 @@ module Theory.Drasil (
   , im, imNoDeriv, imNoRefs, imNoDerivNoRefs
   , qwUC, qwC, getEqModQdsFromIm
   -- Theory
-  , Theory(..), TheoryModel, tm, tmNoRefs
+  , Theory(..), TheoryModel, tm, tmNoRefs, tm', tmNoRefs'
 ) where
 
 import Theory.Drasil.Classes (HasInputs(..), HasOutput(..))

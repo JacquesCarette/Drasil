@@ -1,5 +1,5 @@
 {-# Language TemplateHaskell #-}
-module Theory.Drasil.Theory (Theory(..), TheoryModel, tm, tmNoRefs) where
+module Theory.Drasil.Theory (Theory(..), TheoryModel, tm, tmNoRefs, tm', tmNoRefs') where
 
 import Theory.Drasil.ModelKinds (ModelKinds)
 
@@ -29,22 +29,23 @@ Right now, neither the definition context (vctx) nor the
 spaces (spc) are ever defined.
 -}
 data TheoryModel = TM 
-  { _con :: ConceptChunk
-  , _vctx :: [TheoryModel]
-  , _spc  :: [SpaceDefn]
-  , _quan :: [QuantityDict]
-  , _ops  :: [ConceptChunk]
-  , _defq :: [QDefinition]
-  , _invs :: [Relation]
-  , _dfun :: [QDefinition]
-  , _ref  :: [Reference]
-  ,  lb   :: ShortName
-  ,  ra   :: String
+  { _tUid  :: UID
+  , _con   :: ConceptChunk
+  , _vctx  :: [TheoryModel]
+  , _spc   :: [SpaceDefn]
+  , _quan  :: [QuantityDict]
+  , _ops   :: [ConceptChunk]
+  , _defq  :: [QDefinition]
+  , _invs  :: [Relation]
+  , _dfun  :: [QDefinition]
+  , _ref   :: [Reference]
+  ,  lb    :: ShortName
+  ,  ra    :: String
   , _notes :: [Sentence]
   }
 makeLenses ''TheoryModel
 
-instance HasUID             TheoryModel where uid = con . uid
+instance HasUID             TheoryModel where uid = tUid
 instance NamedIdea          TheoryModel where term = con . term
 instance Idea               TheoryModel where getA = getA . view con
 instance Definition         TheoryModel where defn = con . defn
@@ -66,6 +67,9 @@ instance Referable TheoryModel where
   refAdd      = getRefAdd
   renderRef l = RP (prepend $ abrv l) (getRefAdd l)
 
+-- TODO: Theory Models should generally be using their own UID, instead of
+--       having their UIDs derived by the model kind.
+
 -- This "smart" constructor is really quite awful, it takes way too many arguments.
 -- This should likely be re-arranged somehow. Especially since since of the arguments
 -- have the same type!
@@ -73,14 +77,25 @@ tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKinds ->
     [q] -> [c] -> [QDefinition] ->
     [Relation] -> [QDefinition] -> [Reference] ->
     String -> [Sentence] -> TheoryModel
-tm mk _ _ _ _ _ [] _         = error $ "Source field of " ++ mk ^. uid ++ " is empty"
-tm mk q c dq inv dfn r lbe = 
-  TM (cw mk) [] [] (map qw q) (map cw c) dq inv dfn r (shortname' lbe)
-      (prependAbrv thModel lbe)
+tm mk = tm' (mk ^. uid) mk
 
 tmNoRefs :: (Quantity q, MayHaveUnit q, Concept c) => ModelKinds ->
     [q] -> [c] -> [QDefinition] -> [Relation] -> [QDefinition] -> 
     String -> [Sentence] -> TheoryModel
-tmNoRefs mk q c dq inv dfn lbe = 
-  TM (cw mk) [] [] (map qw q) (map cw c) dq inv dfn [] (shortname' lbe)
+tmNoRefs mk = tmNoRefs' (mk ^. uid) mk
+
+tm' :: (Quantity q, MayHaveUnit q, Concept c) => UID -> ModelKinds ->
+    [q] -> [c] -> [QDefinition] ->
+    [Relation] -> [QDefinition] -> [Reference] ->
+    String -> [Sentence] -> TheoryModel
+tm' u _  _ _ _  _   _   [] _   = error $ "Source field of " ++ u ++ " is empty"
+tm' u mk q c dq inv dfn r  lbe = 
+  TM u (cw mk) [] [] (map qw q) (map cw c) dq inv dfn r (shortname' lbe)
+      (prependAbrv thModel lbe)
+
+tmNoRefs' :: (Quantity q, MayHaveUnit q, Concept c) => UID -> ModelKinds ->
+    [q] -> [c] -> [QDefinition] -> [Relation] -> [QDefinition] -> 
+    String -> [Sentence] -> TheoryModel
+tmNoRefs' u mk q c dq inv dfn lbe = 
+  TM u (cw mk) [] [] (map qw q) (map cw c) dq inv dfn [] (shortname' lbe)
       (prependAbrv thModel lbe)

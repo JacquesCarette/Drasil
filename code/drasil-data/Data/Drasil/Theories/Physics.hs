@@ -1,8 +1,7 @@
 module Data.Drasil.Theories.Physics where
 
 import Language.Drasil
-import Theory.Drasil (DataDefinition, GenDefn, TheoryModel, ddNoRefs, gd,
-  tmNoRefs, ModelKinds (OthModel, EquationalModel), tm)
+import Theory.Drasil
 import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 
@@ -17,7 +16,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (acceleration, velocity, p
   angularAccel, speed)
 import Data.Drasil.Equations.Defining.Physics (newtonSLRel, newtonSLRC, newtonSLDesc, weightEqn,
   weightDerivAccelEqn, weightDerivNewtonEqn, weightDerivReplaceMassEqn, weightDerivSpecWeightEqn,
-  hsPressureEqn, accelerationEqn, accelerationRC, velocityEqn, velocityRC, speedEqn)
+  hsPressureEqn, accelerationQD, velocityEqn, velocityRC, speedEqn)
 
 physicsTMs :: [TheoryModel]
 physicsTMs = [newtonSL]
@@ -98,7 +97,7 @@ torque :: QDefinition
 torque = mkQuantDef QP.torque torqueEqn
 
 torqueEqn :: Expr
-torqueEqn = cross (sy QP.positionVec) (sy QP.force)
+torqueEqn = sy QP.positionVec `cross` sy QP.force
 
 torqueDesc :: Sentence
 torqueDesc = foldlSent [S "The", phrase torque, 
@@ -120,16 +119,15 @@ vecMag = ddNoRefs vecMagQD Nothing "vecMag" [magNote]
 
 --
 newtonSLR :: TheoryModel
-newtonSLR = tmNoRefs (OthModel newtonSLRRC)
+newtonSLR = tmNoRefs' "newtonSLR" (EquationalModel newtonSLRQD)
   [qw QP.torque, qw QP.momentOfInertia, qw QP.angularAccel] 
-  ([] :: [ConceptChunk]) [] [newtonSLRRel] [] "NewtonSecLawRotMot" newtonSLRNotes
+  ([] :: [ConceptChunk]) [] [relat newtonSLRQD] [] "NewtonSecLawRotMot" newtonSLRNotes
 
-newtonSLRRC :: RelationConcept
-newtonSLRRC = makeRC "newtonSLRRC" 
-  (nounPhraseSP "Newton's second law for rotational motion") EmptyS newtonSLRRel
+newtonSLRQD :: QDefinition
+newtonSLRQD = mkQuantDef' QP.torque (nounPhraseSP "Newton's second law for rotational motion") newtonSLRExpr
 
-newtonSLRRel :: Relation
-newtonSLRRel = sy QP.torque $= mulRe (sy QP.momentOfInertia) (sy QP.angularAccel)
+newtonSLRExpr :: Expr
+newtonSLRExpr = sy QP.momentOfInertia `mulRe` sy QP.angularAccel
 
 newtonSLRNotes :: [Sentence]
 newtonSLRNotes = map foldlSent [
@@ -140,8 +138,8 @@ newtonSLRNotes = map foldlSent [
 --
 
 accelerationTM :: TheoryModel
-accelerationTM = tm (OthModel accelerationRC)
-  [qw QP.acceleration, qw QP.velocity, qw QP.time] ([] :: [ConceptChunk]) [] [accelerationEqn] []
+accelerationTM = tm' "accelerationTM" (EquationalModel accelerationQD)
+  [qw QP.acceleration, qw QP.velocity, qw QP.time] ([] :: [ConceptChunk]) [] [relat accelerationQD] []
   [makeCite accelerationWiki] "acceleration" []
 
 ----------

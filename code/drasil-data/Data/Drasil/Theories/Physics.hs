@@ -16,7 +16,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (acceleration, velocity, p
   angularAccel, speed)
 import Data.Drasil.Equations.Defining.Physics (newtonSLRel, newtonSLRC, newtonSLDesc, weightEqn,
   weightDerivAccelEqn, weightDerivNewtonEqn, weightDerivReplaceMassEqn, weightDerivSpecWeightEqn,
-  hsPressureEqn, accelerationEqn, accelerationRC, velocityEqn, velocityRC, speedEqn)
+  hsPressureEqn, accelerationQD, velocityEqn, velocityRC, speedEqn)
 
 physicsTMs :: [TheoryModel]
 physicsTMs = [newtonSL]
@@ -138,8 +138,8 @@ newtonSLRNotes = map foldlSent [
 --
 
 accelerationTM :: TheoryModel
-accelerationTM = tm (OthModel accelerationRC)
-  [qw QP.acceleration, qw QP.velocity, qw QP.time] ([] :: [ConceptChunk]) [] [accelerationEqn] []
+accelerationTM = tm (EquationalModel accelerationQD)
+  [qw QP.acceleration, qw QP.velocity, qw QP.time] ([] :: [ConceptChunk]) [] [relat accelerationQD] []
   [makeCite accelerationWiki] "acceleration" []
 
 ----------

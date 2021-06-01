@@ -172,6 +172,8 @@ defined_fun :: Theory t => Lens' t [QDefinition]
 data TheoryModel
 tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKinds -> [q] -> [c] -> [QDefinition] -> [Relation] -> [QDefinition] -> [Reference] -> String -> [Sentence] -> TheoryModel
 tmNoRefs :: (Quantity q, MayHaveUnit q, Concept c) => ModelKinds -> [q] -> [c] -> [QDefinition] -> [Relation] -> [QDefinition] -> String -> [Sentence] -> TheoryModel
+tm' :: (Quantity q, MayHaveUnit q, Concept c) => UID -> ModelKinds -> [q] -> [c] -> [QDefinition] -> [Relation] -> [QDefinition] -> [Reference] -> String -> [Sentence] -> TheoryModel
+tmNoRefs' :: (Quantity q, MayHaveUnit q, Concept c) => UID -> ModelKinds -> [q] -> [c] -> [QDefinition] -> [Relation] -> [QDefinition] -> String -> [Sentence] -> TheoryModel
 instance Language.Drasil.Classes.Core.HasUID Theory.Drasil.Theory.TheoryModel
 instance Language.Drasil.Classes.NamedIdea Theory.Drasil.Theory.TheoryModel
 instance Language.Drasil.Classes.Idea Theory.Drasil.Theory.TheoryModel
@@ -252,3 +254,5 @@ defined_fun :: Theory t => Lens' t [QDefinition]
 data TheoryModel
 tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKinds -> [q] -> [c] -> [QDefinition] -> [Relation] -> [QDefinition] -> [Reference] -> String -> [Sentence] -> TheoryModel
 tmNoRefs :: (Quantity q, MayHaveUnit q, Concept c) => ModelKinds -> [q] -> [c] -> [QDefinition] -> [Relation] -> [QDefinition] -> String -> [Sentence] -> TheoryModel
+tm' :: (Quantity q, MayHaveUnit q, Concept c) => UID -> ModelKinds -> [q] -> [c] -> [QDefinition] -> [Relation] -> [QDefinition] -> [Reference] -> String -> [Sentence] -> TheoryModel
+tmNoRefs' :: (Quantity q, MayHaveUnit q, Concept c) => UID -> ModelKinds -> [q] -> [c] -> [QDefinition] -> [Relation] -> [QDefinition] -> String -> [Sentence] -> TheoryModel

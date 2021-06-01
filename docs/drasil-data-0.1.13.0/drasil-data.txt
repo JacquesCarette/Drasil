@@ -775,8 +775,8 @@ hsPressureEqn :: Relation
 speedEqn :: Relation
 velocityEqn :: Relation
 accelerationEqn :: Relation
-accelerationRC :: RelationConcept
-velocityRC :: RelationConcept
+accelerationQD :: QDefinition
+velocityQD :: QDefinition
 newtonSLRC :: RelationConcept
 newtonSLDesc :: Sentence
 
@@ -805,8 +805,8 @@ vecMagQD :: QDefinition
 magNote :: Sentence
 vecMag :: DataDefinition
 newtonSLR :: TheoryModel
-newtonSLRRC :: RelationConcept
-newtonSLRRel :: Relation
+newtonSLRQD :: QDefinition
+newtonSLRExpr :: Expr
 newtonSLRNotes :: [Sentence]
 accelerationTM :: TheoryModel
 velocityTM :: TheoryModel

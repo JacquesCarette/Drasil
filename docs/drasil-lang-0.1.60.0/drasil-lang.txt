@@ -2468,7 +2468,7 @@ Name :: IRefProg
 --   parentheses.
 introduceAbb :: Idea n => n -> Sentence
 
--- | Helper for getting the phrase from a <a>NamedIdea</a>.
+-- | Helper for getting the phrase from a <a>NamedIdea</a> using it's UID.
 phrase :: (HasUID n, NamedIdea n) => n -> Sentence
 
 -- | Helper for getting the plural of a phrase from a <a>NamedIdea</a>.

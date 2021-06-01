@@ -82,3 +82,5 @@ defined_fun :: Theory t => Lens' t [QDefinition]
 data TheoryModel
 tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKinds -> [q] -> [c] -> [QDefinition] -> [Relation] -> [QDefinition] -> [Reference] -> String -> [Sentence] -> TheoryModel
 tmNoRefs :: (Quantity q, MayHaveUnit q, Concept c) => ModelKinds -> [q] -> [c] -> [QDefinition] -> [Relation] -> [QDefinition] -> String -> [Sentence] -> TheoryModel
+tm' :: (Quantity q, MayHaveUnit q, Concept c) => UID -> ModelKinds -> [q] -> [c] -> [QDefinition] -> [Relation] -> [QDefinition] -> [Reference] -> String -> [Sentence] -> TheoryModel
+tmNoRefs' :: (Quantity q, MayHaveUnit q, Concept c) => UID -> ModelKinds -> [q] -> [c] -> [QDefinition] -> [Relation] -> [QDefinition] -> String -> [Sentence] -> TheoryModel

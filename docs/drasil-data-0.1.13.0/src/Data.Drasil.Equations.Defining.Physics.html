@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Data.Drasil.Equations.Defining.Physics</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-comment">-- We define both some basic equations of physics, and their wrappers as concepts</span><span>
+</span><span id="line-4"></span><span class="hs-comment">--</span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">foldlSent</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">getTandS</span></span><span class="hs-special">)</span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.Sentence</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">is</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">of_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">the_ofThe</span></span><span class="hs-special">)</span><span>
+</span><span id="line-8"></span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Math.html"><span class="hs-identifier">Data.Drasil.Quantities.Math</span></a></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">QM</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.Quantities.Math.html#unitVectj"><span class="hs-identifier">unitVectj</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html"><span class="hs-identifier">Data.Drasil.Quantities.Physics</span></a></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">QP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#acceleration"><span class="hs-identifier">acceleration</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#time"><span class="hs-identifier">time</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-11"></span><span>  </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#force"><span class="hs-identifier">force</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#gravitationalAccel"><span class="hs-identifier">gravitationalAccel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#height"><span class="hs-identifier">height</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#weight"><span class="hs-identifier">weight</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#velocity"><span class="hs-identifier">velocity</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.Physics.html#position"><span class="hs-identifier">position</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.PhysicalProperties.html"><span class="hs-identifier">Data.Drasil.Quantities.PhysicalProperties</span></a></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">QPP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.Quantities.PhysicalProperties.html#density"><span class="hs-identifier">density</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-13"></span><span>  </span><span class="annot"><a href="Data.Drasil.Quantities.PhysicalProperties.html#mass"><span class="hs-identifier">mass</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.PhysicalProperties.html#specWeight"><span class="hs-identifier">specWeight</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Quantities.PhysicalProperties.html#vol"><span class="hs-identifier">vol</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#body"><span class="hs-identifier">body</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#constant"><span class="hs-identifier">constant</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-15"></span><span>
+</span><span id="line-16"></span><span class="hs-comment">------------------------------------------------------------------------------------------------------</span><span>
+</span><span id="line-17"></span><span class="hs-comment">-- The equations</span><span>
+</span><span id="line-18"></span><span>
+</span><span id="line-19"></span><span class="annot"><a href="Data.Drasil.Equations.Defining.Physics.html#newtonSLRel"><span class="hs-identifier hs-type">newtonSLRel</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Equations.Defining.Physics.html#weightEqn"><span class="hs-identifier hs-type">weightEqn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Equations.Defining.Physics.html#weightDerivAccelEqn"><span class="hs-identifier hs-type">weightDerivAccelEqn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Equations.Defining.Physics.html#weightDerivNewtonEqn"><span class="hs-identifier hs-type">weightDerivNewtonEqn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Equations.Defining.Physics.html#weightDerivReplaceMassEqn"><span class="hs-identifier hs-type">weightDerivReplaceMassEqn</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-20"></span><span>  </span><span class="annot"><a href="Data.Drasil.Equations.Defining.Physics.html#weightDerivSpecWeightEqn"><span class="hs-identifier hs-type">weightDerivSpecWeightEqn</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-21"></span><span>  </span><span class="annot"><a href="Data.Drasil.Equations.Defining.Physics.html#hsPressureEqn"><span class="hs-identifier hs-type">hsPressureEqn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Equations.Defining.Physics.html#speedEqn"><span class="hs-identifier hs-type">speedEqn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Equations.Defining.Physics.html#velocityEqn"><span class="hs-identifier hs-type">velocityEqn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Equations.Defining.Physics.html#accelerationEqn"><span class="hs-identifier hs-type">accelerationEqn</span></a></span><span>  </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Relation</span></span><span>
+</span><span id="line-22"></span><span>
+</span><span id="line-23"></span><span id="newtonSLRel"><span class="annot"><span class="annottext">newtonSLRel :: Relation
+</span><a href="Data.Drasil.Equations.Defining.Physics.html#newtonSLRel"><span class="hs-identifier hs-var hs-var">newtonSLRel</span></a></span></span><span>               </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.Physics.html#force"><span class="hs-identifier hs-var">QP.force</span></a></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
+</span><span class="hs-identifier hs-var">mulRe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.PhysicalProperties.html#mass"><span class="hs-identifier hs-var">QPP.mass</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.Physics.html#acceleration"><span class="hs-identifier hs-var">QP.acceleration</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-24"></span><span>
+</span><span id="line-25"></span><span id="weightEqn"><span class="annot"><span class="annottext">weightEqn :: Relation
+</span><a href="Data.Drasil.Equations.Defining.Physics.html#weightEqn"><span class="hs-identifier hs-var hs-var">weightEqn</span></a></span></span><span>                 </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.PhysicalProperties.html#vol"><span class="hs-identifier hs-var">QPP.vol</span></a></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.PhysicalProperties.html#specWeight"><span class="hs-identifier hs-var">QPP.specWeight</span></a></span><span>
+</span><span id="line-26"></span><span id="weightDerivNewtonEqn"><span class="annot"><span class="annottext">weightDerivNewtonEqn :: Relation
+</span><a href="Data.Drasil.Equations.Defining.Physics.html#weightDerivNewtonEqn"><span class="hs-identifier hs-var hs-var">weightDerivNewtonEqn</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.Physics.html#weight"><span class="hs-identifier hs-var">QP.weight</span></a></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
+</span><span class="hs-identifier hs-var">mulRe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.PhysicalProperties.html#mass"><span class="hs-identifier hs-var">QPP.mass</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.Physics.html#gravitationalAccel"><span class="hs-identifier hs-var">QP.gravitationalAccel</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-27"></span><span id="weightDerivReplaceMassEqn"><span class="annot"><span class="annottext">weightDerivReplaceMassEqn :: Relation
+</span><a href="Data.Drasil.Equations.Defining.Physics.html#weightDerivReplaceMassEqn"><span class="hs-identifier hs-var hs-var">weightDerivReplaceMassEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.Physics.html#weight"><span class="hs-identifier hs-var">QP.weight</span></a></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
+</span><span class="hs-identifier hs-var">mulRe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.PhysicalProperties.html#density"><span class="hs-identifier hs-var">QPP.density</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
+</span><span class="hs-identifier hs-var">mulRe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.PhysicalProperties.html#vol"><span class="hs-identifier hs-var">QPP.vol</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.Physics.html#gravitationalAccel"><span class="hs-identifier hs-var">QP.gravitationalAccel</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-28"></span><span id="weightDerivSpecWeightEqn"><span class="annot"><span class="annottext">weightDerivSpecWeightEqn :: Relation
+</span><a href="Data.Drasil.Equations.Defining.Physics.html#weightDerivSpecWeightEqn"><span class="hs-identifier hs-var hs-var">weightDerivSpecWeightEqn</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.Physics.html#weight"><span class="hs-identifier hs-var">QP.weight</span></a></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
+</span><span class="hs-identifier hs-var">mulRe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.PhysicalProperties.html#vol"><span class="hs-identifier hs-var">QPP.vol</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.PhysicalProperties.html#specWeight"><span class="hs-identifier hs-var">QPP.specWeight</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-29"></span><span>
+</span><span id="line-30"></span><span id="weightDerivAccelEqn"><span class="annot"><span class="annottext">weightDerivAccelEqn :: Relation
+</span><a href="Data.Drasil.Equations.Defining.Physics.html#weightDerivAccelEqn"><span class="hs-identifier hs-var hs-var">weightDerivAccelEqn</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.Physics.html#acceleration"><span class="hs-identifier hs-var">QP.acceleration</span></a></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
+</span><span class="hs-operator hs-var">$=</span></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
+</span><span class="hs-identifier hs-var">vec2D</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Relation
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
+</span><span class="hs-identifier hs-var">mulRe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.Physics.html#gravitationalAccel"><span class="hs-identifier hs-var">QP.gravitationalAccel</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Relation
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Data.Drasil.Quantities.Math.html#unitVectj"><span class="hs-identifier hs-var">QM.unitVectj</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-31"></span><span>
+</span><span id="line-32"></span><span id="hsPressureEqn"><span class="annot"><span class="annottext">hsPressureEqn :: Relation
+</span><a href="Data.Drasil.Equations.Defining.Physics.html#hsPressureEqn"><span class="hs-identifier hs-var hs-var">hsPressureEqn</span></a></span></span><span>             </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.PhysicalProperties.html#specWeight"><span class="hs-identifier hs-var">QPP.specWeight</span></a></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.Physics.html#height"><span class="hs-identifier hs-var">QP.height</span></a></span><span>
+</span><span id="line-33"></span><span>
+</span><span id="line-34"></span><span id="speedEqn"><span class="annot"><span class="annottext">speedEqn :: Relation
+</span><a href="Data.Drasil.Equations.Defining.Physics.html#speedEqn"><span class="hs-identifier hs-var hs-var">speedEqn</span></a></span></span><span>                  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation
+</span><span class="hs-identifier hs-var">norm</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.Physics.html#velocity"><span class="hs-identifier hs-var">QP.velocity</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-35"></span><span id="velocityEqn"><span class="annot"><span class="annottext">velocityEqn :: Relation
+</span><a href="Data.Drasil.Equations.Defining.Physics.html#velocityEqn"><span class="hs-identifier hs-var hs-var">velocityEqn</span></a></span></span><span>               </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Relation -&gt; UnitalChunk -&gt; Relation
+forall c. (HasUID c, HasSymbol c) =&gt; Relation -&gt; c -&gt; Relation
+</span><span class="hs-identifier hs-var">deriv</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.Physics.html#position"><span class="hs-identifier hs-var">QP.position</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.Physics.html#time"><span class="hs-identifier hs-var">QP.time</span></a></span><span>
+</span><span id="line-36"></span><span id="accelerationEqn"><span class="annot"><span class="annottext">accelerationEqn :: Relation
+</span><a href="Data.Drasil.Equations.Defining.Physics.html#accelerationEqn"><span class="hs-identifier hs-var hs-var">accelerationEqn</span></a></span></span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Relation -&gt; UnitalChunk -&gt; Relation
+forall c. (HasUID c, HasSymbol c) =&gt; Relation -&gt; c -&gt; Relation
+</span><span class="hs-identifier hs-var">deriv</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.Physics.html#velocity"><span class="hs-identifier hs-var">QP.velocity</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.Physics.html#time"><span class="hs-identifier hs-var">QP.time</span></a></span><span>
+</span><span id="line-37"></span><span>
+</span><span id="line-38"></span><span class="hs-comment">------------------------------------------------------------------------------------------------------</span><span>
+</span><span id="line-39"></span><span class="hs-comment">-- The concepts</span><span>
+</span><span id="line-40"></span><span>
+</span><span id="line-41"></span><span class="annot"><a href="Data.Drasil.Equations.Defining.Physics.html#accelerationQD"><span class="hs-identifier hs-type">accelerationQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
+</span><span id="line-42"></span><span id="accelerationQD"><span class="annot"><span class="annottext">accelerationQD :: QDefinition
+</span><a href="Data.Drasil.Equations.Defining.Physics.html#accelerationQD"><span class="hs-identifier hs-var hs-var">accelerationQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation -&gt; QDefinition
+forall c.
+(Quantity c, MayHaveUnit c) =&gt;
+c -&gt; Relation -&gt; QDefinition
+</span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.Physics.html#acceleration"><span class="hs-identifier hs-var">QP.acceleration</span></a></span><span> </span><span class="annot"><span class="annottext">Relation
+</span><a href="Data.Drasil.Equations.Defining.Physics.html#accelerationEqn"><span class="hs-identifier hs-var">accelerationEqn</span></a></span><span>
+</span><span id="line-43"></span><span>
+</span><span id="line-44"></span><span class="annot"><a href="Data.Drasil.Equations.Defining.Physics.html#velocityQD"><span class="hs-identifier hs-type">velocityQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
+</span><span id="line-45"></span><span id="velocityQD"><span class="annot"><span class="annottext">velocityQD :: QDefinition
+</span><a href="Data.Drasil.Equations.Defining.Physics.html#velocityQD"><span class="hs-identifier hs-var hs-var">velocityQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation -&gt; QDefinition
+forall c.
+(Quantity c, MayHaveUnit c) =&gt;
+c -&gt; Relation -&gt; QDefinition
+</span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.Physics.html#velocity"><span class="hs-identifier hs-var">QP.velocity</span></a></span><span> </span><span class="annot"><span class="annottext">Relation
+</span><a href="Data.Drasil.Equations.Defining.Physics.html#velocityEqn"><span class="hs-identifier hs-var">velocityEqn</span></a></span><span>
+</span><span id="line-46"></span><span>
+</span><span id="line-47"></span><span class="annot"><a href="Data.Drasil.Equations.Defining.Physics.html#newtonSLRC"><span class="hs-identifier hs-type">newtonSLRC</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">RelationConcept</span></span><span>
+</span><span id="line-48"></span><span id="newtonSLRC"><span class="annot"><span class="annottext">newtonSLRC :: RelationConcept
+</span><a href="Data.Drasil.Equations.Defining.Physics.html#newtonSLRC"><span class="hs-identifier hs-var hs-var">newtonSLRC</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID -&gt; NP -&gt; Sentence -&gt; Relation -&gt; RelationConcept
+</span><span class="hs-identifier hs-var">makeRC</span></span><span> </span><span class="annot"><span class="hs-string">&quot;newtonSL&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UID -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Newton's second law of motion&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-49"></span><span>  </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Data.Drasil.Equations.Defining.Physics.html#newtonSLDesc"><span class="hs-identifier hs-var">newtonSLDesc</span></a></span><span> </span><span class="annot"><span class="annottext">Relation
+</span><a href="Data.Drasil.Equations.Defining.Physics.html#newtonSLRel"><span class="hs-identifier hs-var">newtonSLRel</span></a></span><span>
+</span><span id="line-50"></span><span>
+</span><span id="line-51"></span><span class="annot"><a href="Data.Drasil.Equations.Defining.Physics.html#newtonSLDesc"><span class="hs-identifier hs-type">newtonSLDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-52"></span><span id="newtonSLDesc"><span class="annot"><span class="annottext">newtonSLDesc :: Sentence
+</span><a href="Data.Drasil.Equations.Defining.Physics.html#newtonSLDesc"><span class="hs-identifier hs-var hs-var">newtonSLDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UID -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The net&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall a. Quantity a =&gt; a -&gt; Sentence
+</span><span class="hs-identifier hs-var">getTandS</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.Physics.html#force"><span class="hs-identifier hs-var">QP.force</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UID -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;on a&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-53"></span><span>  </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Data.Drasil.Concepts.Documentation.html#body"><span class="hs-identifier hs-var">body</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;proportional to&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall a. Quantity a =&gt; a -&gt; Sentence
+</span><span class="hs-identifier hs-var">getTandS</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.Physics.html#acceleration"><span class="hs-identifier hs-var">QP.acceleration</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.the_ofThe`</span></span><span>
+</span><span id="line-54"></span><span>  </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Data.Drasil.Concepts.Documentation.html#body"><span class="hs-identifier hs-var">body</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;where&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.PhysicalProperties.html#mass"><span class="hs-identifier hs-var">QPP.mass</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UID -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;denotes&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Data.Drasil.Quantities.PhysicalProperties.html#mass"><span class="hs-identifier hs-var">QPP.mass</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.the_ofThe`</span></span><span>
+</span><span id="line-55"></span><span>  </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Data.Drasil.Concepts.Documentation.html#body"><span class="hs-identifier hs-var">body</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UID -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;as the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Data.Drasil.Concepts.Documentation.html#constant"><span class="hs-identifier hs-var">constant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.of_`</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;proportionality&quot;</span></span><span class="hs-special">]</span><span>
+</span><span id="line-56"></span></pre></body></html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Language.Drasil.Uncertainty</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Uncertainty.html#defaultUncrt"><span class="hs-identifier">defaultUncrt</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Uncertainty.Core.html#uncty"><span class="hs-identifier">uncty</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-2"></span><span>    </span><span class="annot"><a href="Language.Drasil.Uncertainty.html#uncVal"><span class="hs-identifier">uncVal</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Uncertainty.html#uncPrec"><span class="hs-identifier">uncPrec</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Uncertainty.Core.html#exact"><span class="hs-identifier">exact</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-3"></span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Lens</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-operator">(^.)</span></span><span class="hs-special">)</span><span>
+</span><span id="line-5"></span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Classes.html"><span class="hs-identifier">Language.Drasil.Classes</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Classes.html#HasUncertainty"><span class="hs-identifier">HasUncertainty</span></a></span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Classes.html#unc"><span class="hs-identifier">unc</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Uncertainty.Core.html"><span class="hs-identifier">Language.Drasil.Uncertainty.Core</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Uncertainty.Core.html#Uncertainty"><span class="hs-identifier">Uncertainty</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Uncertainty.Core.html#uncert"><span class="hs-identifier">uncert</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Uncertainty.Core.html#prec"><span class="hs-identifier">prec</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Uncertainty.Core.html#uncty"><span class="hs-identifier">uncty</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Uncertainty.Core.html#exact"><span class="hs-identifier">exact</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Maybe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">fromMaybe</span></span><span class="hs-special">)</span><span>
+</span><span id="line-9"></span><span>
+</span><span id="line-10"></span><span class="hs-comment">-- | The default uncertainty is set to 0.1.</span><span>
+</span><span id="line-11"></span><span class="annot"><a href="Language.Drasil.Uncertainty.html#defaultUncrt"><span class="hs-identifier hs-type">defaultUncrt</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Uncertainty.Core.html#Uncertainty"><span class="hs-identifier hs-type">Uncertainty</span></a></span><span>
+</span><span id="line-12"></span><span id="defaultUncrt"><span class="annot"><span class="annottext">defaultUncrt :: Uncertainty
+</span><a href="Language.Drasil.Uncertainty.html#defaultUncrt"><span class="hs-identifier hs-var hs-var">defaultUncrt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Double -&gt; Maybe Int -&gt; Uncertainty
+</span><a href="Language.Drasil.Uncertainty.Core.html#uncty"><span class="hs-identifier hs-var">uncty</span></a></span><span> </span><span class="annot"><span class="hs-number">0.1</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Int -&gt; Maybe Int
+forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
+</span><span id="line-13"></span><span>
+</span><span id="line-14"></span><span class="hs-comment">-- | Accessor for uncertainty value from something that has an uncertainty.</span><span>
+</span><span id="line-15"></span><span id="local-6989586621679357372"><span class="annot"><a href="Language.Drasil.Uncertainty.html#uncVal"><span class="hs-identifier hs-type">uncVal</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Classes.html#HasUncertainty"><span class="hs-identifier hs-type">HasUncertainty</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679357372"><span class="hs-identifier hs-type">x</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679357372"><span class="hs-identifier hs-type">x</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Double</span></span></span><span>
+</span><span id="line-16"></span><span id="uncVal"><span class="annot"><span class="annottext">uncVal :: x -&gt; Double
+</span><a href="Language.Drasil.Uncertainty.html#uncVal"><span class="hs-identifier hs-var hs-var">uncVal</span></a></span></span><span> </span><span id="local-6989586621679357371"><span class="annot"><span class="annottext">u :: x
+</span><a href="#local-6989586621679357371"><span class="hs-identifier hs-var">u</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Double -&gt; Maybe Double -&gt; Double
+forall a. a -&gt; Maybe a -&gt; a
+</span><span class="hs-identifier hs-var">fromMaybe</span></span><span> </span><span class="annot"><span class="hs-number">0.0</span></span><span> </span><span class="annot"><span class="annottext">(Maybe Double -&gt; Double) -&gt; Maybe Double -&gt; Double
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">x
+</span><a href="#local-6989586621679357371"><span class="hs-identifier hs-var">u</span></a></span><span> </span><span class="annot"><span class="annottext">x -&gt; Getting (Maybe Double) x (Maybe Double) -&gt; Maybe Double
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Uncertainty -&gt; Const (Maybe Double) Uncertainty)
+-&gt; x -&gt; Const (Maybe Double) x
+forall c. HasUncertainty c =&gt; Lens' c Uncertainty
+</span><a href="Language.Drasil.Classes.html#unc"><span class="hs-identifier hs-var">unc</span></a></span><span> </span><span class="annot"><span class="annottext">((Uncertainty -&gt; Const (Maybe Double) Uncertainty)
+ -&gt; x -&gt; Const (Maybe Double) x)
+-&gt; ((Maybe Double -&gt; Const (Maybe Double) (Maybe Double))
+    -&gt; Uncertainty -&gt; Const (Maybe Double) Uncertainty)
+-&gt; Getting (Maybe Double) x (Maybe Double)
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(Maybe Double -&gt; Const (Maybe Double) (Maybe Double))
+-&gt; Uncertainty -&gt; Const (Maybe Double) Uncertainty
+Lens' Uncertainty (Maybe Double)
+</span><a href="Language.Drasil.Uncertainty.Core.html#uncert"><span class="hs-identifier hs-var">uncert</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-17"></span><span>
+</span><span id="line-18"></span><span>
+</span><span id="line-19"></span><span class="hs-comment">-- | Accessor for precision value from something that has an uncertainty.</span><span>
+</span><span id="line-20"></span><span id="local-6989586621679357369"><span class="annot"><a href="Language.Drasil.Uncertainty.html#uncPrec"><span class="hs-identifier hs-type">uncPrec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Classes.html#HasUncertainty"><span class="hs-identifier hs-type">HasUncertainty</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679357369"><span class="hs-identifier hs-type">x</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679357369"><span class="hs-identifier hs-type">x</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span></span><span>
+</span><span id="line-21"></span><span id="uncPrec"><span class="annot"><span class="annottext">uncPrec :: x -&gt; Maybe Int
+</span><a href="Language.Drasil.Uncertainty.html#uncPrec"><span class="hs-identifier hs-var hs-var">uncPrec</span></a></span></span><span> </span><span id="local-6989586621679357368"><span class="annot"><span class="annottext">u :: x
+</span><a href="#local-6989586621679357368"><span class="hs-identifier hs-var">u</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">x
+</span><a href="#local-6989586621679357368"><span class="hs-identifier hs-var">u</span></a></span><span> </span><span class="annot"><span class="annottext">x -&gt; Getting (Maybe Int) x (Maybe Int) -&gt; Maybe Int
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Uncertainty -&gt; Const (Maybe Int) Uncertainty)
+-&gt; x -&gt; Const (Maybe Int) x
+forall c. HasUncertainty c =&gt; Lens' c Uncertainty
+</span><a href="Language.Drasil.Classes.html#unc"><span class="hs-identifier hs-var">unc</span></a></span><span> </span><span class="annot"><span class="annottext">((Uncertainty -&gt; Const (Maybe Int) Uncertainty)
+ -&gt; x -&gt; Const (Maybe Int) x)
+-&gt; ((Maybe Int -&gt; Const (Maybe Int) (Maybe Int))
+    -&gt; Uncertainty -&gt; Const (Maybe Int) Uncertainty)
+-&gt; Getting (Maybe Int) x (Maybe Int)
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(Maybe Int -&gt; Const (Maybe Int) (Maybe Int))
+-&gt; Uncertainty -&gt; Const (Maybe Int) Uncertainty
+Lens' Uncertainty (Maybe Int)
+</span><a href="Language.Drasil.Uncertainty.Core.html#prec"><span class="hs-identifier hs-var">prec</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-22"></span></pre></body></html>

@@ -1,0 +1,864 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | Defines generation functions for SCS code packages.</span><span>
+</span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Language.Drasil.Code.Imperative.Generator</span><span> </span><span class="hs-special">(</span><span>
+</span><span id="line-3"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Generator.html#generator"><span class="hs-identifier">generator</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Generator.html#generateCode"><span class="hs-identifier">generateCode</span></a></span><span>
+</span><span id="line-4"></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-5"></span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.ConceptMatch.html"><span class="hs-identifier">Language.Drasil.Code.Imperative.ConceptMatch</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.ConceptMatch.html#chooseConcept"><span class="hs-identifier">chooseConcept</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html"><span class="hs-identifier">Language.Drasil.Code.Imperative.Descriptions</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#unmodularDesc"><span class="hs-identifier">unmodularDesc</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.SpaceMatch.html"><span class="hs-identifier">Language.Drasil.Code.Imperative.SpaceMatch</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.SpaceMatch.html#chooseSpace"><span class="hs-identifier">chooseSpace</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GenerateGOOL.html"><span class="hs-identifier">Language.Drasil.Code.Imperative.GenerateGOOL</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.GenerateGOOL.html#ClassType"><span class="hs-identifier">ClassType</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-11"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GenerateGOOL.html#genDoxConfig"><span class="hs-identifier">genDoxConfig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GenerateGOOL.html#genReadMe"><span class="hs-identifier">genReadMe</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GenerateGOOL.html#genModuleWithImports"><span class="hs-identifier">genModuleWithImports</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GenODE.html"><span class="hs-identifier">Language.Drasil.Code.Imperative.GenODE</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.GenODE.html#chooseODELib"><span class="hs-identifier">chooseODELib</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Helpers.html"><span class="hs-identifier">Language.Drasil.Code.Imperative.Helpers</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.Helpers.html#liftS"><span class="hs-identifier">liftS</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Import.html"><span class="hs-identifier">Language.Drasil.Code.Imperative.Import</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.Import.html#genModDef"><span class="hs-identifier">genModDef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Import.html#genModFuncs"><span class="hs-identifier">genModFuncs</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-15"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Import.html#genModClasses"><span class="hs-identifier">genModClasses</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Modules.html"><span class="hs-identifier">Language.Drasil.Code.Imperative.Modules</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.Modules.html#chooseInModule"><span class="hs-identifier">chooseInModule</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Modules.html#genConstClass"><span class="hs-identifier">genConstClass</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-17"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Modules.html#genConstMod"><span class="hs-identifier">genConstMod</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Modules.html#genInputClass"><span class="hs-identifier">genInputClass</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Modules.html#genInputConstraints"><span class="hs-identifier">genInputConstraints</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Modules.html#genInputDerived"><span class="hs-identifier">genInputDerived</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-18"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Modules.html#genInputFormat"><span class="hs-identifier">genInputFormat</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Modules.html#genMain"><span class="hs-identifier">genMain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Modules.html#genMainFunc"><span class="hs-identifier">genMainFunc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Modules.html#genCalcMod"><span class="hs-identifier">genCalcMod</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Modules.html#genCalcFunc"><span class="hs-identifier">genCalcFunc</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-19"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Modules.html#genOutputFormat"><span class="hs-identifier">genOutputFormat</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Modules.html#genOutputMod"><span class="hs-identifier">genOutputMod</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Modules.html#genSampleInput"><span class="hs-identifier">genSampleInput</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html"><span class="hs-identifier">Language.Drasil.Code.Imperative.DrasilState</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier">GenState</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#DrasilState"><span class="hs-identifier">DrasilState</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-21"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#designLog"><span class="hs-identifier">designLog</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#inMod"><span class="hs-identifier">inMod</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#modExportMap"><span class="hs-identifier">modExportMap</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#clsDefMap"><span class="hs-identifier">clsDefMap</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-22"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html"><span class="hs-identifier">Language.Drasil.Code.Imperative.GOOL.ClassInterface</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#ReadMeInfo"><span class="hs-identifier">ReadMeInfo</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-23"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#PackageSym"><span class="hs-identifier">PackageSym</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#AuxiliarySym"><span class="hs-identifier">AuxiliarySym</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-24"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.Data.html"><span class="hs-identifier">Language.Drasil.Code.Imperative.GOOL.Data</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.Data.html#PackData"><span class="hs-identifier">PackData</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.Data.html#ad"><span class="hs-identifier">ad</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-25"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Code.CodeGeneration.html"><span class="hs-identifier">Language.Drasil.Code.CodeGeneration</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.CodeGeneration.html#createCodeFiles"><span class="hs-identifier">createCodeFiles</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.CodeGeneration.html#makeCode"><span class="hs-identifier">makeCode</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-26"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExtLibImport.html"><span class="hs-identifier">Language.Drasil.Code.ExtLibImport</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.ExtLibImport.html#auxMods"><span class="hs-identifier">auxMods</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExtLibImport.html#imports"><span class="hs-identifier">imports</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExtLibImport.html#modExports"><span class="hs-identifier">modExports</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-27"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Lang.html"><span class="hs-identifier">Language.Drasil.Code.Lang</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Lang.html#Lang"><span class="hs-identifier">Lang</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-28"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html"><span class="hs-identifier">Language.Drasil.Choices</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Choices.html#Choices"><span class="hs-identifier">Choices</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#Modularity"><span class="hs-identifier">Modularity</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#Visibility"><span class="hs-identifier">Visibility</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-29"></span><span>  </span><span class="annot"><a href="Language.Drasil.Choices.html#choicesSent"><span class="hs-identifier">choicesSent</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-30"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.CodeSpec.html"><span class="hs-identifier">Language.Drasil.CodeSpec</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.CodeSpec.html#CodeSpec"><span class="hs-identifier">CodeSpec</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-31"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Printers</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Linearity</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Linear</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">sentenceDoc</span></span><span class="hs-special">)</span><span>
+</span><span id="line-32"></span><span>
+</span><span id="line-33"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">GOOL.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">GSProgram</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">SFile</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">OOProg</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ProgramSym</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ScopeTag</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-34"></span><span>  </span><span class="annot"><span class="hs-identifier">ProgData</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">initialState</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">unCI</span></span><span class="hs-special">)</span><span>
+</span><span id="line-35"></span><span>
+</span><span id="line-36"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">System.Directory</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">setCurrentDirectory</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">createDirectoryIfMissing</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-37"></span><span>  </span><span class="annot"><span class="hs-identifier">getCurrentDirectory</span></span><span class="hs-special">)</span><span>
+</span><span id="line-38"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Lens</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-operator">(^.)</span></span><span class="hs-special">)</span><span>
+</span><span id="line-39"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Monad.State</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">get</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">evalState</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">runState</span></span><span class="hs-special">)</span><span>
+</span><span id="line-40"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.List</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">nub</span></span><span class="hs-special">)</span><span>
+</span><span id="line-41"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">fromList</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">member</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">keys</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">elems</span></span><span class="hs-special">)</span><span>
+</span><span id="line-42"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Maybe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">maybeToList</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">catMaybes</span></span><span class="hs-special">)</span><span>
+</span><span id="line-43"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Text.PrettyPrint.HughesPJ</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">isEmpty</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">vcat</span></span><span class="hs-special">)</span><span>
+</span><span id="line-44"></span><span>
+</span><span id="line-45"></span><span class="hs-comment">-- | Initializes the generator's DrasilState.</span><span>
+</span><span id="line-46"></span><span class="hs-comment">-- String parameter is a string representing the date.</span><span>
+</span><span id="line-47"></span><span class="hs-comment">-- [Expr] parameter is the sample input values provided by the user</span><span>
+</span><span id="line-48"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Generator.html#generator"><span class="hs-identifier hs-type">generator</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Lang.html#Lang"><span class="hs-identifier hs-type">Lang</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#Choices"><span class="hs-identifier hs-type">Choices</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.CodeSpec.html#CodeSpec"><span class="hs-identifier hs-type">CodeSpec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#DrasilState"><span class="hs-identifier hs-type">DrasilState</span></a></span><span>
+</span><span id="line-49"></span><span id="generator"><span class="annot"><span class="annottext">generator :: Lang -&gt; String -&gt; [Expr] -&gt; Choices -&gt; CodeSpec -&gt; DrasilState
+</span><a href="Language.Drasil.Code.Imperative.Generator.html#generator"><span class="hs-identifier hs-var hs-var">generator</span></a></span></span><span> </span><span id="local-6989586621679336734"><span class="annot"><span class="annottext">l :: Lang
+</span><a href="#local-6989586621679336734"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span id="local-6989586621679336733"><span class="annot"><span class="annottext">dt :: String
+</span><a href="#local-6989586621679336733"><span class="hs-identifier hs-var">dt</span></a></span></span><span> </span><span id="local-6989586621679336732"><span class="annot"><span class="annottext">sd :: [Expr]
+</span><a href="#local-6989586621679336732"><span class="hs-identifier hs-var">sd</span></a></span></span><span> </span><span id="local-6989586621679336731"><span class="annot"><span class="annottext">chs :: Choices
+</span><a href="#local-6989586621679336731"><span class="hs-identifier hs-var">chs</span></a></span></span><span> </span><span id="local-6989586621679336730"><span class="annot"><span class="annottext">spec :: CodeSpec
+</span><a href="#local-6989586621679336730"><span class="hs-identifier hs-var">spec</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DrasilState :: CodeSpec
+-&gt; Modularity
+-&gt; ImplementationType
+-&gt; Structure
+-&gt; ConstantStructure
+-&gt; ConstantRepr
+-&gt; MatchedConceptMap
+-&gt; MatchedSpaces
+-&gt; ConstraintBehaviour
+-&gt; ConstraintBehaviour
+-&gt; [Comments]
+-&gt; Verbosity
+-&gt; String
+-&gt; String
+-&gt; [Logging]
+-&gt; [AuxFile]
+-&gt; [Expr]
+-&gt; [Mod]
+-&gt; [(String, String)]
+-&gt; ExtLibMap
+-&gt; [String]
+-&gt; ModExportMap
+-&gt; ModExportMap
+-&gt; ModExportMap
+-&gt; [String]
+-&gt; String
+-&gt; String
+-&gt; Doc
+-&gt; [(Space, CodeType)]
+-&gt; DrasilState
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#DrasilState"><span class="hs-identifier hs-type hs-type">DrasilState</span></a></span><span> </span><span class="hs-special">{</span><span>
+</span><span id="line-50"></span><span>  </span><span class="hs-comment">-- constants</span><span>
+</span><span id="line-51"></span><span>  </span><span class="annot"><span class="annottext">codeSpec :: CodeSpec
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#codeSpec"><span class="hs-identifier hs-var">codeSpec</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeSpec
+</span><a href="#local-6989586621679336730"><span class="hs-identifier hs-var">spec</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-52"></span><span>  </span><span class="annot"><span class="annottext">modular :: Modularity
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#modular"><span class="hs-identifier hs-var">modular</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Choices -&gt; Modularity
+</span><a href="Language.Drasil.Choices.html#modularity"><span class="hs-identifier hs-var hs-var">modularity</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
+</span><a href="#local-6989586621679336731"><span class="hs-identifier hs-var">chs</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-53"></span><span>  </span><span class="annot"><span class="annottext">inStruct :: Structure
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#inStruct"><span class="hs-identifier hs-var">inStruct</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Choices -&gt; Structure
+</span><a href="Language.Drasil.Choices.html#inputStructure"><span class="hs-identifier hs-var hs-var">inputStructure</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
+</span><a href="#local-6989586621679336731"><span class="hs-identifier hs-var">chs</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-54"></span><span>  </span><span class="annot"><span class="annottext">conStruct :: ConstantStructure
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#conStruct"><span class="hs-identifier hs-var">conStruct</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Choices -&gt; ConstantStructure
+</span><a href="Language.Drasil.Choices.html#constStructure"><span class="hs-identifier hs-var hs-var">constStructure</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
+</span><a href="#local-6989586621679336731"><span class="hs-identifier hs-var">chs</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-55"></span><span>  </span><span class="annot"><span class="annottext">conRepr :: ConstantRepr
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#conRepr"><span class="hs-identifier hs-var">conRepr</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Choices -&gt; ConstantRepr
+</span><a href="Language.Drasil.Choices.html#constRepr"><span class="hs-identifier hs-var hs-var">constRepr</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
+</span><a href="#local-6989586621679336731"><span class="hs-identifier hs-var">chs</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-56"></span><span>  </span><span class="annot"><span class="annottext">concMatches :: MatchedConceptMap
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#concMatches"><span class="hs-identifier hs-var">concMatches</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">MatchedConceptMap
+</span><a href="#local-6989586621679336717"><span class="hs-identifier hs-var">mcm</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-57"></span><span>  </span><span class="annot"><span class="annottext">spaceMatches :: MatchedSpaces
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#spaceMatches"><span class="hs-identifier hs-var">spaceMatches</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Lang -&gt; Choices -&gt; MatchedSpaces
+</span><a href="Language.Drasil.Code.Imperative.SpaceMatch.html#chooseSpace"><span class="hs-identifier hs-var">chooseSpace</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
+</span><a href="#local-6989586621679336734"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
+</span><a href="#local-6989586621679336731"><span class="hs-identifier hs-var">chs</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-58"></span><span>  </span><span class="annot"><span class="annottext">implType :: ImplementationType
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#implType"><span class="hs-identifier hs-var">implType</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Choices -&gt; ImplementationType
+</span><a href="Language.Drasil.Choices.html#impType"><span class="hs-identifier hs-var hs-var">impType</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
+</span><a href="#local-6989586621679336731"><span class="hs-identifier hs-var">chs</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-59"></span><span>  </span><span class="annot"><span class="annottext">onSfwrC :: ConstraintBehaviour
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#onSfwrC"><span class="hs-identifier hs-var">onSfwrC</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Choices -&gt; ConstraintBehaviour
+</span><a href="Language.Drasil.Choices.html#onSfwrConstraint"><span class="hs-identifier hs-var hs-var">onSfwrConstraint</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
+</span><a href="#local-6989586621679336731"><span class="hs-identifier hs-var">chs</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-60"></span><span>  </span><span class="annot"><span class="annottext">onPhysC :: ConstraintBehaviour
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#onPhysC"><span class="hs-identifier hs-var">onPhysC</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Choices -&gt; ConstraintBehaviour
+</span><a href="Language.Drasil.Choices.html#onPhysConstraint"><span class="hs-identifier hs-var hs-var">onPhysConstraint</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
+</span><a href="#local-6989586621679336731"><span class="hs-identifier hs-var">chs</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-61"></span><span>  </span><span class="annot"><span class="annottext">commented :: [Comments]
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#commented"><span class="hs-identifier hs-var">commented</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Choices -&gt; [Comments]
+</span><a href="Language.Drasil.Choices.html#comments"><span class="hs-identifier hs-var hs-var">comments</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
+</span><a href="#local-6989586621679336731"><span class="hs-identifier hs-var">chs</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-62"></span><span>  </span><span class="annot"><span class="annottext">doxOutput :: Verbosity
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#doxOutput"><span class="hs-identifier hs-var">doxOutput</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Choices -&gt; Verbosity
+</span><a href="Language.Drasil.Choices.html#doxVerbosity"><span class="hs-identifier hs-var hs-var">doxVerbosity</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
+</span><a href="#local-6989586621679336731"><span class="hs-identifier hs-var">chs</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-63"></span><span>  </span><span class="annot"><span class="annottext">date :: String
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#date"><span class="hs-identifier hs-var">date</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Visibility -&gt; String
+</span><a href="#local-6989586621679336704"><span class="hs-identifier hs-var">showDate</span></a></span><span> </span><span class="annot"><span class="annottext">(Visibility -&gt; String) -&gt; Visibility -&gt; String
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Choices -&gt; Visibility
+</span><a href="Language.Drasil.Choices.html#dates"><span class="hs-identifier hs-var hs-var">dates</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
+</span><a href="#local-6989586621679336731"><span class="hs-identifier hs-var">chs</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-64"></span><span>  </span><span class="annot"><span class="annottext">logKind :: [Logging]
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#logKind"><span class="hs-identifier hs-var">logKind</span></a></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Choices -&gt; [Logging]
+</span><a href="Language.Drasil.Choices.html#logging"><span class="hs-identifier hs-var hs-var">logging</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
+</span><a href="#local-6989586621679336731"><span class="hs-identifier hs-var">chs</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-65"></span><span>  </span><span class="annot"><span class="annottext">logName :: String
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#logName"><span class="hs-identifier hs-var">logName</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Choices -&gt; String
+</span><a href="Language.Drasil.Choices.html#logFile"><span class="hs-identifier hs-var hs-var">logFile</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
+</span><a href="#local-6989586621679336731"><span class="hs-identifier hs-var">chs</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-66"></span><span>  </span><span class="annot"><span class="annottext">auxiliaries :: [AuxFile]
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#auxiliaries"><span class="hs-identifier hs-var">auxiliaries</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Choices -&gt; [AuxFile]
+</span><a href="Language.Drasil.Choices.html#auxFiles"><span class="hs-identifier hs-var hs-var">auxFiles</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
+</span><a href="#local-6989586621679336731"><span class="hs-identifier hs-var">chs</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-67"></span><span>  </span><span class="annot"><span class="annottext">sampleData :: [Expr]
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#sampleData"><span class="hs-identifier hs-var">sampleData</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679336732"><span class="hs-identifier hs-var">sd</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-68"></span><span>  </span><span class="annot"><span class="annottext">modules :: [Mod]
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#modules"><span class="hs-identifier hs-var">modules</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Mod]
+</span><a href="#local-6989586621679336694"><span class="hs-identifier hs-var">modules'</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-69"></span><span>  </span><span class="annot"><span class="annottext">extLibNames :: [(String, String)]
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#extLibNames"><span class="hs-identifier hs-var">extLibNames</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[(String, String)]
+</span><a href="#local-6989586621679336692"><span class="hs-identifier hs-var">nms</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-70"></span><span>  </span><span class="annot"><span class="annottext">extLibMap :: ExtLibMap
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#extLibMap"><span class="hs-identifier hs-var">extLibMap</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[(String, ExtLibState)] -&gt; ExtLibMap
+forall k a. Ord k =&gt; [(k, a)] -&gt; Map k a
+</span><span class="hs-identifier hs-var">fromList</span></span><span> </span><span class="annot"><span class="annottext">[(String, ExtLibState)]
+</span><a href="#local-6989586621679336690"><span class="hs-identifier hs-var">elmap</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-71"></span><span>  </span><span class="annot"><span class="annottext">libPaths :: [String]
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#libPaths"><span class="hs-identifier hs-var">libPaths</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe String -&gt; [String]
+forall a. Maybe a -&gt; [a]
+</span><span class="hs-identifier hs-var">maybeToList</span></span><span> </span><span class="annot"><span class="annottext">Maybe String
+</span><a href="#local-6989586621679336688"><span class="hs-identifier hs-var">pth</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-72"></span><span>  </span><span class="annot"><span class="annottext">eMap :: ModExportMap
+</span><a href="#local-6989586621679336687"><span class="hs-identifier hs-var">eMap</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModExportMap
+</span><a href="#local-6989586621679336686"><span class="hs-identifier hs-var">mem</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-73"></span><span>  </span><span class="annot"><span class="annottext">libEMap :: ModExportMap
+</span><a href="#local-6989586621679336685"><span class="hs-identifier hs-var">libEMap</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModExportMap
+</span><a href="#local-6989586621679336684"><span class="hs-identifier hs-var">lem</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-74"></span><span>  </span><span class="annot"><span class="annottext">clsMap :: ModExportMap
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#clsMap"><span class="hs-identifier hs-var">clsMap</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModExportMap
+</span><a href="#local-6989586621679336682"><span class="hs-identifier hs-var">cdm</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-75"></span><span>  </span><span class="annot"><span class="annottext">defList :: [String]
+</span><a href="#local-6989586621679336681"><span class="hs-identifier hs-var">defList</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[String] -&gt; [String]
+forall a. Eq a =&gt; [a] -&gt; [a]
+</span><span class="hs-identifier hs-var">nub</span></span><span> </span><span class="annot"><span class="annottext">([String] -&gt; [String]) -&gt; [String] -&gt; [String]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ModExportMap -&gt; [String]
+forall k a. Map k a -&gt; [k]
+</span><span class="hs-identifier hs-var">keys</span></span><span> </span><span class="annot"><span class="annottext">ModExportMap
+</span><a href="#local-6989586621679336686"><span class="hs-identifier hs-var">mem</span></a></span><span> </span><span class="annot"><span class="annottext">[String] -&gt; [String] -&gt; [String]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">ModExportMap -&gt; [String]
+forall k a. Map k a -&gt; [k]
+</span><span class="hs-identifier hs-var">keys</span></span><span> </span><span class="annot"><span class="annottext">ModExportMap
+</span><a href="#local-6989586621679336682"><span class="hs-identifier hs-var">cdm</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-76"></span><span>  </span><span>
+</span><span id="line-77"></span><span>  </span><span class="hs-comment">-- stateful</span><span>
+</span><span id="line-78"></span><span>  </span><span class="annot"><span class="annottext">currentModule :: String
+</span><a href="#local-6989586621679336680"><span class="hs-identifier hs-var">currentModule</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-79"></span><span>  </span><span class="annot"><span class="annottext">currentClass :: String
+</span><a href="#local-6989586621679336679"><span class="hs-identifier hs-var">currentClass</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-80"></span><span>  </span><span class="annot"><span class="annottext">_designLog :: Doc
+</span><a href="#local-6989586621679336678"><span class="hs-identifier hs-var">_designLog</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc
+</span><a href="#local-6989586621679336677"><span class="hs-identifier hs-var">des</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-81"></span><span>  </span><span class="annot"><span class="annottext">_loggedSpaces :: [(Space, CodeType)]
+</span><a href="#local-6989586621679336676"><span class="hs-identifier hs-var">_loggedSpaces</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-comment">-- Used to prevent duplicate logs added to design log</span><span>
+</span><span id="line-82"></span><span class="hs-special">}</span><span>
+</span><span id="line-83"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679336717"><span class="annot"><span class="annottext">mcm :: MatchedConceptMap
+</span><a href="#local-6989586621679336717"><span class="hs-identifier hs-var">mcm</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679336675"><span class="annot"><span class="annottext">concLog :: [Sentence]
+</span><a href="#local-6989586621679336675"><span class="hs-identifier hs-var">concLog</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">State [Sentence] MatchedConceptMap
+-&gt; [Sentence] -&gt; (MatchedConceptMap, [Sentence])
+forall s a. State s a -&gt; s -&gt; (a, s)
+</span><span class="hs-identifier hs-var">runState</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Choices -&gt; State [Sentence] MatchedConceptMap
+</span><a href="Language.Drasil.Code.Imperative.ConceptMatch.html#chooseConcept"><span class="hs-identifier hs-var">chooseConcept</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
+</span><a href="#local-6989586621679336731"><span class="hs-identifier hs-var">chs</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><span id="line-84"></span><span>        </span><span id="local-6989586621679336704"><span class="annot"><span class="annottext">showDate :: Visibility -&gt; String
+</span><a href="#local-6989586621679336704"><span class="hs-identifier hs-var hs-var">showDate</span></a></span></span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#Show"><span class="hs-identifier hs-type">Show</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679336733"><span class="hs-identifier hs-var">dt</span></a></span><span>
+</span><span id="line-85"></span><span>        </span><span class="annot"><a href="#local-6989586621679336704"><span class="hs-identifier hs-var">showDate</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#Hide"><span class="hs-identifier hs-type">Hide</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
+</span><span id="line-86"></span><span>        </span><span class="hs-special">(</span><span class="hs-special">(</span><span id="local-6989586621679336688"><span class="annot"><span class="annottext">pth :: Maybe String
+</span><a href="#local-6989586621679336688"><span class="hs-identifier hs-var">pth</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679336690"><span class="annot"><span class="annottext">elmap :: [(String, ExtLibState)]
+</span><a href="#local-6989586621679336690"><span class="hs-identifier hs-var">elmap</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679336672"><span class="annot"><span class="annottext">lname :: (String, String)
+</span><a href="#local-6989586621679336672"><span class="hs-identifier hs-var">lname</span></a></span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span id="local-6989586621679336671"><span class="annot"><span class="annottext">libLog :: [Sentence]
+</span><a href="#local-6989586621679336671"><span class="hs-identifier hs-var">libLog</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">State
+  [Sentence]
+  (Maybe String, [(String, ExtLibState)], (String, String))
+-&gt; [Sentence]
+-&gt; ((Maybe String, [(String, ExtLibState)], (String, String)),
+    [Sentence])
+forall s a. State s a -&gt; s -&gt; (a, s)
+</span><span class="hs-identifier hs-var">runState</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Lang
+-&gt; [ODELibPckg]
+-&gt; [ODEInfo]
+-&gt; State
+     [Sentence]
+     (Maybe String, [(String, ExtLibState)], (String, String))
+</span><a href="Language.Drasil.Code.Imperative.GenODE.html#chooseODELib"><span class="hs-identifier hs-var">chooseODELib</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
+</span><a href="#local-6989586621679336734"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Choices -&gt; [ODELibPckg]
+</span><a href="Language.Drasil.Choices.html#odeLib"><span class="hs-identifier hs-var hs-var">odeLib</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
+</span><a href="#local-6989586621679336731"><span class="hs-identifier hs-var">chs</span></a></span><span class="hs-special">)</span><span> </span><span>
+</span><span id="line-87"></span><span>          </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Choices -&gt; [ODEInfo]
+</span><a href="Language.Drasil.Choices.html#odes"><span class="hs-identifier hs-var hs-var">odes</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
+</span><a href="#local-6989586621679336731"><span class="hs-identifier hs-var">chs</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><span id="line-88"></span><span>        </span><span id="local-6989586621679336668"><span class="annot"><span class="annottext">els :: [ExtLibState]
+</span><a href="#local-6989586621679336668"><span class="hs-identifier hs-var hs-var">els</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((String, ExtLibState) -&gt; ExtLibState)
+-&gt; [(String, ExtLibState)] -&gt; [ExtLibState]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">(String, ExtLibState) -&gt; ExtLibState
+forall a b. (a, b) -&gt; b
+</span><span class="hs-identifier hs-var">snd</span></span><span> </span><span class="annot"><span class="annottext">[(String, ExtLibState)]
+</span><a href="#local-6989586621679336690"><span class="hs-identifier hs-var">elmap</span></a></span><span>
+</span><span id="line-89"></span><span>        </span><span id="local-6989586621679336692"><span class="annot"><span class="annottext">nms :: [(String, String)]
+</span><a href="#local-6989586621679336692"><span class="hs-identifier hs-var hs-var">nms</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">(String, String)
+</span><a href="#local-6989586621679336672"><span class="hs-identifier hs-var">lname</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-90"></span><span>        </span><span id="local-6989586621679336686"><span class="annot"><span class="annottext">mem :: ModExportMap
+</span><a href="#local-6989586621679336686"><span class="hs-identifier hs-var hs-var">mem</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeSpec -&gt; Choices -&gt; [Mod] -&gt; ModExportMap
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#modExportMap"><span class="hs-identifier hs-var">modExportMap</span></a></span><span> </span><span class="annot"><span class="annottext">CodeSpec
+</span><a href="#local-6989586621679336730"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
+</span><a href="#local-6989586621679336731"><span class="hs-identifier hs-var">chs</span></a></span><span> </span><span class="annot"><span class="annottext">[Mod]
+</span><a href="#local-6989586621679336694"><span class="hs-identifier hs-var">modules'</span></a></span><span> </span><span>
+</span><span id="line-91"></span><span>        </span><span id="local-6989586621679336684"><span class="annot"><span class="annottext">lem :: ModExportMap
+</span><a href="#local-6989586621679336684"><span class="hs-identifier hs-var hs-var">lem</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[(String, String)] -&gt; ModExportMap
+forall k a. Ord k =&gt; [(k, a)] -&gt; Map k a
+</span><span class="hs-identifier hs-var">fromList</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(ExtLibState -&gt; [(String, String)])
+-&gt; [ExtLibState] -&gt; [(String, String)]
+forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
+</span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ExtLibState
+-&gt; Getting [(String, String)] ExtLibState [(String, String)]
+-&gt; [(String, String)]
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting [(String, String)] ExtLibState [(String, String)]
+Lens' ExtLibState [(String, String)]
+</span><a href="Language.Drasil.Code.ExtLibImport.html#modExports"><span class="hs-identifier hs-var">modExports</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[ExtLibState]
+</span><a href="#local-6989586621679336668"><span class="hs-identifier hs-var">els</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-92"></span><span>        </span><span id="local-6989586621679336682"><span class="annot"><span class="annottext">cdm :: ModExportMap
+</span><a href="#local-6989586621679336682"><span class="hs-identifier hs-var hs-var">cdm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeSpec -&gt; Choices -&gt; [Mod] -&gt; ModExportMap
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#clsDefMap"><span class="hs-identifier hs-var">clsDefMap</span></a></span><span> </span><span class="annot"><span class="annottext">CodeSpec
+</span><a href="#local-6989586621679336730"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
+</span><a href="#local-6989586621679336731"><span class="hs-identifier hs-var">chs</span></a></span><span> </span><span class="annot"><span class="annottext">[Mod]
+</span><a href="#local-6989586621679336694"><span class="hs-identifier hs-var">modules'</span></a></span><span>
+</span><span id="line-93"></span><span>        </span><span id="local-6989586621679336694"><span class="annot"><span class="annottext">modules' :: [Mod]
+</span><a href="#local-6989586621679336694"><span class="hs-identifier hs-var hs-var">modules'</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeSpec -&gt; [Mod]
+</span><a href="Language.Drasil.CodeSpec.html#mods"><span class="hs-identifier hs-var hs-var">mods</span></a></span><span> </span><span class="annot"><span class="annottext">CodeSpec
+</span><a href="#local-6989586621679336730"><span class="hs-identifier hs-var">spec</span></a></span><span> </span><span class="annot"><span class="annottext">[Mod] -&gt; [Mod] -&gt; [Mod]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(ExtLibState -&gt; [Mod]) -&gt; [ExtLibState] -&gt; [Mod]
+forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
+</span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ExtLibState -&gt; Getting [Mod] ExtLibState [Mod] -&gt; [Mod]
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting [Mod] ExtLibState [Mod]
+Lens' ExtLibState [Mod]
+</span><a href="Language.Drasil.Code.ExtLibImport.html#auxMods"><span class="hs-identifier hs-var">auxMods</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[ExtLibState]
+</span><a href="#local-6989586621679336668"><span class="hs-identifier hs-var">els</span></a></span><span>
+</span><span id="line-94"></span><span>        </span><span id="local-6989586621679336665"><span class="annot"><span class="annottext">nonPrefChs :: [Sentence]
+</span><a href="#local-6989586621679336665"><span class="hs-identifier hs-var hs-var">nonPrefChs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Choices -&gt; [Sentence]
+</span><a href="Language.Drasil.Choices.html#choicesSent"><span class="hs-identifier hs-var">choicesSent</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
+</span><a href="#local-6989586621679336731"><span class="hs-identifier hs-var">chs</span></a></span><span>
+</span><span id="line-95"></span><span>        </span><span id="local-6989586621679336677"><span class="annot"><span class="annottext">des :: Doc
+</span><a href="#local-6989586621679336677"><span class="hs-identifier hs-var hs-var">des</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><span class="hs-identifier hs-var">vcat</span></span><span> </span><span class="annot"><span class="annottext">([Doc] -&gt; Doc) -&gt; ([Sentence] -&gt; [Doc]) -&gt; [Sentence] -&gt; Doc
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Doc) -&gt; [Sentence] -&gt; [Doc]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB -&gt; Stage -&gt; Linearity -&gt; Sentence -&gt; Doc
+</span><span class="hs-identifier hs-var">sentenceDoc</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeSpec -&gt; ChunkDB
+</span><a href="Language.Drasil.CodeSpec.html#sysinfodb"><span class="hs-identifier hs-var hs-var">sysinfodb</span></a></span><span> </span><span class="annot"><span class="annottext">CodeSpec
+</span><a href="#local-6989586621679336730"><span class="hs-identifier hs-var">spec</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Stage
+</span><span class="hs-identifier hs-var">Implementation</span></span><span> </span><span class="annot"><span class="annottext">Linearity
+</span><span class="hs-identifier hs-var">Linear</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; Doc) -&gt; [Sentence] -&gt; Doc
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span>
+</span><span id="line-96"></span><span>          </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence]
+</span><a href="#local-6989586621679336665"><span class="hs-identifier hs-var">nonPrefChs</span></a></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [Sentence] -&gt; [Sentence]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[Sentence]
+</span><a href="#local-6989586621679336675"><span class="hs-identifier hs-var">concLog</span></a></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [Sentence] -&gt; [Sentence]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[Sentence]
+</span><a href="#local-6989586621679336671"><span class="hs-identifier hs-var">libLog</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-97"></span><span>
+</span><span id="line-98"></span><span class="hs-comment">-- | Generates a package with the given DrasilState. The passed</span><span>
+</span><span id="line-99"></span><span class="hs-comment">-- un-representation functions determine which target language the package will </span><span>
+</span><span id="line-100"></span><span class="hs-comment">-- be generated in.</span><span>
+</span><span id="line-101"></span><span id="local-6989586621679336660"><span id="local-6989586621679336661"><span class="annot"><a href="Language.Drasil.Code.Imperative.Generator.html#generateCode"><span class="hs-identifier hs-type">generateCode</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">OOProg</span></span><span> </span><span class="annot"><a href="#local-6989586621679336661"><span class="hs-identifier hs-type">progRepr</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#PackageSym"><span class="hs-identifier hs-type">PackageSym</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679336660"><span class="hs-identifier hs-type">packRepr</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Lang.html#Lang"><span class="hs-identifier hs-type">Lang</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
+</span><span id="line-102"></span><span>  </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679336661"><span class="hs-identifier hs-type">progRepr</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Program</span></span><span> </span><span class="annot"><a href="#local-6989586621679336661"><span class="hs-identifier hs-type">progRepr</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ProgData</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679336660"><span class="hs-identifier hs-type">packRepr</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#Package"><span class="hs-identifier hs-type">Package</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679336660"><span class="hs-identifier hs-type">packRepr</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
+</span><span id="line-103"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.Data.html#PackData"><span class="hs-identifier hs-type">PackData</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#DrasilState"><span class="hs-identifier hs-type">DrasilState</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span></span></span><span>
+</span><span id="line-104"></span><span id="generateCode"><span class="annot"><span class="annottext">generateCode :: Lang
+-&gt; (progRepr (Program progRepr) -&gt; ProgData)
+-&gt; (packRepr (Package packRepr) -&gt; PackData)
+-&gt; DrasilState
+-&gt; IO ()
+</span><a href="Language.Drasil.Code.Imperative.Generator.html#generateCode"><span class="hs-identifier hs-var hs-var">generateCode</span></a></span></span><span> </span><span id="local-6989586621679336659"><span class="annot"><span class="annottext">l :: Lang
+</span><a href="#local-6989586621679336659"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span id="local-6989586621679336658"><span class="annot"><span class="annottext">unReprProg :: progRepr (Program progRepr) -&gt; ProgData
+</span><a href="#local-6989586621679336658"><span class="hs-identifier hs-var">unReprProg</span></a></span></span><span> </span><span id="local-6989586621679336657"><span class="annot"><span class="annottext">unReprPack :: packRepr (Package packRepr) -&gt; PackData
+</span><a href="#local-6989586621679336657"><span class="hs-identifier hs-var">unReprPack</span></a></span></span><span> </span><span id="local-6989586621679336656"><span class="annot"><span class="annottext">g :: DrasilState
+</span><a href="#local-6989586621679336656"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span> </span><span>
+</span><span id="line-105"></span><span>  </span><span id="local-6989586621679336655"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679336655"><span class="hs-identifier hs-var">workingDir</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO String
+</span><span class="hs-identifier hs-var">getCurrentDirectory</span></span><span>
+</span><span id="line-106"></span><span>  </span><span class="annot"><span class="annottext">Bool -&gt; String -&gt; IO ()
+</span><span class="hs-identifier hs-var">createDirectoryIfMissing</span></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Lang -&gt; String
+</span><a href="Language.Drasil.Code.Imperative.Generator.html#getDir"><span class="hs-identifier hs-var">getDir</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
+</span><a href="#local-6989586621679336659"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-107"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; IO ()
+</span><span class="hs-identifier hs-var">setCurrentDirectory</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Lang -&gt; String
+</span><a href="Language.Drasil.Code.Imperative.Generator.html#getDir"><span class="hs-identifier hs-var">getDir</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
+</span><a href="#local-6989586621679336659"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-108"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679336653"><span class="annot"><span class="annottext">pckg :: packRepr (Package packRepr)
+</span><a href="#local-6989586621679336653"><span class="hs-identifier hs-var">pckg</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679336652"><span class="annot"><span class="annottext">ds :: DrasilState
+</span><a href="#local-6989586621679336652"><span class="hs-identifier hs-var">ds</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">State DrasilState (packRepr (Package packRepr))
+-&gt; DrasilState -&gt; (packRepr (Package packRepr), DrasilState)
+forall s a. State s a -&gt; s -&gt; (a, s)
+</span><span class="hs-identifier hs-var">runState</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(progRepr (Program progRepr) -&gt; ProgData)
+-&gt; State DrasilState (packRepr (Package packRepr))
+forall (progRepr :: * -&gt; *) (packRepr :: * -&gt; *).
+(OOProg progRepr, PackageSym packRepr) =&gt;
+(progRepr (Program progRepr) -&gt; ProgData)
+-&gt; GenState (packRepr (Package packRepr))
+</span><a href="Language.Drasil.Code.Imperative.Generator.html#genPackage"><span class="hs-identifier hs-var">genPackage</span></a></span><span> </span><span class="annot"><span class="annottext">progRepr (Program progRepr) -&gt; ProgData
+</span><a href="#local-6989586621679336658"><span class="hs-identifier hs-var">unReprProg</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679336656"><span class="hs-identifier hs-var">g</span></a></span><span> </span><span>
+</span><span id="line-109"></span><span>      </span><span id="local-6989586621679336650"><span class="annot"><span class="annottext">code :: Code
+</span><a href="#local-6989586621679336650"><span class="hs-identifier hs-var hs-var">code</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[FileData] -&gt; [AuxData] -&gt; Code
+</span><a href="Language.Drasil.Code.CodeGeneration.html#makeCode"><span class="hs-identifier hs-var">makeCode</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ProgData -&gt; [FileData]
+</span><span class="hs-identifier hs-var hs-var">progMods</span></span><span> </span><span class="annot"><span class="annottext">(ProgData -&gt; [FileData]) -&gt; ProgData -&gt; [FileData]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">PackData -&gt; ProgData
+</span><a href="Language.Drasil.Code.Imperative.GOOL.Data.html#packProg"><span class="hs-identifier hs-var hs-var">packProg</span></a></span><span> </span><span class="annot"><span class="annottext">(PackData -&gt; ProgData) -&gt; PackData -&gt; ProgData
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">packRepr (Package packRepr) -&gt; PackData
+</span><a href="#local-6989586621679336657"><span class="hs-identifier hs-var">unReprPack</span></a></span><span> </span><span class="annot"><span class="annottext">packRepr (Package packRepr)
+</span><a href="#local-6989586621679336653"><span class="hs-identifier hs-var">pckg</span></a></span><span class="hs-special">)</span><span> </span><span>
+</span><span id="line-110"></span><span>        </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Doc -&gt; AuxData
+</span><a href="Language.Drasil.Code.Imperative.GOOL.Data.html#ad"><span class="hs-identifier hs-var">ad</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;designLog.txt&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679336652"><span class="hs-identifier hs-var">ds</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; Getting Doc DrasilState Doc -&gt; Doc
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting Doc DrasilState Doc
+Lens' DrasilState Doc
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#designLog"><span class="hs-identifier hs-var">designLog</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool
+</span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Bool) -&gt; Bool -&gt; Bool
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Bool
+</span><span class="hs-identifier hs-var">isEmpty</span></span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Bool) -&gt; Doc -&gt; Bool
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span>
+</span><span id="line-111"></span><span>          </span><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679336652"><span class="hs-identifier hs-var">ds</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; Getting Doc DrasilState Doc -&gt; Doc
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting Doc DrasilState Doc
+Lens' DrasilState Doc
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#designLog"><span class="hs-identifier hs-var">designLog</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[AuxData] -&gt; [AuxData] -&gt; [AuxData]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">PackData -&gt; [AuxData]
+</span><a href="Language.Drasil.Code.Imperative.GOOL.Data.html#packAux"><span class="hs-identifier hs-var hs-var">packAux</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">packRepr (Package packRepr) -&gt; PackData
+</span><a href="#local-6989586621679336657"><span class="hs-identifier hs-var">unReprPack</span></a></span><span> </span><span class="annot"><span class="annottext">packRepr (Package packRepr)
+</span><a href="#local-6989586621679336653"><span class="hs-identifier hs-var">pckg</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-112"></span><span>  </span><span class="annot"><span class="annottext">Code -&gt; IO ()
+</span><a href="Language.Drasil.Code.CodeGeneration.html#createCodeFiles"><span class="hs-identifier hs-var">createCodeFiles</span></a></span><span> </span><span class="annot"><span class="annottext">Code
+</span><a href="#local-6989586621679336650"><span class="hs-identifier hs-var">code</span></a></span><span>
+</span><span id="line-113"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; IO ()
+</span><span class="hs-identifier hs-var">setCurrentDirectory</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679336655"><span class="hs-identifier hs-var">workingDir</span></a></span><span>
+</span><span id="line-114"></span><span>
+</span><span id="line-115"></span><span class="hs-comment">-- Generates a package, including a Makefile, sample input file, and Doxygen </span><span>
+</span><span id="line-116"></span><span class="hs-comment">-- configuration file (all subject to the user's choices). </span><span>
+</span><span id="line-117"></span><span class="hs-comment">-- The passed un-representation function determines which target language the </span><span>
+</span><span id="line-118"></span><span class="hs-comment">-- package will be generated in.</span><span>
+</span><span id="line-119"></span><span class="hs-comment">-- GOOL's static code analysis interpreter is called to initialize the state </span><span>
+</span><span id="line-120"></span><span class="hs-comment">-- used by the language renderer.</span><span>
+</span><span id="line-121"></span><span id="local-6989586621679336870"><span id="local-6989586621679336872"><span class="annot"><a href="Language.Drasil.Code.Imperative.Generator.html#genPackage"><span class="hs-identifier hs-type">genPackage</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">OOProg</span></span><span> </span><span class="annot"><a href="#local-6989586621679336872"><span class="hs-identifier hs-type">progRepr</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#PackageSym"><span class="hs-identifier hs-type">PackageSym</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679336870"><span class="hs-identifier hs-type">packRepr</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span>
+</span><span id="line-122"></span><span>  </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679336872"><span class="hs-identifier hs-type">progRepr</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Program</span></span><span> </span><span class="annot"><a href="#local-6989586621679336872"><span class="hs-identifier hs-type">progRepr</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ProgData</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
+</span><span id="line-123"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679336870"><span class="hs-identifier hs-type">packRepr</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#Package"><span class="hs-identifier hs-type">Package</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679336870"><span class="hs-identifier hs-type">packRepr</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span></span></span><span>
+</span><span id="line-124"></span><span id="genPackage"><span class="annot"><span class="annottext">genPackage :: (progRepr (Program progRepr) -&gt; ProgData)
+-&gt; GenState (packRepr (Package packRepr))
+</span><a href="Language.Drasil.Code.Imperative.Generator.html#genPackage"><span class="hs-identifier hs-var hs-var">genPackage</span></a></span></span><span> </span><span id="local-6989586621679336645"><span class="annot"><span class="annottext">unRepr :: progRepr (Program progRepr) -&gt; ProgData
+</span><a href="#local-6989586621679336645"><span class="hs-identifier hs-var">unRepr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-125"></span><span>  </span><span id="local-6989586621679336644"><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679336644"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
+forall s (m :: * -&gt; *). MonadState s m =&gt; m s
+</span><span class="hs-identifier hs-var">get</span></span><span>
+</span><span id="line-126"></span><span>  </span><span id="local-6989586621679336643"><span class="annot"><span class="annottext">GS (CodeInfo (Program CodeInfo))
+</span><a href="#local-6989586621679336643"><span class="hs-identifier hs-var">ci</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">GenState (GS (CodeInfo (Program CodeInfo)))
+forall (r :: * -&gt; *). OOProg r =&gt; GenState (GSProgram r)
+</span><a href="Language.Drasil.Code.Imperative.Generator.html#genProgram"><span class="hs-identifier hs-var">genProgram</span></a></span><span>
+</span><span id="line-127"></span><span>  </span><span id="local-6989586621679336641"><span class="annot"><span class="annottext">GS (progRepr (Program progRepr))
+</span><a href="#local-6989586621679336641"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">GenState (GS (progRepr (Program progRepr)))
+forall (r :: * -&gt; *). OOProg r =&gt; GenState (GSProgram r)
+</span><a href="Language.Drasil.Code.Imperative.Generator.html#genProgram"><span class="hs-identifier hs-var">genProgram</span></a></span><span>
+</span><span id="line-128"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679336640"><span class="annot"><span class="annottext">info :: GOOLState
+</span><a href="#local-6989586621679336640"><span class="hs-identifier hs-var hs-var">info</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeInfo GOOLState -&gt; GOOLState
+forall a. CodeInfo a -&gt; a
+</span><span class="hs-identifier hs-var hs-var">unCI</span></span><span> </span><span class="annot"><span class="annottext">(CodeInfo GOOLState -&gt; GOOLState)
+-&gt; CodeInfo GOOLState -&gt; GOOLState
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">State GOOLState (CodeInfo GOOLState)
+-&gt; GOOLState -&gt; CodeInfo GOOLState
+forall s a. State s a -&gt; s -&gt; a
+</span><span class="hs-identifier hs-var">evalState</span></span><span> </span><span class="annot"><span class="annottext">GS (CodeInfo (Program CodeInfo))
+State GOOLState (CodeInfo GOOLState)
+</span><a href="#local-6989586621679336643"><span class="hs-identifier hs-var">ci</span></a></span><span> </span><span class="annot"><span class="annottext">GOOLState
+</span><span class="hs-identifier hs-var">initialState</span></span><span>
+</span><span id="line-129"></span><span>      </span><span class="hs-special">(</span><span id="local-6989586621679336639"><span class="annot"><span class="annottext">reprPD :: progRepr (Program progRepr)
+</span><a href="#local-6989586621679336639"><span class="hs-identifier hs-var">reprPD</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679336638"><span class="annot"><span class="annottext">s :: GOOLState
+</span><a href="#local-6989586621679336638"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GS (progRepr (Program progRepr))
+-&gt; GOOLState -&gt; (progRepr (Program progRepr), GOOLState)
+forall s a. State s a -&gt; s -&gt; (a, s)
+</span><span class="hs-identifier hs-var">runState</span></span><span> </span><span class="annot"><span class="annottext">GS (progRepr (Program progRepr))
+</span><a href="#local-6989586621679336641"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="annot"><span class="annottext">GOOLState
+</span><a href="#local-6989586621679336640"><span class="hs-identifier hs-var">info</span></a></span><span>
+</span><span id="line-130"></span><span>      </span><span id="local-6989586621679336637"><span class="annot"><span class="annottext">pd :: ProgData
+</span><a href="#local-6989586621679336637"><span class="hs-identifier hs-var hs-var">pd</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">progRepr (Program progRepr) -&gt; ProgData
+</span><a href="#local-6989586621679336645"><span class="hs-identifier hs-var">unRepr</span></a></span><span> </span><span class="annot"><span class="annottext">progRepr (Program progRepr)
+</span><a href="#local-6989586621679336639"><span class="hs-identifier hs-var">reprPD</span></a></span><span>
+</span><span id="line-131"></span><span>      </span><span id="local-6989586621679336636"><span class="annot"><span class="annottext">m :: packRepr (Auxiliary packRepr)
+</span><a href="#local-6989586621679336636"><span class="hs-identifier hs-var hs-var">m</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[String]
+-&gt; ImplementationType
+-&gt; [Comments]
+-&gt; GOOLState
+-&gt; ProgData
+-&gt; packRepr (Auxiliary packRepr)
+forall (r :: * -&gt; *).
+AuxiliarySym r =&gt;
+[String]
+-&gt; ImplementationType
+-&gt; [Comments]
+-&gt; GOOLState
+-&gt; ProgData
+-&gt; r (Auxiliary r)
+</span><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#makefile"><span class="hs-identifier hs-var">makefile</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DrasilState -&gt; [String]
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#libPaths"><span class="hs-identifier hs-var hs-var">libPaths</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679336644"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DrasilState -&gt; ImplementationType
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#implType"><span class="hs-identifier hs-var hs-var">implType</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679336644"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DrasilState -&gt; [Comments]
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#commented"><span class="hs-identifier hs-var hs-var">commented</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679336644"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">GOOLState
+</span><a href="#local-6989586621679336638"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ProgData
+</span><a href="#local-6989586621679336637"><span class="hs-identifier hs-var">pd</span></a></span><span>
+</span><span id="line-132"></span><span>      </span><span id="local-6989586621679336634"><span class="annot"><span class="annottext">as :: [String]
+</span><a href="#local-6989586621679336634"><span class="hs-keyword hs-var hs-var">as</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; CodeSpec
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#codeSpec"><span class="hs-identifier hs-var hs-var">codeSpec</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679336644"><span class="hs-identifier hs-var">g</span></a></span><span> </span><span class="hs-keyword">of</span><span> </span><span class="annot"><a href="Language.Drasil.CodeSpec.html#CodeSpec"><span class="hs-identifier hs-type">CodeSpec</span></a></span><span> </span><span class="hs-special">{</span><span class="annot"><span class="annottext">authors :: ()
+</span><a href="Language.Drasil.CodeSpec.html#authors"><span class="hs-identifier hs-var">authors</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679336631"><span class="annot"><span class="annottext">[a]
+</span><a href="#local-6989586621679336631"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">}</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">(a -&gt; String) -&gt; [a] -&gt; [String]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; String
+forall n. HasName n =&gt; n -&gt; String
+</span><span class="hs-identifier hs-var">name</span></span><span> </span><span class="annot"><span class="annottext">[a]
+</span><a href="#local-6989586621679336631"><span class="hs-identifier hs-var">a</span></a></span><span>
+</span><span id="line-133"></span><span>      </span><span id="local-6989586621679336629"><span class="annot"><span class="annottext">cfp :: [String]
+</span><a href="#local-6989586621679336629"><span class="hs-identifier hs-var hs-var">cfp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeSpec -&gt; [String]
+</span><a href="Language.Drasil.CodeSpec.html#configFiles"><span class="hs-identifier hs-var hs-var">configFiles</span></a></span><span> </span><span class="annot"><span class="annottext">(CodeSpec -&gt; [String]) -&gt; CodeSpec -&gt; [String]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; CodeSpec
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#codeSpec"><span class="hs-identifier hs-var hs-var">codeSpec</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679336644"><span class="hs-identifier hs-var">g</span></a></span><span>
+</span><span id="line-134"></span><span>  </span><span id="local-6989586621679336627"><span class="annot"><span class="annottext">Maybe (packRepr (Auxiliary packRepr))
+</span><a href="#local-6989586621679336627"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">GenState (Maybe (packRepr (Auxiliary packRepr)))
+forall (r :: * -&gt; *).
+AuxiliarySym r =&gt;
+GenState (Maybe (r (Auxiliary r)))
+</span><a href="Language.Drasil.Code.Imperative.Modules.html#genSampleInput"><span class="hs-identifier hs-var">genSampleInput</span></a></span><span>
+</span><span id="line-135"></span><span>  </span><span id="local-6989586621679336626"><span class="annot"><span class="annottext">Maybe (packRepr (Auxiliary packRepr))
+</span><a href="#local-6989586621679336626"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">GOOLState -&gt; GenState (Maybe (packRepr (Auxiliary packRepr)))
+forall (r :: * -&gt; *).
+AuxiliarySym r =&gt;
+GOOLState -&gt; GenState (Maybe (r (Auxiliary r)))
+</span><a href="Language.Drasil.Code.Imperative.GenerateGOOL.html#genDoxConfig"><span class="hs-identifier hs-var">genDoxConfig</span></a></span><span> </span><span class="annot"><span class="annottext">GOOLState
+</span><a href="#local-6989586621679336638"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><span id="line-136"></span><span>  </span><span id="local-6989586621679336625"><span class="annot"><span class="annottext">Maybe (packRepr (Auxiliary packRepr))
+</span><a href="#local-6989586621679336625"><span class="hs-identifier hs-var">rm</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">ReadMeInfo -&gt; GenState (Maybe (packRepr (Auxiliary packRepr)))
+forall (r :: * -&gt; *).
+AuxiliarySym r =&gt;
+ReadMeInfo -&gt; GenState (Maybe (r (Auxiliary r)))
+</span><a href="Language.Drasil.Code.Imperative.GenerateGOOL.html#genReadMe"><span class="hs-identifier hs-var">genReadMe</span></a></span><span> </span><span class="annot"><span class="annottext">ReadMeInfo :: String
+-&gt; String
+-&gt; Maybe String
+-&gt; ImplementationType
+-&gt; [(String, String)]
+-&gt; [String]
+-&gt; [String]
+-&gt; [String]
+-&gt; String
+-&gt; ReadMeInfo
+</span><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#ReadMeInfo"><span class="hs-identifier hs-type hs-type">ReadMeInfo</span></a></span><span> </span><span class="hs-special">{</span><span>
+</span><span id="line-137"></span><span>        </span><span class="annot"><span class="annottext">langName :: String
+</span><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#langName"><span class="hs-identifier hs-var">langName</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-138"></span><span>        </span><span class="annot"><span class="annottext">langVersion :: String
+</span><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#langVersion"><span class="hs-identifier hs-var">langVersion</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-139"></span><span>        </span><span class="annot"><span class="annottext">invalidOS :: Maybe String
+</span><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#invalidOS"><span class="hs-identifier hs-var">invalidOS</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe String
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span class="hs-special">,</span><span>
+</span><span id="line-140"></span><span>        </span><span class="annot"><span class="annottext">implementType :: ImplementationType
+</span><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#implementType"><span class="hs-identifier hs-var">implementType</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; ImplementationType
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#implType"><span class="hs-identifier hs-var hs-var">implType</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679336644"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-141"></span><span>        </span><span class="annot"><span class="annottext">extLibNV :: [(String, String)]
+</span><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#extLibNV"><span class="hs-identifier hs-var">extLibNV</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; [(String, String)]
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#extLibNames"><span class="hs-identifier hs-var hs-var">extLibNames</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679336644"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-142"></span><span>        </span><span class="annot"><span class="annottext">extLibFP :: [String]
+</span><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#extLibFP"><span class="hs-identifier hs-var">extLibFP</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; [String]
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#libPaths"><span class="hs-identifier hs-var hs-var">libPaths</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679336644"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-143"></span><span>        </span><span class="annot"><span class="annottext">contributors :: [String]
+</span><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#contributors"><span class="hs-identifier hs-var">contributors</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[String]
+</span><a href="#local-6989586621679336634"><span class="hs-keyword hs-var">as</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-144"></span><span>        </span><span class="annot"><span class="annottext">configFP :: [String]
+</span><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#configFP"><span class="hs-identifier hs-var">configFP</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[String]
+</span><a href="#local-6989586621679336629"><span class="hs-identifier hs-var">cfp</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-145"></span><span>        </span><span class="annot"><span class="annottext">caseName :: String
+</span><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#caseName"><span class="hs-identifier hs-var">caseName</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span class="hs-special">}</span><span>
+</span><span id="line-146"></span><span>  </span><span class="annot"><span class="annottext">packRepr (Package packRepr)
+-&gt; GenState (packRepr (Package packRepr))
+forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
+</span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">(packRepr (Package packRepr)
+ -&gt; GenState (packRepr (Package packRepr)))
+-&gt; packRepr (Package packRepr)
+-&gt; GenState (packRepr (Package packRepr))
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ProgData
+-&gt; [packRepr (Auxiliary packRepr)] -&gt; packRepr (Package packRepr)
+forall (r :: * -&gt; *).
+PackageSym r =&gt;
+ProgData -&gt; [r (Auxiliary r)] -&gt; r (Package r)
+</span><a href="Language.Drasil.Code.Imperative.GOOL.ClassInterface.html#package"><span class="hs-identifier hs-var">package</span></a></span><span> </span><span class="annot"><span class="annottext">ProgData
+</span><a href="#local-6989586621679336637"><span class="hs-identifier hs-var">pd</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">packRepr (Auxiliary packRepr)
+</span><a href="#local-6989586621679336636"><span class="hs-identifier hs-var">m</span></a></span><span class="annot"><span class="annottext">packRepr (Auxiliary packRepr)
+-&gt; [packRepr (Auxiliary packRepr)]
+-&gt; [packRepr (Auxiliary packRepr)]
+forall a. a -&gt; [a] -&gt; [a]
+</span><span class="hs-glyph hs-var">:</span></span><span class="annot"><span class="annottext">[Maybe (packRepr (Auxiliary packRepr))]
+-&gt; [packRepr (Auxiliary packRepr)]
+forall a. [Maybe a] -&gt; [a]
+</span><span class="hs-identifier hs-var">catMaybes</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Maybe (packRepr (Auxiliary packRepr))
+</span><a href="#local-6989586621679336627"><span class="hs-identifier hs-var">i</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Maybe (packRepr (Auxiliary packRepr))
+</span><a href="#local-6989586621679336625"><span class="hs-identifier hs-var">rm</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">Maybe (packRepr (Auxiliary packRepr))
+</span><a href="#local-6989586621679336626"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><span id="line-147"></span><span>
+</span><span id="line-148"></span><span class="hs-comment">-- Generates an SCS program based on the problem and the user's design choices.</span><span>
+</span><span id="line-149"></span><span id="local-6989586621679336855"><span class="annot"><a href="Language.Drasil.Code.Imperative.Generator.html#genProgram"><span class="hs-identifier hs-type">genProgram</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">OOProg</span></span><span> </span><span class="annot"><a href="#local-6989586621679336855"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">GSProgram</span></span><span> </span><span class="annot"><a href="#local-6989586621679336855"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span></span><span>
+</span><span id="line-150"></span><span id="genProgram"><span class="annot"><span class="annottext">genProgram :: GenState (GSProgram r)
+</span><a href="Language.Drasil.Code.Imperative.Generator.html#genProgram"><span class="hs-identifier hs-var hs-var">genProgram</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-151"></span><span>  </span><span id="local-6989586621679336612"><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679336612"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
+forall s (m :: * -&gt; *). MonadState s m =&gt; m s
+</span><span class="hs-identifier hs-var">get</span></span><span>
+</span><span id="line-152"></span><span>  </span><span id="local-6989586621679336611"><span class="annot"><span class="annottext">[FS (r (File r))]
+</span><a href="#local-6989586621679336611"><span class="hs-identifier hs-var">ms</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Modularity -&gt; GenState [FS (r (File r))]
+forall (r :: * -&gt; *). OOProg r =&gt; Modularity -&gt; GenState [SFile r]
+</span><a href="Language.Drasil.Code.Imperative.Generator.html#chooseModules"><span class="hs-identifier hs-var">chooseModules</span></a></span><span> </span><span class="annot"><span class="annottext">(Modularity -&gt; GenState [FS (r (File r))])
+-&gt; Modularity -&gt; GenState [FS (r (File r))]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; Modularity
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#modular"><span class="hs-identifier hs-var hs-var">modular</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679336612"><span class="hs-identifier hs-var">g</span></a></span><span>
+</span><span id="line-153"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679336609"><span class="annot"><span class="annottext">n :: String
+</span><a href="#local-6989586621679336609"><span class="hs-identifier hs-var hs-var">n</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeSpec -&gt; String
+</span><a href="Language.Drasil.CodeSpec.html#pName"><span class="hs-identifier hs-var hs-var">pName</span></a></span><span> </span><span class="annot"><span class="annottext">(CodeSpec -&gt; String) -&gt; CodeSpec -&gt; String
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; CodeSpec
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#codeSpec"><span class="hs-identifier hs-var hs-var">codeSpec</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679336612"><span class="hs-identifier hs-var">g</span></a></span><span>
+</span><span id="line-154"></span><span>  </span><span class="annot"><span class="annottext">GSProgram r -&gt; GenState (GSProgram r)
+forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
+</span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">(GSProgram r -&gt; GenState (GSProgram r))
+-&gt; GSProgram r -&gt; GenState (GSProgram r)
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; [FS (r (File r))] -&gt; GSProgram r
+forall (r :: * -&gt; *).
+ProgramSym r =&gt;
+String -&gt; [SFile r] -&gt; GSProgram r
+</span><span class="hs-identifier hs-var">prog</span></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679336609"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">[FS (r (File r))]
+</span><a href="#local-6989586621679336611"><span class="hs-identifier hs-var">ms</span></a></span><span>
+</span><span id="line-155"></span><span>
+</span><span id="line-156"></span><span class="hs-comment">-- Generates either a single module or many modules, based on the users choice </span><span>
+</span><span id="line-157"></span><span class="hs-comment">-- of modularity</span><span>
+</span><span id="line-158"></span><span id="local-6989586621679336831"><span class="annot"><a href="Language.Drasil.Code.Imperative.Generator.html#chooseModules"><span class="hs-identifier hs-type">chooseModules</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">OOProg</span></span><span> </span><span class="annot"><a href="#local-6989586621679336831"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#Modularity"><span class="hs-identifier hs-type">Modularity</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">SFile</span></span><span> </span><span class="annot"><a href="#local-6989586621679336831"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span></span><span>
+</span><span id="line-159"></span><span id="chooseModules"><span class="annot"><span class="annottext">chooseModules :: Modularity -&gt; GenState [SFile r]
+</span><a href="Language.Drasil.Code.Imperative.Generator.html#chooseModules"><span class="hs-identifier hs-var hs-var">chooseModules</span></a></span></span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#Unmodular"><span class="hs-identifier hs-type">Unmodular</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">State DrasilState (SFile r) -&gt; GenState [SFile r]
+forall a b. State a b -&gt; State a [b]
+</span><a href="Language.Drasil.Code.Imperative.Helpers.html#liftS"><span class="hs-identifier hs-var">liftS</span></a></span><span> </span><span class="annot"><span class="annottext">State DrasilState (SFile r)
+forall (r :: * -&gt; *). OOProg r =&gt; GenState (SFile r)
+</span><a href="Language.Drasil.Code.Imperative.Generator.html#genUnmodular"><span class="hs-identifier hs-var">genUnmodular</span></a></span><span>
+</span><span id="line-160"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Generator.html#chooseModules"><span class="hs-identifier hs-var">chooseModules</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Choices.html#Modular"><span class="hs-identifier hs-type">Modular</span></a></span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GenState [SFile r]
+forall (r :: * -&gt; *). OOProg r =&gt; GenState [SFile r]
+</span><a href="Language.Drasil.Code.Imperative.Generator.html#genModules"><span class="hs-identifier hs-var">genModules</span></a></span><span>
+</span><span id="line-161"></span><span>
+</span><span id="line-162"></span><span class="hs-comment">-- Generates an entire SCS program as a single module</span><span>
+</span><span id="line-163"></span><span id="local-6989586621679336824"><span class="annot"><a href="Language.Drasil.Code.Imperative.Generator.html#genUnmodular"><span class="hs-identifier hs-type">genUnmodular</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">OOProg</span></span><span> </span><span class="annot"><a href="#local-6989586621679336824"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">SFile</span></span><span> </span><span class="annot"><a href="#local-6989586621679336824"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span></span><span>
+</span><span id="line-164"></span><span id="genUnmodular"><span class="annot"><span class="annottext">genUnmodular :: GenState (SFile r)
+</span><a href="Language.Drasil.Code.Imperative.Generator.html#genUnmodular"><span class="hs-identifier hs-var hs-var">genUnmodular</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-165"></span><span>  </span><span id="local-6989586621679336602"><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679336602"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
+forall s (m :: * -&gt; *). MonadState s m =&gt; m s
+</span><span class="hs-identifier hs-var">get</span></span><span>
+</span><span id="line-166"></span><span>  </span><span id="local-6989586621679336601"><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679336601"><span class="hs-identifier hs-var">umDesc</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">GenState String
+</span><a href="Language.Drasil.Code.Imperative.Descriptions.html#unmodularDesc"><span class="hs-identifier hs-var">unmodularDesc</span></a></span><span>
+</span><span id="line-167"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679336600"><span class="annot"><span class="annottext">n :: String
+</span><a href="#local-6989586621679336600"><span class="hs-identifier hs-var hs-var">n</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeSpec -&gt; String
+</span><a href="Language.Drasil.CodeSpec.html#pName"><span class="hs-identifier hs-var hs-var">pName</span></a></span><span> </span><span class="annot"><span class="annottext">(CodeSpec -&gt; String) -&gt; CodeSpec -&gt; String
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; CodeSpec
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#codeSpec"><span class="hs-identifier hs-var hs-var">codeSpec</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679336602"><span class="hs-identifier hs-var">g</span></a></span><span>
+</span><span id="line-168"></span><span>      </span><span id="local-6989586621679336599"><span class="annot"><span class="annottext">cls :: Bool
+</span><a href="#local-6989586621679336599"><span class="hs-identifier hs-var hs-var">cls</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(String -&gt; Bool) -&gt; [String] -&gt; Bool
+forall (t :: * -&gt; *) a. Foldable t =&gt; (a -&gt; Bool) -&gt; t a -&gt; Bool
+</span><span class="hs-identifier hs-var">any</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; ModExportMap -&gt; Bool
+forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Bool
+</span><span class="hs-operator hs-var">`member`</span></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; ModExportMap
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#clsMap"><span class="hs-identifier hs-var hs-var">clsMap</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679336602"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span> </span><span>
+</span><span id="line-169"></span><span>        </span><span class="hs-special">[</span><span class="annot"><span class="hs-string">&quot;get_input&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-string">&quot;derived_values&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-string">&quot;input_constraints&quot;</span></span><span class="hs-special">]</span><span>
+</span><span id="line-170"></span><span>  </span><span class="annot"><span class="annottext">String
+-&gt; String
+-&gt; [String]
+-&gt; [GenState (Maybe (SMethod r))]
+-&gt; [GenState (Maybe (SClass r))]
+-&gt; GenState (SFile r)
+forall (r :: * -&gt; *).
+OOProg r =&gt;
+String
+-&gt; String
+-&gt; [String]
+-&gt; [GenState (Maybe (SMethod r))]
+-&gt; [GenState (Maybe (SClass r))]
+-&gt; GenState (SFile r)
+</span><a href="Language.Drasil.Code.Imperative.GenerateGOOL.html#genModuleWithImports"><span class="hs-identifier hs-var">genModuleWithImports</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679336600"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679336601"><span class="hs-identifier hs-var">umDesc</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(ExtLibState -&gt; [String]) -&gt; [ExtLibState] -&gt; [String]
+forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
+</span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ExtLibState -&gt; Getting [String] ExtLibState [String] -&gt; [String]
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting [String] ExtLibState [String]
+Lens' ExtLibState [String]
+</span><a href="Language.Drasil.Code.ExtLibImport.html#imports"><span class="hs-identifier hs-var">imports</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ExtLibMap -&gt; [ExtLibState]
+forall k a. Map k a -&gt; [a]
+</span><span class="hs-identifier hs-var">elems</span></span><span> </span><span class="annot"><span class="annottext">(ExtLibMap -&gt; [ExtLibState]) -&gt; ExtLibMap -&gt; [ExtLibState]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; ExtLibMap
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#extLibMap"><span class="hs-identifier hs-var hs-var">extLibMap</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679336602"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-171"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">GenState (Maybe (SMethod r))
+forall (r :: * -&gt; *). OOProg r =&gt; GenState (Maybe (SMethod r))
+</span><a href="Language.Drasil.Code.Imperative.Modules.html#genMainFunc"><span class="hs-identifier hs-var">genMainFunc</span></a></span><span> </span><span>
+</span><span id="line-172"></span><span>      </span><span class="annot"><span class="annottext">GenState (Maybe (SMethod r))
+-&gt; [GenState (Maybe (SMethod r))] -&gt; [GenState (Maybe (SMethod r))]
+forall a. a -&gt; [a] -&gt; [a]
+</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">(StateT DrasilState Identity (SMethod r)
+ -&gt; GenState (Maybe (SMethod r)))
+-&gt; [StateT DrasilState Identity (SMethod r)]
+-&gt; [GenState (Maybe (SMethod r))]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(SMethod r -&gt; Maybe (SMethod r))
+-&gt; StateT DrasilState Identity (SMethod r)
+-&gt; GenState (Maybe (SMethod r))
+forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-identifier hs-var">fmap</span></span><span> </span><span class="annot"><span class="annottext">SMethod r -&gt; Maybe (SMethod r)
+forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(CodeDefinition -&gt; StateT DrasilState Identity (SMethod r))
+-&gt; [CodeDefinition] -&gt; [StateT DrasilState Identity (SMethod r)]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">CodeDefinition -&gt; StateT DrasilState Identity (SMethod r)
+forall (r :: * -&gt; *).
+OOProg r =&gt;
+CodeDefinition -&gt; GenState (SMethod r)
+</span><a href="Language.Drasil.Code.Imperative.Modules.html#genCalcFunc"><span class="hs-identifier hs-var">genCalcFunc</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeSpec -&gt; [CodeDefinition]
+</span><a href="Language.Drasil.CodeSpec.html#execOrder"><span class="hs-identifier hs-var hs-var">execOrder</span></a></span><span> </span><span class="annot"><span class="annottext">(CodeSpec -&gt; [CodeDefinition]) -&gt; CodeSpec -&gt; [CodeDefinition]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; CodeSpec
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#codeSpec"><span class="hs-identifier hs-var hs-var">codeSpec</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679336602"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span> </span><span>
+</span><span id="line-173"></span><span>        </span><span class="annot"><span class="annottext">[StateT DrasilState Identity (SMethod r)]
+-&gt; [StateT DrasilState Identity (SMethod r)]
+-&gt; [StateT DrasilState Identity (SMethod r)]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(Mod -&gt; [StateT DrasilState Identity (SMethod r)])
+-&gt; [Mod] -&gt; [StateT DrasilState Identity (SMethod r)]
+forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
+</span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="annot"><span class="annottext">Mod -&gt; [StateT DrasilState Identity (SMethod r)]
+forall (r :: * -&gt; *). OOProg r =&gt; Mod -&gt; [GenState (SMethod r)]
+</span><a href="Language.Drasil.Code.Imperative.Import.html#genModFuncs"><span class="hs-identifier hs-var">genModFuncs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DrasilState -&gt; [Mod]
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#modules"><span class="hs-identifier hs-var hs-var">modules</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679336602"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span>
+</span><span id="line-174"></span><span>      </span><span class="annot"><span class="annottext">[GenState (Maybe (SMethod r))]
+-&gt; [GenState (Maybe (SMethod r))] -&gt; [GenState (Maybe (SMethod r))]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><a href="#local-6989586621679336599"><span class="hs-identifier hs-var">cls</span></a></span><span> </span><span class="hs-keyword">then</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-keyword">else</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ScopeTag -&gt; GenState (Maybe (SMethod r))
+forall (r :: * -&gt; *).
+OOProg r =&gt;
+ScopeTag -&gt; GenState (Maybe (SMethod r))
+</span><a href="Language.Drasil.Code.Imperative.Modules.html#genInputFormat"><span class="hs-identifier hs-var">genInputFormat</span></a></span><span> </span><span class="annot"><span class="annottext">ScopeTag
+</span><span class="hs-identifier hs-var">Pub</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ScopeTag -&gt; GenState (Maybe (SMethod r))
+forall (r :: * -&gt; *).
+OOProg r =&gt;
+ScopeTag -&gt; GenState (Maybe (SMethod r))
+</span><a href="Language.Drasil.Code.Imperative.Modules.html#genInputDerived"><span class="hs-identifier hs-var">genInputDerived</span></a></span><span> </span><span class="annot"><span class="annottext">ScopeTag
+</span><span class="hs-identifier hs-var">Pub</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-175"></span><span>        </span><span class="annot"><span class="annottext">ScopeTag -&gt; GenState (Maybe (SMethod r))
+forall (r :: * -&gt; *).
+OOProg r =&gt;
+ScopeTag -&gt; GenState (Maybe (SMethod r))
+</span><a href="Language.Drasil.Code.Imperative.Modules.html#genInputConstraints"><span class="hs-identifier hs-var">genInputConstraints</span></a></span><span> </span><span class="annot"><span class="annottext">ScopeTag
+</span><span class="hs-identifier hs-var">Pub</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[GenState (Maybe (SMethod r))]
+-&gt; [GenState (Maybe (SMethod r))] -&gt; [GenState (Maybe (SMethod r))]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">GenState (Maybe (SMethod r))
+forall (r :: * -&gt; *). OOProg r =&gt; GenState (Maybe (SMethod r))
+</span><a href="Language.Drasil.Code.Imperative.Modules.html#genOutputFormat"><span class="hs-identifier hs-var">genOutputFormat</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span>
+</span><span id="line-176"></span><span>    </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="annot"><span class="annottext">ClassType -&gt; GenState (Maybe (SClass r))
+forall (r :: * -&gt; *).
+OOProg r =&gt;
+ClassType -&gt; GenState (Maybe (SClass r))
+</span><a href="Language.Drasil.Code.Imperative.Modules.html#genInputClass"><span class="hs-identifier hs-var">genInputClass</span></a></span><span> </span><span class="annot"><span class="annottext">ClassType
+</span><a href="Language.Drasil.Code.Imperative.GenerateGOOL.html#Auxiliary"><span class="hs-identifier hs-var">Auxiliary</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ClassType -&gt; GenState (Maybe (SClass r))
+forall (r :: * -&gt; *).
+OOProg r =&gt;
+ClassType -&gt; GenState (Maybe (SClass r))
+</span><a href="Language.Drasil.Code.Imperative.Modules.html#genConstClass"><span class="hs-identifier hs-var">genConstClass</span></a></span><span> </span><span class="annot"><span class="annottext">ClassType
+</span><a href="Language.Drasil.Code.Imperative.GenerateGOOL.html#Auxiliary"><span class="hs-identifier hs-var">Auxiliary</span></a></span><span class="hs-special">]</span><span> </span><span>
+</span><span id="line-177"></span><span>      </span><span class="annot"><span class="annottext">[GenState (Maybe (SClass r))]
+-&gt; [GenState (Maybe (SClass r))] -&gt; [GenState (Maybe (SClass r))]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(StateT DrasilState Identity (SClass r)
+ -&gt; GenState (Maybe (SClass r)))
+-&gt; [StateT DrasilState Identity (SClass r)]
+-&gt; [GenState (Maybe (SClass r))]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(SClass r -&gt; Maybe (SClass r))
+-&gt; StateT DrasilState Identity (SClass r)
+-&gt; GenState (Maybe (SClass r))
+forall (f :: * -&gt; *) a b. Functor f =&gt; (a -&gt; b) -&gt; f a -&gt; f b
+</span><span class="hs-identifier hs-var">fmap</span></span><span> </span><span class="annot"><span class="annottext">SClass r -&gt; Maybe (SClass r)
+forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Mod -&gt; [StateT DrasilState Identity (SClass r)])
+-&gt; [Mod] -&gt; [StateT DrasilState Identity (SClass r)]
+forall (t :: * -&gt; *) a b. Foldable t =&gt; (a -&gt; [b]) -&gt; t a -&gt; [b]
+</span><span class="hs-identifier hs-var">concatMap</span></span><span> </span><span class="annot"><span class="annottext">Mod -&gt; [StateT DrasilState Identity (SClass r)]
+forall (r :: * -&gt; *). OOProg r =&gt; Mod -&gt; [GenState (SClass r)]
+</span><a href="Language.Drasil.Code.Imperative.Import.html#genModClasses"><span class="hs-identifier hs-var">genModClasses</span></a></span><span> </span><span class="annot"><span class="annottext">([Mod] -&gt; [StateT DrasilState Identity (SClass r)])
+-&gt; [Mod] -&gt; [StateT DrasilState Identity (SClass r)]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; [Mod]
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#modules"><span class="hs-identifier hs-var hs-var">modules</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679336602"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-178"></span><span>      </span><span>
+</span><span id="line-179"></span><span class="hs-comment">-- Generates all modules for an SCS program    </span><span>
+</span><span id="line-180"></span><span id="local-6989586621679336823"><span class="annot"><a href="Language.Drasil.Code.Imperative.Generator.html#genModules"><span class="hs-identifier hs-type">genModules</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">OOProg</span></span><span> </span><span class="annot"><a href="#local-6989586621679336823"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">SFile</span></span><span> </span><span class="annot"><a href="#local-6989586621679336823"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span></span><span>
+</span><span id="line-181"></span><span id="genModules"><span class="annot"><span class="annottext">genModules :: GenState [SFile r]
+</span><a href="Language.Drasil.Code.Imperative.Generator.html#genModules"><span class="hs-identifier hs-var hs-var">genModules</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-182"></span><span>  </span><span id="local-6989586621679336594"><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679336594"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
+forall s (m :: * -&gt; *). MonadState s m =&gt; m s
+</span><span class="hs-identifier hs-var">get</span></span><span>
+</span><span id="line-183"></span><span>  </span><span id="local-6989586621679336593"><span class="annot"><span class="annottext">SFile r
+</span><a href="#local-6989586621679336593"><span class="hs-identifier hs-var">mn</span></a></span></span><span>     </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">GenState (SFile r)
+forall (r :: * -&gt; *). OOProg r =&gt; GenState (SFile r)
+</span><a href="Language.Drasil.Code.Imperative.Modules.html#genMain"><span class="hs-identifier hs-var">genMain</span></a></span><span>
+</span><span id="line-184"></span><span>  </span><span id="local-6989586621679336592"><span class="annot"><span class="annottext">[SFile r]
+</span><a href="#local-6989586621679336592"><span class="hs-identifier hs-var">inp</span></a></span></span><span>    </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">InputModule -&gt; GenState [SFile r]
+forall (r :: * -&gt; *). OOProg r =&gt; InputModule -&gt; GenState [SFile r]
+</span><a href="Language.Drasil.Code.Imperative.Modules.html#chooseInModule"><span class="hs-identifier hs-var">chooseInModule</span></a></span><span> </span><span class="annot"><span class="annottext">(InputModule -&gt; GenState [SFile r])
+-&gt; InputModule -&gt; GenState [SFile r]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; InputModule
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#inMod"><span class="hs-identifier hs-var">inMod</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679336594"><span class="hs-identifier hs-var">g</span></a></span><span>
+</span><span id="line-185"></span><span>  </span><span id="local-6989586621679336591"><span class="annot"><span class="annottext">[SFile r]
+</span><a href="#local-6989586621679336591"><span class="hs-identifier hs-var">con</span></a></span></span><span>    </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">GenState [SFile r]
+forall (r :: * -&gt; *). OOProg r =&gt; GenState [SFile r]
+</span><a href="Language.Drasil.Code.Imperative.Modules.html#genConstMod"><span class="hs-identifier hs-var">genConstMod</span></a></span><span> </span><span>
+</span><span id="line-186"></span><span>  </span><span id="local-6989586621679336590"><span class="annot"><span class="annottext">SFile r
+</span><a href="#local-6989586621679336590"><span class="hs-identifier hs-var">cal</span></a></span></span><span>    </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">GenState (SFile r)
+forall (r :: * -&gt; *). OOProg r =&gt; GenState (SFile r)
+</span><a href="Language.Drasil.Code.Imperative.Modules.html#genCalcMod"><span class="hs-identifier hs-var">genCalcMod</span></a></span><span>
+</span><span id="line-187"></span><span>  </span><span id="local-6989586621679336589"><span class="annot"><span class="annottext">[SFile r]
+</span><a href="#local-6989586621679336589"><span class="hs-identifier hs-var">out</span></a></span></span><span>    </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">GenState [SFile r]
+forall (r :: * -&gt; *). OOProg r =&gt; GenState [SFile r]
+</span><a href="Language.Drasil.Code.Imperative.Modules.html#genOutputMod"><span class="hs-identifier hs-var">genOutputMod</span></a></span><span>
+</span><span id="line-188"></span><span>  </span><span id="local-6989586621679336588"><span class="annot"><span class="annottext">[SFile r]
+</span><a href="#local-6989586621679336588"><span class="hs-identifier hs-var">moddef</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">(Mod -&gt; GenState (SFile r)) -&gt; [Mod] -&gt; GenState [SFile r]
+forall (t :: * -&gt; *) (f :: * -&gt; *) a b.
+(Traversable t, Applicative f) =&gt;
+(a -&gt; f b) -&gt; t a -&gt; f (t b)
+</span><span class="hs-identifier hs-var">traverse</span></span><span> </span><span class="annot"><span class="annottext">Mod -&gt; GenState (SFile r)
+forall (r :: * -&gt; *). OOProg r =&gt; Mod -&gt; GenState (SFile r)
+</span><a href="Language.Drasil.Code.Imperative.Import.html#genModDef"><span class="hs-identifier hs-var">genModDef</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DrasilState -&gt; [Mod]
+</span><a href="Language.Drasil.Code.Imperative.DrasilState.html#modules"><span class="hs-identifier hs-var hs-var">modules</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679336594"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- hack ?</span><span>
+</span><span id="line-189"></span><span>  </span><span class="annot"><span class="annottext">[SFile r] -&gt; GenState [SFile r]
+forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
+</span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">([SFile r] -&gt; GenState [SFile r])
+-&gt; [SFile r] -&gt; GenState [SFile r]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">SFile r
+</span><a href="#local-6989586621679336593"><span class="hs-identifier hs-var">mn</span></a></span><span> </span><span class="annot"><span class="annottext">SFile r -&gt; [SFile r] -&gt; [SFile r]
+forall a. a -&gt; [a] -&gt; [a]
+</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[SFile r]
+</span><a href="#local-6989586621679336592"><span class="hs-identifier hs-var">inp</span></a></span><span> </span><span class="annot"><span class="annottext">[SFile r] -&gt; [SFile r] -&gt; [SFile r]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[SFile r]
+</span><a href="#local-6989586621679336591"><span class="hs-identifier hs-var">con</span></a></span><span> </span><span class="annot"><span class="annottext">[SFile r] -&gt; [SFile r] -&gt; [SFile r]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">SFile r
+</span><a href="#local-6989586621679336590"><span class="hs-identifier hs-var">cal</span></a></span><span> </span><span class="annot"><span class="annottext">SFile r -&gt; [SFile r] -&gt; [SFile r]
+forall a. a -&gt; [a] -&gt; [a]
+</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[SFile r]
+</span><a href="#local-6989586621679336589"><span class="hs-identifier hs-var">out</span></a></span><span> </span><span class="annot"><span class="annottext">[SFile r] -&gt; [SFile r] -&gt; [SFile r]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[SFile r]
+</span><a href="#local-6989586621679336588"><span class="hs-identifier hs-var">moddef</span></a></span><span>
+</span><span id="line-190"></span><span>
+</span><span id="line-191"></span><span class="hs-comment">-- private utilities used in generateCode</span><span>
+</span><span id="line-192"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Generator.html#getDir"><span class="hs-identifier hs-type">getDir</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Lang.html#Lang"><span class="hs-identifier hs-type">Lang</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-193"></span><span id="getDir"><span class="annot"><span class="annottext">getDir :: Lang -&gt; String
+</span><a href="Language.Drasil.Code.Imperative.Generator.html#getDir"><span class="hs-identifier hs-var hs-var">getDir</span></a></span></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Lang.html#Cpp"><span class="hs-identifier hs-type">Cpp</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;cpp&quot;</span></span><span>
+</span><span id="line-194"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Generator.html#getDir"><span class="hs-identifier hs-var">getDir</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Lang.html#CSharp"><span class="hs-identifier hs-type">CSharp</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;csharp&quot;</span></span><span>
+</span><span id="line-195"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Generator.html#getDir"><span class="hs-identifier hs-var">getDir</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Lang.html#Java"><span class="hs-identifier hs-type">Java</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;java&quot;</span></span><span>
+</span><span id="line-196"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Generator.html#getDir"><span class="hs-identifier hs-var">getDir</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Lang.html#Python"><span class="hs-identifier hs-type">Python</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;python&quot;</span></span><span>
+</span><span id="line-197"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Generator.html#getDir"><span class="hs-identifier hs-var">getDir</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Code.Lang.html#Swift"><span class="hs-identifier hs-type">Swift</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;swift&quot;</span></span></pre></body></html>

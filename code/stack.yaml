@@ -61,7 +61,6 @@ extra-deps:
 # Used only for a basic set of flags for haddock
 build:
   haddock-deps: false
-  haddock-hyperlink-source: false
 
 # Override default flag values for local packages and extra-deps
 flags: {}

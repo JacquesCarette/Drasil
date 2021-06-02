@@ -11,6 +11,7 @@ import qualified Data.Map as Map
 import qualified DirectoryController as DC (createFolder, createFile, finder, 
   getDirectories, DrasilPack, FileName, FolderName, File(..), Folder(..))
 import SourceCodeReader as SCR (extractEntryData, EntryData(..))
+import Data.List.Split (splitOn)
 
 type FileInstance = String
 type IsInstanceOf = String
@@ -124,6 +125,21 @@ output outputFilePath entryData ordClassInsts = do
   hPutStrLn dataTable (intercalate "," ordClassInsts)
   hPutStrLn dataTable entryData
   hClose dataTable
+  dataTableHTML <- openFile "DataTable.txt" WriteMode
+  hPutStrLn dataTableHTML "<!DOCTYPE html>\n<html>\n\t<title>Auto-Generated Data Table for Drasil</title>"
+  hPutStrLn dataTableHTML "\t<table border=\"1\" class=\"dataframe\">"
+  hPutStrLn dataTableHTML (mkhtmlHeader "Package,\t,\t,\t,\t,\t,Class Instances")
+  hPutStrLn dataTableHTML (mkhtmlHeader "drasil-,File Path,File Name,Data Type,Newtype Type,Class Definitions,")
+  hPutStrLn dataTableHTML (mkhtmlCell ordClassInsts)
+  hPutStrLn dataTableHTML entryData
+  hPutStrLn dataTableHTML "\t\t</tbody>\n</html>"
+  hClose dataTableHTML
+
+mkhtmlHeader :: String -> String
+mkhtmlHeader xs = "\t\t<thead>\n" ++ intercalate "" (map (\y -> "\t\t\t<th>" ++ y ++ "</th>\n") (splitOn "," xs)) ++ "\t\t</thead>"
+
+mkhtmlCell :: [ClassName] -> String
+mkhtmlCell xs = "\t\t\t<tr>\n" ++ intercalate "" (map (\y -> "\t\t\t\t<td>" ++ y ++ "</td>\n") xs) ++ "\t\t\t</tr>\n"
 
 -- creates an entry for each file (new Entry data-oriented format)
 createEntry :: FilePath -> DC.File -> DC.FileName -> IO Entry

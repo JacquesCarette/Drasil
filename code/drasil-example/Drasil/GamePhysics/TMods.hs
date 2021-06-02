@@ -2,7 +2,7 @@
 module Drasil.GamePhysics.TMods (tMods, newtonSL, newtonSLR, newtonTL, newtonLUG) where
 
 import Language.Drasil
-import Theory.Drasil (TheoryModel, tmNoRefs, ModelKinds(OthModel, EquationalModel))
+import Theory.Drasil (TheoryModel, tmNoRefs, tmNoRefs', ModelKinds(OthModel, EquationalModel))
 import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 
@@ -78,16 +78,15 @@ newtonLUGNotes = map foldlSent [
 -- T4 : Newton's second law for rotational motion --
 
 newtonSLR :: TheoryModel
-newtonSLR = tmNoRefs (OthModel newtonSLRRC)
+newtonSLR = tmNoRefs' "newtonSLR" (EquationalModel newtonSLRQD)
   [qw torque, qw momentOfInertia, qw angularAccel]
-  ([] :: [ConceptChunk]) [] [newtonSLRRel] [] "NewtonSecLawRotMot" newtonSLRNotes
+  ([] :: [ConceptChunk]) [] [relat newtonSLRQD] [] "NewtonSecLawRotMot" newtonSLRNotes
 
-newtonSLRRC :: RelationConcept
-newtonSLRRC = makeRC "newtonSLRRC"
-  (nounPhraseSP "Newton's second law for rotational motion") EmptyS newtonSLRRel
+newtonSLRQD :: QDefinition
+newtonSLRQD = mkQuantDef' torque (nounPhraseSP "Newton's second law for rotational motion") newtonSLRExpr
 
-newtonSLRRel :: Relation
-newtonSLRRel = sy torque $= sy momentOfInertia `mulRe` sy angularAccel
+newtonSLRExpr :: Relation
+newtonSLRExpr = sy momentOfInertia `mulRe` sy angularAccel
 
 newtonSLRNotes :: [Sentence]
 newtonSLRNotes = map foldlSent [

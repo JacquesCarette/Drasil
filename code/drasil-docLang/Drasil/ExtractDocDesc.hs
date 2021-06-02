@@ -11,6 +11,7 @@ import Data.List(transpose)
 import Data.Functor.Constant (Constant(Constant))
 import Data.Generics.Multiplate (appendPlate, foldFor, purePlate, preorderFold)
 
+-- | Creates a section contents plate that contains diferrent system subsections.
 secConPlate :: Monoid b => (forall a. HasContents a => [a] -> b) ->
   ([Section] -> b) -> DLPlate (Constant b)
 secConPlate mCon mSec = preorderFold $ purePlate {
@@ -41,6 +42,7 @@ secConPlate mCon mSec = preorderFold $ purePlate {
   appendSec = Constant <$> \(AppndxProg c) -> mCon c
 }
 
+-- | Creates a section plate for expressions.
 exprPlate :: DLPlate (Constant [Expr])
 exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (concatMap egetCon')
   (concatMap egetSec) `appendPlate` (preorderFold $ purePlate {
@@ -59,33 +61,41 @@ exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (conca
     expRel :: ExprRelat a => [a] -> [Expr]
     expRel = map relat
 
+-- | Converts a 'Sentence' into a list of expressions. If the 'Sentence' cant be translated, returns an empty list.
 sentToExp :: Sentence -> [Expr]
 sentToExp ((:+:) s1 s2) = sentToExp s1 ++ sentToExp s2
 sentToExp (E e) = [e]
 sentToExp _ = []
 
+-- | Helper that extracts a list of some type from the 'DLPlate' and 'DocDesc'.
 fmGetDocDesc :: DLPlate (Constant [a]) -> DocDesc -> [a]
 fmGetDocDesc p = concatMap (foldFor docSec p)
 
+-- | Extracts expressions from the document description ('DocDesc') and default 'DLPlate'.
 egetDocDesc :: DocDesc -> [Expr]
 egetDocDesc = fmGetDocDesc exprPlate
 
+-- | Extracts expressions from a 'Section'.
 egetSec :: Section -> [Expr]
 egetSec (Section _ sc _ ) = concatMap egetSecCon sc
 
+-- | Extracts expressions from section contents.
 egetSecCon :: SecCons -> [Expr]
 egetSecCon (Sub s) = egetSec s
 egetSecCon (Con c) = egetCon' c
 
+-- | Extracts expressions from something that has contents.
 egetCon' :: HasContents a => a -> [Expr]
 egetCon' = egetCon . (^. accessContents)
 
+-- | Extracts expressions from raw contents.
 egetCon :: RawContent -> [Expr]
 egetCon (EqnBlock e) = [e]
 egetCon (Defini _ []) = []
 egetCon (Defini dt (hd:tl)) = concatMap egetCon' (snd hd) ++ egetCon (Defini dt tl)
 egetCon _ = []
 
+-- | Creates a 'Sentence' plate.
 sentencePlate :: Monoid a => ([Sentence] -> a) -> DLPlate (Constant a)
 sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatMap getSec) $
   preorderFold $ purePlate {
@@ -134,19 +144,24 @@ sentencePlate f = appendPlate (secConPlate (f . concatMap getCon') $ f . concatM
     notes :: HasAdditionalNotes a => [a] -> [Sentence]
     notes = concatMap (^. getNotes)
 
+-- | Extracts 'Sentence's from a document description.
 getDocDesc :: DocDesc -> [Sentence]
 getDocDesc = fmGetDocDesc (sentencePlate id)
 
+-- | Extracts 'Sentence's from a 'Section'.
 getSec :: Section -> [Sentence]
 getSec (Section t sc _ ) = t : concatMap getSecCon sc
 
+-- | Extracts 'Sentence's from section contents.
 getSecCon :: SecCons -> [Sentence]
 getSecCon (Sub s) = getSec s
 getSecCon (Con c) = getCon' c
 
+-- | Extracts 'Sentence's from something that has contents.
 getCon' :: HasContents a => a -> [Sentence]
 getCon' = getCon . (^. accessContents)
 
+-- | Extracts 'Sentence's from raw content.
 getCon :: RawContent -> [Sentence]
 getCon (Table s1 s2 t _) = isVar (s1, transpose s2) ++ [t]
 getCon (Paragraph s)       = [s]
@@ -160,18 +175,20 @@ getCon Graph{}             = []
 getCon (Defini _ [])       = []
 getCon (Defini dt (hd:fs)) = concatMap getCon' (snd hd) ++ getCon (Defini dt fs)
 
--- This function is used in collecting sentence from table.
+-- | This function is used in collecting 'Sentence's from a table.
 -- Since only the table's first Column titled "Var" should be collected,
--- this function is used to filter out only the first Column of Sentence.
+-- this function is used to filter out only the first column of 'Sentence's.
 isVar :: ([Sentence], [[Sentence]]) -> [Sentence]
 isVar (S "Var" : _, hd1 : _) = hd1
 isVar (_ : tl, _ : tl1) = isVar (tl, tl1)
 isVar ([], _) = []
 isVar (_, []) = []
 
+-- | Get the bibliography from something that has a field.
 getBib :: (HasFields c) => [c] -> [Sentence]
 getBib a = map getField $ concatMap (^. getFields) a
 
+-- | Unwraps a 'CiteField' into a 'Sentence'.
 getField :: CiteField -> Sentence
 getField (Address s) = S s
 getField Author{} = EmptyS
@@ -195,6 +212,7 @@ getField (Type s) = S s
 getField Volume{} = EmptyS
 getField Year{} = EmptyS
 
+-- | Translates different types of lists into a 'Sentence' form.
 getLT :: ListType -> [Sentence]
 getLT (Bullet it) = concatMap (getIL . fst) it
 getLT (Numeric it) = concatMap (getIL . fst) it
@@ -202,22 +220,24 @@ getLT (Simple lp) = concatMap getLP lp
 getLT (Desc lp) = concatMap getLP lp
 getLT (Definitions lp) = concatMap getLP lp
 
+-- | Translates a 'ListTuple' into 'Sentence's.
 getLP :: ListTuple -> [Sentence]
 getLP (t, it, _) = t : getIL it
 
+-- | Flattens out an ItemType into 'Sentence's. Headers for 'Nested' items are prepended to its contents.
 getIL :: ItemType -> [Sentence]
 getIL (Flat s) = [s]
 getIL (Nested h lt) = h : getLT lt
 
--- ciPlate is not currently used.
+-- ciPlate is not currently used. 
+-- | A common idea plate.
 -- ciPlate :: DLPlate (Constant [CI])
 -- ciPlate = preorderFold $ purePlate {
-  -- introSub = Constant <$> \case
-    -- (IOrgSec _ ci _ _) -> [ci]
-    -- _ -> [],
-  -- stkSub = Constant <$> \case
-   -- (Client ci _) -> [ci]
-   -- (Cstmr ci) -> [ci],
-   -- auxConsSec = Constant <$> \(AuxConsProg ci _) -> [ci]
+--   introSub = Constant <$> \case
+--     (IOrgSec _ ci _ _) -> [ci]
+--     _ -> [],
+--   stkSub = Constant <$> \case
+--    (Client ci _) -> [ci]
+--    (Cstmr ci) -> [ci],
+--    auxConsSec = Constant <$> \(AuxConsProg ci _) -> [ci]
 -- }
-

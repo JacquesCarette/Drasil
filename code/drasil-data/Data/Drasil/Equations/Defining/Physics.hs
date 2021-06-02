@@ -16,11 +16,11 @@ import Data.Drasil.Concepts.Documentation (body, constant)
 ------------------------------------------------------------------------------------------------------
 -- The equations
 
-newtonSLRel, weightEqn, weightDerivAccelEqn, weightDerivNewtonEqn, weightDerivReplaceMassEqn,
+newtonSLEqn, weightEqn, weightDerivAccelEqn, weightDerivNewtonEqn, weightDerivReplaceMassEqn,
   weightDerivSpecWeightEqn,
   hsPressureEqn, speedEqn, velocityEqn, accelerationEqn  :: Relation
 
-newtonSLRel               = sy QP.force $= mulRe (sy QPP.mass) (sy QP.acceleration)
+newtonSLEqn               = sy QPP.mass `mulRe` sy QP.acceleration
 
 weightEqn                 = sy QPP.vol `mulRe` sy QPP.specWeight
 weightDerivNewtonEqn      = sy QP.weight $= mulRe (sy QPP.mass) (sy QP.gravitationalAccel)
@@ -44,9 +44,9 @@ accelerationQD = mkQuantDef QP.acceleration accelerationEqn
 velocityQD :: QDefinition
 velocityQD = mkQuantDef QP.velocity velocityEqn
 
-newtonSLRC :: RelationConcept
-newtonSLRC = makeRC "newtonSL" (nounPhraseSP "Newton's second law of motion")
-  newtonSLDesc newtonSLRel
+newtonSLQD :: QDefinition
+newtonSLQD = fromEqn' "force" (nounPhraseSP "Newton's second law of motion")
+  newtonSLDesc (eqSymb QP.force) Real newtonSLEqn
 
 newtonSLDesc :: Sentence
 newtonSLDesc = foldlSent [S "The net", getTandS QP.force, S "on a",

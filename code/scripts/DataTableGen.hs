@@ -87,7 +87,7 @@ main = do
   let entryData = intercalate "\n" bakedEntryData
 
   -- creates and writes to output data file
-  output outputDirectory entryData ordrdClassNames
+  output outputDirectory entryData ordrdClassNames bakedEntryData
 
 -- makes Entry data instance
 makeEntry :: DC.DrasilPack -> DC.FileName -> FilePath -> [DataType] -> 
@@ -115,8 +115,8 @@ config configFilePath = do
   return (packageNames,classInstOrd)
 
 -- function creates and writes output data file DataTable.csv to /code/analysis
-output :: FilePath -> EntryString -> [ClassName] -> IO ()
-output outputFilePath entryData ordClassInsts = do
+output :: FilePath -> EntryString -> [ClassName] -> [EntryString] -> IO ()
+output outputFilePath entryData ordClassInsts bakedEntryData = do
   createDirectoryIfMissing False outputFilePath
   setCurrentDirectory outputFilePath
   dataTable <- openFile "DataTable.csv" WriteMode
@@ -125,21 +125,41 @@ output outputFilePath entryData ordClassInsts = do
   hPutStrLn dataTable (intercalate "," ordClassInsts)
   hPutStrLn dataTable entryData
   hClose dataTable
-  dataTableHTML <- openFile "DataTable.txt" WriteMode
+  let rowLength = length (head (separateN bakedEntryData))
+  dataTableHTML <- openFile "DataTable.html" WriteMode
   hPutStrLn dataTableHTML "<!DOCTYPE html>\n<html>\n\t<title>Auto-Generated Data Table for Drasil</title>"
-  hPutStrLn dataTableHTML "\t<table border=\"1\" class=\"dataframe\">"
-  hPutStrLn dataTableHTML (mkhtmlHeader "Package,\t,\t,\t,\t,\t,Class Instances")
-  hPutStrLn dataTableHTML (mkhtmlHeader "drasil-,File Path,File Name,Data Type,Newtype Type,Class Definitions,")
-  hPutStrLn dataTableHTML (mkhtmlCell ordClassInsts)
-  hPutStrLn dataTableHTML entryData
+  hPutStrLn dataTableHTML "\t<table border=\"1\" cellspacing=\"0\" cellpadding=\"3\" class=\"dataframe\">"
+  hPutStrLn dataTableHTML (mkhtmlTitle ("Package,\t,\t,\t,\t,\t,Class Instances" ++ mkhtmlEmptyCell (rowLength - 7)))
+  hPutStrLn dataTableHTML (mkhtmlHeader ((splitOn "," "drasil-,File Path,File Name,Data Type,Newtype Type,Class Definitions") ++ ordClassInsts))
+  hPutStr dataTableHTML (mkhtmlRow (lenCheck (separateN bakedEntryData) rowLength))
   hPutStrLn dataTableHTML "\t\t</tbody>\n</html>"
   hClose dataTableHTML
 
-mkhtmlHeader :: String -> String
-mkhtmlHeader xs = "\t\t<thead>\n" ++ intercalate "" (map (\y -> "\t\t\t<th>" ++ y ++ "</th>\n") (splitOn "," xs)) ++ "\t\t</thead>"
+lenCheck :: [EntryString] -> Int -> [EntryString]
+lenCheck [] _ = []
+lenCheck (x:xs) len = (x ++ mkhtmlEmptyCell (len - (length x))) : lenCheck xs len
+
+separateN :: [EntryString] -> [EntryString]
+separateN [] = []
+separateN (x:xs) = splitOn "\n" x ++ separateN xs
+
+mkhtmlTitle :: String -> String
+mkhtmlTitle xs = "\t\t<thead>\n" ++ concat (map (\y -> "\t\t\t<th>" ++ y ++ "</th>\n") (splitOn "," xs)) ++ "\t\t</thead>"
+
+mkhtmlHeader :: [String] -> String
+mkhtmlHeader xs = "\t\t<thead>\n" ++ concat (map (\y -> "\t\t\t<th>" ++ y ++ "</th>\n") xs) ++ "\t\t</thead>"
 
 mkhtmlCell :: [ClassName] -> String
 mkhtmlCell xs = "\t\t\t<tr>\n" ++ intercalate "" (map (\y -> "\t\t\t\t<td>" ++ y ++ "</td>\n") xs) ++ "\t\t\t</tr>\n"
+
+mkhtmlEmptyCell :: Int -> String
+mkhtmlEmptyCell num 
+  | num <= 0 = ""
+  | otherwise = ",\t" ++ mkhtmlEmptyCell (num-1)
+
+mkhtmlRow :: [EntryString] -> String
+mkhtmlRow [] = []
+mkhtmlRow (x:xs) = "\t\t\t<tr>\n" ++ concat (map (\y -> "\t\t\t\t<td>" ++ y ++ "</td>\n") (splitOn "," x)) ++ "\t\t\t</tr>\n" ++ mkhtmlRow xs
 
 -- creates an entry for each file (new Entry data-oriented format)
 createEntry :: FilePath -> DC.File -> DC.FileName -> IO Entry

@@ -14,7 +14,7 @@ import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (density,
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration, velocity, position,
   force, gravitationalAccel, pressure, torque, weight, positionVec, time, momentOfInertia,
   angularAccel, speed)
-import Data.Drasil.Equations.Defining.Physics (newtonSLRel, newtonSLRC, newtonSLDesc, weightEqn,
+import Data.Drasil.Equations.Defining.Physics (newtonSLQD, newtonSLDesc, weightEqn,
   weightDerivAccelEqn, weightDerivNewtonEqn, weightDerivReplaceMassEqn, weightDerivSpecWeightEqn,
   hsPressureEqn, accelerationQD, velocityQD, speedEqn)
 
@@ -22,9 +22,9 @@ physicsTMs :: [TheoryModel]
 physicsTMs = [newtonSL]
 
 newtonSL :: TheoryModel
-newtonSL = tmNoRefs (OthModel newtonSLRC)
+newtonSL = tmNoRefs' "newtonSL" (EquationalModel newtonSLQD)
   [qw QP.force, qw QPP.mass, qw QP.acceleration] ([] :: [ConceptChunk])
-  [] [newtonSLRel] [] "NewtonSecLawMot" [newtonSLDesc]
+  [] [relat newtonSLQD] [] "NewtonSecLawMot" [newtonSLDesc]
 
 --
 

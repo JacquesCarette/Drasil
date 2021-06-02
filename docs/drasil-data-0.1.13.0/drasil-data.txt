@@ -765,7 +765,7 @@ gravitationalConstValue :: QDefinition
 gravitationalAccelConst :: QDefinition
 
 module Data.Drasil.Equations.Defining.Physics
-newtonSLRel :: Relation
+newtonSLEqn :: Relation
 weightEqn :: Relation
 weightDerivAccelEqn :: Relation
 weightDerivNewtonEqn :: Relation
@@ -777,7 +777,7 @@ velocityEqn :: Relation
 accelerationEqn :: Relation
 accelerationQD :: QDefinition
 velocityQD :: QDefinition
-newtonSLRC :: RelationConcept
+newtonSLQD :: QDefinition
 newtonSLDesc :: Sentence
 
 module Data.Drasil.Theories.Physics

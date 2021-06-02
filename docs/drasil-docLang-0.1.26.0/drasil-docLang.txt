@@ -285,78 +285,151 @@ toSentence :: MayHaveUnit u => u -> Sentence
 toSentenceUnitless :: MayHaveUnit u => u -> Sentence
 
 module Drasil.DocLang
+
+-- | A Software Requirements Specification Declaration is made up of all
+--   necessary sections (<a>DocSection</a>s).
 type SRSDecl = [DocSection]
+
+-- | Contains all the different sections needed for a full SRS
+--   (<a>SRSDecl</a>).
 data DocSection
+
+-- | Reference.
 RefSec :: RefSec -> DocSection
+
+-- | Introduction.
 IntroSec :: IntroSec -> DocSection
+
+-- | Stakeholders.
 StkhldrSec :: StkhldrSec -> DocSection
+
+-- | General System Description.
 GSDSec :: GSDSec -> DocSection
+
+-- | Specific System Description.
 SSDSec :: SSDSec -> DocSection
+
+-- | Requirements.
 ReqrmntSec :: ReqrmntSec -> DocSection
+
+-- | Likely Changes.
 LCsSec :: DocSection
+
+-- | Unlikely Changes.
 UCsSec :: DocSection
+
+-- | Traceability.
 TraceabilitySec :: TraceabilitySec -> DocSection
+
+-- | Auxiliary Constants.
 AuxConstntSec :: AuxConstntSec -> DocSection
+
+-- | Bibliography.
 Bibliography :: DocSection
+
+-- | Appendix.
 AppndxSec :: AppndxSec -> DocSection
+
+-- | Off the Shelf Solutions.
 OffShelfSolnsSec :: OffShelfSolnsSec -> DocSection
+
+-- | Requirements section (wraps <a>ReqsSub</a> subsections).
 newtype ReqrmntSec
 ReqsProg :: [ReqsSub] -> ReqrmntSec
+
+-- | Requirements subsections.
 data ReqsSub
+
+-- | Functional requirements. <a>LabelledContent</a> for tables (includes
+--   introduction).
 [FReqsSub] :: Sentence -> [LabelledContent] -> ReqsSub
+
+-- | Functional requirements. <a>LabelledContent</a> for tables (no
+--   introduction).
 [FReqsSub'] :: [LabelledContent] -> ReqsSub
+
+-- | Non-Functional requirements.
 [NonFReqsSub] :: ReqsSub
 
--- | Problem Description subsections
+-- | Problem Description subsections.
 data PDSub
+
+-- | Terms and Definitions.
 [TermsAndDefs] :: Concept c => Maybe Sentence -> [c] -> PDSub
+
+-- | Physical System Description.
 [PhySysDesc] :: Idea a => a -> [Sentence] -> LabelledContent -> [Contents] -> PDSub
+
+-- | Goals.
 [Goals] :: [Sentence] -> PDSub
 
--- | Problem Description section
+-- | Problem Description section.
 data ProblemDescription
 [PDProg] :: Sentence -> [Section] -> [PDSub] -> ProblemDescription
 
--- | Specific System Description section . Contains a list of subsections.
+-- | Specific System Description section (wraps <a>SSDSub</a> subsections).
 newtype SSDSec
 SSDProg :: [SSDSub] -> SSDSec
 
--- | Specific system description subsections
+-- | Specific System Description subsections.
 data SSDSub
+
+-- | Problem description.
 [SSDProblem] :: ProblemDescription -> SSDSub
+
+-- | Solution characteristics.
 [SSDSolChSpec] :: SolChSpec -> SSDSub
 
--- | Solution Characteristics Specification subsections
+-- | Solution Characteristics Specification subsections.
 data SCSSub
+
+-- | Assumptions.
 [Assumptions] :: SCSSub
+
+-- | Theory models.
 [TMs] :: [Sentence] -> Fields -> SCSSub
+
+-- | General definitions.
 [GDs] :: [Sentence] -> Fields -> DerivationDisplay -> SCSSub
+
+-- | Data definitions.
 [DDs] :: [Sentence] -> Fields -> DerivationDisplay -> SCSSub
+
+-- | Instance models.
 [IMs] :: [Sentence] -> Fields -> DerivationDisplay -> SCSSub
+
+-- | Constraints.
 [Constraints] :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => Sentence -> [c] -> SCSSub
+
+-- | Properties of a correct solution.
 [CorrSolnPpties] :: (Quantity c, Constrained c) => [c] -> [Contents] -> SCSSub
 
--- | Solution Characteristics Specification section
+-- | Solution Characteristics Specification section (wraps <a>SCSSub</a>
+--   subsections).
 data SolChSpec
 [SCSProg] :: [SCSSub] -> SolChSpec
 
--- | Creates a document from a document description and system information
+-- | Creates a document from a document description, a title combinator
+--   function, and system information.
 mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
 
--- | Default Term and given intro
+-- | Default is term and given introduction.
 --   
---   table of symbols constructor
+--   Table of symbols constructor.
 tsymb :: [TSIntro] -> RefTab
 
--- | Custom function and intro.
---   
---   Custom table of symbols constructor
+-- | Table of symbols constructor. Takes a custom function and
+--   introduction.
 tsymb'' :: [TSIntro] -> LFunc -> RefTab
 
--- | table of units constructors
+-- | Table of units with an SI Name.
+--   
+--   Table of units constructors.
 tunit :: [TUIntro] -> RefTab
 
--- | table of units constructors
+-- | Table of units with SI name in the description column.
+--   
+--   Table of units constructors.
 tunit' :: [TUIntro] -> RefTab
 
 -- | Appendix section.
@@ -606,9 +679,18 @@ termDefnF' :: Maybe Sentence -> [Contents] -> Section
 -- | Contains traceability matrix assumptions, other assumptions,
 --   refinement, and other requirements.
 traceMatStandard :: SystemInformation -> [TraceConfig]
+
+-- | Extracts <a>Sentence</a>s from a document description.
 getDocDesc :: DocDesc -> [Sentence]
+
+-- | Extracts expressions from the document description (<a>DocDesc</a>)
+--   and default <a>DLPlate</a>.
 egetDocDesc :: DocDesc -> [Expr]
+
+-- | Extracts the common ideas from a document description.
 ciGetDocDesc :: DocDesc -> [CI]
+
+-- | Creates a traceability map from document sections.
 generateTraceMap :: [DocSection] -> TraceMap
 
 -- | Makes a reference label for a soultion statement.

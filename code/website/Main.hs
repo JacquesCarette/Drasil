@@ -178,6 +178,7 @@ main = do
   srsDir <- getEnv "SRS_FOLDER_FRAG"
   doxDir <- getEnv "DOX_FOLDER"
   graphRoot <- getEnv "GRAPH_FOLDER"
+  analysisRoot <- getEnv "ANALYSIS_FOLDER"
 
   -- Env variables relating to variables exposed on CI.
   -- Because we want to be able to test site building locally, we fill in these stubs with
@@ -191,11 +192,15 @@ main = do
   let repoCommitRoot = "https://github.com/" ++ repoSlug ++ "/tree/" ++ commit ++ "/"
   let docsPath = docsRoot ++ "index.html"
   let fullDocsPath = docsRoot ++ "full/index.html"
+  let analysisPath = analysisRoot ++ "DataTable.csv"
+  let analysisHTMLPath = analysisRoot ++ "DataTable.html"
 
   let buildPath = "https://github.com/" ++ repoSlug ++ "/actions" ++ maybe "" ("/runs/" ++) buildId
 
   doesDocsExist <- doesFileExist $ deployLocation ++ docsPath
   doesFullDocsExist <- doesFileExist $ deployLocation ++ fullDocsPath
+  doesAnalysisExist <- doesFileExist $ deployLocation ++ analysisPath
+  doesAnalysisHTMLExist <- doesFileExist $ deployLocation ++ analysisHTMLPath
   examples <- mkExamples repoCommitRoot (deployLocation ++ exampleRoot) srsDir
   graphs <- mkGraphs $ deployLocation ++ graphRoot
 
@@ -218,6 +223,8 @@ main = do
                        listField "graphs" (mkGraphCtx graphRoot) (mapM makeItem graphs) <>
                        (if doesDocsExist then field "docsUrl" (return . const docsPath) else mempty) <>
                        (if doesFullDocsExist then field "fullDocsUrl" (return . const fullDocsPath) else mempty) <>
+                       (if doesAnalysisExist then field "analysisUrl" (return . const analysisPath) else mempty) <>
+                       (if doesAnalysisHTMLExist then field "analysisHTMLUrl" (return . const analysisHTMLPath) else mempty) <>
                        field "buildNumber" (return . const buildNumber) <>
                        field "buildUrl" (return . const buildPath) <>
                        field "commit" (return . const commit) <>

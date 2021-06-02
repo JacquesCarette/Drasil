@@ -17,8 +17,8 @@ type Inputs = [Input]
 type Output = QuantityDict
 type OutputConstraints = [RealInterval Expr Expr]
 
--- | An Instance Model is a ModelKind that may have specific input/output
--- constraints. It also has attributes like derivation, source, etc.
+-- | An instance model is a ModelKind that may have specific inputs, outputs, and output
+-- constraints. It also has attributes like references, derivation, labels ('ShortName'), reference address, and notes.
 data InstanceModel = IM { _mk :: ModelKinds
                         , _imInputs :: Inputs
                         , _imOutput :: (Output, OutputConstraints)
@@ -30,6 +30,7 @@ data InstanceModel = IM { _mk :: ModelKinds
                         }
 makeLenses ''InstanceModel
 
+-- | Make 'Lens' for an 'InstanceModel' based on its 'ModelKinds'.
 lensMk :: forall a. Lens' QDefinition a -> Lens' RelationConcept a -> Lens' InstanceModel a
 lensMk lq lr = lens g s
     where g :: InstanceModel -> a
@@ -62,40 +63,40 @@ instance HasSymbol          InstanceModel where symbol = symbol . view output --
 instance HasSpace           InstanceModel where typ = output . typ
 instance MayHaveUnit        InstanceModel where getUnit = getUnit . view output
 
--- | Smart constructor for instance models with everything defined
+-- | Smart constructor for instance models with everything defined.
 im :: ModelKinds -> Inputs -> Output -> 
   OutputConstraints -> [Reference] -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
 im mkind _  _ _  [] _  _  = error $ "Source field of " ++ mkind ^. uid ++ " is empty"
 im mkind i o oc r der sn = 
   IM mkind i (o, oc) r der (shortname' sn) (prependAbrv inModel sn)
 
--- | Smart constructor for instance models; no derivation
+-- | Smart constructor for instance models with no derivation.
 imNoDeriv :: ModelKinds -> Inputs -> Output -> 
   OutputConstraints -> [Reference] -> String -> [Sentence] -> InstanceModel
 imNoDeriv mkind _  _ _ [] _  = error $ "Source field of " ++ mkind ^. uid ++ " is empty"
 imNoDeriv mkind i o oc r sn =
   IM mkind i (o, oc) r Nothing (shortname' sn) (prependAbrv inModel sn)
 
--- | Smart constructor for instance models; no references
+-- | Smart constructor for instance models with no references.
 imNoRefs :: ModelKinds -> Inputs -> Output -> 
   OutputConstraints -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
 imNoRefs mkind i o oc der sn = 
   IM mkind i (o, oc) [] der (shortname' sn) (prependAbrv inModel sn)
 
--- | Smart constructor for instance models; no derivations or references
+-- | Smart constructor for instance models with no derivations or references.
 imNoDerivNoRefs :: ModelKinds -> Inputs -> Output -> 
   OutputConstraints -> String -> [Sentence] -> InstanceModel
 imNoDerivNoRefs mkind i o oc sn = 
   IM mkind i (o, oc) [] Nothing (shortname' sn) (prependAbrv inModel sn)
 
--- | For building a quantity with no constraint
+-- | For building a quantity with no constraint.
 qwUC :: (Quantity q, MayHaveUnit q) => q -> Input 
 qwUC x = (qw x, Nothing)
 
--- | For building a quantity with a constraint
+-- | For building a quantity with a constraint.
 qwC :: (Quantity q, MayHaveUnit q) => q -> RealInterval Expr Expr -> Input 
 qwC x y = (qw x, Just y)
 
--- | Grab all related QDefinitions from a list of instance models
+-- | Grab all related 'QDefinition's from a list of instance models.
 getEqModQdsFromIm :: [InstanceModel] -> [QDefinition]
 getEqModQdsFromIm ims = getEqModQds (map _mk ims)

@@ -7,7 +7,8 @@ import Theory.Drasil.ModelKinds (ModelKinds(..), elimMk, setMk, getEqModQds)
 
 import Control.Lens (makeLenses, view, lens, (^.), set, Lens', to)
 
--- | A GenDefn is a ModelKind that may have units
+-- | A general definition is a 'ModelKind' that may have units, a derivation,
+-- references, a shortname, a reference address, and notes.
 data GenDefn = GD { _mk :: ModelKinds
                   , gdUnit :: Maybe UnitDefn                  
                   , _deri  :: Maybe Derivation
@@ -18,6 +19,7 @@ data GenDefn = GD { _mk :: ModelKinds
                   }
 makeLenses ''GenDefn
 
+-- | Make 'Lens' for a 'GenDefn' based on its 'ModelKinds'.
 lensMk :: forall a. Lens' QDefinition a -> Lens' RelationConcept a -> Lens' GenDefn a
 lensMk lq lr = lens g s
     where g :: GenDefn -> a
@@ -42,19 +44,19 @@ instance Referable          GenDefn where
   refAdd      = getRefAdd
   renderRef l = RP (prepend $ abrv l) (getRefAdd l)
 
--- | Smart constructor for general definitions
+-- | Smart constructor for general definitions.
 gd :: (IsUnit u) => ModelKinds -> Maybe u ->
   Maybe Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
 gd mkind _   _     []   _  = error $ "Source field of " ++ mkind ^. uid ++ " is empty"
 gd mkind u derivs refs sn_ = 
   GD mkind (fmap unitWrapper u) derivs refs (shortname' sn_) (prependAbrv genDefn sn_)
 
--- | Smart constructor for general definitions; no references
+-- | Smart constructor for general definitions with no references.
 gdNoRefs :: (IsUnit u) => ModelKinds -> Maybe u ->
   Maybe Derivation -> String -> [Sentence] -> GenDefn
 gdNoRefs mkind u derivs sn_ = 
   GD mkind (fmap unitWrapper u) derivs [] (shortname' sn_) (prependAbrv genDefn sn_)
 
--- | Grab all related QDefinitions from a list of general definitions
+-- | Grab all related 'QDefinitions' from a list of general definitions.
 getEqModQdsFromGd :: [GenDefn] -> [QDefinition]
 getEqModQdsFromGd gdefns = getEqModQds (map _mk gdefns)

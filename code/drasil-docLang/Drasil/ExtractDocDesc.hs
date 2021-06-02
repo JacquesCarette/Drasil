@@ -1,5 +1,5 @@
 {-# LANGUAGE LambdaCase, Rank2Types #-}
-module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, ciGetDocDesc, sentencePlate) where
+module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, sentencePlate) where
 
 import Control.Lens((^.))
 import Drasil.DocumentLanguage.Core
@@ -209,16 +209,15 @@ getIL :: ItemType -> [Sentence]
 getIL (Flat s) = [s]
 getIL (Nested h lt) = h : getLT lt
 
-ciPlate :: DLPlate (Constant [CI])
-ciPlate = preorderFold $ purePlate {
-  introSub = Constant <$> \case
-    (IOrgSec _ ci _ _) -> [ci]
-    _ -> [],
-  stkSub = Constant <$> \case
-   (Client ci _) -> [ci]
-   (Cstmr ci) -> [ci],
-   auxConsSec = Constant <$> \(AuxConsProg ci _) -> [ci]
-}
+-- ciPlate is not currently used.
+-- ciPlate :: DLPlate (Constant [CI])
+-- ciPlate = preorderFold $ purePlate {
+  -- introSub = Constant <$> \case
+    -- (IOrgSec _ ci _ _) -> [ci]
+    -- _ -> [],
+  -- stkSub = Constant <$> \case
+   -- (Client ci _) -> [ci]
+   -- (Cstmr ci) -> [ci],
+   -- auxConsSec = Constant <$> \(AuxConsProg ci _) -> [ci]
+-- }
 
-ciGetDocDesc :: DocDesc -> [CI]
-ciGetDocDesc = fmGetDocDesc ciPlate

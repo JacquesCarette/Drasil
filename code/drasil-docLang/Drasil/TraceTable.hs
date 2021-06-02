@@ -12,6 +12,7 @@ import Control.Lens ((^.))
 import Data.Functor.Constant (Constant(Constant))
 import Data.Generics.Multiplate (foldFor, preorderFold, purePlate)
 
+-- | Creates a dependency plate for 'UID's.
 dependencyPlate :: DLPlate (Constant [(UID, [UID])])
 dependencyPlate = preorderFold $ purePlate {
   pdSub = Constant <$> \case
@@ -41,5 +42,6 @@ dependencyPlate = preorderFold $ purePlate {
   notes :: HasAdditionalNotes a => a -> [Sentence]
   notes = (^. getNotes)
 
+-- | Creates a traceability map from document sections.
 generateTraceMap :: [DocSection] -> TraceMap
 generateTraceMap = traceMap . concatMap (foldFor docSec dependencyPlate)

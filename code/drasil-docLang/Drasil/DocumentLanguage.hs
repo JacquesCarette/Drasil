@@ -55,21 +55,24 @@ import Data.Function (on)
 import Data.List (nub, sortBy, sortOn)
 import qualified Data.Map as Map (elems, toList)
 
--- | Creates a document from a document description and system information
+-- | Creates a document from a document description, a title combinator function, and system information.
 mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
 mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
   Document (nw kind `comb` nw sys) (foldlList Comma List $ map (S . name) authors) $
   mkSections (fillTraceMaps l (fillReqs l si)) l where
     l = mkDocDesc si dd
 
+-- | Constructs the unit definitions ('UnitDefn's) found in the document description ('DocDesc') from a database ('ChunkDB').
 extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
 extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb
 
+-- | Fills in the traceabiliy matrix and graphs section of the system information using the document description.
 fillTraceMaps :: DocDesc -> SystemInformation -> SystemInformation
 fillTraceMaps dd si@SI{_sysinfodb = db} = si {_sysinfodb =
   set refbyTable (generateRefbyMap tdb) $ set traceTable tdb db} where
   tdb = generateTraceMap dd
 
+-- | Fills in the requirements section of the system information using the document description.
 fillReqs :: DocDesc -> SystemInformation -> SystemInformation
 fillReqs [] si = si
 fillReqs (ReqrmntSec (ReqsProg x):_) si@SI{_sysinfodb = db} = genReqs x
@@ -80,7 +83,7 @@ fillReqs (ReqrmntSec (ReqsProg x):_) si@SI{_sysinfodb = db} = genReqs x
     genReqs (_:xs) = genReqs xs
 fillReqs (_:xs) si = fillReqs xs si
 
--- | Helper for creating the document sections
+-- | Helper for creating the different document sections.
 mkSections :: SystemInformation -> DocDesc -> [Section]
 mkSections si dd = map doit dd
   where
@@ -100,7 +103,7 @@ mkSections si dd = map doit dd
     doit (OffShelfSolnsSec o) = mkOffShelfSolnSec o
 
 
--- | Helper for creating the reference section and subsections
+-- | Helper for creating the reference section and subsections.
 mkRefSec :: SystemInformation -> DocDesc -> RefSec -> Section
 mkRefSec si dd (RefProg c l) = section (titleize refmat) [c]
   (map (mkSubRef si) l) (makeSecRef "RefMat" "Reference Material") --DO NOT CHANGE LABEL OR THINGS WILL BREAK -- see Language.Drasil.Document.Extract
@@ -128,12 +131,14 @@ mkRefSec si dd (RefProg c l) = section (titleize refmat) [c]
     mkSubRef SI {_usedinfodb = db} TAandA =
       tableOfAbbAndAcronyms $ nub $ map fst $ Map.elems $ termTable db
 
--- | table of units constructors
+-- | Table of units constructors.
 tunit, tunit' :: [TUIntro] -> RefTab
+-- | Table of units with an SI Name.
 tunit  t = TUnits' t tOfUnitSIName
+-- | Table of units with SI name in the description column.
 tunit' t = TUnits' t tOfUnitDesc
 
--- | Helper for creating the table of symbols
+-- | Helper for creating the table of symbols.
 mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>
   [e] -> LFunc -> [TSIntro] -> Section
 mkTSymb v f c = SRS.tOfSymb [tsIntro c,
@@ -150,24 +155,22 @@ mkTSymb v f c = SRS.tOfSymb [tsIntro c,
           atStart x else capSent (x ^. defn)
         lf TAD = \tDef -> titleize tDef +: EmptyS +:+. capSent (tDef ^. defn)
 
--- | table of symbols constructor
+-- | Table of symbols constructor.
 tsymb, tsymb' :: [TSIntro] -> RefTab
-tsymb = TSymb 
--- ^ Default Term and given intro
-
+-- | Default is term and given introduction.
+tsymb = TSymb
+-- | Similar to 'tsymb', but has a default Defn for the LFunc type. Still has a given introduction.
 tsymb' = TSymb' Defn
--- ^ Default Defn and given intro
 
--- | Custom table of symbols constructor
+-- | Table of symbols constructor. Takes a custom function and introduction.
 tsymb'' :: [TSIntro] -> LFunc -> RefTab
-tsymb'' intro lfunc = TSymb' lfunc intro 
--- ^ Custom function and intro.
+tsymb'' intro lfunc = TSymb' lfunc intro
 
--- | table of symbols intro builder. Used by mkRefSec
+-- | Table of symbols introduction builder. Used by 'mkRefSec'.
 tsIntro :: [TSIntro] -> Contents
 tsIntro x = mkParagraph $ foldr ((+:+) . tsI) EmptyS x
 
--- | table of symbols intro writer. Translates a TSIntro to a list of Sentences
+-- | Table of symbols intro writer. Translates a 'TSIntro' to a list in a 'Sentence'.
 tsI :: TSIntro -> Sentence
 tsI (TypogConvention ts) = typogConvention ts
 tsI SymbOrder = S "The symbols are listed in alphabetical order."
@@ -176,8 +179,8 @@ tsI TSPurpose = S "The symbols used in this document are summarized in" +:+
   Ref symbTableRef +:+. S "along with their units"
 tsI VectorUnits = S "For vector quantities, the units shown are for each component of the vector."
 
--- | typographic convention writer. Translates a list of typographic conventions
--- to a sentence
+-- | Typographic convention writer. Translates a list of typographic conventions ('TConvention's)
+-- to a 'Sentence'.
 typogConvention :: [TConvention] -> Sentence
 typogConvention [] = error "No arguments given for typographic conventions"
 typogConvention ts = S "Throughout the document," +:+. foldlList Comma List (map tcon ts)
@@ -185,7 +188,7 @@ typogConvention ts = S "Throughout the document," +:+. foldlList Comma List (map
                                 " will represent vectors, and scalars otherwise")
         tcon (Verb s) = s
 
--- | symbolic convention writer.
+-- | Symbolic convention writer.
 symbConvention :: [Literature] -> Sentence
 symbConvention [] = error "Attempting to reference no literature for SymbConvention"
 symbConvention scs = S "The choice of symbols was made to be consistent with the" +:+.
@@ -197,11 +200,11 @@ symbConvention scs = S "The choice of symbols was made to be consistent with the
         scon (Doc' x)      = S "existing documentation for" +:+ plural x
         scon (Manual x)    = S "that used in the" +:+ phrase x +:+ S "manual"
 
--- | Table of units intro builder. Used by mkRefSec
+-- | Table of units introduction builder. Used by 'mkRefSec'.
 tuIntro :: [TUIntro] -> Contents
 tuIntro x = mkParagraph $ foldr ((+:+) . tuI) EmptyS x
 
--- | table of units intro writer. Translates a TUIntro to a Sentence.
+-- | Table of units introduction writer. Translates a 'TUIntro' to a 'Sentence'.
 tuI :: TUIntro -> Sentence
 tuI System  = 
   S "The unit system used throughout is SI (Système International d'Unités)."
@@ -210,10 +213,11 @@ tuI TUPurpose =
 tuI Derived = 
   S "In addition to the basic units, several derived units are also used."
 
--- | Default table of units intro contains the
+-- | Default table of units intro that contains the system, derivation, and purpose.
 defaultTUI :: [TUIntro]
 defaultTUI = [System, Derived, TUPurpose]
 
+-- | Makes the Introduction section into a 'Section'.
 mkIntroSec :: SystemInformation -> IntroSec -> Section
 mkIntroSec si (IntroProg probIntro progDefn l) =
   Intro.introductionSection probIntro progDefn $ map (mkSubIntro si) l
@@ -226,7 +230,7 @@ mkIntroSec si (IntroProg probIntro progDefn l) =
     mkSubIntro _ (IOrgSec i b s t) = Intro.orgSec i b s t
     -- FIXME: s should be "looked up" using "b" once we have all sections being generated
 
--- | Helper for making the 'Stakeholders' section
+-- | Helper for making the Stakeholders section.
 mkStkhldrSec :: StkhldrSec -> Section
 mkStkhldrSec (StkhldrProg l) = SRS.stakeholder [Stk.stakeholderIntro] $ map mkSubs l
   where
@@ -234,7 +238,7 @@ mkStkhldrSec (StkhldrProg l) = SRS.stakeholder [Stk.stakeholderIntro] $ map mkSu
     mkSubs (Client kWrd details) = Stk.tClientF kWrd details
     mkSubs (Cstmr kWrd)          = Stk.tCustomerF kWrd
 
--- | Helper for making the 'General System Description' section
+-- | Helper for making the General System Description section.
 mkGSDSec :: GSDSec -> Section
 mkGSDSec (GSDProg l) = SRS.genSysDes [GSD.genSysIntro] $ map mkSubs l
    where
@@ -243,7 +247,7 @@ mkGSDSec (GSDProg l) = SRS.genSysDes [GSD.genSysIntro] $ map mkSubs l
      mkSubs (UsrChars intro)         = GSD.usrCharsF intro
      mkSubs (SystCons cntnts subsec) = GSD.systCon cntnts subsec
 
--- | Helper for making the 'Specific System Description' section
+-- | Helper for making the Specific System Description section.
 mkSSDSec :: SystemInformation -> SSDSec -> Section
 mkSSDSec si (SSDProg l) =
   SSD.specSysDescr $ map (mkSubSSD si) l
@@ -252,12 +256,14 @@ mkSSDSec si (SSDProg l) =
     mkSubSSD sysi (SSDProblem pd)    = mkSSDProb sysi pd
     mkSubSSD sysi (SSDSolChSpec scs) = mkSolChSpec sysi scs
 
+-- | Helper for making the Specific System Description Problem section.
 mkSSDProb :: SystemInformation -> ProblemDescription -> Section
 mkSSDProb _ (PDProg prob subSec subPD) = SSD.probDescF prob (subSec ++ map mkSubPD subPD)
   where mkSubPD (TermsAndDefs sen concepts) = SSD.termDefnF sen concepts
         mkSubPD (PhySysDesc prog parts dif extra) = SSD.physSystDesc prog parts dif extra
         mkSubPD (Goals ins g) = SSD.goalStmtF ins (mkEnumSimpleD g)
 
+-- | Helper for making the Solution Characteristics Specification section.
 mkSolChSpec :: SystemInformation -> SolChSpec -> Section
 mkSolChSpec si (SCSProg l) =
   SRS.solCharSpec [SSD.solutionCharSpecIntro (siSys si) imStub] $
@@ -289,6 +295,7 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS _ (Constraints end cs)  = SSD.datConF end cs
     mkSubSCS _ (CorrSolnPpties c cs) = SSD.propCorSolF c cs
 
+-- | Helper for making a 'ConceptInstance' with a reference to the system information.
 helperCI :: ConceptInstance -> SystemInformation -> ConceptInstance
 helperCI a c = over defn (\x -> foldlSent_ [x, refby $ helperRefs a c]) a
   where
@@ -297,14 +304,14 @@ helperCI a c = over defn (\x -> foldlSent_ [x, refby $ helperRefs a c]) a
 
 {--}
 
--- | Section stubs for implicit referencing
+-- | Section stubs for implicit referencing of different models and definitions.
 tmStub, ddStub, imStub, pdStub :: Section
 tmStub = SRS.thModel   [] []
 ddStub = SRS.dataDefn  [] []
 imStub = SRS.inModel   [] []
 pdStub = SRS.probDesc  [] []
 
--- | Helper for making the 'Requirements' section
+-- | Helper for making the Requirements section.
 mkReqrmntSec :: ReqrmntSec -> Section
 mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
   where
@@ -315,7 +322,7 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
 
 {--}
 
--- | Helper for making the 'LikelyChanges' section
+-- | Helper for making the Likely Changes section.
 mkLCsSec :: LCsSec -> Section
 mkLCsSec (LCsProg c) = SRS.likeChg (intro : mkEnumSimpleD c) []
   where intro = foldlSP [S "This", phrase section_, S "lists the",
@@ -323,7 +330,7 @@ mkLCsSec (LCsProg c) = SRS.likeChg (intro : mkEnumSimpleD c) []
 
 {--}
 
--- | Helper for making the 'UnikelyChanges' section
+-- | Helper for making the Unikely Changes section.
 mkUCsSec :: UCsSec -> Section
 mkUCsSec (UCsProg c) = SRS.unlikeChg (intro : mkEnumSimpleD c) []
   where intro = foldlSP [S "This", phrase section_, S "lists the",
@@ -331,7 +338,7 @@ mkUCsSec (UCsProg c) = SRS.unlikeChg (intro : mkEnumSimpleD c) []
 
 {--}
 
--- | Helper for making the 'Traceability Matrices and Graphs' section
+-- | Helper for making the Traceability Matrices and Graphs section.
 mkTraceabilitySec :: TraceabilitySec -> SystemInformation -> Section
 mkTraceabilitySec (TraceabilityProg progs) si = TM.traceMGF trace
   (map (\(TraceConfig _ pre _ _ _) -> foldlList Comma List pre) progs)
@@ -341,30 +348,30 @@ mkTraceabilitySec (TraceabilityProg progs) si = TM.traceMGF trace
 
 {--}
 
--- | Helper for making the 'Off-the-Shelf Solutions' section
+-- | Helper for making the Off-the-Shelf Solutions section.
 mkOffShelfSolnSec :: OffShelfSolnsSec -> Section
 mkOffShelfSolnSec (OffShelfSolnsProg cs) = SRS.offShelfSol cs [] 
 
 {--}
 
--- | Helper for making the 'Values of Auxiliary Constants' section
+-- | Helper for making the Values of Auxiliary Constants section.
 mkAuxConsSec :: AuxConstntSec -> Section
 mkAuxConsSec (AuxConsProg key listOfCons) = AC.valsOfAuxConstantsF key $ sortBySymbol listOfCons
 
 {--}
 
--- | Helper for making the bibliography section
+-- | Helper for making the Bibliography section.
 mkBib :: BibRef -> Section
 mkBib bib = SRS.reference [UlC $ ulcc (Bib bib)] []
 
 {--}
 
--- | Helper for making the 'Appendix' section
+-- | Helper for making the Appendix section.
 mkAppndxSec :: AppndxSec -> Section
 mkAppndxSec (AppndxProg cs) = SRS.appendix cs []
 
 {--}
 
--- Helper
+-- | Helper to get part of the system information as an 'IdeaDict'.
 siSys :: SystemInformation -> IdeaDict
 siSys SI {_sys = sys} = nw sys

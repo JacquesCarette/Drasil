@@ -125,41 +125,44 @@ output outputFilePath entryData ordClassInsts bakedEntryData = do
   hPutStrLn dataTable (intercalate "," ordClassInsts)
   hPutStrLn dataTable entryData
   hClose dataTable
+  -- row length needed for lenCheck
   let rowLength = length (head (separateN bakedEntryData))
   dataTableHTML <- openFile "DataTable.html" WriteMode
   hPutStrLn dataTableHTML "<!DOCTYPE html>\n<html>\n\t<title>Auto-Generated Data Table for Drasil</title>"
   hPutStrLn dataTableHTML "\t<table border=\"1\" cellspacing=\"0\" cellpadding=\"3\" class=\"dataframe\">"
   hPutStrLn dataTableHTML (mkhtmlTitle ("Package,\t,\t,\t,\t,\t,Class Instances" ++ mkhtmlEmptyCell (rowLength - 7)))
-  hPutStrLn dataTableHTML (mkhtmlHeader ((splitOn "," "drasil-,File Path,File Name,Data Type,Newtype Type,Class Definitions") ++ ordClassInsts))
+  hPutStrLn dataTableHTML (mkhtmlHeader (splitOn "," "drasil-,File Path,File Name,Data Type,Newtype Type,Class Definitions" ++ ordClassInsts))
   hPutStr dataTableHTML (mkhtmlRow (lenCheck (separateN bakedEntryData) rowLength))
   hPutStrLn dataTableHTML "\t\t</tbody>\n</html>"
   hClose dataTableHTML
 
+-- | Checks the length of an 'EntryString' to see if it matchs the given length. If not, it will add empty html cells.
 lenCheck :: [EntryString] -> Int -> [EntryString]
 lenCheck [] _ = []
-lenCheck (x:xs) len = (x ++ mkhtmlEmptyCell (len - (length x))) : lenCheck xs len
+lenCheck (x:xs) len = (x ++ mkhtmlEmptyCell (len - length x)) : lenCheck xs len
 
+-- | Separate an 'EntryString' by newspace (used for separating the incoming bakedEntryData in 'output').
 separateN :: [EntryString] -> [EntryString]
-separateN [] = []
-separateN (x:xs) = splitOn "\n" x ++ separateN xs
+separateN xs = foldr ((++) . splitOn "\n") [] xs
 
+-- | Adds all of the required html syntax to generate the title files.
 mkhtmlTitle :: String -> String
-mkhtmlTitle xs = "\t\t<thead>\n" ++ concat (map (\y -> "\t\t\t<th>" ++ y ++ "</th>\n") (splitOn "," xs)) ++ "\t\t</thead>"
+mkhtmlTitle xs = "\t\t<thead>\n" ++ concatMap (\y -> "\t\t\t<th>" ++ y ++ "</th>\n") (splitOn "," xs) ++ "\t\t</thead>"
 
+-- | Similar to 'mkhtmlTitle', but the given list of strings must already be split into their respective cells.
 mkhtmlHeader :: [String] -> String
-mkhtmlHeader xs = "\t\t<thead>\n" ++ concat (map (\y -> "\t\t\t<th>" ++ y ++ "</th>\n") xs) ++ "\t\t</thead>"
+mkhtmlHeader xs = "\t\t<thead>\n" ++ concatMap (\y -> "\t\t\t<th>" ++ y ++ "</th>\n") xs ++ "\t\t</thead>"
 
-mkhtmlCell :: [ClassName] -> String
-mkhtmlCell xs = "\t\t\t<tr>\n" ++ intercalate "" (map (\y -> "\t\t\t\t<td>" ++ y ++ "</td>\n") xs) ++ "\t\t\t</tr>\n"
-
+-- | Fills in the given number of html cells in a row with empty cells.
 mkhtmlEmptyCell :: Int -> String
 mkhtmlEmptyCell num 
   | num <= 0 = ""
   | otherwise = ",\t" ++ mkhtmlEmptyCell (num-1)
 
+-- | Adds all required html syntax for creating a normal html table row.
 mkhtmlRow :: [EntryString] -> String
 mkhtmlRow [] = []
-mkhtmlRow (x:xs) = "\t\t\t<tr>\n" ++ concat (map (\y -> "\t\t\t\t<td>" ++ y ++ "</td>\n") (splitOn "," x)) ++ "\t\t\t</tr>\n" ++ mkhtmlRow xs
+mkhtmlRow (x:xs) = "\t\t\t<tr>\n" ++ concatMap (\y -> "\t\t\t\t<td>" ++ y ++ "</td>\n") (splitOn "," x) ++ "\t\t\t</tr>\n" ++ mkhtmlRow xs
 
 -- creates an entry for each file (new Entry data-oriented format)
 createEntry :: FilePath -> DC.File -> DC.FileName -> IO Entry

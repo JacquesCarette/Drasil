@@ -687,9 +687,6 @@ getDocDesc :: DocDesc -> [Sentence]
 --   and default <a>DLPlate</a>.
 egetDocDesc :: DocDesc -> [Expr]
 
--- | Extracts the common ideas from a document description.
-ciGetDocDesc :: DocDesc -> [CI]
-
 -- | Creates a traceability map from document sections.
 generateTraceMap :: [DocSection] -> TraceMap
 

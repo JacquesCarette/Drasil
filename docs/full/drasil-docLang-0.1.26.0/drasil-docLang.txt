@@ -1077,9 +1077,6 @@ getDocDesc :: DocDesc -> [Sentence]
 --   and default <a>DLPlate</a>.
 egetDocDesc :: DocDesc -> [Expr]
 
--- | Extracts the common ideas from a document description.
-ciGetDocDesc :: DocDesc -> [CI]
-
 -- | Creates a <a>Sentence</a> plate.
 sentencePlate :: Monoid a => ([Sentence] -> a) -> DLPlate (Constant a)
 
@@ -1736,9 +1733,6 @@ getDocDesc :: DocDesc -> [Sentence]
 -- | Extracts expressions from the document description (<a>DocDesc</a>)
 --   and default <a>DLPlate</a>.
 egetDocDesc :: DocDesc -> [Expr]
-
--- | Extracts the common ideas from a document description.
-ciGetDocDesc :: DocDesc -> [CI]
 
 -- | Creates a traceability map from document sections.
 generateTraceMap :: [DocSection] -> TraceMap

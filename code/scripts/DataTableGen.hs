@@ -143,7 +143,7 @@ lenCheck (x:xs) len = (x ++ mkhtmlEmptyCell (len - length x)) : lenCheck xs len
 
 -- | Separate an 'EntryString' by newspace (used for separating the incoming bakedEntryData in 'output').
 separateN :: [EntryString] -> [EntryString]
-separateN xs = foldr ((++) . splitOn "\n") [] xs
+separateN = concatMap (splitOn "\n")
 
 -- | Adds all of the required html syntax to generate the title files.
 mkhtmlTitle :: String -> String

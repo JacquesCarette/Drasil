@@ -228,8 +228,10 @@ deploy: analysis graphs docs tex doxygen
 $(filter $(CLEAN_GF_PREFIX)%, $(CLEAN_FOLDERS)): $(CLEAN_GF_PREFIX)%:
 	- rm -rf "./$*/"
 
-clean: $(CLEAN_FOLDERS)
+clean_artifacts cleanArtifacts: $(CLEAN_FOLDERS)
 	- rm -f "$(CACHED_MSV_FILE)"
+
+clean: clean_artifacts
 	- stack clean
 
-.PHONY: clean code analysis tex doc debug prog test graphs graphmod check_stack graphs deploy_code_path deploy deploy_lite all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)
+.PHONY: clean clean_artifacts cleanArtifacts code analysis tex doc debug prog test graphs graphmod check_stack graphs deploy_code_path deploy deploy_lite all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)

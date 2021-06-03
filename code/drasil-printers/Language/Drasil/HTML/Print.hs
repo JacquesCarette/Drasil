@@ -50,19 +50,19 @@ genHTML sm fn doc = build fn (makeDocument sm doc)
 mathJaxScript :: Doc
 mathJaxScript =
   vcat [text "<script>",
-   text "MathJax = {",
-   text "  loader: {load: ['[tex]/textmacros', 'output/chtml']},",
-   text "  tex: {",
-   text "    packages: {'[+]': ['textmacros']}",
-   text "  },",
-   text "  svg: {",
-   text "    fontCache: 'global'",
-   text "  }",
-   text "};",
-   text "</script>",
-   text "<script type=\"text/javascript\" id=\"MathJax-script\" async",
-   text " src=\"https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js\">",
-   text "</script>"]
+        text "MathJax = {",
+        text "  loader: {load: ['[tex]/textmacros', 'output/chtml']},",
+        text "  tex: {",
+        text "    packages: {'[+]': ['textmacros']}",
+        text "  },",
+        text "  svg: {",
+        text "    fontCache: 'global'",
+        text "  }",
+        text "};",
+        text "</script>",
+        text "<script type=\"text/javascript\" id=\"MathJax-script\" async",
+        text " src=\"https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js\">",
+        text "</script>"]
 
 -- | Build the HTML Document, called by genHTML
 build :: String -> Document -> Doc

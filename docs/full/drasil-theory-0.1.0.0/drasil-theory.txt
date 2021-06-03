@@ -207,11 +207,18 @@ module Theory.Drasil.GenDefn
 --   derivation, references, a shortname, a reference address, and notes.
 data GenDefn
 
--- | Smart constructor for general definitions.
+-- | Smart constructor for general definitions derived from ModelKinds.
 gd :: IsUnit u => ModelKinds -> Maybe u -> Maybe Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
 
--- | Smart constructor for general definitions with no references.
+-- | Smart constructor for general definitions with no references, derived
+--   from ModelKinds.
 gdNoRefs :: IsUnit u => ModelKinds -> Maybe u -> Maybe Derivation -> String -> [Sentence] -> GenDefn
+
+-- | Smart constructor for general definitions.
+gd' :: IsUnit u => UID -> ModelKinds -> Maybe u -> Maybe Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
+
+-- | Smart constructor for general definitions with no references.
+gdNoRefs' :: IsUnit u => UID -> ModelKinds -> Maybe u -> Maybe Derivation -> String -> [Sentence] -> GenDefn
 
 -- | Grab all related <tt>QDefinitions</tt> from a list of general
 --   definitions.
@@ -329,11 +336,18 @@ qdFromDD :: DataDefinition -> QDefinition
 --   derivation, references, a shortname, a reference address, and notes.
 data GenDefn
 
--- | Smart constructor for general definitions.
+-- | Smart constructor for general definitions derived from ModelKinds.
 gd :: IsUnit u => ModelKinds -> Maybe u -> Maybe Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
 
--- | Smart constructor for general definitions with no references.
+-- | Smart constructor for general definitions with no references, derived
+--   from ModelKinds.
 gdNoRefs :: IsUnit u => ModelKinds -> Maybe u -> Maybe Derivation -> String -> [Sentence] -> GenDefn
+
+-- | Smart constructor for general definitions.
+gd' :: IsUnit u => UID -> ModelKinds -> Maybe u -> Maybe Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
+
+-- | Smart constructor for general definitions with no references.
+gdNoRefs' :: IsUnit u => UID -> ModelKinds -> Maybe u -> Maybe Derivation -> String -> [Sentence] -> GenDefn
 
 -- | Grab all related <tt>QDefinitions</tt> from a list of general
 --   definitions.

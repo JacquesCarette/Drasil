@@ -1,8 +1,8 @@
-module Drasil.GlassBR.IMods (symb, iMods, pbIsSafe, lrIsSafe, instModIntro) where
+module Drasil.GlassBR.IMods (symb, iMods, iMods0, pbIsSafe, lrIsSafe, instModIntro) where
 
 import Prelude hiding (exp)
 import Language.Drasil
-import Theory.Drasil (InstanceModel, imNoDeriv, qwC, ModelKinds (OthModel))
+import Theory.Drasil (InstanceModel, imNoDeriv, imNoDeriv', qwC, ModelKinds (OthModel, EquationalModel))
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -19,6 +19,9 @@ import Data.Drasil.Concepts.Documentation (goal)
 iMods :: [InstanceModel]
 iMods = [pbIsSafe, lrIsSafe]
 
+iMods0 :: [InstanceModel]
+iMods0 = [lrIsSafe]
+
 symb :: [DefinedQuantityDict]
 symb = map dqdWr [plateLen, plateWidth, charWeight, standOffDist] ++ 
   [dqdQd (qw calofDemand) demandq]
@@ -26,16 +29,15 @@ symb = map dqdWr [plateLen, plateWidth, charWeight, standOffDist] ++
 {--}
 
 pbIsSafe :: InstanceModel
-pbIsSafe = imNoDeriv (OthModel pbIsSafeRC)
+pbIsSafe = imNoDeriv' (EquationalModel pbIsSafeQD) (nounPhraseSP "Safety Req-Pb")
   [qwC probBr $ UpFrom (Exc, exactDbl 0), qwC pbTol $ UpFrom (Exc, exactDbl 0)]
   (qw isSafePb) []
   [makeCite astm2009] "isSafePb"
   [pbIsSafeDesc, probBRRef, pbTolUsr]
 
 
-pbIsSafeRC :: RelationConcept
-pbIsSafeRC = makeRC "safetyReqPb" (nounPhraseSP "Safety Req-Pb")
-  EmptyS (sy isSafePb $= sy probBr $< sy pbTol)
+pbIsSafeQD :: QDefinition
+pbIsSafeQD = mkQuantDef isSafePb (sy probBr $< sy pbTol)
 
 {--}
 

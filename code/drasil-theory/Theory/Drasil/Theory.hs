@@ -8,6 +8,8 @@ import Data.Drasil.TheoryConcepts (thModel)
 
 import Control.Lens (Lens', view, makeLenses, (^.))
 
+-- | Theories are the basis for building models with context,
+-- spaces, quantities, operations, invariants, etc.
 class Theory t where
   valid_context :: Lens' t [TheoryModel]
   spaces        :: Lens' t [SpaceDefn]
@@ -19,15 +21,24 @@ class Theory t where
 
 data SpaceDefn -- FIXME: This should be defined.
 
-{-
-A TheoryModel is a collection of type definitions (spc),
-quantities (quan), operations (ops), definitions (defq),
-invariants (invs), defined functions (dfun),
-accompanying reference (ref), label and notes.
-
-Right now, neither the definition context (vctx) nor the
-spaces (spc) are ever defined.
--}
+-- | A TheoryModel is a collection of:
+--
+--      * tUid - a UID,
+--      * con - a ConceptChunk,
+--      * vctx - definition context ('TheoryModel's),
+--      * spc - type definitions ('SpaceDefn's),
+--      * quan - quantities ('QuantityDict's),
+--      * ops - operations ('ConceptChunk's),
+--      * defq - definitions ('QDefinition's),
+--      * invs - invariants ('Relation's),
+--      * dfun - defined functions ('QDefinition's),
+--      * ref - accompanying references ('Reference's),
+--      * lb - a label ('SpaceDefn'),
+--      * ra - reference address ('SpaceDefn'),
+--      * notes - additional notes ('Sentence's).
+-- 
+-- Right now, neither the definition context (vctx) nor the
+-- spaces (spc) are ever defined.
 data TheoryModel = TM 
   { _tUid  :: UID
   , _con   :: ConceptChunk
@@ -45,13 +56,21 @@ data TheoryModel = TM
   }
 makeLenses ''TheoryModel
 
+-- | Finds the 'UID' of a 'TheoryModel'.
 instance HasUID             TheoryModel where uid = tUid
+-- | Finds the term ('NP') of the 'TheoryModel'.
 instance NamedIdea          TheoryModel where term = con . term
+-- | Finds the idea of the 'ConceptChunk' contained in the 'TheoryModel'.
 instance Idea               TheoryModel where getA = getA . view con
+-- | Finds the definition of the 'ConceptChunk' contained in a 'TheoryModel'.
 instance Definition         TheoryModel where defn = con . defn
+-- | Finds 'Reference's contained in the 'TheoryModel'.
 instance HasReference       TheoryModel where getReferences = ref
+-- | Finds the domain of the 'ConceptChunk' contained in a 'TheoryModel'.
 instance ConceptDomain      TheoryModel where cdom = cdom . view con
+-- | Finds any additional notes for the 'TheoryModel'.
 instance HasAdditionalNotes TheoryModel where getNotes = notes
+-- | Finds the aspects of the 'Theory' behind the 'TheoryModel'.
 instance Theory             TheoryModel where
   valid_context = vctx
   spaces        = spc
@@ -60,9 +79,13 @@ instance Theory             TheoryModel where
   defined_quant = defq
   invariants    = invs
   defined_fun   = dfun
+-- | Finds the 'ShortName' of the 'TheoryModel'.
 instance HasShortName       TheoryModel where shortname = lb
+-- | Finds the reference address of the 'TheoryModel'.
 instance HasRefAddress      TheoryModel where getRefAdd = ra
+-- | Finds the idea of a 'TheoryModel' (abbreviation).
 instance CommonIdea         TheoryModel where abrv _ = abrv thModel
+-- | Finds the reference address of a 'TheoryModel'.
 instance Referable TheoryModel where
   refAdd      = getRefAdd
   renderRef l = RP (prepend $ abrv l) (getRefAdd l)
@@ -73,17 +96,20 @@ instance Referable TheoryModel where
 -- This "smart" constructor is really quite awful, it takes way too many arguments.
 -- This should likely be re-arranged somehow. Especially since since of the arguments
 -- have the same type!
+-- | Constructor for theory models.
 tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKinds ->
     [q] -> [c] -> [QDefinition] ->
     [Relation] -> [QDefinition] -> [Reference] ->
     String -> [Sentence] -> TheoryModel
 tm mk = tm' (mk ^. uid) mk
 
+-- | Constructor for theory models with no references. 
 tmNoRefs :: (Quantity q, MayHaveUnit q, Concept c) => ModelKinds ->
     [q] -> [c] -> [QDefinition] -> [Relation] -> [QDefinition] -> 
     String -> [Sentence] -> TheoryModel
 tmNoRefs mk = tmNoRefs' (mk ^. uid) mk
 
+-- | Constructor for theory models. Must have a source. Uses the shortname of the reference address.
 tm' :: (Quantity q, MayHaveUnit q, Concept c) => UID -> ModelKinds ->
     [q] -> [c] -> [QDefinition] ->
     [Relation] -> [QDefinition] -> [Reference] ->
@@ -93,6 +119,7 @@ tm' u mk q c dq inv dfn r  lbe =
   TM u (cw mk) [] [] (map qw q) (map cw c) dq inv dfn r (shortname' lbe)
       (prependAbrv thModel lbe)
 
+-- | Constructor for theory models. Uses the shortname of the reference address.
 tmNoRefs' :: (Quantity q, MayHaveUnit q, Concept c) => UID -> ModelKinds ->
     [q] -> [c] -> [QDefinition] -> [Relation] -> [QDefinition] -> 
     String -> [Sentence] -> TheoryModel

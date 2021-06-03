@@ -269,15 +269,14 @@ angFrequencyGDNotes = S "The" +:+ phrase torque `S.is` definedIn'' newtonSLR  `S
  --------------------------------Period of Pendulum Motion 
 
 periodPend :: GenDefn
-periodPend = gdNoRefs (OthModel periodPendRC) (getUnit period)
+periodPend = gdNoRefs' "periodPendGD" (EquationalModel periodPendQD) (getUnit period)
            (Just periodPendDeriv) "periodPend" [periodPendNotes]
 
-periodPendRC :: RelationConcept
-periodPendRC = makeRC "periodPendRC" (NP.the (period `ofThe` pendulum)) 
-           EmptyS periodPendRel
- 
-periodPendRel :: Relation
-periodPendRel = sy period $= exactDbl 2 `mulRe` sy QM.pi_ `mulRe` sqrt (sy lenRod $/ sy gravitationalAccel)
+periodPendQD :: QDefinition
+periodPendQD = mkQuantDef' period (NP.the (period `ofThe` pendulum)) periodPendExpr
+
+periodPendExpr :: Expr
+periodPendExpr = exactDbl 2 `mulRe` sy QM.pi_ `mulRe` sqrt (sy lenRod $/ sy gravitationalAccel)
 
 periodPendDeriv :: Derivation
 periodPendDeriv = mkDerivName (phraseNP (NP.the (period `ofThe` pendulum))) (weave [periodPendDerivSents, map E periodPendDerivEqns])

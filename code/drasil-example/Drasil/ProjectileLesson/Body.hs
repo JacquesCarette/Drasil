@@ -9,6 +9,7 @@ import Drasil.DocumentLanguage.Notebook.Core(IntroSec(..), BodySec(..), SmmrySec
 
 import Drasil.ProjectileLesson.IntroSection (introPara)
 import Drasil.ProjectileLesson.Review (reviewContextP1, reviewEq, reviewContextP2)
+import Drasil.ProjectileLesson.Motion (motionContextP1, motionContextP2, horMotion, verMotion, summary)
 
 nb :: Document
 nb = mkDoc mkNB (for'' titleize phrase) si
@@ -23,9 +24,14 @@ mkNB = [
   BodySec $
        BodyProg
          [Review [reviewContextP1, reviewEq, reviewContextP2],
-          Motion [gsduserCharacteristics], MethsAndAnls [] []],
+          Motion [motionContextP1, motionContextP2] [horMotion, verMotion, summary],
+          MethsAndAnls [mAndaintro] []],
   Bibliography
   ]
 
 projMotionLesson :: CI
 projMotionLesson = commonIdea "projMotionLesson" (pn "Projectile Motion Lesson") "Projectile Motion lesson" []
+
+mAndaintro :: Contents
+mAndaintro = foldlSP 
+  [S "Free-flight projectile motion problems can be solved using the following procedure."]

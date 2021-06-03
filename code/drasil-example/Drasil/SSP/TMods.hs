@@ -70,18 +70,18 @@ eqDesc = foldlSent [S "For a body in static equilibrium, the net",
 --
 ------------- New Chunk -----------
 mcShrStrgth :: TheoryModel
-mcShrStrgth = tm (OthModel mcShrStrgthRC)
+mcShrStrgth = tm' "mcShrSrgth" (EquationalModel mcShrStrgthQD)
   [qw shrStress, qw effNormStress, qw fricAngle, qw effCohesion] 
   ([] :: [ConceptChunk])
-  [] [mcShrStrgthRel] [] [makeCite fredlund1977] "mcShrStrgth" [mcShrStrgthDesc]
+  [] [relat mcShrStrgthQD] [] [makeCite fredlund1977] "mcShrStrgth" [mcShrStrgthDesc]
 
 ------------------------------------
-mcShrStrgthRC :: RelationConcept
-mcShrStrgthRC = makeRC "mcShrStrgthRC" (nounPhraseSP "Mohr-Coulumb shear strength")
-  mcShrStrgthDesc mcShrStrgthRel
+mcShrStrgthQD :: QDefinition
+mcShrStrgthQD = fromEqnSt' (shrStress ^. uid) (nounPhraseSP "Mohr-Coulumb shear strength")
+ mcShrStrgthDesc (symbol shrStress) Real mcShrStrgthExpr
 
-mcShrStrgthRel :: Relation
-mcShrStrgthRel = sy shrStress $= (sy effNormStress `mulRe` tan (sy fricAngle) `addRe` sy effCohesion)
+mcShrStrgthExpr :: Expr
+mcShrStrgthExpr = sy effNormStress `mulRe` tan (sy fricAngle) `addRe` sy effCohesion
 
 mcShrStrgthDesc :: Sentence
 mcShrStrgthDesc = foldlSent [S "In this", phrase model, S "the",

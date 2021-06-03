@@ -3,7 +3,8 @@ module Drasil.DocLang.Notebook where
 import Language.Drasil
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (notebook, introduction, 
-  prpsOfDoc, review, body, motion, procForAnls, summary, method_, example, result, appendix, reference)
+  prpsOfDoc, review, body, motion, horizontalMotion, verticalMotion, procForAnls, 
+  summary, method_, example, result, appendix, reference)
 
 -- | Notebook constructor. 
 -- Create the notebook from given system name, authors, and sections
@@ -13,24 +14,28 @@ doc  sys = Document (Doc.notebook `forTT` sys)
 intro, prpsOfDoc, body, review, motion, procForAnls, summary, method, example, result, 
   appendix, reference :: [Contents] -> [Section] -> Section
   
-intro       cs ss = section' (titleize Doc.introduction) cs ss "Intro"
-prpsOfDoc   cs ss = section' (titleize Doc.prpsOfDoc)    cs ss "DocPurpose"
+intro       cs ss = section' (titleize Doc.introduction)     cs ss "Intro"
+prpsOfDoc   cs ss = section' (titleize Doc.prpsOfDoc)        cs ss "DocPurpose"
 
-body        cs ss = section' (titleize Doc.body)         cs ss "Body"
-review      cs ss = section' (titleize Doc.review)       cs ss "Review"
-motion      cs ss = section' (titleize Doc.motion)       cs ss "Motion"
-method      cs ss = section' (titleize Doc.method_)      cs ss "Method"
+body        cs ss = section' (titleize Doc.body)             cs ss "Body"
+review      cs ss = section' (titleize Doc.review)           cs ss "Review"
 
-summary     cs ss = section' (titleize Doc.summary)      cs ss "Summary"
+motion      cs ss = section' (titleize Doc.motion)           cs ss "Motion"
+hormotion   cs ss = section' (titleize Doc.horizontalMotion) cs ss "HorMotion"
+vermotion   cs ss = section' (titleize Doc.verticalMotion)   cs ss "VerMotion"
 
-procForAnls cs ss = section  (titleize Doc.procForAnls)  cs ss AnlsProcLabel
-example     cs ss = section' (titleize Doc.example)      cs ss "Example"
+method      cs ss = section' (titleize Doc.method_)          cs ss "Method"
 
-result      cs ss = section' (titleize Doc.result)       cs ss "Result"
+summary     cs ss = section' (titleize Doc.summary)          cs ss "Summary"
 
-appendix      cs ss = section' (titleize Doc.appendix)     cs ss "Appendix"
+procForAnls cs ss = section  (titleize Doc.procForAnls)      cs ss AnlsProcLabel
+example     cs ss = section' (titleize Doc.example)          cs ss "Example"
 
-reference   cs ss = section  (titleize' Doc.reference)   cs ss referenceLabel
+result      cs ss = section' (titleize Doc.result)           cs ss "Result"
+
+appendix      cs ss = section' (titleize Doc.appendix)       cs ss "Appendix"
+
+reference   cs ss = section  (titleize' Doc.reference)       cs ss referenceLabel
 
 --function that sets the shortname of each section to be the reference address
 section' :: Sentence -> [Contents] -> [Section] -> String -> Section

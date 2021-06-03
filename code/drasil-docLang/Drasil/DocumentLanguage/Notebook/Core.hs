@@ -19,7 +19,7 @@ data IntroSec = IntroProg Sentence Sentence [IntroSub]
 
 -- | Introduction subsections
 data IntroSub where
-  IPurpose :: [Sentence] -> IntroSub
+  IPurpose :: [Sentence] -> IntroSub -- maybe change to [Contents]
   IScope   :: Sentence -> IntroSub
 
 {--}

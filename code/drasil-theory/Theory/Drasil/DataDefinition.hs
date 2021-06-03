@@ -45,13 +45,13 @@ instance HasReference       DataDefinition where getReferences = ref
 instance Eq                 DataDefinition where a == b = (a ^. uid) == (b ^. uid)
 -- | Finds the derivation of the 'DataDefinition'. May contain Nothing.
 instance HasDerivation      DataDefinition where derivations = deri
--- | Finds any other notes for the 'DataDefinition'.
+-- | Finds any additional notes for the 'DataDefinition'.
 instance HasAdditionalNotes DataDefinition where getNotes = notes
 -- | Finds the units of the 'QDefinition' used to make the 'DataDefinition'.
 instance MayHaveUnit        DataDefinition where getUnit = getUnit . view qd 
 -- | Finds the 'ShortName' of the 'DataDefinition'.
 instance HasShortName       DataDefinition where shortname = lbl
--- | Finds the reference address contained in a 'DataDefinition'.
+-- | Finds the reference address of a 'DataDefinition'.
 instance HasRefAddress      DataDefinition where getRefAdd = ra
 -- | Finds the domain of the 'QDefinition' used to make the 'DataDefinition'.
 instance ConceptDomain      DataDefinition where cdom _ = cdom dataDefn

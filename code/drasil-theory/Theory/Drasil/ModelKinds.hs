@@ -19,11 +19,17 @@ data ModelKinds = EquationalModel QDefinition
 
 makeLenses ''ModelKinds
 
+-- | Finds the 'UID' of the 'QDefinition' or 'RelationConcept' in the 'ModelKinds'.
 instance HasUID             ModelKinds where uid = lensMk uid uid
+-- | Finds the term ('NP') of the 'QDefinition' or 'RelationConcept' in the 'ModelKinds'.
 instance NamedIdea          ModelKinds where term = lensMk term term
+-- | Finds the idea of the 'QDefinition' or 'RelationConcept' contained in the 'ModelKinds'.
 instance Idea               ModelKinds where getA = elimMk (to getA) (to getA)
+-- | Finds the definition of the 'QDefinition' or 'RelationConcept' in the 'ModelKinds'.
 instance Definition         ModelKinds where defn = lensMk defn defn
+-- | Finds the domain of the 'QDefinition' or 'RelationConcept' in the 'ModelKinds'.
 instance ConceptDomain      ModelKinds where cdom = elimMk (to cdom) (to cdom)
+-- | Finds the relation expression for a 'QDefinition' or 'RelationConcept' contained in the 'ModelKinds'.
 instance ExprRelat          ModelKinds where relat = elimMk (to relat) (to relat)
 
 -- | A 'Getter' for extracting 'QDefinition's or 'RelationConcept's from 'ModelKinds'.

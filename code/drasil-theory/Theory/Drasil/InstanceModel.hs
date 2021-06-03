@@ -38,29 +38,48 @@ lensMk lq lr = lens g s
           s :: InstanceModel -> a -> InstanceModel
           s im_ x = set mk (setMk (im_ ^. mk) lq lr x) im_
 
+-- | Finds the 'UID' of an 'InstanceModel'.
 instance HasUID             InstanceModel where uid = lensMk uid uid
+-- | Finds the term ('NP') of the 'InstanceModel'.
 instance NamedIdea          InstanceModel where term = lensMk term term
+-- | Finds the idea contained in the 'InstanceModel'.
 instance Idea               InstanceModel where getA = elimMk (to getA) (to getA) . view mk
+-- | Finds the definition of the 'InstanceModel'.
 instance Definition         InstanceModel where defn = lensMk defn defn
+-- | Finds the domain of the 'InstanceModel'.
 instance ConceptDomain      InstanceModel where cdom = elimMk (to cdom) (to cdom) . view mk
+-- | Finds the relation expression for an 'InstanceModel'.
 instance ExprRelat          InstanceModel where relat = elimMk (to relat) (to relat) . view mk
+-- | Finds the derivation of the 'InstanceModel'. May contain Nothing.
 instance HasDerivation      InstanceModel where derivations = deri
+-- | Finds 'Reference's contained in the 'InstanceModel'.
 instance HasReference       InstanceModel where getReferences = ref
+-- | Finds the 'ShortName' of the 'InstanceModel'.
 instance HasShortName       InstanceModel where shortname = lb
+-- | Finds the reference address of the 'InstanceModel'.
 instance HasRefAddress      InstanceModel where getRefAdd = ra
+-- | Finds any additional notes for the 'InstanceModel'.
 instance HasAdditionalNotes InstanceModel where getNotes = notes
+-- | 'InstanceModel's have an 'Quantity'.
 instance Quantity           InstanceModel where
+-- | Finds the idea of an 'InstanceModel' (abbreviation).
 instance CommonIdea         InstanceModel where abrv _ = abrv inModel
+-- | Finds the reference address of an 'InstanceModel'.
 instance Referable          InstanceModel where
   refAdd      = getRefAdd
   renderRef l = RP (prepend $ abrv l) (getRefAdd l)
+-- | Finds the inputs of an 'InstanceModel'.
 instance HasInputs          InstanceModel where
   inputs          = imInputs
+-- | Finds the outputs and output constraints of an 'InstanceModel'.
 instance HasOutput          InstanceModel where
   output          = imOutput . _1
   out_constraints = imOutput . _2
+-- | Finds the output 'Symbol's of the 'InstanceModel'.
 instance HasSymbol          InstanceModel where symbol = symbol . view output -- ???
+-- | Finds the output 'Space' of the 'InstanceModel'.
 instance HasSpace           InstanceModel where typ = output . typ
+-- | Finds the units of the 'InstanceModel'.
 instance MayHaveUnit        InstanceModel where getUnit = getUnit . view output
 
 -- | Smart constructor for instance models with everything defined.

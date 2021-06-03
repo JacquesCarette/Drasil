@@ -8,7 +8,8 @@ import Data.Drasil.TheoryConcepts (thModel)
 
 import Control.Lens (Lens', view, makeLenses, (^.))
 
--- | Theories are the basis for building models with context, spaces, quantities, operations, invariants, etc.
+-- | Theories are the basis for building models with context,
+-- spaces, quantities, operations, invariants, etc.
 class Theory t where
   valid_context :: Lens' t [TheoryModel]
   spaces        :: Lens' t [SpaceDefn]
@@ -55,13 +56,21 @@ data TheoryModel = TM
   }
 makeLenses ''TheoryModel
 
+-- | Finds the 'UID' of a 'TheoryModel'.
 instance HasUID             TheoryModel where uid = tUid
+-- | Finds the term ('NP') of the 'TheoryModel'.
 instance NamedIdea          TheoryModel where term = con . term
+-- | Finds the idea of the 'ConceptChunk' contained in the 'TheoryModel'.
 instance Idea               TheoryModel where getA = getA . view con
+-- | Finds the definition of the 'ConceptChunk' contained in a 'TheoryModel'.
 instance Definition         TheoryModel where defn = con . defn
+-- | Finds 'Reference's contained in the 'TheoryModel'.
 instance HasReference       TheoryModel where getReferences = ref
+-- | Finds the domain of the 'ConceptChunk' contained in a 'TheoryModel'.
 instance ConceptDomain      TheoryModel where cdom = cdom . view con
+-- | Finds any additional notes for the 'TheoryModel'.
 instance HasAdditionalNotes TheoryModel where getNotes = notes
+-- | Finds the aspects of the 'Theory' behind the 'TheoryModel'.
 instance Theory             TheoryModel where
   valid_context = vctx
   spaces        = spc
@@ -70,9 +79,13 @@ instance Theory             TheoryModel where
   defined_quant = defq
   invariants    = invs
   defined_fun   = dfun
+-- | Finds the 'ShortName' of the 'TheoryModel'.
 instance HasShortName       TheoryModel where shortname = lb
+-- | Finds the reference address of the 'TheoryModel'.
 instance HasRefAddress      TheoryModel where getRefAdd = ra
+-- | Finds the idea of a 'TheoryModel' (abbreviation).
 instance CommonIdea         TheoryModel where abrv _ = abrv thModel
+-- | Finds the reference address of a 'TheoryModel'.
 instance Referable TheoryModel where
   refAdd      = getRefAdd
   renderRef l = RP (prepend $ abrv l) (getRefAdd l)

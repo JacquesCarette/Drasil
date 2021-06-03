@@ -27,19 +27,33 @@ lensMk lq lr = lens g s
           s :: GenDefn -> a -> GenDefn
           s gd_ x = set mk (setMk (gd_ ^. mk) lq lr x) gd_
 
+-- | Finds the 'UID' of a 'GenDefn'.
 instance HasUID             GenDefn where uid = lensMk uid uid
+-- | Finds the term ('NP') of the 'GenDefn'.
 instance NamedIdea          GenDefn where term = lensMk term term
+-- | Finds the idea contained in the 'GenDefn'.
 instance Idea               GenDefn where getA = elimMk (to getA) (to getA) . view mk
+-- | Finds the definition of the 'GenDefn'.
 instance Definition         GenDefn where defn = lensMk defn defn
+-- | Finds the domain of the 'GenDefn'.
 instance ConceptDomain      GenDefn where cdom = elimMk (to cdom) (to cdom) . view mk
+-- | Finds the relation expression for a 'GenDefn'.
 instance ExprRelat          GenDefn where relat = elimMk (to relat) (to relat) . view mk
+-- | Finds the derivation of the 'GenDefn'. May contain Nothing.
 instance HasDerivation      GenDefn where derivations = deri
+-- | Finds 'Reference's contained in the 'GenDefn'.
 instance HasReference       GenDefn where getReferences = ref
+-- | Finds the 'ShortName' of the 'GenDefn'.
 instance HasShortName       GenDefn where shortname = view sn
+-- | Finds the reference address of the 'GenDefn'.
 instance HasRefAddress      GenDefn where getRefAdd = view ra
+-- | Finds any additional notes for the 'GenDefn'.
 instance HasAdditionalNotes GenDefn where getNotes = notes
+-- | Finds the units of the 'GenDefn'.
 instance MayHaveUnit        GenDefn where getUnit = gdUnit
+-- | Finds the idea of a 'GenDefn' (abbreviation).
 instance CommonIdea         GenDefn where abrv _ = abrv genDefn
+-- | Finds the reference address of a 'GenDefn'.
 instance Referable          GenDefn where
   refAdd      = getRefAdd
   renderRef l = RP (prepend $ abrv l) (getRefAdd l)

@@ -16,7 +16,7 @@ doccon = [abbreviation, analysis, appendix, aspect, body, charOfIR, characterist
   customer, datum, datumConstraint, decision, definition, dependency, description,
   design, designDoc, document, documentation, effect, element, emphasis, endUser,
   environment, example, failure, figure, first, form, full, fullForm, functional,
-  functionalRequirement, game, general, generalSystemDescription, goal, guide,
+  functionalRequirement, game, general, generalSystemDescription, goal, guide, horizontalMotion,
   implementation, indPRCase, individual, information, input_, instance_, intReader,
   interest, interface, introduction, issue, item, label, library, limitation,
   literacy, loss, material_, message, method_, model, motion, module_, name_, nonfunctional,
@@ -33,7 +33,7 @@ doccon = [abbreviation, analysis, appendix, aspect, body, charOfIR, characterist
   systemdescription, tOfSymb, tOfUnit, table_, task, template, termAndDef, term_,
   terminology, theory, traceyGraph, traceyMandG, traceyMatrix, type_, uncertCol,
   uncertainty, useCase, useCaseTable, user, userCharacteristic, userInput,
-  validation, value, variable, vav, vavPlan, verification, video, year]
+  validation, value, variable, vav, vavPlan, verticalMotion, verification, video, year]
 
 doccon' :: [CI]
 doccon' = [assumption, dataConst, dataDefn, desSpec, genDefn, goalStmt, inModel,
@@ -239,20 +239,21 @@ scpOfTheProj oper = nc "scpOfTheProj" (scope `ofN_` the'' oper project) -- reaso
 
 -- compounds
 
-designDoc, fullForm, generalSystemDescription, moduleInterface, indPRCase,
+designDoc, fullForm, generalSystemDescription, horizontalMotion, moduleInterface, indPRCase,
   physicalConstraint, physicalSystem, problemDescription, prodUCTable,
   specificsystemdescription, systemdescription, systemConstraint, sysCont,
   userCharacteristic, datumConstraint, functionalRequirement,
   nonfunctionalRequirement, safetyReq, softwareConstraint, softwareDoc,
   softwareReq, softwareSys, softwareVerif, softwareVAV, solutionCharSpec,
   solutionCharacteristic, offShelfSolution, physicalSim, productUC, 
-  useCaseTable, physicalProperty, vavPlan, uncertCol, userInput :: NamedChunk
+  useCaseTable, physicalProperty, vavPlan, verticalMotion, uncertCol, userInput :: NamedChunk
  
 datumConstraint              = compoundNC' datum constraint
 designDoc                    = compoundNC design document
 fullForm                     = compoundNC full form
 functionalRequirement        = compoundNC functional requirement_
 generalSystemDescription     = compoundNC general systemdescription
+horizontalMotion             = compoundNC horizontal motion
 moduleInterface              = compoundNC module_ interface
 indPRCase                    = compoundNC individual productUC
 nonfunctionalRequirement     = compoundNC nonfunctional requirement_
@@ -282,6 +283,7 @@ useCaseTable                 = compoundNC useCase table_
 userCharacteristic           = compoundNC user characteristic
 userInput                    = compoundNC user input_
 vavPlan                      = compoundNC vav plan
+verticalMotion               = compoundNC vertical motion
 
 -- Domains
 

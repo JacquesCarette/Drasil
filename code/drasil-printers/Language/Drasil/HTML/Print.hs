@@ -47,15 +47,30 @@ genHTML :: PrintingInformation -> String -> L.Document -> Doc
 genHTML sm fn doc = build fn (makeDocument sm doc)
 --         ^^ -- should really be of type Filename, but that's not in scope
 
+mathJaxScript :: Doc
+mathJaxScript =
+  vcat [text "<script>",
+   text "MathJax = {",
+   text "  loader: {load: ['[tex]/textmacros', 'output/chtml']},",
+   text "  tex: {",
+   text "    packages: {'[+]': ['textmacros']}",
+   text "  },",
+   text "  svg: {",
+   text "    fontCache: 'global'",
+   text "  }",
+   text "};",
+   text "</script>",
+   text "<script type=\"text/javascript\" id=\"MathJax-script\" async",
+   text " src=\"https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js\">",
+   text "</script>"]
+
 -- | Build the HTML Document, called by genHTML
 build :: String -> Document -> Doc
 build fn (Document t a c) =
   text "<!DOCTYPE html>" $$
   html (headTag (linkCSS fn $$ title (titleSpec t) $$
   text "<meta charset=\"utf-8\">" $$
-  text ("<script type=\"text/javascript\" async " ++
-  "src=\"https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML\">" ++
-  "</script>")) $$
+  mathJaxScript) $$
   body (articleTitle (pSpec t) $$ author (pSpec a)
   $$ print c
   ))

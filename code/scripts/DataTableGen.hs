@@ -126,7 +126,7 @@ output outputFilePath entryData ordClassInsts bakedEntryData = do
   hPutStrLn dataTable entryData
   hClose dataTable
   -- row length needed for lenCheck
-  let rowLength = length (head (separateN bakedEntryData))
+  let rowLength = length (splitOn "," "drasil-,File Path,File Name,Data Type,Newtype Type,Class Definitions" ++ ordClassInsts)
   dataTableHTML <- openFile "DataTable.html" WriteMode
   hPutStrLn dataTableHTML "<!DOCTYPE html>\n<html>\n\t<title>Auto-Generated Data Table for Drasil</title>"
   hPutStrLn dataTableHTML "\t<table border=\"1\" cellspacing=\"0\" cellpadding=\"3\" class=\"dataframe\">"
@@ -139,7 +139,7 @@ output outputFilePath entryData ordClassInsts bakedEntryData = do
 -- | Checks the length of an 'EntryString' to see if it matchs the given length. If not, it will add empty html cells.
 lenCheck :: [EntryString] -> Int -> [EntryString]
 lenCheck [] _ = []
-lenCheck (x:xs) len = (x ++ mkhtmlEmptyCell (len - length x)) : lenCheck xs len
+lenCheck (x:xs) len = (x ++ mkhtmlEmptyCell (len - length (splitOn "," x))) : lenCheck xs len
 
 -- | Separate an 'EntryString' by newspace (used for separating the incoming bakedEntryData in 'output').
 separateN :: [EntryString] -> [EntryString]
@@ -155,7 +155,7 @@ mkhtmlHeader xs = "\t\t<thead>\n" ++ concatMap (\y -> "\t\t\t<th>" ++ y ++ "</th
 
 -- | Fills in the given number of html cells in a row with empty cells.
 mkhtmlEmptyCell :: Int -> String
-mkhtmlEmptyCell num 
+mkhtmlEmptyCell num
   | num <= 0 = ""
   | otherwise = ",\t" ++ mkhtmlEmptyCell (num-1)
 

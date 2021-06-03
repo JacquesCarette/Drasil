@@ -3,7 +3,7 @@ module Database.Drasil.ChunkDB (ChunkDB(defTable), RefbyMap, TraceMap, UMap,
   asOrderedList, cdb, collectUnits, conceptMap, conceptinsLookup,
   conceptinsTable, dataDefnTable, datadefnLookup, defResolve, gendefLookup,
   gendefTable, generateRefbyMap, idMap, insmodelLookup, insmodelTable, -- idMap for docLang
-  labelledconLookup, labelledcontentTable, refbyLookup, refbyTable,
+  labelledconLookup, labelledcontentTable, refbyLookup, refbyTable, refResolve,
   sectionLookup, sectionTable, symbResolve, termResolve, termTable,
   theoryModelLookup, theoryModelTable, traceLookup, traceMap, traceTable) where
 
@@ -54,6 +54,8 @@ type ConceptInstanceMap = UMap ConceptInstance
 type SectionMap = UMap Section
 -- | A map of all 'LabelledContent's.
 type LabelledContentMap = UMap LabelledContent
+-- | A map of all 'Reference's.
+type ReferenceMap = UMap Reference
 
 -- | General chunk database map constructor. Creates a 'UMap' from a function that converts something with 'UID's into another type and a list of something with 'UID's.
 cdbMap :: HasUID a => (a -> b) -> [a] -> Map.Map UID (b, Int)
@@ -70,6 +72,10 @@ termMap = cdbMap nw
 -- | Smart constructor for a 'ConceptMap'.
 conceptMap :: (Concept c) => [c] -> ConceptMap
 conceptMap = cdbMap cw
+
+-- | Smart constructor for a 'ReferenceMap'.
+referenceMap :: (Referable r, HasShortName r) => [r] -> ReferenceMap
+referenceMap = cdbMap rw
 
 -- | Smart constructor for a 'UnitMap'.
 unitMap :: (IsUnit u) => [u] -> UnitMap
@@ -99,6 +105,10 @@ symbResolve m x = uMapLookup "Symbol" "SymbolMap" x $ symbolTable m
 -- | Looks up a 'UID' in the term table from the 'ChunkDB'. If nothing is found, an error is thrown.
 termResolve :: ChunkDB -> UID -> IdeaDict
 termResolve m x = uMapLookup "Term" "TermMap" x $ termTable m
+
+-- | Looks up a 'UID' in the reference table from the 'ChunkDB'. If nothing is found, an error is thrown.
+refResolve :: ChunkDB -> UID -> Reference
+refResolve m x = uMapLookup "Reference" "ReferenceMap" x $ refTable m -- (m ^. refbyTable)
 
 -- | Looks up a 'UID' in the unit table. If nothing is found, an error is thrown.
 unitLookup :: UID -> UnitMap -> UnitDefn
@@ -146,6 +156,7 @@ asOrderedList = map fst . sortOn snd . map snd . Map.toList
 data ChunkDB = CDB { symbolTable :: SymbolMap
                    , termTable :: TermMap 
                    , defTable  :: ConceptMap
+                   , refTable :: ReferenceMap
                    , _unitTable :: UnitMap
                    , _traceTable :: TraceMap
                    , _refbyTable :: RefbyMap
@@ -172,11 +183,11 @@ makeLenses ''ChunkDB
 --     * 'ConceptInstance's (for 'ConceptInstanceMap'),
 --     * 'Section's (for 'SectionMap'),
 --     * 'LabelledContent's (for 'LabelledContentMap').
-cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) =>
-    [q] -> [t] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] ->
+cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, Referable r, HasShortName r, IsUnit u) =>
+    [q] -> [t] -> [c] -> [r] -> [u] -> [DataDefinition] -> [InstanceModel] ->
     [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [Section] ->
     [LabelledContent] -> ChunkDB
-cdb s t c u d ins gd tm ci sect lc = CDB (symbolMap s) (termMap t) (conceptMap c)
+cdb s t c r u d ins gd tm ci sect lc = CDB (symbolMap s) (termMap t) (conceptMap c) (referenceMap r)
   (unitMap u) Map.empty Map.empty (idMap d) (idMap ins) (idMap gd) (idMap tm)
   (idMap ci) (idMap sect) (idMap lc)
 

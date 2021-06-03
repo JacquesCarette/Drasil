@@ -1,5 +1,5 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.RefProg (Reference(Reference, refInfo), RefInfo(..)) where
+module Language.Drasil.RefProg (Reference(Reference, refInfo), RefInfo(..), rw) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
   HasShortName(shortname))
@@ -7,7 +7,7 @@ import Language.Drasil.Label.Type (LblType, getAdd)
 import Language.Drasil.ShortName (ShortName)
 import Language.Drasil.UID (UID)
 
-import Control.Lens (makeLenses)
+import Control.Lens ((^.), makeLenses)
 
 -- | Holds any extra information needed for a 'Reference', be it an equation, pages, a note, or nothing.
 data RefInfo = None
@@ -30,3 +30,11 @@ instance HasUID        Reference where uid = ui
 instance HasRefAddress Reference where getRefAdd = getAdd . ra
 -- | Finds the shortname of the reference address used for the 'Reference'.
 instance HasShortName  Reference where shortname = sn
+
+-- | Smart constructor for making a 'Reference'.
+--rw' :: (Referable r, HasShortName r) => r -> Reference
+--rw' r = Reference (r ^. uid) (r ^. ra) (r ^. shortname) None -- None may be a hack
+
+-- | Smart constructor for making a 'Reference'. Does not need 'Referable'.
+rw :: (HasUID r, HasRefAddress r, HasShortName r) => r -> Reference
+rw r = Reference (r ^. uid) (ra r) (sn r) None -- None may be a hack

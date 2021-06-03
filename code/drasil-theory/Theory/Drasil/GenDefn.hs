@@ -60,12 +60,12 @@ instance Referable          GenDefn where
   refAdd      = getRefAdd
   renderRef l = RP (prepend $ abrv l) (getRefAdd l)
 
--- | Smart constructor for general definitions.
+-- | Smart constructor for general definitions derived from ModelKinds.
 gd :: IsUnit u => ModelKinds -> Maybe u ->
   Maybe Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
 gd mkind = gd' (mkind ^. uid) mkind
 
--- | Smart constructor for general definitions with no references.
+-- | Smart constructor for general definitions with no references, derived from ModelKinds.
 gdNoRefs :: (IsUnit u) => ModelKinds -> Maybe u ->
   Maybe Derivation -> String -> [Sentence] -> GenDefn
 gdNoRefs mkind = gdNoRefs' (mkind ^. uid) mkind

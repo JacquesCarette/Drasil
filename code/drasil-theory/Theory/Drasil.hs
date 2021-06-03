@@ -5,7 +5,9 @@ module Theory.Drasil (
   -- DataDefinition
   , DataDefinition, dd, ddNoRefs, qdFromDD
   -- GenDefn
-  , GenDefn, gd, gdNoRefs, getEqModQdsFromGd
+  , GenDefn
+  , gd, gdNoRefs, gd', gdNoRefs'
+  , getEqModQdsFromGd
   -- ModelKinds
   , ModelKinds(..), getEqModQds
   -- InstanceModel

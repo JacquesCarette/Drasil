@@ -390,7 +390,11 @@ bodyRefs = rw astm2009 : map rw [SRS.reference ([]::[Contents]) ([]::[Section]),
   SRS.assumpt ([]::[Contents]) ([]::[Section])] ++
   map rw [sysCtxFig, demandVsSDFig, dimlessloadVsARFig]
   ++ map rw concIns ++ map rw section ++ map rw labCon
+  ++ map (rw.makeTabRef) tabRefUIDs
   -- ++ map rw [traceMatStandard si]
+
+tabRefUIDs :: [String]
+tabRefUIDs = ["TraceMatAvsA", "TraceMatAvsAll", "TraceMatRefvsRef", "TraceMatAllvsR", "ReqInputs", "InDataConstraints", "OutDataConstraints", "TAuxConsts", "TAbbAcc", "ToS", "ToU"]
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ dataDefRefs ++ iModRefs ++ citeRefs ++ reqRefs ++ unitalRefs)

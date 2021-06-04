@@ -124,7 +124,7 @@ helpToRefField t si
 -- | Helper that makes a list of 'Reference's into a 'Sentence'. Then wraps into 'Contents'.
 helperSources :: [Reference] -> [Contents]
 helperSources [] = [mkParagraph $ S "--"]
-helperSources x  = [mkParagraph $ foldlList Comma List $ map Ref x]
+helperSources xs  = [mkParagraph $ foldlList Comma List $ map (Ref . (^. uid)) xs]
 
 -- | Creates the fields for a definition from a 'QDefinition' (used by 'ddefn').
 mkDDField :: DataDefinition -> SystemInformation -> Field -> ModRow -> ModRow

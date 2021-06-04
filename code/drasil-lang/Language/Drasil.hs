@@ -108,7 +108,7 @@ module Language.Drasil (
   -- Sentence.Extract
   , sdep, shortdep
   -- RefProg
-  , Reference(..), RefInfo(..)
+  , Reference(..), RefInfo(..), rw
   -- NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
   , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase'
@@ -282,7 +282,7 @@ import Language.Drasil.Misc -- all of it
 import Language.Drasil.People (People, Person, person, HasName(..),
   person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'', comparePeople)
-import Language.Drasil.RefProg (Reference(..), RefInfo(..))
+import Language.Drasil.RefProg (Reference(..), RefInfo(..), rw)
 import Language.Drasil.Label.Type (getAdd, LblType(RP, Citation, URI), IRefProg(..), prepend)
 
 import Language.Drasil.UnitLang (USymb(US))

@@ -74,7 +74,7 @@ conceptMap :: (Concept c) => [c] -> ConceptMap
 conceptMap = cdbMap cw
 
 -- | Smart constructor for a 'ReferenceMap'.
-referenceMap :: (Referable r, HasShortName r) => [r] -> ReferenceMap
+referenceMap :: (HasUID r, HasRefAddress r, HasShortName r) => [r] -> ReferenceMap
 referenceMap = cdbMap rw
 
 -- | Smart constructor for a 'UnitMap'.
@@ -183,7 +183,7 @@ makeLenses ''ChunkDB
 --     * 'ConceptInstance's (for 'ConceptInstanceMap'),
 --     * 'Section's (for 'SectionMap'),
 --     * 'LabelledContent's (for 'LabelledContentMap').
-cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, Referable r, HasShortName r, IsUnit u) =>
+cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, HasUID r, HasRefAddress r, HasShortName r, IsUnit u) =>
     [q] -> [t] -> [c] -> [r] -> [u] -> [DataDefinition] -> [InstanceModel] ->
     [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [Section] ->
     [LabelledContent] -> ChunkDB

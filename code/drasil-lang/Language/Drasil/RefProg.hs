@@ -3,7 +3,7 @@ module Language.Drasil.RefProg (Reference(Reference, refInfo), RefInfo(..), rw) 
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
   HasShortName(shortname))
-import Language.Drasil.Label.Type (LblType, getAdd)
+import Language.Drasil.Label.Type (LblType(..), getAdd, defer)
 import Language.Drasil.ShortName (ShortName)
 import Language.Drasil.UID (UID)
 
@@ -35,6 +35,6 @@ instance HasShortName  Reference where shortname = sn
 --rw' :: (Referable r, HasShortName r) => r -> Reference
 --rw' r = Reference (r ^. uid) (r ^. ra) (r ^. shortname) None -- None may be a hack
 
--- | Smart constructor for making a 'Reference'. Does not need 'Referable'.
+-- | Smart constructor for making a 'Reference'. Does not need to be 'Referable'. Defers 'LblType' lookup.
 rw :: (HasUID r, HasRefAddress r, HasShortName r) => r -> Reference
-rw r = Reference (r ^. uid) (ra r) (sn r) None -- None may be a hack
+rw r = Reference (r ^. uid) (RP (defer (r ^. uid)) (getRefAdd r)) (shortname r) None -- None and the defer bit may be a hack

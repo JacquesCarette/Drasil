@@ -133,6 +133,12 @@ portable = cic "portable" (foldlSent [
 
 -- References --
 reqRefs :: [Reference]
-reqRefs = map rw [sysSetValsFollowingAssumpsTable, outputValuesTable] ++ map rw [datCon ([]::[Contents]) ([]::[Section]), (propCorSol [] [])]
-  ++ map rw [(inReq EmptyS), sysSetValsFollowingAssumps] ++ map rw [pbIsSafe, lrIsSafe]
+reqRefs = map rw funcReqsTables --[sysSetValsFollowingAssumpsTable, outputValuesTable] 
+  ++ map rw [datCon ([]::[Contents]) ([]::[Section]), (propCorSol [] [])]
+  ++ map rw ([(inReq EmptyS)] ++ funcReqs ++ nonfuncReqs) ++ map rw [pbIsSafe, lrIsSafe]
+  -- ++ map rw (qw loadSF   : map qw (take 4 assumptionConstants))
+  -- ++ map (rw.qw) (assumpGL : replicate 4 assumpSV)
+  ++ map rw [loadDF, hFromt, glaTyFac, standOffDis, aspRat]
+  ++ map rw [risk, strDisFac, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac, hFromt, aspRat]
+  -- ++ map rw []
   

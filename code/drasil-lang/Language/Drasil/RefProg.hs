@@ -24,6 +24,8 @@ data Reference = Reference
   ,  refInfo :: RefInfo }
 makeLenses ''Reference
 
+-- | Equal if 'UID's are equal.
+instance Eq            Reference where a == b = (a ^. uid) == (b ^. uid)
 -- | Finds the 'UID' of a 'Reference'.
 instance HasUID        Reference where uid = ui
 -- | Finds the reference address contained in a 'Reference' (through a 'LblType').

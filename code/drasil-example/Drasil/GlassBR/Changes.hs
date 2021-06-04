@@ -78,4 +78,4 @@ accAlteredGlassDesc = foldlSent [makeRef2S assumpGC, S "requires that the", phra
 
 -- References --
 chgRefs :: [Reference]
-chgRefs = map rw [assumpSV, assumpGC]
+chgRefs = map rw [assumpSV, assumpGC] ++ map rw (likelyChgs ++ unlikelyChgs)

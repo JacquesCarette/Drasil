@@ -59,14 +59,14 @@ import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.Figures
 import Drasil.GlassBR.Goals (goals)
 import Drasil.GlassBR.IMods (symb, iMods, instModIntro, iModRefs)
-import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations, rbrtsn2012)
+import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations, rbrtsn2012, citeRefs)
 import Drasil.GlassBR.Requirements (funcReqs, inReqDesc, funcReqsTables, nonfuncReqs, reqRefs)
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   constrained, inputDataConstraints, inputs, outputs, specParamVals, glassTy,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
-  sD, termsWithAccDefn, termsWithDefsOnly, terms)
+  sD, termsWithAccDefn, termsWithDefsOnly, terms, unitalRefs)
 
 srs :: Document
 srs = mkDoc mkSRS  (S.forGen titleize phrase) si
@@ -389,6 +389,8 @@ bodyRefs :: [Reference]
 bodyRefs = rw astm2009 : map rw [SRS.reference ([]::[Contents]) ([]::[Section]), 
   SRS.assumpt ([]::[Contents]) ([]::[Section])] ++
   map rw [sysCtxFig, demandVsSDFig, dimlessloadVsARFig]
+  ++ map rw concIns ++ map rw section ++ map rw labCon
+  -- ++ map rw [traceMatStandard si]
 
 allRefs :: [Reference]
-allRefs = (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ dataDefRefs ++ iModRefs ++ reqRefs)
+allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ dataDefRefs ++ iModRefs ++ citeRefs ++ reqRefs ++ unitalRefs)

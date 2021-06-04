@@ -442,3 +442,7 @@ glassThickness =
 --Below are present in this file temporarily--
 lateralLoad :: NamedChunk
 lateralLoad  = compoundNC lateral load
+
+-- References --
+unitalRefs :: [Reference]
+unitalRefs = []

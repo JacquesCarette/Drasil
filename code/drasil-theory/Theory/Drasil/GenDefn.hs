@@ -1,5 +1,6 @@
 {-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables  #-}
-module Theory.Drasil.GenDefn (GenDefn, gd, gdNoRefs, getEqModQdsFromGd) where
+module Theory.Drasil.GenDefn (GenDefn,
+  gd, gdNoRefs, gd', gdNoRefs', getEqModQdsFromGd) where
 
 import Language.Drasil
 import Data.Drasil.TheoryConcepts (genDefn)
@@ -9,7 +10,8 @@ import Control.Lens (makeLenses, view, lens, (^.), set, Lens', to)
 
 -- | A general definition is a 'ModelKind' that may have units, a derivation,
 -- references, a shortname, a reference address, and notes.
-data GenDefn = GD { _mk :: ModelKinds
+data GenDefn = GD { _gUid  :: UID
+                  , _mk    :: ModelKinds
                   , gdUnit :: Maybe UnitDefn                  
                   , _deri  :: Maybe Derivation
                   , _ref   :: [Reference]
@@ -28,7 +30,7 @@ lensMk lq lr = lens g s
           s gd_ x = set mk (setMk (gd_ ^. mk) lq lr x) gd_
 
 -- | Finds the 'UID' of a 'GenDefn'.
-instance HasUID             GenDefn where uid = lensMk uid uid
+instance HasUID             GenDefn where uid = gUid
 -- | Finds the term ('NP') of the 'GenDefn'.
 instance NamedIdea          GenDefn where term = lensMk term term
 -- | Finds the idea contained in the 'GenDefn'.
@@ -58,19 +60,29 @@ instance Referable          GenDefn where
   refAdd      = getRefAdd
   renderRef l = RP (prepend $ abrv l) (getRefAdd l)
 
--- | Smart constructor for general definitions.
-gd :: (IsUnit u) => ModelKinds -> Maybe u ->
+-- | Smart constructor for general definitions derived from ModelKinds.
+gd :: IsUnit u => ModelKinds -> Maybe u ->
   Maybe Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
-gd mkind _   _     []   _  = error $ "Source field of " ++ mkind ^. uid ++ " is empty"
-gd mkind u derivs refs sn_ = 
-  GD mkind (fmap unitWrapper u) derivs refs (shortname' sn_) (prependAbrv genDefn sn_)
+gd mkind = gd' (mkind ^. uid) mkind
 
--- | Smart constructor for general definitions with no references.
+-- | Smart constructor for general definitions with no references, derived from ModelKinds.
 gdNoRefs :: (IsUnit u) => ModelKinds -> Maybe u ->
   Maybe Derivation -> String -> [Sentence] -> GenDefn
-gdNoRefs mkind u derivs sn_ = 
-  GD mkind (fmap unitWrapper u) derivs [] (shortname' sn_) (prependAbrv genDefn sn_)
+gdNoRefs mkind = gdNoRefs' (mkind ^. uid) mkind
+
+-- | Smart constructor for general definitions.
+gd' :: IsUnit u => UID -> ModelKinds -> Maybe u ->
+  Maybe Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
+gd' gid _     _   _     []   _  = error $ "Source field of " ++ gid ++ " is empty"
+gd' gid mkind u derivs refs sn_ = 
+  GD gid mkind (fmap unitWrapper u) derivs refs (shortname' sn_) (prependAbrv genDefn sn_)
+
+-- | Smart constructor for general definitions with no references.
+gdNoRefs' :: IsUnit u => UID -> ModelKinds -> Maybe u ->
+  Maybe Derivation -> String -> [Sentence] -> GenDefn
+gdNoRefs' gid mkind u derivs sn_ = 
+  GD gid mkind (fmap unitWrapper u) derivs [] (shortname' sn_) (prependAbrv genDefn sn_)
 
 -- | Grab all related 'QDefinitions' from a list of general definitions.
 getEqModQdsFromGd :: [GenDefn] -> [QDefinition]
-getEqModQdsFromGd gdefns = getEqModQds (map _mk gdefns)
+getEqModQdsFromGd = getEqModQds . map _mk

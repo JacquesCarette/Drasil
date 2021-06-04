@@ -2,9 +2,11 @@
 module Drasil.SSP.TMods (tMods, factOfSafety, equilibrium, mcShrStrgth, effStress) 
   where
 
+import Control.Lens ((^.))
 import Prelude hiding (tan)
+
 import Language.Drasil
-import Theory.Drasil (TheoryModel, tm, ModelKinds(EquationalModel, OthModel))
+import Theory.Drasil (TheoryModel, tm, tm', ModelKinds(EquationalModel, OthModel))
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -68,18 +70,18 @@ eqDesc = foldlSent [S "For a body in static equilibrium, the net",
 --
 ------------- New Chunk -----------
 mcShrStrgth :: TheoryModel
-mcShrStrgth = tm (OthModel mcShrStrgthRC)
+mcShrStrgth = tm' "mcShrSrgth" (EquationalModel mcShrStrgthQD)
   [qw shrStress, qw effNormStress, qw fricAngle, qw effCohesion] 
   ([] :: [ConceptChunk])
-  [] [mcShrStrgthRel] [] [makeCite fredlund1977] "mcShrStrgth" [mcShrStrgthDesc]
+  [] [relat mcShrStrgthQD] [] [makeCite fredlund1977] "mcShrStrgth" [mcShrStrgthDesc]
 
 ------------------------------------
-mcShrStrgthRC :: RelationConcept
-mcShrStrgthRC = makeRC "mcShrStrgthRC" (nounPhraseSP "Mohr-Coulumb shear strength")
-  mcShrStrgthDesc mcShrStrgthRel
+mcShrStrgthQD :: QDefinition
+mcShrStrgthQD = fromEqnSt' (shrStress ^. uid) (nounPhraseSP "Mohr-Coulumb shear strength")
+ mcShrStrgthDesc (symbol shrStress) Real mcShrStrgthExpr
 
-mcShrStrgthRel :: Relation
-mcShrStrgthRel = sy shrStress $= (sy effNormStress `mulRe` tan (sy fricAngle) `addRe` sy effCohesion)
+mcShrStrgthExpr :: Expr
+mcShrStrgthExpr = sy effNormStress `mulRe` tan (sy fricAngle) `addRe` sy effCohesion
 
 mcShrStrgthDesc :: Sentence
 mcShrStrgthDesc = foldlSent [S "In this", phrase model, S "the",
@@ -98,18 +100,18 @@ mcShrStrgthDesc = foldlSent [S "In this", phrase model, S "the",
 --
 ------------- New Chunk -----------
 effStress :: TheoryModel
-effStress = tm (OthModel effStressRC)
+effStress = tm' "effectiveStressTM" (EquationalModel effStressQD)
   [qw effectiveStress, qw totNormStress, qw porePressure] 
   ([] :: [ConceptChunk])
-  [] [effStressRel] [] [makeCite fredlund1977] "effStress" [effStressDesc]
+  [] [relat effStressQD] [] [makeCite fredlund1977] "effStress" [effStressDesc]
 
 ------------------------------------
-effStressRC :: RelationConcept
-effStressRC = makeRC "effStressRC"
-  (nounPhraseSP "effective stress") effStressDesc effStressRel -- l4
+effStressQD :: QDefinition
+effStressQD = fromEqnSt' (effectiveStress ^. uid) (nounPhraseSP "effective stress")
+ effStressDesc (symbol effectiveStress) Real effStressExpr
 
-effStressRel :: Relation
-effStressRel = sy effectiveStress $= sy totNormStress $- sy porePressure
+effStressExpr :: Expr
+effStressExpr = sy totNormStress $- sy porePressure
 
 effStressDesc :: Sentence
 effStressDesc = (totNormStress `definedIn'''` normStressDD !.)

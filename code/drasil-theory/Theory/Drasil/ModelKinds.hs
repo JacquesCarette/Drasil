@@ -12,7 +12,9 @@ import Language.Drasil (($=), sy, Expr, RelationConcept,
   NamedIdea(..), HasUID(..), ExprRelat(..), ConceptDomain(..), Definition(..),
   Idea(..), DefiningExpr(..), UID, Sentence, QDefinition, QuantityDict)
 
--- | 'RealmVariant's
+-- | 'RealmVariant's are partial components of QDefinitions, containing only
+--   the defining expressions and descriptions.
+--   Any 'RealmVariant' paired with a 'QuantityDict' will form a "whole" 'QDefinition'.
 data RealmVariant = RV {
   _cd   :: [UID],
   _desc :: Sentence,

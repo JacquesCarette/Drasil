@@ -7,9 +7,11 @@ import qualified Data.Drasil.Quantities.Physics QP (ixVel, iyVel)
 import Language.Drasil
 import Utils.Drasil
 
-import qualified Drasil.ProjectileLesson.Expressions as E (rectVel, rectPos, rectNoTime)
+import qualified Drasil.Projectile.Expressions as E (speed', scalarPos', rectNoTime)
 
 -- ****ADD figure
+-- Note: define a combinator to avoid repetition.
+-- grab embedded symbols from Drasil
 
 motionContextP1, motionContextP2 :: Contents
 motionContextP1
@@ -33,8 +35,8 @@ horMotion = NB.horizontalMotion [intro, equations, concl] []
                   S "and equal to zero. This value can be substituted in the equations for constant",
                   S "acceleration given above to yield the following:"]
         equations = foldlSP_ [
-                  S "From Equation", makeRef2S E.rectVel, 
-                  S "From Equation", makeRef2S E.rectPos,
+                  S "From Equation", makeRef2S E.speed', 
+                  S "From Equation", makeRef2S E.scalarPos',
                   S "From Equation", makeRef2S E.rectNoTime]
         concl = foldlSP_ [
                   S "Since the acceleration in the x direction is zero, ",
@@ -47,8 +49,8 @@ verMotion = NB.verticalMotion [intro, equations, concl] []
                   S "This value can be substituted in the equations for constant",
                   S "acceleration given above to yield the following:"]
         equations = foldlSP_ [
-                  S "From Equation", makeRef2S E.rectVel, 
-                  S "From Equation", makeRef2S E.rectPos,
+                  S "From Equation", makeRef2S E.speed', 
+                  S "From Equation", makeRef2S E.scalarPos',
                   S "From Equation", makeRef2S E.rectNoTime]
         concl = foldlSP_ [
                   S "Recall that the last equation can be formulated on the basis of eliminating the time t ",

@@ -5,6 +5,7 @@ module Theory.Drasil.GenDefn (GenDefn,
 import Language.Drasil
 import Data.Drasil.TheoryConcepts (genDefn)
 import Theory.Drasil.ModelKinds (ModelKinds(..), elimMk, setMk, getEqModQds)
+import Theory.Drasil.Realms
 
 import Control.Lens (makeLenses, view, lens, (^.), set, Lens')
 
@@ -22,7 +23,7 @@ data GenDefn = GD { _gUid  :: UID
 makeLenses ''GenDefn
 
 -- | Make 'Lens' for a 'GenDefn' based on its 'ModelKinds'.
-lensMk :: forall a. Lens' QDefinition a -> Lens' QuantityDict a -> Lens' RelationConcept a -> Lens' GenDefn a
+lensMk :: forall a. Lens' QDefinition a -> Lens' Realm a -> Lens' RelationConcept a -> Lens' GenDefn a
 lensMk lq lqd lr = lens g s
     where g :: GenDefn -> a
           g gd_ = elimMk lq lqd lr (gd_ ^. mk)
@@ -36,13 +37,13 @@ instance NamedIdea          GenDefn where term          = lensMk term term term
 -- | Finds the idea contained in the 'GenDefn'.
 instance Idea               GenDefn where getA          = getA . (^. mk)
 -- | Finds the definition of the 'GenDefn'.
-instance Definition         GenDefn where defn          = lensMk defn undefined defn
+instance Definition         GenDefn where defn          = lensMk defn defn defn
 -- | Finds the domain of the 'GenDefn'.
 instance ConceptDomain      GenDefn where cdom          = cdom . (^. mk)
 -- | Finds the relation expression for a 'GenDefn'.
 instance ExprRelat          GenDefn where relat         = relat . (^. mk)
 -- | Finds the defining expression for a 'GenDefn'.
-instance DefiningExpr       GenDefn where defnExpr      = lensMk defnExpr undefined defnExpr
+instance DefiningExpr       GenDefn where defnExpr      = lensMk defnExpr undefined defnExpr -- TODO: Defining expression of an EquationalRealm?
 -- | Finds the derivation of the 'GenDefn'. May contain Nothing.
 instance HasDerivation      GenDefn where derivations   = deri
 -- | Finds 'Reference's contained in the 'GenDefn'.

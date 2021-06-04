@@ -8,9 +8,11 @@ module Theory.Drasil (
   , GenDefn
   , gd, gdNoRefs, gd', gdNoRefs'
   , getEqModQdsFromGd
+  -- Realms
+  , Realm, RealmVariant
+  , mkRealm, mkRealmForQuant, mkRealmVariant
   -- ModelKinds
   , ModelKinds(..), getEqModQds
-  , RealmVariant(..)
   -- InstanceModel
   , InstanceModel
   , im, imNoDeriv, imNoRefs, imNoDerivNoRefs
@@ -24,4 +26,5 @@ import Theory.Drasil.DataDefinition (DataDefinition, dd, ddNoRefs, qdFromDD)
 import Theory.Drasil.GenDefn
 import Theory.Drasil.ModelKinds
 import Theory.Drasil.InstanceModel
+import Theory.Drasil.Realms
 import Theory.Drasil.Theory

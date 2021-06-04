@@ -4,7 +4,7 @@ module Drasil.GamePhysics.TMods (tMods, newtonSL, newtonSLR, newtonTL, newtonLUG
 import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
-import Theory.Drasil (tmNoRefs, tmNoRefs', ModelKinds(..), RealmVariant(..), TheoryModel)
+import Theory.Drasil
 import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 
@@ -48,9 +48,9 @@ newtonTLNote = foldlSent [(S "Every action has an equal and opposite reaction" !
 
 -- FIXME: Missing ConceptDomain!
 newtonLUGModel :: ModelKinds
-newtonLUGModel = EquationalRealm newtonForceQuant $ NE.fromList [
-    RV [] EmptyS (sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/ square (sy dispNorm)) `mulRe` sy dVect),
-    RV [] EmptyS (sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/ square (sy dispNorm)) `mulRe` (sy distMass $/ sy dispNorm))
+newtonLUGModel = EquationalRealm $ mkRealmForQuant newtonForceQuant EmptyS $ NE.fromList [
+    mkRealmVariant [] EmptyS (sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/ square (sy dispNorm)) `mulRe` sy dVect),
+    mkRealmVariant [] EmptyS (sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/ square (sy dispNorm)) `mulRe` (sy distMass $/ sy dispNorm))
   ]
 
 newtonLUG :: TheoryModel

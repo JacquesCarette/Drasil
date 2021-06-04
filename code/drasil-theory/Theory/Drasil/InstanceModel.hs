@@ -11,6 +11,7 @@ import Data.Drasil.TheoryConcepts (inModel)
 
 import Control.Lens (set, (^.), lens, view, makeLenses, Lens', _1, _2) 
 import Theory.Drasil.ModelKinds (ModelKinds(..), elimMk, setMk, getEqModQds)
+import Theory.Drasil.Realms
 
 type Input = (QuantityDict, Maybe (RealInterval Expr Expr))
 type Inputs = [Input]
@@ -31,7 +32,7 @@ data InstanceModel = IM { _mk :: ModelKinds
 makeLenses ''InstanceModel
 
 -- | Make 'Lens' for an 'InstanceModel' based on its 'ModelKinds'.
-lensMk :: forall a. Lens' QDefinition a -> Lens' QuantityDict a -> Lens' RelationConcept a -> Lens' InstanceModel a
+lensMk :: forall a. Lens' QDefinition a -> Lens' Realm a -> Lens' RelationConcept a -> Lens' InstanceModel a
 lensMk lq lqd lr = lens g s
     where g :: InstanceModel -> a
           g im_ = elimMk lq lqd lr (im_ ^. mk)
@@ -45,7 +46,7 @@ instance NamedIdea          InstanceModel where term = lensMk term term term
 -- | Finds the idea contained in the 'InstanceModel'.
 instance Idea               InstanceModel where getA = getA . (^. mk)
 -- | Finds the definition of the 'InstanceModel'.
-instance Definition         InstanceModel where defn = lensMk defn undefined defn
+instance Definition         InstanceModel where defn = lensMk defn defn defn
 -- | Finds the domain of the 'InstanceModel'.
 instance ConceptDomain      InstanceModel where cdom = cdom . (^. mk)
 -- | Finds the relation expression for an 'InstanceModel'.

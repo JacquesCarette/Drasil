@@ -45,15 +45,15 @@ si = SI {
 
 symbMap :: ChunkDB
 symbMap = cdb ([] :: [QuantityDict]) [nw example] ([] :: [ConceptChunk])
-  ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
-  ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
-  ([] :: [Section]) ([] :: [LabelledContent])
+  ([] :: [Reference]) ([] :: [UnitDefn]) ([] :: [DataDefinition])
+  ([] :: [InstanceModel]) ([] :: [GenDefn]) ([] :: [TheoryModel])
+  ([] :: [ConceptInstance]) ([] :: [Section]) ([] :: [LabelledContent])
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
-  ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
-  ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
-  ([] :: [Section]) ([] :: [LabelledContent])
+  ([] :: [Reference]) ([] :: [UnitDefn]) ([] :: [DataDefinition])
+  ([] :: [InstanceModel]) ([] :: [GenDefn]) ([] :: [TheoryModel])
+  ([] :: [ConceptInstance]) ([] :: [Section]) ([] :: [LabelledContent])
 
 refDB :: ReferenceDB
 refDB = rdb [] []

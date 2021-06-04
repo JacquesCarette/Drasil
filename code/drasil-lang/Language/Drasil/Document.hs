@@ -2,7 +2,7 @@
 -- | Document Description Language
 module Language.Drasil.Document where
 
-import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname), getRefAdd)
+import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname), getRefAdd, HasRefAddress(getRefAdd))
 import Language.Drasil.Classes (Referable(refAdd, renderRef))
 import Language.Drasil.Document.Core
 import Language.Drasil.Label.Type (prepend, LblType(RP, URI),raw, (+::+), name)
@@ -36,6 +36,8 @@ instance HasShortName  Section where shortname = shortname . view lab
 instance Referable Section where
   refAdd    (Section _ _ lb ) = getRefAdd lb
   renderRef (Section _ _ lb)  = RP (raw "Section: " +::+ name) (getRefAdd lb)
+-- | Finds the reference address of a 'Section'.
+instance HasRefAddress Section where getRefAdd = getRefAdd . (view lab)
 
 -- | A Document has a Title ('Sentence'), Author(s) ('Sentence'), and 'Section's
 -- which hold the contents of the document.

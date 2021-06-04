@@ -2,6 +2,7 @@
 module Drasil.GlassBR.Body where
 
 import Control.Lens ((^.))
+import Data.List (nub)
 import Language.Drasil hiding (Symbol(..), organization, section)
 import Language.Drasil.Code (relToQD)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
@@ -49,17 +50,17 @@ import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
 import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second, fundamentals,
   derived)
 
-import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
-import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
+import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions, assumpRefs)
+import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs, chgRefs)
 import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab, glassBR, 
   ptOfExplsn, con, con', glass)
-import Drasil.GlassBR.DataDefs (qDefns, configFp)
+import Drasil.GlassBR.DataDefs (qDefns, configFp, dataDefRefs)
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.Figures
 import Drasil.GlassBR.Goals (goals)
-import Drasil.GlassBR.IMods (symb, iMods, instModIntro)
+import Drasil.GlassBR.IMods (symb, iMods, instModIntro, iModRefs)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations, rbrtsn2012)
-import Drasil.GlassBR.Requirements (funcReqs, inReqDesc, funcReqsTables, nonfuncReqs)
+import Drasil.GlassBR.Requirements (funcReqs, inReqDesc, funcReqsTables, nonfuncReqs, reqRefs)
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
 import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
@@ -146,7 +147,7 @@ symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw con
   ++ map nw softwarecon ++ map nw terms ++ [nw lateralLoad, nw materialProprty]
    ++ [nw distance, nw algorithm] ++
   map nw fundamentals ++ map nw derived ++ map nw physicalcon)
-  (map cw symb ++ terms ++ Doc.srsDomains) ([] :: [Reference]) (map unitWrapper [metre, second, kilogram]
+  (map cw symb ++ terms ++ Doc.srsDomains) (allRefs) (map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]) GB.dataDefs iMods [] tMods concIns section
   labCon
 
@@ -382,3 +383,12 @@ appdxIntro = foldlSP [
 blstRskInvWGlassSlab :: Sentence
 blstRskInvWGlassSlab = phrase blastRisk +:+ S "involved with the" +:+
   phrase glaSlab
+
+-- References --
+bodyRefs :: [Reference]
+bodyRefs = rw astm2009 : map rw [SRS.reference ([]::[Contents]) ([]::[Section]), 
+  SRS.assumpt ([]::[Contents]) ([]::[Section])] ++
+  map rw [sysCtxFig, demandVsSDFig, dimlessloadVsARFig]
+
+allRefs :: [Reference]
+allRefs = (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ dataDefRefs ++ iModRefs ++ reqRefs)

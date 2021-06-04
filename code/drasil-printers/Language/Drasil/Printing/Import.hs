@@ -362,8 +362,8 @@ pUnit (US ls) = formatu t b
     powu (n,p) = P.Row [symbol n, P.Sup $ P.Int p]
 
 renderShortName :: ChunkDB -> IRefProg -> ShortName -> Sentence
-renderShortName ctx (Deferred u) _ = S $ fromMaybe (error "Domain has no abbreviation.") $
-  getA $ defResolve ctx u
+renderShortName ctx (Deferred u) _ = S $ --fromMaybe (error "Reference has no abbreviation.") $
+  getRefAdd $ refResolve ctx u
 renderShortName ctx (RConcat a b) sn = renderShortName ctx a sn :+: renderShortName ctx b sn
 renderShortName _ (RS s) _ = S s
 renderShortName _ Name sn = S $ getStringSN sn

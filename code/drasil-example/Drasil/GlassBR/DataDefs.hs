@@ -1,6 +1,6 @@
 module Drasil.GlassBR.DataDefs (aspRat, dataDefs, dimLL, qDefns, glaTyFac,
   hFromt, loadDF, nonFL, risk, standOffDis, strDisFac, tolPre, tolStrDisFac,
-  eqTNTWDD, probOfBreak, calofCapacity, calofDemand, pbTolUsr, qRef,configFp)
+  eqTNTWDD, probOfBreak, calofCapacity, calofDemand, pbTolUsr, qRef,configFp, dataDefRefs)
   where
 
 import Control.Lens ((^.))
@@ -301,3 +301,7 @@ stdVals s = foldlList Comma List (map ch s) +:+ sent +:+. makeRef2S assumpSV
   where sent = case s of [ ]   -> error "stdVals needs quantities"
                          [_]   -> S "comes from"
                          (_:_) -> S "come from"
+
+-- References --
+dataDefRefs :: [Reference]
+dataDefRefs = rw assumpSV : map rw [dimlessloadVsARFig, demandVsSDFig] ++ map rw [calofDemand, standOffDis, eqTNTWDD]

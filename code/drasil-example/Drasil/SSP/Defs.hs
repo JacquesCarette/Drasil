@@ -61,13 +61,13 @@ ssa = compoundNC slope stabAnalysis
 effFandS, slpSrf, crtSlpSrf, plnStrn, fsConcept, waterTable :: ConceptChunk
 effFandS = dccWDS "effective forces and stresses" 
   (cn "effective forces and stresses") 
-  (S "The" +:+ phrase normForce `S.or_` phrase nrmStrss +:+
+  (atStartNP (the normForce) `S.or_` phrase nrmStrss +:+
   S "carried by the" +:+ phrase soil +:+ S "skeleton" `sC`
   S "composed of the effective" +:+ phrase force `S.or_` phrase stress `S.andThe`
   phrase force `S.or_` phrase stress +:+ S "exerted by water")
 
-slpSrf = dccWDS "slip surface" (cn' "slip surface") (S "A" +:+
-  phrase surface +:+ S "within a" +:+ phrase slope +:+ S "that has the" +:+
+slpSrf = dccWDS "slip surface" (cn' "slip surface")
+  (atStartNP (a_ surface) +:+ S "within a" +:+ phrase slope +:+ S "that has the" +:+
   S "potential to fail or displace due to load or other" +:+ plural force)
 
 --FIXME: move to Concepts/soldMechanics.hs? They are too specific though
@@ -82,13 +82,13 @@ plnStrn = dccWDS "plane strain" (cn' "plane strain")
   S "dominant" +:+ phrase dimension +:+ S "can be approximated as zero")
 
 crtSlpSrf = dccWDS "critical slip surface" (cn' "critical slip surface") 
-  (atStart slpSrf +:+ S "of the" +:+ phrase slope +:+
+  (atStartNP (slpSrf `ofThe` slope) +:+
   S "that has the lowest" +:+ phrase fsConcept `sC`
   S "and is therefore most likely to experience failure")
 
 fsConcept = dccWDS "FS" factorOfSafety
-  (S "The global stability metric of a" +:+ phrase slpSrf +:+ S "of a" +:+
-  phrase slope `sC` S "defined as the ratio of" +:+ phrase shearRes +:+ 
+  (S "The global stability metric" `S.ofA` phraseNP (slpSrf `ofA` slope) `sC` 
+  S "defined as the ratio of" +:+ phrase shearRes +:+ 
   S "to" +:+ phrase mobShear)
 -- OLD DEFN: Stability metric. How likely a slip surface is to
 -- experience failure through slipping.

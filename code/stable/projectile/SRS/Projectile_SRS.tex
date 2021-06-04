@@ -123,6 +123,8 @@ ${{v_{\text{y}}}^{\text{i}}}$ & $y$-component of initial velocity & $\frac{\text
 \\
 $\mathbf{v}$ & Velocity & $\frac{\text{m}}{\text{s}}$
 \\
+$\mathbf{v}\text{(}t\text{)}$ & 1D speed & $\frac{\text{m}}{\text{s}}$
+\\
 ${\mathbf{v}^{\text{i}}}$ & Initial velocity & $\frac{\text{m}}{\text{s}}$
 \\
 $ε$ & Hit tolerance & --
@@ -330,11 +332,11 @@ Units & $\frac{\text{m}}{\text{s}}$
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           v={v^{\text{i}}}+{a^{c}} t
+           \mathbf{v}\text{(}t\text{)}={v^{\text{i}}}+{a^{c}} t
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$v$ is the speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{$\mathbf{v}\text{(}t\text{)}$ is the 1D speed ($\frac{\text{m}}{\text{s}}$)}
               \item{${v^{\text{i}}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
               \item{${a^{c}}$ is the constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \item{$t$ is the time (${\text{s}}$)}
@@ -363,7 +365,7 @@ Rearranging and integrating, we have:
 Performing the integration, we have the required equation:
 
 \begin{displaymath}
-v={v^{\text{i}}}+{a^{c}} t
+\mathbf{v}\text{(}t\text{)}={v^{\text{i}}}+{a^{c}} t
 \end{displaymath}
 \vspace{\baselineskip}
 \noindent
@@ -411,7 +413,7 @@ Rearranging and integrating, we have:
 \begin{displaymath}
 \int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{v}\,dt
 \end{displaymath}
-From \hyperref[GD:rectVel]{GD: rectVel} we can replace $v$:
+From \hyperref[GD:rectVel]{GD: rectVel}, we can replace $v$:
 
 \begin{displaymath}
 \int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{{v^{\text{i}}}+{a^{c}} t}\,dt

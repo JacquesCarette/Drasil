@@ -10,8 +10,8 @@ import Language.Drasil
 import qualified Data.Drasil.Quantities.Physics as QP (iSpeed,
   constAccel, xConstAccel, yConstAccel, ixPos, iyPos)
 import Data.Drasil.Quantities.Physics (gravitationalAccelConst, ixVel, iyVel, xPos, yPos, time,
-  speed, iPos, scalarPos, xVel, yVel, xAccel, yAccel, position, velocity, acceleration,
-  constAccelV)
+  iPos, scalarPos, xVel, yVel, xAccel, yAccel, position, velocity, acceleration,
+  constAccelV, speed)
 
 import Drasil.Projectile.Unitals (launAngle, launSpeed, targPos, tol, landPos, flightDur, offset)
 

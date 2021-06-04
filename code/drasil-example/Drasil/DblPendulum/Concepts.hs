@@ -1,7 +1,7 @@
 module Drasil.DblPendulum.Concepts where
 
 import Language.Drasil
-import Data.Drasil.Theories.Physics (newtonSLRRC)
+import Data.Drasil.Theories.Physics (newtonSLRQD)
 
 --below imports needed compoundNC part to work
 import Utils.Drasil.Concepts
@@ -9,7 +9,7 @@ import Data.Drasil.Concepts.Physics (pendulum, motion, position, velocity, force
 
 
 concepts :: [IdeaDict]
-concepts = nw newtonSLRRC : map nw [rod, horizontal, vertical,
+concepts = nw newtonSLRQD : map nw [rod, horizontal, vertical,
   pendMotion, horizontalPos, verticalPos, horizontalVel,
   verticalVel, horizontalForce, verticalForce] 
   ++ map nw defs 

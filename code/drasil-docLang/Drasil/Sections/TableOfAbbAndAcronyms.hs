@@ -8,12 +8,12 @@ import Data.Drasil.Concepts.Documentation (abbreviation, fullForm)
 import Data.List (sortBy)
 import Data.Function (on)
 -- | Creates a standard table of abbreviations and acronyms section from a
--- given list of abbreviated chunks
+-- given list of abbreviated chunks.
 tableOfAbbAndAcronyms :: (Idea s) => [s] -> Section
 tableOfAbbAndAcronyms ls = Section (S "Abbreviations and Acronyms")
   [Con (LlC $ table ls)] (makeSecRef "TAbbAcc" "Abbreviations and Acronyms")
 
-
+-- | Helper function that gets the acronym out of an 'Idea'.
 select :: (Idea s) => [s] -> [(String, s)]
 select [] = []
 select (x:xs) = case getA x of

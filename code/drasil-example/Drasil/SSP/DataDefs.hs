@@ -68,8 +68,8 @@ angleAEqn = arctan ((inxi slipHght $- inx slipHght (-1)) $/
   (inxi slipDist $- inx slipDist (-1)))
 
 angleANotes :: Sentence
-angleANotes = foldlSent [S "This", phrase equation, S "is based on the",
-  phrase assumption, S "that the base of a", phrase slice,
+angleANotes = foldlSent [S "This", phrase equation, S "is based" `S.onThe`
+  phrase assumption, S "that the base" `S.ofA` phrase slice,
   S "is a straight line", sParen (makeRef2S assumpSBSBISL)]
 
 --DD angleB: surface angles
@@ -87,8 +87,8 @@ angleBEqn = arctan ((inxi slopeHght $- inx slopeHght (-1)) $/
   (inxi slopeDist $- inx slopeDist (-1)))
 
 angleBNotes :: Sentence
-angleBNotes = foldlSent [S "This", phrase equation, S "is based on the",
-  phrase assumption, S "that the surface of a", phrase slice,
+angleBNotes = foldlSent [S "This", phrase equation, S "is based" `S.onThe`
+  phrase assumption, S "that the surface" `S.ofA` phrase slice,
   S "is a straight line", sParen (makeRef2S assumpSBSBISL)]
 
 --DD lengthB: base width of slices
@@ -117,8 +117,8 @@ lengthLbEqn :: Expr
 lengthLbEqn = inxi baseWthX `mulRe` sec (inxi baseAngle)
 
 lengthLbNotes :: Sentence
-lengthLbNotes = foldlSent [ch baseWthX, S "is defined in",
-  makeRef2S lengthB `S.and_` ch baseAngle, S "is defined in", makeRef2S angleA]
+lengthLbNotes = foldlSent [baseWthX `definedIn'''`
+  lengthB `S.and_` (baseAngle `definedIn'''` angleA)]
 
 --DD lengthLs: surface lengths of slices
 
@@ -134,8 +134,8 @@ lengthLsEqn :: Expr
 lengthLsEqn = inxi baseWthX `mulRe` sec (inxi surfAngle)
 
 lengthLsNotes :: Sentence
-lengthLsNotes = foldlSent [ch baseWthX, S "is defined in",
-  makeRef2S lengthB `S.and_` ch surfAngle, S "is defined in", makeRef2S angleB]
+lengthLsNotes = foldlSent [baseWthX `definedIn'''`
+  lengthB `S.and_` (surfAngle `definedIn'''` angleB)]
 
 
 --DD slcHeight: y-direction heights of slices
@@ -212,7 +212,7 @@ convertFunc1Eqn = (sy normToShear `mulRe` inxi scalFunc `mulRe`
   cos (inxi baseAngle)) `mulRe` sy fs)
 
 convertFunc1Notes :: Sentence
-convertFunc1Notes = foldlSent [ch scalFunc, S "is defined in", makeRef2S ratioVariation `S.and_` ch baseAngle, S "is defined in", makeRef2S angleA]
+convertFunc1Notes = foldlSent [scalFunc `definedIn'''` ratioVariation `S.and_` (baseAngle `definedIn'''` angleA)]
 
 --DD convertFunc2: second function for incorporating interslice forces into shear force
 
@@ -231,10 +231,9 @@ convertFunc2Eqn = ((sy normToShear `mulRe` inxi scalFunc `mulRe`
   inxiM1 shrResC
 
 convertFunc2Notes :: Sentence
-convertFunc2Notes = foldlSent [ch scalFunc, S "is defined in",
-  makeRef2S ratioVariation `sC` ch baseAngle, S "is defined in",
-  makeRef2S angleA `sC` S "and", ch shrResC, S "is defined in",
-  makeRef2S convertFunc1]
+convertFunc2Notes = (foldlList Comma List
+  [scalFunc `definedIn'''` ratioVariation, baseAngle `definedIn'''` angleA,
+  shrResC `definedIn'''` convertFunc1] !.)
 
 {--DD10
 

@@ -1,6 +1,6 @@
 {-# Language TypeFamilies #-}
 module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, checkValidStr,
-  chgsStart, definedIn, definedIn', definedIn'',  displayStrConstrntsAsSet, displayDblConstrntsAsSet,
+  chgsStart, definedIn, definedIn', definedIn'', definedIn''', displayStrConstrntsAsSet, displayDblConstrntsAsSet,
   eqN, eqnWSource, fromReplace, fromSource, fromSources, fmtU, follows, getTandS,
   itemRefToSent, makeListRef, makeTMatrix, maybeChanged, maybeExpanded,
   maybeWOVerb, mkEnumAbbrevList, mkTableFromColumns, noRefs, refineChain,
@@ -41,7 +41,7 @@ eqnWSource a b = E a +:+ sParen (makeRef2S b)
 
 -- | Takes a 'Referable' source and a 'UnitalChunk' and outputs as a 'Sentence': "From @source@ we can replace @symbol@:".
 fromReplace :: (Referable r, HasShortName r) => r -> UnitalChunk -> Sentence
-fromReplace src c = S "From" +:+ makeRef2S src +:+ S "we can replace" +: ch c
+fromReplace src c = S "From" +:+ makeRef2S src `sC` S "we can replace" +: ch c
 
 -- | Takes a list of 'Referable's and 'Symbol's and outputs as a Sentence "By substituting @symbols@, this can be written as:".
 substitute :: (Referable r, HasShortName r, HasSymbol r) => [r] -> Sentence
@@ -59,6 +59,10 @@ definedIn' q info = ch q `S.is` S "defined" `S.in_` makeRef2S q +:+. info
 -- | Takes a 'Referable' and outputs as a 'Sentence' "defined in @reference@" (no 'HasSymbol').
 definedIn'' :: (Referable r, HasShortName r) => r -> Sentence
 definedIn'' q =  S "defined" `S.in_` makeRef2S q
+
+-- | Takes a 'Symbol' and its 'Reference' (does not append a period at the end!). Outputs as "@symbol@ is defined in @source@".
+definedIn''' :: (HasSymbol q, HasUID q, Referable r, HasShortName r) => q -> r -> Sentence
+definedIn''' q src = ch q `S.is` S "defined in" +:+ makeRef2S src
 
 -- | Zip helper function enumerates abbreviations and zips it with list of 'ItemType':
 --

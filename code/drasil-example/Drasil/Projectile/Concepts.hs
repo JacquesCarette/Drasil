@@ -5,9 +5,10 @@ import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 
+import Data.Drasil.Concepts.Documentation (constant)
 import Data.Drasil.Concepts.Math (angle)
 import Data.Drasil.Concepts.Physics (position, speed, motion, distance, iSpeed, time,
-  rectilinear, velocity)
+  rectilinear, velocity, acceleration)
 
 concepts :: [IdeaDict]
 concepts = nw projMotion : map nw [landingPosNC, launchNC, launchAngleNC, launchSpeedNC, offsetNC, targetPosNC,
@@ -31,13 +32,15 @@ projMotion = compoundNC projectile motion
 ---
 
 defs :: [ConceptChunk]
-defs = [launcher, projectile, target]
+defs = [launcher, projectile, target, projSpeed]
 
-launcher, projectile, target :: ConceptChunk
+launcher, projectile, target, projSpeed :: ConceptChunk
 launcher   = dcc "launcher"   (nounPhraseSP "launcher")  ("where the projectile is launched from " ++
                                                           "and the device that does the launching")
 projectile = dcc "projectile" (nounPhraseSP "projectile") "the object to be launched at the target"
 target     = dcc "target"     (nounPhraseSP "target")     "where the projectile should be launched to"
+
+projSpeed  = dccWDS "projSpeed" (nounPhraseSP "1D speed") (S "1D speed under" +:+ phrase constant +:+ phrase acceleration)
 
 landPos, launAngle, launSpeed, offset, targPos, flightDur :: ConceptChunk
 landPos = cc' landingPosNC

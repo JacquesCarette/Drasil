@@ -33,7 +33,7 @@ module Drasil.DocLang (
   -- Sections.TraceabilityMandGs
   traceMatStandard,
   -- ExtractDocDesc
-  getDocDesc, egetDocDesc, ciGetDocDesc,
+  getDocDesc, egetDocDesc,
   -- Tracetable
   generateTraceMap,
  -- Labels
@@ -66,7 +66,7 @@ import Drasil.Sections.SpecificSystemDescription (auxSpecSent, termDefnF')
 --import Drasil.Sections.TableOfSymbols
 --import Drasil.Sections.TableOfUnits
 import Drasil.Sections.TraceabilityMandGs (traceMatStandard)
-import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, ciGetDocDesc)
+import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
 import Drasil.TraceTable (generateTraceMap)
 -- Commented out modules aren't used - uncomment if this changes
 import Drasil.DocumentLanguage.Labels (solutionLabel, characteristicsLabel)

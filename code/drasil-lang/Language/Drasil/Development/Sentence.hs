@@ -38,9 +38,9 @@ titleize  n = NP.titleizeNP (n ^. term)
 -- | Plural title case.
 titleize' n = NP.titleizeNP' (n ^. term)
 
--- | Helper for getting the phrase from a 'NamedIdea'.
+-- | Helper for getting the phrase from a 'NamedIdea' using it's UID.
 phrase :: (HasUID n, NamedIdea n) => n -> Sentence
-phrase n = sentenceTerm (n ^. uid) --NP.phrase (n ^. term)
+phrase n = sentenceTerm (n ^. uid)
 
 -- | Helper for getting the plural of a phrase from a 'NamedIdea'.
 plural :: (HasUID n, NamedIdea n) => n -> Sentence

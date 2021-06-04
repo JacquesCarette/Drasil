@@ -66,6 +66,8 @@ jobs:
         run: make docs
       - name: "Graphs"
         run: make graphs
+      - name: "Analysis"
+        run: make analysis
       - name: "Build website"
         run: |
           LABEL_FILE=/tmp/ci_build_failures \

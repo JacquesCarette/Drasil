@@ -21,10 +21,10 @@ import Utils.Drasil
 
 import Drasil.DocumentLanguage.Units (toSentenceUnitless)
 
--- | Synonym for a list of 'Field'
+-- | Synonym for a list of 'Field's.
 type Fields = [Field]
 
--- | Fields that should be displayed in definitions
+-- | Fields that should be displayed in definitions.
 data Field = Label
            | Symbol
            | Units
@@ -39,35 +39,37 @@ data Field = Label
               -- will be modified across applications; the underlying knowledge won't.
            | RefBy --TODO: Fill in the field.
 
-data Verbosity = Verbose  -- Full Descriptions
-               | Succinct -- Simple Description (do not redefine other symbols)
+-- | Refers to the verbosity of statements.
+data Verbosity = Verbose  -- ^ Full Descriptions.
+               | Succinct -- ^ Simple Description (do not redefine other symbols).
 
-data InclUnits = IncludeUnits -- In description field (for other symbols)
+-- | Determines whether to include or ignore units.
+data InclUnits = IncludeUnits -- ^ In description field (for other symbols).
                | IgnoreUnits
 
 -- | Create a theoretical model using a list of fields to be displayed, a database of symbols,
--- and a RelationConcept (called automatically by 'SCSSub' program)
+-- and a 'RelationConcept' (called automatically by 'SCSSub' program).
 tmodel :: Fields -> SystemInformation -> TheoryModel -> LabelledContent
 tmodel fs m t = mkRawLC (Defini Theory (foldr (mkTMField t m) [] fs)) (makeRef2 t)
 
 -- | Create a data definition using a list of fields, a database of symbols, and a
--- QDefinition (called automatically by 'SCSSub' program)
+-- 'QDefinition' (called automatically by 'SCSSub' program).
 ddefn :: Fields -> SystemInformation -> DataDefinition -> LabelledContent
 ddefn fs m d = mkRawLC (Defini Data (foldr (mkDDField d m) [] fs)) (makeRef2 d)
 
 -- | Create a general definition using a list of fields, database of symbols,
 -- and a 'GenDefn' (general definition) chunk (called automatically by 'SCSSub'
--- program)
+-- program).
 gdefn :: Fields -> SystemInformation -> GenDefn -> LabelledContent
 gdefn fs m g = mkRawLC (Defini General (foldr (mkGDField g m) [] fs)) (makeRef2 g)
 
 -- | Create an instance model using a list of fields, database of symbols,
--- and an 'InstanceModel' chunk (called automatically by 'SCSSub' program)
+-- and an 'InstanceModel' chunk (called automatically by 'SCSSub' program).
 instanceModel :: Fields -> SystemInformation -> InstanceModel -> LabelledContent
 instanceModel fs m i = mkRawLC (Defini Instance (foldr (mkIMField i m) [] fs)) (makeRef2 i)
 
 -- | Create a derivation from a chunk's attributes. This follows the TM, DD, GD,
--- or IM definition automatically (called automatically by 'SCSSub' program)
+-- or IM definition automatically (called automatically by 'SCSSub' program).
 derivation :: (HasDerivation c, HasShortName c, Referable c) => c -> Contents
 derivation c = maybe (mkParagraph EmptyS)
   (\(Derivation h d) -> LlC $ llcc (makeRef2 c) $ DerivBlock h $ map makeDerivCons d) $ c ^. derivations
@@ -78,15 +80,15 @@ makeDerivCons :: Sentence -> RawContent
 makeDerivCons (E e) = EqnBlock e
 makeDerivCons s     = Paragraph s
 
--- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs
+-- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs.
 type ModRow = [(String, [Contents])]
 
--- | nonEmpty is like |maybe| but for lists
+-- | Similar to 'maybe' but for lists.
 nonEmpty :: b -> ([a] -> b) -> [a] -> b
 nonEmpty def _ [] = def
 nonEmpty _   f xs = f xs
 
--- | Create the fields for a model from a relation concept (used by tmodel)
+-- | Create the fields for a model from a relation concept (used by 'tmodel').
 mkTMField :: TheoryModel -> SystemInformation -> Field -> ModRow -> ModRow
 mkTMField t _ l@Label fs  = (show l, [mkParagraph $ atStart t]) : fs
 mkTMField t _ l@DefiningEquation fs =
@@ -100,10 +102,12 @@ mkTMField t _ l@Notes fs =
 mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for theory models"
 
+-- | Helper function to make a list of 'Sentence's from the current system information and something that has a 'UID'.
 helperRefs :: HasUID t => t -> SystemInformation -> Sentence
 helperRefs t s = foldlList Comma List $ map (`helpToRefField` s) $ nub $
   refbyLookup (t ^. uid) (_sysinfodb s ^. refbyTable)
 
+-- | Creates a reference as a 'Sentence' by finding if the 'UID' is in one of the possible data sets contained in the 'SystemInformation' database.
 helpToRefField :: UID -> SystemInformation -> Sentence
 helpToRefField t si
   | t `elem` keys (s ^. dataDefnTable)        = makeRef2S $ datadefnLookup    t (s ^. dataDefnTable)
@@ -117,11 +121,12 @@ helpToRefField t si
   | otherwise = error $ t ++ "Caught."
   where s = _sysinfodb si
 
+-- | Helper that makes a list of 'Reference's into a 'Sentence'. Then wraps into 'Contents'.
 helperSources :: [Reference] -> [Contents]
 helperSources [] = [mkParagraph $ S "--"]
 helperSources x  = [mkParagraph $ foldlList Comma List $ map Ref x]
 
--- | Create the fields for a definition from a QDefinition (used by ddefn)
+-- | Creates the fields for a definition from a 'QDefinition' (used by 'ddefn').
 mkDDField :: DataDefinition -> SystemInformation -> Field -> ModRow -> ModRow
 mkDDField d _ l@Label fs = (show l, [mkParagraph $ atStart d]) : fs
 mkDDField d _ l@Symbol fs = (show l, [mkParagraph . P $ eqSymb d]) : fs
@@ -134,16 +139,16 @@ mkDDField d _ l@Notes fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs
 mkDDField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for data definitions"
 
--- | Create the description field (if necessary) using the given verbosity and
--- including or ignoring units for a model / general definition
+-- | Creates the description field for 'Contents' (if necessary) using the given verbosity and
+-- including or ignoring units for a model/general definition.
 buildDescription :: Verbosity -> InclUnits -> Expr -> SystemInformation -> [Contents] ->
   [Contents]
 buildDescription Succinct _ _ _ _ = []
 buildDescription Verbose u e m cs = (UlC . ulcc .
   Enumeration . Definitions . descPairs u $ vars e $ _sysinfodb m) : cs
 
--- | Create the description field (if necessary) using the given verbosity and
--- including or ignoring units for a data definition
+-- | Similar to 'buildDescription' except it takes a 'DataDefinition' that is included as the 'firstPair'' in ['Contents'] (independent of verbosity).
+-- The 'Verbose' case also includes more details about the 'DataDefinition' expressions.
 buildDDescription' :: Verbosity -> InclUnits -> DataDefinition -> SystemInformation ->
   [Contents]
 buildDDescription' Succinct u d _ = [UlC . ulcc . Enumeration $ Definitions [firstPair' u d]]
@@ -163,7 +168,7 @@ mkGDField g _ l@Source fs = (show l, helperSources $ g ^. getReferences) : fs
 mkGDField g _ l@Notes fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (g ^. getNotes)
 mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
 
--- | Create the fields for an instance model from an 'InstanceModel' chunk
+-- | Create the fields for an instance model from an 'InstanceModel' chunk.
 mkIMField :: InstanceModel -> SystemInformation -> Field -> ModRow -> ModRow
 mkIMField i _ l@Label fs  = (show l, [mkParagraph $ atStart i]) : fs
 mkIMField i _ l@DefiningEquation fs = (show l, [eqUnR' $ relat i]) : fs
@@ -189,20 +194,21 @@ mkIMField i _ l@Notes fs =
 mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for instance models"
 
--- | Used for definitions. The first pair is the symbol of the quantity we are
+-- | Used for making definitions. The first pair is the symbol of the quantity we are
 -- defining.
 firstPair' :: InclUnits -> DataDefinition -> ListTuple
 firstPair' IgnoreUnits d  = (P $ eqSymb d, Flat $ phrase d, Nothing)
 firstPair' IncludeUnits d =
   (P $ eqSymb d, Flat $ phrase d +:+ sParen (toSentenceUnitless d), Nothing)
 
--- | Create the descriptions for each symbol in the relation/equation
+-- | Creates the descriptions for each symbol in the relation/equation.
 descPairs :: (Quantity q, MayHaveUnit q) => InclUnits -> [q] -> [ListTuple]
 descPairs IgnoreUnits = map (\x -> (P $ eqSymb x, Flat $ phrase x, Nothing))
 descPairs IncludeUnits =
   map (\x -> (P $ eqSymb x, Flat $ phrase x +:+ sParen (toSentenceUnitless x), Nothing))
   -- FIXME: Need a Units map for looking up units from variables
 
+-- | Defines 'Field's as 'String's.
 instance Show Field where
   show Label             = "Label"
   show Symbol            = "Symbol"

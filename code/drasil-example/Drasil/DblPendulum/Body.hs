@@ -134,13 +134,13 @@ symbMap = cdb (map qw iMods ++ map qw symbols)
     : nw unitVect : nw unitVectj : [nw errMsg, nw program] ++ map nw symbols ++
    map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon  ++ map nw physicCon' ++
    map nw physicscon ++ concepts ++ map nw physicalcon ++ map nw acronyms ++ map nw symbols ++ map nw [metre, hertz])
-  (map cw iMods ++ srsDomains) ([] :: [Reference]) (map unitWrapper [metre, second, newton, kilogram, degree, radian, hertz]) dataDefs
-  iMods genDefns tMods concIns [] []
+  (map cw iMods ++ srsDomains) (map unitWrapper [metre, second, newton, kilogram, degree, radian, hertz]) dataDefs
+  iMods genDefns tMods concIns [] [] ([] :: [Reference])
 
 
 usedDB :: ChunkDB
-usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw symbols) ([] :: [ConceptChunk]) ([] :: [Reference])
-  ([] :: [UnitDefn]) [] [] [] [] [] [] []
+usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw symbols) ([] :: [ConceptChunk])
+  ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]

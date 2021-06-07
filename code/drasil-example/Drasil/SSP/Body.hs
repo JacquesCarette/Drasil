@@ -166,12 +166,12 @@ symbMap = cdb (map qw SSP.iMods ++ map qw symbols) (map nw symbols
   ++ map nw mathcon ++ map nw mathcon' ++ map nw solidcon ++ map nw physicalcon
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
   ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw units)
-  (map cw SSP.iMods ++ map cw symbols ++ srsDomains) ([] :: [Reference]) units SSP.dataDefs SSP.iMods
-  generalDefinitions tMods concIns section labCon
+  (map cw SSP.iMods ++ map cw symbols ++ srsDomains) units SSP.dataDefs SSP.iMods
+  generalDefinitions tMods concIns section labCon ([] :: [Reference])
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronyms)
- ([] :: [ConceptChunk]) ([] :: [Reference]) ([] :: [UnitDefn]) [] [] [] [] [] [] []
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns

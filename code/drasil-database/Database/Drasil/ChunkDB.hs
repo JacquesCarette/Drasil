@@ -3,7 +3,7 @@ module Database.Drasil.ChunkDB (ChunkDB(defTable), RefbyMap, TraceMap, UMap,
   asOrderedList, cdb, collectUnits, conceptMap, conceptinsLookup,
   conceptinsTable, dataDefnTable, datadefnLookup, defResolve, gendefLookup,
   gendefTable, generateRefbyMap, idMap, insmodelLookup, insmodelTable, -- idMap for docLang
-  labelledconLookup, labelledcontentTable, refbyLookup, refbyTable, refResolve,
+  labelledconLookup, labelledcontentTable, refbyLookup, refbyTable, refResolve, refTable,
   sectionLookup, sectionTable, symbResolve, termResolve, termTable,
   theoryModelLookup, theoryModelTable, traceLookup, traceMap, traceTable) where
 
@@ -107,8 +107,8 @@ termResolve :: ChunkDB -> UID -> IdeaDict
 termResolve m x = uMapLookup "Term" "TermMap" x $ termTable m
 
 -- | Looks up a 'UID' in the reference table from the 'ChunkDB'. If nothing is found, an error is thrown.
-refResolve :: ChunkDB -> UID -> Reference
-refResolve m x = uMapLookup "Reference" "ReferenceMap" x $ refTable m -- (m ^. refbyTable)
+refResolve :: UID -> ReferenceMap -> Reference
+refResolve = uMapLookup "Reference" "ReferenceMap"
 
 -- | Looks up a 'UID' in the unit table. If nothing is found, an error is thrown.
 unitLookup :: UID -> UnitMap -> UnitDefn
@@ -156,7 +156,6 @@ asOrderedList = map fst . sortOn snd . map snd . Map.toList
 data ChunkDB = CDB { symbolTable :: SymbolMap
                    , termTable :: TermMap 
                    , defTable  :: ConceptMap
-                   , refTable :: ReferenceMap
                    , _unitTable :: UnitMap
                    , _traceTable :: TraceMap
                    , _refbyTable :: RefbyMap
@@ -167,6 +166,7 @@ data ChunkDB = CDB { symbolTable :: SymbolMap
                    , _conceptinsTable :: ConceptInstanceMap
                    , _sectionTable :: SectionMap
                    , _labelledcontentTable :: LabelledContentMap
+                   , _refTable :: ReferenceMap
                    } --TODO: Expand and add more databases
 makeLenses ''ChunkDB
 
@@ -184,12 +184,12 @@ makeLenses ''ChunkDB
 --     * 'Section's (for 'SectionMap'),
 --     * 'LabelledContent's (for 'LabelledContentMap').
 cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, HasUID r, HasRefAddress r, HasShortName r, IsUnit u) =>
-    [q] -> [t] -> [c] -> [r] -> [u] -> [DataDefinition] -> [InstanceModel] ->
+    [q] -> [t] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] ->
     [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [Section] ->
-    [LabelledContent] -> ChunkDB
-cdb s t c r u d ins gd tm ci sect lc = CDB (symbolMap s) (termMap t) (conceptMap c) (referenceMap r)
+    [LabelledContent] -> [r] -> ChunkDB
+cdb s t c u d ins gd tm ci sect lc r = CDB (symbolMap s) (termMap t) (conceptMap c)
   (unitMap u) Map.empty Map.empty (idMap d) (idMap ins) (idMap gd) (idMap tm)
-  (idMap ci) (idMap sect) (idMap lc)
+  (idMap ci) (idMap sect) (idMap lc) (referenceMap r)
 
 -- | Gets the units of a 'Quantity' as 'UnitDefn's.
 collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]

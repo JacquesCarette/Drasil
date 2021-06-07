@@ -152,12 +152,12 @@ symbMap = cdb (map qw iMods ++ map qw symbolsAll) (map nw symbolsAll
   ++ map nw softwarecon ++ map nw doccon ++ map nw doccon'
   ++ map nw CP.physicCon ++ map nw educon ++ [nw algorithm] ++ map nw derived
   ++ map nw fundamentals ++ map nw CM.mathcon ++ map nw CM.mathcon') 
-  (map cw defSymbols ++ srsDomains ++ map cw iMods) ([] :: [Reference]) units dataDefs
-  iMods generalDefns tMods concIns section []
+  (map cw defSymbols ++ srsDomains ++ map cw iMods) units dataDefs
+  iMods generalDefns tMods concIns section [] ([] :: [Reference])
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbolsAll ++ map nw acronyms)
-  ([] :: [ConceptChunk]) ([] :: [Reference]) ([] :: [UnitDefn]) [] [] [] [] [] [] []
+  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of
 -- the sections below are now redundant. I have not removed them yet, because

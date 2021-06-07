@@ -137,7 +137,6 @@ symbMap
                        map nw symbols ++ map nw physicscon ++ map nw acronyms
                        ++ map nw physicalcon)
       (map cw inpConstrained ++ srsDomains)
-      ([] :: [Reference])
       (map unitWrapper [second, kilogram])
       dataDefinitions
       instanceModels
@@ -146,12 +145,12 @@ symbMap
       conceptInstances
       ([] :: [Section])
       ([] :: [LabelledContent])
+      ([] :: [Reference])
 
 usedDB :: ChunkDB
 usedDB
   = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw symbolsAll)
       ([] :: [ConceptChunk])
-      ([] :: [Reference])
       ([] :: [UnitDefn])
       ([] :: [DataDefinition])
       ([] :: [InstanceModel])
@@ -160,6 +159,7 @@ usedDB
       ([] :: [ConceptInstance])
       ([] :: [Section])
       ([] :: [LabelledContent])
+      ([] :: [Reference])
 
 refDB :: ReferenceDB
 refDB = rdb citations conceptInstances

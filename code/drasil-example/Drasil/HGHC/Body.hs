@@ -62,8 +62,8 @@ symbMap :: ChunkDB
 symbMap = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals ++ map nw derived
   ++ [nw fp, nw nuclearPhys, nw hghc, nw degree] ++ map nw doccon')
   ([] :: [ConceptChunk])-- FIXME: Fill in concepts
-  ([] :: [Reference]) siUnits dataDefs [] [] [] [] [] []
+  siUnits dataDefs [] [] [] [] [] [] ([] :: [Reference])
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols)
-           ([] :: [ConceptChunk]) ([] :: [Reference]) ([] :: [UnitDefn]) [] [] [] [] [] [] []
+           ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])

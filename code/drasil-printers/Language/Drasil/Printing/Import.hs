@@ -18,7 +18,6 @@ import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..),
 import Control.Lens ((^.))
 import Data.Bifunctor (bimap, second)
 import Data.List (intersperse, partition)
-import Data.Maybe (fromMaybe)
 import Numeric (floatToDigits)
 
 -- | Render a Space
@@ -333,7 +332,7 @@ spec sm (Ch SymbolStyle s)  = P.E $ symbol $ lookupC (sm ^. stg) (sm ^. ckdb) s
 spec sm (Ch TermStyle s)    = spec sm $ lookupT (sm ^. ckdb) s
 spec sm (Ch ShortStyle s)   = spec sm $ lookupS (sm ^. ckdb) s
 spec sm (Ch PluralTerm s)   = spec sm $ lookupP (sm ^. ckdb) s
-spec sm (Ref u) = let reff = refResolve (sm ^. ckdb) u in
+spec sm (Ref u) = let reff = refResolve u (sm ^. ckdb . refTable) in
   case reff of 
   (Reference _ (RP rp ra) sn _) ->
     P.Ref P.Internal ra $ spec sm $ renderShortName (sm ^. ckdb) rp sn
@@ -362,8 +361,7 @@ pUnit (US ls) = formatu t b
     powu (n,p) = P.Row [symbol n, P.Sup $ P.Int p]
 
 renderShortName :: ChunkDB -> IRefProg -> ShortName -> Sentence
-renderShortName ctx (Deferred u) _ = S $ --fromMaybe (error "Reference has no abbreviation.") $
-  getRefAdd $ refResolve ctx u
+renderShortName ctx (Deferred u) _ = S $ getRefAdd $ refResolve u (ctx ^. refTable)
 renderShortName ctx (RConcat a b) sn = renderShortName ctx a sn :+: renderShortName ctx b sn
 renderShortName _ (RS s) _ = S s
 renderShortName _ Name sn = S $ getStringSN sn

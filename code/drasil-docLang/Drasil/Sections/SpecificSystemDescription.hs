@@ -208,7 +208,7 @@ mkDataConstraintTable :: [(Sentence, [Sentence])] -> String -> Sentence -> Label
 mkDataConstraintTable col ref lab = llcc (makeTabRef ref) $ uncurry Table 
   (mkTableFromColumns col) lab True
 
--- Creates the input Data Constraints Table.
+-- | Creates the input Data Constraints Table.
 inDataConstTbl :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => 
   [c] -> LabelledContent
 inDataConstTbl qlst = mkDataConstraintTable [(S "Var", map ch $ sortBySymbol qlst),

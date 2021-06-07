@@ -1,5 +1,5 @@
 module Drasil.Sections.AuxiliaryConstants 
-  (valsOfAuxConstantsF) where
+  (valsOfAuxConstantsF, tableOfConstants) where
 
 import Language.Drasil
 import Utils.Drasil

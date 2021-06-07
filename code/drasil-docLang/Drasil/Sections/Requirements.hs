@@ -1,5 +1,5 @@
 module Drasil.Sections.Requirements (fReqF, fullReqs, fullTables, inReq, inTable,
-  mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable, nfReqF, reqF) where
+  mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable, nfReqF, reqF, reqInputsUID) where
 
 import Language.Drasil
 import Utils.Drasil
@@ -84,10 +84,13 @@ nfReqIntro = mkParagraph $ reqIntroStart +:+. nfrReqIntroBody
 -- | Creates an Input Data Table for use in the Functional Requirments section. Takes a list of wrapped variables and something that is 'Referable'.
 mkInputPropsTable :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => 
                           [i] -> r -> LabelledContent
-mkInputPropsTable reqInputs req = llcc (makeTabRef "ReqInputs") $ 
+mkInputPropsTable reqInputs req = llcc (makeTabRef reqInputsUID) $ 
   Table [atStart symbol_, atStart description, atStart' unit_]
   (mkTable [ch, atStart, toSentence] $ sortBySymbol reqInputs)
   (S "Required" +:+ titleize' input_ `follows` req) True
+
+reqInputsUID :: UID
+reqInputsUID = "ReqInputs"
 
 -- | Creates a table for use in the Functional Requirments section. Takes a list of tuples containing variables and sources, a label, and a caption. 
 mkValsSourceTable :: (Quantity i, MayHaveUnit i) => 

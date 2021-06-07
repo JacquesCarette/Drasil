@@ -23,9 +23,11 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   SolChSpec(..), StkhldrSec(..), StkhldrSub(Client, Cstmr),
   TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, TSPurpose),
   Verbosity(Verbose), auxSpecSent, characteristicsLabel, intro, mkDoc,
-  termDefnF', tsymb, traceMatStandard, purpDoc)
+  termDefnF', tsymb, traceMatStandard, purpDoc, getTraceConfigUID,
+  reqInputsUID, symbTableRef, unitTableRef, tableAbbAccUID, tableOfConstants,
+  inDataConstTbl, outDataConstTbl)
 
-import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
+import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel, sysCon, tOfSymbLabel)
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum, compcon, algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (appendix, aspect,
@@ -66,7 +68,7 @@ import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   constrained, inputDataConstraints, inputs, outputs, specParamVals, glassTy,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
-  sD, termsWithAccDefn, termsWithDefsOnly, terms, unitalRefs)
+  sD, termsWithAccDefn, termsWithDefsOnly, terms)
 
 srs :: Document
 srs = mkDoc mkSRS  (S.forGen titleize phrase) si
@@ -387,14 +389,19 @@ blstRskInvWGlassSlab = phrase blastRisk +:+ S "involved with the" +:+
 -- References --
 bodyRefs :: [Reference]
 bodyRefs = rw astm2009 : map rw [SRS.reference ([]::[Contents]) ([]::[Section]), 
-  SRS.assumpt ([]::[Contents]) ([]::[Section])] ++
+  SRS.assumpt ([]::[Contents]) ([]::[Section]), SRS.sysCon [] []] ++
   map rw [sysCtxFig, demandVsSDFig, dimlessloadVsARFig]
   ++ map rw concIns ++ map rw section ++ map rw labCon
-  ++ map (rw.makeTabRef) tabRefUIDs
-  -- ++ map rw [traceMatStandard si]
 
-tabRefUIDs :: [String]
-tabRefUIDs = ["TraceMatAvsA", "TraceMatAvsAll", "TraceMatRefvsRef", "TraceMatAllvsR", "ReqInputs", "InDataConstraints", "OutDataConstraints", "TAuxConsts", "TAbbAcc", "ToS", "ToU"]
+tabRefs :: [Reference]
+tabRefs = [symbTableRef, unitTableRef] ++ map (rw.makeTabRef) [fst tableAbbAccUID, reqInputsUID] 
+  ++ map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+  ++ map rw [tableOfConstants [], inDataConstTbl ([]::[UncertainChunk]),
+  outDataConstTbl ([]::[ConstrainedChunk])]
+
+secRefs :: [Reference]
+secRefs = [SRS.tOfSymbLabel, rw $ (uncurry makeSecRef) tableAbbAccUID]
 
 allRefs :: [Reference]
-allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ dataDefRefs ++ iModRefs ++ citeRefs ++ reqRefs ++ unitalRefs)
+allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ dataDefRefs
+  ++ iModRefs ++ citeRefs ++ reqRefs ++ secRefs ++ tabRefs)

@@ -124,6 +124,21 @@ imNoRefs :: ModelKinds -> Inputs -> Output -> OutputConstraints -> Maybe Derivat
 --   references.
 imNoDerivNoRefs :: ModelKinds -> Inputs -> Output -> OutputConstraints -> String -> [Sentence] -> InstanceModel
 
+-- | Smart constructor for instance models with everything defined.
+im' :: ModelKinds -> NP -> Inputs -> Output -> OutputConstraints -> [Reference] -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
+
+-- | Smart constructor for instance models with a custom term, and no
+--   derivation.
+imNoDeriv' :: ModelKinds -> NP -> Inputs -> Output -> OutputConstraints -> [Reference] -> String -> [Sentence] -> InstanceModel
+
+-- | Smart constructor for instance models with a custom term, and no
+--   references.
+imNoRefs' :: ModelKinds -> NP -> Inputs -> Output -> OutputConstraints -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
+
+-- | Smart constructor for instance models with a custom term, and no
+--   derivations or references.
+imNoDerivNoRefs' :: ModelKinds -> NP -> Inputs -> Output -> OutputConstraints -> String -> [Sentence] -> InstanceModel
+
 -- | For building a quantity with no constraint.
 qwUC :: (Quantity q, MayHaveUnit q) => q -> Input
 

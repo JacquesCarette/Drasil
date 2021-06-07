@@ -6,7 +6,7 @@ import Control.Lens (makeLenses, set, lens, to, (^.), Setter', Getter, Lens')
 import Data.Maybe (mapMaybe)
 
 import Language.Drasil (ExprRelat(..), ConceptDomain(..), Definition(..),
-  Idea(..), NamedIdea(..), RelationConcept, QDefinition, HasUID(..), DefiningExpr(..))
+  Idea(..), NamedIdea(..), RelationConcept, QDefinition, HasUID(..))
 import Theory.Drasil.MultiDefn (MultiDefn)
 
 -- | Models can be of different kinds: 
@@ -32,8 +32,6 @@ instance Idea          ModelKinds where getA     = elimMk (to getA) (to getA) (t
 instance Definition    ModelKinds where defn     = lensMk defn defn defn
 -- | Finds the domain of the 'ModelKinds'.
 instance ConceptDomain ModelKinds where cdom     = elimMk (to cdom) (to cdom) (to cdom)
--- | Finds the defining expression of the 'ModelKinds'.
-instance DefiningExpr  ModelKinds where defnExpr = lensMk defnExpr (error "ambiguous defining expression (defnExpr) for EquationalRealm") defnExpr
 -- | Finds the relation expression of the 'ModelKinds'.
 instance ExprRelat     ModelKinds where relat    = elimMk (to relat) (to relat) (to relat)
 

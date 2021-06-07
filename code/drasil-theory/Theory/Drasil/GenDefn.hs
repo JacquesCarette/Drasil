@@ -42,8 +42,6 @@ instance Definition         GenDefn where defn          = lensMk defn defn defn
 instance ConceptDomain      GenDefn where cdom          = cdom . (^. mk)
 -- | Finds the relation expression for a 'GenDefn'.
 instance ExprRelat          GenDefn where relat         = relat . (^. mk)
--- | Finds the defining expression for a 'GenDefn'.
-instance DefiningExpr       GenDefn where defnExpr      = lensMk defnExpr undefined defnExpr -- TODO: Defining expression of an EquationalRealm?
 -- | Finds the derivation of the 'GenDefn'. May contain Nothing.
 instance HasDerivation      GenDefn where derivations   = deri
 -- | Finds 'Reference's contained in the 'GenDefn'.
@@ -54,7 +52,7 @@ instance HasShortName       GenDefn where shortname     = view sn
 instance HasRefAddress      GenDefn where getRefAdd     = view ra
 -- | Finds the units of the 'GenDefn'.
 instance HasAdditionalNotes GenDefn where getNotes      = notes
--- | Finds the idea of a 'GenDefn' (abbreviation).
+-- | Finds the units of the 'GenDefn'.
 instance MayHaveUnit        GenDefn where getUnit       = gdUnit
 -- | Finds the idea of a 'GenDefn' (abbreviation).
 instance CommonIdea         GenDefn where abrv _        = abrv genDefn

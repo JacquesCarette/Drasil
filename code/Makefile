@@ -61,12 +61,16 @@ TEST_E_SUFFIX = _diff
 TEX_E_SUFFIX = _tex
 CODE_E_SUFFIX = _code
 DCP_E_SUFFIX = _deploy_code_path
+STABILIZE_E_SUFFIX = _stabilize
+BC_E_SUFFIX = _build_clean
 
 GEN_EXAMPLES = $(addsuffix $(GEN_E_SUFFIX), $(EXAMPLES) $(GOOLTEST))
 TEST_EXAMPLES =  $(addsuffix $(TEST_E_SUFFIX), $(EXAMPLES) $(GOOLTEST))
 TEX_EXAMPLES = $(addsuffix $(TEX_E_SUFFIX), $(EXAMPLES))
 CODE_EXAMPLES = $(addsuffix $(CODE_E_SUFFIX), $(SRC_EXAMPLES))
 DCP_EXAMPLES = $(addsuffix $(DCP_E_SUFFIX), $(EXAMPLES))
+STABILIZE_EXAMPLES = $(addsuffix $(STABILIZE_E_SUFFIX), $(EXAMPLES))
+BC_EXAMPLES = $(addsuffix $(BC_E_SUFFIX), $(EXAMPLES))
 
 EXAMPLE_GEN_TARGET = GEN TEST TEX CODE DCP
 
@@ -86,6 +90,8 @@ CACHED_MSV_FILE = .drasil-min-stack-ver
 DF_DIR = datafiles/
 BUILD_FOLDER_NAME = build
 BUILD_FOLDER = $(BUILD_FOLDER_NAME)/
+STABLE_FOLDER_NAME = stable
+STABLE_FOLDER = $(STABLE_FOLDER_NAME)/
 EXAMPLE_CODE_SUBFOLDER = src/
 LOG_FOLDER_NAME = logs
 LOG_FOLDER = $(LOG_FOLDER_NAME)/
@@ -136,18 +142,28 @@ packages: $(BUILD_PACKAGES)
 $(filter %$(BUILD_P_SUFFIX), $(BUILD_PACKAGES)): %$(BUILD_P_SUFFIX): check_stack
 	stack install $(stackArgs) "drasil-$*"
 
-%$(GEN_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
-%$(GEN_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
+%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
+%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
+
+# individual example runs
 %$(GEN_E_SUFFIX): EEXE=$($(EXAMPLE)_EXE)
 $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX): example$(BUILD_P_SUFFIX)
 	@mkdir -p "$(BUILD_FOLDER)$(EDIR)"
 	cd "$(BUILD_FOLDER)$(EDIR)" && stack exec -- "$(EEXE)" $(EXECARGS)
 
-%$(TEST_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
-%$(TEST_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
+# individual example build cleans
+$(filter %$(BC_E_SUFFIX), $(BC_EXAMPLES)): %$(BC_E_SUFFIX):
+	- rm -rf "$(BUILD_FOLDER)$(EDIR)"
+
+# individual example stabilization
+$(filter %$(STABILIZE_E_SUFFIX), $(STABILIZE_EXAMPLES)): %$(STABILIZE_E_SUFFIX): %$(BC_E_SUFFIX) %$(GEN_E_SUFFIX)
+	- rm -rf "$(STABLE_FOLDER)$*/"
+	- cp -r "$(BUILD_FOLDER)$(EDIR)" "$(STABLE_FOLDER)$*/"
+
+# individual example diff tests
 $(filter %$(TEST_E_SUFFIX), $(TEST_EXAMPLES)): %$(TEST_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) %$(GEN_E_SUFFIX)
 	@mkdir -p "$(LOG_FOLDER)"
-	- $(DIFF) "stable/$*/" "$(BUILD_FOLDER)$(EDIR)"/ > "$(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX)" 2>&1
+	- $(DIFF) "$(STABLE_FOLDER)$*/" "$(BUILD_FOLDER)$(EDIR)"/ > "$(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX)" 2>&1
 
 # actually run the tests
 test: $(TEST_EXAMPLES)
@@ -157,6 +173,11 @@ test: $(TEST_EXAMPLES)
 	@LOG_FOLDER="$(LOG_FOLDER)" LOG_SUFFIX="$(LOG_SUFFIX)" NOISY=$(NOISY) "$(SHELL)" "$(SCRIPT_FOLDER)"log_check.sh
 
 prog: $(GEN_EXAMPLES)
+
+stabilize: $(STABILIZE_EXAMPLES)
+	@echo ----------------------------
+	@echo Stabilized all examples
+	@echo ----------------------------
 
 # generate pretty dot graphs too
 graphmod: check_stack

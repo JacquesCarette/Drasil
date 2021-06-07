@@ -14,9 +14,7 @@ import Language.Drasil (($=), sy, QuantityDict, MayHaveUnit(..),
 
 -- TODO: Need a system for instantiating MultiDefns into QDefs via "selecting" variants
 
--- | 'DefiningExpr's are partial components of QDefinitions, containing only
---   the defining expressions and descriptions.
---   Any 'DefiningExpr' paired with a 'QuantityDict' will form a "whole" 'QDefinition'.
+-- | A 'DefiningExpr' is the "Expr"-related components of QDefinitions.
 data DefiningExpr = DefiningExpr {
   _cd     :: [UID],    -- ^ Concept domain
   _rvDesc :: Sentence, -- ^ Defining description/statement

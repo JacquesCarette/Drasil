@@ -3,7 +3,6 @@ module Drasil.GlassBR.Body where
 
 import Control.Lens ((^.))
 import Language.Drasil hiding (Symbol(..), organization, section)
-import Language.Drasil.Code (relToQD)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
@@ -57,7 +56,7 @@ import Drasil.GlassBR.DataDefs (qDefns, configFp)
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.Figures
 import Drasil.GlassBR.Goals (goals)
-import Drasil.GlassBR.IMods (symb, iMods, iMods0, instModIntro)
+import Drasil.GlassBR.IMods (symb, iMods, instModIntro)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations, rbrtsn2012)
 import Drasil.GlassBR.Requirements (funcReqs, inReqDesc, funcReqsTables, nonfuncReqs)
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
@@ -81,8 +80,7 @@ si = SI {
   _purpose     = purpDoc glassBR Verbose,
   _quants      = symbolsForTable,
   _concepts    = [] :: [DefinedQuantityDict],
-  _definitions = getEqModQdsFromIm iMods ++
-                 map (relToQD symbMap) iMods0 ++ 
+  _definitions = getEqModQdsFromIm iMods ++ 
                  concatMap (^. defined_quant) tMods ++
                  concatMap (^. defined_fun) tMods,
   _datadefs    = GB.dataDefs,

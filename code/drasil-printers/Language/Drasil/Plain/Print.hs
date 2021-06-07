@@ -153,14 +153,14 @@ opsDoc Prod = text "product "
 opsDoc Point = text "."
 opsDoc Perc = text "%"
 
--- | Helper for printing the left side of some characters "(,{,\\|,|".
+-- | Helper for printing the left side of some characters "(, {, \\|, |".
 fenceDocL :: Fence -> Doc
 fenceDocL Paren = text "("
 fenceDocL Curly = text "{"
 fenceDocL Norm = text "\\|"
 fenceDocL Abs = text "|"
 
--- | Helper for printing the right side of some characters "),},\\|,|".
+-- | Helper for printing the right side of some characters "), }, \\|, |".
 fenceDocR :: Fence -> Doc
 fenceDocR Paren = text ")"
 fenceDocR Curly = text "}"

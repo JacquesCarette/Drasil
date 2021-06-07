@@ -5,7 +5,7 @@ module Drasil.DblPendulum.GenDefs (genDefns, velocityIXGD, velocityIYGD,
 
 import Prelude hiding (cos, sin, sqrt)
 import Language.Drasil
-import Theory.Drasil (GenDefn, gdNoRefs, ModelKinds (OthModel, EquationalModel))
+import Theory.Drasil (GenDefn, gdNoRefs, gdNoRefs', ModelKinds (OthModel, EquationalModel))
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -210,15 +210,14 @@ vForceOnPendulumDeriv = mkDerivName (phraseNP (force `onThe` pendulum)) [ E vFor
 --------------------------------------Angular Frequency Of Pendulum
 
 angFrequencyGD :: GenDefn
-angFrequencyGD = gdNoRefs (OthModel angFrequencyRC) (getUnit angularFrequency)
+angFrequencyGD = gdNoRefs' "angFrequencyGD" (EquationalModel angFrequencyQD) (getUnit angularFrequency)
            (Just angFrequencyDeriv) "angFrequencyGD" [angFrequencyGDNotes]
 
-angFrequencyRC :: RelationConcept
-angFrequencyRC = makeRC "angFrequencyRC" (angularFrequency `the_ofThe` pendulum) 
-           EmptyS angFrequencyRel
- 
-angFrequencyRel :: Relation
-angFrequencyRel = sy angularFrequency $= sqrt (sy gravitationalAccel $/ sy lenRod)
+angFrequencyQD :: QDefinition
+angFrequencyQD = mkQuantDef' angularFrequency (angularFrequency `the_ofThe` pendulum) angFrequencyExpr
+
+angFrequencyExpr :: Expr
+angFrequencyExpr = sqrt (sy gravitationalAccel $/ sy lenRod)
 
 angFrequencyDeriv :: Derivation
 angFrequencyDeriv = mkDerivName (phraseNP (angularFrequency `the_ofThe` pendulum)) (weave [angFrequencyDerivSents, map E angFrequencyDerivEqns])
@@ -270,15 +269,14 @@ angFrequencyGDNotes = S "The" +:+ phrase torque `S.is` definedIn'' newtonSLR  `S
  --------------------------------Period of Pendulum Motion 
 
 periodPend :: GenDefn
-periodPend = gdNoRefs (OthModel periodPendRC) (getUnit period)
+periodPend = gdNoRefs' "periodPendGD" (EquationalModel periodPendQD) (getUnit period)
            (Just periodPendDeriv) "periodPend" [periodPendNotes]
 
-periodPendRC :: RelationConcept
-periodPendRC = makeRC "periodPendRC" (NP.the (period `ofThe` pendulum)) 
-           EmptyS periodPendRel
- 
-periodPendRel :: Relation
-periodPendRel = sy period $= exactDbl 2 `mulRe` sy QM.pi_ `mulRe` sqrt (sy lenRod $/ sy gravitationalAccel)
+periodPendQD :: QDefinition
+periodPendQD = mkQuantDef' period (NP.the (period `ofThe` pendulum)) periodPendExpr
+
+periodPendExpr :: Expr
+periodPendExpr = exactDbl 2 `mulRe` sy QM.pi_ `mulRe` sqrt (sy lenRod $/ sy gravitationalAccel)
 
 periodPendDeriv :: Derivation
 periodPendDeriv = mkDerivName (phraseNP (NP.the (period `ofThe` pendulum))) (weave [periodPendDerivSents, map E periodPendDerivEqns])

@@ -5,12 +5,15 @@ module Theory.Drasil (
   -- DataDefinition
   , DataDefinition, dd, ddNoRefs, qdFromDD
   -- GenDefn
-  , GenDefn, gd, gdNoRefs, getEqModQdsFromGd
+  , GenDefn
+  , gd, gdNoRefs, gd', gdNoRefs'
+  , getEqModQdsFromGd
   -- ModelKinds
   , ModelKinds(..), getEqModQds
   -- InstanceModel
   , InstanceModel
   , im, imNoDeriv, imNoRefs, imNoDerivNoRefs
+  , im', imNoDeriv', imNoRefs', imNoDerivNoRefs'
   , qwUC, qwC, getEqModQdsFromIm
   -- Theory
   , Theory(..), TheoryModel, tm, tmNoRefs, tm', tmNoRefs'

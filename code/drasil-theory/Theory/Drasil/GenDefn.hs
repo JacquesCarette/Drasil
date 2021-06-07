@@ -5,7 +5,7 @@ module Theory.Drasil.GenDefn (GenDefn,
 import Language.Drasil
 import Data.Drasil.TheoryConcepts (genDefn)
 import Theory.Drasil.ModelKinds (ModelKinds(..), elimMk, setMk, getEqModQds)
-import Theory.Drasil.Realms
+import Theory.Drasil.MultiDefn (MultiDefn)
 
 import Control.Lens (makeLenses, view, lens, (^.), set, Lens')
 
@@ -23,7 +23,7 @@ data GenDefn = GD { _gUid  :: UID
 makeLenses ''GenDefn
 
 -- | Make 'Lens' for a 'GenDefn' based on its 'ModelKinds'.
-lensMk :: forall a. Lens' QDefinition a -> Lens' Realm a -> Lens' RelationConcept a -> Lens' GenDefn a
+lensMk :: forall a. Lens' QDefinition a -> Lens' MultiDefn a -> Lens' RelationConcept a -> Lens' GenDefn a
 lensMk lq lqd lr = lens g s
     where g :: GenDefn -> a
           g gd_ = elimMk lq lqd lr (gd_ ^. mk)

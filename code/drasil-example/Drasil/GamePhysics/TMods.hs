@@ -48,9 +48,9 @@ newtonTLNote = foldlSent [(S "Every action has an equal and opposite reaction" !
 
 -- FIXME: Missing ConceptDomain!
 newtonLUGModel :: ModelKinds
-newtonLUGModel = EquationalRealm $ mkRealmForQuant newtonForceQuant EmptyS $ NE.fromList [
-    mkRealmVariant [] EmptyS (sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/ square (sy dispNorm)) `mulRe` sy dVect),
-    mkRealmVariant [] EmptyS (sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/ square (sy dispNorm)) `mulRe` (sy distMass $/ sy dispNorm))
+newtonLUGModel = EquationalRealm $ mkMultiDefnForQuant newtonForceQuant EmptyS $ NE.fromList [
+    mkDefiningExpr [] EmptyS (sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/ square (sy dispNorm)) `mulRe` sy dVect),
+    mkDefiningExpr [] EmptyS (sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/ square (sy dispNorm)) `mulRe` (sy distMass $/ sy dispNorm))
   ]
 
 newtonLUG :: TheoryModel

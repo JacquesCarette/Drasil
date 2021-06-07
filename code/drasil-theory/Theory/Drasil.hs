@@ -8,9 +8,9 @@ module Theory.Drasil (
   , GenDefn
   , gd, gdNoRefs, gd', gdNoRefs'
   , getEqModQdsFromGd
-  -- Realms
-  , Realm, RealmVariant
-  , mkRealm, mkRealmForQuant, mkRealmVariant
+  -- MultiDefn
+  , MultiDefn, DefiningExpr
+  , mkMultiDefn, mkMultiDefnForQuant, mkDefiningExpr
   -- ModelKinds
   , ModelKinds(..), getEqModQds
   -- InstanceModel
@@ -27,5 +27,5 @@ import Theory.Drasil.DataDefinition (DataDefinition, dd, ddNoRefs, qdFromDD)
 import Theory.Drasil.GenDefn
 import Theory.Drasil.ModelKinds
 import Theory.Drasil.InstanceModel
-import Theory.Drasil.Realms
+import Theory.Drasil.MultiDefn
 import Theory.Drasil.Theory

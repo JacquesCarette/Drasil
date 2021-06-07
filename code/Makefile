@@ -236,4 +236,10 @@ clean_artifacts cleanArtifacts: $(CLEAN_FOLDERS)
 clean: clean_artifacts
 	- stack clean
 
+stabilize: clean_artifacts $(GEN_EXAMPLES)
+	- cp -rf $(BUILD_FOLDER)* "$(STABLE_FOLDER)"
+	@echo "----------------------------"
+	@echo "Stabilized $(BUILD_FOLDER) over $(STABLE_FOLDER)"
+	@echo "----------------------------"
+
 .PHONY: clean clean_artifacts cleanArtifacts code analysis tex doc debug prog test graphs graphmod check_stack graphs deploy_code_path deploy deploy_lite all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)

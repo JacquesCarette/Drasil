@@ -1,7 +1,9 @@
 {-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables  #-}
 module Theory.Drasil.InstanceModel
   ( InstanceModel
-  , im, imNoDeriv, imNoRefs, imNoDerivNoRefs, getEqModQdsFromIm
+  , im, imNoDeriv, imNoRefs, imNoDerivNoRefs
+  , im', imNoDeriv', imNoRefs', imNoDerivNoRefs'
+  , getEqModQdsFromIm
   , qwUC, qwC
   ) where
 
@@ -20,14 +22,15 @@ type OutputConstraints = [RealInterval Expr Expr]
 
 -- | An instance model is a ModelKind that may have specific inputs, outputs, and output
 -- constraints. It also has attributes like references, derivation, labels ('ShortName'), reference address, and notes.
-data InstanceModel = IM { _mk :: ModelKinds
+data InstanceModel = IM { _mk       :: ModelKinds
+                        , _imTerm   :: NP
                         , _imInputs :: Inputs
                         , _imOutput :: (Output, OutputConstraints)
-                        , _ref :: [Reference]
-                        , _deri :: Maybe Derivation
-                        ,  lb :: ShortName
-                        ,  ra :: String
-                        , _notes :: [Sentence]
+                        , _ref      :: [Reference]
+                        , _deri     :: Maybe Derivation
+                        ,  lb       :: ShortName
+                        ,  ra       :: String
+                        , _notes    :: [Sentence]
                         }
 makeLenses ''InstanceModel
 
@@ -42,7 +45,7 @@ lensMk lq lqd lr = lens g s
 -- | Finds the 'UID' of an 'InstanceModel'.
 instance HasUID             InstanceModel where uid = lensMk uid uid uid
 -- | Finds the term ('NP') of the 'InstanceModel'.
-instance NamedIdea          InstanceModel where term = lensMk term term term
+instance NamedIdea          InstanceModel where term = imTerm
 -- | Finds the idea contained in the 'InstanceModel'.
 instance Idea               InstanceModel where getA = getA . (^. mk)
 -- | Finds the definition of the 'InstanceModel'.
@@ -88,28 +91,48 @@ instance MayHaveUnit        InstanceModel where getUnit = getUnit . view output
 -- | Smart constructor for instance models with everything defined.
 im :: ModelKinds -> Inputs -> Output -> 
   OutputConstraints -> [Reference] -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
-im mkind _  _ _  [] _  _  = error $ "Source field of " ++ mkind ^. uid ++ " is empty"
-im mkind i o oc r der sn =
-  IM mkind i (o, oc) r der (shortname' sn) (prependAbrv inModel sn)
+im mkind = im' mkind (mkind ^. term)
 
 -- | Smart constructor for instance models with no derivation.
 imNoDeriv :: ModelKinds -> Inputs -> Output -> 
   OutputConstraints -> [Reference] -> String -> [Sentence] -> InstanceModel
-imNoDeriv mkind _  _ _ [] _  = error $ "Source field of " ++ mkind ^. uid ++ " is empty"
-imNoDeriv mkind i o oc r sn =
-  IM mkind i (o, oc) r Nothing (shortname' sn) (prependAbrv inModel sn)
+imNoDeriv mkind = imNoDeriv' mkind (mkind ^. term)
 
 -- | Smart constructor for instance models with no references.
 imNoRefs :: ModelKinds -> Inputs -> Output -> 
   OutputConstraints -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
-imNoRefs mkind i o oc der sn =
-  IM mkind i (o, oc) [] der (shortname' sn) (prependAbrv inModel sn)
+imNoRefs mkind = imNoRefs' mkind (mkind ^. term)
 
 -- | Smart constructor for instance models with no derivations or references.
 imNoDerivNoRefs :: ModelKinds -> Inputs -> Output -> 
   OutputConstraints -> String -> [Sentence] -> InstanceModel
-imNoDerivNoRefs mkind i o oc sn =
-  IM mkind i (o, oc) [] Nothing (shortname' sn) (prependAbrv inModel sn)
+imNoDerivNoRefs mkind = imNoDerivNoRefs' mkind (mkind ^. term)
+
+-- | Smart constructor for instance models with everything defined.
+im' :: ModelKinds -> NP -> Inputs -> Output -> 
+  OutputConstraints -> [Reference] -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
+im' mkind _ _  _ _  [] _  _  = error $ "Source field of " ++ mkind ^. uid ++ " is empty"
+im' mkind n i o oc r der sn = 
+  IM mkind n i (o, oc) r der (shortname' sn) (prependAbrv inModel sn)
+
+-- | Smart constructor for instance models with a custom term, and no derivation.
+imNoDeriv' :: ModelKinds -> NP -> Inputs -> Output -> 
+  OutputConstraints -> [Reference] -> String -> [Sentence] -> InstanceModel
+imNoDeriv' mkind _ _  _ _ [] _  = error $ "Source field of " ++ mkind ^. uid ++ " is empty"
+imNoDeriv' mkind n i o oc r sn =
+  IM mkind n i (o, oc) r Nothing (shortname' sn) (prependAbrv inModel sn)
+
+-- | Smart constructor for instance models with a custom term, and no references.
+imNoRefs' :: ModelKinds -> NP -> Inputs -> Output -> 
+  OutputConstraints -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
+imNoRefs' mkind n i o oc der sn = 
+  IM mkind n i (o, oc) [] der (shortname' sn) (prependAbrv inModel sn)
+
+-- | Smart constructor for instance models with a custom term, and no derivations or references.
+imNoDerivNoRefs' :: ModelKinds -> NP -> Inputs -> Output -> 
+  OutputConstraints -> String -> [Sentence] -> InstanceModel
+imNoDerivNoRefs' mkind n i o oc sn = 
+  IM mkind n i (o, oc) [] Nothing (shortname' sn) (prependAbrv inModel sn)
 
 -- | For building a quantity with no constraint.
 qwUC :: (Quantity q, MayHaveUnit q) => q -> Input 

@@ -3,7 +3,7 @@ module Drasil.Projectile.IMods (iMods, iMods0, landPosIM, messageIM, offsetIM, t
 import Prelude hiding (cos, sin)
 
 import Language.Drasil
-import Theory.Drasil (InstanceModel, imNoDerivNoRefs, imNoDerivNoRefs', imNoRefs, imNoRefs', qwC, ModelKinds (OthModel, EquationalModel))
+import Theory.Drasil (InstanceModel, imNoDerivNoRefs, imNoDerivNoRefs',imNoRefs', qwC, ModelKinds (OthModel, EquationalModel))
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -34,7 +34,7 @@ iMods :: [InstanceModel]
 iMods = [timeIM, landPosIM, offsetIM, messageIM]
 
 iMods0 :: [InstanceModel]
-iMods0 = [landPosIM, messageIM]
+iMods0 = [ messageIM]
 ---
 timeIM :: InstanceModel
 timeIM = imNoRefs' (EquationalModel timeQD)(nounPhraseSP "calculation of landing time")
@@ -76,15 +76,14 @@ timeDerivEqns = [E.timeDerivEqn1, E.timeDerivEqn2, E.timeDerivEqn3, E.timeDerivE
 
 ---
 landPosIM :: InstanceModel
-landPosIM = imNoRefs (OthModel landPosRC)
+landPosIM = imNoRefs' (EquationalModel landPosQD)(nounPhraseSP "calculation of landing position")
   [qwC launSpeed $ UpFrom (Exc, exactDbl 0),
    qwC launAngle $ Bounded (Exc, exactDbl 0) (Exc, half $ sy pi_)]
   (qw landPos) [UpFrom (Exc, exactDbl 0)]
   (Just landPosDeriv) "calOfLandingDist" [angleConstraintNote, gravitationalAccelConstNote, landPosConsNote]
 
-landPosRC :: RelationConcept
-landPosRC = makeRC "landPosRC" (nounPhraseSP "calculation of landing position")
-  landPosConsNote (sy landPos $= E.landPosExpr)
+landPosQD :: QDefinition
+landPosQD = mkQuantDef landPos E.landPosExpr
 
 landPosDeriv :: Derivation
 landPosDeriv = mkDerivName (phrase landPos) (weave [landPosDerivSents, map E landPosDerivEqns])

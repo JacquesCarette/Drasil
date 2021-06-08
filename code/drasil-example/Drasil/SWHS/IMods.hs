@@ -39,7 +39,7 @@ iMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 -- IM1 --
 ---------
 eBalanceOnWtr :: InstanceModel
-eBalanceOnWtr = im (OthModel eBalanceOnWtrRC)
+eBalanceOnWtr = im (DEModel eBalanceOnWtrRC)
   [qwUC wMass ,qwUC htCapW, qwUC coilHTC, qwUC pcmSA, qwUC pcmHTC, qwUC coilSA
   ,qwUC tempPCM, qwUC timeFinal, qwC tempC $ UpFrom (Exc, sy tempInit)
   ,qwUC tempInit]

@@ -89,15 +89,50 @@ gdNoRefs' :: IsUnit u => UID -> ModelKinds -> Maybe u -> Maybe Derivation -> Str
 --   definitions.
 getEqModQdsFromGd :: [GenDefn] -> [QDefinition]
 
+-- | <a>MultiDefn</a>s are QDefinition factories, used for showing one or
+--   more ways we can define a QDefinition.
+data MultiDefn
+
+-- | <a>DefiningExpr</a> are the data that make up a (quantity) definition,
+--   namely the description, the defining (rhs) expression and the context
+--   domain(s). These are meant to be <tt>alternate</tt> but equivalent
+--   definitions for a single concept.
+data DefiningExpr
+
+-- | Smart constructor for MultiDefns, does nothing special at the moment
+mkMultiDefn :: UID -> QuantityDict -> Sentence -> NonEmpty DefiningExpr -> MultiDefn
+
+-- | Smart constructor for MultiDefns defining UIDs using that of the
+--   QuantityDict
+mkMultiDefnForQuant :: QuantityDict -> Sentence -> NonEmpty DefiningExpr -> MultiDefn
+
+-- | Smart constructor for DefiningExprs
+mkDefiningExpr :: UID -> [UID] -> Sentence -> Expr -> DefiningExpr
+
+-- | Convert MultiDefns into QDefinitions via a specific DefiningExpr
+multiDefnGenQD :: MultiDefn -> DefiningExpr -> QDefinition
+
+-- | Convert MultiDefns into QDefinitions via a specific DefiningExpr (by
+--   UID)
+multiDefnGenQDByUID :: MultiDefn -> UID -> QDefinition
+
 -- | Models can be of different kinds:
 --   
 --   <ul>
---   <li>Equational models contain <a>QDefinition</a>s,</li>
---   <li>Differential equation models contain <a>RelationConcept</a>s,</li>
---   <li>Other models contain <a>RelationConcept</a>s.</li>
+--   <li><a>EquationalModel</a>s represent quantities that are calculated
+--   via a single definition/<a>QDefinition</a>.</li>
+--   <li><a>EquationalRealm</a>s represent MultiDefns; quantities that may
+--   be calculated using any one of many <tt>DefiningExpr</tt>s (e.g., 'x =
+--   A = ... = Z')</li>
+--   <li><a>DEModel</a>s represent differential equations as
+--   <a>RelationConcept</a>s</li>
+--   <li><a>OthModel</a>s are placeholders for models. No new
+--   <a>OthModel</a>s should be created, they should be using one of the
+--   other kinds.</li>
 --   </ul>
 data ModelKinds
 EquationalModel :: QDefinition -> ModelKinds
+EquationalRealm :: MultiDefn -> ModelKinds
 DEModel :: RelationConcept -> ModelKinds
 OthModel :: RelationConcept -> ModelKinds
 

@@ -116,31 +116,79 @@ instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.DataDefinition.Data
 instance Language.Drasil.Classes.CommonIdea Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Classes.Referable Theory.Drasil.DataDefinition.DataDefinition
 
+module Theory.Drasil.MultiDefn
+
+-- | <a>MultiDefn</a>s are QDefinition factories, used for showing one or
+--   more ways we can define a QDefinition.
+data MultiDefn
+
+-- | <a>DefiningExpr</a> are the data that make up a (quantity) definition,
+--   namely the description, the defining (rhs) expression and the context
+--   domain(s). These are meant to be <tt>alternate</tt> but equivalent
+--   definitions for a single concept.
+data DefiningExpr
+
+-- | Smart constructor for MultiDefns, does nothing special at the moment
+mkMultiDefn :: UID -> QuantityDict -> Sentence -> NonEmpty DefiningExpr -> MultiDefn
+
+-- | Smart constructor for MultiDefns defining UIDs using that of the
+--   QuantityDict
+mkMultiDefnForQuant :: QuantityDict -> Sentence -> NonEmpty DefiningExpr -> MultiDefn
+
+-- | Smart constructor for DefiningExprs
+mkDefiningExpr :: UID -> [UID] -> Sentence -> Expr -> DefiningExpr
+
+-- | Convert MultiDefns into QDefinitions via a specific DefiningExpr
+multiDefnGenQD :: MultiDefn -> DefiningExpr -> QDefinition
+
+-- | Convert MultiDefns into QDefinitions via a specific DefiningExpr (by
+--   UID)
+multiDefnGenQDByUID :: MultiDefn -> UID -> QDefinition
+instance Language.Drasil.Classes.Core.HasUID Theory.Drasil.MultiDefn.MultiDefn
+instance Language.Drasil.Classes.Core.HasSymbol Theory.Drasil.MultiDefn.MultiDefn
+instance Language.Drasil.Classes.NamedIdea Theory.Drasil.MultiDefn.MultiDefn
+instance Language.Drasil.Classes.Idea Theory.Drasil.MultiDefn.MultiDefn
+instance Language.Drasil.Classes.HasSpace Theory.Drasil.MultiDefn.MultiDefn
+instance Language.Drasil.Classes.Quantity Theory.Drasil.MultiDefn.MultiDefn
+instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Theory.Drasil.MultiDefn.MultiDefn
+instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.MultiDefn.MultiDefn
+instance Language.Drasil.Classes.Definition Theory.Drasil.MultiDefn.MultiDefn
+instance Language.Drasil.Classes.ExprRelat Theory.Drasil.MultiDefn.MultiDefn
+instance GHC.Classes.Eq Theory.Drasil.MultiDefn.DefiningExpr
+instance Language.Drasil.Classes.Core.HasUID Theory.Drasil.MultiDefn.DefiningExpr
+instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.MultiDefn.DefiningExpr
+instance Language.Drasil.Classes.Definition Theory.Drasil.MultiDefn.DefiningExpr
+
 module Theory.Drasil.ModelKinds
 
 -- | Models can be of different kinds:
 --   
 --   <ul>
---   <li>Equational models contain <a>QDefinition</a>s,</li>
---   <li>Differential equation models contain <a>RelationConcept</a>s,</li>
---   <li>Other models contain <a>RelationConcept</a>s.</li>
+--   <li><a>EquationalModel</a>s represent quantities that are calculated
+--   via a single definition/<a>QDefinition</a>.</li>
+--   <li><a>EquationalRealm</a>s represent MultiDefns; quantities that may
+--   be calculated using any one of many <tt>DefiningExpr</tt>s (e.g., 'x =
+--   A = ... = Z')</li>
+--   <li><a>DEModel</a>s represent differential equations as
+--   <a>RelationConcept</a>s</li>
+--   <li><a>OthModel</a>s are placeholders for models. No new
+--   <a>OthModel</a>s should be created, they should be using one of the
+--   other kinds.</li>
 --   </ul>
 data ModelKinds
 EquationalModel :: QDefinition -> ModelKinds
+EquationalRealm :: MultiDefn -> ModelKinds
 DEModel :: RelationConcept -> ModelKinds
 OthModel :: RelationConcept -> ModelKinds
 
--- | A <tt>Setter</tt> for <a>ModelKinds</a> built upon <a>QDefinition</a>s
---   or <a>RelationConcept</a>s.
-setMk :: ModelKinds -> Setter' QDefinition a -> Setter' RelationConcept a -> a -> ModelKinds
+-- | Map into internal representations of ModelKinds
+setMk :: ModelKinds -> Setter' QDefinition a -> Setter' MultiDefn a -> Setter' RelationConcept a -> a -> ModelKinds
 
--- | A <a>Getter</a> for extracting <a>QDefinition</a>s or
---   <a>RelationConcept</a>s from <a>ModelKinds</a>.
-elimMk :: Getter QDefinition a -> Getter RelationConcept a -> ModelKinds -> a
+-- | Retrieve internal data from ModelKinds
+elimMk :: Getter QDefinition a -> Getter MultiDefn a -> Getter RelationConcept a -> ModelKinds -> a
 
--- | Make a <tt>Lens</tt> for <a>ModelKinds</a>. They may contain either
---   <a>QDefinition</a>s or <a>RelationConcept</a>s.
-lensMk :: forall a. Lens' QDefinition a -> Lens' RelationConcept a -> Lens' ModelKinds a
+-- | Make a <tt>Lens</tt> for <a>ModelKinds</a>.
+lensMk :: forall a. Lens' QDefinition a -> Lens' MultiDefn a -> Lens' RelationConcept a -> Lens' ModelKinds a
 
 -- | Extract a list of <a>QDefinition</a>s from a list of
 --   <a>ModelKinds</a>.
@@ -368,15 +416,50 @@ gdNoRefs' :: IsUnit u => UID -> ModelKinds -> Maybe u -> Maybe Derivation -> Str
 --   definitions.
 getEqModQdsFromGd :: [GenDefn] -> [QDefinition]
 
+-- | <a>MultiDefn</a>s are QDefinition factories, used for showing one or
+--   more ways we can define a QDefinition.
+data MultiDefn
+
+-- | <a>DefiningExpr</a> are the data that make up a (quantity) definition,
+--   namely the description, the defining (rhs) expression and the context
+--   domain(s). These are meant to be <tt>alternate</tt> but equivalent
+--   definitions for a single concept.
+data DefiningExpr
+
+-- | Smart constructor for MultiDefns, does nothing special at the moment
+mkMultiDefn :: UID -> QuantityDict -> Sentence -> NonEmpty DefiningExpr -> MultiDefn
+
+-- | Smart constructor for MultiDefns defining UIDs using that of the
+--   QuantityDict
+mkMultiDefnForQuant :: QuantityDict -> Sentence -> NonEmpty DefiningExpr -> MultiDefn
+
+-- | Smart constructor for DefiningExprs
+mkDefiningExpr :: UID -> [UID] -> Sentence -> Expr -> DefiningExpr
+
+-- | Convert MultiDefns into QDefinitions via a specific DefiningExpr
+multiDefnGenQD :: MultiDefn -> DefiningExpr -> QDefinition
+
+-- | Convert MultiDefns into QDefinitions via a specific DefiningExpr (by
+--   UID)
+multiDefnGenQDByUID :: MultiDefn -> UID -> QDefinition
+
 -- | Models can be of different kinds:
 --   
 --   <ul>
---   <li>Equational models contain <a>QDefinition</a>s,</li>
---   <li>Differential equation models contain <a>RelationConcept</a>s,</li>
---   <li>Other models contain <a>RelationConcept</a>s.</li>
+--   <li><a>EquationalModel</a>s represent quantities that are calculated
+--   via a single definition/<a>QDefinition</a>.</li>
+--   <li><a>EquationalRealm</a>s represent MultiDefns; quantities that may
+--   be calculated using any one of many <tt>DefiningExpr</tt>s (e.g., 'x =
+--   A = ... = Z')</li>
+--   <li><a>DEModel</a>s represent differential equations as
+--   <a>RelationConcept</a>s</li>
+--   <li><a>OthModel</a>s are placeholders for models. No new
+--   <a>OthModel</a>s should be created, they should be using one of the
+--   other kinds.</li>
 --   </ul>
 data ModelKinds
 EquationalModel :: QDefinition -> ModelKinds
+EquationalRealm :: MultiDefn -> ModelKinds
 DEModel :: RelationConcept -> ModelKinds
 OthModel :: RelationConcept -> ModelKinds
 

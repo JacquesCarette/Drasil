@@ -1313,11 +1313,14 @@ fromEqnSt :: IsUnit u => String -> NP -> Sentence -> (Stage -> Symbol) -> Space 
 fromEqnSt' :: String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> Expr -> QDefinition
 equat :: Lens' QDefinition Expr
 
--- | Used to help make <tt>Qdefinition</tt>s when <a>UID</a>, term, and
+-- | Wrapper for fromEqnSt and fromEqnSt'
+mkQDefSt :: UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> Expr -> QDefinition
+
+-- | Used to help make <a>QDefinition</a>s when <a>UID</a>, term, and
 --   <a>Symbol</a> come from the same source.
 mkQuantDef :: (Quantity c, MayHaveUnit c) => c -> Expr -> QDefinition
 
--- | Used to help make <tt>Qdefinition</tt>s when <a>UID</a> and
+-- | Used to help make <a>QDefinition</a>s when <a>UID</a> and
 --   <a>Symbol</a> come from the same source, with the term separate.
 mkQuantDef' :: (Quantity c, MayHaveUnit c) => c -> NP -> Expr -> QDefinition
 

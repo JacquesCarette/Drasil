@@ -1,59 +1,87 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span>
-</span><span id="line-2"></span><span class="hs-pragma">{-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables  #-}</span><span>
-</span><span id="line-3"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Theory.Drasil.ModelKinds</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier">ModelKinds</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#setMk"><span class="hs-identifier">setMk</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#elimMk"><span class="hs-identifier">elimMk</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#lensMk"><span class="hs-identifier">lensMk</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#getEqModQds"><span class="hs-identifier">getEqModQds</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables, PostfixOperators  #-}</span><span>
+</span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Theory.Drasil.ModelKinds</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier">ModelKinds</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-3"></span><span>  </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#setMk"><span class="hs-identifier">setMk</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#elimMk"><span class="hs-identifier">elimMk</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#lensMk"><span class="hs-identifier">lensMk</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#getEqModQds"><span class="hs-identifier">getEqModQds</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-4"></span><span>
-</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">QDefinition</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">RelationConcept</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ConceptDomain</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-6"></span><span>                        </span><span class="annot"><span class="hs-identifier">Definition</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ExprRelat</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Idea</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-7"></span><span>                        </span><span class="annot"><span class="hs-identifier">NamedIdea</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">HasUID</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Lens</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Lens'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-operator">(^.)</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">to</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">lens</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">set</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">makeLenses</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Getter</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Setter'</span></span><span class="hs-special">)</span><span>
-</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Maybe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">mapMaybe</span></span><span class="hs-special">)</span><span>
-</span><span id="line-10"></span><span>
-</span><span id="line-11"></span><span class="hs-comment">-- | Models can be of different kinds: </span><span>
-</span><span id="line-12"></span><span class="hs-comment">--</span><span>
-</span><span id="line-13"></span><span class="hs-comment">--     * Equational models contain 'QDefinition's,</span><span>
-</span><span id="line-14"></span><span class="hs-comment">--     * Differential equation models contain 'RelationConcept's,</span><span>
-</span><span id="line-15"></span><span class="hs-comment">--     * Other models contain 'RelationConcept's.</span><span>
-</span><span id="line-16"></span><span class="hs-keyword">data</span><span> </span><span id="ModelKinds"><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-var">ModelKinds</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="EquationalModel"><span class="annot"><a href="Theory.Drasil.ModelKinds.html#EquationalModel"><span class="hs-identifier hs-var">EquationalModel</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
-</span><span id="line-17"></span><span>                </span><span class="hs-glyph">|</span><span> </span><span id="DEModel"><span class="annot"><a href="Theory.Drasil.ModelKinds.html#DEModel"><span class="hs-identifier hs-var">DEModel</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">RelationConcept</span></span><span>
-</span><span id="line-18"></span><span>                </span><span class="hs-glyph">|</span><span> </span><span id="OthModel"><span class="annot"><a href="Theory.Drasil.ModelKinds.html#OthModel"><span class="hs-identifier hs-var">OthModel</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">RelationConcept</span></span><span>
-</span><span id="line-19"></span><span>
-</span><span id="line-20"></span><span class="hs-identifier">makeLenses</span><span> </span><span class="hs-special">''</span><span class="hs-identifier">ModelKinds</span><span>
-</span><span id="line-21"></span><span>
-</span><span id="line-22"></span><span class="hs-comment">-- | Finds the 'UID' of the 'QDefinition' or 'RelationConcept' in the 'ModelKinds'.</span><span>
-</span><span id="line-23"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span>             </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679132061"><span class="annot"><span class="annottext">uid :: (UID -&gt; f UID) -&gt; ModelKinds -&gt; f ModelKinds
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">uid</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Lens' QDefinition UID
--&gt; Lens' RelationConcept UID -&gt; Lens' ModelKinds UID
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Lens</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">makeLenses</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">set</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">lens</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">to</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-operator">(^.)</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Setter'</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Getter</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Lens'</span></span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Maybe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">mapMaybe</span></span><span class="hs-special">)</span><span>
+</span><span id="line-7"></span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">ExprRelat</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ConceptDomain</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Definition</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-9"></span><span>  </span><span class="annot"><span class="hs-identifier">Idea</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">NamedIdea</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">RelationConcept</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">QDefinition</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">HasUID</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html"><span class="hs-identifier">Theory.Drasil.MultiDefn</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#MultiDefn"><span class="hs-identifier">MultiDefn</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-11"></span><span>
+</span><span id="line-12"></span><span class="hs-comment">-- | Models can be of different kinds: </span><span>
+</span><span id="line-13"></span><span class="hs-comment">--</span><span>
+</span><span id="line-14"></span><span class="hs-comment">--     * 'EquationalModel's represent quantities that are calculated via a single definition/'QDefinition'.</span><span>
+</span><span id="line-15"></span><span class="hs-comment">--     * 'EquationalRealm's represent MultiDefns; quantities that may be calculated using any one of many 'DefiningExpr's (e.g., 'x = A = ... = Z')</span><span>
+</span><span id="line-16"></span><span class="hs-comment">--     * 'DEModel's represent differential equations as 'RelationConcept's</span><span>
+</span><span id="line-17"></span><span class="hs-comment">--     * 'OthModel's are placeholders for models. No new 'OthModel's should be created, they should be using one of the other kinds.</span><span>
+</span><span id="line-18"></span><span class="hs-keyword">data</span><span> </span><span id="ModelKinds"><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-var">ModelKinds</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="EquationalModel"><span class="annot"><a href="Theory.Drasil.ModelKinds.html#EquationalModel"><span class="hs-identifier hs-var">EquationalModel</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
+</span><span id="line-19"></span><span>                </span><span class="hs-glyph">|</span><span> </span><span id="EquationalRealm"><span class="annot"><a href="Theory.Drasil.ModelKinds.html#EquationalRealm"><span class="hs-identifier hs-var">EquationalRealm</span></a></span></span><span> </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#MultiDefn"><span class="hs-identifier hs-type">MultiDefn</span></a></span><span>
+</span><span id="line-20"></span><span>                </span><span class="hs-glyph">|</span><span> </span><span id="DEModel"><span class="annot"><a href="Theory.Drasil.ModelKinds.html#DEModel"><span class="hs-identifier hs-var">DEModel</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">RelationConcept</span></span><span>
+</span><span id="line-21"></span><span>                </span><span class="hs-glyph">|</span><span> </span><span id="OthModel"><span class="annot"><a href="Theory.Drasil.ModelKinds.html#OthModel"><span class="hs-identifier hs-var">OthModel</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">RelationConcept</span></span><span>
+</span><span id="line-22"></span><span>
+</span><span id="line-23"></span><span class="hs-identifier">makeLenses</span><span> </span><span class="hs-special">''</span><span class="hs-identifier">ModelKinds</span><span>
+</span><span id="line-24"></span><span>
+</span><span id="line-25"></span><span class="hs-comment">-- | Finds the 'UID' of the 'ModelKinds'.</span><span>
+</span><span id="line-26"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span>        </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679136499"><span class="annot"><span class="annottext">uid :: (UID -&gt; f UID) -&gt; ModelKinds -&gt; f ModelKinds
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">uid</span></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Lens' QDefinition UID
+-&gt; Lens' MultiDefn UID
+-&gt; Lens' RelationConcept UID
+-&gt; Lens' ModelKinds UID
 forall a.
 Lens' QDefinition a
--&gt; Lens' RelationConcept a -&gt; Lens' ModelKinds a
+-&gt; Lens' MultiDefn a
+-&gt; Lens' RelationConcept a
+-&gt; Lens' ModelKinds a
 </span><a href="Theory.Drasil.ModelKinds.html#lensMk"><span class="hs-identifier hs-var">lensMk</span></a></span><span> </span><span class="annot"><span class="annottext">forall c. HasUID c =&gt; Lens' c UID
 Lens' QDefinition UID
 </span><span class="hs-identifier hs-var">uid</span></span><span> </span><span class="annot"><span class="annottext">forall c. HasUID c =&gt; Lens' c UID
+Lens' MultiDefn UID
+</span><span class="hs-identifier hs-var">uid</span></span><span> </span><span class="annot"><span class="annottext">forall c. HasUID c =&gt; Lens' c UID
 Lens' RelationConcept UID
 </span><span class="hs-identifier hs-var">uid</span></span><span>
-</span><span id="line-24"></span><span class="hs-comment">-- | Finds the term ('NP') of the 'QDefinition' or 'RelationConcept' in the 'ModelKinds'.</span><span>
-</span><span id="line-25"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span>          </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679132056"><span class="annot"><span class="annottext">term :: (NP -&gt; f NP) -&gt; ModelKinds -&gt; f ModelKinds
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">term</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Lens' QDefinition NP
--&gt; Lens' RelationConcept NP -&gt; Lens' ModelKinds NP
+</span><span id="line-27"></span><span class="hs-comment">-- | Finds the term ('NP') of the 'ModelKinds'.</span><span>
+</span><span id="line-28"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span>     </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679136494"><span class="annot"><span class="annottext">term :: (NP -&gt; f NP) -&gt; ModelKinds -&gt; f ModelKinds
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">term</span></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Lens' QDefinition NP
+-&gt; Lens' MultiDefn NP
+-&gt; Lens' RelationConcept NP
+-&gt; Lens' ModelKinds NP
 forall a.
 Lens' QDefinition a
--&gt; Lens' RelationConcept a -&gt; Lens' ModelKinds a
+-&gt; Lens' MultiDefn a
+-&gt; Lens' RelationConcept a
+-&gt; Lens' ModelKinds a
 </span><a href="Theory.Drasil.ModelKinds.html#lensMk"><span class="hs-identifier hs-var">lensMk</span></a></span><span> </span><span class="annot"><span class="annottext">forall c. NamedIdea c =&gt; Lens' c NP
 Lens' QDefinition NP
 </span><span class="hs-identifier hs-var">term</span></span><span> </span><span class="annot"><span class="annottext">forall c. NamedIdea c =&gt; Lens' c NP
+Lens' MultiDefn NP
+</span><span class="hs-identifier hs-var">term</span></span><span> </span><span class="annot"><span class="annottext">forall c. NamedIdea c =&gt; Lens' c NP
 Lens' RelationConcept NP
 </span><span class="hs-identifier hs-var">term</span></span><span>
-</span><span id="line-26"></span><span class="hs-comment">-- | Finds the idea of the 'QDefinition' or 'RelationConcept' contained in the 'ModelKinds'.</span><span>
-</span><span id="line-27"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span>               </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679132051"><span class="annot"><span class="annottext">getA :: ModelKinds -&gt; Maybe UID
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">getA</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Getter QDefinition (Maybe UID)
--&gt; Getter RelationConcept (Maybe UID) -&gt; ModelKinds -&gt; Maybe UID
+</span><span id="line-29"></span><span class="hs-comment">-- | Finds the idea of the 'ModelKinds'.</span><span>
+</span><span id="line-30"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span>          </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679136489"><span class="annot"><span class="annottext">getA :: ModelKinds -&gt; Maybe UID
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">getA</span></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Getter QDefinition (Maybe UID)
+-&gt; Getter MultiDefn (Maybe UID)
+-&gt; Getter RelationConcept (Maybe UID)
+-&gt; ModelKinds
+-&gt; Maybe UID
 forall a.
-Getter QDefinition a -&gt; Getter RelationConcept a -&gt; ModelKinds -&gt; a
+Getter QDefinition a
+-&gt; Getter MultiDefn a
+-&gt; Getter RelationConcept a
+-&gt; ModelKinds
+-&gt; a
 </span><a href="Theory.Drasil.ModelKinds.html#elimMk"><span class="hs-identifier hs-var">elimMk</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(QDefinition -&gt; Maybe UID) -&gt; Optic' (-&gt;) f QDefinition (Maybe UID)
 forall (p :: * -&gt; * -&gt; *) (f :: * -&gt; *) s a.
 (Profunctor p, Contravariant f) =&gt;
 (s -&gt; a) -&gt; Optic' p f s a
 </span><span class="hs-identifier hs-var">to</span></span><span> </span><span class="annot"><span class="annottext">QDefinition -&gt; Maybe UID
+forall c. Idea c =&gt; c -&gt; Maybe UID
+</span><span class="hs-identifier hs-var">getA</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(MultiDefn -&gt; Maybe UID) -&gt; Optic' (-&gt;) f MultiDefn (Maybe UID)
+forall (p :: * -&gt; * -&gt; *) (f :: * -&gt; *) s a.
+(Profunctor p, Contravariant f) =&gt;
+(s -&gt; a) -&gt; Optic' p f s a
+</span><span class="hs-identifier hs-var">to</span></span><span> </span><span class="annot"><span class="annottext">MultiDefn -&gt; Maybe UID
 forall c. Idea c =&gt; c -&gt; Maybe UID
 </span><span class="hs-identifier hs-var">getA</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(RelationConcept -&gt; Maybe UID)
 -&gt; Optic' (-&gt;) f RelationConcept (Maybe UID)
@@ -63,29 +91,48 @@ forall (p :: * -&gt; * -&gt; *) (f :: * -&gt; *) s a.
 </span><span class="hs-identifier hs-var">to</span></span><span> </span><span class="annot"><span class="annottext">RelationConcept -&gt; Maybe UID
 forall c. Idea c =&gt; c -&gt; Maybe UID
 </span><span class="hs-identifier hs-var">getA</span></span><span class="hs-special">)</span><span>
-</span><span id="line-28"></span><span class="hs-comment">-- | Finds the definition of the 'QDefinition' or 'RelationConcept' in the 'ModelKinds'.</span><span>
-</span><span id="line-29"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Definition</span></span><span>         </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679132047"><span class="annot"><span class="annottext">defn :: (Sentence -&gt; f Sentence) -&gt; ModelKinds -&gt; f ModelKinds
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">defn</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Lens' QDefinition Sentence
--&gt; Lens' RelationConcept Sentence -&gt; Lens' ModelKinds Sentence
+</span><span id="line-31"></span><span class="hs-comment">-- | Finds the definition of the 'ModelKinds'.</span><span>
+</span><span id="line-32"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Definition</span></span><span>    </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679136485"><span class="annot"><span class="annottext">defn :: (Sentence -&gt; f Sentence) -&gt; ModelKinds -&gt; f ModelKinds
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">defn</span></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Lens' QDefinition Sentence
+-&gt; Lens' MultiDefn Sentence
+-&gt; Lens' RelationConcept Sentence
+-&gt; Lens' ModelKinds Sentence
 forall a.
 Lens' QDefinition a
--&gt; Lens' RelationConcept a -&gt; Lens' ModelKinds a
+-&gt; Lens' MultiDefn a
+-&gt; Lens' RelationConcept a
+-&gt; Lens' ModelKinds a
 </span><a href="Theory.Drasil.ModelKinds.html#lensMk"><span class="hs-identifier hs-var">lensMk</span></a></span><span> </span><span class="annot"><span class="annottext">forall c. Definition c =&gt; Lens' c Sentence
 Lens' QDefinition Sentence
 </span><span class="hs-identifier hs-var">defn</span></span><span> </span><span class="annot"><span class="annottext">forall c. Definition c =&gt; Lens' c Sentence
+Lens' MultiDefn Sentence
+</span><span class="hs-identifier hs-var">defn</span></span><span> </span><span class="annot"><span class="annottext">forall c. Definition c =&gt; Lens' c Sentence
 Lens' RelationConcept Sentence
 </span><span class="hs-identifier hs-var">defn</span></span><span>
-</span><span id="line-30"></span><span class="hs-comment">-- | Finds the domain of the 'QDefinition' or 'RelationConcept' in the 'ModelKinds'.</span><span>
-</span><span id="line-31"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptDomain</span></span><span>      </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679132043"><span class="annot"><span class="annottext">cdom :: ModelKinds -&gt; [UID]
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">cdom</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Getter QDefinition [UID]
--&gt; Getter RelationConcept [UID] -&gt; ModelKinds -&gt; [UID]
+</span><span id="line-33"></span><span class="hs-comment">-- | Finds the domain of the 'ModelKinds'.</span><span>
+</span><span id="line-34"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptDomain</span></span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679136481"><span class="annot"><span class="annottext">cdom :: ModelKinds -&gt; [UID]
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">cdom</span></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Getter QDefinition [UID]
+-&gt; Getter MultiDefn [UID]
+-&gt; Getter RelationConcept [UID]
+-&gt; ModelKinds
+-&gt; [UID]
 forall a.
-Getter QDefinition a -&gt; Getter RelationConcept a -&gt; ModelKinds -&gt; a
+Getter QDefinition a
+-&gt; Getter MultiDefn a
+-&gt; Getter RelationConcept a
+-&gt; ModelKinds
+-&gt; a
 </span><a href="Theory.Drasil.ModelKinds.html#elimMk"><span class="hs-identifier hs-var">elimMk</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(QDefinition -&gt; [UID]) -&gt; Optic' (-&gt;) f QDefinition [UID]
 forall (p :: * -&gt; * -&gt; *) (f :: * -&gt; *) s a.
 (Profunctor p, Contravariant f) =&gt;
 (s -&gt; a) -&gt; Optic' p f s a
 </span><span class="hs-identifier hs-var">to</span></span><span> </span><span class="annot"><span class="annottext">QDefinition -&gt; [UID]
+forall c. ConceptDomain c =&gt; c -&gt; [UID]
+</span><span class="hs-identifier hs-var">cdom</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(MultiDefn -&gt; [UID]) -&gt; Optic' (-&gt;) f MultiDefn [UID]
+forall (p :: * -&gt; * -&gt; *) (f :: * -&gt; *) s a.
+(Profunctor p, Contravariant f) =&gt;
+(s -&gt; a) -&gt; Optic' p f s a
+</span><span class="hs-identifier hs-var">to</span></span><span> </span><span class="annot"><span class="annottext">MultiDefn -&gt; [UID]
 forall c. ConceptDomain c =&gt; c -&gt; [UID]
 </span><span class="hs-identifier hs-var">cdom</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(RelationConcept -&gt; [UID]) -&gt; Optic' (-&gt;) f RelationConcept [UID]
 forall (p :: * -&gt; * -&gt; *) (f :: * -&gt; *) s a.
@@ -94,17 +141,30 @@ forall (p :: * -&gt; * -&gt; *) (f :: * -&gt; *) s a.
 </span><span class="hs-identifier hs-var">to</span></span><span> </span><span class="annot"><span class="annottext">RelationConcept -&gt; [UID]
 forall c. ConceptDomain c =&gt; c -&gt; [UID]
 </span><span class="hs-identifier hs-var">cdom</span></span><span class="hs-special">)</span><span>
-</span><span id="line-32"></span><span class="hs-comment">-- | Finds the relation expression for a 'QDefinition' or 'RelationConcept' contained in the 'ModelKinds'.</span><span>
-</span><span id="line-33"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ExprRelat</span></span><span>          </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679132039"><span class="annot"><span class="annottext">relat :: ModelKinds -&gt; Relation
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">relat</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Getter QDefinition Relation
--&gt; Getter RelationConcept Relation -&gt; ModelKinds -&gt; Relation
+</span><span id="line-35"></span><span class="hs-comment">-- | Finds the relation expression of the 'ModelKinds'.</span><span>
+</span><span id="line-36"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ExprRelat</span></span><span>     </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679136477"><span class="annot"><span class="annottext">relat :: ModelKinds -&gt; Relation
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">relat</span></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Getter QDefinition Relation
+-&gt; Getter MultiDefn Relation
+-&gt; Getter RelationConcept Relation
+-&gt; ModelKinds
+-&gt; Relation
 forall a.
-Getter QDefinition a -&gt; Getter RelationConcept a -&gt; ModelKinds -&gt; a
+Getter QDefinition a
+-&gt; Getter MultiDefn a
+-&gt; Getter RelationConcept a
+-&gt; ModelKinds
+-&gt; a
 </span><a href="Theory.Drasil.ModelKinds.html#elimMk"><span class="hs-identifier hs-var">elimMk</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(QDefinition -&gt; Relation) -&gt; Optic' (-&gt;) f QDefinition Relation
 forall (p :: * -&gt; * -&gt; *) (f :: * -&gt; *) s a.
 (Profunctor p, Contravariant f) =&gt;
 (s -&gt; a) -&gt; Optic' p f s a
 </span><span class="hs-identifier hs-var">to</span></span><span> </span><span class="annot"><span class="annottext">QDefinition -&gt; Relation
+forall c. ExprRelat c =&gt; c -&gt; Relation
+</span><span class="hs-identifier hs-var">relat</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(MultiDefn -&gt; Relation) -&gt; Optic' (-&gt;) f MultiDefn Relation
+forall (p :: * -&gt; * -&gt; *) (f :: * -&gt; *) s a.
+(Profunctor p, Contravariant f) =&gt;
+(s -&gt; a) -&gt; Optic' p f s a
+</span><span class="hs-identifier hs-var">to</span></span><span> </span><span class="annot"><span class="annottext">MultiDefn -&gt; Relation
 forall c. ExprRelat c =&gt; c -&gt; Relation
 </span><span class="hs-identifier hs-var">relat</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(RelationConcept -&gt; Relation)
 -&gt; Optic' (-&gt;) f RelationConcept Relation
@@ -114,46 +174,61 @@ forall (p :: * -&gt; * -&gt; *) (f :: * -&gt; *) s a.
 </span><span class="hs-identifier hs-var">to</span></span><span> </span><span class="annot"><span class="annottext">RelationConcept -&gt; Relation
 forall c. ExprRelat c =&gt; c -&gt; Relation
 </span><span class="hs-identifier hs-var">relat</span></span><span class="hs-special">)</span><span>
-</span><span id="line-34"></span><span>
-</span><span id="line-35"></span><span class="hs-comment">-- | A 'Getter' for extracting 'QDefinition's or 'RelationConcept's from 'ModelKinds'.</span><span>
-</span><span id="line-36"></span><span id="local-6989586621679132124"><span class="annot"><a href="Theory.Drasil.ModelKinds.html#elimMk"><span class="hs-identifier hs-type">elimMk</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Getter</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span> </span><span class="annot"><a href="#local-6989586621679132124"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Getter</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">RelationConcept</span></span><span> </span><span class="annot"><a href="#local-6989586621679132124"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679132124"><span class="hs-identifier hs-type">a</span></a></span></span><span>
-</span><span id="line-37"></span><span id="elimMk"><span class="annot"><span class="annottext">elimMk :: Getter QDefinition a -&gt; Getter RelationConcept a -&gt; ModelKinds -&gt; a
-</span><a href="Theory.Drasil.ModelKinds.html#elimMk"><span class="hs-identifier hs-var hs-var">elimMk</span></a></span></span><span> </span><span id="local-6989586621679132037"><span class="annot"><span class="annottext">l :: Getter QDefinition a
-</span><a href="#local-6989586621679132037"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#EquationalModel"><span class="hs-identifier hs-type">EquationalModel</span></a></span><span> </span><span id="local-6989586621679132036"><span class="annot"><span class="annottext">q :: QDefinition
-</span><a href="#local-6989586621679132036"><span class="hs-identifier hs-var">q</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QDefinition
-</span><a href="#local-6989586621679132036"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">QDefinition -&gt; Getting a QDefinition a -&gt; a
+</span><span id="line-37"></span><span>
+</span><span id="line-38"></span><span class="hs-comment">-- TODO: implement MayHaveUnit for ModelKinds once we've sufficiently removed OthModels &amp; RelationConcepts (else we'd be breaking too much of `stable`)</span><span>
+</span><span id="line-39"></span><span>
+</span><span id="line-40"></span><span class="hs-comment">-- | Retrieve internal data from ModelKinds</span><span>
+</span><span id="line-41"></span><span id="local-6989586621679136566"><span class="annot"><a href="Theory.Drasil.ModelKinds.html#elimMk"><span class="hs-identifier hs-type">elimMk</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Getter</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span> </span><span class="annot"><a href="#local-6989586621679136566"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Getter</span></span><span> </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#MultiDefn"><span class="hs-identifier hs-type">MultiDefn</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679136566"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Getter</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">RelationConcept</span></span><span> </span><span class="annot"><a href="#local-6989586621679136566"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679136566"><span class="hs-identifier hs-type">a</span></a></span></span><span>
+</span><span id="line-42"></span><span id="elimMk"><span class="annot"><span class="annottext">elimMk :: Getter QDefinition a
+-&gt; Getter MultiDefn a
+-&gt; Getter RelationConcept a
+-&gt; ModelKinds
+-&gt; a
+</span><a href="Theory.Drasil.ModelKinds.html#elimMk"><span class="hs-identifier hs-var hs-var">elimMk</span></a></span></span><span> </span><span id="local-6989586621679136475"><span class="annot"><span class="annottext">l :: Getter QDefinition a
+</span><a href="#local-6989586621679136475"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#EquationalModel"><span class="hs-identifier hs-type">EquationalModel</span></a></span><span> </span><span id="local-6989586621679136474"><span class="annot"><span class="annottext">q :: QDefinition
+</span><a href="#local-6989586621679136474"><span class="hs-identifier hs-var">q</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><a href="#local-6989586621679136474"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">QDefinition -&gt; Getting a QDefinition a -&gt; a
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting a QDefinition a
 Getter QDefinition a
-</span><a href="#local-6989586621679132037"><span class="hs-identifier hs-var">l</span></a></span><span>
-</span><span id="line-38"></span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#elimMk"><span class="hs-identifier hs-var">elimMk</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span id="local-6989586621679132035"><span class="annot"><span class="annottext">l :: Getter RelationConcept a
-</span><a href="#local-6989586621679132035"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#DEModel"><span class="hs-identifier hs-type">DEModel</span></a></span><span> </span><span id="local-6989586621679132034"><span class="annot"><span class="annottext">q :: RelationConcept
-</span><a href="#local-6989586621679132034"><span class="hs-identifier hs-var">q</span></a></span></span><span class="hs-special">)</span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">RelationConcept
-</span><a href="#local-6989586621679132034"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">RelationConcept -&gt; Getting a RelationConcept a -&gt; a
+</span><a href="#local-6989586621679136475"><span class="hs-identifier hs-var">l</span></a></span><span>
+</span><span id="line-43"></span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#elimMk"><span class="hs-identifier hs-var">elimMk</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span id="local-6989586621679136473"><span class="annot"><span class="annottext">l :: Getter MultiDefn a
+</span><a href="#local-6989586621679136473"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#EquationalRealm"><span class="hs-identifier hs-type">EquationalRealm</span></a></span><span> </span><span id="local-6989586621679136472"><span class="annot"><span class="annottext">q :: MultiDefn
+</span><a href="#local-6989586621679136472"><span class="hs-identifier hs-var">q</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">MultiDefn
+</span><a href="#local-6989586621679136472"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">MultiDefn -&gt; Getting a MultiDefn a -&gt; a
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting a MultiDefn a
+Getter MultiDefn a
+</span><a href="#local-6989586621679136473"><span class="hs-identifier hs-var">l</span></a></span><span>
+</span><span id="line-44"></span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#elimMk"><span class="hs-identifier hs-var">elimMk</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-identifier">_</span><span> </span><span id="local-6989586621679136471"><span class="annot"><span class="annottext">l :: Getter RelationConcept a
+</span><a href="#local-6989586621679136471"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#DEModel"><span class="hs-identifier hs-type">DEModel</span></a></span><span> </span><span id="local-6989586621679136470"><span class="annot"><span class="annottext">q :: RelationConcept
+</span><a href="#local-6989586621679136470"><span class="hs-identifier hs-var">q</span></a></span></span><span class="hs-special">)</span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">RelationConcept
+</span><a href="#local-6989586621679136470"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">RelationConcept -&gt; Getting a RelationConcept a -&gt; a
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting a RelationConcept a
 Getter RelationConcept a
-</span><a href="#local-6989586621679132035"><span class="hs-identifier hs-var">l</span></a></span><span>
-</span><span id="line-39"></span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#elimMk"><span class="hs-identifier hs-var">elimMk</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span id="local-6989586621679132033"><span class="annot"><span class="annottext">l :: Getter RelationConcept a
-</span><a href="#local-6989586621679132033"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#OthModel"><span class="hs-identifier hs-type">OthModel</span></a></span><span> </span><span id="local-6989586621679132032"><span class="annot"><span class="annottext">q :: RelationConcept
-</span><a href="#local-6989586621679132032"><span class="hs-identifier hs-var">q</span></a></span></span><span class="hs-special">)</span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">RelationConcept
-</span><a href="#local-6989586621679132032"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">RelationConcept -&gt; Getting a RelationConcept a -&gt; a
+</span><a href="#local-6989586621679136471"><span class="hs-identifier hs-var">l</span></a></span><span>
+</span><span id="line-45"></span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#elimMk"><span class="hs-identifier hs-var">elimMk</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-identifier">_</span><span> </span><span id="local-6989586621679136469"><span class="annot"><span class="annottext">l :: Getter RelationConcept a
+</span><a href="#local-6989586621679136469"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#OthModel"><span class="hs-identifier hs-type">OthModel</span></a></span><span> </span><span id="local-6989586621679136468"><span class="annot"><span class="annottext">q :: RelationConcept
+</span><a href="#local-6989586621679136468"><span class="hs-identifier hs-var">q</span></a></span></span><span class="hs-special">)</span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">RelationConcept
+</span><a href="#local-6989586621679136468"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">RelationConcept -&gt; Getting a RelationConcept a -&gt; a
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting a RelationConcept a
 Getter RelationConcept a
-</span><a href="#local-6989586621679132033"><span class="hs-identifier hs-var">l</span></a></span><span>
-</span><span id="line-40"></span><span>
-</span><span id="line-41"></span><span class="hs-comment">-- | A 'Setter' for 'ModelKinds' built upon 'QDefinition's or 'RelationConcept's.</span><span>
-</span><span id="line-42"></span><span id="local-6989586621679132080"><span class="annot"><a href="Theory.Drasil.ModelKinds.html#setMk"><span class="hs-identifier hs-type">setMk</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Setter'</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span> </span><span class="annot"><a href="#local-6989586621679132080"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Setter'</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">RelationConcept</span></span><span> </span><span class="annot"><a href="#local-6989586621679132080"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679132080"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span></span><span>
-</span><span id="line-43"></span><span id="setMk"><span class="annot"><span class="annottext">setMk :: ModelKinds
+</span><a href="#local-6989586621679136469"><span class="hs-identifier hs-var">l</span></a></span><span>
+</span><span id="line-46"></span><span>
+</span><span id="line-47"></span><span class="hs-comment">-- | Map into internal representations of ModelKinds</span><span>
+</span><span id="line-48"></span><span id="local-6989586621679136519"><span class="annot"><a href="Theory.Drasil.ModelKinds.html#setMk"><span class="hs-identifier hs-type">setMk</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Setter'</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span> </span><span class="annot"><a href="#local-6989586621679136519"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Setter'</span></span><span> </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#MultiDefn"><span class="hs-identifier hs-type">MultiDefn</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679136519"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Setter'</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">RelationConcept</span></span><span> </span><span class="annot"><a href="#local-6989586621679136519"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679136519"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span></span><span>
+</span><span id="line-49"></span><span id="setMk"><span class="annot"><span class="annottext">setMk :: ModelKinds
 -&gt; Setter' QDefinition a
+-&gt; Setter' MultiDefn a
 -&gt; Setter' RelationConcept a
 -&gt; a
 -&gt; ModelKinds
-</span><a href="Theory.Drasil.ModelKinds.html#setMk"><span class="hs-identifier hs-var hs-var">setMk</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#EquationalModel"><span class="hs-identifier hs-type">EquationalModel</span></a></span><span> </span><span id="local-6989586621679132031"><span class="annot"><span class="annottext">q :: QDefinition
-</span><a href="#local-6989586621679132031"><span class="hs-identifier hs-var">q</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679132030"><span class="annot"><span class="annottext">f :: Setter' QDefinition a
-</span><a href="#local-6989586621679132030"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-identifier">_</span><span> </span><span id="local-6989586621679132029"><span class="annot"><span class="annottext">x :: a
-</span><a href="#local-6989586621679132029"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QDefinition -&gt; ModelKinds
+</span><a href="Theory.Drasil.ModelKinds.html#setMk"><span class="hs-identifier hs-var hs-var">setMk</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#EquationalModel"><span class="hs-identifier hs-type">EquationalModel</span></a></span><span> </span><span id="local-6989586621679136467"><span class="annot"><span class="annottext">q :: QDefinition
+</span><a href="#local-6989586621679136467"><span class="hs-identifier hs-var">q</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679136466"><span class="annot"><span class="annottext">f :: Setter' QDefinition a
+</span><a href="#local-6989586621679136466"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-identifier">_</span><span> </span><span id="local-6989586621679136465"><span class="annot"><span class="annottext">x :: a
+</span><a href="#local-6989586621679136465"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QDefinition -&gt; ModelKinds
 </span><a href="Theory.Drasil.ModelKinds.html#EquationalModel"><span class="hs-identifier hs-var">EquationalModel</span></a></span><span> </span><span class="annot"><span class="annottext">(QDefinition -&gt; ModelKinds) -&gt; QDefinition -&gt; ModelKinds
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ASetter QDefinition QDefinition a a
@@ -161,13 +236,26 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall s t a b. ASetter s t a b -&gt; b -&gt; s -&gt; t
 </span><span class="hs-identifier hs-var">set</span></span><span> </span><span class="annot"><span class="annottext">ASetter QDefinition QDefinition a a
 Setter' QDefinition a
-</span><a href="#local-6989586621679132030"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679132029"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">QDefinition
-</span><a href="#local-6989586621679132031"><span class="hs-identifier hs-var">q</span></a></span><span>
-</span><span id="line-44"></span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#setMk"><span class="hs-identifier hs-var">setMk</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#DEModel"><span class="hs-identifier hs-type">DEModel</span></a></span><span> </span><span id="local-6989586621679132028"><span class="annot"><span class="annottext">q :: RelationConcept
-</span><a href="#local-6989586621679132028"><span class="hs-identifier hs-var">q</span></a></span></span><span class="hs-special">)</span><span>         </span><span class="hs-identifier">_</span><span> </span><span id="local-6989586621679132027"><span class="annot"><span class="annottext">g :: Setter' RelationConcept a
-</span><a href="#local-6989586621679132027"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span id="local-6989586621679132026"><span class="annot"><span class="annottext">x :: a
-</span><a href="#local-6989586621679132026"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">RelationConcept -&gt; ModelKinds
+</span><a href="#local-6989586621679136466"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679136465"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><a href="#local-6989586621679136467"><span class="hs-identifier hs-var">q</span></a></span><span>
+</span><span id="line-50"></span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#setMk"><span class="hs-identifier hs-var">setMk</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#EquationalRealm"><span class="hs-identifier hs-type">EquationalRealm</span></a></span><span> </span><span id="local-6989586621679136464"><span class="annot"><span class="annottext">q :: MultiDefn
+</span><a href="#local-6989586621679136464"><span class="hs-identifier hs-var">q</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-identifier">_</span><span> </span><span id="local-6989586621679136463"><span class="annot"><span class="annottext">f :: Setter' MultiDefn a
+</span><a href="#local-6989586621679136463"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-identifier">_</span><span> </span><span id="local-6989586621679136462"><span class="annot"><span class="annottext">x :: a
+</span><a href="#local-6989586621679136462"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">MultiDefn -&gt; ModelKinds
+</span><a href="Theory.Drasil.ModelKinds.html#EquationalRealm"><span class="hs-identifier hs-var">EquationalRealm</span></a></span><span> </span><span class="annot"><span class="annottext">(MultiDefn -&gt; ModelKinds) -&gt; MultiDefn -&gt; ModelKinds
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ASetter MultiDefn MultiDefn a a -&gt; a -&gt; MultiDefn -&gt; MultiDefn
+forall s t a b. ASetter s t a b -&gt; b -&gt; s -&gt; t
+</span><span class="hs-identifier hs-var">set</span></span><span> </span><span class="annot"><span class="annottext">ASetter MultiDefn MultiDefn a a
+Setter' MultiDefn a
+</span><a href="#local-6989586621679136463"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679136462"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">MultiDefn
+</span><a href="#local-6989586621679136464"><span class="hs-identifier hs-var">q</span></a></span><span>
+</span><span id="line-51"></span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#setMk"><span class="hs-identifier hs-var">setMk</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#DEModel"><span class="hs-identifier hs-type">DEModel</span></a></span><span> </span><span id="local-6989586621679136461"><span class="annot"><span class="annottext">q :: RelationConcept
+</span><a href="#local-6989586621679136461"><span class="hs-identifier hs-var">q</span></a></span></span><span class="hs-special">)</span><span>         </span><span class="hs-identifier">_</span><span> </span><span class="hs-identifier">_</span><span> </span><span id="local-6989586621679136460"><span class="annot"><span class="annottext">g :: Setter' RelationConcept a
+</span><a href="#local-6989586621679136460"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span id="local-6989586621679136459"><span class="annot"><span class="annottext">x :: a
+</span><a href="#local-6989586621679136459"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">RelationConcept -&gt; ModelKinds
 </span><a href="Theory.Drasil.ModelKinds.html#DEModel"><span class="hs-identifier hs-var">DEModel</span></a></span><span> </span><span class="annot"><span class="annottext">(RelationConcept -&gt; ModelKinds) -&gt; RelationConcept -&gt; ModelKinds
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ASetter RelationConcept RelationConcept a a
@@ -175,13 +263,13 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall s t a b. ASetter s t a b -&gt; b -&gt; s -&gt; t
 </span><span class="hs-identifier hs-var">set</span></span><span> </span><span class="annot"><span class="annottext">ASetter RelationConcept RelationConcept a a
 Setter' RelationConcept a
-</span><a href="#local-6989586621679132027"><span class="hs-identifier hs-var">g</span></a></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679132026"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">RelationConcept
-</span><a href="#local-6989586621679132028"><span class="hs-identifier hs-var">q</span></a></span><span>
-</span><span id="line-45"></span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#setMk"><span class="hs-identifier hs-var">setMk</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#OthModel"><span class="hs-identifier hs-type">OthModel</span></a></span><span> </span><span id="local-6989586621679132025"><span class="annot"><span class="annottext">q :: RelationConcept
-</span><a href="#local-6989586621679132025"><span class="hs-identifier hs-var">q</span></a></span></span><span class="hs-special">)</span><span>        </span><span class="hs-identifier">_</span><span> </span><span id="local-6989586621679132024"><span class="annot"><span class="annottext">g :: Setter' RelationConcept a
-</span><a href="#local-6989586621679132024"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span id="local-6989586621679132023"><span class="annot"><span class="annottext">x :: a
-</span><a href="#local-6989586621679132023"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">RelationConcept -&gt; ModelKinds
+</span><a href="#local-6989586621679136460"><span class="hs-identifier hs-var">g</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679136459"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">RelationConcept
+</span><a href="#local-6989586621679136461"><span class="hs-identifier hs-var">q</span></a></span><span>
+</span><span id="line-52"></span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#setMk"><span class="hs-identifier hs-var">setMk</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#OthModel"><span class="hs-identifier hs-type">OthModel</span></a></span><span> </span><span id="local-6989586621679136458"><span class="annot"><span class="annottext">q :: RelationConcept
+</span><a href="#local-6989586621679136458"><span class="hs-identifier hs-var">q</span></a></span></span><span class="hs-special">)</span><span>        </span><span class="hs-identifier">_</span><span> </span><span class="hs-identifier">_</span><span> </span><span id="local-6989586621679136457"><span class="annot"><span class="annottext">g :: Setter' RelationConcept a
+</span><a href="#local-6989586621679136457"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span id="local-6989586621679136456"><span class="annot"><span class="annottext">x :: a
+</span><a href="#local-6989586621679136456"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">RelationConcept -&gt; ModelKinds
 </span><a href="Theory.Drasil.ModelKinds.html#OthModel"><span class="hs-identifier hs-var">OthModel</span></a></span><span> </span><span class="annot"><span class="annottext">(RelationConcept -&gt; ModelKinds) -&gt; RelationConcept -&gt; ModelKinds
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ASetter RelationConcept RelationConcept a a
@@ -189,72 +277,89 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall s t a b. ASetter s t a b -&gt; b -&gt; s -&gt; t
 </span><span class="hs-identifier hs-var">set</span></span><span> </span><span class="annot"><span class="annottext">ASetter RelationConcept RelationConcept a a
 Setter' RelationConcept a
-</span><a href="#local-6989586621679132024"><span class="hs-identifier hs-var">g</span></a></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679132023"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">RelationConcept
-</span><a href="#local-6989586621679132025"><span class="hs-identifier hs-var">q</span></a></span><span>
-</span><span id="line-46"></span><span>
-</span><span id="line-47"></span><span class="hs-comment">-- | Make a 'Lens' for 'ModelKinds'. They may contain either 'QDefinition's or 'RelationConcept's.</span><span>
-</span><span id="line-48"></span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#lensMk"><span class="hs-identifier hs-type">lensMk</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-keyword">forall</span><span> </span><span id="local-6989586621679132132"><span class="annot"><a href="#local-6989586621679132132"><span class="hs-identifier hs-type">a</span></a></span></span><span class="hs-operator">.</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Lens'</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span> </span><span class="annot"><a href="#local-6989586621679132132"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Lens'</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">RelationConcept</span></span><span> </span><span class="annot"><a href="#local-6989586621679132132"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Lens'</span></span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679132132"><span class="hs-identifier hs-type">a</span></a></span><span>
-</span><span id="line-49"></span><span id="lensMk"><span class="annot"><span class="annottext">lensMk :: Lens' QDefinition a
--&gt; Lens' RelationConcept a -&gt; Lens' ModelKinds a
-</span><a href="Theory.Drasil.ModelKinds.html#lensMk"><span class="hs-identifier hs-var hs-var">lensMk</span></a></span></span><span> </span><span id="local-6989586621679132022"><span class="annot"><span class="annottext">lq :: Lens' QDefinition a
-</span><a href="#local-6989586621679132022"><span class="hs-identifier hs-var">lq</span></a></span></span><span> </span><span id="local-6989586621679132021"><span class="annot"><span class="annottext">lr :: Lens' RelationConcept a
-</span><a href="#local-6989586621679132021"><span class="hs-identifier hs-var">lr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ModelKinds -&gt; a)
+</span><a href="#local-6989586621679136457"><span class="hs-identifier hs-var">g</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679136456"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">RelationConcept
+</span><a href="#local-6989586621679136458"><span class="hs-identifier hs-var">q</span></a></span><span>
+</span><span id="line-53"></span><span>
+</span><span id="line-54"></span><span class="hs-comment">-- | Make a 'Lens' for 'ModelKinds'.</span><span>
+</span><span id="line-55"></span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#lensMk"><span class="hs-identifier hs-type">lensMk</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-keyword">forall</span><span> </span><span id="local-6989586621679136574"><span class="annot"><a href="#local-6989586621679136574"><span class="hs-identifier hs-type">a</span></a></span></span><span class="hs-operator">.</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Lens'</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span> </span><span class="annot"><a href="#local-6989586621679136574"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Lens'</span></span><span> </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#MultiDefn"><span class="hs-identifier hs-type">MultiDefn</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679136574"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Lens'</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">RelationConcept</span></span><span> </span><span class="annot"><a href="#local-6989586621679136574"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Lens'</span></span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679136574"><span class="hs-identifier hs-type">a</span></a></span><span>
+</span><span id="line-56"></span><span id="lensMk"><span class="annot"><span class="annottext">lensMk :: Lens' QDefinition a
+-&gt; Lens' MultiDefn a
+-&gt; Lens' RelationConcept a
+-&gt; Lens' ModelKinds a
+</span><a href="Theory.Drasil.ModelKinds.html#lensMk"><span class="hs-identifier hs-var hs-var">lensMk</span></a></span></span><span> </span><span id="local-6989586621679136455"><span class="annot"><span class="annottext">lq :: Lens' QDefinition a
+</span><a href="#local-6989586621679136455"><span class="hs-identifier hs-var">lq</span></a></span></span><span> </span><span id="local-6989586621679136454"><span class="annot"><span class="annottext">lqd :: Lens' MultiDefn a
+</span><a href="#local-6989586621679136454"><span class="hs-identifier hs-var">lqd</span></a></span></span><span> </span><span id="local-6989586621679136453"><span class="annot"><span class="annottext">lr :: Lens' RelationConcept a
+</span><a href="#local-6989586621679136453"><span class="hs-identifier hs-var">lr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ModelKinds -&gt; a)
 -&gt; (ModelKinds -&gt; a -&gt; ModelKinds) -&gt; Lens' ModelKinds a
 forall s a b t. (s -&gt; a) -&gt; (s -&gt; b -&gt; t) -&gt; Lens s t a b
 </span><span class="hs-identifier hs-var">lens</span></span><span> </span><span class="annot"><span class="annottext">ModelKinds -&gt; a
-</span><a href="#local-6989586621679132020"><span class="hs-identifier hs-var">g</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKinds -&gt; a -&gt; ModelKinds
-</span><a href="#local-6989586621679132019"><span class="hs-identifier hs-var">s</span></a></span><span>
-</span><span id="line-50"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span class="annot"><a href="#local-6989586621679132020"><span class="hs-identifier hs-type">g</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679132132"><span class="hs-identifier hs-type">a</span></a></span><span>
-</span><span id="line-51"></span><span>          </span><span id="local-6989586621679132020"><span class="annot"><span class="annottext">g :: ModelKinds -&gt; a
-</span><a href="#local-6989586621679132020"><span class="hs-identifier hs-var hs-var">g</span></a></span></span><span> </span><span id="local-6989586621679132018"><span class="annot"><span class="annottext">mk :: ModelKinds
-</span><a href="#local-6989586621679132018"><span class="hs-identifier hs-var">mk</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Getter QDefinition a -&gt; Getter RelationConcept a -&gt; ModelKinds -&gt; a
+</span><a href="#local-6989586621679136452"><span class="hs-identifier hs-var">g</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKinds -&gt; a -&gt; ModelKinds
+</span><a href="#local-6989586621679136451"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><span id="line-57"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span class="annot"><a href="#local-6989586621679136452"><span class="hs-identifier hs-type">g</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679136574"><span class="hs-identifier hs-type">a</span></a></span><span>
+</span><span id="line-58"></span><span>          </span><span id="local-6989586621679136452"><span class="annot"><span class="annottext">g :: ModelKinds -&gt; a
+</span><a href="#local-6989586621679136452"><span class="hs-identifier hs-var hs-var">g</span></a></span></span><span> </span><span id="local-6989586621679136450"><span class="annot"><span class="annottext">mk :: ModelKinds
+</span><a href="#local-6989586621679136450"><span class="hs-identifier hs-var">mk</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Getter QDefinition a
+-&gt; Getter MultiDefn a
+-&gt; Getter RelationConcept a
+-&gt; ModelKinds
+-&gt; a
 forall a.
-Getter QDefinition a -&gt; Getter RelationConcept a -&gt; ModelKinds -&gt; a
+Getter QDefinition a
+-&gt; Getter MultiDefn a
+-&gt; Getter RelationConcept a
+-&gt; ModelKinds
+-&gt; a
 </span><a href="Theory.Drasil.ModelKinds.html#elimMk"><span class="hs-identifier hs-var">elimMk</span></a></span><span> </span><span class="annot"><span class="annottext">Lens' QDefinition a
 Getter QDefinition a
-</span><a href="#local-6989586621679132022"><span class="hs-identifier hs-var">lq</span></a></span><span> </span><span class="annot"><span class="annottext">Lens' RelationConcept a
+</span><a href="#local-6989586621679136455"><span class="hs-identifier hs-var">lq</span></a></span><span> </span><span class="annot"><span class="annottext">Lens' MultiDefn a
+Getter MultiDefn a
+</span><a href="#local-6989586621679136454"><span class="hs-identifier hs-var">lqd</span></a></span><span> </span><span class="annot"><span class="annottext">Lens' RelationConcept a
 Getter RelationConcept a
-</span><a href="#local-6989586621679132021"><span class="hs-identifier hs-var">lr</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKinds
-</span><a href="#local-6989586621679132018"><span class="hs-identifier hs-var">mk</span></a></span><span>
-</span><span id="line-52"></span><span>          </span><span class="annot"><a href="#local-6989586621679132019"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679132132"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span><span>
-</span><span id="line-53"></span><span>          </span><span id="local-6989586621679132019"><span class="annot"><span class="annottext">s :: ModelKinds -&gt; a -&gt; ModelKinds
-</span><a href="#local-6989586621679132019"><span class="hs-identifier hs-var hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679132017"><span class="annot"><span class="annottext">mk_ :: ModelKinds
-</span><a href="#local-6989586621679132017"><span class="hs-identifier hs-var">mk_</span></a></span></span><span> </span><span id="local-6989586621679132016"><span class="annot"><span class="annottext">x :: a
-</span><a href="#local-6989586621679132016"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKinds
+</span><a href="#local-6989586621679136453"><span class="hs-identifier hs-var">lr</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKinds
+</span><a href="#local-6989586621679136450"><span class="hs-identifier hs-var">mk</span></a></span><span>
+</span><span id="line-59"></span><span>          </span><span class="annot"><a href="#local-6989586621679136451"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679136574"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span><span>
+</span><span id="line-60"></span><span>          </span><span id="local-6989586621679136451"><span class="annot"><span class="annottext">s :: ModelKinds -&gt; a -&gt; ModelKinds
+</span><a href="#local-6989586621679136451"><span class="hs-identifier hs-var hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679136449"><span class="annot"><span class="annottext">mk_ :: ModelKinds
+</span><a href="#local-6989586621679136449"><span class="hs-identifier hs-var">mk_</span></a></span></span><span> </span><span id="local-6989586621679136448"><span class="annot"><span class="annottext">x :: a
+</span><a href="#local-6989586621679136448"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKinds
 -&gt; Setter' QDefinition a
+-&gt; Setter' MultiDefn a
 -&gt; Setter' RelationConcept a
 -&gt; a
 -&gt; ModelKinds
 forall a.
 ModelKinds
 -&gt; Setter' QDefinition a
+-&gt; Setter' MultiDefn a
 -&gt; Setter' RelationConcept a
 -&gt; a
 -&gt; ModelKinds
 </span><a href="Theory.Drasil.ModelKinds.html#setMk"><span class="hs-identifier hs-var">setMk</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKinds
-</span><a href="#local-6989586621679132017"><span class="hs-identifier hs-var">mk_</span></a></span><span> </span><span class="annot"><span class="annottext">Lens' QDefinition a
+</span><a href="#local-6989586621679136449"><span class="hs-identifier hs-var">mk_</span></a></span><span> </span><span class="annot"><span class="annottext">Lens' QDefinition a
 Setter' QDefinition a
-</span><a href="#local-6989586621679132022"><span class="hs-identifier hs-var">lq</span></a></span><span> </span><span class="annot"><span class="annottext">Lens' RelationConcept a
+</span><a href="#local-6989586621679136455"><span class="hs-identifier hs-var">lq</span></a></span><span> </span><span class="annot"><span class="annottext">Lens' MultiDefn a
+Setter' MultiDefn a
+</span><a href="#local-6989586621679136454"><span class="hs-identifier hs-var">lqd</span></a></span><span> </span><span class="annot"><span class="annottext">Lens' RelationConcept a
 Setter' RelationConcept a
-</span><a href="#local-6989586621679132021"><span class="hs-identifier hs-var">lr</span></a></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679132016"><span class="hs-identifier hs-var">x</span></a></span><span>
-</span><span id="line-54"></span><span>
-</span><span id="line-55"></span><span class="hs-comment">-- | Extract a list of 'QDefinition's from a list of 'ModelKinds'.</span><span>
-</span><span id="line-56"></span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#getEqModQds"><span class="hs-identifier hs-type">getEqModQds</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span class="hs-special">]</span><span>
-</span><span id="line-57"></span><span id="getEqModQds"><span class="annot"><span class="annottext">getEqModQds :: [ModelKinds] -&gt; [QDefinition]
+</span><a href="#local-6989586621679136453"><span class="hs-identifier hs-var">lr</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679136448"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-61"></span><span>
+</span><span id="line-62"></span><span class="hs-comment">-- | Extract a list of 'QDefinition's from a list of 'ModelKinds'.</span><span>
+</span><span id="line-63"></span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#getEqModQds"><span class="hs-identifier hs-type">getEqModQds</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span class="hs-special">]</span><span>
+</span><span id="line-64"></span><span id="getEqModQds"><span class="annot"><span class="annottext">getEqModQds :: [ModelKinds] -&gt; [QDefinition]
 </span><a href="Theory.Drasil.ModelKinds.html#getEqModQds"><span class="hs-identifier hs-var hs-var">getEqModQds</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ModelKinds -&gt; Maybe QDefinition) -&gt; [ModelKinds] -&gt; [QDefinition]
 forall a b. (a -&gt; Maybe b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">mapMaybe</span></span><span> </span><span class="annot"><span class="annottext">ModelKinds -&gt; Maybe QDefinition
-</span><a href="#local-6989586621679132015"><span class="hs-identifier hs-var">isEqMod</span></a></span><span>
-</span><span id="line-58"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-59"></span><span>    </span><span id="local-6989586621679132015"><span class="annot"><span class="annottext">isEqMod :: ModelKinds -&gt; Maybe QDefinition
-</span><a href="#local-6989586621679132015"><span class="hs-identifier hs-var hs-var">isEqMod</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#EquationalModel"><span class="hs-identifier hs-type">EquationalModel</span></a></span><span> </span><span id="local-6989586621679132014"><span class="annot"><span class="annottext">f :: QDefinition
-</span><a href="#local-6989586621679132014"><span class="hs-identifier hs-var">f</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QDefinition -&gt; Maybe QDefinition
+</span><a href="#local-6989586621679136447"><span class="hs-identifier hs-var">isEqMod</span></a></span><span>
+</span><span id="line-65"></span><span>  </span><span class="hs-keyword">where</span><span>
+</span><span id="line-66"></span><span>    </span><span id="local-6989586621679136447"><span class="annot"><span class="annottext">isEqMod :: ModelKinds -&gt; Maybe QDefinition
+</span><a href="#local-6989586621679136447"><span class="hs-identifier hs-var hs-var">isEqMod</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#EquationalModel"><span class="hs-identifier hs-type">EquationalModel</span></a></span><span> </span><span id="local-6989586621679136446"><span class="annot"><span class="annottext">f :: QDefinition
+</span><a href="#local-6989586621679136446"><span class="hs-identifier hs-var">f</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QDefinition -&gt; Maybe QDefinition
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
-</span><a href="#local-6989586621679132014"><span class="hs-identifier hs-var">f</span></a></span><span>
-</span><span id="line-60"></span><span>    </span><span class="annot"><a href="#local-6989586621679132015"><span class="hs-identifier hs-var">isEqMod</span></a></span><span> </span><span class="hs-identifier">_</span><span>                   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe QDefinition
+</span><a href="#local-6989586621679136446"><span class="hs-identifier hs-var">f</span></a></span><span>
+</span><span id="line-67"></span><span>    </span><span class="annot"><a href="#local-6989586621679136447"><span class="hs-identifier hs-var">isEqMod</span></a></span><span> </span><span class="hs-identifier">_</span><span>                   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe QDefinition
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-61"></span></pre></body></html>
+</span><span id="line-68"></span></pre></body></html>

@@ -43,89 +43,89 @@
 </span><span id="line-39"></span><span>  </span><span class="hs-special">}</span><span>
 </span><span id="line-40"></span><span id="fields"><span id="citeKind"><span id="citeID"><span class="hs-identifier">makeLenses</span><span> </span><span class="hs-special">''</span><span class="hs-identifier">Citation</span></span></span></span><span>
 </span><span id="line-41"></span><span>
-</span><span id="line-42"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.Classes.Core.html#HasUID"><span class="hs-identifier hs-type">HasUID</span></a></span><span>       </span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#Citation"><span class="hs-identifier hs-type">Citation</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679358354"><span class="annot"><span class="annottext">uid :: (UID -&gt; f UID) -&gt; Citation -&gt; f Citation
-</span><a href="#local-6989586621679358354"><span class="hs-identifier hs-var hs-var hs-var hs-var">uid</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UID -&gt; f UID) -&gt; Citation -&gt; f Citation
+</span><span id="line-42"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.Classes.Core.html#HasUID"><span class="hs-identifier hs-type">HasUID</span></a></span><span>       </span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#Citation"><span class="hs-identifier hs-type">Citation</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679358144"><span class="annot"><span class="annottext">uid :: (UID -&gt; f UID) -&gt; Citation -&gt; f Citation
+</span><a href="#local-6989586621679358144"><span class="hs-identifier hs-var hs-var hs-var hs-var">uid</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UID -&gt; f UID) -&gt; Citation -&gt; f Citation
 Lens' Citation UID
 </span><a href="Language.Drasil.Chunk.Citation.html#citeID"><span class="hs-identifier hs-var">citeID</span></a></span><span>
 </span><span id="line-43"></span><span class="hs-comment">-- ^ Finds 'UID' of the 'Citation'.</span><span>
-</span><span id="line-44"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.Classes.Core.html#HasShortName"><span class="hs-identifier hs-type">HasShortName</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#Citation"><span class="hs-identifier hs-type">Citation</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679358351"><span class="annot"><span class="annottext">shortname :: Citation -&gt; ShortName
-</span><a href="#local-6989586621679358351"><span class="hs-identifier hs-var hs-var hs-var hs-var">shortname</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Citation -&gt; ShortName
+</span><span id="line-44"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.Classes.Core.html#HasShortName"><span class="hs-identifier hs-type">HasShortName</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#Citation"><span class="hs-identifier hs-type">Citation</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679358141"><span class="annot"><span class="annottext">shortname :: Citation -&gt; ShortName
+</span><a href="#local-6989586621679358141"><span class="hs-identifier hs-var hs-var hs-var hs-var">shortname</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Citation -&gt; ShortName
 </span><a href="Language.Drasil.Chunk.Citation.html#sn"><span class="hs-identifier hs-var hs-var">sn</span></a></span><span>
 </span><span id="line-45"></span><span class="hs-comment">-- ^ Finds 'ShortName' of the 'Citation'.</span><span>
-</span><span id="line-46"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.Classes.Citations.html#HasFields"><span class="hs-identifier hs-type">HasFields</span></a></span><span>    </span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#Citation"><span class="hs-identifier hs-type">Citation</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679358348"><span class="annot"><span class="annottext">getFields :: ([CiteField] -&gt; f [CiteField]) -&gt; Citation -&gt; f Citation
-</span><a href="#local-6989586621679358348"><span class="hs-identifier hs-var hs-var hs-var hs-var">getFields</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([CiteField] -&gt; f [CiteField]) -&gt; Citation -&gt; f Citation
+</span><span id="line-46"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.Classes.Citations.html#HasFields"><span class="hs-identifier hs-type">HasFields</span></a></span><span>    </span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#Citation"><span class="hs-identifier hs-type">Citation</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679358138"><span class="annot"><span class="annottext">getFields :: ([CiteField] -&gt; f [CiteField]) -&gt; Citation -&gt; f Citation
+</span><a href="#local-6989586621679358138"><span class="hs-identifier hs-var hs-var hs-var hs-var">getFields</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([CiteField] -&gt; f [CiteField]) -&gt; Citation -&gt; f Citation
 Lens' Citation [CiteField]
 </span><a href="Language.Drasil.Chunk.Citation.html#fields"><span class="hs-identifier hs-var">fields</span></a></span><span>
 </span><span id="line-47"></span><span class="hs-comment">-- ^ Finds 'Fields' of the 'Citation'.</span><span>
 </span><span id="line-48"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.Classes.html#Referable"><span class="hs-identifier hs-type">Referable</span></a></span><span>    </span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#Citation"><span class="hs-identifier hs-type">Citation</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-49"></span><span>  </span><span id="local-6989586621679358343"><span class="annot"><span class="annottext">refAdd :: Citation -&gt; UID
-</span><a href="#local-6989586621679358343"><span class="hs-identifier hs-var hs-var hs-var hs-var">refAdd</span></a></span></span><span>    </span><span id="local-6989586621679358342"><span class="annot"><span class="annottext">c :: Citation
-</span><a href="#local-6989586621679358342"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Citation
-</span><a href="#local-6989586621679358342"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Citation -&gt; Getting UID Citation UID -&gt; UID
+</span><span id="line-49"></span><span>  </span><span id="local-6989586621679358133"><span class="annot"><span class="annottext">refAdd :: Citation -&gt; UID
+</span><a href="#local-6989586621679358133"><span class="hs-identifier hs-var hs-var hs-var hs-var">refAdd</span></a></span></span><span>    </span><span id="local-6989586621679358132"><span class="annot"><span class="annottext">c :: Citation
+</span><a href="#local-6989586621679358132"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Citation
+</span><a href="#local-6989586621679358132"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Citation -&gt; Getting UID Citation UID -&gt; UID
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting UID Citation UID
 Lens' Citation UID
 </span><a href="Language.Drasil.Chunk.Citation.html#citeID"><span class="hs-identifier hs-var">citeID</span></a></span><span> </span><span>
 </span><span id="line-50"></span><span>  </span><span class="hs-comment">-- ^ 'Citation' 'UID' should be unique as a reference address.</span><span>
-</span><span id="line-51"></span><span>  </span><span id="local-6989586621679358341"><span class="annot"><span class="annottext">renderRef :: Citation -&gt; LblType
-</span><a href="#local-6989586621679358341"><span class="hs-identifier hs-var hs-var hs-var hs-var">renderRef</span></a></span></span><span> </span><span id="local-6989586621679358340"><span class="annot"><span class="annottext">c :: Citation
-</span><a href="#local-6989586621679358340"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID -&gt; LblType
+</span><span id="line-51"></span><span>  </span><span id="local-6989586621679358131"><span class="annot"><span class="annottext">renderRef :: Citation -&gt; LblType
+</span><a href="#local-6989586621679358131"><span class="hs-identifier hs-var hs-var hs-var hs-var">renderRef</span></a></span></span><span> </span><span id="local-6989586621679358130"><span class="annot"><span class="annottext">c :: Citation
+</span><a href="#local-6989586621679358130"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID -&gt; LblType
 </span><a href="Language.Drasil.Label.Type.html#Citation"><span class="hs-identifier hs-var">Citation</span></a></span><span> </span><span class="annot"><span class="annottext">(UID -&gt; LblType) -&gt; UID -&gt; LblType
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Citation -&gt; UID
 forall s. Referable s =&gt; s -&gt; UID
 </span><a href="Language.Drasil.Classes.html#refAdd"><span class="hs-identifier hs-var">refAdd</span></a></span><span> </span><span class="annot"><span class="annottext">Citation
-</span><a href="#local-6989586621679358340"><span class="hs-identifier hs-var">c</span></a></span><span>
+</span><a href="#local-6989586621679358130"><span class="hs-identifier hs-var">c</span></a></span><span>
 </span><span id="line-52"></span><span>  </span><span class="hs-comment">-- ^ Get the alternate form of reference address.</span><span>
 </span><span id="line-53"></span><span>
 </span><span id="line-54"></span><span class="hs-comment">-- | Smart constructor which implicitly uses EntryID as chunk id.</span><span>
 </span><span id="line-55"></span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#cite"><span class="hs-identifier hs-type">cite</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Data.Citation.html#CitationKind"><span class="hs-identifier hs-type">CitationKind</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Data.Citation.html#CiteField"><span class="hs-identifier hs-type">CiteField</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#Citation"><span class="hs-identifier hs-type">Citation</span></a></span><span>
 </span><span id="line-56"></span><span id="cite"><span class="annot"><span class="annottext">cite :: CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
-</span><a href="Language.Drasil.Chunk.Citation.html#cite"><span class="hs-identifier hs-var hs-var">cite</span></a></span></span><span> </span><span id="local-6989586621679358338"><span class="annot"><span class="annottext">x :: CitationKind
-</span><a href="#local-6989586621679358338"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679358337"><span class="annot"><span class="annottext">y :: [CiteField]
-</span><a href="#local-6989586621679358337"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span id="local-6989586621679358336"><span class="annot"><span class="annottext">z :: UID
-</span><a href="#local-6989586621679358336"><span class="hs-identifier hs-var">z</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679358335"><span class="annot"><span class="annottext">s :: UID
-</span><a href="#local-6989586621679358335"><span class="hs-identifier hs-var hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID
+</span><a href="Language.Drasil.Chunk.Citation.html#cite"><span class="hs-identifier hs-var hs-var">cite</span></a></span></span><span> </span><span id="local-6989586621679358128"><span class="annot"><span class="annottext">x :: CitationKind
+</span><a href="#local-6989586621679358128"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679358127"><span class="annot"><span class="annottext">y :: [CiteField]
+</span><a href="#local-6989586621679358127"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span id="local-6989586621679358126"><span class="annot"><span class="annottext">z :: UID
+</span><a href="#local-6989586621679358126"><span class="hs-identifier hs-var">z</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679358125"><span class="annot"><span class="annottext">s :: UID
+</span><a href="#local-6989586621679358125"><span class="hs-identifier hs-var hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID
 </span><a href="Language.Drasil.Misc.html#noSpaces"><span class="hs-identifier hs-var">noSpaces</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358336"><span class="hs-identifier hs-var">z</span></a></span><span> </span><span class="hs-keyword">in</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; ShortName -&gt; Citation
+</span><a href="#local-6989586621679358126"><span class="hs-identifier hs-var">z</span></a></span><span> </span><span class="hs-keyword">in</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; ShortName -&gt; Citation
 </span><a href="Language.Drasil.Chunk.Citation.html#Cite"><span class="hs-identifier hs-var">Cite</span></a></span><span> </span><span class="annot"><span class="annottext">CitationKind
-</span><a href="#local-6989586621679358338"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
-</span><a href="#local-6989586621679358337"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358335"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UID -&gt; ShortName
+</span><a href="#local-6989586621679358128"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
+</span><a href="#local-6989586621679358127"><span class="hs-identifier hs-var">y</span></a></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679358125"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UID -&gt; ShortName
 </span><a href="Language.Drasil.ShortName.html#shortname%27"><span class="hs-identifier hs-var">shortname'</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358335"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679358125"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-57"></span><span>
 </span><span id="line-58"></span><span class="hs-comment">-- | Article citation requires author(s), title, journal, year.</span><span>
 </span><span id="line-59"></span><span class="hs-comment">-- Optional fields can be: volume, number, pages, month, and note.</span><span>
 </span><span id="line-60"></span><span class="hs-comment">-- Implicitly uses the EntryID as the chunk id.</span><span>
 </span><span id="line-61"></span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#cArticle"><span class="hs-identifier hs-type">cArticle</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.People.html#People"><span class="hs-identifier hs-type">People</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Data.Citation.html#CiteField"><span class="hs-identifier hs-type">CiteField</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#Citation"><span class="hs-identifier hs-type">Citation</span></a></span><span>
 </span><span id="line-62"></span><span id="cArticle"><span class="annot"><span class="annottext">cArticle :: People -&gt; UID -&gt; UID -&gt; Int -&gt; [CiteField] -&gt; UID -&gt; Citation
-</span><a href="Language.Drasil.Chunk.Citation.html#cArticle"><span class="hs-identifier hs-var hs-var">cArticle</span></a></span></span><span> </span><span id="local-6989586621679358334"><span class="annot"><span class="annottext">aut :: People
-</span><a href="#local-6989586621679358334"><span class="hs-identifier hs-var">aut</span></a></span></span><span> </span><span id="local-6989586621679358333"><span class="annot"><span class="annottext">t :: UID
-</span><a href="#local-6989586621679358333"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358332"><span class="annot"><span class="annottext">journ :: UID
-</span><a href="#local-6989586621679358332"><span class="hs-identifier hs-var">journ</span></a></span></span><span> </span><span id="local-6989586621679358331"><span class="annot"><span class="annottext">yr :: Int
-</span><a href="#local-6989586621679358331"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358330"><span class="annot"><span class="annottext">opt :: [CiteField]
-</span><a href="#local-6989586621679358330"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
+</span><a href="Language.Drasil.Chunk.Citation.html#cArticle"><span class="hs-identifier hs-var hs-var">cArticle</span></a></span></span><span> </span><span id="local-6989586621679358124"><span class="annot"><span class="annottext">aut :: People
+</span><a href="#local-6989586621679358124"><span class="hs-identifier hs-var">aut</span></a></span></span><span> </span><span id="local-6989586621679358123"><span class="annot"><span class="annottext">t :: UID
+</span><a href="#local-6989586621679358123"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358122"><span class="annot"><span class="annottext">journ :: UID
+</span><a href="#local-6989586621679358122"><span class="hs-identifier hs-var">journ</span></a></span></span><span> </span><span id="local-6989586621679358121"><span class="annot"><span class="annottext">yr :: Int
+</span><a href="#local-6989586621679358121"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358120"><span class="annot"><span class="annottext">opt :: [CiteField]
+</span><a href="#local-6989586621679358120"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
 </span><a href="Language.Drasil.Chunk.Citation.html#cite"><span class="hs-identifier hs-var">cite</span></a></span><span> </span><span class="annot"><span class="annottext">CitationKind
 </span><a href="Language.Drasil.Data.Citation.html#Article"><span class="hs-identifier hs-var">Article</span></a></span><span> </span><span>
 </span><span id="line-63"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">People -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#author"><span class="hs-identifier hs-var">author</span></a></span><span> </span><span class="annot"><span class="annottext">People
-</span><a href="#local-6989586621679358334"><span class="hs-identifier hs-var">aut</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358124"><span class="hs-identifier hs-var">aut</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#title"><span class="hs-identifier hs-var">title</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358333"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358123"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#journal"><span class="hs-identifier hs-var">journal</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358332"><span class="hs-identifier hs-var">journ</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358122"><span class="hs-identifier hs-var">journ</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#year"><span class="hs-identifier hs-var">year</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679358331"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358121"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[CiteField]
-</span><a href="#local-6989586621679358330"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679358120"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-64"></span><span>
 </span><span id="line-65"></span><span class="hs-comment">-- | Book citation requires author or editor, title, publisher, year.</span><span>
 </span><span id="line-66"></span><span class="hs-comment">-- Optional fields can be volume or number, series, address, edition, month, and note.</span><span>
@@ -134,58 +134,58 @@ forall a. a -&gt; [a] -&gt; [a]
 </span><span id="line-69"></span><span>  </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Data.Citation.html#CiteField"><span class="hs-identifier hs-type">CiteField</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#Citation"><span class="hs-identifier hs-type">Citation</span></a></span><span>
 </span><span id="line-70"></span><span class="hs-comment">-- | Book citation by author.</span><span>
 </span><span id="line-71"></span><span id="cBookA"><span class="annot"><span class="annottext">cBookA :: People -&gt; UID -&gt; UID -&gt; Int -&gt; [CiteField] -&gt; UID -&gt; Citation
-</span><a href="Language.Drasil.Chunk.Citation.html#cBookA"><span class="hs-identifier hs-var hs-var">cBookA</span></a></span></span><span> </span><span id="local-6989586621679358328"><span class="annot"><span class="annottext">aut :: People
-</span><a href="#local-6989586621679358328"><span class="hs-identifier hs-var">aut</span></a></span></span><span> </span><span id="local-6989586621679358327"><span class="annot"><span class="annottext">t :: UID
-</span><a href="#local-6989586621679358327"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358326"><span class="annot"><span class="annottext">pub :: UID
-</span><a href="#local-6989586621679358326"><span class="hs-identifier hs-var">pub</span></a></span></span><span> </span><span id="local-6989586621679358325"><span class="annot"><span class="annottext">yr :: Int
-</span><a href="#local-6989586621679358325"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358324"><span class="annot"><span class="annottext">opt :: [CiteField]
-</span><a href="#local-6989586621679358324"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
+</span><a href="Language.Drasil.Chunk.Citation.html#cBookA"><span class="hs-identifier hs-var hs-var">cBookA</span></a></span></span><span> </span><span id="local-6989586621679358118"><span class="annot"><span class="annottext">aut :: People
+</span><a href="#local-6989586621679358118"><span class="hs-identifier hs-var">aut</span></a></span></span><span> </span><span id="local-6989586621679358117"><span class="annot"><span class="annottext">t :: UID
+</span><a href="#local-6989586621679358117"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358116"><span class="annot"><span class="annottext">pub :: UID
+</span><a href="#local-6989586621679358116"><span class="hs-identifier hs-var">pub</span></a></span></span><span> </span><span id="local-6989586621679358115"><span class="annot"><span class="annottext">yr :: Int
+</span><a href="#local-6989586621679358115"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358114"><span class="annot"><span class="annottext">opt :: [CiteField]
+</span><a href="#local-6989586621679358114"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
 </span><a href="Language.Drasil.Chunk.Citation.html#cite"><span class="hs-identifier hs-var">cite</span></a></span><span> </span><span class="annot"><span class="annottext">CitationKind
 </span><a href="Language.Drasil.Data.Citation.html#Book"><span class="hs-identifier hs-var">Book</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">People -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#author"><span class="hs-identifier hs-var">author</span></a></span><span> </span><span class="annot"><span class="annottext">People
-</span><a href="#local-6989586621679358328"><span class="hs-identifier hs-var">aut</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358118"><span class="hs-identifier hs-var">aut</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; Int -&gt; [CiteField] -&gt; [CiteField]
 </span><a href="Language.Drasil.Chunk.Citation.html#stdFields"><span class="hs-identifier hs-var">stdFields</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358327"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358326"><span class="hs-identifier hs-var">pub</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679358325"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
-</span><a href="#local-6989586621679358324"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679358117"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679358116"><span class="hs-identifier hs-var">pub</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679358115"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
+</span><a href="#local-6989586621679358114"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-72"></span><span class="hs-comment">-- | Book citation by editor.</span><span>
 </span><span id="line-73"></span><span id="cBookE"><span class="annot"><span class="annottext">cBookE :: People -&gt; UID -&gt; UID -&gt; Int -&gt; [CiteField] -&gt; UID -&gt; Citation
-</span><a href="Language.Drasil.Chunk.Citation.html#cBookE"><span class="hs-identifier hs-var hs-var">cBookE</span></a></span></span><span> </span><span id="local-6989586621679358321"><span class="annot"><span class="annottext">ed :: People
-</span><a href="#local-6989586621679358321"><span class="hs-identifier hs-var">ed</span></a></span></span><span> </span><span id="local-6989586621679358320"><span class="annot"><span class="annottext">t :: UID
-</span><a href="#local-6989586621679358320"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358319"><span class="annot"><span class="annottext">pub :: UID
-</span><a href="#local-6989586621679358319"><span class="hs-identifier hs-var">pub</span></a></span></span><span> </span><span id="local-6989586621679358318"><span class="annot"><span class="annottext">yr :: Int
-</span><a href="#local-6989586621679358318"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358317"><span class="annot"><span class="annottext">opt :: [CiteField]
-</span><a href="#local-6989586621679358317"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
+</span><a href="Language.Drasil.Chunk.Citation.html#cBookE"><span class="hs-identifier hs-var hs-var">cBookE</span></a></span></span><span> </span><span id="local-6989586621679358111"><span class="annot"><span class="annottext">ed :: People
+</span><a href="#local-6989586621679358111"><span class="hs-identifier hs-var">ed</span></a></span></span><span> </span><span id="local-6989586621679358110"><span class="annot"><span class="annottext">t :: UID
+</span><a href="#local-6989586621679358110"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358109"><span class="annot"><span class="annottext">pub :: UID
+</span><a href="#local-6989586621679358109"><span class="hs-identifier hs-var">pub</span></a></span></span><span> </span><span id="local-6989586621679358108"><span class="annot"><span class="annottext">yr :: Int
+</span><a href="#local-6989586621679358108"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358107"><span class="annot"><span class="annottext">opt :: [CiteField]
+</span><a href="#local-6989586621679358107"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
 </span><a href="Language.Drasil.Chunk.Citation.html#cite"><span class="hs-identifier hs-var">cite</span></a></span><span> </span><span class="annot"><span class="annottext">CitationKind
 </span><a href="Language.Drasil.Data.Citation.html#Book"><span class="hs-identifier hs-var">Book</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">People -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#editor"><span class="hs-identifier hs-var">editor</span></a></span><span> </span><span class="annot"><span class="annottext">People
-</span><a href="#local-6989586621679358321"><span class="hs-identifier hs-var">ed</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358111"><span class="hs-identifier hs-var">ed</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; Int -&gt; [CiteField] -&gt; [CiteField]
 </span><a href="Language.Drasil.Chunk.Citation.html#stdFields"><span class="hs-identifier hs-var">stdFields</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358320"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358319"><span class="hs-identifier hs-var">pub</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679358318"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
-</span><a href="#local-6989586621679358317"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679358110"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679358109"><span class="hs-identifier hs-var">pub</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679358108"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
+</span><a href="#local-6989586621679358107"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-74"></span><span>
 </span><span id="line-75"></span><span class="hs-comment">-- | Booklet citation requires title.</span><span>
 </span><span id="line-76"></span><span class="hs-comment">-- Optional fields can be author, how published, address, month, year, note.</span><span>
 </span><span id="line-77"></span><span class="hs-comment">-- Implicitly uses the EntryID as the chunk id.</span><span>
 </span><span id="line-78"></span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#cBooklet"><span class="hs-identifier hs-type">cBooklet</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Data.Citation.html#CiteField"><span class="hs-identifier hs-type">CiteField</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#Citation"><span class="hs-identifier hs-type">Citation</span></a></span><span>
 </span><span id="line-79"></span><span id="cBooklet"><span class="annot"><span class="annottext">cBooklet :: UID -&gt; [CiteField] -&gt; UID -&gt; Citation
-</span><a href="Language.Drasil.Chunk.Citation.html#cBooklet"><span class="hs-identifier hs-var hs-var">cBooklet</span></a></span></span><span> </span><span id="local-6989586621679358316"><span class="annot"><span class="annottext">t :: UID
-</span><a href="#local-6989586621679358316"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358315"><span class="annot"><span class="annottext">opt :: [CiteField]
-</span><a href="#local-6989586621679358315"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
+</span><a href="Language.Drasil.Chunk.Citation.html#cBooklet"><span class="hs-identifier hs-var hs-var">cBooklet</span></a></span></span><span> </span><span id="local-6989586621679358106"><span class="annot"><span class="annottext">t :: UID
+</span><a href="#local-6989586621679358106"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358105"><span class="annot"><span class="annottext">opt :: [CiteField]
+</span><a href="#local-6989586621679358105"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
 </span><a href="Language.Drasil.Chunk.Citation.html#cite"><span class="hs-identifier hs-var">cite</span></a></span><span> </span><span class="annot"><span class="annottext">CitationKind
 </span><a href="Language.Drasil.Data.Citation.html#Booklet"><span class="hs-identifier hs-var">Booklet</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UID -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#title"><span class="hs-identifier hs-var">title</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358316"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358106"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[CiteField]
-</span><a href="#local-6989586621679358315"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679358105"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-80"></span><span>
 </span><span id="line-81"></span><span class="hs-comment">-- | InBook citation requires author or editor, title, chapter and/or pages,</span><span>
 </span><span id="line-82"></span><span class="hs-comment">-- publisher, year. Optional fields can be volume or number, series, type,</span><span>
@@ -204,34 +204,34 @@ forall a. a -&gt; [a] -&gt; [a]
 -&gt; [CiteField]
 -&gt; UID
 -&gt; Citation
-</span><a href="Language.Drasil.Chunk.Citation.html#cInBookACP"><span class="hs-identifier hs-var hs-var">cInBookACP</span></a></span></span><span> </span><span id="local-6989586621679358313"><span class="annot"><span class="annottext">auth :: People
-</span><a href="#local-6989586621679358313"><span class="hs-identifier hs-var">auth</span></a></span></span><span> </span><span id="local-6989586621679358312"><span class="annot"><span class="annottext">t :: UID
-</span><a href="#local-6989586621679358312"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358311"><span class="annot"><span class="annottext">chap :: Int
-</span><a href="#local-6989586621679358311"><span class="hs-identifier hs-var">chap</span></a></span></span><span> </span><span id="local-6989586621679358310"><span class="annot"><span class="annottext">pgs :: [Int]
-</span><a href="#local-6989586621679358310"><span class="hs-identifier hs-var">pgs</span></a></span></span><span> </span><span id="local-6989586621679358309"><span class="annot"><span class="annottext">pub :: UID
-</span><a href="#local-6989586621679358309"><span class="hs-identifier hs-var">pub</span></a></span></span><span> </span><span id="local-6989586621679358308"><span class="annot"><span class="annottext">yr :: Int
-</span><a href="#local-6989586621679358308"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358307"><span class="annot"><span class="annottext">opt :: [CiteField]
-</span><a href="#local-6989586621679358307"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
+</span><a href="Language.Drasil.Chunk.Citation.html#cInBookACP"><span class="hs-identifier hs-var hs-var">cInBookACP</span></a></span></span><span> </span><span id="local-6989586621679358103"><span class="annot"><span class="annottext">auth :: People
+</span><a href="#local-6989586621679358103"><span class="hs-identifier hs-var">auth</span></a></span></span><span> </span><span id="local-6989586621679358102"><span class="annot"><span class="annottext">t :: UID
+</span><a href="#local-6989586621679358102"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358101"><span class="annot"><span class="annottext">chap :: Int
+</span><a href="#local-6989586621679358101"><span class="hs-identifier hs-var">chap</span></a></span></span><span> </span><span id="local-6989586621679358100"><span class="annot"><span class="annottext">pgs :: [Int]
+</span><a href="#local-6989586621679358100"><span class="hs-identifier hs-var">pgs</span></a></span></span><span> </span><span id="local-6989586621679358099"><span class="annot"><span class="annottext">pub :: UID
+</span><a href="#local-6989586621679358099"><span class="hs-identifier hs-var">pub</span></a></span></span><span> </span><span id="local-6989586621679358098"><span class="annot"><span class="annottext">yr :: Int
+</span><a href="#local-6989586621679358098"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358097"><span class="annot"><span class="annottext">opt :: [CiteField]
+</span><a href="#local-6989586621679358097"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
 </span><a href="Language.Drasil.Chunk.Citation.html#cite"><span class="hs-identifier hs-var">cite</span></a></span><span> </span><span class="annot"><span class="annottext">CitationKind
 </span><a href="Language.Drasil.Data.Citation.html#InBook"><span class="hs-identifier hs-var">InBook</span></a></span><span> </span><span>
 </span><span id="line-90"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">People -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#author"><span class="hs-identifier hs-var">author</span></a></span><span> </span><span class="annot"><span class="annottext">People
-</span><a href="#local-6989586621679358313"><span class="hs-identifier hs-var">auth</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358103"><span class="hs-identifier hs-var">auth</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#chapter"><span class="hs-identifier hs-var">chapter</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679358311"><span class="hs-identifier hs-var">chap</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358101"><span class="hs-identifier hs-var">chap</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[Int] -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#pages"><span class="hs-identifier hs-var">pages</span></a></span><span> </span><span class="annot"><span class="annottext">[Int]
-</span><a href="#local-6989586621679358310"><span class="hs-identifier hs-var">pgs</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358100"><span class="hs-identifier hs-var">pgs</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; Int -&gt; [CiteField] -&gt; [CiteField]
 </span><a href="Language.Drasil.Chunk.Citation.html#stdFields"><span class="hs-identifier hs-var">stdFields</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358312"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358309"><span class="hs-identifier hs-var">pub</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679358308"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
-</span><a href="#local-6989586621679358307"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679358102"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679358099"><span class="hs-identifier hs-var">pub</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679358098"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
+</span><a href="#local-6989586621679358097"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-91"></span><span class="hs-comment">-- | InBook citation by editor.</span><span>
 </span><span id="line-92"></span><span id="cInBookECP"><span class="annot"><span class="annottext">cInBookECP :: People
 -&gt; UID
@@ -242,34 +242,34 @@ forall a. a -&gt; [a] -&gt; [a]
 -&gt; [CiteField]
 -&gt; UID
 -&gt; Citation
-</span><a href="Language.Drasil.Chunk.Citation.html#cInBookECP"><span class="hs-identifier hs-var hs-var">cInBookECP</span></a></span></span><span> </span><span id="local-6989586621679358305"><span class="annot"><span class="annottext">ed :: People
-</span><a href="#local-6989586621679358305"><span class="hs-identifier hs-var">ed</span></a></span></span><span> </span><span id="local-6989586621679358304"><span class="annot"><span class="annottext">t :: UID
-</span><a href="#local-6989586621679358304"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358303"><span class="annot"><span class="annottext">chap :: Int
-</span><a href="#local-6989586621679358303"><span class="hs-identifier hs-var">chap</span></a></span></span><span> </span><span id="local-6989586621679358302"><span class="annot"><span class="annottext">pgs :: [Int]
-</span><a href="#local-6989586621679358302"><span class="hs-identifier hs-var">pgs</span></a></span></span><span> </span><span id="local-6989586621679358301"><span class="annot"><span class="annottext">pub :: UID
-</span><a href="#local-6989586621679358301"><span class="hs-identifier hs-var">pub</span></a></span></span><span> </span><span id="local-6989586621679358300"><span class="annot"><span class="annottext">yr :: Int
-</span><a href="#local-6989586621679358300"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358299"><span class="annot"><span class="annottext">opt :: [CiteField]
-</span><a href="#local-6989586621679358299"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
+</span><a href="Language.Drasil.Chunk.Citation.html#cInBookECP"><span class="hs-identifier hs-var hs-var">cInBookECP</span></a></span></span><span> </span><span id="local-6989586621679358095"><span class="annot"><span class="annottext">ed :: People
+</span><a href="#local-6989586621679358095"><span class="hs-identifier hs-var">ed</span></a></span></span><span> </span><span id="local-6989586621679358094"><span class="annot"><span class="annottext">t :: UID
+</span><a href="#local-6989586621679358094"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358093"><span class="annot"><span class="annottext">chap :: Int
+</span><a href="#local-6989586621679358093"><span class="hs-identifier hs-var">chap</span></a></span></span><span> </span><span id="local-6989586621679358092"><span class="annot"><span class="annottext">pgs :: [Int]
+</span><a href="#local-6989586621679358092"><span class="hs-identifier hs-var">pgs</span></a></span></span><span> </span><span id="local-6989586621679358091"><span class="annot"><span class="annottext">pub :: UID
+</span><a href="#local-6989586621679358091"><span class="hs-identifier hs-var">pub</span></a></span></span><span> </span><span id="local-6989586621679358090"><span class="annot"><span class="annottext">yr :: Int
+</span><a href="#local-6989586621679358090"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358089"><span class="annot"><span class="annottext">opt :: [CiteField]
+</span><a href="#local-6989586621679358089"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
 </span><a href="Language.Drasil.Chunk.Citation.html#cite"><span class="hs-identifier hs-var">cite</span></a></span><span> </span><span class="annot"><span class="annottext">CitationKind
 </span><a href="Language.Drasil.Data.Citation.html#InBook"><span class="hs-identifier hs-var">InBook</span></a></span><span> </span><span>
 </span><span id="line-93"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">People -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#editor"><span class="hs-identifier hs-var">editor</span></a></span><span> </span><span class="annot"><span class="annottext">People
-</span><a href="#local-6989586621679358305"><span class="hs-identifier hs-var">ed</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358095"><span class="hs-identifier hs-var">ed</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#chapter"><span class="hs-identifier hs-var">chapter</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679358303"><span class="hs-identifier hs-var">chap</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358093"><span class="hs-identifier hs-var">chap</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[Int] -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#pages"><span class="hs-identifier hs-var">pages</span></a></span><span> </span><span class="annot"><span class="annottext">[Int]
-</span><a href="#local-6989586621679358302"><span class="hs-identifier hs-var">pgs</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358092"><span class="hs-identifier hs-var">pgs</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; Int -&gt; [CiteField] -&gt; [CiteField]
 </span><a href="Language.Drasil.Chunk.Citation.html#stdFields"><span class="hs-identifier hs-var">stdFields</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358304"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358301"><span class="hs-identifier hs-var">pub</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679358300"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
-</span><a href="#local-6989586621679358299"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679358094"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679358091"><span class="hs-identifier hs-var">pub</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679358090"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
+</span><a href="#local-6989586621679358089"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-94"></span><span>
 </span><span id="line-95"></span><span class="hs-comment">-- | InBook citation excluding page numbers.</span><span>
 </span><span id="line-96"></span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#cInBookAC"><span class="hs-identifier hs-type">cInBookAC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#cInBookEC"><span class="hs-identifier hs-type">cInBookEC</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.People.html#People"><span class="hs-identifier hs-type">People</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span>
@@ -278,55 +278,55 @@ forall a. a -&gt; [a] -&gt; [a]
 </span><span id="line-99"></span><span class="hs-comment">-- | Otherwise identical to 'cInBookACP'.</span><span>
 </span><span id="line-100"></span><span id="cInBookAC"><span class="annot"><span class="annottext">cInBookAC :: People
 -&gt; UID -&gt; Int -&gt; UID -&gt; Int -&gt; [CiteField] -&gt; UID -&gt; Citation
-</span><a href="Language.Drasil.Chunk.Citation.html#cInBookAC"><span class="hs-identifier hs-var hs-var">cInBookAC</span></a></span></span><span> </span><span id="local-6989586621679358298"><span class="annot"><span class="annottext">auth :: People
-</span><a href="#local-6989586621679358298"><span class="hs-identifier hs-var">auth</span></a></span></span><span> </span><span id="local-6989586621679358297"><span class="annot"><span class="annottext">t :: UID
-</span><a href="#local-6989586621679358297"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358296"><span class="annot"><span class="annottext">chap :: Int
-</span><a href="#local-6989586621679358296"><span class="hs-identifier hs-var">chap</span></a></span></span><span> </span><span id="local-6989586621679358295"><span class="annot"><span class="annottext">pub :: UID
-</span><a href="#local-6989586621679358295"><span class="hs-identifier hs-var">pub</span></a></span></span><span> </span><span id="local-6989586621679358294"><span class="annot"><span class="annottext">yr :: Int
-</span><a href="#local-6989586621679358294"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358293"><span class="annot"><span class="annottext">opt :: [CiteField]
-</span><a href="#local-6989586621679358293"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
+</span><a href="Language.Drasil.Chunk.Citation.html#cInBookAC"><span class="hs-identifier hs-var hs-var">cInBookAC</span></a></span></span><span> </span><span id="local-6989586621679358088"><span class="annot"><span class="annottext">auth :: People
+</span><a href="#local-6989586621679358088"><span class="hs-identifier hs-var">auth</span></a></span></span><span> </span><span id="local-6989586621679358087"><span class="annot"><span class="annottext">t :: UID
+</span><a href="#local-6989586621679358087"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358086"><span class="annot"><span class="annottext">chap :: Int
+</span><a href="#local-6989586621679358086"><span class="hs-identifier hs-var">chap</span></a></span></span><span> </span><span id="local-6989586621679358085"><span class="annot"><span class="annottext">pub :: UID
+</span><a href="#local-6989586621679358085"><span class="hs-identifier hs-var">pub</span></a></span></span><span> </span><span id="local-6989586621679358084"><span class="annot"><span class="annottext">yr :: Int
+</span><a href="#local-6989586621679358084"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358083"><span class="annot"><span class="annottext">opt :: [CiteField]
+</span><a href="#local-6989586621679358083"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
 </span><a href="Language.Drasil.Chunk.Citation.html#cite"><span class="hs-identifier hs-var">cite</span></a></span><span> </span><span class="annot"><span class="annottext">CitationKind
 </span><a href="Language.Drasil.Data.Citation.html#InBook"><span class="hs-identifier hs-var">InBook</span></a></span><span> </span><span>
 </span><span id="line-101"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">People -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#author"><span class="hs-identifier hs-var">author</span></a></span><span> </span><span class="annot"><span class="annottext">People
-</span><a href="#local-6989586621679358298"><span class="hs-identifier hs-var">auth</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358088"><span class="hs-identifier hs-var">auth</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#chapter"><span class="hs-identifier hs-var">chapter</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679358296"><span class="hs-identifier hs-var">chap</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358086"><span class="hs-identifier hs-var">chap</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; Int -&gt; [CiteField] -&gt; [CiteField]
 </span><a href="Language.Drasil.Chunk.Citation.html#stdFields"><span class="hs-identifier hs-var">stdFields</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358297"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358295"><span class="hs-identifier hs-var">pub</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679358294"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
-</span><a href="#local-6989586621679358293"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679358087"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679358085"><span class="hs-identifier hs-var">pub</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679358084"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
+</span><a href="#local-6989586621679358083"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-102"></span><span class="hs-comment">-- | Otherwise identical to 'cInBookECP'.</span><span>
 </span><span id="line-103"></span><span id="cInBookEC"><span class="annot"><span class="annottext">cInBookEC :: People
 -&gt; UID -&gt; Int -&gt; UID -&gt; Int -&gt; [CiteField] -&gt; UID -&gt; Citation
-</span><a href="Language.Drasil.Chunk.Citation.html#cInBookEC"><span class="hs-identifier hs-var hs-var">cInBookEC</span></a></span></span><span> </span><span id="local-6989586621679358292"><span class="annot"><span class="annottext">ed :: People
-</span><a href="#local-6989586621679358292"><span class="hs-identifier hs-var">ed</span></a></span></span><span> </span><span id="local-6989586621679358291"><span class="annot"><span class="annottext">t :: UID
-</span><a href="#local-6989586621679358291"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358290"><span class="annot"><span class="annottext">chap :: Int
-</span><a href="#local-6989586621679358290"><span class="hs-identifier hs-var">chap</span></a></span></span><span> </span><span id="local-6989586621679358289"><span class="annot"><span class="annottext">pub :: UID
-</span><a href="#local-6989586621679358289"><span class="hs-identifier hs-var">pub</span></a></span></span><span> </span><span id="local-6989586621679358288"><span class="annot"><span class="annottext">yr :: Int
-</span><a href="#local-6989586621679358288"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358287"><span class="annot"><span class="annottext">opt :: [CiteField]
-</span><a href="#local-6989586621679358287"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
+</span><a href="Language.Drasil.Chunk.Citation.html#cInBookEC"><span class="hs-identifier hs-var hs-var">cInBookEC</span></a></span></span><span> </span><span id="local-6989586621679358082"><span class="annot"><span class="annottext">ed :: People
+</span><a href="#local-6989586621679358082"><span class="hs-identifier hs-var">ed</span></a></span></span><span> </span><span id="local-6989586621679358081"><span class="annot"><span class="annottext">t :: UID
+</span><a href="#local-6989586621679358081"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358080"><span class="annot"><span class="annottext">chap :: Int
+</span><a href="#local-6989586621679358080"><span class="hs-identifier hs-var">chap</span></a></span></span><span> </span><span id="local-6989586621679358079"><span class="annot"><span class="annottext">pub :: UID
+</span><a href="#local-6989586621679358079"><span class="hs-identifier hs-var">pub</span></a></span></span><span> </span><span id="local-6989586621679358078"><span class="annot"><span class="annottext">yr :: Int
+</span><a href="#local-6989586621679358078"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358077"><span class="annot"><span class="annottext">opt :: [CiteField]
+</span><a href="#local-6989586621679358077"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
 </span><a href="Language.Drasil.Chunk.Citation.html#cite"><span class="hs-identifier hs-var">cite</span></a></span><span> </span><span class="annot"><span class="annottext">CitationKind
 </span><a href="Language.Drasil.Data.Citation.html#InBook"><span class="hs-identifier hs-var">InBook</span></a></span><span> </span><span>
 </span><span id="line-104"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">People -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#editor"><span class="hs-identifier hs-var">editor</span></a></span><span> </span><span class="annot"><span class="annottext">People
-</span><a href="#local-6989586621679358292"><span class="hs-identifier hs-var">ed</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358082"><span class="hs-identifier hs-var">ed</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#chapter"><span class="hs-identifier hs-var">chapter</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679358290"><span class="hs-identifier hs-var">chap</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358080"><span class="hs-identifier hs-var">chap</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; Int -&gt; [CiteField] -&gt; [CiteField]
 </span><a href="Language.Drasil.Chunk.Citation.html#stdFields"><span class="hs-identifier hs-var">stdFields</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358291"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358289"><span class="hs-identifier hs-var">pub</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679358288"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
-</span><a href="#local-6989586621679358287"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679358081"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679358079"><span class="hs-identifier hs-var">pub</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679358078"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
+</span><a href="#local-6989586621679358077"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-105"></span><span>
 </span><span id="line-106"></span><span class="hs-comment">-- | InBook citation excluding chapter.</span><span>
 </span><span id="line-107"></span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#cInBookAP"><span class="hs-identifier hs-type">cInBookAP</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#cInBookEP"><span class="hs-identifier hs-type">cInBookEP</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.People.html#People"><span class="hs-identifier hs-type">People</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span>
@@ -335,55 +335,55 @@ forall a. a -&gt; [a] -&gt; [a]
 </span><span id="line-110"></span><span class="hs-comment">-- | Otherwise identical to 'cInBookACP'.</span><span>
 </span><span id="line-111"></span><span id="cInBookAP"><span class="annot"><span class="annottext">cInBookAP :: People
 -&gt; UID -&gt; [Int] -&gt; UID -&gt; Int -&gt; [CiteField] -&gt; UID -&gt; Citation
-</span><a href="Language.Drasil.Chunk.Citation.html#cInBookAP"><span class="hs-identifier hs-var hs-var">cInBookAP</span></a></span></span><span> </span><span id="local-6989586621679358286"><span class="annot"><span class="annottext">auth :: People
-</span><a href="#local-6989586621679358286"><span class="hs-identifier hs-var">auth</span></a></span></span><span> </span><span id="local-6989586621679358285"><span class="annot"><span class="annottext">t :: UID
-</span><a href="#local-6989586621679358285"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358284"><span class="annot"><span class="annottext">pgs :: [Int]
-</span><a href="#local-6989586621679358284"><span class="hs-identifier hs-var">pgs</span></a></span></span><span> </span><span id="local-6989586621679358283"><span class="annot"><span class="annottext">pub :: UID
-</span><a href="#local-6989586621679358283"><span class="hs-identifier hs-var">pub</span></a></span></span><span> </span><span id="local-6989586621679358282"><span class="annot"><span class="annottext">yr :: Int
-</span><a href="#local-6989586621679358282"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358281"><span class="annot"><span class="annottext">opt :: [CiteField]
-</span><a href="#local-6989586621679358281"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
+</span><a href="Language.Drasil.Chunk.Citation.html#cInBookAP"><span class="hs-identifier hs-var hs-var">cInBookAP</span></a></span></span><span> </span><span id="local-6989586621679358076"><span class="annot"><span class="annottext">auth :: People
+</span><a href="#local-6989586621679358076"><span class="hs-identifier hs-var">auth</span></a></span></span><span> </span><span id="local-6989586621679358075"><span class="annot"><span class="annottext">t :: UID
+</span><a href="#local-6989586621679358075"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358074"><span class="annot"><span class="annottext">pgs :: [Int]
+</span><a href="#local-6989586621679358074"><span class="hs-identifier hs-var">pgs</span></a></span></span><span> </span><span id="local-6989586621679358073"><span class="annot"><span class="annottext">pub :: UID
+</span><a href="#local-6989586621679358073"><span class="hs-identifier hs-var">pub</span></a></span></span><span> </span><span id="local-6989586621679358072"><span class="annot"><span class="annottext">yr :: Int
+</span><a href="#local-6989586621679358072"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358071"><span class="annot"><span class="annottext">opt :: [CiteField]
+</span><a href="#local-6989586621679358071"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
 </span><a href="Language.Drasil.Chunk.Citation.html#cite"><span class="hs-identifier hs-var">cite</span></a></span><span> </span><span class="annot"><span class="annottext">CitationKind
 </span><a href="Language.Drasil.Data.Citation.html#InBook"><span class="hs-identifier hs-var">InBook</span></a></span><span> </span><span>
 </span><span id="line-112"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">People -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#author"><span class="hs-identifier hs-var">author</span></a></span><span> </span><span class="annot"><span class="annottext">People
-</span><a href="#local-6989586621679358286"><span class="hs-identifier hs-var">auth</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358076"><span class="hs-identifier hs-var">auth</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[Int] -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#pages"><span class="hs-identifier hs-var">pages</span></a></span><span> </span><span class="annot"><span class="annottext">[Int]
-</span><a href="#local-6989586621679358284"><span class="hs-identifier hs-var">pgs</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358074"><span class="hs-identifier hs-var">pgs</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; Int -&gt; [CiteField] -&gt; [CiteField]
 </span><a href="Language.Drasil.Chunk.Citation.html#stdFields"><span class="hs-identifier hs-var">stdFields</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358285"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358283"><span class="hs-identifier hs-var">pub</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679358282"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
-</span><a href="#local-6989586621679358281"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679358075"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679358073"><span class="hs-identifier hs-var">pub</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679358072"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
+</span><a href="#local-6989586621679358071"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-113"></span><span class="hs-comment">-- | Otherwise identical to 'cInBookECP'.</span><span>
 </span><span id="line-114"></span><span id="cInBookEP"><span class="annot"><span class="annottext">cInBookEP :: People
 -&gt; UID -&gt; [Int] -&gt; UID -&gt; Int -&gt; [CiteField] -&gt; UID -&gt; Citation
-</span><a href="Language.Drasil.Chunk.Citation.html#cInBookEP"><span class="hs-identifier hs-var hs-var">cInBookEP</span></a></span></span><span> </span><span id="local-6989586621679358280"><span class="annot"><span class="annottext">ed :: People
-</span><a href="#local-6989586621679358280"><span class="hs-identifier hs-var">ed</span></a></span></span><span> </span><span id="local-6989586621679358279"><span class="annot"><span class="annottext">t :: UID
-</span><a href="#local-6989586621679358279"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358278"><span class="annot"><span class="annottext">pgs :: [Int]
-</span><a href="#local-6989586621679358278"><span class="hs-identifier hs-var">pgs</span></a></span></span><span> </span><span id="local-6989586621679358277"><span class="annot"><span class="annottext">pub :: UID
-</span><a href="#local-6989586621679358277"><span class="hs-identifier hs-var">pub</span></a></span></span><span> </span><span id="local-6989586621679358276"><span class="annot"><span class="annottext">yr :: Int
-</span><a href="#local-6989586621679358276"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358275"><span class="annot"><span class="annottext">opt :: [CiteField]
-</span><a href="#local-6989586621679358275"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
+</span><a href="Language.Drasil.Chunk.Citation.html#cInBookEP"><span class="hs-identifier hs-var hs-var">cInBookEP</span></a></span></span><span> </span><span id="local-6989586621679358070"><span class="annot"><span class="annottext">ed :: People
+</span><a href="#local-6989586621679358070"><span class="hs-identifier hs-var">ed</span></a></span></span><span> </span><span id="local-6989586621679358069"><span class="annot"><span class="annottext">t :: UID
+</span><a href="#local-6989586621679358069"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358068"><span class="annot"><span class="annottext">pgs :: [Int]
+</span><a href="#local-6989586621679358068"><span class="hs-identifier hs-var">pgs</span></a></span></span><span> </span><span id="local-6989586621679358067"><span class="annot"><span class="annottext">pub :: UID
+</span><a href="#local-6989586621679358067"><span class="hs-identifier hs-var">pub</span></a></span></span><span> </span><span id="local-6989586621679358066"><span class="annot"><span class="annottext">yr :: Int
+</span><a href="#local-6989586621679358066"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358065"><span class="annot"><span class="annottext">opt :: [CiteField]
+</span><a href="#local-6989586621679358065"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
 </span><a href="Language.Drasil.Chunk.Citation.html#cite"><span class="hs-identifier hs-var">cite</span></a></span><span> </span><span class="annot"><span class="annottext">CitationKind
 </span><a href="Language.Drasil.Data.Citation.html#InBook"><span class="hs-identifier hs-var">InBook</span></a></span><span> </span><span>
 </span><span id="line-115"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">People -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#editor"><span class="hs-identifier hs-var">editor</span></a></span><span> </span><span class="annot"><span class="annottext">People
-</span><a href="#local-6989586621679358280"><span class="hs-identifier hs-var">ed</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358070"><span class="hs-identifier hs-var">ed</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[Int] -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#pages"><span class="hs-identifier hs-var">pages</span></a></span><span> </span><span class="annot"><span class="annottext">[Int]
-</span><a href="#local-6989586621679358278"><span class="hs-identifier hs-var">pgs</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358068"><span class="hs-identifier hs-var">pgs</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; Int -&gt; [CiteField] -&gt; [CiteField]
 </span><a href="Language.Drasil.Chunk.Citation.html#stdFields"><span class="hs-identifier hs-var">stdFields</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358279"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358277"><span class="hs-identifier hs-var">pub</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679358276"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
-</span><a href="#local-6989586621679358275"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679358069"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679358067"><span class="hs-identifier hs-var">pub</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679358066"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
+</span><a href="#local-6989586621679358065"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-116"></span><span>
 </span><span id="line-117"></span><span class="hs-comment">-- | InCollection citation requires author, title, bookTitle, publisher, year.</span><span>
 </span><span id="line-118"></span><span class="hs-comment">-- Optional fields can be editor, volume or number, series, type, chapter,</span><span>
@@ -393,29 +393,29 @@ forall a. a -&gt; [a] -&gt; [a]
 </span><span id="line-122"></span><span>  </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Data.Citation.html#CiteField"><span class="hs-identifier hs-type">CiteField</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#Citation"><span class="hs-identifier hs-type">Citation</span></a></span><span>
 </span><span id="line-123"></span><span id="cInCollection"><span class="annot"><span class="annottext">cInCollection :: People
 -&gt; UID -&gt; UID -&gt; UID -&gt; Int -&gt; [CiteField] -&gt; UID -&gt; Citation
-</span><a href="Language.Drasil.Chunk.Citation.html#cInCollection"><span class="hs-identifier hs-var hs-var">cInCollection</span></a></span></span><span> </span><span id="local-6989586621679358274"><span class="annot"><span class="annottext">auth :: People
-</span><a href="#local-6989586621679358274"><span class="hs-identifier hs-var">auth</span></a></span></span><span> </span><span id="local-6989586621679358273"><span class="annot"><span class="annottext">t :: UID
-</span><a href="#local-6989586621679358273"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358272"><span class="annot"><span class="annottext">bt :: UID
-</span><a href="#local-6989586621679358272"><span class="hs-identifier hs-var">bt</span></a></span></span><span> </span><span id="local-6989586621679358271"><span class="annot"><span class="annottext">pub :: UID
-</span><a href="#local-6989586621679358271"><span class="hs-identifier hs-var">pub</span></a></span></span><span> </span><span id="local-6989586621679358270"><span class="annot"><span class="annottext">yr :: Int
-</span><a href="#local-6989586621679358270"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358269"><span class="annot"><span class="annottext">opt :: [CiteField]
-</span><a href="#local-6989586621679358269"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
+</span><a href="Language.Drasil.Chunk.Citation.html#cInCollection"><span class="hs-identifier hs-var hs-var">cInCollection</span></a></span></span><span> </span><span id="local-6989586621679358064"><span class="annot"><span class="annottext">auth :: People
+</span><a href="#local-6989586621679358064"><span class="hs-identifier hs-var">auth</span></a></span></span><span> </span><span id="local-6989586621679358063"><span class="annot"><span class="annottext">t :: UID
+</span><a href="#local-6989586621679358063"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358062"><span class="annot"><span class="annottext">bt :: UID
+</span><a href="#local-6989586621679358062"><span class="hs-identifier hs-var">bt</span></a></span></span><span> </span><span id="local-6989586621679358061"><span class="annot"><span class="annottext">pub :: UID
+</span><a href="#local-6989586621679358061"><span class="hs-identifier hs-var">pub</span></a></span></span><span> </span><span id="local-6989586621679358060"><span class="annot"><span class="annottext">yr :: Int
+</span><a href="#local-6989586621679358060"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358059"><span class="annot"><span class="annottext">opt :: [CiteField]
+</span><a href="#local-6989586621679358059"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
 </span><a href="Language.Drasil.Chunk.Citation.html#cite"><span class="hs-identifier hs-var">cite</span></a></span><span> </span><span class="annot"><span class="annottext">CitationKind
 </span><a href="Language.Drasil.Data.Citation.html#InCollection"><span class="hs-identifier hs-var">InCollection</span></a></span><span> </span><span>
 </span><span id="line-124"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">People -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#author"><span class="hs-identifier hs-var">author</span></a></span><span> </span><span class="annot"><span class="annottext">People
-</span><a href="#local-6989586621679358274"><span class="hs-identifier hs-var">auth</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358064"><span class="hs-identifier hs-var">auth</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#bookTitle"><span class="hs-identifier hs-var">bookTitle</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358272"><span class="hs-identifier hs-var">bt</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358062"><span class="hs-identifier hs-var">bt</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; Int -&gt; [CiteField] -&gt; [CiteField]
 </span><a href="Language.Drasil.Chunk.Citation.html#stdFields"><span class="hs-identifier hs-var">stdFields</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358273"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358271"><span class="hs-identifier hs-var">pub</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679358270"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
-</span><a href="#local-6989586621679358269"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679358063"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679358061"><span class="hs-identifier hs-var">pub</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679358060"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
+</span><a href="#local-6989586621679358059"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-125"></span><span>
 </span><span id="line-126"></span><span class="hs-comment">-- | InProceedings citation requires author, title, bookTitle, year.</span><span>
 </span><span id="line-127"></span><span class="hs-comment">-- Optional fields can be editor, volume or number, series, pages,</span><span>
@@ -424,68 +424,68 @@ forall a. a -&gt; [a] -&gt; [a]
 </span><span id="line-130"></span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#cInProceedings"><span class="hs-identifier hs-type">cInProceedings</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.People.html#People"><span class="hs-identifier hs-type">People</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span>
 </span><span id="line-131"></span><span>  </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Data.Citation.html#CiteField"><span class="hs-identifier hs-type">CiteField</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#Citation"><span class="hs-identifier hs-type">Citation</span></a></span><span>
 </span><span id="line-132"></span><span id="cInProceedings"><span class="annot"><span class="annottext">cInProceedings :: People -&gt; UID -&gt; UID -&gt; Int -&gt; [CiteField] -&gt; UID -&gt; Citation
-</span><a href="Language.Drasil.Chunk.Citation.html#cInProceedings"><span class="hs-identifier hs-var hs-var">cInProceedings</span></a></span></span><span> </span><span id="local-6989586621679358267"><span class="annot"><span class="annottext">auth :: People
-</span><a href="#local-6989586621679358267"><span class="hs-identifier hs-var">auth</span></a></span></span><span> </span><span id="local-6989586621679358266"><span class="annot"><span class="annottext">t :: UID
-</span><a href="#local-6989586621679358266"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358265"><span class="annot"><span class="annottext">bt :: UID
-</span><a href="#local-6989586621679358265"><span class="hs-identifier hs-var">bt</span></a></span></span><span> </span><span id="local-6989586621679358264"><span class="annot"><span class="annottext">yr :: Int
-</span><a href="#local-6989586621679358264"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358263"><span class="annot"><span class="annottext">opt :: [CiteField]
-</span><a href="#local-6989586621679358263"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
+</span><a href="Language.Drasil.Chunk.Citation.html#cInProceedings"><span class="hs-identifier hs-var hs-var">cInProceedings</span></a></span></span><span> </span><span id="local-6989586621679358057"><span class="annot"><span class="annottext">auth :: People
+</span><a href="#local-6989586621679358057"><span class="hs-identifier hs-var">auth</span></a></span></span><span> </span><span id="local-6989586621679358056"><span class="annot"><span class="annottext">t :: UID
+</span><a href="#local-6989586621679358056"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358055"><span class="annot"><span class="annottext">bt :: UID
+</span><a href="#local-6989586621679358055"><span class="hs-identifier hs-var">bt</span></a></span></span><span> </span><span id="local-6989586621679358054"><span class="annot"><span class="annottext">yr :: Int
+</span><a href="#local-6989586621679358054"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358053"><span class="annot"><span class="annottext">opt :: [CiteField]
+</span><a href="#local-6989586621679358053"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
 </span><a href="Language.Drasil.Chunk.Citation.html#cite"><span class="hs-identifier hs-var">cite</span></a></span><span> </span><span class="annot"><span class="annottext">CitationKind
 </span><a href="Language.Drasil.Data.Citation.html#InProceedings"><span class="hs-identifier hs-var">InProceedings</span></a></span><span> </span><span>
 </span><span id="line-133"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">People -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#author"><span class="hs-identifier hs-var">author</span></a></span><span> </span><span class="annot"><span class="annottext">People
-</span><a href="#local-6989586621679358267"><span class="hs-identifier hs-var">auth</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358057"><span class="hs-identifier hs-var">auth</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#title"><span class="hs-identifier hs-var">title</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358266"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358056"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#bookTitle"><span class="hs-identifier hs-var">bookTitle</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358265"><span class="hs-identifier hs-var">bt</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358055"><span class="hs-identifier hs-var">bt</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#year"><span class="hs-identifier hs-var">year</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679358264"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358054"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[CiteField]
-</span><a href="#local-6989586621679358263"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679358053"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-134"></span><span>
 </span><span id="line-135"></span><span class="hs-comment">-- | Manual (technical documentation) citation requires title.</span><span>
 </span><span id="line-136"></span><span class="hs-comment">-- Optional fields can be author, organization, address, edition, month, year, and note.</span><span>
 </span><span id="line-137"></span><span class="hs-comment">-- Implicitly uses the EntryID as the chunk id.</span><span>
 </span><span id="line-138"></span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#cManual"><span class="hs-identifier hs-type">cManual</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Data.Citation.html#CiteField"><span class="hs-identifier hs-type">CiteField</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#Citation"><span class="hs-identifier hs-type">Citation</span></a></span><span>
 </span><span id="line-139"></span><span id="cManual"><span class="annot"><span class="annottext">cManual :: UID -&gt; [CiteField] -&gt; UID -&gt; Citation
-</span><a href="Language.Drasil.Chunk.Citation.html#cManual"><span class="hs-identifier hs-var hs-var">cManual</span></a></span></span><span> </span><span id="local-6989586621679358261"><span class="annot"><span class="annottext">t :: UID
-</span><a href="#local-6989586621679358261"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358260"><span class="annot"><span class="annottext">opt :: [CiteField]
-</span><a href="#local-6989586621679358260"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
+</span><a href="Language.Drasil.Chunk.Citation.html#cManual"><span class="hs-identifier hs-var hs-var">cManual</span></a></span></span><span> </span><span id="local-6989586621679358051"><span class="annot"><span class="annottext">t :: UID
+</span><a href="#local-6989586621679358051"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358050"><span class="annot"><span class="annottext">opt :: [CiteField]
+</span><a href="#local-6989586621679358050"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
 </span><a href="Language.Drasil.Chunk.Citation.html#cite"><span class="hs-identifier hs-var">cite</span></a></span><span> </span><span class="annot"><span class="annottext">CitationKind
 </span><a href="Language.Drasil.Data.Citation.html#Manual"><span class="hs-identifier hs-var">Manual</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UID -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#title"><span class="hs-identifier hs-var">title</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358261"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358051"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[CiteField]
-</span><a href="#local-6989586621679358260"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679358050"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-140"></span><span>
 </span><span id="line-141"></span><span class="hs-comment">-- | Master's Thesis citation requires author, title, school, and year.</span><span>
 </span><span id="line-142"></span><span class="hs-comment">-- Optional fields can be type, address, month, and note.</span><span>
 </span><span id="line-143"></span><span class="hs-comment">-- Implicitly uses the EntryID as the chunk id.</span><span>
 </span><span id="line-144"></span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#cMThesis"><span class="hs-identifier hs-type">cMThesis</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.People.html#People"><span class="hs-identifier hs-type">People</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Data.Citation.html#CiteField"><span class="hs-identifier hs-type">CiteField</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#Citation"><span class="hs-identifier hs-type">Citation</span></a></span><span>
 </span><span id="line-145"></span><span id="cMThesis"><span class="annot"><span class="annottext">cMThesis :: People -&gt; UID -&gt; UID -&gt; Int -&gt; [CiteField] -&gt; UID -&gt; Citation
-</span><a href="Language.Drasil.Chunk.Citation.html#cMThesis"><span class="hs-identifier hs-var hs-var">cMThesis</span></a></span></span><span> </span><span id="local-6989586621679358258"><span class="annot"><span class="annottext">auth :: People
-</span><a href="#local-6989586621679358258"><span class="hs-identifier hs-var">auth</span></a></span></span><span> </span><span id="local-6989586621679358257"><span class="annot"><span class="annottext">t :: UID
-</span><a href="#local-6989586621679358257"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358256"><span class="annot"><span class="annottext">sch :: UID
-</span><a href="#local-6989586621679358256"><span class="hs-identifier hs-var">sch</span></a></span></span><span> </span><span id="local-6989586621679358255"><span class="annot"><span class="annottext">yr :: Int
-</span><a href="#local-6989586621679358255"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358254"><span class="annot"><span class="annottext">opt :: [CiteField]
-</span><a href="#local-6989586621679358254"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
+</span><a href="Language.Drasil.Chunk.Citation.html#cMThesis"><span class="hs-identifier hs-var hs-var">cMThesis</span></a></span></span><span> </span><span id="local-6989586621679358048"><span class="annot"><span class="annottext">auth :: People
+</span><a href="#local-6989586621679358048"><span class="hs-identifier hs-var">auth</span></a></span></span><span> </span><span id="local-6989586621679358047"><span class="annot"><span class="annottext">t :: UID
+</span><a href="#local-6989586621679358047"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358046"><span class="annot"><span class="annottext">sch :: UID
+</span><a href="#local-6989586621679358046"><span class="hs-identifier hs-var">sch</span></a></span></span><span> </span><span id="local-6989586621679358045"><span class="annot"><span class="annottext">yr :: Int
+</span><a href="#local-6989586621679358045"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358044"><span class="annot"><span class="annottext">opt :: [CiteField]
+</span><a href="#local-6989586621679358044"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
 </span><a href="Language.Drasil.Chunk.Citation.html#cite"><span class="hs-identifier hs-var">cite</span></a></span><span> </span><span class="annot"><span class="annottext">CitationKind
 </span><a href="Language.Drasil.Data.Citation.html#MThesis"><span class="hs-identifier hs-var">MThesis</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">People -&gt; UID -&gt; UID -&gt; Int -&gt; [CiteField] -&gt; [CiteField]
 </span><a href="Language.Drasil.Chunk.Citation.html#thesis"><span class="hs-identifier hs-var">thesis</span></a></span><span> </span><span class="annot"><span class="annottext">People
-</span><a href="#local-6989586621679358258"><span class="hs-identifier hs-var">auth</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358257"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358256"><span class="hs-identifier hs-var">sch</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679358255"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
-</span><a href="#local-6989586621679358254"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679358048"><span class="hs-identifier hs-var">auth</span></a></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679358047"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679358046"><span class="hs-identifier hs-var">sch</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679358045"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
+</span><a href="#local-6989586621679358044"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-146"></span><span>
 </span><span id="line-147"></span><span class="hs-comment">-- | Misc citation requires nothing.</span><span>
 </span><span id="line-148"></span><span class="hs-comment">-- Optional fields can be author, title, howpublished, month, year, and note.</span><span>
@@ -501,20 +501,20 @@ forall a. a -&gt; [a] -&gt; [a]
 </span><span id="line-155"></span><span class="hs-comment">-- Implicitly uses the EntryID as the chunk id.</span><span>
 </span><span id="line-156"></span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#cPhDThesis"><span class="hs-identifier hs-type">cPhDThesis</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.People.html#People"><span class="hs-identifier hs-type">People</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Data.Citation.html#CiteField"><span class="hs-identifier hs-type">CiteField</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#Citation"><span class="hs-identifier hs-type">Citation</span></a></span><span>
 </span><span id="line-157"></span><span id="cPhDThesis"><span class="annot"><span class="annottext">cPhDThesis :: People -&gt; UID -&gt; UID -&gt; Int -&gt; [CiteField] -&gt; UID -&gt; Citation
-</span><a href="Language.Drasil.Chunk.Citation.html#cPhDThesis"><span class="hs-identifier hs-var hs-var">cPhDThesis</span></a></span></span><span> </span><span id="local-6989586621679358250"><span class="annot"><span class="annottext">auth :: People
-</span><a href="#local-6989586621679358250"><span class="hs-identifier hs-var">auth</span></a></span></span><span> </span><span id="local-6989586621679358249"><span class="annot"><span class="annottext">t :: UID
-</span><a href="#local-6989586621679358249"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358248"><span class="annot"><span class="annottext">sch :: UID
-</span><a href="#local-6989586621679358248"><span class="hs-identifier hs-var">sch</span></a></span></span><span> </span><span id="local-6989586621679358247"><span class="annot"><span class="annottext">yr :: Int
-</span><a href="#local-6989586621679358247"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358246"><span class="annot"><span class="annottext">opt :: [CiteField]
-</span><a href="#local-6989586621679358246"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
+</span><a href="Language.Drasil.Chunk.Citation.html#cPhDThesis"><span class="hs-identifier hs-var hs-var">cPhDThesis</span></a></span></span><span> </span><span id="local-6989586621679358040"><span class="annot"><span class="annottext">auth :: People
+</span><a href="#local-6989586621679358040"><span class="hs-identifier hs-var">auth</span></a></span></span><span> </span><span id="local-6989586621679358039"><span class="annot"><span class="annottext">t :: UID
+</span><a href="#local-6989586621679358039"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358038"><span class="annot"><span class="annottext">sch :: UID
+</span><a href="#local-6989586621679358038"><span class="hs-identifier hs-var">sch</span></a></span></span><span> </span><span id="local-6989586621679358037"><span class="annot"><span class="annottext">yr :: Int
+</span><a href="#local-6989586621679358037"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358036"><span class="annot"><span class="annottext">opt :: [CiteField]
+</span><a href="#local-6989586621679358036"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
 </span><a href="Language.Drasil.Chunk.Citation.html#cite"><span class="hs-identifier hs-var">cite</span></a></span><span> </span><span class="annot"><span class="annottext">CitationKind
 </span><a href="Language.Drasil.Data.Citation.html#PhDThesis"><span class="hs-identifier hs-var">PhDThesis</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">People -&gt; UID -&gt; UID -&gt; Int -&gt; [CiteField] -&gt; [CiteField]
 </span><a href="Language.Drasil.Chunk.Citation.html#thesis"><span class="hs-identifier hs-var">thesis</span></a></span><span> </span><span class="annot"><span class="annottext">People
-</span><a href="#local-6989586621679358250"><span class="hs-identifier hs-var">auth</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358249"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358248"><span class="hs-identifier hs-var">sch</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679358247"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
-</span><a href="#local-6989586621679358246"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679358040"><span class="hs-identifier hs-var">auth</span></a></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679358039"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679358038"><span class="hs-identifier hs-var">sch</span></a></span><span> </span><span class="annot"><span class="annottext">Int
+</span><a href="#local-6989586621679358037"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">[CiteField]
+</span><a href="#local-6989586621679358036"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-158"></span><span>
 </span><span id="line-159"></span><span class="hs-comment">-- | Proceedings citation requires title and year.</span><span>
 </span><span id="line-160"></span><span class="hs-comment">-- Optional fields can be editor, volume or number, series, address,</span><span>
@@ -522,128 +522,128 @@ forall a. a -&gt; [a] -&gt; [a]
 </span><span id="line-162"></span><span class="hs-comment">-- Implicitly uses the EntryID as the chunk id.</span><span>
 </span><span id="line-163"></span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#cProceedings"><span class="hs-identifier hs-type">cProceedings</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Data.Citation.html#CiteField"><span class="hs-identifier hs-type">CiteField</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#Citation"><span class="hs-identifier hs-type">Citation</span></a></span><span>
 </span><span id="line-164"></span><span id="cProceedings"><span class="annot"><span class="annottext">cProceedings :: UID -&gt; Int -&gt; [CiteField] -&gt; UID -&gt; Citation
-</span><a href="Language.Drasil.Chunk.Citation.html#cProceedings"><span class="hs-identifier hs-var hs-var">cProceedings</span></a></span></span><span> </span><span id="local-6989586621679358244"><span class="annot"><span class="annottext">t :: UID
-</span><a href="#local-6989586621679358244"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358243"><span class="annot"><span class="annottext">yr :: Int
-</span><a href="#local-6989586621679358243"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358242"><span class="annot"><span class="annottext">opt :: [CiteField]
-</span><a href="#local-6989586621679358242"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
+</span><a href="Language.Drasil.Chunk.Citation.html#cProceedings"><span class="hs-identifier hs-var hs-var">cProceedings</span></a></span></span><span> </span><span id="local-6989586621679358034"><span class="annot"><span class="annottext">t :: UID
+</span><a href="#local-6989586621679358034"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358033"><span class="annot"><span class="annottext">yr :: Int
+</span><a href="#local-6989586621679358033"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358032"><span class="annot"><span class="annottext">opt :: [CiteField]
+</span><a href="#local-6989586621679358032"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
 </span><a href="Language.Drasil.Chunk.Citation.html#cite"><span class="hs-identifier hs-var">cite</span></a></span><span> </span><span class="annot"><span class="annottext">CitationKind
 </span><a href="Language.Drasil.Data.Citation.html#Proceedings"><span class="hs-identifier hs-var">Proceedings</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UID -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#title"><span class="hs-identifier hs-var">title</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358244"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358034"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#year"><span class="hs-identifier hs-var">year</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679358243"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358033"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[CiteField]
-</span><a href="#local-6989586621679358242"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679358032"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-165"></span><span>
 </span><span id="line-166"></span><span class="hs-comment">-- | Technical Report citation requires author, title, institution, and year.</span><span>
 </span><span id="line-167"></span><span class="hs-comment">-- Optional fields can be type, number, address, month, and note.</span><span>
 </span><span id="line-168"></span><span class="hs-comment">-- Implicitly uses the EntryID as the chunk id.</span><span>
 </span><span id="line-169"></span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#cTechReport"><span class="hs-identifier hs-type">cTechReport</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.People.html#People"><span class="hs-identifier hs-type">People</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Data.Citation.html#CiteField"><span class="hs-identifier hs-type">CiteField</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#Citation"><span class="hs-identifier hs-type">Citation</span></a></span><span>
 </span><span id="line-170"></span><span id="cTechReport"><span class="annot"><span class="annottext">cTechReport :: People -&gt; UID -&gt; UID -&gt; Int -&gt; [CiteField] -&gt; UID -&gt; Citation
-</span><a href="Language.Drasil.Chunk.Citation.html#cTechReport"><span class="hs-identifier hs-var hs-var">cTechReport</span></a></span></span><span> </span><span id="local-6989586621679358240"><span class="annot"><span class="annottext">auth :: People
-</span><a href="#local-6989586621679358240"><span class="hs-identifier hs-var">auth</span></a></span></span><span> </span><span id="local-6989586621679358239"><span class="annot"><span class="annottext">t :: UID
-</span><a href="#local-6989586621679358239"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358238"><span class="annot"><span class="annottext">inst :: UID
-</span><a href="#local-6989586621679358238"><span class="hs-identifier hs-var">inst</span></a></span></span><span> </span><span id="local-6989586621679358237"><span class="annot"><span class="annottext">yr :: Int
-</span><a href="#local-6989586621679358237"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358236"><span class="annot"><span class="annottext">opt :: [CiteField]
-</span><a href="#local-6989586621679358236"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
+</span><a href="Language.Drasil.Chunk.Citation.html#cTechReport"><span class="hs-identifier hs-var hs-var">cTechReport</span></a></span></span><span> </span><span id="local-6989586621679358030"><span class="annot"><span class="annottext">auth :: People
+</span><a href="#local-6989586621679358030"><span class="hs-identifier hs-var">auth</span></a></span></span><span> </span><span id="local-6989586621679358029"><span class="annot"><span class="annottext">t :: UID
+</span><a href="#local-6989586621679358029"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358028"><span class="annot"><span class="annottext">inst :: UID
+</span><a href="#local-6989586621679358028"><span class="hs-identifier hs-var">inst</span></a></span></span><span> </span><span id="local-6989586621679358027"><span class="annot"><span class="annottext">yr :: Int
+</span><a href="#local-6989586621679358027"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358026"><span class="annot"><span class="annottext">opt :: [CiteField]
+</span><a href="#local-6989586621679358026"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
 </span><a href="Language.Drasil.Chunk.Citation.html#cite"><span class="hs-identifier hs-var">cite</span></a></span><span> </span><span class="annot"><span class="annottext">CitationKind
 </span><a href="Language.Drasil.Data.Citation.html#TechReport"><span class="hs-identifier hs-var">TechReport</span></a></span><span> </span><span>
 </span><span id="line-171"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">People -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#author"><span class="hs-identifier hs-var">author</span></a></span><span> </span><span class="annot"><span class="annottext">People
-</span><a href="#local-6989586621679358240"><span class="hs-identifier hs-var">auth</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358030"><span class="hs-identifier hs-var">auth</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#title"><span class="hs-identifier hs-var">title</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358239"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358029"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#institution"><span class="hs-identifier hs-var">institution</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358238"><span class="hs-identifier hs-var">inst</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358028"><span class="hs-identifier hs-var">inst</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#year"><span class="hs-identifier hs-var">year</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679358237"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358027"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[CiteField]
-</span><a href="#local-6989586621679358236"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679358026"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-172"></span><span>
 </span><span id="line-173"></span><span class="hs-comment">-- | Unpublished citation requires author, title, and note.</span><span>
 </span><span id="line-174"></span><span class="hs-comment">-- Optional fields can be month and year.</span><span>
 </span><span id="line-175"></span><span class="hs-comment">-- Implicitly uses the EntryID as the chunk id.</span><span>
 </span><span id="line-176"></span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#cUnpublished"><span class="hs-identifier hs-type">cUnpublished</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.People.html#People"><span class="hs-identifier hs-type">People</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Data.Citation.html#CiteField"><span class="hs-identifier hs-type">CiteField</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#Citation"><span class="hs-identifier hs-type">Citation</span></a></span><span>
 </span><span id="line-177"></span><span id="cUnpublished"><span class="annot"><span class="annottext">cUnpublished :: People -&gt; UID -&gt; UID -&gt; [CiteField] -&gt; UID -&gt; Citation
-</span><a href="Language.Drasil.Chunk.Citation.html#cUnpublished"><span class="hs-identifier hs-var hs-var">cUnpublished</span></a></span></span><span> </span><span id="local-6989586621679358234"><span class="annot"><span class="annottext">auth :: People
-</span><a href="#local-6989586621679358234"><span class="hs-identifier hs-var">auth</span></a></span></span><span> </span><span id="local-6989586621679358233"><span class="annot"><span class="annottext">t :: UID
-</span><a href="#local-6989586621679358233"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358232"><span class="annot"><span class="annottext">n :: UID
-</span><a href="#local-6989586621679358232"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679358231"><span class="annot"><span class="annottext">opt :: [CiteField]
-</span><a href="#local-6989586621679358231"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
+</span><a href="Language.Drasil.Chunk.Citation.html#cUnpublished"><span class="hs-identifier hs-var hs-var">cUnpublished</span></a></span></span><span> </span><span id="local-6989586621679358024"><span class="annot"><span class="annottext">auth :: People
+</span><a href="#local-6989586621679358024"><span class="hs-identifier hs-var">auth</span></a></span></span><span> </span><span id="local-6989586621679358023"><span class="annot"><span class="annottext">t :: UID
+</span><a href="#local-6989586621679358023"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358022"><span class="annot"><span class="annottext">n :: UID
+</span><a href="#local-6989586621679358022"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679358021"><span class="annot"><span class="annottext">opt :: [CiteField]
+</span><a href="#local-6989586621679358021"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CitationKind -&gt; [CiteField] -&gt; UID -&gt; Citation
 </span><a href="Language.Drasil.Chunk.Citation.html#cite"><span class="hs-identifier hs-var">cite</span></a></span><span> </span><span class="annot"><span class="annottext">CitationKind
 </span><a href="Language.Drasil.Data.Citation.html#Unpublished"><span class="hs-identifier hs-var">Unpublished</span></a></span><span> </span><span>
 </span><span id="line-178"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">People -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#author"><span class="hs-identifier hs-var">author</span></a></span><span> </span><span class="annot"><span class="annottext">People
-</span><a href="#local-6989586621679358234"><span class="hs-identifier hs-var">auth</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358024"><span class="hs-identifier hs-var">auth</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#title"><span class="hs-identifier hs-var">title</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358233"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358023"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#note"><span class="hs-identifier hs-var">note</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358232"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358022"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[CiteField]
-</span><a href="#local-6989586621679358231"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679358021"><span class="hs-identifier hs-var">opt</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-179"></span><span>
 </span><span id="line-180"></span><span class="hs-comment">-- | Helper function (do not export) for creating book reference.</span><span>
 </span><span id="line-181"></span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#stdFields"><span class="hs-identifier hs-type">stdFields</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Data.Citation.html#CiteField"><span class="hs-identifier hs-type">CiteField</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Data.Citation.html#CiteField"><span class="hs-identifier hs-type">CiteField</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-182"></span><span id="stdFields"><span class="annot"><span class="annottext">stdFields :: UID -&gt; UID -&gt; Int -&gt; [CiteField] -&gt; [CiteField]
-</span><a href="Language.Drasil.Chunk.Citation.html#stdFields"><span class="hs-identifier hs-var hs-var">stdFields</span></a></span></span><span> </span><span id="local-6989586621679358229"><span class="annot"><span class="annottext">t :: UID
-</span><a href="#local-6989586621679358229"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358228"><span class="annot"><span class="annottext">pub :: UID
-</span><a href="#local-6989586621679358228"><span class="hs-identifier hs-var">pub</span></a></span></span><span> </span><span id="local-6989586621679358227"><span class="annot"><span class="annottext">yr :: Int
-</span><a href="#local-6989586621679358227"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358226"><span class="annot"><span class="annottext">opt :: [CiteField]
-</span><a href="#local-6989586621679358226"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID -&gt; CiteField
+</span><a href="Language.Drasil.Chunk.Citation.html#stdFields"><span class="hs-identifier hs-var hs-var">stdFields</span></a></span></span><span> </span><span id="local-6989586621679358019"><span class="annot"><span class="annottext">t :: UID
+</span><a href="#local-6989586621679358019"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358018"><span class="annot"><span class="annottext">pub :: UID
+</span><a href="#local-6989586621679358018"><span class="hs-identifier hs-var">pub</span></a></span></span><span> </span><span id="local-6989586621679358017"><span class="annot"><span class="annottext">yr :: Int
+</span><a href="#local-6989586621679358017"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358016"><span class="annot"><span class="annottext">opt :: [CiteField]
+</span><a href="#local-6989586621679358016"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#title"><span class="hs-identifier hs-var">title</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358229"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358019"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#publisher"><span class="hs-identifier hs-var">publisher</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358228"><span class="hs-identifier hs-var">pub</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358018"><span class="hs-identifier hs-var">pub</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#year"><span class="hs-identifier hs-var">year</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679358227"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358017"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[CiteField]
-</span><a href="#local-6989586621679358226"><span class="hs-identifier hs-var">opt</span></a></span><span>
+</span><a href="#local-6989586621679358016"><span class="hs-identifier hs-var">opt</span></a></span><span>
 </span><span id="line-183"></span><span>
 </span><span id="line-184"></span><span class="hs-comment">-- | Helper function (do not export) for creating thesis reference.</span><span>
 </span><span id="line-185"></span><span class="annot"><a href="Language.Drasil.Chunk.Citation.html#thesis"><span class="hs-identifier hs-type">thesis</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.People.html#People"><span class="hs-identifier hs-type">People</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Data.Citation.html#CiteField"><span class="hs-identifier hs-type">CiteField</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Data.Citation.html#CiteField"><span class="hs-identifier hs-type">CiteField</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-186"></span><span id="thesis"><span class="annot"><span class="annottext">thesis :: People -&gt; UID -&gt; UID -&gt; Int -&gt; [CiteField] -&gt; [CiteField]
-</span><a href="Language.Drasil.Chunk.Citation.html#thesis"><span class="hs-identifier hs-var hs-var">thesis</span></a></span></span><span> </span><span id="local-6989586621679358225"><span class="annot"><span class="annottext">auth :: People
-</span><a href="#local-6989586621679358225"><span class="hs-identifier hs-var">auth</span></a></span></span><span> </span><span id="local-6989586621679358224"><span class="annot"><span class="annottext">t :: UID
-</span><a href="#local-6989586621679358224"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358223"><span class="annot"><span class="annottext">sch :: UID
-</span><a href="#local-6989586621679358223"><span class="hs-identifier hs-var">sch</span></a></span></span><span> </span><span id="local-6989586621679358222"><span class="annot"><span class="annottext">yr :: Int
-</span><a href="#local-6989586621679358222"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358221"><span class="annot"><span class="annottext">opt :: [CiteField]
-</span><a href="#local-6989586621679358221"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">People -&gt; CiteField
+</span><a href="Language.Drasil.Chunk.Citation.html#thesis"><span class="hs-identifier hs-var hs-var">thesis</span></a></span></span><span> </span><span id="local-6989586621679358015"><span class="annot"><span class="annottext">auth :: People
+</span><a href="#local-6989586621679358015"><span class="hs-identifier hs-var">auth</span></a></span></span><span> </span><span id="local-6989586621679358014"><span class="annot"><span class="annottext">t :: UID
+</span><a href="#local-6989586621679358014"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679358013"><span class="annot"><span class="annottext">sch :: UID
+</span><a href="#local-6989586621679358013"><span class="hs-identifier hs-var">sch</span></a></span></span><span> </span><span id="local-6989586621679358012"><span class="annot"><span class="annottext">yr :: Int
+</span><a href="#local-6989586621679358012"><span class="hs-identifier hs-var">yr</span></a></span></span><span> </span><span id="local-6989586621679358011"><span class="annot"><span class="annottext">opt :: [CiteField]
+</span><a href="#local-6989586621679358011"><span class="hs-identifier hs-var">opt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">People -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#author"><span class="hs-identifier hs-var">author</span></a></span><span> </span><span class="annot"><span class="annottext">People
-</span><a href="#local-6989586621679358225"><span class="hs-identifier hs-var">auth</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358015"><span class="hs-identifier hs-var">auth</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#title"><span class="hs-identifier hs-var">title</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358224"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358014"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#school"><span class="hs-identifier hs-var">school</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679358223"><span class="hs-identifier hs-var">sch</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358013"><span class="hs-identifier hs-var">sch</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">Int -&gt; CiteField
 </span><a href="Language.Drasil.Data.Citation.html#year"><span class="hs-identifier hs-var">year</span></a></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679358222"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
+</span><a href="#local-6989586621679358012"><span class="hs-identifier hs-var">yr</span></a></span><span> </span><span class="annot"><span class="annottext">CiteField -&gt; [CiteField] -&gt; [CiteField]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[CiteField]
-</span><a href="#local-6989586621679358221"><span class="hs-identifier hs-var">opt</span></a></span><span>
+</span><a href="#local-6989586621679358011"><span class="hs-identifier hs-var">opt</span></a></span><span>
 </span><span id="line-187"></span><span>
 </span><span id="line-188"></span></pre></body></html>

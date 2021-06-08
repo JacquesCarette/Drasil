@@ -1,7 +1,6 @@
 module Drasil.Projectile.Body (printSetting, si, srs, projectileTitle) where
 
 import Language.Drasil hiding (Symbol(..), Vector)
-import Language.Drasil.Code (relToQD)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
@@ -51,7 +50,7 @@ import Drasil.Projectile.DataDefs (dataDefs)
 import Drasil.Projectile.Figures (figLaunch)
 import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
-import Drasil.Projectile.IMods (iMods,iMods0)
+import Drasil.Projectile.IMods (iMods)
 import Drasil.Projectile.References (citations)
 import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs)
 import Drasil.Projectile.Unitals
@@ -122,8 +121,7 @@ si = SI {
   _purpose     = [],
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
-  _definitions = getEqModQdsFromIm iMods ++
-                 map (relToQD symbMap) iMods0
+  _definitions = getEqModQdsFromIm iMods
                  ++ getEqModQdsFromGd genDefns,
   _datadefs    = dataDefs,
   _configFiles = [],

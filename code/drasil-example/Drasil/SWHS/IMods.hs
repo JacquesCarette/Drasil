@@ -188,7 +188,7 @@ eBalanceOnWtrDerivEqnsIM1 = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2,
 -- IM2 --
 ---------
 eBalanceOnPCM :: InstanceModel
-eBalanceOnPCM = im (OthModel eBalanceOnPCMRC) [qwC tempMeltP $ UpFrom (Exc, sy tempInit)
+eBalanceOnPCM = im (DEModel eBalanceOnPCMRC) [qwC tempMeltP $ UpFrom (Exc, sy tempInit)
   , qwUC timeFinal, qwUC tempInit, qwUC pcmSA
   , qwUC pcmHTC, qwUC pcmMass, qwUC htCapSP, qwUC htCapLP]
   (qw tempPCM) []

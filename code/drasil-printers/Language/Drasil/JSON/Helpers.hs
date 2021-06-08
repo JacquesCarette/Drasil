@@ -2,9 +2,9 @@ module Language.Drasil.JSON.Helpers where
 
 import Prelude hiding ((<>))
 import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), vcat, hcat, cat, nest)
+import Utils.Drasil (replace)
 import Data.List (intersperse)
-import Data.List.Split
-import Data.List.Utils (replace)
+import Data.List.Split (splitOn)
 
 import Language.Drasil (MaxWidthPercent)
 import Language.Drasil.HTML.Helpers (img)

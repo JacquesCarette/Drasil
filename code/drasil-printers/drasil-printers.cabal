@@ -56,4 +56,5 @@ library
     , drasil-utils
     , lens
     , pretty
+    , split
   default-language: Haskell2010

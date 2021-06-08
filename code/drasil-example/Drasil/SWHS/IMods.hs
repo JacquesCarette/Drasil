@@ -343,7 +343,7 @@ htWtrNotes = map foldlSent [
 -- IM4 --
 ---------
 heatEInPCM :: InstanceModel
-heatEInPCM = imNoDeriv (OthModel heatEInPCMRC) [qwC tempMeltP $ UpFrom (Exc, sy tempInit)
+heatEInPCM = imNoDeriv (DEModel heatEInPCMRC) [qwC tempMeltP $ UpFrom (Exc, sy tempInit)
   , qwUC timeFinal, qwUC tempInit, qwUC pcmSA, qwUC pcmHTC
   , qwUC pcmMass, qwUC htCapSP, qwUC htCapLP, qwUC tempPCM, qwUC htFusion, qwUC tInitMelt]
   (qw pcmE)

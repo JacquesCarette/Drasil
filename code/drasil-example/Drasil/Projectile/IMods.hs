@@ -3,7 +3,7 @@ module Drasil.Projectile.IMods (iMods, iMods0, landPosIM, messageIM, offsetIM, t
 import Prelude hiding (cos, sin)
 
 import Language.Drasil
-import Theory.Drasil (InstanceModel, imNoDerivNoRefs, imNoRefs, imNoRefs', qwC, ModelKinds (OthModel, EquationalModel))
+import Theory.Drasil (InstanceModel, imNoDerivNoRefs, imNoDerivNoRefs', imNoRefs, imNoRefs', qwC, ModelKinds (OthModel, EquationalModel))
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -34,7 +34,7 @@ iMods :: [InstanceModel]
 iMods = [timeIM, landPosIM, offsetIM, messageIM]
 
 iMods0 :: [InstanceModel]
-iMods0 = [landPosIM, offsetIM, messageIM]
+iMods0 = [landPosIM, messageIM]
 ---
 timeIM :: InstanceModel
 timeIM = imNoRefs' (EquationalModel timeQD)(nounPhraseSP "calculation of landing time")
@@ -111,14 +111,13 @@ landPosDerivEqns = [E.landPosDerivEqn1, E.landPosDerivEqn2, E.landPosDerivEqn3, 
 
 ---
 offsetIM :: InstanceModel
-offsetIM = imNoDerivNoRefs (OthModel offsetRC)
+offsetIM = imNoDerivNoRefs' (EquationalModel offsetQD) (nounPhraseSP "offset")
   [qwC landPos $ UpFrom (Exc, exactDbl 0)
   ,qwC targPos $ UpFrom (Exc, exactDbl 0)]
   (qw offset) [] "offsetIM" [landPosNote, landAndTargPosConsNote]
 
-offsetRC :: RelationConcept
-offsetRC = makeRC "offsetRC" (nounPhraseSP "offset") EmptyS $ sy offset $= E.offset'
-
+offsetQD :: QDefinition
+offsetQD = mkQuantDef offset E.offset'
 ---
 messageIM :: InstanceModel
 messageIM = imNoDerivNoRefs (OthModel messageRC)

@@ -2,7 +2,7 @@ module Drasil.GlassBR.IMods (symb, iMods, pbIsSafe, lrIsSafe, instModIntro, iMod
 
 import Prelude hiding (exp)
 import Language.Drasil
-import Theory.Drasil (InstanceModel, imNoDeriv, qwC, ModelKinds (OthModel))
+import Theory.Drasil (InstanceModel, imNoDeriv', qwC, ModelKinds ( EquationalModel))
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -26,30 +26,28 @@ symb = map dqdWr [plateLen, plateWidth, charWeight, standOffDist] ++
 {--}
 
 pbIsSafe :: InstanceModel
-pbIsSafe = imNoDeriv (OthModel pbIsSafeRC)
+pbIsSafe = imNoDeriv' (EquationalModel pbIsSafeQD) (nounPhraseSP "Safety Req-Pb")
   [qwC probBr $ UpFrom (Exc, exactDbl 0), qwC pbTol $ UpFrom (Exc, exactDbl 0)]
   (qw isSafePb) []
   [makeCite astm2009] "isSafePb"
   [pbIsSafeDesc, probBRRef, pbTolUsr]
 
 
-pbIsSafeRC :: RelationConcept
-pbIsSafeRC = makeRC "safetyReqPb" (nounPhraseSP "Safety Req-Pb")
-  EmptyS (sy isSafePb $= sy probBr $< sy pbTol)
+pbIsSafeQD :: QDefinition
+pbIsSafeQD = mkQuantDef isSafePb (sy probBr $< sy pbTol)
 
 {--}
 
 lrIsSafe :: InstanceModel
-lrIsSafe = imNoDeriv (OthModel lrIsSafeRC) 
+lrIsSafe = imNoDeriv' (EquationalModel lrIsSafeQD) (nounPhraseSP "Safety Req-LR")
   [qwC lRe $ UpFrom (Exc, exactDbl 0), qwC demand $ UpFrom (Exc, exactDbl 0)]
   (qw isSafeLR) []
   [makeCite astm2009] "isSafeLR"
   [lrIsSafeDesc, capRef, qRef] 
 
-lrIsSafeRC :: RelationConcept
-lrIsSafeRC = makeRC "safetyReqLR" (nounPhraseSP "Safety Req-LR")
-  EmptyS (sy isSafeLR $= sy lRe $> sy demand)
-  
+lrIsSafeQD :: QDefinition 
+lrIsSafeQD = mkQuantDef isSafeLR (sy lRe $> sy demand)
+
 iModDesc :: QuantityDict -> Sentence -> Sentence
 iModDesc main s = foldlSent [S "If", ch main `sC` S "the glass is" +:+.
     S "considered safe", s `S.are` S "either both True or both False"]

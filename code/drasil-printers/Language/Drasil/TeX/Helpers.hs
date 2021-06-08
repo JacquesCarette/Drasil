@@ -153,12 +153,14 @@ cite c i = command1oD "cite" i (pure $ text c)
 -----------------------------------------------------------------------------
 -- Now create standard LaTeX stuff
 
--- | Useful commands.
 count, mathbb, usepackage :: String -> D
+-- | Newcounter command.
 count      = command "newcounter"
 -- changed to command "newcounter" from command "count" (I assume this was
 -- what was intended?)
+-- | Mathbb command.
 mathbb     = command "mathbb"
+-- | Usepackage command.
 usepackage = command "usepackage"
 
 -- | Include graphics with a given max width percentage.

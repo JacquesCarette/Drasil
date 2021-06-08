@@ -1,4 +1,5 @@
 {-# Language FlexibleInstances #-}
+-- | Printing Monad. Starts with a specific data type (reader monad) and extends from there.
 module Language.Drasil.TeX.Monad where
 
 import Prelude hiding (print)

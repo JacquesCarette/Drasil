@@ -14,7 +14,7 @@ import Language.Drasil.UID (UID)
 
 -- | For a 'ConceptChunk' that also has a 'Relation' attached.
 data RelationConcept = RC { _conc :: ConceptChunk
-                          , rel :: Relation
+                          , _rel :: Relation
                           }
 makeLenses ''RelationConcept
 
@@ -28,7 +28,7 @@ instance Definition    RelationConcept where defn = conc . defn
 -- ^ Finds the definition contained in the 'ConceptChunk' used to make the 'RelationConcept'.
 instance ConceptDomain RelationConcept where cdom = cdom . view conc
 -- ^ Finds the domain of the 'ConceptChunk' used to make the 'RelationConcept'.
-instance ExprRelat     RelationConcept where relat = rel
+instance ExprRelat     RelationConcept where relat = (^. rel)
 -- ^ Finds the relation expression for a 'RelationConcept'.
 instance Eq            RelationConcept where a == b = (a ^. uid) == (b ^. uid)
 -- ^ Equal if 'UID's are equal.

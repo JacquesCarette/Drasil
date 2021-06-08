@@ -16,13 +16,13 @@ doccon = [abbreviation, analysis, appendix, aspect, body, charOfIR, characterist
   customer, datum, datumConstraint, decision, definition, dependency, description,
   design, designDoc, document, documentation, effect, element, emphasis, endUser,
   environment, example, failure, figure, first, form, full, fullForm, functional,
-  functionalRequirement, game, general, generalSystemDescription, goal, guide, horizontalMotion,
+  functionalRequirement, game, general, generalSystemDescription, goal, guide, 
   implementation, indPRCase, individual, information, input_, instance_, intReader,
   interest, interface, introduction, issue, item, label, library, limitation,
-  literacy, loss, material_, message, method_, model, motion, module_, name_, nonfunctional,
+  literacy, loss, material_, message, method_, model, module_, name_, nonfunctional,
   nonfunctionalRequirement, object, offShelf, offShelfSolution, open, orgOfDoc,
   organization, output_, physical, physicalConstraint, physicalProperty, physicalSim,
-  physicalSystem, physics, plan, practice, priority, problem, problemDescription,
+  physicalSystem, physics, plan, practice, priority, problem, problemDescription, procedure,
   prodUCTable, productUC, product_, project, procForAnls, propOfCorSol, property, prpsOfDoc,
   purpose, quantity, realtime, review, reference, refmat, requirement_, response, result,
   reviewer, safety, safetyReq, scenario, scope, scpOfReq, scpOfTheProjS, second_,
@@ -33,7 +33,7 @@ doccon = [abbreviation, analysis, appendix, aspect, body, charOfIR, characterist
   systemdescription, tOfSymb, tOfUnit, table_, task, template, termAndDef, term_,
   terminology, theory, traceyGraph, traceyMandG, traceyMatrix, type_, uncertCol,
   uncertainty, useCase, useCaseTable, user, userCharacteristic, userInput,
-  validation, value, variable, vav, vavPlan, verticalMotion, verification, video, year]
+  validation, value, variable, vav, vavPlan, verification, video, year]
 
 doccon' :: [CI]
 doccon' = [assumption, dataConst, dataDefn, desSpec, genDefn, goalStmt, inModel,
@@ -76,8 +76,8 @@ abbreviation, analysis, appendix, aspect, body, characteristic, class_, client,
   functional, game, general, goal, guide, implementation, individual, information, 
   interest, interface, input_, instance_, intReader, introduction, issue, item, 
   loss, label, library, limitation, literacy, material_, message, method_, module_,
-  model, motion, name_, nonfunctional, object, offShelf, open, organization, output_,
-  physics, physical, plan, practice, priority, problem, product_, project,
+  model, name_, nonfunctional, object, offShelf, open, organization, output_,
+  physics, physical, plan, practice, priority, problem, procedure, product_, project,
   property, purpose, quantity, realtime, review, reference, requirement_, response, 
   result, reviewer, safety, scope, scpOfTheProjS, second_, section_, scenario,
   source, simulation, software, solution, summary, specific, specification, stakeholder,
@@ -152,7 +152,6 @@ message         = nc "message"        (cn'    "message"            )
 method_         = nc "method"         (cn'    "method"             )
 module_         = nc "module"         (cn'    "module"             )
 model           = nc "model"          (cn'    "model"              )
-motion          = nc "motion"         (cn'    "motion"             )
 name_           = nc "name"           (cn'    "name"               )
 nonfunctional   = nc "non-functional" (cn'    "non-functional"     ) --FIXME: Adjective
 object          = nc "object"         (cn'    "object"             )
@@ -166,6 +165,7 @@ plan            = nc "plan"           (cn'    "plan"               )
 practice        = nc "practice"       (cn'    "practice"           )
 priority        = nc "priority"       (cnIES  "priority"           )
 problem         = nc "problem"        (cn'    "problem"            )
+procedure       = nc "procedure"      (cn'    "procedure"          )
 product_        = nc "product"        (cn'    "product"            )
 project         = nc "project"        (cn'    "project"            )
 property        = nc "property"       (cnIES  "property"           )
@@ -239,21 +239,20 @@ scpOfTheProj oper = nc "scpOfTheProj" (scope `ofN_` the'' oper project) -- reaso
 
 -- compounds
 
-designDoc, fullForm, generalSystemDescription, horizontalMotion, moduleInterface, indPRCase,
+designDoc, fullForm, generalSystemDescription, moduleInterface, indPRCase,
   physicalConstraint, physicalSystem, problemDescription, prodUCTable,
   specificsystemdescription, systemdescription, systemConstraint, sysCont,
   userCharacteristic, datumConstraint, functionalRequirement,
   nonfunctionalRequirement, safetyReq, softwareConstraint, softwareDoc,
   softwareReq, softwareSys, softwareVerif, softwareVAV, solutionCharSpec,
   solutionCharacteristic, offShelfSolution, physicalSim, productUC, 
-  useCaseTable, physicalProperty, vavPlan, verticalMotion, uncertCol, userInput :: NamedChunk
+  useCaseTable, physicalProperty, vavPlan, uncertCol, userInput :: NamedChunk
  
 datumConstraint              = compoundNC' datum constraint
 designDoc                    = compoundNC design document
 fullForm                     = compoundNC full form
 functionalRequirement        = compoundNC functional requirement_
 generalSystemDescription     = compoundNC general systemdescription
-horizontalMotion             = compoundNC horizontal motion
 moduleInterface              = compoundNC module_ interface
 indPRCase                    = compoundNC individual productUC
 nonfunctionalRequirement     = compoundNC nonfunctional requirement_
@@ -283,7 +282,6 @@ useCaseTable                 = compoundNC useCase table_
 userCharacteristic           = compoundNC user characteristic
 userInput                    = compoundNC user input_
 vavPlan                      = compoundNC vav plan
-verticalMotion               = compoundNC vertical motion
 
 -- Domains
 

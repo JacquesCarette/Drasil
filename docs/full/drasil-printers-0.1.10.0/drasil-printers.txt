@@ -17,10 +17,10 @@ module Language.Drasil.Config
 -- | TeX Only - Numbered sections?
 numberedSections :: Bool
 
--- | TeX Only - Settings for hyperref
+-- | TeX Only - Settings for hyperref.
 hyperSettings :: String
 
--- | TeX font size
+-- | TeX font size.
 fontSize :: Int
 
 -- | Used to name the BibTeX file
@@ -29,20 +29,24 @@ bibFname :: String
 -- | Print verbose data definition descriptions?
 verboseDDDescription :: Bool
 
--- | The bibliography format
+-- | The bibliography format.
 data StyleGuide
 MLA :: StyleGuide
 APA :: StyleGuide
 Chicago :: StyleGuide
+
+-- | MLA for bibliography style.
 bibStyleH :: StyleGuide
+
+-- | MLA for bibliography style as a <a>String</a>.
 bibStyleT :: String
 
 -- | TeX Only - column width for data definitions (fraction of LaTeX
---   textwidth)
+--   textwidth).
 colAwidth :: Double
 
 -- | TeX Only - column width for data definitions (fraction of LaTeX
---   textwidth)
+--   textwidth).
 colBwidth :: Double
 
 -- | TeX Only - Number Data Definition equations?
@@ -53,7 +57,7 @@ numberedTMEquations :: Bool
 
 module Language.Drasil.Format
 
--- | Possible formats for output
+-- | Possible formats for output.
 data Format
 TeX :: Format
 Plain :: Format
@@ -61,38 +65,65 @@ HTML :: Format
 
 module Language.Drasil.HTML.CSS
 
--- | Generates the CSS selectors necessary for a document
+-- | Generates the CSS selectors necessary for a document.
 makeCSS :: Document -> Doc
 
--- | Create the link to the necessary CSS file
+-- | Create the link to the necessary CSS file.
 linkCSS :: String -> Doc
 
 module Language.Drasil.HTML.Monad
 
--- | Printing "monad". Don't need context, so Identity (under another name)
---   will do just fine.
+-- | Printing "monad". Doesn't need context, so Identity (under another
+--   name) will do just fine.
 newtype PrintHTML
 PH :: String -> PrintHTML
 [unPH] :: PrintHTML -> String
 instance Language.Drasil.Unicode.RenderSpecial Language.Drasil.HTML.Monad.PrintHTML
 
 module Language.Drasil.Markdown.CreateMd
+
+-- | Combines a list of sentences into a final Doc, also appends end note.
 makeMd :: [Doc] -> Doc
+
+-- | Example title and purpose section.
 introInfo :: String -> [String] -> Doc
+
+-- | Language version section.
 verInfo :: String -> String -> Doc
+
+-- | Invalid Operating Systems section, does not display unless atleast 1
+--   invalid OS.
 unsupOS :: Maybe String -> Doc
+
+-- | External Libraries section. The inputs are a list of name and version
+--   pairs and a list of the corresponding version numbers, these are first
+--   combined into a list of triplets, and then each printed on a new line.
 extLibSec :: [(String, String)] -> [String] -> Doc
+
+-- | Constructs regular section section from header and message.
 regularSec :: Doc -> Doc -> Doc
+
+-- | Instruction section, contains 3 paragraphs, Running, Building and
+--   Config Files. The Config file section is only displayed if there are
+--   configuration files.
 instDoc :: [String] -> Doc
 
 module Language.Drasil.Plain.Helpers
+
+-- | Replace occurences of special characters
+--   (",~`-=!@#$%^&amp;*+[]\;'/|"&lt;&gt;? ") with underscores ("_").
 toPlainName :: String -> String
 
 module Language.Drasil.Printing.AST
+
+-- | Different types of links for referencing. May be internal, a citation,
+--   or external.
 data LinkType
 Internal :: LinkType
 Cite2 :: LinkType
 External :: LinkType
+
+-- | Different operators.
 data Ops
 IsIn :: Ops
 Integer :: Ops
@@ -137,186 +168,276 @@ Inte :: Ops
 Prod :: Ops
 Point :: Ops
 Perc :: Ops
+
+-- | Holds the type of "text fencing" ("(), {}, |, ||").
 data Fence
 Paren :: Fence
 Curly :: Fence
 Norm :: Fence
 Abs :: Fence
+
+-- | The "^" symbol.
 data OverSymb
 Hat :: OverSymb
+
+-- | Different font effects (<b>bold</b>, <i>emphasis</i>).
 data Fonts
 Bold :: Fonts
 Emph :: Fonts
+
+-- | Spacing is Thin.
 data Spacing
 Thin :: Spacing
+
+-- | A Label is just a <a>Spec</a> (sentence).
 type Label = Spec
+
+-- | Redefine the <a>Expr</a> type from Language.Drasil to be more suitable
+--   to printing.
 data Expr
 Dbl :: Double -> Expr
 Int :: Integer -> Expr
 Str :: String -> Expr
+
+-- | Case expressions
 Case :: [(Expr, Expr)] -> Expr
+
+-- | Matrix.
 Mtx :: [[Expr]] -> Expr
 Row :: [Expr] -> Expr
 Ident :: String -> Expr
 Label :: String -> Expr
+
+-- | Special characters.
 Spec :: Special -> Expr
+
+-- | Subscript.
 Sub :: Expr -> Expr
+
+-- | Superscript.
 Sup :: Expr -> Expr
 MO :: Ops -> Expr
+
+-- | Holds an expression that needs a hat symbol "^"
 Over :: OverSymb -> Expr -> Expr
+
+-- | Holds an expression that is surrounded with a <a>Fence</a>.
 Fenced :: Fence -> Fence -> Expr -> Expr
+
+-- | Holds an expression with a font.
 Font :: Fonts -> Expr -> Expr
+
+-- | Fractions are a layout thing.
 Div :: Expr -> Expr -> Expr
+
+-- | Roots are also a layout thing. Just sqrt for now.
 Sqrt :: Expr -> Expr
+
+-- | Holds the <a>Spacing</a>.
 Spc :: Spacing -> Expr
+
+-- | Redefine the <a>Sentence</a> type from Language.Drasil to be more
+--   suitable to printing.
 data Spec
+
+-- | Holds an expression.
 E :: Expr -> Spec
+
+-- | Holds a String.
 S :: String -> Spec
+
+-- | Concatination.
 (:+:) :: Spec -> Spec -> Spec
+
+-- | Special characters.
 Sp :: Special -> Spec
+
+-- | Holds the actual reference.
 Ref :: LinkType -> String -> Spec -> Spec
+
+-- | Empty sentence.
 EmptyS :: Spec
+
+-- | Quotes are different in different languages.
 Quote :: Spec -> Spec
+
+-- | Newline. | A title is just a sentence (<a>Spec</a>).
 HARDNL :: Spec
 infixr 5 :+:
 type Title = Spec
+
+-- | Different types of lists that contain an <a>ItemType</a> and may
+--   contain a label and a title. May be ordered, unordered, simple,
+--   descriptive, or for definitions. More suitable to printing.
 data ListType
 Ordered :: [(ItemType, Maybe Label)] -> ListType
 Unordered :: [(ItemType, Maybe Label)] -> ListType
 Simple :: [(Title, ItemType, Maybe Label)] -> ListType
 Desc :: [(Title, ItemType, Maybe Label)] -> ListType
 Definitions :: [(Title, ItemType, Maybe Label)] -> ListType
+
+-- | A list may contain an element or another list. More suitable to
+--   printing.
 data ItemType
 Flat :: Spec -> ItemType
 Nested :: Spec -> ListType -> ItemType
 
 module Language.Drasil.HTML.Helpers
 
--- | HTML tag wrapper
+-- | HTML tag wrapper.
 html :: Doc -> Doc
 
--- | Head tag wrapper
+-- | Head tag wrapper.
 headTag :: Doc -> Doc
 
--- | Body tag wrapper
+-- | Body tag wrapper.
 body :: Doc -> Doc
 
--- | Title tag wrapper
+-- | Title tag wrapper.
 title :: Doc -> Doc
 
--- | Paragraph tag wrapper
+-- | Paragraph tag wrapper.
 paragraph :: Doc -> Doc
 
--- | Code tag wrapper
+-- | Code tag wrapper.
 code :: Doc -> Doc
 
--- | Table row tag wrapper
+-- | Table row tag wrapper.
 tr :: Doc -> Doc
 
--- | Table header tag wrapper
+-- | Table header tag wrapper.
 th :: Doc -> Doc
 
--- | Table cell tag wrapper
+-- | Table cell tag wrapper.
 td :: Doc -> Doc
 
--- | Figure tag wrapper
+-- | Figure tag wrapper.
 figure :: Doc -> Doc
 
--- | Figcaption tag wrapper
+-- | Figcaption tag wrapper.
 figcaption :: Doc -> Doc
 
--- | List tag wrapper
+-- | List tag wrapper.
 li :: Doc -> Doc
 
--- | Paragraph in list tag wrapper
+-- | Paragraph in list tag wrapper.
 pa :: Doc -> Doc
+
+-- | Bring attention to element wrapper.
 ba :: Doc -> Doc
 
--- | Ordered list tag wrapper
+-- | Ordered list tag wrapper.
 ol :: [String] -> Doc -> Doc
 
--- | Unordered list tag wrapper
+-- | Unordered list tag wrapper.
 ul :: [String] -> Doc -> Doc
 
--- | Table tag wrapper
+-- | Table tag wrapper.
 table :: [String] -> Doc -> Doc
 
--- | Image tag wrapper
+-- | Image tag wrapper.
 img :: [(String, Doc)] -> Doc
 
--- | Helper for HTML headers
+-- | Helper for HTML headers.
 h :: Int -> Doc -> Doc
+
+-- | HTML class or id selector.
 data Variation
 Class :: Variation
 Id :: Variation
+
+-- | General <a>Class</a> wrapper function and formats the document space
+--   with <a>cat</a>.
 wrap :: String -> [String] -> Doc -> Doc
+
+-- | General wrapper function and formats the document space with
+--   <a>hcat</a>.
 wrap' :: String -> [String] -> Doc -> Doc
 
--- | Helper for wrapping HTML tags. The forth argument provides class names
---   for the CSS.
+-- | Helper for wrapping HTML tags. The fourth argument provides class
+--   names for the CSS.
 wrapGen' :: ([Doc] -> Doc) -> Variation -> String -> Doc -> [String] -> Doc -> Doc
+
+-- | General wrapper that formats the document space nicely.
 wrapGen :: Variation -> String -> Doc -> [String] -> Doc -> Doc
 
--- | Helper for wrapping attributes in a tag. | The first argument is tag
---   name. | The String in the pair is the attribute name, | The Doc is the
---   value for different attributes.
+-- | Helper for wrapping attributes in a tag.
+--   
+--   <ul>
+--   <li>The first argument is tag name.</li>
+--   <li>The <a>String</a> in the pair is the attribute name,</li>
+--   <li>The <a>Doc</a> is the value for different attributes.</li>
+--   </ul>
 wrapInside :: String -> [(String, Doc)] -> Doc
 
--- | Helper for setting up captions
+-- | Helper for setting up captions.
 caption :: Doc -> Doc
+
+-- | Helper for wrapping divisions or sections.
 refwrap :: Doc -> Doc -> Doc
 
--- | Helper for setting up links to references
+-- | Helper for setting up links to references.
 reflink :: String -> Doc -> Doc
 
--- | Helper for setting up links to references with additional information
+-- | Helper for setting up links to references with additional information.
 reflinkInfo :: String -> Doc -> Doc -> Doc
 
--- | Helper for setting up links to external URIs
+-- | Helper for setting up links to external URIs.
 reflinkURI :: String -> Doc -> Doc
 
--- | Helper for setting up figures
+-- | Helper for setting up figures.
 image :: Doc -> Doc -> MaxWidthPercent -> Doc
 
--- | Emphasis (italics) tag
+-- | Emphasis (italics) tag.
 em :: Doc -> Doc
 
--- | Superscript tag
+-- | Superscript tag.
 sup :: Doc -> Doc
 
--- | Subscript tag
+-- | Subscript tag.
 sub :: Doc -> Doc
 
--- | Bold tag
+-- | Bold tag.
 bold :: Doc -> Doc
 
--- | Title header
+-- | Title header.
 articleTitle :: Doc -> Doc
 
--- | Author header
+-- | Author header.
 author :: Doc -> Doc
 
--- | Div tag wrapper
+-- | Div tag wrapper.
 divTag :: [String] -> Doc -> Doc
+
+-- | Span tag wrapper.
 spanTag :: [String] -> Doc -> Doc
+
+-- | Indent the Document by 2 positions.
 indent :: Doc -> Doc
 
 -- | Create and markup fractions fraction :: Doc -&gt; Doc -&gt; Doc
 --   fraction a b = divTag ["fraction"] (spanTag ["fup"] a $$ spanTag
 --   ["fdn"] b)
 --   
---   Build case expressions
+--   Build case expressions.
 makeCases :: [(Expr, Expr)] -> (Expr -> Doc) -> Doc
 
 module Language.Drasil.Printing.Citation
+
+-- | A collection of citations.
 type BibRef = [Citation]
+
+-- | A citation contains an entry id, the kind of citation, and the
+--   appropriate citation fields.
 data Citation
 Cite :: EntryID -> CitationKind -> [CiteField] -> Citation
 
--- | Fields used in citations.
+-- | Fields used in citations. More suitable to printing
 data CiteField
 Address :: Spec -> CiteField
 Author :: People -> CiteField
+
+-- | Used for <a>InCollection</a> references only.
 BookTitle :: Spec -> CiteField
 Chapter :: Int -> CiteField
 Edition :: Int -> CiteField
@@ -328,16 +449,20 @@ Month :: Month -> CiteField
 Note :: Spec -> CiteField
 Number :: Int -> CiteField
 Organization :: Spec -> CiteField
+
+-- | Range of pages (ex1. 1-32; ex2. 7,31,52-55)
 Pages :: [Int] -> CiteField
 Publisher :: Spec -> CiteField
 School :: Spec -> CiteField
 Series :: Spec -> CiteField
 Title :: Spec -> CiteField
+
+-- | BibTeX "type" field
 Type :: Spec -> CiteField
 Volume :: Int -> CiteField
 Year :: Int -> CiteField
 
--- | How Published. Necessary for URLs to work properly.
+-- | How something is published. Necessary for URLs to work properly.
 data HP
 URL :: Spec -> HP
 Verb :: Spec -> HP
@@ -346,126 +471,239 @@ Verb :: Spec -> HP
 -- | Helper functions for printing
 module Language.Drasil.Printing.Helpers
 
--- | Basic text-rendering helper function
+-- | Single backslash.
+--   
+--   Basic text-rendering helper function.
 bslash :: Doc
 
--- | Double backslash
+-- | Double backslash.
 --   
---   Basic text-rendering helper function
+--   Basic text-rendering helper function.
 dbs :: Doc
 
--- | "="
+-- | Variable assignment character ("=").
 --   
---   Basic text-rendering helper function
+--   Basic text-rendering helper function.
 assign :: Doc
 
--- | "=="
+-- | Equality character ("==").
 --   
---   Basic text-rendering helper function
+--   Basic text-rendering helper function.
 eq :: Doc
 
--- | Basic text-rendering helper function
+-- | Less than.
+--   
+--   Basic text-rendering helper function.
 lt :: Doc
 
--- | Basic text-rendering helper function
+-- | Greater than.
+--   
+--   Basic text-rendering helper function.
 gt :: Doc
 
--- | Basic text-rendering helper function
+-- | Less than or equal to.
+--   
+--   Basic text-rendering helper function.
 leq :: Doc
 
--- | Basic text-rendering helper function
+-- | Greater than or equal to.
+--   
+--   Basic text-rendering helper function.
 geq :: Doc
 
--- | Basic text-rendering helper function
+-- | Dollar sign.
+--   
+--   Basic text-rendering helper function.
 dlr :: Doc
 
--- | Basic text-rendering helper function
+-- | Asterisk.
+--   
+--   Basic text-rendering helper function.
 ast :: Doc
 
--- | Basic text-rendering helper function
+-- | Plus.
+--   
+--   Basic text-rendering helper function.
 pls :: Doc
 
--- | Basic text-rendering helper function
+-- | Hat symbol ("^").
+--   
+--   Basic text-rendering helper function.
 hat :: Doc
 
--- | Basic text-rendering helper function
+-- | Forward slash.
+--   
+--   Basic text-rendering helper function.
 slash :: Doc
 
--- | Basic text-rendering helper function
+-- | Hyphen.
+--   
+--   Basic text-rendering helper function.
 hyph :: Doc
 
--- | Basic text-rendering helper function
+-- | Tab.
+--   
+--   Basic text-rendering helper function.
 tab :: Doc
 
--- | Basic text-rendering helper function
+-- | Underscore.
+--   
+--   Basic text-rendering helper function.
 unders :: Doc
 
--- | Text-rendering helper for wrapping strings with brackets/braces
+-- | Square brackets.
+--   
+--   Text-rendering helper for wrapping strings with brackets/braces.
 sq :: String -> Doc
 
--- | Text-rendering helper for wrapping strings with brackets/braces
+-- | Curly braces.
+--   
+--   Text-rendering helper for wrapping strings with brackets/braces.
 br :: String -> Doc
+
+-- | Dot symbol (".")
+--   
+--   Text-rendering helper for appending a period/decimal point (dot
+--   symbol) or a comma.
 dot :: Doc -> Doc
+
+-- | Comma (",")
+--   
+--   Text-rendering helper for appending a period/decimal point (dot
+--   symbol) or a comma.
 comm :: Doc -> Doc
+
+-- | For wrapping $ on both sides of a <a>Doc</a>.
 dollarDoc :: Doc -> Doc
 
--- | basic plaintext (String) wrapping
+-- | Wraps in parenthesis.
+--   
+--   Basic plaintext (String) wrapping.
 paren :: String -> String
 
--- | basic plaintext (String) wrapping
+-- | Wraps in curly braces.
+--   
+--   Basic plaintext (String) wrapping.
 brace :: String -> String
 
--- | basic plaintext (String) wrapping
+-- | Wraps in dollar signs.
+--   
+--   Basic plaintext (String) wrapping.
 dollar :: String -> String
 
--- | basic plaintext (String) wrapping
+-- | Wraps in square brackets.
+--   
+--   Basic plaintext (String) wrapping.
 sqbrac :: String -> String
 
--- | basic plaintext (String) wrapping
+-- | Wraps in angular brackets ("&lt;&gt;").
+--   
+--   Basic plaintext (String) wrapping.
 angbrac :: String -> String
 
--- | Format strings and convert to Doc
+-- | Capitalize first letter of string.
+--   
+--   Format strings and convert to Doc.
 upcase :: String -> Doc
 
--- | Format strings and convert to Doc
+-- | Make first letter lowercase.
+--   
+--   Format strings and convert to Doc.
 lowcase :: String -> Doc
+
+-- | Appends a suffix for a number. Used only on single digit <a>Int</a>s.
 sufx :: Int -> String
+
+-- | Similar to <a>sufx</a> but used on any sized <a>Int</a>.
 sufxer :: Int -> String
 
 module Language.Drasil.Printing.LayoutObj
+
+-- | A document must contain a title, author, and contents (as
+--   <a>LayoutObj</a>s).
 data Document
 Document :: Title -> Author -> [LayoutObj] -> Document
+
+-- | An author is just a sentence (<a>Spec</a>).
 type Author = Spec
+
+-- | Contents are just a sentence (<a>Spec</a>).
 type Contents = Spec
+
+-- | A group of layout objects.
 type Items = [LayoutObj]
+
+-- | Tags.
 type Tags = [String]
+
+-- | Depth of a header.
 type Depth = Int
+
+-- | Horizontal dimension of a graph.
 type Width = Float
+
+-- | Vertical dimension of a graph.
 type Height = Float
+
+-- | Holds a file path.
 type Filepath = String
+
+-- | A caption is just a sentence (<a>Spec</a>).
 type Caption = Spec
 data LayoutObj
+
+-- | Holds all information needed for a table.
 Table :: Tags -> [[Spec]] -> Label -> Bool -> Caption -> LayoutObj
+
+-- | Holds all information needed for a header.
 Header :: Depth -> Title -> Label -> LayoutObj
+
+-- | Paragraph.
 Paragraph :: Contents -> LayoutObj
+
+-- | Equation block.
 EqnBlock :: Contents -> LayoutObj
+
+-- | Definition. Holds the type, contents, and a label.
 Definition :: DType -> [(String, [LayoutObj])] -> Label -> LayoutObj
+
+-- | List.
 List :: ListType -> LayoutObj
+
+-- | Holds all information needed for a figure.
 Figure :: Label -> Caption -> Filepath -> MaxWidthPercent -> LayoutObj
+
+-- | Holds all information needed for a graph.
 Graph :: [(Spec, Spec)] -> Maybe Width -> Maybe Height -> Caption -> Label -> LayoutObj
+
+-- | Holds tags, more contents, and a label. this shouldn't be here, it
+--   should have been expanded.
 HDiv :: Tags -> [LayoutObj] -> Label -> LayoutObj
+
+-- | Bibliography section.
 Bib :: BibRef -> LayoutObj
 
 module Language.Drasil.Printing.PrintingInformation
+
+-- | Notation can be scientific or for engineering.
 data Notation
 Scientific :: Notation
 Engineering :: Notation
+
+-- | Able to be printed.
 class HasPrintingOptions c
+
+-- | Holds the printing notation.
 getSetting :: HasPrintingOptions c => Lens' c Notation
+
+-- | Holds the printing configuration.
 newtype PrintingConfiguration
 PC :: Notation -> PrintingConfiguration
 [_notation] :: PrintingConfiguration -> Notation
 notation :: Iso' PrintingConfiguration Notation
+
+-- | Printing information contains a database, a stage, and a printing
+--   configuration.
 data PrintingInformation
 PI :: ChunkDB -> Stage -> PrintingConfiguration -> PrintingInformation
 [_ckdb] :: PrintingInformation -> ChunkDB
@@ -474,55 +712,107 @@ PI :: ChunkDB -> Stage -> PrintingConfiguration -> PrintingInformation
 stg :: Lens' PrintingInformation Stage
 configuration :: Lens' PrintingInformation PrintingConfiguration
 ckdb :: Lens' PrintingInformation ChunkDB
+
+-- | Default configuration is for engineering.
 defaultConfiguration :: PrintingConfiguration
 instance Language.Drasil.Printing.PrintingInformation.HasPrintingOptions Language.Drasil.Printing.PrintingInformation.PrintingInformation
 instance Language.Drasil.Printing.PrintingInformation.HasPrintingOptions Language.Drasil.Printing.PrintingInformation.PrintingConfiguration
 
 module Language.Drasil.Printing.Import
 
--- | Render a Space
+-- | Render a <a>Space</a>.
 space :: PrintingInformation -> Space -> Expr
 
--- | expr translation function from Drasil to layout AST
+-- | Expr translation function from Drasil to printable layout AST.
 expr :: Expr -> PrintingInformation -> Expr
+
+-- | Helper tha converts a symbol into an expression.
 symbol :: Symbol -> Expr
 
--- | Translates Sentence to the Printing representation of Sentence
---   (<tt>Spec</tt>)
+-- | Translates <a>Sentence</a> to the printable representation of a
+--   <a>Sentence</a> (<tt>Spec</tt>).
 spec :: PrintingInformation -> Sentence -> Spec
 
--- | Translates from Document to the Printing representation of Document
+-- | Translates from <a>Document</a> to a printable representation of
+--   <a>Document</a>.
 makeDocument :: PrintingInformation -> Document -> Document
 
 module Language.Drasil.Plain.Print
+
+-- | Data is either linear or not.
 data Linearity
 Linear :: Linearity
 Nonlinear :: Linearity
+
+-- | Create expressions for a document in <a>Doc</a> format.
 exprDoc :: ChunkDB -> Stage -> Linearity -> Expr -> Doc
+
+-- | Create sentences for a document in <a>Doc</a> format.
 sentenceDoc :: ChunkDB -> Stage -> Linearity -> Sentence -> Doc
+
+-- | Create symbols for a document in <a>Doc</a> format.
 symbolDoc :: Symbol -> Doc
+
+-- | Helper for printing units in <a>Doc</a> format.
 unitDoc :: Linearity -> USymb -> Doc
 
+
+-- | Printing Monad. Starts with a specific data type (reader monad) and
+--   extends from there.
 module Language.Drasil.TeX.Monad
+
+-- | There are two proper contexts, Text and Math; Curr is the current
+--   context. There are multiple ways of getting there: for Text, either
+--   being at the top-level or inside text. For Math, either surrounded by
+--   $ or in begin{equation} .. end{equation}. Curr is when the current
+--   context is fine.
 data MathContext
 Text :: MathContext
 Math :: MathContext
 Curr :: MathContext
+
+-- | A monad for printing in LaTeX.
 newtype PrintLaTeX a
 PL :: (MathContext -> a) -> PrintLaTeX a
 [runPrint] :: PrintLaTeX a -> MathContext -> a
+
+-- | Convenient abbreviation.
 type D = PrintLaTeX Doc
+
+-- | MonadReader calls this <tt>local</tt>. Can switch contexts (including
+--   no-switch cases). Adjust printing as necessary.
 switch :: (MathContext -> MathContext) -> D -> D
+
+-- | Change context to Math.
 toMath :: D -> D
+
+-- | Change context to Text.
 toText :: D -> D
+
+-- | MonadReader calls this <tt>ask</tt>.
 getCtx :: PrintLaTeX MathContext
+
+-- | Since Text.PrettyPrint steals &lt;&gt;, use %% instead for mappend.
 (%%) :: D -> D -> D
+
+-- | Lifts Text.PrettyPrint's $+$. Above, with no overlapping. Associative.
 ($+$) :: D -> D -> D
+
+-- | Concatenates a list of <a>D</a> using a function from [<a>Doc</a>]
+--   -&gt; <a>Doc</a>.
 tpRunPrint :: ([Doc] -> Doc) -> [D] -> D
+
+-- | List version of <a>$$</a>. Above, except that if the last line of the
+--   first argument stops at least one position before the first line of
+--   the second begins, these two lines are overlapped.
 vcat :: [D] -> D
 vpunctuate :: Doc -> [D] -> D
 hpunctuate :: Doc -> [D] -> D
+
+-- | MathContext operations.
 lub :: MathContext -> MathContext -> MathContext
+
+-- | Latex type. Holds <a>String</a>s.
 newtype Latex
 L :: String -> Latex
 [unPL] :: Latex -> String
@@ -535,133 +825,353 @@ instance GHC.Base.Semigroup (Language.Drasil.TeX.Monad.PrintLaTeX Text.PrettyPri
 instance GHC.Base.Monoid (Language.Drasil.TeX.Monad.PrintLaTeX Text.PrettyPrint.HughesPJ.Doc)
 
 module Language.Drasil.TeX.Helpers
+
+-- | Curly braces.
+--   
+--   Helper for adding fencing symbols.
 br :: D -> D
+
+-- | Square brackets.
+--   
+--   Helper for adding fencing symbols.
 sq :: D -> D
+
+-- | Parenthesis.
+--   
+--   Helper for adding fencing symbols.
 parens :: D -> D
+
+-- | Quotes.
+--   
+--   Helper for adding fencing symbols.
 quote :: D -> D
+
+-- | 0-argument command.
 command0 :: String -> D
+
+-- | Make 1-argument command.
 command :: String -> String -> D
+
+-- | Similar to <a>command</a>, but uses <a>br</a> for braces.
 commandD :: String -> D -> D
+
+-- | 1-argument command, with optional argument.
 command1o :: String -> Maybe String -> String -> D
+
+-- | Similar to <a>command1o</a>, but uses <a>sq</a> and <a>br</a> for
+--   brackets.
 command1oD :: String -> Maybe D -> D -> D
+
+-- | 1-argument command with parameter in square brackets.
 command1p :: String -> String -> String -> D
+
+-- | Similar to <a>command1p</a>, but uses <a>sq</a> and <a>br</a> for
+--   brackets.
 command1pD :: String -> D -> D -> D
+
+-- | Make LaTeX symbol.
 texSym :: String -> D
+
+-- | 2-argument command.
 command2 :: String -> String -> String -> D
+
+-- | Similar to <a>command2</a>, but uses <a>br</a> for brackets.
 command2D :: String -> D -> D -> D
+
+-- | 3-argument command.
 command3 :: String -> String -> String -> String -> D
+
+-- | Encapsulate environments.
 mkEnv :: String -> D -> D
+
+-- | Encapsulate environments with argument with braces.
 mkEnvArgBr :: String -> String -> D -> D
+
+-- | Encapsulate environments with argument with brackets.
 mkEnvArgSq :: String -> String -> D -> D
+
+-- | Makes minipage environment.
 mkMinipage :: D -> D
+
+-- | For defining (LaTeX) macros.
 comm :: String -> String -> Maybe String -> D
+
+-- | Renews given command.
 renewcomm :: String -> String -> D
+
+-- | Useful to have an empty case.
 empty :: D
+
+-- | For sections.
 genSec :: Int -> D
+
+-- | For references.
 ref :: String -> D -> D
+
+-- | For references.
 sref :: String -> D -> D
+
+-- | For references.
 hyperref :: String -> D -> D
+
+-- | For references.
 externalref :: String -> D -> D
+
+-- | For references.
 snref :: String -> D -> D
+
+-- | For references.
 href :: String -> String -> D
+
+-- | For citations.
 cite :: String -> Maybe D -> D
+
+-- | Newcounter command.
 count :: String -> D
+
+-- | Mathbb command.
 mathbb :: String -> D
+
+-- | Usepackage command.
 usepackage :: String -> D
+
+-- | Include graphics with a given max width percentage.
 includegraphics :: MaxWidthPercent -> String -> D
+
+-- | Preamble for a LaTeX document.
 author :: D -> D
+
+-- | Preamble for a LaTeX document.
 caption :: D -> D
+
+-- | Preamble for a LaTeX document.
 item :: D -> D
+
+-- | Preamble for a LaTeX document.
 label :: D -> D
+
+-- | Preamble for a LaTeX document.
 title :: D -> D
+
+-- | Preamble for a LaTeX document.
 bold :: D -> D
+
+-- | Command for "item".
 item' :: D -> D -> D
+
+-- | Formatting options for a LaTeX document.
 maketitle :: D
+
+-- | Formatting options for a LaTeX document.
 maketoc :: D
+
+-- | Formatting options for a LaTeX document.
 newpage :: D
+
+-- | Formatting options for a LaTeX document.
 centering :: D
+
+-- | Common commands and formatting options for a LaTeX document.
 code :: D -> D
+
+-- | Common commands and formatting options for a LaTeX document.
 itemize :: D -> D
+
+-- | Common commands and formatting options for a LaTeX document.
 enumerate :: D -> D
+
+-- | Common commands and formatting options for a LaTeX document.
 description :: D -> D
+
+-- | Common commands and formatting options for a LaTeX document.
 figure :: D -> D
+
+-- | Common commands and formatting options for a LaTeX document.
 center :: D -> D
+
+-- | Common commands and formatting options for a LaTeX document.
 document :: D -> D
+
+-- | Common commands and formatting options for a LaTeX document.
 equation :: D -> D
+
+-- | Common commands and formatting options for a LaTeX document.
 symbDescription :: D -> D
+
+-- | Command for the document class.
 docclass :: String -> String -> D
+
+-- | General section function.
 sec :: Int -> D -> D
+
+-- | Makes second argument a subscript of the first argument.
 subscript :: D -> D -> D
+
+-- | Makes second argument a superscript of the first argument.
 superscript :: D -> D -> D
+
+-- | Macro/Command definitions.
 bullet :: D
+
+-- | Macro/Command definitions.
 counter :: D
+
+-- | Macro/Command definitions.
 ddefnum :: D
+
+-- | Macro/Command definitions.
 ddref :: D
+
+-- | Macro/Command definitions.
 colAw :: D
+
+-- | Macro/Command definitions.
 colBw :: D
+
+-- | Macro/Command definitions.
 arrayS :: D
+
+-- | Macro/Command definitions.
 modcounter :: D
+
+-- | Macro/Command definitions.
 modnum :: D
+
+-- | Add newline.
 newline :: D -> D
+
+-- | Create a fraction.
 fraction :: D -> D -> D
+
+-- | Configuration settings.
 hyperConfig :: D
+
+-- | Uses luatex85 tex packages.
 useTikz :: D
+
+-- | toEqn is special; it switches to <a>Math</a>, but inserts an equation
+--   environment.
 toEqn :: D -> D
+
+-- | Wrap with parenthesis.
+--   
+--   Helper(s) for String-Printing in TeX where it varies from
+--   HTML/Plaintext.
 paren :: String -> String
+
+-- | Wrap with square brackets.
+--   
+--   Helper(s) for String-Printing in TeX where it varies from
+--   HTML/Plaintext.
 sqbrac :: String -> String
 
 module Language.Drasil.TeX.Preamble
+
+-- | Generates LaTeX document preamble.
 genPreamble :: [LayoutObj] -> D
 instance GHC.Classes.Eq Language.Drasil.TeX.Preamble.Def
 instance GHC.Classes.Eq Language.Drasil.TeX.Preamble.Package
 
 module Language.Drasil.TeX.Print
+
+-- | Generates a LaTeX document.
 genTeX :: Document -> PrintingInformation -> Doc
+
+-- | Print an expression to a document.
 pExpr :: Expr -> D
+
+-- | Prints units.
 pUnit :: USymb -> D
+
+-- | Prints all <a>Spec</a>s.
 spec :: Spec -> D
 
 module Language.Drasil.HTML.Print
 
--- | Generate an HTML document from a Drasil <a>Document</a>
+-- | Generate an HTML document from a Drasil <a>Document</a>.
 genHTML :: PrintingInformation -> String -> Document -> Doc
 
 module Language.Drasil.Printers
 
--- | Possible formats for output
+-- | Possible formats for output.
 data Format
 TeX :: Format
 HTML :: Format
 
--- | Generates the CSS selectors necessary for a document
+-- | Generates the CSS selectors necessary for a document.
 makeCSS :: Document -> Doc
 
--- | Generate an HTML document from a Drasil <a>Document</a>
+-- | Generate an HTML document from a Drasil <a>Document</a>.
 genHTML :: PrintingInformation -> String -> Document -> Doc
+
+-- | Combines a list of sentences into a final Doc, also appends end note.
 makeMd :: [Doc] -> Doc
+
+-- | Example title and purpose section.
 introInfo :: String -> [String] -> Doc
+
+-- | Language version section.
 verInfo :: String -> String -> Doc
+
+-- | Invalid Operating Systems section, does not display unless atleast 1
+--   invalid OS.
 unsupOS :: Maybe String -> Doc
+
+-- | Constructs regular section section from header and message.
 regularSec :: Doc -> Doc -> Doc
+
+-- | Instruction section, contains 3 paragraphs, Running, Building and
+--   Config Files. The Config file section is only displayed if there are
+--   configuration files.
 instDoc :: [String] -> Doc
+
+-- | External Libraries section. The inputs are a list of name and version
+--   pairs and a list of the corresponding version numbers, these are first
+--   combined into a list of triplets, and then each printed on a new line.
 extLibSec :: [(String, String)] -> [String] -> Doc
+
+-- | Replace occurences of special characters
+--   (",~`-=!@#$%^&amp;*+[]\;'/|"&lt;&gt;? ") with underscores ("_").
 toPlainName :: String -> String
+
+-- | Data is either linear or not.
 data Linearity
 Linear :: Linearity
 Nonlinear :: Linearity
+
+-- | Create sentences for a document in <a>Doc</a> format.
 sentenceDoc :: ChunkDB -> Stage -> Linearity -> Sentence -> Doc
+
+-- | Create expressions for a document in <a>Doc</a> format.
 exprDoc :: ChunkDB -> Stage -> Linearity -> Expr -> Doc
+
+-- | Create symbols for a document in <a>Doc</a> format.
 symbolDoc :: Symbol -> Doc
+
+-- | Helper for printing units in <a>Doc</a> format.
 unitDoc :: Linearity -> USymb -> Doc
+
+-- | Generates a LaTeX document.
 genTeX :: Document -> PrintingInformation -> Doc
+
+-- | Printing information contains a database, a stage, and a printing
+--   configuration.
 data PrintingInformation
 PI :: ChunkDB -> Stage -> PrintingConfiguration -> PrintingInformation
 [_ckdb] :: PrintingInformation -> ChunkDB
 [_stg] :: PrintingInformation -> Stage
 [_configuration] :: PrintingInformation -> PrintingConfiguration
+
+-- | Able to be printed.
 class HasPrintingOptions c
+
+-- | Holds the printing notation.
 getSetting :: HasPrintingOptions c => Lens' c Notation
+
+-- | Notation can be scientific or for engineering.
 data Notation
 Scientific :: Notation
 Engineering :: Notation
+
+-- | Default configuration is for engineering.
 defaultConfiguration :: PrintingConfiguration

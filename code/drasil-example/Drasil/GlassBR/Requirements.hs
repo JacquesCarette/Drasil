@@ -140,5 +140,4 @@ reqRefs = map rw funcReqsTables --[sysSetValsFollowingAssumpsTable, outputValues
   -- ++ map (rw.qw) (assumpGL : replicate 4 assumpSV)
   ++ map rw [loadDF, hFromt, glaTyFac, standOffDis, aspRat]
   ++ map rw [risk, strDisFac, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac, hFromt, aspRat]
-  -- ++ map rw []
   

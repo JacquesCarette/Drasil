@@ -50,4 +50,4 @@ beasonEtAl1998 = cMisc
 
 -- References--
 citeRefs :: [Reference]
-citeRefs = map rw citations
+citeRefs = map rwCite citations

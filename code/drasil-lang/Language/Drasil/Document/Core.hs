@@ -4,8 +4,7 @@ module Language.Drasil.Document.Core where
 import Language.Drasil.Chunk.Citation (BibRef)
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
-  HasShortName(shortname))
-import Language.Drasil.Classes (Referable(refAdd, renderRef))
+  HasShortName(shortname), Referable(refAdd, renderRef))
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label.Type (LblType(RP), IRefProg, name, raw, (+::+))
 import Language.Drasil.RefProg(Reference)

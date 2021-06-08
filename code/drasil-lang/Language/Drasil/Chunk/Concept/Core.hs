@@ -5,9 +5,9 @@ module Language.Drasil.Chunk.Concept.Core(ConceptChunk(ConDict), CommonConcept(C
   where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
-  HasRefAddress(getRefAdd))
+  HasRefAddress(getRefAdd), Referable(refAdd, renderRef))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), CommonIdea(abrv), Referable(refAdd, renderRef))
+  Definition(defn), ConceptDomain(cdom), CommonIdea(abrv))
 import Language.Drasil.Chunk.CommonIdea (CI)
 import Language.Drasil.Chunk.NamedIdea (IdeaDict)
 import Language.Drasil.Label.Type (LblType(RP), name, raw, (+::+), defer)

@@ -443,3 +443,6 @@ glassThickness =
 lateralLoad :: NamedChunk
 lateralLoad  = compoundNC lateral load
 
+unitalRefs :: [Reference]
+unitalRefs = [rwCiteInfo astm2009 $ Page [1, 53]]
+

@@ -73,10 +73,6 @@ termMap = cdbMap nw
 conceptMap :: (Concept c) => [c] -> ConceptMap
 conceptMap = cdbMap cw
 
--- | Smart constructor for a 'ReferenceMap'.
-referenceMap :: (HasUID r, HasRefAddress r, HasShortName r) => [r] -> ReferenceMap
-referenceMap = cdbMap rw
-
 -- | Smart constructor for a 'UnitMap'.
 unitMap :: (IsUnit u) => [u] -> UnitMap
 unitMap = cdbMap unitWrapper
@@ -183,13 +179,13 @@ makeLenses ''ChunkDB
 --     * 'ConceptInstance's (for 'ConceptInstanceMap'),
 --     * 'Section's (for 'SectionMap'),
 --     * 'LabelledContent's (for 'LabelledContentMap').
-cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, HasUID r, HasRefAddress r, HasShortName r, IsUnit u) =>
+cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) =>
     [q] -> [t] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] ->
     [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [Section] ->
-    [LabelledContent] -> [r] -> ChunkDB
+    [LabelledContent] -> [Reference] -> ChunkDB
 cdb s t c u d ins gd tm ci sect lc r = CDB (symbolMap s) (termMap t) (conceptMap c)
   (unitMap u) Map.empty Map.empty (idMap d) (idMap ins) (idMap gd) (idMap tm)
-  (idMap ci) (idMap sect) (idMap lc) (referenceMap r)
+  (idMap ci) (idMap sect) (idMap lc) (idMap r)
 
 -- | Gets the units of a 'Quantity' as 'UnitDefn's.
 collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]

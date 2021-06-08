@@ -1,9 +1,9 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.RefProg (Reference(Reference, refInfo), RefInfo(..), rw) where
+module Language.Drasil.RefProg (Reference(Reference, refInfo), RefInfo(..)) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
-  HasShortName(shortname))
-import Language.Drasil.Label.Type (LblType(..), getAdd, defer)
+  HasShortName(shortname), Referable(refAdd, renderRef))
+import Language.Drasil.Label.Type (LblType(..), getAdd)
 import Language.Drasil.ShortName (ShortName)
 import Language.Drasil.UID (UID)
 
@@ -32,11 +32,7 @@ instance HasUID        Reference where uid = ui
 instance HasRefAddress Reference where getRefAdd = getAdd . ra
 -- | Finds the shortname of the reference address used for the 'Reference'.
 instance HasShortName  Reference where shortname = sn
-
--- | Smart constructor for making a 'Reference'.
---rw' :: (Referable r, HasShortName r) => r -> Reference
---rw' r = Reference (r ^. uid) (r ^. ra) (r ^. shortname) None -- None may be a hack
-
--- | Smart constructor for making a 'Reference'. Does not need to be 'Referable'. Defers 'LblType' lookup.
-rw :: (HasUID r, HasRefAddress r, HasShortName r) => r -> Reference
-rw r = Reference (r ^. uid) (RP (defer (r ^. uid)) (getRefAdd r)) (shortname r) None -- None and the defer bit may be a hack
+-- | Finds the reference address of a 'Reference'.
+instance Referable Reference where
+  refAdd r = r ^. ui
+  renderRef = ra

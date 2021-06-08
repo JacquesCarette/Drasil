@@ -10,7 +10,9 @@ import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil hiding (DefiningExpr)
 
--- | A 'DefiningExpr' contains the "Expr"-related components of a QDefinition.
+-- | 'DefiningExpr' are the data that make up a (quantity) definition, namely
+--   the description, the defining (rhs) expression and the context domain(s).
+--   These are meant to be 'alternate' but equivalent definitions for a single concept.
 data DefiningExpr = DefiningExpr {
   _deUid  :: UID,      -- ^ UID
   _cd     :: [UID],    -- ^ Concept domain
@@ -25,7 +27,7 @@ instance ConceptDomain DefiningExpr where cdom   = (^. cd)
 instance Definition    DefiningExpr where defn   = rvDesc
 
 -- | 'MultiDefn's are QDefinition factories, used for showing one or more ways we
---   can define a QDefinition
+--   can define a QDefinition.
 data MultiDefn = MultiDefn {
     _rUid  :: UID,                     -- ^ UID
     _qd    :: QuantityDict,            -- ^ Underlying quantity it defines

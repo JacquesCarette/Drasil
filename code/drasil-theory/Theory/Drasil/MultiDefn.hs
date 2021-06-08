@@ -1,7 +1,8 @@
 {-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables, PostfixOperators  #-}
 
 module Theory.Drasil.MultiDefn (MultiDefn, DefiningExpr, 
-    mkMultiDefn, mkMultiDefnForQuant, mkDefiningExpr, multiDefnGenQD) where
+    mkMultiDefn, mkMultiDefnForQuant, mkDefiningExpr,
+    multiDefnGenQD, multiDefnGenQDByUID) where
 
 import Control.Lens ((^.), view, makeLenses)
 import Data.List (union)
@@ -49,7 +50,11 @@ instance ExprRelat     MultiDefn where relat q  = sy q $= foldr1 ($=) (NE.map (^
 
 -- | Smart constructor for MultiDefns, does nothing special at the moment
 mkMultiDefn :: UID -> QuantityDict -> Sentence -> NE.NonEmpty DefiningExpr -> MultiDefn
-mkMultiDefn = MultiDefn
+mkMultiDefn u q s des
+  | length des == dupsRemovedLen = MultiDefn u q s des
+  | otherwise                    = error $ 
+    "MultiDefn '" ++ u ++ "' created with non-unique list of expressions"
+  where dupsRemovedLen = length (NE.nubBy (\x y -> x ^. uid == y ^. uid) des)
 
 -- | Smart constructor for MultiDefns defining UIDs using that of the QuantityDict
 mkMultiDefnForQuant :: QuantityDict -> Sentence -> NE.NonEmpty DefiningExpr -> MultiDefn
@@ -59,12 +64,14 @@ mkMultiDefnForQuant q = mkMultiDefn (q ^. uid) q
 mkDefiningExpr :: UID -> [UID] -> Sentence -> Expr -> DefiningExpr
 mkDefiningExpr = DefiningExpr
 
--- | Converting MultiDefns into QDefinitions via choosing a DefiningExpr
-multiDefnGenQD :: MultiDefn -> UID -> QDefinition
-multiDefnGenQD md u | length matches == 1 = datadef $ getUnit md
-                    | otherwise           = error $ "Invalid UID for multiDefn QD generation; " ++ u
+-- | Convert MultiDefns into QDefinitions via a specific DefiningExpr 
+multiDefnGenQD :: MultiDefn -> DefiningExpr -> QDefinition
+multiDefnGenQD md de = mkQDefSt (md ^. qd . uid) (md ^. term) (md ^. defn)
+                                (symbol md) (md ^. typ) (getUnit md) (de ^. expr)
+
+-- | Convert MultiDefns into QDefinitions via a specific DefiningExpr (by UID)
+multiDefnGenQDByUID :: MultiDefn -> UID -> QDefinition
+multiDefnGenQDByUID md u | length matches == 1 = multiDefnGenQD md matched
+                         | otherwise           = error $ "Invalid UID for multiDefn QD generation; " ++ u
   where matches = NE.filter (\x -> x ^. uid == u) (md ^. rvs)
         matched = head matches
-        datadef (Just a) = fromEqnSt  (md ^. qd . uid) (md ^. term) (md ^. defn) (symbol md) (md ^. typ) a (matched ^. expr)
-        datadef Nothing  = fromEqnSt' (md ^. qd . uid) (md ^. term) (md ^. defn) (symbol md) (md ^. typ) (matched ^. expr)
--- TODO: Clean this `datadef` function and push it back into QDefinition code area

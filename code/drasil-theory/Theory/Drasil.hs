@@ -11,6 +11,7 @@ module Theory.Drasil (
   -- MultiDefn
   , MultiDefn, DefiningExpr
   , mkMultiDefn, mkMultiDefnForQuant, mkDefiningExpr
+  , multiDefnGenQD, multiDefnGenQDByUID
   -- ModelKinds
   , ModelKinds(..), getEqModQds
   -- InstanceModel

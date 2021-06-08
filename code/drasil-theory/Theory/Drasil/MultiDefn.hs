@@ -19,9 +19,10 @@ data DefiningExpr = DefiningExpr {
 }
 makeLenses ''DefiningExpr
 
-instance HasUID        DefiningExpr where uid  = deUid
-instance ConceptDomain DefiningExpr where cdom = (^. cd)
-instance Definition    DefiningExpr where defn = rvDesc
+instance Eq            DefiningExpr where a == b = a ^. uid == b ^. uid
+instance HasUID        DefiningExpr where uid    = deUid
+instance ConceptDomain DefiningExpr where cdom   = (^. cd)
+instance Definition    DefiningExpr where defn   = rvDesc
 
 -- | 'MultiDefn's are QDefinition factories, used for showing one or more ways we
 --   can define a QDefinition
@@ -54,7 +55,7 @@ mkMultiDefn u q s des
   | length des == dupsRemovedLen = MultiDefn u q s des
   | otherwise                    = error $ 
     "MultiDefn '" ++ u ++ "' created with non-unique list of expressions"
-  where dupsRemovedLen = length (NE.nubBy (\x y -> x ^. uid == y ^. uid) des)
+  where dupsRemovedLen = length $ NE.nub des
 
 -- | Smart constructor for MultiDefns defining UIDs using that of the QuantityDict
 mkMultiDefnForQuant :: QuantityDict -> Sentence -> NE.NonEmpty DefiningExpr -> MultiDefn

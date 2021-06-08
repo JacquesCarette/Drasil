@@ -11,11 +11,11 @@ reviewSec :: [Contents] -> Section
 reviewSec cs = NB.review cs []
 
 -- Motion
--- **** Rename the subsection
+-- **TODO: Rename the subsection
 motionSec :: [Contents] -> [Section] -> Section
 motionSec a subSec = NB.motion a subSec
 
 -- Method and Anaysis
--- **** Rename the subsection
+-- **TODO: Rename the subsection
 mthdAndanls :: [Contents] -> [Section] -> Section
 mthdAndanls a subSec = NB.MethsAndAnls a subSec

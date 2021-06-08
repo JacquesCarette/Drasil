@@ -16,9 +16,10 @@ introductionSection problemIntroduction programDefinition = NB.intro
 
 -- | Constructor for the overview paragraph for the introduction
 -- programDefinition - defintion of the specific example being generated
--- **** list of subsections for intro sec
+
+-- **TODO: come up with a list of subsections for intro sec
 overviewParagraph :: Sentence -> Contents
-overviewParagraph programDefinition = foldlSP [S "The presentation below is based on 
+overviewParagraph programDefinition = foldlSP [S "The presentation below is based on
   Section 12.6 (Motion of a Projectile) from the classic Hibbler text 
   \"Engineering Mechanics Dynamnics, 10th edition\""]
 

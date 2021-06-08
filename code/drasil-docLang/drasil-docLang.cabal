@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 6f978264fbfc29f81be470962339098152c6c923043130ebd7d8a21ddf9e3ea2
+-- hash: 02fe92611e5975ae153e814ae750fe264a25fa08339d041301795a7b27fbfa08
 
 name:           drasil-docLang
 version:        0.1.26.0
@@ -27,13 +27,18 @@ library
       Drasil.DocumentLanguage.Units
   other-modules:
       Drasil.DocDecl
+      Drasil.DocLang.Notebook
       Drasil.DocumentLanguage
       Drasil.DocumentLanguage.Core
       Drasil.DocumentLanguage.Definitions
       Drasil.DocumentLanguage.Labels
+      Drasil.DocumentLanguage.Notebook.Core
+      Drasil.DocumentLanguage.Notebook.DocumentLanguage
       Drasil.DocumentLanguage.RefHelpers
       Drasil.DocumentLanguage.TraceabilityMatrix
       Drasil.ExtractDocDesc
+      Drasil.NBSections.Body
+      Drasil.NBSections.Introduction
       Drasil.Sections.AuxiliaryConstants
       Drasil.Sections.GeneralSystDesc
       Drasil.Sections.Introduction

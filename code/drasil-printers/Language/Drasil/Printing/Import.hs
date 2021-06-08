@@ -21,7 +21,7 @@ import Data.List (intersperse, partition)
 import Data.Maybe (fromMaybe)
 import Numeric (floatToDigits)
 
--- | Render a Space
+-- | Render a 'Space'.
 space :: PrintingInformation -> Space -> P.Expr
 space _ Integer = P.MO P.Integer
 space _ Rational = P.MO P.Rational
@@ -50,6 +50,7 @@ p_space (DiscreteS a)  = "{" ++ (concat $ intersperse ", " a) ++ "}"
 parens :: P.Expr -> P.Expr
 parens = P.Fenced P.Paren P.Paren
 
+-- | Helper for rendering printable expressions.
 mulExpr ::  [Expr] -> AssocArithOper -> PrintingInformation -> [P.Expr]
 mulExpr (hd1:hd2:tl) o sm = case (hd1, hd2) of
   (a, Int _)      ->  [expr' sm (precA o) a, P.MO P.Dot] ++ mulExpr (hd2 : tl) o sm
@@ -59,8 +60,8 @@ mulExpr (hd1:hd2:tl) o sm = case (hd1, hd2) of
 mulExpr [hd]         o sm = [expr' sm (precA o) hd]
 mulExpr []           o sm = [expr' sm (precA o) (Int 1)]
 
---This function takes the digits form `floatToDigits` function
--- and decimal point position and a counter and exponent
+-- | Processes the digits from the 'floatToDigits' function,
+-- decimal point position, a counter, and exponent.
 digitsProcess :: [Integer] -> Int -> Int -> Integer -> [P.Expr]
 digitsProcess [0] _ _ _ = [P.Int 0, P.MO P.Point, P.Int 0]
 digitsProcess ds pos _ (-3) = [P.Int 0, P.MO P.Point] ++ replicate (3 - pos) (P.Int 0) ++ map P.Int ds
@@ -73,14 +74,17 @@ digitsProcess [] pos coun ex
   | ex /= 0 = [P.MO P.Point, P.Int 0, P.MO P.Dot, P.Int 10, P.Sup $ P.Int ex]
   | otherwise = [P.MO P.Point, P.Int 0]
 
--- This function takes the exponent and the [Int] of base and give out
--- the decimal point position and processed exponent
+-- | Takes the exponent and the 'Int' of the base and gives
+-- the decimal point position and processed exponent.
 -- This function supports transferring scientific notation to
 -- engineering notation.
 -- References for standard of Engineering Notation:
+--
 -- https://www.khanacademy.org/science/electrical-engineering/introduction-to-ee/
 --    intro-to-ee/a/ee-numbers-in-electrical-engineering 
+--
 -- https://www.calculatorsoup.com/calculators/math/scientific-notation-converter.php
+--
 -- https://en.wikipedia.org/wiki/Scientific_notation
 processExpo :: Int -> (Int, Int)
 processExpo a
@@ -89,11 +93,11 @@ processExpo a
   | mod (a-1) 3 == 2 = (3, a-3)
   | otherwise = error "The cases of processExpo should be exhaustive!"
 
--- | Common method of converting associative operations into layout AST
+-- | Common method of converting associative operations into printable layout AST.
 assocExpr :: P.Ops -> Int -> [Expr] -> PrintingInformation -> P.Expr
 assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ map (expr' sm prec) exprs
 
--- | expr translation function from Drasil to layout AST
+-- | Expr translation function from Drasil to printable layout AST.
 expr :: Expr -> PrintingInformation -> P.Expr
 expr (Dbl d)                  sm = case sm ^. getSetting of
   Engineering -> P.Row $ digitsProcess (map toInteger $ fst $ floatToDigits 10 d)
@@ -171,33 +175,41 @@ expr (IsIn  a b)              sm = P.Row [expr a sm, P.MO P.IsIn, space sm b]
 expr (RealI c ri)             sm = renderRealInt sm (lookupC (sm ^. stg)
   (sm ^. ckdb) c) ri
 
+-- | Given the stage of the symbol, looks up a character/symbol
+-- inside a chunk database that matches the given 'UID'. 
 lookupC :: Stage -> ChunkDB -> UID -> Symbol
 lookupC Equational     sm c = eqSymb   $ symbResolve sm c
 lookupC Implementation sm c = codeSymb $ symbResolve sm c
 
+-- | Look up a term given a chunk database and a 'UID' associated with the term.
 lookupT :: ChunkDB -> UID -> Sentence
 lookupT sm c = phraseNP $ termResolve sm c ^. term
 
+-- | Look up the acronym/abbreviation of a term. Otherwise returns the singular form of a term. Takes a chunk database and a 'UID' associated with the term.
 lookupS :: ChunkDB -> UID -> Sentence
 lookupS sm c = maybe (phraseNP $ l ^. term) S $ getA l
   where l = termResolve sm c
 
+-- | Look up the plural form of a term given a chunk database and a 'UID' associated with the term.
 lookupP :: ChunkDB -> UID -> Sentence
 lookupP sm c = pluralNP $ termResolve sm c ^. term
 -- plural n = NP.plural (n ^. term)
 
+-- | Helper that creates an expression row given printing information, an operator, and an expression.
 mkCall :: PrintingInformation -> P.Ops -> Expr -> P.Expr
 mkCall s o e = P.Row [P.MO o, parens $ expr e s]
 
+-- | Helper that creates a binary expression row given printing information, an operator, and two expressions.
 mkBOp :: PrintingInformation -> P.Ops -> Expr -> Expr -> P.Expr
 mkBOp sm o a b = P.Row [expr a sm, P.MO o, expr b sm]
 
+-- | Helper that adds parenthesis to an expression where appropriate.
 expr' :: PrintingInformation -> Int -> Expr -> P.Expr
 expr' s p e = fence $ expr e s
   where
   fence = if eprec e < p then parens else id
 
--- | Helper for properly rendering negation of expressions
+-- | Helper for properly rendering negation of expressions.
 neg' :: Expr -> Bool
 neg' (Dbl     _)            = True
 neg' (Int     _)            = True
@@ -211,11 +223,11 @@ neg' (UnaryOpVec _ _)       = True
 neg' (C _)                  = True
 neg' _                      = False
 
--- | Render negated expressions
+-- | Render negated expressions.
 neg :: PrintingInformation -> Expr -> P.Expr
 neg sm a = P.Row [P.MO P.Neg, (if neg' a then id else parens) $ expr a sm]
 
--- | For printing indexes
+-- | For printing indexes.
 indx :: PrintingInformation -> Expr -> Expr -> P.Expr
 indx sm (C c) i = f s
   where
@@ -231,13 +243,14 @@ indx sm (C c) i = f s
     f   e          = let e' = symbol e in P.Row [P.Row [e'], P.Sub i']
 indx sm a i = P.Row [P.Row [expr a sm], P.Sub $ expr i sm]
 
--- | For printing expressions that call something
+-- | For printing expressions that call something.
 call :: PrintingInformation -> UID -> [Expr] -> [(UID,Expr)] -> P.Expr
 call sm f ps ns = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f,
   parens $ P.Row $ intersperse (P.MO P.Comma) $ map (`expr` sm) ps ++
   zipWith (\n a -> P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) n,
   P.MO P.Eq, expr a sm]) (map fst ns) (map snd ns)]
 
+-- | Helper function for addition 'EOperator's.
 eopAdds :: PrintingInformation -> DomainDesc Expr Expr -> Expr -> P.Expr
 eopAdds sm (BoundedDD v Continuous l h) e =
   P.Row [P.MO P.Inte, P.Sub (expr l sm), P.Sup (expr h sm),
@@ -250,6 +263,7 @@ eopAdds sm (BoundedDD v Discrete l h) e =
          P.Row [expr e sm]]
 eopAdds sm (AllDD _ Discrete) e = P.Row [P.MO P.Summ, P.Row [expr e sm]]
 
+-- | Helper function for multiplicative 'EOperator's.
 eopMuls :: PrintingInformation -> DomainDesc Expr Expr -> Expr -> P.Expr
 eopMuls sm (BoundedDD v Discrete l h) e =
   P.Row [P.MO P.Prod, P.Sub (P.Row [symbol v, P.MO P.Eq, expr l sm]), P.Sup (expr h sm),
@@ -259,13 +273,14 @@ eopMuls _ (AllDD _ Continuous) _ = error "Printing/Import.hs Product-Integral no
 eopMuls _ (BoundedDD _ Continuous _ _) _ = error "Printing/Import.hs Product-Integral not implemented."
 
 
--- | Helper function for translating 'EOperator's
+-- | Helper function for translating 'EOperator's.
 eop :: PrintingInformation -> AssocArithOper -> DomainDesc Expr Expr -> Expr -> P.Expr
 eop sm AddI = eopAdds sm
 eop sm AddRe = eopAdds sm
 eop sm MulI = eopMuls sm
 eop sm MulRe = eopMuls sm
 
+-- | Helper tha converts a symbol into an expression.
 symbol :: Symbol -> P.Expr
 symbol (Variable s) = P.Ident s
 symbol (Label    s) = P.Label s
@@ -283,15 +298,18 @@ symbol Corners{}                = error "rendering of Corners (general)"
 symbol (Atop f s)               = sFormat f s
 symbol Empty                    = P.Row []
 
+-- | Helper that adds decoration to symbols (for vectors, derivatives, etc.).
 sFormat :: Decoration -> Symbol -> P.Expr
 sFormat Hat    s = P.Over P.Hat $ symbol s
 sFormat Vector s = P.Font P.Bold $ symbol s
 sFormat Prime  s = P.Row [symbol s, P.MO P.Prime]
 
+-- | Helper that adds parenthesis to the first expression. The second expression
+-- is written as a superscript attached to the first.
 withParens :: PrintingInformation -> Expr -> Expr -> P.Expr
 withParens prI a b = P.Row [parens (expr a prI), P.Sup (expr b prI)]
 
--- | Helper for properly rendering exponents
+-- | Helper for properly rendering exponents.
 pow :: PrintingInformation -> Expr -> Expr -> P.Expr
 pow prI a@(AssocA AddI _)          b = withParens prI a b
 pow prI a@(AssocA AddRe _)         b = withParens prI a b
@@ -302,7 +320,7 @@ pow prI a@(ArithBinaryOp Frac _ _) b = withParens prI a b
 pow prI a@(ArithBinaryOp Pow _ _)  b = withParens prI a b
 pow prI a                          b = P.Row [expr a prI, P.Sup (expr b prI)]
 
--- | Print a RealInterval
+-- | Print a 'RealInterval'.
 renderRealInt :: PrintingInformation -> Symbol -> RealInterval Expr Expr -> P.Expr
 renderRealInt st s (Bounded (Inc,a) (Inc,b)) =
   P.Row [expr a st, P.MO P.LEq, symbol s, P.MO P.LEq, expr b st]
@@ -318,7 +336,7 @@ renderRealInt st s (UpFrom (Inc,a)) = P.Row [symbol s, P.MO P.GEq, expr a st]
 renderRealInt st s (UpFrom (Exc,a)) = P.Row [symbol s, P.MO P.Gt,  expr a st]
 
 
--- | Translates Sentence to the Printing representation of Sentence ('Spec')
+-- | Translates 'Sentence' to the printable representation of a 'Sentence' ('Spec').
 spec :: PrintingInformation -> Sentence -> P.Spec
   -- make sure these optimizations are clear
 spec sm (EmptyS :+: b) = spec sm b
@@ -343,6 +361,7 @@ spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ expr e sm
 
+-- | Renders a unit symbol as a printable expression.
 pUnit :: USymb -> P.Expr
 pUnit (US ls) = formatu t b
   where
@@ -359,6 +378,7 @@ pUnit (US ls) = formatu t b
     powu (n,1) = symbol n
     powu (n,p) = P.Row [symbol n, P.Sup $ P.Int p]
 
+-- | Renders the shortname of a reference/domain.
 renderShortName :: ChunkDB -> IRefProg -> ShortName -> Sentence
 renderShortName ctx (Deferred u) _ = S $ fromMaybe (error "Domain has no abbreviation.") $
   getA $ defResolve ctx u
@@ -366,9 +386,11 @@ renderShortName ctx (RConcat a b) sn = renderShortName ctx a sn :+: renderShortN
 renderShortName _ (RS s) _ = S s
 renderShortName _ Name sn = S $ getStringSN sn
 
+-- | Render a uniform resource locator as a 'Sentence'.
 renderURI :: ctx -> ShortName -> Sentence
 renderURI _ sn = S $ getStringSN sn
 
+-- | Renders citation information.
 renderCitInfo :: RefInfo -> Sentence
 renderCitInfo  None          = EmptyS
 renderCitInfo (RefNote   rn) = sParen (S rn)
@@ -377,21 +399,21 @@ renderCitInfo (Equation  i ) = sParen (S "Eqs." +:+ foldNums "-" i)
 renderCitInfo (Page     [x]) = sParen (S "pg." +:+ S (show x))
 renderCitInfo (Page      i ) = sParen (S "pp." +:+ foldNums "-" i)
 
--- | Translates from Document to the Printing representation of Document
+-- | Translates from 'Document' to a printable representation of 'T.Document'.
 makeDocument :: PrintingInformation -> Document -> T.Document
 makeDocument sm (Document titleLb authorName sections) =
   T.Document (spec sm titleLb) (spec sm authorName) (createLayout sm sections)
 
--- | Translates from LayoutObj to the Printing representation of LayoutObj
+-- | Helper for translating sections into a printable representation of layout objects ('T.LayoutObj').
 layout :: PrintingInformation -> Int -> SecCons -> T.LayoutObj
 layout sm currDepth (Sub s) = sec sm (currDepth+1) s
 layout sm _         (Con c) = lay sm c
 
--- | Helper function for creating sections as layout objects
+-- | Helper function for creating sections as layout objects.
 createLayout :: PrintingInformation -> [Section] -> [T.LayoutObj]
 createLayout sm = map (sec sm 0)
 
--- | Helper function for creating sections at the appropriate depth
+-- | Helper function for creating sections at the appropriate depth.
 sec :: PrintingInformation -> Int -> Section -> T.LayoutObj
 sec sm depth x@(Section titleLb contents _) = --FIXME: should ShortName be used somewhere?
   let ref = P.S (refAdd x) in
@@ -399,12 +421,14 @@ sec sm depth x@(Section titleLb contents _) = --FIXME: should ShortName be used 
   (T.Header depth (spec sm titleLb) ref :
    map (layout sm depth) contents) ref
 
--- | Translates from Contents to the Printing Representation of LayoutObj.
--- Called internally by layout.
+-- | Helper that translates 'Contents' to a printable representation of 'T.LayoutObj'.
+-- Called internally by 'layout'.
 lay :: PrintingInformation -> Contents -> T.LayoutObj
 lay sm (LlC x) = layLabelled sm x
 lay sm (UlC x) = layUnlabelled sm (x ^. accessContents)
 
+-- | Helper that translates 'LabelledContent's to a printable representation of 'T.LayoutObj'.
+-- Called internally by 'lay'.
 layLabelled :: PrintingInformation -> LabelledContent -> T.LayoutObj
 layLabelled sm x@(LblC _ (Table hdr lls t b)) = T.Table ["table"]
   (map (spec sm) hdr : map (map (spec sm)) lls)
@@ -430,8 +454,8 @@ layLabelled sm x@(LblC _ (DerivBlock h d)) = T.HDiv ["subsubsubsection"]
 layLabelled sm (LblC _ (Enumeration cs)) = T.List $ makeL sm cs
 layLabelled  _ (LblC _ (Bib bib))        = T.Bib $ map layCite bib
 
--- | Translates from Contents to the Printing Representation of LayoutObj.
--- Called internally by layout.
+-- | Helper that translates 'RawContent's to a printable representation of 'T.LayoutObj'.
+-- Called internally by 'lay'.
 layUnlabelled :: PrintingInformation -> RawContent -> T.LayoutObj
 layUnlabelled sm (Table hdr lls t b) = T.Table ["table"]
   (map (spec sm) hdr : map (map (spec sm)) lls) (P.S "nolabel0") b (spec sm t)
@@ -449,10 +473,11 @@ layUnlabelled sm (Defini dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S 
         temp  y   = layUnlabelled sm (y ^. accessContents)
 layUnlabelled  _ (Bib bib)              = T.Bib $ map layCite bib
 
--- | For importing bibliography
+-- | For importing a bibliography.
 layCite :: Citation -> P.Citation
 layCite c = P.Cite (c ^. citeID) (c ^. citeKind) (map layField (c ^. getFields))
 
+-- | Helper for translating 'Citefield's into a printable representation of 'P.CiteField's
 layField :: CiteField -> P.CiteField
 layField (Address      s) = P.Address      $ P.S s
 layField (Author       p) = P.Author       p
@@ -477,7 +502,7 @@ layField (Year         y) = P.Year         y
 layField (HowPublished (URL  u)) = P.HowPublished (P.URL  $ P.S u)
 layField (HowPublished (Verb v)) = P.HowPublished (P.Verb $ P.S v)
 
--- | Translates lists
+-- | Translates lists to be printable.
 makeL :: PrintingInformation -> ListType -> P.ListType
 makeL sm (Bullet bs)      = P.Unordered   $ map (bimap (item sm) (fmap P.S)) bs
 makeL sm (Numeric ns)     = P.Ordered     $ map (bimap (item sm) (fmap P.S)) ns
@@ -485,7 +510,7 @@ makeL sm (Simple ps)      = P.Simple      $ map (\(x,y,z) -> (spec sm x, item sm
 makeL sm (Desc ps)        = P.Desc        $ map (\(x,y,z) -> (spec sm x, item sm y, fmap P.S z)) ps
 makeL sm (Definitions ps) = P.Definitions $ map (\(x,y,z) -> (spec sm x, item sm y, fmap P.S z)) ps
 
--- | Helper for translating list items
+-- | Helper for translating list items to be printable.
 item :: PrintingInformation -> ItemType -> P.ItemType
 item sm (Flat i)     = P.Flat $ spec sm i
 item sm (Nested t s) = P.Nested (spec sm t) (makeL sm s)

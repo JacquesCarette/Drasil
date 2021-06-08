@@ -1,9 +1,9 @@
-module Drasil.Projectile.IMods (iMods, landPosIM, messageIM, offsetIM, timeIM) where
+module Drasil.Projectile.IMods (iMods, iMods0, landPosIM, messageIM, offsetIM, timeIM) where
 
 import Prelude hiding (cos, sin)
 
 import Language.Drasil
-import Theory.Drasil (InstanceModel, imNoDerivNoRefs, imNoRefs, qwC, ModelKinds (OthModel))
+import Theory.Drasil (InstanceModel, imNoDerivNoRefs, imNoRefs, imNoRefs', qwC, ModelKinds (OthModel, EquationalModel))
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -33,17 +33,18 @@ import Drasil.Projectile.Unitals (flightDur, landPos, launAngle, launSpeed,
 iMods :: [InstanceModel]
 iMods = [timeIM, landPosIM, offsetIM, messageIM]
 
+iMods0 :: [InstanceModel]
+iMods0 = [landPosIM, offsetIM, messageIM]
 ---
 timeIM :: InstanceModel
-timeIM = imNoRefs (OthModel timeRC)
+timeIM = imNoRefs' (EquationalModel timeQD)(nounPhraseSP "calculation of landing time")
   [qwC launSpeed $ UpFrom (Exc, exactDbl 0)
   ,qwC launAngle $ Bounded (Exc, exactDbl 0) (Exc, half $ sy pi_)]
   (qw flightDur) [UpFrom (Exc, exactDbl 0)]
   (Just timeDeriv) "calOfLandingTime" [angleConstraintNote, gravitationalAccelConstNote, timeConsNote]
 
-timeRC :: RelationConcept
-timeRC = makeRC "timeRC" (nounPhraseSP "calculation of landing time")
-  EmptyS $ sy flightDur $= E.flightDur'
+timeQD :: QDefinition 
+timeQD =  mkQuantDef flightDur E.flightDur'
 
 timeDeriv :: Derivation
 timeDeriv = mkDerivName (phrase flightDur) (weave [timeDerivSents, map E timeDerivEqns])

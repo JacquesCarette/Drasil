@@ -192,12 +192,14 @@ effNormFDeriv = mkDerivNoHeader [foldlSent [
   sParen (makeRef2S assumpPSC) `sC` S "the resulting", plural force,
   S "are expressed per", phrase metre, S "in", phraseNP (the zDir)]]
 
---
+-- 
+
 normShrR :: QDefinition 
-normShrR = mkQuantDef normToShear nmShrRRel
+normShrR = mkQuantDef' normToShear  (nounPhraseSP "interslice normal and shear force proportionality") nmShrRRel
+
 
 nmShrRRel :: Relation
-nmShrRRel = sy intShrForce $= sy normToShear `mulRe` sy scalFunc `mulRe` sy intNormForce
+nmShrRRel = sy normToShear `mulRe` sy scalFunc `mulRe` sy intNormForce
 
 nmShrRDesc :: Sentence
 nmShrRDesc = foldlSent [S "Mathematical representation of the primary",

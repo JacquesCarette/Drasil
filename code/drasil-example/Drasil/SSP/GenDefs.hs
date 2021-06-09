@@ -195,7 +195,7 @@ effNormFDeriv = mkDerivNoHeader [foldlSent [
 -- 
 
 normShrR :: QDefinition 
-normShrR = mkQuantDef' normToShear  (nounPhraseSP "interslice normal and shear force proportionality") nmShrRRel
+normShrR = mkQuantDef' intShrForce (nounPhraseSP "interslice normal and shear force proportionality") nmShrRRel
 
 
 nmShrRRel :: Relation

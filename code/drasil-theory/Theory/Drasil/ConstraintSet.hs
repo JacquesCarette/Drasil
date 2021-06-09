@@ -7,9 +7,10 @@ import Control.Lens ((^.), makeLenses)
 import Language.Drasil
 import qualified Data.List.NonEmpty as NE
 
+-- | 'ConstraintSet's are sets of invariants that always hold for underlying domains.
 data ConstraintSet = CL {
     _con  :: ConceptChunk,
-    _invs   :: NE.NonEmpty Relation
+    _invs :: NE.NonEmpty Relation
 }
 makeLenses ''ConstraintSet
 
@@ -22,8 +23,9 @@ instance Idea          ConstraintSet where getA  = getA . (^. con)
 -- | Finds the definition of the 'ConstraintSet'.
 instance Definition    ConstraintSet where defn  = con . defn
 -- | Finds the domain of the 'ConstraintSet'.
-instance ConceptDomain ConstraintSet where cdom  = cdom .  (^. con)
--- | Finds the relation expression of the 'ConstraintSet'.
+instance ConceptDomain ConstraintSet where cdom  = cdom . (^. con)
+-- | The complete Relation of a ConstraintSet is the logical conjunction of all
+--   the underlying relations (e.g., `a $&& b $&& ... $&& z`).
 instance ExprRelat     ConstraintSet where relat = foldr1 ($&&) . (^. invs)
 
 -- | Smart constructor for building ConstraintSets

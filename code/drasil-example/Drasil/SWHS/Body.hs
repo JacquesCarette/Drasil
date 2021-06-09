@@ -22,8 +22,10 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocSection (..),
   ReqrmntSec(..), ReqsSub(..), SRSDecl, SSDSub(..), SolChSpec (SCSProg),
   SSDSec(..), InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg), GSDSec(..), GSDSub(..),
-  ProblemDescription(PDProg), PDSub(..), intro, mkDoc, tsymb'', traceMatStandard, purpDoc)
-import qualified Drasil.DocLang.SRS as SRS (inModel)
+  ProblemDescription(PDProg), PDSub(..), intro, mkDoc, tsymb'', traceMatStandard, purpDoc,
+  getTraceConfigUID, reqInputsUID, symbTableRef, unitTableRef, tableAbbAccUID, tableOfConstants,
+  inDataConstTbl, outDataConstTbl)
+import qualified Drasil.DocLang.SRS as SRS (inModel, reference, assumpt, sysCon, referenceSections)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.TheoryConcepts as Doc (inModel)
@@ -604,3 +606,25 @@ propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)"
 ----------------------------
 -- Section 9 : References --
 ----------------------------
+bodyRefs :: [Reference]
+bodyRefs = []
+  --map rw [sysCtxFig, demandVsSDFig, dimlessloadVsARFig]
+  -- ++ map rw concIns ++ map rw section ++ map rw labCon
+
+-- below are references used in all examples
+srsRefs :: [Reference]
+srsRefs = map rw [SRS.reference ([]::[Contents]) ([]::[Section]), 
+    SRS.assumpt ([]::[Contents]) ([]::[Section]), SRS.sysCon [] []]
+
+tabRefs :: [Reference]
+tabRefs = [symbTableRef, unitTableRef] ++ map (rw.makeTabRef) [fst tableAbbAccUID, reqInputsUID] 
+  ++ map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+  ++ map rw [tableOfConstants [], inDataConstTbl ([]::[UncertainChunk]),
+  outDataConstTbl ([]::[ConstrainedChunk])]
+
+secRefs :: [Reference]
+secRefs = rw $ (uncurry makeSecRef) tableAbbAccUID: map rw SRS.sectionReferences
+
+allRefs :: [Reference]
+allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ goalRefs ++ dataDefRefs
+  ++ iModRefs ++ citeRefs ++ reqRefs ++ secRefs ++ tabRefs ++ srsRefs)

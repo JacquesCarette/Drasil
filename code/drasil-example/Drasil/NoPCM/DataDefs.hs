@@ -28,3 +28,7 @@ waterVolumeNotes = foldlSent [S "Based on" +:+. makeRef2S assumpVCN, ch tankVol,
 waterVolume :: DataDefinition
 waterVolume = ddNoRefs waterVolumeQD Nothing "waterVolume_nopcm" 
   [waterVolumeNotes]
+
+-- References --
+dataDefRefs :: [Reference]
+dataDefRefs = [rw tankVolume, rw assumpVCN] ++ map rw dataDefs

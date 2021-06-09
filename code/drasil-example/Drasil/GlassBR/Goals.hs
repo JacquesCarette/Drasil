@@ -1,4 +1,4 @@
-module Drasil.GlassBR.Goals (goals, willBreakGS) where
+module Drasil.GlassBR.Goals (goals, willBreakGS, goalRefs) where
 
 import Language.Drasil
 import Utils.Drasil
@@ -20,4 +20,5 @@ willBreakGS = cic "willBreakGS" (foldlSent [S "Analyze" `S.and_`
   S "which is calculated based on", phrase userInput])
   "Predict-Glass-Withstands-Explosion" goalStmtDom
 
--- Reference is found in IMods for this ConceptInstance
+goalRefs :: [Reference]
+goalRefs = map rw goals

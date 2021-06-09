@@ -14,7 +14,7 @@ import qualified Utils.Drasil.Sentence as S
 import Language.Drasil.Code (quantvar, listToArray, ODEInfo, odeInfo,
   ODEOptions, odeOptions, ODEMethod(..))
 
-import Data.List ((\\))
+import Data.List ((\\), nub)
 import Data.Drasil.People (thulasi)
 
 import Data.Drasil.Concepts.Computation (algorithm, inValue)
@@ -70,16 +70,16 @@ import Drasil.SWHS.Unitals (coilSAMax, deltaT, htFluxC, htFluxIn,
   wMass, wVol, unitalChuncks, absTol, relTol)
 
 import Drasil.NoPCM.Assumptions
-import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs)
-import Drasil.NoPCM.DataDefs (qDefs)
+import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs, chgRefs)
+import Drasil.NoPCM.DataDefs (qDefs, dataDefRefs)
 import qualified Drasil.NoPCM.DataDefs as NoPCM (dataDefs)
 import Drasil.NoPCM.Definitions (srsSWHS, htTrans)
 import Drasil.NoPCM.GenDefs (genDefs)
-import Drasil.NoPCM.Goals (goals)
-import Drasil.NoPCM.IMods (eBalanceOnWtr, instModIntro)
+import Drasil.NoPCM.Goals (goals, goalRefs)
+import Drasil.NoPCM.IMods (eBalanceOnWtr, instModIntro, iModRefs)
 import qualified Drasil.NoPCM.IMods as NoPCM (iMods)
-import Drasil.NoPCM.Requirements (funcReqs, inputInitValsTable)
-import Drasil.NoPCM.References (citations)
+import Drasil.NoPCM.Requirements (funcReqs, inputInitValsTable, reqRefs)
+import Drasil.NoPCM.References (citations, citeRefs)
 import Drasil.NoPCM.Unitals (inputs, constrained, unconstrained,
   specParamValList)
 
@@ -224,7 +224,7 @@ symbMap = cdb symbolsAll (map nw symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srsSWHS, nw algorithm, nw inValue, nw htTrans]
   ++ map nw [absTol, relTol] ++ [nw materialProprty])
   (map cw symbols ++ srsDomains) units NoPCM.dataDefs NoPCM.iMods genDefs
-  tMods concIns section labCon ([] :: [Reference])
+  tMods concIns section labCon allRefs
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronyms)
@@ -374,3 +374,23 @@ dataConstListOut = [tempW, watE]
 ------------
 --REFERENCES
 ------------
+bodyRefs :: [Reference]
+bodyRefs = [rw figTank]
+  --rw figTank : map rw [SRS.reference ([]::[Contents]) ([]::[Section]), 
+  --SRS.assumpt ([]::[Contents]) ([]::[Section]), SRS.sysCon [] []] ++
+  --map rw [sysCtxFig, demandVsSDFig, dimlessloadVsARFig]
+  ++ map rw concIns ++ map rw section ++ map rw labCon
+
+tabRefs :: [Reference]
+tabRefs = [] --[symbTableRef, unitTableRef] 
+  -- ++ map (rw.makeTabRef) [fst tableAbbAccUID, reqInputsUID] 
+  -- ++ map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+  -- ++ map rw [tableOfConstants [], inDataConstTbl ([]::[UncertainChunk]),
+  -- outDataConstTbl ([]::[ConstrainedChunk])]
+
+secRefs :: [Reference]
+secRefs = [] --[SRS.tOfSymbLabel, rw $ (uncurry makeSecRef) tableAbbAccUID]
+
+allRefs :: [Reference]
+allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ dataDefRefs ++ goalRefs
+  ++ iModRefs ++ citeRefs ++ reqRefs ++ secRefs ++ tabRefs)

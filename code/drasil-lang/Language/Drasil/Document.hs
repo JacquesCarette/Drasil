@@ -99,7 +99,7 @@ figWithWidth = Figure
 -- These should eventually either disappear, or at least move out to docLang
 -- | Create a reference for a table. Takes in the name of a table (which will also be used for its shortname).
 makeTabRef :: String -> Reference
-makeTabRef rs = Reference rs (RP (prepend "Tab") ("Table:" ++ repUnd rs)) (shortname' rs) None
+makeTabRef rs = Reference rs (RP (prepend "Table") ("Table:" ++ repUnd rs)) (shortname' rs) None
 
 -- | Create a reference for a figure. Takes in the name of a figure (which will also be used for its shortname).
 makeFigRef :: String -> Reference

@@ -58,7 +58,7 @@ import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab, glassBR,
 import Drasil.GlassBR.DataDefs (qDefns, configFp, dataDefRefs)
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.Figures
-import Drasil.GlassBR.Goals (goals)
+import Drasil.GlassBR.Goals (goals, goalRefs)
 import Drasil.GlassBR.IMods (symb, iMods, instModIntro, iModRefs)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations, rbrtsn2012, citeRefs)
 import Drasil.GlassBR.Requirements (funcReqs, inReqDesc, funcReqsTables, nonfuncReqs, reqRefs)
@@ -402,5 +402,5 @@ secRefs :: [Reference]
 secRefs = [SRS.tOfSymbLabel, rw $ (uncurry makeSecRef) tableAbbAccUID]
 
 allRefs :: [Reference]
-allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ dataDefRefs
+allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ goalRefs ++ dataDefRefs
   ++ iModRefs ++ citeRefs ++ reqRefs ++ secRefs ++ tabRefs ++ unitalRefs)

@@ -50,4 +50,5 @@ dimlessloadVsARFig = llcc (makeFigRef "dimlessloadVSaspect") $ fig (S "Non dimen
 
 -- References --
 figRefs :: [Reference]
-figRefs = map rw [sysCtxFig, physSystFig, traceItemSecsFig, traceReqsItemsFig, traceAssumpsOthersFig, demandVsSDFig, dimlessloadVsARFig]
+figRefs = map rw [sysCtxFig, physSystFig, traceItemSecsFig,
+  traceReqsItemsFig, traceAssumpsOthersFig, demandVsSDFig, dimlessloadVsARFig]

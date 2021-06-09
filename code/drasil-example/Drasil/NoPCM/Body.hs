@@ -1,5 +1,6 @@
 module Drasil.NoPCM.Body where
 
+import Control.Lens ((^.))
 import Language.Drasil hiding (Symbol(..), section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
@@ -44,7 +45,7 @@ import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived)
 
-import qualified Drasil.DocLang.SRS as SRS (inModel)
+import qualified Drasil.DocLang.SRS as SRS (inModel, reference, assumpt, sysCon, tOfSymbLabel)
 import Drasil.DocLang (AuxConstntSec(AuxConsProg), DerivationDisplay(..),
   DocSection(..), Field(..), Fields, GSDSec(..), GSDSub(..), InclUnits(IncludeUnits),
   IntroSec(IntroProg), IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
@@ -52,7 +53,8 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg), DerivationDisplay(..),
   ReqrmntSec(..), ReqsSub(..), SCSSub(..), SolChSpec(..), SRSDecl, SSDSec(..),
   SSDSub(..), TraceabilitySec(TraceabilityProg), Verbosity(Verbose),
   TSIntro(SymbOrder, SymbConvention, TSPurpose, VectorUnits), intro, mkDoc,
-  tsymb, traceMatStandard, purpDoc)
+  tsymb, traceMatStandard, purpDoc, getTraceConfigUID, tableOfConstants,
+  inDataConstTbl, outDataConstTbl, symbTableRef, unitTableRef, reqInputsUID, tableAbbAccUID)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
@@ -74,7 +76,7 @@ import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs, chgRefs)
 import Drasil.NoPCM.DataDefs (qDefs, dataDefRefs)
 import qualified Drasil.NoPCM.DataDefs as NoPCM (dataDefs)
 import Drasil.NoPCM.Definitions (srsSWHS, htTrans)
-import Drasil.NoPCM.GenDefs (genDefs)
+import Drasil.NoPCM.GenDefs (genDefs, genDefRefs)
 import Drasil.NoPCM.Goals (goals, goalRefs)
 import Drasil.NoPCM.IMods (eBalanceOnWtr, instModIntro, iModRefs)
 import qualified Drasil.NoPCM.IMods as NoPCM (iMods)
@@ -375,22 +377,25 @@ dataConstListOut = [tempW, watE]
 --REFERENCES
 ------------
 bodyRefs :: [Reference]
-bodyRefs = [rw figTank]
-  --rw figTank : map rw [SRS.reference ([]::[Contents]) ([]::[Section]), 
-  --SRS.assumpt ([]::[Contents]) ([]::[Section]), SRS.sysCon [] []] ++
-  --map rw [sysCtxFig, demandVsSDFig, dimlessloadVsARFig]
-  ++ map rw concIns ++ map rw section ++ map rw labCon
+bodyRefs = rw figTank: rw sysCntxtFig:
+  map rw concIns ++ map rw section ++ map rw labCon 
+  ++ map rw tMods ++ concatMap (^. getReferences) tMods --needs the references hidden in the tmodel.
+
+-- below are references used in all examples
+srsRefs :: [Reference]
+srsRefs = map rw [SRS.reference ([]::[Contents]) ([]::[Section]), 
+  SRS.assumpt ([]::[Contents]) ([]::[Section]), SRS.sysCon [] []] 
 
 tabRefs :: [Reference]
-tabRefs = [] --[symbTableRef, unitTableRef] 
-  -- ++ map (rw.makeTabRef) [fst tableAbbAccUID, reqInputsUID] 
-  -- ++ map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
-  -- ++ map rw [tableOfConstants [], inDataConstTbl ([]::[UncertainChunk]),
-  -- outDataConstTbl ([]::[ConstrainedChunk])]
+tabRefs = [symbTableRef, unitTableRef] 
+  ++ map (rw.makeTabRef) [fst tableAbbAccUID, reqInputsUID] 
+  ++ map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+  ++ map rw [tableOfConstants [], inDataConstTbl ([]::[UncertainChunk]),
+  outDataConstTbl ([]::[ConstrainedChunk])]
 
 secRefs :: [Reference]
-secRefs = [] --[SRS.tOfSymbLabel, rw $ (uncurry makeSecRef) tableAbbAccUID]
+secRefs = [SRS.tOfSymbLabel, rw $ (uncurry makeSecRef) tableAbbAccUID]
 
 allRefs :: [Reference]
-allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ dataDefRefs ++ goalRefs
-  ++ iModRefs ++ citeRefs ++ reqRefs ++ secRefs ++ tabRefs)
+allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ dataDefRefs ++ genDefRefs++ goalRefs
+  ++ iModRefs ++ citeRefs ++ reqRefs ++ secRefs ++ tabRefs ++ srsRefs)

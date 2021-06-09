@@ -48,6 +48,6 @@ beasonEtAl1998 = cMisc
   howPublishedU "https://doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)"]
   "beasonEtAl1998"
 
--- References--
+-- References --
 citeRefs :: [Reference]
-citeRefs = map rwCite citations
+citeRefs = map rw citations

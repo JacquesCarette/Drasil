@@ -40,29 +40,8 @@ makeCiteInfoS :: Citation -> RefInfo -> Sentence
 makeCiteInfoS c ri = Ref (makeCiteInfo c ri ^. uid) ri
 
 ---------------------------------------
--- The following functions have the same functions as makeRef2, makeCite, and makeCiteInfo respectively. --
+-- The following function is the same as makeRef2, but renamed for clarity. --
 
 -- | Smart constructor for making a 'Referable' 'Reference'.
 rw :: (Referable r, HasShortName r) => r -> Reference
 rw r = Reference (r ^. uid) (renderRef r) (shortname r) None -- None is here as all additional information is treated as display info in a 'Sentence'.
-
--- Lower level version of rw (only needs a ref address, not to be Referable). Is this even needed?
--- Smart constructor for making a 'Reference'. Does not need to be 'Referable'.
--- Defers 'LblType' lookup. Uses 'RP' to construct 'LblType'.
--- Citations should not be mapped with this, should instead use rw'.
---rw :: (HasUID r, HasRefAddress r, HasShortName r) => r -> Reference
---rw r = Reference (r ^. uid) (RP (defer (r ^. uid)) (getRefAdd r)) (shortname r) None -- None and the defer bit may be a hack
-
--- | Smart constructor for converting a 'Citation' into a 'Reference'. Does not take in additional information.
-rwCite :: Citation -> Reference
-rwCite r = Reference (r ^. uid) (renderRef r) (shortname r) None
-
-{--- This is probably a hack. Because we are deferring reference lookups
--- instead of rendering them on the spot, they may need different UIDs to hold different info.
--- For example, the RefInfo of two references may be different but one will overwrite the other if they have the same UID.
--- | Smart constructor for converting a 'Citation' into a 'Reference'. Does not take in additional information.
-rwCiteInfo :: Citation -> RefInfo -> Reference
-rwCiteInfo r None = rwCite r
-rwCiteInfo r (Equation xs) = Reference (r ^. uid ++ "Eq" ++ concatMap show xs) (renderRef r) (shortname r) (Equation xs)
-rwCiteInfo r (Page xs) = Reference (r ^. uid ++ "Page" ++ concatMap show xs) (renderRef r) (shortname r) (Page xs)
-rwCiteInfo r (RefNote n) = Reference (r ^. uid ++ n) (renderRef r) (shortname r) (RefNote n)-}

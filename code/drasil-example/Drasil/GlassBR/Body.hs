@@ -67,7 +67,7 @@ import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   constrained, inputDataConstraints, inputs, outputs, specParamVals, glassTy,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
-  sD, termsWithAccDefn, termsWithDefsOnly, terms, unitalRefs)
+  sD, termsWithAccDefn, termsWithDefsOnly, terms)
 
 srs :: Document
 srs = mkDoc mkSRS  (S.forGen titleize phrase) si
@@ -387,10 +387,13 @@ blstRskInvWGlassSlab = phrase blastRisk +:+ S "involved with the" +:+
 
 -- References --
 bodyRefs :: [Reference]
-bodyRefs = map rw [SRS.reference ([]::[Contents]) ([]::[Section]), 
-  SRS.assumpt ([]::[Contents]) ([]::[Section]), SRS.sysCon [] []] ++
-  map rw [sysCtxFig, demandVsSDFig, dimlessloadVsARFig]
+bodyRefs = map rw [sysCtxFig, demandVsSDFig, dimlessloadVsARFig]
   ++ map rw concIns ++ map rw section ++ map rw labCon
+
+-- below are references used in all examples
+srsRefs :: [Reference]
+srsRefs = map rw [SRS.reference ([]::[Contents]) ([]::[Section]), 
+    SRS.assumpt ([]::[Contents]) ([]::[Section]), SRS.sysCon [] []]
 
 tabRefs :: [Reference]
 tabRefs = [symbTableRef, unitTableRef] ++ map (rw.makeTabRef) [fst tableAbbAccUID, reqInputsUID] 
@@ -403,4 +406,4 @@ secRefs = [SRS.tOfSymbLabel, rw $ (uncurry makeSecRef) tableAbbAccUID]
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ goalRefs ++ dataDefRefs
-  ++ iModRefs ++ citeRefs ++ reqRefs ++ secRefs ++ tabRefs ++ unitalRefs)
+  ++ iModRefs ++ citeRefs ++ reqRefs ++ secRefs ++ tabRefs ++ srsRefs)

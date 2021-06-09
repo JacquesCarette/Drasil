@@ -6,7 +6,7 @@ import Language.Drasil.Chunk.Citation (BibRef)
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
   HasShortName(shortname), Referable(refAdd, renderRef))
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.Label.Type (LblType(RP), IRefProg, name, raw, (+::+), prepend)
+import Language.Drasil.Label.Type (LblType(RP), IRefProg, prepend)
 import Language.Drasil.RefProg(Reference)
 import Language.Drasil.Sentence (Sentence)
 
@@ -108,20 +108,6 @@ instance HasContents Contents where
 instance Referable LabelledContent where
   refAdd     (LblC lb _) = getRefAdd lb
   renderRef  (LblC lb c) = RP (prependLabel c) (getRefAdd lb)
-
--- | Reference the different types of 'RawContent' in different manners.
-refLabelledCon :: RawContent -> IRefProg
-refLabelledCon Table{}        = raw "Table:" +::+ name 
-refLabelledCon Figure{}       = raw "Fig:" +::+ name
-refLabelledCon Graph{}        = raw "Fig:" +::+ name
-refLabelledCon Defini{}       = raw "Def:" +::+ name
-refLabelledCon EqnBlock{}     = raw "EqnB:" +::+ name
-refLabelledCon DerivBlock{}   = raw "Deriv:" +::+ name
-refLabelledCon Enumeration{}  = raw "Lst:" +::+ name 
-refLabelledCon Paragraph{}    = error "Shouldn't reference paragraphs"
-refLabelledCon Bib{}          = error $ 
-    "Bibliography list of references cannot be referenced. " ++
-    "You must reference the Section or an individual citation."
 
 prependLabel :: RawContent -> IRefProg
 prependLabel Table{}        = prepend "Table"

@@ -74,6 +74,6 @@ pbIsSafeDesc = iModDesc isSafePb
 probBRRef :: Sentence
 probBRRef = definedIn probOfBreak
 
--- Reference -- 
+-- References -- 
 iModRefs :: [Reference]
 iModRefs = rw willBreakGS: map rw [pbIsSafe, lrIsSafe]

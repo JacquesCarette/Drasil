@@ -105,7 +105,7 @@ instModIntro = foldlSent [atStartNP (the goal), makeRef2S waterTempGS,
   S "is met by", makeRef2S eBalanceOnWtr `S.andThe` phrase goal,
   makeRef2S waterEnergyGS, S "is met by", makeRef2S heatEInWtr]
 
--- Reference -- 
+-- References -- 
 iModRefs :: [Reference]
 iModRefs = rw koothoor2013: rw htFluxWaterFromCoil: rw balanceDecayRate: map rw [eBalanceOnWtr, heatEInWtr] ++ 
   map rw [waterTempGS, waterEnergyGS]

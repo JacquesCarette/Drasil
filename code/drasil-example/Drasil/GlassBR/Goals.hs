@@ -20,5 +20,6 @@ willBreakGS = cic "willBreakGS" (foldlSent [S "Analyze" `S.and_`
   S "which is calculated based on", phrase userInput])
   "Predict-Glass-Withstands-Explosion" goalStmtDom
 
+-- References --
 goalRefs :: [Reference]
 goalRefs = map rw goals

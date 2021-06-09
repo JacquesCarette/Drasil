@@ -91,4 +91,4 @@ ldfConstantDesc mainConcept = foldlSent [S "With", phrase reference, S "to",
 
 -- References --
 assumpRefs :: [Reference]
-assumpRefs = rw (SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section])) : rwCiteInfo astm2009 (Page [1]) : map rw assumptions
+assumpRefs = rw (SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section])) : rw astm2009 : map rw assumptions

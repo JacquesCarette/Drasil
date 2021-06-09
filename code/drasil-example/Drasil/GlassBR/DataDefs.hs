@@ -305,5 +305,4 @@ stdVals s = foldlList Comma List (map ch s) +:+ sent +:+. makeRef2S assumpSV
 -- References --
 dataDefRefs :: [Reference]
 dataDefRefs = rw assumpSV : map rw [dimlessloadVsARFig, demandVsSDFig] -- ++ map rw [calofDemand, standOffDis, eqTNTWDD, probOfBreak, calofCapacity] 
-  ++ map rw dataDefs ++ map (uncurry rwCiteInfo) [(beasonEtAl1998, (Equation [4, 5])),
-  (campidelli, (Equation [14])), (campidelli, (Equation [7]))]
+  ++ map rw dataDefs

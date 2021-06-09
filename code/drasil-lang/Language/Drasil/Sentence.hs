@@ -7,7 +7,7 @@ module Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), (+:+),
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
 import Language.Drasil.Expr (Expr)
---import Language.Drasil.RefProg (Reference)
+import Language.Drasil.RefProg (RefInfo)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.UID (UID)
@@ -44,7 +44,7 @@ data Sentence where
   -- | Lifts an expression into a Sentence.
   E     :: Expr -> Sentence
   -- | Takes a 'UID' to a reference. Resolves the reference later (similar to Ch).
-  Ref   :: UID -> Sentence
+  Ref   :: UID -> RefInfo -> Sentence
   -- | Adds quotation marks around a Sentence.
   Quote :: Sentence -> Sentence
   -- | Used for a % symbol.

@@ -55,6 +55,21 @@ output :: HasOutput c => Lens' c QuantityDict
 -- | Provides a <tt>Lens</tt> that holds constraints on the output.
 out_constraints :: HasOutput c => Lens' c [RealInterval Expr Expr]
 
+module Theory.Drasil.ConstraintSet
+
+-- | <a>ConstraintSet</a>s are sets of invariants that always hold for
+--   underlying domains.
+data ConstraintSet
+
+-- | Smart constructor for building ConstraintSets
+mkConstraintSet :: ConceptChunk -> NonEmpty Relation -> ConstraintSet
+instance Language.Drasil.Classes.Core.HasUID Theory.Drasil.ConstraintSet.ConstraintSet
+instance Language.Drasil.Classes.NamedIdea Theory.Drasil.ConstraintSet.ConstraintSet
+instance Language.Drasil.Classes.Idea Theory.Drasil.ConstraintSet.ConstraintSet
+instance Language.Drasil.Classes.Definition Theory.Drasil.ConstraintSet.ConstraintSet
+instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.ConstraintSet.ConstraintSet
+instance Language.Drasil.Classes.ExprRelat Theory.Drasil.ConstraintSet.ConstraintSet
+
 module Theory.Drasil.DataDefinition
 
 -- | A scope is an indirect reference to a <a>UID</a>.
@@ -164,31 +179,34 @@ module Theory.Drasil.ModelKinds
 -- | Models can be of different kinds:
 --   
 --   <ul>
+--   <li><a>DEModel</a>s represent differential equations as
+--   <a>RelationConcept</a>s</li>
+--   <li><tt>EquationalConstraint</tt>s represent invariants that will hold
+--   in a system of equations.</li>
 --   <li><a>EquationalModel</a>s represent quantities that are calculated
 --   via a single definition/<a>QDefinition</a>.</li>
 --   <li><a>EquationalRealm</a>s represent MultiDefns; quantities that may
 --   be calculated using any one of many <tt>DefiningExpr</tt>s (e.g., 'x =
 --   A = ... = Z')</li>
---   <li><a>DEModel</a>s represent differential equations as
---   <a>RelationConcept</a>s</li>
 --   <li><a>OthModel</a>s are placeholders for models. No new
 --   <a>OthModel</a>s should be created, they should be using one of the
 --   other kinds.</li>
 --   </ul>
 data ModelKinds
+DEModel :: RelationConcept -> ModelKinds
+EquationalConstraints :: ConstraintSet -> ModelKinds
 EquationalModel :: QDefinition -> ModelKinds
 EquationalRealm :: MultiDefn -> ModelKinds
-DEModel :: RelationConcept -> ModelKinds
 OthModel :: RelationConcept -> ModelKinds
 
 -- | Map into internal representations of ModelKinds
-setMk :: ModelKinds -> Setter' QDefinition a -> Setter' MultiDefn a -> Setter' RelationConcept a -> a -> ModelKinds
+setMk :: ModelKinds -> Setter' RelationConcept a -> Setter' ConstraintSet a -> Setter' QDefinition a -> Setter' MultiDefn a -> a -> ModelKinds
 
 -- | Retrieve internal data from ModelKinds
-elimMk :: Getter QDefinition a -> Getter MultiDefn a -> Getter RelationConcept a -> ModelKinds -> a
+elimMk :: Getter RelationConcept a -> Getter ConstraintSet a -> Getter QDefinition a -> Getter MultiDefn a -> ModelKinds -> a
 
 -- | Make a <tt>Lens</tt> for <a>ModelKinds</a>.
-lensMk :: forall a. Lens' QDefinition a -> Lens' MultiDefn a -> Lens' RelationConcept a -> Lens' ModelKinds a
+lensMk :: forall a. Lens' RelationConcept a -> Lens' ConstraintSet a -> Lens' QDefinition a -> Lens' MultiDefn a -> Lens' ModelKinds a
 
 -- | Extract a list of <a>QDefinition</a>s from a list of
 --   <a>ModelKinds</a>.
@@ -380,6 +398,13 @@ output :: HasOutput c => Lens' c QuantityDict
 -- | Provides a <tt>Lens</tt> that holds constraints on the output.
 out_constraints :: HasOutput c => Lens' c [RealInterval Expr Expr]
 
+-- | <a>ConstraintSet</a>s are sets of invariants that always hold for
+--   underlying domains.
+data ConstraintSet
+
+-- | Smart constructor for building ConstraintSets
+mkConstraintSet :: ConceptChunk -> NonEmpty Relation -> ConstraintSet
+
 -- | A data definition is a <a>QDefinition</a> that may have additional
 --   notes: the scope, any references, maybe a derivation, a label
 --   (<a>ShortName</a>), a reference address, and other notes
@@ -446,21 +471,24 @@ multiDefnGenQDByUID :: MultiDefn -> UID -> QDefinition
 -- | Models can be of different kinds:
 --   
 --   <ul>
+--   <li><a>DEModel</a>s represent differential equations as
+--   <a>RelationConcept</a>s</li>
+--   <li><tt>EquationalConstraint</tt>s represent invariants that will hold
+--   in a system of equations.</li>
 --   <li><a>EquationalModel</a>s represent quantities that are calculated
 --   via a single definition/<a>QDefinition</a>.</li>
 --   <li><a>EquationalRealm</a>s represent MultiDefns; quantities that may
 --   be calculated using any one of many <tt>DefiningExpr</tt>s (e.g., 'x =
 --   A = ... = Z')</li>
---   <li><a>DEModel</a>s represent differential equations as
---   <a>RelationConcept</a>s</li>
 --   <li><a>OthModel</a>s are placeholders for models. No new
 --   <a>OthModel</a>s should be created, they should be using one of the
 --   other kinds.</li>
 --   </ul>
 data ModelKinds
+DEModel :: RelationConcept -> ModelKinds
+EquationalConstraints :: ConstraintSet -> ModelKinds
 EquationalModel :: QDefinition -> ModelKinds
 EquationalRealm :: MultiDefn -> ModelKinds
-DEModel :: RelationConcept -> ModelKinds
 OthModel :: RelationConcept -> ModelKinds
 
 -- | Extract a list of <a>QDefinition</a>s from a list of

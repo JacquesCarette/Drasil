@@ -650,6 +650,7 @@ printers,Language/Drasil/,Printers.hs,	,	,
 theory,Data/Drasil/,TheoryConcepts.hs,	,	,	
 theory,Theory/Drasil/,Classes.hs,	,	,HasInputs
 	,	,	,	,	,HasOutput
+theory,Theory/Drasil/,ConstraintSet.hs,ConstraintSet,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,YYYY,	,	,	,	,	,YYYY,YYYY,YYYY,	,YYYY,	,	,	,	,	,	,	,	,	,	,	,	,	,YYYY,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	
 theory,Theory/Drasil/,DataDefinition.hs,ScopeType,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	
 	,	,	,DataDefinition,	,	,	,	,YYYY,	,	,	,	,	,	,	,	,	,	,YYYY,	,	,YYYY,YYYY,YYYY,YYYY,	,	,YYYY,YYYY,	,YYYY,YYYY,YYYY,YYYY,YYYY,YYYY,	,	,YYYY,	,YYYY,	,	,	,	,	,YYYY,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	
 	,	,	,	,Scope,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	,	

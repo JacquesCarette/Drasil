@@ -90,11 +90,11 @@ forall a. a -&gt; a
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#choiceSteps"><span class="hs-identifier hs-var hs-var">choiceSteps</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; StepGroup
 forall a. HasCallStack =&gt; [Char] -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="hs-string">&quot;choiceSteps should be called with a non-empty list&quot;</span></span><span>
-</span><span id="line-87"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#choiceSteps"><span class="hs-identifier hs-var">choiceSteps</span></a></span><span> </span><span id="local-6989586621679331163"><span class="annot"><span class="annottext">sg :: [[Step]]
-</span><a href="#local-6989586621679331163"><span class="hs-identifier hs-var">sg</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[[Step]] -&gt; StepGroup
+</span><span id="line-87"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#choiceSteps"><span class="hs-identifier hs-var">choiceSteps</span></a></span><span> </span><span id="local-6989586621679331170"><span class="annot"><span class="annottext">sg :: [[Step]]
+</span><a href="#local-6989586621679331170"><span class="hs-identifier hs-var">sg</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[[Step]] -&gt; StepGroup
 forall a. [a] -&gt; NonEmpty a
 </span><span class="hs-identifier hs-var">fromList</span></span><span> </span><span class="annot"><span class="annottext">[[Step]]
-</span><a href="#local-6989586621679331163"><span class="hs-identifier hs-var">sg</span></a></span><span>
+</span><a href="#local-6989586621679331170"><span class="hs-identifier hs-var">sg</span></a></span><span>
 </span><span id="line-88"></span><span>
 </span><span id="line-89"></span><span class="hs-comment">-- To be used when there are multiple options for a single step, where a </span><span>
 </span><span id="line-90"></span><span class="hs-comment">-- use-case-specific factor decides which step to use.</span><span>
@@ -103,8 +103,8 @@ forall a. [a] -&gt; NonEmpty a
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#choiceStep"><span class="hs-identifier hs-var hs-var">choiceStep</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; StepGroup
 forall a. HasCallStack =&gt; [Char] -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="hs-string">&quot;choiceStep should be called with a non-empty list&quot;</span></span><span>
-</span><span id="line-93"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#choiceStep"><span class="hs-identifier hs-var">choiceStep</span></a></span><span> </span><span id="local-6989586621679331162"><span class="annot"><span class="annottext">ss :: [Step]
-</span><a href="#local-6989586621679331162"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[[Step]] -&gt; StepGroup
+</span><span id="line-93"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#choiceStep"><span class="hs-identifier hs-var">choiceStep</span></a></span><span> </span><span id="local-6989586621679331169"><span class="annot"><span class="annottext">ss :: [Step]
+</span><a href="#local-6989586621679331169"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[[Step]] -&gt; StepGroup
 forall a. [a] -&gt; NonEmpty a
 </span><span class="hs-identifier hs-var">fromList</span></span><span> </span><span class="annot"><span class="annottext">([[Step]] -&gt; StepGroup) -&gt; [[Step]] -&gt; StepGroup
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -113,14 +113,14 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Step -&gt; [Step] -&gt; [Step]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Step]
-</span><a href="#local-6989586621679331162"><span class="hs-identifier hs-var">ss</span></a></span><span>
+</span><a href="#local-6989586621679331169"><span class="hs-identifier hs-var">ss</span></a></span><span>
 </span><span id="line-94"></span><span>
 </span><span id="line-95"></span><span class="hs-comment">-- Specifies a step which must exist in some form in every use case.</span><span>
 </span><span id="line-96"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#mandatoryStep"><span class="hs-identifier hs-type">mandatoryStep</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Step"><span class="hs-identifier hs-type">Step</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#StepGroup"><span class="hs-identifier hs-type">StepGroup</span></a></span><span>
 </span><span id="line-97"></span><span id="mandatoryStep"><span class="annot"><span class="annottext">mandatoryStep :: Step -&gt; StepGroup
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#mandatoryStep"><span class="hs-identifier hs-var hs-var">mandatoryStep</span></a></span></span><span> </span><span id="local-6989586621679331161"><span class="annot"><span class="annottext">f :: Step
-</span><a href="#local-6989586621679331161"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Step
-</span><a href="#local-6989586621679331161"><span class="hs-identifier hs-var">f</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Step] -&gt; [[Step]] -&gt; StepGroup
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#mandatoryStep"><span class="hs-identifier hs-var hs-var">mandatoryStep</span></a></span></span><span> </span><span id="local-6989586621679331168"><span class="annot"><span class="annottext">f :: Step
+</span><a href="#local-6989586621679331168"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Step
+</span><a href="#local-6989586621679331168"><span class="hs-identifier hs-var">f</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Step] -&gt; [[Step]] -&gt; StepGroup
 forall a. a -&gt; [a] -&gt; NonEmpty a
 </span><span class="hs-operator hs-var">:|</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-98"></span><span>
@@ -128,9 +128,9 @@ forall a. a -&gt; [a] -&gt; NonEmpty a
 </span><span id="line-100"></span><span class="hs-comment">-- every use case.</span><span>
 </span><span id="line-101"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#mandatorySteps"><span class="hs-identifier hs-type">mandatorySteps</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Step"><span class="hs-identifier hs-type">Step</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#StepGroup"><span class="hs-identifier hs-type">StepGroup</span></a></span><span>
 </span><span id="line-102"></span><span id="mandatorySteps"><span class="annot"><span class="annottext">mandatorySteps :: [Step] -&gt; StepGroup
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#mandatorySteps"><span class="hs-identifier hs-var hs-var">mandatorySteps</span></a></span></span><span> </span><span id="local-6989586621679331159"><span class="annot"><span class="annottext">fs :: [Step]
-</span><a href="#local-6989586621679331159"><span class="hs-identifier hs-var">fs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Step]
-</span><a href="#local-6989586621679331159"><span class="hs-identifier hs-var">fs</span></a></span><span> </span><span class="annot"><span class="annottext">[Step] -&gt; [[Step]] -&gt; StepGroup
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#mandatorySteps"><span class="hs-identifier hs-var hs-var">mandatorySteps</span></a></span></span><span> </span><span id="local-6989586621679331166"><span class="annot"><span class="annottext">fs :: [Step]
+</span><a href="#local-6989586621679331166"><span class="hs-identifier hs-var">fs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Step]
+</span><a href="#local-6989586621679331166"><span class="hs-identifier hs-var">fs</span></a></span><span> </span><span class="annot"><span class="annottext">[Step] -&gt; [[Step]] -&gt; StepGroup
 forall a. a -&gt; [a] -&gt; NonEmpty a
 </span><span class="hs-operator hs-var">:|</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-103"></span><span>
@@ -150,27 +150,79 @@ forall a. HasCallStack =&gt; [Char] -&gt; a
 </span><span id="line-112"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#loopStep"><span class="hs-identifier hs-var">loopStep</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Step
 forall a. HasCallStack =&gt; [Char] -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="hs-string">&quot;loopStep should be called with a non-empty list of Step&quot;</span></span><span>
-</span><span id="line-113"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#loopStep"><span class="hs-identifier hs-var">loopStep</span></a></span><span> </span><span id="local-6989586621679331157"><span class="annot"><span class="annottext">fis :: [FunctionInterface]
-</span><a href="#local-6989586621679331157"><span class="hs-identifier hs-var">fis</span></a></span></span><span> </span><span id="local-6989586621679331156"><span class="annot"><span class="annottext">c :: [Expr] -&gt; Expr
-</span><a href="#local-6989586621679331156"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679331155"><span class="annot"><span class="annottext">ss :: [Step]
-</span><a href="#local-6989586621679331155"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NonEmpty FunctionInterface
+</span><span id="line-113"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#loopStep"><span class="hs-identifier hs-var">loopStep</span></a></span><span> </span><span id="local-6989586621679331164"><span class="annot"><span class="annottext">fis :: [FunctionInterface]
+</span><a href="#local-6989586621679331164"><span class="hs-identifier hs-var">fis</span></a></span></span><span> </span><span id="local-6989586621679331163"><span class="annot"><span class="annottext">c :: [Expr] -&gt; Expr
+</span><a href="#local-6989586621679331163"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679331162"><span class="annot"><span class="annottext">ss :: [Step]
+</span><a href="#local-6989586621679331162"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NonEmpty FunctionInterface
 -&gt; ([Expr] -&gt; Expr) -&gt; NonEmpty Step -&gt; Step
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#Loop"><span class="hs-identifier hs-var">Loop</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[FunctionInterface] -&gt; NonEmpty FunctionInterface
 forall a. [a] -&gt; NonEmpty a
 </span><span class="hs-identifier hs-var">fromList</span></span><span> </span><span class="annot"><span class="annottext">[FunctionInterface]
-</span><a href="#local-6989586621679331157"><span class="hs-identifier hs-var">fis</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Expr] -&gt; Expr
-</span><a href="#local-6989586621679331156"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Step] -&gt; NonEmpty Step
+</span><a href="#local-6989586621679331164"><span class="hs-identifier hs-var">fis</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Expr] -&gt; Expr
+</span><a href="#local-6989586621679331163"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Step] -&gt; NonEmpty Step
 forall a. [a] -&gt; NonEmpty a
 </span><span class="hs-identifier hs-var">fromList</span></span><span> </span><span class="annot"><span class="annottext">[Step]
-</span><a href="#local-6989586621679331155"><span class="hs-identifier hs-var">ss</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679331162"><span class="hs-identifier hs-var">ss</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-114"></span><span>
 </span><span id="line-115"></span><span class="hs-comment">-- Specifies a call to an external library function.</span><span>
 </span><span id="line-116"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#libFunction"><span class="hs-identifier hs-type">libFunction</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Requires"><span class="hs-identifier hs-type">Requires</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeFuncChunk"><span class="hs-identifier hs-type">CodeFuncChunk</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Argument"><span class="hs-identifier hs-type">Argument</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#FunctionInterface"><span class="hs-identifier hs-type">FunctionInterface</span></a></span><span>
 </span><span id="line-117"></span><span id="libFunction"><span class="annot"><span class="annottext">libFunction :: [Char] -&gt; CodeFuncChunk -&gt; [Argument] -&gt; FunctionInterface
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#libFunction"><span class="hs-identifier hs-var hs-var">libFunction</span></a></span></span><span> </span><span id="local-6989586621679331154"><span class="annot"><span class="annottext">rq :: [Char]
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#libFunction"><span class="hs-identifier hs-var hs-var">libFunction</span></a></span></span><span> </span><span id="local-6989586621679331161"><span class="annot"><span class="annottext">rq :: [Char]
+</span><a href="#local-6989586621679331161"><span class="hs-identifier hs-var">rq</span></a></span></span><span> </span><span id="local-6989586621679331160"><span class="annot"><span class="annottext">f :: CodeFuncChunk
+</span><a href="#local-6989586621679331160"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679331159"><span class="annot"><span class="annottext">ps :: [Argument]
+</span><a href="#local-6989586621679331159"><span class="hs-identifier hs-var">ps</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NonEmpty [Char]
+-&gt; FuncType
+-&gt; CodeFuncChunk
+-&gt; [Argument]
+-&gt; Maybe Result
+-&gt; FunctionInterface
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#FI"><span class="hs-identifier hs-var">FI</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679331161"><span class="hs-identifier hs-var">rq</span></a></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [[Char]] -&gt; NonEmpty [Char]
+forall a. a -&gt; [a] -&gt; NonEmpty a
+</span><span class="hs-operator hs-var">:|</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">FuncType
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#Function"><span class="hs-identifier hs-var">Function</span></a></span><span> </span><span class="annot"><span class="annottext">CodeFuncChunk
+</span><a href="#local-6989586621679331160"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">[Argument]
+</span><a href="#local-6989586621679331159"><span class="hs-identifier hs-var">ps</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Result
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-118"></span><span>
+</span><span id="line-119"></span><span class="hs-comment">-- Specifies a call to an external library method.</span><span>
+</span><span id="line-120"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#libMethod"><span class="hs-identifier hs-type">libMethod</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Requires"><span class="hs-identifier hs-type">Requires</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeFuncChunk"><span class="hs-identifier hs-type">CodeFuncChunk</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Argument"><span class="hs-identifier hs-type">Argument</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
+</span><span id="line-121"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#FunctionInterface"><span class="hs-identifier hs-type">FunctionInterface</span></a></span><span>
+</span><span id="line-122"></span><span id="libMethod"><span class="annot"><span class="annottext">libMethod :: [Char]
+-&gt; CodeVarChunk -&gt; CodeFuncChunk -&gt; [Argument] -&gt; FunctionInterface
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#libMethod"><span class="hs-identifier hs-var hs-var">libMethod</span></a></span></span><span> </span><span id="local-6989586621679331158"><span class="annot"><span class="annottext">rq :: [Char]
+</span><a href="#local-6989586621679331158"><span class="hs-identifier hs-var">rq</span></a></span></span><span> </span><span id="local-6989586621679331157"><span class="annot"><span class="annottext">o :: CodeVarChunk
+</span><a href="#local-6989586621679331157"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679331156"><span class="annot"><span class="annottext">m :: CodeFuncChunk
+</span><a href="#local-6989586621679331156"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span id="local-6989586621679331155"><span class="annot"><span class="annottext">ps :: [Argument]
+</span><a href="#local-6989586621679331155"><span class="hs-identifier hs-var">ps</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NonEmpty [Char]
+-&gt; FuncType
+-&gt; CodeFuncChunk
+-&gt; [Argument]
+-&gt; Maybe Result
+-&gt; FunctionInterface
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#FI"><span class="hs-identifier hs-var">FI</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679331158"><span class="hs-identifier hs-var">rq</span></a></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [[Char]] -&gt; NonEmpty [Char]
+forall a. a -&gt; [a] -&gt; NonEmpty a
+</span><span class="hs-operator hs-var">:|</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk -&gt; FuncType
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#Method"><span class="hs-identifier hs-var">Method</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
+</span><a href="#local-6989586621679331157"><span class="hs-identifier hs-var">o</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CodeFuncChunk
+</span><a href="#local-6989586621679331156"><span class="hs-identifier hs-var">m</span></a></span><span> </span><span class="annot"><span class="annottext">[Argument]
+</span><a href="#local-6989586621679331155"><span class="hs-identifier hs-var">ps</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Result
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-123"></span><span>
+</span><span id="line-124"></span><span class="hs-comment">-- Specifies a call to an external library function, where the result is </span><span>
+</span><span id="line-125"></span><span class="hs-comment">-- assigned to a variable.</span><span>
+</span><span id="line-126"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#libFunctionWithResult"><span class="hs-identifier hs-type">libFunctionWithResult</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Requires"><span class="hs-identifier hs-type">Requires</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeFuncChunk"><span class="hs-identifier hs-type">CodeFuncChunk</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Argument"><span class="hs-identifier hs-type">Argument</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
+</span><span id="line-127"></span><span>  </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#FunctionInterface"><span class="hs-identifier hs-type">FunctionInterface</span></a></span><span>
+</span><span id="line-128"></span><span id="libFunctionWithResult"><span class="annot"><span class="annottext">libFunctionWithResult :: [Char]
+-&gt; CodeFuncChunk -&gt; [Argument] -&gt; CodeVarChunk -&gt; FunctionInterface
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#libFunctionWithResult"><span class="hs-identifier hs-var hs-var">libFunctionWithResult</span></a></span></span><span> </span><span id="local-6989586621679331154"><span class="annot"><span class="annottext">rq :: [Char]
 </span><a href="#local-6989586621679331154"><span class="hs-identifier hs-var">rq</span></a></span></span><span> </span><span id="local-6989586621679331153"><span class="annot"><span class="annottext">f :: CodeFuncChunk
 </span><a href="#local-6989586621679331153"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679331152"><span class="annot"><span class="annottext">ps :: [Argument]
-</span><a href="#local-6989586621679331152"><span class="hs-identifier hs-var">ps</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NonEmpty [Char]
+</span><a href="#local-6989586621679331152"><span class="hs-identifier hs-var">ps</span></a></span></span><span> </span><span id="local-6989586621679331151"><span class="annot"><span class="annottext">r :: CodeVarChunk
+</span><a href="#local-6989586621679331151"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NonEmpty [Char]
 -&gt; FuncType
 -&gt; CodeFuncChunk
 -&gt; [Argument]
@@ -182,65 +234,13 @@ forall a. a -&gt; [a] -&gt; NonEmpty a
 </span><span class="hs-operator hs-var">:|</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">FuncType
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#Function"><span class="hs-identifier hs-var">Function</span></a></span><span> </span><span class="annot"><span class="annottext">CodeFuncChunk
 </span><a href="#local-6989586621679331153"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">[Argument]
-</span><a href="#local-6989586621679331152"><span class="hs-identifier hs-var">ps</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Result
-forall a. Maybe a
-</span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-118"></span><span>
-</span><span id="line-119"></span><span class="hs-comment">-- Specifies a call to an external library method.</span><span>
-</span><span id="line-120"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#libMethod"><span class="hs-identifier hs-type">libMethod</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Requires"><span class="hs-identifier hs-type">Requires</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeFuncChunk"><span class="hs-identifier hs-type">CodeFuncChunk</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Argument"><span class="hs-identifier hs-type">Argument</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
-</span><span id="line-121"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#FunctionInterface"><span class="hs-identifier hs-type">FunctionInterface</span></a></span><span>
-</span><span id="line-122"></span><span id="libMethod"><span class="annot"><span class="annottext">libMethod :: [Char]
--&gt; CodeVarChunk -&gt; CodeFuncChunk -&gt; [Argument] -&gt; FunctionInterface
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#libMethod"><span class="hs-identifier hs-var hs-var">libMethod</span></a></span></span><span> </span><span id="local-6989586621679331151"><span class="annot"><span class="annottext">rq :: [Char]
-</span><a href="#local-6989586621679331151"><span class="hs-identifier hs-var">rq</span></a></span></span><span> </span><span id="local-6989586621679331150"><span class="annot"><span class="annottext">o :: CodeVarChunk
-</span><a href="#local-6989586621679331150"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679331149"><span class="annot"><span class="annottext">m :: CodeFuncChunk
-</span><a href="#local-6989586621679331149"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span id="local-6989586621679331148"><span class="annot"><span class="annottext">ps :: [Argument]
-</span><a href="#local-6989586621679331148"><span class="hs-identifier hs-var">ps</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NonEmpty [Char]
--&gt; FuncType
--&gt; CodeFuncChunk
--&gt; [Argument]
--&gt; Maybe Result
--&gt; FunctionInterface
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#FI"><span class="hs-identifier hs-var">FI</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679331151"><span class="hs-identifier hs-var">rq</span></a></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [[Char]] -&gt; NonEmpty [Char]
-forall a. a -&gt; [a] -&gt; NonEmpty a
-</span><span class="hs-operator hs-var">:|</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk -&gt; FuncType
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#Method"><span class="hs-identifier hs-var">Method</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331150"><span class="hs-identifier hs-var">o</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CodeFuncChunk
-</span><a href="#local-6989586621679331149"><span class="hs-identifier hs-var">m</span></a></span><span> </span><span class="annot"><span class="annottext">[Argument]
-</span><a href="#local-6989586621679331148"><span class="hs-identifier hs-var">ps</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Result
-forall a. Maybe a
-</span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-123"></span><span>
-</span><span id="line-124"></span><span class="hs-comment">-- Specifies a call to an external library function, where the result is </span><span>
-</span><span id="line-125"></span><span class="hs-comment">-- assigned to a variable.</span><span>
-</span><span id="line-126"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#libFunctionWithResult"><span class="hs-identifier hs-type">libFunctionWithResult</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Requires"><span class="hs-identifier hs-type">Requires</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeFuncChunk"><span class="hs-identifier hs-type">CodeFuncChunk</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Argument"><span class="hs-identifier hs-type">Argument</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
-</span><span id="line-127"></span><span>  </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#FunctionInterface"><span class="hs-identifier hs-type">FunctionInterface</span></a></span><span>
-</span><span id="line-128"></span><span id="libFunctionWithResult"><span class="annot"><span class="annottext">libFunctionWithResult :: [Char]
--&gt; CodeFuncChunk -&gt; [Argument] -&gt; CodeVarChunk -&gt; FunctionInterface
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#libFunctionWithResult"><span class="hs-identifier hs-var hs-var">libFunctionWithResult</span></a></span></span><span> </span><span id="local-6989586621679331147"><span class="annot"><span class="annottext">rq :: [Char]
-</span><a href="#local-6989586621679331147"><span class="hs-identifier hs-var">rq</span></a></span></span><span> </span><span id="local-6989586621679331146"><span class="annot"><span class="annottext">f :: CodeFuncChunk
-</span><a href="#local-6989586621679331146"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679331145"><span class="annot"><span class="annottext">ps :: [Argument]
-</span><a href="#local-6989586621679331145"><span class="hs-identifier hs-var">ps</span></a></span></span><span> </span><span id="local-6989586621679331144"><span class="annot"><span class="annottext">r :: CodeVarChunk
-</span><a href="#local-6989586621679331144"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NonEmpty [Char]
--&gt; FuncType
--&gt; CodeFuncChunk
--&gt; [Argument]
--&gt; Maybe Result
--&gt; FunctionInterface
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#FI"><span class="hs-identifier hs-var">FI</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679331147"><span class="hs-identifier hs-var">rq</span></a></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [[Char]] -&gt; NonEmpty [Char]
-forall a. a -&gt; [a] -&gt; NonEmpty a
-</span><span class="hs-operator hs-var">:|</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">FuncType
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#Function"><span class="hs-identifier hs-var">Function</span></a></span><span> </span><span class="annot"><span class="annottext">CodeFuncChunk
-</span><a href="#local-6989586621679331146"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">[Argument]
-</span><a href="#local-6989586621679331145"><span class="hs-identifier hs-var">ps</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Result -&gt; Maybe Result
+</span><a href="#local-6989586621679331152"><span class="hs-identifier hs-var">ps</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Result -&gt; Maybe Result
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">(Result -&gt; Maybe Result) -&gt; Result -&gt; Maybe Result
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Result
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#Assign"><span class="hs-identifier hs-var">Assign</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331144"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679331151"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-129"></span><span>
 </span><span id="line-130"></span><span class="hs-comment">-- Specifies a call to an external library method, where the result is </span><span>
 </span><span id="line-131"></span><span class="hs-comment">-- assigned to a variable.</span><span>
@@ -252,31 +252,31 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 -&gt; [Argument]
 -&gt; CodeVarChunk
 -&gt; FunctionInterface
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#libMethodWithResult"><span class="hs-identifier hs-var hs-var">libMethodWithResult</span></a></span></span><span> </span><span id="local-6989586621679331143"><span class="annot"><span class="annottext">rq :: [Char]
-</span><a href="#local-6989586621679331143"><span class="hs-identifier hs-var">rq</span></a></span></span><span> </span><span id="local-6989586621679331142"><span class="annot"><span class="annottext">o :: CodeVarChunk
-</span><a href="#local-6989586621679331142"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679331141"><span class="annot"><span class="annottext">m :: CodeFuncChunk
-</span><a href="#local-6989586621679331141"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span id="local-6989586621679331140"><span class="annot"><span class="annottext">ps :: [Argument]
-</span><a href="#local-6989586621679331140"><span class="hs-identifier hs-var">ps</span></a></span></span><span> </span><span id="local-6989586621679331139"><span class="annot"><span class="annottext">r :: CodeVarChunk
-</span><a href="#local-6989586621679331139"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NonEmpty [Char]
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#libMethodWithResult"><span class="hs-identifier hs-var hs-var">libMethodWithResult</span></a></span></span><span> </span><span id="local-6989586621679331150"><span class="annot"><span class="annottext">rq :: [Char]
+</span><a href="#local-6989586621679331150"><span class="hs-identifier hs-var">rq</span></a></span></span><span> </span><span id="local-6989586621679331149"><span class="annot"><span class="annottext">o :: CodeVarChunk
+</span><a href="#local-6989586621679331149"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679331148"><span class="annot"><span class="annottext">m :: CodeFuncChunk
+</span><a href="#local-6989586621679331148"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span id="local-6989586621679331147"><span class="annot"><span class="annottext">ps :: [Argument]
+</span><a href="#local-6989586621679331147"><span class="hs-identifier hs-var">ps</span></a></span></span><span> </span><span id="local-6989586621679331146"><span class="annot"><span class="annottext">r :: CodeVarChunk
+</span><a href="#local-6989586621679331146"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NonEmpty [Char]
 -&gt; FuncType
 -&gt; CodeFuncChunk
 -&gt; [Argument]
 -&gt; Maybe Result
 -&gt; FunctionInterface
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#FI"><span class="hs-identifier hs-var">FI</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679331143"><span class="hs-identifier hs-var">rq</span></a></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [[Char]] -&gt; NonEmpty [Char]
+</span><a href="#local-6989586621679331150"><span class="hs-identifier hs-var">rq</span></a></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [[Char]] -&gt; NonEmpty [Char]
 forall a. a -&gt; [a] -&gt; NonEmpty a
 </span><span class="hs-operator hs-var">:|</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk -&gt; FuncType
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#Method"><span class="hs-identifier hs-var">Method</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331142"><span class="hs-identifier hs-var">o</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CodeFuncChunk
-</span><a href="#local-6989586621679331141"><span class="hs-identifier hs-var">m</span></a></span><span> </span><span class="annot"><span class="annottext">[Argument]
-</span><a href="#local-6989586621679331140"><span class="hs-identifier hs-var">ps</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Result -&gt; Maybe Result
+</span><a href="#local-6989586621679331149"><span class="hs-identifier hs-var">o</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CodeFuncChunk
+</span><a href="#local-6989586621679331148"><span class="hs-identifier hs-var">m</span></a></span><span> </span><span class="annot"><span class="annottext">[Argument]
+</span><a href="#local-6989586621679331147"><span class="hs-identifier hs-var">ps</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Result -&gt; Maybe Result
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">(Result -&gt; Maybe Result) -&gt; Result -&gt; Maybe Result
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Result
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#Assign"><span class="hs-identifier hs-var">Assign</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331139"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679331146"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-135"></span><span>
 </span><span id="line-136"></span><span class="hs-comment">-- Specifies a call to an external library constructor, where the result is </span><span>
 </span><span id="line-137"></span><span class="hs-comment">-- assigned to a variable.</span><span>
@@ -284,29 +284,29 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span id="line-139"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#FunctionInterface"><span class="hs-identifier hs-type">FunctionInterface</span></a></span><span>
 </span><span id="line-140"></span><span id="libConstructor"><span class="annot"><span class="annottext">libConstructor :: [Char]
 -&gt; CodeFuncChunk -&gt; [Argument] -&gt; CodeVarChunk -&gt; FunctionInterface
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#libConstructor"><span class="hs-identifier hs-var hs-var">libConstructor</span></a></span></span><span> </span><span id="local-6989586621679331138"><span class="annot"><span class="annottext">rq :: [Char]
-</span><a href="#local-6989586621679331138"><span class="hs-identifier hs-var">rq</span></a></span></span><span> </span><span id="local-6989586621679331137"><span class="annot"><span class="annottext">c :: CodeFuncChunk
-</span><a href="#local-6989586621679331137"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679331136"><span class="annot"><span class="annottext">as :: [Argument]
-</span><a href="#local-6989586621679331136"><span class="hs-keyword hs-var">as</span></a></span></span><span> </span><span id="local-6989586621679331135"><span class="annot"><span class="annottext">r :: CodeVarChunk
-</span><a href="#local-6989586621679331135"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NonEmpty [Char]
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#libConstructor"><span class="hs-identifier hs-var hs-var">libConstructor</span></a></span></span><span> </span><span id="local-6989586621679331145"><span class="annot"><span class="annottext">rq :: [Char]
+</span><a href="#local-6989586621679331145"><span class="hs-identifier hs-var">rq</span></a></span></span><span> </span><span id="local-6989586621679331144"><span class="annot"><span class="annottext">c :: CodeFuncChunk
+</span><a href="#local-6989586621679331144"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679331143"><span class="annot"><span class="annottext">as :: [Argument]
+</span><a href="#local-6989586621679331143"><span class="hs-keyword hs-var">as</span></a></span></span><span> </span><span id="local-6989586621679331142"><span class="annot"><span class="annottext">r :: CodeVarChunk
+</span><a href="#local-6989586621679331142"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NonEmpty [Char]
 -&gt; FuncType
 -&gt; CodeFuncChunk
 -&gt; [Argument]
 -&gt; Maybe Result
 -&gt; FunctionInterface
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#FI"><span class="hs-identifier hs-var">FI</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679331138"><span class="hs-identifier hs-var">rq</span></a></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [[Char]] -&gt; NonEmpty [Char]
+</span><a href="#local-6989586621679331145"><span class="hs-identifier hs-var">rq</span></a></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [[Char]] -&gt; NonEmpty [Char]
 forall a. a -&gt; [a] -&gt; NonEmpty a
 </span><span class="hs-operator hs-var">:|</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">FuncType
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#Constructor"><span class="hs-identifier hs-var">Constructor</span></a></span><span> </span><span class="annot"><span class="annottext">CodeFuncChunk
-</span><a href="#local-6989586621679331137"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">[Argument]
-</span><a href="#local-6989586621679331136"><span class="hs-keyword hs-var">as</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Result -&gt; Maybe Result
+</span><a href="#local-6989586621679331144"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">[Argument]
+</span><a href="#local-6989586621679331143"><span class="hs-keyword hs-var">as</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Result -&gt; Maybe Result
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">(Result -&gt; Maybe Result) -&gt; Result -&gt; Maybe Result
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Result
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#Assign"><span class="hs-identifier hs-var">Assign</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331135"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679331142"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-141"></span><span>
 </span><span id="line-142"></span><span class="hs-comment">-- Specifies a call to an external library function, where multiple modules from</span><span>
 </span><span id="line-143"></span><span class="hs-comment">-- the external library are required, and the result is assigned to a variable.</span><span>
@@ -322,11 +322,11 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
 </span><span id="line-147"></span><span>  </span><span class="annot"><span class="hs-string">&quot; be called with a non-empty list of Requires&quot;</span></span><span>
-</span><span id="line-148"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#libConstructorMultiReqs"><span class="hs-identifier hs-var">libConstructorMultiReqs</span></a></span><span> </span><span id="local-6989586621679331134"><span class="annot"><span class="annottext">rqs :: [[Char]]
-</span><a href="#local-6989586621679331134"><span class="hs-identifier hs-var">rqs</span></a></span></span><span> </span><span id="local-6989586621679331133"><span class="annot"><span class="annottext">c :: CodeFuncChunk
-</span><a href="#local-6989586621679331133"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679331132"><span class="annot"><span class="annottext">as :: [Argument]
-</span><a href="#local-6989586621679331132"><span class="hs-keyword hs-var">as</span></a></span></span><span> </span><span id="local-6989586621679331131"><span class="annot"><span class="annottext">r :: CodeVarChunk
-</span><a href="#local-6989586621679331131"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NonEmpty [Char]
+</span><span id="line-148"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#libConstructorMultiReqs"><span class="hs-identifier hs-var">libConstructorMultiReqs</span></a></span><span> </span><span id="local-6989586621679331141"><span class="annot"><span class="annottext">rqs :: [[Char]]
+</span><a href="#local-6989586621679331141"><span class="hs-identifier hs-var">rqs</span></a></span></span><span> </span><span id="local-6989586621679331140"><span class="annot"><span class="annottext">c :: CodeFuncChunk
+</span><a href="#local-6989586621679331140"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679331139"><span class="annot"><span class="annottext">as :: [Argument]
+</span><a href="#local-6989586621679331139"><span class="hs-keyword hs-var">as</span></a></span></span><span> </span><span id="local-6989586621679331138"><span class="annot"><span class="annottext">r :: CodeVarChunk
+</span><a href="#local-6989586621679331138"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NonEmpty [Char]
 -&gt; FuncType
 -&gt; CodeFuncChunk
 -&gt; [Argument]
@@ -335,38 +335,38 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#FI"><span class="hs-identifier hs-var">FI</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Char]] -&gt; NonEmpty [Char]
 forall a. [a] -&gt; NonEmpty a
 </span><span class="hs-identifier hs-var">fromList</span></span><span> </span><span class="annot"><span class="annottext">[[Char]]
-</span><a href="#local-6989586621679331134"><span class="hs-identifier hs-var">rqs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">FuncType
+</span><a href="#local-6989586621679331141"><span class="hs-identifier hs-var">rqs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">FuncType
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#Constructor"><span class="hs-identifier hs-var">Constructor</span></a></span><span> </span><span class="annot"><span class="annottext">CodeFuncChunk
-</span><a href="#local-6989586621679331133"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">[Argument]
-</span><a href="#local-6989586621679331132"><span class="hs-keyword hs-var">as</span></a></span><span> </span><span>
+</span><a href="#local-6989586621679331140"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">[Argument]
+</span><a href="#local-6989586621679331139"><span class="hs-keyword hs-var">as</span></a></span><span> </span><span>
 </span><span id="line-149"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Result -&gt; Maybe Result
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">(Result -&gt; Maybe Result) -&gt; Result -&gt; Maybe Result
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Result
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#Assign"><span class="hs-identifier hs-var">Assign</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331131"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679331138"><span class="hs-identifier hs-var">r</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-150"></span><span>
 </span><span id="line-151"></span><span class="hs-comment">-- Specifies a call to an external library constructor, where the result is returned.</span><span>
 </span><span id="line-152"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#constructAndReturn"><span class="hs-identifier hs-type">constructAndReturn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Requires"><span class="hs-identifier hs-type">Requires</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeFuncChunk"><span class="hs-identifier hs-type">CodeFuncChunk</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Argument"><span class="hs-identifier hs-type">Argument</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
 </span><span id="line-153"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#FunctionInterface"><span class="hs-identifier hs-type">FunctionInterface</span></a></span><span>
 </span><span id="line-154"></span><span id="constructAndReturn"><span class="annot"><span class="annottext">constructAndReturn :: [Char] -&gt; CodeFuncChunk -&gt; [Argument] -&gt; FunctionInterface
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#constructAndReturn"><span class="hs-identifier hs-var hs-var">constructAndReturn</span></a></span></span><span> </span><span id="local-6989586621679331130"><span class="annot"><span class="annottext">rq :: [Char]
-</span><a href="#local-6989586621679331130"><span class="hs-identifier hs-var">rq</span></a></span></span><span> </span><span id="local-6989586621679331129"><span class="annot"><span class="annottext">c :: CodeFuncChunk
-</span><a href="#local-6989586621679331129"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679331128"><span class="annot"><span class="annottext">as :: [Argument]
-</span><a href="#local-6989586621679331128"><span class="hs-keyword hs-var">as</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NonEmpty [Char]
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#constructAndReturn"><span class="hs-identifier hs-var hs-var">constructAndReturn</span></a></span></span><span> </span><span id="local-6989586621679331137"><span class="annot"><span class="annottext">rq :: [Char]
+</span><a href="#local-6989586621679331137"><span class="hs-identifier hs-var">rq</span></a></span></span><span> </span><span id="local-6989586621679331136"><span class="annot"><span class="annottext">c :: CodeFuncChunk
+</span><a href="#local-6989586621679331136"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679331135"><span class="annot"><span class="annottext">as :: [Argument]
+</span><a href="#local-6989586621679331135"><span class="hs-keyword hs-var">as</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NonEmpty [Char]
 -&gt; FuncType
 -&gt; CodeFuncChunk
 -&gt; [Argument]
 -&gt; Maybe Result
 -&gt; FunctionInterface
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#FI"><span class="hs-identifier hs-var">FI</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679331130"><span class="hs-identifier hs-var">rq</span></a></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [[Char]] -&gt; NonEmpty [Char]
+</span><a href="#local-6989586621679331137"><span class="hs-identifier hs-var">rq</span></a></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [[Char]] -&gt; NonEmpty [Char]
 forall a. a -&gt; [a] -&gt; NonEmpty a
 </span><span class="hs-operator hs-var">:|</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">FuncType
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#Constructor"><span class="hs-identifier hs-var">Constructor</span></a></span><span> </span><span class="annot"><span class="annottext">CodeFuncChunk
-</span><a href="#local-6989586621679331129"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">[Argument]
-</span><a href="#local-6989586621679331128"><span class="hs-keyword hs-var">as</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Result -&gt; Maybe Result
+</span><a href="#local-6989586621679331136"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">[Argument]
+</span><a href="#local-6989586621679331135"><span class="hs-keyword hs-var">as</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Result -&gt; Maybe Result
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">Result
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#Return"><span class="hs-identifier hs-var">Return</span></a></span><span class="hs-special">)</span><span>
@@ -386,12 +386,12 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span id="line-160"></span><span class="hs-comment">-- Specifies a named argument that is not use-case-dependent.</span><span>
 </span><span id="line-161"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#lockedNamedArg"><span class="hs-identifier hs-type">lockedNamedArg</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedArgument</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Argument"><span class="hs-identifier hs-type">Argument</span></a></span><span>
 </span><span id="line-162"></span><span id="lockedNamedArg"><span class="annot"><span class="annottext">lockedNamedArg :: NamedArgument -&gt; Expr -&gt; Argument
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#lockedNamedArg"><span class="hs-identifier hs-var hs-var">lockedNamedArg</span></a></span></span><span> </span><span id="local-6989586621679331126"><span class="annot"><span class="annottext">n :: NamedArgument
-</span><a href="#local-6989586621679331126"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe NamedArgument -&gt; ArgumentInfo -&gt; Argument
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#lockedNamedArg"><span class="hs-identifier hs-var hs-var">lockedNamedArg</span></a></span></span><span> </span><span id="local-6989586621679331133"><span class="annot"><span class="annottext">n :: NamedArgument
+</span><a href="#local-6989586621679331133"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe NamedArgument -&gt; ArgumentInfo -&gt; Argument
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#Arg"><span class="hs-identifier hs-var">Arg</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedArgument -&gt; Maybe NamedArgument
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">NamedArgument
-</span><a href="#local-6989586621679331126"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(ArgumentInfo -&gt; Argument)
+</span><a href="#local-6989586621679331133"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(ArgumentInfo -&gt; Argument)
 -&gt; (Expr -&gt; ArgumentInfo) -&gt; Expr -&gt; Argument
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; ArgumentInfo
@@ -401,15 +401,15 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span id="line-165"></span><span class="hs-comment">-- call.</span><span>
 </span><span id="line-166"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#inlineArg"><span class="hs-identifier hs-type">inlineArg</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Space</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Argument"><span class="hs-identifier hs-type">Argument</span></a></span><span>
 </span><span id="line-167"></span><span id="inlineArg"><span class="annot"><span class="annottext">inlineArg :: Space -&gt; Argument
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#inlineArg"><span class="hs-identifier hs-var hs-var">inlineArg</span></a></span></span><span> </span><span id="local-6989586621679331125"><span class="annot"><span class="annottext">t :: Space
-</span><a href="#local-6989586621679331125"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe NamedArgument -&gt; ArgumentInfo -&gt; Argument
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#inlineArg"><span class="hs-identifier hs-var hs-var">inlineArg</span></a></span></span><span> </span><span id="local-6989586621679331132"><span class="annot"><span class="annottext">t :: Space
+</span><a href="#local-6989586621679331132"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe NamedArgument -&gt; ArgumentInfo -&gt; Argument
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#Arg"><span class="hs-identifier hs-var">Arg</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe NamedArgument
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">(ArgumentInfo -&gt; Argument) -&gt; ArgumentInfo -&gt; Argument
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Space -&gt; Maybe CodeVarChunk -&gt; ArgumentInfo
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#Basic"><span class="hs-identifier hs-var">Basic</span></a></span><span> </span><span class="annot"><span class="annottext">Space
-</span><a href="#local-6989586621679331125"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe CodeVarChunk
+</span><a href="#local-6989586621679331132"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe CodeVarChunk
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
 </span><span id="line-168"></span><span>
@@ -417,17 +417,17 @@ forall a. Maybe a
 </span><span id="line-170"></span><span class="hs-comment">-- the call.</span><span>
 </span><span id="line-171"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#inlineNamedArg"><span class="hs-identifier hs-type">inlineNamedArg</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedArgument</span></span><span> </span><span class="hs-glyph">-&gt;</span><span>  </span><span class="annot"><span class="hs-identifier hs-type">Space</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Argument"><span class="hs-identifier hs-type">Argument</span></a></span><span>
 </span><span id="line-172"></span><span id="inlineNamedArg"><span class="annot"><span class="annottext">inlineNamedArg :: NamedArgument -&gt; Space -&gt; Argument
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#inlineNamedArg"><span class="hs-identifier hs-var hs-var">inlineNamedArg</span></a></span></span><span> </span><span id="local-6989586621679331124"><span class="annot"><span class="annottext">n :: NamedArgument
-</span><a href="#local-6989586621679331124"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679331123"><span class="annot"><span class="annottext">t :: Space
-</span><a href="#local-6989586621679331123"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe NamedArgument -&gt; ArgumentInfo -&gt; Argument
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#inlineNamedArg"><span class="hs-identifier hs-var hs-var">inlineNamedArg</span></a></span></span><span> </span><span id="local-6989586621679331131"><span class="annot"><span class="annottext">n :: NamedArgument
+</span><a href="#local-6989586621679331131"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679331130"><span class="annot"><span class="annottext">t :: Space
+</span><a href="#local-6989586621679331130"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe NamedArgument -&gt; ArgumentInfo -&gt; Argument
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#Arg"><span class="hs-identifier hs-var">Arg</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedArgument -&gt; Maybe NamedArgument
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">NamedArgument
-</span><a href="#local-6989586621679331124"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(ArgumentInfo -&gt; Argument) -&gt; ArgumentInfo -&gt; Argument
+</span><a href="#local-6989586621679331131"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(ArgumentInfo -&gt; Argument) -&gt; ArgumentInfo -&gt; Argument
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Space -&gt; Maybe CodeVarChunk -&gt; ArgumentInfo
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#Basic"><span class="hs-identifier hs-var">Basic</span></a></span><span> </span><span class="annot"><span class="annottext">Space
-</span><a href="#local-6989586621679331123"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe CodeVarChunk
+</span><a href="#local-6989586621679331130"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe CodeVarChunk
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
 </span><span id="line-173"></span><span>
@@ -435,60 +435,60 @@ forall a. Maybe a
 </span><span id="line-175"></span><span class="hs-comment">-- variable before being passed in the call.</span><span>
 </span><span id="line-176"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#preDefinedArg"><span class="hs-identifier hs-type">preDefinedArg</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Argument"><span class="hs-identifier hs-type">Argument</span></a></span><span>
 </span><span id="line-177"></span><span id="preDefinedArg"><span class="annot"><span class="annottext">preDefinedArg :: CodeVarChunk -&gt; Argument
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#preDefinedArg"><span class="hs-identifier hs-var hs-var">preDefinedArg</span></a></span></span><span> </span><span id="local-6989586621679331122"><span class="annot"><span class="annottext">v :: CodeVarChunk
-</span><a href="#local-6989586621679331122"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe NamedArgument -&gt; ArgumentInfo -&gt; Argument
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#preDefinedArg"><span class="hs-identifier hs-var hs-var">preDefinedArg</span></a></span></span><span> </span><span id="local-6989586621679331129"><span class="annot"><span class="annottext">v :: CodeVarChunk
+</span><a href="#local-6989586621679331129"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe NamedArgument -&gt; ArgumentInfo -&gt; Argument
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#Arg"><span class="hs-identifier hs-var">Arg</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe NamedArgument
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">(ArgumentInfo -&gt; Argument) -&gt; ArgumentInfo -&gt; Argument
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Space -&gt; Maybe CodeVarChunk -&gt; ArgumentInfo
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#Basic"><span class="hs-identifier hs-var">Basic</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331122"><span class="hs-identifier hs-var">v</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Getting Space CodeVarChunk Space -&gt; Space
+</span><a href="#local-6989586621679331129"><span class="hs-identifier hs-var">v</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Getting Space CodeVarChunk Space -&gt; Space
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting Space CodeVarChunk Space
 forall c. HasSpace c =&gt; Lens' c Space
 </span><span class="hs-identifier hs-var">typ</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Maybe CodeVarChunk
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331122"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679331129"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-178"></span><span>
 </span><span id="line-179"></span><span class="hs-comment">-- Specifies use-case-dependent named argument whose value must be assigned to </span><span>
 </span><span id="line-180"></span><span class="hs-comment">-- a variable before being passed in the call.</span><span>
 </span><span id="line-181"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#preDefinedNamedArg"><span class="hs-identifier hs-type">preDefinedNamedArg</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedArgument</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Argument"><span class="hs-identifier hs-type">Argument</span></a></span><span>
 </span><span id="line-182"></span><span id="preDefinedNamedArg"><span class="annot"><span class="annottext">preDefinedNamedArg :: NamedArgument -&gt; CodeVarChunk -&gt; Argument
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#preDefinedNamedArg"><span class="hs-identifier hs-var hs-var">preDefinedNamedArg</span></a></span></span><span> </span><span id="local-6989586621679331120"><span class="annot"><span class="annottext">n :: NamedArgument
-</span><a href="#local-6989586621679331120"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679331119"><span class="annot"><span class="annottext">v :: CodeVarChunk
-</span><a href="#local-6989586621679331119"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe NamedArgument -&gt; ArgumentInfo -&gt; Argument
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#preDefinedNamedArg"><span class="hs-identifier hs-var hs-var">preDefinedNamedArg</span></a></span></span><span> </span><span id="local-6989586621679331127"><span class="annot"><span class="annottext">n :: NamedArgument
+</span><a href="#local-6989586621679331127"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679331126"><span class="annot"><span class="annottext">v :: CodeVarChunk
+</span><a href="#local-6989586621679331126"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe NamedArgument -&gt; ArgumentInfo -&gt; Argument
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#Arg"><span class="hs-identifier hs-var">Arg</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedArgument -&gt; Maybe NamedArgument
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">NamedArgument
-</span><a href="#local-6989586621679331120"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(ArgumentInfo -&gt; Argument) -&gt; ArgumentInfo -&gt; Argument
+</span><a href="#local-6989586621679331127"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(ArgumentInfo -&gt; Argument) -&gt; ArgumentInfo -&gt; Argument
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Space -&gt; Maybe CodeVarChunk -&gt; ArgumentInfo
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#Basic"><span class="hs-identifier hs-var">Basic</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331119"><span class="hs-identifier hs-var">v</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Getting Space CodeVarChunk Space -&gt; Space
+</span><a href="#local-6989586621679331126"><span class="hs-identifier hs-var">v</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Getting Space CodeVarChunk Space -&gt; Space
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting Space CodeVarChunk Space
 forall c. HasSpace c =&gt; Lens' c Space
 </span><span class="hs-identifier hs-var">typ</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Maybe CodeVarChunk
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331119"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679331126"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-183"></span><span>
 </span><span id="line-184"></span><span class="hs-comment">-- Specifies a function type argument, where the body consists of a single step.</span><span>
 </span><span id="line-185"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#functionArg"><span class="hs-identifier hs-type">functionArg</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeFuncChunk"><span class="hs-identifier hs-type">CodeFuncChunk</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Parameter"><span class="hs-identifier hs-type">Parameter</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Step"><span class="hs-identifier hs-type">Step</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Argument"><span class="hs-identifier hs-type">Argument</span></a></span><span>
 </span><span id="line-186"></span><span id="functionArg"><span class="annot"><span class="annottext">functionArg :: CodeFuncChunk -&gt; [Parameter] -&gt; Step -&gt; Argument
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#functionArg"><span class="hs-identifier hs-var hs-var">functionArg</span></a></span></span><span> </span><span id="local-6989586621679331118"><span class="annot"><span class="annottext">f :: CodeFuncChunk
-</span><a href="#local-6989586621679331118"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679331117"><span class="annot"><span class="annottext">ps :: [Parameter]
-</span><a href="#local-6989586621679331117"><span class="hs-identifier hs-var">ps</span></a></span></span><span> </span><span id="local-6989586621679331116"><span class="annot"><span class="annottext">b :: Step
-</span><a href="#local-6989586621679331116"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe NamedArgument -&gt; ArgumentInfo -&gt; Argument
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#functionArg"><span class="hs-identifier hs-var hs-var">functionArg</span></a></span></span><span> </span><span id="local-6989586621679331125"><span class="annot"><span class="annottext">f :: CodeFuncChunk
+</span><a href="#local-6989586621679331125"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679331124"><span class="annot"><span class="annottext">ps :: [Parameter]
+</span><a href="#local-6989586621679331124"><span class="hs-identifier hs-var">ps</span></a></span></span><span> </span><span id="local-6989586621679331123"><span class="annot"><span class="annottext">b :: Step
+</span><a href="#local-6989586621679331123"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe NamedArgument -&gt; ArgumentInfo -&gt; Argument
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#Arg"><span class="hs-identifier hs-var">Arg</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe NamedArgument
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeFuncChunk -&gt; [Parameter] -&gt; Step -&gt; ArgumentInfo
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#Fn"><span class="hs-identifier hs-var">Fn</span></a></span><span> </span><span class="annot"><span class="annottext">CodeFuncChunk
-</span><a href="#local-6989586621679331118"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">[Parameter]
-</span><a href="#local-6989586621679331117"><span class="hs-identifier hs-var">ps</span></a></span><span> </span><span class="annot"><span class="annottext">Step
-</span><a href="#local-6989586621679331116"><span class="hs-identifier hs-var">b</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679331125"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">[Parameter]
+</span><a href="#local-6989586621679331124"><span class="hs-identifier hs-var">ps</span></a></span><span> </span><span class="annot"><span class="annottext">Step
+</span><a href="#local-6989586621679331123"><span class="hs-identifier hs-var">b</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-187"></span><span>
 </span><span id="line-188"></span><span class="hs-comment">-- Specifies an argument that is an object of a class that must be defined in </span><span>
 </span><span id="line-189"></span><span class="hs-comment">-- the calling program.</span><span>
@@ -496,12 +496,12 @@ forall a. Maybe a
 </span><span id="line-191"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#ClassInfo"><span class="hs-identifier hs-type">ClassInfo</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Argument"><span class="hs-identifier hs-type">Argument</span></a></span><span>
 </span><span id="line-192"></span><span id="customObjArg"><span class="annot"><span class="annottext">customObjArg :: [[Char]]
 -&gt; [Char] -&gt; CodeVarChunk -&gt; CodeFuncChunk -&gt; ClassInfo -&gt; Argument
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#customObjArg"><span class="hs-identifier hs-var hs-var">customObjArg</span></a></span></span><span> </span><span id="local-6989586621679331115"><span class="annot"><span class="annottext">rs :: [[Char]]
-</span><a href="#local-6989586621679331115"><span class="hs-identifier hs-var">rs</span></a></span></span><span> </span><span id="local-6989586621679331114"><span class="annot"><span class="annottext">d :: [Char]
-</span><a href="#local-6989586621679331114"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span id="local-6989586621679331113"><span class="annot"><span class="annottext">o :: CodeVarChunk
-</span><a href="#local-6989586621679331113"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679331112"><span class="annot"><span class="annottext">c :: CodeFuncChunk
-</span><a href="#local-6989586621679331112"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679331111"><span class="annot"><span class="annottext">ci :: ClassInfo
-</span><a href="#local-6989586621679331111"><span class="hs-identifier hs-var">ci</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe NamedArgument -&gt; ArgumentInfo -&gt; Argument
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#customObjArg"><span class="hs-identifier hs-var hs-var">customObjArg</span></a></span></span><span> </span><span id="local-6989586621679331122"><span class="annot"><span class="annottext">rs :: [[Char]]
+</span><a href="#local-6989586621679331122"><span class="hs-identifier hs-var">rs</span></a></span></span><span> </span><span id="local-6989586621679331121"><span class="annot"><span class="annottext">d :: [Char]
+</span><a href="#local-6989586621679331121"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span id="local-6989586621679331120"><span class="annot"><span class="annottext">o :: CodeVarChunk
+</span><a href="#local-6989586621679331120"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679331119"><span class="annot"><span class="annottext">c :: CodeFuncChunk
+</span><a href="#local-6989586621679331119"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679331118"><span class="annot"><span class="annottext">ci :: ClassInfo
+</span><a href="#local-6989586621679331118"><span class="hs-identifier hs-var">ci</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe NamedArgument -&gt; ArgumentInfo -&gt; Argument
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#Arg"><span class="hs-identifier hs-var">Arg</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe NamedArgument
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Char]]
@@ -511,11 +511,11 @@ forall a. Maybe a
 -&gt; ClassInfo
 -&gt; ArgumentInfo
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#Class"><span class="hs-identifier hs-var">Class</span></a></span><span> </span><span class="annot"><span class="annottext">[[Char]]
-</span><a href="#local-6989586621679331115"><span class="hs-identifier hs-var">rs</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679331114"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331113"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">CodeFuncChunk
-</span><a href="#local-6989586621679331112"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">ClassInfo
-</span><a href="#local-6989586621679331111"><span class="hs-identifier hs-var">ci</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679331122"><span class="hs-identifier hs-var">rs</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679331121"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
+</span><a href="#local-6989586621679331120"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">CodeFuncChunk
+</span><a href="#local-6989586621679331119"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">ClassInfo
+</span><a href="#local-6989586621679331118"><span class="hs-identifier hs-var">ci</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-193"></span><span>
 </span><span id="line-194"></span><span class="hs-comment">-- Specifies an argument that is an object of a class from the external library.</span><span>
 </span><span id="line-195"></span><span class="hs-comment">-- The list of [CodeVarChunk] represents fields of the object that must be set </span><span>
@@ -524,22 +524,22 @@ forall a. Maybe a
 </span><span id="line-198"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Argument"><span class="hs-identifier hs-type">Argument</span></a></span><span>
 </span><span id="line-199"></span><span id="recordArg"><span class="annot"><span class="annottext">recordArg :: [Char]
 -&gt; CodeFuncChunk -&gt; CodeVarChunk -&gt; [CodeVarChunk] -&gt; Argument
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#recordArg"><span class="hs-identifier hs-var hs-var">recordArg</span></a></span></span><span> </span><span id="local-6989586621679331110"><span class="annot"><span class="annottext">rq :: [Char]
-</span><a href="#local-6989586621679331110"><span class="hs-identifier hs-var">rq</span></a></span></span><span> </span><span id="local-6989586621679331109"><span class="annot"><span class="annottext">c :: CodeFuncChunk
-</span><a href="#local-6989586621679331109"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679331108"><span class="annot"><span class="annottext">o :: CodeVarChunk
-</span><a href="#local-6989586621679331108"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679331107"><span class="annot"><span class="annottext">fs :: [CodeVarChunk]
-</span><a href="#local-6989586621679331107"><span class="hs-identifier hs-var">fs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe NamedArgument -&gt; ArgumentInfo -&gt; Argument
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#recordArg"><span class="hs-identifier hs-var hs-var">recordArg</span></a></span></span><span> </span><span id="local-6989586621679331117"><span class="annot"><span class="annottext">rq :: [Char]
+</span><a href="#local-6989586621679331117"><span class="hs-identifier hs-var">rq</span></a></span></span><span> </span><span id="local-6989586621679331116"><span class="annot"><span class="annottext">c :: CodeFuncChunk
+</span><a href="#local-6989586621679331116"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679331115"><span class="annot"><span class="annottext">o :: CodeVarChunk
+</span><a href="#local-6989586621679331115"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679331114"><span class="annot"><span class="annottext">fs :: [CodeVarChunk]
+</span><a href="#local-6989586621679331114"><span class="hs-identifier hs-var">fs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe NamedArgument -&gt; ArgumentInfo -&gt; Argument
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#Arg"><span class="hs-identifier hs-var">Arg</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe NamedArgument
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NonEmpty [Char]
 -&gt; CodeFuncChunk -&gt; CodeVarChunk -&gt; [CodeVarChunk] -&gt; ArgumentInfo
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#Record"><span class="hs-identifier hs-var">Record</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679331110"><span class="hs-identifier hs-var">rq</span></a></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [[Char]] -&gt; NonEmpty [Char]
+</span><a href="#local-6989586621679331117"><span class="hs-identifier hs-var">rq</span></a></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [[Char]] -&gt; NonEmpty [Char]
 forall a. a -&gt; [a] -&gt; NonEmpty a
 </span><span class="hs-operator hs-var">:|</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CodeFuncChunk
-</span><a href="#local-6989586621679331109"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331108"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679331107"><span class="hs-identifier hs-var">fs</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679331116"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
+</span><a href="#local-6989586621679331115"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><a href="#local-6989586621679331114"><span class="hs-identifier hs-var">fs</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-200"></span><span>
 </span><span id="line-201"></span><span class="hs-comment">-- Specifies a use-case-independent parameter</span><span>
 </span><span id="line-202"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#lockedParam"><span class="hs-identifier hs-type">lockedParam</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Parameter"><span class="hs-identifier hs-type">Parameter</span></a></span><span>
@@ -573,14 +573,14 @@ forall c. CodeIdea c =&gt; c -&gt; ParameterChunk
 </span><span id="line-217"></span><span class="hs-comment">-- Specifies a constructor.</span><span>
 </span><span id="line-218"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#constructorInfo"><span class="hs-identifier hs-type">constructorInfo</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeFuncChunk"><span class="hs-identifier hs-type">CodeFuncChunk</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Parameter"><span class="hs-identifier hs-type">Parameter</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Step"><span class="hs-identifier hs-type">Step</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#MethodInfo"><span class="hs-identifier hs-type">MethodInfo</span></a></span><span>
 </span><span id="line-219"></span><span id="constructorInfo"><span class="annot"><span class="annottext">constructorInfo :: CodeFuncChunk -&gt; [Parameter] -&gt; [Step] -&gt; MethodInfo
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#constructorInfo"><span class="hs-identifier hs-var hs-var">constructorInfo</span></a></span></span><span> </span><span id="local-6989586621679331106"><span class="annot"><span class="annottext">c :: CodeFuncChunk
-</span><a href="#local-6989586621679331106"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Parameter] -&gt; [Step] -&gt; MethodInfo
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#constructorInfo"><span class="hs-identifier hs-var hs-var">constructorInfo</span></a></span></span><span> </span><span id="local-6989586621679331113"><span class="annot"><span class="annottext">c :: CodeFuncChunk
+</span><a href="#local-6989586621679331113"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Parameter] -&gt; [Step] -&gt; MethodInfo
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#CI"><span class="hs-identifier hs-var">CI</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-string">&quot;Constructor for &quot;</span></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Char] -&gt; [Char]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">CodeFuncChunk -&gt; [Char]
 forall c. CodeIdea c =&gt; c -&gt; [Char]
 </span><a href="Language.Drasil.Chunk.Code.html#codeName"><span class="hs-identifier hs-var">codeName</span></a></span><span> </span><span class="annot"><span class="annottext">CodeFuncChunk
-</span><a href="#local-6989586621679331106"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Char] -&gt; [Char]
+</span><a href="#local-6989586621679331113"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Char] -&gt; [Char]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot; objects&quot;</span></span><span class="hs-special">)</span><span>
 </span><span id="line-220"></span><span>
@@ -592,27 +592,27 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#methodInfo"><span class="hs-identifier hs-var hs-var">methodInfo</span></a></span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; MethodInfo
 forall a. HasCallStack =&gt; [Char] -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="hs-string">&quot;methodInfo should be called with a non-empty list of Step&quot;</span></span><span>
-</span><span id="line-225"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#methodInfo"><span class="hs-identifier hs-var">methodInfo</span></a></span><span> </span><span id="local-6989586621679331105"><span class="annot"><span class="annottext">m :: CodeFuncChunk
-</span><a href="#local-6989586621679331105"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span id="local-6989586621679331104"><span class="annot"><span class="annottext">d :: [Char]
-</span><a href="#local-6989586621679331104"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span id="local-6989586621679331103"><span class="annot"><span class="annottext">ps :: [Parameter]
-</span><a href="#local-6989586621679331103"><span class="hs-identifier hs-var">ps</span></a></span></span><span> </span><span id="local-6989586621679331102"><span class="annot"><span class="annottext">rd :: [Char]
-</span><a href="#local-6989586621679331102"><span class="hs-identifier hs-var">rd</span></a></span></span><span> </span><span id="local-6989586621679331101"><span class="annot"><span class="annottext">ss :: [Step]
-</span><a href="#local-6989586621679331101"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeFuncChunk
+</span><span id="line-225"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#methodInfo"><span class="hs-identifier hs-var">methodInfo</span></a></span><span> </span><span id="local-6989586621679331112"><span class="annot"><span class="annottext">m :: CodeFuncChunk
+</span><a href="#local-6989586621679331112"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span id="local-6989586621679331111"><span class="annot"><span class="annottext">d :: [Char]
+</span><a href="#local-6989586621679331111"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span id="local-6989586621679331110"><span class="annot"><span class="annottext">ps :: [Parameter]
+</span><a href="#local-6989586621679331110"><span class="hs-identifier hs-var">ps</span></a></span></span><span> </span><span id="local-6989586621679331109"><span class="annot"><span class="annottext">rd :: [Char]
+</span><a href="#local-6989586621679331109"><span class="hs-identifier hs-var">rd</span></a></span></span><span> </span><span id="local-6989586621679331108"><span class="annot"><span class="annottext">ss :: [Step]
+</span><a href="#local-6989586621679331108"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeFuncChunk
 -&gt; [Char]
 -&gt; [Parameter]
 -&gt; Maybe [Char]
 -&gt; NonEmpty Step
 -&gt; MethodInfo
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#MI"><span class="hs-identifier hs-var">MI</span></a></span><span> </span><span class="annot"><span class="annottext">CodeFuncChunk
-</span><a href="#local-6989586621679331105"><span class="hs-identifier hs-var">m</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679331104"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">[Parameter]
-</span><a href="#local-6989586621679331103"><span class="hs-identifier hs-var">ps</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Char] -&gt; Maybe [Char]
+</span><a href="#local-6989586621679331112"><span class="hs-identifier hs-var">m</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679331111"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">[Parameter]
+</span><a href="#local-6989586621679331110"><span class="hs-identifier hs-var">ps</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Char] -&gt; Maybe [Char]
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679331102"><span class="hs-identifier hs-var">rd</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Step] -&gt; NonEmpty Step
+</span><a href="#local-6989586621679331109"><span class="hs-identifier hs-var">rd</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Step] -&gt; NonEmpty Step
 forall a. [a] -&gt; NonEmpty a
 </span><span class="hs-identifier hs-var">fromList</span></span><span> </span><span class="annot"><span class="annottext">[Step]
-</span><a href="#local-6989586621679331101"><span class="hs-identifier hs-var">ss</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679331108"><span class="hs-identifier hs-var">ss</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-226"></span><span>
 </span><span id="line-227"></span><span class="hs-comment">-- Specifies a method that does not return anything.</span><span>
 </span><span id="line-228"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#methodInfoNoReturn"><span class="hs-identifier hs-type">methodInfoNoReturn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeFuncChunk"><span class="hs-identifier hs-type">CodeFuncChunk</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Parameter"><span class="hs-identifier hs-type">Parameter</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Step"><span class="hs-identifier hs-type">Step</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
@@ -621,41 +621,41 @@ forall a. [a] -&gt; NonEmpty a
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#methodInfoNoReturn"><span class="hs-identifier hs-var hs-var">methodInfoNoReturn</span></a></span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; MethodInfo
 forall a. HasCallStack =&gt; [Char] -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="hs-string">&quot;methodInfoNoReturn should be called with a non-empty list of Step&quot;</span></span><span>
-</span><span id="line-231"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#methodInfoNoReturn"><span class="hs-identifier hs-var">methodInfoNoReturn</span></a></span><span> </span><span id="local-6989586621679331100"><span class="annot"><span class="annottext">m :: CodeFuncChunk
-</span><a href="#local-6989586621679331100"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span id="local-6989586621679331099"><span class="annot"><span class="annottext">d :: [Char]
-</span><a href="#local-6989586621679331099"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span id="local-6989586621679331098"><span class="annot"><span class="annottext">ps :: [Parameter]
-</span><a href="#local-6989586621679331098"><span class="hs-identifier hs-var">ps</span></a></span></span><span> </span><span id="local-6989586621679331097"><span class="annot"><span class="annottext">ss :: [Step]
-</span><a href="#local-6989586621679331097"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeFuncChunk
+</span><span id="line-231"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#methodInfoNoReturn"><span class="hs-identifier hs-var">methodInfoNoReturn</span></a></span><span> </span><span id="local-6989586621679331107"><span class="annot"><span class="annottext">m :: CodeFuncChunk
+</span><a href="#local-6989586621679331107"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span id="local-6989586621679331106"><span class="annot"><span class="annottext">d :: [Char]
+</span><a href="#local-6989586621679331106"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span id="local-6989586621679331105"><span class="annot"><span class="annottext">ps :: [Parameter]
+</span><a href="#local-6989586621679331105"><span class="hs-identifier hs-var">ps</span></a></span></span><span> </span><span id="local-6989586621679331104"><span class="annot"><span class="annottext">ss :: [Step]
+</span><a href="#local-6989586621679331104"><span class="hs-identifier hs-var">ss</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeFuncChunk
 -&gt; [Char]
 -&gt; [Parameter]
 -&gt; Maybe [Char]
 -&gt; NonEmpty Step
 -&gt; MethodInfo
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#MI"><span class="hs-identifier hs-var">MI</span></a></span><span> </span><span class="annot"><span class="annottext">CodeFuncChunk
-</span><a href="#local-6989586621679331100"><span class="hs-identifier hs-var">m</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679331099"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">[Parameter]
-</span><a href="#local-6989586621679331098"><span class="hs-identifier hs-var">ps</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe [Char]
+</span><a href="#local-6989586621679331107"><span class="hs-identifier hs-var">m</span></a></span><span> </span><span class="annot"><span class="annottext">[Char]
+</span><a href="#local-6989586621679331106"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">[Parameter]
+</span><a href="#local-6989586621679331105"><span class="hs-identifier hs-var">ps</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe [Char]
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Step] -&gt; NonEmpty Step
 forall a. [a] -&gt; NonEmpty a
 </span><span class="hs-identifier hs-var">fromList</span></span><span> </span><span class="annot"><span class="annottext">[Step]
-</span><a href="#local-6989586621679331097"><span class="hs-identifier hs-var">ss</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679331104"><span class="hs-identifier hs-var">ss</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-232"></span><span>
 </span><span id="line-233"></span><span class="hs-comment">-- Specifies a statement where a current solution is appended to a solution list.</span><span>
 </span><span id="line-234"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#appendCurrSol"><span class="hs-identifier hs-type">appendCurrSol</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Step"><span class="hs-identifier hs-type">Step</span></a></span><span>
 </span><span id="line-235"></span><span id="appendCurrSol"><span class="annot"><span class="annottext">appendCurrSol :: Expr -&gt; Step
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#appendCurrSol"><span class="hs-identifier hs-var hs-var">appendCurrSol</span></a></span></span><span> </span><span id="local-6989586621679331096"><span class="annot"><span class="annottext">curr :: Expr
-</span><a href="#local-6989586621679331096"><span class="hs-identifier hs-var">curr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([CodeVarChunk] -&gt; [Expr] -&gt; FuncStmt) -&gt; Step
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#statementStep"><span class="hs-identifier hs-var">statementStep</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679331094"><span class="annot"><span class="annottext">cdchs :: [CodeVarChunk]
-</span><a href="#local-6989586621679331094"><span class="hs-identifier hs-var">cdchs</span></a></span></span><span> </span><span id="local-6989586621679331093"><span class="annot"><span class="annottext">es :: [Expr]
-</span><a href="#local-6989586621679331093"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679331094"><span class="hs-identifier hs-var">cdchs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679331093"><span class="hs-identifier hs-var">es</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">of</span><span>
-</span><span id="line-236"></span><span>    </span><span class="hs-special">(</span><span class="hs-special">[</span><span id="local-6989586621679331092"><span class="annot"><span class="annottext">s :: CodeVarChunk
-</span><a href="#local-6989586621679331092"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; CodeVarChunk -&gt; FuncStmt
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#appendCurrSol"><span class="hs-identifier hs-var hs-var">appendCurrSol</span></a></span></span><span> </span><span id="local-6989586621679331103"><span class="annot"><span class="annottext">curr :: Expr
+</span><a href="#local-6989586621679331103"><span class="hs-identifier hs-var">curr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([CodeVarChunk] -&gt; [Expr] -&gt; FuncStmt) -&gt; Step
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#statementStep"><span class="hs-identifier hs-var">statementStep</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679331101"><span class="annot"><span class="annottext">cdchs :: [CodeVarChunk]
+</span><a href="#local-6989586621679331101"><span class="hs-identifier hs-var">cdchs</span></a></span></span><span> </span><span id="local-6989586621679331100"><span class="annot"><span class="annottext">es :: [Expr]
+</span><a href="#local-6989586621679331100"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><a href="#local-6989586621679331101"><span class="hs-identifier hs-var">cdchs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679331100"><span class="hs-identifier hs-var">es</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">of</span><span>
+</span><span id="line-236"></span><span>    </span><span class="hs-special">(</span><span class="hs-special">[</span><span id="local-6989586621679331099"><span class="annot"><span class="annottext">s :: CodeVarChunk
+</span><a href="#local-6989586621679331099"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; CodeVarChunk -&gt; FuncStmt
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#appendCurrSolFS"><span class="hs-identifier hs-var">appendCurrSolFS</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
-</span><a href="#local-6989586621679331096"><span class="hs-identifier hs-var">curr</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331092"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><a href="#local-6989586621679331103"><span class="hs-identifier hs-var">curr</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
+</span><a href="#local-6989586621679331099"><span class="hs-identifier hs-var">s</span></a></span><span>
 </span><span id="line-237"></span><span>    </span><span class="hs-special">(</span><span class="hs-identifier">_</span><span class="hs-special">,</span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; FuncStmt
 forall a. HasCallStack =&gt; [Char] -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Fill for appendCurrSol should provide one CodeChunk and no Exprs&quot;</span></span><span class="hs-special">)</span><span>
@@ -664,69 +664,69 @@ forall a. HasCallStack =&gt; [Char] -&gt; a
 </span><span id="line-240"></span><span class="hs-comment">-- through a solution array.</span><span>
 </span><span id="line-241"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#populateSolList"><span class="hs-identifier hs-type">populateSolList</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Step"><span class="hs-identifier hs-type">Step</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-242"></span><span id="populateSolList"><span class="annot"><span class="annottext">populateSolList :: CodeVarChunk -&gt; CodeVarChunk -&gt; CodeVarChunk -&gt; [Step]
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#populateSolList"><span class="hs-identifier hs-var hs-var">populateSolList</span></a></span></span><span> </span><span id="local-6989586621679331090"><span class="annot"><span class="annottext">arr :: CodeVarChunk
-</span><a href="#local-6989586621679331090"><span class="hs-identifier hs-var">arr</span></a></span></span><span> </span><span id="local-6989586621679331089"><span class="annot"><span class="annottext">el :: CodeVarChunk
-</span><a href="#local-6989586621679331089"><span class="hs-identifier hs-var">el</span></a></span></span><span> </span><span id="local-6989586621679331088"><span class="annot"><span class="annottext">fld :: CodeVarChunk
-</span><a href="#local-6989586621679331088"><span class="hs-identifier hs-var">fld</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">([CodeVarChunk] -&gt; [Expr] -&gt; FuncStmt) -&gt; Step
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#statementStep"><span class="hs-identifier hs-var">statementStep</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679331087"><span class="annot"><span class="annottext">cdchs :: [CodeVarChunk]
-</span><a href="#local-6989586621679331087"><span class="hs-identifier hs-var">cdchs</span></a></span></span><span> </span><span id="local-6989586621679331086"><span class="annot"><span class="annottext">es :: [Expr]
-</span><a href="#local-6989586621679331086"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679331087"><span class="hs-identifier hs-var">cdchs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679331086"><span class="hs-identifier hs-var">es</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">of</span><span>
-</span><span id="line-243"></span><span>    </span><span class="hs-special">(</span><span class="hs-special">[</span><span id="local-6989586621679331085"><span class="annot"><span class="annottext">s :: CodeVarChunk
-</span><a href="#local-6989586621679331085"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Expr -&gt; FuncStmt
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#populateSolList"><span class="hs-identifier hs-var hs-var">populateSolList</span></a></span></span><span> </span><span id="local-6989586621679331097"><span class="annot"><span class="annottext">arr :: CodeVarChunk
+</span><a href="#local-6989586621679331097"><span class="hs-identifier hs-var">arr</span></a></span></span><span> </span><span id="local-6989586621679331096"><span class="annot"><span class="annottext">el :: CodeVarChunk
+</span><a href="#local-6989586621679331096"><span class="hs-identifier hs-var">el</span></a></span></span><span> </span><span id="local-6989586621679331095"><span class="annot"><span class="annottext">fld :: CodeVarChunk
+</span><a href="#local-6989586621679331095"><span class="hs-identifier hs-var">fld</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">([CodeVarChunk] -&gt; [Expr] -&gt; FuncStmt) -&gt; Step
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#statementStep"><span class="hs-identifier hs-var">statementStep</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679331094"><span class="annot"><span class="annottext">cdchs :: [CodeVarChunk]
+</span><a href="#local-6989586621679331094"><span class="hs-identifier hs-var">cdchs</span></a></span></span><span> </span><span id="local-6989586621679331093"><span class="annot"><span class="annottext">es :: [Expr]
+</span><a href="#local-6989586621679331093"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><a href="#local-6989586621679331094"><span class="hs-identifier hs-var">cdchs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679331093"><span class="hs-identifier hs-var">es</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">of</span><span>
+</span><span id="line-243"></span><span>    </span><span class="hs-special">(</span><span class="hs-special">[</span><span id="local-6989586621679331092"><span class="annot"><span class="annottext">s :: CodeVarChunk
+</span><a href="#local-6989586621679331092"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Expr -&gt; FuncStmt
 </span><a href="Language.Drasil.Mod.html#FAsg"><span class="hs-identifier hs-var">FAsg</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331085"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Expr]] -&gt; Expr
+</span><a href="#local-6989586621679331092"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Expr]] -&gt; Expr
 </span><span class="hs-identifier hs-var">Matrix</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">]</span><span class="hs-special">)</span><span>
 </span><span id="line-244"></span><span>    </span><span class="hs-special">(</span><span class="hs-identifier">_</span><span class="hs-special">,</span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; FuncStmt
 forall a. HasCallStack =&gt; [Char] -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679331082"><span class="hs-identifier hs-var">popErr</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679331089"><span class="hs-identifier hs-var">popErr</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-245"></span><span>  </span><span class="annot"><span class="annottext">([CodeVarChunk] -&gt; [Expr] -&gt; FuncStmt) -&gt; Step
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#statementStep"><span class="hs-identifier hs-var">statementStep</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679331081"><span class="annot"><span class="annottext">cdchs :: [CodeVarChunk]
-</span><a href="#local-6989586621679331081"><span class="hs-identifier hs-var">cdchs</span></a></span></span><span> </span><span id="local-6989586621679331080"><span class="annot"><span class="annottext">es :: [Expr]
-</span><a href="#local-6989586621679331080"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679331081"><span class="hs-identifier hs-var">cdchs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679331080"><span class="hs-identifier hs-var">es</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">of</span><span>
-</span><span id="line-246"></span><span>    </span><span class="hs-special">(</span><span class="hs-special">[</span><span id="local-6989586621679331079"><span class="annot"><span class="annottext">s :: CodeVarChunk
-</span><a href="#local-6989586621679331079"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Expr -&gt; [FuncStmt] -&gt; FuncStmt
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#statementStep"><span class="hs-identifier hs-var">statementStep</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679331088"><span class="annot"><span class="annottext">cdchs :: [CodeVarChunk]
+</span><a href="#local-6989586621679331088"><span class="hs-identifier hs-var">cdchs</span></a></span></span><span> </span><span id="local-6989586621679331087"><span class="annot"><span class="annottext">es :: [Expr]
+</span><a href="#local-6989586621679331087"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><a href="#local-6989586621679331088"><span class="hs-identifier hs-var">cdchs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679331087"><span class="hs-identifier hs-var">es</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">of</span><span>
+</span><span id="line-246"></span><span>    </span><span class="hs-special">(</span><span class="hs-special">[</span><span id="local-6989586621679331086"><span class="annot"><span class="annottext">s :: CodeVarChunk
+</span><a href="#local-6989586621679331086"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Expr -&gt; [FuncStmt] -&gt; FuncStmt
 </span><a href="Language.Drasil.Mod.html#FForEach"><span class="hs-identifier hs-var">FForEach</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331089"><span class="hs-identifier hs-var">el</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Expr
+</span><a href="#local-6989586621679331096"><span class="hs-identifier hs-var">el</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331090"><span class="hs-identifier hs-var">arr</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Expr -&gt; CodeVarChunk -&gt; FuncStmt
+</span><a href="#local-6989586621679331097"><span class="hs-identifier hs-var">arr</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Expr -&gt; CodeVarChunk -&gt; FuncStmt
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#appendCurrSolFS"><span class="hs-identifier hs-var">appendCurrSolFS</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk -&gt; CodeVarChunk -&gt; Expr
 </span><a href="Language.Drasil.CodeExpr.html#field"><span class="hs-identifier hs-var">field</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331089"><span class="hs-identifier hs-var">el</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331088"><span class="hs-identifier hs-var">fld</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331079"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679331096"><span class="hs-identifier hs-var">el</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
+</span><a href="#local-6989586621679331095"><span class="hs-identifier hs-var">fld</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
+</span><a href="#local-6989586621679331086"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-247"></span><span>    </span><span class="hs-special">(</span><span class="hs-identifier">_</span><span class="hs-special">,</span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; FuncStmt
 forall a. HasCallStack =&gt; [Char] -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679331082"><span class="hs-identifier hs-var">popErr</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-248"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679331082"><span class="annot"><span class="annottext">popErr :: [Char]
-</span><a href="#local-6989586621679331082"><span class="hs-identifier hs-var hs-var">popErr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;Fill for populateSolList should provide one CodeChunk and no Exprs&quot;</span></span><span>
+</span><a href="#local-6989586621679331089"><span class="hs-identifier hs-var">popErr</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><span id="line-248"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679331089"><span class="annot"><span class="annottext">popErr :: [Char]
+</span><a href="#local-6989586621679331089"><span class="hs-identifier hs-var hs-var">popErr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;Fill for populateSolList should provide one CodeChunk and no Exprs&quot;</span></span><span>
 </span><span id="line-249"></span><span>
 </span><span id="line-250"></span><span class="hs-comment">-- Specifies statements where every index of an array is assigned a value.</span><span>
 </span><span id="line-251"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#assignArrayIndex"><span class="hs-identifier hs-type">assignArrayIndex</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Step"><span class="hs-identifier hs-type">Step</span></a></span><span>
 </span><span id="line-252"></span><span id="assignArrayIndex"><span class="annot"><span class="annottext">assignArrayIndex :: Step
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#assignArrayIndex"><span class="hs-identifier hs-var hs-var">assignArrayIndex</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([CodeVarChunk] -&gt; [Expr] -&gt; FuncStmt) -&gt; Step
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#statementStep"><span class="hs-identifier hs-var">statementStep</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679331076"><span class="annot"><span class="annottext">cdchs :: [CodeVarChunk]
-</span><a href="#local-6989586621679331076"><span class="hs-identifier hs-var">cdchs</span></a></span></span><span> </span><span id="local-6989586621679331075"><span class="annot"><span class="annottext">es :: [Expr]
-</span><a href="#local-6989586621679331075"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679331076"><span class="hs-identifier hs-var">cdchs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679331075"><span class="hs-identifier hs-var">es</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">of</span><span>
-</span><span id="line-253"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span id="local-6989586621679331074"><span class="annot"><span class="annottext">a :: CodeVarChunk
-</span><a href="#local-6989586621679331074"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">]</span><span class="hs-special">,</span><span id="local-6989586621679331073"><span class="annot"><span class="annottext">vs :: [Expr]
-</span><a href="#local-6989586621679331073"><span class="hs-identifier hs-var">vs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[FuncStmt] -&gt; FuncStmt
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#statementStep"><span class="hs-identifier hs-var">statementStep</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679331083"><span class="annot"><span class="annottext">cdchs :: [CodeVarChunk]
+</span><a href="#local-6989586621679331083"><span class="hs-identifier hs-var">cdchs</span></a></span></span><span> </span><span id="local-6989586621679331082"><span class="annot"><span class="annottext">es :: [Expr]
+</span><a href="#local-6989586621679331082"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><a href="#local-6989586621679331083"><span class="hs-identifier hs-var">cdchs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679331082"><span class="hs-identifier hs-var">es</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">of</span><span>
+</span><span id="line-253"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span id="local-6989586621679331081"><span class="annot"><span class="annottext">a :: CodeVarChunk
+</span><a href="#local-6989586621679331081"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">]</span><span class="hs-special">,</span><span id="local-6989586621679331080"><span class="annot"><span class="annottext">vs :: [Expr]
+</span><a href="#local-6989586621679331080"><span class="hs-identifier hs-var">vs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[FuncStmt] -&gt; FuncStmt
 </span><a href="Language.Drasil.Mod.html#FMulti"><span class="hs-identifier hs-var">FMulti</span></a></span><span> </span><span class="annot"><span class="annottext">([FuncStmt] -&gt; FuncStmt) -&gt; [FuncStmt] -&gt; FuncStmt
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Integer -&gt; Expr -&gt; FuncStmt) -&gt; [Integer] -&gt; [Expr] -&gt; [FuncStmt]
 forall a b c. (a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt; [c]
 </span><span class="hs-identifier hs-var">zipWith</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Integer -&gt; Expr -&gt; FuncStmt
 </span><a href="Language.Drasil.Mod.html#FAsgIndex"><span class="hs-identifier hs-var">FAsgIndex</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331074"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-number">0</span></span><span class="hs-glyph">..</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679331073"><span class="hs-identifier hs-var">vs</span></a></span><span>
+</span><a href="#local-6989586621679331081"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-number">0</span></span><span class="hs-glyph">..</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679331080"><span class="hs-identifier hs-var">vs</span></a></span><span>
 </span><span id="line-254"></span><span>  </span><span class="hs-special">(</span><span class="hs-identifier">_</span><span class="hs-special">,</span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; FuncStmt
 forall a. HasCallStack =&gt; [Char] -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Fill for assignArrayIndex should provide one CodeChunk&quot;</span></span><span class="hs-special">)</span><span>
@@ -735,20 +735,20 @@ forall a. HasCallStack =&gt; [Char] -&gt; a
 </span><span id="line-257"></span><span class="hs-comment">-- object.</span><span>
 </span><span id="line-258"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#assignSolFromObj"><span class="hs-identifier hs-type">assignSolFromObj</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Step"><span class="hs-identifier hs-type">Step</span></a></span><span>
 </span><span id="line-259"></span><span id="assignSolFromObj"><span class="annot"><span class="annottext">assignSolFromObj :: CodeVarChunk -&gt; Step
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#assignSolFromObj"><span class="hs-identifier hs-var hs-var">assignSolFromObj</span></a></span></span><span> </span><span id="local-6989586621679331069"><span class="annot"><span class="annottext">o :: CodeVarChunk
-</span><a href="#local-6989586621679331069"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([CodeVarChunk] -&gt; [Expr] -&gt; FuncStmt) -&gt; Step
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#statementStep"><span class="hs-identifier hs-var">statementStep</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679331068"><span class="annot"><span class="annottext">cdchs :: [CodeVarChunk]
-</span><a href="#local-6989586621679331068"><span class="hs-identifier hs-var">cdchs</span></a></span></span><span> </span><span id="local-6989586621679331067"><span class="annot"><span class="annottext">es :: [Expr]
-</span><a href="#local-6989586621679331067"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679331068"><span class="hs-identifier hs-var">cdchs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679331067"><span class="hs-identifier hs-var">es</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">of</span><span>
-</span><span id="line-260"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span id="local-6989586621679331066"><span class="annot"><span class="annottext">s :: CodeVarChunk
-</span><a href="#local-6989586621679331066"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">]</span><span class="hs-special">,</span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Expr -&gt; FuncStmt
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#assignSolFromObj"><span class="hs-identifier hs-var hs-var">assignSolFromObj</span></a></span></span><span> </span><span id="local-6989586621679331076"><span class="annot"><span class="annottext">o :: CodeVarChunk
+</span><a href="#local-6989586621679331076"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([CodeVarChunk] -&gt; [Expr] -&gt; FuncStmt) -&gt; Step
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#statementStep"><span class="hs-identifier hs-var">statementStep</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679331075"><span class="annot"><span class="annottext">cdchs :: [CodeVarChunk]
+</span><a href="#local-6989586621679331075"><span class="hs-identifier hs-var">cdchs</span></a></span></span><span> </span><span id="local-6989586621679331074"><span class="annot"><span class="annottext">es :: [Expr]
+</span><a href="#local-6989586621679331074"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><a href="#local-6989586621679331075"><span class="hs-identifier hs-var">cdchs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679331074"><span class="hs-identifier hs-var">es</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">of</span><span>
+</span><span id="line-260"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span id="local-6989586621679331073"><span class="annot"><span class="annottext">s :: CodeVarChunk
+</span><a href="#local-6989586621679331073"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">]</span><span class="hs-special">,</span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Expr -&gt; FuncStmt
 </span><a href="Language.Drasil.Mod.html#FAsg"><span class="hs-identifier hs-var">FAsg</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331066"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk -&gt; CodeVarChunk -&gt; Expr
+</span><a href="#local-6989586621679331073"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk -&gt; CodeVarChunk -&gt; Expr
 </span><a href="Language.Drasil.CodeExpr.html#field"><span class="hs-identifier hs-var">field</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331069"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331066"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679331076"><span class="hs-identifier hs-var">o</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
+</span><a href="#local-6989586621679331073"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-261"></span><span>  </span><span class="hs-special">(</span><span class="hs-identifier">_</span><span class="hs-special">,</span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; FuncStmt
 forall a. HasCallStack =&gt; [Char] -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Fill for assignSolFromObj should provide one CodeChunk and no Exprs&quot;</span></span><span class="hs-special">)</span><span>
@@ -757,22 +757,22 @@ forall a. HasCallStack =&gt; [Char] -&gt; a
 </span><span id="line-264"></span><span class="hs-comment">-- element of an array.</span><span>
 </span><span id="line-265"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#initSolListFromArray"><span class="hs-identifier hs-type">initSolListFromArray</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Step"><span class="hs-identifier hs-type">Step</span></a></span><span>
 </span><span id="line-266"></span><span id="initSolListFromArray"><span class="annot"><span class="annottext">initSolListFromArray :: CodeVarChunk -&gt; Step
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#initSolListFromArray"><span class="hs-identifier hs-var hs-var">initSolListFromArray</span></a></span></span><span> </span><span id="local-6989586621679331065"><span class="annot"><span class="annottext">a :: CodeVarChunk
-</span><a href="#local-6989586621679331065"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([CodeVarChunk] -&gt; [Expr] -&gt; FuncStmt) -&gt; Step
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#statementStep"><span class="hs-identifier hs-var">statementStep</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679331064"><span class="annot"><span class="annottext">cdchs :: [CodeVarChunk]
-</span><a href="#local-6989586621679331064"><span class="hs-identifier hs-var">cdchs</span></a></span></span><span> </span><span id="local-6989586621679331063"><span class="annot"><span class="annottext">es :: [Expr]
-</span><a href="#local-6989586621679331063"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679331064"><span class="hs-identifier hs-var">cdchs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679331063"><span class="hs-identifier hs-var">es</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">of</span><span>
-</span><span id="line-267"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span id="local-6989586621679331062"><span class="annot"><span class="annottext">s :: CodeVarChunk
-</span><a href="#local-6989586621679331062"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">]</span><span class="hs-special">,</span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Expr -&gt; FuncStmt
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#initSolListFromArray"><span class="hs-identifier hs-var hs-var">initSolListFromArray</span></a></span></span><span> </span><span id="local-6989586621679331072"><span class="annot"><span class="annottext">a :: CodeVarChunk
+</span><a href="#local-6989586621679331072"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([CodeVarChunk] -&gt; [Expr] -&gt; FuncStmt) -&gt; Step
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#statementStep"><span class="hs-identifier hs-var">statementStep</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679331071"><span class="annot"><span class="annottext">cdchs :: [CodeVarChunk]
+</span><a href="#local-6989586621679331071"><span class="hs-identifier hs-var">cdchs</span></a></span></span><span> </span><span id="local-6989586621679331070"><span class="annot"><span class="annottext">es :: [Expr]
+</span><a href="#local-6989586621679331070"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><a href="#local-6989586621679331071"><span class="hs-identifier hs-var">cdchs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679331070"><span class="hs-identifier hs-var">es</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">of</span><span>
+</span><span id="line-267"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span id="local-6989586621679331069"><span class="annot"><span class="annottext">s :: CodeVarChunk
+</span><a href="#local-6989586621679331069"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">]</span><span class="hs-special">,</span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Expr -&gt; FuncStmt
 </span><a href="Language.Drasil.Mod.html#FAsg"><span class="hs-identifier hs-var">FAsg</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331062"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Expr]] -&gt; Expr
+</span><a href="#local-6989586621679331069"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Expr]] -&gt; Expr
 </span><span class="hs-identifier hs-var">Matrix</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-identifier hs-var">idx</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331065"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><a href="#local-6989586621679331072"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><span class="hs-identifier hs-var">int</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span class="hs-special">]</span><span class="hs-special">)</span><span>
 </span><span id="line-268"></span><span>  </span><span class="hs-special">(</span><span class="hs-identifier">_</span><span class="hs-special">,</span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; FuncStmt
 forall a. HasCallStack =&gt; [Char] -&gt; a
@@ -782,18 +782,18 @@ forall a. HasCallStack =&gt; [Char] -&gt; a
 </span><span id="line-271"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#initSolListWithVal"><span class="hs-identifier hs-type">initSolListWithVal</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Step"><span class="hs-identifier hs-type">Step</span></a></span><span>
 </span><span id="line-272"></span><span id="initSolListWithVal"><span class="annot"><span class="annottext">initSolListWithVal :: Step
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#initSolListWithVal"><span class="hs-identifier hs-var hs-var">initSolListWithVal</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([CodeVarChunk] -&gt; [Expr] -&gt; FuncStmt) -&gt; Step
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#statementStep"><span class="hs-identifier hs-var">statementStep</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679331059"><span class="annot"><span class="annottext">cdchs :: [CodeVarChunk]
-</span><a href="#local-6989586621679331059"><span class="hs-identifier hs-var">cdchs</span></a></span></span><span> </span><span id="local-6989586621679331058"><span class="annot"><span class="annottext">es :: [Expr]
-</span><a href="#local-6989586621679331058"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679331059"><span class="hs-identifier hs-var">cdchs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679331058"><span class="hs-identifier hs-var">es</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">of</span><span>
-</span><span id="line-273"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span id="local-6989586621679331057"><span class="annot"><span class="annottext">s :: CodeVarChunk
-</span><a href="#local-6989586621679331057"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">]</span><span class="hs-special">,</span><span class="hs-special">[</span><span id="local-6989586621679331056"><span class="annot"><span class="annottext">v :: Expr
-</span><a href="#local-6989586621679331056"><span class="hs-identifier hs-var">v</span></a></span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Expr -&gt; FuncStmt
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#statementStep"><span class="hs-identifier hs-var">statementStep</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679331066"><span class="annot"><span class="annottext">cdchs :: [CodeVarChunk]
+</span><a href="#local-6989586621679331066"><span class="hs-identifier hs-var">cdchs</span></a></span></span><span> </span><span id="local-6989586621679331065"><span class="annot"><span class="annottext">es :: [Expr]
+</span><a href="#local-6989586621679331065"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><a href="#local-6989586621679331066"><span class="hs-identifier hs-var">cdchs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679331065"><span class="hs-identifier hs-var">es</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">of</span><span>
+</span><span id="line-273"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span id="local-6989586621679331064"><span class="annot"><span class="annottext">s :: CodeVarChunk
+</span><a href="#local-6989586621679331064"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">]</span><span class="hs-special">,</span><span class="hs-special">[</span><span id="local-6989586621679331063"><span class="annot"><span class="annottext">v :: Expr
+</span><a href="#local-6989586621679331063"><span class="hs-identifier hs-var">v</span></a></span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Expr -&gt; FuncStmt
 </span><a href="Language.Drasil.Mod.html#FDecDef"><span class="hs-identifier hs-var">FDecDef</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331057"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Expr]] -&gt; Expr
+</span><a href="#local-6989586621679331064"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[[Expr]] -&gt; Expr
 </span><span class="hs-identifier hs-var">Matrix</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><span class="annottext">Expr
-</span><a href="#local-6989586621679331056"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">]</span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679331063"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">]</span><span class="hs-special">]</span><span class="hs-special">)</span><span>
 </span><span id="line-274"></span><span>  </span><span class="hs-special">(</span><span class="hs-identifier">_</span><span class="hs-special">,</span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; FuncStmt
 forall a. HasCallStack =&gt; [Char] -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Fill for initSolListWithVal should provide one CodeChunk and one Expr&quot;</span></span><span class="hs-special">)</span><span>
@@ -809,47 +809,47 @@ forall a. HasCallStack =&gt; [Char] -&gt; a
 -&gt; FunctionInterface
 -&gt; CodeVarChunk
 -&gt; Step
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#solveAndPopulateWhile"><span class="hs-identifier hs-var hs-var">solveAndPopulateWhile</span></a></span></span><span> </span><span id="local-6989586621679331054"><span class="annot"><span class="annottext">lc :: FunctionInterface
-</span><a href="#local-6989586621679331054"><span class="hs-identifier hs-var">lc</span></a></span></span><span> </span><span id="local-6989586621679331053"><span class="annot"><span class="annottext">ob :: CodeVarChunk
-</span><a href="#local-6989586621679331053"><span class="hs-identifier hs-var">ob</span></a></span></span><span> </span><span id="local-6989586621679331052"><span class="annot"><span class="annottext">iv :: CodeVarChunk
-</span><a href="#local-6989586621679331052"><span class="hs-identifier hs-var">iv</span></a></span></span><span> </span><span id="local-6989586621679331051"><span class="annot"><span class="annottext">slv :: FunctionInterface
-</span><a href="#local-6989586621679331051"><span class="hs-identifier hs-var">slv</span></a></span></span><span> </span><span id="local-6989586621679331050"><span class="annot"><span class="annottext">popArr :: CodeVarChunk
-</span><a href="#local-6989586621679331050"><span class="hs-identifier hs-var">popArr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[FunctionInterface] -&gt; ([Expr] -&gt; Expr) -&gt; [Step] -&gt; Step
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#solveAndPopulateWhile"><span class="hs-identifier hs-var hs-var">solveAndPopulateWhile</span></a></span></span><span> </span><span id="local-6989586621679331061"><span class="annot"><span class="annottext">lc :: FunctionInterface
+</span><a href="#local-6989586621679331061"><span class="hs-identifier hs-var">lc</span></a></span></span><span> </span><span id="local-6989586621679331060"><span class="annot"><span class="annottext">ob :: CodeVarChunk
+</span><a href="#local-6989586621679331060"><span class="hs-identifier hs-var">ob</span></a></span></span><span> </span><span id="local-6989586621679331059"><span class="annot"><span class="annottext">iv :: CodeVarChunk
+</span><a href="#local-6989586621679331059"><span class="hs-identifier hs-var">iv</span></a></span></span><span> </span><span id="local-6989586621679331058"><span class="annot"><span class="annottext">slv :: FunctionInterface
+</span><a href="#local-6989586621679331058"><span class="hs-identifier hs-var">slv</span></a></span></span><span> </span><span id="local-6989586621679331057"><span class="annot"><span class="annottext">popArr :: CodeVarChunk
+</span><a href="#local-6989586621679331057"><span class="hs-identifier hs-var">popArr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[FunctionInterface] -&gt; ([Expr] -&gt; Expr) -&gt; [Step] -&gt; Step
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#loopStep"><span class="hs-identifier hs-var">loopStep</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">FunctionInterface
-</span><a href="#local-6989586621679331054"><span class="hs-identifier hs-var">lc</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-glyph">case</span><span> </span><span>
-</span><span id="line-282"></span><span>  </span><span class="hs-special">[</span><span id="local-6989586621679331049"><span class="annot"><span class="annottext">ub :: Expr
-</span><a href="#local-6989586621679331049"><span class="hs-identifier hs-var">ub</span></a></span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; CodeVarChunk -&gt; Expr
+</span><a href="#local-6989586621679331061"><span class="hs-identifier hs-var">lc</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-glyph">case</span><span> </span><span>
+</span><span id="line-282"></span><span>  </span><span class="hs-special">[</span><span id="local-6989586621679331056"><span class="annot"><span class="annottext">ub :: Expr
+</span><a href="#local-6989586621679331056"><span class="hs-identifier hs-var">ub</span></a></span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; CodeVarChunk -&gt; Expr
 </span><a href="Language.Drasil.CodeExpr.html#field"><span class="hs-identifier hs-var">field</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331053"><span class="hs-identifier hs-var">ob</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331052"><span class="hs-identifier hs-var">iv</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><a href="#local-6989586621679331060"><span class="hs-identifier hs-var">ob</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
+</span><a href="#local-6989586621679331059"><span class="hs-identifier hs-var">iv</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-operator hs-var">$&lt;</span></span><span> </span><span class="annot"><span class="annottext">Expr
-</span><a href="#local-6989586621679331049"><span class="hs-identifier hs-var">ub</span></a></span><span>
+</span><a href="#local-6989586621679331056"><span class="hs-identifier hs-var">ub</span></a></span><span>
 </span><span id="line-283"></span><span>  </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Expr
 forall a. HasCallStack =&gt; [Char] -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Fill for solveAndPopulateWhile should provide one Expr&quot;</span></span><span class="hs-special">)</span><span> </span><span>
 </span><span id="line-284"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">FunctionInterface -&gt; Step
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#callStep"><span class="hs-identifier hs-var">callStep</span></a></span><span> </span><span class="annot"><span class="annottext">FunctionInterface
-</span><a href="#local-6989586621679331051"><span class="hs-identifier hs-var">slv</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Step
+</span><a href="#local-6989586621679331058"><span class="hs-identifier hs-var">slv</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Step
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#appendCurrSol"><span class="hs-identifier hs-var">appendCurrSol</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk -&gt; CodeVarChunk -&gt; Expr
 </span><a href="Language.Drasil.CodeExpr.html#field"><span class="hs-identifier hs-var">field</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331053"><span class="hs-identifier hs-var">ob</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331050"><span class="hs-identifier hs-var">popArr</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679331060"><span class="hs-identifier hs-var">ob</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
+</span><a href="#local-6989586621679331057"><span class="hs-identifier hs-var">popArr</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
 </span><span id="line-285"></span><span>
 </span><span id="line-286"></span><span class="hs-comment">-- Specifies a statement where a list is returned, where each value of the list -- is explicitly defined.</span><span>
 </span><span id="line-287"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#returnExprList"><span class="hs-identifier hs-type">returnExprList</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Step"><span class="hs-identifier hs-type">Step</span></a></span><span>
 </span><span id="line-288"></span><span id="returnExprList"><span class="annot"><span class="annottext">returnExprList :: Step
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#returnExprList"><span class="hs-identifier hs-var hs-var">returnExprList</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([CodeVarChunk] -&gt; [Expr] -&gt; FuncStmt) -&gt; Step
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#statementStep"><span class="hs-identifier hs-var">statementStep</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679331047"><span class="annot"><span class="annottext">cdchs :: [CodeVarChunk]
-</span><a href="#local-6989586621679331047"><span class="hs-identifier hs-var">cdchs</span></a></span></span><span> </span><span id="local-6989586621679331046"><span class="annot"><span class="annottext">es :: [Expr]
-</span><a href="#local-6989586621679331046"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679331047"><span class="hs-identifier hs-var">cdchs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679331046"><span class="hs-identifier hs-var">es</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">of</span><span>
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#statementStep"><span class="hs-identifier hs-var">statementStep</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679331054"><span class="annot"><span class="annottext">cdchs :: [CodeVarChunk]
+</span><a href="#local-6989586621679331054"><span class="hs-identifier hs-var">cdchs</span></a></span></span><span> </span><span id="local-6989586621679331053"><span class="annot"><span class="annottext">es :: [Expr]
+</span><a href="#local-6989586621679331053"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><a href="#local-6989586621679331054"><span class="hs-identifier hs-var">cdchs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679331053"><span class="hs-identifier hs-var">es</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">of</span><span>
 </span><span id="line-289"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; FuncStmt
 </span><a href="Language.Drasil.Mod.html#FRet"><span class="hs-identifier hs-var">FRet</span></a></span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; FuncStmt) -&gt; Expr -&gt; FuncStmt
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[[Expr]] -&gt; Expr
 </span><span class="hs-identifier hs-var">Matrix</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679331046"><span class="hs-identifier hs-var">es</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679331053"><span class="hs-identifier hs-var">es</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-290"></span><span>  </span><span class="hs-special">(</span><span class="hs-identifier">_</span><span class="hs-special">,</span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; FuncStmt
 forall a. HasCallStack =&gt; [Char] -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Fill for returnExprList should provide no CodeChunks&quot;</span></span><span class="hs-special">)</span><span>
@@ -857,15 +857,15 @@ forall a. HasCallStack =&gt; [Char] -&gt; a
 </span><span id="line-292"></span><span class="hs-comment">-- A statement where a current solution is appended to a solution list</span><span>
 </span><span id="line-293"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#appendCurrSolFS"><span class="hs-identifier hs-type">appendCurrSolFS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#FuncStmt"><span class="hs-identifier hs-type">FuncStmt</span></a></span><span>
 </span><span id="line-294"></span><span id="appendCurrSolFS"><span class="annot"><span class="annottext">appendCurrSolFS :: Expr -&gt; CodeVarChunk -&gt; FuncStmt
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#appendCurrSolFS"><span class="hs-identifier hs-var hs-var">appendCurrSolFS</span></a></span></span><span> </span><span id="local-6989586621679331044"><span class="annot"><span class="annottext">cs :: Expr
-</span><a href="#local-6989586621679331044"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679331043"><span class="annot"><span class="annottext">s :: CodeVarChunk
-</span><a href="#local-6989586621679331043"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; FuncStmt
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#appendCurrSolFS"><span class="hs-identifier hs-var hs-var">appendCurrSolFS</span></a></span></span><span> </span><span id="local-6989586621679331051"><span class="annot"><span class="annottext">cs :: Expr
+</span><a href="#local-6989586621679331051"><span class="hs-identifier hs-var">cs</span></a></span></span><span> </span><span id="local-6989586621679331050"><span class="annot"><span class="annottext">s :: CodeVarChunk
+</span><a href="#local-6989586621679331050"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; FuncStmt
 </span><a href="Language.Drasil.Mod.html#FAppend"><span class="hs-identifier hs-var">FAppend</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331043"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><a href="#local-6989586621679331050"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-identifier hs-var">idx</span></span><span> </span><span class="annot"><span class="annottext">Expr
-</span><a href="#local-6989586621679331044"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><a href="#local-6989586621679331051"><span class="hs-identifier hs-var">cs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><span class="hs-identifier hs-var">int</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-295"></span><span>
 </span><span id="line-296"></span><span class="hs-comment">-- Specifies a use-case-independent statement that returns a value.</span><span>
@@ -886,26 +886,26 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span id="line-304"></span><span class="hs-comment">-- Specifies a statement that is not use-case-dependent</span><span>
 </span><span id="line-305"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#lockedStatement"><span class="hs-identifier hs-type">lockedStatement</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#FuncStmt"><span class="hs-identifier hs-type">FuncStmt</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Step"><span class="hs-identifier hs-type">Step</span></a></span><span>
 </span><span id="line-306"></span><span id="lockedStatement"><span class="annot"><span class="annottext">lockedStatement :: FuncStmt -&gt; Step
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#lockedStatement"><span class="hs-identifier hs-var hs-var">lockedStatement</span></a></span></span><span> </span><span id="local-6989586621679331040"><span class="annot"><span class="annottext">s :: FuncStmt
-</span><a href="#local-6989586621679331040"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([CodeVarChunk] -&gt; [Expr] -&gt; FuncStmt) -&gt; Step
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#lockedStatement"><span class="hs-identifier hs-var hs-var">lockedStatement</span></a></span></span><span> </span><span id="local-6989586621679331047"><span class="annot"><span class="annottext">s :: FuncStmt
+</span><a href="#local-6989586621679331047"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([CodeVarChunk] -&gt; [Expr] -&gt; FuncStmt) -&gt; Step
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#Statement"><span class="hs-identifier hs-var">Statement</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span class="hs-identifier">_</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">FuncStmt
-</span><a href="#local-6989586621679331040"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679331047"><span class="hs-identifier hs-var">s</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-307"></span><span>
 </span><span id="line-308"></span><span class="hs-comment">-- Specifies a statement where a single solution is initialized with a value.</span><span>
 </span><span id="line-309"></span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#initSolWithVal"><span class="hs-identifier hs-type">initSolWithVal</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.ExternalLibrary.html#Step"><span class="hs-identifier hs-type">Step</span></a></span><span>
 </span><span id="line-310"></span><span id="initSolWithVal"><span class="annot"><span class="annottext">initSolWithVal :: Step
 </span><a href="Language.Drasil.Code.ExternalLibrary.html#initSolWithVal"><span class="hs-identifier hs-var hs-var">initSolWithVal</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([CodeVarChunk] -&gt; [Expr] -&gt; FuncStmt) -&gt; Step
-</span><a href="Language.Drasil.Code.ExternalLibrary.html#statementStep"><span class="hs-identifier hs-var">statementStep</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679331039"><span class="annot"><span class="annottext">cdchs :: [CodeVarChunk]
-</span><a href="#local-6989586621679331039"><span class="hs-identifier hs-var">cdchs</span></a></span></span><span> </span><span id="local-6989586621679331038"><span class="annot"><span class="annottext">es :: [Expr]
-</span><a href="#local-6989586621679331038"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[CodeVarChunk]
-</span><a href="#local-6989586621679331039"><span class="hs-identifier hs-var">cdchs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679331038"><span class="hs-identifier hs-var">es</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">of</span><span>
-</span><span id="line-311"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span id="local-6989586621679331037"><span class="annot"><span class="annottext">s :: CodeVarChunk
-</span><a href="#local-6989586621679331037"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">]</span><span class="hs-special">,</span><span class="hs-special">[</span><span id="local-6989586621679331036"><span class="annot"><span class="annottext">v :: Expr
-</span><a href="#local-6989586621679331036"><span class="hs-identifier hs-var">v</span></a></span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Expr -&gt; FuncStmt
+</span><a href="Language.Drasil.Code.ExternalLibrary.html#statementStep"><span class="hs-identifier hs-var">statementStep</span></a></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679331046"><span class="annot"><span class="annottext">cdchs :: [CodeVarChunk]
+</span><a href="#local-6989586621679331046"><span class="hs-identifier hs-var">cdchs</span></a></span></span><span> </span><span id="local-6989586621679331045"><span class="annot"><span class="annottext">es :: [Expr]
+</span><a href="#local-6989586621679331045"><span class="hs-identifier hs-var">es</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[CodeVarChunk]
+</span><a href="#local-6989586621679331046"><span class="hs-identifier hs-var">cdchs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679331045"><span class="hs-identifier hs-var">es</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">of</span><span>
+</span><span id="line-311"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span id="local-6989586621679331044"><span class="annot"><span class="annottext">s :: CodeVarChunk
+</span><a href="#local-6989586621679331044"><span class="hs-identifier hs-var">s</span></a></span></span><span class="hs-special">]</span><span class="hs-special">,</span><span class="hs-special">[</span><span id="local-6989586621679331043"><span class="annot"><span class="annottext">v :: Expr
+</span><a href="#local-6989586621679331043"><span class="hs-identifier hs-var">v</span></a></span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Expr -&gt; FuncStmt
 </span><a href="Language.Drasil.Mod.html#FDecDef"><span class="hs-identifier hs-var">FDecDef</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679331037"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
-</span><a href="#local-6989586621679331036"><span class="hs-identifier hs-var">v</span></a></span><span>
+</span><a href="#local-6989586621679331044"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
+</span><a href="#local-6989586621679331043"><span class="hs-identifier hs-var">v</span></a></span><span>
 </span><span id="line-312"></span><span>  </span><span class="hs-special">(</span><span class="hs-identifier">_</span><span class="hs-special">,</span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; FuncStmt
 forall a. HasCallStack =&gt; [Char] -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Fill for initSolWithVal should provide one CodeChunk and one Expr&quot;</span></span><span class="hs-special">)</span><span>

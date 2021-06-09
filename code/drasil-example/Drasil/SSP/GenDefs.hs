@@ -193,9 +193,6 @@ effNormFDeriv = mkDerivNoHeader [foldlSent [
   S "are expressed per", phrase metre, S "in", phraseNP (the zDir)]]
 
 --
---normShrR :: QDefinition 
---normShrR = mkQuantDef nmShrRDesc nmShrRRel
-
 normShrR :: QDefinition 
 normShrR = mkQuantDef normToShear nmShrRRel
 

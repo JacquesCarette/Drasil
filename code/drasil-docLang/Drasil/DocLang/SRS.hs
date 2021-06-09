@@ -6,7 +6,7 @@ module Drasil.DocLang.SRS (appendix, assumpt, assumptLabel, charOfIR, datCon,
   referenceLabel, require, scpOfReq, scpOfTheProj, solCharSpec, solCharSpecLabel,
   specSysDes, stakeholder, sysCon, sysCont, tOfSymb, tOfSymbLabel, tOfUnit,
   termAndDefn, termogy, thModel, thModelLabel, theClient, theCustomer, traceyMandG,
-  unlikeChg, unlikeChgLabel, userChar, valsOfAuxCons, valsOfAuxConsLabel) where
+  unlikeChg, unlikeChgLabel, userChar, valsOfAuxCons, valsOfAuxConsLabel, sectionReferences) where
 --Temporary file for keeping the "srs" document constructor until I figure out
 -- a better place for it. Maybe Data.Drasil or Language.Drasil.Template?
 
@@ -150,6 +150,13 @@ section' a b c d = section a b c (makeSecRef d (toString a))
     toString _ = error "Term is not a string"
 
 --Labels--
+-- | Collections all 'Section' 'Reference's.
+sectionReferences :: [Reference]
+sectionReferences = [physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, 
+  inModelLabel, likeChgLabel, tOfSymbLabel, valsOfAuxConsLabel, referenceLabel,
+  indPRCaseLabel, unlikeChgLabel, assumptLabel, funcReqLabel, nonfuncReqLabel,
+  solCharSpecLabel]
+
 --FIXME: create using section information somehow?
 -- | Makes a 'Reference' to a 'Section'.
 physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel, 

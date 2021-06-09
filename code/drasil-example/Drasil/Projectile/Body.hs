@@ -1,5 +1,6 @@
 module Drasil.Projectile.Body (printSetting, si, srs, projectileTitle) where
 
+import Data.List (nub)
 import Language.Drasil hiding (Symbol(..), Vector)
 import Language.Drasil.Code (relToQD)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
@@ -20,7 +21,12 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl,
   SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
   TConvention(..), TSIntro(..), TraceabilitySec(TraceabilityProg),
-  Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb)
+  Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, getTraceConfigUID,
+  reqInputsUID, symbTableRef, unitTableRef, tableAbbAccUID, tableOfConstants,
+  inDataConstTbl, outDataConstTbl)
+
+import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, sysCon, probDesc, sectionReferences) --,tOfSymbLabel,
+  --dataDefnLabel, thModelLabel, genDefnLabel, inModelLabel)
 
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
@@ -44,16 +50,16 @@ import Data.Drasil.SI_Units (metre, radian, second)
 import Data.Drasil.Theories.Physics (accelerationTM, velocityTM)
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
-import Drasil.Projectile.Assumptions (assumptions)
+import Drasil.Projectile.Assumptions (assumptions, assumpRefs)
 import Drasil.Projectile.Concepts (concepts, landingPosNC,
   launcher, projectile, target)
-import Drasil.Projectile.DataDefs (dataDefs)
-import Drasil.Projectile.Figures (figLaunch)
-import Drasil.Projectile.GenDefs (genDefns)
-import Drasil.Projectile.Goals (goals)
-import Drasil.Projectile.IMods (iMods,iMods0)
-import Drasil.Projectile.References (citations)
-import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs)
+import Drasil.Projectile.DataDefs (dataDefs, dataDefRefs)
+import Drasil.Projectile.Figures (figLaunch, figRefs)
+import Drasil.Projectile.GenDefs (genDefns, genDefRefs)
+import Drasil.Projectile.Goals (goals, goalRefs)
+import Drasil.Projectile.IMods (iMods,iMods0, iModRefs)
+import Drasil.Projectile.References (citations, citeRefs)
+import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs, reqRefs)
 import Drasil.Projectile.Unitals
 
 import Theory.Drasil (getEqModQdsFromGd, getEqModQdsFromIm, TheoryModel)
@@ -146,7 +152,7 @@ symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants ++ symbols)
     map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw physicCon' ++
     map nw physicscon ++ map nw mathcon ++ concepts ++ unitalIdeas ++
     map nw acronyms ++ map nw symbols ++ map nw [metre, radian, second]) (cw pi_ : map cw constrained ++ srsDomains)
-  (map unitWrapper [metre, radian, second]) dataDefs iMods genDefns tMods concIns [] [] ([] :: [Reference])
+  (map unitWrapper [metre, radian, second]) dataDefs iMods genDefns tMods concIns [] [] allRefs
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (nw pi_ : map nw acronyms ++ map nw symbols)
@@ -222,4 +228,28 @@ constrained = [flightDur, landPos, launAngle, launSpeed, offset, targPos]
 acronyms :: [CI]
 acronyms = [oneD, twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
   physSyst, requirement, Doc.srs, thModel, typUnc]
+
+-- References --
+bodyRefs :: [Reference]
+bodyRefs = map rw tMods ++ map rw concIns
+
+-- below are references used in all examples
+srsRefs :: [Reference]
+srsRefs = map rw [SRS.reference ([]::[Contents]) ([]::[Section]), 
+    SRS.assumpt ([]::[Contents]) ([]::[Section]), SRS.sysCon [] [], SRS.probDesc [] []]
+    
+tabRefs :: [Reference]
+tabRefs = [symbTableRef, unitTableRef] ++ map (rw.makeTabRef) [fst tableAbbAccUID, reqInputsUID] 
+  ++ map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+  ++ map rw [tableOfConstants [], inDataConstTbl ([]::[UncertainChunk]),
+  outDataConstTbl ([]::[ConstrainedChunk])]
+
+secRefs :: [Reference]
+secRefs = rw ((uncurry makeSecRef) tableAbbAccUID):
+  map rw SRS.sectionReferences -- [SRS.dataDefnLabel, SRS.thModelLabel, SRS.genDefnLabel, SRS.inModelLabel, SRS.tOfSymbLabel]
+
+
+allRefs :: [Reference]
+allRefs = nub (assumpRefs ++ bodyRefs ++ figRefs ++ goalRefs ++ dataDefRefs ++ genDefRefs
+  ++ iModRefs ++ citeRefs ++ reqRefs ++ secRefs ++ tabRefs ++ srsRefs)
 

@@ -110,7 +110,7 @@ instance Referable LabelledContent where
   renderRef  (LblC lb c) = RP (prependLabel c) (getRefAdd lb)
 
 prependLabel :: RawContent -> IRefProg
-prependLabel Table{}        = prepend "Table"
+prependLabel Table{}        = prepend "Tab"
 prependLabel Figure{}       = prepend "Fig"
 prependLabel Graph{}        = prepend "Fig"
 prependLabel Defini{}       = prepend "Def"

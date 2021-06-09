@@ -85,6 +85,6 @@ instance HasRefAddress ConceptInstance where getRefAdd = ra
 instance Referable     ConceptInstance where
   refAdd      = ra 
   -- ^ Finds the reference address contained in a 'ConceptInstance'.
-  renderRef l = RP (defer (sDom $ cdom l) +::+ raw ": " +::+ name) (ra l) 
+  renderRef l = RP (defer (sDom $ cdom l) +::+ raw ":" +::+ name) (ra l) 
   -- ^ Finds the reference address but in a diferent form.
 

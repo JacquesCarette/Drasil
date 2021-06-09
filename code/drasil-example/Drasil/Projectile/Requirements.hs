@@ -1,4 +1,4 @@
-module Drasil.Projectile.Requirements (funcReqs, nonfuncReqs) where
+module Drasil.Projectile.Requirements (funcReqs, nonfuncReqs, reqRefs) where
 
 import Language.Drasil
 import Drasil.DocLang.SRS (datCon, propCorSol)
@@ -6,6 +6,7 @@ import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 
+import Drasil.DocLang (inReq)
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (assumption, code, datumConstraint,
   environment, funcReqDom, likelyChg, mg, mis, module_, nonFuncReqDom, output_,
@@ -80,3 +81,7 @@ portable = cic "portable" (foldlSent [
   atStartNP (the code), S "is able to be run in different", plural environment])
   "Portable" nonFuncReqDom
 
+-- References --
+reqRefs :: [Reference]
+reqRefs = map rw ([(inReq EmptyS)] ++ funcReqs ++ nonfuncReqs)
+  ++ map rw [(propCorSol [] []), datCon ([]::[Contents]) ([]::[Section])]

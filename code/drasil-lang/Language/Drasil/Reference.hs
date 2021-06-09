@@ -25,13 +25,8 @@ makeCite l = Reference (l ^. uid) (renderRef l) (shortname l) None
 makeCiteS :: Citation -> Sentence
 makeCiteS l = Ref (makeCite l ^. uid) None
 
--- Changing UIDs may be a hack.
 -- | Makes a 'Reference' from a 'Citation' with additional information.
 makeCiteInfo :: Citation -> RefInfo -> Reference
-{-makeCiteInfo l None = Reference (l ^. uid) (renderRef l) (shortname l) None
-makeCiteInfo l (Equation xs) = Reference (l ^. uid ++ "Eq" ++ concatMap show xs) (renderRef l) (shortname l) (Equation xs)
-makeCiteInfo l (Page xs) = Reference (l ^. uid ++ "Page" ++ concatMap show xs) (renderRef l) (shortname l) (Page xs)
-makeCiteInfo l (RefNote n) = Reference (l ^. uid) (renderRef l) (shortname l) (RefNote n)-}
 makeCiteInfo l = Reference (l ^. uid) (renderRef l) (shortname l)
 
 -- | Makes a 'Reference' from a 'Citation' with additional information

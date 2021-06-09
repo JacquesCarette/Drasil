@@ -11,9 +11,8 @@ import Language.Drasil
 import Theory.Drasil.Classes (HasInputs(inputs), HasOutput(..))
 import Data.Drasil.TheoryConcepts (inModel)
 
-import Control.Lens (set, (^.), lens, view, makeLenses, Lens', _1, _2) 
-import Theory.Drasil.ModelKinds (ModelKinds(..), elimMk, setMk, getEqModQds)
-import Theory.Drasil.MultiDefn (MultiDefn)
+import Control.Lens ((^.), view, makeLenses, _1, _2) 
+import Theory.Drasil.ModelKinds (ModelKinds(..), getEqModQds)
 
 type Input = (QuantityDict, Maybe (RealInterval Expr Expr))
 type Inputs = [Input]
@@ -34,22 +33,14 @@ data InstanceModel = IM { _mk       :: ModelKinds
                         }
 makeLenses ''InstanceModel
 
--- | Make 'Lens' for an 'InstanceModel' based on its 'ModelKinds'.
-lensMk :: forall a. Lens' QDefinition a -> Lens' MultiDefn a -> Lens' RelationConcept a -> Lens' InstanceModel a
-lensMk lq lqd lr = lens g s
-    where g :: InstanceModel -> a
-          g im_ = elimMk lq lqd lr (im_ ^. mk)
-          s :: InstanceModel -> a -> InstanceModel
-          s im_ x = set mk (setMk (im_ ^. mk) lq lqd lr x) im_
-
 -- | Finds the 'UID' of an 'InstanceModel'.
-instance HasUID             InstanceModel where uid = lensMk uid uid uid
+instance HasUID             InstanceModel where uid = mk . uid
 -- | Finds the term ('NP') of the 'InstanceModel'.
 instance NamedIdea          InstanceModel where term = imTerm
 -- | Finds the idea contained in the 'InstanceModel'.
 instance Idea               InstanceModel where getA = getA . (^. mk)
 -- | Finds the definition of the 'InstanceModel'.
-instance Definition         InstanceModel where defn = lensMk defn defn defn
+instance Definition         InstanceModel where defn = mk . defn
 -- | Finds the domain of the 'InstanceModel'.
 instance ConceptDomain      InstanceModel where cdom = cdom . (^. mk)
 -- | Finds the relation expression for an 'InstanceModel'.

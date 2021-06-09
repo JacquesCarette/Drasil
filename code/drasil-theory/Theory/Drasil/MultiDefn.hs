@@ -47,7 +47,7 @@ instance MayHaveUnit   MultiDefn where getUnit  = getUnit . view qd
 -- | The concept domain of a MultiDefn is the union of the concept domains of the underlying variants.
 instance ConceptDomain MultiDefn where cdom     = foldr1 union . NE.toList . NE.map (^. cd) . (^. rvs)
 instance Definition    MultiDefn where defn     = rDesc
--- | The related Relation of a MultiDefn is defined as the quantity and the related expressions being equal
+-- | The complete Relation of a MultiDefn is defined as the quantity and the related expressions being equal
 --   e.g., `q $= a $= b $= ... $= z`
 instance ExprRelat     MultiDefn where relat q  = sy q $= foldr1 ($=) (NE.map (^. expr) (q ^. rvs))
 

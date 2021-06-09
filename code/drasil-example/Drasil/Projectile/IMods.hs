@@ -1,9 +1,9 @@
-module Drasil.Projectile.IMods (iMods, landPosIM, messageIM, offsetIM, timeIM) where
+module Drasil.Projectile.IMods (iMods, iMods0, landPosIM, messageIM, offsetIM, timeIM) where
 
 import Prelude hiding (cos, sin)
 
 import Language.Drasil
-import Theory.Drasil (InstanceModel, imNoDerivNoRefs, imNoRefs, qwC, ModelKinds (OthModel))
+import Theory.Drasil (InstanceModel, imNoDerivNoRefs, imNoDerivNoRefs',imNoRefs', qwC, ModelKinds (OthModel, EquationalModel))
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -33,17 +33,18 @@ import Drasil.Projectile.Unitals (flightDur, landPos, launAngle, launSpeed,
 iMods :: [InstanceModel]
 iMods = [timeIM, landPosIM, offsetIM, messageIM]
 
+iMods0 :: [InstanceModel]
+iMods0 = [ messageIM]
 ---
 timeIM :: InstanceModel
-timeIM = imNoRefs (OthModel timeRC)
+timeIM = imNoRefs' (EquationalModel timeQD)(nounPhraseSP "calculation of landing time")
   [qwC launSpeed $ UpFrom (Exc, exactDbl 0)
   ,qwC launAngle $ Bounded (Exc, exactDbl 0) (Exc, half $ sy pi_)]
   (qw flightDur) [UpFrom (Exc, exactDbl 0)]
   (Just timeDeriv) "calOfLandingTime" [angleConstraintNote, gravitationalAccelConstNote, timeConsNote]
 
-timeRC :: RelationConcept
-timeRC = makeRC "timeRC" (nounPhraseSP "calculation of landing time")
-  EmptyS $ sy flightDur $= E.flightDur'
+timeQD :: QDefinition 
+timeQD =  mkQuantDef flightDur E.flightDur'
 
 timeDeriv :: Derivation
 timeDeriv = mkDerivName (phrase flightDur) (weave [timeDerivSents, map E timeDerivEqns])
@@ -75,15 +76,14 @@ timeDerivEqns = [E.timeDerivEqn1, E.timeDerivEqn2, E.timeDerivEqn3, E.timeDerivE
 
 ---
 landPosIM :: InstanceModel
-landPosIM = imNoRefs (OthModel landPosRC)
+landPosIM = imNoRefs' (EquationalModel landPosQD)(nounPhraseSP "calculation of landing position")
   [qwC launSpeed $ UpFrom (Exc, exactDbl 0),
    qwC launAngle $ Bounded (Exc, exactDbl 0) (Exc, half $ sy pi_)]
   (qw landPos) [UpFrom (Exc, exactDbl 0)]
   (Just landPosDeriv) "calOfLandingDist" [angleConstraintNote, gravitationalAccelConstNote, landPosConsNote]
 
-landPosRC :: RelationConcept
-landPosRC = makeRC "landPosRC" (nounPhraseSP "calculation of landing position")
-  landPosConsNote (sy landPos $= E.landPosExpr)
+landPosQD :: QDefinition
+landPosQD = mkQuantDef landPos E.landPosExpr
 
 landPosDeriv :: Derivation
 landPosDeriv = mkDerivName (phrase landPos) (weave [landPosDerivSents, map E landPosDerivEqns])
@@ -110,14 +110,13 @@ landPosDerivEqns = [E.landPosDerivEqn1, E.landPosDerivEqn2, E.landPosDerivEqn3, 
 
 ---
 offsetIM :: InstanceModel
-offsetIM = imNoDerivNoRefs (OthModel offsetRC)
+offsetIM = imNoDerivNoRefs' (EquationalModel offsetQD) (nounPhraseSP "offset")
   [qwC landPos $ UpFrom (Exc, exactDbl 0)
   ,qwC targPos $ UpFrom (Exc, exactDbl 0)]
   (qw offset) [] "offsetIM" [landPosNote, landAndTargPosConsNote]
 
-offsetRC :: RelationConcept
-offsetRC = makeRC "offsetRC" (nounPhraseSP "offset") EmptyS $ sy offset $= E.offset'
-
+offsetQD :: QDefinition
+offsetQD = mkQuantDef offset E.offset'
 ---
 messageIM :: InstanceModel
 messageIM = imNoDerivNoRefs (OthModel messageRC)

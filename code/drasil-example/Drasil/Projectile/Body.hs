@@ -51,12 +51,12 @@ import Drasil.Projectile.DataDefs (dataDefs)
 import Drasil.Projectile.Figures (figLaunch)
 import Drasil.Projectile.GenDefs (genDefns)
 import Drasil.Projectile.Goals (goals)
-import Drasil.Projectile.IMods (iMods)
+import Drasil.Projectile.IMods (iMods,iMods0)
 import Drasil.Projectile.References (citations)
 import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs)
 import Drasil.Projectile.Unitals
 
-import Theory.Drasil (getEqModQdsFromGd, TheoryModel)
+import Theory.Drasil (getEqModQdsFromGd, getEqModQdsFromIm, TheoryModel)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
@@ -122,7 +122,8 @@ si = SI {
   _purpose     = [],
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
-  _definitions = map (relToQD symbMap) iMods
+  _definitions = getEqModQdsFromIm iMods ++
+                 map (relToQD symbMap) iMods0
                  ++ getEqModQdsFromGd genDefns,
   _datadefs    = dataDefs,
   _configFiles = [],

@@ -18,20 +18,26 @@ import Text.PrettyPrint.HughesPJ (Doc, (<>), (<+>), brackets, comma, double,
   doubleQuotes, empty, hcat, hsep, integer, parens, punctuate, space, text, 
   vcat)
 
+-- | Data is either linear or not.
 data Linearity = Linear | Nonlinear
 
+-- | Simple printing configuration is scientific.
 plainConfiguration :: PrintingConfiguration
 plainConfiguration = PC Scientific
 
+-- | Create expressions for a document in 'Doc' format.
 exprDoc :: ChunkDB -> Stage -> Linearity -> L.Expr -> Doc
 exprDoc db st f e = pExprDoc f (expr e (PI db st plainConfiguration))
 
+-- | Create sentences for a document in 'Doc' format.
 sentenceDoc :: ChunkDB -> Stage -> Linearity -> Sentence -> Doc
 sentenceDoc db st f s = specDoc f (spec (PI db st plainConfiguration) s)
 
+-- | Create symbols for a document in 'Doc' format.
 symbolDoc :: Symbol -> Doc
 symbolDoc s = pExprDoc Linear (symbol s)
 
+-- | Helper for printing expressions in 'Doc' format. Display format of an expression may change regarding the 'Linearity'.
 pExprDoc :: Linearity -> Expr -> Doc
 pExprDoc _ (Dbl d) = double d
 pExprDoc _ (Int i) = integer i
@@ -53,6 +59,7 @@ pExprDoc f (Div n d) = parens (pExprDoc f n) <> text "/" <> parens (pExprDoc f d
 pExprDoc f (Sqrt e) = text "sqrt" <> parens (pExprDoc f e)
 pExprDoc _ (Spc Thin) = space
 
+-- | Helper for printing sentences ('Spec's) in 'Doc' format.
 specDoc :: Linearity -> Spec -> Doc
 specDoc f (E e) = pExprDoc f e
 specDoc _ (S s) = text s
@@ -64,6 +71,7 @@ specDoc f (Quote s) = doubleQuotes $ specDoc f s
 specDoc Nonlinear HARDNL = text "\n"
 specDoc Linear HARDNL = error "HARDNL encountered in attempt to format linearly"
 
+-- | Helper for printing units in 'Doc' format.
 unitDoc :: Linearity -> USymb -> Doc
 unitDoc f (US us) = formatu t b
   where
@@ -80,22 +88,26 @@ unitDoc f (US us) = formatu t b
   pow (x,1) = pExprDoc f $ symbol x
   pow (x,p) = pExprDoc f (symbol x) <> text "^" <> integer p
 
+-- | Helper for printing multicase expressions differently based on linearity.
 caseDoc :: Linearity -> [(Expr, Expr)] -> Doc
 caseDoc Linear cs = hsep $ punctuate comma $ map (\(e,c) -> pExprDoc Linear c
   <+> text "=>" <+> pExprDoc Linear e) cs
 caseDoc Nonlinear cs = vcat $ map (\(e,c) -> pExprDoc Nonlinear e <> comma <+> 
   pExprDoc Nonlinear c) cs
 
+-- | Helper for printing matrices.
 mtxDoc :: Linearity -> [[Expr]] -> Doc
 mtxDoc Linear rs = brackets $ hsep $ map (brackets . hsep . map (pExprDoc 
   Linear)) rs
 mtxDoc Nonlinear rs = brackets $ vcat $ map (hsep . map (pExprDoc Nonlinear)) rs
 
 -- TODO: Double check that this is valid in all output languages
+-- | Helper for printing special characters (for degrees and partial derivatives).
 specialDoc :: Special -> Doc
 specialDoc Circle  = text "degree"
 specialDoc Partial = text "partial"
 
+-- | Helper for printing operators.
 opsDoc :: Ops -> Doc
 opsDoc IsIn = text " is in "
 opsDoc Integer = text "integers"
@@ -141,12 +153,14 @@ opsDoc Prod = text "product "
 opsDoc Point = text "."
 opsDoc Perc = text "%"
 
+-- | Helper for printing the left side of some characters "(, {, \\|, |".
 fenceDocL :: Fence -> Doc
 fenceDocL Paren = text "("
 fenceDocL Curly = text "{"
 fenceDocL Norm = text "\\|"
 fenceDocL Abs = text "|"
 
+-- | Helper for printing the right side of some characters "), }, \\|, |".
 fenceDocR :: Fence -> Doc
 fenceDocR Paren = text ")"
 fenceDocR Curly = text "}"

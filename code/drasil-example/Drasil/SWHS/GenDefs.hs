@@ -2,7 +2,7 @@ module Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater,
   rocTempSimp, rocTempSimpDeriv, rocTempSimpRC) where
 
 import Language.Drasil
-import Theory.Drasil (GenDefn, gd, gdNoRefs, ModelKinds (OthModel, EquationalModel))
+import Theory.Drasil (GenDefn, gd, gdNoRefs, ModelKinds (DEModel, EquationalModel))
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -35,7 +35,7 @@ genDefs :: [GenDefn]
 genDefs = [rocTempSimp, htFluxWaterFromCoil, htFluxPCMFromWater] 
 
 rocTempSimp :: GenDefn
-rocTempSimp = gdNoRefs (OthModel rocTempSimpRC) (Nothing :: Maybe UnitDefn)
+rocTempSimp = gdNoRefs (DEModel rocTempSimpRC) (Nothing :: Maybe UnitDefn)
   (Just $ rocTempSimpDeriv rocTempDerivConsFlxSWHS
    [assumpCWTAT, assumpTPCAV, assumpDWPCoV, assumpSHECoV])
   "rocTempSimp" [{-Notes-}]

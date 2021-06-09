@@ -6,7 +6,7 @@ module Drasil.SSP.GenDefs (normForcEq, bsShrFEq, resShr, mobShr,
 
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil
-import Theory.Drasil (GenDefn, gd, ModelKinds (OthModel))
+import Theory.Drasil (GenDefn, gd, ModelKinds (OthModel, EquationalModel))
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.NounPhrase as NP
@@ -72,7 +72,7 @@ resShearWOGD = gd (OthModel resShearWO) (getUnit shearRNoIntsl) Nothing
   (map makeCite[chen2005, karchewski2012]) "resShearWO"  [resShearWODesc]
 mobShearWOGD = gd (OthModel mobShearWO) (getUnit shearFNoIntsl) Nothing
   (map makeCite[chen2005, karchewski2012]) "mobShearWO"  [mobShearWODesc]
-normShrRGD   = gd (OthModel normShrR)   (getUnit intShrForce)   Nothing
+normShrRGD   = gd (EquationalModel normShrR)   (getUnit intShrForce)   Nothing
   [makeCite chen2005]                      "normShrR"    [nmShrRDesc]
 momentEqlGD  = gd (OthModel momentEql)  (Just newton)           (Just momEqlDeriv)
   [makeCite chen2005]                      "momentEql"   [momEqlDesc]
@@ -193,10 +193,11 @@ effNormFDeriv = mkDerivNoHeader [foldlSent [
   S "are expressed per", phrase metre, S "in", phraseNP (the zDir)]]
 
 --
-normShrR :: RelationConcept
-normShrR = makeRC "normShrR"
-  (nounPhraseSP "interslice normal and shear force proportionality")
-  nmShrRDesc nmShrRRel -- genDef5Label
+--normShrR :: QDefinition 
+--normShrR = mkQuantDef nmShrRDesc nmShrRRel
+
+normShrR :: QDefinition 
+normShrR = mkQuantDef normToShear nmShrRRel
 
 nmShrRRel :: Relation
 nmShrRRel = sy intShrForce $= sy normToShear `mulRe` sy scalFunc `mulRe` sy intNormForce

@@ -112,3 +112,6 @@ ddCtrlNote
          S "form of the PD equation is",
          S "used in this document"]
 
+-- References --
+dataDefRefs :: [Reference]
+dataDefRefs = map rw dataDefinitions

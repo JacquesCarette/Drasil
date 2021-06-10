@@ -4,10 +4,9 @@ module Theory.Drasil.GenDefn (GenDefn,
 
 import Language.Drasil
 import Data.Drasil.TheoryConcepts (genDefn)
-import Theory.Drasil.ModelKinds (ModelKinds(..), elimMk, setMk, getEqModQds)
-import Theory.Drasil.MultiDefn (MultiDefn)
+import Theory.Drasil.ModelKinds (ModelKinds(..), getEqModQds)
 
-import Control.Lens (makeLenses, view, lens, (^.), set, Lens')
+import Control.Lens ((^.), view, makeLenses)
 
 -- | A general definition is a 'ModelKind' that may have units, a derivation,
 -- references, a shortname, a reference address, and notes.
@@ -22,22 +21,14 @@ data GenDefn = GD { _gUid  :: UID
                   }
 makeLenses ''GenDefn
 
--- | Make 'Lens' for a 'GenDefn' based on its 'ModelKinds'.
-lensMk :: forall a. Lens' QDefinition a -> Lens' MultiDefn a -> Lens' RelationConcept a -> Lens' GenDefn a
-lensMk lq lqd lr = lens g s
-    where g :: GenDefn -> a
-          g gd_ = elimMk lq lqd lr (gd_ ^. mk)
-          s :: GenDefn -> a -> GenDefn
-          s gd_ x = set mk (setMk (gd_ ^. mk) lq lqd lr x) gd_
-
 -- | Finds the 'UID' of a 'GenDefn'.
 instance HasUID             GenDefn where uid           = gUid
 -- | Finds the term ('NP') of the 'GenDefn'.
-instance NamedIdea          GenDefn where term          = lensMk term term term
+instance NamedIdea          GenDefn where term          = mk . term
 -- | Finds the idea contained in the 'GenDefn'.
 instance Idea               GenDefn where getA          = getA . (^. mk)
 -- | Finds the definition of the 'GenDefn'.
-instance Definition         GenDefn where defn          = lensMk defn defn defn
+instance Definition         GenDefn where defn          = mk . defn
 -- | Finds the domain of the 'GenDefn'.
 instance ConceptDomain      GenDefn where cdom          = cdom . (^. mk)
 -- | Finds the relation expression for a 'GenDefn'.

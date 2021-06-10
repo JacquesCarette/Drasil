@@ -2,6 +2,8 @@
 module Theory.Drasil (
   -- Classes
     HasInputs(..), HasOutput(..)
+  -- ConstraintSet
+  , ConstraintSet, mkConstraintSet
   -- DataDefinition
   , DataDefinition, dd, ddNoRefs, qdFromDD
   -- GenDefn
@@ -24,6 +26,7 @@ module Theory.Drasil (
 ) where
 
 import Theory.Drasil.Classes (HasInputs(..), HasOutput(..))
+import Theory.Drasil.ConstraintSet
 import Theory.Drasil.DataDefinition (DataDefinition, dd, ddNoRefs, qdFromDD)
 import Theory.Drasil.GenDefn
 import Theory.Drasil.ModelKinds

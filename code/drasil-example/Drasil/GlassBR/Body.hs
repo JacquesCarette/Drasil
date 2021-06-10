@@ -8,7 +8,7 @@ import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
   _datadefs, _definitions, _configFiles, _defSequence, _inputs, _kind, 
   _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
-import Theory.Drasil (Theory(defined_fun, defined_quant), getEqModQdsFromIm)
+import Theory.Drasil (getEqModQdsFromIm)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S

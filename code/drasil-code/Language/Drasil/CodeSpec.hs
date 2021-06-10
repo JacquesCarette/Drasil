@@ -121,8 +121,8 @@ convertRel _ _ = error "Conversion failed"
 -- function.
 asVC :: Func -> QuantityDict
 asVC (FDef (FuncDef n _ _ _ _ _)) = implVar n (nounPhraseSP n) Real (Variable n)
-asVC (FDef (CtorDef n _ _ _ _)) = implVar n (nounPhraseSP n) Real (Variable n)
-asVC (FData (FuncData n _ _)) = implVar n (nounPhraseSP n) Real (Variable n)
+asVC (FDef (CtorDef n _ _ _ _))   = implVar n (nounPhraseSP n) Real (Variable n)
+asVC (FData (FuncData n _ _))     = implVar n (nounPhraseSP n) Real (Variable n)
 
 -- | Get a UID of a chunk corresponding to a Func
 funcUID :: Func -> UID
@@ -135,8 +135,8 @@ funcUID' f = asVC' f ^. uid
 -- | FIXME: Part of above hack
 asVC' :: Func -> QuantityDict
 asVC' (FDef (FuncDef n _ _ _ _ _)) = vc n (nounPhraseSP n) (Variable n) Real
-asVC' (FDef (CtorDef n _ _ _ _)) = vc n (nounPhraseSP n) (Variable n) Real
-asVC' (FData (FuncData n _ _)) = vc n (nounPhraseSP n) (Variable n) Real
+asVC' (FDef (CtorDef n _ _ _ _))   = vc n (nounPhraseSP n) (Variable n) Real
+asVC' (FData (FuncData n _ _))     = vc n (nounPhraseSP n) (Variable n) Real
 
 -- Determines the derived inputs, which can be immediately calculated from the 
 -- knowns (inputs and constants). If there are DDs, the derived inputs will 

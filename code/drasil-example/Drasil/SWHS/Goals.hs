@@ -1,5 +1,5 @@
 module Drasil.SWHS.Goals (goals, waterTempGS, pcmTempGS, waterEnergyGS, 
-  pcmEnergyGS) where
+  pcmEnergyGS, goalRefs) where
 
 import Language.Drasil
 import Utils.Drasil
@@ -31,3 +31,7 @@ pcmEnergyGS = cic "pcmEnergyGS" (goalState pcmE) "Predict-PCM-Energy"
 goalState :: NamedIdea varTerm => varTerm -> Sentence
 goalState varTerm = foldlSent [S "Predict the", phrase varTerm,
   S "over", phrase time]
+
+-- References --
+goalRefs :: [Reference]
+goalRefs = map rw goals

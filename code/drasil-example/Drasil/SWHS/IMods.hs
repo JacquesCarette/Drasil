@@ -1,5 +1,5 @@
 module Drasil.SWHS.IMods (iMods, eBalanceOnWtr, eBalanceOnWtrDerivDesc1,
-  eBalanceOnWtrDerivDesc3, eBalanceOnPCM, heatEInWtr, heatEInPCM, instModIntro) where
+  eBalanceOnWtrDerivDesc3, eBalanceOnPCM, heatEInWtr, heatEInPCM, instModIntro, iModRefs) where
 
 import Language.Drasil
 import Theory.Drasil (InstanceModel, im, imNoDeriv, qwUC, qwC, ModelKinds (DEModel, OthModel))
@@ -411,3 +411,7 @@ instModIntro = foldlSent [atStartNP' (the goal), foldlList Comma List
   S "has been solved", atStartNP' (the solution) `S.of_` makeRef2S eBalanceOnPCM `S.and_`
   makeRef2S heatEInPCM `S.are` S "also coupled" `sC` S "since the",
   phrase tempPCM `S.andThe` phrase pcmE,S "depend on the", phrase phaseChange]
+
+-- References --
+iModRefs :: [Reference]
+iModRefs = rw waterTempGS :map rw iMods

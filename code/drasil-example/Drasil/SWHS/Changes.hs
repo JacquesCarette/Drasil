@@ -1,4 +1,5 @@
-module Drasil.SWHS.Changes (likelyChgs, likeChgTCVOD, likeChgTCVOL, likeChgTLH, unlikelyChgs) where
+module Drasil.SWHS.Changes (likelyChgs, likeChgTCVOD, likeChgTCVOL,
+  likeChgTLH, unlikelyChgs, chgRefs) where
 
 import Language.Drasil
 import Utils.Drasil
@@ -86,4 +87,4 @@ unlikeChgNGS = cic "unlikeChgNGS" (
 -- References --
 chgRefs :: [Reference]
 chgRefs = map rw (likelyChgs ++ unlikelyChgs)
-  ++ map rw [heatEInPCM, eBalanceOnPCM, eBalanceOnWtr, assumpWAL]
+  ++ map rw [heatEInPCM, eBalanceOnPCM, eBalanceOnWtr]

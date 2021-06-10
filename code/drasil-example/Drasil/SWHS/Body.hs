@@ -1,6 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.SWHS.Body where
 
+import Data.List (nub)
 import Language.Drasil hiding (Symbol(..), organization, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB,
@@ -25,7 +26,7 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocSection (..),
   ProblemDescription(PDProg), PDSub(..), intro, mkDoc, tsymb'', traceMatStandard, purpDoc,
   getTraceConfigUID, reqInputsUID, symbTableRef, unitTableRef, tableAbbAccUID, tableOfConstants,
   inDataConstTbl, outDataConstTbl)
-import qualified Drasil.DocLang.SRS as SRS (inModel, reference, assumpt, sysCon, referenceSections)
+import qualified Drasil.DocLang.SRS as SRS (inModel, reference, assumpt, sysCon, sectionReferences)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.TheoryConcepts as Doc (inModel)
@@ -53,19 +54,19 @@ import Data.Drasil.People (brooks, spencerSmith, thulasi)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived, m_2, m_3)
 
-import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
-import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
+import Drasil.SWHS.Assumptions (assumpPIS, assumptions, assumpRefs)
+import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs, chgRefs)
 import Drasil.SWHS.Concepts (acronymsFull, coil, con, phaseChangeMaterial,
   phsChgMtrl, progName, sWHT, swhsPCM, tank, tankPCM, transient, water)
-import Drasil.SWHS.DataDefs (qDefs)
+import Drasil.SWHS.DataDefs (qDefs, dataDefRefs)
 import qualified Drasil.SWHS.DataDefs as SWHS (dataDefs)
-import Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater)
-import Drasil.SWHS.Goals (goals)
+import Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater, genDefRefs)
+import Drasil.SWHS.Goals (goals, goalRefs)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
-  iMods, instModIntro)
-import Drasil.SWHS.References (citations, koothoor2013, smithLai2005)
-import Drasil.SWHS.Requirements (funcReqs, inReqDesc, nfRequirements, verifyEnergyOutput)
-import Drasil.SWHS.TMods (tMods)
+  iMods, instModIntro, iModRefs)
+import Drasil.SWHS.References (citations, koothoor2013, smithLai2005, citeRefs)
+import Drasil.SWHS.Requirements (funcReqs, inReqDesc, nfRequirements, verifyEnergyOutput, reqRefs)
+import Drasil.SWHS.TMods (tMods, tModRefs)
 import Drasil.SWHS.Unitals (absTol, coilHTC, coilSA, consTol, constrained,
   htFluxC, htFluxP, inputs, inputConstraints, outputs, pcmE, pcmHTC, pcmSA,
   relTol, simTime, specParamValList, symbols, symbolsAll, tempC, tempPCM,
@@ -117,7 +118,7 @@ symbMap = cdb (qw heatEInPCM : symbolsAll) -- heatEInPCM ?
   ++ map nw fundamentals ++ map nw educon ++ map nw derived ++ map nw physicalcon ++ map nw unitalChuncks
   ++ [nw swhsPCM, nw algorithm] ++ map nw compcon ++ [nw materialProprty])
   (cw heatEInPCM : map cw symbols ++ srsDomains) -- FIXME: heatEInPCM?
-  (units ++ [m_2, m_3]) SWHS.dataDefs insModel genDefs tMods concIns section [] ([] :: [Reference])
+  (units ++ [m_2, m_3]) SWHS.dataDefs insModel genDefs tMods concIns section [] allRefs
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronymsFull)
@@ -607,9 +608,8 @@ propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)"
 -- Section 9 : References --
 ----------------------------
 bodyRefs :: [Reference]
-bodyRefs = []
-  --map rw [sysCtxFig, demandVsSDFig, dimlessloadVsARFig]
-  -- ++ map rw concIns ++ map rw section ++ map rw labCon
+bodyRefs = [rw sysCntxtFig, rw figTank]
+  ++ map rw concIns ++ map rw section
 
 -- below are references used in all examples
 srsRefs :: [Reference]
@@ -623,8 +623,8 @@ tabRefs = [symbTableRef, unitTableRef] ++ map (rw.makeTabRef) [fst tableAbbAccUI
   outDataConstTbl ([]::[ConstrainedChunk])]
 
 secRefs :: [Reference]
-secRefs = rw $ (uncurry makeSecRef) tableAbbAccUID: map rw SRS.sectionReferences
+secRefs = rw ((uncurry makeSecRef) tableAbbAccUID): map rw SRS.sectionReferences
 
 allRefs :: [Reference]
-allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ goalRefs ++ dataDefRefs
-  ++ iModRefs ++ citeRefs ++ reqRefs ++ secRefs ++ tabRefs ++ srsRefs)
+allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ goalRefs ++ dataDefRefs ++ genDefRefs
+  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs ++ tabRefs ++ srsRefs)

@@ -2,8 +2,9 @@
 module Drasil.SSP.GenDefs (normForcEq, bsShrFEq, resShr, mobShr,
   normShrR, momentEql, generalDefinitions,
   normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, normShrRGD, momentEqlGD,
-  mobShearWOGD, resShearWOGD, srfWtrFGD) where
+  mobShearWOGD, resShearWOGD, srfWtrFGD, genDefRefs) where
 
+import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil
 import Theory.Drasil (GenDefn, gd, ModelKinds (OthModel))
@@ -746,3 +747,7 @@ srfWtrFDerivHeightEqn = oneHalf `mulRe` ((inxi waterHght $- inxi slopeHght) `add
 
 srfWtrFDerivSliceEqn = inxi surfHydroForce $= inxi surfLngth `mulRe` sy waterWeight `mulRe`
   srfWtrFDerivHeightEqn
+
+-- References --
+genDefRefs :: [Reference]
+genDefRefs = map rw generalDefinitions ++ concatMap (^. getReferences) generalDefinitions 

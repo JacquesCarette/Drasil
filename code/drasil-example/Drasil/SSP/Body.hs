@@ -1,6 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.SSP.Body (srs, si, symbMap, printSetting) where
 
+import Data.List (nub)
 import Language.Drasil hiding (Symbol(..), Verb, number, organization, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
@@ -21,10 +22,12 @@ import Drasil.DocLang (DocSection(..), IntroSec(..), IntroSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
   SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
   ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
-  PDSub(..), intro, mkDoc, tsymb'', traceMatStandard, purpDoc)
+  PDSub(..), intro, mkDoc, tsymb'', traceMatStandard, purpDoc, getTraceConfigUID,
+  reqInputsUID, symbTableRef, unitTableRef, tableAbbAccUID, tableOfConstants,
+  inDataConstTbl, outDataConstTbl)
 
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
-  genDefn, dataDefn, datCon)
+  genDefn, dataDefn, datCon, reference, sysCon, sectionReferences)
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   constant, constraint, document, effect, endUser, environment,
@@ -51,19 +54,20 @@ import Data.Drasil.People (brooks, henryFrankis)
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, derived, fundamentals)
 
-import Drasil.SSP.Assumptions (assumptions)
-import Drasil.SSP.Changes (likelyChgs, unlikelyChgs)
-import qualified Drasil.SSP.DataDefs as SSP (dataDefs)
+import Drasil.SSP.Assumptions (assumptions, assumpRefs)
+import Drasil.SSP.Changes (likelyChgs, unlikelyChgs, chgRefs)
+import qualified Drasil.SSP.DataDefs as SSP (dataDefs, dataDefRefs)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, defs, defs', effFandS, factor, fsConcept,
   intrslce, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope, slpSrf, soil,
   soilLyr, soilMechanics, soilPrpty, ssa, ssp, stabAnalysis, waterTable)
-import Drasil.SSP.GenDefs (generalDefinitions)
-import Drasil.SSP.Goals (goals)
-import Drasil.SSP.IMods (instModIntro)
+import Drasil.SSP.Figures (figRefs)
+import Drasil.SSP.GenDefs (generalDefinitions, genDefRefs)
+import Drasil.SSP.Goals (goals, goalRefs)
+import Drasil.SSP.IMods (instModIntro, iModRefs)
 import qualified Drasil.SSP.IMods as SSP (iMods)
-import Drasil.SSP.References (citations, morgenstern1965)
-import Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs)
-import Drasil.SSP.TMods (tMods)
+import Drasil.SSP.References (citations, morgenstern1965, citeRefs)
+import Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs, reqRefs)
+import Drasil.SSP.TMods (tMods, tModRefs)
 import Drasil.SSP.Unitals (constrained, effCohesion, fricAngle, fs, index,
   inputs, inputsWUncrtn, outputs, symbols)
 
@@ -167,7 +171,7 @@ symbMap = cdb (map qw SSP.iMods ++ map qw symbols) (map nw symbols
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
   ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw units)
   (map cw SSP.iMods ++ map cw symbols ++ srsDomains) units SSP.dataDefs SSP.iMods
-  generalDefinitions tMods concIns section labCon ([] :: [Reference])
+  generalDefinitions tMods concIns section labCon allRefs
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronyms)
@@ -443,4 +447,23 @@ slopeVert = verticesConst $ phrase slope
 -- Table of aux consts is automatically generated
 
 -- References --
--- automatically generated
+bodyRefs :: [Reference]
+bodyRefs = rw sysCtxFig1: map rw concIns ++ map rw section ++ map rw labCon
+
+-- below are references used in all examples
+srsRefs :: [Reference]
+srsRefs = map rw [SRS.reference ([]::[Contents]) ([]::[Section]), 
+    SRS.assumpt ([]::[Contents]) ([]::[Section]), SRS.sysCon [] []]
+
+tabRefs :: [Reference]
+tabRefs = [symbTableRef, unitTableRef] ++ map (rw.makeTabRef) [fst tableAbbAccUID, reqInputsUID] 
+  ++ map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+  ++ map rw [tableOfConstants [], inDataConstTbl ([]::[UncertainChunk]),
+  outDataConstTbl ([]::[ConstrainedChunk])]
+
+secRefs :: [Reference]
+secRefs = rw ((uncurry makeSecRef) tableAbbAccUID): map rw SRS.sectionReferences
+
+allRefs :: [Reference]
+allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ goalRefs ++ SSP.dataDefRefs ++ genDefRefs
+  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs ++ tabRefs ++ srsRefs)

@@ -12,3 +12,7 @@ figForceActing = llcc (makeFigRef "ForceDiagram") $
 
 resourcePath :: String
 resourcePath = "../../../datafiles/SSP/"
+
+-- References --
+figRefs :: [Reference]
+figRefs = [rw figForceActing]

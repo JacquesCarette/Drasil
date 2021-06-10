@@ -1,5 +1,5 @@
 module Drasil.SSP.Goals (goals, identifyCritAndFSGS, determineNormalFGS,
-  determineShearFGS) where
+  determineShearFGS, goalRefs) where
 
 import Language.Drasil
 import Utils.Drasil.Concepts
@@ -37,3 +37,7 @@ determineF :: (NamedIdea a) => a -> Sentence
 determineF what = S "Determine the" +:+ phrase what +:+
   S "between each pair of vertical" +:+. pluralNP (slice `ofThePS`
   slope)
+
+-- References --
+goalRefs :: [Reference]
+goalRefs = map rw goals

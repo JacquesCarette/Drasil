@@ -1,5 +1,5 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.SSP.TMods (tMods, factOfSafety, equilibrium, mcShrStrgth, effStress) 
+module Drasil.SSP.TMods (tMods, factOfSafety, equilibrium, mcShrStrgth, effStress, tModRefs) 
   where
 
 import Control.Lens ((^.))
@@ -115,3 +115,7 @@ effStressExpr = sy totNormStress $- sy porePressure
 
 effStressDesc :: Sentence
 effStressDesc = (totNormStress `definedIn'''` normStressDD !.)
+
+-- References --
+tModRefs :: [Reference]
+tModRefs = map rw tMods

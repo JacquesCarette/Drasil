@@ -26,7 +26,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   reqInputsUID, symbTableRef, unitTableRef, tableAbbAccUID, tableOfConstants,
   inDataConstTbl, outDataConstTbl)
 
-import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel, sysCon, tOfSymbLabel)
+import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel, sysCon, sectionReferences)
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum, compcon, algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (appendix, aspect,
@@ -402,7 +402,7 @@ tabRefs = [symbTableRef, unitTableRef] ++ map (rw.makeTabRef) [fst tableAbbAccUI
   outDataConstTbl ([]::[ConstrainedChunk])]
 
 secRefs :: [Reference]
-secRefs = [SRS.tOfSymbLabel, rw $ (uncurry makeSecRef) tableAbbAccUID]
+secRefs = rw ((uncurry makeSecRef) tableAbbAccUID): map rw SRS.sectionReferences
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ goalRefs ++ dataDefRefs

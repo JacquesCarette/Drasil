@@ -1,4 +1,4 @@
-module Drasil.SSP.Changes (likelyChgs, unlikelyChgs) where
+module Drasil.SSP.Changes (likelyChgs, unlikelyChgs, chgRefs) where
 
 -- A list of likely and unlikely changes for the SSP example
 
@@ -66,3 +66,7 @@ uc2AODesc = foldlSent [makeRef2S assumpENSL, S "allows for", short twoD,
   S "These", plural model, S "do not take into account", phraseNP (stress 
   `inThe` zDir) `sC` S "and therefore cannot be used",
   S "without manipulation to attempt", phraseNP (combineNINI threeD analysis)]
+
+-- References --
+chgRefs :: [Reference]
+chgRefs = map rw (likelyChgs ++ unlikelyChgs)

@@ -76,4 +76,4 @@ probBRRef = definedIn probOfBreak
 
 -- References -- 
 iModRefs :: [Reference]
-iModRefs = rw willBreakGS: map rw [pbIsSafe, lrIsSafe]
+iModRefs = rw willBreakGS: map rw iMods

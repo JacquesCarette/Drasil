@@ -1,5 +1,5 @@
 {-# LANGUAGE PostfixOperators#-}
-module Drasil.DblPendulum.Goals (goals, goalsInputs) where
+module Drasil.DblPendulum.Goals (goals, goalsInputs, goalRefs) where
 
 import Language.Drasil
 import Utils.Drasil.Concepts
@@ -26,4 +26,6 @@ motionMass = cic "motionMass"
   (S "Calculate" +:+ phraseNP (motion `the_ofThe` CPP.mass) !.)
   "Motion-of-the-mass" goalStmtDom
 
-
+-- References --
+goalRefs :: [Reference]
+goalRefs = map rw goals

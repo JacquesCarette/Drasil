@@ -1,7 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.DblPendulum.GenDefs (genDefns, velocityIXGD, velocityIYGD,
          accelerationIXGD, accelerationIYGD, hForceOnPendulumGD, vForceOnPendulumGD,
-         angFrequencyGD, periodPend) where
+         angFrequencyGD, periodPend, genDefRefs) where
 
 import Prelude hiding (cos, sin, sqrt)
 import Language.Drasil
@@ -302,3 +302,6 @@ periodPendNotes :: Sentence
 periodPendNotes = atStartNP (NP.the (frequency `and_` period)) +:+ S "are defined in" +:+ makeRef2S frequencyDD +:+
         makeRef2S periodSHMDD +:+ S "respectively"
 
+-- References --
+genDefRefs :: [Reference]
+genDefRefs = map rw genDefns

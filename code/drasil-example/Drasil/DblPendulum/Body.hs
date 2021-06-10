@@ -1,6 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.DblPendulum.Body where
 
+import Data.List (nub)
 import Language.Drasil hiding (Symbol(..), Vector)
 import Theory.Drasil (TheoryModel)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
@@ -12,6 +13,7 @@ import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.NounPhrase as NP
 import qualified Utils.Drasil.Sentence as S
+
 import Data.Drasil.People (olu)
 import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian, hertz)
 import Data.Drasil.Concepts.Software (program, errMsg)
@@ -31,19 +33,24 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl,
   SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
   TConvention(..), TSIntro(..), TraceabilitySec(TraceabilityProg),
-  Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb)
-import Drasil.DblPendulum.Figures (figMotion)
+  Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, getTraceConfigUID,
+  reqInputsUID, symbTableRef, unitTableRef, tableAbbAccUID, tableOfConstants,
+  inDataConstTbl, outDataConstTbl)
+import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, sysCon, sectionReferences,
+  propCorSol, probDesc)
+
+import Drasil.DblPendulum.Figures (figMotion, figRefs)
 import Data.Drasil.Concepts.Math (mathcon, cartesian)
 import Data.Drasil.Quantities.Math (unitVect, unitVectj)
-import Drasil.DblPendulum.Assumptions (assumptions)
+import Drasil.DblPendulum.Assumptions (assumptions, assumpRefs)
 import Drasil.DblPendulum.Concepts (rod, concepts, pendMotion)
-import Drasil.DblPendulum.Goals (goals, goalsInputs)
-import Drasil.DblPendulum.DataDefs (dataDefs)
-import Drasil.DblPendulum.IMods (iMods)
-import Drasil.DblPendulum.GenDefs (genDefns)
+import Drasil.DblPendulum.Goals (goals, goalsInputs, goalRefs)
+import Drasil.DblPendulum.DataDefs (dataDefs, dataDefRefs)
+import Drasil.DblPendulum.IMods (iMods, iModRefs)
+import Drasil.DblPendulum.GenDefs (genDefns, genDefRefs)
 import Drasil.DblPendulum.Unitals (symbols, inputs, outputs,
   inConstraints, outConstraints, acronyms)
-import Drasil.DblPendulum.Requirements (funcReqs, nonFuncReqs)
+import Drasil.DblPendulum.Requirements (funcReqs, nonFuncReqs, reqRefs)
 import Data.Drasil.Citations (cartesianWiki, accelerationWiki, velocityWiki)
 import Drasil.Projectile.References (hibbeler2004)
 
@@ -135,7 +142,7 @@ symbMap = cdb (map qw iMods ++ map qw symbols)
    map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon  ++ map nw physicCon' ++
    map nw physicscon ++ concepts ++ map nw physicalcon ++ map nw acronyms ++ map nw symbols ++ map nw [metre, hertz])
   (map cw iMods ++ srsDomains) (map unitWrapper [metre, second, newton, kilogram, degree, radian, hertz]) dataDefs
-  iMods genDefns tMods concIns [] [] ([] :: [Reference])
+  iMods genDefns tMods concIns [] [] allRefs
 
 
 usedDB :: ChunkDB
@@ -181,6 +188,31 @@ tMods = [accelerationTM, velocityTM, newtonSL, newtonSLR]
 physSystParts :: [Sentence]
 physSystParts = map ((!.) . atStartNP) [the rod, the mass]
 
+-- References --
+citeRefs :: [Reference]
+citeRefs = map rw citations
 
- 
+tModRefs :: [Reference]
+tModRefs = map rw tMods
 
+bodyRefs :: [Reference]
+bodyRefs = map rw concIns
+
+-- below are references used in all examples
+srsRefs :: [Reference]
+srsRefs = map rw [SRS.reference ([]::[Contents]) ([]::[Section]), 
+    SRS.assumpt ([]::[Contents]) ([]::[Section]), SRS.sysCon [] [],
+    SRS.propCorSol [] [], SRS.probDesc [] []]
+
+tabRefs :: [Reference]
+tabRefs = [symbTableRef, unitTableRef] ++ map (rw.makeTabRef) [fst tableAbbAccUID, reqInputsUID] 
+  ++ map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+  ++ map rw [tableOfConstants [], inDataConstTbl ([]::[UncertainChunk]),
+  outDataConstTbl ([]::[ConstrainedChunk])]
+
+secRefs :: [Reference]
+secRefs = rw ((uncurry makeSecRef) tableAbbAccUID): map rw SRS.sectionReferences
+
+allRefs :: [Reference]
+allRefs = nub (assumpRefs ++ bodyRefs ++ figRefs ++ goalRefs ++ dataDefRefs ++ genDefRefs
+  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs ++ tabRefs ++ srsRefs)

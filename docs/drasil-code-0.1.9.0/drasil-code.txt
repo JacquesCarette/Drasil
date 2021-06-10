@@ -133,7 +133,6 @@ asVC' :: Func -> QuantityDict
 -- | Defines a CodeSpec based on the SystemInformation, Choices, and Mods
 --   defined by the user.
 codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
-relToQD :: ExprRelat c => ChunkDB -> c -> QDefinition
 
 -- | Define an assignment statement
 ($:=) :: (Quantity c, MayHaveUnit c) => c -> Expr -> FuncStmt

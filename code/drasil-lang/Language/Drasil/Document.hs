@@ -4,7 +4,7 @@ module Language.Drasil.Document where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname), getRefAdd, HasRefAddress(getRefAdd), Referable(refAdd, renderRef))
 import Language.Drasil.Document.Core
-import Language.Drasil.Label.Type (prepend, LblType(RP, URI),raw, (+::+), name)
+import Language.Drasil.Label.Type (prepend, LblType(RP, URI))
 import Language.Drasil.Misc (repUnd)
 import Language.Drasil.RefProg (Reference(Reference), RefInfo(None))
 import Language.Drasil.Sentence (Sentence(..))

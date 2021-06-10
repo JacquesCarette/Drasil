@@ -79,6 +79,10 @@ si = SI {
   _purpose     = purpDoc glassBR Verbose,
   _quants      = symbolsForTable,
   _concepts    = [] :: [DefinedQuantityDict],
+<<<<<<< HEAD
+=======
+  _definitions = getEqModQdsFromIm iMods,
+>>>>>>> e46cb78133711e84913790cb4c97b675cb580571
   _datadefs    = GB.dataDefs,
   _configFiles = configFp,
   _inputs      = inputs,

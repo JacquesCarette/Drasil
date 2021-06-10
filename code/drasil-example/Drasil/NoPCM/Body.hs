@@ -4,7 +4,7 @@ import Language.Drasil hiding (Symbol(..), section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts,
-  _constants, _constraints, _datadefs, _configFiles, _definitions, _defSequence,
+  _constants, _constraints, _datadefs, _configFiles, _defSequence,
   _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (TheoryModel)
 import Utils.Drasil
@@ -192,7 +192,6 @@ si = SI {
   -- tau does not appear in the document and thus should not be displayed.
   _quants = (map qw unconstrained ++ map qw symbolsAll) \\ [qw tau],
   _concepts = symbols,
-  _definitions = [],
   _datadefs = NoPCM.dataDefs,
   _configFiles = [],
   _inputs = inputs ++ [qw watE], --inputs ++ outputs?

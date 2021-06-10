@@ -5,12 +5,12 @@ module Language.Drasil.CodeSpec where
 import Language.Drasil
 import Database.Drasil (ChunkDB, SystemInformation(SI), symbResolve,
   _authors, _constants, _constraints, _datadefs, _configFiles,
-  _definitions, _inputs, _outputs, _sys, _sysinfodb)
+  _inputs, _outputs, _sys, _sysinfodb)
 import Language.Drasil.Development (namesRI, EqBinOp(Eq))
 import Theory.Drasil (DataDefinition, qdFromDD)
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeIdea(codeChunk),
-  ConstraintMap, programName, quantvar, codevars, codevars', 
+  ConstraintMap, programName, quantvar, codevars, codevars',
   varResolve, constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef,
   auxExprs, codeEquat)
@@ -35,7 +35,7 @@ data CodeSpec where
   -- Program name
   pName :: Name,
   -- Authors
-  authors :: [a], 
+  authors :: [a],
   -- All inputs
   inputs :: [Input],
   -- Explicit inputs (values to be supplied by a file)
@@ -73,21 +73,19 @@ assocToMap = Map.fromList . map (\x -> (x ^. uid, x))
 codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
 codeSpec SI {_sys = sys
               , _authors = as
-              , _definitions = defs'
               , _datadefs = ddefs
               , _configFiles = cfp
               , _inputs = ins
               , _outputs = outs
               , _constraints = cs
               , _constants = cnsts
-              , _sysinfodb = db} chs ms = 
+              , _sysinfodb = db} chs ms =
   let n = programName sys
       inputs' = map quantvar ins
-      const' = map qtov (filter ((`Map.notMember` conceptMatch chs) . (^. uid)) 
+      const' = map qtov (filter ((`Map.notMember` conceptMatch chs) . (^. uid))
         cnsts)
-      derived = getDerivedInputs ddefs defs' inputs' const' db
-      rels = map qtoc ((defs' ++ map qdFromDD ddefs) \\ derived) 
-        ++ map odeDef (odes chs)
+      derived = getDerivedInputs ddefs inputs' const' db
+      rels = map qtoc (map qdFromDD ddefs \\ derived) ++ map odeDef (odes chs)
       outs' = map quantvar outs
       allInputs = nub $ inputs' ++ map quantvar derived
       exOrder = getExecOrder rels (allInputs ++ map quantvar cnsts) outs' db
@@ -139,16 +137,15 @@ asVC' :: Func -> QuantityDict
 asVC' (FDef (FuncDef n _ _ _ _ _)) = vc n (nounPhraseSP n) (Variable n) Real
 asVC' (FDef (CtorDef n _ _ _ _)) = vc n (nounPhraseSP n) (Variable n) Real
 asVC' (FData (FuncData n _ _)) = vc n (nounPhraseSP n) (Variable n) Real
-        
+
 -- Determines the derived inputs, which can be immediately calculated from the 
 -- knowns (inputs and constants). If there are DDs, the derived inputs will 
 -- come from those. If there are none, then the QDefinitions are used instead.
-getDerivedInputs :: [DataDefinition] -> [QDefinition] -> [Input] -> [Const] ->
+getDerivedInputs :: [DataDefinition] -> [Input] -> [Const] ->
   ChunkDB -> [QDefinition]
-getDerivedInputs ddefs defs' ins cnsts sm =
-  let refSet = ins ++ map quantvar cnsts
-  in  if null ddefs then filter ((`subsetOf` refSet) . flip codevars sm . (^.equat)) defs'
-      else filter ((`subsetOf` refSet) . flip codevars sm . (^.defnExpr)) (map qdFromDD ddefs)
+getDerivedInputs ddefs ins cnsts sm =
+  filter ((`subsetOf` refSet) . flip codevars sm . (^. defnExpr)) (map qdFromDD ddefs)
+  where refSet = ins ++ map quantvar cnsts
 
 type Known = CodeVarChunk
 type Need  = CodeVarChunk
@@ -158,18 +155,18 @@ type Need  = CodeVarChunk
 getExecOrder :: [Def] -> [Known] -> [Need] -> ChunkDB -> [Def]
 getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
   where getExecOrder' ord _ _ []   = ord
-        getExecOrder' ord defs' k n = 
+        getExecOrder' ord defs' k n =
           let new  = filter (\def -> (`subsetOf` k) (concatMap (`codevars'` sm)
                 (codeEquat def : def ^. auxExprs) \\ [quantvar def])) defs'
               cnew = map quantvar new
               kNew = k ++ cnew
               nNew = n \\ cnew
-          in  if null new 
+          in  if null new
               then error ("The following outputs cannot be computed: " ++
                        intercalate ", " (map (^. uid) n) ++ "\n"
-                     ++ "Unused definitions are: " 
+                     ++ "Unused definitions are: "
                        ++ intercalate ", " (map (^. uid) defs') ++ "\n"
-                     ++ "Known values are: " 
+                     ++ "Known values are: "
                        ++ intercalate ", " (map (^. uid) k))
               else getExecOrder' (ord ++ new) (defs' \\ new) kNew nNew
 
@@ -184,6 +181,6 @@ getConstraints cm cs = concat $ mapMaybe (\c -> Map.lookup (c ^. uid) cm) cs
 
 -- | Get a list of CodeChunks from a constraint
 constraintvars :: Constraint -> ChunkDB -> [CodeChunk]
-constraintvars (Range _ ri) m = map (codeChunk . varResolve m) $ nub $ 
+constraintvars (Range _ ri) m = map (codeChunk . varResolve m) $ nub $
   namesRI ri
 constraintvars _ _ = []

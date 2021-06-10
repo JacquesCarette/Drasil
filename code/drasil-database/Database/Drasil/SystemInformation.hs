@@ -30,7 +30,6 @@ data SystemInformation where
   , _purpose :: d
   , _quants :: [e]
   , _concepts :: [f]
-  , _definitions :: [QDefinition] --FIXME: will be removed upon migration to use of [DataDefinition] below
   , _datadefs :: [DataDefinition]
   , _configFiles :: [String]
   , _inputs :: [h]

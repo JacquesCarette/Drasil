@@ -80,9 +80,7 @@ si = SI {
   _purpose     = purpDoc glassBR Verbose,
   _quants      = symbolsForTable,
   _concepts    = [] :: [DefinedQuantityDict],
-  _definitions = getEqModQdsFromIm iMods ++ 
-                 concatMap (^. defined_quant) tMods ++
-                 concatMap (^. defined_fun) tMods,
+  _definitions = getEqModQdsFromIm iMods,
   _datadefs    = GB.dataDefs,
   _configFiles = configFp,
   _inputs      = inputs,

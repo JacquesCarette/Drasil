@@ -34,7 +34,7 @@ instance HasShortName  Section where shortname = shortname . view lab
 -- | Finds the reference address of a 'Section'.
 instance Referable Section where
   refAdd    (Section _ _ lb ) = getRefAdd lb
-  renderRef (Section _ _ lb)  = RP (raw "Section: " +::+ name) (getRefAdd lb)
+  renderRef (Section _ _ lb)  = RP (prepend "Sec") (getRefAdd lb)
 -- | Finds the reference address of a 'Section'.
 instance HasRefAddress Section where getRefAdd = getRefAdd . (view lab)
 
@@ -107,7 +107,7 @@ makeFigRef rs = Reference rs (RP (prepend "Fig") ("Figure:" ++ repUnd rs)) (shor
 
 -- | Create a reference for a section. Takes in the name of a section and a shortname for the section.
 makeSecRef :: String -> String -> Reference
-makeSecRef r s = Reference (r ++ "Label") (RP (prepend "Section") ("Sec:" ++ repUnd r))
+makeSecRef r s = Reference (r ++ "Label") (RP (prepend "Sec") ("Sec:" ++ repUnd r))
   (shortname' s) None
 
 -- | Create a reference for a list. Takes in the name of the list and a shortname for the list.

@@ -313,7 +313,7 @@ The following section provides an overview of the Software Requirements Specific
 
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
-The primary purpose of this document is to record the requirements of the Slope Stability analysis Program. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of SSP. With the exception of system constraints in \hyperref[Sec:SysConstraints]{Section: System Constraints}, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
+The primary purpose of this document is to record the requirements of the Slope Stability analysis Program. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of SSP. With the exception of system constraints in \hyperref[Sec:SysConstraints]{Sec:System Constraints}, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
 
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out \cite{parnasClements1986}, the most logical way to present the documentation is still to ``fake'' a rational design process.
 
@@ -323,13 +323,13 @@ The scope of the requirements includes stability analysis of a two-dimensional (
 
 \subsection{Characteristics of Intended Reader}
 \label{Sec:ReaderChars}
-Reviewers of this documentation should have an understanding of undergraduate level 4 physics and undergraduate level 2 or higher solid mechanics. It would be an asset to understand soil mechanics. The users of SSP can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Section: User Characteristics}.
+Reviewers of this documentation should have an understanding of undergraduate level 4 physics and undergraduate level 2 or higher solid mechanics. It would be an asset to understand soil mechanics. The users of SSP can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Sec:User Characteristics}.
 
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
-The organization of this document follows the template for an SRS for scientific computing software proposed by Koothoor \cite{koothoor2013} as well as Smith and Lai \cite{smithLai2005}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in \hyperref[Sec:IMs]{Section: Instance Models} and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by Koothoor \cite{koothoor2013} as well as Smith and Lai \cite{smithLai2005}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in \hyperref[Sec:IMs]{Sec:Instance Models} and trace back to find any additional information they require.
 
-The goal statements (\hyperref[Sec:GoalStmt]{Section: Goal Statements}) are refined to the theoretical models and the theoretical models (\hyperref[Sec:TMs]{Section: Theoretical Models}) to the instance models (\hyperref[Sec:IMs]{Section: Instance Models}). The instance models provide the set of algebraic equations that must be solved.
+The goal statements (\hyperref[Sec:GoalStmt]{Sec:Goal Statements}) are refined to the theoretical models and the theoretical models (\hyperref[Sec:TMs]{Sec:Theoretical Models}) to the instance models (\hyperref[Sec:IMs]{Sec:Instance Models}). The instance models provide the set of algebraic equations that must be solved.
 
 \section{General System Description}
 \label{Sec:GenSysDesc}
@@ -353,12 +353,12 @@ The responsibilities of the user and the system are as follows:
 \begin{itemize}
 \item{Provide the input data related to the soil layer(s) and water table (if applicable), ensuring conformation to input data format required by SSP}
 \item{Ensure that consistent units are used for input variables}
-\item{Ensure required software assumptions (\hyperref[Sec:Assumps]{Section: Assumptions}) are appropriate for the problem to which the user is applying the software}
+\item{Ensure required software assumptions (\hyperref[Sec:Assumps]{Sec:Assumptions}) are appropriate for the problem to which the user is applying the software}
 \end{itemize}
 \item{SSP Responsibilities}
 \begin{itemize}
 \item{Detect data type mismatch, such as a string of characters input instead of a floating point number}
-\item{Verify that the inputs satisfy the required physical and other data constraints (\hyperref[Sec:DataConstraints]{Section: Data Constraints})}
+\item{Verify that the inputs satisfy the required physical and other data constraints (\hyperref[Sec:DataConstraints]{Sec:Data Constraints})}
 \item{Identify the critical slip surface within the possible input range}
 \item{Find the factor of safety for the slope}
 \item{Find the interslice normal force and shear force along the critical slip surface}
@@ -424,7 +424,7 @@ Morgenstern-Price analysis \cite{morgenstern1965} of the slope involves represen
 \label{Figure:IndexConvention}
 \end{center}
 \end{figure}
-A free body diagram of the forces acting on a slice is displayed in \hyperref[Figure:ForceDiagram]{Fig:ForceDiagram}. The specific forces and symbols will be discussed in detail in \hyperref[Sec:GDs]{Section: General Definitions} and \hyperref[Sec:DDs]{Section: Data Definitions}.
+A free body diagram of the forces acting on a slice is displayed in \hyperref[Figure:ForceDiagram]{Fig:ForceDiagram}. The specific forces and symbols will be discussed in detail in \hyperref[Sec:GDs]{Sec:General Definitions} and \hyperref[Sec:DDs]{Sec:Data Definitions}.
 
 \begin{figure}
 \begin{center}
@@ -444,7 +444,7 @@ Given the shape of the soil mass, the location of the water table, and the mater
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
-The instance models that govern SSP are presented in \hyperref[Sec:IMs]{Section: Instance Models}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models that govern SSP are presented in \hyperref[Sec:IMs]{Sec:Instance Models}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 
 \subsubsection{Assumptions}
 \label{Sec:Assumps}
@@ -680,7 +680,7 @@ RefBy & \hyperref[IM:fctSfty]{IM:fctSfty}
 \end{minipage}
 \paragraph{}
 \label{GD:normForcEqDeriv}
-Normal force equilibrium is derived from the free body diagram of \hyperref[Figure:ForceDiagram]{Fig:ForceDiagram} in \hyperref[Sec:PhysSyst]{Section: Physical System Description}.
+Normal force equilibrium is derived from the free body diagram of \hyperref[Figure:ForceDiagram]{Fig:ForceDiagram} in \hyperref[Sec:PhysSyst]{Sec:Physical System Description}.
 
 \vspace{\baselineskip}
 \noindent
@@ -728,7 +728,7 @@ RefBy & \hyperref[IM:fctSfty]{IM:fctSfty}
 \end{minipage}
 \paragraph{}
 \label{GD:bsShrFEqDeriv}
-Base shear force equilibrium is derived from the free body diagram of \hyperref[Figure:ForceDiagram]{Fig:ForceDiagram} in \hyperref[Sec:PhysSyst]{Section: Physical System Description}.
+Base shear force equilibrium is derived from the free body diagram of \hyperref[Figure:ForceDiagram]{Fig:ForceDiagram} in \hyperref[Sec:PhysSyst]{Sec:Physical System Description}.
 
 \vspace{\baselineskip}
 \noindent
@@ -2054,7 +2054,7 @@ RefBy & \hyperref[DD:slcHeight]{DD:slcHeight}
 
 \subsubsection{Instance Models}
 \label{Sec:IMs}
-This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Section: Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Section: Theoretical Models} and \hyperref[Sec:GDs]{Section: General Definitions}.
+This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Sec:Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Sec:Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Sec:Theoretical Models} and \hyperref[Sec:GDs]{Sec:General Definitions}.
 
 The goals \hyperref[identifyCritAndFS]{GS:Identify-Crit-and-FS}, \hyperref[determineNormalF]{GS:Determine-Normal-Forces}, and \hyperref[determineShearF]{GS:Determine-Shear-Forces} are met by the simultaneous solution of \hyperref[IM:fctSfty]{IM:fctSfty}, \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, and \hyperref[IM:intsliceFs]{IM:intsliceFs}. The goal \hyperref[identifyCritAndFS]{GS:Identify-Crit-and-FS} is also contributed to by \hyperref[IM:crtSlpId]{IM:crtSlpId}.
 
@@ -2506,7 +2506,7 @@ Description & \begin{symbDescription}
               \item{$const_f$ is the decision on f (Unitless)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The minimization function must enforce the constraints on the critical slip surface expressed in \hyperref[assumpSSC]{A:Slip-Surface-Concave} and \hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution}. The sizes of ${\mathbf{x}_{\text{wt}}}$ and ${\mathbf{y}_{\text{wt}}}$ must be equal and not 1. The sizes of ${\mathbf{x}_{\text{slope}}}$ and ${\mathbf{y}_{\text{slope}}}$ must be equal and at least 2. The first and last ${\mathbf{x}_{\text{wt}}}$ values must be equal to the first and last ${\mathbf{x}_{\text{slope}}}$ values. ${\mathbf{x}_{\text{wt}}}$ and ${\mathbf{x}_{\text{slope}}}$ values must be monotonically increasing. ${{x_{\text{slip}}}^{\text{maxExt}}}$, ${{x_{\text{slip}}}^{\text{maxEtr}}}$, ${{x_{\text{slip}}}^{\text{minExt}}}$, and ${{x_{\text{slip}}}^{\text{minEtr}}}$ must be between or equal to the minimum and maximum ${\mathbf{x}_{\text{slope}}}$ values. ${{y_{\text{slip}}}^{\text{max}}}$ cannot be below the minimum ${\mathbf{y}_{\text{slope}}}$ value. ${{y_{\text{slip}}}^{\text{min}}}$ cannot be above the maximum ${\mathbf{y}_{\text{slope}}}$ value. All $x$ values of ${\mathbf{x}_{\text{cs}}}\text{,}{\mathbf{y}_{\text{cs}}}$ must be between ${{x_{\text{slip}}}^{\text{minEtr}}}$ and ${{x_{\text{slip}}}^{\text{maxExt}}}$. All $y$ values of ${\mathbf{x}_{\text{cs}}}\text{,}{\mathbf{y}_{\text{cs}}}$ must not be below ${{y_{\text{slip}}}^{\text{min}}}$. For any given vertex in ${\mathbf{x}_{\text{cs}}}\text{,}{\mathbf{y}_{\text{cs}}}$ the $y$ value must not exceed the ${\mathbf{y}_{\text{slope}}}$ value corresponding to the same $x$ value. The first and last vertices in ${\mathbf{x}_{\text{cs}}}\text{,}{\mathbf{y}_{\text{cs}}}$ must each be equal to one of the vertices formed by ${\mathbf{x}_{\text{slope}}}$ and ${\mathbf{y}_{\text{slope}}}$. The slope between consecutive vertices must be always increasing as $x$ increases. The internal angle between consecutive vertices in ${\mathbf{x}_{\text{cs}}}\text{,}{\mathbf{y}_{\text{cs}}}$ must not be below 110 degrees.
+Notes & The minimization function must enforce the constraints on the critical slip surface expressed in \hyperref[assumpSSC]{A:Slip-Surface-Concave} and \hyperref[Sec:CorSolProps]{Sec:Properties of a Correct Solution}. The sizes of ${\mathbf{x}_{\text{wt}}}$ and ${\mathbf{y}_{\text{wt}}}$ must be equal and not 1. The sizes of ${\mathbf{x}_{\text{slope}}}$ and ${\mathbf{y}_{\text{slope}}}$ must be equal and at least 2. The first and last ${\mathbf{x}_{\text{wt}}}$ values must be equal to the first and last ${\mathbf{x}_{\text{slope}}}$ values. ${\mathbf{x}_{\text{wt}}}$ and ${\mathbf{x}_{\text{slope}}}$ values must be monotonically increasing. ${{x_{\text{slip}}}^{\text{maxExt}}}$, ${{x_{\text{slip}}}^{\text{maxEtr}}}$, ${{x_{\text{slip}}}^{\text{minExt}}}$, and ${{x_{\text{slip}}}^{\text{minEtr}}}$ must be between or equal to the minimum and maximum ${\mathbf{x}_{\text{slope}}}$ values. ${{y_{\text{slip}}}^{\text{max}}}$ cannot be below the minimum ${\mathbf{y}_{\text{slope}}}$ value. ${{y_{\text{slip}}}^{\text{min}}}$ cannot be above the maximum ${\mathbf{y}_{\text{slope}}}$ value. All $x$ values of ${\mathbf{x}_{\text{cs}}}\text{,}{\mathbf{y}_{\text{cs}}}$ must be between ${{x_{\text{slip}}}^{\text{minEtr}}}$ and ${{x_{\text{slip}}}^{\text{maxExt}}}$. All $y$ values of ${\mathbf{x}_{\text{cs}}}\text{,}{\mathbf{y}_{\text{cs}}}$ must not be below ${{y_{\text{slip}}}^{\text{min}}}$. For any given vertex in ${\mathbf{x}_{\text{cs}}}\text{,}{\mathbf{y}_{\text{cs}}}$ the $y$ value must not exceed the ${\mathbf{y}_{\text{slope}}}$ value corresponding to the same $x$ value. The first and last vertices in ${\mathbf{x}_{\text{cs}}}\text{,}{\mathbf{y}_{\text{cs}}}$ must each be equal to one of the vertices formed by ${\mathbf{x}_{\text{slope}}}$ and ${\mathbf{y}_{\text{slope}}}$. The slope between consecutive vertices must be always increasing as $x$ increases. The internal angle between consecutive vertices in ${\mathbf{x}_{\text{cs}}}\text{,}{\mathbf{y}_{\text{cs}}}$ must not be below 110 degrees.
         
 \\ \midrule \\
 Source & \cite{li2010}
@@ -2590,9 +2590,9 @@ This section provides the functional requirements, the tasks and behaviours that
 
 \begin{itemize}
 \item[Read-and-Store:\phantomsection\label{readAndStore}]{Read the inputs, shown in \hyperref[Table:ReqInputs]{Tab:ReqInputs}, and store the data.}
-\item[Verify-Input:\phantomsection\label{verifyInput}]{Verify that the input data lie within the physical constraints shown in \hyperref[Sec:DataConstraints]{Section: Data Constraints}.}
+\item[Verify-Input:\phantomsection\label{verifyInput}]{Verify that the input data lie within the physical constraints shown in \hyperref[Sec:DataConstraints]{Sec:Data Constraints}.}
 \item[Determine-Critical-Slip-Surface:\phantomsection\label{determineCritSlip}]{Determine the critical slip surface for the input slope, corresponding to the minimum factor of safety, by using \hyperref[IM:fctSfty]{IM:fctSfty}, \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, and \hyperref[IM:intsliceFs]{IM:intsliceFs} to calculate the factor of safety for a slip surface and using \hyperref[IM:crtSlpId]{IM:crtSlpId} to find the slip surface that minimizes it.}
-\item[Verify-Output:\phantomsection\label{verifyOutput}]{Verify that the minimum factor of safety and critical slip surface satisfy the physical constraints shown in \hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution}.}
+\item[Verify-Output:\phantomsection\label{verifyOutput}]{Verify that the minimum factor of safety and critical slip surface satisfy the physical constraints shown in \hyperref[Sec:CorSolProps]{Sec:Properties of a Correct Solution}.}
 \item[Display-Input:\phantomsection\label{displayInput}]{Display as output the user-supplied inputs listed in \hyperref[Table:inputsToOutputTable]{Tab:inputsToOutputTable}.}
 \item[Display-Graph:\phantomsection\label{displayGraph}]{Display the critical slip surface of the 2D slope, as determined from \hyperref[IM:crtSlpId]{IM:crtSlpId}, graphically.}
 \item[Display-Factor-of-Safety:\phantomsection\label{displayFS}]{Display the value of the factor of safety for the critical slip surface, as determined from \hyperref[IM:fctSfty]{IM:fctSfty}, \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, and \hyperref[IM:intsliceFs]{IM:intsliceFs}.}
@@ -2673,7 +2673,7 @@ ${{y_{\text{slip}}}^{\text{min}}}$ & minimum $y$-coordinate
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
 
 \begin{itemize}
-\item[Correct:\phantomsection\label{correct}]{The outputs of the code have the properties described in \hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution}.}
+\item[Correct:\phantomsection\label{correct}]{The outputs of the code have the properties described in \hyperref[Sec:CorSolProps]{Sec:Properties of a Correct Solution}.}
 \item[Understandable:\phantomsection\label{understandable}]{The code is modularized with complete module guide and module interface specification.}
 \item[Reusable:\phantomsection\label{reusable}]{The code is modularized.}
 \item[Maintainable:\phantomsection\label{maintainable}]{The traceability between requirements, assumptions, theoretical models, general definitions, data definitions, instance models, likely changes, unlikely changes, and modules is completely recorded in traceability matrices in the SRS and module guide.}

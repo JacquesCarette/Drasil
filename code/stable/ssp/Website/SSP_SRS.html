@@ -821,7 +821,7 @@
           <div class="subsection">
             <h2>Purpose of Document</h2>
             <p class="paragraph">
-              The primary purpose of this document is to record the requirements of the Slope Stability analysis Program. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of SSP. With the exception of system constraints in <a href=#Sec:SysConstraints>Section: System Constraints</a>, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
+              The primary purpose of this document is to record the requirements of the Slope Stability analysis Program. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of SSP. With the exception of system constraints in <a href=#Sec:SysConstraints>Sec:System Constraints</a>, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
             </p>
             <p class="paragraph">
               This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
@@ -840,7 +840,7 @@
           <div class="subsection">
             <h2>Characteristics of Intended Reader</h2>
             <p class="paragraph">
-              Reviewers of this documentation should have an understanding of undergraduate level 4 physics and undergraduate level 2 or higher solid mechanics. It would be an asset to understand soil mechanics. The users of SSP can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Section: User Characteristics</a>.
+              Reviewers of this documentation should have an understanding of undergraduate level 4 physics and undergraduate level 2 or higher solid mechanics. It would be an asset to understand soil mechanics. The users of SSP can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
             </p>
           </div>
         </div>
@@ -848,10 +848,10 @@
           <div class="subsection">
             <h2>Organization of Document</h2>
             <p class="paragraph">
-              The organization of this document follows the template for an SRS for scientific computing software proposed by Koothoor <a href=#koothoor2013>koothoor2013</a> as well as Smith and Lai <a href=#smithLai2005>smithLai2005</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:IMs>Section: Instance Models</a> and trace back to find any additional information they require.
+              The organization of this document follows the template for an SRS for scientific computing software proposed by Koothoor <a href=#koothoor2013>koothoor2013</a> as well as Smith and Lai <a href=#smithLai2005>smithLai2005</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:IMs>Sec:Instance Models</a> and trace back to find any additional information they require.
             </p>
             <p class="paragraph">
-              The goal statements (<a href=#Sec:GoalStmt>Section: Goal Statements</a>) are refined to the theoretical models and the theoretical models (<a href=#Sec:TMs>Section: Theoretical Models</a>) to the instance models (<a href=#Sec:IMs>Section: Instance Models</a>). The instance models provide the set of algebraic equations that must be solved.
+              The goal statements (<a href=#Sec:GoalStmt>Sec:Goal Statements</a>) are refined to the theoretical models and the theoretical models (<a href=#Sec:TMs>Sec:Theoretical Models</a>) to the instance models (<a href=#Sec:IMs>Sec:Instance Models</a>). The instance models provide the set of algebraic equations that must be solved.
             </p>
           </div>
         </div>
@@ -887,7 +887,7 @@
                   </li>
                   <li>Ensure that consistent units are used for input variables</li>
                   <li>
-                    Ensure required software assumptions (<a href=#Sec:Assumps>Section: Assumptions</a>) are appropriate for the problem to which the user is applying the software
+                    Ensure required software assumptions (<a href=#Sec:Assumps>Sec:Assumptions</a>) are appropriate for the problem to which the user is applying the software
                   </li>
                 </ul>
               </li>
@@ -898,7 +898,7 @@
                     Detect data type mismatch, such as a string of characters input instead of a floating point number
                   </li>
                   <li>
-                    Verify that the inputs satisfy the required physical and other data constraints (<a href=#Sec:DataConstraints>Section: Data Constraints</a>)
+                    Verify that the inputs satisfy the required physical and other data constraints (<a href=#Sec:DataConstraints>Sec:Data Constraints</a>)
                   </li>
                   <li>
                     Identify the critical slip surface within the possible input range
@@ -1024,7 +1024,7 @@
                   </figure>
                 </div>
                 <p class="paragraph">
-                  A free body diagram of the forces acting on a slice is displayed in <a href=#Figure:ForceDiagram>Fig:ForceDiagram</a>. The specific forces and symbols will be discussed in detail in <a href=#Sec:GDs>Section: General Definitions</a> and <a href=#Sec:DDs>Section: Data Definitions</a>.
+                  A free body diagram of the forces acting on a slice is displayed in <a href=#Figure:ForceDiagram>Fig:ForceDiagram</a>. The specific forces and symbols will be discussed in detail in <a href=#Sec:GDs>Sec:General Definitions</a> and <a href=#Sec:DDs>Sec:Data Definitions</a>.
                 </p>
                 <div id="Figure:ForceDiagram">
                   <figure>
@@ -1067,7 +1067,7 @@
           <div class="subsection">
             <h2>Solution Characteristics Specification</h2>
             <p class="paragraph">
-              The instance models that govern SSP are presented in <a href=#Sec:IMs>Section: Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+              The instance models that govern SSP are presented in <a href=#Sec:IMs>Sec:Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
             </p>
             <div id="Sec:Assumps">
               <div class="subsubsection">
@@ -1485,7 +1485,7 @@
                   <div class="subsubsubsection">
                     <h4></h4>
                     <p class="paragraph">
-                      Normal force equilibrium is derived from the free body diagram of <a href=#Figure:ForceDiagram>Fig:ForceDiagram</a> in <a href=#Sec:PhysSyst>Section: Physical System Description</a>.
+                      Normal force equilibrium is derived from the free body diagram of <a href=#Figure:ForceDiagram>Fig:ForceDiagram</a> in <a href=#Sec:PhysSyst>Sec:Physical System Description</a>.
                     </p>
                   </div>
                 </div>
@@ -1572,7 +1572,7 @@
                   <div class="subsubsubsection">
                     <h4></h4>
                     <p class="paragraph">
-                      Base shear force equilibrium is derived from the free body diagram of <a href=#Figure:ForceDiagram>Fig:ForceDiagram</a> in <a href=#Sec:PhysSyst>Section: Physical System Description</a>.
+                      Base shear force equilibrium is derived from the free body diagram of <a href=#Figure:ForceDiagram>Fig:ForceDiagram</a> in <a href=#Sec:PhysSyst>Sec:Physical System Description</a>.
                     </p>
                   </div>
                 </div>
@@ -3625,7 +3625,7 @@
               <div class="subsubsection">
                 <h3>Instance Models</h3>
                 <p class="paragraph">
-                  This section transforms the problem defined in <a href=#Sec:ProbDesc>Section: Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Section: Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Section: Theoretical Models</a> and <a href=#Sec:GDs>Section: General Definitions</a>.
+                  This section transforms the problem defined in <a href=#Sec:ProbDesc>Sec:Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Sec:Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Sec:Theoretical Models</a> and <a href=#Sec:GDs>Sec:General Definitions</a>.
                 </p>
                 <p class="paragraph">
                   The goals <a href=#identifyCritAndFS>GS:Identify-Crit-and-FS</a>, <a href=#determineNormalF>GS:Determine-Normal-Forces</a>, and <a href=#determineShearF>GS:Determine-Shear-Forces</a> are met by the simultaneous solution of <a href=#IM:fctSfty>IM:fctSfty</a>, <a href=#IM:nrmShrFor>IM:nrmShrFor</a>, and <a href=#IM:intsliceFs>IM:intsliceFs</a>. The goal <a href=#identifyCritAndFS>GS:Identify-Crit-and-FS</a> is also contributed to by <a href=#IM:crtSlpId>IM:crtSlpId</a>.
@@ -4296,7 +4296,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The minimization function must enforce the constraints on the critical slip surface expressed in <a href=#assumpSSC>A:Slip-Surface-Concave</a> and <a href=#Sec:CorSolProps>Section: Properties of a Correct Solution</a>. The sizes of <em><b>x</b><sub>wt</sub></em> and <em><b>y</b><sub>wt</sub></em> must be equal and not 1. The sizes of <em><b>x</b><sub>slope</sub></em> and <em><b>y</b><sub>slope</sub></em> must be equal and at least 2. The first and last <em><b>x</b><sub>wt</sub></em> values must be equal to the first and last <em><b>x</b><sub>slope</sub></em> values. <em><b>x</b><sub>wt</sub></em> and <em><b>x</b><sub>slope</sub></em> values must be monotonically increasing. <em>x<sub>slip</sub><sup>maxExt</sup></em>, <em>x<sub>slip</sub><sup>maxEtr</sup></em>, <em>x<sub>slip</sub><sup>minExt</sup></em>, and <em>x<sub>slip</sub><sup>minEtr</sup></em> must be between or equal to the minimum and maximum <em><b>x</b><sub>slope</sub></em> values. <em>y<sub>slip</sub><sup>max</sup></em> cannot be below the minimum <em><b>y</b><sub>slope</sub></em> value. <em>y<sub>slip</sub><sup>min</sup></em> cannot be above the maximum <em><b>y</b><sub>slope</sub></em> value. All <em>x</em> values of <em><b>x</b><sub>cs</sub>,<b>y</b><sub>cs</sub></em> must be between <em>x<sub>slip</sub><sup>minEtr</sup></em> and <em>x<sub>slip</sub><sup>maxExt</sup></em>. All <em>y</em> values of <em><b>x</b><sub>cs</sub>,<b>y</b><sub>cs</sub></em> must not be below <em>y<sub>slip</sub><sup>min</sup></em>. For any given vertex in <em><b>x</b><sub>cs</sub>,<b>y</b><sub>cs</sub></em> the <em>y</em> value must not exceed the <em><b>y</b><sub>slope</sub></em> value corresponding to the same <em>x</em> value. The first and last vertices in <em><b>x</b><sub>cs</sub>,<b>y</b><sub>cs</sub></em> must each be equal to one of the vertices formed by <em><b>x</b><sub>slope</sub></em> and <em><b>y</b><sub>slope</sub></em>. The slope between consecutive vertices must be always increasing as <em>x</em> increases. The internal angle between consecutive vertices in <em><b>x</b><sub>cs</sub>,<b>y</b><sub>cs</sub></em> must not be below 110 degrees.
+                          The minimization function must enforce the constraints on the critical slip surface expressed in <a href=#assumpSSC>A:Slip-Surface-Concave</a> and <a href=#Sec:CorSolProps>Sec:Properties of a Correct Solution</a>. The sizes of <em><b>x</b><sub>wt</sub></em> and <em><b>y</b><sub>wt</sub></em> must be equal and not 1. The sizes of <em><b>x</b><sub>slope</sub></em> and <em><b>y</b><sub>slope</sub></em> must be equal and at least 2. The first and last <em><b>x</b><sub>wt</sub></em> values must be equal to the first and last <em><b>x</b><sub>slope</sub></em> values. <em><b>x</b><sub>wt</sub></em> and <em><b>x</b><sub>slope</sub></em> values must be monotonically increasing. <em>x<sub>slip</sub><sup>maxExt</sup></em>, <em>x<sub>slip</sub><sup>maxEtr</sup></em>, <em>x<sub>slip</sub><sup>minExt</sup></em>, and <em>x<sub>slip</sub><sup>minEtr</sup></em> must be between or equal to the minimum and maximum <em><b>x</b><sub>slope</sub></em> values. <em>y<sub>slip</sub><sup>max</sup></em> cannot be below the minimum <em><b>y</b><sub>slope</sub></em> value. <em>y<sub>slip</sub><sup>min</sup></em> cannot be above the maximum <em><b>y</b><sub>slope</sub></em> value. All <em>x</em> values of <em><b>x</b><sub>cs</sub>,<b>y</b><sub>cs</sub></em> must be between <em>x<sub>slip</sub><sup>minEtr</sup></em> and <em>x<sub>slip</sub><sup>maxExt</sup></em>. All <em>y</em> values of <em><b>x</b><sub>cs</sub>,<b>y</b><sub>cs</sub></em> must not be below <em>y<sub>slip</sub><sup>min</sup></em>. For any given vertex in <em><b>x</b><sub>cs</sub>,<b>y</b><sub>cs</sub></em> the <em>y</em> value must not exceed the <em><b>y</b><sub>slope</sub></em> value corresponding to the same <em>x</em> value. The first and last vertices in <em><b>x</b><sub>cs</sub>,<b>y</b><sub>cs</sub></em> must each be equal to one of the vertices formed by <em><b>x</b><sub>slope</sub></em> and <em><b>y</b><sub>slope</sub></em>. The slope between consecutive vertices must be always increasing as <em>x</em> increases. The internal angle between consecutive vertices in <em><b>x</b><sub>cs</sub>,<b>y</b><sub>cs</sub></em> must not be below 110 degrees.
                         </p>
                       </td>
                     </tr>
@@ -4477,7 +4477,7 @@
               </p>
               <p>
                 <div id="verifyInput">
-                  Verify-Input: Verify that the input data lie within the physical constraints shown in <a href=#Sec:DataConstraints>Section: Data Constraints</a>.
+                  Verify-Input: Verify that the input data lie within the physical constraints shown in <a href=#Sec:DataConstraints>Sec:Data Constraints</a>.
                 </div>
               </p>
               <p>
@@ -4487,7 +4487,7 @@
               </p>
               <p>
                 <div id="verifyOutput">
-                  Verify-Output: Verify that the minimum factor of safety and critical slip surface satisfy the physical constraints shown in <a href=#Sec:CorSolProps>Section: Properties of a Correct Solution</a>.
+                  Verify-Output: Verify that the minimum factor of safety and critical slip surface satisfy the physical constraints shown in <a href=#Sec:CorSolProps>Sec:Properties of a Correct Solution</a>.
                 </div>
               </p>
               <p>
@@ -4666,7 +4666,7 @@
             <div class="list">
               <p>
                 <div id="correct">
-                  Correct: The outputs of the code have the properties described in <a href=#Sec:CorSolProps>Section: Properties of a Correct Solution</a>.
+                  Correct: The outputs of the code have the properties described in <a href=#Sec:CorSolProps>Sec:Properties of a Correct Solution</a>.
                 </div>
               </p>
               <p>

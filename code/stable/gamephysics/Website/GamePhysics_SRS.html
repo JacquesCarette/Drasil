@@ -513,7 +513,7 @@
           <div class="subsection">
             <h2>Purpose of Document</h2>
             <p class="paragraph">
-              The primary purpose of this document is to record the requirements of the game physics library. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of Game Physics. With the exception of system constraints in <a href=#Sec:SysConstraints>Section: System Constraints</a>, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
+              The primary purpose of this document is to record the requirements of the game physics library. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of Game Physics. With the exception of system constraints in <a href=#Sec:SysConstraints>Sec:System Constraints</a>, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
             </p>
             <p class="paragraph">
               This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
@@ -532,7 +532,7 @@
           <div class="subsection">
             <h2>Characteristics of Intended Reader</h2>
             <p class="paragraph">
-              Reviewers of this documentation should have an understanding of rigid body dynamics and high school calculus. The users of Game Physics can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Section: User Characteristics</a>.
+              Reviewers of this documentation should have an understanding of rigid body dynamics and high school calculus. The users of Game Physics can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
             </p>
           </div>
         </div>
@@ -540,10 +540,10 @@
           <div class="subsection">
             <h2>Organization of Document</h2>
             <p class="paragraph">
-              The organization of this document follows the template for an SRS for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a> and <a href=#smithLai2005>smithLai2005</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:IMs>Section: Instance Models</a> and trace back to find any additional information they require.
+              The organization of this document follows the template for an SRS for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a> and <a href=#smithLai2005>smithLai2005</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:IMs>Sec:Instance Models</a> and trace back to find any additional information they require.
             </p>
             <p class="paragraph">
-              The goal statements (<a href=#Sec:GoalStmt>Section: Goal Statements</a>) are refined to the theoretical models and the theoretical models (<a href=#Sec:TMs>Section: Theoretical Models</a>) to the instance models (<a href=#Sec:IMs>Section: Instance Models</a>).
+              The goal statements (<a href=#Sec:GoalStmt>Sec:Goal Statements</a>) are refined to the theoretical models and the theoretical models (<a href=#Sec:TMs>Sec:Theoretical Models</a>) to the instance models (<a href=#Sec:IMs>Sec:Instance Models</a>).
             </p>
           </div>
         </div>
@@ -581,7 +581,7 @@
                     Ensure application programming interface use complies with the user guide.
                   </li>
                   <li>
-                    Ensure required software assumptions (<a href=#Sec:Assumps>Section: Assumptions</a>) are appropriate for any particular problem the software addresses.
+                    Ensure required software assumptions (<a href=#Sec:Assumps>Sec:Assumptions</a>) are appropriate for any particular problem the software addresses.
                   </li>
                 </ul>
               </li>
@@ -589,7 +589,7 @@
                 Game Physics Responsibilities
                 <ul class="list">
                   <li>
-                    Determine if the inputs and simulation state satisfy the required physical and system constraints (<a href=#Sec:DataConstraints>Section: Data Constraints</a>).
+                    Determine if the inputs and simulation state satisfy the required physical and system constraints (<a href=#Sec:DataConstraints>Sec:Data Constraints</a>).
                   </li>
                   <li>
                     Calculate the new state of all rigid bodies within the simulation at each simulation step.
@@ -628,7 +628,7 @@
           <div class="subsection">
             <h2>Problem Description</h2>
             <p class="paragraph">
-              A system is needed to create a simple, lightweight, fast, and portable 2D rigid body physics library, which will allow for more accessible game development and the production of higher quality products. Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality physics libraries available to be used for consumer products (<a href=#Sec:offShelfSolns>Section: Off-The-Shelf Solutions</a>).
+              A system is needed to create a simple, lightweight, fast, and portable 2D rigid body physics library, which will allow for more accessible game development and the production of higher quality products. Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality physics libraries available to be used for consumer products (<a href=#Sec:offShelfSolns>Sec:Off-The-Shelf Solutions</a>).
             </p>
             <div id="Sec:TermDefs">
               <div class="subsubsection">
@@ -690,7 +690,7 @@
           <div class="subsection">
             <h2>Solution Characteristics Specification</h2>
             <p class="paragraph">
-              The instance models that govern Game Physics are presented in <a href=#Sec:IMs>Section: Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+              The instance models that govern Game Physics are presented in <a href=#Sec:IMs>Sec:Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
             </p>
             <div id="Sec:Assumps">
               <div class="subsubsection">
@@ -2058,7 +2058,7 @@
               <div class="subsubsection">
                 <h3>Instance Models</h3>
                 <p class="paragraph">
-                  This section transforms the problem defined in <a href=#Sec:ProbDesc>Section: Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Section: Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Section: Theoretical Models</a> and <a href=#Sec:GDs>Section: General Definitions</a>.
+                  This section transforms the problem defined in <a href=#Sec:ProbDesc>Sec:Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Sec:Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Sec:Theoretical Models</a> and <a href=#Sec:GDs>Sec:General Definitions</a>.
                 </p>
                 <p class="paragraph">
                   The goal <a href=#linearGS>GS:Determine-Linear-Properties</a> is met by <a href=#IM:transMot>IM:transMot</a> and <a href=#IM:col2D>IM:col2D</a>. The goal <a href=#angularGS>GS:Determine-Angular-Properties</a> is met by <a href=#IM:rotMot>IM:rotMot</a> and <a href=#IM:col2D>IM:col2D</a>.
@@ -2503,7 +2503,7 @@
               </p>
               <p>
                 <div id="verifyPhysCons">
-                  Verify-Physical_Constraints: Verify that the inputs satisfy the required physical constraints from <a href=#Sec:SolCharSpec>Section: Solution Characteristics Specification</a>.
+                  Verify-Physical_Constraints: Verify that the inputs satisfy the required physical constraints from <a href=#Sec:SolCharSpec>Sec:Solution Characteristics Specification</a>.
                 </div>
               </p>
               <p>
@@ -2630,7 +2630,7 @@
       <div class="section">
         <h1>Off-The-Shelf Solutions</h1>
         <p class="paragraph">
-          As mentioned in <a href=#Sec:ProbDesc>Section: Problem Description</a>, there already exist free open source game physics libraries. Similar 2D physics libraries are:
+          As mentioned in <a href=#Sec:ProbDesc>Sec:Problem Description</a>, there already exist free open source game physics libraries. Similar 2D physics libraries are:
         </p>
         <ul class="list">
           <li>Box2D: http://box2d.org/</li>

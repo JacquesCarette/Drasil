@@ -255,7 +255,7 @@ The following section provides an overview of the Software Requirements Specific
 
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
-The primary purpose of this document is to record the requirements of the game physics library. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of Game Physics. With the exception of system constraints in \hyperref[Sec:SysConstraints]{Section: System Constraints}, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
+The primary purpose of this document is to record the requirements of the game physics library. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of Game Physics. With the exception of system constraints in \hyperref[Sec:SysConstraints]{Sec:System Constraints}, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
 
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out \cite{parnasClements1986}, the most logical way to present the documentation is still to ``fake'' a rational design process.
 
@@ -265,13 +265,13 @@ The scope of the requirements includes the physical simulation of 2D rigid bodie
 
 \subsection{Characteristics of Intended Reader}
 \label{Sec:ReaderChars}
-Reviewers of this documentation should have an understanding of rigid body dynamics and high school calculus. The users of Game Physics can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Section: User Characteristics}.
+Reviewers of this documentation should have an understanding of rigid body dynamics and high school calculus. The users of Game Physics can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Sec:User Characteristics}.
 
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
-The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{koothoor2013} and \cite{smithLai2005}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in \hyperref[Sec:IMs]{Section: Instance Models} and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{koothoor2013} and \cite{smithLai2005}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in \hyperref[Sec:IMs]{Sec:Instance Models} and trace back to find any additional information they require.
 
-The goal statements (\hyperref[Sec:GoalStmt]{Section: Goal Statements}) are refined to the theoretical models and the theoretical models (\hyperref[Sec:TMs]{Section: Theoretical Models}) to the instance models (\hyperref[Sec:IMs]{Section: Instance Models}).
+The goal statements (\hyperref[Sec:GoalStmt]{Sec:Goal Statements}) are refined to the theoretical models and the theoretical models (\hyperref[Sec:TMs]{Sec:Theoretical Models}) to the instance models (\hyperref[Sec:IMs]{Sec:Instance Models}).
 
 \section{General System Description}
 \label{Sec:GenSysDesc}
@@ -295,11 +295,11 @@ The interaction between the product and the user is through an application progr
 \begin{itemize}
 \item{Provide initial conditions of the physical state of the simulation, rigid bodies present, and forces applied to them.}
 \item{Ensure application programming interface use complies with the user guide.}
-\item{Ensure required software assumptions (\hyperref[Sec:Assumps]{Section: Assumptions}) are appropriate for any particular problem the software addresses.}
+\item{Ensure required software assumptions (\hyperref[Sec:Assumps]{Sec:Assumptions}) are appropriate for any particular problem the software addresses.}
 \end{itemize}
 \item{Game Physics Responsibilities}
 \begin{itemize}
-\item{Determine if the inputs and simulation state satisfy the required physical and system constraints (\hyperref[Sec:DataConstraints]{Section: Data Constraints}).}
+\item{Determine if the inputs and simulation state satisfy the required physical and system constraints (\hyperref[Sec:DataConstraints]{Sec:Data Constraints}).}
 \item{Calculate the new state of all rigid bodies within the simulation at each simulation step.}
 \item{Provide updated physical state of all rigid bodies at the end of a simulation step.}
 \end{itemize}
@@ -318,7 +318,7 @@ This section first presents the problem description, which gives a high-level vi
 
 \subsection{Problem Description}
 \label{Sec:ProbDesc}
-A system is needed to create a simple, lightweight, fast, and portable 2D rigid body physics library, which will allow for more accessible game development and the production of higher quality products. Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality physics libraries available to be used for consumer products (\hyperref[Sec:offShelfSolns]{Section: Off-The-Shelf Solutions}).
+A system is needed to create a simple, lightweight, fast, and portable 2D rigid body physics library, which will allow for more accessible game development and the production of higher quality products. Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality physics libraries available to be used for consumer products (\hyperref[Sec:offShelfSolns]{Sec:Off-The-Shelf Solutions}).
 
 \subsubsection{Terminology and Definitions}
 \label{Sec:TermDefs}
@@ -344,7 +344,7 @@ Given the kinematic properties, and forces (including any collision forces) appl
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
-The instance models that govern Game Physics are presented in \hyperref[Sec:IMs]{Section: Instance Models}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models that govern Game Physics are presented in \hyperref[Sec:IMs]{Sec:Instance Models}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 
 \subsubsection{Assumptions}
 \label{Sec:Assumps}
@@ -1230,7 +1230,7 @@ RefBy &
 
 \subsubsection{Instance Models}
 \label{Sec:IMs}
-This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Section: Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Section: Theoretical Models} and \hyperref[Sec:GDs]{Section: General Definitions}.
+This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Sec:Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Sec:Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Sec:Theoretical Models} and \hyperref[Sec:GDs]{Sec:General Definitions}.
 
 The goal \hyperref[linearGS]{GS:Determine-Linear-Properties} is met by \hyperref[IM:transMot]{IM:transMot} and \hyperref[IM:col2D]{IM:col2D}. The goal \hyperref[angularGS]{GS:Determine-Angular-Properties} is met by \hyperref[IM:rotMot]{IM:rotMot} and \hyperref[IM:col2D]{IM:col2D}.
 
@@ -1498,7 +1498,7 @@ This section provides the functional requirements, the tasks and behaviours that
 \item[Simulation-Space:\phantomsection\label{simSpace}]{Create a space for all of the rigid bodies in the physical simulation to interact in.}
 \item[Input-Initial-Conditions:\phantomsection\label{inputInitialConds}]{Input the initial masses, velocities, orientations, angular velocities of, and forces applied on rigid bodies.}
 \item[Input-Surface-Properties:\phantomsection\label{inputSurfaceProps}]{Input the surface properties of the bodies such as friction or elasticity.}
-\item[Verify-Physical\_Constraints:\phantomsection\label{verifyPhysCons}]{Verify that the inputs satisfy the required physical constraints from \hyperref[Sec:SolCharSpec]{Section: Solution Characteristics Specification}.}
+\item[Verify-Physical\_Constraints:\phantomsection\label{verifyPhysCons}]{Verify that the inputs satisfy the required physical constraints from \hyperref[Sec:SolCharSpec]{Sec:Solution Characteristics Specification}.}
 \item[Calculate-Translation-Over-Time:\phantomsection\label{calcTransOverTime}]{Determine the positions and velocities over a period of time of the 2D rigid bodies acted upon by a force.}
 \item[Calculate-Rotation-Over-Time:\phantomsection\label{calcRotOverTime}]{Determine the orientations and angular velocities over a period of time of the 2D rigid bodies.}
 \item[Determine-Collisions:\phantomsection\label{deterColls}]{Determine if any of the rigid bodies in the space have collided.}
@@ -1537,7 +1537,7 @@ This section lists the unlikely changes to be made to the software.
 \end{itemize}
 \section{Off-The-Shelf Solutions}
 \label{Sec:offShelfSolns}
-As mentioned in \hyperref[Sec:ProbDesc]{Section: Problem Description}, there already exist free open source game physics libraries. Similar 2D physics libraries are:
+As mentioned in \hyperref[Sec:ProbDesc]{Sec:Problem Description}, there already exist free open source game physics libraries. Similar 2D physics libraries are:
 
 \begin{itemize}
 \item{Box2D: http://box2d.org/}

@@ -448,7 +448,7 @@
           <div class="subsection">
             <h2>Purpose of Document</h2>
             <p class="paragraph">
-              The primary purpose of this document is to record the requirements of the GlassBR. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of GlassBR. With the exception of system constraints in <a href=#Sec:SysConstraints>Section: System Constraints</a>, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
+              The primary purpose of this document is to record the requirements of the GlassBR. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of GlassBR. With the exception of system constraints in <a href=#Sec:SysConstraints>Sec:System Constraints</a>, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
             </p>
             <p class="paragraph">
               This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
@@ -467,7 +467,7 @@
           <div class="subsection">
             <h2>Characteristics of Intended Reader</h2>
             <p class="paragraph">
-              Reviewers of this documentation should have an understanding of second year calculus, structural mechanics, glass breakage, blast risk, computer applications in civil engineering, and applicable standards for constructions using glass from <a href=#astm2009>astm2009</a>, <a href=#astm2012>astm2012</a>, and <a href=#astm2016>astm2016</a> in <a href=#Sec:References>Section: References</a>. The users of GlassBR can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Section: User Characteristics</a>.
+              Reviewers of this documentation should have an understanding of second year calculus, structural mechanics, glass breakage, blast risk, computer applications in civil engineering, and applicable standards for constructions using glass from <a href=#astm2009>astm2009</a>, <a href=#astm2012>astm2012</a>, and <a href=#astm2016>astm2016</a> in <a href=#Sec:References>Sec:References</a>. The users of GlassBR can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
             </p>
           </div>
         </div>
@@ -475,10 +475,10 @@
           <div class="subsection">
             <h2>Organization of Document</h2>
             <p class="paragraph">
-              The organization of this document follows the template for an SRS for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a> and <a href=#smithLai2005>smithLai2005</a>, with some aspects taken from Volere template 16 <a href=#rbrtsn2012>rbrtsn2012</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in <a href=#Sec:IMs>Section: Instance Models</a> and trace back to find any additional information they require.
+              The organization of this document follows the template for an SRS for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a> and <a href=#smithLai2005>smithLai2005</a>, with some aspects taken from Volere template 16 <a href=#rbrtsn2012>rbrtsn2012</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in <a href=#Sec:IMs>Sec:Instance Models</a> and trace back to find any additional information they require.
             </p>
             <p class="paragraph">
-              The goal statements (<a href=#Sec:GoalStmt>Section: Goal Statements</a>) are refined to the theoretical models and the theoretical models (<a href=#Sec:TMs>Section: Theoretical Models</a>) to the instance models (<a href=#Sec:IMs>Section: Instance Models</a>). The data definitions are used to support the definitions of the different models.
+              The goal statements (<a href=#Sec:GoalStmt>Sec:Goal Statements</a>) are refined to the theoretical models and the theoretical models (<a href=#Sec:TMs>Sec:Theoretical Models</a>) to the instance models (<a href=#Sec:IMs>Sec:Instance Models</a>). The data definitions are used to support the definitions of the different models.
             </p>
           </div>
         </div>
@@ -536,7 +536,7 @@
                   </li>
                   <li>Ensure that consistent units are used for input variables.</li>
                   <li>
-                    Ensure required software assumptions (<a href=#Sec:Assumps>Section: Assumptions</a>) are appropriate for any particular problem input to the software.
+                    Ensure required software assumptions (<a href=#Sec:Assumps>Sec:Assumptions</a>) are appropriate for any particular problem input to the software.
                   </li>
                 </ul>
               </li>
@@ -708,7 +708,7 @@
           <div class="subsection">
             <h2>Solution Characteristics Specification</h2>
             <p class="paragraph">
-              The instance models that govern GlassBR are presented in <a href=#Sec:IMs>Section: Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+              The instance models that govern GlassBR are presented in <a href=#Sec:IMs>Sec:Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
             </p>
             <div id="Sec:Assumps">
               <div class="subsubsection">
@@ -734,7 +734,7 @@
                   </p>
                   <p>
                     <div id="assumpSV">
-                      standardValues: The values provided in <a href=#Sec:AuxConstants>Section: Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>. (RefBy: <a href=#varValsOfmkE>LC:Variable-Values-of-m,k,E</a>, <a href=#DD:sdfTol>DD:sdfTol</a>, <a href=#DD:nFL>DD:nFL</a>, <a href=#DD:loadDurFactor>DD:loadDurFactor</a>, <a href=#DD:dimlessLoad>DD:dimlessLoad</a>, and <a href=#assumpLDFC>A:ldfConstant</a>.)
+                      standardValues: The values provided in <a href=#Sec:AuxConstants>Sec:Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>. (RefBy: <a href=#varValsOfmkE>LC:Variable-Values-of-m,k,E</a>, <a href=#DD:sdfTol>DD:sdfTol</a>, <a href=#DD:nFL>DD:nFL</a>, <a href=#DD:loadDurFactor>DD:loadDurFactor</a>, <a href=#DD:dimlessLoad>DD:dimlessLoad</a>, and <a href=#assumpLDFC>A:ldfConstant</a>.)
                     </div>
                   </p>
                   <p>
@@ -1884,7 +1884,7 @@
               <div class="subsubsection">
                 <h3>Instance Models</h3>
                 <p class="paragraph">
-                  This section transforms the problem defined in <a href=#Sec:ProbDesc>Section: Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Section: Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Section: Theoretical Models</a> and <a href=#Sec:GDs>Section: General Definitions</a>.
+                  This section transforms the problem defined in <a href=#Sec:ProbDesc>Sec:Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Sec:Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Sec:Theoretical Models</a> and <a href=#Sec:GDs>Sec:General Definitions</a>.
                 </p>
                 <p class="paragraph">
                   The goal <a href=#willBreakGS>GS:Predict-Glass-Withstands-Explosion</a> is met by <a href=#IM:isSafePb>IM:isSafePb</a>, <a href=#IM:isSafeLR>IM:isSafeLR</a>.
@@ -2045,7 +2045,7 @@
               <div class="subsubsection">
                 <h3>Data Constraints</h3>
                 <p class="paragraph">
-                  <a href=#Table:InDataConstraints>Tab:InDataConstraints</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. <a href=#Sec:AuxConstants>Section: Values of Auxiliary Constants</a> gives the values of the specification parameters used in <a href=#Table:InDataConstraints>Tab:InDataConstraints</a>.
+                  <a href=#Table:InDataConstraints>Tab:InDataConstraints</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. <a href=#Sec:AuxConstants>Sec:Values of Auxiliary Constants</a> gives the values of the specification parameters used in <a href=#Table:InDataConstraints>Tab:InDataConstraints</a>.
                 </p>
                 <div id="Table:InDataConstraints">
                   <table class="table">
@@ -2180,7 +2180,7 @@
               </p>
               <p>
                 <div id="checkInputWithDataCons">
-                  Check-Input-with-Data_Constraints: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataConstraints>Section: Data Constraints</a>. If any of the input values are out of bounds, an error message is displayed and the calculations stop.
+                  Check-Input-with-Data_Constraints: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataConstraints>Sec:Data Constraints</a>. If any of the input values are out of bounds, an error message is displayed and the calculations stop.
                 </div>
               </p>
               <p>
@@ -2426,7 +2426,7 @@
             <div class="list">
               <p>
                 <div id="correct">
-                  Correct: The outputs of the code have the properties described in <a href=#Sec:CorSolProps>Section: Properties of a Correct Solution</a>.
+                  Correct: The outputs of the code have the properties described in <a href=#Sec:CorSolProps>Sec:Properties of a Correct Solution</a>.
                 </div>
               </p>
               <p>

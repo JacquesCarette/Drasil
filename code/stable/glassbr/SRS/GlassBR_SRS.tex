@@ -235,7 +235,7 @@ The following section provides an overview of the Software Requirements Specific
 
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
-The primary purpose of this document is to record the requirements of the GlassBR. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of GlassBR. With the exception of system constraints in \hyperref[Sec:SysConstraints]{Section: System Constraints}, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
+The primary purpose of this document is to record the requirements of the GlassBR. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of GlassBR. With the exception of system constraints in \hyperref[Sec:SysConstraints]{Sec:System Constraints}, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
 
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out \cite{parnasClements1986}, the most logical way to present the documentation is still to ``fake'' a rational design process.
 
@@ -245,13 +245,13 @@ The scope of the requirements includes determining the safety of a glass slab un
 
 \subsection{Characteristics of Intended Reader}
 \label{Sec:ReaderChars}
-Reviewers of this documentation should have an understanding of second year calculus, structural mechanics, glass breakage, blast risk, computer applications in civil engineering, and applicable standards for constructions using glass from \cite{astm2009}, \cite{astm2012}, and \cite{astm2016} in \hyperref[Sec:References]{Section: References}. The users of GlassBR can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Section: User Characteristics}.
+Reviewers of this documentation should have an understanding of second year calculus, structural mechanics, glass breakage, blast risk, computer applications in civil engineering, and applicable standards for constructions using glass from \cite{astm2009}, \cite{astm2012}, and \cite{astm2016} in \hyperref[Sec:References]{Sec:References}. The users of GlassBR can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Sec:User Characteristics}.
 
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
-The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{koothoor2013} and \cite{smithLai2005}, with some aspects taken from Volere template 16 \cite{rbrtsn2012}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in \hyperref[Sec:IMs]{Section: Instance Models} and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{koothoor2013} and \cite{smithLai2005}, with some aspects taken from Volere template 16 \cite{rbrtsn2012}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in \hyperref[Sec:IMs]{Sec:Instance Models} and trace back to find any additional information they require.
 
-The goal statements (\hyperref[Sec:GoalStmt]{Section: Goal Statements}) are refined to the theoretical models and the theoretical models (\hyperref[Sec:TMs]{Section: Theoretical Models}) to the instance models (\hyperref[Sec:IMs]{Section: Instance Models}). The data definitions are used to support the definitions of the different models.
+The goal statements (\hyperref[Sec:GoalStmt]{Sec:Goal Statements}) are refined to the theoretical models and the theoretical models (\hyperref[Sec:TMs]{Sec:Theoretical Models}) to the instance models (\hyperref[Sec:IMs]{Sec:Instance Models}). The data definitions are used to support the definitions of the different models.
 
 \section{Stakeholders}
 \label{Sec:Stakeholder}
@@ -287,7 +287,7 @@ The interaction between the product and the user is through a user interface. Th
 \begin{itemize}
 \item{Provide the input data related to the glass slab and blast type, ensuring no errors in the data entry.}
 \item{Ensure that consistent units are used for input variables.}
-\item{Ensure required software assumptions (\hyperref[Sec:Assumps]{Section: Assumptions}) are appropriate for any particular problem input to the software.}
+\item{Ensure required software assumptions (\hyperref[Sec:Assumps]{Sec:Assumptions}) are appropriate for any particular problem input to the software.}
 \end{itemize}
 \item{GlassBR Responsibilities}
 \begin{itemize}
@@ -371,7 +371,7 @@ Given the dimensions of the glass plane, the glass type, the characteristics of 
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
-The instance models that govern GlassBR are presented in \hyperref[Sec:IMs]{Section: Instance Models}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models that govern GlassBR are presented in \hyperref[Sec:IMs]{Sec:Instance Models}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 
 \subsubsection{Assumptions}
 \label{Sec:Assumps}
@@ -381,7 +381,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[glassType:\phantomsection\label{assumpGT}]{The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along one, two, three, or four edges. This practice assumes that: (1) the supported glass edges for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam; and (3) glass supported on one side acts as a cantilever.}
 \item[glassCondition:\phantomsection\label{assumpGC}]{Following \cite[(pg. 1)]{astm2009}, this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength. (RefBy: \hyperref[accAlteredGlass]{UC:Accommodate-Altered-Glass}.)}
 \item[explainScenario:\phantomsection\label{assumpES}]{This system only considers the external explosion scenario for its calculations. (RefBy: \hyperref[calcInternalBlastRisk]{LC:Calculate-Internal-Blask-Risk}.)}
-\item[standardValues:\phantomsection\label{assumpSV}]{The values provided in \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants} are assumed for the duration of load (${t_{\text{d}}}$), and the material properties of $m$, $k$, and $E$. (RefBy: \hyperref[varValsOfmkE]{LC:Variable-Values-of-m,k,E}, \hyperref[DD:sdfTol]{DD:sdfTol}, \hyperref[DD:nFL]{DD:nFL}, \hyperref[DD:loadDurFactor]{DD:loadDurFactor}, \hyperref[DD:dimlessLoad]{DD:dimlessLoad}, and \hyperref[assumpLDFC]{A:ldfConstant}.)}
+\item[standardValues:\phantomsection\label{assumpSV}]{The values provided in \hyperref[Sec:AuxConstants]{Sec:Values of Auxiliary Constants} are assumed for the duration of load (${t_{\text{d}}}$), and the material properties of $m$, $k$, and $E$. (RefBy: \hyperref[varValsOfmkE]{LC:Variable-Values-of-m,k,E}, \hyperref[DD:sdfTol]{DD:sdfTol}, \hyperref[DD:nFL]{DD:nFL}, \hyperref[DD:loadDurFactor]{DD:loadDurFactor}, \hyperref[DD:dimlessLoad]{DD:dimlessLoad}, and \hyperref[assumpLDFC]{A:ldfConstant}.)}
 \item[glassLite:\phantomsection\label{assumpGL}]{Glass under consideration is assumed to be a single lite; hence, the value of LSF is equal to 1 for all calculations in GlassBR. (RefBy: \hyperref[accMoreThanSingleLite]{LC:Accomodate-More-than-Single-Lite}.)}
 \item[boundaryConditions:\phantomsection\label{assumpBC}]{Boundary conditions for the glass slab are assumed to be 4-sided support for calculations. (RefBy: \hyperref[accMoreBoundaryConditions]{LC:Accomodate-More-Boundary-Conditions}.)}
 \item[responseType:\phantomsection\label{assumpRT}]{The response type considered in GlassBR is flexural. (RefBy: \hyperref[considerMoreThanFlexGlass]{LC:Consider-More-than-Flexure-Glass}.)}
@@ -1128,7 +1128,7 @@ RefBy & \hyperref[IM:isSafeLR]{IM:isSafeLR} and \hyperref[DD:dimlessLoad]{DD:dim
 
 \subsubsection{Instance Models}
 \label{Sec:IMs}
-This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Section: Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Section: Theoretical Models} and \hyperref[Sec:GDs]{Section: General Definitions}.
+This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Sec:Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Sec:Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Sec:Theoretical Models} and \hyperref[Sec:GDs]{Sec:General Definitions}.
 
 The goal \hyperref[willBreakGS]{GS:Predict-Glass-Withstands-Explosion} is met by \hyperref[IM:isSafePb]{IM:isSafePb}, \hyperref[IM:isSafeLR]{IM:isSafeLR}.
 
@@ -1236,7 +1236,7 @@ RefBy & \hyperref[IM:isSafePb]{IM:isSafePb}
 \end{minipage}
 \subsubsection{Data Constraints}
 \label{Sec:DataConstraints}
-\hyperref[Table:InDataConstraints]{Tab:InDataConstraints} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. \hyperref[Sec:AuxConstants]{Section: Values of Auxiliary Constants} gives the values of the specification parameters used in \hyperref[Table:InDataConstraints]{Tab:InDataConstraints}.
+\hyperref[Table:InDataConstraints]{Tab:InDataConstraints} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. \hyperref[Sec:AuxConstants]{Sec:Values of Auxiliary Constants} gives the values of the specification parameters used in \hyperref[Table:InDataConstraints]{Tab:InDataConstraints}.
 
 \begin{longtable}{l l l l l}
 \toprule
@@ -1291,7 +1291,7 @@ This section provides the functional requirements, the tasks and behaviours that
 \begin{itemize}
 \item[Input-Values:\phantomsection\label{inputValues}]{Input the values from \hyperref[Table:ReqInputs]{Tab:ReqInputs}, which define the glass dimensions, type of glass, tolerable probability of failure, and the characteristics of the blast.}
 \item[System-Set-Values-Following-Assumptions:\phantomsection\label{sysSetValsFollowingAssumps}]{The system shall set the known values as described in \hyperref[Table:ReqAssignments]{Tab:ReqAssignments}.}
-\item[Check-Input-with-Data\_Constraints:\phantomsection\label{checkInputWithDataCons}]{The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in \hyperref[Sec:DataConstraints]{Section: Data Constraints}. If any of the input values are out of bounds, an error message is displayed and the calculations stop.}
+\item[Check-Input-with-Data\_Constraints:\phantomsection\label{checkInputWithDataCons}]{The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in \hyperref[Sec:DataConstraints]{Sec:Data Constraints}. If any of the input values are out of bounds, an error message is displayed and the calculations stop.}
 \item[Output-Values-and-Known-Values:\phantomsection\label{outputValsAndKnownValues}]{Output the input values from \hyperref[inputValues]{FR:Input-Values} and the known values from \hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions}.}
 \item[Check-Glass-Safety:\phantomsection\label{checkGlassSafety}]{If $is-safePb\land{}is-safeLR$ (from \hyperref[TM:isSafeProb]{TM:isSafeProb} and \hyperref[TM:isSafeLoad]{TM:isSafeLoad}), output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''}
 \item[Output-Values:\phantomsection\label{outputValues}]{Output the values from \hyperref[Table:ReqOutputs]{Tab:ReqOutputs}.}
@@ -1393,7 +1393,7 @@ ${\hat{q}_{\text{tol}}}$ & Tolerable load & \hyperref[DD:tolLoad]{DD:tolLoad} & 
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
 
 \begin{itemize}
-\item[Correct:\phantomsection\label{correct}]{The outputs of the code have the properties described in \hyperref[Sec:CorSolProps]{Section: Properties of a Correct Solution}.}
+\item[Correct:\phantomsection\label{correct}]{The outputs of the code have the properties described in \hyperref[Sec:CorSolProps]{Sec:Properties of a Correct Solution}.}
 \item[Verifiable:\phantomsection\label{verifiable}]{The code is tested with complete verification and validation plan.}
 \item[Understandable:\phantomsection\label{understandable}]{The code is modularized with complete module guide and module interface specification.}
 \item[Reusable:\phantomsection\label{reusable}]{The code is modularized.}

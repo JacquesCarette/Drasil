@@ -177,13 +177,13 @@ The scope of the requirements includes a PD Control Loop with three subsystems, 
 
 \subsection{Characteristics of Intended Reader}
 \label{Sec:ReaderChars}
-Reviewers of this documentation should have an understanding of control systems (control theory and controllers) at the fourth-year undergraduate level and engineering mathematics at a second-year undergraduate level. The users of PD Controller can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Section: User Characteristics}.
+Reviewers of this documentation should have an understanding of control systems (control theory and controllers) at the fourth-year undergraduate level and engineering mathematics at a second-year undergraduate level. The users of PD Controller can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Sec:User Characteristics}.
 
 \subsection{Organization of Document}
 \label{Sec:DocOrg}
-The sections in this document are based on \cite{smithLai2005}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in \hyperref[Sec:IMs]{Section:Instance Models} and trace back to find any additional information they require.
+The sections in this document are based on \cite{smithLai2005}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in \hyperref[Sec:IMs]{Sec:Instance Models} and trace back to find any additional information they require.
 
-The goal statements (\hyperref[Sec:GoalStmt]{Section: Goal Statements}) are refined to the theoretical models and the theoretical models (\hyperref[Sec:TMs]{Section:Theoretical Models}) to the instance models (\hyperref[Sec:IMs]{Section:Instance Models}). The instance model referred as \hyperref[IM:pdEquationIM]{IM:pdEquationIM} provides an Ordinary Differential Equation (ODE) that models the PD Controller.
+The goal statements (\hyperref[Sec:GoalStmt]{Sec:Goal Statements}) are refined to the theoretical models and the theoretical models (\hyperref[Sec:TMs]{Sec:Theoretical Models}) to the instance models (\hyperref[Sec:IMs]{Sec:Instance Models}). The instance model referred as \hyperref[IM:pdEquationIM]{IM:pdEquationIM} provides an Ordinary Differential Equation (ODE) that models the PD Controller.
 
 \section{General System Description}
 \label{Sec:GenSysDesc}
@@ -285,7 +285,7 @@ Given Set-Point, Simulation Time, Proportional Gain, Derivative Gain, and Step T
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
-The instance models that govern PD Controller are presented in \hyperref[Sec:IMs]{Section:Instance Models}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models that govern PD Controller are presented in \hyperref[Sec:IMs]{Sec:Instance Models}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 
 \subsubsection{Assumptions}
 \label{Sec:Assumps}
@@ -604,7 +604,7 @@ RefBy & \hyperref[IM:pdEquationIM]{IM:pdEquationIM}
 
 \subsubsection{Instance Models}
 \label{Sec:IMs}
-This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Section: Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Section:Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Section:Theoretical Models} and \hyperref[Sec:GDs]{Section:General Definitions}.
+This section transforms the problem defined in \hyperref[Sec:ProbDesc]{Sec:Problem Description} into one which is expressed in mathematical terms. It uses concrete symbols defined in \hyperref[Sec:DDs]{Sec:Data Definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{Sec:Theoretical Models} and \hyperref[Sec:GDs]{Sec:General Definitions}.
 
 \vspace{\baselineskip}
 \noindent
@@ -713,7 +713,7 @@ This section provides the functional requirements, the tasks and behaviours that
 
 \begin{itemize}
 \item[Input-Values:\phantomsection\label{inputValues}]{Input the values from \hyperref[Table:ReqInputs]{Tab:ReqInputs}.}
-\item[Verify-Input-Values:\phantomsection\label{verifyInputs}]{Ensure that the input values are within the limits specified in \hyperref[Sec:DataConstraints]{Section: Data Constraints}.}
+\item[Verify-Input-Values:\phantomsection\label{verifyInputs}]{Ensure that the input values are within the limits specified in \hyperref[Sec:DataConstraints]{Sec:Data Constraints}.}
 \item[Calculate-Values:\phantomsection\label{calculateValues}]{Calculate the Process Variable (from \hyperref[IM:pdEquationIM]{IM:pdEquationIM}) over the simulation time.}
 \item[Output-Values:\phantomsection\label{outputValues}]{Output the Process Variable (from \hyperref[IM:pdEquationIM]{IM:pdEquationIM}) over the simulation time.}
 \end{itemize}

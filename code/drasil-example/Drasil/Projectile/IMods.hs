@@ -162,4 +162,4 @@ tolNote = ch tol `S.is` S "defined in" +:+. makeRef2S (SRS.valsOfAuxCons ([]::[C
 
 -- References -- 
 iModRefs :: [Reference]
-iModRefs = map rw (iMods ++ iMods0)
+iModRefs = map rw iMods

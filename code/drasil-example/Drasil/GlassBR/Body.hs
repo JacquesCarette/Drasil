@@ -63,7 +63,7 @@ import Drasil.GlassBR.IMods (symb, iMods, instModIntro, iModRefs)
 import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations, rbrtsn2012, citeRefs)
 import Drasil.GlassBR.Requirements (funcReqs, inReqDesc, funcReqsTables, nonfuncReqs, reqRefs)
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
-import Drasil.GlassBR.TMods (tMods)
+import Drasil.GlassBR.TMods (tMods, tModRefs)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   constrained, inputDataConstraints, inputs, outputs, specParamVals, glassTy,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
@@ -406,4 +406,4 @@ secRefs = rw ((uncurry makeSecRef) tableAbbAccUID): map rw SRS.sectionReferences
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ goalRefs ++ dataDefRefs
-  ++ iModRefs ++ citeRefs ++ reqRefs ++ secRefs ++ tabRefs ++ srsRefs)
+  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs ++ tabRefs ++ srsRefs)

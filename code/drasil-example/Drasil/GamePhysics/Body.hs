@@ -1,5 +1,6 @@
 module Drasil.GamePhysics.Body where
 
+import Data.List (nub)
 import Language.Drasil hiding (Symbol(..), Vector, organization, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB, SystemInformation(SI),
@@ -16,7 +17,9 @@ import Drasil.DocLang (DerivationDisplay(..), DocSection(..), Emphasis(..),
   SolChSpec(SCSProg), TConvention(..), TSIntro(..), Verbosity(Verbose),
   OffShelfSolnsSec(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
   ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
-  PDSub(..), intro, mkDoc, tsymb, traceMatStandard, solutionLabel, purpDoc)
+  PDSub(..), intro, mkDoc, tsymb, traceMatStandard, solutionLabel, purpDoc, getTraceConfigUID,
+  reqInputsUID, symbTableRef, unitTableRef, tableAbbAccUID, tableOfConstants,
+  inDataConstTbl, outDataConstTbl)
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
@@ -41,18 +44,18 @@ import qualified Data.Drasil.Concepts.Math as CM (cartesian, equation, law,
   mathcon, mathcon', rightHand, line, point)
 import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
-import Drasil.GamePhysics.Assumptions (assumptions)
-import Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs)
+import Drasil.GamePhysics.Assumptions (assumptions, assumpRefs)
+import Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs, chgRefs)
 import Drasil.GamePhysics.Concepts (gamePhysics, acronyms, threeD, twoD)
-import Drasil.GamePhysics.DataDefs (dataDefs)
-import Drasil.GamePhysics.Goals (goals)
-import Drasil.GamePhysics.IMods (iMods, instModIntro)
-import Drasil.GamePhysics.References (citations, koothoor2013, smithLai2005)
-import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs)
-import Drasil.GamePhysics.TMods (tMods)
+import Drasil.GamePhysics.DataDefs (dataDefs, dataDefRefs)
+import Drasil.GamePhysics.Goals (goals, goalRefs)
+import Drasil.GamePhysics.IMods (iMods, instModIntro, iModRefs)
+import Drasil.GamePhysics.References (citations, koothoor2013, smithLai2005, citeRefs)
+import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, reqRefs)
+import Drasil.GamePhysics.TMods (tMods, tModRefs)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
   inputSymbols, outputSymbols, inputConstraints, defSymbols)
-import Drasil.GamePhysics.GenDefs (generalDefns)
+import Drasil.GamePhysics.GenDefs (generalDefns, genDefRefs)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize short) si
@@ -153,7 +156,7 @@ symbMap = cdb (map qw iMods ++ map qw symbolsAll) (map nw symbolsAll
   ++ map nw CP.physicCon ++ map nw educon ++ [nw algorithm] ++ map nw derived
   ++ map nw fundamentals ++ map nw CM.mathcon ++ map nw CM.mathcon') 
   (map cw defSymbols ++ srsDomains ++ map cw iMods) units dataDefs
-  iMods generalDefns tMods concIns section [] ([] :: [Reference])
+  iMods generalDefns tMods concIns section [] allRefs
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbolsAll ++ map nw acronyms)
@@ -438,3 +441,25 @@ offShelfSols3DList = LlC $ enumBullet solutionLabel [
 -- REFERENCES --
 ----------------
 -- To be added --
+
+-- References --
+bodyRefs :: [Reference]
+bodyRefs = rw sysCtxFig1: map rw concIns ++ map rw section
+
+-- below are references used in all examples
+srsRefs :: [Reference]
+srsRefs = map rw [SRS.reference ([]::[Contents]) ([]::[Section]), 
+    SRS.assumpt ([]::[Contents]) ([]::[Section]), SRS.sysCon [] []]
+
+tabRefs :: [Reference]
+tabRefs = [symbTableRef, unitTableRef] ++ map (rw.makeTabRef) [fst tableAbbAccUID, reqInputsUID] 
+  ++ map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+  ++ map rw [tableOfConstants [], inDataConstTbl ([]::[UncertainChunk]),
+  outDataConstTbl ([]::[ConstrainedChunk])]
+
+secRefs :: [Reference]
+secRefs = rw ((uncurry makeSecRef) tableAbbAccUID): map rw SRS.sectionReferences
+
+allRefs :: [Reference]
+allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ goalRefs ++ dataDefRefs ++ genDefRefs
+  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs ++ tabRefs ++ srsRefs)

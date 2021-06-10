@@ -140,4 +140,4 @@ maintainability = cic "maintainability" (foldlSent [
 
 -- References --
 reqRefs :: [Reference]
-reqRefs = map rw ([(inReq EmptyS)] ++ funcReqs ++ nonfuncReqs)
+reqRefs = map rw ([inReq EmptyS] ++ funcReqs ++ nonfuncReqs)

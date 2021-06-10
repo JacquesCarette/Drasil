@@ -134,8 +134,8 @@ portable = cic "portable" (foldlSent [
 -- References --
 reqRefs :: [Reference]
 reqRefs = map rw funcReqsTables
-  ++ map rw [datCon ([]::[Contents]) ([]::[Section]), (propCorSol [] [])]
-  ++ map rw ([(inReq EmptyS)] ++ funcReqs ++ nonfuncReqs) ++ map rw [pbIsSafe, lrIsSafe]
+  ++ map rw [datCon ([]::[Contents]) ([]::[Section]), propCorSol [] []]
+  ++ map rw ([inReq EmptyS] ++ funcReqs ++ nonfuncReqs) ++ map rw [pbIsSafe, lrIsSafe]
   ++ map rw [loadDF, hFromt, glaTyFac, standOffDis, aspRat]
   ++ map rw [risk, strDisFac, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac, hFromt, aspRat]
   

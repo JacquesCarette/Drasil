@@ -81,5 +81,5 @@ verifiability
 -- References --
 reqRefs :: [Reference]
 reqRefs = rw (datCon ([]::[Contents]) ([]::[Section])): 
-  map rw ([(inReq EmptyS)] ++ funcReqs ++ nonfuncReqs)
+  map rw ([inReq EmptyS] ++ funcReqs ++ nonfuncReqs)
 

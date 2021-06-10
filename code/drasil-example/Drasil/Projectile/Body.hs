@@ -243,7 +243,7 @@ tabRefs = [symbTableRef, unitTableRef] ++ map (rw.makeTabRef) [fst tableAbbAccUI
   outDataConstTbl ([]::[ConstrainedChunk])]
 
 secRefs :: [Reference]
-secRefs = rw ((uncurry makeSecRef) tableAbbAccUID):
+secRefs = rw (uncurry makeSecRef tableAbbAccUID):
   map rw SRS.sectionReferences -- [SRS.dataDefnLabel, SRS.thModelLabel, SRS.genDefnLabel, SRS.inModelLabel, SRS.tOfSymbLabel]
 
 

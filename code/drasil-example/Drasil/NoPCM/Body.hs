@@ -45,7 +45,7 @@ import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived)
 
-import qualified Drasil.DocLang.SRS as SRS (inModel, reference, assumpt, sysCon, tOfSymbLabel)
+import qualified Drasil.DocLang.SRS as SRS (inModel, reference, assumpt, sysCon, sectionReferences)
 import Drasil.DocLang (AuxConstntSec(AuxConsProg), DerivationDisplay(..),
   DocSection(..), Field(..), Fields, GSDSec(..), GSDSub(..), InclUnits(IncludeUnits),
   IntroSec(IntroProg), IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
@@ -394,7 +394,7 @@ tabRefs = [symbTableRef, unitTableRef]
   outDataConstTbl ([]::[ConstrainedChunk])]
 
 secRefs :: [Reference]
-secRefs = [SRS.tOfSymbLabel, rw $ (uncurry makeSecRef) tableAbbAccUID]
+secRefs = rw (uncurry makeSecRef tableAbbAccUID): SRS.sectionReferences
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ dataDefRefs ++ genDefRefs++ goalRefs

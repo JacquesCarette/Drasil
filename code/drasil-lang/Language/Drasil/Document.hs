@@ -36,7 +36,7 @@ instance Referable Section where
   refAdd    (Section _ _ lb ) = getRefAdd lb
   renderRef (Section _ _ lb)  = RP (prepend "Sec") (getRefAdd lb)
 -- | Finds the reference address of a 'Section'.
-instance HasRefAddress Section where getRefAdd = getRefAdd . (view lab)
+instance HasRefAddress Section where getRefAdd = getRefAdd . view lab
 
 -- | A Document has a Title ('Sentence'), Author(s) ('Sentence'), and 'Section's
 -- which hold the contents of the document.

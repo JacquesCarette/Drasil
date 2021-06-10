@@ -66,4 +66,4 @@ portable = cic "portable" (foldlSent [
  
 -- References --
 reqRefs :: [Reference]
-reqRefs = map rw ([(inReq EmptyS)] ++ funcReqs ++ nonFuncReqs)
+reqRefs = map rw ([inReq EmptyS] ++ funcReqs ++ nonFuncReqs)

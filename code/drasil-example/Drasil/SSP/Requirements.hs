@@ -132,5 +132,5 @@ maintainable = cic "maintainable" (foldlSent [
   plural traceyMatrix `S.inThe` getAcc srs `S.and_` phrase mg]) "Maintainable" nonFuncReqDom
 
 reqRefs :: [Reference]
-reqRefs = map rw ([(inReq EmptyS)] ++ funcReqs ++ nonFuncReqs) 
+reqRefs = map rw ([inReq EmptyS] ++ funcReqs ++ nonFuncReqs)
   ++ map rw (funcReqTables ++ [inputsToOutputTable, inputDataTable])

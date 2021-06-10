@@ -5,8 +5,10 @@ module Drasil.SSP.GenDefs (normForcEq, bsShrFEq, resShr, mobShr,
   mobShearWOGD, resShearWOGD, srfWtrFGD) where
 
 import Prelude hiding (sin, cos, tan)
+import qualified Data.List.NonEmpty as NE
+
 import Language.Drasil
-import Theory.Drasil (GenDefn, gd, ModelKinds (OthModel))
+import Theory.Drasil (GenDefn, gd, ModelKinds (OthModel, EquationalConstraints), mkConstraintSet)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.NounPhrase as NP
@@ -74,7 +76,7 @@ mobShearWOGD = gd (OthModel mobShearWO) (getUnit shearFNoIntsl) Nothing
   (map makeCite[chen2005, karchewski2012]) "mobShearWO"  [mobShearWODesc]
 normShrRGD   = gd (OthModel normShrR)   (getUnit intShrForce)   Nothing
   [makeCite chen2005]                      "normShrR"    [nmShrRDesc]
-momentEqlGD  = gd (OthModel momentEql)  (Just newton)           (Just momEqlDeriv)
+momentEqlGD  = gd momentEqlModel        (Just newton)            (Just momEqlDeriv)
   [makeCite chen2005]                      "momentEql"   [momEqlDesc]
 sliceWghtGD  = gd (OthModel sliceWght)  (getUnit slcWght)       (Just sliceWghtDeriv)
   [makeCite fredlund1977]                  "sliceWght"   [sliceWghtNotes]
@@ -82,7 +84,6 @@ baseWtrFGD   = gd (OthModel baseWtrF)   (getUnit baseHydroForce) (Just bsWtrFDer
   [makeCite fredlund1977]                  "baseWtrF"    [bsWtrFNotes]
 srfWtrFGD    = gd (OthModel srfWtrF)    (getUnit surfHydroForce) (Just srfWtrFDeriv)
   [makeCite fredlund1977]                  "srfWtrF"     [srfWtrFNotes]
-
 --
 normForcEq :: RelationConcept
 normForcEq = makeRC "normForcEq" (nounPhraseSP "normal force equilibrium")
@@ -247,6 +248,11 @@ mobShearWODesc = (foldlList Comma List [slcWght `definedIn'''` sliceWghtGD,
   watrForce `definedIn'''` intersliceWtrF] !.)
 
 --
+
+momentEqlModel :: ModelKinds
+momentEqlModel = EquationalConstraints $
+  mkConstraintSet (dccWDS "momentEql" (nounPhraseSP "moment equilibrium") momEqlDesc) $
+  NE.fromList [momEqlRel]
 
 momentEql :: RelationConcept
 momentEql = makeRC "momentEql" (nounPhraseSP "moment equilibrium")

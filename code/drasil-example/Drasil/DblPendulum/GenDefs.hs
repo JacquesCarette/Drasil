@@ -4,8 +4,12 @@ module Drasil.DblPendulum.GenDefs (genDefns, velocityIXGD, velocityIYGD,
          angFrequencyGD, periodPend) where
 
 import Prelude hiding (cos, sin, sqrt)
+import qualified Data.List.NonEmpty as NE
+
 import Language.Drasil
-import Theory.Drasil (GenDefn, gdNoRefs, gdNoRefs', ModelKinds (OthModel, EquationalModel))
+import Theory.Drasil (GenDefn, gdNoRefs, gdNoRefs',
+    ModelKinds (OthModel, EquationalModel, EquationalRealm),
+    MultiDefn, mkDefiningExpr, mkMultiDefnForQuant)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -178,19 +182,21 @@ accelerationIYDerivSent5 = S "Simplifying,"
 
 -------------------------------------Horizontal force acting on the pendulum 
 hForceOnPendulumGD :: GenDefn
-hForceOnPendulumGD = gdNoRefs (OthModel hForceOnPendulumRC) (getUnit force)
+hForceOnPendulumGD = gdNoRefs (EquationalRealm hForceOnPendulumMD) (getUnit force)
            (Just hForceOnPendulumDeriv) "hForceOnPendulum" [{-Notes-}]
 
-hForceOnPendulumRC :: RelationConcept
-hForceOnPendulumRC = makeRC "hForceOnPendulumRC" (horizontalForce `onThe` pendulum)
-           EmptyS hForceOnPendulumRel
- 
-hForceOnPendulumRel :: Relation
-hForceOnPendulumRel = sy force $= sy mass `mulRe` sy xAccel $= neg (sy tension `mulRe` sin (sy pendDisplacementAngle))
-                     
+hForceOnPendulumMD :: MultiDefn
+hForceOnPendulumMD = mkMultiDefnForQuant quant EmptyS $ NE.fromList [
+        mkDefiningExpr "hForceOnPendulumViaComponent" [] EmptyS $
+            sy mass `mulRe` sy xAccel,
+        mkDefiningExpr "hForceOnPendulumViaAngle"     [] EmptyS $
+            neg (sy tension `mulRe` sin (sy pendDisplacementAngle))
+    ]
+    where quant = mkQuant' "force" (horizontalForce `onThe` pendulum)
+                    Nothing Real (symbol force) (getUnit force)
 
 hForceOnPendulumDeriv :: Derivation
-hForceOnPendulumDeriv = mkDerivName (phraseNP (force `onThe` pendulum)) [ E hForceOnPendulumRel]
+hForceOnPendulumDeriv = mkDerivName (phraseNP (force `onThe` pendulum)) [E $ relat hForceOnPendulumMD]
 
 ----------------------------------------Vertical force acting on the pendulum 
 vForceOnPendulumGD :: GenDefn

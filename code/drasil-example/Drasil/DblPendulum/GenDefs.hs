@@ -182,8 +182,8 @@ accelerationIYDerivSent5 = S "Simplifying,"
 
 -------------------------------------Horizontal force acting on the pendulum 
 hForceOnPendulumGD :: GenDefn
-hForceOnPendulumGD = gdNoRefs' "hForceOnPendulum" (EquationalRealm hForceOnPendulumMD) (getUnit force)
-           (Just hForceOnPendulumDeriv) "hForceOnPendulum" [{-Notes-}]
+hForceOnPendulumGD = gdNoRefs' "hForceOnPendulum" (EquationalRealm hForceOnPendulumMD)
+        (getUnit force) (Just hForceOnPendulumDeriv) "hForceOnPendulum" [{-Notes-}]
 
 hForceOnPendulumMD :: MultiDefn
 hForceOnPendulumMD = mkMultiDefnForQuant quant EmptyS defns
@@ -201,8 +201,8 @@ hForceOnPendulumDeriv = mkDerivName (phraseNP (force `onThe` pendulum)) [E $ rel
 
 ----------------------------------------Vertical force acting on the pendulum 
 vForceOnPendulumGD :: GenDefn
-vForceOnPendulumGD = gdNoRefs' "vForceOnPendulum" (EquationalRealm vForceOnPendulumMD) (getUnit force)
-           (Just vForceOnPendulumDeriv) "vForceOnPendulum" [{-Notes-}]
+vForceOnPendulumGD = gdNoRefs' "vForceOnPendulum" (EquationalRealm vForceOnPendulumMD)
+        (getUnit force) (Just vForceOnPendulumDeriv) "vForceOnPendulum" [{-Notes-}]
 
 vForceOnPendulumMD :: MultiDefn
 vForceOnPendulumMD = mkMultiDefnForQuant quant EmptyS defns

@@ -55,7 +55,7 @@ import Drasil.Projectile.References (citations)
 import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs)
 import Drasil.Projectile.Unitals
 
-import Theory.Drasil (getEqModQdsFromGd, getEqModQdsFromIm, TheoryModel)
+import Theory.Drasil (TheoryModel)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si

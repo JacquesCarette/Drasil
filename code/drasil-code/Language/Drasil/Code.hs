@@ -8,7 +8,7 @@ module Language.Drasil.Code (
   ConstantStructure(..), ConstantRepr(..), InputModule(..), CodeConcept(..), 
   matchConcepts, SpaceMatch, matchSpaces, AuxFile(..), getSampleData, 
   Visibility(..), defaultChoices, 
-  CodeSpec(..), funcUID, funcUID', asVC, asVC', codeSpec, relToQD,
+  CodeSpec(..), funcUID, funcUID', asVC, asVC', codeSpec,
   ($:=), Mod(Mod), StateVariable, Func, FuncStmt(..), pubStateVar, 
   privStateVar, fDecDef, ffor, funcData, funcDef, packmod,
   junkLine, multiLine, repeated, singleLine, singleton,
@@ -86,7 +86,7 @@ import Language.Drasil.Choices (Choices(..), Comments(..), Verbosity(..),
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, AuxFile(..), 
   getSampleData, Visibility(..), defaultChoices,)
 import Language.Drasil.CodeSpec (CodeSpec(..), funcUID, funcUID', asVC, asVC', 
-  codeSpec, relToQD)
+  codeSpec)
 import Language.Drasil.Mod (($:=), Mod(Mod), StateVariable, Func, FuncStmt(..), 
   pubStateVar, privStateVar, fDecDef, ffor, funcData, funcDef, packmod)
 

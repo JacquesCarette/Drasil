@@ -5,7 +5,7 @@ import Language.Drasil hiding (Symbol(..), organization, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts, _constants,
-  _constraints, _datadefs, _configFiles, _definitions, _defSequence, _inputs, _kind, 
+  _constraints, _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, 
   _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (GenDefn, InstanceModel)
 import Utils.Drasil
@@ -55,7 +55,6 @@ import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
 import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
 import Drasil.SWHS.Concepts (acronymsFull, coil, con, phaseChangeMaterial,
   phsChgMtrl, progName, sWHT, swhsPCM, tank, tankPCM, transient, water)
-import Drasil.SWHS.DataDefs (qDefs)
 import qualified Drasil.SWHS.DataDefs as SWHS (dataDefs)
 import Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater)
 import Drasil.SWHS.Goals (goals)
@@ -87,23 +86,23 @@ units = map unitWrapper [metre, kilogram, second] ++
 
 si :: SystemInformation
 si = SI {
-  _sys = swhsPCM,
-  _kind = Doc.srs, 
-  _authors = [thulasi, brooks, spencerSmith],
-  _purpose = purpDoc progName Verbose,
-  _quants = symbols,
-  _concepts = [] :: [DefinedQuantityDict],
-  _definitions = qDefs,
-  _datadefs = SWHS.dataDefs,
+  _sys         = swhsPCM,
+  _kind        = Doc.srs, 
+  _authors     = [thulasi, brooks, spencerSmith],
+  _purpose     = purpDoc progName Verbose,
+  _quants      = symbols,
+  _concepts    = [] :: [DefinedQuantityDict],
+  _instModels  = [], -- FIXME; empty _instModels
+  _datadefs    = SWHS.dataDefs,
   _configFiles = [],
-  _inputs = inputs,
-  _outputs = map qw outputs,
+  _inputs      = inputs,
+  _outputs     = map qw outputs,
   _defSequence = [] :: [Block QDefinition],
   _constraints = constrained,
-  _constants = specParamValList,
-  _sysinfodb = symbMap,
-  _usedinfodb = usedDB,
-   refdb = refDB
+  _constants   = specParamValList,
+  _sysinfodb   = symbMap,
+  _usedinfodb  = usedDB,
+   refdb       = refDB
 }
 
 symbMap :: ChunkDB

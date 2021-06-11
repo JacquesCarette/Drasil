@@ -6,9 +6,8 @@ import Language.Drasil hiding (Symbol(..), organization, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
-  _datadefs, _definitions, _configFiles, _defSequence, _inputs, _kind, 
+  _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, 
   _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
-import Theory.Drasil (getEqModQdsFromIm)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -80,7 +79,7 @@ si = SI {
   _purpose     = purpDoc glassBR Verbose,
   _quants      = symbolsForTable,
   _concepts    = [] :: [DefinedQuantityDict],
-  _definitions = getEqModQdsFromIm iMods,
+  _instModels  = iMods,
   _datadefs    = GB.dataDefs,
   _configFiles = configFp,
   _inputs      = inputs,
@@ -89,7 +88,7 @@ si = SI {
   _constraints = constrained,
   _constants   = constants,
   _sysinfodb   = symbMap,
-  _usedinfodb = usedDB,
+  _usedinfodb  = usedDB,
    refdb       = refDB
 }
   --FIXME: All named ideas, not just acronyms.
@@ -170,15 +169,12 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 termsAndDescBullets :: Contents
 termsAndDescBullets = UlC $ ulcc $ Enumeration$ 
   Numeric $
-  noRefs $ map tAndDOnly termsWithDefsOnly
-  ++
-  termsAndDescBulletsGlTySubSec
-  ++
-  termsAndDescBulletsLoadSubSec
-  ++
-  map tAndDWAcc termsWithAccDefn
-  ++
-  [tAndDWSym probBreak probBr]
+    noRefs $
+      map tAndDOnly termsWithDefsOnly 
+      ++ termsAndDescBulletsGlTySubSec 
+      ++ termsAndDescBulletsLoadSubSec 
+      ++ map tAndDWAcc termsWithAccDefn 
+      ++ [tAndDWSym probBreak probBr]
    --FIXME: merge? Needs 2 arguments because there is no instance for (SymbolForm ConceptChunk)...
 
 termsAndDescBulletsGlTySubSec, termsAndDescBulletsLoadSubSec :: [ItemType]

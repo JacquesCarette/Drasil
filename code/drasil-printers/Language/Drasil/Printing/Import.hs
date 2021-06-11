@@ -98,7 +98,9 @@ assocExpr :: P.Ops -> Int -> [Expr] -> PrintingInformation -> P.Expr
 assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ map (expr' sm prec) exprs
 
 dispExpr :: DisplayExpr -> PrintingInformation -> P.Expr
-dispExpr _ _ = P.Int 1
+dispExpr (AlgebraicExpr e) sm = expr e sm
+dispExpr (Defines l r)     sm = P.Row [dispExpr l sm, P.MO P.Eq, dispExpr r sm] -- TODO: Use new symbol?
+dispExpr (MultiExpr des)   sm = P.Row $ map (`dispExpr` sm) des                 -- TODO: New lines?
 
 -- | Expr translation function from Drasil to printable layout AST.
 expr :: Expr -> PrintingInformation -> P.Expr
@@ -128,16 +130,16 @@ expr (Deriv Total a b)        sm =
         (P.Row [P.Spc P.Thin, P.Ident "d",
                 symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b])
 expr (C c)                    sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
-expr (FCall f [x] [])         sm = 
+expr (FCall f [x] [])         sm =
   P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f, parens $ expr x sm]
 expr (FCall f l ns)           sm = call sm f l ns
 expr (New c l ns)             sm = call sm c l ns
-expr (Message a m l ns)       sm = 
+expr (Message a m l ns)       sm =
   P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) a, P.MO P.Point, call sm m l ns]
 expr (Field o f)              sm = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) o,
   P.MO P.Point, symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f]
 expr (Case _ ps)              sm =
-  if length ps < 2 
+  if length ps < 2
     then error "Attempting to use multi-case expr incorrectly"
     else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
 expr (Matrix a)               sm = P.Mtx $ map (map (`expr` sm)) a

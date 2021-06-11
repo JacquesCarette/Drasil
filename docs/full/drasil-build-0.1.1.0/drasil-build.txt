@@ -10,23 +10,60 @@
 @version 0.1.1.0
 
 module Build.Drasil.Make.MakeString
+
+-- | Type synonym for variable names.
 type VarName = String
+
+-- | Type synonym for variable values.
 type VarVal = String
 data MakeString
+
+-- | A string for Makefiles.
 Mr :: String -> MakeString
+
+-- | Holds a Makefile variable.
 Mv :: MVar -> MakeString
+
+-- | Concatenates two <a>MakeString</a>s.
 Mc :: MakeString -> MakeString -> MakeString
+
+-- | Concatenates two <a>MakeString</a>s with a space in between.
 (+:+) :: MakeString -> MakeString -> MakeString
+
+-- | For creating Makefile variables.
 data MVar
+
+-- | Operating System specific variable. Holds information for Windows,
+--   Mac, and Linux systems.
 Os :: VarName -> VarVal -> VarVal -> VarVal -> MVar
+
+-- | Implicit OS.
 Implicit :: VarName -> MVar
+
+-- | Independent of OS.
 Free :: VarName -> MVar
+
+-- | Renders a <a>MakeString</a>. Variables have the form
+--   "$(<tt>var</tt>)".
 renderMS :: MakeString -> String
+
+-- | Renders variables. Takes in a function for the variable, and the type
+--   of variable.
 renderVar :: (String -> String) -> MVar -> String
+
+-- | Constructor for converting a String into a MakeString.
 makeS :: String -> MakeString
+
+-- | Constructor for Windows OS variables.
 mkWindowsVar :: VarName -> VarVal -> VarVal -> MakeString
+
+-- | Constructor for <tt>OS</tt> variables.
 mkOSVar :: VarName -> VarVal -> VarVal -> VarVal -> MakeString
+
+-- | Constructor for <a>Implicit</a> variables.
 mkImplicitVar :: VarName -> MakeString
+
+-- | Constructor for <a>Free</a> variables.
 mkFreeVar :: VarName -> MakeString
 instance GHC.Classes.Eq Build.Drasil.Make.MakeString.MVar
 instance GHC.Base.Semigroup Build.Drasil.Make.MakeString.MakeString
@@ -35,119 +72,175 @@ instance GHC.Base.Monoid Build.Drasil.Make.MakeString.MakeString
 
 -- | Makefile abstract syntax tree
 module Build.Drasil.Make.AST
+
+-- | A Makefile is made up of Makefile rules.
 newtype Makefile
 M :: [Rule] -> Makefile
+
+-- | A Makefile Rule needs a target, dependencies, type, and commands.
 data Rule
 R :: Target -> Dependencies -> Type -> [Command] -> Rule
+
+-- | A command is made up of <a>MakeString</a>s and command operators.
 data Command
 C :: MakeString -> [CommandOpts] -> Command
+
+-- | Ignore the return code from the system.
 data CommandOpts
 IgnoreReturnCode :: CommandOpts
+
+-- | Type of rule, either abstract or file-oriented.
 data Type
 Abstract :: Type
 File :: Type
+
+-- | A Makefile target is made from a <a>MakeString</a>.
 type Target = MakeString
+
+-- | Dependencies are made up of 0 or more <a>Target</a>s.
 type Dependencies = [Target]
 
--- | Creates a Rule which results in a file being created
+-- | Creates a Rule which results in a file being created.
 mkFile :: Target -> Dependencies -> [Command] -> Rule
 
--- | Creates an abstract Rule not associated to a specific file
+-- | Creates an abstract Rule not associated to a specific file.
 mkRule :: Target -> Dependencies -> [Command] -> Rule
 
 -- | Creates a Command which fails the make process if it does not return
---   zero
+--   zero.
 mkCheckedCommand :: MakeString -> Command
 
--- | Creates a command which executes and ignores the return code
+-- | Creates a command which executes and ignores the return code.
 mkCommand :: MakeString -> Command
 instance GHC.Classes.Eq Build.Drasil.Make.AST.Type
 instance GHC.Classes.Eq Build.Drasil.Make.AST.CommandOpts
 
 module Build.Drasil.Make.Import
+
+-- | Members can be transformed into a make rule.
 class RuleTransformer c
 makeRule :: RuleTransformer c => c -> [Rule]
 
--- | Creates a Makefile (calls <a>makeRules</a>)
+-- | Creates a Makefile (calls <a>makeRules</a>).
 toMake :: RuleTransformer c => [c] -> Makefile
 
--- | Helper for creating make rules for different document types
+-- | Helper for creating make rules for different document types.
 makeRules :: RuleTransformer c => [c] -> [Rule]
 
 module Build.Drasil.Make.Helpers
+
+-- | Assignment operator ("=").
 ($=) :: MVar -> String -> Doc
+
+-- | Extracts information for Windows OS from a variable.
 win :: MVar -> String
+
+-- | Extracts information for Mac OS from a variable.
 mac :: MVar -> String
+
+-- | Extracts information for Linux OS from a variable.
 linux :: MVar -> String
+
+-- | Defines variables dependent on OS.
 defineOsVars :: (MVar -> String) -> [MVar] -> Doc
 
--- | Helper for rendering OS-specific variables
+-- | Helper for rendering OS-specific variables.
 osDefinitions :: [MVar] -> Doc
 
 -- | Deduplicates a list of variables and ensures duplicate variables have
---   the same definition
+--   the same definition.
 uniqueVars :: [MVar] -> [MVar]
+
+-- | Extracts the variable name from a Makefile variable.
 varName :: MVar -> String
 
--- | Extracts variables from a Makefile rule
+-- | Extracts variables from a Makefile rule.
 extractVars :: Rule -> [MVar]
+
+-- | Gets one or more variables from a MakeString.
 getVars :: MakeString -> [MVar]
+
+-- | Checks if a variable is OS dependent.
 isOsVar :: MVar -> Bool
 
--- | Helper for prepending common features to a Makefile
+-- | Helper for prepending common features to a Makefile.
 addCommonFeatures :: [Rule] -> Doc -> Doc
 
--- | Recipes must be indented with tabs
+-- | Recipes must be indented with tabs.
 tab :: Doc
 
--- | Makefile Syntax Indent (i.e. non recipes)
+-- | Makefile Syntax Indent (i.e. non recipes).
 msIndent :: Doc -> Doc
 
 module Build.Drasil.Make.Print
 
--- | Generates the makefile by calling <a>build</a> after <a>toMake</a>
+-- | Generates the makefile by calling <a>build</a> after <a>toMake</a>.
 genMake :: RuleTransformer c => [c] -> Doc
 
--- | Renders the makefile rules
+-- | Renders the makefile rules.
 build :: Makefile -> Doc
 
--- | Renders specific makefile rules. Called by <a>build</a>
+-- | Renders specific makefile rules. Called by <a>build</a>.
 printRule :: Rule -> Doc
 
 -- | Gathers all rules to abstract targets and tags them as phony.
 printPhony :: [Rule] -> Doc
 
--- | Renders targets with their dependencies
+-- | Renders targets with their dependencies.
 printTarget :: Target -> Dependencies -> Doc
+
+-- | Renders a makefile command.
 printCmd :: Command -> Doc
+
+-- | Renders multiple commands.
 printCmds :: [Command] -> Doc
 
 module Build.Drasil
+
+-- | A command is made up of <a>MakeString</a>s and command operators.
 data Command
+
+-- | Dependencies are made up of 0 or more <a>Target</a>s.
 type Dependencies = [Target]
 
 -- | Creates a Command which fails the make process if it does not return
---   zero
+--   zero.
 mkCheckedCommand :: MakeString -> Command
 
--- | Creates a command which executes and ignores the return code
+-- | Creates a command which executes and ignores the return code.
 mkCommand :: MakeString -> Command
 
--- | Creates a Rule which results in a file being created
+-- | Creates a Rule which results in a file being created.
 mkFile :: Target -> Dependencies -> [Command] -> Rule
 
--- | Creates an abstract Rule not associated to a specific file
+-- | Creates an abstract Rule not associated to a specific file.
 mkRule :: Target -> Dependencies -> [Command] -> Rule
+
+-- | A Makefile Rule needs a target, dependencies, type, and commands.
 data Rule
+
+-- | Members can be transformed into a make rule.
 class RuleTransformer c
 makeRule :: RuleTransformer c => c -> [Rule]
+
+-- | Concatenates two <a>MakeString</a>s with a space in between.
 (+:+) :: MakeString -> MakeString -> MakeString
+
+-- | Constructor for converting a String into a MakeString.
 makeS :: String -> MakeString
 data MakeString
+
+-- | Constructor for <a>Free</a> variables.
 mkFreeVar :: VarName -> MakeString
+
+-- | Constructor for <a>Implicit</a> variables.
 mkImplicitVar :: VarName -> MakeString
+
+-- | Constructor for Windows OS variables.
 mkWindowsVar :: VarName -> VarVal -> VarVal -> MakeString
+
+-- | Constructor for <tt>OS</tt> variables.
 mkOSVar :: VarName -> VarVal -> VarVal -> VarVal -> MakeString
 
--- | Generates the makefile by calling <a>build</a> after <a>toMake</a>
+-- | Generates the makefile by calling <a>build</a> after <a>toMake</a>.
 genMake :: RuleTransformer c => [c] -> Doc

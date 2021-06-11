@@ -4,10 +4,10 @@ module Language.Drasil.CodeSpec where
 
 import Language.Drasil
 import Database.Drasil (ChunkDB, SystemInformation(SI), symbResolve,
-  _authors, _constants, _constraints, _datadefs, _configFiles,
+  _authors, _constants, _constraints, _datadefs, _instModels, _configFiles,
   _inputs, _outputs, _sys, _sysinfodb)
 import Language.Drasil.Development (namesRI, EqBinOp(Eq))
-import Theory.Drasil (DataDefinition, qdFromDD)
+import Theory.Drasil (DataDefinition, qdFromDD, getEqModQdsFromIm)
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeIdea(codeChunk),
   ConstraintMap, programName, quantvar, codevars, codevars',
@@ -71,21 +71,25 @@ assocToMap = Map.fromList . map (\x -> (x ^. uid, x))
 -- | Defines a CodeSpec based on the SystemInformation, Choices, and Mods 
 -- defined by the user.
 codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
-codeSpec SI {_sys = sys
-              , _authors = as
-              , _datadefs = ddefs
-              , _configFiles = cfp
-              , _inputs = ins
-              , _outputs = outs
-              , _constraints = cs
-              , _constants = cnsts
-              , _sysinfodb = db} chs ms =
+codeSpec SI {_sys         = sys
+           , _authors     = as
+           , _instModels  = ims
+           , _datadefs    = ddefs
+           , _configFiles = cfp
+           , _inputs      = ins
+           , _outputs     = outs
+           , _constraints = cs
+           , _constants   = cnsts
+           , _sysinfodb   = db} chs ms =
   let n = programName sys
       inputs' = map quantvar ins
       const' = map qtov (filter ((`Map.notMember` conceptMatch chs) . (^. uid))
         cnsts)
       derived = map qtov $ getDerivedInputs ddefs inputs' const' db
-      rels = (map (qtoc . qdFromDD) ddefs \\ derived) ++ map odeDef (odes chs)
+      rels = (map qtoc (getEqModQdsFromIm ims ++ map qdFromDD ddefs) \\ derived)
+        ++ map odeDef (odes chs)
+      -- TODO: When we have better DEModels, we should be deriving our ODE information
+      --       directly from the instance models (ims) instead of directly from the choices.
       outs' = map quantvar outs
       allInputs = nub $ inputs' ++ map quantvar derived
       exOrder = getExecOrder rels (allInputs ++ map quantvar cnsts) outs' db

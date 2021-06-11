@@ -4,7 +4,7 @@ import Language.Drasil
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
-  _datadefs, _configFiles, _defSequence, _inputs, _kind, _outputs, 
+  _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, _outputs, 
   _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import qualified Utils.Drasil.Sentence as S
@@ -30,6 +30,7 @@ si = SI {
   _purpose     = [],
   _quants      = [] :: [QuantityDict],
   _concepts    = [] :: [DefinedQuantityDict],
+  _instModels  = [] :: [InstanceModel],
   _datadefs    = [] :: [DataDefinition],
   _configFiles = [],
   _inputs      = [] :: [QuantityDict],

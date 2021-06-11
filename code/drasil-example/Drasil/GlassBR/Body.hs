@@ -6,7 +6,7 @@ import Language.Drasil hiding (Symbol(..), organization, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
-  _datadefs, _configFiles, _defSequence, _inputs, _kind, 
+  _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, 
   _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Utils.Drasil
 import Utils.Drasil.Concepts
@@ -79,6 +79,7 @@ si = SI {
   _purpose     = purpDoc glassBR Verbose,
   _quants      = symbolsForTable,
   _concepts    = [] :: [DefinedQuantityDict],
+  _instModels  = iMods,
   _datadefs    = GB.dataDefs,
   _configFiles = configFp,
   _inputs      = inputs,

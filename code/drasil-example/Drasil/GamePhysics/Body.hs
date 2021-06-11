@@ -103,26 +103,26 @@ mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
 
 si :: SystemInformation
 si = SI {
-  _sys = gamePhysics,
-  _kind = Doc.srs,
-  _authors = [alex, luthfi, olu],
-  _purpose = purpDoc gamePhysics Verbose,
+  _sys         = gamePhysics,
+  _kind        = Doc.srs,
+  _authors     = [alex, luthfi, olu],
+  _purpose     = purpDoc gamePhysics Verbose,
   -- FIXME: The _quants field should be filled in with all the symbols, however
   -- #1658 is why this is empty, otherwise we end up with unused (and probably
   -- should be removed) symbols. But that's for another time. This is "fine"
   -- because _quants are only used relative to #1658.
-  _quants =  [] :: [QuantityDict], -- map qw iMods ++ map qw symbolsAll,
-  _concepts = [] :: [DefinedQuantityDict],
-  _datadefs = dataDefs,
+  _quants      =  [] :: [QuantityDict], -- map qw iMods ++ map qw symbolsAll,
+  _concepts    = [] :: [DefinedQuantityDict],
+  _datadefs    = dataDefs,
   _configFiles = [],
-  _inputs = inputSymbols,
-  _outputs = outputSymbols, 
+  _inputs      = inputSymbols,
+  _outputs     = outputSymbols, 
   _defSequence = map (`Parallel` []) qDefs,
   _constraints = inputConstraints,
-  _constants = [],
-  _sysinfodb = symbMap,
-  _usedinfodb = usedDB,
-   refdb = refDB
+  _constants   = [],
+  _sysinfodb   = symbMap,
+  _usedinfodb  = usedDB,
+   refdb       = refDB
 }
   where qDefs = map qdFromDD dataDefs
 

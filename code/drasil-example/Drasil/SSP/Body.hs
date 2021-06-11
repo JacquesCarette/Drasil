@@ -80,22 +80,22 @@ resourcePath = "../../../datafiles/SSP/"
 
 si :: SystemInformation
 si = SI {
-  _sys = ssp, 
-  _kind = Doc.srs, 
-  _authors = [henryFrankis, brooks],
-  _purpose = purpDoc ssp Verbose,
-  _quants = symbols,
-  _concepts = [] :: [DefinedQuantityDict],
-  _datadefs = SSP.dataDefs,
+  _sys         = ssp, 
+  _kind        = Doc.srs, 
+  _authors     = [henryFrankis, brooks],
+  _purpose     = purpDoc ssp Verbose,
+  _quants      = symbols,
+  _concepts    = [] :: [DefinedQuantityDict],
+  _datadefs    = SSP.dataDefs,
   _configFiles = [],
-  _inputs = map qw inputs,
-  _outputs = map qw outputs,
+  _inputs      = map qw inputs,
+  _outputs     = map qw outputs,
   _defSequence = [(\x -> Parallel (head x) (tail x)) $ map qdFromDD SSP.dataDefs],
   _constraints = constrained,
-  _constants = [],
-  _sysinfodb = symbMap,
-  _usedinfodb = usedDB,
-   refdb = refDB
+  _constants   = [],
+  _sysinfodb   = symbMap,
+  _usedinfodb  = usedDB,
+   refdb       = refDB
 }
   
 mkSRS :: SRSDecl

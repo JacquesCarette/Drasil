@@ -733,7 +733,7 @@ funcUID' :: Func -> UID
 
 -- | FIXME: Part of above hack
 asVC' :: Func -> QuantityDict
-getDerivedInputs :: [DataDefinition] -> [QDefinition] -> [Input] -> [Const] -> ChunkDB -> [QDefinition]
+getDerivedInputs :: [DataDefinition] -> [Input] -> [Const] -> ChunkDB -> [QDefinition]
 type Known = CodeVarChunk
 type Need = CodeVarChunk
 getExecOrder :: [Def] -> [Known] -> [Need] -> ChunkDB -> [Def]

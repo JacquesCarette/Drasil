@@ -10,3 +10,9 @@ data DisplayExpr where
     Defines       :: DisplayExpr -> DisplayExpr -> DisplayExpr
     MultiExpr     :: Foldable t => t DisplayExpr -> DisplayExpr
 
+
+-- TODO: The below is a very very bad hack.
+instance Eq DisplayExpr where
+    (AlgebraicExpr a) == (AlgebraicExpr b) = a == b
+    (Defines (AlgebraicExpr a) _) == (Defines (AlgebraicExpr b) _) = a == b
+    _ == _ = False

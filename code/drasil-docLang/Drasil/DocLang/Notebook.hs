@@ -4,7 +4,8 @@ import Language.Drasil
 import Utils.Drasil.Sentence
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (notebook, introduction, 
-  prpsOfDoc, review, body, procForAnls, summary, method_, example, result, appendix, reference)
+  prpsOfDoc, review, body, mainIdea, procForAnls, summary, methAndAnls,method_, 
+  example, result, appendix, reference)
 import qualified Data.Drasil.Concepts.Physics (motion, hormotion, vermotion)
 
 -- | Notebook constructor. 
@@ -21,15 +22,17 @@ prpsOfDoc   cs ss = section' (titleize Doc.prpsOfDoc)        cs ss "DocPurpose"
 body        cs ss = section' (titleize Doc.body)             cs ss "Body"
 review      cs ss = section' (titleize Doc.review)           cs ss "Review"
 
+mainIdea    cs ss = section' (titleize Doc.mainIdea)         cs ss "MainIdea"
 --motion      cs ss = section' (titleize motion)               cs ss "Motion"
 --hormotion   cs ss = section' (titleize hormotion)            cs ss "HorMotion"
 --vermotion   cs ss = section' (titleize vermotion)            cs ss "VerMotion"
 
+methAndAnls cs ss = section' (titleize' Doc.methAndAnls)     cs ss "MethAnlys"
 method      cs ss = section' (titleize Doc.method_)          cs ss "Method"
 
 summary     cs ss = section' (titleize Doc.summary)          cs ss "Summary"
 
-procForAnls cs ss = section'  (titleize Doc.procForAnls)      cs ss "AnlsProc"
+procForAnls cs ss = section'  (titleize Doc.procForAnls)     cs ss "AnlsProc"
 example     cs ss = section' (titleize Doc.example)          cs ss "Example"
 
 result      cs ss = section' (titleize Doc.result)           cs ss "Result"
@@ -48,5 +51,6 @@ section' a b c d = section a b c (makeSecRef d (toString a))
     toString _ = error "Term is not a string"
 
 --Labels--
-referenceLabel :: Reference
-referenceLabel = makeSecRef "References"    "References"
+methsAndanlsLabel, referenceLabel :: Reference
+methsAndanlsLabel = makeSecRef "MethsAndAnls"  "Methods and Analysis"
+referenceLabel    = makeSecRef "References"    "References"

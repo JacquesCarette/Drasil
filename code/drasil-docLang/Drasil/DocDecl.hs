@@ -10,9 +10,6 @@ import qualified Drasil.DocumentLanguage.Core as DL (DocSection(..), RefSec(..),
   AppndxSec(..), OffShelfSolnsSec(..), DerivationDisplay)
 import Drasil.Sections.Requirements (fullReqs, fullTables)
 
-import Drasil.DocumentLanguage.Notebook.Core as NB (AppndxSec(..), NBDesc, DocSection(..), 
-  IntroSec(..), IntroSub(..), BodySec(..), BodySub(..), SmmrySec(..))
-
 import Database.Drasil (ChunkDB, SystemInformation(SI), UMap, asOrderedList,
   _inputs, _sysinfodb, conceptinsTable, dataDefnTable, gendefTable,
   insmodelTable, theoryModelTable)
@@ -24,7 +21,6 @@ import Data.Drasil.Concepts.Documentation (assumpDom, funcReqDom, goalStmtDom,
 import Control.Lens((^.), Getting)
 
 type SRSDecl = [DocSection]
-type NBDecl  = [DocSection']
 
 data DocSection = RefSec DL.RefSec
                 | IntroSec DL.IntroSec
@@ -39,12 +35,6 @@ data DocSection = RefSec DL.RefSec
                 | Bibliography
                 | AppndxSec DL.AppndxSec
                 | OffShelfSolnsSec DL.OffShelfSolnsSec
-
-data DocSection' = IntroSec NB.IntroSec
-                | BodySec NB.BodySec
-                | SmmrySec NB.SmmrySec
-                | Bibliography
-                | AppndxSec NB.AppndxSec
 
 -- | Specific System Description section . Contains a list of subsections.
 newtype SSDSec = SSDProg [SSDSub]
@@ -125,12 +115,3 @@ mkDocDesc SI{_inputs = is, _sysinfodb = db} = map sec where
   allInDB = expandFromDB id
   fromConcInsDB :: Concept c => c -> [ConceptInstance]
   fromConcInsDB c = expandFromDB (filter (\x -> sDom (cdom x) == c ^. uid)) conceptinsTable
-
-mkNBDesc :: SystemInformation -> NBDecl -> NB.NBDesc
-mkNBDesc SI{_inputs = is, _sysinfodb = db} = map sec where
-  sec :: DocSection' -> NB.DocSection
-  sec (IntroSec i) = NB.IntroSec i
-  sec (BodySec bs) = NB.BodySec bs
-  sec Bibliography = DL.Bibliography
-  sec (SmmrySec ss) = NB.SmmrySec ss
-  sec (AppndxSec a) = DL.AppndxSec a

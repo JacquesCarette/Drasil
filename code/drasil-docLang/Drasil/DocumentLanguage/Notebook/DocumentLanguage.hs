@@ -1,21 +1,25 @@
 module Drasil.DocumentLanguage.Notebook.DocumentLanguage where
 
-import Drasil.DocDecl (NBDecl, mkNBDesc)
-
-import Notebook.Core (AppndxSec(..), NBDesc, DocSection(..), 
+import Drasil.DocumentLanguage.Notebook.NBDecl (NBDecl, mkNBDesc)
+import Drasil.DocumentLanguage.Notebook.Core (AppndxSec(..), NBDesc, DocSection(..), 
   IntroSec(..), IntroSub(..), BodySec(..), BodySub(..), SmmrySec(..))
 
 import Language.Drasil
 
+import Utils.Drasil
+
+import Database.Drasil(SystemInformation(SI), _authors, _kind, _sys, citeDB)
+
+import qualified Drasil.DocumentLanguage as DL (fillTraceMaps, fillReqs)
 import qualified Drasil.DocLang.Notebook as NB (appendix, body, reference, summary)
-import qualified Drasil.NBSections.Introduction as Intro (introductionSection)
-import qualified Drasil.NBSections.Body as Body (bodyIntro, reviewSec, motionSec, mthdAndanls)
+import qualified Drasil.NBSections.Introduction as Intro (introductionSection, purposeOfDoc)
+import qualified Drasil.NBSections.Body as Body (bodyIntro, reviewSec, mainIdeaSec, mthdAndanls)
 
 -- | Creates a document from a document description and system information
 mkDoc :: NBDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
 mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
   Document (nw kind `comb` nw sys) (foldlList Comma List $ map (S . name) authors) $
-  mkSections (fillTraceMaps l (fillReqs l si)) l where
+  mkSections [] l where
     l = mkNBDesc si dd
 
 -- | Helper for creating the notebook sections
@@ -45,7 +49,7 @@ mkBodySec (BodyProg l) = NB.body [Body.bodyIntro] $ map mkSubs l
   where
     mkSubs :: BodySub -> Section
     mkSubs (Review cs )                 = Body.reviewSec cs 
-    mkSubs (Motion cntnts subsec)       = Body.motionSec cntnts subsec
+    mkSubs (MainIdea cntnts subsec)     = Body.mainIdeaSec cntnts subsec
     mkSubs (MethsAndAnls cntnts subsec) = Body.mthdAndanls cntnts subsec
 
 -- | Helper for making the 'Summary' section

@@ -1,3 +1,4 @@
+{-# LANGUAGE GADTs #-}
 module Drasil.DocumentLanguage.Notebook.Core where
 
 import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))
@@ -16,7 +17,7 @@ data DocSection = IntroSec IntroSec
 {--}
 
 -- | Introduction section. Contents are top level followed by a list of subsections.
-newtype IntroSec = IntroProg Sentence Sentence [IntroSub]
+data IntroSec = IntroProg Sentence Sentence [IntroSub]
 
 -- | Introduction subsections
 data IntroSub where
@@ -29,7 +30,7 @@ newtype BodySec = BodyProg [BodySub]
 
 data BodySub where
   Review       :: [Contents] -> BodySub
-  Motion       :: [Contents] -> [Section] -> BodySub
+  MainIdea     :: [Contents] -> [Section] -> BodySub
   MethsAndAnls :: [Contents] -> [Section] -> BodySub
 
 {--}
@@ -64,7 +65,9 @@ instance Multiplate DLPlate where
       traverse (introSub p) progs
     intro' (IPurpose s) = pure $ IPurpose s
     intro' (IScope s) = pure $ IScope s
-    body' (Review c s) = pure $ Review c s
+    body (BodyProg progs) = BodyProg <$> traverse (bodySub p) progs
+    body' (Review c) = pure $ Review c
+    body' (MainIdea c s) = pure $ MainIdea c s
     body' (MethsAndAnls c s) = pure $ MethsAndAnls c s
     smry (SmmryProg con) = pure $ SmmryProg con 
     aps (AppndxProg con) = pure $ AppndxProg con

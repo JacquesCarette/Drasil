@@ -4,7 +4,7 @@ import Language.Drasil hiding (Symbol(..), Vector, organization, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, _datadefs,
-  _configFiles, _defSequence, _inputs, _kind, _outputs, _quants, 
+  _instModels, _configFiles, _defSequence, _inputs, _kind, _outputs, _quants, 
   _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (qdFromDD)
 import Utils.Drasil
@@ -113,6 +113,7 @@ si = SI {
   -- because _quants are only used relative to #1658.
   _quants      =  [] :: [QuantityDict], -- map qw iMods ++ map qw symbolsAll,
   _concepts    = [] :: [DefinedQuantityDict],
+  _instModels  = [],
   _datadefs    = dataDefs,
   _configFiles = [],
   _inputs      = inputSymbols,

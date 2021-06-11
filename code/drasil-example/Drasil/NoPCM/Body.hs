@@ -45,7 +45,7 @@ import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived)
 
-import qualified Drasil.DocLang.SRS as SRS (inModel, reference, assumpt, sysCon, sectionReferences)
+import qualified Drasil.DocLang.SRS as SRS (inModel)
 import Drasil.DocLang (AuxConstntSec(AuxConsProg), DerivationDisplay(..),
   DocSection(..), Field(..), Fields, GSDSec(..), GSDSub(..), InclUnits(IncludeUnits),
   IntroSec(IntroProg), IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
@@ -53,8 +53,7 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg), DerivationDisplay(..),
   ReqrmntSec(..), ReqsSub(..), SCSSub(..), SolChSpec(..), SRSDecl, SSDSec(..),
   SSDSub(..), TraceabilitySec(TraceabilityProg), Verbosity(Verbose),
   TSIntro(SymbOrder, SymbConvention, TSPurpose, VectorUnits), intro, mkDoc,
-  tsymb, traceMatStandard, purpDoc, getTraceConfigUID, tableOfConstants,
-  inDataConstTbl, outDataConstTbl, symbTableRef, unitTableRef, reqInputsUID, tableAbbAccUID)
+  tsymb, traceMatStandard, purpDoc, getTraceConfigUID, secRefs)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
@@ -380,22 +379,8 @@ bodyRefs :: [Reference]
 bodyRefs = rw figTank: rw sysCntxtFig:
   map rw concIns ++ map rw section ++ map rw labCon 
   ++ map rw tMods ++ concatMap (^. getReferences) tMods --needs the references hidden in the tmodel.
-
--- below are references used in all examples
-srsRefs :: [Reference]
-srsRefs = map rw [SRS.reference ([]::[Contents]) ([]::[Section]), 
-  SRS.assumpt ([]::[Contents]) ([]::[Section]), SRS.sysCon [] []] 
-
-tabRefs :: [Reference]
-tabRefs = [symbTableRef, unitTableRef] 
-  ++ map (rw.makeTabRef) [fst tableAbbAccUID, reqInputsUID] 
   ++ map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
-  ++ map rw [tableOfConstants [], inDataConstTbl ([]::[UncertainChunk]),
-  outDataConstTbl ([]::[ConstrainedChunk])]
-
-secRefs :: [Reference]
-secRefs = rw (uncurry makeSecRef tableAbbAccUID): SRS.sectionReferences
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ dataDefRefs ++ genDefRefs++ goalRefs
-  ++ iModRefs ++ citeRefs ++ reqRefs ++ secRefs ++ tabRefs ++ srsRefs)
+  ++ iModRefs ++ citeRefs ++ reqRefs ++ secRefs)

@@ -18,8 +18,7 @@ import Drasil.DocLang (DerivationDisplay(..), DocSection(..), Emphasis(..),
   OffShelfSolnsSec(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
   ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
   PDSub(..), intro, mkDoc, tsymb, traceMatStandard, solutionLabel, purpDoc, getTraceConfigUID,
-  reqInputsUID, symbTableRef, unitTableRef, tableAbbAccUID, tableOfConstants,
-  inDataConstTbl, outDataConstTbl)
+  secRefs)
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
@@ -444,22 +443,8 @@ offShelfSols3DList = LlC $ enumBullet solutionLabel [
 
 -- References --
 bodyRefs :: [Reference]
-bodyRefs = rw sysCtxFig1: map rw concIns ++ map rw section
-
--- below are references used in all examples
-srsRefs :: [Reference]
-srsRefs = map rw [SRS.reference ([]::[Contents]) ([]::[Section]), 
-    SRS.assumpt ([]::[Contents]) ([]::[Section]), SRS.sysCon [] []]
-
-tabRefs :: [Reference]
-tabRefs = [symbTableRef, unitTableRef] ++ map (rw.makeTabRef) [fst tableAbbAccUID, reqInputsUID] 
-  ++ map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
-  ++ map rw [tableOfConstants [], inDataConstTbl ([]::[UncertainChunk]),
-  outDataConstTbl ([]::[ConstrainedChunk])]
-
-secRefs :: [Reference]
-secRefs = rw (uncurry makeSecRef tableAbbAccUID): map rw SRS.sectionReferences
+bodyRefs = rw sysCtxFig1: map rw concIns ++ map rw section ++ map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ goalRefs ++ dataDefRefs ++ genDefRefs
-  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs ++ tabRefs ++ srsRefs)
+  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs)

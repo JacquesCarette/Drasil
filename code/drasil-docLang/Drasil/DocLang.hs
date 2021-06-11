@@ -25,24 +25,26 @@ module Drasil.DocLang (
   -- Sections.ReferenceMaterial
   intro,
   -- Sections.Requirements
-  inReq, inTable, mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable, reqInputsUID,
+  inReq, inTable, mkInputPropsTable, mkQRTuple, mkQRTupleRef, mkValsSourceTable, reqInputsRef,
   -- Sections.SpecificSystemDescription
   auxSpecSent, termDefnF', inDataConstTbl, outDataConstTbl,
   -- Sections.Stakeholders
   -- Sections.TableOfAbbAndAcronyms
-  tableAbbAccUID,
+  tableAbbAccRef,
   -- Sections.TableOfSymbols
   symbTableRef,
   -- Sections.TableOfUnits
   unitTableRef,
   -- Sections.TraceabilityMandGs
-  traceMatStandard,
+  traceMatStandard, traceMatOtherReq,
   -- ExtractDocDesc
   getDocDesc, egetDocDesc,
   -- Tracetable
   generateTraceMap,
- -- Labels
-  solutionLabel, characteristicsLabel
+  -- Labels
+  solutionLabel, characteristicsLabel,
+  -- References
+  secRefs
 ) where 
 
 import Drasil.DocDecl (SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
@@ -64,14 +66,15 @@ import Drasil.Sections.AuxiliaryConstants (tableOfConstants)
 import Drasil.Sections.Introduction (purpDoc)
 import Drasil.Sections.ReferenceMaterial (intro)
 import Drasil.Sections.Requirements (inReq, inTable, mkInputPropsTable,
-  mkQRTuple, mkQRTupleRef, mkValsSourceTable, reqInputsUID)
+  mkQRTuple, mkQRTupleRef, mkValsSourceTable, reqInputsRef)
 import Drasil.Sections.SpecificSystemDescription (auxSpecSent, termDefnF', inDataConstTbl, outDataConstTbl)
 --import Drasil.Sections.Stakeholders
-import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccUID)
+import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccRef)
 import Drasil.Sections.TableOfSymbols (symbTableRef)
 import Drasil.Sections.TableOfUnits (unitTableRef)
-import Drasil.Sections.TraceabilityMandGs (traceMatStandard)
+import Drasil.Sections.TraceabilityMandGs (traceMatStandard, traceMatOtherReq)
 import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
 import Drasil.TraceTable (generateTraceMap)
 -- Commented out modules aren't used - uncomment if this changes
 import Drasil.DocumentLanguage.Labels (solutionLabel, characteristicsLabel)
+import Drasil.DocLang.References (secRefs)

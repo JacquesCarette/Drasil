@@ -28,10 +28,8 @@ import Drasil.DocLang
         SRSDecl, SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec),
         SolChSpec(SCSProg), TSIntro(..), TraceabilitySec(TraceabilityProg),
         Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, getTraceConfigUID,
-        reqInputsUID, symbTableRef, unitTableRef, tableAbbAccUID, tableOfConstants,
-        inDataConstTbl, outDataConstTbl)
-import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel, sysCon,
-  sectionReferences, probDesc, goalStmt, userChar)
+        secRefs)
+import qualified Drasil.DocLang.SRS as SRS (inModel)
 
 import Drasil.PDController.Assumptions (assumptions, assumpRefs)
 import Drasil.PDController.Changes
@@ -199,24 +197,9 @@ pidODEInfo
 
 -- References --
 bodyRefs :: [Reference]
-bodyRefs = map rw conceptInstances
-
--- below are references used in all examples
-srsRefs :: [Reference]
-srsRefs = map rw [SRS.reference ([]::[Contents]) ([]::[Section]), 
-    SRS.assumpt ([]::[Contents]) ([]::[Section]), SRS.sysCon [] [], SRS.probDesc [] [],
-    SRS.goalStmt [] [], SRS.userChar [] []]
-
-tabRefs :: [Reference]
-tabRefs = [symbTableRef, unitTableRef] ++ map (rw.makeTabRef) [fst tableAbbAccUID, reqInputsUID] 
-  ++ map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
-  ++ map rw [tableOfConstants [], inDataConstTbl ([]::[UncertainChunk]),
-  outDataConstTbl ([]::[ConstrainedChunk])]
-
-secRefs :: [Reference]
-secRefs = rw (uncurry makeSecRef tableAbbAccUID): map rw SRS.sectionReferences
+bodyRefs = map rw conceptInstances ++ map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ sysDescRefs ++ dataDefRefs ++ genDefRefs
-  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs ++ tabRefs ++ srsRefs)
+  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs)
 

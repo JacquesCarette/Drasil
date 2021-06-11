@@ -34,10 +34,7 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
   TConvention(..), TSIntro(..), TraceabilitySec(TraceabilityProg),
   Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, getTraceConfigUID,
-  reqInputsUID, symbTableRef, unitTableRef, tableAbbAccUID, tableOfConstants,
-  inDataConstTbl, outDataConstTbl)
-import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, sysCon, sectionReferences,
-  propCorSol, probDesc)
+  secRefs)
 
 import Drasil.DblPendulum.Figures (figMotion, figRefs)
 import Data.Drasil.Concepts.Math (mathcon, cartesian)
@@ -196,23 +193,8 @@ tModRefs :: [Reference]
 tModRefs = map rw tMods
 
 bodyRefs :: [Reference]
-bodyRefs = map rw concIns
-
--- below are references used in all examples
-srsRefs :: [Reference]
-srsRefs = map rw [SRS.reference ([]::[Contents]) ([]::[Section]), 
-    SRS.assumpt ([]::[Contents]) ([]::[Section]), SRS.sysCon [] [],
-    SRS.propCorSol [] [], SRS.probDesc [] []]
-
-tabRefs :: [Reference]
-tabRefs = [symbTableRef, unitTableRef] ++ map (rw.makeTabRef) [fst tableAbbAccUID, reqInputsUID] 
-  ++ map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
-  ++ map rw [tableOfConstants [], inDataConstTbl ([]::[UncertainChunk]),
-  outDataConstTbl ([]::[ConstrainedChunk])]
-
-secRefs :: [Reference]
-secRefs = rw (uncurry makeSecRef tableAbbAccUID): map rw SRS.sectionReferences
+bodyRefs = map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ map rw concIns
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ figRefs ++ goalRefs ++ dataDefRefs ++ genDefRefs
-  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs ++ tabRefs ++ srsRefs)
+  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs)

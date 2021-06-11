@@ -23,11 +23,10 @@ import Drasil.DocLang (DocSection(..), IntroSec(..), IntroSub(..),
   SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
   ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
   PDSub(..), intro, mkDoc, tsymb'', traceMatStandard, purpDoc, getTraceConfigUID,
-  reqInputsUID, symbTableRef, unitTableRef, tableAbbAccUID, tableOfConstants,
-  inDataConstTbl, outDataConstTbl)
+  secRefs)
 
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
-  genDefn, dataDefn, datCon, reference, sysCon, sectionReferences)
+  genDefn, dataDefn, datCon)
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
   constant, constraint, document, effect, endUser, environment,
@@ -448,22 +447,8 @@ slopeVert = verticesConst $ phrase slope
 
 -- References --
 bodyRefs :: [Reference]
-bodyRefs = rw sysCtxFig1: map rw concIns ++ map rw section ++ map rw labCon
-
--- below are references used in all examples
-srsRefs :: [Reference]
-srsRefs = map rw [SRS.reference ([]::[Contents]) ([]::[Section]), 
-    SRS.assumpt ([]::[Contents]) ([]::[Section]), SRS.sysCon [] []]
-
-tabRefs :: [Reference]
-tabRefs = [symbTableRef, unitTableRef] ++ map (rw.makeTabRef) [fst tableAbbAccUID, reqInputsUID] 
-  ++ map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
-  ++ map rw [tableOfConstants [], inDataConstTbl ([]::[UncertainChunk]),
-  outDataConstTbl ([]::[ConstrainedChunk])]
-
-secRefs :: [Reference]
-secRefs = rw (uncurry makeSecRef tableAbbAccUID): map rw SRS.sectionReferences
+bodyRefs = rw sysCtxFig1: map rw concIns ++ map rw section ++ map rw labCon ++ map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ goalRefs ++ SSP.dataDefRefs ++ genDefRefs
-  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs ++ tabRefs ++ srsRefs)
+  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs)

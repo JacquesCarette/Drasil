@@ -1,5 +1,5 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Database.Drasil.ChunkDB (ChunkDB(defTable), RefbyMap, TraceMap, UMap,
+module Database.Drasil.ChunkDB (ChunkDB(defTable, CDB), RefbyMap, TraceMap, UMap,
   asOrderedList, cdb, collectUnits, conceptMap, conceptinsLookup,
   conceptinsTable, dataDefnTable, datadefnLookup, defResolve, gendefLookup,
   gendefTable, generateRefbyMap, idMap, insmodelLookup, insmodelTable, -- idMap for docLang

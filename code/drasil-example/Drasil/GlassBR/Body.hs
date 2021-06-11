@@ -23,10 +23,9 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, TSPurpose),
   Verbosity(Verbose), auxSpecSent, characteristicsLabel, intro, mkDoc,
   termDefnF', tsymb, traceMatStandard, purpDoc, getTraceConfigUID,
-  reqInputsUID, symbTableRef, unitTableRef, tableAbbAccUID, tableOfConstants,
-  inDataConstTbl, outDataConstTbl)
+  secRefs)
 
-import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel, sysCon, sectionReferences)
+import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
 
 import Data.Drasil.Concepts.Computation (computerApp, inDatum, compcon, algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (appendix, aspect,
@@ -387,23 +386,10 @@ blstRskInvWGlassSlab = phrase blastRisk +:+ S "involved with the" +:+
 
 -- References --
 bodyRefs :: [Reference]
-bodyRefs = map rw [sysCtxFig, demandVsSDFig, dimlessloadVsARFig]
+bodyRefs = map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+  ++ map rw [sysCtxFig, demandVsSDFig, dimlessloadVsARFig]
   ++ map rw concIns ++ map rw section ++ map rw labCon
-
--- below are references used in all examples
-srsRefs :: [Reference]
-srsRefs = map rw [SRS.reference ([]::[Contents]) ([]::[Section]), 
-    SRS.assumpt ([]::[Contents]) ([]::[Section]), SRS.sysCon [] []]
-
-tabRefs :: [Reference]
-tabRefs = [symbTableRef, unitTableRef] ++ map (rw.makeTabRef) [fst tableAbbAccUID, reqInputsUID] 
-  ++ map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
-  ++ map rw [tableOfConstants [], inDataConstTbl ([]::[UncertainChunk]),
-  outDataConstTbl ([]::[ConstrainedChunk])]
-
-secRefs :: [Reference]
-secRefs = rw (uncurry makeSecRef tableAbbAccUID): map rw SRS.sectionReferences
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ goalRefs ++ dataDefRefs
-  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs ++ tabRefs ++ srsRefs)
+  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs)

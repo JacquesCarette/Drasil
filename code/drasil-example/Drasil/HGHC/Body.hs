@@ -7,10 +7,7 @@ import Drasil.DocLang (DocSection(RefSec, SSDSec), Literature(Lit, Manual),
     intro, mkDoc, tsymb, InclUnits(IncludeUnits), Verbosity(Verbose),
     Field(DefiningEquation, Description, Label, Symbol, Units), SolChSpec(SCSProg), 
     SCSSub(DDs), DerivationDisplay(HideDerivation), SSDSub(SSDSolChSpec), 
-    SSDSec(SSDProg), traceMatStandard, getTraceConfigUID,
-    reqInputsUID, symbTableRef, unitTableRef, tableAbbAccUID, tableOfConstants,
-    inDataConstTbl, outDataConstTbl)
-import qualified Drasil.DocLang.SRS as SRS (sectionReferences, reference, assumpt, sysCon, tOfUnit)
+    SSDSec(SSDProg), traceMatStandard, getTraceConfigUID, secRefs)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
   rdb, refdb, _authors, _concepts, _constants, _constraints, _purpose,
@@ -74,24 +71,10 @@ usedDB = cdb ([] :: [QuantityDict]) (map nw symbols)
 
 -- References --
 bodyRefs :: [Reference]
-bodyRefs = []
+bodyRefs = map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
 
 dataDefRefs :: [Reference]
 dataDefRefs = map rw [htTransCladCoolDD, htTransCladFuelDD]
 
--- below are references used in all examples
-srsRefs :: [Reference]
-srsRefs = map rw [SRS.reference ([]::[Contents]) ([]::[Section]), 
-    SRS.assumpt ([]::[Contents]) ([]::[Section]), SRS.sysCon [] [], SRS.tOfUnit [] []]
-
-tabRefs :: [Reference]
-tabRefs = [symbTableRef, unitTableRef] ++ map (rw.makeTabRef) [fst tableAbbAccUID, reqInputsUID] 
-  ++ map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
-  ++ map rw [tableOfConstants [], inDataConstTbl ([]::[UncertainChunk]),
-  outDataConstTbl ([]::[ConstrainedChunk])]
-
-secRefs :: [Reference]
-secRefs = rw (uncurry makeSecRef tableAbbAccUID): map rw SRS.sectionReferences
-
 allRefs :: [Reference]
-allRefs = nub (bodyRefs ++ dataDefRefs ++ tabRefs ++ secRefs ++ srsRefs)
+allRefs = nub (bodyRefs ++ dataDefRefs ++ secRefs)

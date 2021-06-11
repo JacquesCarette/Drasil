@@ -1,11 +1,11 @@
 module Drasil.Sections.AuxiliaryConstants 
-  (valsOfAuxConstantsF, tableOfConstants) where
+  (valsOfAuxConstantsF, tableOfConstants, tableOfConstantsRef) where
 
 import Language.Drasil
 import Utils.Drasil
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
 import Drasil.DocumentLanguage.Units (toSentence)
-import Data.Drasil.Concepts.Documentation (value, description, symbol_)
+import Data.Drasil.Concepts.Documentation (value, description, symbol_, tAuxConsts)
 import qualified Data.Drasil.Concepts.Math as CM (unit_)
 import Control.Lens ((^.))
 
@@ -25,8 +25,11 @@ intro kWord =  foldlSP [S "This section contains the standard values that are us
 
 -- | Helper that gets a table of constants from a 'QDefinition'.
 tableOfConstants :: [QDefinition] -> LabelledContent
-tableOfConstants f = llcc (makeTabRef "TAuxConsts") $ Table
+tableOfConstants f = llcc tableOfConstantsRef $ Table
   [titleize symbol_, titleize description, titleize value, titleize CM.unit_]
   (mkTable [ch, phrase, \c -> E $ c^.equat, toSentence] f)
-  (S "Auxiliary Constants")
+  (titleize' tAuxConsts)
   True
+
+tableOfConstantsRef :: Reference
+tableOfConstantsRef = (makeTabRef (tAuxConsts ^. uid))

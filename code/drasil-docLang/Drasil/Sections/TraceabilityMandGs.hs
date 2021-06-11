@@ -1,6 +1,6 @@
 module Drasil.Sections.TraceabilityMandGs (generateTraceTable,tvAssumps,
   tvDataDefns, tvGenDefns, tvTheoryModels, tvInsModels, tvGoals, tvReqs,
-  tvChanges, traceMatAssumpOther, traceMatRefinement, traceMatOtherReq,
+  tvChanges, traceMatAssumpAssump, traceMatAssumpOther, traceMatRefinement, traceMatOtherReq,
   traceMatStandard) where
 
 import Drasil.DocumentLanguage.Core (TraceConfig(TraceConfig))

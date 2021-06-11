@@ -4,8 +4,12 @@ module Drasil.DblPendulum.GenDefs (genDefns, velocityIXGD, velocityIYGD,
          angFrequencyGD, periodPend) where
 
 import Prelude hiding (cos, sin, sqrt)
+import qualified Data.List.NonEmpty as NE
+
 import Language.Drasil
-import Theory.Drasil (GenDefn, gdNoRefs, gdNoRefs', ModelKinds (OthModel, EquationalModel))
+import Theory.Drasil (GenDefn, gdNoRefs, gdNoRefs',
+    ModelKinds (EquationalModel, EquationalRealm),
+    MultiDefn, mkDefiningExpr, mkMultiDefnForQuant)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -178,34 +182,42 @@ accelerationIYDerivSent5 = S "Simplifying,"
 
 -------------------------------------Horizontal force acting on the pendulum 
 hForceOnPendulumGD :: GenDefn
-hForceOnPendulumGD = gdNoRefs (OthModel hForceOnPendulumRC) (getUnit force)
-           (Just hForceOnPendulumDeriv) "hForceOnPendulum" [{-Notes-}]
+hForceOnPendulumGD = gdNoRefs' "hForceOnPendulum" (EquationalRealm hForceOnPendulumMD)
+        (getUnit force) (Just hForceOnPendulumDeriv) "hForceOnPendulum" [{-Notes-}]
 
-hForceOnPendulumRC :: RelationConcept
-hForceOnPendulumRC = makeRC "hForceOnPendulumRC" (horizontalForce `onThe` pendulum)
-           EmptyS hForceOnPendulumRel
- 
-hForceOnPendulumRel :: Relation
-hForceOnPendulumRel = sy force $= sy mass `mulRe` sy xAccel $= neg (sy tension `mulRe` sin (sy pendDisplacementAngle))
-                     
+hForceOnPendulumMD :: MultiDefn
+hForceOnPendulumMD = mkMultiDefnForQuant quant EmptyS defns
+    where quant = mkQuant' "force" (horizontalForce `onThe` pendulum)
+                    Nothing Real (symbol force) (getUnit force)
+          defns = NE.fromList [
+                    mkDefiningExpr "hForceOnPendulumViaComponent" [] EmptyS $
+                        sy mass `mulRe` sy xAccel,
+                    mkDefiningExpr "hForceOnPendulumViaAngle"     [] EmptyS $
+                        neg (sy tension `mulRe` sin (sy pendDisplacementAngle))
+                  ]
 
 hForceOnPendulumDeriv :: Derivation
-hForceOnPendulumDeriv = mkDerivName (phraseNP (force `onThe` pendulum)) [ E hForceOnPendulumRel]
+hForceOnPendulumDeriv = mkDerivName (phraseNP (force `onThe` pendulum)) [E $ relat hForceOnPendulumMD]
 
 ----------------------------------------Vertical force acting on the pendulum 
 vForceOnPendulumGD :: GenDefn
-vForceOnPendulumGD = gdNoRefs (OthModel vForceOnPendulumRC) (getUnit force)
-           (Just vForceOnPendulumDeriv) "vForceOnPendulum" [{-Notes-}]
+vForceOnPendulumGD = gdNoRefs' "vForceOnPendulum" (EquationalRealm vForceOnPendulumMD)
+        (getUnit force) (Just vForceOnPendulumDeriv) "vForceOnPendulum" [{-Notes-}]
 
-vForceOnPendulumRC :: RelationConcept
-vForceOnPendulumRC = makeRC "vForceOnPendulumRC" (verticalForce `onThe` pendulum) 
-           EmptyS vForceOnPendulumRel
- 
-vForceOnPendulumRel :: Relation             
-vForceOnPendulumRel = sy force $= sy mass `mulRe` sy yAccel $= sy tension `mulRe` cos (sy pendDisplacementAngle) $- (sy mass `mulRe` sy gravitationalAccel)
+vForceOnPendulumMD :: MultiDefn
+vForceOnPendulumMD = mkMultiDefnForQuant quant EmptyS defns
+    where quant = mkQuant' "force" (verticalForce `onThe` pendulum)
+                    Nothing Real (symbol force) (getUnit force)
+          defns = NE.fromList [
+                    mkDefiningExpr "vForceOnPendulumViaComponent" [] EmptyS $
+                        sy mass `mulRe` sy yAccel,
+                    mkDefiningExpr "vForceOnPendulumViaAngle"     [] EmptyS $
+                        sy tension `mulRe` cos (sy pendDisplacementAngle)
+                            $- (sy mass `mulRe` sy gravitationalAccel)
+                  ]
 
 vForceOnPendulumDeriv :: Derivation
-vForceOnPendulumDeriv = mkDerivName (phraseNP (force `onThe` pendulum)) [ E vForceOnPendulumRel]
+vForceOnPendulumDeriv = mkDerivName (phraseNP (force `onThe` pendulum)) [E $ relat vForceOnPendulumMD]
 
 --------------------------------------Angular Frequency Of Pendulum
 

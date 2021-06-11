@@ -45,6 +45,8 @@ instance Definition         InstanceModel where defn = mk . defn
 instance ConceptDomain      InstanceModel where cdom = cdom . (^. mk)
 -- | Finds the relation expression for an 'InstanceModel'.
 instance ExprRelat          InstanceModel where relat = relat . (^. mk)
+-- | Converts the 'InstanceModel's related expression into the display language.
+instance Display            InstanceModel where toDispExpr = toDispExpr . (^. mk)
 -- | Finds the derivation of the 'InstanceModel'. May contain Nothing.
 instance HasDerivation      InstanceModel where derivations = deri
 -- | Finds 'Reference's contained in the 'InstanceModel'.

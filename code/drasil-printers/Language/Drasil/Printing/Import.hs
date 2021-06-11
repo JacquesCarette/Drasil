@@ -97,6 +97,9 @@ processExpo a
 assocExpr :: P.Ops -> Int -> [Expr] -> PrintingInformation -> P.Expr
 assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ map (expr' sm prec) exprs
 
+dispExpr :: DisplayExpr -> PrintingInformation -> P.Expr
+dispExpr _ _ = P.Int 1
+
 -- | Expr translation function from Drasil to printable layout AST.
 expr :: Expr -> PrintingInformation -> P.Expr
 expr (Dbl d)                  sm = case sm ^. getSetting of
@@ -435,7 +438,7 @@ layLabelled sm x@(LblC _ (Table hdr lls t b)) = T.Table ["table"]
   (P.S $ getRefAdd x)
   b (spec sm t)
 layLabelled sm x@(LblC _ (EqnBlock c))          = T.HDiv ["equation"]
-  [T.EqnBlock (P.E (expr c sm))]
+  [T.EqnBlock (P.E (dispExpr c sm))]
   (P.S $ getRefAdd x)
 layLabelled sm x@(LblC _ (Figure c f wp))     = T.Figure
   (P.S $ getRefAdd x)
@@ -460,7 +463,7 @@ layUnlabelled :: PrintingInformation -> RawContent -> T.LayoutObj
 layUnlabelled sm (Table hdr lls t b) = T.Table ["table"]
   (map (spec sm) hdr : map (map (spec sm)) lls) (P.S "nolabel0") b (spec sm t)
 layUnlabelled sm (Paragraph c)    = T.Paragraph (spec sm c)
-layUnlabelled sm (EqnBlock c)     = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
+layUnlabelled sm (EqnBlock c)     = T.HDiv ["equation"] [T.EqnBlock (P.E (dispExpr c sm))] P.EmptyS
 layUnlabelled sm (DerivBlock h d) = T.HDiv ["subsubsubsection"]
   (T.Header 3 (spec sm h) ref : map (layUnlabelled sm) d) ref
   where ref = P.S "nolabel1"

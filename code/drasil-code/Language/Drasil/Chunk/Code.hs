@@ -50,6 +50,7 @@ instance CodeIdea    CodeChunk where
   codeChunk = id
 instance Eq          CodeChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance MayHaveUnit CodeChunk where getUnit = getUnit . view qc
+instance ExprRelat   CodeChunk where relat c = sy c
 
 -- Chunk representing a variable. obv field represents the object containing 
 -- this variable, if it is an object field.

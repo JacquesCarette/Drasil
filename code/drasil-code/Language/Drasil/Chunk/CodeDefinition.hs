@@ -35,6 +35,7 @@ instance CodeIdea     CodeDefinition where
   codeChunk = view cchunk
 instance Eq           CodeDefinition where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance MayHaveUnit  CodeDefinition where getUnit = getUnit . view cchunk
+instance ExprRelat    CodeDefinition where relat c = relat (c ^. cchunk) $= (c ^. def)
 instance DefiningExpr CodeDefinition where defnExpr = def
 
 -- Constructs a CodeDefinition where the underlying CodeChunk is for a function

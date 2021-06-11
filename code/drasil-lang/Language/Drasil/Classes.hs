@@ -13,9 +13,10 @@ module Language.Drasil.Classes (
   , Definition(defn)
   , ConceptDomain(cdom)
   , Constrained(constraints)
-  , ExprRelat(relat)
   , CommonIdea(abrv)
+  , ExprRelat(relat)
   , DefiningExpr(defnExpr)
+  , Display(toDispExpr)
   , Quantity
   , HasUncertainty(unc)
   , Concept
@@ -34,7 +35,8 @@ import Language.Drasil.Classes.Core
 
 import Language.Drasil.Constraint (Constraint)
 import Language.Drasil.Derivation (Derivation)
-import Language.Drasil.UnitLang(UDefn, USymb)
+import Language.Drasil.UnitLang (UDefn, USymb)
+import Language.Drasil.Expr.Display (DisplayExpr(..))
 import Language.Drasil.Expr (Expr, Relation)
 import Language.Drasil.Label.Type (LblType)
 import Language.Drasil.NounPhrase.Core (NP)
@@ -164,18 +166,26 @@ class UnitEq u where
   uniteq :: Lens' u UDefn
 
 -----------------------------------------------------
--- TODO: It is ok to be able to view a (defining?) 'Relation', but not necessarily
--- to 'set' it,  as it might just not be settable. So Getter it is.
+
 -- | Has a function that turns into a 'Relation'.
 class ExprRelat c where
   -- | Holds a relation.
   relat :: c -> Relation
+  -- TODO: rename to `toRelat`/`asRelat`? essentially saying "this is an idea that we can convert into a logical equivalence checking relation"
 
--- This is the 'correct' version of ExprRelat.
+-- TODO: I *really* think that this DefiningExpr is missing a "what it defines" component...
+--       It's also only used for CodeDefinitions, QDefinitions, and DataDefinitions (food for thought on naming if we want to add ^)
+
 -- | A better version of 'ExprRelat' that holds an 'Expr'.
-class DefiningExpr c where
+class ExprRelat c => DefiningExpr c where
   -- | Provides a 'Lens' to the expression.
   defnExpr :: Lens' c Expr
+
+class Display c where
+  toDispExpr :: c -> DisplayExpr
+
+instance Display Expr where
+  toDispExpr = AlgebraicExpr
 
 {-
   If we intend to replace all 'relat's with 'defnExpr's, it will require a bit

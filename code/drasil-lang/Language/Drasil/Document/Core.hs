@@ -6,7 +6,7 @@ import Language.Drasil.Chunk.Citation (BibRef)
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
   HasShortName(shortname))
 import Language.Drasil.Classes (Referable(refAdd, renderRef))
-import Language.Drasil.Expr (Expr)
+import Language.Drasil.Expr.Display (DisplayExpr)
 import Language.Drasil.Label.Type (LblType(RP), IRefProg, name, raw, (+::+))
 import Language.Drasil.RefProg(Reference)
 import Language.Drasil.Sentence (Sentence)
@@ -56,18 +56,21 @@ data DType = General
            | Theory
            | Data
 
+-- TODO: EquationBlock only allows a single Expr?!?!
+
 -- | Types of layout objects we deal with explicitly.
-data RawContent = Table [Sentence] [[Sentence]] Title Bool
-  -- ^ table has: header-row, data(rows), label/caption, and a bool that determines whether or not to show label.
-               | Paragraph Sentence -- ^ Paragraphs are just sentences.
-               | EqnBlock Expr -- ^ Block of Equations holds an expression.
-               | DerivBlock Sentence [RawContent] -- ^ Grants the ability to label a group of 'RawContent'.
-               | Enumeration ListType -- ^ For enumerated lists.
-               | Defini DType [(Identifier, [Contents])] -- ^ Defines something with a type, identifier, and 'Contents'.
-               | Figure Lbl Filepath MaxWidthPercent -- ^ Should use relative file path.
-               | Bib BibRef -- ^ Grants the ability to reference something.
-               | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl -- ^ Contain a graph with coordinates ('Sentence's), maybe a width and height, and a label ('Sentence').
+data RawContent =
+    Table [Sentence] [[Sentence]] Title Bool -- ^ table has: header-row, data(rows), label/caption, and a bool that determines whether or not to show label.
+  | Paragraph Sentence                       -- ^ Paragraphs are just sentences.
+  | EqnBlock DisplayExpr                     -- ^ Block of Equations holds an expression.
+  | DerivBlock Sentence [RawContent]         -- ^ Grants the ability to label a group of 'RawContent'.
+  | Enumeration ListType                     -- ^ For enumerated lists.
+  | Defini DType [(Identifier, [Contents])]  -- ^ Defines something with a type, identifier, and 'Contents'.
+  | Figure Lbl Filepath MaxWidthPercent      -- ^ Should use relative file path.
+  | Bib BibRef                               -- ^ Grants the ability to reference something.
+  | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl -- ^ Contain a graph with coordinates ('Sentence's), maybe a width and height, and a label ('Sentence').
                -- TODO: Fill this one in.
+
 -- | An identifier is just a 'String'.
 type Identifier = String
 

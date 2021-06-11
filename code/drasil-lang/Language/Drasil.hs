@@ -20,6 +20,8 @@ module Language.Drasil (
   , sy -- old "Chunk" constructor C
   , apply, apply1, apply2, applyWithNamedArgs
   , cross, m2x2, vec2D, dgnl2x2
+  -- DisplayExpr
+  , DisplayExpr(..)
   -- all the stuff from Unicode
   , Special(..), RenderSpecial(..)
    -- UID
@@ -48,6 +50,7 @@ module Language.Drasil (
   , Constrained(constraints)
   , ExprRelat(relat)
   , DefiningExpr(defnExpr)
+  , Display(toDispExpr)
   , HasUncertainty(unc)
   , Quantity
   , Callable
@@ -203,6 +206,7 @@ import Language.Drasil.Expr.Math (abs_, neg, log, ln, sin, cos, tan, sqrt, sec,
           apply, apply1, apply2, applyWithNamedArgs,
           sy, deriv, pderiv,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, intAll)
+import Language.Drasil.Expr.Display
 import Language.Drasil.Document (section, fig, figWithWidth
   , Section(..), SecCons(..) , llcc, ulcc, Document(..)
   , mkParagraph, mkFig, mkRawLC, extractSection
@@ -221,7 +225,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), HasSpace(typ), Referable(refAdd, renderRef),
   DefiningExpr(defnExpr), Quantity, HasUncertainty(unc), Callable, 
-  IsArgumentName)
+  IsArgumentName, Display(toDispExpr))
 import Language.Drasil.Classes.Citations (HasFields(getFields))
 import Language.Drasil.Classes.Document (HasCitation(getCitations))
 import Language.Drasil.Derivation (Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader)

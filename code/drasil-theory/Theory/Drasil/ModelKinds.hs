@@ -6,7 +6,7 @@ import Control.Lens (makeLenses, set, lens, to, (^.), Setter', Getter, Lens')
 import Data.Maybe (mapMaybe)
 
 import Language.Drasil (ExprRelat(..), ConceptDomain(..), Definition(..),
-  Idea(..), NamedIdea(..), RelationConcept, QDefinition, HasUID(..))
+  Idea(..), NamedIdea(..), RelationConcept, QDefinition, HasUID(..), Display (toDispExpr))
 import Theory.Drasil.ConstraintSet (ConstraintSet)
 import Theory.Drasil.MultiDefn (MultiDefn)
 
@@ -28,17 +28,19 @@ makeLenses ''ModelKinds
 -- FIXME: The repetition is starting to get bad.
 
 -- | Finds the 'UID' of the 'ModelKinds'.
-instance HasUID        ModelKinds where uid      = lensMk uid uid uid uid
+instance HasUID        ModelKinds where uid        = lensMk uid uid uid uid
 -- | Finds the term ('NP') of the 'ModelKinds'.
-instance NamedIdea     ModelKinds where term     = lensMk term term term term
+instance NamedIdea     ModelKinds where term       = lensMk term term term term
 -- | Finds the idea of the 'ModelKinds'.
-instance Idea          ModelKinds where getA     = elimMk (to getA) (to getA) (to getA) (to getA)
+instance Idea          ModelKinds where getA       = elimMk (to getA) (to getA) (to getA) (to getA)
 -- | Finds the definition of the 'ModelKinds'.
-instance Definition    ModelKinds where defn     = lensMk defn defn defn defn
+instance Definition    ModelKinds where defn       = lensMk defn defn defn defn
 -- | Finds the domain of the 'ModelKinds'.
-instance ConceptDomain ModelKinds where cdom     = elimMk (to cdom) (to cdom) (to cdom) (to cdom)
+instance ConceptDomain ModelKinds where cdom       = elimMk (to cdom) (to cdom) (to cdom) (to cdom)
 -- | Finds the relation expression of the 'ModelKinds'.
-instance ExprRelat     ModelKinds where relat    = elimMk (to relat) (to relat) (to relat) (to relat)
+instance ExprRelat     ModelKinds where relat      = elimMk (to relat) (to relat) (to relat) (to relat)
+-- | Displays 'ModelKind' in DisplayExpr
+instance Display       ModelKinds where toDispExpr = elimMk (to toDispExpr) (to toDispExpr) (to toDispExpr) (to toDispExpr)
 
 -- TODO: implement MayHaveUnit for ModelKinds once we've sufficiently removed OthModels & RelationConcepts (else we'd be breaking too much of `stable`)
 

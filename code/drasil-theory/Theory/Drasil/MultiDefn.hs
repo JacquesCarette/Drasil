@@ -50,6 +50,7 @@ instance Definition    MultiDefn where defn     = rDesc
 -- | The complete Relation of a MultiDefn is defined as the quantity and the related expressions being equal
 --   e.g., `q $= a $= b $= ... $= z`
 instance ExprRelat     MultiDefn where relat q  = sy q $= foldr1 ($=) (NE.map (^. expr) (q ^. rvs))
+instance Display       MultiDefn where toDispExpr = AlgebraicExpr . relat
 
 -- | Smart constructor for MultiDefns, does nothing special at the moment
 mkMultiDefn :: UID -> QuantityDict -> Sentence -> NE.NonEmpty DefiningExpr -> MultiDefn

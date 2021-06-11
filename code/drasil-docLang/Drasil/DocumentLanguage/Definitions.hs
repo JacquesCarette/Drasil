@@ -77,7 +77,7 @@ derivation c = maybe (mkParagraph EmptyS)
 -- | Helper function for creating the layout objects
 -- (paragraphs and equation blocks) for a derivation.
 makeDerivCons :: Sentence -> RawContent
-makeDerivCons (E e) = EqnBlock e
+makeDerivCons (E e) = EqnBlock $ AlgebraicExpr e  -- TODO: Sentence should not be wrapping plain Es but rather DEs!!!!!!!!
 makeDerivCons s     = Paragraph s
 
 -- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs.
@@ -92,7 +92,7 @@ nonEmpty _   f xs = f xs
 mkTMField :: TheoryModel -> SystemInformation -> Field -> ModRow -> ModRow
 mkTMField t _ l@Label fs  = (show l, [mkParagraph $ atStart t]) : fs
 mkTMField t _ l@DefiningEquation fs =
-  (show l, map eqUnR' (t ^. invariants)) : fs 
+  (show l, map eqUnR' (t ^. invariants)) : fs -- TODO: How should we be displaying constraints?
 mkTMField t m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] (t ^. invariants)) : fs
 mkTMField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
@@ -131,7 +131,7 @@ mkDDField :: DataDefinition -> SystemInformation -> Field -> ModRow -> ModRow
 mkDDField d _ l@Label fs = (show l, [mkParagraph $ atStart d]) : fs
 mkDDField d _ l@Symbol fs = (show l, [mkParagraph . P $ eqSymb d]) : fs
 mkDDField d _ l@Units fs = (show l, [mkParagraph $ toSentenceUnitless d]) : fs
-mkDDField d _ l@DefiningEquation fs = (show l, [eqUnR' $ sy d $= d ^. defnExpr]) : fs 
+mkDDField d _ l@DefiningEquation fs = (show l, [eqUnR' d]) : fs
 mkDDField d m l@(Description v u) fs = (show l, buildDDescription' v u d m) : fs
 mkDDField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
 mkDDField d _ l@Source fs = (show l, helperSources $ d ^. getReferences) : fs
@@ -160,7 +160,7 @@ mkGDField :: GenDefn -> SystemInformation -> Field -> ModRow -> ModRow
 mkGDField g _ l@Label fs = (show l, [mkParagraph $ atStart g]) : fs
 mkGDField g _ l@Units fs = 
   maybe fs (\udef -> (show l, [mkParagraph . Sy $ usymb udef]) : fs) (getUnit g)
-mkGDField g _ l@DefiningEquation fs = (show l, [eqUnR' $ relat g]) : fs
+mkGDField g _ l@DefiningEquation fs = (show l, [eqUnR' g]) : fs
 mkGDField g m l@(Description v u) fs = (show l,
   buildDescription v u (relat g) m []) : fs
 mkGDField g m l@RefBy fs = (show l, [mkParagraph $ helperRefs g m]) : fs --FIXME: fill this in
@@ -171,7 +171,7 @@ mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
 -- | Create the fields for an instance model from an 'InstanceModel' chunk.
 mkIMField :: InstanceModel -> SystemInformation -> Field -> ModRow -> ModRow
 mkIMField i _ l@Label fs  = (show l, [mkParagraph $ atStart i]) : fs
-mkIMField i _ l@DefiningEquation fs = (show l, [eqUnR' $ relat i]) : fs
+mkIMField i _ l@DefiningEquation fs = (show l, [eqUnR' i]) : fs -- TODO: Convert into a display
 mkIMField i m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] [relat i]) : fs
 mkIMField i m l@RefBy fs = (show l, [mkParagraph $ helperRefs i m]) : fs --FIXME: fill this in
@@ -184,10 +184,10 @@ mkIMField i _ l@Input fs =
   (_:_) -> (show l, [mkParagraph $ foldl sC x xs]) : fs
   where (x:xs) = map (P . eqSymb . fst) $ i ^. inputs
 mkIMField i _ l@InConstraints fs  = 
-  let ll = mapMaybe (\(x,y) -> y >>= (\z -> Just (x, z))) (i^.inputs) in
-  (show l, foldr ((:) . UlC . ulcc . EqnBlock . uncurry realInterval) [] ll) : fs
+  let ll = mapMaybe (\(x,y) -> y >>= (\z -> Just (x, z))) (i ^. inputs) in
+  (show l, foldr ((:) . UlC . ulcc . EqnBlock . AlgebraicExpr . uncurry realInterval) [] ll) : fs -- TODO: realInterval?! I don't understand.
 mkIMField i _ l@OutConstraints fs = 
-  (show l, foldr ((:) . UlC . ulcc . EqnBlock . realInterval (i ^. output)) [] 
+  (show l, foldr ((:) . UlC . ulcc . EqnBlock . AlgebraicExpr . realInterval (i ^. output)) []  -- TODO: realInterval?! I don't understand.
     (i ^. out_constraints)) : fs
 mkIMField i _ l@Notes fs = 
   nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (i ^. getNotes)

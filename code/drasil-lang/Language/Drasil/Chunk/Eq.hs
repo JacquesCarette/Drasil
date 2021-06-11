@@ -7,9 +7,11 @@ import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit), UnitDe
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
-  IsUnit, DefiningExpr(defnExpr), Definition(defn), Quantity, HasSpace(typ), ExprRelat(relat), ConceptDomain(cdom))
+  IsUnit, DefiningExpr(defnExpr), Definition(defn), Quantity, HasSpace(typ),
+  ExprRelat(relat), ConceptDomain(cdom), Display(toDispExpr))
 import Language.Drasil.Chunk.Quantity (QuantityDict, mkQuant, mkQuant', qw)
 
+import Language.Drasil.Expr.Display
 import Language.Drasil.Expr (Expr, ($=))
 import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.NounPhrase (NP)
@@ -96,3 +98,6 @@ mkQuantDef' c t = mkQDefSt (c ^. uid) t EmptyS (symbol c) (c ^. typ) (getUnit c)
 -- equation. 
 ec :: (Quantity c, MayHaveUnit c) => c -> Expr -> QDefinition
 ec c eqn = EC (qw c) EmptyS eqn []
+
+instance Display QDefinition where
+  toDispExpr q = Defines (AlgebraicExpr $ sy q) (AlgebraicExpr $ q ^. defnExpr)

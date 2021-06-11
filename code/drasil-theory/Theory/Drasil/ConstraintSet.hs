@@ -10,7 +10,7 @@ import qualified Data.List.NonEmpty as NE
 -- | 'ConstraintSet's are sets of invariants that always hold for underlying domains.
 data ConstraintSet = CL {
     _con  :: ConceptChunk,
-    _invs :: NE.NonEmpty Relation
+    _invs :: NE.NonEmpty Expr
 }
 makeLenses ''ConstraintSet
 
@@ -27,6 +27,10 @@ instance ConceptDomain ConstraintSet where cdom  = cdom . (^. con)
 -- | The complete Relation of a ConstraintSet is the logical conjunction of all
 --   the underlying relations (e.g., `a $&& b $&& ... $&& z`).
 instance ExprRelat     ConstraintSet where relat = foldr1 ($&&) . (^. invs)
+
+-- TODO: Why is Foldable giving me an error here for NEs?!
+--       It is always asking for a list of Exprs instead of Foldable Exprs in the errors too.. something odd going on with the expected base version 
+instance Display       ConstraintSet where toDispExpr = MultiExpr . map AlgebraicExpr . NE.toList . (^. invs)
 
 -- | Smart constructor for building ConstraintSets
 mkConstraintSet :: ConceptChunk -> NE.NonEmpty Relation -> ConstraintSet

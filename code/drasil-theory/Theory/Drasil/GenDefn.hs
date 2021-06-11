@@ -33,6 +33,8 @@ instance Definition         GenDefn where defn          = mk . defn
 instance ConceptDomain      GenDefn where cdom          = cdom . (^. mk)
 -- | Finds the relation expression for a 'GenDefn'.
 instance ExprRelat          GenDefn where relat         = relat . (^. mk)
+-- | Converts the 'GenDefn's related expression into the display language.
+instance Display            GenDefn where toDispExpr    = toDispExpr . (^. mk)
 -- | Finds the derivation of the 'GenDefn'. May contain Nothing.
 instance HasDerivation      GenDefn where derivations   = deri
 -- | Finds 'Reference's contained in the 'GenDefn'.

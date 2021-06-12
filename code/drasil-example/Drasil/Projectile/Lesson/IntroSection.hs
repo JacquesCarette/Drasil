@@ -1,8 +1,9 @@
-module Drasil.ProjectileLesson.IntroSection where
+module Drasil.Projectile.Lesson.IntroSection where
 
 import Data.Drasil.Concepts.Physics (force, motion)
 import Drasil.Projectile.Concepts (projectile, projMotion)
 
+import Utils.Drasil (foldlSent)
 import Language.Drasil
 
 introPara :: Sentence

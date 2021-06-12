@@ -10,7 +10,6 @@ import Utils.Drasil
 
 import Database.Drasil(SystemInformation(SI), _authors, _kind, _sys, citeDB)
 
-import qualified Drasil.DocumentLanguage as DL (fillTraceMaps, fillReqs)
 import qualified Drasil.DocLang.Notebook as NB (appendix, body, reference, summary)
 import qualified Drasil.NBSections.Introduction as Intro (introductionSection, purposeOfDoc)
 import qualified Drasil.NBSections.Body as Body (bodyIntro, reviewSec, mainIdeaSec, mthdAndanls)
@@ -19,7 +18,7 @@ import qualified Drasil.NBSections.Body as Body (bodyIntro, reviewSec, mainIdeaS
 mkDoc :: NBDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
 mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
   Document (nw kind `comb` nw sys) (foldlList Comma List $ map (S . name) authors) $
-  mkSections [] l where
+  mkSections si l where
     l = mkNBDesc si dd
 
 -- | Helper for creating the notebook sections

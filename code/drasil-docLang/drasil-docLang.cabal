@@ -24,17 +24,18 @@ library
   exposed-modules:
       Drasil.DocLang
       Drasil.DocLang.SRS
+      Drasil.DocLang.Notebook
       Drasil.DocumentLanguage.Units
+      -- **TODO: hide nb related modules 
+      Drasil.DocumentLanguage.Notebook.Core
+      Drasil.DocumentLanguage.Notebook.DocumentLanguage
+      Drasil.DocumentLanguage.Notebook.NBDecl
   other-modules:
       Drasil.DocDecl
-      Drasil.DocLang.Notebook
       Drasil.DocumentLanguage
       Drasil.DocumentLanguage.Core
       Drasil.DocumentLanguage.Definitions
       Drasil.DocumentLanguage.Labels
-      Drasil.DocumentLanguage.Notebook.Core
-      Drasil.DocumentLanguage.Notebook.DocumentLanguage
-      Drasil.DocumentLanguage.Notebook.NBDecl
       Drasil.DocumentLanguage.RefHelpers
       Drasil.DocumentLanguage.TraceabilityMatrix
       Drasil.ExtractDocDesc

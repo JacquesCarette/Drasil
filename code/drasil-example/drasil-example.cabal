@@ -251,6 +251,11 @@ executable projectile
       Drasil.Projectile.References
       Drasil.Projectile.Requirements
       Drasil.Projectile.Unitals
+      Drasil.Projectile.Lesson.Body
+      Drasil.Projectile.Lesson.IntroSection
+      Drasil.Projectile.Lesson.Motion
+      Drasil.Projectile.Lesson.Review
+
   hs-source-dirs:
       ./
   ghc-options: -Wall -Wredundant-constraints -threaded -O2 -main-is Drasil.Projectile.Main

@@ -10,13 +10,14 @@ import Language.Drasil.Code (Choices(..), Comments(..),
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
   ConstantRepr(..), InputModule(..), CodeConcept(..), matchConcepts, SpaceMatch,
   matchSpaces, AuxFile(..), Visibility(..), defaultChoices, codeSpec)
-import Language.Drasil.Generate (gen, genCode, DocSpec(DocSpec), DocType(SRS, Website))
+import Language.Drasil.Generate (gen, genCode, DocSpec(DocSpec), DocType(SRS, Website, Jupyter))
 
 import GOOL.Drasil (CodeType(..))
 
 import Data.Drasil.Quantities.Math (piConst)
 
 import Drasil.Projectile.Body (printSetting, si, srs, projectileTitle)
+import qualified Drasil.Projectile.Lesson.Body as PL(nb, printSetting)
 
 import Data.List (intercalate)
 
@@ -28,6 +29,7 @@ main = do
   setLocaleEncoding utf8
   gen (DocSpec SRS     "Projectile_SRS") srs printSetting
   gen (DocSpec Website "Projectile_SRS") srs printSetting
+  gen (DocSpec Jupyter "Projectile Motion Lesson") PL.nb PL.printSetting
   genCodeWithChoices choiceCombos
 
 genCodeWithChoices :: [Choices] -> IO ()

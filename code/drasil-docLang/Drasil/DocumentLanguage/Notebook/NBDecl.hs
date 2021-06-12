@@ -5,9 +5,9 @@ import qualified Drasil.DocumentLanguage.Notebook.Core as NB (AppndxSec(..), NBD
 
 import Database.Drasil (SystemInformation(SI), _inputs, _sysinfodb)
 
-type NBDecl  = [DocSection]
+type NBDecl  = [NbSection]
 
-data DocSection = IntroSec NB.IntroSec
+data NbSection = IntroSec NB.IntroSec
                 | BodySec NB.BodySec
                 | SmmrySec NB.SmmrySec
                 | Bibliography
@@ -15,7 +15,7 @@ data DocSection = IntroSec NB.IntroSec
 
 mkNBDesc :: SystemInformation -> NBDecl -> NB.NBDesc
 mkNBDesc SI{_inputs = is, _sysinfodb = db} = map sec where
-  sec :: DocSection -> NB.DocSection
+  sec :: NbSection -> NB.DocSection
   sec (IntroSec i) = NB.IntroSec i
   sec (BodySec bs) = NB.BodySec bs
   sec Bibliography = NB.Bibliography

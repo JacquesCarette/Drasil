@@ -1,9 +1,9 @@
-module Drasil.ProjectileLesson.Motion where
+module Drasil.Projectile.Lesson.Motion where
 
-import qualified Drasil.DocLang.Notebook as NB
+import qualified Drasil.DocLang.Notebook as NB (mainIdea, summary)
 
 import Drasil.Projectile.Concepts (projectile, projMotion)
-import qualified Data.Drasil.Quantities.Physics QP (ixVel, iyVel)
+import qualified Data.Drasil.Quantities.Physics as QP (ixVel, iyVel)
 import Language.Drasil
 import Utils.Drasil
 
@@ -16,7 +16,8 @@ import qualified Drasil.Projectile.Expressions as E (speed', scalarPos', rectNoT
 motionContextP1, motionContextP2 :: Contents
 motionContextP1
   = foldlSP
-      [S "The free flight motion of a ", phrase projectile, S "is often studied in terms of its rectangular components,"
+      [S "The free flight motion of a ", phrase projectile, 
+        S "is often studied in terms of its rectangular components,",
         S "since the projectile's acceleration always acts in the vertical direciton",
        S "To illustrate the kinematic analysis, consider a ", phrase projectile,
          S "launched at point  (", E (sy QP.ixVel) +:+ S "," +:+ E (sy QP.iyVel) +:+
@@ -28,30 +29,31 @@ motionContextP2
       [S "The equations for rectilinear kinematics given above (ref) are in one dimension",
        S "These equations can be applied for both the vertical motion and the horizontal directions, as follows:"]
 
+-- **TODO: mainIdea should be hor and ver motions
 horMotion, verMotion, summary :: Section
-horMotion = NB.horizontalMotion [intro, equations, concl] []
+horMotion = NB.mainIdea [intro, equations, concl] []
   where intro = foldlSP_ [
                   S "For projectile motion the acceleration in the horizontal direction is constant",
                   S "and equal to zero. This value can be substituted in the equations for constant",
                   S "acceleration given above to yield the following:"]
         equations = foldlSP_ [
-                  S "From Equation", makeRef2S E.speed', 
-                  S "From Equation", makeRef2S E.scalarPos',
-                  S "From Equation", makeRef2S E.rectNoTime]
+                  S "From Equation", 
+                  S "From Equation", 
+                  S "From Equation"] 
         concl = foldlSP_ [
                   S "Since the acceleration in the x direction is zero, ",
                   S "the horizontal component of velocity always remains constant during motion",
                   S "In addition to knowing this, we have one more equation"]
                 
-verMotion = NB.verticalMotion [intro, equations, concl] []
+verMotion = NB.mainIdea [intro, equations, concl] []
   where intro = foldlSP_ [
                   S "Since the positive y axis is directed upward, the acceleration in the vertical direction is",
                   S "This value can be substituted in the equations for constant",
                   S "acceleration given above to yield the following:"]
         equations = foldlSP_ [
-                  S "From Equation", makeRef2S E.speed', 
-                  S "From Equation", makeRef2S E.scalarPos',
-                  S "From Equation", makeRef2S E.rectNoTime]
+                  S "From Equation", 
+                  S "From Equation",
+                  S "From Equation"]
         concl = foldlSP_ [
                   S "Recall that the last equation can be formulated on the basis of eliminating the time t ",
                   S "between the first two equations , and therefore only two of the above",

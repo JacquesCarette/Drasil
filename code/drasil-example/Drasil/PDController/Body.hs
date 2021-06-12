@@ -16,7 +16,7 @@ import Data.Drasil.SI_Units (second, kilogram)
 import Database.Drasil
        (Block, ChunkDB, ReferenceDB, SystemInformation(SI), _authors, _concepts,
         _configFiles, _constants, _constraints, _datadefs, _defSequence,
-        _definitions, _inputs, _kind, _outputs, _purpose, _quants, _sys,
+        _inputs, _kind, _outputs, _purpose, _quants, _sys, _instModels,
         _sysinfodb, _usedinfodb, cdb, rdb, refdb)
 import Drasil.DocLang
        (DerivationDisplay(..),
@@ -110,7 +110,7 @@ si
   = SI{_sys = pidControllerSystem, _kind = Doc.srs, _authors = [naveen],
        _purpose = [], _quants = symbolsAll,
        _concepts = [] :: [DefinedQuantityDict],
-       _definitions = [] :: [QDefinition], _datadefs = dataDefinitions,
+       _datadefs = dataDefinitions, _instModels = [],
        _configFiles = [], _inputs = inputs, _outputs = outputs,
        _defSequence = [] :: [Block QDefinition],
        _constraints = map cnstrw inpConstrained, _constants = pidConstants,

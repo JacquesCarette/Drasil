@@ -11,7 +11,7 @@ import Drasil.DocLang (DocSection(RefSec, SSDSec), Literature(Lit, Manual),
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
   rdb, refdb, _authors, _concepts, _constants, _constraints, _purpose,
-  _datadefs, _configFiles,_definitions, _defSequence, _inputs, _kind, _outputs, _quants, 
+  _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, _outputs, _quants, 
   _sys, _sysinfodb, _usedinfodb)
 import qualified Utils.Drasil.Sentence as S
 
@@ -31,23 +31,23 @@ printSetting = PI symbMap Equational defaultConfiguration
 
 si :: SystemInformation
 si = SI {
-  _sys = hghc,
-  _kind = Doc.srs,
-  _authors = [spencerSmith],
-  _quants = symbols,
-  _purpose = [],
-  _concepts = [] :: [UnitaryConceptDict],
-  _definitions = [] :: [QDefinition],
-  _datadefs = dataDefs,
+  _sys         = hghc,
+  _kind        = Doc.srs,
+  _authors     = [spencerSmith],
+  _quants      = symbols,
+  _purpose     = [],
+  _concepts    = [] :: [UnitaryConceptDict],
+  _instModels  = [], -- FIXME; empty _instModels
+  _datadefs    = dataDefs,
   _configFiles = [],
-  _inputs = htInputs,
-  _outputs = htOutputs,
+  _inputs      = htInputs,
+  _outputs     = htOutputs,
   _defSequence = [] :: [Block QDefinition],
   _constraints = [] :: [ConstrainedChunk],
-  _constants = [],
-  _sysinfodb = symbMap,
-  _usedinfodb = usedDB,
-   refdb = rdb [] [] -- FIXME?
+  _constants   = [],
+  _sysinfodb   = symbMap,
+  _usedinfodb  = usedDB,
+   refdb       = rdb [] [] -- FIXME?
 }
   
 mkSRS :: SRSDecl

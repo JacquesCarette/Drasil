@@ -2,9 +2,13 @@
 module Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, latentHtE,
   nwtnCooling, sensHtE, sensHtETemplate, tMods, tModRefs) where
 
+import qualified Data.List.NonEmpty as NE
+
 import Language.Drasil
 import Control.Lens ((^.))
-import Theory.Drasil (TheoryModel, tm, ModelKinds(OthModel, EquationalModel))
+import Theory.Drasil (TheoryModel, tm, 
+  ModelKinds(OthModel, EquationalModel, EquationalConstraints),
+  ConstraintSet, mkConstraintSet)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -35,14 +39,16 @@ tMods = [consThermE, sensHtE, latentHtE, nwtnCooling]
 -- Theoretical Model 1 --
 -------------------------
 consThermE :: TheoryModel
-consThermE = tm (OthModel consThermERC)
+consThermE = tm (EquationalConstraints consThermECS)
   [qw thFluxVect, qw gradient, qw volHtGen,
     qw density, qw heatCapSpec, qw temp, qw time] ([] :: [ConceptChunk])
   [] [consThermERel] [] [consThemESrc] "consThermE" consThermENotes
 
-consThermERC :: RelationConcept
-consThermERC = makeRC "consThermERC"
-  (nounPhraseSP "Conservation of thermal energy") (lawConsEnergy ^. defn) consThermERel
+consThermECS :: ConstraintSet
+consThermECS = mkConstraintSet consCC rels
+  where consCC = dccWDS "consThermECS"
+          (nounPhraseSP "Conservation of thermal energy") (lawConsEnergy ^. defn)
+        rels   = NE.fromList [consThermERel]
 
 consThermERel :: Relation
 consThermERel = neg (sy gradient) $. sy thFluxVect `addRe` sy volHtGen $=

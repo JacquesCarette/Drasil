@@ -145,7 +145,7 @@ buildDescription :: Verbosity -> InclUnits -> Expr -> SystemInformation -> [Cont
   [Contents]
 buildDescription Succinct _ _ _ _ = []
 buildDescription Verbose u e m cs = (UlC . ulcc .
-  Enumeration . Definitions . descPairs u $ vars e $ _sysinfodb m) : cs
+  Enumeration . Definitions . descPairs u $ vars (toDispExpr e) $ _sysinfodb m) : cs  -- TODO: hack. likely shouldn't be using toDispExpr here
 
 -- | Similar to 'buildDescription' except it takes a 'DataDefinition' that is included as the 'firstPair'' in ['Contents'] (independent of verbosity).
 -- The 'Verbose' case also includes more details about the 'DataDefinition' expressions.
@@ -153,7 +153,7 @@ buildDDescription' :: Verbosity -> InclUnits -> DataDefinition -> SystemInformat
   [Contents]
 buildDDescription' Succinct u d _ = [UlC . ulcc . Enumeration $ Definitions [firstPair' u d]]
 buildDDescription' Verbose u d m = [UlC . ulcc . Enumeration $ Definitions $ 
-  firstPair' u d : descPairs u (flip vars (_sysinfodb m) $ d ^. defnExpr)]
+  firstPair' u d : descPairs u (flip vars (_sysinfodb m) $ toDispExpr $ d ^. defnExpr)] -- TODO: ... check this again ... I don't see why it would be going for specifically only the defnExpr
 
 -- | Create the fields for a general definition from a 'GenDefn' chunk.
 mkGDField :: GenDefn -> SystemInformation -> Field -> ModRow -> ModRow

@@ -7,8 +7,6 @@ module Language.Drasil (
   , DerivType(..), Completeness(..), Relation
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   , ($-), ($/), addI, addRe, mulI, mulRe
-  -- Expr.Extract
-  , dep
   -- Expr.Math
   , abs_, neg, log, ln, abs, sin, cos, tan, sec, csc, cot, arcsin, arccos, arctan, exp
   , sqrt, euclidean, norm, not_
@@ -196,7 +194,6 @@ import Language.Drasil.Expr (Expr(..), UFunc(..), UFuncB, UFuncVec,
           DerivType(..), Completeness(..), Relation,
           ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.),
           ($-), ($/), addI, addRe, mulI, mulRe)
-import Language.Drasil.Expr.Extract (dep) -- exported for drasil-database FIXME: move to development package?
 import Language.Drasil.Expr.Math (abs_, neg, log, ln, sin, cos, tan, sqrt, sec, 
           csc, cot, arcsin, arccos, arctan, exp,
           dim, norm, not_, idx, int, dbl, exactDbl, frac, str, perc, isin,

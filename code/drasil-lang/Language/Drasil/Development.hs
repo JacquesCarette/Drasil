@@ -9,7 +9,8 @@ module Language.Drasil.Development (
   , ArithBinOp(..), BoolBinOp(..), EqBinOp(..)
   , LABinOp(..), OrdBinOp(..), VVVBinOp(..), VVNBinOp(..)
   -- Expr.Extract
-  , dep, names, names', namesRI
+  , eDep, eNames, eNames', eNamesRI
+  , deDep
   -- Sentence.Extract
   , sdep, lnames, lnames'
   -- Expr.Precendence
@@ -21,6 +22,6 @@ import Language.Drasil.Expr (UFuncB(..), UFuncVec(..)
   , ArithBinOp(..), BoolBinOp(..), EqBinOp(..)
   , LABinOp(..), OrdBinOp(..), VVVBinOp(..), VVNBinOp(..))
 import Language.Drasil.Expr.Display
-import Language.Drasil.Expr.Extract (dep, names', names, namesRI)
+import Language.Drasil.Expr.Extract
 import Language.Drasil.Expr.Precedence (precA, precB, eprec)
-import Language.Drasil.Sentence.Extract(sdep, lnames, lnames')
+import Language.Drasil.Sentence.Extract (sdep, lnames, lnames')

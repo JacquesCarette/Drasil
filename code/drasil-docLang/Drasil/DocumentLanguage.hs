@@ -6,8 +6,6 @@
 -- instead.
 module Drasil.DocumentLanguage where
 
-import qualified Data.List.NonEmpty as NE
-
 import Drasil.DocDecl (SRSDecl, mkDocDesc)
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   DerivationDisplay(..), DocDesc, DocSection(..), OffShelfSolnsSec(..), GSDSec(..),
@@ -67,7 +65,7 @@ mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
 
 -- | Constructs the unit definitions ('UnitDefn's) found in the document description ('DocDesc') from a database ('ChunkDB').
 extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
-extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (mapDown $ egetDocDesc dd) cdb
+extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb
 
 -- | Fills in the traceabiliy matrix and graphs section of the system information using the document description.
 fillTraceMaps :: DocDesc -> SystemInformation -> SystemInformation
@@ -105,16 +103,6 @@ mkSections si dd = map doit dd
     doit (AppndxSec a)        = mkAppndxSec a
     doit (OffShelfSolnsSec o) = mkOffShelfSolnSec o
 
-{--- Begin massive hack ---}
-downgradeDEtoE :: DisplayExpr -> Expr
-downgradeDEtoE (AlgebraicExpr e) = e
-downgradeDEtoE (Defines a b)     = downgradeDEtoE a $= downgradeDEtoE b
-downgradeDEtoE (MultiExpr des)   = foldl (\e de -> e $&& downgradeDEtoE de)
-  (downgradeDEtoE $ NE.head des) (NE.tail des)
-
-mapDown :: [DisplayExpr] -> [Expr]
-mapDown = map downgradeDEtoE
-{--- End massive hack ---}
 
 -- | Helper for creating the reference section and subsections.
 mkRefSec :: SystemInformation -> DocDesc -> RefSec -> Section
@@ -137,10 +125,10 @@ mkRefSec si dd (RefProg c l) = section (titleize refmat) [c]
       [tsIntro con,
                 LlC $ table Equational (sortBySymbol
                 $ filter (`hasStageSymbol` Equational) 
-                (nub $ map qw v ++ ccss' (getDocDesc dd) (mapDown $ egetDocDesc dd) cdb))
+                (nub $ map qw v ++ ccss' (getDocDesc dd) (egetDocDesc dd) cdb))
                 atStart] []
     mkSubRef SI {_sysinfodb = cdb} (TSymb' f con) =
-      mkTSymb (ccss (getDocDesc dd) (mapDown $ egetDocDesc dd) cdb) f con
+      mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) cdb) f con
     mkSubRef SI {_usedinfodb = db} TAandA =
       tableOfAbbAndAcronyms $ nub $ map fst $ Map.elems $ termTable db
 

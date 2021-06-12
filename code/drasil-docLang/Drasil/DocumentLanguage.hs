@@ -106,8 +106,8 @@ mkSections si dd = map doit dd
 downgradeDEtoE :: DisplayExpr -> Expr
 downgradeDEtoE (AlgebraicExpr e) = e
 downgradeDEtoE (Defines a b) = downgradeDEtoE a $= downgradeDEtoE b
-downgradeDEtoE (MultiExpr des) = foldr (\de e -> downgradeDEtoE de $&& e)
-  (downgradeDEtoE $ head des) (tail des)
+downgradeDEtoE (MultiExpr des) = foldl (\e de -> e $&& downgradeDEtoE de) (downgradeDEtoE $ head des) (tail des)
+-- foldr (\de e -> downgradeDEtoE de $&& e) (downgradeDEtoE $ head des) (tail des)
 -- TODO: Yep, use NE for des instead.
 
 mapDown :: [DisplayExpr] -> [Expr]

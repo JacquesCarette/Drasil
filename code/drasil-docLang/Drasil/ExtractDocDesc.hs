@@ -48,7 +48,7 @@ exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (conca
   (concatMap egetSec) `appendPlate` (preorderFold $ purePlate {
   scsSub = Constant <$> \case
     (TMs _ _ t)   -> goTM t
-    (DDs _ _ d _) -> map (AlgebraicExpr . sy) d ++ map (AlgebraicExpr . (^. defnExpr)) d  {-- defExp d --}   -- TODO: this is a very different definition in comparison to those around it...
+    (DDs _ _ d _) -> go d -- map (AlgebraicExpr . sy) d ++ map (AlgebraicExpr . (^. defnExpr)) d  {-- defExp d --}   -- TODO: this is a very different definition in comparison to those around it...
     (GDs _ _ g _) -> go g
     (IMs _ _ i _) -> go i
     _ -> [],

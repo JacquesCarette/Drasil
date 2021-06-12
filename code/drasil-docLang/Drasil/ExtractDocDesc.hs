@@ -48,7 +48,7 @@ exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (conca
   (concatMap egetSec) `appendPlate` (preorderFold $ purePlate {
   scsSub = Constant <$> \case
     (TMs _ _ t)   -> goTM t
-    (DDs _ _ d _) -> go d -- ++ map (AlgebraicExpr . sy) d ++ map (AlgebraicExpr . (^. defnExpr)) d -- TODO: this is a very different definition in comparison to those around it...
+    (DDs _ _ d _) -> go d -- ++ map (toDispExpr . sy) d ++ map (toDispExpr . (^. defnExpr)) d -- TODO: this is a very different definition in comparison to those around it...
     (GDs _ _ g _) -> go g
     (IMs _ _ i _) -> go i
     _ -> [],
@@ -61,20 +61,10 @@ exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (conca
                            ++ go (map (^. defnExpr) (x ^. defined_quant ++ x ^. defined_fun))
                            ++ goTM (x ^. valid_context))
 
-{-
-    (TMs _ _ t) -> let r = concatMap (\x -> x ^. invariants ++
-                           defExp (x ^. defined_quant ++ x ^. defined_fun) ++
-                           r (x ^. valid_context)) in r t
-    (DDs _ _ d _) -> map sy d ++ defExp d
-    (GDs _ _ g _) -> expRel g
-    (IMs _ _ i _) -> expRel i
--}
-
-
 -- | Converts a 'Sentence' into a list of expressions. If the 'Sentence' cant be translated, returns an empty list.
 sentToExp :: Sentence -> [DisplayExpr]
 sentToExp ((:+:) s1 s2) = sentToExp s1 ++ sentToExp s2
-sentToExp (E e) = [AlgebraicExpr e] -- TODO: E's should be DisplayExprs!!
+sentToExp (E e) = [toDispExpr e] -- TODO: E's should be DisplayExprs!!
 sentToExp _ = []
 
 -- | Helper that extracts a list of some type from the 'DLPlate' and 'DocDesc'.

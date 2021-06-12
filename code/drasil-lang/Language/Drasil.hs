@@ -22,6 +22,7 @@ module Language.Drasil (
   , cross, m2x2, vec2D, dgnl2x2
   -- DisplayExpr
   , DisplayExpr(..)
+  , defines, multiExpr
   -- all the stuff from Unicode
   , Special(..), RenderSpecial(..)
    -- UID

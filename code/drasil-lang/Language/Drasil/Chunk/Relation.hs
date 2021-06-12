@@ -8,7 +8,6 @@ import Language.Drasil.Classes.Core (HasUID(uid))
 import Language.Drasil.Classes (Display(..), ExprRelat(..), Concept,
   ConceptDomain(..), Definition(..), Idea(..), NamedIdea(..))
 import Language.Drasil.Expr (Relation)
-import Language.Drasil.Expr.Display (DisplayExpr(AlgebraicExpr))
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
@@ -34,7 +33,7 @@ instance ConceptDomain RelationConcept where cdom = cdom . view conc
 -- | Finds the relation expression for a 'RelationConcept'.
 instance ExprRelat     RelationConcept where relat = (^. rel)
 -- | Convert the 'RelationConcept' into the display expression language.
-instance Display       RelationConcept where toDispExpr = AlgebraicExpr . (^. rel)
+instance Display       RelationConcept where toDispExpr = toDispExpr . (^. rel)
 
 -- | Create a 'RelationConcept' from a given 'UID', term ('NP'), definition ('Sentence'), and 'Relation'.
 makeRC :: UID -> NP -> Sentence -> Relation -> RelationConcept

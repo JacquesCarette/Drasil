@@ -77,7 +77,7 @@ derivation c = maybe (mkParagraph EmptyS)
 -- | Helper function for creating the layout objects
 -- (paragraphs and equation blocks) for a derivation.
 makeDerivCons :: Sentence -> RawContent
-makeDerivCons (E e) = EqnBlock $ AlgebraicExpr e  -- TODO: Sentence should not be wrapping plain Es but rather DEs!!!!!!!!
+makeDerivCons (E e) = EqnBlock $ toDispExpr e  -- TODO: Sentence should not be wrapping plain Es but rather DEs!!!!!!!!
 makeDerivCons s     = Paragraph s
 
 -- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs.
@@ -185,9 +185,9 @@ mkIMField i _ l@Input fs =
   where (x:xs) = map (P . eqSymb . fst) $ i ^. inputs
 mkIMField i _ l@InConstraints fs  = 
   let ll = mapMaybe (\(x,y) -> y >>= (\z -> Just (x, z))) (i ^. inputs) in
-  (show l, foldr ((:) . UlC . ulcc . EqnBlock . AlgebraicExpr . uncurry realInterval) [] ll) : fs -- TODO: realInterval?! I don't understand.
+  (show l, foldr ((:) . UlC . ulcc . EqnBlock . toDispExpr . uncurry realInterval) [] ll) : fs -- TODO: realInterval?! I don't understand.
 mkIMField i _ l@OutConstraints fs = 
-  (show l, foldr ((:) . UlC . ulcc . EqnBlock . AlgebraicExpr . realInterval (i ^. output)) []  -- TODO: realInterval?! I don't understand.
+  (show l, foldr ((:) . UlC . ulcc . EqnBlock . toDispExpr . realInterval (i ^. output)) []  -- TODO: realInterval?! I don't understand.
     (i ^. out_constraints)) : fs
 mkIMField i _ l@Notes fs = 
   nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (i ^. getNotes)

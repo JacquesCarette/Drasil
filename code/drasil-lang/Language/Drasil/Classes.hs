@@ -36,7 +36,7 @@ import Language.Drasil.Classes.Core
 import Language.Drasil.Constraint (Constraint)
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.UnitLang (UDefn, USymb)
-import Language.Drasil.Expr.Display (DisplayExpr(..))
+import Language.Drasil.Expr.Display (Display(..))
 import Language.Drasil.Expr (Expr, Relation)
 import Language.Drasil.Label.Type (LblType)
 import Language.Drasil.NounPhrase.Core (NP)
@@ -180,12 +180,6 @@ class ExprRelat c where
 class ExprRelat c => DefiningExpr c where
   -- | Provides a 'Lens' to the expression.
   defnExpr :: Lens' c Expr
-
-class Display c where
-  toDispExpr :: c -> DisplayExpr
-
-instance Display Expr where
-  toDispExpr = AlgebraicExpr
 
 {-
   If we intend to replace all 'relat's with 'defnExpr's, it will require a bit

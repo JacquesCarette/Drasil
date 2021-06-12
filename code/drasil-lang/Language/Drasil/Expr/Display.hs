@@ -9,3 +9,17 @@ data DisplayExpr where
     AlgebraicExpr :: Expr -> DisplayExpr
     Defines       :: DisplayExpr -> DisplayExpr -> DisplayExpr
     MultiExpr     :: [DisplayExpr] -> DisplayExpr      -- TODO: NonEmpty?
+
+
+class Display c where
+  toDispExpr :: c -> DisplayExpr
+
+instance Display Expr where
+  toDispExpr = AlgebraicExpr
+
+
+defines :: (Display a, Display b) => a -> b -> DisplayExpr
+defines a b = Defines (toDispExpr a) (toDispExpr b)
+
+multiExpr :: (Display a) => [a] -> DisplayExpr
+multiExpr = MultiExpr . map toDispExpr

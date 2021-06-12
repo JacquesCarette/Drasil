@@ -42,7 +42,7 @@ instance ExprRelat          DataDefinition where relat d = sy d $= d ^. defnExpr
 -- | Finds the defining expression of the 'QDefinition' used to make the 'DataDefinition'.
 instance DefiningExpr       DataDefinition where defnExpr = qd . defnExpr
 -- | Converts the defining expression of a 'DataDefinition' into the display language.
-instance Display            DataDefinition where toDispExpr d = Defines (AlgebraicExpr $ sy d) (AlgebraicExpr $ d ^. defnExpr)
+instance Display            DataDefinition where toDispExpr d = defines (sy d) (d ^. defnExpr)
 -- | Finds 'Reference's contained in the 'DataDefinition'.
 instance HasReference       DataDefinition where getReferences = ref
 -- | Equal if 'UID's are equal.

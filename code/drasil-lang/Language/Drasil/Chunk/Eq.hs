@@ -11,7 +11,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   ExprRelat(relat), ConceptDomain(cdom), Display(toDispExpr))
 import Language.Drasil.Chunk.Quantity (QuantityDict, mkQuant, mkQuant', qw)
 
-import Language.Drasil.Expr.Display
+import Language.Drasil.Expr.Display (defines)
 import Language.Drasil.Expr (Expr, ($=))
 import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.NounPhrase (NP)
@@ -30,31 +30,31 @@ data QDefinition = EC
   }
 makeLenses ''QDefinition
 
--- this works because UnitalChunk is a Chunk
+-- | Finds the 'UID' of the 'QuantityDict' used to make the 'QDefinition'.
 instance HasUID        QDefinition where uid = qua . uid
--- ^ Finds the 'UID' of the 'QuantityDict' used to make the 'QDefinition'.
+-- | Finds the term ('NP') of the 'QuantityDict' used to make the 'QDefinition'.
 instance NamedIdea     QDefinition where term = qua . term
--- ^ Finds the term ('NP') of the 'QuantityDict' used to make the 'QDefinition'.
+-- | Finds the idea contained in the 'QuantityDict' used to make the 'QDefinition'.
 instance Idea          QDefinition where getA c = getA $ c ^. qua
--- ^ Finds the idea contained in the 'QuantityDict' used to make the 'QDefinition'.
+-- | Finds the 'Space' of the 'QuantityDict' used to make the 'QDefinition'.
 instance HasSpace      QDefinition where typ = qua . typ
--- ^ Finds the 'Space' of the 'QuantityDict' used to make the 'QDefinition'.
+-- | Finds the 'Symbol' of the 'QuantityDict' used to make the 'QDefinition'.
 instance HasSymbol     QDefinition where symbol e = symbol (e ^. qua)
--- ^ Finds the 'Symbol' of the 'QuantityDict' used to make the 'QDefinition'.
+-- | Finds the definition of 'QDefinition'.
 instance Definition    QDefinition where defn = defn'
--- ^ Finds the definition of 'QDefinition'.
+-- | 'QDefinition's have a 'Quantity'.
 instance Quantity      QDefinition where
--- ^ 'QDefinition's have a 'Quantity'.
+-- | Finds the defining expression of 'QDefinition'.
 instance DefiningExpr  QDefinition where defnExpr = equat
--- ^ Finds the defining expression of 'QDefinition'.
+-- | Equal if 'UID's are equal.
 instance Eq            QDefinition where a == b = (a ^. uid) == (b ^. uid)
--- ^ Equal if 'UID's are equal.
+-- | Finds the units of the 'QuantityDict' used to make the 'QDefinition'.
 instance MayHaveUnit   QDefinition where getUnit = getUnit . view qua
--- ^ Finds the units of the 'QuantityDict' used to make the 'QDefinition'.
+-- | Finds the relation given by the expression in 'QDefinition'.
 instance ExprRelat     QDefinition where relat z = sy z $= z ^. equat
--- ^ Finds the relation given by the expression in 'QDefinition'.
+instance Display       QDefinition where toDispExpr q = defines (sy q) (q ^. defnExpr)
+-- | Finds the domain of 'QDefinition'.
 instance ConceptDomain QDefinition where cdom = cd
--- ^ Finds the domain of 'QDefinition'.
 
 -- | Create a 'QDefinition' with a 'UID', term ('NP'), definition ('Sentence'), 'Symbol',
 -- 'Space', unit, and defining expression.
@@ -98,6 +98,3 @@ mkQuantDef' c t = mkQDefSt (c ^. uid) t EmptyS (symbol c) (c ^. typ) (getUnit c)
 -- equation. 
 ec :: (Quantity c, MayHaveUnit c) => c -> Expr -> QDefinition
 ec c eqn = EC (qw c) EmptyS eqn []
-
-instance Display QDefinition where
-  toDispExpr q = Defines (AlgebraicExpr $ sy q) (AlgebraicExpr $ q ^. defnExpr)

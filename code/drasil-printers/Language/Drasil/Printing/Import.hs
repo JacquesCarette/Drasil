@@ -7,7 +7,7 @@ import Language.Drasil hiding (neg, sec, symbol)
 import Language.Drasil.Development (UFuncB(..), UFuncVec(..)
   , ArithBinOp(..), BoolBinOp(..), EqBinOp(..), LABinOp(..)
   , OrdBinOp(..), VVNBinOp(..), VVVBinOp(..)
-  , precA, precB, eprec)
+  , precA, precB, eprec, DisplayExpr(..))
 import Database.Drasil
 import Utils.Drasil
 

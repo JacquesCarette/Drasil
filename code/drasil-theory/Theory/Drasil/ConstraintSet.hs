@@ -28,8 +28,7 @@ instance ConceptDomain ConstraintSet where cdom  = cdom . (^. con)
 --   the underlying relations (e.g., `a $&& b $&& ... $&& z`).
 instance ExprRelat     ConstraintSet where relat = foldr1 ($&&) . (^. invs)
 
--- TODO: Why is Foldable giving me an error here for NEs?!
---       It is always asking for a list of Exprs instead of Foldable Exprs in the errors too.. something odd going on with the expected base version 
+-- TODO: How shall we display this?
 instance Display       ConstraintSet where toDispExpr = multiExpr . NE.toList . (^. invs)
 
 -- | Smart constructor for building ConstraintSets

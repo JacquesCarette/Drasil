@@ -1,6 +1,6 @@
 {-# LANGUAGE GADTs #-}
 
-module Language.Drasil.Expr.Display where
+module Language.Drasil.Expr.Display (DisplayExpr(..), Display(..), defines, multiExpr) where
 
 import qualified Data.List.NonEmpty as NE
 

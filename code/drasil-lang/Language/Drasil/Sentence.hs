@@ -42,7 +42,7 @@ data Sentence where
   -- | Converts the graphical representation of a symbol into a usable Sentence form.
   P     :: Symbol -> Sentence       -- should not be used in examples?
   -- | Lifts an expression into a Sentence.
-  E     :: Expr -> Sentence
+  E     :: Expr -> Sentence  -- TODO: This needs a smart constructor, and it needs to be converted into a DisplayExpr.
   -- | Lifts a Reference into a Sentence.
   Ref   :: Reference -> Sentence
   -- | Adds quotation marks around a Sentence.

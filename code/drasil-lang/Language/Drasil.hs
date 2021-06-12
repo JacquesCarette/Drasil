@@ -21,7 +21,7 @@ module Language.Drasil (
   , apply, apply1, apply2, applyWithNamedArgs
   , cross, m2x2, vec2D, dgnl2x2
   -- DisplayExpr
-  , DisplayExpr(..)
+  , DisplayExpr
   , defines, multiExpr
   -- all the stuff from Unicode
   , Special(..), RenderSpecial(..)
@@ -226,7 +226,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), 
   HasReference(getReferences), HasSpace(typ), Referable(refAdd, renderRef),
   DefiningExpr(defnExpr), Quantity, HasUncertainty(unc), Callable, 
-  IsArgumentName, Display(toDispExpr))
+  IsArgumentName)
 import Language.Drasil.Classes.Citations (HasFields(getFields))
 import Language.Drasil.Classes.Document (HasCitation(getCitations))
 import Language.Drasil.Derivation (Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader)

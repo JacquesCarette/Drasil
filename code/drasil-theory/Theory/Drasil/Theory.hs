@@ -70,6 +70,11 @@ instance HasReference       TheoryModel where getReferences = ref
 instance ConceptDomain      TheoryModel where cdom = cdom . view con
 -- | Finds any additional notes for the 'TheoryModel'.
 instance HasAdditionalNotes TheoryModel where getNotes = notes
+
+-- TODO: I think we should be gathering these from the ModelKinds of the TheoryModel.
+--       If we need "more than 1 ModelKind" in the TheoryModel, we may need to create 
+--       a "stacked model" that allows for composing them.
+
 -- | Finds the aspects of the 'Theory' behind the 'TheoryModel'.
 instance Theory             TheoryModel where
   valid_context = vctx

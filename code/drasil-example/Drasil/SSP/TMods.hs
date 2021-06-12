@@ -50,15 +50,18 @@ factOfSafetyExpr = sy resistiveShear $/ sy mobilizedShear
 equilibrium :: TheoryModel
 equilibrium = tm (EquationalConstraints equilibriumCS)
   [qw fx] ([] :: [ConceptChunk])
-  [] [relat equilibriumCS] [] [makeCite fredlund1977] "equilibrium" [eqDesc]
+  [] equilibriumRels [] [makeCite fredlund1977] "equilibrium" [eqDesc]
 
 ------------------------------------  
+
+equilibriumRels :: [Expr]
+equilibriumRels = map (($= int 0) . sumAll (Variable "i") . sy) [fx, fy, genericM]
 
 -- FIXME: Variable "i" is a hack.  But we need to sum over something!
 equilibriumCS :: ConstraintSet
 equilibriumCS = mkConstraintSet
   (dccWDS "equilibriumCS" (nounPhraseSP "equilibrium") eqDesc) $
-  NE.fromList $ map (($= int 0) . sumAll (Variable "i") . sy) [fx, fy, genericM]
+  NE.fromList equilibriumRels
 -- makeRC "equilibriumRC" (nounPhraseSP "equilibrium") eqDesc eqRel
 
 eqDesc :: Sentence

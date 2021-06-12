@@ -1,6 +1,7 @@
 {-# LANGUAGE GADTs #-}
 
-module Language.Drasil.Expr.Display (DisplayExpr(..), Display(..), defines, multiExpr) where
+module Language.Drasil.Expr.Display (DisplayExpr(..), Display(..),
+  defines, multiExpr, multiExprNE) where
 
 import qualified Data.List.NonEmpty as NE
 
@@ -25,3 +26,6 @@ defines a b = Defines (toDispExpr a) (toDispExpr b)
 
 multiExpr :: Display a => [a] -> DisplayExpr
 multiExpr = MultiExpr . NE.fromList . map toDispExpr
+
+multiExprNE :: Display a => NE.NonEmpty a -> DisplayExpr
+multiExprNE = MultiExpr . NE.map toDispExpr

@@ -28,8 +28,8 @@ instance ConceptDomain ConstraintSet where cdom  = cdom . (^. con)
 --   the underlying relations (e.g., `a $&& b $&& ... $&& z`).
 instance ExprRelat     ConstraintSet where relat = foldr1 ($&&) . (^. invs)
 
--- TODO: How shall we display this?
-instance Display       ConstraintSet where toDispExpr = multiExpr . NE.toList . (^. invs)
+-- TODO: How shall we display this? New lines? I think so.
+instance Display       ConstraintSet where toDispExpr = multiExprNE . (^. invs)
 
 -- | Smart constructor for building ConstraintSets
 mkConstraintSet :: ConceptChunk -> NE.NonEmpty Relation -> ConstraintSet

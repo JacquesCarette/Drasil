@@ -41,7 +41,7 @@ table ls = let chunks = sortBy (compare `on` fst) $ select ls in
 
 -- | Table of abbreviations and acronyms UID and shortname.
 tableAbbAccRef :: Reference
-tableAbbAccRef = (makeTabRef (abbAcc ^. uid))
+tableAbbAccRef = makeTabRef (abbAcc ^. uid)
 
 -- should this be moved to DocLang/SRS?
 -- | Reference for Table of Abbreviations and Acronyms.

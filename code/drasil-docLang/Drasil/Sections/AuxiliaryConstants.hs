@@ -32,4 +32,4 @@ tableOfConstants f = llcc tableOfConstantsRef $ Table
   True
 
 tableOfConstantsRef :: Reference
-tableOfConstantsRef = (makeTabRef (tAuxConsts ^. uid))
+tableOfConstantsRef = makeTabRef (tAuxConsts ^. uid)

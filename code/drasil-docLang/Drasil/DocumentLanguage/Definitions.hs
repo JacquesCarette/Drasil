@@ -171,7 +171,7 @@ mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
 -- | Create the fields for an instance model from an 'InstanceModel' chunk.
 mkIMField :: InstanceModel -> SystemInformation -> Field -> ModRow -> ModRow
 mkIMField i _ l@Label fs  = (show l, [mkParagraph $ atStart i]) : fs
-mkIMField i _ l@DefiningEquation fs = (show l, [eqUnR' i]) : fs -- TODO: Convert into a display
+mkIMField i _ l@DefiningEquation fs = (show l, [eqUnR' i]) : fs
 mkIMField i m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] [relat i]) : fs
 mkIMField i m l@RefBy fs = (show l, [mkParagraph $ helperRefs i m]) : fs --FIXME: fill this in

@@ -113,7 +113,7 @@ symbMap = cdb (qw heatEInPCM : symbolsAll) -- heatEInPCM ?
   ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
   ++ map nw fundamentals ++ map nw educon ++ map nw derived ++ map nw physicalcon ++ map nw unitalChuncks
   ++ [nw swhsPCM, nw algorithm] ++ map nw compcon ++ [nw materialProprty])
-  (cw heatEInPCM : map cw symbols ++ srsDomains) -- FIXME: heatEInPCM?
+  (cw heatEInPCM : map cw symbols ++ srsDomains ++ map cw specParamValList) -- FIXME: heatEInPCM?
   (units ++ [m_2, m_3]) SWHS.dataDefs insModel genDefs tMods concIns section []
 
 usedDB :: ChunkDB

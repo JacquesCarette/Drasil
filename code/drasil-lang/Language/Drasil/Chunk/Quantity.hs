@@ -42,7 +42,7 @@ instance MayHaveUnit   QuantityDict where getUnit = view unit'
 
 -- | Smart constructor for a 'QuantityDict' from another 'Quantity' with units.
 qw :: (Quantity q, MayHaveUnit q) => q -> QuantityDict
-qw q = QD (nw q) (q^.typ) (symbol q) (getUnit q)
+qw q = QD (nw q) (q ^. typ) (symbol q) (getUnit q)
 
 -- | Make a 'QuantityDict' from a 'UID', 'NP', 'Symbol', 'Space', 
 -- 'Maybe' 'UnitDefn', and an abbreviation ('Maybe' 'String').

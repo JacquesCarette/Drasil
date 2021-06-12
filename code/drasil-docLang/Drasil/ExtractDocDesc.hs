@@ -48,7 +48,7 @@ exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (conca
   (concatMap egetSec) `appendPlate` (preorderFold $ purePlate {
   scsSub = Constant <$> \case
     (TMs _ _ t)   -> goTM t
-    (DDs _ _ d _) -> go d -- map (AlgebraicExpr . sy) d ++ map (AlgebraicExpr . (^. defnExpr)) d  {-- defExp d --}   -- TODO: this is a very different definition in comparison to those around it...
+    (DDs _ _ d _) -> go d -- ++ map (AlgebraicExpr . sy) d ++ map (AlgebraicExpr . (^. defnExpr)) d -- TODO: this is a very different definition in comparison to those around it...
     (GDs _ _ g _) -> go g
     (IMs _ _ i _) -> go i
     _ -> [],
@@ -58,15 +58,8 @@ exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (conca
       go = map toDispExpr
       goTM :: [TheoryModel] -> [DisplayExpr]
       goTM = concatMap (\x -> go (x ^. invariants)
-                           ++ go (x ^. defined_quant ++ x ^. defined_fun)
+                           ++ go (map (^. defnExpr) (x ^. defined_quant ++ x ^. defined_fun))
                            ++ goTM (x ^. valid_context))
-
-{- Old:
-      goTM tms = go (concatMap (^. invariants) tms)
-              ++ go (concatMap (^. defined_quant) tms)
-              ++ go (concatMap (^. defined_fun) tms)
-              ++ concatMap (goTM . (^. valid_context)) tms
--}
 
 {-
     (TMs _ _ t) -> let r = concatMap (\x -> x ^. invariants ++

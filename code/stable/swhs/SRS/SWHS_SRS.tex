@@ -71,6 +71,8 @@ The symbols used in this document are summarized in \hyperref[Table:ToS]{Tab: To
 \endhead
 ${A_{\text{C}}}$ & Heating coil surface area & ${\text{m}^{2}}$
 \\
+${{A_{\text{C}}}^{\text{max}}}$ & Maximum surface area of coil & ${\text{m}^{2}}$
+\\
 ${A_{\text{in}}}$ & Surface area over which heat is transferred in & ${\text{m}^{2}}$
 \\
 ${A_{\text{out}}}$ & Surface area over which heat is transferred out & ${\text{m}^{2}}$
@@ -78,6 +80,10 @@ ${A_{\text{out}}}$ & Surface area over which heat is transferred out & ${\text{m
 ${A_{\text{P}}}$ & Phase change material surface area & ${\text{m}^{2}}$
 \\
 $AR$ & Aspect ratio & --
+\\
+${AR_{\text{max}}}$ & Maximum aspect ratio & --
+\\
+${AR_{\text{min}}}$ & Minimum aspect ratio & --
 \\
 $C$ & Specific heat capacity & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
@@ -95,6 +101,18 @@ ${C_{\text{tol}}}$ & Relative tolerance for conservation of energy & --
 \\
 ${C_{\text{W}}}$ & Specific heat capacity of water & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
 \\
+${{C_{\text{W}}}^{\text{max}}}$ & Maximum specific heat capacity of water & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+\\
+${{C_{\text{W}}}^{\text{min}}}$ & Minimum specific heat capacity of water & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+\\
+${{{C_{\text{P}}}^{\text{L}}}_{\text{max}}}$ & Maximum specific heat capacity of PCM as a liquid & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+\\
+${{{C_{\text{P}}}^{\text{L}}}_{\text{min}}}$ & Minimum specific heat capacity of PCM as a liquid & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+\\
+${{{C_{\text{P}}}^{\text{S}}}_{\text{max}}}$ & Maximum specific heat capacity of PCM as a solid & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+\\
+${{{C_{\text{P}}}^{\text{S}}}_{\text{min}}}$ & Minimum specific heat capacity of PCM as a solid & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+\\
 $D$ & Diameter of tank & ${\text{m}}$
 \\
 $E$ & Sensible heat & ${\text{J}}$
@@ -109,21 +127,39 @@ $g$ & Volumetric heat generation per unit volume & $\frac{\text{W}}{\text{m}^{3}
 \\
 ${H_{\text{f}}}$ & Specific latent heat of fusion & $\frac{\text{J}}{\text{kg}}$
 \\
+${{H_{\text{f}}}_{\text{max}}}$ & Maximum specific latent heat of fusion & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+\\
+${{H_{\text{f}}}_{\text{min}}}$ & Minimum specific latent heat of fusion & $\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$
+\\
 $h$ & Convective heat transfer coefficient & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
 \\
 ${h_{\text{C}}}$ & Convective heat transfer coefficient between coil and water & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
+\\
+${{h_{\text{C}}}^{\text{max}}}$ & Maximum convective heat transfer coefficient between coil and water & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
+\\
+${{h_{\text{C}}}^{\text{min}}}$ & Minimum convective heat transfer coefficient between coil and water & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
 \\
 ${h_{\text{min}}}$ & Minimum thickness of a sheet of PCM & ${\text{m}}$
 \\
 ${h_{\text{P}}}$ & Convective heat transfer coefficient between PCM and water & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
 \\
+${{h_{\text{P}}}^{\text{max}}}$ & Maximum convective heat transfer coefficient between PCM and water & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
+\\
+${{h_{\text{P}}}^{\text{min}}}$ & Minimum convective heat transfer coefficient between PCM and water & $\frac{\text{W}}{\text{m}^{2}{}^{\circ}\text{C}}$
+\\
 $L$ & Length of tank & ${\text{m}}$
+\\
+${L_{\text{max}}}$ & Maximum length of tank & ${\text{m}}$
+\\
+${L_{\text{min}}}$ & Minimum length of tank & ${\text{m}}$
 \\
 $m$ & Mass & ${\text{kg}}$
 \\
 ${m_{\text{P}}}$ & Mass of phase change material & ${\text{kg}}$
 \\
 ${m_{\text{W}}}$ & Mass of water & ${\text{kg}}$
+\\
+$MINFRACT$ & Minimum fraction of the tank volume taken up by the PCM & --
 \\
 $\mathbf{\hat{n}}$ & Unit outward normal vector for a surface & --
 \\
@@ -169,6 +205,8 @@ $t$ & Time & ${\text{s}}$
 \\
 ${t_{\text{final}}}$ & Final time & ${\text{s}}$
 \\
+${{t_{\text{final}}}^{\text{max}}}$ & Maximum final time & ${\text{s}}$
+\\
 ${{t_{\text{melt}}}^{\text{final}}}$ & Time at which melting of PCM ends & ${\text{s}}$
 \\
 ${{t_{\text{melt}}}^{\text{init}}}$ & Time at which melting of PCM begins & ${\text{s}}$
@@ -191,7 +229,15 @@ $ρ$ & Density & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
 ${ρ_{\text{P}}}$ & Density of PCM & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
+${{ρ_{\text{P}}}^{\text{max}}}$ & Maximum density of PCM & $\frac{\text{kg}}{\text{m}^{3}}$
+\\
+${{ρ_{\text{P}}}^{\text{min}}}$ & Minimum density of PCM & $\frac{\text{kg}}{\text{m}^{3}}$
+\\
 ${ρ_{\text{W}}}$ & Density of water & $\frac{\text{kg}}{\text{m}^{3}}$
+\\
+${{ρ_{\text{W}}}^{\text{max}}}$ & Maximum density of water & $\frac{\text{kg}}{\text{m}^{3}}$
+\\
+${{ρ_{\text{W}}}^{\text{min}}}$ & Minimum density of water & $\frac{\text{kg}}{\text{m}^{3}}$
 \\
 $τ$ & Dummy variable for integration over time & ${\text{s}}$
 \\

@@ -8,10 +8,9 @@ import qualified Data.List.NonEmpty as NE
 import Language.Drasil.Expr (Expr)
 
 data DisplayExpr where
-    -- TODO: We may need to have a field for UIDs instead of AlgebraicExpr
     AlgebraicExpr :: Expr -> DisplayExpr
     Defines       :: DisplayExpr -> DisplayExpr -> DisplayExpr
-    MultiExpr     :: NE.NonEmpty DisplayExpr -> DisplayExpr      -- TODO: NonEmpty?
+    MultiExpr     :: NE.NonEmpty DisplayExpr -> DisplayExpr
 
 
 class Display c where

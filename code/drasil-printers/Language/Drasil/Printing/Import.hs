@@ -102,7 +102,7 @@ assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ map (expr' sm prec)
 dispExpr :: DisplayExpr -> PrintingInformation -> P.Expr
 dispExpr (AlgebraicExpr e) sm = expr e sm
 dispExpr (Defines l r)     sm = P.Row [dispExpr l sm, P.MO P.Eq, dispExpr r sm] -- TODO: Use new symbol?
-dispExpr (MultiExpr des)   sm = P.Row $ map (`dispExpr` sm) (NE.toList des)     -- TODO: New lines?
+dispExpr (MultiExpr des)   sm = P.Row $ map (`dispExpr` sm) (NE.toList des)
 
 -- | Expr translation function from Drasil to printable layout AST.
 expr :: Expr -> PrintingInformation -> P.Expr

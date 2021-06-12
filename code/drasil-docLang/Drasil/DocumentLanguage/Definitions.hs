@@ -92,7 +92,7 @@ nonEmpty _   f xs = f xs
 mkTMField :: TheoryModel -> SystemInformation -> Field -> ModRow -> ModRow
 mkTMField t _ l@Label fs  = (show l, [mkParagraph $ atStart t]) : fs
 mkTMField t _ l@DefiningEquation fs =
-  (show l, map eqUnR' (t ^. invariants)) : fs -- TODO: How should we be displaying constraints?
+  (show l, map eqUnR' (t ^. invariants)) : fs
 mkTMField t m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] (t ^. invariants)) : fs
 mkTMField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in

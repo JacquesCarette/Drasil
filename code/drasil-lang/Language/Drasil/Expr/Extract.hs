@@ -97,7 +97,7 @@ eNamesRI' (UpFrom il)     = eNames' (snd il)
 eDep :: Expr -> [String]
 eDep = nub . eNames
 
--- TODO:
+-- | Get dependencies from display expressions.
 deDep :: DisplayExpr -> [String]
 deDep (AlgebraicExpr e) = eDep e
 deDep (Defines l r)     = nub $ deDep l ++ deDep r

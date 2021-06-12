@@ -6,6 +6,8 @@
 -- instead.
 module Drasil.DocumentLanguage where
 
+import qualified Data.List.NonEmpty as NE
+
 import Drasil.DocDecl (SRSDecl, mkDocDesc)
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   DerivationDisplay(..), DocDesc, DocSection(..), OffShelfSolnsSec(..), GSDSec(..),
@@ -88,27 +90,26 @@ mkSections :: SystemInformation -> DocDesc -> [Section]
 mkSections si dd = map doit dd
   where
     doit :: DocSection -> Section
-    doit (RefSec rs)         = mkRefSec si dd rs
-    doit (IntroSec is)       = mkIntroSec si is
-    doit (StkhldrSec sts)    = mkStkhldrSec sts
-    doit (SSDSec ss)         = mkSSDSec si ss
-    doit (AuxConstntSec acs) = mkAuxConsSec acs 
-    doit Bibliography        = mkBib (citeDB si)
-    doit (GSDSec gs')        = mkGSDSec gs'
-    doit (ReqrmntSec r)      = mkReqrmntSec r
-    doit (LCsSec lc)         = mkLCsSec lc
-    doit (UCsSec ulcs)       = mkUCsSec ulcs
-    doit (TraceabilitySec t) = mkTraceabilitySec t si
-    doit (AppndxSec a)       = mkAppndxSec a
+    doit (RefSec rs)          = mkRefSec si dd rs
+    doit (IntroSec is)        = mkIntroSec si is
+    doit (StkhldrSec sts)     = mkStkhldrSec sts
+    doit (SSDSec ss)          = mkSSDSec si ss
+    doit (AuxConstntSec acs)  = mkAuxConsSec acs 
+    doit Bibliography         = mkBib (citeDB si)
+    doit (GSDSec gs')         = mkGSDSec gs'
+    doit (ReqrmntSec r)       = mkReqrmntSec r
+    doit (LCsSec lc)          = mkLCsSec lc
+    doit (UCsSec ulcs)        = mkUCsSec ulcs
+    doit (TraceabilitySec t)  = mkTraceabilitySec t si
+    doit (AppndxSec a)        = mkAppndxSec a
     doit (OffShelfSolnsSec o) = mkOffShelfSolnSec o
 
 {--- Begin massive hack ---}
 downgradeDEtoE :: DisplayExpr -> Expr
 downgradeDEtoE (AlgebraicExpr e) = e
-downgradeDEtoE (Defines a b) = downgradeDEtoE a $= downgradeDEtoE b
-downgradeDEtoE (MultiExpr des) = foldl (\e de -> e $&& downgradeDEtoE de) (downgradeDEtoE $ head des) (tail des)
--- foldr (\de e -> downgradeDEtoE de $&& e) (downgradeDEtoE $ head des) (tail des)
--- TODO: Yep, use NE for des instead.
+downgradeDEtoE (Defines a b)     = downgradeDEtoE a $= downgradeDEtoE b
+downgradeDEtoE (MultiExpr des)   = foldl (\e de -> e $&& downgradeDEtoE de)
+  (downgradeDEtoE $ NE.head des) (NE.tail des)
 
 mapDown :: [DisplayExpr] -> [Expr]
 mapDown = map downgradeDEtoE

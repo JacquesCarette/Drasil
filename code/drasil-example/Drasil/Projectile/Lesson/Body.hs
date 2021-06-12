@@ -16,10 +16,13 @@ import Drasil.DocumentLanguage.Notebook.Core(IntroSec(..), BodySec(..), BodySub(
 
 import Data.Drasil.Concepts.Documentation (doccon, doccon')
 import qualified Data.Drasil.Concepts.Documentation as Doc (notebook)
+import Data.Drasil.Quantities.Physics (physicscon)
+import Data.Drasil.Concepts.Physics (physicCon)
 
 import Data.Drasil.People (spencerSmith)
 
 import Drasil.Projectile.Concepts (concepts)
+import Drasil.Projectile.Body (symbols)
 
 import Drasil.Projectile.Lesson.IntroSection (introPara)
 import Drasil.Projectile.Lesson.Review (reviewContextP1, reviewEq, reviewContextP2)
@@ -65,8 +68,8 @@ si = SI {
 }
 
 symbMap :: ChunkDB
-symbMap = cdb ([] :: [QuantityDict]) (nw projectileMotion : [] 
-  ++ map nw doccon ++ map nw doccon' ++ concepts) 
+symbMap = cdb (map qw physicscon ++ symbols) (nw projectileMotion : [] 
+  ++ map nw doccon ++ map nw doccon' ++ map nw physicCon ++ concepts ++ map nw symbols) 
   ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] 
 
 usedDB :: ChunkDB

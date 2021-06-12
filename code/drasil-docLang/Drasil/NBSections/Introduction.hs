@@ -20,7 +20,7 @@ introductionSection problemIntroduction programDefinition = NB.intro
 -- **TODO: come up with a list of subsections for intro sec
 overviewParagraph :: Sentence -> Contents
 overviewParagraph programDefinition = foldlSP [S "The presentation below is based on Section 12.6",
-  S "(Motion of a Projectile) from the classic Hibbler text \"Engineering Mechanics Dynamnics, 10th edition\""]
+  S "(Motion of a Projectile) from the classic Hibbler text Engineering Mechanics Dynamnics, 10th edition"]
 
 -- | Constructor for purpose of document subsection
 -- purposeOfProgramParagraph - a sentence explaining the purpose of the document

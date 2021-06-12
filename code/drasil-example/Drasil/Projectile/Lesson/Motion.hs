@@ -22,7 +22,7 @@ motionContextP1
        S "To illustrate the kinematic analysis, consider a ", phrase projectile,
          S "launched at point  (", E (sy QP.ixVel) +:+ S "," +:+ E (sy QP.iyVel) +:+
          S ") , as shown in Figure [hyperref here?]",
-       S "The path is defined in the $x-y$ plane such that the initial velocity is"]
+       S "The path is defined in the x-y plane such that the initial velocity is"]
 
 motionContextP2
   = foldlSP

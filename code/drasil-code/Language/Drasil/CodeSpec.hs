@@ -173,7 +173,6 @@ xs `subsetOf` ys = all (`elem` ys) xs
 getConstraints :: (HasUID c) => ConstraintMap -> [c] -> [Constraint]
 getConstraints cm cs = concat $ mapMaybe (\c -> Map.lookup (c ^. uid) cm) cs
 
--- TODO: Do RealIntervals need to change into DisplayExprs?
 -- | Get a list of CodeChunks from a constraint
 constraintvars :: Constraint -> ChunkDB -> [CodeChunk]
 constraintvars (Range _ ri) m = map (codeChunk . varResolve m) $ nub $

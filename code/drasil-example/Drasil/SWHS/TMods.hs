@@ -116,7 +116,7 @@ sensHtEdesc :: Sentence
 sensHtEdesc = foldlSent [
   atStart sensHeat :+: S "ing occurs as long as the material does not reach a",
   phrase temp, S "where a", phrase phaseChange, (S "occurs" !.), atStartNP (a_ phaseChange),
-  S "occurs if" +:+. (E (sy temp $= sy boilPt) `S.or_` E (sy temp $= sy meltPt)),
+  S "occurs if" +:+. (eS (sy temp $= sy boilPt) `S.or_` eS (sy temp $= sy meltPt)),
   S "If this is the case" `sC` S "refer to", makeRef2S latentHtE]
 
 --How to have new lines in the description?
@@ -152,7 +152,7 @@ latentHtENotes :: [Sentence]
 latentHtENotes = map foldlSent [
   [ch latentHeat `S.isThe` S "change" `S.in_` phrase thermalEnergy,
    sParen (phrase latentHeat +:+ phrase energy)],
-  [E latHtEEqn `S.isThe` phrase rOfChng `S.of_` ch latentHeat `S.wrt` 
+  [eS latHtEEqn `S.isThe` phrase rOfChng `S.of_` ch latentHeat `S.wrt` 
    phrase time, ch tau],
   [ch time `S.isThe` phrase time, S "elapsed" `sC` S "as long as the",
    phrase phaseChange, S "is not complete"],
@@ -183,5 +183,5 @@ nwtnCoolingNotes = map foldlSent [
    S "proportional to the difference in", plural temp, S "between the body and its surroundings"],
   [ch htTransCoeff, S "is assumed to be independent" `S.of_` ch temp,
    sParen (S "from" +:+ makeRef2S assumpHTCC)],
-  [E (apply1 deltaT time $= apply1 temp time $- apply1 tempEnv time) `S.isThe`
+  [E (defines (apply1 deltaT time) (apply1 temp time $- apply1 tempEnv time)) `S.isThe`
    S "time-dependant thermal gradient between the environment and the object"]]

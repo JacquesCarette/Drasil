@@ -2,11 +2,11 @@
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
 -- | Contains Sentences and helpers
 module Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), (+:+),
-  (+:+.), (+:), (!.), capSent, ch, sC, sDash, sentencePlural, sentenceShort,
+  (+:+.), (+:), (!.), capSent, ch, eS, sC, sDash, sentencePlural, sentenceShort,
   sentenceSymb, sentenceTerm, sParen) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
-import Language.Drasil.Expr (Expr)
+import Language.Drasil.Expr.Display (DisplayExpr, Display (toDispExpr))
 import Language.Drasil.RefProg (Reference)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UnitLang (USymb)
@@ -42,7 +42,7 @@ data Sentence where
   -- | Converts the graphical representation of a symbol into a usable Sentence form.
   P     :: Symbol -> Sentence       -- should not be used in examples?
   -- | Lifts an expression into a Sentence.
-  E     :: Expr -> Sentence  -- TODO: This needs a smart constructor, and it needs to be converted into a DisplayExpr.
+  E     :: DisplayExpr -> Sentence
   -- | Lifts a Reference into a Sentence.
   Ref   :: Reference -> Sentence
   -- | Adds quotation marks around a Sentence.
@@ -53,6 +53,9 @@ data Sentence where
   (:+:) :: Sentence -> Sentence -> Sentence
   -- | Empty Sentence.
   EmptyS :: Sentence
+
+eS :: Display d => d -> Sentence
+eS = E . toDispExpr
 
 -- The HasSymbol is redundant, but on purpose
 -- | Gets a symbol and places it in a 'Sentence'.

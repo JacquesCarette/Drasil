@@ -285,7 +285,7 @@ momEqlDerivSentences = map foldlSentCol [momEqlDerivTorqueSentence,
   momEqlDerivHydroSentence, momEqlDerivExtSentence, momEqlDerivFinalSentence]
 
 momEqlDerivEqns :: [Sentence]
-momEqlDerivEqns = map E [momEqlDerivTorqueEqn, momEqlDerivMomentEqn,
+momEqlDerivEqns = map eS [momEqlDerivTorqueEqn, momEqlDerivMomentEqn,
   momEqlDerivNormaliEqn, momEqlDerivNormaliM1Eqn, momEqlDerivWateriEqn,
   momEqlDerivWateriM1Eqn, momEqlDerivSheariEqn,
   momEqlDerivSheariM1Eqn, momEqlDerivSeismicIntEqn,
@@ -340,7 +340,7 @@ momEqlDerivNormaliSentence = [S "where", ch rotForce `S.isThe`
   phrase slice +:+. ch index,
   S "Thus,", phraseNP (the genericM), S "is expressed as"]
 
-momEqlDerivNormaliM1Sentence = [S "For the", E (sy index $- int 1) :+: S "th",
+momEqlDerivNormaliM1Sentence = [S "For the", eS (sy index $- int 1) :+: S "th",
   phrase slice, S "interface" `sC` phraseNP (the genericM) `S.is`
   S "similar but in the opposite direction"]
 
@@ -355,7 +355,7 @@ momEqlDerivWateriSentence = [S "Next,", phraseNP (the intrslce), S "normal water
 
 momEqlDerivWateriM1Sentence = [atStartNP (the genericM), S "for the",
   phrase intrslce, S "normal water", phrase force, S "acting on", phrase slice,
-  S "interface", E (sy index $- int 1), S "is"]
+  S "interface", eS (sy index $- int 1), S "is"]
 
 momEqlDerivSheariSentence = [atStartNP (the intrslce), phrase shearForce,
   S "at", phrase slice, S "interface", ch index, S "tends to rotate in the",
@@ -365,7 +365,7 @@ momEqlDerivSheariSentence = [atStartNP (the intrslce), phrase shearForce,
   phrase genericM, S "is"]
 
 momEqlDerivSheariM1Sentence = [atStartNP (NP.the (combineNINI intrslce shearForce)),
-  S "at", phrase slice, S "interface", E (sy index $- int 1), S "also tends to",
+  S "at", phrase slice, S "interface", eS (sy index $- int 1), S "also tends to",
   S "rotate in the clockwise direction, and has the same", phrase momntArm `sC`
   S "so", phraseNP (the genericM), S "is"]
 
@@ -373,9 +373,9 @@ momEqlDerivSheariM1Sentence = [atStartNP (NP.the (combineNINI intrslce shearForc
 momEqlDerivSeismicIntSentence = [S "Seismic", plural force, S "act over the",
   S "entire height of the" +:+. phrase slice, S "For each horizontal segment"
   `S.ofThe` phrase slice `sC` S "the seismic", phrase force `S.is`
-  E (sy earthqkLoadFctr `mulRe` inxi slcWght), S "where", E (inxi slcWght),
-  S "can be expressed as", E (sy genericSpWght `mulRe` inxi baseWthX `mulRe` sy yi),
-  S "using", makeRef2S weightGD, S "where", E (sy yi), S "is the height of" +:+.
+  eS (sy earthqkLoadFctr `mulRe` inxi slcWght), S "where", eS (inxi slcWght),
+  S "can be expressed as", eS (sy genericSpWght `mulRe` inxi baseWthX `mulRe` sy yi),
+  S "using", makeRef2S weightGD, S "where", eS yi, S "is the height of" +:+.
   S "the segment under consideration", S "The corresponding", phrase momntArm `S.is`
   ch yi `sC` S "the height from the base of", phraseNP (the slice) +:+.
   S "to the segment under consideration", S "In reality,", pluralNP (the force),
@@ -391,8 +391,8 @@ momEqlDerivSeismicIntSentence = [S "Seismic", plural force, S "act over the",
 momEqlDerivSeismicSentence = [S "Solving the definite integral yields"]
 
 momEqlDerivSeismicWSentence = [S "Using", makeRef2S weightGD,
-  S "again to express", E (sy genericSpWght `mulRe` inxi baseWthX `mulRe` inxi midpntHght),
-  S "as", E (inxi slcWght) `sC` phraseNP (the genericM), S "is"]
+  S "again to express", eS (sy genericSpWght `mulRe` inxi baseWthX `mulRe` inxi midpntHght),
+  S "as", eS (inxi slcWght) `sC` phraseNP (the genericM), S "is"]
 
 momEqlDerivHydroSentence = [S "The surface hydrostatic", phrase force,
   S "acts into the midpoint of the surface of", phraseNP (the slice) +:+.
@@ -490,7 +490,7 @@ sliceWghtDeriv :: Derivation
 sliceWghtDeriv = mkDerivNoHeader (weave [sliceWghtDerivSentences, sliceWghtDerivEqns])
 
 sliceWghtDerivEqns :: [Sentence]
-sliceWghtDerivEqns = map E [sliceWghtDerivSatCaseWeightEqn,
+sliceWghtDerivEqns = map eS [sliceWghtDerivSatCaseWeightEqn,
   sliceWghtDerivSatCaseSliceEqn, sliceWghtDerivDryCaseWeightEqn,
   sliceWghtDerivDryCaseSliceEqn, sliceWghtDerivMixCaseWeightEqn,
   sliceWghtDerivMixCaseSliceEqn]
@@ -614,7 +614,7 @@ bsWtrFDeriv = mkDerivNoHeader (weave [bsWtrFDerivSentences, bsWtrFDerivEqns] ++
   bsWtrFDerivEndSentence)
 
 bsWtrFDerivEqns :: [Sentence]
-bsWtrFDerivEqns = map E [bsWtrFDerivWeightEqn, bsWtrFDerivHeightEqn,
+bsWtrFDerivEqns = map eS [bsWtrFDerivWeightEqn, bsWtrFDerivHeightEqn,
   bsWtrFDerivSliceEqn]
 
 bsWtrFDerivSentences :: [Sentence]
@@ -642,14 +642,14 @@ bsWtrFDerivHeightSentence = [atStartNP (the specWeight), S "in this case is",
   sParen (makeRef2S assumpHFSM),
   atStartNP (the height), S "at the midpoint is the average of the",
   phrase height, S "at", phrase slice, S "interface", ch index `S.andThe`
-  phrase height, S "at", phrase slice, S "interface", E (sy index $- int 1)]
+  phrase height, S "at", phrase slice, S "interface", eS (sy index $- int 1)]
 
 bsWtrFDeriv2DSentence = [S "Due to", makeRef2S assumpPSC `sC`
   S "only two dimensions are considered, so", phraseNP (the baseHydroForce),
   S "are expressed as", plural force +:+. S "per meter",
   atStartNP' (the pressure), S "acting on", pluralNP (the slice), S "can thus be converted",
   S "to", phrase baseHydroForce, S "by multiplying by the corresponding",
-  phraseNP (len `ofThe` slice), S "base", E (inxi baseLngth) `sC`
+  phraseNP (len `ofThe` slice), S "base", eS (inxi baseLngth) `sC`
   S "assuming", phraseNP (the waterTable), S "does not intersect a", phrase slice,
   S "base except at a", phrase slice, S "edge" +:+.
   sParen (makeRef2S assumpWIBE),
@@ -697,7 +697,7 @@ srfWtrFDeriv = mkDerivNoHeader (weave [srfWtrFDerivSentences, srfWtrFDerivEqns] 
   srfWtrFDerivEndSentence)
 
 srfWtrFDerivEqns :: [Sentence]
-srfWtrFDerivEqns = map E [srfWtrFDerivWeightEqn, srfWtrFDerivHeightEqn,
+srfWtrFDerivEqns = map eS [srfWtrFDerivWeightEqn, srfWtrFDerivHeightEqn,
   srfWtrFDerivSliceEqn]
 
 srfWtrFDerivSentences :: [Sentence]
@@ -725,14 +725,14 @@ srfWtrFDerivHeightSentence = [atStartNP (the specWeight), S "in this case is",
   sParen (makeRef2S assumpHFSM),
   atStartNP (the height), S "at the midpoint is the average of the",
   phrase height, S "at", phrase slice, S "interface", ch index `S.andThe`
-  phrase height, S "at", phrase slice, S "interface", E (sy index $- int 1)]
+  phrase height, S "at", phrase slice, S "interface", eS (sy index $- int 1)]
 
 srfWtrFDeriv2DSentence = [S "Due to", makeRef2S assumpPSC `sC`
   S "only two dimensions are considered, so", phraseNP (the surfHydroForce),
   S "are expressed as", plural force +:+. S "per meter", S "The",
   plural pressure, S "acting on", pluralNP (the slice), S "can thus be converted",
   S "to", phrase surfHydroForce, S "by multiplying by the corresponding",
-  phrase len, S "of", phraseNP (the slice), S "surface", E (inxi surfLngth) `sC`
+  phrase len, S "of", phraseNP (the slice), S "surface", eS (inxi surfLngth) `sC`
   S "assuming", phraseNP (the waterTable), S "does not intersect a", phrase slice,
   S "surface except at a", phrase slice, S "edge" +:+.
   sParen (makeRef2S assumpWISE),

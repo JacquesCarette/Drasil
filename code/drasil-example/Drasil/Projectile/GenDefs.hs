@@ -42,13 +42,13 @@ rectVelQD = mkQuantDef' projSpeed (nounPhraseSent $ foldlSent_
 
 rectVelDeriv :: Derivation
 rectVelDeriv = mkDerivName (phrase rectVel)
-               (weave [rectVelDerivSents, map E rectVelDerivEqns])
+               (weave [rectVelDerivSents, map eS rectVelDerivEqns])
 
 rectVelDerivSents :: [Sentence]
 rectVelDerivSents = [rectDeriv velocity acceleration motSent iVel accelerationTM, rearrAndIntSent, performIntSent]
   where
     motSent = foldlSent [atStartNP (the motion) `S.in_` makeRef2S accelerationTM `S.is` S "now", phrase oneD,
-                         S "with a", phrase QP.constAccel `sC` S "represented by", E (sy QP.constAccel)]
+                         S "with a", phrase QP.constAccel `sC` S "represented by", eS QP.constAccel]
 
 rectVelDerivEqns :: [Expr]
 rectVelDerivEqns = [E.rectVelDerivEqn1, E.rectVelDerivEqn2, relat rectVelQD]
@@ -66,7 +66,7 @@ rectPosQD = mkQuantDef' scalarPos (nounPhraseSent $ foldlSent_
 
 rectPosDeriv :: Derivation
 rectPosDeriv = mkDerivName (phrase rectilinear +:+ phrase position)
-               (weave [rectPosDerivSents, map E rectPosDerivEqns])
+               (weave [rectPosDerivSents, map eS rectPosDerivEqns])
 
 rectPosDerivSents :: [Sentence]
 rectPosDerivSents = [rectDeriv position velocity motSent iPos velocityTM,
@@ -89,7 +89,7 @@ velVecQD = mkQuantDef' velocity (nounPhraseSent $ foldlSent_
 
 velVecDeriv :: Derivation
 velVecDeriv = mkDerivName (phrase velocity +:+ phrase vector) [velVecDerivSent, 
-  E $ sy velocity $= E.velVecExpr]
+  E $ defines velocity E.velVecExpr]
 
 velVecDerivSent :: Sentence
 velVecDerivSent = vecDeriv [(velocity, E.velocityXY), (acceleration, E.accelerationXY)] rectVelGD
@@ -105,7 +105,7 @@ posVecQD = mkQuantDef' position (nounPhraseSent $ foldlSent_
             getAcc twoD, S "motion under", phrase QP.constAccel]) E.posVecExpr
 
 posVecDeriv :: Derivation
-posVecDeriv = mkDerivName (phrase positionVec) [posVecDerivSent, E $ relat posVecQD]
+posVecDeriv = mkDerivName (phrase positionVec) [posVecDerivSent, eS posVecQD]
 
 posVecDerivSent :: Sentence
 posVecDerivSent =
@@ -118,16 +118,16 @@ rectDeriv c1 c2 motSent initc ctm = foldlSent_ [
   sParen (S "of negligible size" `S.and_` S "shape" `sC` S "from" +:+ makeRef2S pointMass) :+:
   S ";" +:+. (S "that is" `sC` S "motion" `S.in_` S "a straight line"),
   (atStartNP (the c1) `S.is` getScalar c1 `S.andThe` phrase c2 `S.is` getScalar c2 !.), motSent,
-  atStartNP (the initc), sParen (S "at" +:+ E (sy time $= exactDbl 0) `sC` S "from" +:+
+  atStartNP (the initc), sParen (S "at" +:+ eS (sy time $= exactDbl 0) `sC` S "from" +:+
   makeRef2S timeStartZero) `S.is` S "represented by" +:+. getScalar initc,
   S "From", makeRef2S ctm `sC` S "using the above", plural symbol_ +: S "we have"]
   where
     getScalar c
-      | c == position     = E (sy scalarPos)
-      | c == velocity     = E (sy speed)
-      | c == acceleration = E (sy scalarAccel)
-      | c == iPos         = E (sy iPos)
-      | c == iVel         = E (sy iSpeed)
+      | c == position     = eS scalarPos
+      | c == velocity     = eS speed
+      | c == acceleration = eS scalarAccel
+      | c == iPos         = eS iPos
+      | c == iVel         = eS iSpeed
       | otherwise         = error "Not implemented in getScalar"
 
 rearrAndIntSent, performIntSent :: Sentence
@@ -139,11 +139,11 @@ vecDeriv :: [(UnitalChunk, Expr)] -> GenDefn -> Sentence
 vecDeriv vecs gdef = foldlSentCol [
   S "For a", phraseNP (combineNINI twoD cartesian), sParen (makeRef2S twoDMotion `S.and_` makeRef2S cartSyst) `sC`
   S "we can represent" +:+. foldlList Comma List 
-  (map (\(c, e) -> foldlSent_ [phraseNP (the c), phrase vector, S "as", E e]) vecs),
+  (map (\(c, e) -> foldlSent_ [phraseNP (the c), phrase vector, S "as", eS e]) vecs),
   atStartNP (the acceleration) `S.is` S "assumed to be constant", sParen (makeRef2S constAccel) `S.andThe`
-  phrase constAccelV `S.is` S "represented as" +:+. E E.constAccelXY, 
-  atStartNP (the iVel) +:+ sParen (S "at" +:+ E (sy time $= exactDbl 0) `sC` S "from" +:+ makeRef2S timeStartZero) `S.is`
-  S "represented by" +:+. E (sy iVel $= vec2D (sy ixVel) (sy iyVel)), 
+  phrase constAccelV `S.is` S "represented as" +:+. eS E.constAccelXY, 
+  atStartNP (the iVel) +:+ sParen (S "at" +:+ eS (sy time $= exactDbl 0) `sC` S "from" +:+ makeRef2S timeStartZero) `S.is`
+  S "represented by" +:+. eS (sy iVel $= vec2D (sy ixVel) (sy iyVel)), 
   S "Since we have a",
   phrase cartesian `sC` makeRef2S gdef, S "can be applied to each", phraseNP (coordinate `ofThe`
   (fst . head) vecs), phrase vector, S "to yield the required", phrase equation]

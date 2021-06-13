@@ -77,7 +77,7 @@ derivation c = maybe (mkParagraph EmptyS)
 -- | Helper function for creating the layout objects
 -- (paragraphs and equation blocks) for a derivation.
 makeDerivCons :: Sentence -> RawContent
-makeDerivCons (E e) = EqnBlock $ toDispExpr e  -- TODO: Sentence should not be wrapping plain Es but rather DEs!!!!!!!!
+makeDerivCons (E e) = EqnBlock e
 makeDerivCons s     = Paragraph s
 
 -- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs.

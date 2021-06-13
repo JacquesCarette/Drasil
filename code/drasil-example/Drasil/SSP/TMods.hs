@@ -68,9 +68,9 @@ eqDesc :: Sentence
 eqDesc = foldlSent [S "For a body in static equilibrium, the net",
   pluralNP (force `and_PP` genericM) +:+. S "acting on the body will cancel out",
   S "Assuming a 2D problem", sParen (makeRef2S assumpENSL) `sC` S "the", getTandS fx `S.and_`
-  getTandS fy, S "will be equal to" +:+. E (exactDbl 0), S "All", plural force,
+  getTandS fy, S "will be equal to" +:+. eS (exactDbl 0), S "All", plural force,
   S "and their", phrase distance, S "from the chosen point of rotation",
-  S "will create a net", phrase genericM, S "equal to" +:+ E (exactDbl 0)]
+  S "will create a net", phrase genericM, S "equal to" +:+ eS (exactDbl 0)]
 
 --
 ------------- New Chunk -----------
@@ -93,7 +93,7 @@ mcShrStrgthDesc = foldlSent [S "In this", phrase model, S "the",
   getTandS shrStress, S "is proportional to the product of the",
   phrase effNormStress, ch effNormStress, S "on the plane", 
   S "with its static", phrase friction, S "in the angular form" +:+.
-  E (tan $ sy fricAngle),
+  eS (tan $ sy fricAngle),
   S "The", ch shrStress, S "versus", ch effNormStress,
   S "relationship is not truly",
   phrase linear `sC` S "but assuming the", phrase nrmFSubWat, 

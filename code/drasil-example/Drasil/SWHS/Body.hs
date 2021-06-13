@@ -487,7 +487,7 @@ dataContFooter = foldlSent_ $ map foldlSent [
   [sParen (S "++"), atStartNP' (NP.the (constraint `onThePS` surArea)),
   S "are calculated by considering the", phrase surArea, S "to", phrase vol +:+.
   S "ratio", atStartNP (the assumption), S "is that the lowest ratio is 1" `S.and_`
-  S "the highest possible is", E (exactDbl 2 $/ sy thickness) `sC` S "where", ch thickness,
+  S "the highest possible is", eS (exactDbl 2 $/ sy thickness) `sC` S "where", ch thickness,
   S "is the thickness of a" +:+. (Quote (S "sheet") `S.of_` short phsChgMtrl),
   S "A thin sheet has the greatest", phrase surArea, S "to", phrase vol, S "ratio"],
 

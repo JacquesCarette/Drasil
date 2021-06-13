@@ -46,7 +46,7 @@ weightDerivSentences, weightDerivEqns :: [Sentence]
 weightDerivSentences = map foldlSentCol [weightDerivAccelSentence, 
   weightDerivNewtonSentence, weightDerivReplaceMassSentence, 
   weightDerivSpecWeightSentence]
-weightDerivEqns = map E [weightDerivAccelEqn, weightDerivNewtonEqn, 
+weightDerivEqns = map eS [weightDerivAccelEqn, weightDerivNewtonEqn, 
   weightDerivReplaceMassEqn, weightDerivSpecWeightEqn]
 
 weightDerivAccelSentence :: [Sentence]
@@ -111,7 +111,7 @@ vecMagQD = mkQuantDef QP.speed speedEqn
 
 magNote :: Sentence
 magNote = foldlSent [S "For a given", phrase QP.velocity, S "vector", ch QP.velocity `sC`
-  S "the magnitude of the vector", sParen (E speedEqn) `S.isThe`
+  S "the magnitude of the vector", sParen (eS speedEqn) `S.isThe`
   S "scalar called", phrase QP.speed]
 
 vecMag :: DataDefinition

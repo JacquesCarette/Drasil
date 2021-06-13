@@ -54,9 +54,9 @@ balWtrNotes :: [Sentence]
 balWtrNotes = map foldlSent [
   [ch tauW `S.is` S "calculated from", makeRef2S balanceDecayRate],
   [S "The above", phrase equation, S "applies as long as the", phrase water,
-   S "is in", phrase liquid, S "form" `sC` E (exactDbl 0 $< sy tempW $< exactDbl 100),
-   sParen (unwrap $ getUnit tempW), S "where", E (exactDbl 0),
-   sParen (unwrap $ getUnit tempW) `S.and_` E (exactDbl 100),
+   S "is in", phrase liquid, S "form" `sC` eS (exactDbl 0 $< sy tempW $< exactDbl 100), -- TODO: interval
+   sParen (unwrap $ getUnit tempW), S "where", eS (exactDbl 0),
+   sParen (unwrap $ getUnit tempW) `S.and_` eS (exactDbl 100),
    sParen (unwrap $ getUnit tempW), S "are the", pluralNP ((melting `and_`
    boilPt) `of_PSNPNI` water) `sC` S "respectively", sParen (makeRef2S assumpWAL)]]
 
@@ -65,7 +65,7 @@ balWtrNotes = map foldlSent [
 ----------------------------------------------
 eBalanceOnWtrDeriv :: Derivation
 eBalanceOnWtrDeriv = mkDerivName (phraseNP (the energy) +:+ S "balance on water")
-  (weave [eBalanceOnWtrDerivSentences, map E eBalanceOnWtrDerivEqns])
+  (weave [eBalanceOnWtrDerivSentences, map eS eBalanceOnWtrDerivEqns])
 
 eBalanceOnWtrDerivSentences :: [Sentence]
 eBalanceOnWtrDerivSentences = [eBalanceOnWtrDerivDesc1 EmptyS (S "over area" +:+ ch coilSA) EmptyS assumpNIHGBW,

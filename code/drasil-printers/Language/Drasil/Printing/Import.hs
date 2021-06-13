@@ -366,7 +366,7 @@ spec sm (Ref (Reference _ (URI ra) sn _)) =
   P.Ref P.External    ra $ spec sm $ renderURI sm sn
 spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
-spec sm (E e)          = P.E $ expr e sm
+spec sm (E e)          = P.E $ dispExpr e sm
 
 -- | Renders a unit symbol as a printable expression.
 pUnit :: USymb -> P.Expr

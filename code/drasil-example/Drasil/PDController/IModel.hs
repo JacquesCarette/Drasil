@@ -50,7 +50,7 @@ eqn
 imDeriv :: Derivation
 imDeriv
   = mkDerivName (phrase processVariable)
-      (weave [imDerivStmts, map E imDerivEqns])
+      (weave [imDerivStmts, map eS imDerivEqns])
 
 imDerivStmts :: [Sentence]
 imDerivStmts = [derivStmt1, derivStmt2, derivStmt3, derivStmt4]
@@ -61,7 +61,7 @@ imDerivEqns = [derivEqn1, derivEqn2, derivEqn3, derivEqn4]
 derivStmt1 :: Sentence
 derivStmt1
   = foldlSent
-      [atStartNP (the processVariable), E (sy qdProcessVariableFD), S "in a", phrase pidCL +:+
+      [atStartNP (the processVariable), eS qdProcessVariableFD, S "in a", phrase pidCL +:+
          S "is the product of the", phrase processError, fromSource ddErrSig `sC`
          phrase controlVariable, fromSource ddCtrlVar `sC` EmptyS
          `S.andThe` phrase powerPlant, fromSource gdPowerPlant]
@@ -100,7 +100,7 @@ derivEqn3
 derivStmt4 :: Sentence
 derivStmt4
   = foldlSent_
-      [atStartNP (the setPoint), E (sy qdSetPointTD), S "is a step function and a constant" +:+.
+      [atStartNP (the setPoint), eS qdSetPointTD, S "is a step function and a constant" +:+.
          fromSource aSP,
        S "Therefore the",
          S "differential of the set point is zero. Hence the equation",

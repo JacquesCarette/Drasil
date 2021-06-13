@@ -7,6 +7,11 @@ import Language.Drasil.Expr (Expr(..))
 import Language.Drasil.Expr.Display
 import Language.Drasil.Space (RealInterval(..))
 
+deNames :: DisplayExpr -> [String]
+deNames (AlgebraicExpr e) = eNames e
+deNames (Defines l r)     = deNames l ++ deNames r
+deNames (MultiExpr des)   = concatMap deNames des
+
 -- | Generic traverse of all expressions that could lead to names.
 eNames :: Expr -> [String]
 eNames (AssocA _ l)          = concatMap eNames l
@@ -44,8 +49,14 @@ eNames (RealI c b)           = c : eNamesRI b
 -- | Generic traversal of everything that could come from an interval to names (similar to 'names').
 eNamesRI :: RealInterval Expr Expr -> [String]
 eNamesRI (Bounded (_,il) (_,iu)) = eNames il ++ eNames iu
-eNamesRI (UpTo (_,iu))       = eNames iu
-eNamesRI (UpFrom (_,il))     = eNames il
+eNamesRI (UpTo (_,iu))           = eNames iu
+eNamesRI (UpFrom (_,il))         = eNames il
+
+
+deNames' :: DisplayExpr -> [String]
+deNames' (AlgebraicExpr e) = eNames e
+deNames' (Defines l r)     = deNames' l ++ deNames' r
+deNames' (MultiExpr des)   = concatMap deNames' des
 
 -- | Generic traverse of all positions that could lead to eNames without
 -- functions.  FIXME : this should really be done via post-facto filtering, but

@@ -64,7 +64,7 @@ exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (conca
 -- | Converts a 'Sentence' into a list of expressions. If the 'Sentence' cant be translated, returns an empty list.
 sentToExp :: Sentence -> [DisplayExpr]
 sentToExp ((:+:) s1 s2) = sentToExp s1 ++ sentToExp s2
-sentToExp (E e) = [toDispExpr e] -- TODO: E's should be DisplayExprs!!
+sentToExp (E e) = [e]
 sentToExp _ = []
 
 -- | Helper that extracts a list of some type from the 'DLPlate' and 'DocDesc'.

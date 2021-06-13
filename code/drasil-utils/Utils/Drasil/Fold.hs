@@ -22,10 +22,11 @@ foldle1 _ _ [x]      = x
 foldle1 _ g [x,y]    = g x y
 foldle1 f g (x:y:xs) = foldle f g (f x y) xs
 
+-- TODO: Is this formatting right?
 -- | Helper for formatting constraints.
 foldConstraints :: (Quantity c) => c -> [Constraint] -> Sentence
 foldConstraints _ [] = EmptyS
-foldConstraints c e  = E $ foldl1 ($&&) $ map constraintToExpr e
+foldConstraints c e  = E $ multiExpr $ map constraintToExpr e
   where
     constraintToExpr (Range _ ri)         = realInterval c ri
     constraintToExpr (EnumeratedReal _ l) = isin (sy c) (DiscreteD l)

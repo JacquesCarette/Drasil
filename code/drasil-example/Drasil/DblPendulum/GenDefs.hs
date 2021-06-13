@@ -50,7 +50,7 @@ velocityIXExpr :: Expr
 velocityIXExpr = sy angularVelocity `mulRe` sy lenRod `mulRe` cos (sy pendDisplacementAngle)
 
 velocityIXDeriv :: Derivation
-velocityIXDeriv = mkDerivName (phraseNP (NP.the (xComp `of_` velocity))) (weave [velocityIXDerivSents, map E velocityIXDerivEqns])
+velocityIXDeriv = mkDerivName (phraseNP (NP.the (xComp `of_` velocity))) (weave [velocityIXDerivSents, map eS velocityIXDerivEqns])
 
 velocityIXDerivSents :: [Sentence]
 velocityIXDerivSents = [velocityIDerivSent1,velocityIXDerivSent2,velocityIXDerivSent3,velocityIXDerivSent4,
@@ -69,7 +69,7 @@ velocityIXDerivSent2 = S "We also know the" +:+ phrase horizontalPos
 velocityIXDerivEqn2 = sy xPos $= sy lenRod `mulRe` sin (sy pendDisplacementAngle)
 velocityIXDerivSent3 = S "Applying this,"
 velocityIXDerivEqn3 = sy xVel $= deriv (sy lenRod `mulRe` sin (sy pendDisplacementAngle)) time
-velocityIXDerivSent4 = E (sy lenRod) `S.is` S "constant" `S.wrt` S  "time, so"
+velocityIXDerivSent4 = eS lenRod `S.is` S "constant" `S.wrt` S  "time, so"
 velocityIXDerivEqn4 = sy xVel $= sy lenRod `mulRe` deriv (sin (sy pendDisplacementAngle)) time
 velocityIXDerivSent5 = S "Therefore, using the chain rule,"
 
@@ -85,7 +85,7 @@ velocityIYExpr :: Expr
 velocityIYExpr = sy angularVelocity `mulRe` sy lenRod `mulRe` sin (sy pendDisplacementAngle)
 
 velocityIYDeriv :: Derivation
-velocityIYDeriv = mkDerivName (phraseNP (NP.the (yComp `of_` velocity))) (weave [velocityIYDerivSents, map E velocityIYDerivEqns])
+velocityIYDeriv = mkDerivName (phraseNP (NP.the (yComp `of_` velocity))) (weave [velocityIYDerivSents, map eS velocityIYDerivEqns])
 
 velocityIYDerivSents :: [Sentence]
 velocityIYDerivSents = [velocityIDerivSent1, velocityIYDerivSent2,
@@ -104,7 +104,7 @@ velocityIYDerivSent2 = S "We also know the" +:+ phrase verticalPos
 velocityIYDerivEqn2 = sy yPos $= neg (sy lenRod `mulRe` cos (sy pendDisplacementAngle))
 velocityIYDerivSent3 = S "Applying this again,"
 velocityIYDerivEqn3 = sy yVel $= neg (deriv (sy lenRod `mulRe` cos (sy pendDisplacementAngle)) time)
-velocityIYDerivSent4 = E (sy lenRod) `S.is` S "constant" `S.wrt` S "time, so"
+velocityIYDerivSent4 = eS lenRod `S.is` S "constant" `S.wrt` S "time, so"
 velocityIYDerivEqn4 = sy yVel $= neg (sy lenRod `mulRe` deriv (cos (sy pendDisplacementAngle)) time)
 velocityIYDerivSent5 = S "Therefore, using the chain rule,"
 
@@ -121,7 +121,7 @@ accelerationIXExpr = neg (square (sy angularVelocity) `mulRe` sy lenRod `mulRe` 
                     `addRe` (sy angularAccel `mulRe` sy lenRod `mulRe` cos (sy pendDisplacementAngle))
 
 accelerationIXDeriv :: Derivation
-accelerationIXDeriv = mkDerivName (phraseNP (NP.the (xComp `of_` acceleration))) (weave [accelerationIXDerivSents, map E accelerationIXDerivEqns])
+accelerationIXDeriv = mkDerivName (phraseNP (NP.the (xComp `of_` acceleration))) (weave [accelerationIXDerivSents, map eS accelerationIXDerivEqns])
 
 accelerationIXDerivSents :: [Sentence]
 accelerationIXDerivSents = [accelerationIDerivSent1, accelerationIXDerivSent2, accelerationIXDerivSent3,
@@ -158,7 +158,7 @@ accelerationIYExpr = (square (sy angularVelocity) `mulRe` sy lenRod `mulRe` cos 
                     `addRe` (sy angularAccel `mulRe` sy lenRod `mulRe` sin (sy pendDisplacementAngle))
 
 accelerationIYDeriv :: Derivation
-accelerationIYDeriv = mkDerivName (phraseNP (NP.the (yComp `of_` acceleration))) (weave [accelerationIYDerivSents, map E accelerationIYDerivEqns])
+accelerationIYDeriv = mkDerivName (phraseNP (NP.the (yComp `of_` acceleration))) (weave [accelerationIYDerivSents, map eS accelerationIYDerivEqns])
 
 accelerationIYDerivSents :: [Sentence]
 accelerationIYDerivSents = [accelerationIDerivSent1, accelerationIYDerivSent2, accelerationIYDerivSent3,
@@ -197,7 +197,7 @@ hForceOnPendulumMD = mkMultiDefnForQuant quant EmptyS defns
                   ]
 
 hForceOnPendulumDeriv :: Derivation
-hForceOnPendulumDeriv = mkDerivName (phraseNP (force `onThe` pendulum)) [E $ relat hForceOnPendulumMD]
+hForceOnPendulumDeriv = mkDerivName (phraseNP (force `onThe` pendulum)) [eS hForceOnPendulumMD]
 
 ----------------------------------------Vertical force acting on the pendulum 
 vForceOnPendulumGD :: GenDefn
@@ -217,7 +217,7 @@ vForceOnPendulumMD = mkMultiDefnForQuant quant EmptyS defns
                   ]
 
 vForceOnPendulumDeriv :: Derivation
-vForceOnPendulumDeriv = mkDerivName (phraseNP (force `onThe` pendulum)) [E $ relat vForceOnPendulumMD]
+vForceOnPendulumDeriv = mkDerivName (phraseNP (force `onThe` pendulum)) [eS vForceOnPendulumMD]
 
 --------------------------------------Angular Frequency Of Pendulum
 
@@ -232,7 +232,7 @@ angFrequencyExpr :: Expr
 angFrequencyExpr = sqrt (sy gravitationalAccel $/ sy lenRod)
 
 angFrequencyDeriv :: Derivation
-angFrequencyDeriv = mkDerivName (phraseNP (angularFrequency `the_ofThe` pendulum)) (weave [angFrequencyDerivSents, map E angFrequencyDerivEqns])
+angFrequencyDeriv = mkDerivName (phraseNP (angularFrequency `the_ofThe` pendulum)) (weave [angFrequencyDerivSents, map eS angFrequencyDerivEqns])
 
 
 angFrequencyDerivSents :: [Sentence]
@@ -291,7 +291,7 @@ periodPendExpr :: Expr
 periodPendExpr = exactDbl 2 `mulRe` sy QM.pi_ `mulRe` sqrt (sy lenRod $/ sy gravitationalAccel)
 
 periodPendDeriv :: Derivation
-periodPendDeriv = mkDerivName (phraseNP (NP.the (period `ofThe` pendulum))) (weave [periodPendDerivSents, map E periodPendDerivEqns])
+periodPendDeriv = mkDerivName (phraseNP (NP.the (period `ofThe` pendulum))) (weave [periodPendDerivSents, map eS periodPendDerivEqns])
 
 periodPendDerivSents :: [Sentence]
 periodPendDerivSents = [periodPendDerivSent1, periodPendDerivSent2]

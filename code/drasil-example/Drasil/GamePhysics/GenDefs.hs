@@ -85,7 +85,7 @@ accelGravitySrc = makeURI "accelGravitySrc" "https://en.wikipedia.org/wiki/Gravi
 
 accelGravityDeriv :: Derivation
 accelGravityDeriv = mkDerivName (phrase QP.gravitationalAccel)
-                      (weave [accelGravityDerivSentences, map E accelGravityDerivEqns])
+                      (weave [accelGravityDerivSentences, map eS accelGravityDerivEqns])
 
 accelGravityDerivSentences :: [Sentence]
 accelGravityDerivSentences = map foldlSentCol [accelGravityDerivSentence1,

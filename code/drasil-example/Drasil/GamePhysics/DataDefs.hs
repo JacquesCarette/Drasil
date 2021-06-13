@@ -226,7 +226,7 @@ impulseVDesc = foldlSent [S "An", getTandS QP.impulseV, S "occurs when a",
   getTandS QP.force, S "acts over a body over an interval" `S.of_` phrase QP.time]
 
 impulseVDeriv :: Derivation
-impulseVDeriv = mkDerivName (phrase QP.impulseV) (weave [impulseVDerivSentences, map E impulseVDerivEqns])
+impulseVDeriv = mkDerivName (phrase QP.impulseV) (weave [impulseVDerivSentences, map eS impulseVDerivEqns])
 
 impulseVDerivSentences :: [Sentence]
 impulseVDerivSentences = map foldlSentCol [impulseVDerivSentence1, 
@@ -296,9 +296,9 @@ coeffRestitutionDesc :: Sentence
 coeffRestitutionDesc = foldlSent [S "The", getTandS QP.restitutionCoef,
   S "determines the elasticity of a collision between two" +:+. plural rigidBody,
   foldlList Comma List [
-  E (sy QP.restitutionCoef $= exactDbl 1) +:+ S "results in an elastic collision",
-  E (sy QP.restitutionCoef $< exactDbl 1) +:+ S "results in an inelastic collision",
-  E (sy QP.restitutionCoef $= exactDbl 0) +:+ S "results in a totally inelastic collision"]]
+  eS (sy QP.restitutionCoef $= exactDbl 1) +:+ S "results in an elastic collision",
+  eS (sy QP.restitutionCoef $< exactDbl 1) +:+ S "results in an inelastic collision",
+  eS (sy QP.restitutionCoef $= exactDbl 0) +:+ S "results in a totally inelastic collision"]]
 -----------------------DD15 Kinetic Energy--------------------------------  
 kEnergyDD :: DataDefinition
 kEnergyDD = ddNoRefs kEnergy Nothing "kEnergy"

@@ -4,7 +4,7 @@ import Data.List (nub)
 import Language.Drasil.UID (UID)
 import Language.Drasil.Sentence(Sentence(..), SentenceStyle(..))
 import Language.Drasil.RefProg (Reference(Reference))
-import Language.Drasil.Expr.Extract(eNames)
+import Language.Drasil.Expr.Extract (deNames)
 
 
 -- | Generic traverse of all positions that could lead to UIDs from 'Sentence's.
@@ -20,7 +20,7 @@ getUIDs (Ref _)            = []
 getUIDs Percent            = []
 getUIDs ((:+:) a b)        = getUIDs a ++ getUIDs b
 getUIDs (Quote a)          = getUIDs a
-getUIDs (E a)              = eNames a
+getUIDs (E a)              = deNames a
 getUIDs EmptyS             = []
 
 -- | Generic traverse of all positions that could lead to 'UID's from 'Sentence's

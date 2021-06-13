@@ -35,9 +35,10 @@ compareBySymbol a b = compsy (symbol a Equational) (symbol b Equational)
 eqN :: Int -> Sentence
 eqN n = S "Equation" +:+ sParen (S $ show n)
 
+-- TODO: Should this one be a flat DisplayExpr?
 -- | Takes an expression and a 'Referable' and outputs as a Sentence "expression (source)".
 eqnWSource :: (Referable r, HasShortName r) => Expr -> r -> Sentence
-eqnWSource a b = E a +:+ sParen (makeRef2S b)
+eqnWSource a b = eS a +:+ sParen (makeRef2S b)
 
 -- | Takes a 'Referable' source and a 'UnitalChunk' and outputs as a 'Sentence': "From @source@ we can replace @symbol@:".
 fromReplace :: (Referable r, HasShortName r) => r -> UnitalChunk -> Sentence
@@ -214,11 +215,11 @@ getTandS a = phrase a +:+ ch a
 
 -- | Produces a 'Sentence' that displays the constraints in a set {}.
 displayStrConstrntsAsSet :: Quantity a => a -> [String] -> Sentence
-displayStrConstrntsAsSet sym listOfVals = E $ sy sym `isin` DiscreteS listOfVals
+displayStrConstrntsAsSet sym listOfVals = eS $ sy sym `isin` DiscreteS listOfVals
 
 -- | Produces a 'Sentence' that displays the constraints in a set {}.
 displayDblConstrntsAsSet :: Quantity a => a -> [Double] -> Sentence
-displayDblConstrntsAsSet sym listOfVals = E $ sy sym `isin` DiscreteD listOfVals
+displayDblConstrntsAsSet sym listOfVals = eS $ sy sym `isin` DiscreteD listOfVals
 
 -- | Output is of the form "@reference - sentence@".
 chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence

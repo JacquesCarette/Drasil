@@ -5,9 +5,11 @@ module Language.Drasil.Chunk.Quantity (QuantityDict, codeVC, implVar, implVar',
 import Control.Lens ((^.),makeLenses,view)
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
-import Language.Drasil.Classes (NamedIdea(term), Idea(getA), HasSpace(typ), Quantity)
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
+  HasSpace(typ), Quantity, Display(toDispExpr))
 import Language.Drasil.Chunk.NamedIdea (IdeaDict,nw,mkIdea,nc)
 import Language.Drasil.Chunk.UnitDefn(UnitDefn, MayHaveUnit(getUnit))
+import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Stages (Stage(..))
@@ -39,6 +41,7 @@ instance Eq            QuantityDict where a == b = (a ^. uid) == (b ^. uid)
 -- ^ Equal if 'UID's are equal.
 instance MayHaveUnit   QuantityDict where getUnit = view unit'
 -- ^ Finds the units of the 'QuantityDict'.
+instance Display       QuantityDict where toDispExpr = toDispExpr . sy
 
 -- | Smart constructor for a 'QuantityDict' from another 'Quantity' with units.
 qw :: (Quantity q, MayHaveUnit q) => q -> QuantityDict

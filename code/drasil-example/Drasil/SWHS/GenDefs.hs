@@ -88,7 +88,7 @@ newtonLawNote u a c = foldlSent [ch u `S.is` S "found by assuming that",
 
 rocTempSimpDeriv :: Sentence -> [ConceptInstance] -> Derivation
 rocTempSimpDeriv s a = mkDerivName (S "simplified" +:+ phraseNP (rOfChng `of_` temp))
-  (weave [rocTempSimpDerivSent s a, map E rocTempSimpDerivEqns])
+  (weave [rocTempSimpDerivSent s a, map eS rocTempSimpDerivEqns])
 
 rocTempSimpDerivSent :: Sentence -> [ConceptInstance] -> [Sentence]
 rocTempSimpDerivSent s a = map foldlSentCol [rocTempDerivInteg, rocTempDerivGauss,
@@ -120,7 +120,7 @@ rocTempDerivConsFlx s assumps = [S "Where",
 rocTempDerivConsFlxSWHS :: Sentence
 rocTempDerivConsFlxSWHS = foldlSent [S "The integral over the", phrase surface,
   S "could be simplified because the thermal flux is assumed constant over",
-  ch inSA `S.and_` ch outSA `S.and_` E (exactDbl 0), S "on all other" +:+. plural surface,
+  ch inSA `S.and_` ch outSA `S.and_` eS (exactDbl 0), S "on all other" +:+. plural surface,
   S "Outward flux is considered positive"]
 
 rocTempDerivDens :: [Sentence]

@@ -19,6 +19,8 @@ class Display c where
 instance Display Expr where
   toDispExpr = AlgebraicExpr
 
+instance Display DisplayExpr where
+  toDispExpr = id
 
 defines :: (Display a, Display b) => a -> b -> DisplayExpr
 defines a b = Defines (toDispExpr a) (toDispExpr b)

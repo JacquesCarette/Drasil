@@ -1,20 +1,18 @@
 module Utils.Drasil.Contents (enumBullet, enumBulletU, enumSimple,
-  enumSimpleU, eqUnR, eqUnR', mkEnumSimpleD) where
+  enumSimpleU, lbldExpr, unlbldExpr, mkEnumSimpleD) where
 
 import Language.Drasil
 import Utils.Drasil.Misc (bulletFlat, mkEnumAbbrevList)
 
 import Control.Lens ((^.))
 
--- TODO: Rename eqUnR to lbldExpr
 -- | Constructs 'LabelledContent' from an expression and a reference.
-eqUnR :: Display c => c -> Reference -> LabelledContent
-eqUnR c lbl = llcc lbl $ EqnBlock $ toDispExpr c
+lbldExpr :: Display c => c -> Reference -> LabelledContent
+lbldExpr c lbl = llcc lbl $ EqnBlock $ toDispExpr c
 
--- TODO: Rename eqUnR' to unlbldExpr
 -- | Same as 'eqUnR' except content is unlabelled.
-eqUnR' :: Display c => c -> Contents
-eqUnR' c = UlC $ ulcc $ EqnBlock $ toDispExpr c
+unlbldExpr :: Display c => c -> Contents
+unlbldExpr c = UlC $ ulcc $ EqnBlock $ toDispExpr c
 
 -- | Applies 'Enumeration', 'Bullet' and 'Flat' to a list.
 enumBullet :: Reference -> [Sentence] -> LabelledContent --FIXME: should Enumeration be labelled?

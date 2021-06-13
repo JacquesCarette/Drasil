@@ -56,8 +56,6 @@ data DType = General
            | Theory
            | Data
 
--- TODO: EquationBlock only allows a single Expr?!?!
-
 -- | Types of layout objects we deal with explicitly.
 data RawContent =
     Table [Sentence] [[Sentence]] Title Bool -- ^ table has: header-row, data(rows), label/caption, and a bool that determines whether or not to show label.

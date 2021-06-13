@@ -1,6 +1,7 @@
 module Utils.Drasil (
   -- Contents
-  enumBullet, enumBulletU, enumSimple, enumSimpleU, eqUnR, eqUnR', mkEnumSimpleD,
+  enumBullet, enumBulletU, enumSimple, enumSimpleU, mkEnumSimpleD,
+  lbldExpr, unlbldExpr,
   -- Document
   blank, indent, indentList,
   -- English

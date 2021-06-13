@@ -542,7 +542,7 @@ propCorSolDeriv1 lce ewat en co pcmat g1hfc g2hfp su ht  =
   S "over the", phrase simTime `sC` S "as follows"]
 
 propCorSolDeriv2 :: Contents
-propCorSolDeriv2 = eqUnR'
+propCorSolDeriv2 = unlbldExpr
   (sy watE $= defint (eqSymb time) (exactDbl 0) (sy time)
   (sy coilHTC `mulRe` sy coilSA `mulRe` (sy tempC $- apply1 tempW time))
   $- defint (eqSymb time) (exactDbl 0) (sy time)
@@ -556,7 +556,7 @@ propCorSolDeriv3 epcm en pcmat wa =
   S "from the" +:+. phrase wa, S "This can be expressed as"]
 
 propCorSolDeriv4 :: Contents
-propCorSolDeriv4 = eqUnR'
+propCorSolDeriv4 = unlbldExpr
   (sy pcmE $= defint (eqSymb time) (exactDbl 0) (sy time)
   (sy pcmHTC `mulRe` sy pcmSA `mulRe` (apply1 tempW time $- 
   apply1 tempPCM time)))

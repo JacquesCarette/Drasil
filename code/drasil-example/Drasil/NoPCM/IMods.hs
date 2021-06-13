@@ -54,7 +54,7 @@ balWtrNotes :: [Sentence]
 balWtrNotes = map foldlSent [
   [ch tauW `S.is` S "calculated from", makeRef2S balanceDecayRate],
   [S "The above", phrase equation, S "applies as long as the", phrase water,
-   S "is in", phrase liquid, S "form" `sC` eS (exactDbl 0 $< sy tempW $< exactDbl 100), -- TODO: interval
+   S "is in", phrase liquid, S "form" `sC` eS (realInterval tempW $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 100)),
    sParen (unwrap $ getUnit tempW), S "where", eS (exactDbl 0),
    sParen (unwrap $ getUnit tempW) `S.and_` eS (exactDbl 100),
    sParen (unwrap $ getUnit tempW), S "are the", pluralNP ((melting `and_`

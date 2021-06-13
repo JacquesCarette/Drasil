@@ -9,9 +9,8 @@ import qualified Drasil.DocLang.Notebook as NB (intro, prpsOfDoc)
 -- problemIntroduction - Sentence introducing the specific example problem
 -- programDefinition  - Sentence definition of the specific example
 -- **** programDefinition : maybe just topic 
-introductionSection :: Sentence -> Sentence -> [Section] -> Section
-introductionSection problemIntroduction programDefinition = NB.intro 
-  [mkParagraph problemIntroduction, overviewParagraph programDefinition]
+introductionSection :: [Contents] -> [Section] -> Section
+introductionSection problemIntroduction = NB.intro problemIntroduction
 
 
 -- | Constructor for the overview paragraph for the introduction

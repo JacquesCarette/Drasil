@@ -14,9 +14,12 @@ reviewContextP1
 
 reviewEq 
   = foldlSP 
-      [E (sy QP.speed $= E.speed'), E (sy QP.scalarPos $= E.scalarPos'), E (E.rectNoTime),
+      [E (sy QP.speed $= E.speed'),
        S "where", E (sy QP.iSpeed) `S.sAnd` E (sy QP.iPos), 
        S "are the initial velocity and position, respectively"]
+
+reviewEqns :: [Expr]
+reviewEqns = [sy QP.speed $= E.speed', sy QP.scalarPos $= E.scalarPos', E.rectNoTime]
 
 reviewContextP2
   = foldlSP 

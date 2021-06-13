@@ -36,8 +36,8 @@ mkSections si dd = map doit dd
 -- | Helper for making the 'Introduction' section
 -- **** Add intro subsections
 mkIntroSec :: SystemInformation -> IntroSec -> Section
-mkIntroSec si (IntroProg probIntro progDefn l) =
-  Intro.introductionSection probIntro progDefn $ map (mkSubIntro si) l
+mkIntroSec si (IntroProg probIntro l) =
+  Intro.introductionSection probIntro $ map (mkSubIntro si) l
   where
     mkSubIntro :: SystemInformation -> IntroSub -> Section
     mkSubIntro _ (IPurpose intro) = Intro.purposeOfDoc intro

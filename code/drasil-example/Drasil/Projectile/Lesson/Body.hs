@@ -24,7 +24,7 @@ import Data.Drasil.People (spencerSmith)
 import Drasil.Projectile.Concepts (concepts)
 import Drasil.Projectile.Body (symbols)
 
-import Drasil.Projectile.Lesson.IntroSection (introPara)
+import Drasil.Projectile.Lesson.IntroSection (introContext, reasonList, overviewParagraph)
 import Drasil.Projectile.Lesson.Review (reviewContextP1, reviewEq, reviewContextP2)
 import Drasil.Projectile.Lesson.Motion (motionContextP1, motionContextP2, horMotion, verMotion, summary)
 
@@ -37,7 +37,7 @@ printSetting = PI symbMap Equational defaultConfiguration
 mkNB :: NBDecl
 mkNB = [
   IntroSec $
-    IntroProg introPara (phrase projectileMotion) [],
+    IntroProg [introContext, reasonList, overviewParagraph] [],
   BodySec $
        BodyProg
          [Review [reviewContextP1, reviewEq, reviewContextP2],

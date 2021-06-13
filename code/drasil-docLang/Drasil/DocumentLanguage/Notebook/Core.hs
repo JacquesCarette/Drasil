@@ -17,7 +17,7 @@ data DocSection = IntroSec IntroSec
 {--}
 
 -- | Introduction section. Contents are top level followed by a list of subsections.
-data IntroSec = IntroProg Sentence Sentence [IntroSub]
+data IntroSec = IntroProg [Contents] [IntroSub]
 
 -- | Introduction subsections
 data IntroSub where
@@ -61,7 +61,7 @@ instance Multiplate DLPlate where
     ds (AppndxSec x) = AppndxSec <$> appendSec p x
     ds Bibliography = pure Bibliography
 
-    intro (IntroProg s1 s2 progs) = IntroProg s1 s2 <$>
+    intro (IntroProg c progs) = IntroProg c <$>
       traverse (introSub p) progs
     intro' (IPurpose s) = pure $ IPurpose s
     intro' (IScope s) = pure $ IScope s

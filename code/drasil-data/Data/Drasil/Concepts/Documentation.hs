@@ -19,8 +19,8 @@ doccon = [abbreviation, analysis, appendix, aspect, body, charOfIR, characterist
   functionalRequirement, game, general, generalSystemDescription, goal, guide, 
   implementation, indPRCase, individual, information, input_, instance_, intReader,
   interest, interface, introduction, issue, item, label, library, limitation,
-  literacy, loss, material_, message, method_, model, module_, name_, nonfunctional,
-  nonfunctionalRequirement, object, offShelf, offShelfSolution, open, orgOfDoc,
+  literacy, loss, material_, mainIdea, message, method_, methAndAnls, model, module_, name_, 
+  nonfunctional, nonfunctionalRequirement, object, offShelf, offShelfSolution, open, orgOfDoc,
   organization, output_, physical, physicalConstraint, physicalProperty, physicalSim,
   physicalSystem, physics, plan, practice, priority, problem, problemDescription, procedure,
   prodUCTable, productUC, product_, project, procForAnls, propOfCorSol, property, prpsOfDoc,
@@ -75,7 +75,7 @@ abbreviation, analysis, appendix, aspect, body, characteristic, class_, client,
   element, emphasis, endUser, environment, example, failure, figure, first, form, full, 
   functional, game, general, goal, guide, implementation, individual, information, 
   interest, interface, input_, instance_, intReader, introduction, issue, item, 
-  loss, label, library, limitation, literacy, material_, message, method_, module_,
+  loss, label, library, limitation, literacy, material_, mainIdea, message, method_, module_,
   model, name_, nonfunctional, object, offShelf, open, organization, output_,
   physics, physical, plan, practice, priority, problem, procedure, product_, project,
   property, purpose, quantity, realtime, review, reference, requirement_, response, 
@@ -148,6 +148,7 @@ limitation      = nc "limitation"     (cn'    "limitation"         )
 literacy        = nc "literacy"       (cnIES  "literacy"           )
 loss            = nc "loss"           (cn'''  "loss"               )
 material_       = nc "material"       (cn'    "material"           )
+mainIdea        = nc "mainIdea"       (cn'    "main idea"          )
 message         = nc "message"        (cn'    "message"            )
 method_         = nc "method"         (cn'    "method"             )
 module_         = nc "module"         (cn'    "module"             )
@@ -216,12 +217,13 @@ year            = nc "year"           (cn'    "year"               )
 scpOfTheProjS   = nc "scpOfTheProj"   (cn'    "scope of the project") -- temporary generated for test
 
 
-charOfIR, consVals, corSol, orgOfDoc, procForAnls, propOfCorSol, prpsOfDoc, refmat,
+charOfIR, consVals, corSol, methAndAnls, orgOfDoc, procForAnls, propOfCorSol, prpsOfDoc, refmat,
   scpOfReq, tOfSymb, tOfUnit, termAndDef, traceyMandG, vav :: NamedChunk
 
 consVals     = nc "consVals"     (cn "values of auxiliary constants")
 corSol       = nc "corSol"       (cn' "correct solution")
 charOfIR     = nc "charOfIR"     (characteristic `of__` intReader)
+methAndAnls  = nc "methAndAnls"  (method_ `and_'` analysis)
 orgOfDoc     = nc "orgOfDoc"     (organization `of_` document)
 procForAnls  = nc "procForAnls"  (procedure `for` analysis)
 propOfCorSol = nc "propOfCorSol" (property `ofA` corSol)

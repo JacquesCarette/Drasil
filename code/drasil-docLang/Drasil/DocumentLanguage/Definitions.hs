@@ -185,9 +185,9 @@ mkIMField i _ l@Input fs =
   where (x:xs) = map (P . eqSymb . fst) $ i ^. inputs
 mkIMField i _ l@InConstraints fs  = 
   let ll = mapMaybe (\(x,y) -> y >>= (\z -> Just (x, z))) (i ^. inputs) in
-  (show l, foldr ((:) . UlC . ulcc . EqnBlock . toDispExpr . uncurry realInterval) [] ll) : fs -- TODO: realInterval?! I don't understand.
+  (show l, foldr ((:) . UlC . ulcc . EqnBlock . toDispExpr . uncurry realInterval) [] ll) : fs
 mkIMField i _ l@OutConstraints fs = 
-  (show l, foldr ((:) . UlC . ulcc . EqnBlock . toDispExpr . realInterval (i ^. output)) []  -- TODO: realInterval?! I don't understand.
+  (show l, foldr ((:) . UlC . ulcc . EqnBlock . toDispExpr . realInterval (i ^. output)) []
     (i ^. out_constraints)) : fs
 mkIMField i _ l@Notes fs = 
   nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (i ^. getNotes)

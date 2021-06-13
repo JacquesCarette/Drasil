@@ -36,7 +36,7 @@ data RTopology = Continuous | Discrete
 -- | Describes the domain of a 'Symbol' given a topology. Can be bounded or encase all of the domain.
 data DomainDesc a b where
   BoundedDD :: Symbol -> RTopology -> a -> b -> DomainDesc a b
-  AllDD :: Symbol -> RTopology -> DomainDesc a b
+  AllDD     :: Symbol -> RTopology -> DomainDesc a b
 
 -- | Inclusitivity of a 'Space'.
 data Inclusive = Inc | Exc
@@ -46,8 +46,8 @@ data Inclusive = Inc | Exc
 -- For now, we embed 'Expr' for the bounds, but that will change as well.
 data RealInterval a b where
   Bounded :: (Inclusive, a) -> (Inclusive, b) -> RealInterval a b -- ^ Interval from (x .. y).
-  UpTo :: (Inclusive, a) -> RealInterval a b -- ^ Interval from (-infinity .. x).
-  UpFrom :: (Inclusive, b) -> RealInterval a b -- ^ Interval from (x .. infinity).
+  UpTo    :: (Inclusive, a) -> RealInterval a b                   -- ^ Interval from (-infinity .. x).
+  UpFrom  :: (Inclusive, b) -> RealInterval a b                   -- ^ Interval from (x .. infinity).
 
 -- | Gets the name of an 'Actor'.
 getActorName :: Space -> String

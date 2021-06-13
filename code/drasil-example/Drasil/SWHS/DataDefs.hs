@@ -166,7 +166,7 @@ ddMeltFrac :: DataDefinition
 ddMeltFrac = dd ddMeltFracQD [makeCite koothoor2013]
   Nothing "meltFrac" [meltFracConst, makeRef2S ddHtFusion]
   where meltFracConst = atStartNP (the value) `S.of_` eS meltFrac `S.is`
-                        S "constrained to" +:+. eS (exactDbl 0 $<= sy meltFrac $<= exactDbl 1) -- TODO: This makes sense to us, but I think this wouldn't quite work with the current Expr language.
+                        S "constrained to" +:+. eS (realInterval meltFrac (Bounded (Inc, exactDbl 0) (Inc, exactDbl 1)))
 
 ----
 

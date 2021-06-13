@@ -215,14 +215,14 @@ balPCMNotes = map foldlSent [
   [atStartNP (the temp), S "remains constant at", ch tempMeltP `sC`
    S "even with the heating", sParen (S "or cooling") `sC` S "until the",
    phrase phaseChange, S "has occurred for all" `S.of_` S "the material; that" `S.is`
-   S "as long as" +:+. eS (exactDbl 0 $< sy meltFrac $< exactDbl 1), ch meltFrac,  -- TODO: interval?
+   S "as long as" +:+. eS (realInterval meltFrac $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 1)), ch meltFrac,
    fromSource ddMeltFrac `S.is`
    S "determined as part" `S.ofThe` phrase heat, phrase energy `S.inThe`
    getAcc phsChgMtrl `sC` S "as given" `S.in_` sParen (makeRef2S heatEInPCM)],
   [ch tauSP `S.is` S "calculated" `S.in_` makeRef2S balanceSolidPCM],
   [ch tauLP `S.is` S "calculated" `S.in_` makeRef2S balanceLiquidPCM],
   [S "The initial", plural condition, S "for the", getAcc ode `S.are`
-   eS (apply tempW [exactDbl 0] $= apply tempPCM [exactDbl 0] $= sy tempInit) `follows` assumpSITWP]]
+   eS (apply tempW [exactDbl 0] $= apply tempPCM [exactDbl 0] $= sy tempInit) `follows` assumpSITWP]] -- TODO: fix typing
 
  ----------------------------------------------
 --    Derivation of eBalanceOnPCM          --

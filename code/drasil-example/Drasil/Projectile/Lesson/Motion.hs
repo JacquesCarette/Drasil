@@ -2,10 +2,14 @@ module Drasil.Projectile.Lesson.Motion where
 
 import qualified Drasil.DocLang.Notebook as NB (mainIdea, summary, hormotion, vermotion)
 
+import Data.Drasil.Concepts.Physics (motion, acceleration)
 import Drasil.Projectile.Concepts (projectile, projMotion)
-import qualified Data.Drasil.Quantities.Physics as QP (ixVel, iyVel)
+import qualified Data.Drasil.Quantities.Physics as QP (ixDist, iyDist)
+import Data.Drasil.Concepts.Documentation (coordinateSystem)
 import Language.Drasil
 import Utils.Drasil
+import qualified Utils.Drasil.Sentence as S
+
 
 import qualified Drasil.Projectile.Expressions as E (speed', scalarPos', rectNoTime)
 
@@ -16,12 +20,12 @@ import qualified Drasil.Projectile.Expressions as E (speed', scalarPos', rectNoT
 motionContextP1, motionContextP2 :: Contents
 motionContextP1
   = foldlSP
-      [S "The free flight motion of a ", phrase projectile, 
-        S "is often studied in terms of its rectangular components,",
-        S "since the projectile's acceleration always acts in the vertical direciton",
+      [S "The free flight", phrase motion `S.sOfA` phrase projectile, 
+        S "is often studied in terms of its rectangular components, since the",
+        phrasePoss projectile, phrase acceleration +:+ S "always acts in the vertical direciton",
        S "To illustrate the kinematic analysis, consider a ", phrase projectile,
-         S "launched at point  (", E (sy QP.ixVel) +:+ S "," +:+ E (sy QP.iyVel) +:+
-         S ") , as shown in Figure [hyperref here?]",
+         S "launched at point", sParen ((E (sy QP.ixDist)) `sC` (E (sy QP.iyDist))),
+         S "as shown in" +:+. makeRef2S figCSandA,
        S "The path is defined in the x-y plane such that the initial velocity is"]
 
 motionContextP2
@@ -68,3 +72,12 @@ summary = NB.summary [smmryCon] []
                   S "that is, one equation in the horizontal direction and two in the vertical direction.",
                   S "Once  𝑣𝑥  and  𝑣𝑦  are obtained, the resultant velocity  𝐯 , ",
                   S "which is always tangent to the path, is defined by the vector sum as shown in Figure"]
+
+resourcePath :: String
+resourcePath = "../../../datafiles/Projectile/"
+
+figCSandA :: LabelledContent
+figCSandA = llcc (makeFigRef "CoordSystAndAssumpts") $ figWithWidth (atStartNP (the coordinateSystem))
+  (resourcePath ++ "CoordSystAndAssumpts.png") 70
+
+

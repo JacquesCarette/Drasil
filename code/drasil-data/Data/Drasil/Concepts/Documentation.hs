@@ -12,8 +12,8 @@ import Control.Lens ((^.))
 doccon :: [NamedChunk]
 doccon = [abbreviation, analysis, appendix, aspect, body, charOfIR, characteristic,
   class_, client, code, column, company, component, concept, condition, connection,
-  consVals, constant, constraint, consumer, content, context, coordinate, corSol,
-  customer, datum, datumConstraint, decision, definition, dependency, description,
+  consVals, constant, constraint, consumer, content, context, coordinate, coordinateSystem, 
+  corSol, customer, datum, datumConstraint, decision, definition, dependency, description,
   design, designDoc, document, documentation, effect, element, emphasis, endUser,
   environment, example, failure, figure, first, form, full, fullForm, functional,
   functionalRequirement, game, general, generalSystemDescription, goal, guide, 
@@ -244,12 +244,13 @@ scpOfTheProj oper = nc "scpOfTheProj" (scope `ofN_` the'' oper project) -- reaso
 designDoc, fullForm, generalSystemDescription, moduleInterface, indPRCase,
   physicalConstraint, physicalSystem, problemDescription, prodUCTable,
   specificsystemdescription, systemdescription, systemConstraint, sysCont,
-  userCharacteristic, datumConstraint, functionalRequirement,
+  userCharacteristic, coordinateSystem, datumConstraint, functionalRequirement,
   nonfunctionalRequirement, safetyReq, softwareConstraint, softwareDoc,
   softwareReq, softwareSys, softwareVerif, softwareVAV, solutionCharSpec,
   solutionCharacteristic, offShelfSolution, physicalSim, productUC, 
   useCaseTable, physicalProperty, vavPlan, uncertCol, userInput :: NamedChunk
  
+coordinateSystem             = compoundNC coordinate system
 datumConstraint              = compoundNC' datum constraint
 designDoc                    = compoundNC design document
 fullForm                     = compoundNC full form

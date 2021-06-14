@@ -26,7 +26,7 @@ import Drasil.Projectile.Body (symbols, acronyms)
 
 import Drasil.Projectile.Lesson.IntroSection (introContext, reasonList, overviewParagraph)
 import Drasil.Projectile.Lesson.Review (reviewContent)
-import Drasil.Projectile.Lesson.Motion (motionContextP1, motionContextP2, horMotion, verMotion, summary)
+import Drasil.Projectile.Lesson.Motion (motionContextP1, figCSandA, motionContextP2, horMotion, verMotion, summary)
 
 nb :: Document
 nb = mkDoc mkNB (S.sFor'' titleize phrase) si

@@ -1055,7 +1055,7 @@
                   </p>
                   <p>
                     <div id="determineShearF">
-                      Determine-Shear-Forces: Determine the interslice normal and shear force proportionality between each pair of vertical slices of the slope.
+                      Determine-Shear-Forces: Determine the interslice shear forces between each pair of vertical slices of the slope.
                     </div>
                   </p>
                 </div>
@@ -1103,7 +1103,7 @@
                   </p>
                   <p>
                     <div id="assumpINSFL">
-                      Interslice-Norm-Shear-Forces-Linear: Following the assumption of Morgenstern and Price (<a href=#morgenstern1965>morgenstern1965</a>), interslice normal forces and interslice normal and shear force proportionality have a proportional relationship, depending on a proportionality constant (<em>λ</em>) and a function (<em><b>f</b></em>) describing variation depending on <em>x</em> position. (RefBy: <a href=#IM:nrmShrFor>IM: nrmShrFor</a>, <a href=#IM:fctSfty>IM: fctSfty</a>, <a href=#GD:normShrR>GD: normShrR</a>, and <a href=#UC_normshearlinear>UC: Normal-And-Shear-Linear-Only</a>.)
+                      Interslice-Norm-Shear-Forces-Linear: Following the assumption of Morgenstern and Price (<a href=#morgenstern1965>morgenstern1965</a>), interslice normal forces and interslice shear forces have a proportional relationship, depending on a proportionality constant (<em>λ</em>) and a function (<em><b>f</b></em>) describing variation depending on <em>x</em> position. (RefBy: <a href=#IM:nrmShrFor>IM: nrmShrFor</a>, <a href=#IM:fctSfty>IM: fctSfty</a>, <a href=#GD:normShrR>GD: normShrR</a>, and <a href=#UC_normshearlinear>UC: Normal-And-Shear-Linear-Only</a>.)
                     </div>
                   </p>
                   <p>
@@ -1436,7 +1436,7 @@
                             <em><b>W</b></em> is the weights (<em>\(\frac{\text{N}}{\text{m}}\)</em>)
                           </li>
                           <li>
-                            <em><b>X</b></em> is the interslice normal and shear force proportionality (<em>\(\frac{\text{N}}{\text{m}}\)</em>)
+                            <em><b>X</b></em> is the interslice shear forces (<em>\(\frac{\text{N}}{\text{m}}\)</em>)
                           </li>
                           <li>
                             <em><b>U</b><sub>g</sub></em> is the surface hydrostatic forces (<em>\(\frac{\text{N}}{\text{m}}\)</em>)
@@ -1523,7 +1523,7 @@
                             <em><b>W</b></em> is the weights (<em>\(\frac{\text{N}}{\text{m}}\)</em>)
                           </li>
                           <li>
-                            <em><b>X</b></em> is the interslice normal and shear force proportionality (<em>\(\frac{\text{N}}{\text{m}}\)</em>)
+                            <em><b>X</b></em> is the interslice shear forces (<em>\(\frac{\text{N}}{\text{m}}\)</em>)
                           </li>
                           <li>
                             <em><b>U</b><sub>g</sub></em> is the surface hydrostatic forces (<em>\(\frac{\text{N}}{\text{m}}\)</em>)
@@ -1953,11 +1953,7 @@
                     </tr>
                     <tr>
                       <th>Label</th>
-                      <td>
-                        <p class="paragraph">
-                          Interslice normal and shear force proportionality
-                        </p>
-                      </td>
+                      <td><p class="paragraph">Interslice shear forces</p></td>
                     </tr>
                     <tr>
                       <th>Units</th>
@@ -1974,7 +1970,7 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em><b>X</b></em> is the interslice normal and shear force proportionality (<em>\(\frac{\text{N}}{\text{m}}\)</em>)
+                            <em><b>X</b></em> is the interslice shear forces (<em>\(\frac{\text{N}}{\text{m}}\)</em>)
                           </li>
                           <li><em>λ</em> is the proportionality constant (Unitless)</li>
                           <li>
@@ -2049,7 +2045,7 @@
                             <em><b>h</b><sub>z,w</sub></em> is the heights of the water table (<em>m</em>)
                           </li>
                           <li>
-                            <em><b>X</b></em> is the interslice normal and shear force proportionality (<em>\(\frac{\text{N}}{\text{m}}\)</em>)
+                            <em><b>X</b></em> is the interslice shear forces (<em>\(\frac{\text{N}}{\text{m}}\)</em>)
                           </li>
                           <li>
                             <em>K<sub>c</sub></em> is the seismic coefficient (Unitless)
@@ -3731,7 +3727,7 @@
                     </p>
                     \[\left({\mathbf{W}}_{i}-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}+{\mathbf{U}_{\text{g},i}} \cos\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \cos\left({\mathbf{ω}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)-\left(-{K_{\text{c}}} {\mathbf{W}}_{i}-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)=\frac{\left(\left({\mathbf{W}}_{i}-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}+{\mathbf{U}_{\text{g},i}} \cos\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \cos\left({\mathbf{ω}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)+\left(-{K_{\text{c}}} {\mathbf{W}}_{i}-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)-{\mathbf{U}_{\text{b},i}}\right) \tan\left(φ'\right)+c' {\mathbf{ℓ}_{b,i}}}{{F_{\text{S}}}}\]
                     <p class="paragraph">
-                      Since the interslice normal and shear force proportionality <em><b>X</b></em> and interslice normal forces <em><b>G</b></em> are unknown, they are separated from the other terms as follows:
+                      Since the interslice shear forces <em><b>X</b></em> and interslice normal forces <em><b>G</b></em> are unknown, they are separated from the other terms as follows:
                     </p>
                     \[\left({\mathbf{W}}_{i}+{\mathbf{U}_{\text{g},i}} \cos\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \cos\left({\mathbf{ω}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)-\left(-{K_{\text{c}}} {\mathbf{W}}_{i}-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)-\left(-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}\right) \cos\left({\mathbf{α}}_{i}\right)+\left(-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}\right) \sin\left({\mathbf{α}}_{i}\right)=\frac{\left(\left({\mathbf{W}}_{i}+{\mathbf{U}_{\text{g},i}} \cos\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \cos\left({\mathbf{ω}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)+\left(-{K_{\text{c}}} {\mathbf{W}}_{i}-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)+\left(-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}\right) \sin\left({\mathbf{α}}_{i}\right)+\left(-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}\right) \cos\left({\mathbf{α}}_{i}\right)-{\mathbf{U}_{\text{b},i}}\right) \tan\left(φ'\right)+c' {\mathbf{ℓ}_{b,i}}}{{F_{\text{S}}}}\]
                     <p class="paragraph">
@@ -3743,7 +3739,7 @@
                     </p>
                     \[{\mathbf{T}}_{i}+\left(-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}\right) \sin\left({\mathbf{α}}_{i}\right)-\left(-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}\right) \cos\left({\mathbf{α}}_{i}\right)=\frac{{\mathbf{R}}_{i}+\left(\left(-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}\right) \cos\left({\mathbf{α}}_{i}\right)+\left(-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}\right) \sin\left({\mathbf{α}}_{i}\right)\right) \tan\left(φ'\right)}{{F_{\text{S}}}}\]
                     <p class="paragraph">
-                      The interslice normal and shear force proportionality <em><b>X</b></em> can be expressed in terms of the interslice normal forces <em><b>G</b></em> using <a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a> and <a href=#GD:normShrR>GD: normShrR</a>, resulting in:
+                      The interslice shear forces <em><b>X</b></em> can be expressed in terms of the interslice normal forces <em><b>G</b></em> using <a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a> and <a href=#GD:normShrR>GD: normShrR</a>, resulting in:
                     </p>
                     \[{\mathbf{T}}_{i}+\left(-λ {\mathbf{f}}_{i-1} {\mathbf{G}}_{i-1}+λ {\mathbf{f}}_{i} {\mathbf{G}}_{i}\right) \sin\left({\mathbf{α}}_{i}\right)-\left(-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}\right) \cos\left({\mathbf{α}}_{i}\right)=\frac{{\mathbf{R}}_{i}+\left(\left(-λ {\mathbf{f}}_{i-1} {\mathbf{G}}_{i-1}+λ {\mathbf{f}}_{i} {\mathbf{G}}_{i}\right) \cos\left({\mathbf{α}}_{i}\right)+\left(-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}\right) \sin\left({\mathbf{α}}_{i}\right)\right) \tan\left(φ'\right)}{{F_{\text{S}}}}\]
                     <p class="paragraph">Rearranging yields the following:</p>
@@ -4512,7 +4508,7 @@
               </p>
               <p>
                 <div id="displayShear">
-                  Display-Interslice-Shear-Forces: Using <a href=#IM:fctSfty>IM: fctSfty</a>, <a href=#IM:nrmShrFor>IM: nrmShrFor</a>, and <a href=#IM:intsliceFs>IM: intsliceFs</a>, calculate and graphically display the interslice normal and shear force proportionality.
+                  Display-Interslice-Shear-Forces: Using <a href=#IM:fctSfty>IM: fctSfty</a>, <a href=#IM:nrmShrFor>IM: nrmShrFor</a>, and <a href=#IM:intsliceFs>IM: intsliceFs</a>, calculate and graphically display the interslice shear forces.
                 </div>
               </p>
               <p>
@@ -4719,7 +4715,7 @@
         <div class="list">
           <p>
             <div id="UC_normshearlinear">
-              Normal-And-Shear-Linear-Only: Changes related to <a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a> are not possible due to the dependency of the calculations on the linear relationship between interslice normal forces and interslice normal and shear force proportionality.
+              Normal-And-Shear-Linear-Only: Changes related to <a href=#assumpINSFL>A: Interslice-Norm-Shear-Forces-Linear</a> are not possible due to the dependency of the calculations on the linear relationship between interslice normal forces and interslice shear forces.
             </div>
           </p>
           <p>

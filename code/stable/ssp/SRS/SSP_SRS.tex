@@ -440,7 +440,7 @@ Given the shape of the soil mass, the location of the water table, and the mater
 \begin{itemize}
 \item[Identify-Crit-and-FS:\phantomsection\label{identifyCritAndFS}]{Identify the critical slip surface and the corresponding factor of safety.}
 \item[Determine-Normal-Forces:\phantomsection\label{determineNormalF}]{Determine the interslice normal forces between each pair of vertical slices of the slope.}
-\item[Determine-Shear-Forces:\phantomsection\label{determineShearF}]{Determine the interslice normal and shear force proportionality between each pair of vertical slices of the slope.}
+\item[Determine-Shear-Forces:\phantomsection\label{determineShearF}]{Determine the interslice shear forces between each pair of vertical slices of the slope.}
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
@@ -456,7 +456,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[Soil-Layer-Homogeneous:\phantomsection\label{assumpSLH}]{The soil mass is homogeneous, with consistent soil properties throughout. (RefBy: \hyperref[GD:sliceWght]{GD: sliceWght}, \hyperref[GD:resShr]{GD: resShr}, and \hyperref[LC_inhomogeneous]{LC: Calculate-Inhomogeneous-Soil-Layers}.)}
 \item[Soil-Properties:\phantomsection\label{assumpSP}]{The soil properties are independent of dry or saturated conditions, with the exception of unit weight. (RefBy: \hyperref[GD:resShr]{GD: resShr}.)}
 \item[Soil-Layers-Isotropic:\phantomsection\label{assumpSLI}]{The soil mass is treated as if the effective cohesion and effective angle of friction are isotropic properties. (RefBy: \hyperref[GD:resShr]{GD: resShr}.)}
-\item[Interslice-Norm-Shear-Forces-Linear:\phantomsection\label{assumpINSFL}]{Following the assumption of Morgenstern and Price (\cite{morgenstern1965}), interslice normal forces and interslice normal and shear force proportionality have a proportional relationship, depending on a proportionality constant ($λ$) and a function ($\mathbf{f}$) describing variation depending on $x$ position. (RefBy: \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, \hyperref[IM:fctSfty]{IM: fctSfty}, \hyperref[GD:normShrR]{GD: normShrR}, and \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only}.)}
+\item[Interslice-Norm-Shear-Forces-Linear:\phantomsection\label{assumpINSFL}]{Following the assumption of Morgenstern and Price (\cite{morgenstern1965}), interslice normal forces and interslice shear forces have a proportional relationship, depending on a proportionality constant ($λ$) and a function ($\mathbf{f}$) describing variation depending on $x$ position. (RefBy: \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, \hyperref[IM:fctSfty]{IM: fctSfty}, \hyperref[GD:normShrR]{GD: normShrR}, and \hyperref[UC_normshearlinear]{UC: Normal-And-Shear-Linear-Only}.)}
 \item[Plane-Strain-Conditions:\phantomsection\label{assumpPSC}]{The slope and slip surface extends far into and out of the geometry ($z$ coordinate). This implies plane strain conditions, making 2D analysis appropriate. (RefBy: \hyperref[GD:srfWtrF]{GD: srfWtrF}, \hyperref[GD:sliceWght]{GD: sliceWght}, \hyperref[GD:resShr]{GD: resShr}, \hyperref[GD:effNormF]{GD: effNormF}, and \hyperref[GD:baseWtrF]{GD: baseWtrF}.)}
 \item[Effective-Norm-Stress-Large:\phantomsection\label{assumpENSL}]{The effective normal stress is large enough that the shear strength to effective normal stress relationship can be approximated as a linear relationship. (RefBy: \hyperref[TM:equilibrium]{TM: equilibrium} and \hyperref[UC_2donly]{UC: 2D-Analysis-Only}.)}
 \item[Surface-Base-Slice-between-Interslice-Straight-Lines:\phantomsection\label{assumpSBSBISL}]{The surface and base of a slice are approximated as straight lines. (RefBy: \hyperref[GD:srfWtrF]{GD: srfWtrF}, \hyperref[GD:sliceWght]{GD: sliceWght}, \hyperref[TM:mcShrStrgth]{TM: mcShrStrgth}, \hyperref[DD:slcHeight]{DD: slcHeight}, \hyperref[DD:angleB]{DD: angleB}, \hyperref[GD:baseWtrF]{GD: baseWtrF}, and \hyperref[DD:angleA]{DD: angleA}.)}
@@ -656,7 +656,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{N}$ is the normal forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$i$ is the index (Unitless)}
               \item{$\mathbf{W}$ is the weights ($\frac{\text{N}}{\text{m}}$)}
-              \item{$\mathbf{X}$ is the interslice normal and shear force proportionality ($\frac{\text{N}}{\text{m}}$)}
+              \item{$\mathbf{X}$ is the interslice shear forces ($\frac{\text{N}}{\text{m}}$)}
               \item{${\mathbf{U}_{\text{g}}}$ is the surface hydrostatic forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$\mathbf{β}$ is the surface angles (${{}^{\circ}}$)}
               \item{$\mathbf{Q}$ is the external forces ($\frac{\text{N}}{\text{m}}$)}
@@ -704,7 +704,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{S}$ is the mobilized shear force ($\frac{\text{N}}{\text{m}}$)}
               \item{$i$ is the index (Unitless)}
               \item{$\mathbf{W}$ is the weights ($\frac{\text{N}}{\text{m}}$)}
-              \item{$\mathbf{X}$ is the interslice normal and shear force proportionality ($\frac{\text{N}}{\text{m}}$)}
+              \item{$\mathbf{X}$ is the interslice shear forces ($\frac{\text{N}}{\text{m}}$)}
               \item{${\mathbf{U}_{\text{g}}}$ is the surface hydrostatic forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$\mathbf{β}$ is the surface angles (${{}^{\circ}}$)}
               \item{$\mathbf{Q}$ is the external forces ($\frac{\text{N}}{\text{m}}$)}
@@ -947,7 +947,7 @@ RefBy & \hyperref[IM:intsliceFs]{IM: intsliceFs} and \hyperref[IM:fctSfty]{IM: f
 \phantomsection 
 \label{GD:normShrR}
 \\ \midrule \\
-Label & Interslice normal and shear force proportionality
+Label & Interslice shear forces
         
 \\ \midrule \\
 Units & $\frac{\text{N}}{\text{m}}$
@@ -958,7 +958,7 @@ Equation & \begin{displaymath}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
-              \item{$\mathbf{X}$ is the interslice normal and shear force proportionality ($\frac{\text{N}}{\text{m}}$)}
+              \item{$\mathbf{X}$ is the interslice shear forces ($\frac{\text{N}}{\text{m}}$)}
               \item{$λ$ is the proportionality constant (Unitless)}
               \item{$\mathbf{f}$ is the interslice normal to shear force ratio variation function (Unitless)}
               \item{$\mathbf{G}$ is the interslice normal forces ($\frac{\text{N}}{\text{m}}$)}
@@ -1002,7 +1002,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{α}$ is the base angles (${{}^{\circ}}$)}
               \item{$\mathbf{H}$ is the interslice normal water forces ($\frac{\text{N}}{\text{m}}$)}
               \item{${\mathbf{h}_{\text{z,w}}}$ is the heights of the water table (${\text{m}}$)}
-              \item{$\mathbf{X}$ is the interslice normal and shear force proportionality ($\frac{\text{N}}{\text{m}}$)}
+              \item{$\mathbf{X}$ is the interslice shear forces ($\frac{\text{N}}{\text{m}}$)}
               \item{${K_{\text{c}}}$ is the seismic coefficient (Unitless)}
               \item{$\mathbf{W}$ is the weights ($\frac{\text{N}}{\text{m}}$)}
               \item{$\mathbf{h}$ is the $y$-direction heights of slices (${\text{m}}$)}
@@ -2123,7 +2123,7 @@ Substituting Equation (2) into Equation (1) gives:
 \begin{displaymath}
 \left({\mathbf{W}}_{i}-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}+{\mathbf{U}_{\text{g},i}} \cos\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \cos\left({\mathbf{ω}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)-\left(-{K_{\text{c}}} {\mathbf{W}}_{i}-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)=\frac{\left(\left({\mathbf{W}}_{i}-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}+{\mathbf{U}_{\text{g},i}} \cos\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \cos\left({\mathbf{ω}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)+\left(-{K_{\text{c}}} {\mathbf{W}}_{i}-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)-{\mathbf{U}_{\text{b},i}}\right) \tan\left(φ'\right)+c' {\mathbf{ℓ}_{b,i}}}{{F_{\text{S}}}}
 \end{displaymath}
-Since the interslice normal and shear force proportionality $\mathbf{X}$ and interslice normal forces $\mathbf{G}$ are unknown, they are separated from the other terms as follows:
+Since the interslice shear forces $\mathbf{X}$ and interslice normal forces $\mathbf{G}$ are unknown, they are separated from the other terms as follows:
 
 \begin{displaymath}
 \left({\mathbf{W}}_{i}+{\mathbf{U}_{\text{g},i}} \cos\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \cos\left({\mathbf{ω}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)-\left(-{K_{\text{c}}} {\mathbf{W}}_{i}-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)-\left(-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}\right) \cos\left({\mathbf{α}}_{i}\right)+\left(-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}\right) \sin\left({\mathbf{α}}_{i}\right)=\frac{\left(\left({\mathbf{W}}_{i}+{\mathbf{U}_{\text{g},i}} \cos\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \cos\left({\mathbf{ω}}_{i}\right)\right) \cos\left({\mathbf{α}}_{i}\right)+\left(-{K_{\text{c}}} {\mathbf{W}}_{i}-{\mathbf{H}}_{i}+{\mathbf{H}}_{i-1}+{\mathbf{U}_{\text{g},i}} \sin\left({\mathbf{β}}_{i}\right)+{\mathbf{Q}}_{i} \sin\left({\mathbf{ω}}_{i}\right)\right) \sin\left({\mathbf{α}}_{i}\right)+\left(-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}\right) \sin\left({\mathbf{α}}_{i}\right)+\left(-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}\right) \cos\left({\mathbf{α}}_{i}\right)-{\mathbf{U}_{\text{b},i}}\right) \tan\left(φ'\right)+c' {\mathbf{ℓ}_{b,i}}}{{F_{\text{S}}}}
@@ -2138,7 +2138,7 @@ The definitions of \hyperref[GD:resShearWO]{GD: resShearWO} and \hyperref[GD:mob
 \begin{displaymath}
 {\mathbf{T}}_{i}+\left(-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}\right) \sin\left({\mathbf{α}}_{i}\right)-\left(-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}\right) \cos\left({\mathbf{α}}_{i}\right)=\frac{{\mathbf{R}}_{i}+\left(\left(-{\mathbf{X}}_{i-1}+{\mathbf{X}}_{i}\right) \cos\left({\mathbf{α}}_{i}\right)+\left(-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}\right) \sin\left({\mathbf{α}}_{i}\right)\right) \tan\left(φ'\right)}{{F_{\text{S}}}}
 \end{displaymath}
-The interslice normal and shear force proportionality $\mathbf{X}$ can be expressed in terms of the interslice normal forces $\mathbf{G}$ using \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} and \hyperref[GD:normShrR]{GD: normShrR}, resulting in:
+The interslice shear forces $\mathbf{X}$ can be expressed in terms of the interslice normal forces $\mathbf{G}$ using \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} and \hyperref[GD:normShrR]{GD: normShrR}, resulting in:
 
 \begin{displaymath}
 {\mathbf{T}}_{i}+\left(-λ {\mathbf{f}}_{i-1} {\mathbf{G}}_{i-1}+λ {\mathbf{f}}_{i} {\mathbf{G}}_{i}\right) \sin\left({\mathbf{α}}_{i}\right)-\left(-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}\right) \cos\left({\mathbf{α}}_{i}\right)=\frac{{\mathbf{R}}_{i}+\left(\left(-λ {\mathbf{f}}_{i-1} {\mathbf{G}}_{i-1}+λ {\mathbf{f}}_{i} {\mathbf{G}}_{i}\right) \cos\left({\mathbf{α}}_{i}\right)+\left(-{\mathbf{G}}_{i}+{\mathbf{G}}_{i-1}\right) \sin\left({\mathbf{α}}_{i}\right)\right) \tan\left(φ'\right)}{{F_{\text{S}}}}
@@ -2597,7 +2597,7 @@ This section provides the functional requirements, the tasks and behaviours that
 \item[Display-Graph:\phantomsection\label{displayGraph}]{Display the critical slip surface of the 2D slope, as determined from \hyperref[IM:crtSlpId]{IM: crtSlpId}, graphically.}
 \item[Display-Factor-of-Safety:\phantomsection\label{displayFS}]{Display the value of the factor of safety for the critical slip surface, as determined from \hyperref[IM:fctSfty]{IM: fctSfty}, \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, and \hyperref[IM:intsliceFs]{IM: intsliceFs}.}
 \item[Display-Interslice-Normal-Forces:\phantomsection\label{displayNormal}]{Using \hyperref[IM:fctSfty]{IM: fctSfty}, \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, and \hyperref[IM:intsliceFs]{IM: intsliceFs}, calculate and graphically display the interslice normal forces.}
-\item[Display-Interslice-Shear-Forces:\phantomsection\label{displayShear}]{Using \hyperref[IM:fctSfty]{IM: fctSfty}, \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, and \hyperref[IM:intsliceFs]{IM: intsliceFs}, calculate and graphically display the interslice normal and shear force proportionality.}
+\item[Display-Interslice-Shear-Forces:\phantomsection\label{displayShear}]{Using \hyperref[IM:fctSfty]{IM: fctSfty}, \hyperref[IM:nrmShrFor]{IM: nrmShrFor}, and \hyperref[IM:intsliceFs]{IM: intsliceFs}, calculate and graphically display the interslice shear forces.}
 \item[Write-Results-To-File:\phantomsection\label{writeToFile}]{Provide the option of writing the output result data, as given in \hyperref[displayInput]{FR: Display-Input}, \hyperref[displayGraph]{FR: Display-Graph}, \hyperref[displayFS]{FR: Display-Factor-of-Safety}, \hyperref[displayNormal]{FR: Display-Interslice-Normal-Forces}, and \hyperref[displayShear]{FR: Display-Interslice-Shear-Forces}, to a file.}
 \end{itemize}
 \begin{longtable}{l l l}
@@ -2692,7 +2692,7 @@ This section lists the likely changes to be made to the software.
 This section lists the unlikely changes to be made to the software.
 
 \begin{itemize}
-\item[Normal-And-Shear-Linear-Only:\phantomsection\label{UC_normshearlinear}]{Changes related to \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} are not possible due to the dependency of the calculations on the linear relationship between interslice normal forces and interslice normal and shear force proportionality.}
+\item[Normal-And-Shear-Linear-Only:\phantomsection\label{UC_normshearlinear}]{Changes related to \hyperref[assumpINSFL]{A: Interslice-Norm-Shear-Forces-Linear} are not possible due to the dependency of the calculations on the linear relationship between interslice normal forces and interslice shear forces.}
 \item[2D-Analysis-Only:\phantomsection\label{UC_2donly}]{\hyperref[assumpENSL]{A: Effective-Norm-Stress-Large} allows for 2D analysis with these models only because stress along the $z$-direction is zero. These models do not take into account stress in the $z$-direction, and therefore cannot be used without manipulation to attempt three-dimensional analysis.}
 \end{itemize}
 \section{Traceability Matrices and Graphs}

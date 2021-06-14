@@ -1,6 +1,6 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, latentHtE,
-  nwtnCooling, sensHtE, sensHtETemplate, tMods) where
+  nwtnCooling, sensHtE, sensHtETemplate, tMods, tModRefs) where
 
 import qualified Data.List.NonEmpty as NE
 
@@ -185,3 +185,7 @@ nwtnCoolingNotes = map foldlSent [
    sParen (S "from" +:+ makeRef2S assumpHTCC)],
   [E (defines (apply1 deltaT time) (apply1 temp time $- apply1 tempEnv time)) `S.isThe`
    S "time-dependant thermal gradient between the environment and the object"]]
+
+-- References --
+tModRefs :: [Reference]
+tModRefs = map rw tMods ++ map rw [consThemESrc, sensHtESrc, latHtESrc]

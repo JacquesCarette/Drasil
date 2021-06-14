@@ -1,5 +1,6 @@
 module Drasil.PDController.Body where
 
+import Data.List (nub)
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Math (mathcon, mathcon', ode)
@@ -26,25 +27,27 @@ import Drasil.DocLang
         RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..),
         SRSDecl, SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec),
         SolChSpec(SCSProg), TSIntro(..), TraceabilitySec(TraceabilityProg),
-        Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb)
+        Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, getTraceConfigUID,
+        secRefs)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
-import Drasil.PDController.Assumptions (assumptions)
+
+import Drasil.PDController.Assumptions (assumptions, assumpRefs)
 import Drasil.PDController.Changes
 import Drasil.PDController.Concepts
-import Drasil.PDController.DataDefs (dataDefinitions)
+import Drasil.PDController.DataDefs (dataDefinitions, dataDefRefs)
 import Drasil.PDController.GenDefs
 import Drasil.PDController.GenSysDesc
        (gsdSysContextFig, gsdSysContextList, gsdSysContextP1, gsdSysContextP2,
-        gsduserCharacteristics)
+        gsduserCharacteristics, figRefs)
 import Drasil.PDController.IModel
 import Drasil.PDController.IntroSection
        (introDocOrg, introPara, introPurposeOfDoc, introUserChar1,
         introUserChar2, introscopeOfReq)
-import Drasil.PDController.References (citations)
+import Drasil.PDController.References (citations, citeRefs)
 import Drasil.PDController.Requirements
 import Drasil.PDController.SpSysDesc
-       (goals, sysFigure, sysGoalInput, sysParts, sysProblemDesc)
-import Drasil.PDController.TModel (theoreticalModels)
+       (goals, sysFigure, sysGoalInput, sysParts, sysProblemDesc, sysDescRefs)
+import Drasil.PDController.TModel (theoreticalModels, tModRefs)
 import Language.Drasil hiding (Symbol(..), Vector)
 import Language.Drasil.Code
        (ODEInfo, ODEMethod(..), ODEOptions, odeInfo, odeOptions, quantvar)
@@ -145,6 +148,7 @@ symbMap
       conceptInstances
       ([] :: [Section])
       ([] :: [LabelledContent])
+      allRefs
 
 usedDB :: ChunkDB
 usedDB
@@ -158,6 +162,7 @@ usedDB
       ([] :: [ConceptInstance])
       ([] :: [Section])
       ([] :: [LabelledContent])
+      ([] :: [Reference])
 
 refDB :: ReferenceDB
 refDB = rdb citations conceptInstances
@@ -189,3 +194,12 @@ pidODEInfo
       $- ((exactDbl 20 `addRe` sy qdPropGain) `mulRe` idx (sy opProcessVariable) (int 0))
       `addRe` (sy qdSetPointTD `mulRe` sy qdPropGain)]
       pidODEOptions
+
+-- References --
+bodyRefs :: [Reference]
+bodyRefs = map rw conceptInstances ++ map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+
+allRefs :: [Reference]
+allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ sysDescRefs ++ dataDefRefs ++ genDefRefs
+  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs)
+

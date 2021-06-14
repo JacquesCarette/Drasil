@@ -105,7 +105,7 @@ assumpS11 = foldlSent [
   S "not" +:+. phrase discharging, atStartNP (NP.the (tempW `and_`
   tempPCM)), S "can only increase, or remain",
   S "constant; they do not decrease. This implies that the",
-  phrase tempInit, Ref $ makeRef2 assumpSITWP, S "is less than (or equal)"
+  phrase tempInit, makeRef2S assumpSITWP, S "is less than (or equal)"
   `S.toThe` phrase tempC]
 assumpS12 = foldlSent [atStartNP (tempInit `the_ofThe` water) `S.andThe`
   short phsChgMtrl `S.isThe` S "same"]
@@ -147,3 +147,7 @@ assumpS20 = foldlSent [
 --- Again, list structure is same between all examples.
 -- Can booktabs colored links be used? The box links completely cover nearby
 -- punctuation.
+
+-- References --
+assumpRefs :: [Reference]
+assumpRefs = rw assumpSITWP: map rw assumptions

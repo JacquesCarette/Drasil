@@ -126,7 +126,7 @@ itemRefToSent a b = S a +:+ sParen b
 -- | Takes a list and a reference, then generates references to 
 -- match the length of the list.
 makeListRef :: [a] -> Section -> [Sentence]
-makeListRef l = replicate (length l) . Ref . makeRef2
+makeListRef l = replicate (length l) . makeRef2S
 
 -- | Applies 'Bullet' and 'Flat' to a list.
 bulletFlat :: [Sentence] -> ListType

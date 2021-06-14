@@ -20,8 +20,8 @@ import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..),
 import Control.Lens ((^.))
 import Data.Bifunctor (bimap, second)
 import Data.List (intersperse, partition)
-import Data.Maybe (fromMaybe)
 import Numeric (floatToDigits)
+import Data.Maybe (fromMaybe)
 
 -- | Render a 'Space'.
 space :: PrintingInformation -> Space -> P.Expr
@@ -358,12 +358,19 @@ spec sm (Ch SymbolStyle s)  = P.E $ symbol $ lookupC (sm ^. stg) (sm ^. ckdb) s
 spec sm (Ch TermStyle s)    = spec sm $ lookupT (sm ^. ckdb) s
 spec sm (Ch ShortStyle s)   = spec sm $ lookupS (sm ^. ckdb) s
 spec sm (Ch PluralTerm s)   = spec sm $ lookupP (sm ^. ckdb) s
-spec sm (Ref (Reference _ (RP rp ra) sn _)) =
-  P.Ref P.Internal ra $ spec sm $ renderShortName (sm ^. ckdb) rp sn
-spec sm (Ref (Reference _ (Citation ra) _ r)) =
-  P.Ref P.Cite2    ra (spec sm (renderCitInfo r))
-spec sm (Ref (Reference _ (URI ra) sn _)) =
-  P.Ref P.External    ra $ spec sm $ renderURI sm sn
+spec sm (Ref u notes) = let reff = refResolve u (sm ^. ckdb . refTable) in
+  case reff of 
+  (Reference _ (RP rp ra) sn _) ->
+    P.Ref P.Internal ra $ spec sm $ renderShortName (sm ^. ckdb) rp sn
+  (Reference _ (Citation ra) _ _) ->
+    P.Ref P.Cite2    ra (spec sm (renderCitInfo notes))
+  (Reference _ (URI ra) sn _) ->
+    P.Ref P.External    ra $ spec sm $ renderURI sm sn
+{-spec sm (Ref u n) = let reff = refResolve u (sm ^. ckdb . refTable) in
+  case reff of
+  (Reference _ (Citation ra) _ _) ->
+    P.Ref P.Cite2    ra (spec sm (renderCitInfo n))
+  _ -> error "Only citations should have citation information." -- should this be an error, or should all references get the ability to renderCitInfo?-}
 spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ dispExpr e sm
@@ -388,7 +395,9 @@ pUnit (US ls) = formatu t b
 -- | Renders the shortname of a reference/domain.
 renderShortName :: ChunkDB -> IRefProg -> ShortName -> Sentence
 renderShortName ctx (Deferred u) _ = S $ fromMaybe (error "Domain has no abbreviation.") $
-  getA $ defResolve ctx u
+  getA $ defResolve ctx u --Need defResolve instead of refResolve since only ConceptInstance
+  -- uses this case for domains and we want the short name from there. 
+  -- Used to be: S $ getRefAdd $ refResolve u (ctx ^. refTable)
 renderShortName ctx (RConcat a b) sn = renderShortName ctx a sn :+: renderShortName ctx b sn
 renderShortName _ (RS s) _ = S s
 renderShortName _ Name sn = S $ getStringSN sn

@@ -1,4 +1,4 @@
-module Drasil.Projectile.DataDefs (dataDefs, speedIX, speedIY) where
+module Drasil.Projectile.DataDefs (dataDefs, speedIX, speedIY, dataDefRefs) where
 
 import Prelude hiding (sin, cos)
 import Language.Drasil
@@ -31,3 +31,7 @@ speedRef = ch iSpeed `S.is` S "from" +:+. makeRef2S vecMag
 
 figRef :: Sentence
 figRef = ch launAngle `S.is` S "shown in" +:+. makeRef2S figLaunch
+
+-- References --
+dataDefRefs :: [Reference]
+dataDefRefs = map rw dataDefs

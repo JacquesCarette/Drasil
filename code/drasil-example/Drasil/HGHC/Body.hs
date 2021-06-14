@@ -1,12 +1,13 @@
 module Drasil.HGHC.Body (srs, si, symbMap, printSetting) where
 
+import Data.List (nub)
 import Language.Drasil hiding (Manual, Symbol(..)) -- Citation name conflict. FIXME: Move to different namespace
 import Drasil.DocLang (DocSection(RefSec, SSDSec), Literature(Lit, Manual), 
     RefSec(..), RefTab(TUnits), TSIntro(SymbConvention, TSPurpose), SRSDecl, 
     intro, mkDoc, tsymb, InclUnits(IncludeUnits), Verbosity(Verbose),
     Field(DefiningEquation, Description, Label, Symbol, Units), SolChSpec(SCSProg), 
     SCSSub(DDs), DerivationDisplay(HideDerivation), SSDSub(SSDSolChSpec), 
-    SSDSec(SSDProg))
+    SSDSec(SSDProg), traceMatStandard, getTraceConfigUID, secRefs)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
   rdb, refdb, _authors, _concepts, _constants, _constraints, _purpose,
@@ -15,7 +16,7 @@ import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
 import qualified Utils.Drasil.Sentence as S
 
 import Drasil.HGHC.HeatTransfer (fp, hghc, dataDefs, htInputs, htOutputs, 
-    nuclearPhys, symbols)
+    nuclearPhys, symbols, htTransCladCoolDD, htTransCladFuelDD)
 
 import Data.Drasil.SI_Units (siUnits, fundamentals, derived, degree)
 import Data.Drasil.People (spencerSmith)
@@ -61,9 +62,19 @@ mkSRS = [RefSec $
 symbMap :: ChunkDB
 symbMap = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals ++ map nw derived
   ++ [nw fp, nw nuclearPhys, nw hghc, nw degree] ++ map nw doccon')
- ([] :: [ConceptChunk])-- FIXME: Fill in concepts
-  siUnits dataDefs [] [] [] [] [] []
+  ([] :: [ConceptChunk])-- FIXME: Fill in concepts
+  siUnits dataDefs [] [] [] [] [] [] allRefs
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols)
-           ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] []
+           ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
+
+-- References --
+bodyRefs :: [Reference]
+bodyRefs = map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+
+dataDefRefs :: [Reference]
+dataDefRefs = map rw [htTransCladCoolDD, htTransCladFuelDD]
+
+allRefs :: [Reference]
+allRefs = nub (bodyRefs ++ dataDefRefs ++ secRefs)

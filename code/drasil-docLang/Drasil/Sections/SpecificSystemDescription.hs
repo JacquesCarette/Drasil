@@ -12,6 +12,7 @@ module Drasil.Sections.SpecificSystemDescription
   , inModelF
   , datConF
   , inDataConstTbl, outDataConstTbl, propCorSolF, auxSpecSent
+  , tInDataCstRef, tOutDataCstRef
   ) where
 
 import Language.Drasil
@@ -19,7 +20,7 @@ import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (assumption, column, constraint, corSol,
-  datum, datumConstraint, definition, element, general, goalStmt, information,
+  datum, datumConstraint, inDatumConstraint, outDatumConstraint, definition, element, general, goalStmt, information,
   input_, limitation, model, output_, physical, physicalConstraint, physicalSystem,
   physSyst, problem, problemDescription, property, purpose, quantity, requirement,
   scope, section_, softwareConstraint, solutionCharacteristic, specification,
@@ -208,15 +209,15 @@ mkDataConstraintTable :: [(Sentence, [Sentence])] -> String -> Sentence -> Label
 mkDataConstraintTable col ref lab = llcc (makeTabRef ref) $ uncurry Table 
   (mkTableFromColumns col) lab True
 
--- Creates the input Data Constraints Table.
+-- | Creates the input Data Constraints Table.
 inDataConstTbl :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => 
   [c] -> LabelledContent
 inDataConstTbl qlst = mkDataConstraintTable [(S "Var", map ch $ sortBySymbol qlst),
             (titleize' physicalConstraint, map fmtPhys $ sortBySymbol qlst),
             (titleize' softwareConstraint, map fmtSfwr $ sortBySymbol qlst),
             (S "Typical Value", map (\q -> fmtU (eS $ getRVal q) q) $ sortBySymbol qlst),
-            (short typUnc, map typUncr $ sortBySymbol qlst)]  "InDataConstraints" $
-            S "Input Data Constraints"
+            (short typUnc, map typUncr $ sortBySymbol qlst)]  (inDatumConstraint ^. uid) $
+            titleize' inDatumConstraint
   where
     getRVal c = fromMaybe (error $ "getRVal found no Expr for " ++ (c ^. uid)) (c ^. reasVal)
 
@@ -224,8 +225,14 @@ inDataConstTbl qlst = mkDataConstraintTable [(S "Var", map ch $ sortBySymbol qls
 outDataConstTbl :: (Quantity c, Constrained c) => [c] -> LabelledContent
 outDataConstTbl qlst = mkDataConstraintTable [(S "Var", map ch qlst),
             (titleize' physicalConstraint, map fmtPhys qlst),
-            (titleize' softwareConstraint, map fmtSfwr qlst)] "OutDataConstraints" $
-            S "Output Data Constraints"
+            (titleize' softwareConstraint, map fmtSfwr qlst)] (outDatumConstraint ^. uid) $
+            titleize' outDatumConstraint
+
+--Not actually used here, for exporting references
+-- | Input/Output Data Constraint Table references.
+tInDataCstRef, tOutDataCstRef :: Reference
+tInDataCstRef = makeTabRef (inDatumConstraint ^. uid)
+tOutDataCstRef = makeTabRef (outDatumConstraint ^. uid)
 
 -- | Formats Physical Constraints into a 'Sentence'.
 fmtPhys :: (Constrained c, Quantity c) => c -> Sentence

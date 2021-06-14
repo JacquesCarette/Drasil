@@ -1,4 +1,4 @@
-module Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs) where
+module Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs, chgRefs) where
 
 --A list of likely and unlikely changes for GlassBR
 
@@ -75,3 +75,7 @@ predictWithstandOfCertDegDesc = foldlSent [atStartNP (goal `the_ofThe` system),
 accAlteredGlassDesc = foldlSent [makeRef2S assumpGC, S "requires that the", phrase glass +:+.
   S "is not altered in any way", S "Therefore, this cannot be used on altered",
   phrase glass]
+
+-- References --
+chgRefs :: [Reference]
+chgRefs = map rw [assumpSV, assumpGC] ++ map rw (likelyChgs ++ unlikelyChgs)

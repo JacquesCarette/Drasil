@@ -1,5 +1,5 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.DblPendulum.IMods (iMods, angularDisplacementIM) where
+module Drasil.DblPendulum.IMods (iMods, angularDisplacementIM, iModRefs) where
 
 import Prelude hiding (cos, sin)
 
@@ -105,3 +105,7 @@ angularDispConstraintNote = foldlSent [atStartNP (the constraint),
 --gravitationalAccelConstNote, landAndTargPosConsNote, landPosNote,
 --   landPosConsNote, offsetNote, offsetConsNote, targPosConsNote,
 --   timeConsNote, tolNote :: Sentence
+
+-- References -- 
+iModRefs :: [Reference]
+iModRefs = map rw iMods

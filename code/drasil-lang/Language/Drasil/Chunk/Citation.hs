@@ -13,9 +13,8 @@ module Language.Drasil.Chunk.Citation
 
 import Language.Drasil.People (People)
 
-import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname))
+import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname), HasRefAddress(getRefAdd), Referable(refAdd, renderRef))
 import Language.Drasil.Classes.Citations (HasFields(getFields))
-import Language.Drasil.Classes (Referable(refAdd, renderRef))
 import Language.Drasil.Data.Citation (author, chapter, pages, editor, bookTitle, title, 
   year, school, journal, institution, note, publisher, CitationKind(..), CiteField)
 import Language.Drasil.Label.Type (LblType(Citation))
@@ -45,11 +44,14 @@ instance HasShortName Citation where shortname = sn
 -- ^ Finds 'ShortName' of the 'Citation'.
 instance HasFields    Citation where getFields = fields
 -- ^ Finds 'Fields' of the 'Citation'.
+-- | Gets the reference address of a 'Citation'.
 instance Referable    Citation where
   refAdd    c = c ^. citeID 
   -- ^ 'Citation' 'UID' should be unique as a reference address.
   renderRef c = Citation $ refAdd c
   -- ^ Get the alternate form of reference address.
+-- | Gets the reference address of a 'Citation'.
+instance HasRefAddress Citation where getRefAdd c= c ^. citeID
 
 -- | Smart constructor which implicitly uses EntryID as chunk id.
 cite :: CitationKind -> [CiteField] -> String -> Citation

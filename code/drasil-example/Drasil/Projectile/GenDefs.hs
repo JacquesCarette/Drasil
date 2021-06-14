@@ -1,5 +1,5 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.Projectile.GenDefs (genDefns, posVecGD) where
+module Drasil.Projectile.GenDefs (genDefns, posVecGD, genDefRefs) where
 
 import Prelude hiding (cos, sin)
 import Language.Drasil
@@ -148,3 +148,6 @@ vecDeriv vecs gdef = foldlSentCol [
   phrase cartesian `sC` makeRef2S gdef, S "can be applied to each", phraseNP (coordinate `ofThe`
   (fst . head) vecs), phrase vector, S "to yield the required", phrase equation]
 
+-- References --
+genDefRefs :: [Reference]
+genDefRefs = map rw genDefns

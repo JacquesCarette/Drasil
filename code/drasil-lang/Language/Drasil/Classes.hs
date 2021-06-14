@@ -20,7 +20,6 @@ module Language.Drasil.Classes (
   , Quantity
   , HasUncertainty(unc)
   , Concept
-  , Referable(refAdd, renderRef)
   , Callable
   , IsArgumentName
 
@@ -38,7 +37,6 @@ import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.UnitLang (UDefn, USymb)
 import Language.Drasil.Expr.Display (Display(..))
 import Language.Drasil.Expr (Expr, Relation)
-import Language.Drasil.Label.Type (LblType)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.RefProg (Reference)
 import Language.Drasil.Space (Space)
@@ -132,14 +130,6 @@ class (Idea c, HasSpace c, HasSymbol c) => Quantity c where
 class HasUncertainty c where
   -- | Provides the 'Lens' to an 'Uncertainty'.
   unc  :: Lens' c Uncertainty
-
--- | Members of this class have the ability to be referenced.
-class HasUID s => Referable s where
-  -- | The referencing address (what we're linking to).
-  -- Only visible in the source (tex/html).
-  refAdd    :: s -> String 
-  -- | Alternate form of reference.
-  renderRef :: s -> LblType 
 
 -- | Some chunks can be called like functions.
 class (HasSymbol c) => Callable c

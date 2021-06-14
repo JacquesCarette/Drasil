@@ -48,5 +48,5 @@ defer = Deferred
 
 -- | Prepends a 'String' to an 'IRefProg'.
 prepend :: String -> IRefProg
-prepend s = RS s +::+ RS ": " +::+ Name
+prepend s = RS s +::+ RS ":" +::+ Name
 

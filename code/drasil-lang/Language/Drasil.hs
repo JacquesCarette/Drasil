@@ -11,7 +11,7 @@ module Language.Drasil (
   , abs_, neg, log, ln, abs, sin, cos, tan, sec, csc, cot, arcsin, arccos, arctan, exp
   , sqrt, euclidean, norm, not_
   , square, half, oneHalf, oneThird, recip_
-  , dim, idx, int, dbl, exactDbl, frac, str, perc, isin, completeCase, incompleteCase
+  , dim, idx, int, dbl, exactDbl, frac, str, perc, completeCase, incompleteCase
   , sumAll, defsum, prodAll, defprod, defint, intAll
   , realInterval
   , deriv, pderiv
@@ -20,7 +20,7 @@ module Language.Drasil (
   , cross, m2x2, vec2D, dgnl2x2
   -- DisplayExpr
   , DisplayExpr
-  , defines, multiExpr, multiExprNE
+  , defines, spaceDE, isIn, andDEs
   -- all the stuff from Unicode
   , Special(..), RenderSpecial(..)
    -- UID
@@ -199,7 +199,7 @@ import Language.Drasil.Expr (Expr(..), UFunc(..), UFuncB, UFuncVec,
           ($-), ($/), addI, addRe, mulI, mulRe)
 import Language.Drasil.Expr.Math (abs_, neg, log, ln, sin, cos, tan, sqrt, sec, 
           csc, cot, arcsin, arccos, arctan, exp,
-          dim, norm, not_, idx, int, dbl, exactDbl, frac, str, perc, isin,
+          dim, norm, not_, idx, int, dbl, exactDbl, frac, str, perc,
           square, half, oneHalf, oneThird, recip_,
           completeCase, incompleteCase,
           sumAll, defsum, prodAll, defprod,

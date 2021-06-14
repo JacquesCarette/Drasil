@@ -1,14 +1,11 @@
 module Language.Drasil.Printing.Import (space, expr, symbol, spec,
   makeDocument) where
 
-import Data.List.NonEmpty (NonEmpty((:|)))
-import qualified Data.List.NonEmpty as NE
-
-import Language.Drasil hiding (neg, sec, symbol)
+import Language.Drasil hiding (neg, sec, symbol, isIn)
 import Language.Drasil.Development (UFuncB(..), UFuncVec(..)
   , ArithBinOp(..), BoolBinOp(..), EqBinOp(..), LABinOp(..)
   , OrdBinOp(..), VVNBinOp(..), VVVBinOp(..)
-  , precA, precB, eprec, DisplayExpr(..))
+  , precA, precB, eprec, dePrec, dePrecAssoc, DisplayExpr(..), DisplayBinOp(..), DisplayAssocBinOp)
 import Database.Drasil
 import Utils.Drasil
 
@@ -100,13 +97,23 @@ processExpo a
 assocExpr :: P.Ops -> Int -> [Expr] -> PrintingInformation -> P.Expr
 assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ map (expr' sm prec) exprs
 
-dispExpr :: DisplayExpr -> PrintingInformation -> P.Expr
-dispExpr (AlgebraicExpr e)      sm = expr e sm
-dispExpr (Defines l r)          sm = P.Row [dispExpr l sm, P.MO P.Eq, dispExpr r sm] -- TODO: Use new symbol?
-dispExpr (MultiExpr (de :| [])) sm = dispExpr de sm
-dispExpr (MultiExpr des)        sm = P.Row $ map (`dispExpr` sm) (NE.toList des)
+deBinOp :: DisplayBinOp -> P.Ops
+deBinOp IsIn    = P.IsIn
+deBinOp Defines = P.Eq
 
--- | Expr translation function from Drasil to printable layout AST.
+deAssocBinOp :: DisplayAssocBinOp -> P.Ops
+deAssocBinOp _ = P.And
+
+-- | Translate DisplayExprs to printable layout AST.
+dispExpr :: DisplayExpr -> PrintingInformation -> P.Expr
+dispExpr (AlgebraicExpr e)  sm = expr e sm
+dispExpr (SpaceExpr s)      sm = space sm s
+dispExpr (BinOp b l r)      sm = P.Row [dispExpr l sm, P.MO $ deBinOp b, dispExpr r sm]
+dispExpr (AssocBinOp b des) sm = P.Row $ intersperse (P.MO op) $ map (dispExpr' sm prec) des
+  where prec = dePrecAssoc b
+        op   = deAssocBinOp b
+
+-- | Translate Exprs to printable layout AST.
 expr :: Expr -> PrintingInformation -> P.Expr
 expr (Dbl d)                  sm = case sm ^. getSetting of
   Engineering -> P.Row $ digitsProcess (map toInteger $ fst $ floatToDigits 10 d)
@@ -180,7 +187,6 @@ expr (OrdBinaryOp GEq a b)    sm = mkBOp sm P.GEq a b
 expr (VVNBinaryOp Dot a b)    sm = mkBOp sm P.Dot a b
 expr (VVVBinaryOp Cross a b)  sm = mkBOp sm P.Cross a b
 expr (Operator o d e)         sm = eop sm o d e
-expr (IsIn  a b)              sm = P.Row [expr a sm, P.MO P.IsIn, space sm b]
 expr (RealI c ri)             sm = renderRealInt sm (lookupC (sm ^. stg)
   (sm ^. ckdb) c) ri
 
@@ -215,8 +221,11 @@ mkBOp sm o a b = P.Row [expr a sm, P.MO o, expr b sm]
 -- | Helper that adds parenthesis to an expression where appropriate.
 expr' :: PrintingInformation -> Int -> Expr -> P.Expr
 expr' s p e = fence $ expr e s
-  where
-  fence = if eprec e < p then parens else id
+  where fence = if eprec e < p then parens else id
+
+dispExpr' :: PrintingInformation -> Int -> DisplayExpr -> P.Expr
+dispExpr' s p e = fence $ dispExpr e s
+  where fence = if dePrec e < p then parens else id
 
 -- | Helper for properly rendering negation of expressions.
 neg' :: Expr -> Bool
@@ -348,19 +357,20 @@ renderRealInt st s (UpFrom (Exc,a)) = P.Row [symbol s, P.MO P.Gt,  expr a st]
 -- | Translates 'Sentence' to the printable representation of a 'Sentence' ('Spec').
 spec :: PrintingInformation -> Sentence -> P.Spec
   -- make sure these optimizations are clear
-spec sm (EmptyS :+: b) = spec sm b
-spec sm (a :+: EmptyS) = spec sm a
-spec sm (a :+: b)      = spec sm a P.:+: spec sm b
-spec _ (S s)           = either error P.S $ checkValidStr s invalidChars
-  where invalidChars   = ['<', '>', '\"', '&', '#', '$', '%', '&', '~', '^', '\\', '{', '}']
-spec _ (Sy s)          = P.E $ pUnit s
-spec _ Percent         = P.E $ P.MO P.Perc
-spec _ (P s)           = P.E $ symbol s
-spec sm (Ch SymbolStyle s)  = P.E $ symbol $ lookupC (sm ^. stg) (sm ^. ckdb) s
-spec sm (Ch TermStyle s)    = spec sm $ lookupT (sm ^. ckdb) s
-spec sm (Ch ShortStyle s)   = spec sm $ lookupS (sm ^. ckdb) s
-spec sm (Ch PluralTerm s)   = spec sm $ lookupP (sm ^. ckdb) s
-spec sm (Ref u notes) = let reff = refResolve u (sm ^. ckdb . refTable) in
+spec sm (EmptyS :+: b)     = spec sm b
+spec sm (a :+: EmptyS)     = spec sm a
+spec sm (a :+: b)          = spec sm a P.:+: spec sm b
+spec _ (S s)               = either error P.S $ checkValidStr s invalidChars
+  where invalidChars = ['<', '>', '\"', '&', '#', '$', '%', '&', '~', '^', '\\', '{', '}']
+spec _ (Sy s)              = P.E $ pUnit s
+spec _ Percent             = P.E $ P.MO P.Perc
+spec _ (P s)               = P.E $ symbol s
+spec sm (Ch SymbolStyle s) = P.E $ symbol $ lookupC (sm ^. stg) (sm ^. ckdb) s
+spec sm (Ch TermStyle s)   = spec sm $ lookupT (sm ^. ckdb) s
+spec sm (Ch ShortStyle s)  = spec sm $ lookupS (sm ^. ckdb) s
+spec sm (Ch PluralTerm s)  = spec sm $ lookupP (sm ^. ckdb) s
+spec sm (Ref u notes)      =
+  let reff = refResolve u (sm ^. ckdb . refTable) in
   case reff of 
   (Reference _ (RP rp ra) sn _) ->
     P.Ref P.Internal ra $ spec sm $ renderShortName (sm ^. ckdb) rp sn
@@ -373,9 +383,9 @@ spec sm (Ref u notes) = let reff = refResolve u (sm ^. ckdb . refTable) in
   (Reference _ (Citation ra) _ _) ->
     P.Ref P.Cite2    ra (spec sm (renderCitInfo n))
   _ -> error "Only citations should have citation information." -- should this be an error, or should all references get the ability to renderCitInfo?-}
-spec sm (Quote q)      = P.Quote $ spec sm q
-spec _  EmptyS         = P.EmptyS
-spec sm (E e)          = P.E $ dispExpr e sm
+spec sm (Quote q)          = P.Quote $ spec sm q
+spec _  EmptyS             = P.EmptyS
+spec sm (E e)              = P.E $ dispExpr e sm
 
 -- | Renders a unit symbol as a printable expression.
 pUnit :: USymb -> P.Expr

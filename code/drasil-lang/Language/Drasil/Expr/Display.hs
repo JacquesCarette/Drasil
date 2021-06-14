@@ -1,15 +1,21 @@
-module Language.Drasil.Expr.Display (defines, multiExpr, multiExprNE) where
-
-import qualified Data.List.NonEmpty as NE
+module Language.Drasil.Expr.Display (defines, spaceDE, isIn, andDEs) where
 
 import Language.Drasil.DisplayClasses (Display(..))
-import Language.Drasil.DisplayExpr (DisplayExpr(MultiExpr, Defines))
+import Language.Drasil.DisplayExpr (DisplayAssocBinOp(..), 
+    DisplayBinOp(..), DisplayExpr(..))
+import Language.Drasil.Space (Space)
 
 defines :: (Display a, Display b) => a -> b -> DisplayExpr
-defines a b = Defines (toDispExpr a) (toDispExpr b)
+defines a b = BinOp Defines (toDispExpr a) (toDispExpr b)
 
-multiExpr :: Display a => [a] -> DisplayExpr
-multiExpr = MultiExpr . NE.fromList . map toDispExpr
+spaceDE :: Space -> DisplayExpr
+spaceDE = SpaceExpr
 
-multiExprNE :: Display a => NE.NonEmpty a -> DisplayExpr
-multiExprNE = MultiExpr . NE.map toDispExpr
+isIn :: Display a => a -> DisplayExpr -> DisplayExpr
+isIn a s@(SpaceExpr _) = BinOp IsIn (toDispExpr a) s
+isIn _ _               = error "isIn target must be a Space"
+
+andDEs :: Display a => [a] -> DisplayExpr
+andDEs [] = error "Need at least 1 expression to use andDEs"
+andDEs [x] = toDispExpr x
+andDEs des = AssocBinOp And $ map toDispExpr des

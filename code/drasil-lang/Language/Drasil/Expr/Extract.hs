@@ -1,16 +1,16 @@
 module Language.Drasil.Expr.Extract where
 
 import Data.List (nub)
-import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil.Expr (Expr(..))
-import Language.Drasil.DisplayExpr (DisplayExpr(..))
+import Language.Drasil.DisplayExpr
 import Language.Drasil.Space (RealInterval(..))
 
 deNames :: DisplayExpr -> [String]
-deNames (AlgebraicExpr e) = eNames e
-deNames (Defines l r)     = deNames l ++ deNames r
-deNames (MultiExpr des)   = concatMap deNames des
+deNames (AlgebraicExpr e)  = eNames e
+deNames (SpaceExpr _)      = []
+deNames (BinOp _ l r)      = deNames l ++ deNames r
+deNames (AssocBinOp _ des) = concatMap deNames des
 
 -- | Generic traverse of all expressions that could lead to names.
 eNames :: Expr -> [String]
@@ -42,7 +42,6 @@ eNames (OrdBinaryOp _ a b)   = eNames a ++ eNames b
 eNames (VVVBinaryOp _ a b)   = eNames a ++ eNames b
 eNames (VVNBinaryOp _ a b)   = eNames a ++ eNames b
 eNames (Operator _ _ e)      = eNames e
-eNames (IsIn  a _)           = eNames a
 eNames (Matrix a)            = concatMap (concatMap eNames) a
 eNames (RealI c b)           = c : eNamesRI b
 
@@ -54,9 +53,10 @@ eNamesRI (UpFrom (_,il))         = eNames il
 
 
 deNames' :: DisplayExpr -> [String]
-deNames' (AlgebraicExpr e) = eNames e
-deNames' (Defines l r)     = deNames' l ++ deNames' r
-deNames' (MultiExpr des)   = concatMap deNames' des
+deNames' (AlgebraicExpr e)  = eNames e
+deNames' (SpaceExpr _)      = []
+deNames' (BinOp _ l r)      = deNames l ++ deNames r
+deNames' (AssocBinOp _ des) = concatMap deNames des
 
 -- | Generic traverse of all positions that could lead to eNames without
 -- functions.  FIXME : this should really be done via post-facto filtering, but
@@ -91,7 +91,6 @@ eNames' (OrdBinaryOp _ a b)   = eNames' a ++ eNames' b
 eNames' (VVVBinaryOp _ a b)   = eNames' a ++ eNames' b
 eNames' (VVNBinaryOp _ a b)   = eNames' a ++ eNames' b
 eNames' (Operator _ _ e)      = eNames' e
-eNames' (IsIn  a _)           = eNames' a
 eNames' (Matrix a)            = concatMap (concatMap eNames') a
 eNames' (RealI c b)           = c : eNamesRI' b
 
@@ -110,6 +109,7 @@ eDep = nub . eNames
 
 -- | Get dependencies from display expressions.
 deDep :: DisplayExpr -> [String]
-deDep (AlgebraicExpr e) = eDep e
-deDep (Defines l r)     = nub $ deDep l ++ deDep r
-deDep (MultiExpr des)   = nub $ concat $ NE.map deDep des
+deDep (AlgebraicExpr e)  = eDep e
+deDep (SpaceExpr _)      = []
+deDep (BinOp _ l r)      = nub $ deDep l ++ deDep r
+deDep (AssocBinOp _ des) = nub $ concatMap deDep des 

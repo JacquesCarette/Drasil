@@ -52,8 +52,7 @@ instance Definition    MultiDefn where defn     = rDesc
 instance ExprRelat     MultiDefn where relat q  = sy q $= foldr1 ($=) (NE.map (^. expr) (q ^. rvs))
 -- TODO: How do we want to display MultiDefns?
 instance Display       MultiDefn where
-  -- toDispExpr md = multiExpr $ map (^. expr) $ NE.toList $ md ^. rvs
-  toDispExpr = toDispExpr . relat  -- this one at least doesn't break stable (yet?)
+  toDispExpr = toDispExpr . relat
 
 -- | Smart constructor for MultiDefns, does nothing special at the moment
 mkMultiDefn :: UID -> QuantityDict -> Sentence -> NE.NonEmpty DefiningExpr -> MultiDefn

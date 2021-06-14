@@ -1,6 +1,7 @@
 module Language.Drasil.Printing.Import (space, expr, symbol, spec,
   makeDocument) where
 
+import Data.List.NonEmpty (NonEmpty((:|)))
 import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil hiding (neg, sec, symbol)
@@ -100,9 +101,10 @@ assocExpr :: P.Ops -> Int -> [Expr] -> PrintingInformation -> P.Expr
 assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ map (expr' sm prec) exprs
 
 dispExpr :: DisplayExpr -> PrintingInformation -> P.Expr
-dispExpr (AlgebraicExpr e) sm = expr e sm
-dispExpr (Defines l r)     sm = P.Row [dispExpr l sm, P.MO P.Eq, dispExpr r sm] -- TODO: Use new symbol?
-dispExpr (MultiExpr des)   sm = P.Row $ map (`dispExpr` sm) (NE.toList des)
+dispExpr (AlgebraicExpr e)      sm = expr e sm
+dispExpr (Defines l r)          sm = P.Row [dispExpr l sm, P.MO P.Eq, dispExpr r sm] -- TODO: Use new symbol?
+dispExpr (MultiExpr (de :| [])) sm = dispExpr de sm
+dispExpr (MultiExpr des)        sm = P.Row $ map (`dispExpr` sm) (NE.toList des)
 
 -- | Expr translation function from Drasil to printable layout AST.
 expr :: Expr -> PrintingInformation -> P.Expr

@@ -132,7 +132,7 @@ angleConstraintNote, gravitationalAccelConstNote, landAndTargPosConsNote, landPo
   timeConsNote, tolNote :: Sentence
 
 angleConstraintNote = foldlSent [atStartNP (the constraint),
-  eS (exactDbl 0 $< sy launAngle $< half (sy pi_)) `S.is` S "from",
+  eS (realInterval launAngle (Bounded (Exc, exactDbl 0) (Exc, half $ sy pi_))) `S.is` S "from",
   makeRef2S posXDirection `S.and_` makeRef2S yAxisGravity `sC`
   S "and is shown" `S.in_` makeRef2S figLaunch]
 

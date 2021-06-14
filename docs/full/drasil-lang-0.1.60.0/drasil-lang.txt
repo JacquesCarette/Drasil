@@ -1391,6 +1391,16 @@ class HasSymbol c
 -- | Provides the <a>Symbol</a> for a particular stage of generation.
 symbol :: HasSymbol c => c -> Stage -> Symbol
 
+-- | Members of this class have the ability to be referenced.
+class HasUID s => Referable s
+
+-- | The referencing address (what we're linking to). Only visible in the
+--   source (tex/html).
+refAdd :: Referable s => s -> String
+
+-- | Alternate form of reference.
+renderRef :: Referable s => s -> LblType
+
 
 -- | Routines to help with Symbols and Stages.
 module Language.Drasil.Symbol.Helpers
@@ -1454,9 +1464,147 @@ None :: RefInfo
 Equation :: [Int] -> RefInfo
 Page :: [Int] -> RefInfo
 RefNote :: String -> RefInfo
+instance GHC.Classes.Eq Language.Drasil.RefProg.Reference
 instance Language.Drasil.Classes.Core.HasUID Language.Drasil.RefProg.Reference
 instance Language.Drasil.Classes.Core.HasRefAddress Language.Drasil.RefProg.Reference
 instance Language.Drasil.Classes.Core.HasShortName Language.Drasil.RefProg.Reference
+instance Language.Drasil.Classes.Core.Referable Language.Drasil.RefProg.Reference
+
+module Language.Drasil.Chunk.Citation
+
+-- | All citations require a unique identifier used by the Drasil chunk. We
+--   will re-use the <a>UID</a> part as an EntryID (<a>String</a>) used for
+--   creating reference links. Finally we will have the reference
+--   information (<a>CitationKind</a>, <a>CiteField</a>s, and a
+--   <a>ShortName</a>).
+data Citation
+type BibRef = [Citation] " A list of 'Citation's."
+type EntryID = String " A 'String' that should contain no spaces."
+citeID :: Lens' Citation UID
+citeKind :: Lens' Citation CitationKind
+
+-- | Article citation requires author(s), title, journal, year. Optional
+--   fields can be: volume, number, pages, month, and note. Implicitly uses
+--   the EntryID as the chunk id.
+cArticle :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Book citation by author.
+--   
+--   Book citation requires author or editor, title, publisher, year.
+--   Optional fields can be volume or number, series, address, edition,
+--   month, and note. Implicitly uses the EntryID as the chunk id.
+cBookA :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Book citation by editor.
+--   
+--   Book citation requires author or editor, title, publisher, year.
+--   Optional fields can be volume or number, series, address, edition,
+--   month, and note. Implicitly uses the EntryID as the chunk id.
+cBookE :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Booklet citation requires title. Optional fields can be author, how
+--   published, address, month, year, note. Implicitly uses the EntryID as
+--   the chunk id.
+cBooklet :: String -> [CiteField] -> String -> Citation
+
+-- | InBook citation by author.
+--   
+--   InBook citation requires author or editor, title, chapter and/or
+--   pages, publisher, year. Optional fields can be volume or number,
+--   series, type, address, edition, month, and note. Implicitly uses the
+--   EntryID as the chunk id. This smart constructor includes both chapter
+--   and page numbers.
+cInBookACP :: People -> String -> Int -> [Int] -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | InBook citation by editor.
+--   
+--   InBook citation requires author or editor, title, chapter and/or
+--   pages, publisher, year. Optional fields can be volume or number,
+--   series, type, address, edition, month, and note. Implicitly uses the
+--   EntryID as the chunk id. This smart constructor includes both chapter
+--   and page numbers.
+cInBookECP :: People -> String -> Int -> [Int] -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Otherwise identical to <a>cInBookACP</a>.
+--   
+--   InBook citation excluding page numbers.
+cInBookAC :: People -> String -> Int -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Otherwise identical to <a>cInBookECP</a>.
+--   
+--   InBook citation excluding page numbers.
+cInBookEC :: People -> String -> Int -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Otherwise identical to <a>cInBookACP</a>.
+--   
+--   InBook citation excluding chapter.
+cInBookAP :: People -> String -> [Int] -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Otherwise identical to <a>cInBookECP</a>.
+--   
+--   InBook citation excluding chapter.
+cInBookEP :: People -> String -> [Int] -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | InCollection citation requires author, title, bookTitle, publisher,
+--   year. Optional fields can be editor, volume or number, series, type,
+--   chapter, pages, address, edition, month, and note. Implicitly uses the
+--   EntryID as the chunk id.
+cInCollection :: People -> String -> String -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | InProceedings citation requires author, title, bookTitle, year.
+--   Optional fields can be editor, volume or number, series, pages,
+--   address, month, organization, publisher, and note. Implicitly uses the
+--   EntryID as the chunk id.
+cInProceedings :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Manual (technical documentation) citation requires title. Optional
+--   fields can be author, organization, address, edition, month, year, and
+--   note. Implicitly uses the EntryID as the chunk id.
+cManual :: String -> [CiteField] -> String -> Citation
+
+-- | Master's Thesis citation requires author, title, school, and year.
+--   Optional fields can be type, address, month, and note. Implicitly uses
+--   the EntryID as the chunk id.
+cMThesis :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Misc citation requires nothing. Optional fields can be author, title,
+--   howpublished, month, year, and note. Implicitly uses the EntryID as
+--   the chunk id.
+cMisc :: [CiteField] -> String -> Citation
+
+-- | PhD Thesis citation requires author, title, school, and year. Optional
+--   fields can be type, address, month, and note. Implicitly uses the
+--   EntryID as the chunk id.
+cPhDThesis :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Proceedings citation requires title and year. Optional fields can be
+--   editor, volume or number, series, address, publisher, note, month, and
+--   organization. Implicitly uses the EntryID as the chunk id.
+cProceedings :: String -> Int -> [CiteField] -> String -> Citation
+
+-- | Technical Report citation requires author, title, institution, and
+--   year. Optional fields can be type, number, address, month, and note.
+--   Implicitly uses the EntryID as the chunk id.
+cTechReport :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Unpublished citation requires author, title, and note. Optional fields
+--   can be month and year. Implicitly uses the EntryID as the chunk id.
+cUnpublished :: People -> String -> String -> [CiteField] -> String -> Citation
+instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.Citation.Citation
+instance Language.Drasil.Classes.Core.HasShortName Language.Drasil.Chunk.Citation.Citation
+instance Language.Drasil.Classes.Citations.HasFields Language.Drasil.Chunk.Citation.Citation
+instance Language.Drasil.Classes.Core.Referable Language.Drasil.Chunk.Citation.Citation
+instance Language.Drasil.Classes.Core.HasRefAddress Language.Drasil.Chunk.Citation.Citation
+
+
+-- | Defining classes that represent knowledge about Documents
+module Language.Drasil.Classes.Document
+
+-- | Some documents, as well as some pieces of knowledge, have citations.
+class HasCitation c
+
+-- | Provides a <tt>Lens</tt> to the citations.
+getCitations :: HasCitation c => Lens' c [Citation]
 
 module Language.Drasil.UnitLang
 
@@ -1533,8 +1681,9 @@ data Sentence
 -- | Lifts an expression into a Sentence.
 [E] :: Expr -> Sentence
 
--- | Lifts a Reference into a Sentence.
-[Ref] :: Reference -> Sentence
+-- | Takes a <a>UID</a> to a reference. Resolves the reference later
+--   (similar to Ch).
+[Ref] :: UID -> RefInfo -> Sentence
 
 -- | Adds quotation marks around a Sentence.
 [Quote] :: Sentence -> Sentence
@@ -1615,17 +1764,44 @@ instance GHC.Base.Monoid Language.Drasil.Sentence.Sentence
 
 module Language.Drasil.Sentence.Extract
 
--- | This is to collect <a>UID</a>s that are printed out as a
---   <tt>Symbol</tt>.
+-- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
+--   a <tt>Symbol</tt>.
 sdep :: Sentence -> [UID]
 shortdep :: Sentence -> [UID]
 
--- | Generic traverse of all positions that could lead to reference
+-- | Generic traverse of all positions that could lead to <i>reference</i>
 --   <a>UID</a>s from <a>Sentence</a>s.
 lnames :: Sentence -> [UID]
 
--- | Get reference <a>UID</a>s from <a>Sentence</a>s.
+-- | Get <i>reference</i> <a>UID</a>s from <a>Sentence</a>s.
 lnames' :: [Sentence] -> [UID]
+
+module Language.Drasil.Reference
+
+-- | Projector function that creates a <a>Reference</a> from something
+--   <a>Referable</a>.
+makeRef2 :: (Referable l, HasShortName l) => l -> Reference
+
+-- | Takes the reference <tt>UID</tt> and wraps it into a <a>Sentence</a>.
+makeRef2S :: (Referable l, HasShortName l) => l -> Sentence
+
+-- | Similar to <a>makeRef2</a>, but only turns a citation into a
+--   reference.
+makeCite :: Citation -> Reference
+
+-- | Similar to <a>makeRef2S</a>, but only takes a citation.
+makeCiteS :: Citation -> Sentence
+
+-- | Makes a <a>Reference</a> from a <a>Citation</a> with additional
+--   information.
+makeCiteInfo :: Citation -> RefInfo -> Reference
+
+-- | Makes a <a>Reference</a> from a <a>Citation</a> with additional
+--   information and then wraps into <a>Sentence</a> form.
+makeCiteInfoS :: Citation -> RefInfo -> Sentence
+
+-- | Smart constructor for making a <a>Referable</a> <a>Reference</a>.
+rw :: (Referable r, HasShortName r) => r -> Reference
 
 module Language.Drasil.NounPhrase.Core
 
@@ -1953,15 +2129,15 @@ names' :: Expr -> [String]
 --   names (similar to <a>names</a>).
 namesRI :: RealInterval Expr Expr -> [String]
 
--- | This is to collect <a>UID</a>s that are printed out as a
---   <tt>Symbol</tt>.
+-- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
+--   a <tt>Symbol</tt>.
 sdep :: Sentence -> [UID]
 
--- | Generic traverse of all positions that could lead to reference
+-- | Generic traverse of all positions that could lead to <i>reference</i>
 --   <a>UID</a>s from <a>Sentence</a>s.
 lnames :: Sentence -> [UID]
 
--- | Get reference <a>UID</a>s from <a>Sentence</a>s.
+-- | Get <i>reference</i> <a>UID</a>s from <a>Sentence</a>s.
 lnames' :: [Sentence] -> [UID]
 
 -- | precA - precedence for arithmetic-related Binary-Associative
@@ -1974,6 +2150,212 @@ precB :: AssocBoolOper -> Int
 
 -- | eprec - <a>Expression</a> precedence.
 eprec :: Expr -> Int
+
+module Language.Drasil.Document.Core
+
+-- | Denotes the different possible types that can be used as a list.
+data ListType
+
+-- | Bulleted list.
+Bullet :: [(ItemType, Maybe String)] -> ListType
+
+-- | Enumerated list.
+Numeric :: [(ItemType, Maybe String)] -> ListType
+
+-- | Simple list with items denoted by <tt>-</tt>.
+Simple :: [ListTuple] -> ListType
+
+-- | Descriptive list, renders as "Title: Item" (see <a>ListTuple</a>).
+Desc :: [ListTuple] -> ListType
+
+-- | Renders a list of "<tt><a>Title</a></tt> is the <tt>Item</tt>".
+Definitions :: [ListTuple] -> ListType
+
+-- | Denotes how something should behave in a list (<a>ListType</a>).
+data ItemType
+
+-- | Standard singular item.
+Flat :: Sentence -> ItemType
+
+-- | Nest a list (<a>ListType</a>) as an item.
+Nested :: Header -> ListType -> ItemType
+
+-- | MaxWidthPercent should be kept in the range 1-100. Values outside this
+--   range may have unexpected results. Used for specifying max figure
+--   width as <tt>pagewidth*MaxWidthPercent/100</tt>.
+type MaxWidthPercent = Float
+type Title = Sentence
+type Author = Sentence
+type Header = Sentence " Used when creating sublists."
+type Depth = Int
+type Width = Float
+type Height = Float
+type ListTuple = (Title, ItemType, Maybe String) " Formats as Title: Item."
+type Filepath = String
+type Lbl = Sentence
+
+-- | Contents may be labelled or unlabelled.
+data Contents
+UlC :: UnlabelledContent -> Contents
+LlC :: LabelledContent -> Contents
+
+-- | Types of definitions (general, instance, theory, or data).
+data DType
+General :: DType
+Instance :: DType
+Theory :: DType
+Data :: DType
+
+-- | Types of layout objects we deal with explicitly.
+data RawContent
+
+-- | table has: header-row, data(rows), label/caption, and a bool that
+--   determines whether or not to show label.
+Table :: [Sentence] -> [[Sentence]] -> Title -> Bool -> RawContent
+
+-- | Paragraphs are just sentences.
+Paragraph :: Sentence -> RawContent
+
+-- | Block of Equations holds an expression.
+EqnBlock :: Expr -> RawContent
+
+-- | Grants the ability to label a group of <a>RawContent</a>.
+DerivBlock :: Sentence -> [RawContent] -> RawContent
+
+-- | For enumerated lists.
+Enumeration :: ListType -> RawContent
+
+-- | Defines something with a type, identifier, and <a>Contents</a>.
+Defini :: DType -> [(Identifier, [Contents])] -> RawContent
+
+-- | Should use relative file path.
+Figure :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
+
+-- | Grants the ability to reference something.
+Bib :: BibRef -> RawContent
+
+-- | Contain a graph with coordinates (<a>Sentence</a>s), maybe a width and
+--   height, and a label (<a>Sentence</a>). TODO: Fill this one in. | An
+--   identifier is just a <a>String</a>.
+Graph :: [(Sentence, Sentence)] -> Maybe Width -> Maybe Height -> Lbl -> RawContent
+type Identifier = String
+
+-- | Contains a <a>Reference</a> and <a>RawContent</a>.
+data LabelledContent
+LblC :: Reference -> RawContent -> LabelledContent
+[_ref] :: LabelledContent -> Reference
+[_ctype] :: LabelledContent -> RawContent
+
+-- | Only contains <a>RawContent</a>.
+newtype UnlabelledContent
+UnlblC :: RawContent -> UnlabelledContent
+[_cntnts] :: UnlabelledContent -> RawContent
+ref :: Lens' LabelledContent Reference
+ctype :: Lens' LabelledContent RawContent
+cntnts :: Iso' UnlabelledContent RawContent
+
+-- | Members of this class must have <a>RawContent</a>.
+class HasContents c
+
+-- | Provides a <tt>Lens</tt> to the <a>RawContent</a>.
+accessContents :: HasContents c => Lens' c RawContent
+prependLabel :: RawContent -> IRefProg
+instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.LabelledContent
+instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.UnlabelledContent
+instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.Contents
+instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Document.Core.LabelledContent
+instance Language.Drasil.Classes.Core.HasRefAddress Language.Drasil.Document.Core.LabelledContent
+instance Language.Drasil.Classes.Core.HasShortName Language.Drasil.Document.Core.LabelledContent
+instance Language.Drasil.Classes.Core.Referable Language.Drasil.Document.Core.LabelledContent
+
+
+-- | Document Description Language
+module Language.Drasil.Document
+
+-- | Section Contents are split into subsections or contents, where
+--   contents are standard layout objects (see <a>Contents</a>).
+data SecCons
+Sub :: Section -> SecCons
+Con :: Contents -> SecCons
+
+-- | Sections have a title (<a>Sentence</a>), a list of contents
+--   (<a>SecCons</a>) and a shortname (<a>Reference</a>).
+data Section
+Section :: Title -> [SecCons] -> Reference -> Section
+[tle] :: Section -> Title
+[cons] :: Section -> [SecCons]
+[_lab] :: Section -> Reference
+lab :: Lens' Section Reference
+
+-- | A Document has a Title (<a>Sentence</a>), Author(s) (<a>Sentence</a>),
+--   and <a>Section</a>s which hold the contents of the document.
+data Document
+Document :: Title -> Author -> [Section] -> Document
+
+-- | Smart constructor for labelled content chunks.
+llcc :: Reference -> RawContent -> LabelledContent
+
+-- | Smart constructor for unlabelled content chunks (no <a>Reference</a>).
+ulcc :: RawContent -> UnlabelledContent
+
+-- | Smart constructor that wraps <a>UnlabelledContent</a> into
+--   <a>Contents</a>.
+mkParagraph :: Sentence -> Contents
+
+-- | Smart constructor that wraps <a>LabelledContent</a> into
+--   <a>Contents</a>.
+mkFig :: Reference -> RawContent -> Contents
+
+-- | Smart constructor similar to <a>llcc</a>, but takes in
+--   <a>RawContent</a> first.
+mkRawLC :: RawContent -> Reference -> LabelledContent
+
+-- | Smart constructor for creating <a>Section</a>s with a title
+--   (<a>Sentence</a>), introductory contents (ie. paragraphs, tables,
+--   etc.), a list of subsections, and a shortname (<a>Reference</a>).
+section :: Sentence -> [Contents] -> [Section] -> Reference -> Section
+
+-- | Smart constructor for retrieving the contents (<a>Section</a>s) from a
+--   <a>Document</a>.
+extractSection :: Document -> [Section]
+
+-- | Smart constructor for retrieving the subsections (<a>Section</a>s)
+--   within a <a>Section</a>.
+getSec :: Section -> [Section]
+
+-- | Helper to retrieve subsections (<a>Section</a>s) from section contents
+--   (<a>SecCons</a>).
+getSecCons :: SecCons -> [Section]
+
+-- | <a>Figure</a> smart constructor with a <a>Lbl</a> and a
+--   <a>Filepath</a>. Assumes 100% of page width as max width.
+fig :: Lbl -> Filepath -> RawContent
+
+-- | <a>Figure</a> smart constructor that allows for customized max widths.
+figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
+
+-- | Create a reference for a table. Takes in the name of a table (which
+--   will also be used for its shortname).
+makeTabRef :: String -> Reference
+
+-- | Create a reference for a figure. Takes in the name of a figure (which
+--   will also be used for its shortname).
+makeFigRef :: String -> Reference
+
+-- | Create a reference for a section. Takes in the name of a section and a
+--   shortname for the section.
+makeSecRef :: String -> String -> Reference
+
+-- | Create a reference for a list. Takes in the name of the list and a
+--   shortname for the list.
+makeLstRef :: String -> String -> Reference
+
+-- | Create a reference for a <a>URI</a>.
+makeURI :: UID -> String -> ShortName -> Reference
+instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Document.Section
+instance Language.Drasil.Classes.Core.HasShortName Language.Drasil.Document.Section
+instance Language.Drasil.Classes.Core.Referable Language.Drasil.Document.Section
+instance Language.Drasil.Classes.Core.HasRefAddress Language.Drasil.Document.Section
 
 module Language.Drasil.Derivation
 
@@ -2106,16 +2488,6 @@ unc :: HasUncertainty c => Lens' c Uncertainty
 
 -- | Concepts are <a>Idea</a>s with definitions and domains.
 type Concept c = (Idea c, Definition c, ConceptDomain c)
-
--- | Members of this class have the ability to be referenced.
-class HasUID s => Referable s
-
--- | The referencing address (what we're linking to). Only visible in the
---   source (tex/html).
-refAdd :: Referable s => s -> String
-
--- | Alternate form of reference.
-renderRef :: Referable s => s -> LblType
 
 -- | Some chunks can be called like functions.
 class (HasSymbol c) => Callable c
@@ -2476,7 +2848,7 @@ instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Concept.Core.C
 instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Concept.Core.ConceptInstance
 instance Language.Drasil.Classes.Core.HasShortName Language.Drasil.Chunk.Concept.Core.ConceptInstance
 instance Language.Drasil.Classes.Core.HasRefAddress Language.Drasil.Chunk.Concept.Core.ConceptInstance
-instance Language.Drasil.Classes.Referable Language.Drasil.Chunk.Concept.Core.ConceptInstance
+instance Language.Drasil.Classes.Core.Referable Language.Drasil.Chunk.Concept.Core.ConceptInstance
 instance GHC.Classes.Eq Language.Drasil.Chunk.Concept.Core.CommonConcept
 instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.Concept.Core.CommonConcept
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.Concept.Core.CommonConcept
@@ -2560,374 +2932,6 @@ instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Relation.Relat
 instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Relation.RelationConcept
 instance Language.Drasil.Classes.ExprRelat Language.Drasil.Chunk.Relation.RelationConcept
 instance GHC.Classes.Eq Language.Drasil.Chunk.Relation.RelationConcept
-
-module Language.Drasil.Chunk.Citation
-
--- | All citations require a unique identifier used by the Drasil chunk. We
---   will re-use the <a>UID</a> part as an EntryID (<a>String</a>) used for
---   creating reference links. Finally we will have the reference
---   information (<a>CitationKind</a>, <a>CiteField</a>s, and a
---   <a>ShortName</a>).
-data Citation
-type BibRef = [Citation] " A list of 'Citation's."
-type EntryID = String " A 'String' that should contain no spaces."
-citeID :: Lens' Citation UID
-citeKind :: Lens' Citation CitationKind
-
--- | Article citation requires author(s), title, journal, year. Optional
---   fields can be: volume, number, pages, month, and note. Implicitly uses
---   the EntryID as the chunk id.
-cArticle :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Book citation by author.
---   
---   Book citation requires author or editor, title, publisher, year.
---   Optional fields can be volume or number, series, address, edition,
---   month, and note. Implicitly uses the EntryID as the chunk id.
-cBookA :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Book citation by editor.
---   
---   Book citation requires author or editor, title, publisher, year.
---   Optional fields can be volume or number, series, address, edition,
---   month, and note. Implicitly uses the EntryID as the chunk id.
-cBookE :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Booklet citation requires title. Optional fields can be author, how
---   published, address, month, year, note. Implicitly uses the EntryID as
---   the chunk id.
-cBooklet :: String -> [CiteField] -> String -> Citation
-
--- | InBook citation by author.
---   
---   InBook citation requires author or editor, title, chapter and/or
---   pages, publisher, year. Optional fields can be volume or number,
---   series, type, address, edition, month, and note. Implicitly uses the
---   EntryID as the chunk id. This smart constructor includes both chapter
---   and page numbers.
-cInBookACP :: People -> String -> Int -> [Int] -> String -> Int -> [CiteField] -> String -> Citation
-
--- | InBook citation by editor.
---   
---   InBook citation requires author or editor, title, chapter and/or
---   pages, publisher, year. Optional fields can be volume or number,
---   series, type, address, edition, month, and note. Implicitly uses the
---   EntryID as the chunk id. This smart constructor includes both chapter
---   and page numbers.
-cInBookECP :: People -> String -> Int -> [Int] -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Otherwise identical to <a>cInBookACP</a>.
---   
---   InBook citation excluding page numbers.
-cInBookAC :: People -> String -> Int -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Otherwise identical to <a>cInBookECP</a>.
---   
---   InBook citation excluding page numbers.
-cInBookEC :: People -> String -> Int -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Otherwise identical to <a>cInBookACP</a>.
---   
---   InBook citation excluding chapter.
-cInBookAP :: People -> String -> [Int] -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Otherwise identical to <a>cInBookECP</a>.
---   
---   InBook citation excluding chapter.
-cInBookEP :: People -> String -> [Int] -> String -> Int -> [CiteField] -> String -> Citation
-
--- | InCollection citation requires author, title, bookTitle, publisher,
---   year. Optional fields can be editor, volume or number, series, type,
---   chapter, pages, address, edition, month, and note. Implicitly uses the
---   EntryID as the chunk id.
-cInCollection :: People -> String -> String -> String -> Int -> [CiteField] -> String -> Citation
-
--- | InProceedings citation requires author, title, bookTitle, year.
---   Optional fields can be editor, volume or number, series, pages,
---   address, month, organization, publisher, and note. Implicitly uses the
---   EntryID as the chunk id.
-cInProceedings :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Manual (technical documentation) citation requires title. Optional
---   fields can be author, organization, address, edition, month, year, and
---   note. Implicitly uses the EntryID as the chunk id.
-cManual :: String -> [CiteField] -> String -> Citation
-
--- | Master's Thesis citation requires author, title, school, and year.
---   Optional fields can be type, address, month, and note. Implicitly uses
---   the EntryID as the chunk id.
-cMThesis :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Misc citation requires nothing. Optional fields can be author, title,
---   howpublished, month, year, and note. Implicitly uses the EntryID as
---   the chunk id.
-cMisc :: [CiteField] -> String -> Citation
-
--- | PhD Thesis citation requires author, title, school, and year. Optional
---   fields can be type, address, month, and note. Implicitly uses the
---   EntryID as the chunk id.
-cPhDThesis :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Proceedings citation requires title and year. Optional fields can be
---   editor, volume or number, series, address, publisher, note, month, and
---   organization. Implicitly uses the EntryID as the chunk id.
-cProceedings :: String -> Int -> [CiteField] -> String -> Citation
-
--- | Technical Report citation requires author, title, institution, and
---   year. Optional fields can be type, number, address, month, and note.
---   Implicitly uses the EntryID as the chunk id.
-cTechReport :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Unpublished citation requires author, title, and note. Optional fields
---   can be month and year. Implicitly uses the EntryID as the chunk id.
-cUnpublished :: People -> String -> String -> [CiteField] -> String -> Citation
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.Citation.Citation
-instance Language.Drasil.Classes.Core.HasShortName Language.Drasil.Chunk.Citation.Citation
-instance Language.Drasil.Classes.Citations.HasFields Language.Drasil.Chunk.Citation.Citation
-instance Language.Drasil.Classes.Referable Language.Drasil.Chunk.Citation.Citation
-
-module Language.Drasil.Reference
-
--- | Projector function that creates a <a>Reference</a> from something
---   <a>Referable</a>.
-makeRef2 :: (Referable l, HasShortName l) => l -> Reference
-
--- | Makes a reference from the given argument and then wraps it into a
---   <a>Sentence</a>.
-makeRef2S :: (Referable l, HasShortName l) => l -> Sentence
-
--- | Similar to <a>makeRef2</a>, but only turns a citation into a
---   reference.
-makeCite :: Citation -> Reference
-
--- | Similar to <a>makeRef2S</a>, but only takes a citation.
-makeCiteS :: Citation -> Sentence
-
--- | Makes a <a>Reference</a> from a <a>Citation</a> with additional
---   information.
-makeCiteInfo :: Citation -> RefInfo -> Reference
-
--- | Makes a <a>Reference</a> from a <a>Citation</a> with additional
---   information and then wraps into <a>Sentence</a> form.
-makeCiteInfoS :: Citation -> RefInfo -> Sentence
-
-module Language.Drasil.Document.Core
-
--- | Denotes the different possible types that can be used as a list.
-data ListType
-
--- | Bulleted list.
-Bullet :: [(ItemType, Maybe String)] -> ListType
-
--- | Enumerated list.
-Numeric :: [(ItemType, Maybe String)] -> ListType
-
--- | Simple list with items denoted by <tt>-</tt>.
-Simple :: [ListTuple] -> ListType
-
--- | Descriptive list, renders as "Title: Item" (see <a>ListTuple</a>).
-Desc :: [ListTuple] -> ListType
-
--- | Renders a list of "<tt><a>Title</a></tt> is the <tt>Item</tt>".
-Definitions :: [ListTuple] -> ListType
-
--- | Denotes how something should behave in a list (<a>ListType</a>).
-data ItemType
-
--- | Standard singular item.
-Flat :: Sentence -> ItemType
-
--- | Nest a list (<a>ListType</a>) as an item.
-Nested :: Header -> ListType -> ItemType
-
--- | MaxWidthPercent should be kept in the range 1-100. Values outside this
---   range may have unexpected results. Used for specifying max figure
---   width as <tt>pagewidth*MaxWidthPercent/100</tt>.
-type MaxWidthPercent = Float
-type Title = Sentence
-type Author = Sentence
-type Header = Sentence " Used when creating sublists."
-type Depth = Int
-type Width = Float
-type Height = Float
-type ListTuple = (Title, ItemType, Maybe String) " Formats as Title: Item."
-type Filepath = String
-type Lbl = Sentence
-
--- | Contents may be labelled or unlabelled.
-data Contents
-UlC :: UnlabelledContent -> Contents
-LlC :: LabelledContent -> Contents
-
--- | Types of definitions (general, instance, theory, or data).
-data DType
-General :: DType
-Instance :: DType
-Theory :: DType
-Data :: DType
-
--- | Types of layout objects we deal with explicitly.
-data RawContent
-
--- | table has: header-row, data(rows), label/caption, and a bool that
---   determines whether or not to show label.
-Table :: [Sentence] -> [[Sentence]] -> Title -> Bool -> RawContent
-
--- | Paragraphs are just sentences.
-Paragraph :: Sentence -> RawContent
-
--- | Block of Equations holds an expression.
-EqnBlock :: Expr -> RawContent
-
--- | Grants the ability to label a group of <a>RawContent</a>.
-DerivBlock :: Sentence -> [RawContent] -> RawContent
-
--- | For enumerated lists.
-Enumeration :: ListType -> RawContent
-
--- | Defines something with a type, identifier, and <a>Contents</a>.
-Defini :: DType -> [(Identifier, [Contents])] -> RawContent
-
--- | Should use relative file path.
-Figure :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
-
--- | Grants the ability to reference something.
-Bib :: BibRef -> RawContent
-
--- | Contain a graph with coordinates (<a>Sentence</a>s), maybe a width and
---   height, and a label (<a>Sentence</a>). TODO: Fill this one in. | An
---   identifier is just a <a>String</a>.
-Graph :: [(Sentence, Sentence)] -> Maybe Width -> Maybe Height -> Lbl -> RawContent
-type Identifier = String
-
--- | Contains a <a>Reference</a> and <a>RawContent</a>.
-data LabelledContent
-LblC :: Reference -> RawContent -> LabelledContent
-[_ref] :: LabelledContent -> Reference
-[_ctype] :: LabelledContent -> RawContent
-
--- | Only contains <a>RawContent</a>.
-newtype UnlabelledContent
-UnlblC :: RawContent -> UnlabelledContent
-[_cntnts] :: UnlabelledContent -> RawContent
-ref :: Lens' LabelledContent Reference
-ctype :: Lens' LabelledContent RawContent
-cntnts :: Iso' UnlabelledContent RawContent
-
--- | Members of this class must have <a>RawContent</a>.
-class HasContents c
-
--- | Provides a <tt>Lens</tt> to the <a>RawContent</a>.
-accessContents :: HasContents c => Lens' c RawContent
-
--- | Reference the different types of <a>RawContent</a> in different
---   manners.
-refLabelledCon :: RawContent -> IRefProg
-instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.LabelledContent
-instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.UnlabelledContent
-instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.Contents
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Document.Core.LabelledContent
-instance Language.Drasil.Classes.Core.HasRefAddress Language.Drasil.Document.Core.LabelledContent
-instance Language.Drasil.Classes.Core.HasShortName Language.Drasil.Document.Core.LabelledContent
-instance Language.Drasil.Classes.Referable Language.Drasil.Document.Core.LabelledContent
-
-
--- | Document Description Language
-module Language.Drasil.Document
-
--- | Section Contents are split into subsections or contents, where
---   contents are standard layout objects (see <a>Contents</a>).
-data SecCons
-Sub :: Section -> SecCons
-Con :: Contents -> SecCons
-
--- | Sections have a title (<a>Sentence</a>), a list of contents
---   (<a>SecCons</a>) and a shortname (<a>Reference</a>).
-data Section
-Section :: Title -> [SecCons] -> Reference -> Section
-[tle] :: Section -> Title
-[cons] :: Section -> [SecCons]
-[_lab] :: Section -> Reference
-lab :: Lens' Section Reference
-
--- | A Document has a Title (<a>Sentence</a>), Author(s) (<a>Sentence</a>),
---   and <a>Section</a>s which hold the contents of the document.
-data Document
-Document :: Title -> Author -> [Section] -> Document
-
--- | Smart constructor for labelled content chunks.
-llcc :: Reference -> RawContent -> LabelledContent
-
--- | Smart constructor for unlabelled content chunks (no <a>Reference</a>).
-ulcc :: RawContent -> UnlabelledContent
-
--- | Smart constructor that wraps <a>UnlabelledContent</a> into
---   <a>Contents</a>.
-mkParagraph :: Sentence -> Contents
-
--- | Smart constructor that wraps <a>LabelledContent</a> into
---   <a>Contents</a>.
-mkFig :: Reference -> RawContent -> Contents
-
--- | Smart constructor similar to <a>llcc</a>, but takes in
---   <a>RawContent</a> first.
-mkRawLC :: RawContent -> Reference -> LabelledContent
-
--- | Smart constructor for creating <a>Section</a>s with a title
---   (<a>Sentence</a>), introductory contents (ie. paragraphs, tables,
---   etc.), a list of subsections, and a shortname (<a>Reference</a>).
-section :: Sentence -> [Contents] -> [Section] -> Reference -> Section
-
--- | Smart constructor for retrieving the contents (<a>Section</a>s) from a
---   <a>Document</a>.
-extractSection :: Document -> [Section]
-
--- | Smart constructor for retrieving the subsections (<a>Section</a>s)
---   within a <a>Section</a>.
-getSec :: Section -> [Section]
-
--- | Helper to retrieve subsections (<a>Section</a>s) from section contents
---   (<a>SecCons</a>).
-getSecCons :: SecCons -> [Section]
-
--- | <a>Figure</a> smart constructor with a <a>Lbl</a> and a
---   <a>Filepath</a>. Assumes 100% of page width as max width.
-fig :: Lbl -> Filepath -> RawContent
-
--- | <a>Figure</a> smart constructor that allows for customized max widths.
-figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
-
--- | Create a reference for a table. Takes in the name of a table (which
---   will also be used for its shortname).
-makeTabRef :: String -> Reference
-
--- | Create a reference for a figure. Takes in the name of a figure (which
---   will also be used for its shortname).
-makeFigRef :: String -> Reference
-
--- | Create a reference for a section. Takes in the name of a section and a
---   shortname for the section.
-makeSecRef :: String -> String -> Reference
-
--- | Create a reference for a list. Takes in the name of the list and a
---   shortname for the list.
-makeLstRef :: String -> String -> Reference
-
--- | Create a reference for a <a>URI</a>.
-makeURI :: UID -> String -> ShortName -> Reference
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Document.Section
-instance Language.Drasil.Classes.Core.HasShortName Language.Drasil.Document.Section
-instance Language.Drasil.Classes.Referable Language.Drasil.Document.Section
-
-
--- | Defining classes that represent knowledge about Documents
-module Language.Drasil.Classes.Document
-
--- | Some documents, as well as some pieces of knowledge, have citations.
-class HasCitation c
-
--- | Provides a <tt>Lens</tt> to the citations.
-getCitations :: HasCitation c => Lens' c [Citation]
 
 module Language.Drasil.Chunk.UnitDefn
 
@@ -3916,6 +3920,16 @@ class HasSymbol c
 -- | Provides the <a>Symbol</a> for a particular stage of generation.
 symbol :: HasSymbol c => c -> Stage -> Symbol
 
+-- | Members of this class have the ability to be referenced.
+class HasUID s => Referable s
+
+-- | The referencing address (what we're linking to). Only visible in the
+--   source (tex/html).
+refAdd :: Referable s => s -> String
+
+-- | Alternate form of reference.
+renderRef :: Referable s => s -> LblType
+
 -- | <tt>Citation</tt>s should have a fields (<a>CiteField</a>).
 class HasFields c
 
@@ -4639,8 +4653,9 @@ data Sentence
 -- | Lifts an expression into a Sentence.
 [E] :: Expr -> Sentence
 
--- | Lifts a Reference into a Sentence.
-[Ref] :: Reference -> Sentence
+-- | Takes a <a>UID</a> to a reference. Resolves the reference later
+--   (similar to Ch).
+[Ref] :: UID -> RefInfo -> Sentence
 
 -- | Adds quotation marks around a Sentence.
 [Quote] :: Sentence -> Sentence
@@ -4697,8 +4712,8 @@ sDash :: Sentence -> Sentence -> Sentence
 -- | Helper for wrapping <a>Sentence</a>s in parentheses.
 sParen :: Sentence -> Sentence
 
--- | This is to collect <a>UID</a>s that are printed out as a
---   <tt>Symbol</tt>.
+-- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
+--   a <tt>Symbol</tt>.
 sdep :: Sentence -> [UID]
 shortdep :: Sentence -> [UID]
 
@@ -4912,16 +4927,6 @@ nounPhraseSP :: String -> NP
 --   Used for Requirements, Assumptions, LikelyChanges, etc. to allow for
 --   referencing. Plural case is just <a>AddS</a>.
 nounPhraseSent :: Sentence -> NP
-
--- | Members of this class have the ability to be referenced.
-class HasUID s => Referable s
-
--- | The referencing address (what we're linking to). Only visible in the
---   source (tex/html).
-refAdd :: Referable s => s -> String
-
--- | Alternate form of reference.
-renderRef :: Referable s => s -> LblType
 
 -- | A Document has a Title (<a>Sentence</a>), Author(s) (<a>Sentence</a>),
 --   and <a>Section</a>s which hold the contents of the document.
@@ -5329,8 +5334,7 @@ upperLeft :: Symbol -> Symbol -> Symbol
 -- | Helper for creating a Vector symbol.
 vec :: Symbol -> Symbol
 
--- | Makes a reference from the given argument and then wraps it into a
---   <a>Sentence</a>.
+-- | Takes the reference <tt>UID</tt> and wraps it into a <a>Sentence</a>.
 makeRef2S :: (Referable l, HasShortName l) => l -> Sentence
 
 -- | Similar to <a>makeRef2</a>, but only turns a citation into a
@@ -5351,6 +5355,9 @@ makeCiteInfo :: Citation -> RefInfo -> Reference
 -- | Makes a <a>Reference</a> from a <a>Citation</a> with additional
 --   information and then wraps into <a>Sentence</a> form.
 makeCiteInfoS :: Citation -> RefInfo -> Sentence
+
+-- | Smart constructor for making a <a>Referable</a> <a>Reference</a>.
+rw :: (Referable r, HasShortName r) => r -> Reference
 
 -- | Retrieves the <a>String</a> contained in a <a>LblType</a>.
 getAdd :: LblType -> String

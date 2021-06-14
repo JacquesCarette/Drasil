@@ -275,6 +275,9 @@ valsOfAuxCons :: [Contents] -> [Section] -> Section
 -- | Makes a <a>Reference</a> to a <a>Section</a>.
 valsOfAuxConsLabel :: Reference
 
+-- | Collections all <a>Section</a> <a>Reference</a>s.
+sectionReferences :: [Reference]
+
 module Drasil.DocumentLanguage.Units
 
 -- | Get the units, if they exist, and wrap them as a <a>Sentence</a>.
@@ -467,7 +470,7 @@ data GSDSub
 -- | User characteristics.
 [UsrChars] :: [Contents] -> GSDSub
 
--- | Systen constraints.
+-- | System constraints.
 [SystCons] :: [Contents] -> [Section] -> GSDSub
 
 -- | Introduction section. Contents are top level followed by a list of
@@ -595,6 +598,7 @@ Derived :: TUIntro
 
 -- | Purpose of the table of units.
 TUPurpose :: TUIntro
+getTraceConfigUID :: TraceConfig -> UID
 
 -- | Fields that should be displayed in definitions.
 data Field
@@ -642,6 +646,9 @@ ddRefDB :: ModelDB -> RefMap DataDefinition
 -- | Constructor for creating a <a>ModelDB</a>.
 mdb :: [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> ModelDB
 
+-- | Helper that gets a table of constants from a <a>QDefinition</a>.
+tableOfConstants :: [QDefinition] -> LabelledContent
+
 -- | Combines <a>purpDocPara1</a> and <a>developmentProcessParagraph</a>.
 --   Verbosity controls if the <a>developmentProcessParagraph</a> is added
 --   or not.
@@ -668,6 +675,9 @@ mkQRTupleRef :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => [i] 
 --   caption.
 mkValsSourceTable :: (Quantity i, MayHaveUnit i) => [(i, Sentence)] -> String -> Sentence -> LabelledContent
 
+-- | Reference for the Required Inputs table.
+reqInputsRef :: Reference
+
 -- | General <a>Sentence</a> that describes some auxiliary specifications
 --   of the system.
 auxSpecSent :: Sentence
@@ -676,9 +686,28 @@ auxSpecSent :: Sentence
 --   list of terms.
 termDefnF' :: Maybe Sentence -> [Contents] -> Section
 
+-- | Creates the input Data Constraints Table.
+inDataConstTbl :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => [c] -> LabelledContent
+
+-- | Creates the output Data Constraints Table.
+outDataConstTbl :: (Quantity c, Constrained c) => [c] -> LabelledContent
+
+-- | Table of abbreviations and acronyms UID and shortname.
+tableAbbAccRef :: Reference
+
+-- | Makes a reference to the Table of Symbols.
+symbTableRef :: Reference
+
+-- | Makes a reference to the Table of Units.
+unitTableRef :: Reference
+
 -- | Contains traceability matrix assumptions, other assumptions,
 --   refinement, and other requirements.
 traceMatStandard :: SystemInformation -> [TraceConfig]
+
+-- | Records other requirements. Converts the <a>SystemInformation</a> into
+--   a <a>TraceConfig</a>.
+traceMatOtherReq :: SystemInformation -> TraceConfig
 
 -- | Extracts <a>Sentence</a>s from a document description.
 getDocDesc :: DocDesc -> [Sentence]
@@ -695,3 +724,4 @@ solutionLabel :: Reference
 
 -- | Makes a reference label for a characteristics statement.
 characteristicsLabel :: Reference
+secRefs :: [Reference]

@@ -15,6 +15,7 @@ module Database.Drasil
 --   turn, these maps must contain every chunk definition or concept used
 --   in its respective example, else an error is thrown.
 data ChunkDB
+CDB :: SymbolMap -> TermMap -> ConceptMap -> UnitMap -> TraceMap -> RefbyMap -> DatadefnMap -> InsModelMap -> GendefMap -> TheoryModelMap -> ConceptInstanceMap -> SectionMap -> LabelledContentMap -> ReferenceMap -> ChunkDB
 
 -- | A reference map, used to hold a <a>UID</a> and where it is referenced
 --   (<a>UID</a>s).
@@ -50,7 +51,7 @@ asOrderedList :: UMap a -> [a]
 --   <li><a>Section</a>s (for <a>SectionMap</a>),</li>
 --   <li><a>LabelledContent</a>s (for <a>LabelledContentMap</a>).</li>
 --   </ul>
-cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) => [q] -> [t] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [Section] -> [LabelledContent] -> ChunkDB
+cdb :: (Quantity q, MayHaveUnit q, Idea t, Concept c, IsUnit u) => [q] -> [t] -> [c] -> [u] -> [DataDefinition] -> [InstanceModel] -> [GenDefn] -> [TheoryModel] -> [ConceptInstance] -> [Section] -> [LabelledContent] -> [Reference] -> ChunkDB
 
 -- | Gets the units of a <a>Quantity</a> as <a>UnitDefn</a>s.
 collectUnits :: Quantity c => ChunkDB -> [c] -> [UnitDefn]
@@ -79,6 +80,11 @@ gendefTable :: Lens' ChunkDB GendefMap
 
 -- | Translates a traceability map into a reference map.
 generateRefbyMap :: TraceMap -> RefbyMap
+
+-- | Looks up a <a>UID</a> in the reference table from the <a>ChunkDB</a>.
+--   If nothing is found, an error is thrown.
+refResolve :: UID -> ReferenceMap -> Reference
+refTable :: Lens' ChunkDB ReferenceMap
 
 -- | General smart constructor for making a <a>UMap</a> out of anything
 --   that has a <a>UID</a>.

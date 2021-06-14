@@ -509,15 +509,15 @@ names' :: Expr -> [String]
 --   names (similar to <a>names</a>).
 namesRI :: RealInterval Expr Expr -> [String]
 
--- | This is to collect <a>UID</a>s that are printed out as a
---   <tt>Symbol</tt>.
+-- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
+--   a <tt>Symbol</tt>.
 sdep :: Sentence -> [UID]
 
--- | Generic traverse of all positions that could lead to reference
+-- | Generic traverse of all positions that could lead to <i>reference</i>
 --   <a>UID</a>s from <a>Sentence</a>s.
 lnames :: Sentence -> [UID]
 
--- | Get reference <a>UID</a>s from <a>Sentence</a>s.
+-- | Get <i>reference</i> <a>UID</a>s from <a>Sentence</a>s.
 lnames' :: [Sentence] -> [UID]
 
 -- | precA - precedence for arithmetic-related Binary-Associative
@@ -1000,6 +1000,16 @@ class HasSymbol c
 
 -- | Provides the <a>Symbol</a> for a particular stage of generation.
 symbol :: HasSymbol c => c -> Stage -> Symbol
+
+-- | Members of this class have the ability to be referenced.
+class HasUID s => Referable s
+
+-- | The referencing address (what we're linking to). Only visible in the
+--   source (tex/html).
+refAdd :: Referable s => s -> String
+
+-- | Alternate form of reference.
+renderRef :: Referable s => s -> LblType
 
 -- | <tt>Citation</tt>s should have a fields (<a>CiteField</a>).
 class HasFields c
@@ -1724,8 +1734,9 @@ data Sentence
 -- | Lifts an expression into a Sentence.
 [E] :: Expr -> Sentence
 
--- | Lifts a Reference into a Sentence.
-[Ref] :: Reference -> Sentence
+-- | Takes a <a>UID</a> to a reference. Resolves the reference later
+--   (similar to Ch).
+[Ref] :: UID -> RefInfo -> Sentence
 
 -- | Adds quotation marks around a Sentence.
 [Quote] :: Sentence -> Sentence
@@ -1782,8 +1793,8 @@ sDash :: Sentence -> Sentence -> Sentence
 -- | Helper for wrapping <a>Sentence</a>s in parentheses.
 sParen :: Sentence -> Sentence
 
--- | This is to collect <a>UID</a>s that are printed out as a
---   <tt>Symbol</tt>.
+-- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
+--   a <tt>Symbol</tt>.
 sdep :: Sentence -> [UID]
 shortdep :: Sentence -> [UID]
 
@@ -1997,16 +2008,6 @@ nounPhraseSP :: String -> NP
 --   Used for Requirements, Assumptions, LikelyChanges, etc. to allow for
 --   referencing. Plural case is just <a>AddS</a>.
 nounPhraseSent :: Sentence -> NP
-
--- | Members of this class have the ability to be referenced.
-class HasUID s => Referable s
-
--- | The referencing address (what we're linking to). Only visible in the
---   source (tex/html).
-refAdd :: Referable s => s -> String
-
--- | Alternate form of reference.
-renderRef :: Referable s => s -> LblType
 
 -- | A Document has a Title (<a>Sentence</a>), Author(s) (<a>Sentence</a>),
 --   and <a>Section</a>s which hold the contents of the document.
@@ -2414,8 +2415,7 @@ upperLeft :: Symbol -> Symbol -> Symbol
 -- | Helper for creating a Vector symbol.
 vec :: Symbol -> Symbol
 
--- | Makes a reference from the given argument and then wraps it into a
---   <a>Sentence</a>.
+-- | Takes the reference <tt>UID</tt> and wraps it into a <a>Sentence</a>.
 makeRef2S :: (Referable l, HasShortName l) => l -> Sentence
 
 -- | Similar to <a>makeRef2</a>, but only turns a citation into a
@@ -2436,6 +2436,9 @@ makeCiteInfo :: Citation -> RefInfo -> Reference
 -- | Makes a <a>Reference</a> from a <a>Citation</a> with additional
 --   information and then wraps into <a>Sentence</a> form.
 makeCiteInfoS :: Citation -> RefInfo -> Sentence
+
+-- | Smart constructor for making a <a>Referable</a> <a>Reference</a>.
+rw :: (Referable r, HasShortName r) => r -> Reference
 
 -- | Retrieves the <a>String</a> contained in a <a>LblType</a>.
 getAdd :: LblType -> String

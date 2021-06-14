@@ -310,6 +310,7 @@ variable :: NamedChunk
 video :: NamedChunk
 verification :: NamedChunk
 year :: NamedChunk
+abbAcc :: NamedChunk
 charOfIR :: NamedChunk
 consVals :: NamedChunk
 corSol :: NamedChunk
@@ -317,7 +318,9 @@ orgOfDoc :: NamedChunk
 propOfCorSol :: NamedChunk
 prpsOfDoc :: NamedChunk
 refmat :: NamedChunk
+reqInput :: NamedChunk
 scpOfReq :: NamedChunk
+tAuxConsts :: NamedChunk
 tOfSymb :: NamedChunk
 tOfUnit :: NamedChunk
 termAndDef :: NamedChunk
@@ -339,6 +342,8 @@ systemConstraint :: NamedChunk
 sysCont :: NamedChunk
 userCharacteristic :: NamedChunk
 datumConstraint :: NamedChunk
+inDatumConstraint :: NamedChunk
+outDatumConstraint :: NamedChunk
 functionalRequirement :: NamedChunk
 nonfunctionalRequirement :: NamedChunk
 safetyReq :: NamedChunk

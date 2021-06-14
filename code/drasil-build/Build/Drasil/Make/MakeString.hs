@@ -39,15 +39,15 @@ renderVar f (Os nm _ _ _) = f nm
 renderVar f (Implicit nm) = "\"" ++ f nm ++ "\""
 renderVar f (Free nm) = f nm
 
--- | Constructor for converting a String into a MakeString.
+-- | Constructor for converting a 'String' into a 'MakeString'.
 makeS :: String -> MakeString
 makeS = Mr
 
--- | Constructor for Windows OS variables.
+-- | Constructor for Windows 'Os' variables.
 mkWindowsVar :: VarName -> VarVal -> VarVal -> MakeString
 mkWindowsVar n w e = Mv $ Os n w e e
 
--- | Constructor for 'OS' variables.
+-- | Constructor for 'Os' variables.
 mkOSVar :: VarName -> VarVal -> VarVal -> VarVal -> MakeString
 mkOSVar n w m l = Mv $ Os n w m l
 

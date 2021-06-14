@@ -44,7 +44,7 @@ unmodularDesc = do
 -- If user chose Bundled, this module includes the structure for holding the 
 -- input values, but not if they chose Unbundled.
 -- If the user chose Combined, this module includes the input-related functions,
--- but not if they chose Separated.
+-- but not if they chose 'Separated'.
 inputParametersDesc :: GenState [Description]
 inputParametersDesc = do
   g <- get
@@ -61,7 +61,7 @@ inputParametersDesc = do
 
 -- | Returns description of the input constructor, checking whether each 
 -- possible method that may be called by the constructor is defined, and 
--- including it in the description if so
+-- including it in the description if so.
 inputConstructorDesc :: GenState Description
 inputConstructorDesc = do
   g <- get
@@ -191,11 +191,11 @@ dvFuncDesc = do
         " inputs"
   return $ dvDesc $ "derived_values" `elem` defList g
 
--- | Description of the generated Calculations module
+-- | Description of the generated Calculations module.
 calcModDesc :: Description
 calcModDesc = "Provides functions for calculating the outputs"
 
--- | Returns description for generated output-printing function, if it exists
+-- | Returns description for generated output-printing function, if it exists.
 woFuncDesc :: GenState Description
 woFuncDesc = do
   g <- get

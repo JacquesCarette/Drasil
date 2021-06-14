@@ -21,6 +21,7 @@ import GOOL.Drasil (onCodeList, pyName, pyVersion)
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Text.PrettyPrint.HughesPJ (Doc)
 
+-- | Holds a Python project.
 newtype PythonProject a = PP {unPP :: a}
 
 instance Functor PythonProject where
@@ -56,5 +57,6 @@ instance AuxiliarySym PythonProject where
   auxHelperDoc = unPP
   auxFromData fp d = return $ ad fp d
 
+-- | Default runnable information for Python files.
 pyRunnable :: Maybe Runnable
 pyRunnable = interpMM "python"

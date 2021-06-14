@@ -116,7 +116,7 @@ instance CodeIdea    CodeFuncChunk where
   codeName = codeName . view ccf
   codeChunk c = CodeC (view qc $ view ccf c) Func
 -- | Equal if 'UID's are equal.
-  instance Eq          CodeFuncChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
+instance Eq          CodeFuncChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 -- | Finds the units of the 'CodeChunk' used to make the 'CodeFuncChunk'.
 instance MayHaveUnit CodeFuncChunk where getUnit = getUnit . view ccf
 

@@ -24,36 +24,36 @@ import Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (doxConfigName,
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface ( ReadMeInfo(..),
   AuxiliarySym(Auxiliary, AuxHelper, auxHelperDoc, auxFromData))
 
--- Defines a Doxygen configuration file
+-- | Defines a Doxygen configuration file.
 doxConfig :: (AuxiliarySym r) => r (AuxHelper r) -> String -> 
   GOOLState -> Verbosity -> r (Auxiliary r)
 doxConfig opt pName s v = auxFromData doxConfigName (makeDoxConfig pName s 
   (auxHelperDoc opt) v)
 
--- Defines a markdown file
+-- | Defines a markdown file.
 readMe :: (AuxiliarySym r) => ReadMeInfo -> r (Auxiliary r)
 readMe rmi= auxFromData readMeName (makeReadMe rmi)
 
--- Defines a sample input file
+-- | Defines a sample input file.
 sampleInput :: (AuxiliarySym r) => ChunkDB -> DataDesc -> [Expr] -> 
   r (Auxiliary r)
 sampleInput db d sd = auxFromData sampleInputName (makeInputFile db d sd)
 
--- Defines a Makefile
+-- | Defines a Makefile.
 makefile :: (AuxiliarySym r) => Maybe BuildConfig -> Maybe Runnable -> 
   Maybe DocConfig -> GOOLState -> ProgData -> r (Auxiliary r)
 makefile bc r dc s p = auxFromData makefileName (makeBuild dc bc r s p)
 
--- Changes a Runnable to Nothing if the user chose Library.
+-- | Changes a 'Runnable' to 'Nothing' if the user chose 'Library' for the 'ImplementationType'.
 noRunIfLib :: ImplementationType -> Maybe Runnable -> Maybe Runnable
 noRunIfLib Library _ = Nothing
 noRunIfLib Program r = r
 
--- A DocConfig for Doxygen documentation
+-- | A DocConfig for Doxygen documentation.
 doxDocConfig :: DocConfig
 doxDocConfig = doxygenDocConfig doxConfigName
 
--- Returns Nothing if no comments are enabled
+-- | Returns Nothing if no comments are enabled.
 docIfEnabled :: [Comments] -> DocConfig -> Maybe DocConfig
 docIfEnabled [] _ = Nothing
 docIfEnabled _ d = Just d

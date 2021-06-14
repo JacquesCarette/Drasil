@@ -43,11 +43,11 @@ renderVar f (Free nm) = f nm
 makeS :: String -> MakeString
 makeS = Mr
 
--- | Constructor for Windows 'Os' variables.
+-- | Constructor for Windows OS variables.
 mkWindowsVar :: VarName -> VarVal -> VarVal -> MakeString
 mkWindowsVar n w e = Mv $ Os n w e e
 
--- | Constructor for 'Os' variables.
+-- | Constructor for OS variables.
 mkOSVar :: VarName -> VarVal -> VarVal -> VarVal -> MakeString
 mkOSVar n w m l = Mv $ Os n w m l
 

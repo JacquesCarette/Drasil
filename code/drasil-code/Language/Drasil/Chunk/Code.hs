@@ -20,7 +20,7 @@ import qualified Data.Map as Map
 import Text.PrettyPrint.HughesPJ (render)
 
 -- not using lenses for now
--- | Information that is needed to translate an idea into code. 
+-- | A 'CodeIdea' must include some code and its name. 
 class CodeIdea c where
   -- | Name of the idea.
   codeName      :: c -> String

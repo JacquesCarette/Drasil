@@ -1,4 +1,4 @@
-module Drasil.Projectile.Body (printSetting, si, srs, projectileTitle, symbols) where
+module Drasil.Projectile.Body (printSetting, si, srs, projectileTitle, symbols, acronyms) where
 
 import Language.Drasil hiding (Symbol(..), Vector)
 import Language.Drasil.Code (relToQD)

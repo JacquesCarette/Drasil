@@ -1,25 +1,31 @@
 module Drasil.Projectile.Lesson.Review where
 
+import Data.Drasil.Concepts.Physics (motion, constAccel, oneD)
 import qualified Drasil.Projectile.Expressions as E (speed', scalarPos', rectNoTime)
-import qualified Data.Drasil.Quantities.Physics as QP (speed, scalarPos, iPos, iSpeed)
+import qualified Data.Drasil.Quantities.Physics as QP (speed, time, scalarPos, iPos, iSpeed, constAccel)
 import Language.Drasil
 import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 
-reviewContextP1, reviewEq, reviewContextP2 :: Contents
+reviewContent :: [Contents]
+reviewContent = [reviewContextP1, rectVel, rectPos, reactnoTime, reviewEq, reviewContextP2]
+
+reviewContextP1, reviewEq, rectVel, rectPos, reactnoTime, reviewContextP2 :: Contents
 reviewContextP1
-  = foldlSP
-      [S "As covered previously, the equations relating velocity( 𝑣 ), position ( 𝑝 )",
-       S "and time ( 𝑡 ) for motion in one dimension with constant acceleration ( 𝑎𝑐 ) are as follows:"]
+  = foldlSP_
+      [S "As covered previously, the equations relating velocity (", E (sy QP.speed) +:+ S "), position (", 
+        E (sy QP.scalarPos) +:+ S"), and time (", E (sy QP.time) +:+ S ") for",
+        phrase motion `S.sIn` S "one dimension with constant acceleration (", E (sy QP.constAccel) +:+
+        S ") are as follows:"]
 
 reviewEq 
   = foldlSP 
-      [E (sy QP.speed $= E.speed'),
-       S "where", E (sy QP.iSpeed) `S.sAnd` E (sy QP.iPos), 
+      [S "where", E (sy QP.iSpeed) `S.sAnd` E (sy QP.iPos), 
        S "are the initial velocity and position, respectively"]
 
-reviewEqns :: [Expr]
-reviewEqns = [sy QP.speed $= E.speed', sy QP.scalarPos $= E.scalarPos', E.rectNoTime]
+rectVel = eqUnR'(sy QP.speed $= E.speed')
+rectPos = eqUnR' (sy QP.scalarPos $= E.scalarPos')
+reactnoTime = eqUnR'(E.rectNoTime)
 
 reviewContextP2
   = foldlSP 

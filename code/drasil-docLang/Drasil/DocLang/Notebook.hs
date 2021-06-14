@@ -6,7 +6,7 @@ import Utils.Drasil.Sentence
 import qualified Data.Drasil.Concepts.Documentation as Doc (notebook, introduction, 
   prpsOfDoc, review, body, mainIdea, procForAnls, summary, methAndAnls,method_, 
   example, result, appendix, reference)
-import qualified Data.Drasil.Concepts.Physics (motion, hormotion, vermotion)
+import qualified Data.Drasil.Concepts.Physics as P (motion, horizontalMotion, verticalMotion)
 
 -- | Notebook constructor. 
 -- Create the notebook from given system name, authors, and sections
@@ -23,9 +23,9 @@ body        cs ss = section' (titleize Doc.body)             cs ss "Body"
 review      cs ss = section' (titleize Doc.review)           cs ss "Review"
 
 mainIdea    cs ss = section' (titleize Doc.mainIdea)         cs ss "MainIdea"
---motion      cs ss = section' (titleize motion)               cs ss "Motion"
---hormotion   cs ss = section' (titleize hormotion)            cs ss "HorMotion"
---vermotion   cs ss = section' (titleize vermotion)            cs ss "VerMotion"
+motion      cs ss = section' (titleize P.motion)            cs ss "Motion"
+hormotion   cs ss = section' (titleize P.horizontalMotion)   cs ss "HorizontalMotion"
+vermotion   cs ss = section' (titleize P.verticalMotion)     cs ss "VerticalMotion"
 
 methAndAnls cs ss = section' (titleize' Doc.methAndAnls)     cs ss "MethAnlys"
 method      cs ss = section' (titleize Doc.method_)          cs ss "Method"

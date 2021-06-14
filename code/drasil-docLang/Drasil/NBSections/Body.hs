@@ -12,8 +12,7 @@ bodyIntro = foldlSP [S ""]
 reviewSec :: [Contents] -> Section
 reviewSec cs = NB.review cs []
 
--- Motion
--- **TODO: Rename the subsection
+-- Main Idea
 mainIdeaSec :: [Contents] -> [Section] -> Section
 mainIdeaSec a subSec = NB.mainIdea a subSec
 

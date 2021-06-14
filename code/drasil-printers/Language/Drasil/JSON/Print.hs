@@ -11,6 +11,9 @@ import qualified Language.Drasil as L (DType(Data, Theory, Instance, General), M
 import Language.Drasil.Printing.Import (makeDocument)
 import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),  
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, 
+  Ops(Prod, Inte, Mul, Summ, Or, Add, And, Subt, Iff, Impl, GEq, LEq, Lt, Gt, NEq, Eq,
+  Dot, Cross, Neg, Exp, Not, Dim, Arctan, Arccos, Arcsin, Cot, Csc, Sec, Tan, 
+  Cos, Sin, Log, Ln, Prime, Comma, Boolean, Real, Rational, Natural, Integer, IsIn, Point, Perc),
   Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:)),
   Spacing(Thin), Fonts(Bold, Emph), OverSymb(Hat), Label,
   LinkType(Internal, Cite2, External))
@@ -23,7 +26,7 @@ import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr)
 import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintLaTeX(PL))
 import Language.Drasil.HTML.Monad (unPH)
 import Language.Drasil.HTML.Helpers (th, em, bold, sub, sup, reflinkInfo)
-import Language.Drasil.HTML.Print(renderCite, OpenClose(Open, Close), pOps, fence)
+import Language.Drasil.HTML.Print(renderCite, OpenClose(Open, Close), fence)
 
 import Language.Drasil.JSON.Helpers (makeMetadata, h, jf, formatter, stripnewLine, cell,
  tr, td, image, li, pa, ba, ul, table, quote, refwrap, refID, reflink, reflinkURI)
@@ -66,12 +69,11 @@ printLO :: LayoutObj -> Doc
 printLO (Header n contents l)            = quote (h (n + 1) <> pSpec contents) $$ refID (pSpec l)
 printLO (HDiv _ layoutObs EmptyS)        = vcat (map printLO layoutObs)
 printLO (HDiv _ layoutObs l)             = refID (pSpec l) $$ (vcat (map printLO layoutObs))
---printLO (HDiv _ layoutObs _)            = makeSec layoutObs
 printLO (Paragraph contents)             = quote (stripnewLine (show(pSpec contents)))
-printLO (EqnBlock contents)              = quote (jf (show mathEqn))
+printLO (EqnBlock contents)              = quote (jf (show mathEqn)) 
   where
     toMathHelper (PL g) = PL (\_ -> g Math)
-    mjDelimDisp d  = text "$" <> stripnewLine (show d) <> text "$" 
+    mjDelimDisp d  = text "$$" <> stripnewLine (show d) <> text "$$" 
     mathEqn = mjDelimDisp $ printMath $ toMathHelper $ TeX.spec contents
 printLO (Table _ rows r _ _)            = quote empty $$ makeTable rows (pSpec r)
 printLO (Definition dt ssPs l)          = quote (text "<br>") $$ makeDefn dt ssPs (pSpec l)
@@ -94,7 +96,7 @@ makeSec (x:xs)   = printLO x $$ makeSec xs
 
 
 pSpec :: Spec -> Doc
-pSpec (E e)  = em $ pExpr e
+pSpec (E e)  = text "$" <> pExpr e <> text "$"
 pSpec (a :+: b) = pSpec a <> pSpec b
 pSpec (S s)     = either error (text . concatMap escapeChars) $ checkValidStr s invalid
   where
@@ -121,17 +123,64 @@ pExpr (Ident s)      = text s
 pExpr (Label s)      = text s
 pExpr (Spec s)       = text $ unPH $ L.special s
 pExpr (Sub e)        = sub $ pExpr e
-pExpr (Sup e)        = sup $ pExpr e
+pExpr (Sup e)        = text "^" <> pExpr e
 pExpr (Over Hat s)   = pExpr s <> text "&#770;"
 pExpr (MO o)         = text $ pOps o
 pExpr (Fenced l r e) = text (fence Open l) <> pExpr e <> text (fence Close r)
 pExpr (Font Bold e)  = bold $ pExpr e
-pExpr (Font Emph e)  = text "<em>" <> pExpr e <> text "</em>" -- FIXME
-pExpr (Spc Thin)     = text "&#8239;"
+--pExpr (Font Emph e)  = text "<em>" <> pExpr e <> text "</em>" -- FIXME
+--pExpr (Spc Thin)     = text "&#8239;"
 -- Uses TeX for Mathjax for all other exprs
 pExpr e              = jf (show (mathEqn))
   where mjDelimDisp d = text "$" <> d <> text "$"
         mathEqn = mjDelimDisp $ printMath $ toMath $ TeX.pExpr e
+
+
+-- **TODO: edit all operations in markdown format
+pOps :: Ops -> String
+pOps IsIn     = "&thinsp;&isin;&thinsp;"
+pOps Integer  = "&#8484;"
+pOps Rational = "&#8474;"
+pOps Real     = "&#8477;"
+pOps Natural  = "&#8469;"
+pOps Boolean  = "&#120121;"
+pOps Comma    = ","
+pOps Prime    = "&prime;"
+pOps Log      = "log"
+pOps Ln       = "ln"
+pOps Sin      = "sin"
+pOps Cos      = "cos"
+pOps Tan      = "tan"
+pOps Sec      = "sec"
+pOps Csc      = "csc"
+pOps Cot      = "cot"
+pOps Arcsin   = "arcsin"
+pOps Arccos   = "arccos"
+pOps Arctan   = "arctan"
+pOps Not      = "&not;"
+pOps Dim      = "dim"
+pOps Exp      = "e"
+pOps Neg      = "&minus;"
+pOps Cross    = "&#10799;"
+pOps Dot      = "&sdot;"
+pOps Eq       = " = " -- with spaces?
+pOps NEq      = "&ne;"
+pOps Lt       = "&thinsp;&lt;&thinsp;" --thin spaces make these more readable
+pOps Gt       = "&thinsp;&gt;&thinsp;"
+pOps LEq      = "&thinsp;&le;&thinsp;"
+pOps GEq      = "&thinsp;&ge;&thinsp;"
+pOps Impl     = " &rArr; "
+pOps Iff      = " &hArr; "
+pOps Subt     = " - "
+pOps And      = " &and; "
+pOps Or       = " &or; "
+pOps Add      = " + "
+pOps Mul      = " * "
+pOps Summ     = "&sum"
+pOps Inte     = "&int;"
+pOps Prod     = "&prod;"
+pOps Point    = "."
+pOps Perc     = "%"
 
 
 -- | Renders HTML table, called by 'printLO'

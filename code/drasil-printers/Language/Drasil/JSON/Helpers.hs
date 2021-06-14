@@ -5,6 +5,7 @@ import Text.PrettyPrint (Doc, text, empty, (<>), (<+>), vcat, hcat, cat, nest)
 import Utils.Drasil (replace)
 import Data.List (intersperse)
 import Data.List.Split (splitOn)
+import Text.JSON
 
 import Language.Drasil (MaxWidthPercent)
 import Language.Drasil.HTML.Helpers (img)
@@ -139,6 +140,7 @@ f' (x:xs) = x: f' xs
 f' [] = []
 
 jf, jf' :: String -> Doc
+--jf s = text $ encodeStrict s
 jf s = text $ replace "`" "\'" (formatter s)
 jf' s = text $ f' s
 

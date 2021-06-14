@@ -22,10 +22,10 @@ import Data.Drasil.Concepts.Physics (physicCon)
 import Data.Drasil.People (spencerSmith)
 
 import Drasil.Projectile.Concepts (concepts)
-import Drasil.Projectile.Body (symbols)
+import Drasil.Projectile.Body (symbols, acronyms)
 
 import Drasil.Projectile.Lesson.IntroSection (introContext, reasonList, overviewParagraph)
-import Drasil.Projectile.Lesson.Review (reviewContextP1, reviewEq, reviewContextP2)
+import Drasil.Projectile.Lesson.Review (reviewContent)
 import Drasil.Projectile.Lesson.Motion (motionContextP1, motionContextP2, horMotion, verMotion, summary)
 
 nb :: Document
@@ -40,7 +40,7 @@ mkNB = [
     IntroProg [introContext, reasonList, overviewParagraph] [],
   BodySec $
        BodyProg
-         [Review [reviewContextP1, reviewEq, reviewContextP2],
+         [Review reviewContent,
           MainIdea [motionContextP1, motionContextP2] [horMotion, verMotion, summary],
           MethsAndAnls [mAndaintro] []],
   Bibliography
@@ -69,7 +69,7 @@ si = SI {
 
 symbMap :: ChunkDB
 symbMap = cdb (map qw physicscon ++ symbols) (nw projectileMotion : [] 
-  ++ map nw doccon ++ map nw doccon' ++ map nw physicCon ++ concepts ++ map nw symbols) 
+  ++ map nw doccon ++ map nw doccon' ++ map nw physicCon ++ concepts ++ map nw acronyms ++ map nw symbols) 
   ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] 
 
 usedDB :: ChunkDB

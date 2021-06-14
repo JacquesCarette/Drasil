@@ -55,7 +55,7 @@ scalarPos' :: Expr
 scalarPos' = sy iPos + sy QP.iSpeed * sy time + sy QP.constAccel * square (sy time) / 2
 
 rectNoTime :: Expr
-rectNoTime = square (sy velocity) $= square (sy QP.iSpeed) + 2 * sy QP.constAccel * (sy scalarPos - sy iPos)
+rectNoTime = square (sy QP.iSpeed) $= square (sy QP.iSpeed) + 2 * sy QP.constAccel * (sy scalarPos - sy iPos)
 
 rectPosDerivEqn1, rectPosDerivEqn2, rectPosDerivEqn3 :: Expr
 rectPosDerivEqn1 = sy speed $= deriv (sy scalarPos) time

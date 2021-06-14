@@ -1,4 +1,4 @@
-module Language.Drasil.HTML.Print(genHTML) where
+module Language.Drasil.HTML.Print(genHTML, renderCite, OpenClose(Open, Close), fence) where
 
 import Prelude hiding (print, (<>))
 import Data.List (sortBy)

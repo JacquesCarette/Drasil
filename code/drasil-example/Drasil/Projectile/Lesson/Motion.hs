@@ -1,6 +1,6 @@
 module Drasil.Projectile.Lesson.Motion where
 
-import qualified Drasil.DocLang.Notebook as NB (mainIdea, summary)
+import qualified Drasil.DocLang.Notebook as NB (mainIdea, summary, hormotion, vermotion)
 
 import Drasil.Projectile.Concepts (projectile, projMotion)
 import qualified Data.Drasil.Quantities.Physics as QP (ixVel, iyVel)
@@ -31,7 +31,7 @@ motionContextP2
 
 -- **TODO: mainIdea should be hor and ver motions
 horMotion, verMotion, summary :: Section
-horMotion = NB.mainIdea [intro, equations, concl] []
+horMotion = NB.hormotion [intro, equations, concl] []
   where intro = foldlSP_ [
                   S "For projectile motion the acceleration in the horizontal direction is constant",
                   S "and equal to zero. This value can be substituted in the equations for constant",
@@ -45,7 +45,7 @@ horMotion = NB.mainIdea [intro, equations, concl] []
                   S "the horizontal component of velocity always remains constant during motion",
                   S "In addition to knowing this, we have one more equation"]
                 
-verMotion = NB.mainIdea [intro, equations, concl] []
+verMotion = NB.vermotion [intro, equations, concl] []
   where intro = foldlSP_ [
                   S "Since the positive y axis is directed upward, the acceleration in the vertical direction is",
                   S "This value can be substituted in the equations for constant",

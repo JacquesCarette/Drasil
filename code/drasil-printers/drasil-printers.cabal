@@ -57,4 +57,5 @@ library
     , lens
     , pretty
     , split
+    , json
   default-language: Haskell2010

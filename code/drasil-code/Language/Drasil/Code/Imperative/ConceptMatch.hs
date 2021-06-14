@@ -14,12 +14,11 @@ import Prelude hiding (pi)
 import qualified Data.Map as Map (mapWithKey)
 import Control.Monad.State (State, modify)
 
--- | Concretizes the ConceptMatchMap in Choices to a MatchedConceptMap.
--- Currently we don't have any Choices that would prevent a CodeConcept from 
--- being mapped, so we just take the head of the list of CodeConcepts
--- The conceptMatchMap from choices is passed to chooseConept' internally, this way
--- any codeconcept list can be matched to its appropiate UID
-
+-- | Concretizes the ConceptMatchMap in Choices to a 'MatchedConceptMap'.
+-- Currently we don't have any Choices that would prevent a 'CodeConcept' from 
+-- being mapped, so we just take the head of the list of 'CodeConcept's
+-- The ConceptMatchMap from choices is passed to chooseConept' internally, this way
+-- any 'CodeConcept' list can be matched to its appropiate 'UID'.
 chooseConcept :: Choices -> State [Sentence] MatchedConceptMap
 chooseConcept chs = sequence $ Map.mapWithKey chooseConcept' (conceptMatch chs)
   where chooseConcept' :: UID -> [CodeConcept] -> State [Sentence] CodeConcept
@@ -29,5 +28,6 @@ chooseConcept chs = sequence $ Map.mapWithKey chooseConcept' (conceptMatch chs)
             modify (++ [S "Code Concept" +:+ S uid +:+ S "selected as" +:+. showChs c])
             return c
 
+-- | Translates a 'CodeConcept' into GOOL.
 conceptToGOOL :: (OOProg r) => CodeConcept -> SValue r
 conceptToGOOL Pi = pi

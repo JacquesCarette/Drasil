@@ -28,7 +28,7 @@ data Configuration = Config {genLang :: String, exImp :: Maybe String, opts :: O
 cSharpLabel, cppLabel, goolLabel, javaLabel, objectiveCLabel, pythonLabel,
   luaLabel :: String
 -- | "C#".
-  cSharpLabel = "C#"
+cSharpLabel = "C#"
 -- | "C++".
 cppLabel = "C++"
 -- | "GOOL".

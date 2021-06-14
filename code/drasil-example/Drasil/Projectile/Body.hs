@@ -1,5 +1,6 @@
 module Drasil.Projectile.Body (printSetting, si, srs, projectileTitle) where
 
+import Data.List (nub)
 import Language.Drasil hiding (Symbol(..), Vector)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
@@ -19,7 +20,8 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl,
   SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
   TConvention(..), TSIntro(..), TraceabilitySec(TraceabilityProg),
-  Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb)
+  Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, getTraceConfigUID,
+  secRefs)
 
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
@@ -43,16 +45,16 @@ import Data.Drasil.SI_Units (metre, radian, second)
 import Data.Drasil.Theories.Physics (accelerationTM, velocityTM)
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
-import Drasil.Projectile.Assumptions (assumptions)
+import Drasil.Projectile.Assumptions (assumptions, assumpRefs)
 import Drasil.Projectile.Concepts (concepts, landingPosNC,
   launcher, projectile, target)
-import Drasil.Projectile.DataDefs (dataDefs)
-import Drasil.Projectile.Figures (figLaunch)
-import Drasil.Projectile.GenDefs (genDefns)
-import Drasil.Projectile.Goals (goals)
-import Drasil.Projectile.IMods (iMods)
-import Drasil.Projectile.References (citations)
-import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs)
+import Drasil.Projectile.DataDefs (dataDefs, dataDefRefs)
+import Drasil.Projectile.Figures (figLaunch, figRefs)
+import Drasil.Projectile.GenDefs (genDefns, genDefRefs)
+import Drasil.Projectile.Goals (goals, goalRefs)
+import Drasil.Projectile.IMods (iMods, iModRefs)
+import Drasil.Projectile.References (citations, citeRefs)
+import Drasil.Projectile.Requirements (funcReqs, nonfuncReqs, reqRefs)
 import Drasil.Projectile.Unitals
 
 import Theory.Drasil (TheoryModel)
@@ -143,11 +145,11 @@ symbMap = cdb (qw pi_ : map qw physicscon ++ unitalQuants ++ symbols)
     map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw physicCon' ++
     map nw physicscon ++ map nw mathcon ++ concepts ++ unitalIdeas ++
     map nw acronyms ++ map nw symbols ++ map nw [metre, radian, second]) (cw pi_ : map cw constrained ++ srsDomains)
-  (map unitWrapper [metre, radian, second]) dataDefs iMods genDefns tMods concIns [] []
+  (map unitWrapper [metre, radian, second]) dataDefs iMods genDefns tMods concIns [] [] allRefs
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (nw pi_ : map nw acronyms ++ map nw symbols)
-  (cw pi_ : srsDomains) ([] :: [UnitDefn]) [] [] [] [] [] [] []
+  (cw pi_ : srsDomains) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -219,4 +221,12 @@ constrained = [flightDur, landPos, launAngle, launSpeed, offset, targPos]
 acronyms :: [CI]
 acronyms = [oneD, twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
   physSyst, requirement, Doc.srs, thModel, typUnc]
+
+-- References --
+bodyRefs :: [Reference]
+bodyRefs = map rw tMods ++ map rw concIns ++ map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+
+allRefs :: [Reference]
+allRefs = nub (assumpRefs ++ bodyRefs ++ figRefs ++ goalRefs ++ dataDefRefs ++ genDefRefs
+  ++ iModRefs ++ citeRefs ++ reqRefs ++ secRefs)
 

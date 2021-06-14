@@ -47,3 +47,7 @@ beasonEtAl1998 = cMisc
   month Feb, year 1998,
   howPublishedU "https://doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)"]
   "beasonEtAl1998"
+
+-- References --
+citeRefs :: [Reference]
+citeRefs = map rw citations

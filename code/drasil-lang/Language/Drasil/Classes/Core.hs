@@ -5,12 +5,14 @@ module Language.Drasil.Classes.Core (
   , HasShortName(shortname)
   , HasRefAddress(getRefAdd)
   , HasSymbol(symbol)
+  , Referable(refAdd, renderRef)
   ) where
 
 import Language.Drasil.ShortName (ShortName)
 import Language.Drasil.Stages (Stage)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UID (UID)
+import Language.Drasil.Label.Type (LblType)
 
 import Control.Lens (Lens')
 
@@ -34,3 +36,11 @@ class HasSymbol c where
 class HasRefAddress b where
   -- | Provides the ability to hold a reference address.
   getRefAdd :: b -> String
+
+-- | Members of this class have the ability to be referenced.
+class HasUID s => Referable s where
+  -- | The referencing address (what we're linking to).
+  -- Only visible in the source (tex/html).
+  refAdd    :: s -> String 
+  -- | Alternate form of reference.
+  renderRef :: s -> LblType 

@@ -2,12 +2,12 @@
 module Language.Drasil.RefProg (Reference(Reference, refInfo), RefInfo(..)) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
-  HasShortName(shortname))
-import Language.Drasil.Label.Type (LblType, getAdd)
+  HasShortName(shortname), Referable(refAdd, renderRef))
+import Language.Drasil.Label.Type (LblType(..), getAdd)
 import Language.Drasil.ShortName (ShortName)
 import Language.Drasil.UID (UID)
 
-import Control.Lens (makeLenses)
+import Control.Lens ((^.), makeLenses)
 
 -- | Holds any extra information needed for a 'Reference', be it an equation, pages, a note, or nothing.
 data RefInfo = None
@@ -24,9 +24,15 @@ data Reference = Reference
   ,  refInfo :: RefInfo }
 makeLenses ''Reference
 
+-- | Equal if 'UID's are equal.
+instance Eq            Reference where a == b = (a ^. uid) == (b ^. uid)
 -- | Finds the 'UID' of a 'Reference'.
 instance HasUID        Reference where uid = ui
 -- | Finds the reference address contained in a 'Reference' (through a 'LblType').
 instance HasRefAddress Reference where getRefAdd = getAdd . ra
 -- | Finds the shortname of the reference address used for the 'Reference'.
 instance HasShortName  Reference where shortname = sn
+-- | Finds the reference address of a 'Reference'.
+instance Referable Reference where
+  refAdd r = r ^. ui
+  renderRef = ra

@@ -47,13 +47,13 @@ symbMap :: ChunkDB
 symbMap = cdb ([] :: [QuantityDict]) [nw example] ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
-  ([] :: [Section]) ([] :: [LabelledContent])
+  ([] :: [Section]) ([] :: [LabelledContent]) ([] :: [Reference])
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
-  ([] :: [Section]) ([] :: [LabelledContent])
+  ([] :: [Section]) ([] :: [LabelledContent]) ([] :: [Reference])
 
 refDB :: ReferenceDB
 refDB = rdb [] []

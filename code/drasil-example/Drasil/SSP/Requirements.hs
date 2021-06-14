@@ -1,11 +1,11 @@
-module Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs) where
+module Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs, reqRefs) where
 
 import Language.Drasil
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 
-import Drasil.DocLang (mkInputPropsTable)
+import Drasil.DocLang (mkInputPropsTable, inReq)
 import Drasil.DocLang.SRS (datCon, propCorSol) 
 
 import Data.Drasil.Concepts.Computation (inDatum)
@@ -130,3 +130,7 @@ maintainable = cic "maintainable" (foldlSent [
   plural assumption, plural thModel, plural genDefn, plural dataDefn, plural inModel,
   plural likelyChg, plural unlikelyChg, plural module_], S "is completely recorded in",
   plural traceyMatrix `S.inThe` getAcc srs `S.and_` phrase mg]) "Maintainable" nonFuncReqDom
+
+reqRefs :: [Reference]
+reqRefs = map rw ([inReq EmptyS] ++ funcReqs ++ nonFuncReqs)
+  ++ map rw (funcReqTables ++ [inputsToOutputTable, inputDataTable])

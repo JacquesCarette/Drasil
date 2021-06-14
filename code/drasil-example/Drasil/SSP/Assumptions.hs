@@ -114,3 +114,7 @@ hydrostaticFMidpoint = foldlSent [S "The resultant", phrase surfHydroForce,
   S "act into the midpoint of each", phrase slice, S "surface" `S.andThe`
   S "resultant", phrase baseHydroForce, S "act into the midpoint of each",
   phrase slice, S "base"]
+
+-- References --
+assumpRefs :: [Reference]
+assumpRefs = map rw assumptions

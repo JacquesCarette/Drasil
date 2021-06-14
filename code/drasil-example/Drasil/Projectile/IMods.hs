@@ -1,4 +1,4 @@
-module Drasil.Projectile.IMods (iMods, landPosIM, messageIM, offsetIM, timeIM) where
+module Drasil.Projectile.IMods (iMods, landPosIM, messageIM, offsetIM, timeIM, iModRefs) where
 
 import Prelude hiding (cos, sin)
 
@@ -159,3 +159,7 @@ timeConsNote = atStartNP (the constraint) +:+
   E (sy flightDur $> exactDbl 0) `S.is` S "from" +:+. makeRef2S timeStartZero
 
 tolNote = ch tol `S.is` S "defined in" +:+. makeRef2S (SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]))
+
+-- References -- 
+iModRefs :: [Reference]
+iModRefs = map rw iMods

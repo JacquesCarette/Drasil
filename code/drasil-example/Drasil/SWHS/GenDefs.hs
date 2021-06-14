@@ -1,5 +1,5 @@
 module Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater,
-  rocTempSimp, rocTempSimpDeriv, rocTempSimpRC) where
+  rocTempSimp, rocTempSimpDeriv, rocTempSimpRC, genDefRefs) where
 
 import Language.Drasil
 import Theory.Drasil (GenDefn, gd, gdNoRefs, ModelKinds (DEModel, EquationalModel))
@@ -155,3 +155,7 @@ rocTempDerivDensEq = sy mass `mulRe` sy QT.heatCapSpec `mulRe` deriv (sy QT.temp
 rocTempSimpDerivEqns :: [Expr]
 rocTempSimpDerivEqns = [rocTempDerivIntegEq, rocTempDerivGaussEq, rocTempDerivArbVolEq, rocTempDerivConsFlxEq,
   rocTempDerivDensEq]
+
+-- References --
+genDefRefs :: [Reference]
+genDefRefs = map rw genDefs

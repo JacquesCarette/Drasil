@@ -1,7 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.SSP.DataDefs (dataDefs, intersliceWtrF, angleA, angleB, lengthB,
   lengthLb, lengthLs, slcHeight, normStressDD, tangStressDD, ratioVariation,
-  convertFunc1, convertFunc2, nrmForceSumDD, watForceSumDD) where
+  convertFunc1, convertFunc2, nrmForceSumDD, watForceSumDD, dataDefRefs) where
 
 import Prelude hiding (cos, sin, tan)
 import Language.Drasil
@@ -303,6 +303,10 @@ sliceHghtRightQD = ec sliceHghtRight (inxi slopeHght $- inxi slipHght)
 
 sliceHghtLeftQD :: QDefinition
 sliceHghtLeftQD = ec sliceHghtLeft (inxiM1 slopeHght $- inxiM1 slipHght)
+
+-- References --
+dataDefRefs :: [Reference]
+dataDefRefs = map rw dataDefs
 
 --------------------------
 -- Derivation Sentences --

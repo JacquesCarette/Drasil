@@ -1,5 +1,5 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.GamePhysics.IMods (iMods, instModIntro) where
+module Drasil.GamePhysics.IMods (iMods, instModIntro, iModRefs) where
 
 import Language.Drasil
 import Language.Drasil.ShortHands (lJ)
@@ -159,3 +159,7 @@ noDampConsAssumps :: Sentence
 noDampConsAssumps = foldlSent [S "It is currently assumed that no damping",
   S "occurs during the simulation", fromSource assumpDI `S.and_` S "that no", 
   S "constraints are involved", fromSource assumpCAJI]
+
+-- References -- 
+iModRefs :: [Reference]
+iModRefs = map rw iMods

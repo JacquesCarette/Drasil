@@ -184,3 +184,7 @@ aspRat = ddNoRefs aspRatQD Nothing "aspectRatio" []
 --Symbol appears as "Label"
 --There is no actual label
 --Units section doesn't appear
+
+-- References --
+dataDefRefs :: [Reference]
+dataDefRefs = map rw dataDefs

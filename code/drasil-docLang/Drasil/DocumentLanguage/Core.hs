@@ -136,7 +136,7 @@ data GSDSub where
   SysCntxt   :: [Contents] -> GSDSub --FIXME: partially automate
   -- | User characteristics.
   UsrChars   :: [Contents] -> GSDSub 
-  -- | Systen constraints.
+  -- | System constraints.
   SystCons   :: [Contents] -> [Section] -> GSDSub 
 
 {--}
@@ -222,6 +222,9 @@ newtype TraceabilitySec = TraceabilityProg [TraceConfig]
 
 -- | Traceability Matices and Graphs configurations.
 data TraceConfig = TraceConfig UID [Sentence] Sentence [TraceViewCat] [TraceViewCat]
+
+getTraceConfigUID :: TraceConfig -> UID
+getTraceConfigUID (TraceConfig a _ _ _ _) = a
 
 {--}
 

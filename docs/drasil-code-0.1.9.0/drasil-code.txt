@@ -289,10 +289,19 @@ CSharp :: Lang
 Java :: Lang
 Python :: Lang
 Swift :: Lang
+
+-- | Members of this class must have all the information necessary for the
+--   <a>AuxiliarySym</a> in addition to information necessary to create a
+--   package.
 class (AuxiliarySym r) => PackageSym r where {
     type family Package r;
 }
 package :: PackageSym r => ProgData -> [r (Auxiliary r)] -> r (Package r)
+
+-- | Members of this class must have a doxygen configuration, ReadMe file,
+--   sample input, omptimize doxygen document, information necessary for a
+--   makefile, auxiliary helper documents, and auxiliary from data
+--   documents.
 class AuxiliarySym r where {
     type family Auxiliary r;
     type family AuxHelper r;
@@ -304,17 +313,33 @@ optimizeDox :: AuxiliarySym r => r (AuxHelper r)
 makefile :: AuxiliarySym r => [FilePath] -> ImplementationType -> [Comments] -> GOOLState -> ProgData -> r (Auxiliary r)
 auxHelperDoc :: AuxiliarySym r => r (AuxHelper r) -> Doc
 auxFromData :: AuxiliarySym r => FilePath -> Doc -> r (Auxiliary r)
+
+-- | The underlying data type for auxiliary files in all renderers.
 data AuxData
+
+-- | The underlying data type for packages in all renderers.
 data PackData
+
+-- | Basic chunk representation in the code generation context. Contains a
+--   QuantityDict and the kind of code (variable or function).
 data CodeChunk
+
+-- | Chunk representing a variable. The <tt>obv</tt> field represents the
+--   object containing this variable, if it is an object field.
 data CodeVarChunk
+
+-- | Chunk representing a function.
 data CodeFuncChunk
 
--- | Construct a CodeVarChunk from a Quantity
+-- | Construct a <a>CodeVarChunk</a> from a <a>Quantity</a>.
 quantvar :: (Quantity c, MayHaveUnit c) => c -> CodeVarChunk
 
--- | Construct a CodeFuncChunk from a Quantity
+-- | Construct a <a>CodeFuncChunk</a> from a <a>Quantity</a>.
 quantfunc :: (Quantity c, MayHaveUnit c) => c -> CodeFuncChunk
+
+-- | Combine an Object-type <a>CodeChunk</a> with another <a>CodeChunk</a>
+--   to create a new <a>CodeChunk</a> which represents a field of the
+--   first. ex. <tt>ccObjVar obj f = obj.f</tt>.
 ccObjVar :: CodeVarChunk -> CodeVarChunk -> CodeVarChunk
 listToArray :: CodeVarChunk -> CodeVarChunk
 

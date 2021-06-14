@@ -80,7 +80,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span id="line-44"></span><span class="hs-comment">-- If user chose Bundled, this module includes the structure for holding the </span><span>
 </span><span id="line-45"></span><span class="hs-comment">-- input values, but not if they chose Unbundled.</span><span>
 </span><span id="line-46"></span><span class="hs-comment">-- If the user chose Combined, this module includes the input-related functions,</span><span>
-</span><span id="line-47"></span><span class="hs-comment">-- but not if they chose Separated.</span><span>
+</span><span id="line-47"></span><span class="hs-comment">-- but not if they chose 'Separated'.</span><span>
 </span><span id="line-48"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#inputParametersDesc"><span class="hs-identifier hs-type">inputParametersDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-49"></span><span id="inputParametersDesc"><span class="annot"><span class="annottext">inputParametersDesc :: GenState [Description]
 </span><a href="Language.Drasil.Code.Imperative.Descriptions.html#inputParametersDesc"><span class="hs-identifier hs-var hs-var">inputParametersDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
@@ -131,7 +131,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span id="line-61"></span><span>
 </span><span id="line-62"></span><span class="hs-comment">-- | Returns description of the input constructor, checking whether each </span><span>
 </span><span id="line-63"></span><span class="hs-comment">-- possible method that may be called by the constructor is defined, and </span><span>
-</span><span id="line-64"></span><span class="hs-comment">-- including it in the description if so</span><span>
+</span><span id="line-64"></span><span class="hs-comment">-- including it in the description if so.</span><span>
 </span><span id="line-65"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#inputConstructorDesc"><span class="hs-identifier hs-type">inputConstructorDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span>
 </span><span id="line-66"></span><span id="inputConstructorDesc"><span class="annot"><span class="annottext">inputConstructorDesc :: GenState Description
 </span><a href="Language.Drasil.Code.Imperative.Descriptions.html#inputConstructorDesc"><span class="hs-identifier hs-var hs-var">inputConstructorDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
@@ -599,12 +599,12 @@ forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#defList"><span class="hs-identifier hs-var hs-var">defList</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
 </span><a href="#local-6989586621679333936"><span class="hs-identifier hs-var">g</span></a></span><span>
 </span><span id="line-193"></span><span>
-</span><span id="line-194"></span><span class="hs-comment">-- | Description of the generated Calculations module</span><span>
+</span><span id="line-194"></span><span class="hs-comment">-- | Description of the generated Calculations module.</span><span>
 </span><span id="line-195"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#calcModDesc"><span class="hs-identifier hs-type">calcModDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span>
 </span><span id="line-196"></span><span id="calcModDesc"><span class="annot"><span class="annottext">calcModDesc :: Description
 </span><a href="Language.Drasil.Code.Imperative.Descriptions.html#calcModDesc"><span class="hs-identifier hs-var hs-var">calcModDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;Provides functions for calculating the outputs&quot;</span></span><span>
 </span><span id="line-197"></span><span>
-</span><span id="line-198"></span><span class="hs-comment">-- | Returns description for generated output-printing function, if it exists</span><span>
+</span><span id="line-198"></span><span class="hs-comment">-- | Returns description for generated output-printing function, if it exists.</span><span>
 </span><span id="line-199"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#woFuncDesc"><span class="hs-identifier hs-type">woFuncDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span>
 </span><span id="line-200"></span><span id="woFuncDesc"><span class="annot"><span class="annottext">woFuncDesc :: GenState Description
 </span><a href="Language.Drasil.Code.Imperative.Descriptions.html#woFuncDesc"><span class="hs-identifier hs-var hs-var">woFuncDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>

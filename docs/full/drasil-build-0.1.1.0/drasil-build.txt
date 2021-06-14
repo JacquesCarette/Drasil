@@ -51,13 +51,13 @@ renderMS :: MakeString -> String
 --   of variable.
 renderVar :: (String -> String) -> MVar -> String
 
--- | Constructor for converting a String into a MakeString.
+-- | Constructor for converting a <a>String</a> into a <a>MakeString</a>.
 makeS :: String -> MakeString
 
 -- | Constructor for Windows OS variables.
 mkWindowsVar :: VarName -> VarVal -> VarVal -> MakeString
 
--- | Constructor for <tt>OS</tt> variables.
+-- | Constructor for OS variables.
 mkOSVar :: VarName -> VarVal -> VarVal -> VarVal -> MakeString
 
 -- | Constructor for <a>Implicit</a> variables.
@@ -226,7 +226,7 @@ makeRule :: RuleTransformer c => c -> [Rule]
 -- | Concatenates two <a>MakeString</a>s with a space in between.
 (+:+) :: MakeString -> MakeString -> MakeString
 
--- | Constructor for converting a String into a MakeString.
+-- | Constructor for converting a <a>String</a> into a <a>MakeString</a>.
 makeS :: String -> MakeString
 data MakeString
 
@@ -239,7 +239,7 @@ mkImplicitVar :: VarName -> MakeString
 -- | Constructor for Windows OS variables.
 mkWindowsVar :: VarName -> VarVal -> VarVal -> MakeString
 
--- | Constructor for <tt>OS</tt> variables.
+-- | Constructor for OS variables.
 mkOSVar :: VarName -> VarVal -> VarVal -> VarVal -> MakeString
 
 -- | Generates the makefile by calling <a>build</a> after <a>toMake</a>.

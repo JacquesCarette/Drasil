@@ -5,7 +5,7 @@ import Language.Drasil.Chunk.Citation (BibRef)
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
   HasShortName(shortname), Referable(refAdd, renderRef))
-import Language.Drasil.Expr.Display (DisplayExpr)
+import Language.Drasil.DisplayExpr (DisplayExpr)
 import Language.Drasil.Label.Type (LblType(RP), IRefProg, prepend)
 import Language.Drasil.RefProg(Reference)
 import Language.Drasil.Sentence (Sentence)
@@ -13,10 +13,10 @@ import Language.Drasil.Sentence (Sentence)
 import Control.Lens ((^.), makeLenses, Lens', set, view)
 
 -- | Denotes the different possible types that can be used as a list.
-data ListType = Bullet [(ItemType,Maybe String)] -- ^ Bulleted list.
-              | Numeric [(ItemType,Maybe String)] -- ^ Enumerated list.
-              | Simple [ListTuple] -- ^ Simple list with items denoted by @-@.
-              | Desc [ListTuple] -- ^ Descriptive list, renders as "Title: Item" (see 'ListTuple').
+data ListType = Bullet      [(ItemType, Maybe String)] -- ^ Bulleted list.
+              | Numeric     [(ItemType, Maybe String)] -- ^ Enumerated list.
+              | Simple      [ListTuple] -- ^ Simple list with items denoted by @-@.
+              | Desc        [ListTuple] -- ^ Descriptive list, renders as "Title: Item" (see 'ListTuple').
               | Definitions [ListTuple] -- ^ Renders a list of "@'Title'@ is the @Item@".
 
 -- | Denotes how something should behave in a list ('ListType').
@@ -35,7 +35,7 @@ type Header   = Sentence -- ^ Used when creating sublists.
 type Depth    = Int
 type Width    = Float
 type Height   = Float
-type ListTuple = (Title,ItemType,Maybe String) -- ^ Formats as Title: Item.
+type ListTuple = (Title, ItemType, Maybe String) -- ^ Formats as Title: Item.
 type Filepath = String
 type Lbl      = Sentence
 

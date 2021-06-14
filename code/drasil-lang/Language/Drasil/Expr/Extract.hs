@@ -4,7 +4,7 @@ import Data.List (nub)
 import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil.Expr (Expr(..))
-import Language.Drasil.Expr.Display
+import Language.Drasil.DisplayExpr (DisplayExpr(..))
 import Language.Drasil.Space (RealInterval(..))
 
 deNames :: DisplayExpr -> [String]

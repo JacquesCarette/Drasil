@@ -1,26 +1,9 @@
-{-# LANGUAGE GADTs #-}
-
-module Language.Drasil.Expr.Display (DisplayExpr(..), Display(..),
-  defines, multiExpr, multiExprNE) where
+module Language.Drasil.Expr.Display (defines, multiExpr, multiExprNE) where
 
 import qualified Data.List.NonEmpty as NE
 
-import Language.Drasil.Expr (Expr)
-
-data DisplayExpr where
-    AlgebraicExpr :: Expr -> DisplayExpr
-    Defines       :: DisplayExpr -> DisplayExpr -> DisplayExpr
-    MultiExpr     :: NE.NonEmpty DisplayExpr -> DisplayExpr
-
-
-class Display c where
-  toDispExpr :: c -> DisplayExpr
-
-instance Display Expr where
-  toDispExpr = AlgebraicExpr
-
-instance Display DisplayExpr where
-  toDispExpr = id
+import Language.Drasil.DisplayClasses (Display(..))
+import Language.Drasil.DisplayExpr (DisplayExpr(MultiExpr, Defines))
 
 defines :: (Display a, Display b) => a -> b -> DisplayExpr
 defines a b = Defines (toDispExpr a) (toDispExpr b)

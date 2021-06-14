@@ -6,7 +6,8 @@ module Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), (+:+),
   sentenceSymb, sentenceTerm, sParen) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
-import Language.Drasil.Expr.Display (DisplayExpr, Display (toDispExpr))
+import Language.Drasil.DisplayExpr (DisplayExpr(..))
+import Language.Drasil.DisplayClasses (Display(toDispExpr))
 import Language.Drasil.RefProg (RefInfo)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UnitLang (USymb)

@@ -42,7 +42,7 @@ rectVelQD = mkQuantDef' projSpeed (nounPhraseSent $ foldlSent_
 
 rectVelDeriv :: Derivation
 rectVelDeriv = mkDerivName (phrase rectVel)
-               (weave [rectVelDerivSents, map eS rectVelDerivEqns])
+               (weave [rectVelDerivSents, rectVelDerivEqns])
 
 rectVelDerivSents :: [Sentence]
 rectVelDerivSents = [rectDeriv velocity acceleration motSent iVel accelerationTM, rearrAndIntSent, performIntSent]
@@ -50,8 +50,8 @@ rectVelDerivSents = [rectDeriv velocity acceleration motSent iVel accelerationTM
     motSent = foldlSent [atStartNP (the motion) `S.in_` makeRef2S accelerationTM `S.is` S "now", phrase oneD,
                          S "with a", phrase QP.constAccel `sC` S "represented by", eS QP.constAccel]
 
-rectVelDerivEqns :: [Expr]
-rectVelDerivEqns = [E.rectVelDerivEqn1, E.rectVelDerivEqn2, relat rectVelQD]
+rectVelDerivEqns :: [Sentence]
+rectVelDerivEqns = [eS E.rectVelDerivEqn1, eS E.rectVelDerivEqn2, eS rectVelQD]
 
 ----------
 rectPosGD :: GenDefn

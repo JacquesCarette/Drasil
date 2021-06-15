@@ -50,15 +50,15 @@ velocityIXExpr :: Expr
 velocityIXExpr = sy angularVelocity `mulRe` sy lenRod `mulRe` cos (sy pendDisplacementAngle)
 
 velocityIXDeriv :: Derivation
-velocityIXDeriv = mkDerivName (phraseNP (NP.the (xComp `of_` velocity))) (weave [velocityIXDerivSents, map eS velocityIXDerivEqns])
+velocityIXDeriv = mkDerivName (phraseNP (NP.the (xComp `of_` velocity))) (weave [velocityIXDerivSents, velocityIXDerivEqns])
 
 velocityIXDerivSents :: [Sentence]
 velocityIXDerivSents = [velocityIDerivSent1,velocityIXDerivSent2,velocityIXDerivSent3,velocityIXDerivSent4,
                             velocityIXDerivSent5]
 
-velocityIXDerivEqns :: [Expr]
-velocityIXDerivEqns = [velocityIDerivEqn1,velocityIXDerivEqn2,velocityIXDerivEqn3,
-                            velocityIXDerivEqn4, relat velocityIXQD]
+velocityIXDerivEqns :: [Sentence]
+velocityIXDerivEqns = map eS [velocityIDerivEqn1, velocityIXDerivEqn2,
+    velocityIXDerivEqn3, velocityIXDerivEqn4] ++ [eS velocityIXQD]
 
 velocityIDerivSent1,velocityIXDerivSent2,velocityIXDerivSent3,velocityIXDerivSent4,velocityIXDerivSent5 :: Sentence
 velocityIDerivEqn1,velocityIXDerivEqn2,velocityIXDerivEqn3,velocityIXDerivEqn4 :: Expr
@@ -85,17 +85,16 @@ velocityIYExpr :: Expr
 velocityIYExpr = sy angularVelocity `mulRe` sy lenRod `mulRe` sin (sy pendDisplacementAngle)
 
 velocityIYDeriv :: Derivation
-velocityIYDeriv = mkDerivName (phraseNP (NP.the (yComp `of_` velocity))) (weave [velocityIYDerivSents, map eS velocityIYDerivEqns])
+velocityIYDeriv = mkDerivName (phraseNP (NP.the (yComp `of_` velocity))) (weave [velocityIYDerivSents, velocityIYDerivEqns])
 
 velocityIYDerivSents :: [Sentence]
 velocityIYDerivSents = [velocityIDerivSent1, velocityIYDerivSent2,
                         velocityIYDerivSent3, velocityIYDerivSent4,
                         velocityIYDerivSent5, velocityIYDerivSent5]
 
-velocityIYDerivEqns :: [Expr]
-velocityIYDerivEqns = [velocityIDerivEqn1, velocityIYDerivEqn2,
-                       velocityIYDerivEqn3, velocityIYDerivEqn4,
-                       relat velocityIYQD]
+velocityIYDerivEqns :: [Sentence]
+velocityIYDerivEqns = map eS [velocityIDerivEqn1, velocityIYDerivEqn2,
+    velocityIYDerivEqn3, velocityIYDerivEqn4] ++ [eS velocityIYQD]
 
 velocityIYDerivSent2,velocityIYDerivSent3,velocityIYDerivSent4,velocityIYDerivSent5 :: Sentence
 velocityIYDerivEqn2,velocityIYDerivEqn3,velocityIYDerivEqn4 :: Expr
@@ -121,27 +120,28 @@ accelerationIXExpr = neg (square (sy angularVelocity) `mulRe` sy lenRod `mulRe` 
                     `addRe` (sy angularAccel `mulRe` sy lenRod `mulRe` cos (sy pendDisplacementAngle))
 
 accelerationIXDeriv :: Derivation
-accelerationIXDeriv = mkDerivName (phraseNP (NP.the (xComp `of_` acceleration))) (weave [accelerationIXDerivSents, map eS accelerationIXDerivEqns])
+accelerationIXDeriv = mkDerivName (phraseNP (NP.the (xComp `of_` acceleration))) (weave [accelerationIXDerivSents, accelerationIXDerivEqns])
 
 accelerationIXDerivSents :: [Sentence]
 accelerationIXDerivSents = [accelerationIDerivSent1, accelerationIXDerivSent2, accelerationIXDerivSent3,
     accelerationIXDerivSent4, accelerationIXDerivSent5]
 
-accelerationIXDerivEqns :: [Expr]
-accelerationIXDerivEqns = [accelerationIDerivEqn1, accelerationIXDerivEqn2, accelerationIXDerivEqn3, accelerationIXDerivEqn4, relat accelerationIXQD]
+accelerationIXDerivEqns :: [Sentence]
+accelerationIXDerivEqns = [accelerationIDerivEqn1, accelerationIXDerivEqn2,
+    accelerationIXDerivEqn3, accelerationIXDerivEqn4, eS accelerationIXQD]
 
 accelerationIDerivSent1, accelerationIXDerivSent2, accelerationIXDerivSent3,
      accelerationIXDerivSent4, accelerationIXDerivSent5 :: Sentence
-accelerationIDerivEqn1, accelerationIXDerivEqn2, accelerationIXDerivEqn3, accelerationIXDerivEqn4 :: Expr
+accelerationIDerivEqn1, accelerationIXDerivEqn2, accelerationIXDerivEqn3, accelerationIXDerivEqn4 :: Sentence
 
 accelerationIDerivSent1 = S "Our" +:+ phrase acceleration +: S "is"
-accelerationIDerivEqn1 = sy acceleration $= deriv (sy velocity) time 
+accelerationIDerivEqn1 = eS $ sy acceleration $= deriv (sy velocity) time 
 accelerationIXDerivSent2 = S "Earlier" `sC` S "we found the" +:+ phrase horizontalVel +:+ S "to be"
-accelerationIXDerivEqn2 = relat velocityIXQD
+accelerationIXDerivEqn2 = eS velocityIXQD
 accelerationIXDerivSent3 = S "Applying this to our equation for" +:+ phrase acceleration
-accelerationIXDerivEqn3 = sy xAccel $= deriv (sy angularVelocity `mulRe` sy lenRod `mulRe` cos (sy pendDisplacementAngle)) time
+accelerationIXDerivEqn3 = eS $ sy xAccel $= deriv (sy angularVelocity `mulRe` sy lenRod `mulRe` cos (sy pendDisplacementAngle)) time
 accelerationIXDerivSent4 = S "By the product and chain rules, we find"
-accelerationIXDerivEqn4 = sy xAccel $= deriv (sy angularVelocity) time `mulRe` sy lenRod `mulRe` cos (sy pendDisplacementAngle)
+accelerationIXDerivEqn4 = eS $ sy xAccel $= deriv (sy angularVelocity) time `mulRe` sy lenRod `mulRe` cos (sy pendDisplacementAngle)
                         $- (sy angularVelocity `mulRe` sy lenRod `mulRe` sin (sy pendDisplacementAngle) `mulRe` deriv (sy pendDisplacementAngle) time)
 accelerationIXDerivSent5 = S "Simplifying,"
 
@@ -158,25 +158,26 @@ accelerationIYExpr = (square (sy angularVelocity) `mulRe` sy lenRod `mulRe` cos 
                     `addRe` (sy angularAccel `mulRe` sy lenRod `mulRe` sin (sy pendDisplacementAngle))
 
 accelerationIYDeriv :: Derivation
-accelerationIYDeriv = mkDerivName (phraseNP (NP.the (yComp `of_` acceleration))) (weave [accelerationIYDerivSents, map eS accelerationIYDerivEqns])
+accelerationIYDeriv = mkDerivName (phraseNP (NP.the (yComp `of_` acceleration))) (weave [accelerationIYDerivSents, accelerationIYDerivEqns])
 
 accelerationIYDerivSents :: [Sentence]
 accelerationIYDerivSents = [accelerationIDerivSent1, accelerationIYDerivSent2, accelerationIYDerivSent3,
     accelerationIYDerivSent4, accelerationIYDerivSent5]
 
-accelerationIYDerivEqns :: [Expr]
-accelerationIYDerivEqns = [accelerationIDerivEqn1, accelerationIYDerivEqn2, accelerationIYDerivEqn3, accelerationIYDerivEqn4, relat accelerationIYQD]
+accelerationIYDerivEqns :: [Sentence]
+accelerationIYDerivEqns = [accelerationIDerivEqn1, accelerationIYDerivEqn2,
+    accelerationIYDerivEqn3, accelerationIYDerivEqn4, eS accelerationIYQD]
 
 accelerationIYDerivSent2, accelerationIYDerivSent3, accelerationIYDerivSent4,
     accelerationIYDerivSent5 :: Sentence
-accelerationIYDerivEqn2, accelerationIYDerivEqn3, accelerationIYDerivEqn4 :: Expr
+accelerationIYDerivEqn2, accelerationIYDerivEqn3, accelerationIYDerivEqn4 :: Sentence
 
 accelerationIYDerivSent2 = S "Earlier" `sC` S "we found the" +:+ phrase verticalVel +:+ S "to be"
-accelerationIYDerivEqn2 = relat velocityIYQD
+accelerationIYDerivEqn2 = eS velocityIYQD
 accelerationIYDerivSent3 = S "Applying this to our equation for" +:+ phrase acceleration
-accelerationIYDerivEqn3 = sy yAccel $= deriv (sy angularVelocity `mulRe` sy lenRod `mulRe` sin (sy pendDisplacementAngle)) time
+accelerationIYDerivEqn3 = eS $ sy yAccel $= deriv (sy angularVelocity `mulRe` sy lenRod `mulRe` sin (sy pendDisplacementAngle)) time
 accelerationIYDerivSent4 = S "By the product and chain rules, we find"
-accelerationIYDerivEqn4 = sy yAccel $= deriv (sy angularVelocity) time `mulRe` sy lenRod `mulRe` sin (sy pendDisplacementAngle)
+accelerationIYDerivEqn4 = eS $ sy yAccel $= deriv (sy angularVelocity) time `mulRe` sy lenRod `mulRe` sin (sy pendDisplacementAngle)
                         `addRe` (sy angularVelocity `mulRe` sy lenRod `mulRe` cos (sy pendDisplacementAngle) `mulRe` deriv (sy pendDisplacementAngle) time)
 accelerationIYDerivSent5 = S "Simplifying,"
 

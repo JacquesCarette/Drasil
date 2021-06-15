@@ -22,4 +22,4 @@ reasonList = enumBulletU $ map foldlSent
 
 overviewParagraph :: Contents
 overviewParagraph = foldlSP [S "The presentation below is based on Section 12.6 (", atStart motion `S.sOf`
-  S "a",atStart projectile, S") from the classic Hibbler text Engineering Mechanics Dynamnics, 10th edition"]
+  S "a", atStart projectile, S") from the classic Hibbler text Engineering Mechanics Dynamnics, 10th edition"]

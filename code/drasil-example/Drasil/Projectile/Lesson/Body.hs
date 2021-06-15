@@ -41,7 +41,7 @@ mkNB = [
   BodySec $
        BodyProg
          [Review reviewContent,
-          MainIdea [motionContextP1, motionContextP2] [horMotion, verMotion, summary],
+          MainIdea [motionContextP1, LlC figCSandA, motionContextP2] [horMotion, verMotion, summary],
           MethsAndAnls [mAndaintro] []],
   Bibliography
   ]

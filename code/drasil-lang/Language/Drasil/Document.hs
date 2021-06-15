@@ -104,6 +104,9 @@ makeLstRef :: String -> String -> Reference
 makeLstRef r s = Reference (r ++ "Label") (RP (prepend "Lst") ("Lst:" ++ repUnd r))
   (shortname' s) None
 
+makeEqnRef :: String -> Reference
+makeEqnRef rs = Reference rs (RP (prepend "Eqn") ("Equation:" ++ repUnd rs)) (shortname' rs) None
+
 -- | Create a reference for a URI
 makeURI :: UID -> String -> ShortName -> Reference
 makeURI u r s = Reference u (URI r) s None

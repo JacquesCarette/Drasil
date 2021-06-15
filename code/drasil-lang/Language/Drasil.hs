@@ -125,7 +125,7 @@ module Language.Drasil (
   , HasContents(accessContents)
   , RawContent(..)
   , mkFig
-  , makeTabRef, makeFigRef, makeSecRef, makeLstRef, makeURI
+  , makeTabRef, makeFigRef, makeSecRef, makeLstRef, makeEqnRef, makeURI
   -- Space
   , Space(..) , RealInterval(..), Inclusive(..), RTopology(..)
   , DomainDesc(AllDD, BoundedDD), getActorName, getInnerSpace
@@ -149,7 +149,7 @@ module Language.Drasil (
   , LblType(RP, Citation, URI), IRefProg(..)
   -- Development.Sentence
   , introduceAbb, phrase, plural, phrasePoss, pluralPoss, atStart, atStart'
-  , titleize, titleize'
+  , titleize, titleize', titleizeT
   -- Uncertainty.Core
   , Uncertainty, uncty
   -- Uncertainty
@@ -201,7 +201,7 @@ import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec,
 import Language.Drasil.Document (section, fig, figWithWidth
   , Section(..), SecCons(..) , llcc, ulcc, Document(..)
   , mkParagraph, mkFig, mkRawLC, extractSection
-  , makeTabRef, makeFigRef, makeSecRef, makeLstRef, makeURI)
+  , makeTabRef, makeFigRef, makeSecRef, makeLstRef, makeEqnRef, makeURI)
 import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), DType(..)
   , RawContent(..), ListTuple, MaxWidthPercent
   , HasContents(accessContents)

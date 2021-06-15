@@ -4,7 +4,7 @@ module Drasil.SSP.IMods where
 import Prelude hiding (tan, product, sin, cos)
 
 import Language.Drasil
-import Theory.Drasil (InstanceModel, im, imNoDeriv, qwUC, ModelKinds (OthModel))
+import Theory.Drasil (InstanceModel, im, imNoDeriv, qwUC, ModelKinds (OthModel, EquationalModel))
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -51,17 +51,20 @@ iMods = [fctSfty, nrmShrFor, nrmShrForNum, nrmShrForDen, intsliceFs, crtSlpId]
 --
 
 fctSfty :: InstanceModel
-fctSfty = im (OthModel fctSftyRC)
+fctSfty = im (EquationalModel fctSftyQD)
  [qwUC slopeDist, qwUC slopeHght, qwUC waterHght, qwUC effCohesion, qwUC fricAngle,
   qwUC dryWeight, qwUC satWeight, qwUC waterWeight, qwUC slipDist, qwUC slipHght, qwUC constF]
   (qw fs) [] (map makeCite [chen2005, karchewski2012])
   (Just fctSftyDeriv) "fctSfty" [fctSftyDesc]
 
-fctSftyRC :: RelationConcept
-fctSftyRC = makeRC "fctSftyRC" factorOfSafety fctSftyDesc fctSftyRel -- fctSftyL
+-- fctSftyRC :: RelationConcept
+-- fctSftyRC = makeRC "fctSftyRC" factorOfSafety fctSftyDesc fctSftyRel -- fctSftyL
 
-fctSftyRel :: Relation
-fctSftyRel = sy fs $= sumOp shearRNoIntsl $/ sumOp shearFNoIntsl
+fctSftyQD :: QDefinition 
+fctSftyQD = mkQuantDef' fs factorOfSafety fctSftyExpr
+
+fctSftyExpr :: Expr
+fctSftyExpr = sumOp shearRNoIntsl $/ sumOp shearFNoIntsl
   where prodOp = defprod (eqSymb varblV) (sy index) (sy numbSlices $- int 1)
           (idx (sy mobShrC) (sy varblV))
         sumOp sym = defsum (eqSymb index) (int 1) (sy numbSlices $- int 1)
@@ -99,7 +102,7 @@ fctSftyDerivEqns1 = [fctSftyDerivEqn1, fctSftyDerivEqn2, fctSftyDerivEqn3,
 fctSftyDerivEqns2 :: [Expr]
 fctSftyDerivEqns2 = [fctSftyDerivEqn11, fctSftyDerivEqn12, fctSftyDerivEqn13,
   fctSftyDerivEqn14, fctSftyDerivEqn15, fctSftyDerivEqn16, fctSftyDerivEqn17,
-  fctSftyDerivEqn18, fctSftyRel]
+  fctSftyDerivEqn18, sy fs $= fctSftyExpr]
 
 fctSftyDerivSentence1 :: [Sentence]
 fctSftyDerivSentence1 = [atStartNP (the mobShrI), definedIn'' bsShrFEqGD, 

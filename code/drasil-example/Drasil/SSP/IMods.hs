@@ -57,9 +57,6 @@ fctSfty = im (EquationalModel fctSftyQD)
   (qw fs) [] (map makeCite [chen2005, karchewski2012])
   (Just fctSftyDeriv) "fctSfty" [fctSftyDesc]
 
--- fctSftyRC :: RelationConcept
--- fctSftyRC = makeRC "fctSftyRC" factorOfSafety fctSftyDesc fctSftyRel -- fctSftyL
-
 fctSftyQD :: QDefinition 
 fctSftyQD = mkQuantDef' fs factorOfSafety fctSftyExpr
 

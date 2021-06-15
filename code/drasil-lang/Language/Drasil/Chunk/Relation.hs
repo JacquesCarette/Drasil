@@ -5,7 +5,7 @@ import Control.Lens (makeLenses, (^.), view, set)
 
 import Language.Drasil.Chunk.Concept (ConceptChunk, dccWDS, cw)
 import Language.Drasil.Classes.Core (HasUID(uid))
-import Language.Drasil.Classes (Display(..), ExprRelat(..), Concept,
+import Language.Drasil.Classes (Display(..), Concept,
   ConceptDomain(..), Definition(..), Idea(..), NamedIdea(..))
 import Language.Drasil.Expr (Relation)
 import Language.Drasil.NounPhrase (NP)
@@ -30,8 +30,6 @@ instance Idea          RelationConcept where getA = getA . view conc
 instance Definition    RelationConcept where defn = conc . defn
 -- | Finds the domain of the 'ConceptChunk' used to make the 'RelationConcept'.
 instance ConceptDomain RelationConcept where cdom = cdom . view conc
--- | Finds the relation expression for a 'RelationConcept'.
-instance ExprRelat     RelationConcept where relat = (^. rel)
 -- | Convert the 'RelationConcept' into the display expression language.
 instance Display       RelationConcept where toDispExpr = toDispExpr . (^. rel)
 

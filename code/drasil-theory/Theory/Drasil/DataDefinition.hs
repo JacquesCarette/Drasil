@@ -37,8 +37,6 @@ instance HasSpace           DataDefinition where typ = qd . typ
 instance HasSymbol          DataDefinition where symbol e = symbol (e ^. qd)
 -- | 'DataDefinition's have a 'Quantity'.
 instance Quantity           DataDefinition where 
--- | Converts the defining expression into an equality checking relation
-instance ExprRelat          DataDefinition where relat d = sy d $= d ^. defnExpr
 -- | Finds the defining expression of the 'QDefinition' used to make the 'DataDefinition'.
 instance DefiningExpr       DataDefinition where defnExpr = qd . defnExpr
 -- | Converts the defining expression of a 'DataDefinition' into the display language.

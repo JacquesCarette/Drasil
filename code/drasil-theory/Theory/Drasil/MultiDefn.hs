@@ -49,10 +49,8 @@ instance ConceptDomain MultiDefn where cdom     = foldr1 union . NE.toList . NE.
 instance Definition    MultiDefn where defn     = rDesc
 -- | The complete Relation of a MultiDefn is defined as the quantity and the related expressions being equal
 --   e.g., `q $= a $= b $= ... $= z`
-instance ExprRelat     MultiDefn where relat q  = sy q $= foldr1 ($=) (NE.map (^. expr) (q ^. rvs))
--- TODO: How do we want to display MultiDefns?
-instance Display       MultiDefn where
-  toDispExpr = toDispExpr . relat
+instance Display       MultiDefn where -- TODO: CLEAN UP
+  toDispExpr q = toDispExpr $ sy q $= foldr1 ($=) (NE.map (^. expr) (q ^. rvs))
 
 -- | Smart constructor for MultiDefns, does nothing special at the moment
 mkMultiDefn :: UID -> QuantityDict -> Sentence -> NE.NonEmpty DefiningExpr -> MultiDefn

@@ -15,7 +15,7 @@ import Database.Drasil (SystemInformation, _sysinfodb, citeDB, conceptinsLookup,
   insmodelLookup, insmodelTable, labelledconLookup, labelledcontentTable,
   refbyLookup, refbyTable, sectionLookup, sectionTable, theoryModelLookup,
   theoryModelTable, vars)
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(invariants),
+import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(display_exprs),
   TheoryModel, HasInputs(inputs), HasOutput(output, out_constraints))
 import Utils.Drasil
 
@@ -92,9 +92,9 @@ nonEmpty _   f xs = f xs
 mkTMField :: TheoryModel -> SystemInformation -> Field -> ModRow -> ModRow
 mkTMField t _ l@Label fs  = (show l, [mkParagraph $ atStart t]) : fs
 mkTMField t _ l@DefiningEquation fs =
-  (show l, map unlbldExpr (t ^. invariants)) : fs
+  (show l, map unlbldExpr (display_exprs t)) : fs
 mkTMField t m l@(Description v u) fs = (show l,
-  foldr ((\x -> buildDescription v u x m) . toDispExpr) [] (t ^. invariants)) : fs
+  foldr ((\x -> buildDescription v u x m) . toDispExpr) [] (display_exprs t)) : fs
 mkTMField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
 mkTMField t _ l@Source fs = (show l, helperSources $ t ^. getReferences) : fs
 mkTMField t _ l@Notes fs =

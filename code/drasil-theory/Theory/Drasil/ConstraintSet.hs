@@ -24,11 +24,10 @@ instance Idea          ConstraintSet where getA  = getA . (^. con)
 instance Definition    ConstraintSet where defn  = con . defn
 -- | Finds the domain of the 'ConstraintSet'.
 instance ConceptDomain ConstraintSet where cdom  = cdom . (^. con)
--- | The complete Relation of a ConstraintSet is the logical conjunction of all
---   the underlying relations (e.g., `a $&& b $&& ... $&& z`).
-instance ExprRelat     ConstraintSet where relat = foldr1 ($&&) . (^. invs)
-
-instance Display       ConstraintSet where toDispExpr = toDispExpr . relat
+-- | The complete DisplayExpr of a ConstraintSet is the logical conjunction of
+--   all the underlying relations (e.g., `a $&& b $&& ... $&& z`).
+instance Display       ConstraintSet where
+    toDispExpr = andDEs . map toDispExpr . NE.toList . (^. invs)
 
 -- | Smart constructor for building ConstraintSets
 mkConstraintSet :: ConceptChunk -> NE.NonEmpty Relation -> ConstraintSet

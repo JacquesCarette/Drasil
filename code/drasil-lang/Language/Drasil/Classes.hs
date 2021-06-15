@@ -14,7 +14,6 @@ module Language.Drasil.Classes (
   , ConceptDomain(cdom)
   , Constrained(constraints)
   , CommonIdea(abrv)
-  , ExprRelat(relat)
   , DefiningExpr(defnExpr)
   , Display(toDispExpr)
   , Quantity
@@ -36,7 +35,7 @@ import Language.Drasil.Constraint (Constraint)
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.UnitLang (UDefn, USymb)
 import Language.Drasil.DisplayClasses (Display(toDispExpr))
-import Language.Drasil.Expr (Expr, Relation)
+import Language.Drasil.Expr (Expr)
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.RefProg (Reference)
 import Language.Drasil.Space (Space)
@@ -157,33 +156,12 @@ class UnitEq u where
 
 -----------------------------------------------------
 
--- | Has a function that turns into a 'Relation'.
-class ExprRelat c where
-  -- | Holds a relation.
-  relat :: c -> Relation
-  -- TODO: rename to `toRelat`/`asRelat`? essentially saying "this is an idea that we can convert into a logical equivalence checking relation"
-
--- TODO: I *really* think that this DefiningExpr is missing a "what it defines" component...
+-- TODO: I think that this DefiningExpr is missing a "what it defines" component...
 --       It's also only used for CodeDefinitions, QDefinitions, and DataDefinitions (food for thought on naming if we want to add ^)
-
 -- | A better version of 'ExprRelat' that holds an 'Expr'.
-class ExprRelat c => DefiningExpr c where
+class DefiningExpr c where
   -- | Provides a 'Lens' to the expression.
   defnExpr :: Lens' c Expr
-
-{-
-  If we intend to replace all 'relat's with 'defnExpr's, it will require a bit
-  more work since defnExpr is used very differently. 'defnExpr' is primarily
-  used for uniquely defining expressions of QDefinitions and DataDefinitions,
-  while relat is primarily used for cosmetic formatting (quickly grabbing 
-  `x $= ...` Exprs in particular).
-
-  If we return a NonEmpty list of Exprs for 'defnExpr' instead of a single Expr,
-  then, for all the instances that use relat, we can just intercalate $=,
-  prepending a symbol as well, but then it might not work nicely with the
-  existing usage for DataDefinitions -- for example, defining unique expressions
-  for constants. I think we'll need to have a both in some capacity.
--}
 
 -- | Members must have a named argument.
 class (HasSymbol c) => IsArgumentName c where

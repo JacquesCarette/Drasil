@@ -5,7 +5,7 @@ module Theory.Drasil.ModelKinds (ModelKinds(..),
 import Control.Lens (makeLenses, set, lens, to, (^.), Setter', Getter, Lens')
 import Data.Maybe (mapMaybe)
 
-import Language.Drasil (ExprRelat(..), ConceptDomain(..), Definition(..),
+import Language.Drasil (ConceptDomain(..), Definition(..),
   Idea(..), NamedIdea(..), RelationConcept, QDefinition, HasUID(..), Display (toDispExpr))
 import Theory.Drasil.ConstraintSet (ConstraintSet)
 import Theory.Drasil.MultiDefn (MultiDefn)
@@ -37,8 +37,6 @@ instance Idea          ModelKinds where getA       = elimMk (to getA) (to getA) 
 instance Definition    ModelKinds where defn       = lensMk defn defn defn defn
 -- | Finds the domain of the 'ModelKinds'.
 instance ConceptDomain ModelKinds where cdom       = elimMk (to cdom) (to cdom) (to cdom) (to cdom)
--- | Finds the relation expression of the 'ModelKinds'.
-instance ExprRelat     ModelKinds where relat      = elimMk (to relat) (to relat) (to relat) (to relat)
 -- | Displays 'ModelKind' in DisplayExpr
 instance Display       ModelKinds where toDispExpr = elimMk (to toDispExpr) (to toDispExpr) (to toDispExpr) (to toDispExpr)
 

@@ -8,7 +8,7 @@ import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit), UnitDe
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   IsUnit, DefiningExpr(defnExpr), Definition(defn), Quantity, HasSpace(typ),
-  ExprRelat(relat), ConceptDomain(cdom), Display(toDispExpr))
+  ConceptDomain(cdom), Display(toDispExpr))
 import Language.Drasil.Chunk.Quantity (QuantityDict, mkQuant, mkQuant', qw)
 
 import Language.Drasil.Expr.Display (defines)
@@ -50,8 +50,7 @@ instance DefiningExpr  QDefinition where defnExpr = equat
 instance Eq            QDefinition where a == b = (a ^. uid) == (b ^. uid)
 -- | Finds the units of the 'QuantityDict' used to make the 'QDefinition'.
 instance MayHaveUnit   QDefinition where getUnit = getUnit . view qua
--- | Finds the relation given by the expression in 'QDefinition'.
-instance ExprRelat     QDefinition where relat z = sy z $= z ^. equat
+-- | Displays the relation given by the expression in 'QDefinition'.
 instance Display       QDefinition where toDispExpr q = defines (sy q) (q ^. defnExpr)
 -- | Finds the domain of 'QDefinition'.
 instance ConceptDomain QDefinition where cdom = cd

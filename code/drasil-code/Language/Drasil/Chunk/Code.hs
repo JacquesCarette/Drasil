@@ -65,7 +65,7 @@ instance CodeIdea    CodeChunk where
 instance Eq          CodeChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 -- | Finds the units of the 'QuantityDict' used to make the 'CodeChunk'.
 instance MayHaveUnit CodeChunk where getUnit = getUnit . view qc
-instance ExprRelat   CodeChunk where relat c = sy c
+instance Display     CodeChunk where toDispExpr = toDispExpr . sy
 
 -- | Chunk representing a variable. The @obv@ field represents the object containing 
 -- this variable, if it is an object field.

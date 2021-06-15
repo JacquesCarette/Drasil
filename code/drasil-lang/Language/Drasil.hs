@@ -48,7 +48,6 @@ module Language.Drasil (
   , IsUnit(getUnits)
   , CommonIdea(abrv)
   , Constrained(constraints)
-  , ExprRelat(relat)
   , DefiningExpr(defnExpr)
   , Display(toDispExpr)
   , HasUncertainty(unc)
@@ -223,7 +222,7 @@ import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol),
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
-  HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), 
+  HasReasVal(reasVal), HasDerivation(derivations), 
   HasReference(getReferences), HasSpace(typ),
   DefiningExpr(defnExpr), Quantity, HasUncertainty(unc), Callable, 
   IsArgumentName, Display(..))

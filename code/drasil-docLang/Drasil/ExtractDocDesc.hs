@@ -57,7 +57,7 @@ exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (conca
       go :: Display a => [a] -> [DisplayExpr]
       go = map toDispExpr
       goTM :: [TheoryModel] -> [DisplayExpr]
-      goTM = concatMap (\x -> go (x ^. invariants)
+      goTM = concatMap (\x -> go (display_exprs x)
                            ++ go (map (^. defnExpr) (x ^. defined_quant ++ x ^. defined_fun))
                            ++ goTM (x ^. valid_context))
 

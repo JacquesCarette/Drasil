@@ -1,4 +1,4 @@
--- | Contains functions related to the choice of concept matches
+-- | Contains functions related to the choice of concept matches.
 module Language.Drasil.Code.Imperative.ConceptMatch (
   chooseConcept, conceptToGOOL
 ) where
@@ -17,7 +17,7 @@ import Control.Monad.State (State, modify)
 -- | Concretizes the ConceptMatchMap in Choices to a 'MatchedConceptMap'.
 -- Currently we don't have any Choices that would prevent a 'CodeConcept' from 
 -- being mapped, so we just take the head of the list of 'CodeConcept's
--- The ConceptMatchMap from choices is passed to chooseConept' internally, this way
+-- The ConceptMatchMap from choices is passed to chooseConcept' internally, this way
 -- any 'CodeConcept' list can be matched to its appropiate 'UID'.
 chooseConcept :: Choices -> State [Sentence] MatchedConceptMap
 chooseConcept chs = sequence $ Map.mapWithKey chooseConcept' (conceptMatch chs)

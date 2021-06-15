@@ -1,5 +1,5 @@
 -- | Defines description generators for common SCS functions, classes, and 
--- modules
+-- modules.
 module Language.Drasil.Code.Imperative.Descriptions (
   modDesc, unmodularDesc, inputParametersDesc, inputConstructorDesc, 
   inputFormatDesc, derivedValuesDesc, inputConstraintsDesc, constModDesc, 
@@ -30,7 +30,7 @@ modDesc :: GenState [Description] -> GenState Description
 modDesc = fmap ((++) "Provides " . stringList)
 
 -- | Returns description of what is contained in the module that is generated
--- when the user chooses an Unmodular design. Module is described as either
+-- when the user chooses an Unmodular design. Module is described as either a
 -- program or library, depending on the user's choice of implementation type.
 unmodularDesc :: GenState Description
 unmodularDesc = do
@@ -41,10 +41,10 @@ unmodularDesc = do
   return $ "Contains the entire " ++ n ++ " " ++ getDesc (implType g)
 
 -- | Returns description of what is contained in the Input Parameters module.
--- If user chose Bundled, this module includes the structure for holding the 
--- input values, but not if they chose Unbundled.
--- If the user chose Combined, this module includes the input-related functions,
--- but not if they chose 'Separated'.
+-- If user chooses the 'Bundled' input parameter, this module will include the structure for holding the 
+-- input values. Does not include the structure if they choose 'Unbundled'.
+-- If the user chooses the 'Combined' input parameter, this module includes the input-related functions.
+-- Does not inlcude those functions if they choose 'Separated'.
 inputParametersDesc :: GenState [Description]
 inputParametersDesc = do
   g <- get
@@ -59,7 +59,7 @@ inputParametersDesc = do
       inDesc Unbundled = [""]
   return $ ipDesc im
 
--- | Returns description of the input constructor, checking whether each 
+-- | Returns a description of the input constructor, checking whether each 
 -- possible method that may be called by the constructor is defined, and 
 -- including it in the description if so.
 inputConstructorDesc :: GenState Description
@@ -78,7 +78,7 @@ inputConstructorDesc = do
     idDesc ("derived_values" `elem` dl),
     icDesc ("input_constraints" `elem` dl)]
 
--- | Returns description of what is contained in the Input Format module,
+-- | Returns a description of what is contained in the Input Format module,
 -- if it exists.
 inputFormatDesc :: GenState Description
 inputFormatDesc = do
@@ -87,7 +87,7 @@ inputFormatDesc = do
       ifDesc _ = "the function for reading inputs"
   return $ ifDesc $ "get_input" `elem` defList g
 
--- | Returns description of what is contained in the Derived Values module,
+-- | Returns a description of what is contained in the Derived Values module,
 -- if it exists.
 derivedValuesDesc :: GenState Description
 derivedValuesDesc = do
@@ -96,7 +96,7 @@ derivedValuesDesc = do
       dvDesc _ = "the function for calculating derived values"
   return $ dvDesc $ "derived_values" `elem` defList g
 
--- | Returns description of what is contained in the Input Constraints module,
+-- | Returns a description of what is contained in the Input Constraints module,
 -- if it exists.
 inputConstraintsDesc :: GenState Description
 inputConstraintsDesc = do
@@ -107,7 +107,7 @@ inputConstraintsDesc = do
         " on the input"
   return $ icDesc $ "input_constraints" `elem` defList g
 
--- | Returns description of what is contained in the Constants module,
+-- | Returns a description of what is contained in the Constants module,
 -- if it exists.
 constModDesc :: GenState Description
 constModDesc = do
@@ -118,7 +118,7 @@ constModDesc = do
   return $ cDesc $ filter (flip member (Map.filter (cname ==) 
     (clsMap g)) . codeName) (constants $ codeSpec g)
 
--- | Returns description of what is contained in the Output Format module, 
+-- | Returns a description of what is contained in the Output Format module, 
 -- if it exists.
 outputFormatDesc :: GenState Description
 outputFormatDesc = do
@@ -127,7 +127,7 @@ outputFormatDesc = do
       ofDesc _ = "the function for writing outputs"
   return $ ofDesc $ "write_output" `elem` defList g
 
--- | Returns description for generated function that stores inputs,
+-- | Returns a description for the generated function that stores inputs,
 -- if it exists. Checks whether explicit inputs, derived inputs, and constants 
 -- are defined in the InputParameters class and includes each in the 
 -- description if so.
@@ -150,7 +150,7 @@ inputClassDesc = do
       cVs _ = "constant values"
   return $ inClassD $ Map.null ipMap
 
--- | Returns description for generated class that stores constants,
+-- | Returns a description for the generated class that stores constants,
 -- if it exists. If no constants are defined in the Constants class, then it 
 -- does not exist and an empty description is returned.
 constClassDesc :: GenState Description
@@ -162,7 +162,7 @@ constClassDesc = do
   return $ ccDesc $ filter (flip member (Map.filter (cname ==) 
     (clsMap g)) . codeName) (constants $ codeSpec g)
 
--- | Returns description for generated function that reads input from a file,
+-- | Returns a description for the generated function that reads input from a file,
 -- if it exists.
 inFmtFuncDesc :: GenState Description
 inFmtFuncDesc = do
@@ -171,7 +171,7 @@ inFmtFuncDesc = do
       ifDesc _ = "Reads input from a file with the given file name"
   return $ ifDesc $ "get_input" `elem` defList g
 
--- | Returns description for generated function that checks input constraints,
+-- | Returns a description for the generated function that checks input constraints,
 -- if it exists.
 inConsFuncDesc :: GenState Description
 inConsFuncDesc = do
@@ -181,7 +181,7 @@ inConsFuncDesc = do
       icDesc _ = "Verifies that input values satisfy the " ++ pAndS
   return $ icDesc $ "input_constraints" `elem` defList g
 
--- | Returns description for generated function that calculates derived inputs,
+-- | Returns a description for the generated function that calculates derived inputs,
 -- if it exists.
 dvFuncDesc :: GenState Description
 dvFuncDesc = do

@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | Defines description generators for common SCS functions, classes, and </span><span>
-</span><span id="line-2"></span><span class="hs-comment">-- modules</span><span>
+</span><span id="line-2"></span><span class="hs-comment">-- modules.</span><span>
 </span><span id="line-3"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Language.Drasil.Code.Imperative.Descriptions</span><span> </span><span class="hs-special">(</span><span>
 </span><span id="line-4"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#modDesc"><span class="hs-identifier">modDesc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#unmodularDesc"><span class="hs-identifier">unmodularDesc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#inputParametersDesc"><span class="hs-identifier">inputParametersDesc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#inputConstructorDesc"><span class="hs-identifier">inputConstructorDesc</span></a></span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-5"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#inputFormatDesc"><span class="hs-identifier">inputFormatDesc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#derivedValuesDesc"><span class="hs-identifier">derivedValuesDesc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#inputConstraintsDesc"><span class="hs-identifier">inputConstraintsDesc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#constModDesc"><span class="hs-identifier">constModDesc</span></a></span><span class="hs-special">,</span><span> </span><span>
@@ -40,7 +40,7 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-identifier hs-var">stringList</span></span><span class="hs-special">)</span><span>
 </span><span id="line-31"></span><span>
 </span><span id="line-32"></span><span class="hs-comment">-- | Returns description of what is contained in the module that is generated</span><span>
-</span><span id="line-33"></span><span class="hs-comment">-- when the user chooses an Unmodular design. Module is described as either</span><span>
+</span><span id="line-33"></span><span class="hs-comment">-- when the user chooses an Unmodular design. Module is described as either a</span><span>
 </span><span id="line-34"></span><span class="hs-comment">-- program or library, depending on the user's choice of implementation type.</span><span>
 </span><span id="line-35"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#unmodularDesc"><span class="hs-identifier hs-type">unmodularDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span>
 </span><span id="line-36"></span><span id="unmodularDesc"><span class="annot"><span class="annottext">unmodularDesc :: GenState Description
@@ -77,10 +77,10 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><a href="#local-6989586621679333999"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-42"></span><span>
 </span><span id="line-43"></span><span class="hs-comment">-- | Returns description of what is contained in the Input Parameters module.</span><span>
-</span><span id="line-44"></span><span class="hs-comment">-- If user chose Bundled, this module includes the structure for holding the </span><span>
-</span><span id="line-45"></span><span class="hs-comment">-- input values, but not if they chose Unbundled.</span><span>
-</span><span id="line-46"></span><span class="hs-comment">-- If the user chose Combined, this module includes the input-related functions,</span><span>
-</span><span id="line-47"></span><span class="hs-comment">-- but not if they chose 'Separated'.</span><span>
+</span><span id="line-44"></span><span class="hs-comment">-- If user chooses the 'Bundled' input parameter, this module will include the structure for holding the </span><span>
+</span><span id="line-45"></span><span class="hs-comment">-- input values. Does not include the structure if they choose 'Unbundled'.</span><span>
+</span><span id="line-46"></span><span class="hs-comment">-- If the user chooses the 'Combined' input parameter, this module includes the input-related functions.</span><span>
+</span><span id="line-47"></span><span class="hs-comment">-- Does not inlcude those functions if they choose 'Separated'.</span><span>
 </span><span id="line-48"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#inputParametersDesc"><span class="hs-identifier hs-type">inputParametersDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-49"></span><span id="inputParametersDesc"><span class="annot"><span class="annottext">inputParametersDesc :: GenState [Description]
 </span><a href="Language.Drasil.Code.Imperative.Descriptions.html#inputParametersDesc"><span class="hs-identifier hs-var hs-var">inputParametersDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
@@ -129,7 +129,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="#local-6989586621679333984"><span class="hs-identifier hs-var">ipDesc</span></a></span><span> </span><span class="annot"><span class="annottext">InputModule
 </span><a href="#local-6989586621679333987"><span class="hs-identifier hs-var">im</span></a></span><span>
 </span><span id="line-61"></span><span>
-</span><span id="line-62"></span><span class="hs-comment">-- | Returns description of the input constructor, checking whether each </span><span>
+</span><span id="line-62"></span><span class="hs-comment">-- | Returns a description of the input constructor, checking whether each </span><span>
 </span><span id="line-63"></span><span class="hs-comment">-- possible method that may be called by the constructor is defined, and </span><span>
 </span><span id="line-64"></span><span class="hs-comment">-- including it in the description if so.</span><span>
 </span><span id="line-65"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#inputConstructorDesc"><span class="hs-identifier hs-type">inputConstructorDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span>
@@ -185,7 +185,7 @@ forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">[Description]
 </span><a href="#local-6989586621679333972"><span class="hs-identifier hs-var">dl</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
 </span><span id="line-80"></span><span>
-</span><span id="line-81"></span><span class="hs-comment">-- | Returns description of what is contained in the Input Format module,</span><span>
+</span><span id="line-81"></span><span class="hs-comment">-- | Returns a description of what is contained in the Input Format module,</span><span>
 </span><span id="line-82"></span><span class="hs-comment">-- if it exists.</span><span>
 </span><span id="line-83"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#inputFormatDesc"><span class="hs-identifier hs-type">inputFormatDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span>
 </span><span id="line-84"></span><span id="inputFormatDesc"><span class="annot"><span class="annottext">inputFormatDesc :: GenState Description
@@ -211,7 +211,7 @@ forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#defList"><span class="hs-identifier hs-var hs-var">defList</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
 </span><a href="#local-6989586621679333969"><span class="hs-identifier hs-var">g</span></a></span><span>
 </span><span id="line-89"></span><span>
-</span><span id="line-90"></span><span class="hs-comment">-- | Returns description of what is contained in the Derived Values module,</span><span>
+</span><span id="line-90"></span><span class="hs-comment">-- | Returns a description of what is contained in the Derived Values module,</span><span>
 </span><span id="line-91"></span><span class="hs-comment">-- if it exists.</span><span>
 </span><span id="line-92"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#derivedValuesDesc"><span class="hs-identifier hs-type">derivedValuesDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span>
 </span><span id="line-93"></span><span id="derivedValuesDesc"><span class="annot"><span class="annottext">derivedValuesDesc :: GenState Description
@@ -237,7 +237,7 @@ forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#defList"><span class="hs-identifier hs-var hs-var">defList</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
 </span><a href="#local-6989586621679333967"><span class="hs-identifier hs-var">g</span></a></span><span>
 </span><span id="line-98"></span><span>
-</span><span id="line-99"></span><span class="hs-comment">-- | Returns description of what is contained in the Input Constraints module,</span><span>
+</span><span id="line-99"></span><span class="hs-comment">-- | Returns a description of what is contained in the Input Constraints module,</span><span>
 </span><span id="line-100"></span><span class="hs-comment">-- if it exists.</span><span>
 </span><span id="line-101"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#inputConstraintsDesc"><span class="hs-identifier hs-type">inputConstraintsDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span>
 </span><span id="line-102"></span><span id="inputConstraintsDesc"><span class="annot"><span class="annottext">inputConstraintsDesc :: GenState Description
@@ -272,7 +272,7 @@ forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#defList"><span class="hs-identifier hs-var hs-var">defList</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
 </span><a href="#local-6989586621679333965"><span class="hs-identifier hs-var">g</span></a></span><span>
 </span><span id="line-109"></span><span>
-</span><span id="line-110"></span><span class="hs-comment">-- | Returns description of what is contained in the Constants module,</span><span>
+</span><span id="line-110"></span><span class="hs-comment">-- | Returns a description of what is contained in the Constants module,</span><span>
 </span><span id="line-111"></span><span class="hs-comment">-- if it exists.</span><span>
 </span><span id="line-112"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#constModDesc"><span class="hs-identifier hs-type">constModDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span>
 </span><span id="line-113"></span><span id="constModDesc"><span class="annot"><span class="annottext">constModDesc :: GenState Description
@@ -322,7 +322,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#codeSpec"><span class="hs-identifier hs-var hs-var">codeSpec</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
 </span><a href="#local-6989586621679333962"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-120"></span><span>
-</span><span id="line-121"></span><span class="hs-comment">-- | Returns description of what is contained in the Output Format module, </span><span>
+</span><span id="line-121"></span><span class="hs-comment">-- | Returns a description of what is contained in the Output Format module, </span><span>
 </span><span id="line-122"></span><span class="hs-comment">-- if it exists.</span><span>
 </span><span id="line-123"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#outputFormatDesc"><span class="hs-identifier hs-type">outputFormatDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span>
 </span><span id="line-124"></span><span id="outputFormatDesc"><span class="annot"><span class="annottext">outputFormatDesc :: GenState Description
@@ -348,7 +348,7 @@ forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#defList"><span class="hs-identifier hs-var hs-var">defList</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
 </span><a href="#local-6989586621679333956"><span class="hs-identifier hs-var">g</span></a></span><span>
 </span><span id="line-129"></span><span>
-</span><span id="line-130"></span><span class="hs-comment">-- | Returns description for generated function that stores inputs,</span><span>
+</span><span id="line-130"></span><span class="hs-comment">-- | Returns a description for the generated function that stores inputs,</span><span>
 </span><span id="line-131"></span><span class="hs-comment">-- if it exists. Checks whether explicit inputs, derived inputs, and constants </span><span>
 </span><span id="line-132"></span><span class="hs-comment">-- are defined in the InputParameters class and includes each in the </span><span>
 </span><span id="line-133"></span><span class="hs-comment">-- description if so.</span><span>
@@ -461,7 +461,7 @@ forall k a. Map k a -&gt; Bool
 </span><span class="hs-identifier hs-var">Map.null</span></span><span> </span><span class="annot"><span class="annottext">Map Description Description
 </span><a href="#local-6989586621679333952"><span class="hs-identifier hs-var">ipMap</span></a></span><span>
 </span><span id="line-152"></span><span>
-</span><span id="line-153"></span><span class="hs-comment">-- | Returns description for generated class that stores constants,</span><span>
+</span><span id="line-153"></span><span class="hs-comment">-- | Returns a description for the generated class that stores constants,</span><span>
 </span><span id="line-154"></span><span class="hs-comment">-- if it exists. If no constants are defined in the Constants class, then it </span><span>
 </span><span id="line-155"></span><span class="hs-comment">-- does not exist and an empty description is returned.</span><span>
 </span><span id="line-156"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#constClassDesc"><span class="hs-identifier hs-type">constClassDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span>
@@ -512,7 +512,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#codeSpec"><span class="hs-identifier hs-var hs-var">codeSpec</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
 </span><a href="#local-6989586621679333944"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-164"></span><span>
-</span><span id="line-165"></span><span class="hs-comment">-- | Returns description for generated function that reads input from a file,</span><span>
+</span><span id="line-165"></span><span class="hs-comment">-- | Returns a description for the generated function that reads input from a file,</span><span>
 </span><span id="line-166"></span><span class="hs-comment">-- if it exists.</span><span>
 </span><span id="line-167"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#inFmtFuncDesc"><span class="hs-identifier hs-type">inFmtFuncDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span>
 </span><span id="line-168"></span><span id="inFmtFuncDesc"><span class="annot"><span class="annottext">inFmtFuncDesc :: GenState Description
@@ -538,7 +538,7 @@ forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#defList"><span class="hs-identifier hs-var hs-var">defList</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
 </span><a href="#local-6989586621679333941"><span class="hs-identifier hs-var">g</span></a></span><span>
 </span><span id="line-173"></span><span>
-</span><span id="line-174"></span><span class="hs-comment">-- | Returns description for generated function that checks input constraints,</span><span>
+</span><span id="line-174"></span><span class="hs-comment">-- | Returns a description for the generated function that checks input constraints,</span><span>
 </span><span id="line-175"></span><span class="hs-comment">-- if it exists.</span><span>
 </span><span id="line-176"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#inConsFuncDesc"><span class="hs-identifier hs-type">inConsFuncDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span>
 </span><span id="line-177"></span><span id="inConsFuncDesc"><span class="annot"><span class="annottext">inConsFuncDesc :: GenState Description
@@ -570,7 +570,7 @@ forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#defList"><span class="hs-identifier hs-var hs-var">defList</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
 </span><a href="#local-6989586621679333939"><span class="hs-identifier hs-var">g</span></a></span><span>
 </span><span id="line-183"></span><span>
-</span><span id="line-184"></span><span class="hs-comment">-- | Returns description for generated function that calculates derived inputs,</span><span>
+</span><span id="line-184"></span><span class="hs-comment">-- | Returns a description for the generated function that calculates derived inputs,</span><span>
 </span><span id="line-185"></span><span class="hs-comment">-- if it exists.</span><span>
 </span><span id="line-186"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#dvFuncDesc"><span class="hs-identifier hs-type">dvFuncDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span>
 </span><span id="line-187"></span><span id="dvFuncDesc"><span class="annot"><span class="annottext">dvFuncDesc :: GenState Description

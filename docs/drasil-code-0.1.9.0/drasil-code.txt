@@ -19,18 +19,19 @@ makeCode :: [FileData] -> [AuxData] -> Code
 -- | Creates the requested <a>Code</a> by producing files
 createCodeFiles :: Code -> IO ()
 
--- | Initializes the generator's DrasilState. String parameter is a string
---   representing the date. [Expr] parameter is the sample input values
---   provided by the user
+-- | Initializes the generator's <a>DrasilState</a>. <a>String</a>
+--   parameter is a string representing the date. &lt;math&gt; parameter is
+--   the sample input values provided by the user.
 generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 
--- | Generates a package with the given DrasilState. The passed
+-- | Generates a package with the given <a>DrasilState</a>. The passed
 --   un-representation functions determine which target language the
 --   package will be generated in.
 generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang -> (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> PackData) -> DrasilState -> IO ()
 
--- | Reads data from a file and converts the values to Exprs. The file must
---   be formatted according to the DataDesc passed as a parameter.
+-- | Reads data from a file and converts the values to <a>Expr</a>s. The
+--   file must be formatted according to the <a>DataDesc'</a> passed as a
+--   parameter.
 readWithDataDesc :: FilePath -> DataDesc' -> IO [Expr]
 
 -- | Defines the DataDesc for the file containing a sample data set, which

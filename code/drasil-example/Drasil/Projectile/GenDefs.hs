@@ -51,7 +51,8 @@ rectVelDerivSents = [rectDeriv velocity acceleration motSent iVel accelerationTM
                          S "with a", phrase QP.constAccel `sC` S "represented by", eS QP.constAccel]
 
 rectVelDerivEqns :: [Sentence]
-rectVelDerivEqns = [eS E.rectVelDerivEqn1, eS E.rectVelDerivEqn2, eS rectVelQD]
+rectVelDerivEqns = map eS [E.rectVelDerivEqn1, E.rectVelDerivEqn2]
+                ++ [eS rectVelQD]
 
 ----------
 rectPosGD :: GenDefn

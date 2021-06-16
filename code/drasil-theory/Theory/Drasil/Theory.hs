@@ -18,7 +18,6 @@ class Theory t where
   defined_quant :: Lens' t [QDefinition]
   invariants    :: Lens' t [DisplayExpr]  -- TODO: temporary hack until designed, previously `Lens' t [Relation]`
   defined_fun   :: Lens' t [QDefinition]
-  display_exprs :: t -> [DisplayExpr]     -- TODO: temporary hack until designed
 
 data SpaceDefn -- FIXME: This should be defined.
 
@@ -85,8 +84,6 @@ instance Theory             TheoryModel where
   defined_quant = defq
   invariants    = invs
   defined_fun   = dfun
-  display_exprs t = map toDispExpr (t ^. defq)
-                 ++ (t ^. invs)
 -- | Finds the 'ShortName' of the 'TheoryModel'.
 instance HasShortName       TheoryModel where shortname = lb
 -- | Finds the reference address of the 'TheoryModel'.

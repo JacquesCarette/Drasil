@@ -15,7 +15,7 @@ import Database.Drasil (SystemInformation, _sysinfodb, citeDB, conceptinsLookup,
   insmodelLookup, insmodelTable, labelledconLookup, labelledcontentTable,
   refbyLookup, refbyTable, sectionLookup, sectionTable, theoryModelLookup,
   theoryModelTable, vars)
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(display_exprs),
+import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(..),
   TheoryModel, HasInputs(inputs), HasOutput(output, out_constraints))
 import Utils.Drasil
 
@@ -88,13 +88,15 @@ nonEmpty :: b -> ([a] -> b) -> [a] -> b
 nonEmpty def _ [] = def
 nonEmpty _   f xs = f xs
 
+tmDispExprs :: TheoryModel -> [DisplayExpr]
+tmDispExprs t = map toDispExpr (t ^. defined_quant) ++ t ^. invariants
+
 -- | Create the fields for a model from a relation concept (used by 'tmodel').
 mkTMField :: TheoryModel -> SystemInformation -> Field -> ModRow -> ModRow
 mkTMField t _ l@Label fs  = (show l, [mkParagraph $ atStart t]) : fs
-mkTMField t _ l@DefiningEquation fs =
-  (show l, map unlbldExpr (display_exprs t)) : fs
+mkTMField t _ l@DefiningEquation fs = (show l, map unlbldExpr $ tmDispExprs t) : fs
 mkTMField t m l@(Description v u) fs = (show l,
-  foldr ((\x -> buildDescription v u x m) . toDispExpr) [] (display_exprs t)) : fs
+  foldr ((\x -> buildDescription v u x m) . toDispExpr) [] $ tmDispExprs t) : fs
 mkTMField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
 mkTMField t _ l@Source fs = (show l, helperSources $ t ^. getReferences) : fs
 mkTMField t _ l@Notes fs =

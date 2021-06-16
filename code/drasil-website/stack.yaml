@@ -31,6 +31,19 @@ resolver:
 #   - wai
 packages:
 - .
+- ../drasil-build
+- ../drasil-code
+- ../drasil-data
+- ../drasil-database
+- ../drasil-docLang
+- ../drasil-gen
+- ../drasil-gool
+- ../drasil-lang
+- ../drasil-metadata
+- ../drasil-printers
+- ../drasil-theory
+- ../drasil-utils
+- ../drasil-example
 # Dependency packages to be pulled from upstream that are not in the resolver.
 # These entries can reference officially published versions as well as
 # forks / in-progress versions pinned to a git hash. For example:

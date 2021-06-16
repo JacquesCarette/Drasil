@@ -11,38 +11,41 @@ extra-source-files:
 - ChangeLog.md
 
 # Metadata used when publishing your package
-# synopsis:            Short description of your package
+synopsis:            Using the Drasil generators to create Drasil's website
 # category:            Web
 
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/githubuser/drasil-website#readme>
+homepage:            https://jacquescarette.github.io/Drasil/
+description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
 
 dependencies:
 - base >= 4.7 && < 5
+- lens
+- directory
+- drasil-code
+- drasil-data
+- drasil-database
+- drasil-docLang
+- drasil-gen
+- drasil-gool
+- drasil-lang
+- drasil-metadata
+- drasil-printers
+- drasil-theory
+- drasil-utils
+- drasil-example
 
-library:
-  source-dirs: src
+ghc-options:
+- -Wall
+- -Wredundant-constraints
+- -threaded
+- -O2
 
 executables:
-  drasil-website-exe:
-    main:                Main.hs
-    source-dirs:         app
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    dependencies:
-    - drasil-website
-
-tests:
-  drasil-website-test:
-    main:                Spec.hs
-    source-dirs:         test
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
-    dependencies:
-    - drasil-website
+  website:
+    main: Drasil.Website.Main
+    source-dirs: ./
+    other-modules:
+    - Drasil.Website

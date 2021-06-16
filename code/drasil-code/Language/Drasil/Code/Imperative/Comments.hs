@@ -1,4 +1,4 @@
--- | Contains functions for generating code comments that describe a chunk
+-- | Contains functions for generating code comments that describe a chunk.
 module Language.Drasil.Code.Imperative.Comments (
   getComment
 ) where

@@ -51,23 +51,23 @@ import Control.Monad (liftM2,liftM3)
 import Control.Monad.State (get)
 import Control.Lens ((^.))
 
--- Gets a chunk's CodeType, by checking which CodeType the user has chosen to 
--- match the chunk's Space to.
+-- | Gets a chunk's 'CodeType', by checking which 'CodeType' the user has chosen to 
+-- match the chunk's 'Space' to.
 codeType :: (HasSpace c) => c -> GenState CodeType
 codeType c = spaceCodeType (c ^. typ)
 
--- Gets the CodeType for a Space, based on the user's choice
+-- | Gets the 'CodeType' for a 'Space', based on the user's choice.
 spaceCodeType :: Space -> GenState CodeType
 spaceCodeType s = do
   g <- get
   spaceMatches g s
 
--- | If UID for the variable is matched to a concept, call conceptToGOOL to get 
+-- | If 'UID' for the variable is matched to a concept, call 'conceptToGOOL' to get 
 -- the GOOL code for the concept, and return.
--- If UID is for a constant and user has chosen Inline, convert the constant's 
--- defining Expr to a value with convExpr.
--- Otherwise, just a regular variable: construct it by calling variable, then 
--- call valueOf to reference its value
+-- If 'UID' is for a constant and user has chosen 'Inline', convert the constant's 
+-- defining 'Expr' to a value with 'convExpr'.
+-- Otherwise, just a regular variable: construct it by calling the variable, then 
+-- call 'valueOf' to reference its value.
 value :: (OOProg r) => UID -> Name -> VSType r -> GenState (SValue r)
 value u s t = do
   g <- get
@@ -83,12 +83,12 @@ value u s t = do
   val <- maybe (valueOf <$> variable s t) (convExpr . codeEquat) constDef
   return $ maybe val conceptToGOOL cdCncpt
 
--- | If variable is an input, construct it with var and pass to inputVariable
--- If variable is a constant and Var constant representation is chosen,
--- construct it with var and pass to constVariable.
--- If variable is a constant and Const constant representation is chosen,
--- construct it with staticVar and pass to constVariable
--- If variable is neither, just construct it with var and return it
+-- | If variable is an input, construct it with 'var' and pass to inputVariable.
+-- If variable is a constant and 'Var' constant representation is chosen,
+-- construct it with 'var' and pass to 'constVariable'.
+-- If variable is a constant and 'Const' constant representation is chosen,
+-- construct it with 'staticVar' and pass to 'constVariable'.
+-- If variable is neither, just construct it with 'var' and return it.
 variable :: (OOProg r) => Name -> VSType r -> GenState (SVariable r)
 variable s t = do
   g <- get
@@ -101,13 +101,13 @@ variable s t = do
       then constVariable (conStruct g) (conRepr g) ((defFunc $ conRepr g) s t)
       else return $ var s t
   
--- | If Unbundled inputs, just return variable as-is
--- If Bundled inputs, access variable through object, where the object is self 
--- if current module is InputParameters, inParams otherwise
--- Final case is for when constVariable calls inputVariable, when user chooses 
--- WithInputs for constant structure, and inputs are Bundled, and constant
--- representation is Const. Variable should be accessed through class, so 
--- classVariable is called.
+-- | If 'Unbundled' inputs, just return variable as-is.
+-- If 'Bundled' inputs, access variable through object, where the object is self 
+-- if current module is InputParameters, 'inParams' otherwise.
+-- Final case is for when 'constVariable' calls inputVariable, when user chooses 
+-- WithInputs for constant structure, inputs are 'Bundled', and constant
+-- representation is 'Const'. Variable should be accessed through class, so 
+-- 'classVariable' is called.
 inputVariable :: (OOProg r) => Structure -> ConstantRepr -> SVariable r -> 
   GenState (SVariable r)
 inputVariable Unbundled _ v = return v
@@ -120,13 +120,13 @@ inputVariable Bundled Const v = do
   ip <- mkVar (quantvar inParams)
   classVariable ip v
 
--- | If Unbundled constants, just return variable as-is
--- If Bundled constants and Var constant representation, access variable 
--- through consts object.
--- If Bundled constants and Const constant representation, access variable 
--- through class, so call classVariable.
--- If constants stored WithInputs, call inputVariable
--- If constants Inlined, the generator should not be attempting to make a 
+-- | If 'Unbundled' constants, just return variable as-is.
+-- If 'Bundled' constants and 'Var' constant representation, access variable 
+-- through 'consts' object.
+-- If 'Bundled' constants and 'Const' constant representation, access variable 
+-- through class, so call 'classVariable'.
+-- If constants stored 'WithInputs', call 'inputVariable'.
+-- If constants are 'Inline'd, the generator should not be attempting to make a 
 -- variable for one of the constants.
 constVariable :: (OOProg r) => ConstantStructure -> ConstantRepr -> 
   SVariable r -> GenState (SVariable r)
@@ -141,13 +141,13 @@ constVariable WithInputs cr v = do
   g <- get
   inputVariable (inStruct g) cr v
 constVariable Inline _ _ = error $ "mkVar called on a constant, but user " ++
-  "chose to Inline constants. Generator has bug."
+  "chose to Inline constants. Generator has a bug."
 
 -- | For generating GOOL for a variable that is accessed through a class.
--- If the variable is not in export map, then it is not a public class variable 
--- and cannot be accessed, so throw error
--- If the variable is exported by the current module, use classVar
--- If the variable is exported by a different module, use extClassVar
+-- If the variable is not in the export map, then it is not a public class variable 
+-- and cannot be accessed, so throw an error.
+-- If the variable is exported by the current module, use 'classVar'.
+-- If the variable is exported by a different module, use 'extClassVar'.
 classVariable :: (OOProg r) => SVariable r -> SVariable r -> 
   GenState (SVariable r)
 classVariable c v = do
@@ -159,7 +159,7 @@ classVariable c v = do
     maybe (error $ "Variable " ++ nm ++ " missing from export map") 
       checkCurrent (Map.lookup nm (eMap g)) (onStateValue variableType c) v
 
--- Generates a GOOL Value for a variable represented by a CodeVarChunk
+-- | Generates a GOOL Value for a variable represented by a 'CodeVarChunk'.
 mkVal :: (OOProg r) => CodeVarChunk -> GenState (SValue r)
 mkVal v = do
   t <- codeType v
@@ -170,7 +170,7 @@ mkVal v = do
           (var (codeName v) (convType t))
   toGOOLVal (v ^. obv)
 
--- Generates a GOOL Variable for a variable represented by a CodeVarChunk
+-- | Generates a GOOL Variable for a variable represented by a 'CodeVarChunk'.
 mkVar :: (OOProg r) => CodeVarChunk -> GenState (SVariable r)
 mkVar v = do
   t <- codeType v
@@ -181,7 +181,7 @@ mkVar v = do
           (var (codeName v) (convType t))
   toGOOLVar (v ^. obv)
 
--- Generates a GOOL Parameter for a parameter represented by a ParameterChunk
+-- | Generates a GOOL Parameter for a parameter represented by a 'ParameterChunk'.
 mkParam :: (OOProg r) => ParameterChunk -> GenState (MSParameter r)
 mkParam p = do
   v <- mkVar (quantvar p)
@@ -189,46 +189,46 @@ mkParam p = do
   where paramFunc Ref = pointerParam
         paramFunc Val = param
 
--- Generates a public function
+-- | Generates a public function.
 publicFunc :: (OOProg r) => Label -> VSType r -> Description -> 
   [ParameterChunk] -> Maybe Description -> [MSBlock r] -> 
   GenState (SMethod r)
 publicFunc n t = genMethod (function n public t) n
 
--- Generates a public method
+-- | Generates a public method.
 publicMethod :: (OOProg r) => Label -> VSType r -> Description -> 
   [ParameterChunk] -> Maybe Description -> [MSBlock r] -> 
   GenState (SMethod r)
 publicMethod n t = genMethod (method n public dynamic t) n
 
--- Generates a private method
+-- | Generates a private method.
 privateMethod :: (OOProg r) => Label -> VSType r -> Description -> 
   [ParameterChunk] -> Maybe Description -> [MSBlock r] -> 
   GenState (SMethod r)
 privateMethod n t = genMethod (method n private dynamic t) n
 
--- Generates a public function, defined by its inputs and outputs
+-- | Generates a public function, defined by its inputs and outputs.
 publicInOutFunc :: (OOProg r) => Label -> Description -> [CodeVarChunk] -> 
   [CodeVarChunk] -> [MSBlock r] -> GenState (SMethod r)
 publicInOutFunc n = genInOutFunc (inOutFunc n public) (docInOutFunc n public) n
 
--- Generates a private method, defined by its inputs and outputs
+-- | Generates a private method, defined by its inputs and outputs.
 privateInOutMethod :: (OOProg r) => Label -> Description -> [CodeVarChunk] -> 
   [CodeVarChunk] -> [MSBlock r] -> GenState (SMethod r)
 privateInOutMethod n = genInOutFunc (inOutMethod n private dynamic) (docInOutMethod n private dynamic) n
 
--- Generates a constructor
+-- | Generates a constructor.
 genConstructor :: (OOProg r) => Label -> Description -> [ParameterChunk] -> 
   [MSBlock r] -> GenState (SMethod r)
 genConstructor n desc p = genMethod nonInitConstructor n desc p Nothing
 
--- Generates a constructor that includes initialization of variables
+-- | Generates a constructor that includes initialization of variables.
 genInitConstructor :: (OOProg r) => Label -> Description -> [ParameterChunk] 
   -> Initializers r -> [MSBlock r] -> GenState (SMethod r)
 genInitConstructor n desc p is = genMethod (`constructor` is) n desc p 
   Nothing
 
--- Generates a function or method using the passed GOOL constructor. Other 
+-- | Generates a function or method using the passed GOOL constructor. Other 
 -- parameters are the method's name, description, list of parameters, 
 -- description of what is returned (if applicable), and body.
 genMethod :: (OOProg r) => ([MSParameter r] -> MSBody r -> SMethod r) -> 
@@ -244,7 +244,7 @@ genMethod f n desc p r b = do
   return $ if CommentFunc `elem` commented g
     then docFunc desc pComms r fn else fn
 
--- Generates a function or method defined by its inputs and outputs. 
+-- | Generates a function or method defined by its inputs and outputs. 
 -- Parameters are: the GOOL constructor to use, the equivalent GOOL constructor 
 -- for a documented function/method, the scope, permanence, name, description, 
 -- list of inputs, list of outputs, and body.
@@ -270,7 +270,7 @@ genInOutFunc f docf n desc ins' outs' b = do
     then docf desc (zip pComms inVs) (zip oComms outVs) (zip 
     bComms bothVs) bod else f inVs outVs bothVs bod
 
--- Converts an Expr to a GOOL Value
+-- | Converts an 'Expr' to a GOOL Value.
 convExpr :: (OOProg r) => Expr -> GenState (SValue r)
 convExpr (Dbl d) = do
   sm <- spaceCodeType Real
@@ -347,10 +347,10 @@ convExpr (RealI c ri)  = do
   g <- get
   convExpr $ renderRealInt (lookupC g c) ri
 
--- Generates a function/method call, based on the UID of the chunk representing 
--- the function, the list of argument Exprs, the list of named argument Exprs, 
--- the function call generator to use, and the library version of the function 
--- call generator (used if the function is in the library export map)
+-- | Generates a function/method call, based on the 'UID' of the chunk representing
+-- the function, the list of argument 'Expr's, the list of named argument 'Expr's,
+-- the function call generator to use, and the library version of the function
+-- call generator (used if the function is in the library export map).
 convCall :: (OOProg r) => UID -> [Expr] -> [(UID, Expr)] -> 
   (Name -> Name -> VSType r -> [SValue r] -> NamedArgs r -> 
   GenState (SValue r)) -> (Name -> Name -> VSType r -> [SValue r] 
@@ -372,13 +372,13 @@ convCall c x ns f libf = do
     (\m -> f m funcNm (convType funcTp) args (zip nms nargs)) 
     (Map.lookup funcNm mem)
   
--- Converts a Constraint to an Expr
+-- | Converts a 'Constraint' to an 'Expr'.
 renderC :: (HasUID c, HasSymbol c) => c -> Constraint -> Expr
 renderC s (Range _ rr)         = renderRealInt s rr
 renderC _ (EnumeratedReal _ _) = error "EnumeratedReal IsIn not supported yet" -- IsIn (sy s) (DiscreteD rr)
 renderC _ (EnumeratedStr  _ _) = error "EnumeratedStr IsIn not supported yet" -- IsIn (sy s) (DiscreteS rr)
 
--- Converts an interval to an Expr
+-- | Converts an interval ('RealInterval') to an 'Expr'.
 renderRealInt :: (HasUID c, HasSymbol c) => c -> RealInterval Expr Expr -> Expr
 renderRealInt s (Bounded (Inc,a) (Inc,b)) = (a $<= sy s) $&& (sy s $<= b)
 renderRealInt s (Bounded (Inc,a) (Exc,b)) = (a $<= sy s) $&& (sy s $<  b)
@@ -389,7 +389,7 @@ renderRealInt s (UpTo (Exc,a))    = sy s $< a
 renderRealInt s (UpFrom (Inc,a))  = sy s $>= a
 renderRealInt s (UpFrom (Exc,a))  = sy s $>  a
 
--- Maps a UFunc to the corresponding GOOL unary function.
+-- | Maps a 'UFunc' to the corresponding GOOL unary function.
 unop :: (OOProg r) => UFunc -> (SValue r -> SValue r)
 unop Sqrt = (#/^)
 unop Log  = log
@@ -407,51 +407,53 @@ unop Arccos = arccos
 unop Arctan = arctan
 unop Neg  = (#~)
 
+-- | Similar to 'unop', but for the 'Not' constructor.
 unopB :: (OOProg r) => UFuncB -> (SValue r -> SValue r)
 unopB Not = (?!)
 
+-- | Similar to 'unop', but for vectors.
 unopVec :: (OOProg r) => UFuncVec -> (SValue r -> SValue r)
 unopVec Dim = listSize
 unopVec Norm = error "unop: Norm not implemented" -- TODO
 
--- Maps an ArithBinOp to it's corresponding GOOL binary function
+-- Maps an 'ArithBinOp' to it's corresponding GOOL binary function.
 arithBfunc :: (OOProg r) => ArithBinOp -> (SValue r -> SValue r -> SValue r)
 arithBfunc Pow  = (#^)
 arithBfunc Subt = (#-)
 arithBfunc Frac = (#/)
 
--- Maps a BoolBinOp to it's corresponding GOOL binary function
+-- Maps a 'BoolBinOp' to it's corresponding GOOL binary function.
 boolBfunc :: BoolBinOp -> (SValue r -> SValue r -> SValue r)
 boolBfunc Impl = error "convExpr :=>"
 boolBfunc Iff  = error "convExpr :<=>"
 
--- Maps an EqBinOp to it's corresponding GOOL binary function
+-- Maps an 'EqBinOp' to it's corresponding GOOL binary function.
 eqBfunc :: (OOProg r) => EqBinOp -> (SValue r -> SValue r -> SValue r)
 eqBfunc Eq  = (?==)
 eqBfunc NEq = (?!=)
 
--- Maps an LABinOp to it's corresponding GOOL binary function
+-- Maps an 'LABinOp' to it's corresponding GOOL binary function.
 laBfunc :: (OOProg r) => LABinOp -> (SValue r -> SValue r -> SValue r)
 laBfunc Index = listAccess
 
--- Maps an OrdBinOp to it's corresponding GOOL binary function
+-- Maps an 'OrdBinOp' to it's corresponding GOOL binary function.
 ordBfunc :: (OOProg r) => OrdBinOp -> (SValue r -> SValue r -> SValue r)
 ordBfunc Gt  = (?>)
 ordBfunc Lt  = (?<)
 ordBfunc LEq = (?<=)
 ordBfunc GEq = (?>=)
 
--- Maps a VVVBinOp to it's corresponding GOOL binary function
+-- Maps a 'VVVBinOp' to it's corresponding GOOL binary function.
 vecVecVecBfunc :: VVVBinOp -> (SValue r -> SValue r -> SValue r)
 vecVecVecBfunc Cross = error "bfunc: Cross not implemented"
 
--- Maps a VVNBinOp to it's corresponding GOOL binary function
+-- Maps a 'VVNBinOp' to it's corresponding GOOL binary function.
 vecVecNumBfunc :: VVNBinOp -> (SValue r -> SValue r -> SValue r)
 vecVecNumBfunc Dot = error "convExpr DotProduct"
 
 -- medium hacks --
 
--- Converts a Mod to GOOL
+-- | Converts a 'Mod' to GOOL.
 genModDef :: (OOProg r) => Mod -> GenState (SFile r)
 genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap 
   Just . genFunc publicFunc []) fs) 
@@ -459,15 +461,15 @@ genModDef (Mod n desc is cs fs) = genModuleWithImports n desc is (map (fmap
               (cl:cls) -> fmap Just (genClass primaryClass cl) : 
                 map (fmap Just . genClass auxClass) cls)
 
--- Converts a Mod's functions to GOOL
+-- | Converts a 'Mod'\'s functions to GOOL.
 genModFuncs :: (OOProg r) => Mod -> [GenState (SMethod r)]
 genModFuncs (Mod _ _ _ _ fs) = map (genFunc publicFunc []) fs
 
--- Converts a Mod's classes to GOOL
+-- | Converts a 'Mod'\'s classes to GOOL.
 genModClasses :: (OOProg r) => Mod -> [GenState (SClass r)]
 genModClasses (Mod _ _ _ cs _) = map (genClass auxClass) cs
 
--- Converts a Class (from the Mod AST) to GOOL. 
+-- | Converts a Class (from the Mod AST) to GOOL. 
 -- The class generator to use is passed as a parameter.
 genClass :: (OOProg r) => (Name -> Maybe Name -> Description -> [CSStateVar r] 
   -> GenState [SMethod r] -> GenState (SClass r)) -> 
@@ -479,7 +481,7 @@ genClass f (M.ClassDef n i desc svs ms) = let svar Pub = pubDVar
     (codeType v)) svs
   f n i desc svrs (mapM (genFunc publicMethod svs) ms)
 
--- Converts a Func (from the Mod AST) to GOOL.
+-- | Converts a 'Func' (from the Mod AST) to GOOL.
 -- The function generator to use is passed as a parameter. Automatically adds 
 -- variable declaration statements for any undeclared variables. For methods, 
 -- the list of StateVariables is needed so they can be included in the list of 
@@ -506,7 +508,7 @@ genFunc _ svs (FDef (CtorDef n desc parms i s)) = do
     [block $ map varDec vars, block stmts]
 genFunc _ _ (FData (FuncData n desc ddef)) = genDataFunc n desc ddef
 
--- Converts a FuncStmt to a GOOL Statement
+-- | Converts a 'FuncStmt' to a GOOL Statement.
 convStmt :: (OOProg r) => FuncStmt -> GenState (MSStatement r)
 convStmt (FAsg v (Matrix [es]))  = do
   els <- mapM convExpr es
@@ -602,8 +604,8 @@ convStmt (FAppend a b) = do
   b' <- convExpr b
   return $ valStmt $ listAppend a' b'
 
--- Generates a function that reads a file whose format is based on the passed 
--- DataDesc
+-- | Generates a function that reads a file whose format is based on the passed 
+-- 'DataDesc'.
 genDataFunc :: (OOProg r) => Name -> Description -> DataDesc -> 
   GenState (SMethod r)
 genDataFunc nameTitle desc ddef = do
@@ -613,6 +615,7 @@ genDataFunc nameTitle desc ddef = do
     Nothing bod
 
 -- this is really ugly!!
+-- | Read from a data description into a 'MSBlock' of 'MSStatement's.
 readData :: (OOProg r) => DataDesc -> GenState [MSBlock r]
 readData ddef = do
   inD <- mapM inData ddef
@@ -702,11 +705,13 @@ readData ddef = do
         var_i = var l_i int
         v_i = valueOf var_i
 
+-- | Get entry variables.
 getEntryVars :: (OOProg r) => Maybe String -> LinePattern -> 
   GenState [SVariable r]
 getEntryVars s lp = mapM (maybe mkVar (\st v -> codeType v >>= (variable 
   (codeName v ++ st) . listInnerType . convType)) s) (getPatternInputs lp)
 
+-- | Get entry variable logs.
 getEntryVarLogs :: (OOProg r) => LinePattern -> 
   GenState [MSStatement r]
 getEntryVarLogs lp = do

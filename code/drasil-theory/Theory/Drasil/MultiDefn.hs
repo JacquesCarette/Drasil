@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables, PostfixOperators  #-}
 
-module Theory.Drasil.MultiDefn (MultiDefn, DefiningExpr, 
+module Theory.Drasil.MultiDefn (MultiDefn, DefiningExpr,
     mkMultiDefn, mkMultiDefnForQuant, mkDefiningExpr,
     multiDefnGenQD, multiDefnGenQDByUID) where
 
@@ -49,14 +49,14 @@ instance ConceptDomain MultiDefn where cdom     = foldr1 union . NE.toList . NE.
 instance Definition    MultiDefn where defn     = rDesc
 -- | The complete Relation of a MultiDefn is defined as the quantity and the related expressions being equal
 --   e.g., `q $= a $= b $= ... $= z`
-instance Display       MultiDefn where -- TODO: CLEAN UP
-  toDispExpr q = toDispExpr $ sy q $= foldr1 ($=) (NE.map (^. expr) (q ^. rvs))
+instance Display       MultiDefn where
+  toDispExpr q = equalDEs $ sy q : NE.toList (NE.map (^. expr) (q ^. rvs))
 
 -- | Smart constructor for MultiDefns, does nothing special at the moment
 mkMultiDefn :: UID -> QuantityDict -> Sentence -> NE.NonEmpty DefiningExpr -> MultiDefn
 mkMultiDefn u q s des
   | length des == dupsRemovedLen = MultiDefn u q s des
-  | otherwise                    = error $ 
+  | otherwise                    = error $
     "MultiDefn '" ++ u ++ "' created with non-unique list of expressions"
   where dupsRemovedLen = length $ NE.nub des
 

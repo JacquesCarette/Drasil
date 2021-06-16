@@ -5,7 +5,7 @@ import Language.Drasil hiding (neg, sec, symbol, isIn)
 import Language.Drasil.Development (UFuncB(..), UFuncVec(..)
   , ArithBinOp(..), BoolBinOp(..), EqBinOp(..), LABinOp(..)
   , OrdBinOp(..), VVNBinOp(..), VVVBinOp(..)
-  , precA, precB, eprec, dePrec, dePrecAssoc, DisplayExpr(..), DisplayBinOp(..), DisplayAssocBinOp)
+  , precA, precB, eprec, dePrec, dePrecAssoc, DisplayExpr(..), DisplayBinOp(..), DisplayAssocBinOp (Equal))
 import Database.Drasil
 import Utils.Drasil
 
@@ -102,7 +102,8 @@ deBinOp IsIn    = P.IsIn
 deBinOp Defines = P.Eq
 
 deAssocBinOp :: DisplayAssocBinOp -> P.Ops
-deAssocBinOp _ = P.And
+deAssocBinOp Equal = P.Eq 
+deAssocBinOp _     = P.And
 
 -- | Translate DisplayExprs to printable layout AST.
 dispExpr :: DisplayExpr -> PrintingInformation -> P.Expr

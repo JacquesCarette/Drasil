@@ -4,7 +4,8 @@ import Language.Drasil.Expr (Expr(..),
   ArithBinOp(..), BoolBinOp, EqBinOp(..), LABinOp, OrdBinOp, VVNBinOp,
   UFunc(..), UFuncB(..), UFuncVec(..),
   AssocBoolOper(..), AssocArithOper(..), VVVBinOp)
-import Language.Drasil.DisplayExpr (DisplayBinOp(..), DisplayAssocBinOp (Equal), DisplayExpr (..))
+import Language.Drasil.DisplayExpr (DisplayBinOp(..), 
+  DisplayAssocBinOp (Equivalence), DisplayExpr (..))
 
 -- These precedences are inspired from Haskell/F# 
 -- as documented at http://kevincantu.org/code/operators.html
@@ -110,5 +111,5 @@ dePrecB Defines = 130
 
 -- | dePrecAssoc - precedence for associative binary operators.
 dePrecAssoc :: DisplayAssocBinOp -> Int
-dePrecAssoc Equal = 130
-dePrecAssoc _     = 120
+dePrecAssoc Equivalence = 130
+dePrecAssoc _           = 120

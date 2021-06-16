@@ -5,7 +5,8 @@ import Language.Drasil hiding (neg, sec, symbol, isIn)
 import Language.Drasil.Development (UFuncB(..), UFuncVec(..)
   , ArithBinOp(..), BoolBinOp(..), EqBinOp(..), LABinOp(..)
   , OrdBinOp(..), VVNBinOp(..), VVVBinOp(..)
-  , precA, precB, eprec, dePrec, dePrecAssoc, DisplayExpr(..), DisplayBinOp(..), DisplayAssocBinOp (Equal))
+  , precA, precB, eprec, dePrec, dePrecAssoc, DisplayExpr(..)
+  , DisplayBinOp(..), DisplayAssocBinOp(Equivalence))
 import Database.Drasil
 import Utils.Drasil
 
@@ -97,13 +98,15 @@ processExpo a
 assocExpr :: P.Ops -> Int -> [Expr] -> PrintingInformation -> P.Expr
 assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ map (expr' sm prec) exprs
 
+-- | Convert 'DisplayBinOps' into the operators of the AST language.
 deBinOp :: DisplayBinOp -> P.Ops
 deBinOp IsIn    = P.IsIn
 deBinOp Defines = P.Eq
 
+-- | Convert 'DisplayAssocBinOp's into the operators of the AST language.
 deAssocBinOp :: DisplayAssocBinOp -> P.Ops
-deAssocBinOp Equal = P.Eq 
-deAssocBinOp _     = P.And
+deAssocBinOp Equivalence = P.Eq 
+deAssocBinOp _           = P.And
 
 -- | Translate DisplayExprs to printable layout AST.
 dispExpr :: DisplayExpr -> PrintingInformation -> P.Expr

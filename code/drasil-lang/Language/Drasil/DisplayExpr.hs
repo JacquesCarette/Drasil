@@ -6,16 +6,16 @@ module Language.Drasil.DisplayExpr (DisplayExpr(..),
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Space (Space)
 
+-- | Binary Display Operations
 data DisplayBinOp = Defines | IsIn
   deriving (Eq, Show)
 
 -- | Associative Binary Display Operations
---
---   Note: 'Equal' makes sense in the Display language, but not in the
---         general computation language.
-data DisplayAssocBinOp = And | Equal
+data DisplayAssocBinOp = And | Equivalence
   deriving (Eq, Show)
 
+-- | A variant of the expression language that allows for extensions of Expr
+--   that wouldn't normally type check, or that we only care for displaying.
 data DisplayExpr where
     AlgebraicExpr :: Expr -> DisplayExpr
     SpaceExpr     :: Space -> DisplayExpr

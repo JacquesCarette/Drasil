@@ -141,7 +141,7 @@ codevars e m = map (varResolve m) $ eDep e
 
 -- | Get a list of 'CodeChunk's from an equation (no functions).
 codevars' :: Expr -> ChunkDB -> [CodeVarChunk]
-codevars' e m = map (varResolve m) $ nub $ eNames' e -- TODO: it seems weird, but I'll have to check if this + above should be DisplayExprs
+codevars' e m = map (varResolve m) $ nub $ eNames' e
 
 -- | Make a 'CodeVarChunk' from a 'UID' in the 'ChunkDB'.
 varResolve :: ChunkDB -> UID -> CodeVarChunk

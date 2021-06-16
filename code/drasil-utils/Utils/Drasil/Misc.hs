@@ -35,9 +35,8 @@ compareBySymbol a b = compsy (symbol a Equational) (symbol b Equational)
 eqN :: Int -> Sentence
 eqN n = S "Equation" +:+ sParen (S $ show n)
 
--- TODO: Should this one be a flat DisplayExpr?
 -- | Takes an expression and a 'Referable' and outputs as a Sentence "expression (source)".
-eqnWSource :: (Referable r, HasShortName r) => Expr -> r -> Sentence
+eqnWSource :: (Display e, Referable r, HasShortName r) => e -> r -> Sentence
 eqnWSource a b = eS a +:+ sParen (makeRef2S b)
 
 -- | Takes a 'Referable' source and a 'UnitalChunk' and outputs as a 'Sentence': "From @source@ we can replace @symbol@:".

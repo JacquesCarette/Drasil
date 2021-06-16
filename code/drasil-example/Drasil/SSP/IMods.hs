@@ -74,8 +74,8 @@ fctSftyDesc = foldlList Comma List [shearRNoIntsl `definedIn'''` resShearWOGD,
 
 fctSftyDeriv :: Derivation
 fctSftyDeriv = mkDerivNoHeader (weave [fctSftyDerivSentences1, map eS fctSftyDerivEqns1] ++
-  [eS fctSftyDerivEqn10b, eS fctSftyDerivEqn10c, fctSftyDerivEllipsis,
-  eS fctSftyDerivEqn10d, eS fctSftyDerivEqn10e, eS fctSftyDerivEqn10f] ++
+  map eS [fctSftyDerivEqn10b, fctSftyDerivEqn10c] ++ [fctSftyDerivEllipsis] ++
+  map eS [fctSftyDerivEqn10d, fctSftyDerivEqn10e, fctSftyDerivEqn10f] ++
   weave [fctSftyDerivSentences2, map eS fctSftyDerivEqns2] ++
   fctSftyDerivSentence20)
 

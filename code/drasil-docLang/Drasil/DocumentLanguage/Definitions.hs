@@ -156,7 +156,7 @@ buildDDescription' :: Verbosity -> InclUnits -> DataDefinition -> SystemInformat
   [Contents]
 buildDDescription' Succinct u d _ = [UlC . ulcc . Enumeration $ Definitions [firstPair' u d]]
 buildDDescription' Verbose u d m = [UlC . ulcc . Enumeration $ Definitions $
-  firstPair' u d : descPairs u (flip vars (_sysinfodb m) $ toDispExpr $ d ^. defnExpr)] -- TODO: ... check this again ... I don't see why it would be going for specifically only the defnExpr
+  firstPair' u d : descPairs u (flip vars (_sysinfodb m) $ toDispExpr $ d ^. defnExpr)]
 
 -- | Create the fields for a general definition from a 'GenDefn' chunk.
 mkGDField :: GenDefn -> SystemInformation -> Field -> ModRow -> ModRow

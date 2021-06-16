@@ -45,7 +45,6 @@ instance CodeIdea     CodeDefinition where
 instance Eq           CodeDefinition where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 -- | Finds the units of the 'CodeChunk' used to make the 'CodeDefinition'.
 instance MayHaveUnit  CodeDefinition where getUnit = getUnit . view cchunk
-instance Display      CodeDefinition where toDispExpr c = defines (c ^. cchunk) (c ^. def) 
 -- | Finds the defining expression of a CodeDefinition.
 instance DefiningExpr CodeDefinition where defnExpr = def
 

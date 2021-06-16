@@ -36,7 +36,7 @@ genDefns = [velocityIXGD, velocityIYGD, accelerationIXGD, accelerationIYGD,
        hForceOnPendulumGD, vForceOnPendulumGD, angFrequencyGD, periodPend]
 
 
--- ----------
+---------------------
 velocityIXGD :: GenDefn
 velocityIXGD = gdNoRefs (EquationalModel velocityIXQD) (getUnit velocity)
            (Just velocityIXDeriv) "velocityIX" [{-Notes-}]
@@ -109,8 +109,8 @@ accelerationIXDerivSents = [accelerationIDerivSent1, accelerationIXDerivSent2, a
     accelerationIXDerivSent4, accelerationIXDerivSent5]
 
 accelerationIXDerivEqns :: [Sentence]
-accelerationIXDerivEqns = [eS E.accelerationIDerivEqn1, eS velocityIXQD,
-    eS E.accelerationIXDerivEqn3, eS E.accelerationIXDerivEqn4, eS accelerationIXQD]
+accelerationIXDerivEqns = eS E.accelerationIDerivEqn1 : eS velocityIXQD :
+    map eS [E.accelerationIXDerivEqn3, E.accelerationIXDerivEqn4] ++ [eS accelerationIXQD]
 
 accelerationIDerivSent1, accelerationIXDerivSent2, accelerationIXDerivSent3,
      accelerationIXDerivSent4, accelerationIXDerivSent5 :: Sentence
@@ -137,12 +137,11 @@ accelerationIYDerivSents = [accelerationIDerivSent1, accelerationIYDerivSent2, a
     accelerationIYDerivSent4, accelerationIYDerivSent5]
 
 accelerationIYDerivEqns :: [Sentence]
-accelerationIYDerivEqns = [eS E.accelerationIDerivEqn1, eS velocityIYQD,
-    eS E.accelerationIYDerivEqn3, eS E.accelerationIYDerivEqn4, eS accelerationIYQD]
+accelerationIYDerivEqns = eS E.accelerationIDerivEqn1 : eS velocityIYQD :
+    map eS [E.accelerationIYDerivEqn3, E.accelerationIYDerivEqn4] ++ [eS accelerationIYQD]
 
 accelerationIYDerivSent2, accelerationIYDerivSent3, accelerationIYDerivSent4,
     accelerationIYDerivSent5 :: Sentence
-
 accelerationIYDerivSent2 = S "Earlier" `sC` S "we found the" +:+ phrase verticalVel +:+ S "to be"
 accelerationIYDerivSent3 = S "Applying this to our equation for" +:+ phrase acceleration
 accelerationIYDerivSent4 = S "By the product and chain rules, we find"
@@ -205,14 +204,12 @@ angFrequencyDerivSents = [angFrequencyDerivSent1, angFrequencyDerivSent2, angFre
 
 angFrequencyDerivSent1, angFrequencyDerivSent2, angFrequencyDerivSent3,
      angFrequencyDerivSent4, angFrequencyDerivSent5, angFrequencyDerivSent6, angFrequencyDerivSent7 :: Sentence
-
 angFrequencyDerivSent1 = foldlSentCol [S "Consider the", phrase torque, S "on a", phrase pendulum +:+. definedIn'' newtonSLR,
                   S "The", phrase force, S "providing the restoring", phrase torque `S.is` phraseNP (the component `NP.of_`
                   (weight `ofThe` pendulum)), S "bob that acts along the" +:+. phrase arcLen,
                   (phrase torque `S.isThe` phrase len) `S.the_ofTheC` S "string", ch lenRod, S "multiplied by", phrase component
                   `S.the_ofThe` S "net", phrase force, S "that is perpendicular to", S "radius" `S.the_ofThe` (S "arc" !.),
                   S "The minus sign indicates the", phrase torque, S "acts in the opposite", phraseNP (direction `ofThe`angularDisplacement)]
-
 angFrequencyDerivSent2 = S "So then"
 angFrequencyDerivSent3 = S "Therefore,"
 angFrequencyDerivSent4 = S "Substituting for" +:+ ch momentOfInertia

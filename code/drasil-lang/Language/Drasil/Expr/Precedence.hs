@@ -96,16 +96,19 @@ eprec (VVVBinaryOp bo _ _)   = prec2VVV bo
 eprec (VVNBinaryOp bo _ _)   = prec2VVN bo
 eprec RealI{}                = 170
 
+-- | dePrec - "Display Expression" precedence.
 dePrec :: DisplayExpr -> Int
 dePrec (AlgebraicExpr e) = eprec e
 dePrec (SpaceExpr _)     = 170
 dePrec (BinOp b _ _)     = dePrecB b
 dePrec (AssocBinOp b _)  = dePrecAssoc b
 
+-- | dePrecB - precedence for binary operators.
 dePrecB :: DisplayBinOp -> Int
 dePrecB IsIn = 170
 dePrecB Defines = 130
 
+-- | dePrecAssoc - precedence for associative binary operators.
 dePrecAssoc :: DisplayAssocBinOp -> Int
 dePrecAssoc Equal = 130
 dePrecAssoc _     = 120

@@ -224,6 +224,7 @@ expr' :: PrintingInformation -> Int -> Expr -> P.Expr
 expr' s p e = fence $ expr e s
   where fence = if eprec e < p then parens else id
 
+-- | Helper that adds parenthesis to a display expression where appropriate.
 dispExpr' :: PrintingInformation -> Int -> DisplayExpr -> P.Expr
 dispExpr' s p e = fence $ dispExpr e s
   where fence = if dePrec e < p then parens else id

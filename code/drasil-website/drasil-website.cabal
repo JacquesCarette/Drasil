@@ -4,22 +4,18 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: aeac6d7c2e27365994a090a91d65e9f15fae43b454bf0c87f565be6f8ff0c30b
+-- hash: 873dad2df59c97862f759396366d582909b903b38331e38afbd2aa3a6b3bd0ad
 
 name:           drasil-website
 version:        0.1.0.0
+synopsis:       Using the Drasil generators to create Drasil's website
 description:    Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
 homepage:       https://jacquescarette.github.io/Drasil/
 bug-reports:    https://github.com/JacquesCarette/Drasil/issues
-author:         Author name here
-maintainer:     example@example.com
-copyright:      2021 Author name here
+maintainer:     Jacques Carette
 license:        BSD3
 license-file:   LICENSE
 build-type:     Simple
-extra-source-files:
-    README.md
-    ChangeLog.md
 
 source-repository head
   type: git
@@ -28,13 +24,12 @@ source-repository head
 executable website
   main-is: Drasil/Website/Main.hs
   other-modules:
-      Drasil.Website
+      Drasil.Website.Website
   hs-source-dirs:
       ./
-  ghc-options: -Wall -Wredundant-constraints -threaded -O2 -main-is Drasil.Website.Main
+  ghc-options: -Wall -Wredundant-constraints -threaded -main-is Drasil.Website.Main
   build-depends:
       base >=4.7 && <5
-    , drasil-website
     , directory
     , drasil-code
     , drasil-data

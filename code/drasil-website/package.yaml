@@ -1,17 +1,12 @@
 name:                drasil-website
 version:             0.1.0.0
-github:              "githubuser/drasil-website"
-license:             BSD3
-author:              "Author name here"
-maintainer:          "example@example.com"
-copyright:           "2021 Author name here"
+github:              JacquesCarette/Drasil
+maintainer:          "Jacques Carette"
+synopsis:            Using the Drasil generators to create Drasil's website
 
-extra-source-files:
-- README.md
-- ChangeLog.md
+extra-source-files: []
 
 # Metadata used when publishing your package
-synopsis:            Using the Drasil generators to create Drasil's website
 # category:            Web
 
 # To avoid duplicated efforts in documentation and dealing with the
@@ -35,22 +30,15 @@ dependencies:
 - drasil-printers
 - drasil-theory
 - drasil-utils
-- drasil-example
 
 ghc-options:
 - -Wall
 - -Wredundant-constraints
 - -threaded
-- -O2
 
 executables:
   website:
     main: Drasil.Website.Main
     source-dirs: ./
     other-modules:
-    - Drasil.Website
-
-extra-deps:
-- multiplate-0.0.3@sha256:5d2ffc50d23c55008100b7a8b70f77b5fcce08c6f23822c5a6adc5b5b9356a32
-- unicode-names-3.2.0.0@sha256:fef7241d93170e26265e84553090253a5e8ee207645d47cf271816f5834d07d2
-- unicode-properties-3.2.0.0@sha256:239766a6ac4322329353f6b9cd546024fd8c5f0235c8e32b3cba2d6bd245a699
+    - Drasil.Website.Website

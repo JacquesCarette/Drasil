@@ -4,10 +4,11 @@ module Language.Drasil.Document.Core where
 import Language.Drasil.Chunk.Citation (BibRef)
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
-  HasShortName(shortname), Referable(refAdd, renderRef))
+  Referable(refAdd, renderRef))
+import Language.Drasil.Classes.Core2 (HasShortName(shortname))
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Label.Type (LblType(RP), IRefProg, prepend)
-import Language.Drasil.RefProg(Reference)
+import Language.Drasil.Reference (Reference)
 import Language.Drasil.Sentence (Sentence)
 
 import Control.Lens ((^.), makeLenses, Lens', set, view)

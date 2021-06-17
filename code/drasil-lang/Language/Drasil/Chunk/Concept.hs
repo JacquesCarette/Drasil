@@ -58,4 +58,4 @@ cw c = ConDict (nw c) (c ^. defn) (cdom c)
 -- Reference Address ('String'), a definition ('Sentence'), 
 -- a short name ('String'), and a domain (or explicit tagging).
 cic :: Concept c => String -> Sentence -> String -> c -> ConceptInstance
-cic u d sn dom = ConInst (ccs (nc u $ pn sn) d [dom]) u $ shortname' sn
+cic u d sn dom = ConInst (ccs (nc u $ pn sn) d [dom]) u $ shortname' (S sn)

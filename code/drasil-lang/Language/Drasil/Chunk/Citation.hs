@@ -13,10 +13,12 @@ module Language.Drasil.Chunk.Citation
 
 import Language.Drasil.People (People)
 
-import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname), HasRefAddress(getRefAdd), Referable(refAdd, renderRef))
+import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd), Referable(refAdd, renderRef))
+import Language.Drasil.Classes.Core2 (HasShortName(shortname))
 import Language.Drasil.Classes.Citations (HasFields(getFields))
 import Language.Drasil.Data.Citation (author, chapter, pages, editor, bookTitle, title, 
   year, school, journal, institution, note, publisher, CitationKind(..), CiteField)
+import Language.Drasil.Sentence (Sentence(S))
 import Language.Drasil.Label.Type (LblType(Citation))
 import Language.Drasil.Misc (noSpaces)
 import Language.Drasil.ShortName (ShortName, shortname')
@@ -55,7 +57,7 @@ instance HasRefAddress Citation where getRefAdd c= c ^. citeID
 
 -- | Smart constructor which implicitly uses EntryID as chunk id.
 cite :: CitationKind -> [CiteField] -> String -> Citation
-cite x y z = let s = noSpaces z in Cite x y s (shortname' s)
+cite x y z = let s = noSpaces z in Cite x y s (shortname' (S s))
 
 -- | Article citation requires author(s), title, journal, year.
 -- Optional fields can be: volume, number, pages, month, and note.

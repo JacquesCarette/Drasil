@@ -7,18 +7,14 @@ module Drasil.SSP.GenDefs (normForcEq, bsShrFEq, resShr, mobShr,
 import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
 import qualified Data.List.NonEmpty as NE
-
 import Language.Drasil
-import Theory.Drasil (GenDefn, gd, ModelKinds (OthModel, EquationalConstraints), mkConstraintSet)
+import Theory.Drasil (GenDefn, gd, ModelKinds(EquationalConstraints, OthModel, EquationalModel), mkConstraintSet, )
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.NounPhrase as NP
 import qualified Utils.Drasil.Sentence as S
-
 import Drasil.DocLang.SRS as SRS (physSyst)
-
 import Data.Drasil.SI_Units (metre, newton)
-
 import Data.Drasil.Concepts.Documentation (analysis, assumption, component,
   constant, definition, method_, value)
 import Data.Drasil.Concepts.Math (area, equation, zDir)
@@ -29,7 +25,6 @@ import Data.Drasil.Quantities.PhysicalProperties (specWeight)
 import Data.Drasil.Quantities.Physics (displacement, force, height,
   pressure, torque)
 import Data.Drasil.Theories.Physics (weightGD, hsPressureGD, torqueDD)
-
 import Drasil.SSP.Assumptions (assumpFOSL, assumpSLH, assumpSP, assumpSLI,
   assumpINSFL, assumpPSC, assumpSBSBISL, assumpWIBE, assumpWISE, assumpNESSS,
   assumpHFSM)
@@ -75,7 +70,7 @@ resShearWOGD = gd (OthModel resShearWO) (getUnit shearRNoIntsl) Nothing
   (map makeCite[chen2005, karchewski2012]) "resShearWO"  [resShearWODesc]
 mobShearWOGD = gd (OthModel mobShearWO) (getUnit shearFNoIntsl) Nothing
   (map makeCite[chen2005, karchewski2012]) "mobShearWO"  [mobShearWODesc]
-normShrRGD   = gd (OthModel normShrR)   (getUnit intShrForce)   Nothing
+normShrRGD   = gd (EquationalModel normShrR)   (getUnit intShrForce)   Nothing
   [makeCite chen2005]                      "normShrR"    [nmShrRDesc]
 momentEqlGD  = gd momentEqlModel        (Just newton)            (Just momEqlDeriv)
   [makeCite chen2005]                      "momentEql"   [momEqlDesc]
@@ -194,14 +189,14 @@ effNormFDeriv = mkDerivNoHeader [foldlSent [
   sParen (makeRef2S assumpPSC) `sC` S "the resulting", plural force,
   S "are expressed per", phrase metre, S "in", phraseNP (the zDir)]]
 
---
-normShrR :: RelationConcept
-normShrR = makeRC "normShrR"
-  (nounPhraseSP "interslice normal and shear force proportionality")
-  nmShrRDesc nmShrRRel -- genDef5Label
+-- 
+
+normShrR :: QDefinition 
+normShrR = mkQuantDef intShrForce nmShrRRel
+
 
 nmShrRRel :: Relation
-nmShrRRel = sy intShrForce $= sy normToShear `mulRe` sy scalFunc `mulRe` sy intNormForce
+nmShrRRel = sy normToShear `mulRe` sy scalFunc `mulRe` sy intNormForce
 
 nmShrRDesc :: Sentence
 nmShrRDesc = foldlSent [S "Mathematical representation of the primary",

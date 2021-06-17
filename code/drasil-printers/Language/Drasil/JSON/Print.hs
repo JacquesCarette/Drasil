@@ -66,10 +66,10 @@ printMath = (`runPrint` Math)
 
 -- | Helper for rendering LayoutObjects into JSON
 printLO :: LayoutObj -> Doc
-printLO (Header n contents l)            = quote (h (n + 1) <> pSpec contents) $$ refID (pSpec l)
+printLO (Header n contents l)            = quote empty $$ quote (h (n + 1) <> pSpec contents) $$ refID (pSpec l)
 printLO (HDiv _ layoutObs EmptyS)        = vcat (map printLO layoutObs)
 printLO (HDiv _ layoutObs l)             = refID (pSpec l) $$ (vcat (map printLO layoutObs))
-printLO (Paragraph contents)             = quote (stripnewLine (show(pSpec contents)))
+printLO (Paragraph contents)             = quote empty $$ quote (stripnewLine (show(pSpec contents)))
 printLO (EqnBlock contents)              = quote (jf (show mathEqn)) 
   where
     toMathHelper (PL g) = PL (\_ -> g Math)
@@ -96,7 +96,7 @@ makeSec (x:xs)   = printLO x $$ makeSec xs
 
 
 pSpec :: Spec -> Doc
-pSpec (E e)  = text "$" <> pExpr e <> text "$"
+pSpec (E e)  = text "$" <> pExpr e <> text "$" -- symbols used
 pSpec (a :+: b) = pSpec a <> pSpec b
 pSpec (S s)     = either error (text . concatMap escapeChars) $ checkValidStr s invalid
   where
@@ -122,18 +122,21 @@ pExpr (Row l)        = hcat $ map pExpr l
 pExpr (Ident s)      = text s
 pExpr (Label s)      = text s
 pExpr (Spec s)       = text $ unPH $ L.special s
-pExpr (Sub e)        = sub $ pExpr e
+pExpr (Sub e)        = text "_" <> pExpr e
 pExpr (Sup e)        = text "^" <> pExpr e
 pExpr (Over Hat s)   = pExpr s <> text "&#770;"
 pExpr (MO o)         = text $ pOps o
 pExpr (Fenced l r e) = text (fence Open l) <> pExpr e <> text (fence Close r)
-pExpr (Font Bold e)  = bold $ pExpr e
---pExpr (Font Emph e)  = text "<em>" <> pExpr e <> text "</em>" -- FIXME
---pExpr (Spc Thin)     = text "&#8239;"
--- Uses TeX for Mathjax for all other exprs
+pExpr (Font Bold e)  = pExpr e 
+--pExpr (Font Bold e)  = bold $ pExpr e -- **used before
+--pExpr (Font Emph e)  = text "<em>" <> pExpr e <> text "</em>" -- **HTML used
+--pExpr (Spc Thin)     = text "&#8239;" -- **HTML used
+-- Uses TeX for Mathjax for all other exprs 
 pExpr e              = jf (show (mathEqn))
-  where mjDelimDisp d = text "$" <> d <> text "$"
-        mathEqn = mjDelimDisp $ printMath $ toMath $ TeX.pExpr e
+  where mathEqn = printMath $ toMath $ TeX.pExpr e
+  -- **before
+  --where mjDelimDisp d = text "$" <> d <> text "$"
+  --      mathEqn = mjDelimDisp $ printMath $ toMath $ TeX.pExpr e
 
 
 -- **TODO: edit all operations in markdown format
@@ -160,7 +163,7 @@ pOps Arctan   = "arctan"
 pOps Not      = "&not;"
 pOps Dim      = "dim"
 pOps Exp      = "e"
-pOps Neg      = "&minus;"
+pOps Neg      = "-;"
 pOps Cross    = "&#10799;"
 pOps Dot      = "&sdot;"
 pOps Eq       = " = " -- with spaces?
@@ -175,7 +178,7 @@ pOps Subt     = " - "
 pOps And      = " &and; "
 pOps Or       = " &or; "
 pOps Add      = " + "
-pOps Mul      = " * "
+pOps Mul      = ""
 pOps Summ     = "&sum"
 pOps Inte     = "&int;"
 pOps Prod     = "&prod;"

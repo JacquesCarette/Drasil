@@ -14,14 +14,6 @@ tableOfAbbAndAcronyms :: (Idea s) => [s] -> Section
 tableOfAbbAndAcronyms ls = Section (titleize abbAcc)
   [Con (LlC $ table ls)] tableAbbAccLabel
 
--- Will be changed when shortname is changed.
---FIXME: Temporary until shortname can take a sentence. 
--- Same problem as in Drasil.DocLang.SRS, see issue #2489 for details.
-toString :: Sentence -> String
-toString (S x) = x
-toString ((:+:) s1 s2) = toString s1 ++ toString s2
-toString _ = error "Term is not a string"
-
 -- | Helper function that gets the acronym out of an 'Idea'.
 select :: (Idea s) => [s] -> [(String, s)]
 select [] = []
@@ -46,5 +38,5 @@ tableAbbAccRef = makeTabRef (abbAcc ^. uid)
 -- should this be moved to DocLang/SRS?
 -- | Reference for Table of Abbreviations and Acronyms.
 tableAbbAccLabel :: Reference
-tableAbbAccLabel = makeSecRef (abbAcc ^. uid) (toString (titleize abbAcc))
+tableAbbAccLabel = makeSecRef (abbAcc ^. uid) $ titleize abbAcc
 

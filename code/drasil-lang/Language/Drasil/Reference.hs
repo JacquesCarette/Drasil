@@ -1,5 +1,6 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Reference where
+module Language.Drasil.Reference (Reference(Reference, refInfo), makeRef2, makeRef2S,
+  makeCite, makeCiteS, makeCiteInfo, makeCiteInfoS, rw) where
 
 import Language.Drasil.Chunk.Citation (Citation)
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),

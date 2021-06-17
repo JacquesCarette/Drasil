@@ -58,7 +58,7 @@ consThermERel = neg (sy gradient) $. sy thFluxVect `addRe` sy volHtGen $=
 consThemESrc :: Reference
 consThemESrc = makeURI "consThemESrc"
   "http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm" $
-  shortname' "Fourier Law of Heat Conduction and Heat Equation"
+  shortname' $ S "Fourier Law of Heat Conduction and Heat Equation"
 
 consThermENotes :: [Sentence]
 consThermENotes = map foldlSent [
@@ -96,7 +96,7 @@ sensHtEQD pc eqn desc = fromEqnSt' "sensHeat" np desc (symbol sensHeat) (sensHea
 sensHtESrc :: Reference
 sensHtESrc = makeURI "sensHtESrc"
   "http://en.wikipedia.org/wiki/Sensible_heat" $
-  shortname' "Definition of Sensible Heat"
+  shortname' $ S "Definition of Sensible Heat"
 
 sensHtEEqn :: PhaseChange -> Expr
 sensHtEEqn pChange = case pChange of
@@ -146,7 +146,7 @@ latHtEEqn = apply1 latentHeat time $=
 
 latHtESrc :: Reference
 latHtESrc = makeURI "latHtESrc" "http://en.wikipedia.org/wiki/Latent_heat" $
-  shortname' "Definition of Latent Heat"
+  shortname' $ S "Definition of Latent Heat"
 
 latentHtENotes :: [Sentence]
 latentHtENotes = map foldlSent [

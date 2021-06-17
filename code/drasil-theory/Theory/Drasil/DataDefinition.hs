@@ -65,11 +65,11 @@ instance Referable          DataDefinition where
 -- | Smart constructor for data definitions.
 dd :: QDefinition -> [Reference] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
 dd q []   _   _  = error $ "Source field of " ++ q ^. uid ++ " is empty"
-dd q refs der sn = DatDef q Global refs der (shortname' sn) (prependAbrv dataDefn sn)
+dd q refs der sn = DatDef q Global refs der (shortname' $ S sn) (prependAbrv dataDefn sn)
 
 -- | Smart constructor for data definitions with no references.
 ddNoRefs :: QDefinition -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
-ddNoRefs q der sn = DatDef q Global [] der (shortname' sn) (prependAbrv dataDefn sn)
+ddNoRefs q der sn = DatDef q Global [] der (shortname' $ S sn) (prependAbrv dataDefn sn)
 
 -- | Extracts the 'QDefinition' from a 'DataDefinition'.
 qdFromDD :: DataDefinition -> QDefinition

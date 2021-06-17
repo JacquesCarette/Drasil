@@ -37,7 +37,7 @@ weightQD = mkQuantDef' QP.weight (nounPhraseSP "weight") weightEqn
 
 weightSrc :: Reference
 weightSrc = makeURI "weightSrc" "https://en.wikipedia.org/wiki/Weight" $
-  shortname' "Definition of Weight"
+  shortname' $ S "Definition of Weight"
 
 weightDeriv :: Derivation
 weightDeriv = mkDerivName (phrase QP.weight) $ weave [weightDerivSentences, weightDerivEqns]
@@ -81,7 +81,7 @@ hsPressureQD = mkQuantDef' QP.pressure (nounPhraseSP "hydrostatic pressure") hsP
 
 hsPressureSrc :: Reference
 hsPressureSrc = makeURI "hsPressureSrc" "https://en.wikipedia.org/wiki/Pressure" $
-  shortname' "Definition of Pressure"
+  shortname' $ S "Definition of Pressure"
 
 hsPressureNotes :: Sentence
 hsPressureNotes = S "This" +:+ phrase equation +:+ S "is derived from" +:+

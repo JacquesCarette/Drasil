@@ -108,14 +108,14 @@ makeFigRef :: String -> Reference
 makeFigRef rs = Reference rs (RP (prepend "Fig") ("Figure:" ++ repUnd rs)) (shortname' (S rs)) None
 
 -- | Create a reference for a section. Takes in the name of a section and a shortname for the section.
-makeSecRef :: String -> String -> Reference
+makeSecRef :: String -> Sentence -> Reference
 makeSecRef r s = Reference (r ++ "Label") (RP (prepend "Sec") ("Sec:" ++ repUnd r))
-  (shortname' (S s)) None
+  (shortname' s) None
 
 -- | Create a reference for a list. Takes in the name of the list and a shortname for the list.
-makeLstRef :: String -> String -> Reference
+makeLstRef :: String -> Sentence -> Reference
 makeLstRef r s = Reference (r ++ "Label") (RP (prepend "Lst") ("Lst:" ++ repUnd r))
-  (shortname' (S s)) None
+  (shortname' s) None
 
 -- | Create a reference for a 'URI'.
 makeURI :: UID -> String -> ShortName -> Reference

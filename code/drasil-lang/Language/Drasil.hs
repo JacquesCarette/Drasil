@@ -95,7 +95,7 @@ module Language.Drasil (
   -- Derivation
   , Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader
   -- ShortName
-  , ShortName, shortname', getStringSN
+  , ShortName, shortname', getSentSN
   --Citations
   , Citation, EntryID, BibRef
   , citeID, citeKind
@@ -271,7 +271,7 @@ import Language.Drasil.Data.Citation(CiteField(..), HP(..), CitationKind(..) -- 
       -- Month -> CiteField
   , month)
 import Language.Drasil.NounPhrase
-import Language.Drasil.ShortName (ShortName, shortname', getStringSN)
+import Language.Drasil.ShortName (ShortName, shortname', getSentSN)
 import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..), 
   RTopology(..), DomainDesc(AllDD, BoundedDD), getActorName, getInnerSpace)
 import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), (+:+),

@@ -116,7 +116,7 @@ tm' :: (Quantity q, MayHaveUnit q, Concept c) => UID -> ModelKinds ->
     String -> [Sentence] -> TheoryModel
 tm' u _  _ _ _  _   _   [] _   = error $ "Source field of " ++ u ++ " is empty"
 tm' u mk q c dq inv dfn r  lbe = 
-  TM u (cw mk) [] [] (map qw q) (map cw c) dq inv dfn r (shortname' lbe)
+  TM u (cw mk) [] [] (map qw q) (map cw c) dq inv dfn r (shortname' $ S lbe)
       (prependAbrv thModel lbe)
 
 -- | Constructor for theory models. Uses the shortname of the reference address.
@@ -124,5 +124,5 @@ tmNoRefs' :: (Quantity q, MayHaveUnit q, Concept c) => UID -> ModelKinds ->
     [q] -> [c] -> [QDefinition] -> [Relation] -> [QDefinition] -> 
     String -> [Sentence] -> TheoryModel
 tmNoRefs' u mk q c dq inv dfn lbe = 
-  TM u (cw mk) [] [] (map qw q) (map cw c) dq inv dfn [] (shortname' lbe)
+  TM u (cw mk) [] [] (map qw q) (map cw c) dq inv dfn [] (shortname' $ S lbe)
       (prependAbrv thModel lbe)

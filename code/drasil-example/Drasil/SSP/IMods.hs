@@ -73,10 +73,10 @@ fctSftyDesc = foldlList Comma List [shearRNoIntsl `definedIn'''` resShearWOGD,
   shearFNoIntsl `definedIn'''` mobShearWOGD]
 
 fctSftyDeriv :: Derivation
-fctSftyDeriv = mkDerivNoHeader (weave [fctSftyDerivSentences1, map E fctSftyDerivEqns1] ++
-  [E fctSftyDerivEqn10b, E fctSftyDerivEqn10c, fctSftyDerivEllipsis,
-  E fctSftyDerivEqn10d, E fctSftyDerivEqn10e, E fctSftyDerivEqn10f] ++
-  weave [fctSftyDerivSentences2, map E fctSftyDerivEqns2] ++
+fctSftyDeriv = mkDerivNoHeader (weave [fctSftyDerivSentences1, map eS fctSftyDerivEqns1] ++
+  map eS [fctSftyDerivEqn10b, fctSftyDerivEqn10c] ++ [fctSftyDerivEllipsis] ++
+  map eS [fctSftyDerivEqn10d, fctSftyDerivEqn10e, fctSftyDerivEqn10f] ++
+  weave [fctSftyDerivSentences2, map eS fctSftyDerivEqns2] ++
   fctSftyDerivSentence20)
 
 fctSftyDerivSentences1 :: [Sentence]
@@ -130,8 +130,8 @@ fctSftyDerivSentence5 = [S "Applying assumptions", makeRef2S assumpSF `S.and_`
 fctSftyDerivSentence6 :: [Sentence]
 fctSftyDerivSentence6 = [S "The definitions of", makeRef2S resShearWOGD
   `S.and_` makeRef2S mobShearWOGD, S "are present in this equation, and",
-  S "thus can be replaced by", E (inxi shearRNoIntsl) `S.and_`
-  E (inxi shearFNoIntsl) `sC` S "respectively"]
+  S "thus can be replaced by", eS (inxi shearRNoIntsl) `S.and_`
+  eS (inxi shearFNoIntsl) `sC` S "respectively"]
 
 fctSftyDerivSentence7 :: [Sentence]
 fctSftyDerivSentence7 = [atStartNP (the intShrForce), ch intShrForce,
@@ -156,8 +156,8 @@ fctSftyDerivEllipsis = S "..."
 
 fctSftyDerivSentence11 :: [Sentence]
 fctSftyDerivSentence11 = [S "Applying", makeRef2S assumpES `sC`
-  S "which says that", E (idx (sy intNormForce) (int 0)) `S.and_`
-  E (indxn intNormForce), S "are zero, results in the following special cases:",eqN 8, S "for the first slice"]
+  S "which says that", eS (idx (sy intNormForce) (int 0)) `S.and_`
+  eS (indxn intNormForce), S "are zero, results in the following special cases:",eqN 8, S "for the first slice"]
 
 fctSftyDerivSentence12 :: [Sentence]
 fctSftyDerivSentence12 = [S "and", eqN 9, S "for the", ch numbSlices :+:
@@ -178,7 +178,7 @@ fctSftyDerivSentence16 = [eqN 9, S "can then be substituted into the",
 
 fctSftyDerivSentence17 :: [Sentence]
 fctSftyDerivSentence17 = [S "This can be rearranged by multiplying both sides",
-  S "by", E (idx (sy mobShrC) (sy numbSlices $- int 1)) `S.and_`
+  S "by", eS (idx (sy mobShrC) (sy numbSlices $- int 1)) `S.and_`
   S "then distributing the multiplication of each", ch mobShrC,
   S "over addition to obtain"]
 
@@ -390,7 +390,7 @@ nrmShrFDesc = nrmShearNum `definedIn'''`
   nrmShrForDen !.)
 
 nrmShrDeriv :: Derivation
-nrmShrDeriv = mkDerivNoHeader (weave [nrmShrDerivationSentences, map E nrmShrDerivEqns] ++
+nrmShrDeriv = mkDerivNoHeader (weave [nrmShrDerivationSentences, map eS nrmShrDerivEqns] ++
   nrmShrDerivSentence5)
 
 nrmShrDerivSentence1 :: [Sentence]
@@ -413,8 +413,8 @@ nrmShrDerivSentence3 = [S "This", phrase equation, S "can be simplified by",
 nrmShrDerivSentence4 :: [Sentence]
 nrmShrDerivSentence4 = [S "Taking the summation of all", plural slice `sC`
   S "and applying", makeRef2S assumpES, S "to set",
-  E (idx (sy intNormForce) (int 0)) `sC` E (indxn intNormForce) `sC`
-  E (idx (sy watrForce) (int 0)) `sC` S "and", E (indxn watrForce),
+  eS (idx (sy intNormForce) (int 0)) `sC` eS (indxn intNormForce) `sC`
+  eS (idx (sy watrForce) (int 0)) `sC` S "and", eS (indxn watrForce),
   S "equal to zero" `sC` S "a general", phrase equation, S "for the",
   getTandS normToShear, S "is developed in", eqN 16 `sC` S "which combines", makeRef2S nrmShrFor `sC` makeRef2S nrmShrForNum `sC` S "and",
   makeRef2S nrmShrForDen]
@@ -551,7 +551,7 @@ sliceFsDesc = (foldlList Comma List [shearFNoIntsl `definedIn'''` mobShearWOGD,
   mobShrC `definedIn'''` convertFunc2] !.)
 
 intrSlcDeriv :: Derivation
-intrSlcDeriv = mkDerivNoHeader (weave [intrSlcDerivationSentences, map E intrSlcDerivEqns] ++ intrSlcDerivSentence3)
+intrSlcDeriv = mkDerivNoHeader (weave [intrSlcDerivationSentences, map eS intrSlcDerivEqns] ++ intrSlcDerivSentence3)
 
 intrSlcDerivSentence1 :: [Sentence]
 intrSlcDerivSentence1 = [S "This derivation is identical to the derivation for",
@@ -563,10 +563,10 @@ intrSlcDerivSentence2 = [S "A simple rearrangement of", eqN 3, S "leads to",
 
 intrSlcDerivSentence3 :: [Sentence]
 intrSlcDerivSentence3 = [S "The cases shown in" +:+ makeRef2S intsliceFs +:+
-  S "for when" +:+ E (sy index $= int 0) `sC` E (sy index $= int 1) `sC` S "or" +:+
-  E (sy index $= sy numbSlices) +:+ S "are derived by applying" +:+
+  S "for when" +:+ eS (sy index $= int 0) `sC` eS (sy index $= int 1) `sC` S "or" +:+
+  eS (sy index $= sy numbSlices) +:+ S "are derived by applying" +:+
   makeRef2S assumpES `sC` S "which says that" +:+
-  E (idx (sy intNormForce) (int 0)) `S.and_` E (indxn intNormForce) +:+
+  eS (idx (sy intNormForce) (int 0)) `S.and_` eS (indxn intNormForce) +:+
   S "are zero" `sC` S "to" +:+. eqN 17 +:+ ch intNormForce +:+
   S "depends on the unknowns" +:+ ch fs +:+ sParen (makeRef2S fctSfty) `S.and_`
   ch normToShear +:+. sParen (makeRef2S nrmShrFor)]

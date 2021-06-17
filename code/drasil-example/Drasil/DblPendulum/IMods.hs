@@ -41,7 +41,7 @@ angularDisplacementRC = makeRC "angularDisplacementRC" (nounPhraseSP "calculatio
 
 
 angularDisplacementDeriv :: Derivation
-angularDisplacementDeriv = mkDerivName (phrase angularDisplacement) (weave [angularDisplacementDerivSents, map E angularDisplacementDerivEqns])
+angularDisplacementDeriv = mkDerivName (phrase angularDisplacement) (weave [angularDisplacementDerivSents, map eS angularDisplacementDerivEqns])
 
 angularDisplacementDerivSents :: [Sentence]
 angularDisplacementDerivSents = [angularDisplacementDerivSent1, angularDisplacementDerivSent2, angularDisplacementDerivSent3,
@@ -64,7 +64,7 @@ angularDisplacementDerivSent2 = foldlSentCol [S "Where", ch torque `S.denotes` p
 angularDisplacementDerivSent3 = foldlSentCol [S "And rearranged as" ]
 
 angularDisplacementDerivSent4 = foldlSentCol [S "If", phraseNP (NP.the (amplitude `of_` angularDisplacement)), S "is small enough" `sC`
-  S "we can approximate", E (sin (sy pendDisplacementAngle) $= sy pendDisplacementAngle), S "for the purpose of a simple", phrase pendulum,
+  S "we can approximate", eS (sin (sy pendDisplacementAngle) $= sy pendDisplacementAngle), S "for the purpose of a simple", phrase pendulum,
   S "at very small" +:+. plural angle,
   S "Then", phraseNP (NP.the (equation `of_` motion)), S "reduces to", phraseNP (NP.the (equation `of_` shm))]                                       
 
@@ -99,7 +99,7 @@ angularDispConstraintNote :: Sentence
 
 
 angularDispConstraintNote = foldlSent [atStartNP (the constraint),
-     E ( sy initialPendAngle $> exactDbl 0) `S.is` (S "required" !.),
+     eS (sy initialPendAngle $> exactDbl 0) `S.is` (S "required" !.),
      atStartNP (the angularFrequency) `S.is` definedIn'' angFrequencyGD]
 
 --gravitationalAccelConstNote, landAndTargPosConsNote, landPosNote,

@@ -248,7 +248,7 @@ calofDemandDesc =
 
 aGrtrThanB :: Sentence
 aGrtrThanB = ch plateLen `S.and_` ch plateWidth `S.are` (plural dimension `S.the_ofThe` S "plate") `sC`
-  S "where" +:+. sParen (E (sy plateLen $>= sy plateWidth))
+  S "where" +:+. sParen (eS (sy plateLen $>= sy plateWidth))
 
 anGlass :: Sentence
 anGlass = getAcc annealed `S.is` phrase annealed +:+. phrase glass

@@ -56,7 +56,7 @@ transMotDesc, transMotOutputs :: Sentence
 transMotDesc = foldlSent [S "The above", phrase equation, S "expresses the total",
   phraseNP (acceleration `ofThe` rigidBody), P lJ,
   S "as the sum" `S.of_` phrase gravitationalAccel, fromSource accelGravityGD `S.and_`
-  phrase acceleration, S "due to applied", phrase force, E (apply1 forcej time) +:+.
+  phrase acceleration, S "due to applied", phrase force, eS (apply1 forcej time) +:+.
   fromSource newtonSL, S "The resultant", plural output_ `S.are`
   S "then obtained from this", phrase equation, S "using",
   foldlList Comma List (map makeRef2S [linDispDD, linVelDD, linAccDD])]

@@ -4,6 +4,8 @@ import Language.Drasil.Expr (Expr(..),
   ArithBinOp(..), BoolBinOp, EqBinOp(..), LABinOp, OrdBinOp, VVNBinOp,
   UFunc(..), UFuncB(..), UFuncVec(..),
   AssocBoolOper(..), AssocArithOper(..), VVVBinOp)
+import Language.Drasil.DisplayExpr (DisplayBinOp(..), 
+  DisplayAssocBinOp (Equivalence), DisplayExpr (..))
 
 -- These precedences are inspired from Haskell/F# 
 -- as documented at http://kevincantu.org/code/operators.html
@@ -93,5 +95,21 @@ eprec (LABinaryOp bo _ _)    = prec2LA bo
 eprec (OrdBinaryOp bo _ _)   = prec2Ord bo
 eprec (VVVBinaryOp bo _ _)   = prec2VVV bo
 eprec (VVNBinaryOp bo _ _)   = prec2VVN bo
-eprec IsIn{}                 = 170
 eprec RealI{}                = 170
+
+-- | dePrec - "Display Expression" precedence.
+dePrec :: DisplayExpr -> Int
+dePrec (AlgebraicExpr e) = eprec e
+dePrec (SpaceExpr _)     = 170
+dePrec (BinOp b _ _)     = dePrecB b
+dePrec (AssocBinOp b _)  = dePrecAssoc b
+
+-- | dePrecB - precedence for binary operators.
+dePrecB :: DisplayBinOp -> Int
+dePrecB IsIn = 170
+dePrecB Defines = 130
+
+-- | dePrecAssoc - precedence for associative binary operators.
+dePrecAssoc :: DisplayAssocBinOp -> Int
+dePrecAssoc Equivalence = 130
+dePrecAssoc _           = 120

@@ -78,7 +78,7 @@ outputValsAndKnownValuesDesc = foldlSent [titleize output_, pluralNP (the inValu
   S "from", makeRef2S (inReq EmptyS) `S.andThe` S "known", plural value,
   S "from", makeRef2S sysSetValsFollowingAssumps]
 
-checkGlassSafetyDesc = foldlSent_ [S "If", E (sy isSafePb $&& sy isSafeLR),
+checkGlassSafetyDesc = foldlSent_ [S "If", eS (sy isSafePb $&& sy isSafeLR),
   sParen (S "from" +:+ makeRef2S pbIsSafe `S.and_` makeRef2S lrIsSafe) `sC`
   phrase output_, phraseNP (the message), Quote (safeMessage ^. defn),
   S "If the", phrase condition, S "is false, then", phrase output_,

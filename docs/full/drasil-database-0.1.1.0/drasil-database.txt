@@ -138,11 +138,11 @@ module Database.Drasil.ChunkDB.GetChunk
 -- | Gets a list of defined quantities (<a>DefinedQuantityDict</a>s) from
 --   <a>Sentence</a>s and expressions that are contained in the database
 --   (<a>ChunkDB</a>).
-ccss :: [Sentence] -> [Expr] -> ChunkDB -> [DefinedQuantityDict]
+ccss :: [Sentence] -> [DisplayExpr] -> ChunkDB -> [DefinedQuantityDict]
 
 -- | Gets a list of quantities (<a>QuantityDict</a>s) from <a>Sentence</a>s
 --   and expressions that are contained in the database (<a>ChunkDB</a>).
-ccss' :: [Sentence] -> [Expr] -> ChunkDB -> [QuantityDict]
+ccss' :: [Sentence] -> [DisplayExpr] -> ChunkDB -> [QuantityDict]
 
 -- | Combines the functions of <a>vars</a> and <a>concpt</a> to create a
 --   list of <a>DefinedQuantityDict</a>s from a <a>Sentence</a>.
@@ -154,7 +154,7 @@ getIdeaDict :: Sentence -> ChunkDB -> [IdeaDict]
 
 -- | Gets a list of quantities (<a>QuantityDict</a>) from an equation in
 --   order to print.
-vars :: Expr -> ChunkDB -> [QuantityDict]
+vars :: DisplayExpr -> ChunkDB -> [QuantityDict]
 
 module Database.Drasil.SystemInformation
 
@@ -318,11 +318,11 @@ traceTable :: Lens' ChunkDB TraceMap
 -- | Gets a list of defined quantities (<a>DefinedQuantityDict</a>s) from
 --   <a>Sentence</a>s and expressions that are contained in the database
 --   (<a>ChunkDB</a>).
-ccss :: [Sentence] -> [Expr] -> ChunkDB -> [DefinedQuantityDict]
+ccss :: [Sentence] -> [DisplayExpr] -> ChunkDB -> [DefinedQuantityDict]
 
 -- | Gets a list of quantities (<a>QuantityDict</a>s) from <a>Sentence</a>s
 --   and expressions that are contained in the database (<a>ChunkDB</a>).
-ccss' :: [Sentence] -> [Expr] -> ChunkDB -> [QuantityDict]
+ccss' :: [Sentence] -> [DisplayExpr] -> ChunkDB -> [QuantityDict]
 
 -- | Combines the functions of <a>vars</a> and <a>concpt</a> to create a
 --   list of <a>DefinedQuantityDict</a>s from a <a>Sentence</a>.
@@ -334,7 +334,7 @@ getIdeaDict :: Sentence -> ChunkDB -> [IdeaDict]
 
 -- | Gets a list of quantities (<a>QuantityDict</a>) from an equation in
 --   order to print.
-vars :: Expr -> ChunkDB -> [QuantityDict]
+vars :: DisplayExpr -> ChunkDB -> [QuantityDict]
 
 -- | for listing <a>QDefinition</a>s in <a>SystemInformation</a>.
 data Block a

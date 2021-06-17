@@ -723,7 +723,7 @@ module Language.Drasil.Printing.Import
 -- | Render a <a>Space</a>.
 space :: PrintingInformation -> Space -> Expr
 
--- | Expr translation function from Drasil to printable layout AST.
+-- | Translate Exprs to printable layout AST.
 expr :: Expr -> PrintingInformation -> Expr
 
 -- | Helper tha converts a symbol into an expression.

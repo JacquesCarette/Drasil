@@ -735,11 +735,9 @@ data Expr
 --   Summation is represented via <tt>Add</tt> over a discrete domain.
 [Operator] :: AssocArithOper -> DomainDesc Expr Expr -> Expr -> Expr
 
--- | The expression is an element of a space.
-[IsIn] :: Expr -> Space -> Expr
-
--- | A different kind of <a>IsIn</a>. A <a>UID</a> is an element of an
---   interval.
+-- | The expression is an element of a space. IsIn :: Expr -&gt; Space
+--   -&gt; Expr | A different kind of <tt>IsIn</tt>. A <a>UID</a> is an
+--   element of an interval.
 [RealI] :: UID -> RealInterval Expr Expr -> Expr
 
 -- | Smart constructor for equating two expressions.
@@ -836,6 +834,31 @@ instance GHC.Classes.Eq Language.Drasil.Expr.EqBinOp
 instance GHC.Classes.Eq Language.Drasil.Expr.ArithBinOp
 instance GHC.Classes.Eq Language.Drasil.Expr.Expr
 
+module Language.Drasil.DisplayExpr
+
+-- | A variant of the expression language that allows for extensions of
+--   Expr that wouldn't normally type check, or that we only care for
+--   displaying.
+data DisplayExpr
+[AlgebraicExpr] :: Expr -> DisplayExpr
+[SpaceExpr] :: Space -> DisplayExpr
+[BinOp] :: DisplayBinOp -> DisplayExpr -> DisplayExpr -> DisplayExpr
+[AssocBinOp] :: DisplayAssocBinOp -> [DisplayExpr] -> DisplayExpr
+
+-- | Binary Display Operations
+data DisplayBinOp
+Defines :: DisplayBinOp
+IsIn :: DisplayBinOp
+
+-- | Associative Binary Display Operations
+data DisplayAssocBinOp
+And :: DisplayAssocBinOp
+Equivalence :: DisplayAssocBinOp
+instance GHC.Show.Show Language.Drasil.DisplayExpr.DisplayAssocBinOp
+instance GHC.Classes.Eq Language.Drasil.DisplayExpr.DisplayAssocBinOp
+instance GHC.Show.Show Language.Drasil.DisplayExpr.DisplayBinOp
+instance GHC.Classes.Eq Language.Drasil.DisplayExpr.DisplayBinOp
+
 module Language.Drasil.Expr.Precedence
 
 -- | prec2Arith - precedence for arithmetic-related binary operations.
@@ -881,23 +904,64 @@ prec1Vec :: UFuncVec -> Int
 -- | eprec - <a>Expression</a> precedence.
 eprec :: Expr -> Int
 
-module Language.Drasil.Expr.Extract
+-- | dePrec - "Display Expression" precedence.
+dePrec :: DisplayExpr -> Int
 
--- | Get dependencies from an equation.
-dep :: Expr -> [String]
+-- | dePrecB - precedence for binary operators.
+dePrecB :: DisplayBinOp -> Int
+
+-- | dePrecAssoc - precedence for associative binary operators.
+dePrecAssoc :: DisplayAssocBinOp -> Int
+
+module Language.Drasil.Expr.Extract
+deNames :: DisplayExpr -> [String]
 
 -- | Generic traverse of all expressions that could lead to names.
-names :: Expr -> [String]
+eNames :: Expr -> [String]
 
--- | Generic traverse of all positions that could lead to names without
+-- | Generic traversal of everything that could come from an interval to
+--   names (similar to <tt>names</tt>).
+eNamesRI :: RealInterval Expr Expr -> [String]
+deNames' :: DisplayExpr -> [String]
+
+-- | Generic traverse of all positions that could lead to eNames without
 --   functions. FIXME : this should really be done via post-facto
 --   filtering, but right now the information needed to do this is not
 --   available!
-names' :: Expr -> [String]
+eNames' :: Expr -> [String]
 
 -- | Generic traversal of everything that could come from an interval to
---   names (similar to <a>names</a>).
-namesRI :: RealInterval Expr Expr -> [String]
+--   names without functions (similar to <tt>names'</tt>).
+eNamesRI' :: RealInterval Expr Expr -> [String]
+
+-- | Get dependencies from an equation.
+eDep :: Expr -> [String]
+
+-- | Get dependencies from display expressions.
+deDep :: DisplayExpr -> [String]
+
+module Language.Drasil.DisplayClasses
+
+-- | Data that can convert into a Displayable Expr
+class Display c
+toDispExpr :: Display c => c -> DisplayExpr
+instance Language.Drasil.DisplayClasses.Display Language.Drasil.Expr.Expr
+instance Language.Drasil.DisplayClasses.Display Language.Drasil.DisplayExpr.DisplayExpr
+
+module Language.Drasil.Expr.Display
+
+-- | One expression is "defined" by another.
+defines :: (Display a, Display b) => a -> b -> DisplayExpr
+
+-- | Bring a Space into the DisplayExpr.
+spaceDE :: Space -> DisplayExpr
+isIn :: Display a => a -> DisplayExpr -> DisplayExpr
+
+-- | Binary associative <a>And</a>.
+andDEs :: Display d => [d] -> DisplayExpr
+
+-- | Binary associative <a>Equivalence</a>.
+equivDEs :: Display a => [a] -> DisplayExpr
 
 module Language.Drasil.Constraint
 
@@ -1679,7 +1743,7 @@ data Sentence
 [P] :: Symbol -> Sentence
 
 -- | Lifts an expression into a Sentence.
-[E] :: Expr -> Sentence
+[E] :: DisplayExpr -> Sentence
 
 -- | Takes a <a>UID</a> to a reference. Resolves the reference later
 --   (similar to Ch).
@@ -1728,6 +1792,7 @@ capSent :: Sentence -> Sentence
 
 -- | Gets a symbol and places it in a <a>Sentence</a>.
 ch :: (HasUID c, HasSymbol c) => c -> Sentence
+eS :: Display d => d -> Sentence
 
 -- | Helper for concatenating two <a>Sentence</a>s with a comma and space
 --   between them.
@@ -2066,6 +2131,25 @@ phraseNP :: NounPhrase n => n -> Sentence
 -- | Retrieves plural form of term. Ex. "the quick brown foxes".
 pluralNP :: NounPhrase n => n -> PluralForm
 
+-- | A variant of the expression language that allows for extensions of
+--   Expr that wouldn't normally type check, or that we only care for
+--   displaying.
+data DisplayExpr
+[AlgebraicExpr] :: Expr -> DisplayExpr
+[SpaceExpr] :: Space -> DisplayExpr
+[BinOp] :: DisplayBinOp -> DisplayExpr -> DisplayExpr -> DisplayExpr
+[AssocBinOp] :: DisplayAssocBinOp -> [DisplayExpr] -> DisplayExpr
+
+-- | Binary Display Operations
+data DisplayBinOp
+Defines :: DisplayBinOp
+IsIn :: DisplayBinOp
+
+-- | Associative Binary Display Operations
+data DisplayAssocBinOp
+And :: DisplayAssocBinOp
+Equivalence :: DisplayAssocBinOp
+
 -- | Negation operator (not).
 data UFuncB
 Not :: UFuncB
@@ -2114,20 +2198,23 @@ data VVNBinOp
 Dot :: VVNBinOp
 
 -- | Get dependencies from an equation.
-dep :: Expr -> [String]
+eDep :: Expr -> [String]
 
 -- | Generic traverse of all expressions that could lead to names.
-names :: Expr -> [String]
+eNames :: Expr -> [String]
 
--- | Generic traverse of all positions that could lead to names without
+-- | Generic traverse of all positions that could lead to eNames without
 --   functions. FIXME : this should really be done via post-facto
 --   filtering, but right now the information needed to do this is not
 --   available!
-names' :: Expr -> [String]
+eNames' :: Expr -> [String]
 
 -- | Generic traversal of everything that could come from an interval to
---   names (similar to <a>names</a>).
-namesRI :: RealInterval Expr Expr -> [String]
+--   names (similar to <tt>names</tt>).
+eNamesRI :: RealInterval Expr Expr -> [String]
+
+-- | Get dependencies from display expressions.
+deDep :: DisplayExpr -> [String]
 
 -- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
 --   a <tt>Symbol</tt>.
@@ -2150,6 +2237,12 @@ precB :: AssocBoolOper -> Int
 
 -- | eprec - <a>Expression</a> precedence.
 eprec :: Expr -> Int
+
+-- | dePrec - "Display Expression" precedence.
+dePrec :: DisplayExpr -> Int
+
+-- | dePrecAssoc - precedence for associative binary operators.
+dePrecAssoc :: DisplayAssocBinOp -> Int
 
 module Language.Drasil.Document.Core
 
@@ -2217,7 +2310,7 @@ Table :: [Sentence] -> [[Sentence]] -> Title -> Bool -> RawContent
 Paragraph :: Sentence -> RawContent
 
 -- | Block of Equations holds an expression.
-EqnBlock :: Expr -> RawContent
+EqnBlock :: DisplayExpr -> RawContent
 
 -- | Grants the ability to label a group of <a>RawContent</a>.
 DerivBlock :: Sentence -> [RawContent] -> RawContent
@@ -2235,9 +2328,10 @@ Figure :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
 Bib :: BibRef -> RawContent
 
 -- | Contain a graph with coordinates (<a>Sentence</a>s), maybe a width and
---   height, and a label (<a>Sentence</a>). TODO: Fill this one in. | An
---   identifier is just a <a>String</a>.
+--   height, and a label (<a>Sentence</a>). TODO: Fill this one in.
 Graph :: [(Sentence, Sentence)] -> Maybe Width -> Maybe Height -> Lbl -> RawContent
+
+-- | An identifier is just a <a>String</a>.
 type Identifier = String
 
 -- | Contains a <a>Reference</a> and <a>RawContent</a>.
@@ -2453,12 +2547,6 @@ class Constrained c
 -- | Provides a <tt>Lens</tt> to the <a>Constraint</a>s.
 constraints :: Constrained c => Lens' c [Constraint]
 
--- | Has a function that turns into a <a>Relation</a>.
-class ExprRelat c
-
--- | Holds a relation.
-relat :: ExprRelat c => c -> Relation
-
 -- | CommonIdea is a <a>NamedIdea</a> with the additional constraint that
 --   it <b>must</b> have an abbreviation.
 class NamedIdea c => CommonIdea c
@@ -2466,11 +2554,15 @@ class NamedIdea c => CommonIdea c
 -- | Introduces abrv which necessarily provides an abbreviation.
 abrv :: CommonIdea c => c -> String
 
--- | A better version of <a>ExprRelat</a> that holds an <a>Expr</a>.
+-- | A better version of <tt>ExprRelat</tt> that holds an <a>Expr</a>.
 class DefiningExpr c
 
 -- | Provides a <tt>Lens</tt> to the expression.
 defnExpr :: DefiningExpr c => Lens' c Expr
+
+-- | Data that can convert into a Displayable Expr
+class Display c
+toDispExpr :: Display c => c -> DisplayExpr
 
 -- | A Quantity is an <a>Idea</a> with a <a>Space</a> and a
 --   <tt>Symbol</tt>. In theory, it should also restrict to being a part of
@@ -2608,11 +2700,6 @@ str :: String -> Expr
 
 -- | Smart constructors for percents.
 perc :: Integer -> Integer -> Expr
-
--- | Smart constructor for set membership. FIXME: first argument really
---   ought to be restricted to a <tt>Variable</tt>, as <a>IsIn</a> should
---   only be used as a type proxy.
-isin :: Expr -> Space -> Expr
 
 -- | Smart constructor for the summation, product, and integral functions
 --   over an interval.
@@ -2926,12 +3013,12 @@ makeRC :: UID -> NP -> Sentence -> Relation -> RelationConcept
 --   a <a>Concept</a>, new <a>UID</a> and relation.
 addRelToCC :: Concept c => c -> UID -> Relation -> RelationConcept
 instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.Relation.RelationConcept
+instance GHC.Classes.Eq Language.Drasil.Chunk.Relation.RelationConcept
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.Relation.RelationConcept
 instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.Relation.RelationConcept
 instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Relation.RelationConcept
 instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Relation.RelationConcept
-instance Language.Drasil.Classes.ExprRelat Language.Drasil.Chunk.Relation.RelationConcept
-instance GHC.Classes.Eq Language.Drasil.Chunk.Relation.RelationConcept
+instance Language.Drasil.DisplayClasses.Display Language.Drasil.Chunk.Relation.RelationConcept
 
 module Language.Drasil.Chunk.UnitDefn
 
@@ -3104,6 +3191,7 @@ instance Language.Drasil.Classes.Core.HasSymbol Language.Drasil.Chunk.Quantity.Q
 instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.Quantity.QuantityDict
 instance GHC.Classes.Eq Language.Drasil.Chunk.Quantity.QuantityDict
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Quantity.QuantityDict
+instance Language.Drasil.DisplayClasses.Display Language.Drasil.Chunk.Quantity.QuantityDict
 
 module Language.Drasil.Chunk.Unitary
 
@@ -3225,7 +3313,7 @@ instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.Eq.QDefinition
 instance Language.Drasil.Classes.DefiningExpr Language.Drasil.Chunk.Eq.QDefinition
 instance GHC.Classes.Eq Language.Drasil.Chunk.Eq.QDefinition
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Eq.QDefinition
-instance Language.Drasil.Classes.ExprRelat Language.Drasil.Chunk.Eq.QDefinition
+instance Language.Drasil.DisplayClasses.Display Language.Drasil.Chunk.Eq.QDefinition
 instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Eq.QDefinition
 
 module Language.Drasil.Chunk.DefinedQuantity
@@ -3265,6 +3353,7 @@ instance Language.Drasil.Classes.HasSpace Language.Drasil.Chunk.DefinedQuantity.
 instance Language.Drasil.Classes.Core.HasSymbol Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
 instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
+instance Language.Drasil.DisplayClasses.Display Language.Drasil.Chunk.DefinedQuantity.DefinedQuantityDict
 
 module Language.Drasil.Chunk.Unital
 
@@ -3311,6 +3400,7 @@ instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.Unital.UnitalChu
 instance Language.Drasil.Chunk.Unitary.Unitary Language.Drasil.Chunk.Unital.UnitalChunk
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Unital.UnitalChunk
 instance GHC.Classes.Eq Language.Drasil.Chunk.Unital.UnitalChunk
+instance Language.Drasil.DisplayClasses.Display Language.Drasil.Chunk.Unital.UnitalChunk
 
 module Language.Drasil.Chunk.Constrained
 
@@ -3377,6 +3467,7 @@ instance Language.Drasil.Classes.Constrained Language.Drasil.Chunk.Constrained.C
 instance Language.Drasil.Classes.HasReasVal Language.Drasil.Chunk.Constrained.ConstrConcept
 instance GHC.Classes.Eq Language.Drasil.Chunk.Constrained.ConstrConcept
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Constrained.ConstrConcept
+instance Language.Drasil.DisplayClasses.Display Language.Drasil.Chunk.Constrained.ConstrConcept
 instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.Constrained.ConstrainedChunk
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.Constrained.ConstrainedChunk
 instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.Constrained.ConstrainedChunk
@@ -3438,6 +3529,7 @@ instance Language.Drasil.Classes.HasReasVal Language.Drasil.Chunk.UncertainQuant
 instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.UncertainQuantity.UncertQ
 instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.UncertainQuantity.UncertQ
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.UncertainQuantity.UncertQ
+instance Language.Drasil.DisplayClasses.Display Language.Drasil.Chunk.UncertainQuantity.UncertQ
 instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
 instance GHC.Classes.Eq Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.UncertainQuantity.UncertainChunk
@@ -3560,11 +3652,9 @@ data Expr
 --   Summation is represented via <tt>Add</tt> over a discrete domain.
 [Operator] :: AssocArithOper -> DomainDesc Expr Expr -> Expr -> Expr
 
--- | The expression is an element of a space.
-[IsIn] :: Expr -> Space -> Expr
-
--- | A different kind of <a>IsIn</a>. A <a>UID</a> is an element of an
---   interval.
+-- | The expression is an element of a space. IsIn :: Expr -&gt; Space
+--   -&gt; Expr | A different kind of <tt>IsIn</tt>. A <a>UID</a> is an
+--   element of an interval.
 [RealI] :: UID -> RealInterval Expr Expr -> Expr
 
 -- | Unary functions (abs, log, ln, sin, etc.).
@@ -3709,9 +3799,6 @@ mulI :: Expr -> Expr -> Expr
 -- | Multiply two expressions (Real numbers).
 mulRe :: Expr -> Expr -> Expr
 
--- | Get dependencies from an equation.
-dep :: Expr -> [String]
-
 -- | Smart constructor for taking the absolute value of an expression.
 abs_ :: Expr -> Expr
 
@@ -3809,11 +3896,6 @@ str :: String -> Expr
 -- | Smart constructors for percents.
 perc :: Integer -> Integer -> Expr
 
--- | Smart constructor for set membership. FIXME: first argument really
---   ought to be restricted to a <tt>Variable</tt>, as <a>IsIn</a> should
---   only be used as a type proxy.
-isin :: Expr -> Space -> Expr
-
 -- | Smart constructor for case statement with complete set of cases.
 completeCase :: [(Expr, Relation)] -> Expr
 
@@ -3882,6 +3964,24 @@ vec2D :: Expr -> Expr -> Expr
 
 -- | Matrix helper function.
 dgnl2x2 :: Expr -> Expr -> Expr
+
+-- | A variant of the expression language that allows for extensions of
+--   Expr that wouldn't normally type check, or that we only care for
+--   displaying.
+data DisplayExpr
+
+-- | One expression is "defined" by another.
+defines :: (Display a, Display b) => a -> b -> DisplayExpr
+
+-- | Bring a Space into the DisplayExpr.
+spaceDE :: Space -> DisplayExpr
+isIn :: Display a => a -> DisplayExpr -> DisplayExpr
+
+-- | Binary associative <a>And</a>.
+andDEs :: Display d => [d] -> DisplayExpr
+
+-- | Binary associative <a>Equivalence</a>.
+equivDEs :: Display a => [a] -> DisplayExpr
 
 -- | Special characters include partial derivatives and the degree circle.
 data Special
@@ -4028,17 +4128,15 @@ class Constrained c
 -- | Provides a <tt>Lens</tt> to the <a>Constraint</a>s.
 constraints :: Constrained c => Lens' c [Constraint]
 
--- | Has a function that turns into a <a>Relation</a>.
-class ExprRelat c
-
--- | Holds a relation.
-relat :: ExprRelat c => c -> Relation
-
--- | A better version of <a>ExprRelat</a> that holds an <a>Expr</a>.
+-- | A better version of <tt>ExprRelat</tt> that holds an <a>Expr</a>.
 class DefiningExpr c
 
 -- | Provides a <tt>Lens</tt> to the expression.
 defnExpr :: DefiningExpr c => Lens' c Expr
+
+-- | Data that can convert into a Displayable Expr
+class Display c
+toDispExpr :: Display c => c -> DisplayExpr
 
 -- | HasUncertainty is just a chunk with some uncertainty associated to it.
 --   This uncertainty is represented as a decimal value between 0 and 1
@@ -4651,7 +4749,7 @@ data Sentence
 [P] :: Symbol -> Sentence
 
 -- | Lifts an expression into a Sentence.
-[E] :: Expr -> Sentence
+[E] :: DisplayExpr -> Sentence
 
 -- | Takes a <a>UID</a> to a reference. Resolves the reference later
 --   (similar to Ch).
@@ -4700,6 +4798,7 @@ capSent :: Sentence -> Sentence
 
 -- | Gets a symbol and places it in a <a>Sentence</a>.
 ch :: (HasUID c, HasSymbol c) => c -> Sentence
+eS :: Display d => d -> Sentence
 
 -- | Helper for concatenating two <a>Sentence</a>s with a comma and space
 --   between them.
@@ -5050,7 +5149,7 @@ Table :: [Sentence] -> [[Sentence]] -> Title -> Bool -> RawContent
 Paragraph :: Sentence -> RawContent
 
 -- | Block of Equations holds an expression.
-EqnBlock :: Expr -> RawContent
+EqnBlock :: DisplayExpr -> RawContent
 
 -- | Grants the ability to label a group of <a>RawContent</a>.
 DerivBlock :: Sentence -> [RawContent] -> RawContent
@@ -5068,8 +5167,7 @@ Figure :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
 Bib :: BibRef -> RawContent
 
 -- | Contain a graph with coordinates (<a>Sentence</a>s), maybe a width and
---   height, and a label (<a>Sentence</a>). TODO: Fill this one in. | An
---   identifier is just a <a>String</a>.
+--   height, and a label (<a>Sentence</a>). TODO: Fill this one in.
 Graph :: [(Sentence, Sentence)] -> Maybe Width -> Maybe Height -> Lbl -> RawContent
 
 -- | Smart constructor that wraps <a>LabelledContent</a> into

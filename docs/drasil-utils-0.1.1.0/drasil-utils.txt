@@ -241,16 +241,16 @@ enumSimple :: Reference -> Integer -> Sentence -> [Sentence] -> LabelledContent
 -- | Same as <a>enumSimple</a> but unlabelled.
 enumSimpleU :: Integer -> Sentence -> [Sentence] -> Contents
 
--- | Constructs <a>LabelledContent</a> from an expression and a reference.
-eqUnR :: Expr -> Reference -> LabelledContent
-
--- | Same as <a>eqUnR</a> except content is unlabelled.
-eqUnR' :: Expr -> Contents
-
 -- | Convenience function for transforming types which are instances of the
 --   constraints <a>Referable</a>, <a>HasShortName</a>, and
 --   <a>Definition</a>, into Simple-type <a>Enumeration</a>s.
 mkEnumSimpleD :: (Referable c, HasShortName c, Definition c) => [c] -> [Contents]
+
+-- | Constructs <a>LabelledContent</a> from an expression and a reference.
+lbldExpr :: Display c => c -> Reference -> LabelledContent
+
+-- | Same as <tt>eqUnR</tt> except content is unlabelled.
+unlbldExpr :: Display c => c -> Contents
 
 -- | Creates a blank document with no text.
 blank :: Doc
@@ -379,7 +379,7 @@ eqN :: Int -> Sentence
 
 -- | Takes an expression and a <a>Referable</a> and outputs as a Sentence
 --   "expression (source)".
-eqnWSource :: (Referable r, HasShortName r) => Expr -> r -> Sentence
+eqnWSource :: (Display e, Referable r, HasShortName r) => e -> r -> Sentence
 
 -- | Takes a <a>Referable</a> source and a <a>UnitalChunk</a> and outputs
 --   as a <a>Sentence</a>: "From <tt>source</tt> we can replace

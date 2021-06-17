@@ -446,6 +446,25 @@ phraseNP :: NounPhrase n => n -> Sentence
 -- | Retrieves plural form of term. Ex. "the quick brown foxes".
 pluralNP :: NounPhrase n => n -> PluralForm
 
+-- | A variant of the expression language that allows for extensions of
+--   Expr that wouldn't normally type check, or that we only care for
+--   displaying.
+data DisplayExpr
+[AlgebraicExpr] :: Expr -> DisplayExpr
+[SpaceExpr] :: Space -> DisplayExpr
+[BinOp] :: DisplayBinOp -> DisplayExpr -> DisplayExpr -> DisplayExpr
+[AssocBinOp] :: DisplayAssocBinOp -> [DisplayExpr] -> DisplayExpr
+
+-- | Binary Display Operations
+data DisplayBinOp
+Defines :: DisplayBinOp
+IsIn :: DisplayBinOp
+
+-- | Associative Binary Display Operations
+data DisplayAssocBinOp
+And :: DisplayAssocBinOp
+Equivalence :: DisplayAssocBinOp
+
 -- | Negation operator (not).
 data UFuncB
 Not :: UFuncB
@@ -494,20 +513,23 @@ data VVNBinOp
 Dot :: VVNBinOp
 
 -- | Get dependencies from an equation.
-dep :: Expr -> [String]
+eDep :: Expr -> [String]
 
 -- | Generic traverse of all expressions that could lead to names.
-names :: Expr -> [String]
+eNames :: Expr -> [String]
 
--- | Generic traverse of all positions that could lead to names without
+-- | Generic traverse of all positions that could lead to eNames without
 --   functions. FIXME : this should really be done via post-facto
 --   filtering, but right now the information needed to do this is not
 --   available!
-names' :: Expr -> [String]
+eNames' :: Expr -> [String]
 
 -- | Generic traversal of everything that could come from an interval to
---   names (similar to <a>names</a>).
-namesRI :: RealInterval Expr Expr -> [String]
+--   names (similar to <tt>names</tt>).
+eNamesRI :: RealInterval Expr Expr -> [String]
+
+-- | Get dependencies from display expressions.
+deDep :: DisplayExpr -> [String]
 
 -- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
 --   a <tt>Symbol</tt>.
@@ -530,6 +552,12 @@ precB :: AssocBoolOper -> Int
 
 -- | eprec - <a>Expression</a> precedence.
 eprec :: Expr -> Int
+
+-- | dePrec - "Display Expression" precedence.
+dePrec :: DisplayExpr -> Int
+
+-- | dePrecAssoc - precedence for associative binary operators.
+dePrecAssoc :: DisplayAssocBinOp -> Int
 
 module Language.Drasil
 
@@ -641,11 +669,9 @@ data Expr
 --   Summation is represented via <tt>Add</tt> over a discrete domain.
 [Operator] :: AssocArithOper -> DomainDesc Expr Expr -> Expr -> Expr
 
--- | The expression is an element of a space.
-[IsIn] :: Expr -> Space -> Expr
-
--- | A different kind of <a>IsIn</a>. A <a>UID</a> is an element of an
---   interval.
+-- | The expression is an element of a space. IsIn :: Expr -&gt; Space
+--   -&gt; Expr | A different kind of <tt>IsIn</tt>. A <a>UID</a> is an
+--   element of an interval.
 [RealI] :: UID -> RealInterval Expr Expr -> Expr
 
 -- | Unary functions (abs, log, ln, sin, etc.).
@@ -790,9 +816,6 @@ mulI :: Expr -> Expr -> Expr
 -- | Multiply two expressions (Real numbers).
 mulRe :: Expr -> Expr -> Expr
 
--- | Get dependencies from an equation.
-dep :: Expr -> [String]
-
 -- | Smart constructor for taking the absolute value of an expression.
 abs_ :: Expr -> Expr
 
@@ -890,11 +913,6 @@ str :: String -> Expr
 -- | Smart constructors for percents.
 perc :: Integer -> Integer -> Expr
 
--- | Smart constructor for set membership. FIXME: first argument really
---   ought to be restricted to a <tt>Variable</tt>, as <a>IsIn</a> should
---   only be used as a type proxy.
-isin :: Expr -> Space -> Expr
-
 -- | Smart constructor for case statement with complete set of cases.
 completeCase :: [(Expr, Relation)] -> Expr
 
@@ -963,6 +981,24 @@ vec2D :: Expr -> Expr -> Expr
 
 -- | Matrix helper function.
 dgnl2x2 :: Expr -> Expr -> Expr
+
+-- | A variant of the expression language that allows for extensions of
+--   Expr that wouldn't normally type check, or that we only care for
+--   displaying.
+data DisplayExpr
+
+-- | One expression is "defined" by another.
+defines :: (Display a, Display b) => a -> b -> DisplayExpr
+
+-- | Bring a Space into the DisplayExpr.
+spaceDE :: Space -> DisplayExpr
+isIn :: Display a => a -> DisplayExpr -> DisplayExpr
+
+-- | Binary associative <a>And</a>.
+andDEs :: Display d => [d] -> DisplayExpr
+
+-- | Binary associative <a>Equivalence</a>.
+equivDEs :: Display a => [a] -> DisplayExpr
 
 -- | Special characters include partial derivatives and the degree circle.
 data Special
@@ -1109,17 +1145,15 @@ class Constrained c
 -- | Provides a <tt>Lens</tt> to the <a>Constraint</a>s.
 constraints :: Constrained c => Lens' c [Constraint]
 
--- | Has a function that turns into a <a>Relation</a>.
-class ExprRelat c
-
--- | Holds a relation.
-relat :: ExprRelat c => c -> Relation
-
--- | A better version of <a>ExprRelat</a> that holds an <a>Expr</a>.
+-- | A better version of <tt>ExprRelat</tt> that holds an <a>Expr</a>.
 class DefiningExpr c
 
 -- | Provides a <tt>Lens</tt> to the expression.
 defnExpr :: DefiningExpr c => Lens' c Expr
+
+-- | Data that can convert into a Displayable Expr
+class Display c
+toDispExpr :: Display c => c -> DisplayExpr
 
 -- | HasUncertainty is just a chunk with some uncertainty associated to it.
 --   This uncertainty is represented as a decimal value between 0 and 1
@@ -1732,7 +1766,7 @@ data Sentence
 [P] :: Symbol -> Sentence
 
 -- | Lifts an expression into a Sentence.
-[E] :: Expr -> Sentence
+[E] :: DisplayExpr -> Sentence
 
 -- | Takes a <a>UID</a> to a reference. Resolves the reference later
 --   (similar to Ch).
@@ -1781,6 +1815,7 @@ capSent :: Sentence -> Sentence
 
 -- | Gets a symbol and places it in a <a>Sentence</a>.
 ch :: (HasUID c, HasSymbol c) => c -> Sentence
+eS :: Display d => d -> Sentence
 
 -- | Helper for concatenating two <a>Sentence</a>s with a comma and space
 --   between them.
@@ -2131,7 +2166,7 @@ Table :: [Sentence] -> [[Sentence]] -> Title -> Bool -> RawContent
 Paragraph :: Sentence -> RawContent
 
 -- | Block of Equations holds an expression.
-EqnBlock :: Expr -> RawContent
+EqnBlock :: DisplayExpr -> RawContent
 
 -- | Grants the ability to label a group of <a>RawContent</a>.
 DerivBlock :: Sentence -> [RawContent] -> RawContent
@@ -2149,8 +2184,7 @@ Figure :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
 Bib :: BibRef -> RawContent
 
 -- | Contain a graph with coordinates (<a>Sentence</a>s), maybe a width and
---   height, and a label (<a>Sentence</a>). TODO: Fill this one in. | An
---   identifier is just a <a>String</a>.
+--   height, and a label (<a>Sentence</a>). TODO: Fill this one in.
 Graph :: [(Sentence, Sentence)] -> Maybe Width -> Maybe Height -> Lbl -> RawContent
 
 -- | Smart constructor that wraps <a>LabelledContent</a> into

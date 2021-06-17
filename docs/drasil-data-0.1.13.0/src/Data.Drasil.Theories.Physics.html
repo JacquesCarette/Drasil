@@ -30,7 +30,7 @@
 -&gt; [QuantityDict]
 -&gt; [ConceptChunk]
 -&gt; [QDefinition]
--&gt; [Relation]
+-&gt; [DisplayExpr]
 -&gt; [QDefinition]
 -&gt; UID
 -&gt; [Sentence]
@@ -42,7 +42,7 @@ UID
 -&gt; [q]
 -&gt; [c]
 -&gt; [QDefinition]
--&gt; [Relation]
+-&gt; [DisplayExpr]
 -&gt; [QDefinition]
 -&gt; UID
 -&gt; [Sentence]
@@ -60,10 +60,8 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Data.Drasil.Quantities.Physics.html#acceleration"><span class="hs-identifier hs-var">QP.acceleration</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-27"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition -&gt; Relation
-forall c. ExprRelat c =&gt; c -&gt; Relation
-</span><span class="hs-identifier hs-var">relat</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
-</span><a href="Data.Drasil.Equations.Defining.Physics.html#newtonSLQD"><span class="hs-identifier hs-var">newtonSLQD</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-string">&quot;NewtonSecLawMot&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
+</span><span id="line-27"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Data.Drasil.Equations.Defining.Physics.html#newtonSLQD"><span class="hs-identifier hs-var">newtonSLQD</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-string">&quot;NewtonSecLawMot&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
 </span><a href="Data.Drasil.Equations.Defining.Physics.html#newtonSLDesc"><span class="hs-identifier hs-var">newtonSLDesc</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-28"></span><span>
 </span><span id="line-29"></span><span class="hs-comment">--</span><span>
@@ -100,13 +98,13 @@ forall a. a -&gt; Maybe a
 </span><span id="line-34"></span><span>
 </span><span id="line-35"></span><span class="annot"><a href="Data.Drasil.Theories.Physics.html#weightQD"><span class="hs-identifier hs-type">weightQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
 </span><span id="line-36"></span><span id="weightQD"><span class="annot"><span class="annottext">weightQD :: QDefinition
-</span><a href="Data.Drasil.Theories.Physics.html#weightQD"><span class="hs-identifier hs-var hs-var">weightQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP -&gt; Relation -&gt; QDefinition
+</span><a href="Data.Drasil.Theories.Physics.html#weightQD"><span class="hs-identifier hs-var hs-var">weightQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP -&gt; Expr -&gt; QDefinition
 forall c.
 (Quantity c, MayHaveUnit c) =&gt;
-c -&gt; NP -&gt; Relation -&gt; QDefinition
+c -&gt; NP -&gt; Expr -&gt; QDefinition
 </span><span class="hs-identifier hs-var">mkQuantDef'</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Data.Drasil.Quantities.Physics.html#weight"><span class="hs-identifier hs-var">QP.weight</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UID -&gt; NP
-</span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;weight&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Relation
+</span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;weight&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Data.Drasil.Equations.Defining.Physics.html#weightEqn"><span class="hs-identifier hs-var">weightEqn</span></a></span><span>
 </span><span id="line-37"></span><span>
 </span><span id="line-38"></span><span class="annot"><a href="Data.Drasil.Theories.Physics.html#weightSrc"><span class="hs-identifier hs-type">weightSrc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span>
@@ -145,14 +143,15 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span id="line-48"></span><span>  </span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Data.Drasil.Theories.Physics.html#weightDerivSpecWeightSentence"><span class="hs-identifier hs-var">weightDerivSpecWeightSentence</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-49"></span><span id="weightDerivEqns"><span class="annot"><span class="annottext">weightDerivEqns :: [Sentence]
-</span><a href="Data.Drasil.Theories.Physics.html#weightDerivEqns"><span class="hs-identifier hs-var hs-var">weightDerivEqns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Relation -&gt; Sentence) -&gt; [Relation] -&gt; [Sentence]
+</span><a href="Data.Drasil.Theories.Physics.html#weightDerivEqns"><span class="hs-identifier hs-var hs-var">weightDerivEqns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Expr -&gt; Sentence) -&gt; [Expr] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Sentence
-</span><span class="hs-identifier hs-var">E</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Relation
-</span><a href="Data.Drasil.Equations.Defining.Physics.html#weightDerivAccelEqn"><span class="hs-identifier hs-var">weightDerivAccelEqn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Relation
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Sentence
+forall d. Display d =&gt; d -&gt; Sentence
+</span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Expr
+</span><a href="Data.Drasil.Equations.Defining.Physics.html#weightDerivAccelEqn"><span class="hs-identifier hs-var">weightDerivAccelEqn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Data.Drasil.Equations.Defining.Physics.html#weightDerivNewtonEqn"><span class="hs-identifier hs-var">weightDerivNewtonEqn</span></a></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-50"></span><span>  </span><span class="annot"><span class="annottext">Relation
-</span><a href="Data.Drasil.Equations.Defining.Physics.html#weightDerivReplaceMassEqn"><span class="hs-identifier hs-var">weightDerivReplaceMassEqn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Relation
+</span><span id="line-50"></span><span>  </span><span class="annot"><span class="annottext">Expr
+</span><a href="Data.Drasil.Equations.Defining.Physics.html#weightDerivReplaceMassEqn"><span class="hs-identifier hs-var">weightDerivReplaceMassEqn</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Data.Drasil.Equations.Defining.Physics.html#weightDerivSpecWeightEqn"><span class="hs-identifier hs-var">weightDerivSpecWeightEqn</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-51"></span><span>
 </span><span id="line-52"></span><span class="annot"><a href="Data.Drasil.Theories.Physics.html#weightDerivAccelSentence"><span class="hs-identifier hs-type">weightDerivAccelSentence</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
@@ -294,13 +293,13 @@ forall a. Maybe a
 </span><span id="line-78"></span><span>
 </span><span id="line-79"></span><span class="annot"><a href="Data.Drasil.Theories.Physics.html#hsPressureQD"><span class="hs-identifier hs-type">hsPressureQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
 </span><span id="line-80"></span><span id="hsPressureQD"><span class="annot"><span class="annottext">hsPressureQD :: QDefinition
-</span><a href="Data.Drasil.Theories.Physics.html#hsPressureQD"><span class="hs-identifier hs-var hs-var">hsPressureQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP -&gt; Relation -&gt; QDefinition
+</span><a href="Data.Drasil.Theories.Physics.html#hsPressureQD"><span class="hs-identifier hs-var hs-var">hsPressureQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP -&gt; Expr -&gt; QDefinition
 forall c.
 (Quantity c, MayHaveUnit c) =&gt;
-c -&gt; NP -&gt; Relation -&gt; QDefinition
+c -&gt; NP -&gt; Expr -&gt; QDefinition
 </span><span class="hs-identifier hs-var">mkQuantDef'</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Data.Drasil.Quantities.Physics.html#pressure"><span class="hs-identifier hs-var">QP.pressure</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UID -&gt; NP
-</span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;hydrostatic pressure&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Relation
+</span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;hydrostatic pressure&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Data.Drasil.Equations.Defining.Physics.html#hsPressureEqn"><span class="hs-identifier hs-var">hsPressureEqn</span></a></span><span>
 </span><span id="line-81"></span><span>
 </span><span id="line-82"></span><span class="annot"><a href="Data.Drasil.Theories.Physics.html#hsPressureSrc"><span class="hs-identifier hs-type">hsPressureSrc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span>
@@ -353,22 +352,20 @@ forall a. Maybe a
 </span><span id="line-95"></span><span>
 </span><span id="line-96"></span><span class="annot"><a href="Data.Drasil.Theories.Physics.html#torque"><span class="hs-identifier hs-type">torque</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
 </span><span id="line-97"></span><span id="torque"><span class="annot"><span class="annottext">torque :: QDefinition
-</span><a href="Data.Drasil.Theories.Physics.html#torque"><span class="hs-identifier hs-var hs-var">torque</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation -&gt; QDefinition
-forall c.
-(Quantity c, MayHaveUnit c) =&gt;
-c -&gt; Relation -&gt; QDefinition
+</span><a href="Data.Drasil.Theories.Physics.html#torque"><span class="hs-identifier hs-var hs-var">torque</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; QDefinition
+forall c. (Quantity c, MayHaveUnit c) =&gt; c -&gt; Expr -&gt; QDefinition
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#torque"><span class="hs-identifier hs-var">QP.torque</span></a></span><span> </span><span class="annot"><span class="annottext">Relation
+</span><a href="Data.Drasil.Quantities.Physics.html#torque"><span class="hs-identifier hs-var">QP.torque</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Data.Drasil.Theories.Physics.html#torqueEqn"><span class="hs-identifier hs-var">torqueEqn</span></a></span><span>
 </span><span id="line-98"></span><span>
 </span><span id="line-99"></span><span class="annot"><a href="Data.Drasil.Theories.Physics.html#torqueEqn"><span class="hs-identifier hs-type">torqueEqn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
-</span><span id="line-100"></span><span id="torqueEqn"><span class="annot"><span class="annottext">torqueEqn :: Relation
-</span><a href="Data.Drasil.Theories.Physics.html#torqueEqn"><span class="hs-identifier hs-var hs-var">torqueEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><span id="line-100"></span><span id="torqueEqn"><span class="annot"><span class="annottext">torqueEqn :: Expr
+</span><a href="Data.Drasil.Theories.Physics.html#torqueEqn"><span class="hs-identifier hs-var hs-var">torqueEqn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#positionVec"><span class="hs-identifier hs-var">QP.positionVec</span></a></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
-</span><span class="hs-operator hs-var">`cross`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><a href="Data.Drasil.Quantities.Physics.html#positionVec"><span class="hs-identifier hs-var">QP.positionVec</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">`cross`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Data.Drasil.Quantities.Physics.html#force"><span class="hs-identifier hs-var">QP.force</span></a></span><span>
 </span><span id="line-101"></span><span>
@@ -395,12 +392,10 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span id="line-108"></span><span>
 </span><span id="line-109"></span><span class="annot"><a href="Data.Drasil.Theories.Physics.html#vecMagQD"><span class="hs-identifier hs-type">vecMagQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
 </span><span id="line-110"></span><span id="vecMagQD"><span class="annot"><span class="annottext">vecMagQD :: QDefinition
-</span><a href="Data.Drasil.Theories.Physics.html#vecMagQD"><span class="hs-identifier hs-var hs-var">vecMagQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation -&gt; QDefinition
-forall c.
-(Quantity c, MayHaveUnit c) =&gt;
-c -&gt; Relation -&gt; QDefinition
+</span><a href="Data.Drasil.Theories.Physics.html#vecMagQD"><span class="hs-identifier hs-var hs-var">vecMagQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr -&gt; QDefinition
+forall c. (Quantity c, MayHaveUnit c) =&gt; c -&gt; Expr -&gt; QDefinition
 </span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#speed"><span class="hs-identifier hs-var">QP.speed</span></a></span><span> </span><span class="annot"><span class="annottext">Relation
+</span><a href="Data.Drasil.Quantities.Physics.html#speed"><span class="hs-identifier hs-var">QP.speed</span></a></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Data.Drasil.Equations.Defining.Physics.html#speedEqn"><span class="hs-identifier hs-var">speedEqn</span></a></span><span>
 </span><span id="line-111"></span><span>
 </span><span id="line-112"></span><span class="annot"><a href="Data.Drasil.Theories.Physics.html#magNote"><span class="hs-identifier hs-type">magNote</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
@@ -418,8 +413,9 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span>
 </span><span id="line-114"></span><span>  </span><span class="annot"><span class="annottext">UID -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;the magnitude of the vector&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
-</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Relation -&gt; Sentence
-</span><span class="hs-identifier hs-var">E</span></span><span> </span><span class="annot"><span class="annottext">Relation
+</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Expr -&gt; Sentence
+forall d. Display d =&gt; d -&gt; Sentence
+</span><span class="hs-identifier hs-var">eS</span></span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Data.Drasil.Equations.Defining.Physics.html#speedEqn"><span class="hs-identifier hs-var">speedEqn</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.isThe`</span></span><span>
 </span><span id="line-115"></span><span>  </span><span class="annot"><span class="annottext">UID -&gt; Sentence
@@ -446,7 +442,7 @@ forall a. Maybe a
 -&gt; [QuantityDict]
 -&gt; [ConceptChunk]
 -&gt; [QDefinition]
--&gt; [Relation]
+-&gt; [DisplayExpr]
 -&gt; [QDefinition]
 -&gt; UID
 -&gt; [Sentence]
@@ -458,7 +454,7 @@ UID
 -&gt; [q]
 -&gt; [c]
 -&gt; [QDefinition]
--&gt; [Relation]
+-&gt; [DisplayExpr]
 -&gt; [QDefinition]
 -&gt; UID
 -&gt; [Sentence]
@@ -476,31 +472,29 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Data.Drasil.Quantities.Physics.html#angularAccel"><span class="hs-identifier hs-var">QP.angularAccel</span></a></span><span class="hs-special">]</span><span> </span><span>
-</span><span id="line-124"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition -&gt; Relation
-forall c. ExprRelat c =&gt; c -&gt; Relation
-</span><span class="hs-identifier hs-var">relat</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
-</span><a href="Data.Drasil.Theories.Physics.html#newtonSLRQD"><span class="hs-identifier hs-var">newtonSLRQD</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-string">&quot;NewtonSecLawRotMot&quot;</span></span><span> </span><span class="annot"><span class="annottext">[Sentence]
+</span><span id="line-124"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Data.Drasil.Theories.Physics.html#newtonSLRQD"><span class="hs-identifier hs-var">newtonSLRQD</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-string">&quot;NewtonSecLawRotMot&quot;</span></span><span> </span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Data.Drasil.Theories.Physics.html#newtonSLRNotes"><span class="hs-identifier hs-var">newtonSLRNotes</span></a></span><span>
 </span><span id="line-125"></span><span>
 </span><span id="line-126"></span><span class="annot"><a href="Data.Drasil.Theories.Physics.html#newtonSLRQD"><span class="hs-identifier hs-type">newtonSLRQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
 </span><span id="line-127"></span><span id="newtonSLRQD"><span class="annot"><span class="annottext">newtonSLRQD :: QDefinition
-</span><a href="Data.Drasil.Theories.Physics.html#newtonSLRQD"><span class="hs-identifier hs-var hs-var">newtonSLRQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP -&gt; Relation -&gt; QDefinition
+</span><a href="Data.Drasil.Theories.Physics.html#newtonSLRQD"><span class="hs-identifier hs-var hs-var">newtonSLRQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP -&gt; Expr -&gt; QDefinition
 forall c.
 (Quantity c, MayHaveUnit c) =&gt;
-c -&gt; NP -&gt; Relation -&gt; QDefinition
+c -&gt; NP -&gt; Expr -&gt; QDefinition
 </span><span class="hs-identifier hs-var">mkQuantDef'</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Data.Drasil.Quantities.Physics.html#torque"><span class="hs-identifier hs-var">QP.torque</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UID -&gt; NP
-</span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Newton's second law for rotational motion&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Relation
+</span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Newton's second law for rotational motion&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr
 </span><a href="Data.Drasil.Theories.Physics.html#newtonSLRExpr"><span class="hs-identifier hs-var">newtonSLRExpr</span></a></span><span>
 </span><span id="line-128"></span><span>
 </span><span id="line-129"></span><span class="annot"><a href="Data.Drasil.Theories.Physics.html#newtonSLRExpr"><span class="hs-identifier hs-type">newtonSLRExpr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
-</span><span id="line-130"></span><span id="newtonSLRExpr"><span class="annot"><span class="annottext">newtonSLRExpr :: Relation
-</span><a href="Data.Drasil.Theories.Physics.html#newtonSLRExpr"><span class="hs-identifier hs-var hs-var">newtonSLRExpr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><span id="line-130"></span><span id="newtonSLRExpr"><span class="annot"><span class="annottext">newtonSLRExpr :: Expr
+</span><a href="Data.Drasil.Theories.Physics.html#newtonSLRExpr"><span class="hs-identifier hs-var hs-var">newtonSLRExpr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#momentOfInertia"><span class="hs-identifier hs-var">QP.momentOfInertia</span></a></span><span> </span><span class="annot"><span class="annottext">Relation -&gt; Relation -&gt; Relation
-</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Relation
-forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Relation
+</span><a href="Data.Drasil.Quantities.Physics.html#momentOfInertia"><span class="hs-identifier hs-var">QP.momentOfInertia</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Data.Drasil.Quantities.Physics.html#angularAccel"><span class="hs-identifier hs-var">QP.angularAccel</span></a></span><span>
 </span><span id="line-131"></span><span>
@@ -555,7 +549,7 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 -&gt; [QuantityDict]
 -&gt; [ConceptChunk]
 -&gt; [QDefinition]
--&gt; [Relation]
+-&gt; [DisplayExpr]
 -&gt; [QDefinition]
 -&gt; [Reference]
 -&gt; UID
@@ -568,7 +562,7 @@ UID
 -&gt; [q]
 -&gt; [c]
 -&gt; [QDefinition]
--&gt; [Relation]
+-&gt; [DisplayExpr]
 -&gt; [QDefinition]
 -&gt; [Reference]
 -&gt; UID
@@ -586,10 +580,8 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><a href="Data.Drasil.Quantities.Physics.html#velocity"><span class="hs-identifier hs-var">QP.velocity</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#time"><span class="hs-identifier hs-var">QP.time</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition -&gt; Relation
-forall c. ExprRelat c =&gt; c -&gt; Relation
-</span><span class="hs-identifier hs-var">relat</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
-</span><a href="Data.Drasil.Equations.Defining.Physics.html#accelerationQD"><span class="hs-identifier hs-var">accelerationQD</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><a href="Data.Drasil.Quantities.Physics.html#time"><span class="hs-identifier hs-var">QP.time</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Data.Drasil.Equations.Defining.Physics.html#accelerationQD"><span class="hs-identifier hs-var">accelerationQD</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-143"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; Reference
 </span><span class="hs-identifier hs-var">makeCite</span></span><span> </span><span class="annot"><span class="annottext">Citation
 </span><a href="Data.Drasil.Citations.html#accelerationWiki"><span class="hs-identifier hs-var">accelerationWiki</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-string">&quot;acceleration&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
@@ -603,7 +595,7 @@ forall c. ExprRelat c =&gt; c -&gt; Relation
 -&gt; [QuantityDict]
 -&gt; [ConceptChunk]
 -&gt; [QDefinition]
--&gt; [Relation]
+-&gt; [DisplayExpr]
 -&gt; [QDefinition]
 -&gt; [Reference]
 -&gt; UID
@@ -616,7 +608,7 @@ UID
 -&gt; [q]
 -&gt; [c]
 -&gt; [QDefinition]
--&gt; [Relation]
+-&gt; [DisplayExpr]
 -&gt; [QDefinition]
 -&gt; [Reference]
 -&gt; UID
@@ -634,10 +626,8 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><a href="Data.Drasil.Quantities.Physics.html#position"><span class="hs-identifier hs-var">QP.position</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
-</span><a href="Data.Drasil.Quantities.Physics.html#time"><span class="hs-identifier hs-var">QP.time</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition -&gt; Relation
-forall c. ExprRelat c =&gt; c -&gt; Relation
-</span><span class="hs-identifier hs-var">relat</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
-</span><a href="Data.Drasil.Equations.Defining.Physics.html#velocityQD"><span class="hs-identifier hs-var">velocityQD</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><a href="Data.Drasil.Quantities.Physics.html#time"><span class="hs-identifier hs-var">QP.time</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Data.Drasil.Equations.Defining.Physics.html#velocityQD"><span class="hs-identifier hs-var">velocityQD</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-150"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; Reference
 </span><span class="hs-identifier hs-var">makeCite</span></span><span> </span><span class="annot"><span class="annottext">Citation
 </span><a href="Data.Drasil.Citations.html#velocityWiki"><span class="hs-identifier hs-var">velocityWiki</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-string">&quot;velocity&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>

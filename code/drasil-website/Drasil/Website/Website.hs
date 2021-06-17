@@ -1,11 +1,12 @@
 module Drasil.Website.Website where
 
+import Data.List (zipWith4)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
   rdb, refdb, _authors, _concepts, _constants, _constraints, _purpose,
   _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, _outputs, _quants, 
   _sys, _sysinfodb, _usedinfodb)
-import Language.Drasil
+import Language.Drasil hiding (C)
 import Utils.Drasil
 import Drasil.DocLang
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
@@ -24,24 +25,24 @@ printSetting = PI symbMap Equational defaultConfiguration
 mkWebsite :: Document
 mkWebsite =
     --Document   Title            author     [Section]
-    Document (S websiteTitle) [{-no author-}] sections
+    Document (S websiteTitle) EmptyS sections
 
 si :: SystemInformation
-si = SI SI {
+si = SI {
     _sys         = webName,
     _kind        = web,
-    _authors     = [],
-    _quants      = [],
+    _authors     = [] :: [Person],
+    _quants      = [] :: [QuantityDict],
     _purpose     = [],
     _concepts    = [] :: [UnitaryConceptDict],
-    _instModels  = [], -- FIXME; empty _instModels
-    _datadefs    = [],
+    _instModels  = [], -- :: [InstanceModel],
+    _datadefs    = [], -- :: [DataDefinition],
     _configFiles = [],
-    _inputs      = [],
-    _outputs     = [],
+    _inputs      = [] :: [QuantityDict],
+    _outputs     = [] :: [QuantityDict],
     _defSequence = [] :: [Block QDefinition],
     _constraints = [] :: [ConstrainedChunk],
-    _constants   = [],
+    _constants   = [] :: [QDefinition],
     _sysinfodb   = symbMap,
     _usedinfodb  = usedDB,
     refdb        = rdb [] []
@@ -49,7 +50,7 @@ si = SI SI {
 
 sections :: [Section]
 -- Section Title [SecCons] Reference
-sections = headerSec ++ introSec ++ caseStudySec ++ exampleSec ++ docsSec ++ analysisSec ++ graphSec
+sections = [headerSec, introSec, caseStudySec, exampleSec, docsSec, analysisSec, graphSec]
 
 symbMap :: ChunkDB
 symbMap = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict])
@@ -60,7 +61,9 @@ usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict])
            ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
 
 allRefs :: [Reference]
-allRefs = map rw sections ++ [imageRef, gitHubRef, caseStudyTabRef, docsRef, fullDocsRef, dataTableHTMLRef, dataTableCSVRef] ++ concatMap snd exampleDoxRefs ++ concatMap snd exampleCodeRefs ++ drasilDepGraphRefs
+allRefs = map rw sections ++ [imageRef, gitHubRef, caseStudyTabRef, docsRef, fullDocsRef, dataTableHTMLRef, dataTableCSVRef] 
+  ++ concatMap snd (concat exampleDoxRefs) ++ concatMap snd (concat exampleCodeRefs) ++ drasilDepGraphRefs
+  ++ map getHTMLRef exampleTitles ++ map getPDFRef exampleTitles
 
 -- need section references
 headerSecRef, introSecRef, caseStudySecRef, exampleSecRef, docsSecRef, analysisSecRef, graphSecRef :: Reference
@@ -81,7 +84,7 @@ web = commonIdea "website" (cn "website") "web" []
 
 --header
 headerSec :: Section
-headerSec = section EmptyS [mkParagraph (gitHubInfoName +:+ makeRef2S gitHubRef), imageContent] [] headerSecRef
+headerSec = section EmptyS [mkParagraph (S gitHubInfoName +:+ makeRef2S gitHubRef), imageContent] [] headerSecRef
 
 imageContent :: Contents
 imageContent = mkFig imageRef $ fig EmptyS imagePath
@@ -90,7 +93,7 @@ imageRef :: Reference
 imageRef = makeFigRef "Drasil"
 
 gitHubRef :: Reference
-gitHubRef = Reference "gitHubRepo" (URI gitHubInfoURL) (shortname "gitHubRepo") None
+gitHubRef = Reference "gitHubRepo" (URI gitHubInfoURL) (shortname' "gitHubRepo") None
 
 websiteTitle, gitHubInfoName :: String
 gitHubInfoURL, imagePath :: FilePath
@@ -110,8 +113,8 @@ introParagraph1 = "Drasil is a framework for generating all of the software arti
   \written in a Domain-Specific Language (DSL). These recipes allow us to specify which pieces of \
   \knowledge should be used in which artifacts, how to transform them, and more."
 -- need sentence below?
-introParagraph2 = "This webpage is designed to contain the most up to date" ++
-  "case study artifacts, Haddock documentation, and package dependency graphs" --foldlList "," List [caseStudy, haddockDocs, packDepGraph] 
+introParagraph2 = "This webpage is designed to contain the most up to date " ++
+  "case study artifacts, Haddock documentation, and package dependency graphs " --foldlList "," List [caseStudy, haddockDocs, packDepGraph] 
   ++ "from the Drasil repository. \
   \The case study artifacts include the Software Requirements Specification (SRS) for the case study, \
   \which specifies what the program sets out to achieve. \
@@ -123,7 +126,7 @@ introParagraph2 = "This webpage is designed to contain the most up to date" ++
 ----------------------------------------------------
 -- case studies section
 caseStudySec :: Section
-caseStudySec = section (S caseStudiesTitle) [mkParagraph.S caseStudiesDesc, mkFig caseStudyTabRef mkCaseTable, ULC $ ulcc caseStudyLegend] [] caseStudySecRef
+caseStudySec = section (S caseStudiesTitle) [mkParagraph $ S caseStudiesDesc, mkFig caseStudyTabRef mkCaseTable, UlC $ ulcc caseStudyLegend] [] caseStudySecRef
 
 caseStudiesTitle, caseStudiesDesc :: String
 caseStudiesTitle = "Case Studies"
@@ -136,78 +139,96 @@ mkCaseTable :: RawContent
 mkCaseTable = Table headerRow tableBody EmptyS False
 
 headerRow :: [Sentence]
-headerRow = [S "Case Study", modularityTitle, implementTypeTitle, loggingTitle, inStructTitle, conStructTitle, conRepTitle, realNumRepTitle]
+headerRow = map S ["Case Study", modularityTitle, implementTypeTitle, loggingTitle, inStructTitle, conStructTitle, conRepTitle, realNumRepTitle]
 
 tableBody :: [[Sentence]]
-tableBody = mkTable [(\CS x _ _ _ _ _ _ _ -> S x),
-                     (\CS _ x _ _ _ _ _ _ -> (S . show x)),
-                     (\CS _ _ x _ _ _ _ _ -> (S . show x)),
-                     (\CS _ _ _ x _ _ _ _ -> (S . show x)),
-                     (\CS _ _ _ _ x _ _ _ -> (S . show x)),
-                     (\CS _ _ _ _ _ x _ _ -> (S . show x)),
-                     (\CS _ _ _ _ _ _ x _ -> (S . show x)),
-                     (\CS _ _ _ _ _ _ _ x -> (S . show x))]
+tableBody = mkTable [(\(CS x _ _ _ _ _ _ _) -> S x),
+                     (\(CS _ x _ _ _ _ _ _) -> S $ show x),
+                     (\(CS _ _ x _ _ _ _ _) -> S $ show x),
+                     (\(CS _ _ _ x _ _ _ _) -> S $ show x),
+                     (\(CS _ _ _ _ x _ _ _) -> S $ show x),
+                     (\(CS _ _ _ _ _ x _ _) -> S $ show x),
+                     (\(CS _ _ _ _ _ _ x _) -> S $ show x),
+                     (\(CS _ _ _ _ _ _ _ x) -> S $ show x)]
                      [glassBRCase, noPCMCase, pdControllerCase, projectileCase1, projectileCase2, projectileCase3, projectileCase4, projectileCase5]
 
 caseStudyTabRef :: Reference
 caseStudyTabRef = makeTabRef "CaseStudy"
 
 type Name = String
-data Modularity = P | S deriving (Show)
-data ImplementType = L | P deriving (Show)
+data Modularity = CMod | SMod | UMod
+data ImplementType = LIm | PIm
 data Logging = L | NoL deriving (Show)
-data InStruct = B | U deriving (Show)
+data InStruct = BIn | UIn
 data ConStruct = B | I | U | WI deriving (Show)
 data ConRep = C | V deriving (Show)
 data RealNumRep = D | F deriving (Show)
 
 instance Show Modularity where
-  show P = "P"
+  show CMod = "C"
+  show SMod = "S"
+  show UMod = "U"
+
+instance Show ImplementType where
+  show LIm = "L"
+  show PIm = "P"
+
+instance Show InStruct where
+  show BIn = "B"
+  show UIn = "U"
 data CaseStudy = CS Name Modularity ImplementType Logging InStruct ConStruct ConRep RealNumRep
-glassBRCase      = CS "GlassBR"                     S P L   B I  C D
-noPCMCase        = CS "NoPCM"                       C P NoL U B  C D
-pdControllerCase = CS "PDController"                C P NoL U B  C D
-projectileCase1  = CS "Projectile_C_P_NoL_B_U_V_D"  C P NoL B U  V D
-projectileCase2  = CS "Projectile_S_L_NoL_U_U_V_F"  S L NoL U U  V F
-projectileCase3  = CS "Projectile_U_P_L_B_B_C_D"    U P L   B B  C D
-projectileCase4  = CS "Projectile_U_P_NoL_U_WI_V_D" U P NoL U WI V D
-projectileCase5  = CS "Projectile_U_P_L_B_WI_V_F"   U P L   B WI V F
+
+glassBRCase, noPCMCase, pdControllerCase, projectileCase1, projectileCase2,
+  projectileCase3, projectileCase4, projectileCase5 :: CaseStudy
+
+glassBRCase      = CS "GlassBR"                     SMod PIm L   BIn I  C D
+noPCMCase        = CS "NoPCM"                       CMod PIm NoL UIn B  C D
+pdControllerCase = CS "PDController"                CMod PIm NoL UIn B  C D
+projectileCase1  = CS "Projectile_C_P_NoL_B_U_V_D"  CMod PIm NoL BIn U  V D
+projectileCase2  = CS "Projectile_S_L_NoL_U_U_V_F"  SMod LIm NoL UIn U  V F
+projectileCase3  = CS "Projectile_U_P_L_B_B_C_D"    UMod PIm L   BIn B  C D
+projectileCase4  = CS "Projectile_U_P_NoL_U_WI_V_D" UMod PIm NoL UIn WI V D
+projectileCase5  = CS "Projectile_U_P_L_B_WI_V_F"   UMod PIm L   BIn WI V F
 
 -- case studies symbol legend
 modularityTitle, implementTypeTitle, loggingTitle, inStructTitle, conStructTitle, 
-  conRepTitle, realNumRepTitle, modPt1, modPt2, modPt3, implementPt1, implementPt2, 
+  conRepTitle, realNumRepTitle :: String
+modPt1, modPt2, modPt3, implementPt1, implementPt2, 
   logPt1, logPt2, inStructPt1, inStructPt2, conStructPt1, conStructPt2, conStructPt3, 
   conStructPt4, conRepPt1, conRepPt2, realNumRepPt1, realNumRepPt2 :: String
+modSymbPt1, modSymbPt2, modSymbPt3, implementSymbPt1, implementSymbPt2, 
+  logSymbPt1, logSymbPt2, inStructSymbPt1, inStructSymbPt2, conStructSymbPt1, conStructSymbPt2, conStructSymbPt3, 
+  conStructSymbPt4, conRepSymbPt1, conRepSymbPt2, realNumRepSymbPt1, realNumRepSymbPt2 :: String
 
 caseStudyLegend :: RawContent
 caseStudyLegend = Enumeration caseStudyList
 
 caseStudyList :: ListType
-caseStudyList = Bullet (zip (map (uncurry.mkLegendListFunc) (zip3 legendTitles legendSymbs legendConts)) (repeat Nothing))
+caseStudyList = Bullet $ zip (zipWith3 mkLegendListFunc legendTitles legendSymbs legendConts) $ repeat Nothing
 
 mkLegendListFunc :: Sentence -> [Sentence] -> [Sentence] -> ItemType
-mkLegendListFunc title symbs conts = (Nested title (Simple (zip3 symbs (map Flat conts) (repeat Nothing))))
+mkLegendListFunc t symbs conts = Nested t $ Simple $ zip3 symbs (map Flat conts) $ repeat Nothing
 
 legendTitles :: [Sentence]
-legendTitles = [modularityTitle, implementTypeTitle, loggingTitle, inStructTitle, conStructTitle, conRepTitle, realNumRepTitle]
+legendTitles = map S [modularityTitle, implementTypeTitle, loggingTitle, inStructTitle, conStructTitle, conRepTitle, realNumRepTitle]
 
 legendSymbs :: [[Sentence]]
-legendSymbs = [[modSymbPt1, modSymbPt2, modSymbPt3],
-               [implementSymbPt1, implementSymbPt2],
-               [logSymbPt1, logSymbPt2],
-               [inStructSymbPt1, inStructSymbPt2],
-               [conStructSymbPt1, conStructSymbPt2, conStructSymbPt3, conStructSymbPt4],
-               [conRepSymbPt1, conRepSymbPt2],
-               [realNumRepSymbPt1, realNumRepSymbPt2]]
+legendSymbs = map (map S) [[modSymbPt1, modSymbPt2, modSymbPt3],
+                           [implementSymbPt1, implementSymbPt2],
+                           [logSymbPt1, logSymbPt2],
+                           [inStructSymbPt1, inStructSymbPt2],
+                           [conStructSymbPt1, conStructSymbPt2, conStructSymbPt3, conStructSymbPt4],
+                           [conRepSymbPt1, conRepSymbPt2],
+                           [realNumRepSymbPt1, realNumRepSymbPt2]]
 
 legendConts :: [[Sentence]]
-legendConts = [[modPt1, modPt2, modPt3],
-               [implementPt1, implementPt2],
-               [logPt1, logPt2],
-               [inStructPt1, inStructPt2],
-               [conStructPt1, conStructPt2, conStructPt3, conStructPt4],
-               [conRepPt1, conRepPt2],
-               [realNumRepPt1, realNumRepPt2]]
+legendConts = map (map S) [[modPt1, modPt2, modPt3],
+                           [implementPt1, implementPt2],
+                           [logPt1, logPt2],
+                           [inStructPt1, inStructPt2],
+                           [conStructPt1, conStructPt2, conStructPt3, conStructPt4],
+                           [conRepPt1, conRepPt2],
+                           [realNumRepPt1, realNumRepPt2]]
 
 modularityTitle = "Modularity"
 implementTypeTitle = "Implementation Type"
@@ -239,7 +260,7 @@ inStructPt2 = "Inputs are Unbundled"
 inStructSymbPt1 = "B"
 inStructSymbPt2 = "U"
 
-conStructPt1 = "Constant values are Inlined<"
+conStructPt1 = "Constant values are Inlined"
 conStructPt2 = "Constants are stored With the Inputs"
 conStructPt3 = "Constants are stored in variables that are Bundled in a class"
 conStructPt4 = "Constants are stored in variables that are Unbundled"
@@ -261,26 +282,26 @@ realNumRepSymbPt2 = "F"
 ----------------------------------------
 -- example section
 exampleSec :: Section
-exampleSec = section (S exampleTitle) [mkParagraph exampleIntro, Ulc $ ulcc exampleList] [] exampleSecRef
+exampleSec = section (S exampleTitle) [mkParagraph exampleIntro, UlC $ ulcc mkExampleList] [] exampleSecRef
 
 exampleTitle :: String
 exampleTitle = "Generated Examples"
 
-exampleIntro :: String
-exampleIntro = "Each of the case studies contain their own generated PDF and HTML reports, \
-  \and in some cases, their own generated code."
+exampleIntro :: Sentence
+exampleIntro = S "Each of the case studies contain their own generated PDF and HTML reports," +:+
+  S "and in some cases, their own generated code."
 
-mkExampleLst :: RawContent
-mkExampleLst = Enumeration exampleList
+mkExampleList :: RawContent
+mkExampleList = Enumeration exampleList
 
 exampleList :: ListType
-exampleList = Bullet (zip (map (uncurry.mkExampleListFunc) (zip4 exampleTitles exampleDescs exampleCodePaths exampleDoxPaths)) (repeat Nothing))
+exampleList = Bullet $ zip (zipWith4 mkExampleListFunc exampleTitles exampleDescs exampleCodeRefs exampleDoxRefs) $ repeat Nothing
 
 mkExampleListFunc :: String -> String -> [(String, [Reference])] -> [(String, [Reference])] -> ItemType
 mkExampleListFunc exmpl desc codePth doxPth
-  | codePth == [(_, [])] && doxPth == [(_,[])] = Nested (S exmpl) $ Bullet [(Flat ((S (exmpl ++ "SRS")) +:+ makeRef2S getHTMLRef +:+ makeRef2S getPDFRef), Nothing)]
-  | doxPth == [(_,[])]                         = Nested (S exmpl) $ Bullet $ zip [Flat $ (S (exmpl ++ "SRS")) +:+ makeRef2S getHTMLRef +:+ makeRef2S getPDFRef,
-                                                                       Nested (S generatedCodeTitle) $ Bullet $mkCodeList codePth] $ repeat Nothing
+  | map snd codePth == [[]] && map snd doxPth == [[]] = Nested (S exmpl +:+ S desc) $ Bullet [(Flat (S (exmpl ++ "SRS") +:+ makeRef2S (getHTMLRef exmpl) +:+ makeRef2S (getPDFRef exmpl)), Nothing)]
+  | map snd doxPth == [[]]                         = Nested (S exmpl +:+ S desc) $ Bullet $ zip [Flat $ S (exmpl ++ "SRS") +:+ makeRef2S (getHTMLRef exmpl) +:+ makeRef2S (getPDFRef exmpl),
+                                                                       Nested (S generatedCodeTitle) $ Bullet $ mkCodeList codePth] $ repeat Nothing
                                                                               {-(Bullet [(foldlSent_ (map makeRef2S codePth), Nothing)]), Nothing)])-}
   {-| length codePth <= 1                        = Nested (S exmpl) (Bullet [((S (exmpl ++ "SRS")) +:+ makeRef2S getHTMLRef +:+ makeRef2S getPDFRef, Nothing),
                                                                        (Nested (S generatedCodeTitle) 
@@ -290,48 +311,50 @@ mkExampleListFunc exmpl desc codePth doxPth
   {-| otherwise                                  = Nested (S exmpl) (Bullet [(Flat ((S (exmpl ++ "SRS")) +:+ makeRef2S getHTMLRef +:+ makeRef2S getPDFRef), Nothing),
                                                                        (Nested (S generatedCodeTitle) (Bullet (mkCodeList codePth),
                                                                        (Nested (S generatedCodeDocsTitle) (Bullet (mkCodeList doxPth)])-}
-  | otherwise                                  = Nested (S exmpl) $ Bullet $ zip [Flat $ (S (exmpl ++ "SRS")) +:+ makeRef2S getHTMLRef +:+ makeRef2S getPDFRef,
+  | otherwise                                  = Nested (S exmpl +:+ S desc) $ Bullet $ zip [Flat $ S (exmpl ++ "SRS") +:+ makeRef2S (getHTMLRef exmpl) +:+ makeRef2S (getPDFRef exmpl),
                                                                        Nested (S generatedCodeTitle) $ Bullet $ mkCodeList codePth,
                                                                        Nested (S generatedCodeDocsTitle) $ Bullet $ mkCodeList doxPth] $ repeat Nothing
 
-mkCodeList :: [(String, [Reference])] -> (ItemType, Maybe String)
+mkCodeList :: [(String, [Reference])] -> [(ItemType, Maybe String)]
 mkCodeList [] = []
-mkCodeList (r:refs) = (Flat foldlSent_ (map makeRef2S (snd r)), Nothing): mkCodeList refs
+mkCodeList (r:refs) = (Flat $ foldlSent_ (map makeRef2S (snd r)), Nothing): mkCodeList refs
 
-
+exampleTitles, exampleDescs :: [String]
+exampleCodeRefs, exampleDoxRefs :: [[(String, [Reference])]]
 exampleTitles = [pendulum, gamePhys, glassBR, hghc, noPCM, pdController, projectile, ssp, swhs, template]
 exampleDescs = [pendulumDesc, gamePhysDesc, glassBRDesc, hghcDesc, noPCMDesc, pdControllerDesc, projectileDesc, sspDesc, swhsDesc, templateDesc]
-exampleCodeRefs =[(pendulum, []),
-                  (gamePhys, []),
-                  (glassBR, map (getCodeRef currHash glassBR) glassBRCode), 
-                  (hghc, []), 
-                  (noPCM, map (getCodeRef currHash noPCM) noPCMCode),
-                  (pdController, map (getCodeRef currHash pdController) pdControllerCode),
-                  (projectileC1, map (getCodeRef currHash (projectile ++ "/" projectileC1)) projectileCase1Code),
-                  (projectileC2, map (getCodeRef currHash (projectile ++ "/" projectileC2)) projectileCase2Code),
-                  (projectileC3, map (getCodeRef currHash (projectile ++ "/" projectileC3)) projectileCase3Code),
-                  (projectileC4, map (getCodeRef currHash (projectile ++ "/" projectileC4)) projectileCase4Code),
-                  (projectileC5, map (getCodeRef currHash (projectile ++ "/" projectileC5)) projectileCase5Code),
-                  (ssp, []),
-                  (swhs, []),
-                  (template, [])]
-exampleDoxRefs =[(pendulum, []),
-                 (gamePhys, []),
-                 (glassBR, map (getDoxRef glassBR) glassBRDox), 
-                 (hghc, []), 
-                 (noPCM, map (getDoxRef noPCM) noPCMDox),
-                 (pdController, map (getDoxRef pdController) pdControllerDox),
-                 (projectileC1, map (getDoxRef (projectile ++ "/" projectileC1)) projectileCase1Dox),
-                 (projectileC2, map (getDoxRef (projectile ++ "/" projectileC2)) projectileCase2Dox),
-                 (projectileC3, map (getDoxRef (projectile ++ "/" projectileC3)) projectileCase3Dox),
-                 (projectileC4, map (getDoxRef (projectile ++ "/" projectileC4)) projectileCase4Dox),
-                 (projectileC5, map (getDoxRef (projectile ++ "/" projectileC5)) projectileCase5Dox),
-                 (ssp, []),
-                 (swhs, []),
-                 (template, [])]
+exampleCodeRefs =[[(pendulum, [])],
+                  [(gamePhys, [])],
+                  [(glassBR, map (getCodeRef currHash glassBR) glassBRCode)],
+                  [(hghc, [])],
+                  [(noPCM, map (getCodeRef currHash noPCM) noPCMCode)],
+                  [(pdController, map (getCodeRef currHash pdController) pdControllerCode)],
+                  [(projectileC1, map (getCodeRef currHash (projectile ++ "/" ++ projectileC1)) projectileCase1Code),
+                  (projectileC2, map (getCodeRef currHash (projectile ++ "/" ++ projectileC2)) projectileCase2Code),
+                  (projectileC3, map (getCodeRef currHash (projectile ++ "/" ++ projectileC3)) projectileCase3Code),
+                  (projectileC4, map (getCodeRef currHash (projectile ++ "/" ++ projectileC4)) projectileCase4Code),
+                  (projectileC5, map (getCodeRef currHash (projectile ++ "/" ++ projectileC5)) projectileCase5Code)],
+                  [(ssp, [])],
+                  [(swhs, [])],
+                  [(template, [])]]
+exampleDoxRefs =[[(pendulum, [])],
+                 [(gamePhys, [])],
+                 [(glassBR, map (getDoxRef glassBR) glassBRDox)], 
+                 [(hghc, [])], 
+                 [(noPCM, map (getDoxRef noPCM) noPCMDox)],
+                 [(pdController, map (getDoxRef pdController) pdControllerDox)],
+                 [(projectileC1, map (getDoxRef (projectile ++ "/" ++ projectileC1)) projectileCase1Dox),
+                 (projectileC2, map (getDoxRef (projectile ++ "/" ++ projectileC2)) projectileCase2Dox),
+                 (projectileC3, map (getDoxRef (projectile ++ "/" ++ projectileC3)) projectileCase3Dox),
+                 (projectileC4, map (getDoxRef (projectile ++ "/" ++ projectileC4)) projectileCase4Dox),
+                 (projectileC5, map (getDoxRef (projectile ++ "/" ++ projectileC5)) projectileCase5Dox)],
+                 [(ssp, [])],
+                 [(swhs, [])],
+                 [(template, [])]]
 
 --example names, maybe make a unique type to accept fields of documents, gen code, and doxygen?
-pendulum, gamePhys, glassBR, hghc, noPCM, pdController, projectile, ssp, swhs, template :: String
+pendulum, gamePhys, glassBR, hghc, noPCM, pdController, projectile, projectileC1,
+  projectileC2, projectileC3, projectileC4, projectileC5, ssp, swhs, template :: String
 
 pendulum = "DblPendulum"
 gamePhys = "GamePhysics"
@@ -340,11 +363,16 @@ hghc = "HGHC"
 noPCM = "NoPCM"
 pdController = "PDController"
 projectile = "Projectile"
+projectileC1 = "Projectile_C_P_NoL_B_U_V_D"
+projectileC2 = "Projectile_S_L_NoL_U_U_V_F"
+projectileC3 = "Projectile_U_P_L_B_B_C_D"
+projectileC4 = "Projectile_U_P_NoL_U_WI_V_D"
+projectileC5 = "Projectile_U_P_L_B_WI_V_F"
 ssp = "SSP"
 swhs = "SWHS"
 template = "Template"
 
-glassBRCode, glassBRDox, noPCMCode, noPCMDox, pdControllerCode, projectileCase1Code, projectileCase2Code,
+glassBRCode, glassBRDox, noPCMCode, noPCMDox, pdControllerCode, pdControllerDox, projectileCase1Code, projectileCase2Code,
   projectileCase3Code, projectileCase4Code, projectileCase5Code, projectileCase1Dox, projectileCase2Dox,
   projectileCase3Dox, projectileCase4Dox, projectileCase5Dox :: [String]
 
@@ -353,6 +381,7 @@ glassBRDox           = ["cpp", "csharp", "java", "python"]
 noPCMCode            = ["cpp", "csharp", "java", "python"]
 noPCMDox             = ["cpp", "csharp", "java", "python"]
 pdControllerCode     = ["python"]
+pdControllerDox      = []
 projectileCase1Code  = ["cpp", "csharp", "java", "python", "swift"]
 projectileCase2Code  = ["cpp", "csharp", "java", "python", "swift"]
 projectileCase3Code  = ["cpp", "csharp", "java", "python", "swift"]
@@ -373,15 +402,16 @@ getPDFPath ex = "https://jacquescarette.github.io/Drasil/examples/" ++ ex ++ "/s
 
 getCodeRef :: String -> String -> String -> Reference
 getDoxRef :: String -> String -> Reference
-getCodeRef hash ex lang = Reference ("codeRef" ++ ex) (URI (getCodePath hash ex lang)) (shortname' ("codeRef" ++ ex)) None
-getDoxRef ex lang = Reference ("doxRef" ++ ex) (URI (getDoxPath ex lang)) (shortname' ("doxRef" ++ ex)) None
+getCodeRef hash ex lang = Reference ("codeRef" ++ ex ++ lang) (URI (getCodePath hash ex lang)) (shortname' ("codeRef" ++ ex ++ lang)) None
+getDoxRef ex lang = Reference ("doxRef" ++ ex ++ lang) (URI (getDoxPath ex lang)) (shortname' ("doxRef" ++ ex ++ lang)) None
 getCodePath :: String -> String -> String -> FilePath
 getDoxPath :: String -> String -> FilePath
 getCodePath hash ex lang = "https://github.com/JacquesCarette/Drasil/tree/" ++ hash ++ "/code/stable/" ++ ex ++ "/src/" ++ lang
 getDoxPath ex lang = "https://jacquescarette.github.io/Drasil/examples/" ++ ex ++ "/doxygen/" ++ lang ++ "/index.html"
 
+-- manually get commit number for now
 currHash :: FilePath
-currHash = "3d03b2c88a48643aeaed2aa5bf8943adda0846ce"
+currHash = "cef7307aa11ac0dc0ec1773b82311ca1f7bb6a51"
 
 pendulumDesc, gamePhysDesc, glassBRDesc, hghcDesc, noPCMDesc, pdControllerDesc,
   projectileDesc, sspDesc, swhsDesc, templateDesc :: String
@@ -411,7 +441,7 @@ docsSec :: Section
 docsSec = section haddockDocsTitle [mkParagraph haddockDocsDesc] [] docsSecRef
 
 haddockDocsTitle, haddockDocsDesc :: Sentence
-docsPath, fulldocsPath :: FilePath
+docsPath, fullDocsPath :: FilePath
 docsRef, fullDocsRef :: Reference
 
 haddockDocsTitle = S "Haddock Documentation"
@@ -432,7 +462,7 @@ dataTableHTMLPath, dataTableCSVPath :: FilePath
 dataTableHTMLRef, dataTableCSVRef :: Reference
 
 drasilDataTableTitle = S "Drasil Data Table"
-dataTableDesc = "Here is the updated Data Table" +:+ makeRef2S dataTableHTMLRef +:+ S "for the Drasil framework. There is also a downloadable version" +:+ makeRef2S dataTableCSVRef +:+ S "(csv format)."
+dataTableDesc = S "Here is the updated Data Table" +:+ makeRef2S dataTableHTMLRef +:+ S "for the Drasil framework. There is also a downloadable version" +:+ makeRef2S dataTableCSVRef +:+ S "(csv format)."
 dataTableHTMLPath = "analysis/DataTable.html"
 dataTableCSVPath = "analysis/DataTable.csv"
 dataTableHTMLRef = Reference "dataTableHTML" (URI dataTableHTMLPath) (shortname' "dataTableHTML") None
@@ -442,7 +472,7 @@ dataTableCSVRef = Reference "dataTableCSV" (URI dataTableCSVPath) (shortname' "d
 --graphs section
 
 graphSec :: Section
-graphSec = section packDepGraphTitle [mkParagraph haddockDocsDesc, Ulc $ ulcc folderList] [] graphSecRef
+graphSec = section packDepGraphTitle [UlC $ ulcc folderList] [] graphSecRef
 
 packDepGraphTitle :: Sentence
 drasilFolders, drasilDepGraphPaths :: [String]
@@ -454,7 +484,7 @@ drasilDepGraphPaths = map (\x -> "graphs/" ++ x ++ ".pdf") drasilFolders
 drasilDepGraphRefs = zipWith (\x y -> Reference x (URI y) (shortname' x) None) drasilFolders drasilDepGraphPaths
 
 folderList :: RawContent
-folderList = Enumerated $ Bullet $ zip folderList' $ repeat Nothing
+folderList = Enumeration $ Bullet $ zip folderList' $ repeat Nothing
 
 folderList' :: [ItemType]
 folderList' = map Flat (zipWith (\x y -> S x +:+ makeRef2S y) drasilFolders drasilDepGraphRefs)

@@ -34,7 +34,7 @@ tMods = [factOfSafety, equilibrium, mcShrStrgth, effStress, newtonSL]
 
 ------------- New Chunk -----------
 factOfSafety :: TheoryModel
-factOfSafety = tm (EquationalModel factOfSafetyQD)
+factOfSafety = tm' "factOfSafetyTM" (EquationalModel factOfSafetyQD)
   [qw fs, qw resistiveShear, qw mobilizedShear] ([] :: [ConceptChunk])
   [factOfSafetyQD] [] [] [makeCite fredlund1977] "factOfSafety" []
 

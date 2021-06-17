@@ -421,7 +421,7 @@ renderShortName _ Name sn = getSentSN sn
 
 -- | Render a uniform resource locator as a 'Sentence'.
 renderURI :: ctx -> ShortName -> Sentence
-renderURI _ sn = getSentSN sn
+renderURI _ = getSentSN
 
 -- | Renders citation information.
 renderCitInfo :: RefInfo -> Sentence

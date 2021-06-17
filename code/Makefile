@@ -163,7 +163,7 @@ $(filter %$(STABILIZE_E_SUFFIX), $(STABILIZE_EXAMPLES)): %$(STABILIZE_E_SUFFIX):
 # individual example diff tests
 $(filter %$(TEST_E_SUFFIX), $(TEST_EXAMPLES)): %$(TEST_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) %$(GEN_E_SUFFIX)
 	@mkdir -p "$(LOG_FOLDER)"
-	- $(DIFF) "$(STABLE_FOLDER)$*/" "$(BUILD_FOLDER)$(EDIR)"/ > "$(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX)" 2>&1
+	- $(DIFF) "$(STABLE_FOLDER)$*/" "$(BUILD_FOLDER)$(EDIR)/" > "$(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX)" 2>&1
 
 # actually run the tests
 test: $(TEST_EXAMPLES)

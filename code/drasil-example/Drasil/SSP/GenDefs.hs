@@ -2,20 +2,19 @@
 module Drasil.SSP.GenDefs (normForcEq, bsShrFEq, resShr, mobShr,
   normShrR, momentEql, generalDefinitions,
   normForcEqGD, bsShrFEqGD, resShrGD, mobShrGD, normShrRGD, momentEqlGD,
-  mobShearWOGD, resShearWOGD, srfWtrFGD) where
+  mobShearWOGD, resShearWOGD, srfWtrFGD, genDefRefs) where
 
+import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
+import qualified Data.List.NonEmpty as NE
 import Language.Drasil
-import Theory.Drasil (GenDefn, gd, ModelKinds (OthModel, EquationalModel))
+import Theory.Drasil (GenDefn, gd, ModelKinds (OthModel, EquationalModel), mkConstraintSet)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.NounPhrase as NP
 import qualified Utils.Drasil.Sentence as S
-
 import Drasil.DocLang.SRS as SRS (physSyst)
-
 import Data.Drasil.SI_Units (metre, newton)
-
 import Data.Drasil.Concepts.Documentation (analysis, assumption, component,
   constant, definition, method_, value)
 import Data.Drasil.Concepts.Math (area, equation, zDir)
@@ -26,7 +25,6 @@ import Data.Drasil.Quantities.PhysicalProperties (specWeight)
 import Data.Drasil.Quantities.Physics (displacement, force, height,
   pressure, torque)
 import Data.Drasil.Theories.Physics (weightGD, hsPressureGD, torqueDD)
-
 import Drasil.SSP.Assumptions (assumpFOSL, assumpSLH, assumpSP, assumpSLI,
   assumpINSFL, assumpPSC, assumpSBSBISL, assumpWIBE, assumpWISE, assumpNESSS,
   assumpHFSM)
@@ -74,7 +72,7 @@ mobShearWOGD = gd (OthModel mobShearWO) (getUnit shearFNoIntsl) Nothing
   (map makeCite[chen2005, karchewski2012]) "mobShearWO"  [mobShearWODesc]
 normShrRGD   = gd (EquationalModel normShrR)   (getUnit intShrForce)   Nothing
   [makeCite chen2005]                      "normShrR"    [nmShrRDesc]
-momentEqlGD  = gd (OthModel momentEql)  (Just newton)           (Just momEqlDeriv)
+momentEqlGD  = gd momentEqlModel        (Just newton)            (Just momEqlDeriv)
   [makeCite chen2005]                      "momentEql"   [momEqlDesc]
 sliceWghtGD  = gd (OthModel sliceWght)  (getUnit slcWght)       (Just sliceWghtDeriv)
   [makeCite fredlund1977]                  "sliceWght"   [sliceWghtNotes]
@@ -82,7 +80,6 @@ baseWtrFGD   = gd (OthModel baseWtrF)   (getUnit baseHydroForce) (Just bsWtrFDer
   [makeCite fredlund1977]                  "baseWtrF"    [bsWtrFNotes]
 srfWtrFGD    = gd (OthModel srfWtrF)    (getUnit surfHydroForce) (Just srfWtrFDeriv)
   [makeCite fredlund1977]                  "srfWtrF"     [srfWtrFNotes]
-
 --
 normForcEq :: RelationConcept
 normForcEq = makeRC "normForcEq" (nounPhraseSP "normal force equilibrium")
@@ -247,6 +244,11 @@ mobShearWODesc = (foldlList Comma List [slcWght `definedIn'''` sliceWghtGD,
   watrForce `definedIn'''` intersliceWtrF] !.)
 
 --
+
+momentEqlModel :: ModelKinds
+momentEqlModel = EquationalConstraints $
+  mkConstraintSet (dccWDS "momentEql" (nounPhraseSP "moment equilibrium") momEqlDesc) $
+  NE.fromList [momEqlRel]
 
 momentEql :: RelationConcept
 momentEql = makeRC "momentEql" (nounPhraseSP "moment equilibrium")
@@ -746,3 +748,7 @@ srfWtrFDerivHeightEqn = oneHalf `mulRe` ((inxi waterHght $- inxi slopeHght) `add
 
 srfWtrFDerivSliceEqn = inxi surfHydroForce $= inxi surfLngth `mulRe` sy waterWeight `mulRe`
   srfWtrFDerivHeightEqn
+
+-- References --
+genDefRefs :: [Reference]
+genDefRefs = map rw generalDefinitions ++ concatMap (^. getReferences) generalDefinitions 

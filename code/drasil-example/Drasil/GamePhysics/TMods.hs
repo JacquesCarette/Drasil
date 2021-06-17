@@ -1,5 +1,5 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.GamePhysics.TMods (tMods, newtonSL, newtonSLR, newtonTL, newtonLUG) where
+module Drasil.GamePhysics.TMods (tMods, newtonSL, newtonSLR, newtonTL, newtonLUG, tModRefs) where
 
 import qualified Data.List.NonEmpty as NE
 
@@ -97,3 +97,7 @@ newtonSLRNotes = map foldlSent [
    phrase rigidBody, S "as the", phrase constant `S.of_` S "proportionality"],
   [S "We also assume that all", plural rigidBody, S "involved" `S.are`
    phrase twoD, fromSource assumpOD]]
+
+-- References --
+tModRefs :: [Reference]
+tModRefs = map rw tMods

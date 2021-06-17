@@ -179,3 +179,7 @@ maintainable = cic "maintainable" (foldlSent [
 -- repeated, but it is always either stating that performance is a priority or
 -- performance is not a priority. This is probably something that can be
 -- abstracted out.
+
+-- References --
+reqRefs :: [Reference]
+reqRefs = map rw ([inReq EmptyS] ++ funcReqs ++ nfRequirements)

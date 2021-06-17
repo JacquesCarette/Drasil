@@ -1,11 +1,11 @@
-{-# LANGUAGE GADTs, TemplateHaskell #-}
+{-# LANGUAGE GADTs, TemplateHaskell, RankNTypes #-}
 module Database.Drasil.SystemInformation(SystemInformation(..), Block(..),
   citeDB, ReferenceDB, citationsFromBibMap, citationDB, rdb, RefMap, simpleMap,
   conceptDB
   ) where
 
 import Language.Drasil
-import Theory.Drasil (DataDefinition)
+import Theory.Drasil
 import Database.Drasil.ChunkDB (ChunkDB)
 
 import Control.Lens ((^.), makeLenses)
@@ -24,23 +24,23 @@ data SystemInformation where
   Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f,
   Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i,
   HasUID j, Constrained j) => 
-  { _sys :: a
-  , _kind :: b
-  , _authors :: [c]
-  , _purpose :: d
-  , _quants :: [e]
-  , _concepts :: [f]
-  , _definitions :: [QDefinition] --FIXME: will be removed upon migration to use of [DataDefinition] below
-  , _datadefs :: [DataDefinition]
+  { _sys         :: a
+  , _kind        :: b
+  , _authors     :: [c]
+  , _purpose     :: d
+  , _quants      :: [e]
+  , _concepts    :: [f]
+  , _instModels  :: [InstanceModel]
+  , _datadefs    :: [DataDefinition]
   , _configFiles :: [String]
-  , _inputs :: [h]
-  , _outputs :: [i]
+  , _inputs      :: [h]
+  , _outputs     :: [i]
   , _defSequence :: [Block QDefinition]
   , _constraints :: [j] --TODO: Add SymbolMap OR enough info to gen SymbolMap
-  , _constants :: [QDefinition]
-  , _sysinfodb :: ChunkDB
-  , _usedinfodb :: ChunkDB
-  , refdb :: ReferenceDB
+  , _constants   :: [QDefinition]
+  , _sysinfodb   :: ChunkDB
+  , _usedinfodb  :: ChunkDB
+  , refdb        :: ReferenceDB
   } -> SystemInformation
   
 -- | for listing 'QDefinition's in 'SystemInformation'.

@@ -15,12 +15,12 @@ data ScopeType =
 
 -- | A data definition is a 'QDefinition' that may have additional notes: 
 -- the scope, any references, maybe a derivation, a label ('ShortName'), a reference address, and other notes ('Sentence's).
-data DataDefinition = DatDef { _qd :: QDefinition
-                             , _scp :: ScopeType
-                             , _ref :: [Reference]
-                             , _deri :: Maybe Derivation
-                             , lbl :: ShortName
-                             , ra :: String
+data DataDefinition = DatDef { _qd    :: QDefinition
+                             , _scp   :: ScopeType
+                             , _ref   :: [Reference]
+                             , _deri  :: Maybe Derivation
+                             , lbl    :: ShortName
+                             , ra     :: String
                              , _notes :: [Sentence]
                              }
 makeLenses ''DataDefinition
@@ -34,7 +34,7 @@ instance Idea               DataDefinition where getA c = getA $ c ^. qd
 -- | Finds the Space of the 'QDefinition' used to make the 'DataDefinition'.
 instance HasSpace           DataDefinition where typ = qd . typ
 -- | Finds the Symbol of the 'QDefinition' used to make the 'DataDefinition'.
-instance HasSymbol          DataDefinition where symbol e = symbol (e^.qd)
+instance HasSymbol          DataDefinition where symbol e = symbol (e ^. qd)
 -- | 'DataDefinition's have a 'Quantity'.
 instance Quantity           DataDefinition where 
 -- | Finds the defining expression of the 'QDefinition' used to make the 'DataDefinition'.
@@ -73,4 +73,4 @@ ddNoRefs q der sn = DatDef q Global [] der (shortname' sn) (prependAbrv dataDefn
 
 -- | Extracts the 'QDefinition' from a 'DataDefinition'.
 qdFromDD :: DataDefinition -> QDefinition
-qdFromDD d = d ^. qd
+qdFromDD = (^. qd)

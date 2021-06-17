@@ -42,9 +42,9 @@ import Data.Map (fromList, member, keys, elems)
 import Data.Maybe (maybeToList, catMaybes)
 import Text.PrettyPrint.HughesPJ (isEmpty, vcat)
 
--- | Initializes the generator's DrasilState.
--- String parameter is a string representing the date.
--- [Expr] parameter is the sample input values provided by the user
+-- | Initializes the generator's 'DrasilState'.
+-- 'String' parameter is a string representing the date.
+-- \['Expr'\] parameter is the sample input values provided by the user.
 generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 generator l dt sd chs spec = DrasilState {
   -- constants
@@ -95,7 +95,7 @@ generator l dt sd chs spec = DrasilState {
         des = vcat . map (sentenceDoc (sysinfodb spec) Implementation Linear) $
           (nonPrefChs ++ concLog ++ libLog)
 
--- | Generates a package with the given DrasilState. The passed
+-- | Generates a package with the given 'DrasilState'. The passed
 -- un-representation functions determine which target language the package will 
 -- be generated in.
 generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang -> 
@@ -112,7 +112,7 @@ generateCode l unReprProg unReprPack g = do
   createCodeFiles code
   setCurrentDirectory workingDir
 
--- Generates a package, including a Makefile, sample input file, and Doxygen 
+-- | Generates a package, including a Makefile, sample input file, and Doxygen 
 -- configuration file (all subject to the user's choices). 
 -- The passed un-representation function determines which target language the 
 -- package will be generated in.
@@ -145,7 +145,7 @@ genPackage unRepr = do
         caseName = ""}
   return $ package pd (m:catMaybes [i,rm,d])
 
--- Generates an SCS program based on the problem and the user's design choices.
+-- | Generates an SCS program based on the problem and the user's design choices.
 genProgram :: (OOProg r) => GenState (GSProgram r)
 genProgram = do
   g <- get
@@ -153,13 +153,13 @@ genProgram = do
   let n = pName $ codeSpec g
   return $ prog n ms
 
--- Generates either a single module or many modules, based on the users choice 
--- of modularity
+-- | Generates either a single module or many modules, based on the users choice 
+-- of modularity.
 chooseModules :: (OOProg r) => Modularity -> GenState [SFile r]
 chooseModules Unmodular = liftS genUnmodular
 chooseModules (Modular _) = genModules
 
--- Generates an entire SCS program as a single module
+-- | Generates an entire SCS program as a single module.
 genUnmodular :: (OOProg r) => GenState (SFile r)
 genUnmodular = do
   g <- get
@@ -176,7 +176,7 @@ genUnmodular = do
     ([genInputClass Auxiliary, genConstClass Auxiliary] 
       ++ map (fmap Just) (concatMap genModClasses $ modules g))
       
--- Generates all modules for an SCS program    
+-- | Generates all modules for an SCS program.
 genModules :: (OOProg r) => GenState [SFile r]
 genModules = do
   g <- get
@@ -188,7 +188,7 @@ genModules = do
   moddef <- traverse genModDef (modules g) -- hack ?
   return $ mn : inp ++ con ++ cal : out ++ moddef
 
--- private utilities used in generateCode
+-- | Private utilities used in 'generateCode'.
 getDir :: Lang -> String
 getDir Cpp = "cpp"
 getDir CSharp = "csharp"

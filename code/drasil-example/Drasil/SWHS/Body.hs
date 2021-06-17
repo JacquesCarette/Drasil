@@ -1,11 +1,12 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.SWHS.Body where
 
+import Data.List (nub)
 import Language.Drasil hiding (Symbol(..), organization, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts, _constants,
-  _constraints, _datadefs, _configFiles, _definitions, _defSequence, _inputs, _kind, 
+  _constraints, _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, 
   _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (GenDefn, InstanceModel)
 import Utils.Drasil
@@ -22,7 +23,8 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocSection (..),
   ReqrmntSec(..), ReqsSub(..), SRSDecl, SSDSub(..), SolChSpec (SCSProg),
   SSDSec(..), InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg), GSDSec(..), GSDSub(..),
-  ProblemDescription(PDProg), PDSub(..), intro, mkDoc, tsymb'', traceMatStandard, purpDoc)
+  ProblemDescription(PDProg), PDSub(..), intro, mkDoc, tsymb'', traceMatStandard, purpDoc, getTraceConfigUID,
+  secRefs)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
@@ -51,19 +53,19 @@ import Data.Drasil.People (brooks, spencerSmith, thulasi)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived, m_2, m_3)
 
-import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
-import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
+import Drasil.SWHS.Assumptions (assumpPIS, assumptions, assumpRefs)
+import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs, chgRefs)
 import Drasil.SWHS.Concepts (acronymsFull, coil, con, phaseChangeMaterial,
   phsChgMtrl, progName, sWHT, swhsPCM, tank, tankPCM, transient, water)
-import Drasil.SWHS.DataDefs (qDefs)
+import Drasil.SWHS.DataDefs (dataDefRefs)
 import qualified Drasil.SWHS.DataDefs as SWHS (dataDefs)
-import Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater)
-import Drasil.SWHS.Goals (goals)
+import Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater, genDefRefs)
+import Drasil.SWHS.Goals (goals, goalRefs)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
-  iMods, instModIntro)
-import Drasil.SWHS.References (citations, koothoor2013, smithLai2005)
-import Drasil.SWHS.Requirements (funcReqs, inReqDesc, nfRequirements, verifyEnergyOutput)
-import Drasil.SWHS.TMods (tMods)
+  iMods, instModIntro, iModRefs)
+import Drasil.SWHS.References (citations, koothoor2013, smithLai2005, citeRefs)
+import Drasil.SWHS.Requirements (funcReqs, inReqDesc, nfRequirements, verifyEnergyOutput, reqRefs)
+import Drasil.SWHS.TMods (tMods, tModRefs)
 import Drasil.SWHS.Unitals (absTol, coilHTC, coilSA, consTol, constrained,
   htFluxC, htFluxP, inputs, inputConstraints, outputs, pcmE, pcmHTC, pcmSA,
   relTol, simTime, specParamValList, symbols, symbolsAll, tempC, tempPCM,
@@ -87,23 +89,23 @@ units = map unitWrapper [metre, kilogram, second] ++
 
 si :: SystemInformation
 si = SI {
-  _sys = swhsPCM,
-  _kind = Doc.srs, 
-  _authors = [thulasi, brooks, spencerSmith],
-  _purpose = purpDoc progName Verbose,
-  _quants = symbols,
-  _concepts = [] :: [DefinedQuantityDict],
-  _definitions = qDefs,
-  _datadefs = SWHS.dataDefs,
+  _sys         = swhsPCM,
+  _kind        = Doc.srs, 
+  _authors     = [thulasi, brooks, spencerSmith],
+  _purpose     = purpDoc progName Verbose,
+  _quants      = symbols,
+  _concepts    = [] :: [DefinedQuantityDict],
+  _instModels  = [], -- FIXME; empty _instModels
+  _datadefs    = SWHS.dataDefs,
   _configFiles = [],
-  _inputs = inputs,
-  _outputs = map qw outputs,
+  _inputs      = inputs,
+  _outputs     = map qw outputs,
   _defSequence = [] :: [Block QDefinition],
   _constraints = constrained,
-  _constants = specParamValList,
-  _sysinfodb = symbMap,
-  _usedinfodb = usedDB,
-   refdb = refDB
+  _constants   = specParamValList,
+  _sysinfodb   = symbMap,
+  _usedinfodb  = usedDB,
+   refdb       = refDB
 }
 
 symbMap :: ChunkDB
@@ -115,11 +117,11 @@ symbMap = cdb (qw heatEInPCM : symbolsAll) -- heatEInPCM ?
   ++ map nw fundamentals ++ map nw educon ++ map nw derived ++ map nw physicalcon ++ map nw unitalChuncks
   ++ [nw swhsPCM, nw algorithm] ++ map nw compcon ++ [nw materialProprty])
   (cw heatEInPCM : map cw symbols ++ srsDomains) -- FIXME: heatEInPCM?
-  (units ++ [m_2, m_3]) SWHS.dataDefs insModel genDefs tMods concIns section []
+  (units ++ [m_2, m_3]) SWHS.dataDefs insModel genDefs tMods concIns section [] allRefs
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronymsFull)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] []
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns
@@ -604,3 +606,10 @@ propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)"
 ----------------------------
 -- Section 9 : References --
 ----------------------------
+bodyRefs :: [Reference]
+bodyRefs = [rw sysCntxtFig, rw figTank]
+  ++ map rw concIns ++ map rw section ++ map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+
+allRefs :: [Reference]
+allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ goalRefs ++ dataDefRefs ++ genDefRefs
+  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs)

@@ -25,6 +25,7 @@ import GOOL.Drasil (onCodeList, cppName, cppVersion)
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor,const,log,exp)
 import Text.PrettyPrint.HughesPJ (Doc)
 
+-- | Holds a C++ project.
 newtype CppProject a = CPPP {unCPPP :: a}
 
 instance Functor CppProject where
@@ -60,7 +61,7 @@ instance AuxiliarySym CppProject where
   auxFromData fp d = return $ ad fp d
 
 -- helpers
-
+-- | Create a build configuration for C++ files. Takes in 'FilePath's and the type of implementation.
 cppBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig
 cppBuildConfig fs it = buildAll (\i o -> [cppCompiler : i ++ map asFragment
   ("--std=c++11" : target it ++ ["-o"]) ++ [o] ++ concatMap (\f -> map 
@@ -70,5 +71,6 @@ cppBuildConfig fs it = buildAll (\i o -> [cppCompiler : i ++ map asFragment
         outName Library = sharedLibrary
         outName Program = executable
 
+-- | Default runnable information for C++ files.
 cppRunnable :: Maybe Runnable
 cppRunnable = nativeBinary

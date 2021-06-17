@@ -29,6 +29,7 @@ module Language.Drasil (
   , HasShortName(shortname)
   , HasRefAddress(getRefAdd)
   , HasSymbol(symbol)
+  , Referable(..)
   -- Classes.Document
   , HasFields(getFields)
   -- Classes
@@ -118,7 +119,7 @@ module Language.Drasil (
   , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1
   , titleizeNP, titleizeNP', nounPhrase'', nounPhraseSP, nounPhraseSent
   -- Document
-  , Referable(..), Document(..), DType(..), Section(..), Contents(..)
+  , Document(..), DType(..), Section(..), Contents(..)
   , SecCons(..), ListType(..), ItemType(..), ListTuple
   , LabelledContent(..), UnlabelledContent(..), extractSection
   , mkParagraph, mkRawLC
@@ -146,7 +147,7 @@ module Language.Drasil (
   , eqSymb, codeSymb, hasStageSymbol
   , autoStage, hat, prime, staged, sub, subStr, sup , unicodeConv, upperLeft, vec
   -- Reference
-  , makeRef2S, makeCite, makeCiteS, makeRef2, makeCiteInfo, makeCiteInfoS
+  , makeRef2S, makeCite, makeCiteS, makeRef2, makeCiteInfo, makeCiteInfoS, rw
   -- Label.Type
   , getAdd, prepend
   , LblType(RP, Citation, URI), IRefProg(..)
@@ -214,12 +215,12 @@ import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), 
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol),
-  HasRefAddress(getRefAdd), HasShortName(shortname))
+  HasRefAddress(getRefAdd), HasShortName(shortname), Referable(refAdd, renderRef))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
   HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), 
-  HasReference(getReferences), HasSpace(typ), Referable(refAdd, renderRef),
+  HasReference(getReferences), HasSpace(typ),
   DefiningExpr(defnExpr), Quantity, HasUncertainty(unc), Callable, 
   IsArgumentName)
 import Language.Drasil.Classes.Citations (HasFields(getFields))
@@ -274,7 +275,7 @@ import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..),
 import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), (+:+),
   (+:+.), (+:), (!.), capSent, ch, sC, sDash, sParen)
 import Language.Drasil.Sentence.Extract (sdep, shortdep) -- exported for drasil-database FIXME: move to development package?
-import Language.Drasil.Reference (makeCite, makeCiteS, makeRef2, makeRef2S, makeCiteInfo, makeCiteInfoS)
+import Language.Drasil.Reference (makeCite, makeCiteS, makeRef2, makeRef2S, makeCiteInfo, makeCiteInfoS, rw)
 import Language.Drasil.Symbol (Decoration(..), Symbol(..), compsy)
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol,
   autoStage, hat, prime, staged, sub, subStr, sup, unicodeConv, upperLeft, vec)

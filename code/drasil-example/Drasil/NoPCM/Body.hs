@@ -1,10 +1,11 @@
 module Drasil.NoPCM.Body where
 
+import Control.Lens ((^.))
 import Language.Drasil hiding (Symbol(..), section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts,
-  _constants, _constraints, _datadefs, _configFiles, _definitions, _defSequence,
+  _constants, _constraints, _datadefs, _instModels, _configFiles, _defSequence,
   _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (TheoryModel)
 import Utils.Drasil
@@ -14,7 +15,7 @@ import qualified Utils.Drasil.Sentence as S
 import Language.Drasil.Code (quantvar, listToArray, ODEInfo, odeInfo,
   ODEOptions, odeOptions, ODEMethod(..))
 
-import Data.List ((\\))
+import Data.List ((\\), nub)
 import Data.Drasil.People (thulasi)
 
 import Data.Drasil.Concepts.Computation (algorithm, inValue)
@@ -52,7 +53,7 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg), DerivationDisplay(..),
   ReqrmntSec(..), ReqsSub(..), SCSSub(..), SolChSpec(..), SRSDecl, SSDSec(..),
   SSDSub(..), TraceabilitySec(TraceabilityProg), Verbosity(Verbose),
   TSIntro(SymbOrder, SymbConvention, TSPurpose, VectorUnits), intro, mkDoc,
-  tsymb, traceMatStandard, purpDoc)
+  tsymb, traceMatStandard, purpDoc, getTraceConfigUID, secRefs)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
@@ -70,16 +71,16 @@ import Drasil.SWHS.Unitals (coilSAMax, deltaT, htFluxC, htFluxIn,
   wMass, wVol, unitalChuncks, absTol, relTol)
 
 import Drasil.NoPCM.Assumptions
-import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs)
-import Drasil.NoPCM.DataDefs (qDefs)
+import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs, chgRefs)
+import Drasil.NoPCM.DataDefs (qDefs, dataDefRefs)
 import qualified Drasil.NoPCM.DataDefs as NoPCM (dataDefs)
 import Drasil.NoPCM.Definitions (srsSWHS, htTrans)
-import Drasil.NoPCM.GenDefs (genDefs)
-import Drasil.NoPCM.Goals (goals)
-import Drasil.NoPCM.IMods (eBalanceOnWtr, instModIntro)
+import Drasil.NoPCM.GenDefs (genDefs, genDefRefs)
+import Drasil.NoPCM.Goals (goals, goalRefs)
+import Drasil.NoPCM.IMods (eBalanceOnWtr, instModIntro, iModRefs)
 import qualified Drasil.NoPCM.IMods as NoPCM (iMods)
-import Drasil.NoPCM.Requirements (funcReqs, inputInitValsTable)
-import Drasil.NoPCM.References (citations)
+import Drasil.NoPCM.Requirements (funcReqs, inputInitValsTable, reqRefs)
+import Drasil.NoPCM.References (citations, citeRefs)
 import Drasil.NoPCM.Unitals (inputs, constrained, unconstrained,
   specParamValList)
 
@@ -183,26 +184,26 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 si :: SystemInformation
 si = SI {
-  _sys = srsSWHS,
-  _kind = Doc.srs,
-  _authors = [thulasi],
-  _purpose = purpDoc progName Verbose,
+  _sys         = srsSWHS,
+  _kind        = Doc.srs,
+  _authors     = [thulasi],
+  _purpose     = purpDoc progName Verbose,
   -- FIXME: Everything after (and including) \\ should be removed when
   -- #1658 is resolved. Basically, _quants is used here, but 
   -- tau does not appear in the document and thus should not be displayed.
-  _quants = (map qw unconstrained ++ map qw symbolsAll) \\ [qw tau],
-  _concepts = symbols,
-  _definitions = [],
-  _datadefs = NoPCM.dataDefs,
+  _quants      = (map qw unconstrained ++ map qw symbolsAll) \\ [qw tau],
+  _concepts    = symbols,
+  _instModels  = NoPCM.iMods,
+  _datadefs    = NoPCM.dataDefs,
   _configFiles = [],
-  _inputs = inputs ++ [qw watE], --inputs ++ outputs?
-  _outputs = map qw [tempW, watE],     --outputs
+  _inputs      = inputs ++ [qw watE], --inputs ++ outputs?
+  _outputs     = map qw [tempW, watE],     --outputs
   _defSequence = [(\x -> Parallel (head x) (tail x)) qDefs],
   _constraints = map cnstrw constrained ++ map cnstrw [tempW, watE], --constrained
-  _constants = piConst : specParamValList,
-  _sysinfodb = symbMap,
-  _usedinfodb = usedDB,
-   refdb = refDB
+  _constants   = piConst : specParamValList,
+  _sysinfodb   = symbMap,
+  _usedinfodb  = usedDB,
+   refdb       = refDB
 }
 
 noPCMODEOpts :: ODEOptions
@@ -224,11 +225,11 @@ symbMap = cdb symbolsAll (map nw symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srsSWHS, nw algorithm, nw inValue, nw htTrans]
   ++ map nw [absTol, relTol] ++ [nw materialProprty])
   (map cw symbols ++ srsDomains) units NoPCM.dataDefs NoPCM.iMods genDefs
-  tMods concIns section labCon
+  tMods concIns section labCon allRefs
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronyms)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] []
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
 
 --------------------------
 --Section 2 : INTRODUCTION
@@ -374,3 +375,12 @@ dataConstListOut = [tempW, watE]
 ------------
 --REFERENCES
 ------------
+bodyRefs :: [Reference]
+bodyRefs = rw figTank: rw sysCntxtFig:
+  map rw concIns ++ map rw section ++ map rw labCon 
+  ++ map rw tMods ++ concatMap (^. getReferences) tMods --needs the references hidden in the tmodel.
+  ++ map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+
+allRefs :: [Reference]
+allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ dataDefRefs ++ genDefRefs++ goalRefs
+  ++ iModRefs ++ citeRefs ++ reqRefs ++ secRefs)

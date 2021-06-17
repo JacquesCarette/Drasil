@@ -1,5 +1,5 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs) where
+module Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs, chgRefs) where
 
 import Language.Drasil
 import Utils.Drasil
@@ -41,3 +41,7 @@ unlikeChgNIHG :: ConceptInstance
 unlikeChgNIHG = cic "unlikeChgNIHG" (
   foldlSent [chgsStart assumpNIHGBW (S "Is used for the derivations of"),
   makeRef2S eBalanceOnWtr] ) "No-Internal-Heat-Generation" unlikeChgDom
+
+-- References --
+chgRefs :: [Reference]
+chgRefs = map rw (likelyChgs ++ unlikelyChgs)

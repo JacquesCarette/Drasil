@@ -1,11 +1,12 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.SSP.Body (srs, si, symbMap, printSetting) where
 
+import Data.List (nub)
 import Language.Drasil hiding (Symbol(..), Verb, number, organization, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts, _constants,
-  _constraints, _datadefs, _configFiles, _definitions, _defSequence, _inputs, 
+  _constraints, _datadefs, _instModels, _configFiles, _defSequence, _inputs,
   _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (qdFromDD)
 
@@ -21,7 +22,8 @@ import Drasil.DocLang (DocSection(..), IntroSec(..), IntroSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
   SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
   ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
-  PDSub(..), intro, mkDoc, tsymb'', traceMatStandard, purpDoc)
+  PDSub(..), intro, mkDoc, tsymb'', traceMatStandard, purpDoc, getTraceConfigUID,
+  secRefs)
 
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
@@ -51,19 +53,20 @@ import Data.Drasil.People (brooks, henryFrankis)
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, derived, fundamentals)
 
-import Drasil.SSP.Assumptions (assumptions)
-import Drasil.SSP.Changes (likelyChgs, unlikelyChgs)
-import qualified Drasil.SSP.DataDefs as SSP (dataDefs)
+import Drasil.SSP.Assumptions (assumptions, assumpRefs)
+import Drasil.SSP.Changes (likelyChgs, unlikelyChgs, chgRefs)
+import qualified Drasil.SSP.DataDefs as SSP (dataDefs, dataDefRefs)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, defs, defs', effFandS, factor, fsConcept,
   intrslce, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope, slpSrf, soil,
   soilLyr, soilMechanics, soilPrpty, ssa, ssp, stabAnalysis, waterTable)
-import Drasil.SSP.GenDefs (generalDefinitions)
-import Drasil.SSP.Goals (goals)
-import Drasil.SSP.IMods (instModIntro)
+import Drasil.SSP.Figures (figRefs)
+import Drasil.SSP.GenDefs (generalDefinitions, genDefRefs)
+import Drasil.SSP.Goals (goals, goalRefs)
+import Drasil.SSP.IMods (instModIntro, iModRefs)
 import qualified Drasil.SSP.IMods as SSP (iMods)
-import Drasil.SSP.References (citations, morgenstern1965)
-import Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs)
-import Drasil.SSP.TMods (tMods)
+import Drasil.SSP.References (citations, morgenstern1965, citeRefs)
+import Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs, reqRefs)
+import Drasil.SSP.TMods (tMods, tModRefs)
 import Drasil.SSP.Unitals (constrained, effCohesion, fricAngle, fs, index,
   inputs, inputsWUncrtn, outputs, symbols)
 
@@ -80,23 +83,23 @@ resourcePath = "../../../datafiles/SSP/"
 
 si :: SystemInformation
 si = SI {
-  _sys = ssp, 
-  _kind = Doc.srs, 
-  _authors = [henryFrankis, brooks],
-  _purpose = purpDoc ssp Verbose,
-  _quants = symbols,
-  _concepts = [] :: [DefinedQuantityDict],
-  _definitions = [] :: [QDefinition],
-  _datadefs = SSP.dataDefs,
+  _sys         = ssp, 
+  _kind        = Doc.srs, 
+  _authors     = [henryFrankis, brooks],
+  _purpose     = purpDoc ssp Verbose,
+  _quants      = symbols,
+  _concepts    = [] :: [DefinedQuantityDict],
+  _instModels  = SSP.iMods,
+  _datadefs    = SSP.dataDefs,
   _configFiles = [],
-  _inputs = map qw inputs,
-  _outputs = map qw outputs,
+  _inputs      = map qw inputs,
+  _outputs     = map qw outputs,
   _defSequence = [(\x -> Parallel (head x) (tail x)) $ map qdFromDD SSP.dataDefs],
   _constraints = constrained,
-  _constants = [],
-  _sysinfodb = symbMap,
-  _usedinfodb = usedDB,
-   refdb = refDB
+  _constants   = [],
+  _sysinfodb   = symbMap,
+  _usedinfodb  = usedDB,
+   refdb       = refDB
 }
   
 mkSRS :: SRSDecl
@@ -167,11 +170,11 @@ symbMap = cdb (map qw SSP.iMods ++ map qw symbols) (map nw symbols
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
   ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw units)
   (map cw SSP.iMods ++ map cw symbols ++ srsDomains) units SSP.dataDefs SSP.iMods
-  generalDefinitions tMods concIns section labCon
+  generalDefinitions tMods concIns section labCon allRefs
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronyms)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] []
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns
@@ -443,4 +446,9 @@ slopeVert = verticesConst $ phrase slope
 -- Table of aux consts is automatically generated
 
 -- References --
--- automatically generated
+bodyRefs :: [Reference]
+bodyRefs = rw sysCtxFig1: map rw concIns ++ map rw section ++ map rw labCon ++ map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+
+allRefs :: [Reference]
+allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ goalRefs ++ SSP.dataDefRefs ++ genDefRefs
+  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs)

@@ -25,6 +25,7 @@ import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import qualified Prelude as P ((<>))
 import Text.PrettyPrint.HughesPJ (Doc)
 
+-- | Holds a C# project.
 newtype CSharpProject a = CSP {unCSP :: a}
 
 instance Functor CSharpProject where
@@ -61,6 +62,7 @@ instance AuxiliarySym CSharpProject where
   auxHelperDoc = unCSP
   auxFromData fp d = return $ ad fp d
 
+-- | Create a build configuration for C# files. Takes in 'FilePath's and the type of implementation.
 csBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig
 csBuildConfig fs it = buildAll (\i o -> [osClassDefault "CSC" "csc" "mcs" 
   : target it ++ [asFragment "-out:" P.<> o] ++ map (asFragment . ("-r:" ++)) fs
@@ -70,5 +72,6 @@ csBuildConfig fs it = buildAll (\i o -> [osClassDefault "CSC" "csc" "mcs"
         outName Library = sharedLibrary
         outName Program = executable
 
+-- | Default runnable information for C# files.
 csRunnable :: Maybe Runnable
 csRunnable = nativeBinary

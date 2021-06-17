@@ -114,3 +114,6 @@ soSystemDesc
         S "is characterized by this equation"]
 
        --------
+-- References --
+tModRefs :: [Reference]
+tModRefs = map rw theoreticalModels

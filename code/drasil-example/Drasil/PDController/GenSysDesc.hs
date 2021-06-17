@@ -61,3 +61,7 @@ gsduserCharacteristics
       [S "The end-user of", phrase pidC,
          S "is expected to have taken a course on Control Systems at an",
          S "undergraduate level"]
+
+-- References --
+figRefs :: [Reference]
+figRefs = [rw gsdSysContextFig]

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: c1a2177af7458984fb872c413f09c8617c7aa150685a4e9eefc9ef4fcfae485a
+-- hash: ffb523fa20d59d5c77268207f4ec612bae16f742508bdd9bce4bb2b88a669652
 
 name:           drasil-theory
 version:        0.1.0.0
@@ -26,6 +26,7 @@ library
       Data.Drasil.TheoryConcepts
   other-modules:
       Theory.Drasil.Classes
+      Theory.Drasil.ConstraintSet
       Theory.Drasil.DataDefinition
       Theory.Drasil.GenDefn
       Theory.Drasil.InstanceModel

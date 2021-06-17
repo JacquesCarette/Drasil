@@ -1,12 +1,13 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.SSP.TMods (tMods, factOfSafety, equilibrium, mcShrStrgth, effStress) 
+module Drasil.SSP.TMods (tMods, factOfSafety, equilibrium, mcShrStrgth, effStress, tModRefs) 
   where
 
 import Control.Lens ((^.))
 import Prelude hiding (tan)
+import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
-import Theory.Drasil (TheoryModel, tm, tm', ModelKinds(EquationalModel, OthModel))
+import Theory.Drasil
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -47,17 +48,18 @@ factOfSafetyExpr = sy resistiveShear $/ sy mobilizedShear
 --
 ------------- New Chunk -----------
 equilibrium :: TheoryModel
-equilibrium = tm (OthModel equilibriumRC)
+equilibrium = tm (EquationalConstraints equilibriumCS)
   [qw fx] ([] :: [ConceptChunk])
-  [] [eqRel] [] [makeCite fredlund1977] "equilibrium" [eqDesc]
+  [] [relat equilibriumCS] [] [makeCite fredlund1977] "equilibrium" [eqDesc]
 
 ------------------------------------  
-equilibriumRC :: RelationConcept
-equilibriumRC = makeRC "equilibriumRC" (nounPhraseSP "equilibrium") eqDesc eqRel
 
 -- FIXME: Variable "i" is a hack.  But we need to sum over something!
-eqRel :: Relation
-eqRel = foldr (($=) . sumAll (Variable "i") . sy) (int 0) [fx, fy, genericM]
+equilibriumCS :: ConstraintSet
+equilibriumCS = mkConstraintSet
+  (dccWDS "equilibriumCS" (nounPhraseSP "equilibrium") eqDesc) $
+  NE.fromList $ map (($= int 0) . sumAll (Variable "i") . sy) [fx, fy, genericM]
+-- makeRC "equilibriumRC" (nounPhraseSP "equilibrium") eqDesc eqRel
 
 eqDesc :: Sentence
 eqDesc = foldlSent [S "For a body in static equilibrium, the net",
@@ -115,3 +117,7 @@ effStressExpr = sy totNormStress $- sy porePressure
 
 effStressDesc :: Sentence
 effStressDesc = (totNormStress `definedIn'''` normStressDD !.)
+
+-- References --
+tModRefs :: [Reference]
+tModRefs = map rw tMods

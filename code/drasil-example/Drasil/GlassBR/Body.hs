@@ -2,13 +2,13 @@
 module Drasil.GlassBR.Body where
 
 import Control.Lens ((^.))
+import Data.List (nub)
 import Language.Drasil hiding (Symbol(..), organization, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
-  _datadefs, _definitions, _configFiles, _defSequence, _inputs, _kind, 
+  _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, 
   _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
-import Theory.Drasil (Theory(defined_fun, defined_quant), getEqModQdsFromIm)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -21,7 +21,8 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   SolChSpec(..), StkhldrSec(..), StkhldrSub(Client, Cstmr),
   TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, TSPurpose),
   Verbosity(Verbose), auxSpecSent, characteristicsLabel, intro, mkDoc,
-  termDefnF', tsymb, traceMatStandard, purpDoc)
+  termDefnF', tsymb, traceMatStandard, purpDoc, getTraceConfigUID,
+  secRefs)
 
 import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
 
@@ -48,19 +49,19 @@ import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
 import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second, fundamentals,
   derived)
 
-import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
-import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
+import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions, assumpRefs)
+import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs, chgRefs)
 import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab, glassBR, 
   ptOfExplsn, con, con', glass)
-import Drasil.GlassBR.DataDefs (qDefns, configFp)
+import Drasil.GlassBR.DataDefs (qDefns, configFp, dataDefRefs)
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.Figures
-import Drasil.GlassBR.Goals (goals)
-import Drasil.GlassBR.IMods (symb, iMods, instModIntro)
-import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations, rbrtsn2012)
-import Drasil.GlassBR.Requirements (funcReqs, inReqDesc, funcReqsTables, nonfuncReqs)
+import Drasil.GlassBR.Goals (goals, goalRefs)
+import Drasil.GlassBR.IMods (symb, iMods, instModIntro, iModRefs)
+import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations, rbrtsn2012, citeRefs)
+import Drasil.GlassBR.Requirements (funcReqs, inReqDesc, funcReqsTables, nonfuncReqs, reqRefs)
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
-import Drasil.GlassBR.TMods (tMods)
+import Drasil.GlassBR.TMods (tMods, tModRefs)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   constrained, inputDataConstraints, inputs, outputs, specParamVals, glassTy,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
@@ -80,9 +81,7 @@ si = SI {
   _purpose     = purpDoc glassBR Verbose,
   _quants      = symbolsForTable,
   _concepts    = [] :: [DefinedQuantityDict],
-  _definitions = getEqModQdsFromIm iMods ++ 
-                 concatMap (^. defined_quant) tMods ++
-                 concatMap (^. defined_fun) tMods,
+  _instModels  = iMods,
   _datadefs    = GB.dataDefs,
   _configFiles = configFp,
   _inputs      = inputs,
@@ -91,7 +90,7 @@ si = SI {
   _constraints = constrained,
   _constants   = constants,
   _sysinfodb   = symbMap,
-  _usedinfodb = usedDB,
+  _usedinfodb  = usedDB,
    refdb       = refDB
 }
   --FIXME: All named ideas, not just acronyms.
@@ -147,7 +146,7 @@ symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw con
   map nw fundamentals ++ map nw derived ++ map nw physicalcon)
   (map cw symb ++ terms ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]) GB.dataDefs iMods [] tMods concIns section
-  labCon
+  labCon allRefs
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
@@ -157,7 +156,7 @@ labCon = funcReqsTables ++ [demandVsSDFig, dimlessloadVsARFig]
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] []
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns
@@ -172,15 +171,12 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 termsAndDescBullets :: Contents
 termsAndDescBullets = UlC $ ulcc $ Enumeration$ 
   Numeric $
-  noRefs $ map tAndDOnly termsWithDefsOnly
-  ++
-  termsAndDescBulletsGlTySubSec
-  ++
-  termsAndDescBulletsLoadSubSec
-  ++
-  map tAndDWAcc termsWithAccDefn
-  ++
-  [tAndDWSym probBreak probBr]
+    noRefs $
+      map tAndDOnly termsWithDefsOnly 
+      ++ termsAndDescBulletsGlTySubSec 
+      ++ termsAndDescBulletsLoadSubSec 
+      ++ map tAndDWAcc termsWithAccDefn 
+      ++ [tAndDWSym probBreak probBr]
    --FIXME: merge? Needs 2 arguments because there is no instance for (SymbolForm ConceptChunk)...
 
 termsAndDescBulletsGlTySubSec, termsAndDescBulletsLoadSubSec :: [ItemType]
@@ -381,3 +377,13 @@ appdxIntro = foldlSP [
 blstRskInvWGlassSlab :: Sentence
 blstRskInvWGlassSlab = phrase blastRisk +:+ S "involved with the" +:+
   phrase glaSlab
+
+-- References --
+bodyRefs :: [Reference]
+bodyRefs = map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+  ++ map rw [sysCtxFig, demandVsSDFig, dimlessloadVsARFig]
+  ++ map rw concIns ++ map rw section ++ map rw labCon
+
+allRefs :: [Reference]
+allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ goalRefs ++ dataDefRefs
+  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs)

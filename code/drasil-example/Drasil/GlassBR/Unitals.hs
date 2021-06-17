@@ -1,6 +1,7 @@
 module Drasil.GlassBR.Unitals where --whole file is used
 
 import Language.Drasil
+import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
 import Utils.Drasil
 import Utils.Drasil.Concepts

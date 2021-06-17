@@ -19,8 +19,9 @@ import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
 import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
 import Drasil.TraceTable (generateTraceMap)
 
-import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
-                                                     -- Vector - Name conflict (defined in file)
+import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
+                                             -- Vector - Name conflict (defined in file)
+import Language.Drasil.Display (compsy)
 import Utils.Drasil
 
 import Database.Drasil(ChunkDB, SystemInformation(SI), _authors, _kind,

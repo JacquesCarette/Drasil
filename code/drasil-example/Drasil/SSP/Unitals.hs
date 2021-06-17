@@ -1,6 +1,7 @@
 module Drasil.SSP.Unitals where --export all of it
 
 import Language.Drasil
+import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.NounPhrase as NP

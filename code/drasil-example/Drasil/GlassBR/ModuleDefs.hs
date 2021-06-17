@@ -5,6 +5,7 @@
 module Drasil.GlassBR.ModuleDefs (allMods, implVars, interpY, interpZ) where
 
 import Language.Drasil
+import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
 import Language.Drasil.Code (($:=), Func, FuncStmt(..), Mod, 
   asVC, funcDef, fDecDef, ffor, funcData, quantvar, 

@@ -1,6 +1,7 @@
 module Data.Drasil.SI_Units where
 
 import Language.Drasil
+import Language.Drasil.Display
 import Language.Drasil.ShortHands (cOmega)
 
 fundamentals :: [UnitDefn]

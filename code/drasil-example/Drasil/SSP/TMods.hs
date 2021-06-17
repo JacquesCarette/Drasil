@@ -7,6 +7,7 @@ import Prelude hiding (tan)
 import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
+import Language.Drasil.Display (Symbol(..))
 import Theory.Drasil
 import Utils.Drasil
 import Utils.Drasil.Concepts

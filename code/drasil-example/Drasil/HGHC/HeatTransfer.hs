@@ -1,6 +1,7 @@
 module Drasil.HGHC.HeatTransfer where --whole file is used
 
 import Language.Drasil
+import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
 import Theory.Drasil (DataDefinition, ddNoRefs)
 

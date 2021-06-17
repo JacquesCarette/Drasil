@@ -1,6 +1,7 @@
 module Drasil.DblPendulum.Unitals where
 
 import Language.Drasil
+import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.NounPhrase as NP

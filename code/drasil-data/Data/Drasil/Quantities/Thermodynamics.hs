@@ -1,6 +1,7 @@
 module Data.Drasil.Quantities.Thermodynamics where
 
 import Language.Drasil
+import Language.Drasil.Display
 import Language.Drasil.ShortHands (cT, cC, lQ, cQ, cE)
 
 import Data.Drasil.Concepts.Thermodynamics as CT (boilPt, heatCapSpec,

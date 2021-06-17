@@ -1,6 +1,7 @@
 module Drasil.Projectile.Unitals where
 
 import Language.Drasil
+import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands (lD, lTheta, lV, lP, lT, lS, vEpsilon)
 
 import Data.Drasil.Quantities.Math (pi_)

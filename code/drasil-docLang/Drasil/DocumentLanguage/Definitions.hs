@@ -9,7 +9,7 @@ import Data.List (nub)
 import Data.Maybe (mapMaybe)
 import Control.Lens ((^.))
 
-import Language.Drasil hiding (Symbol(..))
+import Language.Drasil
 import Database.Drasil (SystemInformation, _sysinfodb, citeDB, conceptinsLookup,
   conceptinsTable, dataDefnTable, datadefnLookup, gendefLookup, gendefTable,
   insmodelLookup, insmodelTable, labelledconLookup, labelledcontentTable,

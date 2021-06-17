@@ -1,10 +1,12 @@
 module Drasil.PDController.Unitals where
 
-import Drasil.PDController.Concepts
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (second)
 import Language.Drasil
+import Language.Drasil.Display (Symbol(..))
 import Utils.Drasil.Concepts
+
+import Drasil.PDController.Concepts
 
 syms, symFS, symFt, symnegInf, symposInf, syminvLaplace, symKd, symKp,
        symYT, symYS, symYrT, symYrS, symET, symES, symPS, symDS, symHS,

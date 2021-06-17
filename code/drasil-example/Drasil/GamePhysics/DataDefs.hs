@@ -4,6 +4,7 @@ module Drasil.GamePhysics.DataDefs (dataDefs, ctrOfMassDD, linDispDD, linVelDD,
   collisionAssump, rightHandAssump, rigidTwoDAssump, potEnergyDD, dataDefRefs) where
 
 import Language.Drasil
+import Language.Drasil.Display (Symbol(..))
 import Theory.Drasil (DataDefinition, dd, ddNoRefs)
 import Utils.Drasil
 import Utils.Drasil.Concepts

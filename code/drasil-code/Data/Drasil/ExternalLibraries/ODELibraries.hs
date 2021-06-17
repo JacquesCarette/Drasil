@@ -4,6 +4,7 @@ module Data.Drasil.ExternalLibraries.ODELibraries (
 ) where
 
 import Language.Drasil
+import Language.Drasil.Display (Symbol(Label, Concat))
 
 import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument, 
   externalLib, mandatoryStep, mandatorySteps, choiceSteps, choiceStep,

@@ -1,6 +1,7 @@
 module Drasil.GamePhysics.Unitals where
 
 import Language.Drasil
+import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
 
 import Data.Drasil.SI_Units(kilogram, metre, m_2, newton, second)

@@ -1,6 +1,7 @@
 module Drasil.SWHS.Unitals where -- all of this file is exported
 
 import Language.Drasil
+import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
 import Utils.Drasil.Concepts
 

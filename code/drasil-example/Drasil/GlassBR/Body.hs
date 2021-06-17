@@ -3,7 +3,7 @@ module Drasil.GlassBR.Body where
 
 import Control.Lens ((^.))
 import Data.List (nub)
-import Language.Drasil hiding (Symbol(..), organization, section)
+import Language.Drasil hiding (organization, section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 

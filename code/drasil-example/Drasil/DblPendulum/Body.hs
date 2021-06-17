@@ -2,7 +2,7 @@
 module Drasil.DblPendulum.Body where
 
 import Data.List (nub)
-import Language.Drasil hiding (Symbol(..), Vector)
+import Language.Drasil
 import Theory.Drasil (TheoryModel)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),

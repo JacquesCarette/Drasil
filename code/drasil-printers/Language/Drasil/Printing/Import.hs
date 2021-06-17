@@ -2,6 +2,7 @@ module Language.Drasil.Printing.Import (space, expr, symbol, spec,
   makeDocument) where
 
 import Language.Drasil hiding (neg, sec, symbol, isIn)
+import Language.Drasil.Display
 import Language.Drasil.Development (UFuncB(..), UFuncVec(..)
   , ArithBinOp(..), BoolBinOp(..), EqBinOp(..), LABinOp(..)
   , OrdBinOp(..), VVNBinOp(..), VVVBinOp(..)

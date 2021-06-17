@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 873dad2df59c97862f759396366d582909b903b38331e38afbd2aa3a6b3bd0ad
+-- hash: 494d4ac06209ac07449aeb3329f7e84d2e30ea3df482578f7ea0534d8c58edfc
 
 name:           drasil-website
 version:        0.1.0.0
@@ -31,14 +31,11 @@ executable website
   build-depends:
       base >=4.7 && <5
     , directory
-    , drasil-code
     , drasil-data
     , drasil-database
     , drasil-docLang
     , drasil-gen
-    , drasil-gool
     , drasil-lang
-    , drasil-metadata
     , drasil-printers
     , drasil-theory
     , drasil-utils

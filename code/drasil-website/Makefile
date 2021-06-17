@@ -1,10 +1,10 @@
 all: run
 
 build:
-	stack build --ghc-options="-Wall" website
+	stack build --ghc-options="-Wall"
 
 run: build
-	stack exec --website
+	stack exec
 
 clean:
 	-rm -r _site

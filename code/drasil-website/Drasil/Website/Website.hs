@@ -53,7 +53,7 @@ sections = headerSec ++ introSec ++ caseStudySec ++ exampleSec ++ docsSec ++ ana
 
 symbMap :: ChunkDB
 symbMap = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict])
-([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] allRefs
+  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] allRefs
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict])
@@ -104,21 +104,21 @@ introSec :: Section
 introSec = section EmptyS (map (mkParagraph.S) [introParagraph1, introParagraph2]) [] introSecRef
 
 introParagraph1, introParagraph2 :: String
-introParagraph1 = "Drasil is a framework for generating all of the software artifacts from a stable knowledge base,
-  focusing currently on scientific software. The main goals are to reduce knowledge duplication and
-  improve traceability. The atifacts are generated from a common knowledge-base using recipes
-  written in a Domain-Specific Language (DSL). These recipes allow us to specify which pieces of
-  knowledge should be used in which artifacts, how to transform them, and more."
+introParagraph1 = "Drasil is a framework for generating all of the software artifacts from a stable knowledge base, \
+  \focusing currently on scientific software. The main goals are to reduce knowledge duplication and \
+  \improve traceability. The atifacts are generated from a common knowledge-base using recipes \
+  \written in a Domain-Specific Language (DSL). These recipes allow us to specify which pieces of \
+  \knowledge should be used in which artifacts, how to transform them, and more."
 -- need sentence below?
 introParagraph2 = "This webpage is designed to contain the most up to date" ++
   "case study artifacts, Haddock documentation, and package dependency graphs" --foldlList "," List [caseStudy, haddockDocs, packDepGraph] 
-  ++ "from the Drasil repository.
-  The case study artifacts include the Software Requirements Specification (SRS) for the case study,
-  which specifies what the program sets out to achieve.
-  The Haddock Documentation section contains the current documentation for the Drasil framework.
-  The package dependency graphs shows the hierarchy of modules within each package.
-  The footer of this page contains the continuous integration build of the project,
-  as well as the commit number that the build and artifacts are based off of."
+  ++ "from the Drasil repository. \
+  \The case study artifacts include the Software Requirements Specification (SRS) for the case study, \
+  \which specifies what the program sets out to achieve. \
+  \The Haddock Documentation section contains the current documentation for the Drasil framework. \
+  \The package dependency graphs shows the hierarchy of modules within each package. \
+  \The footer of this page contains the continuous integration build of the project, \
+  \as well as the commit number that the build and artifacts are based off of."
 
 ----------------------------------------------------
 -- case studies section
@@ -127,10 +127,10 @@ caseStudySec = section (S caseStudiesTitle) [mkParagraph.S caseStudiesDesc, mkFi
 
 caseStudiesTitle, caseStudiesDesc :: String
 caseStudiesTitle = "Case Studies"
-caseStudiesDesc = "Drasil allows some design decisions to be made by the user when generating 
-  code. The table below summarizes the design decisions made for each case 
-  study, followed by a guide giving the meaning of the short-forms used in the 
-  table:"
+caseStudiesDesc = "Drasil allows some design decisions to be made by the user when generating \
+  \code. The table below summarizes the design decisions made for each case \
+  \study, followed by a guide giving the meaning of the short-forms used in the \
+  \table:"
 -- case studies table
 mkCaseTable :: RawContent
 mkCaseTable = Table headerRow tableBody EmptyS False
@@ -160,6 +160,9 @@ data InStruct = B | U deriving (Show)
 data ConStruct = B | I | U | WI deriving (Show)
 data ConRep = C | V deriving (Show)
 data RealNumRep = D | F deriving (Show)
+
+instance Show Modularity where
+  show P = "P"
 data CaseStudy = CS Name Modularity ImplementType Logging InStruct ConStruct ConRep RealNumRep
 glassBRCase      = CS "GlassBR"                     S P L   B I  C D
 noPCMCase        = CS "NoPCM"                       C P NoL U B  C D
@@ -264,8 +267,8 @@ exampleTitle :: String
 exampleTitle = "Generated Examples"
 
 exampleIntro :: String
-exampleIntro = "Each of the case studies contain their own generated PDF and HTML reports,
-  and in some cases, their own generated code."
+exampleIntro = "Each of the case studies contain their own generated PDF and HTML reports, \
+  \and in some cases, their own generated code."
 
 mkExampleLst :: RawContent
 mkExampleLst = Enumeration exampleList
@@ -274,7 +277,7 @@ exampleList :: ListType
 exampleList = Bullet (zip (map (uncurry.mkExampleListFunc) (zip4 exampleTitles exampleDescs exampleCodePaths exampleDoxPaths)) (repeat Nothing))
 
 mkExampleListFunc :: String -> String -> [(String, [Reference])] -> [(String, [Reference])] -> ItemType
-mkExampleListFunc exmpl desc codePth doxPth =
+mkExampleListFunc exmpl desc codePth doxPth
   | codePth == [(_, [])] && doxPth == [(_,[])] = Nested (S exmpl) $ Bullet [(Flat ((S (exmpl ++ "SRS")) +:+ makeRef2S getHTMLRef +:+ makeRef2S getPDFRef), Nothing)]
   | doxPth == [(_,[])]                         = Nested (S exmpl) $ Bullet $ zip [Flat $ (S (exmpl ++ "SRS")) +:+ makeRef2S getHTMLRef +:+ makeRef2S getPDFRef,
                                                                        Nested (S generatedCodeTitle) $ Bullet $mkCodeList codePth] $ repeat Nothing
@@ -450,7 +453,7 @@ drasilFolders = ["drasil-build", "drasil-code", "drasil-data", "drasil-database"
 drasilDepGraphPaths = map (\x -> "graphs/" ++ x ++ ".pdf") drasilFolders
 drasilDepGraphRefs = zipWith (\x y -> Reference x (URI y) (shortname' x) None) drasilFolders drasilDepGraphPaths
 
-folderList :: 
+folderList :: RawContent
 folderList = Enumerated $ Bullet $ zip folderList' $ repeat Nothing
 
 folderList' :: [ItemType]

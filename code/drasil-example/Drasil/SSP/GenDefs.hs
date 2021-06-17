@@ -8,7 +8,7 @@ import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
 import qualified Data.List.NonEmpty as NE
 import Language.Drasil
-import Theory.Drasil (GenDefn, gd, ModelKinds (OthModel, EquationalModel), mkConstraintSet)
+import Theory.Drasil (GenDefn, gd, ModelKinds(EquationalConstraints, OthModel, EquationalModel), mkConstraintSet, )
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.NounPhrase as NP

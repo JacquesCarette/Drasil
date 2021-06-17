@@ -7,19 +7,20 @@ module Language.Drasil (
   , DerivType(..), Completeness(..), Relation
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   , ($-), ($/), addI, addRe, mulI, mulRe
-  -- Expr.Extract
-  , dep
   -- Expr.Math
   , abs_, neg, log, ln, abs, sin, cos, tan, sec, csc, cot, arcsin, arccos, arctan, exp
   , sqrt, euclidean, norm, not_
   , square, half, oneHalf, oneThird, recip_
-  , dim, idx, int, dbl, exactDbl, frac, str, perc, isin, completeCase, incompleteCase
+  , dim, idx, int, dbl, exactDbl, frac, str, perc, completeCase, incompleteCase
   , sumAll, defsum, prodAll, defprod, defint, intAll
   , realInterval
   , deriv, pderiv
   , sy -- old "Chunk" constructor C
   , apply, apply1, apply2, applyWithNamedArgs
   , cross, m2x2, vec2D, dgnl2x2
+  -- DisplayExpr
+  , DisplayExpr
+  , defines, spaceDE, isIn, andDEs, equivDEs
   -- all the stuff from Unicode
   , Special(..), RenderSpecial(..)
    -- UID
@@ -47,8 +48,8 @@ module Language.Drasil (
   , IsUnit(getUnits)
   , CommonIdea(abrv)
   , Constrained(constraints)
-  , ExprRelat(relat)
   , DefiningExpr(defnExpr)
+  , Display(toDispExpr)
   , HasUncertainty(unc)
   , Quantity
   , Callable
@@ -106,7 +107,8 @@ module Language.Drasil (
   -- Chunk.Citation
   , HasCitation(getCitations)
   -- Sentence
-  , Sentence(..), SentenceStyle(..), (+:+), (+:+.), (+:), (!.), capSent, ch, sC, sDash, sParen  
+  , Sentence(..), SentenceStyle(..), (+:+), (+:+.), (+:), (!.), capSent
+  , ch, eS, sC, sDash, sParen  
   -- Sentence.Extract
   , sdep, shortdep
   -- RefProg
@@ -187,16 +189,16 @@ module Language.Drasil (
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
+import Language.Drasil.DisplayExpr
 import Language.Drasil.Expr (Expr(..), UFunc(..), UFuncB, UFuncVec,
           ArithBinOp, BoolBinOp, EqBinOp, LABinOp, OrdBinOp, VVVBinOp, VVNBinOp,
           AssocArithOper(..), AssocBoolOper(..), 
           DerivType(..), Completeness(..), Relation,
           ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.),
           ($-), ($/), addI, addRe, mulI, mulRe)
-import Language.Drasil.Expr.Extract (dep) -- exported for drasil-database FIXME: move to development package?
 import Language.Drasil.Expr.Math (abs_, neg, log, ln, sin, cos, tan, sqrt, sec, 
           csc, cot, arcsin, arccos, arctan, exp,
-          dim, norm, not_, idx, int, dbl, exactDbl, frac, str, perc, isin,
+          dim, norm, not_, idx, int, dbl, exactDbl, frac, str, perc,
           square, half, oneHalf, oneThird, recip_,
           completeCase, incompleteCase,
           sumAll, defsum, prodAll, defprod,
@@ -204,6 +206,7 @@ import Language.Drasil.Expr.Math (abs_, neg, log, ln, sin, cos, tan, sqrt, sec,
           apply, apply1, apply2, applyWithNamedArgs,
           sy, deriv, pderiv,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, intAll)
+import Language.Drasil.Expr.Display
 import Language.Drasil.Document (section, fig, figWithWidth
   , Section(..), SecCons(..) , llcc, ulcc, Document(..)
   , mkParagraph, mkFig, mkRawLC, extractSection
@@ -219,10 +222,10 @@ import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol),
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
-  HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), 
+  HasReasVal(reasVal), HasDerivation(derivations), 
   HasReference(getReferences), HasSpace(typ),
   DefiningExpr(defnExpr), Quantity, HasUncertainty(unc), Callable, 
-  IsArgumentName)
+  IsArgumentName, Display(..))
 import Language.Drasil.Classes.Citations (HasFields(getFields))
 import Language.Drasil.Classes.Document (HasCitation(getCitations))
 import Language.Drasil.Derivation (Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader)
@@ -273,7 +276,7 @@ import Language.Drasil.ShortName (ShortName, shortname', getStringSN)
 import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..), 
   RTopology(..), DomainDesc(AllDD, BoundedDD), getActorName, getInnerSpace)
 import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), (+:+),
-  (+:+.), (+:), (!.), capSent, ch, sC, sDash, sParen)
+  (+:+.), (+:), (!.), capSent, ch, eS, sC, sDash, sParen)
 import Language.Drasil.Sentence.Extract (sdep, shortdep) -- exported for drasil-database FIXME: move to development package?
 import Language.Drasil.Reference (makeCite, makeCiteS, makeRef2, makeRef2S, makeCiteInfo, makeCiteInfoS, rw)
 import Language.Drasil.Symbol (Decoration(..), Symbol(..), compsy)

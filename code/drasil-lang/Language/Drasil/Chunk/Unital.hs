@@ -8,9 +8,10 @@ import Language.Drasil.Chunk.Concept (dcc, dccWDS,cw)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd')
 import Language.Drasil.Chunk.Unitary (Unitary(..))
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
-import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Display(toDispExpr),
   Definition(defn), ConceptDomain(cdom), Concept, IsUnit, Quantity, HasSpace(typ))
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), UnitDefn, unitWrapper)
+import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space(..))
@@ -46,6 +47,7 @@ instance MayHaveUnit   UnitalChunk where getUnit = Just . view uni
 -- ^ Finds the units of the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
 instance Eq            UnitalChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid) 
 -- ^ Equal if 'UID's are equal.
+instance Display       UnitalChunk where toDispExpr = toDispExpr . sy
 
 --{BEGIN HELPER FUNCTIONS}--
 

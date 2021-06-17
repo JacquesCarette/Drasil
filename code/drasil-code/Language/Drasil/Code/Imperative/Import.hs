@@ -343,7 +343,6 @@ convExpr (Matrix [l]) = do
   return $ litArray (fmap valueType (head ar)) ar
 convExpr Matrix{} = error "convExpr: Matrix"
 convExpr Operator{} = error "convExpr: Operator"
-convExpr IsIn{}    = error "convExpr: IsIn"
 convExpr (RealI c ri)  = do
   g <- get
   convExpr $ renderRealInt (lookupC g c) ri
@@ -375,9 +374,9 @@ convCall c x ns f libf = do
   
 -- | Converts a 'Constraint' to an 'Expr'.
 renderC :: (HasUID c, HasSymbol c) => c -> Constraint -> Expr
-renderC s (Range _ rr)          = renderRealInt s rr
-renderC s (EnumeratedReal _ rr) = IsIn (sy s) (DiscreteD rr)
-renderC s (EnumeratedStr _ rr)  = IsIn (sy s) (DiscreteS rr)
+renderC s (Range _ rr)         = renderRealInt s rr
+renderC _ (EnumeratedReal _ _) = error "EnumeratedReal IsIn not supported yet" -- IsIn (sy s) (DiscreteD rr)
+renderC _ (EnumeratedStr  _ _) = error "EnumeratedStr IsIn not supported yet" -- IsIn (sy s) (DiscreteS rr)
 
 -- | Converts an interval ('RealInterval') to an 'Expr'.
 renderRealInt :: (HasUID c, HasSymbol c) => c -> RealInterval Expr Expr -> Expr

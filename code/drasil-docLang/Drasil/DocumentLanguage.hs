@@ -88,18 +88,18 @@ mkSections :: SystemInformation -> DocDesc -> [Section]
 mkSections si dd = map doit dd
   where
     doit :: DocSection -> Section
-    doit (RefSec rs)         = mkRefSec si dd rs
-    doit (IntroSec is)       = mkIntroSec si is
-    doit (StkhldrSec sts)    = mkStkhldrSec sts
-    doit (SSDSec ss)         = mkSSDSec si ss
-    doit (AuxConstntSec acs) = mkAuxConsSec acs 
-    doit Bibliography        = mkBib (citeDB si)
-    doit (GSDSec gs')        = mkGSDSec gs'
-    doit (ReqrmntSec r)      = mkReqrmntSec r
-    doit (LCsSec lc)         = mkLCsSec lc
-    doit (UCsSec ulcs)       = mkUCsSec ulcs
-    doit (TraceabilitySec t) = mkTraceabilitySec t si
-    doit (AppndxSec a)       = mkAppndxSec a
+    doit (RefSec rs)          = mkRefSec si dd rs
+    doit (IntroSec is)        = mkIntroSec si is
+    doit (StkhldrSec sts)     = mkStkhldrSec sts
+    doit (SSDSec ss)          = mkSSDSec si ss
+    doit (AuxConstntSec acs)  = mkAuxConsSec acs 
+    doit Bibliography         = mkBib (citeDB si)
+    doit (GSDSec gs')         = mkGSDSec gs'
+    doit (ReqrmntSec r)       = mkReqrmntSec r
+    doit (LCsSec lc)          = mkLCsSec lc
+    doit (UCsSec ulcs)        = mkUCsSec ulcs
+    doit (TraceabilitySec t)  = mkTraceabilitySec t si
+    doit (AppndxSec a)        = mkAppndxSec a
     doit (OffShelfSolnsSec o) = mkOffShelfSolnSec o
 
 

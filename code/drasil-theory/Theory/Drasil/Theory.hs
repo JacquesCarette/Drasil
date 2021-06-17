@@ -16,7 +16,7 @@ class Theory t where
   quantities    :: Lens' t [QuantityDict]
   operations    :: Lens' t [ConceptChunk] -- FIXME: Should not be Concept
   defined_quant :: Lens' t [QDefinition]
-  invariants    :: Lens' t [Relation]
+  invariants    :: Lens' t [DisplayExpr]  -- TODO: temporary hack until designed, previously `Lens' t [Relation]`
   defined_fun   :: Lens' t [QDefinition]
 
 data SpaceDefn -- FIXME: This should be defined.
@@ -30,7 +30,7 @@ data SpaceDefn -- FIXME: This should be defined.
 --      * quan - quantities ('QuantityDict's),
 --      * ops - operations ('ConceptChunk's),
 --      * defq - definitions ('QDefinition's),
---      * invs - invariants ('Relation's),
+--      * invs - invariants ('DisplayExpr's),
 --      * dfun - defined functions ('QDefinition's),
 --      * ref - accompanying references ('Reference's),
 --      * lb - a label ('SpaceDefn'),
@@ -47,7 +47,7 @@ data TheoryModel = TM
   , _quan  :: [QuantityDict]
   , _ops   :: [ConceptChunk]
   , _defq  :: [QDefinition]
-  , _invs  :: [Relation]
+  , _invs  :: [DisplayExpr]
   , _dfun  :: [QDefinition]
   , _ref   :: [Reference]
   ,  lb    :: ShortName
@@ -70,6 +70,11 @@ instance HasReference       TheoryModel where getReferences = ref
 instance ConceptDomain      TheoryModel where cdom = cdom . view con
 -- | Finds any additional notes for the 'TheoryModel'.
 instance HasAdditionalNotes TheoryModel where getNotes = notes
+
+-- TODO: I think we should be gathering these from the ModelKinds of the TheoryModel.
+--       If we need "more than 1 ModelKind" in the TheoryModel, we may need to create 
+--       a "stacked model" that allows for composing them.
+
 -- | Finds the aspects of the 'Theory' behind the 'TheoryModel'.
 instance Theory             TheoryModel where
   valid_context = vctx
@@ -99,20 +104,20 @@ instance Referable TheoryModel where
 -- | Constructor for theory models.
 tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKinds ->
     [q] -> [c] -> [QDefinition] ->
-    [Relation] -> [QDefinition] -> [Reference] ->
+    [DisplayExpr] -> [QDefinition] -> [Reference] ->
     String -> [Sentence] -> TheoryModel
 tm mk = tm' (mk ^. uid) mk
 
 -- | Constructor for theory models with no references. 
 tmNoRefs :: (Quantity q, MayHaveUnit q, Concept c) => ModelKinds ->
-    [q] -> [c] -> [QDefinition] -> [Relation] -> [QDefinition] -> 
+    [q] -> [c] -> [QDefinition] -> [DisplayExpr] -> [QDefinition] -> 
     String -> [Sentence] -> TheoryModel
 tmNoRefs mk = tmNoRefs' (mk ^. uid) mk
 
 -- | Constructor for theory models. Must have a source. Uses the shortname of the reference address.
 tm' :: (Quantity q, MayHaveUnit q, Concept c) => UID -> ModelKinds ->
     [q] -> [c] -> [QDefinition] ->
-    [Relation] -> [QDefinition] -> [Reference] ->
+    [DisplayExpr] -> [QDefinition] -> [Reference] ->
     String -> [Sentence] -> TheoryModel
 tm' u _  _ _ _  _   _   [] _   = error $ "Source field of " ++ u ++ " is empty"
 tm' u mk q c dq inv dfn r  lbe = 
@@ -121,7 +126,7 @@ tm' u mk q c dq inv dfn r  lbe =
 
 -- | Constructor for theory models. Uses the shortname of the reference address.
 tmNoRefs' :: (Quantity q, MayHaveUnit q, Concept c) => UID -> ModelKinds ->
-    [q] -> [c] -> [QDefinition] -> [Relation] -> [QDefinition] -> 
+    [q] -> [c] -> [QDefinition] -> [DisplayExpr] -> [QDefinition] -> 
     String -> [Sentence] -> TheoryModel
 tmNoRefs' u mk q c dq inv dfn lbe = 
   TM u (cw mk) [] [] (map qw q) (map cw c) dq inv dfn [] (shortname' lbe)

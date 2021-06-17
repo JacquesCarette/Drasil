@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: a8f01914d3e85751e00b4deb473c17a061f42e8bf9731dc1729d4dda0c388119
+-- hash: aafedd832d74d24755e82dc1c66d39f236377f548876806ca2898385f071e34d
 
 name:           drasil-lang
 version:        0.1.60.0
@@ -52,9 +52,12 @@ library
       Language.Drasil.Data.Date
       Language.Drasil.Derivation
       Language.Drasil.Development.Sentence
+      Language.Drasil.DisplayClasses
+      Language.Drasil.DisplayExpr
       Language.Drasil.Document
       Language.Drasil.Document.Core
       Language.Drasil.Expr
+      Language.Drasil.Expr.Display
       Language.Drasil.Expr.Extract
       Language.Drasil.Expr.Math
       Language.Drasil.Expr.Precedence

@@ -13,7 +13,7 @@ data ConstraintReason = Physical | Software
 data Constraint where
   -- | By default, physical and software constraints are ranges.
   Range          :: ConstraintReason -> RealInterval Expr Expr -> Constraint
-  EnumeratedReal :: ConstraintReason -> [Double]               -> Constraint
+  EnumeratedReal :: ConstraintReason -> [Double]               -> Constraint  -- TODO: I think this can be merged with the below when we get typed expressions, `Expr a` instead of Double/String
   EnumeratedStr  :: ConstraintReason -> [String]               -> Constraint
 
 -- | Smart constructor for range of 'Physical' constraints between two given expressions.

@@ -11,7 +11,7 @@ import Control.Lens ((^.),makeLenses,view)
 
 import Language.Drasil
 import Database.Drasil (ChunkDB, symbResolve)
-import Language.Drasil.Development ( names')
+import Language.Drasil.Development
 
 import Language.Drasil.Printers (symbolDoc, toPlainName)
 
@@ -137,11 +137,11 @@ ccObjVar c1 c2 = checkObj (c1 ^. typ)
 
 -- | Get a list of 'CodeChunk's from an equation.
 codevars :: Expr -> ChunkDB -> [CodeVarChunk]
-codevars e m = map (varResolve m) $ dep e
+codevars e m = map (varResolve m) $ eDep e
 
 -- | Get a list of 'CodeChunk's from an equation (no functions).
 codevars' :: Expr -> ChunkDB -> [CodeVarChunk]
-codevars' e m = map (varResolve m) $ nub $ names' e
+codevars' e m = map (varResolve m) $ nub $ eNames' e
 
 -- | Make a 'CodeVarChunk' from a 'UID' in the 'ChunkDB'.
 varResolve :: ChunkDB -> UID -> CodeVarChunk

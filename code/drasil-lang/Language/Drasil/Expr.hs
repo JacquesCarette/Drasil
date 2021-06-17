@@ -4,7 +4,7 @@ module Language.Drasil.Expr where
 
 import Prelude hiding (sqrt)
 
-import Language.Drasil.Space (Space(..), DomainDesc, RealInterval)
+import Language.Drasil.Space (DomainDesc, RealInterval)
 import Language.Drasil.UID (UID)
 
 -- FIXME: Haddock open issue #43 seems to make it so GADT constructors cannot
@@ -152,7 +152,7 @@ data Expr where
   --   ex: Summation is represented via 'Add' over a discrete domain.
   Operator :: AssocArithOper -> DomainDesc Expr Expr -> Expr -> Expr
   -- | The expression is an element of a space.
-  IsIn     :: Expr -> Space -> Expr
+  -- IsIn     :: Expr -> Space -> Expr
   -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
   RealI    :: UID -> RealInterval Expr Expr -> Expr
 
@@ -270,7 +270,6 @@ instance Eq Expr where
   C a                 == C b                 =   a == b
   FCall a b c         == FCall d e f         =   a == d && b == e && c == f
   Case a b            == Case c d            =   a == c && b == d 
-  IsIn a b            == IsIn c d            =   a == c && b == d
   UnaryOp a b         == UnaryOp c d         =   a == c && b == d
   UnaryOpB a b        == UnaryOpB c d        =   a == c && b == d
   UnaryOpVec a b      == UnaryOpVec c d      =   a == c && b == d

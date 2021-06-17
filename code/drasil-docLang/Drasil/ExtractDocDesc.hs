@@ -5,7 +5,7 @@ import Control.Lens((^.))
 import Drasil.DocumentLanguage.Core
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
 import Language.Drasil hiding (Manual, Vector, Verb)
-import Theory.Drasil (Theory(..))
+import Theory.Drasil
 import Data.List(transpose)
 
 import Data.Functor.Constant (Constant(Constant))
@@ -43,26 +43,27 @@ secConPlate mCon mSec = preorderFold $ purePlate {
 }
 
 -- | Creates a section plate for expressions.
-exprPlate :: DLPlate (Constant [Expr])
+exprPlate :: DLPlate (Constant [DisplayExpr])
 exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (concatMap egetCon')
   (concatMap egetSec) `appendPlate` (preorderFold $ purePlate {
   scsSub = Constant <$> \case
-    (TMs _ _ t) -> let r = concatMap (\x -> x ^. invariants ++
-                           defExp (x ^. defined_quant ++ x ^. defined_fun) ++
-                           r (x ^. valid_context)) in r t
-    (DDs _ _ d _) -> map sy d ++ defExp d
-    (GDs _ _ g _) -> expRel g
-    (IMs _ _ i _) -> expRel i
+    (TMs _ _ t)   -> goTM t
+    (DDs _ _ d _) -> go d
+    (GDs _ _ g _) -> go g
+    (IMs _ _ i _) -> go i
     _ -> [],
-  auxConsSec = Constant <$> \(AuxConsProg _ qdef) -> defExp qdef
-  })where
-    defExp :: DefiningExpr a => [a] -> [Expr]
-    defExp = map (^. defnExpr)
-    expRel :: ExprRelat a => [a] -> [Expr]
-    expRel = map relat
+  auxConsSec = Constant <$> \(AuxConsProg _ qdef) -> go qdef
+  }) where
+      go :: Display a => [a] -> [DisplayExpr]
+      go = map toDispExpr
+      goTM :: [TheoryModel] -> [DisplayExpr]
+      goTM = concatMap (\x -> go (x ^. defined_quant)
+                           ++ x ^. invariants
+                           ++ go (map (^. defnExpr) (x ^. defined_quant ++ x ^. defined_fun))
+                           ++ goTM (x ^. valid_context))
 
 -- | Converts a 'Sentence' into a list of expressions. If the 'Sentence' cant be translated, returns an empty list.
-sentToExp :: Sentence -> [Expr]
+sentToExp :: Sentence -> [DisplayExpr]
 sentToExp ((:+:) s1 s2) = sentToExp s1 ++ sentToExp s2
 sentToExp (E e) = [e]
 sentToExp _ = []
@@ -72,24 +73,24 @@ fmGetDocDesc :: DLPlate (Constant [a]) -> DocDesc -> [a]
 fmGetDocDesc p = concatMap (foldFor docSec p)
 
 -- | Extracts expressions from the document description ('DocDesc') and default 'DLPlate'.
-egetDocDesc :: DocDesc -> [Expr]
+egetDocDesc :: DocDesc -> [DisplayExpr]
 egetDocDesc = fmGetDocDesc exprPlate
 
 -- | Extracts expressions from a 'Section'.
-egetSec :: Section -> [Expr]
+egetSec :: Section -> [DisplayExpr]
 egetSec (Section _ sc _ ) = concatMap egetSecCon sc
 
 -- | Extracts expressions from section contents.
-egetSecCon :: SecCons -> [Expr]
+egetSecCon :: SecCons -> [DisplayExpr]
 egetSecCon (Sub s) = egetSec s
 egetSecCon (Con c) = egetCon' c
 
 -- | Extracts expressions from something that has contents.
-egetCon' :: HasContents a => a -> [Expr]
+egetCon' :: HasContents a => a -> [DisplayExpr]
 egetCon' = egetCon . (^. accessContents)
 
 -- | Extracts expressions from raw contents.
-egetCon :: RawContent -> [Expr]
+egetCon :: RawContent -> [DisplayExpr]
 egetCon (EqnBlock e) = [e]
 egetCon (Defini _ []) = []
 egetCon (Defini dt (hd:tl)) = concatMap egetCon' (snd hd) ++ egetCon (Defini dt tl)

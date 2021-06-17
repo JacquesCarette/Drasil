@@ -34,9 +34,9 @@ tMods = [factOfSafety, equilibrium, mcShrStrgth, effStress, newtonSL]
 
 ------------- New Chunk -----------
 factOfSafety :: TheoryModel
-factOfSafety = tm (EquationalModel factOfSafetyQD)
+factOfSafety = tm' "factOfSafetyTM" (EquationalModel factOfSafetyQD)
   [qw fs, qw resistiveShear, qw mobilizedShear] ([] :: [ConceptChunk])
-  [] [relat factOfSafetyQD] [] [makeCite fredlund1977] "factOfSafety" []
+  [factOfSafetyQD] [] [] [makeCite fredlund1977] "factOfSafety" []
 
 ------------------------------------
 factOfSafetyQD :: QDefinition
@@ -50,24 +50,27 @@ factOfSafetyExpr = sy resistiveShear $/ sy mobilizedShear
 equilibrium :: TheoryModel
 equilibrium = tm (EquationalConstraints equilibriumCS)
   [qw fx] ([] :: [ConceptChunk])
-  [] [relat equilibriumCS] [] [makeCite fredlund1977] "equilibrium" [eqDesc]
+  [] (map toDispExpr equilibriumRels) [] [makeCite fredlund1977] "equilibrium" [eqDesc]
 
 ------------------------------------  
+
+equilibriumRels :: [Expr]
+equilibriumRels = map (($= int 0) . sumAll (Variable "i") . sy) [fx, fy, genericM]
 
 -- FIXME: Variable "i" is a hack.  But we need to sum over something!
 equilibriumCS :: ConstraintSet
 equilibriumCS = mkConstraintSet
   (dccWDS "equilibriumCS" (nounPhraseSP "equilibrium") eqDesc) $
-  NE.fromList $ map (($= int 0) . sumAll (Variable "i") . sy) [fx, fy, genericM]
+  NE.fromList equilibriumRels
 -- makeRC "equilibriumRC" (nounPhraseSP "equilibrium") eqDesc eqRel
 
 eqDesc :: Sentence
 eqDesc = foldlSent [S "For a body in static equilibrium, the net",
   pluralNP (force `and_PP` genericM) +:+. S "acting on the body will cancel out",
   S "Assuming a 2D problem", sParen (makeRef2S assumpENSL) `sC` S "the", getTandS fx `S.and_`
-  getTandS fy, S "will be equal to" +:+. E (exactDbl 0), S "All", plural force,
+  getTandS fy, S "will be equal to" +:+. eS (exactDbl 0), S "All", plural force,
   S "and their", phrase distance, S "from the chosen point of rotation",
-  S "will create a net", phrase genericM, S "equal to" +:+ E (exactDbl 0)]
+  S "will create a net", phrase genericM, S "equal to" +:+ eS (exactDbl 0)]
 
 --
 ------------- New Chunk -----------
@@ -75,7 +78,7 @@ mcShrStrgth :: TheoryModel
 mcShrStrgth = tm' "mcShrSrgth" (EquationalModel mcShrStrgthQD)
   [qw shrStress, qw effNormStress, qw fricAngle, qw effCohesion] 
   ([] :: [ConceptChunk])
-  [] [relat mcShrStrgthQD] [] [makeCite fredlund1977] "mcShrStrgth" [mcShrStrgthDesc]
+  [mcShrStrgthQD] [] [] [makeCite fredlund1977] "mcShrStrgth" [mcShrStrgthDesc]
 
 ------------------------------------
 mcShrStrgthQD :: QDefinition
@@ -90,7 +93,7 @@ mcShrStrgthDesc = foldlSent [S "In this", phrase model, S "the",
   getTandS shrStress, S "is proportional to the product of the",
   phrase effNormStress, ch effNormStress, S "on the plane", 
   S "with its static", phrase friction, S "in the angular form" +:+.
-  E (tan $ sy fricAngle),
+  eS (tan $ sy fricAngle),
   S "The", ch shrStress, S "versus", ch effNormStress,
   S "relationship is not truly",
   phrase linear `sC` S "but assuming the", phrase nrmFSubWat, 
@@ -105,7 +108,7 @@ effStress :: TheoryModel
 effStress = tm' "effectiveStressTM" (EquationalModel effStressQD)
   [qw effectiveStress, qw totNormStress, qw porePressure] 
   ([] :: [ConceptChunk])
-  [] [relat effStressQD] [] [makeCite fredlund1977] "effStress" [effStressDesc]
+  [effStressQD] [] [] [makeCite fredlund1977] "effStress" [effStressDesc]
 
 ------------------------------------
 effStressQD :: QDefinition

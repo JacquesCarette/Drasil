@@ -2,9 +2,13 @@ module Drasil.Projectile.Lesson.Motion where
 
 import qualified Drasil.DocLang.Notebook as NB (mainIdea, summary, hormotion, vermotion)
 
-import Data.Drasil.Concepts.Physics (motion, acceleration, velocity, force)
+import Data.Drasil.Concepts.Physics (motion, acceleration, velocity, force, time,
+  constAccel, horizontalMotion, verticalMotion)
 import Drasil.Projectile.Concepts (projectile, projMotion)
-import qualified Data.Drasil.Quantities.Physics as QP (ixDist, iyDist, iSpeed, ixVel, iyVel, constAccel, gravitationalAccel)
+import Drasil.Projectile.Expressions (lcrectVel, lcrectPos, lcrectNoTime, horMotionEqn1, horMotionEqn2,
+  verMotionEqn1, verMotionEqn2, verMotionEqn3)
+import qualified Data.Drasil.Quantities.Physics as QP (ixDist, iyDist, iSpeed, ixVel, iyVel, speed,
+  constAccel, gravitationalAccel, xAccel, yAccel, time, xVel, yVel)
 import Data.Drasil.Concepts.Documentation (coordinateSystem)
 import Language.Drasil
 import Language.Drasil.ShortHands
@@ -32,52 +36,49 @@ motionContextP1
        S "When air resistance is neglected, the only", phrase force, S "acting on the",
          phrase projectile, S"is its weight, which causes the", phrase projectile, 
          S "to have a *constant downward acceleration* of approximately",
-         E (sy QP.constAccel $= sy QP.gravitationalAccel $= 9.8) `S.sOr` E (sy QP.gravitationalAccel $= 32.2)]
+         E (sy QP.constAccel $= sy QP.gravitationalAccel $= dbl 9.81) `S.sOr` 
+         E (sy QP.gravitationalAccel $= dbl 32.2)]
 
 motionContextP2
-  = foldlSP
-      [S "The equations for rectilinear kinematics given above (ref) are in one dimension",
-       S "These equations can be applied for both the vertical motion and the horizontal directions, as follows:"]
+  = foldlSP_
+      [S "The equations for rectilinear kinematics given above (ref) are in one dimension.",
+       S "These equations can be applied for both the", phrase verticalMotion `S.andThe`
+       phrase horizontalMotion, S ", as follows:"]
 
--- **TODO: mainIdea should be hor and ver motions
 horMotion, verMotion, summary :: Section
 horMotion = NB.hormotion [intro, equations, concl] []
   where intro = foldlSP_ [
-                  S "For projectile motion the acceleration in the horizontal direction is constant",
-                  S "and equal to zero. This value can be substituted in the equations for constant",
-                  S "acceleration given above to yield the following:"]
-        equations = foldlSP_ [
-                  S "From Equation", 
-                  S "From Equation", 
-                  S "From Equation"] 
-        concl = foldlSP_ [
-                  S "Since the acceleration in the x direction is zero, ",
-                  S "the horizontal component of velocity always remains constant during motion",
+                  S "For", phrase projMotion +:+ S "the", phrase acceleration, 
+                  S "in the horizontal direction is and equal to zero" +:+. 
+                  sParen(E (sy QP.xAccel $= 0)), motionSent]
+        equations = foldlSP_ $ weave [equationsSents, map E horMotionEqns]
+        concl = foldlSP [
+                  S "Since the", phrase acceleration, S "in the x direction", sParen (E (sy QP.xAccel)),
+                  S "is zero, the horizontal component of ", phrase velocity,
+                  S "always remains constant during" +:+. phrase motion,
                   S "In addition to knowing this, we have one more equation"]
                 
 verMotion = NB.vermotion [intro, equations, concl] []
   where intro = foldlSP_ [
-                  S "Since the positive y axis is directed upward, the acceleration in the vertical direction is",
-                  S "This value can be substituted in the equations for constant",
-                  S "acceleration given above to yield the following:"]
-        equations = foldlSP_ [
-                  S "From Equation", 
-                  S "From Equation",
-                  S "From Equation"]
-        concl = foldlSP_ [
-                  S "Recall that the last equation can be formulated on the basis of eliminating the time t ",
-                  S "between the first two equations , and therefore only two of the above",
-                  S "three equations are independent of one another."]
+                  S "Since the positive y axis is directed upward, the", phrase acceleration,
+                  S "in the vertical direction is" +:+. 
+                  E (sy QP.yAccel $= negate (sy QP.gravitationalAccel)), motionSent]
+        equations = foldlSP_ $ weave [equationsSents, map E verMotionEqns]
+        concl = foldlSP [
+                  S "Recall that the last equation can be formulated on the basis of eliminating the",
+                  phrase time +:+ E (sy QP.time), S "between the first two equations, and therefore only ",
+                  S "two of the above three equations are independent of one another"]
 
 summary = NB.summary [smmryCon] []
-  where smmryCon = foldlSP_ [
-                  S "In addition to knowing that the horizontal component of velocity is constant",
-                  S "[Hibbler doesn't say this, but it seems necessary for completeness],",
-                  S "problems involving the motion of a projectile can have at most three unknowns",
-                  S "since only three independent equations can be written: ",
+  where smmryCon = foldlSP [
+                  S "In addition to knowing that the horizontal component of", phrase velocity,
+                  S "is constant [Hibbler doesn't say this, but it seems necessary for completeness],",
+                  S "problems involving the", phrase motion `S.sOfA` phrase projectile +:
+                  S "can have at most three unknowns since only three independent equations can be written",
                   S "that is, one equation in the horizontal direction and two in the vertical direction.",
-                  S "Once  𝑣𝑥  and  𝑣𝑦  are obtained, the resultant velocity  𝐯 , ",
-                  S "which is always tangent to the path, is defined by the vector sum as shown in Figure"]
+                  S "Once", E (sy QP.xVel)  `S.sAnd`  E (sy QP.yVel),  S "are obtained, the resultant",
+                  phrase velocity +:+ E (sy QP.speed), S "which is always tangent to the path,",
+                  S "is defined by the vector sum as shown in", makeRef2S figCSandA]
 
 resourcePath :: String
 resourcePath = "../../../datafiles/Projectile/"
@@ -85,5 +86,18 @@ resourcePath = "../../../datafiles/Projectile/"
 figCSandA :: LabelledContent
 figCSandA = llcc (makeFigRef "CoordSystAndAssumpts") $ fig (atStartNP (the coordinateSystem))
   (resourcePath ++ "CoordSystAndAssumpts.png") 
+
+equationsSents :: [Sentence]
+equationsSents = [S "From Equation" +: makeRef2S lcrectVel,
+                  S "From Equation" +: makeRef2S lcrectPos,
+                  S "From Equation" +: makeRef2S lcrectNoTime]
+                
+horMotionEqns, verMotionEqns :: [Expr]
+horMotionEqns = [horMotionEqn1, horMotionEqn2, horMotionEqn1]
+verMotionEqns = [verMotionEqn1, verMotionEqn2, verMotionEqn3]
+
+motionSent :: Sentence
+motionSent = S "This value can be substituted in the equations for" +:+ phrase constAccel +:
+             S "given above (ref) to yield the following"
 
 

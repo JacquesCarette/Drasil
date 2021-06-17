@@ -7,11 +7,12 @@ module Drasil.Projectile.Expressions where
 import Prelude hiding (cos, sin)
 
 import Language.Drasil
-import qualified Data.Drasil.Quantities.Physics as QP (iSpeed,
-  constAccel, xConstAccel, yConstAccel, ixPos, iyPos)
-import Data.Drasil.Quantities.Physics (gravitationalAccelConst, ixVel, iyVel, xPos, yPos, time,
-  speed, iPos, scalarPos, xVel, yVel, xAccel, yAccel, position, velocity, acceleration,
-  constAccelV)
+import Utils.Drasil
+import qualified Data.Drasil.Quantities.Physics as QP (iSpeed, speed,
+  constAccel, xConstAccel, yConstAccel, ixPos, iyPos, scalarPos)
+import Data.Drasil.Quantities.Physics (gravitationalAccelConst, gravitationalAccel, 
+  ixVel, iyVel, xPos, yPos, time, speed, iPos, scalarPos, xVel, yVel, xAccel, yAccel, 
+  position, velocity, acceleration, constAccelV)
 
 import Drasil.Projectile.Unitals (launAngle, launSpeed, targPos, tol, landPos, flightDur, offset)
 
@@ -80,3 +81,18 @@ positionXY     = sy position     $= vec2D (sy xPos)           (sy yPos)
 velocityXY     = sy velocity     $= vec2D (sy xVel)           (sy yVel)
 accelerationXY = sy acceleration $= vec2D (sy xAccel)         (sy yAccel)
 constAccelXY   = sy constAccelV  $= vec2D (sy QP.xConstAccel) (sy QP.yConstAccel)
+
+-- Expressions for lesson
+lcrectVel, lcrectPos, lcrectNoTime :: LabelledContent
+lcrectVel = eqUnR (sy QP.speed $= speed') (makeEqnRef "rectVel")
+lcrectPos = eqUnR (sy QP.scalarPos $= scalarPos') (makeEqnRef "rectPos")
+lcrectNoTime = eqUnR (rectNoTime) (makeEqnRef "reactNoTime")
+
+horMotionEqn1, horMotionEqn2 :: Expr
+horMotionEqn1 = sy xVel $= sy ixVel
+horMotionEqn2 = sy xPos $= sy QP.ixPos + sy ixVel * sy time
+
+verMotionEqn1, verMotionEqn2, verMotionEqn3 :: Expr
+verMotionEqn1 = sy yVel $= sy iyVel - sy gravitationalAccel * sy time
+verMotionEqn2 = sy yPos $= sy QP.iyPos + sy iyVel * sy time - sy gravitationalAccel * square (sy time) / 2
+verMotionEqn3 = square (sy yVel) $=  square ((sy iyVel)) - 2 * sy gravitationalAccel * (sy yPos - sy QP.iyPos) 

@@ -1,7 +1,8 @@
 module Drasil.Projectile.Lesson.Review where
 
 import Data.Drasil.Concepts.Physics (motion, position, time)
-import qualified Drasil.Projectile.Expressions as E (speed', scalarPos', rectNoTime)
+import qualified Drasil.Projectile.Expressions as E (speed', scalarPos', rectNoTime, 
+  lcrectVel, lcrectPos, lcrectNoTime)
 import Drasil.Projectile.Concepts (projectile)
 import qualified Data.Drasil.Quantities.Physics as QP (speed, time, scalarPos, iPos, iSpeed, constAccel)
 import Language.Drasil
@@ -9,7 +10,7 @@ import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 
 reviewContent :: [Contents]
-reviewContent = [reviewContextP1, LlC rectVel, LlC rectPos, LlC reactnoTime, reviewEqns, reviewContextP2]
+reviewContent = [reviewContextP1, LlC E.lcrectVel, LlC E.lcrectPos, LlC E.lcrectNoTime, reviewEqns, reviewContextP2]
 
 reviewContextP1, reviewEqns, reviewContextP2 :: Contents
 reviewContextP1
@@ -28,10 +29,6 @@ reviewContextP2
   = foldlSP 
       [S "Only two of these equations are independent,",
          S "since the third equation can always be derived from the other two.",
-       S "[", makeRef2S reactnoTime +:+ S "is not in the", atStart projectile, S"SRS]"]
+       S "[", makeRef2S E.lcrectNoTime +:+ S "is not in the", atStart projectile, S"SRS]"]
 
-rectVel, rectPos, reactnoTime :: LabelledContent
-rectVel = eqUnR (sy QP.speed $= E.speed') (makeEqnRef "rectVel")
-rectPos = eqUnR (sy QP.scalarPos $= E.scalarPos') (makeEqnRef "rectPos")
-reactnoTime = eqUnR (E.rectNoTime) (makeEqnRef "reactNoTime")
 

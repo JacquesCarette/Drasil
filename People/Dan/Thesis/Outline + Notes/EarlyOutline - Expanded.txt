@@ -60,9 +60,14 @@ We are well aware of the ambitious nature of attempting to solve the problem of
 manual duplication and unnecessary redundancy across all possible software
 systems. Frankly, it would be highly impractical to attempt to solve such a
 broad spectrum of problems. Each software domain poses its own challenges,
-alongside specific benefits and drawbacks. With that in mind, we have decided to
-focus solely on scientific computing (SC) software. Specifically, we look at
-software that follows the pattern 'input -> process -> output'.
+alongside specific benefits and drawbacks. 
+
+Our work on Drasil is most relevant to software that is well-understood and 
+undergoes frequent change (maintenance). Good candidates for development using
+Drasil are long-lived (10+ years) software projects with artifacts of interest
+to multiple stakeholders. With that in mind, we have decided to focus on
+scientific computing (SC) software. Specifically, we are looking at software 
+that follows the pattern 'input -> process -> output'.
 
 SC software has a strong fundamental underpinning of well-understood concepts.
 It also has the benefit of seldomly changing, and when it does, existing models
@@ -78,6 +83,7 @@ heard 'assume each body is a sphere' during a physics lecture?
 *TBD see 'OLD STUFF' for ideas
 -- Software Artifacts -- 
   - See Parnas (2010 has a good table)
+  - Reiterate that WE DON'T GENERATE ALL OF THESE
   ...
 
 -- Software Reuse and Software Families --
@@ -399,6 +405,9 @@ knowledge vs the specific knowledge
  - Highlight some of the key changes made as we developed, with explanations
  - Really show off major errors/oversights that went unobserved until 
   reimplementation happened
+ - Compare LoC in the source of the original softifacts compared to the Drasil
+  source for generating them, then compare the Drasil output with the original
+  softifacts
 
 -- “Pervasive” Bugs --
  - Sounds bad, but actually really good.
@@ -425,6 +434,12 @@ particularly for those concepts with many possible names.
 Development of Drasil is ongoing and the framework is still being iterated upon
 to date. In this section we present areas we believe have room for improvement
 along with plans for additional features to be added in the long-term.
+
+-- Typed Expression Language --
+??
+
+-- Model types --
+??
 
 -- Usability --
 As mentioned in the results section, usability remains a great area for

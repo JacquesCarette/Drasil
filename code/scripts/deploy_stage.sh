@@ -131,7 +131,7 @@ copy_analysis() {
 }
 
 build_website() {
-  cd "$CUR_DIR"website
+  cd "$CUR_DIR"drasil-website
   make DEPLOY_FOLDER="$CUR_DIR$DEPLOY_FOLDER" DOCS_FOLDER="$DOC_DEST" DOX_FOLDER="$DOX_DEST" EXAMPLES_FOLDER="$EXAMPLE_DEST" \
   SRS_FOLDER_FRAG="$SRS_DEST" GRAPH_FOLDER="$GRAPH_FOLDER"
   RET=$?

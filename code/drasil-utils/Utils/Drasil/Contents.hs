@@ -54,4 +54,4 @@ mkEnumSimple f = replicate 1 . UlC . ulcc . Enumeration . Simple . map f
 -- | Creates a 'ListTuple', filling in the title with a 'ShortName' and filling
 -- reference information.
 mkListTuple :: (Referable c, HasShortName c) => (c -> ItemType) -> c -> ListTuple
-mkListTuple f x = (S . getStringSN $ shortname x, f x, Just $ refAdd x)
+mkListTuple f x = (getSentSN $ shortname x, f x, Just $ refAdd x)

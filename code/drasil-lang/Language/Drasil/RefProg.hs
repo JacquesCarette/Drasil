@@ -1,38 +1,9 @@
-{-# Language TemplateHaskell #-}
-module Language.Drasil.RefProg (Reference(Reference, refInfo), RefInfo(..)) where
+module Language.Drasil.RefProg (RefInfo(..)) where
 
-import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
-  HasShortName(shortname), Referable(refAdd, renderRef))
-import Language.Drasil.Label.Type (LblType(..), getAdd)
-import Language.Drasil.ShortName (ShortName)
-import Language.Drasil.UID (UID)
-
-import Control.Lens ((^.), makeLenses)
+-- RefInfo is here to avoid any import cycles between Reference and Sentence.
 
 -- | Holds any extra information needed for a 'Reference', be it an equation, pages, a note, or nothing.
 data RefInfo = None
              | Equation [Int]
              | Page [Int]
              | RefNote String
-
--- | A Reference contains the identifier ('UID'), a reference address ('LblType'),
--- a human-readable shortname ('ShortName'), and any extra information about the reference ('RefInfo').
-data Reference = Reference
-  { _ui :: UID
-  ,  ra :: LblType
-  ,  sn :: ShortName
-  ,  refInfo :: RefInfo }
-makeLenses ''Reference
-
--- | Equal if 'UID's are equal.
-instance Eq            Reference where a == b = (a ^. uid) == (b ^. uid)
--- | Finds the 'UID' of a 'Reference'.
-instance HasUID        Reference where uid = ui
--- | Finds the reference address contained in a 'Reference' (through a 'LblType').
-instance HasRefAddress Reference where getRefAdd = getAdd . ra
--- | Finds the shortname of the reference address used for the 'Reference'.
-instance HasShortName  Reference where shortname = sn
--- | Finds the reference address of a 'Reference'.
-instance Referable Reference where
-  refAdd r = r ^. ui
-  renderRef = ra

@@ -23,14 +23,15 @@ module Language.Drasil (
   , defines, spaceDE, isIn, andDEs, equivDEs
   -- all the stuff from Unicode
   , Special(..), RenderSpecial(..)
-   -- UID
+  -- UID
   , UID
   -- Classes.Core
   , HasUID(uid)
-  , HasShortName(shortname)
   , HasRefAddress(getRefAdd)
   , HasSymbol(symbol)
   , Referable(..)
+  -- Classes.Core2
+  , HasShortName(shortname)
   -- Classes.Document
   , HasFields(getFields)
   -- Classes
@@ -95,7 +96,7 @@ module Language.Drasil (
   -- Derivation
   , Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader
   -- ShortName
-  , ShortName, shortname', getStringSN
+  , ShortName, shortname', getSentSN
   --Citations
   , Citation, EntryID, BibRef
   , citeID, citeKind
@@ -111,8 +112,6 @@ module Language.Drasil (
   , ch, eS, sC, sDash, sParen  
   -- Sentence.Extract
   , sdep, shortdep
-  -- RefProg
-  , Reference(..), RefInfo(..)
   -- NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
   , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase'
@@ -149,8 +148,10 @@ module Language.Drasil (
   , eqSymb, codeSymb, hasStageSymbol
   , autoStage, hat, prime, staged, sub, subStr, sup , unicodeConv, upperLeft, vec
   , label, variable
+  -- RefProg
+  , RefInfo(..)
   -- Reference
-  , makeRef2S, makeCite, makeCiteS, makeRef2, makeCiteInfo, makeCiteInfoS, rw
+  , Reference(..), makeRef2S, makeCite, makeCiteS, makeRef2, makeCiteInfo, makeCiteInfoS, rw
   -- Label.Type
   , getAdd, prepend
   , LblType(RP, Citation, URI), IRefProg(..)
@@ -219,7 +220,8 @@ import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), 
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol),
-  HasRefAddress(getRefAdd), HasShortName(shortname), Referable(refAdd, renderRef))
+  HasRefAddress(getRefAdd), Referable(refAdd, renderRef))
+import Language.Drasil.Classes.Core2 (HasShortName(shortname))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
@@ -273,13 +275,14 @@ import Language.Drasil.Data.Citation(CiteField(..), HP(..), CitationKind(..) -- 
       -- Month -> CiteField
   , month)
 import Language.Drasil.NounPhrase
-import Language.Drasil.ShortName (ShortName, shortname', getStringSN)
+import Language.Drasil.ShortName (ShortName, shortname', getSentSN)
 import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..), 
   RTopology(..), DomainDesc(AllDD, BoundedDD), getActorName, getInnerSpace)
 import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), (+:+),
   (+:+.), (+:), (!.), capSent, ch, eS, sC, sDash, sParen)
 import Language.Drasil.Sentence.Extract (sdep, shortdep) -- exported for drasil-database FIXME: move to development package?
-import Language.Drasil.Reference (makeCite, makeCiteS, makeRef2, makeRef2S, makeCiteInfo, makeCiteInfoS, rw)
+import Language.Drasil.RefProg (RefInfo(..))
+import Language.Drasil.Reference (Reference(..), makeCite, makeCiteS, makeRef2, makeRef2S, makeCiteInfo, makeCiteInfoS, rw)
 import Language.Drasil.Symbol (Decoration, Symbol)
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol, 
   autoStage, hat, prime, staged, sub, subStr, sup, unicodeConv, upperLeft, vec,
@@ -289,7 +292,6 @@ import Language.Drasil.Misc -- all of it
 import Language.Drasil.People (People, Person, person, HasName(..),
   person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'', comparePeople)
-import Language.Drasil.RefProg (Reference(..), RefInfo(..))
 import Language.Drasil.Label.Type (getAdd, LblType(RP, Citation, URI), IRefProg(..), prepend)
 
 import Language.Drasil.UnitLang (USymb(US))

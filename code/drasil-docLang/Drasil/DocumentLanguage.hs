@@ -107,7 +107,7 @@ mkSections si dd = map doit dd
 -- | Helper for creating the reference section and subsections.
 mkRefSec :: SystemInformation -> DocDesc -> RefSec -> Section
 mkRefSec si dd (RefProg c l) = section (titleize refmat) [c]
-  (map (mkSubRef si) l) (makeSecRef "RefMat" "Reference Material") --DO NOT CHANGE LABEL OR THINGS WILL BREAK -- see Language.Drasil.Document.Extract
+  (map (mkSubRef si) l) (makeSecRef "RefMat" $ titleize refmat) -- DO NOT CHANGE LABEL OR THINGS WILL BREAK -- see Language.Drasil.Document.Extract
   where
     mkSubRef :: SystemInformation -> RefTab -> Section
     mkSubRef si' TUnits = mkSubRef si' $ TUnits' defaultTUI tOfUnitSIName

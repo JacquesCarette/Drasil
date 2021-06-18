@@ -46,6 +46,7 @@ library
       Language.Drasil.Classes
       Language.Drasil.Classes.Citations
       Language.Drasil.Classes.Core
+      Language.Drasil.Classes.Core2
       Language.Drasil.Classes.Document
       Language.Drasil.Constraint
       Language.Drasil.Data.Citation

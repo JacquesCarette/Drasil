@@ -1,0 +1,81 @@
+digraph drasillang {
+
+subgraph conceptchunk {
+	/* relationships between independent and dependent components */
+	IdeaDict -> ConceptChunk;
+    DescConceptChunk -> ConceptChunk;
+    DomainConceptChunk -> ConceptChunk;
+    
+	/* definitions for each type component */
+	ConceptChunk 	    [shape=oval, color=cyan3, label="ConceptChunk"];
+    DescConceptChunk    [shape=oval, color=cyan3, label="Description (Sentence)"];
+    DomainConceptChunk  [shape=oval, color=cyan3, label="Domain ([UID])"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph commonconcept {
+	/* relationships between independent and dependent components */
+	CI -> CommonConcept;
+    DescCommonConcept -> CommonConcept;
+    
+	/* definitions for each type component */
+	CommonConcept 	    [shape=oval, color=cyan3, label="CommonConcept"];
+    DescCommonConcept    [shape=oval, color=cyan3, label="Description (Sentence)"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph conceptinstance {
+	/* relationships between independent and dependent components */
+	ConceptChunk -> ConceptInstance;
+    RefAddConceptInstance -> ConceptInstance;
+    ShortNameConceptInstance -> ConceptInstance;
+    
+	/* definitions for each type component */
+	ConceptInstance 	    [shape=oval, color=cyan3, label="ConceptInstance"];
+    RefAddConceptInstance   [shape=oval, color=cyan3, label="Reference Address (String)"];
+    ShortNameConceptInstance  [shape=oval, color=cyan3, label="ShortName"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph citation {
+	/* relationships between independent and dependent components */
+	CitationKind -> Citation;
+    CiteFields -> Citation;
+    CitationUID -> Citation;
+    ShortNameCitation -> Citation;
+    
+	/* definitions for each type component */
+	Citation 	    [shape=oval, color=cyan3, label="Citation"];
+    CiteFields    [shape=oval, color=cyan3, label="CiteFields"];
+    CitationUID  [shape=oval, color=cyan3, label="UID"];
+    ShortNameCitation  [shape=oval, color=cyan3, label="ShortName"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph ci {
+	/* relationships between independent and dependent components */
+	CIUID -> CI;
+    NPCI -> CI;
+    DescCI -> CI;
+    DomainCI -> CI;
+    
+	/* definitions for each type component */
+	CI 	    [shape=oval, color=cyan3, label="CI"];
+    CIUID [shape=oval, color=cyan3, label="UID"];
+    NPCI [shape=oval, color=cyan3, label="Term (NP)"];
+    DescCI  [shape=oval, color=cyan3, label="Description (Sentence)"];
+    DomainCI [shape=oval, color=cyan3, label="Domain ([UID])"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+}

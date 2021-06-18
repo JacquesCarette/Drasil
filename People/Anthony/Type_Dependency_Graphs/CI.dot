@@ -1,0 +1,17 @@
+digraph ci {
+	/* relationships between independent and dependent components */
+	CIUID -> CI;
+    NPCI -> CI;
+    DescCI -> CI;
+    DomainCI -> CI;
+    
+	/* definitions for each type component */
+	CI 	    [shape=oval, color=cyan3, label="CI"];
+    CIUID [shape=oval, color=cyan3, label="UID"];
+    NPCI [shape=oval, color=cyan3, label="Term (NP)"];
+    DescCI  [shape=oval, color=cyan3, label="Description (Sentence)"];
+    DomainCI [shape=oval, color=cyan3, label="Domain ([UID])"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */

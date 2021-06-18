@@ -1,7 +1,6 @@
 module Drasil.HGHC.HeatTransfer where --whole file is used
 
 import Language.Drasil
-import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
 import Theory.Drasil (DataDefinition, ddNoRefs)
 
@@ -74,7 +73,7 @@ nuclearPhys = nc "nuclearPhys" (nounPhraseSP "nuclear physics")
 fp = nc "fp" (cn "FP")
 
 lCoolant, lClad, lEffective, lGap :: Symbol
-lCoolant   = Label "b"
-lClad      = Label "c"
-lEffective = Label "g"
-lGap       = Label "p"
+lCoolant   = label "b"
+lClad      = label "c"
+lEffective = label "g"
+lGap       = label "p"

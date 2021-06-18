@@ -3,7 +3,6 @@ module Drasil.PDController.Unitals where
 import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.SI_Units (second)
 import Language.Drasil
-import Language.Drasil.Display (Symbol(..))
 import Utils.Drasil.Concepts
 
 import Drasil.PDController.Concepts
@@ -13,31 +12,31 @@ syms, symFS, symFt, symnegInf, symposInf, syminvLaplace, symKd, symKp,
        symCT, symCS, symTStep, symTSim, symAbsTol, symRelTol,
        symDampingCoeff, symStifnessCoeff :: Symbol
 
-symnegInf = Variable "-∞"
-symposInf = Variable "∞"
-symFS = sub (Variable "F") $ Label "s"
-syminvLaplace = Variable "L⁻¹[F(s)]"
-syms = Variable "s"
-symFt = sub (Variable "f") $ Label "t"
-symKd = sub (Variable "K") $ Label "d"
-symKp = sub (Variable "K") $ Label "p"
-symYrT = sub (Variable "r") $ Label "t"
-symYrS = sub (Variable "R") $ Label "s"
-symYT = sub (Variable "y") $ Label "t"
-symYS = sub (Variable "Y") $ Label "s"
-symET = sub (Variable "e") $ Label "t"
-symES = sub (Variable "E") $ Label "s"
-symPS = sub (Variable "P") $ Label "s"
-symDS = sub (Variable "D") $ Label "s"
-symHS = sub (Variable "H") $ Label "s"
-symCT = sub (Variable "c") $ Label "t"
-symCS = sub (Variable "C") $ Label "s"
-symTStep = sub (Variable "t") $ Label "step"
-symTSim = sub (Variable "t") $ Label "sim"
-symAbsTol = Variable "AbsTol"
-symRelTol = Variable "RelTol"
-symDampingCoeff = Variable "c"
-symStifnessCoeff = Variable "k"
+symnegInf        = variable "-∞"
+symposInf        = variable "∞"
+symFS            = sub (variable "F") $ label "s"
+syminvLaplace    = variable "L⁻¹[F(s)]"
+syms             = variable "s"
+symFt            = sub (variable "f") $ label "t"
+symKd            = sub (variable "K") $ label "d"
+symKp            = sub (variable "K") $ label "p"
+symYrT           = sub (variable "r") $ label "t"
+symYrS           = sub (variable "R") $ label "s"
+symYT            = sub (variable "y") $ label "t"
+symYS            = sub (variable "Y") $ label "s"
+symET            = sub (variable "e") $ label "t"
+symES            = sub (variable "E") $ label "s"
+symPS            = sub (variable "P") $ label "s"
+symDS            = sub (variable "D") $ label "s"
+symHS            = sub (variable "H") $ label "s"
+symCT            = sub (variable "c") $ label "t"
+symCS            = sub (variable "C") $ label "s"
+symTStep         = sub (variable "t") $ label "step"
+symTSim          = sub (variable "t") $ label "sim"
+symAbsTol        = variable "AbsTol"
+symRelTol        = variable "RelTol"
+symDampingCoeff  = variable "c"
+symStifnessCoeff = variable "k"
 
 symbols :: [QuantityDict]
 symbols

@@ -4,7 +4,6 @@ module Drasil.GamePhysics.DataDefs (dataDefs, ctrOfMassDD, linDispDD, linVelDD,
   collisionAssump, rightHandAssump, rigidTwoDAssump, potEnergyDD, dataDefRefs) where
 
 import Language.Drasil
-import Language.Drasil.Display (Symbol(..))
 import Theory.Drasil (DataDefinition, dd, ddNoRefs)
 import Utils.Drasil
 import Utils.Drasil.Concepts
@@ -44,9 +43,9 @@ ctrOfMassDD = ddNoRefs ctrOfMass Nothing "ctrOfMass" [rigidBodyAssump]
 ctrOfMass :: QDefinition
 ctrOfMass = mkQuantDef posCM ctrOfMassEqn
 
--- FIXME (Variable "i") is a horrible hack
+-- FIXME (variable "i") is a horrible hack
 ctrOfMassEqn :: Expr
-ctrOfMassEqn = sumAll (Variable "j") (sy massj `mulRe` sy posj) $/ sy mTot
+ctrOfMassEqn = sumAll (variable "j") (sy massj `mulRe` sy posj) $/ sy mTot
 
 -- DD2 : Linear displacement --
 
@@ -323,7 +322,7 @@ momentOfInertia :: QDefinition
 momentOfInertia = mkQuantDef QP.momentOfInertia momentOfInertiaEqn
 
 momentOfInertiaEqn :: Expr
-momentOfInertiaEqn = sumAll (Variable "j") $ sy massj `mulRe` square (sy rRot)
+momentOfInertiaEqn = sumAll (variable "j") $ sy massj `mulRe` square (sy rRot)
 
 momentOfInertiaDesc :: Sentence
 momentOfInertiaDesc = foldlSent [S "The", getTandS QP.momentOfInertia,

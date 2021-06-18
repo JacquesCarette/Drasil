@@ -83,7 +83,7 @@ plateWidth = uqcND "plateWidth" (nounPhraseSP "plate width (short dimension)")
   [ physc $ Bounded (Exc, exactDbl 0) (Inc, sy plateLen),
     sfwrc $ Bounded (Inc, sy dimMin) (Inc, sy dimMax)] (dbl 1.2) defaultUncrt
 
-aspectRatio = uq (constrained' (dqdNoUnit aspectRatioCon (Variable "AR") Real)
+aspectRatio = uq (constrained' (dqdNoUnit aspectRatioCon (variable "AR") Real)
   [ physc $ UpFrom (Inc, exactDbl 1), 
     sfwrc $ UpTo (Inc, sy arMax)] (dbl 1.5)) defaultUncrt
 
@@ -98,10 +98,10 @@ charWeight = uqcND "charWeight" (nounPhraseSP "charge weight")
     (exactDbl 42) defaultUncrt
 
 tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
-  (Variable "TNT") Real
+  (variable "TNT") Real
   [ gtZeroConstr ] (exactDbl 1) defaultUncrt
 
-standOffDist = uq (constrained' (dqd sD (Variable "SD") Real metre)
+standOffDist = uq (constrained' (dqd sD (variable "SD") Real metre)
   [ gtZeroConstr,
     sfwrc $ Bounded (Inc, sy sdMin) (Inc, sy sdMax)] (exactDbl 45)) defaultUncrt
 
@@ -160,7 +160,7 @@ dimMin     = mkQuantDef (unitary "dimMin"
 
 arMax     = mkQuantDef (vc "arMax"
   (nounPhraseSP "maximum aspect ratio")
-  (subMax (Variable "AR")) Rational) (exactDbl 5)
+  (subMax (variable "AR")) Rational) (exactDbl 5)
 
 cWeightMax = mkQuantDef (unitary "cWeightMax" 
   (nounPhraseSP "maximum permissible input charge weight")
@@ -195,13 +195,13 @@ demand, tmDemand, lRe, tmLRe, nonFactorL, eqTNTWeight :: UnitalChunk
 
 demand      = ucs' demandq lQ Rational pascal --correct Space used?
 
-tmDemand    = ucs' load (Variable "Load") Rational pascal --correct Space used?
+tmDemand    = ucs' load (variable "Load") Rational pascal --correct Space used?
   
-lRe         = ucs' loadResis (Variable "LR") Rational pascal --correct Space used?
+lRe         = ucs' loadResis (variable "LR") Rational pascal --correct Space used?
 
-tmLRe       = ucs' capacity (Variable "capacity") Rational pascal --correct Space used?
+tmLRe       = ucs' capacity (variable "capacity") Rational pascal --correct Space used?
 
-nonFactorL  = ucs' nonFactoredL (Variable "NFL") Rational pascal --correct Space used?
+nonFactorL  = ucs' nonFactoredL (variable "NFL") Rational pascal --correct Space used?
 
 eqTNTWeight = ucs' eqTNTChar (sub (eqSymb charWeight) (eqSymb tNT)) Real 
   kilogram
@@ -240,19 +240,19 @@ gTF, loadSF :: DefinedQuantityDict
 
 dimlessLoad = vc "dimlessLoad" (nounPhraseSP "dimensionless load") (hat lQ) Real
 
-gTF           = dqdNoUnit glTyFac (Variable "GTF") Real
+gTF           = dqdNoUnit glTyFac (variable "GTF") Real
 
 isSafePb   = vc "isSafePb"   (nounPhraseSP "probability of glass breakage safety requirement")
-  (Variable "is-safePb")   Boolean
+  (variable "is-safePb")   Boolean
 isSafeProb = vc "isSafeProb" (nounPhraseSP "probability of failure safety requirement")
-  (Variable "is-safeProb") Boolean
+  (variable "is-safeProb") Boolean
 isSafeLR   = vc "isSafeLR"   (nounPhraseSP "3 second load equivalent resistance safety requirement")
-  (Variable "is-safeLR")   Boolean
+  (variable "is-safeLR")   Boolean
 isSafeLoad = vc "isSafeLoad" (nounPhraseSP "load resistance safety requirement")
-  (Variable "is-safeLoad") Boolean
+  (variable "is-safeLoad") Boolean
 
-lDurFac       = vc'' loadDurFactor (Variable "LDF") Real
-loadSF        = dqdNoUnit loadShareFac (Variable "LSF") Real
+lDurFac       = vc'' loadDurFactor (variable "LDF") Real
+loadSF        = dqdNoUnit loadShareFac (variable "LSF") Real
 
 riskFun = vc "riskFun" (nounPhraseSP "risk of failure") cB Real
 
@@ -263,10 +263,10 @@ tolLoad = vc "tolLoad" (nounPhraseSP "tolerable load")
   (sub (eqSymb dimlessLoad) lTol) Real
 
 lBreak, lDur, lFail, lTol :: Symbol
-lBreak = Label "b"
-lDur   = Label "d"
-lFail  = Label "f"
-lTol   = Label "tol"
+lBreak = label "b"
+lDur   = label "d"
+lFail  = label "f"
+lTol   = label "tol"
 
 terms :: [ConceptChunk]
 terms = [aspectRatioCon, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,

@@ -18,10 +18,10 @@ uNormalVect = dqdNoUnit CM.normalV  (vec $ hat lN) Real
 unitVect    = dqdNoUnit CM.unitV    (vec $ hat lI) Real
 unitVectj   = dqdNoUnit CM.unitV    (vec $ hat lJ) Real
 perpVect    = dqdNoUnit CM.perpV    (vec lN)       Real
-pi_         = dqd'      CM.pi_      (staged lPi (Variable "pi")) Real Nothing
-posInf      = dqd'      CM.posInf   (staged lPosInf (Variable "posInf")) Real Nothing
-negInf      = dqd'      CM.negInf   (staged lNegInf (Variable "posInf")) Real Nothing
-euclidNorm  = dqdNoUnit CM.euclidN  (Concat [Label "||", vec lD, Label "||"]) Real  
+pi_         = dqd'      CM.pi_      (staged lPi (variable "pi")) Real Nothing
+posInf      = dqd'      CM.posInf   (staged lPosInf (variable "posInf")) Real Nothing
+negInf      = dqd'      CM.negInf   (staged lNegInf (variable "posInf")) Real Nothing
+euclidNorm  = dqdNoUnit CM.euclidN  (Concat [label "||", vec lD, label "||"]) Real  
 
 
 area, diameter, surface, surArea, orientation :: UnitalChunk

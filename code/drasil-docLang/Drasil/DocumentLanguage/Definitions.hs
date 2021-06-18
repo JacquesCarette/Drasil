@@ -101,7 +101,7 @@ mkTMField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME
 mkTMField t _ l@Source fs = (show l, helperSources $ t ^. getReferences) : fs
 mkTMField t _ l@Notes fs =
   nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (t ^. getNotes)
-mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
+mkTMField _ _ l _ = error $ "Label " ++ show l ++ " not supported " ++
   "for theory models"
 
 -- | Helper function to make a list of 'Sentence's from the current system information and something that has a 'UID'.
@@ -139,7 +139,7 @@ mkDDField d m l@(Description v u) fs = (show l, buildDDescription' v u d m) : fs
 mkDDField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
 mkDDField d _ l@Source fs = (show l, helperSources $ d ^. getReferences) : fs
 mkDDField d _ l@Notes fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (d ^. getNotes)
-mkDDField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
+mkDDField _ _ l _ = error $ "Label " ++ show l ++ " not supported " ++
   "for data definitions"
 
 -- | Creates the description field for 'Contents' (if necessary) using the given verbosity and
@@ -194,7 +194,7 @@ mkIMField i _ l@OutConstraints fs =
     (i ^. out_constraints)) : fs
 mkIMField i _ l@Notes fs =
   nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (i ^. getNotes)
-mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
+mkIMField _ _ l _ = error $ "Label " ++ show l ++ " not supported " ++
   "for instance models"
 
 -- | Used for making definitions. The first pair is the symbol of the quantity we are

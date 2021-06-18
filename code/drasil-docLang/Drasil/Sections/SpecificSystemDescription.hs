@@ -15,7 +15,7 @@ module Drasil.Sections.SpecificSystemDescription
   , tInDataCstRef, tOutDataCstRef
   ) where
 
-import Language.Drasil
+import Language.Drasil hiding (variable)
 import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 

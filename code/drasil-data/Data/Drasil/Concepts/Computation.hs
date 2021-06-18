@@ -1,6 +1,7 @@
 module Data.Drasil.Concepts.Computation where
 
-import Language.Drasil
+import Language.Drasil (dcc, nc, cn', commonIdeaWithDict, Sentence,
+  ConceptChunk, CI, NamedChunk, dccWDS)
 import Utils.Drasil.Concepts
 
 import Data.Drasil.Concepts.Documentation (datum, input_, literacy, output_, 

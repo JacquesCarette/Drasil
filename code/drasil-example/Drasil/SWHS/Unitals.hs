@@ -1,6 +1,7 @@
 module Drasil.SWHS.Unitals where -- all of this file is exported
 
 import Language.Drasil
+import Language.Drasil.Display (Symbol(Concat))
 import Language.Drasil.ShortHands
 import Utils.Drasil.Concepts
 
@@ -217,7 +218,7 @@ meltFrac = dqd' (dcc "meltFrac" (nounPhraseSP "melt fraction")
 fracMin = dqd' (dcc "fracMin" 
   (nounPhraseSP "minimum fraction of the tank volume taken up by the PCM")
   "minimum fraction of the tank volume taken up by the PCM")
-   (const $ Variable "MINFRACT") Real Nothing
+   (const $ variable "MINFRACT") Real Nothing
 
 consTol = dqd' (dcc "consTol" 
   (nounPhraseSP "relative tolerance for conservation of energy") 
@@ -227,7 +228,7 @@ consTol = dqd' (dcc "consTol"
 aspectRatio = dqd' (dcc "aspectRatio" 
   (nounPhraseSP "aspect ratio")
   "ratio of tank diameter to tank length")
-   (const $ Variable "AR") Real Nothing
+   (const $ variable "AR") Real Nothing
 
 aspectRatioMin = dqd' (dcc "aspectRatioMin" 
   (nounPhraseSP "minimum aspect ratio") "minimum aspect ratio")
@@ -581,19 +582,19 @@ timeFinalMax = mkQuantDef (unitary' "timeFinalMax"
 -- Labels
 lCoil, lEnv, lFinal, lFusion, lIn, lInit, lLiquid, lMelt, lOut, lPCM, lSolid,
   lStep, lTank, lTol, lVapour, lWater :: Symbol
-lCoil   = Label "C"
-lEnv    = Label "env"
-lFinal  = Label "final"
-lFusion = Label "f"
-lIn     = Label "in"
-lInit   = Label "init"
-lLiquid = Label "L"
-lMelt   = Label "melt"
-lOut    = Label "out"
-lPCM    = Label "P"
-lSolid  = Label "S"
-lStep   = Label "step"
-lTank   = Label "tank"
-lTol    = Label "tol"
-lVapour = Label "V"
-lWater  = Label "W"
+lCoil   = label "C"
+lEnv    = label "env"
+lFinal  = label "final"
+lFusion = label "f"
+lIn     = label "in"
+lInit   = label "init"
+lLiquid = label "L"
+lMelt   = label "melt"
+lOut    = label "out"
+lPCM    = label "P"
+lSolid  = label "S"
+lStep   = label "step"
+lTank   = label "tank"
+lTol    = label "tol"
+lVapour = label "V"
+lWater  = label "W"

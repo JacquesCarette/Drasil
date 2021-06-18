@@ -2,7 +2,7 @@
 module Drasil.SSP.Body (srs, si, symbMap, printSetting) where
 
 import Data.List (nub)
-import Language.Drasil hiding (Symbol(..), Verb, number, organization, section)
+import Language.Drasil hiding (Verb, number, organization, section, variable)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts, _constants,

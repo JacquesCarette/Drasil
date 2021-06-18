@@ -2,7 +2,7 @@
 module Drasil.SWHS.Body where
 
 import Data.List (nub)
-import Language.Drasil hiding (Symbol(..), organization, section)
+import Language.Drasil hiding (organization, section, variable)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts, _constants,

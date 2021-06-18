@@ -1,6 +1,7 @@
 -- | Routines to help with Symbols and Stages.
-module Language.Drasil.Symbol.Helpers(eqSymb, codeSymb, hasStageSymbol, autoStage,
-  hat, prime, staged, sub, subStr, sup, unicodeConv, upperLeft, vec) where
+module Language.Drasil.Symbol.Helpers(eqSymb, codeSymb, hasStageSymbol,
+  autoStage, hat, prime, staged, sub, subStr, sup, unicodeConv, upperLeft,
+  vec, label, variable) where
 
 import Data.Char (isLatin1, toLower)
 import Data.Char.Properties.Names (getCharacterName)
@@ -9,6 +10,18 @@ import Data.List.Split (splitOn)
 import Language.Drasil.Classes.Core (HasSymbol(symbol))
 import Language.Drasil.Symbol (Symbol(..), Decoration(..))
 import Language.Drasil.Stages (Stage(Equational,Implementation))
+
+neSymb :: (String -> Symbol) -> String -> String -> Symbol
+neSymb _  s [] = error $ s ++ " names must be non-empty"
+neSymb sy _ s  = sy s
+
+-- | Label smart constructor, requires non-empty labels
+label :: String -> Symbol
+label = neSymb Label "label"
+
+-- | Variable smart constructor, requires non-empty variables
+variable :: String -> Symbol
+variable = neSymb Variable "variable"
 
 -- | Helper function for getting a symbol in the Equational Stage.
 eqSymb :: HasSymbol q => q -> Symbol

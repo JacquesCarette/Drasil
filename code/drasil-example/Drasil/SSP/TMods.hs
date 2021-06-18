@@ -55,9 +55,9 @@ equilibrium = tm (EquationalConstraints equilibriumCS)
 ------------------------------------  
 
 equilibriumRels :: [Expr]
-equilibriumRels = map (($= int 0) . sumAll (Variable "i") . sy) [fx, fy, genericM]
+equilibriumRels = map (($= int 0) . sumAll (variable "i") . sy) [fx, fy, genericM]
 
--- FIXME: Variable "i" is a hack.  But we need to sum over something!
+-- FIXME: variable "i" is a hack.  But we need to sum over something!
 equilibriumCS :: ConstraintSet
 equilibriumCS = mkConstraintSet
   (dccWDS "equilibriumCS" (nounPhraseSP "equilibrium") eqDesc) $

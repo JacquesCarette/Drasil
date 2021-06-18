@@ -48,7 +48,7 @@ import Drasil.PDController.Requirements
 import Drasil.PDController.SpSysDesc
        (goals, sysFigure, sysGoalInput, sysParts, sysProblemDesc, sysDescRefs)
 import Drasil.PDController.TModel (theoreticalModels, tModRefs)
-import Language.Drasil hiding (Symbol(..), Vector)
+import Language.Drasil
 import Language.Drasil.Code
        (ODEInfo, ODEMethod(..), ODEOptions, odeInfo, odeOptions, quantvar)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)

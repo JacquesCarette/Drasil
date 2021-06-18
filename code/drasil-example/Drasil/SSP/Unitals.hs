@@ -1,6 +1,7 @@
 module Drasil.SSP.Unitals where --export all of it
 
 import Language.Drasil
+import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.NounPhrase as NP
@@ -146,7 +147,7 @@ yMinSlip = uq (constrained' (makeUCWDS "y_slip^min"
 
 effCohesion = uqc "c'" (cn "effective cohesion")
   "the internal pressure that sticks particles of soil together"
-  (prime $ Variable "c") pascal Real [gtZeroConstr] (exactDbl 10000) defaultUncrt
+  (prime $ variable "c") pascal Real [gtZeroConstr] (exactDbl 10000) defaultUncrt
 
 fricAngle = uqc "varphi'" (cn "effective angle of friction")
   ("the angle of inclination with respect to the horizontal axis of " ++
@@ -172,7 +173,7 @@ waterWeight = uqc "gamma_w" (cn "unit weight of water")
 constF :: DefinedQuantityDict
 constF = dqd' (dcc "const_f" (nounPhraseSP "decision on f") 
   ("a Boolean decision on which form of f the user desires: constant if true," ++
-  " or half-sine if false")) (const (Variable "const_f")) Boolean Nothing
+  " or half-sine if false")) (const (variable "const_f")) Boolean Nothing
 
 {-Output Variables-} --FIXME: See if there should be typical values
 fs, coords  :: ConstrConcept
@@ -248,7 +249,7 @@ zcoord = makeUCWDS "z"   (nounPhraseSent $ phrase zCoord)
 critCoords = makeUCWDS "(xcs,ycs)" (cn "critical slip surface coordinates")
   (S "the set" `S.of_` pluralNP (xCoord `and_PP` yCoord) +:+
    S "that describe the vertices of the critical slip surface")
-  (Concat [sub (vec lX) lCSlip, Label ",", sub (vec lY) lCSlip]) metre
+  (Concat [sub (vec lX) lCSlip, label ",", sub (vec lY) lCSlip]) metre
 
 mobilizedShear = uc' "mobilizedShear" (cn' "mobilized shear force")
   "the shear force in the direction of potential motion" cS newton
@@ -316,7 +317,7 @@ totNrmForce = makeUCWDS "N_i" (cn "normal forces")
 nrmFSubWat = makeUCWDS "N'_i" (cn "effective normal forces")
   (S "the forces per meter" `S.inThe` phrase zDir +:+ S "for each slice of a soil surface" `sC`
    S "subtracting pore water reactive force from total reactive force") 
-  (vec (prime $ Variable "N")) forcePerMeterU
+  (vec (prime $ variable "N")) forcePerMeterU
 
 surfLoad = makeUCWDS "Q_i" (cn "external forces") 
   (S "the forces per meter" `S.inThe` phrase zDir +:+
@@ -356,7 +357,7 @@ porePressure = uc' "u" (cn "pore pressure")
   "the pressure that comes from water within the soil" lU pascal
   
 shrStress = uc' "tau_i" (cn "shear strength")
-  "the strength of a material against shear failure" (sup lTau (Label"f")) pascal
+  "the strength of a material against shear failure" (sup lTau (label "f")) pascal
 
 sliceHght = makeUCWDS "h_z,i" (cn "heights of interslice normal forces")
   (pluralNP (height `inThePS` yDir) `S.the_ofThe` S "interslice normal forces on each slice")
@@ -383,10 +384,10 @@ fy = makeUCWDS "fy" (nounPhraseSent $ phrase yCoord +:+ S "of the force")
   (S "the force acting" `S.inThe` phrase yDir) (subY cF) newton
 
 fn = uc' "F_n" (cn "total normal force") "component of a force in the normal direction"
-  (sub cF (Label "n")) newton
+  (sub cF (label "n")) newton
 
 ft = uc' "F_t" (cn "tangential force") "component of a force in the tangential direction"
-  (sub cF (Label "t")) newton
+  (sub cF (label "t")) newton
 
 nrmForceSum = uc' "F_x^G" (cn "sums of the interslice normal forces") 
   "the sums of the normal forces acting on each pair of adjacent interslice boundaries"
@@ -520,26 +521,26 @@ sum1toN = defsum (eqSymb index) (int 1) (sy numbSlices)
 lBase, lCoeff, lCoords, lCSlip, lDen, lDry, lHeights, lLeft, lMaxEtr, lMaxExt,
   lMinEtr, lMinExt, lNorm, lNormWat, lNum, lRight, lRot, lSafety, lSat, lSlip,
   lSlope, lSurface, lWatTab :: Symbol
-lBase    = Label "b"
-lCoeff   = Label "c"
-lCoords  = Label "(x,y)"
-lCSlip   = Label "cs"
-lDen     = Label "den"
-lDry     = Label "dry"
-lHeights = Label "z,w"
-lLeft    = Label "L"
-lMaxEtr  = Label "maxEtr"
-lMaxExt  = Label "maxExt"
-lMinEtr  = Label "minEtr"
-lMinExt  = Label "minExt"
-lNorm    = Label "G"
-lNormWat = Label "H"
-lNum     = Label "num"
-lRight   = Label "R"
-lRot     = Label "rot"
-lSafety  = Label "S"
-lSat     = Label "sat"
-lSlip    = Label "slip"
-lSlope   = Label "slope"
-lSurface = Label "g"
-lWatTab  = Label "wt"
+lBase    = label "b"
+lCoeff   = label "c"
+lCoords  = label "(x,y)"
+lCSlip   = label "cs"
+lDen     = label "den"
+lDry     = label "dry"
+lHeights = label "z,w"
+lLeft    = label "L"
+lMaxEtr  = label "maxEtr"
+lMaxExt  = label "maxExt"
+lMinEtr  = label "minEtr"
+lMinExt  = label "minExt"
+lNorm    = label "G"
+lNormWat = label "H"
+lNum     = label "num"
+lRight   = label "R"
+lRot     = label "rot"
+lSafety  = label "S"
+lSat     = label "sat"
+lSlip    = label "slip"
+lSlope   = label "slope"
+lSurface = label "g"
+lWatTab  = label "wt"

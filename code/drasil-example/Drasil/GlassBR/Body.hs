@@ -3,7 +3,7 @@ module Drasil.GlassBR.Body where
 
 import Control.Lens ((^.))
 import Data.List (nub)
-import Language.Drasil hiding (Symbol(..), organization, section)
+import Language.Drasil hiding (organization, section, variable)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
@@ -274,7 +274,7 @@ sysCtxUsrResp :: [Sentence]
 sysCtxUsrResp = [S "Provide the" +:+ plural inDatum +:+ S "related to the" +:+
   phraseNP (glaSlab `and_` blastTy) `sC` S "ensuring no errors in the" +:+
   plural datum +:+. S "entry",
-  S "Ensure that consistent units are used for" +:+. pluralNP (combineNINI input_  variable),
+  S "Ensure that consistent units are used for" +:+. pluralNP (combineNINI input_ variable),
   S "Ensure required" +:+ pluralNP (combineNINI software assumption) +:+
     sParen (makeRef2S $ SRS.assumpt ([]::[Contents]) ([]::[Section]))
     +:+ S "are appropriate for any particular" +:+

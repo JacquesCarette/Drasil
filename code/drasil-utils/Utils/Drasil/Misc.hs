@@ -8,6 +8,7 @@ module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, checkValidStr,
   tAndDWAcc, tAndDWSym, typUncr, underConsidertn, unwrap, weave, zipSentList, fterms) where
 
 import Language.Drasil
+import Language.Drasil.Display
 import Utils.Drasil.Fold (FoldType(List), SepType(Comma), foldlList, foldlSent)
 import qualified Utils.Drasil.Sentence as S (are, in_, is, toThe)
 
@@ -27,7 +28,7 @@ sortBySymbolTuple = sortBy (compareBySymbol `on` fst)
 
 -- | Compares two 'Symbol's and returns their order. See 'compsy' for more information.
 compareBySymbol :: HasSymbol a => a -> a -> Ordering
-compareBySymbol a b = compsy (symbol a Equational) (symbol b Equational)
+compareBySymbol a b = compsy (eqSymb a) (eqSymb b)
 
 --Ideally this would create a reference to the equation too
 --Doesn't use equation concept so utils doesn't depend on data

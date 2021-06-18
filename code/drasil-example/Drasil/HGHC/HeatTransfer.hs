@@ -73,7 +73,7 @@ nuclearPhys = nc "nuclearPhys" (nounPhraseSP "nuclear physics")
 fp = nc "fp" (cn "FP")
 
 lCoolant, lClad, lEffective, lGap :: Symbol
-lCoolant   = Label "b"
-lClad      = Label "c"
-lEffective = Label "g"
-lGap       = Label "p"
+lCoolant   = label "b"
+lClad      = label "c"
+lEffective = label "g"
+lGap       = label "p"

@@ -1,13 +1,13 @@
 digraph citation {
 	/* relationships between independent and dependent components */
 	CitationKind -> Citation;
-    CiteFields -> Citation;
+    CiteField -> Citation;
     CitationUID -> Citation;
     CitationShortName -> Citation;
     
 	/* definitions for each type component */
 	Citation 	    [shape=oval, color=cyan3, label="Citation"];
-    CiteFields    [shape=oval, color=cyan3, label="CiteFields"];
+    //CiteFields    [shape=oval, color=cyan3, label="CiteFields"];
     CitationUID  [shape=oval, color=cyan3, label="UID"];
     CitationShortName  [shape=oval, color=cyan3, label="ShortName"];
 

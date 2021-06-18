@@ -1,5 +1,4 @@
 digraph expr {
-    layout=circo
     Double -> Expr [style="dotted"];
     Integer -> Expr [style="dotted"];
     String -> Expr [style="dotted"];

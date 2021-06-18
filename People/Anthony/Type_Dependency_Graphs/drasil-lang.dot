@@ -3,13 +3,13 @@ digraph drasillang {
 subgraph conceptchunk {
 	/* relationships between independent and dependent components */
 	IdeaDict -> ConceptChunk;
-    DescConceptChunk -> ConceptChunk;
-    DomainConceptChunk -> ConceptChunk;
+    ConceptChunkDesc -> ConceptChunk;
+    ConceptChunkDomain -> ConceptChunk;
     
 	/* definitions for each type component */
 	ConceptChunk 	    [shape=oval, color=cyan3, label="ConceptChunk"];
-    DescConceptChunk    [shape=oval, color=cyan3, label="Description (Sentence)"];
-    DomainConceptChunk  [shape=oval, color=cyan3, label="Domain ([UID])"];
+    ConceptChunkDesc    [shape=oval, color=cyan3, label="Description (Sentence)"];
+    ConceptChunkDomain  [shape=oval, color=cyan3, label="Domain ([UID])"];
 
 }
 
@@ -18,11 +18,11 @@ subgraph conceptchunk {
 subgraph commonconcept {
 	/* relationships between independent and dependent components */
 	CI -> CommonConcept;
-    DescCommonConcept -> CommonConcept;
+    CommonConceptDesc -> CommonConcept;
     
 	/* definitions for each type component */
 	CommonConcept 	    [shape=oval, color=cyan3, label="CommonConcept"];
-    DescCommonConcept    [shape=oval, color=cyan3, label="Description (Sentence)"];
+    CommonConceptDesc    [shape=oval, color=cyan3, label="Description (Sentence)"];
 
 }
 
@@ -31,13 +31,13 @@ subgraph commonconcept {
 subgraph conceptinstance {
 	/* relationships between independent and dependent components */
 	ConceptChunk -> ConceptInstance;
-    RefAddConceptInstance -> ConceptInstance;
-    ShortNameConceptInstance -> ConceptInstance;
+    ConceptInstanceRefAdd -> ConceptInstance;
+    ConceptInstanceShortName -> ConceptInstance;
     
 	/* definitions for each type component */
 	ConceptInstance 	    [shape=oval, color=cyan3, label="ConceptInstance"];
-    RefAddConceptInstance   [shape=oval, color=cyan3, label="Reference Address (String)"];
-    ShortNameConceptInstance  [shape=oval, color=cyan3, label="ShortName"];
+    ConceptInstanceRefAdd   [shape=oval, color=cyan3, label="Reference Address (String)"];
+    ConceptInstanceShortName  [shape=oval, color=cyan3, label="ShortName"];
 
 }
 
@@ -46,15 +46,15 @@ subgraph conceptinstance {
 subgraph citation {
 	/* relationships between independent and dependent components */
 	CitationKind -> Citation;
-    CiteFields -> Citation;
+    CiteField -> Citation;
     CitationUID -> Citation;
-    ShortNameCitation -> Citation;
+    CitationShortName -> Citation;
     
 	/* definitions for each type component */
 	Citation 	    [shape=oval, color=cyan3, label="Citation"];
-    CiteFields    [shape=oval, color=cyan3, label="CiteFields"];
+    //CiteFields    [shape=oval, color=cyan3, label="CiteFields"];
     CitationUID  [shape=oval, color=cyan3, label="UID"];
-    ShortNameCitation  [shape=oval, color=cyan3, label="ShortName"];
+    CitationShortName  [shape=oval, color=cyan3, label="ShortName"];
 
 }
 
@@ -63,17 +63,651 @@ subgraph citation {
 subgraph ci {
 	/* relationships between independent and dependent components */
 	CIUID -> CI;
-    NPCI -> CI;
-    DescCI -> CI;
-    DomainCI -> CI;
+    CINP -> CI;
+    CIDesc -> CI;
+    CIDomain -> CI;
     
 	/* definitions for each type component */
 	CI 	    [shape=oval, color=cyan3, label="CI"];
     CIUID [shape=oval, color=cyan3, label="UID"];
-    NPCI [shape=oval, color=cyan3, label="Term (NP)"];
-    DescCI  [shape=oval, color=cyan3, label="Description (Sentence)"];
-    DomainCI [shape=oval, color=cyan3, label="Domain ([UID])"];
+    CINP [shape=oval, color=cyan3, label="Term (NP)"];
+    CIDesc  [shape=oval, color=cyan3, label="Description (Sentence)"];
+    CIDomain [shape=oval, color=cyan3, label="Domain ([UID])"];
 
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+
+subgraph constrconcept {
+	/* relationships between independent and dependent components */
+	QuantityDict -> ConstrConcept;
+    ConstrConceptConstraints -> ConstrConcept;
+    ConstrConceptMaybeExpr -> ConstrConcept;
+    
+	/* definitions for each type component */
+	ConstrConcept 	    [shape=oval, color=cyan3, label="ConstrConcept"];
+    ConstrConceptConstraints    [shape=oval, color=cyan3, label="[Constraint]"];
+    ConstrConceptMaybeExpr  [shape=oval, color=cyan3, label="Maybe Expr"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+
+subgraph definedquantitydict {
+	/* relationships between independent and dependent components */
+	ConceptChunk -> DefinedQuantityDict;
+    DefinedQuantityDictStageSymbol -> DefinedQuantityDict;
+    DefinedQuantityDictSpace -> DefinedQuantityDict;
+    DefinedQuantityDictMaybeUnitDefn -> DefinedQuantityDict;
+    
+	/* definitions for each type component */
+	DefinedQuantityDict 	    [shape=oval, color=cyan3, label="DefinedQuantityDict"];
+    DefinedQuantityDictStageSymbol    [shape=oval, color=cyan3, label="Stage Symbol"];
+    DefinedQuantityDictSpace  [shape=oval, color=cyan3, label="Space"];
+    DefinedQuantityDictMaybeUnitDefn  [shape=oval, color=cyan3, label="Maybe UnitDefn"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+subgraph qdefinition {
+	/* relationships between independent and dependent components */
+	QuantityDict -> QDefinition;
+    QDefinitionDesc -> QDefinition;
+    QDefinitionExpr -> QDefinition;
+    QDefinitionDomain -> QDefinition;
+    
+	/* definitions for each type component */
+	QDefinition 	    [shape=oval, color=cyan3, label="QDefinition"];
+    QDefinitionDesc    [shape=oval, color=cyan3, label="Description (Sentence)"];
+    QDefinitionExpr  [shape=oval, color=cyan3, label="Expr"];
+    QDefinitionDomain  [shape=oval, color=cyan3, label="Domain ([UID])"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph namedargument {
+	/* relationships between independent and dependent components */
+	QuantityDict -> NamedArgument;
+    
+	/* definitions for each type component */
+	NamedArgument 	    [shape=oval, color=cyan3, label="NamedArgument"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+subgraph namedchunk {
+	/* relationships between independent and dependent components */
+	UID -> NamedChunk;
+    NamedChunkNP -> NamedChunk;
+    
+	/* definitions for each type component */
+	NamedChunk 	    [shape=oval, color=cyan3, label="NamedChunk"];
+    NamedChunkNP   [shape=oval, color=cyan3, label="Term (NP)"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph uid {
+    
+	/* definitions for each type component */
+	UID 	    [shape=oval, color=cyan3, label="Unique Identifier (UID)"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+subgraph ideadict {
+	/* relationships between independent and dependent components */
+	NamedChunk -> IdeaDict;
+    IdeaDictAbbrev -> IdeaDict;
+    
+	/* definitions for each type component */
+	IdeaDict 	    [shape=oval, color=cyan3, label="IdeaDict"];
+    IdeaDictAbbrev  [shape=oval, color=cyan3, label="Abbreviation (Maybe String)"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+subgraph quantitydict {
+	/* relationships between independent and dependent components */
+	IdeaDict -> QuantityDict;
+    QuantityDictSpace -> QuantityDict;
+    QuantityDictStageSymbol -> QuantityDict;
+    QuantityDictMaybeUnitDefn -> QuantityDict;
+    
+	/* definitions for each type component */
+	QuantityDict 	    [shape=oval, color=cyan3, label="QuantityDict"];
+    QuantityDictSpace    [shape=oval, color=cyan3, label="Space"];
+    QuantityDictStageSymbol  [shape=oval, color=cyan3, label="Stage Symbol"];
+    QuantityDictMaybeUnitDefn  [shape=oval, color=cyan3, label="Maybe UnitDefn"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph relationconcept {
+	/* relationships between independent and dependent components */
+	ConceptChunk -> RelationConcept;
+    Relation -> RelationConcept;
+    
+	/* definitions for each type component */
+	RelationConcept 	    [shape=oval, color=cyan3, label="RelationConcept"];
+    Relation               [shape=oval, color=cyan3, label="Synonym for Expr"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph uncertainchunk {
+	/* relationships between independent and dependent components */
+	ConstrainedChunk -> UncertainChunk;
+    ConstrainedChunkUncertainty -> UncertainChunk;
+    
+	/* definitions for each type component */
+	UncertainChunk 	    [shape=oval, color=cyan3, label="UncertainChunk"];
+    ConstrainedChunkUncertainty    [shape=oval, color=cyan3, label="Uncertainty"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+subgraph uncertq {
+	/* relationships between independent and dependent components */
+	ConstrainedChunk -> UncertQ;
+    Uncertainty -> UncertQ;
+    
+	/* definitions for each type component */
+	UncertQ 	    [shape=oval, color=cyan3, label="UncertQ"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph unitdefn {
+	/* relationships between independent and dependent components */
+	ConceptChunk -> UnitDefn;
+    UnitSymbol -> UnitDefn;
+    UnitDefnDomain -> UnitDefn;
+    
+	/* definitions for each type component */
+	UnitDefn 	    [shape=oval, color=cyan3, label="UnitDefn"];
+    UnitDefnDomain  [shape=oval, color=cyan3, label="Domain ([UID])"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph unitequation {
+	/* relationships between independent and dependent components */
+	USymb -> UnitEquation;
+    UnitEquationDomain -> UnitEquation;
+    
+	/* definitions for each type component */
+	UnitEquation 	    [shape=oval, color=cyan3, label="UnitEquation"];
+    UnitEquationDomain    [shape=oval, color=cyan3, label="Domain ([UID])"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph unitalchunk {
+	/* relationships between independent and dependent components */
+	DefinedQuantityDict -> UnitalChunk;
+    UnitDefn -> UnitalChunk;
+    
+	/* definitions for each type component */
+	UnitalChunk 	    [shape=oval, color=cyan3, label="UnitalChunk"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph unitarychunk {
+	/* relationships between independent and dependent components */
+	QuantityDict -> UnitaryChunk;
+    UnitDefn -> UnitaryChunk;
+    
+	/* definitions for each type component */
+	UnitaryChunk 	    [shape=oval, color=cyan3, label="UnitaryChunk"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph unitaryconceptdict {
+	/* relationships between independent and dependent components */
+	UnitaryChunk -> UnitaryConceptDict;
+    UnitaryConceptDictDesc -> UnitaryConceptDict;
+    UnitaryConceptDictDomain -> UnitaryConceptDict;
+    
+	/* definitions for each type component */
+	UnitaryConceptDict 	    [shape=oval, color=cyan3, label="UnitaryConceptDict"];
+    UnitaryConceptDictDesc    [shape=oval, color=cyan3, label="Description (Sentence)"];
+    UnitaryConceptDictDomain  [shape=oval, color=cyan3, label="Domain ([UID])"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph citefield {
+	/* definitions for each type component */
+	CiteField 	    [shape=oval, color=cyan3, label="Fields used in citations (CiteField)"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph hp {
+    
+	/* definitions for each type component */
+	HP 	    [shape=oval, color=cyan3, label="Method of Publishing (HP)"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph citationkind {
+	/* definitions for each type component */
+	CitationKind 	    [shape=oval, color=cyan3, label="Kind of citation (Article, Book, etc.)"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph month {
+    /* definitions for each type component */
+    Month [shape=oval, color=cyan3, label="Month"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph listtype {
+    /* definitions for each type component */
+	ListType 	    [shape=oval, color=cyan3, label="For Different Kinds of Lists (ListType)"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph itemtype {
+    /* definitions for each type component */
+	ItemType 	    [shape=oval, color=cyan3, label="Item/Kind of Element in a List (ItemType)"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph contents {
+
+    UnlabelledContent -> Contents [style="dotted"];
+    LabelledContent -> Contents [style="dotted"];
+
+    /* definitions for each type component */
+	Contents 	    [shape=oval, color=cyan3, label="Contents"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph dtype {
+    /* definitions for each type component */
+	DType 	    [shape=oval, color=cyan3, label="Type of Definition or Model (DType)"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph rawcontent {
+
+    ListType -> RawContent [style="dotted"];
+    DisplayExpr -> RawContent [style="dotted"];
+
+    /* definitions for each type component */
+	RawContent 	    [shape=oval, color=cyan3, label="RawContent"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph labelledcontent {
+
+    Reference -> LabelledContent;
+    RawContent -> LabelledContent;
+
+    /* definitions for each type component */
+	LabelledContent 	    [shape=oval, color=cyan3, label="LabelledContent"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph unlabelledcontent {
+
+    RawContent -> UnlabelledContent;
+
+    /* definitions for each type component */
+	UnlabelledContent 	    [shape=oval, color=cyan3, label="UnlabelledContent"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph lbltype {
+
+    IRefProg -> LblType [style="dotted"];
+
+    /* definitions for each type component */
+	LblType 	    [shape=oval, color=cyan3, label="Labels for Referencing (LblType)"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph irefprog {
+
+    IRefProg -> IRefProg [style="dotted"];
+
+    /* definitions for each type component */
+	IRefProg 	    [shape=oval, color=cyan3, label="Names of References (IRefProg)"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph capitalizationrule {
+    /* definitions for each type component */
+	CapitalizationRule 	    [shape=oval, color=cyan3, label="CapitalizationRule"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph pluralrule {
+    /* definitions for each type component */
+	PluralRule 	    [shape=oval, color=cyan3, label="PluralRule"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph np {
+
+    PluralRule -> NP [style="dotted"];
+    CapitalizationRule -> NP [style="dotted"];
+    
+    /* definitions for each type component */
+	NP 	    [shape=oval, color=cyan3, label="Noun Phrase (NP)"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph uri {
+
+    Scheme -> URI [style="dotted"];
+    Authority -> URI [style="dotted"];
+
+
+    /* definitions for each type component */
+	URI 	    [shape=oval, color=cyan3, label="Uniform Resource Identifier (URI)"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph scheme {
+    /* definitions for each type component */
+	Scheme 	    [shape=oval, color=cyan3, label="Connection Type (Scheme)"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph authority {
+
+    Port -> Authority [style="dotted"];
+
+    /* definitions for each type component */
+	Authority 	    [shape=oval, color=cyan3, label="Authentication (Authority)"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph port {
+    /* definitions for each type component */
+	Port 	    [shape=oval, color=cyan3, label="Authentication Port (Port)"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph uncertainty {
+
+    MaybeInt -> Uncertainty [style="dotted"];
+    MaybeDouble -> Uncertainty [style="dotted"];
+
+    /* definitions for each type component */
+	Uncertainty 	    [shape=oval, color=cyan3, label="Uncertainty"];
+    MaybeInt 	    [shape=oval, color=black, label="Maybe Int"];
+    MaybeDouble 	    [shape=oval, color=black, label="Maybe Double"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph constraintreason {
+    /* definitions for each type component */
+	ConstraintReason 	    [shape=oval, color=cyan3, label="Constraints on a model (ConstraintReason)"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph constraint {
+
+    RealInterval -> Constraint [style="dotted"];
+    ConstraintReason -> Constraint [style="dotted"];
+
+    /* definitions for each type component */
+	Constraint 	    [shape=oval, color=cyan3, label="Constraint"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph derivation {
+    /* definitions for each type component */
+	Derivation 	    [shape=oval, color=cyan3, label="A Statement and Explination (Derivation)"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph displaybinop {
+    /* definitions for each type component */
+	DisplayBinOp 	    [shape=oval, color=cyan3, label="DisplayBinOp"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph displayassocbinop {
+    /* definitions for each type component */
+	DisplayAssocBinOp 	    [shape=oval, color=cyan3, label="DisplayAssocBinOp"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph displayexpr {
+
+    Expr -> DisplayExpr [style="dotted"];
+    DisplayBinOp -> DisplayExpr [style="dotted"];
+    DisplayAssocBinOp -> DisplayExpr [style="dotted"];
+
+    /* definitions for each type component */
+	DisplayExpr 	    [shape=oval, color=cyan3, label="DisplayExpr"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph expr {
+    Double -> Expr [style="dotted"];
+    Integer -> Expr [style="dotted"];
+    String -> Expr [style="dotted"];
+    Expr -> Expr [style="dotted"];
+    AssocArithOper  -> Expr [style="dotted"];
+    AssocBoolOper  -> Expr [style="dotted"];
+    DerivType -> Expr [style="dotted"];
+    ExprUID -> Expr [style="dotted"];
+    ArithBinOp -> Expr [style="dotted"];
+    EqBinOp -> Expr [style="dotted"];
+    BoolBinOp -> Expr [style="dotted"];
+    LABinOp  -> Expr [style="dotted"];
+    OrdBinOp  -> Expr [style="dotted"];
+    VVVBinOp -> Expr [style="dotted"];
+    VVNBinOp  -> Expr [style="dotted"];
+    UFunc  -> Expr [style="dotted"];
+    UFuncB -> Expr [style="dotted"];
+    UFuncVec  -> Expr [style="dotted"];
+    Completeness  -> Expr [style="dotted"];
+    DomainDesc -> Expr [style="dotted"];
+
+
+    /* definitions for each type component */
+	Expr 	    [shape=oval, color=cyan3, label="Expr"];
+    ArithBinOp 	    [shape=oval, color=cyan3, label="ArithBinOp"];
+    EqBinOp 	    [shape=oval, color=cyan3, label="EqBinOp"];
+    BoolBinOp 	    [shape=oval, color=cyan3, label="BoolBinOp"];
+    LABinOp 	    [shape=oval, color=cyan3, label="LABinOp"];
+    OrdBinOp 	    [shape=oval, color=cyan3, label="OrdBinOp"];
+    VVVBinOp 	    [shape=oval, color=cyan3, label="VVVBinOp"];
+    VVNBinOp 	    [shape=oval, color=cyan3, label="VVNBinOp"];
+    AssocArithOper 	    [shape=oval, color=cyan3, label="AssocArithOper"];
+    AssocBoolOper 	    [shape=oval, color=cyan3, label="AssocBoolOper"];
+    UFunc 	    [shape=oval, color=cyan3, label="UFunc"];
+    UFuncB 	    [shape=oval, color=cyan3, label="UFuncB"];
+    UFuncVec 	    [shape=oval, color=cyan3, label="UFuncVec"];
+    Completeness 	    [shape=oval, color=cyan3, label="Completeness"];
+    DerivType 	    [shape=oval, color=cyan3, label="DerivType"];
+    ExprUID     [shape=oval, color=cyan3, label="UID"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph seccons {
+
+    Section -> SecCons [style="dotted"];
+    Contents -> SecCons [style="dotted"];
+
+    /* definitions for each type component */
+	SecCons 	    [shape=oval, color=cyan3, label="Section Content (SecCons)"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph section {
+    
+    Reference -> Section;
+    SecCons -> Section;
+
+    /* definitions for each type component */
+	Section 	    [shape=oval, color=cyan3, label="Section"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph document {
+
+    Section -> Document;
+    Person -> Document;
+
+    /* definitions for each type component */
+	Document 	    [shape=oval, color=cyan3, label="Document"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph person {
+
+    String -> Person;
+    Conv -> Person;
+
+    /* definitions for each type component */
+	Person 	    [shape=oval, color=cyan3, label="Person (usually the author)"];
+    Conv [shape=oval, color=cyan3, label="Naming Layout"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph refinfo {
+    /* definitions for each type component */
+	RefInfo 	    [shape=oval, color=cyan3, label="Reference Information (RefInfo)"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph reference {
+
+    ReferenceUID -> Reference;
+    LblType -> Reference;
+    ShortName -> Reference;
+    RefInfo -> Reference;
+
+    /* definitions for each type component */
+	Reference 	    [shape=oval, color=cyan3, label="Reference"];
+    ReferenceUID	    [shape=oval, color=cyan3, label="UID"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph sentence {
+
+    SentenceStyle -> Sentence [style="dotted"];
+    USymb -> Sentence [style="dotted"];
+    String -> Sentence [style="dotted"];
+    Symbol -> Sentence [style="dotted"];
+    DisplayExpr -> Sentence [style="dotted"];
+    RefInfo -> Sentence [style="dotted"];
+    Sentence -> Sentence [style="dotted"];
+
+
+    /* definitions for each type component */
+	Sentence 	    [shape=oval, color=cyan3, label="Sentence"];
+	SentenceStyle	    [shape=oval, color=cyan3, label="SentenceStyle"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph shortname {
+
+    Sentence -> ShortName;
+    
+    /* definitions for each type component */
+	ShortName 	    [shape=oval, color=cyan3, label="ShortName"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph space {
+    /* definitions for each type component */
+	Space 	    [shape=oval, color=cyan3, label="Space"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph domaindesc {
+
+    Symbol -> DomainDesc [style="dotted"];
+    RTopology -> DomainDesc [style="dotted"];
+
+
+    /* definitions for each type component */
+	DomainDesc 	    [shape=oval, color=cyan3, label="DomainDesc"];
+    RTopology 	    [shape=oval, color=cyan3, label="RTopology"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+subgraph realinterval {
+
+    Inclusive -> RealInterval;
+
+    /* definitions for each type component */
+	RealInterval 	    [shape=oval, color=cyan3, label="RealInterval"];
+    Inclusive 	    [shape=oval, color=cyan3, label="Bounds on an interval (Inclusive)"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+
+
+subgraph unitsymbol {
+
+    USymb -> UDefn;
+    USymb -> UnitSymbol;
+    /* definitions for each type component */
+	UDefn 	    [shape=oval, color=cyan3, label="Relative Units (UDefn)"];
+    UnitSymbol 	    [shape=oval, color=cyan3, label="UnitSymbol"];
+    USymb 	    [shape=oval, color=cyan3, label="USymb"];
 }
 
 /* dot -Tpng sample.dot -o sample.png */

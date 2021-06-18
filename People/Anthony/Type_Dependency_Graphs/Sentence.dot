@@ -1,7 +1,7 @@
 digraph sentence {
 
     SentenceStyle -> Sentence [style="dotted"];
-    Usymb -> Sentence [style="dotted"];
+    USymb -> Sentence [style="dotted"];
     String -> Sentence [style="dotted"];
     Symbol -> Sentence [style="dotted"];
     DisplayExpr -> Sentence [style="dotted"];

@@ -6,7 +6,7 @@ import Control.Lens ((^.))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Expr (Expr(..), Relation, DerivType(..), ($^), ($/), AssocArithOper(..),
   LABinOp(..), VVVBinOp(..), UFunc(..), UFuncB(..), UFuncVec(..), Completeness(..), addRe)
-import Language.Drasil.Space (Space, RTopology(..), DomainDesc(..), RealInterval)
+import Language.Drasil.Space (RTopology(..), DomainDesc(..), RealInterval)
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
 import Language.Drasil.Classes (IsArgumentName)
 
@@ -113,12 +113,6 @@ str = Str
 -- | Smart constructors for percents.
 perc :: Integer -> Integer -> Expr
 perc = Perc
-
--- | Smart constructor for set membership.
--- FIXME: first argument really ought to be restricted to a
--- 'Variable', as 'IsIn' should only be used as a type proxy.
-isin :: Expr -> Space -> Expr
-isin = IsIn
 
 -- | Smart constructor for the summation, product, and integral functions over an interval.
 defint, defsum, defprod :: Symbol -> Expr -> Expr -> Expr -> Expr

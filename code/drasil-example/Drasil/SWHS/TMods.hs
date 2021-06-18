@@ -42,7 +42,7 @@ consThermE :: TheoryModel
 consThermE = tm (EquationalConstraints consThermECS)
   [qw thFluxVect, qw gradient, qw volHtGen,
     qw density, qw heatCapSpec, qw temp, qw time] ([] :: [ConceptChunk])
-  [] [consThermERel] [] [consThemESrc] "consThermE" consThermENotes
+  [] [toDispExpr consThermERel] [] [consThemESrc] "consThermE" consThermENotes
 
 consThermECS :: ConstraintSet
 consThermECS = mkConstraintSet consCC rels
@@ -58,7 +58,7 @@ consThermERel = neg (sy gradient) $. sy thFluxVect `addRe` sy volHtGen $=
 consThemESrc :: Reference
 consThemESrc = makeURI "consThemESrc"
   "http://www.efunda.com/formulae/heat_transfer/conduction/overview_cond.cfm" $
-  shortname' "Fourier Law of Heat Conduction and Heat Equation"
+  shortname' $ S "Fourier Law of Heat Conduction and Heat Equation"
 
 consThermENotes :: [Sentence]
 consThermENotes = map foldlSent [
@@ -81,7 +81,7 @@ sensHtETemplate :: PhaseChange -> Sentence -> TheoryModel
 sensHtETemplate pc desc = tm (EquationalModel qd)
   [qw sensHeat, qw htCapS, qw mass,
     qw deltaT, qw meltPt, qw temp, qw htCapL, qw boilPt, qw htCapV] ([] :: [ConceptChunk])
-  [] [relat qd] [] [sensHtESrc] "sensHtE" [desc]
+  [qd] [] [] [sensHtESrc] "sensHtE" [desc]
     where
       qd = sensHtEQD pc eqn desc
       eqn = sensHtEEqn pc
@@ -96,7 +96,7 @@ sensHtEQD pc eqn desc = fromEqnSt' "sensHeat" np desc (symbol sensHeat) (sensHea
 sensHtESrc :: Reference
 sensHtESrc = makeURI "sensHtESrc"
   "http://en.wikipedia.org/wiki/Sensible_heat" $
-  shortname' "Definition of Sensible Heat"
+  shortname' $ S "Definition of Sensible Heat"
 
 sensHtEEqn :: PhaseChange -> Expr
 sensHtEEqn pChange = case pChange of
@@ -116,7 +116,7 @@ sensHtEdesc :: Sentence
 sensHtEdesc = foldlSent [
   atStart sensHeat :+: S "ing occurs as long as the material does not reach a",
   phrase temp, S "where a", phrase phaseChange, (S "occurs" !.), atStartNP (a_ phaseChange),
-  S "occurs if" +:+. (E (sy temp $= sy boilPt) `S.or_` E (sy temp $= sy meltPt)),
+  S "occurs if" +:+. (eS (sy temp $= sy boilPt) `S.or_` eS (sy temp $= sy meltPt)),
   S "If this is the case" `sC` S "refer to", makeRef2S latentHtE]
 
 --How to have new lines in the description?
@@ -132,7 +132,7 @@ sensHtEdesc = foldlSent [
 latentHtE :: TheoryModel
 latentHtE = tm (OthModel latentHtERC)
   [qw latentHeat, qw time, qw tau] ([] :: [ConceptChunk])
-  [] [latHtEEqn] [] [latHtESrc] "latentHtE" latentHtENotes
+  [] [toDispExpr latHtEEqn] [] [latHtESrc] "latentHtE" latentHtENotes
 
 latentHtERC :: RelationConcept
 latentHtERC = makeRC "latentHtERC"
@@ -146,13 +146,13 @@ latHtEEqn = apply1 latentHeat time $=
 
 latHtESrc :: Reference
 latHtESrc = makeURI "latHtESrc" "http://en.wikipedia.org/wiki/Latent_heat" $
-  shortname' "Definition of Latent Heat"
+  shortname' $ S "Definition of Latent Heat"
 
 latentHtENotes :: [Sentence]
 latentHtENotes = map foldlSent [
   [ch latentHeat `S.isThe` S "change" `S.in_` phrase thermalEnergy,
    sParen (phrase latentHeat +:+ phrase energy)],
-  [E latHtEEqn `S.isThe` phrase rOfChng `S.of_` ch latentHeat `S.wrt` 
+  [eS latHtEEqn `S.isThe` phrase rOfChng `S.of_` ch latentHeat `S.wrt` 
    phrase time, ch tau],
   [ch time `S.isThe` phrase time, S "elapsed" `sC` S "as long as the",
    phrase phaseChange, S "is not complete"],
@@ -166,7 +166,7 @@ latentHtENotes = map foldlSent [
 nwtnCooling :: TheoryModel
 nwtnCooling = tm (OthModel nwtnCoolingRC)
   [qw latentHeat, qw time, qw htTransCoeff, qw deltaT] ([] :: [ConceptChunk])
-  [] [nwtnCoolingEqn] [] [makeCiteInfo incroperaEtAl2007 $ Page [8]]
+  [] [toDispExpr nwtnCoolingEqn] [] [makeCiteInfo incroperaEtAl2007 $ Page [8]]
   "nwtnCooling" nwtnCoolingNotes
 
 nwtnCoolingRC :: RelationConcept
@@ -183,7 +183,7 @@ nwtnCoolingNotes = map foldlSent [
    S "proportional to the difference in", plural temp, S "between the body and its surroundings"],
   [ch htTransCoeff, S "is assumed to be independent" `S.of_` ch temp,
    sParen (S "from" +:+ makeRef2S assumpHTCC)],
-  [E (apply1 deltaT time $= apply1 temp time $- apply1 tempEnv time) `S.isThe`
+  [E (defines (apply1 deltaT time) (apply1 temp time $- apply1 tempEnv time)) `S.isThe`
    S "time-dependant thermal gradient between the environment and the object"]]
 
 -- References --

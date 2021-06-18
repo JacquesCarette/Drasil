@@ -4,8 +4,9 @@ module Language.Drasil.Chunk.Concept.Core(ConceptChunk(ConDict), CommonConcept(C
   , sDom)
   where
 
-import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname),
+import Language.Drasil.Classes.Core (HasUID(uid),
   HasRefAddress(getRefAdd), Referable(refAdd, renderRef))
+import Language.Drasil.Classes.Core2 (HasShortName(shortname))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), CommonIdea(abrv))
 import Language.Drasil.Chunk.CommonIdea (CI)

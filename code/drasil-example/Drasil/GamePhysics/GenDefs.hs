@@ -80,11 +80,11 @@ accelGravityExpr = neg ((sy QP.gravitationalConst `mulRe` sy mLarger $/
 
 accelGravitySrc :: Reference
 accelGravitySrc = makeURI "accelGravitySrc" "https://en.wikipedia.org/wiki/Gravitational_acceleration" $
-  shortname' "Definition of Gravitational Acceleration"
+  shortname' $ S "Definition of Gravitational Acceleration"
 
 accelGravityDeriv :: Derivation
 accelGravityDeriv = mkDerivName (phrase QP.gravitationalAccel)
-                      (weave [accelGravityDerivSentences, map E accelGravityDerivEqns])
+                      (weave [accelGravityDerivSentences, map eS accelGravityDerivEqns])
 
 accelGravityDerivSentences :: [Sentence]
 accelGravityDerivSentences = map foldlSentCol [accelGravityDerivSentence1,
@@ -161,7 +161,7 @@ impulseExpr = (neg (exactDbl 1 `addRe` sy QP.restitutionCoef) `mulRe` sy initRel
 
 impulseSrc :: Reference
 impulseSrc = makeURI "impulseSrc" "http://www.chrishecker.com/images/e/e7/Gdmphys3.pdf" $
-  shortname' "Impulse for Collision Ref"
+  shortname' $ S "Impulse for Collision Ref"
 
 -- References --
 genDefRefs :: [Reference]

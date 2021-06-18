@@ -31,8 +31,8 @@ instance Idea               GenDefn where getA          = getA . (^. mk)
 instance Definition         GenDefn where defn          = mk . defn
 -- | Finds the domain of the 'GenDefn'.
 instance ConceptDomain      GenDefn where cdom          = cdom . (^. mk)
--- | Finds the relation expression for a 'GenDefn'.
-instance ExprRelat          GenDefn where relat         = relat . (^. mk)
+-- | Converts the 'GenDefn's related expression into the display language.
+instance Display            GenDefn where toDispExpr    = toDispExpr . (^. mk)
 -- | Finds the derivation of the 'GenDefn'. May contain Nothing.
 instance HasDerivation      GenDefn where derivations   = deri
 -- | Finds 'Reference's contained in the 'GenDefn'.
@@ -67,13 +67,13 @@ gd' :: IsUnit u => UID -> ModelKinds -> Maybe u ->
   Maybe Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
 gd' gid _     _   _     []   _  = error $ "Source field of " ++ gid ++ " is empty"
 gd' gid mkind u derivs refs sn_ = 
-  GD gid mkind (fmap unitWrapper u) derivs refs (shortname' sn_) (prependAbrv genDefn sn_)
+  GD gid mkind (fmap unitWrapper u) derivs refs (shortname' $ S sn_) (prependAbrv genDefn sn_)
 
 -- | Smart constructor for general definitions with no references.
 gdNoRefs' :: IsUnit u => UID -> ModelKinds -> Maybe u ->
   Maybe Derivation -> String -> [Sentence] -> GenDefn
 gdNoRefs' gid mkind u derivs sn_ = 
-  GD gid mkind (fmap unitWrapper u) derivs [] (shortname' sn_) (prependAbrv genDefn sn_)
+  GD gid mkind (fmap unitWrapper u) derivs [] (shortname' $ S sn_) (prependAbrv genDefn sn_)
 
 -- | Grab all related 'QDefinitions' from a list of general definitions.
 getEqModQdsFromGd :: [GenDefn] -> [QDefinition]

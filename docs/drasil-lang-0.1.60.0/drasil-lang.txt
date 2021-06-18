@@ -9,6 +9,77 @@
 @package drasil-lang
 @version 0.1.60.0
 
+module Language.Drasil.Display
+
+-- | Decorations on symbols/characters such as hats or Vector
+--   representations (determines bolding, italics, etc).
+data Decoration
+Hat :: Decoration
+Vector :: Decoration
+Prime :: Decoration
+
+-- | A <a>Symbol</a> is actually going to be a graphical description of
+--   what gets rendered as a (unique) symbol. This is actually NOT based on
+--   semantics at all, but just a description of how things look.
+--   
+--   Symbols can be:
+--   
+--   <ul>
+--   <li><tt><a>Variable</a></tt> (string such as "x" that represent a
+--   value that can vary)</li>
+--   <li><tt><a>Label</a></tt> (strings such as "max" or "target" that
+--   represent a single idea)</li>
+--   <li><tt><a>Special</a></tt> characters (ex. unicode)</li>
+--   <li><tt>Decorated</tt> symbols</li>
+--   <li><tt>Concatenations</tt> of symbols, including subscripts and
+--   superscripts</li>
+--   <li><tt><a>Empty</a></tt>! (this is to give this a monoid-like
+--   flavour)</li>
+--   </ul>
+data Symbol
+Variable :: String -> Symbol
+Label :: String -> Symbol
+Integ :: Int -> Symbol
+Special :: Special -> Symbol
+Atop :: Decoration -> Symbol -> Symbol
+
+-- | Order of Symbols: upleft lowleft upright lowright base
+--   
+--   <pre>
+--   Corners [1]   [2]   [3]   [4]   [5]
+--   </pre>
+--   
+--   <pre>
+--   Visually:  [1]   [3]
+--   
+--                 [5]
+--   
+--              [2]   [4]
+--   </pre>
+Corners :: [Symbol] -> [Symbol] -> [Symbol] -> [Symbol] -> Symbol -> Symbol
+
+-- | Concatentation of two symbols: <tt>[s1, s2] -&gt; s1s2</tt>
+Concat :: [Symbol] -> Symbol
+Empty :: Symbol
+
+-- | The default compare function that sorts all the lower case symbols
+--   after the upper case ones.
+--   
+--   Comparation is used twice for each <tt>Atomic</tt> case, once for
+--   making sure they are the same letter, once for case sensitive. As far
+--   as this comparison is considered, <tt>Δ</tt> is a "decoration" and
+--   ignored unless the compared symbols are the exact same, in which case
+--   it is ordered after the undecorated symbol.
+--   
+--   Superscripts and subscripts are ordered after the base symbols
+--   (because they add additional context to a symbol). For example:
+--   `v_f^{AB}` (expressed in LaTeX notation for clarity), where
+--   <tt>v_f</tt> is a final velocity, and the `^{AB}` adds context that it
+--   is the final velocity between points <tt>A</tt> and <tt>B</tt>. In
+--   these cases, the sorting of `v_f^{AB}` should be following
+--   <tt>v_f</tt> as it is logical to place it with its parent concept.
+compsy :: Symbol -> Symbol -> Ordering
+
 
 -- | Alphabet of capital/lowercase English letters as symbols
 module Language.Drasil.ShortHands
@@ -2250,9 +2321,6 @@ getInnerSpace :: Space -> Space
 -- | Decorations on symbols/characters such as hats or Vector
 --   representations (determines bolding, italics, etc).
 data Decoration
-Hat :: Decoration
-Vector :: Decoration
-Prime :: Decoration
 
 -- | A <a>Symbol</a> is actually going to be a graphical description of
 --   what gets rendered as a (unique) symbol. This is actually NOT based on
@@ -2273,48 +2341,6 @@ Prime :: Decoration
 --   flavour)</li>
 --   </ul>
 data Symbol
-Variable :: String -> Symbol
-Label :: String -> Symbol
-Integ :: Int -> Symbol
-Special :: Special -> Symbol
-Atop :: Decoration -> Symbol -> Symbol
-
--- | Order of Symbols: upleft lowleft upright lowright base
---   
---   <pre>
---   Corners [1]   [2]   [3]   [4]   [5]
---   </pre>
---   
---   <pre>
---   Visually:  [1]   [3]
---   
---                 [5]
---   
---              [2]   [4]
---   </pre>
-Corners :: [Symbol] -> [Symbol] -> [Symbol] -> [Symbol] -> Symbol -> Symbol
-
--- | Concatentation of two symbols: <tt>[s1, s2] -&gt; s1s2</tt>
-Concat :: [Symbol] -> Symbol
-Empty :: Symbol
-
--- | The default compare function that sorts all the lower case symbols
---   after the upper case ones.
---   
---   Comparation is used twice for each <tt>Atomic</tt> case, once for
---   making sure they are the same letter, once for case sensitive. As far
---   as this comparison is considered, <tt>Δ</tt> is a "decoration" and
---   ignored unless the compared symbols are the exact same, in which case
---   it is ordered after the undecorated symbol.
---   
---   Superscripts and subscripts are ordered after the base symbols
---   (because they add additional context to a symbol). For example:
---   `v_f^{AB}` (expressed in LaTeX notation for clarity), where
---   <tt>v_f</tt> is a final velocity, and the `^{AB}` adds context that it
---   is the final velocity between points <tt>A</tt> and <tt>B</tt>. In
---   these cases, the sorting of `v_f^{AB}` should be following
---   <tt>v_f</tt> as it is logical to place it with its parent concept.
-compsy :: Symbol -> Symbol -> Ordering
 
 -- | Create a table body (not including header row) by applying the given
 --   functions to the column elements of the table rows (in order). The
@@ -2434,6 +2460,12 @@ upperLeft :: Symbol -> Symbol -> Symbol
 
 -- | Helper for creating a Vector symbol.
 vec :: Symbol -> Symbol
+
+-- | Label smart constructor, requires non-empty labels
+label :: String -> Symbol
+
+-- | Variable smart constructor, requires non-empty variables
+variable :: String -> Symbol
 
 -- | Holds any extra information needed for a <tt>Reference</tt>, be it an
 --   equation, pages, a note, or nothing.

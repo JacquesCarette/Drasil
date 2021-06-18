@@ -8,8 +8,8 @@ import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
   _sys, _sysinfodb, _usedinfodb)
 import Language.Drasil hiding (C)
 import Utils.Drasil
-import Drasil.DocLang
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
+--import Drasil.DocLang
+--import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 
 
 -- matching the format of an example 
@@ -67,13 +67,13 @@ allRefs = map rw sections ++ [imageRef, gitHubRef, caseStudyTabRef, docsRef, ful
 
 -- need section references
 headerSecRef, introSecRef, caseStudySecRef, exampleSecRef, docsSecRef, analysisSecRef, graphSecRef :: Reference
-headerSecRef = makeSecRef "Header" "Header"
-introSecRef = makeSecRef "Introduction" "Introduction"
-caseStudySecRef = makeSecRef "Case Study" "Case Study"
-exampleSecRef = makeSecRef "Examples" "Examples"
-docsSecRef = makeSecRef "Documentation" "Documentation"
-analysisSecRef = makeSecRef "Analysis" "Analysis"
-graphSecRef = makeSecRef "Dependency Graphs" "Dependency Graphs"
+headerSecRef = makeSecRef "Header" $ S "Header"
+introSecRef = makeSecRef "Introduction" $ S "Introduction"
+caseStudySecRef = makeSecRef "Case Study" $ S "Case Study"
+exampleSecRef = makeSecRef "Examples" $ S "Examples"
+docsSecRef = makeSecRef "Documentation" $ S "Documentation"
+analysisSecRef = makeSecRef "Analysis" $ S "Analysis"
+graphSecRef = makeSecRef "Dependency Graphs" $ S "Dependency Graphs"
 
 --Hardcoded version of existing website.--
 
@@ -93,7 +93,7 @@ imageRef :: Reference
 imageRef = makeFigRef "Drasil"
 
 gitHubRef :: Reference
-gitHubRef = Reference "gitHubRepo" (URI gitHubInfoURL) (shortname' "gitHubRepo") None
+gitHubRef = Reference "gitHubRepo" (URI gitHubInfoURL) (shortname' $ S "gitHubRepo") None
 
 websiteTitle, gitHubInfoName :: String
 gitHubInfoURL, imagePath :: FilePath
@@ -207,7 +207,10 @@ caseStudyList :: ListType
 caseStudyList = Bullet $ zip (zipWith3 mkLegendListFunc legendTitles legendSymbs legendConts) $ repeat Nothing
 
 mkLegendListFunc :: Sentence -> [Sentence] -> [Sentence] -> ItemType
-mkLegendListFunc t symbs conts = Nested t $ Simple $ zip3 symbs (map Flat conts) $ repeat Nothing
+mkLegendListFunc t symbs conts = Nested t $ Bullet $ zip (zipWith mkTandDSent symbs conts) $ repeat Nothing
+
+mkTandDSent :: Sentence -> Sentence -> ItemType
+mkTandDSent s def = Flat $ s +:+ S "-" +:+ def
 
 legendTitles :: [Sentence]
 legendTitles = map S [modularityTitle, implementTypeTitle, loggingTitle, inStructTitle, conStructTitle, conRepTitle, realNumRepTitle]
@@ -394,16 +397,16 @@ projectileCase4Dox   = ["cpp", "csharp", "java", "python"]
 projectileCase5Dox   = ["cpp", "csharp", "java", "python"]
 
 getHTMLRef, getPDFRef :: String -> Reference
-getHTMLRef ex = Reference ("htmlRef" ++ ex) (URI (getHTMLPath ex)) (shortname' ("htmlRef" ++ ex)) None
-getPDFRef ex = Reference ("pdfRef" ++ ex) (URI (getPDFPath ex)) (shortname' ("pdfRef" ++ ex)) None
+getHTMLRef ex = Reference ("htmlRef" ++ ex) (URI (getHTMLPath ex)) (shortname' $ S ("htmlRef" ++ ex)) None
+getPDFRef ex = Reference ("pdfRef" ++ ex) (URI (getPDFPath ex)) (shortname' $ S ("pdfRef" ++ ex)) None
 getHTMLPath, getPDFPath :: String -> FilePath
 getHTMLPath ex = "https://jacquescarette.github.io/Drasil/examples/" ++ ex ++ "/srs/" ++ ex ++ "_SRS.html"
 getPDFPath ex = "https://jacquescarette.github.io/Drasil/examples/" ++ ex ++ "/srs/" ++ ex ++ "_SRS.pdf"
 
 getCodeRef :: String -> String -> String -> Reference
 getDoxRef :: String -> String -> Reference
-getCodeRef hash ex lang = Reference ("codeRef" ++ ex ++ lang) (URI (getCodePath hash ex lang)) (shortname' ("codeRef" ++ ex ++ lang)) None
-getDoxRef ex lang = Reference ("doxRef" ++ ex ++ lang) (URI (getDoxPath ex lang)) (shortname' ("doxRef" ++ ex ++ lang)) None
+getCodeRef hash ex lang = Reference ("codeRef" ++ ex ++ lang) (URI (getCodePath hash ex lang)) (shortname' $ S ("codeRef" ++ ex ++ lang)) None
+getDoxRef ex lang = Reference ("doxRef" ++ ex ++ lang) (URI (getDoxPath ex lang)) (shortname' $ S ("doxRef" ++ ex ++ lang)) None
 getCodePath :: String -> String -> String -> FilePath
 getDoxPath :: String -> String -> FilePath
 getCodePath hash ex lang = "https://github.com/JacquesCarette/Drasil/tree/" ++ hash ++ "/code/stable/" ++ ex ++ "/src/" ++ lang
@@ -448,8 +451,8 @@ haddockDocsTitle = S "Haddock Documentation"
 haddockDocsDesc = S "The current Haddock documentation" +:+ makeRef2S docsRef +:+ S "for the Drasil framework. A variant with fully exposed modules" +:+ makeRef2S fullDocsRef +:+ S "is also available."
 docsPath = "docs/index.html"
 fullDocsPath = "docs/full/index.html"
-docsRef = Reference "haddockDocs" (URI docsPath) (shortname' "HaddockDocs") None
-fullDocsRef = Reference "fullHaddockDocs" (URI fullDocsPath) (shortname' "fullHaddockDocs") None
+docsRef = Reference "haddockDocs" (URI docsPath) (shortname' $ S "HaddockDocs") None
+fullDocsRef = Reference "fullHaddockDocs" (URI fullDocsPath) (shortname' $ S "fullHaddockDocs") None
 
 ---------------------------------------------------------
 --analysis section
@@ -465,8 +468,8 @@ drasilDataTableTitle = S "Drasil Data Table"
 dataTableDesc = S "Here is the updated Data Table" +:+ makeRef2S dataTableHTMLRef +:+ S "for the Drasil framework. There is also a downloadable version" +:+ makeRef2S dataTableCSVRef +:+ S "(csv format)."
 dataTableHTMLPath = "analysis/DataTable.html"
 dataTableCSVPath = "analysis/DataTable.csv"
-dataTableHTMLRef = Reference "dataTableHTML" (URI dataTableHTMLPath) (shortname' "dataTableHTML") None
-dataTableCSVRef = Reference "dataTableCSV" (URI dataTableCSVPath) (shortname' "dataTableCSV") None
+dataTableHTMLRef = Reference "dataTableHTML" (URI dataTableHTMLPath) (shortname' $ S "dataTableHTML") None
+dataTableCSVRef = Reference "dataTableCSV" (URI dataTableCSVPath) (shortname' $ S "dataTableCSV") None
 
 ----------------------------------------------------------
 --graphs section
@@ -481,7 +484,7 @@ drasilDepGraphRefs :: [Reference]
 packDepGraphTitle = S "Package Dependency Graphs"
 drasilFolders = ["drasil-build", "drasil-code", "drasil-data", "drasil-database", "drasil-docLang", "drasil-example", "drasil-gen", "drasil-gool", "drasil-lang", "drasil-printers", "drasil-theory", "drasil-utils"]
 drasilDepGraphPaths = map (\x -> "graphs/" ++ x ++ ".pdf") drasilFolders
-drasilDepGraphRefs = zipWith (\x y -> Reference x (URI y) (shortname' x) None) drasilFolders drasilDepGraphPaths
+drasilDepGraphRefs = zipWith (\x y -> Reference x (URI y) (shortname' $ S x) None) drasilFolders drasilDepGraphPaths
 
 folderList :: RawContent
 folderList = Enumeration $ Bullet $ zip folderList' $ repeat Nothing

@@ -1,0 +1,14 @@
+digraph conceptinstance {
+	/* relationships between independent and dependent components */
+	ConceptChunk -> ConceptInstance;
+    RefAddConceptInstance -> ConceptInstance;
+    ShortNameConceptInstance -> ConceptInstance;
+    
+	/* definitions for each type component */
+	ConceptInstance 	    [shape=oval, color=cyan3, label="ConceptInstance"];
+    RefAddConceptInstance   [shape=oval, color=cyan3, label="Reference Address (String)"];
+    ShortNameConceptInstance  [shape=oval, color=cyan3, label="ShortName"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */

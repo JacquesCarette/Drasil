@@ -1,0 +1,12 @@
+digraph commonconcept {
+	/* relationships between independent and dependent components */
+	CI -> CommonConcept;
+    DescCommonConcept -> CommonConcept;
+    
+	/* definitions for each type component */
+	CommonConcept 	    [shape=oval, color=cyan3, label="CommonConcept"];
+    DescCommonConcept    [shape=oval, color=cyan3, label="Description (Sentence)"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */

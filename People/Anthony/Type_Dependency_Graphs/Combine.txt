@@ -1,0 +1,2 @@
+The command to combine the files:
+m4 Drasil-langCombine.m4 > drasil-lang.dot

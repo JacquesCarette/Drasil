@@ -8,7 +8,7 @@
 </span><span id="line-8"></span><span>
 </span><span id="line-9"></span><span class="hs-comment">-- | Binary Display Operations</span><span>
 </span><span id="line-10"></span><span class="hs-keyword">data</span><span> </span><span id="DisplayBinOp"><span class="annot"><a href="Language.Drasil.DisplayExpr.html#DisplayBinOp"><span class="hs-identifier hs-var">DisplayBinOp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Defines"><span class="annot"><a href="Language.Drasil.DisplayExpr.html#Defines"><span class="hs-identifier hs-var">Defines</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="IsIn"><span class="annot"><a href="Language.Drasil.DisplayExpr.html#IsIn"><span class="hs-identifier hs-var">IsIn</span></a></span></span><span>
-</span><span id="line-11"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679360134"><span id="local-6989586621679360136"><span class="annot"><span class="annottext">DisplayBinOp -&gt; DisplayBinOp -&gt; Bool
+</span><span id="line-11"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679361333"><span id="local-6989586621679361335"><span class="annot"><span class="annottext">DisplayBinOp -&gt; DisplayBinOp -&gt; Bool
 (DisplayBinOp -&gt; DisplayBinOp -&gt; Bool)
 -&gt; (DisplayBinOp -&gt; DisplayBinOp -&gt; Bool) -&gt; Eq DisplayBinOp
 forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
@@ -16,7 +16,7 @@ forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
 $c/= :: DisplayBinOp -&gt; DisplayBinOp -&gt; Bool
 == :: DisplayBinOp -&gt; DisplayBinOp -&gt; Bool
 $c== :: DisplayBinOp -&gt; DisplayBinOp -&gt; Bool
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679360127"><span id="local-6989586621679360129"><span id="local-6989586621679360131"><span class="annot"><span class="annottext">Int -&gt; DisplayBinOp -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679361326"><span id="local-6989586621679361328"><span id="local-6989586621679361330"><span class="annot"><span class="annottext">Int -&gt; DisplayBinOp -&gt; ShowS
 [DisplayBinOp] -&gt; ShowS
 DisplayBinOp -&gt; String
 (Int -&gt; DisplayBinOp -&gt; ShowS)
@@ -35,7 +35,7 @@ $cshowsPrec :: Int -&gt; DisplayBinOp -&gt; ShowS
 </span><span id="line-12"></span><span>
 </span><span id="line-13"></span><span class="hs-comment">-- | Associative Binary Display Operations</span><span>
 </span><span id="line-14"></span><span class="hs-keyword">data</span><span> </span><span id="DisplayAssocBinOp"><span class="annot"><a href="Language.Drasil.DisplayExpr.html#DisplayAssocBinOp"><span class="hs-identifier hs-var">DisplayAssocBinOp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="And"><span class="annot"><a href="Language.Drasil.DisplayExpr.html#And"><span class="hs-identifier hs-var">And</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Equivalence"><span class="annot"><a href="Language.Drasil.DisplayExpr.html#Equivalence"><span class="hs-identifier hs-var">Equivalence</span></a></span></span><span>
-</span><span id="line-15"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679360120"><span id="local-6989586621679360122"><span class="annot"><span class="annottext">DisplayAssocBinOp -&gt; DisplayAssocBinOp -&gt; Bool
+</span><span id="line-15"></span><span>  </span><span class="hs-keyword">deriving</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679361319"><span id="local-6989586621679361321"><span class="annot"><span class="annottext">DisplayAssocBinOp -&gt; DisplayAssocBinOp -&gt; Bool
 (DisplayAssocBinOp -&gt; DisplayAssocBinOp -&gt; Bool)
 -&gt; (DisplayAssocBinOp -&gt; DisplayAssocBinOp -&gt; Bool)
 -&gt; Eq DisplayAssocBinOp
@@ -44,7 +44,7 @@ forall a. (a -&gt; a -&gt; Bool) -&gt; (a -&gt; a -&gt; Bool) -&gt; Eq a
 $c/= :: DisplayAssocBinOp -&gt; DisplayAssocBinOp -&gt; Bool
 == :: DisplayAssocBinOp -&gt; DisplayAssocBinOp -&gt; Bool
 $c== :: DisplayAssocBinOp -&gt; DisplayAssocBinOp -&gt; Bool
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679360114"><span id="local-6989586621679360116"><span id="local-6989586621679360118"><span class="annot"><span class="annottext">Int -&gt; DisplayAssocBinOp -&gt; ShowS
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var hs-var hs-var">Eq</span></span></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679361313"><span id="local-6989586621679361315"><span id="local-6989586621679361317"><span class="annot"><span class="annottext">Int -&gt; DisplayAssocBinOp -&gt; ShowS
 [DisplayAssocBinOp] -&gt; ShowS
 DisplayAssocBinOp -&gt; String
 (Int -&gt; DisplayAssocBinOp -&gt; ShowS)

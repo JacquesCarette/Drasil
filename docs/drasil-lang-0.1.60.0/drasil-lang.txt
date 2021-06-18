@@ -1019,12 +1019,6 @@ class HasUID c
 -- | Provides a <i>unique</i> id for internal Drasil use.
 uid :: HasUID c => Lens' c UID
 
--- | A <a>ShortName</a> is the text to be displayed for a link. Used for
---   referencing within a document that can include symbols and whatnot if
---   required. Visible in the typeset documents (pdf).
-class HasShortName s
-shortname :: HasShortName s => s -> ShortName
-
 -- | Members must have a reference address.
 class HasRefAddress b
 
@@ -1046,6 +1040,12 @@ refAdd :: Referable s => s -> String
 
 -- | Alternate form of reference.
 renderRef :: Referable s => s -> LblType
+
+-- | A <a>ShortName</a> is the text to be displayed for a link. Used for
+--   referencing within a document that can include symbols and whatnot if
+--   required. Visible in the typeset documents (pdf).
+class HasShortName s
+shortname :: HasShortName s => s -> ShortName
 
 -- | <tt>Citation</tt>s should have a fields (<a>CiteField</a>).
 class HasFields c
@@ -1609,10 +1609,10 @@ mkDerivNoHeader :: [Sentence] -> Derivation
 data ShortName
 
 -- | Smart constructor for making a <a>String</a> into a <a>ShortName</a>.
-shortname' :: String -> ShortName
+shortname' :: Sentence -> ShortName
 
 -- | Pulls the short form (as a <a>String</a>) out of a <a>ShortName</a>.
-getStringSN :: ShortName -> String
+getSentSN :: ShortName -> Sentence
 
 -- | All citations require a unique identifier used by the Drasil chunk. We
 --   will re-use the <a>UID</a> part as an EntryID (<a>String</a>) used for
@@ -1832,20 +1832,6 @@ sParen :: Sentence -> Sentence
 --   a <tt>Symbol</tt>.
 sdep :: Sentence -> [UID]
 shortdep :: Sentence -> [UID]
-
--- | A Reference contains the identifier (<a>UID</a>), a reference address
---   (<a>LblType</a>), a human-readable shortname (<a>ShortName</a>), and
---   any extra information about the reference (<a>RefInfo</a>).
-data Reference
-Reference :: UID -> LblType -> ShortName -> RefInfo -> Reference
-
--- | Holds any extra information needed for a <a>Reference</a>, be it an
---   equation, pages, a note, or nothing.
-data RefInfo
-None :: RefInfo
-Equation :: [Int] -> RefInfo
-Page :: [Int] -> RefInfo
-RefNote :: String -> RefInfo
 class NounPhrase n
 
 -- | Retrieves singular form of term. Ex. "the quick brown fox".
@@ -2201,11 +2187,11 @@ makeFigRef :: String -> Reference
 
 -- | Create a reference for a section. Takes in the name of a section and a
 --   shortname for the section.
-makeSecRef :: String -> String -> Reference
+makeSecRef :: String -> Sentence -> Reference
 
 -- | Create a reference for a list. Takes in the name of the list and a
 --   shortname for the list.
-makeLstRef :: String -> String -> Reference
+makeLstRef :: String -> Sentence -> Reference
 
 -- | Create a reference for a <a>URI</a>.
 makeURI :: UID -> String -> ShortName -> Reference
@@ -2449,7 +2435,21 @@ upperLeft :: Symbol -> Symbol -> Symbol
 -- | Helper for creating a Vector symbol.
 vec :: Symbol -> Symbol
 
--- | Takes the reference <tt>UID</tt> and wraps it into a <a>Sentence</a>.
+-- | Holds any extra information needed for a <tt>Reference</tt>, be it an
+--   equation, pages, a note, or nothing.
+data RefInfo
+None :: RefInfo
+Equation :: [Int] -> RefInfo
+Page :: [Int] -> RefInfo
+RefNote :: String -> RefInfo
+
+-- | A Reference contains the identifier (<a>UID</a>), a reference address
+--   (<a>LblType</a>), a human-readable shortname (<a>ShortName</a>), and
+--   any extra information about the reference (<a>RefInfo</a>).
+data Reference
+Reference :: UID -> LblType -> ShortName -> RefInfo -> Reference
+
+-- | Takes the reference <a>UID</a> and wraps it into a <a>Sentence</a>.
 makeRef2S :: (Referable l, HasShortName l) => l -> Sentence
 
 -- | Similar to <a>makeRef2</a>, but only turns a citation into a

@@ -10,10 +10,10 @@
 </span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Function</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">on</span></span><span class="hs-special">)</span><span>
 </span><span id="line-11"></span><span class="hs-comment">-- | Creates a standard table of abbreviations and acronyms section from a</span><span>
 </span><span id="line-12"></span><span class="hs-comment">-- given list of abbreviated chunks.</span><span>
-</span><span id="line-13"></span><span id="local-6989586621679113509"><span class="annot"><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#tableOfAbbAndAcronyms"><span class="hs-identifier hs-type">tableOfAbbAndAcronyms</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span> </span><span class="annot"><a href="#local-6989586621679113509"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679113509"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span></span><span>
+</span><span id="line-13"></span><span id="local-6989586621679113646"><span class="annot"><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#tableOfAbbAndAcronyms"><span class="hs-identifier hs-type">tableOfAbbAndAcronyms</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span> </span><span class="annot"><a href="#local-6989586621679113646"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679113646"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span></span><span>
 </span><span id="line-14"></span><span id="tableOfAbbAndAcronyms"><span class="annot"><span class="annottext">tableOfAbbAndAcronyms :: [s] -&gt; Section
-</span><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#tableOfAbbAndAcronyms"><span class="hs-identifier hs-var hs-var">tableOfAbbAndAcronyms</span></a></span></span><span> </span><span id="local-6989586621679113508"><span class="annot"><span class="annottext">ls :: [s]
-</span><a href="#local-6989586621679113508"><span class="hs-identifier hs-var">ls</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Title -&gt; [SecCons] -&gt; Reference -&gt; Section
+</span><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#tableOfAbbAndAcronyms"><span class="hs-identifier hs-var hs-var">tableOfAbbAndAcronyms</span></a></span></span><span> </span><span id="local-6989586621679113645"><span class="annot"><span class="annottext">ls :: [s]
+</span><a href="#local-6989586621679113645"><span class="hs-identifier hs-var">ls</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Title -&gt; [SecCons] -&gt; Reference -&gt; Section
 </span><span class="hs-identifier hs-var">Section</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Title
 forall n. NamedIdea n =&gt; n -&gt; Title
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
@@ -25,60 +25,39 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[s] -&gt; LabelledContent
 forall s. Idea s =&gt; [s] -&gt; LabelledContent
 </span><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#table"><span class="hs-identifier hs-var">table</span></a></span><span> </span><span class="annot"><span class="annottext">[s]
-</span><a href="#local-6989586621679113508"><span class="hs-identifier hs-var">ls</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="#local-6989586621679113645"><span class="hs-identifier hs-var">ls</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Reference
 </span><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#tableAbbAccLabel"><span class="hs-identifier hs-var">tableAbbAccLabel</span></a></span><span>
 </span><span id="line-16"></span><span>
-</span><span id="line-17"></span><span class="hs-comment">-- Will be changed when shortname is changed.</span><span>
-</span><span id="line-18"></span><span class="hs-comment">--FIXME: Temporary until shortname can take a sentence. </span><span>
-</span><span id="line-19"></span><span class="hs-comment">-- Same problem as in Drasil.DocLang.SRS, see issue #2489 for details.</span><span>
-</span><span id="line-20"></span><span class="annot"><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#toString"><span class="hs-identifier hs-type">toString</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
-</span><span id="line-21"></span><span id="toString"><span class="annot"><span class="annottext">toString :: Title -&gt; String
-</span><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#toString"><span class="hs-identifier hs-var hs-var">toString</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">S</span></span><span> </span><span id="local-6989586621679113499"><span class="annot"><span class="annottext">x :: String
-</span><a href="#local-6989586621679113499"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679113499"><span class="hs-identifier hs-var">x</span></a></span><span>
-</span><span id="line-22"></span><span class="annot"><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#toString"><span class="hs-identifier hs-var">toString</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-operator hs-type">(:+:)</span></span><span> </span><span id="local-6989586621679113497"><span class="annot"><span class="annottext">s1 :: Title
-</span><a href="#local-6989586621679113497"><span class="hs-identifier hs-var">s1</span></a></span></span><span> </span><span id="local-6989586621679113496"><span class="annot"><span class="annottext">s2 :: Title
-</span><a href="#local-6989586621679113496"><span class="hs-identifier hs-var">s2</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Title -&gt; String
-</span><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#toString"><span class="hs-identifier hs-var">toString</span></a></span><span> </span><span class="annot"><span class="annottext">Title
-</span><a href="#local-6989586621679113497"><span class="hs-identifier hs-var">s1</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
-forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">Title -&gt; String
-</span><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#toString"><span class="hs-identifier hs-var">toString</span></a></span><span> </span><span class="annot"><span class="annottext">Title
-</span><a href="#local-6989586621679113496"><span class="hs-identifier hs-var">s2</span></a></span><span>
-</span><span id="line-23"></span><span class="annot"><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#toString"><span class="hs-identifier hs-var">toString</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String
-forall a. HasCallStack =&gt; String -&gt; a
-</span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Term is not a string&quot;</span></span><span>
-</span><span id="line-24"></span><span>
-</span><span id="line-25"></span><span class="hs-comment">-- | Helper function that gets the acronym out of an 'Idea'.</span><span>
-</span><span id="line-26"></span><span id="local-6989586621679113539"><span class="annot"><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#select"><span class="hs-identifier hs-type">select</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span> </span><span class="annot"><a href="#local-6989586621679113539"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679113539"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="#local-6989586621679113539"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span></span><span>
-</span><span id="line-27"></span><span id="select"><span class="annot"><span class="annottext">select :: [s] -&gt; [(String, s)]
+</span><span id="line-17"></span><span class="hs-comment">-- | Helper function that gets the acronym out of an 'Idea'.</span><span>
+</span><span id="line-18"></span><span id="local-6989586621679113676"><span class="annot"><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#select"><span class="hs-identifier hs-type">select</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span> </span><span class="annot"><a href="#local-6989586621679113676"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679113676"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="#local-6989586621679113676"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span></span><span>
+</span><span id="line-19"></span><span id="select"><span class="annot"><span class="annottext">select :: [s] -&gt; [(String, s)]
 </span><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#select"><span class="hs-identifier hs-var hs-var">select</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-28"></span><span class="annot"><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#select"><span class="hs-identifier hs-var">select</span></a></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679113493"><span class="annot"><span class="annottext">x :: s
-</span><a href="#local-6989586621679113493"><span class="hs-identifier hs-var">x</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679113492"><span class="annot"><span class="annottext">xs :: [s]
-</span><a href="#local-6989586621679113492"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">s -&gt; Maybe String
+</span><span id="line-20"></span><span class="annot"><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#select"><span class="hs-identifier hs-var">select</span></a></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679113638"><span class="annot"><span class="annottext">x :: s
+</span><a href="#local-6989586621679113638"><span class="hs-identifier hs-var">x</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679113637"><span class="annot"><span class="annottext">xs :: [s]
+</span><a href="#local-6989586621679113637"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">case</span><span> </span><span class="annot"><span class="annottext">s -&gt; Maybe String
 forall c. Idea c =&gt; c -&gt; Maybe String
 </span><span class="hs-identifier hs-var">getA</span></span><span> </span><span class="annot"><span class="annottext">s
-</span><a href="#local-6989586621679113493"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="hs-keyword">of</span><span>
-</span><span id="line-29"></span><span>  </span><span class="annot"><span class="hs-identifier hs-type">Nothing</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[s] -&gt; [(String, s)]
+</span><a href="#local-6989586621679113638"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="hs-keyword">of</span><span>
+</span><span id="line-21"></span><span>  </span><span class="annot"><span class="hs-identifier hs-type">Nothing</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">[s] -&gt; [(String, s)]
 forall s. Idea s =&gt; [s] -&gt; [(String, s)]
 </span><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#select"><span class="hs-identifier hs-var">select</span></a></span><span> </span><span class="annot"><span class="annottext">[s]
-</span><a href="#local-6989586621679113492"><span class="hs-identifier hs-var">xs</span></a></span><span>
-</span><span id="line-30"></span><span>  </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span id="local-6989586621679113490"><span class="annot"><span class="annottext">y :: String
-</span><a href="#local-6989586621679113490"><span class="hs-identifier hs-var">y</span></a></span></span><span>  </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679113490"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">s
-</span><a href="#local-6989586621679113493"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(String, s) -&gt; [(String, s)] -&gt; [(String, s)]
+</span><a href="#local-6989586621679113637"><span class="hs-identifier hs-var">xs</span></a></span><span>
+</span><span id="line-22"></span><span>  </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span id="local-6989586621679113635"><span class="annot"><span class="annottext">y :: String
+</span><a href="#local-6989586621679113635"><span class="hs-identifier hs-var">y</span></a></span></span><span>  </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679113635"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">s
+</span><a href="#local-6989586621679113638"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(String, s) -&gt; [(String, s)] -&gt; [(String, s)]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[s] -&gt; [(String, s)]
 forall s. Idea s =&gt; [s] -&gt; [(String, s)]
 </span><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#select"><span class="hs-identifier hs-var">select</span></a></span><span> </span><span class="annot"><span class="annottext">[s]
-</span><a href="#local-6989586621679113492"><span class="hs-identifier hs-var">xs</span></a></span><span>
-</span><span id="line-31"></span><span>
-</span><span id="line-32"></span><span class="hs-comment">-- | The actual table creation function.</span><span>
-</span><span id="line-33"></span><span id="local-6989586621679113548"><span class="annot"><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#table"><span class="hs-identifier hs-type">table</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span> </span><span class="annot"><a href="#local-6989586621679113548"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679113548"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span></span><span>
-</span><span id="line-34"></span><span id="table"><span class="annot"><span class="annottext">table :: [s] -&gt; LabelledContent
-</span><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#table"><span class="hs-identifier hs-var hs-var">table</span></a></span></span><span> </span><span id="local-6989586621679113489"><span class="annot"><span class="annottext">ls :: [s]
-</span><a href="#local-6989586621679113489"><span class="hs-identifier hs-var">ls</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679113488"><span class="annot"><span class="annottext">chunks :: [(String, s)]
-</span><a href="#local-6989586621679113488"><span class="hs-identifier hs-var hs-var">chunks</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((String, s) -&gt; (String, s) -&gt; Ordering)
+</span><a href="#local-6989586621679113637"><span class="hs-identifier hs-var">xs</span></a></span><span>
+</span><span id="line-23"></span><span>
+</span><span id="line-24"></span><span class="hs-comment">-- | The actual table creation function.</span><span>
+</span><span id="line-25"></span><span id="local-6989586621679113681"><span class="annot"><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#table"><span class="hs-identifier hs-type">table</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span> </span><span class="annot"><a href="#local-6989586621679113681"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679113681"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span></span><span>
+</span><span id="line-26"></span><span id="table"><span class="annot"><span class="annottext">table :: [s] -&gt; LabelledContent
+</span><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#table"><span class="hs-identifier hs-var hs-var">table</span></a></span></span><span> </span><span id="local-6989586621679113634"><span class="annot"><span class="annottext">ls :: [s]
+</span><a href="#local-6989586621679113634"><span class="hs-identifier hs-var">ls</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679113633"><span class="annot"><span class="annottext">chunks :: [(String, s)]
+</span><a href="#local-6989586621679113633"><span class="hs-identifier hs-var hs-var">chunks</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((String, s) -&gt; (String, s) -&gt; Ordering)
 -&gt; [(String, s)] -&gt; [(String, s)]
 forall a. (a -&gt; a -&gt; Ordering) -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">sortBy</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; String -&gt; Ordering
@@ -96,14 +75,14 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[s] -&gt; [(String, s)]
 forall s. Idea s =&gt; [s] -&gt; [(String, s)]
 </span><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#select"><span class="hs-identifier hs-var">select</span></a></span><span> </span><span class="annot"><span class="annottext">[s]
-</span><a href="#local-6989586621679113489"><span class="hs-identifier hs-var">ls</span></a></span><span> </span><span class="hs-keyword">in</span><span>
-</span><span id="line-35"></span><span>  </span><span class="annot"><span class="annottext">Reference -&gt; RawContent -&gt; LabelledContent
+</span><a href="#local-6989586621679113634"><span class="hs-identifier hs-var">ls</span></a></span><span> </span><span class="hs-keyword">in</span><span>
+</span><span id="line-27"></span><span>  </span><span class="annot"><span class="annottext">Reference -&gt; RawContent -&gt; LabelledContent
 </span><span class="hs-identifier hs-var">llcc</span></span><span> </span><span class="annot"><span class="annottext">Reference
 </span><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#tableAbbAccRef"><span class="hs-identifier hs-var">tableAbbAccRef</span></a></span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; LabelledContent) -&gt; RawContent -&gt; LabelledContent
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Title] -&gt; [[Title]] -&gt; Title -&gt; Bool -&gt; RawContent
 </span><span class="hs-identifier hs-var">Table</span></span><span>
-</span><span id="line-36"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(NamedChunk -&gt; Title) -&gt; [NamedChunk] -&gt; [Title]
+</span><span id="line-28"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(NamedChunk -&gt; Title) -&gt; [NamedChunk] -&gt; [Title]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Title
 forall n. NamedIdea n =&gt; n -&gt; Title
@@ -112,26 +91,26 @@ forall n. NamedIdea n =&gt; n -&gt; Title
 </span><span class="hs-identifier hs-var">fullForm</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[(String, s) -&gt; Title] -&gt; [(String, s)] -&gt; [[Title]]
 forall a b. [a -&gt; b] -&gt; [a] -&gt; [[b]]
 </span><span class="hs-identifier hs-var">mkTable</span></span><span>
-</span><span id="line-37"></span><span>  </span><span class="hs-special">[</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span id="local-6989586621679113483"><span class="annot"><span class="annottext">a :: String
-</span><a href="#local-6989586621679113483"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">,</span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">String -&gt; Title
+</span><span id="line-29"></span><span>  </span><span class="hs-special">[</span><span class="hs-glyph">\</span><span class="hs-special">(</span><span id="local-6989586621679113628"><span class="annot"><span class="annottext">a :: String
+</span><a href="#local-6989586621679113628"><span class="hs-identifier hs-var">a</span></a></span></span><span class="hs-special">,</span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">String -&gt; Title
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679113483"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-38"></span><span>   </span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">_</span><span class="hs-special">,</span><span id="local-6989586621679113482"><span class="annot"><span class="annottext">b :: s
-</span><a href="#local-6989586621679113482"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">s -&gt; Title
+</span><a href="#local-6989586621679113628"><span class="hs-identifier hs-var">a</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-30"></span><span>   </span><span class="hs-glyph">\</span><span class="hs-special">(</span><span class="hs-identifier">_</span><span class="hs-special">,</span><span id="local-6989586621679113626"><span class="annot"><span class="annottext">b :: s
+</span><a href="#local-6989586621679113626"><span class="hs-identifier hs-var">b</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">s -&gt; Title
 forall n. NamedIdea n =&gt; n -&gt; Title
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">s
-</span><a href="#local-6989586621679113482"><span class="hs-identifier hs-var">b</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-39"></span><span>  </span><span class="annot"><span class="annottext">[(String, s)]
-</span><a href="#local-6989586621679113488"><span class="hs-identifier hs-var">chunks</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-40"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Title
+</span><a href="#local-6989586621679113626"><span class="hs-identifier hs-var">b</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-31"></span><span>  </span><span class="annot"><span class="annottext">[(String, s)]
+</span><a href="#local-6989586621679113633"><span class="hs-identifier hs-var">chunks</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-32"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Title
 forall n. NamedIdea n =&gt; n -&gt; Title
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">abbAcc</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span>
-</span><span id="line-41"></span><span>
-</span><span id="line-42"></span><span class="hs-comment">-- | Table of abbreviations and acronyms UID and shortname.</span><span>
-</span><span id="line-43"></span><span class="annot"><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#tableAbbAccRef"><span class="hs-identifier hs-type">tableAbbAccRef</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span>
-</span><span id="line-44"></span><span id="tableAbbAccRef"><span class="annot"><span class="annottext">tableAbbAccRef :: Reference
+</span><span id="line-33"></span><span>
+</span><span id="line-34"></span><span class="hs-comment">-- | Table of abbreviations and acronyms UID and shortname.</span><span>
+</span><span id="line-35"></span><span class="annot"><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#tableAbbAccRef"><span class="hs-identifier hs-type">tableAbbAccRef</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span>
+</span><span id="line-36"></span><span id="tableAbbAccRef"><span class="annot"><span class="annottext">tableAbbAccRef :: Reference
 </span><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#tableAbbAccRef"><span class="hs-identifier hs-var hs-var">tableAbbAccRef</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Reference
 </span><span class="hs-identifier hs-var">makeTabRef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">abbAcc</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Getting String NamedChunk String -&gt; String
@@ -139,21 +118,22 @@ forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting String NamedChunk String
 forall c. HasUID c =&gt; Lens' c String
 </span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span>
-</span><span id="line-45"></span><span>
-</span><span id="line-46"></span><span class="hs-comment">-- should this be moved to DocLang/SRS?</span><span>
-</span><span id="line-47"></span><span class="hs-comment">-- | Reference for Table of Abbreviations and Acronyms.</span><span>
-</span><span id="line-48"></span><span class="annot"><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#tableAbbAccLabel"><span class="hs-identifier hs-type">tableAbbAccLabel</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span>
-</span><span id="line-49"></span><span id="tableAbbAccLabel"><span class="annot"><span class="annottext">tableAbbAccLabel :: Reference
-</span><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#tableAbbAccLabel"><span class="hs-identifier hs-var hs-var">tableAbbAccLabel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; Reference
+</span><span id="line-37"></span><span>
+</span><span id="line-38"></span><span class="hs-comment">-- should this be moved to DocLang/SRS?</span><span>
+</span><span id="line-39"></span><span class="hs-comment">-- | Reference for Table of Abbreviations and Acronyms.</span><span>
+</span><span id="line-40"></span><span class="annot"><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#tableAbbAccLabel"><span class="hs-identifier hs-type">tableAbbAccLabel</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span>
+</span><span id="line-41"></span><span id="tableAbbAccLabel"><span class="annot"><span class="annottext">tableAbbAccLabel :: Reference
+</span><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#tableAbbAccLabel"><span class="hs-identifier hs-var hs-var">tableAbbAccLabel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Title -&gt; Reference
 </span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">abbAcc</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Getting String NamedChunk String -&gt; String
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting String NamedChunk String
 forall c. HasUID c =&gt; Lens' c String
-</span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Title -&gt; String
-</span><a href="Drasil.Sections.TableOfAbbAndAcronyms.html#toString"><span class="hs-identifier hs-var">toString</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Title
+</span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Title -&gt; Reference) -&gt; Title -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Title
 forall n. NamedIdea n =&gt; n -&gt; Title
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
-</span><span class="hs-identifier hs-var">abbAcc</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-50"></span><span>
-</span><span id="line-51"></span></pre></body></html>
+</span><span class="hs-identifier hs-var">abbAcc</span></span><span>
+</span><span id="line-42"></span><span>
+</span><span id="line-43"></span></pre></body></html>

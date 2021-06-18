@@ -126,7 +126,7 @@ instance GHC.Classes.Eq Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Classes.HasDerivation Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Classes.HasAdditionalNotes Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Theory.Drasil.DataDefinition.DataDefinition
-instance Language.Drasil.Classes.Core.HasShortName Theory.Drasil.DataDefinition.DataDefinition
+instance Language.Drasil.Classes.Core2.HasShortName Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Classes.Core.HasRefAddress Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Classes.CommonIdea Theory.Drasil.DataDefinition.DataDefinition
@@ -271,7 +271,7 @@ instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.InstanceModel.Insta
 instance Language.Drasil.DisplayClasses.Display Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Classes.HasDerivation Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Classes.HasReference Theory.Drasil.InstanceModel.InstanceModel
-instance Language.Drasil.Classes.Core.HasShortName Theory.Drasil.InstanceModel.InstanceModel
+instance Language.Drasil.Classes.Core2.HasShortName Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Classes.Core.HasRefAddress Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Classes.HasAdditionalNotes Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Classes.Quantity Theory.Drasil.InstanceModel.InstanceModel
@@ -313,7 +313,7 @@ instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.DisplayClasses.Display Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.Classes.HasDerivation Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.Classes.HasReference Theory.Drasil.GenDefn.GenDefn
-instance Language.Drasil.Classes.Core.HasShortName Theory.Drasil.GenDefn.GenDefn
+instance Language.Drasil.Classes.Core2.HasShortName Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.Classes.Core.HasRefAddress Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.Classes.HasAdditionalNotes Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Theory.Drasil.GenDefn.GenDefn
@@ -376,7 +376,7 @@ instance Language.Drasil.Classes.HasReference Theory.Drasil.Theory.TheoryModel
 instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.Theory.TheoryModel
 instance Language.Drasil.Classes.HasAdditionalNotes Theory.Drasil.Theory.TheoryModel
 instance Theory.Drasil.Theory.Theory Theory.Drasil.Theory.TheoryModel
-instance Language.Drasil.Classes.Core.HasShortName Theory.Drasil.Theory.TheoryModel
+instance Language.Drasil.Classes.Core2.HasShortName Theory.Drasil.Theory.TheoryModel
 instance Language.Drasil.Classes.Core.HasRefAddress Theory.Drasil.Theory.TheoryModel
 instance Language.Drasil.Classes.CommonIdea Theory.Drasil.Theory.TheoryModel
 instance Language.Drasil.Classes.Core.Referable Theory.Drasil.Theory.TheoryModel

@@ -268,18 +268,15 @@ class HasFields c
 -- | Provides a <tt>Lens</tt> to <a>CiteField</a>s.
 getFields :: HasFields c => Lens' c [CiteField]
 
-module Language.Drasil.ShortName
+module Language.Drasil.RefProg
 
--- | Used for holding the short form of a name (as a String with a
---   wrapper).
-newtype ShortName
-ShortNm :: String -> ShortName
-
--- | Pulls the short form (as a <a>String</a>) out of a <a>ShortName</a>.
-getStringSN :: ShortName -> String
-
--- | Smart constructor for making a <a>String</a> into a <a>ShortName</a>.
-shortname' :: String -> ShortName
+-- | Holds any extra information needed for a <tt>Reference</tt>, be it an
+--   equation, pages, a note, or nothing.
+data RefInfo
+None :: RefInfo
+Equation :: [Int] -> RefInfo
+Page :: [Int] -> RefInfo
+RefNote :: String -> RefInfo
 
 module Language.Drasil.Stages
 
@@ -1437,12 +1434,6 @@ class HasUID c
 -- | Provides a <i>unique</i> id for internal Drasil use.
 uid :: HasUID c => Lens' c UID
 
--- | A <a>ShortName</a> is the text to be displayed for a link. Used for
---   referencing within a document that can include symbols and whatnot if
---   required. Visible in the typeset documents (pdf).
-class HasShortName s
-shortname :: HasShortName s => s -> ShortName
-
 -- | Members must have a reference address.
 class HasRefAddress b
 
@@ -1512,163 +1503,6 @@ upperLeft :: Symbol -> Symbol -> Symbol
 
 -- | Helper for creating a Vector symbol.
 vec :: Symbol -> Symbol
-
-module Language.Drasil.RefProg
-
--- | A Reference contains the identifier (<a>UID</a>), a reference address
---   (<a>LblType</a>), a human-readable shortname (<a>ShortName</a>), and
---   any extra information about the reference (<a>RefInfo</a>).
-data Reference
-Reference :: UID -> LblType -> ShortName -> RefInfo -> Reference
-
--- | Holds any extra information needed for a <a>Reference</a>, be it an
---   equation, pages, a note, or nothing.
-data RefInfo
-None :: RefInfo
-Equation :: [Int] -> RefInfo
-Page :: [Int] -> RefInfo
-RefNote :: String -> RefInfo
-instance GHC.Classes.Eq Language.Drasil.RefProg.Reference
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.RefProg.Reference
-instance Language.Drasil.Classes.Core.HasRefAddress Language.Drasil.RefProg.Reference
-instance Language.Drasil.Classes.Core.HasShortName Language.Drasil.RefProg.Reference
-instance Language.Drasil.Classes.Core.Referable Language.Drasil.RefProg.Reference
-
-module Language.Drasil.Chunk.Citation
-
--- | All citations require a unique identifier used by the Drasil chunk. We
---   will re-use the <a>UID</a> part as an EntryID (<a>String</a>) used for
---   creating reference links. Finally we will have the reference
---   information (<a>CitationKind</a>, <a>CiteField</a>s, and a
---   <a>ShortName</a>).
-data Citation
-type BibRef = [Citation] " A list of 'Citation's."
-type EntryID = String " A 'String' that should contain no spaces."
-citeID :: Lens' Citation UID
-citeKind :: Lens' Citation CitationKind
-
--- | Article citation requires author(s), title, journal, year. Optional
---   fields can be: volume, number, pages, month, and note. Implicitly uses
---   the EntryID as the chunk id.
-cArticle :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Book citation by author.
---   
---   Book citation requires author or editor, title, publisher, year.
---   Optional fields can be volume or number, series, address, edition,
---   month, and note. Implicitly uses the EntryID as the chunk id.
-cBookA :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Book citation by editor.
---   
---   Book citation requires author or editor, title, publisher, year.
---   Optional fields can be volume or number, series, address, edition,
---   month, and note. Implicitly uses the EntryID as the chunk id.
-cBookE :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Booklet citation requires title. Optional fields can be author, how
---   published, address, month, year, note. Implicitly uses the EntryID as
---   the chunk id.
-cBooklet :: String -> [CiteField] -> String -> Citation
-
--- | InBook citation by author.
---   
---   InBook citation requires author or editor, title, chapter and/or
---   pages, publisher, year. Optional fields can be volume or number,
---   series, type, address, edition, month, and note. Implicitly uses the
---   EntryID as the chunk id. This smart constructor includes both chapter
---   and page numbers.
-cInBookACP :: People -> String -> Int -> [Int] -> String -> Int -> [CiteField] -> String -> Citation
-
--- | InBook citation by editor.
---   
---   InBook citation requires author or editor, title, chapter and/or
---   pages, publisher, year. Optional fields can be volume or number,
---   series, type, address, edition, month, and note. Implicitly uses the
---   EntryID as the chunk id. This smart constructor includes both chapter
---   and page numbers.
-cInBookECP :: People -> String -> Int -> [Int] -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Otherwise identical to <a>cInBookACP</a>.
---   
---   InBook citation excluding page numbers.
-cInBookAC :: People -> String -> Int -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Otherwise identical to <a>cInBookECP</a>.
---   
---   InBook citation excluding page numbers.
-cInBookEC :: People -> String -> Int -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Otherwise identical to <a>cInBookACP</a>.
---   
---   InBook citation excluding chapter.
-cInBookAP :: People -> String -> [Int] -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Otherwise identical to <a>cInBookECP</a>.
---   
---   InBook citation excluding chapter.
-cInBookEP :: People -> String -> [Int] -> String -> Int -> [CiteField] -> String -> Citation
-
--- | InCollection citation requires author, title, bookTitle, publisher,
---   year. Optional fields can be editor, volume or number, series, type,
---   chapter, pages, address, edition, month, and note. Implicitly uses the
---   EntryID as the chunk id.
-cInCollection :: People -> String -> String -> String -> Int -> [CiteField] -> String -> Citation
-
--- | InProceedings citation requires author, title, bookTitle, year.
---   Optional fields can be editor, volume or number, series, pages,
---   address, month, organization, publisher, and note. Implicitly uses the
---   EntryID as the chunk id.
-cInProceedings :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Manual (technical documentation) citation requires title. Optional
---   fields can be author, organization, address, edition, month, year, and
---   note. Implicitly uses the EntryID as the chunk id.
-cManual :: String -> [CiteField] -> String -> Citation
-
--- | Master's Thesis citation requires author, title, school, and year.
---   Optional fields can be type, address, month, and note. Implicitly uses
---   the EntryID as the chunk id.
-cMThesis :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Misc citation requires nothing. Optional fields can be author, title,
---   howpublished, month, year, and note. Implicitly uses the EntryID as
---   the chunk id.
-cMisc :: [CiteField] -> String -> Citation
-
--- | PhD Thesis citation requires author, title, school, and year. Optional
---   fields can be type, address, month, and note. Implicitly uses the
---   EntryID as the chunk id.
-cPhDThesis :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Proceedings citation requires title and year. Optional fields can be
---   editor, volume or number, series, address, publisher, note, month, and
---   organization. Implicitly uses the EntryID as the chunk id.
-cProceedings :: String -> Int -> [CiteField] -> String -> Citation
-
--- | Technical Report citation requires author, title, institution, and
---   year. Optional fields can be type, number, address, month, and note.
---   Implicitly uses the EntryID as the chunk id.
-cTechReport :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
-
--- | Unpublished citation requires author, title, and note. Optional fields
---   can be month and year. Implicitly uses the EntryID as the chunk id.
-cUnpublished :: People -> String -> String -> [CiteField] -> String -> Citation
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.Citation.Citation
-instance Language.Drasil.Classes.Core.HasShortName Language.Drasil.Chunk.Citation.Citation
-instance Language.Drasil.Classes.Citations.HasFields Language.Drasil.Chunk.Citation.Citation
-instance Language.Drasil.Classes.Core.Referable Language.Drasil.Chunk.Citation.Citation
-instance Language.Drasil.Classes.Core.HasRefAddress Language.Drasil.Chunk.Citation.Citation
-
-
--- | Defining classes that represent knowledge about Documents
-module Language.Drasil.Classes.Document
-
--- | Some documents, as well as some pieces of knowledge, have citations.
-class HasCitation c
-
--- | Provides a <tt>Lens</tt> to the citations.
-getCitations :: HasCitation c => Lens' c [Citation]
 
 module Language.Drasil.UnitLang
 
@@ -1827,6 +1661,29 @@ sParen :: Sentence -> Sentence
 instance GHC.Base.Semigroup Language.Drasil.Sentence.Sentence
 instance GHC.Base.Monoid Language.Drasil.Sentence.Sentence
 
+module Language.Drasil.ShortName
+
+-- | Used for holding the short form of a name (as a String with a
+--   wrapper).
+newtype ShortName
+ShortNm :: Sentence -> ShortName
+
+-- | Pulls the short form (as a <a>String</a>) out of a <a>ShortName</a>.
+getSentSN :: ShortName -> Sentence
+
+-- | Smart constructor for making a <a>String</a> into a <a>ShortName</a>.
+shortname' :: Sentence -> ShortName
+
+
+-- | Defining the core classes which represent knowledge-about-knowledge
+module Language.Drasil.Classes.Core2
+
+-- | A <a>ShortName</a> is the text to be displayed for a link. Used for
+--   referencing within a document that can include symbols and whatnot if
+--   required. Visible in the typeset documents (pdf).
+class HasShortName s
+shortname :: HasShortName s => s -> ShortName
+
 module Language.Drasil.Sentence.Extract
 
 -- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
@@ -1840,33 +1697,6 @@ lnames :: Sentence -> [UID]
 
 -- | Get <i>reference</i> <a>UID</a>s from <a>Sentence</a>s.
 lnames' :: [Sentence] -> [UID]
-
-module Language.Drasil.Reference
-
--- | Projector function that creates a <a>Reference</a> from something
---   <a>Referable</a>.
-makeRef2 :: (Referable l, HasShortName l) => l -> Reference
-
--- | Takes the reference <tt>UID</tt> and wraps it into a <a>Sentence</a>.
-makeRef2S :: (Referable l, HasShortName l) => l -> Sentence
-
--- | Similar to <a>makeRef2</a>, but only turns a citation into a
---   reference.
-makeCite :: Citation -> Reference
-
--- | Similar to <a>makeRef2S</a>, but only takes a citation.
-makeCiteS :: Citation -> Sentence
-
--- | Makes a <a>Reference</a> from a <a>Citation</a> with additional
---   information.
-makeCiteInfo :: Citation -> RefInfo -> Reference
-
--- | Makes a <a>Reference</a> from a <a>Citation</a> with additional
---   information and then wraps into <a>Sentence</a> form.
-makeCiteInfoS :: Citation -> RefInfo -> Sentence
-
--- | Smart constructor for making a <a>Referable</a> <a>Reference</a>.
-rw :: (Referable r, HasShortName r) => r -> Reference
 
 module Language.Drasil.NounPhrase.Core
 
@@ -2244,6 +2074,188 @@ dePrec :: DisplayExpr -> Int
 -- | dePrecAssoc - precedence for associative binary operators.
 dePrecAssoc :: DisplayAssocBinOp -> Int
 
+module Language.Drasil.Derivation
+
+-- | Derivations are an ordered list of sentences and expressions. They are
+--   rendered in order as paragraphs and equation blocks to display the
+--   derivation.
+data Derivation
+Derivation :: Sentence -> [Sentence] -> Derivation
+
+-- | Smart constructor for creating a <a>Derivation</a>.
+mkDeriv :: Sentence -> [Sentence] -> Derivation
+
+-- | Similar to <a>mkDeriv</a>, but prepends "Detailed derivation of" to
+--   the header.
+mkDerivName :: Sentence -> [Sentence] -> Derivation
+
+-- | Similar to <a>mkDeriv</a>, but without a header <a>Sentence</a>.
+mkDerivNoHeader :: [Sentence] -> Derivation
+
+module Language.Drasil.Chunk.Citation
+
+-- | All citations require a unique identifier used by the Drasil chunk. We
+--   will re-use the <a>UID</a> part as an EntryID (<a>String</a>) used for
+--   creating reference links. Finally we will have the reference
+--   information (<a>CitationKind</a>, <a>CiteField</a>s, and a
+--   <a>ShortName</a>).
+data Citation
+type BibRef = [Citation] " A list of 'Citation's."
+type EntryID = String " A 'String' that should contain no spaces."
+citeID :: Lens' Citation UID
+citeKind :: Lens' Citation CitationKind
+
+-- | Article citation requires author(s), title, journal, year. Optional
+--   fields can be: volume, number, pages, month, and note. Implicitly uses
+--   the EntryID as the chunk id.
+cArticle :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Book citation by author.
+--   
+--   Book citation requires author or editor, title, publisher, year.
+--   Optional fields can be volume or number, series, address, edition,
+--   month, and note. Implicitly uses the EntryID as the chunk id.
+cBookA :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Book citation by editor.
+--   
+--   Book citation requires author or editor, title, publisher, year.
+--   Optional fields can be volume or number, series, address, edition,
+--   month, and note. Implicitly uses the EntryID as the chunk id.
+cBookE :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Booklet citation requires title. Optional fields can be author, how
+--   published, address, month, year, note. Implicitly uses the EntryID as
+--   the chunk id.
+cBooklet :: String -> [CiteField] -> String -> Citation
+
+-- | InBook citation by author.
+--   
+--   InBook citation requires author or editor, title, chapter and/or
+--   pages, publisher, year. Optional fields can be volume or number,
+--   series, type, address, edition, month, and note. Implicitly uses the
+--   EntryID as the chunk id. This smart constructor includes both chapter
+--   and page numbers.
+cInBookACP :: People -> String -> Int -> [Int] -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | InBook citation by editor.
+--   
+--   InBook citation requires author or editor, title, chapter and/or
+--   pages, publisher, year. Optional fields can be volume or number,
+--   series, type, address, edition, month, and note. Implicitly uses the
+--   EntryID as the chunk id. This smart constructor includes both chapter
+--   and page numbers.
+cInBookECP :: People -> String -> Int -> [Int] -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Otherwise identical to <a>cInBookACP</a>.
+--   
+--   InBook citation excluding page numbers.
+cInBookAC :: People -> String -> Int -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Otherwise identical to <a>cInBookECP</a>.
+--   
+--   InBook citation excluding page numbers.
+cInBookEC :: People -> String -> Int -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Otherwise identical to <a>cInBookACP</a>.
+--   
+--   InBook citation excluding chapter.
+cInBookAP :: People -> String -> [Int] -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Otherwise identical to <a>cInBookECP</a>.
+--   
+--   InBook citation excluding chapter.
+cInBookEP :: People -> String -> [Int] -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | InCollection citation requires author, title, bookTitle, publisher,
+--   year. Optional fields can be editor, volume or number, series, type,
+--   chapter, pages, address, edition, month, and note. Implicitly uses the
+--   EntryID as the chunk id.
+cInCollection :: People -> String -> String -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | InProceedings citation requires author, title, bookTitle, year.
+--   Optional fields can be editor, volume or number, series, pages,
+--   address, month, organization, publisher, and note. Implicitly uses the
+--   EntryID as the chunk id.
+cInProceedings :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Manual (technical documentation) citation requires title. Optional
+--   fields can be author, organization, address, edition, month, year, and
+--   note. Implicitly uses the EntryID as the chunk id.
+cManual :: String -> [CiteField] -> String -> Citation
+
+-- | Master's Thesis citation requires author, title, school, and year.
+--   Optional fields can be type, address, month, and note. Implicitly uses
+--   the EntryID as the chunk id.
+cMThesis :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Misc citation requires nothing. Optional fields can be author, title,
+--   howpublished, month, year, and note. Implicitly uses the EntryID as
+--   the chunk id.
+cMisc :: [CiteField] -> String -> Citation
+
+-- | PhD Thesis citation requires author, title, school, and year. Optional
+--   fields can be type, address, month, and note. Implicitly uses the
+--   EntryID as the chunk id.
+cPhDThesis :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Proceedings citation requires title and year. Optional fields can be
+--   editor, volume or number, series, address, publisher, note, month, and
+--   organization. Implicitly uses the EntryID as the chunk id.
+cProceedings :: String -> Int -> [CiteField] -> String -> Citation
+
+-- | Technical Report citation requires author, title, institution, and
+--   year. Optional fields can be type, number, address, month, and note.
+--   Implicitly uses the EntryID as the chunk id.
+cTechReport :: People -> String -> String -> Int -> [CiteField] -> String -> Citation
+
+-- | Unpublished citation requires author, title, and note. Optional fields
+--   can be month and year. Implicitly uses the EntryID as the chunk id.
+cUnpublished :: People -> String -> String -> [CiteField] -> String -> Citation
+instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.Citation.Citation
+instance Language.Drasil.Classes.Core2.HasShortName Language.Drasil.Chunk.Citation.Citation
+instance Language.Drasil.Classes.Citations.HasFields Language.Drasil.Chunk.Citation.Citation
+instance Language.Drasil.Classes.Core.Referable Language.Drasil.Chunk.Citation.Citation
+instance Language.Drasil.Classes.Core.HasRefAddress Language.Drasil.Chunk.Citation.Citation
+
+module Language.Drasil.Reference
+
+-- | A Reference contains the identifier (<a>UID</a>), a reference address
+--   (<a>LblType</a>), a human-readable shortname (<a>ShortName</a>), and
+--   any extra information about the reference (<a>RefInfo</a>).
+data Reference
+Reference :: UID -> LblType -> ShortName -> RefInfo -> Reference
+
+-- | Projector function that creates a <a>Reference</a> from something
+--   <a>Referable</a>.
+makeRef2 :: (Referable l, HasShortName l) => l -> Reference
+
+-- | Takes the reference <a>UID</a> and wraps it into a <a>Sentence</a>.
+makeRef2S :: (Referable l, HasShortName l) => l -> Sentence
+
+-- | Similar to <a>makeRef2</a>, but only turns a citation into a
+--   reference.
+makeCite :: Citation -> Reference
+
+-- | Similar to <a>makeRef2S</a>, but only takes a citation.
+makeCiteS :: Citation -> Sentence
+
+-- | Makes a <a>Reference</a> from a <a>Citation</a> with additional
+--   information.
+makeCiteInfo :: Citation -> RefInfo -> Reference
+
+-- | Makes a <a>Reference</a> from a <a>Citation</a> with additional
+--   information and then wraps into <a>Sentence</a> form.
+makeCiteInfoS :: Citation -> RefInfo -> Sentence
+
+-- | Smart constructor for making a <a>Referable</a> <a>Reference</a>.
+rw :: (Referable r, HasShortName r) => r -> Reference
+instance GHC.Classes.Eq Language.Drasil.Reference.Reference
+instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Reference.Reference
+instance Language.Drasil.Classes.Core.HasRefAddress Language.Drasil.Reference.Reference
+instance Language.Drasil.Classes.Core2.HasShortName Language.Drasil.Reference.Reference
+instance Language.Drasil.Classes.Core.Referable Language.Drasil.Reference.Reference
+
 module Language.Drasil.Document.Core
 
 -- | Denotes the different possible types that can be used as a list.
@@ -2359,7 +2371,7 @@ instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core
 instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.Contents
 instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Document.Core.LabelledContent
 instance Language.Drasil.Classes.Core.HasRefAddress Language.Drasil.Document.Core.LabelledContent
-instance Language.Drasil.Classes.Core.HasShortName Language.Drasil.Document.Core.LabelledContent
+instance Language.Drasil.Classes.Core2.HasShortName Language.Drasil.Document.Core.LabelledContent
 instance Language.Drasil.Classes.Core.Referable Language.Drasil.Document.Core.LabelledContent
 
 
@@ -2438,36 +2450,28 @@ makeFigRef :: String -> Reference
 
 -- | Create a reference for a section. Takes in the name of a section and a
 --   shortname for the section.
-makeSecRef :: String -> String -> Reference
+makeSecRef :: String -> Sentence -> Reference
 
 -- | Create a reference for a list. Takes in the name of the list and a
 --   shortname for the list.
-makeLstRef :: String -> String -> Reference
+makeLstRef :: String -> Sentence -> Reference
 
 -- | Create a reference for a <a>URI</a>.
 makeURI :: UID -> String -> ShortName -> Reference
 instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Document.Section
-instance Language.Drasil.Classes.Core.HasShortName Language.Drasil.Document.Section
+instance Language.Drasil.Classes.Core2.HasShortName Language.Drasil.Document.Section
 instance Language.Drasil.Classes.Core.Referable Language.Drasil.Document.Section
 instance Language.Drasil.Classes.Core.HasRefAddress Language.Drasil.Document.Section
 
-module Language.Drasil.Derivation
 
--- | Derivations are an ordered list of sentences and expressions. They are
---   rendered in order as paragraphs and equation blocks to display the
---   derivation.
-data Derivation
-Derivation :: Sentence -> [Sentence] -> Derivation
+-- | Defining classes that represent knowledge about Documents
+module Language.Drasil.Classes.Document
 
--- | Smart constructor for creating a <a>Derivation</a>.
-mkDeriv :: Sentence -> [Sentence] -> Derivation
+-- | Some documents, as well as some pieces of knowledge, have citations.
+class HasCitation c
 
--- | Similar to <a>mkDeriv</a>, but prepends "Detailed derivation of" to
---   the header.
-mkDerivName :: Sentence -> [Sentence] -> Derivation
-
--- | Similar to <a>mkDeriv</a>, but without a header <a>Sentence</a>.
-mkDerivNoHeader :: [Sentence] -> Derivation
+-- | Provides a <tt>Lens</tt> to the citations.
+getCitations :: HasCitation c => Lens' c [Citation]
 
 
 -- | Defining all the classes which represent knowledge-about-knowledge
@@ -2933,7 +2937,7 @@ instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.Concept.Core.Co
 instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.Concept.Core.ConceptInstance
 instance Language.Drasil.Classes.Definition Language.Drasil.Chunk.Concept.Core.ConceptInstance
 instance Language.Drasil.Classes.ConceptDomain Language.Drasil.Chunk.Concept.Core.ConceptInstance
-instance Language.Drasil.Classes.Core.HasShortName Language.Drasil.Chunk.Concept.Core.ConceptInstance
+instance Language.Drasil.Classes.Core2.HasShortName Language.Drasil.Chunk.Concept.Core.ConceptInstance
 instance Language.Drasil.Classes.Core.HasRefAddress Language.Drasil.Chunk.Concept.Core.ConceptInstance
 instance Language.Drasil.Classes.Core.Referable Language.Drasil.Chunk.Concept.Core.ConceptInstance
 instance GHC.Classes.Eq Language.Drasil.Chunk.Concept.Core.CommonConcept
@@ -4002,12 +4006,6 @@ class HasUID c
 -- | Provides a <i>unique</i> id for internal Drasil use.
 uid :: HasUID c => Lens' c UID
 
--- | A <a>ShortName</a> is the text to be displayed for a link. Used for
---   referencing within a document that can include symbols and whatnot if
---   required. Visible in the typeset documents (pdf).
-class HasShortName s
-shortname :: HasShortName s => s -> ShortName
-
 -- | Members must have a reference address.
 class HasRefAddress b
 
@@ -4029,6 +4027,12 @@ refAdd :: Referable s => s -> String
 
 -- | Alternate form of reference.
 renderRef :: Referable s => s -> LblType
+
+-- | A <a>ShortName</a> is the text to be displayed for a link. Used for
+--   referencing within a document that can include symbols and whatnot if
+--   required. Visible in the typeset documents (pdf).
+class HasShortName s
+shortname :: HasShortName s => s -> ShortName
 
 -- | <tt>Citation</tt>s should have a fields (<a>CiteField</a>).
 class HasFields c
@@ -4592,10 +4596,10 @@ mkDerivNoHeader :: [Sentence] -> Derivation
 data ShortName
 
 -- | Smart constructor for making a <a>String</a> into a <a>ShortName</a>.
-shortname' :: String -> ShortName
+shortname' :: Sentence -> ShortName
 
 -- | Pulls the short form (as a <a>String</a>) out of a <a>ShortName</a>.
-getStringSN :: ShortName -> String
+getSentSN :: ShortName -> Sentence
 
 -- | All citations require a unique identifier used by the Drasil chunk. We
 --   will re-use the <a>UID</a> part as an EntryID (<a>String</a>) used for
@@ -4815,20 +4819,6 @@ sParen :: Sentence -> Sentence
 --   a <tt>Symbol</tt>.
 sdep :: Sentence -> [UID]
 shortdep :: Sentence -> [UID]
-
--- | A Reference contains the identifier (<a>UID</a>), a reference address
---   (<a>LblType</a>), a human-readable shortname (<a>ShortName</a>), and
---   any extra information about the reference (<a>RefInfo</a>).
-data Reference
-Reference :: UID -> LblType -> ShortName -> RefInfo -> Reference
-
--- | Holds any extra information needed for a <a>Reference</a>, be it an
---   equation, pages, a note, or nothing.
-data RefInfo
-None :: RefInfo
-Equation :: [Int] -> RefInfo
-Page :: [Int] -> RefInfo
-RefNote :: String -> RefInfo
 class NounPhrase n
 
 -- | Retrieves singular form of term. Ex. "the quick brown fox".
@@ -5184,11 +5174,11 @@ makeFigRef :: String -> Reference
 
 -- | Create a reference for a section. Takes in the name of a section and a
 --   shortname for the section.
-makeSecRef :: String -> String -> Reference
+makeSecRef :: String -> Sentence -> Reference
 
 -- | Create a reference for a list. Takes in the name of the list and a
 --   shortname for the list.
-makeLstRef :: String -> String -> Reference
+makeLstRef :: String -> Sentence -> Reference
 
 -- | Create a reference for a <a>URI</a>.
 makeURI :: UID -> String -> ShortName -> Reference
@@ -5432,7 +5422,21 @@ upperLeft :: Symbol -> Symbol -> Symbol
 -- | Helper for creating a Vector symbol.
 vec :: Symbol -> Symbol
 
--- | Takes the reference <tt>UID</tt> and wraps it into a <a>Sentence</a>.
+-- | Holds any extra information needed for a <tt>Reference</tt>, be it an
+--   equation, pages, a note, or nothing.
+data RefInfo
+None :: RefInfo
+Equation :: [Int] -> RefInfo
+Page :: [Int] -> RefInfo
+RefNote :: String -> RefInfo
+
+-- | A Reference contains the identifier (<a>UID</a>), a reference address
+--   (<a>LblType</a>), a human-readable shortname (<a>ShortName</a>), and
+--   any extra information about the reference (<a>RefInfo</a>).
+data Reference
+Reference :: UID -> LblType -> ShortName -> RefInfo -> Reference
+
+-- | Takes the reference <a>UID</a> and wraps it into a <a>Sentence</a>.
 makeRef2S :: (Referable l, HasShortName l) => l -> Sentence
 
 -- | Similar to <a>makeRef2</a>, but only turns a citation into a

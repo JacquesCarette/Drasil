@@ -15,18 +15,20 @@ import Drasil.DocumentLanguage.Notebook.NBDecl (NBDecl, NbSection(Bibliography, 
 import Drasil.DocumentLanguage.Notebook.Core(IntroSec(..), BodySec(..), BodySub(..), SmmrySec(..))
 
 import Data.Drasil.Concepts.Documentation (doccon, doccon')
+import Data.Drasil.Concepts.Math (mathcon)
 import qualified Data.Drasil.Concepts.Documentation as Doc (notebook)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.Physics (physicCon)
 
 import Data.Drasil.People (spencerSmith)
 
-import Drasil.Projectile.Concepts (concepts)
+import Drasil.Projectile.Concepts (concepts, projMotion)
 import Drasil.Projectile.Body (symbols, acronyms)
 
 import Drasil.Projectile.Lesson.IntroSection (introContext, reasonList, overviewParagraph)
 import Drasil.Projectile.Lesson.Review (reviewContent)
 import Drasil.Projectile.Lesson.Motion (motionContextP1, figCSandA, motionContextP2, horMotion, verMotion, summary)
+import Drasil.Projectile.Lesson.Analysis (coorSyst, kinematicEq)
 
 nb :: Document
 nb = mkDoc mkNB (S.sFor'' titleize phrase) si
@@ -42,7 +44,7 @@ mkNB = [
        BodyProg
          [Review reviewContent,
           MainIdea [motionContextP1, LlC figCSandA, motionContextP2] [horMotion, verMotion, summary],
-          MethsAndAnls [mAndaintro] []],
+          MethsAndAnls [mAndaintro] [coorSyst, kinematicEq]],
   Bibliography
   ]
 
@@ -69,7 +71,8 @@ si = SI {
 
 symbMap :: ChunkDB
 symbMap = cdb (map qw physicscon ++ symbols) (nw projectileMotion : [] 
-  ++ map nw doccon ++ map nw doccon' ++ map nw physicCon ++ concepts ++ map nw acronyms ++ map nw symbols) 
+  ++ map nw doccon ++ map nw doccon' ++ map nw physicCon ++ concepts 
+  ++ map nw mathcon ++ map nw acronyms ++ map nw symbols) 
   ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] 
 
 usedDB :: ChunkDB
@@ -85,4 +88,4 @@ projectileMotion = commonIdea "projectileMotion" (pn "Projectile Motion") "Proje
 
 mAndaintro :: Contents
 mAndaintro = foldlSP 
-  [S "Free-flight projectile motion problems can be solved using the following procedure."]
+  [S "Free-flight", phrase projMotion, S "problems can be solved using the following procedure"]

@@ -1,9 +1,10 @@
 module Drasil.Projectile.Lesson.Motion where
 
-import qualified Drasil.DocLang.Notebook as NB (mainIdea, summary, hormotion, vermotion)
+import qualified Drasil.DocLang.Notebook as NB (summary, hormotion, vermotion)
 
 import Data.Drasil.Concepts.Physics (motion, acceleration, velocity, force, time,
   constAccel, horizontalMotion, verticalMotion)
+import Data.Drasil.Concepts.Math (direction, xDir, yAxis)
 import Drasil.Projectile.Concepts (projectile, projMotion)
 import Drasil.Projectile.Expressions (lcrectVel, lcrectPos, lcrectNoTime, horMotionEqn1, horMotionEqn2,
   verMotionEqn1, verMotionEqn2, verMotionEqn3)
@@ -31,8 +32,9 @@ motionContextP1
        S "To illustrate the kinematic analysis, consider a ", phrase projectile,
          S "launched at point", sParen ((E (sy QP.ixDist)) `sC` (E (sy QP.iyDist))),
          S "as shown in" +:+. makeRef2S figCSandA,
-       S "The path is defined in the x-y plane such that the initial", phrase velocity +:+ S "is",
-         E (sy QP.iSpeed), S ", having components", E (sy QP.ixVel) `S.sAnd` E (sy QP.iyVel),
+       S "The path is defined in the", P lX `sDash` P lY, S "plane such that the initial", 
+         phrase velocity +:+ S "is", E (sy QP.iSpeed), S ", having components", 
+         E (sy QP.ixVel) `S.sAnd` E (sy QP.iyVel),
        S "When air resistance is neglected, the only", phrase force, S "acting on the",
          phrase projectile, S"is its weight, which causes the", phrase projectile, 
          S "to have a *constant downward acceleration* of approximately",
@@ -53,16 +55,15 @@ horMotion = NB.hormotion [intro, equations, concl] []
                   sParen(E (sy QP.xAccel $= 0)), motionSent]
         equations = foldlSP_ $ weave [equationsSents, map E horMotionEqns]
         concl = foldlSP [
-                  S "Since the", phrase acceleration, S "in the x direction", sParen (E (sy QP.xAccel)),
-                  S "is zero, the horizontal component of ", phrase velocity,
+                  S "Since the", phrase acceleration, S "in the" +:+ phrase xDir, 
+                  sParen (E (sy QP.xAccel)), S "is zero, the horizontal component of ", phrase velocity,
                   S "always remains constant during" +:+. phrase motion,
                   S "In addition to knowing this, we have one more equation"]
                 
 verMotion = NB.vermotion [intro, equations, concl] []
   where intro = foldlSP_ [
-                  S "Since the positive y axis is directed upward, the", phrase acceleration,
-                  S "in the vertical direction is" +:+. 
-                  E (sy QP.yAccel $= negate (sy QP.gravitationalAccel)), motionSent]
+                  S "Since the positive", phrase yAxis, S "is directed upward, the", phrase acceleration,
+                  S "in the vertical direction is" +:+. E (sy QP.yAccel $= negate (sy QP.gravitationalAccel)), motionSent]
         equations = foldlSP_ $ weave [equationsSents, map E verMotionEqns]
         concl = foldlSP [
                   S "Recall that the last equation can be formulated on the basis of eliminating the",

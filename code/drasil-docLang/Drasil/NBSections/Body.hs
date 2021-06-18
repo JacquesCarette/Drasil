@@ -16,6 +16,6 @@ reviewSec cs = NB.review cs []
 mainIdeaSec :: [Contents] -> [Section] -> Section
 mainIdeaSec a subSec = NB.mainIdea a subSec
 
--- Method and Anaysis
+-- Method and Analysis
 mthdAndanls :: [Contents] -> [Section] -> Section
 mthdAndanls a subSec = NB.methAndAnls a subSec

@@ -1,11 +1,44 @@
-module Language.Drasil.Reference where
-
-import Control.Lens ((^.))
+{-# Language TemplateHaskell #-}
+module Language.Drasil.Reference (Reference(Reference, refInfo), makeRef2, makeRef2S,
+  makeCite, makeCiteS, makeCiteInfo, makeCiteInfoS, rw) where
 
 import Language.Drasil.Chunk.Citation (Citation)
-import Language.Drasil.Classes.Core (HasUID(uid), HasShortName(shortname), Referable(renderRef))
-import Language.Drasil.RefProg (Reference(..), RefInfo(..))
+import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
+  Referable(refAdd, renderRef))
+import Language.Drasil.Classes.Core2 (HasShortName(shortname))
+import Language.Drasil.RefProg (RefInfo(..))
 import Language.Drasil.Sentence (Sentence(Ref))
+import Language.Drasil.Label.Type (LblType(..), getAdd)
+import Language.Drasil.ShortName (ShortName)
+import Language.Drasil.UID (UID)
+
+import Control.Lens ((^.), makeLenses)
+
+--Reference Type--
+
+-- | A Reference contains the identifier ('UID'), a reference address ('LblType'),
+-- a human-readable shortname ('ShortName'), and any extra information about the reference ('RefInfo').
+data Reference = Reference
+  { _ui :: UID
+  ,  ra :: LblType
+  ,  sn :: ShortName
+  ,  refInfo :: RefInfo }
+makeLenses ''Reference
+
+-- | Equal if 'UID's are equal.
+instance Eq            Reference where a == b = (a ^. uid) == (b ^. uid)
+-- | Finds the 'UID' of a 'Reference'.
+instance HasUID        Reference where uid = ui
+-- | Finds the reference address contained in a 'Reference' (through a 'LblType').
+instance HasRefAddress Reference where getRefAdd = getAdd . ra
+-- | Finds the shortname of the reference address used for the 'Reference'.
+instance HasShortName  Reference where shortname = sn
+-- | Finds the reference address of a 'Reference'.
+instance Referable Reference where
+  refAdd r = r ^. ui
+  renderRef = ra
+
+-------------------------------
 
 -- | Projector function that creates a 'Reference' from something 'Referable'.
 makeRef2 :: (Referable l, HasShortName l) => l -> Reference

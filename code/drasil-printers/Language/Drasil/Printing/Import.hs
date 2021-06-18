@@ -417,11 +417,11 @@ renderShortName ctx (Deferred u) _ = S $ fromMaybe (error "Domain has no abbrevi
   -- Used to be: S $ getRefAdd $ refResolve u (ctx ^. refTable)
 renderShortName ctx (RConcat a b) sn = renderShortName ctx a sn :+: renderShortName ctx b sn
 renderShortName _ (RS s) _ = S s
-renderShortName _ Name sn = S $ getStringSN sn
+renderShortName _ Name sn = getSentSN sn
 
 -- | Render a uniform resource locator as a 'Sentence'.
 renderURI :: ctx -> ShortName -> Sentence
-renderURI _ sn = S $ getStringSN sn
+renderURI _ = getSentSN
 
 -- | Renders citation information.
 renderCitInfo :: RefInfo -> Sentence

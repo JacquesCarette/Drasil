@@ -67,13 +67,13 @@ gd' :: IsUnit u => UID -> ModelKinds -> Maybe u ->
   Maybe Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
 gd' gid _     _   _     []   _  = error $ "Source field of " ++ gid ++ " is empty"
 gd' gid mkind u derivs refs sn_ = 
-  GD gid mkind (fmap unitWrapper u) derivs refs (shortname' sn_) (prependAbrv genDefn sn_)
+  GD gid mkind (fmap unitWrapper u) derivs refs (shortname' $ S sn_) (prependAbrv genDefn sn_)
 
 -- | Smart constructor for general definitions with no references.
 gdNoRefs' :: IsUnit u => UID -> ModelKinds -> Maybe u ->
   Maybe Derivation -> String -> [Sentence] -> GenDefn
 gdNoRefs' gid mkind u derivs sn_ = 
-  GD gid mkind (fmap unitWrapper u) derivs [] (shortname' sn_) (prependAbrv genDefn sn_)
+  GD gid mkind (fmap unitWrapper u) derivs [] (shortname' $ S sn_) (prependAbrv genDefn sn_)
 
 -- | Grab all related 'QDefinitions' from a list of general definitions.
 getEqModQdsFromGd :: [GenDefn] -> [QDefinition]

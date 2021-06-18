@@ -1,0 +1,6 @@
+digraph space {
+    /* definitions for each type component */
+	Space 	    [shape=oval, color=cyan3, label="Space"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */

@@ -1,0 +1,6 @@
+digraph month {
+    /* definitions for each type component */
+    Month [shape=oval, color=cyan3, label="Month"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */

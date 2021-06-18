@@ -1,0 +1,13 @@
+digraph reference {
+
+    ReferenceUID -> Reference;
+    LblType -> Reference;
+    ShortName -> Reference;
+    RefInfo -> Reference;
+
+    /* definitions for each type component */
+	Reference 	    [shape=oval, color=cyan3, label="Reference"];
+    ReferenceUID	    [shape=oval, color=cyan3, label="UID"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */

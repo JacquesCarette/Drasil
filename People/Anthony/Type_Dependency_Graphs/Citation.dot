@@ -3,13 +3,13 @@ digraph citation {
 	CitationKind -> Citation;
     CiteFields -> Citation;
     CitationUID -> Citation;
-    ShortNameCitation -> Citation;
+    CitationShortName -> Citation;
     
 	/* definitions for each type component */
 	Citation 	    [shape=oval, color=cyan3, label="Citation"];
     CiteFields    [shape=oval, color=cyan3, label="CiteFields"];
     CitationUID  [shape=oval, color=cyan3, label="UID"];
-    ShortNameCitation  [shape=oval, color=cyan3, label="ShortName"];
+    CitationShortName  [shape=oval, color=cyan3, label="ShortName"];
 
 }
 

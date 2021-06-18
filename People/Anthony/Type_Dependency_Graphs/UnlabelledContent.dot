@@ -1,0 +1,9 @@
+digraph unlabelledcontent {
+
+    RawContent -> UnlabelledContent;
+
+    /* definitions for each type component */
+	UnlabelledContent 	    [shape=oval, color=cyan3, label="UnlabelledContent"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */

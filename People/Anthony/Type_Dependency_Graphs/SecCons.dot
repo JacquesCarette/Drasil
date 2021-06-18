@@ -1,0 +1,10 @@
+digraph seccons {
+
+    Section -> SecCons [style="dotted"];
+    Contents -> SecCons [style="dotted"];
+
+    /* definitions for each type component */
+	SecCons 	    [shape=oval, color=cyan3, label="Section Content (SecCons)"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */

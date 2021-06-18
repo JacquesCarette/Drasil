@@ -1,0 +1,6 @@
+digraph scheme {
+    /* definitions for each type component */
+	Scheme 	    [shape=oval, color=cyan3, label="Connection Type (Scheme)"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */

@@ -1,0 +1,10 @@
+digraph section {
+    
+    Reference -> Section;
+    SecCons -> Section;
+
+    /* definitions for each type component */
+	Section 	    [shape=oval, color=cyan3, label="Section"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */

@@ -1,0 +1,10 @@
+digraph realinterval {
+
+    Inclusive -> RealInterval;
+
+    /* definitions for each type component */
+	RealInterval 	    [shape=oval, color=cyan3, label="RealInterval"];
+    Inclusive 	    [shape=oval, color=cyan3, label="Bounds on an interval (Inclusive)"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */

@@ -1,0 +1,10 @@
+digraph contents {
+
+    UnlabelledContent -> Contents [style="dotted"];
+    LabelledContent -> Contents [style="dotted"];
+
+    /* definitions for each type component */
+	Contents 	    [shape=oval, color=cyan3, label="Contents"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */

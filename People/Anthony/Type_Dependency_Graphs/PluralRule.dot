@@ -1,0 +1,6 @@
+digraph pluralrule {
+    /* definitions for each type component */
+	PluralRule 	    [shape=oval, color=cyan3, label="PluralRule"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */

@@ -1,0 +1,11 @@
+digraph uri {
+
+    Scheme -> URI [style="dotted"];
+    Authority -> URI [style="dotted"];
+
+
+    /* definitions for each type component */
+	URI 	    [shape=oval, color=cyan3, label="Uniform Resource Identifier (URI)"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */

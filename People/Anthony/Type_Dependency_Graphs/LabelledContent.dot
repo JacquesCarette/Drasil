@@ -1,0 +1,10 @@
+digraph labelledcontent {
+
+    Reference -> LabelledContent;
+    RawContent -> LabelledContent;
+
+    /* definitions for each type component */
+	LabelledContent 	    [shape=oval, color=cyan3, label="LabelledContent"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */

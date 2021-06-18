@@ -1,0 +1,14 @@
+digraph constrainedchunk {
+	/* relationships between independent and dependent components */
+	QuantityDict -> ConstrainedChunk;
+    ConstrainedChunkConstraints -> ConstrainedChunk;
+    ConstrainedChunkMaybeExpr -> ConstrainedChunk;
+    
+	/* definitions for each type component */
+	ConstrainedChunk 	    [shape=oval, color=cyan3, label="ConstrainedChunk"];
+    ConstrainedChunkConstraints    [shape=oval, color=cyan3, label="[Constraint]"];
+    ConstrainedChunkMaybeExpr  [shape=oval, color=cyan3, label="Maybe Expr"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */

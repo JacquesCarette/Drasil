@@ -1,0 +1,16 @@
+digraph quantitydict {
+	/* relationships between independent and dependent components */
+	IdeaDict -> QuantityDict;
+    QuantityDictSpace -> QuantityDict;
+    QuantityDictStageSymbol -> QuantityDict;
+    QuantityDictMaybeUnitDefn -> QuantityDict;
+    
+	/* definitions for each type component */
+	QuantityDict 	    [shape=oval, color=cyan3, label="QuantityDict"];
+    QuantityDictSpace    [shape=oval, color=cyan3, label="Space"];
+    QuantityDictStageSymbol  [shape=oval, color=cyan3, label="Stage Symbol"];
+    QuantityDictMaybeUnitDefn  [shape=oval, color=cyan3, label="Maybe UnitDefn"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */

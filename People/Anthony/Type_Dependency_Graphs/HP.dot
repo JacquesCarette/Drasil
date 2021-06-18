@@ -1,0 +1,7 @@
+digraph hp {
+    
+	/* definitions for each type component */
+	HP 	    [shape=oval, color=cyan3, label="Method of Publishing (HP)"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */

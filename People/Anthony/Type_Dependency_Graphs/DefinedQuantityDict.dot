@@ -1,0 +1,16 @@
+digraph definedquantitydict {
+	/* relationships between independent and dependent components */
+	ConceptChunk -> DefinedQuantityDict;
+    DefinedQuantityDictStageSymbol -> DefinedQuantityDict;
+    DefinedQuantityDictSpace -> DefinedQuantityDict;
+    DefinedQuantityDictMaybeUnitDefn -> DefinedQuantityDict;
+    
+	/* definitions for each type component */
+	DefinedQuantityDict 	    [shape=oval, color=cyan3, label="DefinedQuantityDict"];
+    DefinedQuantityDictStageSymbol    [shape=oval, color=cyan3, label="Stage Symbol"];
+    DefinedQuantityDictSpace  [shape=oval, color=cyan3, label="Space"];
+    DefinedQuantityDictMaybeUnitDefn  [shape=oval, color=cyan3, label="Maybe UnitDefn"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */

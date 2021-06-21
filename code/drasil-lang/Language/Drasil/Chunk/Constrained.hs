@@ -29,26 +29,27 @@ data ConstrainedChunk = ConstrainedChunk { _qd :: QuantityDict
                                          }
 makeLenses ''ConstrainedChunk
 
-instance HasUID        ConstrainedChunk where uid = qd . uid
 -- ^ Finds 'UID' of the 'QuantityDict' used to make the 'ConstrainedChunk'.
-instance NamedIdea     ConstrainedChunk where term = qd . term
+instance HasUID        ConstrainedChunk where uid = qd . uid
 -- ^ Finds term ('NP') of the 'QuantityDict' used to make the 'ConstrainedChunk'.
-instance Idea          ConstrainedChunk where getA = getA . view qd
+instance NamedIdea     ConstrainedChunk where term = qd . term
 -- ^ Finds the idea contained in the 'QuantityDict' used to make the 'ConstrainedChunk'.
-instance HasSpace      ConstrainedChunk where typ = qd . typ
+instance Idea          ConstrainedChunk where getA = getA . view qd
 -- ^ Finds the 'Space' of the 'QuantityDict' used to make the 'ConstrainedChunk'.
-instance HasSymbol     ConstrainedChunk where symbol c = symbol (c^.qd)
+instance HasSpace      ConstrainedChunk where typ = qd . typ
 -- ^ Finds the 'Symbol' of the 'QuantityDict' used to make the 'ConstrainedChunk'.
-instance Quantity      ConstrainedChunk where
+instance HasSymbol     ConstrainedChunk where symbol c = symbol (c^.qd)
 -- ^ 'ConstrainedChunk's have a 'Quantity'. 
-instance Constrained   ConstrainedChunk where constraints = constr
+instance Quantity      ConstrainedChunk where
 -- ^ Finds the 'Constraint's of a 'ConstrainedChunk'.
-instance HasReasVal    ConstrainedChunk where reasVal     = reasV
+instance Constrained   ConstrainedChunk where constraints = constr
 -- ^ Finds a reasonable value for the 'ConstrainedChunk'.
-instance Eq            ConstrainedChunk where c1 == c2 = (c1 ^. qd . uid) == (c2 ^. qd . uid)
+instance HasReasVal    ConstrainedChunk where reasVal     = reasV
 -- ^ Equal if 'UID's are equal.
-instance MayHaveUnit   ConstrainedChunk where getUnit = getUnit . view qd
+instance Eq            ConstrainedChunk where c1 == c2 = (c1 ^. qd . uid) == (c2 ^. qd . uid)
 -- ^ Finds units contained in the 'QuantityDict' used to make the 'ConstrainedChunk'.
+instance MayHaveUnit   ConstrainedChunk where getUnit = getUnit . view qd
+
 
 data ConstrainedQDef = ConstrainedQDef { _qd' :: QuantityDict
                                        , _constr' :: [Constraint] -- should really be NEList
@@ -56,24 +57,25 @@ data ConstrainedQDef = ConstrainedQDef { _qd' :: QuantityDict
 
 makeLenses ''ConstrainedQDef                          
 
-instance HasUID        ConstrainedQDef   where uid = qd' . uid
 -- ^ Finds 'UID' of the 'QuantityDict' used to make the 'ConstrainedQDef  '.
-instance NamedIdea     ConstrainedQDef   where term = qd' . term
+instance HasUID        ConstrainedQDef   where uid = qd' . uid
 -- ^ Finds term ('NP') of the 'QuantityDict' used to make the 'ConstrainedQDef'.
-instance Idea          ConstrainedQDef   where getA = getA . view qd'
+instance NamedIdea     ConstrainedQDef   where term = qd' . term
 -- ^ Finds the idea contained in the 'QuantityDict' used to make the 'ConstrainedQDef '.
-instance HasSpace      ConstrainedQDef   where typ = qd' . typ
+instance Idea          ConstrainedQDef   where getA = getA . view qd'
 -- ^ Finds the 'Space' of the 'QuantityDict' used to make the 'ConstrainedQDef  '.
-instance HasSymbol     ConstrainedQDef   where symbol c = symbol (c^.qd')
+instance HasSpace      ConstrainedQDef   where typ = qd' . typ
 -- ^ Finds the 'Symbol' of the 'QuantityDict' used to make the 'ConstrainedQDef  '.
-instance Quantity      ConstrainedQDef   where
+instance HasSymbol     ConstrainedQDef   where symbol c = symbol (c^.qd')
 -- ^ 'ConstrReasQDef  's have a 'Quantity'. 
-instance Constrained   ConstrainedQDef   where constraints = constr'
+instance Quantity      ConstrainedQDef   where
 -- ^ Finds a reasonable value for the 'ConstrainedQDef '.
-instance Eq            ConstrainedQDef   where c1 == c2 = (c1 ^. qd' . uid) == (c2 ^. qd' . uid)
+instance Constrained   ConstrainedQDef   where constraints = constr'
 -- ^ Equal if 'UID's are equal.
-instance MayHaveUnit   ConstrainedQDef   where getUnit = getUnit . view qd'
+instance Eq            ConstrainedQDef   where c1 == c2 = (c1 ^. qd' . uid) == (c2 ^. qd' . uid)
 -- ^ Finds units contained in the 'QuantityDict' used to make the 'ConstrainedQDef  '.
+instance MayHaveUnit   ConstrainedQDef   where getUnit = getUnit . view qd'
+
 
 
 
@@ -101,30 +103,31 @@ data ConstrConcept = ConstrConcept { _defq :: DefinedQuantityDict
                                    }
 makeLenses ''ConstrConcept
 
-instance HasUID        ConstrConcept where uid = defq . uid
 -- ^ Finds 'UID' of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
-instance NamedIdea     ConstrConcept where term = defq . term
+instance HasUID        ConstrConcept where uid = defq . uid
 -- ^ Finds term ('NP') of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
-instance Idea          ConstrConcept where getA = getA . view defq
+instance NamedIdea     ConstrConcept where term = defq . term
 -- ^ Finds the idea contained in the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
-instance HasSpace      ConstrConcept where typ = defq . typ
+instance Idea          ConstrConcept where getA = getA . view defq
 -- ^ Finds the 'Space' of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
-instance HasSymbol     ConstrConcept where symbol c = symbol (c^.defq)
+instance HasSpace      ConstrConcept where typ = defq . typ
 -- ^ Finds the 'Symbol' of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
-instance Quantity      ConstrConcept where
+instance HasSymbol     ConstrConcept where symbol c = symbol (c^.defq)
 -- ^ 'ConstrConcept's have a 'Quantity'. 
-instance Definition    ConstrConcept where defn = defq . defn
+instance Quantity      ConstrConcept where
 -- ^ Finds definition of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
-instance ConceptDomain ConstrConcept where cdom = cdom . view defq
+instance Definition    ConstrConcept where defn = defq . defn
 -- ^ Finds the domain contained in the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
-instance Constrained   ConstrConcept where constraints  = constr''
+instance ConceptDomain ConstrConcept where cdom = cdom . view defq
 -- ^ Finds the 'Constraint's of a 'ConstrConcept'.
-instance HasReasVal    ConstrConcept where reasVal      = reasV'
+instance Constrained   ConstrConcept where constraints  = constr''
 -- ^ Finds a reasonable value for the 'ConstrConcept'.
-instance Eq            ConstrConcept where c1 == c2 = (c1 ^.defq.uid) == (c2 ^.defq.uid)
+instance HasReasVal    ConstrConcept where reasVal      = reasV'
 -- ^ Equal if 'UID's are equal.
-instance MayHaveUnit   ConstrConcept where getUnit = getUnit . view defq
+instance Eq            ConstrConcept where c1 == c2 = (c1 ^.defq.uid) == (c2 ^.defq.uid)
 -- ^ Finds the units of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
+instance MayHaveUnit   ConstrConcept where getUnit = getUnit . view defq
+
 
 -- | Creates a 'ConstrConcept' with a quantitative concept, a list of 'Constraint's and an 'Expr'.
 constrained' :: (Concept c, MayHaveUnit c, Quantity c) =>

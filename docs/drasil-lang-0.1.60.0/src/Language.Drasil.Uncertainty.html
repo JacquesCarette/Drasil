@@ -40,10 +40,9 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 Lens' Uncertainty (Maybe Double)
 </span><a href="Language.Drasil.Uncertainty.Core.html#uncert"><span class="hs-identifier hs-var">uncert</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-17"></span><span>
-</span><span id="line-18"></span><span>
-</span><span id="line-19"></span><span class="hs-comment">-- | Accessor for precision value from something that has an uncertainty.</span><span>
-</span><span id="line-20"></span><span id="local-6989586621679363167"><span class="annot"><a href="Language.Drasil.Uncertainty.html#uncPrec"><span class="hs-identifier hs-type">uncPrec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Classes.html#HasUncertainty"><span class="hs-identifier hs-type">HasUncertainty</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679363167"><span class="hs-identifier hs-type">x</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679363167"><span class="hs-identifier hs-type">x</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span></span><span>
-</span><span id="line-21"></span><span id="uncPrec"><span class="annot"><span class="annottext">uncPrec :: x -&gt; Maybe Int
+</span><span id="line-18"></span><span class="hs-comment">-- | Accessor for precision value from something that has an uncertainty.</span><span>
+</span><span id="line-19"></span><span id="local-6989586621679363167"><span class="annot"><a href="Language.Drasil.Uncertainty.html#uncPrec"><span class="hs-identifier hs-type">uncPrec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Classes.html#HasUncertainty"><span class="hs-identifier hs-type">HasUncertainty</span></a></span><span> </span><span class="annot"><a href="#local-6989586621679363167"><span class="hs-identifier hs-type">x</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679363167"><span class="hs-identifier hs-type">x</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Int</span></span></span><span>
+</span><span id="line-20"></span><span id="uncPrec"><span class="annot"><span class="annottext">uncPrec :: x -&gt; Maybe Int
 </span><a href="Language.Drasil.Uncertainty.html#uncPrec"><span class="hs-identifier hs-var hs-var">uncPrec</span></a></span></span><span> </span><span id="local-6989586621679363166"><span class="annot"><span class="annottext">u :: x
 </span><a href="#local-6989586621679363166"><span class="hs-identifier hs-var">u</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">x
 </span><a href="#local-6989586621679363166"><span class="hs-identifier hs-var">u</span></a></span><span> </span><span class="annot"><span class="annottext">x -&gt; Getting (Maybe Int) x (Maybe Int) -&gt; Maybe Int
@@ -61,4 +60,4 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 -&gt; Uncertainty -&gt; Const (Maybe Int) Uncertainty
 Lens' Uncertainty (Maybe Int)
 </span><a href="Language.Drasil.Uncertainty.Core.html#prec"><span class="hs-identifier hs-var">prec</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-22"></span></pre></body></html>
+</span><span id="line-21"></span></pre></body></html>

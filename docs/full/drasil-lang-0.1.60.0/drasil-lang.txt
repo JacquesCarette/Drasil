@@ -311,16 +311,17 @@ URI :: String -> LblType
 -- | Created for different forms of references. Used in <a>LblType</a>.
 data IRefProg
 
--- | Deferred lookup; done later
+-- | Deferred lookup; done later. Used for domains in a
+--   <tt>ConceptInstance</tt>.
 Deferred :: UID -> IRefProg
 
--- | Lifts a <a>String</a> into a <tt>RefProg</tt>
+-- | Lifts a <a>String</a> into a <tt>RefProg</tt>.
 RS :: String -> IRefProg
 
--- | Concatenates with two subprograms
+-- | Concatenates with two subprograms.
 RConcat :: IRefProg -> IRefProg -> IRefProg
 
--- | The <tt>Symbol</tt> to insert the <tt>ShortName</tt> directly
+-- | The <tt>Symbol</tt> to insert the <tt>ShortName</tt> directly.
 Name :: IRefProg
 
 -- | Retrieves the <a>String</a> contained in a <a>LblType</a>.
@@ -842,12 +843,12 @@ data DisplayExpr
 [BinOp] :: DisplayBinOp -> DisplayExpr -> DisplayExpr -> DisplayExpr
 [AssocBinOp] :: DisplayAssocBinOp -> [DisplayExpr] -> DisplayExpr
 
--- | Binary Display Operations
+-- | Binary Display Operations.
 data DisplayBinOp
 Defines :: DisplayBinOp
 IsIn :: DisplayBinOp
 
--- | Associative Binary Display Operations
+-- | Associative Binary Display Operations.
 data DisplayAssocBinOp
 And :: DisplayAssocBinOp
 Equivalence :: DisplayAssocBinOp
@@ -911,24 +912,29 @@ dePrecB :: DisplayBinOp -> Int
 dePrecAssoc :: DisplayAssocBinOp -> Int
 
 module Language.Drasil.Expr.Extract
+
+-- | Generic traverse of all display expressions that could lead to names.
 deNames :: DisplayExpr -> [String]
 
 -- | Generic traverse of all expressions that could lead to names.
 eNames :: Expr -> [String]
 
 -- | Generic traversal of everything that could come from an interval to
---   names (similar to <tt>names</tt>).
+--   names (similar to <a>eNames</a>).
 eNamesRI :: RealInterval Expr Expr -> [String]
+
+-- | Generic traverse of all display expressions that could lead to names
+--   (same as <a>deNames</a>).
 deNames' :: DisplayExpr -> [String]
 
--- | Generic traverse of all positions that could lead to eNames without
---   functions. FIXME : this should really be done via post-facto
+-- | Generic traverse of all positions that could lead to <a>eNames</a>
+--   without functions. FIXME : this should really be done via post-facto
 --   filtering, but right now the information needed to do this is not
 --   available!
 eNames' :: Expr -> [String]
 
 -- | Generic traversal of everything that could come from an interval to
---   names without functions (similar to <tt>names'</tt>).
+--   names without functions (similar to <a>eNames'</a>).
 eNamesRI' :: RealInterval Expr Expr -> [String]
 
 -- | Get dependencies from an equation.
@@ -939,7 +945,7 @@ deDep :: DisplayExpr -> [String]
 
 module Language.Drasil.DisplayClasses
 
--- | Data that can convert into a Displayable Expr
+-- | Data that can convert into a Displayable <a>Expr</a>.
 class Display c
 toDispExpr :: Display c => c -> DisplayExpr
 instance Language.Drasil.DisplayClasses.Display Language.Drasil.Expr.Expr
@@ -2047,12 +2053,12 @@ data DisplayExpr
 [BinOp] :: DisplayBinOp -> DisplayExpr -> DisplayExpr -> DisplayExpr
 [AssocBinOp] :: DisplayAssocBinOp -> [DisplayExpr] -> DisplayExpr
 
--- | Binary Display Operations
+-- | Binary Display Operations.
 data DisplayBinOp
 Defines :: DisplayBinOp
 IsIn :: DisplayBinOp
 
--- | Associative Binary Display Operations
+-- | Associative Binary Display Operations.
 data DisplayAssocBinOp
 And :: DisplayAssocBinOp
 Equivalence :: DisplayAssocBinOp
@@ -2110,14 +2116,14 @@ eDep :: Expr -> [String]
 -- | Generic traverse of all expressions that could lead to names.
 eNames :: Expr -> [String]
 
--- | Generic traverse of all positions that could lead to eNames without
---   functions. FIXME : this should really be done via post-facto
+-- | Generic traverse of all positions that could lead to <a>eNames</a>
+--   without functions. FIXME : this should really be done via post-facto
 --   filtering, but right now the information needed to do this is not
 --   available!
 eNames' :: Expr -> [String]
 
 -- | Generic traversal of everything that could come from an interval to
---   names (similar to <tt>names</tt>).
+--   names (similar to <a>eNames</a>).
 eNamesRI :: RealInterval Expr Expr -> [String]
 
 -- | Get dependencies from display expressions.
@@ -2344,10 +2350,11 @@ Bullet :: [(ItemType, Maybe String)] -> ListType
 -- | Enumerated list.
 Numeric :: [(ItemType, Maybe String)] -> ListType
 
--- | Simple list with items denoted by <tt>-</tt>.
+-- | Simple list with items denoted by <tt>:</tt>. Renders as "Title: Item"
 Simple :: [ListTuple] -> ListType
 
--- | Descriptive list, renders as "Title: Item" (see <a>ListTuple</a>).
+-- | Descriptive list, renders as "<b>Title: Item</b>" (see
+--   <a>ListTuple</a>).
 Desc :: [ListTuple] -> ListType
 
 -- | Renders a list of "<tt><a>Title</a></tt> is the <tt>Item</tt>".
@@ -2372,9 +2379,9 @@ type Header = Sentence " Used when creating sublists."
 type Depth = Int
 type Width = Float
 type Height = Float
-type ListTuple = (Title, ItemType, Maybe String) " Formats as Title: Item."
+type ListTuple = (Title, ItemType, Maybe String) " Formats as Title: Item. For use in lists."
 type Filepath = String
-type Lbl = Sentence
+type Lbl = Sentence " Label."
 
 -- | Contents may be labelled or unlabelled.
 data Contents
@@ -2410,7 +2417,7 @@ Enumeration :: ListType -> RawContent
 -- | Defines something with a type, identifier, and <a>Contents</a>.
 Defini :: DType -> [(Identifier, [Contents])] -> RawContent
 
--- | Should use relative file path.
+-- | For creating figures in a document. Should use relative file path.
 Figure :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
 
 -- | Grants the ability to reference something.
@@ -2442,6 +2449,8 @@ class HasContents c
 
 -- | Provides a <tt>Lens</tt> to the <a>RawContent</a>.
 accessContents :: HasContents c => Lens' c RawContent
+
+-- | Helper to prepend labels to <a>LabelledContent</a> when referencing.
 prependLabel :: RawContent -> IRefProg
 instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.LabelledContent
 instance Language.Drasil.Document.Core.HasContents Language.Drasil.Document.Core.UnlabelledContent
@@ -2641,7 +2650,7 @@ class DefiningExpr c
 -- | Provides a <tt>Lens</tt> to the expression.
 defnExpr :: DefiningExpr c => Lens' c Expr
 
--- | Data that can convert into a Displayable Expr
+-- | Data that can convert into a Displayable <a>Expr</a>.
 class Display c
 toDispExpr :: Display c => c -> DisplayExpr
 
@@ -3059,7 +3068,7 @@ dccWDS' :: String -> NP -> Sentence -> String -> CommonConcept
 --   tagging.
 cc :: Idea c => c -> String -> ConceptChunk
 
--- | Same as cc, except definition is a <a>Sentence</a>.
+-- | Same as <a>cc</a>, except definition is a <a>Sentence</a>.
 cc' :: Idea c => c -> Sentence -> ConceptChunk
 
 -- | Similar to <a>cc'</a>, but allows explicit tagging.
@@ -4215,7 +4224,7 @@ class DefiningExpr c
 -- | Provides a <tt>Lens</tt> to the expression.
 defnExpr :: DefiningExpr c => Lens' c Expr
 
--- | Data that can convert into a Displayable Expr
+-- | Data that can convert into a Displayable <a>Expr</a>.
 class Display c
 toDispExpr :: Display c => c -> DisplayExpr
 
@@ -4506,7 +4515,7 @@ ccs :: (Idea c, Concept d) => c -> Sentence -> [d] -> ConceptChunk
 --   tagging.
 cc :: Idea c => c -> String -> ConceptChunk
 
--- | Same as cc, except definition is a <a>Sentence</a>.
+-- | Same as <a>cc</a>, except definition is a <a>Sentence</a>.
 cc' :: Idea c => c -> Sentence -> ConceptChunk
 
 -- | Constructor for a <a>ConceptInstance</a>. Takes in the Reference
@@ -5134,10 +5143,11 @@ Bullet :: [(ItemType, Maybe String)] -> ListType
 -- | Enumerated list.
 Numeric :: [(ItemType, Maybe String)] -> ListType
 
--- | Simple list with items denoted by <tt>-</tt>.
+-- | Simple list with items denoted by <tt>:</tt>. Renders as "Title: Item"
 Simple :: [ListTuple] -> ListType
 
--- | Descriptive list, renders as "Title: Item" (see <a>ListTuple</a>).
+-- | Descriptive list, renders as "<b>Title: Item</b>" (see
+--   <a>ListTuple</a>).
 Desc :: [ListTuple] -> ListType
 
 -- | Renders a list of "<tt><a>Title</a></tt> is the <tt>Item</tt>".
@@ -5151,7 +5161,7 @@ Flat :: Sentence -> ItemType
 
 -- | Nest a list (<a>ListType</a>) as an item.
 Nested :: Header -> ListType -> ItemType
-type ListTuple = (Title, ItemType, Maybe String) " Formats as Title: Item."
+type ListTuple = (Title, ItemType, Maybe String) " Formats as Title: Item. For use in lists."
 
 -- | Contains a <a>Reference</a> and <a>RawContent</a>.
 data LabelledContent
@@ -5227,7 +5237,7 @@ Enumeration :: ListType -> RawContent
 -- | Defines something with a type, identifier, and <a>Contents</a>.
 Defini :: DType -> [(Identifier, [Contents])] -> RawContent
 
--- | Should use relative file path.
+-- | For creating figures in a document. Should use relative file path.
 Figure :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
 
 -- | Grants the ability to reference something.
@@ -5516,16 +5526,17 @@ URI :: String -> LblType
 -- | Created for different forms of references. Used in <a>LblType</a>.
 data IRefProg
 
--- | Deferred lookup; done later
+-- | Deferred lookup; done later. Used for domains in a
+--   <tt>ConceptInstance</tt>.
 Deferred :: UID -> IRefProg
 
--- | Lifts a <a>String</a> into a <tt>RefProg</tt>
+-- | Lifts a <a>String</a> into a <tt>RefProg</tt>.
 RS :: String -> IRefProg
 
--- | Concatenates with two subprograms
+-- | Concatenates with two subprograms.
 RConcat :: IRefProg -> IRefProg -> IRefProg
 
--- | The <tt>Symbol</tt> to insert the <tt>ShortName</tt> directly
+-- | The <tt>Symbol</tt> to insert the <tt>ShortName</tt> directly.
 Name :: IRefProg
 
 -- | Helper for common pattern of introducing the title-case version of a

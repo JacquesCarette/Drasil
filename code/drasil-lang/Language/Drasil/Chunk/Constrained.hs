@@ -1,5 +1,5 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Chunk.Constrained (ConstrainedChunk(..), ConstrainedQDef(..), ConstrConcept(..),
+module Language.Drasil.Chunk.Constrained (ConstrainedChunk(..), ConstrainedQDef(..), ConstrConcept(..), --ReasonableValueQDef(..)
   cnstrw, cnstrw', constrained', constrainedNRV', cuc, cuc', cuc'', cvc) where
 
 import Control.Lens ((^.), makeLenses, view)
@@ -76,7 +76,10 @@ instance Eq            ConstrainedQDef   where c1 == c2 = (c1 ^. qd' . uid) == (
 -- ^ Finds units contained in the 'QuantityDict' used to make the 'ConstrainedQDef  '.
 instance MayHaveUnit   ConstrainedQDef   where getUnit = getUnit . view qd'
 
-
+--data ReasonableValueQDef = RVQD { _qd'' :: QuantityDict
+--                                , reasV'' :: Expr
+--                                }
+--makeLenses ''ReasonableValueQDef
 
 
 -- | Creates a constrained unitary chunk from a 'UID', term ('NP'), 'Symbol', unit, 'Space', 'Constraint's, and an 'Expr'.

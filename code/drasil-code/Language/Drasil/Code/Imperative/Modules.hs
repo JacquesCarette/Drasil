@@ -4,8 +4,11 @@ module Language.Drasil.Code.Imperative.Modules (
   genCalcFunc, genOutputMod, genOutputFormat, genSampleInput
 ) where
 
-import Language.Drasil
+import Language.Drasil (Constraint(..), RealInterval(..),
+  Completeness(..), HasUID(uid), Stage(..))
 import Database.Drasil (ChunkDB)
+import Language.Drasil.Code.Expr
+import Language.Drasil.Code.Expr.Render
 import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.Descriptions (constClassDesc, 
   constModDesc, derivedValuesDesc, dvFuncDesc, inConsFuncDesc, inFmtFuncDesc, 
@@ -146,7 +149,7 @@ initConsts = do
       getDecl Inline _ = return Nothing
       declVars = do 
         vars <- mapM (mkVar . quantvar) cs
-        vals <- mapM (convExpr . codeEquat) cs
+        vals <- mapM (convExpr . renderExpr . codeEquat) cs -- TODO: renderExpr?
         logs <- mapM maybeLog vars
         return $ Just $ multi $ zipWith (defFunc $ conRepr g) vars vals ++ 
           concat logs
@@ -230,7 +233,7 @@ genInputClass scp = do
         GenState (Maybe (SClass r))
       genClass [] [] = return Nothing
       genClass inps csts = do
-        vals <- mapM (convExpr . codeEquat) csts
+        vals <- mapM (convExpr . renderExpr . codeEquat) csts -- TODO: renderExpr?
         inputVars <- mapM (\x -> fmap (pubDVar . var (codeName x) . convType) 
           (codeType x)) inps
         constVars <- zipWithM (\c vl -> fmap (\t -> constVarFunc (conRepr g) 
@@ -277,7 +280,7 @@ genInputDerived s = do
       genDerived _ = do
         ins <- getDerivedIns
         outs <- getDerivedOuts
-        bod <- mapM (\x -> genCalcBlock CalcAssign x (codeEquat x)) dvals
+        bod <- mapM (\x -> genCalcBlock CalcAssign x (renderExpr $ codeEquat x)) dvals -- TODO: renderExpr?
         desc <- dvFuncDesc
         mthd <- getFunc s "derived_values" desc ins outs bod
         return $ Just mthd
@@ -379,16 +382,20 @@ printConstraint c = do
   let db = sysinfodb $ codeSpec g
       printConstraint' :: (OOProg r) => Constraint -> GenState 
         [MSStatement r]
-      printConstraint' (Range _ (Bounded (_,e1) (_,e2))) = do
+      printConstraint' (Range _ (Bounded (_, e1') (_, e2'))) = do
+        let e1 = renderExpr e1' -- TODO: renderExpr hack
+        let e2 = renderExpr e2'
         lb <- convExpr e1
         ub <- convExpr e2
         return $ [printStr "between ", print lb] ++ printExpr e1 db ++
           [printStr " and ", print ub] ++ printExpr e2 db ++ [printStrLn "."]
-      printConstraint' (Range _ (UpTo (_,e))) = do
+      printConstraint' (Range _ (UpTo (_, e'))) = do
+        let e = renderExpr e' -- TODO: renderExpr hack
         ub <- convExpr e
         return $ [printStr "below ", print ub] ++ printExpr e db ++ 
           [printStrLn "."]
-      printConstraint' (Range _ (UpFrom (_,e))) = do
+      printConstraint' (Range _ (UpFrom (_, e'))) = do
+        let e = renderExpr e' -- TODO: renderExpr hack
         lb <- convExpr e
         return $ [printStr "above ", print lb] ++ printExpr e db ++ [printStrLn "."]
       printConstraint' (EnumeratedReal _ ds) = return [
@@ -400,13 +407,12 @@ printConstraint c = do
 -- | Don't print expressions that are just literals, because that would be 
 -- redundant (the values are already printed by printConstraint).
 -- If expression is more than just a literal, print it in parentheses.
-printExpr :: (OOProg r) => Expr -> ChunkDB -> [MSStatement r]
+printExpr :: (OOProg r) => CodeExpr -> ChunkDB -> [MSStatement r]
 printExpr (Dbl _)      _ = []
 printExpr (ExactDbl _) _ = []
 printExpr (Int _)      _ = []
 printExpr (Str _)      _ = []
-printExpr e           db = [printStr $ " (" ++
-  render (exprDoc db Implementation Linear e) ++ ")"]
+printExpr e           db = undefined -- TODO: [printStr $ " (" ++ render (exprDoc db Implementation Linear e) ++ ")"]
 
 -- | | Generates a function for reading inputs from a file.
 genInputFormat :: (OOProg r) => ScopeTag -> 
@@ -465,7 +471,7 @@ genConstClass scp = do
         (Maybe (SClass r))
       genClass [] = return Nothing 
       genClass vs = do
-        vals <- mapM (convExpr . codeEquat) vs 
+        vals <- mapM (convExpr . renderExpr . codeEquat) vs 
         vars <- mapM (\x -> fmap (var (codeName x) . convType) (codeType x)) vs
         let constVars = zipWith (constVarFunc (conRepr g)) vars vals
             getFunc Primary = primaryClass
@@ -501,7 +507,7 @@ genCalcFunc cdef = do
   v <- mkVar (quantvar cdef)
   blcks <- case cdef ^. defType 
             of Definition -> liftS $ genCalcBlock CalcReturn cdef 
-                 (codeEquat cdef)
+                 (renderExpr $ codeEquat cdef)
                ODE -> maybe (error $ nm ++ " missing from ExtLibMap") 
                  (\el -> do
                    defStmts <- mapM convStmt (el ^. defs)
@@ -524,7 +530,7 @@ data CalcType = CalcAssign | CalcReturn deriving Eq
 
 -- | Generates a calculation block for the given 'CodeDefinition', and assigns the 
 -- result to a variable (if 'CalcAssign') or returns the result (if 'CalcReturn').
-genCalcBlock :: (OOProg r) => CalcType -> CodeDefinition -> Expr ->
+genCalcBlock :: (OOProg r) => CalcType -> CodeDefinition -> CodeExpr ->
   GenState (MSBlock r)
 genCalcBlock t v (Case c e) = genCaseBlock t v c e
 genCalcBlock CalcAssign v e = do
@@ -538,7 +544,7 @@ genCalcBlock CalcReturn _ e = block <$> liftS (returnStmt <$> convExpr e)
 -- If the function is defined for every case, the final case is captured by an 
 -- else clause, otherwise an error-throwing else-clause is generated.
 genCaseBlock :: (OOProg r) => CalcType -> CodeDefinition -> Completeness 
-  -> [(Expr,Relation)] -> GenState (MSBlock r)
+  -> [(CodeExpr, CodeExpr)] -> GenState (MSBlock r)
 genCaseBlock _ _ _ [] = error $ "Case expression with no cases encountered" ++
   " in code generator"
 genCaseBlock t v c cs = do

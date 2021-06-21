@@ -4,12 +4,14 @@
 
 module Drasil.GlassBR.ModuleDefs (allMods, implVars, interpY, interpZ) where
 
-import Language.Drasil
+import Language.Drasil (QuantityDict, Space(..), implVar, nounPhraseSP,
+  label, sub, HasSymbol, HasUID, Symbol)
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
 import Language.Drasil.Code (($:=), Func, FuncStmt(..), Mod, 
   asVC, funcDef, fDecDef, ffor, funcData, quantvar, 
   multiLine, packmod, repeated, singleLine)
+import Language.Drasil.CodeExpr
 
 allMods :: [Mod]
 allMods = [readTableMod, interpMod]
@@ -86,41 +88,40 @@ filename = var "filename" "name of file with x y and z data"
 -- Some semantic functions
 
 -- Given two points (x1,y1) and (x2,y2), return the slope of the line going through them
-slope :: (Expr, Expr) -> (Expr, Expr) -> Expr
+slope :: (CodeExpr, CodeExpr) -> (CodeExpr, CodeExpr) -> CodeExpr
 slope (x1, y1) (x2, y2) = (y2 $- y1) $/ (x2 $- x1)
 
 -- Given two points (x1,y1) and (x2,y2), and an x ordinate, return
 -- extrapoled y on the straight line in between
-onLine :: (Expr, Expr) -> (Expr, Expr) -> Expr -> Expr
-onLine p1@(x1, y1) p2 x_ = 
-  let m = slope p1 p2 in
-  addRe (mulRe m (x_ $- x1)) y1
+onLine :: (CodeExpr, CodeExpr) -> (CodeExpr, CodeExpr) -> CodeExpr -> CodeExpr
+onLine p1@(x1, y1) p2 x_ = (m `mulRe` (x_ $- x1)) `addRe` y1
+                 where m = slope p1 p2
 
 ------------------------------------------------------------------------------------------
 -- Code Template helper functions
 
-vLook :: (HasSymbol a, HasSymbol i, HasUID a, HasUID i) => a -> i -> Expr -> Expr
+vLook :: (HasSymbol a, HasSymbol i, HasUID a, HasUID i) => a -> i -> CodeExpr -> CodeExpr
 vLook a i_ p = idx (sy a) (addI (sy i_) p)
 
 aLook :: (HasSymbol a, HasSymbol i, HasSymbol j, HasUID a, HasUID i, HasUID j) =>
-  a -> i -> j -> Expr
+  a -> i -> j -> CodeExpr
 aLook a i_ j_ = idx (idx (sy a) (sy i_)) (sy j_)
 
-getCol :: (HasSymbol a, HasSymbol i, HasUID a, HasUID i) => a -> i -> Expr -> Expr
+getCol :: (HasSymbol a, HasSymbol i, HasUID a, HasUID i) => a -> i -> CodeExpr -> CodeExpr
 getCol a_ i_ p = apply (asVC extractColumnCT) [sy a_, addI (sy i_) p]
 
 call :: Func -> [QuantityDict] -> FuncStmt
 call f l = FVal $ apply (asVC f) $ map sy l
 
-find :: (HasUID zv, HasUID z, HasSymbol zv, HasSymbol z) => zv -> z -> Expr
+find :: (HasUID zv, HasUID z, HasSymbol zv, HasSymbol z) => zv -> z -> CodeExpr
 find zv z_ = apply (asVC findCT) [sy zv, sy z_]
 
-linInterp :: [Expr] -> Expr
+linInterp :: [CodeExpr] -> CodeExpr
 linInterp = apply (asVC linInterpCT)
 
 interpOver :: (HasUID ptx, HasUID pty, HasUID ind, HasUID vv,
   HasSymbol ptx, HasSymbol pty, HasSymbol ind, HasSymbol vv) =>
-  ptx -> pty -> ind -> vv -> [Expr]
+  ptx -> pty -> ind -> vv -> [CodeExpr]
 interpOver ptx pty ind vv =
   [ vLook ptx ind (int 0), vLook pty ind (int 0)
   , vLook ptx ind (int 1), vLook pty ind (int 1)
@@ -150,7 +151,7 @@ extractColumnCT :: Func
 extractColumnCT = funcDef "extractColumn" "Extracts a column from a 2D matrix" 
   [mat, j] (Vect Real) (Just "column of the given matrix at the given index")
   [
-    fDecDef col (Matrix [[]]),
+    fDecDef col (matrix [[]]),
     --
     ffor i (sy i $< dim (sy mat))
       [ FAppend (sy col) (aLook mat i j) ],
@@ -163,9 +164,9 @@ interpY = funcDef "interpY"
   [filename, x, z] Real (Just "y value interpolated at given x and z values")
   [
   -- hack
-  fDecDef xMatrix (Matrix [[]]),
-  fDecDef yMatrix (Matrix [[]]),
-  fDecDef zVector (Matrix [[]]),
+  fDecDef xMatrix (matrix [[]]),
+  fDecDef yMatrix (matrix [[]]),
+  fDecDef zVector (matrix [[]]),
   --
   call readTable [filename, zVector, xMatrix, yMatrix],
   -- endhack
@@ -189,9 +190,9 @@ interpZ = funcDef "interpZ"
   [filename, x, y] Real (Just "z value interpolated at given x and y values")
   [
     -- hack
-  fDecDef xMatrix (Matrix [[]]),
-  fDecDef yMatrix (Matrix [[]]),
-  fDecDef zVector (Matrix [[]]),
+  fDecDef xMatrix (matrix [[]]),
+  fDecDef yMatrix (matrix [[]]),
+  fDecDef zVector (matrix [[]]),
   --
   call readTable [filename, zVector, xMatrix, yMatrix],
   -- endhack

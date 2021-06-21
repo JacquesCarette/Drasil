@@ -16,6 +16,7 @@ import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeIdea(codeChunk),
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef,
   auxExprs, codeEquat)
 import Language.Drasil.Choices (Choices(..))
+import Language.Drasil.Code.Expr.Render
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
 
 import Control.Lens ((^.))
@@ -139,7 +140,7 @@ asVC' (FData (FuncData n _ _))     = vc n (nounPhraseSP n) (Variable n) Real
 getDerivedInputs :: [DataDefinition] -> [Input] -> [Const] ->
   ChunkDB -> [QDefinition]
 getDerivedInputs ddefs ins cnsts sm =
-  filter ((`subsetOf` refSet) . flip codevars sm . (^. defnExpr)) (map qdFromDD ddefs)
+  filter ((`subsetOf` refSet) . flip codevars sm . renderExpr . (^. defnExpr)) (map qdFromDD ddefs) -- TODO: renderExpr here seems odd
   where refSet = ins ++ map quantvar cnsts
 
 type Known = CodeVarChunk
@@ -152,7 +153,7 @@ getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
   where getExecOrder' ord _ _ []   = ord
         getExecOrder' ord defs' k n =
           let new  = filter (\def -> (`subsetOf` k) (concatMap (`codevars'` sm)
-                (codeEquat def : def ^. auxExprs) \\ [quantvar def])) defs'
+                (renderExpr (def ^. defnExpr) : map renderExpr (def ^. auxExprs)) \\ [quantvar def])) defs' -- TODO: the renderExpr here seems hacky.
               cnew = map quantvar new
               kNew = k ++ cnew
               nNew = n \\ cnew

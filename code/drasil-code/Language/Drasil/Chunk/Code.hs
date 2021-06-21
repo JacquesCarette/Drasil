@@ -11,7 +11,9 @@ import Control.Lens ((^.),makeLenses,view)
 
 import Language.Drasil
 import Database.Drasil (ChunkDB, symbResolve)
-import Language.Drasil.Development
+
+import Language.Drasil.Code.Expr
+import Language.Drasil.Code.Expr.Extract
 
 import Language.Drasil.Printers (symbolDoc, toPlainName)
 
@@ -27,7 +29,7 @@ class CodeIdea c where
   -- | Code chunk associated with the idea.
   codeChunk     :: c -> CodeChunk
 
--- | Convert the program name to an abbrevaited 'String' without any special characters.
+-- | Convert the program name to an abbreviated 'String' without any special characters.
 programName :: CommonIdea c => c -> String
 programName = toPlainName . abrv
 
@@ -136,12 +138,12 @@ ccObjVar c1 c2 = checkObj (c1 ^. typ)
         checkObj _ = error "First CodeChunk passed to ccObjVar must have Actor space"
 
 -- | Get a list of 'CodeChunk's from an equation.
-codevars :: Expr -> ChunkDB -> [CodeVarChunk]
+codevars :: CodeExpr -> ChunkDB -> [CodeVarChunk]
 codevars e m = map (varResolve m) $ eDep e
 
 -- | Get a list of 'CodeChunk's from an equation (no functions).
-codevars' :: Expr -> ChunkDB -> [CodeVarChunk]
-codevars' e m = map (varResolve m) $ nub $ eNames' e
+codevars' :: CodeExpr -> ChunkDB -> [CodeVarChunk]
+codevars' e m = map (varResolve m) $ nub $ eDep' e
 
 -- | Make a 'CodeVarChunk' from a 'UID' in the 'ChunkDB'.
 varResolve :: ChunkDB -> UID -> CodeVarChunk

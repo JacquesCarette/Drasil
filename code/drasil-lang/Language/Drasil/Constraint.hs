@@ -12,7 +12,7 @@ data ConstraintReason = Physical | Software
 -- | Holds constraints. May occur between an interval of 'Expr', a list of 'Double's, or a list of 'String's.
 data Constraint where
   -- | By default, physical and software constraints are ranges.
-  Range          :: ConstraintReason -> RealInterval Expr Expr -> Constraint
+  Range          :: ConstraintReason -> RealInterval Expr Expr -> Constraint  -- TODO: parameterize the Expr Expr?
   EnumeratedReal :: ConstraintReason -> [Double]               -> Constraint  -- TODO: I think this can be merged with the below when we get typed expressions, `Expr a` instead of Double/String
   EnumeratedStr  :: ConstraintReason -> [String]               -> Constraint
 

@@ -2,7 +2,7 @@ module Language.Drasil.Plain.Print (
   Linearity(..), exprDoc, sentenceDoc, symbolDoc, unitDoc
 ) where
 
-import Database.Drasil(ChunkDB)
+import Database.Drasil (ChunkDB)
 import Language.Drasil (Sentence, Special(..), Stage(..), Symbol, USymb(..))
 import qualified Language.Drasil as L (Expr)
 import Language.Drasil.Plain.Helpers (toPlainName)

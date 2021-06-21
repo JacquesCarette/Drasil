@@ -63,5 +63,5 @@ odeDef info = CD (codeChunk $ quantfunc $ depVar info) (Matrix [odeSyst info])
   stepSize . odeOpts, initValFstOrd . odeOpts]) ODE
 
 -- | Returns the defining Expr of a 'CodeDefinition'.
-codeEquat :: CodeDefinition -> Expr
+codeEquat :: CodeDefinition -> Expr -- TODO: Remove??? ^. defnExpr should be used instead I think
 codeEquat cd = cd ^. def

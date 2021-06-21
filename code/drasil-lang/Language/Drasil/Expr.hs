@@ -19,9 +19,6 @@ infixr 4 $=
 infixr 9 $&&
 infixr 9 $||
 
--- Known math functions.
--- TODO: Move the below to a separate file somehow. How to go about it?
-
 -- Binary functions
 
 -- | Arithmetic operators (fractional, power, and subtraction).
@@ -226,9 +223,9 @@ mulRe l r = AssocA MulRe [l, r]
 
 ($&&), ($||) :: Expr -> Expr -> Expr
 -- | Smart constructor for the boolean /and/ operator.
-a $&& b = AssocB And [a,b]
+a $&& b = AssocB And [a, b]
 -- | Smart constructor for the boolean /or/ operator.
-a $|| b = AssocB Or  [a,b]
+a $|| b = AssocB Or  [a, b]
 
 -- | The variable type is just a renamed 'String'.
 type Variable = String

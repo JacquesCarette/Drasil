@@ -192,15 +192,15 @@ main = do
   let repoCommitRoot = "https://github.com/" ++ repoSlug ++ "/tree/" ++ commit ++ "/"
   let docsPath = docsRoot ++ "index.html"
   let fullDocsPath = docsRoot ++ "full/index.html"
-  let analysisPath = analysisRoot ++ "DataTable.csv"
-  let analysisHTMLPath = analysisRoot ++ "DataTable.html"
+  let dataTablePath = analysisRoot ++ "DataTable/DataTable.csv"
+  let dataTableHTMLPath = analysisRoot ++ "DataTable/DataTable.html"
 
   let buildPath = "https://github.com/" ++ repoSlug ++ "/actions" ++ maybe "" ("/runs/" ++) buildId
 
   doesDocsExist <- doesFileExist $ deployLocation ++ docsPath
   doesFullDocsExist <- doesFileExist $ deployLocation ++ fullDocsPath
-  doesAnalysisExist <- doesFileExist $ deployLocation ++ analysisPath
-  doesAnalysisHTMLExist <- doesFileExist $ deployLocation ++ analysisHTMLPath
+  doesdataTableExist <- doesFileExist $ deployLocation ++ dataTablePath
+  doesdataTableHTMLExist <- doesFileExist $ deployLocation ++ dataTableHTMLPath
   examples <- mkExamples repoCommitRoot (deployLocation ++ exampleRoot) srsDir
   graphs <- mkGraphs $ deployLocation ++ graphRoot
 
@@ -223,8 +223,8 @@ main = do
                        listField "graphs" (mkGraphCtx graphRoot) (mapM makeItem graphs) <>
                        (if doesDocsExist then field "docsUrl" (return . const docsPath) else mempty) <>
                        (if doesFullDocsExist then field "fullDocsUrl" (return . const fullDocsPath) else mempty) <>
-                       (if doesAnalysisExist then field "analysisUrl" (return . const analysisPath) else mempty) <>
-                       (if doesAnalysisHTMLExist then field "analysisHTMLUrl" (return . const analysisHTMLPath) else mempty) <>
+                       (if doesdataTableExist then field "dataTableUrl" (return . const dataTablePath) else mempty) <>
+                       (if doesdataTableHTMLExist then field "dataTableHTMLUrl" (return . const dataTableHTMLPath) else mempty) <>
                        field "buildNumber" (return . const buildNumber) <>
                        field "buildUrl" (return . const buildPath) <>
                        field "commit" (return . const commit) <>

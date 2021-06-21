@@ -193,6 +193,7 @@ graphs: $(GRAPH_PACKAGES)
 analysis: check_stack
 	@mkdir -p $(ANALYSIS_FOLDER)
 	cd $(SCRIPT_FOLDER) && stack exec -- runghc DataTableGen.hs
+	cd $(SCRIPT_FOLDER) && stack exec -- runghc TypeGraphGen.hs
 
 docs: check_stack
 	DOCS_FOLDER="$(DOCS_FOLDER)" GHC_FLAGS="$(GHCFLAGS)" sh scripts/make_docs.sh

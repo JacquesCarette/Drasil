@@ -33,7 +33,7 @@ instance HasUID        Reference where uid = ui
 instance HasRefAddress Reference where getRefAdd = getAdd . ra
 -- | Finds the shortname of the reference address used for the 'Reference'.
 instance HasShortName  Reference where shortname = sn
--- | Finds the reference address of a 'Reference'.
+-- | Finds the reference information of a 'Reference'.
 instance Referable Reference where
   refAdd r = r ^. ui
   renderRef = ra

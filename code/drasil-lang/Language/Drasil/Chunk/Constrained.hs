@@ -30,26 +30,26 @@ data ConstrainedChunk = ConstrainedChunk { _qd :: QuantityDict
                                          }
 makeLenses ''ConstrainedChunk
 
+-- | Finds 'UID' of the 'QuantityDict' used to make the 'ConstrainedChunk'.
 instance HasUID        ConstrainedChunk where uid = qd . uid
--- ^ Finds 'UID' of the 'QuantityDict' used to make the 'ConstrainedChunk'.
+-- | Finds term ('NP') of the 'QuantityDict' used to make the 'ConstrainedChunk'.
 instance NamedIdea     ConstrainedChunk where term = qd . term
--- ^ Finds term ('NP') of the 'QuantityDict' used to make the 'ConstrainedChunk'.
+-- | Finds the idea contained in the 'QuantityDict' used to make the 'ConstrainedChunk'.
 instance Idea          ConstrainedChunk where getA = getA . view qd
--- ^ Finds the idea contained in the 'QuantityDict' used to make the 'ConstrainedChunk'.
+-- | Finds the 'Space' of the 'QuantityDict' used to make the 'ConstrainedChunk'.
 instance HasSpace      ConstrainedChunk where typ = qd . typ
--- ^ Finds the 'Space' of the 'QuantityDict' used to make the 'ConstrainedChunk'.
+-- | Finds the 'Symbol' of the 'QuantityDict' used to make the 'ConstrainedChunk'.
 instance HasSymbol     ConstrainedChunk where symbol c = symbol (c^.qd)
--- ^ Finds the 'Symbol' of the 'QuantityDict' used to make the 'ConstrainedChunk'.
+-- | 'ConstrainedChunk's have a 'Quantity'. 
 instance Quantity      ConstrainedChunk where
--- ^ 'ConstrainedChunk's have a 'Quantity'. 
+-- | Finds the 'Constraint's of a 'ConstrainedChunk'.
 instance Constrained   ConstrainedChunk where constraints = constr
--- ^ Finds the 'Constraint's of a 'ConstrainedChunk'.
+-- | Finds a reasonable value for the 'ConstrainedChunk'.
 instance HasReasVal    ConstrainedChunk where reasVal     = reasV
--- ^ Finds a reasonable value for the 'ConstrainedChunk'.
+-- | Equal if 'UID's are equal.
 instance Eq            ConstrainedChunk where c1 == c2 = (c1 ^. qd . uid) == (c2 ^. qd . uid)
--- ^ Equal if 'UID's are equal.
+-- | Finds units contained in the 'QuantityDict' used to make the 'ConstrainedChunk'.
 instance MayHaveUnit   ConstrainedChunk where getUnit = getUnit . view qd
--- ^ Finds units contained in the 'QuantityDict' used to make the 'ConstrainedChunk'.
 
 -- | Creates a constrained unitary chunk from a 'UID', term ('NP'), 'Symbol', unit, 'Space', 'Constraint's, and an 'Expr'.
 cuc :: (IsUnit u) => String -> NP -> Symbol -> u
@@ -72,30 +72,31 @@ data ConstrConcept = ConstrConcept { _defq :: DefinedQuantityDict
                                    }
 makeLenses ''ConstrConcept
 
+-- | Finds 'UID' of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
 instance HasUID        ConstrConcept where uid = defq . uid
--- ^ Finds 'UID' of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
+-- | Finds term ('NP') of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
 instance NamedIdea     ConstrConcept where term = defq . term
--- ^ Finds term ('NP') of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
+-- | Finds the idea contained in the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
 instance Idea          ConstrConcept where getA = getA . view defq
--- ^ Finds the idea contained in the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
+-- | Finds the 'Space' of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
 instance HasSpace      ConstrConcept where typ = defq . typ
--- ^ Finds the 'Space' of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
+-- | Finds the 'Symbol' of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
 instance HasSymbol     ConstrConcept where symbol c = symbol (c^.defq)
--- ^ Finds the 'Symbol' of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
+-- | 'ConstrConcept's have a 'Quantity'. 
 instance Quantity      ConstrConcept where
--- ^ 'ConstrConcept's have a 'Quantity'. 
+-- | Finds definition of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
 instance Definition    ConstrConcept where defn = defq . defn
--- ^ Finds definition of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
+-- | Finds the domain contained in the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
 instance ConceptDomain ConstrConcept where cdom = cdom . view defq
--- ^ Finds the domain contained in the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
+-- | Finds the 'Constraint's of a 'ConstrConcept'.
 instance Constrained   ConstrConcept where constraints  = constr'
--- ^ Finds the 'Constraint's of a 'ConstrConcept'.
+-- | Finds a reasonable value for the 'ConstrConcept'.
 instance HasReasVal    ConstrConcept where reasVal      = reasV'
--- ^ Finds a reasonable value for the 'ConstrConcept'.
+-- | Equal if 'UID's are equal.
 instance Eq            ConstrConcept where c1 == c2 = (c1 ^.defq.uid) == (c2 ^.defq.uid)
--- ^ Equal if 'UID's are equal.
+-- | Finds the units of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
 instance MayHaveUnit   ConstrConcept where getUnit = getUnit . view defq
--- ^ Finds the units of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
+-- | Convert the symbol of the 'ConstrConcept' to a 'DisplayExpr'.
 instance Display       ConstrConcept where toDispExpr = toDispExpr . sy
 
 -- | Creates a 'ConstrConcept' with a quantitative concept, a list of 'Constraint's and an 'Expr'.

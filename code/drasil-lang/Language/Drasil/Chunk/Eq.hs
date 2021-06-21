@@ -52,7 +52,7 @@ instance Eq            QDefinition where a == b = (a ^. uid) == (b ^. uid)
 instance MayHaveUnit   QDefinition where getUnit = getUnit . view qua
 -- | Displays the relation given by the expression in 'QDefinition'.
 instance Display       QDefinition where toDispExpr q = defines (sy q) (q ^. defnExpr)
--- | Finds the domain of 'QDefinition'.
+-- | Finds the domain of a 'QDefinition'.
 instance ConceptDomain QDefinition where cdom = cd
 
 -- | Create a 'QDefinition' with a 'UID', term ('NP'), definition ('Sentence'), 'Symbol',

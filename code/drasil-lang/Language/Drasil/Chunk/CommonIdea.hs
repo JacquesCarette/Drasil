@@ -18,16 +18,16 @@ import Control.Lens (makeLenses, (^.), view)
 data CI = CI { _cid :: UID, _ni :: NP, _ab :: String, cdom' :: [UID]}
 makeLenses ''CI
 
+-- | Finds 'UID' of 'CI'.
 instance HasUID        CI where uid  = cid
--- ^ Finds 'UID' of 'CI'.
+-- | Finds term ('NP') of 'CI'.
 instance NamedIdea     CI where term = ni
--- ^ Finds term ('NP') of 'CI'.
+-- | Finds the idea of a 'CI' (abbreviation).
 instance Idea          CI where getA = Just . view ab
--- ^ Finds the idea of a 'CI' (abbreviation).
+-- | Finds the idea of a 'CI' (abbreviation).
 instance CommonIdea    CI where abrv = view ab
--- ^ Finds the idea of a 'CI' (abbreviation).
+-- | Finds the domain of a 'CI'.
 instance ConceptDomain CI where cdom = cdom'
--- ^ Finds the domain of a 'CI'.
   
 -- | The commonIdea smart constructor requires a chunk id ('UID'), a
 -- term ('NP'), an abbreviation ('String'), and a domain (['UID']).

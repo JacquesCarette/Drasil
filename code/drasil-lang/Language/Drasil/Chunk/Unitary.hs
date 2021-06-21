@@ -25,22 +25,22 @@ data UnitaryChunk = UC { _quant :: QuantityDict
                        }
 makeLenses ''UnitaryChunk
 
+-- | Finds 'UID' of the 'QuantityDict' used to make the 'UnitaryChunk'.
 instance HasUID        UnitaryChunk where uid = quant . uid
--- ^ Finds 'UID' of the 'QuantityDict' used to make the 'UnitaryChunk'.
+-- | Finds term ('NP') of the 'QuantityDict' used to make the 'UnitaryChunk'.
 instance NamedIdea     UnitaryChunk where term = quant . term
--- ^ Finds term ('NP') of the 'QuantityDict' used to make the 'UnitaryChunk'.
+-- | Finds the idea contained in the 'QuantityDict' used to make the 'UnitaryChunk'.
 instance Idea          UnitaryChunk where getA uc = getA $ uc ^. quant
--- ^ Finds the idea contained in the 'QuantityDict' used to make the 'UnitaryChunk'.
+-- | Finds the 'Space' of the 'QuantityDict' used to make the 'UnitaryChunk'.
 instance HasSpace      UnitaryChunk where typ = quant . typ
--- ^ Finds the 'Space' of the 'QuantityDict' used to make the 'UnitaryChunk'.
+-- | Finds the 'Symbol' of the 'QuantityDict' used to make the 'UnitaryChunk'.
 instance HasSymbol     UnitaryChunk where symbol u = symbol (u^.quant)
--- ^ Finds the 'Symbol' of the 'QuantityDict' used to make the 'UnitaryChunk'.
+-- | 'UnitaryChunk's have a 'Quantity'.
 instance Quantity      UnitaryChunk where
--- ^ 'UnitaryChunk's have a 'Quantity'.
+-- | Finds the unit definition of a 'UnitaryChunk'.
 instance Unitary       UnitaryChunk where unit x = x ^. un
--- ^ Finds the unit definition of a 'UnitaryChunk'.
+-- | Finds the units of the 'QuantityDict' used to make the 'UnitaryChunk'.
 instance MayHaveUnit   UnitaryChunk where getUnit u = Just $ u ^. un
--- ^ Finds the units of the 'QuantityDict' used to make the 'UnitaryChunk'.
 
 -- | Builds the 'QuantityDict' part from the 'UID', term ('NP'), 'Symbol', and 'Space'.
 -- Assumes there's no abbreviation.

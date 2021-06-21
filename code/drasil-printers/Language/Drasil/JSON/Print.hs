@@ -7,8 +7,9 @@ import Utils.Drasil (checkValidStr)
 
 import qualified Language.Drasil as L (DType(Data, Theory, Instance, General), MaxWidthPercent,
   Document, special)
+import qualified Data.Drasil.Concepts.Documentation as Doc (notebook)
 
-import Language.Drasil.Printing.Import (makeDocument)
+import Language.Drasil.Printing.Import (makeNotebook)
 import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),  
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, 
   Ops(Prod, Inte, Mul, Summ, Or, Add, And, Subt, Iff, Impl, GEq, LEq, Lt, Gt, NEq, Eq,
@@ -25,14 +26,14 @@ import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 import qualified Language.Drasil.TeX.Print as TeX (spec, pExpr)
 import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintLaTeX(PL))
 import Language.Drasil.HTML.Monad (unPH)
-import Language.Drasil.HTML.Helpers (th, em, bold, sub, sup, reflinkInfo)
+import Language.Drasil.HTML.Helpers (th, em, bold, sub, sup, reflinkInfo, divTag)
 import Language.Drasil.HTML.Print(renderCite, OpenClose(Open, Close), fence)
 
 import Language.Drasil.JSON.Helpers (makeMetadata, h, jf, formatter, stripnewLine, cell,
  tr, td, image, li, pa, ba, ul, table, quote, refwrap, refID, reflink, reflinkURI)
 
 genJSON :: PrintingInformation -> L.Document -> Doc
-genJSON sm doc = build (makeDocument sm doc)
+genJSON sm doc = build (makeNotebook sm doc)
 
 -- | Build the JSON Document, called by genJSON
 build :: Document -> Doc
@@ -45,10 +46,12 @@ build (Document t a c) =
   text "   \"source\": [" $$
   quote (text "# " <> pSpec t) $$
   quote (text "## " <> pSpec a) $$
+  markdownE $$
   print c $$
-  text "    \"\\n\"" $$
+ --(before) text "    \"\\n\"" $$
   --text ("    \"" ++      
   --jf (join(conHTMLformat fn (Document t a c))) ++ "\"") $$
+  markdownB $$
   text "   ]" $$
   text "  }" $$
   text " ]," $$
@@ -58,7 +61,7 @@ build (Document t a c) =
 -- Helper for building markdown cells
 markdownB, markdownE :: Doc
 markdownB = text $ "  {\n   \"cell_type\": \"markdown\",\n   \"metadata\": {},\n   \"source\": [" 
-markdownE = text $ "   ]\n  },"
+markdownE = text $ "    \"\\n\"\n   ]\n  },"
 
 -- Helper for rendering a D from Latex print
 printMath :: D -> Doc
@@ -67,8 +70,9 @@ printMath = (`runPrint` Math)
 -- | Helper for rendering LayoutObjects into JSON
 printLO :: LayoutObj -> Doc
 printLO (Header n contents l)            = quote empty $$ quote (h (n + 1) <> pSpec contents) $$ refID (pSpec l)
+printLO (Cell layoutObs l)               = markdownB $$ refID (pSpec l) $$ vcat (map printLO layoutObs) $$ markdownE
 printLO (HDiv _ layoutObs EmptyS)        = vcat (map printLO layoutObs)
-printLO (HDiv _ layoutObs l)             = refID (pSpec l) $$ (vcat (map printLO layoutObs))
+printLO (HDiv _ layoutObs l)             = refID (pSpec l) $$ vcat (map printLO layoutObs)
 printLO (Paragraph contents)             = quote empty $$ quote (stripnewLine (show(pSpec contents)))
 printLO (EqnBlock contents)              = quote (jf (show mathEqn)) 
   where
@@ -163,7 +167,7 @@ pOps Arctan   = "arctan"
 pOps Not      = "&not;"
 pOps Dim      = "dim"
 pOps Exp      = "e"
-pOps Neg      = "-;"
+pOps Neg      = "-"
 pOps Cross    = "&#10799;"
 pOps Dot      = "&sdot;"
 pOps Eq       = " = " -- with spaces?

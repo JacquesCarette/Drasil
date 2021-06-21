@@ -1,5 +1,5 @@
 module Language.Drasil.Printing.Import (space, expr, symbol, spec,
-  makeDocument) where
+  makeDocument, makeNotebook) where
 
 import Language.Drasil hiding (sec, symbol)
 import Language.Drasil.Development (UFuncB(..), UFuncVec(..)
@@ -8,6 +8,8 @@ import Language.Drasil.Development (UFuncB(..), UFuncVec(..)
   , precA, precB, eprec)
 import Database.Drasil
 import Utils.Drasil
+
+import Data.Drasil.Concepts.Documentation (notebook)
 
 import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P
@@ -366,6 +368,10 @@ makeDocument :: PrintingInformation -> Document -> T.Document
 makeDocument sm (Document titleLb authorName sections) =
   T.Document (spec sm titleLb) (spec sm authorName) (createLayout sm sections)
 
+makeNotebook :: PrintingInformation -> Document -> T.Document
+makeNotebook sm (Document titleLb authorName sections) =
+  T.Document (spec sm titleLb) (spec sm authorName) (createLayout' sm sections)
+
 -- | Translates from LayoutObj to the Printing representation of LayoutObj
 layout :: PrintingInformation -> Int -> SecCons -> T.LayoutObj
 layout sm currDepth (Sub s) = sec sm (currDepth+1) s
@@ -375,12 +381,22 @@ layout sm _         (Con c) = lay sm c
 createLayout :: PrintingInformation -> [Section] -> [T.LayoutObj]
 createLayout sm = map (sec sm 0)
 
+-- | Helper function for creating sections as layout objects
+createLayout' :: PrintingInformation -> [Section] -> [T.LayoutObj]
+createLayout' sm = map (cell sm 0)
+
 -- | Helper function for creating sections at the appropriate depth
 sec :: PrintingInformation -> Int -> Section -> T.LayoutObj
 sec sm depth x@(Section titleLb contents _) = --FIXME: should ShortName be used somewhere?
   let ref = P.S (refAdd x) in
   T.HDiv [concat (replicate depth "sub") ++ "section"]
   (T.Header depth (spec sm titleLb) ref :
+   map (layout sm depth) contents) ref
+
+cell :: PrintingInformation -> Int -> Section -> T.LayoutObj
+cell sm depth x@(Section titleLb contents _) = --FIXME: should ShortName be used somewhere?
+  let ref = P.S (refAdd x) in
+  T.Cell (T.Header depth (spec sm titleLb) ref :
    map (layout sm depth) contents) ref
 
 -- | Translates from Contents to the Printing Representation of LayoutObj.
@@ -394,7 +410,7 @@ layLabelled sm x@(LblC _ (Table hdr lls t b)) = T.Table ["table"]
   (map (spec sm) hdr : map (map (spec sm)) lls)
   (P.S $ getRefAdd x)
   b (spec sm t)
-layLabelled sm x@(LblC _ (EqnBlock c))          = T.HDiv ["equation"]
+layLabelled sm x@(LblC _ (EqnBlock c))        = T.HDiv ["equation"]
   [T.EqnBlock (P.E (expr c sm))]
   (P.S $ getRefAdd x)
 layLabelled sm x@(LblC _ (Figure c f wp))     = T.Figure

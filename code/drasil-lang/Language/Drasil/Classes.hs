@@ -109,7 +109,7 @@ class Constrained c where
 -- | A 'Quantity' that could have a reasonable value.
 class HasReasVal c where
   -- | Provides a 'Lens' to the possible reasonable value.
-  reasVal     :: Lens' c (Maybe Expr)
+  reasVal     :: Lens' c Expr
 
 -- | A Quantity is an 'Idea' with a 'Space' and a 'Symbol'.
 -- In theory, it should also restrict to being a part of 'MayHaveUnit', but that causes

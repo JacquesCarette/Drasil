@@ -6,6 +6,7 @@ import Language.Drasil.Expr (Expr(..))
 import Language.Drasil.DisplayExpr
 import Language.Drasil.Space (RealInterval(..))
 
+-- | Generic traverse of all display expressions that could lead to names.
 deNames :: DisplayExpr -> [String]
 deNames (AlgebraicExpr e)  = eNames e
 deNames (SpaceExpr _)      = []
@@ -45,20 +46,20 @@ eNames (Operator _ _ e)      = eNames e
 eNames (Matrix a)            = concatMap (concatMap eNames) a
 eNames (RealI c b)           = c : eNamesRI b
 
--- | Generic traversal of everything that could come from an interval to names (similar to 'names').
+-- | Generic traversal of everything that could come from an interval to names (similar to 'eNames').
 eNamesRI :: RealInterval Expr Expr -> [String]
 eNamesRI (Bounded (_,il) (_,iu)) = eNames il ++ eNames iu
 eNamesRI (UpTo (_,iu))           = eNames iu
 eNamesRI (UpFrom (_,il))         = eNames il
 
-
+-- | Generic traverse of all display expressions that could lead to names (same as 'deNames').
 deNames' :: DisplayExpr -> [String]
 deNames' (AlgebraicExpr e)  = eNames e
 deNames' (SpaceExpr _)      = []
 deNames' (BinOp _ l r)      = deNames l ++ deNames r
 deNames' (AssocBinOp _ des) = concatMap deNames des
 
--- | Generic traverse of all positions that could lead to eNames without
+-- | Generic traverse of all positions that could lead to 'eNames' without
 -- functions.  FIXME : this should really be done via post-facto filtering, but
 -- right now the information needed to do this is not available!
 eNames' :: Expr -> [String]
@@ -94,7 +95,7 @@ eNames' (Operator _ _ e)      = eNames' e
 eNames' (Matrix a)            = concatMap (concatMap eNames') a
 eNames' (RealI c b)           = c : eNamesRI' b
 
--- | Generic traversal of everything that could come from an interval to names without functions (similar to 'names'').
+-- | Generic traversal of everything that could come from an interval to names without functions (similar to 'eNames'').
 eNamesRI' :: RealInterval Expr Expr -> [String]
 eNamesRI' (Bounded il iu) = eNames' (snd il) ++ eNames' (snd iu)
 eNamesRI' (UpTo iu)       = eNames' (snd iu)

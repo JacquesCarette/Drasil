@@ -40,18 +40,16 @@ data Citation = Cite
   }
 makeLenses ''Citation
 
+-- | Finds 'UID' of the 'Citation'.
 instance HasUID       Citation where uid       = citeID
--- ^ Finds 'UID' of the 'Citation'.
+-- | Finds 'ShortName' of the 'Citation'.
 instance HasShortName Citation where shortname = sn
--- ^ Finds 'ShortName' of the 'Citation'.
+-- | Finds 'Fields' of the 'Citation'.
 instance HasFields    Citation where getFields = fields
--- ^ Finds 'Fields' of the 'Citation'.
--- | Gets the reference address of a 'Citation'.
+-- | Gets the reference information of a 'Citation'.
 instance Referable    Citation where
-  refAdd    c = c ^. citeID 
-  -- ^ 'Citation' 'UID' should be unique as a reference address.
-  renderRef c = Citation $ refAdd c
-  -- ^ Get the alternate form of reference address.
+  refAdd    c = c ^. citeID -- Citation UID should be unique as a reference address.
+  renderRef c = Citation $ refAdd c -- Get the alternate form of reference address.
 -- | Gets the reference address of a 'Citation'.
 instance HasRefAddress Citation where getRefAdd c= c ^. citeID
 

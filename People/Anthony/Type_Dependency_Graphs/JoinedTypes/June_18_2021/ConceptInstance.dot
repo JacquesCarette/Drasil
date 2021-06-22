@@ -1,13 +1,13 @@
 digraph conceptinstance {
 	/* relationships between independent and dependent components */
 	ConceptChunk -> ConceptInstance;
-    ConceptInstanceRefAdd -> ConceptInstance;
-    ConceptInstanceShortName -> ConceptInstance;
+    RefAdd -> ConceptInstance;
+    ShortName -> ConceptInstance;
     
 	/* definitions for each type component */
 	ConceptInstance 	    [shape=oval, color=cyan3, label="ConceptInstance"];
-    ConceptInstanceRefAdd   [shape=oval, color=cyan3, label="Reference Address (String)"];
-    ConceptInstanceShortName  [shape=oval, color=cyan3, label="ShortName"];
+    //ConceptInstanceRefAdd   [shape=oval, color=cyan3, label="Reference Address (String)"];
+    //ConceptInstanceShortName  [shape=oval, color=cyan3, label="ShortName"];
 
 }
 

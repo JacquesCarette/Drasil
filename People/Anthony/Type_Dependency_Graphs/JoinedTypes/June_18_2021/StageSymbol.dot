@@ -3,9 +3,12 @@ digraph stagesymbol {
     Special -> Symbol [style="dotted"];
     Decoration -> Symbol [style="dotted"];
     Symbol -> Symbol [style="dotted"];
+    Stage -> StageSymbol;
+    Symbol -> StageSymbol;
     
     /* definitions for each type component */
 	Stage 	    [shape=oval, color=cyan3, label="Current Process of the Symbol (Stage)"];
+    StageSymbol [shape=oval, color=cyan3, label="Stage -> Symbol"];
     Decoration 	    [shape=oval, color=cyan3, label="Decoration (for symbols)"];
     Symbol 	    [shape=oval, color=cyan3, label="Symbol"];
     Special [shape=oval, color=cyan3, label="Special (for symbols)"];

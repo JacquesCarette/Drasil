@@ -2,6 +2,7 @@ digraph relationconcept {
 	/* relationships between independent and dependent components */
 	ConceptChunk -> RelationConcept;
     Relation -> RelationConcept;
+	Expr -> Relation;
     
 	/* definitions for each type component */
 	RelationConcept 	    [shape=oval, color=cyan3, label="RelationConcept"];

@@ -1,15 +1,15 @@
 digraph qdefinition {
 	/* relationships between independent and dependent components */
 	QuantityDict -> QDefinition;
-    QDefinitionDesc -> QDefinition;
-    QDefinitionExpr -> QDefinition;
-    QDefinitionDomain -> QDefinition;
+    Desc -> QDefinition;
+    Expr -> QDefinition;
+    Domain -> QDefinition;
     
 	/* definitions for each type component */
 	QDefinition 	    [shape=oval, color=cyan3, label="QDefinition"];
-    QDefinitionDesc    [shape=oval, color=cyan3, label="Description (Sentence)"];
-    QDefinitionExpr  [shape=oval, color=cyan3, label="Expr"];
-    QDefinitionDomain  [shape=oval, color=cyan3, label="Domain ([UID])"];
+    //QDefinitionDesc    [shape=oval, color=cyan3, label="Description (Sentence)"];
+    //QDefinitionExpr  [shape=oval, color=cyan3, label="Expr"];
+    //QDefinitionDomain  [shape=oval, color=cyan3, label="Domain ([UID])"];
 
 }
 

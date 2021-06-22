@@ -1,9 +1,9 @@
 digraph ci {
 	/* relationships between independent and dependent components */
-	CIUID -> CI;
-    CINP -> CI;
-    CIDesc -> CI;
-    CIDomain -> CI;
+	UID -> CI;
+    NP -> CI;
+    Desc -> CI;
+    Domain -> CI;
     
 	/* definitions for each type component */
 	CI 	    [shape=oval, color=cyan3, label="CI"];

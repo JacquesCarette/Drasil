@@ -1,13 +1,13 @@
 digraph conceptchunk {
 	/* relationships between independent and dependent components */
 	IdeaDict -> ConceptChunk;
-    ConceptChunkDesc -> ConceptChunk;
-    ConceptChunkDomain -> ConceptChunk;
+    Desc -> ConceptChunk;
+    Domain -> ConceptChunk;
     
 	/* definitions for each type component */
 	ConceptChunk 	    [shape=oval, color=cyan3, label="ConceptChunk"];
-    ConceptChunkDesc    [shape=oval, color=cyan3, label="Description (Sentence)"];
-    ConceptChunkDomain  [shape=oval, color=cyan3, label="Domain ([UID])"];
+    //ConceptChunkDesc    [shape=oval, color=cyan3, label="Description (Sentence)"];
+    //ConceptChunkDomain  [shape=oval, color=cyan3, label="Domain ([UID])"];
 
 }
 

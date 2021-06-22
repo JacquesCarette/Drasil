@@ -12,6 +12,7 @@ digraph sentence {
     /* definitions for each type component */
 	Sentence 	    [shape=oval, color=cyan3, label="Sentence"];
 	SentenceStyle	    [shape=oval, color=cyan3, label="SentenceStyle"];
+    Desc                [shape=oval, color=cyan3, label="Description (Sentence)"];
 }
 
 /* dot -Tpng sample.dot -o sample.png */

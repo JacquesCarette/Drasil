@@ -1,0 +1,12 @@
+digraph unitequation {
+	/* relationships between independent and dependent components */
+	USymb -> UnitEquation;
+    UnitEquationDomain -> UnitEquation;
+    
+	/* definitions for each type component */
+	UnitEquation 	    [shape=oval, color=cyan3, label="UnitEquation"];
+    UnitEquationDomain    [shape=oval, color=cyan3, label="Domain ([UID])"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */

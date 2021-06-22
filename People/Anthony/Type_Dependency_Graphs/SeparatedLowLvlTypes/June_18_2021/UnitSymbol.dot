@@ -1,0 +1,11 @@
+digraph unitsymbol {
+
+    USymb -> UDefn;
+    USymb -> UnitSymbol;
+    /* definitions for each type component */
+	UDefn 	    [shape=oval, color=cyan3, label="Relative Units (UDefn)"];
+    UnitSymbol 	    [shape=oval, color=cyan3, label="UnitSymbol"];
+    USymb 	    [shape=oval, color=cyan3, label="USymb"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */

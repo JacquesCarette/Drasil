@@ -1,0 +1,6 @@
+digraph derivation {
+    /* definitions for each type component */
+	Derivation 	    [shape=oval, color=cyan3, label="A Statement and Explination (Derivation)"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */

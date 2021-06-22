@@ -1,0 +1,9 @@
+digraph authority {
+
+    Port -> Authority [style="dotted"];
+
+    /* definitions for each type component */
+	Authority 	    [shape=oval, color=cyan3, label="Authentication (Authority)"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */

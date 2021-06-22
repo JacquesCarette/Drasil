@@ -1,0 +1,13 @@
+digraph unitdefn {
+	/* relationships between independent and dependent components */
+	ConceptChunk -> UnitDefn;
+    UnitSymbol -> UnitDefn;
+    UnitDefnDomain -> UnitDefn;
+    
+	/* definitions for each type component */
+	UnitDefn 	    [shape=oval, color=cyan3, label="UnitDefn"];
+    UnitDefnDomain  [shape=oval, color=cyan3, label="Domain ([UID])"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */

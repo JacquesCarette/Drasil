@@ -1,0 +1,9 @@
+digraph irefprog {
+
+    IRefProg -> IRefProg [style="dotted"];
+
+    /* definitions for each type component */
+	IRefProg 	    [shape=oval, color=cyan3, label="Names of References (IRefProg)"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */

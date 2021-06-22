@@ -1,0 +1,43 @@
+digraph expr {
+    Double -> Expr [style="dotted"];
+    Integer -> Expr [style="dotted"];
+    String -> Expr [style="dotted"];
+    Expr -> Expr [style="dotted"];
+    AssocArithOper  -> Expr [style="dotted"];
+    AssocBoolOper  -> Expr [style="dotted"];
+    DerivType -> Expr [style="dotted"];
+    ExprUID -> Expr [style="dotted"];
+    ArithBinOp -> Expr [style="dotted"];
+    EqBinOp -> Expr [style="dotted"];
+    BoolBinOp -> Expr [style="dotted"];
+    LABinOp  -> Expr [style="dotted"];
+    OrdBinOp  -> Expr [style="dotted"];
+    VVVBinOp -> Expr [style="dotted"];
+    VVNBinOp  -> Expr [style="dotted"];
+    UFunc  -> Expr [style="dotted"];
+    UFuncB -> Expr [style="dotted"];
+    UFuncVec  -> Expr [style="dotted"];
+    Completeness  -> Expr [style="dotted"];
+    DomainDesc -> Expr [style="dotted"];
+
+
+    /* definitions for each type component */
+	Expr 	    [shape=oval, color=cyan3, label="Expr"];
+    ArithBinOp 	    [shape=oval, color=cyan3, label="ArithBinOp"];
+    EqBinOp 	    [shape=oval, color=cyan3, label="EqBinOp"];
+    BoolBinOp 	    [shape=oval, color=cyan3, label="BoolBinOp"];
+    LABinOp 	    [shape=oval, color=cyan3, label="LABinOp"];
+    OrdBinOp 	    [shape=oval, color=cyan3, label="OrdBinOp"];
+    VVVBinOp 	    [shape=oval, color=cyan3, label="VVVBinOp"];
+    VVNBinOp 	    [shape=oval, color=cyan3, label="VVNBinOp"];
+    AssocArithOper 	    [shape=oval, color=cyan3, label="AssocArithOper"];
+    AssocBoolOper 	    [shape=oval, color=cyan3, label="AssocBoolOper"];
+    UFunc 	    [shape=oval, color=cyan3, label="UFunc"];
+    UFuncB 	    [shape=oval, color=cyan3, label="UFuncB"];
+    UFuncVec 	    [shape=oval, color=cyan3, label="UFuncVec"];
+    Completeness 	    [shape=oval, color=cyan3, label="Completeness"];
+    DerivType 	    [shape=oval, color=cyan3, label="DerivType"];
+    ExprUID     [shape=oval, color=cyan3, label="UID"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */

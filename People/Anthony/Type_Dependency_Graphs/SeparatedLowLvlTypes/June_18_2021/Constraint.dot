@@ -1,0 +1,10 @@
+digraph constraint {
+
+    RealInterval -> Constraint [style="dotted"];
+    ConstraintReason -> Constraint [style="dotted"];
+
+    /* definitions for each type component */
+	Constraint 	    [shape=oval, color=cyan3, label="Constraint"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */

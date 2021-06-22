@@ -1,0 +1,15 @@
+digraph constrconcept {
+	/* relationships between independent and dependent components */
+	QuantityDict -> ConstrConcept;
+    ConstrConceptConstraints -> ConstrConcept;
+    ConstrConceptMaybeExpr -> ConstrConcept;
+    
+	/* definitions for each type component */
+	ConstrConcept 	    [shape=oval, color=cyan3, label="ConstrConcept"];
+    ConstrConceptConstraints    [shape=oval, color=cyan3, label="[Constraint]"];
+    ConstrConceptMaybeExpr  [shape=oval, color=cyan3, label="Maybe Expr"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */
+

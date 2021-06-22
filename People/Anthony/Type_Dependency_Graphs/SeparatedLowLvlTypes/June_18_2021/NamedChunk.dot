@@ -1,0 +1,12 @@
+digraph namedchunk {
+	/* relationships between independent and dependent components */
+	UID -> NamedChunk;
+    NamedChunkNP -> NamedChunk;
+    
+	/* definitions for each type component */
+	NamedChunk 	    [shape=oval, color=cyan3, label="NamedChunk"];
+    NamedChunkNP   [shape=oval, color=cyan3, label="Term (NP)"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */

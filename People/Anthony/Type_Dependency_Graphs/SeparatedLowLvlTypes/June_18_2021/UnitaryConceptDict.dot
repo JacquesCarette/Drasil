@@ -1,0 +1,14 @@
+digraph unitaryconceptdict {
+	/* relationships between independent and dependent components */
+	UnitaryChunk -> UnitaryConceptDict;
+    UnitaryConceptDictDesc -> UnitaryConceptDict;
+    UnitaryConceptDictDomain -> UnitaryConceptDict;
+    
+	/* definitions for each type component */
+	UnitaryConceptDict 	    [shape=oval, color=cyan3, label="UnitaryConceptDict"];
+    UnitaryConceptDictDesc    [shape=oval, color=cyan3, label="Description (Sentence)"];
+    UnitaryConceptDictDomain  [shape=oval, color=cyan3, label="Domain ([UID])"];
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */

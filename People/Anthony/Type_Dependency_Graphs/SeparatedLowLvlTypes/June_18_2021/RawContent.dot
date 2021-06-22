@@ -1,0 +1,10 @@
+digraph rawcontent {
+
+    ListType -> RawContent [style="dotted"];
+    DisplayExpr -> RawContent [style="dotted"];
+
+    /* definitions for each type component */
+	RawContent 	    [shape=oval, color=cyan3, label="RawContent"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */

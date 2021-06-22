@@ -1,0 +1,9 @@
+digraph shortname {
+
+    Sentence -> ShortName;
+    
+    /* definitions for each type component */
+	ShortName 	    [shape=oval, color=cyan3, label="ShortName"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */

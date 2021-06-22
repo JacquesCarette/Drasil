@@ -1,0 +1,6 @@
+digraph displaybinop {
+    /* definitions for each type component */
+	DisplayBinOp 	    [shape=oval, color=cyan3, label="DisplayBinOp"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */

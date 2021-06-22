@@ -1,0 +1,17 @@
+digraph ci {
+	/* relationships between independent and dependent components */
+	CIUID -> CI;
+    CINP -> CI;
+    CIDesc -> CI;
+    CIDomain -> CI;
+    
+	/* definitions for each type component */
+	CI 	    [shape=oval, color=cyan3, label="CI"];
+    /*CIUID [shape=oval, color=cyan3, label="UID"];
+    CINP [shape=oval, color=cyan3, label="Term (NP)"];
+    CIDesc  [shape=oval, color=cyan3, label="Description (Sentence)"];
+    CIDomain [shape=oval, color=cyan3, label="Domain ([UID])"];*/
+
+}
+
+/* dot -Tpng sample.dot -o sample.png */

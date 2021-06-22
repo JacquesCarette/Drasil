@@ -1,0 +1,11 @@
+digraph person {
+
+    String -> Person;
+    Conv -> Person;
+
+    /* definitions for each type component */
+	Person 	    [shape=oval, color=cyan3, label="Person (usually the author)"];
+    Conv [shape=oval, color=cyan3, label="Naming Layout"];
+}
+
+/* dot -Tpng sample.dot -o sample.png */

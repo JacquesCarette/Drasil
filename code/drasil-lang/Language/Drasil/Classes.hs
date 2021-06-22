@@ -7,6 +7,7 @@ module Language.Drasil.Classes (
   , HasUnitSymbol(usymb)
   , HasReference(getReferences)
   , HasReasVal(reasVal)
+  , MayHaveReasVal(maybeReasVal)
   , HasDerivation(derivations)
   , HasAdditionalNotes(getNotes)
   , Idea(getA)
@@ -106,10 +107,15 @@ class Constrained c where
   -- | Provides a 'Lens' to the 'Constraint's.
   constraints :: Lens' c [Constraint]
 
--- | A 'Quantity' that could have a reasonable value.
+-- | A 'Quantity' that could has reasonable value.
 class HasReasVal c where
+  -- | Provides a 'Lens' to the reasonable value.
+  reasVal     :: Lens' c Expr
+
+-- | A 'Quantity' that could have a reasonable value.
+class MayHaveReasVal c where
   -- | Provides a 'Lens' to the possible reasonable value.
-  reasVal     :: Lens' c (Maybe Expr)
+  maybeReasVal :: Lens' c (Maybe Expr)
 
 -- | A Quantity is an 'Idea' with a 'Space' and a 'Symbol'.
 -- In theory, it should also restrict to being a part of 'MayHaveUnit', but that causes

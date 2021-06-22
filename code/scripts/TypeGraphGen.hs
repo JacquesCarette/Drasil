@@ -115,7 +115,7 @@ getEdgesDR _ [] = []
 getEdgesDR nm (c:cs) = (nm ++ " -> " ++ c ++ ";"): getEdgesDR nm cs
 
 getNodesDR :: String -> String
-getNodesDR nm = "[shape=oval, color=cyan3, label=" ++ nm ++ "];"
+getNodesDR nm = nm ++ "\t[shape=oval, color=cyan3, label=" ++ nm ++ "];"
 
 -- data types that use constructors
 mkGraphDCOutput :: FilePath -> SCRT.DataDeclConstruct -> IO ()
@@ -143,7 +143,7 @@ getEdgesDC nm (c:cs) s
     -- | otherwise =  (c ++ " -> " ++ nm ++ " [style=\"dotted\"];") : getEdgesDC nm cs s-}
 
 getNodesDC :: String -> String
-getNodesDC nm = "[shape=oval, color=darkviolet, label=" ++ nm ++ "];"
+getNodesDC nm = nm ++ "\t[shape=oval, color=darkviolet, label=" ++ nm ++ "];"
 
 -- for types that use newtype as a constructor
 mkGraphNTOutput :: FilePath -> SCRT.NewtypeDecl -> IO ()
@@ -181,7 +181,7 @@ getEdgesT _ [] = []
 getEdgesT nm (c:cs) = (nm ++ " -> " ++ c ++ ";") : getEdgesT nm cs
 
 getNodesT :: String -> String
-getNodesT nm = "[shape=oval, color=red2, label=" ++ nm ++ "];"
+getNodesT nm = nm ++ "\t[shape=oval, color=red2, label=" ++ nm ++ "];"
 
 
 -- makes Entry data instance

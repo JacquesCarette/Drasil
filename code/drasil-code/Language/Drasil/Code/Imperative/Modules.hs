@@ -40,7 +40,7 @@ import Language.Drasil.Choices (Comments(..), ConstantStructure(..),
   ConstantRepr(..), ConstraintBehaviour(..), ImplementationType(..), 
   InputModule(..), Logging(..), Structure(..), hasSampleInput)
 import Language.Drasil.CodeSpec (CodeSpec(..))
-import Language.Drasil.Printers (Linearity(Linear), exprDoc)
+import Language.Drasil.Printers (Linearity(Linear), exprDoc, codeExprDoc)
 
 import GOOL.Drasil (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement, 
   SMethod, CSStateVar, SClass, OOProg, BodySym(..), bodyStatements, oneLiner, 
@@ -412,7 +412,7 @@ printExpr (Dbl _)      _ = []
 printExpr (ExactDbl _) _ = []
 printExpr (Int _)      _ = []
 printExpr (Str _)      _ = []
-printExpr e           db = undefined -- TODO: [printStr $ " (" ++ render (exprDoc db Implementation Linear e) ++ ")"]
+printExpr e           db = [printStr $ " (" ++ render (codeExprDoc db Implementation Linear e) ++ ")"]
 
 -- | | Generates a function for reading inputs from a file.
 genInputFormat :: (OOProg r) => ScopeTag -> 

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 665fd02009dcc44f33ced46f995f613dc6fed9f93b62e532b079bbe00f233164
+-- hash: 07c93d5ddd3ee72c5827b94a73958b14e99292b7cc5c3b0e59fea44eb290111d
 
 name:           drasil-code
 version:        0.1.9.0
@@ -32,9 +32,6 @@ library
       Language.Drasil.Code.Code
       Language.Drasil.Code.CodeQuantityDicts
       Language.Drasil.Code.DataDesc
-      Language.Drasil.Code.Expr
-      Language.Drasil.Code.Expr.Extract
-      Language.Drasil.Code.Expr.Render
       Language.Drasil.Code.ExternalLibrary
       Language.Drasil.Code.ExternalLibraryCall
       Language.Drasil.Code.ExtLibImport
@@ -82,6 +79,7 @@ library
     , containers
     , directory
     , drasil-build
+    , drasil-code-base
     , drasil-database
     , drasil-gool
     , drasil-lang
@@ -113,9 +111,6 @@ executable codegenTest
       Language.Drasil.Code.Code
       Language.Drasil.Code.CodeQuantityDicts
       Language.Drasil.Code.DataDesc
-      Language.Drasil.Code.Expr
-      Language.Drasil.Code.Expr.Extract
-      Language.Drasil.Code.Expr.Render
       Language.Drasil.Code.ExternalLibrary
       Language.Drasil.Code.ExternalLibraryCall
       Language.Drasil.Code.ExtLibImport
@@ -165,6 +160,7 @@ executable codegenTest
     , directory
     , drasil-build
     , drasil-code
+    , drasil-code-base
     , drasil-database
     , drasil-gool
     , drasil-lang

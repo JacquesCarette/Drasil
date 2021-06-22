@@ -31,14 +31,8 @@ resolver:
 #   - wai
 packages:
 - .
-- ../drasil-build
-- ../drasil-code-base
 - ../drasil-database
-- ../drasil-gool
 - ../drasil-lang
-- ../drasil-metadata
-- ../drasil-printers
-- ../drasil-theory
 - ../drasil-utils
 
 # Dependency packages to be pulled from upstream that are not in the resolver.
@@ -50,7 +44,7 @@ packages:
 # - git: https://github.com/commercialhaskell/stack.git
 #   commit: e7b331f14bcffb8367cd58fbfc8b40ec7642100a
 #
-extra-deps:
+extra-deps: 
 - unicode-names-3.2.0.0@sha256:fef7241d93170e26265e84553090253a5e8ee207645d47cf271816f5834d07d2,470
 - unicode-properties-3.2.0.0@sha256:239766a6ac4322329353f6b9cd546024fd8c5f0235c8e32b3cba2d6bd245a699,1000
 

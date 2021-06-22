@@ -61,6 +61,5 @@ include(ShortName.dot)
 include(Space.dot)
 include(DomainDesc.dot)
 include(RealInterval.dot)
-include(Symbol.dot)
 include(UnitSymbol.dot)
 }

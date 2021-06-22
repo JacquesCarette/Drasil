@@ -1,4 +1,5 @@
 digraph listtype {
+    ItemType -> ListType [style="dotted"];
     /* definitions for each type component */
 	ListType 	    [shape=oval, color=cyan3, label="For Different Kinds of Lists (ListType)"];
 }

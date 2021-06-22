@@ -6,7 +6,7 @@ digraph expr {
     AssocArithOper  -> Expr [style="dotted"];
     AssocBoolOper  -> Expr [style="dotted"];
     DerivType -> Expr [style="dotted"];
-    ExprUID -> Expr [style="dotted"];
+    UID -> Expr [style="dotted"];
     ArithBinOp -> Expr [style="dotted"];
     EqBinOp -> Expr [style="dotted"];
     BoolBinOp -> Expr [style="dotted"];
@@ -37,7 +37,7 @@ digraph expr {
     UFuncVec 	    [shape=oval, color=cyan3, label="UFuncVec"];
     Completeness 	    [shape=oval, color=cyan3, label="Completeness"];
     DerivType 	    [shape=oval, color=cyan3, label="DerivType"];
-    ExprUID     [shape=oval, color=cyan3, label="UID"];
+    //ExprUID     [shape=oval, color=cyan3, label="UID"];
 }
 
 /* dot -Tpng sample.dot -o sample.png */

@@ -3,6 +3,8 @@ digraph stagesymbol {
     Special -> Symbol [style="dotted"];
     Decoration -> Symbol [style="dotted"];
     Symbol -> Symbol [style="dotted"];
+    Int -> Symbol [style="dotted"];
+    String -> Symbol [style="dotted"];
     Stage -> StageSymbol;
     Symbol -> StageSymbol;
     

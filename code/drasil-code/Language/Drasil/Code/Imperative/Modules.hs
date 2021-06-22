@@ -5,7 +5,7 @@ module Language.Drasil.Code.Imperative.Modules (
 ) where
 
 import Language.Drasil (Constraint(..), RealInterval(..),
-  Completeness(..), HasUID(uid), Stage(..))
+  Completeness(..), HasUID(uid), Stage(..), DefiningExpr (..))
 import Database.Drasil (ChunkDB)
 import Language.Drasil.Code.Expr
 import Language.Drasil.Code.Expr.Render
@@ -31,7 +31,7 @@ import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar, 
   physLookup, sfwrLookup)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, DefinitionType(..),
-  defType, codeEquat)
+  defType)
 import Language.Drasil.Chunk.Parameter (pcAuto)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
@@ -149,7 +149,7 @@ initConsts = do
       getDecl Inline _ = return Nothing
       declVars = do 
         vars <- mapM (mkVar . quantvar) cs
-        vals <- mapM (convExpr . renderExpr . codeEquat) cs -- TODO: renderExpr?
+        vals <- mapM (convExpr . renderExpr . (^. defnExpr)) cs -- TODO: renderExpr?
         logs <- mapM maybeLog vars
         return $ Just $ multi $ zipWith (defFunc $ conRepr g) vars vals ++ 
           concat logs
@@ -233,7 +233,7 @@ genInputClass scp = do
         GenState (Maybe (SClass r))
       genClass [] [] = return Nothing
       genClass inps csts = do
-        vals <- mapM (convExpr . renderExpr . codeEquat) csts -- TODO: renderExpr?
+        vals <- mapM (convExpr . renderExpr . (^. defnExpr)) csts -- TODO: renderExpr?
         inputVars <- mapM (\x -> fmap (pubDVar . var (codeName x) . convType) 
           (codeType x)) inps
         constVars <- zipWithM (\c vl -> fmap (\t -> constVarFunc (conRepr g) 
@@ -280,7 +280,7 @@ genInputDerived s = do
       genDerived _ = do
         ins <- getDerivedIns
         outs <- getDerivedOuts
-        bod <- mapM (\x -> genCalcBlock CalcAssign x (renderExpr $ codeEquat x)) dvals -- TODO: renderExpr?
+        bod <- mapM (\x -> genCalcBlock CalcAssign x (renderExpr $ x ^. defnExpr)) dvals -- TODO: renderExpr?
         desc <- dvFuncDesc
         mthd <- getFunc s "derived_values" desc ins outs bod
         return $ Just mthd
@@ -471,7 +471,7 @@ genConstClass scp = do
         (Maybe (SClass r))
       genClass [] = return Nothing 
       genClass vs = do
-        vals <- mapM (convExpr . renderExpr . codeEquat) vs 
+        vals <- mapM (convExpr . renderExpr . (^. defnExpr)) vs 
         vars <- mapM (\x -> fmap (var (codeName x) . convType) (codeType x)) vs
         let constVars = zipWith (constVarFunc (conRepr g)) vars vals
             getFunc Primary = primaryClass
@@ -507,7 +507,7 @@ genCalcFunc cdef = do
   v <- mkVar (quantvar cdef)
   blcks <- case cdef ^. defType 
             of Definition -> liftS $ genCalcBlock CalcReturn cdef 
-                 (renderExpr $ codeEquat cdef)
+                 (renderExpr $ cdef ^. defnExpr)
                ODE -> maybe (error $ nm ++ " missing from ExtLibMap") 
                  (\el -> do
                    defStmts <- mapM convStmt (el ^. defs)

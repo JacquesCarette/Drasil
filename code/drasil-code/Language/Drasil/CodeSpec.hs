@@ -3,20 +3,20 @@
 module Language.Drasil.CodeSpec where
 
 import Language.Drasil
-import Language.Drasil.Display
+import Language.Drasil.Display (Symbol(Variable))
 import Database.Drasil (ChunkDB, SystemInformation(SI),
   _authors, _constants, _constraints, _datadefs, _instModels,
   _configFiles, _inputs, _outputs, _sys, _sysinfodb)
-import Language.Drasil.Development
+import Language.Drasil.Development (eNamesRI)
 import Theory.Drasil (DataDefinition, qdFromDD, getEqModQdsFromIm)
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeIdea(codeChunk),
   ConstraintMap, programName, quantvar, codevars, codevars',
   varResolve, constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef,
-  auxExprs, codeEquat)
+  auxExprs)
 import Language.Drasil.Choices (Choices(..))
-import Language.Drasil.Code.Expr.Render
+import Language.Drasil.Code.Expr.Render (renderExpr)
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
 
 import Utils.Drasil (subsetOf)

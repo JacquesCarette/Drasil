@@ -6,8 +6,7 @@ module Language.Drasil.Code.Imperative.Parameters(getInConstructorParams,
 import Language.Drasil hiding (isIn)
 import Language.Drasil.Chunk.Code (CodeVarChunk, CodeIdea(codeChunk, codeName), 
   quantvar, codevars, codevars')
-import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, auxExprs, 
-  codeEquat)
+import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, auxExprs)
 import Language.Drasil.Choices (Structure(..), InputModule(..), 
   ConstantStructure(..), ConstantRepr(..))
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
@@ -73,7 +72,7 @@ getDerivedIns = do
   g <- get
   let s = codeSpec g
       dvals = derivedInputs s
-      reqdVals = concatMap (flip codevars (sysinfodb s) . renderExpr . codeEquat) dvals -- TODO: renderExpr?
+      reqdVals = concatMap (flip codevars (sysinfodb s) . renderExpr . (^. defnExpr)) dvals -- TODO: renderExpr?
   getParams "derived_values" In reqdVals
 
 -- | The outputs from the function for calculating derived inputs are the derived inputs.

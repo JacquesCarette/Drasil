@@ -1,7 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.CodeDefinition (
   CodeDefinition, DefinitionType(..), qtoc, qtov, odeDef, auxExprs, defType, 
-  codeEquat
 ) where
 
 import Language.Drasil
@@ -61,7 +60,3 @@ odeDef :: ODEInfo -> CodeDefinition
 odeDef info = CD (codeChunk $ quantfunc $ depVar info) (Matrix [odeSyst info]) 
   (map ($ info) [tInit, tFinal, initVal, absTol . odeOpts, relTol . odeOpts, 
   stepSize . odeOpts, initValFstOrd . odeOpts]) ODE
-
--- | Returns the defining Expr of a 'CodeDefinition'.
-codeEquat :: CodeDefinition -> Expr -- TODO: Remove??? ^. defnExpr should be used instead I think
-codeEquat cd = cd ^. def

@@ -112,7 +112,7 @@ mkGraphDROutput outputFilePath ddr = do
 
 getEdgesDR :: String -> [String] -> [String]
 getEdgesDR _ [] = []
-getEdgesDR nm (c:cs) = (c ++ " -> " ++ nm ++ ";"): getEdgesDR nm cs
+getEdgesDR nm (c:cs) = (nm ++ " -> " ++ c ++ ";"): getEdgesDR nm cs
 
 getNodesDR :: String -> String
 getNodesDR nm = "[shape=oval, color=cyan3, label=" ++ nm ++ "];"
@@ -124,18 +124,23 @@ mkGraphDCOutput outputFilePath ddc = do
     setCurrentDirectory outputFilePath
     typeGraph <- openFile (ddcName ddc ++ ".dot") WriteMode
     hPutStrLn typeGraph $ "digraph " ++ map toLower (ddcName ddc) ++ "{"
-    mapM (hPutStrLn typeGraph) $ getEdgesDC (ddcName ddc) (ddcContent ddc) (if length (ddcContent ddc) == 1 then True else False)
+    mapM (hPutStrLn typeGraph) $ getEdgesDC (ddcName ddc) (ddcContent ddc) -- (if length (ddcContent ddc) == 1 then True else False)
     hPutStrLn typeGraph $ getNodesDC $ ddcName ddc
     hPutStrLn typeGraph "}"
     hClose typeGraph
 
+getEdgesDC :: String -> [String] -> [String]
+getEdgesDC _ [] = []
+getEdgesDC nm (c:cs) = (nm ++ " -> " ++ c ++ ";"): getEdgesDC nm cs
+
 -- This boolean checks if a datatype has only one value it can be made of. If True, there is only one value
 -- so we treat it like a record with a single field. If false, use dotted line to show the possibility of one type going into the next.
-getEdgesDC :: String -> [String] -> Bool -> [String]
+{-getEdgesDC :: String -> [String] -> Bool -> [String]
 getEdgesDC _ [] _ = []
 getEdgesDC nm (c:cs) s 
-    | s = (c ++ " -> " ++ nm ++ ";") : getEdgesDC nm cs s
+    | s = (nm ++ " -> " ++ c ++ ";") : getEdgesDC nm cs s
     | otherwise =  (c ++ " -> " ++ nm ++ " [style=\"dotted\"];") : getEdgesDC nm cs s
+    -- | otherwise =  (c ++ " -> " ++ nm ++ " [style=\"dotted\"];") : getEdgesDC nm cs s-}
 
 getNodesDC :: String -> String
 getNodesDC nm = "[shape=oval, color=darkviolet, label=" ++ nm ++ "];"
@@ -154,10 +159,10 @@ mkGraphNTOutput outputFilePath ntd = do
 
 getEdgesNT :: String -> [String] -> [String]
 getEdgesNT _ [] = []
-getEdgesNT nm (c:cs) = (c ++ " -> " ++ nm ++ ";") : getEdgesNT nm cs
+getEdgesNT nm (c:cs) = (nm ++ " -> " ++ c ++ ";") : getEdgesNT nm cs
 
 getNodesNT :: String -> String
-getNodesNT nm = "[shape=oval, color=darkgreen, label=" ++ nm ++ "];"
+getNodesNT nm = nm ++ "\t[shape=oval, color=darkgreen, label=" ++ nm ++ "];"
 
 -- for types that use type as a constructor
 mkGraphTOutput :: FilePath -> SCRT.TypeDecl -> IO ()
@@ -173,7 +178,7 @@ mkGraphTOutput outputFilePath td = do
 
 getEdgesT :: String -> [String] -> [String]
 getEdgesT _ [] = []
-getEdgesT nm (c:cs) = (c ++ " -> " ++ nm ++ ";") : getEdgesT nm cs
+getEdgesT nm (c:cs) = (nm ++ " -> " ++ c ++ ";") : getEdgesT nm cs
 
 getNodesT :: String -> String
 getNodesT nm = "[shape=oval, color=red2, label=" ++ nm ++ "];"

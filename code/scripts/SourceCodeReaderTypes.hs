@@ -13,6 +13,16 @@ type DataName = String
 type NewtypeName = String
 type TypeName = String
 
+--Copied from Data.List.Index. How to import?
+insertAt :: Int -> a -> [a] -> [a]
+insertAt i a ls
+  | i < 0 = ls
+  | otherwise = go i ls
+  where
+    go 0 xs     = a : xs
+    go n (x:xs) = x : go (n-1) xs
+    go _ []     = []
+
 
 -- purposefully use different type names even though they will end up in the same form
 data DataDeclRecord = DDR { ddrName :: DataName
@@ -44,12 +54,12 @@ extractEntryData fileName filePath = do
       -- Recorded types as a String. Contains multiple, so it is a list of strings.
       dataTypesRec = removeNewlineComma $ removeComments $ map fst $ filter snd $ isDataRec scriptFileLines False
       dataTypesConst = filter isDataConst $ useGuardForm scriptFileLines
-      newtypeTypes = filter (isPrefixOf "newtype ") scriptFileLines
+      newtypeTypes =  fromRecordForm $ filter (isPrefixOf "newtype ") scriptFileLines
       typeTypes = filter (isPrefixOf "type ") scriptFileLines
 
 
-  let dataDeclRec = getDataContainedRec $ error $ show $ sortDataRec $ filterEmptyS $ L.splitOn "}\n" $ unlines $ dataTypesRec
-      dataDeclConst = getDataContainedConst $ sortDataConst dataTypesConst 
+  let dataDeclRec = getDataContainedRec $ sortDataRec $ filterEmptyS $ L.splitOn "}\n" $ unlines $ dataTypesRec
+      dataDeclConst = getDataContainedConst $ sortDataConst dataTypesConst
       newtypeDecl = getNewtypes newtypeTypes
       typeDecl = getTypes typeTypes
 
@@ -59,7 +69,20 @@ extractEntryData fileName filePath = do
 stripWS :: String -> String
 stripWS = T.unpack . T.strip . T.pack
 
+fromRecordForm :: [String] -> [String]
+fromRecordForm [] = []
+fromRecordForm (l:ls)                                                   -- FIXME: super hacky but using just to get it to work for now
+  | "newtype " `isPrefixOf` l && "{" `isInfixOf` l = (unwords $ insertAt 2 "=" $ insertAt 2 "Constructor" $ take (fromJust (elemIndex "=" (words l))) $ words l) : fromRecordForm ls
+  | otherwise = l : fromRecordForm ls
+
 ---TODO: use map for most of these, I just need to visualize what is happening for now.
+
+filterInvalidChars :: String -> String
+filterInvalidChars = filterInvalidChars' invalidChars
+  where
+    filterInvalidChars' [] x = x
+    filterInvalidChars' (l:ls) x = filterInvalidChars' ls $ filter (/= l) x
+    invalidChars = "[]!"
 
 removeNewlineComma :: [String] -> [String]
 removeNewlineComma [] = []
@@ -94,14 +117,13 @@ useGuardForm ls = ls
 
 getNewtypes :: [String] -> [NewtypeDecl]
 getNewtypes [] = []
-getNewtypes (l:ls) = NTD {ntdName = head typeContents, ntdContent = checkContents} : getNewtypes ls
+getNewtypes (l:ls) = NTD {ntdName = head typeContents, ntdContent = map filterInvalidChars checkContents} : getNewtypes ls
     where typeContents = map stripWS $ L.splitOn "=" $ l \\ "newtype "
-          checkContents =  if (length $ map words $ tail typeContents) > 1 then concatMap tail $ map words $ tail typeContents else map removeListType $ tail typeContents
-          removeListType = reverse . tail . reverse . tail
+          checkContents = concatMap (tail.words) $ tail typeContents
 
 getTypes :: [String] -> [TypeDecl]
 getTypes [] = []
-getTypes (l:ls) = TD {tdName = head typeContents, tdContent = tail typeContents} : getTypes ls
+getTypes (l:ls) = TD {tdName = head typeContents, tdContent = map filterInvalidChars $ tail typeContents} : getTypes ls
     where typeContents = map stripWS $ L.splitOn "=" $ l \\ "type " 
 
 -- Helper that takes a list of Strings and arranges it so that a list of the data and the datatype constructor values is made.
@@ -120,11 +142,11 @@ filterDeriv (l:ls)
 -- Creates a data declaration for constructs.
 getDataContainedConst :: [(String, [String])] -> [DataDeclConstruct]
 getDataContainedConst [] = []
-getDataContainedConst (l:ls) = DDC {ddcName = fst l, ddcContent = snd l} : getDataContainedConst ls
+getDataContainedConst (l:ls) = DDC {ddcName = fst l, ddcContent = map filterInvalidChars $ snd l} : getDataContainedConst ls
 
 removeNewlineEqual :: [String] -> [String]
 removeNewlineEqual [] = []
-removeNewlineEqual (l1:l2:ls) = if "data " `isPrefixOf` l1 && "=" `isSuffixOf` l1 then removeNewlineEqual ((l1 ++ " " ++ l2): ls) else l1 : removeNewlineEqual (l2:ls)
+removeNewlineEqual (l1:l2:ls) = if ("data " `isPrefixOf` l1 || "type " `isPrefixOf` l1 || "newtype " `isPrefixOf` l1) && "=" `isSuffixOf` l1 then removeNewlineEqual ((l1 ++ " " ++ l2): ls) else l1 : removeNewlineEqual (l2:ls)
 removeNewlineEqual ls = ls
 
 --for those few cases of data declarations that use constructors with guards on a newline.
@@ -136,32 +158,38 @@ removeNewlineGuard ls = ls
 -- for those few cases of data declarations that are record types where the "{" is on a newline.
 removeNewlineBrace :: [String] -> [String]
 removeNewlineBrace [] = []
-removeNewlineBrace (l1:l2:ls) = if "data " `isPrefixOf` l1 && "{" `isPrefixOf` l2 then (l1 ++ l2) : removeNewlineBrace ls else l1:removeNewlineBrace (l2:ls)
+removeNewlineBrace (l1:l2:ls) = if ("data " `isPrefixOf` l1 || "newtype " `isPrefixOf` l1)  && "{" `isInfixOf` l2 then (l1 ++ " " ++ l2) : removeNewlineBrace ls else l1:removeNewlineBrace (l2:ls)
 removeNewlineBrace ls = ls
 
 -- make a data declaration record out of the name of the type and the names of the contained types
 getDataContainedRec :: [(String, [String])] -> [DataDeclRecord]
 getDataContainedRec [] = [] 
-getDataContainedRec (l:ls) = DDR {ddrName = fst l, ddrContent = snd l} : getDataContainedRec ls
+getDataContainedRec (l:ls) = DDR {ddrName = fst l, ddrContent = map filterInvalidChars (snd l)} : getDataContainedRec ls
 
 --for testing, will be removed after
 mytail :: [a] -> [a]
 mytail (x:xs) = xs
 mytail [] = error "here"
 
+{-sortDataConst (l:ls) = (dataCName, dataCContents): sortDataConst ls
+    where dataCName = head $ map stripWS $ L.splitOneOf "|=" $ l \\ "data "
+          dataCContents = concatMap tail $ map words $ tail $ map stripWS $ L.splitOneOf "|=" $ l \\ "data "-}
+
 -- take a list of data declarations for records and get the name of the datatype and all datatypes within the record
 sortDataRec :: [String] -> [(String, [String])]
 sortDataRec [] = []
 --sortDataRec [""] = [] --hack?
-sortDataRec (l:ls) = sortDataRec' (head (L.splitOn "=" l) : tail (L.splitOn "=" l)) : sortDataRec ls
+sortDataRec (l:ls) = (head typeContents, checkContents): sortDataRec ls -- sortDataRec' (head (L.splitOn "=" l) : tail (L.splitOn "=" l)) : sortDataRec ls
     where
-        sortDataRec' :: [String] -> (String, [String])
+        typeContents = map stripWS $ L.splitOn "=" $ l \\ "data "
+        checkContents = map stripWS $ concatMap (tail) $ map (L.splitOn "::") $ L.splitOn "," $ concat $ tail typeContents
+        {-sortDataRec' :: [String] -> (String, [String])
         --sortDataRec' [] = ("", [])
-        sortDataRec' ms = (stripWS (head ms \\ "data "), getContainedTypes $ tail ms)
+        sortDataRec' ms = ("", getContainedTypes $ tail ms)
         getContainedTypes :: [String] -> [String]
-        getContainedTypes [n] = map stripWS $ concatMap (tail) $ map (L.splitOn "::") $ L.splitOn "," n
+        getContainedTypes [n] = []
         getContainedTypes [] = [] --for those files which do not contain any record types
-        getContainedTypes ns = error $ show (l ++ "\nSomething isn't right here.") --"Should only have one string filled with the different needed types at this stage."
+        getContainedTypes ns = error $ show (l ++ "\nSomething isn't right here.")-} --"Should only have one string filled with the different needed types at this stage."
 
 -- Attach booleans to see if a line is a part of a data type declaration (for records)
 isDataRec :: [String] -> Bool -> [(String, Bool)]

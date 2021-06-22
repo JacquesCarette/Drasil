@@ -11,7 +11,7 @@ module Utils.Drasil (
   foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol, foldlSent,
   foldlSent_,foldlSentCol, foldlsC, foldNums, numList,
   -- Lists
-  replaceAll,
+  replaceAll, subsetOf,
   -- Misc
   addPercent, bulletFlat, bulletNested, checkValidStr, chgsStart, definedIn,
   definedIn', definedIn'', definedIn''', displayStrConstrntsAsSet, displayDblConstrntsAsSet, eqN,

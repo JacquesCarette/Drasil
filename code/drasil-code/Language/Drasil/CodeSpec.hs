@@ -19,6 +19,8 @@ import Language.Drasil.Choices (Choices(..))
 import Language.Drasil.Code.Expr.Render
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
 
+import Utils.Drasil (subsetOf)
+
 import Control.Lens ((^.))
 import Data.List (intercalate, nub, (\\))
 import qualified Data.Map as Map
@@ -166,10 +168,6 @@ getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
                        ++ intercalate ", " (map (^. uid) k))
               else getExecOrder' (ord ++ new) (defs' \\ new) kNew nNew
 
--- Returns true if the first list contains only elements that are present in 
--- the second list.
-subsetOf :: (Eq a) => [a] -> [a] -> Bool
-xs `subsetOf` ys = all (`elem` ys) xs
 
 -- | Get a list of Constraints for a list of CodeChunks
 getConstraints :: (HasUID c) => ConstraintMap -> [c] -> [Constraint]

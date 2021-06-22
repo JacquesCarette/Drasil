@@ -1,29 +1,24 @@
 module Language.Drasil.Printing.Import.CodeExpr where
 
-import Language.Drasil (DerivType(Total, Part), DomainDesc(..), Inclusive(Exc, Inc), RTopology(Continuous, Discrete), RealInterval(..), Symbol, UID, Special(Partial) )
-import Language.Drasil.Display
+import Language.Drasil (DerivType(..), DomainDesc(..), Inclusive(..),
+  RTopology(..), RealInterval(..), UID, Special(..) )
+import Language.Drasil.Display (Symbol(..))
 -- import Language.Drasil.Development (precA, precB, eprec)
 import Language.Drasil.Code.Expr.Precedence (precA, precB, eprec)
-import Database.Drasil
-import Utils.Drasil
 
 import Language.Drasil.Code.Expr
 
 import qualified Language.Drasil.Printing.AST as P
-import qualified Language.Drasil.Printing.Citation as P
-import qualified Language.Drasil.Printing.LayoutObj as T
 import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..),
   PrintingInformation, Notation(Scientific, Engineering), ckdb, stg)
 
 import Language.Drasil.Printing.Import.Helpers
-import Language.Drasil.Printing.Import.Space
-import Language.Drasil.Printing.Import.Symbol
+    (digitsProcess, lookupC, parens, processExpo)
+import Language.Drasil.Printing.Import.Symbol (symbol)
 
 import Control.Lens ((^.))
-import Data.Bifunctor (bimap, second)
-import Data.List (intersperse, partition)
+import Data.List (intersperse)
 import Numeric (floatToDigits)
-import Data.Maybe (fromMaybe)
 
 
 -- | Helper that creates an expression row given printing information, an operator, and an expression.

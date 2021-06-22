@@ -40,7 +40,7 @@ import Language.Drasil.Choices (Comments(..), ConstantStructure(..),
   ConstantRepr(..), ConstraintBehaviour(..), ImplementationType(..), 
   InputModule(..), Logging(..), Structure(..), hasSampleInput)
 import Language.Drasil.CodeSpec (CodeSpec(..))
-import Language.Drasil.Printers (Linearity(Linear), exprDoc, codeExprDoc)
+import Language.Drasil.Printers (Linearity(Linear), codeExprDoc)
 
 import GOOL.Drasil (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement, 
   SMethod, CSStateVar, SClass, OOProg, BodySym(..), bodyStatements, oneLiner, 

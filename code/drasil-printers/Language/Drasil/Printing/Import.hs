@@ -2,33 +2,26 @@ module Language.Drasil.Printing.Import (space, expr, codeExpr, symbol, spec,
   makeDocument) where
 
 import Language.Drasil hiding (neg, sec, symbol, isIn)
-import Language.Drasil.Display
-import Language.Drasil.Development (UFuncB(..), UFuncVec(..)
-  , ArithBinOp(..), BoolBinOp(..), EqBinOp(..), LABinOp(..)
-  , OrdBinOp(..), VVNBinOp(..), VVVBinOp(..)
-  , precA, precB, eprec, dePrec, dePrecAssoc, DisplayExpr(..)
-  , DisplayBinOp(..), DisplayAssocBinOp(Equivalence))
-import Database.Drasil
-import Utils.Drasil
+import Database.Drasil (ChunkDB, defResolve, refResolve, refTable)
+import Utils.Drasil (foldNums, checkValidStr)
 
 import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P
 import qualified Language.Drasil.Printing.LayoutObj as T
-import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..),
-  PrintingInformation, Notation(Scientific, Engineering), ckdb, stg)
+import Language.Drasil.Printing.PrintingInformation
+  (PrintingInformation, ckdb, stg)
 
 import Language.Drasil.Printing.Import.CodeExpr (codeExpr)
 import Language.Drasil.Printing.Import.DisplayExpr (dispExpr)
 import Language.Drasil.Printing.Import.Expr (expr)
 import Language.Drasil.Printing.Import.Helpers
-    (lookupC, lookupT, lookupS, lookupP)
-import Language.Drasil.Printing.Import.Space
+  (lookupC, lookupT, lookupS, lookupP)
+import Language.Drasil.Printing.Import.Space (space)
 import Language.Drasil.Printing.Import.Symbol (symbol)
 
 import Control.Lens ((^.))
 import Data.Bifunctor (bimap, second)
-import Data.List (intersperse, partition)
-import Numeric (floatToDigits)
+import Data.List (partition)
 import Data.Maybe (fromMaybe)
 
 -- TODO: Remove?

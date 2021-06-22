@@ -6,8 +6,8 @@ module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
   genModClasses, readData, renderC
 ) where
 
-import Language.Drasil (HasSymbol, HasUID(..), HasSpace(..), Expr,
-  Space(Rational, Real), RealInterval(..), UID, Constraint(..), Inclusive (..))
+import Language.Drasil (HasSymbol, HasUID(..), HasSpace(..),
+  Space(..), RealInterval(..), UID, Constraint(..), Inclusive (..))
 import qualified Language.Drasil as L
 import Database.Drasil (symbResolve)
 import Language.Drasil.CodeExpr hiding (int)

@@ -1,29 +1,24 @@
 module Language.Drasil.Printing.Import.Expr where
 
 import Language.Drasil hiding (neg, sec, symbol, isIn)
-import Language.Drasil.Display
+import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.Development (UFuncB(..), UFuncVec(..)
   , ArithBinOp(..), BoolBinOp(..), EqBinOp(..), LABinOp(..)
   , OrdBinOp(..), VVNBinOp(..), VVVBinOp(..)
-  , precA, precB, eprec, dePrec, dePrecAssoc, DisplayExpr(..)
-  , DisplayBinOp(..), DisplayAssocBinOp(Equivalence))
-import Database.Drasil
-import Utils.Drasil
+  , precA, precB, eprec
+  )
 
 import qualified Language.Drasil.Printing.AST as P
-import qualified Language.Drasil.Printing.Citation as P
-import qualified Language.Drasil.Printing.LayoutObj as T
 import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..),
   PrintingInformation, Notation(Scientific, Engineering), ckdb, stg)
 
 import Control.Lens ((^.))
-import Data.Bifunctor (bimap, second)
-import Data.List (intersperse, partition)
+import Data.List (intersperse)
 import Numeric (floatToDigits)
-import Data.Maybe (fromMaybe)
 
-import Language.Drasil.Printing.Import.Symbol
+import Language.Drasil.Printing.Import.Symbol (symbol)
 import Language.Drasil.Printing.Import.Helpers
+    (digitsProcess, lookupC, parens, processExpo)
 
 
 -- | Helper that creates an expression row given printing information, an operator, and an expression.

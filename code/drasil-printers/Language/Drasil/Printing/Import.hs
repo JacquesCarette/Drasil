@@ -17,12 +17,13 @@ import qualified Language.Drasil.Printing.LayoutObj as T
 import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..),
   PrintingInformation, Notation(Scientific, Engineering), ckdb, stg)
 
-import Language.Drasil.Printing.Import.CodeExpr
-import Language.Drasil.Printing.Import.DisplayExpr
-import Language.Drasil.Printing.Import.Expr
+import Language.Drasil.Printing.Import.CodeExpr (codeExpr)
+import Language.Drasil.Printing.Import.DisplayExpr (dispExpr)
+import Language.Drasil.Printing.Import.Expr (expr)
 import Language.Drasil.Printing.Import.Helpers
+    (lookupC, lookupT, lookupS, lookupP)
 import Language.Drasil.Printing.Import.Space
-import Language.Drasil.Printing.Import.Symbol
+import Language.Drasil.Printing.Import.Symbol (symbol)
 
 import Control.Lens ((^.))
 import Data.Bifunctor (bimap, second)
@@ -72,6 +73,7 @@ spec sm (Quote q)          = P.Quote $ spec sm q
 spec _  EmptyS             = P.EmptyS
 spec sm (E e)              = P.E $ dispExpr e sm
 
+-- TODO: Move into Symbol.hs?
 -- | Renders a unit symbol as a printable expression.
 pUnit :: USymb -> P.Expr
 pUnit (US ls) = formatu t b

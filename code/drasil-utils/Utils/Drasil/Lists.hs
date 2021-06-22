@@ -1,7 +1,6 @@
 module Utils.Drasil.Lists where
 
 replaceAll :: Eq a => [a] -> a -> [a] -> [a]
-replaceAll badElems repl it@(c:cs)
-  | c `elem` badElems = repl : replaceAll badElems repl cs
-  | otherwise         = it
-replaceAll _        _    it = it
+replaceAll bad repl (c:cs) | c `elem` bad = repl : replaceAll bad repl cs
+                           | otherwise    = c : replaceAll bad repl cs
+replaceAll _   _    it                    = it

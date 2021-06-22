@@ -251,6 +251,7 @@ executable projectile
       Drasil.Projectile.References
       Drasil.Projectile.Requirements
       Drasil.Projectile.Unitals
+      Drasil.Projectile.Lesson.Analysis
       Drasil.Projectile.Lesson.Body
       Drasil.Projectile.Lesson.IntroSection
       Drasil.Projectile.Lesson.Motion

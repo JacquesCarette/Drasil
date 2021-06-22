@@ -13,6 +13,8 @@ import qualified Language.Drasil as L (CitationKind(..), Decoration(Prime, Hat, 
   Symbol(..), USymb(US), (+:+), rendPersLFM, special)
 import Utils.Drasil (checkValidStr, foldNums)
 
+import Data.Drasil.Concepts.Documentation (srs)
+
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
 import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat), 
   ListType(Ordered, Unordered, Desc, Definitions, Simple), 
@@ -43,7 +45,7 @@ import Language.Drasil.TeX.Preamble (genPreamble)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 genTeX :: L.Document -> PrintingInformation -> TP.Doc
-genTeX doc sm = runPrint (buildStd sm $ I.makeDocument sm doc) Text
+genTeX doc sm = runPrint (buildStd sm $ (I.makeDocument sm doc)) Text
 
 buildStd :: PrintingInformation -> Document -> D
 buildStd sm (Document t a c) =

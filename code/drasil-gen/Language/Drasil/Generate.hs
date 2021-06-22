@@ -15,7 +15,7 @@ import Language.Drasil.Printers (Format(TeX, HTML, JSON),
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
   Lang(..), getSampleData, readWithDataDesc, sampleInputDD, 
   unPP, unJP, unCSP, unCPPP, unSP)
-import Language.Drasil.Output.Formats( DocType(SRS, MG, MIS, Website, Jupyter), Filename, DocSpec(DocSpec))
+import Language.Drasil.Output.Formats(DocType(SRS, MG, MIS, Website, Jupyter), Filename, DocSpec(DocSpec))
 
 import GOOL.Drasil (unJC, unPC, unCSC, unCPPC, unSC)
 

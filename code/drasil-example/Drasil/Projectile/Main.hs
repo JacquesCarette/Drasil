@@ -29,6 +29,7 @@ main = do
   setLocaleEncoding utf8
   gen (DocSpec SRS     "Projectile_SRS") srs printSetting
   gen (DocSpec Website "Projectile_SRS") srs printSetting
+  gen (DocSpec Jupyter "Projectile_SRS") srs printSetting
   gen (DocSpec Jupyter "Projectile Motion Lesson") PL.nb PL.printSetting
   genCodeWithChoices choiceCombos
 

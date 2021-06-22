@@ -54,6 +54,7 @@ library
     , drasil-database
     , drasil-lang
     , drasil-utils
+    , drasil-data
     , lens
     , pretty
     , split

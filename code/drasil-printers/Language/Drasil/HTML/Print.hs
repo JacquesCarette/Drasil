@@ -6,6 +6,8 @@ import Text.PrettyPrint hiding (Str)
 import Numeric (showEFloat)
 import Utils.Drasil (checkValidStr, numList)
 
+import Data.Drasil.Concepts.Documentation (srs)
+
 import qualified Language.Drasil as L (People, Person, 
   CitationKind(Misc, Book, MThesis, PhDThesis, Article), 
   DType(Data, Theory, Instance, General), MaxWidthPercent,

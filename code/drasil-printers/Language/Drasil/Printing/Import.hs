@@ -31,6 +31,7 @@ import Data.List (intersperse, partition)
 import Numeric (floatToDigits)
 import Data.Maybe (fromMaybe)
 
+-- TODO: Remove?
 {-
 p_space :: Space -> String
 p_space Radians  = "rad"

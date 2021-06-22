@@ -6,4 +6,4 @@ import Utils.Drasil.Lists (replaceAll)
 
 -- | Replace occurences of special characters (",~`-=!@#$%^&*+[]\\;'/|\"<>? ") with underscores ("_").
 toPlainName :: String -> String
-toPlainName = replaceAll ",~`--=!@#$%^&*+[]\\;'/|\"<>? " '_'
+toPlainName = replaceAll ",~`-=!@#$%^&*+[]\\;'/|\"<>? " '_'

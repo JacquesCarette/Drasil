@@ -1,5 +1,5 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Chunk.Constrained (ConstrainedChunk(..), ConstrainedQDef(..), ConstrConcept(..), --ReasonableValueQDef(..)
+module Language.Drasil.Chunk.Constrained (ConstrainedChunk(..), ConstrainedQDef(..), ConstrConcept(..), ReasonableValueQDef(..),
   cnstrw, cnstrw', constrained', constrainedNRV', cuc, cuc', cuc'', cvc) where
 
 import Control.Lens ((^.), makeLenses, view)
@@ -76,10 +76,31 @@ instance Eq            ConstrainedQDef   where c1 == c2 = (c1 ^. qd' . uid) == (
 -- ^ Finds units contained in the 'QuantityDict' used to make the 'ConstrainedQDef  '.
 instance MayHaveUnit   ConstrainedQDef   where getUnit = getUnit . view qd'
 
---data ReasonableValueQDef = RVQD { _qd'' :: QuantityDict
---                                , reasV'' :: Expr
---                                }
---makeLenses ''ReasonableValueQDef
+data ReasonableValueQDef = RVQD { _qd'' :: QuantityDict
+                                , reasV'' :: Expr
+                                }
+makeLenses ''ReasonableValueQDef
+
+-- ^ Finds 'UID' of the 'QuantityDict' used to make the 'ReasonableValueQDef'.
+instance HasUID        ReasonableValueQDef where uid = qd'' . uid
+-- ^ Finds term ('NP') of the 'QuantityDict' used to make the 'ReasonableValueQDef'.
+instance NamedIdea     ReasonableValueQDef where term = qd'' . term
+-- ^ Finds the idea contained in the 'QuantityDict' used to make the 'ReasonableValueQDef'.
+instance Idea          ReasonableValueQDef where getA = getA . view qd''
+-- ^ Finds the 'Space' of the 'QuantityDict' used to make the 'ReasonableValueQDef'.
+instance HasSpace      ReasonableValueQDef where typ = qd'' . typ
+-- ^ Finds the 'Symbol' of the 'QuantityDict' used to make the 'ReasonableValueQDef'.
+instance HasSymbol     ReasonableValueQDef where symbol c = symbol (c^.qd'')
+-- ^ 'ReasonableValueQDef's have a 'Quantity'. 
+instance Quantity      ReasonableValueQDef where
+-- ^ Finds a reasonable value for the 'ReasonableValueQDef'.
+--instance HasReasVal    ReasonableValueQDef where reasVal     = reasV'' --commented out till I sort out the Expr / Maybe Expr situation
+-- ^ Equal if 'UID's are equal.
+instance Eq            ReasonableValueQDef where c1 == c2 = (c1 ^. qd'' . uid) == (c2 ^. qd'' . uid)
+-- ^ Finds units contained in the 'QuantityDict' used to make the 'ReasonableValueQDef'.
+instance MayHaveUnit   ReasonableValueQDef where getUnit = getUnit . view qd''
+
+
 
 
 -- | Creates a constrained unitary chunk from a 'UID', term ('NP'), 'Symbol', unit, 'Space', 'Constraint's, and an 'Expr'.
@@ -101,8 +122,8 @@ cnstrw c = ConstrainedChunk   (qw c) (c ^. constraints) (c ^. reasVal)
 -- | ConstrConcepts are conceptual symbolic quantities ('DefinedQuantityDict')
 -- with 'Constraint's and maybe a reasonable value (no units!).
 data ConstrConcept = ConstrConcept { _defq :: DefinedQuantityDict
-                                   , _constr'' :: [Constraint]
-                                   , _reasV' :: Maybe Expr
+                                   , _constr''' :: [Constraint]
+                                   , _reasV''' :: Maybe Expr
                                    }
 makeLenses ''ConstrConcept
 
@@ -123,9 +144,9 @@ instance Definition    ConstrConcept where defn = defq . defn
 -- ^ Finds the domain contained in the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
 instance ConceptDomain ConstrConcept where cdom = cdom . view defq
 -- ^ Finds the 'Constraint's of a 'ConstrConcept'.
-instance Constrained   ConstrConcept where constraints  = constr''
+instance Constrained   ConstrConcept where constraints  = constr'''
 -- ^ Finds a reasonable value for the 'ConstrConcept'.
-instance HasReasVal    ConstrConcept where reasVal      = reasV'
+instance HasReasVal    ConstrConcept where reasVal      = reasV'''
 -- ^ Equal if 'UID's are equal.
 instance Eq            ConstrConcept where c1 == c2 = (c1 ^.defq.uid) == (c2 ^.defq.uid)
 -- ^ Finds the units of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.

@@ -17,7 +17,7 @@ import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto)
 import Language.Drasil.Code.DataDesc (DataDesc)
 import Language.Drasil.Code.Expr
 
-import Language.Drasil.Printers (toPlainName)
+import Utils.Drasil.Strings (toPlainName)
 
 import Data.List ((\\), nub)
 

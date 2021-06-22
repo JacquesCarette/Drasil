@@ -15,7 +15,9 @@ import Database.Drasil (ChunkDB, symbResolve)
 import Language.Drasil.Code.Expr
 import Language.Drasil.Code.Expr.Extract
 
-import Language.Drasil.Printers (symbolDoc, toPlainName)
+import Language.Drasil.Printers (symbolDoc)
+
+import Utils.Drasil.Strings (toPlainName)
 
 import Data.List (nub)
 import qualified Data.Map as Map

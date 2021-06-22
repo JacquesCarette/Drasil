@@ -10,12 +10,10 @@ module Language.Drasil.Printers (
     --createMd
   , makeMd, introInfo, verInfo, unsupOS, regularSec, instDoc, extLibSec
   -- Plain
-    -- Helpers
-  , toPlainName
-    -- Print
+  -- Print
   , Linearity(..), sentenceDoc, exprDoc, symbolDoc, unitDoc
   -- TeX
-    -- Print
+  -- Print
   , genTeX
   , PrintingInformation(..)
   , HasPrintingOptions (..)
@@ -29,7 +27,6 @@ import Language.Drasil.HTML.CSS (makeCSS)
 import Language.Drasil.HTML.Print (genHTML)
 import Language.Drasil.Markdown.CreateMd (makeMd, introInfo, verInfo, unsupOS, extLibSec, 
   instDoc, regularSec)
-import Language.Drasil.Plain.Helpers (toPlainName)
 import Language.Drasil.Plain.Print (Linearity(..), sentenceDoc, exprDoc, 
   symbolDoc, unitDoc)
 import Language.Drasil.TeX.Print (genTeX)

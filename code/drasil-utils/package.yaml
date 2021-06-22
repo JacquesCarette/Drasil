@@ -24,9 +24,10 @@ library:
   source-dirs: ./
   exposed-modules:
   - Utils.Drasil
-  - Utils.Drasil.Sentence
-  - Utils.Drasil.NounPhrase
   - Utils.Drasil.Concepts
+  - Utils.Drasil.NounPhrase
+  - Utils.Drasil.Sentence
+  - Utils.Drasil.Strings
   when:
   - condition: false
     other-modules: Paths_drasil_utils

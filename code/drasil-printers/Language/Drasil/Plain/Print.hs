@@ -5,12 +5,13 @@ module Language.Drasil.Plain.Print (
 import Database.Drasil (ChunkDB)
 import Language.Drasil (Sentence, Special(..), Stage(..), Symbol, USymb(..))
 import qualified Language.Drasil as L (Expr)
-import Language.Drasil.Plain.Helpers (toPlainName)
 import Language.Drasil.Printing.AST (Expr(..), Spec(..), Ops(..), Fence(..), 
   OverSymb(..), Fonts(..), Spacing(..))
 import Language.Drasil.Printing.Import (expr, spec, symbol)
 import Language.Drasil.Printing.PrintingInformation (PrintingConfiguration(..), 
   PrintingInformation(..), Notation(Scientific))
+
+import Utils.Drasil.Strings (toPlainName)
 
 import Prelude hiding ((<>))
 import Data.List (partition)

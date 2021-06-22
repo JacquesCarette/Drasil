@@ -91,7 +91,7 @@ mkMacroOutput :: FilePath -> [String] -> String -> IO ()
 mkMacroOutput outputFilePath nms nm = do
     createDirectoryIfMissing False outputFilePath
     setCurrentDirectory outputFilePath
-    typeGraph <- openFile (nm ++ ".dot") WriteMode
+    typeGraph <- openFile (nm ++ ".m4") WriteMode
     hPutStrLn typeGraph "digraph alltypes {"
     hPutStrLn typeGraph "define(`digraph', `subgraph')"
     mapM (hPutStrLn typeGraph) $ map (\x -> "sinclude(" ++ x ++ ".dot)") nms

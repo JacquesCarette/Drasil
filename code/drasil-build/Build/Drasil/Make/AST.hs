@@ -24,6 +24,28 @@ type Target = MakeString
 -- | Dependencies are made up of 0 or more 'Target's.
 type Dependencies = [Target]
 
+------------TESTING----------------
+data TheoryModel = TM 
+  { _tUid  :: UID
+  , _con   :: ConceptChunk
+  , _vctx  :: [TheoryModel]
+  , _spc   :: [SpaceDefn]
+  , _quan  :: [QuantityDict]
+  , _ops   :: [ConceptChunk]
+  , _defq  :: [QDefinition]
+  , _invs  :: [DisplayExpr]
+  , _dfun  :: [QDefinition]
+  , _ref   :: [Reference]
+  ,  lb    :: ShortName
+  ,  ra    :: String
+  , _notes :: [Sentence]
+  }
+
+-- | The ConceptChunk datatype is a Concept that contains an idea ('IdeaDict'), a definition ('Sentence'), and a domain (['UID']).
+data ConceptChunk = ConDict { _idea :: IdeaDict -- ^ Contains the idea of the concept.
+                            , _defn' :: Sentence -- ^ The definition of the concept.
+                            , cdom' :: [UID] -- ^ List of 'UID's in the concept.
+                            }
 -- | Creates a Rule which results in a file being created.
 mkFile :: Target -> Dependencies -> [Command] -> Rule
 mkFile t d = R t d File

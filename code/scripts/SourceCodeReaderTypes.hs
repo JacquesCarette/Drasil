@@ -5,6 +5,7 @@ import System.IO
 import System.Directory
 import qualified Data.Text as T
 import qualified Data.List.Split as L
+import Data.Maybe (fromJust)
 
 import DirectoryController as DC (FileName)
 
@@ -37,17 +38,17 @@ extractEntryData fileName filePath = do
   handle <- openFile fileName ReadMode
   scriptFile <- hGetContents handle
   forceRead scriptFile `seq` hClose handle
-  let rScriptFileLines =   removeNewlineGuard $ removeNewlineBrace $ removeNewlineEqual $ map stripWS $ lines scriptFile
+  let scriptFileLines = removeDeriving $ removeNewlineGuard $ removeNewlineBrace $ removeNewlineEqual $ filterEmptyS $ filterComments $ map stripWS $ lines scriptFile
   -- removes comment lines
-      scriptFileLines = rScriptFileLines \\ filter (isPrefixOf "--") rScriptFileLines
-
-      dataTypesRec = filter snd $ isDataRec scriptFileLines False
+      --scriptFileLines = rScriptFileLines \\ filter (isPrefixOf "--") rScriptFileLines
+      -- Recorded types as a String. Contains multiple, so it is a list of strings.
+      dataTypesRec = removeNewlineComma $ removeComments $ map fst $ filter snd $ isDataRec scriptFileLines False
       dataTypesConst = filter isDataConst $ useGuardForm scriptFileLines
       newtypeTypes = filter (isPrefixOf "newtype ") scriptFileLines
       typeTypes = filter (isPrefixOf "type ") scriptFileLines
 
 
-  let dataDeclRec = getDataContainedRec $ sortDataRec $ L.splitOn "}\n" $ unlines $ map fst dataTypesRec
+  let dataDeclRec = getDataContainedRec $ error $ show $ sortDataRec $ filterEmptyS $ L.splitOn "}\n" $ unlines $ dataTypesRec
       dataDeclConst = getDataContainedConst $ sortDataConst dataTypesConst 
       newtypeDecl = getNewtypes newtypeTypes
       typeDecl = getTypes typeTypes
@@ -59,6 +60,31 @@ stripWS :: String -> String
 stripWS = T.unpack . T.strip . T.pack
 
 ---TODO: use map for most of these, I just need to visualize what is happening for now.
+
+removeNewlineComma :: [String] -> [String]
+removeNewlineComma [] = []
+removeNewlineComma (l1:l2:ls)
+  | "," `isPrefixOf` l2 = removeNewlineComma ((l1 ++ " " ++ l2) : ls)
+  | otherwise = l1 : removeNewlineComma (l2:ls)
+removeNewlineComma ls = ls
+
+removeComments :: [String] -> [String]
+removeComments [] = []
+removeComments (l:ls)
+  | "--" `isInfixOf` l = (unwords $ take (fromJust (elemIndex "--" (words l))) $ words l): removeComments ls
+  | otherwise = l : removeComments ls
+
+removeDeriving :: [String] -> [String]
+removeDeriving [] = []
+removeDeriving (l:ls) 
+  | "deriving " `isInfixOf` l = (unwords $ take (fromJust (elemIndex "deriving" (words l))) $ words l): removeDeriving ls
+  | otherwise = l : removeDeriving ls
+
+filterComments :: [String] -> [String]
+filterComments ls = ls \\ filter (isPrefixOf "--") ls
+
+filterEmptyS :: [String] -> [String]
+filterEmptyS ls = filter (/= "") ls
 
 useGuardForm :: [String] -> [String]
 useGuardForm [] = []
@@ -83,13 +109,13 @@ sortDataConst :: [String] -> [(String, [String])]
 sortDataConst [] = []
 sortDataConst (l:ls) = (dataCName, dataCContents): sortDataConst ls
     where dataCName = head $ map stripWS $ L.splitOneOf "|=" $ l \\ "data "
-          dataCContents = filterDeriv $ concatMap tail $ map words $ tail $ map stripWS $ L.splitOneOf "|=" $ l \\ "data " 
+          dataCContents = concatMap tail $ map words $ tail $ map stripWS $ L.splitOneOf "|=" $ l \\ "data " 
 
-filterDeriv :: [String] -> [String]
+{-filterDeriv :: [String] -> [String]
 filterDeriv [] = []
 filterDeriv (l:ls) 
   | "deriving" `isInfixOf` l = []
-  | otherwise = l: filterDeriv ls
+  | otherwise = l: filterDeriv ls-}
 
 -- Creates a data declaration for constructs.
 getDataContainedConst :: [(String, [String])] -> [DataDeclConstruct]
@@ -133,9 +159,9 @@ sortDataRec (l:ls) = sortDataRec' (head (L.splitOn "=" l) : tail (L.splitOn "=" 
         --sortDataRec' [] = ("", [])
         sortDataRec' ms = (stripWS (head ms \\ "data "), getContainedTypes $ tail ms)
         getContainedTypes :: [String] -> [String]
-        getContainedTypes [n] = map (stripWS . (concatMap tail)) $ map (L.splitOn "::") $ lines n
+        getContainedTypes [n] = map stripWS $ concatMap (tail) $ map (L.splitOn "::") $ L.splitOn "," n
         getContainedTypes [] = [] --for those files which do not contain any record types
-        getContainedTypes ns = error $ show (l ++ "\nSomething isn't right here." --"Should only have one string filled with the different needed types at this stage."
+        getContainedTypes ns = error $ show (l ++ "\nSomething isn't right here.") --"Should only have one string filled with the different needed types at this stage."
 
 -- Attach booleans to see if a line is a part of a data type declaration (for records)
 isDataRec :: [String] -> Bool -> [(String, Bool)]

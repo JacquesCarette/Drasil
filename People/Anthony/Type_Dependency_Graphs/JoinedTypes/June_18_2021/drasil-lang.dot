@@ -1,10 +1,11 @@
 digraph drasillang {
 
+
 subgraph conceptchunk {
 	/* relationships between independent and dependent components */
-	IdeaDict -> ConceptChunk;
-    Desc -> ConceptChunk;
-    Domain -> ConceptChunk;
+	ConceptChunk -> IdeaDict;
+    ConceptChunk -> Desc;
+    ConceptChunk -> Domain;
     
 	/* definitions for each type component */
 	ConceptChunk 	    [shape=oval, color=cyan3, label="ConceptChunk"];
@@ -17,8 +18,8 @@ subgraph conceptchunk {
 
 subgraph commonconcept {
 	/* relationships between independent and dependent components */
-	CI -> CommonConcept;
-    Desc -> CommonConcept;
+	CommonConcept -> CI;
+    CommonConcept -> Desc;
     
 	/* definitions for each type component */
 	CommonConcept 	    [shape=oval, color=cyan3, label="CommonConcept"];
@@ -30,9 +31,9 @@ subgraph commonconcept {
 
 subgraph conceptinstance {
 	/* relationships between independent and dependent components */
-	ConceptChunk -> ConceptInstance;
-    RefAdd -> ConceptInstance;
-    ShortName -> ConceptInstance;
+	ConceptInstance -> ConceptChunk;
+    ConceptInstance -> RefAdd;
+    ConceptInstance -> ShortName;
     
 	/* definitions for each type component */
 	ConceptInstance 	    [shape=oval, color=cyan3, label="ConceptInstance"];
@@ -45,10 +46,10 @@ subgraph conceptinstance {
 
 subgraph citation {
 	/* relationships between independent and dependent components */
-	CitationKind -> Citation;
-    CiteField -> Citation;
-    UID -> Citation;
-    ShortName -> Citation;
+	Citation -> CitationKind;
+    Citation -> CiteField;
+    Citation -> UID;
+    Citation -> ShortName;
     
 	/* definitions for each type component */
 	Citation 	    [shape=oval, color=cyan3, label="Citation"];
@@ -62,10 +63,10 @@ subgraph citation {
 
 subgraph ci {
 	/* relationships between independent and dependent components */
-	UID -> CI;
-    NP -> CI;
-    Desc -> CI;
-    Domain -> CI;
+	CI -> UID;
+    CI -> NP;
+    CI -> Desc;
+    CI -> Domain;
     
 	/* definitions for each type component */
 	CI 	    [shape=oval, color=cyan3, label="CI"];
@@ -80,9 +81,9 @@ subgraph ci {
 
 subgraph constrainedchunk {
 	/* relationships between independent and dependent components */
-	QuantityDict -> ConstrainedChunk;
-    Constraint -> ConstrainedChunk;
-    Expr -> ConstrainedChunk [style="dotted"];
+	ConstrainedChunk -> QuantityDict;
+    ConstrainedChunk -> Constraint;
+    ConstrainedChunk -> Expr [style="dotted"];
     
 	/* definitions for each type component */
 	ConstrainedChunk 	    [shape=oval, color=cyan3, label="ConstrainedChunk"];
@@ -95,9 +96,9 @@ subgraph constrainedchunk {
 
 subgraph constrconcept {
 	/* relationships between independent and dependent components */
-	QuantityDict -> ConstrConcept;
-    Constraint -> ConstrConcept;
-    Expr -> ConstrConcept [style="dotted"];
+	ConstrConcept -> QuantityDict;
+    ConstrConcept -> Constraint;
+    ConstrConcept -> Expr [style="dotted"];
     
 	/* definitions for each type component */
 	ConstrConcept 	    [shape=oval, color=cyan3, label="ConstrConcept"];
@@ -111,10 +112,10 @@ subgraph constrconcept {
 
 subgraph definedquantitydict {
 	/* relationships between independent and dependent components */
-	ConceptChunk -> DefinedQuantityDict;
-    StageSymbol -> DefinedQuantityDict;
-    Space -> DefinedQuantityDict;
-    UnitDefn -> DefinedQuantityDict [style="dotted"];
+	DefinedQuantityDict -> ConceptChunk;
+    DefinedQuantityDict -> StageSymbol;
+    DefinedQuantityDict -> Space;
+    DefinedQuantityDict -> UnitDefn [style="dotted"];
     
 	/* definitions for each type component */
 	DefinedQuantityDict 	    [shape=oval, color=cyan3, label="DefinedQuantityDict"];
@@ -127,10 +128,10 @@ subgraph definedquantitydict {
 /* dot -Tpng sample.dot -o sample.png */
 subgraph qdefinition {
 	/* relationships between independent and dependent components */
-	QuantityDict -> QDefinition;
-    Desc -> QDefinition;
-    Expr -> QDefinition;
-    Domain -> QDefinition;
+	QDefinition -> QuantityDict;
+    QDefinition -> Desc;
+    QDefinition -> Expr;
+    QDefinition -> Domain;
     
 	/* definitions for each type component */
 	QDefinition 	    [shape=oval, color=cyan3, label="QDefinition"];
@@ -144,7 +145,7 @@ subgraph qdefinition {
 
 subgraph namedargument {
 	/* relationships between independent and dependent components */
-	QuantityDict -> NamedArgument;
+	NamedArgument -> QuantityDict;
     
 	/* definitions for each type component */
 	NamedArgument 	    [shape=oval, color=cyan3, label="NamedArgument"];
@@ -154,8 +155,8 @@ subgraph namedargument {
 /* dot -Tpng sample.dot -o sample.png */
 subgraph namedchunk {
 	/* relationships between independent and dependent components */
-	UID -> NamedChunk;
-    NP -> NamedChunk;
+	NamedChunk -> UID;
+    NamedChunk -> NP;
     
 	/* definitions for each type component */
 	NamedChunk 	    [shape=oval, color=cyan3, label="NamedChunk"];
@@ -176,8 +177,8 @@ subgraph uid {
 /* dot -Tpng sample.dot -o sample.png */
 subgraph ideadict {
 	/* relationships between independent and dependent components */
-	NamedChunk -> IdeaDict;
-    IdeaDictAbbrev -> IdeaDict;
+	IdeaDict -> NamedChunk;
+    IdeaDict -> IdeaDictAbbrev;
     
 	/* definitions for each type component */
 	IdeaDict 	    [shape=oval, color=cyan3, label="IdeaDict"];
@@ -188,10 +189,10 @@ subgraph ideadict {
 /* dot -Tpng sample.dot -o sample.png */
 subgraph quantitydict {
 	/* relationships between independent and dependent components */
-	IdeaDict -> QuantityDict;
-    Space -> QuantityDict;
-    StageSymbol -> QuantityDict;
-    UnitDefn -> QuantityDict [style="dotted"];
+	QuantityDict -> IdeaDict;
+    QuantityDict -> Space;
+    QuantityDict -> StageSymbol;
+    QuantityDict -> UnitDefn [style="dotted"];
     
 	/* definitions for each type component */
 	QuantityDict 	    [shape=oval, color=cyan3, label="QuantityDict"];
@@ -205,9 +206,9 @@ subgraph quantitydict {
 
 subgraph relationconcept {
 	/* relationships between independent and dependent components */
-	ConceptChunk -> RelationConcept;
-    Relation -> RelationConcept;
-	Expr -> Relation;
+	RelationConcept -> ConceptChunk;
+    RelationConcept -> Relation;
+	Relation -> Expr;
     
 	/* definitions for each type component */
 	RelationConcept 	    [shape=oval, color=cyan3, label="RelationConcept"];
@@ -219,8 +220,8 @@ subgraph relationconcept {
 
 subgraph uncertainchunk {
 	/* relationships between independent and dependent components */
-	ConstrainedChunk -> UncertainChunk;
-    Uncertainty -> UncertainChunk;
+	UncertainChunk -> ConstrainedChunk;
+    UncertainChunk -> Uncertainty;
     
 	/* definitions for each type component */
 	UncertainChunk 	    [shape=oval, color=cyan3, label="UncertainChunk"];
@@ -231,8 +232,8 @@ subgraph uncertainchunk {
 /* dot -Tpng sample.dot -o sample.png */
 subgraph uncertq {
 	/* relationships between independent and dependent components */
-	ConstrainedChunk -> UncertQ;
-    Uncertainty -> UncertQ;
+	UncertQ -> ConstrainedChunk;
+    UncertQ -> Uncertainty;
     
 	/* definitions for each type component */
 	UncertQ 	    [shape=oval, color=cyan3, label="UncertQ"];
@@ -243,9 +244,9 @@ subgraph uncertq {
 
 subgraph unitdefn {
 	/* relationships between independent and dependent components */
-	ConceptChunk -> UnitDefn;
-    UnitSymbol -> UnitDefn;
-    Domain -> UnitDefn;
+	UnitDefn -> ConceptChunk;
+    UnitDefn -> UnitSymbol;
+    UnitDefn -> Domain;
     
 	/* definitions for each type component */
 	UnitDefn 	    [shape=oval, color=cyan3, label="UnitDefn"];
@@ -257,8 +258,8 @@ subgraph unitdefn {
 
 subgraph unitequation {
 	/* relationships between independent and dependent components */
-	USymb -> UnitEquation;
-    Domain -> UnitEquation;
+	UnitEquation -> USymb;
+    UnitEquation -> Domain;
     
 	/* definitions for each type component */
 	UnitEquation 	    [shape=oval, color=cyan3, label="UnitEquation"];
@@ -270,8 +271,8 @@ subgraph unitequation {
 
 subgraph unitalchunk {
 	/* relationships between independent and dependent components */
-	DefinedQuantityDict -> UnitalChunk;
-    UnitDefn -> UnitalChunk;
+	UnitalChunk -> DefinedQuantityDict;
+    UnitalChunk -> UnitDefn;
     
 	/* definitions for each type component */
 	UnitalChunk 	    [shape=oval, color=cyan3, label="UnitalChunk"];
@@ -282,8 +283,8 @@ subgraph unitalchunk {
 
 subgraph unitarychunk {
 	/* relationships between independent and dependent components */
-	QuantityDict -> UnitaryChunk;
-    UnitDefn -> UnitaryChunk;
+	UnitaryChunk -> QuantityDict;
+    UnitaryChunk -> UnitDefn;
     
 	/* definitions for each type component */
 	UnitaryChunk 	    [shape=oval, color=cyan3, label="UnitaryChunk"];
@@ -293,9 +294,9 @@ subgraph unitarychunk {
 
 subgraph unitaryconceptdict {
 	/* relationships between independent and dependent components */
-	UnitaryChunk -> UnitaryConceptDict;
-    Desc -> UnitaryConceptDict;
-    Domain -> UnitaryConceptDict;
+	UnitaryConceptDict -> UnitaryChunk;
+    UnitaryConceptDict -> Desc;
+    UnitaryConceptDict -> Domain;
     
 	/* definitions for each type component */
 	UnitaryConceptDict 	    [shape=oval, color=cyan3, label="UnitaryConceptDict"];
@@ -338,7 +339,7 @@ subgraph month {
 /* dot -Tpng sample.dot -o sample.png */
 
 subgraph listtype {
-    ItemType -> ListType [style="dotted"];
+    ListType -> ItemType [style="dotted"];
     /* definitions for each type component */
 	ListType 	    [shape=oval, color=cyan3, label="For Different Kinds of Lists (ListType)"];
 }
@@ -354,8 +355,8 @@ subgraph itemtype {
 
 subgraph contents {
 
-    UnlabelledContent -> Contents [style="dotted"];
-    LabelledContent -> Contents [style="dotted"];
+    Contents -> UnlabelledContent [style="dotted"];
+    Contents -> LabelledContent [style="dotted"];
 
     /* definitions for each type component */
 	Contents 	    [shape=oval, color=cyan3, label="Contents"];
@@ -372,8 +373,8 @@ subgraph dtype {
 
 subgraph rawcontent {
 
-    ListType -> RawContent [style="dotted"];
-    DisplayExpr -> RawContent [style="dotted"];
+    RawContent -> ListType [style="dotted"];
+    RawContent -> DisplayExpr [style="dotted"];
 
     /* definitions for each type component */
 	RawContent 	    [shape=oval, color=cyan3, label="RawContent"];
@@ -383,8 +384,8 @@ subgraph rawcontent {
 
 subgraph labelledcontent {
 
-    Reference -> LabelledContent;
-    RawContent -> LabelledContent;
+    LabelledContent -> Reference;
+    LabelledContent -> RawContent;
 
     /* definitions for each type component */
 	LabelledContent 	    [shape=oval, color=cyan3, label="LabelledContent"];
@@ -394,7 +395,7 @@ subgraph labelledcontent {
 
 subgraph unlabelledcontent {
 
-    RawContent -> UnlabelledContent;
+    UnlabelledContent -> RawContent;
 
     /* definitions for each type component */
 	UnlabelledContent 	    [shape=oval, color=cyan3, label="UnlabelledContent"];
@@ -404,7 +405,7 @@ subgraph unlabelledcontent {
 
 subgraph lbltype {
 
-    IRefProg -> LblType [style="dotted"];
+    LblType -> IRefProg [style="dotted"];
 
     /* definitions for each type component */
 	LblType 	    [shape=oval, color=cyan3, label="Labels for Referencing (LblType)"];
@@ -438,8 +439,8 @@ subgraph pluralrule {
 
 subgraph np {
 
-    PluralRule -> NP [style="dotted"];
-    CapitalizationRule -> NP [style="dotted"];
+    NP -> PluralRule [style="dotted"];
+    NP -> CapitalizationRule [style="dotted"];
     
     /* definitions for each type component */
 	NP 	    [shape=oval, color=cyan3, label="Noun Phrase (NP)"];
@@ -449,8 +450,8 @@ subgraph np {
 
 subgraph uri {
 
-    Scheme -> URI [style="dotted"];
-    Authority -> URI [style="dotted"];
+    URI -> Scheme [style="dotted"];
+    URI -> Authority [style="dotted"];
 
 
     /* definitions for each type component */
@@ -468,7 +469,7 @@ subgraph scheme {
 
 subgraph authority {
 
-    Port -> Authority [style="dotted"];
+    Authority -> Port [style="dotted"];
 
     /* definitions for each type component */
 	Authority 	    [shape=oval, color=cyan3, label="Authentication (Authority)"];
@@ -485,8 +486,8 @@ subgraph port {
 
 subgraph uncertainty {
 
-    Int -> Uncertainty [style="dotted"];
-    Double -> Uncertainty [style="dotted"];
+    Uncertainty -> Int [style="dotted"];
+    Uncertainty -> Double [style="dotted"];
 
     /* definitions for each type component */
 	Uncertainty 	    [shape=oval, color=cyan3, label="Uncertainty"];
@@ -505,8 +506,8 @@ subgraph constraintreason {
 
 subgraph constraint {
 
-    RealInterval -> Constraint [style="dotted"];
-    ConstraintReason -> Constraint [style="dotted"];
+    Constraint -> RealInterval [style="dotted"];
+    Constraint -> ConstraintReason [style="dotted"];
 
     /* definitions for each type component */
 	Constraint 	    [shape=oval, color=cyan3, label="Constraint"];
@@ -537,9 +538,9 @@ subgraph displayassocbinop {
 
 subgraph displayexpr {
 
-    Expr -> DisplayExpr [style="dotted"];
-    DisplayBinOp -> DisplayExpr [style="dotted"];
-    DisplayAssocBinOp -> DisplayExpr [style="dotted"];
+    DisplayExpr -> Expr [style="dotted"];
+    DisplayExpr -> DisplayBinOp [style="dotted"];
+    DisplayExpr -> DisplayAssocBinOp [style="dotted"];
 
     /* definitions for each type component */
 	DisplayExpr 	    [shape=oval, color=cyan3, label="DisplayExpr"];
@@ -548,26 +549,26 @@ subgraph displayexpr {
 /* dot -Tpng sample.dot -o sample.png */
 
 subgraph expr {
-    Double -> Expr [style="dotted"];
-    Integer -> Expr [style="dotted"];
-    String -> Expr [style="dotted"];
+    Expr -> Double [style="dotted"];
+    Expr -> Integer [style="dotted"];
+    Expr -> String [style="dotted"];
     Expr -> Expr [style="dotted"];
-    AssocArithOper  -> Expr [style="dotted"];
-    AssocBoolOper  -> Expr [style="dotted"];
-    DerivType -> Expr [style="dotted"];
-    UID -> Expr [style="dotted"];
-    ArithBinOp -> Expr [style="dotted"];
-    EqBinOp -> Expr [style="dotted"];
-    BoolBinOp -> Expr [style="dotted"];
-    LABinOp  -> Expr [style="dotted"];
-    OrdBinOp  -> Expr [style="dotted"];
-    VVVBinOp -> Expr [style="dotted"];
-    VVNBinOp  -> Expr [style="dotted"];
-    UFunc  -> Expr [style="dotted"];
-    UFuncB -> Expr [style="dotted"];
-    UFuncVec  -> Expr [style="dotted"];
-    Completeness  -> Expr [style="dotted"];
-    DomainDesc -> Expr [style="dotted"];
+    Expr -> AssocArithOper [style="dotted"];
+    Expr -> AssocBoolOper [style="dotted"];
+    Expr -> DerivType [style="dotted"];
+    Expr -> UID [style="dotted"];
+    Expr -> ArithBinOp [style="dotted"];
+    Expr -> EqBinOp [style="dotted"];
+    Expr -> BoolBinOp [style="dotted"];
+    Expr -> LABinOp [style="dotted"];
+    Expr -> OrdBinOp [style="dotted"];
+    Expr -> VVVBinOp [style="dotted"];
+    Expr -> VVNBinOp [style="dotted"];
+    Expr -> UFunc [style="dotted"];
+    Expr -> UFuncB [style="dotted"];
+    Expr -> UFuncVec [style="dotted"];
+    Expr -> Completeness [style="dotted"];
+    Expr -> DomainDesc [style="dotted"];
 
 
     /* definitions for each type component */
@@ -593,8 +594,8 @@ subgraph expr {
 
 subgraph seccons {
 
-    Section -> SecCons [style="dotted"];
-    Contents -> SecCons [style="dotted"];
+    SecCons -> Section [style="dotted"];
+    SecCons -> Contents [style="dotted"];
 
     /* definitions for each type component */
 	SecCons 	    [shape=oval, color=cyan3, label="Section Content (SecCons)"];
@@ -604,8 +605,8 @@ subgraph seccons {
 
 subgraph section {
     
-    Reference -> Section;
-    SecCons -> Section;
+    Section -> Reference;
+    Section -> SecCons;
 
     /* definitions for each type component */
 	Section 	    [shape=oval, color=cyan3, label="Section"];
@@ -615,8 +616,8 @@ subgraph section {
 
 subgraph document {
 
-    Section -> Document;
-    Person -> Document;
+    Document -> Section;
+    Document -> Person;
 
     /* definitions for each type component */
 	Document 	    [shape=oval, color=cyan3, label="Document"];
@@ -626,8 +627,8 @@ subgraph document {
 
 subgraph person {
 
-    String -> Person;
-    Conv -> Person;
+    Person -> String;
+    Person -> Conv;
 
     /* definitions for each type component */
 	Person 	    [shape=oval, color=cyan3, label="Person (usually the author)"];
@@ -645,10 +646,10 @@ subgraph refinfo {
 
 subgraph reference {
 
-    UID -> Reference;
-    LblType -> Reference;
-    ShortName -> Reference;
-    RefInfo -> Reference;
+    Reference -> UID;
+    Reference -> LblType;
+    Reference -> ShortName;
+    Reference -> RefInfo;
 
     /* definitions for each type component */
 	Reference 	    [shape=oval, color=cyan3, label="Reference"];
@@ -659,12 +660,12 @@ subgraph reference {
 
 subgraph sentence {
 
-    SentenceStyle -> Sentence [style="dotted"];
-    USymb -> Sentence [style="dotted"];
-    String -> Sentence [style="dotted"];
-    Symbol -> Sentence [style="dotted"];
-    DisplayExpr -> Sentence [style="dotted"];
-    RefInfo -> Sentence [style="dotted"];
+    Sentence -> SentenceStyle [style="dotted"];
+    Sentence -> USymb [style="dotted"];
+    Sentence -> String [style="dotted"];
+    Sentence -> Symbol [style="dotted"];
+    Sentence -> DisplayExpr [style="dotted"];
+    Sentence -> RefInfo [style="dotted"];
     Sentence -> Sentence [style="dotted"];
 
 
@@ -678,7 +679,7 @@ subgraph sentence {
 
 subgraph shortname {
 
-    Sentence -> ShortName;
+    ShortName -> Sentence;
     
     /* definitions for each type component */
 	ShortName 	    [shape=oval, color=cyan3, label="ShortName"];
@@ -695,8 +696,8 @@ subgraph space {
 
 subgraph domaindesc {
 
-    Symbol -> DomainDesc [style="dotted"];
-    RTopology -> DomainDesc [style="dotted"];
+    DomainDesc -> Symbol [style="dotted"];
+    DomainDesc -> RTopology [style="dotted"];
 
 
     /* definitions for each type component */
@@ -708,7 +709,7 @@ subgraph domaindesc {
 
 subgraph realinterval {
 
-    Inclusive -> RealInterval;
+    RealInterval -> Inclusive;
 
     /* definitions for each type component */
 	RealInterval 	    [shape=oval, color=cyan3, label="RealInterval"];
@@ -719,8 +720,8 @@ subgraph realinterval {
 
 subgraph unitsymbol {
 
-    USymb -> UDefn;
-    USymb -> UnitSymbol;
+    UDefn -> USymb;
+    UnitSymbol -> USymb;
     /* definitions for each type component */
 	UDefn 	    [shape=oval, color=cyan3, label="Relative Units (UDefn)"];
     UnitSymbol 	    [shape=oval, color=cyan3, label="UnitSymbol"];

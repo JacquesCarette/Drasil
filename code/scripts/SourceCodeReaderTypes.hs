@@ -37,7 +37,7 @@ extractEntryData fileName filePath = do
   handle <- openFile fileName ReadMode
   scriptFile <- hGetContents handle
   forceRead scriptFile `seq` hClose handle
-  let rScriptFileLines = removeNewlineGuard $ removeNewlineBrace $ map stripWS $ lines scriptFile
+  let rScriptFileLines =   removeNewlineGuard $ removeNewlineBrace $ removeNewlineEqual $ map stripWS $ lines scriptFile
   -- removes comment lines
       scriptFileLines = rScriptFileLines \\ filter (isPrefixOf "--") rScriptFileLines
 
@@ -83,12 +83,23 @@ sortDataConst :: [String] -> [(String, [String])]
 sortDataConst [] = []
 sortDataConst (l:ls) = (dataCName, dataCContents): sortDataConst ls
     where dataCName = head $ map stripWS $ L.splitOneOf "|=" $ l \\ "data "
-          dataCContents = concatMap tail $ map words $ tail $ map stripWS $ L.splitOneOf "|=" $ l \\ "data "
+          dataCContents = filterDeriv $ concatMap tail $ map words $ tail $ map stripWS $ L.splitOneOf "|=" $ l \\ "data " 
+
+filterDeriv :: [String] -> [String]
+filterDeriv [] = []
+filterDeriv (l:ls) 
+  | "deriving" `isInfixOf` l = []
+  | otherwise = l: filterDeriv ls
 
 -- Creates a data declaration for constructs.
 getDataContainedConst :: [(String, [String])] -> [DataDeclConstruct]
 getDataContainedConst [] = []
 getDataContainedConst (l:ls) = DDC {ddcName = fst l, ddcContent = snd l} : getDataContainedConst ls
+
+removeNewlineEqual :: [String] -> [String]
+removeNewlineEqual [] = []
+removeNewlineEqual (l1:l2:ls) = if "data " `isPrefixOf` l1 && "=" `isSuffixOf` l1 then removeNewlineEqual ((l1 ++ " " ++ l2): ls) else l1 : removeNewlineEqual (l2:ls)
+removeNewlineEqual ls = ls
 
 --for those few cases of data declarations that use constructors with guards on a newline.
 removeNewlineGuard :: [String] -> [String]
@@ -107,16 +118,24 @@ getDataContainedRec :: [(String, [String])] -> [DataDeclRecord]
 getDataContainedRec [] = [] 
 getDataContainedRec (l:ls) = DDR {ddrName = fst l, ddrContent = snd l} : getDataContainedRec ls
 
+--for testing, will be removed after
+mytail :: [a] -> [a]
+mytail (x:xs) = xs
+mytail [] = error "here"
+
 -- take a list of data declarations for records and get the name of the datatype and all datatypes within the record
 sortDataRec :: [String] -> [(String, [String])]
 sortDataRec [] = []
+--sortDataRec [""] = [] --hack?
 sortDataRec (l:ls) = sortDataRec' (head (L.splitOn "=" l) : tail (L.splitOn "=" l)) : sortDataRec ls
     where
         sortDataRec' :: [String] -> (String, [String])
+        --sortDataRec' [] = ("", [])
         sortDataRec' ms = (stripWS (head ms \\ "data "), getContainedTypes $ tail ms)
         getContainedTypes :: [String] -> [String]
         getContainedTypes [n] = map (stripWS . (concatMap tail)) $ map (L.splitOn "::") $ lines n
-        getContainedTypes _ = error "Should only have one string filled with the different needed types at this stage."
+        getContainedTypes [] = [] --for those files which do not contain any record types
+        getContainedTypes ns = error $ show (l ++ "\nSomething isn't right here." --"Should only have one string filled with the different needed types at this stage."
 
 -- Attach booleans to see if a line is a part of a data type declaration (for records)
 isDataRec :: [String] -> Bool -> [(String, Bool)]

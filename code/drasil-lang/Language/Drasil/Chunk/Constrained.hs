@@ -1,5 +1,5 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Chunk.Constrained (ConstrainedChunk(..), ConstrainedQDef(..), ConstrConcept(..), ReasonableValueQDef(..),
+module Language.Drasil.Chunk.Constrained (ConstrainedChunk(..), ConstrainedQDef(..), ConstrConcept(..), ReasonableValueQDef(..), --ConstrReasQDef(..),
   cnstrw, cnstrw', constrained', constrainedNRV', cuc, cuc', cuc'', cvc) where
 
 import Control.Lens ((^.), makeLenses, view)
@@ -54,7 +54,6 @@ instance MayHaveUnit   ConstrainedChunk where getUnit = getUnit . view qd
 data ConstrainedQDef = ConstrainedQDef { _qd' :: QuantityDict
                                        , _constr' :: [Constraint] -- should really be NEList
                                        }
-
 makeLenses ''ConstrainedQDef                          
 
 -- ^ Finds 'UID' of the 'QuantityDict' used to make the 'ConstrainedQDef  '.
@@ -101,6 +100,32 @@ instance Eq            ReasonableValueQDef where c1 == c2 = (c1 ^. qd'' . uid) =
 instance MayHaveUnit   ReasonableValueQDef where getUnit = getUnit . view qd''
 
 
+--data ConstrReasQDef = CRQD { _qd''' :: QuantityDict
+--                           , _constr''' :: [Constraint]
+--                           , reasV''' :: Expr
+--                           }
+--makeLEnses ''ConstrReasQDef
+
+-- ^ Finds 'UID' of the 'QuantityDict' used to make the 'ConstrReasQDef'.
+--instance HasUID        ConstrReasQDef where uid = qd . uid
+-- ^ Finds term ('NP') of the 'QuantityDict' used to make the 'ConstrReasQDef'.
+--instance NamedIdea     ConstrReasQDef where term = qd . term
+-- ^ Finds the idea contained in the 'QuantityDict' used to make the 'ConstrReasQDef.
+--instance Idea          ConstrReasQDef where getA = getA . view qd
+-- ^ Finds the 'Space' of the 'QuantityDict' used to make the 'ConstrReasQDef'.
+--instance HasSpace      ConstrReasQDef where typ = qd . typ
+-- ^ Finds the 'Symbol' of the 'QuantityDict' used to make the 'ConstrReasQDef'.
+--instance HasSymbol     ConstrReasQDef where symbol c = symbol (c^.qd)
+-- ^ 'ConstrainedChunk's have a 'Quantity'. 
+--instance Quantity      ConstrReasQDef where
+-- ^ Finds the 'Constraint's of a 'ConstrainedChunk'.
+--instance Constrained   ConstrReasQDef where constraints = constr
+-- ^ Finds a reasonable value for the 'ConstrReasQDef'.
+--instance HasReasVal    ConstrReasQDef where reasVal     = reasV
+-- ^ Equal if 'UID's are equal.
+--instance Eq            ConstrainedChunk where c1 == c2 = (c1 ^. qd . uid) == (c2 ^. qd . uid)
+-- ^ Finds units contained in the 'QuantityDict' used to make the 'ConstrReasQDef'.
+--instance MayHaveUnit   ConstrReasQDef where getUnit = getUnit . view qd
 
 
 -- | Creates a constrained unitary chunk from a 'UID', term ('NP'), 'Symbol', unit, 'Space', 'Constraint's, and an 'Expr'.
@@ -122,8 +147,8 @@ cnstrw c = ConstrainedChunk   (qw c) (c ^. constraints) (c ^. reasVal)
 -- | ConstrConcepts are conceptual symbolic quantities ('DefinedQuantityDict')
 -- with 'Constraint's and maybe a reasonable value (no units!).
 data ConstrConcept = ConstrConcept { _defq :: DefinedQuantityDict
-                                   , _constr''' :: [Constraint]
-                                   , _reasV''' :: Maybe Expr
+                                   , _constr'''' :: [Constraint]
+                                   , _reasV'''' :: Maybe Expr
                                    }
 makeLenses ''ConstrConcept
 
@@ -144,9 +169,9 @@ instance Definition    ConstrConcept where defn = defq . defn
 -- ^ Finds the domain contained in the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
 instance ConceptDomain ConstrConcept where cdom = cdom . view defq
 -- ^ Finds the 'Constraint's of a 'ConstrConcept'.
-instance Constrained   ConstrConcept where constraints  = constr'''
+instance Constrained   ConstrConcept where constraints  = constr''''
 -- ^ Finds a reasonable value for the 'ConstrConcept'.
-instance HasReasVal    ConstrConcept where reasVal      = reasV'''
+instance HasReasVal    ConstrConcept where reasVal      = reasV''''
 -- ^ Equal if 'UID's are equal.
 instance Eq            ConstrConcept where c1 == c2 = (c1 ^.defq.uid) == (c2 ^.defq.uid)
 -- ^ Finds the units of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.

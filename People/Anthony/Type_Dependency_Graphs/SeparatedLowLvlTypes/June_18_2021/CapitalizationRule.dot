@@ -1,6 +1,0 @@
-digraph capitalizationrule {
-    /* definitions for each type component */
-	CapitalizationRule 	    [shape=oval, color=cyan3, label="CapitalizationRule"];
-}
-
-/* dot -Tpng sample.dot -o sample.png */

@@ -1,6 +1,0 @@
-digraph dtype {
-    /* definitions for each type component */
-	DType 	    [shape=oval, color=cyan3, label="Type of Definition or Model (DType)"];
-}
-
-/* dot -Tpng sample.dot -o sample.png */

@@ -1,6 +1,0 @@
-digraph constraintreason {
-    /* definitions for each type component */
-	ConstraintReason 	    [shape=oval, color=cyan3, label="Constraints on a model (ConstraintReason)"];
-}
-
-/* dot -Tpng sample.dot -o sample.png */

@@ -1,6 +1,0 @@
-digraph port {
-    /* definitions for each type component */
-	Port 	    [shape=oval, color=cyan3, label="Authentication Port (Port)"];
-}
-
-/* dot -Tpng sample.dot -o sample.png */

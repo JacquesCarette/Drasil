@@ -1,6 +1,0 @@
-digraph displayassocbinop {
-    /* definitions for each type component */
-	DisplayAssocBinOp 	    [shape=oval, color=cyan3, label="DisplayAssocBinOp"];
-}
-
-/* dot -Tpng sample.dot -o sample.png */

@@ -1,9 +1,0 @@
-digraph lbltype {
-
-    IRefProg -> LblType [style="dotted"];
-
-    /* definitions for each type component */
-	LblType 	    [shape=oval, color=cyan3, label="Labels for Referencing (LblType)"];
-}
-
-/* dot -Tpng sample.dot -o sample.png */

@@ -1,9 +1,0 @@
-digraph uid {
-    
-	/* definitions for each type component */
-	UID 	    [shape=oval, color=cyan3, label="Unique Identifier (UID)"];
-	Domain      [shape=oval, color=cyan3, label="Domain ([UID])"];
-
-}
-
-/* dot -Tpng sample.dot -o sample.png */

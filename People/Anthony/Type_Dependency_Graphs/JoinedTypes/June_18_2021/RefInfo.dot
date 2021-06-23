@@ -1,6 +1,0 @@
-digraph refinfo {
-    /* definitions for each type component */
-	RefInfo 	    [shape=oval, color=cyan3, label="Reference Information (RefInfo)"];
-}
-
-/* dot -Tpng sample.dot -o sample.png */

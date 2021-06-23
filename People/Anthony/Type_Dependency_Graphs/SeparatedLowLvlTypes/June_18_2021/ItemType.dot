@@ -1,6 +1,0 @@
-digraph itemtype {
-    /* definitions for each type component */
-	ItemType 	    [shape=oval, color=cyan3, label="Item/Kind of Element in a List (ItemType)"];
-}
-
-/* dot -Tpng sample.dot -o sample.png */

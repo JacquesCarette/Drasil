@@ -1,7 +1,0 @@
-digraph citationkind {
-	/* definitions for each type component */
-	CitationKind 	    [shape=oval, color=cyan3, label="Kind of citation (Article, Book, etc.)"];
-
-}
-
-/* dot -Tpng sample.dot -o sample.png */

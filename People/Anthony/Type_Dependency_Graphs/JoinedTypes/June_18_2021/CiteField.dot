@@ -1,7 +1,0 @@
-digraph citefield {
-	/* definitions for each type component */
-	CiteField 	    [shape=oval, color=cyan3, label="Fields used in citations (CiteField)"];
-
-}
-
-/* dot -Tpng sample.dot -o sample.png */

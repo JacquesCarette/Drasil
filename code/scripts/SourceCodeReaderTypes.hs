@@ -165,7 +165,7 @@ sortDataRec (l:ls) = (head typeContents, checkContents): sortDataRec ls
 
 -- Record a datatype and its dependencies. For record types using the @data@ declaration syntax.
 getDataContainedRec :: [(String, [String])] -> [DataDeclRecord]
-getDataContainedRec ls = map (\l -> DDR {ddrName = filterAll $ fst l, ddrContent = nub $ filter (not . null) $ map filterAll $ snd l}) ls
+getDataContainedRec = map (\l -> DDR {ddrName = filterAll $ fst l, ddrContent = nub $ filter (not . null) $ map filterAll $ snd l})
 
 -----------------
 -- Sorting and filtering for functions that use @data@ syntax (for non-record types)
@@ -195,7 +195,7 @@ sortDataConst (l:ls) = (dataCName, dataCContents): sortDataConst ls
 
 -- Record a datatype and its dependencies. For non-record types using the @data@ declaration syntax.
 getDataContainedConst :: [(String, [String])] -> [DataDeclConstruct]
-getDataContainedConst ls = map (\l -> DDC {ddcName = filterAll $ fst l, ddcContent = nub $ filter (not . null) $ map filterAll $ snd l}) ls
+getDataContainedConst = map (\l -> DDC {ddcName = filterAll $ fst l, ddcContent = nub $ filter (not . null) $ map filterAll $ snd l})
 
 -----------------
 -- Sorting and filtering for functions that use @newtype@ syntax

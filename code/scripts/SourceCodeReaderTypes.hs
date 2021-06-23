@@ -50,7 +50,7 @@ extractEntryData fileName filePath = do
       typeTypes = removeComments $ filter (isInfixOf "=") $ filter (isPrefixOf "type ") scriptFileLines
 
       -- organize the data from a nice string into their respective Decl formats
-  let dataDeclRec = getDataContainedRec $ sortDataRec $ filterEmptyS $ L.splitOn "}\n" $ unlines $ dataTypesRec
+  let dataDeclRec = getDataContainedRec $ sortDataRec $ filterEmptyS $ L.splitOn "}\n" $ unlines dataTypesRec
       dataDeclConst = getDataContainedConst $ sortDataConst dataTypesConst
       newtypeDeclR = getNewtypesR newtypeRec
       newtypeDeclC = getNewtypesC newtypeConst
@@ -77,7 +77,7 @@ filterComments ls = ls \\ filter (isPrefixOf "--") ls
 
 -- get rid of lines with nothing in them.
 filterEmptyS :: [String] -> [String]
-filterEmptyS ls = filter (/= "") ls
+filterEmptyS = filter (/= "")
 
 -- for those few cases of data declarations that start the actual data declaration on a new line after the "=" sign.
 removeNewlineEqual :: [String] -> [String]
@@ -101,14 +101,14 @@ removeNewlineGuard ls = ls
 removeDeriving :: [String] -> [String]
 removeDeriving [] = []
 removeDeriving (l:ls) 
-  | "deriving " `isInfixOf` l = (unwords $ take (fromJust (elemIndex "deriving" (words l))) $ words l): removeDeriving ls
+  | "deriving " `isInfixOf` l = unwords (take (fromJust (elemIndex "deriving" (words l))) $ words l): removeDeriving ls
   | otherwise = l : removeDeriving ls
 
 -- Removes comments that are a part of datatype lines (drops everything after the comment symbol).
 removeComments :: [String] -> [String]
 removeComments [] = []
 removeComments (l:ls)
-  | "--" `isInfixOf` l = (unwords $ take (fromJust (findIndex  (isInfixOf "--") (words l))) $ words l): removeComments ls
+  | "--" `isInfixOf` l = unwords (take (fromJust (findIndex  (isInfixOf "--") (words l))) $ words l): removeComments ls
   | otherwise = l : removeComments ls
 
 -----------------
@@ -142,8 +142,8 @@ useConstructFormRec isSameRec (l1:l2:ls)
   | otherwise = l1 : useConstructFormRec False (l2:ls)
   where
       l1Construct 
-        | "=>" `isInfixOf` l1 = (T.unpack $ T.replace (T.pack "where") (T.pack "=") $ T.pack $ unwords $ take (fromJust (findIndex  (isInfixOf "::") (words l1))) $ words l1) ++ " {" --has a class constraint, but we can just ignore that for now
-        | otherwise = (T.unpack $ T.replace (T.pack "where") (T.pack "=") $ T.pack l1) ++ " {" -- no class constraint in data type
+        | "=>" `isInfixOf` l1 = T.unpack (T.replace (T.pack "where") (T.pack "=") $ T.pack $ unwords $ take (fromJust (findIndex  (isInfixOf "::") (words l1))) $ words l1) ++ " {" --has a class constraint, but we can just ignore that for now
+        | otherwise = T.unpack (T.replace (T.pack "where") (T.pack "=") $ T.pack l1) ++ " {" -- no class constraint in data type
 useConstructFormRec _ ls = ls
 
 -- Instead of separating records by newline (which are not guarenteed),
@@ -161,12 +161,11 @@ sortDataRec [] = []
 sortDataRec (l:ls) = (head typeContents, checkContents): sortDataRec ls 
     where
         typeContents = map stripWS $ L.splitOn "=" $ l \\ "data "
-        checkContents = map stripWS $ concatMap (tail) $ map (L.splitOn "::") $ L.splitOn "," $ concat $ tail typeContents
+        checkContents = map stripWS $ concatMap (tail . L.splitOn "::") $ L.splitOn "," $ concat $ tail typeContents
 
 -- Record a datatype and its dependencies. For record types using the @data@ declaration syntax.
 getDataContainedRec :: [(String, [String])] -> [DataDeclRecord]
-getDataContainedRec [] = [] 
-getDataContainedRec (l:ls) = DDR {ddrName = filterAll $ fst l, ddrContent = nub $ filter (not . null) $ map filterAll $ snd l} : getDataContainedRec ls
+getDataContainedRec ls = map (\l -> DDR {ddrName = filterAll $ fst l, ddrContent = nub $ filter (not . null) $ map filterAll $ snd l}) ls
 
 -----------------
 -- Sorting and filtering for functions that use @data@ syntax (for non-record types)
@@ -176,7 +175,7 @@ getDataContainedRec (l:ls) = DDR {ddrName = filterAll $ fst l, ddrContent = nub 
 useGuardForm :: [String] -> [String]
 useGuardForm [] = []
 useGuardForm (l1:l2:ls) = if "::" `isInfixOf` l2 then useGuardForm ((l1 ++ l2Guard) : ls) else l1: useGuardForm (l2:ls)
-    where l2Guard = " |" ++ (T.unpack $ T.replace (T.pack "::") mempty $ T.replace (T.pack "->") mempty $ T.pack l2)
+    where l2Guard = " |" ++ T.unpack (T.replace (T.pack "::") mempty $ T.replace (T.pack "->") mempty $ T.pack l2)
 useGuardForm ls = ls
 
 -- Some datatypes may be defined using the @where@ syntax, so this converts them to use @=@.
@@ -185,19 +184,18 @@ useEqForm = T.unpack . T.replace (T.pack "where") (T.pack "=") . T.pack
 
 -- For filtering out data types that are records.
 isDataConst :: String -> Bool
-isDataConst dt = if (isPrefixOf "data " dt && not ("{" `isInfixOf` dt)) then True else False
+isDataConst dt = isPrefixOf "data " dt && not ("{" `isInfixOf` dt)
 
 -- Helper that takes a list of datatype declarations (not record type) and sorts them so that a list of the datatype name and the datatype constructor values is made.
 sortDataConst :: [String] -> [(String, [String])]
 sortDataConst [] = []
 sortDataConst (l:ls) = (dataCName, dataCContents): sortDataConst ls
     where dataCName = head $ map stripWS $ L.splitOneOf "|=" $ l \\ "data "
-          dataCContents = concatMap tail $ map words $ tail $ filter (not . null) $ map stripWS $ L.splitOneOf "|=" $ l \\ "data " 
+          dataCContents = concatMap (tail . words) $ tail $ filter (not . null) $ map stripWS $ L.splitOneOf "|=" $ l \\ "data " 
 
 -- Record a datatype and its dependencies. For non-record types using the @data@ declaration syntax.
 getDataContainedConst :: [(String, [String])] -> [DataDeclConstruct]
-getDataContainedConst [] = []
-getDataContainedConst (l:ls) = DDC {ddcName = filterAll $ fst l, ddcContent = nub $ filter (not . null) $ map filterAll $ snd l} : getDataContainedConst ls
+getDataContainedConst ls = map (\l -> DDC {ddcName = filterAll $ fst l, ddcContent = nub $ filter (not . null) $ map filterAll $ snd l}) ls
 
 -----------------
 -- Sorting and filtering for functions that use @newtype@ syntax
@@ -216,7 +214,7 @@ getNewtypesR :: [String] -> [NewtypeDecl]
 getNewtypesR [] = []
 getNewtypesR (l:ls) = NTD {ntdName = filterAll $ head typeContents, ntdContent = nub $ filter (not . null) $ map filterAll checkContents} : getNewtypesR ls
   where typeContents = map stripWS $ L.splitOn "=" $ l \\ "newtype "
-        checkContents = map stripWS $ concatMap (tail) $ map (L.splitOn "::") $ L.splitOn "," $ concat $ tail typeContents
+        checkContents = map stripWS $ concatMap (tail . L.splitOn "::") $ L.splitOn "," $ concat $ tail typeContents
 
 -- Record a datatype and its dependencies. For constructor-style @newtype@ declaration syntax.
 getNewtypesC :: [String] -> [NewtypeDecl]

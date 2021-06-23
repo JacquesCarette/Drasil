@@ -58,9 +58,9 @@ main = do
   rawEntryData <- zipWithM (createEntry codeDirectory) (concat allFiles) (map DC.fileName (concat allFiles))
 
   -- creates and writes to output data file
-  mapM (createPackageFiles outputDirectory) packageNames
-  mapM (output outputDirectory) rawEntryData
-  mapM (closePackageFiles outputDirectory) packageNames
+  mapM_ (createPackageFiles outputDirectory) packageNames
+  mapM_ (output outputDirectory) rawEntryData
+  mapM_ (closePackageFiles outputDirectory) packageNames
   mkDrasilTypeGraph outputDirectory rawEntryData
   return mempty
 
@@ -74,8 +74,8 @@ mkDrasilTypeGraph fp entries = do
   createDirectoryIfMissing False fp
   setCurrentDirectory fp
   typeGraph <- openFile "drasil.dot" AppendMode
-  hPutStrLn typeGraph $ "digraph alltypes {"
-  mapM (mkFullOutputSub typeGraph) entries
+  hPutStrLn typeGraph "digraph alltypes {"
+  mapM_ (mkFullOutputSub typeGraph) entries
   hPutStrLn typeGraph "}"
   hClose typeGraph
 
@@ -85,7 +85,7 @@ createPackageFiles fp lang = do
   createDirectoryIfMissing False fp
   setCurrentDirectory fp
   typeGraph <- openFile (lang ++ ".dot") WriteMode
-  hPutStrLn typeGraph $ "digraph alltypes {"
+  hPutStrLn typeGraph "digraph alltypes {"
   hClose typeGraph
 
 -- Helper to close drasil- package files
@@ -101,10 +101,10 @@ closePackageFiles fp lang = do
 output :: FilePath -> Entry -> IO ()
 output fp entry = do
     mkFullOutput fp entry
-    mapM (mkGraphDROutput (fp ++ "/" ++ drasilPack entry)) $ dataTypeRecords entry
-    mapM (mkGraphDCOutput (fp ++ "/" ++ drasilPack entry)) $ dataTypeConstructors entry
-    mapM (mkGraphNTOutput (fp ++ "/" ++ drasilPack entry)) $ newtypes entry
-    mapM (mkGraphTOutput  (fp ++ "/" ++ drasilPack entry)) $ types entry
+    mapM_ (mkGraphDROutput (fp ++ "/" ++ drasilPack entry)) $ dataTypeRecords entry
+    mapM_ (mkGraphDCOutput (fp ++ "/" ++ drasilPack entry)) $ dataTypeConstructors entry
+    mapM_ (mkGraphNTOutput (fp ++ "/" ++ drasilPack entry)) $ newtypes entry
+    mapM_ (mkGraphTOutput  (fp ++ "/" ++ drasilPack entry)) $ types entry
     return mempty
 
 -------
@@ -117,13 +117,11 @@ mkFullOutput outputFilePath entry = do
     createDirectoryIfMissing False outputFilePath
     setCurrentDirectory outputFilePath
     typeGraph <- openFile (drasilPack entry ++ ".dot") AppendMode
-    hPutStrLn typeGraph $ "\tsubgraph " ++ map toLower ((fileName entry) \\ ".hs") ++ " {"
-    mapM (mkGraphDROutputSub typeGraph) $ dataTypeRecords entry
-    mapM (mkGraphDCOutputSub typeGraph) $ dataTypeConstructors entry
-    mapM (mkGraphNTOutputSub typeGraph) $ newtypes entry
-    mapM (mkGraphTOutputSub  typeGraph) $ types entry
-    --hPutStrLn typeGraph "define(`digraph', `\tsubgraph')"
-    --mapM (hPutStrLn typeGraph) $ map (\x -> "sinclude(" ++ x ++ ".dot)") nms
+    hPutStrLn typeGraph $ "\tsubgraph " ++ map toLower (fileName entry \\ ".hs") ++ " {"
+    mapM_ (mkGraphDROutputSub typeGraph) $ dataTypeRecords entry
+    mapM_ (mkGraphDCOutputSub typeGraph) $ dataTypeConstructors entry
+    mapM_ (mkGraphNTOutputSub typeGraph) $ newtypes entry
+    mapM_ (mkGraphTOutputSub  typeGraph) $ types entry
     hPutStrLn typeGraph "\t}"
     hClose typeGraph
 
@@ -135,7 +133,7 @@ mkGraphDROutput outputFilePath ddr = do
     setCurrentDirectory outputFilePath
     typeGraph <- openFile (ddrName ddr ++ ".dot") WriteMode
     hPutStrLn typeGraph $ "digraph " ++ map toLower (ddrName ddr) ++ "{"
-    mapM (hPutStrLn typeGraph) $ makeEdgesDi (ddrName ddr) (ddrContent ddr)
+    mapM_ (hPutStrLn typeGraph) $ makeEdgesDi (ddrName ddr) (ddrContent ddr)
     hPutStrLn typeGraph $ makeNodesDi "cyan3" $ ddrName ddr
     hPutStrLn typeGraph "}"
     hClose typeGraph
@@ -147,7 +145,7 @@ mkGraphDCOutput outputFilePath ddc = do
     setCurrentDirectory outputFilePath
     typeGraph <- openFile (ddcName ddc ++ ".dot") WriteMode
     hPutStrLn typeGraph $ "digraph " ++ map toLower (ddcName ddc) ++ "{"
-    mapM (hPutStrLn typeGraph) $ makeEdgesDi (ddcName ddc) (ddcContent ddc) -- (if length (ddcContent ddc) == 1 then True else False)
+    mapM_ (hPutStrLn typeGraph) $ makeEdgesDi (ddcName ddc) (ddcContent ddc) -- (if length (ddcContent ddc) == 1 then True else False)
     hPutStrLn typeGraph $ makeNodesDi "darkviolet" $ ddcName ddc
     hPutStrLn typeGraph "}"
     hClose typeGraph
@@ -159,7 +157,7 @@ mkGraphNTOutput outputFilePath ntd = do
     setCurrentDirectory outputFilePath
     typeGraph <- openFile (ntdName ntd ++ ".dot") WriteMode
     hPutStrLn typeGraph $ "digraph " ++ map toLower (ntdName ntd) ++ "{"
-    mapM (hPutStrLn typeGraph) $ makeEdgesDi (ntdName ntd) (ntdContent ntd)
+    mapM_ (hPutStrLn typeGraph) $ makeEdgesDi (ntdName ntd) (ntdContent ntd)
     hPutStrLn typeGraph $ makeNodesDi "darkgreen" $ ntdName ntd
     hPutStrLn typeGraph "}"
     hClose typeGraph
@@ -171,7 +169,7 @@ mkGraphTOutput outputFilePath td = do
     setCurrentDirectory outputFilePath
     typeGraph <- openFile (tdName td ++ ".dot") WriteMode
     hPutStrLn typeGraph $ "digraph " ++ map toLower (tdName td) ++ "{"
-    mapM (hPutStrLn typeGraph) $ makeEdgesDi (tdName td) (tdContent td)
+    mapM_ (hPutStrLn typeGraph) $ makeEdgesDi (tdName td) (tdContent td)
     hPutStrLn typeGraph $ makeNodesDi "red2" $ tdName td
     hPutStrLn typeGraph "}"
     hClose typeGraph
@@ -183,18 +181,18 @@ mkGraphTOutput outputFilePath td = do
 -- Helper to create the drasil.dot graph file
 mkFullOutputSub :: Handle -> Entry -> IO ()
 mkFullOutputSub typeGraph entry = do
-    hPutStrLn typeGraph $ "\tsubgraph " ++ map toLower ((fileName entry) \\ ".hs") ++ " {"
-    mapM (mkGraphDROutputSub typeGraph) $ dataTypeRecords entry
-    mapM (mkGraphDCOutputSub typeGraph) $ dataTypeConstructors entry
-    mapM (mkGraphNTOutputSub typeGraph) $ newtypes entry
-    mapM (mkGraphTOutputSub  typeGraph) $ types entry
+    hPutStrLn typeGraph $ "\tsubgraph " ++ map toLower (fileName entry \\ ".hs") ++ " {"
+    mapM_ (mkGraphDROutputSub typeGraph) $ dataTypeRecords entry
+    mapM_ (mkGraphDCOutputSub typeGraph) $ dataTypeConstructors entry
+    mapM_ (mkGraphNTOutputSub typeGraph) $ newtypes entry
+    mapM_ (mkGraphTOutputSub  typeGraph) $ types entry
     hPutStrLn typeGraph "\t}"
 
 -- Helper to make a graph from datatypes that use the @data@ syntax and are records (for larger package-wide graphs)
 mkGraphDROutputSub :: Handle -> SCRT.DataDeclRecord -> IO ()
 mkGraphDROutputSub typeGraph ddr = do
     hPutStrLn typeGraph $ "\t\tsubgraph " ++ map toLower (ddrName ddr) ++ "{"
-    mapM (hPutStrLn typeGraph) $ makeEdgesSub (ddrName ddr) (ddrContent ddr)
+    mapM_ (hPutStrLn typeGraph) $ makeEdgesSub (ddrName ddr) (ddrContent ddr)
     hPutStrLn typeGraph $ makeNodesSub "cyan3" $ ddrName ddr
     hPutStrLn typeGraph "\t\t}"
 
@@ -202,7 +200,7 @@ mkGraphDROutputSub typeGraph ddr = do
 mkGraphDCOutputSub :: Handle -> SCRT.DataDeclConstruct -> IO ()
 mkGraphDCOutputSub typeGraph ddc = do
     hPutStrLn typeGraph $ "\t\tsubgraph " ++ map toLower (ddcName ddc) ++ "{"
-    mapM (hPutStrLn typeGraph) $ makeEdgesSub (ddcName ddc) (ddcContent ddc)
+    mapM_ (hPutStrLn typeGraph) $ makeEdgesSub (ddcName ddc) (ddcContent ddc)
     hPutStrLn typeGraph $ makeNodesSub "darkviolet" $ ddcName ddc
     hPutStrLn typeGraph "\t\t}"
 
@@ -210,7 +208,7 @@ mkGraphDCOutputSub typeGraph ddc = do
 mkGraphNTOutputSub :: Handle -> SCRT.NewtypeDecl -> IO ()
 mkGraphNTOutputSub typeGraph ntd = do
     hPutStrLn typeGraph $ "\t\tsubgraph " ++ map toLower (ntdName ntd) ++ "{"
-    mapM (hPutStrLn typeGraph) $ makeEdgesSub (ntdName ntd) (ntdContent ntd)
+    mapM_ (hPutStrLn typeGraph) $ makeEdgesSub (ntdName ntd) (ntdContent ntd)
     hPutStrLn typeGraph $ makeNodesSub "darkgreen" $ ntdName ntd
     hPutStrLn typeGraph "\t\t}"
 
@@ -218,7 +216,7 @@ mkGraphNTOutputSub typeGraph ntd = do
 mkGraphTOutputSub :: Handle -> SCRT.TypeDecl -> IO ()
 mkGraphTOutputSub typeGraph td = do
     hPutStrLn typeGraph $ "\t\tsubgraph " ++ map toLower (tdName td) ++ "{"
-    mapM (hPutStrLn typeGraph) $ makeEdgesSub (tdName td) (tdContent td)
+    mapM_ (hPutStrLn typeGraph) $ makeEdgesSub (tdName td) (tdContent td)
     hPutStrLn typeGraph $ makeNodesSub "red2" $ tdName td
     hPutStrLn typeGraph "\t\t}"
 
@@ -255,7 +253,7 @@ makeEntry drpk fn fp dtR dtC ntd td = Entry {drasilPack=drpk,fileName=fn,
   filePath=fp,dataTypeRecords=dtR, dataTypeConstructors=dtC, newtypes=ntd, types=td}
 
 -- import configurations function (drasil- packages)
-config :: FilePath -> IO ([String])
+config :: FilePath -> IO [String]
 config configFilePath = do
   setCurrentDirectory configFilePath
   c <- readFile "DTG_Config.txt"

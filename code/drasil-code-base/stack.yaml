@@ -33,7 +33,9 @@ packages:
 - .
 - ../drasil-database
 - ../drasil-lang
+- ../drasil-metadata
 - ../drasil-utils
+- ../drasil-theory
 
 # Dependency packages to be pulled from upstream that are not in the resolver.
 # These entries can reference officially published versions as well as

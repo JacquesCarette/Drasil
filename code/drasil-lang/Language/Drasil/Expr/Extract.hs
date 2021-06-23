@@ -26,11 +26,6 @@ eNames Str{}                 = []
 eNames Perc{}                = []
 eNames (FCall f x ns)        = f : concatMap eNames x ++ map fst ns ++ 
                               concatMap (eNames . snd) ns
-eNames (New c x ns)          = c : concatMap eNames x ++ map fst ns ++ 
-                              concatMap (eNames . snd) ns
-eNames (Message a m x ns)    = a : m : concatMap eNames x ++ map fst ns ++ 
-                              concatMap (eNames . snd) ns
-eNames (Field o f)           = [o, f]
 eNames (Case _ ls)           = concatMap (eNames . fst) ls ++ concatMap (eNames . snd) ls
 eNames (UnaryOp _ u)         = eNames u
 eNames (UnaryOpB _ u)        = eNames u
@@ -74,11 +69,6 @@ eNames' Str{}                 = []
 eNames' Perc{}                = []
 eNames' (FCall _ x ns)        = concatMap eNames' x ++ map fst ns ++ 
                                concatMap (eNames .snd) ns
-eNames' (New _ x ns)          = concatMap eNames' x ++ map fst ns ++ 
-                               concatMap (eNames .snd) ns
-eNames' (Message a _ x ns)    = a : concatMap eNames' x ++ map fst ns ++ 
-                               concatMap (eNames .snd) ns
-eNames' (Field o f)           = [o, f]
 eNames' (Case _ ls)           = concatMap (eNames' . fst) ls ++ 
                                concatMap (eNames' . snd) ls
 eNames' (UnaryOp _ u)         = eNames' u

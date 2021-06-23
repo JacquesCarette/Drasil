@@ -56,6 +56,7 @@ data UFuncB = Not
 data UFuncVec = Norm | Dim
   deriving Eq
 
+-- | A one-to-one clone of Expr, with extra OO/code-related functionality.
 data CodeExpr where
   -- | Turns a decimal value ('Double') into an expression.
   Dbl      :: Double -> CodeExpr

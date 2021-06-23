@@ -105,18 +105,6 @@ data Expr where
   --   * F(x,y) would be (FCall F [x,y]).
   --   * F(x,n=y) would be (FCall F [x] [(n,y)]).
   FCall    :: UID -> [Expr] -> [(UID, Expr)] -> Expr
-  -- | Actor creation given 'UID', parameters, and named parameters.
-  New      :: UID -> [Expr] -> [(UID, Expr)] -> Expr
-  -- | Message an actor:
-  --
-  --   * 1st 'UID' is the actor,
-  --   * 2nd 'UID' is the method.
-  Message  :: UID -> UID -> [Expr] -> [(UID, Expr)] -> Expr
-  -- | Access a field of an actor:
-  --
-  --   * 1st 'UID' is the actor,
-  --   * 2nd 'UID' is the field.
-  Field    :: UID -> UID -> Expr
   -- | For multi-case expressions, each pair represents one case.
   Case     :: Completeness -> [(Expr,Relation)] -> Expr
   -- | Represents a matrix of expressions.

@@ -137,11 +137,6 @@ expr (C c)                    sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
 expr (FCall f [x] [])         sm =
   P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f, parens $ expr x sm]
 expr (FCall f l ns)           sm = call sm f l ns
-expr (New c l ns)             sm = call sm c l ns
-expr (Message a m l ns)       sm =
-  P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) a, P.MO P.Point, call sm m l ns]
-expr (Field o f)              sm = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) o,
-  P.MO P.Point, symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f]
 expr (Case _ ps)              sm =
   if length ps < 2
     then error "Attempting to use multi-case expr incorrectly"

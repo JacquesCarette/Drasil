@@ -1,16 +1,19 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: April 17, 2019
+Last updated: June 23, 2021
 --------------------------------------------------
 
-**Build**
-  - Contains the code for Drasil
+**Code-base**
+  - Proxy package between `drasil-printers` and `drasil-code`, for the bits of code in `drasil-printers` that relies on bits of `drasil-code` (`CodeExpr` specifically)
  
 README.md
   - This file
 
-drasil-build.cabal
-  - Cabal file, used by stack to build drasil-build
+drasil-code-base.cabal
+  - Cabal file constructed via `hpack` on `package.yaml`.
+
+package.yaml
+  - Configuration file for the `drasil-code-base` project.
 
 stack.yaml
   - Used by Stack

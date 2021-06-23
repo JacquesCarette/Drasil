@@ -38,11 +38,11 @@ eqN n = S "Equation" +:+ sParen (S $ show n)
 
 -- | Takes an expression and a 'Referable' and outputs as a Sentence "expression (source)".
 eqnWSource :: (Display e, Referable r, HasShortName r) => e -> r -> Sentence
-eqnWSource a b = eS a +:+ sParen (makeRef2S b)
+eqnWSource a b = eS a +:+ sParen (refS b)
 
 -- | Takes a 'Referable' source and a 'UnitalChunk' and outputs as a 'Sentence': "From @source@ we can replace @symbol@:".
 fromReplace :: (Referable r, HasShortName r) => r -> UnitalChunk -> Sentence
-fromReplace src c = S "From" +:+ makeRef2S src `sC` S "we can replace" +: ch c
+fromReplace src c = S "From" +:+ refS src `sC` S "we can replace" +: ch c
 
 -- | Takes a list of 'Referable's and 'Symbol's and outputs as a Sentence "By substituting @symbols@, this can be written as:".
 substitute :: (Referable r, HasShortName r, HasSymbol r) => [r] -> Sentence
@@ -51,19 +51,19 @@ substitute s = S "By substituting" +: (foldlList Comma List l `sC` S "this can b
 
 -- | Takes a 'HasSymbol' that is also 'Referable' and outputs as a 'Sentence': "@symbol@ is defined in @reference@."
 definedIn :: (Referable r, HasShortName r, HasSymbol r) => r -> Sentence
-definedIn q = ch q `S.is` S "defined in" +:+. makeRef2S q
+definedIn q = ch q `S.is` S "defined in" +:+. refS q
 
 -- | Same as 'definedIn', but allows for additional information to be appended to the 'Sentence'.
 definedIn' :: (Referable r, HasShortName r, HasSymbol r) => r -> Sentence -> Sentence
-definedIn' q info = ch q `S.is` S "defined" `S.in_` makeRef2S q +:+. info 
+definedIn' q info = ch q `S.is` S "defined" `S.in_` refS q +:+. info 
 
 -- | Takes a 'Referable' and outputs as a 'Sentence' "defined in @reference@" (no 'HasSymbol').
 definedIn'' :: (Referable r, HasShortName r) => r -> Sentence
-definedIn'' q =  S "defined" `S.in_` makeRef2S q
+definedIn'' q =  S "defined" `S.in_` refS q
 
 -- | Takes a 'Symbol' and its 'Reference' (does not append a period at the end!). Outputs as "@symbol@ is defined in @source@".
 definedIn''' :: (HasSymbol q, HasUID q, Referable r, HasShortName r) => q -> r -> Sentence
-definedIn''' q src = ch q `S.is` S "defined in" +:+ makeRef2S src
+definedIn''' q src = ch q `S.is` S "defined in" +:+ refS src
 
 -- | Zip helper function enumerates abbreviations and zips it with list of 'ItemType':
 --
@@ -126,7 +126,7 @@ itemRefToSent a b = S a +:+ sParen b
 -- | Takes a list and a reference, then generates references to 
 -- match the length of the list.
 makeListRef :: [a] -> Section -> [Sentence]
-makeListRef l = replicate (length l) . makeRef2S
+makeListRef l = replicate (length l) . refS
 
 -- | Applies 'Bullet' and 'Flat' to a list.
 bulletFlat :: [Sentence] -> ListType
@@ -165,13 +165,13 @@ underConsidertn chunk = S "The" +:+ phrase chunk +:+
 -- | Create a list in the pattern of "The \_\_ are refined to the \_\_".
 -- Note: Order matters!
 refineChain :: NamedIdea c => [(c, Section)] -> Sentence
-refineChain [x,y] = S "The" +:+ plural (fst x) +:+ sParen (makeRef2S $ snd x) `S.are` S "refined" `S.toThe` plural (fst y)
+refineChain [x,y] = S "The" +:+ plural (fst x) +:+ sParen (refS $ snd x) `S.are` S "refined" `S.toThe` plural (fst y)
 refineChain (x:y:xs) = foldlList Comma List (refineChain [x,y] : rc (y : xs))
   where
-    rc [a, b]   = [rcSent a b +:+. sParen (makeRef2S $ snd b)]
+    rc [a, b]   = [rcSent a b +:+. sParen (refS $ snd b)]
     rc (a:b:as) =  rcSent a b : rc (b : as)
     rc _        = error "refineChain helper encountered an unexpected empty list"
-    rcSent a b  = S "the" +:+ plural (fst a) +:+ sParen (makeRef2S $ snd a) `S.toThe` plural (fst b)
+    rcSent a b  = S "the" +:+ plural (fst a) +:+ sParen (refS $ snd a) `S.toThe` plural (fst b)
 refineChain _ = error "refineChain encountered an unexpected empty list"
 
 -- | Helper functions for making likely change statements. Outputs "The @firstSentence@ may be @someVerb@ @thirdSentence@".
@@ -199,15 +199,15 @@ tAndDOnly chunk  = Flat $ atStart chunk `sDash` EmptyS +:+. capSent (chunk ^. de
 
 -- | Appends "following @reference@" to the end of a 'Sentence'.
 follows :: (Referable r, HasShortName r) => Sentence -> r -> Sentence
-preceding `follows` ref = preceding +:+ S "following" +:+ makeRef2S ref
+preceding `follows` r = preceding +:+ S "following" +:+ refS r
 
 -- | Wraps "from @reference@" in parentheses.
 fromSource :: (Referable r, HasShortName r) => r -> Sentence
-fromSource ref = sParen (S "from" +:+ makeRef2S ref)
+fromSource r = sParen (S "from" +:+ refS r)
 
 -- | Similar to `fromSource` but takes a list of references instead of one.
 fromSources :: (Referable r, HasShortName r) => [r] -> Sentence
-fromSources refs = sParen (S "from" +:+ foldlList Comma List (map makeRef2S refs))
+fromSources rs = sParen (S "from" +:+ foldlList Comma List (map refS rs))
 
 -- | Used when you want to say a term followed by its symbol. ex. "...using the Force F in...".
 getTandS :: (Quantity a) => a -> Sentence
@@ -225,7 +225,7 @@ displayDblConstrntsAsSet sym listOfVals = eS $
 
 -- | Output is of the form "@reference - sentence@".
 chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence
-chgsStart = sDash . makeRef2S
+chgsStart = sDash . refS
 
 -- | Uses an 'Either' type to check if a 'String' is valid - 
 -- 'Left' with error message if there is an invalid 'Char' in 'String', else 'Right' with 'String'.

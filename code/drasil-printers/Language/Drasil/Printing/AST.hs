@@ -50,7 +50,7 @@ data Spec = E Expr                   -- ^ Holds an expression.
           | S String                 -- ^ Holds a String.
           | Spec :+: Spec            -- ^ Concatination.
           | Sp Special               -- ^ Special characters.
-          | Ref LinkType String Spec -- ^ Holds the actual reference.
+          | Ref LinkType String Spec Spec  -- ^ Holds the actual reference. Second Spec is for non-linked extra information
           | EmptyS                   -- ^ Empty sentence.
           | Quote Spec               -- ^ Quotes are different in different languages.
           | HARDNL                   -- Temp fix for multi-line descriptions; 

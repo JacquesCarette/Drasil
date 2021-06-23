@@ -1,13 +1,12 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Reference (Reference(Reference, refInfo), ref, refS,
-  makeCite, makeCiteS, makeCiteInfo, makeCiteInfoS, rw) where
+  namedRef, namedComplexRef, rw) where
 
-import Language.Drasil.Chunk.Citation (Citation)
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
   Referable(refAdd, renderRef))
 import Language.Drasil.Classes.Core2 (HasShortName(shortname))
 import Language.Drasil.RefProg (RefInfo(..))
-import Language.Drasil.Sentence (Sentence(Ref))
+import Language.Drasil.Sentence (Sentence(Ref, EmptyS))
 import Language.Drasil.Label.Type (LblType(..), getAdd)
 import Language.Drasil.ShortName (ShortName)
 import Language.Drasil.UID (UID)
@@ -41,41 +40,23 @@ instance Referable Reference where
 -------------------------------
 
 -- | Projector function that creates a 'Reference' from something 'Referable'.
-ref :: (Referable l, HasShortName l) => l -> Reference
-ref = Reference (l ^. uid) (renderRef l) (shortname l) None
+ref :: (Referable r, HasShortName r) => r -> Reference
+ref r = Reference (r ^. uid) (renderRef r) (shortname r) None
 
--- Maybe just use l ^. uid without 'ref'?
+-- Maybe just use r ^. uid without 'ref'?
 -- | Takes the reference 'UID' and wraps it into a 'Sentence'.
-refS :: (Referable l, HasShortName l) => l -> Sentence
-refS l = makeRef2Display l EmptyS
+refS :: (Referable r, HasShortName r) => r -> Sentence
+refS r = namedRef r EmptyS
 
 -- | Takes a 'Reference' with a name to be displayed and wraps it into a 'Sentence'.
 -- Does not overwrite the shortname contained in the reference, but will only display as the given 'Sentence'.
-makeRef2SDisplay :: (Referable l, HasShortName l) => l -> Sentence -> Sentence
-makeRef2SDisplay l s = makeRef2SDisplayInfo l s None
+namedRef :: (Referable r, HasShortName r) => r -> Sentence -> Sentence
+namedRef r s = namedComplexRef r s None
 
 -- | Takes a 'Reference' with a name to be displayed and any additional information and wraps it into a 'Sentence'.
 -- Does not overwrite the shortname contained in the reference, but will only display as the given 'Sentence' along with the given 'RefInfo'.
-makeRef2SDisplayInfo :: (Referable l, HasShortName l) => l -> Sentence -> RefInfo -> Sentence
-makeRef2SDisplayInfo l = Ref (ref l ^. uid)
-
--- Here we don't use the Lenses as constraints, we really do want a Citation.
--- | Similar to `ref`, but only turns a citation into a reference.
-makeCite :: Citation -> Reference
-makeCite l = Reference (l ^. uid) (renderRef l) (shortname l) None
-
--- | Similar to `refS`, but only takes a citation.
-makeCiteS :: Citation -> Sentence
-makeCiteS l = Ref (makeCite l ^. uid) EmptyS None
-
--- | Makes a 'Reference' from a 'Citation' with additional information.
-makeCiteInfo :: Citation -> RefInfo -> Reference
-makeCiteInfo l = Reference (l ^. uid) (renderRef l) (shortname l)
-
--- | Makes a 'Reference' from a 'Citation' with additional information
--- and then wraps into 'Sentence' form.
-makeCiteInfoS :: Citation -> RefInfo -> Sentence
-makeCiteInfoS c ri = Ref (makeCiteInfo c ri ^. uid) EmptyS ri
+namedComplexRef :: (Referable r, HasShortName r) => r -> Sentence -> RefInfo -> Sentence
+namedComplexRef r = Ref (ref r ^. uid)
 
 ---------------------------------------
 -- The following function is the same as ref, but renamed for clarity. --

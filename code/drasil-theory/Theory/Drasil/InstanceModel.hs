@@ -25,7 +25,7 @@ data InstanceModel = IM { _mk       :: ModelKinds
                         , _imTerm   :: NP
                         , _imInputs :: Inputs
                         , _imOutput :: (Output, OutputConstraints)
-                        , _ref      :: [Reference]
+                        , _rf      :: [Reference]
                         , _deri     :: Maybe Derivation
                         ,  lb       :: ShortName
                         ,  ra       :: String
@@ -48,7 +48,7 @@ instance Display            InstanceModel where toDispExpr = toDispExpr . (^. mk
 -- | Finds the derivation of the 'InstanceModel'. May contain Nothing.
 instance HasDerivation      InstanceModel where derivations = deri
 -- | Finds 'Reference's contained in the 'InstanceModel'.
-instance HasReference       InstanceModel where getReferences = ref
+instance HasReference       InstanceModel where getReferences = rf
 -- | Finds the 'ShortName' of the 'InstanceModel'.
 instance HasShortName       InstanceModel where shortname = lb
 -- | Finds the reference address of the 'InstanceModel'.

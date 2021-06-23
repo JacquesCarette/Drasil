@@ -1,4 +1,4 @@
-module Language.Drasil.Printing.Import.Expr where
+module Language.Drasil.Printing.Import.Expr (expr) where
 
 import Language.Drasil hiding (neg, sec, symbol, isIn)
 import Language.Drasil.Display (Symbol(..))

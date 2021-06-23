@@ -1,4 +1,4 @@
-module Language.Drasil.Printing.Import.DisplayExpr where
+module Language.Drasil.Printing.Import.DisplayExpr (dispExpr) where
 
 import Language.Drasil.Development (dePrec, dePrecAssoc, DisplayExpr(..),
   DisplayBinOp(..), DisplayAssocBinOp(Equivalence))

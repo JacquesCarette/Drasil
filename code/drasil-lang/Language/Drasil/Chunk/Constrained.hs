@@ -25,7 +25,7 @@ import Language.Drasil.Symbol (Symbol)
 -- with 'Constraint's and maybe a typical value ('Maybe' 'Expr').
 data ConstrainedChunk = ConstrainedChunk { _qd :: QuantityDict
                                          , _constr :: [Constraint]
-                                         , _reasV :: Maybe Expr
+                                         , _reasV :: Expr
                                          }
 makeLenses ''ConstrainedChunk
 
@@ -44,7 +44,7 @@ instance Quantity      ConstrainedChunk where
 -- ^ Finds the 'Constraint's of a 'ConstrainedChunk'.
 instance Constrained   ConstrainedChunk where constraints = constr
 -- ^ Finds a reasonable value for the 'ConstrainedChunk'.
-instance MayHaveReasVal    ConstrainedChunk where maybeReasVal     = reasV
+instance HasReasVal    ConstrainedChunk where reasVal     = reasV
 -- ^ Equal if 'UID's are equal.
 instance Eq            ConstrainedChunk where c1 == c2 = (c1 ^. qd . uid) == (c2 ^. qd . uid)
 -- ^ Finds units contained in the 'QuantityDict' used to make the 'ConstrainedChunk'.
@@ -131,15 +131,15 @@ instance MayHaveUnit   ConstrReasQDef where getUnit = getUnit . view qd'''
 -- | Creates a constrained unitary chunk from a 'UID', term ('NP'), 'Symbol', unit, 'Space', 'Constraint's, and an 'Expr'.
 cuc :: (IsUnit u) => String -> NP -> Symbol -> u
   -> Space -> [Constraint] -> Expr -> ConstrainedChunk
-cuc i t s u space cs rv = ConstrainedChunk (qw (unitary i t s u space)) cs (Just rv)
+cuc i t s u space cs rv = ConstrainedChunk (qw (unitary i t s u space)) cs (rv)
 
 -- | Creates a constrained unitary chunk from a 'UID', term ('NP'), 'Symbol', 'Space', 'Constraint's, and a 'Maybe' 'Expr' (Similar to 'cuc' but no units).
-cvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Maybe Expr -> ConstrainedChunk
+cvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Expr -> ConstrainedChunk
 cvc i des sym space = ConstrainedChunk (qw (vc i des sym space))
 
 -- | Creates a new ConstrainedChunk from either a 'ConstrainedChunk', 'ConstrConcept', 'UncertainChunk', or an 'UncertQ'.
-cnstrw :: (Quantity c, Constrained c, MayHaveReasVal c, MayHaveUnit c) => c -> ConstrainedChunk  
-cnstrw c = ConstrainedChunk   (qw c) (c ^. constraints) (c ^. maybeReasVal)
+cnstrw :: (Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> ConstrainedChunk  
+cnstrw c = ConstrainedChunk   (qw c) (c ^. constraints) (c ^. reasVal)
 
 
 

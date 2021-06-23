@@ -18,7 +18,7 @@ import Language.Drasil.Code.Expr.Render (renderExpr)
 
 import Control.Lens ((^.))
 
-sy :: HasUID u => u -> CodeExpr
+sy :: (HasUID u, HasSymbol u) => u -> CodeExpr
 sy = C . (^. uid)
 
 str :: String -> CodeExpr

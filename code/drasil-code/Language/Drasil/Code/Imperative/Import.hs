@@ -374,8 +374,8 @@ convCall c x ns f libf = do
     (Map.lookup funcNm mem)
   
 -- | Converts a 'Constraint' to a 'CodeExpr'.
-renderC :: (HasUID c, HasSymbol c) => c -> Constraint -> CodeExpr
-renderC s (Range _ rr)         = renderExpr $ renderRealInt' s rr -- TODO: hack. I want to make the Constraint parameterized before this can be done properly
+renderC :: (HasUID c, HasSymbol c) => c -> Constraint CodeExpr -> CodeExpr
+renderC s (Range _ rr)         = renderRealInt s rr
 renderC _ (EnumeratedReal _ _) = error "EnumeratedReal IsIn not supported yet" -- IsIn (sy s) (DiscreteD rr)
 renderC _ (EnumeratedStr  _ _) = error "EnumeratedStr IsIn not supported yet" -- IsIn (sy s) (DiscreteS rr)
 
@@ -389,17 +389,6 @@ renderRealInt s (UpTo    (Inc, a))          = sy s $<= a
 renderRealInt s (UpTo    (Exc, a))          = sy s $<  a
 renderRealInt s (UpFrom  (Inc, a))          = sy s $>= a
 renderRealInt s (UpFrom  (Exc, a))          = sy s $>  a
-
--- | Converts an interval ('RealInterval') to a 'CodeExpr'.
-renderRealInt' :: (HasUID c, HasSymbol c) => c -> RealInterval L.Expr L.Expr -> L.Expr
-renderRealInt' s (Bounded (Inc, a) (Inc, b)) = (a L.$<= L.sy s) L.$&& (L.sy s L.$<= b)
-renderRealInt' s (Bounded (Inc, a) (Exc, b)) = (a L.$<= L.sy s) L.$&& (L.sy s L.$<  b)
-renderRealInt' s (Bounded (Exc, a) (Inc, b)) = (a L.$<  L.sy s) L.$&& (L.sy s L.$<= b)
-renderRealInt' s (Bounded (Exc, a) (Exc, b)) = (a L.$<  L.sy s) L.$&& (L.sy s L.$<  b)
-renderRealInt' s (UpTo    (Inc, a))          = L.sy s L.$<= a
-renderRealInt' s (UpTo    (Exc, a))          = L.sy s L.$<  a
-renderRealInt' s (UpFrom  (Inc, a))          = L.sy s L.$>= a
-renderRealInt' s (UpFrom  (Exc, a))          = L.sy s L.$>  a
 
 -- | Maps a 'UFunc' to the corresponding GOOL unary function.
 unop :: (OOProg r) => UFunc -> (SValue r -> SValue r)

@@ -141,22 +141,24 @@ listToArray c = newSpc (c ^. typ)
           Var) (c ^. obv)
         newSpc _ = c
 
+-- TODO: Where should this code below belong? Seems odd to be in this file.
+
 -- | Constraints map. Contains all 'Constraint's.
-type ConstraintMap = Map.Map UID [Constraint]
+type ConstraintEMap = Map.Map UID [ConstraintE]
 
 -- | Creates a map from 'UID' to 'Constraint's for constrained chunks.
-constraintMap :: (HasUID c, Constrained c) => [c] -> ConstraintMap
+constraintMap :: (HasUID c, Constrained c) => [c] -> ConstraintEMap
 constraintMap = Map.fromList . map (\x -> (x ^. uid, x ^. constraints))
 
 -- | Returns a pair of a chunk and its physical constraints.
-physLookup :: (HasUID q) => ConstraintMap -> q -> (q,[Constraint])
+physLookup :: HasUID q => ConstraintEMap -> q -> (q, [ConstraintE])
 physLookup m q = constraintLookup' q m (filter isPhysC)
 
 -- | Returns a pair of a chunk and its software constraints.
-sfwrLookup :: (HasUID q) => ConstraintMap -> q -> (q,[Constraint])
+sfwrLookup :: HasUID q => ConstraintEMap -> q -> (q, [ConstraintE])
 sfwrLookup m q = constraintLookup' q m (filter isSfwrC)
 
 -- | Returns a chunk and a filtered list of its constraints.
-constraintLookup' :: (HasUID q) => q -> ConstraintMap
-                      -> ([Constraint] -> [Constraint]) -> (q , [Constraint])
+constraintLookup' :: HasUID q => q -> ConstraintEMap
+                      -> ([ConstraintE] -> [ConstraintE]) -> (q, [ConstraintE])
 constraintLookup' q m filt = (q, maybe [] filt (Map.lookup (q ^. uid) m))

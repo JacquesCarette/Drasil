@@ -4,8 +4,8 @@ module Language.Drasil.Code.Imperative.Modules (
   genCalcFunc, genOutputMod, genOutputFormat, genSampleInput
 ) where
 
-import Language.Drasil (Constraint(..), RealInterval(..),
-  Completeness(..), HasUID(uid), Stage(..))
+import Language.Drasil (Expr, Constraint(..), RealInterval(..),
+  Completeness(..), HasUID(uid), Stage(..), ConstraintE)
 import Database.Drasil (ChunkDB)
 import Language.Drasil.Code.Expr.Development
 import Language.Drasil.Code.Imperative.Comments (getComment)
@@ -50,14 +50,17 @@ import GOOL.Drasil (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement,
   ScopeSym(..), MethodSym(..), StateVarSym(..), pubDVar, convType, ScopeTag(..))
 
 import Prelude hiding (print)
+import Data.Bifunctor
 import Data.List (intersperse, intercalate, partition)
 import Data.Map ((!), elems, member)
 import qualified Data.Map as Map (lookup, filter)
 import Data.Maybe (maybeToList, catMaybes)
 import Control.Monad (liftM2, zipWithM)
 import Control.Monad.State (get, gets)
-import Control.Lens ((^.))
+import Control.Lens ((^.), Field1 (_1))
 import Text.PrettyPrint.HughesPJ (render)
+
+type ConstraintCE = Constraint CodeExpr
 
 ---- MAIN ---
 
@@ -285,6 +288,16 @@ genInputDerived s = do
         return $ Just mthd
   genDerived $ "derived_values" `elem` defList g
 
+convRealInterval :: RealInterval Expr Expr -> RealInterval CodeExpr CodeExpr
+convRealInterval (Bounded (il, el) (ir, er)) = Bounded (il, renderExpr el) (ir, renderExpr er)
+convRealInterval (UpTo (i, e)) = UpTo (i, renderExpr e)
+convRealInterval (UpFrom (i, e)) = UpFrom (i, renderExpr e)
+
+convConstraint :: ConstraintE -> ConstraintCE
+convConstraint (Range r ri) = Range r (convRealInterval ri)
+convConstraint (EnumeratedReal r ds) = EnumeratedReal r ds
+convConstraint (EnumeratedStr r ss) = EnumeratedStr r ss
+
 -- | Generates function that checks constraints on the input.
 genInputConstraints :: (OOProg r) => ScopeTag ->
   GenState (Maybe (SMethod r))
@@ -301,8 +314,8 @@ genInputConstraints s = do
         let varsList = filter (\i -> member (i ^. uid) cm) (inputs $ codeSpec g)
             sfwrCs   = map (sfwrLookup cm) varsList
             physCs   = map (physLookup cm) varsList
-        sf <- sfwrCBody sfwrCs
-        ph <- physCBody physCs
+        sf <- sfwrCBody $ map (second $ map convConstraint) sfwrCs
+        ph <- physCBody $ map (second $ map convConstraint) physCs
         desc <- inConsFuncDesc
         mthd <- getFunc s "input_constraints" void desc (map pcAuto parms) 
           Nothing [block sf, block ph]
@@ -310,7 +323,7 @@ genInputConstraints s = do
   genConstraints $ "input_constraints" `elem` defList g
 
 -- | Generates input constraints code block for checking software constraints.
-sfwrCBody :: (OOProg r) => [(CodeVarChunk,[Constraint])] -> 
+sfwrCBody :: (OOProg r) => [(CodeVarChunk, [ConstraintCE])] -> 
   GenState [MSStatement r]
 sfwrCBody cs = do
   g <- get
@@ -318,7 +331,7 @@ sfwrCBody cs = do
   chooseConstr cb cs
 
 -- | Generates input constraints code block for checking physical constraints.
-physCBody :: (OOProg r) => [(CodeVarChunk,[Constraint])] -> 
+physCBody :: (OOProg r) => [(CodeVarChunk, [ConstraintCE])] -> 
   GenState [MSStatement r]
 physCBody cs = do
   g <- get
@@ -328,7 +341,7 @@ physCBody cs = do
 -- | Generates conditional statements for checking constraints, where the 
 -- bodies depend on user's choice of constraint violation behaviour.
 chooseConstr :: (OOProg r) => ConstraintBehaviour -> 
-  [(CodeVarChunk,[Constraint])] -> GenState [MSStatement r]
+  [(CodeVarChunk, [ConstraintCE])] -> GenState [MSStatement r]
 chooseConstr cb cs = do
   conds <- mapM (\(q,cns) -> mapM (convExpr . renderC q) cns) cs
   bods <- mapM (chooseCB cb) cs
@@ -340,7 +353,7 @@ chooseConstr cb cs = do
 -- | Generates body defining constraint violation behaviour if Warning chosen from 'chooseConstr'.
 -- Prints a \"Warning\" message followed by a message that says
 -- what value was \"suggested\".
-constrWarn :: (OOProg r) => (CodeVarChunk,[Constraint]) -> 
+constrWarn :: (OOProg r) => (CodeVarChunk, [ConstraintCE]) -> 
   GenState [MSBody r]
 constrWarn c = do
   let q = fst c
@@ -351,7 +364,7 @@ constrWarn c = do
 -- | Generates body defining constraint violation behaviour if Exception chosen from 'chooseConstr'.
 -- Prints a message that says what value was \"expected\",
 -- followed by throwing an exception.
-constrExc :: (OOProg r) => (CodeVarChunk,[Constraint]) -> 
+constrExc :: (OOProg r) => (CodeVarChunk, [ConstraintCE]) -> 
   GenState [MSBody r]
 constrExc c = do
   let q = fst c
@@ -363,7 +376,7 @@ constrExc c = do
 -- Message includes the name of the cosntraint quantity, its value, and a
 -- description of the constraint that is violated.
 constraintViolatedMsg :: (OOProg r) => CodeVarChunk -> String -> 
-  Constraint -> GenState [MSStatement r]
+  ConstraintCE -> GenState [MSStatement r]
 constraintViolatedMsg q s c = do
   pc <- printConstraint c 
   v <- mkVal (quantvar q)
@@ -374,27 +387,23 @@ constraintViolatedMsg q s c = do
 -- | Generates statements to print descriptions of constraints, using words and 
 -- the constrained values. Constrained values are followed by printing the 
 -- expression they originated from, using printExpr. 
-printConstraint :: (OOProg r) => Constraint ->
+printConstraint :: (OOProg r) => ConstraintCE ->
   GenState [MSStatement r]
 printConstraint c = do
   g <- get
   let db = sysinfodb $ codeSpec g
-      printConstraint' :: (OOProg r) => Constraint -> GenState 
+      printConstraint' :: (OOProg r) => ConstraintCE -> GenState 
         [MSStatement r]
-      printConstraint' (Range _ (Bounded (_, e1') (_, e2'))) = do
-        let e1 = renderExpr e1' -- TODO: renderExpr hack
-        let e2 = renderExpr e2'
+      printConstraint' (Range _ (Bounded (_, e1) (_, e2))) = do
         lb <- convExpr e1
         ub <- convExpr e2
         return $ [printStr "between ", print lb] ++ printExpr e1 db ++
           [printStr " and ", print ub] ++ printExpr e2 db ++ [printStrLn "."]
-      printConstraint' (Range _ (UpTo (_, e'))) = do
-        let e = renderExpr e' -- TODO: renderExpr hack
+      printConstraint' (Range _ (UpTo (_, e))) = do
         ub <- convExpr e
         return $ [printStr "below ", print ub] ++ printExpr e db ++ 
           [printStrLn "."]
-      printConstraint' (Range _ (UpFrom (_, e'))) = do
-        let e = renderExpr e' -- TODO: renderExpr hack
+      printConstraint' (Range _ (UpFrom (_, e))) = do
         lb <- convExpr e
         return $ [printStr "above ", print lb] ++ printExpr e db ++ [printStrLn "."]
       printConstraint' (EnumeratedReal _ ds) = return [

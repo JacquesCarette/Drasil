@@ -11,7 +11,7 @@ import Language.Drasil.Development (eNamesRI)
 import Theory.Drasil (DataDefinition, qdFromDD, getEqModQdsFromIm)
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeIdea(codeChunk),
-  ConstraintMap, programName, quantvar, codevars, codevars',
+  ConstraintEMap, programName, quantvar, codevars, codevars',
   varResolve, constraintMap, DefiningCodeExpr(..))
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef,
   auxExprs)
@@ -54,7 +54,7 @@ data CodeSpec where
   -- outputs.
   execOrder :: [Def],
   -- Map from UIDs to constraints for all constrained chunks used in the problem
-  cMap :: ConstraintMap,
+  cMap :: ConstraintEMap,
   -- List of all constants used in the problem
   constants :: [Const],
   -- Map containing all constants used in the problem.
@@ -170,11 +170,11 @@ getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
 
 
 -- | Get a list of Constraints for a list of CodeChunks
-getConstraints :: (HasUID c) => ConstraintMap -> [c] -> [Constraint]
+getConstraints :: (HasUID c) => ConstraintEMap -> [c] -> [ConstraintE]
 getConstraints cm cs = concat $ mapMaybe (\c -> Map.lookup (c ^. uid) cm) cs
 
 -- | Get a list of CodeChunks from a constraint
-constraintvars :: Constraint -> ChunkDB -> [CodeChunk]
+constraintvars :: ConstraintE -> ChunkDB -> [CodeChunk]
 constraintvars (Range _ ri) m = map (codeChunk . varResolve m) $ nub $
   eNamesRI ri
 constraintvars _ _ = []

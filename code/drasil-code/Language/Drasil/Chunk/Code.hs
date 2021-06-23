@@ -5,8 +5,9 @@
 module Language.Drasil.Chunk.Code (
   CodeIdea(..), CodeChunk(..), CodeVarChunk(..), CodeFuncChunk(..), 
   VarOrFunc(..), obv, quantvar, quantfunc, ccObjVar, codevars, codevars', 
-  funcResolve, varResolve, listToArray, ConstraintEMap, constraintMap, 
-  physLookup, sfwrLookup, programName, funcPrefix, DefiningCodeExpr(..)
+  funcResolve, varResolve, listToArray, ConstraintCEMap, ConstraintCE,
+  constraintMap, physLookup, sfwrLookup, programName, funcPrefix,
+  DefiningCodeExpr(..)
 ) where
 
 import Control.Lens

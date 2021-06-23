@@ -1,4 +1,6 @@
-module Language.Drasil.Code.Expr.Render (renderExpr) where
+module Language.Drasil.Code.Expr.Render (
+    renderExpr, renderRealInterval, renderConstraint
+) where
 
 import qualified Language.Drasil as L
 import qualified Language.Drasil.Development as LD
@@ -32,16 +34,24 @@ renderExpr (L.OrdBinaryOp bo l r) = OrdBinaryOp (renderOrdBinOp bo) (renderExpr 
 renderExpr (L.VVVBinaryOp bo l r) = VVVBinaryOp (renderVVVBinOp bo) (renderExpr l) (renderExpr r)
 renderExpr (L.VVNBinaryOp bo l r) = VVNBinaryOp (renderVVNBinOp bo) (renderExpr l) (renderExpr r)
 renderExpr (L.Operator aao dd e) = Operator (renderAssocArithOp aao) (renderDomainDesc dd) (renderExpr e)
-renderExpr (L.RealI u ri) = RealI u (renderRI ri)
+renderExpr (L.RealI u ri) = RealI u (renderRealInterval ri)
 
+-- | Convert 'RealInterval Expr Expr's into 'RealInterval CodeExpr CodeExpr's.
+renderRealInterval :: L.RealInterval L.Expr L.Expr -> L.RealInterval CodeExpr CodeExpr
+renderRealInterval (L.Bounded (il, el) (ir, er)) = L.Bounded (il, renderExpr el) (ir, renderExpr er)
+renderRealInterval (L.UpTo (i, e)) = L.UpTo (i, renderExpr e)
+renderRealInterval (L.UpFrom (i, e)) = L.UpFrom (i, renderExpr e)
+
+-- | Convert 'Constraint Expr's into 'Constraint CodeExpr's.
+renderConstraint :: L.ConstraintE -> L.Constraint CodeExpr
+renderConstraint (L.Range r ri) = L.Range r (renderRealInterval ri)
+renderConstraint (L.EnumeratedReal r ds) = L.EnumeratedReal r ds
+renderConstraint (L.EnumeratedStr r ss) = L.EnumeratedStr r ss
+
+-- | Convert 'DomainDesc Expr Expr' into 'DomainDesc CodeExpr CodeExpr's.
 renderDomainDesc :: L.DomainDesc L.Expr L.Expr -> L.DomainDesc CodeExpr CodeExpr
 renderDomainDesc (L.BoundedDD s t l r) = L.BoundedDD s t (renderExpr l) (renderExpr r)
 renderDomainDesc (L.AllDD s t) = L.AllDD s t
-
-renderRI :: L.RealInterval L.Expr L.Expr -> L.RealInterval CodeExpr CodeExpr
-renderRI (L.Bounded (incl, el) (incr, er)) = L.Bounded (incl, renderExpr el) (incr, renderExpr er)
-renderRI (L.UpTo (inc, e)) = L.UpTo (inc, renderExpr e)
-renderRI (L.UpFrom (inc, e)) = L.UpFrom (inc, renderExpr e)
 
 renderArithBinOp :: L.ArithBinOp -> ArithBinOp
 renderArithBinOp LD.Frac = Frac

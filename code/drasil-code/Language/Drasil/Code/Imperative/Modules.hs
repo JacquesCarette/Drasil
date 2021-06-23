@@ -4,8 +4,8 @@ module Language.Drasil.Code.Imperative.Modules (
   genCalcFunc, genOutputMod, genOutputFormat, genSampleInput
 ) where
 
-import Language.Drasil (Expr, Constraint(..), RealInterval(..),
-  Completeness(..), HasUID(uid), Stage(..), ConstraintE)
+import Language.Drasil (Constraint(..), RealInterval(..),
+  Completeness(..), HasUID(uid), Stage(..))
 import Database.Drasil (ChunkDB)
 import Language.Drasil.Code.Expr.Development
 import Language.Drasil.Code.Imperative.Comments (getComment)
@@ -50,14 +50,13 @@ import GOOL.Drasil (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement,
   ScopeSym(..), MethodSym(..), StateVarSym(..), pubDVar, convType, ScopeTag(..))
 
 import Prelude hiding (print)
-import Data.Bifunctor
 import Data.List (intersperse, intercalate, partition)
 import Data.Map ((!), elems, member)
 import qualified Data.Map as Map (lookup, filter)
 import Data.Maybe (maybeToList, catMaybes)
 import Control.Monad (liftM2, zipWithM)
 import Control.Monad.State (get, gets)
-import Control.Lens ((^.), Field1 (_1))
+import Control.Lens ((^.))
 import Text.PrettyPrint.HughesPJ (render)
 
 type ConstraintCE = Constraint CodeExpr
@@ -288,16 +287,6 @@ genInputDerived s = do
         return $ Just mthd
   genDerived $ "derived_values" `elem` defList g
 
-convRealInterval :: RealInterval Expr Expr -> RealInterval CodeExpr CodeExpr
-convRealInterval (Bounded (il, el) (ir, er)) = Bounded (il, renderExpr el) (ir, renderExpr er)
-convRealInterval (UpTo (i, e)) = UpTo (i, renderExpr e)
-convRealInterval (UpFrom (i, e)) = UpFrom (i, renderExpr e)
-
-convConstraint :: ConstraintE -> ConstraintCE
-convConstraint (Range r ri) = Range r (convRealInterval ri)
-convConstraint (EnumeratedReal r ds) = EnumeratedReal r ds
-convConstraint (EnumeratedStr r ss) = EnumeratedStr r ss
-
 -- | Generates function that checks constraints on the input.
 genInputConstraints :: (OOProg r) => ScopeTag ->
   GenState (Maybe (SMethod r))
@@ -314,8 +303,8 @@ genInputConstraints s = do
         let varsList = filter (\i -> member (i ^. uid) cm) (inputs $ codeSpec g)
             sfwrCs   = map (sfwrLookup cm) varsList
             physCs   = map (physLookup cm) varsList
-        sf <- sfwrCBody $ map (second $ map convConstraint) sfwrCs
-        ph <- physCBody $ map (second $ map convConstraint) physCs
+        sf <- sfwrCBody sfwrCs
+        ph <- physCBody physCs
         desc <- inConsFuncDesc
         mthd <- getFunc s "input_constraints" void desc (map pcAuto parms) 
           Nothing [block sf, block ph]

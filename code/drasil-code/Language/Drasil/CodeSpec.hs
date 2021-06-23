@@ -7,16 +7,15 @@ import Language.Drasil.Display (Symbol(Variable))
 import Database.Drasil (ChunkDB, SystemInformation(SI),
   _authors, _constants, _constraints, _datadefs, _instModels,
   _configFiles, _inputs, _outputs, _sys, _sysinfodb)
-import Language.Drasil.Development (eNamesRI)
 import Theory.Drasil (DataDefinition, qdFromDD, getEqModQdsFromIm)
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeIdea(codeChunk),
-  ConstraintEMap, programName, quantvar, codevars, codevars',
+  ConstraintCEMap, ConstraintCE, programName, quantvar, codevars, codevars',
   varResolve, constraintMap, DefiningCodeExpr(..))
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef,
   auxExprs)
 import Language.Drasil.Choices (Choices(..))
-import Language.Drasil.Code.Expr.Development (renderExpr)
+import Language.Drasil.Code.Expr.Development (renderExpr, eNamesRI)
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
 
 import Utils.Drasil (subsetOf)
@@ -54,7 +53,7 @@ data CodeSpec where
   -- outputs.
   execOrder :: [Def],
   -- Map from UIDs to constraints for all constrained chunks used in the problem
-  cMap :: ConstraintEMap,
+  cMap :: ConstraintCEMap,
   -- List of all constants used in the problem
   constants :: [Const],
   -- Map containing all constants used in the problem.
@@ -170,11 +169,11 @@ getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
 
 
 -- | Get a list of Constraints for a list of CodeChunks
-getConstraints :: (HasUID c) => ConstraintEMap -> [c] -> [ConstraintE]
+getConstraints :: (HasUID c) => ConstraintCEMap -> [c] -> [ConstraintCE]
 getConstraints cm cs = concat $ mapMaybe (\c -> Map.lookup (c ^. uid) cm) cs
 
 -- | Get a list of CodeChunks from a constraint
-constraintvars :: ConstraintE -> ChunkDB -> [CodeChunk]
+constraintvars :: ConstraintCE -> ChunkDB -> [CodeChunk]
 constraintvars (Range _ ri) m = map (codeChunk . varResolve m) $ nub $
   eNamesRI ri
 constraintvars _ _ = []

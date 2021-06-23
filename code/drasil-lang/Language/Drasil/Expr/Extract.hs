@@ -43,9 +43,9 @@ eNames (RealI c b)           = c : eNamesRI b
 
 -- | Generic traversal of everything that could come from an interval to names (similar to 'eNames').
 eNamesRI :: RealInterval Expr Expr -> [String]
-eNamesRI (Bounded (_,il) (_,iu)) = eNames il ++ eNames iu
-eNamesRI (UpTo (_,iu))           = eNames iu
-eNamesRI (UpFrom (_,il))         = eNames il
+eNamesRI (Bounded (_, il) (_, iu)) = eNames il ++ eNames iu
+eNamesRI (UpTo (_, iu))            = eNames iu
+eNamesRI (UpFrom (_, il))          = eNames il
 
 -- | Generic traverse of all display expressions that could lead to names (same as 'deNames').
 deNames' :: DisplayExpr -> [String]

@@ -1,4 +1,7 @@
-module Language.Drasil.Code.Expr.Extract (eDep, eDep') where
+module Language.Drasil.Code.Expr.Extract (
+    eDep, eDep',
+    eNamesRI, eNamesRI'
+) where
 
 import Language.Drasil (RealInterval(..))
 

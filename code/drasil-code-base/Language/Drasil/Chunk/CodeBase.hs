@@ -9,6 +9,7 @@ import Database.Drasil (ChunkDB, symbResolve)
 
 import Language.Drasil.Code.Expr (CodeExpr)
 import Language.Drasil.Code.Expr.Extract (eDep, eDep')
+import Language.Drasil.Code.Expr.Render (renderConstraint)
 
 import Utils.Drasil.Strings (toPlainName)
 
@@ -143,22 +144,25 @@ listToArray c = newSpc (c ^. typ)
 
 -- TODO: Where should this code below belong? Seems odd to be in this file.
 
+-- | Type synonym for 'Constraint CodeExpr'
+type ConstraintCE = Constraint CodeExpr
+
 -- | Constraints map. Contains all 'Constraint's.
-type ConstraintEMap = Map.Map UID [ConstraintE]
+type ConstraintCEMap = Map.Map UID [ConstraintCE]
 
 -- | Creates a map from 'UID' to 'Constraint's for constrained chunks.
-constraintMap :: (HasUID c, Constrained c) => [c] -> ConstraintEMap
-constraintMap = Map.fromList . map (\x -> (x ^. uid, x ^. constraints))
+constraintMap :: (HasUID c, Constrained c) => [c] -> ConstraintCEMap
+constraintMap = Map.fromList . map (\x -> (x ^. uid, map renderConstraint $ x ^. constraints))
 
 -- | Returns a pair of a chunk and its physical constraints.
-physLookup :: HasUID q => ConstraintEMap -> q -> (q, [ConstraintE])
-physLookup m q = constraintLookup' q m (filter isPhysC)
+physLookup :: HasUID q => ConstraintCEMap -> q -> (q, [ConstraintCE])
+physLookup m q = constraintLookup q m (filter isPhysC)
 
 -- | Returns a pair of a chunk and its software constraints.
-sfwrLookup :: HasUID q => ConstraintEMap -> q -> (q, [ConstraintE])
-sfwrLookup m q = constraintLookup' q m (filter isSfwrC)
+sfwrLookup :: HasUID q => ConstraintCEMap -> q -> (q, [ConstraintCE])
+sfwrLookup m q = constraintLookup q m (filter isSfwrC)
 
 -- | Returns a chunk and a filtered list of its constraints.
-constraintLookup' :: HasUID q => q -> ConstraintEMap
-                      -> ([ConstraintE] -> [ConstraintE]) -> (q, [ConstraintE])
-constraintLookup' q m filt = (q, maybe [] filt (Map.lookup (q ^. uid) m))
+constraintLookup :: HasUID q => q -> ConstraintCEMap
+                      -> ([ConstraintCE] -> [ConstraintCE]) -> (q, [ConstraintCE])
+constraintLookup q m filt = (q, maybe [] filt (Map.lookup (q ^. uid) m))

@@ -32,7 +32,7 @@ sfwrc = Range Software
 enumc :: [Double] -> ConstraintE
 enumc = EnumeratedReal Physical
 
-isPhysC, isSfwrC :: ConstraintE -> Bool
+isPhysC, isSfwrC :: Constraint e -> Bool
 -- | Helpful for filtering for Physical constraints. True if constraint is 'Physical'.
 isPhysC (Range Physical _) = True
 isPhysC (EnumeratedReal Physical _) = True

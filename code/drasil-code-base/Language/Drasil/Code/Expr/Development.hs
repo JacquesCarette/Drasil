@@ -7,16 +7,18 @@ module Language.Drasil.Code.Expr.Development (
     UFunc(..), UFuncB(..), UFuncVec(..),
     -- Extract
     eDep, eDep',
+    eNamesRI, eNamesRI',
     -- Precedence
     eprec, precA, precB,
     -- Render
-    renderExpr
+    renderExpr, renderRealInterval, renderConstraint
 ) where
 
 import Language.Drasil.Code.Expr (CodeExpr(..), UFuncVec(..), UFuncB(..),
     UFunc(..), AssocBoolOper(..), AssocArithOper(..), VVNBinOp(..),
     VVVBinOp(..), OrdBinOp(..), LABinOp(..), BoolBinOp(..), EqBinOp(..),
     ArithBinOp(..))
-import Language.Drasil.Code.Expr.Extract (eDep, eDep')
+import Language.Drasil.Code.Expr.Extract (eDep, eDep', eNamesRI, eNamesRI')
 import Language.Drasil.Code.Expr.Precedence (eprec, precA, precB)
-import Language.Drasil.Code.Expr.Render (renderExpr)
+import Language.Drasil.Code.Expr.Render (renderExpr, renderRealInterval,
+    renderConstraint)

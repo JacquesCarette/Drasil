@@ -9,30 +9,20 @@ import Data.Maybe (fromJust)
 
 import DirectoryController as DC (FileName)
 
+-- Synonyms for clarity
 type DataName = String
 type NewtypeName = String
 type TypeName = String
 
-{--Copied from Data.List.Index. How to import?
-insertAt :: Int -> a -> [a] -> [a]
-insertAt i a ls
-  | i < 0 = ls
-  | otherwise = go i ls
-  where
-    go 0 xs     = a : xs
-    go n (x:xs) = x : go (n-1) xs
-    go _ []     = []-}
-
-
--- purposefully use different type names even though they will end up in the same form
-data DataDeclRecord = DDR { ddrName :: DataName
-                          , ddrContent :: [DataName]} deriving (Show)-- this can actually be any kind of type, but use DataName for simplicity
+-- purposefully use different type names even though they will end up in the same form (for now)
+data DataDeclRecord = DDR { ddrName :: DataName                       -- this can actually be any kind of type, but use DataName for clarity (same with below)
+                          , ddrContent :: [DataName]} deriving (Show) -- same with this
 data DataDeclConstruct = DDC { ddcName :: DataName
                           , ddcContent :: [DataName]} deriving (Show)
 data NewtypeDecl = NTD { ntdName :: NewtypeName
-                          , ntdContent :: [NewtypeName]} deriving (Show) -- can only have one value in a constructor, but we don't care about the constructor
+                          , ntdContent :: [NewtypeName]} deriving (Show)
 data TypeDecl = TD { tdName :: TypeName
-                    , tdContent :: [TypeName]} deriving (Show)-- should only be for a type synonym
+                    , tdContent :: [TypeName]} deriving (Show)
 
 
 -- new EntryData data type with strict fields to enforce strict file reading
@@ -48,17 +38,18 @@ extractEntryData fileName filePath = do
   handle <- openFile fileName ReadMode
   scriptFile <- hGetContents handle
   forceRead scriptFile `seq` hClose handle
+
+      -- light cleanup of the files before sorting by datatype
   let scriptFileLines = removeDeriving $ removeNewlineGuard $ removeNewlineBrace $ removeNewlineEqual $ filterEmptyS $ filterComments $ map stripWS $ lines scriptFile
-  -- removes comment lines
-      --scriptFileLines = rScriptFileLines \\ filter (isPrefixOf "--") rScriptFileLines
-      -- Recorded types as a String. Contains multiple, so it is a list of strings.
-      dataTypesRec = removeNewlineComma $ removeComments $ map fst $ filter snd $ isDataRec scriptFileLines False
-      dataTypesConst = removeComments $ filter isDataConst $ useGuardForm scriptFileLines
+
+      -- convert the raw files into nicer strings by picking only the information we want
+      dataTypesRec = removeNewlineComma $ useConstructFormRec False $ removeComments $ map fst $ filter snd $ isDataRec scriptFileLines False
+      dataTypesConst = removeComments $ filter isDataConst $ map useEqForm $ useGuardForm scriptFileLines
       newtypeRec = removeComments $ isNewtypeRec $ filter (isPrefixOf "newtype ") scriptFileLines
       newtypeConst = removeComments $ isNewtypeConst $ filter (isPrefixOf "newtype ") scriptFileLines
-      typeTypes = removeComments $ filter (not . isInfixOf "=") $ filter (isPrefixOf "type ") scriptFileLines
+      typeTypes = removeComments $ filter (isInfixOf "=") $ filter (isPrefixOf "type ") scriptFileLines
 
-
+      -- organize the data from a nice string into their respective Decl formats
   let dataDeclRec = getDataContainedRec $ sortDataRec $ filterEmptyS $ L.splitOn "}\n" $ unlines $ dataTypesRec
       dataDeclConst = getDataContainedConst $ sortDataConst dataTypesConst
       newtypeDeclR = getNewtypesR newtypeRec
@@ -66,11 +57,31 @@ extractEntryData fileName filePath = do
       newtypeDecl = newtypeDeclR ++ newtypeDeclC
       typeDecl = getTypes typeTypes
 
+  -- returns all types within a file
   return EntryData {dRNs=dataDeclRec,dCNs=dataDeclConst,ntNs=newtypeDecl,tNs=typeDecl}
 
 -- strips leading and trailing whitespace from strings
 stripWS :: String -> String
 stripWS = T.unpack . T.strip . T.pack
+
+---TODO: use map for most of these, I just need to visualize what is happening for now.
+-- TODO: organize and comment functions.
+
+useConstructFormRec :: Bool -> [String]  -> [String]
+useConstructFormRec _ [] = []
+useConstructFormRec isSameRec (l1:l2:ls) 
+  | "data " `isPrefixOf` l1 && "where " `isInfixOf` l1 = useConstructFormRec True ((l1Construct ++ l2) : ls)
+  | "}" `isInfixOf` l2 && "->" `isInfixOf` l2 = useConstructFormRec False ((l1 ++ "}") : ls) -- may need to be changed to account for other possible variance, but for now it should work
+  | isSameRec = useConstructFormRec True ((l1 ++ l2):ls)
+  | otherwise = l1 : useConstructFormRec False (l2:ls)
+  where
+      l1Construct 
+        | "=>" `isInfixOf` l1 = (T.unpack $ T.replace (T.pack "where") (T.pack "=") $ T.pack $ unwords $ take (fromJust (findIndex  (isInfixOf "::") (words l1))) $ words l1) ++ " {" --has a class constraint, but we can just ignore for now
+        | otherwise = (T.unpack $ T.replace (T.pack "where") (T.pack "=") $ T.pack l1) ++ " {" -- no class constraint in data type
+useConstructFormRec _ ls = ls
+
+useEqForm :: String -> String
+useEqForm = T.unpack . T.replace (T.pack "where") (T.pack "=") . T.pack
 
 isNewtypeRec :: [String] -> [String]
 isNewtypeRec = filter (isInfixOf "{")
@@ -78,20 +89,21 @@ isNewtypeRec = filter (isInfixOf "{")
 isNewtypeConst :: [String] -> [String]
 isNewtypeConst = filter (not . isInfixOf "{")
 
-{-fromRecordForm :: [String] -> [String]
-fromRecordForm [] = []
-fromRecordForm (l:ls)                                                   -- FIXME: super hacky but using just to get it to work for now
-  | "newtype " `isPrefixOf` l && "{" `isInfixOf` l && "=" `isInfixOf` l = unwords (head (L.splitOn "=" l) : (error $ show $ concatMap tail $ map (L.splitOn "::") $ tail $ L.splitOn "=" l)) : fromRecordForm ls -- (unwords $ insertAt 2 "=" $ insertAt 2 "Constructor" $ take (fromJust (elemIndex "=" (words l))) $ error $ show $ words l) : fromRecordForm ls
-  | otherwise = l : fromRecordForm ls-}
-
----TODO: use map for most of these, I just need to visualize what is happening for now.
+filterAll :: String -> String
+filterAll = filterPrimeTypes . filterQualifiedTypes . filterInvalidChars
 
 filterInvalidChars :: String -> String
 filterInvalidChars = filterInvalidChars' invalidChars
   where
     filterInvalidChars' [] x = x
     filterInvalidChars' (l:ls) x = filterInvalidChars' ls $ filter (/= l) x
-    invalidChars = "[]!}"
+    invalidChars = "[]!} (){->,$" --this space is kind of a hack, but here to get it to work for now
+
+filterPrimeTypes :: String -> String
+filterPrimeTypes = T.unpack . T.replace (T.pack "\'") (T.pack "_") . T.pack 
+
+filterQualifiedTypes :: String -> String
+filterQualifiedTypes l = if '.' `elem` l then drop (fromJust (elemIndex '.' l)+1) l else l -- get rid of types that are made from qualified imports
 
 removeNewlineComma :: [String] -> [String]
 removeNewlineComma [] = []
@@ -126,19 +138,19 @@ useGuardForm ls = ls
 
 getNewtypesR :: [String] -> [NewtypeDecl]
 getNewtypesR [] = []
-getNewtypesR (l:ls) = NTD {ntdName = head typeContents, ntdContent = nub $ map filterInvalidChars checkContents} : getNewtypesR ls
+getNewtypesR (l:ls) = NTD {ntdName = filterAll $ head typeContents, ntdContent = nub $ filter (not . null) $ map filterAll checkContents} : getNewtypesR ls
   where typeContents = map stripWS $ L.splitOn "=" $ l \\ "newtype "
         checkContents = map stripWS $ concatMap (tail) $ map (L.splitOn "::") $ L.splitOn "," $ concat $ tail typeContents
 
 getNewtypesC :: [String] -> [NewtypeDecl]
 getNewtypesC [] = []
-getNewtypesC (l:ls) = NTD {ntdName = head typeContents, ntdContent = nub $ map filterInvalidChars checkContents} : getNewtypesC ls
+getNewtypesC (l:ls) = NTD {ntdName = filterAll $ head typeContents, ntdContent = nub $ filter (not . null) $ map filterAll checkContents} : getNewtypesC ls
     where typeContents = map stripWS $ L.splitOn "=" $ l \\ "newtype "
           checkContents = concatMap (tail.words) $ tail typeContents
 
 getTypes :: [String] -> [TypeDecl]
 getTypes [] = []
-getTypes (l:ls) = TD {tdName = head typeContents, tdContent = nub $ map filterInvalidChars $ tail typeContents} : getTypes ls
+getTypes (l:ls) = TD {tdName = filterAll $ head typeContents, tdContent = nub $ filter (not . null) $ map filterAll $ tail typeContents} : getTypes ls
     where typeContents = map stripWS $ L.splitOn "=" $ l \\ "type "
           --checkContents = if "->" `isInfixOf` (concat $ tail typeContents) then error $ show typeContents else tail typeContents
 
@@ -147,18 +159,12 @@ sortDataConst :: [String] -> [(String, [String])]
 sortDataConst [] = []
 sortDataConst (l:ls) = (dataCName, dataCContents): sortDataConst ls
     where dataCName = head $ map stripWS $ L.splitOneOf "|=" $ l \\ "data "
-          dataCContents = concatMap tail $ map words $ tail $ map stripWS $ L.splitOneOf "|=" $ l \\ "data " 
-
-{-filterDeriv :: [String] -> [String]
-filterDeriv [] = []
-filterDeriv (l:ls) 
-  | "deriving" `isInfixOf` l = []
-  | otherwise = l: filterDeriv ls-}
+          dataCContents = concatMap tail $ map words $ tail $ filter (not . null) $ map stripWS $ L.splitOneOf "|=" $ l \\ "data " 
 
 -- Creates a data declaration for constructs.
 getDataContainedConst :: [(String, [String])] -> [DataDeclConstruct]
 getDataContainedConst [] = []
-getDataContainedConst (l:ls) = DDC {ddcName = fst l, ddcContent = nub $ map filterInvalidChars $ snd l} : getDataContainedConst ls
+getDataContainedConst (l:ls) = DDC {ddcName = filterAll $ fst l, ddcContent = nub $ filter (not . null) $ map filterAll $ snd l} : getDataContainedConst ls
 
 removeNewlineEqual :: [String] -> [String]
 removeNewlineEqual [] = []
@@ -180,16 +186,12 @@ removeNewlineBrace ls = ls
 -- make a data declaration record out of the name of the type and the names of the contained types
 getDataContainedRec :: [(String, [String])] -> [DataDeclRecord]
 getDataContainedRec [] = [] 
-getDataContainedRec (l:ls) = DDR {ddrName = fst l, ddrContent = nub $ map filterInvalidChars $ snd l} : getDataContainedRec ls
+getDataContainedRec (l:ls) = DDR {ddrName = filterAll $ fst l, ddrContent = nub $ filter (not . null) $ map filterAll $ snd l} : getDataContainedRec ls
 
 --for testing, will be removed after
 mytail :: [a] -> [a]
 mytail (x:xs) = xs
 mytail [] = error "here"
-
-{-sortDataConst (l:ls) = (dataCName, dataCContents): sortDataConst ls
-    where dataCName = head $ map stripWS $ L.splitOneOf "|=" $ l \\ "data "
-          dataCContents = concatMap tail $ map words $ tail $ map stripWS $ L.splitOneOf "|=" $ l \\ "data "-}
 
 -- take a list of data declarations for records and get the name of the datatype and all datatypes within the record
 sortDataRec :: [String] -> [(String, [String])]
@@ -199,18 +201,12 @@ sortDataRec (l:ls) = (head typeContents, checkContents): sortDataRec ls -- sortD
     where
         typeContents = map stripWS $ L.splitOn "=" $ l \\ "data "
         checkContents = map stripWS $ concatMap (tail) $ map (L.splitOn "::") $ L.splitOn "," $ concat $ tail typeContents
-        {-sortDataRec' :: [String] -> (String, [String])
-        --sortDataRec' [] = ("", [])
-        sortDataRec' ms = ("", getContainedTypes $ tail ms)
-        getContainedTypes :: [String] -> [String]
-        getContainedTypes [n] = []
-        getContainedTypes [] = [] --for those files which do not contain any record types
-        getContainedTypes ns = error $ show (l ++ "\nSomething isn't right here.")-} --"Should only have one string filled with the different needed types at this stage."
 
 -- Attach booleans to see if a line is a part of a data type declaration (for records)
 isDataRec :: [String] -> Bool -> [(String, Bool)]
 isDataRec [] _ = [] 
 isDataRec (l:ls) dtStill
+    | "data " `isPrefixOf` l && "{" `isInfixOf` l && "}" `isInfixOf` l = (l, True): isDataRec ls False 
     | "data " `isPrefixOf` l && "{" `isInfixOf` l = (l, True): isDataRec ls True -- if start with "data " and contains "{", it is start of record datatype
     | dtStill && "}" `isInfixOf` l = (l, True): isDataRec ls False -- if still part of record datatype and we see "}", dataType ends
     | dtStill = (l, True) : isDataRec ls True -- if still part of record datatype and none of the above happen, keep going with datatype
@@ -225,35 +221,3 @@ forceRead :: [a0] -> ()
 forceRead [] = ()
 forceRead (x:xs) = forceRead xs
 
-{-- index number, class + script lines, indexes list (for multi-line classes)
-getIndexes :: Int -> [String] -> [String] -> [Int]
-getIndexes _ _ [] = []
-getIndexes idx clsLines (x:xs) = if isClassLine then addIdx else nextIdx where
-  isClassLine = x `elem` clsLines
-  addIdx = idx : nextIdx
-  nextIdx = getIndexes (idx + 1) clsLines xs
-
--- used to extract the class name from a raw script line
-getClassName :: String -> ClassName
-getClassName rsl = if derived then stripDv else stripDf where
-  derived = "=>" `isInfixOf` rsl
-  -- operates on derived classes
-  stripDv = takeWhile (/=' ') . (\\ "> ") $ dropWhile (/='>') rsl
-  -- operates on defined classes
-  stripDf = takeWhile (/=' ') $ (\\ "class ") rsl
-
--- used to extract data/newtype name + class instance name
-getStripInstance :: String -> (DtNtName,ClassName)
-getStripInstance rsl = if derived then stripDv else stripDf where
-  derived = "=>" `isInfixOf` rsl
-  -- operates on derived class instances
-  stripDv
-    | "(" `isInfixOf` rsl = (stripDvLmdn,stripDvLmc)
-    | otherwise = (stripDvLs !! 1,head stripDvLs)
-  stripDvLs = words . (\\ "> ") $ dropWhile (/='>') rsl
-  stripDvLm = (\\ "> ") $ dropWhile (/='>') rsl
-  stripDvLmdn = takeWhile (/=')') . (\\ "(") $ dropWhile (/='(') stripDvLm
-  stripDvLmc = takeWhile (/=' ') stripDvLm
-  -- operates on defined class instances
-  stripDf = (stripDfL !! 1,head stripDfL)
-  stripDfL = words $ (\\ "instance ") rsl-}

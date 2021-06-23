@@ -104,7 +104,7 @@ standOffDist = uq (constrained' (dqd sD (Variable "SD") Real metre)
   [ gtZeroConstr,
     sfwrc $ Bounded (Inc, sy sdMin) (Inc, sy sdMax)] (exactDbl 45)) defaultUncrt
 
-nomThick = cuc "nomThick" 
+nomThick = cnstrw "nomThick" 
   (nounPhraseSent $ S "nominal thickness" +:+ displayDblConstrntsAsSet 
     nomThick nominalThicknesses)
   lT millimetre {-Discrete nominalThicknesses, but not implemented-} Rational 

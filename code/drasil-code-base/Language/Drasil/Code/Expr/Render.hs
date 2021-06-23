@@ -1,9 +1,9 @@
-module Language.Drasil.Code.Expr.Render where
+module Language.Drasil.Code.Expr.Render (renderExpr) where
 
 import qualified Language.Drasil as L
 import qualified Language.Drasil.Development as LD
 
-import Data.Bifunctor
+import Data.Bifunctor (Bifunctor(bimap, second))
 
 import Language.Drasil.Code.Expr
 

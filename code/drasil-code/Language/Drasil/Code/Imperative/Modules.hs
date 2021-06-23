@@ -7,8 +7,7 @@ module Language.Drasil.Code.Imperative.Modules (
 import Language.Drasil (Constraint(..), RealInterval(..),
   Completeness(..), HasUID(uid), Stage(..))
 import Database.Drasil (ChunkDB)
-import Language.Drasil.Code.Expr
-import Language.Drasil.Code.Expr.Render
+import Language.Drasil.Code.Expr.Development
 import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.Descriptions (constClassDesc, 
   constModDesc, derivedValuesDesc, dvFuncDesc, inConsFuncDesc, inFmtFuncDesc, 

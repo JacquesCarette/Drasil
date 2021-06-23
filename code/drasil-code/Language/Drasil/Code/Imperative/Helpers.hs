@@ -4,7 +4,7 @@ module Language.Drasil.Code.Imperative.Helpers (
 
 import Language.Drasil (UID, QuantityDict)
 import Database.Drasil (symbResolve)
-import Language.Drasil.Code.Expr (CodeExpr(OrdBinaryOp), OrdBinOp(Lt))
+import Language.Drasil.Code.Expr.Development (CodeExpr(OrdBinaryOp), OrdBinOp(Lt))
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
 

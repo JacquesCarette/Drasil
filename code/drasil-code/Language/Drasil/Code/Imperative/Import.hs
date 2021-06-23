@@ -11,7 +11,7 @@ import Language.Drasil (HasSymbol, HasUID(..), HasSpace(..),
 import qualified Language.Drasil as L
 import Database.Drasil (symbResolve)
 import Language.Drasil.CodeExpr hiding (int)
-import Language.Drasil.Code.Expr
+import Language.Drasil.Code.Expr.Development
 import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
 import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, ctorCall,

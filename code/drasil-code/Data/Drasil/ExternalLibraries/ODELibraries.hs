@@ -31,7 +31,7 @@ import Language.Drasil.Code (Lang(..), ExternalLibrary, Step, Argument,
   ODEInfo(..), ODEOptions(..), ODEMethod(..), ODELibPckg, mkODELib,
   mkODELibNoPath, pubStateVar, privStateVar, initSolWithValFill)
 import Language.Drasil.CodeExpr
-import Language.Drasil.Code.Expr
+import Language.Drasil.Code.Expr.Development
 
 import Control.Lens ((^.), _1, _2, over)
 

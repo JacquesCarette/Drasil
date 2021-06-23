@@ -2,7 +2,7 @@ module Language.Drasil.Code.Expr.Extract (eDep, eDep') where
 
 import Language.Drasil (RealInterval(..))
 
-import Language.Drasil.Code.Expr
+import Language.Drasil.Code.Expr (CodeExpr(..))
 
 import Data.List (nub)
 

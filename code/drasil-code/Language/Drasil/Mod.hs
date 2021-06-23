@@ -15,7 +15,7 @@ import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codevars,
   codevars', quantvar)
 import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto)
 import Language.Drasil.Code.DataDesc (DataDesc)
-import Language.Drasil.Code.Expr
+import Language.Drasil.Code.Expr.Development
 
 import Utils.Drasil.Strings (toPlainName)
 

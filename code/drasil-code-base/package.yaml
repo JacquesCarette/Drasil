@@ -24,6 +24,10 @@ ghc-options:
 
 library:
   source-dirs: ./
+  exposed-modules:
+    - Language.Drasil.Chunk.CodeBase
+    - Language.Drasil.CodeExpr
+    - Language.Drasil.Code.Expr.Development
   when:
     - condition: false
-      other-modules: Paths_drasil_build
+      other-modules: Paths_drasil_code_base

@@ -3,10 +3,7 @@ module Language.Drasil.Printing.Import.CodeExpr where
 import Language.Drasil (DerivType(..), DomainDesc(..), Inclusive(..),
   RTopology(..), RealInterval(..), UID, Special(..) )
 import Language.Drasil.Display (Symbol(..))
--- import Language.Drasil.Development (precA, precB, eprec)
-import Language.Drasil.Code.Expr.Precedence (precA, precB, eprec)
-
-import Language.Drasil.Code.Expr
+import Language.Drasil.Code.Expr.Development
 
 import qualified Language.Drasil.Printing.AST as P
 import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..),

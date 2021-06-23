@@ -17,7 +17,7 @@ module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step(..),
 import Language.Drasil (Space, HasSpace(typ), NamedArgument)
 import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codeName)
 import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto)
-import Language.Drasil.Code.Expr
+import Language.Drasil.Code.Expr.Development
 import Language.Drasil.CodeExpr
 import Language.Drasil.Mod (FuncStmt(..), Description)
 

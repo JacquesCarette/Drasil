@@ -592,7 +592,7 @@ diffCodeChunk c = quantvar $ implVar' ("d" ++ c ^. uid)
 -- So we need a way to switch the dependent variable from list to array,
 -- and the array version must have a distinct UID so it can be stored in the DB
 modifiedODESyst :: String -> ODEInfo -> [CodeExpr]
-modifiedODESyst sufx info = map (replaceDepVar . renderExpr) (odeSyst info) -- TODO; renderExpr
+modifiedODESyst sufx info = map (replaceDepVar . renderExpr) (odeSyst info)
   where
     replaceDepVar cc@(C c) | c == depVar info ^. uid = C (c ++ "_" ++ sufx)
                            | otherwise               = cc

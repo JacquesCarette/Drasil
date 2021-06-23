@@ -1,5 +1,5 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Chunk.Constrained (ConstrainedChunk(..), ConstrainedQDef(..), ConstrConcept(..), ReasonableValueQDef(..), ConstrReasQDef(..),
+module Language.Drasil.Chunk.Constrained (ConstrReasQDef(..), ConstrainedChunk(..), ConstrainedQDef(..), ConstrConcept(..), ReasonableValueQDef(..),
   cnstrw, cnstrw', constrained', constrainedNRV', cuc, cuc', cuc'', cvc) where
 
 import Control.Lens ((^.), makeLenses, view)
@@ -130,16 +130,16 @@ instance MayHaveUnit   ConstrReasQDef where getUnit = getUnit . view qd'''
 
 -- | Creates a constrained unitary chunk from a 'UID', term ('NP'), 'Symbol', unit, 'Space', 'Constraint's, and an 'Expr'.
 cuc :: (IsUnit u) => String -> NP -> Symbol -> u
-  -> Space -> [Constraint] -> Expr -> ConstrainedChunk
-cuc i t s u space cs rv = ConstrainedChunk (qw (unitary i t s u space)) cs (rv)
+  -> Space -> [Constraint] -> ConstrainedQDef
+cuc i t s u space = ConstrainedQDef (qw (unitary i t s u space))
 
 -- | Creates a constrained unitary chunk from a 'UID', term ('NP'), 'Symbol', 'Space', 'Constraint's, and a 'Maybe' 'Expr' (Similar to 'cuc' but no units).
-cvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Expr -> ConstrainedChunk
-cvc i des sym space = ConstrainedChunk (qw (vc i des sym space))
+cvc :: String -> NP -> Symbol -> Space -> Expr -> ReasonableValueQDef
+cvc i des sym space = RVQD (qw (vc i des sym space))
 
--- | Creates a new ConstrainedChunk from either a 'ConstrainedChunk', 'ConstrConcept', 'UncertainChunk', or an 'UncertQ'.
-cnstrw :: (Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> ConstrainedChunk  
-cnstrw c = ConstrainedChunk   (qw c) (c ^. constraints) (c ^. reasVal)
+-- | Creates a new ConstrReasQDef from either a 'ConstrainedChunk', 'ConstrConcept', 'UncertainChunk', or an 'UncertQ'.
+cnstrw :: (Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> ConstrReasQDef  
+cnstrw c = CRQD   (qw c) (c ^. constraints) (c ^. reasVal)
 
 
 

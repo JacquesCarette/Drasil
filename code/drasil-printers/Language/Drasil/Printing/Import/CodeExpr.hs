@@ -3,6 +3,7 @@ module Language.Drasil.Printing.Import.CodeExpr (codeExpr) where
 import Language.Drasil (DerivType(..), DomainDesc(..), Inclusive(..),
   RTopology(..), RealInterval(..), UID, Special(..) )
 import Language.Drasil.Display (Symbol(..))
+import Language.Drasil.CodeExpr (dbl)
 import Language.Drasil.Code.Expr.Development
 
 import qualified Language.Drasil.Printing.AST as P
@@ -112,7 +113,7 @@ codeExpr (Dbl d)                  sm = case sm ^. getSetting of
 codeExpr (Int i)                   _ = P.Int i
 codeExpr (ExactDbl d)              _ = P.Int d
 codeExpr (Str s)                   _ = P.Str s
-codeExpr (Perc a b)               sm = P.Row [codeExpr (Dbl val) sm, P.MO P.Perc] -- TODO: dbl, not Dbl
+codeExpr (Perc a b)               sm = P.Row [codeExpr (dbl val) sm, P.MO P.Perc]
   where
     val = fromIntegral a / (10 ** fromIntegral (b - 2))
 codeExpr (AssocB And l)           sm = assocExpr P.And (precB And) l sm

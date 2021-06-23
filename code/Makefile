@@ -203,6 +203,7 @@ analysis: check_stack
 	@cd $(TYPEGRAPH_FOLDER) && for pack in $(ANALYSIS_PACKAGES); do \
 		dot -Tpdf $$pack.dot > "./$$pack.pdf" ; \
 	done
+	@echo Done dependency graphs
 
 docs: check_stack
 	DOCS_FOLDER="$(DOCS_FOLDER)" GHC_FLAGS="$(GHCFLAGS)" sh scripts/make_docs.sh

@@ -7,7 +7,8 @@ module Language.Drasil.Code.Imperative.DrasilState (
 import Language.Drasil
 import GOOL.Drasil (ScopeTag(..), CodeType)
 
-import Language.Drasil.Chunk.Code (codeName, ConstraintCE)
+import Language.Drasil.Chunk.Code (codeName)
+import Language.Drasil.Chunk.ConstraintMap (ConstraintCE)
 import Language.Drasil.Code.ExtLibImport (ExtLibState)
 import Language.Drasil.Choices (Choices(..), AuxFile, Modularity(..), 
   ImplementationType(..), Comments, Verbosity, MatchedConceptMap, 

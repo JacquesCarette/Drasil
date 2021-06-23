@@ -39,6 +39,7 @@ library:
   other-modules:
     - Language.Drasil.Chunk.Code
     - Language.Drasil.Chunk.CodeDefinition
+    - Language.Drasil.Chunk.ConstraintMap
     - Language.Drasil.Chunk.Parameter
     - Language.Drasil.Code.Code
     - Language.Drasil.Code.CodeQuantityDicts
@@ -99,6 +100,7 @@ executables:
     - Language.Drasil.Code
     - Language.Drasil.Chunk.Code
     - Language.Drasil.Chunk.CodeDefinition
+    - Language.Drasil.Chunk.ConstraintMap
     - Language.Drasil.Chunk.Parameter
     - Language.Drasil.Code.Code
     - Language.Drasil.Code.CodeQuantityDicts

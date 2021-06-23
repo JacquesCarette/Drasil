@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: cc284a1c15d9d4ec17cb9018a9e34d726351de8c84e069e3024535e6899d42aa
+-- hash: 7823bd618cb0ce8837c4312da12e6a687c3aa76b989f8c2af22d7e0b00720077
 
 name:           drasil-code
 version:        0.1.9.0
@@ -27,6 +27,7 @@ library
   other-modules:
       Language.Drasil.Chunk.Code
       Language.Drasil.Chunk.CodeDefinition
+      Language.Drasil.Chunk.ConstraintMap
       Language.Drasil.Chunk.Parameter
       Language.Drasil.Code.Code
       Language.Drasil.Code.CodeQuantityDicts
@@ -106,6 +107,7 @@ executable codegenTest
       Language.Drasil.Code
       Language.Drasil.Chunk.Code
       Language.Drasil.Chunk.CodeDefinition
+      Language.Drasil.Chunk.ConstraintMap
       Language.Drasil.Chunk.Parameter
       Language.Drasil.Code.Code
       Language.Drasil.Code.CodeQuantityDicts

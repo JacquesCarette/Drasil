@@ -28,9 +28,10 @@ import Language.Drasil.Code.Imperative.Parameters (getConstraintParams,
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar, 
-  physLookup, sfwrLookup, DefiningCodeExpr(..))
+  DefiningCodeExpr(..))
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, DefinitionType(..),
   defType)
+import Language.Drasil.Chunk.ConstraintMap (physLookup, sfwrLookup)
 import Language.Drasil.Chunk.Parameter (pcAuto)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)

@@ -5,8 +5,7 @@
 module Language.Drasil.Chunk.Code (
   CodeIdea(..), CodeChunk(..), CodeVarChunk(..), CodeFuncChunk(..), 
   VarOrFunc(..), obv, quantvar, quantfunc, ccObjVar, codevars, codevars', 
-  funcResolve, varResolve, listToArray, ConstraintCEMap, ConstraintCE,
-  constraintMap, physLookup, sfwrLookup, programName, funcPrefix,
+  funcResolve, varResolve, listToArray, programName, funcPrefix,
   DefiningCodeExpr(..)
 ) where
 

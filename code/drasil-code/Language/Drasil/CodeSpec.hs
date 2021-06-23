@@ -10,8 +10,8 @@ import Database.Drasil (ChunkDB, SystemInformation(SI),
 import Theory.Drasil (DataDefinition, qdFromDD, getEqModQdsFromIm)
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeIdea(codeChunk),
-  ConstraintCEMap, ConstraintCE, programName, quantvar, codevars, codevars',
-  varResolve, constraintMap, DefiningCodeExpr(..))
+  programName, quantvar, codevars, codevars', varResolve, DefiningCodeExpr(..))
+import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef,
   auxExprs)
 import Language.Drasil.Choices (Choices(..))

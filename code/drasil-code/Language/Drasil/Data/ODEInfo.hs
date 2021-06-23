@@ -9,7 +9,6 @@ import Language.Drasil
 import Language.Drasil.Chunk.Code (CodeVarChunk)
 
 
--- TODO: Jason: Change the below Exprs into CodeExprs
 -- This may be temporary, but need a structure to hold ODE info for now. 
 -- Goal will be for this info to be populated by the instance model for the ODE and the Choices structure.
 -- Probably doesn't belong here, but where?

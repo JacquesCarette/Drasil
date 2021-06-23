@@ -142,7 +142,7 @@ asVC' (FData (FuncData n _ _))     = vc n (nounPhraseSP n) (Variable n) Real
 getDerivedInputs :: [DataDefinition] -> [Input] -> [Const] ->
   ChunkDB -> [QDefinition]
 getDerivedInputs ddefs ins cnsts sm =
-  filter ((`subsetOf` refSet) . flip codevars sm . renderExpr . (^. defnExpr)) (map qdFromDD ddefs) -- TODO: This one is not hacky
+  filter ((`subsetOf` refSet) . flip codevars sm . renderExpr . (^. defnExpr)) (map qdFromDD ddefs)
   where refSet = ins ++ map quantvar cnsts
 
 type Known = CodeVarChunk

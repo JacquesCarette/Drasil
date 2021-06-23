@@ -506,7 +506,7 @@ genCalcFunc cdef = do
   v <- mkVar (quantvar cdef)
   blcks <- case cdef ^. defType 
             of Definition -> liftS $ genCalcBlock CalcReturn cdef 
-                 (cdef ^. codeExpr) -- TODO: No auxExprs here this time?
+                 (cdef ^. codeExpr)
                ODE -> maybe (error $ nm ++ " missing from ExtLibMap") 
                  (\el -> do
                    defStmts <- mapM convStmt (el ^. defs)

@@ -15,14 +15,14 @@ import Language.Drasil.NounPhrase (NP)
 data NamedChunk = NC {_uu :: UID, _np :: NP}
 makeLenses ''NamedChunk
 
+-- | Equal if 'UID's are equal.
 instance Eq        NamedChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
--- ^ Equal if 'UID's are equal.
+-- | Finds the 'UID' of the 'NamedChunk'.
 instance HasUID    NamedChunk where uid = uu
--- ^ Finds the 'UID' of the 'NamedChunk'.
+-- | Finds the term ('NP') of the 'NamedChunk'.
 instance NamedIdea NamedChunk where term = np
--- ^ Finds the term ('NP') of the 'NamedChunk'.
+-- | Finds the idea of a 'NamedChunk' (always 'Nothing').
 instance Idea      NamedChunk where getA _ = Nothing
--- ^ Finds the idea of a 'NamedChunk' (always 'Nothing').
   
 -- | 'NamedChunk' constructor, takes a 'UID' and a term.
 nc :: String -> NP -> NamedChunk
@@ -34,14 +34,14 @@ nc = NC
 data IdeaDict = IdeaDict { _nc' :: NamedChunk, mabbr :: Maybe String }
 makeLenses ''IdeaDict
 
+-- | Equal if 'UID's are equal.
 instance Eq        IdeaDict where a == b = a ^. uid == b ^. uid
--- ^ Equal if 'UID's are equal.
+-- | Finds the 'UID' of the 'NamedChunk' used to make the 'IdeaDict'.
 instance HasUID    IdeaDict where uid = nc' . uid
--- ^ Finds the 'UID' of the 'NamedChunk' used to make the 'IdeaDict'.
+-- | Finds the term ('NP') of the 'NamedChunk' used to make the 'IdeaDict'.
 instance NamedIdea IdeaDict where term = nc' . term
--- ^ Finds the term ('NP') of the 'NamedChunk' used to make the 'IdeaDict'.
+-- | Finds the abbreviation of the 'IdeaDict'.
 instance Idea      IdeaDict where getA = mabbr
--- ^ Finds the abbreviation of the 'IdeaDict'.
   
 -- | 'IdeaDict' constructor, takes a 'UID', 'NP', and 
 -- an abbreviation in the form of 'Maybe' 'String'

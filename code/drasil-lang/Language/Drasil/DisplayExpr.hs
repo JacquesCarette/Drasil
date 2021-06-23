@@ -6,11 +6,11 @@ module Language.Drasil.DisplayExpr (DisplayExpr(..),
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Space (Space)
 
--- | Binary Display Operations
+-- | Binary Display Operations.
 data DisplayBinOp = Defines | IsIn
   deriving (Eq, Show)
 
--- | Associative Binary Display Operations
+-- | Associative Binary Display Operations.
 data DisplayAssocBinOp = And | Equivalence
   deriving (Eq, Show)
 

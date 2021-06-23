@@ -25,28 +25,29 @@ data UnitalChunk = UC { _defq' :: DefinedQuantityDict
                       }
 makeLenses ''UnitalChunk
 
+-- | Finds 'UID' of the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
 instance HasUID        UnitalChunk where uid = defq' . uid
--- ^ Finds 'UID' of the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
+-- | Finds term ('NP') of the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
 instance NamedIdea     UnitalChunk where term = defq' . term
--- ^ Finds term ('NP') of the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
+-- | Finds the idea contained in the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
 instance Idea          UnitalChunk where getA (UC qc _) = getA qc
--- ^ Finds the idea contained in the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
+-- | Finds definition of the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
 instance Definition    UnitalChunk where defn = defq' . defn
--- ^ Finds definition of the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
+-- | Finds the domain contained in the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
 instance ConceptDomain UnitalChunk where cdom = cdom . view defq'
--- ^ Finds the domain contained in the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
+-- | Finds the 'Space' of the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
 instance HasSpace      UnitalChunk where typ = defq' . typ
--- ^ Finds the 'Space' of the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
+-- | Finds the 'Symbol' of the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
 instance HasSymbol     UnitalChunk where symbol c = symbol (c^.defq')
--- ^ Finds the 'Symbol' of the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
+-- | 'UnitalChunk's have a 'Quantity'.
 instance Quantity      UnitalChunk where 
--- ^ 'UnitalChunk's have a 'Quantity'.
+-- | Finds the unit definition of a 'UnitalChunk'.
 instance Unitary       UnitalChunk where unit = view uni
--- ^ Finds the unit definition of a 'UnitalChunk'.
+-- | Finds the units of the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
 instance MayHaveUnit   UnitalChunk where getUnit = Just . view uni
--- ^ Finds the units of the 'DefinedQuantityDict' used to make the 'UnitalChunk'.
-instance Eq            UnitalChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid) 
--- ^ Equal if 'UID's are equal.
+-- | Equal if 'UID's are equal.
+instance Eq            UnitalChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
+-- | Convert the symbol of the 'UnitalChunk' to a 'DisplayExpr'.
 instance Display       UnitalChunk where toDispExpr = toDispExpr . sy
 
 --{BEGIN HELPER FUNCTIONS}--

@@ -11,6 +11,7 @@ import Language.Drasil.Classes.Core (HasSymbol(symbol))
 import Language.Drasil.Symbol (Symbol(..), Decoration(..))
 import Language.Drasil.Stages (Stage(Equational,Implementation))
 
+-- | Helper for creating smart constructors for 'Symbol's.
 neSymb :: (String -> Symbol) -> String -> String -> Symbol
 neSymb _  s [] = error $ s ++ " names must be non-empty"
 neSymb sy _ s  = sy s

@@ -16,8 +16,8 @@ import Control.Lens ((^.), makeLenses, Lens', set, view)
 -- | Denotes the different possible types that can be used as a list.
 data ListType = Bullet      [(ItemType, Maybe String)] -- ^ Bulleted list.
               | Numeric     [(ItemType, Maybe String)] -- ^ Enumerated list.
-              | Simple      [ListTuple] -- ^ Simple list with items denoted by @-@.
-              | Desc        [ListTuple] -- ^ Descriptive list, renders as "Title: Item" (see 'ListTuple').
+              | Simple      [ListTuple] -- ^ Simple list with items denoted by @:@. Renders as "Title: Item"
+              | Desc        [ListTuple] -- ^ Descriptive list, renders as "__Title: Item__" (see 'ListTuple').
               | Definitions [ListTuple] -- ^ Renders a list of "@'Title'@ is the @Item@".
 
 -- | Denotes how something should behave in a list ('ListType').
@@ -36,9 +36,9 @@ type Header   = Sentence -- ^ Used when creating sublists.
 type Depth    = Int
 type Width    = Float
 type Height   = Float
-type ListTuple = (Title, ItemType, Maybe String) -- ^ Formats as Title: Item.
+type ListTuple = (Title, ItemType, Maybe String) -- ^ Formats as Title: Item. For use in lists.
 type Filepath = String
-type Lbl      = Sentence
+type Lbl      = Sentence  -- ^ Label.
 
 -- | Contents may be labelled or unlabelled.
 data Contents = UlC UnlabelledContent
@@ -64,7 +64,7 @@ data RawContent =
   | DerivBlock Sentence [RawContent]         -- ^ Grants the ability to label a group of 'RawContent'.
   | Enumeration ListType                     -- ^ For enumerated lists.
   | Defini DType [(Identifier, [Contents])]  -- ^ Defines something with a type, identifier, and 'Contents'.
-  | Figure Lbl Filepath MaxWidthPercent      -- ^ Should use relative file path.
+  | Figure Lbl Filepath MaxWidthPercent      -- ^ For creating figures in a document. Should use relative file path.
   | Bib BibRef                               -- ^ Grants the ability to reference something.
   | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl -- ^ Contain a graph with coordinates ('Sentence's), maybe a width and height, and a label ('Sentence').
                -- TODO: Fill this one in.
@@ -106,11 +106,12 @@ instance HasContents Contents where
   accessContents f (UlC c) = fmap (UlC . (\x -> set cntnts x c)) (f $ c ^. cntnts)
   accessContents f (LlC c) = fmap (LlC . (\x -> set ctype x c)) (f $ c ^. ctype)
 
--- | Finds the reference address of 'LabelledContent'.
+-- | Finds the reference information of 'LabelledContent'.
 instance Referable LabelledContent where
   refAdd     (LblC lb _) = getRefAdd lb
   renderRef  (LblC lb c) = RP (prependLabel c) (getRefAdd lb)
 
+-- | Helper to prepend labels to 'LabelledContent' when referencing.
 prependLabel :: RawContent -> IRefProg
 prependLabel Table{}        = prepend "Tab"
 prependLabel Figure{}       = prepend "Fig"

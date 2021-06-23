@@ -25,5 +25,5 @@ ghc-options:
 library:
   source-dirs: ./
   when:
-  - condition: false
-    other-modules: Paths_drasil_build
+    - condition: false
+      other-modules: Paths_drasil_build

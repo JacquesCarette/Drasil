@@ -6,13 +6,12 @@ module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
   genModClasses, readData, renderC
 ) where
 
-import Language.Drasil (HasSymbol, HasUID(..), HasSpace(..), DefiningExpr(..),
+import Language.Drasil (HasSymbol, HasUID(..), HasSpace(..),
   Space(..), RealInterval(..), UID, Constraint(..), Inclusive (..))
 import qualified Language.Drasil as L
 import Database.Drasil (symbResolve)
 import Language.Drasil.CodeExpr hiding (int)
 import Language.Drasil.Code.Expr
-import Language.Drasil.Code.Expr.Render
 import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
 import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, ctorCall,
@@ -21,7 +20,7 @@ import Language.Drasil.Code.Imperative.Helpers (getUpperBound, lookupC)
 import Language.Drasil.Code.Imperative.Logging (maybeLog, logBody)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, obv, 
-  quantvar, quantfunc, ccObjVar)
+  quantvar, quantfunc, ccObjVar, DefiningCodeExpr(..))
 import Language.Drasil.Chunk.Parameter (ParameterChunk(..), PassBy(..), pcAuto)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Choices (Comments(..), ConstantRepr(..),
@@ -82,7 +81,7 @@ value u s t = do
       maybeInline _ _ = Nothing
       cm = concMatches g
       cdCncpt = Map.lookup u cm
-  val <- maybe (valueOf <$> variable s t) (convExpr . renderExpr . (^. defnExpr)) constDef -- TODO: renderExpr here?
+  val <- maybe (valueOf <$> variable s t) (convExpr . (^. codeExpr)) constDef
   return $ maybe val conceptToGOOL cdCncpt
 
 -- | If variable is an input, construct it with 'var' and pass to inputVariable.

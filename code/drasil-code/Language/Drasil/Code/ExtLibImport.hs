@@ -9,8 +9,8 @@ import Language.Drasil (HasSpace(typ), getActorName, NamedArgument)
 import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codeName, 
   ccObjVar)
 import Language.Drasil.Chunk.Parameter (ParameterChunk)
-import Language.Drasil.Code.Expr
-import Language.Drasil.CodeExpr
+import Language.Drasil.CodeExpr (CodeExpr, ($&&), applyWithNamedArgs,
+  msgWithNamedArgs, new, newWithNamedArgs, sy)
 import Language.Drasil.Mod (Class, StateVariable, Func(..), Mod, Name, 
   Description, packmodRequires, classDef, classImplements, FuncStmt(..), 
   funcDefParams, ctorDef)

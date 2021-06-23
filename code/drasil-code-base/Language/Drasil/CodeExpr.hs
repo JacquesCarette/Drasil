@@ -6,13 +6,15 @@ module Language.Drasil.CodeExpr (CodeExpr,
   field, apply, apply1, apply2, applyWithNamedArgs,
   ($&&), ($-), ($/), ($^), ($=>), ($<=>), ($=), ($!=), ($<), ($>),
   ($<=), ($>=), 
-  addI, addRe, mulI, mulRe, dim, idx) where
+  addI, addRe, mulI, mulRe, dim, idx,
+  renderExpr) where
 
 import Language.Drasil (Space(Actor), Callable, HasSpace(..), HasSymbol,
   HasUID(..), IsArgumentName)
 
-import Language.Drasil.Chunk.Code (CodeIdea, CodeVarChunk)
+import Language.Drasil.Chunk.CodeBase (CodeIdea, CodeVarChunk)
 import Language.Drasil.Code.Expr
+import Language.Drasil.Code.Expr.Render (renderExpr)
 
 import Control.Lens ((^.))
 

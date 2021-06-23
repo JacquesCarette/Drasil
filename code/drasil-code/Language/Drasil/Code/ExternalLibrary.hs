@@ -14,11 +14,11 @@ module Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step(..),
   returnExprList, fixedReturn, initSolWithVal
 ) where
 
-import Language.Drasil (Space, HasSpace(typ), NamedArgument, HasUID(..))
+import Language.Drasil (Space, HasSpace(typ), NamedArgument)
 import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codeName)
 import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto)
 import Language.Drasil.Code.Expr
-import Language.Drasil.CodeExpr (field)
+import Language.Drasil.CodeExpr
 import Language.Drasil.Mod (FuncStmt(..), Description)
 
 import Control.Lens ((^.))
@@ -245,7 +245,7 @@ populateSolList arr el fld = [statementStep (\cdchs es -> case (cdchs, es) of
     ([s], []) -> FAsg s (Matrix [[]])
     (_,_) -> error popErr),
   statementStep (\cdchs es -> case (cdchs, es) of
-    ([s], []) -> FForEach el (C $ arr ^. uid) [appendCurrSolFS (field el fld) s]
+    ([s], []) -> FForEach el (sy arr) [appendCurrSolFS (field el fld) s]
     (_,_) -> error popErr)]
   where popErr = "Fill for populateSolList should provide one CodeChunk and no Exprs"
 
@@ -266,13 +266,13 @@ assignSolFromObj o = statementStep (\cdchs es -> case (cdchs, es) of
 -- element of an array.
 initSolListFromArray :: CodeVarChunk -> Step
 initSolListFromArray a = statementStep (\cdchs es -> case (cdchs, es) of
-  ([s],[]) -> FAsg s (Matrix [[LABinaryOp Index (C $ a ^. uid) (Int 0)]]) -- FAsg s (Matrix [[idx (sy a) (int 0)]])
+  ([s],[]) -> FAsg s (matrix [[idx (sy a) (int 0)]])
   (_,_) -> error "Fill for initSolListFromArray should provide one CodeChunk and no Exprs")
 
 -- Specifies a statement where a solution list is initialized with a value.
 initSolListWithVal :: Step
 initSolListWithVal = statementStep (\cdchs es -> case (cdchs, es) of
-  ([s],[v]) -> FDecDef s (Matrix [[v]])
+  ([s],[v]) -> FDecDef s (matrix [[v]])
   (_,_) -> error "Fill for initSolListWithVal should provide one CodeChunk and one Expr")
 
 -- FunctionInterface for loop condition, CodeChunk for solution object, 
@@ -293,7 +293,7 @@ returnExprList = statementStep (\cdchs es -> case (cdchs, es) of
 
 -- A statement where a current solution is appended to a solution list
 appendCurrSolFS :: CodeExpr -> CodeVarChunk -> FuncStmt
-appendCurrSolFS cs s = FAppend (C $ s ^. uid) (LABinaryOp Index cs (Int 0)) -- FAppend (sy s) (idx cs (int 0))
+appendCurrSolFS cs s = FAppend (sy s) (idx cs (int 0))
 
 -- Specifies a use-case-independent statement that returns a value.
 fixedReturn :: CodeExpr -> Step

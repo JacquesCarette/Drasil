@@ -12,7 +12,7 @@ import Theory.Drasil (DataDefinition, qdFromDD, getEqModQdsFromIm)
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeIdea(codeChunk),
   ConstraintMap, programName, quantvar, codevars, codevars',
-  varResolve, constraintMap)
+  varResolve, constraintMap, DefiningCodeExpr(..))
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef,
   auxExprs)
 import Language.Drasil.Choices (Choices(..))
@@ -142,7 +142,7 @@ asVC' (FData (FuncData n _ _))     = vc n (nounPhraseSP n) (Variable n) Real
 getDerivedInputs :: [DataDefinition] -> [Input] -> [Const] ->
   ChunkDB -> [QDefinition]
 getDerivedInputs ddefs ins cnsts sm =
-  filter ((`subsetOf` refSet) . flip codevars sm . renderExpr . (^. defnExpr)) (map qdFromDD ddefs) -- TODO: renderExpr here seems odd
+  filter ((`subsetOf` refSet) . flip codevars sm . renderExpr . (^. defnExpr)) (map qdFromDD ddefs) -- TODO: This one is not hacky
   where refSet = ins ++ map quantvar cnsts
 
 type Known = CodeVarChunk
@@ -155,7 +155,7 @@ getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
   where getExecOrder' ord _ _ []   = ord
         getExecOrder' ord defs' k n =
           let new  = filter (\def -> (`subsetOf` k) (concatMap (`codevars'` sm)
-                (renderExpr (def ^. defnExpr) : map renderExpr (def ^. auxExprs)) \\ [quantvar def])) defs' -- TODO: the renderExpr here seems hacky.
+                (def ^. codeExpr : def ^. auxExprs) \\ [quantvar def])) defs'
               cnew = map quantvar new
               kNew = k ++ cnew
               nNew = n \\ cnew

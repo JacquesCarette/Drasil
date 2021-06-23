@@ -1,10 +1,12 @@
 {-# LANGUAGE TemplateHaskell #-}
+{-# OPTIONS_GHC -Wno-orphans #-}
+
 -- | Defines chunk types for use in code generation.
 module Language.Drasil.Chunk.Code (
   CodeIdea(..), CodeChunk(..), CodeVarChunk(..), CodeFuncChunk(..), 
   VarOrFunc(..), obv, quantvar, quantfunc, ccObjVar, codevars, codevars', 
   funcResolve, varResolve, listToArray, ConstraintMap, constraintMap, 
-  physLookup, sfwrLookup, programName, funcPrefix
+  physLookup, sfwrLookup, programName, funcPrefix, DefiningCodeExpr(..)
 ) where
 
 import Control.Lens

@@ -14,6 +14,7 @@ dependencies:
 - lens
 - directory
 - drasil-code
+- drasil-code-base  # TODO: Can we re-export all of the modules of -base via -code?
 - drasil-data
 - drasil-database
 - drasil-docLang

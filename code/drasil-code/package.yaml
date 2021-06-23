@@ -35,7 +35,6 @@ library:
   source-dirs: ./
   exposed-modules:
   - Language.Drasil.Code
-  - Language.Drasil.CodeExpr
   - Data.Drasil.ExternalLibraries.ODELibraries
   other-modules:
     - Language.Drasil.Chunk.Code
@@ -141,7 +140,6 @@ executables:
     - Language.Drasil.Data.ODEInfo
     - Language.Drasil.Data.ODELibPckg
     - Language.Drasil.Choices
-    - Language.Drasil.CodeExpr
     - Language.Drasil.CodeSpec
     - Language.Drasil.Mod
     ghc-options:

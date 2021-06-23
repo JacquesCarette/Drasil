@@ -2,13 +2,13 @@
 -- | Defines chunk types for use in code generation.
 module Language.Drasil.Chunk.CodeBase where
 
-import Control.Lens ((^.), makeLenses, view)
+import Control.Lens ((^.), view, makeLenses, Lens')
 
 import Language.Drasil
 import Database.Drasil (ChunkDB, symbResolve)
 
-import Language.Drasil.Code.Expr
-import Language.Drasil.Code.Expr.Extract
+import Language.Drasil.Code.Expr (CodeExpr)
+import Language.Drasil.Code.Expr.Extract (eDep, eDep')
 
 import Utils.Drasil.Strings (toPlainName)
 
@@ -19,9 +19,14 @@ import qualified Data.Map as Map
 -- | A 'CodeIdea' must include some code and its name. 
 class CodeIdea c where
   -- | Name of the idea.
-  codeName      :: c -> String
+  codeName  :: c -> String
   -- | Code chunk associated with the idea.
-  codeChunk     :: c -> CodeChunk
+  codeChunk :: c -> CodeChunk
+
+-- | A 'DefiningCodeExpr' must have it's underlying chunk 
+--   defined in the CodeExpr language.
+class CodeIdea c => DefiningCodeExpr c where
+  codeExpr  :: Lens' c CodeExpr
 
 -- | Convert the program name to an abbreviated 'String' without any special characters.
 programName :: CommonIdea c => c -> String
@@ -36,8 +41,8 @@ data VarOrFunc = Var | Func
 
 -- | Basic chunk representation in the code generation context.
 -- Contains a QuantityDict and the kind of code (variable or function).
-data CodeChunk = CodeC { _qc :: QuantityDict
-                       , kind :: VarOrFunc
+data CodeChunk = CodeC { _qc  :: QuantityDict
+                       , kind :: VarOrFunc  -- TODO: Jason: Once we have function spaces, I believe we won't need to store this
                        }
 makeLenses ''CodeChunk
 
@@ -154,4 +159,4 @@ sfwrLookup m q = constraintLookup' q m (filter isSfwrC)
 -- | Returns a chunk and a filtered list of its constraints.
 constraintLookup' :: (HasUID q) => q -> ConstraintMap
                       -> ([Constraint] -> [Constraint]) -> (q , [Constraint])
-constraintLookup' q m filt = (q, maybe [] filt (Map.lookup (q^.uid) m))
+constraintLookup' q m filt = (q, maybe [] filt (Map.lookup (q ^. uid) m))

@@ -16,7 +16,7 @@ import Language.Drasil
 
 import Language.Drasil.Chunk.Code (CodeVarChunk)
 import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto, pcVal)
-import Language.Drasil.Code.Expr
+import Language.Drasil.CodeExpr
 import Language.Drasil.Mod (Initializer, StateVariable)
 
 import Data.List.NonEmpty (NonEmpty(..), fromList)

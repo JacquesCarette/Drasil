@@ -101,14 +101,14 @@ onLine p1@(x1, y1) p2 x_ = (m `mulRe` (x_ $- x1)) `addRe` y1
 -- Code Template helper functions
 
 vLook :: (HasSymbol a, HasSymbol i, HasUID a, HasUID i) => a -> i -> CodeExpr -> CodeExpr
-vLook a i_ p = idx (sy a) (addI (sy i_) p)
+vLook a i_ p = idx (sy a) (sy i_ `addI` p)
 
 aLook :: (HasSymbol a, HasSymbol i, HasSymbol j, HasUID a, HasUID i, HasUID j) =>
   a -> i -> j -> CodeExpr
 aLook a i_ j_ = idx (idx (sy a) (sy i_)) (sy j_)
 
 getCol :: (HasSymbol a, HasSymbol i, HasUID a, HasUID i) => a -> i -> CodeExpr -> CodeExpr
-getCol a_ i_ p = apply (asVC extractColumnCT) [sy a_, addI (sy i_) p]
+getCol a_ i_ p = apply (asVC extractColumnCT) [sy a_, sy i_ `addI` p]
 
 call :: Func -> [QuantityDict] -> FuncStmt
 call f l = FVal $ apply (asVC f) $ map sy l

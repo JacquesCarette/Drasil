@@ -9,11 +9,11 @@ module Language.Drasil.Chunk.Code (
   DefiningCodeExpr(..)
 ) where
 
-import Control.Lens
+import Control.Lens ((^.), view)
 
-import Language.Drasil
+import Language.Drasil (HasSpace(typ), Space(Actor), codeSymb)
 import Language.Drasil.Chunk.CodeBase
-import Language.Drasil.Printers
+import Language.Drasil.Printers (symbolDoc)
 
 import Text.PrettyPrint.HughesPJ (render)
 

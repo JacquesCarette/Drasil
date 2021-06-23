@@ -8,7 +8,6 @@ module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
 
 import Language.Drasil (HasSymbol, HasUID(..), HasSpace(..),
   Space(..), RealInterval(..), UID, Constraint(..), Inclusive (..))
-import qualified Language.Drasil as L
 import Database.Drasil (symbResolve)
 import Language.Drasil.CodeExpr hiding (int)
 import Language.Drasil.Code.Expr.Development

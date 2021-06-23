@@ -3,7 +3,7 @@ module Language.Drasil.Chunk.CodeDefinition (
   CodeDefinition, DefinitionType(..), qtoc, qtov, odeDef, auxExprs, defType, 
 ) where
 
-import Language.Drasil hiding (Matrix)
+import Language.Drasil
 import Language.Drasil.Chunk.Code (CodeChunk(..), CodeIdea(codeName, codeChunk),
   VarOrFunc(..), quantvar, quantfunc, funcPrefix, DefiningCodeExpr(..))
 import Language.Drasil.CodeExpr (CodeExpr, matrix, renderExpr)

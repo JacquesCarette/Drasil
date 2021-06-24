@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 8ee95da946ddc57d058721c64c65f34f09c628f7192a33e00078d91ad21b28d8
+-- hash: 50f2284fbcaf95776a8b72c132cb3ea2d8fb45eefd3734b41fa80e57676efffa
 
 name:           drasil-code-base
 version:        0.1.9.0
@@ -27,9 +27,9 @@ library
       Language.Drasil.Code.Expr.Development
   other-modules:
       Language.Drasil.Code.Expr
+      Language.Drasil.Code.Expr.Convert
       Language.Drasil.Code.Expr.Extract
       Language.Drasil.Code.Expr.Precedence
-      Language.Drasil.Code.Expr.Render
   hs-source-dirs:
       ./
   ghc-options: -Wall -Wredundant-constraints

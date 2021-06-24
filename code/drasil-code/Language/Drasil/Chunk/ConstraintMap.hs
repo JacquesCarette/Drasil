@@ -6,7 +6,7 @@ import Control.Lens ((^.))
 
 import Language.Drasil (Constraint, HasUID(..), UID, Constrained(..),
   isPhysC, isSfwrC)
-import Language.Drasil.Code.Expr.Development (CodeExpr, renderConstraint)
+import Language.Drasil.Code.Expr.Development (CodeExpr, constraint)
 import qualified Data.Map as Map
 
 -- | Type synonym for 'Constraint CodeExpr'
@@ -17,7 +17,7 @@ type ConstraintCEMap = Map.Map UID [ConstraintCE]
 
 -- | Creates a map from 'UID' to 'Constraint's for constrained chunks.
 constraintMap :: (HasUID c, Constrained c) => [c] -> ConstraintCEMap
-constraintMap = Map.fromList . map (\x -> (x ^. uid, map renderConstraint $ x ^. constraints))
+constraintMap = Map.fromList . map (\x -> (x ^. uid, map constraint $ x ^. constraints))
 
 -- | Returns a pair of a chunk and its physical constraints.
 physLookup :: HasUID q => ConstraintCEMap -> q -> (q, [ConstraintCE])

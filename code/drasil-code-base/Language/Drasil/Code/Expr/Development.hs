@@ -11,7 +11,7 @@ module Language.Drasil.Code.Expr.Development (
     -- Precedence
     eprec, precA, precB,
     -- Render
-    renderExpr, renderRealInterval, renderConstraint
+    expr, realInterval, constraint
 ) where
 
 import Language.Drasil.Code.Expr (CodeExpr(..), UFuncVec(..), UFuncB(..),
@@ -20,5 +20,4 @@ import Language.Drasil.Code.Expr (CodeExpr(..), UFuncVec(..), UFuncB(..),
     ArithBinOp(..))
 import Language.Drasil.Code.Expr.Extract (eDep, eDep', eNamesRI, eNamesRI')
 import Language.Drasil.Code.Expr.Precedence (eprec, precA, precB)
-import Language.Drasil.Code.Expr.Render (renderExpr, renderRealInterval,
-    renderConstraint)
+import Language.Drasil.Code.Expr.Convert (expr, realInterval, constraint)

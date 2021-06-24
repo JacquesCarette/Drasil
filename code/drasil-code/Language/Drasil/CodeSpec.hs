@@ -15,7 +15,7 @@ import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, const
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef,
   auxExprs)
 import Language.Drasil.Choices (Choices(..))
-import Language.Drasil.Code.Expr.Development (renderExpr, eNamesRI)
+import Language.Drasil.Code.Expr.Development (expr, eNamesRI)
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
 
 import Utils.Drasil (subsetOf)
@@ -141,7 +141,7 @@ asVC' (FData (FuncData n _ _))     = vc n (nounPhraseSP n) (Variable n) Real
 getDerivedInputs :: [DataDefinition] -> [Input] -> [Const] ->
   ChunkDB -> [QDefinition]
 getDerivedInputs ddefs ins cnsts sm =
-  filter ((`subsetOf` refSet) . flip codevars sm . renderExpr . (^. defnExpr)) (map qdFromDD ddefs)
+  filter ((`subsetOf` refSet) . flip codevars sm . expr . (^. defnExpr)) (map qdFromDD ddefs)
   where refSet = ins ++ map quantvar cnsts
 
 type Known = CodeVarChunk

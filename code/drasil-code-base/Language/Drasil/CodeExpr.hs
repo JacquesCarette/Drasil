@@ -7,14 +7,14 @@ module Language.Drasil.CodeExpr (CodeExpr,
   ($&&), ($-), ($/), ($^), ($=>), ($<=>), ($=), ($!=), ($<), ($>),
   ($<=), ($>=), 
   addI, addRe, mulI, mulRe, dim, idx,
-  renderExpr) where
+  expr) where
 
 import Language.Drasil (Space(Actor), Callable, HasSpace(..), HasSymbol,
   HasUID(..), IsArgumentName)
 
 import Language.Drasil.Chunk.CodeBase (CodeIdea, CodeVarChunk)
 import Language.Drasil.Code.Expr
-import Language.Drasil.Code.Expr.Render (renderExpr)
+import Language.Drasil.Code.Expr.Convert (expr)
 
 import Control.Lens ((^.))
 

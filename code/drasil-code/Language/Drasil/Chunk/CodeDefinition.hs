@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.CodeDefinition (
 import Language.Drasil
 import Language.Drasil.Chunk.Code (CodeChunk(..), CodeIdea(codeName, codeChunk),
   VarOrFunc(..), quantvar, quantfunc, funcPrefix, DefiningCodeExpr(..))
-import Language.Drasil.CodeExpr (CodeExpr, matrix, renderExpr)
+import Language.Drasil.CodeExpr (CodeExpr, matrix, expr)
 import Language.Drasil.Data.ODEInfo (ODEInfo(..), ODEOptions(..))
 
 import Control.Lens ((^.), makeLenses, view)
@@ -53,14 +53,14 @@ instance DefiningCodeExpr CodeDefinition where codeExpr = def
 
 -- | Constructs a 'CodeDefinition' where the underlying 'CodeChunk' is for a function.
 qtoc :: (Quantity q, DefiningExpr q, MayHaveUnit q) => q -> CodeDefinition
-qtoc q = CD (codeChunk $ quantfunc q) (renderExpr $ q ^. defnExpr) [] Definition
+qtoc q = CD (codeChunk $ quantfunc q) (expr $ q ^. defnExpr) [] Definition
 
 -- | Constructs a 'CodeDefinition' where the underlying 'CodeChunk' is for a variable.
 qtov :: QDefinition -> CodeDefinition
-qtov q = CD (codeChunk $ quantvar q) (renderExpr $ q ^. defnExpr) [] Definition
+qtov q = CD (codeChunk $ quantvar q) (expr $ q ^. defnExpr) [] Definition
 
 -- | Constructs a 'CodeDefinition' for an ODE.
 odeDef :: ODEInfo -> CodeDefinition
-odeDef info = CD (codeChunk $ quantfunc $ depVar info) (matrix [map renderExpr $ odeSyst info])
-  (map (renderExpr . ($ info)) [tInit, tFinal, initVal, absTol . odeOpts, relTol . odeOpts, 
+odeDef info = CD (codeChunk $ quantfunc $ depVar info) (matrix [map expr $ odeSyst info])
+  (map (expr . ($ info)) [tInit, tFinal, initVal, absTol . odeOpts, relTol . odeOpts, 
   stepSize . odeOpts, initValFstOrd . odeOpts]) ODE

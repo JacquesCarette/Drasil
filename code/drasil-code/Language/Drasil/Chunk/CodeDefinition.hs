@@ -61,6 +61,6 @@ qtov q = CD (codeChunk $ quantvar q) (expr $ q ^. defnExpr) [] Definition
 
 -- | Constructs a 'CodeDefinition' for an ODE.
 odeDef :: ODEInfo -> CodeDefinition
-odeDef info = CD (codeChunk $ quantfunc $ depVar info) (matrix [map expr $ odeSyst info])
-  (map (expr . ($ info)) [tInit, tFinal, initVal, absTol . odeOpts, relTol . odeOpts, 
+odeDef info = CD (codeChunk $ quantfunc $ depVar info) (matrix [odeSyst info])
+  (map ($ info) [tInit, tFinal, initVal, absTol . odeOpts, relTol . odeOpts, 
   stepSize . odeOpts, initValFstOrd . odeOpts]) ODE

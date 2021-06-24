@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 8d02fb21468301577ad2455f4945a9a751df3dfe91c9e6f72c9e80c73ed6cac7
+-- hash: 3111e14489cd0016dec1bf2c90fe887d100e13dba57751923dd57c33ddaecb6a
 
 name:           drasil-example
 version:        0.1.24.0
@@ -169,8 +169,9 @@ executable nopcm
       Drasil.NoPCM.IMods
       Drasil.NoPCM.GenDefs
       Drasil.NoPCM.Goals
-      Drasil.NoPCM.Requirements
+      Drasil.NoPCM.ODEs
       Drasil.NoPCM.References
+      Drasil.NoPCM.Requirements
       Drasil.SWHS.Assumptions
       Drasil.SWHS.Body
       Drasil.SWHS.Changes
@@ -217,6 +218,7 @@ executable pdController
       Drasil.PDController.IModel
       Drasil.PDController.IntroSection
       Drasil.PDController.GenSysDesc
+      Drasil.PDController.ODEs
       Drasil.PDController.References
       Drasil.PDController.Requirements
       Drasil.PDController.SpSysDesc

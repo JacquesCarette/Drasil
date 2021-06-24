@@ -124,8 +124,9 @@ executables:
     - Drasil.NoPCM.IMods
     - Drasil.NoPCM.GenDefs
     - Drasil.NoPCM.Goals
-    - Drasil.NoPCM.Requirements
+    - Drasil.NoPCM.ODEs
     - Drasil.NoPCM.References
+    - Drasil.NoPCM.Requirements
     - Drasil.SWHS.Assumptions
     - Drasil.SWHS.Body
     - Drasil.SWHS.Changes
@@ -153,6 +154,7 @@ executables:
     - Drasil.PDController.IModel
     - Drasil.PDController.IntroSection
     - Drasil.PDController.GenSysDesc
+    - Drasil.PDController.ODEs
     - Drasil.PDController.References
     - Drasil.PDController.Requirements
     - Drasil.PDController.SpSysDesc

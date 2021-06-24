@@ -9,8 +9,11 @@ module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
 import Language.Drasil (HasSymbol, HasUID(..), HasSpace(..),
   Space(..), RealInterval(..), UID, Constraint(..), Inclusive (..))
 import Database.Drasil (symbResolve)
-import Language.Drasil.CodeExpr hiding (int)
-import Language.Drasil.Code.Expr.Development
+import Language.Drasil.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&))
+import Language.Drasil.Code.Expr.Development (CodeExpr(..), ArithBinOp(..),
+  AssocArithOper(..), AssocBoolOper(..), BoolBinOp(..), EqBinOp(..),
+  LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncVec(..),
+  VVNBinOp(..), VVVBinOp(..))
 import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
 import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, ctorCall,

@@ -60,19 +60,19 @@ scipyCall :: ODEInfo -> ExternalLibraryCall
 scipyCall info = externalLibCall [
   mandatoryStepFill $ callStepFill $ libCallFill [functionArgFill
     (map unnamedParamFill [indepVar info, depVar info])
-    (returnExprListFill $ map expr $ odeSyst info)],
+    (returnExprListFill $ odeSyst info)],
   uncurry choiceStepFill (chooseMethod $ solveMethod $ odeOpts info),
   mandatoryStepsFill [callStepFill $ libCallFill $ map basicArgFill
-      [expr $ initVal info, expr $ tInit info],
-    initSolListWithValFill (depVar info) (expr $ initVal info),
-    solveAndPopulateWhileFill (libCallFill []) (expr $ tFinal info)
-      (libCallFill [basicArgFill (addI (field r t) (expr $ stepSize (odeOpts info)))])
+      [initVal info, tInit info],
+    initSolListWithValFill (depVar info) (initVal info),
+    solveAndPopulateWhileFill (libCallFill []) (tFinal info)
+      (libCallFill [basicArgFill (addI (field r t) (stepSize (odeOpts info)))])
       (depVar info)]]
   where chooseMethod Adams = (0, solveMethodFill)
         chooseMethod BDF = (1, solveMethodFill)
         chooseMethod RK45 = (2, solveMethodFill)
         solveMethodFill = callStepFill $ libCallFill $ map basicArgFill
-          [expr $ absTol $ odeOpts info, expr $ relTol $ odeOpts info]
+          [absTol $ odeOpts info, relTol $ odeOpts info]
 
 -- This package solves a system of ODE using the scipy odeint method.
 -- The odeint method solves the ode using the LSoda solver.
@@ -92,12 +92,12 @@ scipyLSodaODE = externalLib [
 
 scipyLSodaCall :: ODEInfo -> ExternalLibraryCall
 scipyLSodaCall info = externalLibCall [
-  mandatoryStepsFill [callStepFill $ libCallFill $ map (basicArgFill . expr)
+  mandatoryStepsFill [callStepFill $ libCallFill $ map basicArgFill
       [tInit info, tFinal info, stepSize $ odeOpts info]],
   mandatoryStepFill $ callStepFill $ libCallFill [functionArgFill
       (map unnamedParamFill [depVar info, indepVar info])
-      (returnExprListFill $ map expr $ odeSyst info),
-      basicArgFill (matrix [[expr $ initVal info, expr $ initValFstOrd $ odeOpts info]]),
+      (returnExprListFill $ odeSyst info),
+      basicArgFill (matrix [[initVal info, initValFstOrd $ odeOpts info]]),
       basicArgFill (sy xAxis)],
   mandatoryStepFill $ initSolWithValFill (depVar info)
       (idx (sy transpose) (int 0))
@@ -203,14 +203,14 @@ oslo = externalLib [
 
 osloCall :: ODEInfo -> ExternalLibraryCall
 osloCall info = externalLibCall [
-  mandatoryStepFill $ callStepFill $ libCallFill [basicArgFill $ expr $ initVal info],
+  mandatoryStepFill $ callStepFill $ libCallFill [basicArgFill $ initVal info],
   choiceStepFill (chooseMethod $ solveMethod $ odeOpts info) $ callStepFill $
-    libCallFill [basicArgFill $ expr $ tInit info,
+    libCallFill [basicArgFill $ tInit info,
       functionArgFill (map unnamedParamFill [indepVar info, vecDepVar info]) $
         callStepFill $ libCallFill $ map userDefinedArgFill (modifiedODESyst "arrayvec" info),
-      recordArgFill [expr $ absTol $ odeOpts info, expr $ relTol $ odeOpts info]],
+      recordArgFill [absTol $ odeOpts info, relTol $ odeOpts info]],
   mandatoryStepsFill (callStepFill (libCallFill $ map basicArgFill
-      [expr $ tInit info, expr $ tFinal info, expr $ stepSize $ odeOpts info]) :
+      [tInit info, tFinal info, stepSize $ odeOpts info]) :
     populateSolListFill (depVar info))]
   where chooseMethod RK45 = 0
         chooseMethod BDF = 1
@@ -336,7 +336,7 @@ apacheODE = externalLib [
 apacheODECall :: ODEInfo -> ExternalLibraryCall
 apacheODECall info = externalLibCall [
   choiceStepFill (chooseMethod $ solveMethod $ odeOpts info) $ callStepFill $
-    libCallFill (map (basicArgFill . expr . ($ odeOpts info)) [stepSize, stepSize, absTol, relTol]),
+    libCallFill (map (basicArgFill . ($ odeOpts info)) [stepSize, stepSize, absTol, relTol]),
   mandatoryStepsFill [callStepFill $ libCallFill [
       customObjArgFill [pubStateVar $ depVar info] (implementationFill [
         methodInfoFill [] [initSolListFromArrayFill $ depVar info], methodInfoFill []
@@ -349,8 +349,8 @@ apacheODECall info = externalLibCall [
         methodInfoFill [] [fixedStatementFill],
         methodInfoFill (map (unnamedParamFill . listToArray) [depVar info, ddep])
           [assignArrayIndexFill (listToArray ddep) (modifiedODESyst "array" info)]])
-      : map basicArgFill [expr $ tInit info, matrix [[expr $ initVal info]], expr $ tFinal info,
-        matrix [[expr $ initVal info]]],
+      : map basicArgFill [tInit info, matrix [[initVal info]], tFinal info,
+        matrix [[initVal info]]],
     assignSolFromObjFill $ depVar info]]
   where chooseMethod Adams = 0
         chooseMethod RK45 = 1
@@ -481,15 +481,15 @@ odeintCall info = externalLibCall [
       constructorInfoFill (map userDefinedParamFill $ otherVars info)
         (zip (otherVars info) (map sy $ otherVars info)) [],
       methodInfoFill [unnamedParamPBVFill $ depVar info, unnamedParamFill ddep]
-        [assignArrayIndexFill ddep (map expr $ odeSyst info)]]) :
-    map basicArgFill [matrix [[expr $ initVal info]], expr $ tInit info, expr $ tFinal info,
-      expr $ stepSize $ odeOpts info] ++ [
+        [assignArrayIndexFill ddep (odeSyst info)]]) :
+    map basicArgFill [matrix [[initVal info]], tInit info, tFinal info,
+      stepSize $ odeOpts info] ++ [
     customObjArgFill [privStateVar $ depVar info] (customClassFill [
       constructorInfoFill [unnamedParamFill $ depVar info]
         [(depVar info, sy $ depVar info)] [],
       methodInfoFill [] [appendCurrSolFill $ depVar info]])]]
   where chooseMethod RK45 = (0, map (callStepFill . libCallFill . map
-          basicArgFill) [[], [expr $ absTol $ odeOpts info, expr $ relTol $ odeOpts info]])
+          basicArgFill) [[], [absTol $ odeOpts info, relTol $ odeOpts info]])
         chooseMethod Adams = (1, [callStepFill $ libCallFill []])
         chooseMethod _ = error odeMethodUnavailable
         ddep = diffCodeChunk $ depVar info
@@ -592,7 +592,7 @@ diffCodeChunk c = quantvar $ implVar' ("d" ++ c ^. uid)
 -- So we need a way to switch the dependent variable from list to array,
 -- and the array version must have a distinct UID so it can be stored in the DB
 modifiedODESyst :: String -> ODEInfo -> [CodeExpr]
-modifiedODESyst sufx info = map (replaceDepVar . expr) (odeSyst info)
+modifiedODESyst sufx info = map replaceDepVar (odeSyst info)
   where
     replaceDepVar cc@(C c) | c == depVar info ^. uid = C (c ++ "_" ++ sufx)
                            | otherwise               = cc

@@ -1,13 +1,18 @@
 {-# OPTIONS_GHC -fno-warn-redundant-constraints #-}
--- Defines constructors for Exprs often used in relation to code generation.
+-- Defines constructors for CodeExprs often used in relation to code generation.
 module Language.Drasil.CodeExpr (CodeExpr, 
   sy, str, int, dbl, exactDbl, matrix,
+  frac, recip_, abs_, neg, log,  ln, sqrt,
+  sin, cos, tan, sec, csc, cot, arcsin, arccos, arctan,
+  exp, dim, norm, not_,
   new, newWithNamedArgs, message, msgWithNamedArgs,
   field, apply, apply1, apply2, applyWithNamedArgs,
   ($&&), ($-), ($/), ($^), ($=>), ($<=>), ($=), ($!=), ($<), ($>),
   ($<=), ($>=), 
-  addI, addRe, mulI, mulRe, dim, idx,
+  addI, addRe, mulI, mulRe, idx,
   expr) where
+
+import Prelude hiding (exp, sin, cos, tan, sqrt, log)
 
 import Language.Drasil (Space(Actor), Callable, HasSpace(..), HasSymbol,
   HasUID(..), IsArgumentName)
@@ -18,35 +23,126 @@ import Language.Drasil.Code.Expr.Convert (expr)
 
 import Control.Lens ((^.))
 
+-- | Smart constructor for chunk symbols.
 sy :: (HasUID u, HasSymbol u) => u -> CodeExpr
 sy = C . (^. uid)
 
+-- | Smart constructor for strings.
 str :: String -> CodeExpr
 str = Str
 
+-- | Smart constructor for integers.
 int :: Integer -> CodeExpr
 int = Int
 
+-- | Smart constructor for doubles.
 dbl :: Double -> CodeExpr
 dbl = Dbl
 
+-- | Smart constructor for exact doubles.
 exactDbl :: Integer -> CodeExpr
 exactDbl = ExactDbl
 
+-- | Smart constructor for matrices.
 matrix :: [[CodeExpr]] -> CodeExpr
 matrix = Matrix
 
--- | Constructs an Expr for actor creation (constructor call)
+-- | Smart constructor for fractions.
+frac :: Integer -> Integer -> CodeExpr
+frac l r = exactDbl l $/ exactDbl r
+
+-- | Smart constructor for rational expressions (only in 1/x form).
+recip_ :: CodeExpr -> CodeExpr
+recip_ denom = exactDbl 1 $/ denom
+
+
+-- | Smart constructor for taking the absolute value of an expression.
+abs_ :: CodeExpr -> CodeExpr
+abs_ = UnaryOp Abs
+
+-- | Smart constructor for negating an expression.
+neg :: CodeExpr -> CodeExpr 
+neg = UnaryOp Neg
+
+-- | Smart constructor to take the log of an expression.
+log :: CodeExpr -> CodeExpr
+log = UnaryOp Log
+
+-- | Smart constructor to take the ln of an expression.
+ln :: CodeExpr -> CodeExpr
+ln = UnaryOp Ln
+
+-- | Smart constructor to take the square root of an expression.
+sqrt :: CodeExpr -> CodeExpr
+sqrt = UnaryOp Sqrt
+
+-- | Smart constructor to apply sin to an expression.
+sin :: CodeExpr -> CodeExpr
+sin = UnaryOp Sin
+
+-- | Smart constructor to apply cos to an expression.
+cos :: CodeExpr -> CodeExpr 
+cos = UnaryOp Cos
+
+-- | Smart constructor to apply tan to an expression.
+tan :: CodeExpr -> CodeExpr
+tan = UnaryOp Tan
+
+-- | Smart constructor to apply sec to an expression.
+sec :: CodeExpr -> CodeExpr 
+sec = UnaryOp Sec
+
+-- | Smart constructor to apply csc to an expression.
+csc :: CodeExpr -> CodeExpr
+csc = UnaryOp Csc
+
+-- | Smart constructor to apply cot to an expression.
+cot :: CodeExpr -> CodeExpr 
+cot = UnaryOp Cot
+
+-- | Smart constructor to apply arcsin to an expression.
+arcsin :: CodeExpr -> CodeExpr 
+arcsin = UnaryOp Arcsin
+
+-- | Smart constructor to apply arccos to an expression.
+arccos :: CodeExpr -> CodeExpr 
+arccos = UnaryOp Arccos
+
+-- | Smart constructor to apply arctan to an expression.
+arctan :: CodeExpr -> CodeExpr 
+arctan = UnaryOp Arctan
+
+-- | Smart constructor for the exponential (base e) function.
+exp :: CodeExpr -> CodeExpr
+exp = UnaryOp Exp
+
+-- | Smart constructor for calculating the dimension of a vector.
+dim :: CodeExpr -> CodeExpr
+dim = UnaryOpVec Dim
+
+-- | Smart constructor for calculating the normal form of a vector.
+norm :: CodeExpr -> CodeExpr
+norm = UnaryOpVec Norm
+
+-- | Smart constructor for applying logical negation to an expression.
+not_ :: CodeExpr -> CodeExpr
+not_ = UnaryOpB Not
+
+-- | Smart constructor for indexing.
+idx :: CodeExpr -> CodeExpr -> CodeExpr
+idx = LABinaryOp Index
+
+-- | Constructs a CodeExpr for actor creation (constructor call)
 new :: (Callable f, HasUID f, CodeIdea f) => f -> [CodeExpr] -> CodeExpr
 new c ps = New (c ^. uid) ps []
 
--- | Constructs an Expr for actor creation (constructor call) that uses named arguments
+-- | Constructs a CodeExpr for actor creation (constructor call) that uses named arguments
 newWithNamedArgs :: (Callable f, HasUID f, CodeIdea f, HasUID a, 
   IsArgumentName a) => f -> [CodeExpr] -> [(a, CodeExpr)] -> CodeExpr
 newWithNamedArgs c ps ns = New (c ^. uid) ps (zip (map ((^. uid) . fst) ns) 
   (map snd ns))
 
--- | Constructs an Expr for actor messaging (method call)
+-- | Constructs a CodeExpr for actor messaging (method call)
 message :: (Callable f, HasUID f, CodeIdea f, HasUID c, HasSpace c, CodeIdea c) 
   => c -> f -> [CodeExpr] -> CodeExpr
 message o m ps = checkObj (o ^. typ)
@@ -54,7 +150,7 @@ message o m ps = checkObj (o ^. typ)
         checkObj _ = error $ "Invalid actor message: Actor should have " ++ 
           "Actor space"
 
--- | Constructs an Expr for actor messaging (method call) that uses named arguments
+-- | Constructs a CodeExpr for actor messaging (method call) that uses named arguments
 msgWithNamedArgs :: (Callable f, HasUID f, CodeIdea f, HasUID c, HasSpace c, 
   CodeIdea c, HasUID a, IsArgumentName a) => c -> f -> [CodeExpr] -> [(a, CodeExpr)] -> 
   CodeExpr
@@ -64,7 +160,7 @@ msgWithNamedArgs o m ps as = checkObj (o ^. typ)
         checkObj _ = error $ "Invalid actor message: Actor should have " ++ 
           "Actor space"
 
--- | Constructs an Expr representing the field of an actor
+-- | Constructs a CodeExpr representing the field of an actor
 field :: CodeVarChunk -> CodeVarChunk -> CodeExpr
 field o f = checkObj (o ^. typ)
   where checkObj (Actor _) = Field (o ^. uid) (f ^. uid)
@@ -120,13 +216,6 @@ a $&& b = AssocB And [a, b]
 -- | Greater than or equal to.
 ($>=) = OrdBinaryOp GEq
 
-dim :: CodeExpr -> CodeExpr
-dim = UnaryOpVec Dim
-
-idx :: CodeExpr -> CodeExpr -> CodeExpr
-idx = LABinaryOp Index
-
--- Generate below 4 functions with TH?
 -- | Add two expressions (Integers).
 addI :: CodeExpr -> CodeExpr -> CodeExpr
 addI l (Int 0) = l

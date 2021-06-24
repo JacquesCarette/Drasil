@@ -1,10 +1,13 @@
 module Drasil.PDController.ODEs where
 
-import Language.Drasil.Code
+import Language.Drasil.Code (odeInfo, odeOptions, quantvar, ODEInfo,
+    ODEMethod(RK45), ODEOptions)
 import Language.Drasil.CodeExpr
 
 import Data.Drasil.Quantities.Physics (time)
-import Drasil.PDController.Unitals
+import Drasil.PDController.Unitals (qdSetPointTD, qdPropGain, qdDerivGain,
+    qdSimTime, ipSetPt, ipDerivGain, ipPropGain, opProcessVariable,
+    qdStepTime, odeRelTolConst, odeAbsTolConst)
 
 
 pidODEOptions :: ODEOptions

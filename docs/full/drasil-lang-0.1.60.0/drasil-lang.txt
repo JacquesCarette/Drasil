@@ -1662,9 +1662,10 @@ data Sentence
 -- | Lifts an expression into a Sentence.
 [E] :: DisplayExpr -> Sentence
 
--- | Takes a <a>UID</a> to a reference. Resolves the reference later
---   (similar to Ch).
-[Ref] :: UID -> RefInfo -> Sentence
+-- | Takes a <a>UID</a> to a reference, a display name (<a>Sentence</a>),
+--   and any additional reference display information (<a>RefInfo</a>).
+--   Resolves the reference later (similar to Ch).
+[Ref] :: UID -> Sentence -> RefInfo -> Sentence
 
 -- | Adds quotation marks around a Sentence.
 [Quote] :: Sentence -> Sentence
@@ -1780,6 +1781,46 @@ lnames :: Sentence -> [UID]
 
 -- | Get <i>reference</i> <a>UID</a>s from <a>Sentence</a>s.
 lnames' :: [Sentence] -> [UID]
+
+module Language.Drasil.Reference
+
+-- | A Reference contains the identifier (<a>UID</a>), a reference address
+--   (<a>LblType</a>), a human-readable shortname (<a>ShortName</a>), and
+--   any extra information about the reference (<a>RefInfo</a>).
+data Reference
+Reference :: UID -> LblType -> ShortName -> RefInfo -> Reference
+
+-- | Projector function that creates a <a>Reference</a> from something
+--   <a>Referable</a>.
+ref :: (Referable r, HasShortName r) => r -> Reference
+
+-- | Takes the reference <a>UID</a> and wraps it into a <a>Sentence</a>.
+refS :: (Referable r, HasShortName r) => r -> Sentence
+
+-- | Takes a <a>Reference</a> with a name to be displayed and wraps it into
+--   a <a>Sentence</a>. Does not overwrite the shortname contained in the
+--   reference, but will only display as the given <a>Sentence</a>.
+namedRef :: (Referable r, HasShortName r) => r -> Sentence -> Sentence
+
+-- | Takes a <a>Reference</a> with additional display info. Uses the
+--   internal shortname for its display name.
+complexRef :: (Referable r, HasShortName r) => r -> RefInfo -> Sentence
+
+-- | Takes a <a>Reference</a> with a name to be displayed and any
+--   additional information and wraps it into a <a>Sentence</a>. Does not
+--   overwrite the shortname contained in the reference, but will only
+--   display as the given <a>Sentence</a> along with the given
+--   <a>RefInfo</a>.
+namedComplexRef :: (Referable r, HasShortName r) => r -> Sentence -> RefInfo -> Sentence
+
+-- | Projector function that creates a <a>Reference</a> from something
+--   <a>Referable</a>. Also accepts <a>RefInfo</a>.
+refInfo :: (Referable r, HasShortName r) => r -> RefInfo -> Reference
+instance GHC.Classes.Eq Language.Drasil.Reference.Reference
+instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Reference.Reference
+instance Language.Drasil.Classes.Core.HasRefAddress Language.Drasil.Reference.Reference
+instance Language.Drasil.Classes.Core2.HasShortName Language.Drasil.Reference.Reference
+instance Language.Drasil.Classes.Core.Referable Language.Drasil.Reference.Reference
 
 module Language.Drasil.NounPhrase.Core
 
@@ -2300,44 +2341,6 @@ instance Language.Drasil.Classes.Core2.HasShortName Language.Drasil.Chunk.Citati
 instance Language.Drasil.Classes.Citations.HasFields Language.Drasil.Chunk.Citation.Citation
 instance Language.Drasil.Classes.Core.Referable Language.Drasil.Chunk.Citation.Citation
 instance Language.Drasil.Classes.Core.HasRefAddress Language.Drasil.Chunk.Citation.Citation
-
-module Language.Drasil.Reference
-
--- | A Reference contains the identifier (<a>UID</a>), a reference address
---   (<a>LblType</a>), a human-readable shortname (<a>ShortName</a>), and
---   any extra information about the reference (<a>RefInfo</a>).
-data Reference
-Reference :: UID -> LblType -> ShortName -> RefInfo -> Reference
-
--- | Projector function that creates a <a>Reference</a> from something
---   <a>Referable</a>.
-makeRef2 :: (Referable l, HasShortName l) => l -> Reference
-
--- | Takes the reference <a>UID</a> and wraps it into a <a>Sentence</a>.
-makeRef2S :: (Referable l, HasShortName l) => l -> Sentence
-
--- | Similar to <a>makeRef2</a>, but only turns a citation into a
---   reference.
-makeCite :: Citation -> Reference
-
--- | Similar to <a>makeRef2S</a>, but only takes a citation.
-makeCiteS :: Citation -> Sentence
-
--- | Makes a <a>Reference</a> from a <a>Citation</a> with additional
---   information.
-makeCiteInfo :: Citation -> RefInfo -> Reference
-
--- | Makes a <a>Reference</a> from a <a>Citation</a> with additional
---   information and then wraps into <a>Sentence</a> form.
-makeCiteInfoS :: Citation -> RefInfo -> Sentence
-
--- | Smart constructor for making a <a>Referable</a> <a>Reference</a>.
-rw :: (Referable r, HasShortName r) => r -> Reference
-instance GHC.Classes.Eq Language.Drasil.Reference.Reference
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Reference.Reference
-instance Language.Drasil.Classes.Core.HasRefAddress Language.Drasil.Reference.Reference
-instance Language.Drasil.Classes.Core2.HasShortName Language.Drasil.Reference.Reference
-instance Language.Drasil.Classes.Core.Referable Language.Drasil.Reference.Reference
 
 module Language.Drasil.Document.Core
 
@@ -4841,9 +4844,10 @@ data Sentence
 -- | Lifts an expression into a Sentence.
 [E] :: DisplayExpr -> Sentence
 
--- | Takes a <a>UID</a> to a reference. Resolves the reference later
---   (similar to Ch).
-[Ref] :: UID -> RefInfo -> Sentence
+-- | Takes a <a>UID</a> to a reference, a display name (<a>Sentence</a>),
+--   and any additional reference display information (<a>RefInfo</a>).
+--   Resolves the reference later (similar to Ch).
+[Ref] :: UID -> Sentence -> RefInfo -> Sentence
 
 -- | Adds quotation marks around a Sentence.
 [Quote] :: Sentence -> Sentence
@@ -5484,30 +5488,32 @@ RefNote :: String -> RefInfo
 data Reference
 Reference :: UID -> LblType -> ShortName -> RefInfo -> Reference
 
--- | Takes the reference <a>UID</a> and wraps it into a <a>Sentence</a>.
-makeRef2S :: (Referable l, HasShortName l) => l -> Sentence
-
--- | Similar to <a>makeRef2</a>, but only turns a citation into a
---   reference.
-makeCite :: Citation -> Reference
-
--- | Similar to <a>makeRef2S</a>, but only takes a citation.
-makeCiteS :: Citation -> Sentence
-
 -- | Projector function that creates a <a>Reference</a> from something
 --   <a>Referable</a>.
-makeRef2 :: (Referable l, HasShortName l) => l -> Reference
+ref :: (Referable r, HasShortName r) => r -> Reference
 
--- | Makes a <a>Reference</a> from a <a>Citation</a> with additional
---   information.
-makeCiteInfo :: Citation -> RefInfo -> Reference
+-- | Projector function that creates a <a>Reference</a> from something
+--   <a>Referable</a>. Also accepts <a>RefInfo</a>.
+refInfo :: (Referable r, HasShortName r) => r -> RefInfo -> Reference
 
--- | Makes a <a>Reference</a> from a <a>Citation</a> with additional
---   information and then wraps into <a>Sentence</a> form.
-makeCiteInfoS :: Citation -> RefInfo -> Sentence
+-- | Takes the reference <a>UID</a> and wraps it into a <a>Sentence</a>.
+refS :: (Referable r, HasShortName r) => r -> Sentence
 
--- | Smart constructor for making a <a>Referable</a> <a>Reference</a>.
-rw :: (Referable r, HasShortName r) => r -> Reference
+-- | Takes a <a>Reference</a> with a name to be displayed and wraps it into
+--   a <a>Sentence</a>. Does not overwrite the shortname contained in the
+--   reference, but will only display as the given <a>Sentence</a>.
+namedRef :: (Referable r, HasShortName r) => r -> Sentence -> Sentence
+
+-- | Takes a <a>Reference</a> with additional display info. Uses the
+--   internal shortname for its display name.
+complexRef :: (Referable r, HasShortName r) => r -> RefInfo -> Sentence
+
+-- | Takes a <a>Reference</a> with a name to be displayed and any
+--   additional information and wraps it into a <a>Sentence</a>. Does not
+--   overwrite the shortname contained in the reference, but will only
+--   display as the given <a>Sentence</a> along with the given
+--   <a>RefInfo</a>.
+namedComplexRef :: (Referable r, HasShortName r) => r -> Sentence -> RefInfo -> Sentence
 
 -- | Retrieves the <a>String</a> contained in a <a>LblType</a>.
 getAdd :: LblType -> String

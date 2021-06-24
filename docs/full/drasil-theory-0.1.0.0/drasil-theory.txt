@@ -94,13 +94,13 @@ data DataDefinition
 DatDef :: QDefinition -> ScopeType -> [Reference] -> Maybe Derivation -> ShortName -> String -> [Sentence] -> DataDefinition
 [_qd] :: DataDefinition -> QDefinition
 [_scp] :: DataDefinition -> ScopeType
-[_ref] :: DataDefinition -> [Reference]
+[_rf] :: DataDefinition -> [Reference]
 [_deri] :: DataDefinition -> Maybe Derivation
 [lbl] :: DataDefinition -> ShortName
 [ra] :: DataDefinition -> String
 [_notes] :: DataDefinition -> [Sentence]
 scp :: Lens' DataDefinition ScopeType
-ref :: Lens' DataDefinition [Reference]
+rf :: Lens' DataDefinition [Reference]
 qd :: Lens' DataDefinition QDefinition
 notes :: Lens' DataDefinition [Sentence]
 deri :: Lens' DataDefinition (Maybe Derivation)

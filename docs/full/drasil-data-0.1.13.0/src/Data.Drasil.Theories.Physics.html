@@ -218,8 +218,8 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel
 </span><a href="Data.Drasil.Theories.Physics.html#newtonSL"><span class="hs-identifier hs-var">newtonSL</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UID -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;from&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TheoryModel -&gt; Sentence
-forall l. (Referable l, HasShortName l) =&gt; l -&gt; Sentence
-</span><span class="hs-identifier hs-var">makeRef2S</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel
+forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
+</span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel
 </span><a href="Data.Drasil.Theories.Physics.html#newtonSL"><span class="hs-identifier hs-var">newtonSL</span></a></span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-62"></span><span>  </span><span class="annot"><span class="annottext">UID -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;can be expressed as&quot;</span></span><span class="hs-special">]</span><span>
@@ -589,7 +589,8 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><a href="Data.Drasil.Quantities.Physics.html#time"><span class="hs-identifier hs-var">QP.time</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition
 </span><a href="Data.Drasil.Equations.Defining.Physics.html#accelerationQD"><span class="hs-identifier hs-var">accelerationQD</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-143"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; Reference
-</span><span class="hs-identifier hs-var">makeCite</span></span><span> </span><span class="annot"><span class="annottext">Citation
+forall r. (Referable r, HasShortName r) =&gt; r -&gt; Reference
+</span><span class="hs-identifier hs-var">ref</span></span><span> </span><span class="annot"><span class="annottext">Citation
 </span><a href="Data.Drasil.Citations.html#accelerationWiki"><span class="hs-identifier hs-var">accelerationWiki</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-string">&quot;acceleration&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-144"></span><span>
 </span><span id="line-145"></span><span class="hs-comment">----------</span><span>
@@ -635,6 +636,7 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><a href="Data.Drasil.Quantities.Physics.html#time"><span class="hs-identifier hs-var">QP.time</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition
 </span><a href="Data.Drasil.Equations.Defining.Physics.html#velocityQD"><span class="hs-identifier hs-var">velocityQD</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-150"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation -&gt; Reference
-</span><span class="hs-identifier hs-var">makeCite</span></span><span> </span><span class="annot"><span class="annottext">Citation
+forall r. (Referable r, HasShortName r) =&gt; r -&gt; Reference
+</span><span class="hs-identifier hs-var">ref</span></span><span> </span><span class="annot"><span class="annottext">Citation
 </span><a href="Data.Drasil.Citations.html#velocityWiki"><span class="hs-identifier hs-var">velocityWiki</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-string">&quot;velocity&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
 </span><span id="line-151"></span></pre></body></html>

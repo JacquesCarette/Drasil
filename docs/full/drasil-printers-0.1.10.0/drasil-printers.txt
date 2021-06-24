@@ -117,10 +117,11 @@ toPlainName :: String -> String
 module Language.Drasil.Printing.AST
 
 -- | Different types of links for referencing. May be internal, a citation,
---   or external.
+--   or external. A citation may also hold additional reference
+--   information.
 data LinkType
 Internal :: LinkType
-Cite2 :: LinkType
+Cite2 :: Spec -> LinkType
 External :: LinkType
 
 -- | Different operators.
@@ -252,7 +253,8 @@ S :: String -> Spec
 -- | Special characters.
 Sp :: Special -> Spec
 
--- | Holds the actual reference.
+-- | Holds the actual reference of form <a>LinkType</a>, reference address,
+--   and display name
 Ref :: LinkType -> String -> Spec -> Spec
 
 -- | Empty sentence.

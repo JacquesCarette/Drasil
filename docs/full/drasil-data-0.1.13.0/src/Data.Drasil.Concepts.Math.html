@@ -126,13 +126,10 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span id="line-36"></span><span>                                                                  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;two fixed perpendicular oriented lines, measured in the same unit of length&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-37"></span><span>                                                                  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
-</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;from&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">Citation -&gt; Sentence
-forall l. (Referable l, HasShortName l) =&gt; l -&gt; Sentence
-</span><span class="hs-identifier hs-var">makeRef2S</span></span><span> </span><span class="annot"><span class="annottext">Citation
-</span><a href="Data.Drasil.Citations.html#cartesianWiki"><span class="hs-identifier hs-var">cartesianWiki</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-37"></span><span>                                                                  </span><span class="annot"><span class="annottext">Citation -&gt; Sentence
+forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
+</span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">Citation
+</span><a href="Data.Drasil.Citations.html#cartesianWiki"><span class="hs-identifier hs-var">cartesianWiki</span></a></span><span>
 </span><span id="line-38"></span><span id="centre"><span class="annot"><span class="annottext">centre :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Math.html#centre"><span class="hs-identifier hs-var hs-var">centre</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;centre&quot;</span></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
@@ -201,13 +198,10 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;An interval between two points&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-55"></span><span>                                                                  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
-</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;from&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">Citation -&gt; Sentence
-forall l. (Referable l, HasShortName l) =&gt; l -&gt; Sentence
-</span><span class="hs-identifier hs-var">makeRef2S</span></span><span> </span><span class="annot"><span class="annottext">Citation
-</span><a href="Data.Drasil.Citations.html#lineSource"><span class="hs-identifier hs-var">lineSource</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-55"></span><span>                                                                  </span><span class="annot"><span class="annottext">Citation -&gt; Sentence
+forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
+</span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">Citation
+</span><a href="Data.Drasil.Citations.html#lineSource"><span class="hs-identifier hs-var">lineSource</span></a></span><span>
 </span><span id="line-56"></span><span id="matrix"><span class="annot"><span class="annottext">matrix :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Math.html#matrix"><span class="hs-identifier hs-var hs-var">matrix</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;matrix&quot;</span></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
@@ -272,13 +266,10 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;An exact location, it has no size, only position&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-72"></span><span>                                                                  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
-</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;from&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">Citation -&gt; Sentence
-forall l. (Referable l, HasShortName l) =&gt; l -&gt; Sentence
-</span><span class="hs-identifier hs-var">makeRef2S</span></span><span> </span><span class="annot"><span class="annottext">Citation
-</span><a href="Data.Drasil.Citations.html#pointSource"><span class="hs-identifier hs-var">pointSource</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-72"></span><span>                                                                  </span><span class="annot"><span class="annottext">Citation -&gt; Sentence
+forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
+</span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">Citation
+</span><a href="Data.Drasil.Citations.html#pointSource"><span class="hs-identifier hs-var">pointSource</span></a></span><span>
 </span><span id="line-73"></span><span id="probability"><span class="annot"><span class="annottext">probability :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Math.html#probability"><span class="hs-identifier hs-var hs-var">probability</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;probability&quot;</span></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP

@@ -231,13 +231,10 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">+:+</span></span><span>
 </span><span id="line-65"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;restricting or preventing its oscillations&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
-</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
-</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;from&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">Citation -&gt; Sentence
-forall l. (Referable l, HasShortName l) =&gt; l -&gt; Sentence
-</span><span class="hs-identifier hs-var">makeRef2S</span></span><span> </span><span class="annot"><span class="annottext">Citation
-</span><a href="Data.Drasil.Citations.html#dampingSource"><span class="hs-identifier hs-var">dampingSource</span></a></span><span class="hs-special">)</span><span>
+forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
+</span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">Citation
+</span><a href="Data.Drasil.Citations.html#dampingSource"><span class="hs-identifier hs-var">dampingSource</span></a></span><span>
 </span><span id="line-66"></span><span id="dampingCoeff"><span class="annot"><span class="annottext">dampingCoeff :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Physics.html#dampingCoeff"><span class="hs-identifier hs-var hs-var">dampingCoeff</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;dampingCoeff&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP

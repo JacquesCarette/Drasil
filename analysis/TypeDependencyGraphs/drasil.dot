@@ -3372,6 +3372,7 @@ digraph alltypes {
 	}
 	subgraph ast {
 		subgraph linktype{
+		LinkType -> Spec;
 		LinkType	[shape=oval, color=darkviolet, label=LinkType];
 		}
 		subgraph ops{

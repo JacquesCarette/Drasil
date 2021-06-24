@@ -103,7 +103,7 @@ instance MayHaveUnit   ReasonableValueQDef where getUnit = getUnit . view qd''
 
 data ConstrReasQDef = CRQD { _qd''' :: QuantityDict
                            , _constr'' :: [Constraint]
-                           , reasV'' :: Expr
+                           , _reasV'' :: Expr
                            }
 makeLenses ''ConstrReasQDef
 

@@ -1,4 +1,4 @@
-{-# Language TypeFamilies #-}
+{-# Language TypeFamilies, PostfixOperators #-}
 module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, checkValidStr,
   chgsStart, definedIn, definedIn', definedIn'', definedIn''', displayStrConstrntsAsSet, displayDblConstrntsAsSet,
   eqN, eqnWSource, fromReplace, fromSource, fromSources, fmtU, follows, getTandS,
@@ -165,13 +165,13 @@ underConsidertn chunk = S "The" +:+ phrase chunk +:+
 -- | Create a list in the pattern of "The \_\_ are refined to the \_\_".
 -- Note: Order matters!
 refineChain :: NamedIdea c => [(c, Section)] -> Sentence
-refineChain [x,y] = S "The" +:+ plural (fst x) +:+ sParen (refS $ snd x) `S.are` S "refined" `S.toThe` plural (fst y)
-refineChain (x:y:xs) = foldlList Comma List (refineChain [x,y] : rc (y : xs))
+refineChain [x,y] = S "The" +:+ namedRef (snd x) (plural $ fst x) `S.are` S "refined" `S.toThe` namedRef (snd y) (plural (fst y))
+refineChain (x:y:xs) = (foldlList Comma List (refineChain [x,y] : rc (y : xs)) !.)
   where
-    rc [a, b]   = [rcSent a b +:+. sParen (refS $ snd b)]
+    rc [a, b]   = [rcSent a b]
     rc (a:b:as) =  rcSent a b : rc (b : as)
     rc _        = error "refineChain helper encountered an unexpected empty list"
-    rcSent a b  = S "the" +:+ plural (fst a) +:+ sParen (refS $ snd a) `S.toThe` plural (fst b)
+    rcSent a b  = S "the" +:+ namedRef (snd a) (plural $ fst a) `S.toThe` namedRef (snd b) (plural (fst b))
 refineChain _ = error "refineChain encountered an unexpected empty list"
 
 -- | Helper functions for making likely change statements. Outputs "The @firstSentence@ may be @someVerb@ @thirdSentence@".

@@ -81,7 +81,7 @@ purpDocPara1 proName = foldlSent [S "The primary purpose of this", phrase docume
   phrase information, S "are specified" `sC` S "allowing the reader to fully",
   S "understand" `S.and_` S "verify the", phrase purpose `S.and_` S "scientific",
   S "basis of" +:+. short proName, S "With the exception of", 
-  plural systemConstraint, S "in", refS (SRS.sysCon [] []) `sC` S "this",
+  namedRef (SRS.sysCon [] []) (plural systemConstraint) `sC` S "this",
   short Doc.srs, S "will remain abstract, describing what", phrase problem,
   S "is being solved, but not how to solve it"] 
 
@@ -150,7 +150,7 @@ orgIntro intro bottom bottomSec trailingSentence = [foldlSP [
   intro, S "The presentation follows the standard pattern of presenting" +:+.
   foldlList Comma List (map plural [nw Doc.goal, nw theory, nw definition, nw assumption]),
   S "For readers that would like a more bottom up approach" `sC`
-  S "they can start reading the", plural bottom `S.in_` refS bottomSec `S.and_`
+  S "they can start reading the", namedRef bottomSec (plural bottom)`S.and_`
   S "trace back to find any additional information they require"],
   folder [refineChain (zip [goalStmt, thModel, inModel]
          [SRS.goalStmt [] [], SRS.thModel [] [], SRS.inModel [] []]), trailingSentence]]

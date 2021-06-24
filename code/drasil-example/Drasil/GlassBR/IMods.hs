@@ -29,7 +29,7 @@ pbIsSafe :: InstanceModel
 pbIsSafe = imNoDeriv' (EquationalModel pbIsSafeQD) (nounPhraseSP "Safety Req-Pb")
   [qwC probBr $ UpFrom (Exc, exactDbl 0), qwC pbTol $ UpFrom (Exc, exactDbl 0)]
   (qw isSafePb) []
-  [makeCite astm2009] "isSafePb"
+  [ref astm2009] "isSafePb"
   [pbIsSafeDesc, probBRRef, pbTolUsr]
 
 
@@ -42,7 +42,7 @@ lrIsSafe :: InstanceModel
 lrIsSafe = imNoDeriv' (EquationalModel lrIsSafeQD) (nounPhraseSP "Safety Req-LR")
   [qwC lRe $ UpFrom (Exc, exactDbl 0), qwC demand $ UpFrom (Exc, exactDbl 0)]
   (qw isSafeLR) []
-  [makeCite astm2009] "isSafeLR"
+  [ref astm2009] "isSafeLR"
   [lrIsSafeDesc, capRef, qRef] 
 
 lrIsSafeQD :: QDefinition 
@@ -55,8 +55,8 @@ iModDesc main s = foldlSent [S "If", ch main `sC` S "the glass is" +:+.
 -- Intro --
 
 instModIntro :: Sentence
-instModIntro = foldlSent [atStartNP (the goal), makeRef2S willBreakGS, 
-  S "is met by", makeRef2S pbIsSafe `sC` makeRef2S lrIsSafe]
+instModIntro = foldlSent [atStartNP (the goal), refS willBreakGS, 
+  S "is met by", refS pbIsSafe `sC` refS lrIsSafe]
 
 -- Notes --
 
@@ -76,4 +76,4 @@ probBRRef = definedIn probOfBreak
 
 -- References -- 
 iModRefs :: [Reference]
-iModRefs = rw willBreakGS: map rw iMods
+iModRefs = ref willBreakGS: map ref iMods

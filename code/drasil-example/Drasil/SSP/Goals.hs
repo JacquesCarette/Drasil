@@ -40,4 +40,4 @@ determineF what = S "Determine the" +:+ phrase what +:+
 
 -- References --
 goalRefs :: [Reference]
-goalRefs = map rw goals
+goalRefs = map ref goals

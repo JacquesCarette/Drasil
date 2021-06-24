@@ -84,4 +84,4 @@ assumpAPT = cic "assumpAPT" assumpS13
 
 -- References --
 assumpRefs :: [Reference]
-assumpRefs = map rw assumptions
+assumpRefs = map ref assumptions

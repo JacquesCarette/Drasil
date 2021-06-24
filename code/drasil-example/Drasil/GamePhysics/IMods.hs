@@ -59,7 +59,7 @@ transMotDesc = foldlSent [S "The above", phrase equation, S "expresses the total
   phrase acceleration, S "due to applied", phrase force, eS (apply1 forcej time) +:+.
   fromSource newtonSL, S "The resultant", plural output_ `S.are`
   S "then obtained from this", phrase equation, S "using",
-  foldlList Comma List (map makeRef2S [linDispDD, linVelDD, linAccDD])]
+  foldlList Comma List (map refS [linDispDD, linVelDD, linAccDD])]
 transMotOutputs = foldlSent [atStartNP (output_ `the_ofThe` inModel),
  S "will be the functions" `S.of_` phraseNP (position `and_` velocity),
  S "over time that satisfy the", getAcc ode `S.for` phraseNP (the acceleration) `sC`
@@ -94,9 +94,9 @@ rotMotRel = sy angularAccel $= deriv
 rotMotDesc :: Sentence
 rotMotDesc = foldlSent [S "The above", phrase equation, S "for the total",
   phraseNP (angularAccel `ofThe` rigidBody), P lJ `S.is`
-  S "derived from", makeRef2S newtonSLR `sC` EmptyS `S.andThe` S "resultant",
+  S "derived from", refS newtonSLR `sC` EmptyS `S.andThe` S "resultant",
   plural output_ `S.are` S "then obtained from this", phrase equation, S "using",
-  foldlList Comma List (map makeRef2S [angDispDD, angVelDD, angAccelDD])]
+  foldlList Comma List (map refS [angDispDD, angVelDD, angAccelDD])]
 
 {-- 2D Collision --}
 
@@ -149,10 +149,10 @@ impulseNote = ch impulseS `S.is` definedIn'' impulseGD
 {- Intro -}
 
 instModIntro :: Sentence
-instModIntro = foldlSent [atStartNP (the goal), makeRef2S linearGS, 
-  S "is met by" +:+. (makeRef2S transMot `S.and_` makeRef2S col2D),
-  atStartNP (the goal), makeRef2S angularGS, S "is met by",
-  makeRef2S rotMot `S.and_` makeRef2S col2D]
+instModIntro = foldlSent [atStartNP (the goal), refS linearGS, 
+  S "is met by" +:+. (refS transMot `S.and_` refS col2D),
+  atStartNP (the goal), refS angularGS, S "is met by",
+  refS rotMot `S.and_` refS col2D]
 
 {- Notes -}
 noDampConsAssumps :: Sentence
@@ -162,4 +162,4 @@ noDampConsAssumps = foldlSent [S "It is currently assumed that no damping",
 
 -- References -- 
 iModRefs :: [Reference]
-iModRefs = map rw iMods
+iModRefs = map ref iMods

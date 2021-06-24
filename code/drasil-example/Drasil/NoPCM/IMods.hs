@@ -38,7 +38,7 @@ eBalanceOnWtr = im (DEModel eBalanceOnWtrRC)
   , qwUC tempInit, qwUC timeFinal, qwUC coilSA, qwUC coilHTC, qwUC htCapW, qwUC wMass]
   (qw tempW) []
   --Tw(0) cannot be presented, there is one more constraint Tw(0) = Tinit
-  [makeCiteInfo koothoor2013 $ RefNote "with PCM removed"]
+  [refInfo koothoor2013 $ RefNote "with PCM removed"]
   (Just eBalanceOnWtrDeriv) "eBalanceOnWtr" balWtrNotes
 
 eBalanceOnWtrRC :: RelationConcept
@@ -52,13 +52,13 @@ balWtrRel = deriv (sy tempW) time $= recip_ (sy tauW) `mulRe`
 
 balWtrNotes :: [Sentence]
 balWtrNotes = map foldlSent [
-  [ch tauW `S.is` S "calculated from", makeRef2S balanceDecayRate],
+  [ch tauW `S.is` S "calculated from", refS balanceDecayRate],
   [S "The above", phrase equation, S "applies as long as the", phrase water,
    S "is in", phrase liquid, S "form" `sC` eS (realInterval tempW $ Bounded (Exc, exactDbl 0) (Exc, exactDbl 100)),
    sParen (unwrap $ getUnit tempW), S "where", eS (exactDbl 0),
    sParen (unwrap $ getUnit tempW) `S.and_` eS (exactDbl 100),
    sParen (unwrap $ getUnit tempW), S "are the", pluralNP ((melting `and_`
-   boilPt) `of_PSNPNI` water) `sC` S "respectively", sParen (makeRef2S assumpWAL)]]
+   boilPt) `of_PSNPNI` water) `sC` S "respectively", sParen (refS assumpWAL)]]
 
 ----------------------------------------------
 --    Derivation of eBalanceOnWtr           --
@@ -72,7 +72,7 @@ eBalanceOnWtrDerivSentences = [eBalanceOnWtrDerivDesc1 EmptyS (S "over area" +:+
   eBalanceOnWtrDerivDesc2, eBalanceOnWtrDerivDesc3, eBalanceOnWtrDerivDesc4]
 
 eBalanceOnWtrDerivDesc2 :: Sentence
-eBalanceOnWtrDerivDesc2 = foldlSentCol [S "Using", makeRef2S htFluxWaterFromCoil `S.for`
+eBalanceOnWtrDerivDesc2 = foldlSentCol [S "Using", refS htFluxWaterFromCoil `S.for`
   ch htFluxC `sC` S "this can be written as"]
 
 eBalanceOnWtrDerivDesc4 :: Sentence
@@ -101,11 +101,11 @@ eBalanceOnWtrDerivEqns = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2, eBalan
 -----------
 
 instModIntro :: Sentence
-instModIntro = foldlSent [atStartNP (the goal), makeRef2S waterTempGS,
-  S "is met by", makeRef2S eBalanceOnWtr `S.andThe` phrase goal,
-  makeRef2S waterEnergyGS, S "is met by", makeRef2S heatEInWtr]
+instModIntro = foldlSent [atStartNP (the goal), refS waterTempGS,
+  S "is met by", refS eBalanceOnWtr `S.andThe` phrase goal,
+  refS waterEnergyGS, S "is met by", refS heatEInWtr]
 
 -- References -- 
 iModRefs :: [Reference]
-iModRefs = rw koothoor2013: rw htFluxWaterFromCoil: rw balanceDecayRate: map rw [eBalanceOnWtr, heatEInWtr] ++ 
-  map rw [waterTempGS, waterEnergyGS]
+iModRefs = ref koothoor2013: ref htFluxWaterFromCoil: ref balanceDecayRate: map ref [eBalanceOnWtr, heatEInWtr] ++ 
+  map ref [waterTempGS, waterEnergyGS]

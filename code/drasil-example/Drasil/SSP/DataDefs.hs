@@ -35,7 +35,7 @@ dataDefs = [intersliceWtrF, angleA, angleB, lengthB, lengthLb, lengthLs,
 --DD intersliceWtrF: interslice normal water forces
 
 intersliceWtrF :: DataDefinition
-intersliceWtrF = dd intersliceWtrFQD [makeCite fredlund1977] Nothing "intersliceWtrF"
+intersliceWtrF = dd intersliceWtrFQD [ref fredlund1977] Nothing "intersliceWtrF"
   []--Notes
 --FIXME: fill empty lists in
 
@@ -56,7 +56,7 @@ intersliceWtrFEqn = completeCase [case1,case2,case3]
 --DD angleA: base angles
 
 angleA :: DataDefinition
-angleA = dd angleAQD [makeCite fredlund1977] Nothing "angleA"
+angleA = dd angleAQD [ref fredlund1977] Nothing "angleA"
   [angleANotes]
 --FIXME: fill empty lists in
 
@@ -70,12 +70,12 @@ angleAEqn = arctan ((inxi slipHght $- inx slipHght (-1)) $/
 angleANotes :: Sentence
 angleANotes = foldlSent [S "This", phrase equation, S "is based" `S.onThe`
   phrase assumption, S "that the base" `S.ofA` phrase slice,
-  S "is a straight line", sParen (makeRef2S assumpSBSBISL)]
+  S "is a straight line", sParen (refS assumpSBSBISL)]
 
 --DD angleB: surface angles
 
 angleB :: DataDefinition
-angleB = dd angleBQD [makeCite fredlund1977] Nothing "angleB"
+angleB = dd angleBQD [ref fredlund1977] Nothing "angleB"
   [angleBNotes]--Notes
 --FIXME: fill empty lists in
 
@@ -89,12 +89,12 @@ angleBEqn = arctan ((inxi slopeHght $- inx slopeHght (-1)) $/
 angleBNotes :: Sentence
 angleBNotes = foldlSent [S "This", phrase equation, S "is based" `S.onThe`
   phrase assumption, S "that the surface" `S.ofA` phrase slice,
-  S "is a straight line", sParen (makeRef2S assumpSBSBISL)]
+  S "is a straight line", sParen (refS assumpSBSBISL)]
 
 --DD lengthB: base width of slices
 
 lengthB :: DataDefinition
-lengthB = dd lengthBQD [makeCite fredlund1977] Nothing "lengthB" []--Notes
+lengthB = dd lengthBQD [ref fredlund1977] Nothing "lengthB" []--Notes
 --FIXME: fill empty lists in
 
 lengthBQD :: QDefinition
@@ -106,7 +106,7 @@ lengthBEqn = inxi slipDist $- inx slipDist (-1)
 --DD lengthLb: total base lengths of slices
 
 lengthLb :: DataDefinition
-lengthLb = dd lengthLbQD [makeCite fredlund1977] Nothing "lengthLb"
+lengthLb = dd lengthLbQD [ref fredlund1977] Nothing "lengthLb"
   [lengthLbNotes]--Notes
 --FIXME: fill empty lists in
 
@@ -123,7 +123,7 @@ lengthLbNotes = foldlSent [baseWthX `definedIn'''`
 --DD lengthLs: surface lengths of slices
 
 lengthLs :: DataDefinition
-lengthLs = dd lengthLsQD [makeCite fredlund1977] Nothing "lengthLs"
+lengthLs = dd lengthLsQD [ref fredlund1977] Nothing "lengthLs"
   [lengthLsNotes]--Notes
 --FIXME: fill empty lists in
 
@@ -141,7 +141,7 @@ lengthLsNotes = foldlSent [baseWthX `definedIn'''`
 --DD slcHeight: y-direction heights of slices
 
 slcHeight :: DataDefinition
-slcHeight = dd slcHeightQD [makeCite fredlund1977] Nothing "slcHeight"
+slcHeight = dd slcHeightQD [ref fredlund1977] Nothing "slcHeight"
   slcHeightNotes
 
 slcHeightQD :: QDefinition
@@ -153,15 +153,15 @@ slcHeightEqn = oneHalf `mulRe` (sy sliceHghtRight `addRe` sy sliceHghtLeft)
 slcHeightNotes :: [Sentence]
 slcHeightNotes = [S "This" +:+ phrase equation +:+ S "is based on the" +:+
   phrase assumption +:+ S "that the surface" `S.and_` S "base of a slice" +:+
-  S "are straight lines" +:+. sParen (makeRef2S assumpSBSBISL),
+  S "are straight lines" +:+. sParen (refS assumpSBSBISL),
   ch sliceHghtRight `S.and_` ch sliceHghtLeft +:+ S "are defined in" +:+
-  makeRef2S sliceHghtRightDD `S.and_` makeRef2S sliceHghtLeftDD `sC`
+  refS sliceHghtRightDD `S.and_` refS sliceHghtLeftDD `sC`
   (S "respectively" !.)]
 
 --DD normStress: total normal stress
 
 normStressDD :: DataDefinition
-normStressDD = dd normStressQD [makeCite huston2008] Nothing "normStress" []
+normStressDD = dd normStressQD [ref huston2008] Nothing "normStress" []
 
 normStressQD :: QDefinition
 normStressQD = mkQuantDef totNormStress normStressEqn
@@ -172,7 +172,7 @@ normStressEqn = sy fn $/ sy genericA
 --DD tangStress: tangential stress
 
 tangStressDD :: DataDefinition
-tangStressDD = dd tangStressQD [makeCite huston2008] Nothing "tangStress" []
+tangStressDD = dd tangStressQD [ref huston2008] Nothing "tangStress" []
 
 tangStressQD :: QDefinition
 tangStressQD = mkQuantDef tangStress tangStressEqn
@@ -183,7 +183,7 @@ tangStressEqn = sy ft $/ sy genericA
 --DD ratioVariation: interslice normal to shear force ratio variation function
 
 ratioVariation :: DataDefinition
-ratioVariation = dd ratioVarQD [makeCite fredlund1977] Nothing
+ratioVariation = dd ratioVarQD [ref fredlund1977] Nothing
   "ratioVariation" []
 
 ratioVarQD :: QDefinition
@@ -199,7 +199,7 @@ ratioVarEqn = completeCase [case1, case2]
 --DD convertFunc1: first function for incorporating interslice forces into shear force
 
 convertFunc1 :: DataDefinition
-convertFunc1 = dd convertFunc1QD (map makeCite [chen2005, karchewski2012]) Nothing
+convertFunc1 = dd convertFunc1QD (map ref [chen2005, karchewski2012]) Nothing
   "convertFunc1" [convertFunc1Notes]
 
 convertFunc1QD :: QDefinition
@@ -217,7 +217,7 @@ convertFunc1Notes = foldlSent [scalFunc `definedIn'''` ratioVariation `S.and_` (
 --DD convertFunc2: second function for incorporating interslice forces into shear force
 
 convertFunc2 :: DataDefinition
-convertFunc2 = dd convertFunc2QD (map makeCite [chen2005, karchewski2012]) Nothing
+convertFunc2 = dd convertFunc2QD (map ref [chen2005, karchewski2012]) Nothing
   "convertFunc2" [convertFunc2Notes]
 
 convertFunc2QD :: QDefinition
@@ -239,7 +239,7 @@ convertFunc2Notes = (foldlList Comma List
 
 resShearWO :: DataDefinition
 resShearWO = dd resShearWOQD [chen2005] resShr_deriv_ssp resShearWOL
-  [makeRef2S newA3, makeRef2S newA4, makeRef2S newA5]--Notes
+  [refS newA3, refS newA4, refS newA5]--Notes
 --FIXME: fill empty lists in
 
 resShearWOQD :: QDefinition
@@ -261,7 +261,7 @@ resShr_deriv_ssp = weave [resShrDerivation_sentence, map E resShr_deriv_eqns_ssp
 
 mobShearWO :: DataDefinition
 mobShearWO = dd mobShearWOQD [chen2005] mobShr_deriv_ssp mobShearWOL
-  [makeRef2S newA3, makeRef2S newA4, makeRef2S newA5]--Notes
+  [refS newA3, refS newA4, refS newA5]--Notes
 --FIXME: fill empty lists in
 
 mobShearWOQD :: QDefinition
@@ -283,13 +283,13 @@ mobShr_deriv_ssp = (weave [mobShrDerivation_sentence, map E mobShr_deriv_eqns_ss
 
 nrmForceSumDD, watForceSumDD, sliceHghtRightDD,
   sliceHghtLeftDD :: DataDefinition
-nrmForceSumDD = dd nrmForceSumQD [makeCite fredlund1977] Nothing
+nrmForceSumDD = dd nrmForceSumQD [ref fredlund1977] Nothing
   "nrmForceSumDD" []--Notes
-watForceSumDD = dd watForceSumQD [makeCite fredlund1977] Nothing
+watForceSumDD = dd watForceSumQD [ref fredlund1977] Nothing
   "watForceSumDD" []--Notes
-sliceHghtRightDD = dd sliceHghtRightQD [makeCite fredlund1977] Nothing
+sliceHghtRightDD = dd sliceHghtRightQD [ref fredlund1977] Nothing
   "sliceHghtRightDD" []--Notes
-sliceHghtLeftDD = dd sliceHghtLeftQD [makeCite fredlund1977] Nothing
+sliceHghtLeftDD = dd sliceHghtLeftQD [ref fredlund1977] Nothing
   "sliceHghtLeftDD" []--Notes
 
 nrmForceSumQD :: QDefinition
@@ -306,7 +306,7 @@ sliceHghtLeftQD = ec sliceHghtLeft (inxiM1 slopeHght $- inxiM1 slipHght)
 
 -- References --
 dataDefRefs :: [Reference]
-dataDefRefs = map rw dataDefs
+dataDefRefs = map ref dataDefs
 
 --------------------------
 -- Derivation Sentences --
@@ -316,18 +316,18 @@ dataDefRefs = map rw dataDefs
 
 {-resShr_deriv_sentences_ssp_s1 :: [Sentence]
 resShr_deriv_sentences_ssp_s1 = [S "The", phrase shrResI, S "of a slice is", 
-  S "defined as", ch shrResI, S "in" +:+. makeRef2S genDef3Label, S "The",
+  S "defined as", ch shrResI, S "in" +:+. refS genDef3Label, S "The",
   phrase nrmFSubWat, S "in the", phrase equation, S "for", ch shrResI,
   S "of the soil is defined in the perpendicular force equilibrium",
   S "of a slice from", makeRefS genDef2Label `sC` S "using the", getTandS nrmFSubWat,
-  S "of", makeRef2S effStress, S "shown in", eqN 1]
+  S "of", refS effStress, S "shown in", eqN 1]
 
 resShr_deriv_sentences_ssp_s2 :: [Sentence]
 resShr_deriv_sentences_ssp_s2 = [plural value `the_ofThe'` S "interslice forces",
   ch intNormForce `S.and_` ch intShrForce, S "in the", phrase equation,
   S "are unknown, while the other", plural value,
   S "are found from the physical force", plural definition, S "of",
-  makeRef2S sliceWght, S "to" +:+. makeRef2S lengthLs,
+  refS sliceWght, S "to" +:+. refS lengthLs,
   S "Consider a force equilibrium without the affect of interslice forces" `sC`
   S "to obtain a solvable value as done for", ch nrmFNoIntsl, S "in", eqN 2]
 
@@ -338,7 +338,7 @@ resShr_deriv_sentences_ssp_s3 = [S "Using", ch nrmFNoIntsl `sC` S "a", phrase sh
 
 resShr_deriv_sentences_ssp_s4 :: [Sentence]
 resShr_deriv_sentences_ssp_s4 = [S "This can be further simplified by considering assumptions",
-  makeRef2S newA10, S "and", makeRef2S newA12 `sC`
+  refS newA10, S "and", refS newA12 `sC`
   S "which state that the seismic coefficient and the external force" `sC` S "respectively"
   `sC` S "are0", S "Removing seismic and external forces yields ", eqN 4]
 
@@ -384,11 +384,11 @@ resShrDerivation :: [Contents]
 resShrDerivation = [
 
   foldlSP [S "The", phrase shrResI, S "of a slice is", 
-  S "defined as", ch shrResI, S "in" +:+. makeRef2S genDef3Label, S "The",
+  S "defined as", ch shrResI, S "in" +:+. refS genDef3Label, S "The",
   phrase nrmFSubWat, S "in the", phrase equation, S "for", ch shrResI,
   S "of the soil is defined in the perpendicular force equilibrium",
   S "of a slice from", makeRefS bsShrFEq `sC` S "using the", getTandS nrmFSubWat,
-  S "of", makeRef2S effStress, S "shown in", eqN 5],
+  S "of", refS effStress, S "shown in", eqN 5],
   
   eqUnR' $ (inxi nrmFSubWat) $= eqlExpr cos sin (\x y -> x -
   inxiM1 intShrForce `addRe` inxi intShrForce `addRe` y) - inxi baseHydroForce,
@@ -397,7 +397,7 @@ resShrDerivation = [
   ch intNormForce `S.and_` ch intShrForce, S "in the", phrase equation,
   S "are unknown, while the other", plural value,
   S "are found from the physical force", plural definition, S "of",
-  makeRef2S sliceWght, S "to" +:+. makeRef2S lengthLs,
+  refS sliceWght, S "to" +:+. refS lengthLs,
   S "Consider a force equilibrium without the affect of interslice forces" `sC`
   S "to obtain a solvable value as done for", ch nrmFNoIntsl, S "in", eqN 2],
 
@@ -430,7 +430,7 @@ resShrDerivation = [
 
 mobShr_deriv_sentences_ssp_s1 :: [Sentence]
 mobShr_deriv_sentences_ssp_s1 = [S "The", phrase mobShrI, S "acting on a slice is defined as",
-  ch mobShrI, S "from the force equilibrium in", makeRef2S genDef2Label `sC`
+  ch mobShrI, S "from the force equilibrium in", refS genDef2Label `sC`
   S "also shown in", eqN 5]
 
 mobShr_deriv_sentences_ssp_s2 :: [Sentence]
@@ -443,7 +443,7 @@ mobShr_deriv_sentences_ssp_s3 :: [Sentence]
 mobShr_deriv_sentences_ssp_s3 = [S "The" +:+ plural value +:+ S "of" +:+ 
   ch shearFNoIntsl +:+ S "is now defined completely in terms of the" +:+
   S "known" +:+. plural value +:+ S "This can be further simplified by considering assumptions" +:+
-  makeRef2S newA10 +:+ S "and" +:+ makeRef2S newA12 `sC`
+  refS newA10 +:+ S "and" +:+ refS newA12 `sC`
   S "which state that the seismic coefficient and the external force" `sC` S "respectively"
   `sC` S "are0" +:+ S "Removing seismic and external forces yields " +:+ eqN 7]
 
@@ -475,7 +475,7 @@ mobShrDerivation :: [Contents]
 mobShrDerivation = [
 
   foldlSP [S "The", phrase mobShrI, S "acting on a slice is defined as",
-  ch mobShrI, S "from the force equilibrium in", makeRef2S genDef2Label `sC`
+  ch mobShrI, S "from the force equilibrium in", refS genDef2Label `sC`
   S "also shown in", eqN 4],
   
   eqUnR' $ inxi mobShrI $= eqlExpr sin cos
@@ -495,7 +495,7 @@ mobShrDerivation = [
   
   foldlSP [S "The", plural value, S "of", ch shearRNoIntsl `S.and_`
   ch shearFNoIntsl, S "are now defined completely in terms of the",
-  S "known force property", plural value, S "of", makeRef2S sliceWght, S "to", 
-  makeRef2S lengthLs]
+  S "known force property", plural value, S "of", refS sliceWght, S "to", 
+  refS lengthLs]
 
   ]-}

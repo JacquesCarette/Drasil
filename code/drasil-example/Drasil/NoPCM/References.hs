@@ -10,4 +10,4 @@ citations = [incroperaEtAl2007, koothoor2013, lightstone2012, parnasClements1986
 
 -- References --
 citeRefs :: [Reference]
-citeRefs = map rw citations
+citeRefs = map ref citations

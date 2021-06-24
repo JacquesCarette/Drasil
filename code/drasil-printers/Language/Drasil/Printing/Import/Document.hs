@@ -31,10 +31,10 @@ createLayout sm = map (sec sm 0)
 -- | Helper function for creating sections at the appropriate depth.
 sec :: PrintingInformation -> Int -> Section -> T.LayoutObj
 sec sm depth x@(Section titleLb contents _) = --FIXME: should ShortName be used somewhere?
-  let ref = P.S (refAdd x) in
+  let refr = P.S (refAdd x) in
   T.HDiv [concat (replicate depth "sub") ++ "section"]
-  (T.Header depth (spec sm titleLb) ref :
-   map (layout sm depth) contents) ref
+  (T.Header depth (spec sm titleLb) refr :
+   map (layout sm depth) contents) refr
 
 -- | Helper that translates 'Contents' to a printable representation of 'T.LayoutObj'.
 -- Called internally by 'layout'.
@@ -64,8 +64,8 @@ layLabelled sm x@(LblC _ (Defini dtyp pairs)) = T.Definition
   where layPairs = map (second (map (lay sm)))
 layLabelled sm (LblC _ (Paragraph c))    = T.Paragraph (spec sm c)
 layLabelled sm x@(LblC _ (DerivBlock h d)) = T.HDiv ["subsubsubsection"]
-  (T.Header 3 (spec sm h) ref : map (layUnlabelled sm) d) ref
-  where ref = P.S $ refAdd x ++ "Deriv"
+  (T.Header 3 (spec sm h) refr : map (layUnlabelled sm) d) refr
+  where refr = P.S $ refAdd x ++ "Deriv"
 layLabelled sm (LblC _ (Enumeration cs)) = T.List $ makeL sm cs
 layLabelled  _ (LblC _ (Bib bib))        = T.Bib $ map layCite bib
 
@@ -77,8 +77,8 @@ layUnlabelled sm (Table hdr lls t b) = T.Table ["table"]
 layUnlabelled sm (Paragraph c)    = T.Paragraph (spec sm c)
 layUnlabelled sm (EqnBlock c)     = T.HDiv ["equation"] [T.EqnBlock (P.E (dispExpr c sm))] P.EmptyS
 layUnlabelled sm (DerivBlock h d) = T.HDiv ["subsubsubsection"]
-  (T.Header 3 (spec sm h) ref : map (layUnlabelled sm) d) ref
-  where ref = P.S "nolabel1"
+  (T.Header 3 (spec sm h) refr : map (layUnlabelled sm) d) refr
+  where refr = P.S "nolabel1"
 layUnlabelled sm (Enumeration cs) = T.List $ makeL sm cs
 layUnlabelled sm (Figure c f wp)  = T.Figure (P.S "nolabel2") (spec sm c) f wp
 layUnlabelled sm (Graph ps w h t) = T.Graph (map (bimap (spec sm) (spec sm)) ps)

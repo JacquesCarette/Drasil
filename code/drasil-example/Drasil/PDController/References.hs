@@ -31,4 +31,4 @@ abbasi2015
 
 -- References --
 citeRefs :: [Reference]
-citeRefs = map rw citations
+citeRefs = map ref citations

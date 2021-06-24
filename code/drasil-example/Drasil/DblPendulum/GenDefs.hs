@@ -238,13 +238,13 @@ periodPendDerivSents = [periodPendDerivSent1, periodPendDerivSent2]
 
 periodPendDerivSent1, periodPendDerivSent2 :: Sentence
 periodPendDerivSent1 = atStartNP (period `the_ofThe` pendulum) +:+ S "can be defined from" +:+
-                makeRef2S angFrequencyGD +:+ phrase equation
-periodPendDerivSent2 =  S "Therefore from the" +:+ phrase equation +:+ makeRef2S angFrequencyDD `sC` S "we have"
+                refS angFrequencyGD +:+ phrase equation
+periodPendDerivSent2 =  S "Therefore from the" +:+ phrase equation +:+ refS angFrequencyDD `sC` S "we have"
 
 periodPendNotes :: Sentence
-periodPendNotes = atStartNP (NP.the (frequency `and_` period)) +:+ S "are defined in" +:+ makeRef2S frequencyDD +:+
-        makeRef2S periodSHMDD +:+ S "respectively"
+periodPendNotes = atStartNP (NP.the (frequency `and_` period)) +:+ S "are defined in" +:+ refS frequencyDD +:+
+        refS periodSHMDD +:+ S "respectively"
 
 -- References --
 genDefRefs :: [Reference]
-genDefRefs = map rw genDefns
+genDefRefs = map ref genDefns

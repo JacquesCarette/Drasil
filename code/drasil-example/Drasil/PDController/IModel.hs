@@ -27,7 +27,7 @@ imPD
        qwC qdDerivGain $ UpFrom (Exc, exactDbl 0)]
       (qw qdProcessVariableTD)
       [UpFrom (Exc, exactDbl 0)]
-      [makeCite abbasi2015, makeCite johnson2008]
+      [ref abbasi2015, ref johnson2008]
       (Just imDeriv)
       "pdEquationIM"
       []
@@ -115,4 +115,4 @@ derivEqn4
 
 -- References -- 
 iModRefs :: [Reference]
-iModRefs = map rw instanceModels
+iModRefs = map ref instanceModels

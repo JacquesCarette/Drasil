@@ -53,8 +53,8 @@ rocTempSimpRel = sy QPP.mass `mulRe` sy QT.heatCapSpec `mulRe`
 
 htFluxWaterFromCoil :: GenDefn
 htFluxWaterFromCoil = gd (EquationalModel htFluxWaterFromCoilQD) (getUnit htFluxC) Nothing
-  [makeCite koothoor2013] "htFluxWaterFromCoil"
-  [newtonLawNote htFluxC assumpLCCCW coil, makeRef2S assumpTHCCoT]
+  [ref koothoor2013] "htFluxWaterFromCoil"
+  [newtonLawNote htFluxC assumpLCCCW coil, refS assumpTHCCoT]
 
 htFluxWaterFromCoilQD :: QDefinition
 htFluxWaterFromCoilQD = mkQuantDef htFluxC htFluxWaterFromCoilExpr
@@ -67,7 +67,7 @@ htFluxWaterFromCoilExpr = sy coilHTC `mulRe` (sy tempC $- apply1 tempW time)
 
 htFluxPCMFromWater :: GenDefn
 htFluxPCMFromWater = gd (EquationalModel htFluxPCMFromWaterQD) (getUnit htFluxP) Nothing
-  [makeCite koothoor2013] "htFluxPCMFromWater"
+  [ref koothoor2013] "htFluxPCMFromWater"
   [newtonLawNote htFluxP assumpLCCWP phaseChangeMaterial]
 
 htFluxPCMFromWaterQD :: QDefinition
@@ -78,8 +78,8 @@ htFluxPCMFromWaterExpr = sy pcmHTC `mulRe` (apply1 tempW time $- apply1 tempPCM 
 
 newtonLawNote :: UnitalChunk -> ConceptInstance -> ConceptChunk -> Sentence
 newtonLawNote u a c = foldlSent [ch u `S.is` S "found by assuming that",
-  phrase lawConvCooling, S "applies" +:+. sParen (makeRef2S a), S "This law",
-  sParen (S "defined" `S.in_` makeRef2S nwtnCooling) `S.is` S "used on",
+  phrase lawConvCooling, S "applies" +:+. sParen (refS a), S "This law",
+  sParen (S "defined" `S.in_` refS nwtnCooling) `S.is` S "used on",
   phraseNP (surface `the_ofThe` c)]
 
 --------------------------------------
@@ -95,7 +95,7 @@ rocTempSimpDerivSent s a = map foldlSentCol [rocTempDerivInteg, rocTempDerivGaus
   rocTempDerivArbVol, rocTempDerivConsFlx s a, rocTempDerivDens]
 
 rocTempDerivInteg :: [Sentence]
-rocTempDerivInteg = [S "Integrating", makeRef2S consThermE, S "over a",
+rocTempDerivInteg = [S "Integrating", refS consThermE, S "over a",
   phrase vol, sParen (ch vol) `sC` S "we have"]
 
 rocTempDerivGauss :: [Sentence]
@@ -112,10 +112,10 @@ rocTempDerivArbVol = [S "We consider an arbitrary" +:+. phrase vol,
 rocTempDerivConsFlx :: Sentence -> [ConceptInstance] -> [Sentence]
 rocTempDerivConsFlx s assumps = [S "Where", 
   foldlList Comma List (map ch [htFluxIn, htFluxOut, inSA, outSA]),
-  S "are explained in" +:+. makeRef2S rocTempSimp, s, S "Assuming", 
+  S "are explained in" +:+. refS rocTempSimp, s, S "Assuming", 
   foldlList Comma List (map ch [density, QT.heatCapSpec, QT.temp]),
   S "are constant over the", phrase vol `sC` S "which is true in our case by",
-  foldlList Comma List (map makeRef2S assumps) `sC` S "we have"]
+  foldlList Comma List (map refS assumps) `sC` S "we have"]
 
 rocTempDerivConsFlxSWHS :: Sentence
 rocTempDerivConsFlxSWHS = foldlSent [S "The integral over the", phrase surface,
@@ -158,4 +158,4 @@ rocTempSimpDerivEqns = [rocTempDerivIntegEq, rocTempDerivGaussEq, rocTempDerivAr
 
 -- References --
 genDefRefs :: [Reference]
-genDefRefs = map rw genDefs
+genDefRefs = map ref genDefs

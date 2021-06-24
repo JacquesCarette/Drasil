@@ -13,6 +13,7 @@ GRAPH_P_SUFFIX = _graph
 BUILD_PACKAGES = $(addsuffix $(BUILD_P_SUFFIX), $(PACKAGES))
 DOC_PACKAGES = $(addsuffix $(DOC_P_SUFFIX), $(PACKAGES))
 GRAPH_PACKAGES = $(addsuffix $(GRAPH_P_SUFFIX), $(PACKAGES))
+ANALYSIS_PACKAGES = drasil $(PACKAGES) 
 
 PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 
@@ -100,6 +101,8 @@ GRAPH_FOLDER_NAME = graphs
 GRAPH_FOLDER = $(GRAPH_FOLDER_NAME)/
 ANALYSIS_FOLDER_NAME = analysis
 ANALYSIS_FOLDER = $(ANALYSIS_FOLDER_NAME)/
+TYPEGRAPH_FOLDER_NAME = TypeDependencyGraphs
+TYPEGRAPH_FOLDER = $(ANALYSIS_FOLDER)$(TYPEGRAPH_FOLDER_NAME)/
 DEPLOY_FOLDER_NAME = deploy
 DEPLOY_FOLDER = $(DEPLOY_FOLDER_NAME)/
 DEPLOY_CODE_PATH_KV_SEP = :
@@ -191,8 +194,16 @@ graphs: $(GRAPH_PACKAGES)
 ###
 
 analysis: check_stack
+	stack install dotgen graphmod
+	- rm -rf $(ANALYSIS_FOLDER)
 	@mkdir -p $(ANALYSIS_FOLDER)
 	cd $(SCRIPT_FOLDER) && stack exec -- runghc DataTableGen.hs
+	cd $(SCRIPT_FOLDER) && stack exec -- runghc TypeGraphGen.hs
+	@echo Making dependency graphs
+	@cd $(TYPEGRAPH_FOLDER) && for pack in $(ANALYSIS_PACKAGES); do \
+		dot -Tpdf $$pack.dot > "./$$pack.pdf" ; \
+	done
+	@echo Done dependency graphs
 
 docs: check_stack
 	DOCS_FOLDER="$(DOCS_FOLDER)" GHC_FLAGS="$(GHCFLAGS)" sh scripts/make_docs.sh

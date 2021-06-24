@@ -5,9 +5,11 @@ module Language.Drasil.Chunk.Quantity (QuantityDict, codeVC, implVar, implVar',
 import Control.Lens ((^.),makeLenses,view)
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
-import Language.Drasil.Classes (NamedIdea(term), Idea(getA), HasSpace(typ), Quantity)
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
+  HasSpace(typ), Quantity, Display(toDispExpr))
 import Language.Drasil.Chunk.NamedIdea (IdeaDict,nw,mkIdea,nc)
 import Language.Drasil.Chunk.UnitDefn(UnitDefn, MayHaveUnit(getUnit))
+import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Stages (Stage(..))
@@ -23,26 +25,28 @@ data QuantityDict = QD { _id' :: IdeaDict
                        }
 makeLenses ''QuantityDict
 
+-- | Finds the 'UID' of the 'IdeaDict' used to make the 'QuantityDict'.
 instance HasUID        QuantityDict where uid = id' . uid
--- ^ Finds the 'UID' of the 'IdeaDict' used to make the 'QuantityDict'.
+-- | Finds the term ('NP') of the 'IdeaDict' used to make the 'QuantityDict'.
 instance NamedIdea     QuantityDict where term = id' . term
--- ^ Finds the term ('NP') of the 'IdeaDict' used to make the 'QuantityDict'.
+-- | Finds the idea contained in the 'IdeaDict' used to make the 'QuantityDict'.
 instance Idea          QuantityDict where getA  qd = getA (qd ^. id')
--- ^ Finds the idea contained in the 'IdeaDict' used to make the 'QuantityDict'.
+-- | Finds the 'Space' of the 'QuantityDict'.
 instance HasSpace      QuantityDict where typ = typ'
--- ^ Finds the 'Space' of the 'QuantityDict'.
+-- | Finds the 'Stage' dependent 'Symbol' of the 'QuantityDict'.
 instance HasSymbol     QuantityDict where symbol = view symb'
--- ^ Finds the 'Stage' dependent 'Symbol' of the 'QuantityDict'.
+-- | 'QuantityDict's have a 'Quantity'. 
 instance Quantity      QuantityDict where
--- ^ 'QuantityDict's have a 'Quantity'. 
+-- | Equal if 'UID's are equal.
 instance Eq            QuantityDict where a == b = (a ^. uid) == (b ^. uid)
--- ^ Equal if 'UID's are equal.
+-- | Finds the units of the 'QuantityDict'.
 instance MayHaveUnit   QuantityDict where getUnit = view unit'
--- ^ Finds the units of the 'QuantityDict'.
+-- | Convert the symbol of the 'QuantityDict' to a 'DisplayExpr'.
+instance Display       QuantityDict where toDispExpr = toDispExpr . sy
 
 -- | Smart constructor for a 'QuantityDict' from another 'Quantity' with units.
 qw :: (Quantity q, MayHaveUnit q) => q -> QuantityDict
-qw q = QD (nw q) (q^.typ) (symbol q) (getUnit q)
+qw q = QD (nw q) (q ^. typ) (symbol q) (getUnit q)
 
 -- | Make a 'QuantityDict' from a 'UID', 'NP', 'Symbol', 'Space', 
 -- 'Maybe' 'UnitDefn', and an abbreviation ('Maybe' 'String').

@@ -1,6 +1,6 @@
 module Data.Drasil.Concepts.Documentation where
 
-import Language.Drasil hiding (organization, year)
+import Language.Drasil hiding (organization, year, label, variable)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 

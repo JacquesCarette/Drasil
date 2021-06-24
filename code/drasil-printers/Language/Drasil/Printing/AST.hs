@@ -62,11 +62,11 @@ type Title    = Spec
 
 -- | Different types of lists that contain an 'ItemType' and may contain a label and a title.
 -- May be ordered, unordered, simple, descriptive, or for definitions. More suitable to printing.
-data ListType = Ordered [(ItemType,Maybe Label)]
-              | Unordered [(ItemType,Maybe Label)]
+data ListType = Ordered     [(ItemType,Maybe Label)]
+              | Unordered   [(ItemType,Maybe Label)]
               | Simple      [(Title,ItemType,Maybe Label)]
               | Desc        [(Title,ItemType,Maybe Label)]
-              | Definitions  [(Title,ItemType,Maybe Label)]
+              | Definitions [(Title,ItemType,Maybe Label)]
 
 -- | A list may contain an element or another list. More suitable to printing.
 data ItemType = Flat Spec

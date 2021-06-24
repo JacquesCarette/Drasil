@@ -1,11 +1,13 @@
 module Language.Drasil.Printing.Import (space, expr, symbol, spec,
   makeDocument) where
 
-import Language.Drasil hiding (neg, sec, symbol)
+import Language.Drasil hiding (neg, sec, symbol, isIn)
+import Language.Drasil.Display
 import Language.Drasil.Development (UFuncB(..), UFuncVec(..)
   , ArithBinOp(..), BoolBinOp(..), EqBinOp(..), LABinOp(..)
   , OrdBinOp(..), VVNBinOp(..), VVVBinOp(..)
-  , precA, precB, eprec)
+  , precA, precB, eprec, dePrec, dePrecAssoc, DisplayExpr(..)
+  , DisplayBinOp(..), DisplayAssocBinOp(Equivalence))
 import Database.Drasil
 import Utils.Drasil
 
@@ -97,7 +99,26 @@ processExpo a
 assocExpr :: P.Ops -> Int -> [Expr] -> PrintingInformation -> P.Expr
 assocExpr op prec exprs sm = P.Row $ intersperse (P.MO op) $ map (expr' sm prec) exprs
 
--- | Expr translation function from Drasil to printable layout AST.
+-- | Convert 'DisplayBinOps' into the operators of the AST language.
+deBinOp :: DisplayBinOp -> P.Ops
+deBinOp IsIn    = P.IsIn
+deBinOp Defines = P.Eq
+
+-- | Convert 'DisplayAssocBinOp's into the operators of the AST language.
+deAssocBinOp :: DisplayAssocBinOp -> P.Ops
+deAssocBinOp Equivalence = P.Eq 
+deAssocBinOp _           = P.And
+
+-- | Translate DisplayExprs to printable layout AST.
+dispExpr :: DisplayExpr -> PrintingInformation -> P.Expr
+dispExpr (AlgebraicExpr e)  sm = expr e sm
+dispExpr (SpaceExpr s)      sm = space sm s
+dispExpr (BinOp b l r)      sm = P.Row [dispExpr l sm, P.MO $ deBinOp b, dispExpr r sm]
+dispExpr (AssocBinOp b des) sm = P.Row $ intersperse (P.MO op) $ map (dispExpr' sm prec) des
+  where prec = dePrecAssoc b
+        op   = deAssocBinOp b
+
+-- | Translate Exprs to printable layout AST.
 expr :: Expr -> PrintingInformation -> P.Expr
 expr (Dbl d)                  sm = case sm ^. getSetting of
   Engineering -> P.Row $ digitsProcess (map toInteger $ fst $ floatToDigits 10 d)
@@ -125,16 +146,16 @@ expr (Deriv Total a b)        sm =
         (P.Row [P.Spc P.Thin, P.Ident "d",
                 symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b])
 expr (C c)                    sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
-expr (FCall f [x] [])         sm = 
+expr (FCall f [x] [])         sm =
   P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f, parens $ expr x sm]
 expr (FCall f l ns)           sm = call sm f l ns
 expr (New c l ns)             sm = call sm c l ns
-expr (Message a m l ns)       sm = 
+expr (Message a m l ns)       sm =
   P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) a, P.MO P.Point, call sm m l ns]
 expr (Field o f)              sm = P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) o,
   P.MO P.Point, symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f]
 expr (Case _ ps)              sm =
-  if length ps < 2 
+  if length ps < 2
     then error "Attempting to use multi-case expr incorrectly"
     else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
 expr (Matrix a)               sm = P.Mtx $ map (map (`expr` sm)) a
@@ -171,7 +192,6 @@ expr (OrdBinaryOp GEq a b)    sm = mkBOp sm P.GEq a b
 expr (VVNBinaryOp Dot a b)    sm = mkBOp sm P.Dot a b
 expr (VVVBinaryOp Cross a b)  sm = mkBOp sm P.Cross a b
 expr (Operator o d e)         sm = eop sm o d e
-expr (IsIn  a b)              sm = P.Row [expr a sm, P.MO P.IsIn, space sm b]
 expr (RealI c ri)             sm = renderRealInt sm (lookupC (sm ^. stg)
   (sm ^. ckdb) c) ri
 
@@ -206,8 +226,12 @@ mkBOp sm o a b = P.Row [expr a sm, P.MO o, expr b sm]
 -- | Helper that adds parenthesis to an expression where appropriate.
 expr' :: PrintingInformation -> Int -> Expr -> P.Expr
 expr' s p e = fence $ expr e s
-  where
-  fence = if eprec e < p then parens else id
+  where fence = if eprec e < p then parens else id
+
+-- | Helper that adds parenthesis to a display expression where appropriate.
+dispExpr' :: PrintingInformation -> Int -> DisplayExpr -> P.Expr
+dispExpr' s p e = fence $ dispExpr e s
+  where fence = if dePrec e < p then parens else id
 
 -- | Helper for properly rendering negation of expressions.
 neg' :: Expr -> Bool
@@ -339,19 +363,20 @@ renderRealInt st s (UpFrom (Exc,a)) = P.Row [symbol s, P.MO P.Gt,  expr a st]
 -- | Translates 'Sentence' to the printable representation of a 'Sentence' ('Spec').
 spec :: PrintingInformation -> Sentence -> P.Spec
   -- make sure these optimizations are clear
-spec sm (EmptyS :+: b) = spec sm b
-spec sm (a :+: EmptyS) = spec sm a
-spec sm (a :+: b)      = spec sm a P.:+: spec sm b
-spec _ (S s)           = either error P.S $ checkValidStr s invalidChars
-  where invalidChars   = ['<', '>', '\"', '&', '#', '$', '%', '&', '~', '^', '\\', '{', '}']
-spec _ (Sy s)          = P.E $ pUnit s
-spec _ Percent         = P.E $ P.MO P.Perc
-spec _ (P s)           = P.E $ symbol s
-spec sm (Ch SymbolStyle s)  = P.E $ symbol $ lookupC (sm ^. stg) (sm ^. ckdb) s
-spec sm (Ch TermStyle s)    = spec sm $ lookupT (sm ^. ckdb) s
-spec sm (Ch ShortStyle s)   = spec sm $ lookupS (sm ^. ckdb) s
-spec sm (Ch PluralTerm s)   = spec sm $ lookupP (sm ^. ckdb) s
-spec sm (Ref u notes) = let reff = refResolve u (sm ^. ckdb . refTable) in
+spec sm (EmptyS :+: b)     = spec sm b
+spec sm (a :+: EmptyS)     = spec sm a
+spec sm (a :+: b)          = spec sm a P.:+: spec sm b
+spec _ (S s)               = either error P.S $ checkValidStr s invalidChars
+  where invalidChars = ['<', '>', '\"', '&', '#', '$', '%', '&', '~', '^', '\\', '{', '}']
+spec _ (Sy s)              = P.E $ pUnit s
+spec _ Percent             = P.E $ P.MO P.Perc
+spec _ (P s)               = P.E $ symbol s
+spec sm (Ch SymbolStyle s) = P.E $ symbol $ lookupC (sm ^. stg) (sm ^. ckdb) s
+spec sm (Ch TermStyle s)   = spec sm $ lookupT (sm ^. ckdb) s
+spec sm (Ch ShortStyle s)  = spec sm $ lookupS (sm ^. ckdb) s
+spec sm (Ch PluralTerm s)  = spec sm $ lookupP (sm ^. ckdb) s
+spec sm (Ref u notes)      =
+  let reff = refResolve u (sm ^. ckdb . refTable) in
   case reff of 
   (Reference _ (RP rp ra) sn _) ->
     P.Ref P.Internal ra $ spec sm $ renderShortName (sm ^. ckdb) rp sn
@@ -364,9 +389,9 @@ spec sm (Ref u notes) = let reff = refResolve u (sm ^. ckdb . refTable) in
   (Reference _ (Citation ra) _ _) ->
     P.Ref P.Cite2    ra (spec sm (renderCitInfo n))
   _ -> error "Only citations should have citation information." -- should this be an error, or should all references get the ability to renderCitInfo?-}
-spec sm (Quote q)      = P.Quote $ spec sm q
-spec _  EmptyS         = P.EmptyS
-spec sm (E e)          = P.E $ expr e sm
+spec sm (Quote q)          = P.Quote $ spec sm q
+spec _  EmptyS             = P.EmptyS
+spec sm (E e)              = P.E $ dispExpr e sm
 
 -- | Renders a unit symbol as a printable expression.
 pUnit :: USymb -> P.Expr
@@ -393,11 +418,11 @@ renderShortName ctx (Deferred u) _ = S $ fromMaybe (error "Domain has no abbrevi
   -- Used to be: S $ getRefAdd $ refResolve u (ctx ^. refTable)
 renderShortName ctx (RConcat a b) sn = renderShortName ctx a sn :+: renderShortName ctx b sn
 renderShortName _ (RS s) _ = S s
-renderShortName _ Name sn = S $ getStringSN sn
+renderShortName _ Name sn = getSentSN sn
 
 -- | Render a uniform resource locator as a 'Sentence'.
 renderURI :: ctx -> ShortName -> Sentence
-renderURI _ sn = S $ getStringSN sn
+renderURI _ = getSentSN
 
 -- | Renders citation information.
 renderCitInfo :: RefInfo -> Sentence
@@ -444,7 +469,7 @@ layLabelled sm x@(LblC _ (Table hdr lls t b)) = T.Table ["table"]
   (P.S $ getRefAdd x)
   b (spec sm t)
 layLabelled sm x@(LblC _ (EqnBlock c))          = T.HDiv ["equation"]
-  [T.EqnBlock (P.E (expr c sm))]
+  [T.EqnBlock (P.E (dispExpr c sm))]
   (P.S $ getRefAdd x)
 layLabelled sm x@(LblC _ (Figure c f wp))     = T.Figure
   (P.S $ getRefAdd x)
@@ -469,7 +494,7 @@ layUnlabelled :: PrintingInformation -> RawContent -> T.LayoutObj
 layUnlabelled sm (Table hdr lls t b) = T.Table ["table"]
   (map (spec sm) hdr : map (map (spec sm)) lls) (P.S "nolabel0") b (spec sm t)
 layUnlabelled sm (Paragraph c)    = T.Paragraph (spec sm c)
-layUnlabelled sm (EqnBlock c)     = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
+layUnlabelled sm (EqnBlock c)     = T.HDiv ["equation"] [T.EqnBlock (P.E (dispExpr c sm))] P.EmptyS
 layUnlabelled sm (DerivBlock h d) = T.HDiv ["subsubsubsection"]
   (T.Header 3 (spec sm h) ref : map (layUnlabelled sm) d) ref
   where ref = P.S "nolabel1"

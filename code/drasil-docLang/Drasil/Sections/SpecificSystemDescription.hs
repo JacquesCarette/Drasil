@@ -15,7 +15,7 @@ module Drasil.Sections.SpecificSystemDescription
   , tInDataCstRef, tOutDataCstRef
   ) where
 
-import Language.Drasil
+import Language.Drasil hiding (variable)
 import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 
@@ -215,7 +215,7 @@ inDataConstTbl :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, Ma
 inDataConstTbl qlst = mkDataConstraintTable [(S "Var", map ch $ sortBySymbol qlst),
             (titleize' physicalConstraint, map fmtPhys $ sortBySymbol qlst),
             (titleize' softwareConstraint, map fmtSfwr $ sortBySymbol qlst),
-            (S "Typical Value", map (\q -> fmtU (E $ getRVal q) q) $ sortBySymbol qlst),
+            (S "Typical Value", map (\q -> fmtU (eS $ getRVal q) q) $ sortBySymbol qlst),
             (short typUnc, map typUncr $ sortBySymbol qlst)]  (inDatumConstraint ^. uid) $
             titleize' inDatumConstraint
   where

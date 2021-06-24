@@ -3,10 +3,11 @@
 module Language.Drasil.CodeSpec where
 
 import Language.Drasil
+import Language.Drasil.Display
 import Database.Drasil (ChunkDB, SystemInformation(SI),
   _authors, _constants, _constraints, _datadefs, _instModels,
   _configFiles, _inputs, _outputs, _sys, _sysinfodb)
-import Language.Drasil.Development (namesRI)
+import Language.Drasil.Development
 import Theory.Drasil (DataDefinition, qdFromDD, getEqModQdsFromIm)
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeIdea(codeChunk),
@@ -176,5 +177,5 @@ getConstraints cm cs = concat $ mapMaybe (\c -> Map.lookup (c ^. uid) cm) cs
 -- | Get a list of CodeChunks from a constraint
 constraintvars :: Constraint -> ChunkDB -> [CodeChunk]
 constraintvars (Range _ ri) m = map (codeChunk . varResolve m) $ nub $
-  namesRI ri
+  eNamesRI ri
 constraintvars _ _ = []

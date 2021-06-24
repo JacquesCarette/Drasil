@@ -10,12 +10,13 @@ import Language.Drasil.Chunk.Quantity (QuantityDict, qw, vc)
 import Language.Drasil.Chunk.Unital (ucs)
 import Language.Drasil.Chunk.Unitary (unitary)
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
-import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Display(toDispExpr),
   Definition(defn), ConceptDomain(cdom), Concept, Quantity, HasSpace(typ),
   IsUnit, Constrained(constraints), MayHaveReasVal(maybeReasVal), HasReasVal(reasVal),)
 import Language.Drasil.Constraint (Constraint(..))
 import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr(..))
+import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Stages (Stage)
@@ -116,9 +117,9 @@ instance Idea          ConstrReasQDef where getA = getA . view qd'''
 instance HasSpace      ConstrReasQDef where typ = qd''' . typ
 -- ^ Finds the 'Symbol' of the 'QuantityDict' used to make the 'ConstrReasQDef'.
 instance HasSymbol     ConstrReasQDef where symbol c = symbol (c^.qd''')
--- ^ 'ConstrainedChunk's have a 'Quantity'. 
+-- ^ 'ConstrReasQDef's have a 'Quantity'. 
 instance Quantity      ConstrReasQDef where
--- ^ Finds the 'Constraint's of a 'ConstrainedChunk'.
+-- ^ Finds the 'Constraint's of a 'ConstrReasQDef'.
 instance Constrained   ConstrReasQDef where constraints = constr''
 -- ^ Finds a reasonable value for the 'ConstrReasQDef'.
 instance HasReasVal    ConstrReasQDef where reasVal     = reasV''    --couldn't match type `Expr` with `ConstrReasQDef -> f ConstrReasQDef`
@@ -176,7 +177,8 @@ instance MayHaveReasVal    ConstrConcept where maybeReasVal      = reasV'''
 instance Eq            ConstrConcept where c1 == c2 = (c1 ^.defq.uid) == (c2 ^.defq.uid)
 -- ^ Finds the units of the 'DefinedQuantityDict' used to make the 'ConstrConcept'.
 instance MayHaveUnit   ConstrConcept where getUnit = getUnit . view defq
-
+-- | Convert the symbol of the 'ConstrConcept' to a 'DisplayExpr'.
+instance Display       ConstrConcept where toDispExpr = toDispExpr . sy
 
 -- | Creates a 'ConstrConcept' with a quantitative concept, a list of 'Constraint's and an 'Expr'.
 constrained' :: (Concept c, MayHaveUnit c, Quantity c) =>

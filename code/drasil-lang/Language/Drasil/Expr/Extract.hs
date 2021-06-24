@@ -1,96 +1,116 @@
-module Language.Drasil.Expr.Extract(dep, names, names', namesRI) where
+module Language.Drasil.Expr.Extract where
 
 import Data.List (nub)
 
 import Language.Drasil.Expr (Expr(..))
+import Language.Drasil.DisplayExpr
 import Language.Drasil.Space (RealInterval(..))
 
+-- | Generic traverse of all display expressions that could lead to names.
+deNames :: DisplayExpr -> [String]
+deNames (AlgebraicExpr e)  = eNames e
+deNames (SpaceExpr _)      = []
+deNames (BinOp _ l r)      = deNames l ++ deNames r
+deNames (AssocBinOp _ des) = concatMap deNames des
+
 -- | Generic traverse of all expressions that could lead to names.
-names :: Expr -> [String]
-names (AssocA _ l)          = concatMap names l
-names (AssocB _ l)          = concatMap names l
-names (Deriv _ a b)         = b : names a
-names (C c)                 = [c]
-names Int{}                 = []
-names Dbl{}                 = []
-names ExactDbl{}            = []
-names Str{}                 = []
-names Perc{}                = []
-names (FCall f x ns)        = f : concatMap names x ++ map fst ns ++ 
-                              concatMap (names . snd) ns
-names (New c x ns)          = c : concatMap names x ++ map fst ns ++ 
-                              concatMap (names . snd) ns
-names (Message a m x ns)    = a : m : concatMap names x ++ map fst ns ++ 
-                              concatMap (names . snd) ns
-names (Field o f)           = [o, f]
-names (Case _ ls)           = concatMap (names . fst) ls ++ concatMap (names . snd) ls
-names (UnaryOp _ u)         = names u
-names (UnaryOpB _ u)        = names u
-names (UnaryOpVec _ u)      = names u
-names (ArithBinaryOp _ a b) = names a ++ names b
-names (BoolBinaryOp _ a b)  = names a ++ names b
-names (EqBinaryOp _ a b)    = names a ++ names b
-names (LABinaryOp _ a b)    = names a ++ names b
-names (OrdBinaryOp _ a b)   = names a ++ names b
-names (VVVBinaryOp _ a b)   = names a ++ names b
-names (VVNBinaryOp _ a b)   = names a ++ names b
-names (Operator _ _ e)      = names e
-names (IsIn  a _)           = names a
-names (Matrix a)            = concatMap (concatMap names) a
-names (RealI c b)           = c : namesRI b
+eNames :: Expr -> [String]
+eNames (AssocA _ l)          = concatMap eNames l
+eNames (AssocB _ l)          = concatMap eNames l
+eNames (Deriv _ a b)         = b : eNames a
+eNames (C c)                 = [c]
+eNames Int{}                 = []
+eNames Dbl{}                 = []
+eNames ExactDbl{}            = []
+eNames Str{}                 = []
+eNames Perc{}                = []
+eNames (FCall f x ns)        = f : concatMap eNames x ++ map fst ns ++ 
+                              concatMap (eNames . snd) ns
+eNames (New c x ns)          = c : concatMap eNames x ++ map fst ns ++ 
+                              concatMap (eNames . snd) ns
+eNames (Message a m x ns)    = a : m : concatMap eNames x ++ map fst ns ++ 
+                              concatMap (eNames . snd) ns
+eNames (Field o f)           = [o, f]
+eNames (Case _ ls)           = concatMap (eNames . fst) ls ++ concatMap (eNames . snd) ls
+eNames (UnaryOp _ u)         = eNames u
+eNames (UnaryOpB _ u)        = eNames u
+eNames (UnaryOpVec _ u)      = eNames u
+eNames (ArithBinaryOp _ a b) = eNames a ++ eNames b
+eNames (BoolBinaryOp _ a b)  = eNames a ++ eNames b
+eNames (EqBinaryOp _ a b)    = eNames a ++ eNames b
+eNames (LABinaryOp _ a b)    = eNames a ++ eNames b
+eNames (OrdBinaryOp _ a b)   = eNames a ++ eNames b
+eNames (VVVBinaryOp _ a b)   = eNames a ++ eNames b
+eNames (VVNBinaryOp _ a b)   = eNames a ++ eNames b
+eNames (Operator _ _ e)      = eNames e
+eNames (Matrix a)            = concatMap (concatMap eNames) a
+eNames (RealI c b)           = c : eNamesRI b
 
--- | Generic traversal of everything that could come from an interval to names (similar to 'names').
-namesRI :: RealInterval Expr Expr -> [String]
-namesRI (Bounded (_,il) (_,iu)) = names il ++ names iu
-namesRI (UpTo (_,iu))       = names iu
-namesRI (UpFrom (_,il))     = names il
+-- | Generic traversal of everything that could come from an interval to names (similar to 'eNames').
+eNamesRI :: RealInterval Expr Expr -> [String]
+eNamesRI (Bounded (_,il) (_,iu)) = eNames il ++ eNames iu
+eNamesRI (UpTo (_,iu))           = eNames iu
+eNamesRI (UpFrom (_,il))         = eNames il
 
--- | Generic traverse of all positions that could lead to names without
+-- | Generic traverse of all display expressions that could lead to names (same as 'deNames').
+deNames' :: DisplayExpr -> [String]
+deNames' (AlgebraicExpr e)  = eNames e
+deNames' (SpaceExpr _)      = []
+deNames' (BinOp _ l r)      = deNames l ++ deNames r
+deNames' (AssocBinOp _ des) = concatMap deNames des
+
+-- | Generic traverse of all positions that could lead to 'eNames' without
 -- functions.  FIXME : this should really be done via post-facto filtering, but
 -- right now the information needed to do this is not available!
-names' :: Expr -> [String]
-names' (AssocA _ l)          = concatMap names' l
-names' (AssocB _ l)          = concatMap names' l
-names' (Deriv _ a b)         = b : names' a
-names' (C c)                 = [c]
-names' Int{}                 = []
-names' Dbl{}                 = []
-names' ExactDbl{}            = []
-names' Str{}                 = []
-names' Perc{}                = []
-names' (FCall _ x ns)        = concatMap names' x ++ map fst ns ++ 
-                               concatMap (names .snd) ns
-names' (New _ x ns)          = concatMap names' x ++ map fst ns ++ 
-                               concatMap (names .snd) ns
-names' (Message a _ x ns)    = a : concatMap names' x ++ map fst ns ++ 
-                               concatMap (names .snd) ns
-names' (Field o f)           = [o, f]
-names' (Case _ ls)           = concatMap (names' . fst) ls ++ 
-                               concatMap (names' . snd) ls
-names' (UnaryOp _ u)         = names' u
-names' (UnaryOpB _ u)        = names' u
-names' (UnaryOpVec _ u)      = names' u
-names' (ArithBinaryOp _ a b) = names' a ++ names' b
-names' (BoolBinaryOp _ a b)  = names' a ++ names' b
-names' (EqBinaryOp _ a b)    = names' a ++ names' b
-names' (LABinaryOp _ a b)    = names' a ++ names' b
-names' (OrdBinaryOp _ a b)   = names' a ++ names' b
-names' (VVVBinaryOp _ a b)   = names' a ++ names' b
-names' (VVNBinaryOp _ a b)   = names' a ++ names' b
-names' (Operator _ _ e)      = names' e
-names' (IsIn  a _)           = names' a
-names' (Matrix a)            = concatMap (concatMap names') a
-names' (RealI c b)           = c : namesRI' b
+eNames' :: Expr -> [String]
+eNames' (AssocA _ l)          = concatMap eNames' l
+eNames' (AssocB _ l)          = concatMap eNames' l
+eNames' (Deriv _ a b)         = b : eNames' a
+eNames' (C c)                 = [c]
+eNames' Int{}                 = []
+eNames' Dbl{}                 = []
+eNames' ExactDbl{}            = []
+eNames' Str{}                 = []
+eNames' Perc{}                = []
+eNames' (FCall _ x ns)        = concatMap eNames' x ++ map fst ns ++ 
+                               concatMap (eNames .snd) ns
+eNames' (New _ x ns)          = concatMap eNames' x ++ map fst ns ++ 
+                               concatMap (eNames .snd) ns
+eNames' (Message a _ x ns)    = a : concatMap eNames' x ++ map fst ns ++ 
+                               concatMap (eNames .snd) ns
+eNames' (Field o f)           = [o, f]
+eNames' (Case _ ls)           = concatMap (eNames' . fst) ls ++ 
+                               concatMap (eNames' . snd) ls
+eNames' (UnaryOp _ u)         = eNames' u
+eNames' (UnaryOpB _ u)        = eNames' u
+eNames' (UnaryOpVec _ u)      = eNames' u
+eNames' (ArithBinaryOp _ a b) = eNames' a ++ eNames' b
+eNames' (BoolBinaryOp _ a b)  = eNames' a ++ eNames' b
+eNames' (EqBinaryOp _ a b)    = eNames' a ++ eNames' b
+eNames' (LABinaryOp _ a b)    = eNames' a ++ eNames' b
+eNames' (OrdBinaryOp _ a b)   = eNames' a ++ eNames' b
+eNames' (VVVBinaryOp _ a b)   = eNames' a ++ eNames' b
+eNames' (VVNBinaryOp _ a b)   = eNames' a ++ eNames' b
+eNames' (Operator _ _ e)      = eNames' e
+eNames' (Matrix a)            = concatMap (concatMap eNames') a
+eNames' (RealI c b)           = c : eNamesRI' b
 
--- | Generic traversal of everything that could come from an interval to names without functions (similar to 'names'').
-namesRI' :: RealInterval Expr Expr -> [String]
-namesRI' (Bounded il iu) = names' (snd il) ++ names' (snd iu)
-namesRI' (UpTo iu)       = names' (snd iu)
-namesRI' (UpFrom il)     = names' (snd il)
+-- | Generic traversal of everything that could come from an interval to names without functions (similar to 'eNames'').
+eNamesRI' :: RealInterval Expr Expr -> [String]
+eNamesRI' (Bounded il iu) = eNames' (snd il) ++ eNames' (snd iu)
+eNamesRI' (UpTo iu)       = eNames' (snd iu)
+eNamesRI' (UpFrom il)     = eNames' (snd il)
 
 ---------------------------------------------------------------------------
 -- And now implement the exported traversals all in terms of the above
 
 -- | Get dependencies from an equation.  
-dep :: Expr -> [String]
-dep = nub . names
+eDep :: Expr -> [String]
+eDep = nub . eNames
+
+-- | Get dependencies from display expressions.
+deDep :: DisplayExpr -> [String]
+deDep (AlgebraicExpr e)  = eDep e
+deDep (SpaceExpr _)      = []
+deDep (BinOp _ l r)      = nub $ deDep l ++ deDep r
+deDep (AssocBinOp _ des) = nub $ concatMap deDep des 

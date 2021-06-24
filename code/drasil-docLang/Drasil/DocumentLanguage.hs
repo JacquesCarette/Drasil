@@ -19,8 +19,9 @@ import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
 import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
 import Drasil.TraceTable (generateTraceMap)
 
-import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
-                                                     -- Vector - Name conflict (defined in file)
+import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
+                                             -- Vector - Name conflict (defined in file)
+import Language.Drasil.Display (compsy)
 import Utils.Drasil
 
 import Database.Drasil(ChunkDB, SystemInformation(SI), _authors, _kind,
@@ -88,25 +89,25 @@ mkSections :: SystemInformation -> DocDesc -> [Section]
 mkSections si dd = map doit dd
   where
     doit :: DocSection -> Section
-    doit (RefSec rs)         = mkRefSec si dd rs
-    doit (IntroSec is)       = mkIntroSec si is
-    doit (StkhldrSec sts)    = mkStkhldrSec sts
-    doit (SSDSec ss)         = mkSSDSec si ss
-    doit (AuxConstntSec acs) = mkAuxConsSec acs 
-    doit Bibliography        = mkBib (citeDB si)
-    doit (GSDSec gs')        = mkGSDSec gs'
-    doit (ReqrmntSec r)      = mkReqrmntSec r
-    doit (LCsSec lc)         = mkLCsSec lc
-    doit (UCsSec ulcs)       = mkUCsSec ulcs
-    doit (TraceabilitySec t) = mkTraceabilitySec t si
-    doit (AppndxSec a)       = mkAppndxSec a
+    doit (RefSec rs)          = mkRefSec si dd rs
+    doit (IntroSec is)        = mkIntroSec si is
+    doit (StkhldrSec sts)     = mkStkhldrSec sts
+    doit (SSDSec ss)          = mkSSDSec si ss
+    doit (AuxConstntSec acs)  = mkAuxConsSec acs 
+    doit Bibliography         = mkBib (citeDB si)
+    doit (GSDSec gs')         = mkGSDSec gs'
+    doit (ReqrmntSec r)       = mkReqrmntSec r
+    doit (LCsSec lc)          = mkLCsSec lc
+    doit (UCsSec ulcs)        = mkUCsSec ulcs
+    doit (TraceabilitySec t)  = mkTraceabilitySec t si
+    doit (AppndxSec a)        = mkAppndxSec a
     doit (OffShelfSolnsSec o) = mkOffShelfSolnSec o
 
 
 -- | Helper for creating the reference section and subsections.
 mkRefSec :: SystemInformation -> DocDesc -> RefSec -> Section
 mkRefSec si dd (RefProg c l) = section (titleize refmat) [c]
-  (map (mkSubRef si) l) (makeSecRef "RefMat" "Reference Material") --DO NOT CHANGE LABEL OR THINGS WILL BREAK -- see Language.Drasil.Document.Extract
+  (map (mkSubRef si) l) (makeSecRef "RefMat" $ titleize refmat) -- DO NOT CHANGE LABEL OR THINGS WILL BREAK -- see Language.Drasil.Document.Extract
   where
     mkSubRef :: SystemInformation -> RefTab -> Section
     mkSubRef si' TUnits = mkSubRef si' $ TUnits' defaultTUI tOfUnitSIName

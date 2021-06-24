@@ -2,7 +2,7 @@
 module Drasil.SWHS.Body where
 
 import Data.List (nub)
-import Language.Drasil hiding (Symbol(..), organization, section)
+import Language.Drasil hiding (organization, section, variable)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts, _constants,
@@ -116,7 +116,7 @@ symbMap = cdb (qw heatEInPCM : symbolsAll) -- heatEInPCM ?
   ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
   ++ map nw fundamentals ++ map nw educon ++ map nw derived ++ map nw physicalcon ++ map nw unitalChuncks
   ++ [nw swhsPCM, nw algorithm] ++ map nw compcon ++ [nw materialProprty])
-  (cw heatEInPCM : map cw symbols ++ srsDomains) -- FIXME: heatEInPCM?
+  (cw heatEInPCM : map cw symbols ++ srsDomains ++ map cw specParamValList) -- FIXME: heatEInPCM?
   (units ++ [m_2, m_3]) SWHS.dataDefs insModel genDefs tMods concIns section [] allRefs
 
 usedDB :: ChunkDB
@@ -490,7 +490,7 @@ dataContFooter = foldlSent_ $ map foldlSent [
   [sParen (S "++"), atStartNP' (NP.the (constraint `onThePS` surArea)),
   S "are calculated by considering the", phrase surArea, S "to", phrase vol +:+.
   S "ratio", atStartNP (the assumption), S "is that the lowest ratio is 1" `S.and_`
-  S "the highest possible is", E (exactDbl 2 $/ sy thickness) `sC` S "where", ch thickness,
+  S "the highest possible is", eS (exactDbl 2 $/ sy thickness) `sC` S "where", ch thickness,
   S "is the thickness of a" +:+. (Quote (S "sheet") `S.of_` short phsChgMtrl),
   S "A thin sheet has the greatest", phrase surArea, S "to", phrase vol, S "ratio"],
 
@@ -545,7 +545,7 @@ propCorSolDeriv1 lce ewat en co pcmat g1hfc g2hfp su ht  =
   S "over the", phrase simTime `sC` S "as follows"]
 
 propCorSolDeriv2 :: Contents
-propCorSolDeriv2 = eqUnR'
+propCorSolDeriv2 = unlbldExpr
   (sy watE $= defint (eqSymb time) (exactDbl 0) (sy time)
   (sy coilHTC `mulRe` sy coilSA `mulRe` (sy tempC $- apply1 tempW time))
   $- defint (eqSymb time) (exactDbl 0) (sy time)
@@ -559,7 +559,7 @@ propCorSolDeriv3 epcm en pcmat wa =
   S "from the" +:+. phrase wa, S "This can be expressed as"]
 
 propCorSolDeriv4 :: Contents
-propCorSolDeriv4 = eqUnR'
+propCorSolDeriv4 = unlbldExpr
   (sy pcmE $= defint (eqSymb time) (exactDbl 0) (sy time)
   (sy pcmHTC `mulRe` sy pcmSA `mulRe` (apply1 tempW time $- 
   apply1 tempPCM time)))

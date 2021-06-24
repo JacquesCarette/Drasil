@@ -30,7 +30,7 @@ tMods = [newtonSL, newtonTL, newtonLUG, newtonSLR]
 
 newtonTL :: TheoryModel
 newtonTL = tmNoRefs (EquationalModel newtonTLQD) [qw force_1, qw force_2]
-  ([] :: [ConceptChunk]) [] [relat newtonTLQD] [] "NewtonThirdLawMot" [newtonTLNote]
+  ([] :: [ConceptChunk]) [newtonTLQD] [] [] "NewtonThirdLawMot" [newtonTLNote]
 
 newtonTLQD :: QDefinition
 newtonTLQD = mkQuantDef' force_1 (nounPhraseSP "Newton's third law of motion") newtonTLExpr
@@ -57,7 +57,7 @@ newtonLUG :: TheoryModel
 newtonLUG = tmNoRefs newtonLUGModel
   [qw force, qw gravitationalConst, qw mass_1, qw mass_2,
   qw dispNorm, qw dVect, qw distMass] ([] :: [ConceptChunk])
-  [] [relat newtonLUGModel] [] "UniversalGravLaw" newtonLUGNotes
+  [] [toDispExpr newtonLUGModel] [] "UniversalGravLaw" newtonLUGNotes
 
 newtonForceQuant :: QuantityDict
 newtonForceQuant = mkQuant' "force" (nounPhraseSP "Newton's law of universal gravitation") Nothing Real (symbol force) Nothing
@@ -81,7 +81,7 @@ newtonLUGNotes = map foldlSent [
 newtonSLR :: TheoryModel
 newtonSLR = tmNoRefs' "newtonSLR" (EquationalModel newtonSLRQD)
   [qw torque, qw momentOfInertia, qw angularAccel]
-  ([] :: [ConceptChunk]) [] [relat newtonSLRQD] [] "NewtonSecLawRotMot" newtonSLRNotes
+  ([] :: [ConceptChunk]) [newtonSLRQD] [] [] "NewtonSecLawRotMot" newtonSLRNotes
 
 newtonSLRQD :: QDefinition
 newtonSLRQD = mkQuantDef' torque (nounPhraseSP "Newton's second law for rotational motion") newtonSLRExpr

@@ -9,13 +9,13 @@ import Data.List (nub)
 import Data.Maybe (mapMaybe)
 import Control.Lens ((^.))
 
-import Language.Drasil hiding (Symbol(..))
+import Language.Drasil
 import Database.Drasil (SystemInformation, _sysinfodb, citeDB, conceptinsLookup,
   conceptinsTable, dataDefnTable, datadefnLookup, gendefLookup, gendefTable,
   insmodelLookup, insmodelTable, labelledconLookup, labelledcontentTable,
   refbyLookup, refbyTable, sectionLookup, sectionTable, theoryModelLookup,
   theoryModelTable, vars)
-import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(invariants),
+import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, Theory(..),
   TheoryModel, HasInputs(inputs), HasOutput(output, out_constraints))
 import Utils.Drasil
 
@@ -88,18 +88,20 @@ nonEmpty :: b -> ([a] -> b) -> [a] -> b
 nonEmpty def _ [] = def
 nonEmpty _   f xs = f xs
 
+tmDispExprs :: TheoryModel -> [DisplayExpr]
+tmDispExprs t = map toDispExpr (t ^. defined_quant) ++ t ^. invariants
+
 -- | Create the fields for a model from a relation concept (used by 'tmodel').
 mkTMField :: TheoryModel -> SystemInformation -> Field -> ModRow -> ModRow
 mkTMField t _ l@Label fs  = (show l, [mkParagraph $ atStart t]) : fs
-mkTMField t _ l@DefiningEquation fs =
-  (show l, map eqUnR' (t ^. invariants)) : fs 
+mkTMField t _ l@DefiningEquation fs = (show l, map unlbldExpr $ tmDispExprs t) : fs
 mkTMField t m l@(Description v u) fs = (show l,
-  foldr (\x -> buildDescription v u x m) [] (t ^. invariants)) : fs
+  foldr ((\x -> buildDescription v u x m) . toDispExpr) [] $ tmDispExprs t) : fs
 mkTMField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
 mkTMField t _ l@Source fs = (show l, helperSources $ t ^. getReferences) : fs
-mkTMField t _ l@Notes fs = 
+mkTMField t _ l@Notes fs =
   nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (t ^. getNotes)
-mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
+mkTMField _ _ l _ = error $ "Label " ++ show l ++ " not supported " ++
   "for theory models"
 
 -- | Helper function to make a list of 'Sentence's from the current system information and something that has a 'UID'.
@@ -132,17 +134,17 @@ mkDDField :: DataDefinition -> SystemInformation -> Field -> ModRow -> ModRow
 mkDDField d _ l@Label fs = (show l, [mkParagraph $ atStart d]) : fs
 mkDDField d _ l@Symbol fs = (show l, [mkParagraph . P $ eqSymb d]) : fs
 mkDDField d _ l@Units fs = (show l, [mkParagraph $ toSentenceUnitless d]) : fs
-mkDDField d _ l@DefiningEquation fs = (show l, [eqUnR' $ sy d $= d ^. defnExpr]) : fs 
+mkDDField d _ l@DefiningEquation fs = (show l, [unlbldExpr d]) : fs
 mkDDField d m l@(Description v u) fs = (show l, buildDDescription' v u d m) : fs
 mkDDField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
 mkDDField d _ l@Source fs = (show l, helperSources $ d ^. getReferences) : fs
 mkDDField d _ l@Notes fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (d ^. getNotes)
-mkDDField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
+mkDDField _ _ l _ = error $ "Label " ++ show l ++ " not supported " ++
   "for data definitions"
 
 -- | Creates the description field for 'Contents' (if necessary) using the given verbosity and
 -- including or ignoring units for a model/general definition.
-buildDescription :: Verbosity -> InclUnits -> Expr -> SystemInformation -> [Contents] ->
+buildDescription :: Verbosity -> InclUnits -> DisplayExpr -> SystemInformation -> [Contents] ->
   [Contents]
 buildDescription Succinct _ _ _ _ = []
 buildDescription Verbose u e m cs = (UlC . ulcc .
@@ -153,17 +155,17 @@ buildDescription Verbose u e m cs = (UlC . ulcc .
 buildDDescription' :: Verbosity -> InclUnits -> DataDefinition -> SystemInformation ->
   [Contents]
 buildDDescription' Succinct u d _ = [UlC . ulcc . Enumeration $ Definitions [firstPair' u d]]
-buildDDescription' Verbose u d m = [UlC . ulcc . Enumeration $ Definitions $ 
-  firstPair' u d : descPairs u (flip vars (_sysinfodb m) $ d ^. defnExpr)]
+buildDDescription' Verbose u d m = [UlC . ulcc . Enumeration $ Definitions $
+  firstPair' u d : descPairs u (flip vars (_sysinfodb m) $ toDispExpr $ d ^. defnExpr)]
 
 -- | Create the fields for a general definition from a 'GenDefn' chunk.
 mkGDField :: GenDefn -> SystemInformation -> Field -> ModRow -> ModRow
 mkGDField g _ l@Label fs = (show l, [mkParagraph $ atStart g]) : fs
-mkGDField g _ l@Units fs = 
+mkGDField g _ l@Units fs =
   maybe fs (\udef -> (show l, [mkParagraph . Sy $ usymb udef]) : fs) (getUnit g)
-mkGDField g _ l@DefiningEquation fs = (show l, [eqUnR' $ relat g]) : fs
+mkGDField g _ l@DefiningEquation fs = (show l, [unlbldExpr g]) : fs
 mkGDField g m l@(Description v u) fs = (show l,
-  buildDescription v u (relat g) m []) : fs
+  buildDescription v u (toDispExpr g) m []) : fs
 mkGDField g m l@RefBy fs = (show l, [mkParagraph $ helperRefs g m]) : fs --FIXME: fill this in
 mkGDField g _ l@Source fs = (show l, helperSources $ g ^. getReferences) : fs
 mkGDField g _ l@Notes fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (g ^. getNotes)
@@ -172,27 +174,27 @@ mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
 -- | Create the fields for an instance model from an 'InstanceModel' chunk.
 mkIMField :: InstanceModel -> SystemInformation -> Field -> ModRow -> ModRow
 mkIMField i _ l@Label fs  = (show l, [mkParagraph $ atStart i]) : fs
-mkIMField i _ l@DefiningEquation fs = (show l, [eqUnR' $ relat i]) : fs
+mkIMField i _ l@DefiningEquation fs = (show l, [unlbldExpr i]) : fs
 mkIMField i m l@(Description v u) fs = (show l,
-  foldr (\x -> buildDescription v u x m) [] [relat i]) : fs
+  foldr (\x -> buildDescription v u x m) [] [toDispExpr i]) : fs
 mkIMField i m l@RefBy fs = (show l, [mkParagraph $ helperRefs i m]) : fs --FIXME: fill this in
 mkIMField i _ l@Source fs = (show l, helperSources $ i ^. getReferences) : fs
 mkIMField i _ l@Output fs = (show l, [mkParagraph x]) : fs
   where x = P . eqSymb $ i ^. output
-mkIMField i _ l@Input fs = 
+mkIMField i _ l@Input fs =
   case map fst (i ^. inputs) of
   [] -> (show l, [mkParagraph EmptyS]) : fs -- FIXME? Should an empty input list be allowed?
   (_:_) -> (show l, [mkParagraph $ foldl sC x xs]) : fs
   where (x:xs) = map (P . eqSymb . fst) $ i ^. inputs
-mkIMField i _ l@InConstraints fs  = 
-  let ll = mapMaybe (\(x,y) -> y >>= (\z -> Just (x, z))) (i^.inputs) in
-  (show l, foldr ((:) . UlC . ulcc . EqnBlock . uncurry realInterval) [] ll) : fs
-mkIMField i _ l@OutConstraints fs = 
-  (show l, foldr ((:) . UlC . ulcc . EqnBlock . realInterval (i ^. output)) [] 
+mkIMField i _ l@InConstraints fs  =
+  let ll = mapMaybe (\(x,y) -> y >>= (\z -> Just (x, z))) (i ^. inputs) in
+  (show l, foldr ((:) . UlC . ulcc . EqnBlock . toDispExpr . uncurry realInterval) [] ll) : fs
+mkIMField i _ l@OutConstraints fs =
+  (show l, foldr ((:) . UlC . ulcc . EqnBlock . toDispExpr . realInterval (i ^. output)) []
     (i ^. out_constraints)) : fs
-mkIMField i _ l@Notes fs = 
+mkIMField i _ l@Notes fs =
   nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (i ^. getNotes)
-mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
+mkIMField _ _ l _ = error $ "Label " ++ show l ++ " not supported " ++
   "for instance models"
 
 -- | Used for making definitions. The first pair is the symbol of the quantity we are

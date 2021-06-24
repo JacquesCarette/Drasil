@@ -43,8 +43,8 @@ instance Idea               InstanceModel where getA = getA . (^. mk)
 instance Definition         InstanceModel where defn = mk . defn
 -- | Finds the domain of the 'InstanceModel'.
 instance ConceptDomain      InstanceModel where cdom = cdom . (^. mk)
--- | Finds the relation expression for an 'InstanceModel'.
-instance ExprRelat          InstanceModel where relat = relat . (^. mk)
+-- | Converts the 'InstanceModel's related expression into the display language.
+instance Display            InstanceModel where toDispExpr = toDispExpr . (^. mk)
 -- | Finds the derivation of the 'InstanceModel'. May contain Nothing.
 instance HasDerivation      InstanceModel where derivations = deri
 -- | Finds 'Reference's contained in the 'InstanceModel'.
@@ -102,26 +102,26 @@ im' :: ModelKinds -> NP -> Inputs -> Output ->
   OutputConstraints -> [Reference] -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
 im' mkind _ _  _ _  [] _  _  = error $ "Source field of " ++ mkind ^. uid ++ " is empty"
 im' mkind n i o oc r der sn = 
-  IM mkind n i (o, oc) r der (shortname' sn) (prependAbrv inModel sn)
+  IM mkind n i (o, oc) r der (shortname' $ S sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models with a custom term, and no derivation.
 imNoDeriv' :: ModelKinds -> NP -> Inputs -> Output -> 
   OutputConstraints -> [Reference] -> String -> [Sentence] -> InstanceModel
 imNoDeriv' mkind _ _  _ _ [] _  = error $ "Source field of " ++ mkind ^. uid ++ " is empty"
 imNoDeriv' mkind n i o oc r sn =
-  IM mkind n i (o, oc) r Nothing (shortname' sn) (prependAbrv inModel sn)
+  IM mkind n i (o, oc) r Nothing (shortname' $ S sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models with a custom term, and no references.
 imNoRefs' :: ModelKinds -> NP -> Inputs -> Output -> 
   OutputConstraints -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
 imNoRefs' mkind n i o oc der sn = 
-  IM mkind n i (o, oc) [] der (shortname' sn) (prependAbrv inModel sn)
+  IM mkind n i (o, oc) [] der (shortname' $ S sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models with a custom term, and no derivations or references.
 imNoDerivNoRefs' :: ModelKinds -> NP -> Inputs -> Output -> 
   OutputConstraints -> String -> [Sentence] -> InstanceModel
 imNoDerivNoRefs' mkind n i o oc sn = 
-  IM mkind n i (o, oc) [] Nothing (shortname' sn) (prependAbrv inModel sn)
+  IM mkind n i (o, oc) [] Nothing (shortname' $ S sn) (prependAbrv inModel sn)
 
 -- | For building a quantity with no constraint.
 qwUC :: (Quantity q, MayHaveUnit q) => q -> Input 

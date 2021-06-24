@@ -39,6 +39,8 @@ instance HasSymbol          DataDefinition where symbol e = symbol (e ^. qd)
 instance Quantity           DataDefinition where 
 -- | Finds the defining expression of the 'QDefinition' used to make the 'DataDefinition'.
 instance DefiningExpr       DataDefinition where defnExpr = qd . defnExpr
+-- | Converts the defining expression of a 'DataDefinition' into the display language.
+instance Display            DataDefinition where toDispExpr d = defines (sy d) (d ^. defnExpr)
 -- | Finds 'Reference's contained in the 'DataDefinition'.
 instance HasReference       DataDefinition where getReferences = ref
 -- | Equal if 'UID's are equal.
@@ -65,11 +67,11 @@ instance Referable          DataDefinition where
 -- | Smart constructor for data definitions.
 dd :: QDefinition -> [Reference] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
 dd q []   _   _  = error $ "Source field of " ++ q ^. uid ++ " is empty"
-dd q refs der sn = DatDef q Global refs der (shortname' sn) (prependAbrv dataDefn sn)
+dd q refs der sn = DatDef q Global refs der (shortname' $ S sn) (prependAbrv dataDefn sn)
 
 -- | Smart constructor for data definitions with no references.
 ddNoRefs :: QDefinition -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
-ddNoRefs q der sn = DatDef q Global [] der (shortname' sn) (prependAbrv dataDefn sn)
+ddNoRefs q der sn = DatDef q Global [] der (shortname' $ S sn) (prependAbrv dataDefn sn)
 
 -- | Extracts the 'QDefinition' from a 'DataDefinition'.
 qdFromDD :: DataDefinition -> QDefinition

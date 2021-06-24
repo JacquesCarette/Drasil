@@ -2,7 +2,7 @@ module Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs, chgRefs) where
 
 --A list of likely and unlikely changes for GlassBR
 
-import Language.Drasil
+import Language.Drasil hiding (variable)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 

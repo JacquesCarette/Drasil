@@ -2,7 +2,7 @@
 module Drasil.SSP.Body (srs, si, symbMap, printSetting) where
 
 import Data.List (nub)
-import Language.Drasil hiding (Symbol(..), Verb, number, organization, section)
+import Language.Drasil hiding (Verb, number, organization, section, variable)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts, _constants,
@@ -368,7 +368,7 @@ physSysConv = foldlSP [atStart morPrice, phrase analysis, makeRef2S morgenstern1
   phrase value, S "for a single", phrase slice `sC` S "and an", phrase intrslce, 
   phrase value, S "at a given", phrase index, ch index, S "refers to the",
   phrase value, S "between", phrase slice, ch index `S.and_` S "adjacent", phrase slice,
-  E $ sy index `addI` int 1]
+  eS $ sy index `addI` int 1]
 
 figIndexConv :: LabelledContent
 figIndexConv = llcc (makeFigRef "IndexConvention") $ 

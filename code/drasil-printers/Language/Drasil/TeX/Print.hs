@@ -8,9 +8,8 @@ import qualified Text.PrettyPrint as TP
 import Numeric (showEFloat)
 import Control.Arrow (second)
 
-import qualified Language.Drasil as L (CitationKind(..), Decoration(Prime, Hat, Vector),
-  Document, MaxWidthPercent, Month(..), People, RenderSpecial(..), Sentence(S),
-  Symbol(..), USymb(US), (+:+), rendPersLFM, special)
+import qualified Language.Drasil as L
+import qualified Language.Drasil.Display as LD
 import Utils.Drasil (checkValidStr, foldNums)
 
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
@@ -78,27 +77,27 @@ print sm = foldr (($+$) . (`lo` sm)) empty
 
 ------------------ Symbol ----------------------------
 -- | Converts a symbol into a printable document form.
-symbol :: L.Symbol -> D
-symbol (L.Variable s) = pure $ text s
-symbol (L.Label    s) = pure $ text s
-symbol (L.Integ    n) = pure $ text $ show n
-symbol (L.Special  s) = pure $ text $ unPL $ L.special s
-symbol (L.Concat  sl) = foldl (<>) empty $ map symbol sl
+symbol :: LD.Symbol -> D
+symbol (LD.Variable s) = pure $ text s
+symbol (LD.Label    s) = pure $ text s
+symbol (LD.Integ    n) = pure $ text $ show n
+symbol (LD.Special  s) = pure $ text $ unPL $ L.special s
+symbol (LD.Concat  sl) = foldl (<>) empty $ map symbol sl
 --
 -- handle the special cases first, then general case
-symbol (L.Corners [] [] [x] [] s) = br $ symbol s <> pure hat <> br (symbol x)
-symbol (L.Corners [] [] [] [x] s) = br $ symbol s <> pure unders <> br (symbol x)
-symbol (L.Corners [_] [] [] [] _) = error "rendering of ul prescript"
-symbol (L.Corners [] [_] [] [] _) = error "rendering of ll prescript"
-symbol L.Corners{}                = error "rendering of Corners (general)"
-symbol (L.Atop f s)               = sFormat f s
-symbol L.Empty                    = empty
+symbol (LD.Corners [] [] [x] [] s) = br $ symbol s <> pure hat <> br (symbol x)
+symbol (LD.Corners [] [] [] [x] s) = br $ symbol s <> pure unders <> br (symbol x)
+symbol (LD.Corners [_] [] [] [] _) = error "rendering of ul prescript"
+symbol (LD.Corners [] [_] [] [] _) = error "rendering of ll prescript"
+symbol LD.Corners{}                = error "rendering of Corners (general)"
+symbol (LD.Atop f s)               = sFormat f s
+symbol LD.Empty                    = empty
 
 -- | Converts a decorated symbol into a printable document form.
 sFormat :: L.Decoration -> L.Symbol -> D
-sFormat L.Hat    s = commandD "hat" (symbol s)
-sFormat L.Vector s = commandD "mathbf" (symbol s)
-sFormat L.Prime  s = symbol s <> pure (text "'")
+sFormat LD.Hat    s = commandD "hat" (symbol s)
+sFormat LD.Vector s = commandD "mathbf" (symbol s)
+sFormat LD.Prime  s = symbol s <> pure (text "'")
 
 -- | Determine wether braces and brackets are opening or closing.
 data OpenClose = Open | Close
@@ -297,16 +296,16 @@ spec EmptyS              = empty
 spec (Quote q)           = quote $ spec q
 
 -- | Determines the needed context of a symbol.
-symbolNeeds :: L.Symbol -> MathContext
-symbolNeeds (L.Variable   _) = Text
-symbolNeeds (L.Label      _) = Text
-symbolNeeds (L.Integ      _) = Math
-symbolNeeds (L.Special    _) = Math
-symbolNeeds (L.Concat    []) = Math
-symbolNeeds (L.Concat (s:_)) = symbolNeeds s
-symbolNeeds L.Corners{}      = Math
-symbolNeeds (L.Atop     _ _) = Math
-symbolNeeds L.Empty          = Curr
+symbolNeeds :: LD.Symbol -> MathContext
+symbolNeeds (LD.Variable   _) = Text
+symbolNeeds (LD.Label      _) = Text
+symbolNeeds (LD.Integ      _) = Math
+symbolNeeds (LD.Special    _) = Math
+symbolNeeds (LD.Concat    []) = Math
+symbolNeeds (LD.Concat (s:_)) = symbolNeeds s
+symbolNeeds LD.Corners{}      = Math
+symbolNeeds (LD.Atop     _ _) = Math
+symbolNeeds LD.Empty          = Curr
 
 -- | Prints units.
 pUnit :: L.USymb -> D
@@ -325,7 +324,7 @@ pUnit (L.US ls) = formatu t b
     pow (n,1) = p_symb n
     pow (n,p) = toMath $ superscript (p_symb n) (pure $ text $ show p)
     -- printing of unit symbols is done weirdly... FIXME?
-    p_symb (L.Concat s) = foldl (<>) empty $ map p_symb s
+    p_symb (LD.Concat s) = foldl (<>) empty $ map p_symb s
     p_symb n = let cn = symbolNeeds n in switch (const cn) $ symbol n
 
 -----------------------------------------------------------------

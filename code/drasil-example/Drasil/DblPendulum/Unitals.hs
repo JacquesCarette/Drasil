@@ -62,9 +62,9 @@ initialPendAngle = makeUCWDS "initialPendAngle" (cn "initial pendulum angle")
 unitless :: [DefinedQuantityDict]
 unitless = [QM.unitVect, QM.unitVectj, QM.pi_]
 -----------------------
-lRod :: Symbol
 
-lRod = Label "rod"
+lRod :: Symbol
+lRod = label "rod"
 
 -----------------------
 -- CONSTRAINT CHUNKS --

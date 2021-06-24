@@ -3,7 +3,7 @@ module Language.Drasil.Code.Imperative.Parameters(getInConstructorParams,
   getConstraintParams, getCalcParams, getOutputParams
 ) where
 
-import Language.Drasil 
+import Language.Drasil hiding (isIn)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..), 
   inMod)
 import Language.Drasil.Chunk.Code (CodeVarChunk, CodeIdea(codeChunk, codeName), 

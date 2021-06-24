@@ -1,0 +1,4 @@
+digraph blockcommentjavacode{
+BlockCommentJavaCode -> Doc;
+BlockCommentJavaCode	[shape=oval, color=red2, label=BlockCommentJavaCode];
+}

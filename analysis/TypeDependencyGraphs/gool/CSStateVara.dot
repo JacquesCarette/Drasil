@@ -1,0 +1,4 @@
+digraph csstatevara{
+CSStateVara -> CSaStateVara;
+CSStateVara	[shape=oval, color=red2, label=CSStateVara];
+}

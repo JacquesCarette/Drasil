@@ -1,0 +1,14 @@
+digraph theorymodel{
+TheoryModel -> UID;
+TheoryModel -> ConceptChunk;
+TheoryModel -> TheoryModel;
+TheoryModel -> SpaceDefn;
+TheoryModel -> QuantityDict;
+TheoryModel -> QDefinition;
+TheoryModel -> DisplayExpr;
+TheoryModel -> Reference;
+TheoryModel -> ShortName;
+TheoryModel -> String;
+TheoryModel -> Sentence;
+TheoryModel	[shape=oval, color=cyan3, label=TheoryModel];
+}

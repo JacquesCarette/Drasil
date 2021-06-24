@@ -1,0 +1,7 @@
+digraph funcdef{
+FuncDef -> Name;
+FuncDef -> Description;
+FuncDef -> ParameterChunk;
+FuncDef -> Space;
+FuncDef	[shape=oval, color=darkviolet, label=FuncDef];
+}

@@ -1,0 +1,4 @@
+digraph comment{
+Comment -> String;
+Comment	[shape=oval, color=red2, label=Comment];
+}

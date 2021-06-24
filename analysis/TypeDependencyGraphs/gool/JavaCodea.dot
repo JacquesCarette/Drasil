@@ -1,0 +1,4 @@
+digraph javacodea{
+JavaCodea -> a;
+JavaCodea	[shape=oval, color=darkgreen, label=JavaCodea];
+}

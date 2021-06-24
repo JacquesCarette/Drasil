@@ -1,0 +1,4 @@
+digraph printingconfiguration{
+PrintingConfiguration -> Notation;
+PrintingConfiguration	[shape=oval, color=darkgreen, label=PrintingConfiguration];
+}

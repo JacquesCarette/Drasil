@@ -1,0 +1,3 @@
+digraph linktype{
+LinkType	[shape=oval, color=darkviolet, label=LinkType];
+}

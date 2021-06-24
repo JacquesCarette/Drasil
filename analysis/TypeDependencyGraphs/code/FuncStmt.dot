@@ -1,0 +1,13 @@
+digraph funcstmt{
+FuncStmt -> CodeVarChunk;
+FuncStmt -> Expr;
+FuncStmt -> FuncStmt;
+FuncStmt -> Integer;
+FuncStmt -> String;
+FuncStmt -> CodeFuncChunk;
+FuncStmt -> ParameterChunk;
+FuncStmt -> Quantity;
+FuncStmt -> c;
+FuncStmt -> MayHaveUnit;
+FuncStmt	[shape=oval, color=darkviolet, label=FuncStmt];
+}

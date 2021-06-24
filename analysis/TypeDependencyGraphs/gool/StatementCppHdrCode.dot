@@ -1,0 +1,4 @@
+digraph statementcpphdrcode{
+StatementCppHdrCode -> DocTerminator;
+StatementCppHdrCode	[shape=oval, color=red2, label=StatementCppHdrCode];
+}

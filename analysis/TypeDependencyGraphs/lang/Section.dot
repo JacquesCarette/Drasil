@@ -1,0 +1,6 @@
+digraph section{
+Section -> Title;
+Section -> SecCons;
+Section -> Reference;
+Section	[shape=oval, color=cyan3, label=Section];
+}

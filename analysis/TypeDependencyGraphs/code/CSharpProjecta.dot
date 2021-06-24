@@ -1,0 +1,4 @@
+digraph csharpprojecta{
+CSharpProjecta -> a;
+CSharpProjecta	[shape=oval, color=darkgreen, label=CSharpProjecta];
+}

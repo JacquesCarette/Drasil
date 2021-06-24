@@ -1,0 +1,4 @@
+digraph refmapa{
+RefMapa -> MapUIDaInt;
+RefMapa	[shape=oval, color=red2, label=RefMapa];
+}

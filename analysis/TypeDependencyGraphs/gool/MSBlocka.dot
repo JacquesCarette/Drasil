@@ -1,0 +1,4 @@
+digraph msblocka{
+MSBlocka -> MSaBlocka;
+MSBlocka	[shape=oval, color=red2, label=MSBlocka];
+}

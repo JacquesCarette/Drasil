@@ -1,0 +1,3 @@
+digraph valuestate{
+ValueState	[shape=oval, color=darkgreen, label=ValueState];
+}

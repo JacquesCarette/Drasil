@@ -1,0 +1,4 @@
+digraph matchedspaces{
+MatchedSpaces -> SpaceGenStateCodeType;
+MatchedSpaces	[shape=oval, color=red2, label=MatchedSpaces];
+}

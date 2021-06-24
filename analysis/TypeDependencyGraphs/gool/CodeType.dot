@@ -1,0 +1,3 @@
+digraph codetype{
+CodeType	[shape=oval, color=darkviolet, label=CodeType];
+}

@@ -1,0 +1,8 @@
+digraph codeharness{
+CodeHarness -> MaybeBuildConfig;
+CodeHarness -> MaybeRunnable;
+CodeHarness -> GOOLState;
+CodeHarness -> ProgData;
+CodeHarness -> MaybeDocConfig;
+CodeHarness	[shape=oval, color=cyan3, label=CodeHarness];
+}

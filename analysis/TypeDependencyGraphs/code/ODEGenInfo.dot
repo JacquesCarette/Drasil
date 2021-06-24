@@ -1,0 +1,4 @@
+digraph odegeninfo{
+ODEGenInfo -> MaybeFilePathNameExtLibStateNameVersion;
+ODEGenInfo	[shape=oval, color=red2, label=ODEGenInfo];
+}

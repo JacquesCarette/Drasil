@@ -1,0 +1,4 @@
+digraph latex{
+Latex -> String;
+Latex	[shape=oval, color=darkgreen, label=Latex];
+}

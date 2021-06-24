@@ -1,0 +1,9 @@
+digraph methodinfofill{
+MethodInfoFill -> ParameterFill;
+MethodInfoFill -> Initializer;
+MethodInfoFill -> StepFill;
+MethodInfoFill -> NonEmpty;
+MethodInfoFill -> StepGroupFill;
+MethodInfoFill -> ExternalLibraryCall;
+MethodInfoFill	[shape=oval, color=darkviolet, label=MethodInfoFill];
+}

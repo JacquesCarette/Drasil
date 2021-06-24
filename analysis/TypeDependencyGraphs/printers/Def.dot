@@ -1,0 +1,3 @@
+digraph def{
+Def	[shape=oval, color=darkviolet, label=Def];
+}

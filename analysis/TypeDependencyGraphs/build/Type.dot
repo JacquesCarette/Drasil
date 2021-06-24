@@ -1,0 +1,3 @@
+digraph type{
+Type	[shape=oval, color=darkviolet, label=Type];
+}

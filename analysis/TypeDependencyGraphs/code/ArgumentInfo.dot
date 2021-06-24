@@ -1,0 +1,14 @@
+digraph argumentinfo{
+ArgumentInfo -> Expr;
+ArgumentInfo -> Space;
+ArgumentInfo -> Maybe;
+ArgumentInfo -> CodeVarChunk;
+ArgumentInfo -> CodeFuncChunk;
+ArgumentInfo -> Parameter;
+ArgumentInfo -> Step;
+ArgumentInfo -> Requires;
+ArgumentInfo -> Description;
+ArgumentInfo -> ClassInfo;
+ArgumentInfo -> NonEmpty;
+ArgumentInfo	[shape=oval, color=darkviolet, label=ArgumentInfo];
+}

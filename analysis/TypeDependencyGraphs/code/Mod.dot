@@ -1,0 +1,9 @@
+digraph mod{
+Mod -> Name;
+Mod -> Description;
+Mod -> Import;
+Mod -> Class;
+Mod -> Func;
+Mod -> Mod;
+Mod	[shape=oval, color=darkviolet, label=Mod];
+}

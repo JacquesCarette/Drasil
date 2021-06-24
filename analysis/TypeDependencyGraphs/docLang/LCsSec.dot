@@ -1,0 +1,3 @@
+digraph lcssec{
+LCsSec	[shape=oval, color=darkgreen, label=LCsSec];
+}

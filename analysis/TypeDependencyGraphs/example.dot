@@ -1,0 +1,252 @@
+digraph alltypes {
+	subgraph asumptionss {
+	}
+	subgraph body {
+	}
+	subgraph concepts {
+	}
+	subgraph datadefs {
+	}
+	subgraph expresionss {
+	}
+	subgraph figures {
+	}
+	subgraph gendefs {
+	}
+	subgraph goals {
+	}
+	subgraph imods {
+	}
+	subgraph main {
+	}
+	subgraph requirements {
+	}
+	subgraph unitals {
+	}
+	subgraph arbiter {
+	}
+	subgraph vector {
+	}
+	subgraph asumptionss {
+	}
+	subgraph body {
+	}
+	subgraph cangehs {
+	}
+	subgraph concepts {
+	}
+	subgraph datadefs {
+	}
+	subgraph gdefs {
+	}
+	subgraph gendefs {
+	}
+	subgraph goals {
+	}
+	subgraph imods {
+	}
+	subgraph main {
+	}
+	subgraph references {
+	}
+	subgraph requirements {
+	}
+	subgraph tmods {
+	}
+	subgraph unitals {
+	}
+	subgraph asumptionss {
+	}
+	subgraph body {
+	}
+	subgraph cangehs {
+	}
+	subgraph concepts {
+	}
+	subgraph datadefs {
+	}
+	subgraph figures {
+	}
+	subgraph goals {
+	}
+	subgraph imods {
+	}
+	subgraph main {
+	}
+	subgraph moduledefs {
+	}
+	subgraph references {
+	}
+	subgraph requirements {
+	}
+	subgraph symbols {
+	}
+	subgraph tmods {
+	}
+	subgraph unitals {
+		subgraph glasstype{
+		GlassType -> IntegerCI;
+		GlassType	[shape=oval, color=red2, label=GlassType];
+		}
+		subgraph glassthickness{
+		GlassThickness -> DoubleDouble;
+		GlassThickness	[shape=oval, color=red2, label=GlassThickness];
+		}
+	}
+	subgraph units {
+	}
+	subgraph body {
+	}
+	subgraph heattranfers {
+	}
+	subgraph main {
+	}
+	subgraph asumptionss {
+	}
+	subgraph body {
+	}
+	subgraph cangehs {
+	}
+	subgraph datadefs {
+	}
+	subgraph definitions {
+	}
+	subgraph gendefs {
+	}
+	subgraph goals {
+	}
+	subgraph imods {
+	}
+	subgraph main {
+	}
+	subgraph references {
+	}
+	subgraph requirements {
+	}
+	subgraph unitals {
+	}
+	subgraph asumptionss {
+	}
+	subgraph body {
+	}
+	subgraph cangehs {
+	}
+	subgraph concepts {
+	}
+	subgraph datadefs {
+	}
+	subgraph gendefs {
+	}
+	subgraph gensydescs {
+	}
+	subgraph imodel {
+	}
+	subgraph introsection {
+	}
+	subgraph main {
+	}
+	subgraph references {
+	}
+	subgraph requirements {
+	}
+	subgraph spsydescs {
+	}
+	subgraph tmodel {
+	}
+	subgraph unitals {
+	}
+	subgraph asumptionss {
+	}
+	subgraph body {
+	}
+	subgraph concepts {
+	}
+	subgraph datadefs {
+	}
+	subgraph expresionss {
+	}
+	subgraph figures {
+	}
+	subgraph gendefs {
+	}
+	subgraph goals {
+	}
+	subgraph imods {
+	}
+	subgraph main {
+	}
+	subgraph references {
+	}
+	subgraph requirements {
+	}
+	subgraph unitals {
+	}
+	subgraph asumptionss {
+	}
+	subgraph baicexprss {
+	}
+	subgraph body {
+	}
+	subgraph cangehs {
+	}
+	subgraph datadefs {
+	}
+	subgraph defs {
+	}
+	subgraph figures {
+	}
+	subgraph gendefs {
+	}
+	subgraph goals {
+	}
+	subgraph imods {
+	}
+	subgraph main {
+	}
+	subgraph references {
+	}
+	subgraph requirements {
+	}
+	subgraph tmods {
+	}
+	subgraph unitals {
+	}
+	subgraph asumptionss {
+	}
+	subgraph body {
+	}
+	subgraph cangehs {
+	}
+	subgraph concepts {
+	}
+	subgraph datadefs {
+	}
+	subgraph gendefs {
+	}
+	subgraph generate {
+	}
+	subgraph goals {
+	}
+	subgraph imods {
+	}
+	subgraph main {
+	}
+	subgraph references {
+	}
+	subgraph requirements {
+	}
+	subgraph tmods {
+		subgraph phasechange{
+		PhaseChange -> PhaseChange;
+		PhaseChange -> Sentence;
+		PhaseChange -> TheoryModel;
+		PhaseChange	[shape=oval, color=darkviolet, label=PhaseChange];
+		}
+	}
+	subgraph unitals {
+	}
+	subgraph body {
+	}
+	subgraph main {
+	}
+}

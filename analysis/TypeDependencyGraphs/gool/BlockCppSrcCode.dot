@@ -1,0 +1,4 @@
+digraph blockcppsrccode{
+BlockCppSrcCode -> Doc;
+BlockCppSrcCode	[shape=oval, color=red2, label=BlockCppSrcCode];
+}

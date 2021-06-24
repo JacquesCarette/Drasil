@@ -1,0 +1,3 @@
+digraph fence{
+Fence	[shape=oval, color=darkviolet, label=Fence];
+}

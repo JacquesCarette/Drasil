@@ -1,0 +1,4 @@
+digraph auxiliarycsharpproject{
+AuxiliaryCSharpProject -> AuxData;
+AuxiliaryCSharpProject	[shape=oval, color=red2, label=AuxiliaryCSharpProject];
+}

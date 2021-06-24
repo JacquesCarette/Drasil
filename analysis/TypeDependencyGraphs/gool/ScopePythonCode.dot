@@ -1,0 +1,4 @@
+digraph scopepythoncode{
+ScopePythonCode -> Doc;
+ScopePythonCode	[shape=oval, color=red2, label=ScopePythonCode];
+}

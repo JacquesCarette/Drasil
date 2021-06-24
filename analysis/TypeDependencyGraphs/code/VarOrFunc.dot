@@ -1,0 +1,5 @@
+digraph varorfunc{
+VarOrFunc -> QuantityDict;
+VarOrFunc -> VarOrFunc;
+VarOrFunc	[shape=oval, color=cyan3, label=VarOrFunc];
+}

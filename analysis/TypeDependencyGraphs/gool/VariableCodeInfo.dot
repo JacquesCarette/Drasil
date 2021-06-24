@@ -1,0 +1,3 @@
+digraph variablecodeinfo{
+VariableCodeInfo	[shape=oval, color=red2, label=VariableCodeInfo];
+}

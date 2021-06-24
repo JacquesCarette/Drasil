@@ -1,0 +1,4 @@
+digraph typepythoncode{
+TypePythonCode -> TypeData;
+TypePythonCode	[shape=oval, color=red2, label=TypePythonCode];
+}

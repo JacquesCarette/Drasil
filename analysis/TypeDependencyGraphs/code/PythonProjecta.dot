@@ -1,0 +1,4 @@
+digraph pythonprojecta{
+PythonProjecta -> a;
+PythonProjecta	[shape=oval, color=darkgreen, label=PythonProjecta];
+}

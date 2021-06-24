@@ -1,0 +1,4 @@
+digraph valuepcppsrccodecpphdrcode{
+ValuepCppSrcCodeCppHdrCode -> ValData;
+ValuepCppSrcCodeCppHdrCode	[shape=oval, color=red2, label=ValuepCppSrcCodeCppHdrCode];
+}

@@ -1,0 +1,4 @@
+digraph modularity{
+Modularity -> InputModule;
+Modularity	[shape=oval, color=darkviolet, label=Modularity];
+}

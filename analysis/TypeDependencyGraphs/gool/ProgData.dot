@@ -1,0 +1,5 @@
+digraph progdata{
+ProgData -> String;
+ProgData -> FileData;
+ProgData	[shape=oval, color=cyan3, label=ProgData];
+}

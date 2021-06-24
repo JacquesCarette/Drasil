@@ -1,0 +1,10 @@
+digraph datadefinition{
+DataDefinition -> QDefinition;
+DataDefinition -> ScopeType;
+DataDefinition -> Reference;
+DataDefinition -> MaybeDerivation;
+DataDefinition -> ShortName;
+DataDefinition -> String;
+DataDefinition -> Sentence;
+DataDefinition	[shape=oval, color=cyan3, label=DataDefinition];
+}

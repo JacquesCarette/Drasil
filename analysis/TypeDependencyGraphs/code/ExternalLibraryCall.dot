@@ -1,0 +1,4 @@
+digraph externallibrarycall{
+ExternalLibraryCall -> StepGroupFill;
+ExternalLibraryCall	[shape=oval, color=red2, label=ExternalLibraryCall];
+}

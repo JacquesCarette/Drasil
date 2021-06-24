@@ -1,0 +1,5 @@
+digraph person{
+Person -> String;
+Person -> Conv;
+Person	[shape=oval, color=cyan3, label=Person];
+}

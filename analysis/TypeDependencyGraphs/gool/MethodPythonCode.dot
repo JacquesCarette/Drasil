@@ -1,0 +1,4 @@
+digraph methodpythoncode{
+MethodPythonCode -> MethodData;
+MethodPythonCode	[shape=oval, color=red2, label=MethodPythonCode];
+}

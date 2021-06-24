@@ -1,0 +1,9 @@
+digraph systeminformation{
+SystemInformation -> CommonIdea;
+SystemInformation -> a;
+SystemInformation -> Idea;
+SystemInformation -> b;
+SystemInformation -> HasName;
+SystemInformation -> c;
+SystemInformation	[shape=oval, color=darkviolet, label=SystemInformation];
+}

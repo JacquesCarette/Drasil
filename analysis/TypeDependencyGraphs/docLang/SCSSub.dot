@@ -1,0 +1,14 @@
+digraph scssub{
+SCSSub -> SCSSub;
+SCSSub -> Sentence;
+SCSSub -> Fields;
+SCSSub -> DerivationDisplay;
+SCSSub -> HasUncertainty;
+SCSSub -> c;
+SCSSub -> Quantity;
+SCSSub -> Constrained;
+SCSSub -> HasReasVal;
+SCSSub -> MayHaveUnit;
+SCSSub -> Contents;
+SCSSub	[shape=oval, color=darkviolet, label=SCSSub];
+}

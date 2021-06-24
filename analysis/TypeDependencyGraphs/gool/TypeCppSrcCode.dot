@@ -1,0 +1,4 @@
+digraph typecppsrccode{
+TypeCppSrcCode -> TypeData;
+TypeCppSrcCode	[shape=oval, color=red2, label=TypeCppSrcCode];
+}

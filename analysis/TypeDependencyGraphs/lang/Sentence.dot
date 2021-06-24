@@ -1,0 +1,9 @@
+digraph sentence{
+Sentence -> SentenceStyle;
+Sentence -> UID;
+Sentence -> Sentence;
+Sentence -> USymb;
+Sentence -> String;
+Sentence -> Symbol;
+Sentence	[shape=oval, color=darkviolet, label=Sentence];
+}

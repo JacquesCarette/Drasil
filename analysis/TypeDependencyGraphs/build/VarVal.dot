@@ -1,0 +1,4 @@
+digraph varval{
+VarVal -> String;
+VarVal	[shape=oval, color=red2, label=VarVal];
+}

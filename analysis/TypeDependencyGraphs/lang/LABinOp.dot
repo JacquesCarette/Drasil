@@ -1,0 +1,3 @@
+digraph labinop{
+LABinOp	[shape=oval, color=darkviolet, label=LABinOp];
+}

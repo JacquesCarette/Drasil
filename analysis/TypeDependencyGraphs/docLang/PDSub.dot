@@ -1,0 +1,12 @@
+digraph pdsub{
+PDSub -> Concept;
+PDSub -> c;
+PDSub -> Maybe;
+PDSub -> Sentence;
+PDSub -> PDSub;
+PDSub -> Idea;
+PDSub -> a;
+PDSub -> LabelledContent;
+PDSub -> Contents;
+PDSub	[shape=oval, color=darkviolet, label=PDSub];
+}

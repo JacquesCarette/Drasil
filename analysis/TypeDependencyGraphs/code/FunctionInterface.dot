@@ -1,0 +1,10 @@
+digraph functioninterface{
+FunctionInterface -> NonEmpty;
+FunctionInterface -> Requires;
+FunctionInterface -> FuncType;
+FunctionInterface -> CodeFuncChunk;
+FunctionInterface -> Argument;
+FunctionInterface -> Maybe;
+FunctionInterface -> Result;
+FunctionInterface	[shape=oval, color=darkviolet, label=FunctionInterface];
+}

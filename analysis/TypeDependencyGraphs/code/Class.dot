@@ -1,0 +1,8 @@
+digraph class{
+Class -> Name;
+Class -> MaybeName;
+Class -> Description;
+Class -> StateVariable;
+Class -> Func;
+Class	[shape=oval, color=cyan3, label=Class];
+}

@@ -1,0 +1,3 @@
+digraph rtopology{
+RTopology	[shape=oval, color=darkviolet, label=RTopology];
+}

@@ -1,0 +1,11 @@
+digraph readmeinfo{
+ReadMeInfo -> LangAbbrev;
+ReadMeInfo -> LangVers;
+ReadMeInfo -> MaybeString;
+ReadMeInfo -> ImplementationType;
+ReadMeInfo -> Name;
+ReadMeInfo -> FilePath;
+ReadMeInfo -> Contributor;
+ReadMeInfo -> CaseName;
+ReadMeInfo	[shape=oval, color=cyan3, label=ReadMeInfo];
+}

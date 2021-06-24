@@ -1,0 +1,3 @@
+digraph structure{
+Structure	[shape=oval, color=darkviolet, label=Structure];
+}

@@ -1,0 +1,3 @@
+digraph capitalizationrule{
+CapitalizationRule	[shape=oval, color=darkviolet, label=CapitalizationRule];
+}

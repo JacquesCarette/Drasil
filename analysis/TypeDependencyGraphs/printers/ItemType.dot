@@ -1,0 +1,5 @@
+digraph itemtype{
+ItemType -> Spec;
+ItemType -> ListType;
+ItemType	[shape=oval, color=darkviolet, label=ItemType];
+}

@@ -1,0 +1,25 @@
+digraph expr{
+Expr -> Double;
+Expr -> Expr;
+Expr -> Integer;
+Expr -> String;
+Expr -> AssocArithOper;
+Expr -> AssocBoolOper;
+Expr -> DerivType;
+Expr -> UID;
+Expr -> Completeness;
+Expr -> ExprRelation;
+Expr -> UFunc;
+Expr -> UFuncB;
+Expr -> UFuncVec;
+Expr -> ArithBinOp;
+Expr -> BoolBinOp;
+Expr -> EqBinOp;
+Expr -> LABinOp;
+Expr -> OrdBinOp;
+Expr -> VVVBinOp;
+Expr -> VVNBinOp;
+Expr -> DomainDesc;
+Expr -> RealInterval;
+Expr	[shape=oval, color=darkviolet, label=Expr];
+}

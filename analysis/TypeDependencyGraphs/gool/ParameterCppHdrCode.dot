@@ -1,0 +1,4 @@
+digraph parametercpphdrcode{
+ParameterCppHdrCode -> ParamData;
+ParameterCppHdrCode	[shape=oval, color=red2, label=ParameterCppHdrCode];
+}

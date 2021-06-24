@@ -1,0 +1,4 @@
+digraph host{
+Host -> String;
+Host	[shape=oval, color=red2, label=Host];
+}

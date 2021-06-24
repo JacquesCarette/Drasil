@@ -1,0 +1,4 @@
+digraph fs{
+FS -> StateFileState;
+FS	[shape=oval, color=red2, label=FS];
+}

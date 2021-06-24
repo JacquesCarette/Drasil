@@ -1,0 +1,4 @@
+digraph scopepcppsrccodecpphdrcode{
+ScopepCppSrcCodeCppHdrCode -> DocScopeTag;
+ScopepCppSrcCodeCppHdrCode	[shape=oval, color=red2, label=ScopepCppSrcCodeCppHdrCode];
+}

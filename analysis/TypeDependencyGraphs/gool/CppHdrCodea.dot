@@ -1,0 +1,4 @@
+digraph cpphdrcodea{
+CppHdrCodea -> a;
+CppHdrCodea	[shape=oval, color=darkgreen, label=CppHdrCodea];
+}

@@ -1,0 +1,3 @@
+digraph stage{
+Stage	[shape=oval, color=darkviolet, label=Stage];
+}

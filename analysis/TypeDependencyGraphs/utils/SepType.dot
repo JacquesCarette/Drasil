@@ -1,0 +1,3 @@
+digraph septype{
+SepType	[shape=oval, color=darkviolet, label=SepType];
+}

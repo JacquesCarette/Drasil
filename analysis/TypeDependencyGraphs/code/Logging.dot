@@ -1,0 +1,3 @@
+digraph logging{
+Logging	[shape=oval, color=darkviolet, label=Logging];
+}

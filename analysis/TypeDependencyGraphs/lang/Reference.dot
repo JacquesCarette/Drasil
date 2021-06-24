@@ -1,0 +1,7 @@
+digraph reference{
+Reference -> UID;
+Reference -> LblType;
+Reference -> ShortName;
+Reference -> RefInfo;
+Reference	[shape=oval, color=cyan3, label=Reference];
+}

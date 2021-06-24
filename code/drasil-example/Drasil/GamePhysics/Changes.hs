@@ -69,4 +69,4 @@ unlikelyChgs = [ucSRB, ucEI, ucCCS, ucORB]
 
 -- References --
 chgRefs :: [Reference]
-chgRefs = map rw (likelyChgs ++ unlikelyChgs)
+chgRefs = map ref (likelyChgs ++ unlikelyChgs)

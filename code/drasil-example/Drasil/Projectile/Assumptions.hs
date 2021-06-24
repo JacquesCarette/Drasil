@@ -93,8 +93,8 @@ timeStartZeroDesc = atStart time +:+. S "starts at zero"
 gravAccelValueDesc :: Sentence
 gravAccelValueDesc = atStartNP (the acceleration) +:+ S "due to" +:+
   phrase gravity +:+ S "is assumed to have the" +:+ phrase value +:+ 
-  S "provided in" +:+. makeRef2S (SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]))
+  S "provided in" +:+. refS (SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]))
 
 -- References --
 assumpRefs :: [Reference]
-assumpRefs = map rw assumptions
+assumpRefs = map ref assumptions

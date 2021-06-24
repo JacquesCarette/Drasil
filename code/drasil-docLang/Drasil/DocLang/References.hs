@@ -17,4 +17,4 @@ import Language.Drasil
 secRefs :: [Reference]
 secRefs = sectionReferences ++ [tableAbbAccRef, tableAbbAccLabel,
   reqInputsRef, symbTableRef, unitTableRef, tableOfConstantsRef, tInDataCstRef, tOutDataCstRef]
-  ++ map (rw.makeTabRef.getTraceConfigUID) [traceMatAssumpAssump, traceMatAssumpOther, traceMatRefinement]
+  ++ map (ref.makeTabRef.getTraceConfigUID) [traceMatAssumpAssump, traceMatAssumpOther, traceMatRefinement]

@@ -29,7 +29,7 @@ import Drasil.NoPCM.Unitals (inputs)
 inputInitVals :: ConceptInstance
 inputInitVals = cic "inputInitVals" (foldlSent [
   titleize input_, S "the following", plural value, S "described in",
-  makeRef2S inputInitValsTable `sC` S "which define", inReqDesc])
+  refS inputInitValsTable `sC` S "which define", inReqDesc])
   "Input-Initial-Values" funcReqDom
 
 --
@@ -60,4 +60,4 @@ funcReqs = [inputInitVals, findMass, checkWithPhysConsts,
 
 --References--
 reqRefs :: [Reference]
-reqRefs = rw inputInitValsTable : map rw funcReqs
+reqRefs = ref inputInitValsTable : map ref funcReqs

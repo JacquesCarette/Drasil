@@ -17,7 +17,7 @@ data ScopeType =
 -- the scope, any references, maybe a derivation, a label ('ShortName'), a reference address, and other notes ('Sentence's).
 data DataDefinition = DatDef { _qd    :: QDefinition
                              , _scp   :: ScopeType
-                             , _ref   :: [Reference]
+                             , _rf   :: [Reference]
                              , _deri  :: Maybe Derivation
                              , lbl    :: ShortName
                              , ra     :: String
@@ -42,7 +42,7 @@ instance DefiningExpr       DataDefinition where defnExpr = qd . defnExpr
 -- | Converts the defining expression of a 'DataDefinition' into the display language.
 instance Display            DataDefinition where toDispExpr d = defines (sy d) (d ^. defnExpr)
 -- | Finds 'Reference's contained in the 'DataDefinition'.
-instance HasReference       DataDefinition where getReferences = ref
+instance HasReference       DataDefinition where getReferences = rf
 -- | Equal if 'UID's are equal.
 instance Eq                 DataDefinition where a == b = (a ^. uid) == (b ^. uid)
 -- | Finds the derivation of the 'DataDefinition'. May contain Nothing.

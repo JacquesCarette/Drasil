@@ -49,7 +49,7 @@ data TheoryModel = TM
   , _defq  :: [QDefinition]
   , _invs  :: [DisplayExpr]
   , _dfun  :: [QDefinition]
-  , _ref   :: [Reference]
+  , _rf   :: [Reference]
   ,  lb    :: ShortName
   ,  ra    :: String
   , _notes :: [Sentence]
@@ -65,7 +65,7 @@ instance Idea               TheoryModel where getA = getA . view con
 -- | Finds the definition of the 'ConceptChunk' contained in a 'TheoryModel'.
 instance Definition         TheoryModel where defn = con . defn
 -- | Finds 'Reference's contained in the 'TheoryModel'.
-instance HasReference       TheoryModel where getReferences = ref
+instance HasReference       TheoryModel where getReferences = rf
 -- | Finds the domain of the 'ConceptChunk' contained in a 'TheoryModel'.
 instance ConceptDomain      TheoryModel where cdom = cdom . view con
 -- | Finds any additional notes for the 'TheoryModel'.

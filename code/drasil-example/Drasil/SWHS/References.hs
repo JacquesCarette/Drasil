@@ -38,4 +38,4 @@ lightstone2012 = cMisc [
 
 -- References --
 citeRefs :: [Reference]
-citeRefs = map rw citations
+citeRefs = map ref citations

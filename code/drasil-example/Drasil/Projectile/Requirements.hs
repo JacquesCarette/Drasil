@@ -32,7 +32,7 @@ outputValues = cic "outputValues" outputValuesDesc "Output-Values"       funcReq
 verifyParamsDesc, calcValuesDesc, outputValuesDesc :: Sentence
 verifyParamsDesc = foldlSent [S "Check the entered", plural inValue,
   S "to ensure that they do not exceed the", plural datumConstraint,
-  S "mentioned in" +:+. makeRef2S (datCon ([]::[Contents]) ([]::[Section])), 
+  S "mentioned in" +:+. refS (datCon ([]::[Contents]) ([]::[Section])), 
   S "If any of the", plural inValue, S "are out of bounds" `sC`
   S "an", phrase errMsg, S "is displayed" `S.andThe` plural calculation, S "stop"]
 calcValuesDesc = foldlSent [S "Calculate the following" +: plural value,
@@ -53,7 +53,7 @@ nonfuncReqs = [correct, verifiable, understandable, reusable, maintainable, port
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
   atStartNP' (output_ `the_ofThePS` code), S "have the",
-  plural property, S "described in", makeRef2S (propCorSol [] [])
+  plural property, S "described in", refS (propCorSol [] [])
   ]) "Correct" nonFuncReqDom
  
 verifiable :: ConceptInstance
@@ -83,5 +83,5 @@ portable = cic "portable" (foldlSent [
 
 -- References --
 reqRefs :: [Reference]
-reqRefs = map rw ([inReq EmptyS] ++ funcReqs ++ nonfuncReqs)
-  ++ map rw [propCorSol [] [], datCon ([]::[Contents]) ([]::[Section])]
+reqRefs = map ref ([inReq EmptyS] ++ funcReqs ++ nonfuncReqs)
+  ++ map ref [propCorSol [] [], datCon ([]::[Contents]) ([]::[Section])]

@@ -39,9 +39,9 @@ inTable i = mkInputPropsTable i (inReq EmptyS) -- passes empty Sentence to make 
 -- there will be nothing after the word "@reference@".
 inReqDesc :: (HasShortName r, Referable r) => r -> Sentence -> Sentence 
 inReqDesc  t desc = foldlSent [atStart input_,  S "the", plural value, S "from", end]
-  where end = case desc of EmptyS -> makeRef2S t
-                           sent   -> makeRef2S t `sC` S "which define" +:+ sent
---outReqDesc t = foldlSent [atStart output_, S "the", plural value, S "from", makeRef2S t]
+  where end = case desc of EmptyS -> refS t
+                           sent   -> refS t `sC` S "which define" +:+ sent
+--outReqDesc t = foldlSent [atStart output_, S "the", plural value, S "from", refS t]
 
 -- | Creates a 'ConceptInstance' of input values.
 inReq :: Sentence -> ConceptInstance
@@ -102,7 +102,7 @@ mkValsSourceTable vals labl cap = llcc (makeTabRef labl) $
   (mkTable [ch . fst, atStart . fst, snd, toSentence . fst] $ sortBySymbolTuple vals) cap True
 
 mkQRTuple :: (Quantity i, MayHaveUnit i, HasShortName i, Referable i) => [i] -> [(QuantityDict, Sentence)]
-mkQRTuple = map (\c -> (qw c, makeRef2S c))
+mkQRTuple = map (\c -> (qw c, refS c))
 
 mkQRTupleRef :: (Quantity i, MayHaveUnit i, HasShortName r, Referable r) => [i] -> [r] -> [(QuantityDict, Sentence)]
-mkQRTupleRef = zipWith (curry (bimap qw makeRef2S))
+mkQRTupleRef = zipWith (curry (bimap qw refS))

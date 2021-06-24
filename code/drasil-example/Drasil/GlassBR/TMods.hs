@@ -23,7 +23,7 @@ tMods = [pbIsSafe, lrIsSafe]
 lrIsSafe :: TheoryModel
 lrIsSafe = tm (EquationalModel lrIsSafeQD)
    [qw isSafeLoad, qw tmLRe, qw tmDemand] ([] :: [ConceptChunk])
-   [lrIsSafeQD] [] [] [makeCite astm2009] 
+   [lrIsSafeQD] [] [] [ref astm2009] 
    "isSafeLoad" [lrIsSafeDesc]
 
 lrIsSafeQD :: QDefinition
@@ -38,7 +38,7 @@ lrIsSafeDesc = tModDesc isSafeLoad
 pbIsSafe :: TheoryModel
 pbIsSafe = tm (EquationalModel pbIsSafeQD) 
   [qw isSafeProb, qw probFail, qw pbTolfail] ([] :: [ConceptChunk])
-  [pbIsSafeQD] [] [] [makeCite astm2009]
+  [pbIsSafeQD] [] [] [ref astm2009]
   "isSafeProb" [pbIsSafeDesc]
 
 pbIsSafeQD :: QDefinition
@@ -55,4 +55,4 @@ tModDesc main = S "If" +:+. (ch main `sC` S "the structure is considered safe")
 
 -- References --
 tModRefs :: [Reference]
-tModRefs = map rw tMods
+tModRefs = map ref tMods

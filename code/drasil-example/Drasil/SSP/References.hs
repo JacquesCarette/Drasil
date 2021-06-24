@@ -47,4 +47,4 @@ morgenstern1965 = cArticle [nrMorgenstern, vePrice]
 
 -- References --
 citeRefs :: [Reference]
-citeRefs = map rw citations
+citeRefs = map ref citations

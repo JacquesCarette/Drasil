@@ -105,7 +105,7 @@ assumpS11 = foldlSent [
   S "not" +:+. phrase discharging, atStartNP (NP.the (tempW `and_`
   tempPCM)), S "can only increase, or remain",
   S "constant; they do not decrease. This implies that the",
-  phrase tempInit, makeRef2S assumpSITWP, S "is less than (or equal)"
+  phrase tempInit, refS assumpSITWP, S "is less than (or equal)"
   `S.toThe` phrase tempC]
 assumpS12 = foldlSent [atStartNP (tempInit `the_ofThe` water) `S.andThe`
   short phsChgMtrl `S.isThe` S "same"]
@@ -150,4 +150,4 @@ assumpS20 = foldlSent [
 
 -- References --
 assumpRefs :: [Reference]
-assumpRefs = rw assumpSITWP: map rw assumptions
+assumpRefs = ref assumpSITWP: map ref assumptions

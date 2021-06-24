@@ -34,4 +34,4 @@ goalState varTerm = foldlSent [S "Predict the", phrase varTerm,
 
 -- References --
 goalRefs :: [Reference]
-goalRefs = map rw goals
+goalRefs = map ref goals

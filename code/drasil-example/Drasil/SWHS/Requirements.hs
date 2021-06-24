@@ -62,14 +62,14 @@ findMass = findMassConstruct (inReq EmptyS) (plural mass) iMods
 findMassConstruct :: (Referable r, HasShortName r, Referable s, HasShortName s,
   Referable t, HasShortName t) => r -> Sentence -> [s] -> [t] -> ConceptInstance
 findMassConstruct fr m ims ddefs = cic "findMass" (foldlSent [
-  S "Use the", plural input_ `S.in_` makeRef2S fr, S "to find the", 
-  m, S "needed for", foldlList Comma List (map makeRef2S ims) `sC`
-  S "using", foldlList Comma List (map makeRef2S ddefs)])
+  S "Use the", plural input_ `S.in_` refS fr, S "to find the", 
+  m, S "needed for", foldlList Comma List (map refS ims) `sC`
+  S "using", foldlList Comma List (map refS ddefs)])
   "Find-Mass" funcReqDom
 --
 checkWithPhysConsts = cic "checkWithPhysConsts" (foldlSent [
   S "Verify that", pluralNP (the input_), S "satisfy the required",
-  plural physicalConstraint, S "shown in", makeRef2S (datCon ([]::[Contents]) ([]::[Section]))])
+  plural physicalConstraint, S "shown in", refS (datCon ([]::[Contents]) ([]::[Section]))])
   "Check-Input-with-Physical_Constraints" funcReqDom
 --
 outputInputDerivVals = oIDQConstruct oIDQVals
@@ -119,7 +119,7 @@ verifyEnergyOutput = cic "verifyEnergyOutput" (foldlSent [
   S "Verify that the", phrase energy, plural output_,
   sParen (ch watE :+: sParen (ch time) `S.and_` ch pcmE :+:
   sParen (ch time)), S "follow the", phrase CT.lawConsEnergy `sC`
-  S "as outlined in", makeRef2S (propCorSol [] []) `sC`
+  S "as outlined in", refS (propCorSol [] []) `sC`
   S "with relative error no greater than", ch consTol])
   "Verify-Energy-Output-Follow-Conservation-of-Energy" funcReqDom
 --
@@ -150,7 +150,7 @@ nfRequirements = [correct, verifiable, understandable, reusable, maintainable]
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [atStartNP'
   (output_ `the_ofThePS` code), S "have the",
-  plural property, S "described in", makeRef2S (propCorSol [] [])
+  plural property, S "described in", refS (propCorSol [] [])
   ]) "Correct" nonFuncReqDom
  
 verifiable :: ConceptInstance
@@ -182,4 +182,4 @@ maintainable = cic "maintainable" (foldlSent [
 
 -- References --
 reqRefs :: [Reference]
-reqRefs = map rw ([inReq EmptyS] ++ funcReqs ++ nfRequirements)
+reqRefs = map ref ([inReq EmptyS] ++ funcReqs ++ nfRequirements)

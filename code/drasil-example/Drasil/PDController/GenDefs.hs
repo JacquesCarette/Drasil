@@ -23,7 +23,7 @@ genDefns = [gdPowerPlant]
 gdPowerPlant :: GenDefn
 gdPowerPlant
   = gd (OthModel gdPowerPlantRC) (Nothing :: Maybe UnitDefn) Nothing
-      [makeCite pidWiki, makeCite abbasi2015]
+      [ref pidWiki, ref abbasi2015]
       "gdPowerPlant"
       [gdPowerPlantNote]
 
@@ -56,4 +56,4 @@ gdPowerPlantNote
 
 -- References --
 genDefRefs :: [Reference]
-genDefRefs = map rw genDefns
+genDefRefs = map ref genDefns

@@ -22,8 +22,8 @@ waterVolumeEqn :: Expr
 waterVolumeEqn = sy tankVol
 
 waterVolumeNotes :: Sentence
-waterVolumeNotes = foldlSent [S "Based on" +:+. makeRef2S assumpVCN, ch tankVol,
-  S "is defined in", makeRef2S tankVolume]
+waterVolumeNotes = foldlSent [S "Based on" +:+. refS assumpVCN, ch tankVol,
+  S "is defined in", refS tankVolume]
 
 waterVolume :: DataDefinition
 waterVolume = ddNoRefs waterVolumeQD Nothing "waterVolume_nopcm" 
@@ -31,4 +31,4 @@ waterVolume = ddNoRefs waterVolumeQD Nothing "waterVolume_nopcm"
 
 -- References --
 dataDefRefs :: [Reference]
-dataDefRefs = [rw tankVolume, rw assumpVCN] ++ map rw dataDefs
+dataDefRefs = [ref tankVolume, ref assumpVCN] ++ map ref dataDefs

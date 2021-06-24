@@ -192,7 +192,7 @@ dd7descr = (QP.angularAccel ^. term) +:+ S "of a" +:+
 
 ------------------------DD9 Chasles Theorem----------------------------------
 chaslesDD :: DataDefinition
-chaslesDD = dd chasles [makeCite chaslesWiki] Nothing "chaslesThm" 
+chaslesDD = dd chasles [ref chaslesWiki] Nothing "chaslesThm" 
   [chaslesThmNote, rigidBodyAssump]
 
 chasles :: QDefinition
@@ -358,4 +358,4 @@ rigidTwoDAssump = foldlSent [S "All bodies are assumed to be rigid",
 
 -- References --
 dataDefRefs :: [Reference]
-dataDefRefs = map rw dataDefs
+dataDefRefs = map ref dataDefs

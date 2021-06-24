@@ -69,22 +69,22 @@ unlikelyChgs = [unlikeChgWPFS, unlikeChgNIHG, unlikeChgNGS]
 
 unlikeChgWPFS, unlikeChgNIHG, unlikeChgNGS :: ConceptInstance
 unlikeChgWPFS = cic "unlikeChgWPFS" (
-  foldlSent [makeRef2S assumpWAL `sC` chgsStart assumpNGSP (S "It is unlikely for the change of"),
+  foldlSent [refS assumpWAL `sC` chgsStart assumpNGSP (S "It is unlikely for the change of"),
   phrase water, S "from liquid to a solid or the state change of the", phrase phsChgMtrl,
   S "from a liquid to a gas to be considered"] ) "Water-PCM-Fixed-States" unlikeChgDom
 
 
 unlikeChgNIHG = cic "unlikeChgNIHG" (
   foldlSent [chgsStart assumpNIHGBWP (S "Is used for the derivations of"),
-  makeRef2S eBalanceOnWtr `S.and_` makeRef2S eBalanceOnPCM] )
+  refS eBalanceOnWtr `S.and_` refS eBalanceOnPCM] )
   "No-Internal-Heat-Generation" unlikeChgDom
 
 unlikeChgNGS = cic "unlikeChgNGS" (
-  foldlSent [chgsStart assumpNGSP (S "Is used for the derivation of"), makeRef2S eBalanceOnPCM,
-  S "and for the equation given by", makeRef2S heatEInPCM, S "to be valid"] )
+  foldlSent [chgsStart assumpNGSP (S "Is used for the derivation of"), refS eBalanceOnPCM,
+  S "and for the equation given by", refS heatEInPCM, S "to be valid"] )
   "No-Gaseous-State" unlikeChgDom
 
 -- References --
 chgRefs :: [Reference]
-chgRefs = map rw (likelyChgs ++ unlikelyChgs)
-  ++ map rw [heatEInPCM, eBalanceOnPCM, eBalanceOnWtr]
+chgRefs = map ref (likelyChgs ++ unlikelyChgs)
+  ++ map ref [heatEInPCM, eBalanceOnPCM, eBalanceOnWtr]

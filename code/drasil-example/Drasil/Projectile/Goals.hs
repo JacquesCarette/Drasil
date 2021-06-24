@@ -16,4 +16,4 @@ targetHit = cic "targetHit"
 
 -- References --
 goalRefs :: [Reference]
-goalRefs = map rw goals
+goalRefs = map ref goals

@@ -62,7 +62,7 @@ compression = dccWDS "compression" (cn' "compression")
   (S "a" +:+ phrase stress +:+ S "that causes displacement of the body towards its center")
 damping = dccWDS "damping" (pn' "damping")
   $ S "an influence within or upon an oscillatory system that has the effect of reducing," +:+
-  S "restricting or preventing its oscillations" +:+ sParen (S "from" +:+ makeRef2S dampingSource)
+  S "restricting or preventing its oscillations" +:+ fromSource dampingSource
 dampingCoeff = dcc "dampingCoeff" (cn' "damping coefficient")
  "Quantity that characterizes a second order system's oscillatory response"
 displacement = dccWDS "displacement" (cn' "displacement")

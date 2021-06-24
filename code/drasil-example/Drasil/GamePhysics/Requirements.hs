@@ -70,7 +70,7 @@ inputSurfacePropsDesc = foldlSent [S "Input", pluralNP (combineNINI CM.surface
 
 verifyPhysConsDesc = foldlSent [S "Verify that the", plural input_,
   S "satisfy the required", plural physicalConstraint, S "from", 
-  makeRef2S (SRS.solCharSpec [] [])]
+  refS (SRS.solCharSpec [] [])]
 
 calcTransOverTimeDesc = requirementS QP.position QP.velocity 
   (S "acted upon by a" +:+ phrase QP.force)
@@ -140,4 +140,4 @@ maintainability = cic "maintainability" (foldlSent [
 
 -- References --
 reqRefs :: [Reference]
-reqRefs = map rw ([inReq EmptyS] ++ funcReqs ++ nonfuncReqs)
+reqRefs = map ref ([inReq EmptyS] ++ funcReqs ++ nonfuncReqs)

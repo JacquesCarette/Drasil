@@ -57,8 +57,8 @@ riskQD = mkQuantDef riskFun riskEq
 
 risk :: DataDefinition
 risk = dd riskQD
-  [makeCite astm2009, makeCiteInfo beasonEtAl1998 $ Equation [4, 5],
-  makeCiteInfo campidelli $ Equation [14]]
+  [ref astm2009, refInfo beasonEtAl1998 $ Equation [4, 5],
+  refInfo campidelli $ Equation [14]]
   Nothing "riskFun" [aGrtrThanB, hRef, ldfRef, jRef]
 
 --DD2--
@@ -74,7 +74,7 @@ hFromtQD :: QDefinition
 hFromtQD = mkQuantDef minThick hFromtEq
 
 hFromt :: DataDefinition
-hFromt = dd hFromtQD [makeCite astm2009] Nothing "minThick" [hMin]
+hFromt = dd hFromtQD [ref astm2009] Nothing "minThick" [hMin]
 
 --DD3-- (#749)
 
@@ -85,7 +85,7 @@ loadDFQD :: QDefinition
 loadDFQD = mkQuantDef lDurFac loadDFEq
 
 loadDF :: DataDefinition
-loadDF = dd loadDFQD [makeCite astm2009] Nothing "loadDurFactor"
+loadDF = dd loadDFQD [ref astm2009] Nothing "loadDurFactor"
   [stdVals [loadDur, sflawParamM], ldfConst]
 
 --DD4--
@@ -99,7 +99,7 @@ strDisFacQD :: QDefinition
 strDisFacQD = mkQuantDef stressDistFac strDisFacEq
 
 strDisFac :: DataDefinition
-strDisFac = dd strDisFacQD [makeCite astm2009] Nothing "stressDistFac"
+strDisFac = dd strDisFacQD [ref astm2009] Nothing "stressDistFac"
   [interpolating stressDistFac dimlessloadVsARFig, arRef, qHtRef]
 
 --DD5--
@@ -112,7 +112,7 @@ nonFLQD :: QDefinition
 nonFLQD = mkQuantDef nonFactorL nonFLEq
 
 nonFL :: DataDefinition
-nonFL = dd nonFLQD [makeCite astm2009] Nothing "nFL"
+nonFL = dd nonFLQD [ref astm2009] Nothing "nFL"
   [qHtTlTolRef, stdVals [modElas], hRef, aGrtrThanB]
 
 --DD6--
@@ -127,7 +127,7 @@ glaTyFacQD :: QDefinition
 glaTyFacQD = mkQuantDef gTF glaTyFacEq
 
 glaTyFac :: DataDefinition
-glaTyFac = dd glaTyFacQD [makeCite astm2009] Nothing "gTF"
+glaTyFac = dd glaTyFacQD [ref astm2009] Nothing "gTF"
   [anGlass, ftGlass, hsGlass]
 
 --DD7--
@@ -140,7 +140,7 @@ dimLLQD :: QDefinition
 dimLLQD = mkQuantDef dimlessLoad dimLLEq
 
 dimLL :: DataDefinition
-dimLL = dd dimLLQD [makeCite astm2009, makeCiteInfo campidelli $ Equation [7]] Nothing "dimlessLoad"
+dimLL = dd dimLLQD [ref astm2009, refInfo campidelli $ Equation [7]] Nothing "dimlessLoad"
   [qRef, aGrtrThanB, stdVals [modElas], hRef, gtfRef]
 
 --DD8--
@@ -153,7 +153,7 @@ tolPreQD :: QDefinition
 tolPreQD = mkQuantDef tolLoad tolPreEq
 
 tolPre :: DataDefinition
-tolPre = dd tolPreQD [makeCite astm2009] Nothing "tolLoad"
+tolPre = dd tolPreQD [ref astm2009] Nothing "tolLoad"
   [interpolating tolLoad dimlessloadVsARFig, arRef, jtolRef]
 
 --DD9--
@@ -168,7 +168,7 @@ tolStrDisFacQD :: QDefinition
 tolStrDisFacQD = mkQuantDef sdfTol tolStrDisFacEq
 
 tolStrDisFac :: DataDefinition
-tolStrDisFac = dd tolStrDisFacQD [makeCite astm2009] Nothing "sdfTol"
+tolStrDisFac = dd tolStrDisFacQD [ref astm2009] Nothing "sdfTol"
   [pbTolUsr, aGrtrThanB, stdVals [sflawParamM, sflawParamK, mkUnitary modElas],
    hRef, ldfRef]
 
@@ -181,7 +181,7 @@ standOffDisQD :: QDefinition
 standOffDisQD = mkQuantDef standOffDist standOffDisEq
 
 standOffDis :: DataDefinition
-standOffDis = dd standOffDisQD [makeCite astm2009] Nothing "standOffDist" []
+standOffDis = dd standOffDisQD [ref astm2009] Nothing "standOffDist" []
 
 --DD11--
 
@@ -192,7 +192,7 @@ aspRatQD :: QDefinition
 aspRatQD = mkQuantDef aspectRatio aspRatEq
 
 aspRat :: DataDefinition
-aspRat = dd aspRatQD [makeCite astm2009] Nothing "aspectRatio" [aGrtrThanB]
+aspRat = dd aspRatQD [ref astm2009] Nothing "aspectRatio" [aGrtrThanB]
 
 --DD12--
 eqTNTWEq :: Expr
@@ -202,7 +202,7 @@ eqTNTWQD :: QDefinition
 eqTNTWQD = mkQuantDef eqTNTWeight eqTNTWEq
 
 eqTNTWDD :: DataDefinition
-eqTNTWDD = dd eqTNTWQD [makeCite astm2009] Nothing "eqTNTW" []
+eqTNTWDD = dd eqTNTWQD [ref astm2009] Nothing "eqTNTW" []
 
 --DD13--
 probOfBreakEq :: Expr
@@ -212,7 +212,7 @@ probOfBreakQD :: QDefinition
 probOfBreakQD = mkQuantDef probBr probOfBreakEq
 
 probOfBreak :: DataDefinition
-probOfBreak = dd probOfBreakQD (map makeCite [astm2009, beasonEtAl1998]) Nothing "probOfBreak" [riskRef]
+probOfBreak = dd probOfBreakQD (map ref [astm2009, beasonEtAl1998]) Nothing "probOfBreak" [riskRef]
 
 --DD14--
 calofCapacityEq :: Expr
@@ -222,7 +222,7 @@ calofCapacityQD :: QDefinition
 calofCapacityQD = mkQuantDef lRe calofCapacityEq
 
 calofCapacity :: DataDefinition
-calofCapacity = dd calofCapacityQD [makeCite astm2009] Nothing "calofCapacity"
+calofCapacity = dd calofCapacityQD [ref astm2009] Nothing "calofCapacity"
   [lrCap, nonFLRef, gtfRef]
 
 --DD15--
@@ -233,18 +233,18 @@ calofDemandQD :: QDefinition
 calofDemandQD = mkQuantDef demand calofDemandEq
 
 calofDemand :: DataDefinition
-calofDemand = dd calofDemandQD [makeCite astm2009] Nothing "calofDemand" [calofDemandDesc]
+calofDemand = dd calofDemandQD [ref astm2009] Nothing "calofDemand" [calofDemandDesc]
 
 
 --Additional Notes--
 calofDemandDesc :: Sentence
 calofDemandDesc =
   foldlSent [ch demand `sC` EmptyS `S.or_` phrase demandq `sC` EmptyS `S.isThe`
-  (demandq ^. defn), S "obtained from", makeRef2S demandVsSDFig,
+  (demandq ^. defn), S "obtained from", refS demandVsSDFig,
   S "by interpolation using", phrase standOffDist, sParen (ch standOffDist)
   `S.and_` ch eqTNTWeight, S "as" +:+. plural parameter, ch eqTNTWeight,
-  S "is defined in" +:+. makeRef2S eqTNTWDD, ch standOffDist `S.isThe`
-  phrase standOffDist, S "as defined in", makeRef2S standOffDis]
+  S "is defined in" +:+. refS eqTNTWDD, ch standOffDist `S.isThe`
+  phrase standOffDist, S "as defined in", refS standOffDis]
 
 aGrtrThanB :: Sentence
 aGrtrThanB = ch plateLen `S.and_` ch plateWidth `S.are` (plural dimension `S.the_ofThe` S "plate") `sC`
@@ -273,7 +273,7 @@ pbTolUsr :: Sentence
 pbTolUsr = ch pbTol `S.is` S "entered by the" +:+. phrase user
 
 qRef :: Sentence
-qRef = ch demand `S.isThe` (demandq ^. defn) `sC` S "as given in" +:+. makeRef2S calofDemand
+qRef = ch demand `S.isThe` (demandq ^. defn) `sC` S "as given in" +:+. refS calofDemand
 
 arRef, gtfRef, hRef, jRef, jtolRef, ldfRef, nonFLRef, qHtRef, qHtTlTolRef, riskRef :: Sentence
 arRef       = definedIn  aspRat
@@ -294,15 +294,15 @@ configFp = ["SDF.txt", "TSD.txt"]
 --- Helpers
 interpolating :: (HasUID s, HasSymbol s, Referable f, HasShortName f) => s -> f -> Sentence
 interpolating s f = foldlSent [ch s `S.is` S "obtained by interpolating from",
-  plural datum, S "shown" `S.in_` makeRef2S f]
+  plural datum, S "shown" `S.in_` refS f]
 
 stdVals :: (HasSymbol s, HasUID s) => [s] -> Sentence
-stdVals s = foldlList Comma List (map ch s) +:+ sent +:+. makeRef2S assumpSV
+stdVals s = foldlList Comma List (map ch s) +:+ sent +:+. refS assumpSV
   where sent = case s of [ ]   -> error "stdVals needs quantities"
                          [_]   -> S "comes from"
                          (_:_) -> S "come from"
 
 -- References --
 dataDefRefs :: [Reference]
-dataDefRefs = rw assumpSV : map rw [dimlessloadVsARFig, demandVsSDFig]
-  ++ map rw dataDefs
+dataDefRefs = ref assumpSV : map ref [dimlessloadVsARFig, demandVsSDFig]
+  ++ map ref dataDefs

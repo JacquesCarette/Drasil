@@ -62,4 +62,4 @@ assumptionsListA = [assumpOTDesc, assumpODDesc, assumpCSTDesc, assumpADDesc,
 
 -- References --
 assumpRefs :: [Reference]
-assumpRefs = map rw assumptions
+assumpRefs = map ref assumptions

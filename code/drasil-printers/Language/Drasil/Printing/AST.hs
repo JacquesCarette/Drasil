@@ -3,7 +3,8 @@ module Language.Drasil.Printing.AST where
 import Language.Drasil hiding (ItemType, ListType, Expr)
 
 -- | Different types of links for referencing. May be internal, a citation, or external.
-data LinkType = Internal | Cite2 | External
+-- A citation may also hold additional reference information.
+data LinkType = Internal | Cite2 Spec | External
 
 -- | Different operators.
 data Ops = IsIn | Integer | Real | Rational | Natural | Boolean | Comma | Prime | Log 
@@ -50,7 +51,7 @@ data Spec = E Expr                   -- ^ Holds an expression.
           | S String                 -- ^ Holds a String.
           | Spec :+: Spec            -- ^ Concatination.
           | Sp Special               -- ^ Special characters.
-          | Ref LinkType String Spec -- ^ Holds the actual reference.
+          | Ref LinkType String Spec -- ^ Holds the actual reference of form 'LinkType', reference address, and display name
           | EmptyS                   -- ^ Empty sentence.
           | Quote Spec               -- ^ Quotes are different in different languages.
           | HARDNL                   -- Temp fix for multi-line descriptions; 

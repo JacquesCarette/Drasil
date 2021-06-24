@@ -235,7 +235,7 @@ specLength (S x)       = length x
 specLength (a :+: b)   = specLength a + specLength b
 specLength (Sp _)      = 1
 specLength (Ref Internal r _) = length r
-specLength (Ref Cite2    r i) = length r + specLength i
+specLength (Ref (Cite2 n)   r i ) = length r + specLength i + specLength n --may need to change?
 specLength (Ref External _ t) = specLength t
 specLength EmptyS      = 0
 specLength (Quote q)   = 4 + specLength q
@@ -287,7 +287,7 @@ spec (S s)  = either error (pure . text . concatMap escapeChars) $ checkValidStr
 spec (Sp s) = pure $ text $ unPL $ L.special s
 spec HARDNL = command0 "newline"
 spec (Ref Internal r sn) = snref r (spec sn)
-spec (Ref Cite2    r i)  = cite r (info i)
+spec (Ref (Cite2 n) r _) = cite r (info n)
   where
     info EmptyS = Nothing
     info x      = Just (spec x)

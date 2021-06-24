@@ -71,10 +71,10 @@ usedDB = cdb ([] :: [QuantityDict]) (map nw symbols)
 
 -- References --
 bodyRefs :: [Reference]
-bodyRefs = map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+bodyRefs = map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si)
 
 dataDefRefs :: [Reference]
-dataDefRefs = map rw [htTransCladCoolDD, htTransCladFuelDD]
+dataDefRefs = map ref [htTransCladCoolDD, htTransCladFuelDD]
 
 allRefs :: [Reference]
 allRefs = nub (bodyRefs ++ dataDefRefs ++ secRefs)

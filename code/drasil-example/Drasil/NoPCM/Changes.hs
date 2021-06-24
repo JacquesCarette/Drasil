@@ -40,8 +40,8 @@ unlikeChgWFS = cic "unlikeChgWFS" (
 unlikeChgNIHG :: ConceptInstance
 unlikeChgNIHG = cic "unlikeChgNIHG" (
   foldlSent [chgsStart assumpNIHGBW (S "Is used for the derivations of"),
-  makeRef2S eBalanceOnWtr] ) "No-Internal-Heat-Generation" unlikeChgDom
+  refS eBalanceOnWtr] ) "No-Internal-Heat-Generation" unlikeChgDom
 
 -- References --
 chgRefs :: [Reference]
-chgRefs = map rw (likelyChgs ++ unlikelyChgs)
+chgRefs = map ref (likelyChgs ++ unlikelyChgs)

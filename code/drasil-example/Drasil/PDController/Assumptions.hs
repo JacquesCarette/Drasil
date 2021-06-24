@@ -61,7 +61,7 @@ pwrPlantDesc
 apwrPlantTxFnxDesc
   = foldlSent
       [S "The combined", phrase powerPlant `S.and_` S "Sensor",
-         sParen (makeRef2S aPwrPlant),        
+         sParen (refS aPwrPlant),        
          S "are characterized by a Second Order mass-spring-damper System"]
 
 aDecoupledDesc
@@ -101,7 +101,7 @@ aMassDesc
   = foldlSent
       [atStartNP (the mass),
        S "of the spring in the mass-spring-damper system",
-       sParen (makeRef2S aPwrPlant),
+       sParen (refS aPwrPlant),
        S "is assumed to be 1", 
        phrase kilogram]
 
@@ -109,16 +109,16 @@ aDampingCoeffDesc
   = foldlSent
       [atStartNP (the ccDampingCoeff),
        S "of the spring in the mass-spring-damper system",
-       sParen (makeRef2S aPwrPlant), 
+       sParen (refS aPwrPlant), 
        S "is assumed to be 1"]
 
 aStiffnessCoeffDesc
   = foldlSent
       [atStartNP (the ccStiffCoeff),
        S "of the spring in the mass-spring-damper system",
-       sParen (makeRef2S aPwrPlant), 
+       sParen (refS aPwrPlant), 
        S "is assumed to be 20"]
 
 -- References --
 assumpRefs :: [Reference]
-assumpRefs = map rw assumptions
+assumpRefs = map ref assumptions

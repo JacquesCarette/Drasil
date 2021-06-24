@@ -72,7 +72,7 @@ isotropicP = foldlSent [atStartNP (the soil), S "mass is treated as if the",
   phraseNP (effCohesion `and_` fricAngle), S "are isotropic properties"]
 
 linearS = foldlSent [S "Following the", phrase assumption, S "of Morgenstern",
-  S "and Price", sParen (makeRef2S morgenstern1965) `sC` 
+  S "and Price", sParen (refS morgenstern1965) `sC` 
   phraseNP (intNormForce `and_` intShrForce),
   S "have a proportional relationship, depending on a proportionality",
   phrase constant, sParen (ch normToShear), S "and a function", 
@@ -117,4 +117,4 @@ hydrostaticFMidpoint = foldlSent [S "The resultant", phrase surfHydroForce,
 
 -- References --
 assumpRefs :: [Reference]
-assumpRefs = map rw assumptions
+assumpRefs = map ref assumptions

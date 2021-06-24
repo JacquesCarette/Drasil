@@ -54,7 +54,7 @@ glassTypeDesc = foldlSent [S "The standard E1300-09a for",
   [S "glass supported on one side acts as a", phrase cantilever]]]
 
 glassConditionDesc :: Sentence
-glassConditionDesc = foldlSent [S "Following", makeCiteInfoS astm2009 (Page [1]) `sC` 
+glassConditionDesc = foldlSent [S "Following", complexRef astm2009 (Page [1]) `sC` 
   S "this", phrase practice, S "does not apply to any form of", foldlList Comma Options $ map S ["wired",
   "patterned", "etched", "sandblasted", "drilled", "notched", "grooved glass"], S "with", 
   phrase surface `S.and_` S "edge treatments that alter the glass strength"]
@@ -65,7 +65,7 @@ explainScenarioDesc = foldlSent [S "This", phrase system, S "only considers the 
 
 standardValuesDesc :: UnitaryChunk -> Sentence
 standardValuesDesc mainIdea = foldlSent [atStartNP' (the value), S "provided in",
-  makeRef2S $ SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]), S "are assumed for the", phrase mainIdea, 
+  refS $ SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]), S "are assumed for the", phrase mainIdea, 
   sParen (ch mainIdea) `sC` S "and the", plural materialProprty `S.of_` 
   foldlList Comma List (map ch (take 3 assumptionConstants))]
 
@@ -85,10 +85,10 @@ responseTypeDesc = foldlSent [atStartNP (the responseTy), S "considered in",
 
 ldfConstantDesc :: QuantityDict -> Sentence
 ldfConstantDesc mainConcept = foldlSent [S "With", phrase reference, S "to",
-  makeRef2S assumpSV `sC` phraseNP (NP.the (value `of_`
+  refS assumpSV `sC` phraseNP (NP.the (value `of_`
   mainConcept)), sParen (ch mainConcept) `S.is` phraseNP (a_ constant)
   `S.in_` short glassBR]
 
 -- References --
 assumpRefs :: [Reference]
-assumpRefs = rw (SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section])) : map rw assumptions
+assumpRefs = ref (SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section])) : map ref assumptions

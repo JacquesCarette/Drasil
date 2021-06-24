@@ -28,4 +28,4 @@ motionMass = cic "motionMass"
 
 -- References --
 goalRefs :: [Reference]
-goalRefs = map rw goals
+goalRefs = map ref goals

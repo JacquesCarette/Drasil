@@ -49,7 +49,7 @@ jobs:
           echo "$HOME/.local/bin" >> $GITHUB_PATH
           echo "$HOME/.swift/usr/bin" >> $GITHUB_PATH
       - name: "HLint"
-        run: curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
+        run: make hot_hlint
       - name: "Install dependencies"
         run: stack --no-terminal test --bench --only-dependencies
       - name: "Build"

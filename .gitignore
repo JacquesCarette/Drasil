@@ -21,6 +21,7 @@ dist
 *.chs.h
 .drasil-min-stack-ver
 stack.yaml.lock
+.hlint*
 
 # Drasil supported programming languages
 __pycache__

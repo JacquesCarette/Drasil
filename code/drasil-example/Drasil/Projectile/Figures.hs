@@ -14,4 +14,4 @@ figLaunch = llcc (makeFigRef "Launch") $ figWithWidth (atStartNP (the physicalSy
 
 -- References --
 figRefs :: [Reference]
-figRefs = [rw figLaunch]
+figRefs = [ref figLaunch]

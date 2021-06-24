@@ -27,11 +27,11 @@ speedIYQD = mkQuantDef iyVel $ sy iSpeed `mulRe` sin (sy launAngle)
 ----------
 
 speedRef :: Sentence
-speedRef = ch iSpeed `S.is` S "from" +:+. makeRef2S vecMag
+speedRef = ch iSpeed `S.is` S "from" +:+. refS vecMag
 
 figRef :: Sentence
-figRef = ch launAngle `S.is` S "shown in" +:+. makeRef2S figLaunch
+figRef = ch launAngle `S.is` S "shown in" +:+. refS figLaunch
 
 -- References --
 dataDefRefs :: [Reference]
-dataDefRefs = map rw dataDefs
+dataDefRefs = map ref dataDefs

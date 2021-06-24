@@ -27,7 +27,7 @@ tmLaplace
       []
       [toDispExpr laplaceRel]
       []
-      [makeCite laplaceWiki]
+      [ref laplaceWiki]
       "laplaceTransform"
       [laplaceDesc]
 
@@ -46,7 +46,7 @@ laplaceDesc
       [(S "Bilateral Laplace Transform" !.),
        atStartNP (theGen atStart' ccLaplaceTransform),
          S "are typically inferred from a pre-computed table of", titleize' ccLaplaceTransform,
-         sParen (makeCiteS laplaceWiki)]
+         sParen (refS laplaceWiki)]
 
 --------
 
@@ -59,7 +59,7 @@ tmInvLaplace
       []
       [toDispExpr invLaplaceRel]
       []
-      [makeCite laplaceWiki]
+      [ref laplaceWiki]
       "invLaplaceTransform"
       [invLaplaceDesc]
 
@@ -76,7 +76,7 @@ invLaplaceDesc
       [(S "Inverse Laplace Transform of F(S)" !.),
        S "The Inverse Laplace transforms are",
          S "typically inferred from a pre-computed table of Laplace Transforms",
-         sParen (makeCiteS laplaceWiki)]
+         sParen (refS laplaceWiki)]
 
 --------
 
@@ -88,7 +88,7 @@ tmSOSystem
       []
       [toDispExpr soSystemRel]
       []
-      [makeCite abbasi2015]
+      [ref abbasi2015]
       "tmSOSystem"
       [soSystemDesc]
 
@@ -116,4 +116,4 @@ soSystemDesc
        --------
 -- References --
 tModRefs :: [Reference]
-tModRefs = map rw theoreticalModels
+tModRefs = map ref theoreticalModels

@@ -17,4 +17,4 @@ rocTempSimp = gdNoRefs (OthModel rocTempSimpRC) (Nothing :: Maybe UnitDefn)
 
 -- References--
 genDefRefs :: [Reference]
-genDefRefs = map rw genDefs
+genDefRefs = map ref genDefs

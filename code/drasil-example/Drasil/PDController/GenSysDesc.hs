@@ -17,7 +17,7 @@ gsdSysContextFig
 gsdSysContextP1, gsdSysContextP2 :: Contents
 gsdSysContextP1
   = foldlSP
-      [makeRef2S gsdSysContextFig, S "shows the" +:+. phrase sysCont,
+      [refS gsdSysContextFig, S "shows the" +:+. phrase sysCont,
        S "The circle represents an external entity outside the",
          phrase software `sC` phraseNP (the user) +:+. S "in this case",
        S "The rectangle represents the",
@@ -64,4 +64,4 @@ gsduserCharacteristics
 
 -- References --
 figRefs :: [Reference]
-figRefs = [rw gsdSysContextFig]
+figRefs = [ref gsdSysContextFig]

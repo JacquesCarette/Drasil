@@ -36,7 +36,7 @@ tMods = [factOfSafety, equilibrium, mcShrStrgth, effStress, newtonSL]
 factOfSafety :: TheoryModel
 factOfSafety = tm' "factOfSafetyTM" (EquationalModel factOfSafetyQD)
   [qw fs, qw resistiveShear, qw mobilizedShear] ([] :: [ConceptChunk])
-  [factOfSafetyQD] [] [] [makeCite fredlund1977] "factOfSafety" []
+  [factOfSafetyQD] [] [] [ref fredlund1977] "factOfSafety" []
 
 ------------------------------------
 factOfSafetyQD :: QDefinition
@@ -50,7 +50,7 @@ factOfSafetyExpr = sy resistiveShear $/ sy mobilizedShear
 equilibrium :: TheoryModel
 equilibrium = tm (EquationalConstraints equilibriumCS)
   [qw fx] ([] :: [ConceptChunk])
-  [] (map toDispExpr equilibriumRels) [] [makeCite fredlund1977] "equilibrium" [eqDesc]
+  [] (map toDispExpr equilibriumRels) [] [ref fredlund1977] "equilibrium" [eqDesc]
 
 ------------------------------------  
 
@@ -67,7 +67,7 @@ equilibriumCS = mkConstraintSet
 eqDesc :: Sentence
 eqDesc = foldlSent [S "For a body in static equilibrium, the net",
   pluralNP (force `and_PP` genericM) +:+. S "acting on the body will cancel out",
-  S "Assuming a 2D problem", sParen (makeRef2S assumpENSL) `sC` S "the", getTandS fx `S.and_`
+  S "Assuming a 2D problem", sParen (refS assumpENSL) `sC` S "the", getTandS fx `S.and_`
   getTandS fy, S "will be equal to" +:+. eS (exactDbl 0), S "All", plural force,
   S "and their", phrase distance, S "from the chosen point of rotation",
   S "will create a net", phrase genericM, S "equal to" +:+ eS (exactDbl 0)]
@@ -78,7 +78,7 @@ mcShrStrgth :: TheoryModel
 mcShrStrgth = tm' "mcShrSrgth" (EquationalModel mcShrStrgthQD)
   [qw shrStress, qw effNormStress, qw fricAngle, qw effCohesion] 
   ([] :: [ConceptChunk])
-  [mcShrStrgthQD] [] [] [makeCite fredlund1977] "mcShrStrgth" [mcShrStrgthDesc]
+  [mcShrStrgthQD] [] [] [ref fredlund1977] "mcShrStrgth" [mcShrStrgthDesc]
 
 ------------------------------------
 mcShrStrgthQD :: QDefinition
@@ -98,7 +98,7 @@ mcShrStrgthDesc = foldlSent [S "In this", phrase model, S "the",
   S "relationship is not truly",
   phrase linear `sC` S "but assuming the", phrase nrmFSubWat, 
   S "is strong enough, it can be approximated with a", phrase linear,
-  S "fit", sParen (makeRef2S assumpSBSBISL), S "where the", phrase effCohesion, 
+  S "fit", sParen (refS assumpSBSBISL), S "where the", phrase effCohesion, 
   ch effCohesion, S "represents the", ch shrStress,
   S "intercept of the fitted line"]
 
@@ -108,7 +108,7 @@ effStress :: TheoryModel
 effStress = tm' "effectiveStressTM" (EquationalModel effStressQD)
   [qw effectiveStress, qw totNormStress, qw porePressure] 
   ([] :: [ConceptChunk])
-  [effStressQD] [] [] [makeCite fredlund1977] "effStress" [effStressDesc]
+  [effStressQD] [] [] [ref fredlund1977] "effStress" [effStressDesc]
 
 ------------------------------------
 effStressQD :: QDefinition
@@ -123,4 +123,4 @@ effStressDesc = (totNormStress `definedIn'''` normStressDD !.)
 
 -- References --
 tModRefs :: [Reference]
-tModRefs = map rw tMods
+tModRefs = map ref tMods

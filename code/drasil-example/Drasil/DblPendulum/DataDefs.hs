@@ -30,7 +30,7 @@ positionIXEqn :: Expr
 positionIXEqn = sy lenRod `mulRe` sin (sy initialPendAngle)
 
 figRef :: Sentence
-figRef = ch QP.ixPos `S.is` S "shown in" +:+. makeRef2S figMotion
+figRef = ch QP.ixPos `S.is` S "shown in" +:+. refS figMotion
 
 positionRef :: Sentence
 positionRef = ch QP.ixPos `S.isThe` phrase horizontalPos
@@ -46,7 +46,7 @@ positionIYEqn :: Expr
 positionIYEqn = neg (sy lenRod `mulRe` cos (sy initialPendAngle))
 
 figReff :: Sentence
-figReff = ch QP.iyPos `S.is` S "shown in" +:+. makeRef2S figMotion
+figReff = ch QP.iyPos `S.is` S "shown in" +:+. refS figMotion
 
 positionReff :: Sentence
 positionReff = ch QP.iyPos `S.isThe` phrase verticalPos
@@ -78,7 +78,7 @@ angFrequencyDDEqn :: Expr
 angFrequencyDDEqn = exactDbl 2 `mulRe` sy QM.pi_ $/ sy QP.period
 
 angFrequencyRef :: Sentence
-angFrequencyRef = ch QP.period `S.is` S "from" +:+ makeRef2S periodSHMDD
+angFrequencyRef = ch QP.period `S.is` S "from" +:+ refS periodSHMDD
 
 ------------------------------------------------------
 
@@ -92,8 +92,8 @@ periodSHMDDEqn :: Expr
 periodSHMDDEqn = recip_ $ sy QP.frequency
 
 periodSHMRef :: Sentence
-periodSHMRef = ch QP.period `S.is` S "from" +:+ makeRef2S frequencyDD
+periodSHMRef = ch QP.period `S.is` S "from" +:+ refS frequencyDD
 
 -- References --
 dataDefRefs :: [Reference]
-dataDefRefs = map rw dataDefs
+dataDefRefs = map ref dataDefs

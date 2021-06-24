@@ -214,8 +214,8 @@ organizationOfDocumentsIntro :: Sentence
 organizationOfDocumentsIntro = foldlSent 
   [atStartNP (the organization), S "of this", phrase document, 
   S "follows the", phrase template, S "for an", getAcc Doc.srs, S "for", 
-  phrase sciCompS, S "proposed by", makeCiteS koothoor2013 `S.and_`
-  makeCiteS smithLai2005]
+  phrase sciCompS, S "proposed by", refS koothoor2013 `S.and_`
+  refS smithLai2005]
 
 --------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
@@ -226,7 +226,7 @@ organizationOfDocumentsIntro = foldlSent
 
 sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
-  [makeRef2S sysCtxFig1, S "shows the" +:+. phrase sysCont,
+  [refS sysCtxFig1, S "shows the" +:+. phrase sysCont,
    S "A circle represents an entity external to the", phrase software
    `sC` phraseNP (the user), S "in this case. A rectangle represents the",
    phrase softwareSys, S "itself", sParen (short gamePhysics) +:+. EmptyS,
@@ -251,14 +251,14 @@ sysCtxUsrResp = [S "Provide initial" +:+ pluralNP (condition `ofThePS`
   S "Ensure application programming" +:+ phrase interface +:+
   S "use complies with the" +:+ phrase user +:+. phrase guide,
   S "Ensure required" +:+ phrase software +:+ plural assumption +:+
-  sParen (makeRef2S $ SRS.assumpt ([]::[Contents]) ([]::[Section])) +:+ 
+  sParen (refS $ SRS.assumpt ([]::[Contents]) ([]::[Section])) +:+ 
   S "are appropriate for any particular" +:+
   phrase problem +:+ phraseNP (the software) +:+. S "addresses"]
 
 sysCtxSysResp :: [Sentence]
 sysCtxSysResp = [S "Determine if the" +:+ pluralNP (input_ `and_PS`
     simulation) +:+ S "state satisfy the required" +:+
-    (phrase physical `S.and_` plural systemConstraint) +:+. sParen(makeRef2S $ SRS.datCon ([]::[Contents]) ([]::[Section])),
+    (phrase physical `S.and_` plural systemConstraint) +:+. sParen(refS $ SRS.datCon ([]::[Contents]) ([]::[Section])),
   S "Calculate the new state of all" +:+ plural CP.rigidBody +:+
     S "within the" +:+ phrase simulation +:+ S "at each" +:+
     phrase simulation +:+. S "step",
@@ -313,7 +313,7 @@ probDescIntro = foldlSent_
   phrase game, S "developers to include", phrase Doc.physics, S "in their" +:+. 
   plural product_, S "There are a few free" `sC` phrase openSource `S.and_` S "high quality",
   plural physLib, S "available to be used for", phrase consumer, plural product_,
-  sParen (makeRef2S $ SRS.offShelfSol ([] :: [Contents]) ([] :: [Section]))]
+  sParen (refS $ SRS.offShelfSol ([] :: [Contents]) ([] :: [Section]))]
   
 -----------------------------------------
 -- 4.1.1 : Terminology and Definitions --
@@ -413,7 +413,7 @@ offShelfSolsIntro, offShelfSols2DList,
   offShelfSolsMid, offShelfSols3DList :: Contents
 
 offShelfSolsIntro = mkParagraph $ foldlSentCol 
-  [S "As mentioned in", makeRef2S (SRS.probDesc [] []) `sC`
+  [S "As mentioned in", refS (SRS.probDesc [] []) `sC`
   S "there already exist free", phrase openSource, phrase game +:+.
   plural physLib, S "Similar", getAcc twoD, plural physLib, S "are"]
 
@@ -443,7 +443,7 @@ offShelfSols3DList = LlC $ enumBullet solutionLabel [
 
 -- References --
 bodyRefs :: [Reference]
-bodyRefs = rw sysCtxFig1: map rw concIns ++ map rw section ++ map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+bodyRefs = ref sysCtxFig1: map ref concIns ++ map ref section ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si)
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ goalRefs ++ dataDefRefs ++ genDefRefs

@@ -1,6 +1,6 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Reference (Reference(Reference, refInfo), ref, refS,
-  namedRef, complexRef, namedComplexRef) where
+module Language.Drasil.Reference (Reference(Reference, rInfo), ref, refS,
+  namedRef, complexRef, namedComplexRef, refInfo) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
   Referable(refAdd, renderRef))
@@ -21,7 +21,7 @@ data Reference = Reference
   { _ui :: UID
   ,  ra :: LblType
   ,  sn :: ShortName
-  ,  refInfo :: RefInfo }
+  ,  rInfo :: RefInfo }
 makeLenses ''Reference
 
 -- | Equal if 'UID's are equal.
@@ -43,6 +43,10 @@ instance Referable Reference where
 ref :: (Referable r, HasShortName r) => r -> Reference
 ref r = Reference (r ^. uid) (renderRef r) (shortname r) None
 
+-- | Projector function that creates a 'Reference' from something 'Referable'. Also accepts 'RefInfo'.
+refInfo :: (Referable r, HasShortName r) => r -> RefInfo -> Reference
+refInfo r = Reference (r ^. uid) (renderRef r) (shortname r)
+
 -- Maybe just use r ^. uid without 'ref'?
 -- | Takes the reference 'UID' and wraps it into a 'Sentence'.
 refS :: (Referable r, HasShortName r) => r -> Sentence
@@ -53,6 +57,7 @@ refS r = namedRef r EmptyS
 namedRef :: (Referable r, HasShortName r) => r -> Sentence -> Sentence
 namedRef r s = namedComplexRef r s None
 
+-- | Takes a 'Reference' with additional display info. Uses the internal shortname for its display name.
 complexRef :: (Referable r, HasShortName r) => r -> RefInfo -> Sentence
 complexRef r = Ref (ref r ^. uid) EmptyS
 

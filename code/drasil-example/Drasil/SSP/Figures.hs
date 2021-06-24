@@ -15,4 +15,4 @@ resourcePath = "../../../datafiles/SSP/"
 
 -- References --
 figRefs :: [Reference]
-figRefs = [rw figForceActing]
+figRefs = [ref figForceActing]

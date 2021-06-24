@@ -38,35 +38,35 @@ readAndStore, verifyInput, determineCritSlip, verifyOutput, displayInput,
 
 readAndStore = cic "readAndStore" ( foldlSent [
   S "Read the", plural input_ `sC` S "shown in", 
-  makeRef2S inputDataTable `sC` S "and store the", plural datum]) 
+  refS inputDataTable `sC` S "and store the", plural datum]) 
   "Read-and-Store" funcReqDom
 
 verifyInput = cic "verifyInput" ( foldlSent [
   S "Verify that the", plural inDatum, S "lie within the",
-  plural physicalConstraint, S "shown in", makeRef2S (datCon [] [])])
+  plural physicalConstraint, S "shown in", refS (datCon [] [])])
   "Verify-Input" funcReqDom
 
 determineCritSlip = cic "determineCritSlip" ( foldlSent [
   S "Determine the", phrase crtSlpSrf, S "for the", phrase input_, 
   phrase slope `sC` S "corresponding to the minimum", phrase fs `sC` 
   S "by using", usingIMs, S "to calculate the", phrase fs, S "for a", 
-  phrase slpSrf `S.and_` S "using", makeRef2S crtSlpId, S "to find the", 
+  phrase slpSrf `S.and_` S "using", refS crtSlpId, S "to find the", 
   phrase slpSrf, S "that minimizes it"]) 
   "Determine-Critical-Slip-Surface" funcReqDom
 
 verifyOutput = cic "verifyOutput" ( foldlSent [
   S "Verify that the", phrase fsMin `S.and_` phrase crtSlpSrf, S "satisfy the",
-  plural physicalConstraint, S "shown in", makeRef2S (propCorSol [] [])])
+  plural physicalConstraint, S "shown in", refS (propCorSol [] [])])
   "Verify-Output" funcReqDom
 
 displayInput = cic "displayInput" ( foldlSent [
   S "Display as", phrase output_, phraseNP (the user) :+: S "-supplied",
-  plural input_, S "listed in", makeRef2S inputsToOutputTable])
+  plural input_, S "listed in", refS inputsToOutputTable])
   "Display-Input" funcReqDom
 
 displayGraph = cic "displayGraph" ( foldlSent [
   S "Display", phrase crtSlpSrf `S.the_ofThe` short twoD, phrase slope `sC` 
-  S "as determined from", makeRef2S crtSlpId `sC` S "graphically"]) 
+  S "as determined from", refS crtSlpId `sC` S "graphically"]) 
   "Display-Graph" funcReqDom
 
 displayFS = cic "displayFS" ( foldlSent [
@@ -84,12 +84,12 @@ displayShear = cic "displayShear" ( foldlSent [
 
 writeToFile = cic "writeToFile" ( foldlSent [
   S "Provide the option of writing the output result data, as given in", 
-  foldlList Comma List (map makeRef2S [displayInput, displayGraph, displayFS, 
+  foldlList Comma List (map refS [displayInput, displayGraph, displayFS, 
   displayNormal, displayShear]) `sC` S "to a file"]) "Write-Results-To-File" 
   funcReqDom
 
 usingIMs :: Sentence
-usingIMs = foldlList Comma List $ map makeRef2S [fctSfty, nrmShrFor, intsliceFs]
+usingIMs = foldlList Comma List $ map refS [fctSfty, nrmShrFor, intsliceFs]
 
 ------------------
 inputDataTable :: LabelledContent
@@ -112,7 +112,7 @@ nonFuncReqs = [correct, understandable, reusable, maintainable]
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
   atStartNP' (output_ `the_ofThePS` code), S "have the",
-  plural property, S "described in", makeRef2S (propCorSol [] [])
+  plural property, S "described in", refS (propCorSol [] [])
   ]) "Correct" nonFuncReqDom
 
 understandable :: ConceptInstance
@@ -132,5 +132,5 @@ maintainable = cic "maintainable" (foldlSent [
   plural traceyMatrix `S.inThe` getAcc srs `S.and_` phrase mg]) "Maintainable" nonFuncReqDom
 
 reqRefs :: [Reference]
-reqRefs = map rw ([inReq EmptyS] ++ funcReqs ++ nonFuncReqs)
-  ++ map rw (funcReqTables ++ [inputsToOutputTable, inputDataTable])
+reqRefs = map ref ([inReq EmptyS] ++ funcReqs ++ nonFuncReqs)
+  ++ map ref (funcReqTables ++ [inputsToOutputTable, inputDataTable])

@@ -92,7 +92,7 @@ accelGravityDerivSentences = map foldlSentCol [accelGravityDerivSentence1,
  accelGravityDerivSentence5]
 
 accelGravityDerivSentence1 :: [Sentence]
-accelGravityDerivSentence1 = [S "From Newton's law of universal gravitation", sParen(makeRef2S newtonLUG), S "we have"]
+accelGravityDerivSentence1 = [S "From Newton's law of universal gravitation", sParen(refS newtonLUG), S "we have"]
 
 
 accelGravityDerivSentence2 :: [Sentence]
@@ -165,4 +165,4 @@ impulseSrc = makeURI "impulseSrc" "http://www.chrishecker.com/images/e/e7/Gdmphy
 
 -- References --
 genDefRefs :: [Reference]
-genDefRefs = map rw generalDefns ++ map rw [impulseSrc, accelGravitySrc]
+genDefRefs = map ref generalDefns ++ map ref [impulseSrc, accelGravitySrc]

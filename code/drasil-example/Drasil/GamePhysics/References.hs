@@ -44,4 +44,4 @@ sciComp2013 = cArticle
 
 -- References --
 citeRefs :: [Reference]
-citeRefs = map rw citations
+citeRefs = map ref citations

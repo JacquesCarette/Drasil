@@ -41,4 +41,4 @@ startOriginDesc = atStartNP (the pendulum) `S.is` S "attached" `S.toThe` (phrase
 
 -- References --
 assumpRefs :: [Reference]
-assumpRefs = map rw assumptions
+assumpRefs = map ref assumptions

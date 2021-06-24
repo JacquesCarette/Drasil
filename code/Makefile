@@ -194,11 +194,11 @@ graphs: $(GRAPH_PACKAGES)
 ###
 
 analysis: check_stack
+	stack install dotgen graphmod
 	- rm -rf $(ANALYSIS_FOLDER)
 	@mkdir -p $(ANALYSIS_FOLDER)
 	cd $(SCRIPT_FOLDER) && stack exec -- runghc DataTableGen.hs
 	cd $(SCRIPT_FOLDER) && stack exec -- runghc TypeGraphGen.hs
-	stack install dotgen graphmod
 	@echo Making dependency graphs
 	@cd $(TYPEGRAPH_FOLDER) && for pack in $(ANALYSIS_PACKAGES); do \
 		dot -Tpdf $$pack.dot > "./$$pack.pdf" ; \

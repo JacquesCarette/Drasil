@@ -1,6 +1,6 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Reference (Reference(Reference, refInfo), ref, refS,
-  namedRef, namedComplexRef, rw) where
+  namedRef, complexRef, namedComplexRef) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
   Referable(refAdd, renderRef))
@@ -53,14 +53,10 @@ refS r = namedRef r EmptyS
 namedRef :: (Referable r, HasShortName r) => r -> Sentence -> Sentence
 namedRef r s = namedComplexRef r s None
 
+complexRef :: (Referable r, HasShortName r) => r -> RefInfo -> Sentence
+complexRef r = Ref (ref r ^. uid) EmptyS
+
 -- | Takes a 'Reference' with a name to be displayed and any additional information and wraps it into a 'Sentence'.
 -- Does not overwrite the shortname contained in the reference, but will only display as the given 'Sentence' along with the given 'RefInfo'.
 namedComplexRef :: (Referable r, HasShortName r) => r -> Sentence -> RefInfo -> Sentence
 namedComplexRef r = Ref (ref r ^. uid)
-
----------------------------------------
--- The following function is the same as ref, but renamed for clarity. --
-
--- | Smart constructor for making a 'Referable' 'Reference'.
-rw :: (Referable r, HasShortName r) => r -> Reference
-rw r = Reference (r ^. uid) (renderRef r) (shortname r) None -- None is here as all additional information is treated as display info in a 'Sentence'.

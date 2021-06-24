@@ -147,8 +147,8 @@ href :: String -> String -> D
 href = command2 "href"
 
 -- | For citations.
-cite :: String -> D -> Maybe D -> D
-cite c _ n = command1oD "cite" n (pure $ text c) --may need to be changed to allow for shortnames?
+cite :: String -> Maybe D -> D
+cite c n = command1oD "cite" n (pure $ text c) --may need to be changed to allow for shortnames?
 
 -----------------------------------------------------------------------------
 -- Now create standard LaTeX stuff

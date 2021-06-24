@@ -64,7 +64,7 @@ specDoc :: Linearity -> Spec -> Doc
 specDoc f (E e) = pExprDoc f e
 specDoc _ (S s) = text s
 specDoc _ (Sp s) = specialDoc s
-specDoc f (Ref _ r s n) = specDoc f (s +:+ n) <+> text ("Ref: " ++ r)
+specDoc f (Ref _ r s) = specDoc f s <+> text ("Ref: " ++ r) --may need to change?
 specDoc f (s1 :+: s2) = specDoc f s1 <> specDoc f s2
 specDoc _ EmptyS = empty
 specDoc f (Quote s) = doubleQuotes $ specDoc f s

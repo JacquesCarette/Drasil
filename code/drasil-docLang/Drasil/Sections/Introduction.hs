@@ -37,7 +37,7 @@ developmentProcessParagraph = foldlSent [S "This", phrase document,
   S "that follow the so-called waterfall", phrase model `sC` 
   S "the actual development process is not constrained", 
   S "in any way. Even when the waterfall model is not followed, as",
-  S "Parnas and Clements point out", makeCiteS parnasClements1986 `sC`
+  S "Parnas and Clements point out", refS parnasClements1986 `sC`
   S "the most logical way to present the", phrase documentation,
   S "is still to", Quote (S "fake"), S "a rational", phrase design,
   S "process"]
@@ -81,7 +81,7 @@ purpDocPara1 proName = foldlSent [S "The primary purpose of this", phrase docume
   phrase information, S "are specified" `sC` S "allowing the reader to fully",
   S "understand" `S.and_` S "verify the", phrase purpose `S.and_` S "scientific",
   S "basis of" +:+. short proName, S "With the exception of", 
-  plural systemConstraint, S "in", makeRef2S (SRS.sysCon [] []) `sC` S "this",
+  plural systemConstraint, S "in", refS (SRS.sysCon [] []) `sC` S "this",
   short Doc.srs, S "will remain abstract, describing what", phrase problem,
   S "is being solved, but not how to solve it"] 
 
@@ -130,7 +130,7 @@ intReaderIntro progName assumed topic asset sectionRef =
   S "should have an understanding of" +:+.
   foldlList Comma List (assumed ++ topic), assetSent, S "The",
   plural user `S.of_` short progName, S "can have a lower level" `S.of_`
-  S "expertise, as explained" `S.in_` makeRef2S sectionRef]]
+  S "expertise, as explained" `S.in_` refS sectionRef]]
   where
     assetSent = case asset of
       [] -> EmptyS
@@ -150,7 +150,7 @@ orgIntro intro bottom bottomSec trailingSentence = [foldlSP [
   intro, S "The presentation follows the standard pattern of presenting" +:+.
   foldlList Comma List (map plural [nw Doc.goal, nw theory, nw definition, nw assumption]),
   S "For readers that would like a more bottom up approach" `sC`
-  S "they can start reading the", plural bottom `S.in_` makeRef2S bottomSec `S.and_`
+  S "they can start reading the", plural bottom `S.in_` refS bottomSec `S.and_`
   S "trace back to find any additional information they require"],
   folder [refineChain (zip [goalStmt, thModel, inModel]
          [SRS.goalStmt [] [], SRS.thModel [] [], SRS.inModel [] []]), trailingSentence]]

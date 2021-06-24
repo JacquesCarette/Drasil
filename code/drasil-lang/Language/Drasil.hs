@@ -151,7 +151,7 @@ module Language.Drasil (
   -- RefProg
   , RefInfo(..)
   -- Reference
-  , Reference(..), ref, refS, namedRef, namedComplexRef, rw
+  , Reference(..), ref, refS, namedRef, complexRef, namedComplexRef
   -- Label.Type
   , getAdd, prepend
   , LblType(RP, Citation, URI), IRefProg(..)
@@ -282,7 +282,7 @@ import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), (+:+),
   (+:+.), (+:), (!.), capSent, ch, eS, sC, sDash, sParen)
 import Language.Drasil.Sentence.Extract (sdep, shortdep) -- exported for drasil-database FIXME: move to development package?
 import Language.Drasil.RefProg (RefInfo(..))
-import Language.Drasil.Reference (Reference(..), namedRef, namedComplexRef, ref, refS, rw)
+import Language.Drasil.Reference (Reference(..), namedRef, complexRef, namedComplexRef, ref, refS)
 import Language.Drasil.Symbol (Decoration, Symbol)
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol, 
   autoStage, hat, prime, staged, sub, subStr, sup, unicodeConv, upperLeft, vec,

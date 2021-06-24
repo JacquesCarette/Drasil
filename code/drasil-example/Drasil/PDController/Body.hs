@@ -37,24 +37,26 @@ import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import qualified Utils.Drasil.Sentence as S
 
 import Drasil.PDController.Assumptions (assumptions, assumpRefs)
-import Drasil.PDController.Changes
-import Drasil.PDController.Concepts
+import Drasil.PDController.Changes (likelyChgs, chgRefs)
+import Drasil.PDController.Concepts (acronyms, pidControllerSystem,
+  pidC, concepts, defs)
 import Drasil.PDController.DataDefs (dataDefinitions, dataDefRefs)
-import Drasil.PDController.GenDefs
+import Drasil.PDController.GenDefs (genDefns, genDefRefs)
 import Drasil.PDController.GenSysDesc
        (gsdSysContextFig, gsdSysContextList, gsdSysContextP1, gsdSysContextP2,
         gsduserCharacteristics, figRefs)
-import Drasil.PDController.IModel
+import Drasil.PDController.IModel (instanceModels, imPD, iModRefs)
 import Drasil.PDController.IntroSection
        (introDocOrg, introPara, introPurposeOfDoc, introUserChar1,
         introUserChar2, introscopeOfReq)
 import Drasil.PDController.References (citations, citeRefs)
-import Drasil.PDController.Requirements
+import Drasil.PDController.Requirements (funcReqs, nonfuncReqs, reqRefs)
 import Drasil.PDController.SpSysDesc
        (goals, sysFigure, sysGoalInput, sysParts, sysProblemDesc, sysDescRefs)
 import Drasil.PDController.TModel (theoreticalModels, tModRefs)
-import Drasil.PDController.Unitals
-import Drasil.PDController.ODEs
+import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
+  inpConstrained, pidConstants, pidDqdConstants )
+import Drasil.PDController.ODEs (pidODEInfo)
 
 naveen :: Person
 naveen = person "Naveen Ganesh" "Muralidharan"

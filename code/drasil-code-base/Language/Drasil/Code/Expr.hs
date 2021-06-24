@@ -128,8 +128,8 @@ data CodeExpr where
   -- | Operators are generalized arithmetic operators over a 'DomainDesc'
   --   of an 'Expr'.  Could be called BigOp.
   --   ex: Summation is represented via 'Add' over a discrete domain.
-  Operator :: AssocArithOper -> DomainDesc CodeExpr CodeExpr -> CodeExpr -> CodeExpr  -- TODO: Remove?
+  Operator :: AssocArithOper -> DomainDesc CodeExpr CodeExpr -> CodeExpr -> CodeExpr
   -- | The expression is an element of a space.
   -- IsIn     :: Expr -> Space -> Expr
   -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
-  RealI    :: UID -> RealInterval CodeExpr CodeExpr -> CodeExpr -- TODO: Remove?
+  RealI    :: UID -> RealInterval CodeExpr CodeExpr -> CodeExpr

@@ -165,7 +165,7 @@ underConsidertn chunk = S "The" +:+ phrase chunk +:+
 -- | Create a list in the pattern of "The \_\_ are refined to the \_\_".
 -- Note: Order matters!
 refineChain :: NamedIdea c => [(c, Section)] -> Sentence
-refineChain [x,y] = S "The" +:+ namedRef (snd x) (plural $ fst x) `S.are` S "refined" `S.toThe` namedRef (snd y) (plural (fst y))
+refineChain [x,y] = S "The" +:+ namedRef (snd x) (plural $ fst x) `S.are` S "refined" `S.toThe` plural (fst y)
 refineChain (x:y:xs) = (foldlList Comma List (refineChain [x,y] : rc (y : xs)) !.)
   where
     rc [a, b]   = [rcSent a b]

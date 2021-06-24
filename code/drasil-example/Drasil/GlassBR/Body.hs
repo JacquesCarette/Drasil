@@ -32,7 +32,8 @@ import Data.Drasil.Concepts.Documentation as Doc (appendix, aspect,
   definition, doccon, doccon', document, environment,
   input_, interface, model, organization, physical, problem,
   product_, software, softwareConstraint, softwareSys,
-  srsDomains, standard, sysCont, system, template, term_, user, value, variable)
+  srsDomains, standard, sysCont, system, template, term_,
+  user, value, variable, reference)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.TheoryConcepts as Doc (dataDefn, inModel, thModel)
 import Data.Drasil.Concepts.Education as Edu (civilEng, scndYrCalculus, structuralMechanics,
@@ -219,7 +220,7 @@ undIR = [phrase scndYrCalculus, phrase structuralMechanics, phrase glBreakage,
 appStanddIR = [S "applicable" +:+ plural standard +:+
   S "for constructions using glass from" +:+ foldlList Comma List
   (map refS [astm2009, astm2012, astm2016]) `S.in_`
-  refS (SRS.reference ([]::[Contents]) ([]::[Section]))]
+  namedRef (SRS.reference ([]::[Contents]) ([]::[Section])) (plural reference)]
 
 scope :: Sentence
 scope = foldlSent_ [S "determining the safety of a", phrase glaSlab,

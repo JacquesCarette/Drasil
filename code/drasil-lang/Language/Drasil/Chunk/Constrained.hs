@@ -1,6 +1,6 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Chunk.Constrained (ConstrReasQDef(..), ConstrainedChunk(..), ConstrainedQDef(..), ConstrConcept(..), ReasonableValueQDef(..),
-  cnstrw, cnstrw', constrained', constrainedNRV', cuc, cuc', cuc'', cvc) where
+  cnstrw, cnstrw', constrained', constrainedNRV', cuc, cuc', cuc'', cvc, constrReasQD) where
 
 import Control.Lens ((^.), makeLenses, view)
 
@@ -142,9 +142,11 @@ cvc i des sym space = RVQD (qw (vc i des sym space))
 cnstrw :: (Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> ConstrReasQDef  
 cnstrw c = CRQD   (qw c) (c ^. constraints) (c ^. reasVal)
 
+constrReasQD :: String -> NP -> Symbol -> Space -> [Constraint] -> Expr -> ConstrReasQDef
+constrReasQD i des sym space = CRQD (qw (vc i des sym space)) 
 
 
-
+--nam trm sym space cs val
 -- | ConstrConcepts are conceptual symbolic quantities ('DefinedQuantityDict')
 -- with 'Constraint's and maybe a reasonable value (no units!).
 data ConstrConcept = ConstrConcept { _defq :: DefinedQuantityDict

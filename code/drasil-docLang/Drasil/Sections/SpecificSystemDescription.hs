@@ -18,7 +18,6 @@ module Drasil.Sections.SpecificSystemDescription
 import Language.Drasil hiding (variable)
 import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
-
 import Data.Drasil.Concepts.Documentation (assumption, column, constraint, corSol,
   datum, datumConstraint, inDatumConstraint, outDatumConstraint, definition, element, general, goalStmt, information,
   input_, limitation, model, output_, physical, physicalConstraint, physicalSystem,
@@ -210,7 +209,7 @@ mkDataConstraintTable col ref lab = llcc (makeTabRef ref) $ uncurry Table
   (mkTableFromColumns col) lab True
 
 -- | Creates the input Data Constraints Table.
-inDataConstTbl :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => 
+inDataConstTbl :: (HasUncertainty c, Quantity c, Constrained c, MayHaveReasVal c, MayHaveUnit c) => 
   [c] -> LabelledContent
 inDataConstTbl qlst = mkDataConstraintTable [(S "Var", map ch $ sortBySymbol qlst),
             (titleize' physicalConstraint, map fmtPhys $ sortBySymbol qlst),
@@ -219,7 +218,7 @@ inDataConstTbl qlst = mkDataConstraintTable [(S "Var", map ch $ sortBySymbol qls
             (short typUnc, map typUncr $ sortBySymbol qlst)]  (inDatumConstraint ^. uid) $
             titleize' inDatumConstraint
   where
-    getRVal c = fromMaybe (error $ "getRVal found no Expr for " ++ (c ^. uid)) (c ^. reasVal)
+    getRVal c = fromMaybe (error $ "getRVal found no Expr for " ++ (c ^. uid)) (c ^. maybeReasVal)
 
 -- | Creates the output Data Constraints Table.
 outDataConstTbl :: (Quantity c, Constrained c) => [c] -> LabelledContent

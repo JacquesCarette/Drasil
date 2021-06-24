@@ -41,6 +41,7 @@ module Language.Drasil (
   , HasUnitSymbol(usymb)
   , HasReference(getReferences)
   , HasReasVal(reasVal)
+  , MayHaveReasVal(maybeReasVal)
   , HasDerivation(derivations)
   , Idea(getA)
   , Definition(defn)
@@ -225,7 +226,7 @@ import Language.Drasil.Classes.Core2 (HasShortName(shortname))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
-  HasReasVal(reasVal), HasDerivation(derivations), 
+  HasReasVal(reasVal), MayHaveReasVal(maybeReasVal), HasDerivation(derivations), 
   HasReference(getReferences), HasSpace(typ),
   DefiningExpr(defnExpr), Quantity, HasUncertainty(unc), Callable, 
   IsArgumentName, Display(..))

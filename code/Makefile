@@ -186,17 +186,16 @@ stabilize: $(STABILIZE_EXAMPLES)
 graphmod: check_stack
 	stack install dotgen graphmod
 
-$(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): check_stack check_dot graphmod
-	@mkdir -p $(GRAPH_FOLDER)
+$(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod check_dot
+	@mkdir -p "$(GRAPH_FOLDER)"
 	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tpdf > "$(GRAPH_FOLDER)drasil-$*".pdf
 
 graphs: $(GRAPH_PACKAGES)
 ###
 
-analysis: check_stack
-	stack install dotgen graphmod
-	- rm -rf $(ANALYSIS_FOLDER)
-	@mkdir -p $(ANALYSIS_FOLDER)
+analysis: graphmod
+	- rm -rf "$(ANALYSIS_FOLDER)"
+	@mkdir -p "$(ANALYSIS_FOLDER)"
 	cd $(SCRIPT_FOLDER) && stack exec -- runghc DataTableGen.hs
 	cd $(SCRIPT_FOLDER) && stack exec -- runghc TypeGraphGen.hs
 	@echo Making dependency graphs
@@ -204,6 +203,15 @@ analysis: check_stack
 		dot -Tpdf $$pack.dot > "./$$pack.pdf" ; \
 	done
 	@echo Done dependency graphs
+
+# Use a 'local' HLint installation, using HLint from the current stack repo
+hlint: check_stack
+	- stack install hlint
+	- hlint .
+
+# Use the latest HLint version, downloading the binary each time
+hot_hlint:
+	- curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
 
 docs: check_stack
 	DOCS_FOLDER="$(DOCS_FOLDER)" GHC_FLAGS="$(GHCFLAGS)" sh scripts/make_docs.sh

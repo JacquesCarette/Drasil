@@ -43,19 +43,17 @@ extractEntryData fileName filePath = do
   let scriptFileLines = removeDeriving $ removeNewlineGuard $ removeNewlineBrace $ removeNewlineEqual $ filterEmptyS $ filterComments $ map stripWS $ lines scriptFile
 
       -- convert the raw files into nicer strings by picking only the information we want
-      dataTypesRec = removeNewlineComma $ useConstructFormRec False $ removeComments $ map fst $ filter snd $ isDataRec scriptFileLines False
-      dataTypesConst = removeComments $ filter isDataConst $ map useEqForm $ useGuardForm scriptFileLines
-      newtypeRec = removeComments $ isNewtypeRec $ filter (isPrefixOf "newtype ") scriptFileLines
-      newtypeConst = removeComments $ isNewtypeConst $ filter (isPrefixOf "newtype ") scriptFileLines
-      typeTypes = removeComments $ filter (isInfixOf "=") $ filter (isPrefixOf "type ") scriptFileLines
+      dataTypesRec = removeNewlineComma $ useConstructFormRec False $ removeComments $ isDataRec scriptFileLines
+      dataTypesConst = removeComments $ isDataConst $ map useEqForm $ useGuardForm scriptFileLines
+      newtypeRec = removeComments $ isNewtypeRec scriptFileLines
+      newtypeConst = removeComments $ isNewtypeConst scriptFileLines
+      typeTypes = removeComments $ isType scriptFileLines
 
       -- organize the data from a nice string into their respective Decl formats
   let dataDeclRec = getDataContainedRec $ sortDataRec $ filterEmptyS $ L.splitOn "}\n" $ unlines dataTypesRec
       dataDeclConst = getDataContainedConst $ sortDataConst dataTypesConst
-      newtypeDeclR = getNewtypesR newtypeRec
-      newtypeDeclC = getNewtypesC newtypeConst
-      newtypeDecl = newtypeDeclR ++ newtypeDeclC
-      typeDecl = getTypes typeTypes
+      newtypeDecl = getNewtypes $ sortNewtypesR newtypeRec ++ sortNewtypesC newtypeConst
+      typeDecl = getTypes $ sortTypes typeTypes
 
   -- returns all types within a file
   return EntryData {dRNs=dataDeclRec,dCNs=dataDeclConst,ntNs=newtypeDecl,tNs=typeDecl}
@@ -117,14 +115,28 @@ removeComments (l:ls)
 
 -- Attach booleans to see if a line is a part of a record data type declaration. 
 -- This is needed to organize and arrage data types.
-isDataRec :: [String] -> Bool -> [(String, Bool)]
-isDataRec [] _ = [] 
-isDataRec (l:ls) dtStill
-    | "data " `isPrefixOf` l && "{" `isInfixOf` l && "}" `isInfixOf` l = (l, True): isDataRec ls False -- if a line starts with "data " and contains "{" and "}", it is the start and end of a record datatype.
-    | "data " `isPrefixOf` l && "{" `isInfixOf` l = (l, True): isDataRec ls True -- if a line starts with "data " and contains "{", it is the start of a record datatype.
-    | dtStill && "}" `isInfixOf` l = (l, True): isDataRec ls False               -- if a line is still part of record datatype and we see "}", the datatype declaration has ended.
-    | dtStill = (l, True) : isDataRec ls True                                    -- if a line is still part of record datatype and none of the above happens, keep going with the datatype.
-    | otherwise = (l, False) : isDataRec ls False                                -- otherwise, it is not a datatype and keep going as if the next line is not a datatype.
+isDataRec :: [String] -> [String]
+isDataRec dataRecs = isDataRecAux dataRecs False
+  where
+    -- Trying fold style, gave me different .dot graphs so probably is not right
+    {-output = map fst $ filter snd $ zip dataRecs doit 
+    doit = foldl (\x y -> ((++) x (someFunc (myHead (reverse x)) y))) [] dataRecs
+    someFunc :: Bool -> String -> [Bool]
+    someFunc dtStill l
+      | "data " `isPrefixOf` l && "{" `isInfixOf` l && "}" `isInfixOf` l = [False] -- if a line starts with "data " and contains "{" and "}", it is the start and end of a record datatype.
+      | "data " `isPrefixOf` l && "{" `isInfixOf` l = [True] -- if a line starts with "data " and contains "{", it is the start of a record datatype.
+      | dtStill && "}" `isInfixOf` l = [False]               -- if a line is still part of record datatype and we see "}", the datatype declaration has ended.
+      | dtStill = [True]                                    -- if a line is still part of record datatype and none of the above happens, keep going with the datatype.
+      | otherwise = [False]                                    -- otherwise, it is not a datatype and keep going as if the next line is not a datatype.
+    myHead [] = False
+    myHead (x:xs) = x-}
+    isDataRecAux [] _ = []
+    isDataRecAux (l:ls) dtStill
+      | "data " `isPrefixOf` l && "{" `isInfixOf` l && "}" `isInfixOf` l = l: isDataRecAux ls False -- if a line starts with "data " and contains "{" and "}", it is the start and end of a record datatype.
+      | "data " `isPrefixOf` l && "{" `isInfixOf` l = l: isDataRecAux ls True -- if a line starts with "data " and contains "{", it is the start of a record datatype.
+      | dtStill && "}" `isInfixOf` l = l: isDataRecAux ls False               -- if a line is still part of record datatype and we see "}", the datatype declaration has ended.
+      | dtStill = l: isDataRecAux ls True                                    -- if a line is still part of record datatype and none of the above happens, keep going with the datatype.
+      | otherwise = isDataRecAux ls False                                    -- otherwise, it is not a datatype and keep going as if the next line is not a datatype.
   
 -- Record types may be defined in the form:
 -- data Type where
@@ -165,7 +177,7 @@ sortDataRec (l:ls) = (head typeContents, checkContents): sortDataRec ls
 
 -- Record a datatype and its dependencies. For record types using the @data@ declaration syntax.
 getDataContainedRec :: [(String, [String])] -> [DataDeclRecord]
-getDataContainedRec = map (\l -> DDR {ddrName = filterAll $ fst l, ddrContent = nub $ filter (not . null) $ map filterAll $ snd l})
+getDataContainedRec = map (\l -> DDR {ddrName = filterName $ fst l, ddrContent = filterContents $ snd l})
 
 -----------------
 -- Sorting and filtering for functions that use @data@ syntax (for non-record types)
@@ -183,8 +195,8 @@ useEqForm :: String -> String
 useEqForm = T.unpack . T.replace (T.pack "where") (T.pack "=") . T.pack
 
 -- For filtering out data types that are records.
-isDataConst :: String -> Bool
-isDataConst dt = isPrefixOf "data " dt && not ("{" `isInfixOf` dt)
+isDataConst :: [String] -> [String]
+isDataConst = filter (\dt -> isPrefixOf "data " dt && not ("{" `isInfixOf` dt))
 
 -- Helper that takes a list of datatype declarations (not record type) and sorts them so that a list of the datatype name and the datatype constructor values is made.
 sortDataConst :: [String] -> [(String, [String])]
@@ -195,7 +207,7 @@ sortDataConst (l:ls) = (dataCName, dataCContents): sortDataConst ls
 
 -- Record a datatype and its dependencies. For non-record types using the @data@ declaration syntax.
 getDataContainedConst :: [(String, [String])] -> [DataDeclConstruct]
-getDataContainedConst = map (\l -> DDC {ddcName = filterAll $ fst l, ddcContent = nub $ filter (not . null) $ map filterAll $ snd l})
+getDataContainedConst = map (\l -> DDC {ddcName = filterName $ fst l, ddcContent = filterContents $ snd l})
 
 -----------------
 -- Sorting and filtering for functions that use @newtype@ syntax
@@ -203,43 +215,59 @@ getDataContainedConst = map (\l -> DDC {ddcName = filterAll $ fst l, ddcContent 
 
 -- Newtypes can be defined similar to records. Only includes those record-style declarations.
 isNewtypeRec :: [String] -> [String]
-isNewtypeRec = filter (isInfixOf "{")
+isNewtypeRec = filter (\x -> isInfixOf "{" x && isPrefixOf "newtype " x)
 
 -- Newtypes are often defined using constructors (they don't use @{@).
 isNewtypeConst :: [String] -> [String]
-isNewtypeConst = filter (not . isInfixOf "{")
+isNewtypeConst = filter (\x -> not (isInfixOf "{" x) && isPrefixOf "newtype " x)
 
--- Record a datatype and its dependencies. For record-style @newtype@ declaration syntax.
-getNewtypesR :: [String] -> [NewtypeDecl]
-getNewtypesR [] = []
-getNewtypesR (l:ls) = NTD {ntdName = filterAll $ head typeContents, ntdContent = nub $ filter (not . null) $ map filterAll checkContents} : getNewtypesR ls
-  where typeContents = map stripWS $ L.splitOn "=" $ l \\ "newtype "
-        checkContents = map stripWS $ concatMap (tail . L.splitOn "::") $ L.splitOn "," $ concat $ tail typeContents
+-- Sorts a datatype and its dependencies. For record-style @newtype@ declaration syntax.
+sortNewtypesR :: [String] -> [(String, [String])]
+sortNewtypesR [] = []
+sortNewtypesR (l:ls) = (head typeName, typeContents) : sortNewtypesR ls
+  where typeName = map stripWS $ L.splitOn "=" $ l \\ "newtype "
+        typeContents = map stripWS $ concatMap (tail . L.splitOn "::") $ L.splitOn "," $ concat $ tail typeName
 
--- Record a datatype and its dependencies. For constructor-style @newtype@ declaration syntax.
-getNewtypesC :: [String] -> [NewtypeDecl]
-getNewtypesC [] = []
-getNewtypesC (l:ls) = NTD {ntdName = filterAll $ head typeContents, ntdContent = nub $ filter (not . null) $ map filterAll checkContents} : getNewtypesC ls
-    where typeContents = map stripWS $ L.splitOn "=" $ l \\ "newtype "
-          checkContents = concatMap (tail.words) $ tail typeContents
+-- Sorts a datatype and its dependencies. For constructor style @newtype@ declaration syntax.
+sortNewtypesC :: [String] -> [(String, [String])]
+sortNewtypesC [] = []
+sortNewtypesC (l:ls) = (head typeName, typeContents) : sortNewtypesC ls
+  where typeName = map stripWS $ L.splitOn "=" $ l \\ "newtype "
+        typeContents = concatMap (tail.words) $ tail typeName
+
+-- Record a datatype and its dependencies. For @newtype@ declaration syntax.
+getNewtypes :: [(String, [String])] -> [NewtypeDecl]
+getNewtypes = map (\l -> NTD {ntdName = filterName $ fst l, ntdContent = filterContents $ snd l})
 
 -----------------
 -- Sorting and filtering for functions that use @type@ syntax
 ----------------
 
+-- Only accept types defined with "=" syntax (for now).
+isType :: [String] -> [String]
+isType = filter (\x -> isInfixOf "=" x && isPrefixOf "type " x)
+
+-- Sorts a datatype and its dependencies. For @type@ declaration syntax.
+sortTypes :: [String] -> [(String, [String])]
+sortTypes [] = []
+sortTypes (l:ls) = (head typeContents, tail typeContents) : sortTypes ls
+  where typeContents = map stripWS $ L.splitOn "=" $ l \\ "type "
+
 -- Record a datatype and its dependencies. For @type@ declaration syntax.
-getTypes :: [String] -> [TypeDecl]
-getTypes [] = []
-getTypes (l:ls) = TD {tdName = filterAll $ head typeContents, tdContent = nub $ filter (not . null) $ map filterAll $ tail typeContents} : getTypes ls
-    where typeContents = map stripWS $ L.splitOn "=" $ l \\ "type "
+getTypes :: [(String, [String])] -> [TypeDecl]
+getTypes = map (\l -> TD {tdName = filterName $ fst l, tdContent = filterContents $ snd l})
 
 -----------------
 -- Ending filter functions
 ---------------
 
--- Combines the below three filter functions
-filterAll :: String -> String
-filterAll = filterPrimeTypes . filterQualifiedTypes . filterInvalidChars
+-- Combines multiple filter functions. For type contents.
+filterContents :: [String] -> [String]
+filterContents = nub . filter (not . null) . map filterName
+
+-- Combines the below three filter functions. For type names.
+filterName :: String -> String
+filterName = filterPrimeTypes . filterQualifiedTypes . filterInvalidChars
 
 -- These characters should either not appear in a .dot file (eg. gets rid of list types), or does some extra cleanup that the general sort functions did not catch.
 filterInvalidChars :: String -> String

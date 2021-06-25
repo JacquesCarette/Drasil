@@ -141,7 +141,7 @@ findCT = funcDef "find"
   "Finds the array index for a value closest to the given value" 
   [arr, v] Natural (Just "index of given value in given array")
   [
-    ffor i (sy i $< (dim (sy arr) $- int 1))
+    ffor i (dim (sy arr) $- int 1)
       [ FCond ((vLook arr i (int 0) $<= sy v) $&& (sy v $<= vLook arr i (int 1)))
         [ FRet $ sy i ] [] ],
     FThrow "Bound error"
@@ -153,7 +153,7 @@ extractColumnCT = funcDef "extractColumn" "Extracts a column from a 2D matrix"
   [
     fDecDef col (matrix [[]]),
     --
-    ffor i (sy i $< dim (sy mat))
+    ffor i (dim (sy mat))
       [ FAppend (sy col) (aLook mat i j) ],
     FRet (sy col)
   ]
@@ -196,7 +196,7 @@ interpZ = funcDef "interpZ"
   --
   call readTable [filename, zVector, xMatrix, yMatrix],
   -- endhack
-    ffor i (sy i $< (dim (sy zVector) $- int 1))
+    ffor i (dim (sy zVector) $- int 1)
       [
         x_z_1 $:= getCol xMatrix i (int 0),
         y_z_1 $:= getCol yMatrix i (int 0),

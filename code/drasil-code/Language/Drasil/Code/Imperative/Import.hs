@@ -18,7 +18,7 @@ import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
 import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, ctorCall,
   genModuleWithImports, primaryClass)
-import Language.Drasil.Code.Imperative.Helpers (getUpperBound, lookupC)
+import Language.Drasil.Code.Imperative.Helpers (lookupC)
 import Language.Drasil.Code.Imperative.Logging (maybeLog, logBody)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, obv, 
@@ -538,11 +538,13 @@ convStmt (FAsgIndex v i e) = do
       vi = arrayElem i v'
   l <- maybeLog vi
   return $ multi $ asgFunc t : l
-convStmt (FFor v e st) = do
+convStmt (FFor v start end step st) = do
   stmts <- mapM convStmt st
   vari <- mkVar v
-  e' <- convExpr $ getUpperBound e
-  return $ forRange vari (litInt 0) e' (litInt 1) (bodyStatements stmts)
+  start' <- convExpr start
+  end' <- convExpr end
+  step' <- convExpr step
+  return $ forRange vari start' end' step' (bodyStatements stmts)
 convStmt (FForEach v e st) = do
   stmts <- mapM convStmt st
   vari <- mkVar v

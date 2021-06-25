@@ -39,3 +39,9 @@ executables:
     source-dirs: ./
     other-modules:
     - Drasil.Website.Website
+    - Drasil.Website.Analysis
+    - Drasil.Website.CaseStudy
+    - Drasil.Website.Documentation
+    - Drasil.Website.Example
+    - Drasil.Website.Graphs
+    - Drasil.Website.Introduction

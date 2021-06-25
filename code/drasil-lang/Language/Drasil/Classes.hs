@@ -116,7 +116,7 @@ class HasReasVal c where
 -- | A 'Quantity' that could have a reasonable value.
 class MayHaveReasVal c where
   -- | Provides a 'Lens' to the possible reasonable value.
-  maybeReasVal :: Lens' c (Maybe Expr)
+  maybeReasVal :: c -> Maybe Expr --Lens' c (Maybe Expr)
 
 -- | A Quantity is an 'Idea' with a 'Space' and a 'Symbol'.
 -- In theory, it should also restrict to being a part of 'MayHaveUnit', but that causes

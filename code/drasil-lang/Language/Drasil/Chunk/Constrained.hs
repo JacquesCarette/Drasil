@@ -151,7 +151,7 @@ constrReasQD i des sym space = CRQD (qw (vc i des sym space))
 -- with 'Constraint's and maybe a reasonable value (no units!).
 data ConstrConcept = ConstrConcept { _defq :: DefinedQuantityDict
                                    , _constr''' :: [Constraint]
-                                   , _reasV''' :: Maybe Expr
+                                   , reasV''' :: Maybe Expr
                                    }
 makeLenses ''ConstrConcept
 
@@ -208,4 +208,4 @@ cuc'' nam trm desc sym un space cs rv =
 
 -- | Similar to 'cnstrw', but types must also have a 'Concept'.
 cnstrw' :: (Quantity c, Concept c, Constrained c, MayHaveReasVal c, MayHaveUnit c) => c -> ConstrConcept
-cnstrw' c = ConstrConcept (dqdWr c) (c ^. constraints) (c ^. maybeReasVal)
+cnstrw' c = ConstrConcept (dqdWr c) (c ^. constraints) (maybeReasVal c)

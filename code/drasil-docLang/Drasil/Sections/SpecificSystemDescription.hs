@@ -156,7 +156,7 @@ inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_,
   makeRef2S r4]
 
 -- | Constructor for Data Constraints section. Takes a trailing 'Sentence' (use 'EmptyS' if none) and data constraints.
-datConF :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => 
+datConF :: (HasUncertainty c, Quantity c, Constrained c, MayHaveReasVal c, MayHaveUnit c) => 
   Sentence -> [c] -> Section
 datConF _ [] = SRS.datCon [mkParagraph (S "There are no" +:+. plural datumConstraint)] []
 datConF t c  = SRS.datCon [dataConstraintParagraph t, LlC $ inDataConstTbl c] []
@@ -218,7 +218,7 @@ inDataConstTbl qlst = mkDataConstraintTable [(S "Var", map ch $ sortBySymbol qls
             (short typUnc, map typUncr $ sortBySymbol qlst)]  (inDatumConstraint ^. uid) $
             titleize' inDatumConstraint
   where
-    getRVal c = fromMaybe (error $ "getRVal found no Expr for " ++ (c ^. uid)) (c ^. maybeReasVal)
+    getRVal c = fromMaybe (error $ "getRVal found no Expr for " ++ (c ^. uid)) (maybeReasVal c)
 
 -- | Creates the output Data Constraints Table.
 outDataConstTbl :: (Quantity c, Constrained c) => [c] -> LabelledContent

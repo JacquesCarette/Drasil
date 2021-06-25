@@ -78,7 +78,7 @@ data SCSSub where
   -- | Instance models.
   IMs            :: [Sentence] -> Fields  -> DL.DerivationDisplay -> SCSSub
   -- | Constraints.
-  Constraints    :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => Sentence -> [c] -> SCSSub
+  Constraints    :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveReasVal c, MayHaveUnit c) => Sentence -> [c] -> SCSSub
   -- | Properties of a correct solution.
   CorrSolnPpties :: (Quantity c, Constrained c) => [c] -> [Contents] -> SCSSub
 

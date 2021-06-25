@@ -87,7 +87,7 @@ instance HasUncertainty UncertQ where unc = unc''
 -- ^ Finds the uncertainty of an 'UncertQ'.
 instance Constrained    UncertQ where constraints = coco . constraints
 -- ^ Finds the 'Constraint's of a 'ConstrConcept' used to make the 'UncertQ'.
-instance MayHaveReasVal     UncertQ where maybeReasVal = coco . maybeReasVal
+instance MayHaveReasVal     UncertQ where maybeReasVal q = maybeReasVal (q ^. coco)
 -- ^ Finds a reasonable value for the 'ConstrConcept' used to make the 'UncertQ'.
 instance Definition     UncertQ where defn = coco . defn
 -- ^ Finds definition of the 'ConstrConcept' used to make the 'UncertQ'.
@@ -100,7 +100,7 @@ instance MayHaveUnit    UncertQ where getUnit = getUnit . view coco
 -- | Smart constructor that requires a 'Quantity', a percentage, and a typical value with an 'Uncertainty'.
 uq :: (Quantity c, Constrained c, Concept c, MayHaveReasVal c, MayHaveUnit c) =>
   c -> Uncertainty -> UncertQ
-uq q = UQ (ConstrConcept (dqdWr q) (q ^. constraints) (q ^. maybeReasVal))
+uq q = UQ (ConstrConcept (dqdWr q) (q ^. constraints) (maybeReasVal q))
 
 --FIXME: this is kind of crazy and probably shouldn't be used!
 -- | Uncertainty quantity ('uq') but with a constraint.

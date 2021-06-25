@@ -119,21 +119,21 @@ outputs = map qw [isSafePb, isSafeLR] ++ map qw [probBr] ++ map qw [stressDistFa
 tmSymbols :: [QuantityDict]
 tmSymbols = map qw [probFail, pbTolfail] ++ map qw [isSafeProb, isSafeLoad]
 
-probBr, probFail, pbTolfail, stressDistFac :: ReasonableValueQDef
+probBr, probFail, pbTolfail, stressDistFac :: ConstrReasQDef
 probBr = constrReasQDNU "probBr" (nounPhraseSP "probability of breakage")
   (sub cP lBreak) Rational
-  [probConstr] (Just $ dbl 0.4)
+  [probConstr] (dbl 0.4)
 
 stressDistFac = constrReasQDNU "stressDistFac" (nounPhraseSP "stress distribution factor (Function)") 
-  cJ Real [physc $ Bounded (Inc, sy stressDistFacMin) (Inc, sy stressDistFacMax)] (Just $ exactDbl 15)
+  cJ Real [physc $ Bounded (Inc, sy stressDistFacMin) (Inc, sy stressDistFacMax)] (exactDbl 15)
 
 probFail = constrReasQDNU "probFail" (nounPhraseSP "probability of failure")
   (sub cP lFail) Rational
-  [probConstr] (Just $ dbl 0.4)
+  [probConstr] (dbl 0.4)
 
 pbTolfail = constrReasQDNU "pbTolfail" (nounPhraseSP "tolerable probability of failure") 
   (sub cP (Concat [lFail, lTol])) Real
-  [probConstr] (Just $ dbl 0.008) 
+  [probConstr] (dbl 0.008) 
   
 
   --FIXME: no typical value!

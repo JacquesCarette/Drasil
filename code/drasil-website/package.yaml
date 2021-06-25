@@ -18,6 +18,7 @@ description:         Please see the README on GitHub at <https://github.com/Jacq
 dependencies:
 - base >= 4.7 && < 5
 - lens
+- split
 - directory
 - drasil-data
 - drasil-database

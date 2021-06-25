@@ -2,8 +2,9 @@ module Drasil.Website.Main where
 
 import GHC.IO.Encoding
 import Language.Drasil.Generate (gen, DocSpec(DocSpec), DocType(Website))
-import Drasil.Website.Website (mkWebsite, printSetting)
+import Drasil.Website.Website (mkWebsite, printSetting, FolderLocation(..))
 import System.Environment (getEnv, lookupEnv)
+import Data.Maybe (fromMaybe)
 
 
 main :: IO()
@@ -29,7 +30,12 @@ main = do
 
   let repoCommitRoot = "https://github.com/" ++ repoSlug ++ "/tree/" ++ commit ++ "/"
       buildPath = "https://github.com/" ++ repoSlug ++ "/actions" ++ maybe "" ("/runs/" ++) buildId
-      allFolders = Folder {depL = deployLocation, docsRt = docsRoot, exRt = exampleRoot, srsD = srsDir, doxD = doxDir, graphRt = graphRoot, analysisRt = analysisRoot, repoRt = repoCommitRoot, buildNum = buildNumber, buildPth = buildPath}
+
+      allFolders = Folder {depL = deployLocation, docsRt = deployLocation ++ docsRoot,
+        exRt = deployLocation ++ exampleRoot, srsD = deployLocation ++ srsDir, 
+        doxD = deployLocation ++ doxDir, graphRt = deployLocation ++ graphRoot, 
+        analysisRt = deployLocation ++ analysisRoot, repoRt = repoCommitRoot, 
+        buildNum = buildNumber, buildPth = buildPath}
 
   setLocaleEncoding utf8
-  gen (DocSpec Website "Drasil_Website") (mkWebsite allFolders) printSetting
+  gen (DocSpec Website "Drasil_Website") (mkWebsite allFolders) (printSetting allFolders)

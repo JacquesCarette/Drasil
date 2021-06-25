@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: f96f7a4282f27324ce007e3241e6b38f5196b2b14231e090b1b1e227509cda21
+-- hash: fb6a88d31d2fc32937214cc588e0d469a8f81ba9811ea8a56beaf8fc78baa248
 
 name:           drasil-website
 version:        0.1.0.0
@@ -46,4 +46,5 @@ executable website
     , drasil-theory
     , drasil-utils
     , lens
+    , split
   default-language: Haskell2010

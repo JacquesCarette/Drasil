@@ -1,9 +1,10 @@
 module Drasil.Website.Example (exampleSec, exampleRefs)where
 
-import Data.List (zipWith4)
+import Data.List (zipWith4, isPrefixOf)
 import Language.Drasil hiding (C)
 import Utils.Drasil
-import Data.Char (toUpper)
+import Data.Char (toUpper, toLower)
+import qualified Data.List.Split as L
 
 
 ----------------------------------------
@@ -43,15 +44,15 @@ exampleTitles = [pendulum, gamePhys, glassBR, hghc, noPCM, pdController, project
 exampleDescs = [pendulumDesc, gamePhysDesc, glassBRDesc, hghcDesc, noPCMDesc, pdControllerDesc, projectileDesc, sspDesc, swhsDesc, templateDesc]
 exampleCodeRefs path =[[(pendulum, [])],
                   [(gamePhys, [])],
-                  [(glassBR, map (getCodeRef path glassBR) glassBRCode)],
+                  [(glassBR, map (getCodeRef path $ map toLower glassBR) glassBRCode)],
                   [(hghc, [])],
-                  [(noPCM, map (getCodeRef path noPCM) noPCMCode)],
-                  [(pdController, map (getCodeRef path pdController) pdControllerCode)],
-                  [(projectileC1, map (getCodeRef path (projectile ++ "/" ++ projectileC1)) projectileCase1Code),
-                  (projectileC2, map (getCodeRef path (projectile ++ "/" ++ projectileC2)) projectileCase2Code),
-                  (projectileC3, map (getCodeRef path (projectile ++ "/" ++ projectileC3)) projectileCase3Code),
-                  (projectileC4, map (getCodeRef path (projectile ++ "/" ++ projectileC4)) projectileCase4Code),
-                  (projectileC5, map (getCodeRef path (projectile ++ "/" ++ projectileC5)) projectileCase5Code)],
+                  [(noPCM, map (getCodeRef path $map toLower noPCM) noPCMCode)],
+                  [(pdController, map (getCodeRef path $ map toLower pdController) pdControllerCode)],
+                  [(projectileC1, map (getCodeRef path (map toLower projectile ++ "/" ++ projectileC1)) projectileCase1Code),
+                  (projectileC2, map (getCodeRef path (map toLower projectile ++ "/" ++ projectileC2)) projectileCase2Code),
+                  (projectileC3, map (getCodeRef path (map toLower projectile ++ "/" ++ projectileC3)) projectileCase3Code),
+                  (projectileC4, map (getCodeRef path (map toLower projectile ++ "/" ++ projectileC4)) projectileCase4Code),
+                  (projectileC5, map (getCodeRef path (map toLower projectile ++ "/" ++ projectileC5)) projectileCase5Code)],
                   [(ssp, [])],
                   [(swhs, [])],
                   [(template, [])]]
@@ -61,11 +62,11 @@ exampleDoxRefs path =[[(pendulum, [])],
                  [(hghc, [])], 
                  [(noPCM, map (getDoxRef path noPCM) noPCMDox)],
                  [(pdController, map (getDoxRef path pdController) pdControllerDox)],
-                 [(projectileC1, map (getDoxRef path (projectile ++ "/" ++ projectileC1)) projectileCase1Dox),
-                 (projectileC2, map (getDoxRef path (projectile ++ "/" ++ projectileC2)) projectileCase2Dox),
-                 (projectileC3, map (getDoxRef path (projectile ++ "/" ++ projectileC3)) projectileCase3Dox),
-                 (projectileC4, map (getDoxRef path (projectile ++ "/" ++ projectileC4)) projectileCase4Dox),
-                 (projectileC5, map (getDoxRef path (projectile ++ "/" ++ projectileC5)) projectileCase5Dox)],
+                 [(projectileC1, map (\x -> getDoxRef path projectile (projectileC1 ++ "/" ++ x)) projectileCase1Dox),
+                 (projectileC2, map (\x -> getDoxRef path projectile (projectileC2 ++ "/" ++ x)) projectileCase2Dox),
+                 (projectileC3, map (\x -> getDoxRef path projectile (projectileC3 ++ "/" ++ x)) projectileCase3Dox),
+                 (projectileC4, map (\x -> getDoxRef path projectile (projectileC4 ++ "/" ++ x)) projectileCase4Dox),
+                 (projectileC5, map (\x -> getDoxRef path projectile (projectileC5 ++ "/" ++ x)) projectileCase5Dox)],
                  [(ssp, [])],
                  [(swhs, [])],
                  [(template, [])]]
@@ -126,12 +127,13 @@ getCodeRef path ex lang = ((S ("[" ++ convertlang ++ "]")), Reference ("codeRef"
       | lang == "cpp" = "C++"
       | lang == "csharp" = "C Sharp" -- Drasil printers dont like the # symbol
       | otherwise = (toUpper.head) lang : tail lang
-getDoxRef path ex lang = ((S ("[" ++ convertlang ++ "]")), Reference ("doxRef" ++ ex ++ lang) (URI (getDoxPath path ex lang)) (shortname' $ S ("doxRef" ++ ex ++ lang)) None)
+getDoxRef path ex lang = ((S ("[" ++ convertlang lang ++ "]")), Reference ("doxRef" ++ ex ++ lang) (URI (getDoxPath path ex lang)) (shortname' $ S ("doxRef" ++ ex ++ lang)) None)
   where
-    convertlang 
-      | lang == "cpp" = "C++"
-      | lang == "csharp" = "C Sharp"
-      | otherwise = (toUpper.head) lang : tail lang
+    convertlang l
+      | l == "cpp" = "C++"
+      | l == "csharp" = "C Sharp"
+      | "Projectile" `isPrefixOf` l = convertlang $ concat $ tail $ L.splitOn "/" l
+      | otherwise = (toUpper.head) l : tail l
 getCodePath :: FilePath -> String -> String -> FilePath
 getDoxPath :: FilePath -> String -> String -> FilePath
 getCodePath path ex lang = path ++ "code/stable/" ++ ex ++ "/src/" ++ lang -- need repoCommit path

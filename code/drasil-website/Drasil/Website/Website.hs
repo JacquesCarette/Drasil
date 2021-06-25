@@ -1,14 +1,11 @@
 module Drasil.Website.Website where
 
-import Data.List (zipWith4)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
   rdb, refdb, _authors, _concepts, _constants, _constraints, _purpose,
   _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, _outputs, _quants, 
   _sys, _sysinfodb, _usedinfodb)
 import Language.Drasil hiding (C)
-import Utils.Drasil
-import Data.Char (toUpper)
 
 import Drasil.Website.Introduction
 import Drasil.Website.CaseStudy (caseStudyRefs, caseStudySec)
@@ -18,8 +15,8 @@ import Drasil.Website.Analysis
 import Drasil.Website.Graphs
 
 
-printSetting :: PrintingInformation
-printSetting = PI symbMap Equational defaultConfiguration
+printSetting :: FolderLocation -> PrintingInformation
+printSetting fl = PI (symbMap fl) Equational defaultConfiguration
 
 --mkWebsite :: SRSDecl -> SystemInformation -> Document
 mkWebsite :: FolderLocation -> Document
@@ -35,14 +32,13 @@ data FolderLocation = Folder {
     ,   doxD :: FilePath
     ,   graphRt :: FilePath
     ,   analysisRt :: FilePath
-    ,   repoS :: FilePath
-    ,   commitNum :: FilePath
+    ,   repoRt :: FilePath
     ,   buildNum :: FilePath
     ,   buildPth :: FilePath
     }
 
-si :: SystemInformation
-si = SI {
+si :: FolderLocation -> SystemInformation
+si fl = SI {
     _sys         = webName,
     _kind        = web,
     _authors     = [] :: [Person],
@@ -57,7 +53,7 @@ si = SI {
     _defSequence = [] :: [Block QDefinition],
     _constraints = [] :: [ConstrainedChunk],
     _constants   = [] :: [QDefinition],
-    _sysinfodb   = symbMap,
+    _sysinfodb   = symbMap fl,
     _usedinfodb  = usedDB,
     refdb        = rdb [] []
 }
@@ -65,11 +61,11 @@ si = SI {
 sections :: FolderLocation -> [Section]
 -- Section Title [SecCons] Reference
 sections fl = [headerSec, introSec (ref caseStudySec) (ref $ docsSec $ docsRt fl) (ref $ graphSec $ graphRt fl), 
-  caseStudySec, exampleSec (repoS fl) (exRt fl), docsSec (docsRt fl), analysisSec (analysisRt fl), graphSec $ graphRt fl]
+  caseStudySec, exampleSec (repoRt fl) (exRt fl), docsSec (docsRt fl), analysisSec (analysisRt fl), graphSec $ graphRt fl]
 
-symbMap :: ChunkDB
-symbMap = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict])
-  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] allRefs
+symbMap :: FolderLocation -> ChunkDB
+symbMap fl = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict])
+  ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] $ allRefs fl
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict])
@@ -78,7 +74,7 @@ usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict])
 allRefs :: FolderLocation -> [Reference]
 allRefs fl = [headerSecRef, imageRef, gitHubRef] ++ map ref (sections fl) 
   ++ introRefs (ref caseStudySec) (ref $ docsSec $ docsRt fl) (ref $ graphSec $ graphRt fl) 
-  ++ caseStudyRefs ++ exampleRefs (repoS fl) (exRt fl) ++ docRefs (docsRt fl) ++ analysisRefs (analysisRt fl) ++ graphRefs $ graphRt fl
+  ++ caseStudyRefs ++ exampleRefs (repoRt fl) (exRt fl) ++ docRefs (docsRt fl) ++ analysisRefs (analysisRt fl) ++ graphRefs (graphRt fl)
 
 -- need section references
 headerSecRef :: Reference
@@ -110,7 +106,8 @@ websiteTitle :: String
 gitHubInfoURL, imagePath :: FilePath
 websiteTitle = "Drasil - Generate All the Things!"
 gitHubInfoURL = "https://github.com/JacquesCarette/Drasil"
-imagePath = "../../drasil-website/images/Icon.png"
+imagePath = "./images/Icon.png"
+--imagePath = "../../drasil-website/Website/images/Icon.png"
 
 
 

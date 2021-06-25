@@ -140,7 +140,7 @@ build_website() {
     exit 1
   fi
   cd "$CUR_DIR$DEPLOY_FOLDER"
-  cp -r "$CUR_DIR"website/_site/. .
+  cp -r "$CUR_DIR"drasil-website/Website/. .
 
   # src stubs were consumed by site generator; safe to delete those.
   rm "$EXAMPLE_DEST"*/src

@@ -102,7 +102,7 @@ standOffDist = uq (constrained' (dqd sD (variable "SD") Real metre)
   [ gtZeroConstr,
     sfwrc $ Bounded (Inc, sy sdMin) (Inc, sy sdMax)] (exactDbl 45)) defaultUncrt
 
-nomThick = cnstrw "nomThick" 
+nomThick = constrReasQD "nomThick" 
   (nounPhraseSent $ S "nominal thickness" +:+ displayDblConstrntsAsSet 
     nomThick nominalThicknesses)
   lT millimetre {-Discrete nominalThicknesses, but not implemented-} Rational 
@@ -120,18 +120,18 @@ tmSymbols :: [QuantityDict]
 tmSymbols = map qw [probFail, pbTolfail] ++ map qw [isSafeProb, isSafeLoad]
 
 probBr, probFail, pbTolfail, stressDistFac :: ReasonableValueQDef
-probBr = cvc "probBr" (nounPhraseSP "probability of breakage")
+probBr = constrReasQDNU "probBr" (nounPhraseSP "probability of breakage")
   (sub cP lBreak) Rational
   [probConstr] (Just $ dbl 0.4)
 
-stressDistFac = cvc "stressDistFac" (nounPhraseSP "stress distribution factor (Function)") 
+stressDistFac = constrReasQDNU "stressDistFac" (nounPhraseSP "stress distribution factor (Function)") 
   cJ Real [physc $ Bounded (Inc, sy stressDistFacMin) (Inc, sy stressDistFacMax)] (Just $ exactDbl 15)
 
-probFail = cvc "probFail" (nounPhraseSP "probability of failure")
+probFail = constrReasQDNU "probFail" (nounPhraseSP "probability of failure")
   (sub cP lFail) Rational
   [probConstr] (Just $ dbl 0.4)
 
-pbTolfail = cvc "pbTolfail" (nounPhraseSP "tolerable probability of failure") 
+pbTolfail = constrReasQDNU "pbTolfail" (nounPhraseSP "tolerable probability of failure") 
   (sub cP (Concat [lFail, lTol])) Real
   [probConstr] (Just $ dbl 0.008) 
   

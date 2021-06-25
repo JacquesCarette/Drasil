@@ -5,7 +5,7 @@ module Language.Drasil.Chunk.UncertainQuantity
   , uqcND, uncrtnChunk, uvc, uncrtnw) where
  
 import Language.Drasil.Chunk.DefinedQuantity (dqdWr)
-import Language.Drasil.Chunk.Constrained (ConstrConcept(..), ConstrReasQDef, cuc', cnstrw, constrReasQD)
+import Language.Drasil.Chunk.Constrained (ConstrConcept(..), ConstrReasQDef, cuc', cnstrw, constrReasQDNU)
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, Quantity, HasSpace(typ),
@@ -58,7 +58,7 @@ uncrtnChunk q = UCh (cnstrw q)
 -- | Creates an uncertain variable chunk. Takes 'UID', term ('NP'),
 -- 'Symbol', 'Space', 'Constraints', 'Expr', and 'Uncertainty'.
 uvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Expr -> Uncertainty -> UncertainChunk
-uvc nam trm sym space cs val = uncrtnChunk (constrReasQD nam trm sym space cs val)
+uvc nam trm sym space cs val = uncrtnChunk (constrReasQDNU nam trm sym space cs val)
 
 -- | Projection function into an 'UncertainChunk' from 'UncertQ' or an 'UncertainChunk'.
 uncrtnw :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> UncertainChunk

@@ -40,7 +40,7 @@ extractEntryData fileName filePath = do
   forceRead scriptFile `seq` hClose handle
 
       -- light cleanup of the files before sorting by datatype
-  let scriptFileLines = removeDeriving $ removeNewlineGuard $ removeNewlineBrace $ removeNewlineEqual $ filterEmptyS $ filterComments $ map stripWS $ lines scriptFile
+  let scriptFileLines = scriptFilter scriptFile
 
       -- convert the raw files into nicer strings by picking only the information we want
       dataTypesRec = removeNewlineComma $ useConstructFormRec False $ removeComments $ isDataRec scriptFileLines
@@ -63,15 +63,22 @@ stripWS :: String -> String
 stripWS = T.unpack . T.strip . T.pack
 
 ---TODO: use map for most of these, I just need to visualize what is happening for now.
--- TODO: organize and comment functions.
 
 --------
 -- Initial Filters (In order of use)
 -------
 
+-- combine all initial filters (except for removing in-line comments, which is done later)
+scriptFilter :: String -> [String]
+scriptFilter = removeDeriving . removeNewlineGuard . removeNewlineBrace . removeNewlineEqual . filterEmptyS . filterMultilineComments . filterComments . map stripWS . lines
+
 -- get rid of lines that start with a comment.
 filterComments :: [String] -> [String]
 filterComments ls = ls \\ filter (isPrefixOf "--") ls
+
+-- gets rid of lines that start or end with a multiline comment
+filterMultilineComments :: [String] -> [String]
+filterMultilineComments ls = ls \\ filter (\l -> isPrefixOf "{-" l || isSuffixOf "-}" l) ls
 
 -- get rid of lines with nothing in them.
 filterEmptyS :: [String] -> [String]
@@ -79,35 +86,41 @@ filterEmptyS = filter (/= "")
 
 -- for those few cases of data declarations that start the actual data declaration on a new line after the "=" sign.
 removeNewlineEqual :: [String] -> [String]
-removeNewlineEqual [] = []
-removeNewlineEqual (l1:l2:ls) = if ("data " `isPrefixOf` l1 || "type " `isPrefixOf` l1 || "newtype " `isPrefixOf` l1) && "=" `isSuffixOf` l1 then removeNewlineEqual ((l1 ++ " " ++ l2): ls) else l1 : removeNewlineEqual (l2:ls)
-removeNewlineEqual ls = ls
+removeNewlineEqual = filterNewline prefixCheck (\_ -> True)
+  where
+    prefixCheck l = ("data " `isPrefixOf` l || "type " `isPrefixOf` l || "newtype " `isPrefixOf` l) && "=" `isSuffixOf` l
 
 -- for those few cases of data declarations that are record types where the "{" is on a newline.
 removeNewlineBrace :: [String] -> [String]
-removeNewlineBrace [] = []
-removeNewlineBrace (l1:l2:ls) = if ("data " `isPrefixOf` l1 || "newtype " `isPrefixOf` l1)  && "{" `isInfixOf` l2 then (l1 ++ " " ++ l2) : removeNewlineBrace ls else l1:removeNewlineBrace (l2:ls)
-removeNewlineBrace ls = ls
+removeNewlineBrace = filterNewline prefixCheck (isInfixOf "{")
+  where
+    prefixCheck l = "data " `isPrefixOf` l || "newtype " `isPrefixOf` l
 
 -- for those few cases of data declarations that use constructors with guards on a newline.
 removeNewlineGuard :: [String] -> [String]
-removeNewlineGuard [] = []
-removeNewlineGuard (l1:l2:ls) = if "|" `isPrefixOf` l2 then removeNewlineGuard ((l1 ++ " " ++ l2): ls) else l1 : removeNewlineGuard (l2:ls)
-removeNewlineGuard ls = ls
+removeNewlineGuard = filterNewline (\_ -> True) (isPrefixOf "|") 
 
 -- Gets rid of automatically derived instances since we only care about type dependencies.
 removeDeriving :: [String] -> [String]
-removeDeriving [] = []
-removeDeriving (l:ls) 
-  | "deriving " `isInfixOf` l = unwords (take (fromJust (elemIndex "deriving" (words l))) $ words l): removeDeriving ls
-  | otherwise = l : removeDeriving ls
+removeDeriving = mapIf (isInfixOf "deriving ") $ \l -> unwords (take (fromJust (elemIndex "deriving" (words l))) $ words l)
 
 -- Removes comments that are a part of datatype lines (drops everything after the comment symbol).
 removeComments :: [String] -> [String]
-removeComments [] = []
-removeComments (l:ls)
-  | "--" `isInfixOf` l = unwords (take (fromJust (findIndex  (isInfixOf "--") (words l))) $ words l): removeComments ls
-  | otherwise = l : removeComments ls
+removeComments = mapIf (isInfixOf "--") $ \l -> unwords $ take (fromJust $ findIndex  (isInfixOf "--") $ words l) $ words l
+
+-- helper map functions to reduce code clutter --
+
+-- map a function to a list if a predicate passes, otherwise, just keep element the same.
+mapIf :: (a -> Bool) -> (a -> a) -> [a] -> [a]
+mapIf p f = map (\x -> if p x then f x else x)
+
+-- helper to remove newlines if the contents pass a predicate, otherwise just skip over the element.
+-- Maps over two elements at a time. First predicate is for first line, second is for the second line.
+filterNewline :: (String -> Bool) -> (String -> Bool) -> [String] -> [String]
+filterNewline _ _ [] = []
+filterNewline p1 p2 (l1:l2:ls) = if p1 l1 && p2 l2 then filterNewline p1 p2 ((l1 ++ " " ++ l2):ls) else l1 : filterNewline p1 p2 (l2:ls)
+filterNewline _ _ ls = ls
+
 
 -----------------
 -- Sorting and filtering for functions that use @data@ syntax (for record types)
@@ -161,19 +174,14 @@ useConstructFormRec _ ls = ls
 -- Instead of separating records by newline (which are not guarenteed),
 -- use commas (which will always be there for a record with more than one field).
 removeNewlineComma :: [String] -> [String]
-removeNewlineComma [] = []
-removeNewlineComma (l1:l2:ls)
-  | "," `isPrefixOf` l2 = removeNewlineComma ((l1 ++ " " ++ l2) : ls)
-  | otherwise = l1 : removeNewlineComma (l2:ls)
-removeNewlineComma ls = ls
+removeNewlineComma = filterNewline (\_ -> True) (isPrefixOf ",")
 
 -- Take a list of data declarations for records and get the name of the datatype itself and all dependencies of that datatype.
 sortDataRec :: [String] -> [(String, [String])]
-sortDataRec [] = []
-sortDataRec (l:ls) = (head typeContents, checkContents): sortDataRec ls 
-    where
-        typeContents = map stripWS $ L.splitOn "=" $ l \\ "data "
-        checkContents = map stripWS $ concatMap (tail . L.splitOn "::") $ L.splitOn "," $ concat $ tail typeContents
+sortDataRec = map (\l -> (head $ typeContents l, typeDependencies l))
+  where
+    typeContents l = map stripWS $ L.splitOn "=" $ l \\ "data "
+    typeDependencies l = map stripWS $ concatMap (tail . L.splitOn "::") $ L.splitOn "," $ concat $ tail $ typeContents l
 
 -- Record a datatype and its dependencies. For record types using the @data@ declaration syntax.
 getDataContainedRec :: [(String, [String])] -> [DataDeclRecord]
@@ -200,10 +208,10 @@ isDataConst = filter (\dt -> isPrefixOf "data " dt && not ("{" `isInfixOf` dt))
 
 -- Helper that takes a list of datatype declarations (not record type) and sorts them so that a list of the datatype name and the datatype constructor values is made.
 sortDataConst :: [String] -> [(String, [String])]
-sortDataConst [] = []
-sortDataConst (l:ls) = (dataCName, dataCContents): sortDataConst ls
-    where dataCName = head $ map stripWS $ L.splitOneOf "|=" $ l \\ "data "
-          dataCContents = concatMap (tail . words) $ tail $ filter (not . null) $ map stripWS $ L.splitOneOf "|=" $ l \\ "data " 
+sortDataConst = map (\l -> (head $ typeContents l, typeDependencies l))
+  where 
+    typeContents l = map stripWS $ L.splitOneOf "|=" $ l \\ "data "
+    typeDependencies l = concatMap (tail . words) $ tail $ filter (not . null) $ typeContents l
 
 -- Record a datatype and its dependencies. For non-record types using the @data@ declaration syntax.
 getDataContainedConst :: [(String, [String])] -> [DataDeclConstruct]
@@ -223,17 +231,15 @@ isNewtypeConst = filter (\x -> not (isInfixOf "{" x) && isPrefixOf "newtype " x)
 
 -- Sorts a datatype and its dependencies. For record-style @newtype@ declaration syntax.
 sortNewtypesR :: [String] -> [(String, [String])]
-sortNewtypesR [] = []
-sortNewtypesR (l:ls) = (head typeName, typeContents) : sortNewtypesR ls
-  where typeName = map stripWS $ L.splitOn "=" $ l \\ "newtype "
-        typeContents = map stripWS $ concatMap (tail . L.splitOn "::") $ L.splitOn "," $ concat $ tail typeName
+sortNewtypesR = map (\l -> (head $ typeContents l, typeDependencies l))
+  where typeContents l = map stripWS $ L.splitOn "=" $ l \\ "newtype "
+        typeDependencies l = map stripWS $ concatMap (tail . L.splitOn "::") $ L.splitOn "," $ concat $ tail $ typeContents l
 
 -- Sorts a datatype and its dependencies. For constructor style @newtype@ declaration syntax.
 sortNewtypesC :: [String] -> [(String, [String])]
-sortNewtypesC [] = []
-sortNewtypesC (l:ls) = (head typeName, typeContents) : sortNewtypesC ls
-  where typeName = map stripWS $ L.splitOn "=" $ l \\ "newtype "
-        typeContents = concatMap (tail.words) $ tail typeName
+sortNewtypesC = map (\l -> (head $ typeContents l, typeDependencies l))
+  where typeContents l = map stripWS $ L.splitOn "=" $ l \\ "newtype "
+        typeDependencies l = concatMap (tail.words) $ tail $ typeContents l
 
 -- Record a datatype and its dependencies. For @newtype@ declaration syntax.
 getNewtypes :: [(String, [String])] -> [NewtypeDecl]
@@ -249,9 +255,8 @@ isType = filter (\x -> isInfixOf "=" x && isPrefixOf "type " x)
 
 -- Sorts a datatype and its dependencies. For @type@ declaration syntax.
 sortTypes :: [String] -> [(String, [String])]
-sortTypes [] = []
-sortTypes (l:ls) = (head typeContents, tail typeContents) : sortTypes ls
-  where typeContents = map stripWS $ L.splitOn "=" $ l \\ "type "
+sortTypes = map (\l -> (head $ typeContents l, tail $ typeContents l))
+  where typeContents l = map stripWS $ L.splitOn "=" $ l \\ "type "
 
 -- Record a datatype and its dependencies. For @type@ declaration syntax.
 getTypes :: [(String, [String])] -> [TypeDecl]
@@ -271,10 +276,8 @@ filterName = filterPrimeTypes . filterQualifiedTypes . filterInvalidChars
 
 -- These characters should either not appear in a .dot file (eg. gets rid of list types), or does some extra cleanup that the general sort functions did not catch.
 filterInvalidChars :: String -> String
-filterInvalidChars = filterInvalidChars' invalidChars
+filterInvalidChars = filter (\l -> not (l `elem` invalidChars))
   where
-    filterInvalidChars' [] x = x
-    filterInvalidChars' (l:ls) x = filterInvalidChars' ls $ filter (/= l) x
     invalidChars = "[]!} (){->,$" --the space being here is kind of a hack (as a result of uncommon type syntax not caught by the above sorters), but it allows the .dot files to compile for now
 
 -- Primes are not legal syntax in .dot files, so replace @'@ with @_@ instead.

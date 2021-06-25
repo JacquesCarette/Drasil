@@ -1,24 +1,5 @@
 digraph auxconstntsec{
-AuxConstntSec -> DocSectionfDocSection;
-AuxConstntSec -> RefSecfRefSec;
-AuxConstntSec -> IntroSecfIntroSec;
-AuxConstntSec -> IntroSubfIntroSub;
-AuxConstntSec -> StkhldrSecfStkhldrSec;
-AuxConstntSec -> StkhldrSubfStkhldrSub;
-AuxConstntSec -> GSDSecfGSDSec;
-AuxConstntSec -> GSDSubfGSDSub;
-AuxConstntSec -> SSDSecfSSDSec;
-AuxConstntSec -> SSDSubfSSDSub;
-AuxConstntSec -> ProblemDescriptionfProblemDescription;
-AuxConstntSec -> PDSubfPDSub;
-AuxConstntSec -> SCSSubfSCSSub;
-AuxConstntSec -> ReqrmntSecfReqrmntSec;
-AuxConstntSec -> ReqsSubfReqsSub;
-AuxConstntSec -> LCsSecfLCsSec;
-AuxConstntSec -> UCsSecfUCsSec;
-AuxConstntSec -> TraceabilitySecfTraceabilitySec;
-AuxConstntSec -> OffShelfSolnsSecfOffShelfSolnsSec;
-AuxConstntSec -> AuxConstntSecfAuxConstntSec;
-AuxConstntSec -> AppndxSecfAppndxSec;
-AuxConstntSec	[shape=oval, color=cyan3, label=AuxConstntSec];
+AuxConstntSec -> CI;
+AuxConstntSec -> QDefinition;
+AuxConstntSec	[shape=oval, color=darkviolet, label=AuxConstntSec];
 }

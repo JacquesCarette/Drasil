@@ -1039,30 +1039,6 @@ digraph alltypes {
 	subgraph srs {
 	}
 	subgraph core {
-		subgraph auxconstntsec{
-		AuxConstntSec -> DocSectionfDocSection;
-		AuxConstntSec -> RefSecfRefSec;
-		AuxConstntSec -> IntroSecfIntroSec;
-		AuxConstntSec -> IntroSubfIntroSub;
-		AuxConstntSec -> StkhldrSecfStkhldrSec;
-		AuxConstntSec -> StkhldrSubfStkhldrSub;
-		AuxConstntSec -> GSDSecfGSDSec;
-		AuxConstntSec -> GSDSubfGSDSub;
-		AuxConstntSec -> SSDSecfSSDSec;
-		AuxConstntSec -> SSDSubfSSDSub;
-		AuxConstntSec -> ProblemDescriptionfProblemDescription;
-		AuxConstntSec -> PDSubfPDSub;
-		AuxConstntSec -> SCSSubfSCSSub;
-		AuxConstntSec -> ReqrmntSecfReqrmntSec;
-		AuxConstntSec -> ReqsSubfReqsSub;
-		AuxConstntSec -> LCsSecfLCsSec;
-		AuxConstntSec -> UCsSecfUCsSec;
-		AuxConstntSec -> TraceabilitySecfTraceabilitySec;
-		AuxConstntSec -> OffShelfSolnsSecfOffShelfSolnsSec;
-		AuxConstntSec -> AuxConstntSecfAuxConstntSec;
-		AuxConstntSec -> AppndxSecfAppndxSec;
-		AuxConstntSec	[shape=oval, color=cyan3, label=AuxConstntSec];
-		}
 		subgraph docsection{
 		DocSection -> RefSec;
 		DocSection -> IntroSec;
@@ -1196,14 +1172,10 @@ digraph alltypes {
 		TraceConfig -> TraceConfig;
 		TraceConfig	[shape=oval, color=darkviolet, label=TraceConfig];
 		}
-		subgraph lcssec{
-		LCsSec	[shape=oval, color=darkgreen, label=LCsSec];
-		}
-		subgraph ucssec{
-		UCsSec	[shape=oval, color=darkgreen, label=UCsSec];
-		}
-		subgraph offshelfsolnssec{
-		OffShelfSolnsSec	[shape=oval, color=darkgreen, label=OffShelfSolnsSec];
+		subgraph auxconstntsec{
+		AuxConstntSec -> CI;
+		AuxConstntSec -> QDefinition;
+		AuxConstntSec	[shape=oval, color=darkviolet, label=AuxConstntSec];
 		}
 		subgraph appndxsec{
 		AppndxSec	[shape=oval, color=darkgreen, label=AppndxSec];
@@ -1224,9 +1196,21 @@ digraph alltypes {
 		ReqrmntSec -> ReqsSub;
 		ReqrmntSec	[shape=oval, color=darkgreen, label=ReqrmntSec];
 		}
+		subgraph lcssec{
+		LCsSec -> ConceptInstance;
+		LCsSec	[shape=oval, color=darkgreen, label=LCsSec];
+		}
+		subgraph ucssec{
+		UCsSec -> ConceptInstance;
+		UCsSec	[shape=oval, color=darkgreen, label=UCsSec];
+		}
 		subgraph traceabilitysec{
 		TraceabilitySec -> TraceConfig;
 		TraceabilitySec	[shape=oval, color=darkgreen, label=TraceabilitySec];
+		}
+		subgraph offshelfsolnssec{
+		OffShelfSolnsSec -> Contents;
+		OffShelfSolnsSec	[shape=oval, color=darkgreen, label=OffShelfSolnsSec];
 		}
 		subgraph system{
 		System -> Sentence;

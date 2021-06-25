@@ -5,14 +5,11 @@ import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
 import Utils.Drasil
 import Utils.Drasil.Concepts
-
 import Prelude hiding (log)
-
 import Data.Drasil.Concepts.Math (xComp, yComp, zComp)
 import Data.Drasil.Constraints (gtZeroConstr, probConstr)
 import Data.Drasil.Quantities.Physics (subMax, subMin, subX, subY, subZ)
 import Data.Drasil.SI_Units (kilogram, metre, millimetre, pascal, second)
-
 import Drasil.GlassBR.Concepts (aR, annealed, fullyT, glaPlane, glassTypeFac, 
   heatS, iGlass, lGlass, lResistance, lShareFac, loadDurFactor, nFL, responseTy, 
   stdOffDist)
@@ -64,7 +61,7 @@ derivedInsWUncrtn :: [UncertQ]
 derivedInsWUncrtn = [aspectRatio]
 
 --inputs with no uncertainties
-inputsNoUncrtn :: [ConstrainedChunk]
+inputsNoUncrtn :: [ConstrReasQDef]
 inputsNoUncrtn = [cnstrw glassTypeCon, nomThick]
 
 inputDataConstraints :: [UncertainChunk]

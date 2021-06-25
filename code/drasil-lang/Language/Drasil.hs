@@ -73,7 +73,7 @@ module Language.Drasil (
   -- Chunk.Constrained
   , ConstrainedChunk(..), ConstrConcept(..), ReasonableValueQDef(..), ConstrainedQDef(..), ConstrReasQDef(..)
   , cuc, cvc, constrained', cuc', cuc'', constrainedNRV'
-  , cnstrw, cnstrw'
+  , cnstrw, cnstrw', constrReasQD
   -- Chunk.Eq
   , QDefinition, fromEqn, fromEqn', fromEqnSt, fromEqnSt', equat
   , mkQDefSt, mkQuantDef, mkQuantDef', ec

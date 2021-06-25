@@ -1,0 +1,3 @@
+# Only allow allow the single Typing file
+Typing.*
+!Typing.lhs

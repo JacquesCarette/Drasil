@@ -6,6 +6,7 @@ import System.Directory
 import qualified Data.Text as T
 import qualified Data.List.Split as L
 import Data.Maybe (fromJust)
+import Data.Char (isUpper)
 
 import DirectoryController as DC (FileName)
 
@@ -39,21 +40,13 @@ extractEntryData fileName filePath = do
   scriptFile <- hGetContents handle
   forceRead scriptFile `seq` hClose handle
 
-      -- light cleanup of the files before sorting by datatype
+      -- general light cleanup of the files before sorting by datatype
   let scriptFileLines = scriptFilter scriptFile
-
-      -- convert the raw files into nicer strings by picking only the information we want
-      dataTypesRec = removeNewlineComma $ useConstructFormRec False $ removeComments $ isDataRec scriptFileLines
-      dataTypesConst = removeComments $ isDataConst $ map useEqForm $ useGuardForm scriptFileLines
-      newtypeRec = removeComments $ isNewtypeRec scriptFileLines
-      newtypeConst = removeComments $ isNewtypeConst scriptFileLines
-      typeTypes = removeComments $ isType scriptFileLines
-
-      -- organize the data from a nice string into their respective Decl formats
-  let dataDeclRec = getDataContainedRec $ sortDataRec $ filterEmptyS $ L.splitOn "}\n" $ unlines dataTypesRec
-      dataDeclConst = getDataContainedConst $ sortDataConst dataTypesConst
-      newtypeDecl = getNewtypes $ sortNewtypesR newtypeRec ++ sortNewtypesC newtypeConst
-      typeDecl = getTypes $ sortTypes typeTypes
+      -- organize the data from the script file into their respective data Decl formats
+      dataDeclRec =  formatDataRec scriptFileLines
+      dataDeclConst = formatDataCon scriptFileLines
+      newtypeDecl = formatNewtype scriptFileLines
+      typeDecl = formatType scriptFileLines
 
   -- returns all types within a file
   return EntryData {dRNs=dataDeclRec,dCNs=dataDeclConst,ntNs=newtypeDecl,tNs=typeDecl}
@@ -121,6 +114,35 @@ filterNewline _ _ [] = []
 filterNewline p1 p2 (l1:l2:ls) = if p1 l1 && p2 l2 then filterNewline p1 p2 ((l1 ++ " " ++ l2):ls) else l1 : filterNewline p1 p2 (l2:ls)
 filterNewline _ _ ls = ls
 
+-------------------------------
+-- Main formatting functions (combine many filtering and sorting functions for cleaner code)
+-- Takes in the raw file data, formats it into nice usable strings, and then sorts them into their respective type declarations
+------------------------------
+
+-- combine record data sorting & cleanup functions for cleaner code in extractEntryData
+formatDataRec :: [String] -> [DataDeclRecord]
+                -- sorting functions                                                           -- cleanup functions
+formatDataRec = getDataContainedRec . sortDataRec . filterEmptyS . L.splitOn "}\n" . unlines . removeNewlineComma . useConstructFormRec False . removeComments . isDataRec
+
+-- combine constructor data sorting & cleanup functions for cleaner code in extractEntryData
+formatDataCon :: [String] -> [DataDeclConstruct]
+                -- sorting functions                    -- cleanup functions
+formatDataCon = getDataContainedConst . sortDataConst . removeComments . isDataConst . map useEqForm . useGuardForm 
+
+-- combine newtype sorting & cleanup functions for cleaner code in extractEntryData
+formatNewtype :: [String] -> [NewtypeDecl]
+                -- sorting functions
+formatNewtype sfLines = getNewtypes $ sortNewtypesR newtypeRec ++ sortNewtypesC newtypeConst
+  where
+    -- cleanup functions
+    newtypeRec = removeComments $ isNewtypeRec sfLines
+    newtypeConst = removeComments $ isNewtypeConst sfLines
+
+-- combine type sorting & cleanup functions for cleaner code in extractEntryData
+formatType :: [String] -> [TypeDecl]
+             -- sorting functions   -- cleanup functions
+formatType = getTypes . sortTypes . removeComments . isType
+
 
 -----------------
 -- Sorting and filtering for functions that use @data@ syntax (for record types)
@@ -131,18 +153,6 @@ filterNewline _ _ ls = ls
 isDataRec :: [String] -> [String]
 isDataRec dataRecs = isDataRecAux dataRecs False
   where
-    -- Trying fold style, gave me different .dot graphs so probably is not right
-    {-output = map fst $ filter snd $ zip dataRecs doit 
-    doit = foldl (\x y -> ((++) x (someFunc (myHead (reverse x)) y))) [] dataRecs
-    someFunc :: Bool -> String -> [Bool]
-    someFunc dtStill l
-      | "data " `isPrefixOf` l && "{" `isInfixOf` l && "}" `isInfixOf` l = [False] -- if a line starts with "data " and contains "{" and "}", it is the start and end of a record datatype.
-      | "data " `isPrefixOf` l && "{" `isInfixOf` l = [True] -- if a line starts with "data " and contains "{", it is the start of a record datatype.
-      | dtStill && "}" `isInfixOf` l = [False]               -- if a line is still part of record datatype and we see "}", the datatype declaration has ended.
-      | dtStill = [True]                                    -- if a line is still part of record datatype and none of the above happens, keep going with the datatype.
-      | otherwise = [False]                                    -- otherwise, it is not a datatype and keep going as if the next line is not a datatype.
-    myHead [] = False
-    myHead (x:xs) = x-}
     isDataRecAux [] _ = []
     isDataRecAux (l:ls) dtStill
       | "data " `isPrefixOf` l && "{" `isInfixOf` l && "}" `isInfixOf` l = l: isDataRecAux ls False -- if a line starts with "data " and contains "{" and "}", it is the start and end of a record datatype.
@@ -150,6 +160,18 @@ isDataRec dataRecs = isDataRecAux dataRecs False
       | dtStill && "}" `isInfixOf` l = l: isDataRecAux ls False               -- if a line is still part of record datatype and we see "}", the datatype declaration has ended.
       | dtStill = l: isDataRecAux ls True                                    -- if a line is still part of record datatype and none of the above happens, keep going with the datatype.
       | otherwise = isDataRecAux ls False                                    -- otherwise, it is not a datatype and keep going as if the next line is not a datatype.
+    -- Trying fold style, gave me different .dot graphs so probably is not right
+    {-output = map fst $ filter snd $ zip dataRecs doit 
+    doit = foldl (\x y -> ((++) x (someFunc (myHead (reverse x)) y))) [] dataRecs
+    someFunc :: Bool -> String -> [Bool]
+    someFunc dtStill l
+      | "data " `isPrefixOf` l && "{" `isInfixOf` l && "}" `isInfixOf` l = [False]
+      | "data " `isPrefixOf` l && "{" `isInfixOf` l = [True]
+      | dtStill && "}" `isInfixOf` l = [False]              
+      | dtStill = [True]                                    
+      | otherwise = [False]                                 
+    myHead [] = False
+    myHead (x:xs) = x-}
   
 -- Record types may be defined in the form:
 -- data Type where
@@ -176,12 +198,18 @@ useConstructFormRec _ ls = ls
 removeNewlineComma :: [String] -> [String]
 removeNewlineComma = filterNewline (\_ -> True) (isPrefixOf ",")
 
+-- filter through records of the form rec :: Type1 -> f Type2. Only accepts the first type though, so this will eventually need to be changed
+filterFuncForm :: String -> String
+filterFuncForm l 
+  | "->" `isInfixOf` l = unwords $ filter (\x -> isUpper $ head x) $ nub $ words l
+  | otherwise = l
+
 -- Take a list of data declarations for records and get the name of the datatype itself and all dependencies of that datatype.
 sortDataRec :: [String] -> [(String, [String])]
 sortDataRec = map (\l -> (head $ typeContents l, typeDependencies l))
   where
     typeContents l = map stripWS $ L.splitOn "=" $ l \\ "data "
-    typeDependencies l = map stripWS $ concatMap (tail . L.splitOn "::") $ L.splitOn "," $ concat $ tail $ typeContents l
+    typeDependencies l = map filterFuncForm $ map stripWS $ concatMap (tail . L.splitOn "::") $ L.splitOn "," $ concat $ tail $ typeContents l
 
 -- Record a datatype and its dependencies. For record types using the @data@ declaration syntax.
 getDataContainedRec :: [(String, [String])] -> [DataDeclRecord]

@@ -3,7 +3,7 @@
 module Language.Drasil.Mod (Class(..), StateVariable(..), Func(..), 
   FuncData(..), FuncDef(..), FuncStmt(..), Initializer, Mod(..), Name, 
   Version, Description, Import, ($:=), pubStateVar, privStateVar, classDef, 
-  classImplements, ctorDef, ffor, fDecDef, fname, fstdecl, funcData, funcDef, 
+  classImplements, ctorDef, ffor, fforRange, fDecDef, fname, fstdecl, funcData, funcDef, 
   funcDefParams, packmod, packmodRequires
 ) where
 
@@ -139,10 +139,11 @@ v $:= e = FAsg (quantvar v) e
 ffor :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> [FuncStmt] -> FuncStmt
 ffor v end = fforRange v (CE.int 0) end (CE.int 1)
 
--- | Define a for-loop. Quantity is for the iteration variable, Expr is the 
--- upper bound at that variable (the variable will start with a value of 0).
+-- | Define a for-loop. Quantity is for the iteration variable, and 3 CodeExprs
+-- for the start, stop, step numbers.
 -- [FuncStmt] is for the loop body.
-fforRange :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> CodeExpr -> CodeExpr -> [FuncStmt] -> FuncStmt
+fforRange :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> CodeExpr 
+  -> CodeExpr -> [FuncStmt] -> FuncStmt
 fforRange v = FFor (quantvar v)
 
 -- | Define a declare-define statement.

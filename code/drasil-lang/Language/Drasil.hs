@@ -71,7 +71,7 @@ module Language.Drasil (
   , physc, sfwrc, enumc , isPhysC, isSfwrC
   , Constraint(..), ConstraintReason(..)
   -- Chunk.Constrained
-  , ConstrainedChunk(..), ConstrConcept(..)
+  , ConstrainedChunk(..), ConstrConcept(..), ReasonableValueQDef(..), ConstrainedQDef(..), ConstrReasQDef(..)
   , cuc, cvc, constrained', cuc', cuc'', constrainedNRV'
   , cnstrw, cnstrw'
   -- Chunk.Eq

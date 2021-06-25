@@ -32,13 +32,13 @@ modElas = uc' "modElas" (nounPhraseSP "modulus of elasticity of glass")
 
 {--}
 
-constrained :: [ConstrainedChunk]
+constrained :: [ConstrReasQDef]
 constrained = map cnstrw inputDataConstraints ++ 
   [cnstrw probBr, cnstrw probFail, cnstrw stressDistFac] 
 
 plateLen, plateWidth, aspectRatio, charWeight, standOffDist :: UncertQ
 pbTol, tNT :: UncertainChunk
-nomThick :: ConstrainedChunk
+nomThick :: ConstrReasQDef
 glassTypeCon :: ConstrConcept
 
 {--}
@@ -122,7 +122,7 @@ outputs = map qw [isSafePb, isSafeLR] ++ map qw [probBr] ++ map qw [stressDistFa
 tmSymbols :: [QuantityDict]
 tmSymbols = map qw [probFail, pbTolfail] ++ map qw [isSafeProb, isSafeLoad]
 
-probBr, probFail, pbTolfail, stressDistFac :: ConstrainedChunk
+probBr, probFail, pbTolfail, stressDistFac :: ReasonableValueQDef
 probBr = cvc "probBr" (nounPhraseSP "probability of breakage")
   (sub cP lBreak) Rational
   [probConstr] (Just $ dbl 0.4)

@@ -15,7 +15,7 @@ module Drasil.Sections.SpecificSystemDescription
   , tInDataCstRef, tOutDataCstRef
   ) where
 
-import Language.Drasil
+import Language.Drasil hiding (variable)
 import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 
@@ -76,7 +76,7 @@ termDefnF' end otherContents = SRS.termAndDefn (intro : otherContents) []
 physSystDesc :: Idea a => a -> [Sentence] -> LabelledContent -> [Contents] -> Section
 physSystDesc progName parts fg other = SRS.physSyst (intro : bullets : LlC fg : other) []
   where intro = mkParagraph $ foldlSentCol [S "The", phrase physicalSystem `S.of_` short progName `sC`
-                S "as shown in", makeRef2S fg `sC` S "includes the following", plural element]
+                S "as shown in", refS fg `sC` S "includes the following", plural element]
         bullets = enumSimpleU 1 (short physSyst) parts
 
 -- | General constructor for the Goal Statement section. Takes the given inputs ('Sentence's) and the descriptions ('Contents').
@@ -89,7 +89,7 @@ goalStmtF givenInputs otherContents = SRS.goalStmt (intro:otherContents) []
 solutionCharSpecIntro :: (Idea a) => a -> Section -> Contents
 solutionCharSpecIntro progName instModelSection = foldlSP [S "The", plural inModel, 
   S "that govern", short progName, S "are presented in" +:+. 
-  makeRef2S instModelSection, S "The", phrase information, S "to understand", 
+  refS instModelSection, S "The", phrase information, S "to understand", 
   S "meaning" `S.the_ofThe` plural inModel, 
   S "and their derivation is also presented, so that the", plural inModel, 
   S "can be verified"]
@@ -150,11 +150,11 @@ inModelF probDes datDef theMod genDef otherContents = SRS.inModel
 -- | Creates a general Instance Model introduction. Requires four references to function. Nothing can be input into the last reference if only three tables are present.
 inModelIntro :: Section -> Section -> Section -> Section -> Contents
 inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_, 
-  S "transforms the", phrase problem, S "defined in", makeRef2S r1,
+  S "transforms the", phrase problem, S "defined in", refS r1,
   S "into one which is expressed in mathematical terms. It uses concrete", 
-  plural symbol_, S "defined in", makeRef2S r2, S "to replace the abstract",
-  plural symbol_, S "in the", plural model, S "identified in", makeRef2S r3 `S.and_`
-  makeRef2S r4]
+  plural symbol_, S "defined in", refS r2, S "to replace the abstract",
+  plural symbol_, S "in the", plural model, S "identified in", refS r3 `S.and_`
+  refS r4]
 
 -- | Constructor for Data Constraints section. Takes a trailing 'Sentence' (use 'EmptyS' if none) and data constraints.
 datConF :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => 
@@ -170,7 +170,7 @@ dataConstraintParagraph trailingSent = foldlSP_ [inputTableSent, physConsSent,
 
 -- | General 'Sentence' that describes the data constraints on the input variables.
 inputTableSent :: Sentence
-inputTableSent = foldlSent [makeRef2S $ inDataConstTbl ([] :: [UncertQ]), S "shows the",
+inputTableSent = foldlSent [refS $ inDataConstTbl ([] :: [UncertQ]), S "shows the",
   plural datumConstraint, S "on the", phrase input_, plural variable]
 
 -- | General 'Sentence' that describes the physical constraints/limitations on the variables.
@@ -200,13 +200,13 @@ typValSent = foldlSent [S "The", phrase column `S.of_` S "typical",
 
 -- | General 'Sentence' that describes some auxiliary specifications of the system.
 auxSpecSent :: Sentence
-auxSpecSent = foldlSent [makeRef2S $ SRS.valsOfAuxCons [] [], S "gives",
+auxSpecSent = foldlSent [refS $ SRS.valsOfAuxCons [] [], S "gives",
   plural value `S.the_ofThe` phrase specification, plural parameter, S "used in",
-  makeRef2S $ inDataConstTbl ([] :: [UncertQ])]
+  refS $ inDataConstTbl ([] :: [UncertQ])]
 
 -- | Creates a Data Constraints table. Takes in Columns, reference, and a label.
 mkDataConstraintTable :: [(Sentence, [Sentence])] -> String -> Sentence -> LabelledContent
-mkDataConstraintTable col ref lab = llcc (makeTabRef ref) $ uncurry Table 
+mkDataConstraintTable col rf lab = llcc (makeTabRef rf) $ uncurry Table 
   (mkTableFromColumns col) lab True
 
 -- | Creates the input Data Constraints Table.
@@ -258,5 +258,5 @@ propsIntro = foldlSP_ [outputTableSent, physConsSent]
 
 -- | Outputs a data constraint table as a 'Sentence'.
 outputTableSent :: Sentence
-outputTableSent = foldlSent [makeRef2S $ outDataConstTbl ([] :: [UncertQ]), S "shows the",
+outputTableSent = foldlSent [refS $ outDataConstTbl ([] :: [UncertQ]), S "shows the",
   plural datumConstraint, S "on the", phrase output_, plural variable]

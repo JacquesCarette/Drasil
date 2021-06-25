@@ -4,7 +4,7 @@ module Drasil.ExtractDocDesc (getDocDesc, egetDocDesc, sentencePlate) where
 import Control.Lens((^.))
 import Drasil.DocumentLanguage.Core
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
-import Language.Drasil hiding (Manual, Vector, Verb)
+import Language.Drasil hiding (Manual, Verb)
 import Theory.Drasil
 import Data.List(transpose)
 

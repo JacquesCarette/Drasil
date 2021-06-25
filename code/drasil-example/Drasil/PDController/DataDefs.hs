@@ -20,7 +20,7 @@ dataDefinitions = [ddErrSig, ddPropCtrl, ddDerivCtrl, ddCtrlVar]
 
 ddErrSig :: DataDefinition
 ddErrSig
-  = dd ddErrSigDefn [makeCite johnson2008] Nothing "ddProcessError"
+  = dd ddErrSigDefn [ref johnson2008] Nothing "ddProcessError"
       [ddErrSigNote]
 
 ddErrSigDefn :: QDefinition
@@ -45,7 +45,7 @@ ddErrSigNote
 
 ddPropCtrl :: DataDefinition
 ddPropCtrl
-  = dd ddPropCtrlDefn [makeCite johnson2008] Nothing "ddPropCtrl"
+  = dd ddPropCtrlDefn [ref johnson2008] Nothing "ddPropCtrl"
       [ddPropCtrlNote]
 
 ddPropCtrlDefn :: QDefinition
@@ -66,7 +66,7 @@ ddPropCtrlNote
 
 ddDerivCtrl :: DataDefinition
 ddDerivCtrl
-  = dd ddDerivCtrlDefn [makeCite johnson2008] Nothing "ddDerivCtrl"
+  = dd ddDerivCtrlDefn [ref johnson2008] Nothing "ddDerivCtrl"
       [ddDerivCtrlNote]
 
 ddDerivCtrlDefn :: QDefinition
@@ -90,7 +90,7 @@ ddDerivCtrlNote
 
 ddCtrlVar :: DataDefinition
 ddCtrlVar
-  = dd ddCtrlVarDefn [makeCite johnson2008] Nothing "ddCtrlVar" [ddCtrlNote]
+  = dd ddCtrlVarDefn [ref johnson2008] Nothing "ddCtrlVar" [ddCtrlNote]
 
 ddCtrlVarDefn :: QDefinition
 ddCtrlVarDefn = mkQuantDef qdCtrlVarFD ddCtrlEqn
@@ -114,4 +114,4 @@ ddCtrlNote
 
 -- References --
 dataDefRefs :: [Reference]
-dataDefRefs = map rw dataDefinitions
+dataDefRefs = map ref dataDefinitions

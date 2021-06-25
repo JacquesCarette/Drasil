@@ -14,4 +14,4 @@ hibbeler2004 = cBookA [rcHibbeler] "Engineering Mechanics: Dynamics"
 
 -- References --
 citeRefs :: [Reference]
-citeRefs = map rw citations
+citeRefs = map ref citations

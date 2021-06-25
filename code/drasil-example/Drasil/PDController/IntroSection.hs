@@ -48,4 +48,4 @@ introDocOrg :: Sentence
 introDocOrg
   = foldlSent
       [S "The sections in this document are based on",
-         makeCiteS smithLai2005]
+         refS smithLai2005]

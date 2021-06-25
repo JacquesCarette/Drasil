@@ -9,7 +9,7 @@ import Data.List (nub)
 import Data.Maybe (mapMaybe)
 import Control.Lens ((^.))
 
-import Language.Drasil hiding (Symbol(..))
+import Language.Drasil
 import Database.Drasil (SystemInformation, _sysinfodb, citeDB, conceptinsLookup,
   conceptinsTable, dataDefnTable, datadefnLookup, gendefLookup, gendefTable,
   insmodelLookup, insmodelTable, labelledconLookup, labelledcontentTable,
@@ -50,29 +50,29 @@ data InclUnits = IncludeUnits -- ^ In description field (for other symbols).
 -- | Create a theoretical model using a list of fields to be displayed, a database of symbols,
 -- and a 'RelationConcept' (called automatically by 'SCSSub' program).
 tmodel :: Fields -> SystemInformation -> TheoryModel -> LabelledContent
-tmodel fs m t = mkRawLC (Defini Theory (foldr (mkTMField t m) [] fs)) (makeRef2 t)
+tmodel fs m t = mkRawLC (Defini Theory (foldr (mkTMField t m) [] fs)) (ref t)
 
 -- | Create a data definition using a list of fields, a database of symbols, and a
 -- 'QDefinition' (called automatically by 'SCSSub' program).
 ddefn :: Fields -> SystemInformation -> DataDefinition -> LabelledContent
-ddefn fs m d = mkRawLC (Defini Data (foldr (mkDDField d m) [] fs)) (makeRef2 d)
+ddefn fs m d = mkRawLC (Defini Data (foldr (mkDDField d m) [] fs)) (ref d)
 
 -- | Create a general definition using a list of fields, database of symbols,
 -- and a 'GenDefn' (general definition) chunk (called automatically by 'SCSSub'
 -- program).
 gdefn :: Fields -> SystemInformation -> GenDefn -> LabelledContent
-gdefn fs m g = mkRawLC (Defini General (foldr (mkGDField g m) [] fs)) (makeRef2 g)
+gdefn fs m g = mkRawLC (Defini General (foldr (mkGDField g m) [] fs)) (ref g)
 
 -- | Create an instance model using a list of fields, database of symbols,
 -- and an 'InstanceModel' chunk (called automatically by 'SCSSub' program).
 instanceModel :: Fields -> SystemInformation -> InstanceModel -> LabelledContent
-instanceModel fs m i = mkRawLC (Defini Instance (foldr (mkIMField i m) [] fs)) (makeRef2 i)
+instanceModel fs m i = mkRawLC (Defini Instance (foldr (mkIMField i m) [] fs)) (ref i)
 
 -- | Create a derivation from a chunk's attributes. This follows the TM, DD, GD,
 -- or IM definition automatically (called automatically by 'SCSSub' program).
 derivation :: (HasDerivation c, HasShortName c, Referable c) => c -> Contents
 derivation c = maybe (mkParagraph EmptyS)
-  (\(Derivation h d) -> LlC $ llcc (makeRef2 c) $ DerivBlock h $ map makeDerivCons d) $ c ^. derivations
+  (\(Derivation h d) -> LlC $ llcc (ref c) $ DerivBlock h $ map makeDerivCons d) $ c ^. derivations
 
 -- | Helper function for creating the layout objects
 -- (paragraphs and equation blocks) for a derivation.
@@ -101,7 +101,7 @@ mkTMField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME
 mkTMField t _ l@Source fs = (show l, helperSources $ t ^. getReferences) : fs
 mkTMField t _ l@Notes fs =
   nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (t ^. getNotes)
-mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
+mkTMField _ _ l _ = error $ "Label " ++ show l ++ " not supported " ++
   "for theory models"
 
 -- | Helper function to make a list of 'Sentence's from the current system information and something that has a 'UID'.
@@ -112,13 +112,13 @@ helperRefs t s = foldlList Comma List $ map (`helpToRefField` s) $ nub $
 -- | Creates a reference as a 'Sentence' by finding if the 'UID' is in one of the possible data sets contained in the 'SystemInformation' database.
 helpToRefField :: UID -> SystemInformation -> Sentence
 helpToRefField t si
-  | t `elem` keys (s ^. dataDefnTable)        = makeRef2S $ datadefnLookup    t (s ^. dataDefnTable)
-  | t `elem` keys (s ^. insmodelTable)        = makeRef2S $ insmodelLookup    t (s ^. insmodelTable)
-  | t `elem` keys (s ^. gendefTable)          = makeRef2S $ gendefLookup      t (s ^. gendefTable)
-  | t `elem` keys (s ^. theoryModelTable)     = makeRef2S $ theoryModelLookup t (s ^. theoryModelTable)
-  | t `elem` keys (s ^. conceptinsTable)      = makeRef2S $ conceptinsLookup  t (s ^. conceptinsTable)
-  | t `elem` keys (s ^. sectionTable)         = makeRef2S $ sectionLookup     t (s ^. sectionTable)
-  | t `elem` keys (s ^. labelledcontentTable) = makeRef2S $ labelledconLookup t (s ^. labelledcontentTable)
+  | t `elem` keys (s ^. dataDefnTable)        = refS $ datadefnLookup    t (s ^. dataDefnTable)
+  | t `elem` keys (s ^. insmodelTable)        = refS $ insmodelLookup    t (s ^. insmodelTable)
+  | t `elem` keys (s ^. gendefTable)          = refS $ gendefLookup      t (s ^. gendefTable)
+  | t `elem` keys (s ^. theoryModelTable)     = refS $ theoryModelLookup t (s ^. theoryModelTable)
+  | t `elem` keys (s ^. conceptinsTable)      = refS $ conceptinsLookup  t (s ^. conceptinsTable)
+  | t `elem` keys (s ^. sectionTable)         = refS $ sectionLookup     t (s ^. sectionTable)
+  | t `elem` keys (s ^. labelledcontentTable) = refS $ labelledconLookup t (s ^. labelledcontentTable)
   | t `elem` map  (^. uid) (citeDB si) = EmptyS
   | otherwise = error $ t ++ "Caught."
   where s = _sysinfodb si
@@ -126,7 +126,7 @@ helpToRefField t si
 -- | Helper that makes a list of 'Reference's into a 'Sentence'. Then wraps into 'Contents'.
 helperSources :: [Reference] -> [Contents]
 helperSources [] = [mkParagraph $ S "--"]
-helperSources xs  = [mkParagraph $ foldlList Comma List $ map (\x -> Ref (x ^. uid) (getInfo x)) xs]
+helperSources xs  = [mkParagraph $ foldlList Comma List $ map (\x -> Ref (x ^. uid) EmptyS (getInfo x)) xs]
   where getInfo (Reference _ _ _ i) = i
 
 -- | Creates the fields for a definition from a 'QDefinition' (used by 'ddefn').
@@ -139,7 +139,7 @@ mkDDField d m l@(Description v u) fs = (show l, buildDDescription' v u d m) : fs
 mkDDField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
 mkDDField d _ l@Source fs = (show l, helperSources $ d ^. getReferences) : fs
 mkDDField d _ l@Notes fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (d ^. getNotes)
-mkDDField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
+mkDDField _ _ l _ = error $ "Label " ++ show l ++ " not supported " ++
   "for data definitions"
 
 -- | Creates the description field for 'Contents' (if necessary) using the given verbosity and
@@ -194,7 +194,7 @@ mkIMField i _ l@OutConstraints fs =
     (i ^. out_constraints)) : fs
 mkIMField i _ l@Notes fs =
   nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (i ^. getNotes)
-mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
+mkIMField _ _ l _ = error $ "Label " ++ show l ++ " not supported " ++
   "for instance models"
 
 -- | Used for making definitions. The first pair is the symbol of the quantity we are

@@ -48,7 +48,7 @@ import Drasil.PDController.Requirements
 import Drasil.PDController.SpSysDesc
        (goals, sysFigure, sysGoalInput, sysParts, sysProblemDesc, sysDescRefs)
 import Drasil.PDController.TModel (theoreticalModels, tModRefs)
-import Language.Drasil hiding (Symbol(..), Vector)
+import Language.Drasil
 import Language.Drasil.Code
        (ODEInfo, ODEMethod(..), ODEOptions, odeInfo, odeOptions, quantvar)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
@@ -73,7 +73,7 @@ mkSRS
          [IPurpose [introPurposeOfDoc], IScope introscopeOfReq,
           IChar introUserChar1 introUserChar2 [],
           IOrgSec introDocOrg IDict.dataDefn (SRS.inModel [] [])
-            (S "The instance model referred as" +:+ makeRef2S imPD +:+
+            (S "The instance model referred as" +:+ refS imPD +:+
                S "provides an"
                +:+ titleize ode +:+ sParen (short ode)
                +:+ S "that models the"
@@ -197,7 +197,7 @@ pidODEInfo
 
 -- References --
 bodyRefs :: [Reference]
-bodyRefs = map rw conceptInstances ++ map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+bodyRefs = map ref conceptInstances ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si)
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ sysDescRefs ++ dataDefRefs ++ genDefRefs

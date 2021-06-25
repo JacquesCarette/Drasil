@@ -7,7 +7,7 @@ import Language.Drasil (Sentence, Special(..), Stage(..), Symbol, USymb(..))
 import qualified Language.Drasil as L (Expr)
 import Language.Drasil.Plain.Helpers (toPlainName)
 import Language.Drasil.Printing.AST (Expr(..), Spec(..), Ops(..), Fence(..), 
-  OverSymb(..), Fonts(..), Spacing(..))
+  OverSymb(..), Fonts(..), Spacing(..), LinkType(..))
 import Language.Drasil.Printing.Import (expr, spec, symbol)
 import Language.Drasil.Printing.PrintingInformation (PrintingConfiguration(..), 
   PrintingInformation(..), Notation(Scientific))
@@ -64,7 +64,8 @@ specDoc :: Linearity -> Spec -> Doc
 specDoc f (E e) = pExprDoc f e
 specDoc _ (S s) = text s
 specDoc _ (Sp s) = specialDoc s
-specDoc f (Ref _ r s) = specDoc f s <+> text ("Ref: " ++ r)
+specDoc f (Ref (Cite2 n) r _) = specDoc f n <+> text ("Ref: " ++ r)
+specDoc f (Ref _ r s) = specDoc f s <+> text ("Ref: " ++ r) --may need to change?
 specDoc f (s1 :+: s2) = specDoc f s1 <> specDoc f s2
 specDoc _ EmptyS = empty
 specDoc f (Quote s) = doubleQuotes $ specDoc f s

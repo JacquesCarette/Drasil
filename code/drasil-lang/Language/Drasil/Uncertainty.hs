@@ -15,7 +15,6 @@ defaultUncrt = uncty 0.1 (Just 0)
 uncVal :: HasUncertainty x => x -> Double
 uncVal u = fromMaybe 0.0 $ u ^. (unc . uncert)
 
-
 -- | Accessor for precision value from something that has an uncertainty.
 uncPrec :: HasUncertainty x => x -> Maybe Int
 uncPrec u = u ^. (unc . prec)

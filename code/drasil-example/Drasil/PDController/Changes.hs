@@ -24,4 +24,4 @@ likeChgPPDesc
 
 -- References --
 chgRefs :: [Reference]
-chgRefs = map rw likelyChgs
+chgRefs = map ref likelyChgs

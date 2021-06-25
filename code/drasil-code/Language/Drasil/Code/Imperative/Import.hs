@@ -5,7 +5,7 @@ module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType,
   genModClasses, readData, renderC
 ) where
 
-import Language.Drasil hiding (Ref, int, log, ln, exp,
+import Language.Drasil hiding (Ref, variable, int, log, ln, exp,
   sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
 import Language.Drasil.Development (UFuncB(..), UFuncVec(..), 
   ArithBinOp(..), BoolBinOp(..), EqBinOp(..), LABinOp(..), OrdBinOp(..), VVNBinOp(..), VVVBinOp(..))

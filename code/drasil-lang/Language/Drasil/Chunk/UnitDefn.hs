@@ -33,25 +33,24 @@ data UnitDefn = UD { _vc :: ConceptChunk
                    , _cu :: [UID] }
 makeLenses ''UnitDefn
 
+-- | Finds 'UID' of the 'ConceptChunk' used to make the 'UnitDefn'.
 instance HasUID        UnitDefn where uid = vc . uid
--- ^ Finds 'UID' of the 'ConceptChunk' used to make the 'UnitDefn'.
+-- | Finds term ('NP') of the 'ConceptChunk' used to make the 'UnitDefn'.
 instance NamedIdea     UnitDefn where term   = vc . term
--- ^ Finds term ('NP') of the 'ConceptChunk' used to make the 'UnitDefn'.
+-- | Finds the idea contained in the 'ConceptChunk' used to make the 'UnitDefn'.
 instance Idea          UnitDefn where getA c = getA (c ^. vc)
--- ^ Finds the idea contained in the 'ConceptChunk' used to make the 'UnitDefn'.
+-- | Finds definition of the 'ConceptChunk' used to make the 'UnitDefn'.
 instance Definition    UnitDefn where defn = vc . defn
--- ^ Finds definition of the 'ConceptChunk' used to make the 'UnitDefn'.
+-- | Equal if 'Symbol's are equal.
 instance Eq            UnitDefn where a == b = usymb a == usymb b
--- ^ Equal if 'Symbol's are equal.
+-- | Finds the domain contained in the 'ConceptChunk' used to make the 'UnitDefn'.
 instance ConceptDomain UnitDefn where cdom = cdom . view vc
--- ^ Finds the domain contained in the 'ConceptChunk' used to make the 'UnitDefn'.
+-- | Finds unit symbol of the 'ConceptChunk' used to make the 'UnitDefn'.
 instance HasUnitSymbol UnitDefn where usymb = getUSymb . view cas
--- ^ Finds unit symbol of the 'ConceptChunk' used to make the 'UnitDefn'.
+-- | Gets the UnitDefn and contributing units. 
 instance IsUnit        UnitDefn where 
-  udefn = getDefn . view cas
-  -- ^ Finds unit definition of 'UnitDefn'.
-  getUnits = view cu
-  -- ^ Finds list of 'UID' from 'UnitDefn'.
+  udefn = getDefn . view cas  -- Finds unit definition of UnitDefn.
+  getUnits = view cu  -- Finds list of contributing units through UIDs from a UnitDefn.
 
 -- | Types may contain a unit ('UnitDefn').
 class MayHaveUnit u where
@@ -108,6 +107,7 @@ unitCon s = dcc s (cn' s) s
 unitWrapper :: (IsUnit u)  => u -> UnitDefn
 unitWrapper u = UD (cc' u (u ^. defn)) (Defined (usymb u) (USynonym $ usymb u)) (getUnits u)
 
+-- | Helper get derived units if they exist.
 getSecondSymb :: UnitDefn -> Maybe USymb
 getSecondSymb c = get_symb2 $ view cas c
   where
@@ -116,7 +116,7 @@ getSecondSymb c = get_symb2 $ view cas c
     get_symb2 (DerivedSI _ v _) = Just v
     get_symb2 (Defined _ _) = Nothing
 
-
+-- | Helper to break down unit symbols into 'BaseSI' units.
 helperUnit :: UnitDefn -> [UID]
 helperUnit a = case getSecondSymb a of
   Just _ -> [a ^. uid]

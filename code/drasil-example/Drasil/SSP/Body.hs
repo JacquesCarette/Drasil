@@ -2,7 +2,7 @@
 module Drasil.SSP.Body (srs, si, symbMap, printSetting) where
 
 import Data.List (nub)
-import Language.Drasil hiding (Symbol(..), Verb, number, organization, section)
+import Language.Drasil hiding (Verb, number, organization, section, variable)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts, _constants,
@@ -244,8 +244,8 @@ orgSecStart, orgSecEnd :: Sentence
 orgSecStart = foldlSent [atStartNP (the organization), S "of this",
   phrase document, S "follows the", phrase template, S "for an",
   short Doc.srs `S.for` phrase sciCompS,
-  S "proposed by Koothoor", makeRef2S koothoor2013, S "as well as Smith" `S.and_`
-  S "Lai", makeRef2S smithLai2005]
+  S "proposed by Koothoor", refS koothoor2013, S "as well as Smith" `S.and_`
+  S "Lai", refS smithLai2005]
 orgSecEnd   = foldlSent_ [atStartNP' (the inModel), S "provide the set of",
   S "algebraic", plural equation, S "that must be solved"]
 
@@ -254,7 +254,7 @@ orgSecEnd   = foldlSent_ [atStartNP' (the inModel), S "provide the set of",
 -- System Context automatically generated
 sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
-  [makeRef2S sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
+  [refS sysCtxFig1 +:+ S "shows the" +:+. phrase sysCont,
    S "A circle represents an external entity outside the" +:+. phrase software, S "A rectangle represents the",
    phrase softwareSys, S "itself" +:+. sParen (short ssp),
    S "Arrows are used to show the data flow between the" +:+ phraseNP (system
@@ -275,7 +275,7 @@ sysCtxUsrResp = [S "Provide" +:+ phraseNP (the input_) +:+ S "data related to" +
   S "required by" +:+ short ssp,
   S "Ensure that consistent units are used for" +:+ pluralNP (combineNINI input_ variable),
   S "Ensure required" +:+ pluralNP (combineNINI software assumption) +:+ sParen ( 
-  makeRef2S $ SRS.assumpt ([]::[Contents]) ([]::[Section])) +:+ S "are" +:+ 
+  refS $ SRS.assumpt ([]::[Contents]) ([]::[Section])) +:+ S "are" +:+ 
   S "appropriate for the" +:+ phrase problem +:+ S "to which the" +:+ 
   phrase user +:+ S "is applying the" +:+ phrase software]
   
@@ -284,7 +284,7 @@ sysCtxSysResp = [S "Detect data" +:+ phrase type_ +:+ S "mismatch, such as" +:+
   S "a string of characters" +:+ phrase input_ +:+ S "instead of a floating" +:+
   S "point" +:+ phrase number,
   S "Verify that the" +:+ plural input_ +:+ S "satisfy the required" +:+
-  phrase physical `S.and_` S "other data" +:+ plural constraint +:+ sParen (makeRef2S $ SRS.datCon ([]::[Contents]) ([]::[Section])),
+  phrase physical `S.and_` S "other data" +:+ plural constraint +:+ sParen (refS $ SRS.datCon ([]::[Contents]) ([]::[Section])),
   S "Identify the" +:+ phrase crtSlpSrf +:+ S "within the possible" +:+
   phrase input_ +:+ S "range",
   S "Find the" +:+ phrase fsConcept +:+ S "for the" +:+ phrase slope,
@@ -318,7 +318,7 @@ userChar pname understandings familiarities specifics = foldlSP [
 -- SECTION 3.2 --
 sysConstraints :: Contents
 sysConstraints = foldlSP [atStartNP (NP.the (combineNINI morPrice method_)), 
-  makeRef2S morgenstern1965 `sC` S "which involves dividing the", phrase slope,
+  refS morgenstern1965 `sC` S "which involves dividing the", phrase slope,
   S "into vertical", plural slice `sC` S "will be used to derive the",
   plural equation, S "for analysing the", phrase slope]
 
@@ -361,10 +361,10 @@ physSystContents :: [Contents]
 physSystContents = [physSysConv, LlC figIndexConv, physSysFbd, LlC figForceActing]
 
 physSysConv :: Contents
-physSysConv = foldlSP [atStart morPrice, phrase analysis, makeRef2S morgenstern1965
+physSysConv = foldlSP [atStart morPrice, phrase analysis, refS morgenstern1965
   `S.ofThe` phrase slope,  S "involves representing the", phrase slope,
   S "as a series of vertical" +:+. plural slice, S "As shown in",
-  makeRef2S figIndexConv `sC` phraseNP (the index), ch index, S "is used to denote a",
+  refS figIndexConv `sC` phraseNP (the index), ch index, S "is used to denote a",
   phrase value, S "for a single", phrase slice `sC` S "and an", phrase intrslce, 
   phrase value, S "at a given", phrase index, ch index, S "refers to the",
   phrase value, S "between", phrase slice, ch index `S.and_` S "adjacent", phrase slice,
@@ -377,9 +377,9 @@ figIndexConv = llcc (makeFigRef "IndexConvention") $
 
 physSysFbd :: Contents
 physSysFbd = foldlSP [atStartNP' (NP.a_ (fbd `ofThe` force)), S "acting on a",
-  phrase slice `S.is` S "displayed in" +:+. makeRef2S figForceActing, S "The specific",
+  phrase slice `S.is` S "displayed in" +:+. refS figForceActing, S "The specific",
   pluralNP (force `and_PP` symbol_), S "will be discussed in detail in",
-  makeRef2S (SRS.genDefn [] []) `S.and_` makeRef2S (SRS.dataDefn [] [])]
+  refS (SRS.genDefn [] []) `S.and_` refS (SRS.dataDefn [] [])]
 
 figForceActing :: LabelledContent
 figForceActing = llcc (makeFigRef "ForceDiagram") $
@@ -447,7 +447,7 @@ slopeVert = verticesConst $ phrase slope
 
 -- References --
 bodyRefs :: [Reference]
-bodyRefs = rw sysCtxFig1: map rw concIns ++ map rw section ++ map rw labCon ++ map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+bodyRefs = ref sysCtxFig1: map ref concIns ++ map ref section ++ map ref labCon ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si)
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ goalRefs ++ SSP.dataDefRefs ++ genDefRefs

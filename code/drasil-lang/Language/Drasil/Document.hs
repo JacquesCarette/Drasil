@@ -33,7 +33,7 @@ makeLenses ''Section
 instance HasUID        Section where uid = lab . uid
 -- | Finds the short name of a 'Section'.
 instance HasShortName  Section where shortname = shortname . view lab
--- | Finds the reference address of a 'Section'.
+-- | Finds the reference information of a 'Section'.
 instance Referable Section where
   refAdd    (Section _ _ lb ) = getRefAdd lb
   renderRef (Section _ _ lb)  = RP (prepend "Sec") (getRefAdd lb)

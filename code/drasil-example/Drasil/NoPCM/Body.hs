@@ -1,7 +1,7 @@
 module Drasil.NoPCM.Body where
 
 import Control.Lens ((^.))
-import Language.Drasil hiding (Symbol(..), section)
+import Language.Drasil hiding (section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts,
@@ -260,7 +260,7 @@ scope = phrase thermalAnalysis `S.of_` S "a single" +:+ phrase sWHT
 
 orgDocEnd :: Sentence
 orgDocEnd = foldlSent_ [atStartNP (the inModel),
-  S "to be solved is referred to as" +:+. makeRef2S eBalanceOnWtr,
+  S "to be solved is referred to as" +:+. refS eBalanceOnWtr,
   atStartNP (the inModel), S "provides the", titleize ode,
   sParen (short ode), S "that models the" +:+. phrase progName,
   short progName, S "solves this", short ode]
@@ -329,7 +329,7 @@ sensHtE = sensHtETemplate Liquid sensHtEdesc
 
 sensHtEdesc :: Sentence
 sensHtEdesc = foldlSent [ch QT.sensHeat, S "occurs as long as the", phrase material_, S "does not reach a",
-  phrase temp, S "where a", phrase phaseChange, S "occurs" `sC` S "as assumed in", makeRef2S assumpWAL]
+  phrase temp, S "where a", phrase phaseChange, S "occurs" `sC` S "as assumed in", refS assumpWAL]
 
 --TODO: Implement physical properties of a substance
 
@@ -376,10 +376,10 @@ dataConstListOut = [tempW, watE]
 --REFERENCES
 ------------
 bodyRefs :: [Reference]
-bodyRefs = rw figTank: rw sysCntxtFig:
-  map rw concIns ++ map rw section ++ map rw labCon 
-  ++ map rw tMods ++ concatMap (^. getReferences) tMods --needs the references hidden in the tmodel.
-  ++ map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+bodyRefs = ref figTank: ref sysCntxtFig:
+  map ref concIns ++ map ref section ++ map ref labCon 
+  ++ map ref tMods ++ concatMap (^. getReferences) tMods --needs the references hidden in the tmodel.
+  ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si)
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ dataDefRefs ++ genDefRefs++ goalRefs

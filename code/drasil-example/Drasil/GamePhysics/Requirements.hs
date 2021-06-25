@@ -1,7 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, reqRefs) where
 
-import Language.Drasil hiding (Vector, organization)
+import Language.Drasil hiding (organization)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -70,7 +70,7 @@ inputSurfacePropsDesc = foldlSent [S "Input", pluralNP (combineNINI CM.surface
 
 verifyPhysConsDesc = foldlSent [S "Verify that the", plural input_,
   S "satisfy the required", plural physicalConstraint, S "from", 
-  makeRef2S (SRS.solCharSpec [] [])]
+  refS (SRS.solCharSpec [] [])]
 
 calcTransOverTimeDesc = requirementS QP.position QP.velocity 
   (S "acted upon by a" +:+ phrase QP.force)
@@ -140,4 +140,4 @@ maintainability = cic "maintainability" (foldlSent [
 
 -- References --
 reqRefs :: [Reference]
-reqRefs = map rw ([inReq EmptyS] ++ funcReqs ++ nonfuncReqs)
+reqRefs = map ref ([inReq EmptyS] ++ funcReqs ++ nonfuncReqs)

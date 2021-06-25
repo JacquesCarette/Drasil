@@ -55,7 +55,7 @@ inReqDesc = foldlList Comma List [pluralNP (NP.the (combineNINI glass dimension)
   phraseNP (type_ `of_` glass), phrase pbTolfail, pluralNP (characteristic `the_ofThePS` blast)]
 
 sysSetValsFollowingAssumpsDesc = foldlSent [atStartNP (the system), S "shall set the known",
-    plural value, S "as described in", makeRef2S sysSetValsFollowingAssumpsTable]
+    plural value, S "as described in", refS sysSetValsFollowingAssumpsTable]
 
 sysSetValsFollowingAssumpsTable :: LabelledContent
 sysSetValsFollowingAssumpsTable = mkValsSourceTable (mkQRTupleRef r2AQs r2ARs ++ mkQRTuple r2DDs) "ReqAssignments"
@@ -70,22 +70,22 @@ sysSetValsFollowingAssumpsTable = mkValsSourceTable (mkQRTupleRef r2AQs r2ARs ++
 
 checkInputWithDataConsDesc = foldlSent [atStartNP (the system), S "shall check the entered",
   plural inValue, S "to ensure that they do not exceed the", plural datumConstraint,
-  S "mentioned in" +:+. makeRef2S (datCon ([]::[Contents]) ([]::[Section])), 
+  S "mentioned in" +:+. refS (datCon ([]::[Contents]) ([]::[Section])), 
   S "If any" `S.ofThe` plural inValue, S "are out" `S.of_` S "bounds" `sC`
   S "an", phrase errMsg, S "is displayed" `S.andThe` plural calculation, S "stop"]
 
 outputValsAndKnownValuesDesc = foldlSent [titleize output_, pluralNP (the inValue),
-  S "from", makeRef2S (inReq EmptyS) `S.andThe` S "known", plural value,
-  S "from", makeRef2S sysSetValsFollowingAssumps]
+  S "from", refS (inReq EmptyS) `S.andThe` S "known", plural value,
+  S "from", refS sysSetValsFollowingAssumps]
 
 checkGlassSafetyDesc = foldlSent_ [S "If", eS (sy isSafePb $&& sy isSafeLR),
-  sParen (S "from" +:+ makeRef2S pbIsSafe `S.and_` makeRef2S lrIsSafe) `sC`
+  sParen (S "from" +:+ refS pbIsSafe `S.and_` refS lrIsSafe) `sC`
   phrase output_, phraseNP (the message), Quote (safeMessage ^. defn),
   S "If the", phrase condition, S "is false, then", phrase output_,
   phraseNP (the message), Quote (notSafe ^. defn)]
 
 outputValuesDesc :: Sentence
-outputValuesDesc = foldlSent [titleize output_, pluralNP (the value), S "from", makeRef2S outputValuesTable]
+outputValuesDesc = foldlSent [titleize output_, pluralNP (the value), S "from", refS outputValuesTable]
 
 outputValuesTable :: LabelledContent
 outputValuesTable = mkValsSourceTable (mkQRTuple iMods ++ mkQRTuple r6DDs) "ReqOutputs"
@@ -102,7 +102,7 @@ nonfuncReqs = [correct, verifiable, understandable, reusable, maintainable, port
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
   atStartNP' (output_ `the_ofThePS` code), S "have the",
-  plural property, S "described in", makeRef2S (propCorSol [] [])
+  plural property, S "described in", refS (propCorSol [] [])
   ]) "Correct" nonFuncReqDom
  
 verifiable :: ConceptInstance
@@ -133,9 +133,9 @@ portable = cic "portable" (foldlSent [
 
 -- References --
 reqRefs :: [Reference]
-reqRefs = map rw funcReqsTables
-  ++ map rw [datCon ([]::[Contents]) ([]::[Section]), propCorSol [] []]
-  ++ map rw ([inReq EmptyS] ++ funcReqs ++ nonfuncReqs) ++ map rw [pbIsSafe, lrIsSafe]
-  ++ map rw [loadDF, hFromt, glaTyFac, standOffDis, aspRat]
-  ++ map rw [risk, strDisFac, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac, hFromt, aspRat]
+reqRefs = map ref funcReqsTables
+  ++ map ref [datCon ([]::[Contents]) ([]::[Section]), propCorSol [] []]
+  ++ map ref ([inReq EmptyS] ++ funcReqs ++ nonfuncReqs) ++ map ref [pbIsSafe, lrIsSafe]
+  ++ map ref [loadDF, hFromt, glaTyFac, standOffDis, aspRat]
+  ++ map ref [risk, strDisFac, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac, hFromt, aspRat]
   

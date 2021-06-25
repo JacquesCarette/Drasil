@@ -1,6 +1,7 @@
 module Drasil.GamePhysics.Unitals where
 
 import Language.Drasil
+import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
 
 import Data.Drasil.SI_Units(kilogram, metre, m_2, newton, second)
@@ -110,8 +111,8 @@ perpParam n w = ucs'
  (dccWDS ("|| r_A" ++ n ++ " x n ||") 
   (compoundPhrase' (compoundPhrase (cn' "length of the") (QM.perpVect ^. term))
   (cn $ "to the contact displacement vector of rigid body " ++ n)) 
-  (phrase QM.perpVect)) (Concat [Label "||", w, Label "*", --should be x for cross
-  eqSymb QM.perpVect, Label "||"]) Real metre
+  (phrase QM.perpVect)) (Concat [label "||", w, label "*", --should be x for cross
+  eqSymb QM.perpVect, label "||"]) Real metre
 
 rigidParam n w = ucs'
  (dccWDS ("rig_mass" ++ n) (compoundPhrase' (QPP.mass ^. term)
@@ -217,7 +218,7 @@ massIRigidBody = ucs' (dccWDS "massj" (compoundPhrase' (QPP.mass ^. term)
 normalLen = ucs' (dccWDS "length of the normal vector" (compoundPhrase'
                   (cn "length of the") (QM.normalVect ^. term)) 
                   (phrase QM.normalVect))
-                  (Concat [Label "||", eqSymb QM.normalVect, Label "||"]) Real metre
+                  (Concat [label "||", eqSymb QM.normalVect, label "||"]) Real metre
 
 rRot = ucs' (dccWDS "r_j" (compoundPhrase' (QP.distance ^. term)
                 (cn "between the j-th particle and the axis of rotation")) (phrase QP.distance)) 
@@ -275,12 +276,12 @@ label0, label1, label2, lBodyA, lBodyB, lCMass, lColl, lOrigin, lPoint :: Symbol
 label0  = Integ 0
 label1  = Integ 1
 label2  = Integ 2
-lBodyA  = Label "A"
-lBodyB  = Label "B"
-lCMass  = Label "CM"
-lColl   = Label "c"
-lOrigin = Label "O"
-lPoint  = Label "P"
+lBodyA  = label "A"
+lBodyB  = label "B"
+lCMass  = label "CM"
+lColl   = label "c"
+lOrigin = label "O"
+lPoint  = label "P"
 
 --------------------------
 -- CHUNKS WITHOUT UNITS --

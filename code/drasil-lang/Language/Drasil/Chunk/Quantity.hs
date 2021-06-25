@@ -25,22 +25,23 @@ data QuantityDict = QD { _id' :: IdeaDict
                        }
 makeLenses ''QuantityDict
 
+-- | Finds the 'UID' of the 'IdeaDict' used to make the 'QuantityDict'.
 instance HasUID        QuantityDict where uid = id' . uid
--- ^ Finds the 'UID' of the 'IdeaDict' used to make the 'QuantityDict'.
+-- | Finds the term ('NP') of the 'IdeaDict' used to make the 'QuantityDict'.
 instance NamedIdea     QuantityDict where term = id' . term
--- ^ Finds the term ('NP') of the 'IdeaDict' used to make the 'QuantityDict'.
+-- | Finds the idea contained in the 'IdeaDict' used to make the 'QuantityDict'.
 instance Idea          QuantityDict where getA  qd = getA (qd ^. id')
--- ^ Finds the idea contained in the 'IdeaDict' used to make the 'QuantityDict'.
+-- | Finds the 'Space' of the 'QuantityDict'.
 instance HasSpace      QuantityDict where typ = typ'
--- ^ Finds the 'Space' of the 'QuantityDict'.
+-- | Finds the 'Stage' dependent 'Symbol' of the 'QuantityDict'.
 instance HasSymbol     QuantityDict where symbol = view symb'
--- ^ Finds the 'Stage' dependent 'Symbol' of the 'QuantityDict'.
+-- | 'QuantityDict's have a 'Quantity'. 
 instance Quantity      QuantityDict where
--- ^ 'QuantityDict's have a 'Quantity'. 
+-- | Equal if 'UID's are equal.
 instance Eq            QuantityDict where a == b = (a ^. uid) == (b ^. uid)
--- ^ Equal if 'UID's are equal.
+-- | Finds the units of the 'QuantityDict'.
 instance MayHaveUnit   QuantityDict where getUnit = view unit'
--- ^ Finds the units of the 'QuantityDict'.
+-- | Convert the symbol of the 'QuantityDict' to a 'DisplayExpr'.
 instance Display       QuantityDict where toDispExpr = toDispExpr . sy
 
 -- | Smart constructor for a 'QuantityDict' from another 'Quantity' with units.

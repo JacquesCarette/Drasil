@@ -1,6 +1,7 @@
 module Drasil.Projectile.Unitals where
 
 import Language.Drasil
+import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands (lD, lTheta, lV, lP, lT, lS, vEpsilon)
 
 import Data.Drasil.Quantities.Math (pi_)
@@ -13,7 +14,7 @@ import qualified Drasil.Projectile.Concepts as C (flightDur, offset,
   flightDur, landPos, launAngle, launSpeed, offset, targPos, projSpeed)
 
 projSpeed :: UnitalChunk
-projSpeed  = uc C.projSpeed (Concat [vec lV, Label "(", lT, Label ")"]) velU
+projSpeed  = uc C.projSpeed (Concat [vec lV, label "(", lT, label ")"]) velU
 
 ---
 landPosUnc, launAngleUnc, launSpeedUnc, offsetUnc, targPosUnc :: UncertQ

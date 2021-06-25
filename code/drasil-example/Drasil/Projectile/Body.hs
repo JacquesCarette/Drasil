@@ -1,7 +1,7 @@
 module Drasil.Projectile.Body (printSetting, si, srs, projectileTitle) where
 
 import Data.List (nub)
-import Language.Drasil hiding (Symbol(..), Vector)
+import Language.Drasil
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
@@ -224,7 +224,7 @@ acronyms = [oneD, twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
 
 -- References --
 bodyRefs :: [Reference]
-bodyRefs = map rw tMods ++ map rw concIns ++ map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+bodyRefs = map ref tMods ++ map ref concIns ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si)
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ figRefs ++ goalRefs ++ dataDefRefs ++ genDefRefs

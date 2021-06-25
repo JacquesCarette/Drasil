@@ -56,11 +56,11 @@ unlikelyChg2AO   = cic "UC_2donly"          uc2AODesc   "2D-Analysis-Only"      
 ucNASLODesc, uc2AODesc :: Sentence
 
 ucNASLODesc = foldlSent [S "Changes related to",
-  makeRef2S assumpINSFL, S "are not possible due to the dependency"
+  refS assumpINSFL, S "are not possible due to the dependency"
   `S.ofThe` plural calculation, S "on the linear relationship between",
   phraseNP (intNormForce `and_` intShrForce)]
 
-uc2AODesc = foldlSent [makeRef2S assumpENSL, S "allows for", short twoD, 
+uc2AODesc = foldlSent [refS assumpENSL, S "allows for", short twoD, 
   phrase analysis, S "with these", plural model, S "only because", 
   phrase stress, S "along the" +:+. (phrase zDir `S.is` S "zero"), 
   S "These", plural model, S "do not take into account", phraseNP (stress 
@@ -69,4 +69,4 @@ uc2AODesc = foldlSent [makeRef2S assumpENSL, S "allows for", short twoD,
 
 -- References --
 chgRefs :: [Reference]
-chgRefs = map rw (likelyChgs ++ unlikelyChgs)
+chgRefs = map ref (likelyChgs ++ unlikelyChgs)

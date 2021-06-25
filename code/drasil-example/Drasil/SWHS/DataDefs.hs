@@ -45,7 +45,7 @@ waterMassEqn :: Expr
 waterMassEqn = sy wVol `mulRe` sy wDensity
 
 waterMassNotes :: Sentence
-waterMassNotes = foldlSent [ch wVol, S "is defined in", makeRef2S waterVolume]
+waterMassNotes = foldlSent [ch wVol, S "is defined in", refS waterVolume]
 
 waterMass :: DataDefinition
 waterMass = ddNoRefs waterMassQD Nothing "waterMass" []
@@ -59,8 +59,8 @@ waterVolumeEqn :: Expr
 waterVolumeEqn = sy tankVol $- sy pcmVol
 
 waterVolumeNotes :: Sentence
-waterVolumeNotes = foldlSent [S "Based on" +:+. makeRef2S assumpVCN, 
-  ch tankVol, S "is defined in", makeRef2S tankVolume]
+waterVolumeNotes = foldlSent [S "Based on" +:+. refS assumpVCN, 
+  ch tankVol, S "is defined in", refS tankVolume]
 
 waterVolume :: DataDefinition
 waterVolume = ddNoRefs waterVolumeQD Nothing "waterVolume_pcm" 
@@ -87,10 +87,10 @@ balanceDecayRateEqn = sy wMass `mulRe` sy htCapW $/ (sy coilHTC `mulRe` sy coilS
 
 balanceDecayRateNotes :: Sentence
 balanceDecayRateNotes = foldlSent [ch wMass, S "is defined in", 
-  makeRef2S waterMass]
+  refS waterMass]
 
 balanceDecayRate :: DataDefinition
-balanceDecayRate = dd balanceDecayRateQD [makeCite koothoor2013]
+balanceDecayRate = dd balanceDecayRateQD [ref koothoor2013]
   Nothing "balanceDecayRate" []
 
 ----
@@ -102,7 +102,7 @@ balanceDecayTimeEqn :: Expr
 balanceDecayTimeEqn = sy pcmHTC `mulRe` sy pcmSA $/ (sy coilHTC `mulRe` sy coilSA)
 
 balanceDecayTime :: DataDefinition
-balanceDecayTime = dd balanceDecayTimeQD [makeCite koothoor2013]
+balanceDecayTime = dd balanceDecayTimeQD [ref koothoor2013]
   Nothing "balanceDecayTime" []
 
 ----
@@ -115,7 +115,7 @@ balanceSolidPCMEqn = (sy pcmMass `mulRe` sy htCapSP) $/
   (sy pcmHTC `mulRe` sy pcmSA)
 
 balanceSolidPCM :: DataDefinition
-balanceSolidPCM = dd balanceSolidPCMQD [makeCite lightstone2012]
+balanceSolidPCM = dd balanceSolidPCMQD [ref lightstone2012]
   Nothing "balanceSolidPCM" []
 
 ----
@@ -128,7 +128,7 @@ balanceLiquidPCMEqn = (sy pcmMass `mulRe` sy htCapLP) $/
   (sy pcmHTC `mulRe` sy pcmSA)
 
 balanceLiquidPCM :: DataDefinition
-balanceLiquidPCM = dd balanceLiquidPCMQD [makeCite lightstone2012]
+balanceLiquidPCM = dd balanceLiquidPCMQD [ref lightstone2012]
   Nothing "balanceLiquidPCM" []
 
 ----
@@ -140,7 +140,7 @@ htFusionEqn :: Expr
 htFusionEqn = sy latentHeat $/ sy mass
 
 ddHtFusion :: DataDefinition
-ddHtFusion = dd ddHtFusionQD [makeCiteInfo bueche1986 $ Page [282]]
+ddHtFusion = dd ddHtFusionQD [refInfo bueche1986 $ Page [282]]
   Nothing "htFusion" [htFusionNote]
 
 htFusionNote :: Sentence
@@ -163,8 +163,8 @@ meltFracEqn :: Expr
 meltFracEqn = sy latentEP $/ (sy htFusion `mulRe` sy pcmMass)
 
 ddMeltFrac :: DataDefinition
-ddMeltFrac = dd ddMeltFracQD [makeCite koothoor2013]
-  Nothing "meltFrac" [meltFracConst, makeRef2S ddHtFusion]
+ddMeltFrac = dd ddMeltFracQD [ref koothoor2013]
+  Nothing "meltFrac" [meltFracConst, refS ddHtFusion]
   where meltFracConst = atStartNP (the value) `S.of_` eS meltFrac `S.is`
                         S "constrained to" +:+. eS (realInterval meltFrac (Bounded (Inc, exactDbl 0) (Inc, exactDbl 1)))
 
@@ -187,4 +187,4 @@ aspRat = ddNoRefs aspRatQD Nothing "aspectRatio" []
 
 -- References --
 dataDefRefs :: [Reference]
-dataDefRefs = map rw dataDefs
+dataDefRefs = map ref dataDefs

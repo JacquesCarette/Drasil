@@ -2,7 +2,7 @@
 module Drasil.SWHS.Body where
 
 import Data.List (nub)
-import Language.Drasil hiding (Symbol(..), organization, section)
+import Language.Drasil hiding (organization, section, variable)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts, _constants,
@@ -266,13 +266,13 @@ charReaderDE = plural de +:+ S "from level 1 and 2" +:+ phrase calculus
 orgDocIntro :: Sentence
 orgDocIntro = foldlSent [atStartNP (the organization), S "of this",
   phrase document, S "follows the template for an", short Doc.srs
-  `S.for` phrase sciCompS, S "proposed by", makeCiteS koothoor2013 `S.and_`
-  makeCiteS smithLai2005]
+  `S.for` phrase sciCompS, S "proposed by", refS koothoor2013 `S.and_`
+  refS smithLai2005]
 
 orgDocEnd :: Sentence
 orgDocEnd = foldlSent_ [atStartNP' (the inModel), 
   S "to be solved are referred to as" +:+. 
-  foldlList Comma List (map makeRef2S iMods), S "The", plural inModel,
+  foldlList Comma List (map refS iMods), S "The", plural inModel,
   S "provide the", plural ode, sParen (short ode :+: S "s") `S.and_` 
   S "algebraic", plural equation, S "that", phrase model, 
   (phraseNP (the swhsPCM) !.), short progName, S "solves these", short ode :+: S "s"]
@@ -302,7 +302,7 @@ orgDocEnd = foldlSent_ [atStartNP' (the inModel),
 --------------------------
 
 sysCntxtDesc :: CI -> Contents
-sysCntxtDesc pro = foldlSP [makeRef2S sysCntxtFig, S "shows the" +:+.
+sysCntxtDesc pro = foldlSP [refS sysCntxtFig, S "shows the" +:+.
   phrase sysCont, S "A circle represents an external entity outside the",
   phrase software `sC` phraseNP (the user) +:+. S "in this case",
   S "A rectangle represents the", phrase softwareSys, S "itself" +:+.
@@ -311,7 +311,7 @@ sysCntxtDesc pro = foldlSP [makeRef2S sysCntxtFig, S "shows the" +:+.
 
 sysCntxtFig :: LabelledContent
 sysCntxtFig = llcc (makeFigRef "SysCon") $ fig (foldlSent_
-  [makeRef2S sysCntxtFig +: EmptyS, titleize sysCont])
+  [refS sysCntxtFig +: EmptyS, titleize sysCont])
   $ resourcePath ++ "SystemContextFigure.png"
 
 sysCntxtRespIntro :: CI -> Contents
@@ -485,7 +485,7 @@ dataContFooter = foldlSent_ $ map foldlSent [
   S "or there will be a divide by zero in the", phrase model],
 
   [sParen (S "+"), S "These", plural quantity, S "cannot be zero" `sC`
-  S "or there would be freezing", sParen (makeRef2S assumpPIS)],
+  S "or there would be freezing", sParen (refS assumpPIS)],
 
   [sParen (S "++"), atStartNP' (NP.the (constraint `onThePS` surArea)),
   S "are calculated by considering the", phrase surArea, S "to", phrase vol +:+.
@@ -539,7 +539,7 @@ propCorSolDeriv1 lce ewat en co pcmat g1hfc g2hfp su ht  =
   phrase input_, S "from", phraseNP (the co `NP.andThe`
   combineNINI en output_), S "to the" +:+. short pcmat,
   S "This can be shown as an", phrase equation, S "by taking",
-  makeRef2S g1hfc `S.and_` makeRef2S g2hfp `sC`
+  refS g1hfc `S.and_` refS g2hfp `sC`
   S "multiplying each by their respective", phrase su,
   S "area of", phrase ht `sC` S "and integrating each",
   S "over the", phrase simTime `sC` S "as follows"]
@@ -571,7 +571,7 @@ propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)"
   S "computed by" +:+. short pro, S "The relative",
   S "error between the results computed by", short pro `S.and_`
   S "the results calculated from the", short rs, S "of these",
-  plural eq, S "should be less than", ch consTol, makeRef2S verifyEnergyOutput]
+  plural eq, S "should be less than", ch consTol, refS verifyEnergyOutput]
 
 -- Remember to insert references in above derivation when available
 
@@ -607,8 +607,8 @@ propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)"
 -- Section 9 : References --
 ----------------------------
 bodyRefs :: [Reference]
-bodyRefs = [rw sysCntxtFig, rw figTank]
-  ++ map rw concIns ++ map rw section ++ map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+bodyRefs = [ref sysCntxtFig, ref figTank]
+  ++ map ref concIns ++ map ref section ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si)
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ goalRefs ++ dataDefRefs ++ genDefRefs

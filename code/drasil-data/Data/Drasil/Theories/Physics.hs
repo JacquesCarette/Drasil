@@ -58,7 +58,7 @@ weightDerivNewtonSentence :: [Sentence]
 weightDerivNewtonSentence = [S "Since there is only one non-zero", 
   phrase vector, phrase component `sC` S "the scalar", phrase value, 
   ch QP.weight, S "will be used for the" +:+. phrase QP.weight,
-  S "In this scenario" `sC` phrase newtonSL, S "from", makeRef2S newtonSL, 
+  S "In this scenario" `sC` phrase newtonSL, S "from", refS newtonSL, 
   S "can be expressed as"]
 
 weightDerivReplaceMassSentence :: [Sentence]
@@ -140,11 +140,11 @@ newtonSLRNotes = map foldlSent [
 accelerationTM :: TheoryModel
 accelerationTM = tm' "accelerationTM" (EquationalModel accelerationQD)
   [qw QP.acceleration, qw QP.velocity, qw QP.time] ([] :: [ConceptChunk]) [accelerationQD] [] []
-  [makeCite accelerationWiki] "acceleration" []
+  [ref accelerationWiki] "acceleration" []
 
 ----------
 
 velocityTM :: TheoryModel
 velocityTM = tm' "velocityTM" (EquationalModel velocityQD)
   [qw QP.velocity, qw QP.position, qw QP.time] ([] :: [ConceptChunk]) [velocityQD] [] []
-  [makeCite velocityWiki] "velocity" []
+  [ref velocityWiki] "velocity" []

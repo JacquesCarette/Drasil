@@ -14,7 +14,7 @@ data GenDefn = GD { _gUid  :: UID
                   , _mk    :: ModelKinds
                   , gdUnit :: Maybe UnitDefn -- TODO: Should be derived from the ModelKinds
                   , _deri  :: Maybe Derivation
-                  , _ref   :: [Reference]
+                  , _rf   :: [Reference]
                   , _sn    :: ShortName
                   , _ra    :: String -- RefAddr
                   , _notes :: [Sentence]
@@ -36,7 +36,7 @@ instance Display            GenDefn where toDispExpr    = toDispExpr . (^. mk)
 -- | Finds the derivation of the 'GenDefn'. May contain Nothing.
 instance HasDerivation      GenDefn where derivations   = deri
 -- | Finds 'Reference's contained in the 'GenDefn'.
-instance HasReference       GenDefn where getReferences = ref
+instance HasReference       GenDefn where getReferences = rf
 -- | Finds the 'ShortName' of the 'GenDefn'.
 instance HasShortName       GenDefn where shortname     = view sn
 -- | Finds the reference address of the 'GenDefn'.

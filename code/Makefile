@@ -13,6 +13,7 @@ GRAPH_P_SUFFIX = _graph
 BUILD_PACKAGES = $(addsuffix $(BUILD_P_SUFFIX), $(PACKAGES))
 DOC_PACKAGES = $(addsuffix $(DOC_P_SUFFIX), $(PACKAGES))
 GRAPH_PACKAGES = $(addsuffix $(GRAPH_P_SUFFIX), $(PACKAGES))
+ANALYSIS_PACKAGES = drasil $(PACKAGES) 
 
 PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 
@@ -100,6 +101,8 @@ GRAPH_FOLDER_NAME = graphs
 GRAPH_FOLDER = $(GRAPH_FOLDER_NAME)/
 ANALYSIS_FOLDER_NAME = analysis
 ANALYSIS_FOLDER = $(ANALYSIS_FOLDER_NAME)/
+TYPEGRAPH_FOLDER_NAME = TypeDependencyGraphs
+TYPEGRAPH_FOLDER = $(ANALYSIS_FOLDER)$(TYPEGRAPH_FOLDER_NAME)/
 DEPLOY_FOLDER_NAME = deploy
 DEPLOY_FOLDER = $(DEPLOY_FOLDER_NAME)/
 DEPLOY_CODE_PATH_KV_SEP = :
@@ -183,16 +186,32 @@ stabilize: $(STABILIZE_EXAMPLES)
 graphmod: check_stack
 	stack install dotgen graphmod
 
-$(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): check_stack check_dot graphmod
-	@mkdir -p $(GRAPH_FOLDER)
+$(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod check_dot
+	@mkdir -p "$(GRAPH_FOLDER)"
 	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tpdf > "$(GRAPH_FOLDER)drasil-$*".pdf
 
 graphs: $(GRAPH_PACKAGES)
 ###
 
-analysis: check_stack
-	@mkdir -p $(ANALYSIS_FOLDER)
+analysis: graphmod
+	- rm -rf "$(ANALYSIS_FOLDER)"
+	@mkdir -p "$(ANALYSIS_FOLDER)"
 	cd $(SCRIPT_FOLDER) && stack exec -- runghc DataTableGen.hs
+	cd $(SCRIPT_FOLDER) && stack exec -- runghc TypeGraphGen.hs
+	@echo Making dependency graphs
+	@cd $(TYPEGRAPH_FOLDER) && for pack in $(ANALYSIS_PACKAGES); do \
+		dot -Tpdf $$pack.dot > "./$$pack.pdf" ; \
+	done
+	@echo Done dependency graphs
+
+# Use a 'local' HLint installation, using HLint from the current stack repo
+hlint: check_stack
+	- stack install hlint
+	- hlint .
+
+# Use the latest HLint version, downloading the binary each time
+hot_hlint:
+	- curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
 
 docs: check_stack
 	DOCS_FOLDER="$(DOCS_FOLDER)" GHC_FLAGS="$(GHCFLAGS)" sh scripts/make_docs.sh
@@ -255,4 +274,4 @@ clean_artifacts cleanArtifacts: $(CLEAN_FOLDERS)
 clean: clean_artifacts
 	- stack clean
 
-.PHONY: clean clean_artifacts cleanArtifacts code analysis tex doc debug prog test graphs graphmod check_stack graphs deploy_code_path deploy deploy_lite all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)
+.PHONY: clean clean_artifacts cleanArtifacts code hlint hot_hlint analysis tex doc debug prog test graphs graphmod check_stack graphs deploy_code_path deploy deploy_lite all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)

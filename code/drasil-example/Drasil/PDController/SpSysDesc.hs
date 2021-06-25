@@ -45,5 +45,5 @@ sysProcessVariable
       goalStmtDom
 
 sysDescRefs :: [Reference]
-sysDescRefs = rw sysFigure: map rw goals
+sysDescRefs = ref sysFigure: map ref goals
 

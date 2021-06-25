@@ -22,4 +22,4 @@ willBreakGS = cic "willBreakGS" (foldlSent [S "Analyze" `S.and_`
 
 -- References --
 goalRefs :: [Reference]
-goalRefs = map rw goals
+goalRefs = map ref goals

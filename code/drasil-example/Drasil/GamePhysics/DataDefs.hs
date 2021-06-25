@@ -43,9 +43,9 @@ ctrOfMassDD = ddNoRefs ctrOfMass Nothing "ctrOfMass" [rigidBodyAssump]
 ctrOfMass :: QDefinition
 ctrOfMass = mkQuantDef posCM ctrOfMassEqn
 
--- FIXME (Variable "i") is a horrible hack
+-- FIXME (variable "i") is a horrible hack
 ctrOfMassEqn :: Expr
-ctrOfMassEqn = sumAll (Variable "j") (sy massj `mulRe` sy posj) $/ sy mTot
+ctrOfMassEqn = sumAll (variable "j") (sy massj `mulRe` sy posj) $/ sy mTot
 
 -- DD2 : Linear displacement --
 
@@ -192,7 +192,7 @@ dd7descr = (QP.angularAccel ^. term) +:+ S "of a" +:+
 
 ------------------------DD9 Chasles Theorem----------------------------------
 chaslesDD :: DataDefinition
-chaslesDD = dd chasles [makeCite chaslesWiki] Nothing "chaslesThm" 
+chaslesDD = dd chasles [ref chaslesWiki] Nothing "chaslesThm" 
   [chaslesThmNote, rigidBodyAssump]
 
 chasles :: QDefinition
@@ -322,7 +322,7 @@ momentOfInertia :: QDefinition
 momentOfInertia = mkQuantDef QP.momentOfInertia momentOfInertiaEqn
 
 momentOfInertiaEqn :: Expr
-momentOfInertiaEqn = sumAll (Variable "j") $ sy massj `mulRe` square (sy rRot)
+momentOfInertiaEqn = sumAll (variable "j") $ sy massj `mulRe` square (sy rRot)
 
 momentOfInertiaDesc :: Sentence
 momentOfInertiaDesc = foldlSent [S "The", getTandS QP.momentOfInertia,
@@ -358,4 +358,4 @@ rigidTwoDAssump = foldlSent [S "All bodies are assumed to be rigid",
 
 -- References --
 dataDefRefs :: [Reference]
-dataDefRefs = map rw dataDefs
+dataDefRefs = map ref dataDefs

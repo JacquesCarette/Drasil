@@ -3,6 +3,7 @@
 module Language.Drasil.CodeSpec where
 
 import Language.Drasil
+import Language.Drasil.Display
 import Database.Drasil (ChunkDB, SystemInformation(SI),
   _authors, _constants, _constraints, _datadefs, _instModels,
   _configFiles, _inputs, _outputs, _sys, _sysinfodb)

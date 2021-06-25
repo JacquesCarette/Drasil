@@ -19,8 +19,9 @@ import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
 import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
 import Drasil.TraceTable (generateTraceMap)
 
-import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
-                                                     -- Vector - Name conflict (defined in file)
+import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
+                                             -- Vector - Name conflict (defined in file)
+import Language.Drasil.Display (compsy)
 import Utils.Drasil
 
 import Database.Drasil(ChunkDB, SystemInformation(SI), _authors, _kind,
@@ -176,7 +177,7 @@ tsI (TypogConvention ts) = typogConvention ts
 tsI SymbOrder = S "The symbols are listed in alphabetical order."
 tsI (SymbConvention ls) = symbConvention ls
 tsI TSPurpose = S "The symbols used in this document are summarized in" +:+
-  makeRef2S symbTableRef +:+. S "along with their units"
+  refS symbTableRef +:+. S "along with their units"
 tsI VectorUnits = S "For vector quantities, the units shown are for each component of the vector."
 
 -- | Typographic convention writer. Translates a list of typographic conventions ('TConvention's)
@@ -209,7 +210,7 @@ tuI :: TUIntro -> Sentence
 tuI System  = 
   S "The unit system used throughout is SI (Système International d'Unités)."
 tuI TUPurpose = 
-  S "For each unit" `sC` makeRef2S unitTableRef +:+. S "lists the symbol, a description and the SI name"
+  S "For each unit" `sC` refS unitTableRef +:+. S "lists the symbol, a description and the SI name"
 tuI Derived = 
   S "In addition to the basic units, several derived units are also used."
 

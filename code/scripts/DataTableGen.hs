@@ -53,7 +53,7 @@ main = do
   scriptsDirectory <- getCurrentDirectory
   -- obtains code directory and output directory filepaths
   let codeDirectory = takeDirectory scriptsDirectory
-      outputDirectory = codeDirectory ++ "/analysis"
+      outputDirectory = codeDirectory ++ "/analysis/DataTable"
 
   -- gets names + filepaths of all drasil- packages/directories
   drctyList <- DC.getDirectories codeDirectory "drasil-"

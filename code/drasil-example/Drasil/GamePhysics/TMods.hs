@@ -100,4 +100,4 @@ newtonSLRNotes = map foldlSent [
 
 -- References --
 tModRefs :: [Reference]
-tModRefs = map rw tMods
+tModRefs = map ref tMods

@@ -74,7 +74,7 @@ traceMColumns fc fr c = map ((\u -> filter (`elem` u) $ fc u) . flip traceLookup
 
 -- | Helper that makes references of the form "@reference@ shows the dependencies of @something@".
 tableShows :: LabelledContent -> Sentence -> Sentence
-tableShows ref end = makeRef2S ref +:+ S "shows the" +:+ plural dependency `S.of_` end
+tableShows r end = refS r +:+ S "shows the" +:+ plural dependency `S.of_` end
 
 -- | Generates a traceability table. Takes a 'UID' for the table, a description ('Sentence'), columns ('TraceViewCat'), rows ('TraceViewCat'), and 'SystemInformation'.
 generateTraceTableView :: UID -> Sentence -> [TraceViewCat] -> [TraceViewCat] -> SystemInformation -> LabelledContent

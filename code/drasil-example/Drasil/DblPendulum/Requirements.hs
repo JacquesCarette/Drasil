@@ -33,18 +33,18 @@ verifyInptValsDesc, calcAngPosDesc, outputValuesDesc :: Sentence
 
 verifyInptValsDesc = foldlSent [S "Check the entered", plural inValue,
   S "to ensure that they do not exceed the", plural datumConstraint,
-  S "mentioned in" +:+. makeRef2S (datCon ([]::[Contents]) ([]::[Section])), 
+  S "mentioned in" +:+. refS (datCon ([]::[Contents]) ([]::[Section])), 
   S "If any of the", plural inValue, S "are out of bounds" `sC`
   S "an", phrase errMsg, S "is displayed" `S.andThe` plural calculation, S "stop"]
 
 calcAngPosDesc = foldlSent [S "Calculate the following" +: plural value,
   foldlList Comma List [
-    ch angularDisplacement +:+ sParen (S "from" +:+ makeRef2S angularDisplacementIM),  
-    ch pendDisplacementAngle   +:+ sParen (S "from" +:+ makeRef2S angularDisplacementIM)
+    ch angularDisplacement +:+ sParen (S "from" +:+ refS angularDisplacementIM),  
+    ch pendDisplacementAngle   +:+ sParen (S "from" +:+ refS angularDisplacementIM)
   ]]
 outputValuesDesc = foldlSent [atStart output_, ch lenRod,
-  sParen (S "from" +:+ makeRef2S angularDisplacementIM) `S.and_` ch lenRod,
-  sParen (S "from" +:+ makeRef2S angularDisplacementIM)]
+  sParen (S "from" +:+ refS angularDisplacementIM) `S.and_` ch lenRod,
+  sParen (S "from" +:+ refS angularDisplacementIM)]
 
 
 {--Nonfunctional Requirements--}
@@ -56,7 +56,7 @@ nonFuncReqs = [correct, portable]
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
  atStartNP' (output_ `the_ofThePS` code), S "have the",
- plural property, S "described in", makeRef2S (propCorSol [] [])
+ plural property, S "described in", refS (propCorSol [] [])
  ]) "Correct" nonFuncReqDom
 
 portable :: ConceptInstance
@@ -66,4 +66,4 @@ portable = cic "portable" (foldlSent [
  
 -- References --
 reqRefs :: [Reference]
-reqRefs = map rw ([inReq EmptyS] ++ funcReqs ++ nonFuncReqs)
+reqRefs = map ref ([inReq EmptyS] ++ funcReqs ++ nonFuncReqs)

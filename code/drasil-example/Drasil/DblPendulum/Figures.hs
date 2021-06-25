@@ -14,4 +14,4 @@ figMotion = llcc (makeFigRef "pendulum") $ figWithWidth (atStartNP (the physical
 
 -- References --
 figRefs :: [Reference]
-figRefs = [rw figMotion]
+figRefs = [ref figMotion]

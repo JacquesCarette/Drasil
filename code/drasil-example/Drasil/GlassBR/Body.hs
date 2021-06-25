@@ -3,7 +3,7 @@ module Drasil.GlassBR.Body where
 
 import Control.Lens ((^.))
 import Data.List (nub)
-import Language.Drasil hiding (Symbol(..), organization, section)
+import Language.Drasil hiding (organization, section, variable)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
@@ -32,7 +32,8 @@ import Data.Drasil.Concepts.Documentation as Doc (appendix, aspect,
   definition, doccon, doccon', document, environment,
   input_, interface, model, organization, physical, problem,
   product_, software, softwareConstraint, softwareSys,
-  srsDomains, standard, sysCont, system, template, term_, user, value, variable)
+  srsDomains, standard, sysCont, system, template, term_,
+  user, value, variable, reference)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.TheoryConcepts as Doc (dataDefn, inModel, thModel)
 import Data.Drasil.Concepts.Education as Edu (civilEng, scndYrCalculus, structuralMechanics,
@@ -218,13 +219,13 @@ undIR = [phrase scndYrCalculus, phrase structuralMechanics, phrase glBreakage,
   phrase blastRisk, pluralNP (computerApp `in_PS` Edu.civilEng)]
 appStanddIR = [S "applicable" +:+ plural standard +:+
   S "for constructions using glass from" +:+ foldlList Comma List
-  (map makeCiteS [astm2009, astm2012, astm2016]) `S.in_`
-  makeRef2S (SRS.reference ([]::[Contents]) ([]::[Section]))]
+  (map refS [astm2009, astm2012, astm2016]) `S.in_`
+  namedRef (SRS.reference ([]::[Contents]) ([]::[Section])) (plural reference)]
 
 scope :: Sentence
 scope = foldlSent_ [S "determining the safety of a", phrase glaSlab,
   S "under a", phrase blast, S "loading following the ASTM", phrase standard,
-  sParen $ makeRef2S astm2009]
+  sParen $ refS astm2009]
 
 {--Purpose of Document--}
 -- Purpose of Document automatically generated in IPurpose
@@ -237,10 +238,10 @@ scope = foldlSent_ [S "determining the safety of a", phrase glaSlab,
 orgOfDocIntro, orgOfDocIntroEnd :: Sentence
 orgOfDocIntro = foldlSent [atStartNP (the organization), S "of this",
   phrase document, S "follows the", phrase template, S "for an", short Doc.srs
-  `S.for` phrase sciCompS, S "proposed by" +:+ makeCiteS koothoor2013
-  `S.and_` makeCiteS smithLai2005 `sC` S "with some", 
+  `S.for` phrase sciCompS, S "proposed by" +:+ refS koothoor2013
+  `S.and_` refS smithLai2005 `sC` S "with some", 
   plural aspect, S "taken from Volere", phrase template,
-  S "16", makeCiteS rbrtsn2012]
+  S "16", refS rbrtsn2012]
 
 orgOfDocIntroEnd = foldlSent_ [atStartNP' (the Doc.dataDefn) `S.are`
   S "used to support", plural definition `S.the_ofThe` S "different", plural model]
@@ -256,7 +257,7 @@ orgOfDocIntroEnd = foldlSent_ [atStartNP' (the Doc.dataDefn) `S.are`
   
 sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
-  [makeRef2S sysCtxFig +:+ S "shows the" +:+. phrase sysCont,
+  [refS sysCtxFig +:+ S "shows the" +:+. phrase sysCont,
    S "A circle represents an external entity outside the" +:+ phrase software
    `sC` phraseNP (the user), S "in this case. A rectangle represents the",
    phrase softwareSys, S "itself", (sParen (short glassBR) !.),
@@ -274,9 +275,9 @@ sysCtxUsrResp :: [Sentence]
 sysCtxUsrResp = [S "Provide the" +:+ plural inDatum +:+ S "related to the" +:+
   phraseNP (glaSlab `and_` blastTy) `sC` S "ensuring no errors in the" +:+
   plural datum +:+. S "entry",
-  S "Ensure that consistent units are used for" +:+. pluralNP (combineNINI input_  variable),
+  S "Ensure that consistent units are used for" +:+. pluralNP (combineNINI input_ variable),
   S "Ensure required" +:+ pluralNP (combineNINI software assumption) +:+
-    sParen (makeRef2S $ SRS.assumpt ([]::[Contents]) ([]::[Section]))
+    sParen (refS $ SRS.assumpt ([]::[Contents]) ([]::[Section]))
     +:+ S "are appropriate for any particular" +:+
     phrase problem +:+ S "input to the" +:+. phrase software]
 
@@ -322,7 +323,7 @@ prob = foldlSent_ [S "efficiently" `S.and_` S "correctly predict whether a",
 
 termsAndDesc :: Section
 termsAndDesc = termDefnF' (Just (S "All of the" +:+ plural term_ +:+
-  S "are extracted from" +:+ makeCiteS astm2009)) [termsAndDescBullets]
+  S "are extracted from" +:+ refS astm2009)) [termsAndDescBullets]
 
 {--Physical System Description--}
 
@@ -371,7 +372,7 @@ goalInputs = [pluralNP (dimension `the_ofThePS` glaPlane), phraseNP (the glassTy
 appdxIntro :: Contents
 appdxIntro = foldlSP [
   S "This", phrase appendix, S "holds the", plural graph,
-  sParen (makeRef2S demandVsSDFig `S.and_` makeRef2S dimlessloadVsARFig),
+  sParen (refS demandVsSDFig `S.and_` refS dimlessloadVsARFig),
   S "used for interpolating", plural value, S "needed in the", plural model]
 
 blstRskInvWGlassSlab :: Sentence
@@ -380,9 +381,9 @@ blstRskInvWGlassSlab = phrase blastRisk +:+ S "involved with the" +:+
 
 -- References --
 bodyRefs :: [Reference]
-bodyRefs = map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
-  ++ map rw [sysCtxFig, demandVsSDFig, dimlessloadVsARFig]
-  ++ map rw concIns ++ map rw section ++ map rw labCon
+bodyRefs = map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+  ++ map ref [sysCtxFig, demandVsSDFig, dimlessloadVsARFig]
+  ++ map ref concIns ++ map ref section ++ map ref labCon
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ goalRefs ++ dataDefRefs

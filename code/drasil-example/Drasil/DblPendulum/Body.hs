@@ -2,7 +2,7 @@
 module Drasil.DblPendulum.Body where
 
 import Data.List (nub)
-import Language.Drasil hiding (Symbol(..), Vector)
+import Language.Drasil
 import Theory.Drasil (TheoryModel)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
@@ -187,13 +187,13 @@ physSystParts = map ((!.) . atStartNP) [the rod, the mass]
 
 -- References --
 citeRefs :: [Reference]
-citeRefs = map rw citations
+citeRefs = map ref citations
 
 tModRefs :: [Reference]
-tModRefs = map rw tMods
+tModRefs = map ref tMods
 
 bodyRefs :: [Reference]
-bodyRefs = map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ map rw concIns
+bodyRefs = map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ map ref concIns
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ figRefs ++ goalRefs ++ dataDefRefs ++ genDefRefs

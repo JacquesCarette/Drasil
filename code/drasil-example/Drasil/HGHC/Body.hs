@@ -1,7 +1,7 @@
 module Drasil.HGHC.Body (srs, si, symbMap, printSetting) where
 
 import Data.List (nub)
-import Language.Drasil hiding (Manual, Symbol(..)) -- Citation name conflict. FIXME: Move to different namespace
+import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 import Drasil.DocLang (DocSection(RefSec, SSDSec), Literature(Lit, Manual), 
     RefSec(..), RefTab(TUnits), TSIntro(SymbConvention, TSPurpose), SRSDecl, 
     intro, mkDoc, tsymb, InclUnits(IncludeUnits), Verbosity(Verbose),
@@ -71,10 +71,10 @@ usedDB = cdb ([] :: [QuantityDict]) (map nw symbols)
 
 -- References --
 bodyRefs :: [Reference]
-bodyRefs = map (rw.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+bodyRefs = map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si)
 
 dataDefRefs :: [Reference]
-dataDefRefs = map rw [htTransCladCoolDD, htTransCladFuelDD]
+dataDefRefs = map ref [htTransCladCoolDD, htTransCladFuelDD]
 
 allRefs :: [Reference]
 allRefs = nub (bodyRefs ++ dataDefRefs ++ secRefs)

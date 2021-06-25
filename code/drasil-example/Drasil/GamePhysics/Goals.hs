@@ -27,4 +27,4 @@ goalStatementStruct outputs condition1 condition2 = foldlSent
 
 -- References --
 goalRefs :: [Reference]
-goalRefs = map rw goals
+goalRefs = map ref goals

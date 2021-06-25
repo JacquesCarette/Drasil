@@ -8,6 +8,7 @@ import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
   _sys, _sysinfodb, _usedinfodb)
 import Language.Drasil hiding (C)
 import Utils.Drasil
+import Data.Char (toUpper)
 --import Drasil.DocLang
 --import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 
@@ -24,8 +25,8 @@ printSetting = PI symbMap Equational defaultConfiguration
 --mkWebsite :: SRSDecl -> SystemInformation -> Document
 mkWebsite :: Document
 mkWebsite =
-    --Document   Title            author     [Section]
-    Document (S websiteTitle) EmptyS sections
+    --Document   Title                         author  (hack for now)             [Section]
+    Document (S websiteTitle) (namedRef gitHubRef (S "Link to GitHub Repository")) sections
 
 si :: SystemInformation
 si = SI {
@@ -61,8 +62,8 @@ usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict])
            ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
 
 allRefs :: [Reference]
-allRefs = map rw sections ++ [imageRef, gitHubRef, caseStudyTabRef, docsRef, fullDocsRef, dataTableHTMLRef, dataTableCSVRef] 
-  ++ concatMap snd (concat exampleDoxRefs) ++ concatMap snd (concat exampleCodeRefs) ++ drasilDepGraphRefs
+allRefs = map ref sections ++ [imageRef, gitHubRef, caseStudyTabRef, docsRef, fullDocsRef, dataTableHTMLRef, dataTableCSVRef] 
+  ++ map snd (concatMap snd (concat exampleDoxRefs)) ++ map snd (concatMap snd (concat exampleCodeRefs)) ++ drasilDepGraphRefs
   ++ map getHTMLRef exampleTitles ++ map getPDFRef exampleTitles
 
 -- need section references
@@ -84,10 +85,12 @@ web = commonIdea "website" (cn "website") "web" []
 
 --header
 headerSec :: Section
-headerSec = section EmptyS [mkParagraph (S gitHubInfoName +:+ makeRef2S gitHubRef), imageContent] [] headerSecRef
+headerSec = section EmptyS [LlC imageContent] [] headerSecRef
 
-imageContent :: Contents
-imageContent = mkFig imageRef $ fig EmptyS imagePath
+--imageContent :: Contents
+--imageContent = mkFig imageRef $ fig EmptyS imagePath
+imageContent :: LabelledContent
+imageContent = llcc imageRef $ figWithWidth EmptyS imagePath 70
 
 imageRef :: Reference
 imageRef = makeFigRef "Drasil"
@@ -95,27 +98,26 @@ imageRef = makeFigRef "Drasil"
 gitHubRef :: Reference
 gitHubRef = Reference "gitHubRepo" (URI gitHubInfoURL) (shortname' $ S "gitHubRepo") None
 
-websiteTitle, gitHubInfoName :: String
+websiteTitle :: String
 gitHubInfoURL, imagePath :: FilePath
 websiteTitle = "Drasil - Generate All the Things!"
-gitHubInfoName = "Link to GitHub repository:"
 gitHubInfoURL = "https://github.com/JacquesCarette/Drasil"
-imagePath = "./website/images/Icon.png"
+imagePath = "../../images/Icon.png"
 
 -- intro
 introSec :: Section
-introSec = section EmptyS (map (mkParagraph.S) [introParagraph1, introParagraph2]) [] introSecRef
+introSec = section (S "Introduction") (map mkParagraph [introParagraph1, introParagraph2]) [] introSecRef
 
-introParagraph1, introParagraph2 :: String
-introParagraph1 = "Drasil is a framework for generating all of the software artifacts from a stable knowledge base, \
+introParagraph1, introParagraph2 :: Sentence
+introParagraph1 = S "Drasil is a framework for generating all of the software artifacts from a stable knowledge base, \
   \focusing currently on scientific software. The main goals are to reduce knowledge duplication and \
   \improve traceability. The atifacts are generated from a common knowledge-base using recipes \
   \written in a Domain-Specific Language (DSL). These recipes allow us to specify which pieces of \
   \knowledge should be used in which artifacts, how to transform them, and more."
 -- need sentence below?
-introParagraph2 = "This webpage is designed to contain the most up to date " ++
-  "case study artifacts, Haddock documentation, and package dependency graphs " --foldlList "," List [caseStudy, haddockDocs, packDepGraph] 
-  ++ "from the Drasil repository. \
+introParagraph2 = S "This webpage is designed to contain the most up to date" +:+
+  foldlList Comma List (zipWith (\x y -> namedRef x (S y)) [ref caseStudySec, docsRef, ref graphSec] ["case study artifacts", "Haddock documentation", "package dependency graphs"]) --foldlList "," List [caseStudy, haddockDocs, packDepGraph] 
+  +:+ S "from the Drasil repository. \
   \The case study artifacts include the Software Requirements Specification (SRS) for the case study, \
   \which specifies what the program sets out to achieve. \
   \The Haddock Documentation section contains the current documentation for the Drasil framework. \
@@ -300,30 +302,21 @@ mkExampleList = Enumeration exampleList
 exampleList :: ListType
 exampleList = Bullet $ zip (zipWith4 mkExampleListFunc exampleTitles exampleDescs exampleCodeRefs exampleDoxRefs) $ repeat Nothing
 
-mkExampleListFunc :: String -> String -> [(String, [Reference])] -> [(String, [Reference])] -> ItemType
+mkExampleListFunc :: String -> String -> [(String, [(Sentence, Reference)])] -> [(String, [(Sentence, Reference)])] -> ItemType
 mkExampleListFunc exmpl desc codePth doxPth
-  | map snd codePth == [[]] && map snd doxPth == [[]] = Nested (S exmpl +:+ S desc) $ Bullet [(Flat (S (exmpl ++ "SRS") +:+ makeRef2S (getHTMLRef exmpl) +:+ makeRef2S (getPDFRef exmpl)), Nothing)]
-  | map snd doxPth == [[]]                         = Nested (S exmpl +:+ S desc) $ Bullet $ zip [Flat $ S (exmpl ++ "SRS") +:+ makeRef2S (getHTMLRef exmpl) +:+ makeRef2S (getPDFRef exmpl),
+  | map ((map snd).snd) codePth == [[]] && map ((map snd).snd) doxPth == [[]] = Nested (S exmpl +:+ S desc) $ Bullet [(Flat (S (exmpl ++ "SRS") +:+ namedRef (getHTMLRef exmpl) (S "[HTML]") +:+ namedRef (getPDFRef exmpl) (S "[PDF]")), Nothing)]
+  | map ((map snd).snd) doxPth == [[]]                            = Nested (S exmpl +:+ S desc) $ Bullet $ zip [Flat $ S (exmpl ++ "SRS") +:+ namedRef (getHTMLRef exmpl) (S "[HTML]") +:+ namedRef (getPDFRef exmpl) (S "[PDF]"),
                                                                        Nested (S generatedCodeTitle) $ Bullet $ mkCodeList codePth] $ repeat Nothing
-                                                                              {-(Bullet [(foldlSent_ (map makeRef2S codePth), Nothing)]), Nothing)])-}
-  {-| length codePth <= 1                        = Nested (S exmpl) (Bullet [((S (exmpl ++ "SRS")) +:+ makeRef2S getHTMLRef +:+ makeRef2S getPDFRef, Nothing),
-                                                                       (Nested (S generatedCodeTitle) 
-                                                                              (Bullet [(foldlSent_ (map makeRef2S codePth), Nothing)]), Nothing),
-                                                                       (Nested (S generatedCodeDocsTitle) 
-                                                                              (Bullet [(foldlSent_ (map makeRef2S doxPth), Nothing)]), Nothing)])-}
-  {-| otherwise                                  = Nested (S exmpl) (Bullet [(Flat ((S (exmpl ++ "SRS")) +:+ makeRef2S getHTMLRef +:+ makeRef2S getPDFRef), Nothing),
-                                                                       (Nested (S generatedCodeTitle) (Bullet (mkCodeList codePth),
-                                                                       (Nested (S generatedCodeDocsTitle) (Bullet (mkCodeList doxPth)])-}
-  | otherwise                                  = Nested (S exmpl +:+ S desc) $ Bullet $ zip [Flat $ S (exmpl ++ "SRS") +:+ makeRef2S (getHTMLRef exmpl) +:+ makeRef2S (getPDFRef exmpl),
+  | otherwise                                         = Nested (S exmpl +:+ S desc) $ Bullet $ zip [Flat $ S (exmpl ++ "SRS") +:+ namedRef (getHTMLRef exmpl) (S "[HTML]") +:+ namedRef (getPDFRef exmpl) (S "[PDF]"),
                                                                        Nested (S generatedCodeTitle) $ Bullet $ mkCodeList codePth,
                                                                        Nested (S generatedCodeDocsTitle) $ Bullet $ mkCodeList doxPth] $ repeat Nothing
 
-mkCodeList :: [(String, [Reference])] -> [(ItemType, Maybe String)]
+mkCodeList :: [(String, [(Sentence, Reference)])] -> [(ItemType, Maybe String)]
 mkCodeList [] = []
-mkCodeList (r:refs) = (Flat $ foldlSent_ (map makeRef2S (snd r)), Nothing): mkCodeList refs
+mkCodeList (r:refs) = (Flat $ foldlSent_ $ (S $ fst r) : (map (uncurry (flip namedRef)) (snd r)), Nothing): mkCodeList refs
 
 exampleTitles, exampleDescs :: [String]
-exampleCodeRefs, exampleDoxRefs :: [[(String, [Reference])]]
+exampleCodeRefs, exampleDoxRefs :: [[(String, [(Sentence, Reference)])]]
 exampleTitles = [pendulum, gamePhys, glassBR, hghc, noPCM, pdController, projectile, ssp, swhs, template]
 exampleDescs = [pendulumDesc, gamePhysDesc, glassBRDesc, hghcDesc, noPCMDesc, pdControllerDesc, projectileDesc, sspDesc, swhsDesc, templateDesc]
 exampleCodeRefs =[[(pendulum, [])],
@@ -403,10 +396,20 @@ getHTMLPath, getPDFPath :: String -> FilePath
 getHTMLPath ex = "https://jacquescarette.github.io/Drasil/examples/" ++ ex ++ "/srs/" ++ ex ++ "_SRS.html"
 getPDFPath ex = "https://jacquescarette.github.io/Drasil/examples/" ++ ex ++ "/srs/" ++ ex ++ "_SRS.pdf"
 
-getCodeRef :: String -> String -> String -> Reference
-getDoxRef :: String -> String -> Reference
-getCodeRef hash ex lang = Reference ("codeRef" ++ ex ++ lang) (URI (getCodePath hash ex lang)) (shortname' $ S ("codeRef" ++ ex ++ lang)) None
-getDoxRef ex lang = Reference ("doxRef" ++ ex ++ lang) (URI (getDoxPath ex lang)) (shortname' $ S ("doxRef" ++ ex ++ lang)) None
+getCodeRef :: String -> String -> String -> (Sentence, Reference)
+getDoxRef :: String -> String -> (Sentence, Reference)
+getCodeRef hash ex lang = ((S ("[" ++ convertlang ++ "]")), Reference ("codeRef" ++ ex ++ lang) (URI (getCodePath hash ex lang)) (shortname' $ S ("codeRef" ++ ex ++ lang)) None)
+  where
+    convertlang 
+      | lang == "cpp" = "C++"
+      | lang == "csharp" = "C Sharp" -- Drasil printers dont like the # symbol
+      | otherwise = (toUpper.head) lang : tail lang
+getDoxRef ex lang = ((S ("[" ++ convertlang ++ "]")), Reference ("doxRef" ++ ex ++ lang) (URI (getDoxPath ex lang)) (shortname' $ S ("doxRef" ++ ex ++ lang)) None)
+  where
+    convertlang 
+      | lang == "cpp" = "C++"
+      | lang == "csharp" = "C Sharp"
+      | otherwise = (toUpper.head) lang : tail lang
 getCodePath :: String -> String -> String -> FilePath
 getDoxPath :: String -> String -> FilePath
 getCodePath hash ex lang = "https://github.com/JacquesCarette/Drasil/tree/" ++ hash ++ "/code/stable/" ++ ex ++ "/src/" ++ lang
@@ -414,7 +417,7 @@ getDoxPath ex lang = "https://jacquescarette.github.io/Drasil/examples/" ++ ex +
 
 -- manually get commit number for now
 currHash :: FilePath
-currHash = "cef7307aa11ac0dc0ec1773b82311ca1f7bb6a51"
+currHash = "542f6aa85f23cde493536be924211fb3827b8a5d"
 
 pendulumDesc, gamePhysDesc, glassBRDesc, hghcDesc, noPCMDesc, pdControllerDesc,
   projectileDesc, sspDesc, swhsDesc, templateDesc :: String
@@ -428,7 +431,7 @@ pdControllerDesc = ""
 projectileDesc = "describes the motion of a projectile object in free space."
 sspDesc = "describes the requirements of a slope stability analysis program."
 swhsDesc = "describes the modelling of a solar water heating system with phase change material."
-templateDesc = "an empty template document."
+templateDesc = "is an empty template document."
 
 generatedCodeTitle, generatedCodeDocsTitle :: String
 genCodeRootPath, exampleRoot :: FilePath
@@ -448,7 +451,7 @@ docsPath, fullDocsPath :: FilePath
 docsRef, fullDocsRef :: Reference
 
 haddockDocsTitle = S "Haddock Documentation"
-haddockDocsDesc = S "The current Haddock documentation" +:+ makeRef2S docsRef +:+ S "for the Drasil framework. A variant with fully exposed modules" +:+ makeRef2S fullDocsRef +:+ S "is also available."
+haddockDocsDesc = S "The current" +:+ namedRef docsRef (S "Haddock documentation") +:+ S "for the Drasil framework. A variant with" +:+ namedRef fullDocsRef (S "fully exposed modules") +:+ S "is also available."
 docsPath = "docs/index.html"
 fullDocsPath = "docs/full/index.html"
 docsRef = Reference "haddockDocs" (URI docsPath) (shortname' $ S "HaddockDocs") None
@@ -465,7 +468,7 @@ dataTableHTMLPath, dataTableCSVPath :: FilePath
 dataTableHTMLRef, dataTableCSVRef :: Reference
 
 drasilDataTableTitle = S "Drasil Data Table"
-dataTableDesc = S "Here is the updated Data Table" +:+ makeRef2S dataTableHTMLRef +:+ S "for the Drasil framework. There is also a downloadable version" +:+ makeRef2S dataTableCSVRef +:+ S "(csv format)."
+dataTableDesc = S "Here is the updated" +:+ namedRef dataTableHTMLRef (S "Data Table") +:+ S "for the Drasil framework. There is also a" +:+ namedRef dataTableCSVRef (S "downloadable version") +:+ S "(csv format)."
 dataTableHTMLPath = "analysis/DataTable.html"
 dataTableCSVPath = "analysis/DataTable.csv"
 dataTableHTMLRef = Reference "dataTableHTML" (URI dataTableHTMLPath) (shortname' $ S "dataTableHTML") None
@@ -490,7 +493,7 @@ folderList :: RawContent
 folderList = Enumeration $ Bullet $ zip folderList' $ repeat Nothing
 
 folderList' :: [ItemType]
-folderList' = map Flat (zipWith (\x y -> S x +:+ makeRef2S y) drasilFolders drasilDepGraphRefs)
+folderList' = map Flat (zipWith (\x y -> namedRef y (S x)) drasilFolders drasilDepGraphRefs)
 
 
 

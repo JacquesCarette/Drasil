@@ -257,6 +257,16 @@ deploy_lite:
 
 website:
 	stack install drasil-website
+	cd "drasil-website" && \
+	CUR_DIR="$(PWD)/" \
+	DEPLOY_FOLDER="$(CUR_DIR)$(DEPLOY_FOLDER)"  \
+	DOCS_FOLDER="$(DOCS_FOLDER)" \
+	DOX_FOLDER="doxygen/" \
+	EXAMPLES_FOLDER="examples/" \
+	SRS_FOLDER_FRAG="srs/" \
+	GRAPH_FOLDER="$(GRAPH_FOLDER)" \
+	ANALYSIS_FOLDER="$(ANALYSIS_FOLDER)" \
+	stack exec website
 # This rule is for use with developing deployment layout locally. As part of it, it ensures all needed
 # dependencies exist. One of the downsides is we ensure all files are re-generated which means the TeX
 # files appear newer and thus PDF's are regenerated. If you want to "just generate the structure,

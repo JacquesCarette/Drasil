@@ -34,6 +34,8 @@ data Data' = Datum DataItem' -- ^ Single data item.
     Delimiter -- Delimiter between elements from different lists
   | Junk -- ^ Data that can be ignored/skipped over.
 
+-- | A piece of data that contains the datum described and delimeters between elements. 
+-- The size of the list of delimiters should be equal to the dimension of datum.
 data DataItem' = DI 
   CodeVarChunk -- The datum being described
   [Delimiter] -- Delimiters between list elements. 

@@ -28,14 +28,17 @@ main = do
   buildNumber <- fromMaybe "0" <$> lookupEnv "GITHUB_RUN_NUMBER"
   buildId <- lookupEnv "GITHUB_RUN_ID"
 
+  -- get commit root and build path
   let repoCommitRoot = "https://github.com/" ++ repoSlug ++ "/tree/" ++ commit ++ "/"
       buildPath = "https://github.com/" ++ repoSlug ++ "/actions" ++ maybe "" ("/runs/" ++) buildId
 
+      -- organize all the possible folder locations to use in functions
       allFolders = Folder {depL = deployLocation, docsRt = deployLocation ++ docsRoot,
         exRt = deployLocation ++ exampleRoot, srsD = deployLocation ++ srsDir, 
         doxD = deployLocation ++ doxDir, graphRt = deployLocation ++ graphRoot, 
         analysisRt = deployLocation ++ analysisRoot, repoRt = repoCommitRoot, 
         buildNum = buildNumber, buildPth = buildPath}
 
+  -- generate the html document/website.
   setLocaleEncoding utf8
-  gen (DocSpec Website "Drasil_Website") (mkWebsite allFolders) (printSetting allFolders)
+  gen (DocSpec Website "index") (mkWebsite allFolders) (printSetting allFolders)

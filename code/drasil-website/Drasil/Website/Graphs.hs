@@ -2,10 +2,9 @@ module Drasil.Website.Graphs (graphSec, graphRefs) where
 
 import Language.Drasil
 
-
-
-----------------------------------------------------------
---graphs section
+----------------------------------
+-- Dependency Graphs Section
+----------------------------------
 
 graphSec :: FilePath -> Section
 graphSec path = section packDepGraphTitle [UlC $ ulcc $ folderList path] [] graphSecRef

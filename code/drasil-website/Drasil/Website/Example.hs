@@ -7,8 +7,10 @@ import Data.Char (toUpper, toLower)
 import qualified Data.List.Split as L
 
 
-----------------------------------------
--- example section
+--------------------------
+-- Examples Section
+--------------------------
+
 exampleSec :: FilePath -> FilePath -> Section
 exampleSec p1 p2 = section (S exampleTitle) [mkParagraph exampleIntro, UlC $ ulcc $ mkExampleList p1 p2] [] exampleSecRef
 
@@ -19,14 +21,18 @@ exampleIntro :: Sentence
 exampleIntro = S "Each of the case studies contain their own generated PDF and HTML reports," +:+
   S "and in some cases, their own generated code."
 
+-- Put the list into RawContent form.
 mkExampleList :: FilePath -> FilePath -> RawContent
 mkExampleList p1 p2 = Enumeration $ exampleList p1 p2
 
+-- Put the examples into a list.
 exampleList :: FilePath -> FilePath -> ListType
 exampleList repoPth exPth = Bullet $ zip (zipWith4 (mkExampleListFunc exPth) exampleTitles exampleDescs (exampleCodeRefs repoPth) (exampleDoxRefs exPth)) $ repeat Nothing
 
+-- Organize the examples into a bulleted list.
+-- leave filepath in just in case examples need different path
 mkExampleListFunc :: FilePath -> String -> String -> [(String, [(Sentence, Reference)])] -> [(String, [(Sentence, Reference)])] -> ItemType
-mkExampleListFunc path exmpl desc codePth doxPth
+mkExampleListFunc _ exmpl desc codePth doxPth
   | map ((map snd).snd) codePth == [[]] && map ((map snd).snd) doxPth == [[]] = Nested (S exmpl +:+ S desc) $ Bullet [(Flat (S (exmpl ++ "SRS") +:+ namedRef (getHTMLRef exmpl) (S "[HTML]") +:+ namedRef (getPDFRef exmpl) (S "[PDF]")), Nothing)]
   | map ((map snd).snd) doxPth == [[]]                            = Nested (S exmpl +:+ S desc) $ Bullet $ zip [Flat $ S (exmpl ++ "SRS") +:+ namedRef (getHTMLRef exmpl) (S "[HTML]") +:+ namedRef (getPDFRef exmpl) (S "[PDF]"),
                                                                        Nested (S generatedCodeTitle) $ Bullet $ mkCodeList codePth] $ repeat Nothing
@@ -34,13 +40,17 @@ mkExampleListFunc path exmpl desc codePth doxPth
                                                                        Nested (S generatedCodeTitle) $ Bullet $ mkCodeList codePth,
                                                                        Nested (S generatedCodeDocsTitle) $ Bullet $ mkCodeList doxPth] $ repeat Nothing
 
+-- References come in the form of [(Project version), [(Display name, Reference for generated code or documents)]]
 mkCodeList :: [(String, [(Sentence, Reference)])] -> [(ItemType, Maybe String)]
 mkCodeList [] = []
 mkCodeList (r:refs) = (Flat $ foldlSent_ $ (S $ fst r) : (map (uncurry (flip namedRef)) (snd r)), Nothing): mkCodeList refs
 
 exampleTitles, exampleDescs :: [String]
+-- Sorts the references for mkCodeList.
 exampleCodeRefs, exampleDoxRefs :: FilePath -> [[(String, [(Sentence, Reference)])]]
+-- example titles
 exampleTitles = [pendulum, gamePhys, glassBR, hghc, noPCM, pdController, projectile, ssp, swhs, template]
+-- example descriptions (used in the list of examples)
 exampleDescs = [pendulumDesc, gamePhysDesc, glassBRDesc, hghcDesc, noPCMDesc, pdControllerDesc, projectileDesc, sspDesc, swhsDesc, templateDesc]
 exampleCodeRefs path =[[(pendulum, [])],
                   [(gamePhys, [])],
@@ -91,6 +101,7 @@ ssp = "SSP"
 swhs = "SWHS"
 template = "Template"
 
+-- list that states what languages the generated code/doxygen docs exist in.
 glassBRCode, glassBRDox, noPCMCode, noPCMDox, pdControllerCode, pdControllerDox, projectileCase1Code, projectileCase2Code,
   projectileCase3Code, projectileCase4Code, projectileCase5Code, projectileCase1Dox, projectileCase2Dox,
   projectileCase3Dox, projectileCase4Dox, projectileCase5Dox :: [String]
@@ -112,6 +123,7 @@ projectileCase3Dox   = ["cpp", "csharp", "java", "python"]
 projectileCase4Dox   = ["cpp", "csharp", "java", "python"]
 projectileCase5Dox   = ["cpp", "csharp", "java", "python"]
 
+-- Make references for each of the generated SRS files
 getHTMLRef, getPDFRef :: String -> Reference
 getHTMLRef ex = Reference ("htmlRef" ++ ex) (URI (getHTMLPath ex)) (shortname' $ S ("htmlRef" ++ ex)) None
 getPDFRef ex = Reference ("pdfRef" ++ ex) (URI (getPDFPath ex)) (shortname' $ S ("pdfRef" ++ ex)) None
@@ -119,13 +131,13 @@ getHTMLPath, getPDFPath :: String -> FilePath
 getHTMLPath ex = "examples/" ++ ex ++ "/srs/" ++ ex ++ "_SRS.html"
 getPDFPath ex = "examples/" ++ ex ++ "/srs/" ++ ex ++ "_SRS.pdf"
 
-getCodeRef :: FilePath -> String -> String -> (Sentence, Reference)
-getDoxRef :: FilePath -> String -> String -> (Sentence, Reference)
+-- Make display names and references for generated code and docs
+getCodeRef, getDoxRef :: FilePath -> String -> String -> (Sentence, Reference)
 getCodeRef path ex lang = ((S ("[" ++ convertlang ++ "]")), Reference ("codeRef" ++ ex ++ lang) (URI (getCodePath path ex lang)) (shortname' $ S ("codeRef" ++ ex ++ lang)) None)
   where
     convertlang 
       | lang == "cpp" = "C++"
-      | lang == "csharp" = "C Sharp" -- Drasil printers dont like the # symbol
+      | lang == "csharp" = "C Sharp" -- Drasil printers dont like the # symbol, so we use the full word.
       | otherwise = (toUpper.head) lang : tail lang
 getDoxRef path ex lang = ((S ("[" ++ convertlang lang ++ "]")), Reference ("doxRef" ++ ex ++ lang) (URI (getDoxPath path ex lang)) (shortname' $ S ("doxRef" ++ ex ++ lang)) None)
   where
@@ -139,7 +151,7 @@ getDoxPath :: FilePath -> String -> String -> FilePath
 getCodePath path ex lang = path ++ "code/stable/" ++ ex ++ "/src/" ++ lang -- need repoCommit path
 getDoxPath path ex lang = path ++ ex ++ "/doxygen/" ++ lang ++ "/index.html" -- need example path
 
-
+-- Project descriptions
 pendulumDesc, gamePhysDesc, glassBRDesc, hghcDesc, noPCMDesc, pdControllerDesc,
   projectileDesc, sspDesc, swhsDesc, templateDesc :: String
 

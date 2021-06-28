@@ -1,11 +1,14 @@
 module Drasil.Website.CaseStudy (caseStudySec, caseStudyRefs) where
 
-
 import Language.Drasil hiding (C)
 
 
-----------------------------------------------------
--- case studies section
+-----------------------------
+-- Case Studies Section
+-----------------------------
+
+caseStudySec :: Section
+caseStudySec = section (S caseStudiesTitle) [mkParagraph $ S caseStudiesDesc, mkFig caseStudyTabRef mkCaseTable, UlC $ ulcc caseStudyLegend] [] caseStudySecRef
 
 caseStudyRefs :: [Reference]
 caseStudyRefs = [caseStudySecRef, ref caseStudySec, ref caseStudyTabRef]
@@ -13,15 +16,13 @@ caseStudyRefs = [caseStudySecRef, ref caseStudySec, ref caseStudyTabRef]
 caseStudySecRef :: Reference
 caseStudySecRef = makeSecRef "Case Study" $ S "Case Study"
 
-caseStudySec :: Section
-caseStudySec = section (S caseStudiesTitle) [mkParagraph $ S caseStudiesDesc, mkFig caseStudyTabRef mkCaseTable, UlC $ ulcc caseStudyLegend] [] caseStudySecRef
-
 caseStudiesTitle, caseStudiesDesc :: String
 caseStudiesTitle = "Case Studies"
 caseStudiesDesc = "Drasil allows some design decisions to be made by the user when generating \
   \code. The table below summarizes the design decisions made for each case \
   \study, followed by a guide giving the meaning of the short-forms used in the \
   \table:"
+
 -- case studies table
 mkCaseTable :: RawContent
 mkCaseTable = Table headerRow tableBody EmptyS False
@@ -44,12 +45,17 @@ caseStudyTabRef :: Reference
 caseStudyTabRef = makeTabRef "CaseStudy"
 
 type Name = String
+-- Modularity of the code
 data Modularity = CMod | SMod | UMod
 data ImplementType = LIm | PIm
 data Logging = L | NoL deriving (Show)
+-- Input Structure
 data InStruct = BIn | UIn
+--Constant structure
 data ConStruct = B | I | U | WI deriving (Show)
+-- Constant number representation
 data ConRep = C | V deriving (Show)
+-- Real number representation
 data RealNumRep = D | F deriving (Show)
 
 instance Show Modularity where
@@ -64,8 +70,11 @@ instance Show ImplementType where
 instance Show InStruct where
   show BIn = "B"
   show UIn = "U"
+
+-- Holds all required information for an entry on the case study table
 data CaseStudy = CS Name Modularity ImplementType Logging InStruct ConStruct ConRep RealNumRep
 
+-- Entries in the table for each case study
 glassBRCase, noPCMCase, pdControllerCase, projectileCase1, projectileCase2,
   projectileCase3, projectileCase4, projectileCase5 :: CaseStudy
 

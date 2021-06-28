@@ -3,18 +3,22 @@ module Drasil.Website.Introduction (introSec, introRefs) where
 import Language.Drasil
 import Utils.Drasil
 
--- intro
+-----------------------
+-- Introduction Section
+-----------------------
+
+-- Creates the introduction section
 introSec ::  Reference -> Reference -> Reference -> Section
 introSec r1 r2 r3 = section (S "Introduction") (map mkParagraph [introParagraph1, introParagraph2 r1 r2 r3]) [] introSecRef
 
 introParagraph1 :: Sentence
-introParagraph2 :: Reference -> Reference -> Reference -> Sentence
 introParagraph1 = S "Drasil is a framework for generating all of the software artifacts from a stable knowledge base, \
   \focusing currently on scientific software. The main goals are to reduce knowledge duplication and \
   \improve traceability. The atifacts are generated from a common knowledge-base using recipes \
   \written in a Domain-Specific Language (DSL). These recipes allow us to specify which pieces of \
   \knowledge should be used in which artifacts, how to transform them, and more."
--- need sentence below?
+
+introParagraph2 :: Reference -> Reference -> Reference -> Sentence
 introParagraph2 caseStudySecRef docsRef graphSecRef = S "This webpage is designed to contain the most up to date" +:+
   foldlList Comma List (zipWith (\x y -> namedRef x (S y)) [caseStudySecRef, docsRef, graphSecRef] ["case study artifacts", "Haddock documentation", "package dependency graphs"]) --foldlList "," List [caseStudy, haddockDocs, packDepGraph] 
   +:+ S "from the Drasil repository. \

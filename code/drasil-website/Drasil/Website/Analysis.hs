@@ -2,8 +2,9 @@ module Drasil.Website.Analysis where
 
 import Language.Drasil
 
----------------------------------------------------------
---analysis section
+--------------------
+-- Analysis Section
+--------------------
 
 analysisSec :: FilePath -> Section
 analysisSec path = section drasilDataTableTitle [mkParagraph $ dataTableDesc path] [] analysisSecRef

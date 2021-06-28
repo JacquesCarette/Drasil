@@ -1,9 +1,10 @@
 module Drasil.Website.Documentation (docsSec, docRefs) where
 
-import Language.Drasil hiding (C)
+import Language.Drasil
 
-----------------------------------------------------
---docs section
+-------------------------------------------
+--Haddock Documentation for Drasil Section
+-------------------------------------------
 
 docsSec :: FilePath -> Section
 docsSec path = section haddockDocsTitle [mkParagraph $ haddockDocsDesc path] [] docsSecRef

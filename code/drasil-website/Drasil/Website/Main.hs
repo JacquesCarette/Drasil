@@ -2,7 +2,7 @@ module Drasil.Website.Main where
 
 import GHC.IO.Encoding
 import Language.Drasil.Generate (gen, DocSpec(DocSpec), DocType(Website))
-import Drasil.Website.Website (mkWebsite, printSetting, FolderLocation(..))
+import Drasil.Website.Body (mkWebsite, printSetting, FolderLocation(..))
 import System.Environment (getEnv, lookupEnv)
 import Data.Maybe (fromMaybe)
 

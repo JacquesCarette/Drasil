@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: fb6a88d31d2fc32937214cc588e0d469a8f81ba9811ea8a56beaf8fc78baa248
+-- hash: 0d7324cdec0fd58fcd2b6aff4990af0e7a64e2f226db2be4bd722c35b32973fe
 
 name:           drasil-website
 version:        0.1.0.0
@@ -24,13 +24,14 @@ source-repository head
 executable website
   main-is: Drasil/Website/Main.hs
   other-modules:
-      Drasil.Website.Website
       Drasil.Website.Analysis
+      Drasil.Website.Body
       Drasil.Website.CaseStudy
       Drasil.Website.Documentation
       Drasil.Website.Example
       Drasil.Website.Graphs
       Drasil.Website.Introduction
+      Paths_drasil_website
   hs-source-dirs:
       ./
   ghc-options: -Wall -Wredundant-constraints -threaded -main-is Drasil.Website.Main

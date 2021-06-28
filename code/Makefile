@@ -3,7 +3,7 @@
 SHELL=/bin/bash
 
 # List of all known packages
-PACKAGES = lang utils build gool code theory database printers gen data docLang example
+PACKAGES = lang utils build gool code theory database printers gen data docLang example website
 
 # and associated package-level suffixes
 BUILD_P_SUFFIX = _build
@@ -108,6 +108,8 @@ DEPLOY_FOLDER = $(DEPLOY_FOLDER_NAME)/
 DEPLOY_CODE_PATH_KV_SEP = :
 DOCS_FOLDER_NAME = docs
 DOCS_FOLDER = $(DOCS_FOLDER_NAME)/
+WEBSITE_FOLDER_NAME = website
+WEBSITE_FOLDER = $(WEBSITE_FOLDER_NAME)/
 # make command line options
 #  GHC debug options
 PROFALL = --executable-profiling --library-profiling
@@ -249,12 +251,20 @@ $(filter %$(DCP_E_SUFFIX), $(DCP_EXAMPLES)): %$(DCP_E_SUFFIX):
 
 deploy_code_path: $(DCP_EXAMPLES)
 
-deploy_lite:
+deploy_lite: website
 	@mkdir -p "$(DEPLOY_FOLDER)"
 	@BUILD_FOLDER="$(BUILD_FOLDER)" DEPLOY_FOLDER="$(DEPLOY_FOLDER)" GRAPH_FOLDER="$(GRAPH_FOLDER)" \
 	EXAMPLE_DIRS="$(EXAMPLE_DIRS)" MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" ANALYSIS_FOLDER="$(ANALYSIS_FOLDER)" \
 	DEPLOY_CODE_PATH_KV_SEP="$(DEPLOY_CODE_PATH_KV_SEP)" MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"deploy_stage.sh
 
+website: 
+	rm -rf $(WEBSITE_FOLDER)
+	mkdir -p $(WEBSITE_FOLDER)
+	BUILD_FOLDER="$(BUILD_FOLDER)" DEPLOY_FOLDER="$(DEPLOY_FOLDER)" GRAPH_FOLDER="$(GRAPH_FOLDER)" \
+	EXAMPLE_DIRS="$(EXAMPLE_DIRS)" MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" ANALYSIS_FOLDER="$(ANALYSIS_FOLDER)" \
+	DEPLOY_CODE_PATH_KV_SEP="$(DEPLOY_CODE_PATH_KV_SEP)"
+	cd "drasil-website/" && stack build --ghc-options="-Wall"
+	cd "drasil-website/" && stack exec -- website
 # This rule is for use with developing deployment layout locally. As part of it, it ensures all needed
 # dependencies exist. One of the downsides is we ensure all files are re-generated which means the TeX
 # files appear newer and thus PDF's are regenerated. If you want to "just generate the structure,

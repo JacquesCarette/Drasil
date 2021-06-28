@@ -1,4 +1,4 @@
-module Drasil.Website.Website where
+module Drasil.Website.Body where
 
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,

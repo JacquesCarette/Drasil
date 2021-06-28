@@ -7,9 +7,6 @@ import Prelude hiding (sqrt)
 import Language.Drasil.Space (DomainDesc, RealInterval)
 import Language.Drasil.UID (UID)
 
--- FIXME: Haddock open issue #43 seems to make it so GADT constructors cannot
--- be documented properly
-
 -- | A relation is just an expression ('Expr').
 type Relation = Expr
 

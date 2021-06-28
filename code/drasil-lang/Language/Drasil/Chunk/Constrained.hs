@@ -77,7 +77,6 @@ instance Eq            ConstrainedQDef   where c1 == c2 = (c1 ^. qd' . uid) == (
 instance MayHaveUnit   ConstrainedQDef   where getUnit = getUnit . view qd'
 --instance MayHaveReasVal ConstrainedQDef where
 
-
 data ReasonableValueQDef = RVQD { _qd'' :: QuantityDict
                                 , reasV' :: Expr
                                 }
@@ -102,6 +101,8 @@ instance Eq            ReasonableValueQDef where c1 == c2 = (c1 ^. qd'' . uid) =
 -- ^ Finds units contained in the 'QuantityDict' used to make the 'ReasonableValueQDef'.
 instance MayHaveUnit   ReasonableValueQDef where getUnit = getUnit . view qd''
 --instance MayHaveReasVal ReasonableValueQDef where 
+instance MayHaveReasVal  ReasonableValueQDef where maybeReasVal     = Just . reasV'
+
 
 data ConstrReasQDef = CRQD { _qd''' :: QuantityDict
                            , _constr'' :: [Constraint]
@@ -124,12 +125,14 @@ instance Quantity      ConstrReasQDef where
 -- ^ Finds the 'Constraint's of a 'ConstrReasQDef'.
 instance Constrained   ConstrReasQDef where constraints = constr''
 -- ^ Finds a reasonable value for the 'ConstrReasQDef'.
-instance HasReasVal    ConstrReasQDef where reasVal     = reasV''    --couldn't match type `Expr` with `ConstrReasQDef -> f ConstrReasQDef`
+instance HasReasVal    ConstrReasQDef where reasVal     = reasV''    
 -- ^ Equal if 'UID's are equal.
 instance Eq            ConstrReasQDef where c1 == c2 = (c1 ^. qd''' . uid) == (c2 ^. qd''' . uid)
 -- ^ Finds units contained in the 'QuantityDict' used to make the 'ConstrReasQDef'.
 instance MayHaveUnit   ConstrReasQDef where getUnit = getUnit . view qd'''
 --instance MayHaveReasVal ConstrReasQDef where 
+instance MayHaveReasVal    ConstrReasQDef where maybeReasVal     = Just . ( ^. reasV'')
+
 
 -- | Creates a constrained unitary chunk from a 'UID', term ('NP'), 'Symbol', unit, 'Space', 'Constraint's, and an 'Expr'.
 cuc :: (IsUnit u) => String -> NP -> Symbol -> u

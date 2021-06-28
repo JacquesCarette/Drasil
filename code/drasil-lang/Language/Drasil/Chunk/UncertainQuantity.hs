@@ -9,7 +9,7 @@ import Language.Drasil.Chunk.Constrained (ConstrConcept(..), ConstrReasQDef, cuc
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, Quantity, HasSpace(typ),
-  IsUnit, Constrained(constraints), HasReasVal(reasVal), MayHaveReasVal(..), HasUncertainty (unc))
+  IsUnit, Constrained(constraints), MayHaveReasVal(..), HasUncertainty (unc))
 import Language.Drasil.Constraint (Constraint)
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr)
@@ -42,7 +42,7 @@ instance Quantity          UncertainChunk where
 -- ^ 'UncertainChunk's have a 'Quantity'.
 instance Constrained       UncertainChunk where constraints = conc . constraints
 -- ^ Finds the 'Constraint's of the 'ConstrainedChunk' used to make the 'UncertainChunk'.
-instance HasReasVal        UncertainChunk where reasVal = conc . reasVal
+instance MayHaveReasVal    UncertainChunk where maybeReasVal = maybeReasVal . (^. conc) 
 -- ^ Finds a reasonable value for the 'ConstrainedChunk' used to make the 'UncertainChunk'.
 instance HasUncertainty    UncertainChunk where unc = unc'
 -- ^ Finds the uncertainty of an 'UncertainChunk'.
@@ -51,9 +51,10 @@ instance MayHaveUnit       UncertainChunk where getUnit = getUnit . view conc
 
 {-- Constructors --}
 -- | Smart constructor that can project to an 'UncertainChunk' (also given an 'Uncertainty').
-uncrtnChunk :: (Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => 
+uncrtnChunk :: (Quantity c, Constrained c, MayHaveReasVal c, MayHaveUnit c) => 
   c -> Uncertainty -> UncertainChunk
 uncrtnChunk q = UCh (cnstrw q)
+-- uncrtnChunk q = UCh (constrReasQD (q ^. uid) des  (getUnit q) (q ^. typ) [Constraint] Expr)
 
 -- | Creates an uncertain variable chunk. Takes 'UID', term ('NP'),
 -- 'Symbol', 'Space', 'Constraints', 'Expr', and 'Uncertainty'.
@@ -61,7 +62,7 @@ uvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Expr -> Uncertainty ->
 uvc nam trm sym space cs val = uncrtnChunk (constrReasQDNU nam trm sym space cs val)
 
 -- | Projection function into an 'UncertainChunk' from 'UncertQ' or an 'UncertainChunk'.
-uncrtnw :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> UncertainChunk
+uncrtnw :: (HasUncertainty c, Quantity c, Constrained c, MayHaveReasVal c, MayHaveUnit c) => c -> UncertainChunk
 uncrtnw c = UCh (cnstrw c) (c ^. unc)
 
 -- | UncertQs are conceptual symbolic quantities with constraints and an 'Uncertainty'.

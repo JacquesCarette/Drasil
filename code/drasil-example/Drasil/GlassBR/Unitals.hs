@@ -42,7 +42,7 @@ glassTypeCon :: ConstrConcept
 
 inputs :: [QuantityDict]
 inputs = map qw inputsWUnitsUncrtn ++ map qw inputsWUncrtn ++ 
-  map qw inputsNoUncrtn ++ map qw sdVector
+   inputsNoUncrtn ++ map qw sdVector
 
 --inputs with units and uncertainties
 inputsWUnitsUncrtn :: [UncertQ]
@@ -61,8 +61,8 @@ derivedInsWUncrtn :: [UncertQ]
 derivedInsWUncrtn = [aspectRatio]
 
 --inputs with no uncertainties
-inputsNoUncrtn :: [ConstrReasQDef]
-inputsNoUncrtn = [cnstrw glassTypeCon, nomThick]
+inputsNoUncrtn ::[QuantityDict]
+inputsNoUncrtn = [qw glassTypeCon, qw nomThick]
 
 inputDataConstraints :: [UncertainChunk]
 inputDataConstraints = map uncrtnw inputsWUnitsUncrtn ++ 

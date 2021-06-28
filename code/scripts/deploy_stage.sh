@@ -131,7 +131,7 @@ copy_analysis() {
 }
 
 build_website() {
-  cd "$CUR_DIR"website
+  cd "$CUR_DIR/"drasil-website
   make DEPLOY_FOLDER="$CUR_DIR$DEPLOY_FOLDER" DOCS_FOLDER="$DOC_DEST" DOX_FOLDER="$DOX_DEST" EXAMPLES_FOLDER="$EXAMPLE_DEST" \
   SRS_FOLDER_FRAG="$SRS_DEST" GRAPH_FOLDER="$GRAPH_FOLDER"
   RET=$?
@@ -140,7 +140,7 @@ build_website() {
     exit 1
   fi
   cd "$CUR_DIR$DEPLOY_FOLDER"
-  cp -r "$CUR_DIR"website/_site/. .
+  cp -r "$CUR_DIR"drasil-website/Website/. .
 
   # src stubs were consumed by site generator; safe to delete those.
   rm "$EXAMPLE_DEST"*/src

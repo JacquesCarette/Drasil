@@ -1,0 +1,50 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: fb6a88d31d2fc32937214cc588e0d469a8f81ba9811ea8a56beaf8fc78baa248
+
+name:           drasil-website
+version:        0.1.0.0
+synopsis:       Using the Drasil generators to create Drasil's website
+description:    Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+homepage:       https://jacquescarette.github.io/Drasil/
+bug-reports:    https://github.com/JacquesCarette/Drasil/issues
+maintainer:     Jacques Carette
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+
+source-repository head
+  type: git
+  location: https://github.com/JacquesCarette/Drasil
+
+executable website
+  main-is: Drasil/Website/Main.hs
+  other-modules:
+      Drasil.Website.Website
+      Drasil.Website.Analysis
+      Drasil.Website.CaseStudy
+      Drasil.Website.Documentation
+      Drasil.Website.Example
+      Drasil.Website.Graphs
+      Drasil.Website.Introduction
+  hs-source-dirs:
+      ./
+  ghc-options: -Wall -Wredundant-constraints -threaded -main-is Drasil.Website.Main
+  build-depends:
+      base >=4.7 && <5
+    , directory
+    , drasil-data
+    , drasil-database
+    , drasil-docLang
+    , drasil-gen
+    , drasil-lang
+    , drasil-printers
+    , drasil-theory
+    , drasil-utils
+    , lens
+    , split
+  default-language: Haskell2010

@@ -136,10 +136,8 @@ data Expr where
   --   of an 'Expr'.  Could be called BigOp.
   --   ex: Summation is represented via 'Add' over a discrete domain.
   Operator :: AssocArithOper -> DomainDesc Expr Expr -> Expr -> Expr
-  -- | The expression is an element of a space.
-  -- IsIn     :: Expr -> Space -> Expr
-  -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
-  RealI    :: UID -> RealInterval Expr Expr -> Expr
+  -- | A different kind of 'IsIn'. An 'Expr' is an element of an interval.
+  RealI    :: Expr -> RealInterval Expr Expr -> Expr
 
 ($=), ($!=) :: Expr -> Expr -> Expr
 -- | Smart constructor for equating two expressions.

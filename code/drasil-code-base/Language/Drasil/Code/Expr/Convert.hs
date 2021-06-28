@@ -34,7 +34,7 @@ expr (L.OrdBinaryOp bo l r) = OrdBinaryOp (ordBinOp bo) (expr l) (expr r)
 expr (L.VVVBinaryOp bo l r) = VVVBinaryOp (vvvBinOp bo) (expr l) (expr r)
 expr (L.VVNBinaryOp bo l r) = VVNBinaryOp (vvnBinOp bo) (expr l) (expr r)
 expr (L.Operator aao dd e) = Operator (assocArithOp aao) (renderDomainDesc dd) (expr e)
-expr (L.RealI u ri) = RealI u (realInterval ri)
+expr (L.RealI u ri) = RealI (expr u) (realInterval ri)
 
 -- | Convert 'RealInterval Expr Expr's into 'RealInterval CodeExpr CodeExpr's.
 realInterval :: L.RealInterval L.Expr L.Expr -> L.RealInterval CodeExpr CodeExpr

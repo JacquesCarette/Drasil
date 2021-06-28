@@ -130,8 +130,8 @@ prodAll v = Operator MulRe (AllDD v Discrete)
 -- TODO: Above only does for Reals
 
 -- | Smart constructor for 'real interval' membership.
-realInterval :: HasUID c => c -> RealInterval Expr Expr -> Expr
-realInterval c = RealI (c ^. uid)
+realInterval :: (HasSymbol c, HasUID c) => c -> RealInterval Expr Expr -> Expr
+realInterval c = RealI (sy c)
 
 -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares.
 euclidean :: [Expr] -> Expr

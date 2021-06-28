@@ -177,8 +177,7 @@ codeExpr (OrdBinaryOp GEq a b)    sm = mkBOp sm P.GEq a b
 codeExpr (VVNBinaryOp Dot a b)    sm = mkBOp sm P.Dot a b
 codeExpr (VVVBinaryOp Cross a b)  sm = mkBOp sm P.Cross a b
 codeExpr (Operator o d e)         sm = eop sm o d e
-codeExpr (RealI c ri)             sm = renderRealInt sm (lookupC (sm ^. stg)
-  (sm ^. ckdb) c) ri
+codeExpr (RealI c ri)             sm = renderRealInt sm (codeExpr c sm) ri
 
 -- | Common method of converting associative operations into printable layout AST.
 assocExpr :: P.Ops -> Int -> [CodeExpr] -> PrintingInformation -> P.Expr
@@ -212,16 +211,16 @@ pow prI a@(ArithBinaryOp Pow _ _)  b = withParens prI a b
 pow prI a                          b = P.Row [codeExpr a prI, P.Sup (codeExpr b prI)]
 
 -- | Print a 'RealInterval'.
-renderRealInt :: PrintingInformation -> Symbol -> RealInterval CodeExpr CodeExpr -> P.Expr
+renderRealInt :: PrintingInformation -> P.Expr -> RealInterval CodeExpr CodeExpr -> P.Expr
 renderRealInt st s (Bounded (Inc,a) (Inc,b)) =
-  P.Row [codeExpr a st, P.MO P.LEq, symbol s, P.MO P.LEq, codeExpr b st]
+  P.Row [codeExpr a st, P.MO P.LEq, s, P.MO P.LEq, codeExpr b st]
 renderRealInt st s (Bounded (Inc,a) (Exc,b)) =
-  P.Row [codeExpr a st, P.MO P.LEq, symbol s, P.MO P.Lt, codeExpr b st]
+  P.Row [codeExpr a st, P.MO P.LEq, s, P.MO P.Lt, codeExpr b st]
 renderRealInt st s (Bounded (Exc,a) (Inc,b)) =
-  P.Row [codeExpr a st, P.MO P.Lt, symbol s, P.MO P.LEq, codeExpr b st]
+  P.Row [codeExpr a st, P.MO P.Lt, s, P.MO P.LEq, codeExpr b st]
 renderRealInt st s (Bounded (Exc,a) (Exc,b)) =
-  P.Row [codeExpr a st, P.MO P.Lt, symbol s, P.MO P.Lt, codeExpr b st]
-renderRealInt st s (UpTo (Inc,a))   = P.Row [symbol s, P.MO P.LEq, codeExpr a st]
-renderRealInt st s (UpTo (Exc,a))   = P.Row [symbol s, P.MO P.Lt,  codeExpr a st]
-renderRealInt st s (UpFrom (Inc,a)) = P.Row [symbol s, P.MO P.GEq, codeExpr a st]
-renderRealInt st s (UpFrom (Exc,a)) = P.Row [symbol s, P.MO P.Gt,  codeExpr a st]
+  P.Row [codeExpr a st, P.MO P.Lt, s, P.MO P.Lt, codeExpr b st]
+renderRealInt st s (UpTo (Inc,a))   = P.Row [s, P.MO P.LEq, codeExpr a st]
+renderRealInt st s (UpTo (Exc,a))   = P.Row [s, P.MO P.Lt,  codeExpr a st]
+renderRealInt st s (UpFrom (Inc,a)) = P.Row [s, P.MO P.GEq, codeExpr a st]
+renderRealInt st s (UpFrom (Exc,a)) = P.Row [s, P.MO P.Gt,  codeExpr a st]

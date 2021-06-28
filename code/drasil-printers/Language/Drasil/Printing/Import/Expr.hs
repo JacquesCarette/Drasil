@@ -175,8 +175,7 @@ expr (OrdBinaryOp GEq a b)    sm = mkBOp sm P.GEq a b
 expr (VVNBinaryOp Dot a b)    sm = mkBOp sm P.Dot a b
 expr (VVVBinaryOp Cross a b)  sm = mkBOp sm P.Cross a b
 expr (Operator o d e)         sm = eop sm o d e
-expr (RealI c ri)             sm = renderRealInt sm (lookupC (sm ^. stg)
-  (sm ^. ckdb) c) ri
+expr (RealI c ri)             sm = renderRealInt sm (expr c sm) ri
 
 -- | Common method of converting associative operations into printable layout AST.
 assocExpr :: P.Ops -> Int -> [Expr] -> PrintingInformation -> P.Expr
@@ -210,16 +209,16 @@ pow prI a@(ArithBinaryOp Pow _ _)  b = withParens prI a b
 pow prI a                          b = P.Row [expr a prI, P.Sup (expr b prI)]
 
 -- | Print a 'RealInterval'.
-renderRealInt :: PrintingInformation -> Symbol -> RealInterval Expr Expr -> P.Expr
-renderRealInt st s (Bounded (Inc,a) (Inc,b)) =
-  P.Row [expr a st, P.MO P.LEq, symbol s, P.MO P.LEq, expr b st]
-renderRealInt st s (Bounded (Inc,a) (Exc,b)) =
-  P.Row [expr a st, P.MO P.LEq, symbol s, P.MO P.Lt, expr b st]
-renderRealInt st s (Bounded (Exc,a) (Inc,b)) =
-  P.Row [expr a st, P.MO P.Lt, symbol s, P.MO P.LEq, expr b st]
-renderRealInt st s (Bounded (Exc,a) (Exc,b)) =
-  P.Row [expr a st, P.MO P.Lt, symbol s, P.MO P.Lt, expr b st]
-renderRealInt st s (UpTo (Inc,a))   = P.Row [symbol s, P.MO P.LEq, expr a st]
-renderRealInt st s (UpTo (Exc,a))   = P.Row [symbol s, P.MO P.Lt,  expr a st]
-renderRealInt st s (UpFrom (Inc,a)) = P.Row [symbol s, P.MO P.GEq, expr a st]
-renderRealInt st s (UpFrom (Exc,a)) = P.Row [symbol s, P.MO P.Gt,  expr a st]
+renderRealInt :: PrintingInformation -> P.Expr -> RealInterval Expr Expr -> P.Expr
+renderRealInt st s (Bounded (Inc,a) (Inc,b)) = 
+  P.Row [expr a st, P.MO P.LEq, s, P.MO P.LEq, expr b st]
+renderRealInt st s (Bounded (Inc,a) (Exc,b)) = 
+  P.Row [expr a st, P.MO P.LEq, s, P.MO P.Lt, expr b st]
+renderRealInt st s (Bounded (Exc,a) (Inc,b)) = 
+  P.Row [expr a st, P.MO P.Lt, s, P.MO P.LEq, expr b st]
+renderRealInt st s (Bounded (Exc,a) (Exc,b)) = 
+  P.Row [expr a st, P.MO P.Lt, s, P.MO P.Lt, expr b st]
+renderRealInt st s (UpTo (Inc,a))   = P.Row [s, P.MO P.LEq, expr a st]
+renderRealInt st s (UpTo (Exc,a))   = P.Row [s, P.MO P.Lt,  expr a st]
+renderRealInt st s (UpFrom (Inc,a)) = P.Row [s, P.MO P.GEq, expr a st]
+renderRealInt st s (UpFrom (Exc,a)) = P.Row [s, P.MO P.Gt,  expr a st]

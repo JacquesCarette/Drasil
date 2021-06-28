@@ -129,7 +129,5 @@ data CodeExpr where
   --   of an 'Expr'.  Could be called BigOp.
   --   ex: Summation is represented via 'Add' over a discrete domain.
   Operator :: AssocArithOper -> DomainDesc CodeExpr CodeExpr -> CodeExpr -> CodeExpr
-  -- | The expression is an element of a space.
-  -- IsIn     :: Expr -> Space -> Expr
-  -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
-  RealI    :: UID -> RealInterval CodeExpr CodeExpr -> CodeExpr
+  -- | A different kind of 'IsIn'. A 'CodeExpr' is an element of an interval.
+  RealI    :: CodeExpr -> RealInterval CodeExpr CodeExpr -> CodeExpr

@@ -40,7 +40,7 @@ eNames (VVVBinaryOp _ a b)   = eNames a ++ eNames b
 eNames (VVNBinaryOp _ a b)   = eNames a ++ eNames b
 eNames (Operator _ _ e)      = eNames e
 eNames (Matrix a)            = concatMap (concatMap eNames) a
-eNames (RealI c b)           = c : eNamesRI b
+eNames (RealI c b)           = eNames c ++ eNamesRI b
 
 -- | Generic traversal of everything that could come from an interval to names (similar to 'eNames').
 eNamesRI :: RealInterval CodeExpr CodeExpr -> [String]
@@ -82,7 +82,7 @@ eNames' (VVVBinaryOp _ a b)   = eNames' a ++ eNames' b
 eNames' (VVNBinaryOp _ a b)   = eNames' a ++ eNames' b
 eNames' (Operator _ _ e)      = eNames' e
 eNames' (Matrix a)            = concatMap (concatMap eNames') a
-eNames' (RealI c b)           = c : eNamesRI' b
+eNames' (RealI c b)           = eNames' c ++ eNamesRI' b
 
 -- | Generic traversal of everything that could come from an interval to names without functions (similar to 'eNames'').
 eNamesRI' :: RealInterval CodeExpr CodeExpr -> [String]

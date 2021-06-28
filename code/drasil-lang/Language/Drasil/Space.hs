@@ -43,7 +43,6 @@ data Inclusive = Inc | Exc
 
 -- | A RealInterval is a subset of 'Real' (as a 'Space').
 -- These come in different flavours.
--- For now, we embed 'Expr' for the bounds, but that will change as well.
 data RealInterval a b where
   Bounded :: (Inclusive, a) -> (Inclusive, b) -> RealInterval a b -- ^ Interval from (x .. y).
   UpTo    :: (Inclusive, a) -> RealInterval a b                   -- ^ Interval from (-infinity .. x).

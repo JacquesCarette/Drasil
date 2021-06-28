@@ -346,9 +346,7 @@ convExpr (Matrix [l]) = do
   return $ litArray (fmap valueType (head ar)) ar
 convExpr Matrix{} = error "convExpr: Matrix"
 convExpr Operator{} = error "convExpr: Operator"
-convExpr (RealI c ri)  = do
-  g <- get
-  convExpr $ renderRealInt (lookupC g c) ri
+convExpr (RealI c ri)  = convExpr $ renderRealInt c ri
 
 -- | Generates a function/method call, based on the 'UID' of the chunk representing
 -- the function, the list of argument 'Expr's, the list of named argument 'Expr's,
@@ -377,20 +375,20 @@ convCall c x ns f libf = do
   
 -- | Converts a 'Constraint' to a 'CodeExpr'.
 renderC :: (HasUID c, HasSymbol c) => c -> Constraint CodeExpr -> CodeExpr
-renderC s (Range _ rr)         = renderRealInt s rr
+renderC s (Range _ rr)         = renderRealInt (sy s) rr
 renderC _ (EnumeratedReal _ _) = error "EnumeratedReal IsIn not supported yet" -- IsIn (sy s) (DiscreteD rr)
 renderC _ (EnumeratedStr  _ _) = error "EnumeratedStr IsIn not supported yet" -- IsIn (sy s) (DiscreteS rr)
 
 -- | Converts an interval ('RealInterval') to a 'CodeExpr'.
-renderRealInt :: (HasUID c, HasSymbol c) => c -> RealInterval CodeExpr CodeExpr -> CodeExpr
-renderRealInt s (Bounded (Inc, a) (Inc, b)) = (a $<= sy s) $&& (sy s $<= b)
-renderRealInt s (Bounded (Inc, a) (Exc, b)) = (a $<= sy s) $&& (sy s $<  b)
-renderRealInt s (Bounded (Exc, a) (Inc, b)) = (a $<  sy s) $&& (sy s $<= b)
-renderRealInt s (Bounded (Exc, a) (Exc, b)) = (a $<  sy s) $&& (sy s $<  b)
-renderRealInt s (UpTo    (Inc, a))          = sy s $<= a
-renderRealInt s (UpTo    (Exc, a))          = sy s $<  a
-renderRealInt s (UpFrom  (Inc, a))          = sy s $>= a
-renderRealInt s (UpFrom  (Exc, a))          = sy s $>  a
+renderRealInt :: CodeExpr -> RealInterval CodeExpr CodeExpr -> CodeExpr
+renderRealInt s (Bounded (Inc, a) (Inc, b)) = (a $<= s) $&& (s $<= b)
+renderRealInt s (Bounded (Inc, a) (Exc, b)) = (a $<= s) $&& (s $<  b)
+renderRealInt s (Bounded (Exc, a) (Inc, b)) = (a $<  s) $&& (s $<= b)
+renderRealInt s (Bounded (Exc, a) (Exc, b)) = (a $<  s) $&& (s $<  b)
+renderRealInt s (UpTo    (Inc, a))          = s $<= a
+renderRealInt s (UpTo    (Exc, a))          = s $<  a
+renderRealInt s (UpFrom  (Inc, a))          = s $>= a
+renderRealInt s (UpFrom  (Exc, a))          = s $>  a
 
 -- | Maps a 'UFunc' to the corresponding GOOL unary function.
 unop :: (OOProg r) => UFunc -> (SValue r -> SValue r)

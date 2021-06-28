@@ -118,11 +118,11 @@ exp = UnaryOp Exp
 
 -- | Smart constructor for calculating the dimension of a vector.
 dim :: CodeExpr -> CodeExpr
-dim = UnaryOpVec Dim
+dim = UnaryOpVN Dim
 
 -- | Smart constructor for calculating the normal form of a vector.
 norm :: CodeExpr -> CodeExpr
-norm = UnaryOpVec Norm
+norm = UnaryOpVN Norm
 
 -- | Smart constructor for applying logical negation to an expression.
 not_ :: CodeExpr -> CodeExpr

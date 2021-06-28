@@ -4,7 +4,7 @@ module Language.Drasil.Code.Expr.Development (
     CodeExpr(..), 
     ArithBinOp(..), EqBinOp(..), BoolBinOp(..), LABinOp(..), OrdBinOp(..),
     VVVBinOp(..), VVNBinOp(..), AssocArithOper(..), AssocBoolOper(..),
-    UFunc(..), UFuncB(..), UFuncVec(..),
+    UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
     -- Extract
     eDep, eDep',
     eNamesRI, eNamesRI',
@@ -14,8 +14,9 @@ module Language.Drasil.Code.Expr.Development (
     expr, realInterval, constraint
 ) where
 
-import Language.Drasil.Code.Expr (CodeExpr(..), UFuncVec(..), UFuncB(..),
-    UFunc(..), AssocBoolOper(..), AssocArithOper(..), VVNBinOp(..),
+import Language.Drasil.Code.Expr (CodeExpr(..),
+    UFuncVV(..), UFuncVN(..), UFuncB(..), UFunc(..),
+    AssocBoolOper(..), AssocArithOper(..), VVNBinOp(..),
     VVVBinOp(..), OrdBinOp(..), LABinOp(..), BoolBinOp(..), EqBinOp(..),
     ArithBinOp(..))
 import Language.Drasil.Code.Expr.Extract (eDep, eDep', eNamesRI, eNamesRI')

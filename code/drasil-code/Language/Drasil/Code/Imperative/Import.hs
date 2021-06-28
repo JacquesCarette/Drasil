@@ -12,7 +12,7 @@ import Database.Drasil (symbResolve)
 import Language.Drasil.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&))
 import Language.Drasil.Code.Expr.Development (CodeExpr(..), ArithBinOp(..),
   AssocArithOper(..), AssocBoolOper(..), BoolBinOp(..), EqBinOp(..),
-  LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncVec(..),
+  LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
   VVNBinOp(..), VVVBinOp(..))
 import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
@@ -320,7 +320,8 @@ convExpr (Field o f) = do
   return $ valueOf v
 convExpr (UnaryOp o u)    = fmap (unop o) (convExpr u)
 convExpr (UnaryOpB o u)   = fmap (unopB o) (convExpr u)
-convExpr (UnaryOpVec o u) = fmap (unopVec o) (convExpr u)
+convExpr (UnaryOpVV o u)  = fmap (unopVV o) (convExpr u)
+convExpr (UnaryOpVN o u)  = fmap (unopVN o) (convExpr u)
 convExpr (ArithBinaryOp Frac (Int a) (Int b)) = do -- hack to deal with integer division
   sm <- spaceCodeType Rational
   let getLiteral Double = litDouble (fromIntegral a) #/ litDouble (fromIntegral b)
@@ -415,9 +416,13 @@ unopB :: (OOProg r) => UFuncB -> (SValue r -> SValue r)
 unopB Not = (?!)
 
 -- | Similar to 'unop', but for vectors.
-unopVec :: (OOProg r) => UFuncVec -> (SValue r -> SValue r)
-unopVec Dim = listSize
-unopVec Norm = error "unop: Norm not implemented" -- TODO
+unopVN :: (OOProg r) => UFuncVN -> (SValue r -> SValue r)
+unopVN Dim = listSize
+unopVN Norm = error "unop: Norm not implemented" -- TODO
+
+-- | Similar to 'unop', but for vectors.
+unopVV :: (OOProg r) => UFuncVV -> (SValue r -> SValue r)
+unopVV NegV = error "unop: Negation on Vectors not implemented" -- TODO
 
 -- Maps an 'ArithBinOp' to it's corresponding GOOL binary function.
 arithBfunc :: (OOProg r) => ArithBinOp -> (SValue r -> SValue r -> SValue r)

@@ -17,7 +17,7 @@
 </span><span id="line-15"></span><span id="invs"><span id="con"><span class="hs-identifier">makeLenses</span><span> </span><span class="hs-special">''</span><span class="hs-identifier">ConstraintSet</span></span></span><span>
 </span><span id="line-16"></span><span>
 </span><span id="line-17"></span><span class="hs-comment">-- | Finds the 'UID' of the 'ConstraintSet'.</span><span>
-</span><span id="line-18"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span>        </span><span class="annot"><a href="Theory.Drasil.ConstraintSet.html#ConstraintSet"><span class="hs-identifier hs-type">ConstraintSet</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137340"><span class="annot"><span class="annottext">uid :: (UID -&gt; f UID) -&gt; ConstraintSet -&gt; f ConstraintSet
+</span><span id="line-18"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span>        </span><span class="annot"><a href="Theory.Drasil.ConstraintSet.html#ConstraintSet"><span class="hs-identifier hs-type">ConstraintSet</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137305"><span class="annot"><span class="annottext">uid :: (UID -&gt; f UID) -&gt; ConstraintSet -&gt; f ConstraintSet
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">uid</span></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ConceptChunk -&gt; f ConceptChunk)
 -&gt; ConstraintSet -&gt; f ConstraintSet
 Lens' ConstraintSet ConceptChunk
@@ -32,7 +32,7 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall c. HasUID c =&gt; Lens' c UID
 </span><span class="hs-identifier hs-var">uid</span></span><span>
 </span><span id="line-19"></span><span class="hs-comment">-- | Finds the term ('NP') of the 'ConstraintSet'.</span><span>
-</span><span id="line-20"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span>     </span><span class="annot"><a href="Theory.Drasil.ConstraintSet.html#ConstraintSet"><span class="hs-identifier hs-type">ConstraintSet</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137334"><span class="annot"><span class="annottext">term :: (NP -&gt; f NP) -&gt; ConstraintSet -&gt; f ConstraintSet
+</span><span id="line-20"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span>     </span><span class="annot"><a href="Theory.Drasil.ConstraintSet.html#ConstraintSet"><span class="hs-identifier hs-type">ConstraintSet</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137299"><span class="annot"><span class="annottext">term :: (NP -&gt; f NP) -&gt; ConstraintSet -&gt; f ConstraintSet
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">term</span></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ConceptChunk -&gt; f ConceptChunk)
 -&gt; ConstraintSet -&gt; f ConstraintSet
 Lens' ConstraintSet ConceptChunk
@@ -47,7 +47,7 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall c. NamedIdea c =&gt; Lens' c NP
 </span><span class="hs-identifier hs-var">term</span></span><span>
 </span><span id="line-21"></span><span class="hs-comment">-- | Finds the idea of the 'ConstraintSet'.</span><span>
-</span><span id="line-22"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span>          </span><span class="annot"><a href="Theory.Drasil.ConstraintSet.html#ConstraintSet"><span class="hs-identifier hs-type">ConstraintSet</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137329"><span class="annot"><span class="annottext">getA :: ConstraintSet -&gt; Maybe UID
+</span><span id="line-22"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span>          </span><span class="annot"><a href="Theory.Drasil.ConstraintSet.html#ConstraintSet"><span class="hs-identifier hs-type">ConstraintSet</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137294"><span class="annot"><span class="annottext">getA :: ConstraintSet -&gt; Maybe UID
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">getA</span></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Maybe UID
 forall c. Idea c =&gt; c -&gt; Maybe UID
 </span><span class="hs-identifier hs-var">getA</span></span><span> </span><span class="annot"><span class="annottext">(ConceptChunk -&gt; Maybe UID)
@@ -60,7 +60,7 @@ forall s a. s -&gt; Getting a s a -&gt; a
 Lens' ConstraintSet ConceptChunk
 </span><a href="Theory.Drasil.ConstraintSet.html#con"><span class="hs-identifier hs-var">con</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-23"></span><span class="hs-comment">-- | Finds the definition of the 'ConstraintSet'.</span><span>
-</span><span id="line-24"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Definition</span></span><span>    </span><span class="annot"><a href="Theory.Drasil.ConstraintSet.html#ConstraintSet"><span class="hs-identifier hs-type">ConstraintSet</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137325"><span class="annot"><span class="annottext">defn :: (Sentence -&gt; f Sentence) -&gt; ConstraintSet -&gt; f ConstraintSet
+</span><span id="line-24"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Definition</span></span><span>    </span><span class="annot"><a href="Theory.Drasil.ConstraintSet.html#ConstraintSet"><span class="hs-identifier hs-type">ConstraintSet</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137290"><span class="annot"><span class="annottext">defn :: (Sentence -&gt; f Sentence) -&gt; ConstraintSet -&gt; f ConstraintSet
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">defn</span></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ConceptChunk -&gt; f ConceptChunk)
 -&gt; ConstraintSet -&gt; f ConstraintSet
 Lens' ConstraintSet ConceptChunk
@@ -75,7 +75,7 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall c. Definition c =&gt; Lens' c Sentence
 </span><span class="hs-identifier hs-var">defn</span></span><span>
 </span><span id="line-25"></span><span class="hs-comment">-- | Finds the domain of the 'ConstraintSet'.</span><span>
-</span><span id="line-26"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptDomain</span></span><span> </span><span class="annot"><a href="Theory.Drasil.ConstraintSet.html#ConstraintSet"><span class="hs-identifier hs-type">ConstraintSet</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137321"><span class="annot"><span class="annottext">cdom :: ConstraintSet -&gt; [UID]
+</span><span id="line-26"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptDomain</span></span><span> </span><span class="annot"><a href="Theory.Drasil.ConstraintSet.html#ConstraintSet"><span class="hs-identifier hs-type">ConstraintSet</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137286"><span class="annot"><span class="annottext">cdom :: ConstraintSet -&gt; [UID]
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">cdom</span></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; [UID]
 forall c. ConceptDomain c =&gt; c -&gt; [UID]
 </span><span class="hs-identifier hs-var">cdom</span></span><span> </span><span class="annot"><span class="annottext">(ConceptChunk -&gt; [UID])
@@ -90,7 +90,7 @@ Lens' ConstraintSet ConceptChunk
 </span><span id="line-27"></span><span class="hs-comment">-- | The complete DisplayExpr of a ConstraintSet is the logical conjunction of</span><span>
 </span><span id="line-28"></span><span class="hs-comment">--   all the underlying relations (e.g., `a $&amp;&amp; b $&amp;&amp; ... $&amp;&amp; z`).</span><span>
 </span><span id="line-29"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Display</span></span><span>       </span><span class="annot"><a href="Theory.Drasil.ConstraintSet.html#ConstraintSet"><span class="hs-identifier hs-type">ConstraintSet</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-30"></span><span>    </span><span id="local-6989586621679137317"><span class="annot"><span class="annottext">toDispExpr :: ConstraintSet -&gt; DisplayExpr
+</span><span id="line-30"></span><span>    </span><span id="local-6989586621679137282"><span class="annot"><span class="annottext">toDispExpr :: ConstraintSet -&gt; DisplayExpr
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">toDispExpr</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DisplayExpr] -&gt; DisplayExpr
 forall d. Display d =&gt; [d] -&gt; DisplayExpr
 </span><span class="hs-identifier hs-var">andDEs</span></span><span> </span><span class="annot"><span class="annottext">([DisplayExpr] -&gt; DisplayExpr)

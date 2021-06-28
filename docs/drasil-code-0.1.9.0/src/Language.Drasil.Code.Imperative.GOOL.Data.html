@@ -26,11 +26,11 @@
 </span><span id="line-20"></span><span class="hs-comment">-- | Constructor for package data.</span><span>
 </span><span id="line-21"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.Data.html#packD"><span class="hs-identifier hs-type">packD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ProgData</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.Data.html#AuxData"><span class="hs-identifier hs-type">AuxData</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.Data.html#PackData"><span class="hs-identifier hs-type">PackData</span></a></span><span>
 </span><span id="line-22"></span><span id="packD"><span class="annot"><span class="annottext">packD :: ProgData -&gt; [AuxData] -&gt; PackData
-</span><a href="Language.Drasil.Code.Imperative.GOOL.Data.html#packD"><span class="hs-identifier hs-var hs-var">packD</span></a></span></span><span> </span><span id="local-6989586621679329854"><span class="annot"><span class="annottext">p :: ProgData
-</span><a href="#local-6989586621679329854"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679329853"><span class="annot"><span class="annottext">as :: [AuxData]
-</span><a href="#local-6989586621679329853"><span class="hs-keyword hs-var">as</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ProgData -&gt; [AuxData] -&gt; PackData
+</span><a href="Language.Drasil.Code.Imperative.GOOL.Data.html#packD"><span class="hs-identifier hs-var hs-var">packD</span></a></span></span><span> </span><span id="local-6989586621679320359"><span class="annot"><span class="annottext">p :: ProgData
+</span><a href="#local-6989586621679320359"><span class="hs-identifier hs-var">p</span></a></span></span><span> </span><span id="local-6989586621679320358"><span class="annot"><span class="annottext">as :: [AuxData]
+</span><a href="#local-6989586621679320358"><span class="hs-keyword hs-var">as</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ProgData -&gt; [AuxData] -&gt; PackData
 </span><a href="Language.Drasil.Code.Imperative.GOOL.Data.html#PackD"><span class="hs-identifier hs-var">PackD</span></a></span><span> </span><span class="annot"><span class="annottext">ProgData
-</span><a href="#local-6989586621679329854"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(AuxData -&gt; Bool) -&gt; [AuxData] -&gt; [AuxData]
+</span><a href="#local-6989586621679320359"><span class="hs-identifier hs-var">p</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(AuxData -&gt; Bool) -&gt; [AuxData] -&gt; [AuxData]
 forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">filter</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Bool -&gt; Bool
 </span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Bool) -&gt; (AuxData -&gt; Bool) -&gt; AuxData -&gt; Bool
@@ -40,5 +40,5 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">AuxData -&gt; Doc
 </span><a href="Language.Drasil.Code.Imperative.GOOL.Data.html#auxDoc"><span class="hs-identifier hs-var hs-var">auxDoc</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[AuxData]
-</span><a href="#local-6989586621679329853"><span class="hs-keyword hs-var">as</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679320358"><span class="hs-keyword hs-var">as</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-23"></span></pre></body></html>

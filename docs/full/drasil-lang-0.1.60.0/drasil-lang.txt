@@ -668,25 +668,6 @@ data Expr
 --   </ul>
 [FCall] :: UID -> [Expr] -> [(UID, Expr)] -> Expr
 
--- | Actor creation given <a>UID</a>, parameters, and named parameters.
-[New] :: UID -> [Expr] -> [(UID, Expr)] -> Expr
-
--- | Message an actor:
---   
---   <ul>
---   <li>1st <a>UID</a> is the actor,</li>
---   <li>2nd <a>UID</a> is the method.</li>
---   </ul>
-[Message] :: UID -> UID -> [Expr] -> [(UID, Expr)] -> Expr
-
--- | Access a field of an actor:
---   
---   <ul>
---   <li>1st <a>UID</a> is the actor,</li>
---   <li>2nd <a>UID</a> is the field.</li>
---   </ul>
-[Field] :: UID -> UID -> Expr
-
 -- | For multi-case expressions, each pair represents one case.
 [Case] :: Completeness -> [(Expr, Relation)] -> Expr
 
@@ -970,12 +951,15 @@ module Language.Drasil.Constraint
 
 -- | Holds constraints. May occur between an interval of <a>Expr</a>, a
 --   list of <a>Double</a>s, or a list of <a>String</a>s.
-data Constraint
+data Constraint a
 
 -- | By default, physical and software constraints are ranges.
-[Range] :: ConstraintReason -> RealInterval Expr Expr -> Constraint
-[EnumeratedReal] :: ConstraintReason -> [Double] -> Constraint
-[EnumeratedStr] :: ConstraintReason -> [String] -> Constraint
+[Range] :: ConstraintReason -> RealInterval a a -> Constraint a
+[EnumeratedReal] :: ConstraintReason -> [Double] -> Constraint a
+[EnumeratedStr] :: ConstraintReason -> [String] -> Constraint a
+
+-- | Type synonym for <a>ConstraintE</a>
+type ConstraintE = Constraint Expr
 
 -- | The reason behind the constraint's existence.
 data ConstraintReason
@@ -984,23 +968,23 @@ Software :: ConstraintReason
 
 -- | Smart constructor for range of <a>Physical</a> constraints between two
 --   given expressions.
-physc :: RealInterval Expr Expr -> Constraint
+physc :: RealInterval Expr Expr -> ConstraintE
 
 -- | Smart constructor for range of <a>Software</a> constraints between two
 --   given expressions.
-sfwrc :: RealInterval Expr Expr -> Constraint
+sfwrc :: RealInterval Expr Expr -> ConstraintE
 
 -- | Smart constructor for enumeration of values, default reason for
 --   constraint is <a>Physical</a>.
-enumc :: [Double] -> Constraint
+enumc :: [Double] -> ConstraintE
 
 -- | Helpful for filtering for Physical constraints. True if constraint is
 --   <a>Physical</a>.
-isPhysC :: Constraint -> Bool
+isPhysC :: Constraint e -> Bool
 
 -- | Helpful for filtering for Software constraints. True if constraint is
 --   <a>Software</a>.
-isSfwrC :: Constraint -> Bool
+isSfwrC :: Constraint e -> Bool
 
 module Language.Drasil.Display
 
@@ -2637,8 +2621,8 @@ cdom :: ConceptDomain c => c -> [UID]
 --   It does not enforce <a>Quantity</a> at this point.
 class Constrained c
 
--- | Provides a <tt>Lens</tt> to the <a>Constraint</a>s.
-constraints :: Constrained c => Lens' c [Constraint]
+-- | Provides a <tt>Lens</tt> to the <tt>Constraint</tt>s.
+constraints :: Constrained c => Lens' c [ConstraintE]
 
 -- | CommonIdea is a <a>NamedIdea</a> with the additional constraint that
 --   it <b>must</b> have an abbreviation.
@@ -3498,21 +3482,21 @@ instance Language.Drasil.DisplayClasses.Display Language.Drasil.Chunk.Unital.Uni
 module Language.Drasil.Chunk.Constrained
 
 -- | ConstrainedChunks are symbolic quantities (<a>QuantityDict</a>) with
---   <a>Constraint</a>s and maybe a typical value (<a>Maybe</a>
+--   <tt>Constraint</tt>s and maybe a typical value (<a>Maybe</a>
 --   <a>Expr</a>).
 data ConstrainedChunk
-ConstrainedChunk :: QuantityDict -> [Constraint] -> Maybe Expr -> ConstrainedChunk
+ConstrainedChunk :: QuantityDict -> [ConstraintE] -> Maybe Expr -> ConstrainedChunk
 [_qd] :: ConstrainedChunk -> QuantityDict
-[_constr] :: ConstrainedChunk -> [Constraint]
+[_constr] :: ConstrainedChunk -> [ConstraintE]
 [_reasV] :: ConstrainedChunk -> Maybe Expr
 
 -- | ConstrConcepts are conceptual symbolic quantities
---   (<a>DefinedQuantityDict</a>) with <a>Constraint</a>s and maybe a
+--   (<a>DefinedQuantityDict</a>) with <tt>Constraint</tt>s and maybe a
 --   reasonable value (no units!).
 data ConstrConcept
-ConstrConcept :: DefinedQuantityDict -> [Constraint] -> Maybe Expr -> ConstrConcept
+ConstrConcept :: DefinedQuantityDict -> [ConstraintE] -> Maybe Expr -> ConstrConcept
 [_defq] :: ConstrConcept -> DefinedQuantityDict
-[_constr'] :: ConstrConcept -> [Constraint]
+[_constr'] :: ConstrConcept -> [ConstraintE]
 [_reasV'] :: ConstrConcept -> Maybe Expr
 
 -- | Creates a new ConstrainedChunk from either a <a>ConstrainedChunk</a>,
@@ -3523,31 +3507,31 @@ cnstrw :: (Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> Const
 cnstrw' :: (Quantity c, Concept c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> ConstrConcept
 
 -- | Creates a <a>ConstrConcept</a> with a quantitative concept, a list of
---   <a>Constraint</a>s and an <a>Expr</a>.
-constrained' :: (Concept c, MayHaveUnit c, Quantity c) => c -> [Constraint] -> Expr -> ConstrConcept
+--   <tt>Constraint</tt>s and an <a>Expr</a>.
+constrained' :: (Concept c, MayHaveUnit c, Quantity c) => c -> [ConstraintE] -> Expr -> ConstrConcept
 
 -- | Similar to <a>constrained'</a>, but defaults <a>Maybe</a> <a>Expr</a>
 --   to <a>Nothing</a>.
-constrainedNRV' :: (Concept c, MayHaveUnit c, Quantity c) => c -> [Constraint] -> ConstrConcept
+constrainedNRV' :: (Concept c, MayHaveUnit c, Quantity c) => c -> [ConstraintE] -> ConstrConcept
 
 -- | Creates a constrained unitary chunk from a <tt>UID</tt>, term
---   (<a>NP</a>), <a>Symbol</a>, unit, <a>Space</a>, <a>Constraint</a>s,
+--   (<a>NP</a>), <a>Symbol</a>, unit, <a>Space</a>, <tt>Constraint</tt>s,
 --   and an <a>Expr</a>.
-cuc :: IsUnit u => String -> NP -> Symbol -> u -> Space -> [Constraint] -> Expr -> ConstrainedChunk
+cuc :: IsUnit u => String -> NP -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> ConstrainedChunk
 
 -- | Creates a constrained unitary chunk from a <tt>UID</tt>, term
 --   (<a>NP</a>), description (<a>String</a>), <a>Symbol</a>, unit,
---   <a>Space</a>, <a>Constraint</a>s, and an <a>Expr</a>.
-cuc' :: IsUnit u => String -> NP -> String -> Symbol -> u -> Space -> [Constraint] -> Expr -> ConstrConcept
+--   <a>Space</a>, <tt>Constraint</tt>s, and an <a>Expr</a>.
+cuc' :: IsUnit u => String -> NP -> String -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> ConstrConcept
 
 -- | Similar to <a>cuc'</a>, but <a>Symbol</a> is dependent on
 --   <a>Stage</a>.
-cuc'' :: IsUnit u => String -> NP -> String -> (Stage -> Symbol) -> u -> Space -> [Constraint] -> Expr -> ConstrConcept
+cuc'' :: IsUnit u => String -> NP -> String -> (Stage -> Symbol) -> u -> Space -> [ConstraintE] -> Expr -> ConstrConcept
 
 -- | Creates a constrained unitary chunk from a <tt>UID</tt>, term
---   (<a>NP</a>), <a>Symbol</a>, <a>Space</a>, <a>Constraint</a>s, and a
+--   (<a>NP</a>), <a>Symbol</a>, <a>Space</a>, <tt>Constraint</tt>s, and a
 --   <a>Maybe</a> <a>Expr</a> (Similar to <a>cuc</a> but no units).
-cvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Maybe Expr -> ConstrainedChunk
+cvc :: String -> NP -> Symbol -> Space -> [ConstraintE] -> Maybe Expr -> ConstrainedChunk
 instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.Constrained.ConstrConcept
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.Constrained.ConstrConcept
 instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.Constrained.ConstrConcept
@@ -3592,10 +3576,10 @@ UCh :: ConstrainedChunk -> Uncertainty -> UncertainChunk
 uq :: (Quantity c, Constrained c, Concept c, HasReasVal c, MayHaveUnit c) => c -> Uncertainty -> UncertQ
 
 -- | Uncertainty quantity (<a>uq</a>) but with a constraint.
-uqc :: IsUnit u => String -> NP -> String -> Symbol -> u -> Space -> [Constraint] -> Expr -> Uncertainty -> UncertQ
+uqc :: IsUnit u => String -> NP -> String -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> Uncertainty -> UncertQ
 
 -- | Uncertainty quantity constraint (<a>uqc</a>) without a description.
-uqcND :: IsUnit u => String -> NP -> Symbol -> u -> Space -> [Constraint] -> Expr -> Uncertainty -> UncertQ
+uqcND :: IsUnit u => String -> NP -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> Uncertainty -> UncertQ
 
 -- | Smart constructor that can project to an <a>UncertainChunk</a> (also
 --   given an <a>Uncertainty</a>).
@@ -3604,7 +3588,7 @@ uncrtnChunk :: (Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> 
 -- | Creates an uncertain variable chunk. Takes <tt>UID</tt>, term
 --   (<a>NP</a>), <a>Symbol</a>, <a>Space</a>, <tt>Constrains</tt>,
 --   <a>Expr</a>, and <a>Uncertainty</a>.
-uvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Expr -> Uncertainty -> UncertainChunk
+uvc :: String -> NP -> Symbol -> Space -> [ConstraintE] -> Expr -> Uncertainty -> UncertainChunk
 
 -- | Projection function into an <a>UncertainChunk</a> from <a>UncertQ</a>
 --   or an <a>UncertainChunk</a>.
@@ -3679,25 +3663,6 @@ data Expr
 --   <li>F(x,n=y) would be (FCall F [x] [(n,y)]).</li>
 --   </ul>
 [FCall] :: UID -> [Expr] -> [(UID, Expr)] -> Expr
-
--- | Actor creation given <a>UID</a>, parameters, and named parameters.
-[New] :: UID -> [Expr] -> [(UID, Expr)] -> Expr
-
--- | Message an actor:
---   
---   <ul>
---   <li>1st <a>UID</a> is the actor,</li>
---   <li>2nd <a>UID</a> is the method.</li>
---   </ul>
-[Message] :: UID -> UID -> [Expr] -> [(UID, Expr)] -> Expr
-
--- | Access a field of an actor:
---   
---   <ul>
---   <li>1st <a>UID</a> is the actor,</li>
---   <li>2nd <a>UID</a> is the field.</li>
---   </ul>
-[Field] :: UID -> UID -> Expr
 
 -- | For multi-case expressions, each pair represents one case.
 [Case] :: Completeness -> [(Expr, Relation)] -> Expr
@@ -4218,8 +4183,8 @@ abrv :: CommonIdea c => c -> String
 --   It does not enforce <a>Quantity</a> at this point.
 class Constrained c
 
--- | Provides a <tt>Lens</tt> to the <a>Constraint</a>s.
-constraints :: Constrained c => Lens' c [Constraint]
+-- | Provides a <tt>Lens</tt> to the <tt>Constraint</tt>s.
+constraints :: Constrained c => Lens' c [ConstraintE]
 
 -- | A better version of <tt>ExprRelat</tt> that holds an <a>Expr</a>.
 class DefiningExpr c
@@ -4329,32 +4294,35 @@ nw :: Idea c => c -> IdeaDict
 
 -- | Smart constructor for range of <a>Physical</a> constraints between two
 --   given expressions.
-physc :: RealInterval Expr Expr -> Constraint
+physc :: RealInterval Expr Expr -> ConstraintE
 
 -- | Smart constructor for range of <a>Software</a> constraints between two
 --   given expressions.
-sfwrc :: RealInterval Expr Expr -> Constraint
+sfwrc :: RealInterval Expr Expr -> ConstraintE
 
 -- | Smart constructor for enumeration of values, default reason for
 --   constraint is <a>Physical</a>.
-enumc :: [Double] -> Constraint
+enumc :: [Double] -> ConstraintE
 
 -- | Helpful for filtering for Physical constraints. True if constraint is
 --   <a>Physical</a>.
-isPhysC :: Constraint -> Bool
+isPhysC :: Constraint e -> Bool
 
 -- | Helpful for filtering for Software constraints. True if constraint is
 --   <a>Software</a>.
-isSfwrC :: Constraint -> Bool
+isSfwrC :: Constraint e -> Bool
 
 -- | Holds constraints. May occur between an interval of <a>Expr</a>, a
 --   list of <a>Double</a>s, or a list of <a>String</a>s.
-data Constraint
+data Constraint a
 
 -- | By default, physical and software constraints are ranges.
-[Range] :: ConstraintReason -> RealInterval Expr Expr -> Constraint
-[EnumeratedReal] :: ConstraintReason -> [Double] -> Constraint
-[EnumeratedStr] :: ConstraintReason -> [String] -> Constraint
+[Range] :: ConstraintReason -> RealInterval a a -> Constraint a
+[EnumeratedReal] :: ConstraintReason -> [Double] -> Constraint a
+[EnumeratedStr] :: ConstraintReason -> [String] -> Constraint a
+
+-- | Type synonym for <a>ConstraintE</a>
+type ConstraintE = Constraint Expr
 
 -- | The reason behind the constraint's existence.
 data ConstraintReason
@@ -4362,49 +4330,49 @@ Physical :: ConstraintReason
 Software :: ConstraintReason
 
 -- | ConstrainedChunks are symbolic quantities (<a>QuantityDict</a>) with
---   <a>Constraint</a>s and maybe a typical value (<a>Maybe</a>
+--   <tt>Constraint</tt>s and maybe a typical value (<a>Maybe</a>
 --   <a>Expr</a>).
 data ConstrainedChunk
-ConstrainedChunk :: QuantityDict -> [Constraint] -> Maybe Expr -> ConstrainedChunk
+ConstrainedChunk :: QuantityDict -> [ConstraintE] -> Maybe Expr -> ConstrainedChunk
 [_qd] :: ConstrainedChunk -> QuantityDict
-[_constr] :: ConstrainedChunk -> [Constraint]
+[_constr] :: ConstrainedChunk -> [ConstraintE]
 [_reasV] :: ConstrainedChunk -> Maybe Expr
 
 -- | ConstrConcepts are conceptual symbolic quantities
---   (<a>DefinedQuantityDict</a>) with <a>Constraint</a>s and maybe a
+--   (<a>DefinedQuantityDict</a>) with <tt>Constraint</tt>s and maybe a
 --   reasonable value (no units!).
 data ConstrConcept
-ConstrConcept :: DefinedQuantityDict -> [Constraint] -> Maybe Expr -> ConstrConcept
+ConstrConcept :: DefinedQuantityDict -> [ConstraintE] -> Maybe Expr -> ConstrConcept
 [_defq] :: ConstrConcept -> DefinedQuantityDict
-[_constr'] :: ConstrConcept -> [Constraint]
+[_constr'] :: ConstrConcept -> [ConstraintE]
 [_reasV'] :: ConstrConcept -> Maybe Expr
 
 -- | Creates a constrained unitary chunk from a <tt>UID</tt>, term
---   (<a>NP</a>), <a>Symbol</a>, unit, <a>Space</a>, <a>Constraint</a>s,
+--   (<a>NP</a>), <a>Symbol</a>, unit, <a>Space</a>, <tt>Constraint</tt>s,
 --   and an <a>Expr</a>.
-cuc :: IsUnit u => String -> NP -> Symbol -> u -> Space -> [Constraint] -> Expr -> ConstrainedChunk
+cuc :: IsUnit u => String -> NP -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> ConstrainedChunk
 
 -- | Creates a constrained unitary chunk from a <tt>UID</tt>, term
---   (<a>NP</a>), <a>Symbol</a>, <a>Space</a>, <a>Constraint</a>s, and a
+--   (<a>NP</a>), <a>Symbol</a>, <a>Space</a>, <tt>Constraint</tt>s, and a
 --   <a>Maybe</a> <a>Expr</a> (Similar to <a>cuc</a> but no units).
-cvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Maybe Expr -> ConstrainedChunk
+cvc :: String -> NP -> Symbol -> Space -> [ConstraintE] -> Maybe Expr -> ConstrainedChunk
 
 -- | Creates a <a>ConstrConcept</a> with a quantitative concept, a list of
---   <a>Constraint</a>s and an <a>Expr</a>.
-constrained' :: (Concept c, MayHaveUnit c, Quantity c) => c -> [Constraint] -> Expr -> ConstrConcept
+--   <tt>Constraint</tt>s and an <a>Expr</a>.
+constrained' :: (Concept c, MayHaveUnit c, Quantity c) => c -> [ConstraintE] -> Expr -> ConstrConcept
 
 -- | Creates a constrained unitary chunk from a <tt>UID</tt>, term
 --   (<a>NP</a>), description (<a>String</a>), <a>Symbol</a>, unit,
---   <a>Space</a>, <a>Constraint</a>s, and an <a>Expr</a>.
-cuc' :: IsUnit u => String -> NP -> String -> Symbol -> u -> Space -> [Constraint] -> Expr -> ConstrConcept
+--   <a>Space</a>, <tt>Constraint</tt>s, and an <a>Expr</a>.
+cuc' :: IsUnit u => String -> NP -> String -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> ConstrConcept
 
 -- | Similar to <a>cuc'</a>, but <a>Symbol</a> is dependent on
 --   <a>Stage</a>.
-cuc'' :: IsUnit u => String -> NP -> String -> (Stage -> Symbol) -> u -> Space -> [Constraint] -> Expr -> ConstrConcept
+cuc'' :: IsUnit u => String -> NP -> String -> (Stage -> Symbol) -> u -> Space -> [ConstraintE] -> Expr -> ConstrConcept
 
 -- | Similar to <a>constrained'</a>, but defaults <a>Maybe</a> <a>Expr</a>
 --   to <a>Nothing</a>.
-constrainedNRV' :: (Concept c, MayHaveUnit c, Quantity c) => c -> [Constraint] -> ConstrConcept
+constrainedNRV' :: (Concept c, MayHaveUnit c, Quantity c) => c -> [ConstraintE] -> ConstrConcept
 
 -- | Creates a new ConstrainedChunk from either a <a>ConstrainedChunk</a>,
 --   <a>ConstrConcept</a>, <tt>UncertainChunk</tt>, or an <tt>UncertQ</tt>.
@@ -4544,10 +4512,10 @@ data UncertQ
 uq :: (Quantity c, Constrained c, Concept c, HasReasVal c, MayHaveUnit c) => c -> Uncertainty -> UncertQ
 
 -- | Uncertainty quantity (<a>uq</a>) but with a constraint.
-uqc :: IsUnit u => String -> NP -> String -> Symbol -> u -> Space -> [Constraint] -> Expr -> Uncertainty -> UncertQ
+uqc :: IsUnit u => String -> NP -> String -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> Uncertainty -> UncertQ
 
 -- | Uncertainty quantity constraint (<a>uqc</a>) without a description.
-uqcND :: IsUnit u => String -> NP -> Symbol -> u -> Space -> [Constraint] -> Expr -> Uncertainty -> UncertQ
+uqcND :: IsUnit u => String -> NP -> Symbol -> u -> Space -> [ConstraintE] -> Expr -> Uncertainty -> UncertQ
 
 -- | Smart constructor that can project to an <a>UncertainChunk</a> (also
 --   given an <a>Uncertainty</a>).
@@ -4556,7 +4524,7 @@ uncrtnChunk :: (Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> 
 -- | Creates an uncertain variable chunk. Takes <tt>UID</tt>, term
 --   (<a>NP</a>), <a>Symbol</a>, <a>Space</a>, <tt>Constrains</tt>,
 --   <a>Expr</a>, and <a>Uncertainty</a>.
-uvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Expr -> Uncertainty -> UncertainChunk
+uvc :: String -> NP -> Symbol -> Space -> [ConstraintE] -> Expr -> Uncertainty -> UncertainChunk
 
 -- | Projection function into an <a>UncertainChunk</a> from <a>UncertQ</a>
 --   or an <a>UncertainChunk</a>.

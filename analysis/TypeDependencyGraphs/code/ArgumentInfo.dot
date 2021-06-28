@@ -1,5 +1,5 @@
 digraph argumentinfo{
-ArgumentInfo -> Expr;
+ArgumentInfo -> CodeExpr;
 ArgumentInfo -> Space;
 ArgumentInfo -> Maybe;
 ArgumentInfo -> CodeVarChunk;

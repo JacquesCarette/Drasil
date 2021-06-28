@@ -15,14 +15,14 @@
 </span><span id="line-15"></span><span class="hs-comment">--Removed SymbolForm Constraint</span><span>
 </span><span id="line-16"></span><span class="hs-comment">-- | Table of Symbols creation function. Takes in a 'Stage', 'Symbol's, and something that turns</span><span>
 </span><span id="line-17"></span><span class="hs-comment">-- the symbols into a 'Sentence'. Filters non-symbol chunks and checks for duplicate symbol error.</span><span>
-</span><span id="line-18"></span><span id="local-6989586621679113752"><span class="annot"><a href="Drasil.Sections.TableOfSymbols.html#table"><span class="hs-identifier hs-type">table</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679113752"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MayHaveUnit</span></span><span> </span><span class="annot"><a href="#local-6989586621679113752"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Stage</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679113752"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679113752"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span></span><span>
+</span><span id="line-18"></span><span id="local-6989586621679113967"><span class="annot"><a href="Drasil.Sections.TableOfSymbols.html#table"><span class="hs-identifier hs-type">table</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679113967"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MayHaveUnit</span></span><span> </span><span class="annot"><a href="#local-6989586621679113967"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Stage</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679113967"><span class="hs-identifier hs-type">s</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679113967"><span class="hs-identifier hs-type">s</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span></span><span>
 </span><span id="line-19"></span><span id="table"><span class="annot"><span class="annottext">table :: Stage -&gt; [s] -&gt; (s -&gt; Sentence) -&gt; LabelledContent
-</span><a href="Drasil.Sections.TableOfSymbols.html#table"><span class="hs-identifier hs-var hs-var">table</span></a></span></span><span> </span><span id="local-6989586621679113750"><span class="annot"><span class="annottext">st :: Stage
-</span><a href="#local-6989586621679113750"><span class="hs-identifier hs-var">st</span></a></span></span><span> </span><span id="local-6989586621679113749"><span class="annot"><span class="annottext">ls :: [s]
-</span><a href="#local-6989586621679113749"><span class="hs-identifier hs-var">ls</span></a></span></span><span> </span><span id="local-6989586621679113748"><span class="annot"><span class="annottext">f :: s -&gt; Sentence
-</span><a href="#local-6989586621679113748"><span class="hs-identifier hs-var">f</span></a></span></span><span>
+</span><a href="Drasil.Sections.TableOfSymbols.html#table"><span class="hs-identifier hs-var hs-var">table</span></a></span></span><span> </span><span id="local-6989586621679113965"><span class="annot"><span class="annottext">st :: Stage
+</span><a href="#local-6989586621679113965"><span class="hs-identifier hs-var">st</span></a></span></span><span> </span><span id="local-6989586621679113964"><span class="annot"><span class="annottext">ls :: [s]
+</span><a href="#local-6989586621679113964"><span class="hs-identifier hs-var">ls</span></a></span></span><span> </span><span id="local-6989586621679113963"><span class="annot"><span class="annottext">f :: s -&gt; Sentence
+</span><a href="#local-6989586621679113963"><span class="hs-identifier hs-var">f</span></a></span></span><span>
 </span><span id="line-20"></span><span>    </span><span class="hs-glyph">|</span><span class="annot"><span class="annottext">Bool
-</span><a href="#local-6989586621679113747"><span class="hs-identifier hs-var">noDuplicate</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; RawContent -&gt; LabelledContent
+</span><a href="#local-6989586621679113962"><span class="hs-identifier hs-var">noDuplicate</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; RawContent -&gt; LabelledContent
 </span><span class="hs-identifier hs-var">llcc</span></span><span> </span><span class="annot"><span class="annottext">Reference
 </span><a href="Drasil.Sections.TableOfSymbols.html#symbTableRef"><span class="hs-identifier hs-var">symbTableRef</span></a></span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; LabelledContent) -&gt; RawContent -&gt; LabelledContent
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -46,11 +46,11 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">s -&gt; Stage -&gt; Symbol
 forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
 </span><span class="hs-operator hs-var">`symbol`</span></span><span> </span><span class="annot"><span class="annottext">Stage
-</span><a href="#local-6989586621679113750"><span class="hs-identifier hs-var">st</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">s -&gt; Sentence
-</span><a href="#local-6989586621679113748"><span class="hs-identifier hs-var">f</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">s -&gt; Sentence
+</span><a href="#local-6989586621679113965"><span class="hs-identifier hs-var">st</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">s -&gt; Sentence
+</span><a href="#local-6989586621679113963"><span class="hs-identifier hs-var">f</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">s -&gt; Sentence
 forall u. MayHaveUnit u =&gt; u -&gt; Sentence
 </span><a href="Drasil.DocumentLanguage.Units.html#toSentence"><span class="hs-identifier hs-var">toSentence</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[s]
-</span><a href="#local-6989586621679113738"><span class="hs-identifier hs-var">filteredChunks</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679113953"><span class="hs-identifier hs-var">filteredChunks</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-23"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
@@ -60,77 +60,77 @@ forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">otherwise</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; LabelledContent
 forall a. HasCallStack =&gt; [Char] -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679113735"><span class="hs-identifier hs-var">errorMessage</span></a></span><span> </span><span>
+</span><a href="#local-6989586621679113950"><span class="hs-identifier hs-var">errorMessage</span></a></span><span> </span><span>
 </span><span id="line-25"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span>
-</span><span id="line-26"></span><span>        </span><span id="local-6989586621679113738"><span class="annot"><span class="annottext">filteredChunks :: [s]
-</span><a href="#local-6989586621679113738"><span class="hs-identifier hs-var hs-var">filteredChunks</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(s -&gt; Bool) -&gt; [s] -&gt; [s]
+</span><span id="line-26"></span><span>        </span><span id="local-6989586621679113953"><span class="annot"><span class="annottext">filteredChunks :: [s]
+</span><a href="#local-6989586621679113953"><span class="hs-identifier hs-var hs-var">filteredChunks</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(s -&gt; Bool) -&gt; [s] -&gt; [s]
 forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">filter</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">s -&gt; Stage -&gt; Bool
 forall q. HasSymbol q =&gt; q -&gt; Stage -&gt; Bool
 </span><span class="hs-operator hs-var">`hasStageSymbol`</span></span><span class="annot"><span class="annottext">Stage
-</span><a href="#local-6989586621679113750"><span class="hs-identifier hs-var">st</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[s]
-</span><a href="#local-6989586621679113749"><span class="hs-identifier hs-var">ls</span></a></span><span>
-</span><span id="line-27"></span><span>        </span><span id="local-6989586621679113733"><span class="annot"><span class="annottext">symbolsCol :: [Symbol]
-</span><a href="#local-6989586621679113733"><span class="hs-identifier hs-var hs-var">symbolsCol</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(s -&gt; Symbol) -&gt; [s] -&gt; [Symbol]
+</span><a href="#local-6989586621679113965"><span class="hs-identifier hs-var">st</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[s]
+</span><a href="#local-6989586621679113964"><span class="hs-identifier hs-var">ls</span></a></span><span>
+</span><span id="line-27"></span><span>        </span><span id="local-6989586621679113948"><span class="annot"><span class="annottext">symbolsCol :: [Symbol]
+</span><a href="#local-6989586621679113948"><span class="hs-identifier hs-var hs-var">symbolsCol</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(s -&gt; Symbol) -&gt; [s] -&gt; [Symbol]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">s -&gt; Stage -&gt; Symbol
 forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
 </span><span class="hs-operator hs-var">`symbol`</span></span><span> </span><span class="annot"><span class="annottext">Stage
-</span><a href="#local-6989586621679113750"><span class="hs-identifier hs-var">st</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[s]
-</span><a href="#local-6989586621679113738"><span class="hs-identifier hs-var">filteredChunks</span></a></span><span>
-</span><span id="line-28"></span><span>        </span><span id="local-6989586621679113732"><span class="annot"><span class="annottext">uidCol :: [[Char]]
-</span><a href="#local-6989586621679113732"><span class="hs-identifier hs-var hs-var">uidCol</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(s -&gt; [Char]) -&gt; [s] -&gt; [[Char]]
+</span><a href="#local-6989586621679113965"><span class="hs-identifier hs-var">st</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[s]
+</span><a href="#local-6989586621679113953"><span class="hs-identifier hs-var">filteredChunks</span></a></span><span>
+</span><span id="line-28"></span><span>        </span><span id="local-6989586621679113947"><span class="annot"><span class="annottext">uidCol :: [[Char]]
+</span><a href="#local-6989586621679113947"><span class="hs-identifier hs-var hs-var">uidCol</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(s -&gt; [Char]) -&gt; [s] -&gt; [[Char]]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Getting [Char] s [Char] -&gt; s -&gt; [Char]
 forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
 </span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting [Char] s [Char]
 forall c. HasUID c =&gt; Lens' c [Char]
 </span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span>    </span><span class="annot"><span class="annottext">[s]
-</span><a href="#local-6989586621679113738"><span class="hs-identifier hs-var">filteredChunks</span></a></span><span>
-</span><span id="line-29"></span><span>        </span><span id="local-6989586621679113730"><span class="annot"><span class="annottext">symUidPair :: [(Symbol, [Char])]
-</span><a href="#local-6989586621679113730"><span class="hs-identifier hs-var hs-var">symUidPair</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Symbol] -&gt; [[Char]] -&gt; [(Symbol, [Char])]
+</span><a href="#local-6989586621679113953"><span class="hs-identifier hs-var">filteredChunks</span></a></span><span>
+</span><span id="line-29"></span><span>        </span><span id="local-6989586621679113945"><span class="annot"><span class="annottext">symUidPair :: [(Symbol, [Char])]
+</span><a href="#local-6989586621679113945"><span class="hs-identifier hs-var hs-var">symUidPair</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Symbol] -&gt; [[Char]] -&gt; [(Symbol, [Char])]
 forall a b. [a] -&gt; [b] -&gt; [(a, b)]
 </span><span class="hs-identifier hs-var">zip</span></span><span> </span><span class="annot"><span class="annottext">[Symbol]
-</span><a href="#local-6989586621679113733"><span class="hs-identifier hs-var">symbolsCol</span></a></span><span> </span><span class="annot"><span class="annottext">[[Char]]
-</span><a href="#local-6989586621679113732"><span class="hs-identifier hs-var">uidCol</span></a></span><span>
-</span><span id="line-30"></span><span>        </span><span id="local-6989586621679113729"><span class="annot"><span class="annottext">symDuplicates :: [Symbol]
-</span><a href="#local-6989586621679113729"><span class="hs-identifier hs-var hs-var">symDuplicates</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Symbol] -&gt; [Symbol]
+</span><a href="#local-6989586621679113948"><span class="hs-identifier hs-var">symbolsCol</span></a></span><span> </span><span class="annot"><span class="annottext">[[Char]]
+</span><a href="#local-6989586621679113947"><span class="hs-identifier hs-var">uidCol</span></a></span><span>
+</span><span id="line-30"></span><span>        </span><span id="local-6989586621679113944"><span class="annot"><span class="annottext">symDuplicates :: [Symbol]
+</span><a href="#local-6989586621679113944"><span class="hs-identifier hs-var hs-var">symDuplicates</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Symbol] -&gt; [Symbol]
 forall a. Eq a =&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">nub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Symbol]
-</span><a href="#local-6989586621679113733"><span class="hs-identifier hs-var">symbolsCol</span></a></span><span> </span><span class="annot"><span class="annottext">[Symbol] -&gt; [Symbol] -&gt; [Symbol]
+</span><a href="#local-6989586621679113948"><span class="hs-identifier hs-var">symbolsCol</span></a></span><span> </span><span class="annot"><span class="annottext">[Symbol] -&gt; [Symbol] -&gt; [Symbol]
 forall a. Eq a =&gt; [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">\\</span></span><span> </span><span class="annot"><span class="annottext">[Symbol] -&gt; [Symbol]
 forall a. Eq a =&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">nub</span></span><span> </span><span class="annot"><span class="annottext">[Symbol]
-</span><a href="#local-6989586621679113733"><span class="hs-identifier hs-var">symbolsCol</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-31"></span><span>        </span><span id="local-6989586621679113747"><span class="annot"><span class="annottext">noDuplicate :: Bool
-</span><a href="#local-6989586621679113747"><span class="hs-identifier hs-var hs-var">noDuplicate</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Symbol] -&gt; Bool
+</span><a href="#local-6989586621679113948"><span class="hs-identifier hs-var">symbolsCol</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-31"></span><span>        </span><span id="local-6989586621679113962"><span class="annot"><span class="annottext">noDuplicate :: Bool
+</span><a href="#local-6989586621679113962"><span class="hs-identifier hs-var hs-var">noDuplicate</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Symbol] -&gt; Bool
 forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Bool
 </span><span class="hs-identifier hs-var">null</span></span><span> </span><span class="annot"><span class="annottext">[Symbol]
-</span><a href="#local-6989586621679113729"><span class="hs-identifier hs-var">symDuplicates</span></a></span><span>
+</span><a href="#local-6989586621679113944"><span class="hs-identifier hs-var">symDuplicates</span></a></span><span>
 </span><span id="line-32"></span><span>        </span><span class="hs-comment">-- If there are duplicates then the following will extract the UID's of duplicates symbols</span><span>
-</span><span id="line-33"></span><span>        </span><span id="local-6989586621679113727"><span class="annot"><span class="annottext">extractPairs :: Symbol -&gt; [(Symbol, [Char])]
-</span><a href="#local-6989586621679113727"><span class="hs-identifier hs-var hs-var">extractPairs</span></a></span></span><span> </span><span id="local-6989586621679113726"><span class="annot"><span class="annottext">symb :: Symbol
-</span><a href="#local-6989586621679113726"><span class="hs-identifier hs-var">symb</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((Symbol, [Char]) -&gt; Bool)
+</span><span id="line-33"></span><span>        </span><span id="local-6989586621679113942"><span class="annot"><span class="annottext">extractPairs :: Symbol -&gt; [(Symbol, [Char])]
+</span><a href="#local-6989586621679113942"><span class="hs-identifier hs-var hs-var">extractPairs</span></a></span></span><span> </span><span id="local-6989586621679113941"><span class="annot"><span class="annottext">symb :: Symbol
+</span><a href="#local-6989586621679113941"><span class="hs-identifier hs-var">symb</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((Symbol, [Char]) -&gt; Bool)
 -&gt; [(Symbol, [Char])] -&gt; [(Symbol, [Char])]
 forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
-</span><span class="hs-identifier hs-var">filter</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679113725"><span class="annot"><span class="annottext">x :: (Symbol, [Char])
-</span><a href="#local-6989586621679113725"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">(Symbol, [Char]) -&gt; Symbol
+</span><span class="hs-identifier hs-var">filter</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679113940"><span class="annot"><span class="annottext">x :: (Symbol, [Char])
+</span><a href="#local-6989586621679113940"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">(Symbol, [Char]) -&gt; Symbol
 forall a b. (a, b) -&gt; a
 </span><span class="hs-identifier hs-var">fst</span></span><span> </span><span class="annot"><span class="annottext">(Symbol, [Char])
-</span><a href="#local-6989586621679113725"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Bool
+</span><a href="#local-6989586621679113940"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679113726"><span class="hs-identifier hs-var">symb</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(Symbol, [Char])]
-</span><a href="#local-6989586621679113730"><span class="hs-identifier hs-var">symUidPair</span></a></span><span>
-</span><span id="line-34"></span><span>        </span><span id="local-6989586621679113724"><span class="annot"><span class="annottext">extractUid :: [(a, b)] -&gt; [b]
-</span><a href="#local-6989586621679113724"><span class="hs-identifier hs-var hs-var">extractUid</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((a, b) -&gt; b) -&gt; [(a, b)] -&gt; [b]
+</span><a href="#local-6989586621679113941"><span class="hs-identifier hs-var">symb</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(Symbol, [Char])]
+</span><a href="#local-6989586621679113945"><span class="hs-identifier hs-var">symUidPair</span></a></span><span>
+</span><span id="line-34"></span><span>        </span><span id="local-6989586621679113939"><span class="annot"><span class="annottext">extractUid :: [(a, b)] -&gt; [b]
+</span><a href="#local-6989586621679113939"><span class="hs-identifier hs-var hs-var">extractUid</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((a, b) -&gt; b) -&gt; [(a, b)] -&gt; [b]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">(a, b) -&gt; b
 forall a b. (a, b) -&gt; b
 </span><span class="hs-identifier hs-var">snd</span></span><span>
-</span><span id="line-35"></span><span>        </span><span id="local-6989586621679113723"><span class="annot"><span class="annottext">extractUidFromPairs :: Symbol -&gt; Doc
-</span><a href="#local-6989586621679113723"><span class="hs-identifier hs-var hs-var">extractUidFromPairs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Doc
+</span><span id="line-35"></span><span>        </span><span id="local-6989586621679113938"><span class="annot"><span class="annottext">extractUidFromPairs :: Symbol -&gt; Doc
+</span><a href="#local-6989586621679113938"><span class="hs-identifier hs-var hs-var">extractUidFromPairs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="annottext">([Char] -&gt; Doc) -&gt; (Symbol -&gt; [Char]) -&gt; Symbol -&gt; Doc
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">[[Char]] -&gt; [Char]
@@ -139,34 +139,34 @@ forall a. Show a =&gt; a -&gt; [Char]
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">[(Symbol, [Char])] -&gt; [[Char]]
 forall a b. [(a, b)] -&gt; [b]
-</span><a href="#local-6989586621679113724"><span class="hs-identifier hs-var">extractUid</span></a></span><span> </span><span class="annot"><span class="annottext">([(Symbol, [Char])] -&gt; [[Char]])
+</span><a href="#local-6989586621679113939"><span class="hs-identifier hs-var">extractUid</span></a></span><span> </span><span class="annot"><span class="annottext">([(Symbol, [Char])] -&gt; [[Char]])
 -&gt; (Symbol -&gt; [(Symbol, [Char])]) -&gt; Symbol -&gt; [[Char]]
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; [(Symbol, [Char])]
-</span><a href="#local-6989586621679113727"><span class="hs-identifier hs-var">extractPairs</span></a></span><span>
-</span><span id="line-36"></span><span>        </span><span id="local-6989586621679113721"><span class="annot"><span class="annottext">errSymUidDuplicates :: Doc
-</span><a href="#local-6989586621679113721"><span class="hs-identifier hs-var hs-var">errSymUidDuplicates</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
+</span><a href="#local-6989586621679113942"><span class="hs-identifier hs-var">extractPairs</span></a></span><span>
+</span><span id="line-36"></span><span>        </span><span id="local-6989586621679113936"><span class="annot"><span class="annottext">errSymUidDuplicates :: Doc
+</span><a href="#local-6989586621679113936"><span class="hs-identifier hs-var hs-var">errSymUidDuplicates</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; Doc
 </span><span class="hs-identifier hs-var">vcat</span></span><span> </span><span class="annot"><span class="annottext">([Doc] -&gt; Doc) -&gt; [Doc] -&gt; Doc
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Symbol -&gt; Doc) -&gt; [Symbol] -&gt; [Doc]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679113720"><span class="annot"><span class="annottext">symb :: Symbol
-</span><a href="#local-6989586621679113720"><span class="hs-identifier hs-var">symb</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679113935"><span class="annot"><span class="annottext">symb :: Symbol
+</span><a href="#local-6989586621679113935"><span class="hs-identifier hs-var">symb</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
 </span><span id="line-37"></span><span>          </span><span class="annot"><span class="annottext">Symbol -&gt; Doc
-</span><a href="#local-6989586621679113723"><span class="hs-identifier hs-var">extractUidFromPairs</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679113720"><span class="hs-identifier hs-var">symb</span></a></span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
+</span><a href="#local-6989586621679113938"><span class="hs-identifier hs-var">extractUidFromPairs</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><a href="#local-6989586621679113935"><span class="hs-identifier hs-var">symb</span></a></span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">&lt;+&gt;</span></span><span class="annot"><span class="annottext">[Char] -&gt; Doc
 </span><span class="hs-identifier hs-var">text</span></span><span> </span><span class="annot"><span class="hs-string">&quot;all have symbol&quot;</span></span><span class="annot"><span class="annottext">Doc -&gt; Doc -&gt; Doc
 </span><span class="hs-operator hs-var">&lt;+&gt;</span></span><span class="annot"><span class="annottext">Symbol -&gt; Doc
 </span><span class="hs-identifier hs-var">symbolDoc</span></span><span> </span><span class="annot"><span class="annottext">Symbol
-</span><a href="#local-6989586621679113720"><span class="hs-identifier hs-var">symb</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Symbol]
-</span><a href="#local-6989586621679113729"><span class="hs-identifier hs-var">symDuplicates</span></a></span><span>
-</span><span id="line-38"></span><span>        </span><span id="local-6989586621679113735"><span class="annot"><span class="annottext">errorMessage :: [Char]
-</span><a href="#local-6989586621679113735"><span class="hs-identifier hs-var hs-var">errorMessage</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;Same symbols for different quantities found: &quot;</span></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Char] -&gt; [Char]
+</span><a href="#local-6989586621679113935"><span class="hs-identifier hs-var">symb</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Symbol]
+</span><a href="#local-6989586621679113944"><span class="hs-identifier hs-var">symDuplicates</span></a></span><span>
+</span><span id="line-38"></span><span>        </span><span id="local-6989586621679113950"><span class="annot"><span class="annottext">errorMessage :: [Char]
+</span><a href="#local-6989586621679113950"><span class="hs-identifier hs-var hs-var">errorMessage</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;Same symbols for different quantities found: &quot;</span></span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; [Char] -&gt; [Char]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; [Char]
 </span><span class="hs-identifier hs-var">render</span></span><span> </span><span class="annot"><span class="annottext">Doc
-</span><a href="#local-6989586621679113721"><span class="hs-identifier hs-var">errSymUidDuplicates</span></a></span><span>
+</span><a href="#local-6989586621679113936"><span class="hs-identifier hs-var">errSymUidDuplicates</span></a></span><span>
 </span><span id="line-39"></span><span>
 </span><span id="line-40"></span><span class="hs-comment">-- | Makes a reference to the Table of Symbols.</span><span>
 </span><span id="line-41"></span><span class="annot"><a href="Drasil.Sections.TableOfSymbols.html#symbTableRef"><span class="hs-identifier hs-type">symbTableRef</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span>

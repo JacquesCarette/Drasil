@@ -12,7 +12,7 @@
 </span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
 </span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html"><span class="hs-identifier">Language.Drasil.Code.Imperative.DrasilState</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier">GenState</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#DrasilState"><span class="hs-identifier">DrasilState</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-14"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#inMod"><span class="hs-identifier">inMod</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html"><span class="hs-identifier">Language.Drasil.Chunk.Code</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeIdea"><span class="hs-identifier">CodeIdea</span></a></span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#codeName"><span class="hs-identifier">codeName</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#quantvar"><span class="hs-identifier">quantvar</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html"><span class="hs-identifier">Language.Drasil.Chunk.Code</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">CodeIdea</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">codeName</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">quantvar</span></span><span class="hs-special">)</span><span>
 </span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html"><span class="hs-identifier">Language.Drasil.Choices</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Choices.html#ImplementationType"><span class="hs-identifier">ImplementationType</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#InputModule"><span class="hs-identifier">InputModule</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-17"></span><span>  </span><span class="annot"><a href="Language.Drasil.Choices.html#Structure"><span class="hs-identifier">Structure</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Language.Drasil.CodeSpec.html"><span class="hs-identifier">Language.Drasil.CodeSpec</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.CodeSpec.html#CodeSpec"><span class="hs-identifier">CodeSpec</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
@@ -45,20 +45,20 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span id="line-35"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#unmodularDesc"><span class="hs-identifier hs-type">unmodularDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span>
 </span><span id="line-36"></span><span id="unmodularDesc"><span class="annot"><span class="annottext">unmodularDesc :: GenState Description
 </span><a href="Language.Drasil.Code.Imperative.Descriptions.html#unmodularDesc"><span class="hs-identifier hs-var hs-var">unmodularDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-37"></span><span>  </span><span id="local-6989586621679334274"><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334274"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
+</span><span id="line-37"></span><span>  </span><span id="local-6989586621679324700"><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679324700"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
 forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><span class="hs-identifier hs-var">get</span></span><span>
-</span><span id="line-38"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679334273"><span class="annot"><span class="annottext">n :: Description
-</span><a href="#local-6989586621679334273"><span class="hs-identifier hs-var hs-var">n</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeSpec -&gt; Description
+</span><span id="line-38"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679324699"><span class="annot"><span class="annottext">n :: Description
+</span><a href="#local-6989586621679324699"><span class="hs-identifier hs-var hs-var">n</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeSpec -&gt; Description
 </span><a href="Language.Drasil.CodeSpec.html#pName"><span class="hs-identifier hs-var hs-var">pName</span></a></span><span> </span><span class="annot"><span class="annottext">(CodeSpec -&gt; Description) -&gt; CodeSpec -&gt; Description
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; CodeSpec
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#codeSpec"><span class="hs-identifier hs-var hs-var">codeSpec</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334274"><span class="hs-identifier hs-var">g</span></a></span><span>
-</span><span id="line-39"></span><span>      </span><span id="local-6989586621679334270"><span class="annot"><span class="annottext">getDesc :: ImplementationType -&gt; Description
-</span><a href="#local-6989586621679334270"><span class="hs-identifier hs-var hs-var">getDesc</span></a></span></span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#Library"><span class="hs-identifier hs-type">Library</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;library&quot;</span></span><span>
-</span><span id="line-40"></span><span>      </span><span class="annot"><a href="#local-6989586621679334270"><span class="hs-identifier hs-var">getDesc</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#Program"><span class="hs-identifier hs-type">Program</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;program&quot;</span></span><span>
+</span><a href="#local-6989586621679324700"><span class="hs-identifier hs-var">g</span></a></span><span>
+</span><span id="line-39"></span><span>      </span><span id="local-6989586621679324696"><span class="annot"><span class="annottext">getDesc :: ImplementationType -&gt; Description
+</span><a href="#local-6989586621679324696"><span class="hs-identifier hs-var hs-var">getDesc</span></a></span></span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#Library"><span class="hs-identifier hs-type">Library</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;library&quot;</span></span><span>
+</span><span id="line-40"></span><span>      </span><span class="annot"><a href="#local-6989586621679324696"><span class="hs-identifier hs-var">getDesc</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#Program"><span class="hs-identifier hs-type">Program</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;program&quot;</span></span><span>
 </span><span id="line-41"></span><span>  </span><span class="annot"><span class="annottext">Description -&gt; GenState Description
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">(Description -&gt; GenState Description)
@@ -67,14 +67,14 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Contains the entire &quot;</span></span><span> </span><span class="annot"><span class="annottext">Description -&gt; Description -&gt; Description
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">Description
-</span><a href="#local-6989586621679334273"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Description -&gt; Description -&gt; Description
+</span><a href="#local-6989586621679324699"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Description -&gt; Description -&gt; Description
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot; &quot;</span></span><span> </span><span class="annot"><span class="annottext">Description -&gt; Description -&gt; Description
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">ImplementationType -&gt; Description
-</span><a href="#local-6989586621679334270"><span class="hs-identifier hs-var">getDesc</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DrasilState -&gt; ImplementationType
+</span><a href="#local-6989586621679324696"><span class="hs-identifier hs-var">getDesc</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DrasilState -&gt; ImplementationType
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#implType"><span class="hs-identifier hs-var hs-var">implType</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334274"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679324700"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-42"></span><span>
 </span><span id="line-43"></span><span class="hs-comment">-- | Returns description of what is contained in the Input Parameters module.</span><span>
 </span><span id="line-44"></span><span class="hs-comment">-- If user chooses the 'Bundled' input parameter, this module will include the structure for holding the </span><span>
@@ -84,50 +84,50 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span id="line-48"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#inputParametersDesc"><span class="hs-identifier hs-type">inputParametersDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-49"></span><span id="inputParametersDesc"><span class="annot"><span class="annottext">inputParametersDesc :: GenState [Description]
 </span><a href="Language.Drasil.Code.Imperative.Descriptions.html#inputParametersDesc"><span class="hs-identifier hs-var hs-var">inputParametersDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-50"></span><span>  </span><span id="local-6989586621679334266"><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334266"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
+</span><span id="line-50"></span><span>  </span><span id="local-6989586621679324692"><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679324692"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
 forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><span class="hs-identifier hs-var">get</span></span><span>
-</span><span id="line-51"></span><span>  </span><span id="local-6989586621679334265"><span class="annot"><span class="annottext">Description
-</span><a href="#local-6989586621679334265"><span class="hs-identifier hs-var">ifDesc</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">GenState Description
+</span><span id="line-51"></span><span>  </span><span id="local-6989586621679324691"><span class="annot"><span class="annottext">Description
+</span><a href="#local-6989586621679324691"><span class="hs-identifier hs-var">ifDesc</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">GenState Description
 </span><a href="Language.Drasil.Code.Imperative.Descriptions.html#inputFormatDesc"><span class="hs-identifier hs-var">inputFormatDesc</span></a></span><span>
-</span><span id="line-52"></span><span>  </span><span id="local-6989586621679334264"><span class="annot"><span class="annottext">Description
-</span><a href="#local-6989586621679334264"><span class="hs-identifier hs-var">dvDesc</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">GenState Description
+</span><span id="line-52"></span><span>  </span><span id="local-6989586621679324690"><span class="annot"><span class="annottext">Description
+</span><a href="#local-6989586621679324690"><span class="hs-identifier hs-var">dvDesc</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">GenState Description
 </span><a href="Language.Drasil.Code.Imperative.Descriptions.html#derivedValuesDesc"><span class="hs-identifier hs-var">derivedValuesDesc</span></a></span><span>
-</span><span id="line-53"></span><span>  </span><span id="local-6989586621679334263"><span class="annot"><span class="annottext">Description
-</span><a href="#local-6989586621679334263"><span class="hs-identifier hs-var">icDesc</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">GenState Description
+</span><span id="line-53"></span><span>  </span><span id="local-6989586621679324689"><span class="annot"><span class="annottext">Description
+</span><a href="#local-6989586621679324689"><span class="hs-identifier hs-var">icDesc</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">GenState Description
 </span><a href="Language.Drasil.Code.Imperative.Descriptions.html#inputConstraintsDesc"><span class="hs-identifier hs-var">inputConstraintsDesc</span></a></span><span>
-</span><span id="line-54"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679334262"><span class="annot"><span class="annottext">im :: InputModule
-</span><a href="#local-6989586621679334262"><span class="hs-identifier hs-var hs-var">im</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; InputModule
+</span><span id="line-54"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679324688"><span class="annot"><span class="annottext">im :: InputModule
+</span><a href="#local-6989586621679324688"><span class="hs-identifier hs-var hs-var">im</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; InputModule
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#inMod"><span class="hs-identifier hs-var">inMod</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334266"><span class="hs-identifier hs-var">g</span></a></span><span>
-</span><span id="line-55"></span><span>      </span><span id="local-6989586621679334261"><span class="annot"><span class="annottext">st :: Structure
-</span><a href="#local-6989586621679334261"><span class="hs-identifier hs-var hs-var">st</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; Structure
+</span><a href="#local-6989586621679324692"><span class="hs-identifier hs-var">g</span></a></span><span>
+</span><span id="line-55"></span><span>      </span><span id="local-6989586621679324687"><span class="annot"><span class="annottext">st :: Structure
+</span><a href="#local-6989586621679324687"><span class="hs-identifier hs-var hs-var">st</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; Structure
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#inStruct"><span class="hs-identifier hs-var hs-var">inStruct</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334266"><span class="hs-identifier hs-var">g</span></a></span><span>
-</span><span id="line-56"></span><span>      </span><span id="local-6989586621679334259"><span class="annot"><span class="annottext">ipDesc :: InputModule -&gt; [Description]
-</span><a href="#local-6989586621679334259"><span class="hs-identifier hs-var hs-var">ipDesc</span></a></span></span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#Separated"><span class="hs-identifier hs-type">Separated</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Structure -&gt; [Description]
-</span><a href="#local-6989586621679334257"><span class="hs-identifier hs-var">inDesc</span></a></span><span> </span><span class="annot"><span class="annottext">Structure
-</span><a href="#local-6989586621679334261"><span class="hs-identifier hs-var">st</span></a></span><span>
-</span><span id="line-57"></span><span>      </span><span class="annot"><a href="#local-6989586621679334259"><span class="hs-identifier hs-var">ipDesc</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#Combined"><span class="hs-identifier hs-type">Combined</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Structure -&gt; [Description]
-</span><a href="#local-6989586621679334257"><span class="hs-identifier hs-var">inDesc</span></a></span><span> </span><span class="annot"><span class="annottext">Structure
-</span><a href="#local-6989586621679334261"><span class="hs-identifier hs-var">st</span></a></span><span> </span><span class="annot"><span class="annottext">[Description] -&gt; [Description] -&gt; [Description]
+</span><a href="#local-6989586621679324692"><span class="hs-identifier hs-var">g</span></a></span><span>
+</span><span id="line-56"></span><span>      </span><span id="local-6989586621679324685"><span class="annot"><span class="annottext">ipDesc :: InputModule -&gt; [Description]
+</span><a href="#local-6989586621679324685"><span class="hs-identifier hs-var hs-var">ipDesc</span></a></span></span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#Separated"><span class="hs-identifier hs-type">Separated</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Structure -&gt; [Description]
+</span><a href="#local-6989586621679324683"><span class="hs-identifier hs-var">inDesc</span></a></span><span> </span><span class="annot"><span class="annottext">Structure
+</span><a href="#local-6989586621679324687"><span class="hs-identifier hs-var">st</span></a></span><span>
+</span><span id="line-57"></span><span>      </span><span class="annot"><a href="#local-6989586621679324685"><span class="hs-identifier hs-var">ipDesc</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#Combined"><span class="hs-identifier hs-type">Combined</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Structure -&gt; [Description]
+</span><a href="#local-6989586621679324683"><span class="hs-identifier hs-var">inDesc</span></a></span><span> </span><span class="annot"><span class="annottext">Structure
+</span><a href="#local-6989586621679324687"><span class="hs-identifier hs-var">st</span></a></span><span> </span><span class="annot"><span class="annottext">[Description] -&gt; [Description] -&gt; [Description]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Description
-</span><a href="#local-6989586621679334265"><span class="hs-identifier hs-var">ifDesc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Description
-</span><a href="#local-6989586621679334264"><span class="hs-identifier hs-var">dvDesc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Description
-</span><a href="#local-6989586621679334263"><span class="hs-identifier hs-var">icDesc</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-58"></span><span>      </span><span id="local-6989586621679334257"><span class="annot"><span class="annottext">inDesc :: Structure -&gt; [Description]
-</span><a href="#local-6989586621679334257"><span class="hs-identifier hs-var hs-var">inDesc</span></a></span></span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#Bundled"><span class="hs-identifier hs-type">Bundled</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-string">&quot;the structure for holding input values&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-59"></span><span>      </span><span class="annot"><a href="#local-6989586621679334257"><span class="hs-identifier hs-var">inDesc</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#Unbundled"><span class="hs-identifier hs-type">Unbundled</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679324691"><span class="hs-identifier hs-var">ifDesc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Description
+</span><a href="#local-6989586621679324690"><span class="hs-identifier hs-var">dvDesc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Description
+</span><a href="#local-6989586621679324689"><span class="hs-identifier hs-var">icDesc</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-58"></span><span>      </span><span id="local-6989586621679324683"><span class="annot"><span class="annottext">inDesc :: Structure -&gt; [Description]
+</span><a href="#local-6989586621679324683"><span class="hs-identifier hs-var hs-var">inDesc</span></a></span></span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#Bundled"><span class="hs-identifier hs-type">Bundled</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-string">&quot;the structure for holding input values&quot;</span></span><span class="hs-special">]</span><span>
+</span><span id="line-59"></span><span>      </span><span class="annot"><a href="#local-6989586621679324683"><span class="hs-identifier hs-var">inDesc</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Choices.html#Unbundled"><span class="hs-identifier hs-type">Unbundled</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span class="hs-special">]</span><span>
 </span><span id="line-60"></span><span>  </span><span class="annot"><span class="annottext">[Description] -&gt; GenState [Description]
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">([Description] -&gt; GenState [Description])
 -&gt; [Description] -&gt; GenState [Description]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">InputModule -&gt; [Description]
-</span><a href="#local-6989586621679334259"><span class="hs-identifier hs-var">ipDesc</span></a></span><span> </span><span class="annot"><span class="annottext">InputModule
-</span><a href="#local-6989586621679334262"><span class="hs-identifier hs-var">im</span></a></span><span>
+</span><a href="#local-6989586621679324685"><span class="hs-identifier hs-var">ipDesc</span></a></span><span> </span><span class="annot"><span class="annottext">InputModule
+</span><a href="#local-6989586621679324688"><span class="hs-identifier hs-var">im</span></a></span><span>
 </span><span id="line-61"></span><span>
 </span><span id="line-62"></span><span class="hs-comment">-- | Returns a description of the input constructor, checking whether each </span><span>
 </span><span id="line-63"></span><span class="hs-comment">-- possible method that may be called by the constructor is defined, and </span><span>
@@ -135,31 +135,31 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span id="line-65"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#inputConstructorDesc"><span class="hs-identifier hs-type">inputConstructorDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span>
 </span><span id="line-66"></span><span id="inputConstructorDesc"><span class="annot"><span class="annottext">inputConstructorDesc :: GenState Description
 </span><a href="Language.Drasil.Code.Imperative.Descriptions.html#inputConstructorDesc"><span class="hs-identifier hs-var hs-var">inputConstructorDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-67"></span><span>  </span><span id="local-6989586621679334253"><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334253"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
+</span><span id="line-67"></span><span>  </span><span id="local-6989586621679324679"><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679324679"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
 forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><span class="hs-identifier hs-var">get</span></span><span>
-</span><span id="line-68"></span><span>  </span><span id="local-6989586621679334252"><span class="annot"><span class="annottext">Description
-</span><a href="#local-6989586621679334252"><span class="hs-identifier hs-var">pAndS</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">GenState Description
+</span><span id="line-68"></span><span>  </span><span id="local-6989586621679324678"><span class="annot"><span class="annottext">Description
+</span><a href="#local-6989586621679324678"><span class="hs-identifier hs-var">pAndS</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">GenState Description
 </span><a href="Language.Drasil.Code.Imperative.Descriptions.html#physAndSfwrCons"><span class="hs-identifier hs-var">physAndSfwrCons</span></a></span><span>
-</span><span id="line-69"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679334250"><span class="annot"><span class="annottext">ifDesc :: Bool -&gt; Description
-</span><a href="#local-6989586621679334250"><span class="hs-identifier hs-var hs-var">ifDesc</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">False</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
-</span><span id="line-70"></span><span>      </span><span class="annot"><a href="#local-6989586621679334250"><span class="hs-identifier hs-var">ifDesc</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">True</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;reading inputs&quot;</span></span><span>
-</span><span id="line-71"></span><span>      </span><span id="local-6989586621679334249"><span class="annot"><span class="annottext">idDesc :: Bool -&gt; Description
-</span><a href="#local-6989586621679334249"><span class="hs-identifier hs-var hs-var">idDesc</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">False</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
-</span><span id="line-72"></span><span>      </span><span class="annot"><a href="#local-6989586621679334249"><span class="hs-identifier hs-var">idDesc</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">True</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;calculating derived values&quot;</span></span><span>
-</span><span id="line-73"></span><span>      </span><span id="local-6989586621679334248"><span class="annot"><span class="annottext">icDesc :: Bool -&gt; Description
-</span><a href="#local-6989586621679334248"><span class="hs-identifier hs-var hs-var">icDesc</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">False</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
-</span><span id="line-74"></span><span>      </span><span class="annot"><a href="#local-6989586621679334248"><span class="hs-identifier hs-var">icDesc</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">True</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;checking &quot;</span></span><span> </span><span class="annot"><span class="annottext">Description -&gt; Description -&gt; Description
+</span><span id="line-69"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679324676"><span class="annot"><span class="annottext">ifDesc :: Bool -&gt; Description
+</span><a href="#local-6989586621679324676"><span class="hs-identifier hs-var hs-var">ifDesc</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">False</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
+</span><span id="line-70"></span><span>      </span><span class="annot"><a href="#local-6989586621679324676"><span class="hs-identifier hs-var">ifDesc</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">True</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;reading inputs&quot;</span></span><span>
+</span><span id="line-71"></span><span>      </span><span id="local-6989586621679324675"><span class="annot"><span class="annottext">idDesc :: Bool -&gt; Description
+</span><a href="#local-6989586621679324675"><span class="hs-identifier hs-var hs-var">idDesc</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">False</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
+</span><span id="line-72"></span><span>      </span><span class="annot"><a href="#local-6989586621679324675"><span class="hs-identifier hs-var">idDesc</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">True</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;calculating derived values&quot;</span></span><span>
+</span><span id="line-73"></span><span>      </span><span id="local-6989586621679324674"><span class="annot"><span class="annottext">icDesc :: Bool -&gt; Description
+</span><a href="#local-6989586621679324674"><span class="hs-identifier hs-var hs-var">icDesc</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">False</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
+</span><span id="line-74"></span><span>      </span><span class="annot"><a href="#local-6989586621679324674"><span class="hs-identifier hs-var">icDesc</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">True</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;checking &quot;</span></span><span> </span><span class="annot"><span class="annottext">Description -&gt; Description -&gt; Description
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">Description
-</span><a href="#local-6989586621679334252"><span class="hs-identifier hs-var">pAndS</span></a></span><span> </span><span class="annot"><span class="annottext">Description -&gt; Description -&gt; Description
+</span><a href="#local-6989586621679324678"><span class="hs-identifier hs-var">pAndS</span></a></span><span> </span><span class="annot"><span class="annottext">Description -&gt; Description -&gt; Description
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot; on the input&quot;</span></span><span>
-</span><span id="line-75"></span><span>      </span><span id="local-6989586621679334247"><span class="annot"><span class="annottext">dl :: [Description]
-</span><a href="#local-6989586621679334247"><span class="hs-identifier hs-var hs-var">dl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; [Description]
+</span><span id="line-75"></span><span>      </span><span id="local-6989586621679324673"><span class="annot"><span class="annottext">dl :: [Description]
+</span><a href="#local-6989586621679324673"><span class="hs-identifier hs-var hs-var">dl</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; [Description]
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#defList"><span class="hs-identifier hs-var hs-var">defList</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334253"><span class="hs-identifier hs-var">g</span></a></span><span>
+</span><a href="#local-6989586621679324679"><span class="hs-identifier hs-var">g</span></a></span><span>
 </span><span id="line-76"></span><span>  </span><span class="annot"><span class="annottext">Description -&gt; GenState Description
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">(Description -&gt; GenState Description)
@@ -170,91 +170,91 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[Description] -&gt; Description
 </span><span class="hs-identifier hs-var">stringList</span></span><span> </span><span class="hs-special">[</span><span> </span><span>
 </span><span id="line-77"></span><span>    </span><span class="annot"><span class="annottext">Bool -&gt; Description
-</span><a href="#local-6989586621679334250"><span class="hs-identifier hs-var">ifDesc</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-string">&quot;get_input&quot;</span></span><span> </span><span class="annot"><span class="annottext">Description -&gt; [Description] -&gt; Bool
+</span><a href="#local-6989586621679324676"><span class="hs-identifier hs-var">ifDesc</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-string">&quot;get_input&quot;</span></span><span> </span><span class="annot"><span class="annottext">Description -&gt; [Description] -&gt; Bool
 forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">[Description]
-</span><a href="#local-6989586621679334247"><span class="hs-identifier hs-var">dl</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679324673"><span class="hs-identifier hs-var">dl</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-78"></span><span>    </span><span class="annot"><span class="annottext">Bool -&gt; Description
-</span><a href="#local-6989586621679334249"><span class="hs-identifier hs-var">idDesc</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-string">&quot;derived_values&quot;</span></span><span> </span><span class="annot"><span class="annottext">Description -&gt; [Description] -&gt; Bool
+</span><a href="#local-6989586621679324675"><span class="hs-identifier hs-var">idDesc</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-string">&quot;derived_values&quot;</span></span><span> </span><span class="annot"><span class="annottext">Description -&gt; [Description] -&gt; Bool
 forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">[Description]
-</span><a href="#local-6989586621679334247"><span class="hs-identifier hs-var">dl</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679324673"><span class="hs-identifier hs-var">dl</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-79"></span><span>    </span><span class="annot"><span class="annottext">Bool -&gt; Description
-</span><a href="#local-6989586621679334248"><span class="hs-identifier hs-var">icDesc</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-string">&quot;input_constraints&quot;</span></span><span> </span><span class="annot"><span class="annottext">Description -&gt; [Description] -&gt; Bool
+</span><a href="#local-6989586621679324674"><span class="hs-identifier hs-var">icDesc</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-string">&quot;input_constraints&quot;</span></span><span> </span><span class="annot"><span class="annottext">Description -&gt; [Description] -&gt; Bool
 forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">[Description]
-</span><a href="#local-6989586621679334247"><span class="hs-identifier hs-var">dl</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679324673"><span class="hs-identifier hs-var">dl</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
 </span><span id="line-80"></span><span>
 </span><span id="line-81"></span><span class="hs-comment">-- | Returns a description of what is contained in the Input Format module,</span><span>
 </span><span id="line-82"></span><span class="hs-comment">-- if it exists.</span><span>
 </span><span id="line-83"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#inputFormatDesc"><span class="hs-identifier hs-type">inputFormatDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span>
 </span><span id="line-84"></span><span id="inputFormatDesc"><span class="annot"><span class="annottext">inputFormatDesc :: GenState Description
 </span><a href="Language.Drasil.Code.Imperative.Descriptions.html#inputFormatDesc"><span class="hs-identifier hs-var hs-var">inputFormatDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-85"></span><span>  </span><span id="local-6989586621679334244"><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334244"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
+</span><span id="line-85"></span><span>  </span><span id="local-6989586621679324670"><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679324670"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
 forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><span class="hs-identifier hs-var">get</span></span><span>
-</span><span id="line-86"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679334243"><span class="annot"><span class="annottext">ifDesc :: Bool -&gt; Description
-</span><a href="#local-6989586621679334243"><span class="hs-identifier hs-var hs-var">ifDesc</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">False</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
-</span><span id="line-87"></span><span>      </span><span class="annot"><a href="#local-6989586621679334243"><span class="hs-identifier hs-var">ifDesc</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;the function for reading inputs&quot;</span></span><span>
+</span><span id="line-86"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679324669"><span class="annot"><span class="annottext">ifDesc :: Bool -&gt; Description
+</span><a href="#local-6989586621679324669"><span class="hs-identifier hs-var hs-var">ifDesc</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">False</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
+</span><span id="line-87"></span><span>      </span><span class="annot"><a href="#local-6989586621679324669"><span class="hs-identifier hs-var">ifDesc</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;the function for reading inputs&quot;</span></span><span>
 </span><span id="line-88"></span><span>  </span><span class="annot"><span class="annottext">Description -&gt; GenState Description
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">(Description -&gt; GenState Description)
 -&gt; Description -&gt; GenState Description
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Description
-</span><a href="#local-6989586621679334243"><span class="hs-identifier hs-var">ifDesc</span></a></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Description) -&gt; Bool -&gt; Description
+</span><a href="#local-6989586621679324669"><span class="hs-identifier hs-var">ifDesc</span></a></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Description) -&gt; Bool -&gt; Description
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="hs-string">&quot;get_input&quot;</span></span><span> </span><span class="annot"><span class="annottext">Description -&gt; [Description] -&gt; Bool
 forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; [Description]
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#defList"><span class="hs-identifier hs-var hs-var">defList</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334244"><span class="hs-identifier hs-var">g</span></a></span><span>
+</span><a href="#local-6989586621679324670"><span class="hs-identifier hs-var">g</span></a></span><span>
 </span><span id="line-89"></span><span>
 </span><span id="line-90"></span><span class="hs-comment">-- | Returns a description of what is contained in the Derived Values module,</span><span>
 </span><span id="line-91"></span><span class="hs-comment">-- if it exists.</span><span>
 </span><span id="line-92"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#derivedValuesDesc"><span class="hs-identifier hs-type">derivedValuesDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span>
 </span><span id="line-93"></span><span id="derivedValuesDesc"><span class="annot"><span class="annottext">derivedValuesDesc :: GenState Description
 </span><a href="Language.Drasil.Code.Imperative.Descriptions.html#derivedValuesDesc"><span class="hs-identifier hs-var hs-var">derivedValuesDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-94"></span><span>  </span><span id="local-6989586621679334242"><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334242"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
+</span><span id="line-94"></span><span>  </span><span id="local-6989586621679324668"><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679324668"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
 forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><span class="hs-identifier hs-var">get</span></span><span>
-</span><span id="line-95"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679334241"><span class="annot"><span class="annottext">dvDesc :: Bool -&gt; Description
-</span><a href="#local-6989586621679334241"><span class="hs-identifier hs-var hs-var">dvDesc</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">False</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
-</span><span id="line-96"></span><span>      </span><span class="annot"><a href="#local-6989586621679334241"><span class="hs-identifier hs-var">dvDesc</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;the function for calculating derived values&quot;</span></span><span>
+</span><span id="line-95"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679324667"><span class="annot"><span class="annottext">dvDesc :: Bool -&gt; Description
+</span><a href="#local-6989586621679324667"><span class="hs-identifier hs-var hs-var">dvDesc</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">False</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
+</span><span id="line-96"></span><span>      </span><span class="annot"><a href="#local-6989586621679324667"><span class="hs-identifier hs-var">dvDesc</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;the function for calculating derived values&quot;</span></span><span>
 </span><span id="line-97"></span><span>  </span><span class="annot"><span class="annottext">Description -&gt; GenState Description
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">(Description -&gt; GenState Description)
 -&gt; Description -&gt; GenState Description
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Description
-</span><a href="#local-6989586621679334241"><span class="hs-identifier hs-var">dvDesc</span></a></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Description) -&gt; Bool -&gt; Description
+</span><a href="#local-6989586621679324667"><span class="hs-identifier hs-var">dvDesc</span></a></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Description) -&gt; Bool -&gt; Description
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="hs-string">&quot;derived_values&quot;</span></span><span> </span><span class="annot"><span class="annottext">Description -&gt; [Description] -&gt; Bool
 forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; [Description]
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#defList"><span class="hs-identifier hs-var hs-var">defList</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334242"><span class="hs-identifier hs-var">g</span></a></span><span>
+</span><a href="#local-6989586621679324668"><span class="hs-identifier hs-var">g</span></a></span><span>
 </span><span id="line-98"></span><span>
 </span><span id="line-99"></span><span class="hs-comment">-- | Returns a description of what is contained in the Input Constraints module,</span><span>
 </span><span id="line-100"></span><span class="hs-comment">-- if it exists.</span><span>
 </span><span id="line-101"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#inputConstraintsDesc"><span class="hs-identifier hs-type">inputConstraintsDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span>
 </span><span id="line-102"></span><span id="inputConstraintsDesc"><span class="annot"><span class="annottext">inputConstraintsDesc :: GenState Description
 </span><a href="Language.Drasil.Code.Imperative.Descriptions.html#inputConstraintsDesc"><span class="hs-identifier hs-var hs-var">inputConstraintsDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-103"></span><span>  </span><span id="local-6989586621679334240"><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334240"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
+</span><span id="line-103"></span><span>  </span><span id="local-6989586621679324666"><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679324666"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
 forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><span class="hs-identifier hs-var">get</span></span><span>
-</span><span id="line-104"></span><span>  </span><span id="local-6989586621679334239"><span class="annot"><span class="annottext">Description
-</span><a href="#local-6989586621679334239"><span class="hs-identifier hs-var">pAndS</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">GenState Description
+</span><span id="line-104"></span><span>  </span><span id="local-6989586621679324665"><span class="annot"><span class="annottext">Description
+</span><a href="#local-6989586621679324665"><span class="hs-identifier hs-var">pAndS</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">GenState Description
 </span><a href="Language.Drasil.Code.Imperative.Descriptions.html#physAndSfwrCons"><span class="hs-identifier hs-var">physAndSfwrCons</span></a></span><span>
-</span><span id="line-105"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679334238"><span class="annot"><span class="annottext">icDesc :: Bool -&gt; Description
-</span><a href="#local-6989586621679334238"><span class="hs-identifier hs-var hs-var">icDesc</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">False</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
-</span><span id="line-106"></span><span>      </span><span class="annot"><a href="#local-6989586621679334238"><span class="hs-identifier hs-var">icDesc</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;the function for checking the &quot;</span></span><span> </span><span class="annot"><span class="annottext">Description -&gt; Description -&gt; Description
+</span><span id="line-105"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679324664"><span class="annot"><span class="annottext">icDesc :: Bool -&gt; Description
+</span><a href="#local-6989586621679324664"><span class="hs-identifier hs-var hs-var">icDesc</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">False</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
+</span><span id="line-106"></span><span>      </span><span class="annot"><a href="#local-6989586621679324664"><span class="hs-identifier hs-var">icDesc</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;the function for checking the &quot;</span></span><span> </span><span class="annot"><span class="annottext">Description -&gt; Description -&gt; Description
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">Description
-</span><a href="#local-6989586621679334239"><span class="hs-identifier hs-var">pAndS</span></a></span><span> </span><span class="annot"><span class="annottext">Description -&gt; Description -&gt; Description
+</span><a href="#local-6989586621679324665"><span class="hs-identifier hs-var">pAndS</span></a></span><span> </span><span class="annot"><span class="annottext">Description -&gt; Description -&gt; Description
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span>
 </span><span id="line-107"></span><span>        </span><span class="annot"><span class="hs-string">&quot; on the input&quot;</span></span><span>
@@ -264,28 +264,28 @@ forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 -&gt; Description -&gt; GenState Description
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Description
-</span><a href="#local-6989586621679334238"><span class="hs-identifier hs-var">icDesc</span></a></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Description) -&gt; Bool -&gt; Description
+</span><a href="#local-6989586621679324664"><span class="hs-identifier hs-var">icDesc</span></a></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Description) -&gt; Bool -&gt; Description
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="hs-string">&quot;input_constraints&quot;</span></span><span> </span><span class="annot"><span class="annottext">Description -&gt; [Description] -&gt; Bool
 forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; [Description]
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#defList"><span class="hs-identifier hs-var hs-var">defList</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334240"><span class="hs-identifier hs-var">g</span></a></span><span>
+</span><a href="#local-6989586621679324666"><span class="hs-identifier hs-var">g</span></a></span><span>
 </span><span id="line-109"></span><span>
 </span><span id="line-110"></span><span class="hs-comment">-- | Returns a description of what is contained in the Constants module,</span><span>
 </span><span id="line-111"></span><span class="hs-comment">-- if it exists.</span><span>
 </span><span id="line-112"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#constModDesc"><span class="hs-identifier hs-type">constModDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span>
 </span><span id="line-113"></span><span id="constModDesc"><span class="annot"><span class="annottext">constModDesc :: GenState Description
 </span><a href="Language.Drasil.Code.Imperative.Descriptions.html#constModDesc"><span class="hs-identifier hs-var hs-var">constModDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-114"></span><span>  </span><span id="local-6989586621679334237"><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334237"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
+</span><span id="line-114"></span><span>  </span><span id="local-6989586621679324663"><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679324663"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
 forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><span class="hs-identifier hs-var">get</span></span><span>
-</span><span id="line-115"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679334236"><span class="annot"><span class="annottext">cname :: Description
-</span><a href="#local-6989586621679334236"><span class="hs-identifier hs-var hs-var">cname</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;Constants&quot;</span></span><span>
-</span><span id="line-116"></span><span>      </span><span id="local-6989586621679334235"><span class="annot"><span class="annottext">cDesc :: [a] -&gt; Description
-</span><a href="#local-6989586621679334235"><span class="hs-identifier hs-var hs-var">cDesc</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
-</span><span id="line-117"></span><span>      </span><span class="annot"><a href="#local-6989586621679334235"><span class="hs-identifier hs-var">cDesc</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;the structure for holding constant values&quot;</span></span><span>
+</span><span id="line-115"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679324662"><span class="annot"><span class="annottext">cname :: Description
+</span><a href="#local-6989586621679324662"><span class="hs-identifier hs-var hs-var">cname</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;Constants&quot;</span></span><span>
+</span><span id="line-116"></span><span>      </span><span id="local-6989586621679324661"><span class="annot"><span class="annottext">cDesc :: [a] -&gt; Description
+</span><a href="#local-6989586621679324661"><span class="hs-identifier hs-var hs-var">cDesc</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
+</span><span id="line-117"></span><span>      </span><span class="annot"><a href="#local-6989586621679324661"><span class="hs-identifier hs-var">cDesc</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;the structure for holding constant values&quot;</span></span><span>
 </span><span id="line-118"></span><span>  </span><span class="annot"><span class="annottext">Description -&gt; GenState Description
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">(Description -&gt; GenState Description)
@@ -293,7 +293,7 @@ forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Const] -&gt; Description
 forall a. [a] -&gt; Description
-</span><a href="#local-6989586621679334235"><span class="hs-identifier hs-var">cDesc</span></a></span><span> </span><span class="annot"><span class="annottext">([Const] -&gt; Description) -&gt; [Const] -&gt; Description
+</span><a href="#local-6989586621679324661"><span class="hs-identifier hs-var">cDesc</span></a></span><span> </span><span class="annot"><span class="annottext">([Const] -&gt; Description) -&gt; [Const] -&gt; Description
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Const -&gt; Bool) -&gt; [Const] -&gt; [Const]
 forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
@@ -306,47 +306,47 @@ forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Bool
 -&gt; Map Description Description -&gt; Map Description Description
 forall a k. (a -&gt; Bool) -&gt; Map k a -&gt; Map k a
 </span><span class="hs-identifier hs-var">Map.filter</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Description
-</span><a href="#local-6989586621679334236"><span class="hs-identifier hs-var">cname</span></a></span><span> </span><span class="annot"><span class="annottext">Description -&gt; Description -&gt; Bool
+</span><a href="#local-6989586621679324662"><span class="hs-identifier hs-var">cname</span></a></span><span> </span><span class="annot"><span class="annottext">Description -&gt; Description -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span class="hs-special">)</span><span> </span><span>
 </span><span id="line-119"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DrasilState -&gt; Map Description Description
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#clsMap"><span class="hs-identifier hs-var hs-var">clsMap</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334237"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Description -&gt; Bool) -&gt; (Const -&gt; Description) -&gt; Const -&gt; Bool
+</span><a href="#local-6989586621679324663"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Description -&gt; Bool) -&gt; (Const -&gt; Description) -&gt; Const -&gt; Bool
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Const -&gt; Description
 forall c. CodeIdea c =&gt; c -&gt; Description
-</span><a href="Language.Drasil.Chunk.Code.html#codeName"><span class="hs-identifier hs-var">codeName</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeSpec -&gt; [Const]
+</span><span class="hs-identifier hs-var">codeName</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeSpec -&gt; [Const]
 </span><a href="Language.Drasil.CodeSpec.html#constants"><span class="hs-identifier hs-var hs-var">constants</span></a></span><span> </span><span class="annot"><span class="annottext">(CodeSpec -&gt; [Const]) -&gt; CodeSpec -&gt; [Const]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; CodeSpec
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#codeSpec"><span class="hs-identifier hs-var hs-var">codeSpec</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334237"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679324663"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-120"></span><span>
 </span><span id="line-121"></span><span class="hs-comment">-- | Returns a description of what is contained in the Output Format module, </span><span>
 </span><span id="line-122"></span><span class="hs-comment">-- if it exists.</span><span>
 </span><span id="line-123"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#outputFormatDesc"><span class="hs-identifier hs-type">outputFormatDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span>
 </span><span id="line-124"></span><span id="outputFormatDesc"><span class="annot"><span class="annottext">outputFormatDesc :: GenState Description
 </span><a href="Language.Drasil.Code.Imperative.Descriptions.html#outputFormatDesc"><span class="hs-identifier hs-var hs-var">outputFormatDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-125"></span><span>  </span><span id="local-6989586621679334231"><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334231"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
+</span><span id="line-125"></span><span>  </span><span id="local-6989586621679324657"><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679324657"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
 forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><span class="hs-identifier hs-var">get</span></span><span>
-</span><span id="line-126"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679334230"><span class="annot"><span class="annottext">ofDesc :: Bool -&gt; Description
-</span><a href="#local-6989586621679334230"><span class="hs-identifier hs-var hs-var">ofDesc</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">False</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
-</span><span id="line-127"></span><span>      </span><span class="annot"><a href="#local-6989586621679334230"><span class="hs-identifier hs-var">ofDesc</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;the function for writing outputs&quot;</span></span><span>
+</span><span id="line-126"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679324656"><span class="annot"><span class="annottext">ofDesc :: Bool -&gt; Description
+</span><a href="#local-6989586621679324656"><span class="hs-identifier hs-var hs-var">ofDesc</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">False</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
+</span><span id="line-127"></span><span>      </span><span class="annot"><a href="#local-6989586621679324656"><span class="hs-identifier hs-var">ofDesc</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;the function for writing outputs&quot;</span></span><span>
 </span><span id="line-128"></span><span>  </span><span class="annot"><span class="annottext">Description -&gt; GenState Description
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">(Description -&gt; GenState Description)
 -&gt; Description -&gt; GenState Description
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Description
-</span><a href="#local-6989586621679334230"><span class="hs-identifier hs-var">ofDesc</span></a></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Description) -&gt; Bool -&gt; Description
+</span><a href="#local-6989586621679324656"><span class="hs-identifier hs-var">ofDesc</span></a></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Description) -&gt; Bool -&gt; Description
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="hs-string">&quot;write_output&quot;</span></span><span> </span><span class="annot"><span class="annottext">Description -&gt; [Description] -&gt; Bool
 forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; [Description]
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#defList"><span class="hs-identifier hs-var hs-var">defList</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334231"><span class="hs-identifier hs-var">g</span></a></span><span>
+</span><a href="#local-6989586621679324657"><span class="hs-identifier hs-var">g</span></a></span><span>
 </span><span id="line-129"></span><span>
 </span><span id="line-130"></span><span class="hs-comment">-- | Returns a description for the generated function that stores inputs,</span><span>
 </span><span id="line-131"></span><span class="hs-comment">-- if it exists. Checks whether explicit inputs, derived inputs, and constants </span><span>
@@ -355,111 +355,111 @@ forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span id="line-134"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#inputClassDesc"><span class="hs-identifier hs-type">inputClassDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span>
 </span><span id="line-135"></span><span id="inputClassDesc"><span class="annot"><span class="annottext">inputClassDesc :: GenState Description
 </span><a href="Language.Drasil.Code.Imperative.Descriptions.html#inputClassDesc"><span class="hs-identifier hs-var hs-var">inputClassDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-136"></span><span>  </span><span id="local-6989586621679334229"><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334229"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
+</span><span id="line-136"></span><span>  </span><span id="local-6989586621679324655"><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679324655"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
 forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><span class="hs-identifier hs-var">get</span></span><span>
-</span><span id="line-137"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679334228"><span class="annot"><span class="annottext">cname :: Description
-</span><a href="#local-6989586621679334228"><span class="hs-identifier hs-var hs-var">cname</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;InputParameters&quot;</span></span><span>
-</span><span id="line-138"></span><span>      </span><span id="local-6989586621679334227"><span class="annot"><span class="annottext">ipMap :: Map Description Description
-</span><a href="#local-6989586621679334227"><span class="hs-identifier hs-var hs-var">ipMap</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Description -&gt; Bool)
+</span><span id="line-137"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679324654"><span class="annot"><span class="annottext">cname :: Description
+</span><a href="#local-6989586621679324654"><span class="hs-identifier hs-var hs-var">cname</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;InputParameters&quot;</span></span><span>
+</span><span id="line-138"></span><span>      </span><span id="local-6989586621679324653"><span class="annot"><span class="annottext">ipMap :: Map Description Description
+</span><a href="#local-6989586621679324653"><span class="hs-identifier hs-var hs-var">ipMap</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Description -&gt; Bool)
 -&gt; Map Description Description -&gt; Map Description Description
 forall a k. (a -&gt; Bool) -&gt; Map k a -&gt; Map k a
 </span><span class="hs-identifier hs-var">Map.filter</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Description
-</span><a href="#local-6989586621679334228"><span class="hs-identifier hs-var">cname</span></a></span><span> </span><span class="annot"><span class="annottext">Description -&gt; Description -&gt; Bool
+</span><a href="#local-6989586621679324654"><span class="hs-identifier hs-var">cname</span></a></span><span> </span><span class="annot"><span class="annottext">Description -&gt; Description -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DrasilState -&gt; Map Description Description
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#clsMap"><span class="hs-identifier hs-var hs-var">clsMap</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334229"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-139"></span><span>      </span><span id="local-6989586621679334226"><span class="annot"><span class="annottext">inIPMap :: [Input] -&gt; [Input]
-</span><a href="#local-6989586621679334226"><span class="hs-identifier hs-var hs-var">inIPMap</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Input -&gt; Bool) -&gt; [Input] -&gt; [Input]
+</span><a href="#local-6989586621679324655"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-139"></span><span>      </span><span id="local-6989586621679324652"><span class="annot"><span class="annottext">inIPMap :: [Input] -&gt; [Input]
+</span><a href="#local-6989586621679324652"><span class="hs-identifier hs-var hs-var">inIPMap</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Input -&gt; Bool) -&gt; [Input] -&gt; [Input]
 forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">filter</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Description -&gt; Map Description Description -&gt; Bool
 forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Bool
 </span><span class="hs-operator hs-var">`member`</span></span><span> </span><span class="annot"><span class="annottext">Map Description Description
-</span><a href="#local-6989586621679334227"><span class="hs-identifier hs-var">ipMap</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Description -&gt; Bool) -&gt; (Input -&gt; Description) -&gt; Input -&gt; Bool
+</span><a href="#local-6989586621679324653"><span class="hs-identifier hs-var">ipMap</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Description -&gt; Bool) -&gt; (Input -&gt; Description) -&gt; Input -&gt; Bool
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Input -&gt; Description
 forall c. CodeIdea c =&gt; c -&gt; Description
-</span><a href="Language.Drasil.Chunk.Code.html#codeName"><span class="hs-identifier hs-var">codeName</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-140"></span><span>      </span><span id="local-6989586621679334225"><span class="annot"><span class="annottext">inClassD :: Bool -&gt; Description
-</span><a href="#local-6989586621679334225"><span class="hs-identifier hs-var hs-var">inClassD</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">True</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
-</span><span id="line-141"></span><span>      </span><span class="annot"><a href="#local-6989586621679334225"><span class="hs-identifier hs-var">inClassD</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;Structure for holding the &quot;</span></span><span> </span><span class="annot"><span class="annottext">Description -&gt; Description -&gt; Description
+</span><span class="hs-identifier hs-var">codeName</span></span><span class="hs-special">)</span><span>
+</span><span id="line-140"></span><span>      </span><span id="local-6989586621679324651"><span class="annot"><span class="annottext">inClassD :: Bool -&gt; Description
+</span><a href="#local-6989586621679324651"><span class="hs-identifier hs-var hs-var">inClassD</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">True</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
+</span><span id="line-141"></span><span>      </span><span class="annot"><a href="#local-6989586621679324651"><span class="hs-identifier hs-var">inClassD</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;Structure for holding the &quot;</span></span><span> </span><span class="annot"><span class="annottext">Description -&gt; Description -&gt; Description
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[Description] -&gt; Description
 </span><span class="hs-identifier hs-var">stringList</span></span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-142"></span><span>        </span><span class="annot"><span class="annottext">[Input] -&gt; Description
 forall a. [a] -&gt; Description
-</span><a href="#local-6989586621679334224"><span class="hs-identifier hs-var">inPs</span></a></span><span> </span><span class="annot"><span class="annottext">([Input] -&gt; Description) -&gt; [Input] -&gt; Description
+</span><a href="#local-6989586621679324650"><span class="hs-identifier hs-var">inPs</span></a></span><span> </span><span class="annot"><span class="annottext">([Input] -&gt; Description) -&gt; [Input] -&gt; Description
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Input] -&gt; [Input]
-</span><a href="#local-6989586621679334226"><span class="hs-identifier hs-var">inIPMap</span></a></span><span> </span><span class="annot"><span class="annottext">([Input] -&gt; [Input]) -&gt; [Input] -&gt; [Input]
+</span><a href="#local-6989586621679324652"><span class="hs-identifier hs-var">inIPMap</span></a></span><span> </span><span class="annot"><span class="annottext">([Input] -&gt; [Input]) -&gt; [Input] -&gt; [Input]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">CodeSpec -&gt; [Input]
 </span><a href="Language.Drasil.CodeSpec.html#extInputs"><span class="hs-identifier hs-var hs-var">extInputs</span></a></span><span> </span><span class="annot"><span class="annottext">(CodeSpec -&gt; [Input]) -&gt; CodeSpec -&gt; [Input]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; CodeSpec
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#codeSpec"><span class="hs-identifier hs-var hs-var">codeSpec</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334229"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679324655"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-143"></span><span>        </span><span class="annot"><span class="annottext">[Input] -&gt; Description
 forall a. [a] -&gt; Description
-</span><a href="#local-6989586621679334222"><span class="hs-identifier hs-var">dVs</span></a></span><span> </span><span class="annot"><span class="annottext">([Input] -&gt; Description) -&gt; [Input] -&gt; Description
+</span><a href="#local-6989586621679324648"><span class="hs-identifier hs-var">dVs</span></a></span><span> </span><span class="annot"><span class="annottext">([Input] -&gt; Description) -&gt; [Input] -&gt; Description
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Input] -&gt; [Input]
-</span><a href="#local-6989586621679334226"><span class="hs-identifier hs-var">inIPMap</span></a></span><span> </span><span class="annot"><span class="annottext">([Input] -&gt; [Input]) -&gt; [Input] -&gt; [Input]
+</span><a href="#local-6989586621679324652"><span class="hs-identifier hs-var">inIPMap</span></a></span><span> </span><span class="annot"><span class="annottext">([Input] -&gt; [Input]) -&gt; [Input] -&gt; [Input]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Const -&gt; Input) -&gt; [Const] -&gt; [Input]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Const -&gt; Input
 forall c. (Quantity c, MayHaveUnit c) =&gt; c -&gt; Input
-</span><a href="Language.Drasil.Chunk.Code.html#quantvar"><span class="hs-identifier hs-var">quantvar</span></a></span><span> </span><span class="annot"><span class="annottext">([Const] -&gt; [Input]) -&gt; [Const] -&gt; [Input]
+</span><span class="hs-identifier hs-var">quantvar</span></span><span> </span><span class="annot"><span class="annottext">([Const] -&gt; [Input]) -&gt; [Const] -&gt; [Input]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">CodeSpec -&gt; [Const]
 </span><a href="Language.Drasil.CodeSpec.html#derivedInputs"><span class="hs-identifier hs-var hs-var">derivedInputs</span></a></span><span> </span><span class="annot"><span class="annottext">(CodeSpec -&gt; [Const]) -&gt; CodeSpec -&gt; [Const]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; CodeSpec
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#codeSpec"><span class="hs-identifier hs-var hs-var">codeSpec</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334229"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679324655"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-144"></span><span>        </span><span class="annot"><span class="annottext">[Input] -&gt; Description
 forall a. [a] -&gt; Description
-</span><a href="#local-6989586621679334220"><span class="hs-identifier hs-var">cVs</span></a></span><span> </span><span class="annot"><span class="annottext">([Input] -&gt; Description) -&gt; [Input] -&gt; Description
+</span><a href="#local-6989586621679324646"><span class="hs-identifier hs-var">cVs</span></a></span><span> </span><span class="annot"><span class="annottext">([Input] -&gt; Description) -&gt; [Input] -&gt; Description
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Input] -&gt; [Input]
-</span><a href="#local-6989586621679334226"><span class="hs-identifier hs-var">inIPMap</span></a></span><span> </span><span class="annot"><span class="annottext">([Input] -&gt; [Input]) -&gt; [Input] -&gt; [Input]
+</span><a href="#local-6989586621679324652"><span class="hs-identifier hs-var">inIPMap</span></a></span><span> </span><span class="annot"><span class="annottext">([Input] -&gt; [Input]) -&gt; [Input] -&gt; [Input]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Const -&gt; Input) -&gt; [Const] -&gt; [Input]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Const -&gt; Input
 forall c. (Quantity c, MayHaveUnit c) =&gt; c -&gt; Input
-</span><a href="Language.Drasil.Chunk.Code.html#quantvar"><span class="hs-identifier hs-var">quantvar</span></a></span><span> </span><span class="annot"><span class="annottext">([Const] -&gt; [Input]) -&gt; [Const] -&gt; [Input]
+</span><span class="hs-identifier hs-var">quantvar</span></span><span> </span><span class="annot"><span class="annottext">([Const] -&gt; [Input]) -&gt; [Const] -&gt; [Input]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">CodeSpec -&gt; [Const]
 </span><a href="Language.Drasil.CodeSpec.html#constants"><span class="hs-identifier hs-var hs-var">constants</span></a></span><span> </span><span class="annot"><span class="annottext">(CodeSpec -&gt; [Const]) -&gt; CodeSpec -&gt; [Const]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; CodeSpec
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#codeSpec"><span class="hs-identifier hs-var hs-var">codeSpec</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334229"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-145"></span><span>      </span><span id="local-6989586621679334224"><span class="annot"><span class="annottext">inPs :: [a] -&gt; Description
-</span><a href="#local-6989586621679334224"><span class="hs-identifier hs-var hs-var">inPs</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
-</span><span id="line-146"></span><span>      </span><span class="annot"><a href="#local-6989586621679334224"><span class="hs-identifier hs-var">inPs</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;input values&quot;</span></span><span>
-</span><span id="line-147"></span><span>      </span><span id="local-6989586621679334222"><span class="annot"><span class="annottext">dVs :: [a] -&gt; Description
-</span><a href="#local-6989586621679334222"><span class="hs-identifier hs-var hs-var">dVs</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
-</span><span id="line-148"></span><span>      </span><span class="annot"><a href="#local-6989586621679334222"><span class="hs-identifier hs-var">dVs</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;derived values&quot;</span></span><span>
-</span><span id="line-149"></span><span>      </span><span id="local-6989586621679334220"><span class="annot"><span class="annottext">cVs :: [a] -&gt; Description
-</span><a href="#local-6989586621679334220"><span class="hs-identifier hs-var hs-var">cVs</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
-</span><span id="line-150"></span><span>      </span><span class="annot"><a href="#local-6989586621679334220"><span class="hs-identifier hs-var">cVs</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;constant values&quot;</span></span><span>
+</span><a href="#local-6989586621679324655"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-145"></span><span>      </span><span id="local-6989586621679324650"><span class="annot"><span class="annottext">inPs :: [a] -&gt; Description
+</span><a href="#local-6989586621679324650"><span class="hs-identifier hs-var hs-var">inPs</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
+</span><span id="line-146"></span><span>      </span><span class="annot"><a href="#local-6989586621679324650"><span class="hs-identifier hs-var">inPs</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;input values&quot;</span></span><span>
+</span><span id="line-147"></span><span>      </span><span id="local-6989586621679324648"><span class="annot"><span class="annottext">dVs :: [a] -&gt; Description
+</span><a href="#local-6989586621679324648"><span class="hs-identifier hs-var hs-var">dVs</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
+</span><span id="line-148"></span><span>      </span><span class="annot"><a href="#local-6989586621679324648"><span class="hs-identifier hs-var">dVs</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;derived values&quot;</span></span><span>
+</span><span id="line-149"></span><span>      </span><span id="local-6989586621679324646"><span class="annot"><span class="annottext">cVs :: [a] -&gt; Description
+</span><a href="#local-6989586621679324646"><span class="hs-identifier hs-var hs-var">cVs</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
+</span><span id="line-150"></span><span>      </span><span class="annot"><a href="#local-6989586621679324646"><span class="hs-identifier hs-var">cVs</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;constant values&quot;</span></span><span>
 </span><span id="line-151"></span><span>  </span><span class="annot"><span class="annottext">Description -&gt; GenState Description
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">(Description -&gt; GenState Description)
 -&gt; Description -&gt; GenState Description
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Description
-</span><a href="#local-6989586621679334225"><span class="hs-identifier hs-var">inClassD</span></a></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Description) -&gt; Bool -&gt; Description
+</span><a href="#local-6989586621679324651"><span class="hs-identifier hs-var">inClassD</span></a></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Description) -&gt; Bool -&gt; Description
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Map Description Description -&gt; Bool
 forall k a. Map k a -&gt; Bool
 </span><span class="hs-identifier hs-var">Map.null</span></span><span> </span><span class="annot"><span class="annottext">Map Description Description
-</span><a href="#local-6989586621679334227"><span class="hs-identifier hs-var">ipMap</span></a></span><span>
+</span><a href="#local-6989586621679324653"><span class="hs-identifier hs-var">ipMap</span></a></span><span>
 </span><span id="line-152"></span><span>
 </span><span id="line-153"></span><span class="hs-comment">-- | Returns a description for the generated class that stores constants,</span><span>
 </span><span id="line-154"></span><span class="hs-comment">-- if it exists. If no constants are defined in the Constants class, then it </span><span>
@@ -467,15 +467,15 @@ forall k a. Map k a -&gt; Bool
 </span><span id="line-156"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#constClassDesc"><span class="hs-identifier hs-type">constClassDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span>
 </span><span id="line-157"></span><span id="constClassDesc"><span class="annot"><span class="annottext">constClassDesc :: GenState Description
 </span><a href="Language.Drasil.Code.Imperative.Descriptions.html#constClassDesc"><span class="hs-identifier hs-var hs-var">constClassDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-158"></span><span>  </span><span id="local-6989586621679334219"><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334219"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
+</span><span id="line-158"></span><span>  </span><span id="local-6989586621679324645"><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679324645"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
 forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><span class="hs-identifier hs-var">get</span></span><span>
-</span><span id="line-159"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679334218"><span class="annot"><span class="annottext">cname :: Description
-</span><a href="#local-6989586621679334218"><span class="hs-identifier hs-var hs-var">cname</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;Constants&quot;</span></span><span>
-</span><span id="line-160"></span><span>      </span><span id="local-6989586621679334217"><span class="annot"><span class="annottext">ccDesc :: [a] -&gt; Description
-</span><a href="#local-6989586621679334217"><span class="hs-identifier hs-var hs-var">ccDesc</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
-</span><span id="line-161"></span><span>      </span><span class="annot"><a href="#local-6989586621679334217"><span class="hs-identifier hs-var">ccDesc</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;Structure for holding the constant values&quot;</span></span><span>
+</span><span id="line-159"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679324644"><span class="annot"><span class="annottext">cname :: Description
+</span><a href="#local-6989586621679324644"><span class="hs-identifier hs-var hs-var">cname</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;Constants&quot;</span></span><span>
+</span><span id="line-160"></span><span>      </span><span id="local-6989586621679324643"><span class="annot"><span class="annottext">ccDesc :: [a] -&gt; Description
+</span><a href="#local-6989586621679324643"><span class="hs-identifier hs-var hs-var">ccDesc</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
+</span><span id="line-161"></span><span>      </span><span class="annot"><a href="#local-6989586621679324643"><span class="hs-identifier hs-var">ccDesc</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;Structure for holding the constant values&quot;</span></span><span>
 </span><span id="line-162"></span><span>  </span><span class="annot"><span class="annottext">Description -&gt; GenState Description
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">(Description -&gt; GenState Description)
@@ -483,7 +483,7 @@ forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Const] -&gt; Description
 forall a. [a] -&gt; Description
-</span><a href="#local-6989586621679334217"><span class="hs-identifier hs-var">ccDesc</span></a></span><span> </span><span class="annot"><span class="annottext">([Const] -&gt; Description) -&gt; [Const] -&gt; Description
+</span><a href="#local-6989586621679324643"><span class="hs-identifier hs-var">ccDesc</span></a></span><span> </span><span class="annot"><span class="annottext">([Const] -&gt; Description) -&gt; [Const] -&gt; Description
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Const -&gt; Bool) -&gt; [Const] -&gt; [Const]
 forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
@@ -496,92 +496,92 @@ forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Bool
 -&gt; Map Description Description -&gt; Map Description Description
 forall a k. (a -&gt; Bool) -&gt; Map k a -&gt; Map k a
 </span><span class="hs-identifier hs-var">Map.filter</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Description
-</span><a href="#local-6989586621679334218"><span class="hs-identifier hs-var">cname</span></a></span><span> </span><span class="annot"><span class="annottext">Description -&gt; Description -&gt; Bool
+</span><a href="#local-6989586621679324644"><span class="hs-identifier hs-var">cname</span></a></span><span> </span><span class="annot"><span class="annottext">Description -&gt; Description -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span class="hs-special">)</span><span> </span><span>
 </span><span id="line-163"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DrasilState -&gt; Map Description Description
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#clsMap"><span class="hs-identifier hs-var hs-var">clsMap</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334219"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Description -&gt; Bool) -&gt; (Const -&gt; Description) -&gt; Const -&gt; Bool
+</span><a href="#local-6989586621679324645"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Description -&gt; Bool) -&gt; (Const -&gt; Description) -&gt; Const -&gt; Bool
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Const -&gt; Description
 forall c. CodeIdea c =&gt; c -&gt; Description
-</span><a href="Language.Drasil.Chunk.Code.html#codeName"><span class="hs-identifier hs-var">codeName</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeSpec -&gt; [Const]
+</span><span class="hs-identifier hs-var">codeName</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeSpec -&gt; [Const]
 </span><a href="Language.Drasil.CodeSpec.html#constants"><span class="hs-identifier hs-var hs-var">constants</span></a></span><span> </span><span class="annot"><span class="annottext">(CodeSpec -&gt; [Const]) -&gt; CodeSpec -&gt; [Const]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; CodeSpec
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#codeSpec"><span class="hs-identifier hs-var hs-var">codeSpec</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334219"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679324645"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-164"></span><span>
 </span><span id="line-165"></span><span class="hs-comment">-- | Returns a description for the generated function that reads input from a file,</span><span>
 </span><span id="line-166"></span><span class="hs-comment">-- if it exists.</span><span>
 </span><span id="line-167"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#inFmtFuncDesc"><span class="hs-identifier hs-type">inFmtFuncDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span>
 </span><span id="line-168"></span><span id="inFmtFuncDesc"><span class="annot"><span class="annottext">inFmtFuncDesc :: GenState Description
 </span><a href="Language.Drasil.Code.Imperative.Descriptions.html#inFmtFuncDesc"><span class="hs-identifier hs-var hs-var">inFmtFuncDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-169"></span><span>  </span><span id="local-6989586621679334216"><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334216"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
+</span><span id="line-169"></span><span>  </span><span id="local-6989586621679324642"><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679324642"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
 forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><span class="hs-identifier hs-var">get</span></span><span>
-</span><span id="line-170"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679334215"><span class="annot"><span class="annottext">ifDesc :: Bool -&gt; Description
-</span><a href="#local-6989586621679334215"><span class="hs-identifier hs-var hs-var">ifDesc</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">False</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
-</span><span id="line-171"></span><span>      </span><span class="annot"><a href="#local-6989586621679334215"><span class="hs-identifier hs-var">ifDesc</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;Reads input from a file with the given file name&quot;</span></span><span>
+</span><span id="line-170"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679324641"><span class="annot"><span class="annottext">ifDesc :: Bool -&gt; Description
+</span><a href="#local-6989586621679324641"><span class="hs-identifier hs-var hs-var">ifDesc</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">False</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
+</span><span id="line-171"></span><span>      </span><span class="annot"><a href="#local-6989586621679324641"><span class="hs-identifier hs-var">ifDesc</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;Reads input from a file with the given file name&quot;</span></span><span>
 </span><span id="line-172"></span><span>  </span><span class="annot"><span class="annottext">Description -&gt; GenState Description
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">(Description -&gt; GenState Description)
 -&gt; Description -&gt; GenState Description
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Description
-</span><a href="#local-6989586621679334215"><span class="hs-identifier hs-var">ifDesc</span></a></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Description) -&gt; Bool -&gt; Description
+</span><a href="#local-6989586621679324641"><span class="hs-identifier hs-var">ifDesc</span></a></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Description) -&gt; Bool -&gt; Description
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="hs-string">&quot;get_input&quot;</span></span><span> </span><span class="annot"><span class="annottext">Description -&gt; [Description] -&gt; Bool
 forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; [Description]
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#defList"><span class="hs-identifier hs-var hs-var">defList</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334216"><span class="hs-identifier hs-var">g</span></a></span><span>
+</span><a href="#local-6989586621679324642"><span class="hs-identifier hs-var">g</span></a></span><span>
 </span><span id="line-173"></span><span>
 </span><span id="line-174"></span><span class="hs-comment">-- | Returns a description for the generated function that checks input constraints,</span><span>
 </span><span id="line-175"></span><span class="hs-comment">-- if it exists.</span><span>
 </span><span id="line-176"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#inConsFuncDesc"><span class="hs-identifier hs-type">inConsFuncDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span>
 </span><span id="line-177"></span><span id="inConsFuncDesc"><span class="annot"><span class="annottext">inConsFuncDesc :: GenState Description
 </span><a href="Language.Drasil.Code.Imperative.Descriptions.html#inConsFuncDesc"><span class="hs-identifier hs-var hs-var">inConsFuncDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-178"></span><span>  </span><span id="local-6989586621679334214"><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334214"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
+</span><span id="line-178"></span><span>  </span><span id="local-6989586621679324640"><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679324640"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
 forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><span class="hs-identifier hs-var">get</span></span><span>
-</span><span id="line-179"></span><span>  </span><span id="local-6989586621679334213"><span class="annot"><span class="annottext">Description
-</span><a href="#local-6989586621679334213"><span class="hs-identifier hs-var">pAndS</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">GenState Description
+</span><span id="line-179"></span><span>  </span><span id="local-6989586621679324639"><span class="annot"><span class="annottext">Description
+</span><a href="#local-6989586621679324639"><span class="hs-identifier hs-var">pAndS</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">GenState Description
 </span><a href="Language.Drasil.Code.Imperative.Descriptions.html#physAndSfwrCons"><span class="hs-identifier hs-var">physAndSfwrCons</span></a></span><span>
-</span><span id="line-180"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679334212"><span class="annot"><span class="annottext">icDesc :: Bool -&gt; Description
-</span><a href="#local-6989586621679334212"><span class="hs-identifier hs-var hs-var">icDesc</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">False</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
-</span><span id="line-181"></span><span>      </span><span class="annot"><a href="#local-6989586621679334212"><span class="hs-identifier hs-var">icDesc</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;Verifies that input values satisfy the &quot;</span></span><span> </span><span class="annot"><span class="annottext">Description -&gt; Description -&gt; Description
+</span><span id="line-180"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679324638"><span class="annot"><span class="annottext">icDesc :: Bool -&gt; Description
+</span><a href="#local-6989586621679324638"><span class="hs-identifier hs-var hs-var">icDesc</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">False</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
+</span><span id="line-181"></span><span>      </span><span class="annot"><a href="#local-6989586621679324638"><span class="hs-identifier hs-var">icDesc</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;Verifies that input values satisfy the &quot;</span></span><span> </span><span class="annot"><span class="annottext">Description -&gt; Description -&gt; Description
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">Description
-</span><a href="#local-6989586621679334213"><span class="hs-identifier hs-var">pAndS</span></a></span><span>
+</span><a href="#local-6989586621679324639"><span class="hs-identifier hs-var">pAndS</span></a></span><span>
 </span><span id="line-182"></span><span>  </span><span class="annot"><span class="annottext">Description -&gt; GenState Description
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">(Description -&gt; GenState Description)
 -&gt; Description -&gt; GenState Description
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Description
-</span><a href="#local-6989586621679334212"><span class="hs-identifier hs-var">icDesc</span></a></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Description) -&gt; Bool -&gt; Description
+</span><a href="#local-6989586621679324638"><span class="hs-identifier hs-var">icDesc</span></a></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Description) -&gt; Bool -&gt; Description
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="hs-string">&quot;input_constraints&quot;</span></span><span> </span><span class="annot"><span class="annottext">Description -&gt; [Description] -&gt; Bool
 forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; [Description]
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#defList"><span class="hs-identifier hs-var hs-var">defList</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334214"><span class="hs-identifier hs-var">g</span></a></span><span>
+</span><a href="#local-6989586621679324640"><span class="hs-identifier hs-var">g</span></a></span><span>
 </span><span id="line-183"></span><span>
 </span><span id="line-184"></span><span class="hs-comment">-- | Returns a description for the generated function that calculates derived inputs,</span><span>
 </span><span id="line-185"></span><span class="hs-comment">-- if it exists.</span><span>
 </span><span id="line-186"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#dvFuncDesc"><span class="hs-identifier hs-type">dvFuncDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span>
 </span><span id="line-187"></span><span id="dvFuncDesc"><span class="annot"><span class="annottext">dvFuncDesc :: GenState Description
 </span><a href="Language.Drasil.Code.Imperative.Descriptions.html#dvFuncDesc"><span class="hs-identifier hs-var hs-var">dvFuncDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-188"></span><span>  </span><span id="local-6989586621679334211"><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334211"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
+</span><span id="line-188"></span><span>  </span><span id="local-6989586621679324637"><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679324637"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
 forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><span class="hs-identifier hs-var">get</span></span><span>
-</span><span id="line-189"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679334210"><span class="annot"><span class="annottext">dvDesc :: Bool -&gt; Description
-</span><a href="#local-6989586621679334210"><span class="hs-identifier hs-var hs-var">dvDesc</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">False</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
-</span><span id="line-190"></span><span>      </span><span class="annot"><a href="#local-6989586621679334210"><span class="hs-identifier hs-var">dvDesc</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;Calculates values that can be immediately derived from the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Description -&gt; Description -&gt; Description
+</span><span id="line-189"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679324636"><span class="annot"><span class="annottext">dvDesc :: Bool -&gt; Description
+</span><a href="#local-6989586621679324636"><span class="hs-identifier hs-var hs-var">dvDesc</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">False</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
+</span><span id="line-190"></span><span>      </span><span class="annot"><a href="#local-6989586621679324636"><span class="hs-identifier hs-var">dvDesc</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;Calculates values that can be immediately derived from the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Description -&gt; Description -&gt; Description
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
 </span><span id="line-191"></span><span>        </span><span class="annot"><span class="hs-string">&quot; inputs&quot;</span></span><span>
@@ -591,13 +591,13 @@ forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 -&gt; Description -&gt; GenState Description
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Description
-</span><a href="#local-6989586621679334210"><span class="hs-identifier hs-var">dvDesc</span></a></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Description) -&gt; Bool -&gt; Description
+</span><a href="#local-6989586621679324636"><span class="hs-identifier hs-var">dvDesc</span></a></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Description) -&gt; Bool -&gt; Description
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="hs-string">&quot;derived_values&quot;</span></span><span> </span><span class="annot"><span class="annottext">Description -&gt; [Description] -&gt; Bool
 forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; [Description]
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#defList"><span class="hs-identifier hs-var hs-var">defList</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334211"><span class="hs-identifier hs-var">g</span></a></span><span>
+</span><a href="#local-6989586621679324637"><span class="hs-identifier hs-var">g</span></a></span><span>
 </span><span id="line-193"></span><span>
 </span><span id="line-194"></span><span class="hs-comment">-- | Description of the generated Calculations module.</span><span>
 </span><span id="line-195"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#calcModDesc"><span class="hs-identifier hs-type">calcModDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span>
@@ -608,26 +608,26 @@ forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span id="line-199"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#woFuncDesc"><span class="hs-identifier hs-type">woFuncDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span>
 </span><span id="line-200"></span><span id="woFuncDesc"><span class="annot"><span class="annottext">woFuncDesc :: GenState Description
 </span><a href="Language.Drasil.Code.Imperative.Descriptions.html#woFuncDesc"><span class="hs-identifier hs-var hs-var">woFuncDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-201"></span><span>  </span><span id="local-6989586621679334209"><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334209"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
+</span><span id="line-201"></span><span>  </span><span id="local-6989586621679324635"><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679324635"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
 forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><span class="hs-identifier hs-var">get</span></span><span>
-</span><span id="line-202"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679334208"><span class="annot"><span class="annottext">woDesc :: Bool -&gt; Description
-</span><a href="#local-6989586621679334208"><span class="hs-identifier hs-var hs-var">woDesc</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">False</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
-</span><span id="line-203"></span><span>      </span><span class="annot"><a href="#local-6989586621679334208"><span class="hs-identifier hs-var">woDesc</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;Writes the output values to output.txt&quot;</span></span><span>
+</span><span id="line-202"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679324634"><span class="annot"><span class="annottext">woDesc :: Bool -&gt; Description
+</span><a href="#local-6989586621679324634"><span class="hs-identifier hs-var hs-var">woDesc</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">False</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
+</span><span id="line-203"></span><span>      </span><span class="annot"><a href="#local-6989586621679324634"><span class="hs-identifier hs-var">woDesc</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;Writes the output values to output.txt&quot;</span></span><span>
 </span><span id="line-204"></span><span>  </span><span class="annot"><span class="annottext">Description -&gt; GenState Description
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">(Description -&gt; GenState Description)
 -&gt; Description -&gt; GenState Description
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Description
-</span><a href="#local-6989586621679334208"><span class="hs-identifier hs-var">woDesc</span></a></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Description) -&gt; Bool -&gt; Description
+</span><a href="#local-6989586621679324634"><span class="hs-identifier hs-var">woDesc</span></a></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Description) -&gt; Bool -&gt; Description
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="hs-string">&quot;write_output&quot;</span></span><span> </span><span class="annot"><span class="annottext">Description -&gt; [Description] -&gt; Bool
 forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; [Description]
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#defList"><span class="hs-identifier hs-var hs-var">defList</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334209"><span class="hs-identifier hs-var">g</span></a></span><span>
+</span><a href="#local-6989586621679324635"><span class="hs-identifier hs-var">g</span></a></span><span>
 </span><span id="line-205"></span><span>
 </span><span id="line-206"></span><span class="hs-comment">-- | Returns the phrase &quot;physical constraints&quot; if there are any physical </span><span>
 </span><span id="line-207"></span><span class="hs-comment">-- constraints on the input and &quot;software constraints&quot; if there are any </span><span>
@@ -636,27 +636,29 @@ forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span id="line-210"></span><span class="annot"><a href="Language.Drasil.Code.Imperative.Descriptions.html#physAndSfwrCons"><span class="hs-identifier hs-type">physAndSfwrCons</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Mod.html#Description"><span class="hs-identifier hs-type">Description</span></a></span><span>
 </span><span id="line-211"></span><span id="physAndSfwrCons"><span class="annot"><span class="annottext">physAndSfwrCons :: GenState Description
 </span><a href="Language.Drasil.Code.Imperative.Descriptions.html#physAndSfwrCons"><span class="hs-identifier hs-var hs-var">physAndSfwrCons</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-212"></span><span>  </span><span id="local-6989586621679334207"><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334207"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
+</span><span id="line-212"></span><span>  </span><span id="local-6989586621679324633"><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679324633"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
 forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><span class="hs-identifier hs-var">get</span></span><span>
-</span><span id="line-213"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679334206"><span class="annot"><span class="annottext">cns :: [Constraint]
-</span><a href="#local-6989586621679334206"><span class="hs-identifier hs-var hs-var">cns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[[Constraint]] -&gt; [Constraint]
+</span><span id="line-213"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679324632"><span class="annot"><span class="annottext">cns :: [ConstraintCE]
+</span><a href="#local-6989586621679324632"><span class="hs-identifier hs-var hs-var">cns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[[ConstraintCE]] -&gt; [ConstraintCE]
 forall (t :: * -&gt; *) a. Foldable t =&gt; t [a] -&gt; [a]
-</span><span class="hs-identifier hs-var">concat</span></span><span> </span><span class="annot"><span class="annottext">([[Constraint]] -&gt; [Constraint]) -&gt; [[Constraint]] -&gt; [Constraint]
+</span><span class="hs-identifier hs-var">concat</span></span><span> </span><span class="annot"><span class="annottext">([[ConstraintCE]] -&gt; [ConstraintCE])
+-&gt; [[ConstraintCE]] -&gt; [ConstraintCE]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Input -&gt; Maybe [Constraint]) -&gt; [Input] -&gt; [[Constraint]]
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Input -&gt; Maybe [ConstraintCE]) -&gt; [Input] -&gt; [[ConstraintCE]]
 forall a b. (a -&gt; Maybe b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">mapMaybe</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Description -&gt; Map Description [Constraint] -&gt; Maybe [Constraint]
+</span><span class="hs-identifier hs-var">mapMaybe</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Description
+-&gt; Map Description [ConstraintCE] -&gt; Maybe [ConstraintCE]
 forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
-</span><span class="hs-operator hs-var">`Map.lookup`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeSpec -&gt; Map Description [Constraint]
-</span><a href="Language.Drasil.CodeSpec.html#cMap"><span class="hs-identifier hs-var hs-var">cMap</span></a></span><span> </span><span class="annot"><span class="annottext">(CodeSpec -&gt; Map Description [Constraint])
--&gt; CodeSpec -&gt; Map Description [Constraint]
+</span><span class="hs-operator hs-var">`Map.lookup`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeSpec -&gt; Map Description [ConstraintCE]
+</span><a href="Language.Drasil.CodeSpec.html#cMap"><span class="hs-identifier hs-var hs-var">cMap</span></a></span><span> </span><span class="annot"><span class="annottext">(CodeSpec -&gt; Map Description [ConstraintCE])
+-&gt; CodeSpec -&gt; Map Description [ConstraintCE]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; CodeSpec
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#codeSpec"><span class="hs-identifier hs-var hs-var">codeSpec</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334207"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Description -&gt; Maybe [Constraint])
--&gt; (Input -&gt; Description) -&gt; Input -&gt; Maybe [Constraint]
+</span><a href="#local-6989586621679324633"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Description -&gt; Maybe [ConstraintCE])
+-&gt; (Input -&gt; Description) -&gt; Input -&gt; Maybe [ConstraintCE]
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Input -&gt; Getting Description Input Description -&gt; Description
 forall s a. s -&gt; Getting a s a -&gt; a
@@ -668,7 +670,7 @@ forall c. HasUID c =&gt; Lens' c Description
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; CodeSpec
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#codeSpec"><span class="hs-identifier hs-var hs-var">codeSpec</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679334207"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679324633"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-215"></span><span>  </span><span class="annot"><span class="annottext">Description -&gt; GenState Description
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">(Description -&gt; GenState Description)
@@ -677,14 +679,16 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Description] -&gt; Description
 </span><span class="hs-identifier hs-var">stringList</span></span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-216"></span><span>    </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool
-</span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Constraint -&gt; Bool) -&gt; [Constraint] -&gt; Bool
+</span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(ConstraintCE -&gt; Bool) -&gt; [ConstraintCE] -&gt; Bool
 forall (t :: * -&gt; *) a. Foldable t =&gt; (a -&gt; Bool) -&gt; t a -&gt; Bool
-</span><span class="hs-identifier hs-var">any</span></span><span> </span><span class="annot"><span class="annottext">Constraint -&gt; Bool
-</span><span class="hs-identifier hs-var">isPhysC</span></span><span> </span><span class="annot"><span class="annottext">[Constraint]
-</span><a href="#local-6989586621679334206"><span class="hs-identifier hs-var">cns</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span> </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="hs-string">&quot;physical constraints&quot;</span></span><span class="hs-special">,</span><span>
+</span><span class="hs-identifier hs-var">any</span></span><span> </span><span class="annot"><span class="annottext">ConstraintCE -&gt; Bool
+forall e. Constraint e -&gt; Bool
+</span><span class="hs-identifier hs-var">isPhysC</span></span><span> </span><span class="annot"><span class="annottext">[ConstraintCE]
+</span><a href="#local-6989586621679324632"><span class="hs-identifier hs-var">cns</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span> </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="hs-string">&quot;physical constraints&quot;</span></span><span class="hs-special">,</span><span>
 </span><span id="line-217"></span><span>    </span><span class="hs-keyword">if</span><span> </span><span class="annot"><span class="annottext">Bool -&gt; Bool
-</span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Constraint -&gt; Bool) -&gt; [Constraint] -&gt; Bool
+</span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(ConstraintCE -&gt; Bool) -&gt; [ConstraintCE] -&gt; Bool
 forall (t :: * -&gt; *) a. Foldable t =&gt; (a -&gt; Bool) -&gt; t a -&gt; Bool
-</span><span class="hs-identifier hs-var">any</span></span><span> </span><span class="annot"><span class="annottext">Constraint -&gt; Bool
-</span><span class="hs-identifier hs-var">isSfwrC</span></span><span> </span><span class="annot"><span class="annottext">[Constraint]
-</span><a href="#local-6989586621679334206"><span class="hs-identifier hs-var">cns</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span> </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="hs-string">&quot;software constraints&quot;</span></span><span class="hs-special">]</span></pre></body></html>
+</span><span class="hs-identifier hs-var">any</span></span><span> </span><span class="annot"><span class="annottext">ConstraintCE -&gt; Bool
+forall e. Constraint e -&gt; Bool
+</span><span class="hs-identifier hs-var">isSfwrC</span></span><span> </span><span class="annot"><span class="annottext">[ConstraintCE]
+</span><a href="#local-6989586621679324632"><span class="hs-identifier hs-var">cns</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">then</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span> </span><span class="hs-keyword">else</span><span> </span><span class="annot"><span class="hs-string">&quot;software constraints&quot;</span></span><span class="hs-special">]</span></pre></body></html>

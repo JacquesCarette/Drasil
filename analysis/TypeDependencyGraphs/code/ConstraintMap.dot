@@ -1,4 +1,0 @@
-digraph constraintmap{
-ConstraintMap -> MapUIDConstraint;
-ConstraintMap	[shape=oval, color=red2, label=ConstraintMap];
-}

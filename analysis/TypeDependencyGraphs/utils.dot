@@ -24,11 +24,15 @@ digraph alltypes {
 		FoldType	[shape=oval, color=darkviolet, label=FoldType];
 		}
 	}
+	subgraph litss {
+	}
 	subgraph mics {
 	}
 	subgraph nounpraehs {
 	}
 	subgraph sentence {
+	}
+	subgraph strings {
 	}
 	subgraph drails {
 	}

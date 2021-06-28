@@ -15,12 +15,12 @@
 </span><span id="line-15"></span><span>
 </span><span id="line-16"></span><span class="hs-comment">-- | Generates a statement that logs the given variable's value, if the user </span><span>
 </span><span id="line-17"></span><span class="hs-comment">-- chose to turn on logging of variable assignments.</span><span>
-</span><span id="line-18"></span><span id="local-6989586621679333844"><span class="annot"><a href="Language.Drasil.Code.Imperative.Logging.html#maybeLog"><span class="hs-identifier hs-type">maybeLog</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">OOProg</span></span><span> </span><span class="annot"><a href="#local-6989586621679333844"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SVariable</span></span><span> </span><span class="annot"><a href="#local-6989586621679333844"><span class="hs-identifier hs-type">r</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">MSStatement</span></span><span> </span><span class="annot"><a href="#local-6989586621679333844"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span></span><span>
+</span><span id="line-18"></span><span id="local-6989586621679324280"><span class="annot"><a href="Language.Drasil.Code.Imperative.Logging.html#maybeLog"><span class="hs-identifier hs-type">maybeLog</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">OOProg</span></span><span> </span><span class="annot"><a href="#local-6989586621679324280"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SVariable</span></span><span> </span><span class="annot"><a href="#local-6989586621679324280"><span class="hs-identifier hs-type">r</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">MSStatement</span></span><span> </span><span class="annot"><a href="#local-6989586621679324280"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span></span><span>
 </span><span id="line-19"></span><span id="maybeLog"><span class="annot"><span class="annottext">maybeLog :: SVariable r -&gt; GenState [MSStatement r]
-</span><a href="Language.Drasil.Code.Imperative.Logging.html#maybeLog"><span class="hs-identifier hs-var hs-var">maybeLog</span></a></span></span><span> </span><span id="local-6989586621679333843"><span class="annot"><span class="annottext">v :: SVariable r
-</span><a href="#local-6989586621679333843"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-20"></span><span>  </span><span id="local-6989586621679333842"><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679333842"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
+</span><a href="Language.Drasil.Code.Imperative.Logging.html#maybeLog"><span class="hs-identifier hs-var hs-var">maybeLog</span></a></span></span><span> </span><span id="local-6989586621679324279"><span class="annot"><span class="annottext">v :: SVariable r
+</span><a href="#local-6989586621679324279"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-20"></span><span>  </span><span id="local-6989586621679324278"><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679324278"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
 forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><span class="hs-identifier hs-var">get</span></span><span>
 </span><span id="line-21"></span><span>  </span><span class="annot"><span class="annottext">[StateT DrasilState Identity (MSStatement r)]
@@ -33,21 +33,21 @@ forall (r :: * -&gt; *).
 OOProg r =&gt;
 SVariable r -&gt; GenState (MSStatement r)
 </span><a href="Language.Drasil.Code.Imperative.Logging.html#loggedVar"><span class="hs-identifier hs-var">loggedVar</span></a></span><span> </span><span class="annot"><span class="annottext">SVariable r
-</span><a href="#local-6989586621679333843"><span class="hs-identifier hs-var">v</span></a></span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Logging
+</span><a href="#local-6989586621679324279"><span class="hs-identifier hs-var">v</span></a></span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Logging
 </span><a href="Language.Drasil.Choices.html#LogVar"><span class="hs-identifier hs-var">LogVar</span></a></span><span> </span><span class="annot"><span class="annottext">Logging -&gt; [Logging] -&gt; Bool
 forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; [Logging]
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#logKind"><span class="hs-identifier hs-var hs-var">logKind</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679333842"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679324278"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-22"></span><span>
 </span><span id="line-23"></span><span class="hs-comment">-- | Generates a statement that logs the name of the given variable, its current </span><span>
 </span><span id="line-24"></span><span class="hs-comment">-- value, and the current module name.</span><span>
-</span><span id="line-25"></span><span id="local-6989586621679333912"><span class="annot"><a href="Language.Drasil.Code.Imperative.Logging.html#loggedVar"><span class="hs-identifier hs-type">loggedVar</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">OOProg</span></span><span> </span><span class="annot"><a href="#local-6989586621679333912"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SVariable</span></span><span> </span><span class="annot"><a href="#local-6989586621679333912"><span class="hs-identifier hs-type">r</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">MSStatement</span></span><span> </span><span class="annot"><a href="#local-6989586621679333912"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span></span><span>
+</span><span id="line-25"></span><span id="local-6989586621679324348"><span class="annot"><a href="Language.Drasil.Code.Imperative.Logging.html#loggedVar"><span class="hs-identifier hs-type">loggedVar</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">OOProg</span></span><span> </span><span class="annot"><a href="#local-6989586621679324348"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SVariable</span></span><span> </span><span class="annot"><a href="#local-6989586621679324348"><span class="hs-identifier hs-type">r</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">MSStatement</span></span><span> </span><span class="annot"><a href="#local-6989586621679324348"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span></span><span>
 </span><span id="line-26"></span><span id="loggedVar"><span class="annot"><span class="annottext">loggedVar :: SVariable r -&gt; GenState (MSStatement r)
-</span><a href="Language.Drasil.Code.Imperative.Logging.html#loggedVar"><span class="hs-identifier hs-var hs-var">loggedVar</span></a></span></span><span> </span><span id="local-6989586621679333836"><span class="annot"><span class="annottext">v :: SVariable r
-</span><a href="#local-6989586621679333836"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-27"></span><span>  </span><span id="local-6989586621679333835"><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679333835"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
+</span><a href="Language.Drasil.Code.Imperative.Logging.html#loggedVar"><span class="hs-identifier hs-var hs-var">loggedVar</span></a></span></span><span> </span><span id="local-6989586621679324272"><span class="annot"><span class="annottext">v :: SVariable r
+</span><a href="#local-6989586621679324272"><span class="hs-identifier hs-var">v</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-27"></span><span>  </span><span id="local-6989586621679324271"><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679324271"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
 forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><span class="hs-identifier hs-var">get</span></span><span>
 </span><span id="line-28"></span><span>  </span><span class="annot"><span class="annottext">MSStatement r -&gt; GenState (MSStatement r)
@@ -72,7 +72,7 @@ forall (r :: * -&gt; *). Literal r =&gt; String -&gt; SValue r
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; String
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#logName"><span class="hs-identifier hs-var hs-var">logName</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679333835"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679324271"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-30"></span><span>    </span><span class="annot"><span class="annottext">LensLike'
   (Zoomed (StateT ValueState Identity) (r (Variable r)))
   MethodState
@@ -87,11 +87,11 @@ LensLike' (Zoomed m c) t s -&gt; m c -&gt; n c
   ValueState
 Lens' MethodState ValueState
 </span><span class="hs-identifier hs-var">lensMStoVS</span></span><span> </span><span class="annot"><span class="annottext">SVariable r
-</span><a href="#local-6989586621679333836"><span class="hs-identifier hs-var">v</span></a></span><span> </span><span class="annot"><span class="annottext">StateT MethodState Identity (r (Variable r))
+</span><a href="#local-6989586621679324272"><span class="hs-identifier hs-var">v</span></a></span><span> </span><span class="annot"><span class="annottext">StateT MethodState Identity (r (Variable r))
 -&gt; (r (Variable r) -&gt; MSStatement r) -&gt; MSStatement r
 forall (m :: * -&gt; *) a b. Monad m =&gt; m a -&gt; (a -&gt; m b) -&gt; m b
-</span><span class="hs-operator hs-var">&gt;&gt;=</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679333830"><span class="annot"><span class="annottext">v' :: r (Variable r)
-</span><a href="#local-6989586621679333830"><span class="hs-identifier hs-var">v'</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">SValue r -&gt; String -&gt; MSStatement r
+</span><span class="hs-operator hs-var">&gt;&gt;=</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679324266"><span class="annot"><span class="annottext">v' :: r (Variable r)
+</span><a href="#local-6989586621679324266"><span class="hs-identifier hs-var">v'</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">SValue r -&gt; String -&gt; MSStatement r
 forall (r :: * -&gt; *).
 IOStatement r =&gt;
 SValue r -&gt; String -&gt; MSStatement r
@@ -103,7 +103,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span id="line-31"></span><span>      </span><span class="annot"><span class="annottext">r (Variable r) -&gt; String
 forall (r :: * -&gt; *). VariableElim r =&gt; r (Variable r) -&gt; String
 </span><span class="hs-identifier hs-var">variableName</span></span><span> </span><span class="annot"><span class="annottext">r (Variable r)
-</span><a href="#local-6989586621679333830"><span class="hs-identifier hs-var">v'</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679324266"><span class="hs-identifier hs-var">v'</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;' assigned &quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-32"></span><span>    </span><span class="annot"><span class="annottext">SValue r -&gt; SValue r -&gt; MSStatement r
@@ -115,7 +115,7 @@ forall (r :: * -&gt; *). OOProg r =&gt; SValue r
 </span><a href="Language.Drasil.Code.Imperative.Logging.html#valLogFile"><span class="hs-identifier hs-var">valLogFile</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SVariable r -&gt; SValue r
 forall (r :: * -&gt; *). VariableValue r =&gt; SVariable r -&gt; SValue r
 </span><span class="hs-identifier hs-var">valueOf</span></span><span> </span><span class="annot"><span class="annottext">SVariable r
-</span><a href="#local-6989586621679333836"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679324272"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-33"></span><span>    </span><span class="annot"><span class="annottext">SValue r -&gt; String -&gt; MSStatement r
 forall (r :: * -&gt; *).
 IOStatement r =&gt;
@@ -126,7 +126,7 @@ forall (r :: * -&gt; *). OOProg r =&gt; SValue r
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; String
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#currentModule"><span class="hs-identifier hs-var hs-var">currentModule</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679333835"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679324271"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-34"></span><span>    </span><span class="annot"><span class="annottext">SValue r -&gt; MSStatement r
 forall (r :: * -&gt; *). IOStatement r =&gt; SValue r -&gt; MSStatement r
 </span><span class="hs-identifier hs-var">closeFile</span></span><span> </span><span class="annot"><span class="annottext">SValue r
@@ -137,15 +137,15 @@ forall (r :: * -&gt; *). OOProg r =&gt; SValue r
 </span><span id="line-37"></span><span class="hs-comment">-- and blocks to include in the body. If the user chose to turn on logging of </span><span>
 </span><span id="line-38"></span><span class="hs-comment">-- function calls, statements that log how the function was called are added to </span><span>
 </span><span id="line-39"></span><span class="hs-comment">-- the beginning of the body.</span><span>
-</span><span id="line-40"></span><span id="local-6989586621679333821"><span class="annot"><a href="Language.Drasil.Code.Imperative.Logging.html#logBody"><span class="hs-identifier hs-type">logBody</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">OOProg</span></span><span> </span><span class="annot"><a href="#local-6989586621679333821"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Label</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">SVariable</span></span><span> </span><span class="annot"><a href="#local-6989586621679333821"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">MSBlock</span></span><span> </span><span class="annot"><a href="#local-6989586621679333821"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
-</span><span id="line-41"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">MSBody</span></span><span> </span><span class="annot"><a href="#local-6989586621679333821"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span></span><span>
+</span><span id="line-40"></span><span id="local-6989586621679324257"><span class="annot"><a href="Language.Drasil.Code.Imperative.Logging.html#logBody"><span class="hs-identifier hs-type">logBody</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">OOProg</span></span><span> </span><span class="annot"><a href="#local-6989586621679324257"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Label</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">SVariable</span></span><span> </span><span class="annot"><a href="#local-6989586621679324257"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">MSBlock</span></span><span> </span><span class="annot"><a href="#local-6989586621679324257"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
+</span><span id="line-41"></span><span>  </span><span class="annot"><a href="Language.Drasil.Code.Imperative.DrasilState.html#GenState"><span class="hs-identifier hs-type">GenState</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">MSBody</span></span><span> </span><span class="annot"><a href="#local-6989586621679324257"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span></span><span>
 </span><span id="line-42"></span><span id="logBody"><span class="annot"><span class="annottext">logBody :: String -&gt; [SVariable r] -&gt; [MSBlock r] -&gt; GenState (MSBody r)
-</span><a href="Language.Drasil.Code.Imperative.Logging.html#logBody"><span class="hs-identifier hs-var hs-var">logBody</span></a></span></span><span> </span><span id="local-6989586621679333820"><span class="annot"><span class="annottext">n :: String
-</span><a href="#local-6989586621679333820"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679333819"><span class="annot"><span class="annottext">vars :: [SVariable r]
-</span><a href="#local-6989586621679333819"><span class="hs-identifier hs-var">vars</span></a></span></span><span> </span><span id="local-6989586621679333818"><span class="annot"><span class="annottext">b :: [MSBlock r]
-</span><a href="#local-6989586621679333818"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
-</span><span id="line-43"></span><span>  </span><span id="local-6989586621679333817"><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679333817"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
+</span><a href="Language.Drasil.Code.Imperative.Logging.html#logBody"><span class="hs-identifier hs-var hs-var">logBody</span></a></span></span><span> </span><span id="local-6989586621679324256"><span class="annot"><span class="annottext">n :: String
+</span><a href="#local-6989586621679324256"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679324255"><span class="annot"><span class="annottext">vars :: [SVariable r]
+</span><a href="#local-6989586621679324255"><span class="hs-identifier hs-var">vars</span></a></span></span><span> </span><span id="local-6989586621679324254"><span class="annot"><span class="annottext">b :: [MSBlock r]
+</span><a href="#local-6989586621679324254"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-43"></span><span>  </span><span id="local-6989586621679324253"><span class="annot"><span class="annottext">DrasilState
+</span><a href="#local-6989586621679324253"><span class="hs-identifier hs-var">g</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">StateT DrasilState Identity DrasilState
 forall s (m :: * -&gt; *). MonadState s m =&gt; m s
 </span><span class="hs-identifier hs-var">get</span></span><span> </span><span>
 </span><span id="line-44"></span><span>  </span><span class="annot"><span class="annottext">MSBody r -&gt; GenState (MSBody r)
@@ -163,28 +163,28 @@ OOProg r =&gt;
 String -&gt; String -&gt; [SVariable r] -&gt; MSBlock r
 </span><a href="Language.Drasil.Code.Imperative.Logging.html#loggedMethod"><span class="hs-identifier hs-var">loggedMethod</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DrasilState -&gt; String
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#logName"><span class="hs-identifier hs-var hs-var">logName</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679333817"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679333820"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">[SVariable r]
-</span><a href="#local-6989586621679333819"><span class="hs-identifier hs-var">vars</span></a></span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Logging
+</span><a href="#local-6989586621679324253"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679324256"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">[SVariable r]
+</span><a href="#local-6989586621679324255"><span class="hs-identifier hs-var">vars</span></a></span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Logging
 </span><a href="Language.Drasil.Choices.html#LogFunc"><span class="hs-identifier hs-var">LogFunc</span></a></span><span> </span><span class="annot"><span class="annottext">Logging -&gt; [Logging] -&gt; Bool
 forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
 </span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">DrasilState -&gt; [Logging]
 </span><a href="Language.Drasil.Code.Imperative.DrasilState.html#logKind"><span class="hs-identifier hs-var hs-var">logKind</span></a></span><span> </span><span class="annot"><span class="annottext">DrasilState
-</span><a href="#local-6989586621679333817"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[MSBlock r] -&gt; [MSBlock r] -&gt; [MSBlock r]
+</span><a href="#local-6989586621679324253"><span class="hs-identifier hs-var">g</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[MSBlock r] -&gt; [MSBlock r] -&gt; [MSBlock r]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[MSBlock r]
-</span><a href="#local-6989586621679333818"><span class="hs-identifier hs-var">b</span></a></span><span>
+</span><a href="#local-6989586621679324254"><span class="hs-identifier hs-var">b</span></a></span><span>
 </span><span id="line-45"></span><span>
 </span><span id="line-46"></span><span class="hs-comment">-- | Generates a block that logs, to the given 'FilePath', the name of a function, </span><span>
 </span><span id="line-47"></span><span class="hs-comment">-- and the names and values of the passed list of variables. Intended to be </span><span>
 </span><span id="line-48"></span><span class="hs-comment">-- used as the first block in the function, to log that it was called and what </span><span>
 </span><span id="line-49"></span><span class="hs-comment">-- inputs it was called with.</span><span>
-</span><span id="line-50"></span><span id="local-6989586621679333867"><span class="annot"><a href="Language.Drasil.Code.Imperative.Logging.html#loggedMethod"><span class="hs-identifier hs-type">loggedMethod</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">OOProg</span></span><span> </span><span class="annot"><a href="#local-6989586621679333867"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Label</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">SVariable</span></span><span> </span><span class="annot"><a href="#local-6989586621679333867"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MSBlock</span></span><span> </span><span class="annot"><a href="#local-6989586621679333867"><span class="hs-identifier hs-type">r</span></a></span></span><span>
+</span><span id="line-50"></span><span id="local-6989586621679324303"><span class="annot"><a href="Language.Drasil.Code.Imperative.Logging.html#loggedMethod"><span class="hs-identifier hs-type">loggedMethod</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">OOProg</span></span><span> </span><span class="annot"><a href="#local-6989586621679324303"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Label</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">SVariable</span></span><span> </span><span class="annot"><a href="#local-6989586621679324303"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MSBlock</span></span><span> </span><span class="annot"><a href="#local-6989586621679324303"><span class="hs-identifier hs-type">r</span></a></span></span><span>
 </span><span id="line-51"></span><span id="loggedMethod"><span class="annot"><span class="annottext">loggedMethod :: String -&gt; String -&gt; [SVariable r] -&gt; MSBlock r
-</span><a href="Language.Drasil.Code.Imperative.Logging.html#loggedMethod"><span class="hs-identifier hs-var hs-var">loggedMethod</span></a></span></span><span> </span><span id="local-6989586621679333813"><span class="annot"><span class="annottext">lName :: String
-</span><a href="#local-6989586621679333813"><span class="hs-identifier hs-var">lName</span></a></span></span><span> </span><span id="local-6989586621679333812"><span class="annot"><span class="annottext">n :: String
-</span><a href="#local-6989586621679333812"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679333811"><span class="annot"><span class="annottext">vars :: [SVariable r]
-</span><a href="#local-6989586621679333811"><span class="hs-identifier hs-var">vars</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[MSStatement r] -&gt; MSBlock r
+</span><a href="Language.Drasil.Code.Imperative.Logging.html#loggedMethod"><span class="hs-identifier hs-var hs-var">loggedMethod</span></a></span></span><span> </span><span id="local-6989586621679324249"><span class="annot"><span class="annottext">lName :: String
+</span><a href="#local-6989586621679324249"><span class="hs-identifier hs-var">lName</span></a></span></span><span> </span><span id="local-6989586621679324248"><span class="annot"><span class="annottext">n :: String
+</span><a href="#local-6989586621679324248"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679324247"><span class="annot"><span class="annottext">vars :: [SVariable r]
+</span><a href="#local-6989586621679324247"><span class="hs-identifier hs-var">vars</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[MSStatement r] -&gt; MSBlock r
 forall (r :: * -&gt; *). BlockSym r =&gt; [MSStatement r] -&gt; MSBlock r
 </span><span class="hs-identifier hs-var">block</span></span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-52"></span><span>      </span><span class="annot"><span class="annottext">SVariable r -&gt; MSStatement r
@@ -203,7 +203,7 @@ forall (r :: * -&gt; *). OOProg r =&gt; SVariable r
 </span><a href="Language.Drasil.Code.Imperative.Logging.html#varLogFile"><span class="hs-identifier hs-var">varLogFile</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; SValue r
 forall (r :: * -&gt; *). Literal r =&gt; String -&gt; SValue r
 </span><span class="hs-identifier hs-var">litString</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679333813"><span class="hs-identifier hs-var">lName</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679324249"><span class="hs-identifier hs-var">lName</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-54"></span><span>      </span><span class="annot"><span class="annottext">SValue r -&gt; String -&gt; MSStatement r
 forall (r :: * -&gt; *).
 IOStatement r =&gt;
@@ -213,7 +213,7 @@ forall (r :: * -&gt; *). OOProg r =&gt; SValue r
 </span><a href="Language.Drasil.Code.Imperative.Logging.html#valLogFile"><span class="hs-identifier hs-var">valLogFile</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-string">&quot;function &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679333812"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679324248"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot; called with inputs: {&quot;</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-55"></span><span>      </span><span class="annot"><span class="annottext">[MSStatement r] -&gt; MSStatement r
@@ -228,8 +228,8 @@ forall (r :: * -&gt; *).
 OOProg r =&gt;
 [StateT ValueState Identity (r (Variable r))]
 -&gt; [StateT MethodState Identity (r (Statement r))]
-</span><a href="#local-6989586621679333808"><span class="hs-identifier hs-var">printInputs</span></a></span><span> </span><span class="annot"><span class="annottext">[SVariable r]
-</span><a href="#local-6989586621679333811"><span class="hs-identifier hs-var">vars</span></a></span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679324244"><span class="hs-identifier hs-var">printInputs</span></a></span><span> </span><span class="annot"><span class="annottext">[SVariable r]
+</span><a href="#local-6989586621679324247"><span class="hs-identifier hs-var">vars</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-56"></span><span>      </span><span class="annot"><span class="annottext">SValue r -&gt; String -&gt; MSStatement r
 forall (r :: * -&gt; *).
 IOStatement r =&gt;
@@ -243,11 +243,11 @@ forall (r :: * -&gt; *). IOStatement r =&gt; SValue r -&gt; MSStatement r
 forall (r :: * -&gt; *). OOProg r =&gt; SValue r
 </span><a href="Language.Drasil.Code.Imperative.Logging.html#valLogFile"><span class="hs-identifier hs-var">valLogFile</span></a></span><span> </span><span class="hs-special">]</span><span>
 </span><span id="line-58"></span><span>  </span><span class="hs-keyword">where</span><span>
-</span><span id="line-59"></span><span>    </span><span id="local-6989586621679333808"><span class="annot"><span class="annottext">printInputs :: [StateT ValueState Identity (r (Variable r))]
+</span><span id="line-59"></span><span>    </span><span id="local-6989586621679324244"><span class="annot"><span class="annottext">printInputs :: [StateT ValueState Identity (r (Variable r))]
 -&gt; [StateT MethodState Identity (r (Statement r))]
-</span><a href="#local-6989586621679333808"><span class="hs-identifier hs-var hs-var">printInputs</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
-</span><span id="line-60"></span><span>    </span><span class="annot"><a href="#local-6989586621679333808"><span class="hs-identifier hs-var">printInputs</span></a></span><span> </span><span class="hs-special">[</span><span id="local-6989586621679333807"><span class="annot"><span class="annottext">v :: StateT ValueState Identity (r (Variable r))
-</span><a href="#local-6989586621679333807"><span class="hs-identifier hs-var">v</span></a></span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span>
+</span><a href="#local-6989586621679324244"><span class="hs-identifier hs-var hs-var">printInputs</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><span id="line-60"></span><span>    </span><span class="annot"><a href="#local-6989586621679324244"><span class="hs-identifier hs-var">printInputs</span></a></span><span> </span><span class="hs-special">[</span><span id="local-6989586621679324243"><span class="annot"><span class="annottext">v :: StateT ValueState Identity (r (Variable r))
+</span><a href="#local-6989586621679324243"><span class="hs-identifier hs-var">v</span></a></span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-61"></span><span>      </span><span class="annot"><span class="annottext">LensLike'
   (Zoomed (StateT ValueState Identity) (r (Variable r)))
   MethodState
@@ -263,13 +263,13 @@ LensLike' (Zoomed m c) t s -&gt; m c -&gt; n c
   ValueState
 Lens' MethodState ValueState
 </span><span class="hs-identifier hs-var">lensMStoVS</span></span><span> </span><span class="annot"><span class="annottext">StateT ValueState Identity (r (Variable r))
-</span><a href="#local-6989586621679333807"><span class="hs-identifier hs-var">v</span></a></span><span> </span><span class="annot"><span class="annottext">StateT MethodState Identity (r (Variable r))
+</span><a href="#local-6989586621679324243"><span class="hs-identifier hs-var">v</span></a></span><span> </span><span class="annot"><span class="annottext">StateT MethodState Identity (r (Variable r))
 -&gt; (r (Variable r)
     -&gt; StateT MethodState Identity (r (Statement r)))
 -&gt; StateT MethodState Identity (r (Statement r))
 forall (m :: * -&gt; *) a b. Monad m =&gt; m a -&gt; (a -&gt; m b) -&gt; m b
-</span><span class="hs-operator hs-var">&gt;&gt;=</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679333806"><span class="annot"><span class="annottext">v' :: r (Variable r)
-</span><a href="#local-6989586621679333806"><span class="hs-identifier hs-var">v'</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">SValue r -&gt; String -&gt; StateT MethodState Identity (r (Statement r))
+</span><span class="hs-operator hs-var">&gt;&gt;=</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679324242"><span class="annot"><span class="annottext">v' :: r (Variable r)
+</span><a href="#local-6989586621679324242"><span class="hs-identifier hs-var">v'</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">SValue r -&gt; String -&gt; StateT MethodState Identity (r (Statement r))
 forall (r :: * -&gt; *).
 IOStatement r =&gt;
 SValue r -&gt; String -&gt; MSStatement r
@@ -281,7 +281,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span id="line-62"></span><span>        </span><span class="annot"><span class="annottext">r (Variable r) -&gt; String
 forall (r :: * -&gt; *). VariableElim r =&gt; r (Variable r) -&gt; String
 </span><span class="hs-identifier hs-var">variableName</span></span><span> </span><span class="annot"><span class="annottext">r (Variable r)
-</span><a href="#local-6989586621679333806"><span class="hs-identifier hs-var">v'</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679324242"><span class="hs-identifier hs-var">v'</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot; = &quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-63"></span><span>      </span><span class="annot"><span class="annottext">SValue r
@@ -294,10 +294,10 @@ forall (r :: * -&gt; *). OOProg r =&gt; SValue r
 </span><a href="Language.Drasil.Code.Imperative.Logging.html#valLogFile"><span class="hs-identifier hs-var">valLogFile</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">StateT ValueState Identity (r (Variable r)) -&gt; SValue r
 forall (r :: * -&gt; *). VariableValue r =&gt; SVariable r -&gt; SValue r
 </span><span class="hs-identifier hs-var">valueOf</span></span><span> </span><span class="annot"><span class="annottext">StateT ValueState Identity (r (Variable r))
-</span><a href="#local-6989586621679333807"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-64"></span><span>    </span><span class="annot"><a href="#local-6989586621679333808"><span class="hs-identifier hs-var">printInputs</span></a></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679333804"><span class="annot"><span class="annottext">v :: StateT ValueState Identity (r (Variable r))
-</span><a href="#local-6989586621679333804"><span class="hs-identifier hs-var">v</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679333803"><span class="annot"><span class="annottext">vs :: [StateT ValueState Identity (r (Variable r))]
-</span><a href="#local-6989586621679333803"><span class="hs-identifier hs-var">vs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span>
+</span><a href="#local-6989586621679324243"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><span id="line-64"></span><span>    </span><span class="annot"><a href="#local-6989586621679324244"><span class="hs-identifier hs-var">printInputs</span></a></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679324240"><span class="annot"><span class="annottext">v :: StateT ValueState Identity (r (Variable r))
+</span><a href="#local-6989586621679324240"><span class="hs-identifier hs-var">v</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679324239"><span class="annot"><span class="annottext">vs :: [StateT ValueState Identity (r (Variable r))]
+</span><a href="#local-6989586621679324239"><span class="hs-identifier hs-var">vs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-65"></span><span>      </span><span class="annot"><span class="annottext">LensLike'
   (Zoomed (StateT ValueState Identity) (r (Variable r)))
   MethodState
@@ -313,13 +313,13 @@ LensLike' (Zoomed m c) t s -&gt; m c -&gt; n c
   ValueState
 Lens' MethodState ValueState
 </span><span class="hs-identifier hs-var">lensMStoVS</span></span><span> </span><span class="annot"><span class="annottext">StateT ValueState Identity (r (Variable r))
-</span><a href="#local-6989586621679333804"><span class="hs-identifier hs-var">v</span></a></span><span> </span><span class="annot"><span class="annottext">StateT MethodState Identity (r (Variable r))
+</span><a href="#local-6989586621679324240"><span class="hs-identifier hs-var">v</span></a></span><span> </span><span class="annot"><span class="annottext">StateT MethodState Identity (r (Variable r))
 -&gt; (r (Variable r)
     -&gt; StateT MethodState Identity (r (Statement r)))
 -&gt; StateT MethodState Identity (r (Statement r))
 forall (m :: * -&gt; *) a b. Monad m =&gt; m a -&gt; (a -&gt; m b) -&gt; m b
-</span><span class="hs-operator hs-var">&gt;&gt;=</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679333802"><span class="annot"><span class="annottext">v' :: r (Variable r)
-</span><a href="#local-6989586621679333802"><span class="hs-identifier hs-var">v'</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">SValue r -&gt; String -&gt; StateT MethodState Identity (r (Statement r))
+</span><span class="hs-operator hs-var">&gt;&gt;=</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679324238"><span class="annot"><span class="annottext">v' :: r (Variable r)
+</span><a href="#local-6989586621679324238"><span class="hs-identifier hs-var">v'</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">SValue r -&gt; String -&gt; StateT MethodState Identity (r (Statement r))
 forall (r :: * -&gt; *).
 IOStatement r =&gt;
 SValue r -&gt; String -&gt; MSStatement r
@@ -331,7 +331,7 @@ forall a. [a] -&gt; [a] -&gt; [a]
 </span><span id="line-66"></span><span>        </span><span class="annot"><span class="annottext">r (Variable r) -&gt; String
 forall (r :: * -&gt; *). VariableElim r =&gt; r (Variable r) -&gt; String
 </span><span class="hs-identifier hs-var">variableName</span></span><span> </span><span class="annot"><span class="annottext">r (Variable r)
-</span><a href="#local-6989586621679333802"><span class="hs-identifier hs-var">v'</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+</span><a href="#local-6989586621679324238"><span class="hs-identifier hs-var">v'</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot; = &quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-67"></span><span>      </span><span class="annot"><span class="annottext">SValue r
@@ -344,7 +344,7 @@ forall (r :: * -&gt; *). OOProg r =&gt; SValue r
 </span><a href="Language.Drasil.Code.Imperative.Logging.html#valLogFile"><span class="hs-identifier hs-var">valLogFile</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">StateT ValueState Identity (r (Variable r)) -&gt; SValue r
 forall (r :: * -&gt; *). VariableValue r =&gt; SVariable r -&gt; SValue r
 </span><span class="hs-identifier hs-var">valueOf</span></span><span> </span><span class="annot"><span class="annottext">StateT ValueState Identity (r (Variable r))
-</span><a href="#local-6989586621679333804"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span>
+</span><a href="#local-6989586621679324240"><span class="hs-identifier hs-var">v</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-68"></span><span>      </span><span class="annot"><span class="annottext">SValue r -&gt; String -&gt; StateT MethodState Identity (r (Statement r))
 forall (r :: * -&gt; *).
 IOStatement r =&gt;
@@ -357,11 +357,11 @@ forall (r :: * -&gt; *). OOProg r =&gt; SValue r
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[StateT ValueState Identity (r (Variable r))]
 -&gt; [StateT MethodState Identity (r (Statement r))]
-</span><a href="#local-6989586621679333808"><span class="hs-identifier hs-var">printInputs</span></a></span><span> </span><span class="annot"><span class="annottext">[StateT ValueState Identity (r (Variable r))]
-</span><a href="#local-6989586621679333803"><span class="hs-identifier hs-var">vs</span></a></span><span>
+</span><a href="#local-6989586621679324244"><span class="hs-identifier hs-var">printInputs</span></a></span><span> </span><span class="annot"><span class="annottext">[StateT ValueState Identity (r (Variable r))]
+</span><a href="#local-6989586621679324239"><span class="hs-identifier hs-var">vs</span></a></span><span>
 </span><span id="line-69"></span><span>
 </span><span id="line-70"></span><span class="hs-comment">-- | The variable representing the log file in write mode.</span><span>
-</span><span id="line-71"></span><span id="local-6989586621679333896"><span class="annot"><a href="Language.Drasil.Code.Imperative.Logging.html#varLogFile"><span class="hs-identifier hs-type">varLogFile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">OOProg</span></span><span> </span><span class="annot"><a href="#local-6989586621679333896"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SVariable</span></span><span> </span><span class="annot"><a href="#local-6989586621679333896"><span class="hs-identifier hs-type">r</span></a></span></span><span>
+</span><span id="line-71"></span><span id="local-6989586621679324332"><span class="annot"><a href="Language.Drasil.Code.Imperative.Logging.html#varLogFile"><span class="hs-identifier hs-type">varLogFile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">OOProg</span></span><span> </span><span class="annot"><a href="#local-6989586621679324332"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SVariable</span></span><span> </span><span class="annot"><a href="#local-6989586621679324332"><span class="hs-identifier hs-type">r</span></a></span></span><span>
 </span><span id="line-72"></span><span id="varLogFile"><span class="annot"><span class="annottext">varLogFile :: SVariable r
 </span><a href="Language.Drasil.Code.Imperative.Logging.html#varLogFile"><span class="hs-identifier hs-var hs-var">varLogFile</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; VSType r -&gt; SVariable r
 forall (r :: * -&gt; *).
@@ -372,7 +372,7 @@ forall (r :: * -&gt; *). TypeSym r =&gt; VSType r
 </span><span class="hs-identifier hs-var">outfile</span></span><span>
 </span><span id="line-73"></span><span>
 </span><span id="line-74"></span><span class="hs-comment">-- | The value of the variable representing the log file in write mode.</span><span>
-</span><span id="line-75"></span><span id="local-6989586621679333878"><span class="annot"><a href="Language.Drasil.Code.Imperative.Logging.html#valLogFile"><span class="hs-identifier hs-type">valLogFile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">OOProg</span></span><span> </span><span class="annot"><a href="#local-6989586621679333878"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SValue</span></span><span> </span><span class="annot"><a href="#local-6989586621679333878"><span class="hs-identifier hs-type">r</span></a></span></span><span>
+</span><span id="line-75"></span><span id="local-6989586621679324314"><span class="annot"><a href="Language.Drasil.Code.Imperative.Logging.html#valLogFile"><span class="hs-identifier hs-type">valLogFile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">OOProg</span></span><span> </span><span class="annot"><a href="#local-6989586621679324314"><span class="hs-identifier hs-type">r</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SValue</span></span><span> </span><span class="annot"><a href="#local-6989586621679324314"><span class="hs-identifier hs-type">r</span></a></span></span><span>
 </span><span id="line-76"></span><span id="valLogFile"><span class="annot"><span class="annottext">valLogFile :: SValue r
 </span><a href="Language.Drasil.Code.Imperative.Logging.html#valLogFile"><span class="hs-identifier hs-var hs-var">valLogFile</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SVariable r -&gt; SValue r
 forall (r :: * -&gt; *). VariableValue r =&gt; SVariable r -&gt; SValue r

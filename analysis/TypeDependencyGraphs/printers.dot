@@ -29,13 +29,27 @@ digraph alltypes {
 		Seperator	[shape=oval, color=red2, label=Seperator];
 		}
 	}
-	subgraph helpers {
-	}
 	subgraph print {
 		subgraph linearity{
 		Linearity -> PrintingConfiguration;
 		Linearity	[shape=oval, color=darkviolet, label=Linearity];
 		}
+	}
+	subgraph codeexpr {
+	}
+	subgraph diplayexprs {
+	}
+	subgraph document {
+	}
+	subgraph expr {
+	}
+	subgraph helpers {
+	}
+	subgraph sentence {
+	}
+	subgraph space {
+	}
+	subgraph symbol {
 	}
 	subgraph ast {
 		subgraph linktype{

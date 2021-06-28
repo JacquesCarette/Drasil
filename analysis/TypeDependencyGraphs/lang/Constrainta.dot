@@ -1,0 +1,8 @@
+digraph constrainta{
+Constrainta -> ConstraintReason;
+Constrainta -> RealInterval;
+Constrainta -> a;
+Constrainta -> Constraint;
+Constrainta -> Double;
+Constrainta	[shape=oval, color=darkviolet, label=Constrainta];
+}

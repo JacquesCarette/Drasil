@@ -10,12 +10,12 @@
 </span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Map</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">Map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">elems</span></span><span class="hs-special">)</span><span>
 </span><span id="line-11"></span><span>
 </span><span id="line-12"></span><span class="hs-comment">-- | Get all the models out of a database.</span><span>
-</span><span id="line-13"></span><span id="local-6989586621679111169"><span class="annot"><a href="Drasil.DocumentLanguage.RefHelpers.html#modelsFromDB"><span class="hs-identifier hs-type">modelsFromDB</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">RefMap</span></span><span> </span><span class="annot"><a href="#local-6989586621679111169"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679111169"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span></span><span>
+</span><span id="line-13"></span><span id="local-6989586621679111370"><span class="annot"><a href="Drasil.DocumentLanguage.RefHelpers.html#modelsFromDB"><span class="hs-identifier hs-type">modelsFromDB</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">RefMap</span></span><span> </span><span class="annot"><a href="#local-6989586621679111370"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679111370"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span></span><span>
 </span><span id="line-14"></span><span id="modelsFromDB"><span class="annot"><span class="annottext">modelsFromDB :: RefMap a -&gt; [a]
-</span><a href="Drasil.DocumentLanguage.RefHelpers.html#modelsFromDB"><span class="hs-identifier hs-var hs-var">modelsFromDB</span></a></span></span><span> </span><span id="local-6989586621679111168"><span class="annot"><span class="annottext">db :: RefMap a
-</span><a href="#local-6989586621679111168"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[(a, Int)] -&gt; [a]
+</span><a href="Drasil.DocumentLanguage.RefHelpers.html#modelsFromDB"><span class="hs-identifier hs-var hs-var">modelsFromDB</span></a></span></span><span> </span><span id="local-6989586621679111369"><span class="annot"><span class="annottext">db :: RefMap a
+</span><a href="#local-6989586621679111369"><span class="hs-identifier hs-var">db</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[(a, Int)] -&gt; [a]
 forall b b. [(b, b)] -&gt; [b]
-</span><a href="#local-6989586621679111167"><span class="hs-identifier hs-var">dropNums</span></a></span><span> </span><span class="annot"><span class="annottext">([(a, Int)] -&gt; [a]) -&gt; [(a, Int)] -&gt; [a]
+</span><a href="#local-6989586621679111368"><span class="hs-identifier hs-var">dropNums</span></a></span><span> </span><span class="annot"><span class="annottext">([(a, Int)] -&gt; [a]) -&gt; [(a, Int)] -&gt; [a]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">((a, Int) -&gt; (a, Int) -&gt; Ordering) -&gt; [(a, Int)] -&gt; [(a, Int)]
 forall a. (a -&gt; a -&gt; Ordering) -&gt; [a] -&gt; [a]
@@ -27,14 +27,14 @@ forall b c a. (b -&gt; b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">`on`</span></span><span> </span><span class="annot"><span class="annottext">(a, Int) -&gt; Int
 forall a b. (a, b) -&gt; b
 </span><span class="hs-identifier hs-var">snd</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(a, Int)]
-</span><a href="#local-6989586621679111165"><span class="hs-identifier hs-var">elemPairs</span></a></span><span>
-</span><span id="line-15"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679111165"><span class="annot"><span class="annottext">elemPairs :: [(a, Int)]
-</span><a href="#local-6989586621679111165"><span class="hs-identifier hs-var hs-var">elemPairs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">RefMap a -&gt; [(a, Int)]
+</span><a href="#local-6989586621679111366"><span class="hs-identifier hs-var">elemPairs</span></a></span><span>
+</span><span id="line-15"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679111366"><span class="annot"><span class="annottext">elemPairs :: [(a, Int)]
+</span><a href="#local-6989586621679111366"><span class="hs-identifier hs-var hs-var">elemPairs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">RefMap a -&gt; [(a, Int)]
 forall k a. Map k a -&gt; [a]
 </span><span class="hs-identifier hs-var">Map.elems</span></span><span> </span><span class="annot"><span class="annottext">RefMap a
-</span><a href="#local-6989586621679111168"><span class="hs-identifier hs-var">db</span></a></span><span>
-</span><span id="line-16"></span><span>        </span><span id="local-6989586621679111167"><span class="annot"><span class="annottext">dropNums :: [(b, b)] -&gt; [b]
-</span><a href="#local-6989586621679111167"><span class="hs-identifier hs-var hs-var">dropNums</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((b, b) -&gt; b) -&gt; [(b, b)] -&gt; [b]
+</span><a href="#local-6989586621679111369"><span class="hs-identifier hs-var">db</span></a></span><span>
+</span><span id="line-16"></span><span>        </span><span id="local-6989586621679111368"><span class="annot"><span class="annottext">dropNums :: [(b, b)] -&gt; [b]
+</span><a href="#local-6989586621679111368"><span class="hs-identifier hs-var hs-var">dropNums</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((b, b) -&gt; b) -&gt; [(b, b)] -&gt; [b]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">(b, b) -&gt; b
 forall a b. (a, b) -&gt; a
@@ -58,11 +58,11 @@ forall a b. (a, b) -&gt; a
 </span><span id="line-29"></span><span class="annot"><a href="Drasil.DocumentLanguage.RefHelpers.html#mdb"><span class="hs-identifier hs-type">mdb</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">TheoryModel</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DataDefinition</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">InstanceModel</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.RefHelpers.html#ModelDB"><span class="hs-identifier hs-type">ModelDB</span></a></span><span>
 </span><span id="line-30"></span><span id="mdb"><span class="annot"><span class="annottext">mdb :: [TheoryModel]
 -&gt; [GenDefn] -&gt; [DataDefinition] -&gt; [InstanceModel] -&gt; ModelDB
-</span><a href="Drasil.DocumentLanguage.RefHelpers.html#mdb"><span class="hs-identifier hs-var hs-var">mdb</span></a></span></span><span> </span><span id="local-6989586621679111163"><span class="annot"><span class="annottext">tms :: [TheoryModel]
-</span><a href="#local-6989586621679111163"><span class="hs-identifier hs-var">tms</span></a></span></span><span> </span><span id="local-6989586621679111162"><span class="annot"><span class="annottext">gds :: [GenDefn]
-</span><a href="#local-6989586621679111162"><span class="hs-identifier hs-var">gds</span></a></span></span><span> </span><span id="local-6989586621679111161"><span class="annot"><span class="annottext">dds :: [DataDefinition]
-</span><a href="#local-6989586621679111161"><span class="hs-identifier hs-var">dds</span></a></span></span><span> </span><span id="local-6989586621679111160"><span class="annot"><span class="annottext">ims :: [InstanceModel]
-</span><a href="#local-6989586621679111160"><span class="hs-identifier hs-var">ims</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">RefMap TheoryModel
+</span><a href="Drasil.DocumentLanguage.RefHelpers.html#mdb"><span class="hs-identifier hs-var hs-var">mdb</span></a></span></span><span> </span><span id="local-6989586621679111364"><span class="annot"><span class="annottext">tms :: [TheoryModel]
+</span><a href="#local-6989586621679111364"><span class="hs-identifier hs-var">tms</span></a></span></span><span> </span><span id="local-6989586621679111363"><span class="annot"><span class="annottext">gds :: [GenDefn]
+</span><a href="#local-6989586621679111363"><span class="hs-identifier hs-var">gds</span></a></span></span><span> </span><span id="local-6989586621679111362"><span class="annot"><span class="annottext">dds :: [DataDefinition]
+</span><a href="#local-6989586621679111362"><span class="hs-identifier hs-var">dds</span></a></span></span><span> </span><span id="local-6989586621679111361"><span class="annot"><span class="annottext">ims :: [InstanceModel]
+</span><a href="#local-6989586621679111361"><span class="hs-identifier hs-var">ims</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">RefMap TheoryModel
 -&gt; RefMap GenDefn
 -&gt; RefMap DataDefinition
 -&gt; RefMap InstanceModel
@@ -71,14 +71,14 @@ forall a b. (a, b) -&gt; a
 </span><span id="line-31"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[TheoryModel] -&gt; RefMap TheoryModel
 forall a. HasUID a =&gt; [a] -&gt; RefMap a
 </span><span class="hs-identifier hs-var">simpleMap</span></span><span> </span><span class="annot"><span class="annottext">[TheoryModel]
-</span><a href="#local-6989586621679111163"><span class="hs-identifier hs-var">tms</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[GenDefn] -&gt; RefMap GenDefn
+</span><a href="#local-6989586621679111364"><span class="hs-identifier hs-var">tms</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[GenDefn] -&gt; RefMap GenDefn
 forall a. HasUID a =&gt; [a] -&gt; RefMap a
 </span><span class="hs-identifier hs-var">simpleMap</span></span><span> </span><span class="annot"><span class="annottext">[GenDefn]
-</span><a href="#local-6989586621679111162"><span class="hs-identifier hs-var">gds</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[DataDefinition] -&gt; RefMap DataDefinition
+</span><a href="#local-6989586621679111363"><span class="hs-identifier hs-var">gds</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[DataDefinition] -&gt; RefMap DataDefinition
 forall a. HasUID a =&gt; [a] -&gt; RefMap a
 </span><span class="hs-identifier hs-var">simpleMap</span></span><span> </span><span class="annot"><span class="annottext">[DataDefinition]
-</span><a href="#local-6989586621679111161"><span class="hs-identifier hs-var">dds</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[InstanceModel] -&gt; RefMap InstanceModel
+</span><a href="#local-6989586621679111362"><span class="hs-identifier hs-var">dds</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[InstanceModel] -&gt; RefMap InstanceModel
 forall a. HasUID a =&gt; [a] -&gt; RefMap a
 </span><span class="hs-identifier hs-var">simpleMap</span></span><span> </span><span class="annot"><span class="annottext">[InstanceModel]
-</span><a href="#local-6989586621679111160"><span class="hs-identifier hs-var">ims</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679111361"><span class="hs-identifier hs-var">ims</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-32"></span></pre></body></html>

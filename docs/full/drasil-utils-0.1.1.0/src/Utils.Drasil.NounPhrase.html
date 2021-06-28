@@ -12,104 +12,104 @@
 </span><span id="line-12"></span><span class="hs-comment">-- @(phraseNP t1) +:+ S s +:+ (pluralNP t2)@.</span><span>
 </span><span id="line-13"></span><span class="annot"><a href="Utils.Drasil.NounPhrase.html#insertString"><span class="hs-identifier hs-type">insertString</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span>
 </span><span id="line-14"></span><span id="insertString"><span class="annot"><span class="annottext">insertString :: String -&gt; NP -&gt; NP -&gt; NP
-</span><a href="Utils.Drasil.NounPhrase.html#insertString"><span class="hs-identifier hs-var hs-var">insertString</span></a></span></span><span> </span><span id="local-6989586621679099047"><span class="annot"><span class="annottext">s :: String
-</span><a href="#local-6989586621679099047"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679099046"><span class="annot"><span class="annottext">t1 :: NP
-</span><a href="#local-6989586621679099046"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679099045"><span class="annot"><span class="annottext">t2 :: NP
-</span><a href="#local-6989586621679099045"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Utils.Drasil.NounPhrase.html#insertString"><span class="hs-identifier hs-var hs-var">insertString</span></a></span></span><span> </span><span id="local-6989586621679099128"><span class="annot"><span class="annottext">s :: String
+</span><a href="#local-6989586621679099128"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679099127"><span class="annot"><span class="annottext">t1 :: NP
+</span><a href="#local-6989586621679099127"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679099126"><span class="annot"><span class="annottext">t2 :: NP
+</span><a href="#local-6989586621679099126"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
 -&gt; Sentence -&gt; CapitalizationRule -&gt; CapitalizationRule -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhrase''</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099046"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099127"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679099047"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099128"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099045"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><a href="#local-6989586621679099126"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099046"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099127"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679099047"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099128"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">pluralNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099045"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
+</span><a href="#local-6989586621679099126"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapFirst</span></span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapWords</span></span><span>
 </span><span id="line-15"></span><span class="hs-comment">-- | Helper function that prepends a 'String' to a 'NP'.</span><span>
 </span><span id="line-16"></span><span class="annot"><a href="Utils.Drasil.NounPhrase.html#prependString"><span class="hs-identifier hs-type">prependString</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span>
 </span><span id="line-17"></span><span id="prependString"><span class="annot"><span class="annottext">prependString :: String -&gt; NP -&gt; NP
-</span><a href="Utils.Drasil.NounPhrase.html#prependString"><span class="hs-identifier hs-var hs-var">prependString</span></a></span></span><span> </span><span id="local-6989586621679099037"><span class="annot"><span class="annottext">s :: String
-</span><a href="#local-6989586621679099037"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679099036"><span class="annot"><span class="annottext">t1 :: NP
-</span><a href="#local-6989586621679099036"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Utils.Drasil.NounPhrase.html#prependString"><span class="hs-identifier hs-var hs-var">prependString</span></a></span></span><span> </span><span id="local-6989586621679099118"><span class="annot"><span class="annottext">s :: String
+</span><a href="#local-6989586621679099118"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679099117"><span class="annot"><span class="annottext">t1 :: NP
+</span><a href="#local-6989586621679099117"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
 -&gt; Sentence -&gt; CapitalizationRule -&gt; CapitalizationRule -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhrase''</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679099037"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099118"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099036"><span class="hs-identifier hs-var">t1</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679099117"><span class="hs-identifier hs-var">t1</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679099037"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099118"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">pluralNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099036"><span class="hs-identifier hs-var">t1</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
+</span><a href="#local-6989586621679099117"><span class="hs-identifier hs-var">t1</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapFirst</span></span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapWords</span></span><span>
 </span><span id="line-18"></span><span class="hs-comment">-- | Helper function that places a 'Sentence' in between two 'NP's. Plural case is</span><span>
 </span><span id="line-19"></span><span class="hs-comment">-- @(phraseNP t1) +:+ s +:+ (pluralNP t2)@.</span><span>
 </span><span id="line-20"></span><span class="annot"><a href="Utils.Drasil.NounPhrase.html#insertSent"><span class="hs-identifier hs-type">insertSent</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span>
 </span><span id="line-21"></span><span id="insertSent"><span class="annot"><span class="annottext">insertSent :: Sentence -&gt; NP -&gt; NP -&gt; NP
-</span><a href="Utils.Drasil.NounPhrase.html#insertSent"><span class="hs-identifier hs-var hs-var">insertSent</span></a></span></span><span> </span><span id="local-6989586621679099035"><span class="annot"><span class="annottext">s :: Sentence
-</span><a href="#local-6989586621679099035"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679099034"><span class="annot"><span class="annottext">t1 :: NP
-</span><a href="#local-6989586621679099034"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679099033"><span class="annot"><span class="annottext">t2 :: NP
-</span><a href="#local-6989586621679099033"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Utils.Drasil.NounPhrase.html#insertSent"><span class="hs-identifier hs-var hs-var">insertSent</span></a></span></span><span> </span><span id="local-6989586621679099116"><span class="annot"><span class="annottext">s :: Sentence
+</span><a href="#local-6989586621679099116"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679099115"><span class="annot"><span class="annottext">t1 :: NP
+</span><a href="#local-6989586621679099115"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679099114"><span class="annot"><span class="annottext">t2 :: NP
+</span><a href="#local-6989586621679099114"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
 -&gt; Sentence -&gt; CapitalizationRule -&gt; CapitalizationRule -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhrase''</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099034"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099115"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679099035"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099116"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099033"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><a href="#local-6989586621679099114"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099034"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099115"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679099035"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099116"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">pluralNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099033"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
+</span><a href="#local-6989586621679099114"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapFirst</span></span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapWords</span></span><span>
 </span><span id="line-22"></span><span class="hs-comment">-- | Helper function that prepends a 'Sentence' to a 'NP'.</span><span>
 </span><span id="line-23"></span><span class="annot"><a href="Utils.Drasil.NounPhrase.html#prependSent"><span class="hs-identifier hs-type">prependSent</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span>
 </span><span id="line-24"></span><span id="prependSent"><span class="annot"><span class="annottext">prependSent :: Sentence -&gt; NP -&gt; NP
-</span><a href="Utils.Drasil.NounPhrase.html#prependSent"><span class="hs-identifier hs-var hs-var">prependSent</span></a></span></span><span> </span><span id="local-6989586621679099032"><span class="annot"><span class="annottext">s :: Sentence
-</span><a href="#local-6989586621679099032"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679099031"><span class="annot"><span class="annottext">t1 :: NP
-</span><a href="#local-6989586621679099031"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Utils.Drasil.NounPhrase.html#prependSent"><span class="hs-identifier hs-var hs-var">prependSent</span></a></span></span><span> </span><span id="local-6989586621679099113"><span class="annot"><span class="annottext">s :: Sentence
+</span><a href="#local-6989586621679099113"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679099112"><span class="annot"><span class="annottext">t1 :: NP
+</span><a href="#local-6989586621679099112"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
 -&gt; Sentence -&gt; CapitalizationRule -&gt; CapitalizationRule -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhrase''</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679099032"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099113"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099031"><span class="hs-identifier hs-var">t1</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679099032"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099112"><span class="hs-identifier hs-var">t1</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679099113"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">pluralNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099031"><span class="hs-identifier hs-var">t1</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
+</span><a href="#local-6989586621679099112"><span class="hs-identifier hs-var">t1</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapFirst</span></span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapWords</span></span><span>
 </span><span id="line-25"></span><span>
@@ -122,20 +122,20 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span id="line-30"></span><span class="hs-comment">-- | Similar to 'the', but accepts a function that determines the plural case.</span><span>
 </span><span id="line-31"></span><span class="annot"><a href="Utils.Drasil.NounPhrase.html#theGen"><span class="hs-identifier hs-type">theGen</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span>
 </span><span id="line-32"></span><span id="theGen"><span class="annot"><span class="annottext">theGen :: (NP -&gt; Sentence) -&gt; NP -&gt; NP
-</span><a href="Utils.Drasil.NounPhrase.html#theGen"><span class="hs-identifier hs-var hs-var">theGen</span></a></span></span><span> </span><span id="local-6989586621679099030"><span class="annot"><span class="annottext">f1 :: NP -&gt; Sentence
-</span><a href="#local-6989586621679099030"><span class="hs-identifier hs-var">f1</span></a></span></span><span> </span><span id="local-6989586621679099029"><span class="annot"><span class="annottext">t1 :: NP
-</span><a href="#local-6989586621679099029"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Utils.Drasil.NounPhrase.html#theGen"><span class="hs-identifier hs-var hs-var">theGen</span></a></span></span><span> </span><span id="local-6989586621679099111"><span class="annot"><span class="annottext">f1 :: NP -&gt; Sentence
+</span><a href="#local-6989586621679099111"><span class="hs-identifier hs-var">f1</span></a></span></span><span> </span><span id="local-6989586621679099110"><span class="annot"><span class="annottext">t1 :: NP
+</span><a href="#local-6989586621679099110"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
 -&gt; Sentence -&gt; CapitalizationRule -&gt; CapitalizationRule -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhrase''</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099029"><span class="hs-identifier hs-var">t1</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679099110"><span class="hs-identifier hs-var">t1</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
-</span><a href="#local-6989586621679099030"><span class="hs-identifier hs-var">f1</span></a></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099029"><span class="hs-identifier hs-var">t1</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
+</span><a href="#local-6989586621679099111"><span class="hs-identifier hs-var">f1</span></a></span><span> </span><span class="annot"><span class="annottext">NP
+</span><a href="#local-6989586621679099110"><span class="hs-identifier hs-var">t1</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapFirst</span></span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapWords</span></span><span>
 </span><span id="line-33"></span><span>
@@ -147,20 +147,20 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span id="line-37"></span><span class="hs-comment">-- | Similar to 'a', but accepts a function that determines the plural case.</span><span>
 </span><span id="line-38"></span><span class="annot"><a href="Utils.Drasil.NounPhrase.html#a_Gen"><span class="hs-identifier hs-type">a_Gen</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span>
 </span><span id="line-39"></span><span id="a_Gen"><span class="annot"><span class="annottext">a_Gen :: (NP -&gt; Sentence) -&gt; NP -&gt; NP
-</span><a href="Utils.Drasil.NounPhrase.html#a_Gen"><span class="hs-identifier hs-var hs-var">a_Gen</span></a></span></span><span> </span><span id="local-6989586621679099028"><span class="annot"><span class="annottext">f1 :: NP -&gt; Sentence
-</span><a href="#local-6989586621679099028"><span class="hs-identifier hs-var">f1</span></a></span></span><span> </span><span id="local-6989586621679099027"><span class="annot"><span class="annottext">t1 :: NP
-</span><a href="#local-6989586621679099027"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Utils.Drasil.NounPhrase.html#a_Gen"><span class="hs-identifier hs-var hs-var">a_Gen</span></a></span></span><span> </span><span id="local-6989586621679099109"><span class="annot"><span class="annottext">f1 :: NP -&gt; Sentence
+</span><a href="#local-6989586621679099109"><span class="hs-identifier hs-var">f1</span></a></span></span><span> </span><span id="local-6989586621679099108"><span class="annot"><span class="annottext">t1 :: NP
+</span><a href="#local-6989586621679099108"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
 -&gt; Sentence -&gt; CapitalizationRule -&gt; CapitalizationRule -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhrase''</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;a&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099027"><span class="hs-identifier hs-var">t1</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679099108"><span class="hs-identifier hs-var">t1</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;a&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
-</span><a href="#local-6989586621679099028"><span class="hs-identifier hs-var">f1</span></a></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099027"><span class="hs-identifier hs-var">t1</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
+</span><a href="#local-6989586621679099109"><span class="hs-identifier hs-var">f1</span></a></span><span> </span><span class="annot"><span class="annottext">NP
+</span><a href="#local-6989586621679099108"><span class="hs-identifier hs-var">t1</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapFirst</span></span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapWords</span></span><span>
 </span><span id="line-40"></span><span>
@@ -172,49 +172,49 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span id="line-44"></span><span class="hs-comment">-- | Similar to 'ofThe', but the plural case is now @(pluralNP t1) `S.ofThe` (phraseNP t2)@.</span><span>
 </span><span id="line-45"></span><span class="annot"><a href="Utils.Drasil.NounPhrase.html#ofThePS"><span class="hs-identifier hs-type">ofThePS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span>
 </span><span id="line-46"></span><span id="ofThePS"><span class="annot"><span class="annottext">ofThePS :: NP -&gt; NP -&gt; NP
-</span><a href="Utils.Drasil.NounPhrase.html#ofThePS"><span class="hs-identifier hs-var hs-var">ofThePS</span></a></span></span><span> </span><span id="local-6989586621679099026"><span class="annot"><span class="annottext">t1 :: NP
-</span><a href="#local-6989586621679099026"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679099025"><span class="annot"><span class="annottext">t2 :: NP
-</span><a href="#local-6989586621679099025"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Utils.Drasil.NounPhrase.html#ofThePS"><span class="hs-identifier hs-var hs-var">ofThePS</span></a></span></span><span> </span><span id="local-6989586621679099107"><span class="annot"><span class="annottext">t1 :: NP
+</span><a href="#local-6989586621679099107"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679099106"><span class="annot"><span class="annottext">t2 :: NP
+</span><a href="#local-6989586621679099106"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
 -&gt; Sentence -&gt; CapitalizationRule -&gt; CapitalizationRule -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhrase''</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099026"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099107"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Utils.Drasil.Sentence.html#ofThe"><span class="hs-operator hs-var">`S.ofThe`</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099025"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><a href="#local-6989586621679099106"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">pluralNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099026"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099107"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Utils.Drasil.Sentence.html#ofThe"><span class="hs-operator hs-var">`S.ofThe`</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099025"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
+</span><a href="#local-6989586621679099106"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapFirst</span></span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapWords</span></span><span>
 </span><span id="line-47"></span><span class="hs-comment">-- | Similar to 'ofThe', but accepts two functions for the plural case.</span><span>
 </span><span id="line-48"></span><span class="annot"><a href="Utils.Drasil.NounPhrase.html#ofTheGen"><span class="hs-identifier hs-type">ofTheGen</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span>
 </span><span id="line-49"></span><span id="ofTheGen"><span class="annot"><span class="annottext">ofTheGen :: (NP -&gt; Sentence) -&gt; (NP -&gt; Sentence) -&gt; NP -&gt; NP -&gt; NP
-</span><a href="Utils.Drasil.NounPhrase.html#ofTheGen"><span class="hs-identifier hs-var hs-var">ofTheGen</span></a></span></span><span> </span><span id="local-6989586621679099023"><span class="annot"><span class="annottext">f1 :: NP -&gt; Sentence
-</span><a href="#local-6989586621679099023"><span class="hs-identifier hs-var">f1</span></a></span></span><span> </span><span id="local-6989586621679099022"><span class="annot"><span class="annottext">f2 :: NP -&gt; Sentence
-</span><a href="#local-6989586621679099022"><span class="hs-identifier hs-var">f2</span></a></span></span><span> </span><span id="local-6989586621679099021"><span class="annot"><span class="annottext">t1 :: NP
-</span><a href="#local-6989586621679099021"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679099020"><span class="annot"><span class="annottext">t2 :: NP
-</span><a href="#local-6989586621679099020"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Utils.Drasil.NounPhrase.html#ofTheGen"><span class="hs-identifier hs-var hs-var">ofTheGen</span></a></span></span><span> </span><span id="local-6989586621679099104"><span class="annot"><span class="annottext">f1 :: NP -&gt; Sentence
+</span><a href="#local-6989586621679099104"><span class="hs-identifier hs-var">f1</span></a></span></span><span> </span><span id="local-6989586621679099103"><span class="annot"><span class="annottext">f2 :: NP -&gt; Sentence
+</span><a href="#local-6989586621679099103"><span class="hs-identifier hs-var">f2</span></a></span></span><span> </span><span id="local-6989586621679099102"><span class="annot"><span class="annottext">t1 :: NP
+</span><a href="#local-6989586621679099102"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679099101"><span class="annot"><span class="annottext">t2 :: NP
+</span><a href="#local-6989586621679099101"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
 -&gt; Sentence -&gt; CapitalizationRule -&gt; CapitalizationRule -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhrase''</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099021"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099102"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Utils.Drasil.Sentence.html#ofThe"><span class="hs-operator hs-var">`S.ofThe`</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099020"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
-</span><a href="#local-6989586621679099023"><span class="hs-identifier hs-var">f1</span></a></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099021"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099101"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><a href="#local-6989586621679099104"><span class="hs-identifier hs-var">f1</span></a></span><span> </span><span class="annot"><span class="annottext">NP
+</span><a href="#local-6989586621679099102"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Utils.Drasil.Sentence.html#ofThe"><span class="hs-operator hs-var">`S.ofThe`</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
-</span><a href="#local-6989586621679099022"><span class="hs-identifier hs-var">f2</span></a></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099020"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
+</span><a href="#local-6989586621679099103"><span class="hs-identifier hs-var">f2</span></a></span><span> </span><span class="annot"><span class="annottext">NP
+</span><a href="#local-6989586621679099101"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapFirst</span></span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapWords</span></span><span>
 </span><span id="line-50"></span><span>
@@ -226,84 +226,84 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span id="line-54"></span><span class="hs-comment">-- | Similar to 'ofThe', but the plural case is now @(pluralNP t1) `S.inThe` (phraseNP t2)@.</span><span>
 </span><span id="line-55"></span><span class="annot"><a href="Utils.Drasil.NounPhrase.html#inThePS"><span class="hs-identifier hs-type">inThePS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span>
 </span><span id="line-56"></span><span id="inThePS"><span class="annot"><span class="annottext">inThePS :: NP -&gt; NP -&gt; NP
-</span><a href="Utils.Drasil.NounPhrase.html#inThePS"><span class="hs-identifier hs-var hs-var">inThePS</span></a></span></span><span> </span><span id="local-6989586621679099019"><span class="annot"><span class="annottext">t1 :: NP
-</span><a href="#local-6989586621679099019"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679099018"><span class="annot"><span class="annottext">t2 :: NP
-</span><a href="#local-6989586621679099018"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Utils.Drasil.NounPhrase.html#inThePS"><span class="hs-identifier hs-var hs-var">inThePS</span></a></span></span><span> </span><span id="local-6989586621679099100"><span class="annot"><span class="annottext">t1 :: NP
+</span><a href="#local-6989586621679099100"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679099099"><span class="annot"><span class="annottext">t2 :: NP
+</span><a href="#local-6989586621679099099"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
 -&gt; Sentence -&gt; CapitalizationRule -&gt; CapitalizationRule -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhrase''</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099019"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099100"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Utils.Drasil.Sentence.html#inThe"><span class="hs-operator hs-var">`S.inThe`</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099018"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><a href="#local-6989586621679099099"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">pluralNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099019"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099100"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Utils.Drasil.Sentence.html#inThe"><span class="hs-operator hs-var">`S.inThe`</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099018"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
+</span><a href="#local-6989586621679099099"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapFirst</span></span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapWords</span></span><span>
 </span><span id="line-57"></span><span class="hs-comment">-- | Similar to 'ofThe', but accepts two functions for the plural case.</span><span>
 </span><span id="line-58"></span><span class="annot"><a href="Utils.Drasil.NounPhrase.html#inTheGen"><span class="hs-identifier hs-type">inTheGen</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span>
 </span><span id="line-59"></span><span id="inTheGen"><span class="annot"><span class="annottext">inTheGen :: (NP -&gt; Sentence) -&gt; (NP -&gt; Sentence) -&gt; NP -&gt; NP -&gt; NP
-</span><a href="Utils.Drasil.NounPhrase.html#inTheGen"><span class="hs-identifier hs-var hs-var">inTheGen</span></a></span></span><span> </span><span id="local-6989586621679099016"><span class="annot"><span class="annottext">f1 :: NP -&gt; Sentence
-</span><a href="#local-6989586621679099016"><span class="hs-identifier hs-var">f1</span></a></span></span><span> </span><span id="local-6989586621679099015"><span class="annot"><span class="annottext">f2 :: NP -&gt; Sentence
-</span><a href="#local-6989586621679099015"><span class="hs-identifier hs-var">f2</span></a></span></span><span> </span><span id="local-6989586621679099014"><span class="annot"><span class="annottext">t1 :: NP
-</span><a href="#local-6989586621679099014"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679099013"><span class="annot"><span class="annottext">t2 :: NP
-</span><a href="#local-6989586621679099013"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Utils.Drasil.NounPhrase.html#inTheGen"><span class="hs-identifier hs-var hs-var">inTheGen</span></a></span></span><span> </span><span id="local-6989586621679099097"><span class="annot"><span class="annottext">f1 :: NP -&gt; Sentence
+</span><a href="#local-6989586621679099097"><span class="hs-identifier hs-var">f1</span></a></span></span><span> </span><span id="local-6989586621679099096"><span class="annot"><span class="annottext">f2 :: NP -&gt; Sentence
+</span><a href="#local-6989586621679099096"><span class="hs-identifier hs-var">f2</span></a></span></span><span> </span><span id="local-6989586621679099095"><span class="annot"><span class="annottext">t1 :: NP
+</span><a href="#local-6989586621679099095"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679099094"><span class="annot"><span class="annottext">t2 :: NP
+</span><a href="#local-6989586621679099094"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
 -&gt; Sentence -&gt; CapitalizationRule -&gt; CapitalizationRule -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhrase''</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099014"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099095"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Utils.Drasil.Sentence.html#inThe"><span class="hs-operator hs-var">`S.inThe`</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099013"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
-</span><a href="#local-6989586621679099016"><span class="hs-identifier hs-var">f1</span></a></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099014"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099094"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><a href="#local-6989586621679099097"><span class="hs-identifier hs-var">f1</span></a></span><span> </span><span class="annot"><span class="annottext">NP
+</span><a href="#local-6989586621679099095"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Utils.Drasil.Sentence.html#inThe"><span class="hs-operator hs-var">`S.inThe`</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
-</span><a href="#local-6989586621679099015"><span class="hs-identifier hs-var">f2</span></a></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099013"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
+</span><a href="#local-6989586621679099096"><span class="hs-identifier hs-var">f2</span></a></span><span> </span><span class="annot"><span class="annottext">NP
+</span><a href="#local-6989586621679099094"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapFirst</span></span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapWords</span></span><span>
 </span><span id="line-60"></span><span>
 </span><span id="line-61"></span><span class="hs-comment">-- | Prepends &quot;the&quot; and inserts &quot;of the&quot;. Plural case is @&quot;the&quot; +:+ (phraseNP t1) +:+ &quot;of the&quot; +:+ (pluralNP t2)@.</span><span>
 </span><span id="line-62"></span><span class="annot"><a href="Utils.Drasil.NounPhrase.html#the_ofThe"><span class="hs-identifier hs-type">the_ofThe</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span>
 </span><span id="line-63"></span><span id="the_ofThe"><span class="annot"><span class="annottext">the_ofThe :: NP -&gt; NP -&gt; NP
-</span><a href="Utils.Drasil.NounPhrase.html#the_ofThe"><span class="hs-identifier hs-var hs-var">the_ofThe</span></a></span></span><span> </span><span id="local-6989586621679099012"><span class="annot"><span class="annottext">t1 :: NP
-</span><a href="#local-6989586621679099012"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679099011"><span class="annot"><span class="annottext">t2 :: NP
-</span><a href="#local-6989586621679099011"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NP -&gt; NP
+</span><a href="Utils.Drasil.NounPhrase.html#the_ofThe"><span class="hs-identifier hs-var hs-var">the_ofThe</span></a></span></span><span> </span><span id="local-6989586621679099093"><span class="annot"><span class="annottext">t1 :: NP
+</span><a href="#local-6989586621679099093"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679099092"><span class="annot"><span class="annottext">t2 :: NP
+</span><a href="#local-6989586621679099092"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NP -&gt; NP
 </span><a href="Utils.Drasil.NounPhrase.html#the"><span class="hs-identifier hs-var">the</span></a></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099012"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
+</span><a href="#local-6989586621679099093"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
 </span><a href="Utils.Drasil.NounPhrase.html#ofThe"><span class="hs-operator hs-var">`ofThe`</span></a></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099011"><span class="hs-identifier hs-var">t2</span></a></span><span>
+</span><a href="#local-6989586621679099092"><span class="hs-identifier hs-var">t2</span></a></span><span>
 </span><span id="line-64"></span><span class="hs-comment">-- | Similar to 'the_ofThe', but the plural case is now @ S &quot;the&quot; +:+ (pluralNP t1) `S.ofThe` (phraseNP t2)@.</span><span>
 </span><span id="line-65"></span><span class="annot"><a href="Utils.Drasil.NounPhrase.html#the_ofThePS"><span class="hs-identifier hs-type">the_ofThePS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span>
 </span><span id="line-66"></span><span id="the_ofThePS"><span class="annot"><span class="annottext">the_ofThePS :: NP -&gt; NP -&gt; NP
-</span><a href="Utils.Drasil.NounPhrase.html#the_ofThePS"><span class="hs-identifier hs-var hs-var">the_ofThePS</span></a></span></span><span> </span><span id="local-6989586621679099010"><span class="annot"><span class="annottext">t1 :: NP
-</span><a href="#local-6989586621679099010"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679099009"><span class="annot"><span class="annottext">t2 :: NP
-</span><a href="#local-6989586621679099009"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NP -&gt; NP
+</span><a href="Utils.Drasil.NounPhrase.html#the_ofThePS"><span class="hs-identifier hs-var hs-var">the_ofThePS</span></a></span></span><span> </span><span id="local-6989586621679099091"><span class="annot"><span class="annottext">t1 :: NP
+</span><a href="#local-6989586621679099091"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679099090"><span class="annot"><span class="annottext">t2 :: NP
+</span><a href="#local-6989586621679099090"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NP -&gt; NP
 </span><a href="Utils.Drasil.NounPhrase.html#the"><span class="hs-identifier hs-var">the</span></a></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099010"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
+</span><a href="#local-6989586621679099091"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
 </span><a href="Utils.Drasil.NounPhrase.html#ofThePS"><span class="hs-operator hs-var">`ofThePS`</span></a></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099009"><span class="hs-identifier hs-var">t2</span></a></span><span>
+</span><a href="#local-6989586621679099090"><span class="hs-identifier hs-var">t2</span></a></span><span>
 </span><span id="line-67"></span><span class="hs-comment">-- | Similar to 'the_ofThe'', but takes two functions for the plural case.</span><span>
 </span><span id="line-68"></span><span class="annot"><a href="Utils.Drasil.NounPhrase.html#the_ofTheGen"><span class="hs-identifier hs-type">the_ofTheGen</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span>
 </span><span id="line-69"></span><span id="the_ofTheGen"><span class="annot"><span class="annottext">the_ofTheGen :: (NP -&gt; Sentence) -&gt; (NP -&gt; Sentence) -&gt; NP -&gt; NP -&gt; NP
-</span><a href="Utils.Drasil.NounPhrase.html#the_ofTheGen"><span class="hs-identifier hs-var hs-var">the_ofTheGen</span></a></span></span><span> </span><span id="local-6989586621679099008"><span class="annot"><span class="annottext">f1 :: NP -&gt; Sentence
-</span><a href="#local-6989586621679099008"><span class="hs-identifier hs-var">f1</span></a></span></span><span> </span><span id="local-6989586621679099007"><span class="annot"><span class="annottext">f2 :: NP -&gt; Sentence
-</span><a href="#local-6989586621679099007"><span class="hs-identifier hs-var">f2</span></a></span></span><span> </span><span id="local-6989586621679099006"><span class="annot"><span class="annottext">t1 :: NP
-</span><a href="#local-6989586621679099006"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(NP -&gt; Sentence) -&gt; (NP -&gt; Sentence) -&gt; NP -&gt; NP -&gt; NP
+</span><a href="Utils.Drasil.NounPhrase.html#the_ofTheGen"><span class="hs-identifier hs-var hs-var">the_ofTheGen</span></a></span></span><span> </span><span id="local-6989586621679099089"><span class="annot"><span class="annottext">f1 :: NP -&gt; Sentence
+</span><a href="#local-6989586621679099089"><span class="hs-identifier hs-var">f1</span></a></span></span><span> </span><span id="local-6989586621679099088"><span class="annot"><span class="annottext">f2 :: NP -&gt; Sentence
+</span><a href="#local-6989586621679099088"><span class="hs-identifier hs-var">f2</span></a></span></span><span> </span><span id="local-6989586621679099087"><span class="annot"><span class="annottext">t1 :: NP
+</span><a href="#local-6989586621679099087"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(NP -&gt; Sentence) -&gt; (NP -&gt; Sentence) -&gt; NP -&gt; NP -&gt; NP
 </span><a href="Utils.Drasil.NounPhrase.html#ofTheGen"><span class="hs-identifier hs-var">ofTheGen</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
-</span><a href="#local-6989586621679099008"><span class="hs-identifier hs-var">f1</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
-</span><a href="#local-6989586621679099007"><span class="hs-identifier hs-var">f2</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NP
+</span><a href="#local-6989586621679099089"><span class="hs-identifier hs-var">f1</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><a href="#local-6989586621679099088"><span class="hs-identifier hs-var">f2</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NP
 </span><a href="Utils.Drasil.NounPhrase.html#the"><span class="hs-identifier hs-var">the</span></a></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099006"><span class="hs-identifier hs-var">t1</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679099087"><span class="hs-identifier hs-var">t1</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-70"></span><span>
 </span><span id="line-71"></span><span class="hs-comment">-- | Inserts &quot;for&quot; between two 'NP's. Plural case is @(phraseNP t1) +:+ &quot;for&quot; +:+ (pluralNP t2)@.</span><span>
 </span><span id="line-72"></span><span class="annot"><a href="Utils.Drasil.NounPhrase.html#for"><span class="hs-identifier hs-type">for</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span>
@@ -313,49 +313,49 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span id="line-74"></span><span class="hs-comment">-- | Same as 'for', but plural case is now @(pluralNP t1) `S.for` (phraseNP t2)@.</span><span>
 </span><span id="line-75"></span><span class="annot"><a href="Utils.Drasil.NounPhrase.html#forPS"><span class="hs-identifier hs-type">forPS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span>
 </span><span id="line-76"></span><span id="forPS"><span class="annot"><span class="annottext">forPS :: NP -&gt; NP -&gt; NP
-</span><a href="Utils.Drasil.NounPhrase.html#forPS"><span class="hs-identifier hs-var hs-var">forPS</span></a></span></span><span> </span><span id="local-6989586621679099005"><span class="annot"><span class="annottext">t1 :: NP
-</span><a href="#local-6989586621679099005"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679099004"><span class="annot"><span class="annottext">t2 :: NP
-</span><a href="#local-6989586621679099004"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Utils.Drasil.NounPhrase.html#forPS"><span class="hs-identifier hs-var hs-var">forPS</span></a></span></span><span> </span><span id="local-6989586621679099086"><span class="annot"><span class="annottext">t1 :: NP
+</span><a href="#local-6989586621679099086"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679099085"><span class="annot"><span class="annottext">t2 :: NP
+</span><a href="#local-6989586621679099085"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
 -&gt; Sentence -&gt; CapitalizationRule -&gt; CapitalizationRule -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhrase''</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099005"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099086"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Utils.Drasil.Sentence.html#for"><span class="hs-operator hs-var">`S.for`</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099004"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><a href="#local-6989586621679099085"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">pluralNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099005"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099086"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Utils.Drasil.Sentence.html#for"><span class="hs-operator hs-var">`S.for`</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099004"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
+</span><a href="#local-6989586621679099085"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapFirst</span></span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapWords</span></span><span>
 </span><span id="line-77"></span><span class="hs-comment">-- | Same as 'for'', but takes two functions for the plural case.</span><span>
 </span><span id="line-78"></span><span class="annot"><a href="Utils.Drasil.NounPhrase.html#forGen"><span class="hs-identifier hs-type">forGen</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span>
 </span><span id="line-79"></span><span id="forGen"><span class="annot"><span class="annottext">forGen :: (NP -&gt; Sentence) -&gt; (NP -&gt; Sentence) -&gt; NP -&gt; NP -&gt; NP
-</span><a href="Utils.Drasil.NounPhrase.html#forGen"><span class="hs-identifier hs-var hs-var">forGen</span></a></span></span><span> </span><span id="local-6989586621679099002"><span class="annot"><span class="annottext">f1 :: NP -&gt; Sentence
-</span><a href="#local-6989586621679099002"><span class="hs-identifier hs-var">f1</span></a></span></span><span> </span><span id="local-6989586621679099001"><span class="annot"><span class="annottext">f2 :: NP -&gt; Sentence
-</span><a href="#local-6989586621679099001"><span class="hs-identifier hs-var">f2</span></a></span></span><span> </span><span id="local-6989586621679099000"><span class="annot"><span class="annottext">t1 :: NP
-</span><a href="#local-6989586621679099000"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679098999"><span class="annot"><span class="annottext">t2 :: NP
-</span><a href="#local-6989586621679098999"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Utils.Drasil.NounPhrase.html#forGen"><span class="hs-identifier hs-var hs-var">forGen</span></a></span></span><span> </span><span id="local-6989586621679099083"><span class="annot"><span class="annottext">f1 :: NP -&gt; Sentence
+</span><a href="#local-6989586621679099083"><span class="hs-identifier hs-var">f1</span></a></span></span><span> </span><span id="local-6989586621679099082"><span class="annot"><span class="annottext">f2 :: NP -&gt; Sentence
+</span><a href="#local-6989586621679099082"><span class="hs-identifier hs-var">f2</span></a></span></span><span> </span><span id="local-6989586621679099081"><span class="annot"><span class="annottext">t1 :: NP
+</span><a href="#local-6989586621679099081"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679099080"><span class="annot"><span class="annottext">t2 :: NP
+</span><a href="#local-6989586621679099080"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
 -&gt; Sentence -&gt; CapitalizationRule -&gt; CapitalizationRule -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhrase''</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099000"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099081"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Utils.Drasil.Sentence.html#for"><span class="hs-operator hs-var">`S.for`</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679098999"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
-</span><a href="#local-6989586621679099002"><span class="hs-identifier hs-var">f1</span></a></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679099000"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099080"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><a href="#local-6989586621679099083"><span class="hs-identifier hs-var">f1</span></a></span><span> </span><span class="annot"><span class="annottext">NP
+</span><a href="#local-6989586621679099081"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Utils.Drasil.Sentence.html#for"><span class="hs-operator hs-var">`S.for`</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
-</span><a href="#local-6989586621679099001"><span class="hs-identifier hs-var">f2</span></a></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679098999"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
+</span><a href="#local-6989586621679099082"><span class="hs-identifier hs-var">f2</span></a></span><span> </span><span class="annot"><span class="annottext">NP
+</span><a href="#local-6989586621679099080"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapFirst</span></span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapWords</span></span><span>
 </span><span id="line-80"></span><span>
@@ -367,49 +367,49 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span id="line-84"></span><span class="hs-comment">-- | Same as 'of_', but plural case is now @(pluralNP t1) `S.of_` (phraseNP t2)@.</span><span>
 </span><span id="line-85"></span><span class="annot"><a href="Utils.Drasil.NounPhrase.html#of_PS"><span class="hs-identifier hs-type">of_PS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span>
 </span><span id="line-86"></span><span id="of_PS"><span class="annot"><span class="annottext">of_PS :: NP -&gt; NP -&gt; NP
-</span><a href="Utils.Drasil.NounPhrase.html#of_PS"><span class="hs-identifier hs-var hs-var">of_PS</span></a></span></span><span> </span><span id="local-6989586621679098998"><span class="annot"><span class="annottext">t1 :: NP
-</span><a href="#local-6989586621679098998"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679098997"><span class="annot"><span class="annottext">t2 :: NP
-</span><a href="#local-6989586621679098997"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Utils.Drasil.NounPhrase.html#of_PS"><span class="hs-identifier hs-var hs-var">of_PS</span></a></span></span><span> </span><span id="local-6989586621679099079"><span class="annot"><span class="annottext">t1 :: NP
+</span><a href="#local-6989586621679099079"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679099078"><span class="annot"><span class="annottext">t2 :: NP
+</span><a href="#local-6989586621679099078"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
 -&gt; Sentence -&gt; CapitalizationRule -&gt; CapitalizationRule -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhrase''</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679098998"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099079"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Utils.Drasil.Sentence.html#of_"><span class="hs-operator hs-var">`S.of_`</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679098997"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><a href="#local-6989586621679099078"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">pluralNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679098998"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099079"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Utils.Drasil.Sentence.html#of_"><span class="hs-operator hs-var">`S.of_`</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679098997"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
+</span><a href="#local-6989586621679099078"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapFirst</span></span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapWords</span></span><span>
 </span><span id="line-87"></span><span class="hs-comment">-- | Same as 'of_', but takes two functions for the plural case.</span><span>
 </span><span id="line-88"></span><span class="annot"><a href="Utils.Drasil.NounPhrase.html#of_Gen"><span class="hs-identifier hs-type">of_Gen</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span>
 </span><span id="line-89"></span><span id="of_Gen"><span class="annot"><span class="annottext">of_Gen :: (NP -&gt; Sentence) -&gt; (NP -&gt; Sentence) -&gt; NP -&gt; NP -&gt; NP
-</span><a href="Utils.Drasil.NounPhrase.html#of_Gen"><span class="hs-identifier hs-var hs-var">of_Gen</span></a></span></span><span> </span><span id="local-6989586621679098995"><span class="annot"><span class="annottext">f1 :: NP -&gt; Sentence
-</span><a href="#local-6989586621679098995"><span class="hs-identifier hs-var">f1</span></a></span></span><span> </span><span id="local-6989586621679098994"><span class="annot"><span class="annottext">f2 :: NP -&gt; Sentence
-</span><a href="#local-6989586621679098994"><span class="hs-identifier hs-var">f2</span></a></span></span><span> </span><span id="local-6989586621679098993"><span class="annot"><span class="annottext">t1 :: NP
-</span><a href="#local-6989586621679098993"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679098992"><span class="annot"><span class="annottext">t2 :: NP
-</span><a href="#local-6989586621679098992"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Utils.Drasil.NounPhrase.html#of_Gen"><span class="hs-identifier hs-var hs-var">of_Gen</span></a></span></span><span> </span><span id="local-6989586621679099076"><span class="annot"><span class="annottext">f1 :: NP -&gt; Sentence
+</span><a href="#local-6989586621679099076"><span class="hs-identifier hs-var">f1</span></a></span></span><span> </span><span id="local-6989586621679099075"><span class="annot"><span class="annottext">f2 :: NP -&gt; Sentence
+</span><a href="#local-6989586621679099075"><span class="hs-identifier hs-var">f2</span></a></span></span><span> </span><span id="local-6989586621679099074"><span class="annot"><span class="annottext">t1 :: NP
+</span><a href="#local-6989586621679099074"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679099073"><span class="annot"><span class="annottext">t2 :: NP
+</span><a href="#local-6989586621679099073"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
 -&gt; Sentence -&gt; CapitalizationRule -&gt; CapitalizationRule -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhrase''</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679098993"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099074"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Utils.Drasil.Sentence.html#of_"><span class="hs-operator hs-var">`S.of_`</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679098992"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
-</span><a href="#local-6989586621679098995"><span class="hs-identifier hs-var">f1</span></a></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679098993"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099073"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><a href="#local-6989586621679099076"><span class="hs-identifier hs-var">f1</span></a></span><span> </span><span class="annot"><span class="annottext">NP
+</span><a href="#local-6989586621679099074"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Utils.Drasil.Sentence.html#of_"><span class="hs-operator hs-var">`S.of_`</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
-</span><a href="#local-6989586621679098994"><span class="hs-identifier hs-var">f2</span></a></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679098992"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
+</span><a href="#local-6989586621679099075"><span class="hs-identifier hs-var">f2</span></a></span><span> </span><span class="annot"><span class="annottext">NP
+</span><a href="#local-6989586621679099073"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapFirst</span></span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapWords</span></span><span>
 </span><span id="line-90"></span><span class="hs-comment">-- | Same as 'of_', but takes two functions for the singular case and two for the plural case.</span><span>
@@ -421,25 +421,25 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 -&gt; NP
 -&gt; NP
 -&gt; NP
-</span><a href="Utils.Drasil.NounPhrase.html#of_GenGen"><span class="hs-identifier hs-var hs-var">of_GenGen</span></a></span></span><span> </span><span id="local-6989586621679098991"><span class="annot"><span class="annottext">f1 :: NP -&gt; Sentence
-</span><a href="#local-6989586621679098991"><span class="hs-identifier hs-var">f1</span></a></span></span><span> </span><span id="local-6989586621679098990"><span class="annot"><span class="annottext">f2 :: NP -&gt; Sentence
-</span><a href="#local-6989586621679098990"><span class="hs-identifier hs-var">f2</span></a></span></span><span> </span><span id="local-6989586621679098989"><span class="annot"><span class="annottext">p1 :: NP -&gt; Sentence
-</span><a href="#local-6989586621679098989"><span class="hs-identifier hs-var">p1</span></a></span></span><span> </span><span id="local-6989586621679098988"><span class="annot"><span class="annottext">p2 :: NP -&gt; Sentence
-</span><a href="#local-6989586621679098988"><span class="hs-identifier hs-var">p2</span></a></span></span><span> </span><span id="local-6989586621679098987"><span class="annot"><span class="annottext">t1 :: NP
-</span><a href="#local-6989586621679098987"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679098986"><span class="annot"><span class="annottext">t2 :: NP
-</span><a href="#local-6989586621679098986"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Utils.Drasil.NounPhrase.html#of_GenGen"><span class="hs-identifier hs-var hs-var">of_GenGen</span></a></span></span><span> </span><span id="local-6989586621679099072"><span class="annot"><span class="annottext">f1 :: NP -&gt; Sentence
+</span><a href="#local-6989586621679099072"><span class="hs-identifier hs-var">f1</span></a></span></span><span> </span><span id="local-6989586621679099071"><span class="annot"><span class="annottext">f2 :: NP -&gt; Sentence
+</span><a href="#local-6989586621679099071"><span class="hs-identifier hs-var">f2</span></a></span></span><span> </span><span id="local-6989586621679099070"><span class="annot"><span class="annottext">p1 :: NP -&gt; Sentence
+</span><a href="#local-6989586621679099070"><span class="hs-identifier hs-var">p1</span></a></span></span><span> </span><span id="local-6989586621679099069"><span class="annot"><span class="annottext">p2 :: NP -&gt; Sentence
+</span><a href="#local-6989586621679099069"><span class="hs-identifier hs-var">p2</span></a></span></span><span> </span><span id="local-6989586621679099068"><span class="annot"><span class="annottext">t1 :: NP
+</span><a href="#local-6989586621679099068"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679099067"><span class="annot"><span class="annottext">t2 :: NP
+</span><a href="#local-6989586621679099067"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
 -&gt; Sentence -&gt; CapitalizationRule -&gt; CapitalizationRule -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhrase''</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
-</span><a href="#local-6989586621679098991"><span class="hs-identifier hs-var">f1</span></a></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679098987"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099072"><span class="hs-identifier hs-var">f1</span></a></span><span> </span><span class="annot"><span class="annottext">NP
+</span><a href="#local-6989586621679099068"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Utils.Drasil.Sentence.html#of_"><span class="hs-operator hs-var">`S.of_`</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
-</span><a href="#local-6989586621679098990"><span class="hs-identifier hs-var">f2</span></a></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679098986"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
-</span><a href="#local-6989586621679098989"><span class="hs-identifier hs-var">p1</span></a></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679098987"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099071"><span class="hs-identifier hs-var">f2</span></a></span><span> </span><span class="annot"><span class="annottext">NP
+</span><a href="#local-6989586621679099067"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><a href="#local-6989586621679099070"><span class="hs-identifier hs-var">p1</span></a></span><span> </span><span class="annot"><span class="annottext">NP
+</span><a href="#local-6989586621679099068"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Utils.Drasil.Sentence.html#of_"><span class="hs-operator hs-var">`S.of_`</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
-</span><a href="#local-6989586621679098988"><span class="hs-identifier hs-var">p2</span></a></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679098986"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
+</span><a href="#local-6989586621679099069"><span class="hs-identifier hs-var">p2</span></a></span><span> </span><span class="annot"><span class="annottext">NP
+</span><a href="#local-6989586621679099067"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapFirst</span></span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapWords</span></span><span>
 </span><span id="line-93"></span><span>
@@ -457,49 +457,49 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span id="line-101"></span><span class="hs-comment">-- | Same as 'and_', but plural case is now @(pluralNP t1) `S.and_` (phraseNP t2)@.</span><span>
 </span><span id="line-102"></span><span class="annot"><a href="Utils.Drasil.NounPhrase.html#and_PS"><span class="hs-identifier hs-type">and_PS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span>
 </span><span id="line-103"></span><span id="and_PS"><span class="annot"><span class="annottext">and_PS :: NP -&gt; NP -&gt; NP
-</span><a href="Utils.Drasil.NounPhrase.html#and_PS"><span class="hs-identifier hs-var hs-var">and_PS</span></a></span></span><span> </span><span id="local-6989586621679098985"><span class="annot"><span class="annottext">t1 :: NP
-</span><a href="#local-6989586621679098985"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679098984"><span class="annot"><span class="annottext">t2 :: NP
-</span><a href="#local-6989586621679098984"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Utils.Drasil.NounPhrase.html#and_PS"><span class="hs-identifier hs-var hs-var">and_PS</span></a></span></span><span> </span><span id="local-6989586621679099066"><span class="annot"><span class="annottext">t1 :: NP
+</span><a href="#local-6989586621679099066"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679099065"><span class="annot"><span class="annottext">t2 :: NP
+</span><a href="#local-6989586621679099065"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
 -&gt; Sentence -&gt; CapitalizationRule -&gt; CapitalizationRule -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhrase''</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679098985"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099066"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Utils.Drasil.Sentence.html#and_"><span class="hs-operator hs-var">`S.and_`</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679098984"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><a href="#local-6989586621679099065"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">pluralNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679098985"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099066"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Utils.Drasil.Sentence.html#and_"><span class="hs-operator hs-var">`S.and_`</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679098984"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
+</span><a href="#local-6989586621679099065"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapFirst</span></span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapWords</span></span><span>
 </span><span id="line-104"></span><span class="hs-comment">-- | Same as 'and_', but takes two functions for the plural case.</span><span>
 </span><span id="line-105"></span><span class="annot"><a href="Utils.Drasil.NounPhrase.html#and_Gen"><span class="hs-identifier hs-type">and_Gen</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span>
 </span><span id="line-106"></span><span id="and_Gen"><span class="annot"><span class="annottext">and_Gen :: (NP -&gt; Sentence) -&gt; (NP -&gt; Sentence) -&gt; NP -&gt; NP -&gt; NP
-</span><a href="Utils.Drasil.NounPhrase.html#and_Gen"><span class="hs-identifier hs-var hs-var">and_Gen</span></a></span></span><span> </span><span id="local-6989586621679098982"><span class="annot"><span class="annottext">f1 :: NP -&gt; Sentence
-</span><a href="#local-6989586621679098982"><span class="hs-identifier hs-var">f1</span></a></span></span><span> </span><span id="local-6989586621679098981"><span class="annot"><span class="annottext">f2 :: NP -&gt; Sentence
-</span><a href="#local-6989586621679098981"><span class="hs-identifier hs-var">f2</span></a></span></span><span> </span><span id="local-6989586621679098980"><span class="annot"><span class="annottext">t1 :: NP
-</span><a href="#local-6989586621679098980"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679098979"><span class="annot"><span class="annottext">t2 :: NP
-</span><a href="#local-6989586621679098979"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Utils.Drasil.NounPhrase.html#and_Gen"><span class="hs-identifier hs-var hs-var">and_Gen</span></a></span></span><span> </span><span id="local-6989586621679099063"><span class="annot"><span class="annottext">f1 :: NP -&gt; Sentence
+</span><a href="#local-6989586621679099063"><span class="hs-identifier hs-var">f1</span></a></span></span><span> </span><span id="local-6989586621679099062"><span class="annot"><span class="annottext">f2 :: NP -&gt; Sentence
+</span><a href="#local-6989586621679099062"><span class="hs-identifier hs-var">f2</span></a></span></span><span> </span><span id="local-6989586621679099061"><span class="annot"><span class="annottext">t1 :: NP
+</span><a href="#local-6989586621679099061"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679099060"><span class="annot"><span class="annottext">t2 :: NP
+</span><a href="#local-6989586621679099060"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
 -&gt; Sentence -&gt; CapitalizationRule -&gt; CapitalizationRule -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhrase''</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679098980"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099061"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Utils.Drasil.Sentence.html#and_"><span class="hs-operator hs-var">`S.and_`</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679098979"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
-</span><a href="#local-6989586621679098982"><span class="hs-identifier hs-var">f1</span></a></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679098980"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099060"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><a href="#local-6989586621679099063"><span class="hs-identifier hs-var">f1</span></a></span><span> </span><span class="annot"><span class="annottext">NP
+</span><a href="#local-6989586621679099061"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Utils.Drasil.Sentence.html#and_"><span class="hs-operator hs-var">`S.and_`</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
-</span><a href="#local-6989586621679098981"><span class="hs-identifier hs-var">f2</span></a></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679098979"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
+</span><a href="#local-6989586621679099062"><span class="hs-identifier hs-var">f2</span></a></span><span> </span><span class="annot"><span class="annottext">NP
+</span><a href="#local-6989586621679099060"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapFirst</span></span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapWords</span></span><span>
 </span><span id="line-107"></span><span class="hs-comment">-- | Same as 'and_', but takes two functions for the singular case and two for the plural case.</span><span>
@@ -511,25 +511,25 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 -&gt; NP
 -&gt; NP
 -&gt; NP
-</span><a href="Utils.Drasil.NounPhrase.html#and_GenGen"><span class="hs-identifier hs-var hs-var">and_GenGen</span></a></span></span><span> </span><span id="local-6989586621679098978"><span class="annot"><span class="annottext">f1 :: NP -&gt; Sentence
-</span><a href="#local-6989586621679098978"><span class="hs-identifier hs-var">f1</span></a></span></span><span> </span><span id="local-6989586621679098977"><span class="annot"><span class="annottext">f2 :: NP -&gt; Sentence
-</span><a href="#local-6989586621679098977"><span class="hs-identifier hs-var">f2</span></a></span></span><span> </span><span id="local-6989586621679098976"><span class="annot"><span class="annottext">p1 :: NP -&gt; Sentence
-</span><a href="#local-6989586621679098976"><span class="hs-identifier hs-var">p1</span></a></span></span><span> </span><span id="local-6989586621679098975"><span class="annot"><span class="annottext">p2 :: NP -&gt; Sentence
-</span><a href="#local-6989586621679098975"><span class="hs-identifier hs-var">p2</span></a></span></span><span> </span><span id="local-6989586621679098974"><span class="annot"><span class="annottext">t1 :: NP
-</span><a href="#local-6989586621679098974"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679098973"><span class="annot"><span class="annottext">t2 :: NP
-</span><a href="#local-6989586621679098973"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Utils.Drasil.NounPhrase.html#and_GenGen"><span class="hs-identifier hs-var hs-var">and_GenGen</span></a></span></span><span> </span><span id="local-6989586621679099059"><span class="annot"><span class="annottext">f1 :: NP -&gt; Sentence
+</span><a href="#local-6989586621679099059"><span class="hs-identifier hs-var">f1</span></a></span></span><span> </span><span id="local-6989586621679099058"><span class="annot"><span class="annottext">f2 :: NP -&gt; Sentence
+</span><a href="#local-6989586621679099058"><span class="hs-identifier hs-var">f2</span></a></span></span><span> </span><span id="local-6989586621679099057"><span class="annot"><span class="annottext">p1 :: NP -&gt; Sentence
+</span><a href="#local-6989586621679099057"><span class="hs-identifier hs-var">p1</span></a></span></span><span> </span><span id="local-6989586621679099056"><span class="annot"><span class="annottext">p2 :: NP -&gt; Sentence
+</span><a href="#local-6989586621679099056"><span class="hs-identifier hs-var">p2</span></a></span></span><span> </span><span id="local-6989586621679099055"><span class="annot"><span class="annottext">t1 :: NP
+</span><a href="#local-6989586621679099055"><span class="hs-identifier hs-var">t1</span></a></span></span><span> </span><span id="local-6989586621679099054"><span class="annot"><span class="annottext">t2 :: NP
+</span><a href="#local-6989586621679099054"><span class="hs-identifier hs-var">t2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Sentence
 -&gt; Sentence -&gt; CapitalizationRule -&gt; CapitalizationRule -&gt; NP
 </span><span class="hs-identifier hs-var">nounPhrase''</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
-</span><a href="#local-6989586621679098978"><span class="hs-identifier hs-var">f1</span></a></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679098974"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099059"><span class="hs-identifier hs-var">f1</span></a></span><span> </span><span class="annot"><span class="annottext">NP
+</span><a href="#local-6989586621679099055"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Utils.Drasil.Sentence.html#and_"><span class="hs-operator hs-var">`S.and_`</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
-</span><a href="#local-6989586621679098977"><span class="hs-identifier hs-var">f2</span></a></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679098973"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
-</span><a href="#local-6989586621679098976"><span class="hs-identifier hs-var">p1</span></a></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679098974"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><a href="#local-6989586621679099058"><span class="hs-identifier hs-var">f2</span></a></span><span> </span><span class="annot"><span class="annottext">NP
+</span><a href="#local-6989586621679099054"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><a href="#local-6989586621679099057"><span class="hs-identifier hs-var">p1</span></a></span><span> </span><span class="annot"><span class="annottext">NP
+</span><a href="#local-6989586621679099055"><span class="hs-identifier hs-var">t1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><a href="Utils.Drasil.Sentence.html#and_"><span class="hs-operator hs-var">`S.and_`</span></a></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
-</span><a href="#local-6989586621679098975"><span class="hs-identifier hs-var">p2</span></a></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679098973"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
+</span><a href="#local-6989586621679099056"><span class="hs-identifier hs-var">p2</span></a></span><span> </span><span class="annot"><span class="annottext">NP
+</span><a href="#local-6989586621679099054"><span class="hs-identifier hs-var">t2</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapFirst</span></span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
 </span><span class="hs-identifier hs-var">CapWords</span></span><span>
 </span><span id="line-110"></span><span>

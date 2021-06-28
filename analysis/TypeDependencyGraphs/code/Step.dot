@@ -1,7 +1,7 @@
 digraph step{
 Step -> FunctionInterface;
 Step -> NonEmpty;
-Step -> Expr;
+Step -> CodeExpr;
 Step -> Condition;
 Step -> Step;
 Step -> CodeVarChunk;

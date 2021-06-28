@@ -1,4 +1,4 @@
 digraph condition{
-Condition -> Expr;
+Condition -> CodeExpr;
 Condition	[shape=oval, color=red2, label=Condition];
 }

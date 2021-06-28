@@ -119,6 +119,8 @@ digraph alltypes {
 	}
 	subgraph main {
 	}
+	subgraph odes {
+	}
 	subgraph references {
 	}
 	subgraph requirements {
@@ -144,6 +146,8 @@ digraph alltypes {
 	subgraph introsection {
 	}
 	subgraph main {
+	}
+	subgraph odes {
 	}
 	subgraph references {
 	}

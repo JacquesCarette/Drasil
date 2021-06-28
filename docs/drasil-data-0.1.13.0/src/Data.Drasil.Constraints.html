@@ -2,21 +2,21 @@
 </span><span id="line-2"></span><span>
 </span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
 </span><span id="line-4"></span><span>
-</span><span id="line-5"></span><span class="annot"><a href="Data.Drasil.Constraints.html#gtZeroConstr"><span class="hs-identifier hs-type">gtZeroConstr</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Constraints.html#probConstr"><span class="hs-identifier hs-type">probConstr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Constraint</span></span><span>
-</span><span id="line-6"></span><span id="gtZeroConstr"><span class="annot"><span class="annottext">gtZeroConstr :: Constraint
-</span><a href="Data.Drasil.Constraints.html#gtZeroConstr"><span class="hs-identifier hs-var hs-var">gtZeroConstr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; Constraint
-</span><span class="hs-identifier hs-var">physc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; Constraint)
--&gt; RealInterval Expr Expr -&gt; Constraint
+</span><span id="line-5"></span><span class="annot"><a href="Data.Drasil.Constraints.html#gtZeroConstr"><span class="hs-identifier hs-type">gtZeroConstr</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Data.Drasil.Constraints.html#probConstr"><span class="hs-identifier hs-type">probConstr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConstraintE</span></span><span>
+</span><span id="line-6"></span><span id="gtZeroConstr"><span class="annot"><span class="annottext">gtZeroConstr :: ConstraintE
+</span><a href="Data.Drasil.Constraints.html#gtZeroConstr"><span class="hs-identifier hs-var hs-var">gtZeroConstr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
+</span><span class="hs-identifier hs-var">physc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+-&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; RealInterval Expr Expr
 forall b a. (Inclusive, b) -&gt; RealInterval a b
 </span><span class="hs-identifier hs-var">UpFrom</span></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
 </span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span>
-</span><span id="line-7"></span><span id="probConstr"><span class="annot"><span class="annottext">probConstr :: Constraint
-</span><a href="Data.Drasil.Constraints.html#probConstr"><span class="hs-identifier hs-var hs-var">probConstr</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; Constraint
-</span><span class="hs-identifier hs-var">physc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; Constraint)
--&gt; RealInterval Expr Expr -&gt; Constraint
+</span><span id="line-7"></span><span id="probConstr"><span class="annot"><span class="annottext">probConstr :: ConstraintE
+</span><a href="Data.Drasil.Constraints.html#probConstr"><span class="hs-identifier hs-var hs-var">probConstr</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
+</span><span class="hs-identifier hs-var">physc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+-&gt; RealInterval Expr Expr -&gt; ConstraintE
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
 forall a b. (Inclusive, a) -&gt; (Inclusive, b) -&gt; RealInterval a b

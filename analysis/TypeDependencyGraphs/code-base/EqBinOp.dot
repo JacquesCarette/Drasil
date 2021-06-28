@@ -1,0 +1,3 @@
+digraph eqbinop{
+EqBinOp	[shape=oval, color=darkviolet, label=EqBinOp];
+}

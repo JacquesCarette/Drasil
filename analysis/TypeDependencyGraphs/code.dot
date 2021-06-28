@@ -2,31 +2,23 @@ digraph alltypes {
 	subgraph odelibraries {
 	}
 	subgraph code {
-		subgraph varorfunc{
-		VarOrFunc -> QuantityDict;
-		VarOrFunc -> VarOrFunc;
-		VarOrFunc	[shape=oval, color=cyan3, label=VarOrFunc];
-		}
-		subgraph codevarchunk{
-		CodeVarChunk -> CodeChunk;
-		CodeVarChunk -> MaybeCodeChunk;
-		CodeVarChunk	[shape=oval, color=cyan3, label=CodeVarChunk];
-		}
-		subgraph codefuncchunk{
-		CodeFuncChunk -> CodeChunk;
-		CodeFuncChunk	[shape=oval, color=darkgreen, label=CodeFuncChunk];
-		}
-		subgraph constraintmap{
-		ConstraintMap -> MapUIDConstraint;
-		ConstraintMap	[shape=oval, color=red2, label=ConstraintMap];
-		}
 	}
 	subgraph codedefinition {
 		subgraph definitiontype{
 		DefinitionType -> CodeChunk;
-		DefinitionType -> Expr;
+		DefinitionType -> CodeExpr;
 		DefinitionType -> DefinitionType;
 		DefinitionType	[shape=oval, color=cyan3, label=DefinitionType];
+		}
+	}
+	subgraph contraintmaps {
+		subgraph constraintce{
+		ConstraintCE -> ConstraintCodeExpr;
+		ConstraintCE	[shape=oval, color=red2, label=ConstraintCE];
+		}
+		subgraph constraintcemap{
+		ConstraintCEMap -> MapUIDConstraintCE;
+		ConstraintCEMap	[shape=oval, color=red2, label=ConstraintCEMap];
 		}
 	}
 	subgraph parameter {
@@ -343,8 +335,12 @@ digraph alltypes {
 		CalcType -> r;
 		CalcType -> CalcType;
 		CalcType -> CodeDefinition;
-		CalcType -> Expr;
+		CalcType -> CodeExpr;
 		CalcType	[shape=oval, color=darkviolet, label=CalcType];
+		}
+		subgraph constraintce{
+		ConstraintCE -> ConstraintCodeExpr;
+		ConstraintCE	[shape=oval, color=red2, label=ConstraintCE];
 		}
 	}
 	subgraph parameters {
@@ -428,7 +424,7 @@ digraph alltypes {
 		subgraph step{
 		Step -> FunctionInterface;
 		Step -> NonEmpty;
-		Step -> Expr;
+		Step -> CodeExpr;
 		Step -> Condition;
 		Step -> Step;
 		Step -> CodeVarChunk;
@@ -456,7 +452,7 @@ digraph alltypes {
 		Argument	[shape=oval, color=darkviolet, label=Argument];
 		}
 		subgraph argumentinfo{
-		ArgumentInfo -> Expr;
+		ArgumentInfo -> CodeExpr;
 		ArgumentInfo -> Space;
 		ArgumentInfo -> Maybe;
 		ArgumentInfo -> CodeVarChunk;
@@ -495,7 +491,7 @@ digraph alltypes {
 		FuncType	[shape=oval, color=darkviolet, label=FuncType];
 		}
 		subgraph condition{
-		Condition -> Expr;
+		Condition -> CodeExpr;
 		Condition	[shape=oval, color=red2, label=Condition];
 		}
 		subgraph requires{
@@ -520,7 +516,7 @@ digraph alltypes {
 		subgraph stepfill{
 		StepFill -> FunctionIntFill;
 		StepFill -> NonEmpty;
-		StepFill -> Expr;
+		StepFill -> CodeExpr;
 		StepFill -> StepFill;
 		StepFill -> CodeVarChunk;
 		StepFill	[shape=oval, color=darkviolet, label=StepFill];
@@ -528,7 +524,7 @@ digraph alltypes {
 		subgraph argumentfill{
 		ArgumentFill -> Maybe;
 		ArgumentFill -> NamedArgument;
-		ArgumentFill -> Expr;
+		ArgumentFill -> CodeExpr;
 		ArgumentFill	[shape=oval, color=darkviolet, label=ArgumentFill];
 		}
 		subgraph parameterfill{
@@ -565,13 +561,13 @@ digraph alltypes {
 	subgraph odeinfo {
 		subgraph odeinfo{
 		ODEInfo -> CodeVarChunk;
-		ODEInfo -> Expr;
+		ODEInfo -> CodeExpr;
 		ODEInfo -> ODEOptions;
 		ODEInfo	[shape=oval, color=cyan3, label=ODEInfo];
 		}
 		subgraph odeoptions{
 		ODEOptions -> ODEMethod;
-		ODEOptions -> Expr;
+		ODEOptions -> CodeExpr;
 		ODEOptions	[shape=oval, color=cyan3, label=ODEOptions];
 		}
 		subgraph odemethod{
@@ -666,8 +662,6 @@ digraph alltypes {
 	}
 	subgraph code {
 	}
-	subgraph codeexpr {
-	}
 	subgraph codespec {
 		subgraph codespec{
 		CodeSpec -> Name;
@@ -677,7 +671,7 @@ digraph alltypes {
 		CodeSpec -> Output;
 		CodeSpec -> FilePath;
 		CodeSpec -> Def;
-		CodeSpec -> ConstraintMap;
+		CodeSpec -> ConstraintCEMap;
 		CodeSpec -> Const;
 		CodeSpec -> ConstantMap;
 		CodeSpec -> Mod;
@@ -765,15 +759,9 @@ digraph alltypes {
 		}
 		subgraph funcstmt{
 		FuncStmt -> CodeVarChunk;
-		FuncStmt -> Expr;
+		FuncStmt -> CodeExpr;
 		FuncStmt -> FuncStmt;
 		FuncStmt -> Integer;
-		FuncStmt -> String;
-		FuncStmt -> CodeFuncChunk;
-		FuncStmt -> ParameterChunk;
-		FuncStmt -> Quantity;
-		FuncStmt -> c;
-		FuncStmt -> MayHaveUnit;
 		FuncStmt	[shape=oval, color=darkviolet, label=FuncStmt];
 		}
 		subgraph name{
@@ -793,7 +781,7 @@ digraph alltypes {
 		Version	[shape=oval, color=red2, label=Version];
 		}
 		subgraph initializer{
-		Initializer -> CodeVarChunkExpr;
+		Initializer -> CodeVarChunkCodeExpr;
 		Initializer	[shape=oval, color=red2, label=Initializer];
 		}
 	}

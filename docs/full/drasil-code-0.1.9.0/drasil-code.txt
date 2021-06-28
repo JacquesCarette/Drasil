@@ -59,10 +59,10 @@ quantfunc :: (Quantity c, MayHaveUnit c) => c -> CodeFuncChunk
 ccObjVar :: CodeVarChunk -> CodeVarChunk -> CodeVarChunk
 
 -- | Get a list of <a>CodeChunk</a>s from an equation.
-codevars :: Expr -> ChunkDB -> [CodeVarChunk]
+codevars :: CodeExpr -> ChunkDB -> [CodeVarChunk]
 
 -- | Get a list of <a>CodeChunk</a>s from an equation (no functions).
-codevars' :: Expr -> ChunkDB -> [CodeVarChunk]
+codevars' :: CodeExpr -> ChunkDB -> [CodeVarChunk]
 
 -- | Make a <a>CodeFuncChunk</a> from a <a>UID</a> in the <a>ChunkDB</a>.
 funcResolve :: ChunkDB -> UID -> CodeFuncChunk
@@ -71,54 +71,39 @@ funcResolve :: ChunkDB -> UID -> CodeFuncChunk
 varResolve :: ChunkDB -> UID -> CodeVarChunk
 listToArray :: CodeVarChunk -> CodeVarChunk
 
--- | Constraints map. Contains all <a>Constraint</a>s.
-type ConstraintMap = Map UID [Constraint]
-
--- | Creates a map from <a>UID</a> to <a>Constraint</a>s for constrained
---   chunks.
-constraintMap :: (HasUID c, Constrained c) => [c] -> ConstraintMap
-
--- | Returns a pair of a chunk and its physical constraints.
-physLookup :: HasUID q => ConstraintMap -> q -> (q, [Constraint])
-
--- | Returns a pair of a chunk and its software constraints.
-sfwrLookup :: HasUID q => ConstraintMap -> q -> (q, [Constraint])
-
--- | Convert the program name to an abbrevaited <a>String</a> without any
+-- | Convert the program name to an abbreviated <a>String</a> without any
 --   special characters.
 programName :: CommonIdea c => c -> String
 
 -- | Used when a function name needs to be distinguishable from a variable
 --   name.
 funcPrefix :: String
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.Code.CodeFuncChunk
-instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.Code.CodeFuncChunk
-instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.Code.CodeFuncChunk
-instance Language.Drasil.Classes.HasSpace Language.Drasil.Chunk.Code.CodeFuncChunk
-instance Language.Drasil.Classes.Core.HasSymbol Language.Drasil.Chunk.Code.CodeFuncChunk
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.Code.CodeFuncChunk
-instance Language.Drasil.Classes.Callable Language.Drasil.Chunk.Code.CodeFuncChunk
-instance Language.Drasil.Chunk.Code.CodeIdea Language.Drasil.Chunk.Code.CodeFuncChunk
-instance GHC.Classes.Eq Language.Drasil.Chunk.Code.CodeFuncChunk
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Code.CodeFuncChunk
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.Code.CodeVarChunk
-instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.Code.CodeVarChunk
-instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.Code.CodeVarChunk
-instance Language.Drasil.Classes.HasSpace Language.Drasil.Chunk.Code.CodeVarChunk
-instance Language.Drasil.Classes.Core.HasSymbol Language.Drasil.Chunk.Code.CodeVarChunk
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.Code.CodeVarChunk
-instance Language.Drasil.Chunk.Code.CodeIdea Language.Drasil.Chunk.Code.CodeVarChunk
-instance GHC.Classes.Eq Language.Drasil.Chunk.Code.CodeVarChunk
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Code.CodeVarChunk
-instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.Code.CodeChunk
-instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.Code.CodeChunk
-instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.Code.CodeChunk
-instance Language.Drasil.Classes.HasSpace Language.Drasil.Chunk.Code.CodeChunk
-instance Language.Drasil.Classes.Core.HasSymbol Language.Drasil.Chunk.Code.CodeChunk
-instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.Code.CodeChunk
-instance Language.Drasil.Chunk.Code.CodeIdea Language.Drasil.Chunk.Code.CodeChunk
-instance GHC.Classes.Eq Language.Drasil.Chunk.Code.CodeChunk
-instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Code.CodeChunk
+
+-- | A <a>DefiningCodeExpr</a> must have it's underlying chunk defined in
+--   the CodeExpr language.
+class CodeIdea c => DefiningCodeExpr c
+codeExpr :: DefiningCodeExpr c => Lens' c CodeExpr
+instance Language.Drasil.Chunk.CodeBase.CodeIdea Language.Drasil.Chunk.CodeBase.CodeChunk
+instance Language.Drasil.Chunk.CodeBase.CodeIdea Language.Drasil.Chunk.CodeBase.CodeVarChunk
+instance Language.Drasil.Chunk.CodeBase.CodeIdea Language.Drasil.Chunk.CodeBase.CodeFuncChunk
+
+module Language.Drasil.Chunk.ConstraintMap
+
+-- | Constraints map. Contains all <a>Constraint</a>s.
+type ConstraintCEMap = Map UID [ConstraintCE]
+
+-- | Type synonym for 'Constraint CodeExpr'
+type ConstraintCE = Constraint CodeExpr
+
+-- | Creates a map from <a>UID</a> to <a>Constraint</a>s for constrained
+--   chunks.
+constraintMap :: (HasUID c, Constrained c) => [c] -> ConstraintCEMap
+
+-- | Returns a pair of a chunk and its physical constraints.
+physLookup :: HasUID q => ConstraintCEMap -> q -> (q, [ConstraintCE])
+
+-- | Returns a pair of a chunk and its software constraints.
+sfwrLookup :: HasUID q => ConstraintCEMap -> q -> (q, [ConstraintCE])
 
 module Language.Drasil.Chunk.Parameter
 
@@ -145,7 +130,7 @@ instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.Parameter.ParameterC
 instance Language.Drasil.Classes.HasSpace Language.Drasil.Chunk.Parameter.ParameterChunk
 instance Language.Drasil.Classes.Core.HasSymbol Language.Drasil.Chunk.Parameter.ParameterChunk
 instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.Parameter.ParameterChunk
-instance Language.Drasil.Chunk.Code.CodeIdea Language.Drasil.Chunk.Parameter.ParameterChunk
+instance Language.Drasil.Chunk.CodeBase.CodeIdea Language.Drasil.Chunk.Parameter.ParameterChunk
 instance GHC.Classes.Eq Language.Drasil.Chunk.Parameter.ParameterChunk
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.Parameter.ParameterChunk
 
@@ -412,48 +397,29 @@ Swift :: Lang
 instance GHC.Show.Show Language.Drasil.Code.Lang.Lang
 instance GHC.Classes.Eq Language.Drasil.Code.Lang.Lang
 
-module Language.Drasil.CodeExpr
-
--- | Constructs an Expr for actor creation (constructor call)
-new :: (Callable f, HasUID f, CodeIdea f) => f -> [Expr] -> Expr
-
--- | Constructs an Expr for actor creation (constructor call) that uses
---   named arguments
-newWithNamedArgs :: (Callable f, HasUID f, CodeIdea f, HasUID a, IsArgumentName a) => f -> [Expr] -> [(a, Expr)] -> Expr
-
--- | Constructs an Expr for actor messaging (method call)
-message :: (Callable f, HasUID f, CodeIdea f, HasUID c, HasSpace c, CodeIdea c) => c -> f -> [Expr] -> Expr
-
--- | Constructs an Expr for actor messaging (method call) that uses named
---   arguments
-msgWithNamedArgs :: (Callable f, HasUID f, CodeIdea f, HasUID c, HasSpace c, CodeIdea c, HasUID a, IsArgumentName a) => c -> f -> [Expr] -> [(a, Expr)] -> Expr
-
--- | Constructs an Expr representing the field of an actor
-field :: CodeVarChunk -> CodeVarChunk -> Expr
-
 
 -- | Defines a structure to contain scientifically-relevant information
 --   about an ODE.
 module Language.Drasil.Data.ODEInfo
 data ODEInfo
-ODEInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> Expr -> Expr -> Expr -> [Expr] -> ODEOptions -> ODEInfo
+ODEInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExpr -> CodeExpr -> [CodeExpr] -> ODEOptions -> ODEInfo
 [indepVar] :: ODEInfo -> CodeVarChunk
 [depVar] :: ODEInfo -> CodeVarChunk
 [otherVars] :: ODEInfo -> [CodeVarChunk]
-[tInit] :: ODEInfo -> Expr
-[tFinal] :: ODEInfo -> Expr
-[initVal] :: ODEInfo -> Expr
-[odeSyst] :: ODEInfo -> [Expr]
+[tInit] :: ODEInfo -> CodeExpr
+[tFinal] :: ODEInfo -> CodeExpr
+[initVal] :: ODEInfo -> CodeExpr
+[odeSyst] :: ODEInfo -> [CodeExpr]
 [odeOpts] :: ODEInfo -> ODEOptions
-odeInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> Expr -> Expr -> Expr -> [Expr] -> ODEOptions -> ODEInfo
+odeInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExpr -> CodeExpr -> [CodeExpr] -> ODEOptions -> ODEInfo
 data ODEOptions
-ODEOpts :: ODEMethod -> Expr -> Expr -> Expr -> Expr -> ODEOptions
+ODEOpts :: ODEMethod -> CodeExpr -> CodeExpr -> CodeExpr -> CodeExpr -> ODEOptions
 [solveMethod] :: ODEOptions -> ODEMethod
-[absTol] :: ODEOptions -> Expr
-[relTol] :: ODEOptions -> Expr
-[stepSize] :: ODEOptions -> Expr
-[initValFstOrd] :: ODEOptions -> Expr
-odeOptions :: ODEMethod -> Expr -> Expr -> Expr -> Expr -> ODEOptions
+[absTol] :: ODEOptions -> CodeExpr
+[relTol] :: ODEOptions -> CodeExpr
+[stepSize] :: ODEOptions -> CodeExpr
+[initValFstOrd] :: ODEOptions -> CodeExpr
+odeOptions :: ODEMethod -> CodeExpr -> CodeExpr -> CodeExpr -> CodeExpr -> ODEOptions
 data ODEMethod
 RK45 :: ODEMethod
 BDF :: ODEMethod
@@ -479,21 +445,18 @@ qtov :: QDefinition -> CodeDefinition
 
 -- | Constructs a <a>CodeDefinition</a> for an ODE.
 odeDef :: ODEInfo -> CodeDefinition
-auxExprs :: Lens' CodeDefinition [Expr]
+auxExprs :: Lens' CodeDefinition [CodeExpr]
 defType :: Lens' CodeDefinition DefinitionType
-
--- | Returns the defining Expr of a <a>CodeDefinition</a>.
-codeEquat :: CodeDefinition -> Expr
 instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Chunk.CodeDefinition.CodeDefinition
 instance Language.Drasil.Classes.NamedIdea Language.Drasil.Chunk.CodeDefinition.CodeDefinition
 instance Language.Drasil.Classes.Idea Language.Drasil.Chunk.CodeDefinition.CodeDefinition
 instance Language.Drasil.Classes.HasSpace Language.Drasil.Chunk.CodeDefinition.CodeDefinition
 instance Language.Drasil.Classes.Core.HasSymbol Language.Drasil.Chunk.CodeDefinition.CodeDefinition
 instance Language.Drasil.Classes.Quantity Language.Drasil.Chunk.CodeDefinition.CodeDefinition
-instance Language.Drasil.Chunk.Code.CodeIdea Language.Drasil.Chunk.CodeDefinition.CodeDefinition
+instance Language.Drasil.Chunk.CodeBase.CodeIdea Language.Drasil.Chunk.CodeDefinition.CodeDefinition
 instance GHC.Classes.Eq Language.Drasil.Chunk.CodeDefinition.CodeDefinition
 instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Language.Drasil.Chunk.CodeDefinition.CodeDefinition
-instance Language.Drasil.Classes.DefiningExpr Language.Drasil.Chunk.CodeDefinition.CodeDefinition
+instance Language.Drasil.Chunk.CodeBase.DefiningCodeExpr Language.Drasil.Chunk.CodeDefinition.CodeDefinition
 
 
 -- | Defines an AST for defining Modules
@@ -518,22 +481,24 @@ data FuncDef
 [FuncDef] :: Name -> Description -> [ParameterChunk] -> Space -> Maybe Description -> [FuncStmt] -> FuncDef
 [CtorDef] :: Name -> Description -> [ParameterChunk] -> [Initializer] -> [FuncStmt] -> FuncDef
 data FuncStmt
-[FAsg] :: CodeVarChunk -> Expr -> FuncStmt
-[FAsgIndex] :: CodeVarChunk -> Integer -> Expr -> FuncStmt
-[FFor] :: CodeVarChunk -> Expr -> [FuncStmt] -> FuncStmt
-[FForEach] :: CodeVarChunk -> Expr -> [FuncStmt] -> FuncStmt
-[FWhile] :: Expr -> [FuncStmt] -> FuncStmt
-[FCond] :: Expr -> [FuncStmt] -> [FuncStmt] -> FuncStmt
-[FRet] :: Expr -> FuncStmt
+[FAsg] :: CodeVarChunk -> CodeExpr -> FuncStmt
+[FAsgIndex] :: CodeVarChunk -> Integer -> CodeExpr -> FuncStmt
+
+-- | For-loop; Variable, Start, Stop, Step, Body
+[FFor] :: CodeVarChunk -> CodeExpr -> CodeExpr -> CodeExpr -> [FuncStmt] -> FuncStmt
+[FForEach] :: CodeVarChunk -> CodeExpr -> [FuncStmt] -> FuncStmt
+[FWhile] :: CodeExpr -> [FuncStmt] -> FuncStmt
+[FCond] :: CodeExpr -> [FuncStmt] -> [FuncStmt] -> FuncStmt
+[FRet] :: CodeExpr -> FuncStmt
 [FThrow] :: String -> FuncStmt
 [FTry] :: [FuncStmt] -> [FuncStmt] -> FuncStmt
 [FContinue] :: FuncStmt
-[FDecDef] :: CodeVarChunk -> Expr -> FuncStmt
+[FDecDef] :: CodeVarChunk -> CodeExpr -> FuncStmt
 [FFuncDef] :: CodeFuncChunk -> [ParameterChunk] -> [FuncStmt] -> FuncStmt
-[FVal] :: Expr -> FuncStmt
+[FVal] :: CodeExpr -> FuncStmt
 [FMulti] :: [FuncStmt] -> FuncStmt
-[FAppend] :: Expr -> Expr -> FuncStmt
-type Initializer = (CodeVarChunk, Expr)
+[FAppend] :: CodeExpr -> CodeExpr -> FuncStmt
+type Initializer = (CodeVarChunk, CodeExpr)
 data Mod
 Mod :: Name -> Description -> [Import] -> [Class] -> [Func] -> Mod
 type Name = String
@@ -542,7 +507,7 @@ type Description = String
 type Import = String
 
 -- | Define an assignment statement
-($:=) :: (Quantity c, MayHaveUnit c) => c -> Expr -> FuncStmt
+($:=) :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> FuncStmt
 
 -- | Define a public state variable based on the given CodeVarChunk
 pubStateVar :: CodeVarChunk -> StateVariable
@@ -565,10 +530,15 @@ ctorDef :: Name -> Description -> [ParameterChunk] -> [Initializer] -> [FuncStmt
 -- | Define a for-loop. Quantity is for the iteration variable, Expr is the
 --   upper bound at that variable (the variable will start with a value of
 --   0). [FuncStmt] is for the loop body.
-ffor :: (Quantity c, MayHaveUnit c) => c -> Expr -> [FuncStmt] -> FuncStmt
+ffor :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> [FuncStmt] -> FuncStmt
+
+-- | Define a for-loop. Quantity is for the iteration variable, and 3
+--   CodeExprs for the start, stop, step numbers. [FuncStmt] is for the
+--   loop body.
+fforRange :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> CodeExpr -> CodeExpr -> [FuncStmt] -> FuncStmt
 
 -- | Define a declare-define statement.
-fDecDef :: (Quantity c, MayHaveUnit c) => c -> Expr -> FuncStmt
+fDecDef :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> FuncStmt
 
 -- | Get the name of a function.
 fname :: Func -> Name
@@ -605,16 +575,16 @@ data StepGroupFill
 SGF :: Int -> [StepFill] -> StepGroupFill
 data StepFill
 CallF :: FunctionIntFill -> StepFill
-LoopF :: NonEmpty FunctionIntFill -> [Expr] -> NonEmpty StepFill -> StepFill
-StatementF :: [CodeVarChunk] -> [Expr] -> StepFill
+LoopF :: NonEmpty FunctionIntFill -> [CodeExpr] -> NonEmpty StepFill -> StepFill
+StatementF :: [CodeVarChunk] -> [CodeExpr] -> StepFill
 newtype FunctionIntFill
 FIF :: [ArgumentFill] -> FunctionIntFill
 data ArgumentFill
-UserDefinedArgF :: Maybe NamedArgument -> Expr -> ArgumentFill
-BasicF :: Expr -> ArgumentFill
+UserDefinedArgF :: Maybe NamedArgument -> CodeExpr -> ArgumentFill
+BasicF :: CodeExpr -> ArgumentFill
 FnF :: [ParameterFill] -> StepFill -> ArgumentFill
 ClassF :: [StateVariable] -> ClassInfoFill -> ArgumentFill
-RecordF :: [Expr] -> ArgumentFill
+RecordF :: [CodeExpr] -> ArgumentFill
 data ParameterFill
 NameableParamF :: ParameterChunk -> ParameterFill
 UserDefined :: ParameterChunk -> ParameterFill
@@ -631,11 +601,11 @@ mandatoryStepFill :: StepFill -> StepGroupFill
 mandatoryStepsFill :: [StepFill] -> StepGroupFill
 callStepFill :: FunctionIntFill -> StepFill
 libCallFill :: [ArgumentFill] -> FunctionIntFill
-userDefinedArgFill :: Expr -> ArgumentFill
-basicArgFill :: Expr -> ArgumentFill
+userDefinedArgFill :: CodeExpr -> ArgumentFill
+basicArgFill :: CodeExpr -> ArgumentFill
 functionArgFill :: [ParameterFill] -> StepFill -> ArgumentFill
 customObjArgFill :: [StateVariable] -> ClassInfoFill -> ArgumentFill
-recordArgFill :: [Expr] -> ArgumentFill
+recordArgFill :: [CodeExpr] -> ArgumentFill
 unnamedParamFill :: CodeVarChunk -> ParameterFill
 unnamedParamPBVFill :: CodeVarChunk -> ParameterFill
 userDefinedParamFill :: CodeVarChunk -> ParameterFill
@@ -645,87 +615,231 @@ constructorInfoFill :: [ParameterFill] -> [Initializer] -> [StepFill] -> MethodI
 methodInfoFill :: [ParameterFill] -> [StepFill] -> MethodInfoFill
 appendCurrSolFill :: CodeVarChunk -> StepFill
 populateSolListFill :: CodeVarChunk -> [StepFill]
-assignArrayIndexFill :: CodeVarChunk -> [Expr] -> StepFill
+assignArrayIndexFill :: CodeVarChunk -> [CodeExpr] -> StepFill
 assignSolFromObjFill :: CodeVarChunk -> StepFill
 initSolListFromArrayFill :: CodeVarChunk -> StepFill
-initSolListWithValFill :: CodeVarChunk -> Expr -> StepFill
-solveAndPopulateWhileFill :: FunctionIntFill -> Expr -> FunctionIntFill -> CodeVarChunk -> StepFill
-returnExprListFill :: [Expr] -> StepFill
+initSolListWithValFill :: CodeVarChunk -> CodeExpr -> StepFill
+solveAndPopulateWhileFill :: FunctionIntFill -> CodeExpr -> FunctionIntFill -> CodeVarChunk -> StepFill
+returnExprListFill :: [CodeExpr] -> StepFill
 fixedStatementFill :: StepFill
-initSolWithValFill :: CodeVarChunk -> Expr -> StepFill
+initSolWithValFill :: CodeVarChunk -> CodeExpr -> StepFill
 
 
 -- | Defines a language for specifying external library use scenarios
 module Language.Drasil.Code.ExternalLibrary
 type ExternalLibrary = [StepGroup]
+
+-- | A step can be a call to an external library function or method.
 data Step
 Call :: FunctionInterface -> Step
-Loop :: NonEmpty FunctionInterface -> ([Expr] -> Condition) -> NonEmpty Step -> Step
-Statement :: ([CodeVarChunk] -> [Expr] -> FuncStmt) -> Step
+
+-- | A while loop -- function calls in the condition, other conditions,
+--   steps for the body
+Loop :: NonEmpty FunctionInterface -> ([CodeExpr] -> Condition) -> NonEmpty Step -> Step
+
+-- | For when a statement is needed, but does not interface with the
+--   external library
+Statement :: ([CodeVarChunk] -> [CodeExpr] -> FuncStmt) -> Step
+
+-- | The first item in the requires list should be where the function being
+--   called is defined
 data FunctionInterface
 FI :: NonEmpty Requires -> FuncType -> CodeFuncChunk -> [Argument] -> Maybe Result -> FunctionInterface
+
+-- | The result of a function call can be assigned to a variable or
+--   returned
 data Result
 Assign :: CodeVarChunk -> Result
 Return :: Result
 data Argument
 Arg :: Maybe NamedArgument -> ArgumentInfo -> Argument
 data ArgumentInfo
-LockedArg :: Expr -> ArgumentInfo
+
+-- | An argument not dependent on use case
+LockedArg :: CodeExpr -> ArgumentInfo
+
+-- | An argument dependent on the use case. Maybe is the variable if it
+--   needs to be declared and defined prior to calling.
 Basic :: Space -> Maybe CodeVarChunk -> ArgumentInfo
+
+-- | A function-type argument, with a single Step for the body.
 Fn :: CodeFuncChunk -> [Parameter] -> Step -> ArgumentInfo
+
+-- | An argument that is an object of a class that must be implemented in
+--   the calling program. Parameters: Requires, description, object,
+--   constructor, class info
 Class :: [Requires] -> Description -> CodeVarChunk -> CodeFuncChunk -> ClassInfo -> ArgumentInfo
+
+-- | An argument that is an object of a record class defined by the
+--   external library, where some fields need to be set by the calling
+--   program. Parameters: Requires, constructor, object, fields. First
+--   Require should be where the record type is defined.
 Record :: NonEmpty Requires -> CodeFuncChunk -> CodeVarChunk -> [CodeVarChunk] -> ArgumentInfo
 data Parameter
 LockedParam :: ParameterChunk -> Parameter
 NameableParam :: Space -> Parameter
+
+-- | For classes that need to be generated in the calling program. May be a
+--   regular class or a class that implements an interface from the
+--   external library.
 data ClassInfo
 Regular :: [MethodInfo] -> ClassInfo
 Implements :: String -> [MethodInfo] -> ClassInfo
+
+-- | Constructor: description, known parameters, body. (CodeFuncChunk for
+--   constructor is not here because it is higher up in the AST, at the
+--   Class node)
 data MethodInfo
 CI :: Description -> [Parameter] -> [Step] -> MethodInfo
+
+-- | Method, description, known parameters, maybe return description, body
 MI :: CodeFuncChunk -> Description -> [Parameter] -> Maybe Description -> NonEmpty Step -> MethodInfo
 data FuncType
 Function :: FuncType
 Method :: CodeVarChunk -> FuncType
 Constructor :: FuncType
+
+-- | Specifies an external library
 externalLib :: [StepGroup] -> ExternalLibrary
+
+-- | To be used when there are multiple options for a group of consecutive
+--   steps, where a single use-case-specific factor decides which step
+--   group to use
 choiceSteps :: [[Step]] -> StepGroup
+
+-- | To be used when there are multiple options for a single step, where a
+--   use-case-specific factor decides which step to use.
 choiceStep :: [Step] -> StepGroup
+
+-- | Specifies a step which must exist in some form in every use case.
 mandatoryStep :: Step -> StepGroup
+
+-- | Specifies multiple consecutive steps that all must exist in some form
+--   in every use case.
 mandatorySteps :: [Step] -> StepGroup
 callStep :: FunctionInterface -> Step
+
+-- | Specifies a call to an external library function.
 libFunction :: Requires -> CodeFuncChunk -> [Argument] -> FunctionInterface
+
+-- | Specifies a call to an external library method.
 libMethod :: Requires -> CodeVarChunk -> CodeFuncChunk -> [Argument] -> FunctionInterface
+
+-- | Specifies a call to an external library function, where the result is
+--   assigned to a variable.
 libFunctionWithResult :: Requires -> CodeFuncChunk -> [Argument] -> CodeVarChunk -> FunctionInterface
+
+-- | Specifies a call to an external library method, where the result is
+--   assigned to a variable.
 libMethodWithResult :: Requires -> CodeVarChunk -> CodeFuncChunk -> [Argument] -> CodeVarChunk -> FunctionInterface
+
+-- | Specifies a call to an external library constructor, where the result
+--   is assigned to a variable.
 libConstructor :: Requires -> CodeFuncChunk -> [Argument] -> CodeVarChunk -> FunctionInterface
+
+-- | Specifies a call to an external library function, where multiple
+--   modules from the external library are required, and the result is
+--   assigned to a variable.
 libConstructorMultiReqs :: [Requires] -> CodeFuncChunk -> [Argument] -> CodeVarChunk -> FunctionInterface
+
+-- | Specifies a call to an external library constructor, where the result
+--   is returned.
 constructAndReturn :: Requires -> CodeFuncChunk -> [Argument] -> FunctionInterface
-lockedArg :: Expr -> Argument
-lockedNamedArg :: NamedArgument -> Expr -> Argument
+
+-- | Specifies an argument that is not use-case-dependent.
+lockedArg :: CodeExpr -> Argument
+
+-- | Specifies a named argument that is not use-case-dependent.
+lockedNamedArg :: NamedArgument -> CodeExpr -> Argument
+
+-- | Specifies a use-case-dependent argument whose value can be inlined in
+--   the call.
 inlineArg :: Space -> Argument
+
+-- | Specifies a use-case-dependent named argument whose value can be
+--   inlined in the call.
 inlineNamedArg :: NamedArgument -> Space -> Argument
+
+-- | Specifies use-case-dependent argument whose value must be assigned to
+--   a variable before being passed in the call.
 preDefinedArg :: CodeVarChunk -> Argument
+
+-- | Specifies use-case-dependent named argument whose value must be
+--   assigned to a variable before being passed in the call.
 preDefinedNamedArg :: NamedArgument -> CodeVarChunk -> Argument
+
+-- | Specifies a function type argument, where the body consists of a
+--   single step.
 functionArg :: CodeFuncChunk -> [Parameter] -> Step -> Argument
+
+-- | Specifies an argument that is an object of a class that must be
+--   defined in the calling program.
 customObjArg :: [Requires] -> Description -> CodeVarChunk -> CodeFuncChunk -> ClassInfo -> Argument
+
+-- | Specifies an argument that is an object of a class from the external
+--   library. The list of [CodeVarChunk] represents fields of the object
+--   that must be set in the calling program.
 recordArg :: Requires -> CodeFuncChunk -> CodeVarChunk -> [CodeVarChunk] -> Argument
+
+-- | Specifies a use-case-independent parameter
 lockedParam :: CodeVarChunk -> Parameter
+
+-- | Specifies a parameter whose name depends on the use case.
 unnamedParam :: Space -> Parameter
+
+-- | Specifies a class that must be implemented in the calling program.
 customClass :: [MethodInfo] -> ClassInfo
+
+-- | Specifies an implementation of an interface from the external library.
 implementation :: String -> [MethodInfo] -> ClassInfo
+
+-- | Specifies a constructor.
 constructorInfo :: CodeFuncChunk -> [Parameter] -> [Step] -> MethodInfo
+
+-- | Specifies a method.
 methodInfo :: CodeFuncChunk -> Description -> [Parameter] -> Description -> [Step] -> MethodInfo
+
+-- | Specifies a method that does not return anything.
 methodInfoNoReturn :: CodeFuncChunk -> Description -> [Parameter] -> [Step] -> MethodInfo
-appendCurrSol :: Expr -> Step
+
+-- | Specifies a statement where a current solution is appended to a
+--   solution list.
+appendCurrSol :: CodeExpr -> Step
+
+-- | Specifies a statement where a solution list is populated by iterating
+--   through a solution array.
 populateSolList :: CodeVarChunk -> CodeVarChunk -> CodeVarChunk -> [Step]
+
+-- | Specifies statements where every index of an array is assigned a
+--   value.
 assignArrayIndex :: Step
+
+-- | Specifies a statement where a solution is assigned from the field of
+--   an object.
 assignSolFromObj :: CodeVarChunk -> Step
+
+-- | Specifies a statement where a solution list is initialized with the
+--   first element of an array.
 initSolListFromArray :: CodeVarChunk -> Step
+
+-- | Specifies a statement where a solution list is initialized with a
+--   value.
 initSolListWithVal :: Step
+
+-- | FunctionInterface for loop condition, CodeChunk for solution object,
+--   CodeChunk for independent var, FunctionInterface for solving,
+--   CodeChunk for soln array to populate with
 solveAndPopulateWhile :: FunctionInterface -> CodeVarChunk -> CodeVarChunk -> FunctionInterface -> CodeVarChunk -> Step
+
+-- | Specifies a statement where a list is returned, where each value of
+--   the list -- is explicitly defined.
 returnExprList :: Step
-fixedReturn :: Expr -> Step
+
+-- | Specifies a use-case-independent statement that returns a value.
+fixedReturn :: CodeExpr -> Step
+
+-- | Specifies a statement where a single solution is initialized with a
+--   value.
 initSolWithVal :: Step
 
 
@@ -870,7 +984,7 @@ type Const = CodeDefinition
 type Derived = CodeDefinition
 type Def = CodeDefinition
 data CodeSpec
-[CodeSpec] :: HasName a => {pName :: Name, authors :: [a], inputs :: [Input], extInputs :: [Input], derivedInputs :: [Derived], outputs :: [Output], configFiles :: [FilePath], execOrder :: [Def], cMap :: ConstraintMap, constants :: [Const], constMap :: ConstantMap, mods :: [Mod], sysinfodb :: ChunkDB} -> CodeSpec
+[CodeSpec] :: HasName a => {pName :: Name, authors :: [a], inputs :: [Input], extInputs :: [Input], derivedInputs :: [Derived], outputs :: [Output], configFiles :: [FilePath], execOrder :: [Def], cMap :: ConstraintCEMap, constants :: [Const], constMap :: ConstantMap, mods :: [Mod], sysinfodb :: ChunkDB} -> CodeSpec
 type ConstantMap = Map UID CodeDefinition
 assocToMap :: HasUID a => [a] -> Map UID a
 
@@ -895,13 +1009,12 @@ getDerivedInputs :: [DataDefinition] -> [Input] -> [Const] -> ChunkDB -> [QDefin
 type Known = CodeVarChunk
 type Need = CodeVarChunk
 getExecOrder :: [Def] -> [Known] -> [Need] -> ChunkDB -> [Def]
-subsetOf :: Eq a => [a] -> [a] -> Bool
 
 -- | Get a list of Constraints for a list of CodeChunks
-getConstraints :: HasUID c => ConstraintMap -> [c] -> [Constraint]
+getConstraints :: HasUID c => ConstraintCEMap -> [c] -> [ConstraintCE]
 
 -- | Get a list of CodeChunks from a constraint
-constraintvars :: Constraint -> ChunkDB -> [CodeChunk]
+constraintvars :: ConstraintCE -> ChunkDB -> [CodeChunk]
 
 
 -- | Defines a package extension for GOOL, with functions for pairing a
@@ -1254,9 +1367,6 @@ module Language.Drasil.Code.Imperative.Helpers
 -- | Puts a state-dependent value into a singleton list.
 liftS :: State a b -> State a [b]
 
--- | For an expression using a less than operator, gets the upper bound.
-getUpperBound :: Expr -> Expr
-
 -- | Gets the <a>QuantityDict</a> corresponding to a <a>UID</a>.
 lookupC :: DrasilState -> UID -> QuantityDict
 
@@ -1429,8 +1539,8 @@ mkVar :: OOProg r => CodeVarChunk -> GenState (SVariable r)
 --   <a>CodeVarChunk</a>.
 mkVal :: OOProg r => CodeVarChunk -> GenState (SValue r)
 
--- | Converts an <a>Expr</a> to a GOOL Value.
-convExpr :: OOProg r => Expr -> GenState (SValue r)
+-- | Converts an <tt>Expr</tt> to a GOOL Value.
+convExpr :: OOProg r => CodeExpr -> GenState (SValue r)
 
 -- | Converts a <a>FuncStmt</a> to a GOOL Statement.
 convStmt :: OOProg r => FuncStmt -> GenState (MSStatement r)
@@ -1448,8 +1558,8 @@ genModClasses :: OOProg r => Mod -> [GenState (SClass r)]
 --   <a>MSStatement</a>s.
 readData :: OOProg r => DataDesc -> GenState [MSBlock r]
 
--- | Converts a <a>Constraint</a> to an <a>Expr</a>.
-renderC :: (HasUID c, HasSymbol c) => c -> Constraint -> Expr
+-- | Converts a <a>Constraint</a> to a <a>CodeExpr</a>.
+renderC :: (HasUID c, HasSymbol c) => c -> Constraint CodeExpr -> CodeExpr
 
 module Language.Drasil.Code.Imperative.FunctionCalls
 
@@ -1659,7 +1769,7 @@ Hide :: Visibility
 --   specifications can be built.
 defaultChoices :: Choices
 data CodeSpec
-[CodeSpec] :: HasName a => {pName :: Name, authors :: [a], inputs :: [Input], extInputs :: [Input], derivedInputs :: [Derived], outputs :: [Output], configFiles :: [FilePath], execOrder :: [Def], cMap :: ConstraintMap, constants :: [Const], constMap :: ConstantMap, mods :: [Mod], sysinfodb :: ChunkDB} -> CodeSpec
+[CodeSpec] :: HasName a => {pName :: Name, authors :: [a], inputs :: [Input], extInputs :: [Input], derivedInputs :: [Derived], outputs :: [Output], configFiles :: [FilePath], execOrder :: [Def], cMap :: ConstraintCEMap, constants :: [Const], constMap :: ConstantMap, mods :: [Mod], sysinfodb :: ChunkDB} -> CodeSpec
 
 -- | Get a UID of a chunk corresponding to a Func
 funcUID :: Func -> UID
@@ -1680,27 +1790,29 @@ asVC' :: Func -> QuantityDict
 codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
 
 -- | Define an assignment statement
-($:=) :: (Quantity c, MayHaveUnit c) => c -> Expr -> FuncStmt
+($:=) :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> FuncStmt
 data Mod
 Mod :: Name -> Description -> [Import] -> [Class] -> [Func] -> Mod
 data StateVariable
 data Func
 data FuncStmt
-[FAsg] :: CodeVarChunk -> Expr -> FuncStmt
-[FAsgIndex] :: CodeVarChunk -> Integer -> Expr -> FuncStmt
-[FFor] :: CodeVarChunk -> Expr -> [FuncStmt] -> FuncStmt
-[FForEach] :: CodeVarChunk -> Expr -> [FuncStmt] -> FuncStmt
-[FWhile] :: Expr -> [FuncStmt] -> FuncStmt
-[FCond] :: Expr -> [FuncStmt] -> [FuncStmt] -> FuncStmt
-[FRet] :: Expr -> FuncStmt
+[FAsg] :: CodeVarChunk -> CodeExpr -> FuncStmt
+[FAsgIndex] :: CodeVarChunk -> Integer -> CodeExpr -> FuncStmt
+
+-- | For-loop; Variable, Start, Stop, Step, Body
+[FFor] :: CodeVarChunk -> CodeExpr -> CodeExpr -> CodeExpr -> [FuncStmt] -> FuncStmt
+[FForEach] :: CodeVarChunk -> CodeExpr -> [FuncStmt] -> FuncStmt
+[FWhile] :: CodeExpr -> [FuncStmt] -> FuncStmt
+[FCond] :: CodeExpr -> [FuncStmt] -> [FuncStmt] -> FuncStmt
+[FRet] :: CodeExpr -> FuncStmt
 [FThrow] :: String -> FuncStmt
 [FTry] :: [FuncStmt] -> [FuncStmt] -> FuncStmt
 [FContinue] :: FuncStmt
-[FDecDef] :: CodeVarChunk -> Expr -> FuncStmt
+[FDecDef] :: CodeVarChunk -> CodeExpr -> FuncStmt
 [FFuncDef] :: CodeFuncChunk -> [ParameterChunk] -> [FuncStmt] -> FuncStmt
-[FVal] :: Expr -> FuncStmt
+[FVal] :: CodeExpr -> FuncStmt
 [FMulti] :: [FuncStmt] -> FuncStmt
-[FAppend] :: Expr -> Expr -> FuncStmt
+[FAppend] :: CodeExpr -> CodeExpr -> FuncStmt
 
 -- | Define a public state variable based on the given CodeVarChunk
 pubStateVar :: CodeVarChunk -> StateVariable
@@ -1709,12 +1821,17 @@ pubStateVar :: CodeVarChunk -> StateVariable
 privStateVar :: CodeVarChunk -> StateVariable
 
 -- | Define a declare-define statement.
-fDecDef :: (Quantity c, MayHaveUnit c) => c -> Expr -> FuncStmt
+fDecDef :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> FuncStmt
 
 -- | Define a for-loop. Quantity is for the iteration variable, Expr is the
 --   upper bound at that variable (the variable will start with a value of
 --   0). [FuncStmt] is for the loop body.
-ffor :: (Quantity c, MayHaveUnit c) => c -> Expr -> [FuncStmt] -> FuncStmt
+ffor :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> [FuncStmt] -> FuncStmt
+
+-- | Define a for-loop. Quantity is for the iteration variable, and 3
+--   CodeExprs for the start, stop, step numbers. [FuncStmt] is for the
+--   loop body.
+fforRange :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> CodeExpr -> CodeExpr -> [FuncStmt] -> FuncStmt
 
 -- | Define a function that reads data from a file, according to the given
 --   DataDesc.
@@ -1733,63 +1850,172 @@ repeated :: [DataItem] -> LinePattern
 singleLine :: LinePattern -> Delim -> Data
 singleton :: DataItem -> Data
 type ExternalLibrary = [StepGroup]
+
+-- | A step can be a call to an external library function or method.
 data Step
+
+-- | The first item in the requires list should be where the function being
+--   called is defined
 data FunctionInterface
 data Argument
+
+-- | Specifies an external library
 externalLib :: [StepGroup] -> ExternalLibrary
+
+-- | To be used when there are multiple options for a group of consecutive
+--   steps, where a single use-case-specific factor decides which step
+--   group to use
 choiceSteps :: [[Step]] -> StepGroup
+
+-- | To be used when there are multiple options for a single step, where a
+--   use-case-specific factor decides which step to use.
 choiceStep :: [Step] -> StepGroup
+
+-- | Specifies a step which must exist in some form in every use case.
 mandatoryStep :: Step -> StepGroup
+
+-- | Specifies multiple consecutive steps that all must exist in some form
+--   in every use case.
 mandatorySteps :: [Step] -> StepGroup
 callStep :: FunctionInterface -> Step
+
+-- | Specifies a call to an external library function.
 libFunction :: Requires -> CodeFuncChunk -> [Argument] -> FunctionInterface
+
+-- | Specifies a call to an external library method.
 libMethod :: Requires -> CodeVarChunk -> CodeFuncChunk -> [Argument] -> FunctionInterface
+
+-- | Specifies a call to an external library function, where the result is
+--   assigned to a variable.
 libFunctionWithResult :: Requires -> CodeFuncChunk -> [Argument] -> CodeVarChunk -> FunctionInterface
+
+-- | Specifies a call to an external library method, where the result is
+--   assigned to a variable.
 libMethodWithResult :: Requires -> CodeVarChunk -> CodeFuncChunk -> [Argument] -> CodeVarChunk -> FunctionInterface
+
+-- | Specifies a call to an external library constructor, where the result
+--   is assigned to a variable.
 libConstructor :: Requires -> CodeFuncChunk -> [Argument] -> CodeVarChunk -> FunctionInterface
+
+-- | Specifies a call to an external library function, where multiple
+--   modules from the external library are required, and the result is
+--   assigned to a variable.
 libConstructorMultiReqs :: [Requires] -> CodeFuncChunk -> [Argument] -> CodeVarChunk -> FunctionInterface
+
+-- | Specifies a call to an external library constructor, where the result
+--   is returned.
 constructAndReturn :: Requires -> CodeFuncChunk -> [Argument] -> FunctionInterface
-lockedArg :: Expr -> Argument
-lockedNamedArg :: NamedArgument -> Expr -> Argument
+
+-- | Specifies an argument that is not use-case-dependent.
+lockedArg :: CodeExpr -> Argument
+
+-- | Specifies a named argument that is not use-case-dependent.
+lockedNamedArg :: NamedArgument -> CodeExpr -> Argument
+
+-- | Specifies a use-case-dependent argument whose value can be inlined in
+--   the call.
 inlineArg :: Space -> Argument
+
+-- | Specifies a use-case-dependent named argument whose value can be
+--   inlined in the call.
 inlineNamedArg :: NamedArgument -> Space -> Argument
+
+-- | Specifies use-case-dependent argument whose value must be assigned to
+--   a variable before being passed in the call.
 preDefinedArg :: CodeVarChunk -> Argument
+
+-- | Specifies use-case-dependent named argument whose value must be
+--   assigned to a variable before being passed in the call.
 preDefinedNamedArg :: NamedArgument -> CodeVarChunk -> Argument
+
+-- | Specifies a function type argument, where the body consists of a
+--   single step.
 functionArg :: CodeFuncChunk -> [Parameter] -> Step -> Argument
+
+-- | Specifies an argument that is an object of a class that must be
+--   defined in the calling program.
 customObjArg :: [Requires] -> Description -> CodeVarChunk -> CodeFuncChunk -> ClassInfo -> Argument
+
+-- | Specifies an argument that is an object of a class from the external
+--   library. The list of [CodeVarChunk] represents fields of the object
+--   that must be set in the calling program.
 recordArg :: Requires -> CodeFuncChunk -> CodeVarChunk -> [CodeVarChunk] -> Argument
+
+-- | Specifies a use-case-independent parameter
 lockedParam :: CodeVarChunk -> Parameter
+
+-- | Specifies a parameter whose name depends on the use case.
 unnamedParam :: Space -> Parameter
+
+-- | Specifies a class that must be implemented in the calling program.
 customClass :: [MethodInfo] -> ClassInfo
+
+-- | Specifies an implementation of an interface from the external library.
 implementation :: String -> [MethodInfo] -> ClassInfo
+
+-- | Specifies a constructor.
 constructorInfo :: CodeFuncChunk -> [Parameter] -> [Step] -> MethodInfo
+
+-- | Specifies a method.
 methodInfo :: CodeFuncChunk -> Description -> [Parameter] -> Description -> [Step] -> MethodInfo
+
+-- | Specifies a method that does not return anything.
 methodInfoNoReturn :: CodeFuncChunk -> Description -> [Parameter] -> [Step] -> MethodInfo
-appendCurrSol :: Expr -> Step
+
+-- | Specifies a statement where a current solution is appended to a
+--   solution list.
+appendCurrSol :: CodeExpr -> Step
+
+-- | Specifies a statement where a solution list is populated by iterating
+--   through a solution array.
 populateSolList :: CodeVarChunk -> CodeVarChunk -> CodeVarChunk -> [Step]
+
+-- | Specifies statements where every index of an array is assigned a
+--   value.
 assignArrayIndex :: Step
+
+-- | Specifies a statement where a solution is assigned from the field of
+--   an object.
 assignSolFromObj :: CodeVarChunk -> Step
+
+-- | Specifies a statement where a solution list is initialized with the
+--   first element of an array.
 initSolListFromArray :: CodeVarChunk -> Step
+
+-- | Specifies a statement where a solution list is initialized with a
+--   value.
 initSolListWithVal :: Step
+
+-- | FunctionInterface for loop condition, CodeChunk for solution object,
+--   CodeChunk for independent var, FunctionInterface for solving,
+--   CodeChunk for soln array to populate with
 solveAndPopulateWhile :: FunctionInterface -> CodeVarChunk -> CodeVarChunk -> FunctionInterface -> CodeVarChunk -> Step
+
+-- | Specifies a statement where a list is returned, where each value of
+--   the list -- is explicitly defined.
 returnExprList :: Step
-fixedReturn :: Expr -> Step
+
+-- | Specifies a use-case-independent statement that returns a value.
+fixedReturn :: CodeExpr -> Step
+
+-- | Specifies a statement where a single solution is initialized with a
+--   value.
 initSolWithVal :: Step
 type ExternalLibraryCall = [StepGroupFill]
 data StepGroupFill
 SGF :: Int -> [StepFill] -> StepGroupFill
 data StepFill
 CallF :: FunctionIntFill -> StepFill
-LoopF :: NonEmpty FunctionIntFill -> [Expr] -> NonEmpty StepFill -> StepFill
-StatementF :: [CodeVarChunk] -> [Expr] -> StepFill
+LoopF :: NonEmpty FunctionIntFill -> [CodeExpr] -> NonEmpty StepFill -> StepFill
+StatementF :: [CodeVarChunk] -> [CodeExpr] -> StepFill
 newtype FunctionIntFill
 FIF :: [ArgumentFill] -> FunctionIntFill
 data ArgumentFill
-UserDefinedArgF :: Maybe NamedArgument -> Expr -> ArgumentFill
-BasicF :: Expr -> ArgumentFill
+UserDefinedArgF :: Maybe NamedArgument -> CodeExpr -> ArgumentFill
+BasicF :: CodeExpr -> ArgumentFill
 FnF :: [ParameterFill] -> StepFill -> ArgumentFill
 ClassF :: [StateVariable] -> ClassInfoFill -> ArgumentFill
-RecordF :: [Expr] -> ArgumentFill
+RecordF :: [CodeExpr] -> ArgumentFill
 data ParameterFill
 NameableParamF :: ParameterChunk -> ParameterFill
 UserDefined :: ParameterChunk -> ParameterFill
@@ -1806,11 +2032,11 @@ mandatoryStepFill :: StepFill -> StepGroupFill
 mandatoryStepsFill :: [StepFill] -> StepGroupFill
 callStepFill :: FunctionIntFill -> StepFill
 libCallFill :: [ArgumentFill] -> FunctionIntFill
-userDefinedArgFill :: Expr -> ArgumentFill
-basicArgFill :: Expr -> ArgumentFill
+userDefinedArgFill :: CodeExpr -> ArgumentFill
+basicArgFill :: CodeExpr -> ArgumentFill
 functionArgFill :: [ParameterFill] -> StepFill -> ArgumentFill
 customObjArgFill :: [StateVariable] -> ClassInfoFill -> ArgumentFill
-recordArgFill :: [Expr] -> ArgumentFill
+recordArgFill :: [CodeExpr] -> ArgumentFill
 unnamedParamFill :: CodeVarChunk -> ParameterFill
 unnamedParamPBVFill :: CodeVarChunk -> ParameterFill
 userDefinedParamFill :: CodeVarChunk -> ParameterFill
@@ -1820,14 +2046,14 @@ constructorInfoFill :: [ParameterFill] -> [Initializer] -> [StepFill] -> MethodI
 methodInfoFill :: [ParameterFill] -> [StepFill] -> MethodInfoFill
 appendCurrSolFill :: CodeVarChunk -> StepFill
 populateSolListFill :: CodeVarChunk -> [StepFill]
-assignArrayIndexFill :: CodeVarChunk -> [Expr] -> StepFill
+assignArrayIndexFill :: CodeVarChunk -> [CodeExpr] -> StepFill
 assignSolFromObjFill :: CodeVarChunk -> StepFill
 initSolListFromArrayFill :: CodeVarChunk -> StepFill
-initSolListWithValFill :: CodeVarChunk -> Expr -> StepFill
-solveAndPopulateWhileFill :: FunctionIntFill -> Expr -> FunctionIntFill -> CodeVarChunk -> StepFill
-returnExprListFill :: [Expr] -> StepFill
+initSolListWithValFill :: CodeVarChunk -> CodeExpr -> StepFill
+solveAndPopulateWhileFill :: FunctionIntFill -> CodeExpr -> FunctionIntFill -> CodeVarChunk -> StepFill
+returnExprListFill :: [CodeExpr] -> StepFill
 fixedStatementFill :: StepFill
-initSolWithValFill :: CodeVarChunk -> Expr -> StepFill
+initSolWithValFill :: CodeVarChunk -> CodeExpr -> StepFill
 data Lang
 Cpp :: Lang
 CSharp :: Lang
@@ -1888,27 +2114,27 @@ quantfunc :: (Quantity c, MayHaveUnit c) => c -> CodeFuncChunk
 ccObjVar :: CodeVarChunk -> CodeVarChunk -> CodeVarChunk
 listToArray :: CodeVarChunk -> CodeVarChunk
 
--- | Constructs an Expr representing the field of an actor
-field :: CodeVarChunk -> CodeVarChunk -> Expr
+-- | Constructs a CodeExpr representing the field of an actor
+field :: CodeVarChunk -> CodeVarChunk -> CodeExpr
 data ODEInfo
-ODEInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> Expr -> Expr -> Expr -> [Expr] -> ODEOptions -> ODEInfo
+ODEInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExpr -> CodeExpr -> [CodeExpr] -> ODEOptions -> ODEInfo
 [indepVar] :: ODEInfo -> CodeVarChunk
 [depVar] :: ODEInfo -> CodeVarChunk
 [otherVars] :: ODEInfo -> [CodeVarChunk]
-[tInit] :: ODEInfo -> Expr
-[tFinal] :: ODEInfo -> Expr
-[initVal] :: ODEInfo -> Expr
-[odeSyst] :: ODEInfo -> [Expr]
+[tInit] :: ODEInfo -> CodeExpr
+[tFinal] :: ODEInfo -> CodeExpr
+[initVal] :: ODEInfo -> CodeExpr
+[odeSyst] :: ODEInfo -> [CodeExpr]
 [odeOpts] :: ODEInfo -> ODEOptions
-odeInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> Expr -> Expr -> Expr -> [Expr] -> ODEOptions -> ODEInfo
+odeInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExpr -> CodeExpr -> [CodeExpr] -> ODEOptions -> ODEInfo
 data ODEOptions
-ODEOpts :: ODEMethod -> Expr -> Expr -> Expr -> Expr -> ODEOptions
+ODEOpts :: ODEMethod -> CodeExpr -> CodeExpr -> CodeExpr -> CodeExpr -> ODEOptions
 [solveMethod] :: ODEOptions -> ODEMethod
-[absTol] :: ODEOptions -> Expr
-[relTol] :: ODEOptions -> Expr
-[stepSize] :: ODEOptions -> Expr
-[initValFstOrd] :: ODEOptions -> Expr
-odeOptions :: ODEMethod -> Expr -> Expr -> Expr -> Expr -> ODEOptions
+[absTol] :: ODEOptions -> CodeExpr
+[relTol] :: ODEOptions -> CodeExpr
+[stepSize] :: ODEOptions -> CodeExpr
+[initValFstOrd] :: ODEOptions -> CodeExpr
+odeOptions :: ODEMethod -> CodeExpr -> CodeExpr -> CodeExpr -> CodeExpr -> ODEOptions
 data ODEMethod
 RK45 :: ODEMethod
 BDF :: ODEMethod

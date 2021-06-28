@@ -1,0 +1,88 @@
+	subgraph codebaes {
+		subgraph varorfunc{
+		VarOrFunc -> QuantityDict;
+		VarOrFunc -> VarOrFunc;
+		VarOrFunc	[shape=oval, color=cyan3, label=VarOrFunc];
+		}
+		subgraph codevarchunk{
+		CodeVarChunk -> CodeChunk;
+		CodeVarChunk -> MaybeCodeChunk;
+		CodeVarChunk	[shape=oval, color=cyan3, label=CodeVarChunk];
+		}
+		subgraph codefuncchunk{
+		CodeFuncChunk -> CodeChunk;
+		CodeFuncChunk	[shape=oval, color=darkgreen, label=CodeFuncChunk];
+		}
+	}
+	subgraph convert {
+	}
+	subgraph development {
+	}
+	subgraph extract {
+	}
+	subgraph precedence {
+	}
+	subgraph expr {
+		subgraph arithbinop{
+		ArithBinOp	[shape=oval, color=darkviolet, label=ArithBinOp];
+		}
+		subgraph eqbinop{
+		EqBinOp	[shape=oval, color=darkviolet, label=EqBinOp];
+		}
+		subgraph boolbinop{
+		BoolBinOp	[shape=oval, color=darkviolet, label=BoolBinOp];
+		}
+		subgraph labinop{
+		LABinOp	[shape=oval, color=darkviolet, label=LABinOp];
+		}
+		subgraph ordbinop{
+		OrdBinOp	[shape=oval, color=darkviolet, label=OrdBinOp];
+		}
+		subgraph vvvbinop{
+		VVVBinOp	[shape=oval, color=darkviolet, label=VVVBinOp];
+		}
+		subgraph vvnbinop{
+		VVNBinOp	[shape=oval, color=darkviolet, label=VVNBinOp];
+		}
+		subgraph assocarithoper{
+		AssocArithOper	[shape=oval, color=darkviolet, label=AssocArithOper];
+		}
+		subgraph assocbooloper{
+		AssocBoolOper	[shape=oval, color=darkviolet, label=AssocBoolOper];
+		}
+		subgraph ufunc{
+		UFunc	[shape=oval, color=darkviolet, label=UFunc];
+		}
+		subgraph ufuncb{
+		UFuncB	[shape=oval, color=darkviolet, label=UFuncB];
+		}
+		subgraph ufuncvec{
+		UFuncVec	[shape=oval, color=darkviolet, label=UFuncVec];
+		}
+		subgraph codeexpr{
+		CodeExpr -> Double;
+		CodeExpr -> CodeExpr;
+		CodeExpr -> Integer;
+		CodeExpr -> String;
+		CodeExpr -> AssocArithOper;
+		CodeExpr -> AssocBoolOper;
+		CodeExpr -> DerivType;
+		CodeExpr -> UID;
+		CodeExpr -> Completeness;
+		CodeExpr -> UFunc;
+		CodeExpr -> UFuncB;
+		CodeExpr -> UFuncVec;
+		CodeExpr -> ArithBinOp;
+		CodeExpr -> BoolBinOp;
+		CodeExpr -> EqBinOp;
+		CodeExpr -> LABinOp;
+		CodeExpr -> OrdBinOp;
+		CodeExpr -> VVVBinOp;
+		CodeExpr -> VVNBinOp;
+		CodeExpr -> DomainDesc;
+		CodeExpr -> RealInterval;
+		CodeExpr	[shape=oval, color=darkviolet, label=CodeExpr];
+		}
+	}
+	subgraph codeexpr {
+	}

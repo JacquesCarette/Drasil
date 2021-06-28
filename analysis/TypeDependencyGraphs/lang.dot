@@ -48,13 +48,13 @@ digraph alltypes {
 	subgraph contraineds {
 		subgraph constrainedchunk{
 		ConstrainedChunk -> QuantityDict;
-		ConstrainedChunk -> Constraint;
+		ConstrainedChunk -> ConstraintE;
 		ConstrainedChunk -> MaybeExpr;
 		ConstrainedChunk	[shape=oval, color=cyan3, label=ConstrainedChunk];
 		}
 		subgraph constrconcept{
 		ConstrConcept -> DefinedQuantityDict;
-		ConstrConcept -> Constraint;
+		ConstrConcept -> ConstraintE;
 		ConstrConcept -> MaybeExpr;
 		ConstrConcept	[shape=oval, color=cyan3, label=ConstrConcept];
 		}
@@ -375,13 +375,17 @@ digraph alltypes {
 		subgraph constraintreason{
 		ConstraintReason	[shape=oval, color=darkviolet, label=ConstraintReason];
 		}
-		subgraph constraint{
-		Constraint -> ConstraintReason;
-		Constraint -> RealInterval;
-		Constraint -> Expr;
-		Constraint -> Constraint;
-		Constraint -> Double;
-		Constraint	[shape=oval, color=darkviolet, label=Constraint];
+		subgraph constrainta{
+		Constrainta -> ConstraintReason;
+		Constrainta -> RealInterval;
+		Constrainta -> a;
+		Constrainta -> Constraint;
+		Constrainta -> Double;
+		Constrainta	[shape=oval, color=darkviolet, label=Constrainta];
+		}
+		subgraph constrainte{
+		ConstraintE -> ConstraintExpr;
+		ConstraintE	[shape=oval, color=red2, label=ConstraintE];
 		}
 	}
 	subgraph derivation {

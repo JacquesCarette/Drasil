@@ -1,8 +1,0 @@
-digraph constraint{
-Constraint -> ConstraintReason;
-Constraint -> RealInterval;
-Constraint -> Expr;
-Constraint -> Constraint;
-Constraint -> Double;
-Constraint	[shape=oval, color=darkviolet, label=Constraint];
-}

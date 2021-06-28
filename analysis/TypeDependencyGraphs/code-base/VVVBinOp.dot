@@ -1,0 +1,3 @@
+digraph vvvbinop{
+VVVBinOp	[shape=oval, color=darkviolet, label=VVVBinOp];
+}

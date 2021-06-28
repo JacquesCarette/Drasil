@@ -25,33 +25,33 @@
 </span><span id="line-21"></span><span class="hs-special">}</span><span>
 </span><span id="line-22"></span><span id="rvDesc"><span id="expr"><span id="deUid"><span id="cd"><span class="hs-identifier">makeLenses</span><span> </span><span class="hs-special">''</span><span class="hs-identifier">DefiningExpr</span></span></span></span></span><span>
 </span><span id="line-23"></span><span>
-</span><span id="line-24"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679137690"><span class="annot"><span class="hs-identifier hs-type">Eq</span></span><span>            </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#DefiningExpr"><span class="hs-identifier hs-type">DefiningExpr</span></a></span></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137688"><span class="annot"><span class="annottext">a :: DefiningExpr
-</span><a href="#local-6989586621679137688"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679137687"><span class="annot"><span class="annottext">== :: DefiningExpr -&gt; DefiningExpr -&gt; Bool
-</span><span class="hs-operator hs-var hs-var hs-var hs-var">==</span></span></span><span> </span><span id="local-6989586621679137686"><span class="annot"><span class="annottext">b :: DefiningExpr
-</span><a href="#local-6989586621679137686"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefiningExpr
-</span><a href="#local-6989586621679137688"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">DefiningExpr -&gt; Getting UID DefiningExpr UID -&gt; UID
+</span><span id="line-24"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679137655"><span class="annot"><span class="hs-identifier hs-type">Eq</span></span><span>            </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#DefiningExpr"><span class="hs-identifier hs-type">DefiningExpr</span></a></span></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137653"><span class="annot"><span class="annottext">a :: DefiningExpr
+</span><a href="#local-6989586621679137653"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679137652"><span class="annot"><span class="annottext">== :: DefiningExpr -&gt; DefiningExpr -&gt; Bool
+</span><span class="hs-operator hs-var hs-var hs-var hs-var">==</span></span></span><span> </span><span id="local-6989586621679137651"><span class="annot"><span class="annottext">b :: DefiningExpr
+</span><a href="#local-6989586621679137651"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefiningExpr
+</span><a href="#local-6989586621679137653"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">DefiningExpr -&gt; Getting UID DefiningExpr UID -&gt; UID
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting UID DefiningExpr UID
 forall c. HasUID c =&gt; Lens' c UID
 </span><span class="hs-identifier hs-var">uid</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">DefiningExpr
-</span><a href="#local-6989586621679137686"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">DefiningExpr -&gt; Getting UID DefiningExpr UID -&gt; UID
+</span><a href="#local-6989586621679137651"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">DefiningExpr -&gt; Getting UID DefiningExpr UID -&gt; UID
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting UID DefiningExpr UID
 forall c. HasUID c =&gt; Lens' c UID
 </span><span class="hs-identifier hs-var">uid</span></span><span>
-</span><span id="line-25"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span>        </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#DefiningExpr"><span class="hs-identifier hs-type">DefiningExpr</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137682"><span class="annot"><span class="annottext">uid :: (UID -&gt; f UID) -&gt; DefiningExpr -&gt; f DefiningExpr
-</span><a href="#local-6989586621679137682"><span class="hs-identifier hs-var hs-var hs-var hs-var">uid</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UID -&gt; f UID) -&gt; DefiningExpr -&gt; f DefiningExpr
+</span><span id="line-25"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span>        </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#DefiningExpr"><span class="hs-identifier hs-type">DefiningExpr</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137647"><span class="annot"><span class="annottext">uid :: (UID -&gt; f UID) -&gt; DefiningExpr -&gt; f DefiningExpr
+</span><a href="#local-6989586621679137647"><span class="hs-identifier hs-var hs-var hs-var hs-var">uid</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UID -&gt; f UID) -&gt; DefiningExpr -&gt; f DefiningExpr
 Lens' DefiningExpr UID
 </span><a href="Theory.Drasil.MultiDefn.html#deUid"><span class="hs-identifier hs-var">deUid</span></a></span><span>
-</span><span id="line-26"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptDomain</span></span><span> </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#DefiningExpr"><span class="hs-identifier hs-type">DefiningExpr</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137679"><span class="annot"><span class="annottext">cdom :: DefiningExpr -&gt; [UID]
+</span><span id="line-26"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptDomain</span></span><span> </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#DefiningExpr"><span class="hs-identifier hs-type">DefiningExpr</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137644"><span class="annot"><span class="annottext">cdom :: DefiningExpr -&gt; [UID]
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">cdom</span></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefiningExpr -&gt; Getting [UID] DefiningExpr [UID] -&gt; [UID]
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting [UID] DefiningExpr [UID]
 Lens' DefiningExpr [UID]
 </span><a href="Theory.Drasil.MultiDefn.html#cd"><span class="hs-identifier hs-var">cd</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-27"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Definition</span></span><span>    </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#DefiningExpr"><span class="hs-identifier hs-type">DefiningExpr</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137675"><span class="annot"><span class="annottext">defn :: (Sentence -&gt; f Sentence) -&gt; DefiningExpr -&gt; f DefiningExpr
+</span><span id="line-27"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Definition</span></span><span>    </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#DefiningExpr"><span class="hs-identifier hs-type">DefiningExpr</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137640"><span class="annot"><span class="annottext">defn :: (Sentence -&gt; f Sentence) -&gt; DefiningExpr -&gt; f DefiningExpr
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">defn</span></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; f Sentence) -&gt; DefiningExpr -&gt; f DefiningExpr
 Lens' DefiningExpr Sentence
 </span><a href="Theory.Drasil.MultiDefn.html#rvDesc"><span class="hs-identifier hs-var">rvDesc</span></a></span><span>
@@ -71,11 +71,11 @@ Lens' DefiningExpr Sentence
 </span><span id="line-37"></span><span id="rvs"><span id="rUid"><span id="rDesc"><span id="qd"><span class="hs-identifier">makeLenses</span><span> </span><span class="hs-special">''</span><span class="hs-identifier">MultiDefn</span></span></span></span></span><span>
 </span><span id="line-38"></span><span>
 </span><span id="line-39"></span><span>
-</span><span id="line-40"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span>        </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#MultiDefn"><span class="hs-identifier hs-type">MultiDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137663"><span class="annot"><span class="annottext">uid :: (UID -&gt; f UID) -&gt; MultiDefn -&gt; f MultiDefn
-</span><a href="#local-6989586621679137663"><span class="hs-identifier hs-var hs-var hs-var hs-var">uid</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UID -&gt; f UID) -&gt; MultiDefn -&gt; f MultiDefn
+</span><span id="line-40"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span>        </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#MultiDefn"><span class="hs-identifier hs-type">MultiDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137628"><span class="annot"><span class="annottext">uid :: (UID -&gt; f UID) -&gt; MultiDefn -&gt; f MultiDefn
+</span><a href="#local-6989586621679137628"><span class="hs-identifier hs-var hs-var hs-var hs-var">uid</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UID -&gt; f UID) -&gt; MultiDefn -&gt; f MultiDefn
 Lens' MultiDefn UID
 </span><a href="Theory.Drasil.MultiDefn.html#rUid"><span class="hs-identifier hs-var">rUid</span></a></span><span>
-</span><span id="line-41"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasSymbol</span></span><span>     </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#MultiDefn"><span class="hs-identifier hs-type">MultiDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137660"><span class="annot"><span class="annottext">symbol :: MultiDefn -&gt; Stage -&gt; Symbol
+</span><span id="line-41"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasSymbol</span></span><span>     </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#MultiDefn"><span class="hs-identifier hs-type">MultiDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137625"><span class="annot"><span class="annottext">symbol :: MultiDefn -&gt; Stage -&gt; Symbol
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">symbol</span></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Stage -&gt; Symbol
 forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
 </span><span class="hs-identifier hs-var">symbol</span></span><span> </span><span class="annot"><span class="annottext">(QuantityDict -&gt; Stage -&gt; Symbol)
@@ -87,7 +87,7 @@ forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting QuantityDict MultiDefn QuantityDict
 Lens' MultiDefn QuantityDict
 </span><a href="Theory.Drasil.MultiDefn.html#qd"><span class="hs-identifier hs-var">qd</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-42"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span>     </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#MultiDefn"><span class="hs-identifier hs-type">MultiDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137654"><span class="annot"><span class="annottext">term :: (NP -&gt; f NP) -&gt; MultiDefn -&gt; f MultiDefn
+</span><span id="line-42"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span>     </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#MultiDefn"><span class="hs-identifier hs-type">MultiDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137619"><span class="annot"><span class="annottext">term :: (NP -&gt; f NP) -&gt; MultiDefn -&gt; f MultiDefn
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">term</span></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(QuantityDict -&gt; f QuantityDict) -&gt; MultiDefn -&gt; f MultiDefn
 Lens' MultiDefn QuantityDict
 </span><a href="Theory.Drasil.MultiDefn.html#qd"><span class="hs-identifier hs-var">qd</span></a></span><span> </span><span class="annot"><span class="annottext">((QuantityDict -&gt; f QuantityDict) -&gt; MultiDefn -&gt; f MultiDefn)
@@ -99,7 +99,7 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(NP -&gt; f NP) -&gt; QuantityDict -&gt; f QuantityDict
 forall c. NamedIdea c =&gt; Lens' c NP
 </span><span class="hs-identifier hs-var">term</span></span><span>
-</span><span id="line-43"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span>          </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#MultiDefn"><span class="hs-identifier hs-type">MultiDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137649"><span class="annot"><span class="annottext">getA :: MultiDefn -&gt; Maybe UID
+</span><span id="line-43"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span>          </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#MultiDefn"><span class="hs-identifier hs-type">MultiDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137614"><span class="annot"><span class="annottext">getA :: MultiDefn -&gt; Maybe UID
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">getA</span></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Maybe UID
 forall c. Idea c =&gt; c -&gt; Maybe UID
 </span><span class="hs-identifier hs-var">getA</span></span><span> </span><span class="annot"><span class="annottext">(QuantityDict -&gt; Maybe UID)
@@ -111,7 +111,7 @@ forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting QuantityDict MultiDefn QuantityDict
 Lens' MultiDefn QuantityDict
 </span><a href="Theory.Drasil.MultiDefn.html#qd"><span class="hs-identifier hs-var">qd</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-44"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasSpace</span></span><span>      </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#MultiDefn"><span class="hs-identifier hs-type">MultiDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137645"><span class="annot"><span class="annottext">typ :: (Space -&gt; f Space) -&gt; MultiDefn -&gt; f MultiDefn
+</span><span id="line-44"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasSpace</span></span><span>      </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#MultiDefn"><span class="hs-identifier hs-type">MultiDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137610"><span class="annot"><span class="annottext">typ :: (Space -&gt; f Space) -&gt; MultiDefn -&gt; f MultiDefn
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">typ</span></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(QuantityDict -&gt; f QuantityDict) -&gt; MultiDefn -&gt; f MultiDefn
 Lens' MultiDefn QuantityDict
 </span><a href="Theory.Drasil.MultiDefn.html#qd"><span class="hs-identifier hs-var">qd</span></a></span><span> </span><span class="annot"><span class="annottext">((QuantityDict -&gt; f QuantityDict) -&gt; MultiDefn -&gt; f MultiDefn)
@@ -124,7 +124,7 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall c. HasSpace c =&gt; Lens' c Space
 </span><span class="hs-identifier hs-var">typ</span></span><span>
 </span><span id="line-45"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span>      </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#MultiDefn"><span class="hs-identifier hs-type">MultiDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-46"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MayHaveUnit</span></span><span>   </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#MultiDefn"><span class="hs-identifier hs-type">MultiDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137637"><span class="annot"><span class="annottext">getUnit :: MultiDefn -&gt; Maybe UnitDefn
+</span><span id="line-46"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MayHaveUnit</span></span><span>   </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#MultiDefn"><span class="hs-identifier hs-type">MultiDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137602"><span class="annot"><span class="annottext">getUnit :: MultiDefn -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">getUnit</span></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Maybe UnitDefn
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">(QuantityDict -&gt; Maybe UnitDefn)
@@ -137,8 +137,8 @@ forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
 Lens' MultiDefn QuantityDict
 </span><a href="Theory.Drasil.MultiDefn.html#qd"><span class="hs-identifier hs-var">qd</span></a></span><span>
 </span><span id="line-47"></span><span class="hs-comment">-- | The concept domain of a MultiDefn is the union of the concept domains of the underlying variants.</span><span>
-</span><span id="line-48"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptDomain</span></span><span> </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#MultiDefn"><span class="hs-identifier hs-type">MultiDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137634"><span class="annot"><span class="annottext">cdom :: MultiDefn -&gt; [UID]
-</span><a href="#local-6989586621679137634"><span class="hs-identifier hs-var hs-var hs-var hs-var">cdom</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([UID] -&gt; [UID] -&gt; [UID]) -&gt; [[UID]] -&gt; [UID]
+</span><span id="line-48"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptDomain</span></span><span> </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#MultiDefn"><span class="hs-identifier hs-type">MultiDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137599"><span class="annot"><span class="annottext">cdom :: MultiDefn -&gt; [UID]
+</span><a href="#local-6989586621679137599"><span class="hs-identifier hs-var hs-var hs-var hs-var">cdom</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([UID] -&gt; [UID] -&gt; [UID]) -&gt; [[UID]] -&gt; [UID]
 forall (t :: * -&gt; *) a. Foldable t =&gt; (a -&gt; a -&gt; a) -&gt; t a -&gt; a
 </span><span class="hs-identifier hs-var">foldr1</span></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
 forall a. Eq a =&gt; [a] -&gt; [a] -&gt; [a]
@@ -168,23 +168,23 @@ forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting (NonEmpty DefiningExpr) MultiDefn (NonEmpty DefiningExpr)
 Lens' MultiDefn (NonEmpty DefiningExpr)
 </span><a href="Theory.Drasil.MultiDefn.html#rvs"><span class="hs-identifier hs-var">rvs</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-49"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Definition</span></span><span>    </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#MultiDefn"><span class="hs-identifier hs-type">MultiDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137629"><span class="annot"><span class="annottext">defn :: (Sentence -&gt; f Sentence) -&gt; MultiDefn -&gt; f MultiDefn
-</span><a href="#local-6989586621679137629"><span class="hs-identifier hs-var hs-var hs-var hs-var">defn</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; f Sentence) -&gt; MultiDefn -&gt; f MultiDefn
+</span><span id="line-49"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Definition</span></span><span>    </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#MultiDefn"><span class="hs-identifier hs-type">MultiDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137594"><span class="annot"><span class="annottext">defn :: (Sentence -&gt; f Sentence) -&gt; MultiDefn -&gt; f MultiDefn
+</span><a href="#local-6989586621679137594"><span class="hs-identifier hs-var hs-var hs-var hs-var">defn</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; f Sentence) -&gt; MultiDefn -&gt; f MultiDefn
 Lens' MultiDefn Sentence
 </span><a href="Theory.Drasil.MultiDefn.html#rDesc"><span class="hs-identifier hs-var">rDesc</span></a></span><span>
 </span><span id="line-50"></span><span class="hs-comment">-- | The complete Relation of a MultiDefn is defined as the quantity and the related expressions being equal</span><span>
 </span><span id="line-51"></span><span class="hs-comment">--   e.g., `q $= a $= b $= ... $= z`</span><span>
 </span><span id="line-52"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Display</span></span><span>       </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#MultiDefn"><span class="hs-identifier hs-type">MultiDefn</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-53"></span><span>  </span><span id="local-6989586621679137626"><span class="annot"><span class="annottext">toDispExpr :: MultiDefn -&gt; DisplayExpr
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">toDispExpr</span></span></span><span> </span><span id="local-6989586621679137624"><span class="annot"><span class="annottext">q :: MultiDefn
-</span><a href="#local-6989586621679137624"><span class="hs-identifier hs-var">q</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Expr] -&gt; DisplayExpr
+</span><span id="line-53"></span><span>  </span><span id="local-6989586621679137591"><span class="annot"><span class="annottext">toDispExpr :: MultiDefn -&gt; DisplayExpr
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">toDispExpr</span></span></span><span> </span><span id="local-6989586621679137589"><span class="annot"><span class="annottext">q :: MultiDefn
+</span><a href="#local-6989586621679137589"><span class="hs-identifier hs-var">q</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Expr] -&gt; DisplayExpr
 forall a. Display a =&gt; [a] -&gt; DisplayExpr
 </span><span class="hs-identifier hs-var">equivDEs</span></span><span> </span><span class="annot"><span class="annottext">([Expr] -&gt; DisplayExpr) -&gt; [Expr] -&gt; DisplayExpr
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">MultiDefn -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">MultiDefn
-</span><a href="#local-6989586621679137624"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; [Expr] -&gt; [Expr]
+</span><a href="#local-6989586621679137589"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; [Expr] -&gt; [Expr]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">NonEmpty Expr -&gt; [Expr]
 forall a. NonEmpty a -&gt; [a]
@@ -195,7 +195,7 @@ forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting Expr DefiningExpr Expr
 Lens' DefiningExpr Expr
 </span><a href="Theory.Drasil.MultiDefn.html#expr"><span class="hs-identifier hs-var">expr</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">MultiDefn
-</span><a href="#local-6989586621679137624"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">MultiDefn
+</span><a href="#local-6989586621679137589"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">MultiDefn
 -&gt; Getting
      (NonEmpty DefiningExpr) MultiDefn (NonEmpty DefiningExpr)
 -&gt; NonEmpty DefiningExpr
@@ -208,24 +208,24 @@ Lens' MultiDefn (NonEmpty DefiningExpr)
 </span><span id="line-56"></span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#mkMultiDefn"><span class="hs-identifier hs-type">mkMultiDefn</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NE.NonEmpty</span></span><span> </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#DefiningExpr"><span class="hs-identifier hs-type">DefiningExpr</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#MultiDefn"><span class="hs-identifier hs-type">MultiDefn</span></a></span><span>
 </span><span id="line-57"></span><span id="mkMultiDefn"><span class="annot"><span class="annottext">mkMultiDefn :: UID
 -&gt; QuantityDict -&gt; Sentence -&gt; NonEmpty DefiningExpr -&gt; MultiDefn
-</span><a href="Theory.Drasil.MultiDefn.html#mkMultiDefn"><span class="hs-identifier hs-var hs-var">mkMultiDefn</span></a></span></span><span> </span><span id="local-6989586621679137621"><span class="annot"><span class="annottext">u :: UID
-</span><a href="#local-6989586621679137621"><span class="hs-identifier hs-var">u</span></a></span></span><span> </span><span id="local-6989586621679137620"><span class="annot"><span class="annottext">q :: QuantityDict
-</span><a href="#local-6989586621679137620"><span class="hs-identifier hs-var">q</span></a></span></span><span> </span><span id="local-6989586621679137619"><span class="annot"><span class="annottext">s :: Sentence
-</span><a href="#local-6989586621679137619"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679137618"><span class="annot"><span class="annottext">des :: NonEmpty DefiningExpr
-</span><a href="#local-6989586621679137618"><span class="hs-identifier hs-var">des</span></a></span></span><span>
+</span><a href="Theory.Drasil.MultiDefn.html#mkMultiDefn"><span class="hs-identifier hs-var hs-var">mkMultiDefn</span></a></span></span><span> </span><span id="local-6989586621679137586"><span class="annot"><span class="annottext">u :: UID
+</span><a href="#local-6989586621679137586"><span class="hs-identifier hs-var">u</span></a></span></span><span> </span><span id="local-6989586621679137585"><span class="annot"><span class="annottext">q :: QuantityDict
+</span><a href="#local-6989586621679137585"><span class="hs-identifier hs-var">q</span></a></span></span><span> </span><span id="local-6989586621679137584"><span class="annot"><span class="annottext">s :: Sentence
+</span><a href="#local-6989586621679137584"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span id="local-6989586621679137583"><span class="annot"><span class="annottext">des :: NonEmpty DefiningExpr
+</span><a href="#local-6989586621679137583"><span class="hs-identifier hs-var">des</span></a></span></span><span>
 </span><span id="line-58"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">NonEmpty DefiningExpr -&gt; Int
 forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Int
 </span><span class="hs-identifier hs-var">length</span></span><span> </span><span class="annot"><span class="annottext">NonEmpty DefiningExpr
-</span><a href="#local-6989586621679137618"><span class="hs-identifier hs-var">des</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
+</span><a href="#local-6989586621679137583"><span class="hs-identifier hs-var">des</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">Int
-</span><a href="#local-6989586621679137616"><span class="hs-identifier hs-var">dupsRemovedLen</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679137581"><span class="hs-identifier hs-var">dupsRemovedLen</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
 -&gt; QuantityDict -&gt; Sentence -&gt; NonEmpty DefiningExpr -&gt; MultiDefn
 </span><a href="Theory.Drasil.MultiDefn.html#MultiDefn"><span class="hs-identifier hs-var">MultiDefn</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679137621"><span class="hs-identifier hs-var">u</span></a></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="#local-6989586621679137620"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
-</span><a href="#local-6989586621679137619"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">NonEmpty DefiningExpr
-</span><a href="#local-6989586621679137618"><span class="hs-identifier hs-var">des</span></a></span><span>
+</span><a href="#local-6989586621679137586"><span class="hs-identifier hs-var">u</span></a></span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="#local-6989586621679137585"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679137584"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">NonEmpty DefiningExpr
+</span><a href="#local-6989586621679137583"><span class="hs-identifier hs-var">des</span></a></span><span>
 </span><span id="line-59"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">otherwise</span></span><span>                    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID -&gt; MultiDefn
 forall a. HasCallStack =&gt; UID -&gt; a
@@ -235,32 +235,32 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span id="line-60"></span><span>    </span><span class="annot"><span class="hs-string">&quot;MultiDefn '&quot;</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; UID
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679137621"><span class="hs-identifier hs-var">u</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; UID
+</span><a href="#local-6989586621679137586"><span class="hs-identifier hs-var">u</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; UID
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;' created with non-unique list of expressions&quot;</span></span><span>
-</span><span id="line-61"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137616"><span class="annot"><span class="annottext">dupsRemovedLen :: Int
-</span><a href="#local-6989586621679137616"><span class="hs-identifier hs-var hs-var">dupsRemovedLen</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NonEmpty DefiningExpr -&gt; Int
+</span><span id="line-61"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137581"><span class="annot"><span class="annottext">dupsRemovedLen :: Int
+</span><a href="#local-6989586621679137581"><span class="hs-identifier hs-var hs-var">dupsRemovedLen</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NonEmpty DefiningExpr -&gt; Int
 forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Int
 </span><span class="hs-identifier hs-var">length</span></span><span> </span><span class="annot"><span class="annottext">(NonEmpty DefiningExpr -&gt; Int) -&gt; NonEmpty DefiningExpr -&gt; Int
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NonEmpty DefiningExpr -&gt; NonEmpty DefiningExpr
 forall a. Eq a =&gt; NonEmpty a -&gt; NonEmpty a
 </span><span class="hs-identifier hs-var">NE.nub</span></span><span> </span><span class="annot"><span class="annottext">NonEmpty DefiningExpr
-</span><a href="#local-6989586621679137618"><span class="hs-identifier hs-var">des</span></a></span><span>
+</span><a href="#local-6989586621679137583"><span class="hs-identifier hs-var">des</span></a></span><span>
 </span><span id="line-62"></span><span>
 </span><span id="line-63"></span><span class="hs-comment">-- | Smart constructor for MultiDefns defining UIDs using that of the QuantityDict</span><span>
 </span><span id="line-64"></span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#mkMultiDefnForQuant"><span class="hs-identifier hs-type">mkMultiDefnForQuant</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NE.NonEmpty</span></span><span> </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#DefiningExpr"><span class="hs-identifier hs-type">DefiningExpr</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#MultiDefn"><span class="hs-identifier hs-type">MultiDefn</span></a></span><span>
 </span><span id="line-65"></span><span id="mkMultiDefnForQuant"><span class="annot"><span class="annottext">mkMultiDefnForQuant :: QuantityDict -&gt; Sentence -&gt; NonEmpty DefiningExpr -&gt; MultiDefn
-</span><a href="Theory.Drasil.MultiDefn.html#mkMultiDefnForQuant"><span class="hs-identifier hs-var hs-var">mkMultiDefnForQuant</span></a></span></span><span> </span><span id="local-6989586621679137613"><span class="annot"><span class="annottext">q :: QuantityDict
-</span><a href="#local-6989586621679137613"><span class="hs-identifier hs-var">q</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="Theory.Drasil.MultiDefn.html#mkMultiDefnForQuant"><span class="hs-identifier hs-var hs-var">mkMultiDefnForQuant</span></a></span></span><span> </span><span id="local-6989586621679137578"><span class="annot"><span class="annottext">q :: QuantityDict
+</span><a href="#local-6989586621679137578"><span class="hs-identifier hs-var">q</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
 -&gt; QuantityDict -&gt; Sentence -&gt; NonEmpty DefiningExpr -&gt; MultiDefn
 </span><a href="Theory.Drasil.MultiDefn.html#mkMultiDefn"><span class="hs-identifier hs-var">mkMultiDefn</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="#local-6989586621679137613"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Getting UID QuantityDict UID -&gt; UID
+</span><a href="#local-6989586621679137578"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Getting UID QuantityDict UID -&gt; UID
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting UID QuantityDict UID
 forall c. HasUID c =&gt; Lens' c UID
 </span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="#local-6989586621679137613"><span class="hs-identifier hs-var">q</span></a></span><span>
+</span><a href="#local-6989586621679137578"><span class="hs-identifier hs-var">q</span></a></span><span>
 </span><span id="line-66"></span><span>
 </span><span id="line-67"></span><span class="hs-comment">-- | Smart constructor for DefiningExprs</span><span>
 </span><span id="line-68"></span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#mkDefiningExpr"><span class="hs-identifier hs-type">mkDefiningExpr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#DefiningExpr"><span class="hs-identifier hs-type">DefiningExpr</span></a></span><span>
@@ -271,9 +271,9 @@ forall c. HasUID c =&gt; Lens' c UID
 </span><span id="line-71"></span><span class="hs-comment">-- | Convert MultiDefns into QDefinitions via a specific DefiningExpr </span><span>
 </span><span id="line-72"></span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#multiDefnGenQD"><span class="hs-identifier hs-type">multiDefnGenQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#MultiDefn"><span class="hs-identifier hs-type">MultiDefn</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#DefiningExpr"><span class="hs-identifier hs-type">DefiningExpr</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
 </span><span id="line-73"></span><span id="multiDefnGenQD"><span class="annot"><span class="annottext">multiDefnGenQD :: MultiDefn -&gt; DefiningExpr -&gt; QDefinition
-</span><a href="Theory.Drasil.MultiDefn.html#multiDefnGenQD"><span class="hs-identifier hs-var hs-var">multiDefnGenQD</span></a></span></span><span> </span><span id="local-6989586621679137612"><span class="annot"><span class="annottext">md :: MultiDefn
-</span><a href="#local-6989586621679137612"><span class="hs-identifier hs-var">md</span></a></span></span><span> </span><span id="local-6989586621679137611"><span class="annot"><span class="annottext">de :: DefiningExpr
-</span><a href="#local-6989586621679137611"><span class="hs-identifier hs-var">de</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="Theory.Drasil.MultiDefn.html#multiDefnGenQD"><span class="hs-identifier hs-var hs-var">multiDefnGenQD</span></a></span></span><span> </span><span id="local-6989586621679137577"><span class="annot"><span class="annottext">md :: MultiDefn
+</span><a href="#local-6989586621679137577"><span class="hs-identifier hs-var">md</span></a></span></span><span> </span><span id="local-6989586621679137576"><span class="annot"><span class="annottext">de :: DefiningExpr
+</span><a href="#local-6989586621679137576"><span class="hs-identifier hs-var">de</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
 -&gt; NP
 -&gt; Sentence
 -&gt; (Stage -&gt; Symbol)
@@ -282,7 +282,7 @@ forall c. HasUID c =&gt; Lens' c UID
 -&gt; Expr
 -&gt; QDefinition
 </span><span class="hs-identifier hs-var">mkQDefSt</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">MultiDefn
-</span><a href="#local-6989586621679137612"><span class="hs-identifier hs-var">md</span></a></span><span> </span><span class="annot"><span class="annottext">MultiDefn -&gt; Getting UID MultiDefn UID -&gt; UID
+</span><a href="#local-6989586621679137577"><span class="hs-identifier hs-var">md</span></a></span><span> </span><span class="annot"><span class="annottext">MultiDefn -&gt; Getting UID MultiDefn UID -&gt; UID
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">(QuantityDict -&gt; Const UID QuantityDict)
 -&gt; MultiDefn -&gt; Const UID MultiDefn
@@ -294,12 +294,12 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Getting UID QuantityDict UID
 forall c. HasUID c =&gt; Lens' c UID
 </span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">MultiDefn
-</span><a href="#local-6989586621679137612"><span class="hs-identifier hs-var">md</span></a></span><span> </span><span class="annot"><span class="annottext">MultiDefn -&gt; Getting NP MultiDefn NP -&gt; NP
+</span><a href="#local-6989586621679137577"><span class="hs-identifier hs-var">md</span></a></span><span> </span><span class="annot"><span class="annottext">MultiDefn -&gt; Getting NP MultiDefn NP -&gt; NP
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting NP MultiDefn NP
 forall c. NamedIdea c =&gt; Lens' c NP
 </span><span class="hs-identifier hs-var">term</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">MultiDefn
-</span><a href="#local-6989586621679137612"><span class="hs-identifier hs-var">md</span></a></span><span> </span><span class="annot"><span class="annottext">MultiDefn -&gt; Getting Sentence MultiDefn Sentence -&gt; Sentence
+</span><a href="#local-6989586621679137577"><span class="hs-identifier hs-var">md</span></a></span><span> </span><span class="annot"><span class="annottext">MultiDefn -&gt; Getting Sentence MultiDefn Sentence -&gt; Sentence
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting Sentence MultiDefn Sentence
 forall c. Definition c =&gt; Lens' c Sentence
@@ -307,16 +307,16 @@ forall c. Definition c =&gt; Lens' c Sentence
 </span><span id="line-74"></span><span>                                </span><span class="hs-special">(</span><span class="annot"><span class="annottext">MultiDefn -&gt; Stage -&gt; Symbol
 forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
 </span><span class="hs-identifier hs-var">symbol</span></span><span> </span><span class="annot"><span class="annottext">MultiDefn
-</span><a href="#local-6989586621679137612"><span class="hs-identifier hs-var">md</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">MultiDefn
-</span><a href="#local-6989586621679137612"><span class="hs-identifier hs-var">md</span></a></span><span> </span><span class="annot"><span class="annottext">MultiDefn -&gt; Getting Space MultiDefn Space -&gt; Space
+</span><a href="#local-6989586621679137577"><span class="hs-identifier hs-var">md</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">MultiDefn
+</span><a href="#local-6989586621679137577"><span class="hs-identifier hs-var">md</span></a></span><span> </span><span class="annot"><span class="annottext">MultiDefn -&gt; Getting Space MultiDefn Space -&gt; Space
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting Space MultiDefn Space
 forall c. HasSpace c =&gt; Lens' c Space
 </span><span class="hs-identifier hs-var">typ</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">MultiDefn -&gt; Maybe UnitDefn
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">MultiDefn
-</span><a href="#local-6989586621679137612"><span class="hs-identifier hs-var">md</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefiningExpr
-</span><a href="#local-6989586621679137611"><span class="hs-identifier hs-var">de</span></a></span><span> </span><span class="annot"><span class="annottext">DefiningExpr -&gt; Getting Expr DefiningExpr Expr -&gt; Expr
+</span><a href="#local-6989586621679137577"><span class="hs-identifier hs-var">md</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefiningExpr
+</span><a href="#local-6989586621679137576"><span class="hs-identifier hs-var">de</span></a></span><span> </span><span class="annot"><span class="annottext">DefiningExpr -&gt; Getting Expr DefiningExpr Expr -&gt; Expr
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting Expr DefiningExpr Expr
 Lens' DefiningExpr Expr
@@ -325,17 +325,17 @@ Lens' DefiningExpr Expr
 </span><span id="line-76"></span><span class="hs-comment">-- | Convert MultiDefns into QDefinitions via a specific DefiningExpr (by UID)</span><span>
 </span><span id="line-77"></span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#multiDefnGenQDByUID"><span class="hs-identifier hs-type">multiDefnGenQDByUID</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Theory.Drasil.MultiDefn.html#MultiDefn"><span class="hs-identifier hs-type">MultiDefn</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
 </span><span id="line-78"></span><span id="multiDefnGenQDByUID"><span class="annot"><span class="annottext">multiDefnGenQDByUID :: MultiDefn -&gt; UID -&gt; QDefinition
-</span><a href="Theory.Drasil.MultiDefn.html#multiDefnGenQDByUID"><span class="hs-identifier hs-var hs-var">multiDefnGenQDByUID</span></a></span></span><span> </span><span id="local-6989586621679137609"><span class="annot"><span class="annottext">md :: MultiDefn
-</span><a href="#local-6989586621679137609"><span class="hs-identifier hs-var">md</span></a></span></span><span> </span><span id="local-6989586621679137608"><span class="annot"><span class="annottext">u :: UID
-</span><a href="#local-6989586621679137608"><span class="hs-identifier hs-var">u</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr] -&gt; Int
+</span><a href="Theory.Drasil.MultiDefn.html#multiDefnGenQDByUID"><span class="hs-identifier hs-var hs-var">multiDefnGenQDByUID</span></a></span></span><span> </span><span id="local-6989586621679137574"><span class="annot"><span class="annottext">md :: MultiDefn
+</span><a href="#local-6989586621679137574"><span class="hs-identifier hs-var">md</span></a></span></span><span> </span><span id="local-6989586621679137573"><span class="annot"><span class="annottext">u :: UID
+</span><a href="#local-6989586621679137573"><span class="hs-identifier hs-var">u</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr] -&gt; Int
 forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Int
 </span><span class="hs-identifier hs-var">length</span></span><span> </span><span class="annot"><span class="annottext">[DefiningExpr]
-</span><a href="#local-6989586621679137607"><span class="hs-identifier hs-var">matches</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
+</span><a href="#local-6989586621679137572"><span class="hs-identifier hs-var">matches</span></a></span><span> </span><span class="annot"><span class="annottext">Int -&gt; Int -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">MultiDefn -&gt; DefiningExpr -&gt; QDefinition
 </span><a href="Theory.Drasil.MultiDefn.html#multiDefnGenQD"><span class="hs-identifier hs-var">multiDefnGenQD</span></a></span><span> </span><span class="annot"><span class="annottext">MultiDefn
-</span><a href="#local-6989586621679137609"><span class="hs-identifier hs-var">md</span></a></span><span> </span><span class="annot"><span class="annottext">DefiningExpr
-</span><a href="#local-6989586621679137606"><span class="hs-identifier hs-var">matched</span></a></span><span>
+</span><a href="#local-6989586621679137574"><span class="hs-identifier hs-var">md</span></a></span><span> </span><span class="annot"><span class="annottext">DefiningExpr
+</span><a href="#local-6989586621679137571"><span class="hs-identifier hs-var">matched</span></a></span><span>
 </span><span id="line-79"></span><span>                         </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">otherwise</span></span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID -&gt; QDefinition
 forall a. HasCallStack =&gt; UID -&gt; a
@@ -344,21 +344,21 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Invalid UID for multiDefn QD generation; &quot;</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; UID
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679137608"><span class="hs-identifier hs-var">u</span></a></span><span>
-</span><span id="line-80"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137607"><span class="annot"><span class="annottext">matches :: [DefiningExpr]
-</span><a href="#local-6989586621679137607"><span class="hs-identifier hs-var hs-var">matches</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(DefiningExpr -&gt; Bool) -&gt; NonEmpty DefiningExpr -&gt; [DefiningExpr]
+</span><a href="#local-6989586621679137573"><span class="hs-identifier hs-var">u</span></a></span><span>
+</span><span id="line-80"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137572"><span class="annot"><span class="annottext">matches :: [DefiningExpr]
+</span><a href="#local-6989586621679137572"><span class="hs-identifier hs-var hs-var">matches</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(DefiningExpr -&gt; Bool) -&gt; NonEmpty DefiningExpr -&gt; [DefiningExpr]
 forall a. (a -&gt; Bool) -&gt; NonEmpty a -&gt; [a]
-</span><span class="hs-identifier hs-var">NE.filter</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679137604"><span class="annot"><span class="annottext">x :: DefiningExpr
-</span><a href="#local-6989586621679137604"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">DefiningExpr
-</span><a href="#local-6989586621679137604"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">DefiningExpr -&gt; Getting UID DefiningExpr UID -&gt; UID
+</span><span class="hs-identifier hs-var">NE.filter</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679137569"><span class="annot"><span class="annottext">x :: DefiningExpr
+</span><a href="#local-6989586621679137569"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">DefiningExpr
+</span><a href="#local-6989586621679137569"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">DefiningExpr -&gt; Getting UID DefiningExpr UID -&gt; UID
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting UID DefiningExpr UID
 forall c. HasUID c =&gt; Lens' c UID
 </span><span class="hs-identifier hs-var">uid</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679137608"><span class="hs-identifier hs-var">u</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">MultiDefn
-</span><a href="#local-6989586621679137609"><span class="hs-identifier hs-var">md</span></a></span><span> </span><span class="annot"><span class="annottext">MultiDefn
+</span><a href="#local-6989586621679137573"><span class="hs-identifier hs-var">u</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">MultiDefn
+</span><a href="#local-6989586621679137574"><span class="hs-identifier hs-var">md</span></a></span><span> </span><span class="annot"><span class="annottext">MultiDefn
 -&gt; Getting
      (NonEmpty DefiningExpr) MultiDefn (NonEmpty DefiningExpr)
 -&gt; NonEmpty DefiningExpr
@@ -366,9 +366,9 @@ forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting (NonEmpty DefiningExpr) MultiDefn (NonEmpty DefiningExpr)
 Lens' MultiDefn (NonEmpty DefiningExpr)
 </span><a href="Theory.Drasil.MultiDefn.html#rvs"><span class="hs-identifier hs-var">rvs</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-81"></span><span>        </span><span id="local-6989586621679137606"><span class="annot"><span class="annottext">matched :: DefiningExpr
-</span><a href="#local-6989586621679137606"><span class="hs-identifier hs-var hs-var">matched</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr] -&gt; DefiningExpr
+</span><span id="line-81"></span><span>        </span><span id="local-6989586621679137571"><span class="annot"><span class="annottext">matched :: DefiningExpr
+</span><a href="#local-6989586621679137571"><span class="hs-identifier hs-var hs-var">matched</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr] -&gt; DefiningExpr
 forall a. [a] -&gt; a
 </span><span class="hs-identifier hs-var">head</span></span><span> </span><span class="annot"><span class="annottext">[DefiningExpr]
-</span><a href="#local-6989586621679137607"><span class="hs-identifier hs-var">matches</span></a></span><span>
+</span><a href="#local-6989586621679137572"><span class="hs-identifier hs-var">matches</span></a></span><span>
 </span><span id="line-82"></span></pre></body></html>

@@ -10,8 +10,8 @@
 @version 0.1.13.0
 
 module Data.Drasil.Constraints
-gtZeroConstr :: Constraint
-probConstr :: Constraint
+gtZeroConstr :: ConstraintE
+probConstr :: ConstraintE
 
 module Data.Drasil.People
 spencerSmith :: Person

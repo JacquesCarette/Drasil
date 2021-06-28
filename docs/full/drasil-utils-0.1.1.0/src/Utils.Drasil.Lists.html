@@ -1,0 +1,50 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Utils.Drasil.Lists</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-comment">-- | Replaces all elements of a target list that belong to a provided &quot;bad&quot;</span><span>
+</span><span id="line-4"></span><span class="hs-comment">--   input list.</span><span>
+</span><span id="line-5"></span><span id="local-6989586621679098976"><span class="annot"><a href="Utils.Drasil.Lists.html#replaceAll"><span class="hs-identifier hs-type">replaceAll</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Eq</span></span><span> </span><span class="annot"><a href="#local-6989586621679098976"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679098976"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679098976"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679098976"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679098976"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span></span><span>
+</span><span id="line-6"></span><span id="replaceAll"><span class="annot"><span class="annottext">replaceAll :: [a] -&gt; a -&gt; [a] -&gt; [a]
+</span><a href="Utils.Drasil.Lists.html#replaceAll"><span class="hs-identifier hs-var hs-var">replaceAll</span></a></span></span><span> </span><span id="local-6989586621679098971"><span class="annot"><span class="annottext">bad :: [a]
+</span><a href="#local-6989586621679098971"><span class="hs-identifier hs-var">bad</span></a></span></span><span> </span><span id="local-6989586621679098970"><span class="annot"><span class="annottext">repl :: a
+</span><a href="#local-6989586621679098970"><span class="hs-identifier hs-var">repl</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679098969"><span class="annot"><span class="annottext">c :: a
+</span><a href="#local-6989586621679098969"><span class="hs-identifier hs-var">c</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679098968"><span class="annot"><span class="annottext">cs :: [a]
+</span><a href="#local-6989586621679098968"><span class="hs-identifier hs-var">cs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679098969"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; [a] -&gt; Bool
+forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
+</span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">[a]
+</span><a href="#local-6989586621679098971"><span class="hs-identifier hs-var">bad</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679098970"><span class="hs-identifier hs-var">repl</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; [a] -&gt; [a]
+forall a. a -&gt; [a] -&gt; [a]
+</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[a] -&gt; a -&gt; [a] -&gt; [a]
+forall a. Eq a =&gt; [a] -&gt; a -&gt; [a] -&gt; [a]
+</span><a href="Utils.Drasil.Lists.html#replaceAll"><span class="hs-identifier hs-var">replaceAll</span></a></span><span> </span><span class="annot"><span class="annottext">[a]
+</span><a href="#local-6989586621679098971"><span class="hs-identifier hs-var">bad</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679098970"><span class="hs-identifier hs-var">repl</span></a></span><span> </span><span class="annot"><span class="annottext">[a]
+</span><a href="#local-6989586621679098968"><span class="hs-identifier hs-var">cs</span></a></span><span>
+</span><span id="line-7"></span><span>                           </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">otherwise</span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679098969"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">a -&gt; [a] -&gt; [a]
+forall a. a -&gt; [a] -&gt; [a]
+</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[a] -&gt; a -&gt; [a] -&gt; [a]
+forall a. Eq a =&gt; [a] -&gt; a -&gt; [a] -&gt; [a]
+</span><a href="Utils.Drasil.Lists.html#replaceAll"><span class="hs-identifier hs-var">replaceAll</span></a></span><span> </span><span class="annot"><span class="annottext">[a]
+</span><a href="#local-6989586621679098971"><span class="hs-identifier hs-var">bad</span></a></span><span> </span><span class="annot"><span class="annottext">a
+</span><a href="#local-6989586621679098970"><span class="hs-identifier hs-var">repl</span></a></span><span> </span><span class="annot"><span class="annottext">[a]
+</span><a href="#local-6989586621679098968"><span class="hs-identifier hs-var">cs</span></a></span><span>
+</span><span id="line-8"></span><span class="annot"><a href="Utils.Drasil.Lists.html#replaceAll"><span class="hs-identifier hs-var">replaceAll</span></a></span><span> </span><span class="hs-identifier">_</span><span>   </span><span class="hs-identifier">_</span><span>    </span><span id="local-6989586621679098966"><span class="annot"><span class="annottext">it :: [a]
+</span><a href="#local-6989586621679098966"><span class="hs-identifier hs-var">it</span></a></span></span><span>                    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[a]
+</span><a href="#local-6989586621679098966"><span class="hs-identifier hs-var">it</span></a></span><span>
+</span><span id="line-9"></span><span>
+</span><span id="line-10"></span><span class="hs-comment">-- | Checks if the first set is a subset of the second.</span><span>
+</span><span id="line-11"></span><span id="local-6989586621679098965"><span class="annot"><a href="Utils.Drasil.Lists.html#subsetOf"><span class="hs-identifier hs-type">subsetOf</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Eq</span></span><span> </span><span class="annot"><a href="#local-6989586621679098965"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679098965"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679098965"><span class="hs-identifier hs-type">a</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Bool</span></span></span><span>
+</span><span id="line-12"></span><span id="local-6989586621679098963"><span class="annot"><span class="annottext">xs :: [a]
+</span><a href="#local-6989586621679098963"><span class="hs-identifier hs-var">xs</span></a></span></span><span> </span><span id="subsetOf"><span class="annot"><span class="annottext">subsetOf :: [a] -&gt; [a] -&gt; Bool
+</span><a href="Utils.Drasil.Lists.html#subsetOf"><span class="hs-operator hs-var hs-var">`subsetOf`</span></a></span></span><span> </span><span id="local-6989586621679098962"><span class="annot"><span class="annottext">ys :: [a]
+</span><a href="#local-6989586621679098962"><span class="hs-identifier hs-var">ys</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(a -&gt; Bool) -&gt; [a] -&gt; Bool
+forall (t :: * -&gt; *) a. Foldable t =&gt; (a -&gt; Bool) -&gt; t a -&gt; Bool
+</span><span class="hs-identifier hs-var">all</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a -&gt; [a] -&gt; Bool
+forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
+</span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">[a]
+</span><a href="#local-6989586621679098962"><span class="hs-identifier hs-var">ys</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[a]
+</span><a href="#local-6989586621679098963"><span class="hs-identifier hs-var">xs</span></a></span><span>
+</span><span id="line-13"></span></pre></body></html>

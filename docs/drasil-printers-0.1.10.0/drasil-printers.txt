@@ -48,10 +48,6 @@ instDoc :: [String] -> Doc
 --   combined into a list of triplets, and then each printed on a new line.
 extLibSec :: [(String, String)] -> [String] -> Doc
 
--- | Replace occurences of special characters
---   (",~`-=!@#$%^&amp;*+[]\;'/|"&lt;&gt;? ") with underscores ("_").
-toPlainName :: String -> String
-
 -- | Data is either linear or not.
 data Linearity
 Linear :: Linearity
@@ -62,6 +58,9 @@ sentenceDoc :: ChunkDB -> Stage -> Linearity -> Sentence -> Doc
 
 -- | Create expressions for a document in <a>Doc</a> format.
 exprDoc :: ChunkDB -> Stage -> Linearity -> Expr -> Doc
+
+-- | Create code expressions for a document in <a>Doc</a> format.
+codeExprDoc :: ChunkDB -> Stage -> Linearity -> CodeExpr -> Doc
 
 -- | Create symbols for a document in <a>Doc</a> format.
 symbolDoc :: Symbol -> Doc

@@ -6,7 +6,7 @@ CodeSpec -> Derived;
 CodeSpec -> Output;
 CodeSpec -> FilePath;
 CodeSpec -> Def;
-CodeSpec -> ConstraintMap;
+CodeSpec -> ConstraintCEMap;
 CodeSpec -> Const;
 CodeSpec -> ConstantMap;
 CodeSpec -> Mod;

@@ -108,12 +108,6 @@ regularSec :: Doc -> Doc -> Doc
 --   configuration files.
 instDoc :: [String] -> Doc
 
-module Language.Drasil.Plain.Helpers
-
--- | Replace occurences of special characters
---   (",~`-=!@#$%^&amp;*+[]\;'/|"&lt;&gt;? ") with underscores ("_").
-toPlainName :: String -> String
-
 module Language.Drasil.Printing.AST
 
 -- | Different types of links for referencing. May be internal, a citation,
@@ -619,6 +613,55 @@ sufx :: Int -> String
 -- | Similar to <a>sufx</a> but used on any sized <a>Int</a>.
 sufxer :: Int -> String
 
+module Language.Drasil.Printing.Import.Helpers
+
+-- | Helper for inserting parentheses.
+parens :: Expr -> Expr
+
+-- | Processes the digits from the <tt>floatToDigits</tt> function, decimal
+--   point position, a counter, and exponent.
+digitsProcess :: [Integer] -> Int -> Int -> Integer -> [Expr]
+
+-- | Takes the exponent and the <a>Int</a> of the base and gives the
+--   decimal point position and processed exponent. This function supports
+--   transferring scientific notation to engineering notation. References
+--   for standard of Engineering Notation:
+--   
+--   
+--   <a>https://www.khanacademy.org/science/electrical-engineering/introduction-to-ee/</a>
+--   intro-to-ee<i>a</i>ee-numbers-in-electrical-engineering
+--   
+--   
+--   <a>https://www.calculatorsoup.com/calculators/math/scientific-notation-converter.php</a>
+--   
+--   <a>https://en.wikipedia.org/wiki/Scientific_notation</a>
+processExpo :: Int -> (Int, Int)
+
+-- | Given the stage of the symbol, looks up a character/symbol inside a
+--   chunk database that matches the given <a>UID</a>.
+lookupC :: Stage -> ChunkDB -> UID -> Symbol
+
+-- | Look up a term given a chunk database and a <a>UID</a> associated with
+--   the term.
+lookupT :: ChunkDB -> UID -> Sentence
+
+-- | Look up the acronym/abbreviation of a term. Otherwise returns the
+--   singular form of a term. Takes a chunk database and a <a>UID</a>
+--   associated with the term.
+lookupS :: ChunkDB -> UID -> Sentence
+
+-- | Look up the plural form of a term given a chunk database and a
+--   <a>UID</a> associated with the term.
+lookupP :: ChunkDB -> UID -> Sentence
+
+module Language.Drasil.Printing.Import.Symbol
+
+-- | Converts a symbol into an expression.
+symbol :: Symbol -> Expr
+
+-- | Renders a unit symbol as a printable expression.
+pUnit :: USymb -> Expr
+
 module Language.Drasil.Printing.LayoutObj
 
 -- | A document must contain a title, author, and contents (as
@@ -720,20 +763,102 @@ defaultConfiguration :: PrintingConfiguration
 instance Language.Drasil.Printing.PrintingInformation.HasPrintingOptions Language.Drasil.Printing.PrintingInformation.PrintingInformation
 instance Language.Drasil.Printing.PrintingInformation.HasPrintingOptions Language.Drasil.Printing.PrintingInformation.PrintingConfiguration
 
-module Language.Drasil.Printing.Import
-
--- | Render a <a>Space</a>.
-space :: PrintingInformation -> Space -> Expr
+module Language.Drasil.Printing.Import.Expr
 
 -- | Translate Exprs to printable layout AST.
 expr :: Expr -> PrintingInformation -> Expr
 
--- | Helper tha converts a symbol into an expression.
-symbol :: Symbol -> Expr
+module Language.Drasil.Printing.Import.Space
+
+-- | Render a <a>Space</a>.
+space :: PrintingInformation -> Space -> Expr
+
+module Language.Drasil.Printing.Import.DisplayExpr
+
+-- | Translate DisplayExprs to printable layout AST.
+dispExpr :: DisplayExpr -> PrintingInformation -> Expr
+
+module Language.Drasil.Printing.Import.Sentence
 
 -- | Translates <a>Sentence</a> to the printable representation of a
 --   <a>Sentence</a> (<tt>Spec</tt>).
 spec :: PrintingInformation -> Sentence -> Spec
+
+-- | Renders the shortname of a reference/domain.
+renderShortName :: ChunkDB -> IRefProg -> ShortName -> Sentence
+
+-- | Render a uniform resource locator as a <a>Sentence</a>.
+renderURI :: ctx -> ShortName -> Sentence
+
+-- | Renders citation information.
+renderCitInfo :: RefInfo -> Sentence
+
+module Language.Drasil.Printing.Import.Document
+
+-- | Translates from <a>Document</a> to a printable representation of
+--   <a>Document</a>.
+makeDocument :: PrintingInformation -> Document -> Document
+
+-- | Helper for translating sections into a printable representation of
+--   layout objects (<a>LayoutObj</a>).
+layout :: PrintingInformation -> Int -> SecCons -> LayoutObj
+
+-- | Helper function for creating sections as layout objects.
+createLayout :: PrintingInformation -> [Section] -> [LayoutObj]
+
+-- | Helper function for creating sections at the appropriate depth.
+sec :: PrintingInformation -> Int -> Section -> LayoutObj
+
+-- | Helper that translates <a>Contents</a> to a printable representation
+--   of <a>LayoutObj</a>. Called internally by <a>layout</a>.
+lay :: PrintingInformation -> Contents -> LayoutObj
+
+-- | Helper that translates <a>LabelledContent</a>s to a printable
+--   representation of <a>LayoutObj</a>. Called internally by <a>lay</a>.
+layLabelled :: PrintingInformation -> LabelledContent -> LayoutObj
+
+-- | Helper that translates <a>RawContent</a>s to a printable
+--   representation of <a>LayoutObj</a>. Called internally by <a>lay</a>.
+layUnlabelled :: PrintingInformation -> RawContent -> LayoutObj
+
+-- | For importing a bibliography.
+layCite :: Citation -> Citation
+
+-- | Helper for translating <tt>Citefield</tt>s into a printable
+--   representation of <a>CiteField</a>s
+layField :: CiteField -> CiteField
+
+-- | Translates lists to be printable.
+makeL :: PrintingInformation -> ListType -> ListType
+
+-- | Helper for translating list items to be printable.
+item :: PrintingInformation -> ItemType -> ItemType
+
+module Language.Drasil.Printing.Import.CodeExpr
+
+-- | Translate Exprs to printable layout AST.
+codeExpr :: CodeExpr -> PrintingInformation -> Expr
+
+module Language.Drasil.Printing.Import
+
+-- | Translate Exprs to printable layout AST.
+expr :: Expr -> PrintingInformation -> Expr
+
+-- | Translate Exprs to printable layout AST.
+codeExpr :: CodeExpr -> PrintingInformation -> Expr
+
+-- | Translate DisplayExprs to printable layout AST.
+dispExpr :: DisplayExpr -> PrintingInformation -> Expr
+
+-- | Render a <a>Space</a>.
+space :: PrintingInformation -> Space -> Expr
+
+-- | Translates <a>Sentence</a> to the printable representation of a
+--   <a>Sentence</a> (<tt>Spec</tt>).
+spec :: PrintingInformation -> Sentence -> Spec
+
+-- | Converts a symbol into an expression.
+symbol :: Symbol -> Expr
 
 -- | Translates from <a>Document</a> to a printable representation of
 --   <a>Document</a>.
@@ -748,6 +873,9 @@ Nonlinear :: Linearity
 
 -- | Create expressions for a document in <a>Doc</a> format.
 exprDoc :: ChunkDB -> Stage -> Linearity -> Expr -> Doc
+
+-- | Create code expressions for a document in <a>Doc</a> format.
+codeExprDoc :: ChunkDB -> Stage -> Linearity -> CodeExpr -> Doc
 
 -- | Create sentences for a document in <a>Doc</a> format.
 sentenceDoc :: ChunkDB -> Stage -> Linearity -> Sentence -> Doc
@@ -1132,10 +1260,6 @@ instDoc :: [String] -> Doc
 --   combined into a list of triplets, and then each printed on a new line.
 extLibSec :: [(String, String)] -> [String] -> Doc
 
--- | Replace occurences of special characters
---   (",~`-=!@#$%^&amp;*+[]\;'/|"&lt;&gt;? ") with underscores ("_").
-toPlainName :: String -> String
-
 -- | Data is either linear or not.
 data Linearity
 Linear :: Linearity
@@ -1146,6 +1270,9 @@ sentenceDoc :: ChunkDB -> Stage -> Linearity -> Sentence -> Doc
 
 -- | Create expressions for a document in <a>Doc</a> format.
 exprDoc :: ChunkDB -> Stage -> Linearity -> Expr -> Doc
+
+-- | Create code expressions for a document in <a>Doc</a> format.
+codeExprDoc :: ChunkDB -> Stage -> Linearity -> CodeExpr -> Doc
 
 -- | Create symbols for a document in <a>Doc</a> format.
 symbolDoc :: Symbol -> Doc

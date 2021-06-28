@@ -1,0 +1,125 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Language.Drasil.Chunk.ConstraintMap</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Chunk.ConstraintMap.html#ConstraintCEMap"><span class="hs-identifier">ConstraintCEMap</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.ConstraintMap.html#ConstraintCE"><span class="hs-identifier">ConstraintCE</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-2"></span><span>  </span><span class="annot"><a href="Language.Drasil.Chunk.ConstraintMap.html#constraintMap"><span class="hs-identifier">constraintMap</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.ConstraintMap.html#physLookup"><span class="hs-identifier">physLookup</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.ConstraintMap.html#sfwrLookup"><span class="hs-identifier">sfwrLookup</span></a></span><span>
+</span><span id="line-3"></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-4"></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Lens</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-operator">(^.)</span></span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Constraint</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">HasUID</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">UID</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Constrained</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-8"></span><span>  </span><span class="annot"><span class="hs-identifier">isPhysC</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">isSfwrC</span></span><span class="hs-special">)</span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Code.Expr.Development</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">CodeExpr</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">constraint</span></span><span class="hs-special">)</span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Map</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">Map</span></span><span>
+</span><span id="line-11"></span><span>
+</span><span id="line-12"></span><span class="hs-comment">-- | Type synonym for 'Constraint CodeExpr'</span><span>
+</span><span id="line-13"></span><span class="hs-keyword">type</span><span> </span><span id="ConstraintCE"><span class="annot"><a href="Language.Drasil.Chunk.ConstraintMap.html#ConstraintCE"><span class="hs-identifier hs-var">ConstraintCE</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Constraint</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeExpr</span></span><span>
+</span><span id="line-14"></span><span>
+</span><span id="line-15"></span><span class="hs-comment">-- | Constraints map. Contains all 'Constraint's.</span><span>
+</span><span id="line-16"></span><span class="hs-keyword">type</span><span> </span><span id="ConstraintCEMap"><span class="annot"><a href="Language.Drasil.Chunk.ConstraintMap.html#ConstraintCEMap"><span class="hs-identifier hs-var">ConstraintCEMap</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Map.Map</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Chunk.ConstraintMap.html#ConstraintCE"><span class="hs-identifier hs-type">ConstraintCE</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-17"></span><span>
+</span><span id="line-18"></span><span class="hs-comment">-- | Creates a map from 'UID' to 'Constraint's for constrained chunks.</span><span>
+</span><span id="line-19"></span><span id="local-6989586621679319855"><span class="annot"><a href="Language.Drasil.Chunk.ConstraintMap.html#constraintMap"><span class="hs-identifier hs-type">constraintMap</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span> </span><span class="annot"><a href="#local-6989586621679319855"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Constrained</span></span><span> </span><span class="annot"><a href="#local-6989586621679319855"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679319855"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.ConstraintMap.html#ConstraintCEMap"><span class="hs-identifier hs-type">ConstraintCEMap</span></a></span></span><span>
+</span><span id="line-20"></span><span id="constraintMap"><span class="annot"><span class="annottext">constraintMap :: [c] -&gt; ConstraintCEMap
+</span><a href="Language.Drasil.Chunk.ConstraintMap.html#constraintMap"><span class="hs-identifier hs-var hs-var">constraintMap</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[(UID, [Constraint CodeExpr])] -&gt; ConstraintCEMap
+forall k a. Ord k =&gt; [(k, a)] -&gt; Map k a
+</span><span class="hs-identifier hs-var">Map.fromList</span></span><span> </span><span class="annot"><span class="annottext">([(UID, [Constraint CodeExpr])] -&gt; ConstraintCEMap)
+-&gt; ([c] -&gt; [(UID, [Constraint CodeExpr])])
+-&gt; [c]
+-&gt; ConstraintCEMap
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(c -&gt; (UID, [Constraint CodeExpr]))
+-&gt; [c] -&gt; [(UID, [Constraint CodeExpr])]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679319852"><span class="annot"><span class="annottext">x :: c
+</span><a href="#local-6989586621679319852"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">c
+</span><a href="#local-6989586621679319852"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">c -&gt; Getting UID c UID -&gt; UID
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting UID c UID
+forall c. HasUID c =&gt; Lens' c UID
+</span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">(ConstraintE -&gt; Constraint CodeExpr)
+-&gt; [ConstraintE] -&gt; [Constraint CodeExpr]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ConstraintE -&gt; Constraint CodeExpr
+</span><span class="hs-identifier hs-var">constraint</span></span><span> </span><span class="annot"><span class="annottext">([ConstraintE] -&gt; [Constraint CodeExpr])
+-&gt; [ConstraintE] -&gt; [Constraint CodeExpr]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">c
+</span><a href="#local-6989586621679319852"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">c -&gt; Getting [ConstraintE] c [ConstraintE] -&gt; [ConstraintE]
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting [ConstraintE] c [ConstraintE]
+forall c. Constrained c =&gt; Lens' c [ConstraintE]
+</span><span class="hs-identifier hs-var">constraints</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-21"></span><span>
+</span><span id="line-22"></span><span class="hs-comment">-- | Returns a pair of a chunk and its physical constraints.</span><span>
+</span><span id="line-23"></span><span id="local-6989586621679319849"><span class="annot"><a href="Language.Drasil.Chunk.ConstraintMap.html#physLookup"><span class="hs-identifier hs-type">physLookup</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span> </span><span class="annot"><a href="#local-6989586621679319849"><span class="hs-identifier hs-type">q</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.ConstraintMap.html#ConstraintCEMap"><span class="hs-identifier hs-type">ConstraintCEMap</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679319849"><span class="hs-identifier hs-type">q</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679319849"><span class="hs-identifier hs-type">q</span></a></span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Chunk.ConstraintMap.html#ConstraintCE"><span class="hs-identifier hs-type">ConstraintCE</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span></span><span>
+</span><span id="line-24"></span><span id="physLookup"><span class="annot"><span class="annottext">physLookup :: ConstraintCEMap -&gt; q -&gt; (q, [Constraint CodeExpr])
+</span><a href="Language.Drasil.Chunk.ConstraintMap.html#physLookup"><span class="hs-identifier hs-var hs-var">physLookup</span></a></span></span><span> </span><span id="local-6989586621679319848"><span class="annot"><span class="annottext">m :: ConstraintCEMap
+</span><a href="#local-6989586621679319848"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span id="local-6989586621679319847"><span class="annot"><span class="annottext">q :: q
+</span><a href="#local-6989586621679319847"><span class="hs-identifier hs-var">q</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">q
+-&gt; ConstraintCEMap
+-&gt; ([Constraint CodeExpr] -&gt; [Constraint CodeExpr])
+-&gt; (q, [Constraint CodeExpr])
+forall q.
+HasUID q =&gt;
+q
+-&gt; ConstraintCEMap
+-&gt; ([Constraint CodeExpr] -&gt; [Constraint CodeExpr])
+-&gt; (q, [Constraint CodeExpr])
+</span><a href="Language.Drasil.Chunk.ConstraintMap.html#constraintLookup"><span class="hs-identifier hs-var">constraintLookup</span></a></span><span> </span><span class="annot"><span class="annottext">q
+</span><a href="#local-6989586621679319847"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">ConstraintCEMap
+</span><a href="#local-6989586621679319848"><span class="hs-identifier hs-var">m</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Constraint CodeExpr -&gt; Bool)
+-&gt; [Constraint CodeExpr] -&gt; [Constraint CodeExpr]
+forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
+</span><span class="hs-identifier hs-var">filter</span></span><span> </span><span class="annot"><span class="annottext">Constraint CodeExpr -&gt; Bool
+forall e. Constraint e -&gt; Bool
+</span><span class="hs-identifier hs-var">isPhysC</span></span><span class="hs-special">)</span><span>
+</span><span id="line-25"></span><span>
+</span><span id="line-26"></span><span class="hs-comment">-- | Returns a pair of a chunk and its software constraints.</span><span>
+</span><span id="line-27"></span><span id="local-6989586621679319845"><span class="annot"><a href="Language.Drasil.Chunk.ConstraintMap.html#sfwrLookup"><span class="hs-identifier hs-type">sfwrLookup</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span> </span><span class="annot"><a href="#local-6989586621679319845"><span class="hs-identifier hs-type">q</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.ConstraintMap.html#ConstraintCEMap"><span class="hs-identifier hs-type">ConstraintCEMap</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679319845"><span class="hs-identifier hs-type">q</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679319845"><span class="hs-identifier hs-type">q</span></a></span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Chunk.ConstraintMap.html#ConstraintCE"><span class="hs-identifier hs-type">ConstraintCE</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span></span><span>
+</span><span id="line-28"></span><span id="sfwrLookup"><span class="annot"><span class="annottext">sfwrLookup :: ConstraintCEMap -&gt; q -&gt; (q, [Constraint CodeExpr])
+</span><a href="Language.Drasil.Chunk.ConstraintMap.html#sfwrLookup"><span class="hs-identifier hs-var hs-var">sfwrLookup</span></a></span></span><span> </span><span id="local-6989586621679319844"><span class="annot"><span class="annottext">m :: ConstraintCEMap
+</span><a href="#local-6989586621679319844"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span id="local-6989586621679319843"><span class="annot"><span class="annottext">q :: q
+</span><a href="#local-6989586621679319843"><span class="hs-identifier hs-var">q</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">q
+-&gt; ConstraintCEMap
+-&gt; ([Constraint CodeExpr] -&gt; [Constraint CodeExpr])
+-&gt; (q, [Constraint CodeExpr])
+forall q.
+HasUID q =&gt;
+q
+-&gt; ConstraintCEMap
+-&gt; ([Constraint CodeExpr] -&gt; [Constraint CodeExpr])
+-&gt; (q, [Constraint CodeExpr])
+</span><a href="Language.Drasil.Chunk.ConstraintMap.html#constraintLookup"><span class="hs-identifier hs-var">constraintLookup</span></a></span><span> </span><span class="annot"><span class="annottext">q
+</span><a href="#local-6989586621679319843"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">ConstraintCEMap
+</span><a href="#local-6989586621679319844"><span class="hs-identifier hs-var">m</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Constraint CodeExpr -&gt; Bool)
+-&gt; [Constraint CodeExpr] -&gt; [Constraint CodeExpr]
+forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
+</span><span class="hs-identifier hs-var">filter</span></span><span> </span><span class="annot"><span class="annottext">Constraint CodeExpr -&gt; Bool
+forall e. Constraint e -&gt; Bool
+</span><span class="hs-identifier hs-var">isSfwrC</span></span><span class="hs-special">)</span><span>
+</span><span id="line-29"></span><span>
+</span><span id="line-30"></span><span class="hs-comment">-- | Returns a chunk and a filtered list of its constraints.</span><span>
+</span><span id="line-31"></span><span id="local-6989586621679319872"><span class="annot"><a href="Language.Drasil.Chunk.ConstraintMap.html#constraintLookup"><span class="hs-identifier hs-type">constraintLookup</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span> </span><span class="annot"><a href="#local-6989586621679319872"><span class="hs-identifier hs-type">q</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679319872"><span class="hs-identifier hs-type">q</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.ConstraintMap.html#ConstraintCEMap"><span class="hs-identifier hs-type">ConstraintCEMap</span></a></span><span>
+</span><span id="line-32"></span><span>                      </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Chunk.ConstraintMap.html#ConstraintCE"><span class="hs-identifier hs-type">ConstraintCE</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Chunk.ConstraintMap.html#ConstraintCE"><span class="hs-identifier hs-type">ConstraintCE</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679319872"><span class="hs-identifier hs-type">q</span></a></span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Chunk.ConstraintMap.html#ConstraintCE"><span class="hs-identifier hs-type">ConstraintCE</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span></span><span>
+</span><span id="line-33"></span><span id="constraintLookup"><span class="annot"><span class="annottext">constraintLookup :: q
+-&gt; ConstraintCEMap
+-&gt; ([Constraint CodeExpr] -&gt; [Constraint CodeExpr])
+-&gt; (q, [Constraint CodeExpr])
+</span><a href="Language.Drasil.Chunk.ConstraintMap.html#constraintLookup"><span class="hs-identifier hs-var hs-var">constraintLookup</span></a></span></span><span> </span><span id="local-6989586621679319842"><span class="annot"><span class="annottext">q :: q
+</span><a href="#local-6989586621679319842"><span class="hs-identifier hs-var">q</span></a></span></span><span> </span><span id="local-6989586621679319841"><span class="annot"><span class="annottext">m :: ConstraintCEMap
+</span><a href="#local-6989586621679319841"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span id="local-6989586621679319840"><span class="annot"><span class="annottext">filt :: [Constraint CodeExpr] -&gt; [Constraint CodeExpr]
+</span><a href="#local-6989586621679319840"><span class="hs-identifier hs-var">filt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">q
+</span><a href="#local-6989586621679319842"><span class="hs-identifier hs-var">q</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Constraint CodeExpr]
+-&gt; ([Constraint CodeExpr] -&gt; [Constraint CodeExpr])
+-&gt; Maybe [Constraint CodeExpr]
+-&gt; [Constraint CodeExpr]
+forall b a. b -&gt; (a -&gt; b) -&gt; Maybe a -&gt; b
+</span><span class="hs-identifier hs-var">maybe</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Constraint CodeExpr] -&gt; [Constraint CodeExpr]
+</span><a href="#local-6989586621679319840"><span class="hs-identifier hs-var">filt</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UID -&gt; ConstraintCEMap -&gt; Maybe [Constraint CodeExpr]
+forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Map.lookup</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">q
+</span><a href="#local-6989586621679319842"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">q -&gt; Getting UID q UID -&gt; UID
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting UID q UID
+forall c. HasUID c =&gt; Lens' c UID
+</span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ConstraintCEMap
+</span><a href="#local-6989586621679319841"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-34"></span></pre></body></html>

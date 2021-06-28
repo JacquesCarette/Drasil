@@ -1,130 +1,25 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE TemplateHaskell #-}</span><span>
-</span><span id="line-2"></span><span class="hs-comment">-- | Defines chunk types for use in code generation.</span><span>
-</span><span id="line-3"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Language.Drasil.Chunk.Code</span><span> </span><span class="hs-special">(</span><span>
-</span><span id="line-4"></span><span>  </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeIdea"><span class="hs-identifier">CodeIdea</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeChunk"><span class="hs-identifier">CodeChunk</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier">CodeVarChunk</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeFuncChunk"><span class="hs-identifier">CodeFuncChunk</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-5"></span><span>  </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#VarOrFunc"><span class="hs-identifier">VarOrFunc</span></a></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#obv"><span class="hs-identifier">obv</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#quantvar"><span class="hs-identifier">quantvar</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#quantfunc"><span class="hs-identifier">quantfunc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#ccObjVar"><span class="hs-identifier">ccObjVar</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#codevars"><span class="hs-identifier">codevars</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#codevars%27"><span class="hs-identifier">codevars'</span></a></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-6"></span><span>  </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#funcResolve"><span class="hs-identifier">funcResolve</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#varResolve"><span class="hs-identifier">varResolve</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#listToArray"><span class="hs-identifier">listToArray</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#ConstraintMap"><span class="hs-identifier">ConstraintMap</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#constraintMap"><span class="hs-identifier">constraintMap</span></a></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-7"></span><span>  </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#physLookup"><span class="hs-identifier">physLookup</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#sfwrLookup"><span class="hs-identifier">sfwrLookup</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#programName"><span class="hs-identifier">programName</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#funcPrefix"><span class="hs-identifier">funcPrefix</span></a></span><span>
-</span><span id="line-8"></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-9"></span><span>
-</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Lens</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-operator">(^.)</span></span><span class="hs-special">,</span><span class="annot"><span class="hs-identifier">makeLenses</span></span><span class="hs-special">,</span><span class="annot"><span class="hs-identifier">view</span></span><span class="hs-special">)</span><span>
-</span><span id="line-11"></span><span>
-</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
-</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Database.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">ChunkDB</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">symbResolve</span></span><span class="hs-special">)</span><span>
-</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Development</span></span><span>
-</span><span id="line-15"></span><span>
-</span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Printers</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">symbolDoc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">toPlainName</span></span><span class="hs-special">)</span><span>
-</span><span id="line-17"></span><span>
-</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.List</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">nub</span></span><span class="hs-special">)</span><span>
-</span><span id="line-19"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Map</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">Map</span></span><span>
-</span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Text.PrettyPrint.HughesPJ</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">render</span></span><span class="hs-special">)</span><span>
-</span><span id="line-21"></span><span>
-</span><span id="line-22"></span><span class="hs-comment">-- not using lenses for now</span><span>
-</span><span id="line-23"></span><span class="hs-comment">-- | A 'CodeIdea' must include some code and its name. </span><span>
-</span><span id="line-24"></span><span class="hs-keyword">class</span><span> </span><span id="CodeIdea"><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeIdea"><span class="hs-identifier hs-var">CodeIdea</span></a></span></span><span> </span><span id="local-6989586621679329341"><span class="annot"><a href="#local-6989586621679329341"><span class="hs-identifier hs-type">c</span></a></span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-25"></span><span>  </span><span class="hs-comment">-- | Name of the idea.</span><span>
-</span><span id="line-26"></span><span>  </span><span id="codeName"><span class="annot"><a href="Language.Drasil.Chunk.Code.html#codeName"><span class="hs-identifier hs-type">codeName</span></a></span></span><span>      </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="#local-6989586621679329341"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
-</span><span id="line-27"></span><span>  </span><span class="hs-comment">-- | Code chunk associated with the idea.</span><span>
-</span><span id="line-28"></span><span>  </span><span id="codeChunk"><span class="annot"><a href="Language.Drasil.Chunk.Code.html#codeChunk"><span class="hs-identifier hs-type">codeChunk</span></a></span></span><span>     </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="#local-6989586621679329341"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeChunk"><span class="hs-identifier hs-type">CodeChunk</span></a></span><span>
-</span><span id="line-29"></span><span>
-</span><span id="line-30"></span><span class="hs-comment">-- | Convert the program name to an abbrevaited 'String' without any special characters.</span><span>
-</span><span id="line-31"></span><span id="local-6989586621679329257"><span class="annot"><a href="Language.Drasil.Chunk.Code.html#programName"><span class="hs-identifier hs-type">programName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CommonIdea</span></span><span> </span><span class="annot"><a href="#local-6989586621679329257"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679329257"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span></span><span>
-</span><span id="line-32"></span><span id="programName"><span class="annot"><span class="annottext">programName :: c -&gt; String
-</span><a href="Language.Drasil.Chunk.Code.html#programName"><span class="hs-identifier hs-var hs-var">programName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; String
-</span><span class="hs-identifier hs-var">toPlainName</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; String) -&gt; (c -&gt; String) -&gt; c -&gt; String
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">c -&gt; String
-forall c. CommonIdea c =&gt; c -&gt; String
-</span><span class="hs-identifier hs-var">abrv</span></span><span>
-</span><span id="line-33"></span><span>
-</span><span id="line-34"></span><span class="hs-comment">-- | Used when a function name needs to be distinguishable from a variable name.</span><span>
-</span><span id="line-35"></span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#funcPrefix"><span class="hs-identifier hs-type">funcPrefix</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
-</span><span id="line-36"></span><span id="funcPrefix"><span class="annot"><span class="annottext">funcPrefix :: String
-</span><a href="Language.Drasil.Chunk.Code.html#funcPrefix"><span class="hs-identifier hs-var hs-var">funcPrefix</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;func_&quot;</span></span><span>
-</span><span id="line-37"></span><span> </span><span>
-</span><span id="line-38"></span><span class="hs-comment">-- | Details if a piece of code is meant to be a variable or a function.</span><span>
-</span><span id="line-39"></span><span class="hs-keyword">data</span><span> </span><span id="VarOrFunc"><span class="annot"><a href="Language.Drasil.Chunk.Code.html#VarOrFunc"><span class="hs-identifier hs-var">VarOrFunc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="Var"><span class="annot"><a href="Language.Drasil.Chunk.Code.html#Var"><span class="hs-identifier hs-var">Var</span></a></span></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="Func"><span class="annot"><a href="Language.Drasil.Chunk.Code.html#Func"><span class="hs-identifier hs-var">Func</span></a></span></span><span>
-</span><span id="line-40"></span><span>
-</span><span id="line-41"></span><span class="hs-comment">-- | Basic chunk representation in the code generation context.</span><span>
-</span><span id="line-42"></span><span class="hs-comment">-- Contains a QuantityDict and the kind of code (variable or function).</span><span>
-</span><span id="line-43"></span><span class="hs-keyword">data</span><span> </span><span id="CodeChunk"><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeChunk"><span class="hs-identifier hs-var">CodeChunk</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="CodeC"><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeC"><span class="hs-identifier hs-var">CodeC</span></a></span></span><span> </span><span class="hs-special">{</span><span> </span><span id="_qc"><span class="annot"><span class="annottext">CodeChunk -&gt; QuantityDict
-</span><a href="Language.Drasil.Chunk.Code.html#_qc"><span class="hs-identifier hs-var hs-var">_qc</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span>
-</span><span id="line-44"></span><span>                       </span><span class="hs-special">,</span><span> </span><span id="kind"><span class="annot"><span class="annottext">CodeChunk -&gt; VarOrFunc
-</span><a href="Language.Drasil.Chunk.Code.html#kind"><span class="hs-identifier hs-var hs-var">kind</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#VarOrFunc"><span class="hs-identifier hs-type">VarOrFunc</span></a></span><span>
-</span><span id="line-45"></span><span>                       </span><span class="hs-special">}</span><span>
-</span><span id="line-46"></span><span id="qc"><span class="hs-identifier">makeLenses</span><span> </span><span class="hs-special">''</span><span class="hs-identifier">CodeChunk</span></span><span>
-</span><span id="line-47"></span><span>
-</span><span id="line-48"></span><span class="hs-comment">-- | Finds the 'UID' of the 'QuantityDict' used to make the 'CodeChunk'.</span><span>
-</span><span id="line-49"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span>      </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeChunk"><span class="hs-identifier hs-type">CodeChunk</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679329246"><span class="annot"><span class="annottext">uid :: (String -&gt; f String) -&gt; CodeChunk -&gt; f CodeChunk
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">uid</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(QuantityDict -&gt; f QuantityDict) -&gt; CodeChunk -&gt; f CodeChunk
-Lens' CodeChunk QuantityDict
-</span><a href="Language.Drasil.Chunk.Code.html#qc"><span class="hs-identifier hs-var">qc</span></a></span><span> </span><span class="annot"><span class="annottext">((QuantityDict -&gt; f QuantityDict) -&gt; CodeChunk -&gt; f CodeChunk)
--&gt; ((String -&gt; f String) -&gt; QuantityDict -&gt; f QuantityDict)
--&gt; (String -&gt; f String)
--&gt; CodeChunk
--&gt; f CodeChunk
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; f String) -&gt; QuantityDict -&gt; f QuantityDict
-forall c. HasUID c =&gt; Lens' c String
-</span><span class="hs-identifier hs-var">uid</span></span><span>
-</span><span id="line-50"></span><span class="hs-comment">-- | Finds the term ('NP') of the 'QuantityDict' used to make the 'CodeChunk'.</span><span>
-</span><span id="line-51"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span>   </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeChunk"><span class="hs-identifier hs-type">CodeChunk</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679329241"><span class="annot"><span class="annottext">term :: (NP -&gt; f NP) -&gt; CodeChunk -&gt; f CodeChunk
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">term</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(QuantityDict -&gt; f QuantityDict) -&gt; CodeChunk -&gt; f CodeChunk
-Lens' CodeChunk QuantityDict
-</span><a href="Language.Drasil.Chunk.Code.html#qc"><span class="hs-identifier hs-var">qc</span></a></span><span> </span><span class="annot"><span class="annottext">((QuantityDict -&gt; f QuantityDict) -&gt; CodeChunk -&gt; f CodeChunk)
--&gt; ((NP -&gt; f NP) -&gt; QuantityDict -&gt; f QuantityDict)
--&gt; (NP -&gt; f NP)
--&gt; CodeChunk
--&gt; f CodeChunk
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(NP -&gt; f NP) -&gt; QuantityDict -&gt; f QuantityDict
-forall c. NamedIdea c =&gt; Lens' c NP
-</span><span class="hs-identifier hs-var">term</span></span><span>
-</span><span id="line-52"></span><span class="hs-comment">-- | Finds the idea contained in the 'QuantityDict' used to make the 'CodeChunk'.</span><span>
-</span><span id="line-53"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span>        </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeChunk"><span class="hs-identifier hs-type">CodeChunk</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679329236"><span class="annot"><span class="annottext">getA :: CodeChunk -&gt; Maybe String
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">getA</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Maybe String
-forall c. Idea c =&gt; c -&gt; Maybe String
-</span><span class="hs-identifier hs-var">getA</span></span><span> </span><span class="annot"><span class="annottext">(QuantityDict -&gt; Maybe String)
--&gt; (CodeChunk -&gt; QuantityDict) -&gt; CodeChunk -&gt; Maybe String
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Getting QuantityDict CodeChunk QuantityDict
--&gt; CodeChunk -&gt; QuantityDict
-forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
-</span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting QuantityDict CodeChunk QuantityDict
-Lens' CodeChunk QuantityDict
-</span><a href="Language.Drasil.Chunk.Code.html#qc"><span class="hs-identifier hs-var">qc</span></a></span><span>
-</span><span id="line-54"></span><span class="hs-comment">-- | Finds the 'Space' of the 'QuantityDict' used to make the 'CodeChunk'.</span><span>
-</span><span id="line-55"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasSpace</span></span><span>    </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeChunk"><span class="hs-identifier hs-type">CodeChunk</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679329232"><span class="annot"><span class="annottext">typ :: (Space -&gt; f Space) -&gt; CodeChunk -&gt; f CodeChunk
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">typ</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(QuantityDict -&gt; f QuantityDict) -&gt; CodeChunk -&gt; f CodeChunk
-Lens' CodeChunk QuantityDict
-</span><a href="Language.Drasil.Chunk.Code.html#qc"><span class="hs-identifier hs-var">qc</span></a></span><span> </span><span class="annot"><span class="annottext">((QuantityDict -&gt; f QuantityDict) -&gt; CodeChunk -&gt; f CodeChunk)
--&gt; ((Space -&gt; f Space) -&gt; QuantityDict -&gt; f QuantityDict)
--&gt; (Space -&gt; f Space)
--&gt; CodeChunk
--&gt; f CodeChunk
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(Space -&gt; f Space) -&gt; QuantityDict -&gt; f QuantityDict
-forall c. HasSpace c =&gt; Lens' c Space
-</span><span class="hs-identifier hs-var">typ</span></span><span>
-</span><span id="line-56"></span><span class="hs-comment">-- | Finds the 'Stage' dependent 'Symbol' of the 'QuantityDict' used to make the 'CodeChunk'.</span><span>
-</span><span id="line-57"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasSymbol</span></span><span>   </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeChunk"><span class="hs-identifier hs-type">CodeChunk</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679329228"><span class="annot"><span class="annottext">symbol :: CodeChunk -&gt; Stage -&gt; Symbol
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">symbol</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Stage -&gt; Symbol
-forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
-</span><span class="hs-identifier hs-var">symbol</span></span><span> </span><span class="annot"><span class="annottext">(QuantityDict -&gt; Stage -&gt; Symbol)
--&gt; (CodeChunk -&gt; QuantityDict) -&gt; CodeChunk -&gt; Stage -&gt; Symbol
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Getting QuantityDict CodeChunk QuantityDict
--&gt; CodeChunk -&gt; QuantityDict
-forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
-</span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting QuantityDict CodeChunk QuantityDict
-Lens' CodeChunk QuantityDict
-</span><a href="Language.Drasil.Chunk.Code.html#qc"><span class="hs-identifier hs-var">qc</span></a></span><span>
-</span><span id="line-58"></span><span class="hs-comment">-- | 'CodeChunk's have a 'Quantity'.</span><span>
-</span><span id="line-59"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span>    </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeChunk"><span class="hs-identifier hs-type">CodeChunk</span></a></span><span>
-</span><span id="line-60"></span><span class="hs-comment">-- | Finds the code name of a 'CodeChunk'.</span><span>
-</span><span id="line-61"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeIdea"><span class="hs-identifier hs-type">CodeIdea</span></a></span><span>    </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeChunk"><span class="hs-identifier hs-type">CodeChunk</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-62"></span><span>  </span><span id="local-6989586621679329219"><span class="annot"><span class="annottext">codeName :: CodeChunk -&gt; String
-</span><a href="#local-6989586621679329219"><span class="hs-identifier hs-var hs-var hs-var hs-var">codeName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc -&gt; String
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# OPTIONS_GHC -Wno-orphans #-}</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-comment">-- | Defines chunk types for use in code generation.</span><span>
+</span><span id="line-4"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Language.Drasil.Chunk.Code</span><span> </span><span class="hs-special">(</span><span>
+</span><span id="line-5"></span><span>  </span><span class="annot"><span class="hs-identifier">CodeIdea</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">CodeChunk</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">CodeVarChunk</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">CodeFuncChunk</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-6"></span><span>  </span><span class="annot"><span class="hs-identifier">VarOrFunc</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">obv</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">quantvar</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">quantfunc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#ccObjVar"><span class="hs-identifier">ccObjVar</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">codevars</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">codevars'</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-7"></span><span>  </span><span class="annot"><span class="hs-identifier">funcResolve</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">varResolve</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">listToArray</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">programName</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">funcPrefix</span></span><span class="hs-special">,</span><span>
+</span><span id="line-8"></span><span>  </span><span class="annot"><span class="hs-identifier">DefiningCodeExpr</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span>
+</span><span id="line-9"></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-10"></span><span>
+</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Lens</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-operator">(^.)</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">view</span></span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">HasSpace</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">typ</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">Space</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Actor</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">codeSymb</span></span><span class="hs-special">)</span><span>
+</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Chunk.CodeBase</span></span><span>
+</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Printers</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">symbolDoc</span></span><span class="hs-special">)</span><span>
+</span><span id="line-16"></span><span>
+</span><span id="line-17"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Text.PrettyPrint.HughesPJ</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">render</span></span><span class="hs-special">)</span><span>
+</span><span id="line-18"></span><span>
+</span><span id="line-19"></span><span class="hs-comment">-- | Finds the code name of a 'CodeChunk'.</span><span>
+</span><span id="line-20"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeIdea</span></span><span>    </span><span class="annot"><span class="hs-identifier hs-type">CodeChunk</span></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-21"></span><span>  </span><span id="local-6989586621679319765"><span class="annot"><span class="annottext">codeName :: CodeChunk -&gt; String
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">codeName</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc -&gt; String
 </span><span class="hs-identifier hs-var">render</span></span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; String) -&gt; (CodeChunk -&gt; Doc) -&gt; CodeChunk -&gt; String
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Doc
@@ -140,123 +35,18 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
 </span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting QuantityDict CodeChunk QuantityDict
 Lens' CodeChunk QuantityDict
-</span><a href="Language.Drasil.Chunk.Code.html#qc"><span class="hs-identifier hs-var">qc</span></a></span><span>
-</span><span id="line-63"></span><span>  </span><span id="local-6989586621679329217"><span class="annot"><span class="annottext">codeChunk :: CodeChunk -&gt; CodeChunk
-</span><a href="#local-6989586621679329217"><span class="hs-identifier hs-var hs-var hs-var hs-var">codeChunk</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeChunk -&gt; CodeChunk
+</span><span class="hs-identifier hs-var">qc</span></span><span>
+</span><span id="line-22"></span><span>  </span><span id="local-6989586621679319761"><span class="annot"><span class="annottext">codeChunk :: CodeChunk -&gt; CodeChunk
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">codeChunk</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeChunk -&gt; CodeChunk
 forall a. a -&gt; a
 </span><span class="hs-identifier hs-var">id</span></span><span>
-</span><span id="line-64"></span><span class="hs-comment">-- | Equal if 'UID's are equal.</span><span>
-</span><span id="line-65"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679329213"><span class="annot"><span class="hs-identifier hs-type">Eq</span></span><span>          </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeChunk"><span class="hs-identifier hs-type">CodeChunk</span></a></span></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679329211"><span class="annot"><span class="annottext">c1 :: CodeChunk
-</span><a href="#local-6989586621679329211"><span class="hs-identifier hs-var">c1</span></a></span></span><span> </span><span id="local-6989586621679329210"><span class="annot"><span class="annottext">== :: CodeChunk -&gt; CodeChunk -&gt; Bool
-</span><span class="hs-operator hs-var hs-var hs-var hs-var">==</span></span></span><span> </span><span id="local-6989586621679329209"><span class="annot"><span class="annottext">c2 :: CodeChunk
-</span><a href="#local-6989586621679329209"><span class="hs-identifier hs-var">c2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeChunk
-</span><a href="#local-6989586621679329211"><span class="hs-identifier hs-var">c1</span></a></span><span> </span><span class="annot"><span class="annottext">CodeChunk -&gt; Getting String CodeChunk String -&gt; String
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting String CodeChunk String
-forall c. HasUID c =&gt; Lens' c String
-</span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; Bool
-forall a. Eq a =&gt; a -&gt; a -&gt; Bool
-</span><span class="hs-operator hs-var">==</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeChunk
-</span><a href="#local-6989586621679329209"><span class="hs-identifier hs-var">c2</span></a></span><span> </span><span class="annot"><span class="annottext">CodeChunk -&gt; Getting String CodeChunk String -&gt; String
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting String CodeChunk String
-forall c. HasUID c =&gt; Lens' c String
-</span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span>
-</span><span id="line-66"></span><span class="hs-comment">-- | Finds the units of the 'QuantityDict' used to make the 'CodeChunk'.</span><span>
-</span><span id="line-67"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MayHaveUnit</span></span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeChunk"><span class="hs-identifier hs-type">CodeChunk</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679329206"><span class="annot"><span class="annottext">getUnit :: CodeChunk -&gt; Maybe UnitDefn
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">getUnit</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Maybe UnitDefn
-forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
-</span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">(QuantityDict -&gt; Maybe UnitDefn)
--&gt; (CodeChunk -&gt; QuantityDict) -&gt; CodeChunk -&gt; Maybe UnitDefn
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Getting QuantityDict CodeChunk QuantityDict
--&gt; CodeChunk -&gt; QuantityDict
-forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
-</span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting QuantityDict CodeChunk QuantityDict
-Lens' CodeChunk QuantityDict
-</span><a href="Language.Drasil.Chunk.Code.html#qc"><span class="hs-identifier hs-var">qc</span></a></span><span>
-</span><span id="line-68"></span><span>
-</span><span id="line-69"></span><span class="hs-comment">-- | Chunk representing a variable. The @obv@ field represents the object containing </span><span>
-</span><span id="line-70"></span><span class="hs-comment">-- this variable, if it is an object field.</span><span>
-</span><span id="line-71"></span><span class="hs-keyword">data</span><span> </span><span id="CodeVarChunk"><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-var">CodeVarChunk</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="CodeVC"><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVC"><span class="hs-identifier hs-var">CodeVC</span></a></span></span><span> </span><span class="hs-special">{</span><span id="_ccv"><span class="annot"><span class="annottext">CodeVarChunk -&gt; CodeChunk
-</span><a href="Language.Drasil.Chunk.Code.html#_ccv"><span class="hs-identifier hs-var hs-var">_ccv</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeChunk"><span class="hs-identifier hs-type">CodeChunk</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-72"></span><span>                            </span><span id="_obv"><span class="annot"><span class="annottext">CodeVarChunk -&gt; Maybe CodeChunk
-</span><a href="Language.Drasil.Chunk.Code.html#_obv"><span class="hs-identifier hs-var hs-var">_obv</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeChunk"><span class="hs-identifier hs-type">CodeChunk</span></a></span><span class="hs-special">}</span><span>
-</span><span id="line-73"></span><span id="ccv"><span id="obv"><span class="hs-identifier">makeLenses</span><span> </span><span class="hs-special">''</span><span class="hs-identifier">CodeVarChunk</span></span></span><span>
-</span><span id="line-74"></span><span>
-</span><span id="line-75"></span><span class="hs-comment">-- | Finds the 'UID' of the 'CodeChunk' used to make the 'CodeVarChunk'.</span><span>
-</span><span id="line-76"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span>      </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679329199"><span class="annot"><span class="annottext">uid :: (String -&gt; f String) -&gt; CodeVarChunk -&gt; f CodeVarChunk
-</span><a href="#local-6989586621679329199"><span class="hs-identifier hs-var hs-var hs-var hs-var">uid</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeChunk -&gt; f CodeChunk) -&gt; CodeVarChunk -&gt; f CodeVarChunk
-Lens' CodeVarChunk CodeChunk
-</span><a href="Language.Drasil.Chunk.Code.html#ccv"><span class="hs-identifier hs-var">ccv</span></a></span><span> </span><span class="annot"><span class="annottext">((CodeChunk -&gt; f CodeChunk) -&gt; CodeVarChunk -&gt; f CodeVarChunk)
--&gt; ((String -&gt; f String) -&gt; CodeChunk -&gt; f CodeChunk)
--&gt; (String -&gt; f String)
--&gt; CodeVarChunk
--&gt; f CodeVarChunk
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; f String) -&gt; CodeChunk -&gt; f CodeChunk
-forall c. HasUID c =&gt; Lens' c String
-</span><span class="hs-identifier hs-var">uid</span></span><span>
-</span><span id="line-77"></span><span class="hs-comment">-- | Finds the term ('NP') of the 'CodeChunk' used to make the 'CodeVarChunk'.</span><span>
-</span><span id="line-78"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span>   </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679329196"><span class="annot"><span class="annottext">term :: (NP -&gt; f NP) -&gt; CodeVarChunk -&gt; f CodeVarChunk
-</span><a href="#local-6989586621679329196"><span class="hs-identifier hs-var hs-var hs-var hs-var">term</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeChunk -&gt; f CodeChunk) -&gt; CodeVarChunk -&gt; f CodeVarChunk
-Lens' CodeVarChunk CodeChunk
-</span><a href="Language.Drasil.Chunk.Code.html#ccv"><span class="hs-identifier hs-var">ccv</span></a></span><span> </span><span class="annot"><span class="annottext">((CodeChunk -&gt; f CodeChunk) -&gt; CodeVarChunk -&gt; f CodeVarChunk)
--&gt; ((NP -&gt; f NP) -&gt; CodeChunk -&gt; f CodeChunk)
--&gt; (NP -&gt; f NP)
--&gt; CodeVarChunk
--&gt; f CodeVarChunk
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(NP -&gt; f NP) -&gt; CodeChunk -&gt; f CodeChunk
-forall c. NamedIdea c =&gt; Lens' c NP
-</span><span class="hs-identifier hs-var">term</span></span><span>
-</span><span id="line-79"></span><span class="hs-comment">-- | Finds the idea contained in the 'CodeChunk' used to make the 'CodeVarChunk'.</span><span>
-</span><span id="line-80"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span>        </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679329193"><span class="annot"><span class="annottext">getA :: CodeVarChunk -&gt; Maybe String
-</span><a href="#local-6989586621679329193"><span class="hs-identifier hs-var hs-var hs-var hs-var">getA</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeChunk -&gt; Maybe String
-forall c. Idea c =&gt; c -&gt; Maybe String
-</span><span class="hs-identifier hs-var">getA</span></span><span> </span><span class="annot"><span class="annottext">(CodeChunk -&gt; Maybe String)
--&gt; (CodeVarChunk -&gt; CodeChunk) -&gt; CodeVarChunk -&gt; Maybe String
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Getting CodeChunk CodeVarChunk CodeChunk
--&gt; CodeVarChunk -&gt; CodeChunk
-forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
-</span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting CodeChunk CodeVarChunk CodeChunk
-Lens' CodeVarChunk CodeChunk
-</span><a href="Language.Drasil.Chunk.Code.html#ccv"><span class="hs-identifier hs-var">ccv</span></a></span><span>
-</span><span id="line-81"></span><span class="hs-comment">-- | Finds the 'Space' of the 'CodeChunk' used to make the 'CodeVarChunk'.</span><span>
-</span><span id="line-82"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasSpace</span></span><span>    </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679329191"><span class="annot"><span class="annottext">typ :: (Space -&gt; f Space) -&gt; CodeVarChunk -&gt; f CodeVarChunk
-</span><a href="#local-6989586621679329191"><span class="hs-identifier hs-var hs-var hs-var hs-var">typ</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeChunk -&gt; f CodeChunk) -&gt; CodeVarChunk -&gt; f CodeVarChunk
-Lens' CodeVarChunk CodeChunk
-</span><a href="Language.Drasil.Chunk.Code.html#ccv"><span class="hs-identifier hs-var">ccv</span></a></span><span> </span><span class="annot"><span class="annottext">((CodeChunk -&gt; f CodeChunk) -&gt; CodeVarChunk -&gt; f CodeVarChunk)
--&gt; ((Space -&gt; f Space) -&gt; CodeChunk -&gt; f CodeChunk)
--&gt; (Space -&gt; f Space)
--&gt; CodeVarChunk
--&gt; f CodeVarChunk
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(Space -&gt; f Space) -&gt; CodeChunk -&gt; f CodeChunk
-forall c. HasSpace c =&gt; Lens' c Space
-</span><span class="hs-identifier hs-var">typ</span></span><span>
-</span><span id="line-83"></span><span class="hs-comment">-- | Finds the 'Stage' dependent 'Symbol' of the 'CodeChunk' used to make the 'CodeVarChunk'.</span><span>
-</span><span id="line-84"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasSymbol</span></span><span>   </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679329189"><span class="annot"><span class="annottext">symbol :: CodeVarChunk -&gt; Stage -&gt; Symbol
-</span><a href="#local-6989586621679329189"><span class="hs-identifier hs-var hs-var hs-var hs-var">symbol</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeChunk -&gt; Stage -&gt; Symbol
-forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
-</span><span class="hs-identifier hs-var">symbol</span></span><span> </span><span class="annot"><span class="annottext">(CodeChunk -&gt; Stage -&gt; Symbol)
--&gt; (CodeVarChunk -&gt; CodeChunk) -&gt; CodeVarChunk -&gt; Stage -&gt; Symbol
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Getting CodeChunk CodeVarChunk CodeChunk
--&gt; CodeVarChunk -&gt; CodeChunk
-forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
-</span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting CodeChunk CodeVarChunk CodeChunk
-Lens' CodeVarChunk CodeChunk
-</span><a href="Language.Drasil.Chunk.Code.html#ccv"><span class="hs-identifier hs-var">ccv</span></a></span><span>
-</span><span id="line-85"></span><span class="hs-comment">-- | 'CodeVarChunk's have a 'Quantity'.</span><span>
-</span><span id="line-86"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span>    </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span><span>
-</span><span id="line-87"></span><span class="hs-comment">-- | Finds the code name and 'CodeChunk' within a 'CodeVarChunk'.</span><span>
-</span><span id="line-88"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeIdea"><span class="hs-identifier hs-type">CodeIdea</span></a></span><span>    </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span>
-</span><span id="line-89"></span><span>  </span><span id="local-6989586621679329183"><span class="annot"><span class="annottext">codeName :: CodeVarChunk -&gt; String
-</span><a href="#local-6989586621679329183"><span class="hs-identifier hs-var hs-var hs-var hs-var">codeName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeChunk -&gt; String
+</span><span id="line-23"></span><span>
+</span><span id="line-24"></span><span class="hs-comment">-- | Finds the code name and 'CodeChunk' within a 'CodeVarChunk'.</span><span>
+</span><span id="line-25"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeIdea</span></span><span>    </span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span> </span><span class="hs-keyword">where</span><span> </span><span>
+</span><span id="line-26"></span><span>  </span><span id="local-6989586621679319756"><span class="annot"><span class="annottext">codeName :: CodeVarChunk -&gt; String
+</span><a href="#local-6989586621679319756"><span class="hs-identifier hs-var hs-var hs-var hs-var">codeName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeChunk -&gt; String
 forall c. CodeIdea c =&gt; c -&gt; String
-</span><a href="Language.Drasil.Chunk.Code.html#codeName"><span class="hs-identifier hs-var">codeName</span></a></span><span> </span><span class="annot"><span class="annottext">(CodeChunk -&gt; String)
+</span><span class="hs-identifier hs-var">codeName</span></span><span> </span><span class="annot"><span class="annottext">(CodeChunk -&gt; String)
 -&gt; (CodeVarChunk -&gt; CodeChunk) -&gt; CodeVarChunk -&gt; String
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Getting CodeChunk CodeVarChunk CodeChunk
@@ -264,136 +54,32 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
 </span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting CodeChunk CodeVarChunk CodeChunk
 Lens' CodeVarChunk CodeChunk
-</span><a href="Language.Drasil.Chunk.Code.html#ccv"><span class="hs-identifier hs-var">ccv</span></a></span><span>
-</span><span id="line-90"></span><span>  </span><span id="local-6989586621679329182"><span class="annot"><span class="annottext">codeChunk :: CodeVarChunk -&gt; CodeChunk
-</span><a href="#local-6989586621679329182"><span class="hs-identifier hs-var hs-var hs-var hs-var">codeChunk</span></a></span></span><span> </span><span id="local-6989586621679329181"><span class="annot"><span class="annottext">c :: CodeVarChunk
-</span><a href="#local-6989586621679329181"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; VarOrFunc -&gt; CodeChunk
-</span><a href="Language.Drasil.Chunk.Code.html#CodeC"><span class="hs-identifier hs-var">CodeC</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Getting QuantityDict CodeChunk QuantityDict
+</span><span class="hs-identifier hs-var">ccv</span></span><span>
+</span><span id="line-27"></span><span>  </span><span id="local-6989586621679319754"><span class="annot"><span class="annottext">codeChunk :: CodeVarChunk -&gt; CodeChunk
+</span><a href="#local-6989586621679319754"><span class="hs-identifier hs-var hs-var hs-var hs-var">codeChunk</span></a></span></span><span> </span><span id="local-6989586621679319753"><span class="annot"><span class="annottext">c :: CodeVarChunk
+</span><a href="#local-6989586621679319753"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; VarOrFunc -&gt; CodeChunk
+</span><span class="hs-identifier hs-var">CodeC</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Getting QuantityDict CodeChunk QuantityDict
 -&gt; CodeChunk -&gt; QuantityDict
 forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
 </span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting QuantityDict CodeChunk QuantityDict
 Lens' CodeChunk QuantityDict
-</span><a href="Language.Drasil.Chunk.Code.html#qc"><span class="hs-identifier hs-var">qc</span></a></span><span> </span><span class="annot"><span class="annottext">(CodeChunk -&gt; QuantityDict) -&gt; CodeChunk -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qc</span></span><span> </span><span class="annot"><span class="annottext">(CodeChunk -&gt; QuantityDict) -&gt; CodeChunk -&gt; QuantityDict
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Getting CodeChunk CodeVarChunk CodeChunk
 -&gt; CodeVarChunk -&gt; CodeChunk
 forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
 </span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting CodeChunk CodeVarChunk CodeChunk
 Lens' CodeVarChunk CodeChunk
-</span><a href="Language.Drasil.Chunk.Code.html#ccv"><span class="hs-identifier hs-var">ccv</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679329181"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">VarOrFunc
-</span><a href="Language.Drasil.Chunk.Code.html#Var"><span class="hs-identifier hs-var">Var</span></a></span><span>
-</span><span id="line-91"></span><span class="hs-comment">-- | Equal if 'UID's are equal.</span><span>
-</span><span id="line-92"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679329178"><span class="annot"><span class="hs-identifier hs-type">Eq</span></span><span>          </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679329177"><span class="annot"><span class="annottext">c1 :: CodeVarChunk
-</span><a href="#local-6989586621679329177"><span class="hs-identifier hs-var">c1</span></a></span></span><span> </span><span id="local-6989586621679329176"><span class="annot"><span class="annottext">== :: CodeVarChunk -&gt; CodeVarChunk -&gt; Bool
-</span><span class="hs-operator hs-var hs-var hs-var hs-var">==</span></span></span><span> </span><span id="local-6989586621679329175"><span class="annot"><span class="annottext">c2 :: CodeVarChunk
-</span><a href="#local-6989586621679329175"><span class="hs-identifier hs-var">c2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679329177"><span class="hs-identifier hs-var">c1</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Getting String CodeVarChunk String -&gt; String
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting String CodeVarChunk String
-forall c. HasUID c =&gt; Lens' c String
-</span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; Bool
-forall a. Eq a =&gt; a -&gt; a -&gt; Bool
-</span><span class="hs-operator hs-var">==</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679329175"><span class="hs-identifier hs-var">c2</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Getting String CodeVarChunk String -&gt; String
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting String CodeVarChunk String
-forall c. HasUID c =&gt; Lens' c String
-</span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span>
-</span><span id="line-93"></span><span class="hs-comment">-- | Finds the units of the 'CodeChunk' used to make the 'CodeVarChunk'.</span><span>
-</span><span id="line-94"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MayHaveUnit</span></span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679329173"><span class="annot"><span class="annottext">getUnit :: CodeVarChunk -&gt; Maybe UnitDefn
-</span><a href="#local-6989586621679329173"><span class="hs-identifier hs-var hs-var hs-var hs-var">getUnit</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeChunk -&gt; Maybe UnitDefn
-forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
-</span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">(CodeChunk -&gt; Maybe UnitDefn)
--&gt; (CodeVarChunk -&gt; CodeChunk) -&gt; CodeVarChunk -&gt; Maybe UnitDefn
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Getting CodeChunk CodeVarChunk CodeChunk
--&gt; CodeVarChunk -&gt; CodeChunk
-forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
-</span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting CodeChunk CodeVarChunk CodeChunk
-Lens' CodeVarChunk CodeChunk
-</span><a href="Language.Drasil.Chunk.Code.html#ccv"><span class="hs-identifier hs-var">ccv</span></a></span><span>
-</span><span id="line-95"></span><span>
-</span><span id="line-96"></span><span class="hs-comment">-- | Chunk representing a function.</span><span>
-</span><span id="line-97"></span><span class="hs-keyword">newtype</span><span> </span><span id="CodeFuncChunk"><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeFuncChunk"><span class="hs-identifier hs-var">CodeFuncChunk</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="CodeFC"><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeFC"><span class="hs-identifier hs-var">CodeFC</span></a></span></span><span> </span><span class="hs-special">{</span><span id="_ccf"><span class="annot"><span class="annottext">CodeFuncChunk -&gt; CodeChunk
-</span><a href="Language.Drasil.Chunk.Code.html#_ccf"><span class="hs-identifier hs-var hs-var">_ccf</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeChunk"><span class="hs-identifier hs-type">CodeChunk</span></a></span><span class="hs-special">}</span><span>
-</span><span id="line-98"></span><span id="ccf"><span class="hs-identifier">makeLenses</span><span> </span><span class="hs-special">''</span><span class="hs-identifier">CodeFuncChunk</span></span><span>
-</span><span id="line-99"></span><span>
-</span><span id="line-100"></span><span class="hs-comment">-- | Finds the 'UID' of the 'CodeChunk' used to make the 'CodeFuncChunk'.</span><span>
-</span><span id="line-101"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span>      </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeFuncChunk"><span class="hs-identifier hs-type">CodeFuncChunk</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679329168"><span class="annot"><span class="annottext">uid :: (String -&gt; f String) -&gt; CodeFuncChunk -&gt; f CodeFuncChunk
-</span><a href="#local-6989586621679329168"><span class="hs-identifier hs-var hs-var hs-var hs-var">uid</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeChunk -&gt; f CodeChunk) -&gt; CodeFuncChunk -&gt; f CodeFuncChunk
-Iso' CodeFuncChunk CodeChunk
-</span><a href="Language.Drasil.Chunk.Code.html#ccf"><span class="hs-identifier hs-var">ccf</span></a></span><span> </span><span class="annot"><span class="annottext">((CodeChunk -&gt; f CodeChunk) -&gt; CodeFuncChunk -&gt; f CodeFuncChunk)
--&gt; ((String -&gt; f String) -&gt; CodeChunk -&gt; f CodeChunk)
--&gt; (String -&gt; f String)
--&gt; CodeFuncChunk
--&gt; f CodeFuncChunk
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; f String) -&gt; CodeChunk -&gt; f CodeChunk
-forall c. HasUID c =&gt; Lens' c String
-</span><span class="hs-identifier hs-var">uid</span></span><span>
-</span><span id="line-102"></span><span class="hs-comment">-- | Finds the term ('NP') of the 'CodeChunk' used to make the 'CodeFuncChunk'.</span><span>
-</span><span id="line-103"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span>   </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeFuncChunk"><span class="hs-identifier hs-type">CodeFuncChunk</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679329165"><span class="annot"><span class="annottext">term :: (NP -&gt; f NP) -&gt; CodeFuncChunk -&gt; f CodeFuncChunk
-</span><a href="#local-6989586621679329165"><span class="hs-identifier hs-var hs-var hs-var hs-var">term</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeChunk -&gt; f CodeChunk) -&gt; CodeFuncChunk -&gt; f CodeFuncChunk
-Iso' CodeFuncChunk CodeChunk
-</span><a href="Language.Drasil.Chunk.Code.html#ccf"><span class="hs-identifier hs-var">ccf</span></a></span><span> </span><span class="annot"><span class="annottext">((CodeChunk -&gt; f CodeChunk) -&gt; CodeFuncChunk -&gt; f CodeFuncChunk)
--&gt; ((NP -&gt; f NP) -&gt; CodeChunk -&gt; f CodeChunk)
--&gt; (NP -&gt; f NP)
--&gt; CodeFuncChunk
--&gt; f CodeFuncChunk
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(NP -&gt; f NP) -&gt; CodeChunk -&gt; f CodeChunk
-forall c. NamedIdea c =&gt; Lens' c NP
-</span><span class="hs-identifier hs-var">term</span></span><span>
-</span><span id="line-104"></span><span class="hs-comment">-- | Finds the idea contained in the 'CodeChunk' used to make the 'CodeFuncChunk'.</span><span>
-</span><span id="line-105"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span>        </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeFuncChunk"><span class="hs-identifier hs-type">CodeFuncChunk</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679329162"><span class="annot"><span class="annottext">getA :: CodeFuncChunk -&gt; Maybe String
-</span><a href="#local-6989586621679329162"><span class="hs-identifier hs-var hs-var hs-var hs-var">getA</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeChunk -&gt; Maybe String
-forall c. Idea c =&gt; c -&gt; Maybe String
-</span><span class="hs-identifier hs-var">getA</span></span><span> </span><span class="annot"><span class="annottext">(CodeChunk -&gt; Maybe String)
--&gt; (CodeFuncChunk -&gt; CodeChunk) -&gt; CodeFuncChunk -&gt; Maybe String
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Getting CodeChunk CodeFuncChunk CodeChunk
--&gt; CodeFuncChunk -&gt; CodeChunk
-forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
-</span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting CodeChunk CodeFuncChunk CodeChunk
-Iso' CodeFuncChunk CodeChunk
-</span><a href="Language.Drasil.Chunk.Code.html#ccf"><span class="hs-identifier hs-var">ccf</span></a></span><span>
-</span><span id="line-106"></span><span class="hs-comment">-- | Finds the 'Space' of the 'CodeChunk' used to make the 'CodeFuncChunk'.</span><span>
-</span><span id="line-107"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasSpace</span></span><span>    </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeFuncChunk"><span class="hs-identifier hs-type">CodeFuncChunk</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679329160"><span class="annot"><span class="annottext">typ :: (Space -&gt; f Space) -&gt; CodeFuncChunk -&gt; f CodeFuncChunk
-</span><a href="#local-6989586621679329160"><span class="hs-identifier hs-var hs-var hs-var hs-var">typ</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(CodeChunk -&gt; f CodeChunk) -&gt; CodeFuncChunk -&gt; f CodeFuncChunk
-Iso' CodeFuncChunk CodeChunk
-</span><a href="Language.Drasil.Chunk.Code.html#ccf"><span class="hs-identifier hs-var">ccf</span></a></span><span> </span><span class="annot"><span class="annottext">((CodeChunk -&gt; f CodeChunk) -&gt; CodeFuncChunk -&gt; f CodeFuncChunk)
--&gt; ((Space -&gt; f Space) -&gt; CodeChunk -&gt; f CodeChunk)
--&gt; (Space -&gt; f Space)
--&gt; CodeFuncChunk
--&gt; f CodeFuncChunk
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(Space -&gt; f Space) -&gt; CodeChunk -&gt; f CodeChunk
-forall c. HasSpace c =&gt; Lens' c Space
-</span><span class="hs-identifier hs-var">typ</span></span><span>
-</span><span id="line-108"></span><span class="hs-comment">-- | Finds the 'Stage' dependent 'Symbol' of the 'CodeChunk' used to make the 'CodeFuncChunk'.</span><span>
-</span><span id="line-109"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasSymbol</span></span><span>   </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeFuncChunk"><span class="hs-identifier hs-type">CodeFuncChunk</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679329158"><span class="annot"><span class="annottext">symbol :: CodeFuncChunk -&gt; Stage -&gt; Symbol
-</span><a href="#local-6989586621679329158"><span class="hs-identifier hs-var hs-var hs-var hs-var">symbol</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeChunk -&gt; Stage -&gt; Symbol
-forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
-</span><span class="hs-identifier hs-var">symbol</span></span><span> </span><span class="annot"><span class="annottext">(CodeChunk -&gt; Stage -&gt; Symbol)
--&gt; (CodeFuncChunk -&gt; CodeChunk) -&gt; CodeFuncChunk -&gt; Stage -&gt; Symbol
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Getting CodeChunk CodeFuncChunk CodeChunk
--&gt; CodeFuncChunk -&gt; CodeChunk
-forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
-</span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting CodeChunk CodeFuncChunk CodeChunk
-Iso' CodeFuncChunk CodeChunk
-</span><a href="Language.Drasil.Chunk.Code.html#ccf"><span class="hs-identifier hs-var">ccf</span></a></span><span>
-</span><span id="line-110"></span><span class="hs-comment">-- | 'CodeFuncChunk's have a 'Quantity'.</span><span>
-</span><span id="line-111"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span>    </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeFuncChunk"><span class="hs-identifier hs-type">CodeFuncChunk</span></a></span><span>
-</span><span id="line-112"></span><span class="hs-comment">-- | Functions are Callable.</span><span>
-</span><span id="line-113"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Callable</span></span><span>    </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeFuncChunk"><span class="hs-identifier hs-type">CodeFuncChunk</span></a></span><span>
-</span><span id="line-114"></span><span class="hs-comment">-- | Finds the code name and 'CodeChunk' within a 'CodeFuncChunk'.</span><span>
-</span><span id="line-115"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeIdea"><span class="hs-identifier hs-type">CodeIdea</span></a></span><span>    </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeFuncChunk"><span class="hs-identifier hs-type">CodeFuncChunk</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span>
-</span><span id="line-116"></span><span>  </span><span id="local-6989586621679329150"><span class="annot"><span class="annottext">codeName :: CodeFuncChunk -&gt; String
-</span><a href="#local-6989586621679329150"><span class="hs-identifier hs-var hs-var hs-var hs-var">codeName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeChunk -&gt; String
+</span><span class="hs-identifier hs-var">ccv</span></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
+</span><a href="#local-6989586621679319753"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">VarOrFunc
+</span><span class="hs-identifier hs-var">Var</span></span><span>
+</span><span id="line-28"></span><span>
+</span><span id="line-29"></span><span class="hs-comment">-- | Finds the code name and 'CodeChunk' within a 'CodeFuncChunk'.</span><span>
+</span><span id="line-30"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeIdea</span></span><span>    </span><span class="annot"><span class="hs-identifier hs-type">CodeFuncChunk</span></span><span> </span><span class="hs-keyword">where</span><span> </span><span>
+</span><span id="line-31"></span><span>  </span><span id="local-6989586621679319748"><span class="annot"><span class="annottext">codeName :: CodeFuncChunk -&gt; String
+</span><a href="#local-6989586621679319748"><span class="hs-identifier hs-var hs-var hs-var hs-var">codeName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeChunk -&gt; String
 forall c. CodeIdea c =&gt; c -&gt; String
-</span><a href="Language.Drasil.Chunk.Code.html#codeName"><span class="hs-identifier hs-var">codeName</span></a></span><span> </span><span class="annot"><span class="annottext">(CodeChunk -&gt; String)
+</span><span class="hs-identifier hs-var">codeName</span></span><span> </span><span class="annot"><span class="annottext">(CodeChunk -&gt; String)
 -&gt; (CodeFuncChunk -&gt; CodeChunk) -&gt; CodeFuncChunk -&gt; String
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Getting CodeChunk CodeFuncChunk CodeChunk
@@ -401,330 +87,53 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
 </span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting CodeChunk CodeFuncChunk CodeChunk
 Iso' CodeFuncChunk CodeChunk
-</span><a href="Language.Drasil.Chunk.Code.html#ccf"><span class="hs-identifier hs-var">ccf</span></a></span><span>
-</span><span id="line-117"></span><span>  </span><span id="local-6989586621679329149"><span class="annot"><span class="annottext">codeChunk :: CodeFuncChunk -&gt; CodeChunk
-</span><a href="#local-6989586621679329149"><span class="hs-identifier hs-var hs-var hs-var hs-var">codeChunk</span></a></span></span><span> </span><span id="local-6989586621679329148"><span class="annot"><span class="annottext">c :: CodeFuncChunk
-</span><a href="#local-6989586621679329148"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; VarOrFunc -&gt; CodeChunk
-</span><a href="Language.Drasil.Chunk.Code.html#CodeC"><span class="hs-identifier hs-var">CodeC</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Getting QuantityDict CodeChunk QuantityDict
+</span><span class="hs-identifier hs-var">ccf</span></span><span>
+</span><span id="line-32"></span><span>  </span><span id="local-6989586621679319746"><span class="annot"><span class="annottext">codeChunk :: CodeFuncChunk -&gt; CodeChunk
+</span><a href="#local-6989586621679319746"><span class="hs-identifier hs-var hs-var hs-var hs-var">codeChunk</span></a></span></span><span> </span><span id="local-6989586621679319745"><span class="annot"><span class="annottext">c :: CodeFuncChunk
+</span><a href="#local-6989586621679319745"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; VarOrFunc -&gt; CodeChunk
+</span><span class="hs-identifier hs-var">CodeC</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Getting QuantityDict CodeChunk QuantityDict
 -&gt; CodeChunk -&gt; QuantityDict
 forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
 </span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting QuantityDict CodeChunk QuantityDict
 Lens' CodeChunk QuantityDict
-</span><a href="Language.Drasil.Chunk.Code.html#qc"><span class="hs-identifier hs-var">qc</span></a></span><span> </span><span class="annot"><span class="annottext">(CodeChunk -&gt; QuantityDict) -&gt; CodeChunk -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qc</span></span><span> </span><span class="annot"><span class="annottext">(CodeChunk -&gt; QuantityDict) -&gt; CodeChunk -&gt; QuantityDict
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Getting CodeChunk CodeFuncChunk CodeChunk
 -&gt; CodeFuncChunk -&gt; CodeChunk
 forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
 </span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting CodeChunk CodeFuncChunk CodeChunk
 Iso' CodeFuncChunk CodeChunk
-</span><a href="Language.Drasil.Chunk.Code.html#ccf"><span class="hs-identifier hs-var">ccf</span></a></span><span> </span><span class="annot"><span class="annottext">CodeFuncChunk
-</span><a href="#local-6989586621679329148"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">VarOrFunc
-</span><a href="Language.Drasil.Chunk.Code.html#Func"><span class="hs-identifier hs-var">Func</span></a></span><span>
-</span><span id="line-118"></span><span class="hs-comment">-- | Equal if 'UID's are equal.</span><span>
-</span><span id="line-119"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679329145"><span class="annot"><span class="hs-identifier hs-type">Eq</span></span><span>          </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeFuncChunk"><span class="hs-identifier hs-type">CodeFuncChunk</span></a></span></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679329144"><span class="annot"><span class="annottext">c1 :: CodeFuncChunk
-</span><a href="#local-6989586621679329144"><span class="hs-identifier hs-var">c1</span></a></span></span><span> </span><span id="local-6989586621679329143"><span class="annot"><span class="annottext">== :: CodeFuncChunk -&gt; CodeFuncChunk -&gt; Bool
-</span><span class="hs-operator hs-var hs-var hs-var hs-var">==</span></span></span><span> </span><span id="local-6989586621679329142"><span class="annot"><span class="annottext">c2 :: CodeFuncChunk
-</span><a href="#local-6989586621679329142"><span class="hs-identifier hs-var">c2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeFuncChunk
-</span><a href="#local-6989586621679329144"><span class="hs-identifier hs-var">c1</span></a></span><span> </span><span class="annot"><span class="annottext">CodeFuncChunk -&gt; Getting String CodeFuncChunk String -&gt; String
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting String CodeFuncChunk String
-forall c. HasUID c =&gt; Lens' c String
-</span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; Bool
-forall a. Eq a =&gt; a -&gt; a -&gt; Bool
-</span><span class="hs-operator hs-var">==</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeFuncChunk
-</span><a href="#local-6989586621679329142"><span class="hs-identifier hs-var">c2</span></a></span><span> </span><span class="annot"><span class="annottext">CodeFuncChunk -&gt; Getting String CodeFuncChunk String -&gt; String
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting String CodeFuncChunk String
-forall c. HasUID c =&gt; Lens' c String
-</span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span>
-</span><span id="line-120"></span><span class="hs-comment">-- | Finds the units of the 'CodeChunk' used to make the 'CodeFuncChunk'.</span><span>
-</span><span id="line-121"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MayHaveUnit</span></span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeFuncChunk"><span class="hs-identifier hs-type">CodeFuncChunk</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679329140"><span class="annot"><span class="annottext">getUnit :: CodeFuncChunk -&gt; Maybe UnitDefn
-</span><a href="#local-6989586621679329140"><span class="hs-identifier hs-var hs-var hs-var hs-var">getUnit</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeChunk -&gt; Maybe UnitDefn
-forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
-</span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">(CodeChunk -&gt; Maybe UnitDefn)
--&gt; (CodeFuncChunk -&gt; CodeChunk) -&gt; CodeFuncChunk -&gt; Maybe UnitDefn
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">Getting CodeChunk CodeFuncChunk CodeChunk
--&gt; CodeFuncChunk -&gt; CodeChunk
-forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
-</span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting CodeChunk CodeFuncChunk CodeChunk
-Iso' CodeFuncChunk CodeChunk
-</span><a href="Language.Drasil.Chunk.Code.html#ccf"><span class="hs-identifier hs-var">ccf</span></a></span><span>
-</span><span id="line-122"></span><span>
-</span><span id="line-123"></span><span class="hs-comment">-- | Construct a 'CodeVarChunk' from a 'Quantity'.</span><span>
-</span><span id="line-124"></span><span id="local-6989586621679329301"><span class="annot"><a href="Language.Drasil.Chunk.Code.html#quantvar"><span class="hs-identifier hs-type">quantvar</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679329301"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MayHaveUnit</span></span><span> </span><span class="annot"><a href="#local-6989586621679329301"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679329301"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span></span><span>
-</span><span id="line-125"></span><span id="quantvar"><span class="annot"><span class="annottext">quantvar :: c -&gt; CodeVarChunk
-</span><a href="Language.Drasil.Chunk.Code.html#quantvar"><span class="hs-identifier hs-var hs-var">quantvar</span></a></span></span><span> </span><span id="local-6989586621679329139"><span class="annot"><span class="annottext">c :: c
-</span><a href="#local-6989586621679329139"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeChunk -&gt; Maybe CodeChunk -&gt; CodeVarChunk
-</span><a href="Language.Drasil.Chunk.Code.html#CodeVC"><span class="hs-identifier hs-var">CodeVC</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; VarOrFunc -&gt; CodeChunk
-</span><a href="Language.Drasil.Chunk.Code.html#CodeC"><span class="hs-identifier hs-var">CodeC</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">c -&gt; QuantityDict
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679329139"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">VarOrFunc
-</span><a href="Language.Drasil.Chunk.Code.html#Var"><span class="hs-identifier hs-var">Var</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Maybe CodeChunk
-forall a. Maybe a
-</span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-126"></span><span>
-</span><span id="line-127"></span><span class="hs-comment">-- | Construct a 'CodeFuncChunk' from a 'Quantity'.</span><span>
-</span><span id="line-128"></span><span id="local-6989586621679329300"><span class="annot"><a href="Language.Drasil.Chunk.Code.html#quantfunc"><span class="hs-identifier hs-type">quantfunc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679329300"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MayHaveUnit</span></span><span> </span><span class="annot"><a href="#local-6989586621679329300"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679329300"><span class="hs-identifier hs-type">c</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeFuncChunk"><span class="hs-identifier hs-type">CodeFuncChunk</span></a></span></span><span>
-</span><span id="line-129"></span><span id="quantfunc"><span class="annot"><span class="annottext">quantfunc :: c -&gt; CodeFuncChunk
-</span><a href="Language.Drasil.Chunk.Code.html#quantfunc"><span class="hs-identifier hs-var hs-var">quantfunc</span></a></span></span><span> </span><span id="local-6989586621679329137"><span class="annot"><span class="annottext">c :: c
-</span><a href="#local-6989586621679329137"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeChunk -&gt; CodeFuncChunk
-</span><a href="Language.Drasil.Chunk.Code.html#CodeFC"><span class="hs-identifier hs-var">CodeFC</span></a></span><span> </span><span class="annot"><span class="annottext">(CodeChunk -&gt; CodeFuncChunk) -&gt; CodeChunk -&gt; CodeFuncChunk
-forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; VarOrFunc -&gt; CodeChunk
-</span><a href="Language.Drasil.Chunk.Code.html#CodeC"><span class="hs-identifier hs-var">CodeC</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">c -&gt; QuantityDict
-forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679329137"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">VarOrFunc
-</span><a href="Language.Drasil.Chunk.Code.html#Func"><span class="hs-identifier hs-var">Func</span></a></span><span>
-</span><span id="line-130"></span><span>
-</span><span id="line-131"></span><span class="hs-comment">-- | Combine an Object-type 'CodeChunk' with another 'CodeChunk' to create a new </span><span>
-</span><span id="line-132"></span><span class="hs-comment">-- 'CodeChunk' which represents a field of the first. ex. @ccObjVar obj f = obj.f@.</span><span>
-</span><span id="line-133"></span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#ccObjVar"><span class="hs-identifier hs-type">ccObjVar</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span><span>
-</span><span id="line-134"></span><span id="ccObjVar"><span class="annot"><span class="annottext">ccObjVar :: CodeVarChunk -&gt; CodeVarChunk -&gt; CodeVarChunk
-</span><a href="Language.Drasil.Chunk.Code.html#ccObjVar"><span class="hs-identifier hs-var hs-var">ccObjVar</span></a></span></span><span> </span><span id="local-6989586621679329136"><span class="annot"><span class="annottext">c1 :: CodeVarChunk
-</span><a href="#local-6989586621679329136"><span class="hs-identifier hs-var">c1</span></a></span></span><span> </span><span id="local-6989586621679329135"><span class="annot"><span class="annottext">c2 :: CodeVarChunk
-</span><a href="#local-6989586621679329135"><span class="hs-identifier hs-var">c2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Space -&gt; CodeVarChunk
-</span><a href="#local-6989586621679329134"><span class="hs-identifier hs-var">checkObj</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679329136"><span class="hs-identifier hs-var">c1</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Getting Space CodeVarChunk Space -&gt; Space
+</span><span class="hs-identifier hs-var">ccf</span></span><span> </span><span class="annot"><span class="annottext">CodeFuncChunk
+</span><a href="#local-6989586621679319745"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">VarOrFunc
+</span><span class="hs-identifier hs-var">Func</span></span><span>
+</span><span id="line-33"></span><span>
+</span><span id="line-34"></span><span class="hs-comment">-- | Combine an Object-type 'CodeChunk' with another 'CodeChunk' to create a new </span><span>
+</span><span id="line-35"></span><span class="hs-comment">-- 'CodeChunk' which represents a field of the first. ex. @ccObjVar obj f = obj.f@.</span><span>
+</span><span id="line-36"></span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#ccObjVar"><span class="hs-identifier hs-type">ccObjVar</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span>
+</span><span id="line-37"></span><span id="ccObjVar"><span class="annot"><span class="annottext">ccObjVar :: CodeVarChunk -&gt; CodeVarChunk -&gt; CodeVarChunk
+</span><a href="Language.Drasil.Chunk.Code.html#ccObjVar"><span class="hs-identifier hs-var hs-var">ccObjVar</span></a></span></span><span> </span><span id="local-6989586621679319743"><span class="annot"><span class="annottext">c1 :: CodeVarChunk
+</span><a href="#local-6989586621679319743"><span class="hs-identifier hs-var">c1</span></a></span></span><span> </span><span id="local-6989586621679319742"><span class="annot"><span class="annottext">c2 :: CodeVarChunk
+</span><a href="#local-6989586621679319742"><span class="hs-identifier hs-var">c2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Space -&gt; CodeVarChunk
+</span><a href="#local-6989586621679319741"><span class="hs-identifier hs-var">checkObj</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk
+</span><a href="#local-6989586621679319743"><span class="hs-identifier hs-var">c1</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Getting Space CodeVarChunk Space -&gt; Space
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting Space CodeVarChunk Space
 forall c. HasSpace c =&gt; Lens' c Space
 </span><span class="hs-identifier hs-var">typ</span></span><span class="hs-special">)</span><span>
-</span><span id="line-135"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679329134"><span class="annot"><span class="annottext">checkObj :: Space -&gt; CodeVarChunk
-</span><a href="#local-6989586621679329134"><span class="hs-identifier hs-var hs-var">checkObj</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Actor</span></span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeChunk -&gt; Maybe CodeChunk -&gt; CodeVarChunk
-</span><a href="Language.Drasil.Chunk.Code.html#CodeVC"><span class="hs-identifier hs-var">CodeVC</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk -&gt; CodeChunk
+</span><span id="line-38"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679319741"><span class="annot"><span class="annottext">checkObj :: Space -&gt; CodeVarChunk
+</span><a href="#local-6989586621679319741"><span class="hs-identifier hs-var hs-var">checkObj</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Actor</span></span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeChunk -&gt; Maybe CodeChunk -&gt; CodeVarChunk
+</span><span class="hs-identifier hs-var">CodeVC</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk -&gt; CodeChunk
 forall c. CodeIdea c =&gt; c -&gt; CodeChunk
-</span><a href="Language.Drasil.Chunk.Code.html#codeChunk"><span class="hs-identifier hs-var">codeChunk</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679329135"><span class="hs-identifier hs-var">c2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeChunk -&gt; Maybe CodeChunk
+</span><span class="hs-identifier hs-var">codeChunk</span></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
+</span><a href="#local-6989586621679319742"><span class="hs-identifier hs-var">c2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeChunk -&gt; Maybe CodeChunk
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">(CodeChunk -&gt; Maybe CodeChunk) -&gt; CodeChunk -&gt; Maybe CodeChunk
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; CodeChunk
 forall c. CodeIdea c =&gt; c -&gt; CodeChunk
-</span><a href="Language.Drasil.Chunk.Code.html#codeChunk"><span class="hs-identifier hs-var">codeChunk</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679329136"><span class="hs-identifier hs-var">c1</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-136"></span><span>        </span><span class="annot"><a href="#local-6989586621679329134"><span class="hs-identifier hs-var">checkObj</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; CodeVarChunk
+</span><span class="hs-identifier hs-var">codeChunk</span></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
+</span><a href="#local-6989586621679319743"><span class="hs-identifier hs-var">c1</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-39"></span><span>        </span><span class="annot"><a href="#local-6989586621679319741"><span class="hs-identifier hs-var">checkObj</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; CodeVarChunk
 forall a. HasCallStack =&gt; String -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="hs-string">&quot;First CodeChunk passed to ccObjVar must have Actor space&quot;</span></span><span>
-</span><span id="line-137"></span><span>
-</span><span id="line-138"></span><span class="hs-comment">-- | Get a list of 'CodeChunk's from an equation.</span><span>
-</span><span id="line-139"></span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#codevars"><span class="hs-identifier hs-type">codevars</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-140"></span><span id="codevars"><span class="annot"><span class="annottext">codevars :: Expr -&gt; ChunkDB -&gt; [CodeVarChunk]
-</span><a href="Language.Drasil.Chunk.Code.html#codevars"><span class="hs-identifier hs-var hs-var">codevars</span></a></span></span><span> </span><span id="local-6989586621679329131"><span class="annot"><span class="annottext">e :: Expr
-</span><a href="#local-6989586621679329131"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span id="local-6989586621679329130"><span class="annot"><span class="annottext">m :: ChunkDB
-</span><a href="#local-6989586621679329130"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(String -&gt; CodeVarChunk) -&gt; [String] -&gt; [CodeVarChunk]
-forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB -&gt; String -&gt; CodeVarChunk
-</span><a href="Language.Drasil.Chunk.Code.html#varResolve"><span class="hs-identifier hs-var">varResolve</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679329130"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([String] -&gt; [CodeVarChunk]) -&gt; [String] -&gt; [CodeVarChunk]
-forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; [String]
-</span><span class="hs-identifier hs-var">eDep</span></span><span> </span><span class="annot"><span class="annottext">Expr
-</span><a href="#local-6989586621679329131"><span class="hs-identifier hs-var">e</span></a></span><span>
-</span><span id="line-141"></span><span>
-</span><span id="line-142"></span><span class="hs-comment">-- | Get a list of 'CodeChunk's from an equation (no functions).</span><span>
-</span><span id="line-143"></span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#codevars%27"><span class="hs-identifier hs-type">codevars'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-144"></span><span id="codevars%27"><span class="annot"><span class="annottext">codevars' :: Expr -&gt; ChunkDB -&gt; [CodeVarChunk]
-</span><a href="Language.Drasil.Chunk.Code.html#codevars%27"><span class="hs-identifier hs-var hs-var">codevars'</span></a></span></span><span> </span><span id="local-6989586621679329128"><span class="annot"><span class="annottext">e :: Expr
-</span><a href="#local-6989586621679329128"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span id="local-6989586621679329127"><span class="annot"><span class="annottext">m :: ChunkDB
-</span><a href="#local-6989586621679329127"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(String -&gt; CodeVarChunk) -&gt; [String] -&gt; [CodeVarChunk]
-forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB -&gt; String -&gt; CodeVarChunk
-</span><a href="Language.Drasil.Chunk.Code.html#varResolve"><span class="hs-identifier hs-var">varResolve</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679329127"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([String] -&gt; [CodeVarChunk]) -&gt; [String] -&gt; [CodeVarChunk]
-forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[String] -&gt; [String]
-forall a. Eq a =&gt; [a] -&gt; [a]
-</span><span class="hs-identifier hs-var">nub</span></span><span> </span><span class="annot"><span class="annottext">([String] -&gt; [String]) -&gt; [String] -&gt; [String]
-forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; [String]
-</span><span class="hs-identifier hs-var">eNames'</span></span><span> </span><span class="annot"><span class="annottext">Expr
-</span><a href="#local-6989586621679329128"><span class="hs-identifier hs-var">e</span></a></span><span>
-</span><span id="line-145"></span><span>
-</span><span id="line-146"></span><span class="hs-comment">-- | Make a 'CodeVarChunk' from a 'UID' in the 'ChunkDB'.</span><span>
-</span><span id="line-147"></span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#varResolve"><span class="hs-identifier hs-type">varResolve</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span><span>
-</span><span id="line-148"></span><span id="varResolve"><span class="annot"><span class="annottext">varResolve :: ChunkDB -&gt; String -&gt; CodeVarChunk
-</span><a href="Language.Drasil.Chunk.Code.html#varResolve"><span class="hs-identifier hs-var hs-var">varResolve</span></a></span></span><span>  </span><span id="local-6989586621679329124"><span class="annot"><span class="annottext">m :: ChunkDB
-</span><a href="#local-6989586621679329124"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span id="local-6989586621679329123"><span class="annot"><span class="annottext">x :: String
-</span><a href="#local-6989586621679329123"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; CodeVarChunk
-forall c. (Quantity c, MayHaveUnit c) =&gt; c -&gt; CodeVarChunk
-</span><a href="Language.Drasil.Chunk.Code.html#quantvar"><span class="hs-identifier hs-var">quantvar</span></a></span><span> </span><span class="annot"><span class="annottext">(QuantityDict -&gt; CodeVarChunk) -&gt; QuantityDict -&gt; CodeVarChunk
-forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; String -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">symbResolve</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679329124"><span class="hs-identifier hs-var">m</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679329123"><span class="hs-identifier hs-var">x</span></a></span><span>
-</span><span id="line-149"></span><span>
-</span><span id="line-150"></span><span class="hs-comment">-- | Make a 'CodeFuncChunk' from a 'UID' in the 'ChunkDB'.</span><span>
-</span><span id="line-151"></span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#funcResolve"><span class="hs-identifier hs-type">funcResolve</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeFuncChunk"><span class="hs-identifier hs-type">CodeFuncChunk</span></a></span><span>
-</span><span id="line-152"></span><span id="funcResolve"><span class="annot"><span class="annottext">funcResolve :: ChunkDB -&gt; String -&gt; CodeFuncChunk
-</span><a href="Language.Drasil.Chunk.Code.html#funcResolve"><span class="hs-identifier hs-var hs-var">funcResolve</span></a></span></span><span> </span><span id="local-6989586621679329122"><span class="annot"><span class="annottext">m :: ChunkDB
-</span><a href="#local-6989586621679329122"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span id="local-6989586621679329121"><span class="annot"><span class="annottext">x :: String
-</span><a href="#local-6989586621679329121"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; CodeFuncChunk
-forall c. (Quantity c, MayHaveUnit c) =&gt; c -&gt; CodeFuncChunk
-</span><a href="Language.Drasil.Chunk.Code.html#quantfunc"><span class="hs-identifier hs-var">quantfunc</span></a></span><span> </span><span class="annot"><span class="annottext">(QuantityDict -&gt; CodeFuncChunk) -&gt; QuantityDict -&gt; CodeFuncChunk
-forall a b. (a -&gt; b) -&gt; a -&gt; b
-</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; String -&gt; QuantityDict
-</span><span class="hs-identifier hs-var">symbResolve</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
-</span><a href="#local-6989586621679329122"><span class="hs-identifier hs-var">m</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679329121"><span class="hs-identifier hs-var">x</span></a></span><span>
-</span><span id="line-153"></span><span>
-</span><span id="line-154"></span><span class="hs-comment">-- Changes a 'CodeVarChunk'\'s space from 'Vect' to 'Array'.</span><span>
-</span><span id="line-155"></span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#listToArray"><span class="hs-identifier hs-type">listToArray</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#CodeVarChunk"><span class="hs-identifier hs-type">CodeVarChunk</span></a></span><span>
-</span><span id="line-156"></span><span id="listToArray"><span class="annot"><span class="annottext">listToArray :: CodeVarChunk -&gt; CodeVarChunk
-</span><a href="Language.Drasil.Chunk.Code.html#listToArray"><span class="hs-identifier hs-var hs-var">listToArray</span></a></span></span><span> </span><span id="local-6989586621679329120"><span class="annot"><span class="annottext">c :: CodeVarChunk
-</span><a href="#local-6989586621679329120"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Space -&gt; CodeVarChunk
-</span><a href="#local-6989586621679329119"><span class="hs-identifier hs-var">newSpc</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679329120"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Getting Space CodeVarChunk Space -&gt; Space
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting Space CodeVarChunk Space
-forall c. HasSpace c =&gt; Lens' c Space
-</span><span class="hs-identifier hs-var">typ</span></span><span class="hs-special">)</span><span> </span><span>
-</span><span id="line-157"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679329119"><span class="annot"><span class="annottext">newSpc :: Space -&gt; CodeVarChunk
-</span><a href="#local-6989586621679329119"><span class="hs-identifier hs-var hs-var">newSpc</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Vect</span></span><span> </span><span id="local-6989586621679329117"><span class="annot"><span class="annottext">t :: Space
-</span><a href="#local-6989586621679329117"><span class="hs-identifier hs-var">t</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeChunk -&gt; Maybe CodeChunk -&gt; CodeVarChunk
-</span><a href="Language.Drasil.Chunk.Code.html#CodeVC"><span class="hs-identifier hs-var">CodeVC</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; VarOrFunc -&gt; CodeChunk
-</span><a href="Language.Drasil.Chunk.Code.html#CodeC"><span class="hs-identifier hs-var">CodeC</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
--&gt; NP
--&gt; Maybe String
--&gt; Space
--&gt; Symbol
--&gt; Maybe UnitDefn
--&gt; QuantityDict
-</span><span class="hs-identifier hs-var">implVar'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679329120"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Getting String CodeVarChunk String -&gt; String
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting String CodeVarChunk String
-forall c. HasUID c =&gt; Lens' c String
-</span><span class="hs-identifier hs-var">uid</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
-forall a. [a] -&gt; [a] -&gt; [a]
-</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;_array&quot;</span></span><span class="hs-special">)</span><span> </span><span>
-</span><span id="line-158"></span><span>          </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679329120"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Getting NP CodeVarChunk NP -&gt; NP
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting NP CodeVarChunk NP
-forall c. NamedIdea c =&gt; Lens' c NP
-</span><span class="hs-identifier hs-var">term</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Maybe String
-forall c. Idea c =&gt; c -&gt; Maybe String
-</span><span class="hs-identifier hs-var">getA</span></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679329120"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Space -&gt; Space
-</span><span class="hs-identifier hs-var">Array</span></span><span> </span><span class="annot"><span class="annottext">Space
-</span><a href="#local-6989586621679329117"><span class="hs-identifier hs-var">t</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Stage -&gt; Symbol
-forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
-</span><span class="hs-identifier hs-var">symbol</span></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679329120"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">Stage
-</span><span class="hs-identifier hs-var">Implementation</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Maybe UnitDefn
-forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
-</span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679329120"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span>
-</span><span id="line-159"></span><span>          </span><span class="annot"><span class="annottext">VarOrFunc
-</span><a href="Language.Drasil.Chunk.Code.html#Var"><span class="hs-identifier hs-var">Var</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679329120"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
--&gt; Getting (Maybe CodeChunk) CodeVarChunk (Maybe CodeChunk)
--&gt; Maybe CodeChunk
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting (Maybe CodeChunk) CodeVarChunk (Maybe CodeChunk)
-Lens' CodeVarChunk (Maybe CodeChunk)
-</span><a href="Language.Drasil.Chunk.Code.html#obv"><span class="hs-identifier hs-var">obv</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-160"></span><span>        </span><span class="annot"><a href="#local-6989586621679329119"><span class="hs-identifier hs-var">newSpc</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679329120"><span class="hs-identifier hs-var">c</span></a></span><span>
-</span><span id="line-161"></span><span>
-</span><span id="line-162"></span><span class="hs-comment">-- | Constraints map. Contains all 'Constraint's.</span><span>
-</span><span id="line-163"></span><span class="hs-keyword">type</span><span> </span><span id="ConstraintMap"><span class="annot"><a href="Language.Drasil.Chunk.Code.html#ConstraintMap"><span class="hs-identifier hs-var">ConstraintMap</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Map.Map</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Constraint</span></span><span class="hs-special">]</span><span>
-</span><span id="line-164"></span><span>
-</span><span id="line-165"></span><span class="hs-comment">-- | Creates a map from 'UID' to 'Constraint's for constrained chunks.</span><span>
-</span><span id="line-166"></span><span id="local-6989586621679329113"><span class="annot"><a href="Language.Drasil.Chunk.Code.html#constraintMap"><span class="hs-identifier hs-type">constraintMap</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span> </span><span class="annot"><a href="#local-6989586621679329113"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Constrained</span></span><span> </span><span class="annot"><a href="#local-6989586621679329113"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="#local-6989586621679329113"><span class="hs-identifier hs-type">c</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#ConstraintMap"><span class="hs-identifier hs-type">ConstraintMap</span></a></span></span><span>
-</span><span id="line-167"></span><span id="constraintMap"><span class="annot"><span class="annottext">constraintMap :: [c] -&gt; ConstraintMap
-</span><a href="Language.Drasil.Chunk.Code.html#constraintMap"><span class="hs-identifier hs-var hs-var">constraintMap</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[(String, [Constraint])] -&gt; ConstraintMap
-forall k a. Ord k =&gt; [(k, a)] -&gt; Map k a
-</span><span class="hs-identifier hs-var">Map.fromList</span></span><span> </span><span class="annot"><span class="annottext">([(String, [Constraint])] -&gt; ConstraintMap)
--&gt; ([c] -&gt; [(String, [Constraint])]) -&gt; [c] -&gt; ConstraintMap
-forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
-</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(c -&gt; (String, [Constraint])) -&gt; [c] -&gt; [(String, [Constraint])]
-forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
-</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679329111"><span class="annot"><span class="annottext">x :: c
-</span><a href="#local-6989586621679329111"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679329111"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">c -&gt; Getting String c String -&gt; String
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting String c String
-forall c. HasUID c =&gt; Lens' c String
-</span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">c
-</span><a href="#local-6989586621679329111"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">c -&gt; Getting [Constraint] c [Constraint] -&gt; [Constraint]
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting [Constraint] c [Constraint]
-forall c. Constrained c =&gt; Lens' c [Constraint]
-</span><span class="hs-identifier hs-var">constraints</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-168"></span><span>
-</span><span id="line-169"></span><span class="hs-comment">-- | Returns a pair of a chunk and its physical constraints.</span><span>
-</span><span id="line-170"></span><span id="local-6989586621679329109"><span class="annot"><a href="Language.Drasil.Chunk.Code.html#physLookup"><span class="hs-identifier hs-type">physLookup</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span> </span><span class="annot"><a href="#local-6989586621679329109"><span class="hs-identifier hs-type">q</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#ConstraintMap"><span class="hs-identifier hs-type">ConstraintMap</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679329109"><span class="hs-identifier hs-type">q</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679329109"><span class="hs-identifier hs-type">q</span></a></span><span class="hs-special">,</span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Constraint</span></span><span class="hs-special">]</span><span class="hs-special">)</span></span><span>
-</span><span id="line-171"></span><span id="physLookup"><span class="annot"><span class="annottext">physLookup :: ConstraintMap -&gt; q -&gt; (q, [Constraint])
-</span><a href="Language.Drasil.Chunk.Code.html#physLookup"><span class="hs-identifier hs-var hs-var">physLookup</span></a></span></span><span> </span><span id="local-6989586621679329108"><span class="annot"><span class="annottext">m :: ConstraintMap
-</span><a href="#local-6989586621679329108"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span id="local-6989586621679329107"><span class="annot"><span class="annottext">q :: q
-</span><a href="#local-6989586621679329107"><span class="hs-identifier hs-var">q</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">q
--&gt; ConstraintMap
--&gt; ([Constraint] -&gt; [Constraint])
--&gt; (q, [Constraint])
-forall q.
-HasUID q =&gt;
-q
--&gt; ConstraintMap
--&gt; ([Constraint] -&gt; [Constraint])
--&gt; (q, [Constraint])
-</span><a href="Language.Drasil.Chunk.Code.html#constraintLookup%27"><span class="hs-identifier hs-var">constraintLookup'</span></a></span><span> </span><span class="annot"><span class="annottext">q
-</span><a href="#local-6989586621679329107"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">ConstraintMap
-</span><a href="#local-6989586621679329108"><span class="hs-identifier hs-var">m</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Constraint -&gt; Bool) -&gt; [Constraint] -&gt; [Constraint]
-forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
-</span><span class="hs-identifier hs-var">filter</span></span><span> </span><span class="annot"><span class="annottext">Constraint -&gt; Bool
-</span><span class="hs-identifier hs-var">isPhysC</span></span><span class="hs-special">)</span><span>
-</span><span id="line-172"></span><span>
-</span><span id="line-173"></span><span class="hs-comment">-- | Returns a pair of a chunk and its software constraints.</span><span>
-</span><span id="line-174"></span><span id="local-6989586621679329104"><span class="annot"><a href="Language.Drasil.Chunk.Code.html#sfwrLookup"><span class="hs-identifier hs-type">sfwrLookup</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span> </span><span class="annot"><a href="#local-6989586621679329104"><span class="hs-identifier hs-type">q</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#ConstraintMap"><span class="hs-identifier hs-type">ConstraintMap</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679329104"><span class="hs-identifier hs-type">q</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679329104"><span class="hs-identifier hs-type">q</span></a></span><span class="hs-special">,</span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Constraint</span></span><span class="hs-special">]</span><span class="hs-special">)</span></span><span>
-</span><span id="line-175"></span><span id="sfwrLookup"><span class="annot"><span class="annottext">sfwrLookup :: ConstraintMap -&gt; q -&gt; (q, [Constraint])
-</span><a href="Language.Drasil.Chunk.Code.html#sfwrLookup"><span class="hs-identifier hs-var hs-var">sfwrLookup</span></a></span></span><span> </span><span id="local-6989586621679329103"><span class="annot"><span class="annottext">m :: ConstraintMap
-</span><a href="#local-6989586621679329103"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span id="local-6989586621679329102"><span class="annot"><span class="annottext">q :: q
-</span><a href="#local-6989586621679329102"><span class="hs-identifier hs-var">q</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">q
--&gt; ConstraintMap
--&gt; ([Constraint] -&gt; [Constraint])
--&gt; (q, [Constraint])
-forall q.
-HasUID q =&gt;
-q
--&gt; ConstraintMap
--&gt; ([Constraint] -&gt; [Constraint])
--&gt; (q, [Constraint])
-</span><a href="Language.Drasil.Chunk.Code.html#constraintLookup%27"><span class="hs-identifier hs-var">constraintLookup'</span></a></span><span> </span><span class="annot"><span class="annottext">q
-</span><a href="#local-6989586621679329102"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">ConstraintMap
-</span><a href="#local-6989586621679329103"><span class="hs-identifier hs-var">m</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(Constraint -&gt; Bool) -&gt; [Constraint] -&gt; [Constraint]
-forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
-</span><span class="hs-identifier hs-var">filter</span></span><span> </span><span class="annot"><span class="annottext">Constraint -&gt; Bool
-</span><span class="hs-identifier hs-var">isSfwrC</span></span><span class="hs-special">)</span><span>
-</span><span id="line-176"></span><span>
-</span><span id="line-177"></span><span class="hs-comment">-- | Returns a chunk and a filtered list of its constraints.</span><span>
-</span><span id="line-178"></span><span id="local-6989586621679329289"><span class="annot"><a href="Language.Drasil.Chunk.Code.html#constraintLookup%27"><span class="hs-identifier hs-type">constraintLookup'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span> </span><span class="annot"><a href="#local-6989586621679329289"><span class="hs-identifier hs-type">q</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679329289"><span class="hs-identifier hs-type">q</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#ConstraintMap"><span class="hs-identifier hs-type">ConstraintMap</span></a></span><span>
-</span><span id="line-179"></span><span>                      </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Constraint</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Constraint</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="#local-6989586621679329289"><span class="hs-identifier hs-type">q</span></a></span><span> </span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Constraint</span></span><span class="hs-special">]</span><span class="hs-special">)</span></span><span>
-</span><span id="line-180"></span><span id="constraintLookup%27"><span class="annot"><span class="annottext">constraintLookup' :: q
--&gt; ConstraintMap
--&gt; ([Constraint] -&gt; [Constraint])
--&gt; (q, [Constraint])
-</span><a href="Language.Drasil.Chunk.Code.html#constraintLookup%27"><span class="hs-identifier hs-var hs-var">constraintLookup'</span></a></span></span><span> </span><span id="local-6989586621679329100"><span class="annot"><span class="annottext">q :: q
-</span><a href="#local-6989586621679329100"><span class="hs-identifier hs-var">q</span></a></span></span><span> </span><span id="local-6989586621679329099"><span class="annot"><span class="annottext">m :: ConstraintMap
-</span><a href="#local-6989586621679329099"><span class="hs-identifier hs-var">m</span></a></span></span><span> </span><span id="local-6989586621679329098"><span class="annot"><span class="annottext">filt :: [Constraint] -&gt; [Constraint]
-</span><a href="#local-6989586621679329098"><span class="hs-identifier hs-var">filt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">q
-</span><a href="#local-6989586621679329100"><span class="hs-identifier hs-var">q</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Constraint]
--&gt; ([Constraint] -&gt; [Constraint])
--&gt; Maybe [Constraint]
--&gt; [Constraint]
-forall b a. b -&gt; (a -&gt; b) -&gt; Maybe a -&gt; b
-</span><span class="hs-identifier hs-var">maybe</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[Constraint] -&gt; [Constraint]
-</span><a href="#local-6989586621679329098"><span class="hs-identifier hs-var">filt</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; ConstraintMap -&gt; Maybe [Constraint]
-forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
-</span><span class="hs-identifier hs-var">Map.lookup</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">q
-</span><a href="#local-6989586621679329100"><span class="hs-identifier hs-var">q</span></a></span><span class="annot"><span class="annottext">q -&gt; Getting String q String -&gt; String
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span class="annot"><span class="annottext">Getting String q String
-forall c. HasUID c =&gt; Lens' c String
-</span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ConstraintMap
-</span><a href="#local-6989586621679329099"><span class="hs-identifier hs-var">m</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
-</span><span id="line-181"></span></pre></body></html>
+</span><span id="line-40"></span></pre></body></html>

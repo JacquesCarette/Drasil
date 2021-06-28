@@ -43,7 +43,7 @@
 </span><span id="line-34"></span><span id="rf"><span id="notes"><span id="mk"><span id="imTerm"><span id="imOutput"><span id="imInputs"><span id="deri"><span class="hs-identifier">makeLenses</span><span> </span><span class="hs-special">''</span><span class="hs-identifier">InstanceModel</span></span></span></span></span></span></span></span><span>
 </span><span id="line-35"></span><span>
 </span><span id="line-36"></span><span class="hs-comment">-- | Finds the 'UID' of an 'InstanceModel'.</span><span>
-</span><span id="line-37"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span>             </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138073"><span class="annot"><span class="annottext">uid :: (String -&gt; f String) -&gt; InstanceModel -&gt; f InstanceModel
+</span><span id="line-37"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span>             </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138038"><span class="annot"><span class="annottext">uid :: (String -&gt; f String) -&gt; InstanceModel -&gt; f InstanceModel
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">uid</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ModelKinds -&gt; f ModelKinds) -&gt; InstanceModel -&gt; f InstanceModel
 Lens' InstanceModel ModelKinds
 </span><a href="Theory.Drasil.InstanceModel.html#mk"><span class="hs-identifier hs-var">mk</span></a></span><span> </span><span class="annot"><span class="annottext">((ModelKinds -&gt; f ModelKinds) -&gt; InstanceModel -&gt; f InstanceModel)
@@ -56,12 +56,12 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall c. HasUID c =&gt; Lens' c String
 </span><span class="hs-identifier hs-var">uid</span></span><span>
 </span><span id="line-38"></span><span class="hs-comment">-- | Finds the term ('NP') of the 'InstanceModel'.</span><span>
-</span><span id="line-39"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span>          </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138067"><span class="annot"><span class="annottext">term :: (NP -&gt; f NP) -&gt; InstanceModel -&gt; f InstanceModel
+</span><span id="line-39"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span>          </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138032"><span class="annot"><span class="annottext">term :: (NP -&gt; f NP) -&gt; InstanceModel -&gt; f InstanceModel
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">term</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(NP -&gt; f NP) -&gt; InstanceModel -&gt; f InstanceModel
 Lens' InstanceModel NP
 </span><a href="Theory.Drasil.InstanceModel.html#imTerm"><span class="hs-identifier hs-var">imTerm</span></a></span><span>
 </span><span id="line-40"></span><span class="hs-comment">-- | Finds the idea contained in the 'InstanceModel'.</span><span>
-</span><span id="line-41"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span>               </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138062"><span class="annot"><span class="annottext">getA :: InstanceModel -&gt; Maybe String
+</span><span id="line-41"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span>               </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138027"><span class="annot"><span class="annottext">getA :: InstanceModel -&gt; Maybe String
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">getA</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKinds -&gt; Maybe String
 forall c. Idea c =&gt; c -&gt; Maybe String
 </span><span class="hs-identifier hs-var">getA</span></span><span> </span><span class="annot"><span class="annottext">(ModelKinds -&gt; Maybe String)
@@ -74,7 +74,7 @@ forall s a. s -&gt; Getting a s a -&gt; a
 Lens' InstanceModel ModelKinds
 </span><a href="Theory.Drasil.InstanceModel.html#mk"><span class="hs-identifier hs-var">mk</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-42"></span><span class="hs-comment">-- | Finds the definition of the 'InstanceModel'.</span><span>
-</span><span id="line-43"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Definition</span></span><span>         </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138058"><span class="annot"><span class="annottext">defn :: (Sentence -&gt; f Sentence) -&gt; InstanceModel -&gt; f InstanceModel
+</span><span id="line-43"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Definition</span></span><span>         </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138023"><span class="annot"><span class="annottext">defn :: (Sentence -&gt; f Sentence) -&gt; InstanceModel -&gt; f InstanceModel
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">defn</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ModelKinds -&gt; f ModelKinds) -&gt; InstanceModel -&gt; f InstanceModel
 Lens' InstanceModel ModelKinds
 </span><a href="Theory.Drasil.InstanceModel.html#mk"><span class="hs-identifier hs-var">mk</span></a></span><span> </span><span class="annot"><span class="annottext">((ModelKinds -&gt; f ModelKinds) -&gt; InstanceModel -&gt; f InstanceModel)
@@ -87,7 +87,7 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall c. Definition c =&gt; Lens' c Sentence
 </span><span class="hs-identifier hs-var">defn</span></span><span>
 </span><span id="line-44"></span><span class="hs-comment">-- | Finds the domain of the 'InstanceModel'.</span><span>
-</span><span id="line-45"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptDomain</span></span><span>      </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138054"><span class="annot"><span class="annottext">cdom :: InstanceModel -&gt; [String]
+</span><span id="line-45"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptDomain</span></span><span>      </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138019"><span class="annot"><span class="annottext">cdom :: InstanceModel -&gt; [String]
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">cdom</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKinds -&gt; [String]
 forall c. ConceptDomain c =&gt; c -&gt; [String]
 </span><span class="hs-identifier hs-var">cdom</span></span><span> </span><span class="annot"><span class="annottext">(ModelKinds -&gt; [String])
@@ -100,7 +100,7 @@ forall s a. s -&gt; Getting a s a -&gt; a
 Lens' InstanceModel ModelKinds
 </span><a href="Theory.Drasil.InstanceModel.html#mk"><span class="hs-identifier hs-var">mk</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-46"></span><span class="hs-comment">-- | Converts the 'InstanceModel's related expression into the display language.</span><span>
-</span><span id="line-47"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Display</span></span><span>            </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138050"><span class="annot"><span class="annottext">toDispExpr :: InstanceModel -&gt; DisplayExpr
+</span><span id="line-47"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Display</span></span><span>            </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138015"><span class="annot"><span class="annottext">toDispExpr :: InstanceModel -&gt; DisplayExpr
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">toDispExpr</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKinds -&gt; DisplayExpr
 forall c. Display c =&gt; c -&gt; DisplayExpr
 </span><span class="hs-identifier hs-var">toDispExpr</span></span><span> </span><span class="annot"><span class="annottext">(ModelKinds -&gt; DisplayExpr)
@@ -113,66 +113,66 @@ forall s a. s -&gt; Getting a s a -&gt; a
 Lens' InstanceModel ModelKinds
 </span><a href="Theory.Drasil.InstanceModel.html#mk"><span class="hs-identifier hs-var">mk</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-48"></span><span class="hs-comment">-- | Finds the derivation of the 'InstanceModel'. May contain Nothing.</span><span>
-</span><span id="line-49"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasDerivation</span></span><span>      </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138046"><span class="annot"><span class="annottext">derivations :: (Maybe Derivation -&gt; f (Maybe Derivation))
+</span><span id="line-49"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasDerivation</span></span><span>      </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138011"><span class="annot"><span class="annottext">derivations :: (Maybe Derivation -&gt; f (Maybe Derivation))
 -&gt; InstanceModel -&gt; f InstanceModel
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">derivations</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Maybe Derivation -&gt; f (Maybe Derivation))
 -&gt; InstanceModel -&gt; f InstanceModel
 Lens' InstanceModel (Maybe Derivation)
 </span><a href="Theory.Drasil.InstanceModel.html#deri"><span class="hs-identifier hs-var">deri</span></a></span><span>
 </span><span id="line-50"></span><span class="hs-comment">-- | Finds 'Reference's contained in the 'InstanceModel'.</span><span>
-</span><span id="line-51"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasReference</span></span><span>       </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138042"><span class="annot"><span class="annottext">getReferences :: ([Reference] -&gt; f [Reference]) -&gt; InstanceModel -&gt; f InstanceModel
+</span><span id="line-51"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasReference</span></span><span>       </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138007"><span class="annot"><span class="annottext">getReferences :: ([Reference] -&gt; f [Reference]) -&gt; InstanceModel -&gt; f InstanceModel
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">getReferences</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([Reference] -&gt; f [Reference]) -&gt; InstanceModel -&gt; f InstanceModel
 Lens' InstanceModel [Reference]
 </span><a href="Theory.Drasil.InstanceModel.html#rf"><span class="hs-identifier hs-var">rf</span></a></span><span>
 </span><span id="line-52"></span><span class="hs-comment">-- | Finds the 'ShortName' of the 'InstanceModel'.</span><span>
-</span><span id="line-53"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasShortName</span></span><span>       </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138038"><span class="annot"><span class="annottext">shortname :: InstanceModel -&gt; ShortName
+</span><span id="line-53"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasShortName</span></span><span>       </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138003"><span class="annot"><span class="annottext">shortname :: InstanceModel -&gt; ShortName
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">shortname</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">InstanceModel -&gt; ShortName
 </span><a href="Theory.Drasil.InstanceModel.html#lb"><span class="hs-identifier hs-var hs-var">lb</span></a></span><span>
 </span><span id="line-54"></span><span class="hs-comment">-- | Finds the reference address of the 'InstanceModel'.</span><span>
-</span><span id="line-55"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasRefAddress</span></span><span>      </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138034"><span class="annot"><span class="annottext">getRefAdd :: InstanceModel -&gt; String
+</span><span id="line-55"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasRefAddress</span></span><span>      </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137999"><span class="annot"><span class="annottext">getRefAdd :: InstanceModel -&gt; String
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">getRefAdd</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">InstanceModel -&gt; String
 </span><a href="Theory.Drasil.InstanceModel.html#ra"><span class="hs-identifier hs-var hs-var">ra</span></a></span><span>
 </span><span id="line-56"></span><span class="hs-comment">-- | Finds any additional notes for the 'InstanceModel'.</span><span>
-</span><span id="line-57"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasAdditionalNotes</span></span><span> </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138030"><span class="annot"><span class="annottext">getNotes :: ([Sentence] -&gt; f [Sentence]) -&gt; InstanceModel -&gt; f InstanceModel
+</span><span id="line-57"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasAdditionalNotes</span></span><span> </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137995"><span class="annot"><span class="annottext">getNotes :: ([Sentence] -&gt; f [Sentence]) -&gt; InstanceModel -&gt; f InstanceModel
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">getNotes</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; f [Sentence]) -&gt; InstanceModel -&gt; f InstanceModel
 Lens' InstanceModel [Sentence]
 </span><a href="Theory.Drasil.InstanceModel.html#notes"><span class="hs-identifier hs-var">notes</span></a></span><span>
 </span><span id="line-58"></span><span class="hs-comment">-- | 'InstanceModel's have an 'Quantity'.</span><span>
 </span><span id="line-59"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span>           </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span>
 </span><span id="line-60"></span><span class="hs-comment">-- | Finds the idea of an 'InstanceModel' (abbreviation).</span><span>
-</span><span id="line-61"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CommonIdea</span></span><span>         </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138021"><span class="annot"><span class="annottext">abrv :: InstanceModel -&gt; String
+</span><span id="line-61"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CommonIdea</span></span><span>         </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137986"><span class="annot"><span class="annottext">abrv :: InstanceModel -&gt; String
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">abrv</span></span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI -&gt; String
 forall c. CommonIdea c =&gt; c -&gt; String
 </span><span class="hs-identifier hs-var">abrv</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Data.Drasil.TheoryConcepts.html#inModel"><span class="hs-identifier hs-var">inModel</span></a></span><span>
 </span><span id="line-62"></span><span class="hs-comment">-- | Finds the reference address of an 'InstanceModel'.</span><span>
 </span><span id="line-63"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Referable</span></span><span>          </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-64"></span><span>  </span><span id="local-6989586621679138015"><span class="annot"><span class="annottext">refAdd :: InstanceModel -&gt; String
+</span><span id="line-64"></span><span>  </span><span id="local-6989586621679137980"><span class="annot"><span class="annottext">refAdd :: InstanceModel -&gt; String
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">refAdd</span></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">InstanceModel -&gt; String
 forall b. HasRefAddress b =&gt; b -&gt; String
 </span><span class="hs-identifier hs-var">getRefAdd</span></span><span>
-</span><span id="line-65"></span><span>  </span><span id="local-6989586621679138013"><span class="annot"><span class="annottext">renderRef :: InstanceModel -&gt; LblType
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">renderRef</span></span></span><span> </span><span id="local-6989586621679138011"><span class="annot"><span class="annottext">l :: InstanceModel
-</span><a href="#local-6989586621679138011"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IRefProg -&gt; String -&gt; LblType
+</span><span id="line-65"></span><span>  </span><span id="local-6989586621679137978"><span class="annot"><span class="annottext">renderRef :: InstanceModel -&gt; LblType
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">renderRef</span></span></span><span> </span><span id="local-6989586621679137976"><span class="annot"><span class="annottext">l :: InstanceModel
+</span><a href="#local-6989586621679137976"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IRefProg -&gt; String -&gt; LblType
 </span><span class="hs-identifier hs-var">RP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; IRefProg
 </span><span class="hs-identifier hs-var">prepend</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; IRefProg) -&gt; String -&gt; IRefProg
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel -&gt; String
 forall c. CommonIdea c =&gt; c -&gt; String
 </span><span class="hs-identifier hs-var">abrv</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel
-</span><a href="#local-6989586621679138011"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">InstanceModel -&gt; String
+</span><a href="#local-6989586621679137976"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">InstanceModel -&gt; String
 forall b. HasRefAddress b =&gt; b -&gt; String
 </span><span class="hs-identifier hs-var">getRefAdd</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel
-</span><a href="#local-6989586621679138011"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679137976"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-66"></span><span class="hs-comment">-- | Finds the inputs of an 'InstanceModel'.</span><span>
 </span><span id="line-67"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Theory.Drasil.Classes.html#HasInputs"><span class="hs-identifier hs-type">HasInputs</span></a></span><span>          </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-68"></span><span>  </span><span id="local-6989586621679138006"><span class="annot"><span class="annottext">inputs :: (Inputs -&gt; f Inputs) -&gt; InstanceModel -&gt; f InstanceModel
-</span><a href="#local-6989586621679138006"><span class="hs-identifier hs-var hs-var hs-var hs-var">inputs</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Inputs -&gt; f Inputs) -&gt; InstanceModel -&gt; f InstanceModel
+</span><span id="line-68"></span><span>  </span><span id="local-6989586621679137971"><span class="annot"><span class="annottext">inputs :: (Inputs -&gt; f Inputs) -&gt; InstanceModel -&gt; f InstanceModel
+</span><a href="#local-6989586621679137971"><span class="hs-identifier hs-var hs-var hs-var hs-var">inputs</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Inputs -&gt; f Inputs) -&gt; InstanceModel -&gt; f InstanceModel
 Lens' InstanceModel Inputs
 </span><a href="Theory.Drasil.InstanceModel.html#imInputs"><span class="hs-identifier hs-var">imInputs</span></a></span><span>
 </span><span id="line-69"></span><span class="hs-comment">-- | Finds the outputs and output constraints of an 'InstanceModel'.</span><span>
 </span><span id="line-70"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><a href="Theory.Drasil.Classes.html#HasOutput"><span class="hs-identifier hs-type">HasOutput</span></a></span><span>          </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-71"></span><span>  </span><span id="local-6989586621679138002"><span class="annot"><span class="annottext">output :: (Output -&gt; f Output) -&gt; InstanceModel -&gt; f InstanceModel
+</span><span id="line-71"></span><span>  </span><span id="local-6989586621679137967"><span class="annot"><span class="annottext">output :: (Output -&gt; f Output) -&gt; InstanceModel -&gt; f InstanceModel
 </span><a href="Theory.Drasil.Classes.html#output"><span class="hs-identifier hs-var hs-var hs-var hs-var">output</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((Output, OutputConstraints) -&gt; f (Output, OutputConstraints))
 -&gt; InstanceModel -&gt; f InstanceModel
 Lens' InstanceModel (Output, OutputConstraints)
@@ -188,7 +188,7 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 -&gt; (Output, OutputConstraints) -&gt; f (Output, OutputConstraints)
 forall s t a b. Field1 s t a b =&gt; Lens s t a b
 </span><span class="hs-identifier hs-var">_1</span></span><span>
-</span><span id="line-72"></span><span>  </span><span id="local-6989586621679138000"><span class="annot"><span class="annottext">out_constraints :: (OutputConstraints -&gt; f OutputConstraints)
+</span><span id="line-72"></span><span>  </span><span id="local-6989586621679137965"><span class="annot"><span class="annottext">out_constraints :: (OutputConstraints -&gt; f OutputConstraints)
 -&gt; InstanceModel -&gt; f InstanceModel
 </span><a href="Theory.Drasil.Classes.html#out_constraints"><span class="hs-identifier hs-var hs-var hs-var hs-var">out_constraints</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((Output, OutputConstraints) -&gt; f (Output, OutputConstraints))
 -&gt; InstanceModel -&gt; f InstanceModel
@@ -206,7 +206,7 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall s t a b. Field2 s t a b =&gt; Lens s t a b
 </span><span class="hs-identifier hs-var">_2</span></span><span>
 </span><span id="line-73"></span><span class="hs-comment">-- | Finds the output 'Symbol's of the 'InstanceModel'.</span><span>
-</span><span id="line-74"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasSymbol</span></span><span>          </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137996"><span class="annot"><span class="annottext">symbol :: InstanceModel -&gt; Stage -&gt; Symbol
+</span><span id="line-74"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasSymbol</span></span><span>          </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137961"><span class="annot"><span class="annottext">symbol :: InstanceModel -&gt; Stage -&gt; Symbol
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">symbol</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Output -&gt; Stage -&gt; Symbol
 forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
 </span><span class="hs-identifier hs-var">symbol</span></span><span> </span><span class="annot"><span class="annottext">(Output -&gt; Stage -&gt; Symbol)
@@ -218,7 +218,7 @@ forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
 forall c. HasOutput c =&gt; Lens' c Output
 </span><a href="Theory.Drasil.Classes.html#output"><span class="hs-identifier hs-var">output</span></a></span><span> </span><span class="hs-comment">-- ???</span><span>
 </span><span id="line-75"></span><span class="hs-comment">-- | Finds the output 'Space' of the 'InstanceModel'.</span><span>
-</span><span id="line-76"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasSpace</span></span><span>           </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137992"><span class="annot"><span class="annottext">typ :: (Space -&gt; f Space) -&gt; InstanceModel -&gt; f InstanceModel
+</span><span id="line-76"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasSpace</span></span><span>           </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137957"><span class="annot"><span class="annottext">typ :: (Space -&gt; f Space) -&gt; InstanceModel -&gt; f InstanceModel
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">typ</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Output -&gt; f Output) -&gt; InstanceModel -&gt; f InstanceModel
 forall c. HasOutput c =&gt; Lens' c Output
 </span><a href="Theory.Drasil.Classes.html#output"><span class="hs-identifier hs-var">output</span></a></span><span> </span><span class="annot"><span class="annottext">((Output -&gt; f Output) -&gt; InstanceModel -&gt; f InstanceModel)
@@ -231,7 +231,7 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall c. HasSpace c =&gt; Lens' c Space
 </span><span class="hs-identifier hs-var">typ</span></span><span>
 </span><span id="line-77"></span><span class="hs-comment">-- | Finds the units of the 'InstanceModel'.</span><span>
-</span><span id="line-78"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MayHaveUnit</span></span><span>        </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137988"><span class="annot"><span class="annottext">getUnit :: InstanceModel -&gt; Maybe UnitDefn
+</span><span id="line-78"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MayHaveUnit</span></span><span>        </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679137953"><span class="annot"><span class="annottext">getUnit :: InstanceModel -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">getUnit</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Output -&gt; Maybe UnitDefn
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">(Output -&gt; Maybe UnitDefn)
@@ -255,8 +255,8 @@ forall c. HasOutput c =&gt; Lens' c Output
 -&gt; String
 -&gt; [Sentence]
 -&gt; InstanceModel
-</span><a href="Theory.Drasil.InstanceModel.html#im"><span class="hs-identifier hs-var hs-var">im</span></a></span></span><span> </span><span id="local-6989586621679137986"><span class="annot"><span class="annottext">mkind :: ModelKinds
-</span><a href="#local-6989586621679137986"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKinds
+</span><a href="Theory.Drasil.InstanceModel.html#im"><span class="hs-identifier hs-var hs-var">im</span></a></span></span><span> </span><span id="local-6989586621679137951"><span class="annot"><span class="annottext">mkind :: ModelKinds
+</span><a href="#local-6989586621679137951"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKinds
 -&gt; NP
 -&gt; Inputs
 -&gt; Output
@@ -267,8 +267,8 @@ forall c. HasOutput c =&gt; Lens' c Output
 -&gt; [Sentence]
 -&gt; InstanceModel
 </span><a href="Theory.Drasil.InstanceModel.html#im%27"><span class="hs-identifier hs-var">im'</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKinds
-</span><a href="#local-6989586621679137986"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ModelKinds
-</span><a href="#local-6989586621679137986"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKinds -&gt; Getting NP ModelKinds NP -&gt; NP
+</span><a href="#local-6989586621679137951"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ModelKinds
+</span><a href="#local-6989586621679137951"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKinds -&gt; Getting NP ModelKinds NP -&gt; NP
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting NP ModelKinds NP
 forall c. NamedIdea c =&gt; Lens' c NP
@@ -285,8 +285,8 @@ forall c. NamedIdea c =&gt; Lens' c NP
 -&gt; String
 -&gt; [Sentence]
 -&gt; InstanceModel
-</span><a href="Theory.Drasil.InstanceModel.html#imNoDeriv"><span class="hs-identifier hs-var hs-var">imNoDeriv</span></a></span></span><span> </span><span id="local-6989586621679137985"><span class="annot"><span class="annottext">mkind :: ModelKinds
-</span><a href="#local-6989586621679137985"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKinds
+</span><a href="Theory.Drasil.InstanceModel.html#imNoDeriv"><span class="hs-identifier hs-var hs-var">imNoDeriv</span></a></span></span><span> </span><span id="local-6989586621679137950"><span class="annot"><span class="annottext">mkind :: ModelKinds
+</span><a href="#local-6989586621679137950"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKinds
 -&gt; NP
 -&gt; Inputs
 -&gt; Output
@@ -296,8 +296,8 @@ forall c. NamedIdea c =&gt; Lens' c NP
 -&gt; [Sentence]
 -&gt; InstanceModel
 </span><a href="Theory.Drasil.InstanceModel.html#imNoDeriv%27"><span class="hs-identifier hs-var">imNoDeriv'</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKinds
-</span><a href="#local-6989586621679137985"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ModelKinds
-</span><a href="#local-6989586621679137985"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKinds -&gt; Getting NP ModelKinds NP -&gt; NP
+</span><a href="#local-6989586621679137950"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ModelKinds
+</span><a href="#local-6989586621679137950"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKinds -&gt; Getting NP ModelKinds NP -&gt; NP
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting NP ModelKinds NP
 forall c. NamedIdea c =&gt; Lens' c NP
@@ -314,8 +314,8 @@ forall c. NamedIdea c =&gt; Lens' c NP
 -&gt; String
 -&gt; [Sentence]
 -&gt; InstanceModel
-</span><a href="Theory.Drasil.InstanceModel.html#imNoRefs"><span class="hs-identifier hs-var hs-var">imNoRefs</span></a></span></span><span> </span><span id="local-6989586621679137984"><span class="annot"><span class="annottext">mkind :: ModelKinds
-</span><a href="#local-6989586621679137984"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKinds
+</span><a href="Theory.Drasil.InstanceModel.html#imNoRefs"><span class="hs-identifier hs-var hs-var">imNoRefs</span></a></span></span><span> </span><span id="local-6989586621679137949"><span class="annot"><span class="annottext">mkind :: ModelKinds
+</span><a href="#local-6989586621679137949"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKinds
 -&gt; NP
 -&gt; Inputs
 -&gt; Output
@@ -325,8 +325,8 @@ forall c. NamedIdea c =&gt; Lens' c NP
 -&gt; [Sentence]
 -&gt; InstanceModel
 </span><a href="Theory.Drasil.InstanceModel.html#imNoRefs%27"><span class="hs-identifier hs-var">imNoRefs'</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKinds
-</span><a href="#local-6989586621679137984"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ModelKinds
-</span><a href="#local-6989586621679137984"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKinds -&gt; Getting NP ModelKinds NP -&gt; NP
+</span><a href="#local-6989586621679137949"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ModelKinds
+</span><a href="#local-6989586621679137949"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKinds -&gt; Getting NP ModelKinds NP -&gt; NP
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting NP ModelKinds NP
 forall c. NamedIdea c =&gt; Lens' c NP
@@ -342,8 +342,8 @@ forall c. NamedIdea c =&gt; Lens' c NP
 -&gt; String
 -&gt; [Sentence]
 -&gt; InstanceModel
-</span><a href="Theory.Drasil.InstanceModel.html#imNoDerivNoRefs"><span class="hs-identifier hs-var hs-var">imNoDerivNoRefs</span></a></span></span><span> </span><span id="local-6989586621679137983"><span class="annot"><span class="annottext">mkind :: ModelKinds
-</span><a href="#local-6989586621679137983"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKinds
+</span><a href="Theory.Drasil.InstanceModel.html#imNoDerivNoRefs"><span class="hs-identifier hs-var hs-var">imNoDerivNoRefs</span></a></span></span><span> </span><span id="local-6989586621679137948"><span class="annot"><span class="annottext">mkind :: ModelKinds
+</span><a href="#local-6989586621679137948"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKinds
 -&gt; NP
 -&gt; Inputs
 -&gt; Output
@@ -352,8 +352,8 @@ forall c. NamedIdea c =&gt; Lens' c NP
 -&gt; [Sentence]
 -&gt; InstanceModel
 </span><a href="Theory.Drasil.InstanceModel.html#imNoDerivNoRefs%27"><span class="hs-identifier hs-var">imNoDerivNoRefs'</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKinds
-</span><a href="#local-6989586621679137983"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ModelKinds
-</span><a href="#local-6989586621679137983"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKinds -&gt; Getting NP ModelKinds NP -&gt; NP
+</span><a href="#local-6989586621679137948"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ModelKinds
+</span><a href="#local-6989586621679137948"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKinds -&gt; Getting NP ModelKinds NP -&gt; NP
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting NP ModelKinds NP
 forall c. NamedIdea c =&gt; Lens' c NP
@@ -372,8 +372,8 @@ forall c. NamedIdea c =&gt; Lens' c NP
 -&gt; String
 -&gt; [Sentence]
 -&gt; InstanceModel
-</span><a href="Theory.Drasil.InstanceModel.html#im%27"><span class="hs-identifier hs-var hs-var">im'</span></a></span></span><span> </span><span id="local-6989586621679137982"><span class="annot"><span class="annottext">mkind :: ModelKinds
-</span><a href="#local-6989586621679137982"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-identifier">_</span><span>  </span><span class="hs-identifier">_</span><span> </span><span class="hs-identifier">_</span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-identifier">_</span><span>  </span><span class="hs-identifier">_</span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; [Sentence] -&gt; InstanceModel
+</span><a href="Theory.Drasil.InstanceModel.html#im%27"><span class="hs-identifier hs-var hs-var">im'</span></a></span></span><span> </span><span id="local-6989586621679137947"><span class="annot"><span class="annottext">mkind :: ModelKinds
+</span><a href="#local-6989586621679137947"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-identifier">_</span><span>  </span><span class="hs-identifier">_</span><span> </span><span class="hs-identifier">_</span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-identifier">_</span><span>  </span><span class="hs-identifier">_</span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; [Sentence] -&gt; InstanceModel
 forall a. HasCallStack =&gt; String -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; [Sentence] -&gt; InstanceModel)
 -&gt; String -&gt; [Sentence] -&gt; InstanceModel
@@ -381,22 +381,22 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Source field of &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">ModelKinds
-</span><a href="#local-6989586621679137982"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKinds -&gt; Getting String ModelKinds String -&gt; String
+</span><a href="#local-6989586621679137947"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKinds -&gt; Getting String ModelKinds String -&gt; String
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting String ModelKinds String
 forall c. HasUID c =&gt; Lens' c String
 </span><span class="hs-identifier hs-var">uid</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot; is empty&quot;</span></span><span>
-</span><span id="line-104"></span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#im%27"><span class="hs-identifier hs-var">im'</span></a></span><span> </span><span id="local-6989586621679137980"><span class="annot"><span class="annottext">mkind :: ModelKinds
-</span><a href="#local-6989586621679137980"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span id="local-6989586621679137979"><span class="annot"><span class="annottext">n :: NP
-</span><a href="#local-6989586621679137979"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679137978"><span class="annot"><span class="annottext">i :: Inputs
-</span><a href="#local-6989586621679137978"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span id="local-6989586621679137977"><span class="annot"><span class="annottext">o :: Output
-</span><a href="#local-6989586621679137977"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679137976"><span class="annot"><span class="annottext">oc :: OutputConstraints
-</span><a href="#local-6989586621679137976"><span class="hs-identifier hs-var">oc</span></a></span></span><span> </span><span id="local-6989586621679137975"><span class="annot"><span class="annottext">r :: [Reference]
-</span><a href="#local-6989586621679137975"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span id="local-6989586621679137974"><span class="annot"><span class="annottext">der :: Maybe Derivation
-</span><a href="#local-6989586621679137974"><span class="hs-identifier hs-var">der</span></a></span></span><span> </span><span id="local-6989586621679137973"><span class="annot"><span class="annottext">sn :: String
-</span><a href="#local-6989586621679137973"><span class="hs-identifier hs-var">sn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><span id="line-104"></span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#im%27"><span class="hs-identifier hs-var">im'</span></a></span><span> </span><span id="local-6989586621679137945"><span class="annot"><span class="annottext">mkind :: ModelKinds
+</span><a href="#local-6989586621679137945"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span id="local-6989586621679137944"><span class="annot"><span class="annottext">n :: NP
+</span><a href="#local-6989586621679137944"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679137943"><span class="annot"><span class="annottext">i :: Inputs
+</span><a href="#local-6989586621679137943"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span id="local-6989586621679137942"><span class="annot"><span class="annottext">o :: Output
+</span><a href="#local-6989586621679137942"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679137941"><span class="annot"><span class="annottext">oc :: OutputConstraints
+</span><a href="#local-6989586621679137941"><span class="hs-identifier hs-var">oc</span></a></span></span><span> </span><span id="local-6989586621679137940"><span class="annot"><span class="annottext">r :: [Reference]
+</span><a href="#local-6989586621679137940"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span id="local-6989586621679137939"><span class="annot"><span class="annottext">der :: Maybe Derivation
+</span><a href="#local-6989586621679137939"><span class="hs-identifier hs-var">der</span></a></span></span><span> </span><span id="local-6989586621679137938"><span class="annot"><span class="annottext">sn :: String
+</span><a href="#local-6989586621679137938"><span class="hs-identifier hs-var">sn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
 </span><span id="line-105"></span><span>  </span><span class="annot"><span class="annottext">ModelKinds
 -&gt; NP
 -&gt; Inputs
@@ -408,22 +408,22 @@ forall a. [a] -&gt; [a] -&gt; [a]
 -&gt; [Sentence]
 -&gt; InstanceModel
 </span><a href="Theory.Drasil.InstanceModel.html#IM"><span class="hs-identifier hs-var">IM</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKinds
-</span><a href="#local-6989586621679137980"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679137979"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Inputs
-</span><a href="#local-6989586621679137978"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Output
-</span><a href="#local-6989586621679137977"><span class="hs-identifier hs-var">o</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">OutputConstraints
-</span><a href="#local-6989586621679137976"><span class="hs-identifier hs-var">oc</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Reference]
-</span><a href="#local-6989586621679137975"><span class="hs-identifier hs-var">r</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
-</span><a href="#local-6989586621679137974"><span class="hs-identifier hs-var">der</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; ShortName
+</span><a href="#local-6989586621679137945"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="annot"><span class="annottext">NP
+</span><a href="#local-6989586621679137944"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Inputs
+</span><a href="#local-6989586621679137943"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Output
+</span><a href="#local-6989586621679137942"><span class="hs-identifier hs-var">o</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">OutputConstraints
+</span><a href="#local-6989586621679137941"><span class="hs-identifier hs-var">oc</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Reference]
+</span><a href="#local-6989586621679137940"><span class="hs-identifier hs-var">r</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
+</span><a href="#local-6989586621679137939"><span class="hs-identifier hs-var">der</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; ShortName
 </span><span class="hs-identifier hs-var">shortname'</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; ShortName) -&gt; Sentence -&gt; ShortName
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679137973"><span class="hs-identifier hs-var">sn</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; String -&gt; String
+</span><a href="#local-6989586621679137938"><span class="hs-identifier hs-var">sn</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; String -&gt; String
 forall c. CommonIdea c =&gt; c -&gt; String -&gt; String
 </span><span class="hs-identifier hs-var">prependAbrv</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Data.Drasil.TheoryConcepts.html#inModel"><span class="hs-identifier hs-var">inModel</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679137973"><span class="hs-identifier hs-var">sn</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679137938"><span class="hs-identifier hs-var">sn</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-106"></span><span>
 </span><span id="line-107"></span><span class="hs-comment">-- | Smart constructor for instance models with a custom term, and no derivation.</span><span>
 </span><span id="line-108"></span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#imNoDeriv%27"><span class="hs-identifier hs-type">imNoDeriv'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#Inputs"><span class="hs-identifier hs-type">Inputs</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#Output"><span class="hs-identifier hs-type">Output</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
@@ -437,8 +437,8 @@ forall c. CommonIdea c =&gt; c -&gt; String -&gt; String
 -&gt; String
 -&gt; [Sentence]
 -&gt; InstanceModel
-</span><a href="Theory.Drasil.InstanceModel.html#imNoDeriv%27"><span class="hs-identifier hs-var hs-var">imNoDeriv'</span></a></span></span><span> </span><span id="local-6989586621679137969"><span class="annot"><span class="annottext">mkind :: ModelKinds
-</span><a href="#local-6989586621679137969"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-identifier">_</span><span>  </span><span class="hs-identifier">_</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-identifier">_</span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; [Sentence] -&gt; InstanceModel
+</span><a href="Theory.Drasil.InstanceModel.html#imNoDeriv%27"><span class="hs-identifier hs-var hs-var">imNoDeriv'</span></a></span></span><span> </span><span id="local-6989586621679137934"><span class="annot"><span class="annottext">mkind :: ModelKinds
+</span><a href="#local-6989586621679137934"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-identifier">_</span><span>  </span><span class="hs-identifier">_</span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-identifier">_</span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; [Sentence] -&gt; InstanceModel
 forall a. HasCallStack =&gt; String -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">(String -&gt; [Sentence] -&gt; InstanceModel)
 -&gt; String -&gt; [Sentence] -&gt; InstanceModel
@@ -446,21 +446,21 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Source field of &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">ModelKinds
-</span><a href="#local-6989586621679137969"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKinds -&gt; Getting String ModelKinds String -&gt; String
+</span><a href="#local-6989586621679137934"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKinds -&gt; Getting String ModelKinds String -&gt; String
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting String ModelKinds String
 forall c. HasUID c =&gt; Lens' c String
 </span><span class="hs-identifier hs-var">uid</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot; is empty&quot;</span></span><span>
-</span><span id="line-111"></span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#imNoDeriv%27"><span class="hs-identifier hs-var">imNoDeriv'</span></a></span><span> </span><span id="local-6989586621679137968"><span class="annot"><span class="annottext">mkind :: ModelKinds
-</span><a href="#local-6989586621679137968"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span id="local-6989586621679137967"><span class="annot"><span class="annottext">n :: NP
-</span><a href="#local-6989586621679137967"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679137966"><span class="annot"><span class="annottext">i :: Inputs
-</span><a href="#local-6989586621679137966"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span id="local-6989586621679137965"><span class="annot"><span class="annottext">o :: Output
-</span><a href="#local-6989586621679137965"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679137964"><span class="annot"><span class="annottext">oc :: OutputConstraints
-</span><a href="#local-6989586621679137964"><span class="hs-identifier hs-var">oc</span></a></span></span><span> </span><span id="local-6989586621679137963"><span class="annot"><span class="annottext">r :: [Reference]
-</span><a href="#local-6989586621679137963"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span id="local-6989586621679137962"><span class="annot"><span class="annottext">sn :: String
-</span><a href="#local-6989586621679137962"><span class="hs-identifier hs-var">sn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-111"></span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#imNoDeriv%27"><span class="hs-identifier hs-var">imNoDeriv'</span></a></span><span> </span><span id="local-6989586621679137933"><span class="annot"><span class="annottext">mkind :: ModelKinds
+</span><a href="#local-6989586621679137933"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span id="local-6989586621679137932"><span class="annot"><span class="annottext">n :: NP
+</span><a href="#local-6989586621679137932"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679137931"><span class="annot"><span class="annottext">i :: Inputs
+</span><a href="#local-6989586621679137931"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span id="local-6989586621679137930"><span class="annot"><span class="annottext">o :: Output
+</span><a href="#local-6989586621679137930"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679137929"><span class="annot"><span class="annottext">oc :: OutputConstraints
+</span><a href="#local-6989586621679137929"><span class="hs-identifier hs-var">oc</span></a></span></span><span> </span><span id="local-6989586621679137928"><span class="annot"><span class="annottext">r :: [Reference]
+</span><a href="#local-6989586621679137928"><span class="hs-identifier hs-var">r</span></a></span></span><span> </span><span id="local-6989586621679137927"><span class="annot"><span class="annottext">sn :: String
+</span><a href="#local-6989586621679137927"><span class="hs-identifier hs-var">sn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-112"></span><span>  </span><span class="annot"><span class="annottext">ModelKinds
 -&gt; NP
 -&gt; Inputs
@@ -472,23 +472,23 @@ forall a. [a] -&gt; [a] -&gt; [a]
 -&gt; [Sentence]
 -&gt; InstanceModel
 </span><a href="Theory.Drasil.InstanceModel.html#IM"><span class="hs-identifier hs-var">IM</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKinds
-</span><a href="#local-6989586621679137968"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679137967"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Inputs
-</span><a href="#local-6989586621679137966"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Output
-</span><a href="#local-6989586621679137965"><span class="hs-identifier hs-var">o</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">OutputConstraints
-</span><a href="#local-6989586621679137964"><span class="hs-identifier hs-var">oc</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Reference]
-</span><a href="#local-6989586621679137963"><span class="hs-identifier hs-var">r</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
+</span><a href="#local-6989586621679137933"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="annot"><span class="annottext">NP
+</span><a href="#local-6989586621679137932"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Inputs
+</span><a href="#local-6989586621679137931"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Output
+</span><a href="#local-6989586621679137930"><span class="hs-identifier hs-var">o</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">OutputConstraints
+</span><a href="#local-6989586621679137929"><span class="hs-identifier hs-var">oc</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Reference]
+</span><a href="#local-6989586621679137928"><span class="hs-identifier hs-var">r</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; ShortName
 </span><span class="hs-identifier hs-var">shortname'</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; ShortName) -&gt; Sentence -&gt; ShortName
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679137962"><span class="hs-identifier hs-var">sn</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; String -&gt; String
+</span><a href="#local-6989586621679137927"><span class="hs-identifier hs-var">sn</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; String -&gt; String
 forall c. CommonIdea c =&gt; c -&gt; String -&gt; String
 </span><span class="hs-identifier hs-var">prependAbrv</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Data.Drasil.TheoryConcepts.html#inModel"><span class="hs-identifier hs-var">inModel</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679137962"><span class="hs-identifier hs-var">sn</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679137927"><span class="hs-identifier hs-var">sn</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-113"></span><span>
 </span><span id="line-114"></span><span class="hs-comment">-- | Smart constructor for instance models with a custom term, and no references.</span><span>
 </span><span id="line-115"></span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#imNoRefs%27"><span class="hs-identifier hs-type">imNoRefs'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#Inputs"><span class="hs-identifier hs-type">Inputs</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#Output"><span class="hs-identifier hs-type">Output</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
@@ -502,14 +502,14 @@ forall c. CommonIdea c =&gt; c -&gt; String -&gt; String
 -&gt; String
 -&gt; [Sentence]
 -&gt; InstanceModel
-</span><a href="Theory.Drasil.InstanceModel.html#imNoRefs%27"><span class="hs-identifier hs-var hs-var">imNoRefs'</span></a></span></span><span> </span><span id="local-6989586621679137961"><span class="annot"><span class="annottext">mkind :: ModelKinds
-</span><a href="#local-6989586621679137961"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span id="local-6989586621679137960"><span class="annot"><span class="annottext">n :: NP
-</span><a href="#local-6989586621679137960"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679137959"><span class="annot"><span class="annottext">i :: Inputs
-</span><a href="#local-6989586621679137959"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span id="local-6989586621679137958"><span class="annot"><span class="annottext">o :: Output
-</span><a href="#local-6989586621679137958"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679137957"><span class="annot"><span class="annottext">oc :: OutputConstraints
-</span><a href="#local-6989586621679137957"><span class="hs-identifier hs-var">oc</span></a></span></span><span> </span><span id="local-6989586621679137956"><span class="annot"><span class="annottext">der :: Maybe Derivation
-</span><a href="#local-6989586621679137956"><span class="hs-identifier hs-var">der</span></a></span></span><span> </span><span id="local-6989586621679137955"><span class="annot"><span class="annottext">sn :: String
-</span><a href="#local-6989586621679137955"><span class="hs-identifier hs-var">sn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><a href="Theory.Drasil.InstanceModel.html#imNoRefs%27"><span class="hs-identifier hs-var hs-var">imNoRefs'</span></a></span></span><span> </span><span id="local-6989586621679137926"><span class="annot"><span class="annottext">mkind :: ModelKinds
+</span><a href="#local-6989586621679137926"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span id="local-6989586621679137925"><span class="annot"><span class="annottext">n :: NP
+</span><a href="#local-6989586621679137925"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679137924"><span class="annot"><span class="annottext">i :: Inputs
+</span><a href="#local-6989586621679137924"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span id="local-6989586621679137923"><span class="annot"><span class="annottext">o :: Output
+</span><a href="#local-6989586621679137923"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679137922"><span class="annot"><span class="annottext">oc :: OutputConstraints
+</span><a href="#local-6989586621679137922"><span class="hs-identifier hs-var">oc</span></a></span></span><span> </span><span id="local-6989586621679137921"><span class="annot"><span class="annottext">der :: Maybe Derivation
+</span><a href="#local-6989586621679137921"><span class="hs-identifier hs-var">der</span></a></span></span><span> </span><span id="local-6989586621679137920"><span class="annot"><span class="annottext">sn :: String
+</span><a href="#local-6989586621679137920"><span class="hs-identifier hs-var">sn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
 </span><span id="line-118"></span><span>  </span><span class="annot"><span class="annottext">ModelKinds
 -&gt; NP
 -&gt; Inputs
@@ -521,21 +521,21 @@ forall c. CommonIdea c =&gt; c -&gt; String -&gt; String
 -&gt; [Sentence]
 -&gt; InstanceModel
 </span><a href="Theory.Drasil.InstanceModel.html#IM"><span class="hs-identifier hs-var">IM</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKinds
-</span><a href="#local-6989586621679137961"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679137960"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Inputs
-</span><a href="#local-6989586621679137959"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Output
-</span><a href="#local-6989586621679137958"><span class="hs-identifier hs-var">o</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">OutputConstraints
-</span><a href="#local-6989586621679137957"><span class="hs-identifier hs-var">oc</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
-</span><a href="#local-6989586621679137956"><span class="hs-identifier hs-var">der</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; ShortName
+</span><a href="#local-6989586621679137926"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="annot"><span class="annottext">NP
+</span><a href="#local-6989586621679137925"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Inputs
+</span><a href="#local-6989586621679137924"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Output
+</span><a href="#local-6989586621679137923"><span class="hs-identifier hs-var">o</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">OutputConstraints
+</span><a href="#local-6989586621679137922"><span class="hs-identifier hs-var">oc</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
+</span><a href="#local-6989586621679137921"><span class="hs-identifier hs-var">der</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; ShortName
 </span><span class="hs-identifier hs-var">shortname'</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; ShortName) -&gt; Sentence -&gt; ShortName
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679137955"><span class="hs-identifier hs-var">sn</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; String -&gt; String
+</span><a href="#local-6989586621679137920"><span class="hs-identifier hs-var">sn</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; String -&gt; String
 forall c. CommonIdea c =&gt; c -&gt; String -&gt; String
 </span><span class="hs-identifier hs-var">prependAbrv</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Data.Drasil.TheoryConcepts.html#inModel"><span class="hs-identifier hs-var">inModel</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679137955"><span class="hs-identifier hs-var">sn</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679137920"><span class="hs-identifier hs-var">sn</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-119"></span><span>
 </span><span id="line-120"></span><span class="hs-comment">-- | Smart constructor for instance models with a custom term, and no derivations or references.</span><span>
 </span><span id="line-121"></span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#imNoDerivNoRefs%27"><span class="hs-identifier hs-type">imNoDerivNoRefs'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Theory.Drasil.ModelKinds.html#ModelKinds"><span class="hs-identifier hs-type">ModelKinds</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#Inputs"><span class="hs-identifier hs-type">Inputs</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#Output"><span class="hs-identifier hs-type">Output</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span>
@@ -548,13 +548,13 @@ forall c. CommonIdea c =&gt; c -&gt; String -&gt; String
 -&gt; String
 -&gt; [Sentence]
 -&gt; InstanceModel
-</span><a href="Theory.Drasil.InstanceModel.html#imNoDerivNoRefs%27"><span class="hs-identifier hs-var hs-var">imNoDerivNoRefs'</span></a></span></span><span> </span><span id="local-6989586621679137954"><span class="annot"><span class="annottext">mkind :: ModelKinds
-</span><a href="#local-6989586621679137954"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span id="local-6989586621679137953"><span class="annot"><span class="annottext">n :: NP
-</span><a href="#local-6989586621679137953"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679137952"><span class="annot"><span class="annottext">i :: Inputs
-</span><a href="#local-6989586621679137952"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span id="local-6989586621679137951"><span class="annot"><span class="annottext">o :: Output
-</span><a href="#local-6989586621679137951"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679137950"><span class="annot"><span class="annottext">oc :: OutputConstraints
-</span><a href="#local-6989586621679137950"><span class="hs-identifier hs-var">oc</span></a></span></span><span> </span><span id="local-6989586621679137949"><span class="annot"><span class="annottext">sn :: String
-</span><a href="#local-6989586621679137949"><span class="hs-identifier hs-var">sn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><a href="Theory.Drasil.InstanceModel.html#imNoDerivNoRefs%27"><span class="hs-identifier hs-var hs-var">imNoDerivNoRefs'</span></a></span></span><span> </span><span id="local-6989586621679137919"><span class="annot"><span class="annottext">mkind :: ModelKinds
+</span><a href="#local-6989586621679137919"><span class="hs-identifier hs-var">mkind</span></a></span></span><span> </span><span id="local-6989586621679137918"><span class="annot"><span class="annottext">n :: NP
+</span><a href="#local-6989586621679137918"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span id="local-6989586621679137917"><span class="annot"><span class="annottext">i :: Inputs
+</span><a href="#local-6989586621679137917"><span class="hs-identifier hs-var">i</span></a></span></span><span> </span><span id="local-6989586621679137916"><span class="annot"><span class="annottext">o :: Output
+</span><a href="#local-6989586621679137916"><span class="hs-identifier hs-var">o</span></a></span></span><span> </span><span id="local-6989586621679137915"><span class="annot"><span class="annottext">oc :: OutputConstraints
+</span><a href="#local-6989586621679137915"><span class="hs-identifier hs-var">oc</span></a></span></span><span> </span><span id="local-6989586621679137914"><span class="annot"><span class="annottext">sn :: String
+</span><a href="#local-6989586621679137914"><span class="hs-identifier hs-var">sn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
 </span><span id="line-124"></span><span>  </span><span class="annot"><span class="annottext">ModelKinds
 -&gt; NP
 -&gt; Inputs
@@ -566,55 +566,55 @@ forall c. CommonIdea c =&gt; c -&gt; String -&gt; String
 -&gt; [Sentence]
 -&gt; InstanceModel
 </span><a href="Theory.Drasil.InstanceModel.html#IM"><span class="hs-identifier hs-var">IM</span></a></span><span> </span><span class="annot"><span class="annottext">ModelKinds
-</span><a href="#local-6989586621679137954"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="annot"><span class="annottext">NP
-</span><a href="#local-6989586621679137953"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Inputs
-</span><a href="#local-6989586621679137952"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Output
-</span><a href="#local-6989586621679137951"><span class="hs-identifier hs-var">o</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">OutputConstraints
-</span><a href="#local-6989586621679137950"><span class="hs-identifier hs-var">oc</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
+</span><a href="#local-6989586621679137919"><span class="hs-identifier hs-var">mkind</span></a></span><span> </span><span class="annot"><span class="annottext">NP
+</span><a href="#local-6989586621679137918"><span class="hs-identifier hs-var">n</span></a></span><span> </span><span class="annot"><span class="annottext">Inputs
+</span><a href="#local-6989586621679137917"><span class="hs-identifier hs-var">i</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Output
+</span><a href="#local-6989586621679137916"><span class="hs-identifier hs-var">o</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">OutputConstraints
+</span><a href="#local-6989586621679137915"><span class="hs-identifier hs-var">oc</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; ShortName
 </span><span class="hs-identifier hs-var">shortname'</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; ShortName) -&gt; Sentence -&gt; ShortName
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679137949"><span class="hs-identifier hs-var">sn</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; String -&gt; String
+</span><a href="#local-6989586621679137914"><span class="hs-identifier hs-var">sn</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; String -&gt; String
 forall c. CommonIdea c =&gt; c -&gt; String -&gt; String
 </span><span class="hs-identifier hs-var">prependAbrv</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Data.Drasil.TheoryConcepts.html#inModel"><span class="hs-identifier hs-var">inModel</span></a></span><span> </span><span class="annot"><span class="annottext">String
-</span><a href="#local-6989586621679137949"><span class="hs-identifier hs-var">sn</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679137914"><span class="hs-identifier hs-var">sn</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-125"></span><span>
 </span><span id="line-126"></span><span class="hs-comment">-- | For building a quantity with no constraint.</span><span>
-</span><span id="line-127"></span><span id="local-6989586621679137948"><span class="annot"><a href="Theory.Drasil.InstanceModel.html#qwUC"><span class="hs-identifier hs-type">qwUC</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679137948"><span class="hs-identifier hs-type">q</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MayHaveUnit</span></span><span> </span><span class="annot"><a href="#local-6989586621679137948"><span class="hs-identifier hs-type">q</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679137948"><span class="hs-identifier hs-type">q</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#Input"><span class="hs-identifier hs-type">Input</span></a></span></span><span> </span><span>
+</span><span id="line-127"></span><span id="local-6989586621679137913"><span class="annot"><a href="Theory.Drasil.InstanceModel.html#qwUC"><span class="hs-identifier hs-type">qwUC</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679137913"><span class="hs-identifier hs-type">q</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MayHaveUnit</span></span><span> </span><span class="annot"><a href="#local-6989586621679137913"><span class="hs-identifier hs-type">q</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679137913"><span class="hs-identifier hs-type">q</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#Input"><span class="hs-identifier hs-type">Input</span></a></span></span><span> </span><span>
 </span><span id="line-128"></span><span id="qwUC"><span class="annot"><span class="annottext">qwUC :: q -&gt; Input
-</span><a href="Theory.Drasil.InstanceModel.html#qwUC"><span class="hs-identifier hs-var hs-var">qwUC</span></a></span></span><span> </span><span id="local-6989586621679137947"><span class="annot"><span class="annottext">x :: q
-</span><a href="#local-6989586621679137947"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">q -&gt; Output
+</span><a href="Theory.Drasil.InstanceModel.html#qwUC"><span class="hs-identifier hs-var hs-var">qwUC</span></a></span></span><span> </span><span id="local-6989586621679137912"><span class="annot"><span class="annottext">x :: q
+</span><a href="#local-6989586621679137912"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">q -&gt; Output
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; Output
 </span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">q
-</span><a href="#local-6989586621679137947"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Maybe (RealInterval Expr Expr)
+</span><a href="#local-6989586621679137912"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Maybe (RealInterval Expr Expr)
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span class="hs-special">)</span><span>
 </span><span id="line-129"></span><span>
 </span><span id="line-130"></span><span class="hs-comment">-- | For building a quantity with a constraint.</span><span>
-</span><span id="line-131"></span><span id="local-6989586621679137945"><span class="annot"><a href="Theory.Drasil.InstanceModel.html#qwC"><span class="hs-identifier hs-type">qwC</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679137945"><span class="hs-identifier hs-type">q</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MayHaveUnit</span></span><span> </span><span class="annot"><a href="#local-6989586621679137945"><span class="hs-identifier hs-type">q</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679137945"><span class="hs-identifier hs-type">q</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">RealInterval</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#Input"><span class="hs-identifier hs-type">Input</span></a></span></span><span> </span><span>
+</span><span id="line-131"></span><span id="local-6989586621679137910"><span class="annot"><a href="Theory.Drasil.InstanceModel.html#qwC"><span class="hs-identifier hs-type">qwC</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span> </span><span class="annot"><a href="#local-6989586621679137910"><span class="hs-identifier hs-type">q</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MayHaveUnit</span></span><span> </span><span class="annot"><a href="#local-6989586621679137910"><span class="hs-identifier hs-type">q</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679137910"><span class="hs-identifier hs-type">q</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">RealInterval</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#Input"><span class="hs-identifier hs-type">Input</span></a></span></span><span> </span><span>
 </span><span id="line-132"></span><span id="qwC"><span class="annot"><span class="annottext">qwC :: q -&gt; RealInterval Expr Expr -&gt; Input
-</span><a href="Theory.Drasil.InstanceModel.html#qwC"><span class="hs-identifier hs-var hs-var">qwC</span></a></span></span><span> </span><span id="local-6989586621679137944"><span class="annot"><span class="annottext">x :: q
-</span><a href="#local-6989586621679137944"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679137943"><span class="annot"><span class="annottext">y :: RealInterval Expr Expr
-</span><a href="#local-6989586621679137943"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">q -&gt; Output
+</span><a href="Theory.Drasil.InstanceModel.html#qwC"><span class="hs-identifier hs-var hs-var">qwC</span></a></span></span><span> </span><span id="local-6989586621679137909"><span class="annot"><span class="annottext">x :: q
+</span><a href="#local-6989586621679137909"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679137908"><span class="annot"><span class="annottext">y :: RealInterval Expr Expr
+</span><a href="#local-6989586621679137908"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">q -&gt; Output
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; Output
 </span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">q
-</span><a href="#local-6989586621679137944"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; Maybe (RealInterval Expr Expr)
+</span><a href="#local-6989586621679137909"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; Maybe (RealInterval Expr Expr)
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">RealInterval Expr Expr
-</span><a href="#local-6989586621679137943"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679137908"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-133"></span><span>
 </span><span id="line-134"></span><span class="hs-comment">-- | Grab all related 'QDefinition's from a list of instance models.</span><span>
 </span><span id="line-135"></span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#getEqModQdsFromIm"><span class="hs-identifier hs-type">getEqModQdsFromIm</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Theory.Drasil.InstanceModel.html#InstanceModel"><span class="hs-identifier hs-type">InstanceModel</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span class="hs-special">]</span><span>
 </span><span id="line-136"></span><span id="getEqModQdsFromIm"><span class="annot"><span class="annottext">getEqModQdsFromIm :: [InstanceModel] -&gt; [QDefinition]
-</span><a href="Theory.Drasil.InstanceModel.html#getEqModQdsFromIm"><span class="hs-identifier hs-var hs-var">getEqModQdsFromIm</span></a></span></span><span> </span><span id="local-6989586621679137942"><span class="annot"><span class="annottext">ims :: [InstanceModel]
-</span><a href="#local-6989586621679137942"><span class="hs-identifier hs-var">ims</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[ModelKinds] -&gt; [QDefinition]
+</span><a href="Theory.Drasil.InstanceModel.html#getEqModQdsFromIm"><span class="hs-identifier hs-var hs-var">getEqModQdsFromIm</span></a></span></span><span> </span><span id="local-6989586621679137907"><span class="annot"><span class="annottext">ims :: [InstanceModel]
+</span><a href="#local-6989586621679137907"><span class="hs-identifier hs-var">ims</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[ModelKinds] -&gt; [QDefinition]
 </span><a href="Theory.Drasil.ModelKinds.html#getEqModQds"><span class="hs-identifier hs-var">getEqModQds</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(InstanceModel -&gt; ModelKinds) -&gt; [InstanceModel] -&gt; [ModelKinds]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel -&gt; ModelKinds
 </span><a href="Theory.Drasil.InstanceModel.html#_mk"><span class="hs-identifier hs-var hs-var">_mk</span></a></span><span> </span><span class="annot"><span class="annottext">[InstanceModel]
-</span><a href="#local-6989586621679137942"><span class="hs-identifier hs-var">ims</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679137907"><span class="hs-identifier hs-var">ims</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-137"></span></pre></body></html>

@@ -22,94 +22,94 @@
 </span><span id="line-22"></span><span class="hs-comment">-- | Generate a number of artifacts based on a list of recipes.</span><span>
 </span><span id="line-23"></span><span class="annot"><a href="Language.Drasil.Generate.html#gen"><span class="hs-identifier hs-type">gen</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DocSpec"><span class="hs-identifier hs-type">DocSpec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Document</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">PrintingInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
 </span><span id="line-24"></span><span id="gen"><span class="annot"><span class="annottext">gen :: DocSpec -&gt; Document -&gt; PrintingInformation -&gt; IO ()
-</span><a href="Language.Drasil.Generate.html#gen"><span class="hs-identifier hs-var hs-var">gen</span></a></span></span><span> </span><span id="local-6989586621679103561"><span class="annot"><span class="annottext">ds :: DocSpec
-</span><a href="#local-6989586621679103561"><span class="hs-identifier hs-var">ds</span></a></span></span><span> </span><span id="local-6989586621679103560"><span class="annot"><span class="annottext">fn :: Document
-</span><a href="#local-6989586621679103560"><span class="hs-identifier hs-var">fn</span></a></span></span><span> </span><span id="local-6989586621679103559"><span class="annot"><span class="annottext">sm :: PrintingInformation
-</span><a href="#local-6989586621679103559"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; DocSpec -&gt; Document -&gt; IO ()
+</span><a href="Language.Drasil.Generate.html#gen"><span class="hs-identifier hs-var hs-var">gen</span></a></span></span><span> </span><span id="local-6989586621679103700"><span class="annot"><span class="annottext">ds :: DocSpec
+</span><a href="#local-6989586621679103700"><span class="hs-identifier hs-var">ds</span></a></span></span><span> </span><span id="local-6989586621679103699"><span class="annot"><span class="annottext">fn :: Document
+</span><a href="#local-6989586621679103699"><span class="hs-identifier hs-var">fn</span></a></span></span><span> </span><span id="local-6989586621679103698"><span class="annot"><span class="annottext">sm :: PrintingInformation
+</span><a href="#local-6989586621679103698"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; DocSpec -&gt; Document -&gt; IO ()
 </span><a href="Language.Drasil.Generate.html#prnt"><span class="hs-identifier hs-var">prnt</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679103559"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">DocSpec
-</span><a href="#local-6989586621679103561"><span class="hs-identifier hs-var">ds</span></a></span><span> </span><span class="annot"><span class="annottext">Document
-</span><a href="#local-6989586621679103560"><span class="hs-identifier hs-var">fn</span></a></span><span>
+</span><a href="#local-6989586621679103698"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">DocSpec
+</span><a href="#local-6989586621679103700"><span class="hs-identifier hs-var">ds</span></a></span><span> </span><span class="annot"><span class="annottext">Document
+</span><a href="#local-6989586621679103699"><span class="hs-identifier hs-var">fn</span></a></span><span>
 </span><span id="line-25"></span><span>
 </span><span id="line-26"></span><span class="hs-comment">-- | Generate the output artifacts (TeX+Makefile or HTML)</span><span>
 </span><span id="line-27"></span><span class="annot"><a href="Language.Drasil.Generate.html#prnt"><span class="hs-identifier hs-type">prnt</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">PrintingInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DocSpec"><span class="hs-identifier hs-type">DocSpec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Document</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
 </span><span id="line-28"></span><span id="prnt"><span class="annot"><span class="annottext">prnt :: PrintingInformation -&gt; DocSpec -&gt; Document -&gt; IO ()
-</span><a href="Language.Drasil.Generate.html#prnt"><span class="hs-identifier hs-var hs-var">prnt</span></a></span></span><span> </span><span id="local-6989586621679103557"><span class="annot"><span class="annottext">sm :: PrintingInformation
-</span><a href="#local-6989586621679103557"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span id="local-6989586621679103556"><span class="annot"><span class="annottext">dt :: DocSpec
-</span><a href="#local-6989586621679103556"><span class="hs-identifier hs-var">dt</span></a></span></span><span class="hs-glyph">@</span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DocSpec"><span class="hs-identifier hs-type">DocSpec</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Output.Formats.html#Website"><span class="hs-identifier hs-type">Website</span></a></span><span> </span><span id="local-6989586621679103555"><span class="annot"><span class="annottext">fn :: Filename
-</span><a href="#local-6989586621679103555"><span class="hs-identifier hs-var">fn</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679103554"><span class="annot"><span class="annottext">body :: Document
-</span><a href="#local-6989586621679103554"><span class="hs-identifier hs-var">body</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><a href="Language.Drasil.Generate.html#prnt"><span class="hs-identifier hs-var hs-var">prnt</span></a></span></span><span> </span><span id="local-6989586621679103696"><span class="annot"><span class="annottext">sm :: PrintingInformation
+</span><a href="#local-6989586621679103696"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span id="local-6989586621679103695"><span class="annot"><span class="annottext">dt :: DocSpec
+</span><a href="#local-6989586621679103695"><span class="hs-identifier hs-var">dt</span></a></span></span><span class="hs-glyph">@</span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DocSpec"><span class="hs-identifier hs-type">DocSpec</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Output.Formats.html#Website"><span class="hs-identifier hs-type">Website</span></a></span><span> </span><span id="local-6989586621679103694"><span class="annot"><span class="annottext">fn :: Filename
+</span><a href="#local-6989586621679103694"><span class="hs-identifier hs-var">fn</span></a></span></span><span class="hs-special">)</span><span> </span><span id="local-6989586621679103693"><span class="annot"><span class="annottext">body :: Document
+</span><a href="#local-6989586621679103693"><span class="hs-identifier hs-var">body</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-29"></span><span>  </span><span class="hs-keyword">do</span><span> </span><span class="annot"><span class="annottext">DocSpec -&gt; Document -&gt; PrintingInformation -&gt; IO ()
 </span><a href="Language.Drasil.Generate.html#prntDoc"><span class="hs-identifier hs-var">prntDoc</span></a></span><span> </span><span class="annot"><span class="annottext">DocSpec
-</span><a href="#local-6989586621679103556"><span class="hs-identifier hs-var">dt</span></a></span><span> </span><span class="annot"><span class="annottext">Document
-</span><a href="#local-6989586621679103554"><span class="hs-identifier hs-var">body</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679103557"><span class="hs-identifier hs-var">sm</span></a></span><span>
-</span><span id="line-30"></span><span>     </span><span id="local-6989586621679103552"><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679103552"><span class="hs-identifier hs-var">outh2</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Filename -&gt; IOMode -&gt; IO Handle
+</span><a href="#local-6989586621679103695"><span class="hs-identifier hs-var">dt</span></a></span><span> </span><span class="annot"><span class="annottext">Document
+</span><a href="#local-6989586621679103693"><span class="hs-identifier hs-var">body</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679103696"><span class="hs-identifier hs-var">sm</span></a></span><span>
+</span><span id="line-30"></span><span>     </span><span id="local-6989586621679103691"><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679103691"><span class="hs-identifier hs-var">outh2</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Filename -&gt; IOMode -&gt; IO Handle
 </span><span class="hs-identifier hs-var">openFile</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-string">&quot;Website/&quot;</span></span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Filename -&gt; Filename
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">Filename
-</span><a href="#local-6989586621679103555"><span class="hs-identifier hs-var">fn</span></a></span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Filename -&gt; Filename
+</span><a href="#local-6989586621679103694"><span class="hs-identifier hs-var">fn</span></a></span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Filename -&gt; Filename
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.css&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">IOMode
 </span><span class="hs-identifier hs-var">WriteMode</span></span><span>
 </span><span id="line-31"></span><span>     </span><span class="annot"><span class="annottext">Handle -&gt; Filename -&gt; IO ()
 </span><span class="hs-identifier hs-var">hPutStrLn</span></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679103552"><span class="hs-identifier hs-var">outh2</span></a></span><span> </span><span class="annot"><span class="annottext">(Filename -&gt; IO ()) -&gt; Filename -&gt; IO ()
+</span><a href="#local-6989586621679103691"><span class="hs-identifier hs-var">outh2</span></a></span><span> </span><span class="annot"><span class="annottext">(Filename -&gt; IO ()) -&gt; Filename -&gt; IO ()
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Filename
 </span><span class="hs-identifier hs-var">render</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Document -&gt; Doc
 </span><span class="hs-identifier hs-var">makeCSS</span></span><span> </span><span class="annot"><span class="annottext">Document
-</span><a href="#local-6989586621679103554"><span class="hs-identifier hs-var">body</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679103693"><span class="hs-identifier hs-var">body</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-32"></span><span>     </span><span class="annot"><span class="annottext">Handle -&gt; IO ()
 </span><span class="hs-identifier hs-var">hClose</span></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679103552"><span class="hs-identifier hs-var">outh2</span></a></span><span>
-</span><span id="line-33"></span><span class="annot"><a href="Language.Drasil.Generate.html#prnt"><span class="hs-identifier hs-var">prnt</span></a></span><span> </span><span id="local-6989586621679103551"><span class="annot"><span class="annottext">sm :: PrintingInformation
-</span><a href="#local-6989586621679103551"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span id="local-6989586621679103550"><span class="annot"><span class="annottext">dt :: DocSpec
-</span><a href="#local-6989586621679103550"><span class="hs-identifier hs-var">dt</span></a></span></span><span class="hs-glyph">@</span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DocSpec"><span class="hs-identifier hs-type">DocSpec</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span id="local-6989586621679103549"><span class="annot"><span class="annottext">body :: Document
-</span><a href="#local-6989586621679103549"><span class="hs-identifier hs-var">body</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
+</span><a href="#local-6989586621679103691"><span class="hs-identifier hs-var">outh2</span></a></span><span>
+</span><span id="line-33"></span><span class="annot"><a href="Language.Drasil.Generate.html#prnt"><span class="hs-identifier hs-var">prnt</span></a></span><span> </span><span id="local-6989586621679103690"><span class="annot"><span class="annottext">sm :: PrintingInformation
+</span><a href="#local-6989586621679103690"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span id="local-6989586621679103689"><span class="annot"><span class="annottext">dt :: DocSpec
+</span><a href="#local-6989586621679103689"><span class="hs-identifier hs-var">dt</span></a></span></span><span class="hs-glyph">@</span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DocSpec"><span class="hs-identifier hs-type">DocSpec</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span id="local-6989586621679103688"><span class="annot"><span class="annottext">body :: Document
+</span><a href="#local-6989586621679103688"><span class="hs-identifier hs-var">body</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>
 </span><span id="line-34"></span><span>  </span><span class="hs-keyword">do</span><span> </span><span class="annot"><span class="annottext">DocSpec -&gt; Document -&gt; PrintingInformation -&gt; IO ()
 </span><a href="Language.Drasil.Generate.html#prntDoc"><span class="hs-identifier hs-var">prntDoc</span></a></span><span> </span><span class="annot"><span class="annottext">DocSpec
-</span><a href="#local-6989586621679103550"><span class="hs-identifier hs-var">dt</span></a></span><span> </span><span class="annot"><span class="annottext">Document
-</span><a href="#local-6989586621679103549"><span class="hs-identifier hs-var">body</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679103551"><span class="hs-identifier hs-var">sm</span></a></span><span>
+</span><a href="#local-6989586621679103689"><span class="hs-identifier hs-var">dt</span></a></span><span> </span><span class="annot"><span class="annottext">Document
+</span><a href="#local-6989586621679103688"><span class="hs-identifier hs-var">body</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679103690"><span class="hs-identifier hs-var">sm</span></a></span><span>
 </span><span id="line-35"></span><span>     </span><span class="annot"><span class="annottext">DocSpec -&gt; IO ()
 </span><a href="Language.Drasil.Generate.html#prntMake"><span class="hs-identifier hs-var">prntMake</span></a></span><span> </span><span class="annot"><span class="annottext">DocSpec
-</span><a href="#local-6989586621679103550"><span class="hs-identifier hs-var">dt</span></a></span><span>
+</span><a href="#local-6989586621679103689"><span class="hs-identifier hs-var">dt</span></a></span><span>
 </span><span id="line-36"></span><span>
 </span><span id="line-37"></span><span class="hs-comment">-- | Helper for writing the documents (TeX / HTML) to file</span><span>
 </span><span id="line-38"></span><span class="annot"><a href="Language.Drasil.Generate.html#prntDoc"><span class="hs-identifier hs-type">prntDoc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DocSpec"><span class="hs-identifier hs-type">DocSpec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Document</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">PrintingInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
 </span><span id="line-39"></span><span id="prntDoc"><span class="annot"><span class="annottext">prntDoc :: DocSpec -&gt; Document -&gt; PrintingInformation -&gt; IO ()
-</span><a href="Language.Drasil.Generate.html#prntDoc"><span class="hs-identifier hs-var hs-var">prntDoc</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DocSpec"><span class="hs-identifier hs-type">DocSpec</span></a></span><span> </span><span id="local-6989586621679103547"><span class="annot"><span class="annottext">dt :: DocType
-</span><a href="#local-6989586621679103547"><span class="hs-identifier hs-var">dt</span></a></span></span><span> </span><span id="local-6989586621679103546"><span class="annot"><span class="annottext">fn :: Filename
-</span><a href="#local-6989586621679103546"><span class="hs-identifier hs-var">fn</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DocType
+</span><a href="Language.Drasil.Generate.html#prntDoc"><span class="hs-identifier hs-var hs-var">prntDoc</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DocSpec"><span class="hs-identifier hs-type">DocSpec</span></a></span><span> </span><span id="local-6989586621679103686"><span class="annot"><span class="annottext">dt :: DocType
+</span><a href="#local-6989586621679103686"><span class="hs-identifier hs-var">dt</span></a></span></span><span> </span><span id="local-6989586621679103685"><span class="annot"><span class="annottext">fn :: Filename
+</span><a href="#local-6989586621679103685"><span class="hs-identifier hs-var">fn</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DocType
 -&gt; Filename -&gt; Format -&gt; Document -&gt; PrintingInformation -&gt; IO ()
 forall a.
 Show a =&gt;
 a -&gt; Filename -&gt; Format -&gt; Document -&gt; PrintingInformation -&gt; IO ()
 </span><a href="Language.Drasil.Generate.html#prntDoc%27"><span class="hs-identifier hs-var">prntDoc'</span></a></span><span> </span><span class="annot"><span class="annottext">DocType
-</span><a href="#local-6989586621679103547"><span class="hs-identifier hs-var">dt</span></a></span><span> </span><span class="annot"><span class="annottext">Filename
-</span><a href="#local-6989586621679103546"><span class="hs-identifier hs-var">fn</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DocType -&gt; Format
-</span><a href="#local-6989586621679103544"><span class="hs-identifier hs-var">fmt</span></a></span><span> </span><span class="annot"><span class="annottext">DocType
-</span><a href="#local-6989586621679103547"><span class="hs-identifier hs-var">dt</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-40"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679103544"><span class="annot"><span class="annottext">fmt :: DocType -&gt; Format
-</span><a href="#local-6989586621679103544"><span class="hs-identifier hs-var hs-var">fmt</span></a></span></span><span> </span><span class="annot"><a href="Language.Drasil.Output.Formats.html#SRS"><span class="hs-identifier hs-type">SRS</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Format
+</span><a href="#local-6989586621679103686"><span class="hs-identifier hs-var">dt</span></a></span><span> </span><span class="annot"><span class="annottext">Filename
+</span><a href="#local-6989586621679103685"><span class="hs-identifier hs-var">fn</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DocType -&gt; Format
+</span><a href="#local-6989586621679103683"><span class="hs-identifier hs-var">fmt</span></a></span><span> </span><span class="annot"><span class="annottext">DocType
+</span><a href="#local-6989586621679103686"><span class="hs-identifier hs-var">dt</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-40"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679103683"><span class="annot"><span class="annottext">fmt :: DocType -&gt; Format
+</span><a href="#local-6989586621679103683"><span class="hs-identifier hs-var hs-var">fmt</span></a></span></span><span> </span><span class="annot"><a href="Language.Drasil.Output.Formats.html#SRS"><span class="hs-identifier hs-type">SRS</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Format
 </span><span class="hs-identifier hs-var">TeX</span></span><span>
-</span><span id="line-41"></span><span>        </span><span class="annot"><a href="#local-6989586621679103544"><span class="hs-identifier hs-var">fmt</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Output.Formats.html#MG"><span class="hs-identifier hs-type">MG</span></a></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Format
+</span><span id="line-41"></span><span>        </span><span class="annot"><a href="#local-6989586621679103683"><span class="hs-identifier hs-var">fmt</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Output.Formats.html#MG"><span class="hs-identifier hs-type">MG</span></a></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Format
 </span><span class="hs-identifier hs-var">TeX</span></span><span>
-</span><span id="line-42"></span><span>        </span><span class="annot"><a href="#local-6989586621679103544"><span class="hs-identifier hs-var">fmt</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Output.Formats.html#MIS"><span class="hs-identifier hs-type">MIS</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Format
+</span><span id="line-42"></span><span>        </span><span class="annot"><a href="#local-6989586621679103683"><span class="hs-identifier hs-var">fmt</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Output.Formats.html#MIS"><span class="hs-identifier hs-type">MIS</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Format
 </span><span class="hs-identifier hs-var">TeX</span></span><span>
-</span><span id="line-43"></span><span>        </span><span class="annot"><a href="#local-6989586621679103544"><span class="hs-identifier hs-var">fmt</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Output.Formats.html#Website"><span class="hs-identifier hs-type">Website</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Format
+</span><span id="line-43"></span><span>        </span><span class="annot"><a href="#local-6989586621679103683"><span class="hs-identifier hs-var">fmt</span></a></span><span> </span><span class="annot"><a href="Language.Drasil.Output.Formats.html#Website"><span class="hs-identifier hs-type">Website</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Format
 </span><span class="hs-identifier hs-var">HTML</span></span><span>
 </span><span id="line-44"></span><span>
-</span><span id="line-45"></span><span id="local-6989586621679103658"><span class="annot"><a href="Language.Drasil.Generate.html#prntDoc%27"><span class="hs-identifier hs-type">prntDoc'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Show</span></span><span> </span><span class="annot"><a href="#local-6989586621679103658"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679103658"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Format</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Document</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">PrintingInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span></span><span>
+</span><span id="line-45"></span><span id="local-6989586621679103797"><span class="annot"><a href="Language.Drasil.Generate.html#prntDoc%27"><span class="hs-identifier hs-type">prntDoc'</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Show</span></span><span> </span><span class="annot"><a href="#local-6989586621679103797"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">=&gt;</span><span> </span><span class="annot"><a href="#local-6989586621679103797"><span class="hs-identifier hs-type">a</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Format</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Document</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">PrintingInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span></span><span>
 </span><span id="line-46"></span><span id="prntDoc%27"><span class="annot"><span class="annottext">prntDoc' :: a -&gt; Filename -&gt; Format -&gt; Document -&gt; PrintingInformation -&gt; IO ()
-</span><a href="Language.Drasil.Generate.html#prntDoc%27"><span class="hs-identifier hs-var hs-var">prntDoc'</span></a></span></span><span> </span><span id="local-6989586621679103542"><span class="annot"><span class="annottext">dt' :: a
-</span><a href="#local-6989586621679103542"><span class="hs-identifier hs-var">dt'</span></a></span></span><span> </span><span id="local-6989586621679103541"><span class="annot"><span class="annottext">fn :: Filename
-</span><a href="#local-6989586621679103541"><span class="hs-identifier hs-var">fn</span></a></span></span><span> </span><span id="local-6989586621679103540"><span class="annot"><span class="annottext">format :: Format
-</span><a href="#local-6989586621679103540"><span class="hs-identifier hs-var">format</span></a></span></span><span> </span><span id="local-6989586621679103539"><span class="annot"><span class="annottext">body' :: Document
-</span><a href="#local-6989586621679103539"><span class="hs-identifier hs-var">body'</span></a></span></span><span> </span><span id="local-6989586621679103538"><span class="annot"><span class="annottext">sm :: PrintingInformation
-</span><a href="#local-6989586621679103538"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a href="Language.Drasil.Generate.html#prntDoc%27"><span class="hs-identifier hs-var hs-var">prntDoc'</span></a></span></span><span> </span><span id="local-6989586621679103681"><span class="annot"><span class="annottext">dt' :: a
+</span><a href="#local-6989586621679103681"><span class="hs-identifier hs-var">dt'</span></a></span></span><span> </span><span id="local-6989586621679103680"><span class="annot"><span class="annottext">fn :: Filename
+</span><a href="#local-6989586621679103680"><span class="hs-identifier hs-var">fn</span></a></span></span><span> </span><span id="local-6989586621679103679"><span class="annot"><span class="annottext">format :: Format
+</span><a href="#local-6989586621679103679"><span class="hs-identifier hs-var">format</span></a></span></span><span> </span><span id="local-6989586621679103678"><span class="annot"><span class="annottext">body' :: Document
+</span><a href="#local-6989586621679103678"><span class="hs-identifier hs-var">body'</span></a></span></span><span> </span><span id="local-6989586621679103677"><span class="annot"><span class="annottext">sm :: PrintingInformation
+</span><a href="#local-6989586621679103677"><span class="hs-identifier hs-var">sm</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
 </span><span id="line-47"></span><span>  </span><span class="annot"><span class="annottext">Bool -&gt; Filename -&gt; IO ()
 </span><span class="hs-identifier hs-var">createDirectoryIfMissing</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">(Filename -&gt; IO ()) -&gt; Filename -&gt; IO ()
@@ -117,64 +117,64 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">a -&gt; Filename
 forall a. Show a =&gt; a -&gt; Filename
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679103542"><span class="hs-identifier hs-var">dt'</span></a></span><span>
-</span><span id="line-48"></span><span>  </span><span id="local-6989586621679103536"><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679103536"><span class="hs-identifier hs-var">outh</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Filename -&gt; IOMode -&gt; IO Handle
+</span><a href="#local-6989586621679103681"><span class="hs-identifier hs-var">dt'</span></a></span><span>
+</span><span id="line-48"></span><span>  </span><span id="local-6989586621679103675"><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679103675"><span class="hs-identifier hs-var">outh</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Filename -&gt; IOMode -&gt; IO Handle
 </span><span class="hs-identifier hs-var">openFile</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a -&gt; Filename
 forall a. Show a =&gt; a -&gt; Filename
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">a
-</span><a href="#local-6989586621679103542"><span class="hs-identifier hs-var">dt'</span></a></span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Filename -&gt; Filename
+</span><a href="#local-6989586621679103681"><span class="hs-identifier hs-var">dt'</span></a></span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Filename -&gt; Filename
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;/&quot;</span></span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Filename -&gt; Filename
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">Filename
-</span><a href="#local-6989586621679103541"><span class="hs-identifier hs-var">fn</span></a></span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Filename -&gt; Filename
+</span><a href="#local-6989586621679103680"><span class="hs-identifier hs-var">fn</span></a></span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Filename -&gt; Filename
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">Format -&gt; Filename
-</span><a href="#local-6989586621679103535"><span class="hs-identifier hs-var">getExt</span></a></span><span> </span><span class="annot"><span class="annottext">Format
-</span><a href="#local-6989586621679103540"><span class="hs-identifier hs-var">format</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">IOMode
+</span><a href="#local-6989586621679103674"><span class="hs-identifier hs-var">getExt</span></a></span><span> </span><span class="annot"><span class="annottext">Format
+</span><a href="#local-6989586621679103679"><span class="hs-identifier hs-var">format</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">IOMode
 </span><span class="hs-identifier hs-var">WriteMode</span></span><span>
 </span><span id="line-49"></span><span>  </span><span class="annot"><span class="annottext">Handle -&gt; Filename -&gt; IO ()
 </span><span class="hs-identifier hs-var">hPutStrLn</span></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679103536"><span class="hs-identifier hs-var">outh</span></a></span><span> </span><span class="annot"><span class="annottext">(Filename -&gt; IO ()) -&gt; Filename -&gt; IO ()
+</span><a href="#local-6989586621679103675"><span class="hs-identifier hs-var">outh</span></a></span><span> </span><span class="annot"><span class="annottext">(Filename -&gt; IO ()) -&gt; Filename -&gt; IO ()
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Filename
 </span><span class="hs-identifier hs-var">render</span></span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Filename) -&gt; Doc -&gt; Filename
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Format -&gt; Filename -&gt; Document -&gt; Doc
 </span><a href="Language.Drasil.Generate.html#writeDoc"><span class="hs-identifier hs-var">writeDoc</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679103538"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Format
-</span><a href="#local-6989586621679103540"><span class="hs-identifier hs-var">format</span></a></span><span> </span><span class="annot"><span class="annottext">Filename
-</span><a href="#local-6989586621679103541"><span class="hs-identifier hs-var">fn</span></a></span><span> </span><span class="annot"><span class="annottext">Document
-</span><a href="#local-6989586621679103539"><span class="hs-identifier hs-var">body'</span></a></span><span>
+</span><a href="#local-6989586621679103677"><span class="hs-identifier hs-var">sm</span></a></span><span> </span><span class="annot"><span class="annottext">Format
+</span><a href="#local-6989586621679103679"><span class="hs-identifier hs-var">format</span></a></span><span> </span><span class="annot"><span class="annottext">Filename
+</span><a href="#local-6989586621679103680"><span class="hs-identifier hs-var">fn</span></a></span><span> </span><span class="annot"><span class="annottext">Document
+</span><a href="#local-6989586621679103678"><span class="hs-identifier hs-var">body'</span></a></span><span>
 </span><span id="line-50"></span><span>  </span><span class="annot"><span class="annottext">Handle -&gt; IO ()
 </span><span class="hs-identifier hs-var">hClose</span></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679103536"><span class="hs-identifier hs-var">outh</span></a></span><span>
-</span><span id="line-51"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679103535"><span class="annot"><span class="annottext">getExt :: Format -&gt; Filename
-</span><a href="#local-6989586621679103535"><span class="hs-identifier hs-var hs-var">getExt</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">TeX</span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;.tex&quot;</span></span><span>
-</span><span id="line-52"></span><span>        </span><span class="annot"><a href="#local-6989586621679103535"><span class="hs-identifier hs-var">getExt</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">HTML</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;.html&quot;</span></span><span>
-</span><span id="line-53"></span><span>        </span><span class="annot"><a href="#local-6989586621679103535"><span class="hs-identifier hs-var">getExt</span></a></span><span> </span><span class="hs-identifier">_</span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Filename
+</span><a href="#local-6989586621679103675"><span class="hs-identifier hs-var">outh</span></a></span><span>
+</span><span id="line-51"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679103674"><span class="annot"><span class="annottext">getExt :: Format -&gt; Filename
+</span><a href="#local-6989586621679103674"><span class="hs-identifier hs-var hs-var">getExt</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">TeX</span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;.tex&quot;</span></span><span>
+</span><span id="line-52"></span><span>        </span><span class="annot"><a href="#local-6989586621679103674"><span class="hs-identifier hs-var">getExt</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">HTML</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;.html&quot;</span></span><span>
+</span><span id="line-53"></span><span>        </span><span class="annot"><a href="#local-6989586621679103674"><span class="hs-identifier hs-var">getExt</span></a></span><span> </span><span class="hs-identifier">_</span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Filename
 forall a. HasCallStack =&gt; Filename -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="hs-string">&quot;we can only write TeX/HTML (for now)&quot;</span></span><span>
 </span><span id="line-54"></span><span>
 </span><span id="line-55"></span><span class="hs-comment">-- | Helper for writing the Makefile(s)</span><span>
 </span><span id="line-56"></span><span class="annot"><a href="Language.Drasil.Generate.html#prntMake"><span class="hs-identifier hs-type">prntMake</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DocSpec"><span class="hs-identifier hs-type">DocSpec</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
 </span><span id="line-57"></span><span id="prntMake"><span class="annot"><span class="annottext">prntMake :: DocSpec -&gt; IO ()
-</span><a href="Language.Drasil.Generate.html#prntMake"><span class="hs-identifier hs-var hs-var">prntMake</span></a></span></span><span> </span><span id="local-6989586621679103532"><span class="annot"><span class="annottext">ds :: DocSpec
-</span><a href="#local-6989586621679103532"><span class="hs-identifier hs-var">ds</span></a></span></span><span class="hs-glyph">@</span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DocSpec"><span class="hs-identifier hs-type">DocSpec</span></a></span><span> </span><span id="local-6989586621679103531"><span class="annot"><span class="annottext">dt :: DocType
-</span><a href="#local-6989586621679103531"><span class="hs-identifier hs-var">dt</span></a></span></span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
-</span><span id="line-58"></span><span>  </span><span class="hs-keyword">do</span><span> </span><span id="local-6989586621679103530"><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679103530"><span class="hs-identifier hs-var">outh</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Filename -&gt; IOMode -&gt; IO Handle
+</span><a href="Language.Drasil.Generate.html#prntMake"><span class="hs-identifier hs-var hs-var">prntMake</span></a></span></span><span> </span><span id="local-6989586621679103671"><span class="annot"><span class="annottext">ds :: DocSpec
+</span><a href="#local-6989586621679103671"><span class="hs-identifier hs-var">ds</span></a></span></span><span class="hs-glyph">@</span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Output.Formats.html#DocSpec"><span class="hs-identifier hs-type">DocSpec</span></a></span><span> </span><span id="local-6989586621679103670"><span class="annot"><span class="annottext">dt :: DocType
+</span><a href="#local-6989586621679103670"><span class="hs-identifier hs-var">dt</span></a></span></span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span>
+</span><span id="line-58"></span><span>  </span><span class="hs-keyword">do</span><span> </span><span id="local-6989586621679103669"><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679103669"><span class="hs-identifier hs-var">outh</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">Filename -&gt; IOMode -&gt; IO Handle
 </span><span class="hs-identifier hs-var">openFile</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DocType -&gt; Filename
 forall a. Show a =&gt; a -&gt; Filename
 </span><span class="hs-identifier hs-var">show</span></span><span> </span><span class="annot"><span class="annottext">DocType
-</span><a href="#local-6989586621679103531"><span class="hs-identifier hs-var">dt</span></a></span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Filename -&gt; Filename
+</span><a href="#local-6989586621679103670"><span class="hs-identifier hs-var">dt</span></a></span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Filename -&gt; Filename
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;/Makefile&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">IOMode
 </span><span class="hs-identifier hs-var">WriteMode</span></span><span>
 </span><span id="line-59"></span><span>     </span><span class="annot"><span class="annottext">Handle -&gt; Filename -&gt; IO ()
 </span><span class="hs-identifier hs-var">hPutStrLn</span></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679103530"><span class="hs-identifier hs-var">outh</span></a></span><span> </span><span class="annot"><span class="annottext">(Filename -&gt; IO ()) -&gt; Filename -&gt; IO ()
+</span><a href="#local-6989586621679103669"><span class="hs-identifier hs-var">outh</span></a></span><span> </span><span class="annot"><span class="annottext">(Filename -&gt; IO ()) -&gt; Filename -&gt; IO ()
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Doc -&gt; Filename
 </span><span class="hs-identifier hs-var">render</span></span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; Filename) -&gt; Doc -&gt; Filename
@@ -182,28 +182,28 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[DocSpec] -&gt; Doc
 forall c. RuleTransformer c =&gt; [c] -&gt; Doc
 </span><span class="hs-identifier hs-var">genMake</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">DocSpec
-</span><a href="#local-6989586621679103532"><span class="hs-identifier hs-var">ds</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679103671"><span class="hs-identifier hs-var">ds</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-60"></span><span>     </span><span class="annot"><span class="annottext">Handle -&gt; IO ()
 </span><span class="hs-identifier hs-var">hClose</span></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679103530"><span class="hs-identifier hs-var">outh</span></a></span><span>
+</span><a href="#local-6989586621679103669"><span class="hs-identifier hs-var">outh</span></a></span><span>
 </span><span id="line-61"></span><span>
 </span><span id="line-62"></span><span class="hs-comment">-- | Renders the documents</span><span>
 </span><span id="line-63"></span><span class="annot"><a href="Language.Drasil.Generate.html#writeDoc"><span class="hs-identifier hs-type">writeDoc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">PrintingInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Format</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Output.Formats.html#Filename"><span class="hs-identifier hs-type">Filename</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Document</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span>
 </span><span id="line-64"></span><span id="writeDoc"><span class="annot"><span class="annottext">writeDoc :: PrintingInformation -&gt; Format -&gt; Filename -&gt; Document -&gt; Doc
-</span><a href="Language.Drasil.Generate.html#writeDoc"><span class="hs-identifier hs-var hs-var">writeDoc</span></a></span></span><span> </span><span id="local-6989586621679103529"><span class="annot"><span class="annottext">s :: PrintingInformation
-</span><a href="#local-6989586621679103529"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">TeX</span></span><span>  </span><span class="hs-identifier">_</span><span>  </span><span id="local-6989586621679103528"><span class="annot"><span class="annottext">doc :: Document
-</span><a href="#local-6989586621679103528"><span class="hs-identifier hs-var">doc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Document -&gt; PrintingInformation -&gt; Doc
+</span><a href="Language.Drasil.Generate.html#writeDoc"><span class="hs-identifier hs-var hs-var">writeDoc</span></a></span></span><span> </span><span id="local-6989586621679103668"><span class="annot"><span class="annottext">s :: PrintingInformation
+</span><a href="#local-6989586621679103668"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">TeX</span></span><span>  </span><span class="hs-identifier">_</span><span>  </span><span id="local-6989586621679103667"><span class="annot"><span class="annottext">doc :: Document
+</span><a href="#local-6989586621679103667"><span class="hs-identifier hs-var">doc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Document -&gt; PrintingInformation -&gt; Doc
 </span><span class="hs-identifier hs-var">genTeX</span></span><span> </span><span class="annot"><span class="annottext">Document
-</span><a href="#local-6989586621679103528"><span class="hs-identifier hs-var">doc</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679103529"><span class="hs-identifier hs-var">s</span></a></span><span>
-</span><span id="line-65"></span><span class="annot"><a href="Language.Drasil.Generate.html#writeDoc"><span class="hs-identifier hs-var">writeDoc</span></a></span><span> </span><span id="local-6989586621679103527"><span class="annot"><span class="annottext">s :: PrintingInformation
-</span><a href="#local-6989586621679103527"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">HTML</span></span><span> </span><span id="local-6989586621679103526"><span class="annot"><span class="annottext">fn :: Filename
-</span><a href="#local-6989586621679103526"><span class="hs-identifier hs-var">fn</span></a></span></span><span> </span><span id="local-6989586621679103525"><span class="annot"><span class="annottext">doc :: Document
-</span><a href="#local-6989586621679103525"><span class="hs-identifier hs-var">doc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Filename -&gt; Document -&gt; Doc
+</span><a href="#local-6989586621679103667"><span class="hs-identifier hs-var">doc</span></a></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
+</span><a href="#local-6989586621679103668"><span class="hs-identifier hs-var">s</span></a></span><span>
+</span><span id="line-65"></span><span class="annot"><a href="Language.Drasil.Generate.html#writeDoc"><span class="hs-identifier hs-var">writeDoc</span></a></span><span> </span><span id="local-6989586621679103666"><span class="annot"><span class="annottext">s :: PrintingInformation
+</span><a href="#local-6989586621679103666"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">HTML</span></span><span> </span><span id="local-6989586621679103665"><span class="annot"><span class="annottext">fn :: Filename
+</span><a href="#local-6989586621679103665"><span class="hs-identifier hs-var">fn</span></a></span></span><span> </span><span id="local-6989586621679103664"><span class="annot"><span class="annottext">doc :: Document
+</span><a href="#local-6989586621679103664"><span class="hs-identifier hs-var">doc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">PrintingInformation -&gt; Filename -&gt; Document -&gt; Doc
 </span><span class="hs-identifier hs-var">genHTML</span></span><span> </span><span class="annot"><span class="annottext">PrintingInformation
-</span><a href="#local-6989586621679103527"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">Filename
-</span><a href="#local-6989586621679103526"><span class="hs-identifier hs-var">fn</span></a></span><span> </span><span class="annot"><span class="annottext">Document
-</span><a href="#local-6989586621679103525"><span class="hs-identifier hs-var">doc</span></a></span><span>
+</span><a href="#local-6989586621679103666"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">Filename
+</span><a href="#local-6989586621679103665"><span class="hs-identifier hs-var">fn</span></a></span><span> </span><span class="annot"><span class="annottext">Document
+</span><a href="#local-6989586621679103664"><span class="hs-identifier hs-var">doc</span></a></span><span>
 </span><span id="line-66"></span><span class="annot"><a href="Language.Drasil.Generate.html#writeDoc"><span class="hs-identifier hs-var">writeDoc</span></a></span><span> </span><span class="hs-identifier">_</span><span>    </span><span class="hs-identifier">_</span><span>  </span><span class="hs-identifier">_</span><span>   </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Filename -&gt; Doc
 forall a. HasCallStack =&gt; Filename -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="hs-string">&quot;we can only write TeX/HTML (for now)&quot;</span></span><span>
@@ -211,39 +211,39 @@ forall a. HasCallStack =&gt; Filename -&gt; a
 </span><span id="line-68"></span><span class="hs-comment">-- | Calls the code generator</span><span>
 </span><span id="line-69"></span><span class="annot"><a href="Language.Drasil.Generate.html#genCode"><span class="hs-identifier hs-type">genCode</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Choices</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeSpec</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
 </span><span id="line-70"></span><span id="genCode"><span class="annot"><span class="annottext">genCode :: Choices -&gt; CodeSpec -&gt; IO ()
-</span><a href="Language.Drasil.Generate.html#genCode"><span class="hs-identifier hs-var hs-var">genCode</span></a></span></span><span> </span><span id="local-6989586621679103524"><span class="annot"><span class="annottext">chs :: Choices
-</span><a href="#local-6989586621679103524"><span class="hs-identifier hs-var">chs</span></a></span></span><span> </span><span id="local-6989586621679103523"><span class="annot"><span class="annottext">spec :: CodeSpec
-</span><a href="#local-6989586621679103523"><span class="hs-identifier hs-var">spec</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span> </span><span>
-</span><span id="line-71"></span><span>  </span><span id="local-6989586621679103522"><span class="annot"><span class="annottext">Filename
-</span><a href="#local-6989586621679103522"><span class="hs-identifier hs-var">workingDir</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO Filename
+</span><a href="Language.Drasil.Generate.html#genCode"><span class="hs-identifier hs-var hs-var">genCode</span></a></span></span><span> </span><span id="local-6989586621679103663"><span class="annot"><span class="annottext">chs :: Choices
+</span><a href="#local-6989586621679103663"><span class="hs-identifier hs-var">chs</span></a></span></span><span> </span><span id="local-6989586621679103662"><span class="annot"><span class="annottext">spec :: CodeSpec
+</span><a href="#local-6989586621679103662"><span class="hs-identifier hs-var">spec</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span> </span><span>
+</span><span id="line-71"></span><span>  </span><span id="local-6989586621679103661"><span class="annot"><span class="annottext">Filename
+</span><a href="#local-6989586621679103661"><span class="hs-identifier hs-var">workingDir</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO Filename
 </span><span class="hs-identifier hs-var">getCurrentDirectory</span></span><span>
-</span><span id="line-72"></span><span>  </span><span id="local-6989586621679103521"><span class="annot"><span class="annottext">UTCTime
-</span><a href="#local-6989586621679103521"><span class="hs-identifier hs-var">time</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO UTCTime
+</span><span id="line-72"></span><span>  </span><span id="local-6989586621679103660"><span class="annot"><span class="annottext">UTCTime
+</span><a href="#local-6989586621679103660"><span class="hs-identifier hs-var">time</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO UTCTime
 </span><span class="hs-identifier hs-var">getCurrentTime</span></span><span>
-</span><span id="line-73"></span><span>  </span><span id="local-6989586621679103520"><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679103520"><span class="hs-identifier hs-var">sampData</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO [Expr] -&gt; (Filename -&gt; IO [Expr]) -&gt; Maybe Filename -&gt; IO [Expr]
+</span><span id="line-73"></span><span>  </span><span id="local-6989586621679103659"><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679103659"><span class="hs-identifier hs-var">sampData</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">IO [Expr] -&gt; (Filename -&gt; IO [Expr]) -&gt; Maybe Filename -&gt; IO [Expr]
 forall b a. b -&gt; (a -&gt; b) -&gt; Maybe a -&gt; b
 </span><span class="hs-identifier hs-var">maybe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Expr] -&gt; IO [Expr]
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
-</span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679103518"><span class="annot"><span class="annottext">sd :: Filename
-</span><a href="#local-6989586621679103518"><span class="hs-identifier hs-var">sd</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Filename -&gt; DataDesc' -&gt; IO [Expr]
+</span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679103657"><span class="annot"><span class="annottext">sd :: Filename
+</span><a href="#local-6989586621679103657"><span class="hs-identifier hs-var">sd</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">Filename -&gt; DataDesc' -&gt; IO [Expr]
 </span><span class="hs-identifier hs-var">readWithDataDesc</span></span><span> </span><span class="annot"><span class="annottext">Filename
-</span><a href="#local-6989586621679103518"><span class="hs-identifier hs-var">sd</span></a></span><span> </span><span class="annot"><span class="annottext">(DataDesc' -&gt; IO [Expr]) -&gt; DataDesc' -&gt; IO [Expr]
+</span><a href="#local-6989586621679103657"><span class="hs-identifier hs-var">sd</span></a></span><span> </span><span class="annot"><span class="annottext">(DataDesc' -&gt; IO [Expr]) -&gt; DataDesc' -&gt; IO [Expr]
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[CodeVarChunk] -&gt; DataDesc'
 </span><span class="hs-identifier hs-var">sampleInputDD</span></span><span> </span><span>
 </span><span id="line-74"></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeSpec -&gt; [CodeVarChunk]
 </span><span class="hs-identifier hs-var hs-var">extInputs</span></span><span> </span><span class="annot"><span class="annottext">CodeSpec
-</span><a href="#local-6989586621679103523"><span class="hs-identifier hs-var">spec</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Choices -&gt; Maybe Filename
+</span><a href="#local-6989586621679103662"><span class="hs-identifier hs-var">spec</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Choices -&gt; Maybe Filename
 </span><span class="hs-identifier hs-var">getSampleData</span></span><span> </span><span class="annot"><span class="annottext">Choices
-</span><a href="#local-6989586621679103524"><span class="hs-identifier hs-var">chs</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679103663"><span class="hs-identifier hs-var">chs</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-75"></span><span>  </span><span class="annot"><span class="annottext">Bool -&gt; Filename -&gt; IO ()
 </span><span class="hs-identifier hs-var">createDirectoryIfMissing</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="hs-string">&quot;src&quot;</span></span><span>
 </span><span id="line-76"></span><span>  </span><span class="annot"><span class="annottext">Filename -&gt; IO ()
 </span><span class="hs-identifier hs-var">setCurrentDirectory</span></span><span> </span><span class="annot"><span class="hs-string">&quot;src&quot;</span></span><span>
-</span><span id="line-77"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679103516"><span class="annot"><span class="annottext">genLangCode :: Lang -&gt; IO ()
-</span><a href="#local-6989586621679103516"><span class="hs-identifier hs-var hs-var">genLangCode</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Java</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Lang
+</span><span id="line-77"></span><span>  </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679103655"><span class="annot"><span class="annottext">genLangCode :: Lang -&gt; IO ()
+</span><a href="#local-6989586621679103655"><span class="hs-identifier hs-var hs-var">genLangCode</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Java</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Lang
 -&gt; (JavaCode (Program JavaCode) -&gt; ProgData)
 -&gt; (JavaProject (Package JavaProject) -&gt; PackData)
 -&gt; IO ()
@@ -253,13 +253,13 @@ Lang
 -&gt; (progRepr (Program progRepr) -&gt; ProgData)
 -&gt; (packRepr (Package packRepr) -&gt; PackData)
 -&gt; IO ()
-</span><a href="#local-6989586621679103514"><span class="hs-identifier hs-var">genCall</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
+</span><a href="#local-6989586621679103653"><span class="hs-identifier hs-var">genCall</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
 </span><span class="hs-identifier hs-var">Java</span></span><span> </span><span class="annot"><span class="annottext">JavaCode (Program JavaCode) -&gt; ProgData
 forall a. JavaCode a -&gt; a
 </span><span class="hs-identifier hs-var hs-var">unJC</span></span><span> </span><span class="annot"><span class="annottext">JavaProject (Package JavaProject) -&gt; PackData
 forall a. JavaProject a -&gt; a
 </span><span class="hs-identifier hs-var hs-var">unJP</span></span><span>
-</span><span id="line-78"></span><span>      </span><span class="annot"><a href="#local-6989586621679103516"><span class="hs-identifier hs-var">genLangCode</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Python</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Lang
+</span><span id="line-78"></span><span>      </span><span class="annot"><a href="#local-6989586621679103655"><span class="hs-identifier hs-var">genLangCode</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Python</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Lang
 -&gt; (PythonCode (Program PythonCode) -&gt; ProgData)
 -&gt; (PythonProject (Package PythonProject) -&gt; PackData)
 -&gt; IO ()
@@ -269,13 +269,13 @@ Lang
 -&gt; (progRepr (Program progRepr) -&gt; ProgData)
 -&gt; (packRepr (Package packRepr) -&gt; PackData)
 -&gt; IO ()
-</span><a href="#local-6989586621679103514"><span class="hs-identifier hs-var">genCall</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
+</span><a href="#local-6989586621679103653"><span class="hs-identifier hs-var">genCall</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
 </span><span class="hs-identifier hs-var">Python</span></span><span> </span><span class="annot"><span class="annottext">PythonCode (Program PythonCode) -&gt; ProgData
 forall a. PythonCode a -&gt; a
 </span><span class="hs-identifier hs-var hs-var">unPC</span></span><span> </span><span class="annot"><span class="annottext">PythonProject (Package PythonProject) -&gt; PackData
 forall a. PythonProject a -&gt; a
 </span><span class="hs-identifier hs-var hs-var">unPP</span></span><span>
-</span><span id="line-79"></span><span>      </span><span class="annot"><a href="#local-6989586621679103516"><span class="hs-identifier hs-var">genLangCode</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">CSharp</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Lang
+</span><span id="line-79"></span><span>      </span><span class="annot"><a href="#local-6989586621679103655"><span class="hs-identifier hs-var">genLangCode</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">CSharp</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Lang
 -&gt; (CSharpCode (Program CSharpCode) -&gt; ProgData)
 -&gt; (CSharpProject (Package CSharpProject) -&gt; PackData)
 -&gt; IO ()
@@ -285,13 +285,13 @@ Lang
 -&gt; (progRepr (Program progRepr) -&gt; ProgData)
 -&gt; (packRepr (Package packRepr) -&gt; PackData)
 -&gt; IO ()
-</span><a href="#local-6989586621679103514"><span class="hs-identifier hs-var">genCall</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
+</span><a href="#local-6989586621679103653"><span class="hs-identifier hs-var">genCall</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
 </span><span class="hs-identifier hs-var">CSharp</span></span><span> </span><span class="annot"><span class="annottext">CSharpCode (Program CSharpCode) -&gt; ProgData
 forall a. CSharpCode a -&gt; a
 </span><span class="hs-identifier hs-var hs-var">unCSC</span></span><span> </span><span class="annot"><span class="annottext">CSharpProject (Package CSharpProject) -&gt; PackData
 forall a. CSharpProject a -&gt; a
 </span><span class="hs-identifier hs-var hs-var">unCSP</span></span><span>
-</span><span id="line-80"></span><span>      </span><span class="annot"><a href="#local-6989586621679103516"><span class="hs-identifier hs-var">genLangCode</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Cpp</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Lang
+</span><span id="line-80"></span><span>      </span><span class="annot"><a href="#local-6989586621679103655"><span class="hs-identifier hs-var">genLangCode</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Cpp</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Lang
 -&gt; (CppCode
       CppSrcCode CppHdrCode (Program (CppCode CppSrcCode CppHdrCode))
     -&gt; ProgData)
@@ -303,7 +303,7 @@ Lang
 -&gt; (progRepr (Program progRepr) -&gt; ProgData)
 -&gt; (packRepr (Package packRepr) -&gt; PackData)
 -&gt; IO ()
-</span><a href="#local-6989586621679103514"><span class="hs-identifier hs-var">genCall</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
+</span><a href="#local-6989586621679103653"><span class="hs-identifier hs-var">genCall</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
 </span><span class="hs-identifier hs-var">Cpp</span></span><span> </span><span class="annot"><span class="annottext">CppCode
   CppSrcCode CppHdrCode (Program (CppCode CppSrcCode CppHdrCode))
 -&gt; ProgData
@@ -311,7 +311,7 @@ forall a. CppCode CppSrcCode CppHdrCode a -&gt; a
 </span><span class="hs-identifier hs-var">unCPPC</span></span><span> </span><span class="annot"><span class="annottext">CppProject (Package CppProject) -&gt; PackData
 forall a. CppProject a -&gt; a
 </span><span class="hs-identifier hs-var hs-var">unCPPP</span></span><span>
-</span><span id="line-81"></span><span>      </span><span class="annot"><a href="#local-6989586621679103516"><span class="hs-identifier hs-var">genLangCode</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Swift</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Lang
+</span><span id="line-81"></span><span>      </span><span class="annot"><a href="#local-6989586621679103655"><span class="hs-identifier hs-var">genLangCode</span></a></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Swift</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Lang
 -&gt; (SwiftCode (Program SwiftCode) -&gt; ProgData)
 -&gt; (SwiftProject (Package SwiftProject) -&gt; PackData)
 -&gt; IO ()
@@ -321,20 +321,20 @@ Lang
 -&gt; (progRepr (Program progRepr) -&gt; ProgData)
 -&gt; (packRepr (Package packRepr) -&gt; PackData)
 -&gt; IO ()
-</span><a href="#local-6989586621679103514"><span class="hs-identifier hs-var">genCall</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
+</span><a href="#local-6989586621679103653"><span class="hs-identifier hs-var">genCall</span></a></span><span> </span><span class="annot"><span class="annottext">Lang
 </span><span class="hs-identifier hs-var">Swift</span></span><span> </span><span class="annot"><span class="annottext">SwiftCode (Program SwiftCode) -&gt; ProgData
 forall a. SwiftCode a -&gt; a
 </span><span class="hs-identifier hs-var hs-var">unSC</span></span><span> </span><span class="annot"><span class="annottext">SwiftProject (Package SwiftProject) -&gt; PackData
 forall a. SwiftProject a -&gt; a
 </span><span class="hs-identifier hs-var hs-var">unSP</span></span><span>
-</span><span id="line-82"></span><span>      </span><span id="local-6989586621679103514"><span class="annot"><span class="annottext">genCall :: Lang
+</span><span id="line-82"></span><span>      </span><span id="local-6989586621679103653"><span class="annot"><span class="annottext">genCall :: Lang
 -&gt; (progRepr (Program progRepr) -&gt; ProgData)
 -&gt; (packRepr (Package packRepr) -&gt; PackData)
 -&gt; IO ()
-</span><a href="#local-6989586621679103514"><span class="hs-identifier hs-var hs-var">genCall</span></a></span></span><span> </span><span id="local-6989586621679103509"><span class="annot"><span class="annottext">lng :: Lang
-</span><a href="#local-6989586621679103509"><span class="hs-identifier hs-var">lng</span></a></span></span><span> </span><span id="local-6989586621679103508"><span class="annot"><span class="annottext">unProgRepr :: progRepr (Program progRepr) -&gt; ProgData
-</span><a href="#local-6989586621679103508"><span class="hs-identifier hs-var">unProgRepr</span></a></span></span><span> </span><span id="local-6989586621679103507"><span class="annot"><span class="annottext">unPackRepr :: packRepr (Package packRepr) -&gt; PackData
-</span><a href="#local-6989586621679103507"><span class="hs-identifier hs-var">unPackRepr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Lang
+</span><a href="#local-6989586621679103653"><span class="hs-identifier hs-var hs-var">genCall</span></a></span></span><span> </span><span id="local-6989586621679103648"><span class="annot"><span class="annottext">lng :: Lang
+</span><a href="#local-6989586621679103648"><span class="hs-identifier hs-var">lng</span></a></span></span><span> </span><span id="local-6989586621679103647"><span class="annot"><span class="annottext">unProgRepr :: progRepr (Program progRepr) -&gt; ProgData
+</span><a href="#local-6989586621679103647"><span class="hs-identifier hs-var">unProgRepr</span></a></span></span><span> </span><span id="local-6989586621679103646"><span class="annot"><span class="annottext">unPackRepr :: packRepr (Package packRepr) -&gt; PackData
+</span><a href="#local-6989586621679103646"><span class="hs-identifier hs-var">unPackRepr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Lang
 -&gt; (progRepr (Program progRepr) -&gt; ProgData)
 -&gt; (packRepr (Package packRepr) -&gt; PackData)
 -&gt; DrasilState
@@ -347,31 +347,31 @@ Lang
 -&gt; DrasilState
 -&gt; IO ()
 </span><span class="hs-identifier hs-var">generateCode</span></span><span> </span><span class="annot"><span class="annottext">Lang
-</span><a href="#local-6989586621679103509"><span class="hs-identifier hs-var">lng</span></a></span><span> </span><span class="annot"><span class="annottext">progRepr (Program progRepr) -&gt; ProgData
-</span><a href="#local-6989586621679103508"><span class="hs-identifier hs-var">unProgRepr</span></a></span><span> </span><span>
+</span><a href="#local-6989586621679103648"><span class="hs-identifier hs-var">lng</span></a></span><span> </span><span class="annot"><span class="annottext">progRepr (Program progRepr) -&gt; ProgData
+</span><a href="#local-6989586621679103647"><span class="hs-identifier hs-var">unProgRepr</span></a></span><span> </span><span>
 </span><span id="line-83"></span><span>        </span><span class="annot"><span class="annottext">packRepr (Package packRepr) -&gt; PackData
-</span><a href="#local-6989586621679103507"><span class="hs-identifier hs-var">unPackRepr</span></a></span><span> </span><span class="annot"><span class="annottext">(DrasilState -&gt; IO ()) -&gt; DrasilState -&gt; IO ()
+</span><a href="#local-6989586621679103646"><span class="hs-identifier hs-var">unPackRepr</span></a></span><span> </span><span class="annot"><span class="annottext">(DrasilState -&gt; IO ()) -&gt; DrasilState -&gt; IO ()
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Lang -&gt; Filename -&gt; [Expr] -&gt; Choices -&gt; CodeSpec -&gt; DrasilState
 </span><span class="hs-identifier hs-var">generator</span></span><span> </span><span class="annot"><span class="annottext">Lang
-</span><a href="#local-6989586621679103509"><span class="hs-identifier hs-var">lng</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Day -&gt; Filename
+</span><a href="#local-6989586621679103648"><span class="hs-identifier hs-var">lng</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Day -&gt; Filename
 </span><span class="hs-identifier hs-var">showGregorian</span></span><span> </span><span class="annot"><span class="annottext">(Day -&gt; Filename) -&gt; Day -&gt; Filename
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UTCTime -&gt; Day
 </span><span class="hs-identifier hs-var hs-var">utctDay</span></span><span> </span><span class="annot"><span class="annottext">UTCTime
-</span><a href="#local-6989586621679103521"><span class="hs-identifier hs-var">time</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Expr]
-</span><a href="#local-6989586621679103520"><span class="hs-identifier hs-var">sampData</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
-</span><a href="#local-6989586621679103524"><span class="hs-identifier hs-var">chs</span></a></span><span> </span><span class="annot"><span class="annottext">CodeSpec
-</span><a href="#local-6989586621679103523"><span class="hs-identifier hs-var">spec</span></a></span><span>
+</span><a href="#local-6989586621679103660"><span class="hs-identifier hs-var">time</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[Expr]
+</span><a href="#local-6989586621679103659"><span class="hs-identifier hs-var">sampData</span></a></span><span> </span><span class="annot"><span class="annottext">Choices
+</span><a href="#local-6989586621679103663"><span class="hs-identifier hs-var">chs</span></a></span><span> </span><span class="annot"><span class="annottext">CodeSpec
+</span><a href="#local-6989586621679103662"><span class="hs-identifier hs-var">spec</span></a></span><span>
 </span><span id="line-84"></span><span>  </span><span class="annot"><span class="annottext">(Lang -&gt; IO ()) -&gt; [Lang] -&gt; IO ()
 forall (t :: * -&gt; *) (m :: * -&gt; *) a b.
 (Foldable t, Monad m) =&gt;
 (a -&gt; m b) -&gt; t a -&gt; m ()
 </span><span class="hs-identifier hs-var">mapM_</span></span><span> </span><span class="annot"><span class="annottext">Lang -&gt; IO ()
-</span><a href="#local-6989586621679103516"><span class="hs-identifier hs-var">genLangCode</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Choices -&gt; [Lang]
+</span><a href="#local-6989586621679103655"><span class="hs-identifier hs-var">genLangCode</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Choices -&gt; [Lang]
 </span><span class="hs-identifier hs-var hs-var">lang</span></span><span> </span><span class="annot"><span class="annottext">Choices
-</span><a href="#local-6989586621679103524"><span class="hs-identifier hs-var">chs</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679103663"><span class="hs-identifier hs-var">chs</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-85"></span><span>  </span><span class="annot"><span class="annottext">Filename -&gt; IO ()
 </span><span class="hs-identifier hs-var">setCurrentDirectory</span></span><span> </span><span class="annot"><span class="annottext">Filename
-</span><a href="#local-6989586621679103522"><span class="hs-identifier hs-var">workingDir</span></a></span><span>
+</span><a href="#local-6989586621679103661"><span class="hs-identifier hs-var">workingDir</span></a></span><span>
 </span><span id="line-86"></span></pre></body></html>

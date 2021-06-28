@@ -1,4 +1,4 @@
--- | Defines the 'Code' data type
+-- | Defines the 'Code' data type.
 module Language.Drasil.Code.Code (
     Code(..),
     spaceToCodeType
@@ -10,10 +10,10 @@ import GOOL.Drasil (CodeType(..))
 
 import Text.PrettyPrint.HughesPJ (Doc)
 
--- | Represents the generated code as a list of file names and rendered code pairs
+-- | Represents the generated code as a list of file names and rendered code pairs.
 newtype Code = Code { unCode :: [(FilePath, Doc)]}
 
--- Default mapping between Space and CodeType
+-- Default mapping between Space and CodeType.
 spaceToCodeType :: S.Space -> [CodeType]
 spaceToCodeType S.Integer       = [Integer]
 spaceToCodeType S.Natural       = [Integer]

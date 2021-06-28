@@ -5,15 +5,18 @@ import Language.Drasil.Chunk.Code (CodeVarChunk)
 import Data.List (nub)
 import Data.List.NonEmpty (NonEmpty(..), fromList)
 
+-- | A 'DataItem' is just a 'CodeVarChunk' (a piece of data).
 type DataItem = CodeVarChunk
 
 -- New DataDesc
-
+-- | A data description either has data connected to other pieces of data, or a single piece of data.
 data DataDesc' = DD Data' Delimiter DataDesc' | End Data'
 
-data Data' = Datum DataItem' 
-  | Data -- To be used in cases where multiple list-type data have their 
-         -- elements intermixed, and thus need to be described together
+-- Data can either contain a single 'DataItem'', 'Data', or 'Junk'. See source for more details.
+data Data' = Datum DataItem' -- ^ Single data item.
+  -- | To be used in cases where multiple list-type data have their 
+  -- elements intermixed, and thus need to be described together.
+  | Data 
     (NonEmpty DataItem') -- The DataItems being simultaneously described. 
                 -- The intra-list delimiters for any shared dimensions should 
                 -- be the same between the DataItems. For example, if mixing 2 
@@ -29,7 +32,7 @@ data Data' = Datum DataItem'
             -- Ex. 2 2-D lists with 2 degrees of intermixing:
               -- x11, y11 x12, y12; x21, y21 x22, y22
     Delimiter -- Delimiter between elements from different lists
-  | Junk -- Data that can be ignored/skipped over
+  | Junk -- ^ Data that can be ignored/skipped over.
 
 data DataItem' = DI 
   CodeVarChunk -- The datum being described

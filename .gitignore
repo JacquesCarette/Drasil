@@ -44,6 +44,7 @@ code/stable/*/src/*/latex
 # Website
 code/website/_cache
 code/website/_site
+code/drasil-website/Website
 
 # PDF generation, TeX caches, and misc. file types
 *.aux

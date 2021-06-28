@@ -14,8 +14,8 @@ main = do
   deployLocation <- getEnv "DEPLOY_FOLDER"
   docsRoot <- getEnv "DOCS_FOLDER"
   exampleRoot <- getEnv "EXAMPLES_FOLDER"
-  srsDir <- getEnv "SRS_FOLDER_FRAG"
-  doxDir <- getEnv "DOX_FOLDER"
+  --srsDir <- getEnv "SRS_FOLDER_FRAG"
+  --doxDir <- getEnv "DOX_FOLDER"
   graphRoot <- getEnv "GRAPH_FOLDER"
   analysisRoot <- getEnv "ANALYSIS_FOLDER"
 
@@ -33,10 +33,9 @@ main = do
       buildPath = "https://github.com/" ++ repoSlug ++ "/actions" ++ maybe "" ("/runs/" ++) buildId
 
       -- organize all the possible folder locations to use in functions
-      allFolders = Folder {depL = deployLocation, docsRt = deployLocation ++ docsRoot,
-        exRt = deployLocation ++ exampleRoot, srsD = deployLocation ++ srsDir, 
-        doxD = deployLocation ++ doxDir, graphRt = deployLocation ++ graphRoot, 
-        analysisRt = deployLocation ++ analysisRoot, repoRt = repoCommitRoot, 
+      allFolders = Folder {depL = deployLocation, docsRt = docsRoot,
+        exRt = exampleRoot, graphRt = graphRoot,
+        analysisRt = analysisRoot, repoRt = repoCommitRoot, 
         buildNum = buildNumber, buildPth = buildPath}
 
   -- generate the html document/website.

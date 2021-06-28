@@ -30,8 +30,8 @@ data FolderLocation = Folder {
         depL :: FilePath
     ,   docsRt :: FilePath
     ,   exRt :: FilePath
-    ,   srsD :: FilePath
-    ,   doxD :: FilePath
+    --,   srsD :: FilePath
+    --,   doxD :: FilePath
     ,   graphRt :: FilePath
     ,   analysisRt :: FilePath
     ,   repoRt :: FilePath

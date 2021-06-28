@@ -19,9 +19,6 @@ infixr 4 $=
 infixr 9 $&&
 infixr 9 $||
 
--- Known math functions.
--- TODO: Move the below to a separate file somehow. How to go about it?
-
 -- Binary functions
 
 -- | Arithmetic operators (fractional, power, and subtraction).
@@ -108,18 +105,6 @@ data Expr where
   --   * F(x,y) would be (FCall F [x,y]).
   --   * F(x,n=y) would be (FCall F [x] [(n,y)]).
   FCall    :: UID -> [Expr] -> [(UID, Expr)] -> Expr
-  -- | Actor creation given 'UID', parameters, and named parameters.
-  New      :: UID -> [Expr] -> [(UID, Expr)] -> Expr
-  -- | Message an actor:
-  --
-  --   * 1st 'UID' is the actor,
-  --   * 2nd 'UID' is the method.
-  Message  :: UID -> UID -> [Expr] -> [(UID, Expr)] -> Expr
-  -- | Access a field of an actor:
-  --
-  --   * 1st 'UID' is the actor,
-  --   * 2nd 'UID' is the field.
-  Field    :: UID -> UID -> Expr
   -- | For multi-case expressions, each pair represents one case.
   Case     :: Completeness -> [(Expr,Relation)] -> Expr
   -- | Represents a matrix of expressions.
@@ -226,9 +211,9 @@ mulRe l r = AssocA MulRe [l, r]
 
 ($&&), ($||) :: Expr -> Expr -> Expr
 -- | Smart constructor for the boolean /and/ operator.
-a $&& b = AssocB And [a,b]
+a $&& b = AssocB And [a, b]
 -- | Smart constructor for the boolean /or/ operator.
-a $|| b = AssocB Or  [a,b]
+a $|| b = AssocB Or  [a, b]
 
 -- | The variable type is just a renamed 'String'.
 type Variable = String

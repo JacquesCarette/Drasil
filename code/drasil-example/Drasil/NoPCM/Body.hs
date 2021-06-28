@@ -1,4 +1,4 @@
-module Drasil.NoPCM.Body where
+module Drasil.NoPCM.Body (si, srs, printSetting, noPCMODEInfo) where
 
 import Control.Lens ((^.))
 import Language.Drasil hiding (section)
@@ -12,8 +12,7 @@ import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 
-import Language.Drasil.Code (quantvar, listToArray, ODEInfo, odeInfo,
-  ODEOptions, odeOptions, ODEMethod(..))
+import Language.Drasil.Code (quantvar, listToArray)
 
 import Data.List ((\\), nub)
 import Data.Drasil.People (thulasi)
@@ -66,8 +65,8 @@ import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, wa
 import Drasil.SWHS.Requirements (nfRequirements)
 import Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, nwtnCooling, sensHtETemplate)
 import Drasil.SWHS.Unitals (coilSAMax, deltaT, htFluxC, htFluxIn,
-  htFluxOut, htCapL, htTransCoeff, inSA, outSA, tankVol, tau, tauW, tempC,
-  tempEnv, tempInit, tempW, thFluxVect, timeFinal, timeStep, volHtGen, watE,
+  htFluxOut, htCapL, htTransCoeff, inSA, outSA, tankVol, tau, tauW,
+  tempEnv, tempW, thFluxVect, volHtGen, watE,
   wMass, wVol, unitalChuncks, absTol, relTol)
 
 import Drasil.NoPCM.Assumptions
@@ -79,6 +78,7 @@ import Drasil.NoPCM.GenDefs (genDefs, genDefRefs)
 import Drasil.NoPCM.Goals (goals, goalRefs)
 import Drasil.NoPCM.IMods (eBalanceOnWtr, instModIntro, iModRefs)
 import qualified Drasil.NoPCM.IMods as NoPCM (iMods)
+import Drasil.NoPCM.ODEs
 import Drasil.NoPCM.Requirements (funcReqs, inputInitValsTable, reqRefs)
 import Drasil.NoPCM.References (citations, citeRefs)
 import Drasil.NoPCM.Unitals (inputs, constrained, unconstrained,
@@ -205,14 +205,6 @@ si = SI {
   _usedinfodb  = usedDB,
    refdb       = refDB
 }
-
-noPCMODEOpts :: ODEOptions
-noPCMODEOpts = odeOptions RK45 (sy absTol) (sy relTol) (sy timeStep) (exactDbl 0)
-
-noPCMODEInfo :: ODEInfo
-noPCMODEInfo = odeInfo (quantvar time) (quantvar tempW)
-  [quantvar tauW, quantvar tempC] (exactDbl 0) (sy timeFinal) (sy tempInit)
-  [recip_ (sy tauW) `mulRe` (sy tempC $- idx (sy tempW) (int 0))] noPCMODEOpts
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns

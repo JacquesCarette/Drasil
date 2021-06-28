@@ -23,6 +23,6 @@ import Language.Drasil.DisplayExpr
 import Language.Drasil.Expr (UFuncB(..), UFuncVec(..)
   , ArithBinOp(..), BoolBinOp(..), EqBinOp(..)
   , LABinOp(..), OrdBinOp(..), VVVBinOp(..), VVNBinOp(..))
-import Language.Drasil.Expr.Extract
+import Language.Drasil.Expr.Extract (deDep, eDep, eNames, eNames', eNamesRI)
 import Language.Drasil.Expr.Precedence (precA, precB, eprec, dePrec, dePrecAssoc)
 import Language.Drasil.Sentence.Extract (sdep, lnames, lnames')

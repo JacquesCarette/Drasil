@@ -3,20 +3,22 @@
 module Language.Drasil.CodeSpec where
 
 import Language.Drasil
-import Language.Drasil.Display
+import Language.Drasil.Display (Symbol(Variable))
 import Database.Drasil (ChunkDB, SystemInformation(SI),
   _authors, _constants, _constraints, _datadefs, _instModels,
   _configFiles, _inputs, _outputs, _sys, _sysinfodb)
-import Language.Drasil.Development
 import Theory.Drasil (DataDefinition, qdFromDD, getEqModQdsFromIm)
 
 import Language.Drasil.Chunk.Code (CodeChunk, CodeVarChunk, CodeIdea(codeChunk),
-  ConstraintMap, programName, quantvar, codevars, codevars',
-  varResolve, constraintMap)
+  programName, quantvar, codevars, codevars', varResolve, DefiningCodeExpr(..))
+import Language.Drasil.Chunk.ConstraintMap (ConstraintCEMap, ConstraintCE, constraintMap)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, qtov, qtoc, odeDef,
-  auxExprs, codeEquat)
+  auxExprs)
 import Language.Drasil.Choices (Choices(..))
+import Language.Drasil.Code.Expr.Development (expr, eNamesRI)
 import Language.Drasil.Mod (Func(..), FuncData(..), FuncDef(..), Mod(..), Name)
+
+import Utils.Drasil (subsetOf)
 
 import Control.Lens ((^.))
 import Data.List (intercalate, nub, (\\))
@@ -51,7 +53,7 @@ data CodeSpec where
   -- outputs.
   execOrder :: [Def],
   -- Map from UIDs to constraints for all constrained chunks used in the problem
-  cMap :: ConstraintMap,
+  cMap :: ConstraintCEMap,
   -- List of all constants used in the problem
   constants :: [Const],
   -- Map containing all constants used in the problem.
@@ -139,7 +141,7 @@ asVC' (FData (FuncData n _ _))     = vc n (nounPhraseSP n) (Variable n) Real
 getDerivedInputs :: [DataDefinition] -> [Input] -> [Const] ->
   ChunkDB -> [QDefinition]
 getDerivedInputs ddefs ins cnsts sm =
-  filter ((`subsetOf` refSet) . flip codevars sm . (^. defnExpr)) (map qdFromDD ddefs)
+  filter ((`subsetOf` refSet) . flip codevars sm . expr . (^. defnExpr)) (map qdFromDD ddefs)
   where refSet = ins ++ map quantvar cnsts
 
 type Known = CodeVarChunk
@@ -152,7 +154,7 @@ getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
   where getExecOrder' ord _ _ []   = ord
         getExecOrder' ord defs' k n =
           let new  = filter (\def -> (`subsetOf` k) (concatMap (`codevars'` sm)
-                (codeEquat def : def ^. auxExprs) \\ [quantvar def])) defs'
+                (def ^. codeExpr : def ^. auxExprs) \\ [quantvar def])) defs'
               cnew = map quantvar new
               kNew = k ++ cnew
               nNew = n \\ cnew
@@ -165,17 +167,13 @@ getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
                        ++ intercalate ", " (map (^. uid) k))
               else getExecOrder' (ord ++ new) (defs' \\ new) kNew nNew
 
--- Returns true if the first list contains only elements that are present in 
--- the second list.
-subsetOf :: (Eq a) => [a] -> [a] -> Bool
-xs `subsetOf` ys = all (`elem` ys) xs
 
 -- | Get a list of Constraints for a list of CodeChunks
-getConstraints :: (HasUID c) => ConstraintMap -> [c] -> [Constraint]
+getConstraints :: (HasUID c) => ConstraintCEMap -> [c] -> [ConstraintCE]
 getConstraints cm cs = concat $ mapMaybe (\c -> Map.lookup (c ^. uid) cm) cs
 
 -- | Get a list of CodeChunks from a constraint
-constraintvars :: Constraint -> ChunkDB -> [CodeChunk]
+constraintvars :: ConstraintCE -> ChunkDB -> [CodeChunk]
 constraintvars (Range _ ri) m = map (codeChunk . varResolve m) $ nub $
   eNamesRI ri
 constraintvars _ _ = []

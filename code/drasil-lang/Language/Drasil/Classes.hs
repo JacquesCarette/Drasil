@@ -31,7 +31,7 @@ module Language.Drasil.Classes (
 -- also helps with cycles...
 import Language.Drasil.Classes.Core
 
-import Language.Drasil.Constraint (Constraint)
+import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.Derivation (Derivation)
 import Language.Drasil.UnitLang (UDefn, USymb)
 import Language.Drasil.DisplayClasses (Display(toDispExpr))
@@ -105,7 +105,7 @@ class NamedIdea c => CommonIdea c where
 -- It does not enforce 'Quantity' at this point.
 class Constrained c where
   -- | Provides a 'Lens' to the 'Constraint's.
-  constraints :: Lens' c [Constraint]
+  constraints :: Lens' c [ConstraintE]
 
 -- | A 'Quantity' that could have a reasonable value.
 class HasReasVal c where

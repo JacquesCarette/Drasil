@@ -13,7 +13,7 @@ import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Display(toDispExpr),
   Definition(defn), ConceptDomain(cdom), Concept, Quantity, HasSpace(typ),
   IsUnit, Constrained(constraints), HasReasVal(reasVal))
-import Language.Drasil.Constraint (Constraint(..))
+import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr(..))
 import Language.Drasil.Expr.Math (sy)
@@ -24,9 +24,9 @@ import Language.Drasil.Symbol (Symbol)
 
 -- | ConstrainedChunks are symbolic quantities ('QuantityDict')
 -- with 'Constraint's and maybe a typical value ('Maybe' 'Expr').
-data ConstrainedChunk = ConstrainedChunk { _qd :: QuantityDict
-                                         , _constr :: [Constraint]
-                                         , _reasV :: Maybe Expr
+data ConstrainedChunk = ConstrainedChunk { _qd     :: QuantityDict
+                                         , _constr :: [ConstraintE]
+                                         , _reasV  :: Maybe Expr
                                          }
 makeLenses ''ConstrainedChunk
 
@@ -53,11 +53,11 @@ instance MayHaveUnit   ConstrainedChunk where getUnit = getUnit . view qd
 
 -- | Creates a constrained unitary chunk from a 'UID', term ('NP'), 'Symbol', unit, 'Space', 'Constraint's, and an 'Expr'.
 cuc :: (IsUnit u) => String -> NP -> Symbol -> u
-  -> Space -> [Constraint] -> Expr -> ConstrainedChunk
+  -> Space -> [ConstraintE] -> Expr -> ConstrainedChunk
 cuc i t s u space cs rv = ConstrainedChunk (qw (unitary i t s u space)) cs (Just rv)
 
 -- | Creates a constrained unitary chunk from a 'UID', term ('NP'), 'Symbol', 'Space', 'Constraint's, and a 'Maybe' 'Expr' (Similar to 'cuc' but no units).
-cvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Maybe Expr -> ConstrainedChunk
+cvc :: String -> NP -> Symbol -> Space -> [ConstraintE] -> Maybe Expr -> ConstrainedChunk
 cvc i des sym space = ConstrainedChunk (qw (vc i des sym space))
 
 -- | Creates a new ConstrainedChunk from either a 'ConstrainedChunk', 'ConstrConcept', 'UncertainChunk', or an 'UncertQ'.
@@ -66,9 +66,9 @@ cnstrw c = ConstrainedChunk (qw c) (c ^. constraints) (c ^. reasVal)
 
 -- | ConstrConcepts are conceptual symbolic quantities ('DefinedQuantityDict')
 -- with 'Constraint's and maybe a reasonable value (no units!).
-data ConstrConcept = ConstrConcept { _defq :: DefinedQuantityDict
-                                   , _constr' :: [Constraint]
-                                   , _reasV' :: Maybe Expr
+data ConstrConcept = ConstrConcept { _defq    :: DefinedQuantityDict
+                                   , _constr' :: [ConstraintE]
+                                   , _reasV'  :: Maybe Expr
                                    }
 makeLenses ''ConstrConcept
 
@@ -101,24 +101,24 @@ instance Display       ConstrConcept where toDispExpr = toDispExpr . sy
 
 -- | Creates a 'ConstrConcept' with a quantitative concept, a list of 'Constraint's and an 'Expr'.
 constrained' :: (Concept c, MayHaveUnit c, Quantity c) =>
-  c -> [Constraint] -> Expr -> ConstrConcept
+  c -> [ConstraintE] -> Expr -> ConstrConcept
 constrained' q cs rv = ConstrConcept (dqdWr q) cs (Just rv)
 
 -- | Similar to 'constrained'', but defaults 'Maybe' 'Expr' to 'Nothing'.
 constrainedNRV' :: (Concept c, MayHaveUnit c, Quantity c) =>
-  c -> [Constraint] -> ConstrConcept
+  c -> [ConstraintE] -> ConstrConcept
 constrainedNRV' q cs = ConstrConcept (dqdWr q) cs Nothing
 
 -- | Creates a constrained unitary chunk from a 'UID', term ('NP'), description ('String'), 'Symbol', unit, 'Space', 'Constraint's, and an 'Expr'.
 cuc' :: (IsUnit u) => String -> NP -> String -> Symbol -> u
-            -> Space -> [Constraint] -> Expr -> ConstrConcept
+            -> Space -> [ConstraintE] -> Expr -> ConstrConcept
 cuc' nam trm desc sym un space cs rv =
   ConstrConcept (dqd (cw (ucs nam trm desc sym space un)) sym space uu) cs (Just rv)
   where uu = unitWrapper un
 
 -- | Similar to 'cuc'', but 'Symbol' is dependent on 'Stage'.
 cuc'' :: (IsUnit u) => String -> NP -> String -> (Stage -> Symbol) -> u
-            -> Space -> [Constraint] -> Expr -> ConstrConcept
+            -> Space -> [ConstraintE] -> Expr -> ConstrConcept
 cuc'' nam trm desc sym un space cs rv =
   ConstrConcept (dqd' (dcc nam trm desc) sym space (Just uu)) cs (Just rv)
   where uu = unitWrapper un

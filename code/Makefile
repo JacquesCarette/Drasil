@@ -3,7 +3,7 @@
 SHELL=/bin/bash
 
 # List of all known packages
-PACKAGES = lang utils build gool code theory database printers gen data docLang example website
+PACKAGES = lang utils build gool code theory database printers gen data docLang example
 
 # and associated package-level suffixes
 BUILD_P_SUFFIX = _build
@@ -108,8 +108,6 @@ DEPLOY_FOLDER = $(DEPLOY_FOLDER_NAME)/
 DEPLOY_CODE_PATH_KV_SEP = :
 DOCS_FOLDER_NAME = docs
 DOCS_FOLDER = $(DOCS_FOLDER_NAME)/
-WEBSITE_FOLDER_NAME = website
-WEBSITE_FOLDER = $(WEBSITE_FOLDER_NAME)/
 # make command line options
 #  GHC debug options
 PROFALL = --executable-profiling --library-profiling

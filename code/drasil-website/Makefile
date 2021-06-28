@@ -7,8 +7,7 @@ run: build
 	stack exec -- website
 
 clean:
-	-rm -r _site
-	-rm -r _cache
+	-rm -rf ./Website
 	-stack clean
 
 .PHONY: all build clean run

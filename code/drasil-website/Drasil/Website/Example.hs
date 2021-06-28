@@ -27,10 +27,10 @@ exampleList repoPth exPth = Bullet $ zip (zipWith4 (mkExampleListFunc exPth) exa
 
 mkExampleListFunc :: FilePath -> String -> String -> [(String, [(Sentence, Reference)])] -> [(String, [(Sentence, Reference)])] -> ItemType
 mkExampleListFunc path exmpl desc codePth doxPth
-  | map ((map snd).snd) codePth == [[]] && map ((map snd).snd) doxPth == [[]] = Nested (S exmpl +:+ S desc) $ Bullet [(Flat (S (exmpl ++ "SRS") +:+ namedRef (getHTMLRef path exmpl) (S "[HTML]") +:+ namedRef (getPDFRef path exmpl) (S "[PDF]")), Nothing)]
-  | map ((map snd).snd) doxPth == [[]]                            = Nested (S exmpl +:+ S desc) $ Bullet $ zip [Flat $ S (exmpl ++ "SRS") +:+ namedRef (getHTMLRef path exmpl) (S "[HTML]") +:+ namedRef (getPDFRef path exmpl) (S "[PDF]"),
+  | map ((map snd).snd) codePth == [[]] && map ((map snd).snd) doxPth == [[]] = Nested (S exmpl +:+ S desc) $ Bullet [(Flat (S (exmpl ++ "SRS") +:+ namedRef (getHTMLRef exmpl) (S "[HTML]") +:+ namedRef (getPDFRef exmpl) (S "[PDF]")), Nothing)]
+  | map ((map snd).snd) doxPth == [[]]                            = Nested (S exmpl +:+ S desc) $ Bullet $ zip [Flat $ S (exmpl ++ "SRS") +:+ namedRef (getHTMLRef exmpl) (S "[HTML]") +:+ namedRef (getPDFRef exmpl) (S "[PDF]"),
                                                                        Nested (S generatedCodeTitle) $ Bullet $ mkCodeList codePth] $ repeat Nothing
-  | otherwise                                         = Nested (S exmpl +:+ S desc) $ Bullet $ zip [Flat $ S (exmpl ++ "SRS") +:+ namedRef (getHTMLRef path exmpl) (S "[HTML]") +:+ namedRef (getPDFRef path exmpl) (S "[PDF]"),
+  | otherwise                                         = Nested (S exmpl +:+ S desc) $ Bullet $ zip [Flat $ S (exmpl ++ "SRS") +:+ namedRef (getHTMLRef exmpl) (S "[HTML]") +:+ namedRef (getPDFRef exmpl) (S "[PDF]"),
                                                                        Nested (S generatedCodeTitle) $ Bullet $ mkCodeList codePth,
                                                                        Nested (S generatedCodeDocsTitle) $ Bullet $ mkCodeList doxPth] $ repeat Nothing
 
@@ -112,12 +112,12 @@ projectileCase3Dox   = ["cpp", "csharp", "java", "python"]
 projectileCase4Dox   = ["cpp", "csharp", "java", "python"]
 projectileCase5Dox   = ["cpp", "csharp", "java", "python"]
 
-getHTMLRef, getPDFRef :: FilePath -> String -> Reference
-getHTMLRef path ex = Reference ("htmlRef" ++ ex) (URI (getHTMLPath path ex)) (shortname' $ S ("htmlRef" ++ ex)) None
-getPDFRef path ex = Reference ("pdfRef" ++ ex) (URI (getPDFPath path ex)) (shortname' $ S ("pdfRef" ++ ex)) None
-getHTMLPath, getPDFPath :: FilePath -> String -> FilePath
-getHTMLPath path ex = path ++ ex ++ "/srs/" ++ ex ++ "_SRS.html"
-getPDFPath path ex = path ++ ex ++ "/srs/" ++ ex ++ "_SRS.pdf"
+getHTMLRef, getPDFRef :: String -> Reference
+getHTMLRef ex = Reference ("htmlRef" ++ ex) (URI (getHTMLPath ex)) (shortname' $ S ("htmlRef" ++ ex)) None
+getPDFRef ex = Reference ("pdfRef" ++ ex) (URI (getPDFPath ex)) (shortname' $ S ("pdfRef" ++ ex)) None
+getHTMLPath, getPDFPath :: String -> FilePath
+getHTMLPath ex = "examples/" ++ ex ++ "/srs/" ++ ex ++ "_SRS.html"
+getPDFPath ex = "examples/" ++ ex ++ "/srs/" ++ ex ++ "_SRS.pdf"
 
 getCodeRef :: FilePath -> String -> String -> (Sentence, Reference)
 getDoxRef :: FilePath -> String -> String -> (Sentence, Reference)
@@ -159,7 +159,10 @@ generatedCodeTitle = "Generated Code:"
 generatedCodeDocsTitle = "Generated Code Documentation:"
 
 exampleRefs :: FilePath -> FilePath -> [Reference]
-exampleRefs p1 p2 = [exampleSecRef, ref $ exampleSec p1 p2] ++ concatMap (concatMap ((map snd). snd)) (exampleCodeRefs p1) ++ concatMap (concatMap ((map snd). snd)) (exampleDoxRefs p2) ++ map (getHTMLRef p2) exampleTitles ++ map (getPDFRef p2) exampleTitles
+exampleRefs p1 p2 = [exampleSecRef, ref $ exampleSec p1 p2] ++ 
+  concatMap (concatMap ((map snd). snd)) (exampleCodeRefs p1) ++ 
+  concatMap (concatMap ((map snd). snd)) (exampleDoxRefs p2) ++ 
+  map getHTMLRef exampleTitles ++ map getPDFRef exampleTitles
 
 exampleSecRef :: Reference
 exampleSecRef = makeSecRef "Examples" $ S "Examples"

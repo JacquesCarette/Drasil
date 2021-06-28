@@ -251,20 +251,11 @@ $(filter %$(DCP_E_SUFFIX), $(DCP_EXAMPLES)): %$(DCP_E_SUFFIX):
 
 deploy_code_path: $(DCP_EXAMPLES)
 
-deploy_lite: website
+deploy_lite:
 	@mkdir -p "$(DEPLOY_FOLDER)"
 	@BUILD_FOLDER="$(BUILD_FOLDER)" DEPLOY_FOLDER="$(DEPLOY_FOLDER)" GRAPH_FOLDER="$(GRAPH_FOLDER)" \
 	EXAMPLE_DIRS="$(EXAMPLE_DIRS)" MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" ANALYSIS_FOLDER="$(ANALYSIS_FOLDER)" \
 	DEPLOY_CODE_PATH_KV_SEP="$(DEPLOY_CODE_PATH_KV_SEP)" MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"deploy_stage.sh
-
-website: 
-	rm -rf $(WEBSITE_FOLDER)
-	mkdir -p $(WEBSITE_FOLDER)
-	BUILD_FOLDER="$(BUILD_FOLDER)" DEPLOY_FOLDER="$(DEPLOY_FOLDER)" GRAPH_FOLDER="$(GRAPH_FOLDER)" \
-	EXAMPLE_DIRS="$(EXAMPLE_DIRS)" MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" ANALYSIS_FOLDER="$(ANALYSIS_FOLDER)" \
-	DEPLOY_CODE_PATH_KV_SEP="$(DEPLOY_CODE_PATH_KV_SEP)"
-	cd "drasil-website/" && stack build --ghc-options="-Wall"
-	cd "drasil-website/" && stack exec -- website
 # This rule is for use with developing deployment layout locally. As part of it, it ensures all needed
 # dependencies exist. One of the downsides is we ensure all files are re-generated which means the TeX
 # files appear newer and thus PDF's are regenerated. If you want to "just generate the structure,

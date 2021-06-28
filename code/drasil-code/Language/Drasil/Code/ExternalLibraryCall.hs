@@ -16,6 +16,7 @@ import Language.Drasil
 
 import Language.Drasil.Chunk.Code (CodeVarChunk)
 import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto, pcVal)
+import Language.Drasil.CodeExpr
 import Language.Drasil.Mod (Initializer, StateVariable)
 
 import Data.List.NonEmpty (NonEmpty(..), fromList)
@@ -30,16 +31,16 @@ type ExternalLibraryCall = [StepGroupFill]
 data StepGroupFill = SGF Int [StepFill] -- Int is to "choose" from the options in ExternalLibrary
 
 data StepFill = CallF FunctionIntFill
-  | LoopF (NonEmpty FunctionIntFill) [Expr] (NonEmpty StepFill)
-  | StatementF [CodeVarChunk] [Expr]
+  | LoopF (NonEmpty FunctionIntFill) [CodeExpr] (NonEmpty StepFill)
+  | StatementF [CodeVarChunk] [CodeExpr]
 
 newtype FunctionIntFill = FIF [ArgumentFill]
 
-data ArgumentFill = UserDefinedArgF (Maybe NamedArgument) Expr -- For arguments that are completely dependent on use case
-  | BasicF Expr 
+data ArgumentFill = UserDefinedArgF (Maybe NamedArgument) CodeExpr -- For arguments that are completely dependent on use case
+  | BasicF CodeExpr 
   | FnF [ParameterFill] StepFill -- Fills in the names for the unnamed parameters
   | ClassF [StateVariable] ClassInfoFill -- List of CodeChunk for state variables
-  | RecordF [Expr] -- Fills in the field values
+  | RecordF [CodeExpr] -- Fills in the field values
 
 data ParameterFill = NameableParamF ParameterChunk | UserDefined ParameterChunk
 
@@ -75,7 +76,7 @@ callStepFill :: FunctionIntFill -> StepFill
 callStepFill = CallF
 
 -- Corresponds to ExternalLibrary's loopStep.
-loopStepFill :: [FunctionIntFill] -> [Expr] -> [StepFill] -> StepFill
+loopStepFill :: [FunctionIntFill] -> [CodeExpr] -> [StepFill] -> StepFill
 loopStepFill [] _ _ = error "loopStepFill should be called with a non-empty list of FunctionInterfaceFill"
 loopStepFill _ _ [] = error "loopStepFill should be called with a non-empty list of StepFill"
 loopStepFill fifs cdchs sfs = LoopF (fromList fifs) cdchs (fromList sfs)
@@ -86,12 +87,12 @@ libCallFill = FIF
 
 -- Does not correspond to anything in ExternalLibrary. To be used when the 
 -- presence of an argument is only a consequence of the use case.
-userDefinedArgFill :: Expr -> ArgumentFill
+userDefinedArgFill :: CodeExpr -> ArgumentFill
 userDefinedArgFill = UserDefinedArgF Nothing
 
 -- Corresponds to ExternalLibrary's inlineArg, inlineNamedArg, preDefinedArg, 
 -- and preDefinedNamedArg. Provides the Expr for the argument's value.
-basicArgFill :: Expr -> ArgumentFill
+basicArgFill :: CodeExpr -> ArgumentFill
 basicArgFill = BasicF
 
 -- Corresponds to ExternalLibrary's functionArg. 
@@ -105,7 +106,7 @@ customObjArgFill = ClassF
 
 -- Corresponds to ExternalLibrary's recordArg. Provides the list of Exprs for 
 -- the values of the fields that must be set by the calling program.
-recordArgFill :: [Expr] -> ArgumentFill
+recordArgFill :: [CodeExpr] -> ArgumentFill
 recordArgFill = RecordF
 
 -- Corresponds to ExternalLibrary's unnamedParam. Provides the CodeVarChunk 
@@ -155,7 +156,7 @@ populateSolListFill s = replicate 2 (statementStepFill [s] [])
 -- Corresponds to ExternalLibrary's assignArrayIndex. Provides the CodeVarChunk
 -- for the array variable. Provides the Exprs for the values to assign to each 
 -- array index.
-assignArrayIndexFill :: CodeVarChunk-> [Expr] -> StepFill
+assignArrayIndexFill :: CodeVarChunk-> [CodeExpr] -> StepFill
 assignArrayIndexFill a = statementStepFill [a]
 
 -- Corresponds to ExternalLibrary's assignSolFromObj. Provides the CodeVarChunk
@@ -171,25 +172,25 @@ initSolListFromArrayFill s = statementStepFill [s] []
 -- Corresponds to ExternalLibrary's initSolListWithVal. Provides the 
 -- CodeVarChunk for the solution list and the Expr for the initial element of 
 -- the solution list
-initSolListWithValFill :: CodeVarChunk -> Expr -> StepFill
+initSolListWithValFill :: CodeVarChunk -> CodeExpr -> StepFill
 initSolListWithValFill s v = statementStepFill [s] [v]
 
 -- Corresponds to ExternalLibrary's solveAndPopulateWhile. Provides the Expr 
 -- for the upper bound in the while loop condition and the CodeVarChunk for the 
 -- solution list.
-solveAndPopulateWhileFill :: FunctionIntFill -> Expr -> FunctionIntFill -> 
+solveAndPopulateWhileFill :: FunctionIntFill -> CodeExpr -> FunctionIntFill -> 
   CodeVarChunk -> StepFill
 solveAndPopulateWhileFill lcf ub slvf s = loopStepFill [lcf] [ub] 
   [callStepFill slvf, appendCurrSolFill s]
 
 -- Corresponds to ExternalLibrary's returnExprList. Provides the list of Exprs 
 -- to return.
-returnExprListFill :: [Expr] -> StepFill
+returnExprListFill :: [CodeExpr] -> StepFill
 returnExprListFill = statementStepFill []
 
 -- Corresponds to ExternalLibrary's statementStep. Provides the 
 -- use-case-specific CodeVarChunks and Exprs that parameterize the statement.
-statementStepFill :: [CodeVarChunk] -> [Expr] -> StepFill
+statementStepFill :: [CodeVarChunk] -> [CodeExpr] -> StepFill
 statementStepFill = StatementF
 
 -- Corresponds to ExternalLibrary's fixedStatement.
@@ -200,5 +201,5 @@ fixedStatementFill = StatementF [] []
 -- Corresponds to ExternalLibrary's initSolWithVal. Provides the 
 -- CodeVarChunk for one solution and one Expr for the initial element of 
 -- the solution list
-initSolWithValFill :: CodeVarChunk -> Expr -> StepFill
+initSolWithValFill :: CodeVarChunk -> CodeExpr -> StepFill
 initSolWithValFill s v = statementStepFill [s] [v]

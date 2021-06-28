@@ -4,15 +4,14 @@ module Language.Drasil.Code.Imperative.Parameters(getInConstructorParams,
 ) where
 
 import Language.Drasil hiding (isIn)
-import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..), 
-  inMod)
 import Language.Drasil.Chunk.Code (CodeVarChunk, CodeIdea(codeChunk, codeName), 
-  quantvar, codevars, codevars')
-import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, auxExprs, 
-  codeEquat)
-import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
+  quantvar, codevars, codevars', DefiningCodeExpr(..))
+import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, auxExprs)
 import Language.Drasil.Choices (Structure(..), InputModule(..), 
   ConstantStructure(..), ConstantRepr(..))
+import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
+import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..), 
+  inMod)
 import Language.Drasil.CodeSpec (CodeSpec(..), constraintvars, getConstraints)
 import Language.Drasil.Mod (Name)
 
@@ -72,7 +71,7 @@ getDerivedIns = do
   g <- get
   let s = codeSpec g
       dvals = derivedInputs s
-      reqdVals = concatMap (flip codevars (sysinfodb s) . codeEquat) dvals
+      reqdVals = concatMap (flip codevars (sysinfodb s) . (^. codeExpr)) dvals
   getParams "derived_values" In reqdVals
 
 -- | The outputs from the function for calculating derived inputs are the derived inputs.
@@ -100,7 +99,7 @@ getCalcParams :: CodeDefinition -> GenState [CodeVarChunk]
 getCalcParams c = do
   g <- get
   getParams (codeName c) In $ delete (quantvar c) $ concatMap (`codevars'` 
-    (sysinfodb $ codeSpec g)) (codeEquat c : c ^. auxExprs)
+    (sysinfodb $ codeSpec g)) (c ^. codeExpr : c ^. auxExprs)
 
 -- | The parameters to the function for printing outputs are the outputs.
 getOutputParams :: GenState [CodeVarChunk]

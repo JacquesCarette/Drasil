@@ -2,9 +2,9 @@ module Language.Drasil.Code.Imperative.Helpers (
   liftS, getUpperBound, lookupC
 ) where
 
-import Language.Drasil
-import Language.Drasil.Development (OrdBinOp(Lt))
+import Language.Drasil (UID, QuantityDict)
 import Database.Drasil (symbResolve)
+import Language.Drasil.Code.Expr.Development (CodeExpr(OrdBinaryOp), OrdBinOp(Lt))
 import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
 
@@ -15,7 +15,7 @@ liftS :: State a b -> State a [b]
 liftS = fmap (: [])
 
 -- | For an expression using a less than operator, gets the upper bound.
-getUpperBound :: Expr -> Expr
+getUpperBound :: CodeExpr -> CodeExpr
 getUpperBound (OrdBinaryOp Lt _ b) = b
 getUpperBound _ = error "Attempt to get upper bound of invalid expression"
 

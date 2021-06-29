@@ -10,7 +10,7 @@ import Data.Drasil.Concepts.Documentation (srs)
 
 import qualified Language.Drasil as L (People, Person, 
   CitationKind(Misc, Book, MThesis, PhDThesis, Article), 
-  DType(Data, Theory, Instance, General), MaxWidthPercent,
+  DType(Data, Theory, Instance, General), DocType(SRS), MaxWidthPercent,
   Document, nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special)
 
 import Language.Drasil.HTML.Monad (unPH)
@@ -46,7 +46,7 @@ data OpenClose = Open | Close
 
 -- | Generate an HTML document from a Drasil 'Document'
 genHTML :: PrintingInformation -> String -> L.Document -> Doc
-genHTML sm fn doc = build fn (makeDocument sm doc)
+genHTML sm fn doc = build fn (makeDocument sm doc L.SRS)
 --         ^^ -- should really be of type Filename, but that's not in scope
 
 -- | Build the HTML Document, called by genHTML

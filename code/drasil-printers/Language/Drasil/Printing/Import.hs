@@ -1,7 +1,8 @@
 module Language.Drasil.Printing.Import (space, expr, symbol, spec,
-  makeDocument, makeNotebook) where
+  makeDocument) where
 
 import Language.Drasil hiding (sec, symbol)
+import qualified Language.Drasil as L (DocType(..))
 import Language.Drasil.Development (UFuncB(..), UFuncVec(..)
   , ArithBinOp(..), BoolBinOp(..), EqBinOp(..), LABinOp(..)
   , OrdBinOp(..), VVNBinOp(..), VVVBinOp(..)
@@ -364,90 +365,82 @@ renderCitInfo (Page     [x]) = sParen (S "pg." +:+ S (show x))
 renderCitInfo (Page      i ) = sParen (S "pp." +:+ foldNums "-" i)
 
 -- | Translates from Document to the Printing representation of Document
-makeDocument :: PrintingInformation -> Document -> T.Document
-makeDocument sm (Document titleLb authorName sections) =
-  T.Document (spec sm titleLb) (spec sm authorName) (createLayout sm sections)
-
-makeNotebook :: PrintingInformation -> Document -> T.Document
-makeNotebook sm (Document titleLb authorName sections) =
-  T.Document (spec sm titleLb) (spec sm authorName) (createLayout' sm sections)
+makeDocument :: PrintingInformation -> Document -> L.DocType -> T.Document
+makeDocument sm (Document titleLb authorName sections) docType =
+  T.Document (spec sm titleLb) (spec sm authorName) (createLayout sm docType sections)
 
 -- | Translates from LayoutObj to the Printing representation of LayoutObj
-layout :: PrintingInformation -> Int -> SecCons -> T.LayoutObj
-layout sm currDepth (Sub s) = sec sm (currDepth+1) s
-layout sm _         (Con c) = lay sm c
+layout :: PrintingInformation -> L.DocType -> Int -> SecCons -> T.LayoutObj
+layout sm L.SRS      currDepth (Sub s) = sec sm L.SRS (currDepth+1) s
+layout sm L.SRS      _         (Con c) = lay sm L.SRS c
+layout sm L.Notebook _         (Sub s) = sec sm L.Notebook s
+layout sm L.Notebook _         (Con c) = lay sm L.Notebook c
 
 -- | Helper function for creating sections as layout objects
-createLayout :: PrintingInformation -> [Section] -> [T.LayoutObj]
-createLayout sm = map (sec sm 0)
-
--- | Helper function for creating sections as layout objects
-createLayout' :: PrintingInformation -> [Section] -> [T.LayoutObj]
-createLayout' sm = map (cell sm 0)
+createLayout :: PrintingInformation -> L.DocType -> [Section] -> [T.LayoutObj]
+createLayout sm L.SRS      = map (sec sm L.SRS 0) 
+createLayout sm L.Notebook = map (sec sm L.Notebook 0) 
 
 -- | Helper function for creating sections at the appropriate depth
-sec :: PrintingInformation -> Int -> Section -> T.LayoutObj
-sec sm depth x@(Section titleLb contents _) = --FIXME: should ShortName be used somewhere?
+sec :: PrintingInformation -> L.DocType -> Int -> Section -> T.LayoutObj
+sec sm L.SRS depth x@(Section titleLb contents _) = --FIXME: should ShortName be used somewhere?
   let ref = P.S (refAdd x) in
   T.HDiv [concat (replicate depth "sub") ++ "section"]
-  (T.Header depth (spec sm titleLb) ref :
-   map (layout sm depth) contents) ref
-
-cell :: PrintingInformation -> Int -> Section -> T.LayoutObj
-cell sm depth x@(Section titleLb contents _) = --FIXME: should ShortName be used somewhere?
-  let ref = P.S (refAdd x) in
-  T.Cell (T.Header depth (spec sm titleLb) ref :
-   map (layout sm depth) contents) ref
+   (T.Header depth (spec sm titleLb) ref :
+   map (layout sm L.SRS depth) contents) ref
+sec sm L.Notebook depth x@(Section titleLb contents _) = 
+  let ref = P.S (refAdd x) in T.Cell (T.Header depth (spec sm titleLb) ref :
+   (layout sm L.SRS depth) contents) ref
 
 -- | Translates from Contents to the Printing Representation of LayoutObj.
 -- Called internally by layout.
-lay :: PrintingInformation -> Contents -> T.LayoutObj
-lay sm (LlC x) = layLabelled sm x
-lay sm (UlC x) = layUnlabelled sm (x ^. accessContents)
+lay :: PrintingInformation -> L.DocType -> Contents -> T.LayoutObj
+lay sm docType (LlC x) = layLabelled sm docType x 
+lay sm docType (UlC x) = layUnlabelled sm docType (x ^. accessContents) 
 
-layLabelled :: PrintingInformation -> LabelledContent -> T.LayoutObj
-layLabelled sm x@(LblC _ (Table hdr lls t b)) = T.Table ["table"]
+layLabelled :: PrintingInformation -> L.DocType -> LabelledContent -> T.LayoutObj
+layLabelled sm docType x@(LblC _ (Table hdr lls t b)) = T.Table ["table"]
   (map (spec sm) hdr : map (map (spec sm)) lls)
   (P.S $ getRefAdd x)
   b (spec sm t)
-layLabelled sm x@(LblC _ (EqnBlock c))        = T.HDiv ["equation"]
+layLabelled sm docType x@(LblC _ (EqnBlock c))  = T.HDiv ["equation"]
   [T.EqnBlock (P.E (expr c sm))]
   (P.S $ getRefAdd x)
-layLabelled sm x@(LblC _ (Figure c f wp))     = T.Figure
+layLabelled sm _ x@(LblC _ (Figure c f wp))     = T.Figure
   (P.S $ getRefAdd x)
   (spec sm c) f wp
-layLabelled sm x@(LblC _ (Graph ps w h t))    = T.Graph
+layLabelled sm _ x@(LblC _ (Graph ps w h t))    = T.Graph
   (map (bimap (spec sm) (spec sm)) ps) w h (spec sm t)
   (P.S $ getRefAdd x)
-layLabelled sm x@(LblC _ (Defini dtyp pairs)) = T.Definition
+layLabelled sm docType x@(LblC _ (Defini dtyp pairs)) = T.Definition
   dtyp (layPairs pairs)
   (P.S $ getRefAdd x)
-  where layPairs = map (second (map (lay sm)))
-layLabelled sm (LblC _ (Paragraph c))    = T.Paragraph (spec sm c)
-layLabelled sm x@(LblC _ (DerivBlock h d)) = T.HDiv ["subsubsubsection"]
-  (T.Header 3 (spec sm h) ref : map (layUnlabelled sm) d) ref
+  where layPairs = map (second (map (lay sm docType)))
+layLabelled sm _ (LblC _ (Paragraph c))    = T.Paragraph (spec sm c)
+layLabelled sm docType x@(LblC _ (DerivBlock h d)) = T.HDiv ["subsubsubsection"]
+  (T.Header 3 (spec sm h) ref : map (layUnlabelled sm docType) d) ref
   where ref = P.S $ refAdd x ++ "Deriv"
-layLabelled sm (LblC _ (Enumeration cs)) = T.List $ makeL sm cs
-layLabelled  _ (LblC _ (Bib bib))        = T.Bib $ map layCite bib
+layLabelled sm _ (LblC _ (Enumeration cs)) = T.List $ makeL sm cs
+layLabelled  _ _ (LblC _ (Bib bib))        = T.Bib $ map layCite bib
 
 -- | Translates from Contents to the Printing Representation of LayoutObj.
 -- Called internally by layout.
-layUnlabelled :: PrintingInformation -> RawContent -> T.LayoutObj
-layUnlabelled sm (Table hdr lls t b) = T.Table ["table"]
+layUnlabelled :: PrintingInformation -> L.DocType -> RawContent -> T.LayoutObj
+layUnlabelled sm _ (Table hdr lls t b) = T.Table ["table"]
   (map (spec sm) hdr : map (map (spec sm)) lls) (P.S "nolabel0") b (spec sm t)
-layUnlabelled sm (Paragraph c)    = T.Paragraph (spec sm c)
-layUnlabelled sm (EqnBlock c)     = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
-layUnlabelled sm (DerivBlock h d) = T.HDiv ["subsubsubsection"]
-  (T.Header 3 (spec sm h) ref : map (layUnlabelled sm) d) ref
+layUnlabelled sm _ (Paragraph c)    = T.Paragraph (spec sm c)
+layUnlabelled sm docType (EqnBlock c)     = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
+layUnlabelled sm docType (DerivBlock h d) = T.HDiv ["subsubsubsection"]
+  (T.Header 3 (spec sm h) ref : map (layUnlabelled sm docType) d) ref
   where ref = P.S "nolabel1"
-layUnlabelled sm (Enumeration cs) = T.List $ makeL sm cs
-layUnlabelled sm (Figure c f wp)  = T.Figure (P.S "nolabel2") (spec sm c) f wp
-layUnlabelled sm (Graph ps w h t) = T.Graph (map (bimap (spec sm) (spec sm)) ps)
+layUnlabelled sm _ (Enumeration cs) = T.List $ makeL sm cs
+layUnlabelled sm _ (Figure c f wp)  = T.Figure (P.S "nolabel2") (spec sm c) f wp
+layUnlabelled sm _ (Graph ps w h t) = T.Graph (map (bimap (spec sm) (spec sm)) ps)
                                w h (spec sm t) (P.S "nolabel6")
-layUnlabelled sm (Defini dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S "nolabel7")
+layUnlabelled sm docType (Defini dtyp pairs)  = T.Definition dtyp (layPairs pairs) (P.S "nolabel7")
   where layPairs = map (second (map temp))
-        temp  y   = layUnlabelled sm (y ^. accessContents)
-layUnlabelled  _ (Bib bib)              = T.Bib $ map layCite bib
+        temp  y   = layUnlabelled sm docType (y ^. accessContents)
+layUnlabelled  _ _ (Bib bib)              = T.Bib $ map layCite bib
 
 -- | For importing bibliography
 layCite :: Citation -> P.Citation

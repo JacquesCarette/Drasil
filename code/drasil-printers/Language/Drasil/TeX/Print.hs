@@ -9,7 +9,7 @@ import Numeric (showEFloat)
 import Control.Arrow (second)
 
 import qualified Language.Drasil as L (CitationKind(..), Decoration(Prime, Hat, Vector),
-  Document, MaxWidthPercent, Month(..), People, RenderSpecial(..), Sentence(S),
+  DocType(SRS), Document, MaxWidthPercent, Month(..), People, RenderSpecial(..), Sentence(S),
   Symbol(..), USymb(US), (+:+), rendPersLFM, special)
 import Utils.Drasil (checkValidStr, foldNums)
 
@@ -45,7 +45,7 @@ import Language.Drasil.TeX.Preamble (genPreamble)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 genTeX :: L.Document -> PrintingInformation -> TP.Doc
-genTeX doc sm = runPrint (buildStd sm $ (I.makeDocument sm doc)) Text
+genTeX doc sm = runPrint (buildStd sm $ (I.makeDocument sm doc L.SRS)) Text
 
 buildStd :: PrintingInformation -> Document -> D
 buildStd sm (Document t a c) =

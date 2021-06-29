@@ -27,6 +27,6 @@ data LayoutObj =
    | Figure Label Caption Filepath MaxWidthPercent
    | Graph [(Spec, Spec)] (Maybe Width) (Maybe Height) Caption Label
    | HDiv Tags [LayoutObj] Label
-   | Cell [LayoutObj] Label
+   | Cell [LayoutObj]
    -- this shouldn't be here, it should have been expanded.
    | Bib BibRef

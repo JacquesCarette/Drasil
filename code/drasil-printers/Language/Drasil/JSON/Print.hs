@@ -5,11 +5,11 @@ import Text.PrettyPrint hiding (Str)
 import Numeric (showEFloat)
 import Utils.Drasil (checkValidStr)
 
-import qualified Language.Drasil as L (DType(Data, Theory, Instance, General), MaxWidthPercent,
-  Document, special)
+import qualified Language.Drasil as L (DType(Data, Theory, Instance, General), 
+  DocType(Notebook), MaxWidthPercent, Document, special)
 import qualified Data.Drasil.Concepts.Documentation as Doc (notebook)
 
-import Language.Drasil.Printing.Import (makeNotebook)
+import Language.Drasil.Printing.Import (makeDocument)
 import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),  
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, 
   Ops(Prod, Inte, Mul, Summ, Or, Add, And, Subt, Iff, Impl, GEq, LEq, Lt, Gt, NEq, Eq,
@@ -33,7 +33,7 @@ import Language.Drasil.JSON.Helpers (makeMetadata, h, jf, formatter, stripnewLin
  tr, td, image, li, pa, ba, ul, table, quote, refwrap, refID, reflink, reflinkURI)
 
 genJSON :: PrintingInformation -> L.Document -> Doc
-genJSON sm doc = build (makeNotebook sm doc)
+genJSON sm doc = build (makeDocument sm doc L.Notebook)
 
 -- | Build the JSON Document, called by genJSON
 build :: Document -> Doc
@@ -70,7 +70,7 @@ printMath = (`runPrint` Math)
 -- | Helper for rendering LayoutObjects into JSON
 printLO :: LayoutObj -> Doc
 printLO (Header n contents l)            = quote empty $$ quote (h (n + 1) <> pSpec contents) $$ refID (pSpec l)
-printLO (Cell layoutObs l)               = markdownB $$ refID (pSpec l) $$ vcat (map printLO layoutObs) $$ markdownE
+printLO (Cell layoutObs)                 = text "&&" <> vcat (map printLO layoutObs) <> text "\n%%"
 printLO (HDiv _ layoutObs EmptyS)        = vcat (map printLO layoutObs)
 printLO (HDiv _ layoutObs l)             = refID (pSpec l) $$ vcat (map printLO layoutObs)
 printLO (Paragraph contents)             = quote empty $$ quote (stripnewLine (show(pSpec contents)))

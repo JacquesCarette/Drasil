@@ -131,12 +131,6 @@ copy_analysis() {
 }
 
 build_website() {
-  cd "$CUR_DIR/"drasil-website 
-  RET=$?
-  if [ $RET != 0 ]; then
-    echo "Build Failed. Bailing."
-    exit 1
-  fi
   cd "$CUR_DIR$DEPLOY_FOLDER"
   cp -r "$CUR_DIR"drasil-website/Website/. .
 

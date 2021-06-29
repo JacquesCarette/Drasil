@@ -30,9 +30,10 @@ type ExternalLibrary = [StepGroup]
 
 type StepGroup = NonEmpty [Step]
 
--- A step can be a call to an external library function or method.
+-- | A step can be a call to an external library function or method.
 data Step = Call FunctionInterface 
-  -- A while loop -- function calls in the condition, other conditions, steps for the body
+  -- | A while loop
+  -- function calls in the condition, other conditions, and steps for the body of the loop.
   | Loop (NonEmpty FunctionInterface) ([Expr] -> Condition) (NonEmpty Step)
   -- For when a statement is needed, but does not interface with the external library
   | Statement ([CodeVarChunk] -> [Expr] -> FuncStmt)

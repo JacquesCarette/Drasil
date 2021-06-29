@@ -12,7 +12,7 @@ import Database.Drasil(SystemInformation(SI), _authors, _kind, _sys, citeDB)
 
 import qualified Drasil.DocLang.Notebook as NB (appendix, body, reference, summary)
 import qualified Drasil.NBSections.Introduction as Intro (introductionSection, purposeOfDoc)
-import qualified Drasil.NBSections.Body as Body (bodyIntro, reviewSec, mainIdeaSec, mthdAndanls)
+import qualified Drasil.NBSections.Body as Body (reviewSec, mainIdeaSec, mthdAndanls)
 
 -- | Creates a document from a document description and system information
 mkDoc :: NBDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
@@ -44,7 +44,7 @@ mkIntroSec si (IntroProg probIntro l) =
 
 -- | Helper for making the 'Body' section
 mkBodySec :: BodySec -> Section
-mkBodySec (BodyProg l) = NB.body [Body.bodyIntro] $ map mkSubs l
+mkBodySec (BodyProg l) = NB.body [] $ map mkSubs l
   where
     mkSubs :: BodySub -> Section
     mkSubs (Review cs )                 = Body.reviewSec cs 

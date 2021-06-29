@@ -1,12 +1,12 @@
-module Drasil.NBSections.Body (bodyIntro, reviewSec, mainIdeaSec, mthdAndanls) where
+module Drasil.NBSections.Body (reviewSec, mainIdeaSec, mthdAndanls) where
 
 import Language.Drasil
 import Utils.Drasil
 import qualified Drasil.DocLang.Notebook as NB (review, mainIdea, methAndAnls)
 
 -- **** Leave blank for now
-bodyIntro :: Contents
-bodyIntro = foldlSP [S ""]
+--bodyIntro :: Contents
+--bodyIntro = foldlSP [S ""]
 
 -- Review
 reviewSec :: [Contents] -> Section

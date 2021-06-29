@@ -38,6 +38,9 @@ instance Referable Section where
 -- which hold the contents of the document
 data Document = Document Title Author [Section]
 
+-- | Types of documents (notebook might be extended)
+data DocType = SRS | Notebook
+
 -- | Smart constructor for labelled content chunks
 llcc :: Reference -> RawContent -> LabelledContent
 llcc = LblC

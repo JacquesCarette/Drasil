@@ -9,7 +9,7 @@ import Data.Time.Clock (getCurrentTime, utctDay)
 import Data.Time.Calendar (showGregorian)
 
 import Build.Drasil (genMake)
-import Language.Drasil
+import Language.Drasil hiding (DocType(..))
 import Language.Drasil.Printers (Format(TeX, HTML, JSON), 
  makeCSS, genHTML, genTeX, genJSON, PrintingInformation)
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),

@@ -115,7 +115,7 @@ module Language.Drasil (
   , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1
   , titleizeNP, titleizeNP', nounPhrase'', nounPhraseSP, nounPhraseSent
   -- Document
-  , Referable(..), Document(..), DType(..), Section(..), Contents(..)
+  , Referable(..), Document(..), DocType(..), DType(..), Section(..), Contents(..)
   , SecCons(..), ListType(..), ItemType(..), ListTuple
   , LabelledContent(..), UnlabelledContent(..), extractSection
   , mkParagraph, mkRawLC
@@ -199,7 +199,7 @@ import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec,
           sy, deriv, pderiv,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, intAll)
 import Language.Drasil.Document (section, fig, figWithWidth
-  , Section(..), SecCons(..) , llcc, ulcc, Document(..)
+  , Section(..), SecCons(..) , llcc, ulcc, Document(..), DocType(..)
   , mkParagraph, mkFig, mkRawLC, extractSection
   , makeTabRef, makeFigRef, makeSecRef, makeLstRef, makeEqnRef, makeURI)
 import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), DType(..)

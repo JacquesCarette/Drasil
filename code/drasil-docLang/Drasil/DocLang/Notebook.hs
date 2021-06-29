@@ -1,7 +1,7 @@
 module Drasil.DocLang.Notebook where
 
 import Language.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S (forTPS)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (notebook, introduction, 
   prpsOfDoc, review, body, mainIdea, procForAnls, summary, methAndAnls,method_, 
@@ -11,49 +11,59 @@ import qualified Data.Drasil.Concepts.Physics as P (motion, horizontalMotion, ve
 -- | Notebook constructor. 
 -- Create the notebook from given system name, authors, and sections
 doc :: NamedIdea c => c -> Sentence -> [Section] -> Document
-doc  sys = Document (Doc.notebook `forTT` sys)
+doc  sys = Document (Doc.notebook `S.forTPS` sys)
 
-intro, prpsOfDoc, body, review, procForAnls, summary, method, example, result, 
-  appendix, reference :: [Contents] -> [Section] -> Section
+intro, prpsOfDoc, body, review, procForAnls, summary, appendix, reference :: [Contents] -> [Section] -> Section
   
-intro       cs ss = section' (titleize Doc.introduction)      cs ss "Intro"
-prpsOfDoc   cs ss = section' (titleize Doc.prpsOfDoc)         cs ss "DocPurpose"
+intro       cs ss = section (titleize Doc.introduction)      cs ss introLabel
+prpsOfDoc   cs ss = section (titleize Doc.prpsOfDoc)         cs ss docPurposeLabel
 
-body        cs ss = section' (titleize Doc.body)              cs ss "Body"
-review      cs ss = section' (titleize Doc.review)            cs ss "Review"
+body        cs ss = section (titleize Doc.body)              cs ss bodyLabel
+review      cs ss = section (titleize Doc.review)            cs ss reviewLabel
 
-mainIdea    cs ss = section' (titleize Doc.mainIdea)          cs ss "MainIdea"
-motion      cs ss = section' (titleize P.motion)              cs ss "Motion"
-hormotion   cs ss = section' (titleize P.horizontalMotion)    cs ss "HorizontalMotion"
-vermotion   cs ss = section' (titleize P.verticalMotion)      cs ss "VerticalMotion"
+mainIdea    cs ss = section (titleize Doc.mainIdea)          cs ss mainIdeaLabel
+motion      cs ss = section (titleize P.motion)              cs ss motionLabel
+hormotion   cs ss = section (titleize P.horizontalMotion)    cs ss hormotionLabel
+vermotion   cs ss = section (titleize P.verticalMotion)      cs ss vermotionLabel
 
-methAndAnls cs ss = section  (titleize' Doc.methAndAnls)      cs ss methsAndanlsLabel
-method      cs ss = section' (titleize Doc.method_)           cs ss "Method"
+methAndAnls cs ss = section (titleize' Doc.methAndAnls)      cs ss methsAndanlsLabel
+--method      cs ss = section (titleize Doc.method_)           cs ss "Method"
 
-summary     cs ss = section' (titleize Doc.summary)           cs ss "Summary"
+summary     cs ss = section (titleize Doc.summary)           cs ss summaryLabel
 
-procForAnls cs ss = section'  (titleize Doc.procForAnls)      cs ss "AnlsProc"
-coorSyst    cs ss = section'  (titleize Doc.coordinateSystem) cs ss "CoordinateSystem"
-kinematic   cs ss = section'  (titleize P.kinematics)          cs ss "Kinematic"
+procForAnls cs ss = section  (titleize Doc.procForAnls)      cs ss anlsProcLabel
+coorSyst    cs ss = section  (titleize Doc.coordinateSystem) cs ss coorSystLabel
+kinematic   cs ss = section  (titleize P.kinematics)          cs ss kinematicLabel
 
-example     cs ss = section' (titleize Doc.example)           cs ss "Example"
+--example     cs ss = section (titleize Doc.example)           cs ss "Example"
 
-result      cs ss = section' (titleize Doc.result)            cs ss "Result"
+--result      cs ss = section (titleize Doc.result)            cs ss "Result"
 
-appendix    cs ss = section' (titleize Doc.appendix)          cs ss "Appendix"
+appendix    cs ss = section (titleize Doc.appendix)          cs ss appendixLabel
 
 reference   cs ss = section  (titleize' Doc.reference)        cs ss referenceLabel
 
---function that sets the shortname of each section to be the reference address
-section' :: Sentence -> [Contents] -> [Section] -> String -> Section
-section' a b c d = section a b c (makeSecRef d (toString a))
-  where
-    toString :: Sentence -> String --FIXME: same as sentenceDoc, import instead? 
-    toString (S x) = x
-    toString ((:+:) s1 s2) = toString s1 ++ toString s2
-    toString _ = error "Term is not a string"
-
 --Labels--
-methsAndanlsLabel, referenceLabel :: Reference
-methsAndanlsLabel = makeSecRef "MethsAndAnls"  "Methods and Analysis"
-referenceLabel    = makeSecRef "References"    "References"
+sectionReferences :: [Reference]
+sectionReferences = [introLabel, docPurposeLabel, methsAndanlsLabel, referenceLabel,
+  bodyLabel, reviewLabel, mainIdeaLabel, motionLabel, hormotionLabel, vermotionLabel, 
+  appendixLabel, coorSystLabel, kinematicLabel, summaryLabel, anlsProcLabel]
+
+introLabel, docPurposeLabel, methsAndanlsLabel, referenceLabel, bodyLabel,
+  reviewLabel, mainIdeaLabel, motionLabel, hormotionLabel, vermotionLabel, 
+  appendixLabel, coorSystLabel, kinematicLabel, summaryLabel, anlsProcLabel :: Reference
+introLabel          = makeSecRef "Intro"            $ titleize Doc.introduction
+docPurposeLabel     = makeSecRef "DocPurpose"       $ titleize Doc.prpsOfDoc
+methsAndanlsLabel   = makeSecRef "MethsAndAnls"     $ titleize' Doc.methAndAnls
+referenceLabel      = makeSecRef "References"       $ titleize' Doc.reference
+bodyLabel           = makeSecRef "Body"             $ titleize Doc.body
+reviewLabel         = makeSecRef "Review"           $ titleize Doc.review
+mainIdeaLabel       = makeSecRef "MainIdea"         $titleize Doc.mainIdea        
+motionLabel         = makeSecRef "Motion"           $ titleize P.motion              
+hormotionLabel      = makeSecRef "HorizontalMotion" $ titleize P.horizontalMotion
+vermotionLabel      = makeSecRef "VerticalMotion"   $ titleize P.verticalMotion
+appendixLabel       = makeSecRef "Appendix"         $ titleize Doc.appendix
+coorSystLabel       = makeSecRef "CoordinateSystem" $ titleize Doc.coordinateSystem
+kinematicLabel      = makeSecRef "Kinematic"        $ titleize P.kinematics
+summaryLabel        = makeSecRef "Summary"          $ titleize Doc.summary
+anlsProcLabel       = makeSecRef "AnlsProc"         $ titleize Doc.procForAnls

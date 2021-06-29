@@ -1,6 +1,7 @@
 module Language.Drasil.Printing.Import.Document where
 
 import Language.Drasil hiding (neg, sec, symbol, isIn)
+import qualified Language.Drasil as L (DocType(..))
 
 import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P
@@ -15,9 +16,9 @@ import Control.Lens ((^.))
 import Data.Bifunctor (bimap, second)
 
 -- | Translates from 'Document' to a printable representation of 'T.Document'.
-makeDocument :: PrintingInformation -> Document -> T.Document
-makeDocument sm (Document titleLb authorName sections) =
-  T.Document (spec sm titleLb) (spec sm authorName) (createLayout sm sections)
+makeDocument :: PrintingInformation -> Document -> L.DocType -> T.Document
+makeDocument sm (Document titleLb authorName sections) docType =
+  T.Document (spec sm titleLb) (spec sm authorName) (createLayout sm docType sections )
 
 -- | Helper for translating sections into a printable representation of layout objects ('T.LayoutObj').
 layout :: PrintingInformation -> Int -> SecCons -> T.LayoutObj
@@ -25,8 +26,9 @@ layout sm currDepth (Sub s) = sec sm (currDepth+1) s
 layout sm _         (Con c) = lay sm c
 
 -- | Helper function for creating sections as layout objects.
-createLayout :: PrintingInformation -> [Section] -> [T.LayoutObj]
-createLayout sm = map (sec sm 0)
+createLayout :: PrintingInformation -> L.DocType -> [Section] -> [T.LayoutObj]
+createLayout sm L.SRS = map (sec sm 0)
+createLayout sm L.Notebook = map (cell sm 0)
 
 -- | Helper function for creating sections at the appropriate depth.
 sec :: PrintingInformation -> Int -> Section -> T.LayoutObj
@@ -35,6 +37,12 @@ sec sm depth x@(Section titleLb contents _) = --FIXME: should ShortName be used 
   T.HDiv [concat (replicate depth "sub") ++ "section"]
   (T.Header depth (spec sm titleLb) refr :
    map (layout sm depth) contents) refr
+
+cell :: PrintingInformation -> Int -> Section -> T.LayoutObj
+cell sm depth x@(Section titleLb contents _) = --FIXME: should ShortName be used somewhere?
+  let ref = P.S (refAdd x) in
+  T.Cell (T.Header depth (spec sm titleLb) ref :
+   map (layout sm depth) contents)
 
 -- | Helper that translates 'Contents' to a printable representation of 'T.LayoutObj'.
 -- Called internally by 'layout'.

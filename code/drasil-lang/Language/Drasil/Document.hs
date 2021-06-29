@@ -120,8 +120,9 @@ makeLstRef :: String -> Sentence -> Reference
 makeLstRef r s = Reference (r ++ "Label") (RP (prepend "Lst") ("Lst:" ++ repUnd r))
   (shortname' s) None
 
+-- | Create a reference for a equation. Takes in the name of the equation and a shortname for the equation.
 makeEqnRef :: String -> Reference
-makeEqnRef rs = Reference rs (RP (prepend "Eqn") ("Equation:" ++ repUnd rs)) (shortname' rs) None
+makeEqnRef rs = Reference rs (RP (prepend "Eqn") ("Equation:" ++ repUnd rs)) (shortname' (S rs)) None
 
 -- | Create a reference for a 'URI'.
 makeURI :: UID -> String -> ShortName -> Reference

@@ -22,10 +22,10 @@ coorSystContext, kinematicContext :: Contents
 coorSystContext = enumBulletU $ map foldlSent 
   [[S "Establish the fixed", P lX `sC` P lY, phrase coordinate +:+. S "axes and sketch the trajectory of the particle",
     S "Between any *two points* on the path specify the given problem data and the *three unknowns*.",
-    S "In all cases the", phrase acceleration `S.sOf` phrase gravity +:+. S "acts downward",
+    S "In all cases the", phrase acceleration `S.of_` phrase gravity +:+. S "acts downward",
     S "The particle's initial and final", plural velocity +:+ S "should be represented in terms of their",
-    P lX `S.sAnd` P lY, plural component],
-  [S "Remember that positive and negative", phrase position `sC` phrase velocity, S "," `S.sAnd`
+    P lX `S.and_` P lY, plural component],
+  [S "Remember that positive and negative", phrase position `sC` phrase velocity, S "," `S.and_`
     phrase acceleration, plural component +:+ S "always act in accordance with their associated",
     phrase coordinate +:+ plural direction],
   [S "The two points that are selected should be significant points where something about the",

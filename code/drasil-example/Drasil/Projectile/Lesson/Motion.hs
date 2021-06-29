@@ -14,6 +14,7 @@ import Data.Drasil.Concepts.Documentation (coordinateSystem)
 import Language.Drasil
 import Language.Drasil.ShortHands
 import Utils.Drasil
+import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 
 
@@ -26,20 +27,20 @@ import qualified Drasil.Projectile.Expressions as E (speed', scalarPos', rectNoT
 motionContextP1, motionContextP2 :: Contents
 motionContextP1
   = foldlSP
-      [S "The free flight", phrase motion `S.sOfA` phrase projectile, 
+      [S "The free flight", phrase motion `S.ofA` phrase projectile, 
         S "is often studied in terms of its rectangular components, since the",
         phrasePoss projectile, phrase acceleration +:+. S "always acts in the vertical direciton",
        S "To illustrate the kinematic analysis, consider a ", phrase projectile,
-         S "launched at point", sParen ((E (sy QP.ixDist)) `sC` (E (sy QP.iyDist))),
-         S "as shown in" +:+. makeRef2S figCSandA,
+         S "launched at point", sParen (eS (sy QP.ixDist)) `sC` (eS (sy QP.iyDist)),
+         S "as shown in" +:+. refS figCSandA,
        S "The path is defined in the", P lX `sDash` P lY, S "plane such that the initial", 
-         phrase velocity +:+ S "is", E (sy QP.iSpeed), S ", having components", 
-         E (sy QP.ixVel) `S.sAnd` E (sy QP.iyVel),
+         phrase velocity +:+ S "is", eS (sy QP.iSpeed), S ", having components", 
+         eS (sy QP.ixVel) `S.and_` eS (sy QP.iyVel),
        S "When air resistance is neglected, the only", phrase force, S "acting on the",
          phrase projectile, S"is its weight, which causes the", phrase projectile, 
          S "to have a *constant downward acceleration* of approximately",
-         E (sy QP.constAccel $= sy QP.gravitationalAccel $= dbl 9.81) `S.sOr` 
-         E (sy QP.gravitationalAccel $= dbl 32.2)]
+         eS (sy QP.constAccel $= sy QP.gravitationalAccel $= dbl 9.81) `S.or_` 
+         eS (sy QP.gravitationalAccel $= dbl 32.2)]
 
 motionContextP2
   = foldlSP_
@@ -52,46 +53,46 @@ horMotion = NB.hormotion [intro, equations, concl] []
   where intro = foldlSP_ [
                   S "For", phrase projMotion +:+ S "the", phrase acceleration, 
                   S "in the horizontal direction is and equal to zero" +:+. 
-                  sParen(E (sy QP.xAccel $= 0)), motionSent]
-        equations = foldlSP_ $ weave [equationsSents, map E horMotionEqns]
+                  sParen(eS (sy QP.xAccel $= (exactDbl 0))), motionSent]
+        equations = foldlSP_ $ weave [equationsSents, map eS horMotionEqns]
         concl = foldlSP [
                   S "Since the", phrase acceleration, S "in the" +:+ phrase xDir, 
-                  sParen (E (sy QP.xAccel)), S "is zero, the horizontal component of ", phrase velocity,
+                  sParen (eS (sy QP.xAccel)), S "is zero, the horizontal component of ", phrase velocity,
                   S "always remains constant during" +:+. phrase motion,
                   S "In addition to knowing this, we have one more equation"]
                 
 verMotion = NB.vermotion [intro, equations, concl] []
   where intro = foldlSP_ [
                   S "Since the positive", phrase yAxis, S "is directed upward, the", phrase acceleration,
-                  S "in the vertical direction is" +:+. E (sy QP.yAccel $= negate (sy QP.gravitationalAccel)), motionSent]
-        equations = foldlSP_ $ weave [equationsSents, map E verMotionEqns]
+                  S "in the vertical direction is" +:+. (eS (sy QP.yAccel $= neg (sy QP.gravitationalAccel))), motionSent]
+        equations = foldlSP_ $ weave [equationsSents, map eS verMotionEqns]
         concl = foldlSP [
                   S "Recall that the last equation can be formulated on the basis of eliminating the",
-                  phrase time +:+ E (sy QP.time), S "between the first two equations, and therefore only ",
+                  phrase time +:+ eS (sy QP.time), S "between the first two equations, and therefore only ",
                   S "two of the above three equations are independent of one another"]
 
 summary = NB.summary [smmryCon] []
   where smmryCon = foldlSP [
                   S "In addition to knowing that the horizontal component of", phrase velocity,
                   S "is constant [Hibbler doesn't say this, but it seems necessary for completeness],",
-                  S "problems involving the", phrase motion `S.sOfA` phrase projectile +:
+                  S "problems involving the", phrase motion `S.ofA` phrase projectile +:
                   S "can have at most three unknowns since only three independent equations can be written",
                   S "that is, one equation in the horizontal direction and two in the vertical direction.",
-                  S "Once", E (sy QP.xVel)  `S.sAnd`  E (sy QP.yVel),  S "are obtained, the resultant",
-                  phrase velocity +:+ E (sy QP.speed), S "which is always tangent to the path,",
-                  S "is defined by the vector sum as shown in", makeRef2S figCSandA]
+                  S "Once", eS (sy QP.xVel)  `S.and_` eS (sy QP.yVel),  S "are obtained, the resultant",
+                  phrase velocity +:+ eS (sy QP.speed), S "which is always tangent to the path,",
+                  S "is defined by the vector sum as shown in", refS figCSandA]
 
 resourcePath :: String
 resourcePath = "../../../datafiles/Projectile/"
 
 figCSandA :: LabelledContent
-figCSandA = llcc (makeFigRef "CoordSystAndAssumpts") $ fig (atStartNP (the coordinateSystem))
+figCSandA = llcc (makeFigRef "CoordSystAndAssumpts") $ fig (atStartNP $ the coordinateSystem)
   (resourcePath ++ "CoordSystAndAssumpts.png") 
 
 equationsSents :: [Sentence]
-equationsSents = [S "From Equation" +: makeRef2S lcrectVel,
-                  S "From Equation" +: makeRef2S lcrectPos,
-                  S "From Equation" +: makeRef2S lcrectNoTime]
+equationsSents = [S "From Equation" +: refS lcrectVel,
+                  S "From Equation" +: refS lcrectPos,
+                  S "From Equation" +: refS lcrectNoTime]
                 
 horMotionEqns, verMotionEqns :: [Expr]
 horMotionEqns = [horMotionEqn1, horMotionEqn2, horMotionEqn1]
@@ -101,4 +102,7 @@ motionSent :: Sentence
 motionSent = S "This value can be substituted in the equations for" +:+ phrase constAccel +:
              S "given above (ref) to yield the following"
 
+-- References --
+figRefs :: [Reference]
+figRefs = [ref figCSandA]
 

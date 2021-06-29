@@ -70,7 +70,7 @@ printMath = (`runPrint` Math)
 -- | Helper for rendering LayoutObjects into JSON
 printLO :: LayoutObj -> Doc
 printLO (Header n contents l)            = quote empty $$ quote (h (n + 1) <> pSpec contents) $$ refID (pSpec l)
-printLO (Cell layoutObs)                 = text "&&" <> vcat (map printLO layoutObs) <> text "\n%%"
+printLO (Cell layoutObs)               = markdownB $$ vcat (map printLO layoutObs) $$ markdownE
 printLO (HDiv _ layoutObs EmptyS)        = vcat (map printLO layoutObs)
 printLO (HDiv _ layoutObs l)             = refID (pSpec l) $$ vcat (map printLO layoutObs)
 printLO (Paragraph contents)             = quote empty $$ quote (stripnewLine (show(pSpec contents)))
@@ -111,7 +111,7 @@ pSpec (Sp s)    = text $ unPH $ L.special s
 pSpec HARDNL    = empty
 pSpec (Ref Internal r a)      = reflink     r $ pSpec a
 --pSpec (Ref Cite2    r EmptyS) = reflink     r $ text r -- no difference for citations?
-pSpec (Ref Cite2    r a)      = reflinkInfo r (text r) (pSpec a) -- no difference for citations?
+pSpec (Ref (Cite2 n)   r a)    = reflinkInfo r (pSpec a) (pSpec n)
 pSpec (Ref External r a)      = reflinkURI  r $ pSpec a
 pSpec EmptyS    = text "" -- Expected in the output
 pSpec (Quote q) = jf $ show $ doubleQuotes $ pSpec q

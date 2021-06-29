@@ -21,5 +21,5 @@ reasonList = enumBulletU $ map foldlSent
     S "of launched or thrown objects"]]
 
 overviewParagraph :: Contents
-overviewParagraph = foldlSP [S "The presentation below is based on Section 12.6 (", atStart motion `S.sOf`
+overviewParagraph = foldlSP [S "The presentation below is based on Section 12.6 (", atStart motion `S.of_`
   S "a", atStart projectile, S") from the classic Hibbler text Engineering Mechanics Dynamnics, 10th edition"]

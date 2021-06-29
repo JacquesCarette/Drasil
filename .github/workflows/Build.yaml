@@ -70,6 +70,7 @@ jobs:
         run: make analysis
       - name: "Build website"
         run: |
+          make website
           LABEL_FILE=/tmp/ci_build_failures \
             MANAGED_LABEL_FILE=/tmp/ci_managed_labels \
             ALL_FUNCTIONS_FILE=$(mktemp) \

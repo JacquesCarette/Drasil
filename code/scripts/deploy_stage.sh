@@ -130,13 +130,7 @@ copy_analysis() {
   cp -r "$CUR_DIR$ANALYSIS_FOLDER". "$ANALYSIS_FOLDER"
 }
 
-build_website() {
-  cd "$CUR_DIR/"drasil-website 
-  RET=$?
-  if [ $RET != 0 ]; then
-    echo "Build Failed. Bailing."
-    exit 1
-  fi
+copy_website() {
   cd "$CUR_DIR$DEPLOY_FOLDER"
   cp -r "$CUR_DIR"drasil-website/Website/. .
 
@@ -152,5 +146,5 @@ copy_datafiles
 copy_examples
 copy_images
 copy_analysis
-build_website
+copy_website
 cd "$CUR_DIR"

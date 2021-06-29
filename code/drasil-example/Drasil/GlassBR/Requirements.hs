@@ -1,4 +1,4 @@
-module Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, inReqDesc, nonfuncReqs) where
+module Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, inReqDesc, nonfuncReqs, reqRefs) where
 
 import Control.Lens ((^.))
 
@@ -7,6 +7,8 @@ import Drasil.DocLang (inReq, mkQRTuple, mkQRTupleRef, mkValsSourceTable)
 import Drasil.DocLang.SRS (datCon, propCorSol)
 import Theory.Drasil (DataDefinition)
 import Utils.Drasil
+import Utils.Drasil.Concepts
+import qualified Utils.Drasil.NounPhrase as NP
 import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Computation (inValue)
@@ -49,11 +51,11 @@ outputValues               = cic "outputValues"               outputValuesDesc  
 
 inReqDesc, sysSetValsFollowingAssumpsDesc, checkInputWithDataConsDesc, outputValsAndKnownValuesDesc, checkGlassSafetyDesc :: Sentence
 
-inReqDesc = foldlList Comma List [S "the" +:+ phrase glass +:+ plural dimension,
-  phrase type_ `S.sOf` phrase glass, phrase pbTolfail, plural characteristic `S.the_ofThe` phrase blast]
+inReqDesc = foldlList Comma List [pluralNP (NP.the (combineNINI glass dimension)),
+  phraseNP (type_ `of_` glass), phrase pbTolfail, pluralNP (characteristic `the_ofThePS` blast)]
 
-sysSetValsFollowingAssumpsDesc = foldlSent [S "The", phrase system, S "shall set the known",
-    plural value, S "as described in", makeRef2S sysSetValsFollowingAssumpsTable]
+sysSetValsFollowingAssumpsDesc = foldlSent [atStartNP (the system), S "shall set the known",
+    plural value, S "as described in", refS sysSetValsFollowingAssumpsTable]
 
 sysSetValsFollowingAssumpsTable :: LabelledContent
 sysSetValsFollowingAssumpsTable = mkValsSourceTable (mkQRTupleRef r2AQs r2ARs ++ mkQRTuple r2DDs) "ReqAssignments"
@@ -66,24 +68,24 @@ sysSetValsFollowingAssumpsTable = mkValsSourceTable (mkQRTupleRef r2AQs r2ARs ++
 --FIXME:should constants, LDF, and LSF have some sort of field that holds
 -- the assumption(s) that're being followed? (Issue #349)
 
-checkInputWithDataConsDesc = foldlSent [S "The", phrase system, S "shall check the entered",
+checkInputWithDataConsDesc = foldlSent [atStartNP (the system), S "shall check the entered",
   plural inValue, S "to ensure that they do not exceed the", plural datumConstraint,
-  S "mentioned in" +:+. makeRef2S (datCon ([]::[Contents]) ([]::[Section])), 
-  S "If any" `S.ofThe` plural inValue, S "are out" `S.sOf` S "bounds" `sC`
+  S "mentioned in" +:+. refS (datCon ([]::[Contents]) ([]::[Section])), 
+  S "If any" `S.ofThe` plural inValue, S "are out" `S.of_` S "bounds" `sC`
   S "an", phrase errMsg, S "is displayed" `S.andThe` plural calculation, S "stop"]
 
-outputValsAndKnownValuesDesc = foldlSent [titleize output_, S "the", plural inValue,
-  S "from", makeRef2S (inReq EmptyS) `S.andThe` S "known", plural value,
-  S "from", makeRef2S sysSetValsFollowingAssumps]
+outputValsAndKnownValuesDesc = foldlSent [titleize output_, pluralNP (the inValue),
+  S "from", refS (inReq EmptyS) `S.andThe` S "known", plural value,
+  S "from", refS sysSetValsFollowingAssumps]
 
-checkGlassSafetyDesc = foldlSent_ [S "If", E (sy isSafePb $&& sy isSafeLR),
-  sParen (S "from" +:+ makeRef2S pbIsSafe `S.sAnd` makeRef2S lrIsSafe) `sC`
-  phrase output_, S "the", phrase message, Quote (safeMessage ^. defn),
+checkGlassSafetyDesc = foldlSent_ [S "If", eS (sy isSafePb $&& sy isSafeLR),
+  sParen (S "from" +:+ refS pbIsSafe `S.and_` refS lrIsSafe) `sC`
+  phrase output_, phraseNP (the message), Quote (safeMessage ^. defn),
   S "If the", phrase condition, S "is false, then", phrase output_,
-  S "the", phrase message, Quote (notSafe ^. defn)]
+  phraseNP (the message), Quote (notSafe ^. defn)]
 
 outputValuesDesc :: Sentence
-outputValuesDesc = foldlSent [titleize output_, S "the", plural value, S "from", makeRef2S outputValuesTable]
+outputValuesDesc = foldlSent [titleize output_, pluralNP (the value), S "from", refS outputValuesTable]
 
 outputValuesTable :: LabelledContent
 outputValuesTable = mkValsSourceTable (mkQRTuple iMods ++ mkQRTuple r6DDs) "ReqOutputs"
@@ -99,32 +101,41 @@ nonfuncReqs = [correct, verifiable, understandable, reusable, maintainable, port
 
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
-  plural output_ `S.the_ofThe'` phrase code, S "have the",
-  plural property, S "described in", makeRef2S (propCorSol [] [])
+  atStartNP' (output_ `the_ofThePS` code), S "have the",
+  plural property, S "described in", refS (propCorSol [] [])
   ]) "Correct" nonFuncReqDom
  
 verifiable :: ConceptInstance
 verifiable = cic "verifiable" (foldlSent [
-  S "The", phrase code, S "is tested with complete",
+  atStartNP (the code), S "is tested with complete",
   phrase vavPlan]) "Verifiable" nonFuncReqDom
 
 understandable :: ConceptInstance
 understandable = cic "understandable" (foldlSent [
-  S "The", phrase code, S "is modularized with complete",
-  phrase mg `S.sAnd` phrase mis]) "Understandable" nonFuncReqDom
+  atStartNP (the code), S "is modularized with complete",
+  phrase mg `S.and_` phrase mis]) "Understandable" nonFuncReqDom
 
 reusable :: ConceptInstance
 reusable = cic "reusable" (foldlSent [
-  S "The", phrase code, S "is modularized"]) "Reusable" nonFuncReqDom
+  atStartNP (the code), S "is modularized"]) "Reusable" nonFuncReqDom
 
 maintainable :: ConceptInstance
 maintainable = cic "maintainable" (foldlSent [
   S "The traceability between", foldlList Comma List [plural requirement,
   plural assumption, plural thModel, plural genDefn, plural dataDefn, plural inModel,
   plural likelyChg, plural unlikelyChg, plural module_], S "is completely recorded in",
-  plural traceyMatrix `S.inThe` getAcc srs `S.sAnd` phrase mg]) "Maintainable" nonFuncReqDom
+  plural traceyMatrix `S.inThe` getAcc srs `S.and_` phrase mg]) "Maintainable" nonFuncReqDom
 
 portable :: ConceptInstance
 portable = cic "portable" (foldlSent [
-  S "The", phrase code, S "is able to be run in different", plural environment])
+  atStartNP (the code), S "is able to be run in different", plural environment])
   "Portable" nonFuncReqDom
+
+-- References --
+reqRefs :: [Reference]
+reqRefs = map ref funcReqsTables
+  ++ map ref [datCon ([]::[Contents]) ([]::[Section]), propCorSol [] []]
+  ++ map ref ([inReq EmptyS] ++ funcReqs ++ nonfuncReqs) ++ map ref [pbIsSafe, lrIsSafe]
+  ++ map ref [loadDF, hFromt, glaTyFac, standOffDis, aspRat]
+  ++ map ref [risk, strDisFac, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac, hFromt, aspRat]
+  

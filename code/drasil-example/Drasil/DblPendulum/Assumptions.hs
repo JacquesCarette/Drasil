@@ -1,11 +1,15 @@
-module Drasil.DblPendulum.Assumptions (pend2DMotion, cartCoord, cartCoordRight, yAxisDir, startOrigin, assumptions) where
+{-# LANGUAGE PostfixOperators #-}
+module Drasil.DblPendulum.Assumptions (pend2DMotion, cartCoord, cartCoordRight,
+  yAxisDir, startOrigin, assumptions, assumpRefs) where
     
 import Language.Drasil
+import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (assumpDom) 
 import Data.Drasil.Concepts.Math (cartesian, xAxis, yAxis, direction, origin, positive)
-import Data.Drasil.Concepts.Physics (gravity, twoD, pendulum, motion)
+import Data.Drasil.Concepts.Physics (gravity, twoD, pendulum)
+import Drasil.DblPendulum.Concepts (pendMotion)
 
 
 assumptions :: [ConceptInstance]
@@ -20,18 +24,21 @@ yAxisDir        = cic "yAxisDir"          yAxisDirDesc        "yAxisDir"        
 startOrigin     = cic "startOrigin"       startOriginDesc     "startOrigin"     assumpDom
 
 pend2DMotionDesc :: Sentence
-pend2DMotionDesc = S "The" +:+ phrase pendulum +:+ phrase motion `S.sIs` phrase twoD +:+. sParen (getAcc twoD)
+pend2DMotionDesc = atStartNP (the pendMotion) `S.is` phrase twoD +:+. sParen (getAcc twoD)
 
 cartCoordDesc :: Sentence
-cartCoordDesc = S "A" +:+ (phrase cartesian `S.sIs` S "used") 
+cartCoordDesc = atStartNP (a_ cartesian) `S.is` (S "used" !.)
 
 cartCoordRightDesc :: Sentence
-cartCoordRightDesc = S "The" +:+ phrase cartesian `S.sIs` S "right-handed where" +:+ phrase positive +:+.
-                         phrase xAxis `S.sAnd` phrase yAxis +:+ S "point right up"
+cartCoordRightDesc = atStartNP (the cartesian) `S.is` S "right-handed where" +:+ 
+    phraseNP (combineNINP positive (xAxis `and_` yAxis)) +:+. S "point right up"
 
 yAxisDirDesc :: Sentence
-yAxisDirDesc = phrase direction `S.the_ofThe'` phrase yAxis `S.sIs` S "directed opposite to" +:+. phrase gravity
+yAxisDirDesc = atStartNP (direction `the_ofThe` yAxis) `S.is` S "directed opposite to" +:+. phrase gravity
 
 startOriginDesc :: Sentence
-startOriginDesc = S "The" +:+. (phrase pendulum `S.sIs` S "attached" `S.toThe` phrase origin)
+startOriginDesc = atStartNP (the pendulum) `S.is` S "attached" `S.toThe` (phrase origin !.)
 
+-- References --
+assumpRefs :: [Reference]
+assumpRefs = map ref assumptions

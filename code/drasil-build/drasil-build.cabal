@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 3d78b46c08af67680dcfaa9191fa7bb26b1bcbc5e4479ec9583ba68d8706756f
+-- hash: fcacf133f18f617ea0275c285750248bc7f1254a879c436db44684e83f01ee0c
 
 name:           drasil-build
 version:        0.1.1.0
@@ -29,7 +29,6 @@ library
       Build.Drasil.Make.Import
       Build.Drasil.Make.MakeString
       Build.Drasil.Make.Print
-      Paths_drasil_build
   hs-source-dirs:
       ./
   ghc-options: -Wall -Wredundant-constraints
@@ -37,4 +36,7 @@ library
       base >=4.7 && <5
     , drasil-lang
     , pretty
+  if false
+    other-modules:
+        Paths_drasil_build
   default-language: Haskell2010

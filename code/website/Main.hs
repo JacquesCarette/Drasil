@@ -178,6 +178,7 @@ main = do
   srsDir <- getEnv "SRS_FOLDER_FRAG"
   doxDir <- getEnv "DOX_FOLDER"
   graphRoot <- getEnv "GRAPH_FOLDER"
+  analysisRoot <- getEnv "ANALYSIS_FOLDER"
 
   -- Env variables relating to variables exposed on CI.
   -- Because we want to be able to test site building locally, we fill in these stubs with
@@ -190,10 +191,16 @@ main = do
 
   let repoCommitRoot = "https://github.com/" ++ repoSlug ++ "/tree/" ++ commit ++ "/"
   let docsPath = docsRoot ++ "index.html"
+  let fullDocsPath = docsRoot ++ "full/index.html"
+  let dataTablePath = analysisRoot ++ "DataTable/DataTable.csv"
+  let dataTableHTMLPath = analysisRoot ++ "DataTable/DataTable.html"
 
   let buildPath = "https://github.com/" ++ repoSlug ++ "/actions" ++ maybe "" ("/runs/" ++) buildId
 
   doesDocsExist <- doesFileExist $ deployLocation ++ docsPath
+  doesFullDocsExist <- doesFileExist $ deployLocation ++ fullDocsPath
+  doesdataTableExist <- doesFileExist $ deployLocation ++ dataTablePath
+  doesdataTableHTMLExist <- doesFileExist $ deployLocation ++ dataTableHTMLPath
   examples <- mkExamples repoCommitRoot (deployLocation ++ exampleRoot) srsDir
   graphs <- mkGraphs $ deployLocation ++ graphRoot
 
@@ -215,6 +222,9 @@ main = do
         let indexCtx = listField "examples" (mkExampleCtx exampleRoot srsDir doxDir) (mapM makeItem examples) <>
                        listField "graphs" (mkGraphCtx graphRoot) (mapM makeItem graphs) <>
                        (if doesDocsExist then field "docsUrl" (return . const docsPath) else mempty) <>
+                       (if doesFullDocsExist then field "fullDocsUrl" (return . const fullDocsPath) else mempty) <>
+                       (if doesdataTableExist then field "dataTableUrl" (return . const dataTablePath) else mempty) <>
+                       (if doesdataTableHTMLExist then field "dataTableHTMLUrl" (return . const dataTableHTMLPath) else mempty) <>
                        field "buildNumber" (return . const buildNumber) <>
                        field "buildUrl" (return . const buildPath) <>
                        field "commit" (return . const commit) <>

@@ -4,11 +4,11 @@ module Data.Drasil.Equations.Defining.Physics where
 --
 import Language.Drasil
 import Utils.Drasil (foldlSent, getTandS)
-import Utils.Drasil.Sentence (sIs, sOf, the_ofThe)
+import qualified Utils.Drasil.Sentence as S (is, of_, the_ofThe)
 
 import qualified Data.Drasil.Quantities.Math as QM (unitVectj)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration, time,
-  force, gravitationalAccel, height, pressure, weight, velocity, position)
+  force, gravitationalAccel, height, weight, velocity, position)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (density, 
   mass, specWeight, vol)
 import Data.Drasil.Concepts.Documentation (body, constant)
@@ -16,40 +16,40 @@ import Data.Drasil.Concepts.Documentation (body, constant)
 ------------------------------------------------------------------------------------------------------
 -- The equations
 
-newtonSLRel, weightEqn, weightDerivAccelEqn, weightDerivNewtonEqn, weightDerivReplaceMassEqn,
+newtonSLEqn, weightEqn, weightDerivAccelEqn, weightDerivNewtonEqn, weightDerivReplaceMassEqn,
   weightDerivSpecWeightEqn,
-  hsPressureEqn, accelerationEqn, velocityEqn  :: Relation
+  hsPressureEqn, speedEqn, velocityEqn, accelerationEqn  :: Relation
 
-newtonSLRel               = sy QP.force $= sy QPP.mass * sy QP.acceleration
+newtonSLEqn               = sy QPP.mass `mulRe` sy QP.acceleration
 
-weightEqn                 = sy QP.weight $= sy QPP.vol * sy QPP.specWeight
-weightDerivNewtonEqn      = sy QP.weight $= sy QPP.mass * sy QP.gravitationalAccel
-weightDerivReplaceMassEqn = sy QP.weight $= sy QPP.density * sy QPP.vol * sy QP.gravitationalAccel
-weightDerivSpecWeightEqn  = sy QP.weight $= sy QPP.vol * sy QPP.specWeight
+weightEqn                 = sy QPP.vol `mulRe` sy QPP.specWeight
+weightDerivNewtonEqn      = sy QP.weight $= mulRe (sy QPP.mass) (sy QP.gravitationalAccel)
+weightDerivReplaceMassEqn = sy QP.weight $= mulRe (sy QPP.density) (mulRe (sy QPP.vol) (sy QP.gravitationalAccel))
+weightDerivSpecWeightEqn  = sy QP.weight $= mulRe (sy QPP.vol) (sy QPP.specWeight)
 
-weightDerivAccelEqn       = sy QP.acceleration $= vec2D 0 (sy QP.gravitationalAccel * sy QM.unitVectj)
+weightDerivAccelEqn       = sy QP.acceleration $= vec2D (exactDbl 0) (mulRe (sy QP.gravitationalAccel) (sy QM.unitVectj))
 
-hsPressureEqn             = sy QP.pressure $= sy QPP.specWeight * sy QP.height
+hsPressureEqn             = sy QPP.specWeight `mulRe` sy QP.height
 
-velocityEqn               = sy QP.velocity $= deriv (sy QP.position) QP.time
-accelerationEqn           = sy QP.acceleration $= deriv (sy QP.velocity) QP.time
+speedEqn                  = norm (sy QP.velocity)
+velocityEqn               = deriv (sy QP.position) QP.time
+accelerationEqn           = deriv (sy QP.velocity) QP.time
 
 ------------------------------------------------------------------------------------------------------
 -- The concepts
 
-accelerationRC, velocityRC :: RelationConcept
+accelerationQD :: QDefinition
+accelerationQD = mkQuantDef QP.acceleration accelerationEqn
 
-accelerationRC = addRelToCC QP.acceleration "accelerationRC" accelerationEqn
-velocityRC = addRelToCC QP.velocity "velocityRC" velocityEqn
+velocityQD :: QDefinition
+velocityQD = mkQuantDef QP.velocity velocityEqn
 
-newtonSLRC :: RelationConcept
-newtonSLRC = makeRC "newtonSL" (nounPhraseSP "Newton's second law of motion")
-  newtonSLDesc newtonSLRel
+newtonSLQD :: QDefinition
+newtonSLQD = fromEqn' "force" (nounPhraseSP "Newton's second law of motion")
+  newtonSLDesc (eqSymb QP.force) Real newtonSLEqn
 
 newtonSLDesc :: Sentence
 newtonSLDesc = foldlSent [S "The net", getTandS QP.force, S "on a",
-  phrase body `sIs` S "proportional to", getTandS QP.acceleration `the_ofThe`
-  phrase body `sC` S "where", ch QPP.mass, S "denotes", phrase QPP.mass `the_ofThe`
-  phrase body, S "as the", phrase constant `sOf` S "proportionality"]
-
-
+  phrase body `S.is` S "proportional to", getTandS QP.acceleration `S.the_ofThe`
+  phrase body `sC` S "where", ch QPP.mass, S "denotes", phrase QPP.mass `S.the_ofThe`
+  phrase body, S "as the", phrase constant `S.of_` S "proportionality"]

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: a9a50a45f3a9e998f60776d2574553d0a145ad3e40e1f2062e6fec85b9bbc3ee
+-- hash: 7823bd618cb0ce8837c4312da12e6a687c3aa76b989f8c2af22d7e0b00720077
 
 name:           drasil-code
 version:        0.1.9.0
@@ -27,6 +27,7 @@ library
   other-modules:
       Language.Drasil.Chunk.Code
       Language.Drasil.Chunk.CodeDefinition
+      Language.Drasil.Chunk.ConstraintMap
       Language.Drasil.Chunk.Parameter
       Language.Drasil.Code.Code
       Language.Drasil.Code.CodeQuantityDicts
@@ -68,7 +69,6 @@ library
       Language.Drasil.Data.ODEInfo
       Language.Drasil.Data.ODELibPckg
       Language.Drasil.Choices
-      Language.Drasil.CodeExpr
       Language.Drasil.CodeSpec
       Language.Drasil.Mod
   hs-source-dirs:
@@ -79,6 +79,7 @@ library
     , containers
     , directory
     , drasil-build
+    , drasil-code-base
     , drasil-database
     , drasil-gool
     , drasil-lang
@@ -90,6 +91,9 @@ library
     , mtl
     , pretty
     , split
+  if false
+    other-modules:
+        Paths_drasil_code
   default-language: Haskell2010
 
 executable codegenTest
@@ -103,6 +107,7 @@ executable codegenTest
       Language.Drasil.Code
       Language.Drasil.Chunk.Code
       Language.Drasil.Chunk.CodeDefinition
+      Language.Drasil.Chunk.ConstraintMap
       Language.Drasil.Chunk.Parameter
       Language.Drasil.Code.Code
       Language.Drasil.Code.CodeQuantityDicts
@@ -144,7 +149,6 @@ executable codegenTest
       Language.Drasil.Data.ODEInfo
       Language.Drasil.Data.ODELibPckg
       Language.Drasil.Choices
-      Language.Drasil.CodeExpr
       Language.Drasil.CodeSpec
       Language.Drasil.Mod
   hs-source-dirs:
@@ -156,6 +160,7 @@ executable codegenTest
     , directory
     , drasil-build
     , drasil-code
+    , drasil-code-base
     , drasil-database
     , drasil-gool
     , drasil-lang

@@ -1,10 +1,9 @@
 module Data.Drasil.Theories.Physics where
 
 import Language.Drasil
-import Theory.Drasil (DataDefinition, GenDefn, TheoryModel, ddNoRefs, gd,
-  tmNoRefs, ModelKinds (OthModel), tm)
+import Theory.Drasil
 import Utils.Drasil
-import Utils.Drasil.Sentence
+import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Citations (velocityWiki, accelerationWiki)
 import Data.Drasil.Concepts.Documentation (component, material_, value, constant)
@@ -14,31 +13,31 @@ import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (density,
   mass, specWeight, vol)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration, velocity, position,
   force, gravitationalAccel, pressure, torque, weight, positionVec, time, momentOfInertia,
-  angularAccel)
-import Data.Drasil.Equations.Defining.Physics (newtonSLRel, newtonSLRC, newtonSLDesc, weightEqn,
+  angularAccel, speed)
+import Data.Drasil.Equations.Defining.Physics (newtonSLQD, newtonSLDesc, weightEqn,
   weightDerivAccelEqn, weightDerivNewtonEqn, weightDerivReplaceMassEqn, weightDerivSpecWeightEqn,
-  hsPressureEqn, accelerationEqn, accelerationRC, velocityEqn, velocityRC)
+  hsPressureEqn, accelerationQD, velocityQD, speedEqn)
 
 physicsTMs :: [TheoryModel]
 physicsTMs = [newtonSL]
 
 newtonSL :: TheoryModel
-newtonSL = tmNoRefs (OthModel newtonSLRC)
+newtonSL = tmNoRefs' "newtonSL" (EquationalModel newtonSLQD)
   [qw QP.force, qw QPP.mass, qw QP.acceleration] ([] :: [ConceptChunk])
-  [] [newtonSLRel] [] "NewtonSecLawMot" [newtonSLDesc]
+  [newtonSLQD] [] [] "NewtonSecLawMot" [newtonSLDesc]
 
 --
 
 weightGD :: GenDefn
-weightGD = gd (OthModel weightRC) (getUnit QP.weight) (Just weightDeriv) [weightSrc] 
+weightGD = gd (EquationalModel weightQD) (getUnit QP.weight) (Just weightDeriv) [weightSrc] 
   "weight" [{-Notes-}]
 
-weightRC :: RelationConcept
-weightRC = makeRC "weight" (nounPhraseSP "weight") EmptyS weightEqn
+weightQD :: QDefinition
+weightQD = mkQuantDef' QP.weight (nounPhraseSP "weight") weightEqn
 
 weightSrc :: Reference
 weightSrc = makeURI "weightSrc" "https://en.wikipedia.org/wiki/Weight" $
-  shortname' "Definition of Weight"
+  shortname' $ S "Definition of Weight"
 
 weightDeriv :: Derivation
 weightDeriv = mkDerivName (phrase QP.weight) $ weave [weightDerivSentences, weightDerivEqns]
@@ -47,11 +46,11 @@ weightDerivSentences, weightDerivEqns :: [Sentence]
 weightDerivSentences = map foldlSentCol [weightDerivAccelSentence, 
   weightDerivNewtonSentence, weightDerivReplaceMassSentence, 
   weightDerivSpecWeightSentence]
-weightDerivEqns = map E [weightDerivAccelEqn, weightDerivNewtonEqn, 
+weightDerivEqns = map eS [weightDerivAccelEqn, weightDerivNewtonEqn, 
   weightDerivReplaceMassEqn, weightDerivSpecWeightEqn]
 
 weightDerivAccelSentence :: [Sentence]
-weightDerivAccelSentence = [S "Under the influence" `sOf` phrase gravity `sC` 
+weightDerivAccelSentence = [S "Under the influence" `S.of_` phrase gravity `sC` 
   S "and assuming a", short twoD, phrase cartesian, S "with down as positive" `sC`
   S "an object has an", phrase QP.acceleration, phrase vector, S "of"]
 
@@ -59,7 +58,7 @@ weightDerivNewtonSentence :: [Sentence]
 weightDerivNewtonSentence = [S "Since there is only one non-zero", 
   phrase vector, phrase component `sC` S "the scalar", phrase value, 
   ch QP.weight, S "will be used for the" +:+. phrase QP.weight,
-  S "In this scenario" `sC` phrase newtonSL, S "from", makeRef2S newtonSL, 
+  S "In this scenario" `sC` phrase newtonSL, S "from", refS newtonSL, 
   S "can be expressed as"]
 
 weightDerivReplaceMassSentence :: [Sentence]
@@ -68,22 +67,21 @@ weightDerivReplaceMassSentence = [atStart QPP.mass, S "can be expressed as",
 
 weightDerivSpecWeightSentence :: [Sentence]
 weightDerivSpecWeightSentence = [S "Substituting", phrase QPP.specWeight, 
-  S "as the product" `sOf` phrase QPP.density `sAnd` phrase QP.gravitationalAccel,
+  S "as the product" `S.of_` phrase QPP.density `S.and_` phrase QP.gravitationalAccel,
   S "yields"]
 
 --
 
 hsPressureGD :: GenDefn
-hsPressureGD = gd (OthModel hsPressureRC) (getUnit QP.pressure) Nothing
+hsPressureGD = gd (EquationalModel hsPressureQD) (getUnit QP.pressure) Nothing
   [hsPressureSrc] "hsPressure" [hsPressureNotes]
 
-hsPressureRC :: RelationConcept
-hsPressureRC = makeRC "hsPressure" (nounPhraseSP "hydrostatic pressure") 
-  hsPressureNotes hsPressureEqn
+hsPressureQD :: QDefinition
+hsPressureQD = mkQuantDef' QP.pressure (nounPhraseSP "hydrostatic pressure") hsPressureEqn
 
 hsPressureSrc :: Reference
 hsPressureSrc = makeURI "hsPressureSrc" "https://en.wikipedia.org/wiki/Pressure" $
-  shortname' "Definition of Pressure"
+  shortname' $ S "Definition of Pressure"
 
 hsPressureNotes :: Sentence
 hsPressureNotes = S "This" +:+ phrase equation +:+ S "is derived from" +:+
@@ -99,42 +97,54 @@ torque :: QDefinition
 torque = mkQuantDef QP.torque torqueEqn
 
 torqueEqn :: Expr
-torqueEqn = cross (sy QP.positionVec) (sy QP.force)
+torqueEqn = sy QP.positionVec `cross` sy QP.force
 
 torqueDesc :: Sentence
 torqueDesc = foldlSent [S "The", phrase torque, 
-  S "on a body measures the", S "tendency" `sOf` S "a", phrase QP.force, 
+  S "on a body measures the", S "tendency" `S.of_` S "a", phrase QP.force, 
   S "to rotate the body around an axis or pivot"]
 
 --
+
+vecMagQD :: QDefinition
+vecMagQD = mkQuantDef QP.speed speedEqn
+
+magNote :: Sentence
+magNote = foldlSent [S "For a given", phrase QP.velocity, S "vector", ch QP.velocity `sC`
+  S "the magnitude of the vector", sParen (eS speedEqn) `S.isThe`
+  S "scalar called", phrase QP.speed]
+
+vecMag :: DataDefinition
+vecMag = ddNoRefs vecMagQD Nothing "vecMag" [magNote]
+
+--
 newtonSLR :: TheoryModel
-newtonSLR = tmNoRefs (OthModel newtonSLRRC)
+newtonSLR = tmNoRefs' "newtonSLR" (EquationalModel newtonSLRQD)
   [qw QP.torque, qw QP.momentOfInertia, qw QP.angularAccel] 
-  ([] :: [ConceptChunk]) [] [newtonSLRRel] [] "NewtonSecLawRotMot" newtonSLRNotes
+  ([] :: [ConceptChunk]) [newtonSLRQD] [] [] "NewtonSecLawRotMot" newtonSLRNotes
 
-newtonSLRRC :: RelationConcept
-newtonSLRRC = makeRC "newtonSLRRC" 
-  (nounPhraseSP "Newton's second law for rotational motion") EmptyS newtonSLRRel
+newtonSLRQD :: QDefinition
+newtonSLRQD = mkQuantDef' QP.torque (nounPhraseSP "Newton's second law for rotational motion") newtonSLRExpr
 
-newtonSLRRel :: Relation
-newtonSLRRel = sy QP.torque $= sy QP.momentOfInertia * sy QP.angularAccel
+newtonSLRExpr :: Expr
+newtonSLRExpr = sy QP.momentOfInertia `mulRe` sy QP.angularAccel
 
 newtonSLRNotes :: [Sentence]
 newtonSLRNotes = map foldlSent [
-  [S "The net", getTandS QP.torque, S "on a", phrase rigidBody `sIs`
+  [S "The net", getTandS QP.torque, S "on a", phrase rigidBody `S.is`
    S "proportional to its", getTandS QP.angularAccel `sC` S "where",
-   ch QP.momentOfInertia, S "denotes", phrase QP.momentOfInertia `the_ofThe`
-   phrase rigidBody, S "as the", phrase constant `sOf` S "proportionality"]]
+   ch QP.momentOfInertia, S "denotes", phrase QP.momentOfInertia `S.the_ofThe`
+   phrase rigidBody, S "as the", phrase constant `S.of_` S "proportionality"]]
 --
 
 accelerationTM :: TheoryModel
-accelerationTM = tm (OthModel accelerationRC)
-  [qw QP.acceleration, qw QP.velocity, qw QP.time] ([] :: [ConceptChunk]) [] [accelerationEqn] []
-  [makeCite accelerationWiki] "acceleration" []
+accelerationTM = tm' "accelerationTM" (EquationalModel accelerationQD)
+  [qw QP.acceleration, qw QP.velocity, qw QP.time] ([] :: [ConceptChunk]) [accelerationQD] [] []
+  [ref accelerationWiki] "acceleration" []
 
 ----------
 
 velocityTM :: TheoryModel
-velocityTM = tm (OthModel velocityRC)
-  [qw QP.velocity, qw QP.position, qw QP.time] ([] :: [ConceptChunk]) [] [velocityEqn] []
-  [makeCite velocityWiki] "velocity" []
+velocityTM = tm' "velocityTM" (EquationalModel velocityQD)
+  [qw QP.velocity, qw QP.position, qw QP.time] ([] :: [ConceptChunk]) [velocityQD] [] []
+  [ref velocityWiki] "velocity" []

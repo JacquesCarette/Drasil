@@ -21,3 +21,6 @@ library:
   source-dirs: ./
   exposed-modules:
   - Data.Drasil.Domains
+  when:
+  - condition: false
+    other-modules: Paths_drasil_metadata

@@ -1,7 +1,10 @@
+{-# LANGUAGE PostfixOperators #-}
 module Drasil.SSP.Assumptions where
 
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Concepts
+import qualified Utils.Drasil.NounPhrase as NP
 import qualified Utils.Drasil.Sentence as S
 
 import Drasil.SSP.Defs (plnStrn, slpSrf, slopeSrf, slope,
@@ -51,45 +54,45 @@ monotonicF, slopeS, homogeneousL, isotropicP, linearS, planeS, largeN,
   straightS, propertiesS, edgeS, seismicF, surfaceL, waterBIntersect, 
   waterSIntersect, negligibleSlopeEffect, hydrostaticFMidpoint :: Sentence
 
-monotonicF = foldlSent [S "The", phrase slpSrf,
-  S "is concave" `S.wrt` S "the" +:+. phrase slopeSrf, S "The",
-  sParen (ch slipDist `sC` ch slipHght) +:+ S "coordinates", S "of a", 
+monotonicF = foldlSent [atStartNP (the slpSrf),
+  S "is concave" `S.wrt` (phraseNP (the slopeSrf) !.), S "The",
+  sParen (ch slipDist `sC` ch slipHght), S "coordinates" `S.ofA` 
   phrase slpSrf, S "follow a concave up function"]
 
 slopeS = foldlSent [S "The factor of safety is assumed to be", phrase constant,
   S "across the entire", phrase slpSrf]
 
-homogeneousL = foldlSent [S "The", phrase soil, S "mass is homogeneous" `sC`
-  S "with consistent", plural soilPrpty +:+ S "throughout"]
+homogeneousL = foldlSent [atStartNP (the soil), S "mass is homogeneous" `sC`
+  S "with consistent", plural soilPrpty, S "throughout"]
 
-propertiesS = foldlSent [S "The", plural soilPrpty, S "are independent of dry or saturated",
+propertiesS = foldlSent [atStartNP' (the soilPrpty), S "are independent of dry or saturated",
   plural condition `sC` S "with the exception of", phrase unit_, S "weight"]
 
-isotropicP = foldlSent [S "The", phrase soil, S "mass is treated as if the", 
-  phrase effCohesion `S.sAnd` phrase fricAngle, S "are isotropic properties"]
+isotropicP = foldlSent [atStartNP (the soil), S "mass is treated as if the", 
+  phraseNP (effCohesion `and_` fricAngle), S "are isotropic properties"]
 
 linearS = foldlSent [S "Following the", phrase assumption, S "of Morgenstern",
-  S "and Price", sParen (makeRef2S morgenstern1965) `sC` 
-  phrase intNormForce `S.sAnd` phrase intShrForce,
+  S "and Price", sParen (refS morgenstern1965) `sC` 
+  phraseNP (intNormForce `and_` intShrForce),
   S "have a proportional relationship, depending on a proportionality",
   phrase constant, sParen (ch normToShear), S "and a function", 
   sParen (ch scalFunc), S "describing variation depending on", ch xi, 
   phrase position]
 
-planeS = foldlSent [S "The", phrase slope, S "and", phrase slpSrf +:+
+planeS = foldlSent [atStartNP (NP.the (slope `and_` slpSrf)),
   S "extends far into and out of the geometry" +:+. sParen (ch zcoord +:+ 
-  S "coordinate"), S "This implies", phrase plnStrn, plural condition `sC`
+  S "coordinate"), S "This implies", pluralNP (combineNINI plnStrn condition) `sC`
   S "making", short twoD, phrase analysis, S "appropriate"]
 
 largeN = foldlSent [S "The effective normal", phrase stress,
   S "is large enough that the", phrase shrStress, S "to effective normal",
   phrase stress, S "relationship can be approximated as a linear relationship"]
 
-straightS = foldlSent [S "The", phrase surface, S "and base of a",
+straightS = foldlSent [atStartNP (the surface), S "and base of a",
   phrase slice, S "are approximated as straight lines"]
 
-edgeS = foldlSent [S "The", phrase intrslce, plural force, 
-  S "at the 0th" `S.sAnd` ch numbSlices :+: S "th", phrase intrslce,
+edgeS = foldlSent [atStartNP (the intrslce), plural force, 
+  S "at the 0th" `S.and_` ch numbSlices :+: S "th", phrase intrslce,
   plural interface, S "are zero"]
 
 seismicF = foldlSent [S "There is no seismic", phrase force, S "acting on the", phrase slope]
@@ -97,17 +100,21 @@ seismicF = foldlSent [S "There is no seismic", phrase force, S "acting on the", 
 surfaceL = foldlSent [S "There is no imposed", phrase surface, S "load" `sC`
   S "and therefore no", phrase surfLoad `sC` S "acting on the", phrase slope]
 
-waterBIntersect = foldlSent [S "The", phrase waterTable, S "only intersects", 
-  S "the base of a", phrase slice, S "at an edge of the", phrase slice]
+waterBIntersect = foldlSent [atStartNP (the waterTable), S "only intersects", 
+  S "the base" `S.ofA` phrase slice, S "at an edge" `S.ofThe` phrase slice]
 
-waterSIntersect = foldlSent [S "The", phrase waterTable, S "only intersects", 
-  S "the", phrase slopeSrf, S "at the edge of a", phrase slice]
+waterSIntersect = foldlSent [atStartNP (the waterTable), S "only intersects", 
+  phraseNP (the slopeSrf), S "at the edge of a", phrase slice]
 
-negligibleSlopeEffect = foldlSent [S "The", phrase effect, 
-  S "of the slope of the surface of the", phrase soil, S "on the seismic",
+negligibleSlopeEffect = foldlSent [atStartNP (the effect)
+  `S.ofThe` S "slope" `S.ofThe` phraseNP (surface `ofThe` soil) `S.onThe` S "seismic",
   phrase force, S "is assumed to be negligible"]
 
 hydrostaticFMidpoint = foldlSent [S "The resultant", phrase surfHydroForce,
   S "act into the midpoint of each", phrase slice, S "surface" `S.andThe`
   S "resultant", phrase baseHydroForce, S "act into the midpoint of each",
   phrase slice, S "base"]
+
+-- References --
+assumpRefs :: [Reference]
+assumpRefs = map ref assumptions

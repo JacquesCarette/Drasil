@@ -7,7 +7,8 @@ import Language.Drasil.Data.Citation (CiteField)
 
 import Control.Lens (Lens')
 
--- | Citations have Fields
+-- | 'Citation's should have a fields ('CiteField').
 class HasFields c where
+  -- | Provides a 'Lens' to 'CiteField's.
   getFields :: Lens' c [CiteField]
 

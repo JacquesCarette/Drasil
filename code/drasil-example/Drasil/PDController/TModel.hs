@@ -10,6 +10,8 @@ import Language.Drasil
 import qualified Language.Drasil as DrasilLang
 import Theory.Drasil (TheoryModel, tm, ModelKinds(OthModel))
 import Utils.Drasil
+import Utils.Drasil.Concepts
+import qualified Utils.Drasil.Sentence as S
 import Data.Drasil.Citations(laplaceWiki)
 import Drasil.PDController.Unitals
 
@@ -23,9 +25,9 @@ tmLaplace
        qw qdFxnTDomain]
       ([] :: [ConceptChunk])
       []
-      [laplaceRel]
+      [toDispExpr laplaceRel]
       []
-      [makeCite laplaceWiki]
+      [ref laplaceWiki]
       "laplaceTransform"
       [laplaceDesc]
 
@@ -36,15 +38,15 @@ laplaceRel :: Relation
 laplaceRel
   = sy qdLaplaceTransform $=
       defint (eqSymb time) (sy qdNegInf) (sy qdPosInf) (sy qdFxnTDomain 
-      * DrasilLang.exp (negate (sy qdFreqDomain) * sy time))
+      `mulRe` DrasilLang.exp (neg (sy qdFreqDomain) `mulRe` sy time))
 
 laplaceDesc :: Sentence
 laplaceDesc
   = foldlSent
       [(S "Bilateral Laplace Transform" !.),
-       S "The Laplace transforms are",
-         S "typically inferred from a pre-computed table of Laplace Transforms",
-         sParen (makeCiteS laplaceWiki)]
+       atStartNP (theGen atStart' ccLaplaceTransform),
+         S "are typically inferred from a pre-computed table of", titleize' ccLaplaceTransform,
+         sParen (refS laplaceWiki)]
 
 --------
 
@@ -55,9 +57,9 @@ tmInvLaplace
        qw qdFxnTDomain]
       ([] :: [ConceptChunk])
       []
-      [invLaplaceRel]
+      [toDispExpr invLaplaceRel]
       []
-      [makeCite laplaceWiki]
+      [ref laplaceWiki]
       "invLaplaceTransform"
       [invLaplaceDesc]
 
@@ -74,7 +76,7 @@ invLaplaceDesc
       [(S "Inverse Laplace Transform of F(S)" !.),
        S "The Inverse Laplace transforms are",
          S "typically inferred from a pre-computed table of Laplace Transforms",
-         sParen (makeCiteS laplaceWiki)]
+         sParen (refS laplaceWiki)]
 
 --------
 
@@ -84,9 +86,9 @@ tmSOSystem
       [qw mass, qw qdDampingCoeff, qw qdStiffnessCoeff, qw qdFreqDomain]
       ([] :: [ConceptChunk])
       []
-      [soSystemRel]
+      [toDispExpr soSystemRel]
       []
-      [makeCite abbasi2015]
+      [ref abbasi2015]
       "tmSOSystem"
       [soSystemDesc]
 
@@ -97,18 +99,21 @@ tmSOSystemRC
 
 soSystemRel :: Relation
 soSystemRel
-  = 1 
-    / (sy mass * square (sy qdFreqDomain) 
-    + sy qdDampingCoeff * sy qdFreqDomain
-    + sy qdStiffnessCoeff)
+  = exactDbl 1 
+    $/ (sy mass `mulRe` square (sy qdFreqDomain) 
+    `addRe` (sy qdDampingCoeff `mulRe` sy qdFreqDomain)
+    `addRe` sy qdStiffnessCoeff)
 
 soSystemDesc :: Sentence
 soSystemDesc
   = foldlSent
-      [S "The", phrase ccTransferFxn, 
-        sParen (S "from" +:+ makeRef2S apwrPlantTxFnx),
-        S "of a", phrase secondOrderSystem,
+      [atStartNP (the ccTransferFxn), 
+        fromSource apwrPlantTxFnx
+        `S.ofA` phrase secondOrderSystem,
         sParen (S "mass-spring-damper"), 
         S "is characterized by this equation"]
 
        --------
+-- References --
+tModRefs :: [Reference]
+tModRefs = map ref theoreticalModels

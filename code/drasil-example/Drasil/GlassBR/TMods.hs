@@ -1,4 +1,4 @@
-module Drasil.GlassBR.TMods (tMods, pbIsSafe, lrIsSafe) where
+module Drasil.GlassBR.TMods (tMods, pbIsSafe, lrIsSafe, tModRefs) where
 
 import Language.Drasil
 import Theory.Drasil (TheoryModel, tm, ModelKinds(EquationalModel))
@@ -23,7 +23,7 @@ tMods = [pbIsSafe, lrIsSafe]
 lrIsSafe :: TheoryModel
 lrIsSafe = tm (EquationalModel lrIsSafeQD)
    [qw isSafeLoad, qw tmLRe, qw tmDemand] ([] :: [ConceptChunk])
-   [lrIsSafeQD] [sy isSafeLoad $= lrIsSafeExpr] [] [makeCite astm2009] 
+   [lrIsSafeQD] [] [] [ref astm2009] 
    "isSafeLoad" [lrIsSafeDesc]
 
 lrIsSafeQD :: QDefinition
@@ -38,7 +38,7 @@ lrIsSafeDesc = tModDesc isSafeLoad
 pbIsSafe :: TheoryModel
 pbIsSafe = tm (EquationalModel pbIsSafeQD) 
   [qw isSafeProb, qw probFail, qw pbTolfail] ([] :: [ConceptChunk])
-  [pbIsSafeQD] [sy isSafeProb $= pbIsSafeExpr] [] [makeCite astm2009]
+  [pbIsSafeQD] [] [] [ref astm2009]
   "isSafeProb" [pbIsSafeDesc]
 
 pbIsSafeQD :: QDefinition
@@ -52,3 +52,7 @@ pbIsSafeDesc = tModDesc isSafeProb
 
 tModDesc :: QuantityDict -> Sentence
 tModDesc main = S "If" +:+. (ch main `sC` S "the structure is considered safe")
+
+-- References --
+tModRefs :: [Reference]
+tModRefs = map ref tMods

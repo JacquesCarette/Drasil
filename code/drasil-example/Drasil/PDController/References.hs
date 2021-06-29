@@ -28,3 +28,7 @@ abbasi2015
          "https://www.12000.org/my_notes/connecting_systems/report.htm",
        month Nov, year 2020]
       "abbasi2015"
+
+-- References --
+citeRefs :: [Reference]
+citeRefs = map ref citations

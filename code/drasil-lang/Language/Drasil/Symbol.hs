@@ -5,7 +5,7 @@ import Language.Drasil.Unicode(Special)
 import Data.Char (toLower)
 
 -- | Decorations on symbols/characters such as hats or Vector representations
--- (bolding/etc)
+-- (determines bolding, italics, etc).
 data Decoration = Hat | Vector | Prime deriving (Eq, Ord)
 
 -- | A 'Symbol' is actually going to be a graphical description of what
@@ -27,7 +27,7 @@ data Symbol =
   | Special  Special
   | Atop     Decoration Symbol
   | Corners  [Symbol] [Symbol] [Symbol] [Symbol] Symbol
-          -- ^ In order: upleft   lowleft  upright  lowright base
+          -- ^ Order of Symbols: upleft   lowleft  upright  lowright base
           --
           -- >Corners [1]   [2]   [3]   [4]   [5]
           -- @
@@ -38,30 +38,39 @@ data Symbol =
           --             [2]   [4]
           -- @
   | Concat   [Symbol]
-          -- ^ @[s1, s2] -> s1s2@
+          -- ^ Concatentation of two symbols: @[s1, s2] -> s1s2@
   | Empty
   deriving Eq
 
+-- | Symbols may be concatenated.
 instance Semigroup Symbol where
  a <> b = Concat [a , b]
 
+-- | Symbols can be empty or concatenated.
 instance Monoid Symbol where
   mempty = Empty
   mappend a b = Concat [a , b]
 
--- | Gives an 'Ordering' of a list of two 'Symbol's
+-- | Gives an 'Ordering' of two lists of 'Symbol's.
 complsy :: [Symbol] -> [Symbol] -> Ordering
 complsy [] [] = EQ
 complsy [] _  = LT
 complsy _  [] = GT
 complsy (x : xs) (y : ys) = compsy x y `mappend` complsy xs ys
 
--- | The default compare function sorts all the lower case after the upper case.
+-- | The default compare function that sorts all the lower case symbols after the upper case ones.
+--
 -- Comparation is used twice for each `Atomic` case,
 -- once for making sure they are the same letter, once for case sensitive.
 -- As far as this comparison is considered, `Δ` is a "decoration" and ignored
 -- unless the compared symbols are the exact same, in which case it is ordered
 -- after the undecorated symbol.
+--
+-- Superscripts and subscripts are ordered after the base symbols (because they add additional context to a symbol). 
+-- For example: `v_f^{AB}` (expressed in LaTeX
+-- notation for clarity), where `v_f` is a final velocity, and the `^{AB}` adds context that it is the
+-- final velocity between points `A` and `B`. In these cases, the sorting of `v_f^{AB}` should be
+-- following `v_f` as it is logical to place it with its parent concept.
 compsy :: Symbol -> Symbol -> Ordering
 compsy (Concat (Variable "Δ" : x)) y =
   case compsy (Concat x) y of
@@ -123,7 +132,7 @@ compsy (Label _) _    = LT
 compsy _ (Label _)    = GT
 compsy Empty Empty    = EQ
 
--- | Helper for 'compsy'
+-- | Helper for 'compsy' that compares lower case 'String's.
 compsyLower :: String -> String -> Ordering
 compsyLower x y = case compare (map toLower x) (map toLower y) of
   EQ    -> compare x y 

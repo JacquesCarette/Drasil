@@ -1,9 +1,10 @@
-module Drasil.GlassBR.IMods (symb, iMods, pbIsSafe, lrIsSafe, instModIntro) where
+module Drasil.GlassBR.IMods (symb, iMods, pbIsSafe, lrIsSafe, instModIntro, iModRefs) where
 
 import Prelude hiding (exp)
 import Language.Drasil
-import Theory.Drasil (InstanceModel, imNoDeriv, qwC, ModelKinds (OthModel))
+import Theory.Drasil (InstanceModel, imNoDeriv', qwC, ModelKinds ( EquationalModel))
 import Utils.Drasil
+import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 
 import Drasil.GlassBR.DataDefs (probOfBreak, calofCapacity, calofDemand,
@@ -25,39 +26,37 @@ symb = map dqdWr [plateLen, plateWidth, charWeight, standOffDist] ++
 {--}
 
 pbIsSafe :: InstanceModel
-pbIsSafe = imNoDeriv (OthModel pbIsSafeRC)
-  [qwC probBr $ UpFrom (Exc, 0), qwC pbTol $ UpFrom (Exc, 0)]
+pbIsSafe = imNoDeriv' (EquationalModel pbIsSafeQD) (nounPhraseSP "Safety Req-Pb")
+  [qwC probBr $ UpFrom (Exc, exactDbl 0), qwC pbTol $ UpFrom (Exc, exactDbl 0)]
   (qw isSafePb) []
-  [makeCite astm2009] "isSafePb"
+  [ref astm2009] "isSafePb"
   [pbIsSafeDesc, probBRRef, pbTolUsr]
 
 
-pbIsSafeRC :: RelationConcept
-pbIsSafeRC = makeRC "safetyReqPb" (nounPhraseSP "Safety Req-Pb")
-  EmptyS (sy isSafePb $= sy probBr $< sy pbTol)
+pbIsSafeQD :: QDefinition
+pbIsSafeQD = mkQuantDef isSafePb (sy probBr $< sy pbTol)
 
 {--}
 
 lrIsSafe :: InstanceModel
-lrIsSafe = imNoDeriv (OthModel lrIsSafeRC) 
-  [qwC lRe $ UpFrom (Exc, 0), qwC demand $ UpFrom (Exc, 0)]
+lrIsSafe = imNoDeriv' (EquationalModel lrIsSafeQD) (nounPhraseSP "Safety Req-LR")
+  [qwC lRe $ UpFrom (Exc, exactDbl 0), qwC demand $ UpFrom (Exc, exactDbl 0)]
   (qw isSafeLR) []
-  [makeCite astm2009] "isSafeLR"
+  [ref astm2009] "isSafeLR"
   [lrIsSafeDesc, capRef, qRef] 
 
-lrIsSafeRC :: RelationConcept
-lrIsSafeRC = makeRC "safetyReqLR" (nounPhraseSP "Safety Req-LR")
-  EmptyS (sy isSafeLR $= sy lRe $> sy demand)
-  
+lrIsSafeQD :: QDefinition 
+lrIsSafeQD = mkQuantDef isSafeLR (sy lRe $> sy demand)
+
 iModDesc :: QuantityDict -> Sentence -> Sentence
 iModDesc main s = foldlSent [S "If", ch main `sC` S "the glass is" +:+.
-    S "considered safe", s `S.sAre` S "either both True or both False"]
+    S "considered safe", s `S.are` S "either both True or both False"]
   
 -- Intro --
 
 instModIntro :: Sentence
-instModIntro = foldlSent [S "The", phrase goal, makeRef2S willBreakGS, 
-  S "is met by", makeRef2S pbIsSafe `sC` makeRef2S lrIsSafe]
+instModIntro = foldlSent [atStartNP (the goal), refS willBreakGS, 
+  S "is met by", refS pbIsSafe `sC` refS lrIsSafe]
 
 -- Notes --
 
@@ -66,11 +65,15 @@ capRef = definedIn' calofCapacity (S "and is also called capacity")
 
 lrIsSafeDesc :: Sentence
 lrIsSafeDesc = iModDesc isSafeLR
-  (ch isSafePb +:+ fromSource pbIsSafe `S.sAnd` ch isSafeLR)
+  (ch isSafePb +:+ fromSource pbIsSafe `S.and_` ch isSafeLR)
 
 pbIsSafeDesc :: Sentence
 pbIsSafeDesc = iModDesc isSafePb
-  (ch isSafePb `S.sAnd` ch isSafePb +:+ fromSource lrIsSafe)
+  (ch isSafePb `S.and_` ch isSafePb +:+ fromSource lrIsSafe)
 
 probBRRef :: Sentence
 probBRRef = definedIn probOfBreak
+
+-- References -- 
+iModRefs :: [Reference]
+iModRefs = ref willBreakGS: map ref iMods

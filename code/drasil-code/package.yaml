@@ -18,13 +18,14 @@ dependencies:
 - directory
 - filepath
 - split
-- drasil-lang
-- drasil-utils
 - drasil-build
-- drasil-theory
+- drasil-code-base
 - drasil-database
-- drasil-printers
 - drasil-gool
+- drasil-lang
+- drasil-printers
+- drasil-theory
+- drasil-utils
 
 ghc-options:
 - -Wall
@@ -38,6 +39,7 @@ library:
   other-modules:
     - Language.Drasil.Chunk.Code
     - Language.Drasil.Chunk.CodeDefinition
+    - Language.Drasil.Chunk.ConstraintMap
     - Language.Drasil.Chunk.Parameter
     - Language.Drasil.Code.Code
     - Language.Drasil.Code.CodeQuantityDicts
@@ -79,9 +81,11 @@ library:
     - Language.Drasil.Data.ODEInfo
     - Language.Drasil.Data.ODELibPckg
     - Language.Drasil.Choices
-    - Language.Drasil.CodeExpr
     - Language.Drasil.CodeSpec
     - Language.Drasil.Mod
+  when:
+  - condition: false
+    other-modules: Paths_drasil_code
 
 executables:
   codegenTest:
@@ -96,6 +100,7 @@ executables:
     - Language.Drasil.Code
     - Language.Drasil.Chunk.Code
     - Language.Drasil.Chunk.CodeDefinition
+    - Language.Drasil.Chunk.ConstraintMap
     - Language.Drasil.Chunk.Parameter
     - Language.Drasil.Code.Code
     - Language.Drasil.Code.CodeQuantityDicts
@@ -137,7 +142,6 @@ executables:
     - Language.Drasil.Data.ODEInfo
     - Language.Drasil.Data.ODELibPckg
     - Language.Drasil.Choices
-    - Language.Drasil.CodeExpr
     - Language.Drasil.CodeSpec
     - Language.Drasil.Mod
     ghc-options:

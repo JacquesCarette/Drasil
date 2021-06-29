@@ -10,27 +10,37 @@ import Language.Drasil.NounPhrase (NP)
 
 -- === DATA TYPES/INSTANCES === --
 -- | Note that a 'NamedChunk' does not have an acronym/abbreviation
--- as that's a 'CommonIdea', which has its own representation
+-- as that's a 'CommonIdea', which has its own representation. Contains
+-- a 'UID' and a term ('NP').
 data NamedChunk = NC {_uu :: UID, _np :: NP}
 makeLenses ''NamedChunk
 
+-- | Equal if 'UID's are equal.
 instance Eq        NamedChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
+-- | Finds the 'UID' of the 'NamedChunk'.
 instance HasUID    NamedChunk where uid = uu
+-- | Finds the term ('NP') of the 'NamedChunk'.
 instance NamedIdea NamedChunk where term = np
+-- | Finds the idea of a 'NamedChunk' (always 'Nothing').
 instance Idea      NamedChunk where getA _ = Nothing
   
--- | 'NamedChunk' constructor, takes an uid and a term.
+-- | 'NamedChunk' constructor, takes a 'UID' and a term.
 nc :: String -> NP -> NamedChunk
 nc = NC
 
--- | 'IdeaDict' is the canonical dictionary associated to 'Idea',
--- don't export the record accessors
+-- | 'IdeaDict' is the canonical dictionary associated to 'Idea'.
+-- Contains a 'NamedChunk' and maybe an abbreviation ('String').
+-- Don't export the record accessors.
 data IdeaDict = IdeaDict { _nc' :: NamedChunk, mabbr :: Maybe String }
 makeLenses ''IdeaDict
 
+-- | Equal if 'UID's are equal.
 instance Eq        IdeaDict where a == b = a ^. uid == b ^. uid
+-- | Finds the 'UID' of the 'NamedChunk' used to make the 'IdeaDict'.
 instance HasUID    IdeaDict where uid = nc' . uid
+-- | Finds the term ('NP') of the 'NamedChunk' used to make the 'IdeaDict'.
 instance NamedIdea IdeaDict where term = nc' . term
+-- | Finds the abbreviation of the 'IdeaDict'.
 instance Idea      IdeaDict where getA = mabbr
   
 -- | 'IdeaDict' constructor, takes a 'UID', 'NP', and 

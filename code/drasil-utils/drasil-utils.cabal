@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 628bab8f4dc8526daf25de7a6331190555e2134717f52bb05c67fe8a4eaacf03
+-- hash: 912e80004d1d7bdfb518bd28a0f7fdca499e2454cbf399797f7588cbc89e865a
 
 name:           drasil-utils
 version:        0.1.1.0
@@ -23,16 +23,17 @@ source-repository head
 library
   exposed-modules:
       Utils.Drasil
-      Utils.Drasil.Sentence
-  other-modules:
       Utils.Drasil.Concepts
+      Utils.Drasil.NounPhrase
+      Utils.Drasil.Sentence
+      Utils.Drasil.Strings
+  other-modules:
       Utils.Drasil.Contents
       Utils.Drasil.Document
       Utils.Drasil.English
       Utils.Drasil.Fold
+      Utils.Drasil.Lists
       Utils.Drasil.Misc
-      Utils.Drasil.Phrase
-      Paths_drasil_utils
   hs-source-dirs:
       ./
   ghc-options: -Wall -Wredundant-constraints
@@ -42,4 +43,7 @@ library
     , drasil-lang
     , lens
     , pretty
+  if false
+    other-modules:
+        Paths_drasil_utils
   default-language: Haskell2010

@@ -47,8 +47,8 @@ htTransCladCool = fromEqn "htTransCladCool" (nounPhraseSP
   EmptyS (sub lH lClad) Real heatTransferCoef htTransCladCoolEq
 
 htTransCladCoolEq =
-  2 * sy cladCond * sy coolFilmCond / (2 * sy cladCond + sy cladThick 
-  * sy coolFilmCond)
+  exactDbl 2 `mulRe` sy cladCond `mulRe` sy coolFilmCond $/ (exactDbl 2 `mulRe` sy cladCond `addRe` (sy cladThick 
+  `mulRe` sy coolFilmCond))
 
 ---
 
@@ -60,8 +60,8 @@ htTransCladFuel = fromEqn "htTransCladFuel" (nounPhraseSP
   "effective heat transfer coefficient between clad and fuel surface")
   EmptyS (sub lH lEffective) Real heatTransferCoef htTransCladFuelEq
 
-htTransCladFuelEq = (2 * sy cladCond * sy gapFilmCond) / (2 * sy cladCond
-  + (sy cladThick * sy gapFilmCond))
+htTransCladFuelEq = (exactDbl 2 `mulRe` sy cladCond `mulRe` sy gapFilmCond) $/ (exactDbl 2 `mulRe` sy cladCond
+  `addRe` (sy cladThick `mulRe` sy gapFilmCond))
 
 ---
 
@@ -73,7 +73,7 @@ nuclearPhys = nc "nuclearPhys" (nounPhraseSP "nuclear physics")
 fp = nc "fp" (cn "FP")
 
 lCoolant, lClad, lEffective, lGap :: Symbol
-lCoolant   = Label "b"
-lClad      = Label "c"
-lEffective = Label "g"
-lGap       = Label "p"
+lCoolant   = label "b"
+lClad      = label "c"
+lEffective = label "g"
+lGap       = label "p"

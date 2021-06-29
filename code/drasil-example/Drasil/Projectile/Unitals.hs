@@ -1,7 +1,8 @@
 module Drasil.Projectile.Unitals where
 
 import Language.Drasil
-import Language.Drasil.ShortHands
+import Language.Drasil.Display (Symbol(..))
+import Language.Drasil.ShortHands (lD, lTheta, lV, lP, lT, lS, vEpsilon)
 
 import Data.Drasil.Quantities.Math (pi_)
 
@@ -10,7 +11,10 @@ import Data.Drasil.SI_Units (radian, metre, second)
 import Data.Drasil.Units.Physics (velU)
 
 import qualified Drasil.Projectile.Concepts as C (flightDur, offset,
-  flightDur, landPos, launAngle, launSpeed, offset, targPos)
+  flightDur, landPos, launAngle, launSpeed, offset, targPos, projSpeed)
+
+projSpeed :: UnitalChunk
+projSpeed  = uc C.projSpeed (Concat [vec lV, label "(", lT, label ")"]) velU
 
 ---
 landPosUnc, launAngleUnc, launSpeedUnc, offsetUnc, targPosUnc :: UncertQ
@@ -23,10 +27,10 @@ targPosUnc   = uq targPos   defaultUncrt
 flightDur, landPos, launAngle, launSpeed, offset, targPos :: ConstrConcept
 flightDur = constrainedNRV' (dqd  C.flightDur (subStr lT "flight") Real second)  [gtZeroConstr]
 landPos   = constrainedNRV' (dqd  C.landPos   (subStr lP "land"  ) Real metre)   [gtZeroConstr]
-launAngle = constrained'    (dqd' C.launAngle (autoStage lTheta)   Real (Just radian)) [physc $ Bounded (Exc, 0) (Exc, sy pi_ / 2)] (sy pi_ / 4)
-launSpeed = constrained'    (dqd  C.launSpeed (subStr lV "launch") Real velU)    [gtZeroConstr] (int 100)
-offset    = constrainedNRV' (dqd  C.offset    (subStr lD "offset") Real metre)   [physc $ UpFrom (Exc, negate $ sy landPos) ]
-targPos   = constrained'    (dqd  C.targPos   (subStr lP "target") Real metre)   [gtZeroConstr] (int 1000)
+launAngle = constrained'    (dqd' C.launAngle (autoStage lTheta)   Real (Just radian)) [physc $ Bounded (Exc, exactDbl 0) (Exc, half $ sy pi_)] (sy pi_ $/ exactDbl 4)
+launSpeed = constrained'    (dqd  C.launSpeed (subStr lV "launch") Real velU)    [gtZeroConstr] (exactDbl 100)
+offset    = constrainedNRV' (dqd  C.offset    (subStr lD "offset") Real metre)   [physc $ UpFrom (Exc, neg $ sy landPos) ]
+targPos   = constrained'    (dqd  C.targPos   (subStr lP "target") Real metre)   [gtZeroConstr] (exactDbl 1000)
 
 ---
 -- The output contains a message, as a string, so it needs to be a quantity

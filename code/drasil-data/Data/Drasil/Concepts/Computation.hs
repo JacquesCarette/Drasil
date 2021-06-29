@@ -1,7 +1,8 @@
 module Data.Drasil.Concepts.Computation where
 
-import Language.Drasil
-import Utils.Drasil
+import Language.Drasil (dcc, nc, cn', commonIdeaWithDict, Sentence,
+  ConceptChunk, CI, NamedChunk, dccWDS)
+import Utils.Drasil.Concepts
 
 import Data.Drasil.Concepts.Documentation (datum, input_, literacy, output_, 
   quantity, type_, value, variable)
@@ -36,10 +37,10 @@ dataStruct, dataStruct', dataType, dataType',
   inDatum, outDatum, inParam, inVar, inValue, inQty,
   computerLiteracy, computerApp :: NamedChunk
 
-dataStruct       = compoundNCPlPh datum structure
-dataStruct'      = compoundNC' datum structure
-dataType         = compoundNCPlPh datum type_
-dataType'        = compoundNC' datum type_
+dataStruct       = compoundNCPSPP datum structure
+dataStruct'      = compoundNCPS datum structure
+dataType         = compoundNCPSPP datum type_
+dataType'        = compoundNCPS datum type_
 inDatum          = compoundNC input_ datum
 outDatum         = compoundNC output_ datum
 inParam          = compoundNC input_ parameter

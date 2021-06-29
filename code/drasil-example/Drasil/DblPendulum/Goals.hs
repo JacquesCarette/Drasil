@@ -1,7 +1,11 @@
-module Drasil.DblPendulum.Goals (goals, goalsInputs) where
+{-# LANGUAGE PostfixOperators#-}
+module Drasil.DblPendulum.Goals (goals, goalsInputs, goalRefs) where
 
 import Language.Drasil
+import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
+import qualified Utils.Drasil.NounPhrase as NP
+
 import Data.Drasil.Concepts.Documentation (goalStmtDom)
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (mass, len)
 import Data.Drasil.Concepts.Physics (gravitationalConst, motion)
@@ -14,11 +18,14 @@ goals = [motionMass]
 
 
 goalsInputs :: [Sentence]
-goalsInputs = [(phrase CPP.mass `S.sAnd` phrase CPP.len  `S.the_ofThe` phrase rod) `sC` phrase iAngle `S.ofThe` phrase CPP.mass `S.andThe` phrase gravitationalConst ]
+goalsInputs = [phraseNP (the CPP.mass `NP.and_` (CPP.len  `ofThe` rod)) `sC` 
+        phraseNP (iAngle `ofThe` CPP.mass) `S.and_` phraseNP (the gravitationalConst) ]
 
 motionMass :: ConceptInstance
 motionMass = cic "motionMass" 
-  (S "Calculate" +:+ (phrase motion `S.the_ofThe` phrase CPP.mass))
+  (S "Calculate" +:+ phraseNP (motion `the_ofThe` CPP.mass) !.)
   "Motion-of-the-mass" goalStmtDom
 
-
+-- References --
+goalRefs :: [Reference]
+goalRefs = map ref goals

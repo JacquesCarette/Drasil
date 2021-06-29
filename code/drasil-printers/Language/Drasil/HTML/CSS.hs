@@ -4,7 +4,7 @@ import Text.PrettyPrint (Doc, text, vcat)
 
 import Language.Drasil hiding (Expr)
 
--- | Generates the CSS selectors necessary for a document
+-- | Generates the CSS selectors necessary for a document.
 makeCSS :: Document -> Doc  
 makeCSS _ = vcat [
 -- TODO: Autogenerate necessary css selectors only, make CSS configurable
@@ -126,7 +126,7 @@ makeCSS _ = vcat [
     ] 
   ]
 
--- | Create the link to the necessary CSS file
+-- | Create the link to the necessary CSS file.
 linkCSS :: String -> Doc  
 linkCSS fn = 
   text $ "<link rel=\"stylesheet\" type=\"text/css\" href=\""++fn++".css\">"

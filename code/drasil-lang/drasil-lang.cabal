@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: a66fc1dd99658187a5fe62a5cda4c43ba29e84dce6f22f0b37b85288ae0858bf
+-- hash: 134f01ac261ccbc9bf31bad2d60e4be55542f67165ffbfc3af571ff7919d0847
 
 name:           drasil-lang
 version:        0.1.60.0
@@ -24,6 +24,7 @@ library
   exposed-modules:
       Language.Drasil
       Language.Drasil.Development
+      Language.Drasil.Display
       Language.Drasil.ShortHands
   other-modules:
       Language.Drasil.Chunk.Citation
@@ -45,15 +46,19 @@ library
       Language.Drasil.Classes
       Language.Drasil.Classes.Citations
       Language.Drasil.Classes.Core
+      Language.Drasil.Classes.Core2
       Language.Drasil.Classes.Document
       Language.Drasil.Constraint
       Language.Drasil.Data.Citation
       Language.Drasil.Data.Date
       Language.Drasil.Derivation
       Language.Drasil.Development.Sentence
+      Language.Drasil.DisplayClasses
+      Language.Drasil.DisplayExpr
       Language.Drasil.Document
       Language.Drasil.Document.Core
       Language.Drasil.Expr
+      Language.Drasil.Expr.Display
       Language.Drasil.Expr.Extract
       Language.Drasil.Expr.Math
       Language.Drasil.Expr.Precedence
@@ -77,7 +82,6 @@ library
       Language.Drasil.Unicode
       Language.Drasil.UnitLang
       Language.Drasil.URI.AST
-      Paths_drasil_lang
   hs-source-dirs:
       ./
   ghc-options: -Wall -Wredundant-constraints
@@ -86,4 +90,7 @@ library
     , lens
     , split
     , unicode-names >=3.2.0.0
+  if false
+    other-modules:
+        Paths_drasil_lang
   default-language: Haskell2010

@@ -1,10 +1,11 @@
-module Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs) where
+module Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs, reqRefs) where
 
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 
-import Drasil.DocLang (mkInputPropsTable)
+import Drasil.DocLang (mkInputPropsTable, inReq)
 import Drasil.DocLang.SRS (datCon, propCorSol) 
 
 import Data.Drasil.Concepts.Computation (inDatum)
@@ -37,35 +38,35 @@ readAndStore, verifyInput, determineCritSlip, verifyOutput, displayInput,
 
 readAndStore = cic "readAndStore" ( foldlSent [
   S "Read the", plural input_ `sC` S "shown in", 
-  makeRef2S inputDataTable `sC` S "and store the", plural datum]) 
+  refS inputDataTable `sC` S "and store the", plural datum]) 
   "Read-and-Store" funcReqDom
 
 verifyInput = cic "verifyInput" ( foldlSent [
   S "Verify that the", plural inDatum, S "lie within the",
-  plural physicalConstraint, S "shown in", makeRef2S (datCon [] [])])
+  plural physicalConstraint, S "shown in", refS (datCon [] [])])
   "Verify-Input" funcReqDom
 
 determineCritSlip = cic "determineCritSlip" ( foldlSent [
   S "Determine the", phrase crtSlpSrf, S "for the", phrase input_, 
   phrase slope `sC` S "corresponding to the minimum", phrase fs `sC` 
   S "by using", usingIMs, S "to calculate the", phrase fs, S "for a", 
-  phrase slpSrf `S.sAnd` S "using", makeRef2S crtSlpId, S "to find the", 
+  phrase slpSrf `S.and_` S "using", refS crtSlpId, S "to find the", 
   phrase slpSrf, S "that minimizes it"]) 
   "Determine-Critical-Slip-Surface" funcReqDom
 
 verifyOutput = cic "verifyOutput" ( foldlSent [
-  S "Verify that the", phrase fsMin `S.sAnd` phrase crtSlpSrf, S "satisfy the",
-  plural physicalConstraint, S "shown in", makeRef2S (propCorSol [] [])])
+  S "Verify that the", phrase fsMin `S.and_` phrase crtSlpSrf, S "satisfy the",
+  plural physicalConstraint, S "shown in", refS (propCorSol [] [])])
   "Verify-Output" funcReqDom
 
 displayInput = cic "displayInput" ( foldlSent [
-  S "Display as", phrase output_, S "the", phrase user :+: S "-supplied",
-  plural input_, S "listed in", makeRef2S inputsToOutputTable])
+  S "Display as", phrase output_, phraseNP (the user) :+: S "-supplied",
+  plural input_, S "listed in", refS inputsToOutputTable])
   "Display-Input" funcReqDom
 
 displayGraph = cic "displayGraph" ( foldlSent [
   S "Display", phrase crtSlpSrf `S.the_ofThe` short twoD, phrase slope `sC` 
-  S "as determined from", makeRef2S crtSlpId `sC` S "graphically"]) 
+  S "as determined from", refS crtSlpId `sC` S "graphically"]) 
   "Display-Graph" funcReqDom
 
 displayFS = cic "displayFS" ( foldlSent [
@@ -83,12 +84,12 @@ displayShear = cic "displayShear" ( foldlSent [
 
 writeToFile = cic "writeToFile" ( foldlSent [
   S "Provide the option of writing the output result data, as given in", 
-  foldlList Comma List (map makeRef2S [displayInput, displayGraph, displayFS, 
+  foldlList Comma List (map refS [displayInput, displayGraph, displayFS, 
   displayNormal, displayShear]) `sC` S "to a file"]) "Write-Results-To-File" 
   funcReqDom
 
 usingIMs :: Sentence
-usingIMs = foldlList Comma List $ map makeRef2S [fctSfty, nrmShrFor, intsliceFs]
+usingIMs = foldlList Comma List $ map refS [fctSfty, nrmShrFor, intsliceFs]
 
 ------------------
 inputDataTable :: LabelledContent
@@ -110,22 +111,26 @@ nonFuncReqs = [correct, understandable, reusable, maintainable]
 
 correct :: ConceptInstance
 correct = cic "correct" (foldlSent [
-  plural output_ `S.the_ofThe'` phrase code, S "have the",
-  plural property, S "described in", makeRef2S (propCorSol [] [])
+  atStartNP' (output_ `the_ofThePS` code), S "have the",
+  plural property, S "described in", refS (propCorSol [] [])
   ]) "Correct" nonFuncReqDom
 
 understandable :: ConceptInstance
 understandable = cic "understandable" (foldlSent [
-  S "The", phrase code, S "is modularized with complete",
-  phrase mg `S.sAnd` phrase mis]) "Understandable" nonFuncReqDom
+  atStartNP (the code), S "is modularized with complete",
+  phrase mg `S.and_` phrase mis]) "Understandable" nonFuncReqDom
 
 reusable :: ConceptInstance
 reusable = cic "reusable" (foldlSent [
-  S "The", phrase code, S "is modularized"]) "Reusable" nonFuncReqDom
+  atStartNP (the code), S "is modularized"]) "Reusable" nonFuncReqDom
 
 maintainable :: ConceptInstance
 maintainable = cic "maintainable" (foldlSent [
   S "The traceability between", foldlList Comma List [plural requirement,
   plural assumption, plural thModel, plural genDefn, plural dataDefn, plural inModel,
   plural likelyChg, plural unlikelyChg, plural module_], S "is completely recorded in",
-  plural traceyMatrix, S "in the", getAcc srs `S.sAnd` phrase mg]) "Maintainable" nonFuncReqDom
+  plural traceyMatrix `S.inThe` getAcc srs `S.and_` phrase mg]) "Maintainable" nonFuncReqDom
+
+reqRefs :: [Reference]
+reqRefs = map ref ([inReq EmptyS] ++ funcReqs ++ nonFuncReqs)
+  ++ map ref (funcReqTables ++ [inputsToOutputTable, inputDataTable])

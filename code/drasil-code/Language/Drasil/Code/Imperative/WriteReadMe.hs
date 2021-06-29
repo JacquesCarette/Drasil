@@ -10,6 +10,7 @@ import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..))
 import Prelude hiding ((<>))
 import Text.PrettyPrint.HughesPJ (Doc, empty)
 
+-- | Generates a README file.
 makeReadMe :: ReadMeInfo -> Doc 
 makeReadMe ReadMeInfo {
         langName = progLang,
@@ -27,6 +28,7 @@ makeReadMe ReadMeInfo {
     unsupOS unsupportedOSs,
     extLibSec extLibns extLibfp]
 
+-- | Helper for encoding the type of program (either library or controller-based) in a README file.
 makeInstr :: ImplementationType -> [FilePath]-> Doc
 makeInstr Library _ = empty
 makeInstr Program cfp = instDoc cfp

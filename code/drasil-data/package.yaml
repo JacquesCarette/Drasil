@@ -49,3 +49,6 @@ library:
   - Data.Drasil.Units.Physics
   - Data.Drasil.Units.SolidMechanics
   - Data.Drasil.Theories.Physics
+  when:
+  - condition: false
+    other-modules: Paths_drasil_data

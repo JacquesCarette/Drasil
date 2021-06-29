@@ -1,15 +1,19 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.DblPendulum.Body where
 
-import Language.Drasil hiding (Symbol(..), Vector)
+import Data.List (nub)
+import Language.Drasil
 import Theory.Drasil (TheoryModel)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
-  _datadefs, _configFiles, _definitions, _defSequence, _inputs, _kind, _outputs, 
+  _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, _outputs,
   _quants, _sys, _sysinfodb, _usedinfodb)
 import Utils.Drasil
+import Utils.Drasil.Concepts
+import qualified Utils.Drasil.NounPhrase as NP
 import qualified Utils.Drasil.Sentence as S
+
 import Data.Drasil.People (olu)
 import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian, hertz)
 import Data.Drasil.Concepts.Software (program, errMsg)
@@ -29,25 +33,27 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl,
   SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
   TConvention(..), TSIntro(..), TraceabilitySec(TraceabilityProg),
-  Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb)
-import Drasil.DblPendulum.Figures (figMotion)
+  Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, getTraceConfigUID,
+  secRefs)
+
+import Drasil.DblPendulum.Figures (figMotion, figRefs)
 import Data.Drasil.Concepts.Math (mathcon, cartesian)
 import Data.Drasil.Quantities.Math (unitVect, unitVectj)
-import Drasil.DblPendulum.Assumptions (assumptions)
-import Drasil.DblPendulum.Concepts (rod, concepts)
-import Drasil.DblPendulum.Goals (goals, goalsInputs)
-import Drasil.DblPendulum.DataDefs (dataDefs)
-import Drasil.DblPendulum.IMods (iMods)
-import Drasil.DblPendulum.GenDefs (genDefns)
+import Drasil.DblPendulum.Assumptions (assumptions, assumpRefs)
+import Drasil.DblPendulum.Concepts (rod, concepts, pendMotion)
+import Drasil.DblPendulum.Goals (goals, goalsInputs, goalRefs)
+import Drasil.DblPendulum.DataDefs (dataDefs, dataDefRefs)
+import Drasil.DblPendulum.IMods (iMods, iModRefs)
+import Drasil.DblPendulum.GenDefs (genDefns, genDefRefs)
 import Drasil.DblPendulum.Unitals (symbols, inputs, outputs,
   inConstraints, outConstraints, acronyms)
-import Drasil.DblPendulum.Requirements (funcReqs, nonFuncReqs)
+import Drasil.DblPendulum.Requirements (funcReqs, nonFuncReqs, reqRefs)
 import Data.Drasil.Citations (cartesianWiki, accelerationWiki, velocityWiki)
 import Drasil.Projectile.References (hibbeler2004)
 
 
 srs :: Document
-srs = mkDoc mkSRS (S.sFor'' titleize phrase) si
+srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
@@ -91,15 +97,15 @@ mkSRS = [RefSec $      --This creates the Reference section of the SRS
   ]
 
 justification :: Sentence
-justification = foldlSent [S "A", phrase pendulum, S "consists" `S.sOf` phrase mass, 
-                            S "attached to the end of a", phrase rod `S.andIts` S "moving curve" `S.sIs`
+justification = foldlSent [ atStartNP (a_ pendulum), S "consists" `S.of_` phrase mass, 
+                            S "attached to the end" `S.ofA` phrase rod `S.andIts` S "moving curve" `S.is`
                             (S "highly sensitive to initial conditions" !.), S "Therefore" `sC`
-                            S "it is useful to have a", phrase program, S "to simulate", phrase motion
-                            `S.the_ofThe` phrase pendulum, (S "to exhibit its chaotic characteristics" !.),
-                            S "The", phrase program, S "documented here is called", phrase pendulum]
+                            S "it is useful to have a", phrase program, S "to simulate", phraseNP (motion
+                            `the_ofThe` pendulum), (S "to exhibit its chaotic characteristics" !.),
+                            atStartNP (the program), S "documented here is called", phrase pendulum]
 scope :: Sentence
-scope = foldlSent [S "the", phrase analysis `S.sOfA` phrase twoD, 
-  sParen (getAcc twoD), phrase pendulum, phrase motion, phrase problem,
+scope = foldlSent [phraseNP (NP.the (analysis `ofA` twoD)), 
+  sParen (getAcc twoD), phrase pendMotion, phrase problem,
                    S "with various initial conditions"]
 
 pendulumTitle :: CI
@@ -113,9 +119,9 @@ si = SI {
   _purpose     = [],
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
-  _definitions = [] :: [QDefinition],
+  _instModels  = iMods,
   _datadefs    = dataDefs,
-  _configFiles  = [],
+  _configFiles = [],
   _inputs      = inputs,
   _outputs     = outputs,
   _defSequence = [] :: [Block QDefinition],
@@ -128,17 +134,17 @@ si = SI {
 
 symbMap :: ChunkDB
 symbMap = cdb (map qw iMods ++ map qw symbols)
-  (nw pendulumTitle : nw mass : nw len : nw kilogram : nw inValue : nw newton : nw degree : nw radian
+  (nw newtonSLR : nw pendulumTitle : nw mass : nw len : nw kilogram : nw inValue : nw newton : nw degree : nw radian
     : nw unitVect : nw unitVectj : [nw errMsg, nw program] ++ map nw symbols ++
    map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon  ++ map nw physicCon' ++
    map nw physicscon ++ concepts ++ map nw physicalcon ++ map nw acronyms ++ map nw symbols ++ map nw [metre, hertz])
   (map cw iMods ++ srsDomains) (map unitWrapper [metre, second, newton, kilogram, degree, radian, hertz]) dataDefs
-  iMods genDefns tMods concIns [] []
+  iMods genDefns tMods concIns [] [] allRefs
 
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw symbols) ([] :: [ConceptChunk])
-  ([] :: [UnitDefn]) [] [] [] [] [] [] []
+  ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
@@ -158,8 +164,8 @@ concIns = assumptions ++ goals ++ funcReqs ++ nonFuncReqs
 ------------------------------------
 
 prob :: Sentence
-prob = foldlSent_ [ S "efficiently and correctly to predict the", phrase motion `S.sOfA`  
-                   phrase pendulum]
+prob = foldlSent_ [ S "efficiently and correctly to predict the", phraseNP (motion `ofA`  
+                   pendulum)]
 
 ---------------------------------
 -- Terminology and Definitions --
@@ -179,6 +185,16 @@ tMods = [accelerationTM, velocityTM, newtonSL, newtonSLR]
 physSystParts :: [Sentence]
 physSystParts = map ((!.) . atStartNP) [the rod, the mass]
 
+-- References --
+citeRefs :: [Reference]
+citeRefs = map ref citations
 
- 
+tModRefs :: [Reference]
+tModRefs = map ref tMods
 
+bodyRefs :: [Reference]
+bodyRefs = map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ map ref concIns
+
+allRefs :: [Reference]
+allRefs = nub (assumpRefs ++ bodyRefs ++ figRefs ++ goalRefs ++ dataDefRefs ++ genDefRefs
+  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs)

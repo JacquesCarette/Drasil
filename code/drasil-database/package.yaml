@@ -24,3 +24,6 @@ library:
   source-dirs: ./
   exposed-modules:
   - Database.Drasil
+  when:
+  - condition: false
+    other-modules: Paths_drasil_database

@@ -1,10 +1,11 @@
-module Drasil.Projectile.IMods (iMods, landPosIM, messageIM, offsetIM, timeIM) where
+module Drasil.Projectile.IMods (iMods, landPosIM, messageIM, offsetIM, timeIM, iModRefs) where
 
 import Prelude hiding (cos, sin)
 
 import Language.Drasil
-import Theory.Drasil (InstanceModel, imNoDerivNoRefs, imNoRefs, qwC, ModelKinds (OthModel))
+import Theory.Drasil (InstanceModel, imNoDerivNoRefs',imNoRefs', qwC, ModelKinds ( EquationalModel))
 import Utils.Drasil
+import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
@@ -31,77 +32,74 @@ import Drasil.Projectile.Unitals (flightDur, landPos, launAngle, launSpeed,
 
 iMods :: [InstanceModel]
 iMods = [timeIM, landPosIM, offsetIM, messageIM]
-
 ---
 timeIM :: InstanceModel
-timeIM = imNoRefs (OthModel timeRC) 
-  [qwC launSpeed $ UpFrom (Exc, 0)
-  ,qwC launAngle $ Bounded (Exc, 0) (Exc, sy pi_ / 2)]
-  (qw flightDur) [UpFrom (Exc, 0)]
+timeIM = imNoRefs' (EquationalModel timeQD)(nounPhraseSP "calculation of landing time")
+  [qwC launSpeed $ UpFrom (Exc, exactDbl 0)
+  ,qwC launAngle $ Bounded (Exc, exactDbl 0) (Exc, half $ sy pi_)]
+  (qw flightDur) [UpFrom (Exc, exactDbl 0)]
   (Just timeDeriv) "calOfLandingTime" [angleConstraintNote, gravitationalAccelConstNote, timeConsNote]
 
-timeRC :: RelationConcept
-timeRC = makeRC "timeRC" (nounPhraseSP "calculation of landing time")
-  EmptyS $ sy flightDur $= E.flightDur'
+timeQD :: QDefinition 
+timeQD =  mkQuantDef flightDur E.flightDur'
 
 timeDeriv :: Derivation
-timeDeriv = mkDerivName (phrase flightDur) (weave [timeDerivSents, map E timeDerivEqns])
+timeDeriv = mkDerivName (phrase flightDur) (weave [timeDerivSents, map eS timeDerivEqns])
 
 timeDerivSents :: [Sentence]
 timeDerivSents = [timeDerivSent1, timeDerivSent2, timeDerivSent3, timeDerivSent4, timeDerivSent5]
 
 timeDerivSent1, timeDerivSent2, timeDerivSent3, timeDerivSent4, timeDerivSent5 :: Sentence
 timeDerivSent1 = foldlSentCol [S "We know that" +:+.
-  foldlList Comma List 
+  foldlList Comma List
     [eqnWSource (sy iyPos $= E.iyPos) launchOrigin,
      eqnWSource (sy yConstAccel $= E.yConstAccel) accelYGravity],
-  S "Substituting these", plural value, S "into the y-direction" `S.sOf`
-  makeRef2S posVecGD, S "gives us"]
+  S "Substituting these", plural value, S "into the y-direction" `S.of_`
+  refS posVecGD, S "gives us"]
 timeDerivSent2 = foldlSentCol [S "To find the", phrase time, S "that the",
   phrase projectile, S "lands" `sC` S "we want to find the", ch time, phrase value,
-  sParen (ch flightDur), S "where", E (sy yPos $= 0) +:+. sParen (S "since the" +:+
-  phrase target `S.sIs` S "on the" +:+ phrase xAxis +:+ S "from" +:+ makeRef2S targetXAxis),
-  S "From the", phrase equation, S "above",S "we get"]
+  sParen (ch flightDur), S "where", eS (sy yPos $= exactDbl 0) +:+. sParen (S "since the" +:+
+  phrase target `S.is` S "on the" +:+ phrase xAxis +:+ S "from" +:+ refS targetXAxis),
+  S "From the", phrase equation, S "above we get"]
 timeDerivSent3 = foldlSentCol [S "Dividing by", ch flightDur,
-  sParen (S "with the" +:+ phrase constraint +:+ E (sy flightDur $> 0)),
+  sParen (S "with the" +:+ phrase constraint +:+ eS (sy flightDur $> exactDbl 0)),
   S "gives us"]
 timeDerivSent4 = S "Solving for" +:+ ch flightDur +: S "gives us"
-timeDerivSent5 = foldlSentCol [S "From", makeRef2S speedIY,
-  sParen (S "with" +:+ E (sy iSpeed $= E.iSpeed)), S "we can replace", ch iyVel]
+timeDerivSent5 = foldlSentCol [S "From", refS speedIY,
+  sParen (S "with" +:+ eS (sy iSpeed $= E.iSpeed)), S "we can replace", ch iyVel]
 
 timeDerivEqns :: [Expr]
 timeDerivEqns = [E.timeDerivEqn1, E.timeDerivEqn2, E.timeDerivEqn3, E.timeDerivEqn4, sy flightDur $= E.flightDur']
 
 ---
 landPosIM :: InstanceModel
-landPosIM = imNoRefs (OthModel landPosRC) 
-  [qwC launSpeed $ UpFrom (Exc, 0), 
-   qwC launAngle $ Bounded (Exc, 0) (Exc, sy pi_ / 2)]
-  (qw landPos) [UpFrom (Exc, 0)]
+landPosIM = imNoRefs' (EquationalModel landPosQD)(nounPhraseSP "calculation of landing position")
+  [qwC launSpeed $ UpFrom (Exc, exactDbl 0),
+   qwC launAngle $ Bounded (Exc, exactDbl 0) (Exc, half $ sy pi_)]
+  (qw landPos) [UpFrom (Exc, exactDbl 0)]
   (Just landPosDeriv) "calOfLandingDist" [angleConstraintNote, gravitationalAccelConstNote, landPosConsNote]
 
-landPosRC :: RelationConcept
-landPosRC = makeRC "landPosRC" (nounPhraseSP "calculation of landing position")
-  landPosConsNote (sy landPos $= E.landPosExpr)
+landPosQD :: QDefinition
+landPosQD = mkQuantDef landPos E.landPosExpr
 
 landPosDeriv :: Derivation
-landPosDeriv = mkDerivName (phrase landPos) (weave [landPosDerivSents, map E landPosDerivEqns])
+landPosDeriv = mkDerivName (phrase landPos) (weave [landPosDerivSents, map eS landPosDerivEqns])
 
 landPosDerivSents :: [Sentence]
 landPosDerivSents = [landPosDerivSent1, landPosDerivSent2, landPosDerivSent3, landPosDerivSent4]
 
 landPosDerivSent1, landPosDerivSent2, landPosDerivSent3, landPosDerivSent4 :: Sentence
 landPosDerivSent1 = foldlSentCol [S "We know that" +:+.
-  foldlList Comma List 
-    [eqnWSource (sy ixPos $= 0) launchOrigin,
-     eqnWSource (sy xConstAccel $= 0) accelXZero],
-  S "Substituting these", plural value, S "into the x-direction" `S.sOf`
-  makeRef2S posVecGD, S "gives us"]
+  foldlList Comma List
+    [eqnWSource (sy ixPos $= exactDbl 0) launchOrigin,
+     eqnWSource (sy xConstAccel $= exactDbl 0) accelXZero],
+  S "Substituting these", plural value, S "into the x-direction" `S.of_`
+  refS posVecGD, S "gives us"]
 landPosDerivSent2 = foldlSentCol [S "To find the", phrase landPos `sC`
   S "we want to find the", ch xPos, phrase value, sParen (ch landPos),
-  S "at", phrase flightDur, sParen (S "from" +:+ makeRef2S timeIM)]
-landPosDerivSent3 = foldlSentCol [S "From", makeRef2S speedIX,
-  sParen (S "with" +:+ E (sy iSpeed $= sy launSpeed)), S "we can replace", ch ixVel]
+  S "at", phrase flightDur, fromSource timeIM]
+landPosDerivSent3 = foldlSentCol [S "From", refS speedIX,
+  sParen (S "with" +:+ E (defines iSpeed launSpeed)), S "we can replace", ch ixVel]
 landPosDerivSent4 = S "Rearranging this gives us the required" +: phrase equation
 
 landPosDerivEqns :: [Expr]
@@ -109,25 +107,23 @@ landPosDerivEqns = [E.landPosDerivEqn1, E.landPosDerivEqn2, E.landPosDerivEqn3, 
 
 ---
 offsetIM :: InstanceModel
-offsetIM = imNoDerivNoRefs (OthModel offsetRC)
-  [qwC landPos $ UpFrom (Exc, 0)
-  ,qwC targPos $ UpFrom (Exc, 0)]
+offsetIM = imNoDerivNoRefs' (EquationalModel offsetQD) (nounPhraseSP "offset")
+  [qwC landPos $ UpFrom (Exc, exactDbl 0)
+  ,qwC targPos $ UpFrom (Exc, exactDbl 0)]
   (qw offset) [] "offsetIM" [landPosNote, landAndTargPosConsNote]
 
-offsetRC :: RelationConcept
-offsetRC = makeRC "offsetRC" (nounPhraseSP "offset") EmptyS $ sy offset $= E.offset'
-
+offsetQD :: QDefinition
+offsetQD = mkQuantDef offset E.offset'
 ---
 messageIM :: InstanceModel
-messageIM = imNoDerivNoRefs (OthModel messageRC) 
-  [qwC offset $ UpFrom (Exc, negate (sy landPos))
-  ,qwC targPos $ UpFrom (Exc, 0)]
+messageIM = imNoDerivNoRefs' (EquationalModel messageQD)(nounPhraseSP "output message")
+  [qwC offset $ UpFrom (Exc, neg (sy landPos))
+  ,qwC targPos $ UpFrom (Exc, exactDbl 0)]
   (qw message)
   [] "messageIM" [offsetNote, targPosConsNote, offsetConsNote, tolNote]
 
-messageRC :: RelationConcept
-messageRC = makeRC "messageRC" (nounPhraseSP "output message") 
-  EmptyS $ sy message $= E.message
+messageQD :: QDefinition 
+messageQD = mkQuantDef message E.message
 
 --- Notes
 
@@ -135,31 +131,35 @@ angleConstraintNote, gravitationalAccelConstNote, landAndTargPosConsNote, landPo
   landPosConsNote, offsetNote, offsetConsNote, targPosConsNote,
   timeConsNote, tolNote :: Sentence
 
-angleConstraintNote = foldlSent [S "The", phrase constraint,
-  E (0 $< sy launAngle $< (sy pi_ / 2)) `S.sIs` S "from",
-  makeRef2S posXDirection `S.sAnd` makeRef2S yAxisGravity `sC`
-  S "and is shown" `S.sIn` makeRef2S figLaunch]
+angleConstraintNote = foldlSent [atStartNP (the constraint),
+  eS (realInterval launAngle (Bounded (Exc, exactDbl 0) (Exc, half $ sy pi_))) `S.is` S "from",
+  refS posXDirection `S.and_` refS yAxisGravity `sC`
+  S "and is shown" `S.in_` refS figLaunch]
 
-gravitationalAccelConstNote = ch gravitationalAccelConst `S.sIs`
-  S "defined in" +:+. makeRef2S gravAccelValue
+gravitationalAccelConstNote = ch gravitationalAccelConst `S.is`
+  S "defined in" +:+. refS gravAccelValue
 
-landAndTargPosConsNote = S "The" +:+ plural constraint +:+
-  E (sy landPos $> 0) `S.sAnd` E (sy targPos $> 0) `S.sAre` S "from" +:+. makeRef2S posXDirection
+landAndTargPosConsNote = atStartNP' (the constraint) +:+
+  eS (sy landPos $> exactDbl 0) `S.and_` eS (sy targPos $> exactDbl 0) `S.are` S "from" +:+. refS posXDirection
 
-landPosNote = ch landPos `S.sIs` S "from" +:+. makeRef2S landPosIM
+landPosNote = ch landPos `S.is` S "from" +:+. refS landPosIM
 
-landPosConsNote = S "The" +:+ phrase constraint +:+
-  E (sy landPos $> 0) `S.sIs` S "from" +:+. makeRef2S posXDirection
+landPosConsNote = atStartNP (the constraint) +:+
+  eS (sy landPos $> exactDbl 0) `S.is` S "from" +:+. refS posXDirection
 
-offsetNote = ch offset `S.sIs` S "from" +:+. makeRef2S offsetIM
+offsetNote = ch offset `S.is` S "from" +:+. refS offsetIM
 
-offsetConsNote = foldlSent [S "The", phrase constraint, E (sy offset $> negate (sy landPos)) `S.sIs`
-  S "from the fact that", E (sy landPos $> 0) `sC` S "from", makeRef2S posXDirection]
+offsetConsNote = foldlSent [atStartNP (the constraint), eS (sy offset $> neg (sy landPos)) `S.is`
+  S "from the fact that", eS (sy landPos $> exactDbl 0) `sC` S "from", refS posXDirection]
 
-targPosConsNote = S "The" +:+ phrase constraint +:+
-  E (sy targPos $> 0) `S.sIs` S "from" +:+. makeRef2S posXDirection
+targPosConsNote = atStartNP (the constraint) +:+
+  eS (sy targPos $> exactDbl 0) `S.is` S "from" +:+. refS posXDirection
 
-timeConsNote = S "The" +:+ phrase constraint +:+
-  E (sy flightDur $> 0) `S.sIs` S "from" +:+. makeRef2S timeStartZero
+timeConsNote = atStartNP (the constraint) +:+
+  eS (sy flightDur $> exactDbl 0) `S.is` S "from" +:+. refS timeStartZero
 
-tolNote = ch tol `S.sIs` S "defined in" +:+. makeRef2S (SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]))
+tolNote = ch tol `S.is` S "defined in" +:+. refS (SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section]))
+
+-- References -- 
+iModRefs :: [Reference]
+iModRefs = map ref iMods

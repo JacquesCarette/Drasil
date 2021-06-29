@@ -22,10 +22,10 @@ integralCI          = commonIdeaWithDict "integralCI"      (pn "Integral")      
 pidCI               = commonIdeaWithDict "pidCI"           (pn "Proportional Integral Derivative") "PID"           []
 
 pidC, pidCL, summingPt, powerPlant, secondOrderSystem, processError,
-      simulationTime, processVariable, setPoint, propGain, derGain, simulation,
-      ccFrequencyDomain, ccLaplaceTransform, controlVariable, stepTime,
-      ccAbsTolerance, ccRelTolerance, ccTransferFxn, ccDampingCoeff,
-      ccStiffCoeff :: ConceptChunk
+      simulationTime, processVariable, setPoint, propGain, derGain, 
+      propControl, derControl, simulation,ccFrequencyDomain, ccTimeDomain,
+      ccLaplaceTransform, controlVariable, stepTime, ccAbsTolerance, 
+      ccRelTolerance, ccTransferFxn, ccDampingCoeff, ccStiffCoeff :: ConceptChunk
 pidCL
   = dcc "pdCtrlLoop" (nounPhraseSP "PD Control Loop") ("Closed-Loop control " ++
         "system with PD Controller, Summing Point and Power Plant")
@@ -80,17 +80,31 @@ derGain
   = dcc "derGain" (nounPhraseSP "Derivative Gain") 
       "Gain constant of the derivative controller"
 
+propControl
+  = dcc "propControl" (nounPhraseSP "Proportional control")
+      ("A linear feedback control system where correction is applied to the controlled " ++
+      "variable which is proportional to the difference between desired and measured values")
+
+derControl
+  = dcc "derControl" (nounPhraseSP "Derivative control")
+      ("Monitors the rate of change of the error signal and contributes a component " ++ 
+      "of the output signal (proportional to a derivative of the error signal)")
+
 simulation
   = dcc "simulation" (nounPhraseSP "simulation") 
       "Simulation of the PD controller"
 
 ccFrequencyDomain
-  = dcc "frequencyDomain" (nounPhraseSP "Frequency Domain") 
+  = dcc "frequencyDomain" (nounPhraseSP "frequency domain") 
       ("The analysis of mathematical functions in terms of frequency, instead "
          ++ "of time")
 
+ccTimeDomain 
+  = dcc "timeDomain" (nounPhraseSP "time domain")
+      "The analysis of mathematical functions in terms of time"
+
 ccLaplaceTransform
-  = dcc "laplaceTransform" (nounPhraseSP "Laplace transform") 
+  = dcc "laplaceTransform" (cn' "Laplace transform") 
       ("An integral transform that converts a function of a real variable t " ++
          "(often time) to a function of a complex variable s (complex frequency)")
 
@@ -105,7 +119,7 @@ ccRelTolerance
 ccTransferFxn
   = dcc "transferFxn" (nounPhraseSP "Transfer Function")
       ("The Transfer Function of a system is the ratio of the output to the input"
-         ++ " functions in the Frequency Domain")
+         ++ " functions in the frequency domain")
 
 ccDampingCoeff
   = dcc "dampingCoeff" (nounPhraseSP "Damping Coefficient")
@@ -121,8 +135,8 @@ concepts = map nw defs
 defs :: [ConceptChunk]
 defs
   = [pidCL, pidC, summingPt, powerPlant, secondOrderSystem, processError,
-     simulationTime, processVariable, setPoint, propGain, derGain,
-     ccFrequencyDomain, ccLaplaceTransform, controlVariable, stepTime,
+     simulationTime, processVariable, setPoint, propGain, derGain, propControl,
+    derControl, ccFrequencyDomain, ccTimeDomain, ccLaplaceTransform, controlVariable, stepTime,
      ccAbsTolerance, ccRelTolerance, ccTransferFxn, ccDampingCoeff,
      ccStiffCoeff]
 

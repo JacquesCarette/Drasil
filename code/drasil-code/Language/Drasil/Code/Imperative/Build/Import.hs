@@ -18,6 +18,7 @@ import Data.List (nub)
 import System.FilePath.Posix (takeExtension, takeBaseName)
 import Text.PrettyPrint.HughesPJ (Doc)
 
+-- | Holds all the needed information to run a program.
 data CodeHarness = Ch {
   buildConfig :: Maybe BuildConfig,
   runnable :: Maybe Runnable, 
@@ -25,6 +26,7 @@ data CodeHarness = Ch {
   progData :: ProgData,
   docConfig :: Maybe DocConfig}
 
+-- | Transforms information in 'CodeHarness' into a list of Makefile rules.
 instance RuleTransformer CodeHarness where
   makeRule (Ch b r s m d) = maybe [mkRule buildTarget [] []] 
     (\(BuildConfig comp onm anm bt) -> 
@@ -44,6 +46,7 @@ instance RuleTransformer CodeHarness where
     ]) d where
       buildTarget = makeS "build"
 
+-- | Helper that renders information into a MakeString. Dependent on the 'BuildName' criteria.
 renderBuildName :: GOOLState -> ProgData -> NameOpts -> BuildName -> MakeString
 renderBuildName s _ _ BMain = makeS $ maybe (error "Main module missing") 
   takeBaseName (s ^. mainMod)
@@ -55,22 +58,27 @@ renderBuildName s p o (BWithExt a e) = renderBuildName s p o a <>
   where takeSrc (src:_) = src
         takeSrc [] = error "Generated code has no source files"
 
+-- | Helper that renders an extension onto a 'FilePath'.
 renderExt :: Ext -> FilePath -> MakeString
 renderExt CodeExt f = makeS $ takeExtension f
 renderExt (OtherExt e) _ = e
 
+-- | Helper that records the compiler input information.
 getCompilerInput :: BuildDependencies -> GOOLState -> ProgData -> [MakeString]
 getCompilerInput BcSource s _ = map makeS $ s ^. sources
 getCompilerInput (BcSingle n) s p = [renderBuildName s p nameOpts n]
 
+-- | Helper that retrieves commented files.
 getCommentedFiles :: GOOLState -> [MakeString]
 getCommentedFiles s = map makeS (nub (s ^. headers ++ 
   maybeToList (s ^. mainMod)))
 
+-- | Helper that builds and runs a target.
 buildRunTarget :: MakeString -> RunType -> MakeString
 buildRunTarget fn Standalone = makeS "./" <> fn
 buildRunTarget fn (Interpreter i) = foldr (+:+) mempty $ i ++ [fn]
 
+-- | Creates a Makefile.
 makeBuild :: Maybe DocConfig -> Maybe BuildConfig -> Maybe Runnable -> 
   GOOLState -> ProgData -> Doc
 makeBuild d b r s p = genMake [Ch {

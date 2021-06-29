@@ -13,6 +13,7 @@ dependencies:
 - base >= 4.7 && < 5
 - lens
 - pretty
+- drasil-code-base
 - drasil-database
 - drasil-lang
 - drasil-utils
@@ -25,3 +26,6 @@ library:
   source-dirs: ./
   exposed-modules:
   - Language.Drasil.Printers
+  when:
+  - condition: false
+    other-modules: Paths_drasil_printers

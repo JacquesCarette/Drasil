@@ -1,8 +1,10 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.GamePhysics.TMods (tMods, newtonSL, newtonSLR, newtonTL, newtonLUG) where
+module Drasil.GamePhysics.TMods (tMods, newtonSL, newtonSLR, newtonTL, newtonLUG, tModRefs) where
+
+import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
-import Theory.Drasil (TheoryModel, tmNoRefs, ModelKinds(OthModel, EquationalModel))
+import Theory.Drasil
 import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 
@@ -28,13 +30,13 @@ tMods = [newtonSL, newtonTL, newtonLUG, newtonSLR]
 
 newtonTL :: TheoryModel
 newtonTL = tmNoRefs (EquationalModel newtonTLQD) [qw force_1, qw force_2]
-  ([] :: [ConceptChunk]) [] [relat newtonTLQD] [] "NewtonThirdLawMot" [newtonTLNote]
+  ([] :: [ConceptChunk]) [newtonTLQD] [] [] "NewtonThirdLawMot" [newtonTLNote]
 
 newtonTLQD :: QDefinition
 newtonTLQD = mkQuantDef' force_1 (nounPhraseSP "Newton's third law of motion") newtonTLExpr
 
 newtonTLExpr :: Expr
-newtonTLExpr = negate (sy force_2)
+newtonTLExpr = neg (sy force_2)
 
 newtonTLNote :: Sentence
 newtonTLNote = foldlSent [(S "Every action has an equal and opposite reaction" !.),
@@ -44,56 +46,58 @@ newtonTLNote = foldlSent [(S "Every action has an equal and opposite reaction" !
 
 -- T3 : Newton's law of universal gravitation --
 
+-- FIXME: Missing ConceptDomain!
+newtonLUGModel :: ModelKinds
+newtonLUGModel = EquationalRealm $ mkMultiDefnForQuant newtonForceQuant EmptyS $ NE.fromList [
+    mkDefiningExpr "newtonLUGviaDeriv" [] EmptyS (sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/ square (sy dispNorm)) `mulRe` sy dVect),
+    mkDefiningExpr "newtonLUGviaForm" [] EmptyS (sy gravitationalConst `mulRe` (sy mass_1 `mulRe` sy mass_2 $/ square (sy dispNorm)) `mulRe` (sy distMass $/ sy dispNorm))
+  ]
+
 newtonLUG :: TheoryModel
-newtonLUG = tmNoRefs (OthModel newtonLUGRC)
+newtonLUG = tmNoRefs newtonLUGModel
   [qw force, qw gravitationalConst, qw mass_1, qw mass_2,
   qw dispNorm, qw dVect, qw distMass] ([] :: [ConceptChunk])
-  [] [newtonLUGRel] [] "UniversalGravLaw" newtonLUGNotes
+  [] [toDispExpr newtonLUGModel] [] "UniversalGravLaw" newtonLUGNotes
 
-newtonLUGRC :: RelationConcept
-newtonLUGRC = makeRC "newtonLUGRC" 
-  (nounPhraseSP "Newton's law of universal gravitation") EmptyS newtonLUGRel
-
-newtonLUGRel :: Relation
-newtonLUGRel = sy force $=
-  sy gravitationalConst * (sy mass_1 * sy mass_2 /
-  (sy dispNorm $^ 2)) * sy dVect $=
-  sy gravitationalConst * (sy mass_1 * sy mass_2 /
-  (sy dispNorm $^ 2)) * (sy distMass / sy dispNorm)
+newtonForceQuant :: QuantityDict
+newtonForceQuant = mkQuant' "force" (nounPhraseSP "Newton's law of universal gravitation") Nothing Real (symbol force) Nothing
 
 -- Can't include fractions within a sentence (in the part where 'r denotes the
 -- unit displacement vector, equivalent to r/||r||' (line 184)). Changed to a
 -- verbal description instead.
 
 -- Can't properly include the gravitational constant in a sentence (in the last
--- sentence, supposed to include "6.673 * 10^{-11} m/kgs^2" (line 187)).
+-- sentence, supposed to include "6.673 `mulRe` 10^{-11} m/kgs^2" (line 187)).
 
 newtonLUGNotes :: [Sentence]
 newtonLUGNotes = map foldlSent [
   [S "Two", plural rigidBody `S.inThe` S "universe attract each other with a",
    getTandS force, S "that is directly proportional to the product of their",
-   plural mass `sC` ch mass_1 `S.sAnd` ch mass_2 `sC` EmptyS `S.sAnd`
+   plural mass `sC` ch mass_1 `S.and_` ch mass_2 `sC` EmptyS `S.and_`
    S "inversely proportional" `S.toThe` getTandS sqrDist, S "between them"]]
 
 -- T4 : Newton's second law for rotational motion --
 
 newtonSLR :: TheoryModel
-newtonSLR = tmNoRefs (OthModel newtonSLRRC)
-  [qw torque, qw momentOfInertia, qw angularAccel] 
-  ([] :: [ConceptChunk]) [] [newtonSLRRel] [] "NewtonSecLawRotMot" newtonSLRNotes
+newtonSLR = tmNoRefs' "newtonSLR" (EquationalModel newtonSLRQD)
+  [qw torque, qw momentOfInertia, qw angularAccel]
+  ([] :: [ConceptChunk]) [newtonSLRQD] [] [] "NewtonSecLawRotMot" newtonSLRNotes
 
-newtonSLRRC :: RelationConcept
-newtonSLRRC = makeRC "newtonSLRRC" 
-  (nounPhraseSP "Newton's second law for rotational motion") EmptyS newtonSLRRel
+newtonSLRQD :: QDefinition
+newtonSLRQD = mkQuantDef' torque (nounPhraseSP "Newton's second law for rotational motion") newtonSLRExpr
 
-newtonSLRRel :: Relation
-newtonSLRRel = sy torque $= sy momentOfInertia * sy angularAccel
+newtonSLRExpr :: Relation
+newtonSLRExpr = sy momentOfInertia `mulRe` sy angularAccel
 
 newtonSLRNotes :: [Sentence]
 newtonSLRNotes = map foldlSent [
-  [S "The net", getTandS torque, S "on a", phrase rigidBody `S.sIs`
+  [S "The net", getTandS torque, S "on a", phrase rigidBody `S.is`
    S "proportional to its", getTandS angularAccel `sC` S "where",
    ch momentOfInertia, S "denotes", phrase momentOfInertia `S.the_ofThe`
-   phrase rigidBody, S "as the", phrase constant `S.sOf` S "proportionality"],
-  [S "We also assume that all", plural rigidBody, S "involved" `S.sAre`
+   phrase rigidBody, S "as the", phrase constant `S.of_` S "proportionality"],
+  [S "We also assume that all", plural rigidBody, S "involved" `S.are`
    phrase twoD, fromSource assumpOD]]
+
+-- References --
+tModRefs :: [Reference]
+tModRefs = map ref tMods

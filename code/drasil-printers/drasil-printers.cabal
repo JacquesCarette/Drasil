@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 914c1d705d632c3d5fadee94544b793262beb6c0e1e7f1bad09bb0ad04ef2385
+-- hash: 8910014a28a0a4b118d7c4fdb876503418ed068f6a695793b86b282218274bc2
 
 name:           drasil-printers
 version:        0.1.10.0
@@ -33,24 +33,31 @@ library
       Language.Drasil.JSON.Helpers
       Language.Drasil.JSON.Print
       Language.Drasil.Markdown.CreateMd
-      Language.Drasil.Plain.Helpers
       Language.Drasil.Plain.Print
       Language.Drasil.Printing.AST
       Language.Drasil.Printing.Citation
       Language.Drasil.Printing.Helpers
       Language.Drasil.Printing.Import
+      Language.Drasil.Printing.Import.CodeExpr
+      Language.Drasil.Printing.Import.DisplayExpr
+      Language.Drasil.Printing.Import.Document
+      Language.Drasil.Printing.Import.Expr
+      Language.Drasil.Printing.Import.Helpers
+      Language.Drasil.Printing.Import.Sentence
+      Language.Drasil.Printing.Import.Space
+      Language.Drasil.Printing.Import.Symbol
       Language.Drasil.Printing.LayoutObj
       Language.Drasil.Printing.PrintingInformation
       Language.Drasil.TeX.Helpers
       Language.Drasil.TeX.Monad
       Language.Drasil.TeX.Preamble
       Language.Drasil.TeX.Print
-      Paths_drasil_printers
   hs-source-dirs:
       ./
   ghc-options: -Wall -Wredundant-constraints
   build-depends:
       base >=4.7 && <5
+    , drasil-code-base
     , drasil-database
     , drasil-lang
     , drasil-utils
@@ -59,4 +66,7 @@ library
     , pretty
     , split
     , json
+  if false
+    other-modules:
+        Paths_drasil_printers
   default-language: Haskell2010

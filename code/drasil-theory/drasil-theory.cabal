@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 3cc05d5aac512ed3b6a641929f6bd7928cfed2a17c9f8d713503812e9764cabd
+-- hash: ffb523fa20d59d5c77268207f4ec612bae16f742508bdd9bce4bb2b88a669652
 
 name:           drasil-theory
 version:        0.1.0.0
@@ -26,12 +26,13 @@ library
       Data.Drasil.TheoryConcepts
   other-modules:
       Theory.Drasil.Classes
+      Theory.Drasil.ConstraintSet
       Theory.Drasil.DataDefinition
       Theory.Drasil.GenDefn
       Theory.Drasil.InstanceModel
       Theory.Drasil.ModelKinds
+      Theory.Drasil.MultiDefn
       Theory.Drasil.Theory
-      Paths_drasil_theory
   hs-source-dirs:
       ./
   ghc-options: -Wall -Wredundant-constraints
@@ -40,4 +41,7 @@ library
     , drasil-lang
     , drasil-metadata
     , lens
+  if false
+    other-modules:
+        Paths_drasil_theory
   default-language: Haskell2010

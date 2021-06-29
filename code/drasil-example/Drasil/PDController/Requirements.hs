@@ -3,6 +3,7 @@ module Drasil.PDController.Requirements where
 
 import Data.Drasil.Concepts.Documentation (funcReqDom, nonFuncReqDom)
 
+import Drasil.DocLang (inReq)
 import Drasil.DocLang.SRS (datCon)
 
 import Drasil.PDController.Concepts
@@ -27,18 +28,16 @@ verifyInputsDesc
   = foldlSent_
       [S "Ensure that the input values are within the",
          S "limits specified in"
-         +:+. makeRef2S (datCon ([] :: [Contents]) ([] :: [Section]))]
+         +:+. refS (datCon ([] :: [Contents]) ([] :: [Section]))]
 
 calculateValuesDesc
   = foldlSent
-      [S "Calculate the", phrase processVariable, sParen (S "from" +:+
-         makeRef2S imPD),
+      [S "Calculate the", phrase processVariable, fromSource imPD,
          S "over the simulation time"]
 
 outputValuesDesc
   = foldlSent
-      [S "Output the", phrase processVariable, sParen (S "from" +:+
-         makeRef2S imPD),
+      [S "Output the", phrase processVariable, fromSource imPD,
          S "over the simulation time"]
 
 -----------------------------------------------------------------------------
@@ -78,4 +77,9 @@ verifiability
       (S "The code shall be verifiable against a Verification and Validation plan" !.)
       "Verifiable"
       nonFuncReqDom
+
+-- References --
+reqRefs :: [Reference]
+reqRefs = ref (datCon ([]::[Contents]) ([]::[Section])): 
+  map ref ([inReq EmptyS] ++ funcReqs ++ nonfuncReqs)
 

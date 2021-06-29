@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: c7914c27958a58ca35e5337f1d6f282141991b1526cc81651588a14c0c87fb86
+-- hash: 3c00f96ea30e6543cf94717fbdfa3548a6a963dcb842e7cc07a140ec80afe866
 
 name:           drasil-database
 version:        0.1.1.0
@@ -27,7 +27,6 @@ library
       Database.Drasil.ChunkDB
       Database.Drasil.ChunkDB.GetChunk
       Database.Drasil.SystemInformation
-      Paths_drasil_database
   hs-source-dirs:
       ./
   ghc-options: -Wall -Wredundant-constraints
@@ -37,4 +36,7 @@ library
     , drasil-lang
     , drasil-theory
     , lens
+  if false
+    other-modules:
+        Paths_drasil_database
   default-language: Haskell2010

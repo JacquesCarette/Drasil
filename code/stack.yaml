@@ -41,6 +41,7 @@ packages:
 - drasil-utils/
 - drasil-gool/
 - drasil-build/
+- drasil-code-base/
 - drasil-code/
 - drasil-theory/
 - drasil-database/
@@ -58,6 +59,10 @@ extra-deps:
 - unicode-names-3.2.0.0@sha256:fef7241d93170e26265e84553090253a5e8ee207645d47cf271816f5834d07d2
 - unicode-properties-3.2.0.0@sha256:239766a6ac4322329353f6b9cd546024fd8c5f0235c8e32b3cba2d6bd245a699
 - json-0.10@sha256:d9fc6b07ce92b8894825a17d2cf14799856767eb30c8bf55962baa579207d799,3210
+
+# Used only for a basic set of flags for haddock
+build:
+  haddock-deps: false
 
 # Override default flag values for local packages and extra-deps
 flags: {}
@@ -82,3 +87,5 @@ require-stack-version: ">=2.3.1"
 #
 # Allow a newer minor version of GHC than the snapshot specifies
 # compiler-check: newer-minor
+
+dump-logs: all

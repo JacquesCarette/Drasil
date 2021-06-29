@@ -2,7 +2,8 @@ module Drasil.DblPendulum.Unitals where
 
 import Language.Drasil
 import Language.Drasil.ShortHands
-import qualified Utils.Drasil.Sentence as S
+import Utils.Drasil.Concepts
+import qualified Utils.Drasil.NounPhrase as NP
 import Data.Drasil.Constraints (gtZeroConstr)
 
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
@@ -15,7 +16,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (position, ixPos, xPos, fo
   xAccel, yVel, xVel, iyPos, yPos, time, torque, momentOfInertia, angularDisplacement,
   angularFrequency, frequency, period)
 import Data.Drasil.Concepts.Physics (pendulum, twoD)
-import Data.Drasil.Concepts.Math as CM (angle)
+import Data.Drasil.Concepts.Math as CM (angle, iAngle)
 import Data.Drasil.Quantities.Math as QM (unitVect, unitVectj, pi_)
 import Drasil.DblPendulum.Concepts (rod)
 
@@ -45,25 +46,25 @@ unitalChunks = [lenRod, QPP.mass, QP.force, QP.ixPos, QP.xPos, QP.yPos,
 
 lenRod, pendDisplacementAngle, initialPendAngle :: UnitalChunk
 
-lenRod = makeUCWDS "l_rod" (cn "length of rod")
-        (phrase len `S.the_ofThe` phrase rod)
+lenRod = makeUCWDS "l_rod" (cn "length of the rod")
+        (phraseNP (len `the_ofThe` rod))
         (sub cL lRod) metre
 
-pendDisplacementAngle = makeUCWDS "pendDisplacementAngle" (cn "displacement angle of pendulum")
-        (phrase angle `S.the_ofThe` phrase pendulum)
+pendDisplacementAngle = makeUCWDS "pendDisplacementAngle" (cn "displacement angle of the pendulum")
+        (phraseNP (angle `the_ofThe` pendulum))
         (sub lTheta lP) degree
 
 initialPendAngle = makeUCWDS "initialPendAngle" (cn "initial pendulum angle")
-        (S "the initial angle of" +:+ phrase pendulum)
+        (phraseNP (NP.the (CM.iAngle `of_` pendulum)))
         (sub lTheta lI) radian
 
 
 unitless :: [DefinedQuantityDict]
 unitless = [QM.unitVect, QM.unitVectj, QM.pi_]
 -----------------------
-lRod :: Symbol
 
-lRod = Label "rod"
+lRod :: Symbol
+lRod = label "rod"
 
 -----------------------
 -- CONSTRAINT CHUNKS --
@@ -84,6 +85,6 @@ lenRodCons     = constrained' lenRod        [gtZeroConstr] (dbl 44.2)
 initialPendAngleCons  = constrained' initialPendAngle    [gtZeroConstr] (dbl 2.1)
 --gravAccelCons  = constrained' QP.gravitationalAccel    [gtZeroConstr] (dbl 9.8)
 pendDisplacementAngleOutCons  = constrained' pendDisplacementAngle    [gtZeroConstr] (dbl 2.1)
-angAccelOutCons    = constrained' QP.angularAccel    [gtZeroConstr] (dbl 0.0)
+angAccelOutCons    = constrained' QP.angularAccel    [gtZeroConstr] (exactDbl 0)
 
 

@@ -11,3 +11,7 @@ hibbeler2004 :: Citation
 hibbeler2004 = cBookA [rcHibbeler] "Engineering Mechanics: Dynamics"
   "Pearson Prentice Hall" 2004 []
   "hibbeler2004"
+
+-- References --
+citeRefs :: [Reference]
+citeRefs = map ref citations

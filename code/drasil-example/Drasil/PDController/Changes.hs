@@ -7,6 +7,7 @@ import Drasil.PDController.Assumptions
 import Drasil.PDController.Concepts
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Concepts
 
 likelyChgs :: [ConceptInstance]
 likelyChgs = [likeChgPP]
@@ -17,8 +18,10 @@ likeChgPP = cic "likeChgPP" likeChgPPDesc "DC Gain and Time Constant" likeChgDom
 likeChgPPDesc :: Sentence
 likeChgPPDesc
   = foldlSent
-      [S "The", phrase mass `sC` phrase ccDampingCoeff, S "and the",
-       phrase ccStiffCoeff,
-       S "may be changed to be supplied by the user", sParen (S "from" +:+
-       foldlList Comma List [makeRef2S aMass, makeRef2S aDampingCoeff,
-       makeRef2S aStiffnessCoeff])]
+      [atStartNP (the mass) `sC` phraseNP (ccDampingCoeff `andThe` ccStiffCoeff),
+       S "may be changed to be supplied by the user", 
+       fromSources [aMass, aDampingCoeff, aStiffnessCoeff]]
+
+-- References --
+chgRefs :: [Reference]
+chgRefs = map ref likelyChgs

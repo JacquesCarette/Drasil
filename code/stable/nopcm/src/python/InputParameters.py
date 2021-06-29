@@ -55,7 +55,7 @@ def get_input(filename):
 # \param L length of tank: the length of the tank (m)
 # \return volume of the cylindrical tank: the amount of space encompassed by a tank (m^3)
 def derived_values(D, L):
-    V_tank = Constants.Constants.pi * (D / 2) ** 2 * L
+    V_tank = Constants.Constants.pi * (D / 2.0) ** 2.0 * L
     
     return V_tank
 
@@ -151,98 +151,98 @@ def input_constraints(A_C, C_W, h_C, T_init, t_final, L, T_C, t_step, rho_W, D, 
         print(" (AR_max)", end="")
         print(".")
     
-    if (not(A_C > 0)) :
+    if (not(A_C > 0.0)) :
         print("Warning: ", end="")
         print("A_C has value ", end="")
         print(A_C, end="")
         print(", but is suggested to be ", end="")
         print("above ", end="")
-        print(0, end="")
+        print(0.0, end="")
         print(".")
-    if (not(C_W > 0)) :
+    if (not(C_W > 0.0)) :
         print("Warning: ", end="")
         print("C_W has value ", end="")
         print(C_W, end="")
         print(", but is suggested to be ", end="")
         print("above ", end="")
-        print(0, end="")
+        print(0.0, end="")
         print(".")
-    if (not(h_C > 0)) :
+    if (not(h_C > 0.0)) :
         print("Warning: ", end="")
         print("h_C has value ", end="")
         print(h_C, end="")
         print(", but is suggested to be ", end="")
         print("above ", end="")
-        print(0, end="")
+        print(0.0, end="")
         print(".")
-    if (not(0 < T_init and T_init < 100)) :
+    if (not(0.0 < T_init and T_init < 100.0)) :
         print("Warning: ", end="")
         print("T_init has value ", end="")
         print(T_init, end="")
         print(", but is suggested to be ", end="")
         print("between ", end="")
-        print(0, end="")
+        print(0.0, end="")
         print(" and ", end="")
-        print(100, end="")
+        print(100.0, end="")
         print(".")
-    if (not(t_final > 0)) :
+    if (not(t_final > 0.0)) :
         print("Warning: ", end="")
         print("t_final has value ", end="")
         print(t_final, end="")
         print(", but is suggested to be ", end="")
         print("above ", end="")
-        print(0, end="")
+        print(0.0, end="")
         print(".")
-    if (not(L > 0)) :
+    if (not(L > 0.0)) :
         print("Warning: ", end="")
         print("L has value ", end="")
         print(L, end="")
         print(", but is suggested to be ", end="")
         print("above ", end="")
-        print(0, end="")
+        print(0.0, end="")
         print(".")
-    if (not(0 < T_C and T_C < 100)) :
+    if (not(0.0 < T_C and T_C < 100.0)) :
         print("Warning: ", end="")
         print("T_C has value ", end="")
         print(T_C, end="")
         print(", but is suggested to be ", end="")
         print("between ", end="")
-        print(0, end="")
+        print(0.0, end="")
         print(" and ", end="")
-        print(100, end="")
+        print(100.0, end="")
         print(".")
-    if (not(0 < t_step and t_step < t_final)) :
+    if (not(0.0 < t_step and t_step < t_final)) :
         print("Warning: ", end="")
         print("t_step has value ", end="")
         print(t_step, end="")
         print(", but is suggested to be ", end="")
         print("between ", end="")
-        print(0, end="")
+        print(0.0, end="")
         print(" and ", end="")
         print(t_final, end="")
         print(" (t_final)", end="")
         print(".")
-    if (not(rho_W > 0)) :
+    if (not(rho_W > 0.0)) :
         print("Warning: ", end="")
         print("rho_W has value ", end="")
         print(rho_W, end="")
         print(", but is suggested to be ", end="")
         print("above ", end="")
-        print(0, end="")
+        print(0.0, end="")
         print(".")
-    if (not(D > 0)) :
+    if (not(D > 0.0)) :
         print("Warning: ", end="")
         print("D has value ", end="")
         print(D, end="")
         print(", but is suggested to be ", end="")
         print("above ", end="")
-        print(0, end="")
+        print(0.0, end="")
         print(".")
-    if (not(E_W >= 0)) :
+    if (not(E_W >= 0.0)) :
         print("Warning: ", end="")
         print("E_W has value ", end="")
         print(E_W, end="")
         print(", but is suggested to be ", end="")
         print("above ", end="")
-        print(0, end="")
+        print(0.0, end="")
         print(".")

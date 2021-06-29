@@ -1,7 +1,9 @@
-module Drasil.SWHS.Changes (likelyChgs, likeChgTCVOD, likeChgTCVOL, likeChgTLH, unlikelyChgs) where
+module Drasil.SWHS.Changes (likelyChgs, likeChgTCVOD, likeChgTCVOL,
+  likeChgTLH, unlikelyChgs, chgRefs) where
 
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (assumption, value, simulation,
@@ -51,7 +53,7 @@ likeChgDT = cic "likeChgDT" (
 --
 likeChgDITPW = cic "likeChgDITPW" (
   foldlSent [chgsStart assumpSITWP (S "To add more flexibility to the"),
-  phrase simulation `sC` (phrase tempInit `S.the_ofThe` phrase water) `S.andThe`
+  phrase simulation `sC` phraseNP (tempInit `the_ofThe` water) `S.andThe`
   short phsChgMtrl, S "could be allowed to have different",
   plural value] ) "Different-Initial-Temps-PCM-Water" likeChgDom
 --
@@ -67,17 +69,22 @@ unlikelyChgs = [unlikeChgWPFS, unlikeChgNIHG, unlikeChgNGS]
 
 unlikeChgWPFS, unlikeChgNIHG, unlikeChgNGS :: ConceptInstance
 unlikeChgWPFS = cic "unlikeChgWPFS" (
-  foldlSent [makeRef2S assumpWAL `sC` chgsStart assumpNGSP (S "It is unlikely for the change of"),
+  foldlSent [refS assumpWAL `sC` chgsStart assumpNGSP (S "It is unlikely for the change of"),
   phrase water, S "from liquid to a solid or the state change of the", phrase phsChgMtrl,
   S "from a liquid to a gas to be considered"] ) "Water-PCM-Fixed-States" unlikeChgDom
 
 
 unlikeChgNIHG = cic "unlikeChgNIHG" (
   foldlSent [chgsStart assumpNIHGBWP (S "Is used for the derivations of"),
-  makeRef2S eBalanceOnWtr `S.sAnd` makeRef2S eBalanceOnPCM] )
+  refS eBalanceOnWtr `S.and_` refS eBalanceOnPCM] )
   "No-Internal-Heat-Generation" unlikeChgDom
 
 unlikeChgNGS = cic "unlikeChgNGS" (
-  foldlSent [chgsStart assumpNGSP (S "Is used for the derivation of"), makeRef2S eBalanceOnPCM,
-  S "and for the equation given by", makeRef2S heatEInPCM, S "to be valid"] )
+  foldlSent [chgsStart assumpNGSP (S "Is used for the derivation of"), refS eBalanceOnPCM,
+  S "and for the equation given by", refS heatEInPCM, S "to be valid"] )
   "No-Gaseous-State" unlikeChgDom
+
+-- References --
+chgRefs :: [Reference]
+chgRefs = map ref (likelyChgs ++ unlikelyChgs)
+  ++ map ref [heatEInPCM, eBalanceOnPCM, eBalanceOnWtr]

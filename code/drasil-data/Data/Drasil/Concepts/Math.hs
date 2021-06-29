@@ -5,8 +5,8 @@ import Language.Drasil.ShortHands (lX, lY, lZ)
 import Data.Drasil.Domains (mathematics)
 import Data.Drasil.Citations (cartesianWiki, lineSource, pointSource)
 import Utils.Drasil
-import Utils.Drasil.Sentence
-
+import qualified Utils.Drasil.Sentence as S
+import Utils.Drasil.Concepts
 
 mathcon :: [ConceptChunk]
 
@@ -31,10 +31,10 @@ angle       = dcc "angle"        (cn' "angle")                   "the amount of 
 area        = dcc "area"         (cn' "area")                    "a part of an object or surface"
 axis        = dcc "axis"         (cn' "axis")                    "a fixed reference line for the measurement of coordinates" 
 calculation = dcc "calculation"  (cn' "calculation")             "a mathematical determination of the size or number of something"
-cartesian   = dccWDS "cartesian" (pn' "Cartesian coordinate system") $ S "a coordinate system that specifies each point uniquely in a plane by a set" `sOf`
+cartesian   = dccWDS "cartesian" (pn' "Cartesian coordinate system") $ S "a coordinate system that specifies each point uniquely in a plane by a set" `S.of_`
                                                                   S "numerical coordinates, which are the signed distances to the point from" +:+
                                                                   S "two fixed perpendicular oriented lines, measured in the same unit of length" +:+
-                                                                  sParen (S "from" +:+ makeRef2S cartesianWiki)
+                                                                  fromSource cartesianWiki
 centre       = dcc "centre"       (cn' "centre")                  "the middle point of an object"
 change       = dcc "change"       (cn' "change")                  "Difference between relative start and end states of an object"
 component    = dcc "component"    (nounPhrase "component" "components") ("The scalar quantity defining the contribution " ++
@@ -52,7 +52,7 @@ laplaceTransform = dcc "laplaceTransform" (cn' "laplace transform") ("An integra
                                                                      "(often time) to a function of a complex variable s (complex frequency)")
 law          = dcc "law"          (cn' "law")                     "a generalization based on a fact or event perceived to be recurrent"
 line         = dccWDS "line"      (pn' "line")                    $ S "An interval between two points" +:+
-                                                                  sParen (S "from" +:+ makeRef2S lineSource)
+                                                                  fromSource lineSource
 matrix       = dcc "matrix"       (cnICES "matrix")               ("A rectangular array of quantities or expressions in rows and columns that" ++
                                                                  "is treated as a single entity and manipulated according to particular rules")
 norm        = dcc "norm"         (cn' "norm")                    "the positive length or size of a vector"
@@ -69,7 +69,7 @@ negInf       = dcc "NegInf"       (cn' "Negative Infinity")      "Opposite of po
 positive     = dcc "positive"     (cn' "positive")               "greater than zero"
 negative     = dcc "negative"     (cn' "negative")               "less than zero"
 point        = dccWDS "point"     (pn' "point")                   $ S "An exact location, it has no size, only position" +:+
-                                                                  sParen (S "from" +:+ makeRef2S pointSource)
+                                                                  fromSource pointSource
 probability  = dcc "probability"  (cnIES "probability")          "The likelihood of an event to occur"
 rate         = dcc "rate"         (cn' "rate")                   "Ratio that compares two quantities having different units of measure"
 rightHand    = dcc "rightHand"    (cn' "right-handed coordinate system")  "A coordinate system where the positive z-axis comes out of the screen."

@@ -24,3 +24,6 @@ library:
   exposed-modules:
   - Theory.Drasil
   - Data.Drasil.TheoryConcepts
+  when:
+  - condition: false
+    other-modules: Paths_drasil_theory

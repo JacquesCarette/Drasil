@@ -1,5 +1,5 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs) where
+module Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs, chgRefs) where
 
 --A list of likely and unlikely changes for GamePhysics
 
@@ -34,7 +34,7 @@ likelyChangesStmt3 = chgsStart assumpDI $ phrase library `maybeExpanded` (
   S "to include motion with" +:+ phrase CP.damping)
 
 likelyChangesStmt4 = chgsStart assumpCAJI $ phrase library `maybeExpanded` (
-  S "to include" +:+ plural CP.joint `S.sAnd` plural CM.constraint)
+  S "to include" +:+ plural CP.joint `S.and_` plural CM.constraint)
 
 lcVODES, lcEC, lcID, lcIJC :: ConceptInstance
 
@@ -66,3 +66,7 @@ ucORB = cic "ucORB" unlikelyChangesStmt4 "Objects-Rigid-Bodies" unlikeChgDom
   
 unlikelyChgs :: [ConceptInstance]
 unlikelyChgs = [ucSRB, ucEI, ucCCS, ucORB]
+
+-- References --
+chgRefs :: [Reference]
+chgRefs = map ref (likelyChgs ++ unlikelyChgs)

@@ -26,28 +26,28 @@ data CiteField = Address      String
                | Chapter      Int
                | Edition      Int
                | Editor       People
-               | HowPublished HP
+               | HowPublished HP     -- ^ Can be published via URL or something else.
                | Institution  String
                | Journal      String
                | Month        Month
                | Note         String
                | Number       Int
                | Organization String
-               | Pages        [Int] -- ^ Range of pages (ex1. 1-32; ex2. 7,31,52-55)
+               | Pages        [Int] -- ^ Range of pages (ex1. 1-32; ex2. 7,31,52-55).
                | Publisher    String
                | School       String
                | Series       String
                | Title        String
-               | Type         String -- ^ BibTeX "type" field
+               | Type         String -- ^ BibTeX "type" field.
                | Volume       Int
                | Year         Int
 
--- | How Published. Necessary for URLs to work properly.
+-- | How something is published. Necessary for URLs to work properly.
 data HP = URL String
         | Verb String
 
 -- | External references come in many flavours. Articles, Books, etc.
--- (we are using the types available in Bibtex)
+-- (we are using the types available in Bibtex).
 data CitationKind = Article
                   | Book
                   | Booklet
@@ -61,12 +61,13 @@ data CitationKind = Article
                   | Proceedings
                   | TechReport
                   | Unpublished
--- | Smart field constructor
+
+-- | Smart field constructor for a 'CiteField'.
 author, editor :: People -> CiteField
 author = Author
 editor = Editor
 
--- | Smart field constructor
+-- | Smart field constructor for a 'CiteField'.
 address, bookTitle, institution, journal,
   howPublished, howPublishedU, note, organization, publisher, school, series, title,
   typeField :: String -> CiteField
@@ -74,6 +75,7 @@ address, bookTitle, institution, journal,
 address       = Address
 bookTitle     = BookTitle
 howPublished  = HowPublished . Verb
+-- | URL version of 'howPublished'.
 howPublishedU = HowPublished . URL
 institution   = Institution
 journal       = Journal
@@ -85,7 +87,7 @@ series        = Series
 title         = Title
 typeField     = Type
 
--- | Smart field constructor
+-- | Smart field constructor for a 'CiteField'.
 chapter, edition, number, volume, year :: Int -> CiteField
 
 chapter = Chapter
@@ -94,10 +96,10 @@ number = Number
 volume = Volume
 year = Year
 
--- | Smart field constructor
+-- | Smart field constructor for a 'CiteField'.
 pages :: [Int] -> CiteField
 pages = Pages
 
--- | Smart field constructor
+-- | Smart field constructor for a 'CiteField'.
 month :: Month -> CiteField
 month = Month

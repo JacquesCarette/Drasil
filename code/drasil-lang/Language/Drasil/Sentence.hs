@@ -34,8 +34,9 @@ data SentenceStyle = PluralTerm
 --     * references to specific layout objects
 infixr 5 :+:
 data Sentence where
-  -- | Among other things, Ch allows Sentences to hold plural forms of 'NounPhrase's and 'NamedIdea's.
-  Ch    :: SentenceStyle -> UID -> Sentence
+  -- | Ch looks up the term for a given 'UID' and displays the term with a given 'SentenceStyle' and 'CapitalizationRule'.
+  -- This allows Sentences to hold plural forms of 'NounPhrase's and 'NamedIdea's.
+  Ch    :: SentenceStyle -> CapitalizationRule -> UID -> Sentence
   -- | Converts a unit symbol into a usable Sentence form.
   Sy    :: USymb -> Sentence
   -- | Constructor for 'String's, used often for descriptions in Chunks.

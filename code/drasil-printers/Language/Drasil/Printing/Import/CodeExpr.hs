@@ -162,6 +162,7 @@ codeExpr (UnaryOpVN Norm u)       sm = P.Fenced P.Norm P.Norm $ codeExpr u sm
 codeExpr (UnaryOpVN Dim u)        sm = mkCall sm P.Dim u
 codeExpr (UnaryOp Sqrt u)         sm = P.Sqrt $ codeExpr u sm
 codeExpr (UnaryOp Neg u)          sm = neg sm u
+codeExpr (UnaryOpVV NegV u)       sm = neg sm u
 codeExpr (ArithBinaryOp Frac a b) sm = P.Div (codeExpr a sm) (codeExpr b sm)
 codeExpr (ArithBinaryOp Pow a b)  sm = pow sm a b
 codeExpr (ArithBinaryOp Subt a b) sm = P.Row [codeExpr a sm, P.MO P.Subt, codeExpr b sm]

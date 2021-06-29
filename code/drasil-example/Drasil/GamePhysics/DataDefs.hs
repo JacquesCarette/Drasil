@@ -286,7 +286,6 @@ coeffRestitutionDD = ddNoRefs coeffRestitution Nothing "coeffRestitution"
 coeffRestitution :: QDefinition
 coeffRestitution = mkQuantDef QP.restitutionCoef coeffRestitutionEqn
 
--- TODO: need negate vectors unary operator?
 coeffRestitutionEqn :: Expr
 coeffRestitutionEqn = neg $ sy finRelVel $.
   sy normalVect $/ sy initRelVel $.

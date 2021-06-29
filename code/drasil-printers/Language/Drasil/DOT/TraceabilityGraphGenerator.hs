@@ -12,7 +12,7 @@ type Chunk = String
 -- e.g. sample usage: genTraceGraph SWHS [TMods, IMods, GenDefs]
 genTraceGraph :: CaseStudy -> [Chunk] -> IO ()
 genTraceGraph caseStudy [chunk] = do
-	nodeDefs <- TGGI.getInfo ["all"]
+	let nodeDefs = TGGI.getInfo ["all"]
 	dotFile <- openFile (caseStudy ++ "_TG.dot") WriteMode
 
 	hPutStrLn dotFile ("digraph " ++ caseStudy ++ "_TG {")

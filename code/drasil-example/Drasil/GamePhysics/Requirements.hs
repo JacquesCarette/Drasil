@@ -110,25 +110,6 @@ performance = cic "performance" (foldlSent [
   ]) "Performance" nonFuncReqDom
 
 correctness :: ConceptInstance
-<<<<<<< HEAD
-correctness = cic "correctness" (foldlSent [S "The", phrase output_ `sOf` S "simulation", 
-  S "results shall be compared to an existing implementation like Pymunk"
-  ]) "Correctness" nonFuncReqDom
- 
-usability :: ConceptInstance
-usability = cic "usability" (foldlSent [S "Software shall be easy to learn" `sAnd` S "use.",
-  S "Usability shall be measured by how long it takes a user to learn how to use", 
-  S "the library to create a small program to simulate the movement" `sOf` S "2 bodies", 
-  S "over time in space. Creating a program should take no less than 30 to 60 minutes", 
-  S "for an intermediate to experienced programmer" 
-  ]) "Usability" nonFuncReqDom
-
-understandability :: ConceptInstance
-understandability = cic "understandability" (foldlSent [S "Users" `sOf` S "Tamias2D shall be", 
-  S "able to learn the software with ease. Users shall be able to easily create", 
-  S "a small program using the library. Creating a small program to simulate", 
-  S "the movement of 2 bodies" `sIn` S "space should take no less that 60 minutes" 
-=======
 correctness = cic "correctness" (foldlSent [
   atStartNP (the output_) `S.of_` S "simulation results shall be compared to", 
   S "an existing implementation like Pymunk (please refer to:", 
@@ -149,16 +130,10 @@ understandability = cic "understandability" (foldlSent [
   (S "Users shall be able to easily create a small program using the library" !.), 
   S "Creating a small program to simulate the movement of 2 bodies" `S.in_` 
   S "space should take no less that 60 minutes"
->>>>>>> master
   ]) "Understandability" nonFuncReqDom
 
 maintainability :: ConceptInstance
 maintainability = cic "maintainability" (foldlSent [
-<<<<<<< HEAD
-  S "development time for any " `ofThe'` S "likely changes should not exceed", 
-  addPercent 10, S "percent of the original development time"
-  ]) "Maintainability" nonFuncReqDom
-=======
   S "development time for any" `S.the_ofTheC` S "likely changes should not exceed", 
   addPercent (10 :: Integer), S "percent of the original development time"
   ]) "Maintainability" nonFuncReqDom
@@ -166,4 +141,3 @@ maintainability = cic "maintainability" (foldlSent [
 -- References --
 reqRefs :: [Reference]
 reqRefs = map ref ([inReq EmptyS] ++ funcReqs ++ nonfuncReqs)
->>>>>>> master

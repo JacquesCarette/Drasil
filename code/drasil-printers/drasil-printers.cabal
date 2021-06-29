@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 8910014a28a0a4b118d7c4fdb876503418ed068f6a695793b86b282218274bc2
+-- hash: 97d6cc472c45373ee45755a8bfecb9a7db34bd2f2a7fcf717ce2a94c15486fe7
 
 name:           drasil-printers
 version:        0.1.10.0
@@ -25,6 +25,9 @@ library
       Language.Drasil.Printers
   other-modules:
       Language.Drasil.Config
+      Language.Drasil.DOT.Print
+      Language.Drasil.DOT.TraceabilityGraphGenerator
+      Language.Drasil.DOT.TraceabilityGraphGeneratorInfo
       Language.Drasil.Format
       Language.Drasil.HTML.CSS
       Language.Drasil.HTML.Helpers
@@ -50,9 +53,6 @@ library
       Language.Drasil.TeX.Monad
       Language.Drasil.TeX.Preamble
       Language.Drasil.TeX.Print
-      Language.Drasil.DOT.TraceabilityGraphGenerator
-      Language.Drasil.DOT.TraceabilityGraphGeneratorInfo
-
   hs-source-dirs:
       ./
   ghc-options: -Wall -Wredundant-constraints

@@ -5,7 +5,7 @@ import Prelude hiding (sqrt)
 import Control.Lens ((^.))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Expr (Expr(..), Relation, DerivType(..), ($^), ($/), AssocArithOper(..),
-  LABinOp(..), VVVBinOp(..), UFunc(..), UFuncB(..), UFuncVec(..), Completeness(..), addRe)
+  LABinOp(..), VVVBinOp(..), UFunc(..), UFuncB(..), UFuncVN(..), UFuncVV(..), Completeness(..), addRe)
 import Language.Drasil.Space (RTopology(..), DomainDesc(..), RealInterval)
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
 import Language.Drasil.Classes (IsArgumentName)
@@ -72,11 +72,15 @@ exp = UnaryOp Exp
 
 -- | Smart constructor for calculating the dimension of a vector.
 dim :: Expr -> Expr
-dim = UnaryOpVec Dim
+dim = UnaryOpVN Dim
 
 -- | Smart constructor for calculating the normal form of a vector.
 norm :: Expr -> Expr
-norm = UnaryOpVec Norm
+norm = UnaryOpVN Norm
+
+-- | Smart constructor for negating vectors.
+negVec :: Expr -> Expr
+negVec = UnaryOpVV NegV
 
 -- | Smart constructor for applying logical negation to an expression.
 not_ :: Expr -> Expr

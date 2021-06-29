@@ -7,9 +7,6 @@ import Prelude hiding (sqrt)
 import Language.Drasil.Space (DomainDesc, RealInterval)
 import Language.Drasil.UID (UID)
 
--- FIXME: Haddock open issue #43 seems to make it so GADT constructors cannot
--- be documented properly
-
 -- | A relation is just an expression ('Expr').
 type Relation = Expr
 
@@ -63,12 +60,16 @@ data UFunc = Abs | Log | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin
   | Arccos | Arctan | Exp | Sqrt | Neg
   deriving Eq
 
--- | Negation operator (not).
+-- | @Bool -> Bool@ operators.
 data UFuncB = Not
   deriving Eq
 
--- | Data for vectors (normal, dimensions).
-data UFuncVec = Norm | Dim
+-- | @Vector -> Vector@ operators.
+data UFuncVV = NegV
+  deriving Eq
+
+-- | @Vector -> Number@ operators.
+data UFuncVN = Norm | Dim
   deriving Eq
 
 -- | For case expressions (either complete or incomplete).
@@ -87,7 +88,7 @@ data Expr where
   Str      :: String -> Expr
   -- | Turns two integers into a fraction (or percent).
   Perc     :: Integer -> Integer -> Expr
-  -- | Takes an associative aritmetic operator with a list of expressions.
+  -- | Takes an associative arithmetic operator with a list of expressions.
   AssocA   :: AssocArithOper -> [Expr] -> Expr
   -- | Takes an associative boolean operator with a list of expressions.
   AssocB   :: AssocBoolOper  -> [Expr] -> Expr
@@ -112,10 +113,12 @@ data Expr where
   
   -- | Unary operation for most functions (eg. sin, cos, log, etc.).
   UnaryOp       :: UFunc -> Expr -> Expr
-  -- | Unary operation for negation.
+  -- | Unary operation for @Bool -> Bool@ operations.
   UnaryOpB      :: UFuncB -> Expr -> Expr
-  -- | Unary operation for vectors (holds whether a vector is normal or used for dimensions).
-  UnaryOpVec    :: UFuncVec -> Expr -> Expr
+  -- | Unary operation for @Vector -> Vector@ operations.
+  UnaryOpVV     :: UFuncVV -> Expr -> Expr
+  -- | Unary operation for @Vector -> Number@ operations.
+  UnaryOpVN     :: UFuncVN -> Expr -> Expr
 
   -- | Binary operator for arithmetic between expressions (fractional, power, and subtraction).
   ArithBinaryOp :: ArithBinOp -> Expr -> Expr -> Expr
@@ -257,7 +260,8 @@ instance Eq Expr where
   Case a b            == Case c d            =   a == c && b == d 
   UnaryOp a b         == UnaryOp c d         =   a == c && b == d
   UnaryOpB a b        == UnaryOpB c d        =   a == c && b == d
-  UnaryOpVec a b      == UnaryOpVec c d      =   a == c && b == d
+  UnaryOpVV a b       == UnaryOpVV c d       =   a == c && b == d
+  UnaryOpVN a b       == UnaryOpVN c d       =   a == c && b == d
   ArithBinaryOp o a b == ArithBinaryOp p c d =   o == p && a == c && b == d
   BoolBinaryOp o a b  == BoolBinaryOp p c d  =   o == p && a == c && b == d
   EqBinaryOp o a b    == EqBinaryOp p c d    =   o == p && a == c && b == d
@@ -266,6 +270,7 @@ instance Eq Expr where
   VVVBinaryOp o a b   == VVVBinaryOp p c d   =   o == p && a == c && b == d
   VVNBinaryOp o a b   == VVNBinaryOp p c d   =   o == p && a == c && b == d
   _                   == _                   =   False
+-- ^ TODO: This needs to add more equality checks
 
 -- instance Fractional Expr where
 --   a / b = ArithBinaryOp Frac a b

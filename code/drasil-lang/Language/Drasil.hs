@@ -1,14 +1,15 @@
 {- re-exports modules to simplify external use.-}
 module Language.Drasil (
   -- Expr
-  Expr(..), UFunc(..), UFuncB, UFuncVec
+  Expr(..), UFunc(..), UFuncB, UFuncVV, UFuncVN
   , ArithBinOp, BoolBinOp, EqBinOp, LABinOp, OrdBinOp, VVVBinOp, VVNBinOp
   , AssocArithOper(..), AssocBoolOper(..)
   , DerivType(..), Completeness(..), Relation
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   , ($-), ($/), addI, addRe, mulI, mulRe
   -- Expr.Math
-  , abs_, neg, log, ln, abs, sin, cos, tan, sec, csc, cot, arcsin, arccos, arctan, exp
+  , abs_, neg, negVec, log, ln, abs
+  , sin, cos, tan, sec, csc, cot, arcsin, arccos, arctan, exp
   , sqrt, euclidean, norm, not_
   , square, half, oneHalf, oneThird, recip_
   , dim, idx, int, dbl, exactDbl, frac, str, perc, completeCase, incompleteCase
@@ -192,13 +193,13 @@ module Language.Drasil (
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 import Language.Drasil.DisplayExpr
-import Language.Drasil.Expr (Expr(..), UFunc(..), UFuncB, UFuncVec,
+import Language.Drasil.Expr (Expr(..), UFunc(..), UFuncB, UFuncVV, UFuncVN,
           ArithBinOp, BoolBinOp, EqBinOp, LABinOp, OrdBinOp, VVVBinOp, VVNBinOp,
           AssocArithOper(..), AssocBoolOper(..), 
           DerivType(..), Completeness(..), Relation,
           ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.),
           ($-), ($/), addI, addRe, mulI, mulRe)
-import Language.Drasil.Expr.Math (abs_, neg, log, ln, sin, cos, tan, sqrt, sec, 
+import Language.Drasil.Expr.Math (abs_, neg, negVec, log, ln, sin, cos, tan, sqrt, sec, 
           csc, cot, arcsin, arccos, arctan, exp,
           dim, norm, not_, idx, int, dbl, exactDbl, frac, str, perc,
           square, half, oneHalf, oneThird, recip_,

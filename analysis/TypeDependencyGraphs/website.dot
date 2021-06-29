@@ -1,0 +1,58 @@
+digraph alltypes {
+	subgraph analyiss {
+	}
+	subgraph body {
+		subgraph folderlocation{
+		FolderLocation -> FilePath;
+		FolderLocation	[shape=oval, color=cyan3, label=FolderLocation];
+		}
+	}
+	subgraph caestudys {
+		subgraph modularity{
+		Modularity	[shape=oval, color=darkviolet, label=Modularity];
+		}
+		subgraph implementtype{
+		ImplementType	[shape=oval, color=darkviolet, label=ImplementType];
+		}
+		subgraph logging{
+		Logging	[shape=oval, color=darkviolet, label=Logging];
+		}
+		subgraph instruct{
+		InStruct	[shape=oval, color=darkviolet, label=InStruct];
+		}
+		subgraph construct{
+		ConStruct	[shape=oval, color=darkviolet, label=ConStruct];
+		}
+		subgraph conrep{
+		ConRep	[shape=oval, color=darkviolet, label=ConRep];
+		}
+		subgraph realnumrep{
+		RealNumRep	[shape=oval, color=darkviolet, label=RealNumRep];
+		}
+		subgraph casestudy{
+		CaseStudy -> Name;
+		CaseStudy -> Modularity;
+		CaseStudy -> ImplementType;
+		CaseStudy -> Logging;
+		CaseStudy -> InStruct;
+		CaseStudy -> ConStruct;
+		CaseStudy -> ConRep;
+		CaseStudy -> RealNumRep;
+		CaseStudy	[shape=oval, color=darkviolet, label=CaseStudy];
+		}
+		subgraph name{
+		Name -> String;
+		Name	[shape=oval, color=red2, label=Name];
+		}
+	}
+	subgraph documentation {
+	}
+	subgraph example {
+	}
+	subgraph graphs {
+	}
+	subgraph introduction {
+	}
+	subgraph main {
+	}
+}

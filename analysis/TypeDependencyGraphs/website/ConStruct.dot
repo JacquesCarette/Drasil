@@ -1,0 +1,3 @@
+digraph construct{
+ConStruct	[shape=oval, color=darkviolet, label=ConStruct];
+}

@@ -1,0 +1,11 @@
+digraph casestudy{
+CaseStudy -> Name;
+CaseStudy -> Modularity;
+CaseStudy -> ImplementType;
+CaseStudy -> Logging;
+CaseStudy -> InStruct;
+CaseStudy -> ConStruct;
+CaseStudy -> ConRep;
+CaseStudy -> RealNumRep;
+CaseStudy	[shape=oval, color=darkviolet, label=CaseStudy];
+}

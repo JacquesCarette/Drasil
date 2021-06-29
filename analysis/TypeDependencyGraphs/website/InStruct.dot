@@ -1,0 +1,3 @@
+digraph instruct{
+InStruct	[shape=oval, color=darkviolet, label=InStruct];
+}

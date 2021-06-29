@@ -384,10 +384,6 @@ digraph alltypes {
 		}
 		subgraph data{
 		Data -> DataItem;
-		Data -> LinePattern;
-		Data -> Delim;
-		Data -> Maybe;
-		Data -> Integer;
 		Data	[shape=oval, color=darkviolet, label=Data];
 		}
 		subgraph linepattern{

@@ -1,0 +1,4 @@
+digraph name{
+Name -> String;
+Name	[shape=oval, color=red2, label=Name];
+}

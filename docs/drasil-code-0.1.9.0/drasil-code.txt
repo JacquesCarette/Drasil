@@ -13,10 +13,12 @@
 -- | re-export smart constructors for external code writing
 module Language.Drasil.Code
 
--- | Takes code
+-- | Makes code from <a>FileData</a> (<a>FilePath</a>s with module data)
+--   and <a>AuxData</a> (<a>FilePath</a>s with auxiliary document
+--   information).
 makeCode :: [FileData] -> [AuxData] -> Code
 
--- | Creates the requested <a>Code</a> by producing files
+-- | Creates the requested <a>Code</a> by producing files.
 createCodeFiles :: Code -> IO ()
 
 -- | Initializes the generator's <a>DrasilState</a>. <a>String</a>
@@ -37,76 +39,196 @@ readWithDataDesc :: FilePath -> DataDesc' -> IO [Expr]
 -- | Defines the DataDesc for the file containing a sample data set, which
 --   a user must supply if they want to generate a sample input file.
 sampleInputDD :: [CodeVarChunk] -> DataDesc'
+
+-- | Global design choices (affect entire program)
 data Choices
 Choices :: [Lang] -> Modularity -> Structure -> ConstantStructure -> ConstantRepr -> ConceptMatchMap -> SpaceMatch -> ImplementationType -> [ODELibPckg] -> [ODEInfo] -> ConstraintBehaviour -> ConstraintBehaviour -> [Comments] -> Verbosity -> Visibility -> [Logging] -> FilePath -> [AuxFile] -> Choices
+
+-- | Target languages. Choosing multiple means program will be generated in
+--   multiple languages.
 [lang] :: Choices -> [Lang]
+
+-- | How the program should be modularized.
 [modularity] :: Choices -> Modularity
+
+-- | Structure of inputs (bundled or not).
 [inputStructure] :: Choices -> Structure
+
+-- | Structure of constants (inlined or bundled or not, or stored with
+--   inputs).
 [constStructure] :: Choices -> ConstantStructure
+
+-- | Representation of constants (as variables or as constants).
 [constRepr] :: Choices -> ConstantRepr
+
+-- | Map of <a>UID</a>s for Drasil concepts to code concepts. Matching a
+--   <a>UID</a> to a code concept means the code concept should be used
+--   instead of the chunk associated with the <a>UID</a>.
 [conceptMatch] :: Choices -> ConceptMatchMap
+
+-- | Map of <a>Space</a>s to <a>CodeType</a>s Matching a <a>Space</a> to a
+--   <a>CodeType</a> means values of the <a>Space</a> should have that
+--   <a>CodeType</a> in the generated code.
 [spaceMatch] :: Choices -> SpaceMatch
+
+-- | Implementation type, program or library.
 [impType] :: Choices -> ImplementationType
+
+-- | Preferentially-ordered list ODE libraries to try.
 [odeLib] :: Choices -> [ODELibPckg]
+
+-- | ODE information.
 [odes] :: Choices -> [ODEInfo]
+
+-- | Constraint violation behaviour. Exception or Warning.
 [onSfwrConstraint] :: Choices -> ConstraintBehaviour
 [onPhysConstraint] :: Choices -> ConstraintBehaviour
+
+-- | Turns Doxygen comments for different code structures on or off.
 [comments] :: Choices -> [Comments]
+
+-- | Standard output from running Doxygen: verbose or quiet?
 [doxVerbosity] :: Choices -> Verbosity
+
+-- | Turns date field on or off in the generated module-level Doxygen
+--   comments.
 [dates] :: Choices -> Visibility
+
+-- | Turns different forms of logging on or off.
 [logging] :: Choices -> [Logging]
+
+-- | Name of log file.
 [logFile] :: Choices -> FilePath
+
+-- | Turns generation of different auxiliary (non-source-code) files on or
+--   off.
 [auxFiles] :: Choices -> [AuxFile]
+
+-- | Comment implementation options.
 data Comments
+
+-- | Function/method-level comments.
 CommentFunc :: Comments
+
+-- | Class-level comments.
 CommentClass :: Comments
+
+-- | File/Module-level comments.
 CommentMod :: Comments
+
+-- | Doxygen file verbosity options.
 data Verbosity
 Verbose :: Verbosity
 Quiet :: Verbosity
+
+-- | Constraint behaviour options within program.
 data ConstraintBehaviour
+
+-- | Print warning when constraint violated.
 Warning :: ConstraintBehaviour
+
+-- | Throw exception when constraint violated.
 Exception :: ConstraintBehaviour
+
+-- | Program implementation options.
 data ImplementationType
+
+-- | Generated code does not include Controller.
 Library :: ImplementationType
+
+-- | Generated code includes Controller.
 Program :: ImplementationType
+
+-- | Logging options for function calls and variable assignments. Eq
+--   instances required for Logging and Comments because generator needs to
+--   check membership of these elements in lists
 data Logging
+
+-- | Log messages generated for function calls.
 LogFunc :: Logging
+
+-- | Log messages generated for variable assignments.
 LogVar :: Logging
+
+-- | Modularity of a program.
 data Modularity
+
+-- | Different modules. For controller, input, calculations, output.
 Modular :: InputModule -> Modularity
+
+-- | All generated code is in one module/file.
 Unmodular :: Modularity
+
+-- | Variable structure options.
 data Structure
+
+-- | Individual variables
 Unbundled :: Structure
+
+-- | Variables bundled in a class
 Bundled :: Structure
+
+-- | Constants options.
 data ConstantStructure
+
+-- | Inline values for constants.
 Inline :: ConstantStructure
+
+-- | Store constants with inputs.
 WithInputs :: ConstantStructure
+
+-- | Store constants separately from inputs, whether bundled or unbundled.
 Store :: Structure -> ConstantStructure
+
+-- | Options for representing constants in a program.
 data ConstantRepr
+
+-- | Constants represented as regular variables.
 Var :: ConstantRepr
+
+-- | Use target language's mechanism for defining constants.
 Const :: ConstantRepr
+
+-- | Options for input modules.
 data InputModule
+
+-- | Input-related functions combined in one module.
 Combined :: InputModule
+
+-- | Input-related functions each in own module.
 Separated :: InputModule
+
+-- | Code concepts. For now, just pi.
 data CodeConcept
 Pi :: CodeConcept
 
--- | Builds a ConceptMatchMap from an association list of chunks and
---   CodeConcepts
+-- | Builds a <a>ConceptMatchMap</a> from an association list of chunks and
+--   <tt>CodeConcepts</tt>.
 matchConcepts :: HasUID c => [(c, [CodeConcept])] -> ConceptMatchMap
 
--- | Specifies which CodeType should be used to represent each mathematical
---   Space. [CodeType] is preferentially-ordered, first CodeType that does
---   not conflict with other choices will be selected.
+-- | Specifies which <a>CodeType</a> should be used to represent each
+--   mathematical <a>Space</a>. [<a>CodeType</a>] is
+--   preferentially-ordered, first <a>CodeType</a> that does not conflict
+--   with other choices will be selected.
 type SpaceMatch = Space -> [CodeType]
 
--- | Builds a SpaceMatch from an association list of Spaces and CodeTypes.
+-- | Builds a <a>SpaceMatch</a> from an association list of <tt>Spaces</tt>
+--   and <tt>CodeTypes</tt>.
 matchSpaces :: [(Space, [CodeType])] -> SpaceMatch
+
+-- | Currently we only support one kind of auxiliary file: sample input
+--   file. To generate a sample input file compatible with the generated
+--   program, <a>FilePath</a> is the path to the user-provided file
+--   containing a sample set of input data.
 data AuxFile
 SampleInput :: FilePath -> AuxFile
 ReadME :: AuxFile
+
+-- | Gets the file path to a sample input data set from a <a>Choices</a>
+--   structure, if the user chose to generate a sample input file.
 getSampleData :: Choices -> Maybe FilePath
+
+-- | Doxygen date-field visibility options.
 data Visibility
 Show :: Visibility
 Hide :: Visibility
@@ -114,38 +236,47 @@ Hide :: Visibility
 -- | Default choices to be used as the base from which design
 --   specifications can be built.
 defaultChoices :: Choices
-data CodeSpec
-[CodeSpec] :: HasName a => {pName :: Name, authors :: [a], inputs :: [Input], extInputs :: [Input], derivedInputs :: [Derived], outputs :: [Output], configFiles :: [FilePath], execOrder :: [Def], cMap :: ConstraintCEMap, constants :: [Const], constMap :: ConstantMap, mods :: [Mod], sysinfodb :: ChunkDB} -> CodeSpec
 
--- | Get a UID of a chunk corresponding to a Func
+-- | Code specifications. Holds information needed to generate code.
+data CodeSpec
+[CodeSpec] :: HasName a => {pName :: Name " Program name.", authors :: [a] " Authors.", inputs :: [Input] " All inputs.", extInputs :: [Input] " Explicit inputs (values to be supplied by a file).", derivedInputs :: [Derived] " Derived inputs (each calculated from explicit inputs in a single step).", outputs :: [Output] " All outputs.", configFiles :: [FilePath] " List of files that must be in same directory for running the executable.", execOrder :: [Def] " Mathematical definitions, ordered so that they form a path from inputs to  outputs.", cMap :: ConstraintCEMap " Map from 'UID's to constraints for all constrained chunks used in the problem.", constants :: [Const] " List of all constants used in the problem.", constMap :: ConstantMap " Map containing all constants used in the problem.", mods :: [Mod] " Additional modules required in the generated code, which Drasil cannot yet  automatically define.", sysinfodb :: ChunkDB " The database of all chunks used in the problem."} -> CodeSpec
+
+-- | Get a <a>UID</a> of a chunk corresponding to a <a>Func</a>.
 funcUID :: Func -> UID
 
--- | FIXME: hack. Use for implementation-stage functions that need to be
---   displayed in the SRS.
+-- | Used for implementation-stage functions that need to be displayed in
+--   the SRS.
 funcUID' :: Func -> UID
 
--- | Convert a Func to an implementation-stage QuantityDict representing
---   the function.
+-- | Convert a <a>Func</a> to an implementation-stage <a>QuantityDict</a>
+--   representing the function.
 asVC :: Func -> QuantityDict
 
--- | FIXME: Part of above hack
+-- | Helper for <a>funcUID'</a>.
 asVC' :: Func -> QuantityDict
 
--- | Defines a CodeSpec based on the SystemInformation, Choices, and Mods
---   defined by the user.
+-- | Defines a <a>CodeSpec</a> based on the <a>SystemInformation</a>,
+--   <a>Choices</a>, and <a>Mod</a>s defined by the user.
 codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
 
--- | Define an assignment statement
+-- | Define an assignment statement.
 ($:=) :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> FuncStmt
+
+-- | Holds module information.
 data Mod
 Mod :: Name -> Description -> [Import] -> [Class] -> [Func] -> Mod
+
+-- | State variables hold attach a <a>ScopeTag</a> to a
+--   <a>CodeVarChunk</a>.
 data StateVariable
+
+-- | Holds a function definition or function data.
 data Func
 data FuncStmt
 [FAsg] :: CodeVarChunk -> CodeExpr -> FuncStmt
 [FAsgIndex] :: CodeVarChunk -> Integer -> CodeExpr -> FuncStmt
 
--- | For-loop; Variable, Start, Stop, Step, Body
+-- | For-loop; Variable, Start, Stop, Step, Body.
 [FFor] :: CodeVarChunk -> CodeExpr -> CodeExpr -> CodeExpr -> [FuncStmt] -> FuncStmt
 [FForEach] :: CodeVarChunk -> CodeExpr -> [FuncStmt] -> FuncStmt
 [FWhile] :: CodeExpr -> [FuncStmt] -> FuncStmt
@@ -160,57 +291,73 @@ data FuncStmt
 [FMulti] :: [FuncStmt] -> FuncStmt
 [FAppend] :: CodeExpr -> CodeExpr -> FuncStmt
 
--- | Define a public state variable based on the given CodeVarChunk
+-- | Define a public state variable based on the given <a>CodeVarChunk</a>.
 pubStateVar :: CodeVarChunk -> StateVariable
 
--- | Define a private state variable based on the given CodeVarChunk
+-- | Define a private state variable based on the given
+--   <a>CodeVarChunk</a>.
 privStateVar :: CodeVarChunk -> StateVariable
 
 -- | Define a declare-define statement.
 fDecDef :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> FuncStmt
 
--- | Define a for-loop. Quantity is for the iteration variable, Expr is the
---   upper bound at that variable (the variable will start with a value of
---   0). [FuncStmt] is for the loop body.
+-- | Define a for-loop. <a>Quantity</a> is for the iteration variable,
+--   <a>CodeExpr</a> is the upper bound at that variable (the variable will
+--   start with a value of 0). [<a>FuncStmt</a>] is for the loop body.
 ffor :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> [FuncStmt] -> FuncStmt
 
--- | Define a for-loop. Quantity is for the iteration variable, and 3
---   CodeExprs for the start, stop, step numbers. [FuncStmt] is for the
---   loop body.
+-- | Define a for-loop. <a>Quantity</a> is for the iteration variable, and
+--   3 <a>CodeExpr</a>s for the start, stop, step numbers.
+--   [<a>FuncStmt</a>] is for the loop body.
 fforRange :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> CodeExpr -> CodeExpr -> [FuncStmt] -> FuncStmt
 
 -- | Define a function that reads data from a file, according to the given
---   DataDesc.
+--   <a>DataDesc</a>.
 funcData :: Name -> Description -> DataDesc -> Func
 
--- | Define a function by providing the FuncStmts for its body. Other
---   parameters are function name, description, list of parameters, space
---   of the returned value, and description of the returned value.
+-- | Define a function by providing the <a>FuncStmt</a>s for its body.
+--   Other parameters are function name, description, list of parameters,
+--   space of the returned value, and description of the returned value.
 funcDef :: (Quantity c, MayHaveUnit c) => Name -> Description -> [c] -> Space -> Maybe Description -> [FuncStmt] -> Func
 
--- | Define a Mod with the given Name, Description, Classes, and Functions.
+-- | Define a <a>Mod</a> with the given <a>Name</a>, <a>Description</a>,
+--   <tt>Classes</tt>, and <tt>Functions</tt>.
 packmod :: Name -> Description -> [Class] -> [Func] -> Mod
+
+-- | Constructor for junk data.
 junkLine :: Data
+
+-- | Constructor for an unknown amount of lines of data.
 multiLine :: LinePattern -> Delim -> Data
+
+-- | Constructor for data with a repeated pattern.
 repeated :: [DataItem] -> LinePattern
+
+-- | Constructor for a single line of data.
 singleLine :: LinePattern -> Delim -> Data
+
+-- | Constructor for a single datum.
 singleton :: DataItem -> Data
+
+-- | External library is a group of <a>Step</a>s
 type ExternalLibrary = [StepGroup]
 
 -- | A step can be a call to an external library function or method.
 data Step
 
--- | The first item in the requires list should be where the function being
---   called is defined
+-- | The first item in the <a>Requires</a> list should be where the
+--   function being called is defined.
 data FunctionInterface
+
+-- | An argument may contain a named argument and argument information.
 data Argument
 
--- | Specifies an external library
+-- | Specifies an external library.
 externalLib :: [StepGroup] -> ExternalLibrary
 
 -- | To be used when there are multiple options for a group of consecutive
 --   steps, where a single use-case-specific factor decides which step
---   group to use
+--   group to use.
 choiceSteps :: [[Step]] -> StepGroup
 
 -- | To be used when there are multiple options for a single step, where a
@@ -287,7 +434,7 @@ customObjArg :: [Requires] -> Description -> CodeVarChunk -> CodeFuncChunk -> Cl
 --   that must be set in the calling program.
 recordArg :: Requires -> CodeFuncChunk -> CodeVarChunk -> [CodeVarChunk] -> Argument
 
--- | Specifies a use-case-independent parameter
+-- | Specifies a use-case-independent parameter.
 lockedParam :: CodeVarChunk -> Parameter
 
 -- | Specifies a parameter whose name depends on the use case.
@@ -332,13 +479,14 @@ initSolListFromArray :: CodeVarChunk -> Step
 --   value.
 initSolListWithVal :: Step
 
--- | FunctionInterface for loop condition, CodeChunk for solution object,
---   CodeChunk for independent var, FunctionInterface for solving,
---   CodeChunk for soln array to populate with
+-- | A solve and populate loop. <a>FunctionInterface</a> for loop
+--   condition, <tt>CodeChunk</tt> for solution object, <tt>CodeChunk</tt>
+--   for independent var, <a>FunctionInterface</a> for solving,
+--   <tt>CodeChunk</tt> for soln array to populate with.
 solveAndPopulateWhile :: FunctionInterface -> CodeVarChunk -> CodeVarChunk -> FunctionInterface -> CodeVarChunk -> Step
 
 -- | Specifies a statement where a list is returned, where each value of
---   the list -- is explicitly defined.
+--   the list is explicitly defined.
 returnExprList :: Step
 
 -- | Specifies a use-case-independent statement that returns a value.
@@ -347,59 +495,179 @@ fixedReturn :: CodeExpr -> Step
 -- | Specifies a statement where a single solution is initialized with a
 --   value.
 initSolWithVal :: Step
+
+-- | External library call holds a group of step groups.
 type ExternalLibraryCall = [StepGroupFill]
+
+-- | Holds a group of steps (<a>StepFill</a>s). The Int is to "choose" from
+--   the options in <tt>ExternalLibrary</tt>.
 data StepGroupFill
 SGF :: Int -> [StepFill] -> StepGroupFill
+
+-- | Mirrors ExternalLibrary's <tt>Step</tt>. A StepFill can be a call to
+--   an external library function or method.
 data StepFill
 CallF :: FunctionIntFill -> StepFill
 LoopF :: NonEmpty FunctionIntFill -> [CodeExpr] -> NonEmpty StepFill -> StepFill
 StatementF :: [CodeVarChunk] -> [CodeExpr] -> StepFill
+
+-- | Mirrors ExternalLibrary's <tt>FunctionInterface</tt>.
 newtype FunctionIntFill
 FIF :: [ArgumentFill] -> FunctionIntFill
+
+-- | Mirrors ExternalLibrary's <tt>ArgumentInfo</tt>. Determines the
+--   context needed for an argument to work.
 data ArgumentFill
+
+-- | For arguments that are completely dependent on use case.
 UserDefinedArgF :: Maybe NamedArgument -> CodeExpr -> ArgumentFill
+
+-- | A basic function.
 BasicF :: CodeExpr -> ArgumentFill
+
+-- | Fills in the names for the unnamed parameters.
 FnF :: [ParameterFill] -> StepFill -> ArgumentFill
+
+-- | List of CodeChunk for state variables.
 ClassF :: [StateVariable] -> ClassInfoFill -> ArgumentFill
+
+-- | Fills in the field values.
 RecordF :: [CodeExpr] -> ArgumentFill
+
+-- | Mirrors ExternalLibrary's <tt>Parameter</tt>.
 data ParameterFill
 NameableParamF :: ParameterChunk -> ParameterFill
 UserDefined :: ParameterChunk -> ParameterFill
+
+-- | Mirrors ExternalLibrary's <tt>ClassInfo</tt>.
 data ClassInfoFill
 RegularF :: [MethodInfoFill] -> ClassInfoFill
 ImplementsF :: [MethodInfoFill] -> ClassInfoFill
+
+-- | Mirrors ExternalLibrary's <tt>MethodInfo</tt>.
 data MethodInfoFill
 CIF :: [ParameterFill] -> [Initializer] -> [StepFill] -> MethodInfoFill
 MIF :: [ParameterFill] -> NonEmpty StepFill -> MethodInfoFill
+
+-- | Constructs an ExternalLibraryCall specification.
 externalLibCall :: [StepGroupFill] -> ExternalLibraryCall
+
+-- | Corresponds to ExternalLibrary's <tt>choiceSteps</tt>. Provides the
+--   index of the steps that should be used for the current use case.
 choiceStepsFill :: Int -> [StepFill] -> StepGroupFill
+
+-- | Corresponds to ExternalLibrary's <tt>choiceStep</tt>. Provides the
+--   index of the step that should be used for the current use case.
 choiceStepFill :: Int -> StepFill -> StepGroupFill
+
+-- | Corresponds to ExternalLibrary's <tt>mandatorySteps</tt>.
 mandatoryStepFill :: StepFill -> StepGroupFill
+
+-- | Corresponds to ExternalLibrary's <tt>mandatoryStep</tt>.
 mandatoryStepsFill :: [StepFill] -> StepGroupFill
+
+-- | Corresponds to ExternalLibrary's <tt>callStep</tt>.
 callStepFill :: FunctionIntFill -> StepFill
+
+-- | Corresponds to any of ExternalLibrary's <tt>FunctionInterface</tt>
+--   constructors.
 libCallFill :: [ArgumentFill] -> FunctionIntFill
+
+-- | Does not correspond to anything in ExternalLibrary. To be used when
+--   the presence of an argument is only a consequence of the use case.
 userDefinedArgFill :: CodeExpr -> ArgumentFill
+
+-- | Corresponds to ExternalLibrary's <tt>inlineArg</tt>,
+--   <tt>inlineNamedArg</tt>, <tt>preDefinedArg</tt>, and
+--   <tt>preDefinedNamedArg</tt>. Provides the <a>CodeExpr</a> for the
+--   argument's value.
 basicArgFill :: CodeExpr -> ArgumentFill
+
+-- | Corresponds to ExternalLibrary's <tt>functionArg</tt>.
 functionArgFill :: [ParameterFill] -> StepFill -> ArgumentFill
+
+-- | Corresponds to ExternalLibrary's <tt>customObjArg</tt>. Provides the
+--   list of state variables for the class that must be written in the
+--   calling program.
 customObjArgFill :: [StateVariable] -> ClassInfoFill -> ArgumentFill
+
+-- | Corresponds to ExternalLibrary's <tt>recordArg</tt>. Provides the list
+--   of <a>CodeExpr</a>s for the values of the fields that must be set by
+--   the calling program.
 recordArgFill :: [CodeExpr] -> ArgumentFill
+
+-- | Corresponds to ExternalLibrary's <tt>unnamedParam</tt>. Provides the
+--   <a>CodeVarChunk</a> representing the parameter.
 unnamedParamFill :: CodeVarChunk -> ParameterFill
+
+-- | Corresponds to ExternalLibrary's <tt>unnamedParam</tt>. Provides the
+--   <a>CodeVarChunk</a> representing the parameter. Specifies that the
+--   parameter is passed by value.
 unnamedParamPBVFill :: CodeVarChunk -> ParameterFill
+
+-- | Does not correspond to anything in ExternalLibrary. To be used when
+--   the presence of a parameter is only a consequence of the use case.
 userDefinedParamFill :: CodeVarChunk -> ParameterFill
+
+-- | Corresponds to ExternalLibrary's <tt>customClass</tt>.
 customClassFill :: [MethodInfoFill] -> ClassInfoFill
+
+-- | Corresponds to ExternalLibrary's <tt>implementation</tt>.
 implementationFill :: [MethodInfoFill] -> ClassInfoFill
+
+-- | Corresponds to ExternalLibrary's <tt>constructorInfo</tt>. Provides
+--   Variable-Value pairs for variables initialized by the constructor.
 constructorInfoFill :: [ParameterFill] -> [Initializer] -> [StepFill] -> MethodInfoFill
+
+-- | Corresponds to ExternalLibrary's <tt>methodInfo</tt>.
 methodInfoFill :: [ParameterFill] -> [StepFill] -> MethodInfoFill
+
+-- | Corresponds to ExternalLibrary's <tt>appendCurrSol</tt>. Provides the
+--   <a>CodeVarChunk</a> for the solution list.
 appendCurrSolFill :: CodeVarChunk -> StepFill
+
+-- | Corresponds to ExternalLibrary's <tt>populateSolList</tt>. Provides
+--   the <a>CodeVarChunk</a> for the solution list.
 populateSolListFill :: CodeVarChunk -> [StepFill]
+
+-- | Corresponds to ExternalLibrary's <tt>assignArrayIndex</tt>. Provides
+--   the <a>CodeVarChunk</a> for the array variable. Provides the
+--   <a>CodeExpr</a>s for the values to assign to each array index.
 assignArrayIndexFill :: CodeVarChunk -> [CodeExpr] -> StepFill
+
+-- | Corresponds to ExternalLibrary's <tt>assignSolFromObj</tt>. Provides
+--   the <a>CodeVarChunk</a> for the variable that the solution should be
+--   assigned to.
 assignSolFromObjFill :: CodeVarChunk -> StepFill
+
+-- | Corresponds to ExternalLibrary's <tt>initSolListFromArray</tt>.
+--   Provides the <a>CodeVarChunk</a> for the solution list.
 initSolListFromArrayFill :: CodeVarChunk -> StepFill
+
+-- | Corresponds to ExternalLibrary's <tt>initSolListWithVal</tt>. Provides
+--   the <a>CodeVarChunk</a> for the solution list and the <a>CodeExpr</a>
+--   for the initial element of the solution list
 initSolListWithValFill :: CodeVarChunk -> CodeExpr -> StepFill
+
+-- | Corresponds to ExternalLibrary's <tt>solveAndPopulateWhile</tt>.
+--   Provides the <a>CodeExpr</a> for the upper bound in the while loop
+--   condition and the <a>CodeVarChunk</a> for the solution list.
 solveAndPopulateWhileFill :: FunctionIntFill -> CodeExpr -> FunctionIntFill -> CodeVarChunk -> StepFill
+
+-- | Corresponds to ExternalLibrary's <tt>returnExprList</tt>. Provides the
+--   list of <a>CodeExpr</a>s to return.
 returnExprListFill :: [CodeExpr] -> StepFill
+
+-- | Corresponds to ExternalLibrary's <tt>fixedStatement</tt>. No
+--   parameters because the statement is not use-case-dependent.
 fixedStatementFill :: StepFill
+
+-- | Corresponds to ExternalLibrary's <tt>initSolWithVal</tt>. Provides the
+--   <a>CodeVarChunk</a> for one solution and one <a>CodeExpr</a> for the
+--   initial element of the solution list
 initSolWithValFill :: CodeVarChunk -> CodeExpr -> StepFill
+
+-- | Various OO languages where code may be generated.
 data Lang
 Cpp :: Lang
 CSharp :: Lang
@@ -462,47 +730,93 @@ listToArray :: CodeVarChunk -> CodeVarChunk
 
 -- | Constructs a CodeExpr representing the field of an actor
 field :: CodeVarChunk -> CodeVarChunk -> CodeExpr
+
+-- | Structure to hold ODE information.
 data ODEInfo
 ODEInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExpr -> CodeExpr -> [CodeExpr] -> ODEOptions -> ODEInfo
+
+-- | Independent variable.
 [indepVar] :: ODEInfo -> CodeVarChunk
+
+-- | Dependent variable.
 [depVar] :: ODEInfo -> CodeVarChunk
+
+-- | Other variables in the ODE.
 [otherVars] :: ODEInfo -> [CodeVarChunk]
 [tInit] :: ODEInfo -> CodeExpr
 [tFinal] :: ODEInfo -> CodeExpr
+
+-- | Initial value of an ODE.
 [initVal] :: ODEInfo -> CodeExpr
+
+-- | ODE equations.
 [odeSyst] :: ODEInfo -> [CodeExpr]
+
+-- | Various options related to the ODE, including solution method, step
+--   size, initial value of a second order ODE, etc.
 [odeOpts] :: ODEInfo -> ODEOptions
+
+-- | Basic <a>ODEInfo</a> constructor.
 odeInfo :: CodeVarChunk -> CodeVarChunk -> [CodeVarChunk] -> CodeExpr -> CodeExpr -> CodeExpr -> [CodeExpr] -> ODEOptions -> ODEInfo
 data ODEOptions
 ODEOpts :: ODEMethod -> CodeExpr -> CodeExpr -> CodeExpr -> CodeExpr -> ODEOptions
+
+-- | Solution method.
 [solveMethod] :: ODEOptions -> ODEMethod
+
+-- | Absolute tolerance.
 [absTol] :: ODEOptions -> CodeExpr
+
+-- | Relative tolerance.
 [relTol] :: ODEOptions -> CodeExpr
+
+-- | Step size.
 [stepSize] :: ODEOptions -> CodeExpr
+
+-- | Holds the initial value of a second order ODE.
 [initValFstOrd] :: ODEOptions -> CodeExpr
+
+-- | Basic <a>ODEOptions</a> constructor
 odeOptions :: ODEMethod -> CodeExpr -> CodeExpr -> CodeExpr -> CodeExpr -> ODEOptions
+
+-- | Methods for solving ODEs. Includes Runge-Kutta 4-5, Backwards
+--   Differentiation Formula, or Adams' method.
 data ODEMethod
 RK45 :: ODEMethod
 BDF :: ODEMethod
 Adams :: ODEMethod
+
+-- | Holds an ODE library package.
 data ODELibPckg
 ODELib :: Name -> Version -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> Maybe FilePath -> [Lang] -> ODELibPckg
+
+-- | Library name.
 [libName] :: ODELibPckg -> Name
+
+-- | Version.
 [libVers] :: ODELibPckg -> Version
+
+-- | Library specifications.
 [libSpec] :: ODELibPckg -> ExternalLibrary
+
+-- | Library call.
 [libCall] :: ODELibPckg -> ODEInfo -> ExternalLibraryCall
+
+-- | Library path.
 [libPath] :: ODELibPckg -> Maybe FilePath
+
+-- | Compatible OO languages.
 [compatibleLangs] :: ODELibPckg -> [Lang]
 
--- | Makes an ODELibPckg with the given name, ExternalLibrary
---   specification, ExternalLibraryCall specification parameterized by an
---   ODEInfo, local file path to the library, and list of compatible
---   languages.
+-- | Makes an <a>ODELibPckg</a> with the given name, <a>ExternalLibrary</a>
+--   specification, <a>ExternalLibraryCall</a> specification parameterized
+--   by an <a>ODEInfo</a>, local file path to the library, and list of
+--   compatible languages.
 mkODELib :: Name -> Version -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> FilePath -> [Lang] -> ODELibPckg
 
--- | Makes an ODELibPckg with the given name, ExternalLibrary
---   specification, ExternalLibraryCall specification parameterized by an
---   ODEInfo, and list of compatible languages.
+-- | Makes an <a>ODELibPckg</a> with the given name, <a>ExternalLibrary</a>
+--   specification, <a>ExternalLibraryCall</a> specification parameterized
+--   by an <a>ODEInfo</a>, and list of compatible languages.
 mkODELibNoPath :: Name -> Version -> ExternalLibrary -> (ODEInfo -> ExternalLibraryCall) -> [Lang] -> ODELibPckg
 unPP :: PythonProject a -> a
 unJP :: JavaProject a -> a

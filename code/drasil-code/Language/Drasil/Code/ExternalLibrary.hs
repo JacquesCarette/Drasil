@@ -40,9 +40,9 @@ type StepGroup = NonEmpty [Step]
 data Step = Call FunctionInterface 
   -- | A while loop.
   -- The function calls in the condition, other conditions, and steps for the body of the loop.
-  | Loop (NonEmpty FunctionInterface) ([Expr] -> Condition) (NonEmpty Step)
+  | Loop (NonEmpty FunctionInterface) ([CodeExpr] -> Condition) (NonEmpty Step)
   -- For when a statement is needed, but does not interface with the external library.
-  | Statement ([CodeVarChunk] -> [Expr] -> FuncStmt)
+  | Statement ([CodeVarChunk] -> [CodeExpr] -> FuncStmt)
 
 -- | The first item in the 'Requires' list should be where the function being called is defined.
 data FunctionInterface = FI (NonEmpty Requires) FuncType CodeFuncChunk [Argument] (Maybe Result)

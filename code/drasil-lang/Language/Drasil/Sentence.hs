@@ -20,7 +20,6 @@ import Data.Char (toUpper)
 -- | Used in 'Ch' constructor to determine the state of a 'Sentence'
 -- (can record whether something is in plural form, a symbol, a singular term, or in short form).
 data SentenceStyle = PluralTerm
-                   | SymbolStyle
                    | TermStyle
                    | ShortStyle
 
@@ -37,6 +36,8 @@ data Sentence where
   -- | Ch looks up the term for a given 'UID' and displays the term with a given 'SentenceStyle' and 'CapitalizationRule'.
   -- This allows Sentences to hold plural forms of 'NounPhrase's and 'NamedIdea's.
   Ch    :: SentenceStyle -> CapitalizationRule -> UID -> Sentence
+  -- | A branch of Ch dedicated to SymbolStyle only.
+  SyCh  :: UID -> Sentence
   -- | Converts a unit symbol into a usable Sentence form.
   Sy    :: USymb -> Sentence
   -- | Constructor for 'String's, used often for descriptions in Chunks.
@@ -62,7 +63,7 @@ eS = E . toDispExpr
 -- The HasSymbol is redundant, but on purpose
 -- | Gets a symbol and places it in a 'Sentence'.
 ch :: (HasUID c, HasSymbol c) => c -> Sentence
-ch x = Ch SymbolStyle (x ^. uid)
+ch x = SyCh (x ^. uid)
 
 -- | Sentences can be concatenated.
 instance Semigroup Sentence where
@@ -80,7 +81,7 @@ sentencePlural = Ch PluralTerm
 -- | Gets short form of 'UID'.
 sentenceShort  = Ch ShortStyle
 -- | Gets symbol form of 'UID'.
-sentenceSymb   = Ch SymbolStyle
+sentenceSymb   = SyCh
 -- | Gets singular form of 'UID'.
 sentenceTerm   = Ch TermStyle
 

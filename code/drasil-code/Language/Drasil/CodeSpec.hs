@@ -27,51 +27,58 @@ import Data.Maybe (mapMaybe)
 
 import Prelude hiding (const)
 
+-- | Program input.
 type Input = CodeVarChunk
+-- | Program output.
 type Output = CodeVarChunk
+-- | Constants in the problem.
 type Const = CodeDefinition
+-- | Derived inputs.
 type Derived = CodeDefinition
+-- | Mathematical definition.
 type Def = CodeDefinition
 
+-- | Code specifications. Holds information needed to generate code.
 data CodeSpec where
   CodeSpec :: (HasName a) => {
-  -- Program name
+  -- | Program name.
   pName :: Name,
-  -- Authors
+  -- | Authors.
   authors :: [a],
-  -- All inputs
+  -- | All inputs.
   inputs :: [Input],
-  -- Explicit inputs (values to be supplied by a file)
+  -- | Explicit inputs (values to be supplied by a file).
   extInputs :: [Input],
-  -- Derived inputs (each calculated from explicit inputs in a single step)
+  -- | Derived inputs (each calculated from explicit inputs in a single step).
   derivedInputs :: [Derived],
-  -- All outputs
+  -- | All outputs.
   outputs :: [Output],
-  -- List of files that must be in same directory for running the executable
+  -- | List of files that must be in same directory for running the executable.
   configFiles :: [FilePath],
-  -- Mathematical definitions, ordered so that they form a path from inputs to 
+  -- | Mathematical definitions, ordered so that they form a path from inputs to 
   -- outputs.
   execOrder :: [Def],
-  -- Map from UIDs to constraints for all constrained chunks used in the problem
+  -- | Map from 'UID's to constraints for all constrained chunks used in the problem.
   cMap :: ConstraintCEMap,
-  -- List of all constants used in the problem
+  -- | List of all constants used in the problem.
   constants :: [Const],
-  -- Map containing all constants used in the problem.
+  -- | Map containing all constants used in the problem.
   constMap :: ConstantMap,
-  -- Additional modules required in the generated code, which Drasil cannot yet 
+  -- | Additional modules required in the generated code, which Drasil cannot yet 
   -- automatically define.
   mods :: [Mod],  -- medium hack
-  -- The database of all chunks used in the problem.
+  -- | The database of all chunks used in the problem.
   sysinfodb :: ChunkDB
   } -> CodeSpec
 
+-- | Maps constants to their respective 'CodeDefinition'.
 type ConstantMap = Map.Map UID CodeDefinition
 
--- Converts a list of chunks that have UIDs to a Map from UID to the associated chunk.
+-- | Converts a list of chunks that have 'UID's to a Map from 'UID' to the associated chunk.
 assocToMap :: HasUID a => [a] -> Map.Map UID a
 assocToMap = Map.fromList . map (\x -> (x ^. uid, x))
 
--- | Defines a CodeSpec based on the SystemInformation, Choices, and Mods 
+-- | Defines a 'CodeSpec' based on the 'SystemInformation', 'Choices', and 'Mod's
 -- defined by the user.
 codeSpec :: SystemInformation -> Choices -> [Mod] -> CodeSpec
 codeSpec SI {_sys         = sys
@@ -114,41 +121,45 @@ codeSpec SI {_sys         = sys
 
 -- medium hacks ---
 
--- | Convert a Func to an implementation-stage QuantityDict representing the 
+-- | Convert a 'Func' to an implementation-stage 'QuantityDict' representing the 
 -- function.
 asVC :: Func -> QuantityDict
 asVC (FDef (FuncDef n _ _ _ _ _)) = implVar n (nounPhraseSP n) Real (Variable n)
 asVC (FDef (CtorDef n _ _ _ _))   = implVar n (nounPhraseSP n) Real (Variable n)
 asVC (FData (FuncData n _ _))     = implVar n (nounPhraseSP n) Real (Variable n)
 
--- | Get a UID of a chunk corresponding to a Func
+-- | Get a 'UID' of a chunk corresponding to a 'Func'.
 funcUID :: Func -> UID
 funcUID f = asVC f ^. uid
 
--- | FIXME: hack. Use for implementation-stage functions that need to be displayed in the SRS.
+-- FIXME: hack. 
+-- | Used for implementation-stage functions that need to be displayed in the SRS.
 funcUID' :: Func -> UID
 funcUID' f = asVC' f ^. uid
 
--- | FIXME: Part of above hack
+-- FIXME: Part of above hack
+-- | Helper for 'funcUID''.
 asVC' :: Func -> QuantityDict
 asVC' (FDef (FuncDef n _ _ _ _ _)) = vc n (nounPhraseSP n) (Variable n) Real
 asVC' (FDef (CtorDef n _ _ _ _))   = vc n (nounPhraseSP n) (Variable n) Real
 asVC' (FData (FuncData n _ _))     = vc n (nounPhraseSP n) (Variable n) Real
 
--- Determines the derived inputs, which can be immediately calculated from the 
+-- | Determines the derived inputs, which can be immediately calculated from the 
 -- knowns (inputs and constants). If there are DDs, the derived inputs will 
--- come from those. If there are none, then the QDefinitions are used instead.
+-- come from those. If there are none, then the 'QDefinition's are used instead.
 getDerivedInputs :: [DataDefinition] -> [Input] -> [Const] ->
   ChunkDB -> [QDefinition]
 getDerivedInputs ddefs ins cnsts sm =
   filter ((`subsetOf` refSet) . flip codevars sm . expr . (^. defnExpr)) (map qdFromDD ddefs)
   where refSet = ins ++ map quantvar cnsts
 
+-- | Known values.
 type Known = CodeVarChunk
+-- | Calculated values.
 type Need  = CodeVarChunk
 
--- Orders a list of definitions such that they form a path between Known values 
--- and values that Need to be calculated.
+-- | Orders a list of definitions such that they form a path between 'Known' values 
+-- and values that 'Need' to be calculated.
 getExecOrder :: [Def] -> [Known] -> [Need] -> ChunkDB -> [Def]
 getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
   where getExecOrder' ord _ _ []   = ord
@@ -168,11 +179,11 @@ getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
               else getExecOrder' (ord ++ new) (defs' \\ new) kNew nNew
 
 
--- | Get a list of Constraints for a list of CodeChunks
+-- | Get a list of 'Constraint's for a list of 'CodeChunk's.
 getConstraints :: (HasUID c) => ConstraintCEMap -> [c] -> [ConstraintCE]
 getConstraints cm cs = concat $ mapMaybe (\c -> Map.lookup (c ^. uid) cm) cs
 
--- | Get a list of CodeChunks from a constraint
+-- | Get a list of 'CodeChunk's from a constraint.
 constraintvars :: ConstraintCE -> ChunkDB -> [CodeChunk]
 constraintvars (Range _ ri) m = map (codeChunk . varResolve m) $ nub $
   eNamesRI ri

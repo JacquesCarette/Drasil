@@ -24,39 +24,47 @@ import Language.Drasil.Mod (FuncStmt(..), Description)
 import Control.Lens ((^.))
 import Data.List.NonEmpty (NonEmpty(..), fromList)
 
+-- | Condition for loops.
 type Condition = CodeExpr
+
+-- | Function require
 type Requires = String
 
+-- | External library is a group of 'Step's
 type ExternalLibrary = [StepGroup]
 
+-- | Function steps.
 type StepGroup = NonEmpty [Step]
 
 -- | A step can be a call to an external library function or method.
 data Step = Call FunctionInterface 
-  -- | A while loop -- function calls in the condition, other conditions, steps for the body
+  -- | A while loop.
+  -- The function calls in the condition, other conditions, and steps for the body of the loop.
   | Loop (NonEmpty FunctionInterface) ([CodeExpr] -> Condition) (NonEmpty Step)
-  -- | For when a statement is needed, but does not interface with the external library
+  -- For when a statement is needed, but does not interface with the external library.
   | Statement ([CodeVarChunk] -> [CodeExpr] -> FuncStmt)
 
--- | The first item in the requires list should be where the function being called is defined
+-- | The first item in the 'Requires' list should be where the function being called is defined.
 data FunctionInterface = FI (NonEmpty Requires) FuncType CodeFuncChunk [Argument] (Maybe Result)
 
--- | The result of a function call can be assigned to a variable or returned
-data Result = Assign CodeVarChunk | Return 
+-- | The result of a function call can be assigned to a variable or returned.
+data Result = Assign CodeVarChunk | Return
 
+-- | An argument may contain a named argument and argument information.
 data Argument = Arg (Maybe NamedArgument) ArgumentInfo -- Maybe named argument
 
+-- | Determines the context needed for an argument to work.
 data ArgumentInfo = 
-  -- | An argument not dependent on use case
+  -- | An argument not dependent on use case.
   LockedArg CodeExpr 
   -- | An argument dependent on the use case. Maybe is the variable if it needs
   --   to be declared and defined prior to calling.
   | Basic Space (Maybe CodeVarChunk) 
-  -- | A function-type argument, with a single Step for the body.
+  -- | A function-type argument, with a single 'Step' for the body.
   | Fn CodeFuncChunk [Parameter] Step
   -- | An argument that is an object of a class that must be implemented in the 
   --   calling program.
-  --   Parameters: Requires, description, object, constructor, class info
+  --   Parameters: Requires, description, object, constructor, class info.
   | Class [Requires] Description CodeVarChunk CodeFuncChunk ClassInfo
   -- | An argument that is an object of a record class defined by the external
   --   library, where some fields need to be set by the calling program.
@@ -64,6 +72,7 @@ data ArgumentInfo =
   --   First Require should be where the record type is defined.
   | Record (NonEmpty Requires) CodeFuncChunk CodeVarChunk [CodeVarChunk]
 
+-- | Function parameter may or may not be dependent on use case.
 data Parameter = LockedParam ParameterChunk | NameableParam Space
 
 -- | For classes that need to be generated in the calling program. May be a
@@ -71,19 +80,20 @@ data Parameter = LockedParam ParameterChunk | NameableParam Space
 --   library.
 data ClassInfo = Regular [MethodInfo] | Implements String [MethodInfo]
 
--- | Constructor: description, known parameters, body. (CodeFuncChunk for constructor is not here because it is higher up in the AST, at the Class node)
+-- | Constructor: description, known parameters, body. (CodeFuncChunk for constructor is not here because it is higher up in the AST, at the 'Class' node).
 data MethodInfo = CI Description [Parameter] [Step]
-  -- | Method, description, known parameters, maybe return description, body
+  -- | Method, description, known parameters, maybe return description, body.
   | MI CodeFuncChunk Description [Parameter] (Maybe Description) (NonEmpty Step)
 
+-- | Function type may be a function, a method, or a constructor.
 data FuncType = Function | Method CodeVarChunk | Constructor
 
--- | Specifies an external library
+-- | Specifies an external library.
 externalLib :: [StepGroup] -> ExternalLibrary
 externalLib = id
 
 -- | To be used when there are multiple options for a group of consecutive steps, 
---   where a single use-case-specific factor decides which step group to use
+--   where a single use-case-specific factor decides which step group to use.
 choiceSteps :: [[Step]] -> StepGroup
 choiceSteps [] = error "choiceSteps should be called with a non-empty list"
 choiceSteps sg = fromList sg
@@ -200,7 +210,7 @@ recordArg :: Requires -> CodeFuncChunk -> CodeVarChunk -> [CodeVarChunk] ->
   Argument
 recordArg rq c o fs = Arg Nothing (Record (rq :| []) c o fs)
 
--- | Specifies a use-case-independent parameter
+-- | Specifies a use-case-independent parameter.
 lockedParam :: CodeVarChunk -> Parameter
 lockedParam = LockedParam . pcAuto
 
@@ -275,9 +285,9 @@ initSolListWithVal = statementStep (\cdchs es -> case (cdchs, es) of
   ([s],[v]) -> FDecDef s (matrix [[v]])
   (_,_) -> error "Fill for initSolListWithVal should provide one CodeChunk and one Expr")
 
--- | FunctionInterface for loop condition, CodeChunk for solution object, 
---   CodeChunk for independent var, FunctionInterface for solving, 
---   CodeChunk for soln array to populate with
+-- | A solve and populate loop. 'FunctionInterface' for loop condition, 'CodeChunk' for solution object, 
+--   'CodeChunk' for independent var, 'FunctionInterface' for solving, 
+--   'CodeChunk' for soln array to populate with.
 solveAndPopulateWhile :: FunctionInterface -> CodeVarChunk -> CodeVarChunk -> 
   FunctionInterface -> CodeVarChunk -> Step
 solveAndPopulateWhile lc ob iv slv popArr = loopStep [lc] (\case 
@@ -285,13 +295,14 @@ solveAndPopulateWhile lc ob iv slv popArr = loopStep [lc] (\case
   _ -> error "Fill for solveAndPopulateWhile should provide one Expr") 
   [callStep slv, appendCurrSol (field ob popArr)]
 
--- | Specifies a statement where a list is returned, where each value of the list -- is explicitly defined.
+-- | Specifies a statement where a list is returned, where each value of the list
+-- is explicitly defined.
 returnExprList :: Step
 returnExprList = statementStep (\cdchs es -> case (cdchs, es) of
   ([], _) -> FRet $ Matrix [es]
   (_,_) -> error "Fill for returnExprList should provide no CodeChunks")
 
--- | A statement where a current solution is appended to a solution list
+-- | A statement where a current solution is appended to a solution list.
 appendCurrSolFS :: CodeExpr -> CodeVarChunk -> FuncStmt
 appendCurrSolFS cs s = FAppend (sy s) (idx cs (int 0))
 
@@ -299,11 +310,11 @@ appendCurrSolFS cs s = FAppend (sy s) (idx cs (int 0))
 fixedReturn :: CodeExpr -> Step
 fixedReturn = lockedStatement . FRet
 
--- | Specifies a statement step
+-- | Specifies a statement step.
 statementStep :: ([CodeVarChunk] -> [CodeExpr] -> FuncStmt) -> Step
 statementStep = Statement
 
--- | Specifies a statement that is not use-case-dependent
+-- | Specifies a statement that is not use-case-dependent.
 lockedStatement :: FuncStmt -> Step
 lockedStatement s = Statement (\_ _ -> s)
 

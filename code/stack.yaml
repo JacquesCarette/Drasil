@@ -15,7 +15,8 @@
 # resolver:
 #  name: custom-snapshot
 #  location: "./custom-snapshot.yaml"
-resolver: lts-12.25
+resolver:
+  url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/16/31.yaml
 
 # User packages to be built.
 # Various formats can be used as shown in the example below.
@@ -40,6 +41,7 @@ packages:
 - drasil-utils/
 - drasil-gool/
 - drasil-build/
+- drasil-code-base/
 - drasil-code/
 - drasil-theory/
 - drasil-database/
@@ -48,6 +50,7 @@ packages:
 - drasil-data/
 - drasil-example/
 - drasil-docLang/
+- drasil-metadata/
 
 # Dependency packages to be pulled from upstream that are not in the resolver
 # (e.g., acme-missiles-0.3)
@@ -55,6 +58,10 @@ extra-deps:
 - multiplate-0.0.3@sha256:5d2ffc50d23c55008100b7a8b70f77b5fcce08c6f23822c5a6adc5b5b9356a32
 - unicode-names-3.2.0.0@sha256:fef7241d93170e26265e84553090253a5e8ee207645d47cf271816f5834d07d2
 - unicode-properties-3.2.0.0@sha256:239766a6ac4322329353f6b9cd546024fd8c5f0235c8e32b3cba2d6bd245a699
+
+# Used only for a basic set of flags for haddock
+build:
+  haddock-deps: false
 
 # Override default flag values for local packages and extra-deps
 flags: {}
@@ -67,7 +74,7 @@ extra-package-dbs: []
 #
 # Require a specific version of stack, using version ranges
 # require-stack-version: -any # Default
-# require-stack-version: ">=1.4"
+require-stack-version: ">=2.3.1"
 #
 # Override the architecture used by stack, especially useful on Windows
 # arch: i386
@@ -79,3 +86,5 @@ extra-package-dbs: []
 #
 # Allow a newer minor version of GHC than the snapshot specifies
 # compiler-check: newer-minor
+
+dump-logs: all

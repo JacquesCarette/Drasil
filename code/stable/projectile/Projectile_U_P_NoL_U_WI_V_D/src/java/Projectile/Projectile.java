@@ -42,7 +42,7 @@ public class Projectile {
         \return flight duration: the time when the projectile lands (s)
     */
     public static double func_t_flight(double v_launch, double theta, double g_vect) {
-        return 2 * v_launch * Math.sin(theta) / g_vect;
+        return 2.0 * v_launch * Math.sin(theta) / g_vect;
     }
     
     /** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
@@ -52,7 +52,7 @@ public class Projectile {
         \return landing position: the distance from the launcher to the final position of the projectile (m)
     */
     public static double func_p_land(double v_launch, double theta, double g_vect) {
-        return 2 * Math.pow(v_launch, 2) * Math.sin(theta) * Math.cos(theta) / g_vect;
+        return 2.0 * Math.pow(v_launch, 2.0) * Math.sin(theta) * Math.cos(theta) / g_vect;
     }
     
     /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
@@ -74,7 +74,7 @@ public class Projectile {
         if (Math.abs(d_offset / p_target) < epsilon) {
             return "The target was hit.";
         }
-        else if (d_offset < 0) {
+        else if (d_offset < 0.0) {
             return "The projectile fell short.";
         }
         else {
@@ -117,34 +117,34 @@ public class Projectile {
         \param p_target target position: the distance from the launcher to the target (m)
     */
     public static void input_constraints(double v_launch, double theta, double p_target) {
-        if (!(v_launch > 0)) {
+        if (!(v_launch > 0.0)) {
             System.out.print("Warning: ");
             System.out.print("v_launch has value ");
             System.out.print(v_launch);
-            System.out.print(" but suggested to be ");
+            System.out.print(", but is suggested to be ");
             System.out.print("above ");
-            System.out.print(0);
+            System.out.print(0.0);
             System.out.println(".");
         }
-        if (!(0 < theta && theta < Math.PI / 2)) {
+        if (!(0.0 < theta && theta < Math.PI / 2.0)) {
             System.out.print("Warning: ");
             System.out.print("theta has value ");
             System.out.print(theta);
-            System.out.print(" but suggested to be ");
+            System.out.print(", but is suggested to be ");
             System.out.print("between ");
-            System.out.print(0);
+            System.out.print(0.0);
             System.out.print(" and ");
-            System.out.print(Math.PI / 2);
+            System.out.print(Math.PI / 2.0);
             System.out.print(" ((pi)/(2))");
             System.out.println(".");
         }
-        if (!(p_target > 0)) {
+        if (!(p_target > 0.0)) {
             System.out.print("Warning: ");
             System.out.print("p_target has value ");
             System.out.print(p_target);
-            System.out.print(" but suggested to be ");
+            System.out.print(", but is suggested to be ");
             System.out.print("above ");
-            System.out.print(0);
+            System.out.print(0.0);
             System.out.println(".");
         }
     }

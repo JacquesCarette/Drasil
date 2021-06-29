@@ -1,4 +1,6 @@
-module Main (main) where
+module Drasil.HGHC.Main (main) where
+
+import GHC.IO.Encoding
 
 -- import Language.Drasil (QDefinition)
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
@@ -6,8 +8,7 @@ module Main (main) where
 --   Modularity(..), Structure(..), ConstantStructure(..), 
 --   ConstantRepr(..), InputModule(..), matchConcepts, AuxFile(..), 
 --   Visibility(..), defaultChoices)
-import Language.Drasil.Generate (gen)
-import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
+import Language.Drasil.Generate (gen, DocType(SRS, Website), DocSpec(DocSpec))
 
 import Drasil.HGHC.Body (srs, printSetting) --thisSI
 
@@ -36,6 +37,7 @@ thisChoices = defaultChoices {
   
 main :: IO ()            
 main = do
+  setLocaleEncoding utf8
   gen (DocSpec Website "HGHC_SRS") srs printSetting
   gen (DocSpec SRS "HGHC_SRS")     srs printSetting
   -- When ready to generate code, uncomment this file

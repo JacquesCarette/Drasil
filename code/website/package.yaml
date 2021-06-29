@@ -1,0 +1,25 @@
+name:        website
+version:     0.1.0.0
+maintainer:  "Jacques Carette"
+synopsis:	   A framework for code and document generation for scientific software - Utils SubPackage
+github:      JacquesCarette/Drasil
+homepage:    https://jacquescarette.github.io/Drasil/
+description: Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+
+extra-source-files: []
+
+dependencies:
+- base >= 4.7 && < 5
+- hakyll == 4.13.*
+- directory
+- filepath
+
+ghc-options:
+- -Wall
+- -Wredundant-constraints
+- -threaded
+
+executables:
+  website:
+    main: Main.hs
+    source-dirs: ./

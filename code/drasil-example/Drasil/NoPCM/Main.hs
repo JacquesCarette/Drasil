@@ -1,11 +1,12 @@
-module Main (main) where
+module Drasil.NoPCM.Main (main) where
+
+import GHC.IO.Encoding
 
 import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
   Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
   InputModule(..), AuxFile(..), Visibility(..), defaultChoices)
-import Language.Drasil.Generate (gen, genCode)
-import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
+import Language.Drasil.Generate (gen, genCode, DocType(SRS, Website), DocSpec(DocSpec))
 
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODEPckg, osloPckg, 
   apacheODEPckg, odeintPckg)
@@ -31,13 +32,14 @@ choices = defaultChoices {
   inputStructure = Unbundled,
   constStructure = Store Bundled,
   constRepr = Const,
-  auxFiles = [SampleInput "../../datafiles/NoPCM/sampleInput.txt"],
+  auxFiles = [SampleInput "../../datafiles/NoPCM/sampleInput.txt", ReadME],
   odeLib = [scipyODEPckg, osloPckg, apacheODEPckg, odeintPckg],
   odes = [noPCMODEInfo]
 }       
        
 main :: IO ()            
 main = do
+  setLocaleEncoding utf8
   gen (DocSpec SRS "NoPCM_SRS") srs printSetting
   gen (DocSpec Website "NoPCM_SRS") srs printSetting
   genCode choices code

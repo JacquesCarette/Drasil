@@ -1,15 +1,17 @@
 module Data.Drasil.Concepts.Documentation where
 
-import Language.Drasil hiding (organization, year)
+import Language.Drasil hiding (organization, year, label, variable)
 import Utils.Drasil
+import Utils.Drasil.Concepts
 
 import Data.Drasil.Concepts.Math (graph, unit_)
-import Data.Drasil.IdeaDicts (dataDefn, documentc, genDefn, inModel, softEng, thModel)
+import Data.Drasil.Domains (documentc, softEng)
+import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 
 import Control.Lens ((^.))
 
 doccon :: [NamedChunk]
-doccon = [abbreviation, analysis, appendix, aspect, body, charOfIR, characteristic,
+doccon = [abbAcc, abbreviation, analysis, appendix, aspect, body, charOfIR, characteristic,
   class_, client, code, column, company, component, concept, condition, connection,
   consVals, constant, constraint, consumer, content, context, coordinate, corSol,
   customer, datum, datumConstraint, decision, definition, dependency, description,
@@ -23,13 +25,14 @@ doccon = [abbreviation, analysis, appendix, aspect, body, charOfIR, characterist
   organization, output_, physical, physicalConstraint, physicalProperty, physicalSim,
   physicalSystem, physics, plan, practice, priority, problem, problemDescription,
   prodUCTable, productUC, product_, project, propOfCorSol, property, prpsOfDoc,
-  purpose, quantity, realtime, reference, refmat, requirement_, response, result,
+  purpose, quantity, realtime, reference, refmat, reqInput, requirement_, response, result,
   reviewer, safety, safetyReq, scenario, scope, scpOfReq, scpOfTheProjS, second_,
   section_, simulation, software, softwareConstraint, softwareDoc, softwareReq,
   softwareSys, softwareVAV, softwareVerif, solution, solutionCharSpec,
   solutionCharacteristic, source, specific, specification, specificsystemdescription,
   stakeholder, standard, statement, symbol_, sysCont, system, systemConstraint,
-  systemdescription, tOfSymb, tOfUnit, table_, task, template, termAndDef, term_,
+  systemdescription, tAuxConsts, tOfSymb, tOfUnit, inDatumConstraint, outDatumConstraint,
+  table_, task, template, termAndDef, term_,
   terminology, theory, traceyGraph, traceyMandG, traceyMatrix, type_, uncertCol,
   uncertainty, useCase, useCaseTable, user, userCharacteristic, userInput,
   validation, value, variable, vav, vavPlan, verification, video, year]
@@ -210,44 +213,52 @@ year            = nc "year"           (cn'    "year"               )
 scpOfTheProjS   = nc "scpOfTheProj"   (cn'    "scope of the project") -- temporary generated for test
 
 
-charOfIR, consVals, corSol, orgOfDoc, propOfCorSol, prpsOfDoc, refmat,
-  scpOfReq, tOfSymb, tOfUnit, termAndDef, traceyMandG, vav :: NamedChunk
+abbAcc, charOfIR, consVals, corSol, orgOfDoc, propOfCorSol, prpsOfDoc, refmat,
+  reqInput, scpOfReq, tAuxConsts, tOfSymb, tOfUnit,
+  termAndDef, traceyMandG, vav :: NamedChunk
 
-consVals     = nc "consVals"     (cn "values of auxiliary constants")
-corSol       = nc "corSol"       (cn' "correct solution")
-charOfIR     = nc "charOfIR"     (characteristic `of__` intReader)
-orgOfDoc     = nc "orgOfDoc"     (organization `of_` document)
-propOfCorSol = nc "propOfCorSol" (property `ofA` corSol)
-prpsOfDoc    = nc "prpsOfDoc"    (purpose `of_` document)
-refmat       = nc "refmat"       (cn' "reference material")
-scpOfReq     = nc "scpOfReq"     (scope `of_'` requirement)
-termAndDef   = nc "termAndDef"   (terminology `and_'` definition)
-tOfSymb      = nc "tOfSymb"      (table_ `of_'` symbol_)
-tOfUnit      = nc "tOfUnit"      (table_ `of_'` unit_)
-traceyMandG  = nc "traceyMandG"  (andRT titleize' titleize' traceyMatrix graph)
-vav          = nc "vav"          (verification `and_` validation)
+abbAcc              = nc "TAbbAcc"            (cn "abbreviations and acronyms")
+consVals            = nc "consVals"           (cn "values of auxiliary constants")
+corSol              = nc "corSol"             (cn' "correct solution")
+charOfIR            = nc "charOfIR"           (characteristic `of_TPS` intReader)
+orgOfDoc            = nc "orgOfDoc"           (organization `of_` document)
+propOfCorSol        = nc "propOfCorSol"       (property `ofATPS` corSol)
+prpsOfDoc           = nc "prpsOfDoc"          (purpose `of_` document)
+refmat              = nc "refmat"             (cn' "reference material")
+reqInput            = nc "ReqInputs"          (cn' "required input")
+scpOfReq            = nc "scpOfReq"           (scope `of_TSP` requirement)
+tAuxConsts          = nc "TAuxConsts"         (cn' "auxiliary constant")
+termAndDef          = nc "termAndDef"         (terminology `and_TSP` definition)
+tOfSymb             = nc "tOfSymb"            (table_ `of_TSP` symbol_)
+tOfUnit             = nc "tOfUnit"            (table_ `of_TSP` unit_)
+inDatumConstraint   = nc "InDataConstraints"  (cn' "input data constraint") -- should be moved below
+outDatumConstraint  = nc "OutDataConstraints" (cn' "output data constraint")
+traceyMandG         = nc "traceyMandG"        (and_TGen titleize' titleize' traceyMatrix graph)
+vav                 = nc "vav"                (verification `and_` validation)
 
 scpOfTheProj :: (NamedChunk -> Sentence) -> NamedChunk
-scpOfTheProj oper = nc "scpOfTheProj" (scope `ofN_` theCustom oper project) -- reasonable hack?
+scpOfTheProj oper = nc "scpOfTheProj" (scope `of_NINP` theGen oper project) -- reasonable hack?
 
 -- compounds
 
 designDoc, fullForm, generalSystemDescription, moduleInterface, indPRCase,
   physicalConstraint, physicalSystem, problemDescription, prodUCTable,
   specificsystemdescription, systemdescription, systemConstraint, sysCont,
-  userCharacteristic, datumConstraint, functionalRequirement,
+  userCharacteristic, datumConstraint, inDatumConstraint, outDatumConstraint, functionalRequirement,
   nonfunctionalRequirement, safetyReq, softwareConstraint, softwareDoc,
   softwareReq, softwareSys, softwareVerif, softwareVAV, solutionCharSpec,
   solutionCharacteristic, offShelfSolution, physicalSim, productUC, 
   useCaseTable, physicalProperty, vavPlan, uncertCol, userInput :: NamedChunk
  
-datumConstraint              = compoundNC' datum constraint
+datumConstraint              = compoundNCPP datum constraint
 designDoc                    = compoundNC design document
 fullForm                     = compoundNC full form
 functionalRequirement        = compoundNC functional requirement_
 generalSystemDescription     = compoundNC general systemdescription
 moduleInterface              = compoundNC module_ interface
 indPRCase                    = compoundNC individual productUC
+--inDatumConstraint            = compoundNC input_ datumConstraint -- may be used later, but they break stable for now
+--outDatumConstraint           = compoundNC output_ datumConstraint 
 nonfunctionalRequirement     = compoundNC nonfunctional requirement_
 offShelfSolution             = compoundNC offShelf solution
 physicalConstraint           = compoundNC physical constraint
@@ -260,11 +271,11 @@ productUC                    = compoundNC product_ useCase
 safetyReq                    = compoundNC safety requirement_
 softwareConstraint           = compoundNC software constraint
 softwareDoc                  = compoundNC software documentation
-softwareReq                  = compoundNC' software requirement_
+softwareReq                  = compoundNCPP software requirement_
 softwareSys                  = compoundNC software system
 softwareVAV                  = compoundNC software vav
 softwareVerif                = compoundNC software verification
-solutionCharSpec             = compoundNCP1 solutionCharacteristic specification
+solutionCharSpec             = compoundNCPSPP solutionCharacteristic specification
 solutionCharacteristic       = compoundNC solution characteristic
 specificsystemdescription    = compoundNC specific systemdescription
 sysCont                      = compoundNC system context
@@ -296,9 +307,3 @@ unlikeChgDom  = ccs (mkIdea "unlikeChgDom"  (unlikelyChg ^. term)              $
 srsDomains :: [ConceptChunk]
 srsDomains = [cw srsDom, goalStmtDom, reqDom, funcReqDom, nonFuncReqDom, assumpDom, chgProbDom, likeChgDom, unlikeChgDom]
 
--- FIXME: fterms is here instead of Utils because of cyclic import
--- | Apply a binary function to the terms of two named ideas, instead of to the named
--- ideas themselves. Ex. @fterms compoundPhrase t1 t2@ instead of
--- @compoundPhrase (t1 ^. term) (t2 ^. term)@
-fterms :: (NamedIdea c, NamedIdea d) => (NP -> NP -> t) -> c -> d -> t
-fterms f a b = f (a ^. term) (b ^. term)

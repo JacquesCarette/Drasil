@@ -14,32 +14,32 @@ public class Projectile {
         StreamWriter outfile;
         string filename = args[0];
         outfile = new StreamWriter("log.txt", true);
-        outfile.Write("var 'filename' assigned to ");
+        outfile.Write("var 'filename' assigned ");
         outfile.Write(filename);
         outfile.WriteLine(" in module Projectile");
         outfile.Close();
         InputParameters inParams = new InputParameters(filename);
         float t_flight = func_t_flight(inParams);
         outfile = new StreamWriter("log.txt", true);
-        outfile.Write("var 't_flight' assigned to ");
+        outfile.Write("var 't_flight' assigned ");
         outfile.Write(t_flight);
         outfile.WriteLine(" in module Projectile");
         outfile.Close();
         float p_land = func_p_land(inParams);
         outfile = new StreamWriter("log.txt", true);
-        outfile.Write("var 'p_land' assigned to ");
+        outfile.Write("var 'p_land' assigned ");
         outfile.Write(p_land);
         outfile.WriteLine(" in module Projectile");
         outfile.Close();
         float d_offset = func_d_offset(inParams, p_land);
         outfile = new StreamWriter("log.txt", true);
-        outfile.Write("var 'd_offset' assigned to ");
+        outfile.Write("var 'd_offset' assigned ");
         outfile.Write(d_offset);
         outfile.WriteLine(" in module Projectile");
         outfile.Close();
         string s = func_s(inParams, d_offset);
         outfile = new StreamWriter("log.txt", true);
-        outfile.Write("var 's' assigned to ");
+        outfile.Write("var 's' assigned ");
         outfile.Write(s);
         outfile.WriteLine(" in module Projectile");
         outfile.Close();
@@ -59,7 +59,7 @@ public class Projectile {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return 2 * inParams.v_launch * (float)(Math.Sin(inParams.theta)) / inParams.g_vect;
+        return 2.0f * inParams.v_launch * (float)(Math.Sin(inParams.theta)) / inParams.g_vect;
     }
     
     /** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
@@ -75,7 +75,7 @@ public class Projectile {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        return 2 * (float)(Math.Pow(inParams.v_launch, 2)) * (float)(Math.Sin(inParams.theta)) * (float)(Math.Cos(inParams.theta)) / inParams.g_vect;
+        return 2.0f * (float)(Math.Pow(inParams.v_launch, 2.0f)) * (float)(Math.Sin(inParams.theta)) * (float)(Math.Cos(inParams.theta)) / inParams.g_vect;
     }
     
     /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
@@ -118,7 +118,7 @@ public class Projectile {
         if (Math.Abs(d_offset / inParams.p_target) < inParams.epsilon) {
             return "The target was hit.";
         }
-        else if (d_offset < 0) {
+        else if (d_offset < 0.0f) {
             return "The projectile fell short.";
         }
         else {
@@ -194,21 +194,21 @@ public class InputParameters {
         infile.ReadLine();
         this.v_launch = Single.Parse(infile.ReadLine());
         outfile = new StreamWriter("log.txt", true);
-        outfile.Write("var 'this.v_launch' assigned to ");
+        outfile.Write("var 'this.v_launch' assigned ");
         outfile.Write(this.v_launch);
         outfile.WriteLine(" in module Projectile");
         outfile.Close();
         infile.ReadLine();
         this.theta = Single.Parse(infile.ReadLine());
         outfile = new StreamWriter("log.txt", true);
-        outfile.Write("var 'this.theta' assigned to ");
+        outfile.Write("var 'this.theta' assigned ");
         outfile.Write(this.theta);
         outfile.WriteLine(" in module Projectile");
         outfile.Close();
         infile.ReadLine();
         this.p_target = Single.Parse(infile.ReadLine());
         outfile = new StreamWriter("log.txt", true);
-        outfile.Write("var 'this.p_target' assigned to ");
+        outfile.Write("var 'this.p_target' assigned ");
         outfile.Write(this.p_target);
         outfile.WriteLine(" in module Projectile");
         outfile.Close();
@@ -224,34 +224,34 @@ public class InputParameters {
         outfile.WriteLine("  }");
         outfile.Close();
         
-        if (!(this.v_launch > 0)) {
+        if (!(this.v_launch > 0.0f)) {
             Console.Write("Warning: ");
             Console.Write("v_launch has value ");
             Console.Write(this.v_launch);
-            Console.Write(" but suggested to be ");
+            Console.Write(", but is suggested to be ");
             Console.Write("above ");
-            Console.Write(0);
+            Console.Write(0.0f);
             Console.WriteLine(".");
         }
-        if (!(0 < this.theta && this.theta < Math.PI / 2)) {
+        if (!(0.0f < this.theta && this.theta < Math.PI / 2.0f)) {
             Console.Write("Warning: ");
             Console.Write("theta has value ");
             Console.Write(this.theta);
-            Console.Write(" but suggested to be ");
+            Console.Write(", but is suggested to be ");
             Console.Write("between ");
-            Console.Write(0);
+            Console.Write(0.0f);
             Console.Write(" and ");
-            Console.Write(Math.PI / 2);
+            Console.Write(Math.PI / 2.0f);
             Console.Write(" ((pi)/(2))");
             Console.WriteLine(".");
         }
-        if (!(this.p_target > 0)) {
+        if (!(this.p_target > 0.0f)) {
             Console.Write("Warning: ");
             Console.Write("p_target has value ");
             Console.Write(this.p_target);
-            Console.Write(" but suggested to be ");
+            Console.Write(", but is suggested to be ");
             Console.Write("above ");
-            Console.Write(0);
+            Console.Write(0.0f);
             Console.WriteLine(".");
         }
     }

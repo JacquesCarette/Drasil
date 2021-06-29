@@ -5,7 +5,7 @@ module GOOL.Drasil.RendererClasses (
   RenderBody(..), BodyElim(..), RenderBlock(..), BlockElim(..), RenderType(..), 
   InternalTypeElim(..), VSUnOp, UnaryOpSym(..), VSBinOp, BinaryOpSym(..), 
   OpElim(..), RenderVariable(..), InternalVarElim(..), RenderValue(..), 
-  ValueElim(..), InternalGetSet(..), InternalListFunc(..), InternalIterator(..),
+  ValueElim(..), InternalGetSet(..), InternalListFunc(..),
   RenderFunction(..), FunctionElim(..), InternalAssignStmt(..), 
   InternalIOStmt(..), InternalControlStmt(..), RenderStatement(..), 
   StatementElim(..), RenderScope(..), ScopeElim(..), MSMthdType, 
@@ -18,11 +18,11 @@ import GOOL.Drasil.ClassInterface (Label, Library, SFile, MSBody, MSBlock,
   VSType, SVariable, SValue, VSFunction, MSStatement, MSParameter, SMethod, 
   CSStateVar, SClass, FSModule, MixedCall, FileSym(..), PermanenceSym(..), 
   BodySym(..), BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), 
-  VariableElim(..), ValueSym(..), Literal(..), MathConstant(..), 
+  VariableElim(..), ValueSym(..), Argument(..), Literal(..), MathConstant(..), 
   VariableValue(..), CommandLineArgs(..), NumericExpression(..), 
   BooleanExpression(..), Comparison(..), ValueExpression(..), 
   InternalValueExp(..), FunctionSym(..), GetSet(..), List(..), InternalList(..),
-  Iterator(..), StatementSym(..), AssignStatement(..), DeclStatement(..), 
+  StatementSym(..), AssignStatement(..), DeclStatement(..), 
   IOStatement(..), StringStatement(..), FuncAppStatement(..), 
   CommentStatement(..), ControlStatement(..), StatePattern(..), 
   ObserverPattern(..), StrategyPattern(..), ScopeSym(..), ParameterSym(..), 
@@ -36,13 +36,13 @@ import Text.PrettyPrint.HughesPJ (Doc)
 
 class (FileSym r, AssignStatement r, DeclStatement r, IOStatement r, 
   StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r,
-  Literal r, MathConstant r, VariableValue r, CommandLineArgs r,
+  Argument r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r,
   NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, 
-  InternalValueExp r, GetSet r, List r, InternalList r, Iterator r, 
+  InternalValueExp r, GetSet r, List r, InternalList r, 
   StatePattern r, ObserverPattern r, StrategyPattern r, TypeElim r, 
   VariableElim r, RenderBlock r, BlockElim r, RenderBody r, BodyElim r, 
   RenderClass r, ClassElim r, RenderFile r, InternalGetSet r, 
-  InternalListFunc r, InternalIterator r, RenderFunction r, FunctionElim r, 
+  InternalListFunc r, RenderFunction r, FunctionElim r, 
   RenderMethod r, MethodElim r, RenderMod r, ModuleElim r, OpElim r, 
   RenderParam r, ParamElim r, PermElim r, RenderScope r, 
   ScopeElim r, InternalAssignStmt r, InternalIOStmt r, InternalControlStmt r, 
@@ -60,7 +60,7 @@ class (BlockCommentSym r) => RenderFile r where
 
   commentedMod :: SFile r -> FS (r (BlockComment r)) -> SFile r
 
-  fileFromData :: FilePath -> r (Module r) -> SFile r
+  fileFromData :: FilePath -> FSModule r -> SFile r
 
 class ImportSym r where
   type Import r
@@ -87,7 +87,8 @@ class BlockElim r where
   block :: r (Block r) -> Doc
 
 class RenderType r where
-  typeFromData :: CodeType -> String -> Doc -> r (Type r)
+  multiType :: [VSType r] -> VSType r
+  typeFromData :: CodeType -> String -> Doc -> VSType r
 
 class InternalTypeElim r where
   type' :: r (Type r) -> Doc
@@ -138,7 +139,7 @@ class OpElim r where
   bOpPrec :: r (BinaryOp r) -> Int
   
 class RenderVariable r where
-  varFromData :: Binding -> String -> r (Type r) -> Doc -> r (Variable r)
+  varFromData :: Binding -> String -> VSType r -> Doc -> SVariable r
     
 class InternalVarElim r where
   variableBind :: r (Variable r) -> Binding
@@ -160,7 +161,7 @@ class RenderValue r where
   -- calls.
   call :: Maybe Library -> Maybe Doc -> MixedCall r
 
-  valFromData :: Maybe Int -> r (Type r) -> Doc -> r (Value r)
+  valFromData :: Maybe Int -> VSType r -> Doc -> SValue r
 
 class ValueElim r where
   valuePrec :: r (Value r) -> Maybe Int
@@ -176,10 +177,6 @@ class InternalListFunc r where
   listAppendFunc :: SValue r -> VSFunction r
   listAccessFunc :: VSType r -> SValue r -> VSFunction r
   listSetFunc    :: SValue r -> SValue r -> SValue r -> VSFunction r
-
-class InternalIterator r where
-  iterBeginFunc :: VSType r -> VSFunction r
-  iterEndFunc   :: VSType r -> VSFunction r
 
 class RenderFunction r where
   funcFromData :: Doc -> VSType r -> VSFunction r
@@ -204,7 +201,7 @@ class RenderStatement r where
 
   emptyStmt   :: MSStatement r
 
-  stmtFromData :: Doc -> Terminator -> r (Statement r)
+  stmtFromData :: Doc -> Terminator -> MSStatement r
 
 class StatementElim r where
   statement :: r (Statement r) -> Doc
@@ -224,7 +221,7 @@ class (TypeSym r) => MethodTypeSym r where
   construct :: Label -> MSMthdType r
 
 class RenderParam r where
-  paramFromData :: r (Variable r) -> Doc -> r (Parameter r)
+  paramFromData :: SVariable r -> Doc -> MSParameter r
   
 class ParamElim r where
   parameterName :: r (Parameter r) -> Label
@@ -240,6 +237,8 @@ class (MethodTypeSym r, BlockCommentSym r) =>
   commentedFunc :: MS (r (BlockComment r)) -> SMethod r -> SMethod r
     
   destructor :: [CSStateVar r] -> SMethod r
+
+  mthdFromData :: ScopeTag -> Doc -> SMethod r
 
 class MethodElim r where
   method :: r (Method r) -> Doc

@@ -1,10 +1,11 @@
+-- | Defines functions for reading values from a file corresponding to a DataDesc
 module Language.Drasil.Code.Imperative.ReadInput (
   sampleInputDD, readWithDataDesc
 ) where
 
 import Language.Drasil hiding (Data)
 import Language.Drasil.Code.DataDesc (DataDesc'(..), Data'(..), DataItem'(..), 
-  dataDesc, junk, list, singleton')
+  Delimiter, dataDesc, junk, list, singleton')
 import Language.Drasil.Chunk.Code (CodeVarChunk)
 
 import Control.Lens ((^.))
@@ -12,6 +13,8 @@ import Data.List (intersperse, isPrefixOf, transpose)
 import Data.List.Split (splitOn)
 import Data.List.NonEmpty (NonEmpty(..), toList)
 
+-- | Reads data from a file and converts the values to 'Expr's. The file must be 
+-- formatted according to the 'DataDesc'' passed as a parameter.
 readWithDataDesc :: FilePath -> DataDesc' -> IO [Expr]
 readWithDataDesc fp ddsc = do 
   ins <- readFile fp
@@ -57,6 +60,8 @@ readWithDataDesc fp ddsc = do
 -- transposeData 1 = exprVectTranspose
 -- transposeData n = exprVectMap exprVectTranspose . transposeData (n-1)
 
+-- | Defines the DataDesc for the file containing a sample data set, which a 
+-- user must supply if they want to generate a sample input file.
 sampleInputDD :: [CodeVarChunk] -> DataDesc'
 sampleInputDD ds = dataDesc (junk : intersperse junk (map toData ds)) "\n"
   where toData d = toData' (d ^. typ) d
@@ -66,6 +71,7 @@ sampleInputDD ds = dataDesc (junk : intersperse junk (map toData ds)) "\n"
 
 -- helpers
 
+-- | Converts a 'String' to an 'Expr' of a given 'Space'.
 strAsExpr :: Space -> String -> Expr
 strAsExpr Integer s = int (read s :: Integer)
 strAsExpr Natural s = int (read s :: Integer)
@@ -75,11 +81,14 @@ strAsExpr Rational s = dbl (read s :: Double)
 strAsExpr String s = str s
 strAsExpr _ _ = error "strAsExpr should only be numeric space or string"
 
+-- | Gets the dimension of a 'Space'.
 getDimension :: Space -> Int
 getDimension (Vect t) = 1 + getDimension t
 getDimension _ = 0
 
-splitAtFirst :: String -> String -> (String, String)
+-- | Splits a string at the first (and only the first) occurrence of a delimiter.
+-- The delimiter is dropped from the result.
+splitAtFirst :: String -> Delimiter -> (String, String)
 splitAtFirst = splitAtFirst' []
   where splitAtFirst' acc [] _ = (acc, [])
         splitAtFirst' acc s@(h:t) d = if d `isPrefixOf` s then 
@@ -89,10 +98,12 @@ splitAtFirst = splitAtFirst' []
         dropDelim [] s = s
         dropDelim _ [] = error "impossible"
 
+-- | Converts a list of 'String's to a Matrix 'Expr' of a given 'Space'.
 strListAsExpr :: Space -> [String] -> Expr
 strListAsExpr (Vect t) ss = Matrix [map (strAsExpr t) ss]
 strListAsExpr _ _ = error "strListsAsExpr called on non-vector space"
 
+-- | Converts a 2D list of 'String's to a Matrix 'Expr' of a given 'Space'.
 strList2DAsExpr :: Space -> [[String]] -> Expr
 strList2DAsExpr (Vect (Vect t)) sss = Matrix $ map (map (strAsExpr t)) sss
 strList2DAsExpr _ _ = error "strLists2DAsExprs called on non-2D-vector space"

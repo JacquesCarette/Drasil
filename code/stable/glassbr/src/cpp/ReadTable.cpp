@@ -102,7 +102,7 @@ void read_table(string filename, vector<double> &z_vector, vector<vector<double>
         z_vector.push_back(std::stod(linetokens.at(stringlist_i * 1 + 0)));
     }
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'z_vector' assigned to ";
+    outfile << "var 'z_vector' assigned ";
     outfile << "[";
     for (int list_i1 = 0; list_i1 < (int)(z_vector.size()) - 1; list_i1++) {
         outfile << z_vector.at(list_i1);
@@ -136,7 +136,7 @@ void read_table(string filename, vector<double> &z_vector, vector<vector<double>
         y_matrix.push_back(y_matrix_temp);
     }
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'x_matrix' assigned to ";
+    outfile << "var 'x_matrix' assigned ";
     outfile << "[";
     for (int list_i2 = 0; list_i2 < (int)(x_matrix.size()) - 1; list_i2++) {
         outfile << "[";
@@ -165,7 +165,7 @@ void read_table(string filename, vector<double> &z_vector, vector<vector<double>
     outfile << " in module ReadTable" << std::endl;
     outfile.close();
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'y_matrix' assigned to ";
+    outfile << "var 'y_matrix' assigned ";
     outfile << "[";
     for (int list_i2 = 0; list_i2 < (int)(y_matrix.size()) - 1; list_i2++) {
         outfile << "[";

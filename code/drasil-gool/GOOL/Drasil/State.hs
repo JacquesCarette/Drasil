@@ -4,9 +4,9 @@ module GOOL.Drasil.State (
   -- Types
   GS, GOOLState(..), FS, CS, MS, VS, 
   -- Lenses
-  lensFStoGS, lensGStoFS, lensFStoCS, lensFStoMS, lensFStoVS, lensCStoMS, 
-  lensMStoCS, lensCStoVS, lensMStoFS, lensMStoVS, lensVStoFS, lensVStoMS, 
-  headers, sources, mainMod, currMain, currFileType, currParameters,
+  lensFStoGS, lensGStoFS, lensMStoGS, lensFStoCS, lensFStoMS, lensFStoVS, 
+  lensCStoMS, lensMStoCS, lensCStoVS, lensMStoFS, lensMStoVS, lensVStoFS, 
+  lensVStoMS, lensCStoFS, headers, sources, mainMod, currMain, currFileType, currParameters,
   -- Initial states
   initialState, initialFS, 
   -- State helpers
@@ -25,16 +25,19 @@ module GOOL.Drasil.State (
   updateMethodExcMap, getMethodExcMap, updateCallMap, callMapTransClosure, 
   updateMEMWithCalls, addParameter, getParameters, setOutputsDeclared, 
   isOutputsDeclared, addException, addExceptions, getExceptions, addCall, 
-  setMainDoc, getMainDoc, setScope, getScope, setCurrMainFunc, getCurrMainFunc
+  setMainDoc, getMainDoc, setScope, getScope, setCurrMainFunc, getCurrMainFunc, 
+  setThrowUsed, getThrowUsed, setErrorDefined, getErrorDefined, addIter, 
+  getIter, resetIter, incrementLine, incrementWord, getLineIndex, getWordIndex, 
+  resetIndices
 ) where
 
 import GOOL.Drasil.AST (FileType(..), ScopeTag(..), QualifiedName, qualName)
 import GOOL.Drasil.CodeAnalysis (Exception, ExceptionType, printExc, hasLoc)
 import GOOL.Drasil.CodeType (ClassName)
 
-import Control.Lens (Lens', (^.), lens, makeLenses, over, set)
+import Control.Lens (Lens', (^.), lens, makeLenses, over, set, _1, _2)
 import Control.Monad.State (State, modify, gets)
-import Data.List (nub)
+import Data.List (nub, delete)
 import Data.List.Ordered (nubSort)
 import Data.Maybe (isNothing)
 import Data.Map (Map, fromList, insert, union, findWithDefault, mapWithKey)
@@ -49,9 +52,13 @@ data GOOLState = GS {
   _classMap :: Map String ClassName, -- Used to determine whether an import is 
                                      -- needed when using extClassVar and obj
 
-  -- Only used for Java, to generate correct "throws Exception" declarations
+  -- Only used in Java and Swift, to generate correct "throws Exception" declarations
   _methodExceptionMap :: Map QualifiedName [ExceptionType], -- Method to exceptions thrown
-  _callMap :: Map QualifiedName [QualifiedName] -- Method to other methods it calls
+  _callMap :: Map QualifiedName [QualifiedName], -- Method to other methods it calls
+
+  -- Only used for Swift
+  _throwUsed :: Bool, -- to add code so Strings can be used as Errors
+  _errorDefined :: Bool -- to avoid duplicating that code
 } 
 makeLenses ''GOOLState
 
@@ -69,8 +76,8 @@ data FileState = FS {
   _libImports :: [String],
   _moduleImports :: [String],
   
-  -- Only used for Python
-  _mainDoc :: Doc, -- To print Python's "main" last
+  -- Only used for Python and Swift
+  _mainDoc :: Doc, -- To print Python/Swift's "main" last
 
   -- C++ only
   _headerLangImports :: [String],
@@ -90,6 +97,8 @@ data ClassState = CS {
 }
 makeLenses ''ClassState
 
+type Index = Integer
+
 data MethodState = MS {
   _classState :: ClassState,
   _currParameters :: [String], -- Used to get parameter names when generating 
@@ -103,8 +112,14 @@ data MethodState = MS {
   -- Only used for C++
   _currScope :: ScopeTag, -- Used to maintain correct scope when adding 
                           -- documentation to function in C++
-  _currMainFunc :: Bool -- Used by C++ to put documentation for the main
+  _currMainFunc :: Bool, -- Used by C++ to put documentation for the main
                         -- function in source instead of header file
+  _iterators :: [String],
+
+  -- Only used for Swift
+  _contentsIndices :: (Index, Index) -- Used to keep track of the current place
+                                     -- in a file being read. First Int is the 
+                                     -- line number, second is the word number.
 }
 makeLenses ''MethodState
 
@@ -134,10 +149,18 @@ lensGStoFS = lens (\gs -> set goolState gs initialFS) (const (^. goolState))
 lensFStoGS :: Lens' FileState GOOLState
 lensFStoGS = goolState
 
+-- GS - MS --
+
+lensMStoGS :: Lens' MethodState GOOLState
+lensMStoGS = lensMStoFS . lensFStoGS
+
 -- FS - CS --
 
 lensFStoCS :: Lens' FileState ClassState
 lensFStoCS = lens (\fs -> set fileState fs initialCS) (const (^. fileState))
+
+lensCStoFS :: Lens' ClassState FileState
+lensCStoFS = fileState
 
 -- FS - MS --
 
@@ -189,7 +212,10 @@ initialState = GS {
   _classMap = Map.empty,
 
   _methodExceptionMap = Map.empty,
-  _callMap = Map.empty
+  _callMap = Map.empty,
+
+  _throwUsed = False,
+  _errorDefined = False
 }
 
 initialFS :: FileState
@@ -230,7 +256,10 @@ initialMS = MS {
   _calls = [],
 
   _currScope = Priv,
-  _currMainFunc = False
+  _currMainFunc = False,
+  _iterators = [],
+
+  _contentsIndices = (0,0)
 }
 
 initialVS :: ValueState
@@ -481,6 +510,42 @@ setCurrMainFunc = set currMainFunc
 
 getCurrMainFunc :: MS Bool
 getCurrMainFunc = gets (^. currMainFunc)
+
+setThrowUsed :: MethodState -> MethodState
+setThrowUsed = set (lensMStoGS . throwUsed) True
+
+getThrowUsed :: MS Bool
+getThrowUsed = gets (^. (lensMStoGS . throwUsed))
+
+setErrorDefined :: MethodState -> MethodState
+setErrorDefined = set (lensMStoGS . errorDefined) True
+
+getErrorDefined :: MS Bool
+getErrorDefined = gets (^. (lensMStoGS . errorDefined))
+
+addIter :: String -> MethodState -> MethodState
+addIter st = over iterators ([st]++)
+
+getIter :: MS [String]
+getIter = gets (^. iterators)
+
+resetIter :: String -> MethodState -> MethodState
+resetIter st = over iterators (delete st)
+
+incrementLine :: MethodState -> MethodState
+incrementLine = over (contentsIndices . _1) (+1)  . set (contentsIndices . _2) 0
+
+incrementWord :: MethodState -> MethodState
+incrementWord = over (contentsIndices . _2) (+1)
+
+getLineIndex :: MS Index
+getLineIndex = gets (^. (contentsIndices . _1))
+
+getWordIndex :: MS Index
+getWordIndex = gets (^. (contentsIndices . _2))
+
+resetIndices :: MethodState -> MethodState
+resetIndices = set contentsIndices (0,0)
 
 -- Helpers
 

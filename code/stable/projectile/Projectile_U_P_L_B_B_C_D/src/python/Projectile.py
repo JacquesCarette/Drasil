@@ -33,21 +33,21 @@ class InputParameters:
         infile.readline()
         self.v_launch = float(infile.readline())
         outfile = open("log.txt", "a")
-        print("var 'self.v_launch' assigned to ", end="", file=outfile)
+        print("var 'self.v_launch' assigned ", end="", file=outfile)
         print(self.v_launch, end="", file=outfile)
         print(" in module Projectile", file=outfile)
         outfile.close()
         infile.readline()
         self.theta = float(infile.readline())
         outfile = open("log.txt", "a")
-        print("var 'self.theta' assigned to ", end="", file=outfile)
+        print("var 'self.theta' assigned ", end="", file=outfile)
         print(self.theta, end="", file=outfile)
         print(" in module Projectile", file=outfile)
         outfile.close()
         infile.readline()
         self.p_target = float(infile.readline())
         outfile = open("log.txt", "a")
-        print("var 'self.p_target' assigned to ", end="", file=outfile)
+        print("var 'self.p_target' assigned ", end="", file=outfile)
         print(self.p_target, end="", file=outfile)
         print(" in module Projectile", file=outfile)
         outfile.close()
@@ -60,32 +60,32 @@ class InputParameters:
         print("  }", file=outfile)
         outfile.close()
         
-        if (not(self.v_launch > 0)) :
+        if (not(self.v_launch > 0.0)) :
             print("Warning: ", end="")
             print("v_launch has value ", end="")
             print(self.v_launch, end="")
-            print(" but suggested to be ", end="")
+            print(", but is suggested to be ", end="")
             print("above ", end="")
-            print(0, end="")
+            print(0.0, end="")
             print(".")
-        if (not(0 < self.theta and self.theta < math.pi / 2)) :
+        if (not(0.0 < self.theta and self.theta < math.pi / 2.0)) :
             print("Warning: ", end="")
             print("theta has value ", end="")
             print(self.theta, end="")
-            print(" but suggested to be ", end="")
+            print(", but is suggested to be ", end="")
             print("between ", end="")
-            print(0, end="")
+            print(0.0, end="")
             print(" and ", end="")
-            print(math.pi / 2, end="")
+            print(math.pi / 2.0, end="")
             print(" ((pi)/(2))", end="")
             print(".")
-        if (not(self.p_target > 0)) :
+        if (not(self.p_target > 0.0)) :
             print("Warning: ", end="")
             print("p_target has value ", end="")
             print(self.p_target, end="")
-            print(" but suggested to be ", end="")
+            print(", but is suggested to be ", end="")
             print("above ", end="")
-            print(0, end="")
+            print(0.0, end="")
             print(".")
 
 ## \brief Structure for holding the constant values
@@ -104,7 +104,7 @@ def func_t_flight(inParams):
     print("  }", file=outfile)
     outfile.close()
     
-    return 2 * inParams.v_launch * math.sin(inParams.theta) / Constants.g_vect
+    return 2.0 * inParams.v_launch * math.sin(inParams.theta) / Constants.g_vect
 
 ## \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
 # \param inParams structure holding the input values
@@ -117,7 +117,7 @@ def func_p_land(inParams):
     print("  }", file=outfile)
     outfile.close()
     
-    return 2 * inParams.v_launch ** 2 * math.sin(inParams.theta) * math.cos(inParams.theta) / Constants.g_vect
+    return 2.0 * inParams.v_launch ** 2.0 * math.sin(inParams.theta) * math.cos(inParams.theta) / Constants.g_vect
 
 ## \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
 # \param inParams structure holding the input values
@@ -153,7 +153,7 @@ def func_s(inParams, d_offset):
     
     if (math.fabs(d_offset / inParams.p_target) < Constants.epsilon) :
         return "The target was hit."
-    elif (d_offset < 0) :
+    elif (d_offset < 0.0) :
         return "The projectile fell short."
     else :
         return "The projectile went long."
@@ -181,32 +181,32 @@ def write_output(s, d_offset):
 
 filename = sys.argv[1]
 outfile = open("log.txt", "a")
-print("var 'filename' assigned to ", end="", file=outfile)
+print("var 'filename' assigned ", end="", file=outfile)
 print(filename, end="", file=outfile)
 print(" in module Projectile", file=outfile)
 outfile.close()
 inParams = InputParameters(filename)
 t_flight = func_t_flight(inParams)
 outfile = open("log.txt", "a")
-print("var 't_flight' assigned to ", end="", file=outfile)
+print("var 't_flight' assigned ", end="", file=outfile)
 print(t_flight, end="", file=outfile)
 print(" in module Projectile", file=outfile)
 outfile.close()
 p_land = func_p_land(inParams)
 outfile = open("log.txt", "a")
-print("var 'p_land' assigned to ", end="", file=outfile)
+print("var 'p_land' assigned ", end="", file=outfile)
 print(p_land, end="", file=outfile)
 print(" in module Projectile", file=outfile)
 outfile.close()
 d_offset = func_d_offset(inParams, p_land)
 outfile = open("log.txt", "a")
-print("var 'd_offset' assigned to ", end="", file=outfile)
+print("var 'd_offset' assigned ", end="", file=outfile)
 print(d_offset, end="", file=outfile)
 print(" in module Projectile", file=outfile)
 outfile.close()
 s = func_s(inParams, d_offset)
 outfile = open("log.txt", "a")
-print("var 's' assigned to ", end="", file=outfile)
+print("var 's' assigned ", end="", file=outfile)
 print(s, end="", file=outfile)
 print(" in module Projectile", file=outfile)
 outfile.close()

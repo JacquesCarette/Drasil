@@ -4,22 +4,25 @@
 module GOOL.Drasil.LanguageRenderer (
   -- * Common Syntax
   classDec, dot, commentStart, returnLabel, ifLabel, elseLabel, elseIfLabel, 
-  forLabel, inLabel, whileLabel, tryLabel, catchLabel, throwLabel, 
-  blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, endStatement, 
-  constDec', exceptionObj', new', self', array', listSep', argc, argv, args, 
-  constDec, exceptionObj, mainFunc, new, self, array, listSep, access, 
-  containing, mathFunc, addExt,
+  forLabel, inLabel, whileLabel, tryLabel, catchLabel, throwLabel, throwsLabel, 
+  importLabel, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, 
+  endStatement, constDec', exceptionObj', new', this', self', array', listSep', 
+  argc, argv, args, printLabel, constDec, exceptionObj, mainFunc, new, this, 
+  self, nullLabel, array, listSep, sqrt, abs, fabs, log10, log, exp, sin, cos, 
+  tan, asin, acos, atan, floor, ceil, pow, piLabel, access, containing, tuple,
+  mathFunc, addExt,
   
   -- * Default Functions available for use in renderers
   package, file, module', class', multiStmt, block, body, print, printFile, 
-  param, method, stateVar, constVar, stateVarList, switch, assign, multiAssign, 
-  addAssign, increment, listDec, getTerm, return', comment, var, extVar,
-  arg, classVar, objVar, unOpDocD, unOpDocD', binOpDocD, binOpDocD', 
-  constDecDef, func, cast, listAccessFunc, listSetFunc, objAccess, castObj, 
-  break, continue, static, dynamic, private, public, blockCmt, docCmt, 
-  commentedItem, addComments, functionDox, classDox, moduleDox, commentedMod, 
-  valueList, variableList, parameterList, namedArgList, prependToBody, 
-  appendToBody, surroundBody, getterName, setterName, intValue
+  param, method, stateVar, constVar, stateVarList, switch, assign, 
+  addAssign, subAssign, increment, decrement, listDec, getTerm, return', 
+  comment, var, extVar, arg, classVar, objVar, unOpDocD, unOpDocD', binOpDocD, 
+  binOpDocD', constDecDef, func, cast, listAccessFunc, listSetFunc, objAccess, 
+  castObj, break, continue, static, dynamic, private, public, blockCmt, docCmt, 
+  commentedItem, addComments, FuncDocRenderer, functionDox, ClassDocRenderer,
+  classDox, ModuleDocRenderer, moduleDox, commentedMod, valueList, 
+  variableList, parameterList, namedArgList, prependToBody, appendToBody, 
+  surroundBody, getterName, setterName, intValue
 ) where
 
 import Utils.Drasil (blank, capitalize, indent, indentList, stringList)
@@ -37,8 +40,9 @@ import GOOL.Drasil.AST (Terminator(..), FileData(..), fileD, updateFileMod,
   updateMod, TypeData(..), VarData(..))
 import GOOL.Drasil.Helpers (hicat, vibcat, vmap, emptyIfEmpty, emptyIfNull)
 
-import Data.List (last)
-import Prelude hiding (break,print,last,mod,(<>))
+import Data.List (last, intercalate)
+import Prelude hiding (break,print,last,sqrt,abs,log,exp,sin,cos,tan,asin,acos,
+  atan,floor,mod,(<>))
 import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
   space, brackets, parens, isEmpty, rbrace, lbrace, vcat, semi, equals, colon,
   comma)
@@ -48,9 +52,10 @@ import Text.PrettyPrint.HughesPJ (Doc, text, empty, render, (<>), (<+>), ($+$),
 ----------------------------------------
 
 classDec, dot, commentStart, returnLabel, ifLabel, elseLabel, elseIfLabel, 
-  forLabel, inLabel, whileLabel, tryLabel, catchLabel, throwLabel, 
-  blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, 
-  endStatement, constDec', exceptionObj', new', self', array', listSep' :: Doc
+  forLabel, inLabel, whileLabel, tryLabel, catchLabel, throwLabel, throwsLabel,
+  importLabel, blockCmtStart, blockCmtEnd, docCmtStart, bodyStart, bodyEnd, 
+  endStatement, constDec', exceptionObj', new', this', self', array', 
+  listSep' :: Doc
 classDec = text "class"
 dot = text "."
 commentStart = text "//"
@@ -64,6 +69,8 @@ whileLabel = text "while"
 tryLabel = text "try"
 catchLabel = text "catch"
 throwLabel = text "throw"
+throwsLabel = text "throws"
+importLabel = text "import"
 blockCmtStart = text "/*"
 blockCmtEnd = text "*/"
 docCmtStart = text "/**"
@@ -73,28 +80,54 @@ endStatement = semi
 constDec' = text constDec
 exceptionObj' = text exceptionObj
 new' = text new
+this' = text this
 self' = text self
 array' = text array
 listSep' = text listSep
 
-argc, argv, args, constDec, exceptionObj, mainFunc, new, self, array, 
-  listSep :: String
+argc, argv, args, printLabel, constDec, exceptionObj, mainFunc, new, this, 
+  self, nullLabel, array, listSep :: String
 argc = "argc"
 argv = "argv"
 args = "args"
+printLabel = "print"
 constDec = "const"
 exceptionObj = "Exception"
 mainFunc = "main"
 new = "new"
-self = "this"
+this = "this"
+self = "self"
+nullLabel = "null"
 array = "[]"
 listSep = ", "
+
+sqrt, abs, fabs, log10, log, exp, sin, cos, tan, asin, acos, atan, floor, 
+  ceil, pow, piLabel :: String
+sqrt = "sqrt"
+abs = "abs"
+fabs = "fabs"
+log10 = "log10"
+log = "log"
+exp = "exp"
+sin = "sin"
+cos = "cos"
+tan = "tan"
+asin = "asin"
+acos = "acos"
+atan = "atan"
+floor = "floor"
+ceil = "ceil"
+pow = "pow"
+piLabel = "pi"
 
 access :: String -> String -> String
 access q n = q ++ "." ++ n
 
 containing :: String -> String -> String
 containing l e = l ++ "<" ++ e ++ ">"
+
+tuple :: [String] -> String
+tuple ts = "(" ++ intercalate listSep ts ++ ")"
 
 mathFunc :: String -> String
 mathFunc = access "Math"
@@ -197,21 +230,21 @@ stateVarList = vcat
 
 -- Controls --
 
-switch :: (RenderSym r) => r (Statement r) -> r (Value r) -> r (Body r) -> 
+switch :: (RenderSym r) => (Doc -> Doc) -> r (Statement r) -> r (Value r) -> r (Body r) -> 
   [(r (Value r), r (Body r))] -> Doc
-switch breakState v defBody cs = 
+switch f st v defBody cs = 
   let caseDoc (l, result) = vcat [
         text "case" <+> RC.value l <> colon,
         indentList [
           RC.body result,
-          RC.statement breakState]]
+          RC.statement st]]
       defaultSection = vcat [
         text "default" <> colon,
         indentList [
           RC.body defBody,
-          RC.statement breakState]]
+          RC.statement st]]
   in vcat [
-      text "switch" <> parens (RC.value v) <+> lbrace,
+      text "switch" <> f (RC.value v) <+> lbrace,
       indentList [
         vmap caseDoc cs,
         defaultSection],
@@ -222,14 +255,17 @@ switch breakState v defBody cs =
 assign :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
 assign vr vl = RC.variable vr <+> equals <+> RC.value vl
 
-multiAssign :: (RenderSym r) => [r (Variable r)] -> [r (Value r)] -> Doc
-multiAssign vrs vls = variableList vrs <+> equals <+> valueList vls
-
 addAssign :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
 addAssign vr vl = RC.variable vr <+> text "+=" <+> RC.value vl
 
+subAssign :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
+subAssign vr vl = RC.variable vr <+> text "-=" <+> RC.value vl
+
 increment :: (RenderSym r) => r (Variable r) -> Doc
 increment v = RC.variable v <> text "++"
+
+decrement :: (RenderSym r) => r (Variable r) -> Doc
+decrement v = RC.variable v <> text "--"
 
 listDec :: (RenderSym r) => r (Variable r) -> r (Value r) -> Doc
 listDec v n = space <> equals <+> new' <+> RC.type' (variableType v) 
@@ -360,15 +396,21 @@ endCommentDelimit c = commentDelimit (endCommentLabel ++ " " ++ c)
 dashes :: String -> Int -> String
 dashes s l = replicate (l - length s) '-'
 
-functionDox :: String -> [(String, String)] -> [String] -> [String]
+type FuncDocRenderer = String -> [(String, String)] -> [String] -> [String]
+
+functionDox :: FuncDocRenderer
 functionDox desc params returns = [doxBrief ++ desc | not (null desc)]
   ++ map (\(v, vDesc) -> doxParam ++ v ++ " " ++ vDesc) params
   ++ map (doxReturn ++) returns
 
-classDox :: String -> [String]
+type ClassDocRenderer = String -> [String]
+
+classDox :: ClassDocRenderer
 classDox desc = [doxBrief ++ desc | not (null desc)]
 
-moduleDox :: String -> [String] -> String -> String -> [String]
+type ModuleDocRenderer = String -> [String] -> String -> String -> [String]
+
+moduleDox :: ModuleDocRenderer
 moduleDox desc as date m = (doxFile ++ m) : 
   [doxAuthor ++ stringList as | not (null as)] ++
   [doxDate ++ date | not (null date)] ++ 

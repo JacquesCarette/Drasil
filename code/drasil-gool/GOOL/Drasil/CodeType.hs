@@ -12,10 +12,10 @@ data CodeType = Boolean
               | Double
               | Char
               | String
-              | File
+              | InFile
+              | OutFile
               | List CodeType
               | Array CodeType
-              | Iterator CodeType
               | Object ClassName
               | Func [CodeType] CodeType
-              | Void deriving Eq
+              | Void deriving (Eq, Show)

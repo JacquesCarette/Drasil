@@ -1,15 +1,11 @@
-module Drasil.GlassBR.TMods (tMods, pbIsSafe, lrIsSafe) where
+module Drasil.GlassBR.TMods (tMods, pbIsSafe, lrIsSafe, tModRefs) where
 
 import Language.Drasil
-import Language.Drasil.Code (relToQD) -- FIXME, this should not be needed
-import Database.Drasil (cdb)
-import Theory.Drasil (TheoryModel, tm)
+import Theory.Drasil (TheoryModel, tm, ModelKinds(EquationalModel))
 
-import Drasil.GlassBR.IMods (symb)
 import Drasil.GlassBR.References (astm2009)
 import Drasil.GlassBR.Unitals (isSafeLoad, isSafeProb, pbTolfail, probFail,
   tmDemand, tmLRe)
-import Drasil.GlassBR.Symbols (thisSymbols)
 
 {--}
 
@@ -25,34 +21,38 @@ tMods = [pbIsSafe, lrIsSafe]
 
 
 lrIsSafe :: TheoryModel
-lrIsSafe = tm (cw lrIsSafeRC)
+lrIsSafe = tm (EquationalModel lrIsSafeQD)
    [qw isSafeLoad, qw tmLRe, qw tmDemand] ([] :: [ConceptChunk])
-   [relToQD locSymbMap lrIsSafeRC] [sy isSafeLoad $= sy tmLRe $> sy tmDemand] [] [makeCite astm2009] 
+   [lrIsSafeQD] [] [] [ref astm2009] 
    "isSafeLoad" [lrIsSafeDesc]
-   where locSymbMap = cdb thisSymbols ([] :: [IdeaDict]) symb
-                          ([] :: [UnitDefn]) [] [] [] [] [] [] []
 
-lrIsSafeRC :: RelationConcept
-lrIsSafeRC = makeRC "safetyLoad" (nounPhraseSP "Safety Load")
-  lrIsSafeDesc (sy isSafeLoad $= sy tmLRe $> sy tmDemand)
+lrIsSafeQD :: QDefinition
+lrIsSafeQD = mkQuantDef' isSafeLoad (nounPhraseSP "Safety Load") lrIsSafeExpr
+
+lrIsSafeExpr :: Expr
+lrIsSafeExpr = sy tmLRe $> sy tmDemand
 
 lrIsSafeDesc :: Sentence
 lrIsSafeDesc = tModDesc isSafeLoad
 
 pbIsSafe :: TheoryModel
-pbIsSafe = tm (cw pbIsSafeRC) 
+pbIsSafe = tm (EquationalModel pbIsSafeQD) 
   [qw isSafeProb, qw probFail, qw pbTolfail] ([] :: [ConceptChunk])
-  [relToQD locSymbMap pbIsSafeRC] [sy isSafeProb $= sy probFail $< sy pbTolfail] [] [makeCite astm2009]
+  [pbIsSafeQD] [] [] [ref astm2009]
   "isSafeProb" [pbIsSafeDesc]
-  where locSymbMap = cdb thisSymbols ([] :: [IdeaDict]) symb
-                          ([] :: [UnitDefn]) [] [] [] [] [] [] []
 
-pbIsSafeRC :: RelationConcept
-pbIsSafeRC = makeRC "safetyProbability" (nounPhraseSP "Safety Probability")
-  pbIsSafeDesc (sy isSafeProb $= sy probFail $< sy pbTolfail)
+pbIsSafeQD :: QDefinition
+pbIsSafeQD = mkQuantDef' isSafeProb (nounPhraseSP "Safety Probability") pbIsSafeExpr
+
+pbIsSafeExpr :: Expr
+pbIsSafeExpr = sy probFail $< sy pbTolfail
 
 pbIsSafeDesc :: Sentence
 pbIsSafeDesc = tModDesc isSafeProb
 
 tModDesc :: QuantityDict -> Sentence
 tModDesc main = S "If" +:+. (ch main `sC` S "the structure is considered safe")
+
+-- References --
+tModRefs :: [Reference]
+tModRefs = map ref tMods

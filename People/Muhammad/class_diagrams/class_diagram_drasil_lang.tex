@@ -1,0 +1,247 @@
+\documentclass{minimal}
+
+\usepackage{verbatim}
+
+\usepackage[a3paper,margin=1cm,landscape]{geometry}
+
+\usepackage{tikz}
+\usetikzlibrary{positioning,shapes,shadows,arrows}
+
+\begin{document}
+
+\tikzstyle{class}=[rectangle, draw=black, rounded corners, fill=white!40, drop shadow,
+        text centered, anchor=north, text=black, text width=3cm]
+\tikzstyle{comment}=[rectangle, draw=black, rounded corners, fill=green, drop shadow,
+        text centered, anchor=north, text=white, text width=3cm]
+\tikzstyle{myarrow}=[->, >=triangle 90, thick]
+\tikzstyle{line}=[-, thick]
+\tikzstyle{mayHave}=[rectangle, fill=green, text=black, text width=0.65cm];
+\tikzstyle{greenArrow}=[->, >=triangle 90, thick]
+
+\begin{center}
+\begin{tikzpicture}[node distance=2cm]
+\node (HasUID) [class]
+		{
+			\textbf{HasUID}
+			
+			uid : UID
+		};
+
+\node (Referable) [class, text width=4cm,  below right = 1cm and 0.5cm of HasUID]
+		{
+			\textbf{Referable}
+			
+			refAdd : String
+			
+			renderRef  : LblType
+		};
+\node (NamedIdea) [class, below left = 1cm and 0.5cm of HasUID, text width=4cm]
+        {
+            \textbf{NamedIdea}
+            
+			term : NP
+        };
+
+\node (Idea) [class, below left=1cm and 0.5cm of NamedIdea]
+		{
+			\textbf{Idea}
+			
+			getA : Maybe String
+		};
+\node (CommonIdea) [class, below right=1cm and 0.5cm of NamedIdea]
+		{
+			\textbf{CommonIdea}
+			
+			abrv : String
+		};
+\node (Definition) [class,below left=1cm and 0.5cm of CommonIdea] 
+		{
+			\textbf{Definition}
+			
+			udefn :  Maybe UDefn
+
+   			getUnits :  [UID]
+		};
+\node (HasUnitSymbol) [class, text width=4cm,below right=1cm and 0.5cm of CommonIdea]
+		{ 
+			\textbf{HasUnitSymbol}
+			
+			usymb : USymb
+		};
+\node (HasSpace) [class, text width=4cm,left = 1cm of Idea]
+		{
+			\textbf{HasSpace}
+			
+			typ : Space
+		};
+\node (HasSymbol) [class, text width=4cm, left = 1cm of HasSpace]
+		{
+			\textbf{HasSymbol}
+			
+			symbol : Symbol
+		};
+\node (Callable) [class, text width=4cm, below left=2 cm and 0cm of HasSymbol]
+		{
+			\textbf{Callable}
+			
+			symbol : Symbol
+		};
+
+\node (Quantity) [class, text width=4cm, below left=2cm and 1cm of Idea]
+		{
+			\textbf{Quantity}
+			
+		};
+\node (Unitary) [class, text width=4cm, below=of Quantity]		
+		{
+			\textbf{Unitary}
+			
+			unit : UnitDefn
+		};
+\node (IsUnit) [class, text width=4cm, below right=2cm and 0.5cm of Definition]
+		{ 
+			\textbf{IsUnit}
+
+			udefn : Maybe UDefn
+
+			getUnits : [UID]	
+		};
+\draw[myarrow] (IsUnit.north) -- ++(0,0.8) -| (Idea.south);
+\draw[myarrow] (IsUnit.north) -- ++(0,0.8) -| (Definition.south);
+\draw[myarrow] (IsUnit.north) -- ++(0,0.8) -| (HasUnitSymbol.south);
+\draw[myarrow] (Unitary.north) -- ++(0,0.8) -| (Quantity.south);
+\draw[myarrow] (Quantity.north) -- ++(0,0.8) -| (HasSpace.south);
+\draw[myarrow] (Quantity.north) -- ++(0,0.8) -| (HasSymbol.south);
+\draw[myarrow] (Quantity.north) -- ++(0,0.8) -| (Idea.south);
+
+
+\draw[myarrow] (Callable.north) -- ++(0,4) -| (HasSymbol.north);
+\draw[myarrow] (CommonIdea.north) -- ++(0,0.3) -| (NamedIdea.south);
+\draw[myarrow] (Idea.north) -- ++(0,0.3) -| (NamedIdea.south);
+\draw[myarrow] (NamedIdea.north) -- ++(0,0.3) -| (HasUID.south);
+\draw[myarrow] (Referable.north) -- ++(0,0.3) -| (HasUID.south);
+
+\node (ConceptDomain) [class, text width=6cm, below = 2cm of Unitary]
+		{
+			\textbf{ConceptDomain}
+			
+			cdom : [UID]
+		};
+
+\node (NounPhrase) [class, text width=5cm, right=0cm of ConceptDomain]
+		{
+			\textbf{NounPhrase}
+			
+			phraseNP :  Sentence
+
+			pluralNP : PluralForm 
+
+			sentenceCase : Capitalization 
+
+			titleCase : Capitalization
+		};
+\node (HasName) [class, text width=4cm, right=0cm of NounPhrase]
+		{
+			\textbf{HasName}
+			
+			nameStr : String
+		};
+\node (Constrained) [class, text width=4cm, right=0cm of HasName]
+		{
+			\textbf{Constrained}
+			
+			constraints : [Constraint]
+		};
+\node (HasDerivation) [class, text width=4cm, right=0cm of Constrained]
+		{
+			\textbf{HasDerivation}
+			
+			derivations : Maybe Derivation
+		};
+\node (HasReasVal) [class, text width=4cm, right=0cm of HasDerivation]
+		{
+			\textbf{HasReasVal}
+			
+			reasVal : Maybe Expr
+		};
+\node (UnitEq) [class, text width=4cm, below=1cm of ConceptDomain]
+		{
+			\textbf{UnitEq}
+			
+			uniteq : UDefn
+		};
+\node (ExprRelat) [class, text width=4cm, right=0cm of UnitEq]
+		{
+			\textbf{ExprRelat}
+			
+			relat : Expr
+		};
+\node (RenderSpecial) [class, text width=4cm,  right=0cm of ExprRelat]
+		{
+			\textbf{RenderSpecial}
+			
+			special : RenderSpecial
+		};
+\node (HasAdditionalNotes) [class, text width=5cm, right=0cm of RenderSpecial]
+		{
+			\textbf{HasAdditionalNotes}
+			
+			getNotes : [Sentence]
+		};
+\node (HasFields) [class, text width=4cm, right=0cm of HasAdditionalNotes]
+		{
+			\textbf{HasFields}
+			
+			getFields : [CiteField]
+		};
+
+\node (HasShortName) [class, text width=4cm,  right= 0cm of HasFields]
+		{
+			\textbf{HasShortName}
+			
+			 shortname :  ShortName
+		};
+
+\node (HasRefAddress) [class, text width=4cm, right=0cm of HasShortName]
+		{
+			\textbf{HasRefAddress}
+			
+			 getRefAdd : String
+
+		};
+\node (HasUncertainty) [class, text width=4cm,below =0cm of UnitEq]
+		{
+			\textbf{HasUncertainty}
+			
+			  unc  :  Uncertainty
+
+		};
+\node (DefiningExpr) [class, text width=4cm,right =0cm of HasUncertainty]
+		{
+			\textbf{DefiningExpr}
+			
+			 defnExpr : Expr
+		};
+\node (HasCitation) [class, text width=4cm,right =0cm of DefiningExpr]
+		{
+			\textbf{HasCitation}
+			
+			 getCitations :  [Citation]
+		};
+\node (MayHaveUnit) [class, text width=4cm,below right =0cm of RenderSpecial]
+		{
+			\textbf{MayHaveUnit}
+			
+			    getUnit : Maybe UnitDefn
+		};
+\node (HasContents) [class, text width=4cm, right =0cm of MayHaveUnit]
+		{
+			\textbf{HasContents}
+			
+			  accessContents :  RawContent
+		};
+  
+\end{tikzpicture}
+\end{center}
+
+\end{document}

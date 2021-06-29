@@ -1,14 +1,51 @@
-dist
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editors
+.idea
+.vscode
+
+# Drasil/Haskell
+.cabal-sandbox
+.hsenv
+.stack-work
+cabal.config
+cabal.sandbox.config
 cabal-dev
+dist
 *.o
 *.hi
 *.chi
 *.chs.h
+.drasil-min-stack-ver
+stack.yaml.lock
+.hlint*
+
+# Drasil supported programming languages
+__pycache__
 .virtualenv
-.hsenv
-.cabal-sandbox/
-cabal.sandbox.config
-cabal.config
+*.pyc
+*.class
+Main
+
+# Generated artifacts
+code/analysis
+code/build
+code/docs
+code/deploy
+code/graphs
+code/logs
+code/stable/*/src/*/html
+code/stable/*/src/*/latex
+*/Projectile/output.txt
+
+# Website
+code/website/_cache
+code/website/_site
+
+# PDF generation, TeX caches, and misc. file types
 *.aux
 *.log
 *.blg
@@ -17,30 +54,9 @@ cabal.config
 *.snm
 *.toc
 *.swp
-Main
-.idea
+*.fls
+*.fdb_latexmk
 *.out
 *.iml
 *.vrb
-.DS_Store
-Thumbs.db
-desktop.ini
-.stack-work
-/code/Docs
-/code/build
-/code/logs
-/code/graphs
-/code/deploy
-/code/website/_cache
-/code/website/_site
 *.synctex.gz
-*.pyc
-__pycache__
-*.class
-.drasil-min-stack-ver
-*/Projectile/output.txt
-*.fls
-*.fdb_latexmk
-stack.yaml.lock
-/code/stable/*/src/*/html
-/code/stable/*/src/*/latex

@@ -69,6 +69,16 @@ td {
     <td>D</td>
   </tr>
   <tr>
+    <td>PDController</td>
+    <td>C</td>
+    <td>P</td>
+    <td>NoL</td>
+    <td>U</td>
+    <td>B</td>
+    <td>C</td>
+    <td>D</td>
+  </tr>
+  <tr>
     <td>Projectile_C_P_NoL_B_U_V_D</td>
     <td>C</td>
     <td>P</td>
@@ -215,7 +225,14 @@ $endfor$
 $if(docsUrl)-$
   <h3 id="haskDoc">Haddock Documentation</h3>
   <p>
-    The current <a href="$docsUrl$">Haddock documentation</a> for the Drasil framework.
+    The current <a href="$docsUrl$">Haddock documentation</a> for the Drasil framework. $if(fullDocsUrl)-$A variant with <a href="$fullDocsUrl$">fully exposed modules</a> is also available.$-endif$
+  </p>
+$-endif$
+
+$if(dataTableHTMLUrl)-$
+  <h3 id="drasilDataTable">Drasil Data Table</h3>
+  <p>
+    Here is the updated <a href="$dataTableHTMLUrl$">Data Table</a> for the Drasil framework. $if(dataTableUrl)-$There is also a <a href="$dataTableUrl$">downloadable version</a> (csv format).$-endif$
   </p>
 $-endif$
 

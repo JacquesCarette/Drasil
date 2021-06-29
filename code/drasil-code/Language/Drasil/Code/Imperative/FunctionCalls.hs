@@ -9,7 +9,7 @@ import Language.Drasil.Code.Imperative.Logging (maybeLog)
 import Language.Drasil.Code.Imperative.Parameters (getCalcParams, 
   getConstraintParams, getDerivedIns, getDerivedOuts, getInputFormatIns, 
   getInputFormatOuts, getOutputParams)
-import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
+import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar)
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition)
 import Language.Drasil.Mod (Name)
@@ -21,29 +21,35 @@ import Data.List ((\\), intersect)
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (catMaybes)
 import Control.Applicative ((<|>))
-import Control.Monad.Reader (Reader, ask)
+import Control.Monad.State (get)
 
-getAllInputCalls :: (OOProg r) => Reader DrasilState [MSStatement r]
+-- | Generates calls to all of the input-related functions. First is the call to 
+-- the function for reading inputs, then the function for calculating derived 
+-- inputs, then the function for checking input constraints.
+getAllInputCalls :: (OOProg r) => GenState [MSStatement r]
 getAllInputCalls = do
   gi <- getInputCall
   dv <- getDerivedCall
   ic <- getConstraintCall
   return $ catMaybes [gi, dv, ic]
 
-getInputCall :: (OOProg r) => Reader DrasilState (Maybe (MSStatement r))
+-- | Generates a call to the function for reading inputs from a file.
+getInputCall :: (OOProg r) => GenState (Maybe (MSStatement r))
 getInputCall = getInOutCall "get_input" getInputFormatIns getInputFormatOuts
 
-getDerivedCall :: (OOProg r) => Reader DrasilState (Maybe (MSStatement r))
+-- | Generates a call to the function for calculating derived inputs.
+getDerivedCall :: (OOProg r) => GenState (Maybe (MSStatement r))
 getDerivedCall = getInOutCall "derived_values" getDerivedIns getDerivedOuts
 
-getConstraintCall :: (OOProg r) => Reader DrasilState 
-  (Maybe (MSStatement r))
+-- | Generates a call to the function for checking constraints on the input.
+getConstraintCall :: (OOProg r) => GenState (Maybe (MSStatement r))
 getConstraintCall = do
   val <- getFuncCall "input_constraints" void getConstraintParams
   return $ fmap valStmt val
 
-getCalcCall :: (OOProg r) => CodeDefinition -> Reader DrasilState 
-  (Maybe (MSStatement r))
+-- | Generates a call to a calculation function, given the 'CodeDefinition' for the 
+-- value being calculated.
+getCalcCall :: (OOProg r) => CodeDefinition -> GenState (Maybe (MSStatement r))
 getCalcCall c = do
   t <- codeType c
   val <- getFuncCall (codeName c) (convType t) (getCalcParams c)
@@ -51,13 +57,16 @@ getCalcCall c = do
   l <- maybeLog v
   return $ fmap (multi . (: l) . varDecDef v) val
 
-getOutputCall :: (OOProg r) => Reader DrasilState (Maybe (MSStatement r))
+-- | Generates a call to the function for printing outputs.
+getOutputCall :: (OOProg r) => GenState (Maybe (MSStatement r))
 getOutputCall = do
   val <- getFuncCall "write_output" void getOutputParams
   return $ fmap valStmt val
 
+-- | Generates a function call given the name, return type, and arguments to 
+-- the function.
 getFuncCall :: (OOProg r) => Name -> VSType r -> 
-  Reader DrasilState [CodeVarChunk] -> Reader DrasilState (Maybe (SValue r))
+  GenState [CodeVarChunk] -> GenState (Maybe (SValue r))
 getFuncCall n t funcPs = do
   mm <- getCall n
   let getFuncCall' Nothing = return Nothing
@@ -68,9 +77,10 @@ getFuncCall n t funcPs = do
         return $ Just val
   getFuncCall' mm
 
-getInOutCall :: (OOProg r) => Name -> Reader DrasilState [CodeVarChunk] -> 
-  Reader DrasilState [CodeVarChunk] ->
-  Reader DrasilState (Maybe (MSStatement r))
+-- | Generates a function call given the name, inputs, and outputs for the
+-- function.
+getInOutCall :: (OOProg r) => Name -> GenState [CodeVarChunk] -> 
+  GenState [CodeVarChunk] -> GenState (Maybe (MSStatement r))
 getInOutCall n inFunc outFunc = do
   mm <- getCall n
   let getInOutCall' Nothing = return Nothing
@@ -84,15 +94,15 @@ getInOutCall n inFunc outFunc = do
         return $ Just stmt
   getInOutCall' mm
   
--- Gets the name of the module containing the function being called
--- If the function is not in either module export map or class definition map, 
---   return Nothing
--- If the function is not in module export map but is in class definition map, 
--- that means it is a private function, so return Nothing unless it is in the 
--- current class
-getCall :: Name -> Reader DrasilState (Maybe Name)
+-- | Gets the name of the module containing the function being called.
+-- If the function is not in either the module export map or class definition map, 
+--   return 'Nothing'.
+-- If the function is not in module export map but is in the class definition map, 
+-- that means it is a private function, so return 'Nothing' unless it is in the 
+-- current class.
+getCall :: Name -> GenState (Maybe Name)
 getCall n = do
-  g <- ask
+  g <- get
   let currc = currentClass g
       getCallExported Nothing = getCallInClass (Map.lookup n $ clsMap g)
       getCallExported m = return m

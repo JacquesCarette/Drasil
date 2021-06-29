@@ -4,7 +4,7 @@ module Language.Drasil.Config(numberedSections,hyperSettings,fontSize,bibFname,
   verboseDDDescription,StyleGuide(..),bibStyleH,bibStyleT,colAwidth,colBwidth,
   numberedDDEquations,numberedTMEquations) where
 
--- | TeX font size
+-- | TeX font size.
 fontSize :: Int
 fontSize = 12
 
@@ -33,12 +33,12 @@ numberedSections = True
 --  "amsmath"])
 
 -- | TeX Only - column width for data definitions 
--- (fraction of LaTeX textwidth)
+-- (fraction of LaTeX textwidth).
 colAwidth, colBwidth :: Double
 colAwidth = 0.13
 colBwidth = 0.82
 
--- | TeX Only - Settings for hyperref
+-- | TeX Only - Settings for hyperref.
 hyperSettings :: String
 hyperSettings =
      "bookmarks=true,"     -- show bookmarks bar?
@@ -48,20 +48,24 @@ hyperSettings =
   ++ "filecolor=magenta,"  -- color of file links
   ++ "urlcolor=cyan"       -- color of external links
 
--- | The bibliography format
+-- | The bibliography format.
 data StyleGuide = MLA | APA | Chicago
 
+-- | Converts bibliography style guide.
 useStyleTeX :: StyleGuide -> String
 useStyleTeX MLA = "ieeetr"
 useStyleTeX APA = "apalike"
 useStyleTeX Chicago = "plain"
 
+-- | MLA for bibliography style as a 'String'.
 bibStyleT :: String
 bibStyleT = useStyleTeX bibStyle --This will be an input for the user eventually
 
+-- | MLA for bibliography style.
 bibStyleH :: StyleGuide
 bibStyleH = bibStyle
 
+-- | MLA for bibliography style.
 bibStyle :: StyleGuide
 bibStyle = MLA
 

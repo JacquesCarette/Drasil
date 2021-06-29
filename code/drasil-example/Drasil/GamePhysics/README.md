@@ -1,6 +1,6 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 19, 2019
+Last updated: May 28, 2020
 --------------------------------------------------
 
 **DesignDec**
@@ -32,7 +32,10 @@ README.md
   
 References.hs
   - References for the Game Physics example
-  
+
+Requirements.hs
+  - Requirements for the Game Physics example
+
 TMods.hs
   - Theoretical models for the Game Physics example
   

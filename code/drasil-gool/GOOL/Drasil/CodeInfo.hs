@@ -6,10 +6,10 @@ module GOOL.Drasil.CodeInfo (CodeInfo(..)) where
 import GOOL.Drasil.ClassInterface (MSBody, VSType, SValue, MSStatement, 
   SMethod, OOProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
   BlockSym(..), TypeSym(..), TypeElim(..), VariableSym(..), VariableElim(..), 
-  ValueSym(..), Literal(..), MathConstant(..), VariableValue(..), 
+  ValueSym(..), Argument(..), Literal(..), MathConstant(..), VariableValue(..), 
   CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
   Comparison(..), ValueExpression(..), InternalValueExp(..), FunctionSym(..), 
-  GetSet(..), List(..), InternalList(..), Iterator(..), StatementSym(..), 
+  GetSet(..), List(..), InternalList(..), StatementSym(..), 
   AssignStatement(..), DeclStatement(..), IOStatement(..), StringStatement(..), 
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..), 
   StatePattern(..), ObserverPattern(..), StrategyPattern(..), ScopeSym(..), 
@@ -19,10 +19,10 @@ import GOOL.Drasil.AST (ScopeTag(..), qualName)
 import GOOL.Drasil.CodeAnalysis (ExceptionType(..))
 import GOOL.Drasil.Helpers (toCode, toState)
 import GOOL.Drasil.State (GOOLState, VS, lensGStoFS, lensFStoCS, lensFStoMS,
-  lensCStoMS, lensMStoFS, lensMStoVS, lensVStoFS, modifyReturn, setClassName, 
-  setModuleName, getModuleName, addClass, updateClassMap, addException, 
-  updateMethodExcMap, updateCallMap, addCall, callMapTransClosure, 
-  updateMEMWithCalls)
+  lensCStoMS, lensMStoVS, lensVStoFS, lensCStoFS, modifyReturn, 
+  setClassName, getClassName, setModuleName, getModuleName, addClass, 
+  updateClassMap, addException, updateMethodExcMap, updateCallMap, addCall, 
+  callMapTransClosure, updateMEMWithCalls)
 
 import Control.Monad.State (State, modify)
 import qualified Control.Monad.State as S (get)
@@ -91,7 +91,6 @@ instance TypeSym CodeInfo where
   listInnerType _   = noInfoType
   obj               = toState . toCode
   funcType      _ _ = noInfoType
-  iterator      _   = noInfoType
   void              = noInfoType
 
 instance TypeElim CodeInfo where
@@ -110,7 +109,6 @@ instance VariableSym CodeInfo where
   objVar      _ _   = noInfo
   objVarSelf  _     = noInfo
   arrayElem   _ _   = noInfo
-  iterVar     _ _   = noInfo
   
 instance VariableElim CodeInfo where
   variableName _ = ""
@@ -119,6 +117,9 @@ instance VariableElim CodeInfo where
 instance ValueSym CodeInfo where
   type Value CodeInfo = ()
   valueType _ = toCode ""
+
+instance Argument CodeInfo where
+  pointerArg = id
 
 instance Literal CodeInfo where
   litTrue     = noInfo
@@ -229,10 +230,6 @@ instance InternalList CodeInfo where
     mapM_ (fromMaybe noInfo) [b,e,s]
     _ <- vl
     noInfo
-
-instance Iterator CodeInfo where
-  iterBegin = execute1
-  iterEnd   = execute1
 
 instance StatementSym CodeInfo where
   type Statement CodeInfo = ()
@@ -360,13 +357,13 @@ instance MethodSym CodeInfo where
   constructor _ il b = do
     mapM_ (zoom lensMStoVS . snd) il
     _ <- b
-    mn <- zoom lensMStoFS getModuleName
-    modify (updateCallMap mn . updateMethodExcMap mn)
+    cn <- getClassName
+    modify (updateCallMap cn . updateMethodExcMap cn)
     noInfo
 
   docMain = updateMEMandCM "main"
 
-  function n _ _ _ _ = updateMEMandCM n
+  function n _ _ _ = updateMEMandCM n
   mainFunction = updateMEMandCM "main"
 
   docFunc _ _ _ f = do
@@ -377,27 +374,29 @@ instance MethodSym CodeInfo where
 
   docInOutMethod n _ _ _ _ _ _ = updateMEMandCM n
 
-  inOutFunc      n _ _ _ _ _   = updateMEMandCM n
+  inOutFunc      n _ _ _ _     = updateMEMandCM n
 
-  docInOutFunc   n _ _ _ _ _ _ = updateMEMandCM n
+  docInOutFunc   n _ _ _ _ _   = updateMEMandCM n
 
 instance StateVarSym CodeInfo where
   type StateVar CodeInfo = ()
-  stateVar    _ _ _     = noInfo
-  stateVarDef _ _ _ _ _ = noInfo
-  constVar    _ _ _ _   = noInfo
+  stateVar    _ _ _   = noInfo
+  stateVarDef _ _ _ _ = noInfo
+  constVar    _ _ _   = noInfo
 
 instance ClassSym CodeInfo where
   type Class CodeInfo = ()
-  buildClass n _ _ ms = do
-    modify (addClass n . setClassName n)
-    mapM_ (zoom lensCStoMS) ms
-    noInfo
+  buildClass _ _ ms = do
+    n <- zoom lensCStoFS getModuleName
+    implementingClass n [] [] ms
   extraClass n _ _ ms = do
     modify (setClassName n)
     mapM_ (zoom lensCStoMS) ms
     noInfo
-  implementingClass n _ _ = buildClass n Nothing [] 
+  implementingClass n _ _ ms = do
+    modify (addClass n . setClassName n)
+    mapM_ (zoom lensCStoMS) ms
+    noInfo
 
   docClass _ c = do
     _ <- c

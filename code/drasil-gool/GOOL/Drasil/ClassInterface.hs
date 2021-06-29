@@ -9,15 +9,16 @@ module GOOL.Drasil.ClassInterface (
   OOProg, ProgramSym(..), FileSym(..), PermanenceSym(..), BodySym(..), 
   bodyStatements, oneLiner, BlockSym(..), TypeSym(..), TypeElim(..), 
   VariableSym(..), VariableElim(..), ($->), listOf, listVar, ValueSym(..), 
-  Literal(..), MathConstant(..), VariableValue(..), CommandLineArgs(..), 
-  NumericExpression(..), BooleanExpression(..), Comparison(..), 
-  ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, extFuncApp, 
-  libFuncApp, newObj, extNewObj, libNewObj, exists, InternalValueExp(..), 
-  objMethodCall, objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..),
-  ($.), selfAccess, GetSet(..), List(..), InternalList(..), listSlice,
-  listIndexExists, at, Iterator(..), StatementSym(..), AssignStatement(..), 
-  (&=), assignToListIndex, DeclStatement(..), objDecNewNoParams, 
-  extObjDecNewNoParams, IOStatement(..), StringStatement(..), 
+  Argument(..), Literal(..), MathConstant(..), VariableValue(..), 
+  CommandLineArgs(..), NumericExpression(..), BooleanExpression(..), 
+  Comparison(..), ValueExpression(..), funcApp, funcAppNamedArgs, selfFuncApp, 
+  extFuncApp, libFuncApp, newObj, extNewObj, libNewObj, exists, 
+  InternalValueExp(..), objMethodCall, objMethodCallNamedArgs, 
+  objMethodCallMixedArgs, objMethodCallNoParams, FunctionSym(..), ($.),
+  selfAccess, GetSet(..), List(..), InternalList(..), listSlice, 
+  listIndexExists, at, StatementSym(..), AssignStatement(..), (&=), 
+  assignToListIndex, DeclStatement(..), objDecNewNoParams, 
+  extObjDecNewNoParams, IOStatement(..), StringStatement(..),
   FuncAppStatement(..), CommentStatement(..), ControlStatement(..), 
   StatePattern(..), initState, changeState, ObserverPattern(..), 
   observerListName, initObserverList, addObserver, StrategyPattern(..), 
@@ -39,11 +40,14 @@ type GSProgram a = GS (a (Program a))
 
 -- In relation to GOOL, the type variable r can be considered as short for "representation"
 
+-- Functions in GOOL's interface beginning with "ext" are to be used to access items from other modules in the same program/project
+-- Functions in GOOL's interface beginning with "lib" are to be used to access items from different libraries/projects
+
 class (ProgramSym r, AssignStatement r, DeclStatement r, IOStatement r, 
   StringStatement r, FuncAppStatement r, CommentStatement r, ControlStatement r,
-  InternalList r, Literal r, MathConstant r, VariableValue r, CommandLineArgs r,
-  NumericExpression r, BooleanExpression r, Comparison r, ValueExpression r, 
-  InternalValueExp r, GetSet r, List r, Iterator r, StatePattern r, 
+  InternalList r, Argument r, Literal r, MathConstant r, VariableValue r, 
+  CommandLineArgs r, NumericExpression r, BooleanExpression r, Comparison r, 
+  ValueExpression r, InternalValueExp r, GetSet r, List r, StatePattern r, 
   ObserverPattern r, StrategyPattern r, TypeElim r, VariableElim r) => OOProg r
 
 class (FileSym r) => ProgramSym r where
@@ -102,7 +106,6 @@ class TypeSym r where
   listInnerType :: VSType r -> VSType r
   obj           :: ClassName -> VSType r
   funcType      :: [VSType r] -> VSType r -> VSType r
-  iterator      :: VSType r -> VSType r
   void          :: VSType r
 
 class (TypeSym r) => TypeElim r where
@@ -123,8 +126,6 @@ class (TypeSym r) => VariableSym r where
   objVar       :: SVariable r -> SVariable r -> SVariable r
   objVarSelf   :: SVariable r -> SVariable r
   arrayElem    :: Integer -> SVariable r -> SVariable r
-  -- Use for iterator variables, i.e. in a forEach loop.
-  iterVar      :: Label -> VSType r -> SVariable r
   
 class (VariableSym r) => VariableElim r where
   variableName :: r (Variable r) -> String
@@ -145,6 +146,9 @@ type SValue a = VS (a (Value a))
 class (TypeSym r) => ValueSym r where
   type Value r
   valueType :: r (Value r) -> r (Type r)
+
+class (ValueSym r) => Argument r where
+  pointerArg :: SValue r -> SValue r
 
 class (ValueSym r) => Literal r where
   litTrue   :: SValue r
@@ -287,6 +291,10 @@ objMethodCall :: (InternalValueExp r) => VSType r -> SValue r -> Label ->
   [SValue r] -> SValue r
 objMethodCall t o f ps = objMethodCallMixedArgs' f t o ps []
 
+objMethodCallNamedArgs :: (InternalValueExp r) => VSType r -> SValue r -> Label 
+  -> NamedArgs r -> SValue r
+objMethodCallNamedArgs t o f = objMethodCallMixedArgs' f t o []
+
 objMethodCallMixedArgs :: (InternalValueExp r) => VSType r -> SValue r -> Label 
   -> [SValue r] -> NamedArgs r -> SValue r
 objMethodCallMixedArgs t o f = objMethodCallMixedArgs' f t o
@@ -335,10 +343,6 @@ listIndexExists lst index = listSize lst ?> index
 
 at :: (List r) => SValue r -> SValue r -> SValue r
 at = listAccess
-
-class (ValueSym r) => Iterator r where
-  iterBegin :: SValue r -> SValue r
-  iterEnd   :: SValue r -> SValue r
 
 type MSStatement a = MS (a (Statement a))
 
@@ -507,15 +511,13 @@ type SMethod a = MS (a (Method a))
 type Initializers r = [(SVariable r, SValue r)]
 
 -- The three lists are inputs, outputs, and both, respectively
-type InOutFunc r = Label -> r (Scope r) -> r (Permanence r) -> [SVariable r] -> 
-  [SVariable r] -> [SVariable r] -> MSBody r -> SMethod r
--- Parameters are: function name, scope, permanence, brief description, 
--- input descriptions and variables, output descriptions and variables, 
--- descriptions and variables for parameters that are both input and output, 
--- function body
-type DocInOutFunc r = Label -> r (Scope r) -> r (Permanence r) -> String -> 
-  [(String, SVariable r)] -> [(String, SVariable r)] -> [(String, SVariable r)] 
-  -> MSBody r -> SMethod r
+type InOutFunc r = [SVariable r] -> [SVariable r] -> [SVariable r] -> 
+  MSBody r -> SMethod r
+-- Parameters are: brief description of function, input descriptions and 
+-- variables, output descriptions and variables, descriptions and variables 
+-- for parameters that are both input and output, function body
+type DocInOutFunc r = String -> [(String, SVariable r)] -> 
+  [(String, SVariable r)] -> [(String, SVariable r)] -> MSBody r -> SMethod r
 
 class (BodySym r, ParameterSym r, ScopeSym r, PermanenceSym r) => MethodSym r 
   where
@@ -528,17 +530,19 @@ class (BodySym r, ParameterSym r, ScopeSym r, PermanenceSym r) => MethodSym r
 
   docMain :: MSBody r -> SMethod r
 
-  function :: Label -> r (Scope r) -> r (Permanence r) -> 
-    VSType r -> [MSParameter r] -> MSBody r -> SMethod r
+  function :: Label -> r (Scope r) -> VSType r -> [MSParameter r] -> 
+    MSBody r -> SMethod r
   mainFunction  :: MSBody r -> SMethod r
   -- Parameters are: function description, parameter descriptions, 
   --   return value description if applicable, function
   docFunc :: String -> [String] -> Maybe String -> SMethod r -> SMethod r
 
-  inOutMethod :: InOutFunc r
-  docInOutMethod :: DocInOutFunc r
-  inOutFunc :: InOutFunc r
-  docInOutFunc :: DocInOutFunc r
+  -- inOutMethod and docInOutMethod both need the Permanence parameter
+  inOutMethod :: Label -> r (Scope r) -> r (Permanence r) -> InOutFunc r
+  docInOutMethod :: Label -> r (Scope r) -> r (Permanence r) -> DocInOutFunc r
+  -- inOutFunc and docInOutFunc both do not need the Permanence parameter
+  inOutFunc :: Label -> r (Scope r) -> InOutFunc r
+  docInOutFunc :: Label -> r (Scope r) -> DocInOutFunc r
 
 privMethod :: (MethodSym r) => Label -> VSType r -> [MSParameter r] -> MSBody r 
   -> SMethod r
@@ -559,9 +563,9 @@ type CSStateVar a = CS (a (StateVar a))
 class (ScopeSym r, PermanenceSym r, VariableSym r) => StateVarSym r where
   type StateVar r
   stateVar :: r (Scope r) -> r (Permanence r) -> SVariable r -> CSStateVar r
-  stateVarDef :: Label -> r (Scope r) -> r (Permanence r) -> SVariable r -> 
+  stateVarDef :: r (Scope r) -> r (Permanence r) -> SVariable r -> 
     SValue r -> CSStateVar r
-  constVar :: Label -> r (Scope r) ->  SVariable r -> SValue r -> CSStateVar r
+  constVar :: r (Scope r) ->  SVariable r -> SValue r -> CSStateVar r
 
 privDVar :: (StateVarSym r) => SVariable r -> CSStateVar r
 privDVar = stateVar private dynamic
@@ -576,7 +580,7 @@ type SClass a = CS (a (Class a))
 
 class (MethodSym r, StateVarSym r) => ClassSym r where
   type Class r
-  buildClass :: Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
+  buildClass :: Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
     SClass r
   extraClass :: Label -> Maybe Label -> [CSStateVar r] -> [SMethod r] -> 
     SClass r
@@ -602,8 +606,8 @@ convType Char = char
 convType String = string
 convType (List t) = listType (convType t)
 convType (Array t) = arrayType (convType t)
-convType (Iterator t) = iterator $ convType t
 convType (Object n) = obj n
 convType (Func ps r) = funcType (map convType ps) (convType r)
 convType Void = void
-convType File = error "convType: File ?"
+convType InFile = infile
+convType OutFile = outfile

@@ -137,13 +137,13 @@ double interpY(string filename, double x, double z) {
     read_table(filename, z_vector, x_matrix, y_matrix);
     i = find(z_vector, z);
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'i' assigned to ";
+    outfile << "var 'i' assigned ";
     outfile << i;
     outfile << " in module Interpolation" << std::endl;
     outfile.close();
     x_z_1 = extractColumn(x_matrix, i);
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'x_z_1' assigned to ";
+    outfile << "var 'x_z_1' assigned ";
     outfile << "[";
     for (int list_i1 = 0; list_i1 < (int)(x_z_1.size()) - 1; list_i1++) {
         outfile << x_z_1.at(list_i1);
@@ -157,7 +157,7 @@ double interpY(string filename, double x, double z) {
     outfile.close();
     y_z_1 = extractColumn(y_matrix, i);
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'y_z_1' assigned to ";
+    outfile << "var 'y_z_1' assigned ";
     outfile << "[";
     for (int list_i1 = 0; list_i1 < (int)(y_z_1.size()) - 1; list_i1++) {
         outfile << y_z_1.at(list_i1);
@@ -171,7 +171,7 @@ double interpY(string filename, double x, double z) {
     outfile.close();
     x_z_2 = extractColumn(x_matrix, i + 1);
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'x_z_2' assigned to ";
+    outfile << "var 'x_z_2' assigned ";
     outfile << "[";
     for (int list_i1 = 0; list_i1 < (int)(x_z_2.size()) - 1; list_i1++) {
         outfile << x_z_2.at(list_i1);
@@ -185,7 +185,7 @@ double interpY(string filename, double x, double z) {
     outfile.close();
     y_z_2 = extractColumn(y_matrix, i + 1);
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'y_z_2' assigned to ";
+    outfile << "var 'y_z_2' assigned ";
     outfile << "[";
     for (int list_i1 = 0; list_i1 < (int)(y_z_2.size()) - 1; list_i1++) {
         outfile << y_z_2.at(list_i1);
@@ -200,13 +200,13 @@ double interpY(string filename, double x, double z) {
     try {
         j = find(x_z_1, x);
         outfile.open("log.txt", std::fstream::app);
-        outfile << "var 'j' assigned to ";
+        outfile << "var 'j' assigned ";
         outfile << j;
         outfile << " in module Interpolation" << std::endl;
         outfile.close();
         k_2 = find(x_z_2, x);
         outfile.open("log.txt", std::fstream::app);
-        outfile << "var 'k_2' assigned to ";
+        outfile << "var 'k_2' assigned ";
         outfile << k_2;
         outfile << " in module Interpolation" << std::endl;
         outfile.close();
@@ -215,13 +215,13 @@ double interpY(string filename, double x, double z) {
     }
     y_1 = lin_interp(x_z_1.at(j), y_z_1.at(j), x_z_1.at(j + 1), y_z_1.at(j + 1), x);
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'y_1' assigned to ";
+    outfile << "var 'y_1' assigned ";
     outfile << y_1;
     outfile << " in module Interpolation" << std::endl;
     outfile.close();
     y_2 = lin_interp(x_z_2.at(k_2), y_z_2.at(k_2), x_z_2.at(k_2 + 1), y_z_2.at(k_2 + 1), x);
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'y_2' assigned to ";
+    outfile << "var 'y_2' assigned ";
     outfile << y_2;
     outfile << " in module Interpolation" << std::endl;
     outfile.close();
@@ -259,7 +259,7 @@ double interpZ(string filename, double x, double y) {
     for (int i = 0; i < (int)(z_vector.size()) - 1; i += 1) {
         x_z_1 = extractColumn(x_matrix, i);
         outfile.open("log.txt", std::fstream::app);
-        outfile << "var 'x_z_1' assigned to ";
+        outfile << "var 'x_z_1' assigned ";
         outfile << "[";
         for (int list_i1 = 0; list_i1 < (int)(x_z_1.size()) - 1; list_i1++) {
             outfile << x_z_1.at(list_i1);
@@ -273,7 +273,7 @@ double interpZ(string filename, double x, double y) {
         outfile.close();
         y_z_1 = extractColumn(y_matrix, i);
         outfile.open("log.txt", std::fstream::app);
-        outfile << "var 'y_z_1' assigned to ";
+        outfile << "var 'y_z_1' assigned ";
         outfile << "[";
         for (int list_i1 = 0; list_i1 < (int)(y_z_1.size()) - 1; list_i1++) {
             outfile << y_z_1.at(list_i1);
@@ -287,7 +287,7 @@ double interpZ(string filename, double x, double y) {
         outfile.close();
         x_z_2 = extractColumn(x_matrix, i + 1);
         outfile.open("log.txt", std::fstream::app);
-        outfile << "var 'x_z_2' assigned to ";
+        outfile << "var 'x_z_2' assigned ";
         outfile << "[";
         for (int list_i1 = 0; list_i1 < (int)(x_z_2.size()) - 1; list_i1++) {
             outfile << x_z_2.at(list_i1);
@@ -301,7 +301,7 @@ double interpZ(string filename, double x, double y) {
         outfile.close();
         y_z_2 = extractColumn(y_matrix, i + 1);
         outfile.open("log.txt", std::fstream::app);
-        outfile << "var 'y_z_2' assigned to ";
+        outfile << "var 'y_z_2' assigned ";
         outfile << "[";
         for (int list_i1 = 0; list_i1 < (int)(y_z_2.size()) - 1; list_i1++) {
             outfile << y_z_2.at(list_i1);
@@ -316,13 +316,13 @@ double interpZ(string filename, double x, double y) {
         try {
             j = find(x_z_1, x);
             outfile.open("log.txt", std::fstream::app);
-            outfile << "var 'j' assigned to ";
+            outfile << "var 'j' assigned ";
             outfile << j;
             outfile << " in module Interpolation" << std::endl;
             outfile.close();
             k_2 = find(x_z_2, x);
             outfile.open("log.txt", std::fstream::app);
-            outfile << "var 'k_2' assigned to ";
+            outfile << "var 'k_2' assigned ";
             outfile << k_2;
             outfile << " in module Interpolation" << std::endl;
             outfile.close();
@@ -331,13 +331,13 @@ double interpZ(string filename, double x, double y) {
         }
         y_1 = lin_interp(x_z_1.at(j), y_z_1.at(j), x_z_1.at(j + 1), y_z_1.at(j + 1), x);
         outfile.open("log.txt", std::fstream::app);
-        outfile << "var 'y_1' assigned to ";
+        outfile << "var 'y_1' assigned ";
         outfile << y_1;
         outfile << " in module Interpolation" << std::endl;
         outfile.close();
         y_2 = lin_interp(x_z_2.at(k_2), y_z_2.at(k_2), x_z_2.at(k_2 + 1), y_z_2.at(k_2 + 1), x);
         outfile.open("log.txt", std::fstream::app);
-        outfile << "var 'y_2' assigned to ";
+        outfile << "var 'y_2' assigned ";
         outfile << y_2;
         outfile << " in module Interpolation" << std::endl;
         outfile.close();

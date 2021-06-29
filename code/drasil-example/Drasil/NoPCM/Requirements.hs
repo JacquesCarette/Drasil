@@ -1,8 +1,9 @@
-module Drasil.NoPCM.Requirements (funcReqs, inputInitValsTable) where
+module Drasil.NoPCM.Requirements (funcReqs, inputInitValsTable, reqRefs) where
 
 import Language.Drasil
 import Drasil.DocLang (mkInputPropsTable)
 import Utils.Drasil
+import Utils.Drasil.Concepts
 
 import Data.Drasil.Concepts.Documentation (funcReqDom, input_, value)
 
@@ -26,9 +27,9 @@ import Drasil.NoPCM.Unitals (inputs)
 
 --
 inputInitVals :: ConceptInstance
-inputInitVals = cic "inputInitVals" ( foldlSent [
+inputInitVals = cic "inputInitVals" (foldlSent [
   titleize input_, S "the following", plural value, S "described in",
-  makeRef2S inputInitValsTable `sC` S "which define", inReqDesc])
+  refS inputInitValsTable `sC` S "which define", inReqDesc])
   "Input-Initial-Values" funcReqDom
 
 --
@@ -39,9 +40,9 @@ findMass = findMassConstruct inputInitVals (phrase mass) [eBalanceOnWtr]
 --
 oIDQVals :: [Sentence]
 oIDQVals = map foldlSent_ [
-  [S "the", plural value, S "from", makeRef2S inputInitVals],
-  [S "the", phrase mass, S "from", makeRef2S findMass],
-  [ch balanceDecayRate, sParen (S "from" +:+ makeRef2S balanceDecayRate)]
+  [pluralNP (the value), fromSource inputInitVals],
+  [phraseNP (the mass), fromSource findMass],
+  [ch balanceDecayRate, fromSource balanceDecayRate]
   ]
 
 inputInitValsTable :: LabelledContent
@@ -56,3 +57,7 @@ funcReqs = [inputInitVals, findMass, checkWithPhysConsts,
 -------------------------------------------
 
 --imports from SWHS
+
+--References--
+reqRefs :: [Reference]
+reqRefs = ref inputInitValsTable : map ref funcReqs

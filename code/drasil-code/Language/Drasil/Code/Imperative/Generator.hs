@@ -1,3 +1,4 @@
+-- | Defines generation functions for SCS code packages.
 module Language.Drasil.Code.Imperative.Generator (
   generator, generateCode
 ) where
@@ -7,7 +8,7 @@ import Language.Drasil.Code.Imperative.ConceptMatch (chooseConcept)
 import Language.Drasil.Code.Imperative.Descriptions (unmodularDesc)
 import Language.Drasil.Code.Imperative.SpaceMatch (chooseSpace)
 import Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..), 
-  genDoxConfig, genModuleWithImports)
+  genDoxConfig, genReadMe, genModuleWithImports)
 import Language.Drasil.Code.Imperative.GenODE (chooseODELib)
 import Language.Drasil.Code.Imperative.Helpers (liftS)
 import Language.Drasil.Code.Imperative.Import (genModDef, genModFuncs,
@@ -16,16 +17,18 @@ import Language.Drasil.Code.Imperative.Modules (chooseInModule, genConstClass,
   genConstMod, genInputClass, genInputConstraints, genInputDerived, 
   genInputFormat, genMain, genMainFunc, genCalcMod, genCalcFunc, 
   genOutputFormat, genOutputMod, genSampleInput)
-import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..), inMod,
-  modExportMap, clsDefMap)
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), 
-  AuxiliarySym(..))
-import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..))
+import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..), 
+  designLog, inMod, modExportMap, clsDefMap)
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
+  PackageSym(..), AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..), ad)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
-import Language.Drasil.Choices (Choices(..), Modularity(..), Visibility(..))
+import Language.Drasil.Choices (Choices(..), Modularity(..), Visibility(..),
+  choicesSent)
 import Language.Drasil.CodeSpec (CodeSpec(..))
+import Language.Drasil.Printers (Linearity(Linear), sentenceDoc)
 
 import GOOL.Drasil (GSProgram, SFile, OOProg, ProgramSym(..), ScopeTag(..), 
   ProgData(..), initialState, unCI)
@@ -33,30 +36,37 @@ import GOOL.Drasil (GSProgram, SFile, OOProg, ProgramSym(..), ScopeTag(..),
 import System.Directory (setCurrentDirectory, createDirectoryIfMissing, 
   getCurrentDirectory)
 import Control.Lens ((^.))
-import Control.Monad.Reader (Reader, ask, runReader)
-import Control.Monad.State (evalState, runState)
+import Control.Monad.State (get, evalState, runState)
 import Data.List (nub)
 import Data.Map (fromList, member, keys, elems)
-import Data.Maybe (maybeToList)
+import Data.Maybe (maybeToList, catMaybes)
+import Text.PrettyPrint.HughesPJ (isEmpty, vcat)
 
+-- | Initializes the generator's 'DrasilState'.
+-- 'String' parameter is a string representing the date.
+-- \['Expr'\] parameter is the sample input values provided by the user.
 generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 generator l dt sd chs spec = DrasilState {
   -- constants
   codeSpec = spec,
-  date = showDate $ dates chs,
   modular = modularity chs,
-  implType = impType chs,
   inStruct = inputStructure chs,
   conStruct = constStructure chs,
   conRepr = constRepr chs,
-  logKind  = logging chs,
+  concMatches = mcm,
+  spaceMatches = chooseSpace l chs,
+  implType = impType chs,
+  onSfwrC = onSfwrConstraint chs,
+  onPhysC = onPhysConstraint chs,
   commented = comments chs,
   doxOutput = doxVerbosity chs,
-  concMatches = chooseConcept chs,
-  spaceMatches = chooseSpace l chs,
+  date = showDate $ dates chs,
+  logKind  = logging chs,
+  logName = logFile chs,
   auxiliaries = auxFiles chs,
   sampleData = sd,
   modules = modules',
+  extLibNames = nms,
   extLibMap = fromList elmap,
   libPaths = maybeToList pth,
   eMap = mem,
@@ -64,24 +74,30 @@ generator l dt sd chs spec = DrasilState {
   clsMap = cdm,
   defList = nub $ keys mem ++ keys cdm,
   
-  -- state
+  -- stateful
   currentModule = "",
   currentClass = "",
-
-  -- next depend on chs
-  logName = logFile chs,
-  onSfwrC = onSfwrConstraint chs,
-  onPhysC = onPhysConstraint chs
+  _designLog = des,
+  _loggedSpaces = [] -- Used to prevent duplicate logs added to design log
 }
-  where showDate Show = dt
+  where (mcm, concLog) = runState (chooseConcept chs) []
+        showDate Show = dt
         showDate Hide = ""
-        (pth, elmap) = chooseODELib l (odeLib chs) (odes chs)
+        ((pth, elmap, lname), libLog) = runState (chooseODELib l (odeLib chs) 
+          (odes chs)) []
         els = map snd elmap
+        nms = [lname]
         mem = modExportMap spec chs modules' 
         lem = fromList (concatMap (^. modExports) els)
         cdm = clsDefMap spec chs modules'
         modules' = mods spec ++ concatMap (^. auxMods) els
+        nonPrefChs = choicesSent chs
+        des = vcat . map (sentenceDoc (sysinfodb spec) Implementation Linear) $
+          (nonPrefChs ++ concLog ++ libLog)
 
+-- | Generates a package with the given 'DrasilState'. The passed
+-- un-representation functions determine which target language the package will 
+-- be generated in.
 generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang -> 
   (progRepr (Program progRepr) -> ProgData) -> (packRepr (Package packRepr) -> 
   PackData) -> DrasilState -> IO ()
@@ -89,41 +105,64 @@ generateCode l unReprProg unReprPack g = do
   workingDir <- getCurrentDirectory
   createDirectoryIfMissing False (getDir l)
   setCurrentDirectory (getDir l)
-  let pckg = runReader (genPackage unReprProg) g 
-      code = makeCode (progMods $ packProg $ unReprPack pckg) (packAux $ 
-          unReprPack pckg)
+  let (pckg, ds) = runState (genPackage unReprProg) g 
+      code = makeCode (progMods $ packProg $ unReprPack pckg) 
+        ([ad "designLog.txt" (ds ^. designLog) | not $ isEmpty $ 
+          ds ^. designLog] ++ packAux (unReprPack pckg))
   createCodeFiles code
   setCurrentDirectory workingDir
 
+-- | Generates a package, including a Makefile, sample input file, and Doxygen 
+-- configuration file (all subject to the user's choices). 
+-- The passed un-representation function determines which target language the 
+-- package will be generated in.
+-- GOOL's static code analysis interpreter is called to initialize the state 
+-- used by the language renderer.
 genPackage :: (OOProg progRepr, PackageSym packRepr) => 
   (progRepr (Program progRepr) -> ProgData) -> 
-  Reader DrasilState (packRepr (Package packRepr))
+  GenState (packRepr (Package packRepr))
 genPackage unRepr = do
-  g <- ask
+  g <- get
   ci <- genProgram
   p <- genProgram
   let info = unCI $ evalState ci initialState
       (reprPD, s) = runState p info
       pd = unRepr reprPD
       m = makefile (libPaths g) (implType g) (commented g) s pd
+      as = case codeSpec g of CodeSpec {authors = a} -> map name a
+      cfp = configFiles $ codeSpec g
   i <- genSampleInput
   d <- genDoxConfig s
-  return $ package pd (m:i++d)
+  rm <- genReadMe ReadMeInfo {
+        langName = "",
+        langVersion = "",
+        invalidOS = Nothing,
+        implementType = implType g,
+        extLibNV = extLibNames g,
+        extLibFP = libPaths g,
+        contributors = as, 
+        configFP = cfp,
+        caseName = ""}
+  return $ package pd (m:catMaybes [i,rm,d])
 
-genProgram :: (OOProg r) => Reader DrasilState (GSProgram r)
+-- | Generates an SCS program based on the problem and the user's design choices.
+genProgram :: (OOProg r) => GenState (GSProgram r)
 genProgram = do
-  g <- ask
+  g <- get
   ms <- chooseModules $ modular g
   let n = pName $ codeSpec g
   return $ prog n ms
 
-chooseModules :: (OOProg r) => Modularity -> Reader DrasilState [SFile r]
+-- | Generates either a single module or many modules, based on the users choice 
+-- of modularity.
+chooseModules :: (OOProg r) => Modularity -> GenState [SFile r]
 chooseModules Unmodular = liftS genUnmodular
 chooseModules (Modular _) = genModules
 
-genUnmodular :: (OOProg r) => Reader DrasilState (SFile r)
+-- | Generates an entire SCS program as a single module.
+genUnmodular :: (OOProg r) => GenState (SFile r)
 genUnmodular = do
-  g <- ask
+  g <- get
   umDesc <- unmodularDesc
   let n = pName $ codeSpec g
       cls = any (`member` clsMap g) 
@@ -136,10 +175,11 @@ genUnmodular = do
         genInputConstraints Pub]) ++ [genOutputFormat])) 
     ([genInputClass Auxiliary, genConstClass Auxiliary] 
       ++ map (fmap Just) (concatMap genModClasses $ modules g))
-          
-genModules :: (OOProg r) => Reader DrasilState [SFile r]
+      
+-- | Generates all modules for an SCS program.
+genModules :: (OOProg r) => GenState [SFile r]
 genModules = do
-  g <- ask
+  g <- get
   mn     <- genMain
   inp    <- chooseInModule $ inMod g
   con    <- genConstMod 
@@ -148,9 +188,10 @@ genModules = do
   moddef <- traverse genModDef (modules g) -- hack ?
   return $ mn : inp ++ con ++ cal : out ++ moddef
 
--- private utilities used in generateCode
+-- | Private utilities used in 'generateCode'.
 getDir :: Lang -> String
 getDir Cpp = "cpp"
 getDir CSharp = "csharp"
 getDir Java = "java"
 getDir Python = "python"
+getDir Swift = "swift"

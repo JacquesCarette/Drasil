@@ -22,7 +22,7 @@ public class InputConstraints {
         if (!(0.1 <= inParams.a && inParams.a <= 5.0)) {
             Console.Write("a has value ");
             Console.Write(inParams.a);
-            Console.Write(" but expected to be ");
+            Console.Write(", but is expected to be ");
             Console.Write("between ");
             Console.Write(0.1);
             Console.Write(" (d_min)");
@@ -35,7 +35,7 @@ public class InputConstraints {
         if (!(0.1 <= inParams.b && inParams.b <= 5.0)) {
             Console.Write("b has value ");
             Console.Write(inParams.b);
-            Console.Write(" but expected to be ");
+            Console.Write(", but is expected to be ");
             Console.Write("between ");
             Console.Write(0.1);
             Console.Write(" (d_min)");
@@ -48,7 +48,7 @@ public class InputConstraints {
         if (!(4.5 <= inParams.w && inParams.w <= 910.0)) {
             Console.Write("w has value ");
             Console.Write(inParams.w);
-            Console.Write(" but expected to be ");
+            Console.Write(", but is expected to be ");
             Console.Write("between ");
             Console.Write(4.5);
             Console.Write(" (w_min)");
@@ -61,7 +61,7 @@ public class InputConstraints {
         if (!(6.0 <= inParams.SD && inParams.SD <= 130.0)) {
             Console.Write("SD has value ");
             Console.Write(inParams.SD);
-            Console.Write(" but expected to be ");
+            Console.Write(", but is expected to be ");
             Console.Write("between ");
             Console.Write(6.0);
             Console.Write(" (SD_min)");
@@ -74,7 +74,7 @@ public class InputConstraints {
         if (!(inParams.AR <= 5.0)) {
             Console.Write("AR has value ");
             Console.Write(inParams.AR);
-            Console.Write(" but expected to be ");
+            Console.Write(", but is expected to be ");
             Console.Write("below ");
             Console.Write(5.0);
             Console.Write(" (AR_max)");
@@ -82,81 +82,81 @@ public class InputConstraints {
             throw new Exception("InputError");
         }
         
-        if (!(inParams.a > 0)) {
+        if (!(inParams.a > 0.0)) {
             Console.Write("a has value ");
             Console.Write(inParams.a);
-            Console.Write(" but expected to be ");
+            Console.Write(", but is expected to be ");
             Console.Write("above ");
-            Console.Write(0);
+            Console.Write(0.0);
             Console.WriteLine(".");
             throw new Exception("InputError");
         }
         if (!(inParams.a >= inParams.b)) {
             Console.Write("a has value ");
             Console.Write(inParams.a);
-            Console.Write(" but expected to be ");
+            Console.Write(", but is expected to be ");
             Console.Write("above ");
             Console.Write(inParams.b);
             Console.Write(" (b)");
             Console.WriteLine(".");
             throw new Exception("InputError");
         }
-        if (!(0 < inParams.b && inParams.b <= inParams.a)) {
+        if (!(0.0 < inParams.b && inParams.b <= inParams.a)) {
             Console.Write("b has value ");
             Console.Write(inParams.b);
-            Console.Write(" but expected to be ");
+            Console.Write(", but is expected to be ");
             Console.Write("between ");
-            Console.Write(0);
+            Console.Write(0.0);
             Console.Write(" and ");
             Console.Write(inParams.a);
             Console.Write(" (a)");
             Console.WriteLine(".");
             throw new Exception("InputError");
         }
-        if (!(inParams.w > 0)) {
+        if (!(inParams.w > 0.0)) {
             Console.Write("w has value ");
             Console.Write(inParams.w);
-            Console.Write(" but expected to be ");
+            Console.Write(", but is expected to be ");
             Console.Write("above ");
-            Console.Write(0);
+            Console.Write(0.0);
             Console.WriteLine(".");
             throw new Exception("InputError");
         }
-        if (!(0 <= inParams.P_btol && inParams.P_btol <= 1)) {
+        if (!(0.0 <= inParams.P_btol && inParams.P_btol <= 1.0)) {
             Console.Write("P_btol has value ");
             Console.Write(inParams.P_btol);
-            Console.Write(" but expected to be ");
+            Console.Write(", but is expected to be ");
             Console.Write("between ");
-            Console.Write(0);
+            Console.Write(0.0);
             Console.Write(" and ");
-            Console.Write(1);
+            Console.Write(1.0);
             Console.WriteLine(".");
             throw new Exception("InputError");
         }
-        if (!(inParams.TNT > 0)) {
+        if (!(inParams.TNT > 0.0)) {
             Console.Write("TNT has value ");
             Console.Write(inParams.TNT);
-            Console.Write(" but expected to be ");
+            Console.Write(", but is expected to be ");
             Console.Write("above ");
-            Console.Write(0);
+            Console.Write(0.0);
             Console.WriteLine(".");
             throw new Exception("InputError");
         }
-        if (!(inParams.SD > 0)) {
+        if (!(inParams.SD > 0.0)) {
             Console.Write("SD has value ");
             Console.Write(inParams.SD);
-            Console.Write(" but expected to be ");
+            Console.Write(", but is expected to be ");
             Console.Write("above ");
-            Console.Write(0);
+            Console.Write(0.0);
             Console.WriteLine(".");
             throw new Exception("InputError");
         }
-        if (!(inParams.AR >= 1)) {
+        if (!(inParams.AR >= 1.0)) {
             Console.Write("AR has value ");
             Console.Write(inParams.AR);
-            Console.Write(" but expected to be ");
+            Console.Write(", but is expected to be ");
             Console.Write("above ");
-            Console.Write(1);
+            Console.Write(1.0);
             Console.WriteLine(".");
             throw new Exception("InputError");
         }

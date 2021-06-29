@@ -1,0 +1,560 @@
+\documentclass{minimal}
+
+\usepackage{verbatim}
+
+
+\usepackage[margin=1cm, paperheight=35in,paperwidth=22in]{geometry}
+
+\usepackage{tikz}
+\usetikzlibrary{positioning,shapes,shadows,arrows}
+
+\begin{document}
+
+\tikzstyle{class}=[rectangle, draw=black, rounded corners, fill=white!40, drop shadow,
+        text centered, anchor=north, text=black, text width=3cm]
+\tikzstyle{comment}=[rectangle, draw=black, rounded corners, fill=green, drop shadow,
+        text centered, anchor=north, text=white, text width=3cm]
+\tikzstyle{myarrow}=[->, >=triangle 90, thick]
+\tikzstyle{line}=[-, thick]
+\tikzstyle{mayHave}=[rectangle, fill=green, text=black, text width=0.65cm];
+\tikzstyle{greenArrow}=[->, >=triangle 90, thick]
+
+\begin{center}
+\begin{tikzpicture}[node distance=2cm]
+\node (HasUID) [class]
+		{
+
+		};
+\node (ProgramSym) [class,  text width=3.5cm ,below left=27in and 6in of  HasUID]
+		{
+			\textbf{ProgramSym}
+		};
+\node (FileSym) [class,  text width=3.5cm ,above right=1cm and 5cm of  ProgramSym]
+		{
+			\textbf{FileSym}
+		};
+\draw[myarrow] (ProgramSym.north) -- ++ (0,0.5cm) -| (FileSym.south);
+
+\node (ModuleSym) [class,  text width=3.5cm ,above left=1cm and 5cm of  FileSym]
+		{
+			\textbf{ModuleSym}
+		};
+\draw[myarrow] (FileSym.west) -- ++ (0,0cm) -| (ModuleSym.south);
+
+
+\node (ClassSym) [class,  text width=3.5cm ,above =  1cm of  ModuleSym]
+		{
+			\textbf{ClassSym}
+		};
+\draw[myarrow] (ModuleSym.north) -- ++ (0,0cm) -| (ClassSym.south);
+
+\node (StateVarSym) [class,  text width=3.5cm ,above left=  1cm and 5cm of  ClassSym]
+		{
+			\textbf{StateVarSym}
+		};
+\draw[myarrow] (ClassSym.north) -- ++ (0,0.5cm) -| (StateVarSym.south);
+
+\node (MethodSym) [class,  text width=3.5cm ,above=  1cm of  ClassSym]
+		{
+			\textbf{MethodSym}
+		};
+\draw[myarrow] (ClassSym.north) -- ++ (0,0.5cm) -| (MethodSym.south);
+
+\node (ScopeSym) [class,  text width=3.5cm ,above left=  1cm and 1cmof  MethodSym]
+		{
+			\textbf{ScopeSym}
+		};
+\draw[myarrow] (MethodSym.west) -- ++ (0,0.5cm) -| (ScopeSym.south);
+
+\node (PermanenceSym) [class,  text width=3.5cm ,above left = 1cm and 1cm of  StateVarSym]
+		{
+			\textbf{PermanenceSym}
+		};
+\draw[myarrow] (StateVarSym.north) -- ++ (0,0.5cm) -| (PermanenceSym.south);
+\draw[myarrow] (StateVarSym.east) -- ++ (0,0.5cm) -| (ScopeSym.south);
+
+\node (BodySym) [class,  text width=3.5cm ,above left=  3cm and 1cmof  MethodSym]
+		{
+			\textbf{BodySym}
+		};
+\draw[myarrow] (MethodSym.north) -- ++ (0,2cm) -| (BodySym.south);
+
+\node (BlockSym) [class,  text width=3.5cm ,above =  1cm of  BodySym]
+		{
+			\textbf{BlockSym}
+		};
+\draw[myarrow] (BodySym.north) -- ++ (0,0.5cm) -| (BlockSym.south);
+\node (ControlStatement) [class,  text width=3.5cm ,above right=  1cm and 8cmof  ScopeSym]
+		{
+			\textbf{ControlStatement}
+		};
+\node (StatePattern) [class,  text width=3.5cm ,above =  0cm of  ControlStatement]
+		{
+			\textbf{StatePattern}
+		};
+\node (StrategyPattern) [class,  text width=3.5cm ,above =  0cm of  StatePattern]
+		{
+			\textbf{StrategyPattern}
+		};
+\draw[myarrow] (StrategyPattern.west) -- ++ (-1cm,-0.5cm) -| (BodySym.east);
+\draw[myarrow] (StatePattern.west) -- ++ (0,0cm) -| (BodySym.east);
+\draw[myarrow] (ControlStatement.west) -- ++ (-1cm,00.5cm) -| (BodySym.east);
+
+\node (VariableSym) [class,  text width=3.5cm ,above =10cm of  MethodSym]
+		{
+			\textbf{VariableSym}
+		};
+\draw[myarrow] (StateVarSym.north) -- ++ (0cm, 10cm) -| (VariableSym.west);
+\draw[myarrow] (StrategyPattern.west) -- ++ (-0,6.5cm) -| (VariableSym.east);
+\node (VariableElim) [class,  text width=3.5cm ,above right=3cm and -3.2cmof  StrategyPattern]
+		{
+			\textbf{VariableElim}
+		};
+\draw[myarrow] (VariableElim.west) -- ++ (-0,3cm) -| (VariableSym.east);
+\node (ParameterSym) [class,  text width=3.5cm ,above =7cm  of  MethodSym]
+		{
+			\textbf{ParameterSym}
+		};
+\draw[myarrow, dashed] (MethodSym.north) -- ++ (-0,.5cm) -| (ParameterSym.south);
+\draw[myarrow, dashed] (ParameterSym.north) -- ++ (0,0) -| (VariableSym.south);
+\node (StatementSym) [class,  text width=3.5cm ,above=10cm of  BlockSym]
+		{
+			\textbf{StatementSym}
+		};
+\node (ValueSym) [class,  text width=3.5cm ,above=5cm of  StatementSym]
+		{
+			\textbf{ValueSym}
+		};
+\draw[myarrow, dashed] (BlockSym.north) -- ++ (0,0) -| (StatementSym.south);
+\draw[myarrow, dashed] (StatementSym.north) -- ++ (0,0) -| (ValueSym.south);
+\node (ObserverPattern) [class,  text width=3.5cm ,above=1.5cm of  VariableSym]
+		{
+			\textbf{ObserverPattern}
+		};
+\draw[myarrow] (VariableSym.north) -- ++ (0,0) -| (ObserverPattern.south);
+
+\node (InternalValueExp) [class,  text width=3.5cm ,above=1cm of  ObserverPattern]
+		{
+			\textbf{InternalValueExp}
+		};
+\draw[myarrow] (ObserverPattern.north) -- ++ (0,0) -| (InternalValueExp.south);
+\node (FunctionSym) [class,  text width=3.5cm ,above=3cm of  InternalValueExp]
+		{
+			\textbf{FunctionSym}
+		};
+\node (TypeSym) [class,  text width=3.5cm ,above=1cm of  ValueSym]
+		{
+			\textbf{TypeSym}
+		};
+\node (TypeElim) [class,  text width=3.5cm ,above=1cm of  TypeSym]
+		{
+			\textbf{TypeElim}
+		};
+\node (Literal) [class,  text width=3.5cm ,above right= 0cm and 10cm of  ValueSym]
+		{
+			\textbf{Literal}
+		};
+\node (Argument) [class,  text width=3.5cm ,below =0 cm of  Literal]
+		{
+			\textbf{Argument}
+		};
+\draw[myarrow ] (Literal.west) -- ++ (-1,-0.5) -| (ValueSym.east);
+\draw[myarrow ] (Argument.west) -- ++ (-1,0) -| (ValueSym.east);
+\node (MathConstant) [class,  text width=3.5cm ,above= 0cm of  Literal]
+		{
+			\textbf{MathConstant}
+		};
+\node (CommandLineArgs) [class,  text width=3.5cm ,above= 0cm of  MathConstant]
+		{
+			\textbf{CommandLineArgs}
+		};
+\draw[myarrow ] (MathConstant.west) -- ++ (-1,-1) -| (ValueSym.east);
+\draw[myarrow ] (CommandLineArgs.west) -- ++ (-1,-1.5) -| (ValueSym.east);
+\node (NumExpression) [class,  text width=3.5cm ,above= 0cm of  CommandLineArgs]
+		{
+			\textbf{NumExpression}
+		};
+\draw[myarrow ] (NumExpression.west) -- ++ (-1,-2.1) -| (ValueSym.east);
+\node (BoolExpression) [class,  text width=3.5cm ,above= 0cm of  NumExpression]
+		{
+			\textbf{BoolExpression}
+		};
+\draw[myarrow ] (BoolExpression.west) -- ++ (-1,-2.6) -| (ValueSym.east);
+\node (Comparison) [class,  text width=3.5cm ,above= 0cm of  BoolExpression]
+		{
+			\textbf{Comparison}
+		};
+\draw[myarrow ] (Comparison.west) -- ++ (-1,-3.2) -| (ValueSym.east);
+\node (InternalList) [class,  text width=3.5cm ,above= 0cm of  Comparison]
+		{
+			\textbf{InternalList}
+		};
+\draw[myarrow ] (InternalList.west) -- ++ (-1,-3.7) -| (ValueSym.east);
+\node (Iterator) [class,  text width=3.5cm ,above= 0cm of  InternalList]
+		{
+			\textbf{Iterator}
+		};
+\draw[myarrow ] (Iterator.west) -- ++ (-1,-4.2) -| (ValueSym.east);
+\node (List) [class,  text width=3.5cm ,above= 0cm of  Iterator]
+		{
+			\textbf{List}
+		};
+\node (GetSet) [class,  text width=3.5cm ,above right= 0.5cm and 1cm of  FunctionSym]
+		{
+			\textbf{GetSet}
+		};
+\node (ValueExpression) [class,  text width=3.5cm ,above =0cm of  GetSet]
+		{
+			\textbf{ValueExpression}
+		};
+\node (VariableValue) [class,  text width=3.5cm ,above =0cm of  ValueExpression]
+		{
+			\textbf{VariableValue}
+		};
+\draw[myarrow ] (GetSet.west) -- ++ (-1,2.5) -| (ValueSym.east);
+\draw[myarrow ] (ValueExpression.west) -- ++ (-1,2) -| (ValueSym.east);
+\draw[myarrow ] (VariableValue.west) -- ++ (-1,1.5) -| (ValueSym.east);
+\draw[myarrow ] (GetSet.west) -- ++ (-0.9,-8.1) -| (VariableSym.east);
+\draw[myarrow ] (ValueExpression.west) -- ++ (-0.9,-8.6) -| (VariableSym.east);
+\draw[myarrow ] (VariableValue.west) -- ++ (-0.9,-9.1) -| (VariableSym.east);
+
+
+
+
+\node (StringStatement) [class,  text width=3.5cm ,below right= 1.5cm and 4cm of  FunctionSym]
+		{
+			\textbf{StringStatement}
+		};
+\node (CommentStatement) [class,  text width=3.5cm ,above = 0.3cm  of  StringStatement]
+		{
+			\textbf{CommentStatement}
+		};
+\node (AssignStatement) [class,  text width=3.5cm ,below = 0cm  of  StringStatement]
+		{
+			\textbf{AssignStatement}
+		};
+
+\node (DeclStatement) [class,  text width=3.5cm ,below = 0cm  of  AssignStatement]
+		{
+			\textbf{DeclStatement}
+		};
+\node (IOStatement) [class,  text width=3.5cm ,below = 0cm  of  DeclStatement]
+		{
+			\textbf{IOStatement}
+		};
+\node (FuncAppStatement) [class,  text width=3.5cm ,below = 0cm  of  IOStatement]
+		{
+			\textbf{FuncAppStatement}
+		};
+\draw[myarrow ] (CommentStatement.west) -- ++ (-1,0) -| (StatementSym.east);
+\draw[myarrow ] (StringStatement.west) -- ++ (-1,0.4) -| (StatementSym.east);
+\draw[myarrow ] (AssignStatement.west) -- ++ (-1,1) -| (StatementSym.east);
+\draw[myarrow ] (DeclStatement.west) -- ++ (-1,1.5) -| (StatementSym.east);
+\draw[myarrow ] (IOStatement.west) -- ++ (-1,2) -| (StatementSym.east);
+\draw[myarrow ] (FuncAppStatement.west) -- ++ (-1,2.5) -| (StatementSym.east);
+
+\draw[myarrow ] (StringStatement.west) -- ++ (-1,-5) -| (VariableSym.east);
+\draw[myarrow ] (AssignStatement.west) -- ++ (-1,-4.5) -| (VariableSym.east);
+\draw[myarrow ] (DeclStatement.west) -- ++ (-1,-4) -| (VariableSym.east);
+\draw[myarrow ] (IOStatement.west) -- ++ (-1,-3.5) -| (VariableSym.east);
+\draw[myarrow ] (FuncAppStatement.west) -- ++ (-1,-3) -| (VariableSym.east);
+
+
+\draw[myarrow ] (List.west) -- ++ (-1,-4.7) -| (ValueSym.east);
+\draw[myarrow, dashed] (InternalValueExp.north) -- ++ (0,0) -| (FunctionSym.south);
+\draw[myarrow] (FunctionSym.north) -- ++ (0,0.5) -| (ValueSym.south);
+\draw[myarrow] (ValueSym.north) -- ++ (0,0.5) -| (TypeSym.south);
+\draw[myarrow, dashed] (VariableSym.west) -- ++ (-5cm,0) -| (TypeSym.west);
+\draw[myarrow ] (TypeElim.south) -- ++ (0,0) -| (TypeSym.north);
+
+\node (OOProg) [class,  text width=3.5cm ,right=5cm  of  CommentStatement]
+		{
+			\textbf{OOProg}
+		};
+\node (RenderSym) [class,  text width=3.5cm ,right=3cm  of  OOProg]
+		{
+			\textbf{RenderSym}
+		};
+\draw[myarrow ] (OOProg.west) -- ++ (-1,9.5) -| (List.east);
+\draw[myarrow ] (OOProg.west) -- ++ (-1,9) -| (Iterator.east);
+\draw[myarrow ] (OOProg.west) -- ++ (-1,8.5) -| (InternalList.east);
+\draw[myarrow ] (OOProg.west) -- ++ (-1,8) -| (Comparison.east);
+\draw[myarrow ] (OOProg.west) -- ++ (-1,7.5) -| (BoolExpression.east);
+\draw[myarrow ] (OOProg.west) -- ++ (-1,7) -| (NumExpression.east);
+\draw[myarrow ] (OOProg.west) -- ++ (-1,6.5) -| (CommandLineArgs.east);
+\draw[myarrow ] (OOProg.west) -- ++ (-1,6) -| (MathConstant.east);
+\draw[myarrow ] (OOProg.west) -- ++ (-1,5.5) -| (Literal.east);
+
+\draw[myarrow ] (OOProg.west) -- ++ (-1,3) -| (VariableValue.east);
+\draw[myarrow ] (OOProg.west) -- ++ (-1,2.5) -| (ValueExpression.east);
+\draw[myarrow ] (OOProg.west) -- ++ (-1,2) -| (GetSet.east);
+\draw[myarrow ] (OOProg.west) -- ++ (-1,0) -| (CommentStatement.east);
+\draw[myarrow ] (OOProg.west) -- ++ (-1,-0.5) -| (StringStatement.east);
+\draw[myarrow ] (OOProg.west) -- ++ (-1,-1) -| (AssignStatement.east);
+\draw[myarrow ] (OOProg.west) -- ++ (-1,-1.5) -| (DeclStatement.east);
+\draw[myarrow ] (OOProg.west) -- ++ (-1,-2.5) -| (IOStatement.east);
+\draw[myarrow ] (OOProg.west) -- ++ (-1,-3) -| (FuncAppStatement.east);
+
+\draw[myarrow ] (OOProg.west) -- ++ (-1,-4) -| (ObserverPattern.east);
+\draw[myarrow ] (OOProg.west) -- ++ (-1,-9) -| (VariableElim.east);
+\draw[myarrow ] (OOProg.west) -- ++ (-1,-12.3) -| (StatePattern.east);
+\draw[myarrow ] (OOProg.west) -- ++ (-1,-12.7) -| (StrategyPattern.east);
+\draw[myarrow ] (OOProg.west) -- ++ (-1,-13.2) -| (ControlStatement.east);
+\draw[myarrow ] (OOProg.west) -- ++ (-1,11) -| (TypeElim.north);
+\draw[myarrow ] (OOProg.west) -- ++ (-1,-22.5) -| (ProgramSym.east);
+\draw[myarrow ] (OOProg.west) -- ++ (-1,4.5) -| (Argument.east);
+
+
+\draw[myarrow ] (RenderSym.west) -- ++ (-1,9.5) -| (List.east);
+\draw[myarrow ] (RenderSym.west) -- ++ (-1,9) -| (Iterator.east);
+\draw[myarrow ] (RenderSym.west) -- ++ (-1,8.5) -| (InternalList.east);
+\draw[myarrow ] (RenderSym.west) -- ++ (-1,8) -| (Comparison.east);
+\draw[myarrow ] (RenderSym.west) -- ++ (-1,7.5) -| (BoolExpression.east);
+\draw[myarrow ] (RenderSym.west) -- ++ (-1,7) -| (NumExpression.east);
+\draw[myarrow ] (RenderSym.west) -- ++ (-1,6.5) -| (CommandLineArgs.east);
+\draw[myarrow ] (RenderSym.west) -- ++ (-1,6) -| (MathConstant.east);
+\draw[myarrow ] (RenderSym.west) -- ++ (-1,5.5) -| (Literal.east);
+
+\draw[myarrow ] (RenderSym.west) -- ++ (-1,3) -| (VariableValue.east);
+\draw[myarrow ] (RenderSym.west) -- ++ (-1,2.5) -| (ValueExpression.east);
+\draw[myarrow ] (RenderSym.west) -- ++ (-1,2) -| (GetSet.east);
+\draw[myarrow ] (RenderSym.west) -- ++ (-1,1) -| (CommentStatement.east);
+\draw[myarrow ] (RenderSym.west) -- ++ (-1,-0.5) -| (StringStatement.east);
+\draw[myarrow ] (RenderSym.west) -- ++ (-1,-1) -| (AssignStatement.east);
+\draw[myarrow ] (RenderSym.west) -- ++ (-1,-1.5) -| (DeclStatement.east);
+\draw[myarrow ] (RenderSym.west) -- ++ (-1,-2.5) -| (IOStatement.east);
+\draw[myarrow ] (RenderSym.west) -- ++ (-1,-3) -| (FuncAppStatement.east);
+
+\draw[myarrow ] (RenderSym.west) -- ++ (-1,-4) -| (ObserverPattern.east);
+\draw[myarrow ] (RenderSym.west) -- ++ (-1,-9) -| (VariableElim.east);
+\draw[myarrow ] (RenderSym.west) -- ++ (-1,-12.3) -| (StatePattern.east);
+\draw[myarrow ] (RenderSym.west) -- ++ (-1,-12.7) -| (StrategyPattern.east);
+\draw[myarrow ] (RenderSym.west) -- ++ (-1,-13.2) -| (ControlStatement.east);
+\draw[myarrow ] (RenderSym.west) -- ++ (-1,11) -| (TypeElim.north);
+\draw[myarrow ] (RenderSym.west) -- ++ (-1,-21.5) -| (FileSym.east);
+\draw[myarrow ] (RenderSym.west) -- ++ (-1,4.5) -| (Argument.east);
+\draw[myarrow] (RenderSym.west) -- ++ (-1,-2.9) -| (InternalValueExp.south);
+
+\node (MethodTypeSym) [class,  text width=3.5cm, above right=11cm and 3cm  of  RenderSym]
+		{
+			\textbf{MethodTypeSym}
+		};
+\node (MethodElim) [class,  text width=3.5cm ,below=0cm  of  MethodTypeSym]
+		{
+			\textbf{MethodElim}
+		};
+\node (ParamElim) [class,  text width=3.5cm ,below=0cm  of  MethodElim]
+		{
+			\textbf{ParamElim}
+		};
+\node (RenderMethod) [class,  text width=3.5cm ,below=0cm  of  ParamElim]
+		{
+			\textbf{RenderMethod}
+		};
+\node (RenderFile) [class,  text width=3.5cm ,below=0cm  of  RenderMethod]
+		{
+			\textbf{RenderFile}
+		};
+\node (StateVarElim) [class,  text width=3.5cm ,below=0cm  of  RenderFile]
+		{
+			\textbf{StateVarElim}
+		};
+
+\node (RenderClass) [class,  text width=3.5cm ,below=0cm  of  StateVarElim]
+		{
+			\textbf{RenderClass}
+		};
+\node (ClassElim) [class,  text width=3.5cm ,below=0cm  of  RenderClass]
+		{
+			\textbf{ClassElim}
+		};
+\node (RenderMod) [class,  text width=3.5cm ,below=0cm  of  ClassElim]
+		{
+			\textbf{RenderMod}
+		};
+\node (ModuleElim) [class,  text width=3.5cm ,below=0cm  of  RenderMod]
+		{
+			\textbf{ModuleElim}
+		};
+\node (BlockCommentSym) [class,  text width=3.5cm ,below =0cm  of  ModuleElim]
+		{
+			\textbf{BlockCommentSym}
+		};
+\node (BlockCommentElim) [class,  text width=4cm ,below=0cm  of  BlockCommentSym]
+		{
+			\textbf{BlockCommentElim}
+		};
+\node (ScopeElim) [class,  text width=3.5cm ,below=0 cm of  BlockCommentElim]
+		{
+			\textbf{ScopeElim}
+		};
+\node (ImportSym) [class,  text width=3.5cm ,below=0cm  of  ScopeElim]
+		{
+			\textbf{ImportSym}
+		};
+\node (ImportElim) [class,  text width=3.5cm ,below=0cm  of  ImportSym]
+		{
+			\textbf{ImportElim}
+		};
+\node (PermElim) [class,  text width=3.5cm ,below=0cm  of  ImportElim]
+		{
+			\textbf{PermElim}
+		};
+\node (RenderBody) [class,  text width=3.5cm ,below=0cm  of  PermElim]
+		{
+			\textbf{RenderBody}
+		};
+\node (BodyElim) [class,  text width=3.5cm ,below=0cm  of  RenderBody]
+		{
+			\textbf{BodyElim}
+		};
+\node (RenderBlock) [class,  text width=3.5cm ,below=0cm  of  BodyElim]
+		{
+			\textbf{RenderBlock}
+		};
+\node (BlockElim) [class,  text width=3.5cm ,below=0cm  of  RenderBlock]
+		{
+			\textbf{BlockElim}
+		};
+\node (RenderType) [class,  text width=3.5cm ,below=0cm  of  BlockElim]
+		{
+			\textbf{RenderType}
+		};
+\node (InternalTypeElim) [class,  text width=3.5cm ,below=0cm  of  RenderType]
+		{
+			\textbf{InternalTypeElim}
+		};
+\node (UnaryOpSym) [class,  text width=3.5cm ,below=0cm  of  InternalTypeElim]
+		{
+			\textbf{UnaryOpSym}
+		};
+\node (BinaryOpSym) [class,  text width=3.5cm ,below=0cm  of  UnaryOpSym]
+		{
+			\textbf{BinaryOpSym}
+		};
+\node (OpElim) [class,  text width=3.5cm ,below=0cm  of  BinaryOpSym]
+		{
+			\textbf{OpElim}
+		};
+\node (RenderVariable) [class,  text width=3.5cm ,below=0cm  of  OpElim]
+		{
+			\textbf{RenderVariable}
+		};
+\node (InternalVarElim) [class,  text width=3.5cm ,below=0cm  of  RenderVariable]
+		{
+			\textbf{InternalVarElim}
+		};
+\node (RenderValue) [class,  text width=3.5cm ,below=0cm  of  InternalVarElim]
+		{
+			\textbf{RenderValue}
+		};
+\node (ValueElim) [class,  text width=3.5cm ,below=0cm  of  RenderValue]
+		{
+			\textbf{ValueElim}
+		};
+\node (InternalGetSet) [class,  text width=3.5cm ,below=0cm  of  ValueElim]
+		{
+			\textbf{InternalGetSet}
+		};
+\node (InternalListFunc) [class,  text width=3.5cm ,below=0cm  of  InternalGetSet]
+		{
+			\textbf{InternalListFunc}
+		};
+\node (InternalIterator) [class,  text width=3.5cm ,below=0cm  of  InternalListFunc]
+		{
+			\textbf{InternalIterator}
+		};
+\node (RenderFunction) [class,  text width=3.5cm ,below=0cm  of  InternalIterator]
+		{
+			\textbf{RenderFunction}
+		};
+\node (FunctionElim) [class,  text width=3.5cm ,below=0cm  of  RenderFunction]
+		{
+			\textbf{FunctionElim}
+		};
+\node (InternalAssignStmt) [class,  text width=3.5cm ,below=0cm  of  FunctionElim]
+		{
+			\textbf{InternalAssignStmt}
+		};
+\node (InternalIOStmt) [class,  text width=3.5cm ,below=0cm  of  InternalAssignStmt]
+		{
+			\textbf{InternalIOStmt}
+		};
+\node (InternalControlStmt) [class,  text width=3.5cm ,below=0cm  of  InternalIOStmt]
+		{
+			\textbf{InternalControlStmt}
+		};
+\node (RenderStatement) [class,  text width=3.5cm ,below=0cm  of  InternalControlStmt]
+		{
+			\textbf{RenderStatement}
+		};
+\node (StatementElim) [class,  text width=3.5cm ,below=0cm  of  RenderStatement]
+		{
+			\textbf{StatementElim}
+		};
+\node (RenderScope) [class,  text width=3.5cm ,below=0cm  of  StatementElim]
+		{
+			\textbf{RenderScope}
+		};
+\node (RenderParam) [class,  text width=3.5cm ,below=0cm  of  RenderScope]
+		{
+			\textbf{RenderParam}
+		};
+
+\draw[myarrow , dashed] (MethodTypeSym.east) -- ++ (0.5,0.5) -| (TypeSym.east);
+\draw[myarrow ] (RenderClass.east) -- ++ (2,-2) -| (BlockCommentSym.east);
+\draw[myarrow ] (RenderFile.east) -- ++ (2,-3) -| (BlockCommentSym.east);
+\draw[myarrow ] (RenderMethod.east) -- ++ (2,-3.5) -| (BlockCommentSym.east);
+\draw[myarrow ] (RenderMethod.east) -- ++ (2,1.5) -| (MethodTypeSym.east);
+
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,11) -| (MethodElim.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,10.5) -| (ParamElim.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,10) -| (RenderMethod.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,9.5) -| (RenderFile.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,9) -| (StateVarElim.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,8.5) -| (RenderClass.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,8) -| (ClassElim.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,7.5) -| (RenderMod.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,7) -| (ModuleElim.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,6) -| (BlockCommentElim.west);
+
+
+
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,5.5) -| (ScopeElim.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,5) -| (ImportSym.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,4.5) -| (ImportElim.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,4) -| (PermElim.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,3.2) -| (RenderBody.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,2.5) -| (BodyElim.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,2) -| (RenderBlock.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,1.5) -| (BlockElim.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,1) -| (RenderType.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,0.5) -| (InternalTypeElim.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,0) -| (UnaryOpSym.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,-0.5) -| (BinaryOpSym.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,-1) -| (OpElim.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,-1.5) -| (RenderVariable.west);
+
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,-2) -| (InternalVarElim.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,-2.5) -| (RenderValue.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,-3) -| (ValueElim.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,-3.5) -| (InternalGetSet.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,-4) -| (InternalListFunc.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,-4.5) -| (InternalIterator.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,-5) -| (RenderFunction.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,-5.5) -| (FunctionElim.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,-6) -| (InternalAssignStmt.west);
+
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,-6.7) -| (InternalIOStmt.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,-7.5) -| (InternalControlStmt.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,-8) -| (RenderStatement.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,-8.5) -| (StatementElim.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,-9) -| (RenderScope.west);
+\draw[myarrow ] (RenderSym.east) -- ++ (1.5,-9.5) -| (RenderParam.west);
+
+
+
+\end{tikzpicture}
+\end{center}
+
+\end{document}

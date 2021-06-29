@@ -60,7 +60,7 @@ void get_input(string filename, double &A_C, double &C_W, double &h_C, double &T
 double derived_values(double D, double L) {
     double V_tank;
     
-    V_tank = Constants::pi * pow(D / 2, 2) * L;
+    V_tank = Constants::pi * pow(D / 2.0, 2.0) * L;
     
     return V_tank;
 }
@@ -70,7 +70,7 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << "Warning: ";
         std::cout << "A_C has value ";
         std::cout << A_C;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "below ";
         std::cout << Constants::A_C_max;
         std::cout << " (A_C_max)";
@@ -80,7 +80,7 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << "Warning: ";
         std::cout << "C_W has value ";
         std::cout << C_W;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "between ";
         std::cout << Constants::C_W_min;
         std::cout << " (C_W_min)";
@@ -93,7 +93,7 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << "Warning: ";
         std::cout << "h_C has value ";
         std::cout << h_C;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "between ";
         std::cout << Constants::h_C_min;
         std::cout << " (h_C_min)";
@@ -106,7 +106,7 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << "Warning: ";
         std::cout << "t_final has value ";
         std::cout << t_final;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "below ";
         std::cout << Constants::t_final_max;
         std::cout << " (t_final_max)";
@@ -116,7 +116,7 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << "Warning: ";
         std::cout << "L has value ";
         std::cout << L;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "between ";
         std::cout << Constants::L_min;
         std::cout << " (L_min)";
@@ -129,7 +129,7 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << "Warning: ";
         std::cout << "rho_W has value ";
         std::cout << rho_W;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "between ";
         std::cout << Constants::rho_W_min;
         std::cout << " (rho_W_min)";
@@ -142,7 +142,7 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << "Warning: ";
         std::cout << "D has value ";
         std::cout << D;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "between ";
         std::cout << Constants::AR_min;
         std::cout << " (AR_min)";
@@ -152,110 +152,110 @@ void input_constraints(double A_C, double C_W, double h_C, double T_init, double
         std::cout << "." << std::endl;
     }
     
-    if (!(A_C > 0)) {
+    if (!(A_C > 0.0)) {
         std::cout << "Warning: ";
         std::cout << "A_C has value ";
         std::cout << A_C;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "above ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << "." << std::endl;
     }
-    if (!(C_W > 0)) {
+    if (!(C_W > 0.0)) {
         std::cout << "Warning: ";
         std::cout << "C_W has value ";
         std::cout << C_W;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "above ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << "." << std::endl;
     }
-    if (!(h_C > 0)) {
+    if (!(h_C > 0.0)) {
         std::cout << "Warning: ";
         std::cout << "h_C has value ";
         std::cout << h_C;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "above ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << "." << std::endl;
     }
-    if (!(0 < T_init && T_init < 100)) {
+    if (!(0.0 < T_init && T_init < 100.0)) {
         std::cout << "Warning: ";
         std::cout << "T_init has value ";
         std::cout << T_init;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "between ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << " and ";
-        std::cout << 100;
+        std::cout << 100.0;
         std::cout << "." << std::endl;
     }
-    if (!(t_final > 0)) {
+    if (!(t_final > 0.0)) {
         std::cout << "Warning: ";
         std::cout << "t_final has value ";
         std::cout << t_final;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "above ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << "." << std::endl;
     }
-    if (!(L > 0)) {
+    if (!(L > 0.0)) {
         std::cout << "Warning: ";
         std::cout << "L has value ";
         std::cout << L;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "above ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << "." << std::endl;
     }
-    if (!(0 < T_C && T_C < 100)) {
+    if (!(0.0 < T_C && T_C < 100.0)) {
         std::cout << "Warning: ";
         std::cout << "T_C has value ";
         std::cout << T_C;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "between ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << " and ";
-        std::cout << 100;
+        std::cout << 100.0;
         std::cout << "." << std::endl;
     }
-    if (!(0 < t_step && t_step < t_final)) {
+    if (!(0.0 < t_step && t_step < t_final)) {
         std::cout << "Warning: ";
         std::cout << "t_step has value ";
         std::cout << t_step;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "between ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << " and ";
         std::cout << t_final;
         std::cout << " (t_final)";
         std::cout << "." << std::endl;
     }
-    if (!(rho_W > 0)) {
+    if (!(rho_W > 0.0)) {
         std::cout << "Warning: ";
         std::cout << "rho_W has value ";
         std::cout << rho_W;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "above ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << "." << std::endl;
     }
-    if (!(D > 0)) {
+    if (!(D > 0.0)) {
         std::cout << "Warning: ";
         std::cout << "D has value ";
         std::cout << D;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "above ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << "." << std::endl;
     }
-    if (!(E_W >= 0)) {
+    if (!(E_W >= 0.0)) {
         std::cout << "Warning: ";
         std::cout << "E_W has value ";
         std::cout << E_W;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "above ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << "." << std::endl;
     }
 }

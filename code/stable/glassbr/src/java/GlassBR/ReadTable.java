@@ -50,7 +50,7 @@ public class ReadTable {
             z_vector.add(Double.parseDouble(linetokens.get(stringlist_i * 1 + 0)));
         }
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.print("var 'z_vector' assigned to ");
+        outfile.print("var 'z_vector' assigned ");
         outfile.print(z_vector);
         outfile.println(" in module ReadTable");
         outfile.close();
@@ -69,12 +69,12 @@ public class ReadTable {
             y_matrix.add(y_matrix_temp);
         }
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.print("var 'x_matrix' assigned to ");
+        outfile.print("var 'x_matrix' assigned ");
         outfile.print(x_matrix);
         outfile.println(" in module ReadTable");
         outfile.close();
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.print("var 'y_matrix' assigned to ");
+        outfile.print("var 'y_matrix' assigned ");
         outfile.print(y_matrix);
         outfile.println(" in module ReadTable");
         outfile.close();

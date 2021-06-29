@@ -75,14 +75,14 @@ int main(int argc, const char *argv[]) {
         b = a + 2;
         c = b + 3;
         d = b;
-        d = d - a;
-        c = c - d;
+        d -= a;
+        c -= d;
         b += 17;
         c += 17;
         a++;
         d++;
-        c = c - 1;
-        b = b - 1;
+        c--;
+        b--;
         vector<int> myList(5);
         char myObj = 'o';
         const string myConst = "Imconstant";

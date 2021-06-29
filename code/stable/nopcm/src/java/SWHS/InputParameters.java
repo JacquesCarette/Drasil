@@ -97,7 +97,7 @@ public class InputParameters {
     public static double derived_values(double D, double L) {
         double V_tank;
         
-        V_tank = Constants.pi * Math.pow(D / 2, 2) * L;
+        V_tank = Constants.pi * Math.pow(D / 2.0, 2.0) * L;
         
         return V_tank;
     }
@@ -120,7 +120,7 @@ public class InputParameters {
             System.out.print("Warning: ");
             System.out.print("A_C has value ");
             System.out.print(A_C);
-            System.out.print(" but suggested to be ");
+            System.out.print(", but is suggested to be ");
             System.out.print("below ");
             System.out.print(Constants.A_C_max);
             System.out.print(" (A_C_max)");
@@ -130,7 +130,7 @@ public class InputParameters {
             System.out.print("Warning: ");
             System.out.print("C_W has value ");
             System.out.print(C_W);
-            System.out.print(" but suggested to be ");
+            System.out.print(", but is suggested to be ");
             System.out.print("between ");
             System.out.print(Constants.C_W_min);
             System.out.print(" (C_W_min)");
@@ -143,7 +143,7 @@ public class InputParameters {
             System.out.print("Warning: ");
             System.out.print("h_C has value ");
             System.out.print(h_C);
-            System.out.print(" but suggested to be ");
+            System.out.print(", but is suggested to be ");
             System.out.print("between ");
             System.out.print(Constants.h_C_min);
             System.out.print(" (h_C_min)");
@@ -156,7 +156,7 @@ public class InputParameters {
             System.out.print("Warning: ");
             System.out.print("t_final has value ");
             System.out.print(t_final);
-            System.out.print(" but suggested to be ");
+            System.out.print(", but is suggested to be ");
             System.out.print("below ");
             System.out.print(Constants.t_final_max);
             System.out.print(" (t_final_max)");
@@ -166,7 +166,7 @@ public class InputParameters {
             System.out.print("Warning: ");
             System.out.print("L has value ");
             System.out.print(L);
-            System.out.print(" but suggested to be ");
+            System.out.print(", but is suggested to be ");
             System.out.print("between ");
             System.out.print(Constants.L_min);
             System.out.print(" (L_min)");
@@ -179,7 +179,7 @@ public class InputParameters {
             System.out.print("Warning: ");
             System.out.print("rho_W has value ");
             System.out.print(rho_W);
-            System.out.print(" but suggested to be ");
+            System.out.print(", but is suggested to be ");
             System.out.print("between ");
             System.out.print(Constants.rho_W_min);
             System.out.print(" (rho_W_min)");
@@ -192,7 +192,7 @@ public class InputParameters {
             System.out.print("Warning: ");
             System.out.print("D has value ");
             System.out.print(D);
-            System.out.print(" but suggested to be ");
+            System.out.print(", but is suggested to be ");
             System.out.print("between ");
             System.out.print(Constants.AR_min);
             System.out.print(" (AR_min)");
@@ -202,110 +202,110 @@ public class InputParameters {
             System.out.println(".");
         }
         
-        if (!(A_C > 0)) {
+        if (!(A_C > 0.0)) {
             System.out.print("Warning: ");
             System.out.print("A_C has value ");
             System.out.print(A_C);
-            System.out.print(" but suggested to be ");
+            System.out.print(", but is suggested to be ");
             System.out.print("above ");
-            System.out.print(0);
+            System.out.print(0.0);
             System.out.println(".");
         }
-        if (!(C_W > 0)) {
+        if (!(C_W > 0.0)) {
             System.out.print("Warning: ");
             System.out.print("C_W has value ");
             System.out.print(C_W);
-            System.out.print(" but suggested to be ");
+            System.out.print(", but is suggested to be ");
             System.out.print("above ");
-            System.out.print(0);
+            System.out.print(0.0);
             System.out.println(".");
         }
-        if (!(h_C > 0)) {
+        if (!(h_C > 0.0)) {
             System.out.print("Warning: ");
             System.out.print("h_C has value ");
             System.out.print(h_C);
-            System.out.print(" but suggested to be ");
+            System.out.print(", but is suggested to be ");
             System.out.print("above ");
-            System.out.print(0);
+            System.out.print(0.0);
             System.out.println(".");
         }
-        if (!(0 < T_init && T_init < 100)) {
+        if (!(0.0 < T_init && T_init < 100.0)) {
             System.out.print("Warning: ");
             System.out.print("T_init has value ");
             System.out.print(T_init);
-            System.out.print(" but suggested to be ");
+            System.out.print(", but is suggested to be ");
             System.out.print("between ");
-            System.out.print(0);
+            System.out.print(0.0);
             System.out.print(" and ");
-            System.out.print(100);
+            System.out.print(100.0);
             System.out.println(".");
         }
-        if (!(t_final > 0)) {
+        if (!(t_final > 0.0)) {
             System.out.print("Warning: ");
             System.out.print("t_final has value ");
             System.out.print(t_final);
-            System.out.print(" but suggested to be ");
+            System.out.print(", but is suggested to be ");
             System.out.print("above ");
-            System.out.print(0);
+            System.out.print(0.0);
             System.out.println(".");
         }
-        if (!(L > 0)) {
+        if (!(L > 0.0)) {
             System.out.print("Warning: ");
             System.out.print("L has value ");
             System.out.print(L);
-            System.out.print(" but suggested to be ");
+            System.out.print(", but is suggested to be ");
             System.out.print("above ");
-            System.out.print(0);
+            System.out.print(0.0);
             System.out.println(".");
         }
-        if (!(0 < T_C && T_C < 100)) {
+        if (!(0.0 < T_C && T_C < 100.0)) {
             System.out.print("Warning: ");
             System.out.print("T_C has value ");
             System.out.print(T_C);
-            System.out.print(" but suggested to be ");
+            System.out.print(", but is suggested to be ");
             System.out.print("between ");
-            System.out.print(0);
+            System.out.print(0.0);
             System.out.print(" and ");
-            System.out.print(100);
+            System.out.print(100.0);
             System.out.println(".");
         }
-        if (!(0 < t_step && t_step < t_final)) {
+        if (!(0.0 < t_step && t_step < t_final)) {
             System.out.print("Warning: ");
             System.out.print("t_step has value ");
             System.out.print(t_step);
-            System.out.print(" but suggested to be ");
+            System.out.print(", but is suggested to be ");
             System.out.print("between ");
-            System.out.print(0);
+            System.out.print(0.0);
             System.out.print(" and ");
             System.out.print(t_final);
             System.out.print(" (t_final)");
             System.out.println(".");
         }
-        if (!(rho_W > 0)) {
+        if (!(rho_W > 0.0)) {
             System.out.print("Warning: ");
             System.out.print("rho_W has value ");
             System.out.print(rho_W);
-            System.out.print(" but suggested to be ");
+            System.out.print(", but is suggested to be ");
             System.out.print("above ");
-            System.out.print(0);
+            System.out.print(0.0);
             System.out.println(".");
         }
-        if (!(D > 0)) {
+        if (!(D > 0.0)) {
             System.out.print("Warning: ");
             System.out.print("D has value ");
             System.out.print(D);
-            System.out.print(" but suggested to be ");
+            System.out.print(", but is suggested to be ");
             System.out.print("above ");
-            System.out.print(0);
+            System.out.print(0.0);
             System.out.println(".");
         }
-        if (!(E_W >= 0)) {
+        if (!(E_W >= 0.0)) {
             System.out.print("Warning: ");
             System.out.print("E_W has value ");
             System.out.print(E_W);
-            System.out.print(" but suggested to be ");
+            System.out.print(", but is suggested to be ");
             System.out.print("above ");
-            System.out.print(0);
+            System.out.print(0.0);
             System.out.println(".");
         }
     }

@@ -59,3 +59,7 @@ assumpCAJIDesc = thereNo [plural CM.constraint, plural CP.joint]
 assumptionsListA :: [[Sentence]]
 assumptionsListA = [assumpOTDesc, assumpODDesc, assumpCSTDesc, assumpADDesc,
   assumpCTDesc, assumpDIDesc, assumpCAJIDesc]
+
+-- References --
+assumpRefs :: [Reference]
+assumpRefs = map ref assumptions

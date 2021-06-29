@@ -6,7 +6,8 @@ import Data.Drasil.Concepts.Documentation (assumption, goalStmt, likelyChg,
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Concepts.PhysicalProperties (ctrOfMass)
 import Data.Drasil.Concepts.Physics (threeD, twoD)
-import Data.Drasil.IdeaDicts (dataDefn, genDefn, inModel, physics, thModel)
+import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
+import Data.Drasil.Domains (physics)
 
 import Control.Lens ((^.))
 

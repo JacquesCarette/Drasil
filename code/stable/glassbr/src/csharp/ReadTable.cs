@@ -99,7 +99,7 @@ public class ReadTable {
             z_vector.Add(Double.Parse(linetokens[stringlist_i * 1 + 0]));
         }
         outfile = new StreamWriter("log.txt", true);
-        outfile.Write("var 'z_vector' assigned to ");
+        outfile.Write("var 'z_vector' assigned ");
         outfile.Write("[");
         for (int list_i1 = 0; list_i1 < z_vector.Count - 1; list_i1++) {
             outfile.Write(z_vector[list_i1]);
@@ -126,7 +126,7 @@ public class ReadTable {
             y_matrix.Add(y_matrix_temp);
         }
         outfile = new StreamWriter("log.txt", true);
-        outfile.Write("var 'x_matrix' assigned to ");
+        outfile.Write("var 'x_matrix' assigned ");
         outfile.Write("[");
         for (int list_i2 = 0; list_i2 < x_matrix.Count - 1; list_i2++) {
             outfile.Write("[");
@@ -155,7 +155,7 @@ public class ReadTable {
         outfile.WriteLine(" in module ReadTable");
         outfile.Close();
         outfile = new StreamWriter("log.txt", true);
-        outfile.Write("var 'y_matrix' assigned to ");
+        outfile.Write("var 'y_matrix' assigned ");
         outfile.Write("[");
         for (int list_i2 = 0; list_i2 < y_matrix.Count - 1; list_i2++) {
             outfile.Write("[");

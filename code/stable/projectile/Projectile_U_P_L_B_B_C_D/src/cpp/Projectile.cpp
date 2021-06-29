@@ -45,7 +45,7 @@ void InputParameters::get_input(string filename) {
     infile >> this->v_launch;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'this->v_launch' assigned to ";
+    outfile << "var 'this->v_launch' assigned ";
     outfile << this->v_launch;
     outfile << " in module Projectile" << std::endl;
     outfile.close();
@@ -53,7 +53,7 @@ void InputParameters::get_input(string filename) {
     infile >> this->theta;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'this->theta' assigned to ";
+    outfile << "var 'this->theta' assigned ";
     outfile << this->theta;
     outfile << " in module Projectile" << std::endl;
     outfile.close();
@@ -61,7 +61,7 @@ void InputParameters::get_input(string filename) {
     infile >> this->p_target;
     infile.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'this->p_target' assigned to ";
+    outfile << "var 'this->p_target' assigned ";
     outfile << this->p_target;
     outfile << " in module Projectile" << std::endl;
     outfile.close();
@@ -75,34 +75,34 @@ void InputParameters::input_constraints() {
     outfile << "  }" << std::endl;
     outfile.close();
     
-    if (!(this->v_launch > 0)) {
+    if (!(this->v_launch > 0.0)) {
         std::cout << "Warning: ";
         std::cout << "v_launch has value ";
         std::cout << this->v_launch;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "above ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << "." << std::endl;
     }
-    if (!(0 < this->theta && this->theta < M_PI / 2)) {
+    if (!(0.0 < this->theta && this->theta < M_PI / 2.0)) {
         std::cout << "Warning: ";
         std::cout << "theta has value ";
         std::cout << this->theta;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "between ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << " and ";
-        std::cout << (M_PI / 2);
+        std::cout << (M_PI / 2.0);
         std::cout << " ((pi)/(2))";
         std::cout << "." << std::endl;
     }
-    if (!(this->p_target > 0)) {
+    if (!(this->p_target > 0.0)) {
         std::cout << "Warning: ";
         std::cout << "p_target has value ";
         std::cout << this->p_target;
-        std::cout << " but suggested to be ";
+        std::cout << ", but is suggested to be ";
         std::cout << "above ";
-        std::cout << 0;
+        std::cout << 0.0;
         std::cout << "." << std::endl;
     }
 }
@@ -119,32 +119,32 @@ int main(int argc, const char *argv[]) {
     ofstream outfile;
     string filename = argv[1];
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'filename' assigned to ";
+    outfile << "var 'filename' assigned ";
     outfile << filename;
     outfile << " in module Projectile" << std::endl;
     outfile.close();
     InputParameters inParams = InputParameters(filename);
     double t_flight = func_t_flight(inParams);
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 't_flight' assigned to ";
+    outfile << "var 't_flight' assigned ";
     outfile << t_flight;
     outfile << " in module Projectile" << std::endl;
     outfile.close();
     double p_land = func_p_land(inParams);
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'p_land' assigned to ";
+    outfile << "var 'p_land' assigned ";
     outfile << p_land;
     outfile << " in module Projectile" << std::endl;
     outfile.close();
     double d_offset = func_d_offset(inParams, p_land);
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 'd_offset' assigned to ";
+    outfile << "var 'd_offset' assigned ";
     outfile << d_offset;
     outfile << " in module Projectile" << std::endl;
     outfile.close();
     string s = func_s(inParams, d_offset);
     outfile.open("log.txt", std::fstream::app);
-    outfile << "var 's' assigned to ";
+    outfile << "var 's' assigned ";
     outfile << s;
     outfile << " in module Projectile" << std::endl;
     outfile.close();
@@ -162,7 +162,7 @@ double func_t_flight(InputParameters &inParams) {
     outfile << "  }" << std::endl;
     outfile.close();
     
-    return 2 * inParams.v_launch * sin(inParams.theta) / Constants::g_vect;
+    return 2.0 * inParams.v_launch * sin(inParams.theta) / Constants::g_vect;
 }
 
 double func_p_land(InputParameters &inParams) {
@@ -174,7 +174,7 @@ double func_p_land(InputParameters &inParams) {
     outfile << "  }" << std::endl;
     outfile.close();
     
-    return 2 * pow(inParams.v_launch, 2) * sin(inParams.theta) * cos(inParams.theta) / Constants::g_vect;
+    return 2.0 * pow(inParams.v_launch, 2.0) * sin(inParams.theta) * cos(inParams.theta) / Constants::g_vect;
 }
 
 double func_d_offset(InputParameters &inParams, double p_land) {
@@ -207,7 +207,7 @@ string func_s(InputParameters &inParams, double d_offset) {
     if (fabs(d_offset / inParams.p_target) < Constants::epsilon) {
         return "The target was hit.";
     }
-    else if (d_offset < 0) {
+    else if (d_offset < 0.0) {
         return "The projectile fell short.";
     }
     else {

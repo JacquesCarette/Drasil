@@ -38,34 +38,34 @@ public class InputParameters {
     /** \brief Verifies that input values satisfy the physical constraints
     */
     private void input_constraints() {
-        if (!(this.v_launch > 0)) {
+        if (!(this.v_launch > 0.0)) {
             Console.Write("Warning: ");
             Console.Write("v_launch has value ");
             Console.Write(this.v_launch);
-            Console.Write(" but suggested to be ");
+            Console.Write(", but is suggested to be ");
             Console.Write("above ");
-            Console.Write(0);
+            Console.Write(0.0);
             Console.WriteLine(".");
         }
-        if (!(0 < this.theta && this.theta < Math.PI / 2)) {
+        if (!(0.0 < this.theta && this.theta < Math.PI / 2.0)) {
             Console.Write("Warning: ");
             Console.Write("theta has value ");
             Console.Write(this.theta);
-            Console.Write(" but suggested to be ");
+            Console.Write(", but is suggested to be ");
             Console.Write("between ");
-            Console.Write(0);
+            Console.Write(0.0);
             Console.Write(" and ");
-            Console.Write(Math.PI / 2);
+            Console.Write(Math.PI / 2.0);
             Console.Write(" ((pi)/(2))");
             Console.WriteLine(".");
         }
-        if (!(this.p_target > 0)) {
+        if (!(this.p_target > 0.0)) {
             Console.Write("Warning: ");
             Console.Write("p_target has value ");
             Console.Write(this.p_target);
-            Console.Write(" but suggested to be ");
+            Console.Write(", but is suggested to be ");
             Console.Write("above ");
-            Console.Write(0);
+            Console.Write(0.0);
             Console.WriteLine(".");
         }
     }

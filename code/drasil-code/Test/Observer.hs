@@ -22,7 +22,7 @@ selfX :: (VariableSym r) => SVariable r
 selfX = objVarSelf x
 
 helperClass :: (ClassSym r, IOStatement r, Literal r, VariableValue r) => SClass r
-helperClass = buildClass observerName Nothing [stateVar public dynamic x]
+helperClass = buildClass Nothing [stateVar public dynamic x]
   [observerConstructor, printNumMethod, getMethod x, setMethod x]
 
 observerConstructor :: (MethodSym r, Literal r) => SMethod r

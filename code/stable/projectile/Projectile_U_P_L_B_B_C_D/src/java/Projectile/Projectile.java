@@ -16,36 +16,36 @@ public class Projectile {
     /** \brief Controls the flow of the program
         \param args List of command-line arguments
     */
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws FileNotFoundException, IOException {
         PrintWriter outfile;
         String filename = args[0];
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.print("var 'filename' assigned to ");
+        outfile.print("var 'filename' assigned ");
         outfile.print(filename);
         outfile.println(" in module Projectile");
         outfile.close();
         InputParameters inParams = new InputParameters(filename);
         double t_flight = func_t_flight(inParams);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.print("var 't_flight' assigned to ");
+        outfile.print("var 't_flight' assigned ");
         outfile.print(t_flight);
         outfile.println(" in module Projectile");
         outfile.close();
         double p_land = func_p_land(inParams);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.print("var 'p_land' assigned to ");
+        outfile.print("var 'p_land' assigned ");
         outfile.print(p_land);
         outfile.println(" in module Projectile");
         outfile.close();
         double d_offset = func_d_offset(inParams, p_land);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.print("var 'd_offset' assigned to ");
+        outfile.print("var 'd_offset' assigned ");
         outfile.print(d_offset);
         outfile.println(" in module Projectile");
         outfile.close();
         String s = func_s(inParams, d_offset);
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.print("var 's' assigned to ");
+        outfile.print("var 's' assigned ");
         outfile.print(s);
         outfile.println(" in module Projectile");
         outfile.close();
@@ -65,7 +65,7 @@ public class Projectile {
         outfile.println("  }");
         outfile.close();
         
-        return 2 * inParams.v_launch * Math.sin(inParams.theta) / Constants.g_vect;
+        return 2.0 * inParams.v_launch * Math.sin(inParams.theta) / Constants.g_vect;
     }
     
     /** \brief Calculates landing position: the distance from the launcher to the final position of the projectile (m)
@@ -81,7 +81,7 @@ public class Projectile {
         outfile.println("  }");
         outfile.close();
         
-        return 2 * Math.pow(inParams.v_launch, 2) * Math.sin(inParams.theta) * Math.cos(inParams.theta) / Constants.g_vect;
+        return 2.0 * Math.pow(inParams.v_launch, 2.0) * Math.sin(inParams.theta) * Math.cos(inParams.theta) / Constants.g_vect;
     }
     
     /** \brief Calculates distance between the target position and the landing position: the offset between the target position and the landing position (m)
@@ -124,7 +124,7 @@ public class Projectile {
         if (Math.abs(d_offset / inParams.p_target) < Constants.epsilon) {
             return "The target was hit.";
         }
-        else if (d_offset < 0) {
+        else if (d_offset < 0.0) {
             return "The projectile fell short.";
         }
         else {
@@ -198,21 +198,21 @@ class InputParameters {
         infile.nextLine();
         this.v_launch = Double.parseDouble(infile.nextLine());
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.print("var 'this.v_launch' assigned to ");
+        outfile.print("var 'this.v_launch' assigned ");
         outfile.print(this.v_launch);
         outfile.println(" in module Projectile");
         outfile.close();
         infile.nextLine();
         this.theta = Double.parseDouble(infile.nextLine());
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.print("var 'this.theta' assigned to ");
+        outfile.print("var 'this.theta' assigned ");
         outfile.print(this.theta);
         outfile.println(" in module Projectile");
         outfile.close();
         infile.nextLine();
         this.p_target = Double.parseDouble(infile.nextLine());
         outfile = new PrintWriter(new FileWriter(new File("log.txt"), true));
-        outfile.print("var 'this.p_target' assigned to ");
+        outfile.print("var 'this.p_target' assigned ");
         outfile.print(this.p_target);
         outfile.println(" in module Projectile");
         outfile.close();
@@ -228,34 +228,34 @@ class InputParameters {
         outfile.println("  }");
         outfile.close();
         
-        if (!(this.v_launch > 0)) {
+        if (!(this.v_launch > 0.0)) {
             System.out.print("Warning: ");
             System.out.print("v_launch has value ");
             System.out.print(this.v_launch);
-            System.out.print(" but suggested to be ");
+            System.out.print(", but is suggested to be ");
             System.out.print("above ");
-            System.out.print(0);
+            System.out.print(0.0);
             System.out.println(".");
         }
-        if (!(0 < this.theta && this.theta < Math.PI / 2)) {
+        if (!(0.0 < this.theta && this.theta < Math.PI / 2.0)) {
             System.out.print("Warning: ");
             System.out.print("theta has value ");
             System.out.print(this.theta);
-            System.out.print(" but suggested to be ");
+            System.out.print(", but is suggested to be ");
             System.out.print("between ");
-            System.out.print(0);
+            System.out.print(0.0);
             System.out.print(" and ");
-            System.out.print(Math.PI / 2);
+            System.out.print(Math.PI / 2.0);
             System.out.print(" ((pi)/(2))");
             System.out.println(".");
         }
-        if (!(this.p_target > 0)) {
+        if (!(this.p_target > 0.0)) {
             System.out.print("Warning: ");
             System.out.print("p_target has value ");
             System.out.print(this.p_target);
-            System.out.print(" but suggested to be ");
+            System.out.print(", but is suggested to be ");
             System.out.print("above ");
-            System.out.print(0);
+            System.out.print(0.0);
             System.out.println(".");
         }
     }

@@ -1,50 +1,62 @@
-Name:		  drasil-gool
-Version:	0.1.1
-Cabal-Version:  >= 1.18
-Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith, Brooks MacLachlan
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 5a0b328c117c3657697e6ee4a86bb584ebf63d0093089238a1af21efccbe1d7d
+
+name:           drasil-gool
+version:        0.1.1.0
+synopsis:       A framework for code and document generation for scientific software - GOOL SubPackage
+description:    Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+homepage:       https://jacquescarette.github.io/Drasil/
+bug-reports:    https://github.com/JacquesCarette/Drasil/issues
+author:         Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith, Brooks MacLachlan
+maintainer:     Jacques Carette
 build-type:     Simple
-Synopsis:	A framework for code and document generation for scientific software - GOOL SubPackage
+
+source-repository head
+  type: git
+  location: https://github.com/JacquesCarette/Drasil
 
 library
   exposed-modules:
       GOOL.Drasil
   other-modules:
+      GOOL.Drasil.AST
+      GOOL.Drasil.Classes
+      GOOL.Drasil.ClassInterface
+      GOOL.Drasil.CodeAnalysis
+      GOOL.Drasil.CodeInfo
       GOOL.Drasil.CodeType
-    , GOOL.Drasil.AST
-    , GOOL.Drasil.Classes
-    , GOOL.Drasil.Helpers
-    , GOOL.Drasil.CodeAnalysis
-    , GOOL.Drasil.CodeInfo
-    , GOOL.Drasil.LanguageRenderer.Constructors
-    , GOOL.Drasil.LanguageRenderer.LanguagePolymorphic
-    , GOOL.Drasil.LanguageRenderer.CommonPseudoOO
-    , GOOL.Drasil.LanguageRenderer.CLike
-    , GOOL.Drasil.LanguageRenderer.Macros
-    , GOOL.Drasil.LanguageRenderer
-    , GOOL.Drasil.LanguageRenderer.JavaRenderer
-    , GOOL.Drasil.LanguageRenderer.PythonRenderer
-    , GOOL.Drasil.LanguageRenderer.CSharpRenderer
-    , GOOL.Drasil.LanguageRenderer.CppRenderer
-    , GOOL.Drasil.State
-    , GOOL.Drasil.ClassInterface
-    , GOOL.Drasil.RendererClasses
-  Build-Depends:
-    base >= 4.7,
-    lens >= 4.12,
-    containers >= 0.5.5.1,
-    pretty >= 1.1.1.1,
-    mtl >= 2.2.1,
-    directory >= 1.2.6.2,
-    filepath >= 1.4.1,
-    split >= 0.2.3.1,
-    MissingH >= 1.4.0.1,
-    data-ordlist >= 0.4.7.0,
-    composition >= 1.0.2.1,
-    drasil-utils >= 0.1.1
+      GOOL.Drasil.Helpers
+      GOOL.Drasil.LanguageRenderer
+      GOOL.Drasil.LanguageRenderer.CLike
+      GOOL.Drasil.LanguageRenderer.CommonPseudoOO
+      GOOL.Drasil.LanguageRenderer.Constructors
+      GOOL.Drasil.LanguageRenderer.CppRenderer
+      GOOL.Drasil.LanguageRenderer.CSharpRenderer
+      GOOL.Drasil.LanguageRenderer.JavaRenderer
+      GOOL.Drasil.LanguageRenderer.LanguagePolymorphic
+      GOOL.Drasil.LanguageRenderer.Macros
+      GOOL.Drasil.LanguageRenderer.PythonRenderer
+      GOOL.Drasil.LanguageRenderer.SwiftRenderer
+      GOOL.Drasil.RendererClasses
+      GOOL.Drasil.State
+  hs-source-dirs:
+      ./
+  ghc-options: -Wall -Wredundant-constraints
+  build-depends:
+      base >=4.7 && <5
+    , composition
+    , containers
+    , data-ordlist
+    , drasil-utils
+    , lens
+    , mtl
+    , pretty
+  if false
+    other-modules:
+        Paths_drasil_gool
   default-language: Haskell2010
-  ghc-options:      -Wall -Wredundant-constraints
-
-source-repository head
-  type:     git
-  location: git://github.com/JacquesCarette/Drasil.git
-  subdir: code

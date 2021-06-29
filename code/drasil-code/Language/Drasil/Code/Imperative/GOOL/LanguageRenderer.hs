@@ -1,13 +1,20 @@
 module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer (
   -- * Common Syntax
-  doxConfigName, makefileName, sampleInputName
+  doxConfigName, makefileName, sampleInputName, readMeName
 ) where
 
 ----------------------------------------
 -- Syntax common to several renderers --
 ----------------------------------------
 
-doxConfigName, makefileName, sampleInputName :: String
+-- | Common syntax for several renderers.
+doxConfigName, makefileName, sampleInputName, readMeName :: String
+-- | "doxConfig".
 doxConfigName = "doxConfig"
+-- | \"Makefile\".
 makefileName = "Makefile"
+-- | "input.txt".
 sampleInputName = "input.txt"
+-- | "README.md".
+readMeName = "README.md"
+

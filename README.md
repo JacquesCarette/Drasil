@@ -1,48 +1,51 @@
-The Drasil Framework
+Drasil [![Build Status](https://github.com/JacquesCarette/Drasil/actions/workflows/Build.yaml/badge.svg?branch=master)](https://github.com/JacquesCarette/Drasil/actions/workflows/Build.yaml)
+[![DOI](https://zenodo.org/badge/23760783.svg)](https://zenodo.org/badge/latestdoi/23760783)
 ====================================================
 
-Generate all the Things!
+Generate all the Things! See the [currently generated artifacts](https://jacquescarette.github.io/Drasil/)
 
-[Current Generated Artifacts](https://jacquescarette.github.io/Drasil/)
+## Table of Contents
+
+1. [What is Drasil?](#what-is-drasil)
+2. [Quick Start](#quick-start)
+3. [Building Specific Examples](#building-specific-examples)
+4. [Running the Example(s)](#running-the-examples)
+5. [Finding / Building the Haddock Documentation](#finding--building-the-haddock-documentation)
+6. [Repository Contents](#summary-of-folder-structure-and-file-contents)
 
 ## What is Drasil?
 
-Drasil is a framework for generating all of the software artifacts from
-a stable knowledge base, focusing currently on scientific software. The main goals
-are to reduce knowledge duplication and improve traceability. We also are
-extreme in our drive to reuse everything.  We hope that
-maintainability, verifiability, traceability, and other software qualities will 
-also be improved as a side-effect of our methods.
+For well understood domains, building software ought to be a matter of engineering, based on solid scientific foundations. The ultimate test of "well understood" is being able to teach the domain language to a computer.  Drasil is a framework for generating all of the software artifacts for (well understood) research software, from the natural knowledge base of the domain.
 
-Drasil is used to generate *all* requisite software artifacts from a common 
-*knowledge-base* using *recipes* written in a Domain-Specific Language (DSL).
-These recipes allow us to specify which pieces of knowledge should be used in
-which artifacts, how to transform them, and more.
+We take advantage of the inherent duplication of knowledge present in software artifacts (code, specification, tests, etc). More precisely, we capture the information present in software artifacts so that the particular *view* of that information in the artifacts can be reproduced by Drasil. For example, the equation **F = m a** will *look* different when rendered in documentation and in Java or Python, although it will mean the same thing. In this way, we obtain *traceability*: we know the exact relationship between information in the specification document and in the code and, furthermore, we know that they are coherent by construction.
 
-Drasil is being designed and implemented using a grounded theory approach.  To
-determine what is needed and make the design general, we are concurrently
-implementing six examples (case studies) in Drasil.  (The specific examples are
-listed below under "Building specific examples.")  These examples were first
-written using a typical "manual" approach.  The full files for the case studies
-are available in [a separate case studies repo](https://github.com/smiths/caseStudies).
+Drasil is based on a combination of the following ideas:
+1. domain knowledge changes very slowly
+2. software in well-understood domains can be programmatically assembled from existing knowledge
+3. the various artifacts that make up software are different views on the same knowledge
+4. the most important information in crafting software are the design decisions and their rationale
+5. a lot of software lives for a very long time (10+ years, often as long as 40 years), which needs a different approach
 
-For more information on Drasil, please read 
-[our position paper](https://github.com/JacquesCarette/Drasil/blob/master/People/Dan/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf)
-or take a look at 
-[our poster](https://github.com/JacquesCarette/Drasil/blob/master/People/Dan/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf).
+To better understand the requirements for Drasil, we follow an example-driven approach, based on a set of [case studies](https://github.com/smiths/caseStudies). This is akin to test-driven engineering, but at the system level.  The [currently generated examples](https://jacquescarette.github.io/Drasil/) serve as a good introduction to what we mean.
+
+We wrote a [our position paper](https://github.com/JacquesCarette/Drasil/blob/master/People/Dan/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf) detailing our original ideas - but this is getting somewhat obsolete now. You can also take a look at [a poster](https://github.com/JacquesCarette/Drasil/blob/master/People/Dan/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf).
 
 ## Quick Start
 
-If you are on Windows, we recommend you use cygwin (MinGW probably works too,
-but we have not tested it).  `make` is required as well; on MacOS, you may
-need to install XCode to get that. Most linux installs have it by default.
+If you are on Windows, we recommend you use [cygwin](https://cygwin.com/install.html) (MinGW probably works too, but we have not tested it).  `make` is required as well and can be installed following [these steps](https://stackoverflow.com/questions/32127524/how-to-install-and-use-make-in-windows) ; on MacOS, you may need to install XCode to get that. Most linux installs have it by default. You may also need to install [git](https://git-scm.com/downloads).
 
 1. Ensure you have [Stack](https://www.haskell.org/downloads#stack) installed (if you have the Haskell Platform, you should already have Stack).
+	- Also ensure that your stack version is at least 2.3.1 (latest version); for help, see [Stack Install & Upgrade](https://docs.haskellstack.org/en/stable/install_and_upgrade/)
 2. Run `stack setup` while in **./code/**
-3. Use the `make` command to build the current version of Drasil. This will build and run all of the examples as well.
-4. You can find the generated output in the build folder that appears. Each example will have its own subdirectory.
+	- Remember to  change your working directory to **./code/** first
+	- Use `cd` to change working directory, `pwd` to print your current working directory
+	- Refer to [File Directory](https://swcarpentry.github.io/shell-novice/02-filedir/index.html) for further help regarding file directory commands
+	- e.g. **./Users/.../GitHub/Drasil/code** (on MacOS)
+3. Use the `make` command to build the current version of Drasil. Note that this will build and run **all** of the examples as well.
+	- **Warning**: this entire process takes around 10-15 minutes to complete (MacOS estimate)
+4. You can find the generated output in the build folder that appears in the **./code/** folder. Each example will have its own subdirectory.
 
-## Building specific examples
+## Building Specific Examples
 
 Simply run: `make argument` to build the corresponding example, where argument is detailed below:
 
@@ -55,8 +58,9 @@ tiny_diff | HGHC toy example
 ssp_diff | Slope Stability Analysis
 nopcm_diff | minimal SWHS example, with PCM removed
 projectile_diff | Projectile motion analysis
+pdController_diff | Proportional Derivative controller 
 
-## Running the example(s)
+## Running the Example(s)
 
 Please note that if `make` has been used, docs are already generated automatically and can be found in build.
 Automated testing can be done on these examples.
@@ -72,36 +76,32 @@ tiny | HGHC toy example
 ssp | Slope Stability Analysis (SSP)
 nopcm | SWHS without PCM (NoPCM)
 projectile | Projectile motion analysis
+pdController | Proportional Derivative Controller
 
 This runs the examples manually from the .stack-work folder after building, and the generated docs will
 appear in this folder (i.e. in the SRS and Website folders). Due to this placement, these generated
-versions will not be subject to automated tests.
+versions will not be subject to automated tests. The tex files are generated,
+but they are not automatically compiled.  To compile the tex files, use the
+generated Makefile (in the same folder as the tex file).
 
-## Finding / Building the Haddock documentation
+## Finding / Building the Haddock Documentation
 
-You can run `make docs` from the ./code folder to build the documentation.
+You can run `make docs` from the ./code/ folder to build the documentation. **Note**: this process can take about 10-12 minutes (MacOS estimate).
 
-See the [README](https://github.com/JacquesCarette/Drasil/tree/master/code#building-up-to-date-documentation) 
-in ./code/ for more information.
+See the [README](https://github.com/JacquesCarette/Drasil/tree/master/code#building-up-to-date-documentation) in ./code/ for more information.
 
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
 --------------------------------------------------
 
-**Dan**
-  - Subdirectory for Dan Szymczak's work. Mostly papers and presentations
+**Papers**
+  - Subdirectory for papers related to Drasil framework, GOOL
   
-**GOOLCodeGen**
-  - An isolated compilation space for creating GOOL code for the examples.
+**People**
+  - Contains contributions specific to some contributors (not necessarily to be implemented in Drasil)
   
 **Presentations**
   - Presentations on LSS/Drasil
-  
-**RelatedCode**
-  - Contains the *Generic Object Oriented Language* (GOOL) code.
-
-**Steve**
-  - Steven Palmer's work
   
 **WindowsFix**
   - Contains registry files for adding and removing the autorun of the command 
@@ -110,21 +110,21 @@ in ./code/ for more information.
 **code**
   - The main folder for Drasil source code and example implementations
   
+**doc**
+  - Documentation related to Drasil
+  
 **notes**
   - Assorted general/administrative notes
 
 .gitattributes
-  - Used by git
+  - Used by git (set language attributes so GitHub Linguist calculates code statistics as desired)
   
 .gitignore
   - Used by git (specifies which file(type)s to ignore when committing)
-  
-.travis.yml
-  - Used for continuous integration with Travis CI
   
 LICENSE
   - License information
   
 README.md
   - This file
-  
+ 

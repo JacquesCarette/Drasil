@@ -1,6 +1,0 @@
-# SPEED (m/s)
-20
-# ANGLE (rad)
-2
-# TARGET DISTANCE (m)
-41

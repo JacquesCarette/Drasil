@@ -1,30 +1,37 @@
-{- re-export many things to simplify external use -}
+{- re-exports modules to simplify external use.-}
 module Language.Drasil (
   -- Expr
-  Expr(..), BinOp(..), UFunc(..), ArithOper(..), BoolOper(..), DerivType(..)
-  , Completeness(..), Relation
+  Expr(..), UFunc(..), UFuncB, UFuncVec
+  , ArithBinOp, BoolBinOp, EqBinOp, LABinOp, OrdBinOp, VVVBinOp, VVNBinOp
+  , AssocArithOper(..), AssocBoolOper(..)
+  , DerivType(..), Completeness(..), Relation
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
-  -- Expr.Extract
-  , dep
+  , ($-), ($/), addI, addRe, mulI, mulRe
   -- Expr.Math
-  , log, ln, abs, sin, cos, tan, sec, csc, cot, arcsin, arccos, arctan, exp
-  , sqrt, square, euclidean
-  , dim, idx, int, dbl, str, perc, isin, completeCase, incompleteCase
+  , abs_, neg, log, ln, abs, sin, cos, tan, sec, csc, cot, arcsin, arccos, arctan, exp
+  , sqrt, euclidean, norm, not_
+  , square, half, oneHalf, oneThird, recip_
+  , dim, idx, int, dbl, exactDbl, frac, str, perc, completeCase, incompleteCase
   , sumAll, defsum, prodAll, defprod, defint, intAll
   , realInterval
   , deriv, pderiv
   , sy -- old "Chunk" constructor C
   , apply, apply1, apply2, applyWithNamedArgs
   , cross, m2x2, vec2D, dgnl2x2
+  -- DisplayExpr
+  , DisplayExpr
+  , defines, spaceDE, isIn, andDEs, equivDEs
   -- all the stuff from Unicode
   , Special(..), RenderSpecial(..)
-   -- UID
+  -- UID
   , UID
   -- Classes.Core
   , HasUID(uid)
-  , HasShortName(shortname)
   , HasRefAddress(getRefAdd)
   , HasSymbol(symbol)
+  , Referable(..)
+  -- Classes.Core2
+  , HasShortName(shortname)
   -- Classes.Document
   , HasFields(getFields)
   -- Classes
@@ -42,8 +49,8 @@ module Language.Drasil (
   , IsUnit(getUnits)
   , CommonIdea(abrv)
   , Constrained(constraints)
-  , ExprRelat(relat)
   , DefiningExpr(defnExpr)
+  , Display(toDispExpr)
   , HasUncertainty(unc)
   , Quantity
   , Callable
@@ -61,13 +68,14 @@ module Language.Drasil (
   , nw -- bad name (historical)
   -- Constraint
   , physc, sfwrc, enumc , isPhysC, isSfwrC
-  , Constraint(..), ConstraintReason(..)
+  , Constraint(..), ConstraintE, ConstraintReason(..)
   -- Chunk.Constrained
   , ConstrainedChunk(..), ConstrConcept(..)
   , cuc, cvc, constrained', cuc', cuc'', constrainedNRV'
   , cnstrw, cnstrw'
   -- Chunk.Eq
-  , QDefinition, fromEqn, fromEqn', fromEqnSt, fromEqnSt', equat, ec
+  , QDefinition, fromEqn, fromEqn', fromEqnSt, fromEqnSt', equat
+  , mkQDefSt, mkQuantDef, mkQuantDef', ec
   -- Chunk.Quantity
   , QuantityDict, qw, mkQuant, mkQuant', codeVC, implVar, implVar', dcc, dcc', 
     dccWDS, dccWDS', vc, vc'', vcSt, vcUnit, ccs, cc, cc', cic
@@ -80,7 +88,7 @@ module Language.Drasil (
   -- Chunk.Unitary
   , Unitary(..), UnitaryChunk, unitary, unitary', mkUnitary, unit_symb
   -- Chunk.Relation
-  , RelationConcept, makeRC
+  , RelationConcept, makeRC, addRelToCC
   --Chunk.DefinedQuantity
   , DefinedQuantityDict, dqd, dqd', dqdNoUnit, dqdQd, dqdWr
   -- Chunk.UnitaryConcept
@@ -88,7 +96,7 @@ module Language.Drasil (
   -- Derivation
   , Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader
   -- ShortName
-  , ShortName, shortname', getStringSN
+  , ShortName, shortname', getSentSN
   --Citations
   , Citation, EntryID, BibRef
   , citeID, citeKind
@@ -100,11 +108,10 @@ module Language.Drasil (
   -- Chunk.Citation
   , HasCitation(getCitations)
   -- Sentence
-  , Sentence(..), SentenceStyle(..), (+:+), (+:+.), (+:), capSent, ch, sC, sDash, sParen  
+  , Sentence(..), SentenceStyle(..), (+:+), (+:+.), (+:), (!.), capSent
+  , ch, eS, sC, sDash, sParen  
   -- Sentence.Extract
   , sdep, shortdep
-  -- RefProg
-  , Reference(..), RefInfo(..)
   -- NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
   , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase'
@@ -113,7 +120,7 @@ module Language.Drasil (
   , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1
   , titleizeNP, titleizeNP', nounPhrase'', nounPhraseSP, nounPhraseSent
   -- Document
-  , Referable(..), Document(..), DType(..), Section(..), Contents(..)
+  , Document(..), DType(..), Section(..), Contents(..)
   , SecCons(..), ListType(..), ItemType(..), ListTuple
   , LabelledContent(..), UnlabelledContent(..), extractSection
   , mkParagraph, mkRawLC
@@ -128,8 +135,7 @@ module Language.Drasil (
   , Space(..) , RealInterval(..), Inclusive(..), RTopology(..)
   , DomainDesc(AllDD, BoundedDD), getActorName, getInnerSpace
   -- Symbol
-  , Decoration(..), Symbol(..), autoStage, compsy, hat, prime, staged, sub, sup
-  , unicodeConv, upperLeft, vec
+  , Decoration, Symbol
   -- Misc
   , mkTable
   -- People
@@ -140,8 +146,12 @@ module Language.Drasil (
   , Stage(Equational,Implementation)
   -- Symbol.Helpers
   , eqSymb, codeSymb, hasStageSymbol
+  , autoStage, hat, prime, staged, sub, subStr, sup , unicodeConv, upperLeft, vec
+  , label, variable
+  -- RefProg
+  , RefInfo(..)
   -- Reference
-  , makeRef2S, makeCite, makeCiteS, makeRef2, makeCiteInfo, makeCiteInfoS
+  , Reference(..), ref, refInfo, refS, namedRef, complexRef, namedComplexRef
   -- Label.Type
   , getAdd, prepend
   , LblType(RP, Citation, URI), IRefProg(..)
@@ -151,7 +161,7 @@ module Language.Drasil (
   -- Uncertainty.Core
   , Uncertainty, uncty
   -- Uncertainty
-  , defaultUncrt, uncVal, uncPrec
+  , defaultUncrt, uncVal, uncPrec, exact
   -- UnitLang
   , USymb(US)
   -- Data.Date
@@ -173,7 +183,7 @@ module Language.Drasil (
   -- Chunk.UnitDefn
   , UnitDefn(..)
   , fromUDefn, unitCon, makeDerU
-  , (^:), (/:), (*:), (*$), (/$),(^$), newUnit
+  , (^:), (/:), (*:), (*$), (/$), (^$), newUnit
   , scale, shift
   , derUC, derUC', derUC''
   , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
@@ -181,18 +191,24 @@ module Language.Drasil (
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
-import Language.Drasil.Expr (Expr(..), BinOp(..), UFunc(..), ArithOper(..), 
-          DerivType(..), BoolOper(..), Completeness(..), Relation,
-          ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.))
-import Language.Drasil.Expr.Extract (dep) -- exported for drasil-database FIXME: move to development package?
-import Language.Drasil.Expr.Math (log, ln, sin, cos, tan, sqrt, square, sec, 
+import Language.Drasil.DisplayExpr
+import Language.Drasil.Expr (Expr(..), UFunc(..), UFuncB, UFuncVec,
+          ArithBinOp, BoolBinOp, EqBinOp, LABinOp, OrdBinOp, VVVBinOp, VVNBinOp,
+          AssocArithOper(..), AssocBoolOper(..), 
+          DerivType(..), Completeness(..), Relation,
+          ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.),
+          ($-), ($/), addI, addRe, mulI, mulRe)
+import Language.Drasil.Expr.Math (abs_, neg, log, ln, sin, cos, tan, sqrt, sec, 
           csc, cot, arcsin, arccos, arctan, exp,
-          dim, idx, int, dbl, str, perc, isin, completeCase, incompleteCase,
+          dim, norm, not_, idx, int, dbl, exactDbl, frac, str, perc,
+          square, half, oneHalf, oneThird, recip_,
+          completeCase, incompleteCase,
           sumAll, defsum, prodAll, defprod,
           realInterval,
           apply, apply1, apply2, applyWithNamedArgs,
           sy, deriv, pderiv,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, intAll)
+import Language.Drasil.Expr.Display
 import Language.Drasil.Document (section, fig, figWithWidth
   , Section(..), SecCons(..) , llcc, ulcc, Document(..)
   , mkParagraph, mkFig, mkRawLC, extractSection
@@ -204,14 +220,15 @@ import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), 
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol),
-  HasRefAddress(getRefAdd), HasShortName(shortname))
+  HasRefAddress(getRefAdd), Referable(refAdd, renderRef))
+import Language.Drasil.Classes.Core2 (HasShortName(shortname))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
-  HasReasVal(reasVal), ExprRelat(relat), HasDerivation(derivations), 
-  HasReference(getReferences), HasSpace(typ), Referable(refAdd, renderRef),
+  HasReasVal(reasVal), HasDerivation(derivations), 
+  HasReference(getReferences), HasSpace(typ),
   DefiningExpr(defnExpr), Quantity, HasUncertainty(unc), Callable, 
-  IsArgumentName)
+  IsArgumentName, Display(..))
 import Language.Drasil.Classes.Citations (HasFields(getFields))
 import Language.Drasil.Classes.Document (HasCitation(getCitations))
 import Language.Drasil.Derivation (Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader)
@@ -233,14 +250,14 @@ import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Concept.Core (sDom) -- exported for drasil-database FIXME: move to development package?
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Constraint (physc, sfwrc, enumc, isPhysC, isSfwrC,
-  Constraint(..), ConstraintReason(..))
+  Constraint(..), ConstraintE, ConstraintReason(..))
 import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt, 
-  fromEqnSt', equat, ec)
+  fromEqnSt', equat, mkQDefSt, mkQuantDef, mkQuantDef', ec)
 import Language.Drasil.Chunk.NamedArgument (NamedArgument, narg)
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Chunk.Relation(RelationConcept, makeRC)
+import Language.Drasil.Chunk.Relation(RelationConcept, makeRC, addRelToCC)
 import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, uc, uc', 
   ucStaged, ucs, ucs', ucsWS)
@@ -258,27 +275,28 @@ import Language.Drasil.Data.Citation(CiteField(..), HP(..), CitationKind(..) -- 
       -- Month -> CiteField
   , month)
 import Language.Drasil.NounPhrase
-import Language.Drasil.ShortName (ShortName, shortname', getStringSN)
+import Language.Drasil.ShortName (ShortName, shortname', getSentSN)
 import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..), 
   RTopology(..), DomainDesc(AllDD, BoundedDD), getActorName, getInnerSpace)
 import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), (+:+),
-  (+:+.), (+:), capSent, ch, sC, sDash, sParen)
+  (+:+.), (+:), (!.), capSent, ch, eS, sC, sDash, sParen)
 import Language.Drasil.Sentence.Extract (sdep, shortdep) -- exported for drasil-database FIXME: move to development package?
-import Language.Drasil.Reference (makeCite, makeCiteS, makeRef2, makeRef2S, makeCiteInfo, makeCiteInfoS)
-import Language.Drasil.Symbol (Decoration(..), Symbol(..), autoStage, compsy,
-  hat, prime, staged, sub, sup, unicodeConv, upperLeft, vec)
-import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol)
+import Language.Drasil.RefProg (RefInfo(..))
+import Language.Drasil.Reference (Reference(..), namedRef, refInfo, complexRef, namedComplexRef, ref, refS)
+import Language.Drasil.Symbol (Decoration, Symbol)
+import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol, 
+  autoStage, hat, prime, staged, sub, subStr, sup, unicodeConv, upperLeft, vec,
+  label, variable)
 import Language.Drasil.Stages (Stage(..))
 import Language.Drasil.Misc -- all of it
 import Language.Drasil.People (People, Person, person, HasName(..),
   person', personWM, personWM', mononym, name, nameStr, rendPersLFM, 
   rendPersLFM', rendPersLFM'', comparePeople)
-import Language.Drasil.RefProg (Reference(..), RefInfo(..))
 import Language.Drasil.Label.Type (getAdd, LblType(RP, Citation, URI), IRefProg(..), prepend)
 
 import Language.Drasil.UnitLang (USymb(US))
 import Language.Drasil.Uncertainty.Core(Uncertainty, uncty)
-import Language.Drasil.Uncertainty(defaultUncrt, uncVal, uncPrec)
+import Language.Drasil.Uncertainty(defaultUncrt, uncVal, uncPrec, exact)
 
 import Language.Drasil.Development.Sentence -- are these really development?
 import Language.Drasil.Chunk.UnitDefn (UnitDefn(..)

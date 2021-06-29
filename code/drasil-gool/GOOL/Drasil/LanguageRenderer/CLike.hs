@@ -4,8 +4,8 @@
 module GOOL.Drasil.LanguageRenderer.CLike (charRender, float, double, char, 
   listType, void, notOp, andOp, orOp, self, litTrue, litFalse, litFloat, 
   inlineIf, libFuncAppMixedArgs, libNewObjMixedArgs, listSize, increment1, 
-  varDec, varDecDef, listDec, extObjDecNew, switch, for, while, intFunc, 
-  multiAssignError, multiReturnError
+  decrement1, varDec, varDecDef, listDec, extObjDecNew, switch, for, while, 
+  intFunc, multiAssignError, multiReturnError, multiTypeError
 ) where
 
 import Utils.Drasil (indent)
@@ -15,7 +15,7 @@ import GOOL.Drasil.ClassInterface (Label, Library, MSBody, VSType, SVariable,
   SValue, MSStatement, MSParameter, SMethod, MixedCall, MixedCtorCall, 
   PermanenceSym(..), TypeElim(getType, getTypeString), 
   VariableElim(variableType), ValueSym(Value, valueType), extNewObj, ($.), 
-  ControlStatement(break), ScopeSym(..))
+  ScopeSym(..))
 import qualified GOOL.Drasil.ClassInterface as S (TypeSym(bool, float, obj),
   ValueExpression(funcAppMixedArgs, newObjMixedArgs), 
   DeclStatement(varDec, varDecDef))
@@ -27,12 +27,11 @@ import qualified GOOL.Drasil.RendererClasses as S (
 import qualified GOOL.Drasil.RendererClasses as RC (PermElim(..), BodyElim(..), 
   InternalTypeElim(..), InternalVarElim(variable), ValueElim(value), 
   StatementElim(statement))
-import GOOL.Drasil.AST (Binding(..))
-import GOOL.Drasil.Helpers (angles, toState, onStateValue, on2StateValues, 
-  on3StateValues)
+import GOOL.Drasil.AST (Binding(..), Terminator(..))
+import GOOL.Drasil.Helpers (angles, toState, onStateValue)
 import GOOL.Drasil.LanguageRenderer (forLabel, whileLabel, containing)
-import qualified GOOL.Drasil.LanguageRenderer as R (switch, increment, self', 
-  self)
+import qualified GOOL.Drasil.LanguageRenderer as R (switch, increment, 
+  decrement, this', this)
 import GOOL.Drasil.LanguageRenderer.Constructors (mkStmt, mkStmtNoEnd, 
   mkStateVal, mkStateVar, VSOp, unOpPrec, andPrec, orPrec)
 import GOOL.Drasil.State (lensMStoVS, lensVStoMS, addLibImportVS, getClassName)
@@ -54,20 +53,22 @@ charRender = "char"
 voidRender = "void"
 
 float :: (RenderSym r) => VSType r
-float = toState $ typeFromData Float floatRender (text floatRender)
+float = typeFromData Float floatRender (text floatRender)
 
 double :: (RenderSym r) => VSType r
-double = toState $ typeFromData Double doubleRender (text doubleRender)
+double = typeFromData Double doubleRender (text doubleRender)
 
 char :: (RenderSym r) => VSType r
-char = toState $ typeFromData Char charRender (text charRender)
+char = typeFromData Char charRender (text charRender)
 
 listType :: (RenderSym r) => String -> VSType r -> VSType r
-listType lst = onStateValue (\t -> typeFromData (List (getType t)) (lst 
-  `containing` getTypeString t) (text lst <> angles (RC.type' t)))
-  
+listType lst t' = do 
+  t <- t'
+  typeFromData (List (getType t)) (lst 
+    `containing` getTypeString t) $ text lst <> angles (RC.type' t) 
+
 void :: (RenderSym r) => VSType r
-void = toState $ typeFromData Void voidRender (text voidRender)
+void = typeFromData Void voidRender (text voidRender)
 
 -- Unary Operators --
 
@@ -85,8 +86,9 @@ orOp = orPrec "||"
 -- Variables --
 
 self :: (RenderSym r) => SVariable r
-self = zoom lensVStoMS getClassName >>= (\l -> mkStateVar R.self (S.obj l) 
-  R.self')
+self = do 
+  l <- zoom lensVStoMS getClassName 
+  mkStateVar R.this (S.obj l) R.this'
 
 -- Values --
 
@@ -100,8 +102,12 @@ litFloat :: (RenderSym r) => Float -> SValue r
 litFloat f = mkStateVal S.float (D.float f <> text "f")
 
 inlineIf :: (RenderSym r) => SValue r -> SValue r -> SValue r -> SValue r
-inlineIf = on3StateValues (\c v1 v2 -> valFromData (prec c) (valueType v1) 
-  (RC.value c <+> text "?" <+> RC.value v1 <+> text ":" <+> RC.value v2)) 
+inlineIf c' v1' v2' = do
+  c <- c'
+  v1 <- v1'
+  v2 <- v2' 
+  valFromData (prec c) (toState $ valueType v1) 
+    (RC.value c <+> text "?" <+> RC.value v1 <+> text ":" <+> RC.value v2) 
   where prec cd = valuePrec cd <|> Just 0
 
 libFuncAppMixedArgs :: (RenderSym r) => Library -> MixedCall r
@@ -120,41 +126,59 @@ listSize v = v $. S.listSizeFunc
 -- Statements --
 
 increment1 :: (RenderSym r) => SVariable r -> MSStatement r
-increment1 vr = zoom lensMStoVS $ onStateValue (mkStmt . R.increment) vr
+increment1 vr' = do 
+  vr <- zoom lensMStoVS vr'
+  (mkStmt . R.increment) vr
+
+decrement1 :: (RenderSym r) => SVariable r -> MSStatement r
+decrement1 vr' = do 
+  vr <- zoom lensMStoVS vr'
+  (mkStmt . R.decrement) vr
 
 varDec :: (RenderSym r) => r (Permanence r) -> r (Permanence r) -> Doc -> 
   SVariable r -> MSStatement r
-varDec s d pdoc v' = onStateValue (\v -> mkStmt (RC.perm (bind $ variableBind v)
-  <+> RC.type' (variableType v) <+> (ptrdoc (getType (variableType v)) <> 
-  RC.variable v))) (zoom lensMStoVS v')
+varDec s d pdoc v' = do 
+  v <- zoom lensMStoVS v' 
+  mkStmt (RC.perm (bind $ variableBind v)
+    <+> RC.type' (variableType v) <+> (ptrdoc (getType (variableType v)) <> 
+    RC.variable v))
   where bind Static = s
         bind Dynamic = d
         ptrdoc (List _) = pdoc
         ptrdoc _ = empty
 
-varDecDef :: (RenderSym r) => SVariable r -> SValue r -> MSStatement r
-varDecDef vr vl' = on2StateValues (\vd vl -> mkStmt (RC.statement vd <+> equals 
-  <+> RC.value vl)) (S.varDec vr) (zoom lensMStoVS vl')
+varDecDef :: (RenderSym r) => Terminator -> SVariable r -> SValue r -> 
+  MSStatement r
+varDecDef t vr vl' = do 
+  vd <- S.varDec vr
+  vl <- zoom lensMStoVS vl'
+  let stmtCtor Empty = mkStmtNoEnd
+      stmtCtor Semi = mkStmt
+  stmtCtor t (RC.statement vd <+> equals <+> RC.value vl)
 
 listDec :: (RenderSym r) => (r (Value r) -> Doc) -> SValue r -> SVariable r -> 
   MSStatement r
-listDec f vl v = on2StateValues (\sz vd -> mkStmt (RC.statement vd <> f 
-  sz)) (zoom lensMStoVS vl) (S.varDec v)
+listDec f vl v = do 
+  sz <- zoom lensMStoVS vl
+  vd <- S.varDec v
+  mkStmt (RC.statement vd <> f sz)
   
 extObjDecNew :: (RenderSym r) => Library -> SVariable r -> [SValue r] -> 
   MSStatement r
 extObjDecNew l v vs = S.varDecDef v (extNewObj l (onStateValue variableType v)
   vs)
 
-switch :: (RenderSym r) => SValue r -> [(SValue r, MSBody r)] -> MSBody r -> 
-  MSStatement r
-switch v cs bod = do
-  brk <- S.stmt break
+-- 1st parameter is a Doc function to apply to the render of the control value (i.e. parens)
+-- 2nd parameter is a statement to end every case with
+switch :: (RenderSym r) => (Doc -> Doc) -> MSStatement r -> SValue r -> 
+  [(SValue r, MSBody r)] -> MSBody r -> MSStatement r
+switch f st v cs bod = do
+  s <- S.stmt st
   val <- zoom lensMStoVS v
   vals <- mapM (zoom lensMStoVS . fst) cs
   bods <- mapM snd cs
   dflt <- bod
-  return $ mkStmt $ R.switch brk val dflt (zip vals bods)
+  mkStmt $ R.switch f s val dflt (zip vals bods)
 
 for :: (RenderSym r) => Doc -> Doc -> MSStatement r -> SValue r -> 
   MSStatement r -> MSBody r -> MSStatement r
@@ -163,17 +187,21 @@ for bStart bEnd sInit vGuard sUpdate b = do
   guard <- zoom lensMStoVS vGuard
   upd <- S.loopStmt sUpdate
   bod <- b
-  return $ mkStmtNoEnd $ vcat [
+  mkStmtNoEnd $ vcat [
     forLabel <+> parens (RC.statement initl <> semi <+> RC.value guard <> 
       semi <+> RC.statement upd) <+> bStart,
     indent $ RC.body bod,
     bEnd]
   
-while :: (RenderSym r) => Doc -> Doc -> SValue r -> MSBody r -> MSStatement r
-while bStart bEnd v' = on2StateValues (\v b -> mkStmtNoEnd (vcat [
-  whileLabel <+> parens (RC.value v) <+> bStart,
-  indent $ RC.body b,
-  bEnd])) (zoom lensMStoVS v')
+-- Doc function parameter is applied to the render of the while-condition
+while :: (RenderSym r) => (Doc -> Doc) -> Doc -> Doc -> SValue r -> MSBody r -> 
+  MSStatement r
+while f bStart bEnd v' b'= do 
+  v <- zoom lensMStoVS v'
+  b <- b'
+  mkStmtNoEnd (vcat [whileLabel <+> f (RC.value v) <+> bStart, 
+    indent $ RC.body b, 
+    bEnd]) 
 
 -- Methods --
 
@@ -188,3 +216,6 @@ multiAssignError l = "No multiple assignment statements in " ++ l
 
 multiReturnError :: String -> String
 multiReturnError l = "Cannot return multiple values in " ++ l
+
+multiTypeError :: String -> String
+multiTypeError l = "Multi-types not supported in " ++ l

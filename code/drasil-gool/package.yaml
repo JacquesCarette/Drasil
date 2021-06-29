@@ -1,0 +1,32 @@
+name:                drasil-gool
+version:             0.1.1.0
+author:              "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith, Brooks MacLachlan"
+maintainer:          "Jacques Carette"
+synopsis:	           A framework for code and document generation for scientific software - GOOL SubPackage
+github:              JacquesCarette/Drasil
+homepage:            https://jacquescarette.github.io/Drasil/
+description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+
+extra-source-files: []
+
+dependencies:
+- base >= 4.7 && < 5
+- lens
+- containers
+- pretty
+- mtl
+- data-ordlist
+- composition
+- drasil-utils
+
+ghc-options:
+- -Wall
+- -Wredundant-constraints
+
+library:
+  source-dirs: ./
+  exposed-modules:
+  - GOOL.Drasil
+  when:
+  - condition: false
+    other-modules: Paths_drasil_gool

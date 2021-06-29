@@ -41,34 +41,34 @@ public class InputParameters {
     /** \brief Verifies that input values satisfy the physical constraints
     */
     private void input_constraints() {
-        if (!(this.v_launch > 0)) {
+        if (!(this.v_launch > 0.0)) {
             System.out.print("Warning: ");
             System.out.print("v_launch has value ");
             System.out.print(this.v_launch);
-            System.out.print(" but suggested to be ");
+            System.out.print(", but is suggested to be ");
             System.out.print("above ");
-            System.out.print(0);
+            System.out.print(0.0);
             System.out.println(".");
         }
-        if (!(0 < this.theta && this.theta < Math.PI / 2)) {
+        if (!(0.0 < this.theta && this.theta < Math.PI / 2.0)) {
             System.out.print("Warning: ");
             System.out.print("theta has value ");
             System.out.print(this.theta);
-            System.out.print(" but suggested to be ");
+            System.out.print(", but is suggested to be ");
             System.out.print("between ");
-            System.out.print(0);
+            System.out.print(0.0);
             System.out.print(" and ");
-            System.out.print(Math.PI / 2);
+            System.out.print(Math.PI / 2.0);
             System.out.print(" ((pi)/(2))");
             System.out.println(".");
         }
-        if (!(this.p_target > 0)) {
+        if (!(this.p_target > 0.0)) {
             System.out.print("Warning: ");
             System.out.print("p_target has value ");
             System.out.print(this.p_target);
-            System.out.print(" but suggested to be ");
+            System.out.print(", but is suggested to be ");
             System.out.print("above ");
-            System.out.print(0);
+            System.out.print(0.0);
             System.out.println(".");
         }
     }

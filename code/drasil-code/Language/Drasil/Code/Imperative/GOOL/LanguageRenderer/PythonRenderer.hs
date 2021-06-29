@@ -5,21 +5,23 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.PythonRenderer (
   PythonProject(..)
 ) where
 
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), 
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),PackageSym(..), 
   AuxiliarySym(..))
 import qualified 
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as 
-  G (doxConfig, sampleInput, makefile, noRunIfLib)
+  G (doxConfig, readMe, sampleInput, makefile, noRunIfLib, doxDocConfig, 
+  docIfEnabled)
 import Language.Drasil.Code.Imperative.GOOL.Data (AuxData(..), ad, PackData(..),
   packD)
 import Language.Drasil.Code.Imperative.Build.AST (Runnable, interpMM)
 import Language.Drasil.Code.Imperative.Doxygen.Import (yes)
 
-import GOOL.Drasil (onCodeList)
+import GOOL.Drasil (onCodeList, pyName, pyVersion)
 
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Text.PrettyPrint.HughesPJ (Doc)
 
+-- | Holds a Python project.
 newtype PythonProject a = PP {unPP :: a}
 
 instance Functor PythonProject where
@@ -41,14 +43,20 @@ instance AuxiliarySym PythonProject where
   type Auxiliary PythonProject = AuxData
   type AuxHelper PythonProject = Doc
   doxConfig = G.doxConfig optimizeDox
+  readMe rmi =
+    G.readMe rmi {
+        langName = pyName,
+        langVersion = pyVersion}
   sampleInput = G.sampleInput
 
   optimizeDox = return yes
 
-  makefile _ it = G.makefile Nothing (G.noRunIfLib it pyRunnable)
+  makefile _ it cms = G.makefile Nothing (G.noRunIfLib it pyRunnable)
+    (G.docIfEnabled cms G.doxDocConfig)
 
   auxHelperDoc = unPP
   auxFromData fp d = return $ ad fp d
 
+-- | Default runnable information for Python files.
 pyRunnable :: Maybe Runnable
 pyRunnable = interpMM "python"

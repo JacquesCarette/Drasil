@@ -2,7 +2,7 @@ module Language.Drasil.Code.Imperative.Logging (
   maybeLog, logBody, loggedMethod, varLogFile
 ) where
 
-import Language.Drasil.Code.Imperative.DrasilState (DrasilState(..))
+import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.Choices (Logging(..))
 
 import GOOL.Drasil (Label, MSBody, MSBlock, SVariable, SValue, MSStatement, 
@@ -11,51 +11,50 @@ import GOOL.Drasil (Label, MSBody, MSBlock, SVariable, SValue, MSStatement,
   DeclStatement(..), IOStatement(..), lensMStoVS)
 
 import Control.Lens.Zoom (zoom)
-import Data.Maybe (maybeToList)
-import Control.Applicative ((<$>))
-import Control.Monad.Reader (Reader, ask)
+import Control.Monad.State (get)
 
-maybeLog :: (OOProg r) => SVariable r ->
-  Reader DrasilState [MSStatement r]
+-- | Generates a statement that logs the given variable's value, if the user 
+-- chose to turn on logging of variable assignments.
+maybeLog :: (OOProg r) => SVariable r -> GenState [MSStatement r]
 maybeLog v = do
-  g <- ask
-  l <- chooseLogging (logKind g) v
-  return $ maybeToList l
+  g <- get
+  sequence [loggedVar v | LogVar `elem` logKind g]
 
-chooseLogging :: (OOProg r) => [Logging] -> (SVariable r -> 
-  Reader DrasilState (Maybe (MSStatement r)))
-chooseLogging l v = if LogVar `elem` l then Just <$> loggedVar v 
-  else return Nothing
-
-loggedVar :: (OOProg r) => SVariable r -> Reader DrasilState (MSStatement r)
+-- | Generates a statement that logs the name of the given variable, its current 
+-- value, and the current module name.
+loggedVar :: (OOProg r) => SVariable r -> GenState (MSStatement r)
 loggedVar v = do
-  g <- ask
+  g <- get
   return $ multi [
     openFileA varLogFile (litString $ logName g),
     zoom lensMStoVS v >>= (\v' -> printFileStr valLogFile ("var '" ++ 
-      variableName v' ++ "' assigned to ")),
+      variableName v' ++ "' assigned ")),
     printFile valLogFile (valueOf v),
     printFileStrLn valLogFile (" in module " ++ currentModule g),
     closeFile valLogFile ]
 
+-- | Generates the body of a function with the given name, list of parameters, 
+-- and blocks to include in the body. If the user chose to turn on logging of 
+-- function calls, statements that log how the function was called are added to 
+-- the beginning of the body.
 logBody :: (OOProg r) => Label -> [SVariable r] -> [MSBlock r] -> 
-  Reader DrasilState (MSBody r)
+  GenState (MSBody r)
 logBody n vars b = do
-  g <- ask
-  let loggedBody l = if LogFunc `elem` l then loggedMethod (logName g) n vars b
-        else b
-  return $ body $ loggedBody $ logKind g
+  g <- get 
+  return $ body $ [loggedMethod (logName g) n vars | LogFunc `elem` logKind g] ++ b
 
-loggedMethod :: (OOProg r) => Label -> Label -> [SVariable r] -> 
-  [MSBlock r] -> [MSBlock r]
-loggedMethod lName n vars b = block [
+-- | Generates a block that logs, to the given 'FilePath', the name of a function, 
+-- and the names and values of the passed list of variables. Intended to be 
+-- used as the first block in the function, to log that it was called and what 
+-- inputs it was called with.
+loggedMethod :: (OOProg r) => FilePath -> Label -> [SVariable r] -> MSBlock r
+loggedMethod lName n vars = block [
       varDec varLogFile,
       openFileA varLogFile (litString lName),
       printFileStrLn valLogFile ("function " ++ n ++ " called with inputs: {"),
       multi $ printInputs vars,
       printFileStrLn valLogFile "  }",
       closeFile valLogFile ]
-      : b
   where
     printInputs [] = []
     printInputs [v] = [
@@ -68,8 +67,10 @@ loggedMethod lName n vars b = block [
       printFile valLogFile (valueOf v), 
       printFileStrLn valLogFile ", "] ++ printInputs vs
 
+-- | The variable representing the log file in write mode.
 varLogFile :: (OOProg r) => SVariable r
 varLogFile = var "outfile" outfile
 
+-- | The value of the variable representing the log file in write mode.
 valLogFile :: (OOProg r) => SValue r
 valLogFile = valueOf varLogFile

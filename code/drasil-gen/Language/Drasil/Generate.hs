@@ -1,4 +1,4 @@
-module Language.Drasil.Generate (gen, genCode) where
+module Language.Drasil.Generate (gen, genCode, DocType(SRS, Website), DocSpec(DocSpec)) where
 
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (Doc, render)
@@ -10,14 +10,14 @@ import Data.Time.Calendar (showGregorian)
 
 import Build.Drasil (genMake)
 import Language.Drasil
-import Language.Drasil.Printers (Format(TeX, HTML), DocSpec(DocSpec), 
-  DocType(SRS, MG, MIS, Website), Filename, makeCSS, genHTML,
-  genTeX, PrintingInformation)
+import Language.Drasil.Printers (Format(TeX, HTML), 
+ makeCSS, genHTML, genTeX, PrintingInformation)
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
   Lang(..), getSampleData, readWithDataDesc, sampleInputDD, 
-  unPP, unJP, unCSP, unCPPP)
+  unPP, unJP, unCSP, unCPPP, unSP)
+import Language.Drasil.Output.Formats( DocType(SRS, MG, MIS, Website), Filename, DocSpec(DocSpec))
 
-import GOOL.Drasil (unJC, unPC, unCSC, unCPPC)
+import GOOL.Drasil (unJC, unPC, unCSC, unCPPC, unSC)
 
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: DocSpec -> Document -> PrintingInformation -> IO ()
@@ -78,6 +78,7 @@ genCode chs spec = do
       genLangCode Python = genCall Python unPC unPP
       genLangCode CSharp = genCall CSharp unCSC unCSP
       genLangCode Cpp = genCall Cpp unCPPC unCPPP
+      genLangCode Swift = genCall Swift unSC unSP
       genCall lng unProgRepr unPackRepr = generateCode lng unProgRepr 
         unPackRepr $ generator lng (showGregorian $ utctDay time) sampData chs spec
   mapM_ genLangCode (lang chs)

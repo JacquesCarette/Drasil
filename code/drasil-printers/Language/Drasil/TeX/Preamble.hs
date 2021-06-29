@@ -10,29 +10,31 @@ import Language.Drasil.TeX.Helpers (docclass, command, command0, command1o, comm
 import Language.Drasil.Config (hyperSettings, fontSize, bibFname)
 
 -- FIXME: this really shouldn't be in code, it should be data!
-data Package = AMSMath
-             | BookTabs
-             | Caption
-             | FullPage
-             | Graphics
-             | HyperRef
-             | Listings
-             | LongTable
-             | Tikz
-             | Dot2Tex
-             | AdjustBox
-             | AMSsymb --displays bold math sets (reals, naturals, etc.)
+-- | LaTeX packages.
+data Package = AMSMath      -- ^ Improves information structure for mathematical formulas.
+             | BookTabs     -- ^ Enhances quality of tables in the document.
+             | Caption      -- ^ Customize the captions in floating environments.
+             | FullPage     -- ^ Sets margins and page style.
+             | Graphics     -- ^ Manipulate graphical elements.
+             | HyperRef     -- ^ Handles cross-referencing within the document.
+             | Listings     -- ^ Source code printer for LaTeX.
+             | LongTable    -- ^ Allow tables to overflow page boundaries.
+             | Tikz         -- ^ Create graphical elements.
+             | Dot2Tex      -- ^ Create better graphs.
+             | AdjustBox    -- ^ Adjustable boxed content.
+             | AMSsymb      -- ^ Displays bold math sets (reals, naturals, etc.).
 --           | Breqn --line breaks long equations automatically
-             | FileContents --creates .bib file within .tex file
-             | BibLaTeX
-             | Tabu --adds auto column width feature for tables 
-             | Mathtools --line breaks for long fractions and cases
-             | URL
-             | FontSpec -- for utf-8 encoding in lualatex
-             | Unicode -- for unicode-math in lualatex
-             | EnumItem
+             | FileContents -- ^ Creates .bib file within .tex file.
+             | BibLaTeX     -- ^ Reimplementation of bibliography elements.
+             | Tabu         -- ^ Adds auto column width feature for tables.
+             | Mathtools    -- ^ Line breaks for long fractions and cases.
+             | URL          -- ^ Allows for hyperlinks.
+             | FontSpec     -- ^ For utf-8 encoding in lualatex.
+             | Unicode      -- ^ For unicode-math in lualatex.
+             | EnumItem     -- ^ Contol basic list environments.
              deriving Eq
 
+-- | Adds a 'Package' to the LaTeX document.
 addPackage :: Package -> D
 addPackage AMSMath   = usepackage "amsmath"
 addPackage BookTabs  = usepackage "booktabs"
@@ -60,6 +62,7 @@ addPackage FontSpec  = usepackage "fontspec"
 addPackage Unicode   = usepackage "unicode-math"
 addPackage EnumItem  = usepackage "enumitem"
 
+-- | Common LaTeX commands.
 data Def = Bibliography
          | TabuLine
          | GreaterThan
@@ -69,6 +72,7 @@ data Def = Bibliography
          | SymbDescriptionP2
          deriving Eq
 
+-- | Define common LaTeX commands.
 addDef :: Def -> D
 addDef Bibliography  = command "bibliography" bibFname
 addDef GreaterThan   = command2 "newcommand" "\\gt" "\\ensuremath >"
@@ -78,11 +82,13 @@ addDef SetMathFont   = command "setmathfont" "Latin Modern Math"
 addDef SymbDescriptionP1 = command3 "newlist" "symbDescription" "description" "1"
 addDef SymbDescriptionP2 = command1o "setlist" (Just "symbDescription") "noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt"
 
+-- | Generates LaTeX document preamble.
 genPreamble :: [LayoutObj] -> D
 genPreamble los = let (pkgs, defs) = parseDoc los
   in docclass (show fontSize ++ "pt") "article" %%
      vcat (map addPackage pkgs) %% vcat (map addDef defs)
 
+-- | Helper to gather all preamble information.
 parseDoc :: [LayoutObj] -> ([Package], [Def])
 parseDoc los' = 
   ([FontSpec, FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Unicode] ++ 

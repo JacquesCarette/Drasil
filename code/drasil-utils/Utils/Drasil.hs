@@ -10,6 +10,8 @@ module Utils.Drasil (
   EnumType(..), WrapType(..), SepType(..), FoldType(..), foldConstraints,
   foldlEnumList, foldlList, foldlSP, foldlSP_, foldlSPCol, foldlSent,
   foldlSent_,foldlSentCol, foldlsC, foldNums, numList,
+  -- Lists
+  replaceAll, subsetOf,
   -- Misc
   addPercent, bulletFlat, bulletNested, checkValidStr, chgsStart, definedIn,
   definedIn', definedIn'', definedIn''', displayStrConstrntsAsSet, displayDblConstrntsAsSet, eqN,
@@ -36,6 +38,7 @@ import Utils.Drasil.Contents
 import Utils.Drasil.Document
 import Utils.Drasil.English
 import Utils.Drasil.Fold
+import Utils.Drasil.Lists
 import Utils.Drasil.Misc
 --import Utils.Drasil.Concepts
 --import Utils.Drasil.NounPhrase

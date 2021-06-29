@@ -3,11 +3,11 @@
 module Language.Drasil.Mod (Class(..), StateVariable(..), Func(..), 
   FuncData(..), FuncDef(..), FuncStmt(..), Initializer, Mod(..), Name, 
   Version, Description, Import, ($:=), pubStateVar, privStateVar, classDef, 
-  classImplements, ctorDef, ffor, fDecDef, fname, fstdecl, funcData, funcDef, 
+  classImplements, ctorDef, ffor, fforRange, fDecDef, fname, fstdecl, funcData, funcDef, 
   funcDefParams, packmod, packmodRequires
 ) where
 
-import Language.Drasil
+import Language.Drasil (Space, MayHaveUnit, Quantity)
 import Database.Drasil (ChunkDB)
 import GOOL.Drasil (ScopeTag(..))
 
@@ -15,7 +15,10 @@ import Language.Drasil.Chunk.Code (CodeVarChunk, CodeFuncChunk, codevars,
   codevars', quantvar)
 import Language.Drasil.Chunk.Parameter (ParameterChunk, pcAuto)
 import Language.Drasil.Code.DataDesc (DataDesc)
-import Language.Drasil.Printers (toPlainName)
+import Language.Drasil.CodeExpr (CodeExpr)
+import qualified Language.Drasil.CodeExpr as CE
+
+import Utils.Drasil.Strings (toPlainName)
 
 import Data.List ((\\), nub)
 
@@ -104,38 +107,47 @@ data FuncDef where
   CtorDef :: Name -> Description -> [ParameterChunk] -> [Initializer] -> 
     [FuncStmt] -> FuncDef
 
-type Initializer = (CodeVarChunk, Expr)
+type Initializer = (CodeVarChunk, CodeExpr)
  
 data FuncStmt where
-  FAsg :: CodeVarChunk -> Expr -> FuncStmt
-  FAsgIndex :: CodeVarChunk -> Integer -> Expr -> FuncStmt
-  FFor :: CodeVarChunk -> Expr -> [FuncStmt] -> FuncStmt
-  FForEach :: CodeVarChunk -> Expr -> [FuncStmt] -> FuncStmt
-  FWhile :: Expr -> [FuncStmt] -> FuncStmt
-  FCond :: Expr -> [FuncStmt] -> [FuncStmt] -> FuncStmt
-  FRet :: Expr -> FuncStmt
-  FThrow :: String -> FuncStmt
-  FTry :: [FuncStmt] -> [FuncStmt] -> FuncStmt
+  FAsg      :: CodeVarChunk -> CodeExpr -> FuncStmt
+  FAsgIndex :: CodeVarChunk -> Integer -> CodeExpr -> FuncStmt
+  -- | For-loop; Variable, Start, Stop, Step, Body
+  FFor      :: CodeVarChunk -> CodeExpr -> CodeExpr -> CodeExpr
+                -> [FuncStmt] -> FuncStmt
+  FForEach  :: CodeVarChunk -> CodeExpr -> [FuncStmt] -> FuncStmt
+  FWhile    :: CodeExpr -> [FuncStmt] -> FuncStmt
+  FCond     :: CodeExpr -> [FuncStmt] -> [FuncStmt] -> FuncStmt
+  FRet      :: CodeExpr -> FuncStmt
+  FThrow    :: String -> FuncStmt
+  FTry      :: [FuncStmt] -> [FuncStmt] -> FuncStmt
   FContinue :: FuncStmt
-  FDecDef :: CodeVarChunk -> Expr -> FuncStmt
-  FFuncDef :: CodeFuncChunk -> [ParameterChunk] -> [FuncStmt] -> FuncStmt
-  FVal :: Expr -> FuncStmt
-  FMulti :: [FuncStmt] -> FuncStmt
+  FDecDef   :: CodeVarChunk -> CodeExpr -> FuncStmt
+  FFuncDef  :: CodeFuncChunk -> [ParameterChunk] -> [FuncStmt] -> FuncStmt
+  FVal      :: CodeExpr -> FuncStmt
+  FMulti    :: [FuncStmt] -> FuncStmt
   -- slight hack, for now
-  FAppend :: Expr -> Expr -> FuncStmt
+  FAppend   :: CodeExpr -> CodeExpr -> FuncStmt
   
 -- | Define an assignment statement
-($:=) :: (Quantity c, MayHaveUnit c) => c -> Expr -> FuncStmt
+($:=) :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> FuncStmt
 v $:= e = FAsg (quantvar v) e
 
 -- | Define a for-loop. Quantity is for the iteration variable, Expr is the 
 -- upper bound at that variable (the variable will start with a value of 0).
 -- [FuncStmt] is for the loop body.
-ffor :: (Quantity c, MayHaveUnit c) => c -> Expr -> [FuncStmt] -> FuncStmt
-ffor v = FFor (quantvar v)
+ffor :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> [FuncStmt] -> FuncStmt
+ffor v end = fforRange v (CE.int 0) end (CE.int 1)
+
+-- | Define a for-loop. Quantity is for the iteration variable, and 3 CodeExprs
+-- for the start, stop, step numbers.
+-- [FuncStmt] is for the loop body.
+fforRange :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> CodeExpr 
+  -> CodeExpr -> [FuncStmt] -> FuncStmt
+fforRange v = FFor (quantvar v)
 
 -- | Define a declare-define statement.
-fDecDef :: (Quantity c, MayHaveUnit c) => c -> Expr -> FuncStmt
+fDecDef :: (Quantity c, MayHaveUnit c) => c -> CodeExpr -> FuncStmt
 fDecDef v  = FDecDef (quantvar v)
 
 -- | Returns the list of CodeVarChunks that are used in the list of FuncStmts 
@@ -149,7 +161,8 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
       ++ concatMap (fstvars sm) sts
     fstvars sm (FAsg cch e) = cch:codevars' e sm
     fstvars sm (FAsgIndex cch _ e) = cch:codevars' e sm
-    fstvars sm (FFor cch e fs) = nub (cch : codevars' e sm ++ concatMap (fstvars sm) fs)
+    fstvars sm (FFor cch s e st fs) = nub $ cch : codevars' e sm ++ codevars' s sm
+       ++ codevars' st sm ++ concatMap (fstvars sm) fs
     fstvars sm (FForEach cch e fs) = nub (cch : codevars' e sm ++ concatMap (fstvars sm) fs)
     fstvars sm (FWhile e fs) = codevars' e sm ++ concatMap (fstvars sm) fs
     fstvars sm (FCond e tfs efs) = codevars' e sm ++ concatMap (fstvars sm) tfs ++ concatMap (fstvars sm) efs
@@ -167,7 +180,7 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
       ++ concatMap (declared sm) sts
     declared _  (FAsg _ _) = []
     declared _  FAsgIndex {} = []
-    declared sm (FFor cch _ fs) = cch : concatMap (declared sm) fs
+    declared sm (FFor cch _ _ _ fs) = cch : concatMap (declared sm) fs
     declared sm (FForEach cch _ fs) = cch : concatMap (declared sm) fs
     declared sm (FWhile _ fs) = concatMap (declared sm) fs
     declared sm (FCond _ tfs efs) = concatMap (declared sm) tfs ++ concatMap (declared sm) efs
@@ -183,4 +196,4 @@ fstdecl ctx fsts = nub (concatMap (fstvars ctx) fsts) \\ nub (concatMap (declare
 fname :: Func -> Name
 fname (FDef (FuncDef n _ _ _ _ _)) = n
 fname (FDef (CtorDef n _ _ _ _)) = n
-fname (FData (FuncData n _ _)) = n 
+fname (FData (FuncData n _ _)) = n

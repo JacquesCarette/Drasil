@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 38950fe6204f75c51da3a4fd4565a6ccf8072e64cf879a2a27281417c09fc77d
+-- hash: 3111e14489cd0016dec1bf2c90fe887d100e13dba57751923dd57c33ddaecb6a
 
 name:           drasil-example
 version:        0.1.24.0
@@ -42,6 +42,7 @@ executable dblpendulum
       base >=4.7 && <5
     , directory
     , drasil-code
+    , drasil-code-base
     , drasil-data
     , drasil-database
     , drasil-docLang
@@ -77,6 +78,7 @@ executable gamephysics
       base >=4.7 && <5
     , directory
     , drasil-code
+    , drasil-code-base
     , drasil-data
     , drasil-database
     , drasil-docLang
@@ -115,6 +117,7 @@ executable glassbr
       base >=4.7 && <5
     , directory
     , drasil-code
+    , drasil-code-base
     , drasil-data
     , drasil-database
     , drasil-docLang
@@ -140,6 +143,7 @@ executable hghc
       base >=4.7 && <5
     , directory
     , drasil-code
+    , drasil-code-base
     , drasil-data
     , drasil-database
     , drasil-docLang
@@ -165,8 +169,9 @@ executable nopcm
       Drasil.NoPCM.IMods
       Drasil.NoPCM.GenDefs
       Drasil.NoPCM.Goals
-      Drasil.NoPCM.Requirements
+      Drasil.NoPCM.ODEs
       Drasil.NoPCM.References
+      Drasil.NoPCM.Requirements
       Drasil.SWHS.Assumptions
       Drasil.SWHS.Body
       Drasil.SWHS.Changes
@@ -187,6 +192,7 @@ executable nopcm
       base >=4.7 && <5
     , directory
     , drasil-code
+    , drasil-code-base
     , drasil-data
     , drasil-database
     , drasil-docLang
@@ -212,6 +218,7 @@ executable pdController
       Drasil.PDController.IModel
       Drasil.PDController.IntroSection
       Drasil.PDController.GenSysDesc
+      Drasil.PDController.ODEs
       Drasil.PDController.References
       Drasil.PDController.Requirements
       Drasil.PDController.SpSysDesc
@@ -224,6 +231,7 @@ executable pdController
       base >=4.7 && <5
     , directory
     , drasil-code
+    , drasil-code-base
     , drasil-data
     , drasil-database
     , drasil-docLang
@@ -259,6 +267,7 @@ executable projectile
       base >=4.7 && <5
     , directory
     , drasil-code
+    , drasil-code-base
     , drasil-data
     , drasil-database
     , drasil-docLang
@@ -296,6 +305,7 @@ executable ssp
       base >=4.7 && <5
     , directory
     , drasil-code
+    , drasil-code-base
     , drasil-data
     , drasil-database
     , drasil-docLang
@@ -332,6 +342,7 @@ executable swhs
       base >=4.7 && <5
     , directory
     , drasil-code
+    , drasil-code-base
     , drasil-data
     , drasil-database
     , drasil-docLang
@@ -356,6 +367,7 @@ executable template
       base >=4.7 && <5
     , directory
     , drasil-code
+    , drasil-code-base
     , drasil-data
     , drasil-database
     , drasil-docLang

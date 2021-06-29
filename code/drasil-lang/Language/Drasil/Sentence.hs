@@ -3,7 +3,7 @@
 -- | Contains Sentences and helpers
 module Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), (+:+),
   (+:+.), (+:), (!.), capSent, ch, eS, sC, sDash, sentencePlural, sentenceShort,
-  sentenceSymb, sentenceTerm, sParen) where
+  sentenceSymb, sentenceTerm, sParen, TermCapitalization(..)) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
 import Language.Drasil.DisplayExpr (DisplayExpr(..))
@@ -17,11 +17,14 @@ import Control.Lens ((^.))
 
 import Data.Char (toUpper)
 
--- | Used in 'Ch' constructor to determine the state of a 'Sentence'
--- (can record whether something is in plural form, a symbol, a singular term, or in short form).
+-- | Used in 'Ch' constructor to determine the state of a term
+-- (can record whether something is in plural form, a singular term, or in short form).
 data SentenceStyle = PluralTerm
                    | TermStyle
                    | ShortStyle
+
+-- | Used in 'Ch' constructor to determine the capitalization of a term.
+data TermCapitalization = Cap | NoCap
 
 -- | For writing 'Sentence's via combining smaller elements.
 -- 'Sentence's are made up of some known vocabulary of things:
@@ -35,7 +38,7 @@ infixr 5 :+:
 data Sentence where
   -- | Ch looks up the term for a given 'UID' and displays the term with a given 'SentenceStyle' and 'CapitalizationRule'.
   -- This allows Sentences to hold plural forms of 'NounPhrase's and 'NamedIdea's.
-  Ch    :: SentenceStyle -> CapitalizationRule -> UID -> Sentence
+  Ch    :: SentenceStyle -> TermCapitalization -> UID -> Sentence
   -- | A branch of Ch dedicated to SymbolStyle only.
   SyCh  :: UID -> Sentence
   -- | Converts a unit symbol into a usable Sentence form.
@@ -77,13 +80,13 @@ instance Monoid Sentence where
 -- | Smart constructors for turning a 'UID' into a 'Sentence'.
 sentencePlural, sentenceShort, sentenceSymb, sentenceTerm :: UID -> Sentence
 -- | Gets plural term of 'UID'.
-sentencePlural = Ch PluralTerm
+sentencePlural = Ch PluralTerm NoCap
 -- | Gets short form of 'UID'.
-sentenceShort  = Ch ShortStyle
+sentenceShort  = Ch ShortStyle NoCap
 -- | Gets symbol form of 'UID'.
 sentenceSymb   = SyCh
 -- | Gets singular form of 'UID'.
-sentenceTerm   = Ch TermStyle
+sentenceTerm   = Ch TermStyle NoCap
 
 -- | Helper for wrapping 'Sentence's in parentheses.
 sParen :: Sentence -> Sentence

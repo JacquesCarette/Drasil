@@ -26,8 +26,8 @@ and_TSP :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 and_TSP t1 t2 = nounPhrase'' 
   (phrase t1 `S.and_` plural t2)
   (phrase t1 `S.and_` plural t2)
-  (Replace (atStart t1 `S.and_` plural t2))
-  (Replace (titleize t1 `S.and_` titleize' t2))
+  CapFirst -- (Replace (atStart t1 `S.and_` plural t2))
+  CapWords -- (Replace (titleize t1 `S.and_` titleize' t2))
 
 -- | Creates a 'NP' by combining two 'NamedIdea's with the word "and" between
 -- their terms. Plural case is @(plural t1) "and" (phrase t2)@.

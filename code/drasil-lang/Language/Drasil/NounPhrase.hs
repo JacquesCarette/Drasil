@@ -10,7 +10,7 @@ module Language.Drasil.NounPhrase (NounPhrase(..), NP, atStartNP, atStartNP',
 import Data.Char (isLatin1, isLetter, toLower, toUpper)
 
 import Language.Drasil.NounPhrase.Core -- uses whole module
-import Language.Drasil.Sentence (Sentence((:+:), S), (+:+))
+import Language.Drasil.Sentence (Sentence((:+:), S, Ch), (+:+), TermCapitalization(..))
 
 --Linguistically, nounphrase might not be the best name (yet!), but once
 -- it is fleshed out and/or we do more with it, it will likely be a good fit
@@ -210,6 +210,8 @@ cap :: Sentence -> CapitalizationRule -> Sentence
 cap _ (Replace s) = s
 cap (S (s:ss)) CapFirst = S (toUpper s : ss)
 cap (S s)      CapWords = capString s capFirstWord capWords
+cap (Ch style _ s) CapFirst = Ch style Cap s
+cap (Ch style _ s) CapWords = Ch style Cap s
 cap (S s1 :+: S s2 :+: x) r = cap (S (s1 ++ s2) :+: x) r
 cap (s1 :+: s2) CapWords = cap s1 CapWords +:+ capTail s2
 cap (s1 :+: s2) CapFirst = cap s1 CapFirst :+: s2
@@ -218,6 +220,7 @@ cap a _ = a
 -- | Helper for cap and for capitalizing the end of a 'Sentence' (assumes 'CapWords').
 capTail :: Sentence -> Sentence
 capTail (S s) = capString s capWords capWords
+capTail (Ch style _ s) = Ch style Cap s
 capTail (a :+: b) = capTail a :+: capTail b
 capTail x = x
 

@@ -611,14 +611,18 @@ Exp :: UFunc
 Sqrt :: UFunc
 Neg :: UFunc
 
--- | Negation operator (not).
+-- | <tt>Bool -&gt; Bool</tt> operators.
 data UFuncB
 Not :: UFuncB
 
--- | Data for vectors (normal, dimensions).
-data UFuncVec
-Norm :: UFuncVec
-Dim :: UFuncVec
+-- | <tt>Vector -&gt; Vector</tt> operators.
+data UFuncVV
+NegV :: UFuncVV
+
+-- | <tt>Vector -&gt; Number</tt> operators.
+data UFuncVN
+Norm :: UFuncVN
+Dim :: UFuncVN
 
 -- | For case expressions (either complete or incomplete).
 data Completeness
@@ -643,7 +647,7 @@ data Expr
 -- | Turns two integers into a fraction (or percent).
 [Perc] :: Integer -> Integer -> Expr
 
--- | Takes an associative aritmetic operator with a list of expressions.
+-- | Takes an associative arithmetic operator with a list of expressions.
 [AssocA] :: AssocArithOper -> [Expr] -> Expr
 
 -- | Takes an associative boolean operator with a list of expressions.
@@ -677,12 +681,14 @@ data Expr
 -- | Unary operation for most functions (eg. sin, cos, log, etc.).
 [UnaryOp] :: UFunc -> Expr -> Expr
 
--- | Unary operation for negation.
+-- | Unary operation for <tt>Bool -&gt; Bool</tt> operations.
 [UnaryOpB] :: UFuncB -> Expr -> Expr
 
--- | Unary operation for vectors (holds whether a vector is normal or used
---   for dimensions).
-[UnaryOpVec] :: UFuncVec -> Expr -> Expr
+-- | Unary operation for <tt>Vector -&gt; Vector</tt> operations.
+[UnaryOpVV] :: UFuncVV -> Expr -> Expr
+
+-- | Unary operation for <tt>Vector -&gt; Number</tt> operations.
+[UnaryOpVN] :: UFuncVN -> Expr -> Expr
 
 -- | Binary operator for arithmetic between expressions (fractional, power,
 --   and subtraction).
@@ -799,7 +805,8 @@ Part :: DerivType
 Total :: DerivType
 instance GHC.Classes.Eq Language.Drasil.Expr.DerivType
 instance GHC.Classes.Eq Language.Drasil.Expr.Completeness
-instance GHC.Classes.Eq Language.Drasil.Expr.UFuncVec
+instance GHC.Classes.Eq Language.Drasil.Expr.UFuncVN
+instance GHC.Classes.Eq Language.Drasil.Expr.UFuncVV
 instance GHC.Classes.Eq Language.Drasil.Expr.UFuncB
 instance GHC.Classes.Eq Language.Drasil.Expr.UFunc
 instance GHC.Classes.Eq Language.Drasil.Expr.AssocBoolOper
@@ -877,8 +884,11 @@ prec1 :: UFunc -> Int
 -- | prec1B - precedence of boolean-related unary operators.
 prec1B :: UFuncB -> Int
 
--- | prec1Vec - precedence of vector-related unary operators.
-prec1Vec :: UFuncVec -> Int
+-- | prec1VV - precedence of vector-vector-related unary operators.
+prec1VV :: UFuncVV -> Int
+
+-- | prec1Vec - precedence of vector-number-related unary operators.
+prec1VN :: UFuncVN -> Int
 
 -- | eprec - <a>Expression</a> precedence.
 eprec :: Expr -> Int
@@ -2088,14 +2098,18 @@ data DisplayAssocBinOp
 And :: DisplayAssocBinOp
 Equivalence :: DisplayAssocBinOp
 
--- | Negation operator (not).
+-- | <tt>Bool -&gt; Bool</tt> operators.
 data UFuncB
 Not :: UFuncB
 
--- | Data for vectors (normal, dimensions).
-data UFuncVec
-Norm :: UFuncVec
-Dim :: UFuncVec
+-- | <tt>Vector -&gt; Vector</tt> operators.
+data UFuncVV
+NegV :: UFuncVV
+
+-- | <tt>Vector -&gt; Number</tt> operators.
+data UFuncVN
+Norm :: UFuncVN
+Dim :: UFuncVN
 
 -- | Arithmetic operators (fractional, power, and subtraction).
 data ArithBinOp
@@ -2750,6 +2764,9 @@ dim :: Expr -> Expr
 
 -- | Smart constructor for calculating the normal form of a vector.
 norm :: Expr -> Expr
+
+-- | Smart constructor for negating vectors.
+negVec :: Expr -> Expr
 
 -- | Smart constructor for applying logical negation to an expression.
 not_ :: Expr -> Expr
@@ -3639,7 +3656,7 @@ data Expr
 -- | Turns two integers into a fraction (or percent).
 [Perc] :: Integer -> Integer -> Expr
 
--- | Takes an associative aritmetic operator with a list of expressions.
+-- | Takes an associative arithmetic operator with a list of expressions.
 [AssocA] :: AssocArithOper -> [Expr] -> Expr
 
 -- | Takes an associative boolean operator with a list of expressions.
@@ -3673,12 +3690,14 @@ data Expr
 -- | Unary operation for most functions (eg. sin, cos, log, etc.).
 [UnaryOp] :: UFunc -> Expr -> Expr
 
--- | Unary operation for negation.
+-- | Unary operation for <tt>Bool -&gt; Bool</tt> operations.
 [UnaryOpB] :: UFuncB -> Expr -> Expr
 
--- | Unary operation for vectors (holds whether a vector is normal or used
---   for dimensions).
-[UnaryOpVec] :: UFuncVec -> Expr -> Expr
+-- | Unary operation for <tt>Vector -&gt; Vector</tt> operations.
+[UnaryOpVV] :: UFuncVV -> Expr -> Expr
+
+-- | Unary operation for <tt>Vector -&gt; Number</tt> operations.
+[UnaryOpVN] :: UFuncVN -> Expr -> Expr
 
 -- | Binary operator for arithmetic between expressions (fractional, power,
 --   and subtraction).
@@ -3733,11 +3752,14 @@ Exp :: UFunc
 Sqrt :: UFunc
 Neg :: UFunc
 
--- | Negation operator (not).
+-- | <tt>Bool -&gt; Bool</tt> operators.
 data UFuncB
 
--- | Data for vectors (normal, dimensions).
-data UFuncVec
+-- | <tt>Vector -&gt; Vector</tt> operators.
+data UFuncVV
+
+-- | <tt>Vector -&gt; Number</tt> operators.
+data UFuncVN
 
 -- | Arithmetic operators (fractional, power, and subtraction).
 data ArithBinOp
@@ -3862,6 +3884,9 @@ abs_ :: Expr -> Expr
 
 -- | Smart constructor for negating an expression.
 neg :: Expr -> Expr
+
+-- | Smart constructor for negating vectors.
+negVec :: Expr -> Expr
 
 -- | Smart constructor to take the log of an expression.
 log :: Expr -> Expr

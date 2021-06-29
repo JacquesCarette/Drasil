@@ -468,8 +468,11 @@ digraph alltypes {
 		subgraph ufuncb{
 		UFuncB	[shape=oval, color=darkviolet, label=UFuncB];
 		}
-		subgraph ufuncvec{
-		UFuncVec	[shape=oval, color=darkviolet, label=UFuncVec];
+		subgraph ufuncvv{
+		UFuncVV	[shape=oval, color=darkviolet, label=UFuncVV];
+		}
+		subgraph ufuncvn{
+		UFuncVN	[shape=oval, color=darkviolet, label=UFuncVN];
 		}
 		subgraph completeness{
 		Completeness	[shape=oval, color=darkviolet, label=Completeness];
@@ -487,7 +490,8 @@ digraph alltypes {
 		Expr -> ExprRelation;
 		Expr -> UFunc;
 		Expr -> UFuncB;
-		Expr -> UFuncVec;
+		Expr -> UFuncVV;
+		Expr -> UFuncVN;
 		Expr -> ArithBinOp;
 		Expr -> BoolBinOp;
 		Expr -> EqBinOp;

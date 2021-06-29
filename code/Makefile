@@ -255,6 +255,18 @@ deploy_lite:
 	EXAMPLE_DIRS="$(EXAMPLE_DIRS)" MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" ANALYSIS_FOLDER="$(ANALYSIS_FOLDER)" \
 	DEPLOY_CODE_PATH_KV_SEP="$(DEPLOY_CODE_PATH_KV_SEP)" MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"deploy_stage.sh
 
+website:
+	stack install drasil-website
+	cd "drasil-website" && \
+	CUR_DIR="$(PWD)/" \
+	DEPLOY_FOLDER="$(CUR_DIR)$(DEPLOY_FOLDER)"  \
+	DOCS_FOLDER="$(DOCS_FOLDER)" \
+	DOX_FOLDER="doxygen/" \
+	EXAMPLES_FOLDER="examples/" \
+	SRS_FOLDER_FRAG="srs/" \
+	GRAPH_FOLDER="$(GRAPH_FOLDER)" \
+	ANALYSIS_FOLDER="$(ANALYSIS_FOLDER)" \
+	stack exec website
 # This rule is for use with developing deployment layout locally. As part of it, it ensures all needed
 # dependencies exist. One of the downsides is we ensure all files are re-generated which means the TeX
 # files appear newer and thus PDF's are regenerated. If you want to "just generate the structure,
@@ -274,4 +286,4 @@ clean_artifacts cleanArtifacts: $(CLEAN_FOLDERS)
 clean: clean_artifacts
 	- stack clean
 
-.PHONY: clean clean_artifacts cleanArtifacts code hlint hot_hlint analysis tex doc debug prog test graphs graphmod check_stack graphs deploy_code_path deploy deploy_lite all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)
+.PHONY: clean clean_artifacts cleanArtifacts code hlint hot_hlint analysis tex doc debug prog test graphs graphmod check_stack graphs website deploy_code_path deploy deploy_lite all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)

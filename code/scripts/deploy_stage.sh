@@ -121,7 +121,7 @@ copy_images() {
     rm -rf "$CUR_DIR"deploy/images
   fi
   mkdir -p "$CUR_DIR"deploy/images
-  cp -r "$CUR_DIR"website/images/* "$CUR_DIR"deploy/images
+  cp -r "$CUR_DIR"drasil-website/WebInfo/images/* "$CUR_DIR"deploy/images
   
 }
 
@@ -131,16 +131,14 @@ copy_analysis() {
 }
 
 build_website() {
-  cd "$CUR_DIR"website
-  make DEPLOY_FOLDER="$CUR_DIR$DEPLOY_FOLDER" DOCS_FOLDER="$DOC_DEST" DOX_FOLDER="$DOX_DEST" EXAMPLES_FOLDER="$EXAMPLE_DEST" \
-  SRS_FOLDER_FRAG="$SRS_DEST" GRAPH_FOLDER="$GRAPH_FOLDER"
+  cd "$CUR_DIR/"drasil-website 
   RET=$?
   if [ $RET != 0 ]; then
     echo "Build Failed. Bailing."
     exit 1
   fi
   cd "$CUR_DIR$DEPLOY_FOLDER"
-  cp -r "$CUR_DIR"website/_site/. .
+  cp -r "$CUR_DIR"drasil-website/Website/. .
 
   # src stubs were consumed by site generator; safe to delete those.
   rm "$EXAMPLE_DEST"*/src

@@ -7,7 +7,7 @@ module Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.DefinedQuantity (dqdWr)
 import Language.Drasil.Chunk.Constrained (ConstrConcept(..), ConstrReasQDef, cuc', cnstrw, constrReasQDNU)
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
-import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA), HasReasVal(..),
   Definition(defn), ConceptDomain(cdom), Concept, Quantity, HasSpace(typ),
   IsUnit, Constrained(constraints), MayHaveReasVal(..), HasUncertainty (unc))
 import Language.Drasil.Constraint (Constraint)
@@ -51,7 +51,7 @@ instance MayHaveUnit       UncertainChunk where getUnit = getUnit . view conc
 
 {-- Constructors --}
 -- | Smart constructor that can project to an 'UncertainChunk' (also given an 'Uncertainty').
-uncrtnChunk :: (Quantity c, Constrained c, MayHaveReasVal c, MayHaveUnit c) => 
+uncrtnChunk :: (Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => 
   c -> Uncertainty -> UncertainChunk
 uncrtnChunk q = UCh (cnstrw q)
 -- uncrtnChunk q = UCh (constrReasQD (q ^. uid) des  (getUnit q) (q ^. typ) [Constraint] Expr)
@@ -62,7 +62,7 @@ uvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Expr -> Uncertainty ->
 uvc nam trm sym space cs val = uncrtnChunk (constrReasQDNU nam trm sym space cs val)
 
 -- | Projection function into an 'UncertainChunk' from 'UncertQ' or an 'UncertainChunk'.
-uncrtnw :: (HasUncertainty c, Quantity c, Constrained c, MayHaveReasVal c, MayHaveUnit c) => c -> UncertainChunk
+uncrtnw :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => c -> UncertainChunk
 uncrtnw c = UCh (cnstrw c) (c ^. unc)
 
 -- | UncertQs are conceptual symbolic quantities with constraints and an 'Uncertainty'.

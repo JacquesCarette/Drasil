@@ -24,7 +24,10 @@ data SentenceStyle = PluralTerm
                    | ShortStyle
 
 -- | Used in 'Ch' constructor to determine the capitalization of a term.
-data TermCapitalization = Cap | NoCap
+-- CapF is for capitalizing the first word from the 'UID' of the given term.
+-- CapW is for capitalizing all words from the 'UID' of the given term.
+-- Mirrors 'CapFirst' and 'CapWords' from 'CapitalizationRule'.
+data TermCapitalization = CapF | CapW | NoCap
 
 -- | For writing 'Sentence's via combining smaller elements.
 -- 'Sentence's are made up of some known vocabulary of things:

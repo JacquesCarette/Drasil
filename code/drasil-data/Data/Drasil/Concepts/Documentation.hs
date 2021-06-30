@@ -45,18 +45,18 @@ assumption, desSpec, goalStmt, dataConst, likelyChg, unlikelyChg, physSyst, requ
   mg, mis, notApp, srs, typUnc, sec :: CI
 
 softReqSpec :: NP
-softReqSpec = compoundPhraseP1 (softwareReq ^. term) (specification ^. term)
+softReqSpec = fterms compoundPhraseP1 softwareReq specification
 
 ------------------------------------------------------------------------------------------------------------------------------
 -- | CI       |                  |    uid      |         term                                   | abbreviation | ConceptDomain
 ------------------------------------------------------------------------------------------------------------------------------
 assumption  = commonIdeaWithDict "assumption"  (cn' "assumption")                                    "A"       [softEng]
-desSpec     = commonIdeaWithDict "desSpec"     (fterms compoundPhrase design specification)          "DS"      [softEng]
-goalStmt    = commonIdeaWithDict "goalStmt"    (fterms compoundPhrase goal statement)                "GS"      [softEng]
+desSpec     = commonIdeaWithDict "desSpec"     (combineNINI design specification)                    "DS"      [softEng]
+goalStmt    = commonIdeaWithDict "goalStmt"    (combineNINI goal statement)                          "GS"      [softEng]
 dataConst   = commonIdeaWithDict "dataConst"   (cn' "data constraint")                               "DC"      [softEng]
 likelyChg   = commonIdeaWithDict "likelyChg"   (cn' "likely change")                                 "LC"      [softEng]
 unlikelyChg = commonIdeaWithDict "unlikelyChg" (cn' "unlikely change")                               "UC"      [softEng]
-physSyst    = commonIdeaWithDict "physSyst"    (fterms compoundPhrase physicalSystem description)    "PS"      [softEng]
+physSyst    = commonIdeaWithDict "physSyst"    (combineNINI physicalSystem description)              "PS"      [softEng]
 requirement = commonIdeaWithDict "requirement" (cn' "requirement")                                   "R"       [softEng]
 mis         = commonIdeaWithDict "mis"         (fterms compoundPhrase moduleInterface specification) "MIS"     [softEng]
 mg          = commonIdeaWithDict "mg"          (fterms compoundPhrase module_ guide)                 "MG"      [softEng]

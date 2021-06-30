@@ -1,7 +1,8 @@
 module Data.Drasil.Concepts.Thermodynamics where
 
 import Language.Drasil
-import Utils.Drasil
+--import Utils.Drasil
+import Utils.Drasil.Concepts
 
 import Data.Drasil.Concepts.Documentation (source, theory)
 import Data.Drasil.Concepts.Physics (energy)
@@ -67,8 +68,8 @@ thermalConductor  = dcc "thermalConductor"  (cn' "thermal conductor")
 thermalEnergy     = dcc "thermalEnergy"     (cnIES "thermal energy")
                       "the energy that comes from heat"
 
-enerSrc           = dcc "enerSrc"     (fterms compoundPhrase' energy source)
+enerSrc           = dcc "enerSrc"     (combineNINI energy source)
                       "a source from which useful energy can be extracted"
-htTransTheo       = dcc "htTransTheo" (fterms compoundPhrase' heatTrans theory)
+htTransTheo       = dcc "htTransTheo" (combineNINI heatTrans theory)
                       ("the theory predicting the energy transfer that may take " ++
                       "place between material bodies as a result of temperature difference")

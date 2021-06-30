@@ -1,3 +1,6 @@
+-- | Source code reader for all types, classes, and instances in Drasil.
+-- Only records the names of types and classes, not contents.
+-- Meant to show instances of types within classes.
 module SourceCodeReader (extractEntryData, EntryData(..)) where
 
 import Data.List

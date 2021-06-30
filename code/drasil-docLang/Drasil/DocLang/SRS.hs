@@ -48,7 +48,7 @@ intro         cs ss = section (titleize Doc.introduction)              cs ss int
 -- | Purpose of Document section.
 prpsOfDoc     cs ss = section (titleize Doc.prpsOfDoc)                 cs ss docPurposeLabel
 -- | Scope of Requirements section.
-scpOfReq      cs ss = section (titleize Doc.scpOfReq)                  cs ss reqsScopeLabel
+scpOfReq      cs ss = section (titleize' Doc.scpOfReq)                  cs ss reqsScopeLabel
 -- | Characteristics of Intended Reader section.
 charOfIR      cs ss = section (titleize' Doc.charOfIR)                 cs ss readerCharsLabel
 -- | Organization of Document section.
@@ -57,9 +57,9 @@ orgOfDoc      cs ss = section (titleize Doc.orgOfDoc)                  cs ss doc
 -- | Stakeholders section.
 stakeholder   cs ss = section (titleize' Doc.stakeholder)              cs ss stakeholderLabel
 -- | The Customer section.
-theCustomer   cs ss = section (titleizeNP $ theT Doc.customer)         cs ss customerLabel
+theCustomer   cs ss = section (titleizeNP $ the Doc.customer)         cs ss customerLabel
 -- | The Client section.
-theClient     cs ss = section (titleizeNP $ theT Doc.client)           cs ss clientLabel
+theClient     cs ss = section (titleizeNP $ the Doc.client)           cs ss clientLabel
 
 -- | General System Description section.
 genSysDes     cs ss = section (titleize Doc.generalSystemDescription)  cs ss genSysDescLabel
@@ -132,9 +132,9 @@ reference     cs ss = section (titleize' Doc.reference)                cs ss ref
 offShelfSol   cs ss = section (titleize' Doc.offShelfSolution)         cs ss offShelfSolnsLabel
 
 -- | Table of Symbols section.
-tOfSymb       cs ss = section (titleize Doc.tOfSymb)                   cs ss tOfSymbLabel
+tOfSymb       cs ss = section (titleize' Doc.tOfSymb)                   cs ss tOfSymbLabel
 -- | Table of Units section.
-tOfUnit       cs ss = section (titleize Doc.tOfUnit)                   cs ss tOfUnitLabel
+tOfUnit       cs ss = section (titleize' Doc.tOfUnit)                   cs ss tOfUnitLabel
 
 --Labels--
 -- | Collections all 'Section' 'Reference's.
@@ -169,8 +169,8 @@ dataDefnLabel       = makeSecRef "DDs"              $ titleize' Doc.dataDefn
 inModelLabel        = makeSecRef "IMs"              $ titleize' Doc.inModel
 likeChgLabel        = makeSecRef "LCs"              $ titleize' Doc.likelyChg
 unlikeChgLabel      = makeSecRef "UCs"              $ titleize' Doc.unlikelyChg
-tOfSymbLabel        = makeSecRef "ToS"              $ titleize Doc.tOfSymb
-tOfUnitLabel        = makeSecRef "ToU"              $ titleize Doc.tOfUnit
+tOfSymbLabel        = makeSecRef "ToS"              $ titleize' Doc.tOfSymb
+tOfUnitLabel        = makeSecRef "ToU"              $ titleize' Doc.tOfUnit
 valsOfAuxConsLabel  = makeSecRef "AuxConstants"     $ titleize Doc.consVals -- "Values of Auxiliary Constants" - DO NOT CHANGE OR THINGS WILL BREAK -- see Language.Drasil.Document.Extract
 referenceLabel      = makeSecRef "References"       $ titleize' Doc.reference 
 indPRCaseLabel      = makeSecRef "IndividualProdUC" $ titleize' Doc.indPRCase
@@ -180,12 +180,12 @@ nonfuncReqLabel     = makeSecRef "NFRs"             $ titleize' Doc.nonfunctiona
 solCharSpecLabel    = makeSecRef "SolCharSpec"      $ titleize Doc.solutionCharSpec
 introLabel          = makeSecRef "Intro"            $ titleize Doc.introduction
 docPurposeLabel     = makeSecRef "DocPurpose"       $ titleize Doc.prpsOfDoc
-reqsScopeLabel      = makeSecRef "ReqsScope"        $ titleize Doc.scpOfReq
+reqsScopeLabel      = makeSecRef "ReqsScope"        $ titleize' Doc.scpOfReq
 readerCharsLabel    = makeSecRef "ReaderChars"      $ titleize' Doc.charOfIR
 docOrgLabel         = makeSecRef "DocOrg"           $ titleize Doc.orgOfDoc
 stakeholderLabel    = makeSecRef "Stakeholder"      $ titleize' Doc.stakeholder
-customerLabel       = makeSecRef "Customer"         $ titleizeNP $ theT Doc.customer
-clientLabel         = makeSecRef "Client"           $ titleizeNP $ theT Doc.client
+customerLabel       = makeSecRef "Customer"         $ titleizeNP $ the Doc.customer
+clientLabel         = makeSecRef "Client"           $ titleizeNP $ the Doc.client
 genSysDescLabel     = makeSecRef "GenSysDesc"       $ titleize Doc.generalSystemDescription
 sysContextLabel     = makeSecRef "SysContext"       $ titleize Doc.sysCont
 userCharsLabel      = makeSecRef "UserChars"        $ titleize' Doc.userCharacteristic

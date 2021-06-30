@@ -383,7 +383,7 @@ physSysFbd = foldlSP [atStartNP' (NP.a_ (fbd `ofThe` force)), S "acting on a",
 
 figForceActing :: LabelledContent
 figForceActing = llcc (makeFigRef "ForceDiagram") $
-  fig (atStartNP' (fbd `of_TSP` force) +:+ S "acting on a" +:+
+  fig (atStartNP' (fbd `of_` force) +:+ S "acting on a" +:+
   phrase slice) (resourcePath ++ "ForceDiagram.png")
 
 -- SECTION 4.1.3 --

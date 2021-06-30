@@ -1,5 +1,5 @@
-module Utils.Drasil.Concepts (and_, and_TSP, and_PS, and_PP, and_TGen, and_Gen, andIts, andThe, with, of_, of_NINP, of_PSNPNI, of_TSP, of_PS, of_TPS, ofA,
-ofATPS, ofThe, ofThePS, the_ofThe, the_ofThePS, onThe, onThePS, inThe, inThePS, isThe, toThe, for, forTGen, in_, in_PS, inA, is, the, theT, theGen, a_, a_Gen,
+module Utils.Drasil.Concepts (and_, and_PS, and_PP, and_TGen, and_Gen, andIts, andThe, with, of_, of_NINP, of_PSNPNI, of_PS, ofA,
+ofAPS, ofThe, ofThePS, the_ofThe, the_ofThePS, onThe, onThePS, inThe, inThePS, isThe, toThe, for, forTGen, in_, in_PS, inA, is, the, theGen, a_, a_Gen,
 compoundNC, compoundNCPP, compoundNCGen, compoundNCPS, compoundNCPSPP, compoundNCGenP, combineNINP, combineNPNI, combineNINI) where
 
 import Language.Drasil
@@ -8,23 +8,12 @@ import Control.Lens ((^.))
 
 import qualified Utils.Drasil.Sentence as S (and_, andIts, andThe, of_, ofA, ofThe, the_ofThe, onThe, for, inThe, in_, is, toThe, isThe) 
 
------------
---FIXME: Find out why CapFirst and CapWords can't just be used instead of Replace constructor.
------------
 
 -- | Creates a 'NP' by combining two 'NamedIdea's with the word "and" between
 -- their terms. Plural case is @(phrase t1) "and" (plural t2)@.
 and_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 and_ t1 t2 = nounPhrase''
   (phrase t1 `S.and_` phrase t2)
-  (phrase t1 `S.and_` plural t2)
-  CapFirst
-  CapWords
-
--- | Same as `and_` combinator, except both singular and plural case are @(phrase t1) "and" (plural t2)@.
-and_TSP :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-and_TSP t1 t2 = nounPhrase'' 
-  (phrase t1 `S.and_` plural t2)
   (phrase t1 `S.and_` plural t2)
   CapFirst
   CapWords
@@ -117,27 +106,10 @@ of_PSNPNI t1 t2 = nounPhrase''
   CapFirst
   CapWords
 
--- | Similar to 'of_', but singular case is
--- @(phrase t1) "of" (plural t2)@. Plural case is the same.
-of_TSP :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-of_TSP t1 t2 = nounPhrase'' 
-  (phrase t1 `S.of_` plural t2)
-  (phrase t1 `S.of_` plural t2)
-  CapFirst
-  CapWords
-
 -- | Same as 'of_', except plural case is @(plural t1) "of" (phrase t2)@.
 of_PS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 of_PS t1 t2 = nounPhrase'' 
   (phrase t1 `S.of_` phrase t2)
-  (plural t1 `S.of_` phrase t2)
-  CapFirst
-  CapWords
-
--- | Same as 'of_', except singular and plural cases are both @(plural t1) "of" (phrase t2)@.
-of_TPS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-of_TPS t1 t2 = nounPhrase'' 
-  (plural t1 `S.of_` phrase t2)
   (plural t1 `S.of_` phrase t2)
   CapFirst
   CapWords
@@ -151,9 +123,9 @@ ofA t1 t2 = nounPhrase''
   CapWords
 
 -- | Same as 'ofA', except phrase case is @(plural t1) "of a" (phrase t2)@.
-ofATPS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-ofATPS t1 t2 = nounPhrase'' 
-  (plural t1 `S.ofA` phrase t2)
+ofAPS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+ofAPS t1 t2 = nounPhrase'' 
+  (phrase t1 `S.ofA` phrase t2)
   (plural t1 `S.ofA` phrase t2)
   CapFirst
   CapWords
@@ -305,10 +277,6 @@ is t1 t2 = nounPhrase''
 -- | Prepends "the" to a 'NamedIdea'.
 the :: (NamedIdea t) => t -> NP
 the t = nounPhrase'' (S "the" +:+ phrase t) (S "the" +:+ plural t) CapFirst CapWords
-
--- | Prepends "the" to a titleized 'NamedIdea'. Similar to 'the', but titleized.
-theT :: (NamedIdea t) => t -> NP
-theT t = nounPhrase'' (S "the" +:+ titleize t) (S "the" +:+ titleize' t) CapFirst CapWords
 
 -- | A customizable version of 'the'. The given function is applied to both singular and plural cases.
 theGen :: (t -> Sentence) -> t -> NP

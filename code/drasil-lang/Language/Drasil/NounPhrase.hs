@@ -122,7 +122,7 @@ cnIrr = CommonNoun
 nounPhrase :: String -> PluralString -> NP
 nounPhrase s p = Phrase (S s) (S p) CapFirst CapWords
 
--- | Similar to 'nounPhrase', but takes a specified capitalization rule.
+-- | Similar to 'nounPhrase', but takes a specified capitalization rule for the sentence case.
 nounPhrase' :: String -> PluralString -> CapitalizationRule -> NP
 nounPhrase' s p c = Phrase (S s) (S p) c CapWords
 
@@ -211,7 +211,7 @@ cap _ (Replace s) = s
 cap (S (s:ss)) CapFirst = S (toUpper s : ss)
 cap (S s)      CapWords = capString s capFirstWord capWords
 cap (P symb :+: x) CapFirst = P symb :+: x                  -- TODO: See why the Table of Symbols uses the CapWords case instead of CapFirst for items of the form:
-cap (P symb :+: x) CapWords = P symb :+: x                  -- "x-component". Instead, it displays as "x-Component". Using a temp fix for now
+cap (P symb :+: x) CapWords = P symb :+: x                  -- "x-component". Instead, it displays as "x-Component". Using a temp fix for now by ignoring everything after a P symbol.
 cap (Ch style _ s) CapFirst = Ch style CapF s
 cap (Ch style _ s) CapWords = Ch style CapW s
 cap (S s1 :+: S s2 :+: x) r = cap (S (s1 ++ s2) :+: x) r

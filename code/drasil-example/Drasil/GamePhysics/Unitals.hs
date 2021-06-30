@@ -144,8 +144,8 @@ iVect = ucs' (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
                (eqSymb QM.unitVect) Real metre
 jVect       = ucs' (dccWDS "unitVectJ" (compoundPhrase' (cn "vertical")
                (QM.unitVect ^. term)) (phrase QM.unitVect)) (vec $ hat lJ) Real metre
-normalVect  = ucs' (dccWDS "normalVect" (compoundPhrase' (cn "collision")
-                   (QM.normalVect ^. term)) (phrase QM.normalVect)) 
+normalVect  = ucs' (dccWDS "normalVect" (nounPhraseSent (S "collision" +:+
+                   phrase QM.normalVect)) (phrase QM.normalVect)) 
                    (eqSymb QM.normalVect) Real metre
 
 dVect = ucs' (dccWDS "unitVect" 

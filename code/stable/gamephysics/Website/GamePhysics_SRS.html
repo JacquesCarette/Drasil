@@ -701,12 +701,12 @@
                 <div class="list">
                   <p>
                     <div id="assumpOT">
-                      objectTy: All objects are rigid bodies. (RefBy: <a href=#DD:chaslesThm>DD:chaslesThm</a>, <a href=#DD:reVeInColl>DD:reVeInColl</a>, <a href=#IM:transMot>IM:transMot</a>, <a href=#IM:rotMot>IM:rotMot</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#DD:ctrOfMass>DD:ctrOfMass</a>, <a href=#DD:momentOfInertia>DD:momentOfInertia</a>, <a href=#DD:linVel>DD:linVel</a>, <a href=#DD:linDisp>DD:linDisp</a>, <a href=#DD:linAcc>DD:linAcc</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, <a href=#DD:impulseV>DD:impulseV</a>, <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, <a href=#DD:angVel>DD:angVel</a>, <a href=#DD:angDisp>DD:angDisp</a>, and <a href=#DD:angAccel>DD:angAccel</a>.)
+                      objectTy: All objects are rigid bodies. (RefBy: <a href=#DD:chaslesThm>DD:chaslesThm</a>, <a href=#DD:reVeInColl>DD:reVeInColl</a>, <a href=#IM:rotMot>IM:rotMot</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#DD:ctrOfMass>DD:ctrOfMass</a>, <a href=#DD:momentOfInertia>DD:momentOfInertia</a>, <a href=#DD:linVel>DD:linVel</a>, <a href=#DD:linDisp>DD:linDisp</a>, <a href=#DD:linAcc>DD:linAcc</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, <a href=#DD:impulseV>DD:impulseV</a>, <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, <a href=#DD:angVel>DD:angVel</a>, <a href=#DD:angDisp>DD:angDisp</a>, <a href=#DD:angAccel>DD:angAccel</a>, and <a href=#IM:transMot>IM:transMot</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpOD">
-                      objectDimension: All objects are 2D. (RefBy: <a href=#IM:transMot>IM:transMot</a>, <a href=#IM:rotMot>IM:rotMot</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#TM:NewtonSecLawRotMot>TM:NewtonSecLawRotMot</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, <a href=#DD:angVel>DD:angVel</a>, <a href=#DD:angDisp>DD:angDisp</a>, and <a href=#DD:angAccel>DD:angAccel</a>.)
+                      objectDimension: All objects are 2D. (RefBy: <a href=#IM:rotMot>IM:rotMot</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#TM:NewtonSecLawRotMot>TM:NewtonSecLawRotMot</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, <a href=#DD:angVel>DD:angVel</a>, <a href=#DD:angDisp>DD:angDisp</a>, <a href=#DD:angAccel>DD:angAccel</a>, and <a href=#IM:transMot>IM:transMot</a>.)
                     </div>
                   </p>
                   <p>
@@ -726,12 +726,12 @@
                   </p>
                   <p>
                     <div id="assumpDI">
-                      dampingInvolvement: There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: <a href=#IM:transMot>IM:transMot</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#lcID>LC:Include-Dampening</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, and <a href=#IM:col2D>IM:col2D</a>.)
+                      dampingInvolvement: There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#lcID>LC:Include-Dampening</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, <a href=#IM:col2D>IM:col2D</a>, and <a href=#IM:transMot>IM:transMot</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpCAJI">
-                      constraintsAndJointsInvolvement: There are no constraints and joints involved throughout the simulation. (RefBy: <a href=#IM:transMot>IM:transMot</a>, <a href=#lcIJC>LC:Include-Joints-Constraints</a>, and <a href=#IM:col2D>IM:col2D</a>.)
+                      constraintsAndJointsInvolvement: There are no constraints and joints involved throughout the simulation. (RefBy: <a href=#lcIJC>LC:Include-Joints-Constraints</a>, <a href=#IM:col2D>IM:col2D</a>, and <a href=#IM:transMot>IM:transMot</a>.)
                     </div>
                   </p>
                 </div>
@@ -1206,7 +1206,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:transMot>IM:transMot</a> and <a href=#IM:col2D>IM:col2D</a>
+                          <a href=#IM:col2D>IM:col2D</a> and <a href=#IM:transMot>IM:transMot</a>
                         </p>
                       </td>
                     </tr>
@@ -2106,7 +2106,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{\mathbf{a}_{j}}=\frac{\,d{\mathbf{v}_{j}}\left(t\right)}{\,dt}=\mathbf{g}+\frac{{\mathbf{F}_{j}}\left(t\right)}{{m_{j}}}\]
+                        \[{\mathbf{a}_{j}}=\mathbf{g}+\frac{{\mathbf{F}_{j}}\left(t\right)}{{m_{j}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -2114,11 +2114,7 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em><b>a</b><sub>j</sub></em> is the j-th body's acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
-                          </li>
-                          <li><em>t</em> is the time (<em>s</em>)</li>
-                          <li>
-                            <em><b>v</b><sub>j</sub></em> is the velocity of the j-th body's velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                            <em><b>a</b><sub>j</sub></em> is the force on the translational motion of a set of 2D rigid bodies (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
                           </li>
                           <li>
                             <em><b>g</b></em> is the gravitational acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
@@ -2126,6 +2122,7 @@
                           <li>
                             <em><b>F</b><sub>j</sub></em> is the force applied to the j-th body at time t (<em>N</em>)
                           </li>
+                          <li><em>t</em> is the time (<em>s</em>)</li>
                           <li>
                             <em>m<sub>j</sub></em> is the mass of the j-th particle (<em>kg</em>)
                           </li>
@@ -2159,7 +2156,19 @@
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph"></p>
+                <div id="IM:transMotDeriv">
+                  <div class="subsubsubsection">
+                    <h4>
+                      Detailed derivation of force on the translational motion of a set of 2D rigid bodies:
+                    </h4>
+                    <p class="paragraph">
+                      We may calculate the total acceleration of rigid body <em>j</em> by calculating the derivative of it's velocity with respect to time.
+                    </p>
+                    \[{\mathbf{a}_{j}}=\frac{\,d{\mathbf{v}_{j}}\left(t\right)}{\,dt}\]
+                    <p class="paragraph">Performing the derivative, we obtain:</p>
+                    \[{\mathbf{a}_{j}}=\mathbf{g}+\frac{{\mathbf{F}_{j}}\left(t\right)}{{m_{j}}}\]
+                  </div>
+                </div>
                 <div id="IM:rotMot">
                   <table class="idefn">
                     <tr>

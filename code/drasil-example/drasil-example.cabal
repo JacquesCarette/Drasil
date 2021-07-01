@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 3111e14489cd0016dec1bf2c90fe887d100e13dba57751923dd57c33ddaecb6a
+-- hash: 160dc61077f10a566631e2aaa90986b1e6049cd9988f995ebe038e60beed4f22
 
 name:           drasil-example
 version:        0.1.24.0
@@ -64,6 +64,7 @@ executable gamephysics
       Drasil.GamePhysics.Changes
       Drasil.GamePhysics.Concepts
       Drasil.GamePhysics.DataDefs
+      Drasil.GamePhysics.Expressions
       Drasil.GamePhysics.GenDefs
       Drasil.GamePhysics.Goals
       Drasil.GamePhysics.TMods

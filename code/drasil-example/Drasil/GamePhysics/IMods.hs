@@ -73,7 +73,7 @@ transMotDeriv = mkDerivName (phrase transMot)
 transMotDerivStmts :: [Sentence]
 transMotDerivStmts = [
     foldlSent [S "We may calculate the total acceleration of rigid body", 
-      P lJ, S "by calculating the derivative of it's velocity with respect to time"],
+      P lJ, S "by calculating the derivative of it's velocity with respect to time", fromSource linAccDD],
     S "Performing the derivative, we obtain:"
   ]
 

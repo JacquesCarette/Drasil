@@ -650,13 +650,21 @@ lookupT :: ChunkDB -> UID -> TermCapitalization -> Sentence
 --   associated with the term.
 lookupS :: ChunkDB -> UID -> TermCapitalization -> Sentence
 
--- | Helper to get the capital case of an abbreviation. For sentence and
---   title cases.
-capHelper :: String -> Maybe String
-
 -- | Look up the plural form of a term given a chunk database and a
 --   <a>UID</a> associated with the term.
 lookupP :: ChunkDB -> UID -> TermCapitalization -> Sentence
+
+-- | Helper to get the proper function for capitalizing a <a>NP</a> based
+--   on its <a>TermCapitalization</a>. Singular case.
+resolveCapT :: TermCapitalization -> NP -> Sentence
+
+-- | Helper to get the right function for capitalizing a <a>NP</a> based on
+--   its <a>TermCapitalization</a>. Plural case.
+resolveCapP :: TermCapitalization -> NP -> Sentence
+
+-- | Helper to get the capital case of an abbreviation based on
+--   <a>TermCapitalization</a>. For sentence and title cases.
+capHelper :: TermCapitalization -> String -> Maybe String
 
 module Language.Drasil.Printing.Import.Symbol
 

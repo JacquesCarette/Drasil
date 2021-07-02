@@ -2,7 +2,7 @@ module Language.Drasil.Printing.Import.Helpers where
 
 import Language.Drasil (Stage(..), codeSymb, eqSymb, Idea(..),
   NamedIdea(..), NounPhrase(..), Sentence(S), Symbol, UID,
-  TermCapitalization(..), titleizeNP, titleizeNP', atStartNP, atStartNP')
+  TermCapitalization(..), titleizeNP, titleizeNP', atStartNP, atStartNP', NP)
 import Database.Drasil (ChunkDB, symbResolve, termResolve)
 
 import qualified Language.Drasil.Printing.AST as P
@@ -55,26 +55,31 @@ lookupC Implementation sm c = codeSymb $ symbResolve sm c
 
 -- | Look up a term given a chunk database and a 'UID' associated with the term. Also specifies capitalization
 lookupT :: ChunkDB -> UID -> TermCapitalization -> Sentence
-lookupT sm c NoCap = phraseNP $ termResolve sm c ^. term
-lookupT sm c CapF = atStartNP $ termResolve sm c ^. term
-lookupT sm c CapW = titleizeNP $ termResolve sm c ^. term
+lookupT sm c tCap = resolveCapT tCap $ termResolve sm c ^. term
 
 -- | Look up the acronym/abbreviation of a term. Otherwise returns the singular form of a term. Takes a chunk database and a 'UID' associated with the term.
 lookupS :: ChunkDB -> UID -> TermCapitalization -> Sentence
-lookupS sm c NoCap = maybe (phraseNP $ l ^. term) S $ getA l
+lookupS sm c sCap = maybe (resolveCapT sCap $ l ^. term) S $ getA l >>= (capHelper sCap)
   where l = termResolve sm c
-lookupS sm c CapF = maybe (atStartNP $ l ^. term) S $ getA l >>= capHelper
-  where l = termResolve sm c
-lookupS sm c CapW = maybe (titleizeNP $ l ^. term) S $ getA l >>= capHelper
-  where l = termResolve sm c
-
--- | Helper to get the capital case of an abbreviation. For sentence and title cases.
-capHelper :: String -> Maybe String
-capHelper [] = Nothing
-capHelper (x:xs) = Just ((toUpper x): xs)
 
 -- | Look up the plural form of a term given a chunk database and a 'UID' associated with the term.
 lookupP :: ChunkDB -> UID -> TermCapitalization -> Sentence
-lookupP sm c NoCap = pluralNP $ termResolve sm c ^. term
-lookupP sm c CapF = atStartNP' $ termResolve sm c ^. term
-lookupP sm c CapW = titleizeNP' $ termResolve sm c ^. term
+lookupP sm c pCap = resolveCapP pCap $ termResolve sm c ^. term
+
+-- | Helper to get the proper function for capitalizing a 'NP' based on its 'TermCapitalization'. Singular case.
+resolveCapT :: TermCapitalization -> (NP -> Sentence)
+resolveCapT NoCap = phraseNP
+resolveCapT CapF = atStartNP
+resolveCapT CapW = titleizeNP
+
+-- | Helper to get the right function for capitalizing a 'NP' based on its 'TermCapitalization'. Plural case.
+resolveCapP :: TermCapitalization -> (NP -> Sentence)
+resolveCapP NoCap = pluralNP
+resolveCapP CapF = atStartNP'
+resolveCapP CapW = titleizeNP'
+
+-- | Helper to get the capital case of an abbreviation based on 'TermCapitalization'. For sentence and title cases.
+capHelper :: TermCapitalization -> String -> Maybe String
+capHelper NoCap s = return s
+capHelper _ [] = Nothing
+capHelper _ (x:xs) = Just ((toUpper x): xs)

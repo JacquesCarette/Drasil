@@ -1,3 +1,4 @@
+# Creates Haddock documentation for all Haskell files in Drasil.
 if [ -z "$DOCS_FOLDER" ]; then
   echo "Missing DOCS_FOLDER environment variable, defaulting to 'docs/'"
   DOCS_FOLDER="docs/"

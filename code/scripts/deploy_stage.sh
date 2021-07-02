@@ -1,3 +1,5 @@
+# Get all files ready for deploy. Checks if website files exist,
+# and then copies each file to a deploy folder.
 if [ -z "$DEPLOY_FOLDER" ]; then
   echo "Need DEPLOY_FOLDER to know where to stage deploy."
   exit 1

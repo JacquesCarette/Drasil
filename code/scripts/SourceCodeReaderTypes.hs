@@ -1,4 +1,6 @@
-module SourceCodeReaderTypes (extractEntryData, EntryData(..), DataDeclRecord(..), DataDeclConstruct(..), NewtypeDecl(..), TypeDecl(..)) where
+-- | Source code reader for type dependency graphs of all Drasil types.
+module SourceCodeReaderTypes (extractEntryData, EntryData(..), DataDeclRecord(..),
+ DataDeclConstruct(..), NewtypeDecl(..), TypeDecl(..)) where
 
 import Data.List
 import System.IO

@@ -1,3 +1,4 @@
+# For deploying on a local machine.
 # Only use from `code/` folder after running through all CI steps, `sh code/mock_deploy.sh`
 
 LABEL_FILE=/tmp/ci_build_failures \

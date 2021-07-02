@@ -8,36 +8,36 @@ import Language.Drasil.Expr.Extract (deNames)
 
 -- | Generic traverse of all positions that could lead to /symbolic/ 'UID's from 'Sentence's.
 getUIDs :: Sentence -> [UID]
-getUIDs (Ch SymbolStyle a) = [a]
-getUIDs (Ch ShortStyle _)  = []
-getUIDs (Ch TermStyle _)   = []
-getUIDs (Ch PluralTerm _)  = []
-getUIDs (Sy _)             = []
-getUIDs (S _)              = []
-getUIDs (P _)              = []
-getUIDs (Ref {})           = []
-getUIDs Percent            = []
-getUIDs ((:+:) a b)        = getUIDs a ++ getUIDs b
-getUIDs (Quote a)          = getUIDs a
-getUIDs (E a)              = deNames a
-getUIDs EmptyS             = []
+getUIDs (Ch ShortStyle _ _) = []
+getUIDs (Ch TermStyle _ _)  = []
+getUIDs (Ch PluralTerm _ _) = []
+getUIDs (SyCh a)            = [a]
+getUIDs (Sy _)              = []
+getUIDs (S _)               = []
+getUIDs (P _)               = []
+getUIDs (Ref {})            = []
+getUIDs Percent             = []
+getUIDs ((:+:) a b)         = getUIDs a ++ getUIDs b
+getUIDs (Quote a)           = getUIDs a
+getUIDs (E a)               = deNames a
+getUIDs EmptyS              = []
 
 -- | Generic traverse of all positions that could lead to /symbolic/ and /abbreviated/ 'UID's from 'Sentence's
 -- but doesn't go into expressions.
 getUIDshort :: Sentence -> [UID]
-getUIDshort (Ch ShortStyle a)  = [a]
-getUIDshort (Ch SymbolStyle _) = []
-getUIDshort (Ch TermStyle _)   = []
-getUIDshort (Ch PluralTerm _)  = []
-getUIDshort (Sy _)             = []
-getUIDshort (S _)              = []
-getUIDshort Percent            = []
-getUIDshort (P _)              = []
-getUIDshort (Ref {})           = []
-getUIDshort ((:+:) a b)        = getUIDshort a ++ getUIDshort b
-getUIDshort (Quote a)          = getUIDshort a
-getUIDshort (E _)              = []
-getUIDshort EmptyS             = []
+getUIDshort (Ch ShortStyle _ a) = [a]
+getUIDshort (Ch TermStyle _ _)  = []
+getUIDshort (Ch PluralTerm _ _) = []
+getUIDshort (SyCh _)            = []
+getUIDshort (Sy _)              = []
+getUIDshort (S _)               = []
+getUIDshort Percent             = []
+getUIDshort (P _)               = []
+getUIDshort (Ref {})            = []
+getUIDshort ((:+:) a b)         = getUIDshort a ++ getUIDshort b
+getUIDshort (Quote a)           = getUIDshort a
+getUIDshort (E _)               = []
+getUIDshort EmptyS              = []
 
 -----------------------------------------------------------------------------
 -- And now implement the exported traversals all in terms of the above
@@ -51,7 +51,8 @@ shortdep = nub . getUIDshort
 
 -- | Generic traverse of all positions that could lead to /reference/ 'UID's from 'Sentence's.
 lnames :: Sentence -> [UID]
-lnames (Ch _ _)       = []
+lnames (Ch _ _ _)     = []
+lnames (SyCh _)       = []
 lnames (Sy _)         = []
 lnames (S _)          = []
 lnames Percent        = []

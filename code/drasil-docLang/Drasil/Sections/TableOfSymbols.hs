@@ -20,7 +20,7 @@ table st ls f
     |noDuplicate = llcc symbTableRef $
       Table [atStart symbol_, atStart description, atStart' unit_]
       (mkTable [P . (`symbol` st), f, toSentence] filteredChunks)
-      (titleize tOfSymb) True
+      (titleize' tOfSymb) True
     | otherwise = error errorMessage 
     where 
         filteredChunks = filter (`hasStageSymbol`st) ls

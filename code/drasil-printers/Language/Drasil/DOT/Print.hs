@@ -35,7 +35,7 @@ Some of these functions/types should exist:-}
 genDot :: SystemInformation -> IO ()
 genDot si = do
     let gi = mkGraphInfo si
-    output "code/TraceyGraph" gi
+    output "TraceyGraph" gi
     return mempty
 
 mkGraphEdges :: [TraceViewCat] -> SystemInformation -> [(UID, [UID])]
@@ -174,8 +174,8 @@ output outputFilePath gi = do
 
 mkOutputAvsA :: FilePath -> GraphInfo -> IO ()
 mkOutputAvsA outputFilePath gi = do
-    handle <- openFile ((map toLower $ show $ graphType gi) ++ ".dot") WriteMode
-    hPutStrLn handle $ "digraph " ++ (map toLower $ show $ graphType gi) ++ " {"
+    handle <- openFile "avsa.dot" WriteMode
+    hPutStrLn handle "digraph avsa {"
     mapM_ (outputSubAvsA gi handle) $ sections gi
     hPutStrLn handle "}"
     hClose handle
@@ -193,8 +193,8 @@ outputSubAvsA gi handle section = do
 
 mkOutputAvsAll :: FilePath -> GraphInfo -> IO ()
 mkOutputAvsAll outputFilePath gi = do
-    handle <- openFile ((map toLower $ show $ graphType gi) ++ ".dot") WriteMode
-    hPutStrLn handle $ "digraph " ++ (map toLower $ show $ graphType gi) ++ " {"
+    handle <- openFile "avsall.dot" WriteMode
+    hPutStrLn handle $ "digraph avsall {"
     mapM_ (outputSubAvsA gi handle) $ sections gi
     hPutStrLn handle "}"
     hClose handle
@@ -210,8 +210,8 @@ outputSubAvsAll gi handle section = do
 
 mkOutputRefvsRef :: FilePath -> GraphInfo -> IO ()
 mkOutputRefvsRef outputFilePath gi = do
-    handle <- openFile ((map toLower $ show $ graphType gi) ++ ".dot") WriteMode
-    hPutStrLn handle $ "digraph " ++ (map toLower $ show $ graphType gi) ++ " {"
+    handle <- openFile "refvsref.dot" WriteMode
+    hPutStrLn handle $ "digraph refvsref {"
     mapM_ (outputSubAvsA gi handle) $ sections gi
     hPutStrLn handle "}"
     hClose handle
@@ -227,8 +227,8 @@ outputSubRefvsRef gi handle section = do
 
 mkOutputAllvsR :: FilePath -> GraphInfo -> IO ()
 mkOutputAllvsR outputFilePath gi = do
-    handle <- openFile ((map toLower $ show $ graphType gi) ++ ".dot") WriteMode
-    hPutStrLn handle $ "digraph " ++ (map toLower $ show $ graphType gi) ++ " {"
+    handle <- openFile "allvsr.dot" WriteMode
+    hPutStrLn handle $ "digraph allvsr {"
     mapM_ (outputSubAvsA gi handle) $ sections gi
     hPutStrLn handle "}"
     hClose handle

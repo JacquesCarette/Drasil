@@ -1818,9 +1818,14 @@ getCitations :: HasCitation c => Lens' c [Citation]
 --   </ul>
 data Sentence
 
--- | Among other things, Ch allows Sentences to hold plural forms of
---   <tt>NounPhrase</tt>s and <tt>NamedIdea</tt>s.
-[Ch] :: SentenceStyle -> UID -> Sentence
+-- | Ch looks up the term for a given <a>UID</a> and displays the term with
+--   a given <a>SentenceStyle</a> and <tt>CapitalizationRule</tt>. This
+--   allows Sentences to hold plural forms of <tt>NounPhrase</tt>s and
+--   <tt>NamedIdea</tt>s.
+[Ch] :: SentenceStyle -> TermCapitalization -> UID -> Sentence
+
+-- | A branch of Ch dedicated to SymbolStyle only.
+[SyCh] :: UID -> Sentence
 
 -- | Converts a unit symbol into a usable Sentence form.
 [Sy] :: USymb -> Sentence
@@ -1853,14 +1858,23 @@ data Sentence
 [EmptyS] :: Sentence
 infixr 5 :+:
 
--- | Used in <a>Ch</a> constructor to determine the state of a
---   <a>Sentence</a> (can record whether something is in plural form, a
---   symbol, a singular term, or in short form).
+-- | Used in <a>Ch</a> constructor to determine the state of a term (can
+--   record whether something is in plural form, a singular term, or in
+--   short form).
 data SentenceStyle
 PluralTerm :: SentenceStyle
-SymbolStyle :: SentenceStyle
 TermStyle :: SentenceStyle
 ShortStyle :: SentenceStyle
+
+-- | Used in <a>Ch</a> constructor to determine the capitalization of a
+--   term. CapF is for capitalizing the first word from the <a>UID</a> of
+--   the given term. CapW is for capitalizing all words from the <a>UID</a>
+--   of the given term. Mirrors <tt>CapFirst</tt> and <tt>CapWords</tt>
+--   from <tt>CapitalizationRule</tt>.
+data TermCapitalization
+CapF :: TermCapitalization
+CapW :: TermCapitalization
+NoCap :: TermCapitalization
 
 -- | Helper for concatenating two <a>Sentence</a>s with a space between
 --   them.
@@ -2003,7 +2017,7 @@ cnUM :: String -> NP
 nounPhrase :: String -> PluralString -> NP
 
 -- | Similar to <a>nounPhrase</a>, but takes a specified capitalization
---   rule.
+--   rule for the sentence case.
 nounPhrase' :: String -> PluralString -> CapitalizationRule -> NP
 
 -- | Capitalization rules.

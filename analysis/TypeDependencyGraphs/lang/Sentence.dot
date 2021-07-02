@@ -1,5 +1,6 @@
 digraph sentence{
 Sentence -> SentenceStyle;
+Sentence -> TermCapitalization;
 Sentence -> UID;
 Sentence -> Sentence;
 Sentence -> USymb;

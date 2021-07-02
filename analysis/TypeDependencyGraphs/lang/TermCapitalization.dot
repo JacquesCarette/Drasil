@@ -1,0 +1,3 @@
+digraph termcapitalization{
+TermCapitalization	[shape=oval, color=darkviolet, label=TermCapitalization];
+}

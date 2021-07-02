@@ -3308,8 +3308,12 @@ digraph alltypes {
 		subgraph sentencestyle{
 		SentenceStyle	[shape=oval, color=darkviolet, label=SentenceStyle];
 		}
+		subgraph termcapitalization{
+		TermCapitalization	[shape=oval, color=darkviolet, label=TermCapitalization];
+		}
 		subgraph sentence{
 		Sentence -> SentenceStyle;
+		Sentence -> TermCapitalization;
 		Sentence -> UID;
 		Sentence -> Sentence;
 		Sentence -> USymb;

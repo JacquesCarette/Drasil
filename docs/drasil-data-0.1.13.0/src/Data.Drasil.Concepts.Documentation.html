@@ -241,18 +241,14 @@
 </span><span id="line-46"></span><span>
 </span><span id="line-47"></span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#softReqSpec"><span class="hs-identifier hs-type">softReqSpec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NP</span></span><span>
 </span><span id="line-48"></span><span id="softReqSpec"><span class="annot"><span class="annottext">softReqSpec :: NP
-</span><a href="Data.Drasil.Concepts.Documentation.html#softReqSpec"><span class="hs-identifier hs-var hs-var">softReqSpec</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
-</span><span class="hs-identifier hs-var">compoundPhraseP1</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk
-</span><a href="Data.Drasil.Concepts.Documentation.html#softwareReq"><span class="hs-identifier hs-var">softwareReq</span></a></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Getting NP NamedChunk NP -&gt; NP
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting NP NamedChunk NP
-forall c. NamedIdea c =&gt; Lens' c NP
-</span><span class="hs-identifier hs-var">term</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk
-</span><a href="Data.Drasil.Concepts.Documentation.html#specification"><span class="hs-identifier hs-var">specification</span></a></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Getting NP NamedChunk NP -&gt; NP
-forall s a. s -&gt; Getting a s a -&gt; a
-</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting NP NamedChunk NP
-forall c. NamedIdea c =&gt; Lens' c NP
-</span><span class="hs-identifier hs-var">term</span></span><span class="hs-special">)</span><span>
+</span><a href="Data.Drasil.Concepts.Documentation.html#softReqSpec"><span class="hs-identifier hs-var hs-var">softReqSpec</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(NP -&gt; NP -&gt; NP) -&gt; NamedChunk -&gt; NamedChunk -&gt; NP
+forall c d t.
+(NamedIdea c, NamedIdea d) =&gt;
+(NP -&gt; NP -&gt; t) -&gt; c -&gt; d -&gt; t
+</span><span class="hs-identifier hs-var">fterms</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
+</span><span class="hs-identifier hs-var">compoundPhraseP1</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Data.Drasil.Concepts.Documentation.html#softwareReq"><span class="hs-identifier hs-var">softwareReq</span></a></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Data.Drasil.Concepts.Documentation.html#specification"><span class="hs-identifier hs-var">specification</span></a></span><span>
 </span><span id="line-49"></span><span>
 </span><span id="line-50"></span><span class="hs-comment">------------------------------------------------------------------------------------------------------------------------------</span><span>
 </span><span id="line-51"></span><span class="hs-comment">-- | CI       |                  |    uid      |         term                                   | abbreviation | ConceptDomain</span><span>
@@ -264,27 +260,19 @@ forall c. NamedIdea c =&gt; Lens' c NP
 </span><span class="hs-identifier hs-var">softEng</span></span><span class="hs-special">]</span><span>
 </span><span id="line-54"></span><span id="desSpec"><span class="annot"><span class="annottext">desSpec :: CI
 </span><a href="Data.Drasil.Concepts.Documentation.html#desSpec"><span class="hs-identifier hs-var hs-var">desSpec</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; [IdeaDict] -&gt; CI
-</span><span class="hs-identifier hs-var">commonIdeaWithDict</span></span><span> </span><span class="annot"><span class="hs-string">&quot;desSpec&quot;</span></span><span>     </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(NP -&gt; NP -&gt; NP) -&gt; NamedChunk -&gt; NamedChunk -&gt; NP
-forall c d t.
-(NamedIdea c, NamedIdea d) =&gt;
-(NP -&gt; NP -&gt; t) -&gt; c -&gt; d -&gt; t
-</span><span class="hs-identifier hs-var">fterms</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
-forall a b. (NounPhrase a, NounPhrase b) =&gt; a -&gt; b -&gt; NP
-</span><span class="hs-identifier hs-var">compoundPhrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">commonIdeaWithDict</span></span><span> </span><span class="annot"><span class="hs-string">&quot;desSpec&quot;</span></span><span>     </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; NamedChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-identifier hs-var">combineNINI</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Data.Drasil.Concepts.Documentation.html#design"><span class="hs-identifier hs-var">design</span></a></span><span> </span><span class="annot"><span class="annottext">NamedChunk
-</span><a href="Data.Drasil.Concepts.Documentation.html#specification"><span class="hs-identifier hs-var">specification</span></a></span><span class="hs-special">)</span><span>          </span><span class="annot"><span class="hs-string">&quot;DS&quot;</span></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">IdeaDict
+</span><a href="Data.Drasil.Concepts.Documentation.html#specification"><span class="hs-identifier hs-var">specification</span></a></span><span class="hs-special">)</span><span>                    </span><span class="annot"><span class="hs-string">&quot;DS&quot;</span></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">softEng</span></span><span class="hs-special">]</span><span>
 </span><span id="line-55"></span><span id="goalStmt"><span class="annot"><span class="annottext">goalStmt :: CI
 </span><a href="Data.Drasil.Concepts.Documentation.html#goalStmt"><span class="hs-identifier hs-var hs-var">goalStmt</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; [IdeaDict] -&gt; CI
-</span><span class="hs-identifier hs-var">commonIdeaWithDict</span></span><span> </span><span class="annot"><span class="hs-string">&quot;goalStmt&quot;</span></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(NP -&gt; NP -&gt; NP) -&gt; NamedChunk -&gt; NamedChunk -&gt; NP
-forall c d t.
-(NamedIdea c, NamedIdea d) =&gt;
-(NP -&gt; NP -&gt; t) -&gt; c -&gt; d -&gt; t
-</span><span class="hs-identifier hs-var">fterms</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
-forall a b. (NounPhrase a, NounPhrase b) =&gt; a -&gt; b -&gt; NP
-</span><span class="hs-identifier hs-var">compoundPhrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">commonIdeaWithDict</span></span><span> </span><span class="annot"><span class="hs-string">&quot;goalStmt&quot;</span></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; NamedChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-identifier hs-var">combineNINI</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Data.Drasil.Concepts.Documentation.html#goal"><span class="hs-identifier hs-var">goal</span></a></span><span> </span><span class="annot"><span class="annottext">NamedChunk
-</span><a href="Data.Drasil.Concepts.Documentation.html#statement"><span class="hs-identifier hs-var">statement</span></a></span><span class="hs-special">)</span><span>                </span><span class="annot"><span class="hs-string">&quot;GS&quot;</span></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">IdeaDict
+</span><a href="Data.Drasil.Concepts.Documentation.html#statement"><span class="hs-identifier hs-var">statement</span></a></span><span class="hs-special">)</span><span>                          </span><span class="annot"><span class="hs-string">&quot;GS&quot;</span></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">softEng</span></span><span class="hs-special">]</span><span>
 </span><span id="line-56"></span><span id="dataConst"><span class="annot"><span class="annottext">dataConst :: CI
 </span><a href="Data.Drasil.Concepts.Documentation.html#dataConst"><span class="hs-identifier hs-var hs-var">dataConst</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; [IdeaDict] -&gt; CI
@@ -303,15 +291,11 @@ forall a b. (NounPhrase a, NounPhrase b) =&gt; a -&gt; b -&gt; NP
 </span><span class="hs-identifier hs-var">softEng</span></span><span class="hs-special">]</span><span>
 </span><span id="line-59"></span><span id="physSyst"><span class="annot"><span class="annottext">physSyst :: CI
 </span><a href="Data.Drasil.Concepts.Documentation.html#physSyst"><span class="hs-identifier hs-var hs-var">physSyst</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; [IdeaDict] -&gt; CI
-</span><span class="hs-identifier hs-var">commonIdeaWithDict</span></span><span> </span><span class="annot"><span class="hs-string">&quot;physSyst&quot;</span></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(NP -&gt; NP -&gt; NP) -&gt; NamedChunk -&gt; NamedChunk -&gt; NP
-forall c d t.
-(NamedIdea c, NamedIdea d) =&gt;
-(NP -&gt; NP -&gt; t) -&gt; c -&gt; d -&gt; t
-</span><span class="hs-identifier hs-var">fterms</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
-forall a b. (NounPhrase a, NounPhrase b) =&gt; a -&gt; b -&gt; NP
-</span><span class="hs-identifier hs-var">compoundPhrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">commonIdeaWithDict</span></span><span> </span><span class="annot"><span class="hs-string">&quot;physSyst&quot;</span></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; NamedChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-identifier hs-var">combineNINI</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Data.Drasil.Concepts.Documentation.html#physicalSystem"><span class="hs-identifier hs-var">physicalSystem</span></a></span><span> </span><span class="annot"><span class="annottext">NamedChunk
-</span><a href="Data.Drasil.Concepts.Documentation.html#description"><span class="hs-identifier hs-var">description</span></a></span><span class="hs-special">)</span><span>    </span><span class="annot"><span class="hs-string">&quot;PS&quot;</span></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">IdeaDict
+</span><a href="Data.Drasil.Concepts.Documentation.html#description"><span class="hs-identifier hs-var">description</span></a></span><span class="hs-special">)</span><span>              </span><span class="annot"><span class="hs-string">&quot;PS&quot;</span></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">IdeaDict
 </span><span class="hs-identifier hs-var">softEng</span></span><span class="hs-special">]</span><span>
 </span><span id="line-60"></span><span id="requirement"><span class="annot"><span class="annottext">requirement :: CI
 </span><a href="Data.Drasil.Concepts.Documentation.html#requirement"><span class="hs-identifier hs-var hs-var">requirement</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; [IdeaDict] -&gt; CI
@@ -906,7 +890,7 @@ forall a b. (NounPhrase a, NounPhrase b) =&gt; a -&gt; b -&gt; NP
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;charOfIR&quot;</span></span><span>           </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Data.Drasil.Concepts.Documentation.html#characteristic"><span class="hs-identifier hs-var">characteristic</span></a></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; NamedChunk -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
-</span><span class="hs-operator hs-var">`of_TPS`</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-operator hs-var">`of_PS`</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Data.Drasil.Concepts.Documentation.html#intReader"><span class="hs-identifier hs-var">intReader</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-224"></span><span id="orgOfDoc"><span class="annot"><span class="annottext">orgOfDoc :: NamedChunk
 </span><a href="Data.Drasil.Concepts.Documentation.html#orgOfDoc"><span class="hs-identifier hs-var hs-var">orgOfDoc</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; NamedChunk
@@ -920,7 +904,7 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;propOfCorSol&quot;</span></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Data.Drasil.Concepts.Documentation.html#property"><span class="hs-identifier hs-var">property</span></a></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; NamedChunk -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
-</span><span class="hs-operator hs-var">`ofATPS`</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-operator hs-var">`ofAPS`</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Data.Drasil.Concepts.Documentation.html#corSol"><span class="hs-identifier hs-var">corSol</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-226"></span><span id="prpsOfDoc"><span class="annot"><span class="annottext">prpsOfDoc :: NamedChunk
 </span><a href="Data.Drasil.Concepts.Documentation.html#prpsOfDoc"><span class="hs-identifier hs-var hs-var">prpsOfDoc</span></a></span></span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; NamedChunk
@@ -942,7 +926,7 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;scpOfReq&quot;</span></span><span>           </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Data.Drasil.Concepts.Documentation.html#scope"><span class="hs-identifier hs-var">scope</span></a></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; CI -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
-</span><span class="hs-operator hs-var">`of_TSP`</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-operator hs-var">`of_`</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Data.Drasil.Concepts.Documentation.html#requirement"><span class="hs-identifier hs-var">requirement</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-230"></span><span id="tAuxConsts"><span class="annot"><span class="annottext">tAuxConsts :: NamedChunk
 </span><a href="Data.Drasil.Concepts.Documentation.html#tAuxConsts"><span class="hs-identifier hs-var hs-var">tAuxConsts</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; NamedChunk
@@ -953,21 +937,21 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;termAndDef&quot;</span></span><span>         </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Data.Drasil.Concepts.Documentation.html#terminology"><span class="hs-identifier hs-var">terminology</span></a></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; NamedChunk -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
-</span><span class="hs-operator hs-var">`and_TSP`</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-operator hs-var">`and_`</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Data.Drasil.Concepts.Documentation.html#definition"><span class="hs-identifier hs-var">definition</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-232"></span><span id="tOfSymb"><span class="annot"><span class="annottext">tOfSymb :: NamedChunk
 </span><a href="Data.Drasil.Concepts.Documentation.html#tOfSymb"><span class="hs-identifier hs-var hs-var">tOfSymb</span></a></span></span><span>             </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; NamedChunk
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;tOfSymb&quot;</span></span><span>            </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Data.Drasil.Concepts.Documentation.html#table_"><span class="hs-identifier hs-var">table_</span></a></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; NamedChunk -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
-</span><span class="hs-operator hs-var">`of_TSP`</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-operator hs-var">`of_`</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Data.Drasil.Concepts.Documentation.html#symbol_"><span class="hs-identifier hs-var">symbol_</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-233"></span><span id="tOfUnit"><span class="annot"><span class="annottext">tOfUnit :: NamedChunk
 </span><a href="Data.Drasil.Concepts.Documentation.html#tOfUnit"><span class="hs-identifier hs-var hs-var">tOfUnit</span></a></span></span><span>             </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; NamedChunk
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;tOfUnit&quot;</span></span><span>            </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Data.Drasil.Concepts.Documentation.html#table_"><span class="hs-identifier hs-var">table_</span></a></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; ConceptChunk -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
-</span><span class="hs-operator hs-var">`of_TSP`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-operator hs-var">`of_`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Math.html#unit_"><span class="hs-identifier hs-var">unit_</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-234"></span><span id="inDatumConstraint"><span class="annot"><span class="annottext">inDatumConstraint :: NamedChunk
 </span><a href="Data.Drasil.Concepts.Documentation.html#inDatumConstraint"><span class="hs-identifier hs-var hs-var">inDatumConstraint</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; NamedChunk
@@ -1001,15 +985,15 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span id="line-238"></span><span>
 </span><span id="line-239"></span><span class="annot"><a href="Data.Drasil.Concepts.Documentation.html#scpOfTheProj"><span class="hs-identifier hs-type">scpOfTheProj</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">NamedChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedChunk</span></span><span>
 </span><span id="line-240"></span><span id="scpOfTheProj"><span class="annot"><span class="annottext">scpOfTheProj :: (NamedChunk -&gt; Sentence) -&gt; NamedChunk
-</span><a href="Data.Drasil.Concepts.Documentation.html#scpOfTheProj"><span class="hs-identifier hs-var hs-var">scpOfTheProj</span></a></span></span><span> </span><span id="local-6989586621679063830"><span class="annot"><span class="annottext">oper :: NamedChunk -&gt; Sentence
-</span><a href="#local-6989586621679063830"><span class="hs-identifier hs-var">oper</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; NamedChunk
+</span><a href="Data.Drasil.Concepts.Documentation.html#scpOfTheProj"><span class="hs-identifier hs-var hs-var">scpOfTheProj</span></a></span></span><span> </span><span id="local-6989586621679063810"><span class="annot"><span class="annottext">oper :: NamedChunk -&gt; Sentence
+</span><a href="#local-6989586621679063810"><span class="hs-identifier hs-var">oper</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; NamedChunk
 </span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;scpOfTheProj&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Data.Drasil.Concepts.Documentation.html#scope"><span class="hs-identifier hs-var">scope</span></a></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; NP -&gt; NP
 forall c d. (NamedIdea c, NounPhrase d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`of_NINP`</span></span><span> </span><span class="annot"><span class="annottext">(NamedChunk -&gt; Sentence) -&gt; NamedChunk -&gt; NP
 forall t. (t -&gt; Sentence) -&gt; t -&gt; NP
 </span><span class="hs-identifier hs-var">theGen</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
-</span><a href="#local-6989586621679063830"><span class="hs-identifier hs-var">oper</span></a></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="#local-6989586621679063810"><span class="hs-identifier hs-var">oper</span></a></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Data.Drasil.Concepts.Documentation.html#project"><span class="hs-identifier hs-var">project</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- reasonable hack?</span><span>
 </span><span id="line-241"></span><span>
 </span><span id="line-242"></span><span class="hs-comment">-- compounds</span><span>

@@ -457,61 +457,47 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-identifier hs-var">mathematics</span></span><span class="hs-special">]</span><span>
 </span><span id="line-106"></span><span>
 </span><span id="line-107"></span><span class="hs-comment">--FIXME: COMBINATION HACK (all below)</span><span>
-</span><span id="line-108"></span><span id="euclidN"><span class="annot"><span class="annottext">euclidN :: ConceptChunk
+</span><span id="line-108"></span><span class="hs-comment">-- do we really need fterms here? Would combineNINI work?</span><span>
+</span><span id="line-109"></span><span id="euclidN"><span class="annot"><span class="annottext">euclidN :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Math.html#euclidN"><span class="hs-identifier hs-var hs-var">euclidN</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
-</span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;euclidNorm&quot;</span></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(NP -&gt; NP -&gt; NP) -&gt; ConceptChunk -&gt; ConceptChunk -&gt; NP
-forall c d t.
-(NamedIdea c, NamedIdea d) =&gt;
-(NP -&gt; NP -&gt; t) -&gt; c -&gt; d -&gt; t
-</span><span class="hs-identifier hs-var">fterms</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
-</span><span class="hs-identifier hs-var">compoundPhrase'</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;euclidNorm&quot;</span></span><span>    </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-identifier hs-var">combineNINI</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Math.html#euclidSpace"><span class="hs-identifier hs-var">euclidSpace</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Math.html#norm"><span class="hs-identifier hs-var">norm</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;euclidean norm&quot;</span></span><span>
-</span><span id="line-109"></span><span id="normalV"><span class="annot"><span class="annottext">normalV :: ConceptChunk
+</span><span id="line-110"></span><span id="normalV"><span class="annot"><span class="annottext">normalV :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Math.html#normalV"><span class="hs-identifier hs-var hs-var">normalV</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
-</span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;normal vector&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(NP -&gt; NP -&gt; NP) -&gt; ConceptChunk -&gt; ConceptChunk -&gt; NP
-forall c d t.
-(NamedIdea c, NamedIdea d) =&gt;
-(NP -&gt; NP -&gt; t) -&gt; c -&gt; d -&gt; t
-</span><span class="hs-identifier hs-var">fterms</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
-</span><span class="hs-identifier hs-var">compoundPhrase'</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;normal vector&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-identifier hs-var">combineNINI</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Math.html#normal"><span class="hs-identifier hs-var">normal</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Math.html#vector"><span class="hs-identifier hs-var">vector</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;unit outward normal vector for a surface&quot;</span></span><span>
-</span><span id="line-110"></span><span id="perpV"><span class="annot"><span class="annottext">perpV :: ConceptChunk
+</span><span id="line-111"></span><span id="perpV"><span class="annot"><span class="annottext">perpV :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Math.html#perpV"><span class="hs-identifier hs-var hs-var">perpV</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
-</span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;perp_vect&quot;</span></span><span>     </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(NP -&gt; NP -&gt; NP) -&gt; ConceptChunk -&gt; ConceptChunk -&gt; NP
-forall c d t.
-(NamedIdea c, NamedIdea d) =&gt;
-(NP -&gt; NP -&gt; t) -&gt; c -&gt; d -&gt; t
-</span><span class="hs-identifier hs-var">fterms</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
-</span><span class="hs-identifier hs-var">compoundPhrase'</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;perp_vect&quot;</span></span><span>     </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-identifier hs-var">combineNINI</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Math.html#perp"><span class="hs-identifier hs-var">perp</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Math.html#vector"><span class="hs-identifier hs-var">vector</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;vector perpendicular or 90 degrees to another vector&quot;</span></span><span>
-</span><span id="line-111"></span><span id="rOfChng"><span class="annot"><span class="annottext">rOfChng :: ConceptChunk
+</span><span id="line-112"></span><span id="rOfChng"><span class="annot"><span class="annottext">rOfChng :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Math.html#rOfChng"><span class="hs-identifier hs-var hs-var">rOfChng</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
 </span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;rOfChng&quot;</span></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Math.html#rate"><span class="hs-identifier hs-var">rate</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`of_`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Math.html#change"><span class="hs-identifier hs-var">change</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;ratio between a change in one variable relative to a corresponding change in another&quot;</span></span><span>
-</span><span id="line-112"></span><span id="surArea"><span class="annot"><span class="annottext">surArea :: ConceptChunk
+</span><span id="line-113"></span><span id="surArea"><span class="annot"><span class="annottext">surArea :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Math.html#surArea"><span class="hs-identifier hs-var hs-var">surArea</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
-</span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;surArea&quot;</span></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(NP -&gt; NP -&gt; NP) -&gt; ConceptChunk -&gt; ConceptChunk -&gt; NP
-forall c d t.
-(NamedIdea c, NamedIdea d) =&gt;
-(NP -&gt; NP -&gt; t) -&gt; c -&gt; d -&gt; t
-</span><span class="hs-identifier hs-var">fterms</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
-</span><span class="hs-identifier hs-var">compoundPhrase'</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;surArea&quot;</span></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-identifier hs-var">combineNINI</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Math.html#surface"><span class="hs-identifier hs-var">surface</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Math.html#area"><span class="hs-identifier hs-var">area</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;a measure of the total area that the surface of the object occupies&quot;</span></span><span>
-</span><span id="line-113"></span><span id="unitV"><span class="annot"><span class="annottext">unitV :: ConceptChunk
+</span><span id="line-114"></span><span id="unitV"><span class="annot"><span class="annottext">unitV :: ConceptChunk
 </span><a href="Data.Drasil.Concepts.Math.html#unitV"><span class="hs-identifier hs-var hs-var">unitV</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
-</span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;unit_vect&quot;</span></span><span>     </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(NP -&gt; NP -&gt; NP) -&gt; ConceptChunk -&gt; ConceptChunk -&gt; NP
-forall c d t.
-(NamedIdea c, NamedIdea d) =&gt;
-(NP -&gt; NP -&gt; t) -&gt; c -&gt; d -&gt; t
-</span><span class="hs-identifier hs-var">fterms</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
-</span><span class="hs-identifier hs-var">compoundPhrase'</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;unit_vect&quot;</span></span><span>     </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-identifier hs-var">combineNINI</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Math.html#unit_"><span class="hs-identifier hs-var">unit_</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><a href="Data.Drasil.Concepts.Math.html#vector"><span class="hs-identifier hs-var">vector</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;a vector that has a magnitude of one&quot;</span></span><span>
-</span><span id="line-114"></span></pre></body></html>
+</span><span id="line-115"></span></pre></body></html>

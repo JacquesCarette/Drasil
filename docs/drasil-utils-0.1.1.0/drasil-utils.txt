@@ -526,10 +526,6 @@ module Utils.Drasil.Concepts
 --   (plural t2)</tt>.
 and_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
--- | Same as <a>and_</a> combinator, except both singular and plural case
---   are <tt>(phrase t1) "and" (plural t2)</tt>.
-and_TSP :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-
 -- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the word
 --   "and" between their terms. Plural case is <tt>(plural t1) "and"
 --   (phrase t2)</tt>.
@@ -560,7 +556,7 @@ andThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Case with "T1s with T2", as opposed to "T1 with T2", i.e. singular
 --   case is <tt>(plural t1) "with" (phrase t2)</tt> while the plural case
---   pluralizes both.
+--   pluralizes the first.
 with :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the word
@@ -575,17 +571,9 @@ of_NINP :: (NamedIdea c, NounPhrase d) => c -> d -> NP
 --   plural case is <tt>(plural t1) "of" (phrase t2)</tt>.
 of_PSNPNI :: (NounPhrase c, NamedIdea d) => c -> d -> NP
 
--- | Similar to <a>of_</a>, but singular case is <tt>(phrase t1) "of"
---   (plural t2)</tt>. Plural case is the same.
-of_TSP :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-
 -- | Same as <a>of_</a>, except plural case is <tt>(plural t1) "of" (phrase
 --   t2)</tt>.
 of_PS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-
--- | Same as <a>of_</a>, except singular and plural cases are both
---   <tt>(plural t1) "of" (phrase t2)</tt>.
-of_TPS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Same as <a>of_PS</a>, except combining <a>Sentence</a> piece is "of
 --   a".
@@ -593,7 +581,7 @@ ofA :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Same as <a>ofA</a>, except phrase case is <tt>(plural t1) "of a"
 --   (phrase t2)</tt>.
-ofATPS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+ofAPS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Same as <a>of_</a>, except combining <a>Sentence</a> piece is "of
 --   the". Plural case is <tt>(phrase t1) <a>ofThe</a> (plural t2)</tt>.
@@ -667,10 +655,6 @@ is :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Prepends "the" to a <a>NamedIdea</a>.
 the :: NamedIdea t => t -> NP
-
--- | Prepends "the" to a titleized <a>NamedIdea</a>. Similar to <a>the</a>,
---   but titleized.
-theT :: NamedIdea t => t -> NP
 
 -- | A customizable version of <a>the</a>. The given function is applied to
 --   both singular and plural cases.

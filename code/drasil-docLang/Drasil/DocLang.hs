@@ -4,7 +4,7 @@ module Drasil.DocLang (
   PDSub(..), ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..),
   SolChSpec(..),
   -- DocumentLanguage
-  mkDoc, tsymb, tsymb'', tunit, tunit',
+  mkDoc, tsymb, tsymb'', tunit, tunit', fillTraceSI, -- need for testing dot gen
   -- DocumentLanguage.Core
   AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), Emphasis(..),
   OffShelfSolnsSec(..), GSDSec(..), GSDSub(UsrChars, SystCons, SysCntxt),
@@ -50,7 +50,7 @@ module Drasil.DocLang (
 import Drasil.DocDecl (SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
   PDSub(..), ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..),
   SolChSpec(..))
-import Drasil.DocumentLanguage (mkDoc, tsymb, tsymb'', tunit, tunit')
+import Drasil.DocumentLanguage (mkDoc, tsymb, tsymb'', tunit, tunit', fillTraceSI) -- fillTraceSI needed for testing
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   DerivationDisplay(..), Emphasis(..), OffShelfSolnsSec(..), GSDSec(..),
   GSDSub(UsrChars, SystCons, SysCntxt), IntroSec(..), IntroSub(..), LFunc(..),

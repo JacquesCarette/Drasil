@@ -63,6 +63,12 @@ mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
   mkSections (fillTraceMaps l (fillReqs l si)) l where
     l = mkDocDesc si dd
 
+-- Helper, testing needed for .dot graphs?
+fillTraceSI :: SRSDecl -> SystemInformation -> SystemInformation
+fillTraceSI dd si = fillTraceMaps l $ fillReqs l si
+  where
+    l = mkDocDesc si dd
+
 -- | Constructs the unit definitions ('UnitDefn's) found in the document description ('DocDesc') from a database ('ChunkDB').
 extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
 extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb

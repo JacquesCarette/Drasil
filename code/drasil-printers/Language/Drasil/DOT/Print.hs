@@ -2,21 +2,22 @@ module Language.Drasil.DOT.Print where
 
 --import Drasil.DocLang
 import Language.Drasil
-import Database.Drasil
-import Data.Char (toLower)
+import Database.Drasil hiding (cdb)
+--import Data.Char (toLower)
 import Data.List (nub)
 import Control.Lens ((^.), Getting)
 import qualified Data.Map as Map
 import System.IO
-import Data.Drasil.Concepts.Documentation (assumption, assumpDom, chgProbDom,
-  goalStmt, goalStmtDom, requirement, reqDom, item, section_, likelyChg,
-  unlikelyChg)
+import Data.Drasil.Concepts.Documentation (assumpDom, chgProbDom,
+  goalStmtDom, reqDom)
 import System.Directory
 
 type Colour = String
 
 -- Brainstorming ideas here
 {-
+Some (many) of these functions should be in DocLang instead, but for simplicity + debugging they are here.
+
 Ideally, all the functions in doclang create a traceability table for us.
 That means all the heavy lifting of collecting the actual information required to 
 autogenerate the .dot files would already be done. The labels also appear on the reference names 
@@ -38,11 +39,23 @@ genDot si = do
     output "TraceyGraph" gi
     return mempty
 
-mkGraphEdges :: [TraceViewCat] -> SystemInformation -> [(UID, [UID])]
-mkGraphEdges entries si = zip (traceGReferees entryF cdb) (traceGReferrers entryF cdb)
+mkGraphNodes :: [TraceViewCat] -> SystemInformation -> [UID]
+mkGraphNodes entries si = (traceGReferees entryF cdb)
     where
         cdb = _sysinfodb si
         entryF = layoutUIDs entries cdb
+
+mkGraphEdges :: [TraceViewCat] -> [TraceViewCat] -> SystemInformation -> [(UID, [UID])]
+mkGraphEdges cols rows si = makeTGraph (ensureItems $ traceMRowHeader rowf si) (traceMColumns colf rowf cdb) $ traceMReferees colf cdb --(traceGReferees entryF cdb) (traceGReferrers entryF cdb) -- first list always seems empty. Hmm
+    where
+        cdb = _sysinfodb si
+        colf = layoutUIDs cols cdb
+        rowf = layoutUIDs rows cdb
+
+makeTGraph :: [String] -> [[String]] -> [String] -> [(String, [String])]
+makeTGraph rowName rows cols = zip rowName [zipFTable' x cols | x <- rows]
+  where
+    zipFTable' content = concatMap (\x -> if x `elem` content then [x] else [""])
 
 mkGraphInfo :: SystemInformation -> GraphInfo
 mkGraphInfo si = GI {
@@ -59,6 +72,16 @@ mkGraphInfo si = GI {
     , ucColour = "teal"
     , cColour = "teal"
 
+    {-}, assumpLabels = map ("A_" ++) $ getLabels tvAssumps si
+    , ddLabels = map ("DD_" ++) $ getLabels tvDataDefns si
+    , gdLabels = map ("GD_" ++) $ getLabels tvGenDefns si
+    , tmLabels = map ("TM_" ++) $ getLabels tvTheoryModels si
+    , imLabels = map ("IM_" ++) $ getLabels tvInsModels si
+    , rLabels = map ("R_" ++) $ getLabels tvReqs si
+    , gsLabels = map ("GS_" ++) $ getLabels tvGoals si
+    , cLabels = map ("C_" ++) $ getLabels tvChanges si
+    , everyLabel = map ("All_" ++) $ getLabels tvEverything si-}
+
     , assumpLabels = getLabels tvAssumps si
     , ddLabels = getLabels tvDataDefns si
     , gdLabels = getLabels tvGenDefns si
@@ -67,18 +90,18 @@ mkGraphInfo si = GI {
     , rLabels = getLabels tvReqs si
     , gsLabels = getLabels tvGoals si
     , cLabels = getLabels tvChanges si
-    , allLabels = getLabels tvEverything si
+    , everyLabel = getLabels tvEverything si
 
-    , directionsAvsA = mkGraphEdges [tvAssumps] si
-    , directionsAvsAll = mkGraphEdges [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels, tvReqs, tvChanges] si
-    , directionsRefvsRef = mkGraphEdges [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels] si
-    , directionsAllvsR = mkGraphEdges [tvGoals, tvReqs] si
+    , directionsAvsA = mkGraphEdges [tvAssumps] [tvAssumps] si
+    , directionsAvsAll = mkGraphEdges [tvAssumps] [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels, tvReqs, tvChanges] si
+    , directionsRefvsRef = mkGraphEdges [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels] [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels] si
+    , directionsAllvsR = mkGraphEdges [tvDataDefns, tvTheoryModels,tvGenDefns, tvInsModels, tvReqs] [tvGoals, tvReqs] si
     , graphType = AvsA
     , sections = ["A", "DD", "GD", "TM", "IM", "FR", "NFR", "GS", "LC", "UC"]
 }
 
 getLabels :: TraceViewCat -> SystemInformation -> [UID]
-getLabels l si = map fst $ mkGraphEdges [l] si
+getLabels l si = mkGraphNodes [l] si
 
 -- | Helper that finds the traceability matrix references (things being referenced).
 traceGReferees :: ([UID] -> [UID]) -> ChunkDB -> [UID]
@@ -102,7 +125,7 @@ makeTGraph :: [[String]] -> [String] -> [(String,[String])]
 makeTGraph sections possibleDependencies = map (uncurry mTGraphAux) (zip sections possibleDependencies)
   where
     mTGraphAux :: String -> [String] -> (String, [String])
-    mtGraphAux sec pDep = if sec `elem` pDep then
+    mtGraphAux s pDep = if s `elem` pDep then
   map (\x -> zipFTable' x dep) indep --[zipFTable' x cols | x <- rows]
   where
     zipFTable' independent = concatMap (\x -> if x `elem` independent then x else [])
@@ -133,7 +156,7 @@ data GraphInfo = GI {
     , lcLabels :: [String] -- Likely changes
     , ucLabels :: [String] -- Unlikely changes
     , cLabels :: [String] -- changes
-    , allLabels :: [String] -- all labels
+    , everyLabel :: [String] -- all labels
 
     , directionsAvsA :: [(String, [String])] -- graph directions
     , directionsAvsAll :: [(String, [String])]
@@ -167,86 +190,90 @@ output :: FilePath -> GraphInfo -> IO ()
 output outputFilePath gi = do
     createDirectoryIfMissing False outputFilePath
     setCurrentDirectory outputFilePath
-    mkOutputAvsA outputFilePath gi
-    mkOutputAvsAll outputFilePath gi
-    mkOutputRefvsRef outputFilePath gi
-    mkOutputAllvsR outputFilePath gi
+    mkOutputAvsA gi
+    mkOutputAvsAll gi
+    mkOutputRefvsRef gi
+    mkOutputAllvsR gi
 
-mkOutputAvsA :: FilePath -> GraphInfo -> IO ()
-mkOutputAvsA outputFilePath gi = do
+mkOutputAvsA :: GraphInfo -> IO ()
+mkOutputAvsA gi = do
     handle <- openFile "avsa.dot" WriteMode
     hPutStrLn handle "digraph avsa {"
-    mapM_ (outputSubAvsA gi handle) $ sections gi
+    outputSubAvsA gi handle
     hPutStrLn handle "}"
     hClose handle
 
 -- since the 'dot' method of displaying graphs naturally groups subgraphs,
 --all related ideas could be grouped by section type 
 --(eg. assumptions all together, datadefs all together)
-outputSubAvsA :: GraphInfo -> Handle -> String -> IO ()
-outputSubAvsA gi handle section = do
-    hPutStrLn handle ("\tsubgraph " ++ section ++ " {")
+outputSubAvsA :: GraphInfo -> Handle -> IO ()
+outputSubAvsA gi handle = do
+    --hPutStrLn handle ("\tsubgraph " ++ s ++ " {")
     mapM_ (mkDirections handle) (directionsAvsA gi)
-    let allLabels = zip [assumpLabels gi] [assumpColour gi]
+    let allLabels = zip [assumpLabels gi] [assumpColour gi] --["A_"]
     mapM_ (uncurry (mkNodes handle)) allLabels
-    hPutStrLn handle "\t}"
+    --hPutStrLn handle "\t}"
 
-mkOutputAvsAll :: FilePath -> GraphInfo -> IO ()
-mkOutputAvsAll outputFilePath gi = do
+addLabel :: [String] -> String -> String -> ([String], String)
+addLabel lbl col addlbl = (map (addlbl ++) lbl, col)
+
+mkOutputAvsAll :: GraphInfo -> IO ()
+mkOutputAvsAll gi = do
     handle <- openFile "avsall.dot" WriteMode
     hPutStrLn handle $ "digraph avsall {"
-    mapM_ (outputSubAvsA gi handle) $ sections gi
+    outputSubAvsAll gi handle
     hPutStrLn handle "}"
     hClose handle
 
-outputSubAvsAll :: GraphInfo -> Handle -> String -> IO ()
-outputSubAvsAll gi handle section = do
-    hPutStrLn handle ("\tsubgraph " ++ section ++ " {")
+outputSubAvsAll :: GraphInfo -> Handle -> IO ()
+outputSubAvsAll gi handle = do
+    --hPutStrLn handle ("\tsubgraph " ++ s ++ " {")
     mapM_ (mkDirections handle) (directionsAvsAll gi)
     --let allLabels = zip [assumpLabels gi, ddLabels gi, tmLabels gi, gdLabels gi, imLabels gi, frLabels gi, nfrLabels gi, lcLabels gi, ucLabels gi] [assumpColour gi, ddColour gi, tmColour gi, gdColour gi, imColour gi, frColour gi, nfrColour gi, lcColour gi, ucColour gi]
-    let allLabels = zip [assumpLabels gi, ddLabels gi, tmLabels gi, gdLabels gi, imLabels gi, rLabels gi, cLabels gi] [assumpColour gi, ddColour gi, tmColour gi, gdColour gi, imColour gi, rColour gi, cColour gi]
+    let allLabels = zip [assumpLabels gi, ddLabels gi, tmLabels gi, gdLabels gi, imLabels gi, rLabels gi, cLabels gi] [assumpColour gi, ddColour gi, tmColour gi, gdColour gi, imColour gi, rColour gi, cColour gi] --["A_", "DD_", "TM_", "GD_", "IM_", "R_", "C_"]
     mapM_ (uncurry (mkNodes handle)) allLabels
-    hPutStrLn handle "\t}"
+    --hPutStrLn handle "\t}"
 
-mkOutputRefvsRef :: FilePath -> GraphInfo -> IO ()
-mkOutputRefvsRef outputFilePath gi = do
+mkOutputRefvsRef :: GraphInfo -> IO ()
+mkOutputRefvsRef gi = do
     handle <- openFile "refvsref.dot" WriteMode
     hPutStrLn handle $ "digraph refvsref {"
-    mapM_ (outputSubAvsA gi handle) $ sections gi
+    outputSubRefvsRef gi handle
     hPutStrLn handle "}"
     hClose handle
 
-outputSubRefvsRef :: GraphInfo -> Handle -> String -> IO ()
-outputSubRefvsRef gi handle section = do
-    hPutStrLn handle ("\tsubgraph " ++ section ++ " {")
+outputSubRefvsRef :: GraphInfo -> Handle -> IO ()
+outputSubRefvsRef gi handle = do
+    --hPutStrLn handle ("\tsubgraph " ++ s ++ " {")
     mapM_ (mkDirections handle) (directionsRefvsRef gi)
-    let allLabels = zip [ddLabels gi, tmLabels gi, gdLabels gi, imLabels gi] [ddColour gi, tmColour gi, gdColour gi, imColour gi]
+    let allLabels = zip [ddLabels gi, tmLabels gi, gdLabels gi, imLabels gi] [ddColour gi, tmColour gi, gdColour gi, imColour gi] --["DD_", "TM_", "GD_", "IM_"]
     mapM_ (uncurry (mkNodes handle)) allLabels
-    hPutStrLn handle "\t}"
+    --hPutStrLn handle "\t}"
 
 
-mkOutputAllvsR :: FilePath -> GraphInfo -> IO ()
-mkOutputAllvsR outputFilePath gi = do
+mkOutputAllvsR :: GraphInfo -> IO ()
+mkOutputAllvsR gi = do
     handle <- openFile "allvsr.dot" WriteMode
     hPutStrLn handle $ "digraph allvsr {"
-    mapM_ (outputSubAvsA gi handle) $ sections gi
+    outputSubAllvsR gi handle
     hPutStrLn handle "}"
     hClose handle
 
-outputSubAllvsR :: GraphInfo -> Handle -> String -> IO ()
-outputSubAllvsR gi handle section = do
-    hPutStrLn handle ("\tsubgraph " ++ section ++ " {")
+outputSubAllvsR :: GraphInfo -> Handle -> IO ()
+outputSubAllvsR gi handle = do
+    --hPutStrLn handle ("\tsubgraph " ++ s ++ " {")
     mapM_ (mkDirections handle) (directionsAllvsR gi) ----------------- map ($ gi) [assumpLabels ..]?
-    let allLabels = zip [assumpLabels gi, ddLabels gi, tmLabels gi, gdLabels gi, imLabels gi, frLabels gi, nfrLabels gi, gsLabels gi] [assumpColour gi, ddColour gi, tmColour gi, gdColour gi, imColour gi, frColour gi, nfrColour gi, gsColour gi]
+    --let allLabels = zip [assumpLabels gi, ddLabels gi, tmLabels gi, gdLabels gi, imLabels gi, frLabels gi, nfrLabels gi, gsLabels gi] [assumpColour gi, ddColour gi, tmColour gi, gdColour gi, imColour gi, frColour gi, nfrColour gi, gsColour gi]
+    let allLabels = zip [assumpLabels gi, ddLabels gi, tmLabels gi, gdLabels gi, imLabels gi, rLabels gi, gsLabels gi] [assumpColour gi, ddColour gi, tmColour gi, gdColour gi, imColour gi, rColour gi, gsColour gi]-- ["A_", "DD_", "TM_", "GD_", "IM_", "R_", "GS_"]
     mapM_ (uncurry (mkNodes handle)) allLabels
-    hPutStrLn handle "\t}"
+    --hPutStrLn handle "\t}"
 
 {-- since the 'dot' method of displaying graphs naturally groups subgraphs,
-all related ideas could be grouped by section type 
+all related ideas could be grouped by s type 
 (eg. assumptions all together, datadefs all together)
 outputSub :: GraphInfo -> Handle -> String -> IO ()
-outputSub gi handle section = do
-    hPutStrLn handle ("\tsubgraph " ++ section ++ " {")
+outputSub gi handle s = do
+    hPutStrLn handle ("\tsubgraph " ++ s ++ " {")
     mapM_ (mkDirections handle) (directions gi)
     let allLabels = zip [assumpLabels gi, ddLabels gi, tmLabels gi, ...] [assumpColour gi, ddColour gi, ...]
     mapM_ (uncurry (mkNodes handle)) allLabels
@@ -254,20 +281,20 @@ outputSub gi handle section = do
 
 mkDirections :: Handle -> (String, [String]) -> IO ()
 mkDirections handle ls = do
-    mapM_ (hPutStrLn handle) $ (uncurry makeEdgesSub) ls
+    mapM_ (hPutStrLn handle) $ makeEdgesSub (fst ls) (filter (not . null) $ snd ls)
     where
        -- Creates an edge between a type and its dependency (indented for subgraphs)
         makeEdgesSub :: String -> [String] -> [String]
         makeEdgesSub _ [] = []
-        makeEdgesSub nm (c:cs) = ("\t\t" ++ nm ++ " -> " ++ c ++ ";"): makeEdgesSub nm cs
+        makeEdgesSub nm (c:cs) = ("\t" ++ nm ++ " -> " ++ c ++ ";"): makeEdgesSub nm cs
 
-mkNodes :: Handle -> [String] -> Colour -> IO ()
+mkNodes :: Handle -> [String] -> Colour -> IO () -- maybe take a second string for labels?
 mkNodes handle ls col = do
     mapM_ ((hPutStrLn handle) . (makeNodesSub col)) ls
     where
         -- Creates a node based on the kind of datatype (indented for subgraphs)
         makeNodesSub :: Colour -> String -> String
-        makeNodesSub c nm = "\t\t" ++ nm ++ "\t[shape=oval, color=" ++ c ++ ", label=" ++ nm ++ "];"
+        makeNodesSub c nm = "\t" ++ nm ++ "\t[shape=oval, color=" ++ c ++ ", label=" ++ nm ++ "];"
 
 
 ----------- Helper functions taken from other parts of drasil. Modified versions could be useful here.-----------
@@ -326,9 +353,9 @@ generateTraceTableView u desc cols rows c = llcc (makeTabRef u) $ Table
 type TraceViewCat = [UID] -> ChunkDB -> [UID]
 
 -- | Helper that makes sure the rows and columns of a traceability matrix have substance.
-ensureItems :: UID -> [a] -> [a]
-ensureItems u [] = error $ "Expected non-empty matrix dimension for traceability matrix " ++ u
-ensureItems _ l = l
+ensureItems :: [a] -> [a]
+ensureItems [] = error $ "Expected non-empty matrix dimension for traceability matrix."
+ensureItems l = l
 
 -- | Helper that finds the layout 'UID's of a traceability matrix.
 layoutUIDs :: [TraceViewCat] -> ChunkDB -> [UID] -> [UID]

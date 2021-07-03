@@ -37,6 +37,8 @@ digraph alltypes {
 	}
 	subgraph datadefs {
 	}
+	subgraph expresionss {
+	}
 	subgraph gdefs {
 	}
 	subgraph gendefs {

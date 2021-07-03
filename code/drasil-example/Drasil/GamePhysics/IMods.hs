@@ -3,7 +3,7 @@ module Drasil.GamePhysics.IMods (iMods, instModIntro, iModRefs) where
 
 import Language.Drasil
 import Language.Drasil.ShortHands (lJ)
-import Theory.Drasil (InstanceModel, imNoDerivNoRefs, qwC, ModelKinds (OthModel))
+import Theory.Drasil
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -13,6 +13,7 @@ import Drasil.GamePhysics.Concepts (centreMass)
 import Drasil.GamePhysics.DataDefs (ctrOfMassDD, linDispDD, linVelDD, linAccDD,
   angDispDD, angVelDD, angAccelDD, collisionAssump, rightHandAssump,
   rigidTwoDAssump)
+import Drasil.GamePhysics.Expressions
 import Drasil.GamePhysics.GenDefs (accelGravityGD, impulseGD)
 import Drasil.GamePhysics.Goals (linearGS, angularGS)
 import Drasil.GamePhysics.TMods (newtonSL, newtonSLR)
@@ -33,24 +34,21 @@ iMods = [transMot, rotMot, col2D]
 
 {-- Force on the translational motion  --}
 transMot :: InstanceModel
-transMot = imNoDerivNoRefs (OthModel transMotRC) 
-  [qwC velj $ UpFrom (Exc, exactDbl 0)
-  ,qwC time $ UpFrom (Exc, exactDbl 0)
-  ,qwC gravitationalAccel $ UpFrom (Exc, exactDbl 0)
-  ,qwC forcej $ UpFrom (Exc, exactDbl 0)
-  ,qwC massj $ UpFrom (Exc, exactDbl 0)
+transMot = imNoRefs (EquationalModel transMotQD) 
+  [ qwC velj               $ UpFrom (Exc, exactDbl 0)
+  , qwC time               $ UpFrom (Exc, exactDbl 0)
+  , qwC gravitationalAccel $ UpFrom (Exc, exactDbl 0)
+  , qwC forcej             $ UpFrom (Exc, exactDbl 0)
+  , qwC massj              $ UpFrom (Exc, exactDbl 0)
   ]
-  (qw accj) [] "transMot" [transMotDesc, transMotOutputs, rigidTwoDAssump, noDampConsAssumps]
+  (qw accj) [] (Just transMotDeriv)
+  "transMot" [transMotDesc, transMotOutputs, rigidTwoDAssump, noDampConsAssumps]
 
-transMotRC :: RelationConcept
-transMotRC = makeRC "transMotRC" transMotNP EmptyS transMotRel
+transMotQD :: QDefinition
+transMotQD = mkQuantDef' accj transMotNP transMotExpr
 
 transMotNP :: NP
-transMotNP = nounPhraseSP "Force on the translational motion of a set of 2D rigid bodies"
-
-transMotRel :: Relation -- FIXME: add proper equation
-transMotRel = sy accj $= deriv (apply1 velj time) time
-  $= sy gravitationalAccel `addRe` (apply1 forcej time $/ sy massj)
+transMotNP = nounPhraseSP "force on the translational motion of a set of 2D rigid bodies"
 
 transMotDesc, transMotOutputs :: Sentence
 transMotDesc = foldlSent [S "The above", phrase equation, S "expresses the total",
@@ -67,6 +65,20 @@ transMotOutputs = foldlSent [atStartNP (output_ `the_ofThe` inModel),
  velocity) !.), atStartNP (the motion), S "is translational" `sC` S "so the",
  phraseNP (position `and_` velocity), S "functions are for the",
  phrase centreMass, fromSource ctrOfMassDD]
+
+transMotDeriv :: Derivation 
+transMotDeriv = mkDerivName (phrase transMot)
+      (weave [transMotDerivStmts, transMotDerivEqns])
+
+transMotDerivStmts :: [Sentence]
+transMotDerivStmts = [
+    foldlSent [S "We may calculate the total acceleration of rigid body", 
+      P lJ, S "by calculating the derivative of it's velocity with respect to time", fromSource linAccDD],
+    S "Performing the derivative, we obtain:"
+  ]
+
+transMotDerivEqns :: [Sentence]
+transMotDerivEqns = map eS [transMotExprDeriv1, toDispExpr transMotQD]
 
 {-- Rotational Motion --}
 

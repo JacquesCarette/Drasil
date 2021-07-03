@@ -17,8 +17,9 @@ import Control.Lens (makeLenses, view)
 
 -- | Section Contents are split into subsections or contents, where contents
 -- are standard layout objects (see 'Contents').
-data SecCons = Sub   Section
-             | Con   Contents
+data SecCons = Sub Section
+             | Con Contents
+             | Cel Cell
 
 -- | Sections have a title ('Sentence'), a list of contents ('SecCons')
 -- and a shortname ('Reference').
@@ -27,7 +28,14 @@ data Section = Section
              , cons :: [SecCons]
              , _lab :: Reference
              }
+
+data Cell = Cell  
+          { ttle :: Title
+          , conts :: [Contents]
+          }
+
 makeLenses ''Section
+makeLenses ''Cell  
 
 -- | Finds the 'UID' of a 'Section'.
 instance HasUID        Section where uid = lab . uid

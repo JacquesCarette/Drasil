@@ -56,7 +56,7 @@ scalarPos' :: Expr
 scalarPos' = sy iPos `addRe` (sy QP.iSpeed `mulRe` sy time `addRe` half (sy QP.constAccel `mulRe` square (sy time)))
 
 rectNoTime :: Expr
-rectNoTime = square (sy QP.iSpeed) $= square (sy QP.iSpeed) `addRe` (exactDbl 2) `mulRe` sy QP.constAccel `mulRe` (sy scalarPos $- sy iPos)
+rectNoTime = square (sy speed) $= square (sy QP.iSpeed) `addRe` (exactDbl 2 `mulRe` sy QP.constAccel `mulRe` (sy scalarPos $- sy iPos))
 
 rectPosDerivEqn1, rectPosDerivEqn2, rectPosDerivEqn3 :: Expr
 rectPosDerivEqn1 = sy speed $= deriv (sy scalarPos) time
@@ -90,11 +90,11 @@ lcrectNoTime = lbldExpr (rectNoTime) (makeEqnRef "rectNoTime")
 
 horMotionEqn1, horMotionEqn2 :: Expr
 horMotionEqn1 = sy xVel $= sy ixVel
-horMotionEqn2 = sy xPos $= sy QP.ixPos `addRe` sy ixVel `mulRe` sy time
+horMotionEqn2 = sy xPos $= sy QP.ixPos `addRe` (sy ixVel `mulRe` sy time)
 
 verMotionEqn1, verMotionEqn2, verMotionEqn3 :: Expr
-verMotionEqn1 = sy yVel $= sy iyVel $- sy gravitationalAccel `mulRe` sy time
-verMotionEqn2 = sy yPos $= sy QP.iyPos `addRe` sy iyVel `mulRe` sy time $- sy gravitationalAccel `mulRe` square (sy time) $/ (exactDbl 2)
+verMotionEqn1 = sy yVel $= sy iyVel $- (sy gravitationalAccel `mulRe` sy time)
+verMotionEqn2 = sy yPos $= sy QP.iyPos `addRe` (sy iyVel `mulRe` sy time) $- (sy gravitationalAccel `mulRe` square (sy time) $/ exactDbl 2)
 verMotionEqn3 = square (sy yVel) $= square ((sy iyVel)) $- (exactDbl 2) `mulRe` sy gravitationalAccel `mulRe` (sy yPos $- sy QP.iyPos) 
 
 -- References --

@@ -89,7 +89,7 @@ xDist = uc CP.xDist (subX lR) metre
 yDist = uc CP.yDist (subY lR) metre
 
 ixDist = uc CP.xDist (sup lX initial) metre
-iyDist = uc CP.xDist (sup lY initial) metre
+iyDist = uc CP.yDist (sup lY initial) metre
 
 iPos = uc CP.iPos (sup lP initial) metre
 xPos = uc CP.xPos (subX lP) metre

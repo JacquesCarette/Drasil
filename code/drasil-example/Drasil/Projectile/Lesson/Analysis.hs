@@ -5,18 +5,22 @@ import qualified Drasil.DocLang.Notebook as NB (coorSyst, kinematic, hormotion, 
 import Data.Drasil.Concepts.Documentation (coordinate)
 import Data.Drasil.Concepts.Math (component, direction, equation)
 import Data.Drasil.Concepts.Physics (acceleration, gravity, velocity, position, motion)
+
+import qualified Data.Drasil.Quantities.Physics as QP (ixVel, iyVel, xVel, yVel)
+
 import Drasil.Projectile.Concepts (projectile, projMotion)
+import Drasil.Projectile.Expressions (horMotionEqn1, horMotionEqn2, verMotionEqn1, verMotionEqn2, verMotionEqn3)
 import Language.Drasil
 import Language.Drasil.ShortHands
 import Utils.Drasil (foldlSP, foldlSP_, foldlSent, enumBulletU)
 
 import qualified Utils.Drasil.Sentence as S
 
-coorSyst, kinematicEq, horMotion, verMotion :: Section
+coorSyst, kinematicEq, horMotionAna, verMotionAna :: Section
 coorSyst = NB.coorSyst [coorSystContext] []
 kinematicEq = NB.kinematic [kinematicContext] []
-horMotion = NB.hormotion [] []
-verMotion = NB.vermotion [] []
+horMotionAna = NB.hormotion [horMotionContext] []
+verMotionAna = NB.vermotion [verMotionContext] []
 
 coorSystContext, kinematicContext :: Contents
 coorSystContext = enumBulletU $ map foldlSent 
@@ -37,3 +41,14 @@ kinematicContext = enumBulletU $ map foldlSent
   [[S "Depending upon the known data and what is to be determined, a choice should be made",
     S "as to which three of the following four", plural equation, S "should be applied between",
     S "the two points on the path to obtain the most direct solution to the problem"]]
+
+horMotionContext = enumBulletU $ map foldlSent 
+  [[S "The *velocity* in the horizontal" `S.or_` P lX, phrase direction, S "is *constant*, i.e.,", 
+    eS horMotionEqn1 `S.and_` eS horMotionEqn2]]
+
+verMotionContext = enumBulletU $ map foldlSent
+  [[S "In the vertical" `S.or_` P lY, phrase direction, 
+    S "*only two* of the following three equations can be used for solution"],
+   [S "For example, if the particle's final", phrase velocity +:+ eS (sy QP.yVel),
+    S "is not needed, then the first and third of these questions", sParen (S "for" +:+ P lY),
+    S "will not be useful"]]

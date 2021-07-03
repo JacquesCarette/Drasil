@@ -31,7 +31,7 @@ motionContextP1
         S "is often studied in terms of its rectangular components, since the",
         phrasePoss projectile, phrase acceleration +:+. S "always acts in the vertical direciton",
        S "To illustrate the kinematic analysis, consider a ", phrase projectile,
-         S "launched at point", sParen (eS (sy QP.ixDist)) `sC` (eS (sy QP.iyDist)),
+         S "launched at point", sParen (eS (sy QP.ixDist) `sC` (eS (sy QP.iyDist))),
          S "as shown in" +:+. refS figCSandA,
        S "The path is defined in the", P lX `sDash` P lY, S "plane such that the initial", 
          phrase velocity +:+ S "is", eS (sy QP.iSpeed), S ", having components", 

@@ -10,9 +10,9 @@ import Utils.Drasil
 
 import Database.Drasil(SystemInformation(SI), _authors, _kind, _sys, citeDB)
 
-import qualified Drasil.DocLang.Notebook as NB (appendix, body, reference, summary)
+import qualified Drasil.DocLang.Notebook as NB (appendix, body, example, reference, summary)
 import qualified Drasil.NBSections.Introduction as Intro (introductionSection, purposeOfDoc)
-import qualified Drasil.NBSections.Body as Body (reviewSec, mainIdeaSec, mthdAndanls)
+import qualified Drasil.NBSections.Body as Body (reviewSec, mainIdeaSec, mthdAndanls, exampleSec)
 
 -- | Creates a document from a document description and system information
 mkDoc :: NBDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
@@ -28,8 +28,8 @@ mkSections si dd = map doit dd
     doit :: DocSection -> Section
     doit (IntroSec is)       = mkIntroSec si is
     doit (BodySec bs)        = mkBodySec bs
-    doit Bibliography        = mkBib (citeDB si)
     doit (SmmrySec ss)       = mkSmmrySec ss
+    doit Bibliography        = mkBib (citeDB si)
     doit (AppndxSec a)       = mkAppndxSec a
 
 
@@ -50,6 +50,7 @@ mkBodySec (BodyProg l) = NB.body [] $ map mkSubs l
     mkSubs (Review cs )                 = Body.reviewSec cs 
     mkSubs (MainIdea cntnts subsec)     = Body.mainIdeaSec cntnts subsec
     mkSubs (MethsAndAnls cntnts subsec) = Body.mthdAndanls cntnts subsec
+    mkSubs (Example cntnts cell)        = Body.exampleSec cntnts cell
 
 -- | Helper for making the 'Summary' section
 mkSmmrySec :: SmmrySec -> Section

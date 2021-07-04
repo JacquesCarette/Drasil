@@ -1,8 +1,8 @@
-module Drasil.NBSections.Body (reviewSec, mainIdeaSec, mthdAndanls) where
+module Drasil.NBSections.Body (reviewSec, mainIdeaSec, mthdAndanls, exampleSec) where
 
 import Language.Drasil
 import Utils.Drasil
-import qualified Drasil.DocLang.Notebook as NB (review, mainIdea, methAndAnls)
+import qualified Drasil.DocLang.Notebook as NB (review, mainIdea, methAndAnls, example)
 
 -- **** Leave blank for now
 --bodyIntro :: Contents
@@ -19,3 +19,7 @@ mainIdeaSec a subSec = NB.mainIdea a subSec
 -- Method and Analysis
 mthdAndanls :: [Contents] -> [Section] -> Section
 mthdAndanls a subSec = NB.methAndAnls a subSec
+
+-- Example
+exampleSec :: [Contents] -> [Cell] -> Section
+exampleSec cs cls = NB.example  cs cls 

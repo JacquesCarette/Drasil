@@ -125,7 +125,7 @@ module Language.Drasil (
   , LabelledContent(..), UnlabelledContent(..), extractSection
   , mkParagraph, mkRawLC
   , llcc, ulcc
-  , section, fig, figWithWidth
+  , section, cell, fig, figWithWidth
   , MaxWidthPercent
   , HasContents(accessContents)
   , RawContent(..)
@@ -209,7 +209,7 @@ import Language.Drasil.Expr.Math (abs_, neg, log, ln, sin, cos, tan, sqrt, sec,
           sy, deriv, pderiv,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, intAll)
 import Language.Drasil.Expr.Display
-import Language.Drasil.Document (section, fig, figWithWidth
+import Language.Drasil.Document (section, cell, fig, figWithWidth
   , Section(..), Cell(..), SecCons(..) , llcc, ulcc, Document(..), DocType(..)
   , mkParagraph, mkFig, mkRawLC, extractSection
   , makeTabRef, makeFigRef, makeSecRef, makeLstRef, makeEqnRef, makeURI)

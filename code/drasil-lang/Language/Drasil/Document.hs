@@ -30,8 +30,9 @@ data Section = Section
              }
 
 data Cell = Cell  
-          { ttle :: Title
+          { ttle  :: Title
           , conts :: [Contents]
+          , _lbl  :: Reference
           }
 
 makeLenses ''Section
@@ -85,6 +86,10 @@ mkRawLC x lb = llcc lb x
 -- (ie. paragraphs, tables, etc.), a list of subsections, and a shortname ('Reference').
 section :: Sentence -> [Contents] -> [Section] -> Reference -> Section
 section title intro secs = Section title (map Con intro ++ map Sub secs)
+
+-- | Smart constructor for creating 'Section' with cell blocks
+cell :: Sentence -> [Contents] -> [Cell] -> Reference -> Section
+cell title intro cells = Section title (map Con intro ++ map Cel cells)
 
 -- | Smart constructor for retrieving the contents ('Section's) from a 'Document'.
 extractSection :: Document -> [Section]

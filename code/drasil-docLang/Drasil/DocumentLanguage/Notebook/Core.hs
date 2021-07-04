@@ -32,7 +32,8 @@ data BodySub where
   Review       :: [Contents] -> BodySub
   MainIdea     :: [Contents] -> [Section] -> BodySub
   MethsAndAnls :: [Contents] -> [Section] -> BodySub
-
+  Example      :: [Contents] -> [Cell] -> BodySub
+  
 {--}
 
 newtype SmmrySec = SmmryProg [Contents]

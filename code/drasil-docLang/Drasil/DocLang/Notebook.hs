@@ -33,15 +33,16 @@ summary     cs ss = section (titleize Doc.summary)           cs ss summaryLabel
 
 procForAnls cs ss = section  (titleize Doc.procForAnls)      cs ss anlsProcLabel
 coorSyst    cs ss = section  (titleize Doc.coordinateSystem) cs ss coorSystLabel
-kinematic   cs ss = section  (titleize P.kinematics)          cs ss kinematicLabel
-
---example     cs ss = section (titleize Doc.example)           cs ss "Example"
+kinematic   cs ss = section  (titleize P.kinematics)         cs ss kinematicLabel
 
 --result      cs ss = section (titleize Doc.result)            cs ss "Result"
 
 appendix    cs ss = section (titleize Doc.appendix)          cs ss appendixLabel
 
 reference   cs ss = section  (titleize' Doc.reference)        cs ss referenceLabel
+
+example :: [Contents] -> [Cell] -> Section
+example cs cls = cell (titleize Doc.example)           cs cls exampleLabel
 
 --Labels--
 sectionReferences :: [Reference]
@@ -67,3 +68,4 @@ coorSystLabel       = makeSecRef "CoordinateSystem" $ titleize Doc.coordinateSys
 kinematicLabel      = makeSecRef "Kinematic"        $ titleize P.kinematics
 summaryLabel        = makeSecRef "Summary"          $ titleize Doc.summary
 anlsProcLabel       = makeSecRef "AnlsProc"         $ titleize Doc.procForAnls
+exampleLabel        = makeSecRef "Example"          $ titleize Doc.example

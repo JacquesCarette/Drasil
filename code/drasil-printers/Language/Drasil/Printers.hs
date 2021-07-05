@@ -2,7 +2,7 @@ module Language.Drasil.Printers (
   -- Format 
     Format(TeX, HTML)
   -- DOT
-  , genDot
+  , outputDot, GraphInfo(..)
   -- HTML
     -- Helpers
   , makeCSS
@@ -35,4 +35,4 @@ import Language.Drasil.Plain.Print (Linearity(..), sentenceDoc, exprDoc,
 import Language.Drasil.TeX.Print (genTeX)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation(..),
   HasPrintingOptions(..), Notation(..), defaultConfiguration)
-import Language.Drasil.DOT.Print (genDot)
+import Language.Drasil.DOT.Print (outputDot, GraphInfo(..))

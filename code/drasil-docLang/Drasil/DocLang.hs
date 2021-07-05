@@ -17,6 +17,8 @@ module Drasil.DocLang (
   -- DocumentLanguage.RefHelpers 
   ModelDB, ddRefDB, mdb,
   -- DocumentLanguage.TraceabilityMatrix
+  -- DocumentLanguage.TraceabilityGraph
+  mkGraphInfo,
   -- Sections.AuxiliaryConstants
   tableOfConstants,
   -- Sections.GeneralSystDesc
@@ -61,6 +63,7 @@ import Drasil.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(Include
   Verbosity(..), ddefn)
 import Drasil.DocumentLanguage.RefHelpers (ModelDB, ddRefDB, mdb)
 --import Drasil.DocumentLanguage.TraceabilityMatrix
+import Drasil.DocumentLanguage.TraceabilityGraph (mkGraphInfo)
 import Drasil.Sections.AuxiliaryConstants (tableOfConstants)
 --import Drasil.Sections.GeneralSystDesc
 import Drasil.Sections.Introduction (purpDoc)

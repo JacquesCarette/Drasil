@@ -6,10 +6,9 @@ module Drasil.SWHS.Generate (generate) where
 --   Modularity(..), Structure(..), ConstantStructure(..), 
 --   ConstantRepr(..), InputModule(..), matchConcepts, AuxFile(..), 
 --   Visibility(..), defaultChoices)
-import Language.Drasil.Generate (gen, DocType(SRS, Website), DocSpec(DocSpec))
+import Language.Drasil.Generate (gen, genDot, DocType(SRS, Website), DocSpec(DocSpec))
 
-import Drasil.SWHS.Body (srs, printSetting, fullSI) -- si
-import Language.Drasil.Printers (genDot)
+import Drasil.SWHS.Body (srs, printSetting, fullSI)
 
 -- code :: CodeSpec
 -- code = codeSpec si choices []

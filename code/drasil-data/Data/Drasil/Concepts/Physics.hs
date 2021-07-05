@@ -4,6 +4,7 @@ module Data.Drasil.Concepts.Physics where
 import Language.Drasil
 import qualified Utils.Drasil.Sentence as S
 import Utils.Drasil
+import Utils.Drasil.Concepts
 
 import Data.Drasil.Domains (mathematics, physics)
 import Data.Drasil.Concepts.Documentation (property, value)
@@ -197,19 +198,20 @@ yConstAccel = dccWDS "yConstAccel" (nounPhraseSent $ phrase yComp `S.of_` phrase
 
 
 --FIXME: COMBINATION HACK (for all below)
-angDisp = dcc "angularDisplacement" (fterms compoundPhrase' angular displacement)
+--FIXME: should use compoundPhrase instead? Or better yet, use combineNINI instead of interacting with the terms directly?
+angDisp = dcc "angularDisplacement" (combineNINI angular displacement)
   "the angle through which an object moves on a circular path"
-angVelo = dcc "angularVelocity" (fterms compoundPhrase' angular velocity)
+angVelo = dcc "angularVelocity" (combineNINI angular velocity)
   "the rate of change of angular position of a rotating body"
-angAccel = dcc "angularAcceleration" (fterms compoundPhrase' angular acceleration)
+angAccel = dcc "angularAcceleration" (combineNINI angular acceleration)
   "the rate of change of angular velocity"
 constAccel = dcc "constantAcceleration" (cn "constant acceleration")
   "a one-dimensional acceleration that is constant"
-linDisp = dcc "linearDisplacement" (fterms compoundPhrase' linear displacement) 
+linDisp = dcc "linearDisplacement" (combineNINI linear displacement) 
   "movement in one direction along a single axis"
-linVelo = dcc "linearVelocity" (fterms compoundPhrase' linear velocity) 
+linVelo = dcc "linearVelocity" (combineNINI linear velocity) 
   "the speed of a moving object, dependent on the perspective taken"
-linAccel = dcc "linearAcceleration" (fterms compoundPhrase' linear acceleration) 
+linAccel = dcc "linearAcceleration" (combineNINI linear acceleration) 
   "the rate of change of velocity without a change in direction"
 
 -- The following feel like they're missing something/need to be more

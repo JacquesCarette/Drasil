@@ -2,7 +2,7 @@ module Language.Drasil.Printing.Import.Expr (expr) where
 
 import Language.Drasil hiding (neg, sec, symbol, isIn)
 import Language.Drasil.Display (Symbol(..))
-import Language.Drasil.Development (UFuncB(..), UFuncVec(..)
+import Language.Drasil.Development (UFuncB(..), UFuncVV(..), UFuncVN(..)
   , ArithBinOp(..), BoolBinOp(..), EqBinOp(..), LABinOp(..)
   , OrdBinOp(..), VVNBinOp(..), VVVBinOp(..)
   , precA, precB, eprec
@@ -44,7 +44,7 @@ neg' (AssocA MulRe _)       = True
 neg' (LABinaryOp Index _ _) = True
 neg' (UnaryOp _ _)          = True
 neg' (UnaryOpB _ _)         = True
-neg' (UnaryOpVec _ _)       = True
+neg' (UnaryOpVV _ _)        = True
 neg' (C _)                  = True
 neg' _                      = False
 
@@ -156,10 +156,11 @@ expr (UnaryOp Arctan u)       sm = mkCall sm P.Arctan u
 expr (UnaryOp Exp u)          sm = P.Row [P.MO P.Exp, P.Sup $ expr u sm]
 expr (UnaryOp Abs u)          sm = P.Fenced P.Abs P.Abs $ expr u sm
 expr (UnaryOpB Not u)         sm = P.Row [P.MO P.Not, expr u sm]
-expr (UnaryOpVec Norm u)      sm = P.Fenced P.Norm P.Norm $ expr u sm
-expr (UnaryOpVec Dim u)       sm = mkCall sm P.Dim u
+expr (UnaryOpVN Norm u)       sm = P.Fenced P.Norm P.Norm $ expr u sm
+expr (UnaryOpVN Dim u)        sm = mkCall sm P.Dim u
 expr (UnaryOp Sqrt u)         sm = P.Sqrt $ expr u sm
 expr (UnaryOp Neg u)          sm = neg sm u
+expr (UnaryOpVV NegV u)       sm = neg sm u
 expr (ArithBinaryOp Frac a b) sm = P.Div (expr a sm) (expr b sm)
 expr (ArithBinaryOp Pow a b)  sm = pow sm a b
 expr (ArithBinaryOp Subt a b) sm = P.Row [expr a sm, P.MO P.Subt, expr b sm]

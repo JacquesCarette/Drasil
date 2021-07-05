@@ -216,7 +216,7 @@ probOfBreak = dd probOfBreakQD (map ref [astm2009, beasonEtAl1998]) Nothing "pro
 
 --DD14--
 calofCapacityEq :: Expr
-calofCapacityEq = mulRe (mulRe (sy nonFL) (sy glaTyFac)) (sy loadSF)
+calofCapacityEq = sy nonFL `mulRe` sy glaTyFac `mulRe` sy loadSF
 
 calofCapacityQD :: QDefinition
 calofCapacityQD = mkQuantDef lRe calofCapacityEq

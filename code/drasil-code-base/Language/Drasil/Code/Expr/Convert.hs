@@ -25,7 +25,8 @@ expr (L.Case c es) = Case c $ map (bimap expr expr) es
 expr (L.Matrix es) = Matrix $ map (map expr) es
 expr (L.UnaryOp uo e) = UnaryOp (uFunc uo) (expr e)
 expr (L.UnaryOpB uo e) = UnaryOpB (uFuncB uo) (expr e)
-expr (L.UnaryOpVec uo e) = UnaryOpVec (uFuncVec uo) (expr e)
+expr (L.UnaryOpVV uo e) = UnaryOpVV (uFuncVV uo) (expr e)
+expr (L.UnaryOpVN uo e) = UnaryOpVN (uFuncVN uo) (expr e)
 expr (L.ArithBinaryOp bo l r) = ArithBinaryOp (arithBinOp bo) (expr l) (expr r)
 expr (L.BoolBinaryOp bo l r) = BoolBinaryOp (boolBinOp bo) (expr l) (expr r)
 expr (L.EqBinaryOp bo l r) = EqBinaryOp (eqBinOp bo) (expr l) (expr r)
@@ -45,8 +46,6 @@ realInterval (L.UpFrom (i, e)) = L.UpFrom (i, expr e)
 -- | Convert 'Constraint Expr's into 'Constraint CodeExpr's.
 constraint :: L.ConstraintE -> L.Constraint CodeExpr
 constraint (L.Range r ri) = L.Range r (realInterval ri)
-constraint (L.EnumeratedReal r ds) = L.EnumeratedReal r ds
-constraint (L.EnumeratedStr r ss) = L.EnumeratedStr r ss
 
 -- | Convert 'DomainDesc Expr Expr' into 'DomainDesc CodeExpr CodeExpr's.
 renderDomainDesc :: L.DomainDesc L.Expr L.Expr -> L.DomainDesc CodeExpr CodeExpr
@@ -111,6 +110,9 @@ uFunc L.Neg = Neg
 uFuncB :: L.UFuncB -> UFuncB
 uFuncB LD.Not = Not
 
-uFuncVec :: L.UFuncVec -> UFuncVec
-uFuncVec LD.Norm = Norm
-uFuncVec LD.Dim = Dim
+uFuncVV :: L.UFuncVV -> UFuncVV
+uFuncVV LD.NegV = NegV
+
+uFuncVN :: L.UFuncVN -> UFuncVN
+uFuncVN LD.Norm = Norm
+uFuncVN LD.Dim = Dim

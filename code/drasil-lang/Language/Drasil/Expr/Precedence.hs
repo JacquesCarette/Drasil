@@ -2,7 +2,7 @@ module Language.Drasil.Expr.Precedence where
 
 import Language.Drasil.Expr (Expr(..),
   ArithBinOp(..), BoolBinOp, EqBinOp(..), LABinOp, OrdBinOp, VVNBinOp,
-  UFunc(..), UFuncB(..), UFuncVec(..),
+  UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
   AssocBoolOper(..), AssocArithOper(..), VVVBinOp)
 import Language.Drasil.DisplayExpr (DisplayBinOp(..), 
   DisplayAssocBinOp (Equivalence), DisplayExpr (..))
@@ -63,9 +63,13 @@ prec1 _ = 250
 prec1B :: UFuncB -> Int
 prec1B Not = 230
 
--- | prec1Vec - precedence of vector-related unary operators.
-prec1Vec :: UFuncVec -> Int
-prec1Vec _ = 250
+-- | prec1VV - precedence of vector-vector-related unary operators.
+prec1VV :: UFuncVV -> Int
+prec1VV _ = 250
+
+-- | prec1Vec - precedence of vector-number-related unary operators.
+prec1VN :: UFuncVN -> Int
+prec1VN _ = 230
 
 -- | eprec - "Expression" precedence.
 eprec :: Expr -> Int
@@ -83,7 +87,8 @@ eprec Case{}                 = 200
 eprec Matrix{}               = 220
 eprec (UnaryOp fn _)         = prec1 fn
 eprec (UnaryOpB fn _)        = prec1B fn
-eprec (UnaryOpVec fn _)      = prec1Vec fn
+eprec (UnaryOpVV fn _)       = prec1VV fn
+eprec (UnaryOpVN fn _)       = prec1VN fn
 eprec (Operator o _ _)       = precA o
 eprec (ArithBinaryOp bo _ _) = prec2Arith bo
 eprec (BoolBinaryOp bo _ _)  = prec2Bool bo

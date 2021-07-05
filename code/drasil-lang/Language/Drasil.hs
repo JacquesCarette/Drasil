@@ -1,14 +1,15 @@
 {- re-exports modules to simplify external use.-}
 module Language.Drasil (
   -- Expr
-  Expr(..), UFunc(..), UFuncB, UFuncVec
+  Expr(..), UFunc(..), UFuncB, UFuncVV, UFuncVN
   , ArithBinOp, BoolBinOp, EqBinOp, LABinOp, OrdBinOp, VVVBinOp, VVNBinOp
   , AssocArithOper(..), AssocBoolOper(..)
   , DerivType(..), Completeness(..), Relation
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   , ($-), ($/), addI, addRe, mulI, mulRe
   -- Expr.Math
-  , abs_, neg, log, ln, abs, sin, cos, tan, sec, csc, cot, arcsin, arccos, arctan, exp
+  , abs_, neg, negVec, log, ln, abs
+  , sin, cos, tan, sec, csc, cot, arcsin, arccos, arctan, exp
   , sqrt, euclidean, norm, not_
   , square, half, oneHalf, oneThird, recip_
   , dim, idx, int, dbl, exactDbl, frac, str, perc, completeCase, incompleteCase
@@ -67,7 +68,7 @@ module Language.Drasil (
   , NamedChunk, short, nc, IdeaDict , mkIdea
   , nw -- bad name (historical)
   -- Constraint
-  , physc, sfwrc, enumc , isPhysC, isSfwrC
+  , physc, sfwrc, isPhysC, isSfwrC
   , Constraint(..), ConstraintE, ConstraintReason(..)
   -- Chunk.Constrained
   , ConstrainedChunk(..), ConstrConcept(..)
@@ -108,7 +109,7 @@ module Language.Drasil (
   -- Chunk.Citation
   , HasCitation(getCitations)
   -- Sentence
-  , Sentence(..), SentenceStyle(..), (+:+), (+:+.), (+:), (!.), capSent
+  , Sentence(..), SentenceStyle(..), TermCapitalization(..), (+:+), (+:+.), (+:), (!.), capSent
   , ch, eS, sC, sDash, sParen  
   -- Sentence.Extract
   , sdep, shortdep
@@ -192,13 +193,13 @@ module Language.Drasil (
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 import Language.Drasil.DisplayExpr
-import Language.Drasil.Expr (Expr(..), UFunc(..), UFuncB, UFuncVec,
+import Language.Drasil.Expr (Expr(..), UFunc(..), UFuncB, UFuncVV, UFuncVN,
           ArithBinOp, BoolBinOp, EqBinOp, LABinOp, OrdBinOp, VVVBinOp, VVNBinOp,
           AssocArithOper(..), AssocBoolOper(..), 
           DerivType(..), Completeness(..), Relation,
           ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.),
           ($-), ($/), addI, addRe, mulI, mulRe)
-import Language.Drasil.Expr.Math (abs_, neg, log, ln, sin, cos, tan, sqrt, sec, 
+import Language.Drasil.Expr.Math (abs_, neg, negVec, log, ln, sin, cos, tan, sqrt, sec, 
           csc, cot, arcsin, arccos, arctan, exp,
           dim, norm, not_, idx, int, dbl, exactDbl, frac, str, perc,
           square, half, oneHalf, oneThird, recip_,
@@ -249,7 +250,7 @@ import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Concept.Core (sDom) -- exported for drasil-database FIXME: move to development package?
 import Language.Drasil.Chunk.Constrained
-import Language.Drasil.Constraint (physc, sfwrc, enumc, isPhysC, isSfwrC,
+import Language.Drasil.Constraint (physc, sfwrc, isPhysC, isSfwrC,
   Constraint(..), ConstraintE, ConstraintReason(..))
 import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt, 
@@ -278,7 +279,7 @@ import Language.Drasil.NounPhrase
 import Language.Drasil.ShortName (ShortName, shortname', getSentSN)
 import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..), 
   RTopology(..), DomainDesc(AllDD, BoundedDD), getActorName, getInnerSpace)
-import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), (+:+),
+import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), TermCapitalization(..), (+:+),
   (+:+.), (+:), (!.), capSent, ch, eS, sC, sDash, sParen)
 import Language.Drasil.Sentence.Extract (sdep, shortdep) -- exported for drasil-database FIXME: move to development package?
 import Language.Drasil.RefProg (RefInfo(..))

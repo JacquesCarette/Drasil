@@ -1,4 +1,5 @@
 -- FIXME: use real parser (Low Priority; see line 119)
+-- | Creates a .csv table and an HTML table of all the types, classes, and instances in Drasil.
 module TypeGraphGen (main) where
 
 import Data.List

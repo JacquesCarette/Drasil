@@ -1,0 +1,89 @@
+digraph avsall {
+	qdProcessErrorFD -> setPoint;
+	qdProcessErrorFD -> initialValue;
+	qdDerivativeControlFD -> unfilteredDerivative;
+	qdCtrlVarFD -> decoupled;
+	qdCtrlVarFD -> parallelEq;
+	tmSOSystemRC -> pwrPlantTxFnx;
+	gdPowerPlantRC -> externalDisturb;
+	gdPowerPlantRC -> massSpring;
+	gdPowerPlantRC -> dampingCoeffSpring;
+	gdPowerPlantRC -> stiffnessCoeffSpring;
+	imPDRC -> setPoint;
+	likeChgPP -> massSpring;
+	likeChgPP -> dampingCoeffSpring;
+	likeChgPP -> stiffnessCoeffSpring;
+
+
+	pwrPlant	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: pwrPlant"];
+	decoupled	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: decoupled"];
+	setPoint	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: setPoint"];
+	externalDisturb	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: externalDisturb"];
+	initialValue	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: initialValue"];
+	parallelEq	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: parallelEq"];
+	unfilteredDerivative	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: unfilteredDerivative"];
+	pwrPlantTxFnx	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: pwrPlantTxFnx"];
+	massSpring	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: massSpring"];
+	dampingCoeffSpring	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: dampingCoeffSpring"];
+	stiffnessCoeffSpring	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: stiffnessCoeffSpring"];
+
+	subgraph A {
+	rank="same"
+	{pwrPlant, decoupled, setPoint, externalDisturb, initialValue, parallelEq, unfilteredDerivative, pwrPlantTxFnx, massSpring, dampingCoeffSpring, stiffnessCoeffSpring}
+	}
+
+	qdProcessErrorFD	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: qdProcessErrorFD"];
+	qdPropControlFD	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: qdPropControlFD"];
+	qdDerivativeControlFD	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: qdDerivativeControlFD"];
+	qdCtrlVarFD	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: qdCtrlVarFD"];
+
+	subgraph DD {
+	rank="same"
+	{qdProcessErrorFD, qdPropControlFD, qdDerivativeControlFD, qdCtrlVarFD}
+	}
+
+	laplaceRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM: laplaceRC"];
+	invLaplaceRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM: invLaplaceRC"];
+	tmSOSystemRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM: tmSOSystemRC"];
+
+	subgraph TM {
+	rank="same"
+	{laplaceRC, invLaplaceRC, tmSOSystemRC}
+	}
+
+	gdPowerPlantRC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: gdPowerPlantRC"];
+
+	subgraph GD {
+	rank="same"
+	{gdPowerPlantRC}
+	}
+
+	imPDRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: imPDRC"];
+
+	subgraph IM {
+	rank="same"
+	{imPDRC}
+	}
+
+	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: inputValues"];
+	verifyInputs	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: verifyInputs"];
+	calculateValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: calculateValues"];
+	outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: outputValues"];
+	portability	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: portability"];
+	security	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: security"];
+	maintainability	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: maintainability"];
+	verifiability	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: verifiability"];
+
+	subgraph R {
+	rank="same"
+	{inputValues, verifyInputs, calculateValues, outputValues, portability, security, maintainability, verifiability}
+	}
+
+	likeChgPP	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: likeChgPP"];
+
+	subgraph C {
+	rank="same"
+	{likeChgPP}
+	}
+
+}

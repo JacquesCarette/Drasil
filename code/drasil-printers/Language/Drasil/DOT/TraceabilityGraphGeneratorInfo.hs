@@ -1,6 +1,6 @@
-module Language.Drasil.DOT.TraceabilityGraphGeneratorInfo (getInfo) where
+module Language.Drasil.DOT.TraceabilityGraphGeneratorInfo where
 
-import Data.List
+{-import Data.List
 import System.IO
 
 -- node labels + styles for each chunk
@@ -60,4 +60,4 @@ getInfo chunk =
     -- in return (foldl (++) [] (intersperse [""] [iMods,funcReqs,tMods,genDefs,dataDefs,assumps,likeChgs,unlikeChgs]))
   else []
 
--- nodeDefns =
+-- nodeDefns =-}

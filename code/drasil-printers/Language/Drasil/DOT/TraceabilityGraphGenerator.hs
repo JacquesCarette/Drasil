@@ -1,6 +1,6 @@
-module Language.Drasil.DOT.TraceabilityGraphGenerator (genTraceGraph) where
+module Language.Drasil.DOT.TraceabilityGraphGenerator where
 
--- import needed 
+{-- import needed 
 
 import Language.Drasil.DOT.TraceabilityGraphGeneratorInfo as TGGI
 import System.IO
@@ -22,4 +22,4 @@ genTraceGraph caseStudy [chunk] = do
 
 	hPutStrLn dotFile ("}")
 
-	hClose dotFile
+	hClose dotFile-}

@@ -1,0 +1,135 @@
+digraph allvsall {
+	wVol -> assumpVCN;
+	wVol -> tankVol;
+	consThermECS -> assumpTEO;
+	sensHeat -> assumpWAL;
+	nwtnCoolingRC -> assumpHTCC;
+	rocTempSimpRC -> assumpCWTAT;
+	rocTempSimpRC -> assumpDWCoW;
+	rocTempSimpRC -> assumpSHECoW;
+	rocTempSimpRC -> consThermECS;
+	rocTempSimpRC -> rocTempSimpRC;
+	htFluxC -> assumpLCCCW;
+	htFluxC -> assumpTHCCoT;
+	htFluxC -> nwtnCoolingRC;
+	eBalanceOnWtrRC -> assumpWAL;
+	eBalanceOnWtrRC -> assumpPIT;
+	eBalanceOnWtrRC -> assumpNIHGBW;
+	eBalanceOnWtrRC -> tauW;
+	eBalanceOnWtrRC -> rocTempSimpRC;
+	eBalanceOnWtrRC -> htFluxC;
+	heatEInWtrRC -> assumpWAL;
+	heatEInWtrRC -> assumpAPT;
+	heatEInWtrRC -> sensHeat;
+	findMass -> wMass;
+	findMass -> wVol;
+	findMass -> tankVol;
+	findMass -> eBalanceOnWtrRC;
+	findMass -> inputInitVals;
+	outputInputDerivVals -> tauW;
+	outputInputDerivVals -> inputInitVals;
+	outputInputDerivVals -> findMass;
+	calcTempWtrOverTime -> eBalanceOnWtrRC;
+	calcChgHeatEnergyWtrOverTime -> heatEInWtrRC;
+	likeChgTCVOD -> assumpTHCCoT;
+	likeChgTCVOL -> assumpTHCCoL;
+	likeChgDT -> assumpCTNTD;
+	likeChgTLH -> assumpPIT;
+	unlikeChgWFS -> assumpWAL;
+	unlikeChgNIHG -> assumpNIHGBW;
+	unlikeChgNIHG -> eBalanceOnWtrRC;
+
+
+	assumpTEO	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpTEO"];
+	assumpHTCC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpHTCC"];
+	assumpCWTAT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpCWTAT"];
+	assumpDWCoW	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpDWCoW"];
+	assumpSHECoW	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpSHECoW"];
+	assumpLCCCW	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpLCCCW"];
+	assumpTHCCoT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpTHCCoT"];
+	assumpTHCCoL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpTHCCoL"];
+	assumpCTNTD	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpCTNTD"];
+	assumpWAL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpWAL"];
+	assumpPIT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpPIT"];
+	assumpNIHGBW	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpNIHGBW"];
+	assumpAPT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpAPT"];
+	assumpVCN	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpVCN"];
+
+	subgraph A {
+	rank="same"
+	{assumpTEO, assumpHTCC, assumpCWTAT, assumpDWCoW, assumpSHECoW, assumpLCCCW, assumpTHCCoT, assumpTHCCoL, assumpCTNTD, assumpWAL, assumpPIT, assumpNIHGBW, assumpAPT, assumpVCN}
+	}
+
+	wMass	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: wMass"];
+	wVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: wVol"];
+	tankVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: tankVol"];
+	tauW	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: tauW"];
+
+	subgraph DD {
+	rank="same"
+	{wMass, wVol, tankVol, tauW}
+	}
+
+	consThermECS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM: consThermECS"];
+	sensHeat	[shape=box, color=black, style=filled, fillcolor=pink, label="TM: sensHeat"];
+	nwtnCoolingRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM: nwtnCoolingRC"];
+
+	subgraph TM {
+	rank="same"
+	{consThermECS, sensHeat, nwtnCoolingRC}
+	}
+
+	rocTempSimpRC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: rocTempSimpRC"];
+	htFluxC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: htFluxC"];
+
+	subgraph GD {
+	rank="same"
+	{rocTempSimpRC, htFluxC}
+	}
+
+	eBalanceOnWtrRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: eBalanceOnWtrRC"];
+	heatEInWtrRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: heatEInWtrRC"];
+
+	subgraph IM {
+	rank="same"
+	{eBalanceOnWtrRC, heatEInWtrRC}
+	}
+
+	inputInitVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: inputInitVals"];
+	findMass	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: findMass"];
+	checkWithPhysConsts	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: checkWithPhysConsts"];
+	outputInputDerivVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: outputInputDerivVals"];
+	calcTempWtrOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: calcTempWtrOverTime"];
+	calcChgHeatEnergyWtrOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: calcChgHeatEnergyWtrOverTime"];
+	correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: correct"];
+	verifiable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: verifiable"];
+	understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: understandable"];
+	reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: reusable"];
+	maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: maintainable"];
+
+	subgraph R {
+	rank="same"
+	{inputInitVals, findMass, checkWithPhysConsts, outputInputDerivVals, calcTempWtrOverTime, calcChgHeatEnergyWtrOverTime, correct, verifiable, understandable, reusable, maintainable}
+	}
+
+	waterTempGS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS: waterTempGS"];
+	waterEnergyGS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS: waterEnergyGS"];
+
+	subgraph GS {
+	rank="same"
+	{waterTempGS, waterEnergyGS}
+	}
+
+	likeChgTCVOD	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: likeChgTCVOD"];
+	likeChgTCVOL	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: likeChgTCVOL"];
+	likeChgDT	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: likeChgDT"];
+	likeChgTLH	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: likeChgTLH"];
+	unlikeChgWFS	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: unlikeChgWFS"];
+	unlikeChgNIHG	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: unlikeChgNIHG"];
+
+	subgraph C {
+	rank="same"
+	{likeChgTCVOD, likeChgTCVOL, likeChgDT, likeChgTLH, unlikeChgWFS, unlikeChgNIHG}
+	}
+
+}

@@ -1,0 +1,127 @@
+digraph allvsr {
+	findMass -> wMass;
+	findMass -> wVol;
+	findMass -> tankVol;
+	findMass -> eBalanceOnWtrRC;
+	findMass -> eBalanceOnPCMRC;
+	findMass -> heatEInWtrRC;
+	findMass -> heatEInPCMRC;
+	findMass -> inputValues;
+	outputInputDerivVals -> tauW;
+	outputInputDerivVals -> eta;
+	outputInputDerivVals -> tauSP;
+	outputInputDerivVals -> tauLP;
+	outputInputDerivVals -> inputValues;
+	outputInputDerivVals -> findMass;
+	calcTempWtrOverTime -> eBalanceOnWtrRC;
+	calcTempPCMOverTime -> eBalanceOnPCMRC;
+	calcChgHeatEnergyWtrOverTime -> heatEInWtrRC;
+	calcChgHeatEnergyPCMOverTime -> heatEInPCMRC;
+	calcPCMMeltBegin -> eBalanceOnPCMRC;
+	calcPCMMeltEnd -> eBalanceOnPCMRC;
+
+
+	assumpTEO	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpTEO"];
+	assumpHTCC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpHTCC"];
+	assumpCWTAT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpCWTAT"];
+	assumpTPCAV	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpTPCAV"];
+	assumpDWPCoV	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpDWPCoV"];
+	assumpSHECov	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpSHECov"];
+	assumpLCCCW	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpLCCCW"];
+	assumpTHCCoT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpTHCCoT"];
+	assumpTHCCoL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpTHCCoL"];
+	assumpLCCWP	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpLCCWP"];
+	assumpCTNOD	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpCTNOD"];
+	assumpSITWP	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpSITWP"];
+	assumpPIS	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpPIS"];
+	assumpWAL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpWAL"];
+	assumpPIT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpPIT"];
+	assumpNIHGBWP	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpNIHGBWP"];
+	assumpVCMPN	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpVCMPN"];
+	assumpNGSP	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpNGSP"];
+	assumpAPT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpAPT"];
+	assumpVCN	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpVCN"];
+
+	subgraph A {
+	rank="same"
+	{assumpTEO, assumpHTCC, assumpCWTAT, assumpTPCAV, assumpDWPCoV, assumpSHECov, assumpLCCCW, assumpTHCCoT, assumpTHCCoL, assumpLCCWP, assumpCTNOD, assumpSITWP, assumpPIS, assumpWAL, assumpPIT, assumpNIHGBWP, assumpVCMPN, assumpNGSP, assumpAPT, assumpVCN}
+	}
+
+	wMass	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: wMass"];
+	wVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: wVol"];
+	tankVol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: tankVol"];
+	tauW	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: tauW"];
+	eta	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: eta"];
+	tauSP	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: tauSP"];
+	tauLP	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: tauLP"];
+	htFusion	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: htFusion"];
+	meltFrac	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: meltFrac"];
+	aspectRatio	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: aspectRatio"];
+
+	subgraph DD {
+	rank="same"
+	{wMass, wVol, tankVol, tauW, eta, tauSP, tauLP, htFusion, meltFrac, aspectRatio}
+	}
+
+	consThermECS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM: consThermECS"];
+	sensHeat	[shape=box, color=black, style=filled, fillcolor=pink, label="TM: sensHeat"];
+	latentHtERC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM: latentHtERC"];
+	nwtnCoolingRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM: nwtnCoolingRC"];
+
+	subgraph TM {
+	rank="same"
+	{consThermECS, sensHeat, latentHtERC, nwtnCoolingRC}
+	}
+
+	rocTempSimpRC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: rocTempSimpRC"];
+	htFluxC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: htFluxC"];
+	htFluxP	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: htFluxP"];
+
+	subgraph GD {
+	rank="same"
+	{rocTempSimpRC, htFluxC, htFluxP}
+	}
+
+	eBalanceOnWtrRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: eBalanceOnWtrRC"];
+	eBalanceOnPCMRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: eBalanceOnPCMRC"];
+	heatEInWtrRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: heatEInWtrRC"];
+	heatEInPCMRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: heatEInPCMRC"];
+
+	subgraph IM {
+	rank="same"
+	{eBalanceOnWtrRC, eBalanceOnPCMRC, heatEInWtrRC, heatEInPCMRC}
+	}
+
+	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: inputValues"];
+	findMass	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: findMass"];
+	checkWithPhysConsts	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: checkWithPhysConsts"];
+	outputInputDerivVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: outputInputDerivVals"];
+	calcTempWtrOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: calcTempWtrOverTime"];
+	calcTempPCMOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: calcTempPCMOverTime"];
+	calcChgHeatEnergyWtrOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: calcChgHeatEnergyWtrOverTime"];
+	calcChgHeatEnergyPCMOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: calcChgHeatEnergyPCMOverTime"];
+	verifyEnergyOutput	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: verifyEnergyOutput"];
+	calcPCMMeltBegin	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: calcPCMMeltBegin"];
+	calcPCMMeltEnd	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: calcPCMMeltEnd"];
+	correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: correct"];
+	verifiable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: verifiable"];
+	understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: understandable"];
+	reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: reusable"];
+	maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: maintainable"];
+
+	subgraph R {
+	rank="same"
+	{inputValues, findMass, checkWithPhysConsts, outputInputDerivVals, calcTempWtrOverTime, calcTempPCMOverTime, calcChgHeatEnergyWtrOverTime, calcChgHeatEnergyPCMOverTime, verifyEnergyOutput, calcPCMMeltBegin, calcPCMMeltEnd, correct, verifiable, understandable, reusable, maintainable}
+	}
+
+	waterTempGS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS: waterTempGS"];
+	pcmTempGS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS: pcmTempGS"];
+	waterEnergyGS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS: waterEnergyGS"];
+	pcmEnergyGS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS: pcmEnergyGS"];
+
+	subgraph GS {
+	rank="same"
+	{waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS}
+	}
+
+}

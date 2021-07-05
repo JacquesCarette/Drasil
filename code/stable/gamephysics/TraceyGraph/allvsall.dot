@@ -1,0 +1,160 @@
+digraph allvsall {
+	p_CM -> assumpOT;
+	linearDisplacement -> assumpOT;
+	linearVelocity -> assumpOT;
+	linearAcceleration -> assumpOT;
+	angularDisplacement -> assumpOT;
+	angularDisplacement -> assumpOD;
+	angularVelocity -> assumpOT;
+	angularVelocity -> assumpOD;
+	angularAcceleration -> assumpOT;
+	angularAcceleration -> assumpOD;
+	velocityB -> assumpOT;
+	kEnergy -> assumpOT;
+	kEnergy -> assumpOD;
+	kEnergy -> assumpDI;
+	v_iAB -> assumpOT;
+	impulseV -> assumpOT;
+	potEnergy -> assumpOT;
+	potEnergy -> assumpOD;
+	potEnergy -> assumpDI;
+	momentOfInertia -> assumpOT;
+	newtonSLR -> assumpOD;
+	gravitationalAccel -> force;
+	impulseS -> assumpOT;
+	impulseS -> assumpOD;
+	impulseS -> assumpAD;
+	impulseS -> assumpCT;
+	transMotRC -> assumpOT;
+	transMotRC -> assumpOD;
+	transMotRC -> assumpDI;
+	transMotRC -> assumpCAJI;
+	transMotRC -> p_CM;
+	transMotRC -> linearDisplacement;
+	transMotRC -> linearVelocity;
+	transMotRC -> linearAcceleration;
+	transMotRC -> newtonSL;
+	transMotRC -> gravitationalAccel;
+	rotMotRC -> assumpOT;
+	rotMotRC -> assumpOD;
+	rotMotRC -> assumpAD;
+	rotMotRC -> angularDisplacement;
+	rotMotRC -> angularVelocity;
+	rotMotRC -> angularAcceleration;
+	rotMotRC -> newtonSLR;
+	col2DRC -> assumpOT;
+	col2DRC -> assumpOD;
+	col2DRC -> assumpAD;
+	col2DRC -> assumpCT;
+	col2DRC -> assumpDI;
+	col2DRC -> assumpCAJI;
+	col2DRC -> p_CM;
+	col2DRC -> impulseS;
+	lcEC -> assumpCT;
+	lcID -> assumpDI;
+	lcIJC -> assumpCAJI;
+
+
+	assumpOT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpOT"];
+	assumpOD	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpOD"];
+	assumpCST	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpCST"];
+	assumpAD	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpAD"];
+	assumpCT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpCT"];
+	assumpDI	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpDI"];
+	assumpCAJI	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpCAJI"];
+
+	subgraph A {
+	rank="same"
+	{assumpOT, assumpOD, assumpCST, assumpAD, assumpCT, assumpDI, assumpCAJI}
+	}
+
+	p_CM	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: p_CM"];
+	linearDisplacement	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: linearDisplacement"];
+	linearVelocity	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: linearVelocity"];
+	linearAcceleration	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: linearAcceleration"];
+	angularDisplacement	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: angularDisplacement"];
+	angularVelocity	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: angularVelocity"];
+	angularAcceleration	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: angularAcceleration"];
+	velocityB	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: velocityB"];
+	torque	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: torque"];
+	kEnergy	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: kEnergy"];
+	restitutionCoef	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: restitutionCoef"];
+	v_iAB	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: v_iAB"];
+	impulseV	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: impulseV"];
+	potEnergy	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: potEnergy"];
+	momentOfInertia	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: momentOfInertia"];
+
+	subgraph DD {
+	rank="same"
+	{p_CM, linearDisplacement, linearVelocity, linearAcceleration, angularDisplacement, angularVelocity, angularAcceleration, velocityB, torque, kEnergy, restitutionCoef, v_iAB, impulseV, potEnergy, momentOfInertia}
+	}
+
+	newtonSL	[shape=box, color=black, style=filled, fillcolor=pink, label="TM: newtonSL"];
+	force1	[shape=box, color=black, style=filled, fillcolor=pink, label="TM: force1"];
+	force	[shape=box, color=black, style=filled, fillcolor=pink, label="TM: force"];
+	newtonSLR	[shape=box, color=black, style=filled, fillcolor=pink, label="TM: newtonSLR"];
+
+	subgraph TM {
+	rank="same"
+	{newtonSL, force1, force, newtonSLR}
+	}
+
+	gravitationalAccel	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: gravitationalAccel"];
+	impulseS	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: impulseS"];
+
+	subgraph GD {
+	rank="same"
+	{gravitationalAccel, impulseS}
+	}
+
+	transMotRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: transMotRC"];
+	rotMotRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: rotMotRC"];
+	col2DRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: col2DRC"];
+
+	subgraph IM {
+	rank="same"
+	{transMotRC, rotMotRC, col2DRC}
+	}
+
+	simSpace	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: simSpace"];
+	inputInitialConds	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: inputInitialConds"];
+	inputSurfaceProps	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: inputSurfaceProps"];
+	verifyPhysCons	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: verifyPhysCons"];
+	calcTransOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: calcTransOverTime"];
+	calcRotOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: calcRotOverTime"];
+	deterColls	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: deterColls"];
+	deterCollRespOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: deterCollRespOverTime"];
+	performance	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: performance"];
+	correctness	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: correctness"];
+	usability	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: usability"];
+	understandability	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: understandability"];
+	maintainability	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: maintainability"];
+
+	subgraph R {
+	rank="same"
+	{simSpace, inputInitialConds, inputSurfaceProps, verifyPhysCons, calcTransOverTime, calcRotOverTime, deterColls, deterCollRespOverTime, performance, correctness, usability, understandability, maintainability}
+	}
+
+	linearGS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS: linearGS"];
+	angularGS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS: angularGS"];
+
+	subgraph GS {
+	rank="same"
+	{linearGS, angularGS}
+	}
+
+	lcVODES	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: lcVODES"];
+	lcEC	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: lcEC"];
+	lcID	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: lcID"];
+	lcIJC	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: lcIJC"];
+	ucSRB	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: ucSRB"];
+	ucEI	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: ucEI"];
+	ucCCS	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: ucCCS"];
+	ucORB	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: ucORB"];
+
+	subgraph C {
+	rank="same"
+	{lcVODES, lcEC, lcID, lcIJC, ucSRB, ucEI, ucCCS, ucORB}
+	}
+
+}

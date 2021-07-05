@@ -1,0 +1,291 @@
+digraph allvsall {
+	alpha_i -> assumpSBSBISL;
+	beta_i -> assumpSBSBISL;
+	l_bi -> alpha_i;
+	l_bi -> b_i;
+	l_si -> beta_i;
+	l_si -> b_i;
+	h_i -> assumpSBSBISL;
+	h_i -> hR;
+	h_i -> hL;
+	Phi -> alpha_i;
+	Phi -> f_i;
+	Psi -> alpha_i;
+	Psi -> f_i;
+	Psi -> Phi;
+	equilibriumCS -> assumpENSL;
+	mcShrSrgth -> assumpSBSBISL;
+	effectiveStressTM -> sigma;
+	normForcEq -> alpha_i;
+	normForcEq -> beta_i;
+	normForcEq -> equilibriumCS;
+	normForcEq -> sliceWght;
+	normForcEq -> srfWtrF;
+	bsShrFEq -> alpha_i;
+	bsShrFEq -> beta_i;
+	bsShrFEq -> equilibriumCS;
+	bsShrFEq -> sliceWght;
+	bsShrFEq -> srfWtrF;
+	resShr -> assumpSLH;
+	resShr -> assumpSP;
+	resShr -> assumpSLI;
+	resShr -> assumpPSC;
+	resShr -> l_bi;
+	resShr -> sigma;
+	resShr -> tau;
+	resShr -> mcShrSrgth;
+	mobShr -> assumpFOS;
+	mobShr -> l_bi;
+	mobShr -> factOfSafetyTM;
+	mobShr -> resShr;
+	effNormF -> assumpPSC;
+	effNormF -> sigma;
+	effNormF -> effectiveStressTM;
+	effNormF -> baseWtrF;
+	resShearWO -> H_i;
+	resShearWO -> alpha_i;
+	resShearWO -> beta_i;
+	resShearWO -> l_bi;
+	resShearWO -> sliceWght;
+	resShearWO -> baseWtrF;
+	resShearWO -> srfWtrF;
+	mobShearWO -> H_i;
+	mobShearWO -> alpha_i;
+	mobShearWO -> beta_i;
+	mobShearWO -> sliceWght;
+	mobShearWO -> srfWtrF;
+	X_i -> assumpINSFL;
+	X_i -> f_i;
+	momentEql -> assumpNESSS;
+	momentEql -> assumpHFSM;
+	momentEql -> alpha_i;
+	momentEql -> beta_i;
+	momentEql -> b_i;
+	momentEql -> h_i;
+	momentEql -> torque;
+	momentEql -> equilibriumCS;
+	momentEql -> weight;
+	momentEql -> sliceWght;
+	momentEql -> srfWtrF;
+	weight -> newtonSL;
+	sliceWght -> assumpSLH;
+	sliceWght -> assumpPSC;
+	sliceWght -> assumpSBSBISL;
+	sliceWght -> assumpWIBE;
+	sliceWght -> assumpWISE;
+	sliceWght -> b_i;
+	sliceWght -> weight;
+	baseWtrF -> assumpPSC;
+	baseWtrF -> assumpSBSBISL;
+	baseWtrF -> assumpWIBE;
+	baseWtrF -> assumpHFSM;
+	baseWtrF -> l_bi;
+	baseWtrF -> pressure;
+	baseWtrF -> baseWtrF;
+	srfWtrF -> assumpPSC;
+	srfWtrF -> assumpSBSBISL;
+	srfWtrF -> assumpWISE;
+	srfWtrF -> assumpHFSM;
+	srfWtrF -> l_si;
+	srfWtrF -> pressure;
+	srfWtrF -> srfWtrF;
+	FS -> assumpINSFL;
+	FS -> assumpES;
+	FS -> assumpSF;
+	FS -> assumpSL;
+	FS -> Phi;
+	FS -> Psi;
+	FS -> normForcEq;
+	FS -> bsShrFEq;
+	FS -> mobShr;
+	FS -> resShearWO;
+	FS -> mobShearWO;
+	FS -> X_i;
+	FS -> FS;
+	FS -> nrmShrForRC;
+	FS -> intsliceFsRC;
+	nrmShrForRC -> assumpINSFL;
+	nrmShrForRC -> assumpES;
+	nrmShrForRC -> assumpSF;
+	nrmShrForRC -> assumpSL;
+	nrmShrForRC -> X_i;
+	nrmShrForRC -> momentEql;
+	nrmShrForRC -> FS;
+	nrmShrForRC -> nrmShrForRC;
+	nrmShrForRC -> nrmShrForNumRC;
+	nrmShrForRC -> nrmShrForDenRC;
+	nrmShrForRC -> intsliceFsRC;
+	nrmShrForNumRC -> H_i;
+	nrmShrForNumRC -> alpha_i;
+	nrmShrForNumRC -> beta_i;
+	nrmShrForNumRC -> b_i;
+	nrmShrForNumRC -> h_i;
+	nrmShrForNumRC -> srfWtrF;
+	nrmShrForNumRC -> nrmShrForRC;
+	nrmShrForDenRC -> b_i;
+	nrmShrForDenRC -> f_i;
+	nrmShrForDenRC -> nrmShrForRC;
+	intsliceFsRC -> assumpES;
+	intsliceFsRC -> Phi;
+	intsliceFsRC -> Psi;
+	intsliceFsRC -> resShearWO;
+	intsliceFsRC -> mobShearWO;
+	intsliceFsRC -> FS;
+	intsliceFsRC -> nrmShrForRC;
+	intsliceFsRC -> intsliceFsRC;
+	crtSlpIdRC -> assumpSSC;
+	determineCritSlip -> FS;
+	determineCritSlip -> nrmShrForRC;
+	determineCritSlip -> intsliceFsRC;
+	determineCritSlip -> crtSlpIdRC;
+	displayGraph -> crtSlpIdRC;
+	displayFS -> FS;
+	displayFS -> nrmShrForRC;
+	displayFS -> intsliceFsRC;
+	displayNormal -> FS;
+	displayNormal -> nrmShrForRC;
+	displayNormal -> intsliceFsRC;
+	displayShear -> FS;
+	displayShear -> nrmShrForRC;
+	displayShear -> intsliceFsRC;
+	writeToFile -> displayInput;
+	writeToFile -> displayGraph;
+	writeToFile -> displayFS;
+	writeToFile -> displayNormal;
+	writeToFile -> displayShear;
+	LC_inhomogeneous -> assumpSLH;
+	LC_seismic -> assumpSF;
+	LC_external -> assumpSL;
+	UC_normshearlinear -> assumpINSFL;
+	UC_2donly -> assumpENSL;
+
+
+	assumpSSC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpSSC"];
+	assumpFOS	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpFOS"];
+	assumpSLH	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpSLH"];
+	assumpSP	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpSP"];
+	assumpSLI	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpSLI"];
+	assumpINSFL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpINSFL"];
+	assumpPSC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpPSC"];
+	assumpENSL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpENSL"];
+	assumpSBSBISL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpSBSBISL"];
+	assumpES	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpES"];
+	assumpSF	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpSF"];
+	assumpSL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpSL"];
+	assumpWIBE	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpWIBE"];
+	assumpWISE	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpWISE"];
+	assumpNESSS	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpNESSS"];
+	assumpHFSM	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpHFSM"];
+
+	subgraph A {
+	rank="same"
+	{assumpSSC, assumpFOS, assumpSLH, assumpSP, assumpSLI, assumpINSFL, assumpPSC, assumpENSL, assumpSBSBISL, assumpES, assumpSF, assumpSL, assumpWIBE, assumpWISE, assumpNESSS, assumpHFSM}
+	}
+
+	H_i	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: H_i"];
+	alpha_i	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: alpha_i"];
+	beta_i	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: beta_i"];
+	b_i	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: b_i"];
+	l_bi	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: l_bi"];
+	l_si	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: l_si"];
+	h_i	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: h_i"];
+	sigma	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: sigma"];
+	tau	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: tau"];
+	torque	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: torque"];
+	f_i	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: f_i"];
+	Phi	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: Phi"];
+	Psi	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: Psi"];
+	F_xG	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: F_xG"];
+	F_xH	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: F_xH"];
+	hR	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: hR"];
+	hL	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: hL"];
+
+	subgraph DD {
+	rank="same"
+	{H_i, alpha_i, beta_i, b_i, l_bi, l_si, h_i, sigma, tau, torque, f_i, Phi, Psi, F_xG, F_xH, hR, hL}
+	}
+
+	factOfSafetyTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM: factOfSafetyTM"];
+	equilibriumCS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM: equilibriumCS"];
+	mcShrSrgth	[shape=box, color=black, style=filled, fillcolor=pink, label="TM: mcShrSrgth"];
+	effectiveStressTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM: effectiveStressTM"];
+	newtonSL	[shape=box, color=black, style=filled, fillcolor=pink, label="TM: newtonSL"];
+
+	subgraph TM {
+	rank="same"
+	{factOfSafetyTM, equilibriumCS, mcShrSrgth, effectiveStressTM, newtonSL}
+	}
+
+	normForcEq	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: normForcEq"];
+	bsShrFEq	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: bsShrFEq"];
+	resShr	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: resShr"];
+	mobShr	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: mobShr"];
+	effNormF	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: effNormF"];
+	resShearWO	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: resShearWO"];
+	mobShearWO	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: mobShearWO"];
+	X_i	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: X_i"];
+	momentEql	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: momentEql"];
+	weight	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: weight"];
+	sliceWght	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: sliceWght"];
+	pressure	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: pressure"];
+	baseWtrF	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: baseWtrF"];
+	srfWtrF	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: srfWtrF"];
+
+	subgraph GD {
+	rank="same"
+	{normForcEq, bsShrFEq, resShr, mobShr, effNormF, resShearWO, mobShearWO, X_i, momentEql, weight, sliceWght, pressure, baseWtrF, srfWtrF}
+	}
+
+	FS	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: FS"];
+	nrmShrForRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: nrmShrForRC"];
+	nrmShrForNumRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: nrmShrForNumRC"];
+	nrmShrForDenRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: nrmShrForDenRC"];
+	intsliceFsRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: intsliceFsRC"];
+	crtSlpIdRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: crtSlpIdRC"];
+
+	subgraph IM {
+	rank="same"
+	{FS, nrmShrForRC, nrmShrForNumRC, nrmShrForDenRC, intsliceFsRC, crtSlpIdRC}
+	}
+
+	readAndStore	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: readAndStore"];
+	verifyInput	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: verifyInput"];
+	determineCritSlip	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: determineCritSlip"];
+	verifyOutput	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: verifyOutput"];
+	displayInput	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: displayInput"];
+	displayGraph	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: displayGraph"];
+	displayFS	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: displayFS"];
+	displayNormal	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: displayNormal"];
+	displayShear	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: displayShear"];
+	writeToFile	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: writeToFile"];
+	correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: correct"];
+	understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: understandable"];
+	reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: reusable"];
+	maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: maintainable"];
+
+	subgraph R {
+	rank="same"
+	{readAndStore, verifyInput, determineCritSlip, verifyOutput, displayInput, displayGraph, displayFS, displayNormal, displayShear, writeToFile, correct, understandable, reusable, maintainable}
+	}
+
+	identifyCritAndFS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS: identifyCritAndFS"];
+	determineNormalF	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS: determineNormalF"];
+	determineShearF	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS: determineShearF"];
+
+	subgraph GS {
+	rank="same"
+	{identifyCritAndFS, determineNormalF, determineShearF}
+	}
+
+	LC_inhomogeneous	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: LC_inhomogeneous"];
+	LC_seismic	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: LC_seismic"];
+	LC_external	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: LC_external"];
+	UC_normshearlinear	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: UC_normshearlinear"];
+	UC_2donly	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: UC_2donly"];
+
+	subgraph C {
+	rank="same"
+	{LC_inhomogeneous, LC_seismic, LC_external, UC_normshearlinear, UC_2donly}
+	}
+
+}

@@ -1,0 +1,90 @@
+digraph allvsr {
+	outputValsAndKnownValues -> inputValues;
+	outputValsAndKnownValues -> sysSetValsFollowingAssumps;
+	checkGlassSafety -> isSafeProb;
+	checkGlassSafety -> isSafeLoad;
+
+
+	assumpGT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpGT"];
+	assumpGC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpGC"];
+	assumpES	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpES"];
+	assumpSV	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpSV"];
+	assumpGL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpGL"];
+	assumpBC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpBC"];
+	assumpRT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpRT"];
+	assumpLDFC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpLDFC"];
+
+	subgraph A {
+	rank="same"
+	{assumpGT, assumpGC, assumpES, assumpSV, assumpGL, assumpBC, assumpRT, assumpLDFC}
+	}
+
+	riskFun	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: riskFun"];
+	minThick	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: minThick"];
+	loadDurFactor	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: loadDurFactor"];
+	stressDistFac	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: stressDistFac"];
+	nFL	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: nFL"];
+	glassTypeFac	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: glassTypeFac"];
+	dimlessLoad	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: dimlessLoad"];
+	tolLoad	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: tolLoad"];
+	sdfTol	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: sdfTol"];
+	stdOffDist	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: stdOffDist"];
+	aR	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: aR"];
+	eqTNTChar	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: eqTNTChar"];
+	probBr	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: probBr"];
+	lResistance	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: lResistance"];
+	demandq	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: demandq"];
+
+	subgraph DD {
+	rank="same"
+	{riskFun, minThick, loadDurFactor, stressDistFac, nFL, glassTypeFac, dimlessLoad, tolLoad, sdfTol, stdOffDist, aR, eqTNTChar, probBr, lResistance, demandq}
+	}
+
+	isSafeProb	[shape=box, color=black, style=filled, fillcolor=pink, label="TM: isSafeProb"];
+	isSafeLoad	[shape=box, color=black, style=filled, fillcolor=pink, label="TM: isSafeLoad"];
+
+	subgraph TM {
+	rank="same"
+	{isSafeProb, isSafeLoad}
+	}
+
+
+	subgraph GD {
+	rank="same"
+	{}
+	}
+
+	isSafePb	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: isSafePb"];
+	isSafeLR	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: isSafeLR"];
+
+	subgraph IM {
+	rank="same"
+	{isSafePb, isSafeLR}
+	}
+
+	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: inputValues"];
+	sysSetValsFollowingAssumps	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: sysSetValsFollowingAssumps"];
+	checkInputWithDataCons	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: checkInputWithDataCons"];
+	outputValsAndKnownValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: outputValsAndKnownValues"];
+	checkGlassSafety	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: checkGlassSafety"];
+	outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: outputValues"];
+	correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: correct"];
+	verifiable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: verifiable"];
+	understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: understandable"];
+	reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: reusable"];
+	maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: maintainable"];
+	portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: portable"];
+
+	subgraph R {
+	rank="same"
+	{inputValues, sysSetValsFollowingAssumps, checkInputWithDataCons, outputValsAndKnownValues, checkGlassSafety, outputValues, correct, verifiable, understandable, reusable, maintainable, portable}
+	}
+
+	willBreakGS	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS: willBreakGS"];
+
+	subgraph GS {
+	rank="same"
+	{willBreakGS}
+	}
+
+}

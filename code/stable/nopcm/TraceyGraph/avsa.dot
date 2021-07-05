@@ -1,0 +1,24 @@
+digraph avsa {
+
+
+	assumpTEO	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpTEO"];
+	assumpHTCC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpHTCC"];
+	assumpCWTAT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpCWTAT"];
+	assumpDWCoW	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpDWCoW"];
+	assumpSHECoW	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpSHECoW"];
+	assumpLCCCW	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpLCCCW"];
+	assumpTHCCoT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpTHCCoT"];
+	assumpTHCCoL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpTHCCoL"];
+	assumpCTNTD	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpCTNTD"];
+	assumpWAL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpWAL"];
+	assumpPIT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpPIT"];
+	assumpNIHGBW	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpNIHGBW"];
+	assumpAPT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpAPT"];
+	assumpVCN	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpVCN"];
+
+	subgraph A {
+	rank="same"
+	{assumpTEO, assumpHTCC, assumpCWTAT, assumpDWCoW, assumpSHECoW, assumpLCCCW, assumpTHCCoT, assumpTHCCoL, assumpCTNTD, assumpWAL, assumpPIT, assumpNIHGBW, assumpAPT, assumpVCN}
+	}
+
+}

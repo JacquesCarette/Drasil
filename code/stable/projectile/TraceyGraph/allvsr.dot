@@ -1,0 +1,91 @@
+digraph allvsr {
+	calcValues -> flightduration;
+	calcValues -> landingposition;
+	calcValues -> offset;
+	calcValues -> message;
+	outputValues -> offset;
+	outputValues -> message;
+
+
+	twoDMotion	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: twoDMotion"];
+	cartSyst	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: cartSyst"];
+	yAxisGravity	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: yAxisGravity"];
+	launchOrigin	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: launchOrigin"];
+	targetXAxis	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: targetXAxis"];
+	posXDirection	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: posXDirection"];
+	constAccel	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: constAccel"];
+	accelXZero	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: accelXZero"];
+	accelYGravity	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: accelYGravity"];
+	neglectDrag	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: neglectDrag"];
+	pointMass	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: pointMass"];
+	freeFlight	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: freeFlight"];
+	neglectCurv	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: neglectCurv"];
+	timeStartZero	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: timeStartZero"];
+	gravAccelValue	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: gravAccelValue"];
+
+	subgraph A {
+	rank="same"
+	{twoDMotion, cartSyst, yAxisGravity, launchOrigin, targetXAxis, posXDirection, constAccel, accelXZero, accelYGravity, neglectDrag, pointMass, freeFlight, neglectCurv, timeStartZero, gravAccelValue}
+	}
+
+	speed	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: speed"];
+	ixVel	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: ixVel"];
+	iyVel	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: iyVel"];
+
+	subgraph DD {
+	rank="same"
+	{speed, ixVel, iyVel}
+	}
+
+	accelerationTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM: accelerationTM"];
+	velocityTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM: velocityTM"];
+
+	subgraph TM {
+	rank="same"
+	{accelerationTM, velocityTM}
+	}
+
+	projSpeed	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: projSpeed"];
+	scalarPos	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: scalarPos"];
+	velocity	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: velocity"];
+	position	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: position"];
+
+	subgraph GD {
+	rank="same"
+	{projSpeed, scalarPos, velocity, position}
+	}
+
+	flightduration	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: flightduration"];
+	landingposition	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: landingposition"];
+	offset	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: offset"];
+	message	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: message"];
+
+	subgraph IM {
+	rank="same"
+	{flightduration, landingposition, offset, message}
+	}
+
+	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: inputValues"];
+	verifyInVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: verifyInVals"];
+	calcValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: calcValues"];
+	outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: outputValues"];
+	correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: correct"];
+	verifiable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: verifiable"];
+	understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: understandable"];
+	reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: reusable"];
+	maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: maintainable"];
+	portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: portable"];
+
+	subgraph R {
+	rank="same"
+	{inputValues, verifyInVals, calcValues, outputValues, correct, verifiable, understandable, reusable, maintainable, portable}
+	}
+
+	targetHit	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS: targetHit"];
+
+	subgraph GS {
+	rank="same"
+	{targetHit}
+	}
+
+}

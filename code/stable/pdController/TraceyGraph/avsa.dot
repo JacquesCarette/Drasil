@@ -1,0 +1,25 @@
+digraph avsa {
+	pwrPlantTxFnx -> pwrPlant;
+	massSpring -> pwrPlant;
+	dampingCoeffSpring -> pwrPlant;
+	stiffnessCoeffSpring -> pwrPlant;
+
+
+	pwrPlant	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: pwrPlant"];
+	decoupled	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: decoupled"];
+	setPoint	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: setPoint"];
+	externalDisturb	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: externalDisturb"];
+	initialValue	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: initialValue"];
+	parallelEq	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: parallelEq"];
+	unfilteredDerivative	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: unfilteredDerivative"];
+	pwrPlantTxFnx	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: pwrPlantTxFnx"];
+	massSpring	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: massSpring"];
+	dampingCoeffSpring	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: dampingCoeffSpring"];
+	stiffnessCoeffSpring	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: stiffnessCoeffSpring"];
+
+	subgraph A {
+	rank="same"
+	{pwrPlant, decoupled, setPoint, externalDisturb, initialValue, parallelEq, unfilteredDerivative, pwrPlantTxFnx, massSpring, dampingCoeffSpring, stiffnessCoeffSpring}
+	}
+
+}

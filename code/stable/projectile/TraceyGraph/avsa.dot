@@ -1,0 +1,32 @@
+digraph avsa {
+	cartSyst -> neglectCurv;
+	targetXAxis -> neglectCurv;
+	constAccel -> accelXZero;
+	constAccel -> accelYGravity;
+	constAccel -> neglectDrag;
+	constAccel -> freeFlight;
+	accelYGravity -> yAxisGravity;
+
+
+	twoDMotion	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: twoDMotion"];
+	cartSyst	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: cartSyst"];
+	yAxisGravity	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: yAxisGravity"];
+	launchOrigin	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: launchOrigin"];
+	targetXAxis	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: targetXAxis"];
+	posXDirection	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: posXDirection"];
+	constAccel	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: constAccel"];
+	accelXZero	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: accelXZero"];
+	accelYGravity	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: accelYGravity"];
+	neglectDrag	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: neglectDrag"];
+	pointMass	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: pointMass"];
+	freeFlight	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: freeFlight"];
+	neglectCurv	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: neglectCurv"];
+	timeStartZero	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: timeStartZero"];
+	gravAccelValue	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: gravAccelValue"];
+
+	subgraph A {
+	rank="same"
+	{twoDMotion, cartSyst, yAxisGravity, launchOrigin, targetXAxis, posXDirection, constAccel, accelXZero, accelYGravity, neglectDrag, pointMass, freeFlight, neglectCurv, timeStartZero, gravAccelValue}
+	}
+
+}

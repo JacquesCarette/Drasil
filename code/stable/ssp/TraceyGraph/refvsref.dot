@@ -1,0 +1,168 @@
+digraph refvsref {
+	l_bi -> alpha_i;
+	l_bi -> b_i;
+	l_si -> beta_i;
+	l_si -> b_i;
+	h_i -> hR;
+	h_i -> hL;
+	Phi -> alpha_i;
+	Phi -> f_i;
+	Psi -> alpha_i;
+	Psi -> f_i;
+	Psi -> Phi;
+	effectiveStressTM -> sigma;
+	normForcEq -> alpha_i;
+	normForcEq -> beta_i;
+	normForcEq -> equilibriumCS;
+	normForcEq -> sliceWght;
+	normForcEq -> srfWtrF;
+	bsShrFEq -> alpha_i;
+	bsShrFEq -> beta_i;
+	bsShrFEq -> equilibriumCS;
+	bsShrFEq -> sliceWght;
+	bsShrFEq -> srfWtrF;
+	resShr -> l_bi;
+	resShr -> sigma;
+	resShr -> tau;
+	resShr -> mcShrSrgth;
+	mobShr -> l_bi;
+	mobShr -> factOfSafetyTM;
+	mobShr -> resShr;
+	effNormF -> sigma;
+	effNormF -> effectiveStressTM;
+	effNormF -> baseWtrF;
+	resShearWO -> H_i;
+	resShearWO -> alpha_i;
+	resShearWO -> beta_i;
+	resShearWO -> l_bi;
+	resShearWO -> sliceWght;
+	resShearWO -> baseWtrF;
+	resShearWO -> srfWtrF;
+	mobShearWO -> H_i;
+	mobShearWO -> alpha_i;
+	mobShearWO -> beta_i;
+	mobShearWO -> sliceWght;
+	mobShearWO -> srfWtrF;
+	X_i -> f_i;
+	momentEql -> alpha_i;
+	momentEql -> beta_i;
+	momentEql -> b_i;
+	momentEql -> h_i;
+	momentEql -> torque;
+	momentEql -> equilibriumCS;
+	momentEql -> weight;
+	momentEql -> sliceWght;
+	momentEql -> srfWtrF;
+	weight -> newtonSL;
+	sliceWght -> b_i;
+	sliceWght -> weight;
+	baseWtrF -> l_bi;
+	baseWtrF -> pressure;
+	baseWtrF -> baseWtrF;
+	srfWtrF -> l_si;
+	srfWtrF -> pressure;
+	srfWtrF -> srfWtrF;
+	FS -> Phi;
+	FS -> Psi;
+	FS -> normForcEq;
+	FS -> bsShrFEq;
+	FS -> mobShr;
+	FS -> resShearWO;
+	FS -> mobShearWO;
+	FS -> X_i;
+	FS -> FS;
+	FS -> nrmShrForRC;
+	FS -> intsliceFsRC;
+	nrmShrForRC -> X_i;
+	nrmShrForRC -> momentEql;
+	nrmShrForRC -> FS;
+	nrmShrForRC -> nrmShrForRC;
+	nrmShrForRC -> nrmShrForNumRC;
+	nrmShrForRC -> nrmShrForDenRC;
+	nrmShrForRC -> intsliceFsRC;
+	nrmShrForNumRC -> H_i;
+	nrmShrForNumRC -> alpha_i;
+	nrmShrForNumRC -> beta_i;
+	nrmShrForNumRC -> b_i;
+	nrmShrForNumRC -> h_i;
+	nrmShrForNumRC -> srfWtrF;
+	nrmShrForNumRC -> nrmShrForRC;
+	nrmShrForDenRC -> b_i;
+	nrmShrForDenRC -> f_i;
+	nrmShrForDenRC -> nrmShrForRC;
+	intsliceFsRC -> Phi;
+	intsliceFsRC -> Psi;
+	intsliceFsRC -> resShearWO;
+	intsliceFsRC -> mobShearWO;
+	intsliceFsRC -> FS;
+	intsliceFsRC -> nrmShrForRC;
+	intsliceFsRC -> intsliceFsRC;
+
+
+	H_i	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: H_i"];
+	alpha_i	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: alpha_i"];
+	beta_i	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: beta_i"];
+	b_i	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: b_i"];
+	l_bi	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: l_bi"];
+	l_si	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: l_si"];
+	h_i	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: h_i"];
+	sigma	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: sigma"];
+	tau	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: tau"];
+	torque	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: torque"];
+	f_i	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: f_i"];
+	Phi	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: Phi"];
+	Psi	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: Psi"];
+	F_xG	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: F_xG"];
+	F_xH	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: F_xH"];
+	hR	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: hR"];
+	hL	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: hL"];
+
+	subgraph DD {
+	rank="same"
+	{H_i, alpha_i, beta_i, b_i, l_bi, l_si, h_i, sigma, tau, torque, f_i, Phi, Psi, F_xG, F_xH, hR, hL}
+	}
+
+	factOfSafetyTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM: factOfSafetyTM"];
+	equilibriumCS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM: equilibriumCS"];
+	mcShrSrgth	[shape=box, color=black, style=filled, fillcolor=pink, label="TM: mcShrSrgth"];
+	effectiveStressTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM: effectiveStressTM"];
+	newtonSL	[shape=box, color=black, style=filled, fillcolor=pink, label="TM: newtonSL"];
+
+	subgraph TM {
+	rank="same"
+	{factOfSafetyTM, equilibriumCS, mcShrSrgth, effectiveStressTM, newtonSL}
+	}
+
+	normForcEq	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: normForcEq"];
+	bsShrFEq	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: bsShrFEq"];
+	resShr	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: resShr"];
+	mobShr	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: mobShr"];
+	effNormF	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: effNormF"];
+	resShearWO	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: resShearWO"];
+	mobShearWO	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: mobShearWO"];
+	X_i	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: X_i"];
+	momentEql	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: momentEql"];
+	weight	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: weight"];
+	sliceWght	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: sliceWght"];
+	pressure	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: pressure"];
+	baseWtrF	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: baseWtrF"];
+	srfWtrF	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: srfWtrF"];
+
+	subgraph GD {
+	rank="same"
+	{normForcEq, bsShrFEq, resShr, mobShr, effNormF, resShearWO, mobShearWO, X_i, momentEql, weight, sliceWght, pressure, baseWtrF, srfWtrF}
+	}
+
+	FS	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: FS"];
+	nrmShrForRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: nrmShrForRC"];
+	nrmShrForNumRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: nrmShrForNumRC"];
+	nrmShrForDenRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: nrmShrForDenRC"];
+	intsliceFsRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: intsliceFsRC"];
+	crtSlpIdRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: crtSlpIdRC"];
+
+	subgraph IM {
+	rank="same"
+	{FS, nrmShrForRC, nrmShrForNumRC, nrmShrForDenRC, intsliceFsRC, crtSlpIdRC}
+	}
+
+}

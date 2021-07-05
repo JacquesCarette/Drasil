@@ -68,7 +68,7 @@ module Language.Drasil (
   , NamedChunk, short, nc, IdeaDict , mkIdea
   , nw -- bad name (historical)
   -- Constraint
-  , physc, sfwrc, enumc , isPhysC, isSfwrC
+  , physc, sfwrc, isPhysC, isSfwrC
   , Constraint(..), ConstraintE, ConstraintReason(..)
   -- Chunk.Constrained
   , ConstrainedChunk(..), ConstrConcept(..)
@@ -250,7 +250,7 @@ import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Concept.Core (sDom) -- exported for drasil-database FIXME: move to development package?
 import Language.Drasil.Chunk.Constrained
-import Language.Drasil.Constraint (physc, sfwrc, enumc, isPhysC, isSfwrC,
+import Language.Drasil.Constraint (physc, sfwrc, isPhysC, isSfwrC,
   Constraint(..), ConstraintE, ConstraintReason(..))
 import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt, 

@@ -46,8 +46,6 @@ realInterval (L.UpFrom (i, e)) = L.UpFrom (i, expr e)
 -- | Convert 'Constraint Expr's into 'Constraint CodeExpr's.
 constraint :: L.ConstraintE -> L.Constraint CodeExpr
 constraint (L.Range r ri) = L.Range r (realInterval ri)
-constraint (L.EnumeratedReal r ds) = L.EnumeratedReal r ds
-constraint (L.EnumeratedStr r ss) = L.EnumeratedStr r ss
 
 -- | Convert 'DomainDesc Expr Expr' into 'DomainDesc CodeExpr CodeExpr's.
 renderDomainDesc :: L.DomainDesc L.Expr L.Expr -> L.DomainDesc CodeExpr CodeExpr

@@ -25,16 +25,16 @@ digraph allvsall {
 	impulseS -> assumpOD;
 	impulseS -> assumpAD;
 	impulseS -> assumpCT;
-	transMotRC -> assumpOT;
-	transMotRC -> assumpOD;
-	transMotRC -> assumpDI;
-	transMotRC -> assumpCAJI;
-	transMotRC -> p_CM;
-	transMotRC -> linearDisplacement;
-	transMotRC -> linearVelocity;
-	transMotRC -> linearAcceleration;
-	transMotRC -> newtonSL;
-	transMotRC -> gravitationalAccel;
+	accj -> assumpOT;
+	accj -> assumpOD;
+	accj -> assumpDI;
+	accj -> assumpCAJI;
+	accj -> p_CM;
+	accj -> linearDisplacement;
+	accj -> linearVelocity;
+	accj -> linearAcceleration;
+	accj -> newtonSL;
+	accj -> gravitationalAccel;
 	rotMotRC -> assumpOT;
 	rotMotRC -> assumpOD;
 	rotMotRC -> assumpAD;
@@ -107,13 +107,13 @@ digraph allvsall {
 	{gravitationalAccel, impulseS}
 	}
 
-	transMotRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: transMotRC"];
+	accj	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: accj"];
 	rotMotRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: rotMotRC"];
 	col2DRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: col2DRC"];
 
 	subgraph IM {
 	rank="same"
-	{transMotRC, rotMotRC, col2DRC}
+	{accj, rotMotRC, col2DRC}
 	}
 
 	simSpace	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: simSpace"];

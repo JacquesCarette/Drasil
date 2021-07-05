@@ -53,13 +53,13 @@ digraph allvsr {
 	{gravitationalAccel, impulseS}
 	}
 
-	transMotRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: transMotRC"];
+	accj	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: accj"];
 	rotMotRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: rotMotRC"];
 	col2DRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: col2DRC"];
 
 	subgraph IM {
 	rank="same"
-	{transMotRC, rotMotRC, col2DRC}
+	{accj, rotMotRC, col2DRC}
 	}
 
 	simSpace	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: simSpace"];

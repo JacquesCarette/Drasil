@@ -1,4 +1,4 @@
-module Drasil.HGHC.Body (srs, si, symbMap, printSetting) where
+module Drasil.HGHC.Body (srs, si, symbMap, printSetting, fullSI) where
 
 import Data.List (nub)
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
@@ -7,7 +7,7 @@ import Drasil.DocLang (DocSection(RefSec, SSDSec), Literature(Lit, Manual),
     intro, mkDoc, tsymb, InclUnits(IncludeUnits), Verbosity(Verbose),
     Field(DefiningEquation, Description, Label, Symbol, Units), SolChSpec(SCSProg), 
     SCSSub(DDs), DerivationDisplay(HideDerivation), SSDSub(SSDSolChSpec), 
-    SSDSec(SSDProg), traceMatStandard, getTraceConfigUID, secRefs)
+    SSDSec(SSDProg), traceMatStandard, getTraceConfigUID, secRefs, fillTraceSI)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
   rdb, refdb, _authors, _concepts, _constants, _constraints, _purpose,
@@ -25,6 +25,9 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
   
 srs :: Document
 srs = mkDoc mkSRS S.forT si
+
+fullSI :: SystemInformation
+fullSI = fillTraceSI mkSRS si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration

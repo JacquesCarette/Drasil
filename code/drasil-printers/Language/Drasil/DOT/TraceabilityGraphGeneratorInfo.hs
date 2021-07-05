@@ -39,14 +39,13 @@ uCS = ("UC", " [color=black, fillcolor=aquamarine2, label=\"UC: ", "\", style=fi
 
 
 type Chunk = String
-type Node = String
 
 -- creates chunk node with node style + label
 createNode :: (String, String, String) -> (Int, String) -> String
 createNode (head, body, tail) (num, label) = head ++ show num ++ body ++ label ++ tail
 
 -- output the following: node definitions + relationships
-getInfo :: [Chunk] -> [Node]
+getInfo :: [Chunk] -> [String]
 getInfo chunk =
   if chunk == ["all"] then
     let iMods = map (createNode iMS) iML

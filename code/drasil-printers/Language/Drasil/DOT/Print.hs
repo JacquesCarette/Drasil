@@ -79,7 +79,7 @@ outputSubAvsA :: GraphInfo -> Handle -> IO ()
 outputSubAvsA gi handle = do
     mapM_ (mkDirections handle) (directionsAvsA gi)
 
-    let labels = [assumpLabels gi]
+    let labels = filterAndGI gi [assumpLabels]
         prefixLabels = ["A"]
         colours = [assumpColour gi]
 
@@ -100,7 +100,7 @@ outputSubAvsAll :: GraphInfo -> Handle -> IO ()
 outputSubAvsAll gi handle = do
     mapM_ (mkDirections handle) (directionsAvsAll gi)
 
-    let labels = map ($ gi) [assumpLabels, ddLabels, tmLabels, gdLabels, imLabels, rLabels, cLabels]
+    let labels = filterAndGI gi [assumpLabels, ddLabels, tmLabels, gdLabels, imLabels, rLabels, cLabels]
         prefixLabels = ["A", "DD", "TM", "GD", "IM", "R", "C"]
         colours = map ($ gi) [assumpColour, ddColour, tmColour, gdColour, imColour, rColour, cColour]
         
@@ -121,7 +121,7 @@ outputSubRefvsRef :: GraphInfo -> Handle -> IO ()
 outputSubRefvsRef gi handle = do
     mapM_ (mkDirections handle) (directionsRefvsRef gi)
 
-    let labels = map ($ gi) [ddLabels, tmLabels, gdLabels, imLabels]
+    let labels = filterAndGI gi [ddLabels, tmLabels, gdLabels, imLabels]
         prefixLabels = ["DD", "TM", "GD", "IM"]
         colours = map ($ gi) [ddColour, tmColour, gdColour, imColour]
 
@@ -143,7 +143,7 @@ outputSubAllvsR :: GraphInfo -> Handle -> IO ()
 outputSubAllvsR gi handle = do
     mapM_ (mkDirections handle) (directionsAllvsR gi)
 
-    let labels = map ($ gi) [assumpLabels, ddLabels, tmLabels, gdLabels, imLabels, rLabels, gsLabels]
+    let labels = filterAndGI gi [assumpLabels, ddLabels, tmLabels, gdLabels, imLabels, rLabels, gsLabels]
         prefixLabels = ["A", "DD", "TM", "GD", "IM", "R", "GS"]
         colours = map ($ gi) [assumpColour, ddColour, tmColour, gdColour, imColour, rColour, gsColour]
         
@@ -164,7 +164,7 @@ outputSubAllvsAll :: GraphInfo -> Handle -> IO ()
 outputSubAllvsAll gi handle = do
     mapM_ (mkDirections handle) (directionsAllvsAll gi)
 
-    let labels = map ($ gi) [assumpLabels, ddLabels, tmLabels, gdLabels, imLabels, rLabels, gsLabels, cLabels]
+    let labels = filterAndGI gi [assumpLabels, ddLabels, tmLabels, gdLabels, imLabels, rLabels, gsLabels, cLabels]
         prefixLabels = ["A", "DD", "TM", "GD", "IM", "R", "GS", "C"]
         colours = map ($ gi) [assumpColour, ddColour, tmColour, gdColour, imColour, rColour, gsColour, cColour]
 
@@ -181,7 +181,7 @@ mkDirections handle ls = do
        -- Creates an edge between a type and its dependency (indented for subgraphs)
         makeEdgesSub :: String -> [String] -> [String]
         makeEdgesSub _ [] = []
-        makeEdgesSub nm (c:cs) = ("\t" ++ nm ++ " -> " ++ c ++ ";"): makeEdgesSub nm cs
+        makeEdgesSub nm (c:cs) = ("\t" ++ filterInvalidChars nm ++ " -> " ++ filterInvalidChars c ++ ";"): makeEdgesSub nm cs
 
 mkNodes :: Handle -> ([String], String, Colour) -> IO ()
 mkNodes handle (ls, lbl, col) = do
@@ -195,3 +195,11 @@ mkNodes handle (ls, lbl, col) = do
         makeNodesSub :: Colour -> String -> String -> String
         makeNodesSub c l nm  = "\t" ++ nm ++ "\t[shape=box, color=black, style=filled, fillcolor=" ++ c ++ ", label=\"" ++ l ++ ": " ++ nm ++ "\"];"
         --makeNodesSub c l nm  = "\t" ++ nm ++ "\t[shape=box, color=" ++ c ++ ", label=\"" ++ l ++ nm ++ "\"];"
+
+filterAndGI :: GraphInfo -> [GraphInfo -> [String]] -> [[String]]
+filterAndGI gi ls = map (map filterInvalidChars) $ map ($ gi) ls
+
+filterInvalidChars :: String -> String
+filterInvalidChars = filter (\l -> not (l `elem` invalidChars))
+  where
+    invalidChars = "^[]!} (){->,$"

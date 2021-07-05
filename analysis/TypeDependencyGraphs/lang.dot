@@ -380,7 +380,8 @@ digraph alltypes {
 		Constrainta -> RealInterval;
 		Constrainta -> a;
 		Constrainta -> Constraint;
-		Constrainta -> Double;
+		Constrainta -> Expr;
+		Constrainta -> ConstraintE;
 		Constrainta	[shape=oval, color=darkviolet, label=Constrainta];
 		}
 		subgraph constrainte{

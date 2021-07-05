@@ -720,9 +720,8 @@ data Expr
 --   Summation is represented via <tt>Add</tt> over a discrete domain.
 [Operator] :: AssocArithOper -> DomainDesc Expr Expr -> Expr -> Expr
 
--- | The expression is an element of a space. IsIn :: Expr -&gt; Space
---   -&gt; Expr | A different kind of <tt>IsIn</tt>. A <a>UID</a> is an
---   element of an interval.
+-- | A different kind of <tt>IsIn</tt>. A <a>UID</a> is an element of an
+--   interval.
 [RealI] :: UID -> RealInterval Expr Expr -> Expr
 
 -- | Smart constructor for equating two expressions.
@@ -965,8 +964,6 @@ data Constraint a
 
 -- | By default, physical and software constraints are ranges.
 [Range] :: ConstraintReason -> RealInterval a a -> Constraint a
-[EnumeratedReal] :: ConstraintReason -> [Double] -> Constraint a
-[EnumeratedStr] :: ConstraintReason -> [String] -> Constraint a
 
 -- | Type synonym for <a>ConstraintE</a>
 type ConstraintE = Constraint Expr
@@ -983,10 +980,6 @@ physc :: RealInterval Expr Expr -> ConstraintE
 -- | Smart constructor for range of <a>Software</a> constraints between two
 --   given expressions.
 sfwrc :: RealInterval Expr Expr -> ConstraintE
-
--- | Smart constructor for enumeration of values, default reason for
---   constraint is <a>Physical</a>.
-enumc :: [Double] -> ConstraintE
 
 -- | Helpful for filtering for Physical constraints. True if constraint is
 --   <a>Physical</a>.
@@ -3743,9 +3736,8 @@ data Expr
 --   Summation is represented via <tt>Add</tt> over a discrete domain.
 [Operator] :: AssocArithOper -> DomainDesc Expr Expr -> Expr -> Expr
 
--- | The expression is an element of a space. IsIn :: Expr -&gt; Space
---   -&gt; Expr | A different kind of <tt>IsIn</tt>. A <a>UID</a> is an
---   element of an interval.
+-- | A different kind of <tt>IsIn</tt>. A <a>UID</a> is an element of an
+--   interval.
 [RealI] :: UID -> RealInterval Expr Expr -> Expr
 
 -- | Unary functions (abs, log, ln, sin, etc.).
@@ -4339,10 +4331,6 @@ physc :: RealInterval Expr Expr -> ConstraintE
 --   given expressions.
 sfwrc :: RealInterval Expr Expr -> ConstraintE
 
--- | Smart constructor for enumeration of values, default reason for
---   constraint is <a>Physical</a>.
-enumc :: [Double] -> ConstraintE
-
 -- | Helpful for filtering for Physical constraints. True if constraint is
 --   <a>Physical</a>.
 isPhysC :: Constraint e -> Bool
@@ -4357,8 +4345,6 @@ data Constraint a
 
 -- | By default, physical and software constraints are ranges.
 [Range] :: ConstraintReason -> RealInterval a a -> Constraint a
-[EnumeratedReal] :: ConstraintReason -> [Double] -> Constraint a
-[EnumeratedStr] :: ConstraintReason -> [String] -> Constraint a
 
 -- | Type synonym for <a>ConstraintE</a>
 type ConstraintE = Constraint Expr

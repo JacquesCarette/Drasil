@@ -60,17 +60,17 @@ makeTGraph rowName rows cols = zip rowName [zipFTable' x cols | x <- rows]
 mkGraphInfo :: SystemInformation -> GraphInfo
 mkGraphInfo si = GI {
       assumpColour = "red"
-    , ddColour = "blue"
-    , gdColour = "magenta"
-    , tmColour = "green"
-    , imColour = "yellow"
-    , frColour = "grey"
-    , nfrColour = "pink"
-    , rColour = "pink"
-    , gsColour = "orange"
-    , lcColour = "brown"
-    , ucColour = "teal"
-    , cColour = "teal"
+    , ddColour     = "blue"
+    , gdColour     = "magenta"
+    , tmColour     = "green"
+    , imColour     = "yellow"
+    --, frColour     = "grey"
+    --, nfrColour    = "pink"
+    , rColour      = "pink"
+    , gsColour     = "orange"
+    --, lcColour     = "brown"
+    --, ucColour     = "teal"
+    , cColour      = "cyan"
 
     {-}, assumpLabels = map ("A_" ++) $ getLabels tvAssumps si
     , ddLabels = map ("DD_" ++) $ getLabels tvDataDefns si
@@ -83,21 +83,21 @@ mkGraphInfo si = GI {
     , everyLabel = map ("All_" ++) $ getLabels tvEverything si-}
 
     , assumpLabels = getLabels tvAssumps si
-    , ddLabels = getLabels tvDataDefns si
-    , gdLabels = getLabels tvGenDefns si
-    , tmLabels = getLabels tvTheoryModels si
-    , imLabels = getLabels tvInsModels si
-    , rLabels = getLabels tvReqs si
-    , gsLabels = getLabels tvGoals si
-    , cLabels = getLabels tvChanges si
-    , everyLabel = getLabels tvEverything si
+    , ddLabels     = getLabels tvDataDefns si
+    , gdLabels     = getLabels tvGenDefns si
+    , tmLabels     = getLabels tvTheoryModels si
+    , imLabels     = getLabels tvInsModels si
+    , rLabels      = getLabels tvReqs si
+    , gsLabels     = getLabels tvGoals si
+    , cLabels      = getLabels tvChanges si
+    , everyLabel   = getLabels tvEverything si
 
-    , directionsAvsA = mkGraphEdges [tvAssumps] [tvAssumps] si
-    , directionsAvsAll = mkGraphEdges [tvAssumps] [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels, tvReqs, tvChanges] si
+    , directionsAvsA     = mkGraphEdges [tvAssumps] [tvAssumps] si
+    , directionsAvsAll   = mkGraphEdges [tvAssumps] [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels, tvReqs, tvChanges] si
     , directionsRefvsRef = mkGraphEdges [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels] [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels] si
-    , directionsAllvsR = mkGraphEdges [tvDataDefns, tvTheoryModels,tvGenDefns, tvInsModels, tvReqs] [tvGoals, tvReqs] si
-    , graphType = AvsA
-    , sections = ["A", "DD", "GD", "TM", "IM", "FR", "NFR", "GS", "LC", "UC"]
+    , directionsAllvsR   = mkGraphEdges [tvDataDefns, tvTheoryModels,tvGenDefns, tvInsModels, tvReqs] [tvGoals, tvReqs] si
+    , directionsAllvsAll = mkGraphEdges [tvAssumps, tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels, tvReqs, tvGoals, tvChanges] [tvAssumps, tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels, tvReqs, tvGoals, tvChanges] si -- [tvEverything] si
+    --, sections = ["A", "DD", "GD", "TM", "IM", "FR", "NFR", "GS", "LC", "UC"] -- unused for now
 }
 
 getLabels :: TraceViewCat -> SystemInformation -> [UID]
@@ -141,42 +141,40 @@ generateTraceTableView u desc cols rows c = llcc (makeTabRef u) $ Table
     colf = layoutUIDs cols cdb
     rowf = layoutUIDs rows cdb-}
 
-data GraphType = AvsA | AvsAll | RefvsRef | AllvsR deriving (Show)
-
 data GraphInfo = GI {
     assumpLabels :: [String] -- Assumption
-    , ddLabels :: [String] -- Data definition
-    , gdLabels :: [String] -- General definition
-    , tmLabels :: [String] -- Theory model
-    , imLabels :: [String] -- Instance model
-    , frLabels :: [String] -- Functional requirements
-    , nfrLabels :: [String] -- Non-functional requirements
-    , rLabels :: [String] -- requirements
-    , gsLabels :: [String] -- Goal statements
-    , lcLabels :: [String] -- Likely changes
-    , ucLabels :: [String] -- Unlikely changes
-    , cLabels :: [String] -- changes
-    , everyLabel :: [String] -- all labels
+    , ddLabels   :: [String] -- Data definition
+    , gdLabels   :: [String] -- General definition
+    , tmLabels   :: [String] -- Theory model
+    , imLabels   :: [String] -- Instance model
+    --, frLabels   :: [String] -- Functional requirements
+    --, nfrLabels  :: [String] -- Non-functional requirements
+    , rLabels    :: [String] -- requirements
+    , gsLabels   :: [String] -- Goal statements
+    --, lcLabels   :: [String] -- Likely changes
+    --, ucLabels   :: [String] -- Unlikely changes
+    , cLabels    :: [String] -- changes
+    , everyLabel :: [String] -- all labels, unused for now since each label has a separate tag
 
-    , directionsAvsA :: [(String, [String])] -- graph directions
-    , directionsAvsAll :: [(String, [String])]
+    , directionsAvsA     :: [(String, [String])] -- graph directions
+    , directionsAvsAll   :: [(String, [String])]
     , directionsRefvsRef :: [(String, [String])]
-    , directionsAllvsR :: [(String, [String])]
-    , graphType :: GraphType -- AvsAll graph, AvsA graph, etc. -----may not be needed?
-    , sections :: [String] -- can be assumptions, TMs, DDs, etc.
+    , directionsAllvsR   :: [(String, [String])]
+    , directionsAllvsAll :: [(String, [String])]
+    --, sections :: [String] -- can be assumptions, TMs, DDs, etc. currently unused
 
     , assumpColour :: Colour -- give the ability to change colours of bubbles within the graph
-    , ddColour :: Colour
-    , gdColour :: Colour
-    , tmColour :: Colour
-    , imColour :: Colour
-    , frColour :: Colour
-    , nfrColour :: Colour
-    , rColour :: Colour
-    , gsColour :: Colour
-    , lcColour :: Colour
-    , ucColour :: Colour
-    , cColour :: Colour
+    , ddColour     :: Colour
+    , gdColour     :: Colour
+    , tmColour     :: Colour
+    , imColour     :: Colour
+    --, frColour     :: Colour
+    --, nfrColour    :: Colour
+    , rColour      :: Colour
+    , gsColour     :: Colour
+    --, lcColour     :: Colour
+    --, ucColour     :: Colour
+    , cColour      :: Colour
     
     -- may need more information regarding ranking & ordering, but for now I'm just keeping it simple
 }
@@ -194,6 +192,7 @@ output outputFilePath gi = do
     mkOutputAvsAll gi
     mkOutputRefvsRef gi
     mkOutputAllvsR gi
+    mkOutputAllvsAll gi
 
 mkOutputAvsA :: GraphInfo -> IO ()
 mkOutputAvsA gi = do
@@ -210,8 +209,8 @@ outputSubAvsA :: GraphInfo -> Handle -> IO ()
 outputSubAvsA gi handle = do
     --hPutStrLn handle ("\tsubgraph " ++ s ++ " {")
     mapM_ (mkDirections handle) (directionsAvsA gi)
-    let allLabels = zip [assumpLabels gi] [assumpColour gi] --["A_"]
-    mapM_ (uncurry (mkNodes handle)) allLabels
+    let allLabels = zip3 [assumpLabels gi] ["A: "] [assumpColour gi]
+    mapM_ (mkNodes handle) allLabels
     --hPutStrLn handle "\t}"
 
 addLabel :: [String] -> String -> String -> ([String], String)
@@ -230,8 +229,8 @@ outputSubAvsAll gi handle = do
     --hPutStrLn handle ("\tsubgraph " ++ s ++ " {")
     mapM_ (mkDirections handle) (directionsAvsAll gi)
     --let allLabels = zip [assumpLabels gi, ddLabels gi, tmLabels gi, gdLabels gi, imLabels gi, frLabels gi, nfrLabels gi, lcLabels gi, ucLabels gi] [assumpColour gi, ddColour gi, tmColour gi, gdColour gi, imColour gi, frColour gi, nfrColour gi, lcColour gi, ucColour gi]
-    let allLabels = zip [assumpLabels gi, ddLabels gi, tmLabels gi, gdLabels gi, imLabels gi, rLabels gi, cLabels gi] [assumpColour gi, ddColour gi, tmColour gi, gdColour gi, imColour gi, rColour gi, cColour gi] --["A_", "DD_", "TM_", "GD_", "IM_", "R_", "C_"]
-    mapM_ (uncurry (mkNodes handle)) allLabels
+    let allLabels = zip3 [assumpLabels gi, ddLabels gi, tmLabels gi, gdLabels gi, imLabels gi, rLabels gi, cLabels gi] ["A: ", "DD: ", "TM: ", "GD: ", "IM: ", "R: ", "C: "] [assumpColour gi, ddColour gi, tmColour gi, gdColour gi, imColour gi, rColour gi, cColour gi]
+    mapM_ (mkNodes handle) allLabels
     --hPutStrLn handle "\t}"
 
 mkOutputRefvsRef :: GraphInfo -> IO ()
@@ -246,8 +245,8 @@ outputSubRefvsRef :: GraphInfo -> Handle -> IO ()
 outputSubRefvsRef gi handle = do
     --hPutStrLn handle ("\tsubgraph " ++ s ++ " {")
     mapM_ (mkDirections handle) (directionsRefvsRef gi)
-    let allLabels = zip [ddLabels gi, tmLabels gi, gdLabels gi, imLabels gi] [ddColour gi, tmColour gi, gdColour gi, imColour gi] --["DD_", "TM_", "GD_", "IM_"]
-    mapM_ (uncurry (mkNodes handle)) allLabels
+    let allLabels = zip3 [ddLabels gi, tmLabels gi, gdLabels gi, imLabels gi] ["DD: ", "TM: ", "GD: ", "IM: "] [ddColour gi, tmColour gi, gdColour gi, imColour gi]
+    mapM_ (mkNodes handle) allLabels
     --hPutStrLn handle "\t}"
 
 
@@ -264,8 +263,25 @@ outputSubAllvsR gi handle = do
     --hPutStrLn handle ("\tsubgraph " ++ s ++ " {")
     mapM_ (mkDirections handle) (directionsAllvsR gi) ----------------- map ($ gi) [assumpLabels ..]?
     --let allLabels = zip [assumpLabels gi, ddLabels gi, tmLabels gi, gdLabels gi, imLabels gi, frLabels gi, nfrLabels gi, gsLabels gi] [assumpColour gi, ddColour gi, tmColour gi, gdColour gi, imColour gi, frColour gi, nfrColour gi, gsColour gi]
-    let allLabels = zip [assumpLabels gi, ddLabels gi, tmLabels gi, gdLabels gi, imLabels gi, rLabels gi, gsLabels gi] [assumpColour gi, ddColour gi, tmColour gi, gdColour gi, imColour gi, rColour gi, gsColour gi]-- ["A_", "DD_", "TM_", "GD_", "IM_", "R_", "GS_"]
-    mapM_ (uncurry (mkNodes handle)) allLabels
+    let allLabels = zip3 [assumpLabels gi, ddLabels gi, tmLabels gi, gdLabels gi, imLabels gi, rLabels gi, gsLabels gi] ["A: ", "DD: ", "TM: ", "GD: ", "IM: ", "R: ", "GS: "] [assumpColour gi, ddColour gi, tmColour gi, gdColour gi, imColour gi, rColour gi, gsColour gi]
+    mapM_ (mkNodes handle) allLabels
+    --hPutStrLn handle "\t}"
+
+mkOutputAllvsAll :: GraphInfo -> IO ()
+mkOutputAllvsAll gi = do
+    handle <- openFile "allvsall.dot" WriteMode
+    hPutStrLn handle $ "digraph allvsall {"
+    outputSubAllvsAll gi handle
+    hPutStrLn handle "}"
+    hClose handle
+
+outputSubAllvsAll :: GraphInfo -> Handle -> IO ()
+outputSubAllvsAll gi handle = do
+    --hPutStrLn handle ("\tsubgraph " ++ s ++ " {")
+    mapM_ (mkDirections handle) (directionsAllvsAll gi) ----------------- map ($ gi) [assumpLabels ..]?
+    --let allLabels = zip [assumpLabels gi, ddLabels gi, tmLabels gi, gdLabels gi, imLabels gi, frLabels gi, nfrLabels gi, gsLabels gi] [assumpColour gi, ddColour gi, tmColour gi, gdColour gi, imColour gi, frColour gi, nfrColour gi, gsColour gi]
+    let allLabels = zip3 [assumpLabels gi, ddLabels gi, tmLabels gi, gdLabels gi, imLabels gi, rLabels gi, gsLabels gi, cLabels gi] ["A: ", "DD: ", "TM: ", "GD: ", "IM: ", "R: ", "GS: ", "C: "] [assumpColour gi, ddColour gi, tmColour gi, gdColour gi, imColour gi, rColour gi, gsColour gi, cColour gi]
+    mapM_ (mkNodes handle) allLabels
     --hPutStrLn handle "\t}"
 
 {-- since the 'dot' method of displaying graphs naturally groups subgraphs,
@@ -288,13 +304,13 @@ mkDirections handle ls = do
         makeEdgesSub _ [] = []
         makeEdgesSub nm (c:cs) = ("\t" ++ nm ++ " -> " ++ c ++ ";"): makeEdgesSub nm cs
 
-mkNodes :: Handle -> [String] -> Colour -> IO () -- maybe take a second string for labels?
-mkNodes handle ls col = do
-    mapM_ ((hPutStrLn handle) . (makeNodesSub col)) ls
+mkNodes :: Handle -> ([String], String, Colour) -> IO () -- uncurry3 doesn't really work, so just change it to take in a tuple instead
+mkNodes handle (ls, lbl, col) = do
+    mapM_ ((hPutStrLn handle) . (makeNodesSub col lbl)) ls
     where
         -- Creates a node based on the kind of datatype (indented for subgraphs)
-        makeNodesSub :: Colour -> String -> String
-        makeNodesSub c nm = "\t" ++ nm ++ "\t[shape=oval, color=" ++ c ++ ", label=" ++ nm ++ "];"
+        makeNodesSub :: Colour -> String -> String -> String
+        makeNodesSub c l nm  = "\t" ++ nm ++ "\t[shape=oval, color=" ++ c ++ ", label=" ++ l ++ nm ++ "];"
 
 
 ----------- Helper functions taken from other parts of drasil. Modified versions could be useful here.-----------

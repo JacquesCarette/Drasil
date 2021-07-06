@@ -23,14 +23,14 @@ mkGraphInfo si = GI {
     , gsColour     = "darkgoldenrod1"
     , cColour      = "lavender"
 
-    , assumpLabels = getLabels tvAssumps si
-    , ddLabels     = getLabels tvDataDefns si
-    , gdLabels     = getLabels tvGenDefns si
-    , tmLabels     = getLabels tvTheoryModels si
-    , imLabels     = getLabels tvInsModels si
-    , rLabels      = getLabels tvReqs si
-    , gsLabels     = getLabels tvGoals si
-    , cLabels      = getLabels tvChanges si
+    , assumpLabels = (getLabels tvAssumps si,      "A")
+    , ddLabels     = (getLabels tvDataDefns si,    "DD")
+    , gdLabels     = (getLabels tvGenDefns si,     "GD")
+    , tmLabels     = (getLabels tvTheoryModels si, "TM")
+    , imLabels     = (getLabels tvInsModels si,    "IM")
+    , rLabels      = (getLabels tvReqs si,         "R")
+    , gsLabels     = (getLabels tvGoals si,        "GS")
+    , cLabels      = (getLabels tvChanges si,      "C")
 
     , directionsAvsA     = mkGraphEdges [tvAssumps] [tvAssumps] si
     , directionsAvsAll   = mkGraphEdges [tvAssumps] [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels, tvReqs, tvChanges] si
@@ -39,12 +39,21 @@ mkGraphInfo si = GI {
     , directionsAllvsAll = mkGraphEdges [tvAssumps, tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels, tvReqs, tvGoals, tvChanges] [tvAssumps, tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels, tvReqs, tvGoals, tvChanges] si
 }
 
--- | Gets the nodes of a graph based on a list of sections we want to examine and the system information.
+{--- | Gets the nodes of a graph based on a list of sections we want to examine and the system information.
 mkGraphNodes :: [TraceViewCat] -> SystemInformation -> [UID]
 mkGraphNodes entries si = (traceMReferees entryF cdb)
     where
         cdb = _sysinfodb si
-        entryF = layoutUIDs entries cdb
+        entryF = layoutUIDs entries cdb-}
+
+-- Testing new graphnodes function
+-- | Gets the nodes of a graph based on a list of sections we want to examine and the system information.
+mkGraphNodes :: TraceViewCat -> SystemInformation -> ([UID], [String])
+mkGraphNodes entry si = (nodeContents, map checkUID' nodeContents)
+    where
+        nodeContents = traceMReferees entryF cdb
+        cdb = _sysinfodb si
+        entryF = layoutUIDs [entry] cdb
 
 -- | Creates the graph edges based on the relation of the first list of sections to the second.
 -- Also needs the system information. Return value is of the form (Section, [Dependencies])
@@ -60,23 +69,37 @@ mkGraphEdges cols rows si = makeTGraph (ensureItems "Traceability Graph" $ trace
 makeTGraph :: [String] -> [[String]] -> [String] -> [(String, [String])]
 makeTGraph rowName rows cols = zip rowName [zipFTable' x cols | x <- rows]
   where
-    zipFTable' content = concatMap (\x -> if x `elem` content then [x] else [""])
+    zipFTable' content = filter (`elem` content)
 
 -- | Get all possible nodes based on the system information and a single section.
 -- In other words, finds all possible UIDs under a given section.
-getLabels :: TraceViewCat -> SystemInformation -> [UID]
-getLabels l si = mkGraphNodes [l] si
+getLabels :: TraceViewCat -> SystemInformation -> ([UID], [String])
+getLabels l si = mkGraphNodes l si
 
 -- | Checker for uids by finding if the 'UID' is in one of the possible data sets contained in the 'SystemInformation' database.
 checkUID :: UID -> SystemInformation -> UID
 checkUID t si
-  | t `elem` Map.keys (s ^. dataDefnTable)        = datadefnLookup    t (s ^. dataDefnTable) ^. uid
-  | t `elem` Map.keys (s ^. insmodelTable)        = insmodelLookup    t (s ^. insmodelTable) ^. uid
-  | t `elem` Map.keys (s ^. gendefTable)          = gendefLookup      t (s ^. gendefTable) ^. uid
-  | t `elem` Map.keys (s ^. theoryModelTable)     = theoryModelLookup t (s ^. theoryModelTable) ^. uid
-  | t `elem` Map.keys (s ^. conceptinsTable)      = conceptinsLookup  t (s ^. conceptinsTable) ^. uid
-  | t `elem` Map.keys (s ^. sectionTable)         = sectionLookup     t (s ^. sectionTable) ^. uid
-  | t `elem` Map.keys (s ^. labelledcontentTable) = labelledconLookup t (s ^. labelledcontentTable)  ^. uid
+  | Just _ <- Map.lookupIndex t (s ^. dataDefnTable)        = t
+  | Just _ <- Map.lookupIndex t (s ^. insmodelTable)        = t
+  | Just _ <- Map.lookupIndex t (s ^. gendefTable)          = t
+  | Just _ <- Map.lookupIndex t (s ^. theoryModelTable)     = t
+  | Just _ <- Map.lookupIndex t (s ^. conceptinsTable)      = t
+  | Just _ <- Map.lookupIndex t (s ^. sectionTable)         = t
+  | Just _ <- Map.lookupIndex t (s ^. labelledcontentTable) = t
+  | t `elem` map  (^. uid) (citeDB si) = ""
+  | otherwise = error $ t ++ "Caught."
+  where s = _sysinfodb si
+
+-- have to somehow get the domain abbreviation from here. Maybe mabbr?
+checkUID' :: UID -> SystemInformation -> String
+checkUID' t si
+  | Just _ <- Map.lookupIndex t (s ^. dataDefnTable)        = refS $ datadefnLookup    t (s ^. dataDefnTable)
+  | Just _ <- Map.lookupIndex t (s ^. insmodelTable)        = refS $ insmodelLookup    t (s ^. insmodelTable)
+  | Just _ <- Map.lookupIndex t (s ^. gendefTable)          = refS $ gendefLookup      t (s ^. gendefTable)
+  | Just _ <- Map.lookupIndex t (s ^. theoryModelTable)     = refS $ theoryModelLookup t (s ^. theoryModelTable)
+  | Just _ <- Map.lookupIndex t (s ^. conceptinsTable)      = refS $ conceptinsLookup  t (s ^. conceptinsTable)
+  | Just _ <- Map.lookupIndex t (s ^. sectionTable)         = refS $ sectionLookup     t (s ^. sectionTable)
+  | Just _ <- Map.lookupIndex t (s ^. labelledcontentTable) = refS $ labelledconLookup t (s ^. labelledcontentTable)
   | t `elem` map  (^. uid) (citeDB si) = ""
   | otherwise = error $ t ++ "Caught."
   where s = _sysinfodb si

@@ -1,5 +1,6 @@
 module Language.Drasil.DOT.Print where
 
+import Language.Drasil
 import Data.List (intercalate)
 import System.IO
 import System.Directory
@@ -27,33 +28,33 @@ type Colour = String
 data GraphInfo = GI {
     -------------- graph nodes (labels) -------------------------------
     -- | Assumptions.
-    assumpLabels :: [String]
+    assumpLabels :: ([UID], String)
     -- | Data definitions.
-    , ddLabels   :: [String]
+    , ddLabels   :: ([UID], String)
     -- | General definitions.
-    , gdLabels   :: [String]
+    , gdLabels   :: ([UID], String)
     -- | Theory models.
-    , tmLabels   :: [String]
+    , tmLabels   :: ([UID], String)
     -- | Instance models.
-    , imLabels   :: [String]
+    , imLabels   :: ([UID], String)
     -- | Requirements. Currently cannot differentiate Functional and Non-Functional ones.
-    , rLabels    :: [String]
+    , rLabels    :: ([UID], String)
     -- | Goal statements.
-    , gsLabels   :: [String]
+    , gsLabels   :: ([UID], String)
     -- | Changes. Currently cannot differentiate Likely and Unlikely ones.
-    , cLabels    :: [String]
+    , cLabels    :: ([UID], String)
 
     -------------- graph edges (directions) ---------------------------
     -- | Assumptions dependent on assumptions.
-    , directionsAvsA     :: [(String, [String])] 
+    , directionsAvsA     :: [(UID, [UID])] 
     -- | Definitions, models, requirements, and changes dependent on assumptions.
-    , directionsAvsAll   :: [(String, [String])]
+    , directionsAvsAll   :: [(UID, [UID])]
     -- | Definitions and models that are dependent on other definitions and models.
-    , directionsRefvsRef :: [(String, [String])]
+    , directionsRefvsRef :: [(UID, [UID])]
     -- | Goals and requirements dependent on definitions, models, and other requirements.
-    , directionsAllvsR   :: [(String, [String])]
+    , directionsAllvsR   :: [(UID, [UID])]
     -- | Definitions, models, requirements, goals, and changes that are dependent on one another.
-    , directionsAllvsAll :: [(String, [String])]
+    , directionsAllvsAll :: [(UID, [UID])]
 
     -------------- node colours ---------------------------------------
     -- give the ability to change colours of bubbles within the graph
@@ -83,76 +84,54 @@ outputDot outputFilePath gi = do
 -- | Output function for assumptions dependent on assumptions.
 mkOutputAvsA :: GraphInfo -> IO ()
 mkOutputAvsA gi = do
-    handle <- openFile "avsa.dot" WriteMode
-    hPutStrLn handle "digraph avsa {"
-    let labels = filterAndGI gi [assumpLabels]
-        prefixLabels = ["A"]
-        colours = [assumpColour gi]
-
-        allLabels = zip3 labels prefixLabels colours
-    outputSub handle (directionsAvsA gi) allLabels
-    hPutStrLn handle "}"
-    hClose handle
+    let labels = [assumpLabels]
+        colours = [assumpColour]
+    mkOutput gi "avsa" directionsAvsA labels colours
 
 -- | Output function for definitions, models, requirements, and changes dependent on assumptions.
 mkOutputAvsAll :: GraphInfo -> IO ()
 mkOutputAvsAll gi = do
-    handle <- openFile "avsall.dot" WriteMode
-    hPutStrLn handle "digraph avsall {"
-    let labels = filterAndGI gi [assumpLabels, ddLabels, tmLabels, gdLabels, imLabels, rLabels, cLabels]
-        prefixLabels = ["A", "DD", "TM", "GD", "IM", "R", "C"]
-        colours = map ($ gi) [assumpColour, ddColour, tmColour, gdColour, imColour, rColour, cColour]
-        
-        allLabels = zip3 labels prefixLabels colours
-    outputSub handle (directionsAvsAll gi) allLabels
-    hPutStrLn handle "}"
-    hClose handle
+    let labels = [assumpLabels, ddLabels, tmLabels, gdLabels, imLabels, rLabels, cLabels]
+        colours = [assumpColour, ddColour, tmColour, gdColour, imColour, rColour, cColour]
+    mkOutput gi "avsall" directionsAvsAll labels colours
 
 -- | Output function for definitions and models that are dependent on other definitions and models.
 mkOutputRefvsRef :: GraphInfo -> IO ()
 mkOutputRefvsRef gi = do
-    handle <- openFile "refvsref.dot" WriteMode
-    hPutStrLn handle "digraph refvsref {"
-    let labels = filterAndGI gi [ddLabels, tmLabels, gdLabels, imLabels]
-        prefixLabels = ["DD", "TM", "GD", "IM"]
-        colours = map ($ gi) [ddColour, tmColour, gdColour, imColour]
-
-        allLabels = zip3 labels prefixLabels colours 
-    outputSub handle (directionsRefvsRef gi) allLabels
-    hPutStrLn handle "}"
-    hClose handle
+    let labels = [ddLabels, tmLabels, gdLabels, imLabels]
+        colours = [ddColour, tmColour, gdColour, imColour]
+    mkOutput gi "refvsref" directionsRefvsRef labels colours
 
 -- | Output function for goals and requirements dependent on definitions, models, and other requirements.
 mkOutputAllvsR :: GraphInfo -> IO ()
 mkOutputAllvsR gi = do
-    handle <- openFile "allvsr.dot" WriteMode
-    hPutStrLn handle "digraph allvsr {"
-    let labels = filterAndGI gi [assumpLabels, ddLabels, tmLabels, gdLabels, imLabels, rLabels, gsLabels]
-        prefixLabels = ["A", "DD", "TM", "GD", "IM", "R", "GS"]
-        colours = map ($ gi) [assumpColour, ddColour, tmColour, gdColour, imColour, rColour, gsColour]
-        
-        allLabels = zip3 labels prefixLabels colours
-    outputSub handle (directionsAllvsR gi) allLabels
-    hPutStrLn handle "}"
-    hClose handle
+    let labels = [assumpLabels, ddLabels, tmLabels, gdLabels, imLabels, rLabels, gsLabels]
+        colours = [assumpColour, ddColour, tmColour, gdColour, imColour, rColour, gsColour]
+    mkOutput gi "allvsr" directionsAllvsR labels  colours
 
 -- | Output function for definitions, models, requirements, goals, and changes that are dependent on one another.
 mkOutputAllvsAll :: GraphInfo -> IO ()
 mkOutputAllvsAll gi = do
-    handle <- openFile "allvsall.dot" WriteMode
-    hPutStrLn handle $ "digraph allvsall {"
-    let labels = filterAndGI gi [assumpLabels, ddLabels, tmLabels, gdLabels, imLabels, rLabels, gsLabels, cLabels]
-        prefixLabels = ["A", "DD", "TM", "GD", "IM", "R", "GS", "C"]
-        colours = map ($ gi) [assumpColour, ddColour, tmColour, gdColour, imColour, rColour, gsColour, cColour]
-
-        allLabels = zip3 labels prefixLabels colours
-    outputSub handle (directionsAllvsAll gi) allLabels
-    hPutStrLn handle "}"
-    hClose handle
+    let labels = [assumpLabels, ddLabels, tmLabels, gdLabels, imLabels, rLabels, gsLabels, cLabels]
+        colours = [assumpColour, ddColour, tmColour, gdColour, imColour, rColour, gsColour, cColour]
+    mkOutput gi "allvsall" directionsAllvsAll labels colours
 
 -------------
 -- General helper functions
 -------------
+
+-- | General output function for making a traceability graph. Takes in the graph information, title, direction function, label functions, label prefixes, and colour functions.
+mkOutput :: GraphInfo -> String -> (GraphInfo -> [(String, [String])]) -> [GraphInfo -> ([String], String)] -> [GraphInfo -> Colour] -> IO ()
+mkOutput gi title getDirections getLabels getColours = do
+    handle <- openFile (title ++ ".dot") WriteMode
+    hPutStrLn handle $ "digraph " ++ title ++ " {"
+    let labels = filterAndGI gi getLabels
+        colours = map ($ gi) getColours
+
+        allLabels = zipWith (\x y -> (fst x, snd x, y)) labels colours
+    outputSub handle (getDirections gi) allLabels
+    hPutStrLn handle "}"
+    hClose handle
 
 -- | Graph output helper. Takes in the file handle, edges, and nodes.
 outputSub :: Handle -> [(String, [String])] -> [([String], String, Colour)] -> IO ()
@@ -185,8 +164,10 @@ mkNodes handle (ls, lbl, col) = do
         makeNodesSub c l nm  = "\t" ++ nm ++ "\t[shape=box, color=black, style=filled, fillcolor=" ++ c ++ ", label=\"" ++ l ++ ": " ++ nm ++ "\"];"
 
 -- | Gets graph labels and removes any invalid characters.
-filterAndGI :: GraphInfo -> [GraphInfo -> [String]] -> [[String]]
-filterAndGI gi ls = map (map filterInvalidChars) $ map ($ gi) ls
+filterAndGI :: GraphInfo -> [GraphInfo -> ([String], String)] -> [([String], String)]
+filterAndGI gi ls = map (\x -> (map filterInvalidChars $ fst x, snd x)) labels
+    where
+        labels = map ($ gi) ls
 
 -- | Helper to remove invalid characters.
 filterInvalidChars :: String -> String

@@ -23,14 +23,14 @@ mkGraphInfo si = GI {
     , gsColour     = "darkgoldenrod1"
     , cColour      = "lavender"
 
-    , assumpLabels = (getLabels tvAssumps si,      "A")
-    , ddLabels     = (getLabels tvDataDefns si,    "DD")
-    , gdLabels     = (getLabels tvGenDefns si,     "GD")
-    , tmLabels     = (getLabels tvTheoryModels si, "TM")
-    , imLabels     = (getLabels tvInsModels si,    "IM")
-    , rLabels      = (getLabels tvReqs si,         "R")
-    , gsLabels     = (getLabels tvGoals si,        "GS")
-    , cLabels      = (getLabels tvChanges si,      "C")
+    , assumpLabels = (getLabels tvAssumps si,  "A")
+    , ddLabels     = (getLabels tvDataDefns si,  "DD")
+    , gdLabels     = (getLabels tvGenDefns si,  "GD")
+    , tmLabels     = (getLabels tvTheoryModels si,  "TM")
+    , imLabels     = (getLabels tvInsModels si,  "IM")
+    , rLabels      = (getLabels tvReqs si,  "R")
+    , gsLabels     = (getLabels tvGoals si,  "GS")
+    , cLabels      = (getLabels tvChanges si,  "C")
 
     , directionsAvsA     = mkGraphEdges [tvAssumps] [tvAssumps] si
     , directionsAvsAll   = mkGraphEdges [tvAssumps] [tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels, tvReqs, tvChanges] si
@@ -49,7 +49,7 @@ mkGraphNodes entries si = (traceMReferees entryF cdb)
 -- Testing new graphnodes function
 -- | Gets the nodes of a graph based on a list of sections we want to examine and the system information.
 mkGraphNodes :: TraceViewCat -> SystemInformation -> ([UID], [String])
-mkGraphNodes entry si = (nodeContents, map checkUID' nodeContents)
+mkGraphNodes entry si = (nodeContents, map (\x -> checkUID' x si) nodeContents)
     where
         nodeContents = traceMReferees entryF cdb
         cdb = _sysinfodb si
@@ -90,19 +90,25 @@ checkUID t si
   | otherwise = error $ t ++ "Caught."
   where s = _sysinfodb si
 
--- have to somehow get the domain abbreviation from here. Maybe mabbr?
+-- | Similar to 'checkUID' but prepends domain for labelling.
 checkUID' :: UID -> SystemInformation -> String
 checkUID' t si
-  | Just _ <- Map.lookupIndex t (s ^. dataDefnTable)        = refS $ datadefnLookup    t (s ^. dataDefnTable)
-  | Just _ <- Map.lookupIndex t (s ^. insmodelTable)        = refS $ insmodelLookup    t (s ^. insmodelTable)
-  | Just _ <- Map.lookupIndex t (s ^. gendefTable)          = refS $ gendefLookup      t (s ^. gendefTable)
-  | Just _ <- Map.lookupIndex t (s ^. theoryModelTable)     = refS $ theoryModelLookup t (s ^. theoryModelTable)
-  | Just _ <- Map.lookupIndex t (s ^. conceptinsTable)      = refS $ conceptinsLookup  t (s ^. conceptinsTable)
-  | Just _ <- Map.lookupIndex t (s ^. sectionTable)         = refS $ sectionLookup     t (s ^. sectionTable)
-  | Just _ <- Map.lookupIndex t (s ^. labelledcontentTable) = refS $ labelledconLookup t (s ^. labelledcontentTable)
+  | Just _ <- Map.lookupIndex t (s ^. dataDefnTable)        =  "DD: " ++ t --Directly encoded since these are unlikely to change
+  | Just _ <- Map.lookupIndex t (s ^. insmodelTable)        =  "IM: " ++ t
+  | Just _ <- Map.lookupIndex t (s ^. gendefTable)          =  "GD: " ++ t
+  | Just _ <- Map.lookupIndex t (s ^. theoryModelTable)     =  "TM: " ++ t
+  -- Concept instances can range from likely changes to non-functional requirements, so use domain abbreviations for labelling.
+  | Just _ <- Map.lookupIndex t (s ^. conceptinsTable)      = (safeFromJust $ getA $ defResolve s $ sDom $ cdom $ conceptinsLookup  t $ s ^. conceptinsTable) ++ ": " ++ t
+  | Just _ <- Map.lookupIndex t (s ^. sectionTable)         = "Sec: " ++ t
+  | Just _ <- Map.lookupIndex t (s ^. labelledcontentTable) = "Content: " ++ t
   | t `elem` map  (^. uid) (citeDB si) = ""
   | otherwise = error $ t ++ "Caught."
   where s = _sysinfodb si
+
+-- | Safe version of 'fromJust', used in 'checkUID''.
+safeFromJust :: Maybe String -> String
+safeFromJust (Just x) = x
+safeFromJust Nothing = ""
 
 -- | Helper that finds the header of a traceability matrix.
 -- However, here we use this to get a list of 'UID's for a traceability graph instead.

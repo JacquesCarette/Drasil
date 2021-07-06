@@ -28,21 +28,21 @@ type Colour = String
 data GraphInfo = GI {
     -------------- graph nodes (labels) -------------------------------
     -- | Assumptions.
-    assumpLabels :: ([UID], String)
+    assumpLabels :: (([UID], [String]), String)
     -- | Data definitions.
-    , ddLabels   :: ([UID], String)
+    , ddLabels   :: (([UID], [String]), String)
     -- | General definitions.
-    , gdLabels   :: ([UID], String)
+    , gdLabels   :: (([UID], [String]), String)
     -- | Theory models.
-    , tmLabels   :: ([UID], String)
+    , tmLabels   :: (([UID], [String]), String)
     -- | Instance models.
-    , imLabels   :: ([UID], String)
+    , imLabels   :: (([UID], [String]), String)
     -- | Requirements. Currently cannot differentiate Functional and Non-Functional ones.
-    , rLabels    :: ([UID], String)
+    , rLabels    :: (([UID], [String]), String)
     -- | Goal statements.
-    , gsLabels   :: ([UID], String)
+    , gsLabels   :: (([UID], [String]), String)
     -- | Changes. Currently cannot differentiate Likely and Unlikely ones.
-    , cLabels    :: ([UID], String)
+    , cLabels    :: (([UID], [String]), String)
 
     -------------- graph edges (directions) ---------------------------
     -- | Assumptions dependent on assumptions.
@@ -121,20 +121,20 @@ mkOutputAllvsAll gi = do
 -------------
 
 -- | General output function for making a traceability graph. Takes in the graph information, title, direction function, label functions, label prefixes, and colour functions.
-mkOutput :: GraphInfo -> String -> (GraphInfo -> [(String, [String])]) -> [GraphInfo -> ([String], String)] -> [GraphInfo -> Colour] -> IO ()
-mkOutput gi title getDirections getLabels getColours = do
-    handle <- openFile (title ++ ".dot") WriteMode
-    hPutStrLn handle $ "digraph " ++ title ++ " {"
+mkOutput :: GraphInfo -> String -> (GraphInfo -> [(String, [String])]) -> [GraphInfo -> (([String], [String]), String)] -> [GraphInfo -> Colour] -> IO ()
+mkOutput gi ttl getDirections getLabels getColours = do
+    handle <- openFile (ttl ++ ".dot") WriteMode
+    hPutStrLn handle $ "digraph " ++ ttl ++ " {"
     let labels = filterAndGI gi getLabels
         colours = map ($ gi) getColours
 
-        allLabels = zipWith (\x y -> (fst x, snd x, y)) labels colours
+        allLabels = zipWith (\x y -> (fst $ fst x, snd $ fst x, snd x, y)) labels colours
     outputSub handle (getDirections gi) allLabels
     hPutStrLn handle "}"
     hClose handle
 
 -- | Graph output helper. Takes in the file handle, edges, and nodes.
-outputSub :: Handle -> [(String, [String])] -> [([String], String, Colour)] -> IO ()
+outputSub :: Handle -> [(String, [String])] -> [([String], [String], String, Colour)] -> IO ()
 outputSub handle edges nodes = do
     mapM_ (mkDirections handle) edges
     hPutStrLn handle "\n"
@@ -151,21 +151,21 @@ mkDirections handle ls = do
         makeEdgesSub nm (c:cs) = ("\t" ++ filterInvalidChars nm ++ " -> " ++ filterInvalidChars c ++ ";"): makeEdgesSub nm cs
 
 -- | Prints graph nodes (labels) onto a given file handle.
-mkNodes :: Handle -> ([String], String, Colour) -> IO ()
-mkNodes handle (ls, lbl, col) = do
-    mapM_ ((hPutStrLn handle) . (makeNodesSub col lbl)) ls
-    hPutStrLn handle $ "\n\tsubgraph " ++ lbl ++ " {"
+mkNodes :: Handle -> ([String], [String], String, Colour) -> IO ()
+mkNodes handle (ls, lbl, subL, col) = do
+    mapM_ ((hPutStrLn handle) . uncurry (makeNodesSub col)) $ zip lbl ls
+    hPutStrLn handle $ "\n\tsubgraph " ++ subL ++ " {"
     hPutStrLn handle "\trank=\"same\""
     hPutStrLn handle $ "\t{" ++ intercalate ", " ls ++ "}"
     hPutStrLn handle "\t}\n"
     where
         -- Creates a node based on the kind of datatype (indented for subgraphs)
         makeNodesSub :: Colour -> String -> String -> String
-        makeNodesSub c l nm  = "\t" ++ nm ++ "\t[shape=box, color=black, style=filled, fillcolor=" ++ c ++ ", label=\"" ++ l ++ ": " ++ nm ++ "\"];"
+        makeNodesSub c l nm  = "\t" ++ nm ++ "\t[shape=box, color=black, style=filled, fillcolor=" ++ c ++ ", label=\"" ++ l ++ "\"];"
 
 -- | Gets graph labels and removes any invalid characters.
-filterAndGI :: GraphInfo -> [GraphInfo -> ([String], String)] -> [([String], String)]
-filterAndGI gi ls = map (\x -> (map filterInvalidChars $ fst x, snd x)) labels
+filterAndGI :: GraphInfo -> [GraphInfo -> (([String], [String]), String)] -> [(([String], [String]), String)]
+filterAndGI gi ls = map (\x -> ((map filterInvalidChars $ fst $ fst x, snd $ fst x), snd x)) labels
     where
         labels = map ($ gi) ls
 

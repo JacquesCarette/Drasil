@@ -25,7 +25,7 @@ digraph refvsref {
 	torque	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: torque"];
 	kEnergy	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: kEnergy"];
 	restitutionCoef	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: restitutionCoef"];
-	v_iAB	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: v_iAB"];
+	v_iAB	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: v_i^AB"];
 	impulseV	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: impulseV"];
 	potEnergy	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: potEnergy"];
 	momentOfInertia	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: momentOfInertia"];

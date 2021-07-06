@@ -70,31 +70,31 @@ digraph avsall {
 	{isSafePb, isSafeLR}
 	}
 
-	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: inputValues"];
-	sysSetValsFollowingAssumps	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: sysSetValsFollowingAssumps"];
-	checkInputWithDataCons	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: checkInputWithDataCons"];
-	outputValsAndKnownValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: outputValsAndKnownValues"];
-	checkGlassSafety	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: checkGlassSafety"];
-	outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: outputValues"];
-	correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: correct"];
-	verifiable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: verifiable"];
-	understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: understandable"];
-	reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: reusable"];
-	maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: maintainable"];
-	portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: portable"];
+	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: inputValues"];
+	sysSetValsFollowingAssumps	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: sysSetValsFollowingAssumps"];
+	checkInputWithDataCons	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: checkInputWithDataCons"];
+	outputValsAndKnownValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: outputValsAndKnownValues"];
+	checkGlassSafety	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: checkGlassSafety"];
+	outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: outputValues"];
+	correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: correct"];
+	verifiable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: verifiable"];
+	understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: understandable"];
+	reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: reusable"];
+	maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: maintainable"];
+	portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: portable"];
 
 	subgraph R {
 	rank="same"
 	{inputValues, sysSetValsFollowingAssumps, checkInputWithDataCons, outputValsAndKnownValues, checkGlassSafety, outputValues, correct, verifiable, understandable, reusable, maintainable, portable}
 	}
 
-	calcInternalBlastRisk	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: calcInternalBlastRisk"];
-	varValsOfmkE	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: varValsOfmkE"];
-	accMoreThanSingleLite	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: accMoreThanSingleLite"];
-	accMoreBoundaryConditions	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: accMoreBoundaryConditions"];
-	considerMoreThanFlexGlass	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: considerMoreThanFlexGlass"];
-	predictWithstandOfCertDeg	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: predictWithstandOfCertDeg"];
-	accAlteredGlass	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: accAlteredGlass"];
+	calcInternalBlastRisk	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC: calcInternalBlastRisk"];
+	varValsOfmkE	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC: varValsOfmkE"];
+	accMoreThanSingleLite	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC: accMoreThanSingleLite"];
+	accMoreBoundaryConditions	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC: accMoreBoundaryConditions"];
+	considerMoreThanFlexGlass	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC: considerMoreThanFlexGlass"];
+	predictWithstandOfCertDeg	[shape=box, color=black, style=filled, fillcolor=lavender, label="UC: predictWithstandOfCertDeg"];
+	accAlteredGlass	[shape=box, color=black, style=filled, fillcolor=lavender, label="UC: accAlteredGlass"];
 
 	subgraph C {
 	rank="same"

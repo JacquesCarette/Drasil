@@ -112,16 +112,16 @@ digraph allvsall {
 	{flightduration, landingposition, offset, message}
 	}
 
-	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: inputValues"];
-	verifyInVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: verifyInVals"];
-	calcValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: calcValues"];
-	outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: outputValues"];
-	correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: correct"];
-	verifiable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: verifiable"];
-	understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: understandable"];
-	reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: reusable"];
-	maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: maintainable"];
-	portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: portable"];
+	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: inputValues"];
+	verifyInVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: verifyInVals"];
+	calcValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: calcValues"];
+	outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: outputValues"];
+	correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: correct"];
+	verifiable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: verifiable"];
+	understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: understandable"];
+	reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: reusable"];
+	maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: maintainable"];
+	portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: portable"];
 
 	subgraph R {
 	rank="same"

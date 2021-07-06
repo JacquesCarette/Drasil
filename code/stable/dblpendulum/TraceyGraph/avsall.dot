@@ -54,12 +54,12 @@ digraph avsall {
 	{angularDisplacementRC}
 	}
 
-	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: inputValues"];
-	verifyInptVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: verifyInptVals"];
-	calcAngPos	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: calcAngPos"];
-	outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: outputValues"];
-	correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: correct"];
-	portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: portable"];
+	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: inputValues"];
+	verifyInptVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: verifyInptVals"];
+	calcAngPos	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: calcAngPos"];
+	outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: outputValues"];
+	correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: correct"];
+	portable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: portable"];
 
 	subgraph R {
 	rank="same"

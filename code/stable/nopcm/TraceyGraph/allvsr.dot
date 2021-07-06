@@ -66,17 +66,17 @@ digraph allvsr {
 	{eBalanceOnWtrRC, heatEInWtrRC}
 	}
 
-	inputInitVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: inputInitVals"];
-	findMass	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: findMass"];
-	checkWithPhysConsts	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: checkWithPhysConsts"];
-	outputInputDerivVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: outputInputDerivVals"];
-	calcTempWtrOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: calcTempWtrOverTime"];
-	calcChgHeatEnergyWtrOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: calcChgHeatEnergyWtrOverTime"];
-	correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: correct"];
-	verifiable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: verifiable"];
-	understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: understandable"];
-	reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: reusable"];
-	maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: maintainable"];
+	inputInitVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: inputInitVals"];
+	findMass	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: findMass"];
+	checkWithPhysConsts	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: checkWithPhysConsts"];
+	outputInputDerivVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: outputInputDerivVals"];
+	calcTempWtrOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: calcTempWtrOverTime"];
+	calcChgHeatEnergyWtrOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: calcChgHeatEnergyWtrOverTime"];
+	correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: correct"];
+	verifiable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: verifiable"];
+	understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: understandable"];
+	reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: reusable"];
+	maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: maintainable"];
 
 	subgraph R {
 	rank="same"

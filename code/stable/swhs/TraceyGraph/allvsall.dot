@@ -163,22 +163,22 @@ digraph allvsall {
 	{eBalanceOnWtrRC, eBalanceOnPCMRC, heatEInWtrRC, heatEInPCMRC}
 	}
 
-	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: inputValues"];
-	findMass	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: findMass"];
-	checkWithPhysConsts	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: checkWithPhysConsts"];
-	outputInputDerivVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: outputInputDerivVals"];
-	calcTempWtrOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: calcTempWtrOverTime"];
-	calcTempPCMOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: calcTempPCMOverTime"];
-	calcChgHeatEnergyWtrOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: calcChgHeatEnergyWtrOverTime"];
-	calcChgHeatEnergyPCMOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: calcChgHeatEnergyPCMOverTime"];
-	verifyEnergyOutput	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: verifyEnergyOutput"];
-	calcPCMMeltBegin	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: calcPCMMeltBegin"];
-	calcPCMMeltEnd	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: calcPCMMeltEnd"];
-	correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: correct"];
-	verifiable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: verifiable"];
-	understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: understandable"];
-	reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: reusable"];
-	maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: maintainable"];
+	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: inputValues"];
+	findMass	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: findMass"];
+	checkWithPhysConsts	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: checkWithPhysConsts"];
+	outputInputDerivVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: outputInputDerivVals"];
+	calcTempWtrOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: calcTempWtrOverTime"];
+	calcTempPCMOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: calcTempPCMOverTime"];
+	calcChgHeatEnergyWtrOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: calcChgHeatEnergyWtrOverTime"];
+	calcChgHeatEnergyPCMOverTime	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: calcChgHeatEnergyPCMOverTime"];
+	verifyEnergyOutput	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: verifyEnergyOutput"];
+	calcPCMMeltBegin	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: calcPCMMeltBegin"];
+	calcPCMMeltEnd	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: calcPCMMeltEnd"];
+	correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: correct"];
+	verifiable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: verifiable"];
+	understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: understandable"];
+	reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: reusable"];
+	maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: maintainable"];
 
 	subgraph R {
 	rank="same"
@@ -195,15 +195,15 @@ digraph allvsall {
 	{waterTempGS, pcmTempGS, waterEnergyGS, pcmEnergyGS}
 	}
 
-	likeChgUTP	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: likeChgUTP"];
-	likeChgTCVOD	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: likeChgTCVOD"];
-	likeChgTCVOL	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: likeChgTCVOL"];
-	likeChgDT	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: likeChgDT"];
-	likeChgDITPW	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: likeChgDITPW"];
-	likeChgTLH	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: likeChgTLH"];
-	unlikeChgWPFS	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: unlikeChgWPFS"];
-	unlikeChgNIHG	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: unlikeChgNIHG"];
-	unlikeChgNGS	[shape=box, color=black, style=filled, fillcolor=lavender, label="C: unlikeChgNGS"];
+	likeChgUTP	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC: likeChgUTP"];
+	likeChgTCVOD	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC: likeChgTCVOD"];
+	likeChgTCVOL	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC: likeChgTCVOL"];
+	likeChgDT	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC: likeChgDT"];
+	likeChgDITPW	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC: likeChgDITPW"];
+	likeChgTLH	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC: likeChgTLH"];
+	unlikeChgWPFS	[shape=box, color=black, style=filled, fillcolor=lavender, label="UC: unlikeChgWPFS"];
+	unlikeChgNIHG	[shape=box, color=black, style=filled, fillcolor=lavender, label="UC: unlikeChgNIHG"];
+	unlikeChgNGS	[shape=box, color=black, style=filled, fillcolor=lavender, label="UC: unlikeChgNGS"];
 
 	subgraph C {
 	rank="same"

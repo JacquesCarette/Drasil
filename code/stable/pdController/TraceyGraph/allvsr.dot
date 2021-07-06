@@ -53,14 +53,14 @@ digraph allvsr {
 	{imPDRC}
 	}
 
-	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: inputValues"];
-	verifyInputs	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: verifyInputs"];
-	calculateValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: calculateValues"];
-	outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: outputValues"];
-	portability	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: portability"];
-	security	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: security"];
-	maintainability	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: maintainability"];
-	verifiability	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: verifiability"];
+	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: inputValues"];
+	verifyInputs	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: verifyInputs"];
+	calculateValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: calculateValues"];
+	outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: outputValues"];
+	portability	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: portability"];
+	security	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: security"];
+	maintainability	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: maintainability"];
+	verifiability	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: verifiability"];
 
 	subgraph R {
 	rank="same"

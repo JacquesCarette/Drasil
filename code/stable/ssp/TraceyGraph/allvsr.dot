@@ -46,8 +46,8 @@ digraph allvsr {
 	alpha_i	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: alpha_i"];
 	beta_i	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: beta_i"];
 	b_i	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: b_i"];
-	l_bi	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: l_bi"];
-	l_si	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: l_si"];
+	l_bi	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: l_b,i"];
+	l_si	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: l_s,i"];
 	h_i	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: h_i"];
 	sigma	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: sigma"];
 	tau	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: tau"];
@@ -55,10 +55,10 @@ digraph allvsr {
 	f_i	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: f_i"];
 	Phi	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: Phi"];
 	Psi	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: Psi"];
-	F_xG	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: F_xG"];
-	F_xH	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: F_xH"];
-	hR	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: hR"];
-	hL	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: hL"];
+	F_xG	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: F_x^G"];
+	F_xH	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: F_x^H"];
+	hR	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: h^R"];
+	hL	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: h^L"];
 
 	subgraph DD {
 	rank="same"
@@ -108,20 +108,20 @@ digraph allvsr {
 	{FS, nrmShrForRC, nrmShrForNumRC, nrmShrForDenRC, intsliceFsRC, crtSlpIdRC}
 	}
 
-	readAndStore	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: readAndStore"];
-	verifyInput	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: verifyInput"];
-	determineCritSlip	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: determineCritSlip"];
-	verifyOutput	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: verifyOutput"];
-	displayInput	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: displayInput"];
-	displayGraph	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: displayGraph"];
-	displayFS	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: displayFS"];
-	displayNormal	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: displayNormal"];
-	displayShear	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: displayShear"];
-	writeToFile	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: writeToFile"];
-	correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: correct"];
-	understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: understandable"];
-	reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: reusable"];
-	maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="R: maintainable"];
+	readAndStore	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: readAndStore"];
+	verifyInput	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: verifyInput"];
+	determineCritSlip	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: determineCritSlip"];
+	verifyOutput	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: verifyOutput"];
+	displayInput	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: displayInput"];
+	displayGraph	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: displayGraph"];
+	displayFS	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: displayFS"];
+	displayNormal	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: displayNormal"];
+	displayShear	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: displayShear"];
+	writeToFile	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR: writeToFile"];
+	correct	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: correct"];
+	understandable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: understandable"];
+	reusable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: reusable"];
+	maintainable	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR: maintainable"];
 
 	subgraph R {
 	rank="same"

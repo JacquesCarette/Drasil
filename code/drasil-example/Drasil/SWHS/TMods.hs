@@ -166,7 +166,7 @@ latentHtENotes = map foldlSent [
 nwtnCooling :: TheoryModel
 nwtnCooling = tm (OthModel nwtnCoolingRC)
   [qw latentHeat, qw time, qw htTransCoeff, qw deltaT] ([] :: [ConceptChunk])
-  [] [toDispExpr nwtnCoolingEqn] [] [refInfo incroperaEtAl2007 $ Page [8]]
+  [] [toDispExpr nwtnCoolingEqn] [] [ref incroperaEtAl2007 {- Page [8]-}]
   "nwtnCooling" nwtnCoolingNotes
 
 nwtnCoolingRC :: RelationConcept

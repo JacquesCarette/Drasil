@@ -57,8 +57,8 @@ riskQD = mkQuantDef riskFun riskEq
 
 risk :: DataDefinition
 risk = dd riskQD
-  [ref astm2009, refInfo beasonEtAl1998 $ Equation [4, 5],
-  refInfo campidelli $ Equation [14]]
+  (map ref [astm2009, beasonEtAl1998, -- Equation [4, 5],
+  campidelli]) -- Equation [14]
   Nothing "riskFun" [aGrtrThanB, hRef, ldfRef, jRef]
 
 --DD2--
@@ -140,7 +140,7 @@ dimLLQD :: QDefinition
 dimLLQD = mkQuantDef dimlessLoad dimLLEq
 
 dimLL :: DataDefinition
-dimLL = dd dimLLQD [ref astm2009, refInfo campidelli $ Equation [7]] Nothing "dimlessLoad"
+dimLL = dd dimLLQD [ref astm2009, ref campidelli {- Equation [7]-}] Nothing "dimlessLoad"
   [qRef, aGrtrThanB, stdVals [modElas], hRef, gtfRef]
 
 --DD8--

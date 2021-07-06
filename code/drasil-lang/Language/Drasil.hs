@@ -109,7 +109,7 @@ module Language.Drasil (
   -- Chunk.Citation
   , HasCitation(getCitations)
   -- Sentence
-  , Sentence(..), SentenceStyle(..), TermCapitalization(..), (+:+), (+:+.), (+:), (!.), capSent
+  , Sentence(..), SentenceStyle(..), TermCapitalization(..), RefInfo(..), (+:+), (+:+.), (+:), (!.), capSent
   , ch, eS, sC, sDash, sParen  
   -- Sentence.Extract
   , sdep, shortdep
@@ -149,10 +149,8 @@ module Language.Drasil (
   , eqSymb, codeSymb, hasStageSymbol
   , autoStage, hat, prime, staged, sub, subStr, sup , unicodeConv, upperLeft, vec
   , label, variable
-  -- RefProg
-  , RefInfo(..)
   -- Reference
-  , Reference(..), ref, refInfo, refS, namedRef, complexRef, namedComplexRef
+  , Reference(..), ref, refS, namedRef, complexRef, namedComplexRef
   -- Label.Type
   , getAdd, prepend
   , LblType(RP, Citation, URI), IRefProg(..)
@@ -279,11 +277,10 @@ import Language.Drasil.NounPhrase
 import Language.Drasil.ShortName (ShortName, shortname', getSentSN)
 import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..), 
   RTopology(..), DomainDesc(AllDD, BoundedDD), getActorName, getInnerSpace)
-import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), TermCapitalization(..), (+:+),
+import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), TermCapitalization(..), RefInfo(..), (+:+),
   (+:+.), (+:), (!.), capSent, ch, eS, sC, sDash, sParen)
 import Language.Drasil.Sentence.Extract (sdep, shortdep) -- exported for drasil-database FIXME: move to development package?
-import Language.Drasil.RefProg (RefInfo(..))
-import Language.Drasil.Reference (Reference(..), namedRef, refInfo, complexRef, namedComplexRef, ref, refS)
+import Language.Drasil.Reference (Reference(..), namedRef, complexRef, namedComplexRef, ref, refS)
 import Language.Drasil.Symbol (Decoration, Symbol)
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol, 
   autoStage, hat, prime, staged, sub, subStr, sup, unicodeConv, upperLeft, vec,

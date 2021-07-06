@@ -1,12 +1,11 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Reference (Reference(Reference, rInfo), ref, refS,
-  namedRef, complexRef, namedComplexRef, refInfo) where
+module Language.Drasil.Reference (Reference(Reference), ref, refS,
+  namedRef, complexRef, namedComplexRef) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
   Referable(refAdd, renderRef))
 import Language.Drasil.Classes.Core2 (HasShortName(shortname))
-import Language.Drasil.RefProg (RefInfo(..))
-import Language.Drasil.Sentence (Sentence(Ref, EmptyS))
+import Language.Drasil.Sentence (Sentence(Ref, EmptyS), RefInfo(..))
 import Language.Drasil.Label.Type (LblType(..), getAdd)
 import Language.Drasil.ShortName (ShortName)
 import Language.Drasil.UID (UID)
@@ -20,8 +19,7 @@ import Control.Lens ((^.), makeLenses)
 data Reference = Reference
   { _ui :: UID
   ,  ra :: LblType
-  ,  sn :: ShortName
-  ,  rInfo :: RefInfo }
+  ,  sn :: ShortName}
 makeLenses ''Reference
 
 -- | Equal if 'UID's are equal.
@@ -41,11 +39,7 @@ instance Referable Reference where
 
 -- | Projector function that creates a 'Reference' from something 'Referable'.
 ref :: (Referable r, HasShortName r) => r -> Reference
-ref r = Reference (r ^. uid) (renderRef r) (shortname r) None
-
--- | Projector function that creates a 'Reference' from something 'Referable'. Also accepts 'RefInfo'.
-refInfo :: (Referable r, HasShortName r) => r -> RefInfo -> Reference
-refInfo r = Reference (r ^. uid) (renderRef r) (shortname r)
+ref r = Reference (r ^. uid) (renderRef r) (shortname r)
 
 -- Maybe just use r ^. uid without 'ref'?
 -- | Takes the reference 'UID' and wraps it into a 'Sentence'.

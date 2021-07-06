@@ -7,7 +7,6 @@ import Language.Drasil.Classes.Core2 (HasShortName(shortname))
 import Language.Drasil.Document.Core
 import Language.Drasil.Label.Type (prepend, LblType(RP, URI))
 import Language.Drasil.Misc (repUnd)
-import Language.Drasil.RefProg (RefInfo(None))
 import Language.Drasil.Reference (Reference(Reference))
 import Language.Drasil.Sentence (Sentence(..))
 import Language.Drasil.ShortName (ShortName, shortname')
@@ -101,22 +100,22 @@ figWithWidth = Figure
 -- These should eventually either disappear, or at least move out to docLang
 -- | Create a reference for a table. Takes in the name of a table (which will also be used for its shortname).
 makeTabRef :: String -> Reference
-makeTabRef rs = Reference rs (RP (prepend "Tab") ("Table:" ++ repUnd rs)) (shortname' (S rs)) None
+makeTabRef rs = Reference rs (RP (prepend "Tab") ("Table:" ++ repUnd rs)) (shortname' (S rs))
 
 -- | Create a reference for a figure. Takes in the name of a figure (which will also be used for its shortname).
 makeFigRef :: String -> Reference
-makeFigRef rs = Reference rs (RP (prepend "Fig") ("Figure:" ++ repUnd rs)) (shortname' (S rs)) None
+makeFigRef rs = Reference rs (RP (prepend "Fig") ("Figure:" ++ repUnd rs)) (shortname' (S rs))
 
 -- | Create a reference for a section. Takes in the name of a section and a shortname for the section.
 makeSecRef :: String -> Sentence -> Reference
 makeSecRef r s = Reference (r ++ "Label") (RP (prepend "Sec") ("Sec:" ++ repUnd r))
-  (shortname' s) None
+  (shortname' s)
 
 -- | Create a reference for a list. Takes in the name of the list and a shortname for the list.
 makeLstRef :: String -> Sentence -> Reference
 makeLstRef r s = Reference (r ++ "Label") (RP (prepend "Lst") ("Lst:" ++ repUnd r))
-  (shortname' s) None
+  (shortname' s)
 
 -- | Create a reference for a 'URI'.
 makeURI :: UID -> String -> ShortName -> Reference
-makeURI u r s = Reference u (URI r) s None
+makeURI u r s = Reference u (URI r) s

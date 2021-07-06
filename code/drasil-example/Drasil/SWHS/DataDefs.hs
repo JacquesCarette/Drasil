@@ -140,7 +140,7 @@ htFusionEqn :: Expr
 htFusionEqn = sy latentHeat $/ sy mass
 
 ddHtFusion :: DataDefinition
-ddHtFusion = dd ddHtFusionQD [refInfo bueche1986 $ Page [282]]
+ddHtFusion = dd ddHtFusionQD [ref bueche1986 {-Page [282]-}]
   Nothing "htFusion" [htFusionNote]
 
 htFusionNote :: Sentence

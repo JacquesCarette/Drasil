@@ -1,6 +1,5 @@
 module Drasil.DocumentLanguage.TraceabilityGraph (mkGraphInfo) where
 
---import Drasil.DocLang
 import Language.Drasil
 import Database.Drasil hiding (cdb)
 import Control.Lens ((^.))
@@ -12,7 +11,7 @@ import Drasil.Sections.TraceabilityMandGs (tvAssumps,
   tvChanges)
 import Language.Drasil.Printers (GraphInfo(..))
 
-
+-- | Extracts traceability graph inforomation from filled-in 'SystemInformation'.
 mkGraphInfo :: SystemInformation -> GraphInfo
 mkGraphInfo si = GI {
       assumpColour = "mistyrose"
@@ -40,12 +39,15 @@ mkGraphInfo si = GI {
     , directionsAllvsAll = mkGraphEdges [tvAssumps, tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels, tvReqs, tvGoals, tvChanges] [tvAssumps, tvDataDefns, tvTheoryModels, tvGenDefns, tvInsModels, tvReqs, tvGoals, tvChanges] si
 }
 
+-- | Gets the nodes of a graph based on a list of sections we want to examine and the system information.
 mkGraphNodes :: [TraceViewCat] -> SystemInformation -> [UID]
 mkGraphNodes entries si = (traceMReferees entryF cdb)
     where
         cdb = _sysinfodb si
         entryF = layoutUIDs entries cdb
 
+-- | Creates the graph edges based on the relation of the first list of sections to the second.
+-- Also needs the system information. Return value is of the form (Section, [Dependencies])
 mkGraphEdges :: [TraceViewCat] -> [TraceViewCat] -> SystemInformation -> [(UID, [UID])]
 mkGraphEdges cols rows si = makeTGraph (ensureItems "Traceability Graph" $ traceGRowHeader rowf si) (traceMColumns colf rowf cdb) $ traceMReferees colf cdb
     where
@@ -53,11 +55,15 @@ mkGraphEdges cols rows si = makeTGraph (ensureItems "Traceability Graph" $ trace
         colf = layoutUIDs cols cdb
         rowf = layoutUIDs rows cdb
 
+-- | Helper for making graph edges. Taken from Utils.Drasil's traceability matrix relation finder.
+-- But, instead of marking "X" on two related ideas, it makes them an edge.
 makeTGraph :: [String] -> [[String]] -> [String] -> [(String, [String])]
 makeTGraph rowName rows cols = zip rowName [zipFTable' x cols | x <- rows]
   where
     zipFTable' content = concatMap (\x -> if x `elem` content then [x] else [""])
 
+-- | Get all possible nodes based on the system information and a single section.
+-- In other words, finds all possible UIDs under a given section.
 getLabels :: TraceViewCat -> SystemInformation -> [UID]
 getLabels l si = mkGraphNodes [l] si
 
@@ -76,9 +82,12 @@ checkUID t si
   where s = _sysinfodb si
 
 -- | Helper that finds the header of a traceability matrix.
+-- However, here we use this to get a list of 'UID's for a traceability graph instead.
 traceGHeader :: (ChunkDB -> [UID]) -> SystemInformation -> [UID]
 traceGHeader f c = map (`checkUID` c) $ f $ _sysinfodb c
 
 -- | Helper that finds the headers of the traceability matrix rows.
+-- However, here we use this to get a list of 'UID's for a traceability graph instead.
+-- This is then used to create the graph edges.
 traceGRowHeader :: ([UID] -> [UID]) -> SystemInformation -> [UID]
 traceGRowHeader f = traceGHeader (traceMReferrers f)

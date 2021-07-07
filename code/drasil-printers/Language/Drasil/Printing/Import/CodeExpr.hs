@@ -122,14 +122,6 @@ codeExpr (AssocA AddI l)          sm = assocExpr P.Add (precA AddI) l sm
 codeExpr (AssocA AddRe l)         sm = assocExpr P.Add (precA AddRe) l sm
 codeExpr (AssocA MulI l)          sm = P.Row $ mulExpr l MulI sm
 codeExpr (AssocA MulRe l)         sm = P.Row $ mulExpr l MulRe sm
-codeExpr (Deriv Part a b)         sm =
-  P.Div (P.Row [P.Spc P.Thin, P.Spec Partial, codeExpr a sm])
-        (P.Row [P.Spc P.Thin, P.Spec Partial,
-                symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b])
-codeExpr (Deriv Total a b)        sm =
-  P.Div (P.Row [P.Spc P.Thin, P.Ident "d", codeExpr a sm])
-        (P.Row [P.Spc P.Thin, P.Ident "d",
-                symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b])
 codeExpr (C c)                    sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
 codeExpr (FCall f [x] [])         sm =
   P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f, parens $ codeExpr x sm]

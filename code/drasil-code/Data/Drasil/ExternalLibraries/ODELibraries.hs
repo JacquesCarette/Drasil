@@ -598,7 +598,6 @@ modifiedODESyst sufx info = map replaceDepVar (odeSyst info)
                            | otherwise               = cc
     replaceDepVar (AssocA a es)           = AssocA a (map replaceDepVar es)
     replaceDepVar (AssocB b es)           = AssocB b (map replaceDepVar es)
-    replaceDepVar (Deriv dt e u)          = Deriv dt (replaceDepVar e) u
     replaceDepVar (FCall u es nes)        = FCall u (map replaceDepVar es)
       (map (over _2 replaceDepVar) nes)
     replaceDepVar (New u es nes)          = New u (map replaceDepVar es)

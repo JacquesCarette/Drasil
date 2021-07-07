@@ -29,11 +29,11 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   DerivationDisplay(ShowDerivation),
   DocSection(AuxConstntSec, Bibliography, IntroSec, RefSec, ReqrmntSec, SSDSec, TraceabilitySec),
   Emphasis(Bold), Field(..), Fields, InclUnits(IncludeUnits),
-  IntroSec(..), IntroSub(IScope), ProblemDescription(PDProg), PDSub(..),
+  IntroSec(..), IntroSub(IPurpose, IScope), ProblemDescription(PDProg), PDSub(..),
   RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl,
   SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
   TConvention(..), TSIntro(..), TraceabilitySec(TraceabilityProg),
-  Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, getTraceConfigUID,
+  Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, purpDoc, getTraceConfigUID,
   secRefs)
 
 import Drasil.DblPendulum.Figures (figMotion, figRefs)
@@ -68,7 +68,8 @@ mkSRS = [RefSec $      --This creates the Reference section of the SRS
       ],
   IntroSec $            -- This adds an introduction with an overview of the sub-sections
     IntroProg justification (phrase pendulumTitle) -- This adds an introductory blob before the overview paragraph above.
-      [IScope scope],                            -- This section add a Scope section with the content of 'scope' constructor.
+      [IPurpose $ purpDoc pendulumTitle Verbose,
+       IScope scope],                            -- This section add a Scope section with the content of 'scope' constructor.
   SSDSec $ 
     SSDProg                               -- This adds a Specific system description section and an introductory blob.
       [ SSDProblem $ PDProg prob []                --  This adds a is used to define the problem your system will solve
@@ -116,7 +117,7 @@ si = SI {
   _sys         = pendulumTitle, 
   _kind        = Doc.srs,
   _authors     = [olu],
-  _purpose     = [],
+  _purpose     = purpDoc pendulumTitle Verbose,
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = iMods,

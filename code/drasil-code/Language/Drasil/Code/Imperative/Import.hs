@@ -296,7 +296,6 @@ convExpr (AssocA MulI l)  = foldl1 (#*)  <$> mapM convExpr l
 convExpr (AssocA MulRe l) = foldl1 (#*)  <$> mapM convExpr l
 convExpr (AssocB And l)   = foldl1 (?&&) <$> mapM convExpr l
 convExpr (AssocB Or l)    = foldl1 (?||) <$> mapM convExpr l
-convExpr Deriv{} = return $ litString "**convExpr :: Deriv unimplemented**"
 convExpr (C c)   = do
   g <- get
   let v = quantvar (lookupC g c)
@@ -379,8 +378,6 @@ convCall c x ns f libf = do
 -- | Converts a 'Constraint' to a 'CodeExpr'.
 renderC :: (HasUID c, HasSymbol c) => c -> Constraint CodeExpr -> CodeExpr
 renderC s (Range _ rr)         = renderRealInt s rr
-renderC _ (EnumeratedReal _ _) = error "EnumeratedReal IsIn not supported yet" -- IsIn (sy s) (DiscreteD rr)
-renderC _ (EnumeratedStr  _ _) = error "EnumeratedStr IsIn not supported yet" -- IsIn (sy s) (DiscreteS rr)
 
 -- | Converts an interval ('RealInterval') to a 'CodeExpr'.
 renderRealInt :: (HasUID c, HasSymbol c) => c -> RealInterval CodeExpr CodeExpr -> CodeExpr

@@ -69,7 +69,6 @@
 		CodeExpr -> String;
 		CodeExpr -> AssocArithOper;
 		CodeExpr -> AssocBoolOper;
-		CodeExpr -> DerivType;
 		CodeExpr -> UID;
 		CodeExpr -> Completeness;
 		CodeExpr -> UFunc;

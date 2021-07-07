@@ -5,67 +5,56 @@ import Data.List (intercalate)
 import System.IO
 import System.Directory
 
-{-
-Ideally, all the functions in doclang create a traceability table for us.
-That means all the heavy lifting of collecting the actual information required to 
-autogenerate the .dot files would already be done. The labels also appear on the reference names 
-(for example, a data definition shows up as DD:dataDefUID), so we could sort the graph
-in that manner. Then, all we need to do is print.
-
-Each traceability matrix should be separate for easier viewability.
-
-To make the graphs look better, we try to group the elements by section type
-(eg. datadefs with datadefs, changes with changes, etc.)
-by using subgraphs and making each section type level with each other.
-The 'dot' method of displaying graphs naturally groups subgraphs.
--}
-
 -- | Type synonym for clarity.
 type Colour = String
+-- | Type synonym for clarity.
+type Label = String
+
+-- | A node family contains a list of 'UID's, their display labels, general subgraph label, and colour.
+data NodeFamily = NF {
+    -- | Node 'UID's.
+    nodeUIDs :: [UID]
+    -- | Display labels for nodes. We use the reference addresses from the 'UID's.
+    , nodeLabels :: [Label]
+    -- | Individual subgraph labels. These labels do not show on the
+    -- final generated pdf or png files.
+    , nfLabel :: Label
+    -- | Gives the ability to change colours of bubbles within the graph.
+    , nfColour :: Colour
+}
 
 -- | Holds all important and relevant information for generating a traceability graph.
--- Includes labels, graph edges (directions), and label colours.
+-- Includes nodes, graph edges, and node family information.
 data GraphInfo = GI {
-    -------------- graph nodes (labels) -------------------------------
+    --------------- graph node families -------------------------------
     -- | Assumptions.
-    assumpLabels :: (([UID], [String]), String)
+    assumpNF :: NodeFamily
     -- | Data definitions.
-    , ddLabels   :: (([UID], [String]), String)
+    , ddNF :: NodeFamily
     -- | General definitions.
-    , gdLabels   :: (([UID], [String]), String)
+    , gdNF :: NodeFamily
     -- | Theory models.
-    , tmLabels   :: (([UID], [String]), String)
+    , tmNF :: NodeFamily
     -- | Instance models.
-    , imLabels   :: (([UID], [String]), String)
-    -- | Requirements. Currently cannot differentiate Functional and Non-Functional ones.
-    , rLabels    :: (([UID], [String]), String)
-    -- | Goal statements.
-    , gsLabels   :: (([UID], [String]), String)
-    -- | Changes. Currently cannot differentiate Likely and Unlikely ones.
-    , cLabels    :: (([UID], [String]), String)
+    , imNF :: NodeFamily
+    -- | Requirements (both functional and non-functional).
+    , reqNF :: NodeFamily
+    -- | Goal statement.
+    , gsNF :: NodeFamily
+    -- | Changes (both likely and unlikely).
+    , chgNF :: NodeFamily
 
-    -------------- graph edges (directions) ---------------------------
+    -------------- graph edges  ---------------------------
     -- | Assumptions dependent on assumptions.
-    , directionsAvsA     :: [(UID, [UID])] 
+    , edgesAvsA     :: [(UID, [UID])] 
     -- | Definitions, models, requirements, and changes dependent on assumptions.
-    , directionsAvsAll   :: [(UID, [UID])]
+    , edgesAvsAll   :: [(UID, [UID])]
     -- | Definitions and models that are dependent on other definitions and models.
-    , directionsRefvsRef :: [(UID, [UID])]
+    , edgesRefvsRef :: [(UID, [UID])]
     -- | Goals and requirements dependent on definitions, models, and other requirements.
-    , directionsAllvsR   :: [(UID, [UID])]
+    , edgesAllvsR   :: [(UID, [UID])]
     -- | Definitions, models, requirements, goals, and changes that are dependent on one another.
-    , directionsAllvsAll :: [(UID, [UID])]
-
-    -------------- node colours ---------------------------------------
-    -- give the ability to change colours of bubbles within the graph
-    , assumpColour :: Colour
-    , ddColour     :: Colour
-    , gdColour     :: Colour
-    , tmColour     :: Colour
-    , imColour     :: Colour
-    , rColour      :: Colour
-    , gsColour     :: Colour
-    , cColour      :: Colour
+    , edgesAllvsAll :: [(UID, [UID])]
     
     -- may need more information regarding ranking & ordering, but for now I'm just keeping it simple
 }
@@ -84,57 +73,49 @@ outputDot outputFilePath gi = do
 -- | Output function for assumptions dependent on assumptions.
 mkOutputAvsA :: GraphInfo -> IO ()
 mkOutputAvsA gi = do
-    let labels = [assumpLabels]
-        colours = [assumpColour]
-    mkOutput gi "avsa" directionsAvsA labels colours
+    let labels = [assumpNF]
+    mkOutput gi "avsa" edgesAvsA labels
 
 -- | Output function for definitions, models, requirements, and changes dependent on assumptions.
 mkOutputAvsAll :: GraphInfo -> IO ()
 mkOutputAvsAll gi = do
-    let labels = [assumpLabels, ddLabels, tmLabels, gdLabels, imLabels, rLabels, cLabels]
-        colours = [assumpColour, ddColour, tmColour, gdColour, imColour, rColour, cColour]
-    mkOutput gi "avsall" directionsAvsAll labels colours
+    let labels = [assumpNF, ddNF, tmNF, gdNF, imNF, reqNF, chgNF]
+    mkOutput gi "avsall" edgesAvsAll labels
 
 -- | Output function for definitions and models that are dependent on other definitions and models.
 mkOutputRefvsRef :: GraphInfo -> IO ()
 mkOutputRefvsRef gi = do
-    let labels = [ddLabels, tmLabels, gdLabels, imLabels]
-        colours = [ddColour, tmColour, gdColour, imColour]
-    mkOutput gi "refvsref" directionsRefvsRef labels colours
+    let labels = [ddNF, tmNF, gdNF, imNF]
+    mkOutput gi "refvsref" edgesRefvsRef labels
 
 -- | Output function for goals and requirements dependent on definitions, models, and other requirements.
 mkOutputAllvsR :: GraphInfo -> IO ()
 mkOutputAllvsR gi = do
-    let labels = [assumpLabels, ddLabels, tmLabels, gdLabels, imLabels, rLabels, gsLabels]
-        colours = [assumpColour, ddColour, tmColour, gdColour, imColour, rColour, gsColour]
-    mkOutput gi "allvsr" directionsAllvsR labels  colours
+    let labels = [assumpNF, ddNF, tmNF, gdNF, imNF, reqNF, gsNF]
+    mkOutput gi "allvsr" edgesAllvsR labels
 
 -- | Output function for definitions, models, requirements, goals, and changes that are dependent on one another.
 mkOutputAllvsAll :: GraphInfo -> IO ()
 mkOutputAllvsAll gi = do
-    let labels = [assumpLabels, ddLabels, tmLabels, gdLabels, imLabels, rLabels, gsLabels, cLabels]
-        colours = [assumpColour, ddColour, tmColour, gdColour, imColour, rColour, gsColour, cColour]
-    mkOutput gi "allvsall" directionsAllvsAll labels colours
+    let labels = [assumpNF, ddNF, tmNF, gdNF, imNF, reqNF, gsNF, chgNF]
+    mkOutput gi "allvsall" edgesAllvsAll labels
 
 -------------
 -- General helper functions
 -------------
 
--- | General output function for making a traceability graph. Takes in the graph information, title, direction function, label functions, label prefixes, and colour functions.
-mkOutput :: GraphInfo -> String -> (GraphInfo -> [(String, [String])]) -> [GraphInfo -> (([String], [String]), String)] -> [GraphInfo -> Colour] -> IO ()
-mkOutput gi ttl getDirections getLabels getColours = do
+-- | General output function for making a traceability graph. Takes in the graph information, title, edge generator functions, and node family functions.
+mkOutput :: GraphInfo -> String -> (GraphInfo -> [(UID, [UID])]) -> [GraphInfo -> NodeFamily] -> IO ()
+mkOutput gi ttl getDirections getLabels = do
     handle <- openFile (ttl ++ ".dot") WriteMode
     hPutStrLn handle $ "digraph " ++ ttl ++ " {"
     let labels = filterAndGI gi getLabels
-        colours = map ($ gi) getColours
-
-        allLabels = zipWith (\x y -> (fst $ fst x, snd $ fst x, snd x, y)) labels colours
-    outputSub handle (getDirections gi) allLabels
+    outputSub handle (getDirections gi) labels
     hPutStrLn handle "}"
     hClose handle
 
--- | Graph output helper. Takes in the file handle, edges, and nodes.
-outputSub :: Handle -> [(String, [String])] -> [([String], [String], String, Colour)] -> IO ()
+-- | Graph output helper. Takes in the file handle, edges, and node families.
+outputSub :: Handle -> [(String, [String])] -> [NodeFamily] -> IO ()
 outputSub handle edges nodes = do
     mapM_ (mkDirections handle) edges
     hPutStrLn handle "\n"
@@ -151,23 +132,31 @@ mkDirections handle ls = do
         makeEdgesSub nm (c:cs) = ("\t" ++ filterInvalidChars nm ++ " -> " ++ filterInvalidChars c ++ ";"): makeEdgesSub nm cs
 
 -- | Prints graph nodes (labels) onto a given file handle.
-mkNodes :: Handle -> ([String], [String], String, Colour) -> IO ()
-mkNodes handle (ls, lbl, subL, col) = do
-    mapM_ ((hPutStrLn handle) . uncurry (makeNodesSub col)) $ zip lbl ls
-    hPutStrLn handle $ "\n\tsubgraph " ++ subL ++ " {"
-    hPutStrLn handle "\trank=\"same\""
-    hPutStrLn handle $ "\t{" ++ intercalate ", " ls ++ "}"
-    hPutStrLn handle "\t}\n"
+mkNodes :: Handle -> NodeFamily -> IO ()
+mkNodes handle NF{nodeUIDs = u, nodeLabels = ls, nfLabel = lbl, nfColour = col} = do
+    mapM_ ((hPutStrLn handle) . uncurry (makeNodesSub col)) $ zip ls u
+    mkSubgraph handle lbl u 
     where
         -- Creates a node based on the kind of datatype (indented for subgraphs)
         makeNodesSub :: Colour -> String -> String -> String
         makeNodesSub c l nm  = "\t" ++ nm ++ "\t[shape=box, color=black, style=filled, fillcolor=" ++ c ++ ", label=\"" ++ l ++ "\"];"
 
+-- | Helper that only makes a subgraph if there are elements in the subgraph. Otherwise, it returns nothing.
+mkSubgraph :: Handle -> Label -> [UID] -> IO ()
+mkSubgraph handle l u 
+    | null l = return mempty
+    | otherwise = do 
+             hPutStrLn handle $ "\n\tsubgraph " ++ l ++ " {"
+             hPutStrLn handle "\trank=\"same\""
+             hPutStrLn handle $ "\t{" ++ intercalate ", " u ++ "}"
+             hPutStrLn handle "\t}\n"
+
 -- | Gets graph labels and removes any invalid characters.
-filterAndGI :: GraphInfo -> [GraphInfo -> (([String], [String]), String)] -> [(([String], [String]), String)]
-filterAndGI gi ls = map (\x -> ((map filterInvalidChars $ fst $ fst x, snd $ fst x), snd x)) labels
+filterAndGI :: GraphInfo -> [GraphInfo -> NodeFamily] -> [NodeFamily]
+filterAndGI gi toNodes = map filterUIDs labels
     where
-        labels = map ($ gi) ls
+        filterUIDs NF{nodeUIDs = u, nodeLabels = ls, nfLabel = l, nfColour = c} = NF{nodeUIDs = map filterInvalidChars u, nodeLabels = ls, nfLabel = l, nfColour = c}
+        labels = map ($ gi) toNodes
 
 -- | Helper to remove invalid characters.
 filterInvalidChars :: String -> String

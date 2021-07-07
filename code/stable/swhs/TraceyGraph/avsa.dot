@@ -2,26 +2,26 @@ digraph avsa {
 	assumpCTNOD -> assumpSITWP;
 
 
-	assumpTEO	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpTEO"];
-	assumpHTCC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpHTCC"];
-	assumpCWTAT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpCWTAT"];
-	assumpTPCAV	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpTPCAV"];
-	assumpDWPCoV	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpDWPCoV"];
-	assumpSHECov	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpSHECov"];
-	assumpLCCCW	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpLCCCW"];
-	assumpTHCCoT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpTHCCoT"];
-	assumpTHCCoL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpTHCCoL"];
-	assumpLCCWP	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpLCCWP"];
-	assumpCTNOD	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpCTNOD"];
-	assumpSITWP	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpSITWP"];
-	assumpPIS	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpPIS"];
-	assumpWAL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpWAL"];
-	assumpPIT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpPIT"];
-	assumpNIHGBWP	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpNIHGBWP"];
-	assumpVCMPN	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpVCMPN"];
-	assumpNGSP	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpNGSP"];
-	assumpAPT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpAPT"];
-	assumpVCN	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A: assumpVCN"];
+	assumpTEO	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpTEO"];
+	assumpHTCC	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpHTCC"];
+	assumpCWTAT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpCWTAT"];
+	assumpTPCAV	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpTPCAV"];
+	assumpDWPCoV	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpDWPCoV"];
+	assumpSHECov	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSHECov"];
+	assumpLCCCW	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpLCCCW"];
+	assumpTHCCoT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpTHCCoT"];
+	assumpTHCCoL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpTHCCoL"];
+	assumpLCCWP	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpLCCWP"];
+	assumpCTNOD	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpCTNOD"];
+	assumpSITWP	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpSITWP"];
+	assumpPIS	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpPIS"];
+	assumpWAL	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpWAL"];
+	assumpPIT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpPIT"];
+	assumpNIHGBWP	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpNIHGBWP"];
+	assumpVCMPN	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpVCMPN"];
+	assumpNGSP	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpNGSP"];
+	assumpAPT	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpAPT"];
+	assumpVCN	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpVCN"];
 
 	subgraph A {
 	rank="same"

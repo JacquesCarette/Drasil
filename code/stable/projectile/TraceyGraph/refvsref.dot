@@ -15,37 +15,37 @@ digraph refvsref {
 	message -> offset;
 
 
-	speed	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: speed"];
-	ixVel	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: ixVel"];
-	iyVel	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD: iyVel"];
+	speed	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:vecMag"];
+	ixVel	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:speedIX"];
+	iyVel	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:speedIY"];
 
 	subgraph DD {
 	rank="same"
 	{speed, ixVel, iyVel}
 	}
 
-	accelerationTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM: accelerationTM"];
-	velocityTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM: velocityTM"];
+	accelerationTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:acceleration"];
+	velocityTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:velocity"];
 
 	subgraph TM {
 	rank="same"
 	{accelerationTM, velocityTM}
 	}
 
-	projSpeed	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: projSpeed"];
-	scalarPos	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: scalarPos"];
-	velocity	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: velocity"];
-	position	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD: position"];
+	projSpeed	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectVel"];
+	scalarPos	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rectPos"];
+	velocity	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:velVec"];
+	position	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:posVec"];
 
 	subgraph GD {
 	rank="same"
 	{projSpeed, scalarPos, velocity, position}
 	}
 
-	flightduration	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: flightduration"];
-	landingposition	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: landingposition"];
-	offset	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: offset"];
-	message	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM: message"];
+	flightduration	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingTime"];
+	landingposition	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfLandingDist"];
+	offset	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:offsetIM"];
+	message	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:messageIM"];
 
 	subgraph IM {
 	rank="same"

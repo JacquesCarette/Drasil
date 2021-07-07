@@ -2477,6 +2477,10 @@ module Language.Drasil.Document
 data SecCons
 Sub :: Section -> SecCons
 Con :: Contents -> SecCons
+data Partition
+Sections :: Partition
+Part :: Partition
+Chapter :: Partition
 
 -- | Sections have a title (<a>Sentence</a>), a list of contents
 --   (<a>SecCons</a>) and a shortname (<a>Reference</a>).

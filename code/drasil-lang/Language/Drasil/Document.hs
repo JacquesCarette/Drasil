@@ -20,6 +20,10 @@ import Control.Lens (makeLenses, view)
 data SecCons = Sub   Section
              | Con   Contents
 
+data Partition = Sections
+                | Part
+                | Chapter
+
 -- | Sections have a title ('Sentence'), a list of contents ('SecCons')
 -- and a shortname ('Reference').
 data Section = Section 
@@ -28,6 +32,7 @@ data Section = Section
              , _lab :: Reference
              }
 makeLenses ''Section
+                
 
 -- | Finds the 'UID' of a 'Section'.
 instance HasUID        Section where uid = lab . uid

@@ -267,9 +267,9 @@ forall c. Idea c =&gt; c -&gt; Maybe [Char]
 </span><span class="hs-identifier hs-var">getA</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict
 </span><a href="#local-6989586621679120098"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe [Char] -&gt; ([Char] -&gt; Maybe [Char]) -&gt; Maybe [Char]
 forall (m :: * -&gt; *) a b. Monad m =&gt; m a -&gt; (a -&gt; m b) -&gt; m b
-</span><span class="hs-operator hs-var">&gt;&gt;=</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">TermCapitalization -&gt; [Char] -&gt; Maybe [Char]
+</span><span class="hs-operator hs-var">&gt;&gt;=</span></span><span> </span><span class="annot"><span class="annottext">TermCapitalization -&gt; [Char] -&gt; Maybe [Char]
 </span><a href="Language.Drasil.Printing.Import.Helpers.html#capHelper"><span class="hs-identifier hs-var">capHelper</span></a></span><span> </span><span class="annot"><span class="annottext">TermCapitalization
-</span><a href="#local-6989586621679120100"><span class="hs-identifier hs-var">sCap</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679120100"><span class="hs-identifier hs-var">sCap</span></a></span><span>
 </span><span id="line-63"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679120098"><span class="annot"><span class="annottext">l :: IdeaDict
 </span><a href="#local-6989586621679120098"><span class="hs-identifier hs-var hs-var">l</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; [Char] -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">termResolve</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
@@ -325,20 +325,21 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span id="line-82"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Helpers.html#capHelper"><span class="hs-identifier hs-type">capHelper</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">TermCapitalization</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-83"></span><span id="capHelper"><span class="annot"><span class="annottext">capHelper :: TermCapitalization -&gt; [Char] -&gt; Maybe [Char]
 </span><a href="Language.Drasil.Printing.Import.Helpers.html#capHelper"><span class="hs-identifier hs-var hs-var">capHelper</span></a></span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">NoCap</span></span><span> </span><span id="local-6989586621679120084"><span class="annot"><span class="annottext">s :: [Char]
-</span><a href="#local-6989586621679120084"><span class="hs-identifier hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Maybe [Char]
+</span><a href="#local-6989586621679120084"><span class="hs-identifier hs-var">s</span></a></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Maybe [Char]
 forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
 </span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">[Char]
 </span><a href="#local-6989586621679120084"><span class="hs-identifier hs-var">s</span></a></span><span>
-</span><span id="line-84"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Helpers.html#capHelper"><span class="hs-identifier hs-var">capHelper</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe [Char]
+</span><span id="line-84"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Helpers.html#capHelper"><span class="hs-identifier hs-var">capHelper</span></a></span><span> </span><span class="hs-identifier">_</span><span>     </span><span class="hs-special">[</span><span class="hs-special">]</span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Maybe [Char]
 forall a. Maybe a
 </span><span class="hs-identifier hs-var">Nothing</span></span><span>
-</span><span id="line-85"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Helpers.html#capHelper"><span class="hs-identifier hs-var">capHelper</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">(</span><span id="local-6989586621679120083"><span class="annot"><span class="annottext">x :: Char
+</span><span id="line-85"></span><span class="annot"><a href="Language.Drasil.Printing.Import.Helpers.html#capHelper"><span class="hs-identifier hs-var">capHelper</span></a></span><span> </span><span class="hs-identifier">_</span><span>     </span><span class="hs-special">(</span><span id="local-6989586621679120083"><span class="annot"><span class="annottext">x :: Char
 </span><a href="#local-6989586621679120083"><span class="hs-identifier hs-var">x</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679120082"><span class="annot"><span class="annottext">xs :: [Char]
 </span><a href="#local-6989586621679120082"><span class="hs-identifier hs-var">xs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Char] -&gt; Maybe [Char]
 forall a. a -&gt; Maybe a
-</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char -&gt; Char
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char -&gt; Char
 </span><span class="hs-identifier hs-var">toUpper</span></span><span> </span><span class="annot"><span class="annottext">Char
-</span><a href="#local-6989586621679120083"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span class="annot"><span class="annottext">Char -&gt; [Char] -&gt; [Char]
+</span><a href="#local-6989586621679120083"><span class="hs-identifier hs-var">x</span></a></span><span class="annot"><span class="annottext">Char -&gt; [Char] -&gt; [Char]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[Char]
-</span><a href="#local-6989586621679120082"><span class="hs-identifier hs-var">xs</span></a></span><span class="hs-special">)</span></pre></body></html>
+</span><a href="#local-6989586621679120082"><span class="hs-identifier hs-var">xs</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-86"></span></pre></body></html>

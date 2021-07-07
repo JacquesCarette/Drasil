@@ -112,7 +112,7 @@ rotMotDeriv = mkDerivName (phrase rotMot)
 
 rotMotDerivStmts :: [Sentence]
 rotMotDerivStmts = [
-    foldlSent [S "We know that we may calculate the total angular acceleration of rigid body", 
+    foldlSent [S "We may calculate the total angular acceleration of rigid body", 
       P lJ, S "by calculating the derivative of it's angular velocity with respect to time", fromSource angAccelDD],
     S "Performing the derivative, we obtain:"
   ]

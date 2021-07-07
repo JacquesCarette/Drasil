@@ -2,8 +2,9 @@ module Drasil.GamePhysics.Expressions where
 
 import Language.Drasil
 
-import Drasil.GamePhysics.Unitals
-import Data.Drasil.Quantities.Physics
+import Drasil.GamePhysics.Unitals (massj, velj, torquej, forcej, angAccj)
+import Data.Drasil.Quantities.Physics (time, momentOfInertia, 
+    gravitationalAccel, angularVelocity)
 
 transMotExpr :: Expr
 transMotExpr = sy gravitationalAccel `addRe` (apply1 forcej time $/ sy massj)

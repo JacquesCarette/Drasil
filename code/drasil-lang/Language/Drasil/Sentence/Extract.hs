@@ -12,10 +12,10 @@ getUIDs (Ch ShortStyle _ _) = []
 getUIDs (Ch TermStyle _ _)  = []
 getUIDs (Ch PluralTerm _ _) = []
 getUIDs (SyCh a)            = [a]
-getUIDs (Sy _)              = []
-getUIDs (S _)               = []
-getUIDs (P _)               = []
-getUIDs (Ref {})            = []
+getUIDs Sy {}               = []
+getUIDs S {}                = []
+getUIDs P {}                = []
+getUIDs Ref {}              = []
 getUIDs Percent             = []
 getUIDs ((:+:) a b)         = getUIDs a ++ getUIDs b
 getUIDs (Quote a)           = getUIDs a
@@ -28,15 +28,15 @@ getUIDshort :: Sentence -> [UID]
 getUIDshort (Ch ShortStyle _ a) = [a]
 getUIDshort (Ch TermStyle _ _)  = []
 getUIDshort (Ch PluralTerm _ _) = []
-getUIDshort (SyCh _)            = []
-getUIDshort (Sy _)              = []
-getUIDshort (S _)               = []
+getUIDshort SyCh {}             = []
+getUIDshort Sy {}               = []
+getUIDshort S {}                = []
 getUIDshort Percent             = []
-getUIDshort (P _)               = []
-getUIDshort (Ref {})            = []
+getUIDshort P {}                = []
+getUIDshort Ref {}              = []
 getUIDshort ((:+:) a b)         = getUIDshort a ++ getUIDshort b
 getUIDshort (Quote a)           = getUIDshort a
-getUIDshort (E _)               = []
+getUIDshort E {}                = []
 getUIDshort EmptyS              = []
 
 -----------------------------------------------------------------------------
@@ -51,18 +51,18 @@ shortdep = nub . getUIDshort
 
 -- | Generic traverse of all positions that could lead to /reference/ 'UID's from 'Sentence's.
 lnames :: Sentence -> [UID]
-lnames (Ch _ _ _)     = []
-lnames (SyCh _)       = []
-lnames (Sy _)         = []
-lnames (S _)          = []
-lnames Percent        = []
-lnames (P _)          = []
-lnames (Ref a _ _)    = [a]
-lnames ((:+:) a b)    = lnames a ++ lnames b
-lnames (Quote _)      = []
-lnames (E _)          = []
-lnames EmptyS         = []
+lnames Ch {}       = []
+lnames SyCh {}     = []
+lnames Sy {}       = []
+lnames S {}        = []
+lnames Percent     = []
+lnames P {}        = []
+lnames (Ref a _ _) = [a]
+lnames ((:+:) a b) = lnames a ++ lnames b
+lnames Quote {}    = []
+lnames E {}        = []
+lnames EmptyS      = []
 
 -- | Get /reference/ 'UID's from 'Sentence's.
 lnames'  :: [Sentence] -> [UID]
-lnames' = concatMap lnames 
+lnames' = concatMap lnames

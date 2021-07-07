@@ -206,12 +206,12 @@ analysis: graphmod
 
 # Use a 'local' HLint installation, using HLint from the current stack repo
 hlint: check_stack
-	- stack install hlint
-	- hlint .
+	stack install hlint
+	hlint .
 
 # Use the latest HLint version, downloading the binary each time
 hot_hlint:
-	- curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
+	curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
 
 docs: check_stack
 	DOCS_FOLDER="$(DOCS_FOLDER)" GHC_FLAGS="$(GHCFLAGS)" sh scripts/make_docs.sh

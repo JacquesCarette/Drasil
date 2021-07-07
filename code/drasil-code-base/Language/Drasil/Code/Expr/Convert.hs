@@ -13,12 +13,11 @@ import Language.Drasil.Code.Expr
 expr :: L.Expr -> CodeExpr
 expr (L.Dbl d) = Dbl d
 expr (L.Int i) = Int i
-expr (L.ExactDbl i) = ExactDbl i 
+expr (L.ExactDbl i) = ExactDbl i
 expr (L.Str s) = Str s
 expr (L.Perc n d) = Perc n d
 expr (L.AssocA ao es) = AssocA (assocArithOp ao) $ map expr es
 expr (L.AssocB bo es) = AssocB (assocBoolOp bo) $ map expr es
-expr (L.Deriv dt e u) = Deriv dt (expr e) u
 expr (L.C u) = C u
 expr (L.FCall u es ns) = FCall u (map expr es) (map (second expr) ns)
 expr (L.Case c es) = Case c $ map (bimap expr expr) es
@@ -36,6 +35,7 @@ expr (L.VVVBinaryOp bo l r) = VVVBinaryOp (vvvBinOp bo) (expr l) (expr r)
 expr (L.VVNBinaryOp bo l r) = VVNBinaryOp (vvnBinOp bo) (expr l) (expr r)
 expr (L.Operator aao dd e) = Operator (assocArithOp aao) (renderDomainDesc dd) (expr e)
 expr (L.RealI u ri) = RealI u (realInterval ri)
+expr L.Deriv {} = error "Expr's Deriv is not convertible to the language of CodeExpr"
 
 -- | Convert 'RealInterval Expr Expr's into 'RealInterval CodeExpr CodeExpr's.
 realInterval :: L.RealInterval L.Expr L.Expr -> L.RealInterval CodeExpr CodeExpr
@@ -93,8 +93,8 @@ assocBoolOp L.Or = Or
 uFunc :: L.UFunc -> UFunc
 uFunc L.Abs = Abs -- TODO: These L.'s should be exported through L.D.Development
 uFunc L.Log = Log
-uFunc L.Ln = Ln 
-uFunc L.Sin = Sin 
+uFunc L.Ln = Ln
+uFunc L.Sin = Sin
 uFunc L.Cos = Cos
 uFunc L.Tan = Tan
 uFunc L.Sec = Sec
@@ -102,10 +102,10 @@ uFunc L.Csc = Csc
 uFunc L.Cot = Cot
 uFunc L.Arcsin = Arcsin
 uFunc L.Arccos = Arccos
-uFunc L.Arctan = Arctan 
-uFunc L.Exp = Exp 
-uFunc L.Sqrt = Sqrt 
-uFunc L.Neg = Neg 
+uFunc L.Arctan = Arctan
+uFunc L.Exp = Exp
+uFunc L.Sqrt = Sqrt
+uFunc L.Neg = Neg
 
 uFuncB :: L.UFuncB -> UFuncB
 uFuncB LD.Not = Not

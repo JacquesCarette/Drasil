@@ -21,6 +21,7 @@ import Drasil.HGHC.HeatTransfer (fp, hghc, dataDefs, htInputs, htOutputs,
 import Data.Drasil.SI_Units (siUnits, fundamentals, derived, degree)
 import Data.Drasil.People (spencerSmith)
 import Data.Drasil.Concepts.Documentation (doccon, doccon')
+import Data.Drasil.Concepts.Math (mathcon)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
   
 srs :: Document
@@ -61,7 +62,7 @@ mkSRS = [RefSec $
 
 symbMap :: ChunkDB
 symbMap = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals ++ map nw derived
-  ++ [nw fp, nw nuclearPhys, nw hghc, nw degree] ++ map nw doccon')
+  ++ [nw fp, nw nuclearPhys, nw hghc, nw degree] ++ map nw doccon' ++ map nw mathcon)
   ([] :: [ConceptChunk])-- FIXME: Fill in concepts
   siUnits dataDefs [] [] [] [] [] [] allRefs
 

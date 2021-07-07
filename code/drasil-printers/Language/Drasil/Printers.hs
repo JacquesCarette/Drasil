@@ -10,16 +10,15 @@ module Language.Drasil.Printers (
     --createMd
   , makeMd, introInfo, verInfo, unsupOS, regularSec, instDoc, extLibSec
   -- Plain
-    -- Helpers
-  , toPlainName
-    -- Print
-  , Linearity(..), sentenceDoc, exprDoc, symbolDoc, unitDoc
+  -- Print
+  , Linearity(..)
+  , sentenceDoc, exprDoc, codeExprDoc, symbolDoc, unitDoc
   -- TeX
-    -- Print
+  -- Print
   , genTeX
   , PrintingInformation(..)
   , HasPrintingOptions (..)
-  , Notation(Scientific, Engineering)
+  , Notation(..)
   , defaultConfiguration
   )
   where
@@ -27,11 +26,10 @@ module Language.Drasil.Printers (
 import Language.Drasil.Format (Format(TeX, HTML))
 import Language.Drasil.HTML.CSS (makeCSS)
 import Language.Drasil.HTML.Print (genHTML)
-import Language.Drasil.Markdown.CreateMd (makeMd, introInfo, verInfo, unsupOS, extLibSec, 
-  instDoc, regularSec)
-import Language.Drasil.Plain.Helpers (toPlainName)
-import Language.Drasil.Plain.Print (Linearity(..), sentenceDoc, exprDoc, 
-  symbolDoc, unitDoc)
+import Language.Drasil.Markdown.CreateMd (makeMd, introInfo, verInfo, unsupOS,
+  extLibSec, instDoc, regularSec)
+import Language.Drasil.Plain.Print (Linearity(..), sentenceDoc, exprDoc,
+  codeExprDoc, symbolDoc, unitDoc)
 import Language.Drasil.TeX.Print (genTeX)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation(..),
-  HasPrintingOptions(..), Notation(Scientific, Engineering), defaultConfiguration)
+  HasPrintingOptions(..), Notation(..), defaultConfiguration)

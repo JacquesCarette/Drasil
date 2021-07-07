@@ -86,7 +86,7 @@ getDimension :: Space -> Int
 getDimension (Vect t) = 1 + getDimension t
 getDimension _ = 0
 
--- | Splits a string at the first (and only the first) occurence of a delimiter.
+-- | Splits a string at the first (and only the first) occurrence of a delimiter.
 -- The delimiter is dropped from the result.
 splitAtFirst :: String -> Delimiter -> (String, String)
 splitAtFirst = splitAtFirst' []

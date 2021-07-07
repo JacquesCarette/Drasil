@@ -45,18 +45,18 @@ assumption, desSpec, goalStmt, dataConst, likelyChg, unlikelyChg, physSyst, requ
   mg, mis, notApp, srs, typUnc, sec :: CI
 
 softReqSpec :: NP
-softReqSpec = compoundPhraseP1 (softwareReq ^. term) (specification ^. term)
+softReqSpec = fterms compoundPhraseP1 softwareReq specification
 
 ------------------------------------------------------------------------------------------------------------------------------
 -- | CI       |                  |    uid      |         term                                   | abbreviation | ConceptDomain
 ------------------------------------------------------------------------------------------------------------------------------
 assumption  = commonIdeaWithDict "assumption"  (cn' "assumption")                                    "A"       [softEng]
-desSpec     = commonIdeaWithDict "desSpec"     (fterms compoundPhrase design specification)          "DS"      [softEng]
-goalStmt    = commonIdeaWithDict "goalStmt"    (fterms compoundPhrase goal statement)                "GS"      [softEng]
+desSpec     = commonIdeaWithDict "desSpec"     (combineNINI design specification)                    "DS"      [softEng]
+goalStmt    = commonIdeaWithDict "goalStmt"    (combineNINI goal statement)                          "GS"      [softEng]
 dataConst   = commonIdeaWithDict "dataConst"   (cn' "data constraint")                               "DC"      [softEng]
 likelyChg   = commonIdeaWithDict "likelyChg"   (cn' "likely change")                                 "LC"      [softEng]
 unlikelyChg = commonIdeaWithDict "unlikelyChg" (cn' "unlikely change")                               "UC"      [softEng]
-physSyst    = commonIdeaWithDict "physSyst"    (fterms compoundPhrase physicalSystem description)    "PS"      [softEng]
+physSyst    = commonIdeaWithDict "physSyst"    (combineNINI physicalSystem description)              "PS"      [softEng]
 requirement = commonIdeaWithDict "requirement" (cn' "requirement")                                   "R"       [softEng]
 mis         = commonIdeaWithDict "mis"         (fterms compoundPhrase moduleInterface specification) "MIS"     [softEng]
 mg          = commonIdeaWithDict "mg"          (fterms compoundPhrase module_ guide)                 "MG"      [softEng]
@@ -220,17 +220,17 @@ abbAcc, charOfIR, consVals, corSol, orgOfDoc, propOfCorSol, prpsOfDoc, refmat,
 abbAcc              = nc "TAbbAcc"            (cn "abbreviations and acronyms")
 consVals            = nc "consVals"           (cn "values of auxiliary constants")
 corSol              = nc "corSol"             (cn' "correct solution")
-charOfIR            = nc "charOfIR"           (characteristic `of_TPS` intReader)
+charOfIR            = nc "charOfIR"           (characteristic `of_PS` intReader)
 orgOfDoc            = nc "orgOfDoc"           (organization `of_` document)
-propOfCorSol        = nc "propOfCorSol"       (property `ofATPS` corSol)
+propOfCorSol        = nc "propOfCorSol"       (property `ofAPS` corSol)
 prpsOfDoc           = nc "prpsOfDoc"          (purpose `of_` document)
 refmat              = nc "refmat"             (cn' "reference material")
 reqInput            = nc "ReqInputs"          (cn' "required input")
-scpOfReq            = nc "scpOfReq"           (scope `of_TSP` requirement)
+scpOfReq            = nc "scpOfReq"           (scope `of_` requirement)
 tAuxConsts          = nc "TAuxConsts"         (cn' "auxiliary constant")
-termAndDef          = nc "termAndDef"         (terminology `and_TSP` definition)
-tOfSymb             = nc "tOfSymb"            (table_ `of_TSP` symbol_)
-tOfUnit             = nc "tOfUnit"            (table_ `of_TSP` unit_)
+termAndDef          = nc "termAndDef"         (terminology `and_` definition)
+tOfSymb             = nc "tOfSymb"            (table_ `of_` symbol_)
+tOfUnit             = nc "tOfUnit"            (table_ `of_` unit_)
 inDatumConstraint   = nc "InDataConstraints"  (cn' "input data constraint") -- should be moved below
 outDatumConstraint  = nc "OutDataConstraints" (cn' "output data constraint")
 traceyMandG         = nc "traceyMandG"        (and_TGen titleize' titleize' traceyMatrix graph)

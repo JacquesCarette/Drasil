@@ -1,4 +1,7 @@
 -- FIXME: use real parser (Low Priority; see line 119)
+-- | Data table generator. Uses information from SourceCodeReader.hs 
+-- to organize all types, classes, and instances in Drasil.
+-- Generates a .csv file and an HTML table with this information.
 module DataTableGen (main) where
 
 import Data.List

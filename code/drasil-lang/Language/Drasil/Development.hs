@@ -6,7 +6,7 @@ module Language.Drasil.Development (
   , DisplayExpr(..)
   , DisplayBinOp(..), DisplayAssocBinOp(..)
   -- Expr
-  , UFuncB(..), UFuncVec(..)
+  , UFuncB(..), UFuncVV(..), UFuncVN(..)
   , ArithBinOp(..), BoolBinOp(..), EqBinOp(..)
   , LABinOp(..), OrdBinOp(..), VVVBinOp(..), VVNBinOp(..)
   -- Expr.Extract
@@ -20,9 +20,9 @@ module Language.Drasil.Development (
 
 import Language.Drasil.NounPhrase (NounPhrase(phraseNP,pluralNP))
 import Language.Drasil.DisplayExpr
-import Language.Drasil.Expr (UFuncB(..), UFuncVec(..)
+import Language.Drasil.Expr (UFuncB(..), UFuncVV(..), UFuncVN(..)
   , ArithBinOp(..), BoolBinOp(..), EqBinOp(..)
   , LABinOp(..), OrdBinOp(..), VVVBinOp(..), VVNBinOp(..))
-import Language.Drasil.Expr.Extract
+import Language.Drasil.Expr.Extract (deDep, eDep, eNames, eNames', eNamesRI)
 import Language.Drasil.Expr.Precedence (precA, precB, eprec, dePrec, dePrecAssoc)
 import Language.Drasil.Sentence.Extract (sdep, lnames, lnames')

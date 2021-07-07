@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 38950fe6204f75c51da3a4fd4565a6ccf8072e64cf879a2a27281417c09fc77d
+-- hash: 160dc61077f10a566631e2aaa90986b1e6049cd9988f995ebe038e60beed4f22
 
 name:           drasil-example
 version:        0.1.24.0
@@ -42,6 +42,7 @@ executable dblpendulum
       base >=4.7 && <5
     , directory
     , drasil-code
+    , drasil-code-base
     , drasil-data
     , drasil-database
     , drasil-docLang
@@ -63,6 +64,7 @@ executable gamephysics
       Drasil.GamePhysics.Changes
       Drasil.GamePhysics.Concepts
       Drasil.GamePhysics.DataDefs
+      Drasil.GamePhysics.Expressions
       Drasil.GamePhysics.GenDefs
       Drasil.GamePhysics.Goals
       Drasil.GamePhysics.TMods
@@ -77,6 +79,7 @@ executable gamephysics
       base >=4.7 && <5
     , directory
     , drasil-code
+    , drasil-code-base
     , drasil-data
     , drasil-database
     , drasil-docLang
@@ -115,6 +118,7 @@ executable glassbr
       base >=4.7 && <5
     , directory
     , drasil-code
+    , drasil-code-base
     , drasil-data
     , drasil-database
     , drasil-docLang
@@ -140,6 +144,7 @@ executable hghc
       base >=4.7 && <5
     , directory
     , drasil-code
+    , drasil-code-base
     , drasil-data
     , drasil-database
     , drasil-docLang
@@ -165,8 +170,9 @@ executable nopcm
       Drasil.NoPCM.IMods
       Drasil.NoPCM.GenDefs
       Drasil.NoPCM.Goals
-      Drasil.NoPCM.Requirements
+      Drasil.NoPCM.ODEs
       Drasil.NoPCM.References
+      Drasil.NoPCM.Requirements
       Drasil.SWHS.Assumptions
       Drasil.SWHS.Body
       Drasil.SWHS.Changes
@@ -187,6 +193,7 @@ executable nopcm
       base >=4.7 && <5
     , directory
     , drasil-code
+    , drasil-code-base
     , drasil-data
     , drasil-database
     , drasil-docLang
@@ -212,6 +219,7 @@ executable pdController
       Drasil.PDController.IModel
       Drasil.PDController.IntroSection
       Drasil.PDController.GenSysDesc
+      Drasil.PDController.ODEs
       Drasil.PDController.References
       Drasil.PDController.Requirements
       Drasil.PDController.SpSysDesc
@@ -224,6 +232,7 @@ executable pdController
       base >=4.7 && <5
     , directory
     , drasil-code
+    , drasil-code-base
     , drasil-data
     , drasil-database
     , drasil-docLang
@@ -259,6 +268,7 @@ executable projectile
       base >=4.7 && <5
     , directory
     , drasil-code
+    , drasil-code-base
     , drasil-data
     , drasil-database
     , drasil-docLang
@@ -296,6 +306,7 @@ executable ssp
       base >=4.7 && <5
     , directory
     , drasil-code
+    , drasil-code-base
     , drasil-data
     , drasil-database
     , drasil-docLang
@@ -332,6 +343,7 @@ executable swhs
       base >=4.7 && <5
     , directory
     , drasil-code
+    , drasil-code-base
     , drasil-data
     , drasil-database
     , drasil-docLang
@@ -356,6 +368,7 @@ executable template
       base >=4.7 && <5
     , directory
     , drasil-code
+    , drasil-code-base
     , drasil-data
     , drasil-database
     , drasil-docLang

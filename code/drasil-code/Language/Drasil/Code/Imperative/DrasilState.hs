@@ -8,6 +8,7 @@ import Language.Drasil
 import GOOL.Drasil (ScopeTag(..), CodeType)
 
 import Language.Drasil.Chunk.Code (codeName)
+import Language.Drasil.Chunk.ConstraintMap (ConstraintCE)
 import Language.Drasil.Code.ExtLibImport (ExtLibState)
 import Language.Drasil.Choices (Choices(..), AuxFile, Modularity(..), 
   ImplementationType(..), Comments, Verbosity, MatchedConceptMap, 
@@ -233,7 +234,7 @@ getDerivedCls chs _ = dCls (inputModule chs) (inputStructure chs)
 
 -- | Get input constraints to be exported (for @input_constraints@).
 -- See 'getExpDerived' for full logic details.
-getExpConstraints :: Name -> Choices -> [Constraint] -> [ModExp]
+getExpConstraints :: Name -> Choices -> [ConstraintCE] -> [ModExp]
 getExpConstraints _ _ [] = []
 getExpConstraints n chs _ = cMod (modularity chs) (inputStructure chs)
   where cMod (Modular Separated) _ = [(icNm, "InputConstraints")]
@@ -244,9 +245,9 @@ getExpConstraints n chs _ = cMod (modularity chs) (inputStructure chs)
 
 -- | Get constraints defined in a class (for @input_constraints@).
 -- See 'getDerivedCls' for full logic details.
-getConstraintsCls :: Choices -> [Constraint] -> [ClassDef]
-getConstraintsCls _ [] = []
-getConstraintsCls chs _ = cCls (inputModule chs) (inputStructure chs)
+getConstraintsCls :: Choices -> [ConstraintCE] -> [ClassDef]
+getConstraintsCls _   [] = []
+getConstraintsCls chs _  = cCls (inputModule chs) (inputStructure chs)
   where cCls Combined Bundled = [("input_constraints", "InputParameters")]
         cCls _ _ = []
 

@@ -1,25 +1,28 @@
 {-# LANGUAGE PostfixOperators, Rank2Types #-}
+{-# OPTIONS_GHC -Wno-redundant-constraints #-}
 module Language.Drasil.Code.Imperative.Import (codeType, spaceCodeType, 
   publicFunc, privateMethod, publicInOutFunc, privateInOutMethod, 
   genConstructor, mkVar, mkVal, convExpr, convStmt, genModDef, genModFuncs, 
   genModClasses, readData, renderC
 ) where
 
-import Language.Drasil hiding (Ref, variable, int, log, ln, exp,
-  sin, cos, tan, csc, sec, cot, arcsin, arccos, arctan)
-import Language.Drasil.Development (UFuncB(..), UFuncVec(..), 
-  ArithBinOp(..), BoolBinOp(..), EqBinOp(..), LABinOp(..), OrdBinOp(..), VVNBinOp(..), VVVBinOp(..))
+import Language.Drasil (HasSymbol, HasUID(..), HasSpace(..),
+  Space(..), RealInterval(..), UID, Constraint(..), Inclusive (..))
 import Database.Drasil (symbResolve)
+import Language.Drasil.CodeExpr (sy, ($<), ($>), ($<=), ($>=), ($&&))
+import Language.Drasil.Code.Expr.Development (CodeExpr(..), ArithBinOp(..),
+  AssocArithOper(..), AssocBoolOper(..), BoolBinOp(..), EqBinOp(..),
+  LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncVV(..), UFuncVN(..),
+  VVNBinOp(..), VVVBinOp(..))
 import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.ConceptMatch (conceptToGOOL)
 import Language.Drasil.Code.Imperative.GenerateGOOL (auxClass, fApp, ctorCall,
   genModuleWithImports, primaryClass)
-import Language.Drasil.Code.Imperative.Helpers (getUpperBound, lookupC)
+import Language.Drasil.Code.Imperative.Helpers (lookupC)
 import Language.Drasil.Code.Imperative.Logging (maybeLog, logBody)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, obv, 
-  quantvar, quantfunc, ccObjVar)
-import Language.Drasil.Chunk.CodeDefinition (codeEquat)
+  quantvar, quantfunc, ccObjVar, DefiningCodeExpr(..))
 import Language.Drasil.Chunk.Parameter (ParameterChunk(..), PassBy(..), pcAuto)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Choices (Comments(..), ConstantRepr(..),
@@ -80,7 +83,7 @@ value u s t = do
       maybeInline _ _ = Nothing
       cm = concMatches g
       cdCncpt = Map.lookup u cm
-  val <- maybe (valueOf <$> variable s t) (convExpr . codeEquat) constDef
+  val <- maybe (valueOf <$> variable s t) (convExpr . (^. codeExpr)) constDef
   return $ maybe val conceptToGOOL cdCncpt
 
 -- | If variable is an input, construct it with 'var' and pass to inputVariable.
@@ -271,14 +274,14 @@ genInOutFunc f docf n desc ins' outs' b = do
     bComms bothVs) bod else f inVs outVs bothVs bod
 
 -- | Converts an 'Expr' to a GOOL Value.
-convExpr :: (OOProg r) => Expr -> GenState (SValue r)
+convExpr :: (OOProg r) => CodeExpr -> GenState (SValue r)
 convExpr (Dbl d) = do
   sm <- spaceCodeType Real
   let getLiteral Double = litDouble d
       getLiteral Float = litFloat (realToFrac d)
       getLiteral _ = error "convExpr: Real space matched to invalid CodeType; should be Double or Float"
   return $ getLiteral sm
-convExpr (ExactDbl d) = convExpr $ dbl $ fromInteger d
+convExpr (ExactDbl d) = convExpr $ Dbl $ fromInteger d
 convExpr (Int i)      = return $ litInt i
 convExpr (Str s)      = return $ litString s
 convExpr (Perc a b) = do
@@ -293,7 +296,6 @@ convExpr (AssocA MulI l)  = foldl1 (#*)  <$> mapM convExpr l
 convExpr (AssocA MulRe l) = foldl1 (#*)  <$> mapM convExpr l
 convExpr (AssocB And l)   = foldl1 (?&&) <$> mapM convExpr l
 convExpr (AssocB Or l)    = foldl1 (?||) <$> mapM convExpr l
-convExpr Deriv{} = return $ litString "**convExpr :: Deriv unimplemented**"
 convExpr (C c)   = do
   g <- get
   let v = quantvar (lookupC g c)
@@ -317,7 +319,8 @@ convExpr (Field o f) = do
   return $ valueOf v
 convExpr (UnaryOp o u)    = fmap (unop o) (convExpr u)
 convExpr (UnaryOpB o u)   = fmap (unopB o) (convExpr u)
-convExpr (UnaryOpVec o u) = fmap (unopVec o) (convExpr u)
+convExpr (UnaryOpVV o u)  = fmap (unopVV o) (convExpr u)
+convExpr (UnaryOpVN o u)  = fmap (unopVN o) (convExpr u)
 convExpr (ArithBinaryOp Frac (Int a) (Int b)) = do -- hack to deal with integer division
   sm <- spaceCodeType Rational
   let getLiteral Double = litDouble (fromIntegral a) #/ litDouble (fromIntegral b)
@@ -351,7 +354,7 @@ convExpr (RealI c ri)  = do
 -- the function, the list of argument 'Expr's, the list of named argument 'Expr's,
 -- the function call generator to use, and the library version of the function
 -- call generator (used if the function is in the library export map).
-convCall :: (OOProg r) => UID -> [Expr] -> [(UID, Expr)] -> 
+convCall :: (OOProg r) => UID -> [CodeExpr] -> [(UID, CodeExpr)] -> 
   (Name -> Name -> VSType r -> [SValue r] -> NamedArgs r -> 
   GenState (SValue r)) -> (Name -> Name -> VSType r -> [SValue r] 
   -> NamedArgs r -> SValue r) -> GenState (SValue r)
@@ -372,22 +375,20 @@ convCall c x ns f libf = do
     (\m -> f m funcNm (convType funcTp) args (zip nms nargs)) 
     (Map.lookup funcNm mem)
   
--- | Converts a 'Constraint' to an 'Expr'.
-renderC :: (HasUID c, HasSymbol c) => c -> Constraint -> Expr
+-- | Converts a 'Constraint' to a 'CodeExpr'.
+renderC :: (HasUID c, HasSymbol c) => c -> Constraint CodeExpr -> CodeExpr
 renderC s (Range _ rr)         = renderRealInt s rr
-renderC _ (EnumeratedReal _ _) = error "EnumeratedReal IsIn not supported yet" -- IsIn (sy s) (DiscreteD rr)
-renderC _ (EnumeratedStr  _ _) = error "EnumeratedStr IsIn not supported yet" -- IsIn (sy s) (DiscreteS rr)
 
--- | Converts an interval ('RealInterval') to an 'Expr'.
-renderRealInt :: (HasUID c, HasSymbol c) => c -> RealInterval Expr Expr -> Expr
-renderRealInt s (Bounded (Inc,a) (Inc,b)) = (a $<= sy s) $&& (sy s $<= b)
-renderRealInt s (Bounded (Inc,a) (Exc,b)) = (a $<= sy s) $&& (sy s $<  b)
-renderRealInt s (Bounded (Exc,a) (Inc,b)) = (a $<  sy s) $&& (sy s $<= b)
-renderRealInt s (Bounded (Exc,a) (Exc,b)) = (a $<  sy s) $&& (sy s $<  b)
-renderRealInt s (UpTo (Inc,a))    = sy s $<= a
-renderRealInt s (UpTo (Exc,a))    = sy s $< a
-renderRealInt s (UpFrom (Inc,a))  = sy s $>= a
-renderRealInt s (UpFrom (Exc,a))  = sy s $>  a
+-- | Converts an interval ('RealInterval') to a 'CodeExpr'.
+renderRealInt :: (HasUID c, HasSymbol c) => c -> RealInterval CodeExpr CodeExpr -> CodeExpr
+renderRealInt s (Bounded (Inc, a) (Inc, b)) = (a $<= sy s) $&& (sy s $<= b)
+renderRealInt s (Bounded (Inc, a) (Exc, b)) = (a $<= sy s) $&& (sy s $<  b)
+renderRealInt s (Bounded (Exc, a) (Inc, b)) = (a $<  sy s) $&& (sy s $<= b)
+renderRealInt s (Bounded (Exc, a) (Exc, b)) = (a $<  sy s) $&& (sy s $<  b)
+renderRealInt s (UpTo    (Inc, a))          = sy s $<= a
+renderRealInt s (UpTo    (Exc, a))          = sy s $<  a
+renderRealInt s (UpFrom  (Inc, a))          = sy s $>= a
+renderRealInt s (UpFrom  (Exc, a))          = sy s $>  a
 
 -- | Maps a 'UFunc' to the corresponding GOOL unary function.
 unop :: (OOProg r) => UFunc -> (SValue r -> SValue r)
@@ -412,9 +413,13 @@ unopB :: (OOProg r) => UFuncB -> (SValue r -> SValue r)
 unopB Not = (?!)
 
 -- | Similar to 'unop', but for vectors.
-unopVec :: (OOProg r) => UFuncVec -> (SValue r -> SValue r)
-unopVec Dim = listSize
-unopVec Norm = error "unop: Norm not implemented" -- TODO
+unopVN :: (OOProg r) => UFuncVN -> (SValue r -> SValue r)
+unopVN Dim = listSize
+unopVN Norm = error "unop: Norm not implemented" -- TODO
+
+-- | Similar to 'unop', but for vectors.
+unopVV :: (OOProg r) => UFuncVV -> (SValue r -> SValue r)
+unopVV NegV = error "unop: Negation on Vectors not implemented" -- TODO
 
 -- Maps an 'ArithBinOp' to it's corresponding GOOL binary function.
 arithBfunc :: (OOProg r) => ArithBinOp -> (SValue r -> SValue r -> SValue r)
@@ -535,11 +540,13 @@ convStmt (FAsgIndex v i e) = do
       vi = arrayElem i v'
   l <- maybeLog vi
   return $ multi $ asgFunc t : l
-convStmt (FFor v e st) = do
+convStmt (FFor v start end step st) = do
   stmts <- mapM convStmt st
   vari <- mkVar v
-  e' <- convExpr $ getUpperBound e
-  return $ forRange vari (litInt 0) e' (litInt 1) (bodyStatements stmts)
+  start' <- convExpr start
+  end' <- convExpr end
+  step' <- convExpr step
+  return $ forRange vari start' end' step' (bodyStatements stmts)
 convStmt (FForEach v e st) = do
   stmts <- mapM convStmt st
   vari <- mkVar v

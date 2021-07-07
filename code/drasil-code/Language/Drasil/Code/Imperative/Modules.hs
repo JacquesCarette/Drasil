@@ -4,8 +4,10 @@ module Language.Drasil.Code.Imperative.Modules (
   genCalcFunc, genOutputMod, genOutputFormat, genSampleInput
 ) where
 
-import Language.Drasil
+import Language.Drasil (Constraint(..), RealInterval(..),
+  Completeness(..), HasUID(uid), Stage(..))
 import Database.Drasil (ChunkDB)
+import Language.Drasil.Code.Expr.Development
 import Language.Drasil.Code.Imperative.Comments (getComment)
 import Language.Drasil.Code.Imperative.Descriptions (constClassDesc, 
   constModDesc, derivedValuesDesc, dvFuncDesc, inConsFuncDesc, inFmtFuncDesc, 
@@ -26,9 +28,10 @@ import Language.Drasil.Code.Imperative.Parameters (getConstraintParams,
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
 import Language.Drasil.Chunk.Code (CodeIdea(codeName), CodeVarChunk, quantvar, 
-  physLookup, sfwrLookup)
+  DefiningCodeExpr(..))
 import Language.Drasil.Chunk.CodeDefinition (CodeDefinition, DefinitionType(..),
-  defType, codeEquat)
+  defType)
+import Language.Drasil.Chunk.ConstraintMap (physLookup, sfwrLookup)
 import Language.Drasil.Chunk.Parameter (pcAuto)
 import Language.Drasil.Code.CodeQuantityDicts (inFileName, inParams, consts)
 import Language.Drasil.Code.DataDesc (DataDesc, junkLine, singleton)
@@ -37,7 +40,7 @@ import Language.Drasil.Choices (Comments(..), ConstantStructure(..),
   ConstantRepr(..), ConstraintBehaviour(..), ImplementationType(..), 
   InputModule(..), Logging(..), Structure(..), hasSampleInput)
 import Language.Drasil.CodeSpec (CodeSpec(..))
-import Language.Drasil.Printers (Linearity(Linear), exprDoc)
+import Language.Drasil.Printers (Linearity(Linear), codeExprDoc)
 
 import GOOL.Drasil (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement, 
   SMethod, CSStateVar, SClass, OOProg, BodySym(..), bodyStatements, oneLiner, 
@@ -48,7 +51,7 @@ import GOOL.Drasil (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement,
   ScopeSym(..), MethodSym(..), StateVarSym(..), pubDVar, convType, ScopeTag(..))
 
 import Prelude hiding (print)
-import Data.List (intersperse, intercalate, partition)
+import Data.List (intersperse, partition)
 import Data.Map ((!), elems, member)
 import qualified Data.Map as Map (lookup, filter)
 import Data.Maybe (maybeToList, catMaybes)
@@ -56,6 +59,8 @@ import Control.Monad (liftM2, zipWithM)
 import Control.Monad.State (get, gets)
 import Control.Lens ((^.))
 import Text.PrettyPrint.HughesPJ (render)
+
+type ConstraintCE = Constraint CodeExpr
 
 ---- MAIN ---
 
@@ -146,7 +151,7 @@ initConsts = do
       getDecl Inline _ = return Nothing
       declVars = do 
         vars <- mapM (mkVar . quantvar) cs
-        vals <- mapM (convExpr . codeEquat) cs
+        vals <- mapM (convExpr . (^. codeExpr)) cs
         logs <- mapM maybeLog vars
         return $ Just $ multi $ zipWith (defFunc $ conRepr g) vars vals ++ 
           concat logs
@@ -230,7 +235,7 @@ genInputClass scp = do
         GenState (Maybe (SClass r))
       genClass [] [] = return Nothing
       genClass inps csts = do
-        vals <- mapM (convExpr . codeEquat) csts
+        vals <- mapM (convExpr . (^. codeExpr)) csts
         inputVars <- mapM (\x -> fmap (pubDVar . var (codeName x) . convType) 
           (codeType x)) inps
         constVars <- zipWithM (\c vl -> fmap (\t -> constVarFunc (conRepr g) 
@@ -277,7 +282,7 @@ genInputDerived s = do
       genDerived _ = do
         ins <- getDerivedIns
         outs <- getDerivedOuts
-        bod <- mapM (\x -> genCalcBlock CalcAssign x (codeEquat x)) dvals
+        bod <- mapM (\x -> genCalcBlock CalcAssign x (x ^. codeExpr)) dvals
         desc <- dvFuncDesc
         mthd <- getFunc s "derived_values" desc ins outs bod
         return $ Just mthd
@@ -308,7 +313,7 @@ genInputConstraints s = do
   genConstraints $ "input_constraints" `elem` defList g
 
 -- | Generates input constraints code block for checking software constraints.
-sfwrCBody :: (OOProg r) => [(CodeVarChunk,[Constraint])] -> 
+sfwrCBody :: (OOProg r) => [(CodeVarChunk, [ConstraintCE])] -> 
   GenState [MSStatement r]
 sfwrCBody cs = do
   g <- get
@@ -316,7 +321,7 @@ sfwrCBody cs = do
   chooseConstr cb cs
 
 -- | Generates input constraints code block for checking physical constraints.
-physCBody :: (OOProg r) => [(CodeVarChunk,[Constraint])] -> 
+physCBody :: (OOProg r) => [(CodeVarChunk, [ConstraintCE])] -> 
   GenState [MSStatement r]
 physCBody cs = do
   g <- get
@@ -326,7 +331,7 @@ physCBody cs = do
 -- | Generates conditional statements for checking constraints, where the 
 -- bodies depend on user's choice of constraint violation behaviour.
 chooseConstr :: (OOProg r) => ConstraintBehaviour -> 
-  [(CodeVarChunk,[Constraint])] -> GenState [MSStatement r]
+  [(CodeVarChunk, [ConstraintCE])] -> GenState [MSStatement r]
 chooseConstr cb cs = do
   conds <- mapM (\(q,cns) -> mapM (convExpr . renderC q) cns) cs
   bods <- mapM (chooseCB cb) cs
@@ -338,7 +343,7 @@ chooseConstr cb cs = do
 -- | Generates body defining constraint violation behaviour if Warning chosen from 'chooseConstr'.
 -- Prints a \"Warning\" message followed by a message that says
 -- what value was \"suggested\".
-constrWarn :: (OOProg r) => (CodeVarChunk,[Constraint]) -> 
+constrWarn :: (OOProg r) => (CodeVarChunk, [ConstraintCE]) -> 
   GenState [MSBody r]
 constrWarn c = do
   let q = fst c
@@ -349,7 +354,7 @@ constrWarn c = do
 -- | Generates body defining constraint violation behaviour if Exception chosen from 'chooseConstr'.
 -- Prints a message that says what value was \"expected\",
 -- followed by throwing an exception.
-constrExc :: (OOProg r) => (CodeVarChunk,[Constraint]) -> 
+constrExc :: (OOProg r) => (CodeVarChunk, [ConstraintCE]) -> 
   GenState [MSBody r]
 constrExc c = do
   let q = fst c
@@ -361,7 +366,7 @@ constrExc c = do
 -- Message includes the name of the cosntraint quantity, its value, and a
 -- description of the constraint that is violated.
 constraintViolatedMsg :: (OOProg r) => CodeVarChunk -> String -> 
-  Constraint -> GenState [MSStatement r]
+  ConstraintCE -> GenState [MSStatement r]
 constraintViolatedMsg q s c = do
   pc <- printConstraint c 
   v <- mkVal (quantvar q)
@@ -372,41 +377,36 @@ constraintViolatedMsg q s c = do
 -- | Generates statements to print descriptions of constraints, using words and 
 -- the constrained values. Constrained values are followed by printing the 
 -- expression they originated from, using printExpr. 
-printConstraint :: (OOProg r) => Constraint ->
+printConstraint :: (OOProg r) => ConstraintCE ->
   GenState [MSStatement r]
 printConstraint c = do
   g <- get
   let db = sysinfodb $ codeSpec g
-      printConstraint' :: (OOProg r) => Constraint -> GenState 
+      printConstraint' :: (OOProg r) => ConstraintCE -> GenState 
         [MSStatement r]
-      printConstraint' (Range _ (Bounded (_,e1) (_,e2))) = do
+      printConstraint' (Range _ (Bounded (_, e1) (_, e2))) = do
         lb <- convExpr e1
         ub <- convExpr e2
         return $ [printStr "between ", print lb] ++ printExpr e1 db ++
           [printStr " and ", print ub] ++ printExpr e2 db ++ [printStrLn "."]
-      printConstraint' (Range _ (UpTo (_,e))) = do
+      printConstraint' (Range _ (UpTo (_, e))) = do
         ub <- convExpr e
         return $ [printStr "below ", print ub] ++ printExpr e db ++ 
           [printStrLn "."]
-      printConstraint' (Range _ (UpFrom (_,e))) = do
+      printConstraint' (Range _ (UpFrom (_, e))) = do
         lb <- convExpr e
         return $ [printStr "above ", print lb] ++ printExpr e db ++ [printStrLn "."]
-      printConstraint' (EnumeratedReal _ ds) = return [
-        printStrLn $ "one of: " ++ intercalate ", " (map show ds)]
-      printConstraint' (EnumeratedStr _ ss) = return [
-        printStrLn $ "one of: " ++ intercalate ", " ss]
   printConstraint' c
 
 -- | Don't print expressions that are just literals, because that would be 
 -- redundant (the values are already printed by printConstraint).
 -- If expression is more than just a literal, print it in parentheses.
-printExpr :: (OOProg r) => Expr -> ChunkDB -> [MSStatement r]
+printExpr :: (OOProg r) => CodeExpr -> ChunkDB -> [MSStatement r]
 printExpr (Dbl _)      _ = []
 printExpr (ExactDbl _) _ = []
 printExpr (Int _)      _ = []
 printExpr (Str _)      _ = []
-printExpr e           db = [printStr $ " (" ++
-  render (exprDoc db Implementation Linear e) ++ ")"]
+printExpr e           db = [printStr $ " (" ++ render (codeExprDoc db Implementation Linear e) ++ ")"]
 
 -- | | Generates a function for reading inputs from a file.
 genInputFormat :: (OOProg r) => ScopeTag -> 
@@ -465,7 +465,7 @@ genConstClass scp = do
         (Maybe (SClass r))
       genClass [] = return Nothing 
       genClass vs = do
-        vals <- mapM (convExpr . codeEquat) vs 
+        vals <- mapM (convExpr . (^. codeExpr)) vs 
         vars <- mapM (\x -> fmap (var (codeName x) . convType) (codeType x)) vs
         let constVars = zipWith (constVarFunc (conRepr g)) vars vals
             getFunc Primary = primaryClass
@@ -501,7 +501,7 @@ genCalcFunc cdef = do
   v <- mkVar (quantvar cdef)
   blcks <- case cdef ^. defType 
             of Definition -> liftS $ genCalcBlock CalcReturn cdef 
-                 (codeEquat cdef)
+                 (cdef ^. codeExpr)
                ODE -> maybe (error $ nm ++ " missing from ExtLibMap") 
                  (\el -> do
                    defStmts <- mapM convStmt (el ^. defs)
@@ -524,7 +524,7 @@ data CalcType = CalcAssign | CalcReturn deriving Eq
 
 -- | Generates a calculation block for the given 'CodeDefinition', and assigns the 
 -- result to a variable (if 'CalcAssign') or returns the result (if 'CalcReturn').
-genCalcBlock :: (OOProg r) => CalcType -> CodeDefinition -> Expr ->
+genCalcBlock :: (OOProg r) => CalcType -> CodeDefinition -> CodeExpr ->
   GenState (MSBlock r)
 genCalcBlock t v (Case c e) = genCaseBlock t v c e
 genCalcBlock CalcAssign v e = do
@@ -538,7 +538,7 @@ genCalcBlock CalcReturn _ e = block <$> liftS (returnStmt <$> convExpr e)
 -- If the function is defined for every case, the final case is captured by an 
 -- else clause, otherwise an error-throwing else-clause is generated.
 genCaseBlock :: (OOProg r) => CalcType -> CodeDefinition -> Completeness 
-  -> [(Expr,Relation)] -> GenState (MSBlock r)
+  -> [(CodeExpr, CodeExpr)] -> GenState (MSBlock r)
 genCaseBlock _ _ _ [] = error $ "Case expression with no cases encountered" ++
   " in code generator"
 genCaseBlock t v c cs = do

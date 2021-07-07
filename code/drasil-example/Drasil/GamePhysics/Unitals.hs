@@ -3,6 +3,7 @@ module Drasil.GamePhysics.Unitals where
 import Language.Drasil
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
+import Utils.Drasil.Concepts
 
 import Data.Drasil.SI_Units(kilogram, metre, m_2, newton, second)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
@@ -109,7 +110,7 @@ momtParam n w = ucs'
 
 perpParam n w = ucs'
  (dccWDS ("|| r_A" ++ n ++ " x n ||") 
-  (compoundPhrase' (compoundPhrase (cn' "length of the") (QM.perpVect ^. term))
+  (compoundPhrase' (QPP.len `ofThe` QM.perpVect)
   (cn $ "to the contact displacement vector of rigid body " ++ n)) 
   (phrase QM.perpVect)) (Concat [label "||", w, label "*", --should be x for cross
   eqSymb QM.perpVect, label "||"]) Real metre
@@ -123,7 +124,7 @@ velBodyParam n w = ucs'
   (cn $ "of the  " ++ n ++ " body")) (phrase QP.velocity)) (sub (eqSymb QP.velocity) w) Real velU
 
 velParam n w = ucs'
- (dccWDS ("velocity" ++ n) ( compoundPhrase' (QP.velocity ^. term)
+ (dccWDS ("velocity" ++ n) (compoundPhrase' (QP.velocity ^. term)
   (cn $ "at point " ++ n)) (phrase QP.velocity)) (sub (eqSymb QP.velocity) w) Real velU
 
 -----------------------
@@ -143,8 +144,8 @@ iVect = ucs' (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
                (eqSymb QM.unitVect) Real metre
 jVect       = ucs' (dccWDS "unitVectJ" (compoundPhrase' (cn "vertical")
                (QM.unitVect ^. term)) (phrase QM.unitVect)) (vec $ hat lJ) Real metre
-normalVect  = ucs' (dccWDS "normalVect" (compoundPhrase' (cn "collision")
-                   (QM.normalVect ^. term)) (phrase QM.normalVect)) 
+normalVect  = ucs' (dccWDS "normalVect" (nounPhraseSent (S "collision" +:+
+                   phrase QM.normalVect)) (phrase QM.normalVect)) 
                    (eqSymb QM.normalVect) Real metre
 
 dVect = ucs' (dccWDS "unitVect" 
@@ -215,8 +216,8 @@ finRelVel = ucs' (dccWDS "v_f^AB" (compoundPhrase'
 massIRigidBody = ucs' (dccWDS "massj" (compoundPhrase' (QPP.mass ^. term) 
                 (cn "of the j-th rigid body")) (phrase QPP.mass)) 
                 (sub (eqSymb QPP.mass) lJ) Real kilogram
-normalLen = ucs' (dccWDS "length of the normal vector" (compoundPhrase'
-                  (cn "length of the") (QM.normalVect ^. term)) 
+normalLen = ucs' (dccWDS "length of the normal vector" (
+                  QPP.len `ofThe` QM.normalVect) 
                   (phrase QM.normalVect))
                   (Concat [label "||", eqSymb QM.normalVect, label "||"]) Real metre
 

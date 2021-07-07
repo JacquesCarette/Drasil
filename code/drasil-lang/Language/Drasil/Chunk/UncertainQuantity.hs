@@ -10,7 +10,7 @@ import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Display(toDispExpr),
   Definition(defn), ConceptDomain(cdom), Concept, Quantity, HasSpace(typ),
   IsUnit, Constrained(constraints), HasReasVal(reasVal), HasUncertainty (unc))
-import Language.Drasil.Constraint (Constraint)
+import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit))
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Expr.Math (sy)
@@ -58,7 +58,7 @@ uncrtnChunk q = UCh (cnstrw q)
 
 -- | Creates an uncertain variable chunk. Takes 'UID', term ('NP'),
 -- 'Symbol', 'Space', 'Constrains', 'Expr', and 'Uncertainty'.
-uvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Expr -> Uncertainty -> UncertainChunk
+uvc :: String -> NP -> Symbol -> Space -> [ConstraintE] -> Expr -> Uncertainty -> UncertainChunk
 uvc nam trm sym space cs val = uncrtnChunk (cvc nam trm sym space cs (Just val))
 
 -- | Projection function into an 'UncertainChunk' from 'UncertQ' or an 'UncertainChunk'.
@@ -108,10 +108,10 @@ uq q = UQ (ConstrConcept (dqdWr q) (q ^. constraints) (q ^. reasVal))
 --FIXME: this is kind of crazy and probably shouldn't be used!
 -- | Uncertainty quantity ('uq') but with a constraint.
 uqc :: (IsUnit u) => String -> NP -> String -> Symbol -> u -> Space
-                -> [Constraint] -> Expr -> Uncertainty -> UncertQ
+                -> [ConstraintE] -> Expr -> Uncertainty -> UncertQ
 uqc nam trm desc sym un space cs val = uq (cuc' nam trm desc sym un space cs val)
 
 -- | Uncertainty quantity constraint ('uqc') without a description.
-uqcND :: (IsUnit u) => String -> NP -> Symbol -> u -> Space -> [Constraint]
+uqcND :: (IsUnit u) => String -> NP -> Symbol -> u -> Space -> [ConstraintE]
                   -> Expr -> Uncertainty -> UncertQ
 uqcND nam trm sym un space cs val = uq (cuc' nam trm "" sym un space cs val)

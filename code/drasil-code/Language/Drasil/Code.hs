@@ -10,7 +10,7 @@ module Language.Drasil.Code (
   Visibility(..), defaultChoices, 
   CodeSpec(..), funcUID, funcUID', asVC, asVC', codeSpec,
   ($:=), Mod(Mod), StateVariable, Func, FuncStmt(..), pubStateVar, 
-  privStateVar, fDecDef, ffor, funcData, funcDef, packmod,
+  privStateVar, fDecDef, ffor, fforRange, funcData, funcDef, packmod,
   junkLine, multiLine, repeated, singleLine, singleton,
   ExternalLibrary, Step, FunctionInterface, Argument, externalLib, choiceSteps, 
   choiceStep, mandatoryStep, mandatorySteps, callStep, libFunction, libMethod, 
@@ -88,7 +88,7 @@ import Language.Drasil.Choices (Choices(..), Comments(..), Verbosity(..),
 import Language.Drasil.CodeSpec (CodeSpec(..), funcUID, funcUID', asVC, asVC', 
   codeSpec)
 import Language.Drasil.Mod (($:=), Mod(Mod), StateVariable, Func, FuncStmt(..), 
-  pubStateVar, privStateVar, fDecDef, ffor, funcData, funcDef, packmod)
+  pubStateVar, privStateVar, fDecDef, ffor, fforRange, funcData, funcDef, packmod)
 
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), 
   AuxiliarySym(..))

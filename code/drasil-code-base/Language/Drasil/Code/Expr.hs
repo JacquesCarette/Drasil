@@ -2,7 +2,7 @@
 
 module Language.Drasil.Code.Expr where
 
-import Language.Drasil (UID, DomainDesc, Completeness, DerivType, RealInterval)
+import Language.Drasil (UID, DomainDesc, Completeness, RealInterval)
 
 -- Binary functions
 

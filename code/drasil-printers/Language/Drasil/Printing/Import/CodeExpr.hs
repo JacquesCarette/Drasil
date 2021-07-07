@@ -1,7 +1,7 @@
 module Language.Drasil.Printing.Import.CodeExpr (codeExpr) where
 
-import Language.Drasil (DerivType(..), DomainDesc(..), Inclusive(..),
-  RTopology(..), RealInterval(..), UID, Special(..) )
+import Language.Drasil (DomainDesc(..), Inclusive(..),
+  RTopology(..), RealInterval(..), UID )
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.CodeExpr (dbl)
 import Language.Drasil.Code.Expr.Development

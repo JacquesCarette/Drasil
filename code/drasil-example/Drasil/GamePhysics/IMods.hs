@@ -45,7 +45,7 @@ transMot = imNoRefs (EquationalModel transMotQD)
   "transMot" [transMotDesc, transMotOutputs, rigidTwoDAssump, noDampConsAssumps]
 
 transMotQD :: QDefinition
-transMotQD = mkQuantDef' angAccj transMotNP transMotExpr
+transMotQD = mkQuantDef' accj transMotNP transMotExpr
 
 transMotNP :: NP
 transMotNP = nounPhraseSP "force on the translational motion of a set of 2D rigid bodies"

@@ -204,9 +204,6 @@ analysis: graphmod
 	done
 	@echo Done dependency graphs
 
-quick_fail:
-	exit 1
-
 # Use a 'local' HLint installation, using HLint from the current stack repo
 hlint: check_stack
 	stack install hlint

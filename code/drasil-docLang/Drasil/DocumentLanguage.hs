@@ -348,9 +348,10 @@ mkUCsSec (UCsProg c) = SRS.unlikeChg (intro : mkEnumSimpleD c) []
 
 -- | Helper for making the Traceability Matrices and Graphs section.
 mkTraceabilitySec :: TraceabilitySec -> SystemInformation -> Section
-mkTraceabilitySec (TraceabilityProg progs) si = TG.traceMGF trace
+mkTraceabilitySec (TraceabilityProg progs) si = TG.traceMGF  trace
   (map (\(TraceConfig _ pre _ _ _) -> foldlList Comma List pre) progs)
-  (map LlC trace) [] where
+  (map LlC trace) (abrv $ _sys si) [] 
+  where
   trace = map (\(TraceConfig u _ desc rows cols) -> TM.generateTraceTableView
     u desc rows cols si) progs
 

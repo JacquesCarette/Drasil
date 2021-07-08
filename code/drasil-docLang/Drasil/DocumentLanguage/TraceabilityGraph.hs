@@ -14,13 +14,44 @@ import Language.Drasil.Printers (GraphInfo(..), NodeFamily(..))
 import Data.Maybe (fromMaybe)
 
 -- | Wrapper for 'traceMIntro'. Turns references ('LabelledContent's), trailing notes ('Sentence's), and any other needed contents to create a 'Section'.
-traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> [Section] -> Section
-traceMGF refs trailing otherContents = SRS.traceyMandG (traceMIntro refs trailing : otherContents)
+traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> String -> [Section] -> Section
+traceMGF refs trailing otherContents ex = SRS.traceyMandG (traceMIntro refs trailing : otherContents ++ traceGraphContent trailing ex)
+
+traceGraphContent :: [Sentence] -> String -> [Contents]
+traceGraphContent trailing ex = traceGIntro (traceGs ex) (trailing ++ [allvsallDesc])
+
+traceGs :: String -> [LabelledContent]
+traceGs ex = map ($ removeSpaces ex) [avsaFig, avsallFig, refvsrefFig, allvsrFig, allvsallFig]
+
+removeSpaces :: String -> String
+removeSpaces = filter (not.null)
+
+traceGRefs :: [Reference]
+traceGRefs = map ref $ traceGs ""
+
+avsaFig, avsallFig, refvsrefFig, allvsrFig, allvsallFig :: String -> LabelledContent
+avsaFig ex = llcc (makeFigRef "TraceGraphAvsA") $ figWithWidth (S "A vs A") (resourcePath ++ ex ++ "/avsa.pdf") 100
+avsallFig ex = llcc (makeFigRef "TraceGraphAvsAll") $ figWithWidth (S "A vs All") (resourcePath ++ ex ++ "/avsall.pdf") 100
+refvsrefFig ex = llcc (makeFigRef "TraceGraphRefvsRef") $ figWithWidth (S "Ref vs Ref") (resourcePath ++ ex ++ "/refvsref.pdf") 100
+allvsrFig ex = llcc (makeFigRef "TraceGraphAllvsR") $ figWithWidth (S "All vs R") (resourcePath ++ ex ++ "/allvsr.pdf") 100
+allvsallFig ex = llcc (makeFigRef "TraceGraphAllvsAll") $ figWithWidth (S "All vs All") (resourcePath ++ ex ++ "/allvsall.pdf") 100
+
+resourcePath :: String
+resourcePath = "../../../traceygraphs/"
+avsa
+avsall
+refvsref
+allvsr
+allvsall
+
+
+allvsallDesc :: Sentence
+allvsallDesc = S "dependencies of assumptions, models, definitions, requirements, goals, and changes with each other"
 
 -- | Generalized traceability graph introduction: appends references to the traceability graphs in 'Sentence' form
 -- and wraps in 'Contents'. Usually references the five graphs generally found in the GraphInfo type.
 traceGIntro :: [LabelledContent] -> [Sentence] -> [UnlabelledContent]
-traceGIntro refs trailings = map ulcc [Paragraph $ foldlSent
+traceGIntro refs trailings = UlC $ map ulcc [Paragraph $ foldlSent
         [phrase purpose `S.the_ofTheC` plural traceyGraph,
         S "is also to provide easy", plural reference, S "on what has to be",
         S "additionally modified if a certain", phrase component +:+. S "is changed", 

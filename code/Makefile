@@ -202,6 +202,7 @@ traceygraph: graphmod $(TEST_EXAMPLES)
 	@mkdir -p "$(TRACEY_GRAPHS_FOLDER)"
 	@cd $(BUILD_FOLDER) && for dir in $(EXAMPLE_DIRS); do \
 		if [ -d $$dir/$(TRACEY_GRAPH_FOLDER) ]; then \
+			mkdir -p "../../../$(TRACEY_GRAPHS_FOLDER)$$dir" \
 			cd $$dir/$(TRACEY_GRAPH_FOLDER) && for graph in $(TRACEY_GRAPH_NAMES); do \
 				dot -Tpdf $$graph.dot > "../../../$(TRACEY_GRAPHS_FOLDER)$$graph.pdf" ; \
 			done ; \

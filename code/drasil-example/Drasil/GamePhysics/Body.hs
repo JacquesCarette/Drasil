@@ -118,7 +118,7 @@ si = SI {
   -- because _quants are only used relative to #1658.
   _quants      =  [] :: [QuantityDict], -- map qw iMods ++ map qw symbolsAll,
   _concepts    = [] :: [DefinedQuantityDict],
-  _instModels  = [],
+  _instModels  = iMods,
   _datadefs    = dataDefs,
   _configFiles = [],
   _inputs      = inputSymbols,

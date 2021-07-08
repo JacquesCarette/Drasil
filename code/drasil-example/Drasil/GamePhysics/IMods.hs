@@ -18,7 +18,7 @@ import Drasil.GamePhysics.GenDefs (accelGravityGD, impulseGD)
 import Drasil.GamePhysics.Goals (linearGS, angularGS)
 import Drasil.GamePhysics.TMods (newtonSL, newtonSLR)
 import Drasil.GamePhysics.Unitals (accj, forcej, massA, massj, normalVect,
-  timeC, torquej, velA, velj)
+  timeC, torquej, velA, velj, angAccj)
 
 import Data.Drasil.TheoryConcepts (inModel)
 
@@ -83,25 +83,21 @@ transMotDerivEqns = map eS [transMotExprDeriv1, toDispExpr transMotQD]
 {-- Rotational Motion --}
 
 rotMot :: InstanceModel
-rotMot = imNoDerivNoRefs (OthModel rotMotRC) 
-  [qwC angularVelocity $ UpFrom (Exc, exactDbl 0)
-  ,qwC time $ UpFrom (Exc, exactDbl 0)
-  ,qwC torquej $ UpFrom (Exc, exactDbl 0)
-  ,qwC momentOfInertia $ UpFrom (Exc, exactDbl 0)
+rotMot = imNoRefs (EquationalModel rotMotQD) 
+  [ qwC angularVelocity $ UpFrom (Exc, exactDbl 0)
+  , qwC time            $ UpFrom (Exc, exactDbl 0)
+  , qwC torquej         $ UpFrom (Exc, exactDbl 0)
+  , qwC momentOfInertia $ UpFrom (Exc, exactDbl 0)
   ]
-    (qw angularAccel) [UpFrom (Exc, exactDbl 0)] "rotMot"
+  (qw angAccj) [UpFrom (Exc, exactDbl 0)] 
+  (Just rotMotDeriv) "rotMot"
   [rotMotDesc, rigidTwoDAssump, rightHandAssump]
 
-rotMotRC :: RelationConcept
-rotMotRC = makeRC "rotMotRC" rotMotNP EmptyS rotMotRel
+rotMotQD :: QDefinition
+rotMotQD = mkQuantDef' angAccj rotMotNP rotMotExpr
 
 rotMotNP :: NP
 rotMotNP =  nounPhraseSP "Force on the rotational motion of a set of 2D rigid body"
-
-rotMotRel :: Relation
-rotMotRel = sy angularAccel $= deriv
-  (apply1 angularVelocity time) time $= 
-     (apply1 torquej time $/ sy momentOfInertia)
 
 rotMotDesc :: Sentence
 rotMotDesc = foldlSent [S "The above", phrase equation, S "for the total",
@@ -109,6 +105,20 @@ rotMotDesc = foldlSent [S "The above", phrase equation, S "for the total",
   S "derived from", refS newtonSLR `sC` EmptyS `S.andThe` S "resultant",
   plural output_ `S.are` S "then obtained from this", phrase equation, S "using",
   foldlList Comma List (map refS [angDispDD, angVelDD, angAccelDD])]
+
+rotMotDeriv :: Derivation 
+rotMotDeriv = mkDerivName (phrase rotMot)
+      (weave [rotMotDerivStmts, rotMotDerivEqns])
+
+rotMotDerivStmts :: [Sentence]
+rotMotDerivStmts = [
+    foldlSent [S "We may calculate the total angular acceleration of rigid body", 
+      P lJ, S "by calculating the derivative of its angular velocity with respect to time", fromSource angAccelDD],
+    S "Performing the derivative, we obtain:"
+  ]
+
+rotMotDerivEqns :: [Sentence]
+rotMotDerivEqns = map eS [rotMotExprDeriv1, toDispExpr rotMotQD]
 
 {-- 2D Collision --}
 

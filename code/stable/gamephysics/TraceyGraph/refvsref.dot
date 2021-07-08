@@ -6,10 +6,10 @@ digraph refvsref {
 	accj -> linearAcceleration;
 	accj -> newtonSL;
 	accj -> gravitationalAccel;
-	rotMotRC -> angularDisplacement;
-	rotMotRC -> angularVelocity;
-	rotMotRC -> angularAcceleration;
-	rotMotRC -> newtonSLR;
+	angAccj -> angularDisplacement;
+	angAccj -> angularVelocity;
+	angAccj -> angularAcceleration;
+	angAccj -> newtonSLR;
 	col2DRC -> p_CM;
 	col2DRC -> impulseS;
 
@@ -54,12 +54,12 @@ digraph refvsref {
 	}
 
 	accj	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:transMot"];
-	rotMotRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:rotMot"];
+	angAccj	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:rotMot"];
 	col2DRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:col2D"];
 
 	subgraph IM {
 	rank="same"
-	{accj, rotMotRC, col2DRC}
+	{accj, angAccj, col2DRC}
 	}
 
 }

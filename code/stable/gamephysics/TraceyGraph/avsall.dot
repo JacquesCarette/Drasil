@@ -28,9 +28,9 @@ digraph avsall {
 	accj -> assumpOD;
 	accj -> assumpDI;
 	accj -> assumpCAJI;
-	rotMotRC -> assumpOT;
-	rotMotRC -> assumpOD;
-	rotMotRC -> assumpAD;
+	angAccj -> assumpOT;
+	angAccj -> assumpOD;
+	angAccj -> assumpAD;
 	col2DRC -> assumpOT;
 	col2DRC -> assumpOD;
 	col2DRC -> assumpAD;
@@ -95,12 +95,12 @@ digraph avsall {
 	}
 
 	accj	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:transMot"];
-	rotMotRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:rotMot"];
+	angAccj	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:rotMot"];
 	col2DRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:col2D"];
 
 	subgraph IM {
 	rank="same"
-	{accj, rotMotRC, col2DRC}
+	{accj, angAccj, col2DRC}
 	}
 
 	simSpace	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:simSpace"];

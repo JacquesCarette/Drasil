@@ -12,6 +12,40 @@ import Drasil.Sections.TraceabilityMandGs (tvAssumps,
 import Language.Drasil.Printers (GraphInfo(..), NodeFamily(..))
 import Data.Maybe (fromMaybe)
 
+-- | Wrapper for 'traceMIntro'. Turns references ('LabelledContent's), trailing notes ('Sentence's), and any other needed contents to create a 'Section'.
+traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> [Section] -> Section
+traceMGF refs trailing otherContents = SRS.traceyMandG (traceMIntro refs trailing : otherContents)
+
+-- | Generalized traceability graph introduction: appends references to the traceability graphs in 'Sentence' form
+-- and wraps in 'Contents'. Usually references the three tables generally found in this section (in order of being mentioned).
+traceGIntro :: [Reference] -> [Sentence] -> String -> [UnlabelledContent]
+traceGIntro refs trailings ex = map ulcc [Paragraph $ foldlSent
+        [phrase purpose `S.the_ofTheC` plural traceyGraph,
+        S "is also to provide easy", plural reference, S "on what has to be",
+        S "additionally modified if a certain", phrase component +:+. S "is changed", 
+        S "The arrows in the", plural graph, S "represent" +:+. plural dependency,
+        S "The", phrase component, S "at the tail of an arrow is depended on by the",
+        phrase component, S "at the head of that arrow. Therefore, if a", phrase component,
+        S "is changed, the", plural component, S "that it points to should also be changed"] +:+
+        foldlSent (zipWith tableShows refs trailings)]
+
+traceGSec :: String -> Contents
+traceGSec ex = UlC $ ulcc $ folderList ex
+
+traceGFiles :: [String]
+drasilDepGraphPaths :: String -> [String]
+drasilDepGraphRefs :: String -> [Reference]
+
+traceGFiles = ["avsa", "avsall", "refvsref", "allvsr", "allvsall"]
+drasilDepGraphPaths ex = map (\x -> resourcePath ++ ex ++ "/" ++ x ++ ".pdf") traceGFiles
+drasilDepGraphRefs ex = zipWith (\x y -> Reference x (URI y) (shortname' $ S x) None) traceGFiles drasilDepGraphPaths
+
+folderList :: String -> RawContent
+folderList ex = Enumeration $ Bullet $ zip (folderList' ex) $ repeat Nothing
+
+folderList' :: String -> [ItemType]
+folderList' ex = map Flat (zipWith (\x y -> namedRef y (S x)) traceGFiles $ drasilDepGraphRefs ex)
+
 -- | Extracts traceability graph inforomation from filled-in 'SystemInformation'.
 mkGraphInfo :: SystemInformation -> GraphInfo
 mkGraphInfo si = GI {

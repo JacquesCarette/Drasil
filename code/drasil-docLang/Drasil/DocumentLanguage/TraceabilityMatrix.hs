@@ -25,7 +25,7 @@ traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> [Section] -> Sectio
 traceMGF refs trailing otherContents = SRS.traceyMandG (traceMIntro refs trailing : otherContents)
 
 -- | Generalized traceability matrix introduction: appends references to the traceability matrices in 'Sentence' form
--- and wraps in 'Contents'. Usually references the three tables generally found in this section (in order of being mentioned).
+-- and wraps in 'Contents'. Usually references the four tables generally found in this section (in order of being mentioned).
 traceMIntro :: [LabelledContent] -> [Sentence] -> Contents
 traceMIntro refs trailings = UlC $ ulcc $ Paragraph $ foldlSent [phrase purpose
         `S.the_ofTheC` plural traceyMatrix, S "is to provide easy", plural reference, 
@@ -36,7 +36,7 @@ traceMIntro refs trailings = UlC $ ulcc $ Paragraph $ foldlSent [phrase purpose
         S "should be modified as well"] +:+ foldlSent (zipWith tableShows refs trailings)
 
 -- | Generalized traceability graph introduction: appends references to the traceability graphs in 'Sentence' form
--- and wraps in 'Contents'. Usually references the three tables generally found in this section (in order of being mentioned).
+-- and wraps in 'Contents'. Usually references the five graphs generally found in the GraphInfo type.
 traceGIntro :: [LabelledContent] -> [Sentence] -> [UnlabelledContent]
 traceGIntro refs trailings = map ulcc [Paragraph $ foldlSent
         [phrase purpose `S.the_ofTheC` plural traceyGraph,

@@ -1,0 +1,517 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Language.Drasil.DOT.Print</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.List</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">intercalate</span></span><span class="hs-special">)</span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">System.IO</span></span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">System.Directory</span></span><span>
+</span><span id="line-7"></span><span>
+</span><span id="line-8"></span><span class="hs-comment">-- | Type synonym for clarity.</span><span>
+</span><span id="line-9"></span><span class="hs-keyword">type</span><span> </span><span id="Colour"><span class="annot"><a href="Language.Drasil.DOT.Print.html#Colour"><span class="hs-identifier hs-var">Colour</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-10"></span><span class="hs-comment">-- | Type synonym for clarity.</span><span>
+</span><span id="line-11"></span><span class="hs-keyword">type</span><span> </span><span id="Label"><span class="annot"><a href="Language.Drasil.DOT.Print.html#Label"><span class="hs-identifier hs-var">Label</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-12"></span><span>
+</span><span id="line-13"></span><span class="hs-comment">-- | A node family contains a list of 'UID's, their display labels, general subgraph label, and colour.</span><span>
+</span><span id="line-14"></span><span class="hs-keyword">data</span><span> </span><span id="NodeFamily"><span class="annot"><a href="Language.Drasil.DOT.Print.html#NodeFamily"><span class="hs-identifier hs-var">NodeFamily</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="NF"><span class="annot"><a href="Language.Drasil.DOT.Print.html#NF"><span class="hs-identifier hs-var">NF</span></a></span></span><span> </span><span class="hs-special">{</span><span>
+</span><span id="line-15"></span><span>    </span><span class="hs-comment">-- | Node 'UID's.</span><span>
+</span><span id="line-16"></span><span>    </span><span id="nodeUIDs"><span class="annot"><span class="annottext">NodeFamily -&gt; [UID]
+</span><a href="Language.Drasil.DOT.Print.html#nodeUIDs"><span class="hs-identifier hs-var hs-var">nodeUIDs</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span>
+</span><span id="line-17"></span><span>    </span><span class="hs-comment">-- | Display labels for nodes. We use the reference addresses from the 'UID's.</span><span>
+</span><span id="line-18"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="nodeLabels"><span class="annot"><span class="annottext">NodeFamily -&gt; [UID]
+</span><a href="Language.Drasil.DOT.Print.html#nodeLabels"><span class="hs-identifier hs-var hs-var">nodeLabels</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.DOT.Print.html#Label"><span class="hs-identifier hs-type">Label</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-19"></span><span>    </span><span class="hs-comment">-- | Individual subgraph labels. These labels do not show on the</span><span>
+</span><span id="line-20"></span><span>    </span><span class="hs-comment">-- final generated pdf or png files.</span><span>
+</span><span id="line-21"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="nfLabel"><span class="annot"><span class="annottext">NodeFamily -&gt; UID
+</span><a href="Language.Drasil.DOT.Print.html#nfLabel"><span class="hs-identifier hs-var hs-var">nfLabel</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.DOT.Print.html#Label"><span class="hs-identifier hs-type">Label</span></a></span><span>
+</span><span id="line-22"></span><span>    </span><span class="hs-comment">-- | Gives the ability to change colours of bubbles within the graph.</span><span>
+</span><span id="line-23"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="nfColour"><span class="annot"><span class="annottext">NodeFamily -&gt; UID
+</span><a href="Language.Drasil.DOT.Print.html#nfColour"><span class="hs-identifier hs-var hs-var">nfColour</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.DOT.Print.html#Colour"><span class="hs-identifier hs-type">Colour</span></a></span><span>
+</span><span id="line-24"></span><span class="hs-special">}</span><span>
+</span><span id="line-25"></span><span>
+</span><span id="line-26"></span><span class="hs-comment">-- | Holds all important and relevant information for generating a traceability graph.</span><span>
+</span><span id="line-27"></span><span class="hs-comment">-- Includes nodes, graph edges, and node family information.</span><span>
+</span><span id="line-28"></span><span class="hs-keyword">data</span><span> </span><span id="GraphInfo"><span class="annot"><a href="Language.Drasil.DOT.Print.html#GraphInfo"><span class="hs-identifier hs-var">GraphInfo</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="GI"><span class="annot"><a href="Language.Drasil.DOT.Print.html#GI"><span class="hs-identifier hs-var">GI</span></a></span></span><span> </span><span class="hs-special">{</span><span>
+</span><span id="line-29"></span><span>    </span><span class="hs-comment">--------------- graph node families -------------------------------</span><span>
+</span><span id="line-30"></span><span>    </span><span class="hs-comment">-- | Assumptions.</span><span>
+</span><span id="line-31"></span><span>    </span><span id="assumpNF"><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#assumpNF"><span class="hs-identifier hs-var hs-var">assumpNF</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.DOT.Print.html#NodeFamily"><span class="hs-identifier hs-type">NodeFamily</span></a></span><span>
+</span><span id="line-32"></span><span>    </span><span class="hs-comment">-- | Data definitions.</span><span>
+</span><span id="line-33"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="ddNF"><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#ddNF"><span class="hs-identifier hs-var hs-var">ddNF</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.DOT.Print.html#NodeFamily"><span class="hs-identifier hs-type">NodeFamily</span></a></span><span>
+</span><span id="line-34"></span><span>    </span><span class="hs-comment">-- | General definitions.</span><span>
+</span><span id="line-35"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="gdNF"><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#gdNF"><span class="hs-identifier hs-var hs-var">gdNF</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.DOT.Print.html#NodeFamily"><span class="hs-identifier hs-type">NodeFamily</span></a></span><span>
+</span><span id="line-36"></span><span>    </span><span class="hs-comment">-- | Theory models.</span><span>
+</span><span id="line-37"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="tmNF"><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#tmNF"><span class="hs-identifier hs-var hs-var">tmNF</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.DOT.Print.html#NodeFamily"><span class="hs-identifier hs-type">NodeFamily</span></a></span><span>
+</span><span id="line-38"></span><span>    </span><span class="hs-comment">-- | Instance models.</span><span>
+</span><span id="line-39"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="imNF"><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#imNF"><span class="hs-identifier hs-var hs-var">imNF</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.DOT.Print.html#NodeFamily"><span class="hs-identifier hs-type">NodeFamily</span></a></span><span>
+</span><span id="line-40"></span><span>    </span><span class="hs-comment">-- | Requirements (both functional and non-functional).</span><span>
+</span><span id="line-41"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="reqNF"><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#reqNF"><span class="hs-identifier hs-var hs-var">reqNF</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.DOT.Print.html#NodeFamily"><span class="hs-identifier hs-type">NodeFamily</span></a></span><span>
+</span><span id="line-42"></span><span>    </span><span class="hs-comment">-- | Goal statement.</span><span>
+</span><span id="line-43"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="gsNF"><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#gsNF"><span class="hs-identifier hs-var hs-var">gsNF</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.DOT.Print.html#NodeFamily"><span class="hs-identifier hs-type">NodeFamily</span></a></span><span>
+</span><span id="line-44"></span><span>    </span><span class="hs-comment">-- | Changes (both likely and unlikely).</span><span>
+</span><span id="line-45"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="chgNF"><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#chgNF"><span class="hs-identifier hs-var hs-var">chgNF</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.DOT.Print.html#NodeFamily"><span class="hs-identifier hs-type">NodeFamily</span></a></span><span>
+</span><span id="line-46"></span><span>
+</span><span id="line-47"></span><span>    </span><span class="hs-comment">-------------- graph edges  ---------------------------</span><span>
+</span><span id="line-48"></span><span>    </span><span class="hs-comment">-- | Assumptions dependent on assumptions.</span><span>
+</span><span id="line-49"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="edgesAvsA"><span class="annot"><span class="annottext">GraphInfo -&gt; [(UID, [UID])]
+</span><a href="Language.Drasil.DOT.Print.html#edgesAvsA"><span class="hs-identifier hs-var hs-var">edgesAvsA</span></a></span></span><span>     </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span>
+</span><span id="line-50"></span><span>    </span><span class="hs-comment">-- | Definitions, models, requirements, and changes dependent on assumptions.</span><span>
+</span><span id="line-51"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="edgesAvsAll"><span class="annot"><span class="annottext">GraphInfo -&gt; [(UID, [UID])]
+</span><a href="Language.Drasil.DOT.Print.html#edgesAvsAll"><span class="hs-identifier hs-var hs-var">edgesAvsAll</span></a></span></span><span>   </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><span id="line-52"></span><span>    </span><span class="hs-comment">-- | Definitions and models that are dependent on other definitions and models.</span><span>
+</span><span id="line-53"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="edgesRefvsRef"><span class="annot"><span class="annottext">GraphInfo -&gt; [(UID, [UID])]
+</span><a href="Language.Drasil.DOT.Print.html#edgesRefvsRef"><span class="hs-identifier hs-var hs-var">edgesRefvsRef</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><span id="line-54"></span><span>    </span><span class="hs-comment">-- | Goals and requirements dependent on definitions, models, and other requirements.</span><span>
+</span><span id="line-55"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="edgesAllvsR"><span class="annot"><span class="annottext">GraphInfo -&gt; [(UID, [UID])]
+</span><a href="Language.Drasil.DOT.Print.html#edgesAllvsR"><span class="hs-identifier hs-var hs-var">edgesAllvsR</span></a></span></span><span>   </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><span id="line-56"></span><span>    </span><span class="hs-comment">-- | Definitions, models, requirements, goals, and changes that are dependent on one another.</span><span>
+</span><span id="line-57"></span><span>    </span><span class="hs-special">,</span><span> </span><span id="edgesAllvsAll"><span class="annot"><span class="annottext">GraphInfo -&gt; [(UID, [UID])]
+</span><a href="Language.Drasil.DOT.Print.html#edgesAllvsAll"><span class="hs-identifier hs-var hs-var">edgesAllvsAll</span></a></span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><span id="line-58"></span><span>    </span><span>
+</span><span id="line-59"></span><span>    </span><span class="hs-comment">-- may need more information regarding ranking &amp; ordering, but for now I'm just keeping it simple</span><span>
+</span><span id="line-60"></span><span class="hs-special">}</span><span>
+</span><span id="line-61"></span><span>
+</span><span id="line-62"></span><span class="hs-comment">-- | Creates the directory for output, gathers all individual graph output functions and calls them.</span><span>
+</span><span id="line-63"></span><span class="annot"><a href="Language.Drasil.DOT.Print.html#outputDot"><span class="hs-identifier hs-type">outputDot</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.DOT.Print.html#GraphInfo"><span class="hs-identifier hs-type">GraphInfo</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-64"></span><span id="outputDot"><span class="annot"><span class="annottext">outputDot :: UID -&gt; GraphInfo -&gt; IO ()
+</span><a href="Language.Drasil.DOT.Print.html#outputDot"><span class="hs-identifier hs-var hs-var">outputDot</span></a></span></span><span> </span><span id="local-6989586621679126675"><span class="annot"><span class="annottext">outputFilePath :: UID
+</span><a href="#local-6989586621679126675"><span class="hs-identifier hs-var">outputFilePath</span></a></span></span><span> </span><span id="local-6989586621679126674"><span class="annot"><span class="annottext">gi :: GraphInfo
+</span><a href="#local-6989586621679126674"><span class="hs-identifier hs-var">gi</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-65"></span><span>    </span><span class="annot"><span class="annottext">Bool -&gt; UID -&gt; IO ()
+</span><span class="hs-identifier hs-var">createDirectoryIfMissing</span></span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">False</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679126675"><span class="hs-identifier hs-var">outputFilePath</span></a></span><span>
+</span><span id="line-66"></span><span>    </span><span class="annot"><span class="annottext">UID -&gt; IO ()
+</span><span class="hs-identifier hs-var">setCurrentDirectory</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679126675"><span class="hs-identifier hs-var">outputFilePath</span></a></span><span>
+</span><span id="line-67"></span><span>    </span><span class="annot"><span class="annottext">GraphInfo -&gt; IO ()
+</span><a href="Language.Drasil.DOT.Print.html#mkOutputAvsA"><span class="hs-identifier hs-var">mkOutputAvsA</span></a></span><span> </span><span class="annot"><span class="annottext">GraphInfo
+</span><a href="#local-6989586621679126674"><span class="hs-identifier hs-var">gi</span></a></span><span>
+</span><span id="line-68"></span><span>    </span><span class="annot"><span class="annottext">GraphInfo -&gt; IO ()
+</span><a href="Language.Drasil.DOT.Print.html#mkOutputAvsAll"><span class="hs-identifier hs-var">mkOutputAvsAll</span></a></span><span> </span><span class="annot"><span class="annottext">GraphInfo
+</span><a href="#local-6989586621679126674"><span class="hs-identifier hs-var">gi</span></a></span><span>
+</span><span id="line-69"></span><span>    </span><span class="annot"><span class="annottext">GraphInfo -&gt; IO ()
+</span><a href="Language.Drasil.DOT.Print.html#mkOutputRefvsRef"><span class="hs-identifier hs-var">mkOutputRefvsRef</span></a></span><span> </span><span class="annot"><span class="annottext">GraphInfo
+</span><a href="#local-6989586621679126674"><span class="hs-identifier hs-var">gi</span></a></span><span>
+</span><span id="line-70"></span><span>    </span><span class="annot"><span class="annottext">GraphInfo -&gt; IO ()
+</span><a href="Language.Drasil.DOT.Print.html#mkOutputAllvsR"><span class="hs-identifier hs-var">mkOutputAllvsR</span></a></span><span> </span><span class="annot"><span class="annottext">GraphInfo
+</span><a href="#local-6989586621679126674"><span class="hs-identifier hs-var">gi</span></a></span><span>
+</span><span id="line-71"></span><span>    </span><span class="annot"><span class="annottext">GraphInfo -&gt; IO ()
+</span><a href="Language.Drasil.DOT.Print.html#mkOutputAllvsAll"><span class="hs-identifier hs-var">mkOutputAllvsAll</span></a></span><span> </span><span class="annot"><span class="annottext">GraphInfo
+</span><a href="#local-6989586621679126674"><span class="hs-identifier hs-var">gi</span></a></span><span>
+</span><span id="line-72"></span><span>
+</span><span id="line-73"></span><span class="hs-comment">-- | Output function for assumptions dependent on assumptions.</span><span>
+</span><span id="line-74"></span><span class="annot"><a href="Language.Drasil.DOT.Print.html#mkOutputAvsA"><span class="hs-identifier hs-type">mkOutputAvsA</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.DOT.Print.html#GraphInfo"><span class="hs-identifier hs-type">GraphInfo</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-75"></span><span id="mkOutputAvsA"><span class="annot"><span class="annottext">mkOutputAvsA :: GraphInfo -&gt; IO ()
+</span><a href="Language.Drasil.DOT.Print.html#mkOutputAvsA"><span class="hs-identifier hs-var hs-var">mkOutputAvsA</span></a></span></span><span> </span><span id="local-6989586621679126666"><span class="annot"><span class="annottext">gi :: GraphInfo
+</span><a href="#local-6989586621679126666"><span class="hs-identifier hs-var">gi</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-76"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679126665"><span class="annot"><span class="annottext">labels :: [GraphInfo -&gt; NodeFamily]
+</span><a href="#local-6989586621679126665"><span class="hs-identifier hs-var hs-var">labels</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#assumpNF"><span class="hs-identifier hs-var hs-var">assumpNF</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-77"></span><span>    </span><span class="annot"><span class="annottext">GraphInfo
+-&gt; UID
+-&gt; (GraphInfo -&gt; [(UID, [UID])])
+-&gt; [GraphInfo -&gt; NodeFamily]
+-&gt; IO ()
+</span><a href="Language.Drasil.DOT.Print.html#mkOutput"><span class="hs-identifier hs-var">mkOutput</span></a></span><span> </span><span class="annot"><span class="annottext">GraphInfo
+</span><a href="#local-6989586621679126666"><span class="hs-identifier hs-var">gi</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;avsa&quot;</span></span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; [(UID, [UID])]
+</span><a href="Language.Drasil.DOT.Print.html#edgesAvsA"><span class="hs-identifier hs-var hs-var">edgesAvsA</span></a></span><span> </span><span class="annot"><span class="annottext">[GraphInfo -&gt; NodeFamily]
+</span><a href="#local-6989586621679126665"><span class="hs-identifier hs-var">labels</span></a></span><span>
+</span><span id="line-78"></span><span>
+</span><span id="line-79"></span><span class="hs-comment">-- | Output function for definitions, models, requirements, and changes dependent on assumptions.</span><span>
+</span><span id="line-80"></span><span class="annot"><a href="Language.Drasil.DOT.Print.html#mkOutputAvsAll"><span class="hs-identifier hs-type">mkOutputAvsAll</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.DOT.Print.html#GraphInfo"><span class="hs-identifier hs-type">GraphInfo</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-81"></span><span id="mkOutputAvsAll"><span class="annot"><span class="annottext">mkOutputAvsAll :: GraphInfo -&gt; IO ()
+</span><a href="Language.Drasil.DOT.Print.html#mkOutputAvsAll"><span class="hs-identifier hs-var hs-var">mkOutputAvsAll</span></a></span></span><span> </span><span id="local-6989586621679126663"><span class="annot"><span class="annottext">gi :: GraphInfo
+</span><a href="#local-6989586621679126663"><span class="hs-identifier hs-var">gi</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-82"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679126662"><span class="annot"><span class="annottext">labels :: [GraphInfo -&gt; NodeFamily]
+</span><a href="#local-6989586621679126662"><span class="hs-identifier hs-var hs-var">labels</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#assumpNF"><span class="hs-identifier hs-var hs-var">assumpNF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#ddNF"><span class="hs-identifier hs-var hs-var">ddNF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#tmNF"><span class="hs-identifier hs-var hs-var">tmNF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#gdNF"><span class="hs-identifier hs-var hs-var">gdNF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#imNF"><span class="hs-identifier hs-var hs-var">imNF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#reqNF"><span class="hs-identifier hs-var hs-var">reqNF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#chgNF"><span class="hs-identifier hs-var hs-var">chgNF</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-83"></span><span>    </span><span class="annot"><span class="annottext">GraphInfo
+-&gt; UID
+-&gt; (GraphInfo -&gt; [(UID, [UID])])
+-&gt; [GraphInfo -&gt; NodeFamily]
+-&gt; IO ()
+</span><a href="Language.Drasil.DOT.Print.html#mkOutput"><span class="hs-identifier hs-var">mkOutput</span></a></span><span> </span><span class="annot"><span class="annottext">GraphInfo
+</span><a href="#local-6989586621679126663"><span class="hs-identifier hs-var">gi</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;avsall&quot;</span></span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; [(UID, [UID])]
+</span><a href="Language.Drasil.DOT.Print.html#edgesAvsAll"><span class="hs-identifier hs-var hs-var">edgesAvsAll</span></a></span><span> </span><span class="annot"><span class="annottext">[GraphInfo -&gt; NodeFamily]
+</span><a href="#local-6989586621679126662"><span class="hs-identifier hs-var">labels</span></a></span><span>
+</span><span id="line-84"></span><span>
+</span><span id="line-85"></span><span class="hs-comment">-- | Output function for definitions and models that are dependent on other definitions and models.</span><span>
+</span><span id="line-86"></span><span class="annot"><a href="Language.Drasil.DOT.Print.html#mkOutputRefvsRef"><span class="hs-identifier hs-type">mkOutputRefvsRef</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.DOT.Print.html#GraphInfo"><span class="hs-identifier hs-type">GraphInfo</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-87"></span><span id="mkOutputRefvsRef"><span class="annot"><span class="annottext">mkOutputRefvsRef :: GraphInfo -&gt; IO ()
+</span><a href="Language.Drasil.DOT.Print.html#mkOutputRefvsRef"><span class="hs-identifier hs-var hs-var">mkOutputRefvsRef</span></a></span></span><span> </span><span id="local-6989586621679126661"><span class="annot"><span class="annottext">gi :: GraphInfo
+</span><a href="#local-6989586621679126661"><span class="hs-identifier hs-var">gi</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-88"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679126660"><span class="annot"><span class="annottext">labels :: [GraphInfo -&gt; NodeFamily]
+</span><a href="#local-6989586621679126660"><span class="hs-identifier hs-var hs-var">labels</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#ddNF"><span class="hs-identifier hs-var hs-var">ddNF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#tmNF"><span class="hs-identifier hs-var hs-var">tmNF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#gdNF"><span class="hs-identifier hs-var hs-var">gdNF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#imNF"><span class="hs-identifier hs-var hs-var">imNF</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-89"></span><span>    </span><span class="annot"><span class="annottext">GraphInfo
+-&gt; UID
+-&gt; (GraphInfo -&gt; [(UID, [UID])])
+-&gt; [GraphInfo -&gt; NodeFamily]
+-&gt; IO ()
+</span><a href="Language.Drasil.DOT.Print.html#mkOutput"><span class="hs-identifier hs-var">mkOutput</span></a></span><span> </span><span class="annot"><span class="annottext">GraphInfo
+</span><a href="#local-6989586621679126661"><span class="hs-identifier hs-var">gi</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;refvsref&quot;</span></span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; [(UID, [UID])]
+</span><a href="Language.Drasil.DOT.Print.html#edgesRefvsRef"><span class="hs-identifier hs-var hs-var">edgesRefvsRef</span></a></span><span> </span><span class="annot"><span class="annottext">[GraphInfo -&gt; NodeFamily]
+</span><a href="#local-6989586621679126660"><span class="hs-identifier hs-var">labels</span></a></span><span>
+</span><span id="line-90"></span><span>
+</span><span id="line-91"></span><span class="hs-comment">-- | Output function for goals and requirements dependent on definitions, models, and other requirements.</span><span>
+</span><span id="line-92"></span><span class="annot"><a href="Language.Drasil.DOT.Print.html#mkOutputAllvsR"><span class="hs-identifier hs-type">mkOutputAllvsR</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.DOT.Print.html#GraphInfo"><span class="hs-identifier hs-type">GraphInfo</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-93"></span><span id="mkOutputAllvsR"><span class="annot"><span class="annottext">mkOutputAllvsR :: GraphInfo -&gt; IO ()
+</span><a href="Language.Drasil.DOT.Print.html#mkOutputAllvsR"><span class="hs-identifier hs-var hs-var">mkOutputAllvsR</span></a></span></span><span> </span><span id="local-6989586621679126659"><span class="annot"><span class="annottext">gi :: GraphInfo
+</span><a href="#local-6989586621679126659"><span class="hs-identifier hs-var">gi</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-94"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679126658"><span class="annot"><span class="annottext">labels :: [GraphInfo -&gt; NodeFamily]
+</span><a href="#local-6989586621679126658"><span class="hs-identifier hs-var hs-var">labels</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#assumpNF"><span class="hs-identifier hs-var hs-var">assumpNF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#ddNF"><span class="hs-identifier hs-var hs-var">ddNF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#tmNF"><span class="hs-identifier hs-var hs-var">tmNF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#gdNF"><span class="hs-identifier hs-var hs-var">gdNF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#imNF"><span class="hs-identifier hs-var hs-var">imNF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#reqNF"><span class="hs-identifier hs-var hs-var">reqNF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#gsNF"><span class="hs-identifier hs-var hs-var">gsNF</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-95"></span><span>    </span><span class="annot"><span class="annottext">GraphInfo
+-&gt; UID
+-&gt; (GraphInfo -&gt; [(UID, [UID])])
+-&gt; [GraphInfo -&gt; NodeFamily]
+-&gt; IO ()
+</span><a href="Language.Drasil.DOT.Print.html#mkOutput"><span class="hs-identifier hs-var">mkOutput</span></a></span><span> </span><span class="annot"><span class="annottext">GraphInfo
+</span><a href="#local-6989586621679126659"><span class="hs-identifier hs-var">gi</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;allvsr&quot;</span></span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; [(UID, [UID])]
+</span><a href="Language.Drasil.DOT.Print.html#edgesAllvsR"><span class="hs-identifier hs-var hs-var">edgesAllvsR</span></a></span><span> </span><span class="annot"><span class="annottext">[GraphInfo -&gt; NodeFamily]
+</span><a href="#local-6989586621679126658"><span class="hs-identifier hs-var">labels</span></a></span><span>
+</span><span id="line-96"></span><span>
+</span><span id="line-97"></span><span class="hs-comment">-- | Output function for definitions, models, requirements, goals, and changes that are dependent on one another.</span><span>
+</span><span id="line-98"></span><span class="annot"><a href="Language.Drasil.DOT.Print.html#mkOutputAllvsAll"><span class="hs-identifier hs-type">mkOutputAllvsAll</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.DOT.Print.html#GraphInfo"><span class="hs-identifier hs-type">GraphInfo</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-99"></span><span id="mkOutputAllvsAll"><span class="annot"><span class="annottext">mkOutputAllvsAll :: GraphInfo -&gt; IO ()
+</span><a href="Language.Drasil.DOT.Print.html#mkOutputAllvsAll"><span class="hs-identifier hs-var hs-var">mkOutputAllvsAll</span></a></span></span><span> </span><span id="local-6989586621679126657"><span class="annot"><span class="annottext">gi :: GraphInfo
+</span><a href="#local-6989586621679126657"><span class="hs-identifier hs-var">gi</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-100"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679126656"><span class="annot"><span class="annottext">labels :: [GraphInfo -&gt; NodeFamily]
+</span><a href="#local-6989586621679126656"><span class="hs-identifier hs-var hs-var">labels</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#assumpNF"><span class="hs-identifier hs-var hs-var">assumpNF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#ddNF"><span class="hs-identifier hs-var hs-var">ddNF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#tmNF"><span class="hs-identifier hs-var hs-var">tmNF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#gdNF"><span class="hs-identifier hs-var hs-var">gdNF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#imNF"><span class="hs-identifier hs-var hs-var">imNF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#reqNF"><span class="hs-identifier hs-var hs-var">reqNF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#gsNF"><span class="hs-identifier hs-var hs-var">gsNF</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#chgNF"><span class="hs-identifier hs-var hs-var">chgNF</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-101"></span><span>    </span><span class="annot"><span class="annottext">GraphInfo
+-&gt; UID
+-&gt; (GraphInfo -&gt; [(UID, [UID])])
+-&gt; [GraphInfo -&gt; NodeFamily]
+-&gt; IO ()
+</span><a href="Language.Drasil.DOT.Print.html#mkOutput"><span class="hs-identifier hs-var">mkOutput</span></a></span><span> </span><span class="annot"><span class="annottext">GraphInfo
+</span><a href="#local-6989586621679126657"><span class="hs-identifier hs-var">gi</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;allvsall&quot;</span></span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; [(UID, [UID])]
+</span><a href="Language.Drasil.DOT.Print.html#edgesAllvsAll"><span class="hs-identifier hs-var hs-var">edgesAllvsAll</span></a></span><span> </span><span class="annot"><span class="annottext">[GraphInfo -&gt; NodeFamily]
+</span><a href="#local-6989586621679126656"><span class="hs-identifier hs-var">labels</span></a></span><span>
+</span><span id="line-102"></span><span>
+</span><span id="line-103"></span><span class="hs-comment">-------------</span><span>
+</span><span id="line-104"></span><span class="hs-comment">-- General helper functions</span><span>
+</span><span id="line-105"></span><span class="hs-comment">-------------</span><span>
+</span><span id="line-106"></span><span>
+</span><span id="line-107"></span><span class="hs-comment">-- | General output function for making a traceability graph. Takes in the graph information, title, edge generator functions, and node family functions.</span><span>
+</span><span id="line-108"></span><span class="annot"><a href="Language.Drasil.DOT.Print.html#mkOutput"><span class="hs-identifier hs-type">mkOutput</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.DOT.Print.html#GraphInfo"><span class="hs-identifier hs-type">GraphInfo</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.DOT.Print.html#GraphInfo"><span class="hs-identifier hs-type">GraphInfo</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.DOT.Print.html#GraphInfo"><span class="hs-identifier hs-type">GraphInfo</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.DOT.Print.html#NodeFamily"><span class="hs-identifier hs-type">NodeFamily</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-109"></span><span id="mkOutput"><span class="annot"><span class="annottext">mkOutput :: GraphInfo
+-&gt; UID
+-&gt; (GraphInfo -&gt; [(UID, [UID])])
+-&gt; [GraphInfo -&gt; NodeFamily]
+-&gt; IO ()
+</span><a href="Language.Drasil.DOT.Print.html#mkOutput"><span class="hs-identifier hs-var hs-var">mkOutput</span></a></span></span><span> </span><span id="local-6989586621679126655"><span class="annot"><span class="annottext">gi :: GraphInfo
+</span><a href="#local-6989586621679126655"><span class="hs-identifier hs-var">gi</span></a></span></span><span> </span><span id="local-6989586621679126654"><span class="annot"><span class="annottext">ttl :: UID
+</span><a href="#local-6989586621679126654"><span class="hs-identifier hs-var">ttl</span></a></span></span><span> </span><span id="local-6989586621679126653"><span class="annot"><span class="annottext">getDirections :: GraphInfo -&gt; [(UID, [UID])]
+</span><a href="#local-6989586621679126653"><span class="hs-identifier hs-var">getDirections</span></a></span></span><span> </span><span id="local-6989586621679126652"><span class="annot"><span class="annottext">getLabels :: [GraphInfo -&gt; NodeFamily]
+</span><a href="#local-6989586621679126652"><span class="hs-identifier hs-var">getLabels</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-110"></span><span>    </span><span id="local-6989586621679126651"><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679126651"><span class="hs-identifier hs-var">handle</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">UID -&gt; IOMode -&gt; IO Handle
+</span><span class="hs-identifier hs-var">openFile</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679126654"><span class="hs-identifier hs-var">ttl</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; UID
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.dot&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">IOMode
+</span><span class="hs-identifier hs-var">WriteMode</span></span><span>
+</span><span id="line-111"></span><span>    </span><span class="annot"><span class="annottext">Handle -&gt; UID -&gt; IO ()
+</span><span class="hs-identifier hs-var">hPutStrLn</span></span><span> </span><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679126651"><span class="hs-identifier hs-var">handle</span></a></span><span> </span><span class="annot"><span class="annottext">(UID -&gt; IO ()) -&gt; UID -&gt; IO ()
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="hs-string">&quot;digraph &quot;</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; UID
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679126654"><span class="hs-identifier hs-var">ttl</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; UID
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot; {&quot;</span></span><span>
+</span><span id="line-112"></span><span>    </span><span class="hs-keyword">let</span><span> </span><span id="local-6989586621679126647"><span class="annot"><span class="annottext">labels :: [NodeFamily]
+</span><a href="#local-6989586621679126647"><span class="hs-identifier hs-var hs-var">labels</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GraphInfo -&gt; [GraphInfo -&gt; NodeFamily] -&gt; [NodeFamily]
+</span><a href="Language.Drasil.DOT.Print.html#filterAndGI"><span class="hs-identifier hs-var">filterAndGI</span></a></span><span> </span><span class="annot"><span class="annottext">GraphInfo
+</span><a href="#local-6989586621679126655"><span class="hs-identifier hs-var">gi</span></a></span><span> </span><span class="annot"><span class="annottext">[GraphInfo -&gt; NodeFamily]
+</span><a href="#local-6989586621679126652"><span class="hs-identifier hs-var">getLabels</span></a></span><span>
+</span><span id="line-113"></span><span>    </span><span class="annot"><span class="annottext">Handle -&gt; [(UID, [UID])] -&gt; [NodeFamily] -&gt; IO ()
+</span><a href="Language.Drasil.DOT.Print.html#outputSub"><span class="hs-identifier hs-var">outputSub</span></a></span><span> </span><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679126651"><span class="hs-identifier hs-var">handle</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">GraphInfo -&gt; [(UID, [UID])]
+</span><a href="#local-6989586621679126653"><span class="hs-identifier hs-var">getDirections</span></a></span><span> </span><span class="annot"><span class="annottext">GraphInfo
+</span><a href="#local-6989586621679126655"><span class="hs-identifier hs-var">gi</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[NodeFamily]
+</span><a href="#local-6989586621679126647"><span class="hs-identifier hs-var">labels</span></a></span><span>
+</span><span id="line-114"></span><span>    </span><span class="annot"><span class="annottext">Handle -&gt; UID -&gt; IO ()
+</span><span class="hs-identifier hs-var">hPutStrLn</span></span><span> </span><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679126651"><span class="hs-identifier hs-var">handle</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;}&quot;</span></span><span>
+</span><span id="line-115"></span><span>    </span><span class="annot"><span class="annottext">Handle -&gt; IO ()
+</span><span class="hs-identifier hs-var">hClose</span></span><span> </span><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679126651"><span class="hs-identifier hs-var">handle</span></a></span><span>
+</span><span id="line-116"></span><span>
+</span><span id="line-117"></span><span class="hs-comment">-- | Graph output helper. Takes in the file handle, edges, and node families.</span><span>
+</span><span id="line-118"></span><span class="annot"><a href="Language.Drasil.DOT.Print.html#outputSub"><span class="hs-identifier hs-type">outputSub</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Handle</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.DOT.Print.html#NodeFamily"><span class="hs-identifier hs-type">NodeFamily</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-119"></span><span id="outputSub"><span class="annot"><span class="annottext">outputSub :: Handle -&gt; [(UID, [UID])] -&gt; [NodeFamily] -&gt; IO ()
+</span><a href="Language.Drasil.DOT.Print.html#outputSub"><span class="hs-identifier hs-var hs-var">outputSub</span></a></span></span><span> </span><span id="local-6989586621679126643"><span class="annot"><span class="annottext">handle :: Handle
+</span><a href="#local-6989586621679126643"><span class="hs-identifier hs-var">handle</span></a></span></span><span> </span><span id="local-6989586621679126642"><span class="annot"><span class="annottext">edges :: [(UID, [UID])]
+</span><a href="#local-6989586621679126642"><span class="hs-identifier hs-var">edges</span></a></span></span><span> </span><span id="local-6989586621679126641"><span class="annot"><span class="annottext">nodes :: [NodeFamily]
+</span><a href="#local-6989586621679126641"><span class="hs-identifier hs-var">nodes</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-120"></span><span>    </span><span class="annot"><span class="annottext">((UID, [UID]) -&gt; IO ()) -&gt; [(UID, [UID])] -&gt; IO ()
+forall (t :: * -&gt; *) (m :: * -&gt; *) a b.
+(Foldable t, Monad m) =&gt;
+(a -&gt; m b) -&gt; t a -&gt; m ()
+</span><span class="hs-identifier hs-var">mapM_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Handle -&gt; (UID, [UID]) -&gt; IO ()
+</span><a href="Language.Drasil.DOT.Print.html#mkDirections"><span class="hs-identifier hs-var">mkDirections</span></a></span><span> </span><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679126643"><span class="hs-identifier hs-var">handle</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[(UID, [UID])]
+</span><a href="#local-6989586621679126642"><span class="hs-identifier hs-var">edges</span></a></span><span>
+</span><span id="line-121"></span><span>    </span><span class="annot"><span class="annottext">Handle -&gt; UID -&gt; IO ()
+</span><span class="hs-identifier hs-var">hPutStrLn</span></span><span> </span><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679126643"><span class="hs-identifier hs-var">handle</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;\n&quot;</span></span><span>
+</span><span id="line-122"></span><span>    </span><span class="annot"><span class="annottext">(NodeFamily -&gt; IO ()) -&gt; [NodeFamily] -&gt; IO ()
+forall (t :: * -&gt; *) (m :: * -&gt; *) a b.
+(Foldable t, Monad m) =&gt;
+(a -&gt; m b) -&gt; t a -&gt; m ()
+</span><span class="hs-identifier hs-var">mapM_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Handle -&gt; NodeFamily -&gt; IO ()
+</span><a href="Language.Drasil.DOT.Print.html#mkNodes"><span class="hs-identifier hs-var">mkNodes</span></a></span><span> </span><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679126643"><span class="hs-identifier hs-var">handle</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[NodeFamily]
+</span><a href="#local-6989586621679126641"><span class="hs-identifier hs-var">nodes</span></a></span><span>
+</span><span id="line-123"></span><span>
+</span><span id="line-124"></span><span class="hs-comment">-- | Prints graph edges (directions) onto a given file handle.</span><span>
+</span><span id="line-125"></span><span class="annot"><a href="Language.Drasil.DOT.Print.html#mkDirections"><span class="hs-identifier hs-type">mkDirections</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Handle</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-126"></span><span id="mkDirections"><span class="annot"><span class="annottext">mkDirections :: Handle -&gt; (UID, [UID]) -&gt; IO ()
+</span><a href="Language.Drasil.DOT.Print.html#mkDirections"><span class="hs-identifier hs-var hs-var">mkDirections</span></a></span></span><span> </span><span id="local-6989586621679126637"><span class="annot"><span class="annottext">handle :: Handle
+</span><a href="#local-6989586621679126637"><span class="hs-identifier hs-var">handle</span></a></span></span><span> </span><span id="local-6989586621679126636"><span class="annot"><span class="annottext">ls :: (UID, [UID])
+</span><a href="#local-6989586621679126636"><span class="hs-identifier hs-var">ls</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-127"></span><span>    </span><span class="annot"><span class="annottext">(UID -&gt; IO ()) -&gt; [UID] -&gt; IO ()
+forall (t :: * -&gt; *) (m :: * -&gt; *) a b.
+(Foldable t, Monad m) =&gt;
+(a -&gt; m b) -&gt; t a -&gt; m ()
+</span><span class="hs-identifier hs-var">mapM_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Handle -&gt; UID -&gt; IO ()
+</span><span class="hs-identifier hs-var">hPutStrLn</span></span><span> </span><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679126637"><span class="hs-identifier hs-var">handle</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([UID] -&gt; IO ()) -&gt; [UID] -&gt; IO ()
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679126635"><span class="hs-identifier hs-var">makeEdgesSub</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(UID, [UID]) -&gt; UID
+forall a b. (a, b) -&gt; a
+</span><span class="hs-identifier hs-var">fst</span></span><span> </span><span class="annot"><span class="annottext">(UID, [UID])
+</span><a href="#local-6989586621679126636"><span class="hs-identifier hs-var">ls</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(UID -&gt; Bool) -&gt; [UID] -&gt; [UID]
+forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
+</span><span class="hs-identifier hs-var">filter</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Bool -&gt; Bool
+</span><span class="hs-identifier hs-var">not</span></span><span> </span><span class="annot"><span class="annottext">(Bool -&gt; Bool) -&gt; (UID -&gt; Bool) -&gt; UID -&gt; Bool
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; Bool
+forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Bool
+</span><span class="hs-identifier hs-var">null</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([UID] -&gt; [UID]) -&gt; [UID] -&gt; [UID]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(UID, [UID]) -&gt; [UID]
+forall a b. (a, b) -&gt; b
+</span><span class="hs-identifier hs-var">snd</span></span><span> </span><span class="annot"><span class="annottext">(UID, [UID])
+</span><a href="#local-6989586621679126636"><span class="hs-identifier hs-var">ls</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-128"></span><span>    </span><span class="hs-keyword">where</span><span>
+</span><span id="line-129"></span><span>       </span><span class="hs-comment">-- Creates an edge between a type and its dependency (indented for subgraphs)</span><span>
+</span><span id="line-130"></span><span>        </span><span class="annot"><a href="#local-6989586621679126635"><span class="hs-identifier hs-type">makeEdgesSub</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span>
+</span><span id="line-131"></span><span>        </span><span id="local-6989586621679126635"><span class="annot"><span class="annottext">makeEdgesSub :: UID -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679126635"><span class="hs-identifier hs-var hs-var">makeEdgesSub</span></a></span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>
+</span><span id="line-132"></span><span>        </span><span class="annot"><a href="#local-6989586621679126635"><span class="hs-identifier hs-var">makeEdgesSub</span></a></span><span> </span><span id="local-6989586621679126631"><span class="annot"><span class="annottext">nm :: UID
+</span><a href="#local-6989586621679126631"><span class="hs-identifier hs-var">nm</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679126630"><span class="annot"><span class="annottext">c :: UID
+</span><a href="#local-6989586621679126630"><span class="hs-identifier hs-var">c</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span id="local-6989586621679126629"><span class="annot"><span class="annottext">cs :: [UID]
+</span><a href="#local-6989586621679126629"><span class="hs-identifier hs-var">cs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-string">&quot;\t&quot;</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; UID
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID
+</span><a href="Language.Drasil.DOT.Print.html#filterInvalidChars"><span class="hs-identifier hs-var">filterInvalidChars</span></a></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679126631"><span class="hs-identifier hs-var">nm</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; UID
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot; -&gt; &quot;</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; UID
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID
+</span><a href="Language.Drasil.DOT.Print.html#filterInvalidChars"><span class="hs-identifier hs-var">filterInvalidChars</span></a></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679126630"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; UID
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;;&quot;</span></span><span class="hs-special">)</span><span class="annot"><span class="annottext">UID -&gt; [UID] -&gt; [UID]
+forall a. a -&gt; [a] -&gt; [a]
+</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; [UID] -&gt; [UID]
+</span><a href="#local-6989586621679126635"><span class="hs-identifier hs-var">makeEdgesSub</span></a></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679126631"><span class="hs-identifier hs-var">nm</span></a></span><span> </span><span class="annot"><span class="annottext">[UID]
+</span><a href="#local-6989586621679126629"><span class="hs-identifier hs-var">cs</span></a></span><span>
+</span><span id="line-133"></span><span>
+</span><span id="line-134"></span><span class="hs-comment">-- | Prints graph nodes (labels) onto a given file handle.</span><span>
+</span><span id="line-135"></span><span class="annot"><a href="Language.Drasil.DOT.Print.html#mkNodes"><span class="hs-identifier hs-type">mkNodes</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Handle</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.DOT.Print.html#NodeFamily"><span class="hs-identifier hs-type">NodeFamily</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-136"></span><span id="mkNodes"><span class="annot"><span class="annottext">mkNodes :: Handle -&gt; NodeFamily -&gt; IO ()
+</span><a href="Language.Drasil.DOT.Print.html#mkNodes"><span class="hs-identifier hs-var hs-var">mkNodes</span></a></span></span><span> </span><span id="local-6989586621679126627"><span class="annot"><span class="annottext">handle :: Handle
+</span><a href="#local-6989586621679126627"><span class="hs-identifier hs-var">handle</span></a></span></span><span> </span><span class="annot"><a href="Language.Drasil.DOT.Print.html#NF"><span class="hs-identifier hs-type">NF</span></a></span><span class="hs-special">{</span><span class="annot"><span class="annottext">nodeUIDs :: NodeFamily -&gt; [UID]
+</span><a href="Language.Drasil.DOT.Print.html#nodeUIDs"><span class="hs-identifier hs-var">nodeUIDs</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679126626"><span class="annot"><span class="annottext">[UID]
+</span><a href="#local-6989586621679126626"><span class="hs-identifier hs-var">u</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">nodeLabels :: NodeFamily -&gt; [UID]
+</span><a href="Language.Drasil.DOT.Print.html#nodeLabels"><span class="hs-identifier hs-var">nodeLabels</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679126625"><span class="annot"><span class="annottext">[UID]
+</span><a href="#local-6989586621679126625"><span class="hs-identifier hs-var">ls</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">nfLabel :: NodeFamily -&gt; UID
+</span><a href="Language.Drasil.DOT.Print.html#nfLabel"><span class="hs-identifier hs-var">nfLabel</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679126624"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679126624"><span class="hs-identifier hs-var">lbl</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">nfColour :: NodeFamily -&gt; UID
+</span><a href="Language.Drasil.DOT.Print.html#nfColour"><span class="hs-identifier hs-var">nfColour</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679126623"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679126623"><span class="hs-identifier hs-var">col</span></a></span></span><span class="hs-special">}</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><span id="line-137"></span><span>    </span><span class="annot"><span class="annottext">((UID, UID) -&gt; IO ()) -&gt; [(UID, UID)] -&gt; IO ()
+forall (t :: * -&gt; *) (m :: * -&gt; *) a b.
+(Foldable t, Monad m) =&gt;
+(a -&gt; m b) -&gt; t a -&gt; m ()
+</span><span class="hs-identifier hs-var">mapM_</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Handle -&gt; UID -&gt; IO ()
+</span><span class="hs-identifier hs-var">hPutStrLn</span></span><span> </span><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679126627"><span class="hs-identifier hs-var">handle</span></a></span><span> </span><span class="annot"><span class="annottext">(UID -&gt; IO ()) -&gt; ((UID, UID) -&gt; UID) -&gt; (UID, UID) -&gt; IO ()
+forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
+</span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">(UID -&gt; UID -&gt; UID) -&gt; (UID, UID) -&gt; UID
+forall a b c. (a -&gt; b -&gt; c) -&gt; (a, b) -&gt; c
+</span><span class="hs-identifier hs-var">uncurry</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; UID -&gt; UID
+</span><a href="#local-6989586621679126621"><span class="hs-identifier hs-var">makeNodesSub</span></a></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679126623"><span class="hs-identifier hs-var">col</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([(UID, UID)] -&gt; IO ()) -&gt; [(UID, UID)] -&gt; IO ()
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [(UID, UID)]
+forall a b. [a] -&gt; [b] -&gt; [(a, b)]
+</span><span class="hs-identifier hs-var">zip</span></span><span> </span><span class="annot"><span class="annottext">[UID]
+</span><a href="#local-6989586621679126625"><span class="hs-identifier hs-var">ls</span></a></span><span> </span><span class="annot"><span class="annottext">[UID]
+</span><a href="#local-6989586621679126626"><span class="hs-identifier hs-var">u</span></a></span><span>
+</span><span id="line-138"></span><span>    </span><span class="annot"><span class="annottext">Handle -&gt; UID -&gt; [UID] -&gt; IO ()
+</span><a href="Language.Drasil.DOT.Print.html#mkSubgraph"><span class="hs-identifier hs-var">mkSubgraph</span></a></span><span> </span><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679126627"><span class="hs-identifier hs-var">handle</span></a></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679126624"><span class="hs-identifier hs-var">lbl</span></a></span><span> </span><span class="annot"><span class="annottext">[UID]
+</span><a href="#local-6989586621679126626"><span class="hs-identifier hs-var">u</span></a></span><span> </span><span>
+</span><span id="line-139"></span><span>    </span><span class="hs-keyword">where</span><span>
+</span><span id="line-140"></span><span>        </span><span class="hs-comment">-- Creates a node based on the kind of datatype (indented for subgraphs)</span><span>
+</span><span id="line-141"></span><span>        </span><span class="annot"><a href="#local-6989586621679126621"><span class="hs-identifier hs-type">makeNodesSub</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.DOT.Print.html#Colour"><span class="hs-identifier hs-type">Colour</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-142"></span><span>        </span><span id="local-6989586621679126621"><span class="annot"><span class="annottext">makeNodesSub :: UID -&gt; UID -&gt; UID -&gt; UID
+</span><a href="#local-6989586621679126621"><span class="hs-identifier hs-var hs-var">makeNodesSub</span></a></span></span><span> </span><span id="local-6989586621679126619"><span class="annot"><span class="annottext">c :: UID
+</span><a href="#local-6989586621679126619"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span id="local-6989586621679126618"><span class="annot"><span class="annottext">l :: UID
+</span><a href="#local-6989586621679126618"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span id="local-6989586621679126617"><span class="annot"><span class="annottext">nm :: UID
+</span><a href="#local-6989586621679126617"><span class="hs-identifier hs-var">nm</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;\t&quot;</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; UID
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679126617"><span class="hs-identifier hs-var">nm</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; UID
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;\t[shape=box, color=black, style=filled, fillcolor=&quot;</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; UID
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679126619"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; UID
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;, label=\&quot;&quot;</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; UID
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679126618"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; UID
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;\&quot;];&quot;</span></span><span>
+</span><span id="line-143"></span><span>
+</span><span id="line-144"></span><span class="hs-comment">-- | Helper that only makes a subgraph if there are elements in the subgraph. Otherwise, it returns nothing.</span><span>
+</span><span id="line-145"></span><span class="annot"><a href="Language.Drasil.DOT.Print.html#mkSubgraph"><span class="hs-identifier hs-type">mkSubgraph</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Handle</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.DOT.Print.html#Label"><span class="hs-identifier hs-type">Label</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
+</span><span id="line-146"></span><span id="mkSubgraph"><span class="annot"><span class="annottext">mkSubgraph :: Handle -&gt; UID -&gt; [UID] -&gt; IO ()
+</span><a href="Language.Drasil.DOT.Print.html#mkSubgraph"><span class="hs-identifier hs-var hs-var">mkSubgraph</span></a></span></span><span> </span><span id="local-6989586621679126616"><span class="annot"><span class="annottext">handle :: Handle
+</span><a href="#local-6989586621679126616"><span class="hs-identifier hs-var">handle</span></a></span></span><span> </span><span id="local-6989586621679126615"><span class="annot"><span class="annottext">l :: UID
+</span><a href="#local-6989586621679126615"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span id="local-6989586621679126614"><span class="annot"><span class="annottext">u :: [UID]
+</span><a href="#local-6989586621679126614"><span class="hs-identifier hs-var">u</span></a></span></span><span> </span><span>
+</span><span id="line-147"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">UID -&gt; Bool
+forall (t :: * -&gt; *) a. Foldable t =&gt; t a -&gt; Bool
+</span><span class="hs-identifier hs-var">null</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679126615"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">() -&gt; IO ()
+forall (m :: * -&gt; *) a. Monad m =&gt; a -&gt; m a
+</span><span class="hs-identifier hs-var">return</span></span><span> </span><span class="annot"><span class="annottext">()
+forall a. Monoid a =&gt; a
+</span><span class="hs-identifier hs-var">mempty</span></span><span>
+</span><span id="line-148"></span><span>    </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">otherwise</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span> </span><span>
+</span><span id="line-149"></span><span>             </span><span class="annot"><span class="annottext">Handle -&gt; UID -&gt; IO ()
+</span><span class="hs-identifier hs-var">hPutStrLn</span></span><span> </span><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679126616"><span class="hs-identifier hs-var">handle</span></a></span><span> </span><span class="annot"><span class="annottext">(UID -&gt; IO ()) -&gt; UID -&gt; IO ()
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="hs-string">&quot;\n\tsubgraph &quot;</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; UID
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679126615"><span class="hs-identifier hs-var">l</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; UID
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot; {&quot;</span></span><span>
+</span><span id="line-150"></span><span>             </span><span class="annot"><span class="annottext">Handle -&gt; UID -&gt; IO ()
+</span><span class="hs-identifier hs-var">hPutStrLn</span></span><span> </span><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679126616"><span class="hs-identifier hs-var">handle</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;\trank=\&quot;same\&quot;&quot;</span></span><span>
+</span><span id="line-151"></span><span>             </span><span class="annot"><span class="annottext">Handle -&gt; UID -&gt; IO ()
+</span><span class="hs-identifier hs-var">hPutStrLn</span></span><span> </span><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679126616"><span class="hs-identifier hs-var">handle</span></a></span><span> </span><span class="annot"><span class="annottext">(UID -&gt; IO ()) -&gt; UID -&gt; IO ()
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="hs-string">&quot;\t{&quot;</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; UID
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; [UID] -&gt; UID
+forall a. [a] -&gt; [[a]] -&gt; [a]
+</span><span class="hs-identifier hs-var">intercalate</span></span><span> </span><span class="annot"><span class="hs-string">&quot;, &quot;</span></span><span> </span><span class="annot"><span class="annottext">[UID]
+</span><a href="#local-6989586621679126614"><span class="hs-identifier hs-var">u</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; UID
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;}&quot;</span></span><span>
+</span><span id="line-152"></span><span>             </span><span class="annot"><span class="annottext">Handle -&gt; UID -&gt; IO ()
+</span><span class="hs-identifier hs-var">hPutStrLn</span></span><span> </span><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679126616"><span class="hs-identifier hs-var">handle</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;\t}\n&quot;</span></span><span>
+</span><span id="line-153"></span><span>
+</span><span id="line-154"></span><span class="hs-comment">-- | Gets graph labels and removes any invalid characters.</span><span>
+</span><span id="line-155"></span><span class="annot"><a href="Language.Drasil.DOT.Print.html#filterAndGI"><span class="hs-identifier hs-type">filterAndGI</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.DOT.Print.html#GraphInfo"><span class="hs-identifier hs-type">GraphInfo</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.DOT.Print.html#GraphInfo"><span class="hs-identifier hs-type">GraphInfo</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.DOT.Print.html#NodeFamily"><span class="hs-identifier hs-type">NodeFamily</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.DOT.Print.html#NodeFamily"><span class="hs-identifier hs-type">NodeFamily</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-156"></span><span id="filterAndGI"><span class="annot"><span class="annottext">filterAndGI :: GraphInfo -&gt; [GraphInfo -&gt; NodeFamily] -&gt; [NodeFamily]
+</span><a href="Language.Drasil.DOT.Print.html#filterAndGI"><span class="hs-identifier hs-var hs-var">filterAndGI</span></a></span></span><span> </span><span id="local-6989586621679126613"><span class="annot"><span class="annottext">gi :: GraphInfo
+</span><a href="#local-6989586621679126613"><span class="hs-identifier hs-var">gi</span></a></span></span><span> </span><span id="local-6989586621679126612"><span class="annot"><span class="annottext">toNodes :: [GraphInfo -&gt; NodeFamily]
+</span><a href="#local-6989586621679126612"><span class="hs-identifier hs-var">toNodes</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(NodeFamily -&gt; NodeFamily) -&gt; [NodeFamily] -&gt; [NodeFamily]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">NodeFamily -&gt; NodeFamily
+</span><a href="#local-6989586621679126611"><span class="hs-identifier hs-var">filterUIDs</span></a></span><span> </span><span class="annot"><span class="annottext">[NodeFamily]
+</span><a href="#local-6989586621679126610"><span class="hs-identifier hs-var">labels</span></a></span><span>
+</span><span id="line-157"></span><span>    </span><span class="hs-keyword">where</span><span>
+</span><span id="line-158"></span><span>        </span><span id="local-6989586621679126611"><span class="annot"><span class="annottext">filterUIDs :: NodeFamily -&gt; NodeFamily
+</span><a href="#local-6989586621679126611"><span class="hs-identifier hs-var hs-var">filterUIDs</span></a></span></span><span> </span><span class="annot"><a href="Language.Drasil.DOT.Print.html#NF"><span class="hs-identifier hs-type">NF</span></a></span><span class="hs-special">{</span><span class="annot"><span class="annottext">nodeUIDs :: NodeFamily -&gt; [UID]
+</span><a href="Language.Drasil.DOT.Print.html#nodeUIDs"><span class="hs-identifier hs-var">nodeUIDs</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679126609"><span class="annot"><span class="annottext">[UID]
+</span><a href="#local-6989586621679126609"><span class="hs-identifier hs-var">u</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">nodeLabels :: NodeFamily -&gt; [UID]
+</span><a href="Language.Drasil.DOT.Print.html#nodeLabels"><span class="hs-identifier hs-var">nodeLabels</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679126608"><span class="annot"><span class="annottext">[UID]
+</span><a href="#local-6989586621679126608"><span class="hs-identifier hs-var">ls</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">nfLabel :: NodeFamily -&gt; UID
+</span><a href="Language.Drasil.DOT.Print.html#nfLabel"><span class="hs-identifier hs-var">nfLabel</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679126607"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679126607"><span class="hs-identifier hs-var">l</span></a></span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">nfColour :: NodeFamily -&gt; UID
+</span><a href="Language.Drasil.DOT.Print.html#nfColour"><span class="hs-identifier hs-var">nfColour</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="local-6989586621679126606"><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679126606"><span class="hs-identifier hs-var">c</span></a></span></span><span class="hs-special">}</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NF :: [UID] -&gt; [UID] -&gt; UID -&gt; UID -&gt; NodeFamily
+</span><a href="Language.Drasil.DOT.Print.html#NF"><span class="hs-identifier hs-type hs-type">NF</span></a></span><span class="hs-special">{</span><span class="annot"><span class="annottext">nodeUIDs :: [UID]
+</span><a href="Language.Drasil.DOT.Print.html#nodeUIDs"><span class="hs-identifier hs-var">nodeUIDs</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UID -&gt; UID) -&gt; [UID] -&gt; [UID]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID
+</span><a href="Language.Drasil.DOT.Print.html#filterInvalidChars"><span class="hs-identifier hs-var">filterInvalidChars</span></a></span><span> </span><span class="annot"><span class="annottext">[UID]
+</span><a href="#local-6989586621679126609"><span class="hs-identifier hs-var">u</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">nodeLabels :: [UID]
+</span><a href="Language.Drasil.DOT.Print.html#nodeLabels"><span class="hs-identifier hs-var">nodeLabels</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[UID]
+</span><a href="#local-6989586621679126608"><span class="hs-identifier hs-var">ls</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">nfLabel :: UID
+</span><a href="Language.Drasil.DOT.Print.html#nfLabel"><span class="hs-identifier hs-var">nfLabel</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679126607"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">nfColour :: UID
+</span><a href="Language.Drasil.DOT.Print.html#nfColour"><span class="hs-identifier hs-var">nfColour</span></a></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679126606"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">}</span><span>
+</span><span id="line-159"></span><span>        </span><span id="local-6989586621679126610"><span class="annot"><span class="annottext">labels :: [NodeFamily]
+</span><a href="#local-6989586621679126610"><span class="hs-identifier hs-var hs-var">labels</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((GraphInfo -&gt; NodeFamily) -&gt; NodeFamily)
+-&gt; [GraphInfo -&gt; NodeFamily] -&gt; [NodeFamily]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(GraphInfo -&gt; NodeFamily) -&gt; GraphInfo -&gt; NodeFamily
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">GraphInfo
+</span><a href="#local-6989586621679126613"><span class="hs-identifier hs-var">gi</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[GraphInfo -&gt; NodeFamily]
+</span><a href="#local-6989586621679126612"><span class="hs-identifier hs-var">toNodes</span></a></span><span>
+</span><span id="line-160"></span><span>
+</span><span id="line-161"></span><span class="hs-comment">-- | Helper to remove invalid characters.</span><span>
+</span><span id="line-162"></span><span class="annot"><a href="Language.Drasil.DOT.Print.html#filterInvalidChars"><span class="hs-identifier hs-type">filterInvalidChars</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-163"></span><span id="filterInvalidChars"><span class="annot"><span class="annottext">filterInvalidChars :: UID -&gt; UID
+</span><a href="Language.Drasil.DOT.Print.html#filterInvalidChars"><span class="hs-identifier hs-var hs-var">filterInvalidChars</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Char -&gt; Bool) -&gt; UID -&gt; UID
+forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
+</span><span class="hs-identifier hs-var">filter</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Char -&gt; UID -&gt; Bool
+forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
+</span><span class="hs-operator hs-var">`notElem`</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679126603"><span class="hs-identifier hs-var">invalidChars</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-164"></span><span>  </span><span class="hs-keyword">where</span><span>
+</span><span id="line-165"></span><span>    </span><span id="local-6989586621679126603"><span class="annot"><span class="annottext">invalidChars :: UID
+</span><a href="#local-6989586621679126603"><span class="hs-identifier hs-var hs-var">invalidChars</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;^[]!} (){-&gt;,$&quot;</span></span></pre></body></html>

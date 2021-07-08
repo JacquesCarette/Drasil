@@ -1,0 +1,788 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.DocumentLanguage.TraceabilityGraph</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphInfo"><span class="hs-identifier">mkGraphInfo</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Database.Drasil</span></span><span> </span><span class="hs-keyword">hiding</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">cdb</span></span><span class="hs-special">)</span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Lens</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-operator">(^.)</span></span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.Map</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">Map</span></span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html"><span class="hs-identifier">Drasil.DocumentLanguage.TraceabilityMatrix</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#TraceViewCat"><span class="hs-identifier">TraceViewCat</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#traceMReferees"><span class="hs-identifier">traceMReferees</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#traceMReferrers"><span class="hs-identifier">traceMReferrers</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-8"></span><span>  </span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#traceMColumns"><span class="hs-identifier">traceMColumns</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#ensureItems"><span class="hs-identifier">ensureItems</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#layoutUIDs"><span class="hs-identifier">layoutUIDs</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.Sections.TraceabilityMandGs.html"><span class="hs-identifier">Drasil.Sections.TraceabilityMandGs</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Sections.TraceabilityMandGs.html#tvAssumps"><span class="hs-identifier">tvAssumps</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-10"></span><span>  </span><span class="annot"><a href="Drasil.Sections.TraceabilityMandGs.html#tvDataDefns"><span class="hs-identifier">tvDataDefns</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Sections.TraceabilityMandGs.html#tvGenDefns"><span class="hs-identifier">tvGenDefns</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Sections.TraceabilityMandGs.html#tvTheoryModels"><span class="hs-identifier">tvTheoryModels</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Sections.TraceabilityMandGs.html#tvInsModels"><span class="hs-identifier">tvInsModels</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Sections.TraceabilityMandGs.html#tvGoals"><span class="hs-identifier">tvGoals</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Sections.TraceabilityMandGs.html#tvReqs"><span class="hs-identifier">tvReqs</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-11"></span><span>  </span><span class="annot"><a href="Drasil.Sections.TraceabilityMandGs.html#tvChanges"><span class="hs-identifier">tvChanges</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil.Printers</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">GraphInfo</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">NodeFamily</span></span><span class="hs-special">(</span><span class="hs-glyph">..</span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Maybe</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">fromMaybe</span></span><span class="hs-special">)</span><span>
+</span><span id="line-14"></span><span>
+</span><span id="line-15"></span><span class="hs-comment">-- | Extracts traceability graph inforomation from filled-in 'SystemInformation'.</span><span>
+</span><span id="line-16"></span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphInfo"><span class="hs-identifier hs-type">mkGraphInfo</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SystemInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GraphInfo</span></span><span>
+</span><span id="line-17"></span><span id="mkGraphInfo"><span class="annot"><span class="annottext">mkGraphInfo :: SystemInformation -&gt; GraphInfo
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphInfo"><span class="hs-identifier hs-var hs-var">mkGraphInfo</span></a></span></span><span> </span><span id="local-6989586621679119094"><span class="annot"><span class="annottext">si :: SystemInformation
+</span><a href="#local-6989586621679119094"><span class="hs-identifier hs-var">si</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GI :: NodeFamily
+-&gt; NodeFamily
+-&gt; NodeFamily
+-&gt; NodeFamily
+-&gt; NodeFamily
+-&gt; NodeFamily
+-&gt; NodeFamily
+-&gt; NodeFamily
+-&gt; [(UID, [UID])]
+-&gt; [(UID, [UID])]
+-&gt; [(UID, [UID])]
+-&gt; [(UID, [UID])]
+-&gt; [(UID, [UID])]
+-&gt; GraphInfo
+</span><span class="hs-identifier hs-type hs-type">GI</span></span><span> </span><span class="hs-special">{</span><span>
+</span><span id="line-18"></span><span>    </span><span class="annot"><span class="annottext">assumpNF :: NodeFamily
+</span><span class="hs-identifier hs-var">assumpNF</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TraceViewCat -&gt; SystemInformation -&gt; UID -&gt; NodeFamily
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphNodes"><span class="hs-identifier hs-var">mkGraphNodes</span></a></span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvAssumps"><span class="hs-identifier hs-var">tvAssumps</span></a></span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679119094"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;mistyrose&quot;</span></span><span>
+</span><span id="line-19"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ddNF :: NodeFamily
+</span><span class="hs-identifier hs-var">ddNF</span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TraceViewCat -&gt; SystemInformation -&gt; UID -&gt; NodeFamily
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphNodes"><span class="hs-identifier hs-var">mkGraphNodes</span></a></span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvDataDefns"><span class="hs-identifier hs-var">tvDataDefns</span></a></span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679119094"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;paleturquoise1&quot;</span></span><span>
+</span><span id="line-20"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">gdNF :: NodeFamily
+</span><span class="hs-identifier hs-var">gdNF</span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TraceViewCat -&gt; SystemInformation -&gt; UID -&gt; NodeFamily
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphNodes"><span class="hs-identifier hs-var">mkGraphNodes</span></a></span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvGenDefns"><span class="hs-identifier hs-var">tvGenDefns</span></a></span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679119094"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;palegreen&quot;</span></span><span>
+</span><span id="line-21"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">tmNF :: NodeFamily
+</span><span class="hs-identifier hs-var">tmNF</span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TraceViewCat -&gt; SystemInformation -&gt; UID -&gt; NodeFamily
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphNodes"><span class="hs-identifier hs-var">mkGraphNodes</span></a></span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvTheoryModels"><span class="hs-identifier hs-var">tvTheoryModels</span></a></span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679119094"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;pink&quot;</span></span><span>
+</span><span id="line-22"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">imNF :: NodeFamily
+</span><span class="hs-identifier hs-var">imNF</span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TraceViewCat -&gt; SystemInformation -&gt; UID -&gt; NodeFamily
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphNodes"><span class="hs-identifier hs-var">mkGraphNodes</span></a></span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvInsModels"><span class="hs-identifier hs-var">tvInsModels</span></a></span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679119094"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;khaki1&quot;</span></span><span>
+</span><span id="line-23"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">reqNF :: NodeFamily
+</span><span class="hs-identifier hs-var">reqNF</span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TraceViewCat -&gt; SystemInformation -&gt; UID -&gt; NodeFamily
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphNodes"><span class="hs-identifier hs-var">mkGraphNodes</span></a></span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvReqs"><span class="hs-identifier hs-var">tvReqs</span></a></span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679119094"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;ivory&quot;</span></span><span>
+</span><span id="line-24"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">gsNF :: NodeFamily
+</span><span class="hs-identifier hs-var">gsNF</span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TraceViewCat -&gt; SystemInformation -&gt; UID -&gt; NodeFamily
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphNodes"><span class="hs-identifier hs-var">mkGraphNodes</span></a></span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvGoals"><span class="hs-identifier hs-var">tvGoals</span></a></span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679119094"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;darkgoldenrod1&quot;</span></span><span>
+</span><span id="line-25"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">chgNF :: NodeFamily
+</span><span class="hs-identifier hs-var">chgNF</span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TraceViewCat -&gt; SystemInformation -&gt; UID -&gt; NodeFamily
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphNodes"><span class="hs-identifier hs-var">mkGraphNodes</span></a></span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvChanges"><span class="hs-identifier hs-var">tvChanges</span></a></span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679119094"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;lavender&quot;</span></span><span>
+</span><span id="line-26"></span><span>
+</span><span id="line-27"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">edgesAvsA :: [(UID, [UID])]
+</span><span class="hs-identifier hs-var">edgesAvsA</span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[TraceViewCat]
+-&gt; [TraceViewCat] -&gt; SystemInformation -&gt; [(UID, [UID])]
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphEdges"><span class="hs-identifier hs-var">mkGraphEdges</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvAssumps"><span class="hs-identifier hs-var">tvAssumps</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvAssumps"><span class="hs-identifier hs-var">tvAssumps</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679119094"><span class="hs-identifier hs-var">si</span></a></span><span>
+</span><span id="line-28"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">edgesAvsAll :: [(UID, [UID])]
+</span><span class="hs-identifier hs-var">edgesAvsAll</span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[TraceViewCat]
+-&gt; [TraceViewCat] -&gt; SystemInformation -&gt; [(UID, [UID])]
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphEdges"><span class="hs-identifier hs-var">mkGraphEdges</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvAssumps"><span class="hs-identifier hs-var">tvAssumps</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvDataDefns"><span class="hs-identifier hs-var">tvDataDefns</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvTheoryModels"><span class="hs-identifier hs-var">tvTheoryModels</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvGenDefns"><span class="hs-identifier hs-var">tvGenDefns</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvInsModels"><span class="hs-identifier hs-var">tvInsModels</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvReqs"><span class="hs-identifier hs-var">tvReqs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvChanges"><span class="hs-identifier hs-var">tvChanges</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679119094"><span class="hs-identifier hs-var">si</span></a></span><span>
+</span><span id="line-29"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">edgesRefvsRef :: [(UID, [UID])]
+</span><span class="hs-identifier hs-var">edgesRefvsRef</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[TraceViewCat]
+-&gt; [TraceViewCat] -&gt; SystemInformation -&gt; [(UID, [UID])]
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphEdges"><span class="hs-identifier hs-var">mkGraphEdges</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvDataDefns"><span class="hs-identifier hs-var">tvDataDefns</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvTheoryModels"><span class="hs-identifier hs-var">tvTheoryModels</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvGenDefns"><span class="hs-identifier hs-var">tvGenDefns</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvInsModels"><span class="hs-identifier hs-var">tvInsModels</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvDataDefns"><span class="hs-identifier hs-var">tvDataDefns</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvTheoryModels"><span class="hs-identifier hs-var">tvTheoryModels</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvGenDefns"><span class="hs-identifier hs-var">tvGenDefns</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvInsModels"><span class="hs-identifier hs-var">tvInsModels</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679119094"><span class="hs-identifier hs-var">si</span></a></span><span>
+</span><span id="line-30"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">edgesAllvsR :: [(UID, [UID])]
+</span><span class="hs-identifier hs-var">edgesAllvsR</span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[TraceViewCat]
+-&gt; [TraceViewCat] -&gt; SystemInformation -&gt; [(UID, [UID])]
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphEdges"><span class="hs-identifier hs-var">mkGraphEdges</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvDataDefns"><span class="hs-identifier hs-var">tvDataDefns</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvTheoryModels"><span class="hs-identifier hs-var">tvTheoryModels</span></a></span><span class="hs-special">,</span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvGenDefns"><span class="hs-identifier hs-var">tvGenDefns</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvInsModels"><span class="hs-identifier hs-var">tvInsModels</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvReqs"><span class="hs-identifier hs-var">tvReqs</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvGoals"><span class="hs-identifier hs-var">tvGoals</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvReqs"><span class="hs-identifier hs-var">tvReqs</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679119094"><span class="hs-identifier hs-var">si</span></a></span><span>
+</span><span id="line-31"></span><span>    </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">edgesAllvsAll :: [(UID, [UID])]
+</span><span class="hs-identifier hs-var">edgesAllvsAll</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[TraceViewCat]
+-&gt; [TraceViewCat] -&gt; SystemInformation -&gt; [(UID, [UID])]
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphEdges"><span class="hs-identifier hs-var">mkGraphEdges</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvAssumps"><span class="hs-identifier hs-var">tvAssumps</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvDataDefns"><span class="hs-identifier hs-var">tvDataDefns</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvTheoryModels"><span class="hs-identifier hs-var">tvTheoryModels</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvGenDefns"><span class="hs-identifier hs-var">tvGenDefns</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvInsModels"><span class="hs-identifier hs-var">tvInsModels</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvReqs"><span class="hs-identifier hs-var">tvReqs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvGoals"><span class="hs-identifier hs-var">tvGoals</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvChanges"><span class="hs-identifier hs-var">tvChanges</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvAssumps"><span class="hs-identifier hs-var">tvAssumps</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvDataDefns"><span class="hs-identifier hs-var">tvDataDefns</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvTheoryModels"><span class="hs-identifier hs-var">tvTheoryModels</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvGenDefns"><span class="hs-identifier hs-var">tvGenDefns</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvInsModels"><span class="hs-identifier hs-var">tvInsModels</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvReqs"><span class="hs-identifier hs-var">tvReqs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvGoals"><span class="hs-identifier hs-var">tvGoals</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="Drasil.Sections.TraceabilityMandGs.html#tvChanges"><span class="hs-identifier hs-var">tvChanges</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679119094"><span class="hs-identifier hs-var">si</span></a></span><span>
+</span><span id="line-32"></span><span class="hs-special">}</span><span>
+</span><span id="line-33"></span><span>
+</span><span id="line-34"></span><span class="hs-comment">-- | Gets the node family of a graph based on the given section</span><span>
+</span><span id="line-35"></span><span class="hs-comment">-- and system information. Also applies a given colour to the node family.</span><span>
+</span><span id="line-36"></span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphNodes"><span class="hs-identifier hs-type">mkGraphNodes</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#TraceViewCat"><span class="hs-identifier hs-type">TraceViewCat</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SystemInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NodeFamily</span></span><span>
+</span><span id="line-37"></span><span id="mkGraphNodes"><span class="annot"><span class="annottext">mkGraphNodes :: TraceViewCat -&gt; SystemInformation -&gt; UID -&gt; NodeFamily
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphNodes"><span class="hs-identifier hs-var hs-var">mkGraphNodes</span></a></span></span><span> </span><span id="local-6989586621679119075"><span class="annot"><span class="annottext">entry :: TraceViewCat
+</span><a href="#local-6989586621679119075"><span class="hs-identifier hs-var">entry</span></a></span></span><span> </span><span id="local-6989586621679119074"><span class="annot"><span class="annottext">si :: SystemInformation
+</span><a href="#local-6989586621679119074"><span class="hs-identifier hs-var">si</span></a></span></span><span> </span><span id="local-6989586621679119073"><span class="annot"><span class="annottext">col :: UID
+</span><a href="#local-6989586621679119073"><span class="hs-identifier hs-var">col</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NF :: [UID] -&gt; [UID] -&gt; UID -&gt; UID -&gt; NodeFamily
+</span><span class="hs-identifier hs-type hs-type">NF</span></span><span> </span><span class="hs-special">{</span><span class="annot"><span class="annottext">nodeUIDs :: [UID]
+</span><span class="hs-identifier hs-var">nodeUIDs</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[UID]
+</span><a href="#local-6989586621679119069"><span class="hs-identifier hs-var">nodeContents</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">nodeLabels :: [UID]
+</span><span class="hs-identifier hs-var">nodeLabels</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UID -&gt; UID) -&gt; [UID] -&gt; [UID]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SystemInformation -&gt; UID -&gt; UID
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#checkUIDRefAdd"><span class="hs-identifier hs-var">checkUIDRefAdd</span></a></span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679119074"><span class="hs-identifier hs-var">si</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[UID]
+</span><a href="#local-6989586621679119069"><span class="hs-identifier hs-var">nodeContents</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">nfLabel :: UID
+</span><span class="hs-identifier hs-var">nfLabel</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; UID
+</span><a href="#local-6989586621679119065"><span class="hs-identifier hs-var">checkNodeContents</span></a></span><span> </span><span class="annot"><span class="annottext">[UID]
+</span><a href="#local-6989586621679119069"><span class="hs-identifier hs-var">nodeContents</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">nfColour :: UID
+</span><span class="hs-identifier hs-var">nfColour</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119073"><span class="hs-identifier hs-var">col</span></a></span><span class="hs-special">}</span><span>
+</span><span id="line-38"></span><span>    </span><span class="hs-keyword">where</span><span>
+</span><span id="line-39"></span><span>        </span><span class="annot"><a href="#local-6989586621679119065"><span class="hs-identifier hs-type">checkNodeContents</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-40"></span><span>        </span><span id="local-6989586621679119065"><span class="annot"><span class="annottext">checkNodeContents :: [UID] -&gt; UID
+</span><a href="#local-6989586621679119065"><span class="hs-identifier hs-var hs-var">checkNodeContents</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
+</span><span id="line-41"></span><span>        </span><span class="annot"><a href="#local-6989586621679119065"><span class="hs-identifier hs-var">checkNodeContents</span></a></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679119063"><span class="annot"><span class="annottext">x :: UID
+</span><a href="#local-6989586621679119063"><span class="hs-identifier hs-var">x</span></a></span></span><span class="annot"><span class="hs-glyph hs-type">:</span></span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SystemInformation -&gt; UID -&gt; UID
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#checkUIDAbbrev"><span class="hs-identifier hs-var">checkUIDAbbrev</span></a></span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679119074"><span class="hs-identifier hs-var">si</span></a></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119063"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-42"></span><span>        </span><span id="local-6989586621679119069"><span class="annot"><span class="annottext">nodeContents :: [UID]
+</span><a href="#local-6989586621679119069"><span class="hs-identifier hs-var hs-var">nodeContents</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([UID] -&gt; [UID]) -&gt; ChunkDB -&gt; [UID]
+</span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#traceMReferees"><span class="hs-identifier hs-var">traceMReferees</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID]
+</span><a href="#local-6989586621679119061"><span class="hs-identifier hs-var">entryF</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119060"><span class="hs-identifier hs-var">cdb</span></a></span><span>
+</span><span id="line-43"></span><span>        </span><span id="local-6989586621679119060"><span class="annot"><span class="annottext">cdb :: ChunkDB
+</span><a href="#local-6989586621679119060"><span class="hs-identifier hs-var hs-var">cdb</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SystemInformation -&gt; ChunkDB
+</span><span class="hs-identifier hs-var hs-var">_sysinfodb</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679119074"><span class="hs-identifier hs-var">si</span></a></span><span>
+</span><span id="line-44"></span><span>        </span><span id="local-6989586621679119061"><span class="annot"><span class="annottext">entryF :: [UID] -&gt; [UID]
+</span><a href="#local-6989586621679119061"><span class="hs-identifier hs-var hs-var">entryF</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[TraceViewCat] -&gt; ChunkDB -&gt; [UID] -&gt; [UID]
+</span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#layoutUIDs"><span class="hs-identifier hs-var">layoutUIDs</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TraceViewCat
+</span><a href="#local-6989586621679119075"><span class="hs-identifier hs-var">entry</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119060"><span class="hs-identifier hs-var">cdb</span></a></span><span>
+</span><span id="line-45"></span><span>
+</span><span id="line-46"></span><span class="hs-comment">-- | Creates the graph edges based on the relation of the first list of sections to the second.</span><span>
+</span><span id="line-47"></span><span class="hs-comment">-- Also needs the system information. Return value is of the form (Section, [Dependencies]).</span><span>
+</span><span id="line-48"></span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphEdges"><span class="hs-identifier hs-type">mkGraphEdges</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#TraceViewCat"><span class="hs-identifier hs-type">TraceViewCat</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#TraceViewCat"><span class="hs-identifier hs-type">TraceViewCat</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SystemInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><span id="line-49"></span><span id="mkGraphEdges"><span class="annot"><span class="annottext">mkGraphEdges :: [TraceViewCat]
+-&gt; [TraceViewCat] -&gt; SystemInformation -&gt; [(UID, [UID])]
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#mkGraphEdges"><span class="hs-identifier hs-var hs-var">mkGraphEdges</span></a></span></span><span> </span><span id="local-6989586621679119058"><span class="annot"><span class="annottext">cols :: [TraceViewCat]
+</span><a href="#local-6989586621679119058"><span class="hs-identifier hs-var">cols</span></a></span></span><span> </span><span id="local-6989586621679119057"><span class="annot"><span class="annottext">rows :: [TraceViewCat]
+</span><a href="#local-6989586621679119057"><span class="hs-identifier hs-var">rows</span></a></span></span><span> </span><span id="local-6989586621679119056"><span class="annot"><span class="annottext">si :: SystemInformation
+</span><a href="#local-6989586621679119056"><span class="hs-identifier hs-var">si</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [[UID]] -&gt; [UID] -&gt; [(UID, [UID])]
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#makeTGraph"><span class="hs-identifier hs-var">makeTGraph</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UID -&gt; [UID] -&gt; [UID]
+forall a. UID -&gt; [a] -&gt; [a]
+</span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#ensureItems"><span class="hs-identifier hs-var">ensureItems</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;Traceability Graph&quot;</span></span><span> </span><span class="annot"><span class="annottext">([UID] -&gt; [UID]) -&gt; [UID] -&gt; [UID]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">([UID] -&gt; [UID]) -&gt; SystemInformation -&gt; [UID]
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGRowHeader"><span class="hs-identifier hs-var">traceGRowHeader</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID]
+</span><a href="#local-6989586621679119053"><span class="hs-identifier hs-var">rowf</span></a></span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679119056"><span class="hs-identifier hs-var">si</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">([UID] -&gt; [UID]) -&gt; ([UID] -&gt; [UID]) -&gt; ChunkDB -&gt; [[UID]]
+</span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#traceMColumns"><span class="hs-identifier hs-var">traceMColumns</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID]
+</span><a href="#local-6989586621679119052"><span class="hs-identifier hs-var">colf</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID]
+</span><a href="#local-6989586621679119053"><span class="hs-identifier hs-var">rowf</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119051"><span class="hs-identifier hs-var">cdb</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([UID] -&gt; [(UID, [UID])]) -&gt; [UID] -&gt; [(UID, [UID])]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">([UID] -&gt; [UID]) -&gt; ChunkDB -&gt; [UID]
+</span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#traceMReferees"><span class="hs-identifier hs-var">traceMReferees</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID]
+</span><a href="#local-6989586621679119052"><span class="hs-identifier hs-var">colf</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119051"><span class="hs-identifier hs-var">cdb</span></a></span><span>
+</span><span id="line-50"></span><span>    </span><span class="hs-keyword">where</span><span>
+</span><span id="line-51"></span><span>        </span><span id="local-6989586621679119051"><span class="annot"><span class="annottext">cdb :: ChunkDB
+</span><a href="#local-6989586621679119051"><span class="hs-identifier hs-var hs-var">cdb</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SystemInformation -&gt; ChunkDB
+</span><span class="hs-identifier hs-var hs-var">_sysinfodb</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679119056"><span class="hs-identifier hs-var">si</span></a></span><span>
+</span><span id="line-52"></span><span>        </span><span id="local-6989586621679119052"><span class="annot"><span class="annottext">colf :: [UID] -&gt; [UID]
+</span><a href="#local-6989586621679119052"><span class="hs-identifier hs-var hs-var">colf</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[TraceViewCat] -&gt; ChunkDB -&gt; [UID] -&gt; [UID]
+</span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#layoutUIDs"><span class="hs-identifier hs-var">layoutUIDs</span></a></span><span> </span><span class="annot"><span class="annottext">[TraceViewCat]
+</span><a href="#local-6989586621679119058"><span class="hs-identifier hs-var">cols</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119051"><span class="hs-identifier hs-var">cdb</span></a></span><span>
+</span><span id="line-53"></span><span>        </span><span id="local-6989586621679119053"><span class="annot"><span class="annottext">rowf :: [UID] -&gt; [UID]
+</span><a href="#local-6989586621679119053"><span class="hs-identifier hs-var hs-var">rowf</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[TraceViewCat] -&gt; ChunkDB -&gt; [UID] -&gt; [UID]
+</span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#layoutUIDs"><span class="hs-identifier hs-var">layoutUIDs</span></a></span><span> </span><span class="annot"><span class="annottext">[TraceViewCat]
+</span><a href="#local-6989586621679119057"><span class="hs-identifier hs-var">rows</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119051"><span class="hs-identifier hs-var">cdb</span></a></span><span>
+</span><span id="line-54"></span><span>
+</span><span id="line-55"></span><span class="hs-comment">-- | Helper for making graph edges. Taken from Utils.Drasil's traceability matrix relation finder.</span><span>
+</span><span id="line-56"></span><span class="hs-comment">-- But, instead of marking &quot;X&quot; on two related ideas, it makes them an edge.</span><span>
+</span><span id="line-57"></span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#makeTGraph"><span class="hs-identifier hs-type">makeTGraph</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">,</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><span id="line-58"></span><span id="makeTGraph"><span class="annot"><span class="annottext">makeTGraph :: [UID] -&gt; [[UID]] -&gt; [UID] -&gt; [(UID, [UID])]
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#makeTGraph"><span class="hs-identifier hs-var hs-var">makeTGraph</span></a></span></span><span> </span><span id="local-6989586621679119050"><span class="annot"><span class="annottext">rowName :: [UID]
+</span><a href="#local-6989586621679119050"><span class="hs-identifier hs-var">rowName</span></a></span></span><span> </span><span id="local-6989586621679119049"><span class="annot"><span class="annottext">rows :: [[UID]]
+</span><a href="#local-6989586621679119049"><span class="hs-identifier hs-var">rows</span></a></span></span><span> </span><span id="local-6989586621679119048"><span class="annot"><span class="annottext">cols :: [UID]
+</span><a href="#local-6989586621679119048"><span class="hs-identifier hs-var">cols</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [[UID]] -&gt; [(UID, [UID])]
+forall a b. [a] -&gt; [b] -&gt; [(a, b)]
+</span><span class="hs-identifier hs-var">zip</span></span><span> </span><span class="annot"><span class="annottext">[UID]
+</span><a href="#local-6989586621679119050"><span class="hs-identifier hs-var">rowName</span></a></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[UID] -&gt; [UID] -&gt; [UID]
+forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; t a -&gt; [a] -&gt; [a]
+</span><a href="#local-6989586621679119047"><span class="hs-identifier hs-var">zipFTable'</span></a></span><span> </span><span class="annot"><span class="annottext">[UID]
+</span><a href="#local-6989586621679119046"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">[UID]
+</span><a href="#local-6989586621679119048"><span class="hs-identifier hs-var">cols</span></a></span><span> </span><span class="hs-glyph">|</span><span> </span><span id="local-6989586621679119046"><span class="annot"><span class="annottext">[UID]
+</span><a href="#local-6989586621679119046"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">[[UID]]
+</span><a href="#local-6989586621679119049"><span class="hs-identifier hs-var">rows</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-59"></span><span>  </span><span class="hs-keyword">where</span><span>
+</span><span id="line-60"></span><span>    </span><span id="local-6989586621679119047"><span class="annot"><span class="annottext">zipFTable' :: t a -&gt; [a] -&gt; [a]
+</span><a href="#local-6989586621679119047"><span class="hs-identifier hs-var hs-var">zipFTable'</span></a></span></span><span> </span><span id="local-6989586621679119045"><span class="annot"><span class="annottext">content :: t a
+</span><a href="#local-6989586621679119045"><span class="hs-identifier hs-var">content</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(a -&gt; Bool) -&gt; [a] -&gt; [a]
+forall a. (a -&gt; Bool) -&gt; [a] -&gt; [a]
+</span><span class="hs-identifier hs-var">filter</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">a -&gt; t a -&gt; Bool
+forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
+</span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">t a
+</span><a href="#local-6989586621679119045"><span class="hs-identifier hs-var">content</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-61"></span><span>
+</span><span id="line-62"></span><span class="hs-comment">-- | Checker for uids by finding if the 'UID' is in one of the possible data sets contained in the 'SystemInformation' database.</span><span>
+</span><span id="line-63"></span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#checkUID"><span class="hs-identifier hs-type">checkUID</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SystemInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span>
+</span><span id="line-64"></span><span id="checkUID"><span class="annot"><span class="annottext">checkUID :: UID -&gt; SystemInformation -&gt; UID
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#checkUID"><span class="hs-identifier hs-var hs-var">checkUID</span></a></span></span><span> </span><span id="local-6989586621679119042"><span class="annot"><span class="annottext">t :: UID
+</span><a href="#local-6989586621679119042"><span class="hs-identifier hs-var">t</span></a></span></span><span> </span><span id="local-6989586621679119041"><span class="annot"><span class="annottext">si :: SystemInformation
+</span><a href="#local-6989586621679119041"><span class="hs-identifier hs-var">si</span></a></span></span><span>
+</span><span id="line-65"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">UID -&gt; Map UID (DataDefinition, Int) -&gt; Maybe Int
+forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe Int
+</span><span class="hs-identifier hs-var">Map.lookupIndex</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119042"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119039"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+-&gt; Getting
+     (Map UID (DataDefinition, Int))
+     ChunkDB
+     (Map UID (DataDefinition, Int))
+-&gt; Map UID (DataDefinition, Int)
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting
+  (Map UID (DataDefinition, Int))
+  ChunkDB
+  (Map UID (DataDefinition, Int))
+Lens' ChunkDB (Map UID (DataDefinition, Int))
+</span><span class="hs-identifier hs-var">dataDefnTable</span></span><span class="hs-special">)</span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119042"><span class="hs-identifier hs-var">t</span></a></span><span>
+</span><span id="line-66"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">UID -&gt; Map UID (InstanceModel, Int) -&gt; Maybe Int
+forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe Int
+</span><span class="hs-identifier hs-var">Map.lookupIndex</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119042"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119039"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+-&gt; Getting
+     (Map UID (InstanceModel, Int))
+     ChunkDB
+     (Map UID (InstanceModel, Int))
+-&gt; Map UID (InstanceModel, Int)
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting
+  (Map UID (InstanceModel, Int))
+  ChunkDB
+  (Map UID (InstanceModel, Int))
+Lens' ChunkDB (Map UID (InstanceModel, Int))
+</span><span class="hs-identifier hs-var">insmodelTable</span></span><span class="hs-special">)</span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119042"><span class="hs-identifier hs-var">t</span></a></span><span>
+</span><span id="line-67"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">UID -&gt; Map UID (GenDefn, Int) -&gt; Maybe Int
+forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe Int
+</span><span class="hs-identifier hs-var">Map.lookupIndex</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119042"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119039"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+-&gt; Getting
+     (Map UID (GenDefn, Int)) ChunkDB (Map UID (GenDefn, Int))
+-&gt; Map UID (GenDefn, Int)
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting (Map UID (GenDefn, Int)) ChunkDB (Map UID (GenDefn, Int))
+Lens' ChunkDB (Map UID (GenDefn, Int))
+</span><span class="hs-identifier hs-var">gendefTable</span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119042"><span class="hs-identifier hs-var">t</span></a></span><span>
+</span><span id="line-68"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">UID -&gt; Map UID (TheoryModel, Int) -&gt; Maybe Int
+forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe Int
+</span><span class="hs-identifier hs-var">Map.lookupIndex</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119042"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119039"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+-&gt; Getting
+     (Map UID (TheoryModel, Int)) ChunkDB (Map UID (TheoryModel, Int))
+-&gt; Map UID (TheoryModel, Int)
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting
+  (Map UID (TheoryModel, Int)) ChunkDB (Map UID (TheoryModel, Int))
+Lens' ChunkDB (Map UID (TheoryModel, Int))
+</span><span class="hs-identifier hs-var">theoryModelTable</span></span><span class="hs-special">)</span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119042"><span class="hs-identifier hs-var">t</span></a></span><span>
+</span><span id="line-69"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">UID -&gt; Map UID (ConceptInstance, Int) -&gt; Maybe Int
+forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe Int
+</span><span class="hs-identifier hs-var">Map.lookupIndex</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119042"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119039"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+-&gt; Getting
+     (Map UID (ConceptInstance, Int))
+     ChunkDB
+     (Map UID (ConceptInstance, Int))
+-&gt; Map UID (ConceptInstance, Int)
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting
+  (Map UID (ConceptInstance, Int))
+  ChunkDB
+  (Map UID (ConceptInstance, Int))
+Lens' ChunkDB (Map UID (ConceptInstance, Int))
+</span><span class="hs-identifier hs-var">conceptinsTable</span></span><span class="hs-special">)</span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119042"><span class="hs-identifier hs-var">t</span></a></span><span>
+</span><span id="line-70"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">UID -&gt; Map UID (Section, Int) -&gt; Maybe Int
+forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe Int
+</span><span class="hs-identifier hs-var">Map.lookupIndex</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119042"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119039"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+-&gt; Getting
+     (Map UID (Section, Int)) ChunkDB (Map UID (Section, Int))
+-&gt; Map UID (Section, Int)
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting (Map UID (Section, Int)) ChunkDB (Map UID (Section, Int))
+Lens' ChunkDB (Map UID (Section, Int))
+</span><span class="hs-identifier hs-var">sectionTable</span></span><span class="hs-special">)</span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119042"><span class="hs-identifier hs-var">t</span></a></span><span>
+</span><span id="line-71"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">UID -&gt; Map UID (LabelledContent, Int) -&gt; Maybe Int
+forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe Int
+</span><span class="hs-identifier hs-var">Map.lookupIndex</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119042"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119039"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+-&gt; Getting
+     (Map UID (LabelledContent, Int))
+     ChunkDB
+     (Map UID (LabelledContent, Int))
+-&gt; Map UID (LabelledContent, Int)
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting
+  (Map UID (LabelledContent, Int))
+  ChunkDB
+  (Map UID (LabelledContent, Int))
+Lens' ChunkDB (Map UID (LabelledContent, Int))
+</span><span class="hs-identifier hs-var">labelledcontentTable</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119042"><span class="hs-identifier hs-var">t</span></a></span><span>
+</span><span id="line-72"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119042"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; [UID] -&gt; Bool
+forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
+</span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">(Citation -&gt; UID) -&gt; [Citation] -&gt; [UID]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Citation -&gt; Getting UID Citation UID -&gt; UID
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting UID Citation UID
+forall c. HasUID c =&gt; Lens' c UID
+</span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SystemInformation -&gt; [Citation]
+</span><span class="hs-identifier hs-var">citeDB</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679119041"><span class="hs-identifier hs-var">si</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
+</span><span id="line-73"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">otherwise</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID
+forall a. HasCallStack =&gt; UID -&gt; a
+</span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">(UID -&gt; UID) -&gt; UID -&gt; UID
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119042"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; UID
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Caught.&quot;</span></span><span>
+</span><span id="line-74"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679119039"><span class="annot"><span class="annottext">s :: ChunkDB
+</span><a href="#local-6989586621679119039"><span class="hs-identifier hs-var hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SystemInformation -&gt; ChunkDB
+</span><span class="hs-identifier hs-var hs-var">_sysinfodb</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679119041"><span class="hs-identifier hs-var">si</span></a></span><span>
+</span><span id="line-75"></span><span>
+</span><span id="line-76"></span><span class="hs-comment">-- | Similar to 'checkUID' but prepends domain for labelling.</span><span>
+</span><span id="line-77"></span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#checkUIDAbbrev"><span class="hs-identifier hs-type">checkUIDAbbrev</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SystemInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-78"></span><span id="checkUIDAbbrev"><span class="annot"><span class="annottext">checkUIDAbbrev :: SystemInformation -&gt; UID -&gt; UID
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#checkUIDAbbrev"><span class="hs-identifier hs-var hs-var">checkUIDAbbrev</span></a></span></span><span> </span><span id="local-6989586621679119028"><span class="annot"><span class="annottext">si :: SystemInformation
+</span><a href="#local-6989586621679119028"><span class="hs-identifier hs-var">si</span></a></span></span><span> </span><span id="local-6989586621679119027"><span class="annot"><span class="annottext">t :: UID
+</span><a href="#local-6989586621679119027"><span class="hs-identifier hs-var">t</span></a></span></span><span>
+</span><span id="line-79"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679119026"><span class="annot"><span class="annottext">x :: DataDefinition
+</span><a href="#local-6989586621679119026"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">UID -&gt; Map UID (DataDefinition, Int) -&gt; Maybe (DataDefinition, Int)
+forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Map.lookup</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119027"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119024"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+-&gt; Getting
+     (Map UID (DataDefinition, Int))
+     ChunkDB
+     (Map UID (DataDefinition, Int))
+-&gt; Map UID (DataDefinition, Int)
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting
+  (Map UID (DataDefinition, Int))
+  ChunkDB
+  (Map UID (DataDefinition, Int))
+Lens' ChunkDB (Map UID (DataDefinition, Int))
+</span><span class="hs-identifier hs-var">dataDefnTable</span></span><span class="hs-special">)</span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; UID
+forall c. CommonIdea c =&gt; c -&gt; UID
+</span><span class="hs-identifier hs-var">abrv</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
+</span><a href="#local-6989586621679119026"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-80"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679119022"><span class="annot"><span class="annottext">x :: InstanceModel
+</span><a href="#local-6989586621679119022"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">UID -&gt; Map UID (InstanceModel, Int) -&gt; Maybe (InstanceModel, Int)
+forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Map.lookup</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119027"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119024"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+-&gt; Getting
+     (Map UID (InstanceModel, Int))
+     ChunkDB
+     (Map UID (InstanceModel, Int))
+-&gt; Map UID (InstanceModel, Int)
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting
+  (Map UID (InstanceModel, Int))
+  ChunkDB
+  (Map UID (InstanceModel, Int))
+Lens' ChunkDB (Map UID (InstanceModel, Int))
+</span><span class="hs-identifier hs-var">insmodelTable</span></span><span class="hs-special">)</span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">InstanceModel -&gt; UID
+forall c. CommonIdea c =&gt; c -&gt; UID
+</span><span class="hs-identifier hs-var">abrv</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel
+</span><a href="#local-6989586621679119022"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-81"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679119021"><span class="annot"><span class="annottext">x :: GenDefn
+</span><a href="#local-6989586621679119021"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">UID -&gt; Map UID (GenDefn, Int) -&gt; Maybe (GenDefn, Int)
+forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Map.lookup</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119027"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119024"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+-&gt; Getting
+     (Map UID (GenDefn, Int)) ChunkDB (Map UID (GenDefn, Int))
+-&gt; Map UID (GenDefn, Int)
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting (Map UID (GenDefn, Int)) ChunkDB (Map UID (GenDefn, Int))
+Lens' ChunkDB (Map UID (GenDefn, Int))
+</span><span class="hs-identifier hs-var">gendefTable</span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GenDefn -&gt; UID
+forall c. CommonIdea c =&gt; c -&gt; UID
+</span><span class="hs-identifier hs-var">abrv</span></span><span> </span><span class="annot"><span class="annottext">GenDefn
+</span><a href="#local-6989586621679119021"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-82"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679119020"><span class="annot"><span class="annottext">x :: TheoryModel
+</span><a href="#local-6989586621679119020"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">UID -&gt; Map UID (TheoryModel, Int) -&gt; Maybe (TheoryModel, Int)
+forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Map.lookup</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119027"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119024"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+-&gt; Getting
+     (Map UID (TheoryModel, Int)) ChunkDB (Map UID (TheoryModel, Int))
+-&gt; Map UID (TheoryModel, Int)
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting
+  (Map UID (TheoryModel, Int)) ChunkDB (Map UID (TheoryModel, Int))
+Lens' ChunkDB (Map UID (TheoryModel, Int))
+</span><span class="hs-identifier hs-var">theoryModelTable</span></span><span class="hs-special">)</span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TheoryModel -&gt; UID
+forall c. CommonIdea c =&gt; c -&gt; UID
+</span><span class="hs-identifier hs-var">abrv</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel
+</span><a href="#local-6989586621679119020"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-83"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679119019"><span class="annot"><span class="annottext">x :: ConceptInstance
+</span><a href="#local-6989586621679119019"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">UID
+-&gt; Map UID (ConceptInstance, Int) -&gt; Maybe (ConceptInstance, Int)
+forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Map.lookup</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119027"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119024"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+-&gt; Getting
+     (Map UID (ConceptInstance, Int))
+     ChunkDB
+     (Map UID (ConceptInstance, Int))
+-&gt; Map UID (ConceptInstance, Int)
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting
+  (Map UID (ConceptInstance, Int))
+  ChunkDB
+  (Map UID (ConceptInstance, Int))
+Lens' ChunkDB (Map UID (ConceptInstance, Int))
+</span><span class="hs-identifier hs-var">conceptinsTable</span></span><span class="hs-special">)</span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID -&gt; Maybe UID -&gt; UID
+forall a. a -&gt; Maybe a -&gt; a
+</span><span class="hs-identifier hs-var">fromMaybe</span></span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span> </span><span class="annot"><span class="annottext">(Maybe UID -&gt; UID) -&gt; Maybe UID -&gt; UID
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Maybe UID
+forall c. Idea c =&gt; c -&gt; Maybe UID
+</span><span class="hs-identifier hs-var">getA</span></span><span> </span><span class="annot"><span class="annottext">(ConceptChunk -&gt; Maybe UID) -&gt; ConceptChunk -&gt; Maybe UID
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; UID -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">defResolve</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119024"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">(UID -&gt; ConceptChunk) -&gt; UID -&gt; ConceptChunk
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; UID
+</span><span class="hs-identifier hs-var">sDom</span></span><span> </span><span class="annot"><span class="annottext">([UID] -&gt; UID) -&gt; [UID] -&gt; UID
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance -&gt; [UID]
+forall c. ConceptDomain c =&gt; c -&gt; [UID]
+</span><span class="hs-identifier hs-var">cdom</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="#local-6989586621679119019"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-84"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">UID -&gt; Map UID (Section, Int) -&gt; Maybe (Section, Int)
+forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Map.lookup</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119027"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119024"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+-&gt; Getting
+     (Map UID (Section, Int)) ChunkDB (Map UID (Section, Int))
+-&gt; Map UID (Section, Int)
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting (Map UID (Section, Int)) ChunkDB (Map UID (Section, Int))
+Lens' ChunkDB (Map UID (Section, Int))
+</span><span class="hs-identifier hs-var">sectionTable</span></span><span class="hs-special">)</span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119027"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-comment">-- shouldn't really reach these cases</span><span>
+</span><span id="line-85"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">UID
+-&gt; Map UID (LabelledContent, Int) -&gt; Maybe (LabelledContent, Int)
+forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Map.lookup</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119027"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119024"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+-&gt; Getting
+     (Map UID (LabelledContent, Int))
+     ChunkDB
+     (Map UID (LabelledContent, Int))
+-&gt; Map UID (LabelledContent, Int)
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting
+  (Map UID (LabelledContent, Int))
+  ChunkDB
+  (Map UID (LabelledContent, Int))
+Lens' ChunkDB (Map UID (LabelledContent, Int))
+</span><span class="hs-identifier hs-var">labelledcontentTable</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119027"><span class="hs-identifier hs-var">t</span></a></span><span>
+</span><span id="line-86"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119027"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; [UID] -&gt; Bool
+forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
+</span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">(Citation -&gt; UID) -&gt; [Citation] -&gt; [UID]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Citation -&gt; Getting UID Citation UID -&gt; UID
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting UID Citation UID
+forall c. HasUID c =&gt; Lens' c UID
+</span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SystemInformation -&gt; [Citation]
+</span><span class="hs-identifier hs-var">citeDB</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679119028"><span class="hs-identifier hs-var">si</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
+</span><span id="line-87"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">otherwise</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID
+forall a. HasCallStack =&gt; UID -&gt; a
+</span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">(UID -&gt; UID) -&gt; UID -&gt; UID
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119027"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; UID
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Caught.&quot;</span></span><span>
+</span><span id="line-88"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679119024"><span class="annot"><span class="annottext">s :: ChunkDB
+</span><a href="#local-6989586621679119024"><span class="hs-identifier hs-var hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SystemInformation -&gt; ChunkDB
+</span><span class="hs-identifier hs-var hs-var">_sysinfodb</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679119028"><span class="hs-identifier hs-var">si</span></a></span><span>
+</span><span id="line-89"></span><span>
+</span><span id="line-90"></span><span class="hs-comment">-- | Similar to 'checkUID' but gets reference addresses for display.</span><span>
+</span><span id="line-91"></span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#checkUIDRefAdd"><span class="hs-identifier hs-type">checkUIDRefAdd</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SystemInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-92"></span><span id="checkUIDRefAdd"><span class="annot"><span class="annottext">checkUIDRefAdd :: SystemInformation -&gt; UID -&gt; UID
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#checkUIDRefAdd"><span class="hs-identifier hs-var hs-var">checkUIDRefAdd</span></a></span></span><span> </span><span id="local-6989586621679119014"><span class="annot"><span class="annottext">si :: SystemInformation
+</span><a href="#local-6989586621679119014"><span class="hs-identifier hs-var">si</span></a></span></span><span> </span><span id="local-6989586621679119013"><span class="annot"><span class="annottext">t :: UID
+</span><a href="#local-6989586621679119013"><span class="hs-identifier hs-var">t</span></a></span></span><span>
+</span><span id="line-93"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679119012"><span class="annot"><span class="annottext">x :: DataDefinition
+</span><a href="#local-6989586621679119012"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">UID -&gt; Map UID (DataDefinition, Int) -&gt; Maybe (DataDefinition, Int)
+forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Map.lookup</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119013"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119011"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+-&gt; Getting
+     (Map UID (DataDefinition, Int))
+     ChunkDB
+     (Map UID (DataDefinition, Int))
+-&gt; Map UID (DataDefinition, Int)
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting
+  (Map UID (DataDefinition, Int))
+  ChunkDB
+  (Map UID (DataDefinition, Int))
+Lens' ChunkDB (Map UID (DataDefinition, Int))
+</span><span class="hs-identifier hs-var">dataDefnTable</span></span><span class="hs-special">)</span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; UID
+forall b. HasRefAddress b =&gt; b -&gt; UID
+</span><span class="hs-identifier hs-var">getRefAdd</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
+</span><a href="#local-6989586621679119012"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-94"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679119009"><span class="annot"><span class="annottext">x :: InstanceModel
+</span><a href="#local-6989586621679119009"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">UID -&gt; Map UID (InstanceModel, Int) -&gt; Maybe (InstanceModel, Int)
+forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Map.lookup</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119013"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119011"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+-&gt; Getting
+     (Map UID (InstanceModel, Int))
+     ChunkDB
+     (Map UID (InstanceModel, Int))
+-&gt; Map UID (InstanceModel, Int)
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting
+  (Map UID (InstanceModel, Int))
+  ChunkDB
+  (Map UID (InstanceModel, Int))
+Lens' ChunkDB (Map UID (InstanceModel, Int))
+</span><span class="hs-identifier hs-var">insmodelTable</span></span><span class="hs-special">)</span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">InstanceModel -&gt; UID
+forall b. HasRefAddress b =&gt; b -&gt; UID
+</span><span class="hs-identifier hs-var">getRefAdd</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel
+</span><a href="#local-6989586621679119009"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-95"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679119008"><span class="annot"><span class="annottext">x :: GenDefn
+</span><a href="#local-6989586621679119008"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">UID -&gt; Map UID (GenDefn, Int) -&gt; Maybe (GenDefn, Int)
+forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Map.lookup</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119013"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119011"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+-&gt; Getting
+     (Map UID (GenDefn, Int)) ChunkDB (Map UID (GenDefn, Int))
+-&gt; Map UID (GenDefn, Int)
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting (Map UID (GenDefn, Int)) ChunkDB (Map UID (GenDefn, Int))
+Lens' ChunkDB (Map UID (GenDefn, Int))
+</span><span class="hs-identifier hs-var">gendefTable</span></span><span class="hs-special">)</span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">GenDefn -&gt; UID
+forall b. HasRefAddress b =&gt; b -&gt; UID
+</span><span class="hs-identifier hs-var">getRefAdd</span></span><span> </span><span class="annot"><span class="annottext">GenDefn
+</span><a href="#local-6989586621679119008"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-96"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679119007"><span class="annot"><span class="annottext">x :: TheoryModel
+</span><a href="#local-6989586621679119007"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">UID -&gt; Map UID (TheoryModel, Int) -&gt; Maybe (TheoryModel, Int)
+forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Map.lookup</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119013"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119011"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+-&gt; Getting
+     (Map UID (TheoryModel, Int)) ChunkDB (Map UID (TheoryModel, Int))
+-&gt; Map UID (TheoryModel, Int)
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting
+  (Map UID (TheoryModel, Int)) ChunkDB (Map UID (TheoryModel, Int))
+Lens' ChunkDB (Map UID (TheoryModel, Int))
+</span><span class="hs-identifier hs-var">theoryModelTable</span></span><span class="hs-special">)</span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">TheoryModel -&gt; UID
+forall b. HasRefAddress b =&gt; b -&gt; UID
+</span><span class="hs-identifier hs-var">getRefAdd</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel
+</span><a href="#local-6989586621679119007"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-97"></span><span>  </span><span class="hs-comment">-- Concept instances can range from likely changes to non-functional requirements, so use domain abbreviations for labelling in addition to the reference address.</span><span>
+</span><span id="line-98"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679119006"><span class="annot"><span class="annottext">x :: ConceptInstance
+</span><a href="#local-6989586621679119006"><span class="hs-identifier hs-var">x</span></a></span></span><span class="hs-special">,</span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">UID
+-&gt; Map UID (ConceptInstance, Int) -&gt; Maybe (ConceptInstance, Int)
+forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Map.lookup</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119013"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119011"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+-&gt; Getting
+     (Map UID (ConceptInstance, Int))
+     ChunkDB
+     (Map UID (ConceptInstance, Int))
+-&gt; Map UID (ConceptInstance, Int)
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting
+  (Map UID (ConceptInstance, Int))
+  ChunkDB
+  (Map UID (ConceptInstance, Int))
+Lens' ChunkDB (Map UID (ConceptInstance, Int))
+</span><span class="hs-identifier hs-var">conceptinsTable</span></span><span class="hs-special">)</span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID -&gt; Maybe UID -&gt; UID
+forall a. a -&gt; Maybe a -&gt; a
+</span><span class="hs-identifier hs-var">fromMaybe</span></span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; Maybe UID
+forall c. Idea c =&gt; c -&gt; Maybe UID
+</span><span class="hs-identifier hs-var">getA</span></span><span> </span><span class="annot"><span class="annottext">(ConceptChunk -&gt; Maybe UID) -&gt; ConceptChunk -&gt; Maybe UID
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; UID -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">defResolve</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119011"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">(UID -&gt; ConceptChunk) -&gt; UID -&gt; ConceptChunk
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; UID
+</span><span class="hs-identifier hs-var">sDom</span></span><span> </span><span class="annot"><span class="annottext">([UID] -&gt; UID) -&gt; [UID] -&gt; UID
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance -&gt; [UID]
+forall c. ConceptDomain c =&gt; c -&gt; [UID]
+</span><span class="hs-identifier hs-var">cdom</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="#local-6989586621679119006"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; UID
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;:&quot;</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; UID
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance -&gt; UID
+forall b. HasRefAddress b =&gt; b -&gt; UID
+</span><span class="hs-identifier hs-var">getRefAdd</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="#local-6989586621679119006"><span class="hs-identifier hs-var">x</span></a></span><span>
+</span><span id="line-99"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">UID -&gt; Map UID (Section, Int) -&gt; Maybe (Section, Int)
+forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Map.lookup</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119013"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119011"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+-&gt; Getting
+     (Map UID (Section, Int)) ChunkDB (Map UID (Section, Int))
+-&gt; Map UID (Section, Int)
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting (Map UID (Section, Int)) ChunkDB (Map UID (Section, Int))
+Lens' ChunkDB (Map UID (Section, Int))
+</span><span class="hs-identifier hs-var">sectionTable</span></span><span class="hs-special">)</span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119013"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-comment">-- shouldn't really reach these cases</span><span>
+</span><span id="line-100"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Just</span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">UID
+-&gt; Map UID (LabelledContent, Int) -&gt; Maybe (LabelledContent, Int)
+forall k a. Ord k =&gt; k -&gt; Map k a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Map.lookup</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119013"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ChunkDB
+</span><a href="#local-6989586621679119011"><span class="hs-identifier hs-var">s</span></a></span><span> </span><span class="annot"><span class="annottext">ChunkDB
+-&gt; Getting
+     (Map UID (LabelledContent, Int))
+     ChunkDB
+     (Map UID (LabelledContent, Int))
+-&gt; Map UID (LabelledContent, Int)
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting
+  (Map UID (LabelledContent, Int))
+  ChunkDB
+  (Map UID (LabelledContent, Int))
+Lens' ChunkDB (Map UID (LabelledContent, Int))
+</span><span class="hs-identifier hs-var">labelledcontentTable</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119013"><span class="hs-identifier hs-var">t</span></a></span><span>
+</span><span id="line-101"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119013"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; [UID] -&gt; Bool
+forall (t :: * -&gt; *) a. (Foldable t, Eq a) =&gt; a -&gt; t a -&gt; Bool
+</span><span class="hs-operator hs-var">`elem`</span></span><span> </span><span class="annot"><span class="annottext">(Citation -&gt; UID) -&gt; [Citation] -&gt; [UID]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Citation -&gt; Getting UID Citation UID -&gt; UID
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting UID Citation UID
+forall c. HasUID c =&gt; Lens' c UID
+</span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">SystemInformation -&gt; [Citation]
+</span><span class="hs-identifier hs-var">citeDB</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679119014"><span class="hs-identifier hs-var">si</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span>
+</span><span id="line-102"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">otherwise</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID
+forall a. HasCallStack =&gt; UID -&gt; a
+</span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">(UID -&gt; UID) -&gt; UID -&gt; UID
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UID
+</span><a href="#local-6989586621679119013"><span class="hs-identifier hs-var">t</span></a></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; UID
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Caught.&quot;</span></span><span>
+</span><span id="line-103"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679119011"><span class="annot"><span class="annottext">s :: ChunkDB
+</span><a href="#local-6989586621679119011"><span class="hs-identifier hs-var hs-var">s</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SystemInformation -&gt; ChunkDB
+</span><span class="hs-identifier hs-var hs-var">_sysinfodb</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679119014"><span class="hs-identifier hs-var">si</span></a></span><span>
+</span><span id="line-104"></span><span>
+</span><span id="line-105"></span><span class="hs-comment">-- | Helper that finds the header of a traceability matrix.</span><span>
+</span><span id="line-106"></span><span class="hs-comment">-- However, here we use this to get a list of 'UID's for a traceability graph instead.</span><span>
+</span><span id="line-107"></span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGHeader"><span class="hs-identifier hs-type">traceGHeader</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SystemInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span>
+</span><span id="line-108"></span><span id="traceGHeader"><span class="annot"><span class="annottext">traceGHeader :: (ChunkDB -&gt; [UID]) -&gt; SystemInformation -&gt; [UID]
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGHeader"><span class="hs-identifier hs-var hs-var">traceGHeader</span></a></span></span><span> </span><span id="local-6989586621679119004"><span class="annot"><span class="annottext">f :: ChunkDB -&gt; [UID]
+</span><a href="#local-6989586621679119004"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span id="local-6989586621679119003"><span class="annot"><span class="annottext">c :: SystemInformation
+</span><a href="#local-6989586621679119003"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UID -&gt; UID) -&gt; [UID] -&gt; [UID]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UID -&gt; SystemInformation -&gt; UID
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#checkUID"><span class="hs-operator hs-var">`checkUID`</span></a></span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679119003"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([UID] -&gt; [UID]) -&gt; [UID] -&gt; [UID]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">ChunkDB -&gt; [UID]
+</span><a href="#local-6989586621679119004"><span class="hs-identifier hs-var">f</span></a></span><span> </span><span class="annot"><span class="annottext">(ChunkDB -&gt; [UID]) -&gt; ChunkDB -&gt; [UID]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation -&gt; ChunkDB
+</span><span class="hs-identifier hs-var hs-var">_sysinfodb</span></span><span> </span><span class="annot"><span class="annottext">SystemInformation
+</span><a href="#local-6989586621679119003"><span class="hs-identifier hs-var">c</span></a></span><span>
+</span><span id="line-109"></span><span>
+</span><span id="line-110"></span><span class="hs-comment">-- | Helper that finds the headers of the traceability matrix rows.</span><span>
+</span><span id="line-111"></span><span class="hs-comment">-- However, here we use this to get a list of 'UID's for a traceability graph instead.</span><span>
+</span><span id="line-112"></span><span class="hs-comment">-- This is then used to create the graph edges.</span><span>
+</span><span id="line-113"></span><span class="annot"><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGRowHeader"><span class="hs-identifier hs-type">traceGRowHeader</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SystemInformation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UID</span></span><span class="hs-special">]</span><span>
+</span><span id="line-114"></span><span id="traceGRowHeader"><span class="annot"><span class="annottext">traceGRowHeader :: ([UID] -&gt; [UID]) -&gt; SystemInformation -&gt; [UID]
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGRowHeader"><span class="hs-identifier hs-var hs-var">traceGRowHeader</span></a></span></span><span> </span><span id="local-6989586621679119002"><span class="annot"><span class="annottext">f :: [UID] -&gt; [UID]
+</span><a href="#local-6989586621679119002"><span class="hs-identifier hs-var">f</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(ChunkDB -&gt; [UID]) -&gt; SystemInformation -&gt; [UID]
+</span><a href="Drasil.DocumentLanguage.TraceabilityGraph.html#traceGHeader"><span class="hs-identifier hs-var">traceGHeader</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">([UID] -&gt; [UID]) -&gt; ChunkDB -&gt; [UID]
+</span><a href="Drasil.DocumentLanguage.TraceabilityMatrix.html#traceMReferrers"><span class="hs-identifier hs-var">traceMReferrers</span></a></span><span> </span><span class="annot"><span class="annottext">[UID] -&gt; [UID]
+</span><a href="#local-6989586621679119002"><span class="hs-identifier hs-var">f</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-115"></span></pre></body></html>

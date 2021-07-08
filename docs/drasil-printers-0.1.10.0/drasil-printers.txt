@@ -16,6 +16,78 @@ data Format
 TeX :: Format
 HTML :: Format
 
+-- | Creates the directory for output, gathers all individual graph output
+--   functions and calls them.
+outputDot :: FilePath -> GraphInfo -> IO ()
+
+-- | Holds all important and relevant information for generating a
+--   traceability graph. Includes nodes, graph edges, and node family
+--   information.
+data GraphInfo
+GI :: NodeFamily -> NodeFamily -> NodeFamily -> NodeFamily -> NodeFamily -> NodeFamily -> NodeFamily -> NodeFamily -> [(UID, [UID])] -> [(UID, [UID])] -> [(UID, [UID])] -> [(UID, [UID])] -> [(UID, [UID])] -> GraphInfo
+
+-- | Assumptions.
+[assumpNF] :: GraphInfo -> NodeFamily
+
+-- | Data definitions.
+[ddNF] :: GraphInfo -> NodeFamily
+
+-- | General definitions.
+[gdNF] :: GraphInfo -> NodeFamily
+
+-- | Theory models.
+[tmNF] :: GraphInfo -> NodeFamily
+
+-- | Instance models.
+[imNF] :: GraphInfo -> NodeFamily
+
+-- | Requirements (both functional and non-functional).
+[reqNF] :: GraphInfo -> NodeFamily
+
+-- | Goal statement.
+[gsNF] :: GraphInfo -> NodeFamily
+
+-- | Changes (both likely and unlikely).
+[chgNF] :: GraphInfo -> NodeFamily
+
+-- | Assumptions dependent on assumptions.
+[edgesAvsA] :: GraphInfo -> [(UID, [UID])]
+
+-- | Definitions, models, requirements, and changes dependent on
+--   assumptions.
+[edgesAvsAll] :: GraphInfo -> [(UID, [UID])]
+
+-- | Definitions and models that are dependent on other definitions and
+--   models.
+[edgesRefvsRef] :: GraphInfo -> [(UID, [UID])]
+
+-- | Goals and requirements dependent on definitions, models, and other
+--   requirements.
+[edgesAllvsR] :: GraphInfo -> [(UID, [UID])]
+
+-- | Definitions, models, requirements, goals, and changes that are
+--   dependent on one another.
+[edgesAllvsAll] :: GraphInfo -> [(UID, [UID])]
+
+-- | A node family contains a list of <a>UID</a>s, their display labels,
+--   general subgraph label, and colour.
+data NodeFamily
+NF :: [UID] -> [Label] -> Label -> Colour -> NodeFamily
+
+-- | Node <a>UID</a>s.
+[nodeUIDs] :: NodeFamily -> [UID]
+
+-- | Display labels for nodes. We use the reference addresses from the
+--   <a>UID</a>s.
+[nodeLabels] :: NodeFamily -> [Label]
+
+-- | Individual subgraph labels. These labels do not show on the final
+--   generated pdf or png files.
+[nfLabel] :: NodeFamily -> Label
+
+-- | Gives the ability to change colours of bubbles within the graph.
+[nfColour] :: NodeFamily -> Colour
+
 -- | Generates the CSS selectors necessary for a document.
 makeCSS :: Document -> Doc
 

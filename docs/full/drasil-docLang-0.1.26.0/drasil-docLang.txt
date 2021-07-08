@@ -1203,6 +1203,12 @@ traceMatOtherReq :: SystemInformation -> TraceConfig
 --   refinement, and other requirements.
 traceMatStandard :: SystemInformation -> [TraceConfig]
 
+module Drasil.DocumentLanguage.TraceabilityGraph
+
+-- | Extracts traceability graph inforomation from filled-in
+--   <a>SystemInformation</a>.
+mkGraphInfo :: SystemInformation -> GraphInfo
+
 module Drasil.DocLang.References
 secRefs :: [Reference]
 
@@ -1224,6 +1230,7 @@ module Drasil.DocumentLanguage
 -- | Creates a document from a document description, a title combinator
 --   function, and system information.
 mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
+fillTraceSI :: SRSDecl -> SystemInformation -> SystemInformation
 
 -- | Constructs the unit definitions (<a>UnitDefn</a>s) found in the
 --   document description (<a>DocDesc</a>) from a database
@@ -1509,6 +1516,7 @@ tunit :: [TUIntro] -> RefTab
 --   
 --   Table of units constructors.
 tunit' :: [TUIntro] -> RefTab
+fillTraceSI :: SRSDecl -> SystemInformation -> SystemInformation
 
 -- | Appendix section.
 newtype AppndxSec
@@ -1720,6 +1728,10 @@ ddRefDB :: ModelDB -> RefMap DataDefinition
 
 -- | Constructor for creating a <a>ModelDB</a>.
 mdb :: [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> ModelDB
+
+-- | Extracts traceability graph inforomation from filled-in
+--   <a>SystemInformation</a>.
+mkGraphInfo :: SystemInformation -> GraphInfo
 
 -- | Helper that gets a table of constants from a <a>QDefinition</a>.
 tableOfConstants :: [QDefinition] -> LabelledContent

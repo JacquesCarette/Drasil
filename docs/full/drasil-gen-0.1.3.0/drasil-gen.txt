@@ -43,6 +43,9 @@ module Language.Drasil.Generate
 -- | Generate a number of artifacts based on a list of recipes.
 gen :: DocSpec -> Document -> PrintingInformation -> IO ()
 
+-- | Generates traceability graphs as .dot files.
+genDot :: SystemInformation -> IO ()
+
 -- | Calls the code generator
 genCode :: Choices -> CodeSpec -> IO ()
 data DocType

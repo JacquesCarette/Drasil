@@ -226,6 +226,8 @@ digraph alltypes {
 		ModelDB	[shape=oval, color=cyan3, label=ModelDB];
 		}
 	}
+	subgraph traceabilitygraph {
+	}
 	subgraph traceabilitymatrix {
 		subgraph traceviewcat{
 		TraceViewCat -> UIDChunkDBUID;

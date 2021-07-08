@@ -1,4 +1,25 @@
 digraph alltypes {
+	subgraph print {
+		subgraph nodefamily{
+		NodeFamily -> UID;
+		NodeFamily -> Label;
+		NodeFamily -> Colour;
+		NodeFamily	[shape=oval, color=cyan3, label=NodeFamily];
+		}
+		subgraph graphinfo{
+		GraphInfo -> NodeFamily;
+		GraphInfo -> UID;
+		GraphInfo	[shape=oval, color=cyan3, label=GraphInfo];
+		}
+		subgraph colour{
+		Colour -> String;
+		Colour	[shape=oval, color=red2, label=Colour];
+		}
+		subgraph label{
+		Label -> String;
+		Label	[shape=oval, color=red2, label=Label];
+		}
+	}
 	subgraph css {
 	}
 	subgraph helpers {

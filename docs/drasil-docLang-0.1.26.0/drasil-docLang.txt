@@ -287,6 +287,12 @@ toSentence :: MayHaveUnit u => u -> Sentence
 -- | Similar to <a>toSentence</a>, except default value is "Unitless".
 toSentenceUnitless :: MayHaveUnit u => u -> Sentence
 
+module Drasil.DocumentLanguage.TraceabilityGraph
+
+-- | Extracts traceability graph inforomation from filled-in
+--   <a>SystemInformation</a>.
+mkGraphInfo :: SystemInformation -> GraphInfo
+
 module Drasil.DocLang
 
 -- | A Software Requirements Specification Declaration is made up of all
@@ -434,6 +440,7 @@ tunit :: [TUIntro] -> RefTab
 --   
 --   Table of units constructors.
 tunit' :: [TUIntro] -> RefTab
+fillTraceSI :: SRSDecl -> SystemInformation -> SystemInformation
 
 -- | Appendix section.
 newtype AppndxSec
@@ -645,6 +652,10 @@ ddRefDB :: ModelDB -> RefMap DataDefinition
 
 -- | Constructor for creating a <a>ModelDB</a>.
 mdb :: [TheoryModel] -> [GenDefn] -> [DataDefinition] -> [InstanceModel] -> ModelDB
+
+-- | Extracts traceability graph inforomation from filled-in
+--   <a>SystemInformation</a>.
+mkGraphInfo :: SystemInformation -> GraphInfo
 
 -- | Helper that gets a table of constants from a <a>QDefinition</a>.
 tableOfConstants :: [QDefinition] -> LabelledContent

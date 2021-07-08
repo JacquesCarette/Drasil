@@ -1,0 +1,115 @@
+digraph allvsall {
+	pwrPlantTxFnx -> pwrPlant;
+	massSpring -> pwrPlant;
+	dampingCoeffSpring -> pwrPlant;
+	stiffnessCoeffSpring -> pwrPlant;
+	qdProcessErrorFD -> setPoint;
+	qdProcessErrorFD -> initialValue;
+	qdProcessErrorFD -> laplaceRC;
+	qdPropControlFD -> qdProcessErrorFD;
+	qdPropControlFD -> laplaceRC;
+	qdDerivativeControlFD -> unfilteredDerivative;
+	qdDerivativeControlFD -> qdProcessErrorFD;
+	qdDerivativeControlFD -> laplaceRC;
+	qdCtrlVarFD -> decoupled;
+	qdCtrlVarFD -> parallelEq;
+	qdCtrlVarFD -> qdPropControlFD;
+	qdCtrlVarFD -> qdDerivativeControlFD;
+	tmSOSystemRC -> pwrPlantTxFnx;
+	gdPowerPlantRC -> externalDisturb;
+	gdPowerPlantRC -> massSpring;
+	gdPowerPlantRC -> dampingCoeffSpring;
+	gdPowerPlantRC -> stiffnessCoeffSpring;
+	gdPowerPlantRC -> laplaceRC;
+	gdPowerPlantRC -> tmSOSystemRC;
+	imPDRC -> setPoint;
+	imPDRC -> qdProcessErrorFD;
+	imPDRC -> qdCtrlVarFD;
+	imPDRC -> invLaplaceRC;
+	imPDRC -> gdPowerPlantRC;
+	calculateValues -> imPDRC;
+	outputValues -> imPDRC;
+	likeChgPP -> massSpring;
+	likeChgPP -> dampingCoeffSpring;
+	likeChgPP -> stiffnessCoeffSpring;
+
+
+	pwrPlant	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:pwrPlant"];
+	decoupled	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:decoupled"];
+	setPoint	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:setPoint"];
+	externalDisturb	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:externalDisturb"];
+	initialValue	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:initialValue"];
+	parallelEq	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:parallelEq"];
+	unfilteredDerivative	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:unfilteredDerivative"];
+	pwrPlantTxFnx	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:pwrPlantTxFnx"];
+	massSpring	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:massSpring"];
+	dampingCoeffSpring	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:dampingCoeffSpring"];
+	stiffnessCoeffSpring	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:stiffnessCoeffSpring"];
+
+	subgraph A {
+	rank="same"
+	{pwrPlant, decoupled, setPoint, externalDisturb, initialValue, parallelEq, unfilteredDerivative, pwrPlantTxFnx, massSpring, dampingCoeffSpring, stiffnessCoeffSpring}
+	}
+
+	qdProcessErrorFD	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:ddProcessError"];
+	qdPropControlFD	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:ddPropCtrl"];
+	qdDerivativeControlFD	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:ddDerivCtrl"];
+	qdCtrlVarFD	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:ddCtrlVar"];
+
+	subgraph DD {
+	rank="same"
+	{qdProcessErrorFD, qdPropControlFD, qdDerivativeControlFD, qdCtrlVarFD}
+	}
+
+	laplaceRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:laplaceTransform"];
+	invLaplaceRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:invLaplaceTransform"];
+	tmSOSystemRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:tmSOSystem"];
+
+	subgraph TM {
+	rank="same"
+	{laplaceRC, invLaplaceRC, tmSOSystemRC}
+	}
+
+	gdPowerPlantRC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:gdPowerPlant"];
+
+	subgraph GD {
+	rank="same"
+	{gdPowerPlantRC}
+	}
+
+	imPDRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:pdEquationIM"];
+
+	subgraph IM {
+	rank="same"
+	{imPDRC}
+	}
+
+	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];
+	verifyInputs	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:verifyInputs"];
+	calculateValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:calculateValues"];
+	outputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:outputValues"];
+	portability	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:portability"];
+	security	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:security"];
+	maintainability	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:maintainability"];
+	verifiability	[shape=box, color=black, style=filled, fillcolor=ivory, label="NFR:verifiability"];
+
+	subgraph FR {
+	rank="same"
+	{inputValues, verifyInputs, calculateValues, outputValues, portability, security, maintainability, verifiability}
+	}
+
+	processVariable	[shape=box, color=black, style=filled, fillcolor=darkgoldenrod1, label="GS:processVariable"];
+
+	subgraph GS {
+	rank="same"
+	{processVariable}
+	}
+
+	likeChgPP	[shape=box, color=black, style=filled, fillcolor=lavender, label="LC:likeChgPP"];
+
+	subgraph LC {
+	rank="same"
+	{likeChgPP}
+	}
+
+}

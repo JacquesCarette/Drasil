@@ -4,7 +4,7 @@ module Drasil.DocLang (
   PDSub(..), ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..),
   SolChSpec(..),
   -- DocumentLanguage
-  mkDoc, tsymb, tsymb'', tunit, tunit',
+  mkDoc, tsymb, tsymb'', tunit, tunit', fillTraceSI, -- need for testing dot gen
   -- DocumentLanguage.Core
   AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), Emphasis(..),
   OffShelfSolnsSec(..), GSDSec(..), GSDSub(UsrChars, SystCons, SysCntxt),
@@ -17,6 +17,8 @@ module Drasil.DocLang (
   -- DocumentLanguage.RefHelpers 
   ModelDB, ddRefDB, mdb,
   -- DocumentLanguage.TraceabilityMatrix
+  -- DocumentLanguage.TraceabilityGraph
+  mkGraphInfo,
   -- Sections.AuxiliaryConstants
   tableOfConstants,
   -- Sections.GeneralSystDesc
@@ -50,7 +52,7 @@ module Drasil.DocLang (
 import Drasil.DocDecl (SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
   PDSub(..), ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..),
   SolChSpec(..))
-import Drasil.DocumentLanguage (mkDoc, tsymb, tsymb'', tunit, tunit')
+import Drasil.DocumentLanguage (mkDoc, tsymb, tsymb'', tunit, tunit', fillTraceSI) -- fillTraceSI needed for testing
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   DerivationDisplay(..), Emphasis(..), OffShelfSolnsSec(..), GSDSec(..),
   GSDSub(UsrChars, SystCons, SysCntxt), IntroSec(..), IntroSub(..), LFunc(..),
@@ -61,6 +63,7 @@ import Drasil.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(Include
   Verbosity(..), ddefn)
 import Drasil.DocumentLanguage.RefHelpers (ModelDB, ddRefDB, mdb)
 --import Drasil.DocumentLanguage.TraceabilityMatrix
+import Drasil.DocumentLanguage.TraceabilityGraph (mkGraphInfo)
 import Drasil.Sections.AuxiliaryConstants (tableOfConstants)
 --import Drasil.Sections.GeneralSystDesc
 import Drasil.Sections.Introduction (purpDoc)

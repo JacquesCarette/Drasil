@@ -18,7 +18,7 @@ import Drasil.DocLang (DerivationDisplay(..), DocSection(..), Emphasis(..),
   OffShelfSolnsSec(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
   ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
   PDSub(..), intro, mkDoc, tsymb, traceMatStandard, solutionLabel, purpDoc, getTraceConfigUID,
-  secRefs)
+  secRefs, fillTraceSI)
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
@@ -58,6 +58,9 @@ import Drasil.GamePhysics.GenDefs (generalDefns, genDefRefs)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize short) si
+
+fullSI :: SystemInformation
+fullSI = fillTraceSI mkSRS si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
@@ -115,7 +118,7 @@ si = SI {
   -- because _quants are only used relative to #1658.
   _quants      =  [] :: [QuantityDict], -- map qw iMods ++ map qw symbolsAll,
   _concepts    = [] :: [DefinedQuantityDict],
-  _instModels  = [],
+  _instModels  = iMods,
   _datadefs    = dataDefs,
   _configFiles = [],
   _inputs      = inputSymbols,

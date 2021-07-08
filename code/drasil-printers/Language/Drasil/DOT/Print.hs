@@ -134,7 +134,7 @@ mkDirections handle ls = do
 -- | Prints graph nodes (labels) onto a given file handle.
 mkNodes :: Handle -> NodeFamily -> IO ()
 mkNodes handle NF{nodeUIDs = u, nodeLabels = ls, nfLabel = lbl, nfColour = col} = do
-    mapM_ ((hPutStrLn handle) . uncurry (makeNodesSub col)) $ zip ls u
+    mapM_ (hPutStrLn handle . uncurry (makeNodesSub col)) $ zip ls u
     mkSubgraph handle lbl u 
     where
         -- Creates a node based on the kind of datatype (indented for subgraphs)
@@ -160,6 +160,6 @@ filterAndGI gi toNodes = map filterUIDs labels
 
 -- | Helper to remove invalid characters.
 filterInvalidChars :: String -> String
-filterInvalidChars = filter (\l -> not (l `elem` invalidChars))
+filterInvalidChars = filter (`notElem` invalidChars)
   where
     invalidChars = "^[]!} (){->,$"

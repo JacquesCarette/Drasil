@@ -10,6 +10,7 @@ import Drasil.Sections.TraceabilityMandGs (tvAssumps,
   tvDataDefns, tvGenDefns, tvTheoryModels, tvInsModels, tvGoals, tvReqs,
   tvChanges)
 import Language.Drasil.Printers (GraphInfo(..), NodeFamily(..))
+import Data.Maybe (fromMaybe)
 
 -- | Extracts traceability graph inforomation from filled-in 'SystemInformation'.
 mkGraphInfo :: SystemInformation -> GraphInfo
@@ -79,7 +80,7 @@ checkUIDAbbrev si t
   | Just (x, _) <- Map.lookup t (s ^. insmodelTable)        = abrv x
   | Just (x, _) <- Map.lookup t (s ^. gendefTable)          = abrv x
   | Just (x, _) <- Map.lookup t (s ^. theoryModelTable)     = abrv x
-  | Just (x, _) <- Map.lookup t (s ^. conceptinsTable)      = safeFromJust $ getA $ defResolve s $ sDom $ cdom x
+  | Just (x, _) <- Map.lookup t (s ^. conceptinsTable)      = fromMaybe "" $ getA $ defResolve s $ sDom $ cdom x
   | Just _ <- Map.lookup t (s ^. sectionTable)         = t -- shouldn't really reach these cases
   | Just _ <- Map.lookup t (s ^. labelledcontentTable) = t
   | t `elem` map  (^. uid) (citeDB si) = ""
@@ -94,16 +95,12 @@ checkUIDRefAdd si t
   | Just (x, _) <- Map.lookup t (s ^. gendefTable)          = getRefAdd x
   | Just (x, _) <- Map.lookup t (s ^. theoryModelTable)     = getRefAdd x
   -- Concept instances can range from likely changes to non-functional requirements, so use domain abbreviations for labelling in addition to the reference address.
-  | Just (x, _) <- Map.lookup t (s ^. conceptinsTable)      = (safeFromJust $ getA $ defResolve s $ sDom $ cdom x) ++ ":" ++ (getRefAdd x)
+  | Just (x, _) <- Map.lookup t (s ^. conceptinsTable)      = fromMaybe "" (getA $ defResolve s $ sDom $ cdom x) ++ ":" ++ getRefAdd x
   | Just _ <- Map.lookup t (s ^. sectionTable)         = t -- shouldn't really reach these cases
   | Just _ <- Map.lookup t (s ^. labelledcontentTable) = t
   | t `elem` map  (^. uid) (citeDB si) = ""
   | otherwise = error $ t ++ "Caught."
   where s = _sysinfodb si
-
--- | Safe version of 'fromJust', used in 'checkUIDAbbrev' and 'checkUIDRefAdd'.
-safeFromJust :: Maybe String -> String
-safeFromJust = maybe "" id
 
 -- | Helper that finds the header of a traceability matrix.
 -- However, here we use this to get a list of 'UID's for a traceability graph instead.

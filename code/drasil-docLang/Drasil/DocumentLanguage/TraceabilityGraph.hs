@@ -15,12 +15,13 @@ import Data.Maybe (fromMaybe)
 
 -- | Wrapper for 'traceMIntro'. Turns references ('LabelledContent's), trailing notes ('Sentence's), and any other needed contents to create a 'Section'.
 traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> [Section] -> Section
-traceMGF refs trailing otherContents = SRS.traceyMandG (traceMIntro refs trailing : otherContents)
+traceMGF refs trailing otherContents = SRS.traceyMandG (traceMIntro refs trailing : otherContents 
+  ++ map UlC (traceGIntro [traceyGraphRefs] (trailing ++ [avsallDesc]) ++ [traceGCon])
 
 -- | Generalized traceability graph introduction: appends references to the traceability graphs in 'Sentence' form
 -- and wraps in 'Contents'. Usually references the three tables generally found in this section (in order of being mentioned).
-traceGIntro :: [Reference] -> [Sentence] -> String -> [UnlabelledContent]
-traceGIntro refs trailings ex = map ulcc [Paragraph $ foldlSent
+traceGIntro :: [Reference] -> [Sentence] -> [UnlabelledContent]
+traceGIntro refs trailings = map ulcc [Paragraph $ foldlSent
         [phrase purpose `S.the_ofTheC` plural traceyGraph,
         S "is also to provide easy", plural reference, S "on what has to be",
         S "additionally modified if a certain", phrase component +:+. S "is changed", 
@@ -30,16 +31,19 @@ traceGIntro refs trailings ex = map ulcc [Paragraph $ foldlSent
         S "is changed, the", plural component, S "that it points to should also be changed"] +:+
         foldlSent (zipWith tableShows refs trailings)]
 
-traceGSec :: String -> Contents
-traceGSec ex = UlC $ ulcc $ folderList ex
+traceGCon :: String -> Contents
+traceGCon ex = UlC $ ulcc $ folderList ex
 
 traceGFiles :: [String]
-drasilDepGraphPaths :: String -> [String]
-drasilDepGraphRefs :: String -> [Reference]
+traceyGraphPaths :: String -> [String]
+traceyGraphRefs :: String -> [Reference]
 
 traceGFiles = ["avsa", "avsall", "refvsref", "allvsr", "allvsall"]
-drasilDepGraphPaths ex = map (\x -> resourcePath ++ ex ++ "/" ++ x ++ ".pdf") traceGFiles
-drasilDepGraphRefs ex = zipWith (\x y -> Reference x (URI y) (shortname' $ S x) None) traceGFiles drasilDepGraphPaths
+traceyGraphPaths ex = map (\x -> resourcePath ++ ex ++ "/" ++ x ++ ".pdf") traceGFiles
+traceyGraphRefs ex = zipWith (\x y -> Reference x (URI y) (shortname' $ S x) None) traceGFiles drasilDepGraphPaths
+
+resourcePath :: String
+resourcePath = "../../../traceygraphs/"
 
 folderList :: String -> RawContent
 folderList ex = Enumeration $ Bullet $ zip (folderList' ex) $ repeat Nothing

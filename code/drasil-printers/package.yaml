@@ -13,6 +13,9 @@ dependencies:
 - base >= 4.7 && < 5
 - lens
 - pretty
+- containers
+- directory
+- drasil-data
 - drasil-code-base
 - drasil-database
 - drasil-lang

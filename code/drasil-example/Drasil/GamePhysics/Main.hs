@@ -8,9 +8,9 @@ import GHC.IO.Encoding
 --   Modularity(..), Structure(..), ConstantStructure(..), 
 --   ConstantRepr(..), InputModule(..), matchConcepts, AuxFile(..), 
 --   Visibility(..), defaultChoices)
-import Language.Drasil.Generate (gen, DocType(SRS, Website), DocSpec(DocSpec))
+import Language.Drasil.Generate (gen, genDot, DocType(SRS, Website), DocSpec(DocSpec))
 
-import Drasil.GamePhysics.Body (srs, printSetting) -- sysInfo
+import Drasil.GamePhysics.Body (srs, printSetting, fullSI) -- sysInfo
 
 -- code :: CodeSpec
 -- code = codeSpec sysInfo choices []
@@ -39,5 +39,6 @@ main = do
   setLocaleEncoding utf8
   gen (DocSpec SRS "GamePhysics_SRS") srs  printSetting
   gen (DocSpec Website "GamePhysics_SRS") srs printSetting
+  genDot fullSI
   -- When ready to generate code from GamePhysics, uncomment this file
   -- genCode choices code

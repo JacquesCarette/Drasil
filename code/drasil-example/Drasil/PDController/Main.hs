@@ -4,7 +4,7 @@ import GHC.IO.Encoding (setLocaleEncoding, utf8)
 
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODELSodaPkg)
 
-import Drasil.PDController.Body (pidODEInfo, printSetting, si, srs)
+import Drasil.PDController.Body (pidODEInfo, printSetting, si, srs, fullSI)
 
 import Language.Drasil.Code
        (AuxFile(..), Choices(..), CodeSpec, Comments(..), ConstantRepr(..),
@@ -12,7 +12,7 @@ import Language.Drasil.Code
         InputModule(..), Lang(..), Modularity(..), Structure(..), Verbosity(..),
         Visibility(..), codeSpec, defaultChoices)
 
-import Language.Drasil.Generate (gen, genCode, DocSpec(DocSpec), DocType(SRS, Website))
+import Language.Drasil.Generate (gen, genCode, genDot, DocSpec(DocSpec), DocType(SRS, Website))
 
 codeSpecs :: CodeSpec
 codeSpecs = codeSpec si codeChoices []
@@ -38,3 +38,4 @@ main = do
   gen (DocSpec SRS "PDController_SRS") srs printSetting
   gen (DocSpec Website "PDController_SRS") srs printSetting
   genCode codeChoices codeSpecs
+  genDot fullSI

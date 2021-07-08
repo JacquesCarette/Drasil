@@ -7,9 +7,9 @@ import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
   ConstantRepr(..), InputModule(..), AuxFile(..), Visibility(..),
   defaultChoices)
-import Language.Drasil.Generate (gen, genCode, DocSpec(DocSpec), DocType(SRS, Website))
+import Language.Drasil.Generate (gen, genCode, genDot, DocSpec(DocSpec), DocType(SRS, Website))
 
-import Drasil.GlassBR.Body (si, srs, printSetting)
+import Drasil.GlassBR.Body (si, srs, printSetting, fullSI)
 import Drasil.GlassBR.ModuleDefs (allMods)
 
 code :: CodeSpec
@@ -39,3 +39,4 @@ main = do
   gen (DocSpec SRS "GlassBR_SRS")     srs printSetting
   gen (DocSpec Website "GlassBR_SRS") srs printSetting
   genCode choices code
+  genDot fullSI

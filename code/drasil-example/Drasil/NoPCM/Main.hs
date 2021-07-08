@@ -6,12 +6,12 @@ import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
   Modularity(..), Structure(..), ConstantStructure(..), ConstantRepr(..), 
   InputModule(..), AuxFile(..), Visibility(..), defaultChoices)
-import Language.Drasil.Generate (gen, genCode, DocType(SRS, Website), DocSpec(DocSpec))
+import Language.Drasil.Generate (gen, genCode, genDot, DocType(SRS, Website), DocSpec(DocSpec))
 
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODEPckg, osloPckg, 
   apacheODEPckg, odeintPckg)
 
-import Drasil.NoPCM.Body (si, srs, printSetting, noPCMODEInfo)
+import Drasil.NoPCM.Body (si, srs, printSetting, noPCMODEInfo, fullSI)
 
 code :: CodeSpec
 code = codeSpec si choices []
@@ -43,3 +43,4 @@ main = do
   gen (DocSpec SRS "NoPCM_SRS") srs printSetting
   gen (DocSpec Website "NoPCM_SRS") srs printSetting
   genCode choices code
+  genDot fullSI

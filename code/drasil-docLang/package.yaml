@@ -33,6 +33,7 @@ library:
   - Drasil.DocLang
   - Drasil.DocLang.SRS
   - Drasil.DocumentLanguage.Units
+  - Drasil.DocumentLanguage.TraceabilityGraph
   when:
   - condition: false
     other-modules: Paths_drasil_docLang

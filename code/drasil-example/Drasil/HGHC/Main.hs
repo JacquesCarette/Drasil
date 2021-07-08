@@ -42,3 +42,5 @@ main = do
   gen (DocSpec SRS "HGHC_SRS")     srs printSetting
   -- When ready to generate code, uncomment this file
   --genCode thisChoices thisCode
+  -- When ready to generate traceability graphs, uncomment this and import genDot and fullSI:
+  -- genDot fullSI

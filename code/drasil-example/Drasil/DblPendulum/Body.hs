@@ -54,6 +54,9 @@ import Drasil.DblPendulum.References (citations, citeRefs)
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
+fullSI :: SystemInformation
+fullSI = fillTraceSI mkSRS si
+
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
 

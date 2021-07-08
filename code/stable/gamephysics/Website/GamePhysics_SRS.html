@@ -391,6 +391,11 @@
                   <td><em>\(\frac{\text{rad}}{\text{s}^{2}}\)</em></td>
                 </tr>
                 <tr>
+                  <td><em>α<sub>j</sub></em></td>
+                  <td>Force on the rotational motion of a set of 2D rigid body</td>
+                  <td><em>\(\frac{\text{rad}}{\text{s}^{2}}\)</em></td>
+                </tr>
+                <tr>
                   <td><em>θ</em></td>
                   <td>Angular displacement</td>
                   <td><em>rad</em></td>
@@ -701,12 +706,12 @@
                 <div class="list">
                   <p>
                     <div id="assumpOT">
-                      objectTy: All objects are rigid bodies. (RefBy: <a href=#DD:chaslesThm>DD:chaslesThm</a>, <a href=#DD:reVeInColl>DD:reVeInColl</a>, <a href=#IM:rotMot>IM:rotMot</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#DD:ctrOfMass>DD:ctrOfMass</a>, <a href=#DD:momentOfInertia>DD:momentOfInertia</a>, <a href=#DD:linVel>DD:linVel</a>, <a href=#DD:linDisp>DD:linDisp</a>, <a href=#DD:linAcc>DD:linAcc</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, <a href=#DD:impulseV>DD:impulseV</a>, <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, <a href=#DD:angVel>DD:angVel</a>, <a href=#DD:angDisp>DD:angDisp</a>, <a href=#DD:angAccel>DD:angAccel</a>, and <a href=#IM:transMot>IM:transMot</a>.)
+                      objectTy: All objects are rigid bodies. (RefBy: <a href=#DD:chaslesThm>DD:chaslesThm</a>, <a href=#DD:reVeInColl>DD:reVeInColl</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#DD:ctrOfMass>DD:ctrOfMass</a>, <a href=#DD:momentOfInertia>DD:momentOfInertia</a>, <a href=#DD:linVel>DD:linVel</a>, <a href=#DD:linDisp>DD:linDisp</a>, <a href=#DD:linAcc>DD:linAcc</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, <a href=#DD:impulseV>DD:impulseV</a>, <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, <a href=#DD:angVel>DD:angVel</a>, <a href=#DD:angDisp>DD:angDisp</a>, <a href=#DD:angAccel>DD:angAccel</a>, <a href=#IM:rotMot>IM:rotMot</a>, and <a href=#IM:transMot>IM:transMot</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpOD">
-                      objectDimension: All objects are 2D. (RefBy: <a href=#IM:rotMot>IM:rotMot</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#TM:NewtonSecLawRotMot>TM:NewtonSecLawRotMot</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, <a href=#DD:angVel>DD:angVel</a>, <a href=#DD:angDisp>DD:angDisp</a>, <a href=#DD:angAccel>DD:angAccel</a>, and <a href=#IM:transMot>IM:transMot</a>.)
+                      objectDimension: All objects are 2D. (RefBy: <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#TM:NewtonSecLawRotMot>TM:NewtonSecLawRotMot</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, <a href=#DD:angVel>DD:angVel</a>, <a href=#DD:angDisp>DD:angDisp</a>, <a href=#DD:angAccel>DD:angAccel</a>, <a href=#IM:rotMot>IM:rotMot</a>, and <a href=#IM:transMot>IM:transMot</a>.)
                     </div>
                   </p>
                   <p>
@@ -716,7 +721,7 @@
                   </p>
                   <p>
                     <div id="assumpAD">
-                      axesDefined: The axes are defined using right-handed coordinate system. (RefBy: <a href=#IM:rotMot>IM:rotMot</a>, <a href=#GD:impulse>GD:impulse</a>, and <a href=#IM:col2D>IM:col2D</a>.)
+                      axesDefined: The axes are defined using right-handed coordinate system. (RefBy: <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, and <a href=#IM:rotMot>IM:rotMot</a>.)
                     </div>
                   </p>
                   <p>
@@ -2164,7 +2169,7 @@
                     <p class="paragraph">
                       We may calculate the total acceleration of rigid body <em>j</em> by calculating the derivative of it's velocity with respect to time (from <a href=#DD:linAcc>DD:linAcc</a>).
                     </p>
-                    \[{\mathbf{a}_{j}}=\frac{\,d{\mathbf{v}_{j}}\left(t\right)}{\,dt}\]
+                    \[{α_{j}}=\frac{\,d{\mathbf{v}_{j}}\left(t\right)}{\,dt}\]
                     <p class="paragraph">Performing the derivative, we obtain:</p>
                     \[{\mathbf{a}_{j}}=\mathbf{g}+\frac{{\mathbf{F}_{j}}\left(t\right)}{{m_{j}}}\]
                   </div>
@@ -2193,7 +2198,7 @@
                     </tr>
                     <tr>
                       <th>Output</th>
-                      <td><p class="paragraph"><em>α</em></p></td>
+                      <td><p class="paragraph"><em>α<sub>j</sub></em></p></td>
                     </tr>
                     <tr>
                       <th>Input Constraints</th>
@@ -2206,12 +2211,12 @@
                     </tr>
                     <tr>
                       <th>Output Constraints</th>
-                      <td>\[α\gt{}0\]</td>
+                      <td>\[{α_{j}}\gt{}0\]</td>
                     </tr>
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[α=\frac{\,dω\left(t\right)}{\,dt}=\frac{{\mathbf{τ}_{j}}\left(t\right)}{\mathbf{I}}\]
+                        \[{α_{j}}=\frac{{\mathbf{τ}_{j}}\left(t\right)}{\mathbf{I}}\]
                       </td>
                     </tr>
                     <tr>
@@ -2219,15 +2224,12 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em>α</em> is the angular acceleration (<em>\(\frac{\text{rad}}{\text{s}^{2}}\)</em>)
-                          </li>
-                          <li><em>t</em> is the time (<em>s</em>)</li>
-                          <li>
-                            <em>ω</em> is the angular velocity (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
+                            <em>α<sub>j</sub></em> is the Force on the rotational motion of a set of 2D rigid body (<em>\(\frac{\text{rad}}{\text{s}^{2}}\)</em>)
                           </li>
                           <li>
                             <em><b>τ</b><sub>j</sub></em> is the torque applied to the j-th body (<em>Nm</em>)
                           </li>
+                          <li><em>t</em> is the time (<em>s</em>)</li>
                           <li>
                             <em><b>I</b></em> is the moment of inertia (<em>kgm<sup>2</sup></em>)
                           </li>
@@ -2258,7 +2260,19 @@
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph"></p>
+                <div id="IM:rotMotDeriv">
+                  <div class="subsubsubsection">
+                    <h4>
+                      Detailed derivation of Force on the rotational motion of a set of 2D rigid body:
+                    </h4>
+                    <p class="paragraph">
+                      We may calculate the total angular acceleration of rigid body <em>j</em> by calculating the derivative of its angular velocity with respect to time (from <a href=#DD:angAccel>DD:angAccel</a>).
+                    </p>
+                    \[{α_{j}}=\frac{\,dω\left(t\right)}{\,dt}\]
+                    <p class="paragraph">Performing the derivative, we obtain:</p>
+                    \[{α_{j}}=\frac{{\mathbf{τ}_{j}}\left(t\right)}{\mathbf{I}}\]
+                  </div>
+                </div>
                 <div id="IM:col2D">
                   <table class="idefn">
                     <tr>

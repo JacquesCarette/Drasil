@@ -37,7 +37,7 @@ mkGraphNodes entry si col = NF {nodeUIDs = nodeContents, nodeLabels = map (check
     where
         checkNodeContents :: [String] -> String
         checkNodeContents [] = ""
-        checkNodeContents xs = checkUIDAbbrev si $ head xs
+        checkNodeContents (x:_) = checkUIDAbbrev si x
         nodeContents = traceMReferees entryF cdb
         cdb = _sysinfodb si
         entryF = layoutUIDs [entry] cdb
@@ -75,13 +75,13 @@ checkUID t si
 -- | Similar to 'checkUID' but prepends domain for labelling.
 checkUIDAbbrev :: SystemInformation -> UID -> String
 checkUIDAbbrev si t
-  | Just _ <- Map.lookupIndex t (s ^. dataDefnTable)        = abrv $ datadefnLookup    t (s ^. dataDefnTable)
-  | Just _ <- Map.lookupIndex t (s ^. insmodelTable)        = abrv $ insmodelLookup    t (s ^. insmodelTable)
-  | Just _ <- Map.lookupIndex t (s ^. gendefTable)          = abrv $ gendefLookup      t (s ^. gendefTable)
-  | Just _ <- Map.lookupIndex t (s ^. theoryModelTable)     = abrv $ theoryModelLookup t (s ^. theoryModelTable)
-  | Just _ <- Map.lookupIndex t (s ^. conceptinsTable)      = safeFromJust $ getA $ defResolve s $ sDom $ cdom $ conceptinsLookup  t $ s ^. conceptinsTable
-  | Just _ <- Map.lookupIndex t (s ^. sectionTable)         = t -- shouldn't really reach these cases
-  | Just _ <- Map.lookupIndex t (s ^. labelledcontentTable) = t
+  | Just (x, _) <- Map.lookup t (s ^. dataDefnTable)        = abrv x
+  | Just (x, _) <- Map.lookup t (s ^. insmodelTable)        = abrv x
+  | Just (x, _) <- Map.lookup t (s ^. gendefTable)          = abrv x
+  | Just (x, _) <- Map.lookup t (s ^. theoryModelTable)     = abrv x
+  | Just (x, _) <- Map.lookup t (s ^. conceptinsTable)      = safeFromJust $ getA $ defResolve s $ sDom $ cdom x
+  | Just _ <- Map.lookup t (s ^. sectionTable)         = t -- shouldn't really reach these cases
+  | Just _ <- Map.lookup t (s ^. labelledcontentTable) = t
   | t `elem` map  (^. uid) (citeDB si) = ""
   | otherwise = error $ t ++ "Caught."
   where s = _sysinfodb si
@@ -89,14 +89,14 @@ checkUIDAbbrev si t
 -- | Similar to 'checkUID' but gets reference addresses for display.
 checkUIDRefAdd :: SystemInformation -> UID -> String
 checkUIDRefAdd si t
-  | Just _ <- Map.lookupIndex t (s ^. dataDefnTable)        = getRefAdd $ datadefnLookup    t $ s ^. dataDefnTable
-  | Just _ <- Map.lookupIndex t (s ^. insmodelTable)        = getRefAdd $ insmodelLookup    t $ s ^. insmodelTable
-  | Just _ <- Map.lookupIndex t (s ^. gendefTable)          = getRefAdd $ gendefLookup      t $ s ^. gendefTable
-  | Just _ <- Map.lookupIndex t (s ^. theoryModelTable)     = getRefAdd $ theoryModelLookup t $ s ^. theoryModelTable
+  | Just (x, _) <- Map.lookup t (s ^. dataDefnTable)        = getRefAdd x
+  | Just (x, _) <- Map.lookup t (s ^. insmodelTable)        = getRefAdd x
+  | Just (x, _) <- Map.lookup t (s ^. gendefTable)          = getRefAdd x
+  | Just (x, _) <- Map.lookup t (s ^. theoryModelTable)     = getRefAdd x
   -- Concept instances can range from likely changes to non-functional requirements, so use domain abbreviations for labelling in addition to the reference address.
-  | Just _ <- Map.lookupIndex t (s ^. conceptinsTable)      = (safeFromJust $ getA $ defResolve s $ sDom $ cdom $ conceptinsLookup  t $ s ^. conceptinsTable) ++ ":" ++ (getRefAdd $ conceptinsLookup  t $ s ^. conceptinsTable)
-  | Just _ <- Map.lookupIndex t (s ^. sectionTable)         = t -- shouldn't really reach these cases
-  | Just _ <- Map.lookupIndex t (s ^. labelledcontentTable) = t
+  | Just (x, _) <- Map.lookup t (s ^. conceptinsTable)      = (safeFromJust $ getA $ defResolve s $ sDom $ cdom x) ++ ":" ++ (getRefAdd x)
+  | Just _ <- Map.lookup t (s ^. sectionTable)         = t -- shouldn't really reach these cases
+  | Just _ <- Map.lookup t (s ^. labelledcontentTable) = t
   | t `elem` map  (^. uid) (citeDB si) = ""
   | otherwise = error $ t ++ "Caught."
   where s = _sysinfodb si

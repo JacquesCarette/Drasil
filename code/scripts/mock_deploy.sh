@@ -1,5 +1,5 @@
-# For deploying on a local machine.
-# Only use from `code/` folder after running through all CI steps, `sh code/mock_deploy.sh`
+# For recreating the deployment on a local machine.
+# Only use from `code/` folder after running through all CI steps, `sh code/mock_deploy.sh`.
 
 LABEL_FILE=/tmp/ci_build_failures \
 MANAGED_LABEL_FILE=/tmp/ci_managed_labels \

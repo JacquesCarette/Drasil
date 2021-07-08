@@ -5,21 +5,25 @@ import Database.Drasil hiding (cdb)
 import Control.Lens ((^.))
 import qualified Data.Map as Map
 import Drasil.DocumentLanguage.TraceabilityMatrix (TraceViewCat, traceMReferees, traceMReferrers,
-  traceMColumns, ensureItems, layoutUIDs, traceMIntro)
+  traceMColumns, ensureItems, layoutUIDs, traceMIntro, tableShows)
 import Drasil.Sections.TraceabilityMandGs (tvAssumps,
   tvDataDefns, tvGenDefns, tvTheoryModels, tvInsModels, tvGoals, tvReqs,
   tvChanges)
 import qualified Drasil.DocLang.SRS as SRS
 import Language.Drasil.Printers (GraphInfo(..), NodeFamily(..))
 import Data.Maybe (fromMaybe)
+import Data.Drasil.Concepts.Math (graph)
+import Data.Drasil.Concepts.Documentation (traceyGraph, component, dependency, reference, purpose)
+import Utils.Drasil
+import qualified Utils.Drasil.Sentence as S
 
 -- | Wrapper for 'traceMIntro'. Turns references ('LabelledContent's), trailing notes ('Sentence's), and any other needed contents to create a 'Section'.
-traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> [Section] -> Section
-traceMGF refs trailing otherContents = SRS.traceyMandG (traceMIntro refs trailing : otherContents 
-  ++ map UlC (traceGIntro [traceyGraphRefs] (trailing ++ [avsallDesc]) ++ [traceGCon])
+traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> String -> [Section] -> Section
+traceMGF refs trailing otherContents ex = SRS.traceyMandG (traceMIntro refs trailing : otherContents 
+  ++ map UlC (traceGIntro (traceyGraphRefs ex) (trailing ++ [allvsallDesc])) ++ [traceGCon ex])
 
 -- | Generalized traceability graph introduction: appends references to the traceability graphs in 'Sentence' form
--- and wraps in 'Contents'. Usually references the three tables generally found in this section (in order of being mentioned).
+-- and wraps in 'Contents'. Usually references the five graphs as defined in 'GraphInfo'.
 traceGIntro :: [Reference] -> [Sentence] -> [UnlabelledContent]
 traceGIntro refs trailings = map ulcc [Paragraph $ foldlSent
         [phrase purpose `S.the_ofTheC` plural traceyGraph,
@@ -31,6 +35,9 @@ traceGIntro refs trailings = map ulcc [Paragraph $ foldlSent
         S "is changed, the", plural component, S "that it points to should also be changed"] +:+
         foldlSent (zipWith tableShows refs trailings)]
 
+allvsallDesc :: Sentence
+allvsallDesc = S "dependencies of assumptions, models, definitions, requirements, goals, and changes with each other"
+
 traceGCon :: String -> Contents
 traceGCon ex = UlC $ ulcc $ folderList ex
 
@@ -40,7 +47,7 @@ traceyGraphRefs :: String -> [Reference]
 
 traceGFiles = ["avsa", "avsall", "refvsref", "allvsr", "allvsall"]
 traceyGraphPaths ex = map (\x -> resourcePath ++ ex ++ "/" ++ x ++ ".pdf") traceGFiles
-traceyGraphRefs ex = zipWith (\x y -> Reference x (URI y) (shortname' $ S x) None) traceGFiles drasilDepGraphPaths
+traceyGraphRefs ex = zipWith (\x y -> Reference x (URI y) (shortname' $ S x) None) traceGFiles $ traceyGraphPaths ex
 
 resourcePath :: String
 resourcePath = "../../../traceygraphs/"
@@ -49,7 +56,7 @@ folderList :: String -> RawContent
 folderList ex = Enumeration $ Bullet $ zip (folderList' ex) $ repeat Nothing
 
 folderList' :: String -> [ItemType]
-folderList' ex = map Flat (zipWith (\x y -> namedRef y (S x)) traceGFiles $ drasilDepGraphRefs ex)
+folderList' ex = map Flat (zipWith (\x y -> namedRef y (S x)) traceGFiles $ traceyGraphRefs ex)
 
 -- | Extracts traceability graph inforomation from filled-in 'SystemInformation'.
 mkGraphInfo :: SystemInformation -> GraphInfo

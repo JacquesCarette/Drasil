@@ -7,11 +7,9 @@ import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (purpose, component, dependency,
-  item, reference, traceyGraph, traceyMatrix)
-import Data.Drasil.Concepts.Math (graph)
+  item, reference, traceyMatrix)
 
 import Drasil.DocumentLanguage.Definitions (helpToRefField)
-import qualified Drasil.DocLang.SRS as SRS
 
 import Control.Lens ((^.), Getting)
 import Data.List (nub)
@@ -56,7 +54,7 @@ traceMColumns :: ([UID] -> [UID]) -> ([UID] -> [UID]) -> ChunkDB -> [[UID]]
 traceMColumns fc fr c = map ((\u -> filter (`elem` u) $ fc u) . flip traceLookup (c ^. traceTable)) $ traceMReferrers fr c
 
 -- | Helper that makes references of the form "@reference@ shows the dependencies of @something@".
-tableShows :: Referable a -> a -> Sentence -> Sentence
+tableShows :: (Referable a, HasShortName a) => a -> Sentence -> Sentence
 tableShows r end = refS r +:+ S "shows the" +:+ plural dependency `S.of_` end
 
 -- | Generates a traceability table. Takes a 'UID' for the table, a description ('Sentence'), columns ('TraceViewCat'), rows ('TraceViewCat'), and 'SystemInformation'.

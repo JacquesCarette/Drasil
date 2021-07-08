@@ -8,9 +8,9 @@ import GHC.IO.Encoding
 --   Modularity(..), Structure(..), ConstantStructure(..), 
 --   ConstantRepr(..), InputModule(..), matchConcepts, AuxFile(..), 
 --   Visibility(..), defaultChoices)
-import Language.Drasil.Generate (gen,DocType(SRS, Website), DocSpec(DocSpec))
+import Language.Drasil.Generate (gen, genDot, DocType(SRS, Website), DocSpec(DocSpec))
 
-import Drasil.SSP.Body (srs, printSetting) -- si
+import Drasil.SSP.Body (srs, printSetting, fullSI) -- si
 
 -- code :: CodeSpec
 -- code = codeSpec si choices []
@@ -39,5 +39,6 @@ main = do
   setLocaleEncoding utf8
   gen (DocSpec Website "SSP_SRS") srs printSetting
   gen (DocSpec SRS "SSP_SRS")     srs printSetting
+  genDot fullSI
   -- for when we can generate code again, uncomment this file
   --genCode choices code

@@ -1,4 +1,4 @@
-module Drasil.Projectile.Body (printSetting, si, srs, projectileTitle) where
+module Drasil.Projectile.Body (printSetting, si, srs, projectileTitle, fullSI) where
 
 import Data.List (nub)
 import Language.Drasil
@@ -21,7 +21,7 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
   TConvention(..), TSIntro(..), TraceabilitySec(TraceabilityProg),
   Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, getTraceConfigUID,
-  secRefs)
+  secRefs, fillTraceSI)
 
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
@@ -61,6 +61,9 @@ import Theory.Drasil (TheoryModel)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
+
+fullSI :: SystemInformation
+fullSI = fillTraceSI mkSRS si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration

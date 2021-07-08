@@ -6,9 +6,9 @@ module Drasil.SWHS.Generate (generate) where
 --   Modularity(..), Structure(..), ConstantStructure(..), 
 --   ConstantRepr(..), InputModule(..), matchConcepts, AuxFile(..), 
 --   Visibility(..), defaultChoices)
-import Language.Drasil.Generate (gen, DocType(SRS, Website), DocSpec(DocSpec))
+import Language.Drasil.Generate (gen, genDot, DocType(SRS, Website), DocSpec(DocSpec))
 
-import Drasil.SWHS.Body (srs, printSetting) -- si
+import Drasil.SWHS.Body (srs, printSetting, fullSI)
 
 -- code :: CodeSpec
 -- code = codeSpec si choices []
@@ -35,6 +35,7 @@ generate :: IO ()
 generate = do
   gen (DocSpec SRS "SWHS_SRS")     srs printSetting
   gen (DocSpec Website "SWHS_SRS") srs printSetting
+  genDot fullSI
   -- When ready to generate code from SWHS, uncomment this file
   -- genCode choices code
        

@@ -9,12 +9,15 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import qualified Utils.Drasil.Sentence as S
 
-import Drasil.DocLang (SRSDecl, mkDoc)
+import Drasil.DocLang (SRSDecl, mkDoc, fillTraceSI)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
+
+fullSI :: SystemInformation
+fullSI = fillTraceSI mkSRS si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration

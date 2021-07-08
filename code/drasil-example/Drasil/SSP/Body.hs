@@ -1,5 +1,5 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.SSP.Body (srs, si, symbMap, printSetting) where
+module Drasil.SSP.Body (srs, si, symbMap, printSetting, fullSI) where
 
 import Data.List (nub)
 import Language.Drasil hiding (Verb, number, organization, section, variable)
@@ -23,7 +23,7 @@ import Drasil.DocLang (DocSection(..), IntroSec(..), IntroSub(..),
   SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
   ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
   PDSub(..), intro, mkDoc, tsymb'', traceMatStandard, purpDoc, getTraceConfigUID,
-  secRefs)
+  secRefs, fillTraceSI)
 
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
@@ -77,6 +77,9 @@ srs = mkDoc mkSRS S.forT si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
+
+fullSI :: SystemInformation
+fullSI = fillTraceSI mkSRS si
 
 resourcePath :: String
 resourcePath = "../../../datafiles/SSP/"

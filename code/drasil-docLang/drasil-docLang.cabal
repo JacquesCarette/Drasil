@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 4c719f59c76c87bd6a1ae7b403d6c14b74815fe17ed3aaf281bea44336aa47ad
+-- hash: f5e045ef0f5a9973225b960bb74066b7c94a2a185f577c532b3b06a2376372df
 
 name:           drasil-docLang
 version:        0.1.26.0
@@ -25,6 +25,7 @@ library
       Drasil.DocLang
       Drasil.DocLang.SRS
       Drasil.DocumentLanguage.Units
+      Drasil.DocumentLanguage.TraceabilityGraph
   other-modules:
       Drasil.DocDecl
       Drasil.DocLang.References

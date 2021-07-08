@@ -1,0 +1,65 @@
+digraph refvsref {
+	gravitationalAccel -> force;
+	accj -> p_CM;
+	accj -> linearDisplacement;
+	accj -> linearVelocity;
+	accj -> linearAcceleration;
+	accj -> newtonSL;
+	accj -> gravitationalAccel;
+	angAccj -> angularDisplacement;
+	angAccj -> angularVelocity;
+	angAccj -> angularAcceleration;
+	angAccj -> newtonSLR;
+	col2DRC -> p_CM;
+	col2DRC -> impulseS;
+
+
+	p_CM	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:ctrOfMass"];
+	linearDisplacement	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:linDisp"];
+	linearVelocity	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:linVel"];
+	linearAcceleration	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:linAcc"];
+	angularDisplacement	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:angDisp"];
+	angularVelocity	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:angVel"];
+	angularAcceleration	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:angAccel"];
+	velocityB	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:chaslesThm"];
+	torque	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:torque"];
+	kEnergy	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:kEnergy"];
+	restitutionCoef	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:coeffRestitution"];
+	v_iAB	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:reVeInColl"];
+	impulseV	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:impulseV"];
+	potEnergy	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:potEnergy"];
+	momentOfInertia	[shape=box, color=black, style=filled, fillcolor=paleturquoise1, label="DD:momentOfInertia"];
+
+	subgraph DD {
+	rank="same"
+	{p_CM, linearDisplacement, linearVelocity, linearAcceleration, angularDisplacement, angularVelocity, angularAcceleration, velocityB, torque, kEnergy, restitutionCoef, v_iAB, impulseV, potEnergy, momentOfInertia}
+	}
+
+	newtonSL	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawMot"];
+	force1	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonThirdLawMot"];
+	force	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:UniversalGravLaw"];
+	newtonSLR	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:NewtonSecLawRotMot"];
+
+	subgraph TM {
+	rank="same"
+	{newtonSL, force1, force, newtonSLR}
+	}
+
+	gravitationalAccel	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:accelGravity"];
+	impulseS	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:impulse"];
+
+	subgraph GD {
+	rank="same"
+	{gravitationalAccel, impulseS}
+	}
+
+	accj	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:transMot"];
+	angAccj	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:rotMot"];
+	col2DRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:col2D"];
+
+	subgraph IM {
+	rank="same"
+	{accj, angAccj, col2DRC}
+	}
+
+}

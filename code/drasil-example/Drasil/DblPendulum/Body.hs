@@ -24,7 +24,7 @@ import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (mass, len, physicalcon)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains, problem, analysis)
-import Data.Drasil.Concepts.Computation (inValue)
+import Data.Drasil.Concepts.Computation (inValue, algorithm)
 import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   DerivationDisplay(ShowDerivation),
   DocSection(AuxConstntSec, Bibliography, IntroSec, RefSec, ReqrmntSec, SSDSec, TraceabilitySec),
@@ -48,8 +48,7 @@ import Drasil.DblPendulum.GenDefs (genDefns, genDefRefs)
 import Drasil.DblPendulum.Unitals (symbols, inputs, outputs,
   inConstraints, outConstraints, acronyms)
 import Drasil.DblPendulum.Requirements (funcReqs, nonFuncReqs, reqRefs)
-import Data.Drasil.Citations (cartesianWiki, accelerationWiki, velocityWiki)
-import Drasil.Projectile.References (hibbeler2004)
+import Drasil.DblPendulum.References (citations, citeRefs)
 
 
 srs :: Document
@@ -138,7 +137,8 @@ symbMap = cdb (map qw iMods ++ map qw symbols)
   (nw newtonSLR : nw pendulumTitle : nw mass : nw len : nw kilogram : nw inValue : nw newton : nw degree : nw radian
     : nw unitVect : nw unitVectj : [nw errMsg, nw program] ++ map nw symbols ++
    map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon  ++ map nw physicCon' ++
-   map nw physicscon ++ concepts ++ map nw physicalcon ++ map nw acronyms ++ map nw symbols ++ map nw [metre, hertz])
+   map nw physicscon ++ concepts ++ map nw physicalcon ++ map nw acronyms ++ map nw symbols ++ map nw [metre, hertz] ++
+   [nw algorithm])
   (map cw iMods ++ srsDomains) (map unitWrapper [metre, second, newton, kilogram, degree, radian, hertz]) dataDefs
   iMods genDefns tMods concIns [] [] allRefs
 
@@ -152,9 +152,6 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns
-
-citations :: BibRef
-citations = [accelerationWiki, velocityWiki, hibbeler2004, cartesianWiki]
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ funcReqs ++ nonFuncReqs
@@ -185,10 +182,6 @@ tMods = [accelerationTM, velocityTM, newtonSL, newtonSLR]
 
 physSystParts :: [Sentence]
 physSystParts = map ((!.) . atStartNP) [the rod, the mass]
-
--- References --
-citeRefs :: [Reference]
-citeRefs = map ref citations
 
 tModRefs :: [Reference]
 tModRefs = map ref tMods

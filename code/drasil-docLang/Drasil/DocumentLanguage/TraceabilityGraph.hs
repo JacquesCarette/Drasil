@@ -1,16 +1,34 @@
-module Drasil.DocumentLanguage.TraceabilityGraph (mkGraphInfo) where
+module Drasil.DocumentLanguage.TraceabilityGraph where
 
 import Language.Drasil
 import Database.Drasil hiding (cdb)
 import Control.Lens ((^.))
 import qualified Data.Map as Map
 import Drasil.DocumentLanguage.TraceabilityMatrix (TraceViewCat, traceMReferees, traceMReferrers,
-  traceMColumns, ensureItems, layoutUIDs)
+  traceMColumns, ensureItems, layoutUIDs, traceMIntro)
 import Drasil.Sections.TraceabilityMandGs (tvAssumps,
   tvDataDefns, tvGenDefns, tvTheoryModels, tvInsModels, tvGoals, tvReqs,
   tvChanges)
+import qualified Drasil.DocLang.SRS as SRS
 import Language.Drasil.Printers (GraphInfo(..), NodeFamily(..))
 import Data.Maybe (fromMaybe)
+
+-- | Wrapper for 'traceMIntro'. Turns references ('LabelledContent's), trailing notes ('Sentence's), and any other needed contents to create a 'Section'.
+traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> [Section] -> Section
+traceMGF refs trailing otherContents = SRS.traceyMandG (traceMIntro refs trailing : otherContents)
+
+-- | Generalized traceability graph introduction: appends references to the traceability graphs in 'Sentence' form
+-- and wraps in 'Contents'. Usually references the five graphs generally found in the GraphInfo type.
+traceGIntro :: [LabelledContent] -> [Sentence] -> [UnlabelledContent]
+traceGIntro refs trailings = map ulcc [Paragraph $ foldlSent
+        [phrase purpose `S.the_ofTheC` plural traceyGraph,
+        S "is also to provide easy", plural reference, S "on what has to be",
+        S "additionally modified if a certain", phrase component +:+. S "is changed", 
+        S "The arrows in the", plural graph, S "represent" +:+. plural dependency,
+        S "The", phrase component, S "at the tail of an arrow is depended on by the",
+        phrase component, S "at the head of that arrow. Therefore, if a", phrase component,
+        S "is changed, the", plural component, S "that it points to should also be changed"] +:+
+        foldlSent (zipWith tableShows refs trailings)]
 
 -- | Extracts traceability graph inforomation from filled-in 'SystemInformation'.
 mkGraphInfo :: SystemInformation -> GraphInfo

@@ -110,6 +110,8 @@ DOCS_FOLDER_NAME = docs
 DOCS_FOLDER = $(DOCS_FOLDER_NAME)/
 TRACEY_GRAPH_FOLDER_NAME = TraceyGraph
 TRACEY_GRAPH_FOLDER = $(TRACEY_GRAPH_FOLDER_NAME)/
+TRACEY_GRAPHS_FOLDER_NAME = traceygraphs
+TRACEY_GRAPHS_FOLDER = $(TRACEY_GRAPHS_FOLDER_NAME)/
 TRACEY_GRAPH_NAMES = allvsall allvsr avsa avsall refvsref
 # make command line options
 #  GHC debug options
@@ -197,10 +199,11 @@ graphs: $(GRAPH_PACKAGES)
 ###
 
 traceygraph: graphmod $(TEST_EXAMPLES)
+	@mkdir -p "$(TRACEY_GRAPHS_FOLDER)"
 	@cd $(BUILD_FOLDER) && for dir in $(EXAMPLE_DIRS); do \
 		if [ -d $$dir/$(TRACEY_GRAPH_FOLDER) ]; then \
 			cd $$dir/$(TRACEY_GRAPH_FOLDER) && for graph in $(TRACEY_GRAPH_NAMES); do \
-				dot -Tpdf $$graph.dot > "./$$graph.pdf" ; \
+				dot -Tpdf $$graph.dot > "../../../$(TRACEY_GRAPHS_FOLDER)$$graph.pdf" ; \
 			done ; \
 			cd .. ; \
 			cd .. ; \

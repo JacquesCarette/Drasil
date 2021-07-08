@@ -20,10 +20,6 @@ import qualified Data.Map as Map
 -- | Helper type that takes two sets of 'UID's and a 'ChunkDB'.
 type TraceViewCat = [UID] -> ChunkDB -> [UID]
 
--- | Wrapper for 'traceMIntro'. Turns references ('LabelledContent's), trailing notes ('Sentence's), and any other needed contents to create a 'Section'.
-traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> [Section] -> Section
-traceMGF refs trailing otherContents = SRS.traceyMandG (traceMIntro refs trailing : otherContents)
-
 -- | Generalized traceability matrix introduction: appends references to the traceability matrices in 'Sentence' form
 -- and wraps in 'Contents'. Usually references the four tables generally found in this section (in order of being mentioned).
 traceMIntro :: [LabelledContent] -> [Sentence] -> Contents
@@ -34,19 +30,6 @@ traceMIntro refs trailings = UlC $ ulcc $ Paragraph $ foldlSent [phrase purpose
         S "is changed, the", plural item, S "in the column of that", 
         phrase component, S "that are marked with an", Quote (S "X"), 
         S "should be modified as well"] +:+ foldlSent (zipWith tableShows refs trailings)
-
--- | Generalized traceability graph introduction: appends references to the traceability graphs in 'Sentence' form
--- and wraps in 'Contents'. Usually references the five graphs generally found in the GraphInfo type.
-traceGIntro :: [LabelledContent] -> [Sentence] -> [UnlabelledContent]
-traceGIntro refs trailings = map ulcc [Paragraph $ foldlSent
-        [phrase purpose `S.the_ofTheC` plural traceyGraph,
-        S "is also to provide easy", plural reference, S "on what has to be",
-        S "additionally modified if a certain", phrase component +:+. S "is changed", 
-        S "The arrows in the", plural graph, S "represent" +:+. plural dependency,
-        S "The", phrase component, S "at the tail of an arrow is depended on by the",
-        phrase component, S "at the head of that arrow. Therefore, if a", phrase component,
-        S "is changed, the", plural component, S "that it points to should also be changed"] +:+
-        foldlSent (zipWith tableShows refs trailings)]
 
 -- | Helper that finds the traceability matrix references (things being referenced).
 traceMReferees :: ([UID] -> [UID]) -> ChunkDB -> [UID]

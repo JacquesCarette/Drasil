@@ -1,14 +1,15 @@
-module Drasil.DocumentLanguage.TraceabilityGraph (mkGraphInfo) where
+module Drasil.DocumentLanguage.TraceabilityGraph where
 
 import Language.Drasil
 import Database.Drasil hiding (cdb)
 import Control.Lens ((^.))
 import qualified Data.Map as Map
 import Drasil.DocumentLanguage.TraceabilityMatrix (TraceViewCat, traceMReferees, traceMReferrers,
-  traceMColumns, ensureItems, layoutUIDs)
+  traceMColumns, ensureItems, layoutUIDs, traceMIntro)
 import Drasil.Sections.TraceabilityMandGs (tvAssumps,
   tvDataDefns, tvGenDefns, tvTheoryModels, tvInsModels, tvGoals, tvReqs,
   tvChanges)
+import qualified Drasil.DocLang.SRS as SRS
 import Language.Drasil.Printers (GraphInfo(..), NodeFamily(..))
 import Data.Maybe (fromMaybe)
 

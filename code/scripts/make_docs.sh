@@ -1,4 +1,10 @@
-# Creates Haddock documentation for all Haskell files in Drasil.
+# Since Drasil hides many modules in the built libraries, the normal Haddock docs
+# become a bit difficult to read or appear to be missing components when read.
+#
+# This script creates 2 variants of Haddock documentation for all Drasil packages:
+#   1. With all modules exposed.
+#   2. As-is.
+
 if [ -z "$DOCS_FOLDER" ]; then
   echo "Missing DOCS_FOLDER environment variable, defaulting to 'docs/'"
   DOCS_FOLDER="docs/"

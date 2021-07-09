@@ -157,7 +157,7 @@ inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_,
   S "into one which is expressed in mathematical terms. It uses concrete", 
   plural symbol_, S "defined in the", namedRef r2 $ plural dataDefn, S "to replace the abstract",
   pluralNP $ symbol_ `inThePP` model, S "identified in", namedRef r3 (plural thModel) `S.and_`
-  (namedRef r4 $ plural genDefn)]
+  namedRef r4 (plural genDefn)]
 
 -- | Constructor for Data Constraints section. Takes a trailing 'Sentence' (use 'EmptyS' if none) and data constraints.
 datConF :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => 

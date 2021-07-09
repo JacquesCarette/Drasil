@@ -56,7 +56,7 @@ body = dccWDS "body" (cnIES "body")
 chgInVelocity = dccWDS "chgInVelocity" (cn "change in velocity")
   (S "the" +:+ phrase chgInVelocity `S.of_` S "a" +:+ phrase rigidBody)
 chgMomentum = dccWDS "chgMomentum" (cn' "change in momentum")
-  (S "The rate of change of a body's" +:+ (phrase impulseV))  
+  (S "The rate of change of a body's" +:+ phrase impulseV)  
 collision = dcc "collision" (cn' "collision")
   "an encounter between particles resulting in an exchange or transformation of energy"
 cohesion = dccWDS "cohesion" (cn "cohesion")

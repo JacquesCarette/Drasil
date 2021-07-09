@@ -8,7 +8,7 @@ import Drasil.PDController.Concepts
 import Drasil.PDController.References
 import Drasil.PDController.TModel
 import Language.Drasil
-import Theory.Drasil (GenDefn, gd, ModelKind, othModel')
+import Theory.Drasil (GenDefn, gd, othModel')
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S

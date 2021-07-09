@@ -8,9 +8,7 @@ import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
 import Theory.Drasil (GenDefn, gdNoRefs,
-    ModelKind,
-    equationalModel', equationalModelU,
-    equationalRealm', equationalRealmU,
+    equationalModel', equationalModelU, equationalRealmU,
     MultiDefn, mkDefiningExpr, mkMultiDefnForQuant)
 import Utils.Drasil
 import Utils.Drasil.Concepts

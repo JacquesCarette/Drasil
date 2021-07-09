@@ -1,7 +1,7 @@
 module Drasil.NoPCM.GenDefs (rocTempSimp, genDefs, genDefRefs) where
 
 import Language.Drasil
-import Theory.Drasil (GenDefn, gdNoRefs, ModelKind, othModel')
+import Theory.Drasil (GenDefn, gdNoRefs, othModel')
 
 import Drasil.NoPCM.Assumptions (assumpDWCoW, assumpSHECoW)
 import Drasil.SWHS.Assumptions (assumpCWTAT)

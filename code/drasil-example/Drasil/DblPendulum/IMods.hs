@@ -4,8 +4,7 @@ module Drasil.DblPendulum.IMods (iMods, angularDisplacementIM, iModRefs) where
 import Prelude hiding (cos, sin)
 
 import Language.Drasil
-import Theory.Drasil (InstanceModel, imNoRefs, qwC, ModelKind, othModel')
-  --imNoDerivNoRefs, )
+import Theory.Drasil (InstanceModel, imNoRefs, qwC, othModel')
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S

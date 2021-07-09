@@ -1,7 +1,7 @@
 module Drasil.NoPCM.IMods (eBalanceOnWtr, iMods, instModIntro, iModRefs) where
 
 import Language.Drasil
-import Theory.Drasil (InstanceModel, im, qwC, qwUC, ModelKind, deModel')
+import Theory.Drasil (InstanceModel, im, qwC, qwUC, deModel')
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S

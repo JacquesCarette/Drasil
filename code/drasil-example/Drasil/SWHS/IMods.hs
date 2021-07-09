@@ -2,7 +2,7 @@ module Drasil.SWHS.IMods (iMods, eBalanceOnWtr, eBalanceOnWtrDerivDesc1,
   eBalanceOnWtrDerivDesc3, eBalanceOnPCM, heatEInWtr, heatEInPCM, instModIntro, iModRefs) where
 
 import Language.Drasil
-import Theory.Drasil (InstanceModel, im, imNoDeriv, qwUC, qwC, ModelKind, deModel', othModel')
+import Theory.Drasil (InstanceModel, im, imNoDeriv, qwUC, qwC, deModel', othModel')
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.NounPhrase as NP

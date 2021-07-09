@@ -9,7 +9,7 @@ import Drasil.PDController.GenDefs
 import Drasil.PDController.References
 import Drasil.PDController.TModel
 import Language.Drasil
-import Theory.Drasil (InstanceModel, im, qwC, ModelKind, deModel')
+import Theory.Drasil (InstanceModel, im, qwC, deModel')
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S

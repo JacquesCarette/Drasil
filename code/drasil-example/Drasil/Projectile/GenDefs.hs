@@ -3,7 +3,7 @@ module Drasil.Projectile.GenDefs (genDefns, posVecGD, genDefRefs) where
 
 import Prelude hiding (cos, sin)
 import Language.Drasil
-import Theory.Drasil (GenDefn, TheoryModel, gd, gdNoRefs, ModelKind, equationalModel')
+import Theory.Drasil (GenDefn, TheoryModel, gd, gdNoRefs, equationalModel')
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S

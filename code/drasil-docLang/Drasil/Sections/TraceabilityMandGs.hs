@@ -51,8 +51,8 @@ tvChanges = traceViewCC chgProbDom
 -- | Assumptions on the assumptions of a traceabiliy matrix.
 traceMatAssumpAssump :: TraceConfig
 traceMatAssumpAssump = TraceConfig "TraceMatAvsA" [plural assumption +:+
-  S "on the" +:+. plural assumption] (titleize' assumption +:+
-  S "dependence of each other") [tvAssumps] [tvAssumps]
+  S "on the" +:+ plural assumption] (titleize' assumption +:+
+  S "and Other" +:+ titleize' assumption ) [tvAssumps] [tvAssumps]
 
 -- | Other assumptions of the traceability matrix
 traceMatAssumpOther :: TraceConfig

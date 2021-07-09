@@ -18,16 +18,3 @@ secRefs :: [Reference]
 secRefs = sectionReferences ++ [tableAbbAccRef, tableAbbAccLabel,
   reqInputsRef, symbTableRef, unitTableRef, tableOfConstantsRef, tInDataCstRef, tOutDataCstRef]
   ++ map (ref.makeTabRef.getTraceConfigUID) [traceMatAssumpAssump, traceMatAssumpOther, traceMatRefinement]
-
-{-traceyGraphRefs :: String -> SystemInformation
-traceyGraphRefs ex = traceyGraphGetRefs ex
-
-addRefsToSI :: SystemInformation -> [Reference] -> SystemInformation
---addRefsToSI si@SI{_sysinfodb = c} newRefs = si {_sysinfodb = (c {_refTable = idMap (map fst refs ++ newRefs)})}
---addRefsToSI si refs = over (_refTable._sysinfodb) (++ refs) si -- si ^. sysinfodb . refTable
-{-addRefsToSI si@SI{_sysinfodb = c} newRefs = si {_sysinfodb = (c {_refTable = idMap (map fst refs ++ newRefs)})}
-  where
-    refs = c ^. refTable-}
-{-addRefsToSI si@SI{_sysinfodb = c} newRefs = si {_sysinfodb = (idMap (map fst refs ++ newRefs) .~ refTable c)}
-  where
-    refs = c ^. refTable-}-}

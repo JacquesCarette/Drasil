@@ -1,12 +1,16 @@
 {-# LANGUAGE TemplateHaskell, Rank2Types, ScopedTypeVariables, PostfixOperators  #-}
-module Theory.Drasil.ModelKinds (ModelKinds(..),
-  setMk, elimMk, lensMk, getEqModQds) where
+module Theory.Drasil.ModelKinds (
+    ModelKind(..), ModelKinds(..),
+    deModel, equationalConstraints, equationalModel, equationalRealm, othModel,
+    deModel', equationalConstraints', equationalModel', equationalRealm', othModel',
+    setMk, elimMk, lensMk, getEqModQds
+  ) where
 
 import Control.Lens (makeLenses, set, lens, to, (^.), Setter', Getter, Lens')
 import Data.Maybe (mapMaybe)
 
-import Language.Drasil (ConceptDomain(..), Definition(..),
-  Idea(..), NamedIdea(..), RelationConcept, QDefinition, HasUID(..), Display (toDispExpr))
+import Language.Drasil (NamedIdea(..), NP, QDefinition, HasUID(..),
+  RelationConcept, ConceptDomain(..), Definition(..), Idea(..), Display(..), UID)
 import Theory.Drasil.ConstraintSet (ConstraintSet)
 import Theory.Drasil.MultiDefn (MultiDefn)
 
@@ -25,6 +29,45 @@ data ModelKinds = DEModel RelationConcept
 
 makeLenses ''ModelKinds
 
+data ModelKind = MK {
+  _mk     :: ModelKinds,
+  _mkUid  :: UID,
+  _mkTerm :: NP
+}
+
+makeLenses ''ModelKind
+
+deModel :: UID -> NP -> RelationConcept -> ModelKind
+deModel u n rc = MK (DEModel rc) u n
+
+deModel' :: RelationConcept -> ModelKind
+deModel' rc = MK (DEModel rc) (rc ^. uid) (rc ^. term)
+
+equationalConstraints :: UID -> NP -> ConstraintSet-> ModelKind
+equationalConstraints u n qs = MK (EquationalConstraints qs) u n
+
+equationalConstraints' :: ConstraintSet-> ModelKind
+equationalConstraints' qs = MK (EquationalConstraints qs) (qs ^. uid) (qs ^. term)
+
+equationalModel :: UID -> NP -> QDefinition -> ModelKind
+equationalModel u n qd = MK (EquationalModel qd) u n
+
+equationalModel' :: QDefinition -> ModelKind
+equationalModel' qd = MK (EquationalModel qd) (qd ^. uid) (qd ^. term)
+
+equationalRealm :: UID -> NP -> MultiDefn -> ModelKind
+equationalRealm u n md = MK (EquationalRealm md) u n
+
+equationalRealm' :: MultiDefn -> ModelKind
+equationalRealm' md = MK (EquationalRealm md) (md ^. uid) (md ^. term)
+
+othModel :: UID -> NP -> RelationConcept -> ModelKind
+othModel u n rc = MK (OthModel rc) u n
+
+othModel' :: RelationConcept -> ModelKind
+othModel' rc = MK (OthModel rc) (rc ^. uid) (rc ^. term)
+
+
 -- FIXME: The repetition is starting to get bad.
 
 -- | Finds the 'UID' of the 'ModelKinds'.
@@ -41,6 +84,15 @@ instance ConceptDomain ModelKinds where cdom       = elimMk (to cdom) (to cdom) 
 instance Display       ModelKinds where toDispExpr = elimMk (to toDispExpr) (to toDispExpr) (to toDispExpr) (to toDispExpr)
 
 -- TODO: implement MayHaveUnit for ModelKinds once we've sufficiently removed OthModels & RelationConcepts (else we'd be breaking too much of `stable`)
+
+-- | Finds the 'UID' of the 'ModelKinds'.
+instance HasUID        ModelKind where uid        = mkUid
+instance NamedIdea     ModelKind where term       = mkTerm
+instance Idea          ModelKind where getA       = getA . (^. mk)
+instance Definition    ModelKind where defn       = mk . defn
+instance ConceptDomain ModelKind where cdom       = cdom . (^. mk)
+instance Display       ModelKind where toDispExpr = toDispExpr . (^. mk)
+
 
 -- | Retrieve internal data from ModelKinds
 elimMk :: Getter RelationConcept a -> Getter ConstraintSet a -> Getter QDefinition a -> Getter MultiDefn a -> ModelKinds -> a
@@ -62,13 +114,13 @@ setMk (OthModel q)              f _ _ _ x = OthModel              $ set f x q
 lensMk :: forall a. Lens' RelationConcept a -> Lens' ConstraintSet a -> Lens' QDefinition a -> Lens' MultiDefn a -> Lens' ModelKinds a
 lensMk lr lcs lq lqd = lens g s
     where g :: ModelKinds -> a
-          g mk = elimMk lr lcs lq lqd mk
+          g mk_ = elimMk lr lcs lq lqd mk_
           s :: ModelKinds -> a -> ModelKinds
           s mk_ x = setMk mk_ lr lcs lq lqd x
 
 -- | Extract a list of 'QDefinition's from a list of 'ModelKinds'.
-getEqModQds :: [ModelKinds] -> [QDefinition]
-getEqModQds = mapMaybe isEqMod
+getEqModQds :: [ModelKind] -> [QDefinition]
+getEqModQds = mapMaybe eqMod
   where
-    isEqMod (EquationalModel f) = Just f
-    isEqMod _                   = Nothing
+    eqMod (MK (EquationalModel f) _ _) = Just f
+    eqMod _                            = Nothing

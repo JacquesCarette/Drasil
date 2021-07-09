@@ -199,18 +199,19 @@ graphs: $(GRAPH_PACKAGES)
 ###
 
 traceygraph: graphmod $(TEST_EXAMPLES)
+	@echo Creating traceability graphs
+	@rm -rf "$(TRACEY_GRAPHS_FOLDER)"
 	@mkdir -p "$(TRACEY_GRAPHS_FOLDER)"
-	@cd $(BUILD_FOLDER) && for dir in $(EXAMPLE_DIRS); do \
-		if [ -d $$dir/$(TRACEY_GRAPH_FOLDER) ]; then \
-			mkdir -p "../../../$(TRACEY_GRAPHS_FOLDER)$$dir" \
-			cd $$dir/$(TRACEY_GRAPH_FOLDER) && for graph in $(TRACEY_GRAPH_NAMES); do \
-				dot -Tpdf $$graph.dot > "../../../$(TRACEY_GRAPHS_FOLDER)$$graph.pdf" ; \
+	@for dir in $(EXAMPLE_DIRS); do \
+		if [ -d "$(BUILD_FOLDER)$$dir/$(TRACEY_GRAPH_FOLDER)" ]; then \
+			mkdir -p "$(TRACEY_GRAPHS_FOLDER)$$dir" ; \
+			cd "$(BUILD_FOLDER)$$dir/$(TRACEY_GRAPH_FOLDER)" && for graph in $(TRACEY_GRAPH_NAMES); do \
+				dot -Tpdf $$graph.dot > "../../../$(TRACEY_GRAPHS_FOLDER)$$dir/$$graph.pdf" ; \
 			done ; \
-			cd .. ; \
-			cd .. ; \
+			cd "../../.." ; \
 		fi ; \
 	done
-	@echo Created traceability graphs
+	@echo Done
 
 analysis: graphmod
 	- rm -rf "$(ANALYSIS_FOLDER)"

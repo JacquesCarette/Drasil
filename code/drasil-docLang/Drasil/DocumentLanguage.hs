@@ -48,7 +48,6 @@ import qualified Drasil.Sections.Stakeholders as Stk (stakeholderIntro,
 import qualified Drasil.DocumentLanguage.TraceabilityMatrix as TM (
   generateTraceTableView)
 import qualified Drasil.DocumentLanguage.TraceabilityGraph as TG (traceMGF)
-import qualified Drasil.DocLang.References as Ref
 
 import Data.Drasil.Concepts.Documentation (likelyChg, refmat, section_,
   software, unlikelyChg)
@@ -62,9 +61,8 @@ import qualified Data.Map as Map (elems, toList)
 mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
 mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
   Document (nw kind `comb` nw sys) (foldlList Comma List $ map (S . name) authors) $
-  mkSections (fillTraceSI dd fillTraceRef) l where
-    fillTraceRef = Ref.traceyGraphRefs si
-    l = mkDocDesc fillTraceRef dd
+  mkSections (fillTraceSI dd si) l where
+    l = mkDocDesc si dd
 
 -- | Helper for filling in the traceability matrix and graph information into the system.
 fillTraceSI :: SRSDecl -> SystemInformation -> SystemInformation
@@ -350,9 +348,9 @@ mkUCsSec (UCsProg c) = SRS.unlikeChg (intro : mkEnumSimpleD c) []
 
 -- | Helper for making the Traceability Matrices and Graphs section.
 mkTraceabilitySec :: TraceabilitySec -> SystemInformation -> Section
-mkTraceabilitySec (TraceabilityProg progs) si@SI{_sys = nm} = TG.traceMGF  trace
+mkTraceabilitySec (TraceabilityProg progs) si = TG.traceMGF trace
   (map (\(TraceConfig _ pre _ _ _) -> foldlList Comma List pre) progs)
-  (map LlC trace) (abrv nm) [] 
+  (map LlC trace) []
   where
   trace = map (\(TraceConfig u _ desc rows cols) -> TM.generateTraceTableView
     u desc rows cols si) progs

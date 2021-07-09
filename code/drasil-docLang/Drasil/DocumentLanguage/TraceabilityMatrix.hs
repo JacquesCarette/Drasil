@@ -1,3 +1,4 @@
+{-# LANGUAGE PostfixOperators #-}
 module Drasil.DocumentLanguage.TraceabilityMatrix where
 
 import Language.Drasil
@@ -27,7 +28,7 @@ traceMIntro refs trailings = UlC $ ulcc $ Paragraph $ foldlSent [phrase purpose
         phrase component, S "is changed. Every time a", phrase component, 
         S "is changed, the", plural item, S "in the column of that", 
         phrase component, S "that are marked with an", Quote (S "X"), 
-        S "should be modified as well"] +:+ foldlSent (zipWith tableShows refs trailings)
+        S "should be modified as well"] +:+ foldlSent_ (zipWith tableShows refs trailings)
 
 -- | Helper that finds the traceability matrix references (things being referenced).
 traceMReferees :: ([UID] -> [UID]) -> ChunkDB -> [UID]
@@ -55,7 +56,7 @@ traceMColumns fc fr c = map ((\u -> filter (`elem` u) $ fc u) . flip traceLookup
 
 -- | Helper that makes references of the form "@reference@ shows the dependencies of @something@".
 tableShows :: (Referable a, HasShortName a) => a -> Sentence -> Sentence
-tableShows r end = refS r +:+ S "shows the" +:+ plural dependency `S.of_` end
+tableShows r end = refS r +:+ S "shows the" +:+ plural dependency `S.of_` (end !.)
 
 -- | Generates a traceability table. Takes a 'UID' for the table, a description ('Sentence'), columns ('TraceViewCat'), rows ('TraceViewCat'), and 'SystemInformation'.
 generateTraceTableView :: UID -> Sentence -> [TraceViewCat] -> [TraceViewCat] -> SystemInformation -> LabelledContent

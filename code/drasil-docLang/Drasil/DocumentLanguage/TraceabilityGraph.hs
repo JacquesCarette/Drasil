@@ -1,3 +1,4 @@
+{-# LANGUAGE PostfixOperators #-}
 module Drasil.DocumentLanguage.TraceabilityGraph where
 
 import Language.Drasil
@@ -5,7 +6,7 @@ import Database.Drasil hiding (cdb)
 import Control.Lens ((^.))
 import qualified Data.Map as Map
 import Drasil.DocumentLanguage.TraceabilityMatrix (TraceViewCat, traceMReferees, traceMReferrers,
-  traceMColumns, ensureItems, layoutUIDs, traceMIntro, tableShows)
+  traceMColumns, ensureItems, layoutUIDs, traceMIntro)
 import Drasil.Sections.TraceabilityMandGs (tvAssumps,
   tvDataDefns, tvGenDefns, tvTheoryModels, tvInsModels, tvGoals, tvReqs,
   tvChanges)
@@ -18,13 +19,13 @@ import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 
 -- | Wrapper for 'traceMIntro'. Turns references ('LabelledContent's), trailing notes ('Sentence's), and any other needed contents to create a 'Section'.
-traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> String -> [Section] -> Section
-traceMGF refs trailing otherContents ex = SRS.traceyMandG (traceMIntro refs trailing : otherContents 
-  ++ map UlC (traceGIntro (traceyGraphGetRefs ex) (trailing ++ [allvsallDesc])) ++ [traceGCon ex])
+traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> [Section] -> Section
+traceMGF refs trailing otherContents = SRS.traceyMandG (traceMIntro refs trailing : otherContents 
+  ++ map UlC (traceGIntro traceGUIDs (trailing ++ [allvsallDesc])) ++ [traceGCon])
 
 -- | Generalized traceability graph introduction: appends references to the traceability graphs in 'Sentence' form
 -- and wraps in 'Contents'. Usually references the five graphs as defined in 'GraphInfo'.
-traceGIntro :: [Reference] -> [Sentence] -> [UnlabelledContent]
+traceGIntro :: [UID] -> [Sentence] -> [UnlabelledContent]
 traceGIntro refs trailings = map ulcc [Paragraph $ foldlSent
         [phrase purpose `S.the_ofTheC` plural traceyGraph,
         S "is also to provide easy", plural reference, S "on what has to be",
@@ -33,30 +34,35 @@ traceGIntro refs trailings = map ulcc [Paragraph $ foldlSent
         S "The", phrase component, S "at the tail of an arrow is depended on by the",
         phrase component, S "at the head of that arrow. Therefore, if a", phrase component,
         S "is changed, the", plural component, S "that it points to should also be changed"] +:+
-        foldlSent (zipWith tableShows refs trailings)]
+        foldlSent_ (zipWith graphShows refs trailings)]
+
+graphShows :: UID -> Sentence -> Sentence
+graphShows r end = Ref r EmptyS None +:+ S "shows the" +:+ plural dependency `S.of_` (end !.)
 
 allvsallDesc :: Sentence
 allvsallDesc = S "dependencies of assumptions, models, definitions, requirements, goals, and changes with each other"
 
-traceGCon :: String -> Contents
-traceGCon ex = UlC $ ulcc $ folderList ex
+traceGCon :: Contents
+traceGCon = UlC $ ulcc folderList
 
 traceGFiles :: [String]
+traceGUIDs :: [UID]
 traceyGraphPaths :: String -> [String]
 traceyGraphGetRefs :: String -> [Reference]
 
 traceGFiles = ["avsa", "avsall", "refvsref", "allvsr", "allvsall"]
+traceGUIDs = ["TraceGraphAvsA", "TraceGraphAvsAll", "TraceGraphRefvsRef", "TraceGraphAllvsR", "TraceGraphAllvsAll"]
 traceyGraphPaths ex = map (\x -> resourcePath ++ ex ++ "/" ++ x ++ ".pdf") traceGFiles
-traceyGraphGetRefs ex = zipWith (\x y -> Reference x (URI y) (shortname' $ S x) None) traceGFiles $ traceyGraphPaths $ concat $ words ex
+traceyGraphGetRefs ex = zipWith (\x y -> Reference x (URI y) (shortname' $ S x) None) traceGUIDs $ traceyGraphPaths $ concat $ words ex
 
 resourcePath :: String
 resourcePath = "../../../traceygraphs/"
 
-folderList :: String -> RawContent
-folderList ex = Enumeration $ Bullet $ zip (folderList' ex) $ repeat Nothing
+folderList :: RawContent
+folderList = Enumeration $ Bullet $ zip (folderList') $ repeat Nothing
 
-folderList' :: String -> [ItemType]
-folderList' ex = map Flat (zipWith (\x y -> namedRef y (S x)) traceGFiles $ traceyGraphGetRefs ex)
+folderList' :: [ItemType]
+folderList' = map Flat (map (\x -> Ref x EmptyS None) traceGUIDs)
 
 -- | Extracts traceability graph inforomation from filled-in 'SystemInformation'.
 mkGraphInfo :: SystemInformation -> GraphInfo

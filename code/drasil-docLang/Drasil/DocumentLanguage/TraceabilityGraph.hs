@@ -150,7 +150,7 @@ allvsallDesc = S "dependencies of assumptions, models, definitions, requirements
 
 -- | Create a list of traceability graph references.
 traceGCon :: Contents
-traceGCon = UlC $ ulcc $ Enumeration $ Bullet $ zip (folderList') $ repeat Nothing
+traceGCon = UlC $ ulcc $ Enumeration $ Bullet $ zip folderList' $ repeat Nothing
 
 -- | Traceability graph file names.
 traceGFiles :: [String]
@@ -172,4 +172,4 @@ resourcePath = "../../../traceygraphs/"
 
 -- | Helper to create a list of traceability graph references.
 folderList' :: [ItemType]
-folderList' = map Flat (map (\x -> Ref x EmptyS None) traceGUIDs)
+folderList' = map (Flat . (\x -> Ref x EmptyS None)) traceGUIDs

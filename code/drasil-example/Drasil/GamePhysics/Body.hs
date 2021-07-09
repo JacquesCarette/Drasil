@@ -313,8 +313,8 @@ probDescIntro = foldlSent_
   S "is very costly" `sC` S "presenting barriers of entry which make it difficult for",
   phrase game, S "developers to include", phrase Doc.physics, S "in their" +:+. 
   plural product_, S "There are a few free" `sC` phrase openSource `S.and_` S "high quality",
-  plural physLib, namedRef (SRS.offShelfSol ([] :: [Contents]) ([] :: [Section])) (S "available"),
-  S "to be used for", phrase consumer, plural product_]
+  namedRef (SRS.offShelfSol ([] :: [Contents]) ([] :: [Section])) (plural physLib),
+  S "available to be used for", phrase consumer, plural product_]
   
 -----------------------------------------
 -- 4.1.1 : Terminology and Definitions --

@@ -92,7 +92,7 @@ goalStmtF givenInputs otherContents = SRS.goalStmt (intro:otherContents) []
 solutionCharSpecIntro :: (Idea a) => a -> Section -> Contents
 solutionCharSpecIntro progName instModelSection = foldlSP [atStartNP' (the inModel), 
   S "that govern", short progName, S "are presented in the" +:+. 
-  namedRef instModelSection (phrase inModel +:+ phrase DCD.sec), atStartNP (the information), S "to understand", 
+  namedRef instModelSection (titleize inModel +:+ titleize DCD.sec), atStartNP (the information), S "to understand", 
   S "meaning" `S.the_ofThe` plural inModel, 
   S "and their derivation is also presented, so that the", plural inModel, 
   S "can be verified"]
@@ -173,7 +173,7 @@ dataConstraintParagraph trailingSent = foldlSP_ [inputTableSent, physConsSent,
 
 -- | General 'Sentence' that describes the data constraints on the input variables.
 inputTableSent :: Sentence
-inputTableSent = foldlSent [S "The", namedRef (inDataConstTbl ([] :: [UncertQ])) $ plural datumConstraint +:+ phrase table_, S "shows the",
+inputTableSent = foldlSent [S "The", namedRef (inDataConstTbl ([] :: [UncertQ])) $ titleize' datumConstraint +:+ titleize table_, S "shows the",
   pluralNP (datumConstraint `onThePS` input_), plural variable]
 
 -- | General 'Sentence' that describes the physical constraints/limitations on the variables.
@@ -203,9 +203,9 @@ typValSent = foldlSent [atStartNP (the column) `S.of_` S "typical",
 
 -- | General 'Sentence' that describes some auxiliary specifications of the system.
 auxSpecSent :: Sentence
-auxSpecSent = foldlSent [S "The", namedRef (SRS.valsOfAuxCons [] []) $ S "auxiliary constants section", S "gives",
+auxSpecSent = foldlSent [S "The", namedRef (SRS.valsOfAuxCons [] []) $ S "auxiliary constants", S "give",
   plural value `S.the_ofThe` phrase specification, plural parameter, S "used in the",
-  namedRef (inDataConstTbl ([] :: [UncertQ])) $ plural datumConstraint +:+ phrase table_]
+  namedRef (inDataConstTbl ([] :: [UncertQ])) $ titleize' datumConstraint +:+ titleize table_]
 
 -- | Creates a Data Constraints table. Takes in Columns, reference, and a label.
 mkDataConstraintTable :: [(Sentence, [Sentence])] -> String -> Sentence -> LabelledContent
@@ -261,5 +261,5 @@ propsIntro = foldlSP_ [outputTableSent, physConsSent]
 
 -- | Outputs a data constraint table as a 'Sentence'.
 outputTableSent :: Sentence
-outputTableSent = foldlSent [S "The", namedRef (outDataConstTbl ([] :: [UncertQ])) $ plural datumConstraint +:+ phrase table_, S "shows the",
+outputTableSent = foldlSent [S "The", namedRef (outDataConstTbl ([] :: [UncertQ])) $ titleize' datumConstraint +:+ titleize table_, S "shows the",
   pluralNP (datumConstraint `onThePS` output_), plural variable]

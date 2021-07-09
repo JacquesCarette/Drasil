@@ -287,7 +287,7 @@ The interaction between the product and the user is through a user interface. Th
 \begin{itemize}
 \item{Provide the input data related to the glass slab and blast type, ensuring no errors in the data entry.}
 \item{Ensure that consistent units are used for input variables.}
-\item{Ensure required software assumptions (\hyperref[Sec:Assumps]{Sec:Assumptions}) are appropriate for any particular problem input to the software.}
+\item{Ensure required \hyperref[Sec:Assumps]{software assumptions} are appropriate for any particular problem input to the software.}
 \end{itemize}
 \item{GlassBR Responsibilities}
 \begin{itemize}
@@ -1290,11 +1290,11 @@ This section provides the functional requirements, the tasks and behaviours that
 
 \begin{itemize}
 \item[Input-Values:\phantomsection\label{inputValues}]{Input the values from \hyperref[Table:ReqInputs]{Tab:ReqInputs}, which define the glass dimensions, type of glass, tolerable probability of failure, and the characteristics of the blast.}
-\item[System-Set-Values-Following-Assumptions:\phantomsection\label{sysSetValsFollowingAssumps}]{The system shall set the known values as described in \hyperref[Table:ReqAssignments]{Tab:ReqAssignments}.}
-\item[Check-Input-with-Data\_Constraints:\phantomsection\label{checkInputWithDataCons}]{The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in \hyperref[Sec:DataConstraints]{Sec:Data Constraints}. If any of the input values are out of bounds, an error message is displayed and the calculations stop.}
+\item[System-Set-Values-Following-Assumptions:\phantomsection\label{sysSetValsFollowingAssumps}]{The system shall set the known values as described in the table for \hyperref[Table:ReqAssignments]{Required Assignments}.}
+\item[Check-Input-with-Data\_Constraints:\phantomsection\label{checkInputWithDataCons}]{The system shall check the entered input values to ensure that they do not exceed the \hyperref[Sec:DataConstraints]{data constraints}. If any of the input values are out of bounds, an error message is displayed and the calculations stop.}
 \item[Output-Values-and-Known-Values:\phantomsection\label{outputValsAndKnownValues}]{Output the input values from \hyperref[inputValues]{FR:Input-Values} and the known values from \hyperref[sysSetValsFollowingAssumps]{FR:System-Set-Values-Following-Assumptions}.}
 \item[Check-Glass-Safety:\phantomsection\label{checkGlassSafety}]{If $is-safePb\land{}is-safeLR$ (from \hyperref[TM:isSafeProb]{TM:isSafeProb} and \hyperref[TM:isSafeLoad]{TM:isSafeLoad}), output the message ``For the given input parameters, the glass is considered safe.'' If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe.''}
-\item[Output-Values:\phantomsection\label{outputValues}]{Output the values from \hyperref[Table:ReqOutputs]{Tab:ReqOutputs}.}
+\item[Output-Values:\phantomsection\label{outputValues}]{Output the values from the table for \hyperref[Table:ReqOutputs]{Required Outputs}.}
 \end{itemize}
 \begin{longtabu}{l X[l] l}
 \toprule

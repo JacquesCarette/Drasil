@@ -353,12 +353,12 @@ The responsibilities of the user and the system are as follows:
 \begin{itemize}
 \item{Provide the input data related to the soil layer(s) and water table (if applicable), ensuring conformation to input data format required by SSP}
 \item{Ensure that consistent units are used for input variables}
-\item{Ensure required software assumptions (\hyperref[Sec:Assumps]{Sec:Assumptions}) are appropriate for the problem to which the user is applying the software}
+\item{Ensure required \hyperref[Sec:Assumps]{software assumptions} are appropriate for the problem to which the user is applying the software}
 \end{itemize}
 \item{SSP Responsibilities}
 \begin{itemize}
 \item{Detect data type mismatch, such as a string of characters input instead of a floating point number}
-\item{Verify that the inputs satisfy the required physical and other data constraints (\hyperref[Sec:DataConstraints]{Sec:Data Constraints})}
+\item{Verify that the inputs satisfy the required physical and other \hyperref[Sec:DataConstraints]{data constraints}}
 \item{Identify the critical slip surface within the possible input range}
 \item{Find the factor of safety for the slope}
 \item{Find the interslice normal force and shear force along the critical slip surface}
@@ -2599,10 +2599,10 @@ This section provides the functional requirements, the tasks and behaviours that
 This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
 
 \begin{itemize}
-\item[Read-and-Store:\phantomsection\label{readAndStore}]{Read the inputs, shown in \hyperref[Table:ReqInputs]{Tab:ReqInputs}, and store the data.}
-\item[Verify-Input:\phantomsection\label{verifyInput}]{Verify that the input data lie within the physical constraints shown in \hyperref[Sec:DataConstraints]{Sec:Data Constraints}.}
+\item[Read-and-Store:\phantomsection\label{readAndStore}]{Read the inputs, shown in the table \hyperref[Table:ReqInputs]{Required Inputs}, and store the data.}
+\item[Verify-Input:\phantomsection\label{verifyInput}]{Verify that the input data lie within the \hyperref[Sec:DataConstraints]{physical constraints}.}
 \item[Determine-Critical-Slip-Surface:\phantomsection\label{determineCritSlip}]{Determine the critical slip surface for the input slope, corresponding to the minimum factor of safety, by using \hyperref[IM:fctSfty]{IM:fctSfty}, \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, and \hyperref[IM:intsliceFs]{IM:intsliceFs} to calculate the factor of safety for a slip surface and using \hyperref[IM:crtSlpId]{IM:crtSlpId} to find the slip surface that minimizes it.}
-\item[Verify-Output:\phantomsection\label{verifyOutput}]{Verify that the minimum factor of safety and critical slip surface satisfy the physical constraints shown in \hyperref[Sec:CorSolProps]{Sec:Properties of a Correct Solution}.}
+\item[Verify-Output:\phantomsection\label{verifyOutput}]{Verify that the minimum factor of safety and critical slip surface satisfy the physical constraints shown in \hyperref[Sec:CorSolProps]{Properties of a Correct Solution}.}
 \item[Display-Input:\phantomsection\label{displayInput}]{Display as output the user-supplied inputs listed in \hyperref[Table:inputsToOutputTable]{Tab:inputsToOutputTable}.}
 \item[Display-Graph:\phantomsection\label{displayGraph}]{Display the critical slip surface of the 2D slope, as determined from \hyperref[IM:crtSlpId]{IM:crtSlpId}, graphically.}
 \item[Display-Factor-of-Safety:\phantomsection\label{displayFS}]{Display the value of the factor of safety for the critical slip surface, as determined from \hyperref[IM:fctSfty]{IM:fctSfty}, \hyperref[IM:nrmShrFor]{IM:nrmShrFor}, and \hyperref[IM:intsliceFs]{IM:intsliceFs}.}

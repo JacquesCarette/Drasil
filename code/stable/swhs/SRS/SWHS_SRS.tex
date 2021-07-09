@@ -1533,13 +1533,13 @@ This section provides the functional requirements, the tasks and behaviours that
 \begin{itemize}
 \item[Input-Values:\phantomsection\label{inputValues}]{Input the values from \hyperref[Table:ReqInputs]{Tab:ReqInputs}, which define the tank parameters, material properties, and initial conditions.}
 \item[Find-Mass:\phantomsection\label{findMass}]{Use the inputs in \hyperref[inputValues]{FR:Input-Values} to find the masses needed for \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}, \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}, \hyperref[IM:heatEInWtr]{IM:heatEInWtr}, and \hyperref[IM:heatEInPCM]{IM:heatEInPCM}, using \hyperref[DD:waterMass]{DD:waterMass}, \hyperref[DD:waterVolume.pcm]{DD:waterVolume\_pcm}, and \hyperref[DD:tankVolume]{DD:tankVolume}.}
-\item[Check-Input-with-Physical\_Constraints:\phantomsection\label{checkWithPhysConsts}]{Verify that the inputs satisfy the required physical constraints shown in \hyperref[Sec:DataConstraints]{Sec:Data Constraints}.}
+\item[Check-Input-with-Physical\_Constraints:\phantomsection\label{checkWithPhysConsts}]{Verify that the inputs satisfy the required \hyperref[Sec:DataConstraints]{physical constraints}.}
 \item[Output-Input-Derived-Values:\phantomsection\label{outputInputDerivVals}]{Output the input values and derived values in the following list: the values (from \hyperref[inputValues]{FR:Input-Values}), the masses (from \hyperref[findMass]{FR:Find-Mass}), ${τ_{\text{W}}}$ (from \hyperref[DD:balanceDecayRate]{DD:balanceDecayRate}), $η$ (from \hyperref[DD:balanceDecayTime]{DD:balanceDecayTime}), ${{τ_{\text{P}}}^{\text{S}}}$ (from \hyperref[DD:balanceSolidPCM]{DD:balanceSolidPCM}), and ${{τ_{\text{P}}}^{\text{L}}}$ (from \hyperref[DD:balanceLiquidPCM]{DD:balanceLiquidPCM}).}
 \item[Calculate-Temperature-Water-Over-Time:\phantomsection\label{calcTempWtrOverTime}]{Calculate and output the temperature of the water (${T_{\text{W}}}$($t$)) over the simulation time (from \hyperref[IM:eBalanceOnWtr]{IM:eBalanceOnWtr}).}
 \item[Calculate-Temperature-PCM-Over-Time:\phantomsection\label{calcTempPCMOverTime}]{Calculate and output the temperature of the phase change material (${T_{\text{P}}}$($t$)) over the simulation time (from \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}).}
 \item[Calculate-Change-Heat\_Energy-Water-Over-Time:\phantomsection\label{calcChgHeatEnergyWtrOverTime}]{Calculate and output the change in heat energy in the water (${E_{\text{W}}}$($t$)) over the simulation time (from \hyperref[IM:heatEInWtr]{IM:heatEInWtr}).}
 \item[Calculate-Change-Heat\_Energy-PCM-Over-Time:\phantomsection\label{calcChgHeatEnergyPCMOverTime}]{Calculate and output the change in heat energy in the PCM (${E_{\text{P}}}$($t$)) over the simulation time (from \hyperref[IM:heatEInPCM]{IM:heatEInPCM}).}
-\item[Verify-Energy-Output-Follow-Conservation-of-Energy:\phantomsection\label{verifyEnergyOutput}]{Verify that the energy outputs (${E_{\text{W}}}$($t$) and ${E_{\text{P}}}$($t$)) follow the law of conservation of energy, as outlined in \hyperref[Sec:CorSolProps]{Sec:Properties of a Correct Solution}, with relative error no greater than ${C_{\text{tol}}}$.}
+\item[Verify-Energy-Output-Follow-Conservation-of-Energy:\phantomsection\label{verifyEnergyOutput}]{Verify that the energy outputs (${E_{\text{W}}}$($t$) and ${E_{\text{P}}}$($t$)) follow the law of conservation of energy, as outlined in \hyperref[Sec:CorSolProps]{Properties of a Correct Solution}, with relative error no greater than ${C_{\text{tol}}}$.}
 \item[Calculate-PCM-Melt-Begin-Time:\phantomsection\label{calcPCMMeltBegin}]{Calculate and output the time at which the PCM begins to melt ${{t_{\text{melt}}}^{\text{init}}}$ (from \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}).}
 \item[Calculate-PCM-Melt-End-Time:\phantomsection\label{calcPCMMeltEnd}]{Calculate and output the time at which the PCM stops melting ${{t_{\text{melt}}}^{\text{final}}}$ (from \hyperref[IM:eBalanceOnPCM]{IM:eBalanceOnPCM}).}
 \end{itemize}
@@ -1598,7 +1598,7 @@ ${ρ_{\text{W}}}$ & Density of water & $\frac{\text{kg}}{\text{m}^{3}}$
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
 
 \begin{itemize}
-\item[Correct:\phantomsection\label{correct}]{The outputs of the code have the properties described in \hyperref[Sec:CorSolProps]{Sec:Properties of a Correct Solution}.}
+\item[Correct:\phantomsection\label{correct}]{The outputs of the code have the properties described in \hyperref[Sec:CorSolProps]{Properties of a Correct Solution}.}
 \item[Verifiable:\phantomsection\label{verifiable}]{The code is tested with complete verification and validation plan.}
 \item[Understandable:\phantomsection\label{understandable}]{The code is modularized with complete module guide and module interface specification.}
 \item[Reusable:\phantomsection\label{reusable}]{The code is modularized.}

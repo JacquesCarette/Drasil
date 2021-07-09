@@ -4,7 +4,7 @@ module Drasil.DblPendulum.IMods (iMods, angularDisplacementIM, iModRefs) where
 import Prelude hiding (cos, sin)
 
 import Language.Drasil
-import Theory.Drasil (InstanceModel, imNoRefs, qwC, ModelKinds (OthModel))
+import Theory.Drasil (InstanceModel, imNoRefs, qwC, ModelKind, othModel')
   --imNoDerivNoRefs, )
 import Utils.Drasil
 import Utils.Drasil.Concepts
@@ -27,7 +27,7 @@ iMods = [angularDisplacementIM]
 
 ---
 angularDisplacementIM :: InstanceModel
-angularDisplacementIM = imNoRefs (OthModel angularDisplacementRC)
+angularDisplacementIM = imNoRefs (othModel' angularDisplacementRC)
   [qwC lenRod $ UpFrom (Exc, exactDbl 0)
   ,qwC initialPendAngle $ UpFrom (Exc, exactDbl 0)
   , qwC gravitationalAccel $ UpFrom (Exc, exactDbl 0)]

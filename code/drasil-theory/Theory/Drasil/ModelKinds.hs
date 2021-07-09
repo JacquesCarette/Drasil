@@ -3,6 +3,7 @@ module Theory.Drasil.ModelKinds (
     ModelKind(..), ModelKinds(..),
     deModel, equationalConstraints, equationalModel, equationalRealm, othModel,
     deModel', equationalConstraints', equationalModel', equationalRealm', othModel',
+    equationalModelU, equationalModelN, equationalRealmU, equationalRealmN,
     setMk, elimMk, lensMk, getEqModQds
   ) where
 
@@ -55,11 +56,23 @@ equationalModel u n qd = MK (EquationalModel qd) u n
 equationalModel' :: QDefinition -> ModelKind
 equationalModel' qd = MK (EquationalModel qd) (qd ^. uid) (qd ^. term)
 
+equationalModelU :: UID -> QDefinition -> ModelKind
+equationalModelU u qd = MK (EquationalModel qd) u (qd ^. term)
+
+equationalModelN :: NP -> QDefinition -> ModelKind
+equationalModelN n qd = MK (EquationalModel qd) (qd ^. uid) n
+
 equationalRealm :: UID -> NP -> MultiDefn -> ModelKind
 equationalRealm u n md = MK (EquationalRealm md) u n
 
 equationalRealm' :: MultiDefn -> ModelKind
 equationalRealm' md = MK (EquationalRealm md) (md ^. uid) (md ^. term)
+
+equationalRealmU :: UID -> MultiDefn -> ModelKind
+equationalRealmU u md = MK (EquationalRealm md) u (md ^. term)
+
+equationalRealmN :: NP -> MultiDefn -> ModelKind
+equationalRealmN n md = MK (EquationalRealm md) (md ^. uid) n
 
 othModel :: UID -> NP -> RelationConcept -> ModelKind
 othModel u n rc = MK (OthModel rc) u n

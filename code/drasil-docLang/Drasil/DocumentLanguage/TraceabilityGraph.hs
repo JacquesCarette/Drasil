@@ -20,7 +20,7 @@ import qualified Utils.Drasil.Sentence as S
 -- | Wrapper for 'traceMIntro'. Turns references ('LabelledContent's), trailing notes ('Sentence's), and any other needed contents to create a 'Section'.
 traceMGF :: [LabelledContent] -> [Sentence] -> [Contents] -> String -> [Section] -> Section
 traceMGF refs trailing otherContents ex = SRS.traceyMandG (traceMIntro refs trailing : otherContents 
-  ++ map UlC (traceGIntro (traceyGraphRefs ex) (trailing ++ [allvsallDesc])) ++ [traceGCon ex])
+  ++ map UlC (traceGIntro (traceyGraphGetRefs ex) (trailing ++ [allvsallDesc])) ++ [traceGCon ex])
 
 -- | Generalized traceability graph introduction: appends references to the traceability graphs in 'Sentence' form
 -- and wraps in 'Contents'. Usually references the five graphs as defined in 'GraphInfo'.
@@ -43,11 +43,11 @@ traceGCon ex = UlC $ ulcc $ folderList ex
 
 traceGFiles :: [String]
 traceyGraphPaths :: String -> [String]
-traceyGraphRefs :: String -> [Reference]
+traceyGraphGetRefs :: String -> [Reference]
 
 traceGFiles = ["avsa", "avsall", "refvsref", "allvsr", "allvsall"]
 traceyGraphPaths ex = map (\x -> resourcePath ++ ex ++ "/" ++ x ++ ".pdf") traceGFiles
-traceyGraphRefs ex = zipWith (\x y -> Reference x (URI y) (shortname' $ S x) None) traceGFiles $ traceyGraphPaths ex
+traceyGraphGetRefs ex = zipWith (\x y -> Reference x (URI y) (shortname' $ S x) None) traceGFiles $ traceyGraphPaths $ concat $ words ex
 
 resourcePath :: String
 resourcePath = "../../../traceygraphs/"
@@ -56,7 +56,7 @@ folderList :: String -> RawContent
 folderList ex = Enumeration $ Bullet $ zip (folderList' ex) $ repeat Nothing
 
 folderList' :: String -> [ItemType]
-folderList' ex = map Flat (zipWith (\x y -> namedRef y (S x)) traceGFiles $ traceyGraphRefs ex)
+folderList' ex = map Flat (zipWith (\x y -> namedRef y (S x)) traceGFiles $ traceyGraphGetRefs ex)
 
 -- | Extracts traceability graph inforomation from filled-in 'SystemInformation'.
 mkGraphInfo :: SystemInformation -> GraphInfo

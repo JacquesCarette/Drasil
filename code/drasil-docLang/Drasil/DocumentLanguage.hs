@@ -48,6 +48,7 @@ import qualified Drasil.Sections.Stakeholders as Stk (stakeholderIntro,
 import qualified Drasil.DocumentLanguage.TraceabilityMatrix as TM (
   generateTraceTableView)
 import qualified Drasil.DocumentLanguage.TraceabilityGraph as TG (traceMGF)
+import qualified Drasil.DocLang.References as Ref
 
 import Data.Drasil.Concepts.Documentation (likelyChg, refmat, section_,
   software, unlikelyChg)
@@ -61,10 +62,11 @@ import qualified Data.Map as Map (elems, toList)
 mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
 mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
   Document (nw kind `comb` nw sys) (foldlList Comma List $ map (S . name) authors) $
-  mkSections (fillTraceMaps l (fillReqs l si)) l where
-    l = mkDocDesc si dd
+  mkSections (fillTraceSI dd fillTraceRef) l where
+    fillTraceRef = Ref.traceyGraphRefs si
+    l = mkDocDesc fillTraceRef dd
 
--- Helper, testing needed for .dot graphs?
+-- | Helper for filling in the traceability matrix and graph information into the system.
 fillTraceSI :: SRSDecl -> SystemInformation -> SystemInformation
 fillTraceSI dd si = fillTraceMaps l $ fillReqs l si
   where

@@ -195,7 +195,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \end{itemize}
 \subsubsection{Physical System Description}
 \label{Sec:PhysSyst}
-The physical system of Pendulum, as shown in the \hyperref[Figure:pendulum]{figure} below, includes the following elements:
+The physical system of Pendulum, as shown in the \hyperref[Figure:pendulum]{Fig:pendulum} below, includes the following elements:
 
 \begin{itemize}
 \item[PS1:]{The rod.}
@@ -771,7 +771,7 @@ Description & \begin{symbDescription}
               \item{$\mathbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
               \end{symbDescription}
 \\ \midrule \\
-Notes & The frequency and period are defined in \hyperref[DD:frequencyDD]{DD:frequencyDD} \hyperref[DD:periodSHMDD]{DD:periodSHMDD} respectively
+Notes & The frequency and period are defined in the data definitions for \hyperref[DD:frequencyDD]{frequency} and \hyperref[DD:periodSHMDD]{period} respectively
         
 \\ \midrule \\
 Source & --
@@ -783,12 +783,12 @@ RefBy &
 \end{minipage}
 \paragraph{Detailed derivation of the period of the pendulum:}
 \label{GD:periodPendDeriv}
-The period of the pendulum can be defined from \hyperref[GD:angFrequencyGD]{GD:angFrequencyGD} equation
+The period of the pendulum can be defined from the general definition for the equation of \hyperref[GD:angFrequencyGD]{angular frequency}
 
 \begin{displaymath}
 Ω=\sqrt{\frac{\mathbf{g}}{{L_{\text{rod}}}}}
 \end{displaymath}
-Therefore from the equation \hyperref[DD:angFrequencyDD]{DD:angFrequencyDD}, we have
+Therefore from the data definition of the equation for \hyperref[DD:angFrequencyDD]{angular frequency}, we have
 
 \begin{displaymath}
 T=2 π \sqrt{\frac{{L_{\text{rod}}}}{\mathbf{g}}}
@@ -1051,7 +1051,7 @@ RefBy & \hyperref[outputValues]{FR:Output-Values} and \hyperref[calcAngPos]{FR:C
 \end{minipage}
 \paragraph{Detailed derivation of angular displacement:}
 \label{IM:calOfAngularDisplacementDeriv}
-When the pendulum is displaced to an initial angle and released, the pendulum swings back and forth with periodic motion. By applying Newton's second law for rotational motion in \hyperref[TM:NewtonSecLawRotMot]{TM:NewtonSecLawRotMot}, the equation of motion for the pendulum may be obtained:
+When the pendulum is displaced to an initial angle and released, the pendulum swings back and forth with periodic motion. By applying \hyperref[TM:NewtonSecLawRotMot]{Newton's second law for rotational motion}, the equation of motion for the pendulum may be obtained:
 
 \begin{displaymath}
 \mathbf{τ}=\mathbf{I} α
@@ -1122,7 +1122,7 @@ This section provides the functional requirements, the tasks and behaviours that
 
 \begin{itemize}
 \item[Input-Values:\phantomsection\label{inputValues}]{Input the values from \hyperref[Table:ReqInputs]{Tab:ReqInputs}.}
-\item[Verify-Input-Values:\phantomsection\label{verifyInptVals}]{Check the entered input values to ensure that they do not exceed the data constraints mentioned in \hyperref[Sec:DataConstraints]{Sec:Data Constraints}. If any of the input values are out of bounds, an error message is displayed and the calculations stop.}
+\item[Verify-Input-Values:\phantomsection\label{verifyInptVals}]{Check the entered input values to ensure that they do not exceed the \hyperref[Sec:DataConstraints]{data constraints}. If any of the input values are out of bounds, an error message is displayed and the calculations stop.}
 \item[Calculate-Angular-Position-Of-Mass:\phantomsection\label{calcAngPos}]{Calculate the following values: $θ$ (from \hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement}) and ${θ_{p}}$ (from \hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement}).}
 \item[Output-Values:\phantomsection\label{outputValues}]{Output ${L_{\text{rod}}}$ (from \hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement}) and ${L_{\text{rod}}}$ (from \hyperref[IM:calOfAngularDisplacement]{IM:calOfAngularDisplacement}).}
 \end{itemize}
@@ -1151,7 +1151,7 @@ ${θ_{p}}$ & Displacement angle of the pendulum & ${{}^{\circ}}$
 This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
 
 \begin{itemize}
-\item[Correct:\phantomsection\label{correct}]{The outputs of the code have the properties described in \hyperref[Sec:CorSolProps]{Sec:Properties of a Correct Solution}.}
+\item[Correct:\phantomsection\label{correct}]{The outputs of the code have the \hyperref[Sec:CorSolProps]{properties of a correct solution}.}
 \item[Portable:\phantomsection\label{portable}]{The code is able to be run in different environments.}
 \end{itemize}
 \section{Traceability Matrices and Graphs}

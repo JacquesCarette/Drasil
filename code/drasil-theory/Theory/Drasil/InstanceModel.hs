@@ -23,7 +23,7 @@ type OutputConstraints = [RealInterval Expr Expr]
 data InstanceModel = IM { _mk       :: ModelKind
                         , _imInputs :: Inputs
                         , _imOutput :: (Output, OutputConstraints)
-                        , _rf      :: [Reference]
+                        , _rf       :: [Reference]
                         , _deri     :: Maybe Derivation
                         ,  lb       :: ShortName
                         ,  ra       :: String

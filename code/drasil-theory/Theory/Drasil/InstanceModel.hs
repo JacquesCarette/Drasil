@@ -20,7 +20,7 @@ type Output = QuantityDict
 type OutputConstraints = [RealInterval Expr Expr]
 
 -- | An instance model is a ModelKind that may have specific inputs, outputs, and output
--- constraints. It also has attributes like references, derivation, labels ('ShortName'), reference address, and notes.
+-- constraints. It also has attributes like references (as 'DecRef's), derivation, labels ('ShortName'), reference address, and notes.
 data InstanceModel = IM { _mk       :: ModelKinds
                         , _imTerm   :: NP
                         , _imInputs :: Inputs

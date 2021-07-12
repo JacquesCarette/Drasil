@@ -14,7 +14,7 @@ data ScopeType =
   | Global      -- ^ Visible everywhere.
 
 -- | A data definition is a 'QDefinition' that may have additional notes: 
--- the scope, any references, maybe a derivation, a label ('ShortName'), a reference address, and other notes ('Sentence's).
+-- the scope, any references (as 'DecRef's), maybe a derivation, a label ('ShortName'), a reference address, and other notes ('Sentence's).
 data DataDefinition = DatDef { _qd    :: QDefinition
                              , _scp   :: ScopeType
                              , _rf    :: [DecRef]

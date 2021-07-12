@@ -9,7 +9,7 @@ import Theory.Drasil.ModelKinds (ModelKinds(..), getEqModQds)
 import Control.Lens ((^.), view, makeLenses)
 
 -- | A general definition is a 'ModelKind' that may have units, a derivation,
--- references, a shortname, a reference address, and notes.
+-- references (as 'DecRef's), a shortname, a reference address, and notes.
 data GenDefn = GD { _gUid  :: UID
                   , _mk    :: ModelKinds
                   , gdUnit :: Maybe UnitDefn -- TODO: Should be derived from the ModelKinds

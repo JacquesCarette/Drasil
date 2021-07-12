@@ -1,8 +1,8 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.DecoratedReference (DecRef(..), dRef, dRefInfo) where
 
-import Language.Drasil.Sentence
-import Language.Drasil.Reference
+import Language.Drasil.Sentence (RefInfo(..))
+import Language.Drasil.Reference (Reference, ref)
 import Language.Drasil.Classes.Core (HasUID(..), HasRefAddress(..))
 import Language.Drasil.Classes.Core2 (HasShortName(..))
 import Control.Lens ((^.), makeLenses)
@@ -24,9 +24,10 @@ instance HasRefAddress DecRef where getRefAdd (DR r _) = getRefAdd r
 -- | Finds the shortname of the reference address used for the 'Reference'.
 instance HasShortName  DecRef where shortname (DR r _) = shortname r
 
-
+-- | For creating a decorated reference ('DecRef') with extra reference information ('RefInfo').
 dRefInfo :: (HasUID r, HasRefAddress r, HasShortName r) => r -> RefInfo -> DecRef
 dRefInfo r = DR (ref r)
 
+-- | Same as 'ref', but for 'DecRef' instead of 'Reference'.
 dRef :: (HasUID r, HasRefAddress r, HasShortName r) => r -> DecRef
 dRef r = dRefInfo r None

@@ -93,7 +93,7 @@ class HasReference c where
   getReferences :: Lens' c [Reference]
 
 -- | A class that contains a list of decorated references ('DecRef's).
-class HasReference c => HasDecRef c where
+class HasDecRef c where
   -- | Provides a 'Lens' to the 'DecRef's.
   getDecRefs :: Lens' c [DecRef]
 

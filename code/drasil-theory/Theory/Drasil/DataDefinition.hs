@@ -42,9 +42,7 @@ instance DefiningExpr       DataDefinition where defnExpr = qd . defnExpr
 -- | Converts the defining expression of a 'DataDefinition' into the display language.
 instance Display            DataDefinition where toDispExpr d = defines (sy d) (d ^. defnExpr)
 {-- Finds 'Reference's contained in the 'DataDefinition'.
-instance HasReference       DataDefinition where getReferences = toRefLens.rf
-toRefLens :: Lens' s [DecRef] -> Lens' s [Reference]
-toRefLens (Lens a b c d) = Lens a b (map ref c) (map ref d)-}
+instance HasReference       DataDefinition where getReferences = rf-}
 -- | Finds 'DecRef's contained in the 'DataDefinition'.
 instance HasDecRef          DataDefinition where getDecRefs = rf
 -- | Equal if 'UID's are equal.

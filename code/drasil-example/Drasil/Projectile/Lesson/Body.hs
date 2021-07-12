@@ -30,8 +30,9 @@ import Drasil.Projectile.Expressions (eqnRefs)
 import Drasil.Projectile.Lesson.IntroSection (introContext, reasonList, overviewParagraph)
 import Drasil.Projectile.Lesson.Review (reviewContent)
 import Drasil.Projectile.Lesson.Motion (motionContextP1, figCSandA, figRefs,
-  motionContextP2, horMotion, verMotion, summary)
+  motionContextP2, horMotion, verMotion, summary, foot)
 import Drasil.Projectile.Lesson.Analysis (coorSyst, kinematicEq, horMotionAna, verMotionAna)
+import Drasil.Projectile.Lesson.Example(expIntro)
 
 nb :: Document
 nb = mkDoc mkNB (S.forGen titleize phrase) si
@@ -47,7 +48,8 @@ mkNB = [
        BodyProg
          [Review reviewContent,
           MainIdea [motionContextP1, LlC figCSandA, motionContextP2] [horMotion, verMotion, summary],
-          MethsAndAnls [mAndaintro] [coorSyst, kinematicEq, horMotionAna, verMotionAna]],
+          MethsAndAnls [mAndaintro] [coorSyst, kinematicEq, horMotionAna, verMotionAna],
+          Example [expIntro] []],
   Bibliography
   ]
 
@@ -91,7 +93,6 @@ projectileMotion = commonIdea "projectileMotion" (pn "Projectile Motion") "Proje
 mAndaintro :: Contents
 mAndaintro = foldlSP 
   [S "Free-flight", phrase projMotion, S "problems can be solved using the following procedure"]
-
 
 allRefs :: [Reference]
 allRefs = nub (figRefs ++ eqnRefs)

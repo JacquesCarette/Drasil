@@ -4,6 +4,7 @@ import qualified Drasil.DocLang.Notebook as NB (summary, hormotion, vermotion)
 
 import Data.Drasil.Concepts.Physics (motion, acceleration, velocity, force, time,
   constAccel, horizontalMotion, verticalMotion)
+import Data.Drasil.Units.Physics (accelU)
 import Data.Drasil.Concepts.Math (direction, xDir, yAxis)
 import Drasil.Projectile.Concepts (projectile, projMotion)
 import Drasil.Projectile.Expressions (lcrectVel, lcrectPos, lcrectNoTime, horMotionEqn1, horMotionEqn2,
@@ -16,7 +17,7 @@ import Language.Drasil.ShortHands
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
-
+import Data.Drasil.SI_Units (s_2)
 
 import qualified Drasil.Projectile.Expressions as E (speed', scalarPos', rectNoTime)
 
@@ -34,14 +35,14 @@ motionContextP1
          S "launched at point", sParen (eS (sy QP.ixDist) `sC` (eS (sy QP.iyDist))),
          S "as shown in" +:+. refS figCSandA,
        S "The path is defined in the", P lX `sDash` P lY, S "plane such that the initial", 
-         phrase velocity +:+ S "is", eS (sy QP.iSpeed), S ", having components", 
+         phrase velocity, S "is", eS (sy QP.iSpeed) :+: S ", having components", 
          eS (sy QP.ixVel) `S.and_` eS (sy QP.iyVel),
        S "When air resistance is neglected, the only", phrase force, S "acting on the",
          phrase projectile, S"is its weight, which causes the", phrase projectile, 
          S "to have a *constant downward acceleration* of approximately",
-         eS (sy QP.constAccel $= sy QP.gravitationalAccel $= dbl 9.81) `S.or_` 
-         eS (sy QP.gravitationalAccel $= dbl 32.2)]
-
+         eS (sy QP.constAccel $= sy QP.gravitationalAccel $= dbl 9.81), Sy (usymb accelU) `S.or_` 
+         eS (sy QP.gravitationalAccel $= dbl 32.2), Sy (usymb accelinftU)]
+--
 motionContextP2
   = foldlSP_
       [S "The equations for rectilinear kinematics given above (ref) are in one dimension.",
@@ -106,3 +107,6 @@ motionSent = S "This value can be substituted in the equations for" +:+ phrase c
 figRefs :: [Reference]
 figRefs = [ref figCSandA]
 
+foot, accelinftU :: UnitDefn
+foot = fund "foot" "length" "ft"
+accelinftU = newUnit "acceleration" $ foot /: s_2

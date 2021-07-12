@@ -16,10 +16,11 @@ reasonList :: Contents
 reasonList = enumBulletU $ map foldlSent
   [[S "The model developed is relatively simple because it only involves kinematic quantities,",
     S "not kinetics. Kinematics focuses on the geometrics aspects of", phrase motion,
-    S "while kinetics introduces the concept of" +:+. plural force], 
+    S "while kinetics introduces the concept of" +:+ plural force], 
   [atStart projMotion +:+ S "has practical applications for tracking the", phrase motion, 
     S "of launched or thrown objects"]]
 
 overviewParagraph :: Contents
 overviewParagraph = foldlSP [S "The presentation below is based on Section 12.6 (", atStart motion `S.of_`
-  S "a", atStart projectile, S") from the classic Hibbler text Engineering Mechanics Dynamnics, 10th edition"]
+  S "a", atStart projectile, S") from the classic Hibbler text" +:+
+  Quote (S "Engineering Mechanics Dynamnics, 10th edition")]

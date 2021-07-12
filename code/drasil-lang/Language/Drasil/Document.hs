@@ -118,4 +118,4 @@ makeLstRef r s = Reference (r ++ "Label") (RP (prepend "Lst") ("Lst:" ++ repUnd 
 
 -- | Create a reference for a 'URI'.
 makeURI :: UID -> String -> ShortName -> Reference
-makeURI u r s = Reference u (URI r) s
+makeURI u r = Reference u (URI r)

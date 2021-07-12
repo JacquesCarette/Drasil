@@ -57,8 +57,8 @@ riskQD = mkQuantDef riskFun riskEq
 
 risk :: DataDefinition
 risk = dd riskQD
-  ([dRef astm2009, dRefInfo beasonEtAl1998 $ Equation [4, 5],
-  dRefInfo campidelli $ Equation [14]])
+  [dRef astm2009, dRefInfo beasonEtAl1998 $ Equation [4, 5],
+  dRefInfo campidelli $ Equation [14]]
   Nothing "riskFun" [aGrtrThanB, hRef, ldfRef, jRef]
 
 --DD2--

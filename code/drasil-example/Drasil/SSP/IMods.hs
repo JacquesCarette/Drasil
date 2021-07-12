@@ -372,17 +372,20 @@ fctSftyDerivEqn18 = sy fs `mulRe` (idx (sy mobShrC) (sy numbSlices $- int 1) `mu
 ------------------------------------------------------------------------
 
 nrmShrFor :: InstanceModel
-nrmShrFor = im (othModel' nrmShrForRC) [qwUC slopeDist, qwUC slopeHght, qwUC waterHght,
+nrmShrFor = im nrmShrForMK [qwUC slopeDist, qwUC slopeHght, qwUC waterHght,
   qwUC waterWeight, qwUC slipDist, qwUC slipHght, qwUC constF]
   (qw normToShear) [] (map ref [chen2005, karchewski2012])
   (Just nrmShrDeriv) "nrmShrFor" [nrmShrFDesc]
 
-nrmShrForRC :: RelationConcept
-nrmShrForRC = makeRC "nrmShrForRC" (nounPhraseSP "normal and shear force proportionality constant")
-  nrmShrFDesc nrmShrFRel -- nrmShrForL
+nrmShrForMK :: ModelKind
+nrmShrForMK = equationalModel "nrmShrForIM"
+  (nounPhraseSP "normal and shear force proportionality constant") nrmShrForQD
 
-nrmShrFRel :: Relation
-nrmShrFRel = sy normToShear $= sum1toN (inxi nrmShearNum) $/ sum1toN (inxi nrmShearDen)
+nrmShrForQD :: QDefinition
+nrmShrForQD = mkQuantDef normToShear nrmShrFExpr
+
+nrmShrFExpr :: Expr
+nrmShrFExpr = sum1toN (inxi nrmShearNum) $/ sum1toN (inxi nrmShearDen)
 
 nrmShrFDesc :: Sentence
 nrmShrFDesc = nrmShearNum `definedIn'''`

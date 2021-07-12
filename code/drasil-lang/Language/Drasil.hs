@@ -41,6 +41,7 @@ module Language.Drasil (
   , HasSpace(typ)
   , HasUnitSymbol(usymb)
   , HasReference(getReferences)
+  , HasDecRef(getDecRefs)
   , HasReasVal(reasVal)
   , HasDerivation(derivations)
   , Idea(getA)
@@ -151,6 +152,8 @@ module Language.Drasil (
   , label, variable
   -- Reference
   , Reference(..), ref, refS, namedRef, complexRef, namedComplexRef
+  -- Decorated Reference
+  , DecRef(refInfo), mkDecRef
   -- Label.Type
   , getAdd, prepend
   , LblType(RP, Citation, URI), IRefProg(..)
@@ -225,7 +228,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
   HasReasVal(reasVal), HasDerivation(derivations), 
-  HasReference(getReferences), HasSpace(typ),
+  HasReference(getReferences), HasDecRef(getDecRefs), HasSpace(typ),
   DefiningExpr(defnExpr), Quantity, HasUncertainty(unc), Callable, 
   IsArgumentName, Display(..))
 import Language.Drasil.Classes.Citations (HasFields(getFields))
@@ -281,6 +284,7 @@ import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), TermCapitaliza
   (+:+.), (+:), (!.), capSent, ch, eS, sC, sDash, sParen)
 import Language.Drasil.Sentence.Extract (sdep, shortdep) -- exported for drasil-database FIXME: move to development package?
 import Language.Drasil.Reference (Reference(..), namedRef, complexRef, namedComplexRef, ref, refS)
+import Language.Drasil.DecoratedReference(DecRef(refInfo), mkDecRef)
 import Language.Drasil.Symbol (Decoration, Symbol)
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol, 
   autoStage, hat, prime, staged, sub, subStr, sup, unicodeConv, upperLeft, vec,

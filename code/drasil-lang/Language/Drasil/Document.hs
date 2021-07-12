@@ -5,7 +5,7 @@ module Language.Drasil.Document where
 import Language.Drasil.Classes.Core (HasUID(uid), getRefAdd, HasRefAddress(getRefAdd), Referable(refAdd, renderRef))
 import Language.Drasil.Classes.Core2 (HasShortName(shortname))
 import Language.Drasil.Document.Core
-import Language.Drasil.Label.Type (prepend, LblType(RP, URI))
+import Language.Drasil.Label.Type (prepend, LblType(RP, URI), getAdd)
 import Language.Drasil.Misc (repUnd)
 import Language.Drasil.Reference (Reference(Reference))
 import Language.Drasil.Sentence (Sentence(..))
@@ -34,10 +34,10 @@ instance HasUID        Section where uid = lab . uid
 instance HasShortName  Section where shortname = shortname . view lab
 -- | Finds the reference information of a 'Section'.
 instance Referable Section where
-  refAdd    (Section _ _ lb ) = getRefAdd lb
-  renderRef (Section _ _ lb)  = RP (prepend "Sec") (getRefAdd lb)
+  refAdd     = getAdd . getRefAdd . view lab
+  renderRef (Section _ _ lb)  = RP (prepend "Sec") (getAdd $ getRefAdd lb)
 -- | Finds the reference address of a 'Section'.
-instance HasRefAddress Section where getRefAdd = getRefAdd . view lab
+instance HasRefAddress Section where getRefAdd (Section _ _ lb) = RP (prepend "Sec") (getAdd $ getRefAdd lb)
 
 -- | A Document has a Title ('Sentence'), Author(s) ('Sentence'), and 'Section's
 -- which hold the contents of the document.

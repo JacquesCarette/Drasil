@@ -124,9 +124,9 @@ helpToRefField t si
   where s = _sysinfodb si
 
 -- | Helper that makes a list of 'Reference's into a 'Sentence'. Then wraps into 'Contents'.
-helperSources :: [Reference] -> [Contents]
+helperSources :: [DecRef] -> [Contents]
 helperSources [] = [mkParagraph $ S "--"]
-helperSources rs  = [mkParagraph $ foldlList Comma List $ map (\(r) -> Ref (r ^. uid) EmptyS None) rs]
+helperSources rs  = [mkParagraph $ foldlList Comma List $ map (\r -> Ref (r ^. uid) EmptyS $ refInfo r) rs]
 
 -- | Creates the fields for a definition from a 'QDefinition' (used by 'ddefn').
 mkDDField :: DataDefinition -> SystemInformation -> Field -> ModRow -> ModRow

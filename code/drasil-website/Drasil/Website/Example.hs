@@ -32,8 +32,8 @@ exampleList repoPth exPth = Bullet $ zip (zipWith4 (mkExampleListFunc exPth) exa
 -- Organize the examples into a bulleted list.
 mkExampleListFunc :: FilePath -> String -> String -> [(String, [(Sentence, Reference)])] -> [(String, [(Sentence, Reference)])] -> ItemType
 mkExampleListFunc path exmpl desc codePth doxPth
-  | map ((map snd).snd) codePth == [[]] && map ((map snd).snd) doxPth == [[]] = Nested (S exmpl +:+ S desc) $ Bullet [(Flat (S (exmpl ++ "SRS") +:+ namedRef (getHTMLRef path exmpl) (S "[HTML]") +:+ namedRef (getPDFRef path exmpl) (S "[PDF]")), Nothing)]
-  | map ((map snd).snd) doxPth == [[]]                            = Nested (S exmpl +:+ S desc) $ Bullet $ zip [Flat $ S (exmpl ++ "SRS") +:+ namedRef (getHTMLRef path exmpl) (S "[HTML]") +:+ namedRef (getPDFRef path exmpl) (S "[PDF]"),
+  | map (map snd . snd) codePth == [[]] && map (map snd . snd) doxPth == [[]] = Nested (S exmpl +:+ S desc) $ Bullet [(Flat (S (exmpl ++ "SRS") +:+ namedRef (getHTMLRef path exmpl) (S "[HTML]") +:+ namedRef (getPDFRef path exmpl) (S "[PDF]")), Nothing)]
+  | map (map snd . snd) doxPth == [[]]                            = Nested (S exmpl +:+ S desc) $ Bullet $ zip [Flat $ S (exmpl ++ "SRS") +:+ namedRef (getHTMLRef path exmpl) (S "[HTML]") +:+ namedRef (getPDFRef path exmpl) (S "[PDF]"),
                                                                        Nested (S generatedCodeTitle) $ Bullet $ mkCodeList codePth] $ repeat Nothing
   | otherwise                                         = Nested (S exmpl +:+ S desc) $ Bullet $ zip [Flat $ S (exmpl ++ "SRS") +:+ namedRef (getHTMLRef path exmpl) (S "[HTML]") +:+ namedRef (getPDFRef path exmpl) (S "[PDF]"),
                                                                        Nested (S generatedCodeTitle) $ Bullet $ mkCodeList codePth,
@@ -41,8 +41,12 @@ mkExampleListFunc path exmpl desc codePth doxPth
 
 -- References come in the form of [(Project version), [(Display name, Reference for generated code or documents)]]
 mkCodeList :: [(String, [(Sentence, Reference)])] -> [(ItemType, Maybe String)]
-mkCodeList [] = []
-mkCodeList (r:refs) = (Flat $ foldlSent_ $ (S $ fst r) : (map (uncurry (flip namedRef)) (snd r)), Nothing): mkCodeList refs
+mkCodeList = map
+      (\ r
+         -> (Flat
+               $ foldlSent_
+                   $ S (fst r) : map (uncurry (flip namedRef)) (snd r),
+             Nothing))
 
 exampleTitles, exampleDescs :: [String]
 -- Sorts the references for mkCodeList.
@@ -67,8 +71,8 @@ exampleCodeRefs path =[[(pendulum, [])],
                   [(template, [])]]
 exampleDoxRefs path =[[(pendulum, [])],
                  [(gamePhys, [])],
-                 [(glassBR, map (getDoxRef path glassBR) glassBRDox)], 
-                 [(hghc, [])], 
+                 [(glassBR, map (getDoxRef path glassBR) glassBRDox)],
+                 [(hghc, [])],
                  [(noPCM, map (getDoxRef path noPCM) noPCMDox)],
                  [(pdController, map (getDoxRef path pdController) pdControllerDox)],
                  [(projectileC1, map (\x -> getDoxRef path projectile (projectileC1 ++ "/" ++ x)) projectileCase1Dox),
@@ -132,13 +136,13 @@ getPDFPath path ex = path ++ ex ++ "/srs/" ++ ex ++ "_SRS.pdf"
 
 -- Make display names and references for generated code and docs
 getCodeRef, getDoxRef :: FilePath -> String -> String -> (Sentence, Reference)
-getCodeRef path ex lang = ((S ("[" ++ convertlang ++ "]")), Reference ("codeRef" ++ ex ++ lang) (URI (getCodePath path ex lang)) (shortname' $ S ("codeRef" ++ ex ++ lang)) None)
+getCodeRef path ex lang = (S ("[" ++ convertlang ++ "]"), Reference ("codeRef" ++ ex ++ lang) (URI (getCodePath path ex lang)) (shortname' $ S ("codeRef" ++ ex ++ lang)) None)
   where
-    convertlang 
+    convertlang
       | lang == "cpp" = "C++"
       | lang == "csharp" = "C Sharp" -- Drasil printers dont like the # symbol, so we use the full word.
       | otherwise = (toUpper.head) lang : tail lang
-getDoxRef path ex lang = ((S ("[" ++ convertlang lang ++ "]")), Reference ("doxRef" ++ ex ++ lang) (URI (getDoxPath path ex lang)) (shortname' $ S ("doxRef" ++ ex ++ lang)) None)
+getDoxRef path ex lang = (S ("[" ++ convertlang lang ++ "]"), Reference ("doxRef" ++ ex ++ lang) (URI (getDoxPath path ex lang)) (shortname' $ S ("doxRef" ++ ex ++ lang)) None)
   where
     convertlang l
       | l == "cpp" = "C++"
@@ -170,9 +174,9 @@ generatedCodeTitle = "Generated Code:"
 generatedCodeDocsTitle = "Generated Code Documentation:"
 
 exampleRefs :: FilePath -> FilePath -> [Reference]
-exampleRefs p1 p2 = [exampleSecRef, ref $ exampleSec p1 p2] ++ 
-  concatMap (concatMap ((map snd). snd)) (exampleCodeRefs p1) ++ 
-  concatMap (concatMap ((map snd). snd)) (exampleDoxRefs p2) ++ 
+exampleRefs p1 p2 = [exampleSecRef, ref $ exampleSec p1 p2] ++
+  concatMap (concatMap (map snd. snd)) (exampleCodeRefs p1) ++
+  concatMap (concatMap (map snd. snd)) (exampleDoxRefs p2) ++
   map (getHTMLRef p2) exampleTitles ++ map (getPDFRef p2) exampleTitles
 
 exampleSecRef :: Reference

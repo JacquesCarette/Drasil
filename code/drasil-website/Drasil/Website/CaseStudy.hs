@@ -31,14 +31,14 @@ headerRow :: [Sentence]
 headerRow = map S ["Case Study", modularityTitle, implementTypeTitle, loggingTitle, inStructTitle, conStructTitle, conRepTitle, realNumRepTitle]
 
 tableBody :: [[Sentence]]
-tableBody = mkTable [(\(CS x _ _ _ _ _ _ _) -> S x),
-                     (\(CS _ x _ _ _ _ _ _) -> S $ show x),
-                     (\(CS _ _ x _ _ _ _ _) -> S $ show x),
-                     (\(CS _ _ _ x _ _ _ _) -> S $ show x),
-                     (\(CS _ _ _ _ x _ _ _) -> S $ show x),
-                     (\(CS _ _ _ _ _ x _ _) -> S $ show x),
-                     (\(CS _ _ _ _ _ _ x _) -> S $ show x),
-                     (\(CS _ _ _ _ _ _ _ x) -> S $ show x)]
+tableBody = mkTable [\(CS x _ _ _ _ _ _ _) -> S x,
+                     \(CS _ x _ _ _ _ _ _) -> S $ show x,
+                     \(CS _ _ x _ _ _ _ _) -> S $ show x,
+                     \(CS _ _ _ x _ _ _ _) -> S $ show x,
+                     \(CS _ _ _ _ x _ _ _) -> S $ show x,
+                     \(CS _ _ _ _ _ x _ _) -> S $ show x,
+                     \(CS _ _ _ _ _ _ x _) -> S $ show x,
+                     \(CS _ _ _ _ _ _ _ x) -> S $ show x]
                      [glassBRCase, noPCMCase, pdControllerCase, projectileCase1, projectileCase2, projectileCase3, projectileCase4, projectileCase5]
 
 caseStudyTabRef :: Reference
@@ -88,13 +88,13 @@ projectileCase4  = CS "Projectile_U_P_NoL_U_WI_V_D" UMod PIm NoL UIn WI V D
 projectileCase5  = CS "Projectile_U_P_L_B_WI_V_F"   UMod PIm L   BIn WI V F
 
 -- case studies symbol legend
-modularityTitle, implementTypeTitle, loggingTitle, inStructTitle, conStructTitle, 
+modularityTitle, implementTypeTitle, loggingTitle, inStructTitle, conStructTitle,
   conRepTitle, realNumRepTitle :: String
-modPt1, modPt2, modPt3, implementPt1, implementPt2, 
-  logPt1, logPt2, inStructPt1, inStructPt2, conStructPt1, conStructPt2, conStructPt3, 
+modPt1, modPt2, modPt3, implementPt1, implementPt2,
+  logPt1, logPt2, inStructPt1, inStructPt2, conStructPt1, conStructPt2, conStructPt3,
   conStructPt4, conRepPt1, conRepPt2, realNumRepPt1, realNumRepPt2 :: String
-modSymbPt1, modSymbPt2, modSymbPt3, implementSymbPt1, implementSymbPt2, 
-  logSymbPt1, logSymbPt2, inStructSymbPt1, inStructSymbPt2, conStructSymbPt1, conStructSymbPt2, conStructSymbPt3, 
+modSymbPt1, modSymbPt2, modSymbPt3, implementSymbPt1, implementSymbPt2,
+  logSymbPt1, logSymbPt2, inStructSymbPt1, inStructSymbPt2, conStructSymbPt1, conStructSymbPt2, conStructSymbPt3,
   conStructSymbPt4, conRepSymbPt1, conRepSymbPt2, realNumRepSymbPt1, realNumRepSymbPt2 :: String
 
 caseStudyLegend :: RawContent

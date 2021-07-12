@@ -40,7 +40,7 @@ PDCONTROLLER_DIR = PDController
 MULTI_SRC_DIRS = $(PROJECTILE_DIR) # Directories for examples with multiple src versions
 
 EXAMPLE_DIRS = $(MULTI_SRC_DIRS) $(HGHC_DIR) $(GLASSBR_DIR) $(NOPCM_DIR) \
-  $(SWHS_DIR) $(SSP_DIR) $(GAMEPHYSICS_DIR)  $(DBLPENDULUM_DIR) \
+  $(SWHS_DIR) $(SSP_DIR) $(GAMEPHYSICS_DIR) $(DBLPENDULUM_DIR) \
   $(PDCONTROLLER_DIR) # All example directories
 
 # and the name of their executables
@@ -108,6 +108,9 @@ DEPLOY_FOLDER = $(DEPLOY_FOLDER_NAME)/
 DEPLOY_CODE_PATH_KV_SEP = :
 DOCS_FOLDER_NAME = docs
 DOCS_FOLDER = $(DOCS_FOLDER_NAME)/
+TRACEY_GRAPH_FOLDER_NAME = TraceyGraph
+TRACEY_GRAPH_FOLDER = $(TRACEY_GRAPH_FOLDER_NAME)/
+TRACEY_GRAPH_NAMES = allvsall allvsr avsa avsall refvsref
 # make command line options
 #  GHC debug options
 PROFALL = --executable-profiling --library-profiling
@@ -193,6 +196,18 @@ $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod ch
 graphs: $(GRAPH_PACKAGES)
 ###
 
+traceygraph: graphmod $(TEST_EXAMPLES)
+	@cd $(BUILD_FOLDER) && for dir in $(EXAMPLE_DIRS); do \
+		if [ -d $$dir/$(TRACEY_GRAPH_FOLDER) ]; then \
+			cd $$dir/$(TRACEY_GRAPH_FOLDER) && for graph in $(TRACEY_GRAPH_NAMES); do \
+				dot -Tpdf $$graph.dot > "./$$graph.pdf" ; \
+			done ; \
+			cd .. ; \
+			cd .. ; \
+		fi ; \
+	done
+	@echo Created traceability graphs
+
 analysis: graphmod
 	- rm -rf "$(ANALYSIS_FOLDER)"
 	@mkdir -p "$(ANALYSIS_FOLDER)"
@@ -206,12 +221,12 @@ analysis: graphmod
 
 # Use a 'local' HLint installation, using HLint from the current stack repo
 hlint: check_stack
-	- stack install hlint
-	- hlint .
+	stack install hlint
+	hlint .
 
 # Use the latest HLint version, downloading the binary each time
 hot_hlint:
-	- curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
+	curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
 
 docs: check_stack
 	DOCS_FOLDER="$(DOCS_FOLDER)" GHC_FLAGS="$(GHCFLAGS)" sh scripts/make_docs.sh
@@ -286,4 +301,4 @@ clean_artifacts cleanArtifacts: $(CLEAN_FOLDERS)
 clean: clean_artifacts
 	- stack clean
 
-.PHONY: clean clean_artifacts cleanArtifacts code hlint hot_hlint analysis tex doc debug prog test graphs graphmod check_stack graphs website deploy_code_path deploy deploy_lite all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)
+.PHONY: clean clean_artifacts cleanArtifacts code hlint hot_hlint analysis tex doc debug prog test graphs graphmod check_stack graphs website deploy_code_path deploy deploy_lite traceygraph all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)

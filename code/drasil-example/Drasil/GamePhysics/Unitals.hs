@@ -17,8 +17,8 @@ import qualified Data.Drasil.Quantities.Physics as QP (acceleration, angularAcce
 import qualified Data.Drasil.Quantities.Math as QM (euclidNorm, normalVect, 
   orientation, perpVect, pi_, unitVect)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
-import Data.Drasil.Units.Physics (accelU, angVelU, impulseU, momtInertU, 
-  torqueU, velU)
+import Data.Drasil.Units.Physics (accelU, angVelU, impulseU, momtInertU,
+  torqueU, velU, angAccelU)
 
 import Control.Lens((^.))
 import Data.Drasil.Constraints (gtZeroConstr)
@@ -31,7 +31,7 @@ unitSymbs :: [UnitaryConceptDict]
 unitSymbs = map ucw unitalChunks ++ map ucw [iVect, jVect, normalVect,
  force_1, force_2, forcej, mass_1, mass_2, 
   dispNorm, sqrDist, velA, velB, velO, rOB, angVelA, angVelB,
-  posCM, massj, posj, accj, mTot, velj, torquej, timeC, initRelVel, 
+  posCM, massj, posj, accj, angAccj, mTot, velj, torquej, timeC, initRelVel, 
   massA, massB, massIRigidBody, normalLen, contDispA, contDispB, 
   perpLenA, momtInertA, perpLenB, momtInertB, timeT, inittime, 
   momtInertK, pointOfCollision, contDispK, collisionImpulse, velAP,
@@ -133,7 +133,7 @@ velParam n w = ucs'
 
 iVect, jVect, normalVect, force_1, force_2, forcej, mass_1, mass_2, 
   dispNorm, sqrDist, velA, velB, velO, rOB, angVelA, angVelB,
-  posCM, massj, posj, accj, mTot, velj, torquej, timeC, initRelVel, 
+  posCM, massj, posj, accj, angAccj, mTot, velj, torquej, timeC, initRelVel, 
   massA, massB, massIRigidBody, normalLen, contDispA, contDispB, 
   perpLenA, momtInertA, perpLenB, momtInertB, timeT, inittime, 
   momtInertK, pointOfCollision, contDispK, collisionImpulse, finRelVel,
@@ -184,6 +184,10 @@ posj = ucs' (dccWDS "p_j" (compoundPhrase' (QP.position ^. term)
 accj = ucs' (dccWDS "accj" (compoundPhrase' (cn "j-th body's")
                (QP.acceleration ^. term)) (phrase QP.acceleration))
                (sub (eqSymb QP.acceleration) lJ) Real accelU
+
+angAccj = ucs' (dccWDS "angAccj" (compoundPhrase' (cn "j-th body's")
+               (QP.angularAccel ^. term)) (phrase QP.angularAccel))
+               (sub (eqSymb QP.angularAccel) lJ) Real angAccelU
 
 velj = ucs' (dccWDS "velj" (compoundPhrase' (QP.velocity ^. term) 
                (cn "of the j-th body's velocity")) (phrase QP.velocity))

@@ -296,7 +296,6 @@ convExpr (AssocA MulI l)  = foldl1 (#*)  <$> mapM convExpr l
 convExpr (AssocA MulRe l) = foldl1 (#*)  <$> mapM convExpr l
 convExpr (AssocB And l)   = foldl1 (?&&) <$> mapM convExpr l
 convExpr (AssocB Or l)    = foldl1 (?||) <$> mapM convExpr l
-convExpr Deriv{} = return $ litString "**convExpr :: Deriv unimplemented**"
 convExpr (C c)   = do
   g <- get
   let v = quantvar (lookupC g c)

@@ -1,4 +1,4 @@
-module Drasil.PDController.Body (pidODEInfo, printSetting, si, srs) where
+module Drasil.PDController.Body (pidODEInfo, printSetting, si, srs, fullSI) where
 
 import Data.List (nub)
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
@@ -28,7 +28,7 @@ import Drasil.DocLang
         SRSDecl, SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec),
         SolChSpec(SCSProg), TSIntro(..), TraceabilitySec(TraceabilityProg),
         Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, getTraceConfigUID,
-        secRefs)
+        secRefs, fillTraceSI)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 
 import Language.Drasil
@@ -63,6 +63,9 @@ naveen = person "Naveen Ganesh" "Muralidharan"
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
+
+fullSI :: SystemInformation
+fullSI = fillTraceSI mkSRS si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration

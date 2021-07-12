@@ -19,6 +19,8 @@ dependencies:
 - drasil-build
 - drasil-code
 - drasil-printers
+- drasil-docLang
+- drasil-database
 
 ghc-options:
 - -Wall

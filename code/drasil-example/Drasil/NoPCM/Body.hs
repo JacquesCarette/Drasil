@@ -1,4 +1,4 @@
-module Drasil.NoPCM.Body (si, srs, printSetting, noPCMODEInfo) where
+module Drasil.NoPCM.Body (si, srs, printSetting, noPCMODEInfo, fullSI) where
 
 import Control.Lens ((^.))
 import Language.Drasil hiding (section)
@@ -52,7 +52,7 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg), DerivationDisplay(..),
   ReqrmntSec(..), ReqsSub(..), SCSSub(..), SolChSpec(..), SRSDecl, SSDSec(..),
   SSDSub(..), TraceabilitySec(TraceabilityProg), Verbosity(Verbose),
   TSIntro(SymbOrder, SymbConvention, TSPurpose, VectorUnits), intro, mkDoc,
-  tsymb, traceMatStandard, purpDoc, getTraceConfigUID, secRefs)
+  tsymb, traceMatStandard, purpDoc, getTraceConfigUID, secRefs, fillTraceSI)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
@@ -86,6 +86,9 @@ import Drasil.NoPCM.Unitals (inputs, constrained, unconstrained,
 
 srs :: Document
 srs = mkDoc mkSRS S.forT si
+
+fullSI :: SystemInformation
+fullSI = fillTraceSI mkSRS si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration

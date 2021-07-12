@@ -59,7 +59,7 @@ lookupT sm c tCap = resolveCapT tCap $ termResolve sm c ^. term
 
 -- | Look up the acronym/abbreviation of a term. Otherwise returns the singular form of a term. Takes a chunk database and a 'UID' associated with the term.
 lookupS :: ChunkDB -> UID -> TermCapitalization -> Sentence
-lookupS sm c sCap = maybe (resolveCapT sCap $ l ^. term) S $ getA l >>= (capHelper sCap)
+lookupS sm c sCap = maybe (resolveCapT sCap $ l ^. term) S $ getA l >>= capHelper sCap
   where l = termResolve sm c
 
 -- | Look up the plural form of a term given a chunk database and a 'UID' associated with the term.
@@ -80,6 +80,6 @@ resolveCapP CapW = titleizeNP'
 
 -- | Helper to get the capital case of an abbreviation based on 'TermCapitalization'. For sentence and title cases.
 capHelper :: TermCapitalization -> String -> Maybe String
-capHelper NoCap s = return s
-capHelper _ [] = Nothing
-capHelper _ (x:xs) = Just ((toUpper x): xs)
+capHelper NoCap s      = return s
+capHelper _     []     = Nothing
+capHelper _     (x:xs) = Just (toUpper x: xs)

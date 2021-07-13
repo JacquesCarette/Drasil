@@ -44,7 +44,7 @@ module Drasil.DocLang (
   -- Tracetable
   generateTraceMap,
   -- Labels
-  solutionLabel, characteristicsLabel,
+ -- solutionLabel, characteristicsLabel,
   -- References
   secRefs
 ) where 
@@ -79,5 +79,5 @@ import Drasil.Sections.TraceabilityMandGs (traceMatStandard, traceMatOtherReq)
 import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
 import Drasil.TraceTable (generateTraceMap)
 -- Commented out modules aren't used - uncomment if this changes
-import Drasil.DocumentLanguage.Labels (solutionLabel, characteristicsLabel)
+-- import Drasil.DocumentLanguage.Labels (solutionLabel, characteristicsLabel)
 import Drasil.DocLang.References (secRefs)

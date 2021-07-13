@@ -1,3 +1,4 @@
+{-# Language TupleSections #-}
 ---------------------------------------------------------------------------
 -- | Start the process of moving away from Document as the main internal
 -- representation of information, to something more informative.
@@ -28,13 +29,14 @@ import Database.Drasil(ChunkDB, SystemInformation(SI), _authors, _kind,
   _quants, _sys, _sysinfodb, _usedinfodb, ccss, ccss', citeDB, collectUnits,
   conceptinsTable, generateRefbyMap, idMap, refbyTable, termTable, traceTable)
 
-import Drasil.Sections.TableOfAbbAndAcronyms (tableOfAbbAndAcronyms)
+import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
 import Drasil.Sections.TableOfContents (toToC)
 import Drasil.Sections.TableOfSymbols (table, symbTableRef)
 import Drasil.Sections.TableOfUnits (tOfUnitDesc, tOfUnitSIName, unitTableRef)
 import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn,
   genSysDes, inModel, likeChg, unlikeChg, probDesc, reference, solCharSpec,
-  stakeholder, thModel, tOfCont, tOfSymb, tOfUnit, userChar, offShelfSol)
+  stakeholder, thModel, tOfCont, tOfSymb, tOfUnit, userChar, offShelfSol, refMat,
+  tOfAbbAcc)
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysIntro,
   systCon, usrCharsF, sysContxt)
@@ -49,7 +51,7 @@ import qualified Drasil.Sections.Stakeholders as Stk (stakeholderIntro,
 import qualified Drasil.DocumentLanguage.TraceabilityMatrix as TM (traceMGF,
   generateTraceTableView)
 
-import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, refmat, section_,
+import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
   software, unlikelyChg)
 
 
@@ -102,8 +104,6 @@ extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) 
 
 ----- Section creators -----
 
---- General Section creator ---
-
 -- | Helper for creating the different document sections.
 mkSections :: SystemInformation -> DocDesc -> [Section]
 mkSections si dd = map doit dd
@@ -124,17 +124,16 @@ mkSections si dd = map doit dd
     doit (AppndxSec a)        = mkAppndxSec a
     doit (OffShelfSolnsSec o) = mkOffShelfSolnSec o
 
---- Table of Contents ---
-
 -- | Helper for making the Table of Contents section.
 mkToC :: DocDesc -> Section
-mkToC dd = SRS.tOfCont [intro, UlC $ ulcc $ Enumeration $ Bullet $ map (, Nothing) $ concatMap toToC dd] []
+mkToC dd = SRS.tOfCont [intro, UlC $ ulcc $ Enumeration $ Bullet $ map ((, Nothing) . toToC) dd] []
   where
     intro = mkParagraph $ S "An outline of all sections included in this SRS is recorded here for easy reference."
 
---- Reference Materials section. Includes Table of Symbols, Units and Abbreviations and Acronyms. ---
+
 
 -- | Helper for creating the reference section and subsections.
+-- Includes Table of Symbols, Units and Abbreviations and Acronyms.
 mkRefSec :: SystemInformation -> DocDesc -> RefSec -> Section
 mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
   where
@@ -159,7 +158,7 @@ mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
     mkSubRef SI {_sysinfodb = cdb} (TSymb' f con) =
       mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) cdb) f con
     mkSubRef SI {_usedinfodb = db} TAandA =
-      tOfAbbAcc [LlC $ table $ nub $ map fst $ Map.elems $ termTable db] []
+      SRS.tOfAbbAcc [LlC $ tableAbbAccGen $ nub $ map fst $ Map.elems $ termTable db] []
 
 -- | Table of units constructors.
 tunit, tunit' :: [TUIntro] -> RefTab
@@ -355,16 +354,16 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
 -- | Helper for making the Likely Changes section.
 mkLCsSec :: LCsSec -> Section
 mkLCsSec (LCsProg c) = SRS.likeChg (intro : mkEnumSimpleD c) []
-  where intro = foldlSP [S "This", phrase section_, S "lists the",
-                plural likelyChg, S "to be made to the", phrase software]
+  where intro = foldlSP [S "This", phrase Doc.section_, S "lists the",
+                plural Doc.likelyChg, S "to be made to the", phrase Doc.software]
 
 {--}
 
 -- | Helper for making the Unikely Changes section.
 mkUCsSec :: UCsSec -> Section
 mkUCsSec (UCsProg c) = SRS.unlikeChg (intro : mkEnumSimpleD c) []
-  where intro = foldlSP [S "This", phrase section_, S "lists the",
-                plural unlikelyChg, S "to be made to the", phrase software]
+  where intro = foldlSP [S "This", phrase Doc.section_, S "lists the",
+                plural Doc.unlikelyChg, S "to be made to the", phrase Doc.software]
 
 {--}
 
@@ -402,6 +401,6 @@ mkAppndxSec (AppndxProg cs) = SRS.appendix cs []
 
 {--}
 
--- | Helper to get part of the system information as an 'IdeaDict'.
+-- | Helper to get the program name as an 'IdeaDict'.
 siSys :: SystemInformation -> IdeaDict
 siSys SI {_sys = sys} = nw sys

@@ -124,14 +124,14 @@ module Language.Drasil (
   , Document(..), DType(..), Section(..), Contents(..)
   , SecCons(..), ListType(..), ItemType(..), ListTuple
   , LabelledContent(..), UnlabelledContent(..), extractSection, getDTle, getDAtr
-  , getDSec, getDDoc, mkParagraph, mkUnOrdList, mkTEList, mkTE2List, mkRawLC
+  , getDSec, getDDoc, mkParagraph, mkRawLC
   , llcc, ulcc
   , section, fig, figWithWidth
   , MaxWidthPercent
   , HasContents(accessContents)
   , RawContent(..)
   , mkFig
-  , makeTabRef, makeFigRef, makeSecRef, makeToCRef, makeLstRef, makeURI
+  , makeTabRef, makeFigRef, makeSecRef, makeLstRef, makeURI
   -- Space
   , Space(..) , RealInterval(..), Inclusive(..), RTopology(..)
   , DomainDesc(AllDD, BoundedDD), getActorName, getInnerSpace
@@ -212,8 +212,8 @@ import Language.Drasil.Expr.Math (abs_, neg, negVec, log, ln, sin, cos, tan, sqr
 import Language.Drasil.Expr.Display
 import Language.Drasil.Document (section, fig, figWithWidth
   , Section(..), SecCons(..) , llcc, ulcc, Document(..), getDTle, getDAtr, getDSec
-  , getDDoc, mkParagraph, mkUnOrdList, mkTEList, mkTE2List, mkFig, mkRawLC
-  , extractSection, makeTabRef, makeFigRef, makeSecRef, makeToCRef, makeLstRef, makeURI)
+  , getDDoc, mkParagraph, mkFig, mkRawLC
+  , extractSection, makeTabRef, makeFigRef, makeSecRef, makeLstRef, makeURI)
 import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), DType(..)
   , RawContent(..), ListTuple, MaxWidthPercent
   , HasContents(accessContents)

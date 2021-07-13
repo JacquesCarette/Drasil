@@ -25,7 +25,7 @@ doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body, charO
   organization, output_, physical, physicalConstraint, physicalProperty, physicalSim,
   physicalSystem, physics, plan, practice, priority, problem, problemDescription,
   prodUCTable, productUC, product_, project, propOfCorSol, property, prpsOfDoc,
-  purpose, quantity, realtime, reference, refmat, reqInput, requirement_, response, result,
+  purpose, quantity, realtime, reference, refMat, reqInput, requirement_, response, result,
   reviewer, safety, safetyReq, scenario, scope, scpOfReq, scpOfTheProjS, second_,
   section_, simulation, software, softwareConstraint, softwareDoc, softwareReq,
   softwareSys, softwareVAV, softwareVerif, solution, solutionCharSpec,
@@ -214,7 +214,7 @@ year            = nc "year"           (cn'    "year"               )
 scpOfTheProjS   = nc "scpOfTheProj"   (cn'    "scope of the project") -- temporary generated for test
 
 
-abbAcc, charOfIR, consVals, corSol, orgOfDoc, propOfCorSol, prpsOfDoc, refmat,
+abbAcc, charOfIR, consVals, corSol, orgOfDoc, propOfCorSol, prpsOfDoc, refMat,
   reqInput, scpOfReq, tAuxConsts, tOfSymb, tOfUnit,
   termAndDef, traceyMandG, vav, tOfCont :: NamedChunk
 
@@ -225,7 +225,7 @@ charOfIR            = nc "charOfIR"           (characteristic `of_PS` intReader)
 orgOfDoc            = nc "orgOfDoc"           (organization `of_` document)
 propOfCorSol        = nc "propOfCorSol"       (property `ofAPS` corSol)
 prpsOfDoc           = nc "prpsOfDoc"          (purpose `of_` document)
-refmat              = nc "refmat"             (cn' "reference material")
+refMat              = nc "refMat"             (cn' "reference material")
 reqInput            = nc "ReqInputs"          (cn' "required input")
 scpOfReq            = nc "scpOfReq"           (scope `of_` requirement)
 tAuxConsts          = nc "TAuxConsts"         (cn' "auxiliary constant")

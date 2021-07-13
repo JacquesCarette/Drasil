@@ -1,23 +1,13 @@
 module Drasil.HGHC.Body (srs, si, symbMap, printSetting, fullSI) where
 
-<<<<<<< HEAD
-import Language.Drasil hiding (Manual, Symbol(..)) -- Citation name conflict. FIXME: Move to different namespace
-import Drasil.DocLang (DocSection(TableOfContents, RefSec, SSDSec), 
-    Literature(Lit, Manual), RefSec(..), RefTab(TUnits), TSIntro(SymbConvention, 
-    TSPurpose), SRSDecl, intro, mkDoc, tsymb, InclUnits(IncludeUnits), 
-    Verbosity(Verbose), Field(DefiningEquation, Description, Label, Symbol, Units), 
-    SolChSpec(SCSProg), SCSSub(DDs), DerivationDisplay(HideDerivation), 
-    SSDSub(SSDSolChSpec), SSDSec(SSDProg))
-=======
 import Data.List (nub)
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 import Drasil.DocLang (DocSection(RefSec, SSDSec), Literature(Lit, Manual), 
-    RefSec(..), RefTab(TUnits), TSIntro(SymbConvention, TSPurpose), SRSDecl, 
-    intro, mkDoc, tsymb, InclUnits(IncludeUnits), Verbosity(Verbose),
+    RefSec(..), RefTab(TUnits), DocSection(TableOfContents), TSIntro(SymbConvention, TSPurpose),
+    SRSDecl, intro, mkDoc, tsymb, InclUnits(IncludeUnits), Verbosity(Verbose),
     Field(DefiningEquation, Description, Label, Symbol, Units), SolChSpec(SCSProg), 
     SCSSub(DDs), DerivationDisplay(HideDerivation), SSDSub(SSDSolChSpec), 
     SSDSec(SSDProg), traceMatStandard, getTraceConfigUID, secRefs, fillTraceSI)
->>>>>>> master
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
   rdb, refdb, _authors, _concepts, _constants, _constraints, _purpose,

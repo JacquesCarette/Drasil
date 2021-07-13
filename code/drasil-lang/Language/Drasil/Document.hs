@@ -1,4 +1,4 @@
-{-# Language TemplateHaskell, TupleSections #-}
+{-# Language TemplateHaskell #-}
 -- | Document Description Language
 module Language.Drasil.Document where
 
@@ -74,26 +74,6 @@ ulcc = UnlblC
 -- | Smart constructor that wraps 'UnlabelledContent' into 'Contents'.
 mkParagraph :: Sentence -> Contents
 mkParagraph x = UlC $ ulcc $ Paragraph x
-
--- Note: are these needed? Check. otherwise move to Utils
-mkUnOrdList :: [Sentence] -> Contents
-mkUnOrdList l = UlC $ ulcc $ Enumeration $ mkUnOrdList_ l
-
-mkUnOrdList_ :: [Sentence] -> ListType
-mkUnOrdList_ l = Bullet tl where
-  tl = map (\a -> (Flat a,Nothing)) l
-
-mkUnOrdList2_ :: [ItemType] -> ListType
-mkUnOrdList2_ l = Bullet tl where
-  tl = map (,Nothing) l
-
-mkTEList :: [(Sentence,[Sentence])] -> [ItemType]
-mkTEList l = tl where
-  tl = zipWith (\n a -> Nested n a) (map fst l) (map (mkUnOrdList_ . snd) l)
-
-mkTE2List :: [(Sentence,[ItemType])] -> [ItemType]
-mkTE2List l = tl where
-  tl = zipWith (\n a -> Nested n a) (map fst l) (map (mkUnOrdList2_ . snd) l)
 
 -- | Smart constructor that wraps 'LabelledContent' into 'Contents'.
 mkFig :: Reference -> RawContent -> Contents

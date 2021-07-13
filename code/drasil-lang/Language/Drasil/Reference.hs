@@ -1,6 +1,6 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Reference (Reference(Reference, rInfo), ref, refS,
-  namedRef, complexRef, namedComplexRef, refInfo) where
+  namedRef, complexRef, namedComplexRef, refInfo, RefInfo(..)) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasRefAddress(getRefAdd),
   Referable(refAdd, renderRef))

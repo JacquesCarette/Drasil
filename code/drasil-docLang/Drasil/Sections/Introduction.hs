@@ -6,6 +6,7 @@ import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq,
   charOfIR, orgOfDoc, goalStmt, thModel, inModel, sysCon)
 import Drasil.DocumentLanguage.Definitions(Verbosity(..))
 import Utils.Drasil
+import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, characteristic,
@@ -13,7 +14,7 @@ import Data.Drasil.Concepts.Documentation as Doc (assumption, characteristic,
   environment, goal, goalStmt, implementation, intReader, model, organization,
   purpose, requirement, scope, section_, softwareDoc, softwareVAV, srs,
   theory, user, vavPlan, problem, information, systemConstraint)
-import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
+import Data.Drasil.TheoryConcepts as Doc (inModel, thModel)
 import Data.Drasil.Citations (parnasClements1986)
 
 
@@ -21,7 +22,7 @@ import Data.Drasil.Citations (parnasClements1986)
 --     Constants     --
 -----------------------
 
--- | Contents explaining the development process of this program
+-- | 'Sentence' that explains the development process of a program.
 developmentProcessParagraph :: Sentence
 developmentProcessParagraph = foldlSent [S "This", phrase document, 
   S "will be used as a starting point for subsequent development", 
@@ -36,14 +37,14 @@ developmentProcessParagraph = foldlSent [S "This", phrase document,
   S "that follow the so-called waterfall", phrase model `sC` 
   S "the actual development process is not constrained", 
   S "in any way. Even when the waterfall model is not followed, as",
-  S "Parnas and Clements point out", makeCiteS parnasClements1986 `sC`
+  S "Parnas and Clements point out", refS parnasClements1986 `sC`
   S "the most logical way to present the", phrase documentation,
   S "is still to", Quote (S "fake"), S "a rational", phrase design,
   S "process"]
 
--- | Sentence containing the subsections of the introduction
+-- | 'Sentence' containing the subsections of the Introduction.
 introductionSubsections :: Sentence
-introductionSubsections = foldlList Comma List (map (uncurry ofThe) 
+introductionSubsections = foldlList Comma List (map (uncurry S.the_ofThe) 
   [(phrase scope, plural requirement), 
   (plural characteristic, phrase intReader),
   (phrase Doc.organization, phrase document)])
@@ -52,17 +53,18 @@ introductionSubsections = foldlList Comma List (map (uncurry ofThe)
 --                    --
 -------------------------
 
--- | Constructor for the introduction section
--- problemIntroduction - Sentence introducing the specific example problem
--- programDefinition  - Sentence definition of the specific example
--- subSections        - List of subsections for this section
+-- | Constructor for the Introduction section. In order, the parameters are:
+--
+--     * problemIntroduction - 'Sentence' introducing the specific example problem.
+--     * programDefinition  - 'Sentence' definition of the specific example.
+--     * subSections        - List of subsections for this section.
 introductionSection :: Sentence -> Sentence -> [Section] -> Section
 introductionSection problemIntroduction programDefinition = SRS.intro 
   [mkParagraph problemIntroduction, overviewParagraph programDefinition]
 
 
--- | Constructor for the overview paragraph for the introduction
--- programDefinition - defintion of the specific example being generated
+-- | Constructor for the overview paragraph for the Introduction.
+-- Takes the definition of the specific example being generated ('Sentence').
 overviewParagraph :: Sentence -> Contents
 overviewParagraph programDefinition = foldlSP [S "The following", phrase section_,
   S "provides an overview of the", introduceAbb srs, S "for" +:+. 
@@ -70,78 +72,85 @@ overviewParagraph programDefinition = foldlSP [S "The following", phrase section
   S "of this", phrase document `sC` introductionSubsections]
 
 
--- | Constructor for purpose of document function that each example controls
--- | verbosity controls if second paragraph is added or not
+-- | Constructor for Purpose of Document section that each example controls.
 purpDocPara1 :: CI -> Sentence 
 purpDocPara1 proName = foldlSent [S "The primary purpose of this", phrase document, S "is to",
   S "record the", plural requirement, S "of the" +:+. titleize proName, 
   atStart' goal `sC` plural assumption `sC` plural thModel `sC` 
   plural definition `sC` S "and other", phrase model, S "derivation",
   phrase information, S "are specified" `sC` S "allowing the reader to fully",
-  S "understand" `sAnd` S "verify the", phrase purpose `sAnd` S "scientific",
+  S "understand" `S.and_` S "verify the", phrase purpose `S.and_` S "scientific",
   S "basis of" +:+. short proName, S "With the exception of", 
-  plural systemConstraint, S "in", makeRef2S (SRS.sysCon [] []) `sC` S "this",
+  namedRef (SRS.sysCon [] []) (plural systemConstraint) `sC` S "this",
   short Doc.srs, S "will remain abstract, describing what", phrase problem,
   S "is being solved, but not how to solve it"] 
-purpDoc :: CI->Verbosity -> [Sentence]
+
+-- | Combines 'purpDocPara1' and 'developmentProcessParagraph'.
+-- Verbosity controls if the 'developmentProcessParagraph' is added or not.
+purpDoc :: CI -> Verbosity -> [Sentence]
 purpDoc proName Verbose = [purpDocPara1 proName, developmentProcessParagraph]
 purpDoc proName Succinct = [purpDocPara1 proName]
--- | constructor for purpose of document subsection
--- purposeOfProgramParagraph - a sentence explaining the purpose of the specific 
--- example
+
+-- | Constructor for Purpose of Document subsection. Takes a list of 'Sentence's that:
+--
+--     * Given one element: explains the purpose of the specific example.
+--     * Given two elements: explains the purpose of the specific example and the development process.
+--     * Otherwise: Uses the default 'developmentProcessParagraph'.
 purposeOfDoc :: [Sentence] -> Section
 purposeOfDoc [purposeOfProgram] = SRS.prpsOfDoc [mkParagraph purposeOfProgram] []
 purposeOfDoc [purposeOfProgram, developmentProcess] = SRS.prpsOfDoc 
   [mkParagraph purposeOfProgram, mkParagraph developmentProcess] []
 purposeOfDoc _ = SRS.prpsOfDoc [mkParagraph developmentProcessParagraph] []
 
--- | constructor for scope of requirements subsection
--- req - the main requirement for the program
+-- | Constructor for the Scope of Requirements subsection.
+-- Takes in the main requirement for the program.
 scopeOfRequirements :: Sentence -> Section
 scopeOfRequirements req = SRS.scpOfReq [foldlSP
-  [phrase scope `ofThe'` plural requirement, S "includes", req]] []
+  [phrase scope `S.the_ofTheC` plural requirement, S "includes", req]] []
 
--- | constructor for characteristics of the intended reader subsection
--- progName
--- assumed
--- topic
--- asset
--- r
+-- | Constructor for characteristics of the intended reader subsection.
+-- Takes the program name ('Idea'), assumed knowledge ('Sentence's), topic-related subjects ('Sentence's),
+-- knowledge assets ('Sentence's), and references ('Section').
 charIntRdrF :: (Idea a) => a -> [Sentence] -> [Sentence] -> [Sentence] -> 
   Section -> Section
 charIntRdrF progName assumed topic asset r = 
   SRS.charOfIR (intReaderIntro progName assumed topic asset r) []
 
---paragraph called by charIntRdrF
--- assumed    - subjects the reader is assumed to understand
--- topic      - topic-related subjects that the reader should understand
--- asset      - subjects that would be an asset if the reader understood them
--- sectionRef - reference to user characteristic section
+-- | Helper that creates a paragraph. Called by 'charIntRdrF'. The parameters (in order) should be:
+--
+--     * program name,
+--     * subjects the reader is assumed to understand,
+--     * topic-related subjects that the reader should understand,
+--     * subjects that would be an asset if the reader understood them,
+--     * reference to User Characteristics section.
 intReaderIntro :: (Idea a) => a -> [Sentence] -> [Sentence] -> [Sentence] ->
   Section -> [Contents]
 intReaderIntro progName assumed topic asset sectionRef = 
   [foldlSP [S "Reviewers of this", phrase documentation,
   S "should have an understanding of" +:+.
   foldlList Comma List (assumed ++ topic), assetSent, S "The",
-  plural user `sOf` short progName, S "can have a lower level" `sOf`
-  S "expertise, as explained" `sIn` makeRef2S sectionRef]]
+  plural user `S.of_` short progName, S "can have a lower level" `S.of_`
+  S "expertise, as explained" `S.in_` refS sectionRef]]
   where
     assetSent = case asset of
       [] -> EmptyS
       _  -> S "It would be an asset to understand" +:+. foldlList Comma List asset
 
--- | Doc.organization of the document section constructor.  => Sentence -> c -> Section -> Sentence -> Section
+-- | Constructor for the Organization of the Document section. Parameters should be
+-- an introduction ('Sentence'), a resource for a bottom up approach ('NamedIdea'), reference to that resource ('Section'),
+-- and any other relevant information ('Sentence').
 orgSec :: NamedIdea c => Sentence -> c -> Section -> Sentence -> Section
 orgSec i b s t = SRS.orgOfDoc (orgIntro i b s t) []
 
--- Intro -> Bottom (for bottom up approach) -> Section that contains bottom ->
---    trailing sentences -> [Contents]
+-- | Helper function that creates the introduction for the Organization of the Document section. Parameters should be
+-- an introduction ('Sentence'), a resource for a bottom up approach ('NamedIdea'), reference to that resource ('Section'),
+-- and any other relevant information ('Sentence').
 orgIntro :: NamedIdea c => Sentence -> c -> Section -> Sentence -> [Contents]
 orgIntro intro bottom bottomSec trailingSentence = [foldlSP [
   intro, S "The presentation follows the standard pattern of presenting" +:+.
   foldlList Comma List (map plural [nw Doc.goal, nw theory, nw definition, nw assumption]),
   S "For readers that would like a more bottom up approach" `sC`
-  S "they can start reading the", plural bottom `sIn` makeRef2S bottomSec `sAnd`
+  S "they can start reading the", namedRef bottomSec (plural bottom)`S.and_`
   S "trace back to find any additional information they require"],
   folder [refineChain (zip [goalStmt, thModel, inModel]
          [SRS.goalStmt [] [], SRS.thModel [] [], SRS.inModel [] []]), trailingSentence]]

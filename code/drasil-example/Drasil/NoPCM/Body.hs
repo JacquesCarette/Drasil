@@ -1,24 +1,26 @@
-module Drasil.NoPCM.Body where
+module Drasil.NoPCM.Body (si, srs, printSetting, noPCMODEInfo, fullSI) where
 
-import Language.Drasil hiding (Symbol(..), section)
+import Control.Lens ((^.))
+import Language.Drasil hiding (section)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
-  SystemInformation(SI), cdb, rdb, refdb, _authors, _concepts, _constants,
-  _constraints, _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs,
-  _quants, _sys, _sysinfodb, _usedinfodb)
+  SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts,
+  _constants, _constraints, _datadefs, _instModels, _configFiles, _defSequence,
+  _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (TheoryModel)
 import Utils.Drasil
+import Utils.Drasil.Concepts
+import qualified Utils.Drasil.Sentence as S
 
-import Language.Drasil.Code (quantvar, listToArray, ODEInfo, odeInfo, 
-  ODEOptions, odeOptions, ODEMethod(..))
+import Language.Drasil.Code (quantvar, listToArray)
 
-import Data.List ((\\))
+import Data.List ((\\), nub)
 import Data.Drasil.People (thulasi)
 
 import Data.Drasil.Concepts.Computation (algorithm, inValue)
 import Data.Drasil.Concepts.Documentation as Doc (doccon, doccon', material_, srsDomains)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-import Data.Drasil.IdeaDicts as Doc (inModel)
+import Data.Drasil.TheoryConcepts as Doc (inModel)
 import Data.Drasil.Concepts.Education (educon)
 import Data.Drasil.Concepts.Math (mathcon, mathcon', ode)
 import Data.Drasil.Concepts.PhysicalProperties (materialProprty, physicalcon)
@@ -33,7 +35,7 @@ import Data.Drasil.ExternalLibraries.ODELibraries (scipyODESymbols, osloSymbols,
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
   heatCapSpec, htFlux, sensHeat)
 
-import Data.Drasil.Quantities.Math (gradient, pi_, piConst, surface, 
+import Data.Drasil.Quantities.Math (gradient, pi_, piConst, surface,
   uNormalVect)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Physics (time, energy, physicscon)
@@ -48,9 +50,9 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg), DerivationDisplay(..),
   IntroSec(IntroProg), IntroSub(IOrgSec, IScope, IChar, IPurpose), Literature(Lit, Doc'),
   PDSub(..), ProblemDescription(PDProg), RefSec(RefProg), RefTab(TAandA, TUnits),
   ReqrmntSec(..), ReqsSub(..), SCSSub(..), SolChSpec(..), SRSDecl, SSDSec(..),
-  SSDSub(..), TraceabilitySec(TraceabilityProg), Verbosity(Verbose), 
+  SSDSub(..), TraceabilitySec(TraceabilityProg), Verbosity(Verbose),
   TSIntro(SymbOrder, SymbConvention, TSPurpose, VectorUnits), intro, mkDoc,
-  tsymb, traceMatStandard, purpDoc)
+  tsymb, traceMatStandard, purpDoc, getTraceConfigUID, secRefs, fillTraceSI)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
@@ -62,27 +64,31 @@ import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
 import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, water, con)
 import Drasil.SWHS.Requirements (nfRequirements)
 import Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, nwtnCooling, sensHtETemplate)
-import Drasil.SWHS.Unitals (coilSAMax, deltaT, htFluxC, htFluxIn, 
-  htFluxOut, htCapL, htTransCoeff, inSA, outSA, tankVol, tau, tauW, tempC, 
-  tempEnv, tempInit, tempW, thFluxVect, timeFinal, timeStep, volHtGen, watE, 
+import Drasil.SWHS.Unitals (coilSAMax, deltaT, htFluxC, htFluxIn,
+  htFluxOut, htCapL, htTransCoeff, inSA, outSA, tankVol, tau, tauW,
+  tempEnv, tempW, thFluxVect, volHtGen, watE,
   wMass, wVol, unitalChuncks, absTol, relTol)
 
 import Drasil.NoPCM.Assumptions
-import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs)
-import Drasil.NoPCM.DataDefs (qDefs)
+import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs, chgRefs)
+import Drasil.NoPCM.DataDefs (qDefs, dataDefRefs)
 import qualified Drasil.NoPCM.DataDefs as NoPCM (dataDefs)
 import Drasil.NoPCM.Definitions (srsSWHS, htTrans)
-import Drasil.NoPCM.GenDefs (genDefs)
-import Drasil.NoPCM.Goals (goals)
-import Drasil.NoPCM.IMods (eBalanceOnWtr, instModIntro)
+import Drasil.NoPCM.GenDefs (genDefs, genDefRefs)
+import Drasil.NoPCM.Goals (goals, goalRefs)
+import Drasil.NoPCM.IMods (eBalanceOnWtr, instModIntro, iModRefs)
 import qualified Drasil.NoPCM.IMods as NoPCM (iMods)
-import Drasil.NoPCM.Requirements (funcReqs, inputInitValsTable)
-import Drasil.NoPCM.References (citations)
-import Drasil.NoPCM.Unitals (inputs, constrained, unconstrained, 
+import Drasil.NoPCM.ODEs
+import Drasil.NoPCM.Requirements (funcReqs, inputInitValsTable, reqRefs)
+import Drasil.NoPCM.References (citations, citeRefs)
+import Drasil.NoPCM.Unitals (inputs, constrained, unconstrained,
   specParamValList)
 
 srs :: Document
-srs = mkDoc mkSRS for si
+srs = mkDoc mkSRS S.forT si
+
+fullSI :: SystemInformation
+fullSI = fillTraceSI mkSRS si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
@@ -98,12 +104,12 @@ symbols :: [DefinedQuantityDict]
 symbols = pi_ : map dqdWr concepts ++ map dqdWr constrained
  ++ map dqdWr [tempW, watE]
  ++ [gradient, uNormalVect] ++ map dqdWr [surface]
-  
+
 symbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcmHTC and pcmSA
                                --FOUND LOC OF ERROR: Instance Models
-symbolsAll = map qw symbols ++ map qw specParamValList ++ 
-  map qw [coilSAMax] ++ map qw [tauW] ++ map qw [absTol, relTol] ++ 
+symbolsAll = map qw symbols ++ map qw specParamValList ++
+  map qw [coilSAMax] ++ map qw [tauW] ++ map qw [absTol, relTol] ++
   scipyODESymbols ++ osloSymbols ++ apacheODESymbols ++ odeintSymbols
   ++ map qw [listToArray $ quantvar tempW, arrayVecDepVar noPCMODEInfo]
 
@@ -121,7 +127,7 @@ concepts = map ucw [density, tau, inSA, outSA,
 --------------------------------
 --Section 1 : REFERENCE MATERIAL
 --------------------------------
-  
+
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
   RefSec $ RefProg intro
@@ -182,33 +188,27 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 si :: SystemInformation
 si = SI {
-  _sys = srsSWHS,
-  _kind = Doc.srs,
-  _authors = [thulasi],
+  _sys         = srsSWHS,
+  _kind        = Doc.srs,
+  _authors     = [thulasi],
+  _purpose     = purpDoc progName Verbose,
   -- FIXME: Everything after (and including) \\ should be removed when
   -- #1658 is resolved. Basically, _quants is used here, but 
   -- tau does not appear in the document and thus should not be displayed.
-  _quants = (map qw unconstrained ++ map qw symbolsAll) \\ [qw tau],
-  _concepts = symbols,
-  _definitions = [],
-  _datadefs = NoPCM.dataDefs,
-  _inputs = inputs ++ [qw watE], --inputs ++ outputs?
-  _outputs = map qw [tempW, watE],     --outputs
+  _quants      = (map qw unconstrained ++ map qw symbolsAll) \\ [qw tau],
+  _concepts    = symbols,
+  _instModels  = NoPCM.iMods,
+  _datadefs    = NoPCM.dataDefs,
+  _configFiles = [],
+  _inputs      = inputs ++ [qw watE], --inputs ++ outputs?
+  _outputs     = map qw [tempW, watE],     --outputs
   _defSequence = [(\x -> Parallel (head x) (tail x)) qDefs],
   _constraints = map cnstrw constrained ++ map cnstrw [tempW, watE], --constrained
-  _constants = piConst : specParamValList,
-  _sysinfodb = symbMap,
-  _usedinfodb = usedDB,
-   refdb = refDB
+  _constants   = piConst : specParamValList,
+  _sysinfodb   = symbMap,
+  _usedinfodb  = usedDB,
+   refdb       = refDB
 }
-
-noPCMODEOpts :: ODEOptions
-noPCMODEOpts = odeOptions RK45 (sy absTol) (sy relTol) (sy timeStep)
-
-noPCMODEInfo :: ODEInfo
-noPCMODEInfo = odeInfo (quantvar time) (quantvar tempW)
-  [quantvar tauW, quantvar tempC] (dbl 0) (sy timeFinal) (sy tempInit) 
-  [1 / sy tauW * (sy tempC - idx (sy tempW) (int 0))] noPCMODEOpts
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns
@@ -217,15 +217,15 @@ symbMap :: ChunkDB
 symbMap = cdb symbolsAll (map nw symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
   ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' ++ map nw mathcon ++ map nw mathcon'
-  ++ map nw specParamValList ++ map nw fundamentals ++ map nw educon ++ map nw derived 
+  ++ map nw specParamValList ++ map nw fundamentals ++ map nw educon ++ map nw derived
   ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srsSWHS, nw algorithm, nw inValue, nw htTrans]
   ++ map nw [absTol, relTol] ++ [nw materialProprty])
   (map cw symbols ++ srsDomains) units NoPCM.dataDefs NoPCM.iMods genDefs
-  tMods concIns section labCon
+  tMods concIns section labCon allRefs
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronyms)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] []
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
 
 --------------------------
 --Section 2 : INTRODUCTION
@@ -244,20 +244,20 @@ introStartNoPCM = atStart' progName +:+ S "provide a novel way of storing" +:+. 
 -------------------------------------
 
 scope :: Sentence
-scope = phrase thermalAnalysis `sOf` S "a single" +:+ phrase sWHT
+scope = phrase thermalAnalysis `S.of_` S "a single" +:+ phrase sWHT
 
 --------------------------------------------------
 --Section 2.3 : CHARACTERISTICS Of INTENDED READER
 --------------------------------------------------
-          
+
 ---------------------------------------
 --Section 2.4: ORGANIZATION OF DOCUMENT
 ---------------------------------------
 
 orgDocEnd :: Sentence
-orgDocEnd = foldlSent_ [S "The", phrase inModel,
-  S "to be solved is referred to as" +:+. makeRef2S eBalanceOnWtr,
-  S "The", phrase inModel, S "provides the", titleize ode,
+orgDocEnd = foldlSent_ [atStartNP (the inModel),
+  S "to be solved is referred to as" +:+. refS eBalanceOnWtr,
+  atStartNP (the inModel), S "provides the", titleize ode,
   sParen (short ode), S "that models the" +:+. phrase progName,
   short progName, S "solves this", short ode]
 
@@ -272,7 +272,7 @@ orgDocEnd = foldlSent_ [S "The", phrase inModel,
 ------------------------------
 --Section 3.1 : SYSTEM CONTEXT
 ------------------------------
-  
+
 ------------------------------------
 --Section 3.2 : USER CHARACTERISTICS
 ------------------------------------
@@ -296,22 +296,22 @@ orgDocEnd = foldlSent_ [S "The", phrase inModel,
 -----------------------------------
 
 probDescIntro :: Sentence
-probDescIntro = foldlSent_ [S "investigate the heating" `sOf` phrase water, S "in a", phrase sWHT]
+probDescIntro = foldlSent_ [S "investigate the heating" `S.of_` phraseNP (water `inA` sWHT)]
 
 terms :: [ConceptChunk]
 terms = [htFlux, heatCapSpec, thermalConduction, transient]
-  
+
 figTank :: LabelledContent
 figTank = llcc (makeFigRef "Tank") $ fig (atStart sWHT `sC` S "with" +:+ phrase htFlux +:+
-  S "from" +:+ phrase coil `sOf` ch htFluxC)
+  S "from" +:+ phrase coil `S.of_` ch htFluxC)
   $ resourcePath ++ "TankWaterOnly.png"
 
 physSystParts :: [Sentence]
 physSystParts = map foldlSent_ [physSyst1 tank water, physSyst2 coil tank htFluxC]
 
 goalInputs :: [Sentence]
-goalInputs = [phrase temp `ofThe` phrase coil,
-  S "the initial" +:+ phrase tempW, S "the" +:+ plural materialProprty]
+goalInputs = [phraseNP (temp `the_ofThe` coil),
+  S "the initial" +:+ phrase tempW, pluralNP (the materialProprty)]
 
 ------------------------------------------------------
 --Section 4.2 : SOLUTION CHARACTERISTICS SPECIFICATION
@@ -325,7 +325,7 @@ sensHtE = sensHtETemplate Liquid sensHtEdesc
 
 sensHtEdesc :: Sentence
 sensHtEdesc = foldlSent [ch QT.sensHeat, S "occurs as long as the", phrase material_, S "does not reach a",
-  phrase temp, S "where a", phrase phaseChange, S "occurs" `sC` S "as assumed in", makeRef2S assumpWAL]
+  phrase temp, S "where a", phrase phaseChange, S "occurs" `sC` S "as assumed in", refS assumpWAL]
 
 --TODO: Implement physical properties of a substance
 
@@ -371,3 +371,12 @@ dataConstListOut = [tempW, watE]
 ------------
 --REFERENCES
 ------------
+bodyRefs :: [Reference]
+bodyRefs = ref figTank: ref sysCntxtFig:
+  map ref concIns ++ map ref section ++ map ref labCon 
+  ++ map ref tMods ++ concatMap (^. getReferences) tMods --needs the references hidden in the tmodel.
+  ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+
+allRefs :: [Reference]
+allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ dataDefRefs ++ genDefRefs++ goalRefs
+  ++ iModRefs ++ citeRefs ++ reqRefs ++ secRefs)

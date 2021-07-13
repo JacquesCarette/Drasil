@@ -1,0 +1,31 @@
+name:                drasil-lang
+version:             0.1.60.0
+author:              "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
+maintainer:          "Jacques Carette"
+synopsis:	           A framework for code and document generation for scientific software - Language SubPackage
+github:              JacquesCarette/Drasil
+homepage:            https://jacquescarette.github.io/Drasil/
+description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+
+extra-source-files: []
+
+dependencies:
+- base >= 4.7 && < 5
+- lens
+- split
+- unicode-names >= 3.2.0.0
+
+ghc-options:
+- -Wall
+- -Wredundant-constraints
+
+library:
+  source-dirs: ./
+  exposed-modules:
+  - Language.Drasil
+  - Language.Drasil.Development
+  - Language.Drasil.Display
+  - Language.Drasil.ShortHands
+  when:
+  - condition: false
+    other-modules: Paths_drasil_lang

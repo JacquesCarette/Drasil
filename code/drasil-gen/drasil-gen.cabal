@@ -1,35 +1,46 @@
-Name:		  drasil-gen
-Version:	0.1.3
-Cabal-Version:  >= 1.18
-Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: 377e430a48d9f9d8a003d4f428ee37528a78910682095a558adfe8fb6fdaf75b
+
+name:           drasil-gen
+version:        0.1.3.0
+synopsis:       A framework for code and document generation for scientific software - Utils SubPackage
+description:    Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+homepage:       https://jacquescarette.github.io/Drasil/
+bug-reports:    https://github.com/JacquesCarette/Drasil/issues
+author:         Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
+maintainer:     Jacques Carette
 build-type:     Simple
-Synopsis:	A framework for code and document generation for scientific software - Generate SubPackage
+
+source-repository head
+  type: git
+  location: https://github.com/JacquesCarette/Drasil
 
 library
   exposed-modules:
-    Language.Drasil.Generate
-
-  Build-Depends:
-    base >= 4.7,
-    lens >= 4.12,
-    containers >= 0.5.5.1,
-    pretty >= 1.1.1.1,
-    mtl >= 2.2.1,
-    directory >= 1.2.6.2,
-    split >= 0.2.3.1,
-    MissingH >= 1.4.0.1,
-    parsec >= 3.1.9,
-    time >= 1.8.0.2,
-    drasil-lang >= 0.1.59,
-    drasil-gool >= 0.1.0,
-    drasil-build >= 0.1.0,
-    drasil-code >= 0.1.9,
-    drasil-printers >= 0.1.8
+      Language.Drasil.Generate
+  other-modules:
+      Language.Drasil.Output.Formats
+  hs-source-dirs:
+      ./
+  ghc-options: -Wall -Wredundant-constraints
+  build-depends:
+      base >=4.7 && <5
+    , directory
+    , drasil-build
+    , drasil-code
+    , drasil-database
+    , drasil-docLang
+    , drasil-gool
+    , drasil-lang
+    , drasil-printers
+    , pretty
+    , time
+  if false
+    other-modules:
+        Paths_drasil_gen
   default-language: Haskell2010
-  ghc-options:      -Wall -Wredundant-constraints
-
-
-source-repository head
-  type:     git
-  location: git://github.com/JacquesCarette/Drasil.git
-  subdir: code

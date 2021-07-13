@@ -13,6 +13,7 @@ GRAPH_P_SUFFIX = _graph
 BUILD_PACKAGES = $(addsuffix $(BUILD_P_SUFFIX), $(PACKAGES))
 DOC_PACKAGES = $(addsuffix $(DOC_P_SUFFIX), $(PACKAGES))
 GRAPH_PACKAGES = $(addsuffix $(GRAPH_P_SUFFIX), $(PACKAGES))
+ANALYSIS_PACKAGES = drasil $(PACKAGES) 
 
 PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 
@@ -20,7 +21,7 @@ PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 
 # Current list of examples
 SRC_EXAMPLES = glassbr nopcm projectile
-EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template
+EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template dblpendulum pdController
 GOOLTEST = gooltest
 
 # where they live
@@ -33,11 +34,14 @@ GAMEPHYSICS_DIR  = GamePhysics
 PROJECTILE_DIR = Projectile
 TEMPLATE_DIR = Template
 GOOLTEST_DIR = GOOLTest
+DBLPENDULUM_DIR = DblPendulum
+PDCONTROLLER_DIR = PDController
 
 MULTI_SRC_DIRS = $(PROJECTILE_DIR) # Directories for examples with multiple src versions
 
 EXAMPLE_DIRS = $(MULTI_SRC_DIRS) $(HGHC_DIR) $(GLASSBR_DIR) $(NOPCM_DIR) \
-  $(SWHS_DIR) $(SSP_DIR) $(GAMEPHYSICS_DIR) # All example directories
+  $(SWHS_DIR) $(SSP_DIR) $(GAMEPHYSICS_DIR) $(DBLPENDULUM_DIR) \
+  $(PDCONTROLLER_DIR) # All example directories
 
 # and the name of their executables
 HGHC_EXE  = hghc
@@ -49,6 +53,8 @@ GAMEPHYSICS_EXE  = gamephysics
 PROJECTILE_EXE = projectile
 TEMPLATE_EXE = template
 GOOLTEST_EXE = codegenTest
+DBLPENDULUM_EXE = dblpendulum
+PDCONTROLLER_EXE = pdController
 
 # and the associated per-example information generated
 GEN_E_SUFFIX = _gen
@@ -56,16 +62,20 @@ TEST_E_SUFFIX = _diff
 TEX_E_SUFFIX = _tex
 CODE_E_SUFFIX = _code
 DCP_E_SUFFIX = _deploy_code_path
+STABILIZE_E_SUFFIX = _stabilize
+BC_E_SUFFIX = _build_clean
 
 GEN_EXAMPLES = $(addsuffix $(GEN_E_SUFFIX), $(EXAMPLES) $(GOOLTEST))
 TEST_EXAMPLES =  $(addsuffix $(TEST_E_SUFFIX), $(EXAMPLES) $(GOOLTEST))
 TEX_EXAMPLES = $(addsuffix $(TEX_E_SUFFIX), $(EXAMPLES))
 CODE_EXAMPLES = $(addsuffix $(CODE_E_SUFFIX), $(SRC_EXAMPLES))
 DCP_EXAMPLES = $(addsuffix $(DCP_E_SUFFIX), $(EXAMPLES))
+STABILIZE_EXAMPLES = $(addsuffix $(STABILIZE_E_SUFFIX), $(EXAMPLES))
+BC_EXAMPLES = $(addsuffix $(BC_E_SUFFIX), $(EXAMPLES))
 
 EXAMPLE_GEN_TARGET = GEN TEST TEX CODE DCP
 
-GENNED_FOLDERS = $(LOG_FOLDER_NAME) $(BUILD_FOLDER_NAME) $(GRAPH_FOLDER_NAME) $(DEPLOY_FOLDER_NAME)
+GENNED_FOLDERS = $(ANALYSIS_FOLDER_NAME) $(BUILD_FOLDER_NAME) $(DEPLOY_FOLDER_NAME) $(DOCS_FOLDER_NAME) $(GRAPH_FOLDER_NAME) $(LOG_FOLDER_NAME)
 CLEAN_GF_PREFIX = clean_
 CLEAN_FOLDERS = $(addprefix $(CLEAN_GF_PREFIX), $(GENNED_FOLDERS))
 
@@ -81,24 +91,38 @@ CACHED_MSV_FILE = .drasil-min-stack-ver
 DF_DIR = datafiles/
 BUILD_FOLDER_NAME = build
 BUILD_FOLDER = $(BUILD_FOLDER_NAME)/
+STABLE_FOLDER_NAME = stable
+STABLE_FOLDER = $(STABLE_FOLDER_NAME)/
 EXAMPLE_CODE_SUBFOLDER = src/
 LOG_FOLDER_NAME = logs
 LOG_FOLDER = $(LOG_FOLDER_NAME)/
 SCRIPT_FOLDER = scripts/
 GRAPH_FOLDER_NAME = graphs
 GRAPH_FOLDER = $(GRAPH_FOLDER_NAME)/
+ANALYSIS_FOLDER_NAME = analysis
+ANALYSIS_FOLDER = $(ANALYSIS_FOLDER_NAME)/
+TYPEGRAPH_FOLDER_NAME = TypeDependencyGraphs
+TYPEGRAPH_FOLDER = $(ANALYSIS_FOLDER)$(TYPEGRAPH_FOLDER_NAME)/
 DEPLOY_FOLDER_NAME = deploy
 DEPLOY_FOLDER = $(DEPLOY_FOLDER_NAME)/
 DEPLOY_CODE_PATH_KV_SEP = :
+DOCS_FOLDER_NAME = docs
+DOCS_FOLDER = $(DOCS_FOLDER_NAME)/
+TRACEY_GRAPH_FOLDER_NAME = TraceyGraph
+TRACEY_GRAPH_FOLDER = $(TRACEY_GRAPH_FOLDER_NAME)/
+TRACEY_GRAPH_NAMES = allvsall allvsr avsa avsall refvsref
 # make command line options
 #  GHC debug options
 PROFALL = --executable-profiling --library-profiling
 PROFEXEC = +RTS -xc -P
 
 #  GHC build options
-GHCTHREADS += 2
+ifndef GHCTHREADS
+override GHCTHREADS = 2
+endif
+
 override GHCFLAGS += -Wall -j$(GHCTHREADS)
-override stackArgs += -j3 --ghc-options="$(GHCFLAGS)" --dump-logs --interleaved-output
+override stackArgs += --ghc-options="$(GHCFLAGS)"
 
 #  Output amount control
 NOISY=no
@@ -124,18 +148,28 @@ packages: $(BUILD_PACKAGES)
 $(filter %$(BUILD_P_SUFFIX), $(BUILD_PACKAGES)): %$(BUILD_P_SUFFIX): check_stack
 	stack install $(stackArgs) "drasil-$*"
 
-%$(GEN_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
-%$(GEN_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
+%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
+%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
+
+# individual example runs
 %$(GEN_E_SUFFIX): EEXE=$($(EXAMPLE)_EXE)
 $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX): example$(BUILD_P_SUFFIX)
 	@mkdir -p "$(BUILD_FOLDER)$(EDIR)"
 	cd "$(BUILD_FOLDER)$(EDIR)" && stack exec -- "$(EEXE)" $(EXECARGS)
 
-%$(TEST_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
-%$(TEST_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
+# individual example build cleans
+$(filter %$(BC_E_SUFFIX), $(BC_EXAMPLES)): %$(BC_E_SUFFIX):
+	- rm -rf "$(BUILD_FOLDER)$(EDIR)"
+
+# individual example stabilization
+$(filter %$(STABILIZE_E_SUFFIX), $(STABILIZE_EXAMPLES)): %$(STABILIZE_E_SUFFIX): %$(BC_E_SUFFIX) %$(GEN_E_SUFFIX)
+	- rm -rf "$(STABLE_FOLDER)$*/"
+	- cp -r "$(BUILD_FOLDER)$(EDIR)" "$(STABLE_FOLDER)$*/"
+
+# individual example diff tests
 $(filter %$(TEST_E_SUFFIX), $(TEST_EXAMPLES)): %$(TEST_E_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) %$(GEN_E_SUFFIX)
 	@mkdir -p "$(LOG_FOLDER)"
-	- $(DIFF) "stable/$*/" "$(BUILD_FOLDER)$(EDIR)"/ > "$(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX)" 2>&1
+	- $(DIFF) "$(STABLE_FOLDER)$*/" "$(BUILD_FOLDER)$(EDIR)/" > "$(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX)" 2>&1
 
 # actually run the tests
 test: $(TEST_EXAMPLES)
@@ -146,22 +180,56 @@ test: $(TEST_EXAMPLES)
 
 prog: $(GEN_EXAMPLES)
 
+stabilize: $(STABILIZE_EXAMPLES)
+	@echo ----------------------------
+	@echo Stabilized all examples
+	@echo ----------------------------
+
 # generate pretty dot graphs too
 graphmod: check_stack
 	stack install dotgen graphmod
 
-$(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): check_stack check_dot graphmod
-	@mkdir -p $(GRAPH_FOLDER)
+$(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod check_dot
+	@mkdir -p "$(GRAPH_FOLDER)"
 	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tpdf > "$(GRAPH_FOLDER)drasil-$*".pdf
 
 graphs: $(GRAPH_PACKAGES)
 ###
 
-# use stack to build the documentation too
-$(filter %$(DOC_P_SUFFIX), $(DOC_PACKAGES)): %$(DOC_P_SUFFIX): check_stack
-	stack haddock "drasil-$*" $(haddockArgs)
+traceygraph: graphmod $(TEST_EXAMPLES)
+	@cd $(BUILD_FOLDER) && for dir in $(EXAMPLE_DIRS); do \
+		if [ -d $$dir/$(TRACEY_GRAPH_FOLDER) ]; then \
+			cd $$dir/$(TRACEY_GRAPH_FOLDER) && for graph in $(TRACEY_GRAPH_NAMES); do \
+				dot -Tpdf $$graph.dot > "./$$graph.pdf" ; \
+			done ; \
+			cd .. ; \
+			cd .. ; \
+		fi ; \
+	done
+	@echo Created traceability graphs
 
-docs: $(DOC_PACKAGES)
+analysis: graphmod
+	- rm -rf "$(ANALYSIS_FOLDER)"
+	@mkdir -p "$(ANALYSIS_FOLDER)"
+	cd $(SCRIPT_FOLDER) && stack exec -- runghc DataTableGen.hs
+	cd $(SCRIPT_FOLDER) && stack exec -- runghc TypeGraphGen.hs
+	@echo Making dependency graphs
+	@cd $(TYPEGRAPH_FOLDER) && for pack in $(ANALYSIS_PACKAGES); do \
+		dot -Tpdf $$pack.dot > "./$$pack.pdf" ; \
+	done
+	@echo Done dependency graphs
+
+# Use a 'local' HLint installation, using HLint from the current stack repo
+hlint: check_stack
+	stack install hlint
+	hlint .
+
+# Use the latest HLint version, downloading the binary each time
+hot_hlint:
+	curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
+
+docs: check_stack
+	DOCS_FOLDER="$(DOCS_FOLDER)" GHC_FLAGS="$(GHCFLAGS)" sh scripts/make_docs.sh
 
 %$(TEX_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(TEX_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
@@ -199,24 +267,38 @@ deploy_code_path: $(DCP_EXAMPLES)
 deploy_lite:
 	@mkdir -p "$(DEPLOY_FOLDER)"
 	@BUILD_FOLDER="$(BUILD_FOLDER)" DEPLOY_FOLDER="$(DEPLOY_FOLDER)" GRAPH_FOLDER="$(GRAPH_FOLDER)" \
-	EXAMPLE_DIRS="$(EXAMPLE_DIRS)" MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" \
+	EXAMPLE_DIRS="$(EXAMPLE_DIRS)" MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" ANALYSIS_FOLDER="$(ANALYSIS_FOLDER)" \
 	DEPLOY_CODE_PATH_KV_SEP="$(DEPLOY_CODE_PATH_KV_SEP)" MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"deploy_stage.sh
 
+website:
+	stack install drasil-website
+	cd "drasil-website" && \
+	CUR_DIR="$(PWD)/" \
+	DEPLOY_FOLDER="$(CUR_DIR)$(DEPLOY_FOLDER)"  \
+	DOCS_FOLDER="$(DOCS_FOLDER)" \
+	DOX_FOLDER="doxygen/" \
+	EXAMPLES_FOLDER="examples/" \
+	SRS_FOLDER_FRAG="srs/" \
+	GRAPH_FOLDER="$(GRAPH_FOLDER)" \
+	ANALYSIS_FOLDER="$(ANALYSIS_FOLDER)" \
+	stack exec website
 # This rule is for use with developing deployment layout locally. As part of it, it ensures all needed
 # dependencies exist. One of the downsides is we ensure all files are re-generated which means the TeX
 # files appear newer and thus PDF's are regenerated. If you want to "just generate the structure,
 # everything exists," (or you've run `deploy` once already) then `deploy_lite` does just that and is
 # what `deploy.bash` calls. 
-deploy: graphs docs tex doxygen
+deploy: analysis graphs docs tex doxygen
 	"$(MAKE)" deploy_lite
 
 
 # follow two are for cleaning things out
 $(filter $(CLEAN_GF_PREFIX)%, $(CLEAN_FOLDERS)): $(CLEAN_GF_PREFIX)%:
-	- rm -r "./$*"
+	- rm -rf "./$*/"
 
-clean: $(CLEAN_FOLDERS)
+clean_artifacts cleanArtifacts: $(CLEAN_FOLDERS)
+	- rm -f "$(CACHED_MSV_FILE)"
+
+clean: clean_artifacts
 	- stack clean
-	- rm "$(CACHED_MSV_FILE)"
 
-.PHONY: clean code tex doc debug prog test graphs graphmod check_stack graphs deploy_code_path deploy deploy_lite all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)
+.PHONY: clean clean_artifacts cleanArtifacts code hlint hot_hlint analysis tex doc debug prog test graphs graphmod check_stack graphs website deploy_code_path deploy deploy_lite traceygraph all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)

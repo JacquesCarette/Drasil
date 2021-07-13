@@ -1,6 +1,8 @@
 {-# LANGUAGE TupleSections #-}
 
-module Main (main) where
+module Drasil.Projectile.Main (main) where
+
+import GHC.IO.Encoding
 
 import Language.Drasil (Space(..), getAccStr)
 import Language.Drasil.Code (Choices(..), Comments(..), 
@@ -8,15 +10,13 @@ import Language.Drasil.Code (Choices(..), Comments(..),
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
   ConstantRepr(..), InputModule(..), CodeConcept(..), matchConcepts, SpaceMatch,
   matchSpaces, AuxFile(..), Visibility(..), defaultChoices, codeSpec)
-import Language.Drasil.Generate (gen, genCode)
-import Language.Drasil.Printers (DocSpec(DocSpec), DocType(SRS, Website))
+import Language.Drasil.Generate (gen, genCode, genDot, DocSpec(DocSpec), DocType(SRS, Website))
 
 import GOOL.Drasil (CodeType(..))
 
 import Data.Drasil.Quantities.Math (piConst)
 
-import Drasil.Projectile.Body (printSetting, si, srs)
-import Drasil.Projectile.Concepts (projectileTitle)
+import Drasil.Projectile.Body (printSetting, si, srs, projectileTitle, fullSI)
 
 import Data.List (intercalate)
 
@@ -25,9 +25,11 @@ import System.Directory (createDirectoryIfMissing, getCurrentDirectory,
 
 main :: IO()
 main = do
+  setLocaleEncoding utf8
   gen (DocSpec SRS     "Projectile_SRS") srs printSetting
   gen (DocSpec Website "Projectile_SRS") srs printSetting
   genCodeWithChoices choiceCombos
+  genDot fullSI
 
 genCodeWithChoices :: [Choices] -> IO ()
 genCodeWithChoices [] = return ()

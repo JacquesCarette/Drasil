@@ -1,4 +1,4 @@
-module Language.Drasil.Generate (gen, genCode) where
+module Language.Drasil.Generate (gen, genDot, genCode, DocType(SRS, Website), DocSpec(DocSpec)) where
 
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (Doc, render)
@@ -10,12 +10,14 @@ import Data.Time.Calendar (showGregorian)
 
 import Build.Drasil (genMake)
 import Language.Drasil
-import Language.Drasil.Printers (Format(TeX, HTML), DocSpec(DocSpec), 
-  DocType(SRS, MG, MIS, Website), Filename, makeCSS, genHTML,
-  genTeX, PrintingInformation)
+import Drasil.DocLang (mkGraphInfo)
+import Database.Drasil (SystemInformation)
+import Language.Drasil.Printers (Format(TeX, HTML), 
+ makeCSS, genHTML, genTeX, PrintingInformation, outputDot)
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
   Lang(..), getSampleData, readWithDataDesc, sampleInputDD, 
   unPP, unJP, unCSP, unCPPP, unSP)
+import Language.Drasil.Output.Formats( DocType(SRS, MG, MIS, Website), Filename, DocSpec(DocSpec))
 
 import GOOL.Drasil (unJC, unPC, unCSC, unCPPC, unSC)
 
@@ -64,6 +66,13 @@ writeDoc :: PrintingInformation -> Format -> Filename -> Document -> Doc
 writeDoc s TeX  _  doc = genTeX doc s
 writeDoc s HTML fn doc = genHTML s fn doc
 writeDoc _    _  _   _ = error "we can only write TeX/HTML (for now)"
+
+-- | Generates traceability graphs as .dot files.
+genDot :: SystemInformation -> IO ()
+genDot si = do
+    let gi = mkGraphInfo si
+    outputDot "TraceyGraph" gi
+    return mempty
 
 -- | Calls the code generator
 genCode :: Choices -> CodeSpec -> IO ()

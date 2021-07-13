@@ -12,14 +12,15 @@ import Data.Drasil.Concepts.Documentation (symbol_, description, tOfSymb)
 import Data.Drasil.Concepts.Math (unit_)
 import Language.Drasil.Printers (symbolDoc)
 
---Removed SymbolForm Constraint, filtered non-symbol'd chunks and checks for duplicate symbol error
--- | table of symbols creation function
+--Removed SymbolForm Constraint
+-- | Table of Symbols creation function. Takes in a 'Stage', 'Symbol's, and something that turns
+-- the symbols into a 'Sentence'. Filters non-symbol chunks and checks for duplicate symbol error.
 table :: (Quantity s, MayHaveUnit s) => Stage -> [s] -> (s -> Sentence) -> LabelledContent
 table st ls f
     |noDuplicate = llcc symbTableRef $
       Table [atStart symbol_, atStart description, atStart' unit_]
       (mkTable [P . (`symbol` st), f, toSentence] filteredChunks)
-      (titleize tOfSymb) True
+      (titleize' tOfSymb) True
     | otherwise = error errorMessage 
     where 
         filteredChunks = filter (`hasStageSymbol`st) ls
@@ -36,6 +37,6 @@ table st ls f
           extractUidFromPairs symb<+>text "all have symbol"<+>symbolDoc symb) symDuplicates
         errorMessage = "Same symbols for different quantities found: " ++ render errSymUidDuplicates
 
-
+-- | Makes a reference to the Table of Symbols.
 symbTableRef :: Reference
 symbTableRef = makeTabRef "ToS"

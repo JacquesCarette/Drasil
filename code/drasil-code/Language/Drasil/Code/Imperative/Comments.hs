@@ -1,4 +1,4 @@
--- | Contains functions for generating code comments that describe a chunk
+-- | Contains functions for generating code comments that describe a chunk.
 module Language.Drasil.Code.Imperative.Comments (
   getComment
 ) where
@@ -11,12 +11,11 @@ import Language.Drasil.CodeSpec (CodeSpec(..))
 import Language.Drasil.Printers (Linearity(Linear), sentenceDoc, unitDoc)
 
 import qualified Data.Map as Map (lookup)
-import Data.Maybe (maybe)
 import Control.Monad.State (get)
 import Control.Lens ((^.))
 import Text.PrettyPrint.HughesPJ (Doc, (<+>), colon, empty, parens, render)
 
--- | Gets a plain renderering of the term for a chunk
+-- | Gets a plain renderering of the term for a chunk.
 getTermDoc :: (CodeIdea c) => c -> GenState Doc
 getTermDoc c = do
   g <- get
@@ -25,7 +24,7 @@ getTermDoc c = do
 
 -- | Gets a plain rendering of the definition of a chunk, preceded by a colon 
 -- as it is intended to follow the term for the chunk. Returns empty if the 
--- chunk has no definition
+-- chunk has no definition.
 getDefnDoc :: (CodeIdea c) => c -> GenState Doc
 getDefnDoc c = do
   g <- get
@@ -40,7 +39,7 @@ getUnitsDoc c = maybe empty (parens . unitDoc Linear . usymb)
   (getUnit $ codeChunk c)
 
 -- | Generates a comment string for a chunk, including the term, 
--- definition (if applicable), and unit (if applicable)
+-- definition (if applicable), and unit (if applicable).
 getComment :: (CodeIdea c) => c -> GenState String
 getComment l = do
   t <- getTermDoc l

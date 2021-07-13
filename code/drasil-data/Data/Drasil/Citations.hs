@@ -2,24 +2,19 @@ module Data.Drasil.Citations where
 
 import Language.Drasil --(S,(:+:),(+:+),sC,phrase,F,Accent(..),Citation(..),CiteField(..))
 import Data.Drasil.People (dParnas, jRalyte, lLai, nKoothoor, nKraiem, 
-  pcClements, pjAgerfalk, spencerSmith, mCampidelli, dmWiess, rodPierce)
+  pcClements, pjAgerfalk, spencerSmith, mCampidelli, dmWiess, rodPierce, wikiAuthors)
 
 ---------------
 -- CITATIONS --
 ---------------
 
-campidelli, cartesianWiki, koothoor2013, parnas1972, parnasClements1984,
-  parnasClements1986, smithLai2005, lineSource, pointSource, dampingSource :: Citation
+-- Papers
+campidelli, koothoor2013, parnas1972, parnasClements1984,
+  parnasClements1986, smithLai2005, lineSource, pointSource :: Citation
 
 campidelli = cBooklet
   "Glass-BR Software for the design and risk assessment of glass facades subjected to blast loading"
   [author [mCampidelli]] "campidelli"
-
-cartesianWiki = cMisc
-  [author [mononym "Wikipedia Contributors"], title "Cartesian coordinate system",
-  howPublishedU "https://en.wikipedia.org/wiki/Cartesian_coordinate_system",
-  month Jun, year 2019]
-  "cartesianWiki"
 
 koothoor2013 = 
   cMThesis [nKoothoor] 
@@ -67,11 +62,45 @@ pointSource = cMisc
   month May, year 2017]
   "pointSource"
 
+-- Wikipedia
+dampingSource, accelerationWiki, velocityWiki, cartesianWiki, laplaceWiki, pidWiki :: Citation
+
 dampingSource = cMisc
-  [author [mononym "Wikipedia Contributors"], title "Damping",
+  [author [wikiAuthors], title "Damping",
   howPublishedU "https://en.wikipedia.org/wiki/Damping_ratio",
   month Jul, year 2019]
   "dampingSource"
+
+accelerationWiki = cMisc [author [wikiAuthors],
+  title "Acceleration", howPublishedU "https://en.wikipedia.org/wiki/Acceleration",
+  month Jun, year 2019]
+  "accelerationWiki"
+
+velocityWiki = cMisc [author [wikiAuthors],
+  title "Velocity", howPublishedU "https://en.wikipedia.org/wiki/Velocity",
+  month Jun, year 2019]
+  "velocityWiki"
+
+cartesianWiki = cMisc
+  [author [wikiAuthors], title "Cartesian coordinate system",
+  howPublishedU "https://en.wikipedia.org/wiki/Cartesian_coordinate_system",
+  month Jun, year 2019]
+  "cartesianWiki"
+
+laplaceWiki
+  = cMisc
+      [author [wikiAuthors], title "Laplace transform",
+       howPublishedU "https://en.wikipedia.org/wiki/Laplace_transform",
+       month Nov, year 2020]
+      "laplaceWiki"
+
+pidWiki
+  = cMisc
+      [author [wikiAuthors], title "PID controller",
+       howPublishedU "https://en.wikipedia.org/wiki/PID_controller", month Oct,
+       year 2020]
+      "pidWiki"
+
 ------------------------
 -- COMMON CITE-FIELDS --
 ------------------------

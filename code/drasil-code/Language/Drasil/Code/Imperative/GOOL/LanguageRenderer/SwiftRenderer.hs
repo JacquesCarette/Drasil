@@ -6,8 +6,8 @@ module Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.SwiftRenderer (
 ) where
 
 import Language.Drasil.Choices (ImplementationType(..))
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), 
-  AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
+  PackageSym(..), AuxiliarySym(..))
 import qualified 
   Language.Drasil.Code.Imperative.GOOL.LanguageRenderer.LanguagePolymorphic as 
   G (sampleInput, readMe, makefile, noRunIfLib, docIfEnabled)
@@ -21,6 +21,7 @@ import GOOL.Drasil (onCodeList, swiftName, swiftVersion)
 import Prelude hiding (break,print,(<>),sin,cos,tan,floor)
 import Text.PrettyPrint.HughesPJ (Doc, empty)
 
+-- | Holds a Swift project.
 newtype SwiftProject a = SP {unSP :: a}
 
 instance Functor SwiftProject where
@@ -42,7 +43,9 @@ instance AuxiliarySym SwiftProject where
   type Auxiliary SwiftProject = AuxData
   type AuxHelper SwiftProject = Doc
   doxConfig _ _ _ = auxFromData "" empty
-  readMe = G.readMe swiftName swiftVersion Nothing
+  readMe rmi = G.readMe rmi {
+        langName = swiftName,
+        langVersion = swiftVersion}
   sampleInput = G.sampleInput
 
   optimizeDox = error doxError
@@ -52,6 +55,7 @@ instance AuxiliarySym SwiftProject where
   auxHelperDoc = unSP
   auxFromData fp d = return $ ad fp d
 
+-- | Create a build configuration for Swift files. Takes in 'FilePath's and the type of implementation.
 swiftBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig
 swiftBuildConfig fs it = buildAll (\i o -> [asFragment "swiftc" : i ++
   [asFragment "-o", o] ++ concatMap (\f -> map asFragment ["-I", f]) fs ++
@@ -61,8 +65,10 @@ swiftBuildConfig fs it = buildAll (\i o -> [asFragment "swiftc" : i ++
         outName Library = sharedLibrary
         outName Program = executable
 
+-- | Default runnable information for Swift files.
 swiftRunnable :: Maybe Runnable
 swiftRunnable = nativeBinary
 
+-- | Swift is not compatible with Doxygen, so raise an error if trying to compile Doxygen documentation.
 doxError :: String
 doxError = swiftName ++ " is not compatible with Doxygen."

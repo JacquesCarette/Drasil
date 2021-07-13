@@ -1,5 +1,5 @@
 module Drasil.SWHS.References (citations, bueche1986, incroperaEtAl2007, koothoor2013, lightstone2012, 
-  parnasClements1986, smithLai2005) where
+  parnasClements1986, smithLai2005, citeRefs) where
 
 import Language.Drasil
 
@@ -35,3 +35,7 @@ lightstone2012 = cMisc [
   year 2012,
   note "From Marilyn Lightstone's Personal Notes"]
   "lightstone2012"
+
+-- References --
+citeRefs :: [Reference]
+citeRefs = map ref citations

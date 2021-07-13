@@ -1,3 +1,6 @@
+# Get all files ready for deploy. Checks if website files exist,
+# and then copies each file to a deploy folder.
+
 if [ -z "$DEPLOY_FOLDER" ]; then
   echo "Need DEPLOY_FOLDER to know where to stage deploy."
   exit 1
@@ -23,6 +26,11 @@ if [ -z "$EXAMPLE_DIRS" ]; then
   exit 1
 fi
 
+if [ -z "$ANALYSIS_FOLDER" ]; then
+  echo "Missing ANALYSIS_FOLDER."
+  exit 1
+fi
+
 if [ -z "$DEPLOY_CODE_PATH_KV_SEP" ]; then
   echo "Missing DEPLOY_CODE_PATH_KV_SEP."
   exit 1
@@ -39,29 +47,25 @@ DOX_DEST=doxygen/
 EXAMPLE_DEST=examples/
 CUR_DIR="$PWD/"
 
+if [ ! -d "$DOC_DEST" ]; then
+  echo "Missing $DOC_DEST folder artifacts."
+  exit 1
+fi
 
 copy_docs() {
-  # The doc directory can be in two locations (as of Stack 2.1.1) depending on which arguments are
-  # passed to `stack haddock`. The first directory is when no arguments are specified. The second
-  # is used when `--no-haddock-deps` is passed as an argument.
-  DOC_DIR=$(cd "$CUR_DIR" && stack path --local-doc-root)/
-  if [ ! -d "$DOC_DIR" ]; then
-    DOC_DIR=$(cd "$CUR_DIR" && stack path --local-install-root)/doc/
-  fi
-  rm -r "$DOC_DEST" >/dev/null 2>&1  # Printing an error message that a directory doesn't exist isn't the most useful.
-  mkdir -p "$DOC_DEST"
-  cp -r "$DOC_DIR". "$DOC_DEST"
+  rm -rf "$DOC_DEST"
+  cp -r "$CUR_DIR$DOC_DEST" "$DOC_DEST"
 }
 
 copy_datafiles() {
   echo "FIXME: Drasil should copy needed images and resources to the appropriate output directory to avoid needing the entirety of datafiles (for HTML)."
-  rm -r datafiles  >/dev/null 2>&1  # Printing an error message that a directory doesn't exist isn't the most useful.
+  rm -rf datafiles
   mkdir -p datafiles
   cp -r "$CUR_DIR"datafiles/. datafiles/
 }
 
 copy_graphs() {
-  rm -r "$GRAPH_FOLDER" >/dev/null 2>&1  # Printing an error message that a directory doesn't exist isn't the most useful.
+  rm -rf "$GRAPH_FOLDER"
   cp -r "$CUR_DIR$GRAPH_FOLDER". "$GRAPH_FOLDER"
 }
 
@@ -117,24 +121,21 @@ copy_examples() {
 
 copy_images() {
   if [ -d "$CUR_DIR"deploy/images ]; then
-    rm -r "$CUR_DIR"deploy/images
+    rm -rf "$CUR_DIR"deploy/images
   fi
   mkdir -p "$CUR_DIR"deploy/images
-  cp -r "$CUR_DIR"website/images/* "$CUR_DIR"deploy/images
+  cp -r "$CUR_DIR"drasil-website/WebInfo/images/* "$CUR_DIR"deploy/images
   
 }
 
-build_website() {
-  cd "$CUR_DIR"website
-  make DEPLOY_FOLDER="$CUR_DIR$DEPLOY_FOLDER" DOCS_FOLDER="$DOC_DEST" DOX_FOLDER="$DOX_DEST" EXAMPLES_FOLDER="$EXAMPLE_DEST" \
-  SRS_FOLDER_FRAG="$SRS_DEST" GRAPH_FOLDER="$GRAPH_FOLDER"
-  RET=$?
-  if [ $RET != 0 ]; then
-    echo "Build Failed. Bailing."
-    exit 1
-  fi
+copy_analysis() {
+  rm -rf "$ANALYSIS_FOLDER"
+  cp -r "$CUR_DIR$ANALYSIS_FOLDER". "$ANALYSIS_FOLDER"
+}
+
+copy_website() {
   cd "$CUR_DIR$DEPLOY_FOLDER"
-  cp -r "$CUR_DIR"website/_site/. .
+  cp -r "$CUR_DIR"drasil-website/Website/. .
 
   # src stubs were consumed by site generator; safe to delete those.
   rm "$EXAMPLE_DEST"*/src
@@ -147,5 +148,6 @@ copy_graphs
 copy_datafiles
 copy_examples
 copy_images
-build_website
+copy_analysis
+copy_website
 cd "$CUR_DIR"

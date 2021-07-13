@@ -1,0 +1,54 @@
+name:                drasil-data
+version:             0.1.13.0
+author:              "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
+maintainer:          "Jacques Carette"
+synopsis:	           A framework for code and document generation for scientific software - Data System SubPackage
+github:              JacquesCarette/Drasil
+homepage:            https://jacquescarette.github.io/Drasil/
+description:         Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
+
+extra-source-files: []
+
+dependencies:
+- base >= 4.7 && < 5
+- lens
+- drasil-lang
+- drasil-metadata
+- drasil-theory
+- drasil-utils
+
+ghc-options:
+- -Wall
+- -Wredundant-constraints
+
+library:
+  source-dirs: ./
+  exposed-modules:
+  - Data.Drasil.People
+  - Data.Drasil.Citations
+  - Data.Drasil.Constraints
+  - Data.Drasil.SI_Units
+  - Data.Drasil.Concepts.Computation
+  - Data.Drasil.Concepts.Documentation
+  - Data.Drasil.Concepts.Thermodynamics
+  - Data.Drasil.Concepts.PhysicalProperties
+  - Data.Drasil.Concepts.Education
+  - Data.Drasil.Concepts.Physics
+  - Data.Drasil.Concepts.Software
+  - Data.Drasil.Concepts.Math
+  - Data.Drasil.Concepts.SolidMechanics
+  - Data.Drasil.Equations.Defining.Physics
+  - Data.Drasil.Quantities.Thermodynamics
+  - Data.Drasil.Quantities.PhysicalProperties
+  - Data.Drasil.Quantities.Physics
+  - Data.Drasil.Quantities.Math
+  - Data.Drasil.Quantities.SolidMechanics
+  - Data.Drasil.Software.Products
+  - Data.Drasil.Units.Thermodynamics
+  - Data.Drasil.Units.PhysicalProperties
+  - Data.Drasil.Units.Physics
+  - Data.Drasil.Units.SolidMechanics
+  - Data.Drasil.Theories.Physics
+  when:
+  - condition: false
+    other-modules: Paths_drasil_data

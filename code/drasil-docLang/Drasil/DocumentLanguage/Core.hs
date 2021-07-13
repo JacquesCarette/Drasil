@@ -3,22 +3,23 @@ module Drasil.DocumentLanguage.Core where
 
 import Drasil.DocumentLanguage.Definitions (Fields)
 import Drasil.DocumentLanguage.TraceabilityMatrix (TraceViewCat)
-import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
-                                                     -- Vector - Name conflict (defined in file)
+import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 
 import Data.Generics.Multiplate (Multiplate(multiplate, mkPlate))
 
+-- | Type synonym for clarity.
 type System = Sentence
+-- | Type synonym for clarity.
 type DocKind = Sentence
 
 {--}
-
+-- | A document description is made up of document sections.
 type DocDesc = [DocSection]
 
 -- | Document sections are either Reference, Introduction, or Specific
--- System Description sections (for now!)
+-- System Description sections (for now!).
 data DocSection = TableOfContents
                 | RefSec RefSec
                 | IntroSec IntroSec
@@ -39,27 +40,32 @@ data DocSection = TableOfContents
 -- | Reference section. Contents are top level followed by a list of subsections.
 data RefSec = RefProg Contents [RefTab]
 
--- | Reference subsections
+-- | Reference subsections (tables) made out of units or symbols (can be customized).
 data RefTab where
+  -- | Default table of units.
   TUnits :: RefTab
-  TUnits' :: [TUIntro] -> ([UnitDefn] -> LabelledContent) -> RefTab -- Customized intro
+  -- | Customized introduction.
+  TUnits' :: [TUIntro] -> ([UnitDefn] -> LabelledContent) -> RefTab
+  -- | Adds an introduction for a table of symbols.
   TSymb :: [TSIntro] -> RefTab
+  -- | Allows Lens functions in addition to an introduction for a table of symbols.
   TSymb' :: LFunc -> [TSIntro] -> RefTab
+  -- | Default.
   TAandA :: RefTab
   -- add more here
 
--- | For creating the table of symbols intro
-data TSIntro = TypogConvention [TConvention] -- ^ Typographic conventions used
-             | SymbOrder -- ^ Symbol ordering (defaults to alphabetical)
-             | SymbConvention [Literature] -- ^ Symbol conventions match specified literature
-             | TSPurpose -- ^ Purpose of the Table of Symbols
-             | VectorUnits -- ^ Definition of vector components
+-- | For creating a table of symbols introduction
+data TSIntro = TypogConvention [TConvention] -- ^ Typographic conventions used.
+             | SymbOrder -- ^ Symbol ordering (defaults to alphabetical).
+             | SymbConvention [Literature] -- ^ Symbol conventions match specified literature.
+             | TSPurpose -- ^ Purpose of the Table of Symbols.
+             | VectorUnits -- ^ Definition of vector components.
 
--- | Possible typographic conventions
-data TConvention = Vector Emphasis -- ^ How vectors are emphasized
-                 | Verb Sentence -- ^ Verbatim for specialized conventions
+-- | Possible typographic conventions.
+data TConvention = Vector Emphasis -- ^ How vectors are emphasized.
+                 | Verb Sentence -- ^ Verbatim for specialized conventions.
 
--- | How to handle Emphasis
+-- | How to handle emphasis of words.
 data Emphasis = Bold
               | Italics
 
@@ -67,26 +73,27 @@ instance Show Emphasis where
   show Bold = "bold"
   show Italics = "italics"
 
--- | Types of literature
-data Literature = Lit Topic -- ^ literature
-                | Doc Topic -- ^ existing documentation for (singular topic)
-                | Doc' Topic -- ^ existing documentation for (plural of topic)
-                | Manual Topic -- ^ manual
+-- | Types of literature.
+data Literature = Lit Topic -- ^ Literature (with a Topic).
+                | Doc Topic -- ^ Existing documentation for (singular topic).
+                | Doc' Topic -- ^ Existing documentation for (plural version of topic).
+                | Manual Topic -- ^ Manual.
 
+-- | Type synonym for clarity.
 type Topic = IdeaDict
 
--- | For creating the table of units intro
-data TUIntro = System -- ^ System of units (defaults to SI)
-             | Derived -- ^ Sentence about derived units being used alongside SI
-             | TUPurpose -- ^ Purpose of the table of units
+-- | For creating the table of units introduction.
+data TUIntro = System -- ^ System of units (defaults to SI).
+             | Derived -- ^ Sentence about derived units being used alongside SI.
+             | TUPurpose -- ^ Purpose of the table of units.
 
--- | Lens (lookup) functions (currently for TSymb)
+-- | Lens (lookup) functions (currently for TSymb).
 data LFunc where
   Term :: LFunc
   Defn :: LFunc
   TermExcept :: [DefinedQuantityDict] -> LFunc
   DefnExcept :: [DefinedQuantityDict] -> LFunc
-  TAD :: LFunc --Term and Definition
+  TAD :: LFunc -- ^ Term and Definition.
 
 {--}
 
@@ -95,108 +102,148 @@ data LFunc where
 data IntroSec = IntroProg Sentence Sentence [IntroSub]
   -- ^ Temporary, will be modified once we've figured out more about the section.
 
--- | Introduction subsections
+-- | Introduction subsections.
 data IntroSub where
+  -- | Describes purpose of the system.
   IPurpose :: [Sentence] -> IntroSub
+  -- | Describes scope of the system.
   IScope   :: Sentence -> IntroSub
+  -- | Describes characteristics of the system.
   IChar   :: [Sentence] -> [Sentence] -> [Sentence] -> IntroSub
+  -- | Organises the section.
   IOrgSec  :: Sentence -> CI -> Section -> Sentence -> IntroSub
 
 {--}
 
--- | Stakeholders section
+-- | Stakeholders section (wraps stakeholders subsections 'StkhldrSub').
 newtype StkhldrSec = StkhldrProg [StkhldrSub]
 
--- | Stakeholders subsections
+-- | Stakeholders subsections.
 data StkhldrSub where
-  Client :: CI -> Sentence -> StkhldrSub
-  Cstmr  :: CI -> StkhldrSub
+  -- | May have a client.
+  Client :: CI -> Sentence -> StkhldrSub 
+  -- | May have a customer.
+  Cstmr  :: CI -> StkhldrSub 
 
 {--}
 
+-- | General System Description section (wraps 'GSDSub' subsections).
 newtype GSDSec = GSDProg [GSDSub]
 
+-- | General System Description subsections.
 data GSDSub where
+  -- | System context.
   SysCntxt   :: [Contents] -> GSDSub --FIXME: partially automate
-  UsrChars   :: [Contents] -> GSDSub
-  SystCons   :: [Contents] -> [Section] -> GSDSub
+  -- | User characteristics.
+  UsrChars   :: [Contents] -> GSDSub 
+  -- | System constraints.
+  SystCons   :: [Contents] -> [Section] -> GSDSub 
 
 {--}
 
--- | Specific System Description section . Contains a list of subsections.
+-- | Specific System Description section. Contains a list of subsections ('SSDSub').
 newtype SSDSec = SSDProg [SSDSub]
 
--- | Specific system description subsections
+-- | Specific System Description subsections.
 data SSDSub where
+  -- | System description problems.
   SSDProblem :: ProblemDescription -> SSDSub
+  -- | Solution characteristics specification.
   SSDSolChSpec :: SolChSpec -> SSDSub
 
--- | Problem Description section
+-- | Problem Description section. Contains an intro or title,
+-- 'Section's, and problem description subsections ('PDSub').
 data ProblemDescription where
   PDProg :: Sentence -> [Section] -> [PDSub] -> ProblemDescription
 
--- | Problem Description subsections
+-- | Problem Description subsections.
 data PDSub where
+  -- | Terms and definitions.
   TermsAndDefs :: Concept c => Maybe Sentence -> [c] -> PDSub
+  -- | Physical system description.
   PhySysDesc :: Idea a => a -> [Sentence] -> LabelledContent -> [Contents] -> PDSub
+  -- | Goals.
   Goals :: [Sentence] -> [ConceptInstance] -> PDSub
 
--- | Solution Characteristics Specification section
+-- | Solution Characteristics Specification section. Contains a list of subsections ('SCSSub').
 data SolChSpec where
   SCSProg :: [SCSSub] -> SolChSpec
 
--- | Solution Characteristics Specification subsections
+-- | Solution Characteristics Specification subsections.
 data SCSSub where
+  -- | Assumptions.
   Assumptions    :: [ConceptInstance] -> SCSSub
+  -- | Theory Models.
   TMs            :: [Sentence] -> Fields  -> [TheoryModel] -> SCSSub
+  -- | General Definitions.
   GDs            :: [Sentence] -> Fields  -> [GenDefn] -> DerivationDisplay -> SCSSub
-  DDs            :: [Sentence] -> Fields  -> [DataDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro
+  -- | Data Definitions.
+  DDs            :: [Sentence] -> Fields  -> [DataDefinition] -> DerivationDisplay -> SCSSub -- (FIXME: Need DD intro).
+  -- | Instance Models.
   IMs            :: [Sentence] -> Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
-  Constraints    :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => Sentence -> [c] -> SCSSub
---                  Sentence -> [LabelledContent] Fields  -> [UncertainWrapper] -> [ConstrainedChunk] -> SCSSub --FIXME: temporary definition?
---FIXME: Work in Progress ^
+  -- | Constraints.
+  Constraints    :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => Sentence -> [c] -> SCSSub 
+  --                  Sentence -> [LabelledContent] Fields  -> [UncertainWrapper] -> [ConstrainedChunk] -> SCSSub --FIXME: temporary definition?
+  --FIXME: Work in Progress ^
+  -- | Properties of a correct solution.
   CorrSolnPpties :: (Quantity c, Constrained c) => [c] -> [Contents] -> SCSSub
+
+-- | Choose whether to show or hide the derivation of an expression.
 data DerivationDisplay = ShowDerivation
                        | HideDerivation
 {--}
 
+-- | Requirements section. Contains a list of subsections ('ReqsSub').
 newtype ReqrmntSec = ReqsProg [ReqsSub]
 
+-- | Requirements subsections. 
 data ReqsSub where
-  FReqsSub'   :: [ConceptInstance] -> [LabelledContent] -> ReqsSub -- LabelledContent for tables
-  FReqsSub    :: [ConceptInstance] -> [LabelledContent] -> ReqsSub -- LabelledContent for tables
+  -- | Functional requirements. LabelledContent needed for tables.  
+  FReqsSub'   :: [ConceptInstance] -> [LabelledContent] -> ReqsSub
+  -- | Functional requirements. LabelledContent needed for tables.
+  FReqsSub    :: [ConceptInstance] -> [LabelledContent] -> ReqsSub
+  -- | Non-functional requirements.
   NonFReqsSub :: [ConceptInstance] -> ReqsSub
 
 {--}
 
+-- | Likely Changes section.
 newtype LCsSec = LCsProg [ConceptInstance]
 
 {--}
 
+-- | Unlikely Changes section.
 newtype UCsSec = UCsProg [ConceptInstance]
 
 {--}
 
+-- | Traceability Matices and Graphs section. Contains configurations ('TraceConfig').
 newtype TraceabilitySec = TraceabilityProg [TraceConfig]
 
+-- | Traceability Matices and Graphs configurations.
 data TraceConfig = TraceConfig UID [Sentence] Sentence [TraceViewCat] [TraceViewCat]
+
+getTraceConfigUID :: TraceConfig -> UID
+getTraceConfigUID (TraceConfig a _ _ _ _) = a
 
 {--}
 
--- | Off-The-Shelf Solutions section 
+-- | Off-The-Shelf Solutions section.
 newtype OffShelfSolnsSec = OffShelfSolnsProg [Contents]
 
 {--}
 
--- | Values of Auxiliary Constants section
+-- | Values of Auxiliary Constants section.
 data AuxConstntSec = AuxConsProg CI [QDefinition]
 
 {--}
 
+-- | Appendix section.
 newtype AppndxSec = AppndxProg [Contents]
 
 {--}
 
+-- | Holds all of the different kinds of sections. Defines as a plate with an applicative functor.
 data DLPlate f = DLPlate {
   docSec :: DocSection -> f DocSection,
   refSec :: RefSec -> f RefSec,
@@ -221,6 +268,7 @@ data DLPlate f = DLPlate {
   appendSec :: AppndxSec -> f AppndxSec
 }
 
+-- | Holds boilerplate code to make getting sections easier.
 instance Multiplate DLPlate where
   multiplate p = DLPlate ds res intro intro' stk stk' gs gs' ss ss' pd pd' sc
     rs rs' lcp ucp ts es acs aps where

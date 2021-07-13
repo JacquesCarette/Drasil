@@ -1,6 +1,7 @@
 module Data.Drasil.SI_Units where
 
 import Language.Drasil
+import Language.Drasil.Display
 import Language.Drasil.ShortHands (cOmega)
 
 fundamentals :: [UnitDefn]
@@ -47,91 +48,91 @@ becquerel, calorie, centigrade, coulomb, farad, gray, henry, hertz, joule,
   pascal, radian, siemens, sievert, steradian, tesla, volt, watt, weber :: UnitDefn
 
 becquerel = derCUC' "becquerel" 
-  "becquerel" "activity" (Label "Bq") --of a Radionuclide
+  "becquerel" "activity" (label "Bq") --of a Radionuclide
   (second ^: (-1))
   
 calorie = derUC "calorie" 
-  "calorie" "energy" (Label "cal") (scale 4.184 joule)
+  "calorie" "energy" (label "cal") (scale 4.184 joule)
 
 centigrade = derUC "centigrade" 
-  "centigrade" "temperature" (Concat [Special Circle, Label "C"])
+  "centigrade" "temperature" (Concat [Special Circle, label "C"])
   (shift 273.15 kelvin)
 
 coulomb = derCUC' "coulomb" 
-  "coulomb" "electric charge" (Label "C") (ampere *: second)
+  "coulomb" "electric charge" (label "C") (ampere *: second)
 
 farad = derCUC' "farad" 
-  "farad" "capacitance" (Label "F") (coulomb /: volt)
+  "farad" "capacitance" (label "F") (coulomb /: volt)
 
 gray = derCUC' "gray" 
-  "gray" "absorbed dose" (Label "Gy") (joule /: kilogram)
+  "gray" "absorbed dose" (label "Gy") (joule /: kilogram)
   
 henry = derCUC'' "henry" 
-  (cnIES "henry") "inductance" (Label "H") (weber /: ampere)
+  (cnIES "henry") "inductance" (label "H") (weber /: ampere)
   
 hertz = derCUC "hertz" 
-  "hertz" "frequency" (Label "Hz") (second ^: (-1))
+  "hertz" "frequency" (label "Hz") (second ^: (-1))
 
 joule = derCUC' "joule" 
-  "joule" "energy" (Label "J") 
+  "joule" "energy" (label "J") 
  (kilogram *$ (m_2 *$ (second ^: (-2))))
 
 katal = derCUC' "katal" 
-  "katal" "catalytic activity" (Label "kat") (mole /: second)
+  "katal" "catalytic activity" (label "kat") (mole /: second)
 
 kilopascal = derUC' "kilopascal" 
   "kilopascal" "pressure"
-  (Concat [Label "k", Label "Pa"]) (scale 1000 pascal)
+  (Concat [label "k", label "Pa"]) (scale 1000 pascal)
 
 kilowatt = derUC' "kilowatt" 
-  "kilowatt" "power" (Concat [Label "k", Label "W"]) (scale 1000 watt)
+  "kilowatt" "power" (Concat [label "k", label "W"]) (scale 1000 watt)
   
 litre = derUC' "litre"
-  "litre" "volume" (Label "L") (scale (1/1000) m_3)
+  "litre" "volume" (label "L") (scale (1/1000) m_3)
 
 lumen = derCUC' "lumen" 
-  "lumen" "luminous flux" (Label "lm") (candela *: steradian)
+  "lumen" "luminous flux" (label "lm") (candela *: steradian)
 
 lux = derCUC "lux" 
-  "lux" "illuminance" (Label "lx") (lumen /: m_2)
+  "lux" "illuminance" (label "lx") (lumen /: m_2)
 
 millimetre = derUC' "millimetre"
-  "millimetre" "length" (Label "mm") (scale 0.0001 metre)
+  "millimetre" "length" (label "mm") (scale 0.0001 metre)
 
 newton = derCUC' "newton"
-  "newton" "force" (Label "N") (kilogram *$ (second ^: (-2)))
+  "newton" "force" (label "N") (kilogram *$ (second ^: (-2)))
   
 ohm = derCUC' "ohm"
   "ohm" "resistance" cOmega (volt /: ampere)
   
 pascal = derCUC' "pascal" 
-  "pascal" "pressure" (Label "Pa")
+  "pascal" "pressure" (label "Pa")
   (kilogram /$ (metre *$ (second ^: 2)))
   
 radian = derCUC' "radian" 
-  "radian" "angle" (Label "rad") (metre /: metre)
+  "radian" "angle" (label "rad") (metre /: metre)
             
 siemens = derCUC "siemens" 
-  "siemens" "conductance" (Label "S") (ohm ^: (-1))
+  "siemens" "conductance" (label "S") (ohm ^: (-1))
   
 sievert = derCUC' "sievert" 
-  "sievert" "dose equivalent" (Label "Sv")
+  "sievert" "dose equivalent" (label "Sv")
   (joule /: kilogram)
             
 steradian = derCUC' "steradian" 
-  "steradian" "solid angle" (Label "sr") (m_2 /: m_2 )
+  "steradian" "solid angle" (label "sr") (m_2 /: m_2 )
   
 tesla = derCUC "tesla"
-  "tesla" "magnetic flux density" (Label "T") (weber /: m_2)
+  "tesla" "magnetic flux density" (label "T") (weber /: m_2)
 
 volt = derCUC' "volt" 
-  "volt" "voltage" (Label "V") (watt /: ampere)
+  "volt" "voltage" (label "V") (watt /: ampere)
 
-watt = derCUC' "watt" "watt" "power" (Label "W")
+watt = derCUC' "watt" "watt" "power" (label "W")
   (kilogram *$ (m_2 *$ (second ^: (-3))))
           
 weber = derCUC' "weber"
-  "weber" "magnetic flux" (Label "Wb") (volt *: second)
+  "weber" "magnetic flux" (label "Wb") (volt *: second)
   
 specificE :: UnitDefn
 specificE = makeDerU (dcc "specificE" (cnIES "specific energy") 

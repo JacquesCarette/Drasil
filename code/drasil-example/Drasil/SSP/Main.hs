@@ -1,4 +1,6 @@
-module Main (main) where
+module Drasil.SSP.Main (main) where
+
+import GHC.IO.Encoding
 
 -- import Language.Drasil (QDefinition)
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
@@ -6,10 +8,9 @@ module Main (main) where
 --   Modularity(..), Structure(..), ConstantStructure(..), 
 --   ConstantRepr(..), InputModule(..), matchConcepts, AuxFile(..), 
 --   Visibility(..), defaultChoices)
-import Language.Drasil.Generate (gen)
-import Language.Drasil.Printers (DocType(SRS, Website), DocSpec(DocSpec))
+import Language.Drasil.Generate (gen, genDot, DocType(SRS, Website), DocSpec(DocSpec))
 
-import Drasil.SSP.Body (srs, printSetting) -- si
+import Drasil.SSP.Body (srs, printSetting, fullSI) -- si
 
 -- code :: CodeSpec
 -- code = codeSpec si choices []
@@ -35,7 +36,9 @@ import Drasil.SSP.Body (srs, printSetting) -- si
        
 main :: IO ()            
 main = do
+  setLocaleEncoding utf8
   gen (DocSpec Website "SSP_SRS") srs printSetting
   gen (DocSpec SRS "SSP_SRS")     srs printSetting
+  genDot fullSI
   -- for when we can generate code again, uncomment this file
   --genCode choices code

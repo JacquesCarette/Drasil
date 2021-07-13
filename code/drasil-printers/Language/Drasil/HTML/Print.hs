@@ -16,7 +16,6 @@ import Language.Drasil.HTML.Helpers (articleTitle, author, ba, body, bold,
   caption, divTag, em, h, headTag, html, image, li, ol, pa,
   paragraph, reflink, reflinkInfo, reflinkURI, refwrap, sub, sup, table, td,
   th, title, tr, ul)
-import qualified Language.Drasil.Output.Formats as F
 import Language.Drasil.HTML.CSS (linkCSS)
 
 import Language.Drasil.Config (StyleGuide(APA, MLA, Chicago), bibStyleH)
@@ -41,13 +40,15 @@ import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 import qualified Language.Drasil.TeX.Print as TeX (pExpr, spec)
 import Language.Drasil.TeX.Monad (runPrint, MathContext(Math), D, toMath, PrintLaTeX(PL))
 
+-- | Referring to 'fence' (for parenthesis and brackeds). Either opened or closed.
 data OpenClose = Open | Close
 
--- | Generate an HTML document from a Drasil 'Document'
-genHTML :: PrintingInformation -> F.Filename -> L.Document -> Doc
+-- | Generate an HTML document from a Drasil 'Document'.
+genHTML :: PrintingInformation -> String -> L.Document -> Doc
 genHTML sm fn doc = build fn (makeDocument sm doc)
+--         ^^ -- should really be of type Filename, but that's not in scope
 
--- | Build the HTML Document, called by genHTML
+-- | Build the HTML Document, called by 'genHTML'.
 build :: String -> Document -> Doc
 build fn (Document t a c) =
   text "<!DOCTYPE html>" $$
@@ -60,11 +61,11 @@ build fn (Document t a c) =
   $$ print c
   ))
 
--- Helper for rendering a D from Latex print
+-- | Helper for rendering a 'D' from Latex print.
 printMath :: D -> Doc
 printMath = (`runPrint` Math)
 
--- | Helper for rendering LayoutObjects into HTML
+-- | Helper for rendering layout objects ('LayoutObj's) into HTML.
 printLO :: LayoutObj -> Doc
 -- FIXME: could be hacky
 printLO (HDiv ["equation"] layoutObs EmptyS)  = vcat (map printLO layoutObs)
@@ -90,7 +91,7 @@ printLO Graph{}                = empty -- FIXME
 
 
 -- | Called by build, uses 'printLO' to render the layout
--- objects in Doc format.
+-- objects in 'Doc' format.
 print :: [LayoutObj] -> Doc
 print = foldr (($$) . printLO) empty
 
@@ -104,7 +105,7 @@ titleSpec (a :+: b) = titleSpec a <> titleSpec b
 titleSpec HARDNL    = empty
 titleSpec s         = pSpec s
 
--- | Renders the Sentences in the HTML body (called by 'printLO')
+-- | Renders the Sentences ('Spec's) in the HTML body (called by 'printLO').
 pSpec :: Spec -> Doc
 -- Non-mathjax
 pSpec (E e)  = em $ pExpr e
@@ -119,10 +120,10 @@ pSpec (S s)     = either error (text . concatMap escapeChars) $ checkValidStr s 
     escapeChars c = [c]
 pSpec (Sp s)    = text $ unPH $ L.special s
 pSpec HARDNL    = text "<br />"
-pSpec (Ref Internal r a)      = reflink     r $ pSpec a
-pSpec (Ref Cite2    r EmptyS) = reflink     r $ text r -- no difference for citations?
-pSpec (Ref Cite2    r a)      = reflinkInfo r (text r) (pSpec a) -- no difference for citations?
-pSpec (Ref External r a)      = reflinkURI  r $ pSpec a
+pSpec (Ref Internal r a)       = reflink     r $ pSpec a
+pSpec (Ref (Cite2 EmptyS) r a) = reflink     r $ pSpec a -- no difference for citations?
+pSpec (Ref (Cite2 n)   r a)    = reflinkInfo r (pSpec a) (pSpec n) -- no difference for citations?
+pSpec (Ref External r a)       = reflinkURI  r $ pSpec a
 pSpec EmptyS    = text "" -- Expected in the output
 pSpec (Quote q) = doubleQuotes $ pSpec q
 --pSpec (Acc Grave c) = text $ '&' : c : "grave;" --Only works on vowels.
@@ -134,7 +135,7 @@ pSpec (Quote q) = doubleQuotes $ pSpec q
 -----------------------------------------------------------------
 
 
--- | Renders expressions in the HTML (called by multiple functions)
+-- | Renders expressions in the HTML document (called by multiple functions).
 pExpr :: Expr -> Doc
 pExpr (Dbl d)        = text $ showEFloat Nothing d ""
 pExpr (Int i)        = text $ show i
@@ -163,6 +164,7 @@ pExpr (Case ps)      = cases ps pExpr
 pExpr (Mtx a)        = text "<table class=\"matrix\">\n" <> pMatrix a <> text "</table>"
 -}
 
+-- | Converts expression operators into HTML characters.
 pOps :: Ops -> String
 pOps IsIn     = "&thinsp;&isin;&thinsp;"
 pOps Integer  = "&#8484;"
@@ -208,6 +210,7 @@ pOps Prod     = "&prod;"
 pOps Point    = "."
 pOps Perc     = "%"
 
+-- | Allows for open/closed variants of parenthesis, curly brackets, absolute value symbols, and normal symbols.
 fence :: OpenClose -> Fence -> String
 fence Open  Paren = "("
 fence Close Paren = ")"
@@ -232,28 +235,28 @@ fence _     Norm  = "||"
 ------------------BEGIN TABLE PRINTING---------------------------
 -----------------------------------------------------------------
 
--- | Renders HTML table, called by 'printLO'
+-- | Renders an HTML table, called by 'printLO'.
 makeTable :: Tags -> [[Spec]] -> Doc -> Bool -> Doc -> Doc
 makeTable _ [] _ _ _       = error "No table to print (see PrintHTML)"
 makeTable ts (l:lls) r b t = refwrap r (table ts (
     tr (makeHeaderCols l) $$ makeRows lls) $$ if b then caption t else empty)
 
--- | Helper for creating table rows
+-- | Helper for creating table rows.
 makeRows :: [[Spec]] -> Doc
 makeRows = foldr (($$) . tr . makeColumns) empty
 
 makeColumns, makeHeaderCols :: [Spec] -> Doc
--- | Helper for creating table header row (each of the column header cells)
+-- | Helper for creating table header row (each of the column header cells).
 makeHeaderCols = vcat . map (th . pSpec)
 
--- | Helper for creating table columns
+-- | Helper for creating table columns.
 makeColumns = vcat . map (td . pSpec)
 
 -----------------------------------------------------------------
 ------------------BEGIN DEFINITION PRINTING----------------------
 -----------------------------------------------------------------
 
--- | Renders definition tables (Data, General, Theory, etc.)
+-- | Renders definition tables (Data, General, Theory, etc.).
 makeDefn :: L.DType -> [(String,[LayoutObj])] -> Doc -> Doc
 makeDefn _ [] _  = error "L.Empty definition"
 makeDefn dt ps l = refwrap l $ table [dtag dt]
@@ -263,7 +266,7 @@ makeDefn dt ps l = refwrap l $ table [dtag dt]
         dtag L.Theory   = "tdefn"
         dtag L.Data     = "ddefn"
 
--- | Helper for making the definition table rows
+-- | Helper for making the definition table rows.
 makeDRows :: [(String,[LayoutObj])] -> Doc
 makeDRows []         = error "No fields to create defn table"
 makeDRows [(f,d)] = tr (th (text f) $$ td (vcat $ map printLO d))
@@ -273,7 +276,7 @@ makeDRows ((f,d):ps) = tr (th (text f) $$ td (vcat $ map printLO d)) $$ makeDRow
 ------------------BEGIN LIST PRINTING----------------------------
 -----------------------------------------------------------------
 
--- | Renders lists
+-- | Renders lists in HTML.
 makeList :: ListType -> Doc -- FIXME: ref id's should be folded into the li
 makeList (Simple items) = divTag ["list"] $
   vcat $ map (\(b,e,l) -> pa $ mlref l $ pSpec b <> text ": "
@@ -289,11 +292,11 @@ makeList (Definitions items) = ul ["hide-list-style-no-indent"] $
   vcat $ map (\(b,e,l) -> li $ mlref l $ pSpec b <> text " is the"
   <+> pItem e) items
 
--- | Helper for setting up references
+-- | Helper for setting up references.
 mlref :: Maybe Label -> Doc -> Doc
 mlref = maybe id $ refwrap . pSpec
 
--- | Helper for rendering list items
+-- | Helper for rendering list items.
 pItem :: ItemType -> Doc
 pItem (Flat s)     = pSpec s
 pItem (Nested s l) = vcat [pSpec s, makeList l]
@@ -301,11 +304,11 @@ pItem (Nested s l) = vcat [pSpec s, makeList l]
 -----------------------------------------------------------------
 ------------------BEGIN FIGURE PRINTING--------------------------
 -----------------------------------------------------------------
--- | Renders figures in HTML
+-- | Renders figures in HTML.
 makeFigure :: Doc -> Doc -> Doc -> L.MaxWidthPercent -> Doc
 makeFigure r c f wp = refwrap r (image f c wp)
 
--- | Renders assumptions, requirements, likely changes
+-- | Renders assumptions, requirements, likely changes.
 makeRefList :: Doc -> Doc -> Doc -> Doc
 makeRefList a l i = li (refwrap l (i <> text ": " <> a))
 
@@ -314,12 +317,13 @@ makeRefList a l i = li (refwrap l (i <> text ": " <> a))
 ---------------------
 -- **THE MAIN FUNCTION**
 
+-- | Makes a bilbliography for the document.
 makeBib :: BibRef -> Doc
 makeBib = ul ["hide-list-style"] . vcat .
   zipWith (curry (\(x,(y,z)) -> makeRefList z y x))
   [text $ sqbrac $ show x | x <- [1..] :: [Int]] . map renderCite
 
---for when we add other things to reference like website, newspaper
+-- | For when we add other things to reference like website, newspaper
 renderCite :: Citation -> (Doc, Doc)
 renderCite (Cite e L.Book cfs)      = (text e, renderF cfs useStyleBk    <> text " Print.")
 renderCite (Cite e L.Article cfs)   = (text e, renderF cfs useStyleArtcl <> text " Print.")
@@ -328,9 +332,11 @@ renderCite (Cite e L.PhDThesis cfs) = (text e, renderF cfs useStyleBk    <> text
 renderCite (Cite e L.Misc cfs)      = (text e, renderF cfs useStyleBk)
 renderCite (Cite e _ cfs)           = (text e, renderF cfs useStyleArtcl) --FIXME: Properly render these later.
 
+-- | Render fields to be used in the document.
 renderF :: [CiteField] -> (StyleGuide -> (CiteField -> Doc)) -> Doc
 renderF fields styl = hsep $ map (styl bibStyleH) (sortBy compCiteField fields)
 
+-- | Compares two cite fields.
 compCiteField :: CiteField -> CiteField -> Ordering
 compCiteField (Institution _) _ = LT
 compCiteField _ (Institution _) = GT
@@ -377,17 +383,20 @@ compCiteField _ (Note       _) = GT
 compCiteField (Type       _) _ = LT
 
 -- Config helpers --
+-- | Renders citation as a book style.
 useStyleBk :: StyleGuide -> (CiteField -> Doc)
 useStyleBk MLA     = bookMLA
 useStyleBk APA     = bookAPA
 useStyleBk Chicago = bookChicago
 
+-- | Renders citation as an article style.
 useStyleArtcl :: StyleGuide -> (CiteField -> Doc)
 useStyleArtcl MLA     = artclMLA
 useStyleArtcl APA     = artclAPA
 useStyleArtcl Chicago = artclChicago
 
 -- FIXME: move these show functions and use tags, combinators
+-- | Cite books in MLA format.
 bookMLA :: CiteField -> Doc
 bookMLA (Address   s) = pSpec s <> text ":"
 bookMLA (Edition   s) = comm $ text $ show s ++ sufxer s ++ " ed."
@@ -418,6 +427,7 @@ bookMLA (Organization i) = comm $ pSpec i
 bookMLA (Month        m) = comm $ text $ show m
 bookMLA (Type         t) = comm $ pSpec t
 
+-- | Cite books in APA format.
 bookAPA :: CiteField -> Doc --FIXME: year needs to come after author in L.APA
 bookAPA (Author   p) = pSpec (rendPeople L.rendPersLFM' p) --L.APA uses initals rather than full name
 bookAPA (Year     y) = dot $ text $ paren $ show y --L.APA puts "()" around the year
@@ -427,6 +437,7 @@ bookAPA (Pages    p) = dot $ foldPages p
 bookAPA (Editor   p) = dot $ foldPeople p <> text " (Ed.)"
 bookAPA i = bookMLA i --Most items are rendered the same as L.MLA
 
+-- | Cite books in Chicago format.
 bookChicago :: CiteField -> Doc
 bookChicago (Author   p) = pSpec (rendPeople L.rendPersLFM'' p) --L.APA uses middle initals rather than full name
 bookChicago (Pages    p) = dot $ foldPages p
@@ -434,16 +445,19 @@ bookChicago (Editor   p) = dot $ foldPeople p <> text (toPlural p " ed")
 bookChicago i = bookMLA i --Most items are rendered the same as L.MLA
 
 -- for article renderings
+-- | Cite articles in MLA format.
 artclMLA :: CiteField -> Doc
 artclMLA (Title s) = doubleQuotes $ dot $ pSpec s
 artclMLA i         = bookMLA i
 
+-- | Cite articles in APA format.
 artclAPA :: CiteField -> Doc
 artclAPA (Title  s)  = dot $ pSpec s
 artclAPA (Volume n)  = em $ text $ show n
 artclAPA (Number  n) = comm $ text $ paren $ show n
 artclAPA i           = bookAPA i
 
+-- | Cite articles in Chicago format.
 artclChicago :: CiteField -> Doc
 artclChicago i@(Title    _) = artclMLA i
 artclChicago (Volume     n) = comm $ text $ show n
@@ -453,41 +467,47 @@ artclChicago i@(Year     _) = bookAPA i
 artclChicago i = bookChicago i
 
 -- PEOPLE RENDERING --
+-- | Render a list of people (after applying a given function).
 rendPeople :: (L.Person -> String) -> L.People -> Spec
 rendPeople _ []  = S "N.a." -- "No authors given"
 rendPeople f people = S . foldlList $ map f people --foldlList is in drasil-utils
 
+-- | Render a list of people (of form FirstName LastName).
 rendPeople' :: L.People -> Spec
 rendPeople' []  = S "N.a." -- "No authors given"
 rendPeople' people = S . foldlList $ map rendPers (init people) ++  [rendPersL (last people)]
 
+-- | Organize a list of pages.
 foldPages :: [Int] -> Doc
 foldPages = text . foldlList . numList "&ndash;"
 
+-- | Organize a list of people.
 foldPeople :: L.People -> Doc
 foldPeople p = text . foldlList $ map L.nameStr p
 
+-- | Organize a list of Strings, separated by commas and inserting "and" before the last item.
 foldlList :: [String] -> String
 foldlList []    = ""
 foldlList [a,b] = a ++ " and " ++ b
 foldlList lst   = foldle1 (\a b -> a ++ ", " ++ b) (\a b -> a ++ ", and " ++ b) lst
 
+-- | Similar to foldl, but applies a function to two arguments at a time.
 foldle1 :: (a -> a -> a) -> (a -> a -> a) -> [a] -> a
 foldle1 _ _ []       = error "foldle1 cannot be used with empty list"
 foldle1 _ _ [x]      = x
 foldle1 _ g [x,y]    = g x y
 foldle1 f g (x:y:xs) = foldle1 f g (f x y : xs)
 
--- LFM is Last, First Middle
+-- | Renders a 'Person' as Last, First Middle.
 rendPers :: L.Person -> String
 rendPers = L.rendPersLFM
 
--- To render the last person's name
+-- | Renders a person's last name.
 rendPersL :: L.Person -> String
 rendPersL =
   (\n -> (if not (null n) && last n == '.' then init else id) n) . rendPers
 
---adds an 's' if there is more than one person in a list
+-- | adds an 's' if there is more than one person in a list.
 toPlural :: L.People -> String -> String
 toPlural (_:_) str = str ++ "s"
 toPlural _     str = str

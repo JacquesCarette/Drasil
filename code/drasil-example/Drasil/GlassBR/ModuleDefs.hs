@@ -4,11 +4,14 @@
 
 module Drasil.GlassBR.ModuleDefs (allMods, implVars, interpY, interpZ) where
 
-import Language.Drasil
+import Language.Drasil (QuantityDict, Space(..), implVar, nounPhraseSP,
+  label, sub, HasSymbol, HasUID, Symbol)
+import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.ShortHands
 import Language.Drasil.Code (($:=), Func, FuncStmt(..), Mod, 
   asVC, funcDef, fDecDef, ffor, funcData, quantvar, 
   multiLine, packmod, repeated, singleLine)
+import Language.Drasil.CodeExpr
 
 allMods :: [Mod]
 allMods = [readTableMod, interpMod]
@@ -58,13 +61,13 @@ y = var "y" "y-coordinate to interpolate at"  lY Real
 z = var "z" "z-coordinate to interpolate at"  lZ Real
 
 zVector = var "zVector" "list of z values" 
-  (sub lZ (Label "vector")) (Vect Real)               
+  (sub lZ (label "vector")) (Vect Real)               
 yMatrix = var "yMatrix" "lists of y values at different z values" 
-  (sub lY (Label "matrix")) (Vect $ Vect Real)        
+  (sub lY (label "matrix")) (Vect $ Vect Real)        
 xMatrix = var "xMatrix" "lists of x values at different z values" 
-  (sub lX (Label "matrix")) (Vect $ Vect Real)        
+  (sub lX (label "matrix")) (Vect $ Vect Real)        
 arr     = var "arr"     "array in which value should be found" 
-  (Label "arr")             (Vect Real)  --FIXME: temporary variable for findCT?
+  (label "arr")             (Vect Real)  --FIXME: temporary variable for findCT?
 x_z_1   = var "x_z_1"   "list of x values at a specific z value"    
   (sub lX (sub lZ one))      (Vect Real)
 y_z_1   = var "y_z_1"   "list of y values at a specific z value"    
@@ -74,55 +77,54 @@ x_z_2   = var "x_z_2"   "list of x values at a specific z value"
 y_z_2   = var "y_z_2"   "list of y values at a specific z value"   
   (sub lY (sub lZ two))      (Vect Real)
 mat     = var "mat"     "matrix from which column will be extracted"     
-  (Label "mat")             (Vect $ Vect Real)
+  (label "mat")             (Vect $ Vect Real)
 col     = var "col"     "extracted column"    
-  (Label "col")             (Vect Real)               
+  (label "col")             (Vect Real)               
 filename = var "filename" "name of file with x y and z data" 
-  (Label "filename")        String
+  (label "filename")        String
 
 ------------------------------------------------------------------------------------------
 --
 -- Some semantic functions
 
 -- Given two points (x1,y1) and (x2,y2), return the slope of the line going through them
-slope :: (Fractional a) => (a, a) -> (a, a) -> a
-slope (x1,y1) (x2,y2) = (y2 - y1) / (x2 - x1)
+slope :: (CodeExpr, CodeExpr) -> (CodeExpr, CodeExpr) -> CodeExpr
+slope (x1, y1) (x2, y2) = (y2 $- y1) $/ (x2 $- x1)
 
 -- Given two points (x1,y1) and (x2,y2), and an x ordinate, return
 -- extrapoled y on the straight line in between
-onLine :: (Fractional a) => (a, a) -> (a, a) -> a -> a
-onLine p1@(x1,y1) p2 x_ = 
-  let m = slope p1 p2 in
-  m * (x_ - x1) + y1
+onLine :: (CodeExpr, CodeExpr) -> (CodeExpr, CodeExpr) -> CodeExpr -> CodeExpr
+onLine p1@(x1, y1) p2 x_ = (m `mulRe` (x_ $- x1)) `addRe` y1
+                 where m = slope p1 p2
 
 ------------------------------------------------------------------------------------------
 -- Code Template helper functions
 
-vLook :: (HasSymbol a, HasSymbol i, HasUID a, HasUID i) => a -> i -> Expr -> Expr
-vLook a i_ p = idx (sy a) (sy i_ + p)
+vLook :: (HasSymbol a, HasSymbol i, HasUID a, HasUID i) => a -> i -> CodeExpr -> CodeExpr
+vLook a i_ p = idx (sy a) (sy i_ `addI` p)
 
 aLook :: (HasSymbol a, HasSymbol i, HasSymbol j, HasUID a, HasUID i, HasUID j) =>
-  a -> i -> j -> Expr
+  a -> i -> j -> CodeExpr
 aLook a i_ j_ = idx (idx (sy a) (sy i_)) (sy j_)
 
-getCol :: (HasSymbol a, HasSymbol i, HasUID a, HasUID i) => a -> i -> Expr -> Expr
-getCol a_ i_ p = apply (asVC extractColumnCT) [sy a_, sy i_ + p]
+getCol :: (HasSymbol a, HasSymbol i, HasUID a, HasUID i) => a -> i -> CodeExpr -> CodeExpr
+getCol a_ i_ p = apply (asVC extractColumnCT) [sy a_, sy i_ `addI` p]
 
 call :: Func -> [QuantityDict] -> FuncStmt
 call f l = FVal $ apply (asVC f) $ map sy l
 
-find :: (HasUID zv, HasUID z, HasSymbol zv, HasSymbol z) => zv -> z -> Expr
+find :: (HasUID zv, HasUID z, HasSymbol zv, HasSymbol z) => zv -> z -> CodeExpr
 find zv z_ = apply (asVC findCT) [sy zv, sy z_]
 
-linInterp :: [Expr] -> Expr
+linInterp :: [CodeExpr] -> CodeExpr
 linInterp = apply (asVC linInterpCT)
 
 interpOver :: (HasUID ptx, HasUID pty, HasUID ind, HasUID vv,
   HasSymbol ptx, HasSymbol pty, HasSymbol ind, HasSymbol vv) =>
-  ptx -> pty -> ind -> vv -> [Expr]
+  ptx -> pty -> ind -> vv -> [CodeExpr]
 interpOver ptx pty ind vv =
-  [ vLook ptx ind 0, vLook pty ind 0
-  , vLook ptx ind 1, vLook pty ind 1
+  [ vLook ptx ind (int 0), vLook pty ind (int 0)
+  , vLook ptx ind (int 1), vLook pty ind (int 1)
   , sy vv ]
 ------------------------------------------------------------------------------------------
 -- Code Templates
@@ -139,8 +141,8 @@ findCT = funcDef "find"
   "Finds the array index for a value closest to the given value" 
   [arr, v] Natural (Just "index of given value in given array")
   [
-    ffor i (sy i $< (dim (sy arr) - 1))
-      [ FCond ((vLook arr i 0 $<= sy v) $&& (sy v $<= vLook arr i 1))
+    ffor i (dim (sy arr) $- int 1)
+      [ FCond ((vLook arr i (int 0) $<= sy v) $&& (sy v $<= vLook arr i (int 1)))
         [ FRet $ sy i ] [] ],
     FThrow "Bound error"
   ]
@@ -149,9 +151,9 @@ extractColumnCT :: Func
 extractColumnCT = funcDef "extractColumn" "Extracts a column from a 2D matrix" 
   [mat, j] (Vect Real) (Just "column of the given matrix at the given index")
   [
-    fDecDef col (Matrix [[]]),
+    fDecDef col (matrix [[]]),
     --
-    ffor i (sy i $< dim (sy mat))
+    ffor i (dim (sy mat))
       [ FAppend (sy col) (aLook mat i j) ],
     FRet (sy col)
   ]
@@ -162,24 +164,24 @@ interpY = funcDef "interpY"
   [filename, x, z] Real (Just "y value interpolated at given x and z values")
   [
   -- hack
-  fDecDef xMatrix (Matrix [[]]),
-  fDecDef yMatrix (Matrix [[]]),
-  fDecDef zVector (Matrix [[]]),
+  fDecDef xMatrix (matrix [[]]),
+  fDecDef yMatrix (matrix [[]]),
+  fDecDef zVector (matrix [[]]),
   --
   call readTable [filename, zVector, xMatrix, yMatrix],
   -- endhack
     i     $:= find zVector z,
-    x_z_1 $:= getCol xMatrix i 0,
-    y_z_1 $:= getCol yMatrix i 0,
-    x_z_2 $:= getCol xMatrix i 1,
-    y_z_2 $:= getCol yMatrix i 1,
+    x_z_1 $:= getCol xMatrix i (int 0),
+    y_z_1 $:= getCol yMatrix i (int 0),
+    x_z_2 $:= getCol xMatrix i (int 1),
+    y_z_2 $:= getCol yMatrix i (int 1),
     FTry
       [ j $:= find x_z_1 x,
         k $:= find x_z_2 x ]
       [ FThrow "Interpolation of y failed" ],
     y_1 $:= linInterp (interpOver x_z_1 y_z_1 j x),
     y_2 $:= linInterp (interpOver x_z_2 y_z_2 k x),
-    FRet $ linInterp [ vLook zVector i 0, sy y_1, vLook zVector i 1, sy y_2, sy z ]
+    FRet $ linInterp [ vLook zVector i (int 0), sy y_1, vLook zVector i (int 1), sy y_2, sy z ]
   ]
 
 interpZ :: Func
@@ -188,18 +190,18 @@ interpZ = funcDef "interpZ"
   [filename, x, y] Real (Just "z value interpolated at given x and y values")
   [
     -- hack
-  fDecDef xMatrix (Matrix [[]]),
-  fDecDef yMatrix (Matrix [[]]),
-  fDecDef zVector (Matrix [[]]),
+  fDecDef xMatrix (matrix [[]]),
+  fDecDef yMatrix (matrix [[]]),
+  fDecDef zVector (matrix [[]]),
   --
   call readTable [filename, zVector, xMatrix, yMatrix],
   -- endhack
-    ffor i (sy i $< (dim (sy zVector) - 1))
+    ffor i (dim (sy zVector) $- int 1)
       [
-        x_z_1 $:= getCol xMatrix i 0,
-        y_z_1 $:= getCol yMatrix i 0,
-        x_z_2 $:= getCol xMatrix i 1,
-        y_z_2 $:= getCol yMatrix i 1,
+        x_z_1 $:= getCol xMatrix i (int 0),
+        y_z_1 $:= getCol yMatrix i (int 0),
+        x_z_2 $:= getCol xMatrix i (int 1),
+        y_z_2 $:= getCol yMatrix i (int 1),
         FTry
           [ j $:= find x_z_1 x,
             k $:= find x_z_2 x ]
@@ -207,7 +209,7 @@ interpZ = funcDef "interpZ"
         y_1 $:= linInterp (interpOver x_z_1 y_z_1 j x),
         y_2 $:= linInterp (interpOver x_z_2 y_z_2 k x),
         FCond ((sy y_1 $<= sy y) $&& (sy y $<= sy y_2))
-          [ FRet $ linInterp [ sy y_1, vLook zVector i 0, sy y_2, vLook zVector i 1, sy y ]
+          [ FRet $ linInterp [ sy y_1, vLook zVector i (int 0), sy y_2, vLook zVector i (int 1), sy y ]
           ] []
       ],
     FThrow "Interpolation of z failed"

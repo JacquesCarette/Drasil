@@ -19,14 +19,16 @@ import Language.Drasil.Code.Imperative.Modules (chooseInModule, genConstClass,
   genOutputFormat, genOutputMod, genSampleInput)
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..), 
   designLog, inMod, modExportMap, clsDefMap)
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), 
-  AuxiliarySym(..))
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
+  PackageSym(..), AuxiliarySym(..))
 import Language.Drasil.Code.Imperative.GOOL.Data (PackData(..), ad)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Code.ExtLibImport (auxMods, imports, modExports)
 import Language.Drasil.Code.Lang (Lang(..))
-import Language.Drasil.Choices (Choices(..), Modularity(..), Visibility(..))
+import Language.Drasil.Choices (Choices(..), Modularity(..), Visibility(..),
+  choicesSent)
 import Language.Drasil.CodeSpec (CodeSpec(..))
+import Language.Drasil.Printers (Linearity(Linear), sentenceDoc)
 
 import GOOL.Drasil (GSProgram, SFile, OOProg, ProgramSym(..), ScopeTag(..), 
   ProgData(..), initialState, unCI)
@@ -37,12 +39,12 @@ import Control.Lens ((^.))
 import Control.Monad.State (get, evalState, runState)
 import Data.List (nub)
 import Data.Map (fromList, member, keys, elems)
-import Data.Maybe (maybeToList)
-import Text.PrettyPrint.HughesPJ (($$), empty, isEmpty)
+import Data.Maybe (maybeToList, catMaybes)
+import Text.PrettyPrint.HughesPJ (isEmpty, vcat)
 
--- | Initializes the generator's DrasilState.
--- String parameter is a string representing the date.
--- [Expr] parameter is the sample input values provided by the user
+-- | Initializes the generator's 'DrasilState'.
+-- 'String' parameter is a string representing the date.
+-- \['Expr'\] parameter is the sample input values provided by the user.
 generator :: Lang -> String -> [Expr] -> Choices -> CodeSpec -> DrasilState
 generator l dt sd chs spec = DrasilState {
   -- constants
@@ -75,22 +77,25 @@ generator l dt sd chs spec = DrasilState {
   -- stateful
   currentModule = "",
   currentClass = "",
-  _designLog = concLog $$ libLog,
+  _designLog = des,
   _loggedSpaces = [] -- Used to prevent duplicate logs added to design log
 }
-  where (mcm, concLog) = runState (chooseConcept chs) empty
+  where (mcm, concLog) = runState (chooseConcept chs) []
         showDate Show = dt
         showDate Hide = ""
         ((pth, elmap, lname), libLog) = runState (chooseODELib l (odeLib chs) 
-          (odes chs)) empty
+          (odes chs)) []
         els = map snd elmap
         nms = [lname]
         mem = modExportMap spec chs modules' 
         lem = fromList (concatMap (^. modExports) els)
         cdm = clsDefMap spec chs modules'
         modules' = mods spec ++ concatMap (^. auxMods) els
+        nonPrefChs = choicesSent chs
+        des = vcat . map (sentenceDoc (sysinfodb spec) Implementation Linear) $
+          (nonPrefChs ++ concLog ++ libLog)
 
--- | Generates a package with the given DrasilState. The passed
+-- | Generates a package with the given 'DrasilState'. The passed
 -- un-representation functions determine which target language the package will 
 -- be generated in.
 generateCode :: (OOProg progRepr, PackageSym packRepr) => Lang -> 
@@ -107,7 +112,7 @@ generateCode l unReprProg unReprPack g = do
   createCodeFiles code
   setCurrentDirectory workingDir
 
--- Generates a package, including a Makefile, sample input file, and Doxygen 
+-- | Generates a package, including a Makefile, sample input file, and Doxygen 
 -- configuration file (all subject to the user's choices). 
 -- The passed un-representation function determines which target language the 
 -- package will be generated in.
@@ -124,12 +129,23 @@ genPackage unRepr = do
       (reprPD, s) = runState p info
       pd = unRepr reprPD
       m = makefile (libPaths g) (implType g) (commented g) s pd
+      as = case codeSpec g of CodeSpec {authors = a} -> map name a
+      cfp = configFiles $ codeSpec g
   i <- genSampleInput
   d <- genDoxConfig s
-  rm <- genReadMe (implType g) (extLibNames g)
-  return $ package pd (m:i++rm++d)
+  rm <- genReadMe ReadMeInfo {
+        langName = "",
+        langVersion = "",
+        invalidOS = Nothing,
+        implementType = implType g,
+        extLibNV = extLibNames g,
+        extLibFP = libPaths g,
+        contributors = as, 
+        configFP = cfp,
+        caseName = ""}
+  return $ package pd (m:catMaybes [i,rm,d])
 
--- Generates an SCS program based on the problem and the user's design choices.
+-- | Generates an SCS program based on the problem and the user's design choices.
 genProgram :: (OOProg r) => GenState (GSProgram r)
 genProgram = do
   g <- get
@@ -137,13 +153,13 @@ genProgram = do
   let n = pName $ codeSpec g
   return $ prog n ms
 
--- Generates either a single module or many modules, based on the users choice 
--- of modularity
+-- | Generates either a single module or many modules, based on the users choice 
+-- of modularity.
 chooseModules :: (OOProg r) => Modularity -> GenState [SFile r]
 chooseModules Unmodular = liftS genUnmodular
 chooseModules (Modular _) = genModules
 
--- Generates an entire SCS program as a single module
+-- | Generates an entire SCS program as a single module.
 genUnmodular :: (OOProg r) => GenState (SFile r)
 genUnmodular = do
   g <- get
@@ -160,7 +176,7 @@ genUnmodular = do
     ([genInputClass Auxiliary, genConstClass Auxiliary] 
       ++ map (fmap Just) (concatMap genModClasses $ modules g))
       
--- Generates all modules for an SCS program    
+-- | Generates all modules for an SCS program.
 genModules :: (OOProg r) => GenState [SFile r]
 genModules = do
   g <- get
@@ -172,7 +188,7 @@ genModules = do
   moddef <- traverse genModDef (modules g) -- hack ?
   return $ mn : inp ++ con ++ cal : out ++ moddef
 
--- private utilities used in generateCode
+-- | Private utilities used in 'generateCode'.
 getDir :: Lang -> String
 getDir Cpp = "cpp"
 getDir CSharp = "csharp"

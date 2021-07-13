@@ -75,34 +75,34 @@ void InputParameters::input_constraints() {
     outfile << "  }" << std::endl;
     outfile.close();
     
-    if (!(this->v_launch > 0)) {
+    if (!(this->v_launch > 0.0f)) {
         std::cout << "Warning: ";
         std::cout << "v_launch has value ";
         std::cout << this->v_launch;
         std::cout << ", but is suggested to be ";
         std::cout << "above ";
-        std::cout << 0;
+        std::cout << 0.0f;
         std::cout << "." << std::endl;
     }
-    if (!(0 < this->theta && this->theta < M_PI / 2)) {
+    if (!(0.0f < this->theta && this->theta < M_PI / 2.0f)) {
         std::cout << "Warning: ";
         std::cout << "theta has value ";
         std::cout << this->theta;
         std::cout << ", but is suggested to be ";
         std::cout << "between ";
-        std::cout << 0;
+        std::cout << 0.0f;
         std::cout << " and ";
-        std::cout << (M_PI / 2);
+        std::cout << (M_PI / 2.0f);
         std::cout << " ((pi)/(2))";
         std::cout << "." << std::endl;
     }
-    if (!(this->p_target > 0)) {
+    if (!(this->p_target > 0.0f)) {
         std::cout << "Warning: ";
         std::cout << "p_target has value ";
         std::cout << this->p_target;
         std::cout << ", but is suggested to be ";
         std::cout << "above ";
-        std::cout << 0;
+        std::cout << 0.0f;
         std::cout << "." << std::endl;
     }
 }
@@ -159,7 +159,7 @@ float func_t_flight(InputParameters &inParams) {
     outfile << "  }" << std::endl;
     outfile.close();
     
-    return 2 * inParams.v_launch * sin(inParams.theta) / inParams.g_vect;
+    return 2.0f * inParams.v_launch * sin(inParams.theta) / inParams.g_vect;
 }
 
 float func_p_land(InputParameters &inParams) {
@@ -171,7 +171,7 @@ float func_p_land(InputParameters &inParams) {
     outfile << "  }" << std::endl;
     outfile.close();
     
-    return 2 * pow(inParams.v_launch, 2) * sin(inParams.theta) * cos(inParams.theta) / inParams.g_vect;
+    return 2.0f * pow(inParams.v_launch, 2.0f) * sin(inParams.theta) * cos(inParams.theta) / inParams.g_vect;
 }
 
 float func_d_offset(InputParameters &inParams, float p_land) {
@@ -204,7 +204,7 @@ string func_s(InputParameters &inParams, float d_offset) {
     if (fabs(d_offset / inParams.p_target) < inParams.epsilon) {
         return "The target was hit.";
     }
-    else if (d_offset < 0) {
+    else if (d_offset < 0.0f) {
         return "The projectile fell short.";
     }
     else {

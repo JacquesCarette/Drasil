@@ -9,137 +9,183 @@ module Drasil.Sections.TableOfContents (contToCRef, contRefMatRef, contToURef,
   contBibRef, contApndxRef, contOtSSRef) where
 
 import Language.Drasil
+{- Which parts of the SRS do we have sections for?
+Table of Contents ^
+Reference Material
+  Table of Units ^
+  Table of Symbols ^
+  Table of Abbreviations and Acronyms ----
+Instroduction ^
+  Purpose of Document ^
+  Scope of Requirements ^
+  Characteristics of Intended Reader ^
+  Organization of Document ^
+Stakeholders ^
+  The Client ^
+  The Customer ^
+General System Description ^
+  System Context ^
+  User Characteristics ^
+  System Constraints ^
+Specific System Description ^
+  Problem Description ^
+    -- MISSING: Termonology and definitions ^
+    Physical System Description ^
+    Goal Statements ^
+  Solution Characteristics Specification ^
+    Assumptions ^
+    Theoretical Models ^
+    General Definitions ^
+    Data Definitions ^
+    Instance Models ^
+    Data Constraints ^
+    Properties of a Correct Solution ^
+Requirements ^
+  Functional Requirements ^
+  Non-Functional Requirements ^
+Likely Changes ^
+Unlikely Changes ^
+Traceability Matrices and Graphs ^
+Values of Auxiliary Constants ^
+References ^
+Appendix ^
 
+Other refs not used but still defined:
+product use case
+scope of the project
+use case table
+off the shelf solutions
+-}
 -- Table of Contents section entry
 contToCRef :: Reference
-contToCRef = makeToCRef "ToC" "Table of Contents"
+contToCRef = makeSecRef "ToC" "Table of Contents"
 
 -- Reference Material section entries
 contRefMatRef :: Reference
-contRefMatRef = makeToCRef "RefMat" "Reference Material"
+contRefMatRef = makeSecRef "RefMat" "Reference Material"
 
 contToURef :: Reference
-contToURef = makeToCRef "ToU" "Table of Units"
+contToURef = makeSecRef "ToU" "Table of Units"
 
 contToSRef :: Reference
-contToSRef = makeToCRef "ToS" "Table of Symbols"
+contToSRef = makeSecRef "ToS" "Table of Symbols"
 
 contToAARef :: Reference
-contToAARef = makeToCRef "TAbbAcc" "Table of Abbreviations and Acronyms"
+contToAARef = makeSecRef "TAbbAcc" "Table of Abbreviations and Acronyms"
 
 -- Introduction section entries
 contIntroRef :: Reference
-contIntroRef = makeToCRef "Intro" "Instroduction"
+contIntroRef = makeSecRef "Intro" "Instroduction"
 
 contPoDRef :: Reference
-contPoDRef = makeToCRef "DocPurpose" "Purpose of Document"
+contPoDRef = makeSecRef "DocPurpose" "Purpose of Document"
 
 contSoRRef :: Reference
-contSoRRef = makeToCRef "ReqsScope" "Scope of Requirements"
+contSoRRef = makeSecRef "ReqsScope" "Scope of Requirements"
 
 contCIRRef :: Reference
-contCIRRef = makeToCRef "ReaderChars" "Characteristics of Intended Reader"
+contCIRRef = makeSecRef "ReaderChars" "Characteristics of Intended Reader"
 
 contOoDRef :: Reference
-contOoDRef = makeToCRef "DocOrg" "Organization of Document"
+contOoDRef = makeSecRef "DocOrg" "Organization of Document"
 
 -- Stakeholders section entries
 contStkhldrRef :: Reference
-contStkhldrRef = makeToCRef "Stakeholder" "Stakeholders"
+contStkhldrRef = makeSecRef "Stakeholder" "Stakeholders"
 
 contClntRef :: Reference
-contClntRef = makeToCRef "Client" "The Client"
+contClntRef = makeSecRef "Client" "The Client"
 
 contCstmrRef :: Reference
-contCstmrRef = makeToCRef "Customer" "The Customer"
+contCstmrRef = makeSecRef "Customer" "The Customer"
 
 -- General System Description section entries
 contGSDRef :: Reference
-contGSDRef = makeToCRef "GenSysDesc" "General System Description"
+contGSDRef = makeSecRef "GenSysDesc" "General System Description"
 
 contSysCtxtRef :: Reference
-contSysCtxtRef = makeToCRef "SysContext" "System Context"
+contSysCtxtRef = makeSecRef "SysContext" "System Context"
 
 contUsrChrRef :: Reference
-contUsrChrRef = makeToCRef "UserChars" "User Characteristics"
+contUsrChrRef = makeSecRef "UserChars" "User Characteristics"
 
 contSysConRef :: Reference
-contSysConRef = makeToCRef "SysConstraints" "System Constraints"
+contSysConRef = makeSecRef "SysConstraints" "System Constraints"
 
 -- Specific System Description section entries
 contSSDRef :: Reference
-contSSDRef = makeToCRef "SpecSystDesc" "Specific System Description"
+contSSDRef = makeSecRef "SpecSystDesc" "Specific System Description"
 
 contPrbDescRef :: Reference
-contPrbDescRef = makeToCRef "ProbDesc" "Problem Description"
+contPrbDescRef = makeSecRef "ProbDesc" "Problem Description"
 
 contSCSRef :: Reference
-contSCSRef = makeToCRef "SolCharSpec" "Solution Characteristics Specification"
+contSCSRef = makeSecRef "SolCharSpec" "Solution Characteristics Specification"
 
 contTaDRef :: Reference
-contTaDRef = makeToCRef "TermDefs" "Terminology and Definitions"
+contTaDRef = makeSecRef "TermDefs" "Terminology and Definitions"
 
 contPSDRef :: Reference
-contPSDRef = makeToCRef "PhysSyst" "Physical System Description"
+contPSDRef = makeSecRef "PhysSyst" "Physical System Description"
 
 contGlStRef :: Reference
-contGlStRef = makeToCRef "GoalStmt" "Goal Statements"
+contGlStRef = makeSecRef "GoalStmt" "Goal Statements"
 
 contAsmpRef :: Reference
-contAsmpRef = makeToCRef "Assumps" "Assumptions"
+contAsmpRef = makeSecRef "Assumps" "Assumptions"
 
 contTMRef :: Reference
-contTMRef = makeToCRef "TMs" "Theoretical Models"
+contTMRef = makeSecRef "TMs" "Theoretical Models"
 
 contGDRef :: Reference
-contGDRef = makeToCRef "GDs" "General Definitions"
+contGDRef = makeSecRef "GDs" "General Definitions"
 
 contDDRef :: Reference
-contDDRef = makeToCRef "DDs" "Data Definitions"
+contDDRef = makeSecRef "DDs" "Data Definitions"
 
 contIMRef :: Reference
-contIMRef = makeToCRef "IMs" "Instance Models"
+contIMRef = makeSecRef "IMs" "Instance Models"
 
 contDtCnstrRef :: Reference
-contDtCnstrRef = makeToCRef "DataConstraints" "Data Constraints"
+contDtCnstrRef = makeSecRef "DataConstraints" "Data Constraints"
 
 contCSPRef :: Reference
-contCSPRef = makeToCRef "CorSolProps" "Properties of a Correct Solution"
+contCSPRef = makeSecRef "CorSolProps" "Properties of a Correct Solution"
 
 -- Requirements section entries
 contRqmtRef :: Reference
-contRqmtRef = makeToCRef "Requirements" "Requirements"
+contRqmtRef = makeSecRef "Requirements" "Requirements"
 
 contFReqsRef :: Reference
-contFReqsRef = makeToCRef "FRs" "Functional Requirements"
+contFReqsRef = makeSecRef "FRs" "Functional Requirements"
 
 contNFReqsRef :: Reference
-contNFReqsRef = makeToCRef "NFRs" "Non-Functional Requirements"
+contNFReqsRef = makeSecRef "NFRs" "Non-Functional Requirements"
 
 -- Likely Changes section entry
 contLCsRef :: Reference
-contLCsRef = makeToCRef "LCs" "Likely Changes"
+contLCsRef = makeSecRef "LCs" "Likely Changes"
 
 -- Unlikely Changes section entry
 contUCsRef :: Reference
-contUCsRef = makeToCRef "UCs" "Unlikely Changes"
+contUCsRef = makeSecRef "UCs" "Unlikely Changes"
 
 -- Traceability Matrices and Graphs section entry
 contTMaGRef :: Reference
-contTMaGRef = makeToCRef "TraceMatrices" "Traceability Matrices and Graphs"
+contTMaGRef = makeSecRef "TraceMatrices" "Traceability Matrices and Graphs"
 
 -- Values of Auxiliary Constants section entry
 contVACRef :: Reference
-contVACRef = makeToCRef "AuxConstants" "Values of Auxiliary Constants"
+contVACRef = makeSecRef "AuxConstants" "Values of Auxiliary Constants"
 
 -- References section entry
 contBibRef :: Reference
-contBibRef = makeToCRef "References" "References"
+contBibRef = makeSecRef "References" "References"
 
 -- Appendix section entry
 contApndxRef :: Reference
-contApndxRef = makeToCRef "Appendix" "Appendix"
+contApndxRef = makeSecRef "Appendix" "Appendix"
 
 -- Off-The-Shelf Solutions section entry
 contOtSSRef :: Reference
-contOtSSRef = makeToCRef "offShelfSolns" "Off-The-Shelf Solutions"
+contOtSSRef = makeSecRef "offShelfSolns" "Off-The-Shelf Solutions"

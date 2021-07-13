@@ -13,8 +13,8 @@ import Data.List (intersperse, isPrefixOf, transpose)
 import Data.List.Split (splitOn)
 import Data.List.NonEmpty (NonEmpty(..), toList)
 
--- | Reads data from a file and converts the values to Exprs. The file must be 
--- formatted according to the DataDesc passed as a parameter.
+-- | Reads data from a file and converts the values to 'Expr's. The file must be 
+-- formatted according to the 'DataDesc'' passed as a parameter.
 readWithDataDesc :: FilePath -> DataDesc' -> IO [Expr]
 readWithDataDesc fp ddsc = do 
   ins <- readFile fp
@@ -71,7 +71,7 @@ sampleInputDD ds = dataDesc (junk : intersperse junk (map toData ds)) "\n"
 
 -- helpers
 
--- | Converts a string to an Expr of a given Space
+-- | Converts a 'String' to an 'Expr' of a given 'Space'.
 strAsExpr :: Space -> String -> Expr
 strAsExpr Integer s = int (read s :: Integer)
 strAsExpr Natural s = int (read s :: Integer)
@@ -81,12 +81,12 @@ strAsExpr Rational s = dbl (read s :: Double)
 strAsExpr String s = str s
 strAsExpr _ _ = error "strAsExpr should only be numeric space or string"
 
--- Gets the dimension of a Space
+-- | Gets the dimension of a 'Space'.
 getDimension :: Space -> Int
 getDimension (Vect t) = 1 + getDimension t
 getDimension _ = 0
 
--- Splits a string at the first (and only the first) occurence of a delimiter.
+-- | Splits a string at the first (and only the first) occurrence of a delimiter.
 -- The delimiter is dropped from the result.
 splitAtFirst :: String -> Delimiter -> (String, String)
 splitAtFirst = splitAtFirst' []
@@ -98,12 +98,12 @@ splitAtFirst = splitAtFirst' []
         dropDelim [] s = s
         dropDelim _ [] = error "impossible"
 
--- Converts a list of strings to a Matrix Expr of a given Space
+-- | Converts a list of 'String's to a Matrix 'Expr' of a given 'Space'.
 strListAsExpr :: Space -> [String] -> Expr
 strListAsExpr (Vect t) ss = Matrix [map (strAsExpr t) ss]
 strListAsExpr _ _ = error "strListsAsExpr called on non-vector space"
 
--- Converts a 2D list of strings to a Matrix Expr of a given Space
+-- | Converts a 2D list of 'String's to a Matrix 'Expr' of a given 'Space'.
 strList2DAsExpr :: Space -> [[String]] -> Expr
 strList2DAsExpr (Vect (Vect t)) sss = Matrix $ map (map (strAsExpr t)) sss
 strList2DAsExpr _ _ = error "strLists2DAsExprs called on non-2D-vector space"

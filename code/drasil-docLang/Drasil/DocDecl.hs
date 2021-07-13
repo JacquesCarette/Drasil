@@ -20,61 +20,82 @@ import Data.Drasil.Concepts.Documentation (assumpDom, funcReqDom, goalStmtDom,
 
 import Control.Lens((^.), Getting)
 
+-- | A Software Requirements Specification Declaration is made up of all necessary sections ('DocSection's).
 type SRSDecl = [DocSection]
 
-data DocSection = TableOfContents
-                | RefSec DL.RefSec
-                | IntroSec DL.IntroSec
-                | StkhldrSec DL.StkhldrSec
-                | GSDSec DL.GSDSec
-                | SSDSec SSDSec
-                | ReqrmntSec ReqrmntSec
-                | LCsSec
-                | UCsSec
-                | TraceabilitySec DL.TraceabilitySec
-                | AuxConstntSec DL.AuxConstntSec
-                | Bibliography
-                | AppndxSec DL.AppndxSec
-                | OffShelfSolnsSec DL.OffShelfSolnsSec
+-- | Contains all the different sections needed for a full SRS ('SRSDecl').
+data DocSection = TableOfContents                       -- ^ Table of Contents
+                | RefSec DL.RefSec                      -- ^ Reference.
+                | IntroSec DL.IntroSec                  -- ^ Introduction.
+                | StkhldrSec DL.StkhldrSec              -- ^ Stakeholders.
+                | GSDSec DL.GSDSec                      -- ^ General System Description.
+                | SSDSec SSDSec                         -- ^ Specific System Description.
+                | ReqrmntSec ReqrmntSec                 -- ^ Requirements.
+                | LCsSec                                -- ^ Likely Changes.
+                | UCsSec                                -- ^ Unlikely Changes.
+                | TraceabilitySec DL.TraceabilitySec    -- ^ Traceability.
+                | AuxConstntSec DL.AuxConstntSec        -- ^ Auxiliary Constants.
+                | Bibliography                          -- ^ Bibliography.
+                | AppndxSec DL.AppndxSec                -- ^ Appendix.
+                | OffShelfSolnsSec DL.OffShelfSolnsSec  -- ^ Off the Shelf Solutions.
 
--- | Specific System Description section . Contains a list of subsections.
+-- | Specific System Description section (wraps 'SSDSub' subsections).
 newtype SSDSec = SSDProg [SSDSub]
 
--- | Specific system description subsections
+-- | Specific System Description subsections.
 data SSDSub where
+  -- | Problem description.
   SSDProblem :: ProblemDescription -> SSDSub
+  -- | Solution characteristics.
   SSDSolChSpec :: SolChSpec -> SSDSub
 
--- | Problem Description section
+-- | Problem Description section.
 data ProblemDescription where
   PDProg :: Sentence -> [Section] -> [PDSub] -> ProblemDescription
 
--- | Problem Description subsections
+-- | Problem Description subsections.
 data PDSub where
+  -- | Terms and Definitions.
   TermsAndDefs :: Concept c => Maybe Sentence -> [c] -> PDSub
+  -- | Physical System Description.
   PhySysDesc :: Idea a => a -> [Sentence] -> LabelledContent -> [Contents] -> PDSub
+  -- | Goals.
   Goals :: [Sentence] -> PDSub
 
--- | Solution Characteristics Specification section
+-- | Solution Characteristics Specification section (wraps 'SCSSub' subsections).
 data SolChSpec where
   SCSProg :: [SCSSub] -> SolChSpec
 
--- | Solution Characteristics Specification subsections
+-- | Solution Characteristics Specification subsections.
 data SCSSub where
+  -- | Assumptions.
   Assumptions    :: SCSSub
+  -- | Theory models.
   TMs            :: [Sentence] -> Fields  -> SCSSub
+  -- | General definitions.
   GDs            :: [Sentence] -> Fields  -> DL.DerivationDisplay -> SCSSub
+  -- | Data definitions.
   DDs            :: [Sentence] -> Fields  -> DL.DerivationDisplay -> SCSSub
+  -- | Instance models.
   IMs            :: [Sentence] -> Fields  -> DL.DerivationDisplay -> SCSSub
+  -- | Constraints.
   Constraints    :: (HasUncertainty c, Quantity c, Constrained c, HasReasVal c, MayHaveUnit c) => Sentence -> [c] -> SCSSub
+  -- | Properties of a correct solution.
   CorrSolnPpties :: (Quantity c, Constrained c) => [c] -> [Contents] -> SCSSub
+
+-- | Requirements section (wraps 'ReqsSub' subsections).
 newtype ReqrmntSec = ReqsProg [ReqsSub]
 
+-- | Requirements subsections.
 data ReqsSub where
-  FReqsSub    :: Sentence -> [LabelledContent] -> ReqsSub -- LabelledContent for tables
-  FReqsSub'   :: [LabelledContent] -> ReqsSub -- LabelledContent for tables
+  -- | Functional requirements. 'LabelledContent' for tables (includes introduction).
+  FReqsSub    :: Sentence -> [LabelledContent] -> ReqsSub
+  -- | Functional requirements. 'LabelledContent' for tables (no introduction).
+  FReqsSub'   :: [LabelledContent] -> ReqsSub
+  -- | Non-Functional requirements.
   NonFReqsSub :: ReqsSub
 
+-- | Creates the document description (translates 'SRSDecl' into a more usable form for generating documents).
 mkDocDesc :: SystemInformation -> SRSDecl -> DocDesc
 mkDocDesc SI{_inputs = is, _sysinfodb = db} = map sec where
   sec :: DocSection -> DL.DocSection

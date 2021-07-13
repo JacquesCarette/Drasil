@@ -1,12 +1,13 @@
-module Drasil.Projectile.DataDefs (dataDefs, speedIX, speedIY) where
+module Drasil.Projectile.DataDefs (dataDefs, speedIX, speedIY, dataDefRefs) where
 
 import Prelude hiding (sin, cos)
 import Language.Drasil
-import Utils.Drasil
+import qualified Utils.Drasil.Sentence as S
 
-import Theory.Drasil (DataDefinition, ddNoRefs, mkQuantDef)
+import Theory.Drasil (DataDefinition, ddNoRefs)
 
-import Data.Drasil.Quantities.Physics (speed, iSpeed, ixVel, iyVel, velocity)
+import Data.Drasil.Quantities.Physics (iSpeed, ixVel, iyVel)
+import Data.Drasil.Theories.Physics (vecMag)
 
 import Drasil.Projectile.Figures (figLaunch)
 import Drasil.Projectile.Unitals (launAngle)
@@ -15,43 +16,22 @@ dataDefs :: [DataDefinition]
 dataDefs = [vecMag, speedIX, speedIY]
 
 ----------
-vecMag :: DataDefinition
-vecMag = ddNoRefs vecMagQD Nothing "vecMag" [magNote]
-
-vecMagQD :: QDefinition
-vecMagQD = mkQuantDef speed vecMagEqn
-
-vecMagEqn :: Expr
-vecMagEqn = UnaryOp Abs (sy velocity)
-
-----------
-speedIX :: DataDefinition
+speedIX, speedIY :: DataDefinition
 speedIX = ddNoRefs speedIXQD Nothing "speedIX" [speedRef, figRef]
-
-speedIXQD :: QDefinition
-speedIXQD = mkQuantDef ixVel speedIXEqn
-
-speedIXEqn :: Expr
-speedIXEqn = sy iSpeed * cos (sy launAngle)
-
-----------
-speedIY :: DataDefinition
 speedIY = ddNoRefs speedIYQD Nothing "speedIY" [speedRef, figRef]
 
-speedIYQD :: QDefinition
-speedIYQD = mkQuantDef iyVel speedIYEqn
-
-speedIYEqn :: Expr
-speedIYEqn = sy iSpeed * sin (sy launAngle)
+speedIXQD, speedIYQD :: QDefinition
+speedIXQD = mkQuantDef ixVel $ sy iSpeed `mulRe` cos (sy launAngle)
+speedIYQD = mkQuantDef iyVel $ sy iSpeed `mulRe` sin (sy launAngle)
 
 ----------
-magNote :: Sentence
-magNote = foldlSent [S "For a given", phrase velocity, S "vector", ch velocity `sC`
-  S "the magnitude of the vector", sParen (E $ UnaryOp Abs (sy velocity)) `isThe`
-  S "scalar called", phrase speed]
 
 speedRef :: Sentence
-speedRef = ch iSpeed `sIs` S "from" +:+. makeRef2S vecMag
+speedRef = ch iSpeed `S.is` S "from" +:+. refS vecMag
 
 figRef :: Sentence
-figRef = ch launAngle `sIs` S "shown in" +:+. makeRef2S figLaunch
+figRef = ch launAngle `S.is` S "shown in" +:+. refS figLaunch
+
+-- References --
+dataDefRefs :: [Reference]
+dataDefRefs = map ref dataDefs

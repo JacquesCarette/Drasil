@@ -2,6 +2,8 @@ module Data.Drasil.Concepts.Software where
 
 import Language.Drasil
 import Utils.Drasil
+import qualified Utils.Drasil.Sentence as S
+
 import Data.Drasil.Concepts.Computation (algorithm, dataStruct, inParam)
 import Data.Drasil.Concepts.Documentation (input_, physical, physicalConstraint,
   srs, softwareConstraint, quantity)
@@ -84,7 +86,7 @@ modControl = dcc "modControl" (cn' "control module") "provides the main program"
 
 modSfwrDecision :: ConceptChunk
 modSfwrDecision = dccWDS "modSfwrDecision" (cn' "software decision module") (foldlSent_
-  [S "includes", plural dataStruct `sAnd` plural algorithm,
+  [S "includes", plural dataStruct `S.and_` plural algorithm,
    S "used in the system that do not provide direct interaction with the user"])
 
 modInputFormat :: ConceptChunk
@@ -104,7 +106,7 @@ modInputConstraint = dcc "modInputConstraint" (cn' "input constraint module")
 
 modInputVerif :: ConceptChunk
 modInputVerif = dccWDS "modInputVerif" (cn' "input verification module") (foldlSent
-  [S "verifies that the", plural inParam, S "comply with", phrase physical `sAnd`
+  [S "verifies that the", plural inParam, S "comply with", phrase physical `S.and_`
    plural softwareConstraint, S "Throws an error if a parameter violates a" +:+.
    phrase physicalConstraint, S "Throws a warning if a parameter violates a",
    phrase softwareConstraint])
@@ -116,8 +118,8 @@ modDerivedVal = dccWDS "modDerivedVal" (cn' "derived value module") (foldlSent_
 
 modInterpolation :: ConceptChunk
 modInterpolation = dccWDS "modInterpolation" (cn "interpolation module") (foldlSent_
-  [S "provides the", plural equation, S "that take the", plural inParam `sAnd`
-   S "interpolation data" `sAnd` S "return an interpolated value"])
+  [S "provides the", plural equation, S "that take the", plural inParam `S.and_`
+   S "interpolation data" `S.and_` S "return an interpolated value"])
 
 modInterpDatum :: ConceptChunk
 modInterpDatum = dccWDS "modInterpDatum" (cn "interpolation datum module") (foldlSent_
@@ -157,5 +159,5 @@ modOutputfDescFun desc = dccWDS "modOutputfDescFun" (cn' "output format")
 modOdeDesc :: ConceptChunk
 modOdeDesc = dccWDS "modOdeDesc" (nounPhraseSP "ODE solver")
   (S "provides solvers that take the" +:+ foldlList Comma List
-   [S "governing equation", S "initial conditions", S "numerical parameters"] `sAnd`
+   [S "governing equation", S "initial conditions", S "numerical parameters"] `S.and_`
    S "solve them")

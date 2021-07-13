@@ -1,9 +1,14 @@
 module Language.Drasil.ShortName where
 
-newtype ShortName = ShortNm String
+import Language.Drasil.Sentence
 
-getStringSN :: ShortName -> String
-getStringSN (ShortNm s) = s
+-- | Used for holding the short form of a name (as a String with a wrapper).
+newtype ShortName = ShortNm Sentence
 
-shortname' :: String -> ShortName
+-- | Pulls the short form (as a 'String') out of a 'ShortName'.
+getSentSN :: ShortName -> Sentence
+getSentSN (ShortNm s) = s
+
+-- | Smart constructor for making a 'String' into a 'ShortName'.
+shortname' :: Sentence -> ShortName
 shortname' = ShortNm

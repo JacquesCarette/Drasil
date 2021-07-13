@@ -1,9 +1,11 @@
-module Drasil.SSP.Changes (likelyChgs, unlikelyChgs) where
+module Drasil.SSP.Changes (likelyChgs, unlikelyChgs, chgRefs) where
 
 -- A list of likely and unlikely changes for the SSP example
 
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Concepts
+import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (analysis, likeChgDom, model, system, unlikeChgDom)
 import Data.Drasil.Concepts.Math (calculation, zDir)
@@ -54,13 +56,17 @@ unlikelyChg2AO   = cic "UC_2donly"          uc2AODesc   "2D-Analysis-Only"      
 ucNASLODesc, uc2AODesc :: Sentence
 
 ucNASLODesc = foldlSent [S "Changes related to",
-  makeRef2S assumpINSFL, S "are not possible due to the dependency",
-  S "of the", plural calculation, S "on the linear relationship between",
-  phrase intNormForce `sAnd` phrase intShrForce]
+  refS assumpINSFL, S "are not possible due to the dependency"
+  `S.ofThe` plural calculation, S "on the linear relationship between",
+  phraseNP (intNormForce `and_` intShrForce)]
 
-uc2AODesc = foldlSent [makeRef2S assumpENSL, S "allows for", short twoD, 
+uc2AODesc = foldlSent [refS assumpENSL, S "allows for", short twoD, 
   phrase analysis, S "with these", plural model, S "only because", 
-  phrase stress, S "along the" +:+. (phrase zDir `sIs` S "zero"), 
-  S "These", plural model, S "do not take into account", phrase stress, 
-  S "in the", phrase zDir `sC` S "and therefore cannot be used",
-  S "without manipulation to attempt", phrase threeD, phrase analysis]
+  phrase stress, S "along the" +:+. (phrase zDir `S.is` S "zero"), 
+  S "These", plural model, S "do not take into account", phraseNP (stress 
+  `inThe` zDir) `sC` S "and therefore cannot be used",
+  S "without manipulation to attempt", phraseNP (combineNINI threeD analysis)]
+
+-- References --
+chgRefs :: [Reference]
+chgRefs = map ref (likelyChgs ++ unlikelyChgs)

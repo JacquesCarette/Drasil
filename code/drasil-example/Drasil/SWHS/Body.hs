@@ -1,13 +1,18 @@
+{-# LANGUAGE PostfixOperators #-}
 module Drasil.SWHS.Body where
 
-import Language.Drasil hiding (Symbol(..), organization, section)
+import Data.List (nub)
+import Language.Drasil hiding (organization, section, variable)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB,
-  SystemInformation(SI), cdb, rdb, refdb, _authors, _concepts, _constants,
-  _constraints, _datadefs, _definitions, _defSequence, _inputs, _kind, _outputs,
-  _quants, _sys, _sysinfodb, _usedinfodb)
+  SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts, _constants,
+  _constraints, _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, 
+  _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (GenDefn, InstanceModel)
 import Utils.Drasil
+import Utils.Drasil.Concepts
+import qualified Utils.Drasil.NounPhrase as NP
+import qualified Utils.Drasil.Sentence as S
 
 import Control.Lens ((^.))
 
@@ -18,11 +23,12 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocSection (..),
   ReqrmntSec(..), ReqsSub(..), SRSDecl, SSDSub(..), SolChSpec (SCSProg),
   SSDSec(..), InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg), GSDSec(..), GSDSub(..),
-  ProblemDescription(PDProg), PDSub(..), intro, mkDoc, tsymb'', traceMatStandard, purpDoc)
+  ProblemDescription(PDProg), PDSub(..), intro, mkDoc, fillTraceSI, tsymb'', traceMatStandard, purpDoc, getTraceConfigUID,
+  secRefs)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-import Data.Drasil.IdeaDicts as Doc (inModel)
+import Data.Drasil.TheoryConcepts as Doc (inModel)
 import Data.Drasil.Concepts.Computation (algorithm, compcon)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, column, condition,
   constraint, corSol, datum, document, environment,input_, model, organization, 
@@ -47,19 +53,19 @@ import Data.Drasil.People (brooks, spencerSmith, thulasi)
 import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt,
   fundamentals, derived, m_2, m_3)
 
-import Drasil.SWHS.Assumptions (assumpPIS, assumptions)
-import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs)
+import Drasil.SWHS.Assumptions (assumpPIS, assumptions, assumpRefs)
+import Drasil.SWHS.Changes (likelyChgs, unlikelyChgs, chgRefs)
 import Drasil.SWHS.Concepts (acronymsFull, coil, con, phaseChangeMaterial,
   phsChgMtrl, progName, sWHT, swhsPCM, tank, tankPCM, transient, water)
-import Drasil.SWHS.DataDefs (qDefs)
+import Drasil.SWHS.DataDefs (dataDefRefs)
 import qualified Drasil.SWHS.DataDefs as SWHS (dataDefs)
-import Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater)
-import Drasil.SWHS.Goals (goals)
+import Drasil.SWHS.GenDefs (genDefs, htFluxWaterFromCoil, htFluxPCMFromWater, genDefRefs)
+import Drasil.SWHS.Goals (goals, goalRefs)
 import Drasil.SWHS.IMods (eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM,
-  iMods, instModIntro)
-import Drasil.SWHS.References (citations, koothoor2013, smithLai2005)
-import Drasil.SWHS.Requirements (funcReqs, inReqDesc, nfRequirements, verifyEnergyOutput)
-import Drasil.SWHS.TMods (tMods)
+  iMods, instModIntro, iModRefs)
+import Drasil.SWHS.References (citations, koothoor2013, smithLai2005, citeRefs)
+import Drasil.SWHS.Requirements (funcReqs, inReqDesc, nfRequirements, verifyEnergyOutput, reqRefs)
+import Drasil.SWHS.TMods (tMods, tModRefs)
 import Drasil.SWHS.Unitals (absTol, coilHTC, coilSA, consTol, constrained,
   htFluxC, htFluxP, inputs, inputConstraints, outputs, pcmE, pcmHTC, pcmSA,
   relTol, simTime, specParamValList, symbols, symbolsAll, tempC, tempPCM,
@@ -68,7 +74,10 @@ import Drasil.SWHS.Unitals (absTol, coilHTC, coilSA, consTol, constrained,
 -------------------------------------------------------------------------------
 
 srs :: Document
-srs = mkDoc mkSRS for si
+srs = mkDoc mkSRS S.forT si
+
+fullSI :: SystemInformation
+fullSI = fillTraceSI mkSRS si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
@@ -83,21 +92,23 @@ units = map unitWrapper [metre, kilogram, second] ++
 
 si :: SystemInformation
 si = SI {
-  _sys = swhsPCM,
-  _kind = Doc.srs, 
-  _authors = [thulasi, brooks, spencerSmith],
-  _quants = symbols,
-  _concepts = [] :: [DefinedQuantityDict],
-  _definitions = qDefs,
-  _datadefs = SWHS.dataDefs,
-  _inputs = inputs,
-  _outputs = map qw outputs,
+  _sys         = swhsPCM,
+  _kind        = Doc.srs, 
+  _authors     = [thulasi, brooks, spencerSmith],
+  _purpose     = purpDoc progName Verbose,
+  _quants      = symbols,
+  _concepts    = [] :: [DefinedQuantityDict],
+  _instModels  = [], -- FIXME; empty _instModels
+  _datadefs    = SWHS.dataDefs,
+  _configFiles = [],
+  _inputs      = inputs,
+  _outputs     = map qw outputs,
   _defSequence = [] :: [Block QDefinition],
   _constraints = constrained,
-  _constants = specParamValList,
-  _sysinfodb = symbMap,
-  _usedinfodb = usedDB,
-   refdb = refDB
+  _constants   = specParamValList,
+  _sysinfodb   = symbMap,
+  _usedinfodb  = usedDB,
+   refdb       = refDB
 }
 
 symbMap :: ChunkDB
@@ -108,12 +119,12 @@ symbMap = cdb (qw heatEInPCM : symbolsAll) -- heatEInPCM ?
   ++ map nw prodtcon ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw specParamValList
   ++ map nw fundamentals ++ map nw educon ++ map nw derived ++ map nw physicalcon ++ map nw unitalChuncks
   ++ [nw swhsPCM, nw algorithm] ++ map nw compcon ++ [nw materialProprty])
-  (cw heatEInPCM : map cw symbols ++ srsDomains) -- FIXME: heatEInPCM?
-  (units ++ [m_2, m_3]) SWHS.dataDefs insModel genDefs tMods concIns section []
+  (cw heatEInPCM : map cw symbols ++ srsDomains ++ map cw specParamValList) -- FIXME: heatEInPCM?
+  (units ++ [m_2, m_3]) SWHS.dataDefs insModel genDefs tMods concIns section [] allRefs
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronymsFull)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] []
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns
@@ -194,21 +205,21 @@ priorityNFReqs = [correctness, verifiability, understandability, reusability,
 
 introStart :: Sentence
 introStart = foldlSent [S "Due to", foldlList Comma List (map S
-  ["increasing costs", "diminishing availability", "negative environmental impact"]) `sOf`
-  S "fossil fuels" `sC` S "the demand is high for renewable", plural enerSrc `sAnd`
-  phrase energy, S "storage technology"]
+  ["increasing costs", "diminishing availability", "negative environmental impact"]) `S.of_`
+  S "fossil fuels" `sC` S "the demand is high for renewable", pluralNP (enerSrc `and_PS`
+  energy), S "storage technology"]
 
 introStartSWHS :: Sentence
 introStartSWHS = foldlSent [capSent (swhsPCM ^. defn), sParen (short phsChgMtrl),
-  S "use a renewable", phrase enerSrc `sAnd` S "provide a novel way of storing" +:+.
+  S "use a renewable", phrase enerSrc `S.and_` S "provide a novel way of storing" +:+.
   phrase energy, atStart swhsPCM, S "improve over the traditional", plural progName,
-  S "because of their smaller size. The smaller size is possible because of the ability" `sOf`
+  S "because of their smaller size. The smaller size is possible because of the ability" `S.of_`
   short phsChgMtrl, S "to store", phrase thermalEnergy, S "as", phrase latentHeat `sC`
   S "which allows higher", phrase thermalEnergy, S "storage capacity per",
   phrase unit_, S "weight"]
 
 introEnd :: Sentence -> CI -> Sentence
-introEnd progSent pro = foldlSent_ [EmptyS +:+. progSent, S "The developed",
+introEnd progSent pro = foldlSent_ [(progSent !.), S "The developed",
   phrase program, S "will be referred to as", titleize pro, sParen (short pro)]
   -- SSP has same style sentence here
 
@@ -225,9 +236,9 @@ introEnd progSent pro = foldlSent_ [EmptyS +:+. progSent, S "The developed",
 ---------------------------------
 
 scope :: Sentence
-scope = foldlSent_ [phrase thermalAnalysis `sOf` S "a single" +:+. phrase tankPCM,
-  S "This entire", phrase document `sIs` S "written assuming that the substances inside the",
-  phrase sWHT `sAre` phrase water `sAnd` short phsChgMtrl]
+scope = foldlSent_ [phrase thermalAnalysis `S.of_` S "a single" +:+. phrase tankPCM,
+  S "This entire", phrase document `S.is` S "written assuming that the substances inside the",
+  phrase sWHT `S.are` phraseNP (and_Gen phrase short water phsChgMtrl)]
 
 -- There is a similar paragraph in each example, but there's a lot of specific
 -- info here. Would need to abstract out the object of analysis (i.e. solar
@@ -257,18 +268,18 @@ charReaderDE = plural de +:+ S "from level 1 and 2" +:+ phrase calculus
 ------------------------------------
 
 orgDocIntro :: Sentence
-orgDocIntro = foldlSent [S "The", phrase organization, S "of this",
-  phrase document, S "follows the template for an", short Doc.srs,
-  S "for", phrase sciCompS, S "proposed by", makeCiteS koothoor2013 `sAnd`
-  makeCiteS smithLai2005]
+orgDocIntro = foldlSent [atStartNP (the organization), S "of this",
+  phrase document, S "follows the template for an", short Doc.srs
+  `S.for` phrase sciCompS, S "proposed by", refS koothoor2013 `S.and_`
+  refS smithLai2005]
 
 orgDocEnd :: Sentence
-orgDocEnd = foldlSent_ [S "The", plural inModel, 
+orgDocEnd = foldlSent_ [atStartNP' (the inModel), 
   S "to be solved are referred to as" +:+. 
-  foldlList Comma List (map makeRef2S iMods), S "The", plural inModel,
-  S "provide the", plural ode, sParen (short ode :+: S "s") `sAnd` 
-  S "algebraic", plural equation, S "that", phrase model, S "the" +:+. 
-  phrase swhsPCM, short progName, S "solves these", short ode :+: S "s"]
+  foldlList Comma List (map refS iMods), S "The", plural inModel,
+  S "provide the", plural ode, sParen (short ode :+: S "s") `S.and_` 
+  S "algebraic", plural equation, S "that", phrase model, 
+  (phraseNP (the swhsPCM) !.), short progName, S "solves these", short ode :+: S "s"]
 
 -- This paragraph is mostly general (besides program name and number of IMs),
 -- but there are some differences between the examples that I'm not sure how to
@@ -295,23 +306,23 @@ orgDocEnd = foldlSent_ [S "The", plural inModel,
 --------------------------
 
 sysCntxtDesc :: CI -> Contents
-sysCntxtDesc pro = foldlSP [makeRef2S sysCntxtFig, S "shows the" +:+.
+sysCntxtDesc pro = foldlSP [refS sysCntxtFig, S "shows the" +:+.
   phrase sysCont, S "A circle represents an external entity outside the",
-  phrase software `sC` S "the", phrase user +:+. S "in this case",
+  phrase software `sC` phraseNP (the user) +:+. S "in this case",
   S "A rectangle represents the", phrase softwareSys, S "itself" +:+.
   sParen (short pro), S "Arrows are used to show the", plural datum,
-  S "flow between the", phrase system `sAnd` S "its", phrase environment]
+  S "flow between the", phraseNP (system `andIts` environment)]
 
 sysCntxtFig :: LabelledContent
 sysCntxtFig = llcc (makeFigRef "SysCon") $ fig (foldlSent_
-  [makeRef2S sysCntxtFig +: EmptyS, titleize sysCont])
+  [refS sysCntxtFig +: EmptyS, titleize sysCont])
   $ resourcePath ++ "SystemContextFigure.png"
 
 sysCntxtRespIntro :: CI -> Contents
 sysCntxtRespIntro pro = foldlSPCol [short pro +:+. S "is mostly self-contained",
   S "The only external interaction is through the", phrase user +:+.
-  S "interface", S "responsibilities" `ofThe'` phrase user `andThe`
-  phrase system `sAre` S "as follows"]
+  S "interface", S "responsibilities" `S.the_ofTheC` phraseNP (user `andThe`
+  system) `S.are` S "as follows"]
 
 systContRespBullets :: Contents
 systContRespBullets = UlC $ ulcc $ Enumeration $ bulletNested
@@ -320,7 +331,7 @@ systContRespBullets = UlC $ ulcc $ Enumeration $ bulletNested
 
 userResp :: [Sentence]
 userResp = map foldlSent_ [
-  [S "Provide the", phrase input_, plural datum `toThe`
+  [S "Provide the", phrase input_, plural datum `S.toThe`
     phrase system `sC` S "ensuring no errors in the", plural datum, S "entry"],
   [S "Take care that consistent", plural unit_, S "are used for",
     phrase input_, plural variable]
@@ -328,10 +339,10 @@ userResp = map foldlSent_ [
 
 swhsResp :: [Sentence]
 swhsResp = map foldlSent_ [
-  [S "Detect", plural datum, S "type mismatch, such as a string" `sOf`
+  [S "Detect", plural datum, S "type mismatch, such as a string" `S.of_`
     S "characters instead of a floating point number"],
   [S "Determine if the", plural input_, S "satisfy the required",
-    phrase physical `sAnd` phrase software, plural constraint],
+    phraseNP (physical `and_` software), plural constraint],
   [S "Calculate the required", plural output_]
   ]
 
@@ -340,8 +351,8 @@ swhsResp = map foldlSent_ [
 --------------------------------
 
 userChars :: CI -> Contents
-userChars pro = foldlSP [S "The end", phrase user `sOf` short pro,
-  S "should have an understanding of undergraduate Level 1 Calculus" `sAnd`
+userChars pro = foldlSP [S "The end", phrase user `S.of_` short pro,
+  S "should have an understanding of undergraduate Level 1 Calculus" `S.and_`
   titleize Doc.physics]
 
 -- Some of these course names are repeated between examples, could potentially
@@ -359,7 +370,7 @@ userChars pro = foldlSP [S "The end", phrase user `sOf` short pro,
 -- 4.1 : Problem Description --
 -------------------------------
 probDescIntro :: Sentence
-probDescIntro = foldlSent_ [S "investigate the effect" `sOf` S "employing",
+probDescIntro = foldlSent_ [S "investigate the effect" `S.of_` S "employing",
   short phsChgMtrl, S "within a", phrase sWHT]
 
 -----------------------------------------
@@ -393,8 +404,8 @@ physSyst2 co ta hfc = [atStart co, S "at bottom of" +:+. phrase ta,
 
 figTank :: LabelledContent
 figTank = llcc (makeFigRef "Tank") $ fig (
-  foldlSent_ [atStart sWHT `sC` S "with", phrase htFluxC `sOf`
-  ch htFluxC `sAnd` phrase htFluxP `sOf` ch htFluxP])
+  foldlSent_ [atStart sWHT `sC` S "with", phrase htFluxC `S.of_`
+  ch htFluxC `S.and_` phrase htFluxP `S.of_` ch htFluxP])
   $ resourcePath ++ "Tank.png"
 
 -----------------------------
@@ -402,8 +413,8 @@ figTank = llcc (makeFigRef "Tank") $ fig (
 -----------------------------
 
 goalInputs :: [Sentence]
-goalInputs  = [S "the" +:+ phrase tempC,
-  S "the initial" +:+ plural condition +:+ S "for the" +:+ phrase tempW `andThe` phrase tempPCM,
+goalInputs  = [phraseNP (the tempC),
+  S "the initial" +:+ plural condition +:+ S "for the" +:+ phraseNP (tempW `andThe` tempPCM),
   S "the material" +:+ plural property]
 
 -- 2 examples include this paragraph, 2 don't. The "givens" would need to be
@@ -467,8 +478,8 @@ dataConTail :: Sentence
 dataConTail = dataContMid +:+ dataContFooter
 
 dataContMid :: Sentence
-dataContMid = foldlSent [S "The", phrase column, S "for", phrase software,
-  plural constraint, S "restricts the range" `sOf` plural input_,
+dataContMid = foldlSent [atStartNP (the column) `S.for` pluralNP (combineNINI software
+  constraint), S "restricts the range" `S.of_` plural input_,
   S "to reasonable", plural value]
 
 dataContFooter :: Sentence
@@ -478,16 +489,16 @@ dataContFooter = foldlSent_ $ map foldlSent [
   S "or there will be a divide by zero in the", phrase model],
 
   [sParen (S "+"), S "These", plural quantity, S "cannot be zero" `sC`
-  S "or there would be freezing", sParen (makeRef2S assumpPIS)],
+  S "or there would be freezing", sParen (refS assumpPIS)],
 
-  [sParen (S "++"), S "The", plural constraint, S "on the", phrase surArea,
+  [sParen (S "++"), atStartNP' (NP.the (constraint `onThePS` surArea)),
   S "are calculated by considering the", phrase surArea, S "to", phrase vol +:+.
-  S "ratio", S "The", phrase assumption, S "is that the lowest ratio is 1" `sAnd`
-  S "the highest possible is", E (2 / sy thickness) `sC` S "where", ch thickness,
-  S "is the thickness of a" +:+. (Quote (S "sheet") `sOf` short phsChgMtrl),
+  S "ratio", atStartNP (the assumption), S "is that the lowest ratio is 1" `S.and_`
+  S "the highest possible is", eS (exactDbl 2 $/ sy thickness) `sC` S "where", ch thickness,
+  S "is the thickness of a" +:+. (Quote (S "sheet") `S.of_` short phsChgMtrl),
   S "A thin sheet has the greatest", phrase surArea, S "to", phrase vol, S "ratio"],
 
-  [sParen (S "**"), S "The", phrase constraint, S "on the maximum", phrase time,
+  [sParen (S "**"), atStartNP (the constraint), S "on the maximum", phrase time,
   S "at the end of the simulation is the total number of seconds in one day"]
   
   ]
@@ -526,23 +537,23 @@ propsDeriv = [
 propCorSolDeriv1 :: (NamedIdea b, NamedIdea h) => ConceptChunk -> b -> UnitalChunk ->
   ConceptChunk -> CI -> GenDefn -> GenDefn -> h -> ConceptChunk -> Contents
 propCorSolDeriv1 lce ewat en co pcmat g1hfc g2hfp su ht  =
-  foldlSPCol [S "A", phrase corSol, S "must exhibit the" +:+.
-  phrase lce, S "This means that the", phrase ewat,
+  foldlSPCol [atStartNP (a_ corSol), S "must exhibit" +:+.
+  phraseNP (the lce), S "This means that", phraseNP (the ewat),
   S "should equal the difference between the total", phrase en,
-  phrase input_, S "from the", phrase co `sAnd` S "the",
-  phrase en, phrase output_, S "to the" +:+. short pcmat,
+  phrase input_, S "from", phraseNP (the co `NP.andThe`
+  combineNINI en output_), S "to the" +:+. short pcmat,
   S "This can be shown as an", phrase equation, S "by taking",
-  makeRef2S g1hfc `sAnd` makeRef2S g2hfp `sC`
+  refS g1hfc `S.and_` refS g2hfp `sC`
   S "multiplying each by their respective", phrase su,
   S "area of", phrase ht `sC` S "and integrating each",
   S "over the", phrase simTime `sC` S "as follows"]
 
 propCorSolDeriv2 :: Contents
-propCorSolDeriv2 = eqUnR'
-  (sy watE $= defint (eqSymb time) 0 (sy time)
-  (sy coilHTC * sy coilSA * (sy tempC - apply1 tempW time))
-  - defint (eqSymb time) 0 (sy time)
-  (sy pcmHTC * sy pcmSA * (apply1 tempW time -
+propCorSolDeriv2 = unlbldExpr
+  (sy watE $= defint (eqSymb time) (exactDbl 0) (sy time)
+  (sy coilHTC `mulRe` sy coilSA `mulRe` (sy tempC $- apply1 tempW time))
+  $- defint (eqSymb time) (exactDbl 0) (sy time)
+  (sy pcmHTC `mulRe` sy pcmSA `mulRe` (apply1 tempW time $-
   apply1 tempPCM time)))
 
 propCorSolDeriv3 :: NamedIdea a => a -> UnitalChunk -> CI -> ConceptChunk -> Contents
@@ -552,19 +563,19 @@ propCorSolDeriv3 epcm en pcmat wa =
   S "from the" +:+. phrase wa, S "This can be expressed as"]
 
 propCorSolDeriv4 :: Contents
-propCorSolDeriv4 = eqUnR'
-  (sy pcmE $= defint (eqSymb time) 0 (sy time)
-  (sy pcmHTC * sy pcmSA * (apply1 tempW time - 
+propCorSolDeriv4 = unlbldExpr
+  (sy pcmE $= defint (eqSymb time) (exactDbl 0) (sy time)
+  (sy pcmHTC `mulRe` sy pcmSA `mulRe` (apply1 tempW time $- 
   apply1 tempPCM time)))
 
 propCorSolDeriv5 :: ConceptChunk -> CI -> CI -> Contents
 propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)" 
-  `sAnd` S "(FIXME: Equation 8) can be used as", Quote (S "sanity") +:+
+  `S.and_` S "(FIXME: Equation 8) can be used as", Quote (S "sanity") +:+
   S "checks to gain confidence in any", phrase solution,
   S "computed by" +:+. short pro, S "The relative",
-  S "error between the results computed by", short pro `sAnd`
+  S "error between the results computed by", short pro `S.and_`
   S "the results calculated from the", short rs, S "of these",
-  plural eq, S "should be less than", ch consTol, makeRef2S verifyEnergyOutput]
+  plural eq, S "should be less than", ch consTol, refS verifyEnergyOutput]
 
 -- Remember to insert references in above derivation when available
 
@@ -599,3 +610,10 @@ propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)"
 ----------------------------
 -- Section 9 : References --
 ----------------------------
+bodyRefs :: [Reference]
+bodyRefs = [ref sysCntxtFig, ref figTank]
+  ++ map ref concIns ++ map ref section ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+
+allRefs :: [Reference]
+allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ goalRefs ++ dataDefRefs ++ genDefRefs
+  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs)

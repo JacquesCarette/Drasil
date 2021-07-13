@@ -3,18 +3,21 @@ module Drasil.Template.Body where
 import Language.Drasil
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
-  cdb, rdb, refdb, _authors, _concepts, _constants, _constraints, _datadefs,
-  _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys,
-  _sysinfodb, _usedinfodb)
+  cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
+  _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, _outputs, 
+  _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
-import Utils.Drasil
+import qualified Utils.Drasil.Sentence as S
 
-import Drasil.DocLang (SRSDecl, mkDoc)
+import Drasil.DocLang (SRSDecl, mkDoc, fillTraceSI)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 
 srs :: Document
-srs = mkDoc mkSRS (for'' titleize phrase) si
+srs = mkDoc mkSRS (S.forGen titleize phrase) si
+
+fullSI :: SystemInformation
+fullSI = fillTraceSI mkSRS si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
@@ -27,10 +30,12 @@ si = SI {
   _sys         = example,
   _kind        = Doc.srs,
   _authors     = [authorName],
+  _purpose     = [],
   _quants      = [] :: [QuantityDict],
   _concepts    = [] :: [DefinedQuantityDict],
-  _definitions = [] :: [QDefinition],
+  _instModels  = [] :: [InstanceModel],
   _datadefs    = [] :: [DataDefinition],
+  _configFiles = [],
   _inputs      = [] :: [QuantityDict],
   _outputs     = [] :: [QuantityDict],
   _defSequence = [] :: [Block QDefinition],
@@ -45,13 +50,13 @@ symbMap :: ChunkDB
 symbMap = cdb ([] :: [QuantityDict]) [nw example] ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
-  ([] :: [Section]) ([] :: [LabelledContent])
+  ([] :: [Section]) ([] :: [LabelledContent]) ([] :: [Reference])
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict]) ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) ([] :: [DataDefinition]) ([] :: [InstanceModel])
   ([] :: [GenDefn]) ([] :: [TheoryModel]) ([] :: [ConceptInstance])
-  ([] :: [Section]) ([] :: [LabelledContent])
+  ([] :: [Section]) ([] :: [LabelledContent]) ([] :: [Reference])
 
 refDB :: ReferenceDB
 refDB = rdb [] []

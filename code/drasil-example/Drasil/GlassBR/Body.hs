@@ -1,15 +1,17 @@
+{-# LANGUAGE PostfixOperators #-}
 module Drasil.GlassBR.Body where
 
 import Control.Lens ((^.))
-import Language.Drasil hiding (Symbol(..), organization, section)
-import Language.Drasil.Code (relToQD)
+import Data.List (nub)
+import Language.Drasil hiding (organization, section, variable)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI),
-  cdb, rdb, refdb, _authors, _concepts, _constants, _constraints, _datadefs,
-  _definitions, _defSequence, _inputs, _kind, _outputs, _quants, _sys,
-  _sysinfodb, _usedinfodb)
-import Theory.Drasil (Theory(defined_fun, defined_quant))
+  cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
+  _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, 
+  _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Utils.Drasil
+import Utils.Drasil.Concepts
+import qualified Utils.Drasil.Sentence as S
 
 import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   DocSection(..), Field(..), Fields, GSDSec(..), GSDSub(..),
@@ -19,7 +21,8 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   SolChSpec(..), StkhldrSec(..), StkhldrSub(Client, Cstmr),
   TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, TSPurpose),
   Verbosity(Verbose), auxSpecSent, characteristicsLabel, intro, mkDoc,
-  termDefnF', tsymb, traceMatStandard, purpDoc)
+  termDefnF', tsymb, traceMatStandard, purpDoc, getTraceConfigUID,
+  secRefs, fillTraceSI)
 
 import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
 
@@ -29,10 +32,10 @@ import Data.Drasil.Concepts.Documentation as Doc (appendix, aspect,
   definition, doccon, doccon', document, environment,
   input_, interface, model, organization, physical, problem,
   product_, software, softwareConstraint, softwareSys,
-  srsDomains, standard, sysCont, system, template, term_, user, value, variable)
+  srsDomains, standard, sysCont, system, template, term_,
+  user, value, variable, reference)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-import Data.Drasil.IdeaDicts as Doc (inModel, thModel)
-import qualified Data.Drasil.IdeaDicts as Doc (dataDefn)
+import Data.Drasil.TheoryConcepts as Doc (dataDefn, inModel, thModel)
 import Data.Drasil.Concepts.Education as Edu (civilEng, scndYrCalculus, structuralMechanics,
   educon)
 import Data.Drasil.Concepts.Math (graph, mathcon, mathcon')
@@ -47,26 +50,29 @@ import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
 import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second, fundamentals,
   derived)
 
-import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
-import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
+import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions, assumpRefs)
+import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs, chgRefs)
 import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab, glassBR, 
-  ptOfExplsn, con, con')
-import Drasil.GlassBR.DataDefs (qDefns)
+  ptOfExplsn, con, con', glass)
+import Drasil.GlassBR.DataDefs (qDefns, configFp, dataDefRefs)
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.Figures
-import Drasil.GlassBR.Goals (goals)
-import Drasil.GlassBR.IMods (symb, iMods, instModIntro)
-import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations, rbrtsn2012)
-import Drasil.GlassBR.Requirements (funcReqs, inReqDesc, funcReqsTables, nonfuncReqs)
+import Drasil.GlassBR.Goals (goals, goalRefs)
+import Drasil.GlassBR.IMods (symb, iMods, instModIntro, iModRefs)
+import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations, rbrtsn2012, citeRefs)
+import Drasil.GlassBR.Requirements (funcReqs, inReqDesc, funcReqsTables, nonfuncReqs, reqRefs)
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
-import Drasil.GlassBR.TMods (tMods)
+import Drasil.GlassBR.TMods (tMods, tModRefs)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   constrained, inputDataConstraints, inputs, outputs, specParamVals, glassTy,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
   sD, termsWithAccDefn, termsWithDefsOnly, terms)
 
 srs :: Document
-srs = mkDoc mkSRS (for'' titleize phrase) si
+srs = mkDoc mkSRS  (S.forGen titleize phrase) si
+
+fullSI :: SystemInformation
+fullSI = fillTraceSI mkSRS si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
@@ -76,19 +82,19 @@ si = SI {
   _sys         = glassBR,
   _kind        = Doc.srs,
   _authors     = [nikitha, spencerSmith],
+  _purpose     = purpDoc glassBR Verbose,
   _quants      = symbolsForTable,
   _concepts    = [] :: [DefinedQuantityDict],
-  _definitions = map (relToQD symbMap) iMods ++ 
-                 concatMap (^. defined_quant) tMods ++
-                 concatMap (^. defined_fun) tMods,
+  _instModels  = iMods,
   _datadefs    = GB.dataDefs,
+  _configFiles = configFp,
   _inputs      = inputs,
   _outputs     = outputs,
   _defSequence = qDefns,
   _constraints = constrained,
   _constants   = constants,
   _sysinfodb   = symbMap,
-  _usedinfodb = usedDB,
+  _usedinfodb  = usedDB,
    refdb       = refDB
 }
   --FIXME: All named ideas, not just acronyms.
@@ -105,8 +111,8 @@ mkSRS = [TableOfContents,
      IOrgSec orgOfDocIntro Doc.dataDefn (SRS.inModel [] []) orgOfDocIntroEnd],
   StkhldrSec $
     StkhldrProg
-      [Client glassBR $ S "a" +:+ phrase company
-        +:+ S "named Entuitive. It is developed by Dr." +:+ S (name mCampidelli),
+      [Client glassBR $ phraseNP (a_ company)
+        +:+. S "named Entuitive" +:+ S "It is developed by Dr." +:+ S (name mCampidelli),
       Cstmr glassBR],
   GSDSec $ GSDProg [SysCntxt [sysCtxIntro, LlC sysCtxFig, sysCtxDesc, sysCtxList],
     UsrChars [userCharacteristicsIntro], SystCons [] [] ],
@@ -145,7 +151,7 @@ symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw con
   map nw fundamentals ++ map nw derived ++ map nw physicalcon)
   (map cw symb ++ terms ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]) GB.dataDefs iMods [] tMods concIns section
-  labCon
+  labCon allRefs
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
@@ -155,7 +161,7 @@ labCon = funcReqsTables ++ [demandVsSDFig, dimlessloadVsARFig]
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw thisSymbols)
- ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] []
+ ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns
@@ -170,15 +176,12 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 termsAndDescBullets :: Contents
 termsAndDescBullets = UlC $ ulcc $ Enumeration$ 
   Numeric $
-  noRefs $ map tAndDOnly termsWithDefsOnly
-  ++
-  termsAndDescBulletsGlTySubSec
-  ++
-  termsAndDescBulletsLoadSubSec
-  ++
-  map tAndDWAcc termsWithAccDefn
-  ++
-  [tAndDWSym probBreak probBr]
+    noRefs $
+      map tAndDOnly termsWithDefsOnly 
+      ++ termsAndDescBulletsGlTySubSec 
+      ++ termsAndDescBulletsLoadSubSec 
+      ++ map tAndDWAcc termsWithAccDefn 
+      ++ [tAndDWSym probBreak probBr]
    --FIXME: merge? Needs 2 arguments because there is no instance for (SymbolForm ConceptChunk)...
 
 termsAndDescBulletsGlTySubSec, termsAndDescBulletsLoadSubSec :: [ItemType]
@@ -186,7 +189,7 @@ termsAndDescBulletsGlTySubSec, termsAndDescBulletsLoadSubSec :: [ItemType]
 termsAndDescBulletsGlTySubSec = [Nested (EmptyS +: titleize glassTy) $
   Bullet $ noRefs $ map tAndDWAcc glassTypes]
 
-termsAndDescBulletsLoadSubSec = [Nested (atStart load `sDash` EmptyS +:+. capSent (load ^. defn)) $
+termsAndDescBulletsLoadSubSec = [Nested (atStart load `sDash` capSent (load ^. defn) !.) $
   Bullet $ noRefs $ map tAndDWAcc (take 2 loadTypes)
   ++
   map tAndDOnly (drop 2 loadTypes)]
@@ -209,24 +212,24 @@ priorityNFReqs = [correctness, verifiability, understandability,
 
 startIntro :: NamedChunk -> Sentence -> CI -> Sentence
 startIntro prgm sfwrPredicts progName = foldlSent [
-  atStart prgm, S "is helpful to efficiently" `sAnd` S "correctly predict the"
+  atStart prgm, S "is helpful to efficiently" `S.and_` S "correctly predict the"
   +:+. sfwrPredicts, underConsidertn blast,
-  S "The", phrase prgm `sC` S "herein called", short progName `sC`
+  atStartNP (the prgm) `sC` S "herein called", short progName `sC`
   S "aims to predict the", sfwrPredicts, S "using an intuitive",
   phrase interface]
 
 undIR, appStanddIR :: [Sentence]
 undIR = [phrase scndYrCalculus, phrase structuralMechanics, phrase glBreakage,
-  phrase blastRisk, plural computerApp `sIn` phrase Edu.civilEng]
+  phrase blastRisk, pluralNP (computerApp `in_PS` Edu.civilEng)]
 appStanddIR = [S "applicable" +:+ plural standard +:+
   S "for constructions using glass from" +:+ foldlList Comma List
-  (map makeCiteS [astm2009, astm2012, astm2016]) `sIn`
-  makeRef2S (SRS.reference ([]::[Contents]) ([]::[Section]))]
+  (map refS [astm2009, astm2012, astm2016]) `S.in_`
+  namedRef (SRS.reference ([]::[Contents]) ([]::[Section])) (plural reference)]
 
 scope :: Sentence
 scope = foldlSent_ [S "determining the safety of a", phrase glaSlab,
   S "under a", phrase blast, S "loading following the ASTM", phrase standard,
-  sParen $ makeRef2S astm2009]
+  sParen $ refS astm2009]
 
 {--Purpose of Document--}
 -- Purpose of Document automatically generated in IPurpose
@@ -237,15 +240,15 @@ scope = foldlSent_ [S "determining the safety of a", phrase glaSlab,
 {--Organization of Document--}
 
 orgOfDocIntro, orgOfDocIntroEnd :: Sentence
-orgOfDocIntro = foldlSent [S "The", phrase organization, S "of this",
-  phrase document, S "follows the", phrase template, S "for an", short Doc.srs,
-  S "for", phrase sciCompS, S "proposed by" +:+ makeCiteS koothoor2013
-  `sAnd` makeCiteS smithLai2005 `sC` S "with some", 
+orgOfDocIntro = foldlSent [atStartNP (the organization), S "of this",
+  phrase document, S "follows the", phrase template, S "for an", short Doc.srs
+  `S.for` phrase sciCompS, S "proposed by" +:+ refS koothoor2013
+  `S.and_` refS smithLai2005 `sC` S "with some", 
   plural aspect, S "taken from Volere", phrase template,
-  S "16", makeCiteS rbrtsn2012]
+  S "16", refS rbrtsn2012]
 
-orgOfDocIntroEnd = foldlSent_ [atStartNP' (the Doc.dataDefn) `sAre`
-  S "used to support", plural definition `ofThe` S "different", plural model]
+orgOfDocIntroEnd = foldlSent_ [atStartNP' (the Doc.dataDefn) `S.are`
+  S "used to support", plural definition `S.the_ofThe` S "different", plural model]
 
 {--STAKEHOLDERS--}
 
@@ -258,27 +261,27 @@ orgOfDocIntroEnd = foldlSent_ [atStartNP' (the Doc.dataDefn) `sAre`
   
 sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
-  [makeRef2S sysCtxFig +:+ S "shows the" +:+. phrase sysCont,
+  [refS sysCtxFig +:+ S "shows the" +:+. phrase sysCont,
    S "A circle represents an external entity outside the" +:+ phrase software
-   `sC` S "the", phrase user, S "in this case. A rectangle represents the",
-   phrase softwareSys, S "itself", sParen (short glassBR) +:+. EmptyS,
-   S "Arrows are used to show the data flow between the" +:+ phrase system,
-   S "and its" +:+ phrase environment]
+   `sC` phraseNP (the user), S "in this case. A rectangle represents the",
+   phrase softwareSys, S "itself", (sParen (short glassBR) !.),
+   S "Arrows are used to show the data flow between the" +:+ phraseNP (system
+   `andIts` environment)]
 
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol
-  [S "The interaction between the", phrase product_, S "and the", phrase user,
+  [S "The interaction between the", phraseNP (product_ `andThe` user),
    S "is through a user" +:+. phrase interface,
-   S "The responsibilities of the", phrase user, S "and the", phrase system,
+   S "The responsibilities of the", phraseNP (user `andThe` system),
    S "are as follows"]
    
 sysCtxUsrResp :: [Sentence]
 sysCtxUsrResp = [S "Provide the" +:+ plural inDatum +:+ S "related to the" +:+
-  phrase glaSlab `sAnd` phrase blastTy `sC` S "ensuring no errors in the" +:+
+  phraseNP (glaSlab `and_` blastTy) `sC` S "ensuring no errors in the" +:+
   plural datum +:+. S "entry",
-  S "Ensure that consistent units are used for" +:+ phrase input_ +:+. plural variable,
-  S "Ensure required" +:+ phrase software +:+ plural assumption +:+
-    sParen (makeRef2S $ SRS.assumpt ([]::[Contents]) ([]::[Section]))
+  S "Ensure that consistent units are used for" +:+. pluralNP (combineNINI input_ variable),
+  S "Ensure required" +:+ pluralNP (combineNINI software assumption) +:+
+    sParen (refS $ SRS.assumpt ([]::[Contents]) ([]::[Section]))
     +:+ S "are appropriate for any particular" +:+
     phrase problem +:+ S "input to the" +:+. phrase software]
 
@@ -286,7 +289,7 @@ sysCtxSysResp :: [Sentence]
 sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters" +:+
   phrase input_ +:+. S "instead of a floating point number",
   S "Determine if the" +:+ plural input_ +:+ S "satisfy the required" +:+.
-  (phrase physical `sAnd` plural softwareConstraint),
+  pluralNP (physical `and_` softwareConstraint),
   S "Predict whether the" +:+ phrase glaSlab +:+. S "is safe or not"]
   
 sysCtxResp :: [Sentence]
@@ -316,7 +319,7 @@ userCharacteristicsIntro = LlC $ enumBullet characteristicsLabel $ map foldlSent
 {--PROBLEM DESCRIPTION--}
 
 prob :: Sentence
-prob = foldlSent_ [S "efficiently" `sAnd` S "correctly predict whether a",
+prob = foldlSent_ [S "efficiently" `S.and_` S "correctly predict whether a",
   phrase glaSlab, S "can withstand a", phrase blast, S "under given",
   plural condition]
 
@@ -324,21 +327,21 @@ prob = foldlSent_ [S "efficiently" `sAnd` S "correctly predict whether a",
 
 termsAndDesc :: Section
 termsAndDesc = termDefnF' (Just (S "All of the" +:+ plural term_ +:+
-  S "are extracted from" +:+ makeCiteS astm2009)) [termsAndDescBullets]
+  S "are extracted from" +:+ refS astm2009)) [termsAndDescBullets]
 
 {--Physical System Description--}
 
 physSystParts :: [Sentence]
-physSystParts = [S "The" +:+. phrase glaSlab,
-  foldlSent [S "The" +:+. phrase ptOfExplsn, S "Where the", phrase bomb `sC`
-  S "or", (blast ^. defn) `sC` S "is located. The", phrase sD `isThe`
-  phrase distance, S "between the", phrase ptOfExplsn `sAnd` S "the glass"]]
+physSystParts = [(atStartNP (the glaSlab)!.),
+  foldlSent [(atStartNP (the ptOfExplsn) !.), S "Where the", phrase bomb `sC`
+  S "or", (blast ^. defn) `sC` (S "is located" !.), atStartNP (the sD) `S.isThe`
+  phrase distance, S "between the", phrase ptOfExplsn `S.and_` phraseNP (the glass)]]
 
 {--Goal Statements--}
 
 goalInputs :: [Sentence]
-goalInputs = [plural dimension `ofThe` phrase glaPlane, S "the" +:+ phrase glassTy,
-  plural characteristic `ofThe` phrase explosion, S "the" +:+ phrase pbTol]
+goalInputs = [pluralNP (dimension `the_ofThePS` glaPlane), phraseNP (the glassTy),
+  pluralNP (characteristic `the_ofThePS` explosion), phraseNP (the pbTol)]
 
 {--SOLUTION CHARACTERISTICS SPECIFICATION--}
 
@@ -373,9 +376,19 @@ goalInputs = [plural dimension `ofThe` phrase glaPlane, S "the" +:+ phrase glass
 appdxIntro :: Contents
 appdxIntro = foldlSP [
   S "This", phrase appendix, S "holds the", plural graph,
-  sParen (makeRef2S demandVsSDFig `sAnd` makeRef2S dimlessloadVsARFig),
+  sParen (refS demandVsSDFig `S.and_` refS dimlessloadVsARFig),
   S "used for interpolating", plural value, S "needed in the", plural model]
 
 blstRskInvWGlassSlab :: Sentence
 blstRskInvWGlassSlab = phrase blastRisk +:+ S "involved with the" +:+
   phrase glaSlab
+
+-- References --
+bodyRefs :: [Reference]
+bodyRefs = map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+  ++ map ref [sysCtxFig, demandVsSDFig, dimlessloadVsARFig]
+  ++ map ref concIns ++ map ref section ++ map ref labCon
+
+allRefs :: [Reference]
+allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ goalRefs ++ dataDefRefs
+  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs)

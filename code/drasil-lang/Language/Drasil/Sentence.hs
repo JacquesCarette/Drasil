@@ -1,13 +1,14 @@
-{-# LANGUAGE GADTs #-}
+{-# LANGUAGE GADTs, PostfixOperators #-}
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
--- | Contains Sentences and helpers
+-- | Contains Sentences and helpers.
 module Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), (+:+),
-  (+:+.), (+:), capSent, ch, sC, sDash, sentencePlural, sentenceShort,
-  sentenceSymb, sentenceTerm, sParen, senToStr) where
+  (+:+.), (+:), (!.), capSent, ch, eS, sC, sDash, sentencePlural, sentenceShort,
+  sentenceSymb, sentenceTerm, sParen, TermCapitalization(..), senToStr) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
-import Language.Drasil.Expr (Expr)
-import Language.Drasil.RefProg (Reference)
+import Language.Drasil.DisplayExpr (DisplayExpr(..))
+import Language.Drasil.DisplayClasses (Display(toDispExpr))
+import Language.Drasil.RefProg (RefInfo)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.UID (UID)
@@ -16,88 +17,121 @@ import Control.Lens ((^.))
 
 import Data.Char (toUpper)
 
--- | For writing "sentences" via combining smaller elements
--- Sentences are made up of some known vocabulary of things:
--- - units (their visual representation)
--- - words (via String)
--- - special characters
--- - accented letters
--- - References to specific layout objects
+-- | Used in 'Ch' constructor to determine the state of a term
+-- (can record whether something is in plural form, a singular term, or in short form).
 data SentenceStyle = PluralTerm
-                   | SymbolStyle
                    | TermStyle
                    | ShortStyle
 
+-- | Used in 'Ch' constructor to determine the capitalization of a term.
+-- CapF is for capitalizing the first word from the 'UID' of the given term.
+-- CapW is for capitalizing all words from the 'UID' of the given term.
+-- Mirrors 'CapFirst' and 'CapWords' from 'CapitalizationRule'.
+data TermCapitalization = CapF | CapW | NoCap
+
+-- | For writing 'Sentence's via combining smaller elements.
+-- 'Sentence's are made up of some known vocabulary of things:
+--
+--     * units (their visual representation)
+--     * words (via 'String's)
+--     * special characters
+--     * accented letters
+--     * references to specific layout objects
 infixr 5 :+:
 data Sentence where
-  Ch    :: SentenceStyle -> UID -> Sentence
+  -- | Ch looks up the term for a given 'UID' and displays the term with a given 'SentenceStyle' and 'CapitalizationRule'.
+  -- This allows Sentences to hold plural forms of 'NounPhrase's and 'NamedIdea's.
+  Ch    :: SentenceStyle -> TermCapitalization -> UID -> Sentence
+  -- | A branch of Ch dedicated to SymbolStyle only.
+  SyCh  :: UID -> Sentence
+  -- | Converts a unit symbol into a usable Sentence form.
   Sy    :: USymb -> Sentence
-  S     :: String -> Sentence       -- Strings, used for Descriptions in Chunks
+  -- | Constructor for 'String's, used often for descriptions in Chunks.
+  S     :: String -> Sentence
+  -- | Converts the graphical representation of a symbol into a usable Sentence form.
   P     :: Symbol -> Sentence       -- should not be used in examples?
-  E     :: Expr -> Sentence
-  Ref   :: Reference -> Sentence
-
-  Quote :: Sentence -> Sentence     -- Adds quotation marks around a sentence
-  Percent :: Sentence               -- % symbol
-                                    
-  -- Direct concatenation of two Sentences (no implicit spaces!)
-  (:+:) :: Sentence -> Sentence -> Sentence   
+  -- | Lifts an expression into a Sentence.
+  E     :: DisplayExpr -> Sentence
+  -- | Takes a 'UID' to a reference, a display name ('Sentence'), and any additional reference display information ('RefInfo'). Resolves the reference later (similar to Ch).
+  Ref   :: UID -> Sentence -> RefInfo -> Sentence
+  -- | Adds quotation marks around a Sentence.
+  Quote :: Sentence -> Sentence
+  -- | Used for a % symbol.
+  Percent :: Sentence
+  -- | Direct concatenation of two Sentences (no implicit spaces!).
+  (:+:) :: Sentence -> Sentence -> Sentence
+  -- | Empty Sentence.
   EmptyS :: Sentence
 
+------- FIXME: Should not need to go from a sentence to a string.
 senToStr :: Sentence -> String
 senToStr (S string) = string
-senToStr (Ch _ _) = "error; incompatible Sentence constructor"
+senToStr (Ch _ _ _) = "error; incompatible Sentence constructor"
 senToStr (Sy _) = "error; incompatible Sentence constructor"
 senToStr (P _) = "error; incompatible Sentence constructor"
 senToStr (E _) = "error; incompatible Sentence constructor"
-senToStr (Ref _) = "error; incompatible Sentence constructor"
+senToStr (Ref _ _ _) = "error; incompatible Sentence constructor"
 senToStr (Quote _) = "\'\'"
 senToStr Percent = "%"
 senToStr ((:+:) _ _) = "error; incompatible Sentence constructor"
 senToStr EmptyS = ""
 
--- The HasSymbol is redundant, but on purpose
-ch :: (HasUID c, HasSymbol c) => c -> Sentence
-ch x = Ch SymbolStyle (x ^. uid)
 
+eS :: Display d => d -> Sentence
+eS = E . toDispExpr
+
+-- The HasSymbol is redundant, but on purpose
+-- | Gets a symbol and places it in a 'Sentence'.
+ch :: (HasUID c, HasSymbol c) => c -> Sentence
+ch x = SyCh (x ^. uid)
+
+-- | Sentences can be concatenated.
 instance Semigroup Sentence where
   (<>) = (:+:)
 
+-- | Sentences can be empty or directly concatenated.
 instance Monoid Sentence where
   mempty = EmptyS
   mappend = (:+:)
 
+-- | Smart constructors for turning a 'UID' into a 'Sentence'.
 sentencePlural, sentenceShort, sentenceSymb, sentenceTerm :: UID -> Sentence
-sentencePlural = Ch PluralTerm
-sentenceShort  = Ch ShortStyle
-sentenceSymb   = Ch SymbolStyle
-sentenceTerm   = Ch TermStyle
+-- | Gets plural term of 'UID'.
+sentencePlural = Ch PluralTerm NoCap
+-- | Gets short form of 'UID'.
+sentenceShort  = Ch ShortStyle NoCap
+-- | Gets symbol form of 'UID'.
+sentenceSymb   = SyCh
+-- | Gets singular form of 'UID'.
+sentenceTerm   = Ch TermStyle NoCap
 
--- | Helper for wrapping sentences in parentheses.
+-- | Helper for wrapping 'Sentence's in parentheses.
 sParen :: Sentence -> Sentence
 sParen x = S "(" :+: x :+: S ")"
 
--- | Helper for concatenating two sentences with a space-surrounded dash between them.
+-- | Helper for concatenating two 'Sentence's with a space-surrounded dash between them.
 sDash :: Sentence -> Sentence -> Sentence
 sDash a b = a +:+ S "-" +:+ b
 
--- | Helper for concatenating two sentences with a space between them.
+-- | Helper for concatenating two 'Sentence's with a space between them.
 (+:+) :: Sentence -> Sentence -> Sentence
 EmptyS +:+ b = b
 a +:+ EmptyS = a
 a +:+ b = a :+: S " " :+: b
 
--- | Helper for concatenating two sentences with a comma and space between them.
+-- | Helper for concatenating two 'Sentence's with a comma and space between them.
 sC :: Sentence -> Sentence -> Sentence
 a `sC` b = a :+: S "," +:+ b
 
--- | Helper which concatenates two sentences using '+:+' then adds a period to
--- the end.
+-- | Helper which concatenates two 'Sentence's using '+:+' and appends a period.
 (+:+.) :: Sentence -> Sentence -> Sentence
 a +:+. b = a +:+ b :+: S "."
 
--- | Helper which concatenates two sentences using '+:+' then adds a colon to
--- the end.
+-- | Helper which appends a period to the end of a 'Sentence' (used often as a post-fix operator).
+(!.) :: Sentence -> Sentence
+(!.) a = a :+: S "."
+
+-- | Helper which concatenates two sentences using '+:+' and appends a colon.
 (+:) :: Sentence -> Sentence -> Sentence
 a +: b = a +:+ b :+: S ":"
 

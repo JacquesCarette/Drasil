@@ -8,9 +8,9 @@ module Language.Drasil.Code (
   ConstantStructure(..), ConstantRepr(..), InputModule(..), CodeConcept(..), 
   matchConcepts, SpaceMatch, matchSpaces, AuxFile(..), getSampleData, 
   Visibility(..), defaultChoices, 
-  CodeSpec(..), funcUID, funcUID', asVC, asVC', codeSpec, relToQD,
+  CodeSpec(..), funcUID, funcUID', asVC, asVC', codeSpec,
   ($:=), Mod(Mod), StateVariable, Func, FuncStmt(..), pubStateVar, 
-  privStateVar, fDecDef, ffor, funcData, funcDef, packmod,
+  privStateVar, fDecDef, ffor, fforRange, funcData, funcDef, packmod,
   junkLine, multiLine, repeated, singleLine, singleton,
   ExternalLibrary, Step, FunctionInterface, Argument, externalLib, choiceSteps, 
   choiceStep, mandatoryStep, mandatorySteps, callStep, libFunction, libMethod, 
@@ -21,7 +21,7 @@ module Language.Drasil.Code (
   implementation, constructorInfo, methodInfo, methodInfoNoReturn, 
   appendCurrSol, populateSolList, assignArrayIndex, assignSolFromObj, 
   initSolListFromArray, initSolListWithVal, solveAndPopulateWhile, 
-  returnExprList, fixedReturn,
+  returnExprList, fixedReturn, initSolWithVal,
   ExternalLibraryCall, StepGroupFill(..), StepFill(..), FunctionIntFill(..), 
   ArgumentFill(..), ParameterFill(..), ClassInfoFill(..), MethodInfoFill(..),
   externalLibCall, choiceStepsFill, choiceStepFill, mandatoryStepFill, 
@@ -31,7 +31,7 @@ module Language.Drasil.Code (
   implementationFill, constructorInfoFill, methodInfoFill, appendCurrSolFill, 
   populateSolListFill, assignArrayIndexFill, assignSolFromObjFill, 
   initSolListFromArrayFill, initSolListWithValFill, solveAndPopulateWhileFill, 
-  returnExprListFill, fixedStatementFill,
+  returnExprListFill, fixedStatementFill, initSolWithValFill,
   Lang(..),
   PackageSym(..), AuxiliarySym(..),
   AuxData(..), PackData(..),
@@ -65,7 +65,7 @@ import Language.Drasil.Code.ExternalLibrary (ExternalLibrary, Step,
   implementation, constructorInfo, methodInfo, methodInfoNoReturn, 
   appendCurrSol, populateSolList, assignArrayIndex, assignSolFromObj, 
   initSolListFromArray, initSolListWithVal, solveAndPopulateWhile, 
-  returnExprList, fixedReturn)
+  returnExprList, fixedReturn, initSolWithVal)
 import Language.Drasil.Code.ExternalLibraryCall (ExternalLibraryCall,
   StepGroupFill(..), StepFill(..), FunctionIntFill(..), ArgumentFill(..),
   ParameterFill(..), ClassInfoFill(..), MethodInfoFill(..), externalLibCall, 
@@ -76,7 +76,7 @@ import Language.Drasil.Code.ExternalLibraryCall (ExternalLibraryCall,
   constructorInfoFill, methodInfoFill, appendCurrSolFill, populateSolListFill, 
   assignArrayIndexFill, assignSolFromObjFill, initSolListFromArrayFill, 
   initSolListWithValFill, solveAndPopulateWhileFill, returnExprListFill, 
-  fixedStatementFill)
+  fixedStatementFill, initSolWithValFill)
 
 import Language.Drasil.Code.Lang (Lang(..))
 
@@ -86,9 +86,9 @@ import Language.Drasil.Choices (Choices(..), Comments(..), Verbosity(..),
   CodeConcept(..), matchConcepts, SpaceMatch, matchSpaces, AuxFile(..), 
   getSampleData, Visibility(..), defaultChoices,)
 import Language.Drasil.CodeSpec (CodeSpec(..), funcUID, funcUID', asVC, asVC', 
-  codeSpec, relToQD)
+  codeSpec)
 import Language.Drasil.Mod (($:=), Mod(Mod), StateVariable, Func, FuncStmt(..), 
-  pubStateVar, privStateVar, fDecDef, ffor, funcData, funcDef, packmod)
+  pubStateVar, privStateVar, fDecDef, ffor, fforRange, funcData, funcDef, packmod)
 
 import Language.Drasil.Code.Imperative.GOOL.ClassInterface (PackageSym(..), 
   AuxiliarySym(..))

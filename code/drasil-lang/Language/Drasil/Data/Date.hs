@@ -6,7 +6,7 @@ module Language.Drasil.Data.Date
     Month(..)
   ) where
 
--- | Month abbreviations
+-- | Custom type for months (abbreviated).
 data Month = Jan
            | Feb
            | Mar

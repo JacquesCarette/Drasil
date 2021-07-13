@@ -1,27 +1,33 @@
--- | Contains functions related to the choice of concept matches
+-- | Contains functions related to the choice of concept matches.
 module Language.Drasil.Code.Imperative.ConceptMatch (
   chooseConcept, conceptToGOOL
 ) where
 
-import Language.Drasil.Choices (Choices(..), CodeConcept(..), MatchedConceptMap)
+import Language.Drasil (UID, Sentence(S), (+:+), (+:+.))
+
+import Language.Drasil.Choices (Choices(..), CodeConcept(..), 
+    MatchedConceptMap, showChs)
 
 import GOOL.Drasil (SValue, OOProg, MathConstant(..))
 
 import Prelude hiding (pi)
-import qualified Data.Map as Map (map)
-import Control.Monad.State (State)
-import Text.PrettyPrint.HughesPJ (Doc)
+import qualified Data.Map as Map (mapWithKey)
+import Control.Monad.State (State, modify)
 
--- | Concretizes the ConceptMatchMap in Choices to a MatchedConceptMap.
--- Currently we don't have any Choices that would prevent a CodeConcept from 
--- being mapped, so we just take the head of the list of CodeConcepts
-chooseConcept :: Choices -> State Doc MatchedConceptMap
-chooseConcept chs = sequence $ Map.map (chooseConcept' chs) (conceptMatch chs)
-  where chooseConcept' _ [] = error $ "Empty list of CodeConcepts in the " ++ 
+-- | Concretizes the ConceptMatchMap in Choices to a 'MatchedConceptMap'.
+-- Currently we don't have any Choices that would prevent a 'CodeConcept' from 
+-- being mapped, so we just take the head of the list of 'CodeConcept's
+-- The ConceptMatchMap from choices is passed to chooseConcept' internally, this way
+-- any 'CodeConcept' list can be matched to its appropiate 'UID'.
+chooseConcept :: Choices -> State [Sentence] MatchedConceptMap
+chooseConcept chs = sequence $ Map.mapWithKey chooseConcept' (conceptMatch chs)
+  where chooseConcept' :: UID -> [CodeConcept] -> State [Sentence] CodeConcept
+        chooseConcept' _ [] = error $ "Empty list of CodeConcepts in the " ++ 
           "ConceptMatchMap"
-        chooseConcept' _ cs = return $ head cs
+        chooseConcept' uid (c:_) = do 
+            modify (++ [S "Code Concept" +:+ S uid +:+ S "selected as" +:+. showChs c])
+            return c
 
--- | Maps CodeConcepts to corresponding GOOL values
+-- | Translates a 'CodeConcept' into GOOL.
 conceptToGOOL :: (OOProg r) => CodeConcept -> SValue r
 conceptToGOOL Pi = pi
-

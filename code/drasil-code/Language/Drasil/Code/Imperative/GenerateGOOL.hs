@@ -5,10 +5,11 @@ module Language.Drasil.Code.Imperative.GenerateGOOL (ClassType(..),
 
 import Language.Drasil
 import Language.Drasil.Code.Imperative.DrasilState (GenState, DrasilState(..))
-import Language.Drasil.Code.Imperative.GOOL.ClassInterface (AuxiliarySym(..))
-import Language.Drasil.Choices (Comments(..), ImplementationType, hasReadMe)
+import Language.Drasil.Code.Imperative.GOOL.ClassInterface (ReadMeInfo(..),
+  AuxiliarySym(..))
+import Language.Drasil.Choices (Comments(..), AuxFile(..))
 import Language.Drasil.CodeSpec (CodeSpec(..))
-import Language.Drasil.Mod (Name, Version, Description, Import)
+import Language.Drasil.Mod (Name, Description, Import)
   
 import GOOL.Drasil (SFile, VSType, SVariable, SValue, MSStatement, SMethod, 
   CSStateVar, SClass, NamedArgs, OOProg, FileSym(..), TypeElim(..), 
@@ -20,10 +21,10 @@ import qualified Data.Map as Map (lookup)
 import Data.Maybe (catMaybes)
 import Control.Monad.State (get, modify)
 
--- | Defines a GOOL module. If the user chose CommentMod, the module will have
--- Doxygen comments. If the user did not choose CommentMod but did choose 
--- CommentFunc, a module-level Doxygen comment is still created, though it only 
--- documents the file name, because without this Doxygen will not find the 
+-- | Defines a GOOL module. If the user chose 'CommentMod', the module will have
+-- Doxygen comments. If the user did not choose 'CommentMod' but did choose
+-- 'CommentFunc', a module-level Doxygen comment is still created, though it only
+-- documents the file name, because without this Doxygen will not find the
 -- function-level comments in the file.
 genModuleWithImports :: (OOProg r) => Name -> Description -> [Import] -> 
   [GenState (Maybe (SMethod r))] -> 
@@ -42,33 +43,36 @@ genModuleWithImports n desc is maybeMs maybeCs = do
               | otherwise                                       = id
   return $ commMod $ fileDoc $ buildModule n is (catMaybes ms) (catMaybes cs)
 
--- | Generates a module for when imports do not need to be explicitly stated
+-- | Generates a module for when imports do not need to be explicitly stated.
 genModule :: (OOProg r) => Name -> Description -> 
   [GenState (Maybe (SMethod r))] -> 
   [GenState (Maybe (SClass r))] -> GenState (SFile r)
 genModule n desc = genModuleWithImports n desc []
 
--- Generates a Doxygen configuration file, if the user has comments enabled
-genDoxConfig :: (AuxiliarySym r) => GOOLState ->
-  GenState [r (Auxiliary r)]
+-- | Generates a Doxygen configuration file if the user has comments enabled.
+genDoxConfig :: (AuxiliarySym r) => GOOLState -> GenState (Maybe (r (Auxiliary r)))
 genDoxConfig s = do
   g <- get
   let n = pName $ codeSpec g
       cms = commented g
       v = doxOutput g
-  return [doxConfig n s v | not (null cms)]
+  return $ if not (null cms) then Just (doxConfig n s v) else Nothing
 
-genReadMe :: (AuxiliarySym r) => ImplementationType -> [(Name,Version)] ->
-  GenState [r (Auxiliary r)]
-genReadMe imp libnms = do 
+-- | Generates a README file.
+genReadMe :: (AuxiliarySym r) => ReadMeInfo -> GenState (Maybe (r (Auxiliary r)))
+genReadMe rmi = do 
   g <- get
   let n = pName $ codeSpec g
-  return [readMe imp libnms n | hasReadMe (auxiliaries g)]
+  return $ getReadMe (auxiliaries g) rmi {caseName = n}
+
+-- | Helper for generating a README file.
+getReadMe :: (AuxiliarySym r) => [AuxFile] -> ReadMeInfo -> Maybe (r (Auxiliary r))
+getReadMe auxl rmi = if ReadME `elem` auxl then Just (readMe rmi) else Nothing
 
 data ClassType = Primary | Auxiliary
 
--- Generates a primary or auxiliary class with the given name, description, 
--- state variables, and methods. The Maybe Name parameter is the name of the 
+-- | Generates a primary or auxiliary class with the given name, description, 
+-- state variables, and methods. The 'Maybe' 'Name' parameter is the name of the 
 -- interface the class implements, if applicable.
 mkClass :: (OOProg r) => ClassType -> Name -> Maybe Name -> Description -> 
   [CSStateVar r] -> GenState [SMethod r] ->
@@ -87,19 +91,19 @@ mkClass s n l desc vs mths = do
     then docClass desc c
     else c
 
---  Generates a primary class
+-- | Generates a primary class.
 primaryClass :: (OOProg r) => Name -> Maybe Name -> Description -> 
   [CSStateVar r] -> GenState [SMethod r] -> 
   GenState (SClass r)
 primaryClass = mkClass Primary
 
--- Generates an auxiliary class (for when a module contains multiple classes)
+-- | Generates an auxiliary class (for when a module contains multiple classes).
 auxClass :: (OOProg r) => Name -> Maybe Name -> Description -> 
   [CSStateVar r] -> GenState [SMethod r] -> 
   GenState (SClass r)
 auxClass = mkClass Auxiliary
 
--- Converts lists or objects to pointer arguments, since we use pointerParam 
+-- | Converts lists or objects to pointer arguments, since we use pointerParam 
 -- for list or object-type parameters.
 mkArg :: (OOProg r) => SValue r -> SValue r
 mkArg v = do
@@ -110,8 +114,8 @@ mkArg v = do
   mkArg' (getType $ valueType vl) (return vl)
 
 
--- To be called by more specific function call generators (fApp and ctorCall)
--- Gets the current module and calls mkArg on the arguments.
+-- | Gets the current module and calls mkArg on the arguments.
+-- Called by more specific function call generators ('fApp' and 'ctorCall').
 fCall :: (OOProg r) => (Name -> [SValue r] -> NamedArgs r -> SValue r) ->
   [SValue r] -> NamedArgs r -> GenState (SValue r)
 fCall f vl ns = do
@@ -121,12 +125,13 @@ fCall f vl ns = do
       nargs = map (second mkArg) ns
   return $ f cm args nargs
 
--- m parameter is the module where the function is defined
--- if m is not current module, use GOOL's function for calling functions from 
---   external modules
--- if m is current module and the function is in export map, use GOOL's basic 
---   function for function applications
--- if m is current module and function is not exported, use GOOL's function for 
+-- | Function call generator.
+-- The first parameter (@m@) is the module where the function is defined.
+-- If @m@ is not the current module, use GOOL's function for calling functions from 
+--   external modules.
+-- If @m@ is the current module and the function is in export map, use GOOL's basic 
+--   function for function applications.
+-- If @m@ is the current module and function is not exported, use GOOL's function for 
 --   calling a method on self. This assumes all private methods are dynamic, 
 --   which is true for this generator.
 fApp :: (OOProg r) => Name -> Name -> VSType r -> [SValue r] -> 
@@ -138,14 +143,14 @@ fApp m s t vl ns = do
       if Map.lookup s (eMap g) == Just cm then funcAppMixedArgs s t args nargs
       else selfFuncAppMixedArgs s t args nargs) vl ns
 
--- Logic similar to fApp above, but self case not required here 
--- (because constructor will never be private)
+-- | Logic similar to 'fApp', but the self case is not required here 
+-- (because constructor will never be private). Calls 'newObjMixedArgs'.
 ctorCall :: (OOProg r) => Name -> VSType r -> [SValue r] -> NamedArgs r 
   -> GenState (SValue r)
 ctorCall m t = fCall (\cm args nargs -> if m /= cm then 
   extNewObjMixedArgs m t args nargs else newObjMixedArgs t args nargs)
 
--- Logic similar to fApp above
+-- | Logic similar to 'fApp', but for In/Out calls.
 fAppInOut :: (OOProg r) => Name -> Name -> [SValue r] -> 
   [SVariable r] -> [SVariable r] -> GenState (MSStatement r)
 fAppInOut m n ins outs both = do

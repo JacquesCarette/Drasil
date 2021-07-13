@@ -1,14 +1,15 @@
-module Main (main) where
+module Drasil.GlassBR.Main (main) where
+
+import GHC.IO.Encoding
 
 import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
   Logging(..), Modularity(..), Structure(..), ConstantStructure(..), 
   ConstantRepr(..), InputModule(..), AuxFile(..), Visibility(..),
   defaultChoices)
-import Language.Drasil.Generate (gen, genCode)
-import Language.Drasil.Printers (DocSpec(DocSpec), DocType(SRS, Website))
+import Language.Drasil.Generate (gen, genCode, genDot, DocSpec(DocSpec), DocType(SRS, Website))
 
-import Drasil.GlassBR.Body (si, srs, printSetting)
+import Drasil.GlassBR.Body (si, srs, printSetting, fullSI)
 import Drasil.GlassBR.ModuleDefs (allMods)
 
 code :: CodeSpec
@@ -34,6 +35,8 @@ choices = defaultChoices {
   
 main :: IO()
 main = do
+  setLocaleEncoding utf8
   gen (DocSpec SRS "GlassBR_SRS")     srs printSetting
   gen (DocSpec Website "GlassBR_SRS") srs printSetting
   genCode choices code
+  genDot fullSI

@@ -1,4 +1,7 @@
-module Drasil.DocLang.SRS (appendix, assumpt, assumptLabel, charOfIR, datCon,
+module Drasil.DocLang.SRS where
+
+-- whole module used?
+{-(appendix, assumpt, assumptLabel, charOfIR, datCon,
   datConLabel, dataDefn, dataDefnLabel, doc, doc', funcReq, funcReqLabel, genDefn,
   genDefnLabel, genSysDes, goalStmt, inModel, inModelLabel, indPRCase,
   indPRCaseLabel, intro, likeChg, likeChgLabel, nonfuncReq, offShelfSol, orgOfDoc,
@@ -7,7 +10,7 @@ module Drasil.DocLang.SRS (appendix, assumpt, assumptLabel, charOfIR, datCon,
   specSysDes, stakeholder, sysCon, sysCont, tOfCont, tOfContLabel, tOfSymb,
   tOfSymbLabel, tOfUnit, termAndDefn, termogy, thModel, thModelLabel, theClient,
   theCustomer, traceyMandG, unlikeChg, unlikeChgLabel, userChar, valsOfAuxCons,
-  valsOfAuxConsLabel, sectionReferences) where
+  valsOfAuxConsLabel, refMatLabel, tOfAbbAccLabel, sectionReferences)-} 
 --Temporary file for keeping the "srs" document constructor until I figure out
 -- a better place for it. Maybe Data.Drasil or Language.Drasil.Template?
 
@@ -24,7 +27,7 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, assumption
   prodUCTable, problemDescription, propOfCorSol, prpsOfDoc, reference, requirement,
   scpOfReq, scpOfTheProj, solutionCharSpec, specificsystemdescription, srs,
   stakeholder, sysCont, systemConstraint, termAndDef, terminology, traceyMandG,
-  tOfCont, tOfSymb, tOfUnit, userCharacteristic)
+  tOfCont, tOfSymb, tOfUnit, userCharacteristic, refMat)
 import qualified Data.Drasil.TheoryConcepts as Doc (dataDefn, genDefn, inModel, thModel)
 
 
@@ -49,7 +52,7 @@ intro         cs ss = section (titleize Doc.introduction)              cs ss int
 -- | Purpose of Document section.
 prpsOfDoc     cs ss = section (titleize Doc.prpsOfDoc)                 cs ss docPurposeLabel
 -- | Scope of Requirements section.
-scpOfReq      cs ss = section (titleize' Doc.scpOfReq)                  cs ss reqsScopeLabel
+scpOfReq      cs ss = section (titleize' Doc.scpOfReq)                 cs ss reqsScopeLabel
 -- | Characteristics of Intended Reader section.
 charOfIR      cs ss = section (titleize' Doc.charOfIR)                 cs ss readerCharsLabel
 -- | Organization of Document section.
@@ -58,9 +61,9 @@ orgOfDoc      cs ss = section (titleize Doc.orgOfDoc)                  cs ss doc
 -- | Stakeholders section.
 stakeholder   cs ss = section (titleize' Doc.stakeholder)              cs ss stakeholderLabel
 -- | The Customer section.
-theCustomer   cs ss = section (titleizeNP $ the Doc.customer)         cs ss customerLabel
+theCustomer   cs ss = section (titleizeNP $ the Doc.customer)          cs ss customerLabel
 -- | The Client section.
-theClient     cs ss = section (titleizeNP $ the Doc.client)           cs ss clientLabel
+theClient     cs ss = section (titleizeNP $ the Doc.client)            cs ss clientLabel
 
 -- | General System Description section.
 genSysDes     cs ss = section (titleize Doc.generalSystemDescription)  cs ss genSysDescLabel
@@ -131,6 +134,8 @@ appendix      cs ss = section (titleize Doc.appendix)                  cs ss app
 reference     cs ss = section (titleize' Doc.reference)                cs ss referenceLabel
 -- | Off-the-Shelf Solutions section.
 offShelfSol   cs ss = section (titleize' Doc.offShelfSolution)         cs ss offShelfSolnsLabel
+-- | Reference Material section.
+refMat        cs ss = section (titleize Doc.refMat)                    cs ss refMatLabel
 
 -- | Table of Contents section.
 tOfCont       cs ss = section (titleize Doc.tOfCont)                   cs ss tOfContLabel
@@ -138,6 +143,8 @@ tOfCont       cs ss = section (titleize Doc.tOfCont)                   cs ss tOf
 tOfSymb       cs ss = section (titleize' Doc.tOfSymb)                  cs ss tOfSymbLabel
 -- | Table of Units section.
 tOfUnit       cs ss = section (titleize' Doc.tOfUnit)                  cs ss tOfUnitLabel
+-- | Table of Abbreviations and Acronyms section.
+tOfAbbAcc     cs ss = section (titleize' Doc.abbAcc)                   cs ss tOfAbbAccLabel
 
 --Labels--
 -- | Collections all 'Section' 'Reference's.
@@ -150,7 +157,7 @@ sectionReferences = [physSystLabel, datConLabel, genDefnLabel, thModelLabel, dat
   sysContextLabel, userCharsLabel, sysConstraintsLabel, projScopeLabel, useCaseTableLabel,
   specSystDescLabel, probDescLabel, termDefsLabel, terminologyLabel, goalStmtLabel,
   corSolPropsLabel, requirementsLabel, traceMatricesLabel,
-  appendixLabel, offShelfSolnsLabel]
+  appendixLabel, offShelfSolnsLabel, refMatLabel, tOfAbbAccLabel]
 
 --FIXME: create using section information somehow?
 --TODO: Once shortname can take a Sentence, use NamedIdeas for the second argument in all labels 
@@ -163,8 +170,9 @@ physSystLabel, datConLabel, genDefnLabel, thModelLabel, dataDefnLabel,
   sysContextLabel, userCharsLabel, sysConstraintsLabel, projScopeLabel, useCaseTableLabel,
   specSystDescLabel, probDescLabel, termDefsLabel, terminologyLabel, goalStmtLabel,
   corSolPropsLabel, requirementsLabel, traceMatricesLabel,
-  appendixLabel, offShelfSolnsLabel :: Reference
-physSystLabel       = makeSecRef "PhysSyst"         $ titleize Doc.physSyst
+  appendixLabel, offShelfSolnsLabel, refMatLabel, tOfAbbAccLabel :: Reference
+
+physSystLabel       = makeSecRef "PhysSyst"         $ titleize  Doc.physSyst
 datConLabel         = makeSecRef "DataConstraints"  $ titleize' Doc.datumConstraint
 genDefnLabel        = makeSecRef "GDs"              $ titleize' Doc.genDefn
 thModelLabel        = makeSecRef "TMs"              $ titleize' Doc.thModel
@@ -175,34 +183,36 @@ unlikeChgLabel      = makeSecRef "UCs"              $ titleize' Doc.unlikelyChg
 tOfContLabel        = makeSecRef "ToC"              $ titleize' Doc.tOfCont
 tOfSymbLabel        = makeSecRef "ToS"              $ titleize' Doc.tOfSymb
 tOfUnitLabel        = makeSecRef "ToU"              $ titleize' Doc.tOfUnit
-valsOfAuxConsLabel  = makeSecRef "AuxConstants"     $ titleize Doc.consVals -- "Values of Auxiliary Constants" - DO NOT CHANGE OR THINGS WILL BREAK -- see Language.Drasil.Document.Extract
+tOfAbbAccLabel      = makeSecRef "AbbandAcc"        $ titleize' Doc.abbAcc
+valsOfAuxConsLabel  = makeSecRef "AuxConstants"     $ titleize  Doc.consVals -- "Values of Auxiliary Constants" - DO NOT CHANGE OR THINGS WILL BREAK -- see Language.Drasil.Document.Extract
 referenceLabel      = makeSecRef "References"       $ titleize' Doc.reference 
 indPRCaseLabel      = makeSecRef "IndividualProdUC" $ titleize' Doc.indPRCase
 assumptLabel        = makeSecRef "Assumps"          $ titleize' Doc.assumption
 funcReqLabel        = makeSecRef "FRs"              $ titleize' Doc.functionalRequirement
 nonfuncReqLabel     = makeSecRef "NFRs"             $ titleize' Doc.nonfunctionalRequirement
-solCharSpecLabel    = makeSecRef "SolCharSpec"      $ titleize Doc.solutionCharSpec
-introLabel          = makeSecRef "Intro"            $ titleize Doc.introduction
-docPurposeLabel     = makeSecRef "DocPurpose"       $ titleize Doc.prpsOfDoc
+solCharSpecLabel    = makeSecRef "SolCharSpec"      $ titleize  Doc.solutionCharSpec
+introLabel          = makeSecRef "Intro"            $ titleize  Doc.introduction
+docPurposeLabel     = makeSecRef "DocPurpose"       $ titleize  Doc.prpsOfDoc
 reqsScopeLabel      = makeSecRef "ReqsScope"        $ titleize' Doc.scpOfReq
 readerCharsLabel    = makeSecRef "ReaderChars"      $ titleize' Doc.charOfIR
-docOrgLabel         = makeSecRef "DocOrg"           $ titleize Doc.orgOfDoc
+docOrgLabel         = makeSecRef "DocOrg"           $ titleize  Doc.orgOfDoc
 stakeholderLabel    = makeSecRef "Stakeholder"      $ titleize' Doc.stakeholder
 customerLabel       = makeSecRef "Customer"         $ titleizeNP $ the Doc.customer
 clientLabel         = makeSecRef "Client"           $ titleizeNP $ the Doc.client
-genSysDescLabel     = makeSecRef "GenSysDesc"       $ titleize Doc.generalSystemDescription
-sysContextLabel     = makeSecRef "SysContext"       $ titleize Doc.sysCont
+genSysDescLabel     = makeSecRef "GenSysDesc"       $ titleize  Doc.generalSystemDescription
+sysContextLabel     = makeSecRef "SysContext"       $ titleize  Doc.sysCont
 userCharsLabel      = makeSecRef "UserChars"        $ titleize' Doc.userCharacteristic
 sysConstraintsLabel = makeSecRef "SysConstraints"   $ titleize' Doc.systemConstraint
 projScopeLabel      = makeSecRef "ProjScope"        $ atStart $ Doc.scpOfTheProj titleize
-useCaseTableLabel   = makeSecRef "UseCaseTable"     $ titleize Doc.prodUCTable
-specSystDescLabel   = makeSecRef "SpecSystDesc"     $ titleize Doc.specificsystemdescription
-probDescLabel       = makeSecRef "ProbDesc"         $ titleize Doc.problemDescription
+useCaseTableLabel   = makeSecRef "UseCaseTable"     $ titleize  Doc.prodUCTable
+specSystDescLabel   = makeSecRef "SpecSystDesc"     $ titleize  Doc.specificsystemdescription
+probDescLabel       = makeSecRef "ProbDesc"         $ titleize  Doc.problemDescription
 termDefsLabel       = makeSecRef "TermDefs"         $ titleize' Doc.termAndDef
-terminologyLabel    = makeSecRef "Terminology"      $ titleize Doc.terminology
+terminologyLabel    = makeSecRef "Terminology"      $ titleize  Doc.terminology
 goalStmtLabel       = makeSecRef "GoalStmt"         $ titleize' Doc.goalStmt
 corSolPropsLabel    = makeSecRef "CorSolProps"      $ titleize' Doc.propOfCorSol
 requirementsLabel   = makeSecRef "Requirements"     $ titleize' Doc.requirement
 traceMatricesLabel  = makeSecRef "TraceMatrices"    $ titleize' Doc.traceyMandG
-appendixLabel       = makeSecRef "Appendix"         $ titleize Doc.appendix
+appendixLabel       = makeSecRef "Appendix"         $ titleize  Doc.appendix
 offShelfSolnsLabel  = makeSecRef "offShelfSolns"    $ titleize' Doc.offShelfSolution
+refMatLabel         = makeSecRef "RefMat"           $ titleize  Doc.refmat

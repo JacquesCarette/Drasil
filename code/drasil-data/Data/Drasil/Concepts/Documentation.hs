@@ -11,7 +11,7 @@ import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 import Control.Lens ((^.))
 
 doccon :: [NamedChunk]
-doccon = [abbAcc, abbreviation, analysis, appendix, aspect, body, charOfIR, characteristic,
+doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body, charOfIR, characteristic,
   class_, client, code, column, company, component, concept, condition, connection,
   consVals, constant, constraint, consumer, content, context, coordinate, corSol,
   customer, datum, datumConstraint, decision, definition, dependency, description,
@@ -69,7 +69,7 @@ srs         = commonIdeaWithDict "srs"         softReqSpec                      
 
 -- concepts relating to the templates and their contents
 
-abbreviation, analysis, appendix, aspect, body, characteristic, class_, client, 
+abbreviation, acronym, analysis, appendix, aspect, body, characteristic, class_, client, 
   code, column, company, component, concept, condition, connection, constant,
   constraint, consumer, content, context, coordinate, customer, datum, decision, 
   definition, dependency, description, design, document, documentation, effect, 
@@ -87,6 +87,7 @@ abbreviation, analysis, appendix, aspect, body, characteristic, class_, client,
   value, variable, video, verification, year :: NamedChunk
 
 abbreviation    = nc "abbreviation"   (cn'    "abbreviation"       )
+acronym         = nc "acronym"        (cn'    "acronym"            )
 analysis        = nc "analysis"       (cnIS   "analysis"           )
 appendix        = nc "appendix"       (cnICES "appendix"           )
 aspect          = nc "aspect"         (cn'    "aspect"             )
@@ -217,7 +218,7 @@ abbAcc, charOfIR, consVals, corSol, orgOfDoc, propOfCorSol, prpsOfDoc, refmat,
   reqInput, scpOfReq, tAuxConsts, tOfSymb, tOfUnit,
   termAndDef, traceyMandG, vav, tOfCont :: NamedChunk
 
-abbAcc              = nc "TAbbAcc"            (cn "abbreviations and acronyms")
+abbAcc              = nc "TAbbAcc"            (abbreviation `and_PP` acronym)
 consVals            = nc "consVals"           (cn "values of auxiliary constants")
 corSol              = nc "corSol"             (cn' "correct solution")
 charOfIR            = nc "charOfIR"           (characteristic `of_PS` intReader)

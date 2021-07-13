@@ -75,7 +75,7 @@ ulcc = UnlblC
 mkParagraph :: Sentence -> Contents
 mkParagraph x = UlC $ ulcc $ Paragraph x
 
--- Note: are these needed? Check
+-- Note: are these needed? Check. otherwise move to Utils
 mkUnOrdList :: [Sentence] -> Contents
 mkUnOrdList l = UlC $ ulcc $ Enumeration $ mkUnOrdList_ l
 
@@ -87,13 +87,13 @@ mkUnOrdList2_ :: [ItemType] -> ListType
 mkUnOrdList2_ l = Bullet tl where
   tl = map (,Nothing) l
 
-mkTEList :: [(Sentence,[Sentence])] -> [(ItemType,Maybe String)]
+mkTEList :: [(Sentence,[Sentence])] -> [ItemType]
 mkTEList l = tl where
-  tl = zipWith (\n a -> (Nested n a, Nothing)) (map fst l) (map (mkUnOrdList_ . snd) l)
+  tl = zipWith (\n a -> Nested n a) (map fst l) (map (mkUnOrdList_ . snd) l)
 
-mkTE2List :: [(Sentence,[ItemType])] -> [(ItemType,Maybe String)]
+mkTE2List :: [(Sentence,[ItemType])] -> [ItemType]
 mkTE2List l = tl where
-  tl = zipWith (\n a -> (Nested n a, Nothing)) (map fst l) (map (mkUnOrdList2_ . snd) l)
+  tl = zipWith (\n a -> Nested n a) (map fst l) (map (mkUnOrdList2_ . snd) l)
 
 -- | Smart constructor that wraps 'LabelledContent' into 'Contents'.
 mkFig :: Reference -> RawContent -> Contents

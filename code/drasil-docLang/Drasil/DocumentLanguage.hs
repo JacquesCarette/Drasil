@@ -29,14 +29,7 @@ import Database.Drasil(ChunkDB, SystemInformation(SI), _authors, _kind,
   conceptinsTable, generateRefbyMap, idMap, refbyTable, termTable, traceTable)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableOfAbbAndAcronyms)
-import Drasil.Sections.TableOfContents (contToCRef, contRefMatRef, contToURef,
-  contToSRef, contToAARef, contIntroRef, contPoDRef, contSoRRef, contCIRRef,
-  contOoDRef, contStkhldrRef, contClntRef, contCstmrRef, contGSDRef,
-  contSysCtxtRef, contUsrChrRef, contSysConRef, contSSDRef, contPrbDescRef,
-  contSCSRef, contTaDRef, contPSDRef, contGlStRef, contAsmpRef, contTMRef,
-  contGDRef, contDDRef, contIMRef, contDtCnstrRef, contCSPRef, contRqmtRef,
-  contFReqsRef, contNFReqsRef, contLCsRef, contUCsRef, contTMaGRef, contVACRef,
-  contBibRef, contApndxRef, contOtSSRef)
+import Drasil.Sections.TableOfContents (toToC)
 import Drasil.Sections.TableOfSymbols (table, symbTableRef)
 import Drasil.Sections.TableOfUnits (tOfUnitDesc, tOfUnitSIName, unitTableRef)
 import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn,
@@ -56,14 +49,16 @@ import qualified Drasil.Sections.Stakeholders as Stk (stakeholderIntro,
 import qualified Drasil.DocumentLanguage.TraceabilityMatrix as TM (traceMGF,
   generateTraceTableView)
 
-import Data.Drasil.Concepts.Documentation (likelyChg, refmat, section_,
+import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, refmat, section_,
   software, unlikelyChg)
+
 
 import Control.Lens ((^.), over, set)
 import Data.Function (on)
 import Data.List (nub, sortBy, sortOn)
 import qualified Data.Map as Map (elems, toList)
 
+----- Gather all information necessary to create a document -----
 -- | Creates a document from a document description, a title combinator function, and system information.
 mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
 mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
@@ -71,15 +66,18 @@ mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
   mkSections (fillTraceMaps l (fillReqs l si)) l where
     l = mkDocDesc si dd
 
+----- Helpers to complete the SystemInformation database. Primarily for traceability. -----
+-- I think these should eventually be moved to a different file and then imported here.
+-- It's currently a minor hack for the traceability graphs, but it might enable
+-- us to add universal information (such as doccon) to the database without
+-- the user needing to. Or should each example already have a complete SystemInformation before
+-- going to this step?
+
 -- Helper, testing needed for .dot graphs?
 fillTraceSI :: SRSDecl -> SystemInformation -> SystemInformation
 fillTraceSI dd si = fillTraceMaps l $ fillReqs l si
   where
     l = mkDocDesc si dd
-
--- | Constructs the unit definitions ('UnitDefn's) found in the document description ('DocDesc') from a database ('ChunkDB').
-extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
-extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb
 
 -- | Fills in the traceabiliy matrix and graphs section of the system information using the document description.
 fillTraceMaps :: DocDesc -> SystemInformation -> SystemInformation
@@ -97,6 +95,14 @@ fillReqs (ReqrmntSec (ReqsProg x):_) si@SI{_sysinfodb = db} = genReqs x
         newCI = idMap $ nub $ c ++ map fst (sortOn snd $ map snd $ Map.toList $ db ^. conceptinsTable)
     genReqs (_:xs) = genReqs xs
 fillReqs (_:xs) si = fillReqs xs si
+
+-- | Constructs the unit definitions ('UnitDefn's) found in the document description ('DocDesc') from a database ('ChunkDB').
+extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
+extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb
+
+----- Section creators -----
+
+--- General Section creator ---
 
 -- | Helper for creating the different document sections.
 mkSections :: SystemInformation -> DocDesc -> [Section]
@@ -118,143 +124,19 @@ mkSections si dd = map doit dd
     doit (AppndxSec a)        = mkAppndxSec a
     doit (OffShelfSolnsSec o) = mkOffShelfSolnSec o
 
--- | Helper for making the Table of Contents section (work in progress)
+--- Table of Contents ---
+
+-- | Helper for making the Table of Contents section.
 mkToC :: DocDesc -> Section
-mkToC dd = SRS.tOfCont [intro,mkToCSec $ concatMap toToC dd] []
+mkToC dd = SRS.tOfCont [intro, UlC $ ulcc $ Enumeration $ Bullet $ map (, Nothing) $ concatMap toToC dd] []
   where
     intro = mkParagraph $ S "An outline of all sections included in this SRS is recorded here for easy reference."
 
-    toToC :: DocSection -> [(ItemType,Maybe String)]
-    toToC TableOfContents     = mktToCSec
-    toToC (RefSec rs)         = mktRefSec rs
-    toToC (IntroSec is)       = mktIntroSec is
-    toToC (StkhldrSec sts)    = mktStkhldrSec sts
-    toToC (SSDSec ss)         = mktSSDSec ss
-    toToC (AuxConstntSec acs) = mktAuxConsSec acs
-    toToC Bibliography        = mktBib
-    toToC (GSDSec gs')        = mktGSDSec gs'
-    toToC (ReqrmntSec r)      = mktReqrmntSec r
-    toToC (LCsSec lc)         = mktLCsSec lc
-    toToC (UCsSec ulcs)       = mktUCsSec ulcs
-    toToC (TraceabilitySec t) = mktTraceabilitySec t
-    toToC (AppndxSec a)       = mktAppndxSec a
-    toToC (OffShelfSolnsSec o) = mktOffShelfSolnSec o
-
--- | Helper for compiling all section ToC entries into one list
-mkToCSec :: [(ItemType,Maybe String)] -> Contents
-mkToCSec tl = UlC $ ulcc $ Enumeration $ Bullet tl
-
--- | Helper for creating the 'Table of Contents' section ToC entry
-mktToCSec :: [(ItemType,Maybe String)]
-mktToCSec = [(Flat (Ref contToCRef),Nothing)]
-
--- | Helper for creating the 'Reference Material' section ToC entry
-mktRefSec :: RefSec -> [(ItemType,Maybe String)]
-mktRefSec (RefProg _ l) =
-  mkTEList [(Ref contRefMatRef,map mktSubRef l)]
-  where -- tl = [(Sentence,[Sentence])]
-    mktSubRef :: RefTab -> Sentence
-    mktSubRef TUnits = Ref contToURef
-    mktSubRef (TUnits' _ _) = Ref contToURef
-    mktSubRef (TSymb _) = Ref contToSRef
-    mktSubRef (TSymb' _ _) = Ref contToSRef
-    mktSubRef TAandA = Ref contToAARef
-
--- | Helper for creating the 'Introduction' section ToC entry
-mktIntroSec :: IntroSec -> [(ItemType,Maybe String)]
-mktIntroSec (IntroProg _ _ l) =
-  mkTEList [(Ref contIntroRef,map mktSubIntro l)]
-  where
-    mktSubIntro :: IntroSub -> Sentence
-    mktSubIntro (IPurpose _) = Ref contPoDRef
-    mktSubIntro (IScope _) = Ref contSoRRef
-    mktSubIntro IChar {} = Ref contCIRRef
-    mktSubIntro IOrgSec {} = Ref contOoDRef
-
--- | Helper for creating the 'Stakeholders' section ToC entry
-mktStkhldrSec:: StkhldrSec -> [(ItemType,Maybe String)]
-mktStkhldrSec (StkhldrProg l) =
-  mkTEList [(Ref contStkhldrRef,map mktSub l)]
-  where
-    mktSub :: StkhldrSub -> Sentence
-    mktSub (Client _ _) = Ref contClntRef
-    mktSub (Cstmr _) = Ref contCstmrRef
-
--- | Helper for creating the 'General System Description' section ToC entry
-mktGSDSec :: GSDSec -> [(ItemType,Maybe String)]
-mktGSDSec (GSDProg l) =
-  mkTEList [(Ref contGSDRef,map mktSub l)]
-  where
-    mktSub :: GSDSub -> Sentence
-    mktSub (SysCntxt _) = Ref contSysCtxtRef
-    mktSub (UsrChars _) = Ref contUsrChrRef
-    mktSub (SystCons _ _) = Ref contSysConRef
-
--- | Helper for creating the 'Specific System Description' section ToC entry
-mktSSDSec :: SSDSec -> [(ItemType,Maybe String)]
-mktSSDSec (SSDProg l) =
-  mkTE2List [(Ref contSSDRef,map mktSubSSD l)]
-  where
-    mktSubSSD :: SSDSub -> ItemType
-    mktSubSSD (SSDProblem (PDProg _ _ sl1)) = Nested (Ref contPrbDescRef) (Bullet (map mktSubPD sl1))
-    mktSubSSD (SSDSolChSpec (SCSProg sl2)) = Nested (Ref contSCSRef) (Bullet (map mktSubSCS sl2))
-
-    mktSubPD :: PDSub -> (ItemType,Maybe String)
-    mktSubPD (TermsAndDefs _ _) = (Flat (Ref contTaDRef),Nothing)
-    mktSubPD PhySysDesc {} = (Flat (Ref contPSDRef),Nothing)
-    mktSubPD (Goals _ _) = (Flat (Ref contGlStRef),Nothing)
-
-    mktSubSCS :: SCSSub -> (ItemType,Maybe String)
-    mktSubSCS (Assumptions _) = (Flat (Ref contAsmpRef),Nothing)
-    mktSubSCS TMs {} = (Flat (Ref contTMRef),Nothing)
-    mktSubSCS GDs {} = (Flat (Ref contGDRef),Nothing)
-    mktSubSCS DDs {} = (Flat (Ref contDDRef),Nothing)
-    mktSubSCS IMs {} = (Flat (Ref contIMRef),Nothing)
-    mktSubSCS (Constraints _ _) = (Flat (Ref contDtCnstrRef),Nothing)
-    mktSubSCS (CorrSolnPpties _ _) = (Flat (Ref contCSPRef),Nothing)
-
--- | Helper for creating the 'Requirements' section ToC entry
-mktReqrmntSec :: ReqrmntSec -> [(ItemType,Maybe String)]
-mktReqrmntSec (ReqsProg l) =
-  mkTEList [(Ref contRqmtRef,map mktSubs l)]
-  where
-    mktSubs :: ReqsSub -> Sentence
-    mktSubs (FReqsSub' _ _) = Ref contFReqsRef
-    mktSubs (FReqsSub _ _) = Ref contFReqsRef
-    mktSubs (NonFReqsSub _) = Ref contNFReqsRef
-
--- | Helper for creating the 'Likely Changes' section ToC entry
-mktLCsSec :: LCsSec -> [(ItemType,Maybe String)]
-mktLCsSec (LCsProg _) = [(Flat (Ref contLCsRef),Nothing)]
-
--- | Helper for creating the 'Unlikely Changes' section ToC entry
-mktUCsSec :: UCsSec -> [(ItemType,Maybe String)]
-mktUCsSec (UCsProg _) = [(Flat (Ref contUCsRef),Nothing)]
-
--- | Helper for creating the 'Traceability Matrices and Graphs' section ToC entry
-mktTraceabilitySec :: TraceabilitySec -> [(ItemType,Maybe String)]
-mktTraceabilitySec (TraceabilityProg _) = [(Flat (Ref contTMaGRef),Nothing)]
-
--- | Helper for creating the 'Values of Auxiliary Constants' section ToC entry
-mktAuxConsSec :: AuxConstntSec -> [(ItemType,Maybe String)]
-mktAuxConsSec (AuxConsProg _ _) = [(Flat (Ref contVACRef),Nothing)]
-
--- | Helper for creating the 'References' section ToC entry
-mktBib :: [(ItemType,Maybe String)]
-mktBib = [(Flat (Ref contBibRef),Nothing)]
-
--- | Helper for creating the 'Appendix' section ToC entry
-mktAppndxSec :: AppndxSec -> [(ItemType,Maybe String)]
-mktAppndxSec (AppndxProg _) = [(Flat (Ref contApndxRef),Nothing)]
-
--- | Helper for creating the 'Off-The-Shelf Solutions' section ToC entry
-mktOffShelfSolnSec :: OffShelfSolnsSec -> [(ItemType,Maybe String)]
-mktOffShelfSolnSec (OffShelfSolnsProg _) = [(Flat (Ref contOtSSRef),Nothing)]
+--- Reference Materials section. Includes Table of Symbols, Units and Abbreviations and Acronyms. ---
 
 -- | Helper for creating the reference section and subsections.
 mkRefSec :: SystemInformation -> DocDesc -> RefSec -> Section
-mkRefSec si dd (RefProg c l) = section (titleize refmat) [c]
-  (map (mkSubRef si) l) (makeSecRef "RefMat" $ titleize refmat) -- DO NOT CHANGE LABEL OR THINGS WILL BREAK -- see Language.Drasil.Document.Extract
+mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
   where
     mkSubRef :: SystemInformation -> RefTab -> Section
     mkSubRef si' TUnits = mkSubRef si' $ TUnits' defaultTUI tOfUnitSIName
@@ -277,7 +159,7 @@ mkRefSec si dd (RefProg c l) = section (titleize refmat) [c]
     mkSubRef SI {_sysinfodb = cdb} (TSymb' f con) =
       mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) cdb) f con
     mkSubRef SI {_usedinfodb = db} TAandA =
-      tableOfAbbAndAcronyms $ nub $ map fst $ Map.elems $ termTable db
+      tOfAbbAcc [LlC $ table $ nub $ map fst $ Map.elems $ termTable db] []
 
 -- | Table of units constructors.
 tunit, tunit' :: [TUIntro] -> RefTab

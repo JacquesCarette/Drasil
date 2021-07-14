@@ -16,7 +16,7 @@ import Data.Bifunctor (bimap, second)
 
 -- | Translates from 'Document' to a printable representation of 'T.Document'.
 makeDocument :: PrintingInformation -> Document -> T.Document
-makeDocument sm (Document titleLb authorName toC sections) =
+makeDocument sm (Document titleLb authorName _ sections) =
   T.Document (spec sm titleLb) (spec sm authorName) (createLayout sm sections)
 
 -- | Helper for translating sections into a printable representation of layout objects ('T.LayoutObj').

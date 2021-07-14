@@ -153,11 +153,17 @@ $(filter %$(BUILD_P_SUFFIX), $(BUILD_PACKAGES)): %$(BUILD_P_SUFFIX): check_stack
 %$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 
-# individual example runs
+# individual example runs. Creates traceability graphs for each example run.
 %$(GEN_E_SUFFIX): EEXE=$($(EXAMPLE)_EXE)
 $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX): example$(BUILD_P_SUFFIX)
 	@mkdir -p "$(BUILD_FOLDER)$(EDIR)"
 	cd "$(BUILD_FOLDER)$(EDIR)" && stack exec -- "$(EEXE)" $(EXECARGS)
+	@mkdir -p "$(TRACEY_GRAPHS_FOLDER)$(EDIR)"
+	@if [ -d "$(BUILD_FOLDER)$(EDIR)/$(TRACEY_GRAPH_FOLDER)" ]; then \
+		cd "$(BUILD_FOLDER)$(EDIR)/$(TRACEY_GRAPH_FOLDER)" && for graph in $(TRACEY_GRAPH_NAMES); do \
+			dot -Tpdf $$graph.dot > "../../../$(TRACEY_GRAPHS_FOLDER)$(EDIR)/$$graph.pdf" ; \
+		done ; \
+	fi ; \
 
 # individual example build cleans
 $(filter %$(BC_E_SUFFIX), $(BC_EXAMPLES)): %$(BC_E_SUFFIX):
@@ -197,21 +203,6 @@ $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod ch
 
 graphs: $(GRAPH_PACKAGES)
 ###
-
-traceygraph: graphmod $(TEST_EXAMPLES)
-	@echo Creating traceability graphs
-	@rm -rf "$(TRACEY_GRAPHS_FOLDER)"
-	@mkdir -p "$(TRACEY_GRAPHS_FOLDER)"
-	@for dir in $(EXAMPLE_DIRS); do \
-		if [ -d "$(BUILD_FOLDER)$$dir/$(TRACEY_GRAPH_FOLDER)" ]; then \
-			mkdir -p "$(TRACEY_GRAPHS_FOLDER)$$dir" ; \
-			cd "$(BUILD_FOLDER)$$dir/$(TRACEY_GRAPH_FOLDER)" && for graph in $(TRACEY_GRAPH_NAMES); do \
-				dot -Tpdf $$graph.dot > "../../../$(TRACEY_GRAPHS_FOLDER)$$dir/$$graph.pdf" ; \
-			done ; \
-			cd "../../.." ; \
-		fi ; \
-	done
-	@echo Done
 
 analysis: graphmod
 	- rm -rf "$(ANALYSIS_FOLDER)"

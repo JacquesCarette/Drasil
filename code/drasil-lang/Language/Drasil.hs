@@ -124,7 +124,7 @@ module Language.Drasil (
   , Document(..), ShowTableOfContents(..), DType(..), Section(..), Contents(..)
   , SecCons(..), ListType(..), ItemType(..), ListTuple
   , LabelledContent(..), UnlabelledContent(..), extractSection
-  , mkParagraph, mkRawLC, rmManToC
+  , mkParagraph, mkRawLC, checkToC
   , llcc, ulcc
   , section, fig, figWithWidth
   , MaxWidthPercent
@@ -212,7 +212,7 @@ import Language.Drasil.Expr.Math (abs_, neg, negVec, log, ln, sin, cos, tan, sqr
 import Language.Drasil.Expr.Display
 import Language.Drasil.Document (section, fig, figWithWidth
   , Section(..), SecCons(..) , llcc, ulcc, Document(..)
-  , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), rmManToC
+  , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC
   , extractSection, makeTabRef, makeFigRef, makeSecRef, makeLstRef, makeURI)
 import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), DType(..)
   , RawContent(..), ListTuple, MaxWidthPercent

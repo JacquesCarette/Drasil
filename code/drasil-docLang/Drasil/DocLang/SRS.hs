@@ -1,4 +1,4 @@
-module Drasil.DocLang.SRS (--doc, doc',
+module Drasil.DocLang.SRS (
   tOfCont, refMat, tOfUnit, tOfSymb, tOfAbbAcc, intro, prpsOfDoc, scpOfReq,
   charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, genSysDes, sysCont,
   userChar, sysCon, specSysDes, probDesc, termAndDefn, physSyst, goalStmt,
@@ -33,14 +33,6 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, assumption
   tOfCont, tOfSymb, tOfUnit, userCharacteristic, refMat, abbAcc)
 import qualified Data.Drasil.TheoryConcepts as Doc (dataDefn, genDefn, inModel, thModel)
 
-
-{--- | SRS document constructor. 
--- Creates the SRS from a given system name, authors, and sections.
-doc, doc' :: NamedIdea c => c -> Sentence -> [Section] -> Document
--- | Names document "Software Requirement Specifications for @system@".
-doc  sys = Document (Doc.srs `S.forTPS` sys)
--- | Similar to 'doc', but uses plural form of @systems@ in the title.
-doc' sys = Document (Doc.srs `S.forTPP` sys)-}
 
 -- Ordered by appearance in SRS.
 -- | Standard SRS section builders.

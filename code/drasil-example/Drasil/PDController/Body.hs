@@ -21,7 +21,7 @@ import Database.Drasil
 import Drasil.DocLang
        (DerivationDisplay(..),
         DocSection(Bibliography, GSDSec, IntroSec, LCsSec, RefSec, ReqrmntSec,
-                   SSDSec, TraceabilitySec), TableOfContents,
+                   SSDSec, TraceabilitySec,TableOfContents),
         Field(..), Fields, GSDSec(..), GSDSub(..), InclUnits(IncludeUnits),
         IntroSec(..), IntroSub(..), PDSub(..), ProblemDescription(PDProg),
         RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..),

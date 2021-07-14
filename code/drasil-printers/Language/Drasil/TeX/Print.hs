@@ -43,32 +43,18 @@ import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 -- | Generates a LaTeX document.
 genTeX :: L.Document -> PrintingInformation -> TP.Doc
-genTeX doc@(L.Document t a toC sc) sm = 
-  case toC of
-    L.ToC -> wToC
-    _ -> woToC 
-  where
-    --doc_ = L.Document t a (drop 1 sc)
-    wToC = runPrint (buildStd sm $ I.makeDocument sm $ L.rmManToC doc) Text
-    woToC = runPrint (buildStd_ sm $ I.makeDocument sm doc) Text
-  -- add new part here that only adds ToC iff section is in Document
--- genTeX doc sm = runPrint (buildStd sm $ I.makeDocument sm doc) Text
+genTeX doc@(L.Document _ _ toC _) sm = 
+  runPrint (buildStd sm toC $ I.makeDocument sm $ L.checkToC doc) Text
 
--- Shouldn't need two of these, but just testing for now.
 -- | Helper to build the document.
-buildStd :: PrintingInformation -> Document -> D -- includes ToC generation
-buildStd sm (Document t a _ c) =
+buildStd :: PrintingInformation -> L.ShowTableOfContents -> Document -> D
+buildStd sm toC (Document t a c) =
   genPreamble c %%
   title (spec t) %%
   author (spec a) %%
-  document (maketitle %% maketoc %% newpage %% print sm c)
-
-buildStd_ :: PrintingInformation -> Document -> D -- omits ToC generation
-buildStd_ sm (Document t a _ c) =
-  genPreamble c %%
-  title (spec t) %%
-  author (spec a) %%
-  document (maketitle %% newpage %% print sm c)
+  case toC of 
+    L.ToC -> document (maketitle %% maketoc %% newpage %% print sm c) -- includes ToC generation
+    _ -> document (maketitle %% newpage %% print sm c) -- omits ToC generation
 
 -- clean until here; lo needs its sub-functions fixed first though
 -- | Helper for converting layout objects into a more printable form.

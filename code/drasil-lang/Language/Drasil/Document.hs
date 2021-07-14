@@ -57,8 +57,11 @@ data ShowTableOfContents = ToC | NoToC
 -- This function is needed by the TeX printer, as TeX carries its own form of creating
 -- a table of contents. However, the printer package is compiled before the docLang one.
 -- | Manually removes the first section of a document (table of contents section).
-rmManToC :: Document -> Document
-rmManToC (Document t a toC sc) = Document t a toC $ drop 1 sc
+checkToC :: Document -> Document
+checkToC (Document t a toC sc) = 
+  case toC of
+    ToC -> Document t a toC $ drop 1 sc
+    _   -> Document t a toC sc
 
 -- | Smart constructor for labelled content chunks.
 llcc :: Reference -> RawContent -> LabelledContent

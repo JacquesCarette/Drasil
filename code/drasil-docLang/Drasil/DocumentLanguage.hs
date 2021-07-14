@@ -106,8 +106,8 @@ extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) 
 -- | Finds whether the Table of Contents is in a SRSDecl.
 findToC :: [DocSection] -> ShowTableOfContents
 findToC [] = NoToC
-findToC (TableOfContents:dds) = ToC
-findToC (d:dds) = findToC dds
+findToC (TableOfContents:_) = ToC
+findToC (_:dds) = findToC dds
 
 ----- Section creators -----
 

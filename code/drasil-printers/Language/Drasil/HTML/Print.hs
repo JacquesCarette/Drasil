@@ -51,7 +51,7 @@ genHTML sm fn doc = build fn (makeDocument sm doc)
 -- HTML printer doesn't need to know if there is a table of contents or not.
 -- | Build the HTML Document, called by 'genHTML'.
 build :: String -> Document -> Doc
-build fn (Document t a _ c) =
+build fn (Document t a c) =
   text "<!DOCTYPE html>" $$
   html (headTag (linkCSS fn $$ title (titleSpec t) $$
   text "<meta charset=\"utf-8\">" $$

@@ -26,8 +26,8 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains, problem, analysis)
 import Data.Drasil.Concepts.Computation (inValue)
 import Drasil.DocLang (AuxConstntSec(AuxConsProg),
-  DerivationDisplay(ShowDerivation), TableOfContents,
-  DocSection(AuxConstntSec, Bibliography, IntroSec, RefSec, ReqrmntSec, SSDSec, TraceabilitySec),
+  DerivationDisplay(ShowDerivation),
+  DocSection(TableOfContents, AuxConstntSec, Bibliography, IntroSec, RefSec, ReqrmntSec, SSDSec, TraceabilitySec),
   Emphasis(Bold), Field(..), Fields, InclUnits(IncludeUnits),
   IntroSec(..), IntroSub(IScope), ProblemDescription(PDProg), PDSub(..),
   RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl,

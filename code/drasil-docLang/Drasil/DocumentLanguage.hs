@@ -56,6 +56,7 @@ import Control.Lens ((^.), over, set)
 import Data.Function (on)
 import Data.List (nub, sortBy, sortOn)
 import qualified Data.Map as Map (elems, toList)
+import Data.Maybe (fromMaybe)
 
 -- | Creates a document from a document description, a title combinator function, and system information.
 mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
@@ -350,7 +351,7 @@ mkUCsSec (UCsProg c) = SRS.unlikeChg (intro : mkEnumSimpleD c) []
 mkTraceabilitySec :: TraceabilitySec -> SystemInformation -> Section
 mkTraceabilitySec (TraceabilityProg progs) si = TG.traceMGF trace
   (map (\(TraceConfig _ pre _ _ _) -> foldlList Comma List pre) progs)
-  (map LlC trace) []
+  (map LlC trace) (fromMaybe "" $ getA $ siSys si) []
   where
   trace = map (\(TraceConfig u _ desc rows cols) -> TM.generateTraceTableView
     u desc rows cols si) progs

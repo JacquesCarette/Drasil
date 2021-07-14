@@ -161,7 +161,9 @@ $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX): example$(BUILD_P_
 	@mkdir -p "$(TRACEY_GRAPHS_FOLDER)$(EDIR)"
 	@if [ -d "$(BUILD_FOLDER)$(EDIR)/$(TRACEY_GRAPH_FOLDER)" ]; then \
 		cd "$(BUILD_FOLDER)$(EDIR)/$(TRACEY_GRAPH_FOLDER)" && for graph in $(TRACEY_GRAPH_NAMES); do \
+			dot -Tpng $$graph.dot > "../../../$(TRACEY_GRAPHS_FOLDER)$(EDIR)/$$graph.png" ; \
 			dot -Tpdf $$graph.dot > "../../../$(TRACEY_GRAPHS_FOLDER)$(EDIR)/$$graph.pdf" ; \
+			dot -Tsvg $$graph.dot > "../../../$(TRACEY_GRAPHS_FOLDER)$(EDIR)/$$graph.svg" ; \
 		done ; \
 	fi ; \
 

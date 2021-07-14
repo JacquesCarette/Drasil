@@ -112,7 +112,7 @@ scope = foldlSent [phraseNP (NP.the (analysis `ofA` twoD)),
                    S "with various initial conditions"]
 
 pendulumTitle :: CI
-pendulumTitle = commonIdeaWithDict "pendulumTitle" (pn "Pendulum") "Pendulum" [physics]
+pendulumTitle = commonIdeaWithDict "pendulumTitle" (pn "Pendulum") "DblPendulum" [physics] -- this needs to be DblPendulum for now, as the folder name is called DblPendulum (for traceability graphs). Changing this will break the links for traceability graphs.
 
 si :: SystemInformation
 si = SI {

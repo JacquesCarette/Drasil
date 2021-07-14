@@ -21,14 +21,13 @@ module Drasil.DocLang.SRS (
 
 import Language.Drasil
 import Utils.Drasil.Concepts
-import qualified Utils.Drasil.Sentence as S (forTPS, forTPP)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (appendix, assumption,
   charOfIR, client, customer, consVals, datumConstraint, functionalRequirement,
   generalSystemDescription, goalStmt, indPRCase, introduction, likelyChg,
   unlikelyChg, nonfunctionalRequirement, offShelfSolution, orgOfDoc, physSyst,
   prodUCTable, problemDescription, propOfCorSol, prpsOfDoc, reference, requirement,
-  scpOfReq, scpOfTheProj, solutionCharSpec, specificsystemdescription, srs,
+  scpOfReq, scpOfTheProj, solutionCharSpec, specificsystemdescription,
   stakeholder, sysCont, systemConstraint, termAndDef, terminology, traceyMandG,
   tOfCont, tOfSymb, tOfUnit, userCharacteristic, refMat, abbAcc)
 import qualified Data.Drasil.TheoryConcepts as Doc (dataDefn, genDefn, inModel, thModel)

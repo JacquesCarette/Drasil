@@ -20,7 +20,8 @@ type DocDesc = [DocSection]
 
 -- | Document sections are either Reference, Introduction, or Specific
 -- System Description sections (for now!).
-data DocSection = RefSec RefSec
+data DocSection = TableOfContents
+                | RefSec RefSec
                 | IntroSec IntroSec
                 | StkhldrSec StkhldrSec
                 | GSDSec GSDSec
@@ -271,6 +272,7 @@ data DLPlate f = DLPlate {
 instance Multiplate DLPlate where
   multiplate p = DLPlate ds res intro intro' stk stk' gs gs' ss ss' pd pd' sc
     rs rs' lcp ucp ts es acs aps where
+    ds TableOfContents = pure TableOfContents
     ds (RefSec x) = RefSec <$> refSec p x
     ds (IntroSec x) = IntroSec <$> introSec p x
     ds (StkhldrSec x) = StkhldrSec <$> stkSec p x

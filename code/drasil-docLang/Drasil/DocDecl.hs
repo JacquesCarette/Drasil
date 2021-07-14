@@ -24,7 +24,8 @@ import Control.Lens((^.), Getting)
 type SRSDecl = [DocSection]
 
 -- | Contains all the different sections needed for a full SRS ('SRSDecl').
-data DocSection = RefSec DL.RefSec                      -- ^ Reference.
+data DocSection = TableOfContents                       -- ^ Table of Contents
+                | RefSec DL.RefSec                      -- ^ Reference.
                 | IntroSec DL.IntroSec                  -- ^ Introduction.
                 | StkhldrSec DL.StkhldrSec              -- ^ Stakeholders.
                 | GSDSec DL.GSDSec                      -- ^ General System Description.
@@ -98,6 +99,7 @@ data ReqsSub where
 mkDocDesc :: SystemInformation -> SRSDecl -> DocDesc
 mkDocDesc SI{_inputs = is, _sysinfodb = db} = map sec where
   sec :: DocSection -> DL.DocSection
+  sec TableOfContents = DL.TableOfContents
   sec (RefSec r) = DL.RefSec r
   sec (IntroSec i) = DL.IntroSec i
   sec (StkhldrSec s) = DL.StkhldrSec s

@@ -1,6 +1,6 @@
 {-# LANGUAGE GADTs, PostfixOperators #-}
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
--- | Contains Sentences and helpers
+-- | Contains Sentences and helpers.
 module Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), (+:+),
   (+:+.), (+:), (!.), capSent, ch, eS, sC, sDash, sentencePlural, sentenceShort,
   sentenceSymb, sentenceTerm, sParen, TermCapitalization(..)) where

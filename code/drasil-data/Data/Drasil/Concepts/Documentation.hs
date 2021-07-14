@@ -11,7 +11,7 @@ import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 import Control.Lens ((^.))
 
 doccon :: [NamedChunk]
-doccon = [abbAcc, abbreviation, analysis, appendix, aspect, body, charOfIR, characteristic,
+doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body, charOfIR, characteristic,
   class_, client, code, column, company, component, concept, condition, connection,
   consVals, constant, constraint, consumer, content, context, coordinate, corSol,
   customer, datum, datumConstraint, decision, definition, dependency, description,
@@ -25,13 +25,13 @@ doccon = [abbAcc, abbreviation, analysis, appendix, aspect, body, charOfIR, char
   organization, output_, physical, physicalConstraint, physicalProperty, physicalSim,
   physicalSystem, physics, plan, practice, priority, problem, problemDescription,
   prodUCTable, productUC, product_, project, propOfCorSol, property, prpsOfDoc,
-  purpose, quantity, realtime, reference, refmat, reqInput, requirement_, response, result,
+  purpose, quantity, realtime, reference, refMat, reqInput, requirement_, response, result,
   reviewer, safety, safetyReq, scenario, scope, scpOfReq, scpOfTheProjS, second_,
   section_, simulation, software, softwareConstraint, softwareDoc, softwareReq,
   softwareSys, softwareVAV, softwareVerif, solution, solutionCharSpec,
   solutionCharacteristic, source, specific, specification, specificsystemdescription,
   stakeholder, standard, statement, symbol_, sysCont, system, systemConstraint,
-  systemdescription, tAuxConsts, tOfSymb, tOfUnit, inDatumConstraint, outDatumConstraint,
+  systemdescription, tAuxConsts, tOfCont, tOfSymb, tOfUnit, inDatumConstraint, outDatumConstraint,
   table_, task, template, termAndDef, term_,
   terminology, theory, traceyGraph, traceyMandG, traceyMatrix, type_, uncertCol,
   uncertainty, useCase, useCaseTable, user, userCharacteristic, userInput,
@@ -69,7 +69,7 @@ srs         = commonIdeaWithDict "srs"         softReqSpec                      
 
 -- concepts relating to the templates and their contents
 
-abbreviation, analysis, appendix, aspect, body, characteristic, class_, client, 
+abbreviation, acronym, analysis, appendix, aspect, body, characteristic, class_, client, 
   code, column, company, component, concept, condition, connection, constant,
   constraint, consumer, content, context, coordinate, customer, datum, decision, 
   definition, dependency, description, design, document, documentation, effect, 
@@ -87,6 +87,7 @@ abbreviation, analysis, appendix, aspect, body, characteristic, class_, client,
   value, variable, video, verification, year :: NamedChunk
 
 abbreviation    = nc "abbreviation"   (cn'    "abbreviation"       )
+acronym         = nc "acronym"        (cn'    "acronym"            )
 analysis        = nc "analysis"       (cnIS   "analysis"           )
 appendix        = nc "appendix"       (cnICES "appendix"           )
 aspect          = nc "aspect"         (cn'    "aspect"             )
@@ -213,22 +214,23 @@ year            = nc "year"           (cn'    "year"               )
 scpOfTheProjS   = nc "scpOfTheProj"   (cn'    "scope of the project") -- temporary generated for test
 
 
-abbAcc, charOfIR, consVals, corSol, orgOfDoc, propOfCorSol, prpsOfDoc, refmat,
+abbAcc, charOfIR, consVals, corSol, orgOfDoc, propOfCorSol, prpsOfDoc, refMat,
   reqInput, scpOfReq, tAuxConsts, tOfSymb, tOfUnit,
-  termAndDef, traceyMandG, vav :: NamedChunk
+  termAndDef, traceyMandG, vav, tOfCont :: NamedChunk
 
-abbAcc              = nc "TAbbAcc"            (cn "abbreviations and acronyms")
+abbAcc              = nc "TAbbAcc"            (abbreviation `and_PP` acronym)
 consVals            = nc "consVals"           (cn "values of auxiliary constants")
 corSol              = nc "corSol"             (cn' "correct solution")
 charOfIR            = nc "charOfIR"           (characteristic `of_PS` intReader)
 orgOfDoc            = nc "orgOfDoc"           (organization `of_` document)
 propOfCorSol        = nc "propOfCorSol"       (property `ofAPS` corSol)
 prpsOfDoc           = nc "prpsOfDoc"          (purpose `of_` document)
-refmat              = nc "refmat"             (cn' "reference material")
+refMat              = nc "refMat"             (cn' "reference material")
 reqInput            = nc "ReqInputs"          (cn' "required input")
 scpOfReq            = nc "scpOfReq"           (scope `of_` requirement)
 tAuxConsts          = nc "TAuxConsts"         (cn' "auxiliary constant")
 termAndDef          = nc "termAndDef"         (terminology `and_` definition)
+tOfCont             = nc "tOfCont"            (table_ `of_` content)
 tOfSymb             = nc "tOfSymb"            (table_ `of_` symbol_)
 tOfUnit             = nc "tOfUnit"            (table_ `of_` unit_)
 inDatumConstraint   = nc "InDataConstraints"  (cn' "input data constraint") -- should be moved below

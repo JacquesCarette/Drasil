@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: f5e045ef0f5a9973225b960bb74066b7c94a2a185f577c532b3b06a2376372df
+-- hash: 87b1d05e758b67c1d8f143b4786f88aa92ecc3c2fdd08aa061772f72e5870d21
 
 name:           drasil-docLang
 version:        0.1.26.0
@@ -44,6 +44,7 @@ library
       Drasil.Sections.SpecificSystemDescription
       Drasil.Sections.Stakeholders
       Drasil.Sections.TableOfAbbAndAcronyms
+      Drasil.Sections.TableOfContents
       Drasil.Sections.TableOfSymbols
       Drasil.Sections.TableOfUnits
       Drasil.Sections.TraceabilityMandGs

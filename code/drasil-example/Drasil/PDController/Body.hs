@@ -21,7 +21,7 @@ import Database.Drasil
 import Drasil.DocLang
        (DerivationDisplay(..),
         DocSection(Bibliography, GSDSec, IntroSec, LCsSec, RefSec, ReqrmntSec,
-                   SSDSec, TraceabilitySec),
+                   SSDSec, TraceabilitySec,TableOfContents),
         Field(..), Fields, GSDSec(..), GSDSub(..), InclUnits(IncludeUnits),
         IntroSec(..), IntroSub(..), PDSub(..), ProblemDescription(PDProg),
         RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..),
@@ -72,7 +72,8 @@ printSetting = PI symbMap Equational defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS
-  = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
+  = [TableOfContents,
+    RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
      IntroSec $
        IntroProg introPara (phrase pidControllerSystem)
          [IPurpose [introPurposeOfDoc], IScope introscopeOfReq,

@@ -3,7 +3,7 @@
 -- | Contains Sentences and helpers.
 module Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), (+:+),
   (+:+.), (+:), (!.), capSent, ch, eS, sC, sDash, sentencePlural, sentenceShort,
-  sentenceSymb, sentenceTerm, sParen, TermCapitalization(..), senToStr) where
+  sentenceSymb, sentenceTerm, sParen, TermCapitalization(..)) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
 import Language.Drasil.DisplayExpr (DisplayExpr(..))
@@ -62,20 +62,6 @@ data Sentence where
   (:+:) :: Sentence -> Sentence -> Sentence
   -- | Empty Sentence.
   EmptyS :: Sentence
-
-------- FIXME: Should not need to go from a sentence to a string.
-senToStr :: Sentence -> String
-senToStr (S string) = string
-senToStr (Ch _ _ _) = "error; incompatible Sentence constructor"
-senToStr (Sy _) = "error; incompatible Sentence constructor"
-senToStr (P _) = "error; incompatible Sentence constructor"
-senToStr (E _) = "error; incompatible Sentence constructor"
-senToStr (Ref _ _ _) = "error; incompatible Sentence constructor"
-senToStr (Quote _) = "\'\'"
-senToStr Percent = "%"
-senToStr ((:+:) _ _) = "error; incompatible Sentence constructor"
-senToStr EmptyS = ""
-
 
 eS :: Display d => d -> Sentence
 eS = E . toDispExpr

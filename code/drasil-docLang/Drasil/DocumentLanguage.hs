@@ -64,7 +64,7 @@ import qualified Data.Map as Map (elems, toList)
 -- | Creates a document from a document description, a title combinator function, and system information.
 mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
 mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
-  Document (nw kind `comb` nw sys) (foldlList Comma List $ map (S . name) authors) $
+  Document (nw kind `comb` nw sys) (foldlList Comma List $ map (S . name) authors) (findToC l) $
   mkSections (fillTraceMaps l (fillReqs l si)) l where
     l = mkDocDesc si dd
 
@@ -72,7 +72,7 @@ mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
 -- I think these should eventually be moved to a different file and then imported here.
 -- It's currently a minor hack for the traceability graphs, but it might enable
 -- us to add universal information (such as doccon) to the database without
--- the user needing to. Or should each example already have a complete SystemInformation before
+-- the user needing to (see #2675). Or should each example already have a complete SystemInformation before
 -- going to this step?
 
 -- Helper, testing needed for .dot graphs?
@@ -102,6 +102,13 @@ fillReqs (_:xs) si = fillReqs xs si
 extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
 extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb
 
+-- Find more concise way to do this
+-- | Finds whether the Table of Contents is in a SRSDecl.
+findToC :: [DocSection] -> ShowTableOfContents
+findToC [] = NoToC
+findToC (TableOfContents:dds) = ToC
+findToC (d:dds) = findToC dds
+
 ----- Section creators -----
 
 -- | Helper for creating the different document sections.
@@ -129,8 +136,6 @@ mkToC :: DocDesc -> Section
 mkToC dd = SRS.tOfCont [intro, UlC $ ulcc $ Enumeration $ Bullet $ map ((, Nothing) . toToC) dd] []
   where
     intro = mkParagraph $ S "An outline of all sections included in this SRS is recorded here for easy reference."
-
-
 
 -- | Helper for creating the reference section and subsections.
 -- Includes Table of Symbols, Units and Abbreviations and Acronyms.

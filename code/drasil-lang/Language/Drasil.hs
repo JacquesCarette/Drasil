@@ -110,7 +110,7 @@ module Language.Drasil (
   , HasCitation(getCitations)
   -- Sentence
   , Sentence(..), SentenceStyle(..), TermCapitalization(..), (+:+), (+:+.), (+:), (!.), capSent
-  , ch, eS, sC, sDash, sParen, senToStr
+  , ch, eS, sC, sDash, sParen
   -- Sentence.Extract
   , sdep, shortdep
   -- NounPhrase
@@ -121,10 +121,10 @@ module Language.Drasil (
   , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1
   , titleizeNP, titleizeNP', nounPhrase'', nounPhraseSP, nounPhraseSent
   -- Document
-  , Document(..), DType(..), Section(..), Contents(..)
+  , Document(..), ShowTableOfContents(..), DType(..), Section(..), Contents(..)
   , SecCons(..), ListType(..), ItemType(..), ListTuple
-  , LabelledContent(..), UnlabelledContent(..), extractSection, getDTle, getDAtr
-  , getDSec, getDDoc, mkParagraph, mkRawLC
+  , LabelledContent(..), UnlabelledContent(..), extractSection
+  , mkParagraph, mkRawLC, rmManToC
   , llcc, ulcc
   , section, fig, figWithWidth
   , MaxWidthPercent
@@ -211,8 +211,8 @@ import Language.Drasil.Expr.Math (abs_, neg, negVec, log, ln, sin, cos, tan, sqr
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, intAll)
 import Language.Drasil.Expr.Display
 import Language.Drasil.Document (section, fig, figWithWidth
-  , Section(..), SecCons(..) , llcc, ulcc, Document(..), getDTle, getDAtr, getDSec
-  , getDDoc, mkParagraph, mkFig, mkRawLC
+  , Section(..), SecCons(..) , llcc, ulcc, Document(..)
+  , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), rmManToC
   , extractSection, makeTabRef, makeFigRef, makeSecRef, makeLstRef, makeURI)
 import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), DType(..)
   , RawContent(..), ListTuple, MaxWidthPercent
@@ -280,7 +280,7 @@ import Language.Drasil.ShortName (ShortName, shortname', getSentSN)
 import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..), 
   RTopology(..), DomainDesc(AllDD, BoundedDD), getActorName, getInnerSpace)
 import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), TermCapitalization(..), (+:+),
-  (+:+.), (+:), (!.), capSent, ch, eS, sC, sDash, sParen, senToStr)
+  (+:+.), (+:), (!.), capSent, ch, eS, sC, sDash, sParen)
 import Language.Drasil.Sentence.Extract (sdep, shortdep) -- exported for drasil-database FIXME: move to development package?
 import Language.Drasil.RefProg (RefInfo(..))
 import Language.Drasil.Reference (Reference(..), namedRef, refInfo, complexRef, namedComplexRef, ref, refS)

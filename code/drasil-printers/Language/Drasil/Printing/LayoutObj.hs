@@ -6,7 +6,7 @@ import Language.Drasil.Printing.AST (ListType, Spec, Title, Label)
 import Language.Drasil.Printing.Citation (BibRef)
 
 -- | A document must contain a title, author, and contents (as 'LayoutObj's).
-data Document = Document Title Author [LayoutObj]
+data Document = Document Title Author ShowTableOfContents [LayoutObj]
 -- | An author is just a sentence ('Spec').
 type Author   = Spec
 -- | Contents are just a sentence ('Spec').

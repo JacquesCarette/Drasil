@@ -26,7 +26,7 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains, problem, analysis)
 import Data.Drasil.Concepts.Computation (inValue)
 import Drasil.DocLang (AuxConstntSec(AuxConsProg),
-  DerivationDisplay(ShowDerivation),
+  DerivationDisplay(ShowDerivation), TableOfContents,
   DocSection(AuxConstntSec, Bibliography, IntroSec, RefSec, ReqrmntSec, SSDSec, TraceabilitySec),
   Emphasis(Bold), Field(..), Fields, InclUnits(IncludeUnits),
   IntroSec(..), IntroSub(IScope), ProblemDescription(PDProg), PDSub(..),
@@ -62,7 +62,8 @@ printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
 
 mkSRS :: SRSDecl
-mkSRS = [RefSec $      --This creates the Reference section of the SRS
+mkSRS = [TableOfContents, -- This creates the Table of Contents
+  RefSec $      --This creates the Reference section of the SRS
     RefProg intro      -- This add the introduction blob to the reference section  
       [ TUnits         -- Adds table of unit section with a table frame
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits] -- Adds table of symbol section with a table frame

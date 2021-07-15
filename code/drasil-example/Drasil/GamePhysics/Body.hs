@@ -6,7 +6,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, _datadefs,
   _instModels, _configFiles, _defSequence, _inputs, _kind, _outputs, _quants, 
-  _sys, _sysinfodb, _usedinfodb)
+  _sys, _sysinfodb, _usedinfodb, _folderPath)
 import Theory.Drasil (qdFromDD)
 import Utils.Drasil
 import Utils.Drasil.Concepts
@@ -121,6 +121,7 @@ si = SI {
   _instModels  = iMods,
   _datadefs    = dataDefs,
   _configFiles = [],
+  _folderPath  = directoryName,
   _inputs      = inputSymbols,
   _outputs     = outputSymbols, 
   _defSequence = map (`Parallel` []) qDefs,
@@ -131,6 +132,9 @@ si = SI {
    refdb       = refDB
 }
   where qDefs = map qdFromDD dataDefs
+
+directoryName :: FilePath
+directoryName = "GamePhysics"
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
@@ -446,7 +450,7 @@ offShelfSols3DList = LlC $ enumBullet solutionLabel [
 
 -- References --
 bodyRefs :: [Reference]
-bodyRefs = ref sysCtxFig1: map ref concIns ++ map ref section ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ traceyGraphGetRefs "GamePhysics"
+bodyRefs = ref sysCtxFig1: map ref concIns ++ map ref section ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ traceyGraphGetRefs directoryName
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ goalRefs ++ dataDefRefs ++ genDefRefs

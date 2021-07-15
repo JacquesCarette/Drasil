@@ -8,7 +8,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
   _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, _outputs,
-  _quants, _sys, _sysinfodb, _usedinfodb)
+  _quants, _sys, _sysinfodb, _usedinfodb, _folderPath)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.NounPhrase as NP
@@ -112,7 +112,11 @@ scope = foldlSent [phraseNP (NP.the (analysis `ofA` twoD)),
                    S "with various initial conditions"]
 
 pendulumTitle :: CI
-pendulumTitle = commonIdeaWithDict "pendulumTitle" (pn "Pendulum") "DblPendulum" [physics] -- this needs to be DblPendulum for now, as the folder name is called DblPendulum (for traceability graphs). Changing this will break the links for traceability graphs.
+pendulumTitle = commonIdeaWithDict "pendulumTitle" (pn "Pendulum") "Pendulum" [physics]
+
+-- Folder name. Used in traceability graphs.
+directoryName :: FilePath
+directoryName = "DblPendulum"
 
 si :: SystemInformation
 si = SI {
@@ -125,6 +129,7 @@ si = SI {
   _instModels  = iMods,
   _datadefs    = dataDefs,
   _configFiles = [],
+  _folderPath  = directoryName,
   _inputs      = inputs,
   _outputs     = outputs,
   _defSequence = [] :: [Block QDefinition],
@@ -196,7 +201,7 @@ tModRefs :: [Reference]
 tModRefs = map ref tMods
 
 bodyRefs :: [Reference]
-bodyRefs = map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ map ref concIns ++ traceyGraphGetRefs "DblPendulum"
+bodyRefs = map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ map ref concIns ++ traceyGraphGetRefs directoryName
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ figRefs ++ goalRefs ++ dataDefRefs ++ genDefRefs

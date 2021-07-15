@@ -12,7 +12,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
   rdb, refdb, _authors, _concepts, _constants, _constraints, _purpose,
   _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, _outputs, _quants, 
-  _sys, _sysinfodb, _usedinfodb)
+  _sys, _sysinfodb, _usedinfodb, _folderPath)
 import qualified Utils.Drasil.Sentence as S
 
 import Drasil.HGHC.HeatTransfer (fp, hghc, dataDefs, htInputs, htOutputs, 
@@ -33,6 +33,9 @@ fullSI = fillTraceSI mkSRS si
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
 
+directoryName :: FilePath
+directoryName = "HGHC"
+
 si :: SystemInformation
 si = SI {
   _sys         = hghc,
@@ -44,6 +47,7 @@ si = SI {
   _instModels  = [], -- FIXME; empty _instModels
   _datadefs    = dataDefs,
   _configFiles = [],
+  _folderPath  = directoryName,
   _inputs      = htInputs,
   _outputs     = htOutputs,
   _defSequence = [] :: [Block QDefinition],
@@ -75,7 +79,7 @@ usedDB = cdb ([] :: [QuantityDict]) (map nw symbols)
 
 -- References --
 bodyRefs :: [Reference]
-bodyRefs = map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ traceyGraphGetRefs "HGHC"
+bodyRefs = map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ traceyGraphGetRefs directoryName
 
 dataDefRefs :: [Reference]
 dataDefRefs = map ref [htTransCladCoolDD, htTransCladFuelDD]

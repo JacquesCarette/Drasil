@@ -25,7 +25,7 @@ import Language.Drasil.Display (compsy)
 import Utils.Drasil
 
 import Database.Drasil(ChunkDB, SystemInformation(SI), _authors, _kind,
-  _quants, _sys, _sysinfodb, _usedinfodb, ccss, ccss', citeDB, collectUnits,
+  _quants, _sys, _folderPath, _sysinfodb, _usedinfodb, ccss, ccss', citeDB, collectUnits,
   conceptinsTable, generateRefbyMap, idMap, refbyTable, termTable, traceTable)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableOfAbbAndAcronyms)
@@ -56,7 +56,6 @@ import Control.Lens ((^.), over, set)
 import Data.Function (on)
 import Data.List (nub, sortBy, sortOn)
 import qualified Data.Map as Map (elems, toList)
-import Data.Maybe (fromMaybe)
 
 -- | Creates a document from a document description, a title combinator function, and system information.
 mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
@@ -351,7 +350,7 @@ mkUCsSec (UCsProg c) = SRS.unlikeChg (intro : mkEnumSimpleD c) []
 mkTraceabilitySec :: TraceabilitySec -> SystemInformation -> Section
 mkTraceabilitySec (TraceabilityProg progs) si = TG.traceMGF trace
   (map (\(TraceConfig _ pre _ _ _) -> foldlList Comma List pre) progs)
-  (map LlC trace) (fromMaybe "" $ getA $ siSys si) []
+  (map LlC trace) (_folderPath si) []
   where
   trace = map (\(TraceConfig u _ desc rows cols) -> TM.generateTraceTableView
     u desc rows cols si) progs

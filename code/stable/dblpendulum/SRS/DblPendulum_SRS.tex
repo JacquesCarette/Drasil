@@ -13,6 +13,7 @@
 \usepackage{caption}
 \usepackage{enumitem}
 \usepackage{graphics}
+\usepackage{svg}
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
@@ -195,7 +196,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \end{itemize}
 \subsubsection{Physical System Description}
 \label{Sec:PhysSyst}
-The physical system of DblPendulum, as shown in \hyperref[Figure:pendulum]{Fig:pendulum}, includes the following elements:
+The physical system of Pendulum, as shown in \hyperref[Figure:pendulum]{Fig:pendulum}, includes the following elements:
 
 \begin{itemize}
 \item[PS1:]{The rod.}
@@ -217,7 +218,7 @@ Given the mass and length of the rod, initial angle of the mass and the gravitat
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
-The instance models that govern DblPendulum are presented in \hyperref[Sec:IMs]{Sec:Instance Models}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models that govern Pendulum are presented in \hyperref[Sec:IMs]{Sec:Instance Models}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 
 \subsubsection{Assumptions}
 \label{Sec:Assumps}
@@ -232,7 +233,7 @@ This section simplifies the original problem and helps in developing the theoret
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
-This section focuses on the general equations and laws that DblPendulum is based on.
+This section focuses on the general equations and laws that Pendulum is based on.
 
 \vspace{\baselineskip}
 \noindent
@@ -1310,35 +1311,35 @@ The purpose of the traceability graphs is also to provide easy references on wha
 
 \begin{figure}
 \begin{center}
-\includegraphics[width=\textwidth]{../../../traceygraphs/DblPendulum/avsa.png}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../../traceygraphs/DblPendulum/avsa}
 \caption{TraceGraphAvsA}
 \label{Figure:TraceGraphAvsA}
 \end{center}
 \end{figure}
 \begin{figure}
 \begin{center}
-\includegraphics[width=\textwidth]{../../../traceygraphs/DblPendulum/avsall.png}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../../traceygraphs/DblPendulum/avsall}
 \caption{TraceGraphAvsAll}
 \label{Figure:TraceGraphAvsAll}
 \end{center}
 \end{figure}
 \begin{figure}
 \begin{center}
-\includegraphics[width=\textwidth]{../../../traceygraphs/DblPendulum/refvsref.png}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../../traceygraphs/DblPendulum/refvsref}
 \caption{TraceGraphRefvsRef}
 \label{Figure:TraceGraphRefvsRef}
 \end{center}
 \end{figure}
 \begin{figure}
 \begin{center}
-\includegraphics[width=\textwidth]{../../../traceygraphs/DblPendulum/allvsr.png}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../../traceygraphs/DblPendulum/allvsr}
 \caption{TraceGraphAllvsR}
 \label{Figure:TraceGraphAllvsR}
 \end{center}
 \end{figure}
 \begin{figure}
 \begin{center}
-\includegraphics[width=\textwidth]{../../../traceygraphs/DblPendulum/allvsall.png}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../../traceygraphs/DblPendulum/allvsall}
 \caption{TraceGraphAllvsAll}
 \label{Figure:TraceGraphAllvsAll}
 \end{center}
@@ -1346,11 +1347,11 @@ The purpose of the traceability graphs is also to provide easy references on wha
 For convenience, the following graphs can be found at the links below:
 
 \begin{itemize}
-\item{\hyperref{../../../traceygraphs/DblPendulum/avsa.pdf}{}{}{TraceGraphAvsA}}
-\item{\hyperref{../../../traceygraphs/DblPendulum/avsall.pdf}{}{}{TraceGraphAvsAll}}
-\item{\hyperref{../../../traceygraphs/DblPendulum/refvsref.pdf}{}{}{TraceGraphRefvsRef}}
-\item{\hyperref{../../../traceygraphs/DblPendulum/allvsr.pdf}{}{}{TraceGraphAllvsR}}
-\item{\hyperref{../../../traceygraphs/DblPendulum/allvsall.pdf}{}{}{TraceGraphAllvsAll}}
+\item{\hyperref{../../../traceygraphs/DblPendulum/avsa.svg}{}{}{TraceGraphAvsA}}
+\item{\hyperref{../../../traceygraphs/DblPendulum/avsall.svg}{}{}{TraceGraphAvsAll}}
+\item{\hyperref{../../../traceygraphs/DblPendulum/refvsref.svg}{}{}{TraceGraphRefvsRef}}
+\item{\hyperref{../../../traceygraphs/DblPendulum/allvsr.svg}{}{}{TraceGraphAllvsR}}
+\item{\hyperref{../../../traceygraphs/DblPendulum/allvsall.svg}{}{}{TraceGraphAllvsAll}}
 \end{itemize}
 \section{Values of Auxiliary Constants}
 \label{Sec:AuxConstants}

@@ -6,7 +6,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts,
   _constants, _constraints, _datadefs, _instModels, _configFiles, _defSequence,
-  _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
+  _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb, _folderPath)
 import Theory.Drasil (TheoryModel)
 import Utils.Drasil
 import Utils.Drasil.Concepts
@@ -92,6 +92,9 @@ fullSI = fillTraceSI mkSRS si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
+
+directoryName :: FilePath
+directoryName = "NoPCM"
 
 resourcePath :: String
 resourcePath = "../../../datafiles/NoPCM/"
@@ -199,6 +202,7 @@ si = SI {
   _instModels  = NoPCM.iMods,
   _datadefs    = NoPCM.dataDefs,
   _configFiles = [],
+  _folderPath  = directoryName,
   _inputs      = inputs ++ [qw watE], --inputs ++ outputs?
   _outputs     = map qw [tempW, watE],     --outputs
   _defSequence = [(\x -> Parallel (head x) (tail x)) qDefs],
@@ -375,7 +379,7 @@ bodyRefs = ref figTank: ref sysCntxtFig:
   map ref concIns ++ map ref section ++ map ref labCon 
   ++ map ref tMods ++ concatMap (^. getReferences) tMods --needs the references hidden in the tmodel.
   ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si)
-  ++ traceyGraphGetRefs "NoPCM"
+  ++ traceyGraphGetRefs directoryName
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ dataDefRefs ++ genDefRefs++ goalRefs

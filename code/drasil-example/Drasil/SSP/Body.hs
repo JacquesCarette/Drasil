@@ -7,7 +7,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts, _constants,
   _constraints, _datadefs, _instModels, _configFiles, _defSequence, _inputs,
-  _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
+  _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb, _folderPath)
 import Theory.Drasil (qdFromDD)
 
 import Prelude hiding (sin, cos, tan)
@@ -84,6 +84,9 @@ fullSI = fillTraceSI mkSRS si
 resourcePath :: String
 resourcePath = "../../../datafiles/SSP/"
 
+directoryName :: FilePath
+directoryName = "SSP"
+
 si :: SystemInformation
 si = SI {
   _sys         = ssp, 
@@ -95,6 +98,7 @@ si = SI {
   _instModels  = SSP.iMods,
   _datadefs    = SSP.dataDefs,
   _configFiles = [],
+  _folderPath  = directoryName,
   _inputs      = map qw inputs,
   _outputs     = map qw outputs,
   _defSequence = [(\x -> Parallel (head x) (tail x)) $ map qdFromDD SSP.dataDefs],
@@ -450,7 +454,7 @@ slopeVert = verticesConst $ phrase slope
 
 -- References --
 bodyRefs :: [Reference]
-bodyRefs = ref sysCtxFig1: map ref concIns ++ map ref section ++ map ref labCon ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ traceyGraphGetRefs "SSP"
+bodyRefs = ref sysCtxFig1: map ref concIns ++ map ref section ++ map ref labCon ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ traceyGraphGetRefs directoryName
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ goalRefs ++ SSP.dataDefRefs ++ genDefRefs

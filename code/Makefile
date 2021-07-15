@@ -266,7 +266,8 @@ deploy_lite:
 	@mkdir -p "$(DEPLOY_FOLDER)"
 	@BUILD_FOLDER="$(BUILD_FOLDER)" DEPLOY_FOLDER="$(DEPLOY_FOLDER)" GRAPH_FOLDER="$(GRAPH_FOLDER)" \
 	EXAMPLE_DIRS="$(EXAMPLE_DIRS)" MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" ANALYSIS_FOLDER="$(ANALYSIS_FOLDER)" \
-	DEPLOY_CODE_PATH_KV_SEP="$(DEPLOY_CODE_PATH_KV_SEP)" MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"deploy_stage.sh
+	TRACEY_GRAPHS_FOLDER="$(TRACEY_GRAPHS_FOLDER)" DEPLOY_CODE_PATH_KV_SEP="$(DEPLOY_CODE_PATH_KV_SEP)" \
+	MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"deploy_stage.sh
 
 website:
 	stack install drasil-website
@@ -285,7 +286,7 @@ website:
 # files appear newer and thus PDF's are regenerated. If you want to "just generate the structure,
 # everything exists," (or you've run `deploy` once already) then `deploy_lite` does just that and is
 # what `deploy.bash` calls. 
-deploy: analysis graphs docs tex doxygen
+deploy: analysis graphs docs tex doxygen website
 	"$(MAKE)" deploy_lite
 
 

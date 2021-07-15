@@ -178,7 +178,7 @@ traceGUIDs = ["TraceGraphAvsA", "TraceGraphAvsAll", "TraceGraphRefvsRef", "Trace
 traceyGraphPaths ex = map (\x -> resourcePath ++ concat (words ex) ++ "/" ++ x ++ ".pdf") traceGFiles
 traceyGraphGetRefs ex = map makeFigRef traceGUIDs ++ zipWith (\x y -> Reference (x ++ "Link") (URI y) (shortname' $ S x) None) traceGUIDs (traceyGraphPaths $ concat $ words ex)
 -- for actual use in creating the graph figures
-traceyGraphPath ex f = resourcePath ++ concat (words ex) ++ "/" ++ f ++ ".png"
+traceyGraphPath ex f = resourcePath ++ concat (words ex) ++ "/" ++ f ++ ".svg"
 
 -- | Traceability graphs reference path.
 resourcePath :: String

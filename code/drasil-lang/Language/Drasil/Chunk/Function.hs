@@ -29,9 +29,9 @@ makeLenses ''FuncDefn
 
 instance HasUID        FuncDefn where uid = qua . uid
 instance NamedIdea     FuncDefn where term = qua . term
-instance Idea          FuncDefn where getA c = getA $ c ^. qua
+instance Idea          FuncDefn where getA = getA . (^. qua)
 instance HasSpace      FuncDefn where typ = spc
-instance HasSymbol     FuncDefn where symbol e = symbol (e ^. qua)  -- TODO: what should the symbol be?
+instance HasSymbol     FuncDefn where symbol = symbol . (^. qua)  -- TODO: what should the symbol be? "F(X,Y,Z)" or just "F"? Leaving as "F" for now since we match stable
 instance Definition    FuncDefn where defn = defn'
 instance Quantity      FuncDefn where
 instance DefiningExpr  FuncDefn where defnExpr = equat

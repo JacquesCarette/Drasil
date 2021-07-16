@@ -35,11 +35,11 @@ instance HasUID        QDefinition where uid = qua . uid
 -- | Finds the term ('NP') of the 'QuantityDict' used to make the 'QDefinition'.
 instance NamedIdea     QDefinition where term = qua . term
 -- | Finds the idea contained in the 'QuantityDict' used to make the 'QDefinition'.
-instance Idea          QDefinition where getA c = getA $ c ^. qua
+instance Idea          QDefinition where getA = getA . (^. qua)
 -- | Finds the 'Space' of the 'QuantityDict' used to make the 'QDefinition'.
 instance HasSpace      QDefinition where typ = qua . typ
 -- | Finds the 'Symbol' of the 'QuantityDict' used to make the 'QDefinition'.
-instance HasSymbol     QDefinition where symbol e = symbol (e ^. qua)
+instance HasSymbol     QDefinition where symbol = symbol . (^. qua)
 -- | Finds the definition of 'QDefinition'.
 instance Definition    QDefinition where defn = defn'
 -- | 'QDefinition's have a 'Quantity'.

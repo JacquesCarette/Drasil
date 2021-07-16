@@ -119,7 +119,8 @@ instance ConceptDomain ModelKinds where cdom       = elimMk (to cdom) (to cdom) 
 -- | Rewrites the underlying model using DisplayExpr
 instance Display       ModelKinds where toDispExpr = elimMk (to toDispExpr) (to toDispExpr) (to toDispExpr) (to toDispExpr) (to toDispExpr)
 
--- TODO: 5 equal inputs in each function! A true beauty! (sarcasm). Can we fix it?
+-- TODO: 5 inputs in each function, all the same! Can we clean it?
+--       When we have to split FuncDefn and QDefinition related models into Expr/ModelExpr, there will be more.
 
 -- TODO: implement MayHaveUnit for ModelKinds once we've sufficiently removed OthModels & RelationConcepts (else we'd be breaking too much of `stable`)
 

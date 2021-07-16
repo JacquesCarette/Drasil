@@ -47,11 +47,11 @@ digraph avsall {
 	{xVel, yVel, xScalAcc, yScalAcc, hForceOnPendulum, vForceOnPendulum, angFrequencyGD, periodPendGD}
 	}
 
-	angularDisplacementRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfAngularDisplacement"];
+	pendDisplacementAngle	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfAngularDisplacement"];
 
 	subgraph IM {
 	rank="same"
-	{angularDisplacementRC}
+	{pendDisplacementAngle}
 	}
 
 	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];

@@ -7,10 +7,10 @@ digraph allvsall {
 	periodPendGD -> angularFrequency;
 	periodPendGD -> period;
 	periodPendGD -> angFrequencyGD;
-	angularDisplacementRC -> newtonSLR;
-	angularDisplacementRC -> angFrequencyGD;
-	calcAngPos -> angularDisplacementRC;
-	outputValues -> angularDisplacementRC;
+	pendDisplacementAngle -> newtonSLR;
+	pendDisplacementAngle -> angFrequencyGD;
+	calcAngPos -> pendDisplacementAngle;
+	outputValues -> pendDisplacementAngle;
 
 
 	pend2DMotion	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:pend2DMotion"];
@@ -59,11 +59,11 @@ digraph allvsall {
 	{xVel, yVel, xScalAcc, yScalAcc, hForceOnPendulum, vForceOnPendulum, angFrequencyGD, periodPendGD}
 	}
 
-	angularDisplacementRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfAngularDisplacement"];
+	pendDisplacementAngle	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:calOfAngularDisplacement"];
 
 	subgraph IM {
 	rank="same"
-	{angularDisplacementRC}
+	{pendDisplacementAngle}
 	}
 
 	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];

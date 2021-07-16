@@ -1,4 +1,4 @@
--- FIXME: use real parser (Low Priority; see line 119)
+-- FIXME: use real parser (Low Priority; see line 267)
 -- | Data table generator. Uses information from SourceCodeReader.hs 
 -- to organize all types, classes, and instances in Drasil.
 -- Generates a .csv file and an HTML table with this information.
@@ -16,8 +16,13 @@ import qualified DirectoryController as DC (createFolder, createFile, finder,
 import SourceCodeReader as SCR (extractEntryData, EntryData(..))
 import Data.List.Split (splitOn)
 import Data.List ((\\))
-import Printers.Dot
+import DataPrinters.Dot
+import DataPrinters.HTML
 
+
+------------
+-- Data types used in the generation of dependency tables and graphs
+------------
 type FileInstance = String
 type IsInstanceOf = String
 
@@ -51,7 +56,7 @@ data ClassType = Haskell | Drasil | GOOL deriving (Eq)
 data SmallEntry = SE {
   types :: [String],
   cls :: [ClassName],
-  usedCls :: [ClassName], --not defined in this package, but used here
+  usedCls :: [ClassName], --for classes not defined in the entry's package, but used here anyways
   edges :: [Edges]
 } deriving (Show)
 -- For making one graph per Drasil package
@@ -65,6 +70,36 @@ instance Show ClassType where
   show Haskell = "Haskell-defined"
   show Drasil = "Drasil-defined"
   show GOOL = "GOOL-defined"
+
+------------
+-- Constructors for various data types
+------------
+
+-- makes Entry data instance
+makeEntry :: DC.DrasilPack -> DC.FileName -> FilePath -> [DataType] -> 
+  [Newtype] -> [Class] -> [ClassInstance] -> Entry
+makeEntry drpk fn fp dtl ntl cls clsint = Entry {drasilPack=drpk, fileName = fn,
+  filePath = fp, dataTypes = dtl, newtypes = ntl, classes = cls, classInstances = clsint}
+
+-- makes Class data instance
+makeClass :: ClassType -> ClassName -> Class
+makeClass clstp clsnm = Class {className = clsnm, classType = clstp}
+
+-- makes ClassInstance data instance
+makeClassInstance :: (DNType,ClassName) -> ClassInstance
+makeClassInstance (dnt,cls) = ClassInstance {dnType = dnt, clsInstName = cls}
+
+-- makes SmallEntry data instance
+makeSmallEntry :: [String] -> [ClassName] -> [ClassName] -> [Edges] -> SmallEntry
+makeSmallEntry typs clss uclss edgs = SE {types = typs, cls = clss, usedCls = uclss, edges = edgs}
+
+-- makes entry package data instance
+makeEntryPack :: String -> [SmallEntry] -> EntryPack
+makeEntryPack nm ents = EP {dPack = nm, pkgEntries = ents}
+
+-----------
+-- Main functions
+-----------
 
 -- main controller function; initiates function calls to generate output file
 main :: IO ()
@@ -106,13 +141,36 @@ main = do
   -- contains joined string with each file EntryString ("\n" separated)
   let entryData = intercalate "\n" bakedEntryData
 
-  -- creates and writes to output data file (HTML table and CSV)
-  output outputDirectory entryData ordrdClassNames bakedEntryData
-  -- creates and writes to output data file (.dot graph)
-  outputGraph outputDirectory rawEntryData
+  -- creates and writes to output data file (HTML table, CSV, and dot graph)
+  output outputDirectory entryData ordrdClassNames bakedEntryData rawEntryData
+
+-- wrapper for all output functions
+output :: FilePath -> EntryString -> [ClassName] -> [EntryString] -> [Entry] -> IO ()
+output outputFilePath entryData ordClassInsts bakedEntryData entries= do
+  outputCSV outputFilePath entryData ordClassInsts
+  outputHTML outputFilePath ordClassInsts bakedEntryData
+  outputGraph outputFilePath entries
+
+------------
+-- CSV Output Functions
+------------
+  
+-- function creates and writes output data file DataTable.csv to /code/analysis
+outputCSV :: FilePath -> EntryString -> [ClassName] -> IO ()
+outputCSV outputFilePath entryData ordClassInsts = do
+  createDirectoryIfMissing False outputFilePath
+  setCurrentDirectory outputFilePath
+  dataTable <- openFile "DataTable.csv" WriteMode
+  hPutStrLn dataTable "Package,\t,\t,\t,\t,\t,Class Instances"
+  hPutStr dataTable "drasil-,File Path,File Name,Data Type,Newtype Type,Class Definitions,"
+  hPutStrLn dataTable (intercalate "," ordClassInsts)
+  hPutStrLn dataTable entryData
+  hClose dataTable
 
 -------------
 -- Graph Output Functions
+-------------
+
 -- For creating dot graphs from entries.
 outputGraph :: FilePath -> [Entry] -> IO ()
 outputGraph outputDirectory entries = do
@@ -132,21 +190,20 @@ mkOutputGraph outputDirectory entry = do
 -- Extracts the drasil package name from entries and sorts them.
 -- Output form is (drasil-* package, [contents related to package])
 sortByPackage :: [Entry] -> [(String, [Entry])]
-sortByPackage entries = sortByPackageAux $ map (\e -> (drasilPack e, [e])) entries
-  where
-    sortByPackageAux :: [(String, [Entry])] -> [(String, [Entry])]
-    sortByPackageAux [] = []
-    sortByPackageAux [x] = [x]
-    sortByPackageAux ((nm1, e1):(nm2, e2):entries)
-      | nm1 == nm2 = sortByPackageAux ((nm1, e1 ++ e2):entries)
-      | otherwise = (nm1, e1): sortByPackageAux ((nm2,e2):entries)
+sortByPackage entries = concatOver2 $ map (\e -> (drasilPack e, [e])) entries
 
 -- Convert from [(Package, contents)] to [EntryPack].
 -- This makes the data easier to work with and allows us to extract
 -- the datatypes, classes, used (but not defined in the package) classes,
 -- and class instances (which will become edges).
 mkEntryPack :: [(String, [Entry])] -> [EntryPack]
-mkEntryPack = map (\(n, es) -> EP n (filter isEntryEmpty $ map (\Entry{dataTypes= dts,newtypes = nts,classes = cs, classInstances = ci} -> SE{types=dts++nts,cls=nub (map className cs),usedCls=nub $ concatMap snd (mkPkgEdges ci) \\ (map className cs),edges=mkPkgEdges ci}) es))
+mkEntryPack = map $ \(n, es) -> makeEntryPack n $ filter isEntryEmpty $ map entryToSmallEntry es
+  where
+    -- only take the information needed to construct a graph from a full entry
+    entryToSmallEntry :: Entry -> SmallEntry
+    entryToSmallEntry Entry{dataTypes = dts, newtypes = nts, classes = clss, classInstances = clsinst} = 
+      makeSmallEntry (dts ++ nts) (nub $ map className clss)
+      (nub $ concatMap snd (mkPkgEdges clsinst) \\ map className clss) $ mkPkgEdges clsinst
 
 -- Cleanup function to get rid of empty SmallEntries
 isEntryEmpty :: SmallEntry -> Bool
@@ -155,28 +212,51 @@ isEntryEmpty _ = True
 
 -- Helper to convert class instances into graph edges.
 mkPkgEdges :: [ClassInstance] -> [Edges]
-mkPkgEdges cis = mkPkgEdgesAux $ map (\ClassInstance{dnType=typ, clsInstName=cls} -> (typ, [cls])) cis
-  where
-    mkPkgEdgesAux :: [(String, [String])] -> [Edges]
-    mkPkgEdgesAux [] = []
-    mkPkgEdgesAux [c] = [c]
-    mkPkgEdgesAux (c1:c2:cs)
-      | fst c1 == fst c2 = mkPkgEdgesAux ((fst c1, snd c1 ++ snd c2):cs)
-      | otherwise = c1:mkPkgEdgesAux (c2:cs)
+mkPkgEdges cis = concatOver2 $ map (\ClassInstance{dnType=typ, clsInstName=cls} -> (typ, [cls])) cis
 
--- makes Entry data instance
-makeEntry :: DC.DrasilPack -> DC.FileName -> FilePath -> [DataType] -> 
-  [Newtype] -> [Class] -> [ClassInstance] -> Entry
-makeEntry drpk fn fp dtl ntl cls clsint = Entry {drasilPack=drpk,fileName=fn,
-  filePath=fp,dataTypes=dtl,newtypes=ntl,classes=cls,classInstances=clsint}
+-- Helper to concatenate tuples based on the first part of the tuple
+-- (if two elements have the same thing for the first part of the tuple, concatenate the second parts)
+concatOver2 :: Eq a => [(a, [b])] -> [(a, [b])]
+concatOver2 [] = []
+concatOver2 [x] = [x]
+concatOver2 (x1:x2:xs)
+  | fst x1 == fst x2 = concatOver2 ((fst x1, snd x1 ++ snd x2):xs)
+  | otherwise = x1:concatOver2 (x2:xs)
 
--- makes Class data instance
-makeClass :: ClassType -> ClassName -> Class
-makeClass clstp clsnm = Class {className=clsnm,classType=clstp}
+------------
+-- HTML Output Functions
+------------
 
--- makes ClassInstance data instance
-makeClassInstance :: (DNType,ClassName) -> ClassInstance
-makeClassInstance (dnt,cls) = ClassInstance {dnType=dnt,clsInstName=cls}
+-- Creates and writes output data file DataTable.html to /code/analysis
+outputHTML :: FilePath -> [ClassName] -> [EntryString] -> IO ()
+outputHTML outputFilePath ordClassInsts bakedEntryData = do
+  createDirectoryIfMissing False outputFilePath
+  setCurrentDirectory outputFilePath
+  -- row length needed for lenCheck
+  let columnNames = splitOn "," "drasil-,File Path,File Name,Data Type,Newtype Type,Class Definitions" ++ ordClassInsts
+      rowLength = length columnNames
+
+  dataTableHTML <- openFile "DataTable.html" WriteMode
+  hPutStrLn dataTableHTML htmlDataTableTitle
+  hPutStrLn dataTableHTML htmlConfig
+  hPutStrLn dataTableHTML $ mkhtmlTitle $ "Package,\t,\t,\t,\t,\t,Class Instances" ++ (mkhtmlEmptyCell $ rowLength - 7)
+  hPutStrLn dataTableHTML $ mkhtmlHeader columnNames
+  hPutStr dataTableHTML $ mkhtmlRow $ lenCheck (separateN bakedEntryData) rowLength
+  hPutStrLn dataTableHTML htmlEnd
+  hClose dataTableHTML
+
+-- | Checks the length of an 'EntryString' to see if it matchs the given length. If not, it will add empty html cells.
+lenCheck :: [EntryString] -> Int -> [EntryString]
+lenCheck [] _ = []
+lenCheck (x:xs) len = (x ++ mkhtmlEmptyCell (len - length (splitOn "," x))) : lenCheck xs len
+
+-- | Separate an 'EntryString' by newspace (used for separating the incoming bakedEntryData in 'output').
+separateN :: [EntryString] -> [EntryString]
+separateN = concatMap (splitOn "\n")
+
+-------------
+-- Configuration file parser
+-------------
 
 -- import configurations function (drasil- package + class instance orderings)
 config :: FilePath -> IO ([String],[ClassType])
@@ -189,55 +269,19 @@ config configFilePath = do
       (packageNames,classInstOrd) = (head l, map toClassType (l !! 1))
   return (packageNames,classInstOrd)
 
--- function creates and writes output data file DataTable.csv to /code/analysis
-output :: FilePath -> EntryString -> [ClassName] -> [EntryString] -> IO ()
-output outputFilePath entryData ordClassInsts bakedEntryData = do
-  createDirectoryIfMissing False outputFilePath
-  setCurrentDirectory outputFilePath
-  dataTable <- openFile "DataTable.csv" WriteMode
-  hPutStrLn dataTable "Package,\t,\t,\t,\t,\t,Class Instances"
-  hPutStr dataTable "drasil-,File Path,File Name,Data Type,Newtype Type,Class Definitions,"
-  hPutStrLn dataTable (intercalate "," ordClassInsts)
-  hPutStrLn dataTable entryData
-  hClose dataTable
-  -- row length needed for lenCheck
-  let rowLength = length (splitOn "," "drasil-,File Path,File Name,Data Type,Newtype Type,Class Definitions" ++ ordClassInsts)
-  dataTableHTML <- openFile "DataTable.html" WriteMode
-  hPutStrLn dataTableHTML "<!DOCTYPE html>\n<html>\n\t<title>Auto-Generated Data Table for Drasil</title>"
-  hPutStrLn dataTableHTML "\t<table border=\"1\" cellspacing=\"0\" cellpadding=\"3\" class=\"dataframe\">"
-  hPutStrLn dataTableHTML (mkhtmlTitle ("Package,\t,\t,\t,\t,\t,Class Instances" ++ mkhtmlEmptyCell (rowLength - 7)))
-  hPutStrLn dataTableHTML (mkhtmlHeader (splitOn "," "drasil-,File Path,File Name,Data Type,Newtype Type,Class Definitions" ++ ordClassInsts))
-  hPutStr dataTableHTML (mkhtmlRow (lenCheck (separateN bakedEntryData) rowLength))
-  hPutStrLn dataTableHTML "\t\t</tbody>\n</html>"
-  hClose dataTableHTML
+-- used to filter out info lines (i.e. removes comment and empty lines)
+isInfoLine :: String -> Bool
+isInfoLine line = (line /="") && not ("#" `isPrefixOf` line)
 
--- | Checks the length of an 'EntryString' to see if it matchs the given length. If not, it will add empty html cells.
-lenCheck :: [EntryString] -> Int -> [EntryString]
-lenCheck [] _ = []
-lenCheck (x:xs) len = (x ++ mkhtmlEmptyCell (len - length (splitOn "," x))) : lenCheck xs len
+-- converts string to classtype (for use by config function)
+toClassType :: String -> ClassType
+toClassType "Haskell" = Haskell
+toClassType "Drasil"  = Drasil
+toClassType "GOOL"    = GOOL
 
--- | Separate an 'EntryString' by newspace (used for separating the incoming bakedEntryData in 'output').
-separateN :: [EntryString] -> [EntryString]
-separateN = concatMap (splitOn "\n")
-
--- | Adds all of the required html syntax to generate the title files.
-mkhtmlTitle :: String -> String
-mkhtmlTitle xs = "\t\t<thead>\n" ++ concatMap (\y -> "\t\t\t<th>" ++ y ++ "</th>\n") (splitOn "," xs) ++ "\t\t</thead>"
-
--- | Similar to 'mkhtmlTitle', but the given list of strings must already be split into their respective cells.
-mkhtmlHeader :: [String] -> String
-mkhtmlHeader xs = "\t\t<thead>\n" ++ concatMap (\y -> "\t\t\t<th>" ++ y ++ "</th>\n") xs ++ "\t\t</thead>"
-
--- | Fills in the given number of html cells in a row with empty cells.
-mkhtmlEmptyCell :: Int -> String
-mkhtmlEmptyCell num
-  | num <= 0 = ""
-  | otherwise = ",\t" ++ mkhtmlEmptyCell (num-1)
-
--- | Adds all required html syntax for creating a normal html table row.
-mkhtmlRow :: [EntryString] -> String
-mkhtmlRow [] = []
-mkhtmlRow (x:xs) = "\t\t\t<tr>\n" ++ concatMap (\y -> "\t\t\t\t<td>" ++ y ++ "</td>\n") (splitOn "," x) ++ "\t\t\t</tr>\n" ++ mkhtmlRow xs
+-------------
+-- Data formatting functions and other helpers
+-------------
 
 -- creates an entry for each file (new Entry data-oriented format)
 createEntry :: FilePath -> DC.File -> DC.FileName -> IO Entry
@@ -329,15 +373,6 @@ compileEntryData ordClassInsts entry filename = do
   -- mapM_ print (lines output)
   return output
 
--- used to filter out info lines (i.e. removes comment and empty lines)
-isInfoLine :: String -> Bool
-isInfoLine line = (line /="") && not ("#" `isPrefixOf` line)
-
--- converts string to classtype (for use by config function)
-toClassType :: String -> ClassType
-toClassType "Haskell" = Haskell
-toClassType "Drasil"  = Drasil
-toClassType "GOOL"    = GOOL
 
 -- gets folder from dictionary using folder name (iff it exists in dictionary)
 getFolder :: Map.Map DC.FolderName DC.Folder -> DC.FolderName -> DC.Folder

@@ -15,7 +15,7 @@ import SourceCodeReaderTypes as SCRT (extractEntryData, EntryData(..),
   DataDeclRecord(..), DataDeclConstruct(..), NewtypeDecl(..), TypeDecl(..))
 import Data.List.Split (splitOn)
 import Data.Char (toLower)
-import Printers.Dot
+import DataPrinters.Dot
 
 type EntryString = String
 type Colour = String

@@ -16,7 +16,7 @@ import qualified DirectoryController as DC (createFolder, createFile, finder,
 import SourceCodeReader as SCR (extractEntryData, EntryData(..))
 import Data.List.Split (splitOn)
 import Data.List ((\\))
-import DOT.DotPrinter
+import Printers.Dot
 
 type FileInstance = String
 type IsInstanceOf = String
@@ -111,6 +111,8 @@ main = do
   -- creates and writes to output data file (.dot graph)
   outputGraph outputDirectory rawEntryData
 
+-------------
+-- Graph Output Functions
 -- For creating dot graphs from entries.
 outputGraph :: FilePath -> [Entry] -> IO ()
 outputGraph outputDirectory entries = do
@@ -126,13 +128,6 @@ mkOutputGraph outputDirectory entry = do
   let nodes = [("turquoise4", concatMap types $ pkgEntries entry),("pink", concatMap usedCls $ pkgEntries entry),("magenta", concatMap cls $ pkgEntries entry)]
       edgs = concatMap edges $ pkgEntries entry
   digraph handle (dPack entry) nodes edgs
-  {-hPutStrLn handle $ "digraph " ++ dPack entry ++ "{"
-  mapM_ (hPutStrLn handle) $ map (makeNodesDi "turquoise4") $ concatMap types $ pkgEntries entry
-  mapM_ (hPutStrLn handle) $ map (makeNodesDi "pink") $ concatMap usedCls $ pkgEntries entry
-  mapM_ (hPutStrLn handle) $ map (makeNodesDi "magenta") $ concatMap cls $ pkgEntries entry
-  mapM_ (hPutStrLn handle) $ concatMap (uncurry makeEdgesDi) $ concatMap edges $ pkgEntries entry
-  hPutStrLn handle "}"
-  hClose handle-}
 
 -- Extracts the drasil package name from entries and sorts them.
 -- Output form is (drasil-* package, [contents related to package])

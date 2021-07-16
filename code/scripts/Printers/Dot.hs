@@ -1,5 +1,5 @@
 -- To generalize the use of dot printers in generating graphs
-module DOT.DotPrinter (digraph, makeEdgesDi, makeEdgesSub, makeNodesSub, makeNodesSub) where
+module Printers.Dot (digraph, makeEdgesDi, makeEdgesSub, makeNodesDi, makeNodesSub) where
 
 import System.IO
 

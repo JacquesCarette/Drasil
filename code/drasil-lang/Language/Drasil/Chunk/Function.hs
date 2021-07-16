@@ -2,23 +2,21 @@
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
 module Language.Drasil.Chunk.Function where
 
-import Control.Lens
+import Control.Lens ((^.), view, makeLenses)
 
-import Language.Drasil.Chunk.UnitDefn
-import Language.Drasil.Classes.Core
-import Language.Drasil.Classes
-import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Expr.Display
-import Language.Drasil.Expr
-import Language.Drasil.Expr.Math
-import Language.Drasil.NounPhrase.Core
-import Language.Drasil.Space
-import Language.Drasil.Sentence
-import Language.Drasil.Stages
-import Language.Drasil.Symbol
-import Language.Drasil.UID
+import Language.Drasil.Chunk.UnitDefn (unitWrapper, IsUnit, MayHaveUnit(..))
+import Language.Drasil.Classes.Core ( HasSymbol(..), HasUID(..) )
+import Language.Drasil.Classes (ConceptDomain(..), Display(..), DefiningExpr(..),
+  Quantity, Definition(..), HasSpace(..), Idea(..), NamedIdea(..))
+import Language.Drasil.Chunk.Quantity (mkQuant', QuantityDict)
+import Language.Drasil.Expr.Display (defines)
+import Language.Drasil.Expr (Expr(FCall, C))
+import Language.Drasil.NounPhrase.Core (NP)
+import Language.Drasil.Space (mkPrimitiveMapping, Space)
+import Language.Drasil.Sentence (Sentence)
+import Language.Drasil.UID (UID)
 
--- TODO: Should we have named arguments for functions? Probably in CodeExpr, but don't think so in Expr
+-- TODO: Should we have named arguments for functions? Probably in CodeExpr, but don't think so in Expr. Perhaps the FCalls need to be different!
 data FuncDefn = FD {
   _qua    :: QuantityDict,
   _inputs :: [UID],

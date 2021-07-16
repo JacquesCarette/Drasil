@@ -23,7 +23,6 @@ library:
   source-dirs: ./
   exposed-modules:
   - Language.Drasil
-  - Language.Drasil.Chunk.Function # TODO: remove, reroute through Language.Drasil later
   - Language.Drasil.Development
   - Language.Drasil.Display
   - Language.Drasil.ShortHands

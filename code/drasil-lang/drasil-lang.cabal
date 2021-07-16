@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 32da5541292b5ea329936a4220ecac025c4368e40631ea905b3d391bc4053071
+-- hash: d3b318462166a9656a47ca2bccc19ebf44a54f964024ce74f98e467e524d9688
 
 name:           drasil-lang
 version:        0.1.60.0
@@ -23,7 +23,6 @@ source-repository head
 library
   exposed-modules:
       Language.Drasil
-      Language.Drasil.Chunk.Function
       Language.Drasil.Development
       Language.Drasil.Display
       Language.Drasil.ShortHands
@@ -35,6 +34,7 @@ library
       Language.Drasil.Chunk.Constrained
       Language.Drasil.Chunk.DefinedQuantity
       Language.Drasil.Chunk.Eq
+      Language.Drasil.Chunk.Function
       Language.Drasil.Chunk.NamedArgument
       Language.Drasil.Chunk.NamedIdea
       Language.Drasil.Chunk.Quantity

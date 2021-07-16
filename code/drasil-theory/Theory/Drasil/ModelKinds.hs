@@ -11,9 +11,8 @@ module Theory.Drasil.ModelKinds (
 import Control.Lens (makeLenses, set, lens, to, (^.), Setter', Getter, Lens')
 import Data.Maybe (mapMaybe)
 
-import Language.Drasil (NamedIdea(..), NP, QDefinition, HasUID(..),
+import Language.Drasil (NamedIdea(..), NP, QDefinition, HasUID(..), FuncDefn,
   RelationConcept, ConceptDomain(..), Definition(..), Idea(..), Display(..), UID)
-import Language.Drasil.Chunk.Function
 import Theory.Drasil.ConstraintSet (ConstraintSet)
 import Theory.Drasil.MultiDefn (MultiDefn)
 
@@ -23,6 +22,7 @@ import Theory.Drasil.MultiDefn (MultiDefn)
 --     * 'EquationalConstraint's represent invariants that will hold in a system of equations.
 --     * 'EquationalModel's represent quantities that are calculated via a single definition/'QDefinition'.
 --     * 'EquationalRealm's represent MultiDefns; quantities that may be calculated using any one of many 'DefiningExpr's (e.g., 'x = A = ... = Z')
+--     * 'FunctionalModel's represent quantity-resulting function definitions.
 --     * 'OthModel's are placeholders for models. No new 'OthModel's should be created, they should be using one of the other kinds.
 data ModelKinds = DEModel RelationConcept
                 | EquationalConstraints ConstraintSet
@@ -78,7 +78,7 @@ equationalModelN n qd = MK (EquationalModel qd) (qd ^. uid) n
 equationalRealm :: UID -> NP -> MultiDefn -> ModelKind
 equationalRealm u n md = MK (EquationalRealm md) u n
 
--- | Smart constructor for 'EquationalRealm's
+-- | Smart constructor for 'EquationalRealm's, deriving UID+Term from the 'MultiDefn'
 equationalRealm' :: MultiDefn -> ModelKind
 equationalRealm' md = MK (EquationalRealm md) (md ^. uid) (md ^. term)
 
@@ -86,7 +86,7 @@ equationalRealm' md = MK (EquationalRealm md) (md ^. uid) (md ^. term)
 functionalModel :: UID -> NP -> FuncDefn -> ModelKind
 functionalModel u n fd = MK (FunctionalModel fd) u n
 
--- | Smart constructor for 'FunctionalModel's
+-- | Smart constructor for 'FunctionalModel's, deriving UID+Term from the 'FuncDefn'
 functionalModel' :: FuncDefn -> ModelKind
 functionalModel' fd = MK (FunctionalModel fd) (fd ^. uid) (fd ^. term)
 

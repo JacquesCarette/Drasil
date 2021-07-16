@@ -27,7 +27,7 @@ iMods = [angularDisplacementIM]
 
 -- Angular Displacement
 angularDisplacementIM :: InstanceModel
-angularDisplacementIM = imNoRefs (functionalModel' angularDisplacementFD)
+angularDisplacementIM = imNoRefs angularDisplacementMK
   [qwC lenRod $ UpFrom (Exc, exactDbl 0)
   ,qwC initialPendAngle $ UpFrom (Exc, exactDbl 0)
   , qwC gravitationalAccel $ UpFrom (Exc, exactDbl 0)]
@@ -36,8 +36,13 @@ angularDisplacementIM = imNoRefs (functionalModel' angularDisplacementFD)
 
 -- TODO: is the `qw pendDisplacementAngle` something we can remove entirely?
 
+angularDisplacementMK :: ModelKind 
+angularDisplacementMK = functionalModel "angularDisplacementIM"
+  (nounPhraseSP "calculation of angular displacement") angularDisplacementFD
+
 angularDisplacementFD :: FuncDefn
-angularDisplacementFD = mkFuncDefn pendDisplacementAngle (nounPhraseSP "calculation of angular displacement") EmptyS (unit pendDisplacementAngle) [time] angularDisplacementExpr
+angularDisplacementFD = mkFuncDefnByQ pendDisplacementAngle
+  [time] angularDisplacementExpr
 
 angularDisplacementDeriv :: Derivation
 angularDisplacementDeriv = mkDerivName (phrase angularDisplacement) (weave [angularDisplacementDerivSents, map eS angularDisplacementDerivEqns])

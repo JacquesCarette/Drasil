@@ -1,6 +1,9 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
-module Language.Drasil.Chunk.Function where
+module Language.Drasil.Chunk.Function (
+  FuncDefn(..),
+  mkFuncDefn, mkFuncDefn', mkFuncDefnByQ
+) where
 
 import Control.Lens ((^.), view, makeLenses)
 
@@ -13,7 +16,7 @@ import Language.Drasil.Expr.Display (defines)
 import Language.Drasil.Expr (Expr(FCall, C))
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Space (mkPrimitiveMapping, Space)
-import Language.Drasil.Sentence (Sentence)
+import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.UID (UID)
 
 -- TODO: Should we have named arguments for functions? Probably in CodeExpr, but don't think so in Expr. Perhaps the FCalls need to be different!
@@ -47,3 +50,8 @@ mkFuncDefn f n s u is e = FD (mkQuant' (f ^. uid) n Nothing (f ^. typ) (symbol f
 mkFuncDefn' :: (HasUID f, HasSymbol f, HasSpace f, HasUID i, HasSymbol i, HasSpace i) =>
   f -> NP -> Sentence -> [i] -> Expr -> FuncDefn
 mkFuncDefn' f n s is e = FD (mkQuant' (f ^. uid) n Nothing (f ^. typ) (symbol f) Nothing) (map (^. uid) is) s e (mkPrimitiveMapping (map (^. typ) is) (f ^. typ)) []
+
+mkFuncDefnByQ :: (Quantity c, MayHaveUnit c, HasSpace c, Quantity i, HasSpace i) => c -> [i] -> Expr -> FuncDefn
+mkFuncDefnByQ f is e = case getUnit f of
+  Just u  -> mkFuncDefn  f (f ^. term) EmptyS u is e
+  Nothing -> mkFuncDefn' f (f ^. term) EmptyS   is e

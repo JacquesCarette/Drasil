@@ -15,7 +15,6 @@ import qualified DirectoryController as DC (createFolder, createFile, finder,
   getDirectories, DrasilPack, FileName, FolderName, File(..), Folder(..))
 import SourceCodeReader as SCR (extractEntryData, EntryData(..))
 import Data.List.Split (splitOn)
-import Data.List ((\\))
 import DataPrinters.Dot
 import DataPrinters.HTML
 
@@ -239,7 +238,7 @@ outputHTML outputFilePath ordClassInsts bakedEntryData = do
   dataTableHTML <- openFile "DataTable.html" WriteMode
   hPutStrLn dataTableHTML htmlDataTableTitle
   hPutStrLn dataTableHTML htmlConfig
-  hPutStrLn dataTableHTML $ mkhtmlTitle $ "Package,\t,\t,\t,\t,\t,Class Instances" ++ (mkhtmlEmptyCell $ rowLength - 7)
+  hPutStrLn dataTableHTML $ mkhtmlTitle $ "Package,\t,\t,\t,\t,\t,Class Instances" ++ mkhtmlEmptyCell (rowLength - 7)
   hPutStrLn dataTableHTML $ mkhtmlHeader columnNames
   hPutStr dataTableHTML $ mkhtmlRow $ lenCheck (separateN bakedEntryData) rowLength
   hPutStrLn dataTableHTML htmlEnd

@@ -81,11 +81,11 @@ software predicts whether a given plane of glass is likely to break when
 subjected to an explosion.  An important property of the software is its name.
 In this case the name is GlassBR.  In the generated artifacts the name GlassBR
 appears more than 80 times -- in the folder structure, in the requirements
-specification, in the README file, in the Makefile, and in the source code.
-Although the software name is a likely change, in a conventional software
-project changing the name across all artifacts is surprisingly difficult.  With
+specification, in the README file, in the Makefile, and in the source code.  In
+a conventional software project changing the name across all artifacts is
+surprisingly difficult--difficult enough that the change may not be made.  With
 Drasil a change like this is made by one change to the source knowledge and
-regenerating.  By capturing domain knowledge, Drasil facilitates more than just
+regeneration.  By capturing domain knowledge, Drasil facilitates more than just
 renaming.  For instance, if the assumption of a constant Load Distribution
 Factor (LDF) changes, the regenerated software will have LDF as an input
 variable.  Drasil also captures design decisions, like whether to log all

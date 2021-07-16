@@ -15,6 +15,8 @@ import qualified DirectoryController as DC (createFolder, createFile, finder,
   getDirectories, DrasilPack, FileName, FolderName, File(..), Folder(..))
 import SourceCodeReader as SCR (extractEntryData, EntryData(..))
 import Data.List.Split (splitOn)
+import Data.List ((\\))
+import DOT.DotPrinter
 
 type FileInstance = String
 type IsInstanceOf = String
@@ -24,6 +26,7 @@ type Newtype = String
 type DNType = String
 type ClassName = String
 type EntryString = String
+type Edges = (String, [String])
 
 -- Entry data type for storing entry data for each file entry
 data Entry = Entry { drasilPack :: DC.DrasilPack
@@ -42,6 +45,20 @@ data Class = Class {className :: ClassName, classType :: ClassType}
   deriving (Show)
 -- ClassType data type for specifying class type (Haskell, Drasil or GOOL)
 data ClassType = Haskell | Drasil | GOOL deriving (Eq)
+
+-- SmallEntry data type for storing entry data that will only be used for making .dot graphs.
+-- Essentially formats the data from an Entry to be easier to graph with.
+data SmallEntry = SE {
+  types :: [String],
+  cls :: [ClassName],
+  usedCls :: [ClassName], --not defined in this package, but used here
+  edges :: [Edges]
+} deriving (Show)
+-- For making one graph per Drasil package
+data EntryPack = EP {
+      dPack :: String,
+      pkgEntries :: [SmallEntry]
+  } deriving (Show)
 
 -- Show instance of ClassType to enable printing to console
 instance Show ClassType where
@@ -89,8 +106,68 @@ main = do
   -- contains joined string with each file EntryString ("\n" separated)
   let entryData = intercalate "\n" bakedEntryData
 
-  -- creates and writes to output data file
+  -- creates and writes to output data file (HTML table and CSV)
   output outputDirectory entryData ordrdClassNames bakedEntryData
+  -- creates and writes to output data file (.dot graph)
+  outputGraph outputDirectory rawEntryData
+
+-- For creating dot graphs from entries.
+outputGraph :: FilePath -> [Entry] -> IO ()
+outputGraph outputDirectory entries = do
+  let sortedEntries = mkEntryPack $ filter (not.null.fst) $ sortByPackage entries
+  mapM_ (mkOutputGraph (outputDirectory ++ "/packagegraphs")) sortedEntries
+
+-- Helper that creates one dot graph per Drasil package.
+mkOutputGraph :: FilePath -> EntryPack -> IO ()
+mkOutputGraph outputDirectory entry = do
+  createDirectoryIfMissing True outputDirectory
+  setCurrentDirectory outputDirectory
+  handle <- openFile (dPack entry ++ ".dot") WriteMode
+  let nodes = [("turquoise4", concatMap types $ pkgEntries entry),("pink", concatMap usedCls $ pkgEntries entry),("magenta", concatMap cls $ pkgEntries entry)]
+      edgs = concatMap edges $ pkgEntries entry
+  digraph handle (dPack entry) nodes edgs
+  {-hPutStrLn handle $ "digraph " ++ dPack entry ++ "{"
+  mapM_ (hPutStrLn handle) $ map (makeNodesDi "turquoise4") $ concatMap types $ pkgEntries entry
+  mapM_ (hPutStrLn handle) $ map (makeNodesDi "pink") $ concatMap usedCls $ pkgEntries entry
+  mapM_ (hPutStrLn handle) $ map (makeNodesDi "magenta") $ concatMap cls $ pkgEntries entry
+  mapM_ (hPutStrLn handle) $ concatMap (uncurry makeEdgesDi) $ concatMap edges $ pkgEntries entry
+  hPutStrLn handle "}"
+  hClose handle-}
+
+-- Extracts the drasil package name from entries and sorts them.
+-- Output form is (drasil-* package, [contents related to package])
+sortByPackage :: [Entry] -> [(String, [Entry])]
+sortByPackage entries = sortByPackageAux $ map (\e -> (drasilPack e, [e])) entries
+  where
+    sortByPackageAux :: [(String, [Entry])] -> [(String, [Entry])]
+    sortByPackageAux [] = []
+    sortByPackageAux [x] = [x]
+    sortByPackageAux ((nm1, e1):(nm2, e2):entries)
+      | nm1 == nm2 = sortByPackageAux ((nm1, e1 ++ e2):entries)
+      | otherwise = (nm1, e1): sortByPackageAux ((nm2,e2):entries)
+
+-- Convert from [(Package, contents)] to [EntryPack].
+-- This makes the data easier to work with and allows us to extract
+-- the datatypes, classes, used (but not defined in the package) classes,
+-- and class instances (which will become edges).
+mkEntryPack :: [(String, [Entry])] -> [EntryPack]
+mkEntryPack = map (\(n, es) -> EP n (filter isEntryEmpty $ map (\Entry{dataTypes= dts,newtypes = nts,classes = cs, classInstances = ci} -> SE{types=dts++nts,cls=nub (map className cs),usedCls=nub $ concatMap snd (mkPkgEdges ci) \\ (map className cs),edges=mkPkgEdges ci}) es))
+
+-- Cleanup function to get rid of empty SmallEntries
+isEntryEmpty :: SmallEntry -> Bool
+isEntryEmpty (SE [] [] [] []) = False
+isEntryEmpty _ = True
+
+-- Helper to convert class instances into graph edges.
+mkPkgEdges :: [ClassInstance] -> [Edges]
+mkPkgEdges cis = mkPkgEdgesAux $ map (\ClassInstance{dnType=typ, clsInstName=cls} -> (typ, [cls])) cis
+  where
+    mkPkgEdgesAux :: [(String, [String])] -> [Edges]
+    mkPkgEdgesAux [] = []
+    mkPkgEdgesAux [c] = [c]
+    mkPkgEdgesAux (c1:c2:cs)
+      | fst c1 == fst c2 = mkPkgEdgesAux ((fst c1, snd c1 ++ snd c2):cs)
+      | otherwise = c1:mkPkgEdgesAux (c2:cs)
 
 -- makes Entry data instance
 makeEntry :: DC.DrasilPack -> DC.FileName -> FilePath -> [DataType] -> 

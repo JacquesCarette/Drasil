@@ -227,13 +227,11 @@ mkGraphTOutputSub typeGraph td = do
 
 -- Creates an edge between a type and its dependency
 makeEdgesDi :: String -> [String] -> [String]
-makeEdgesDi _ [] = []
-makeEdgesDi nm (c:cs) = (nm ++ " -> " ++ c ++ ";"): makeEdgesDi nm cs
+makeEdgesDi nm = map (\c -> nm ++ " -> " ++ c ++ ";")
 
 -- Creates an edge between a type and its dependency (indented for subgraphs)
 makeEdgesSub :: String -> [String] -> [String]
-makeEdgesSub _ [] = []
-makeEdgesSub nm (c:cs) = ("\t\t" ++ nm ++ " -> " ++ c ++ ";"): makeEdgesSub nm cs
+makeEdgesSub nm = map (\c -> "\t\t" ++ nm ++ " -> " ++ c ++ ";")
 
 -- Creates a node based on the kind of datatype
 makeNodesDi :: Colour -> String -> String

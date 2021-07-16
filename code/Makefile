@@ -103,6 +103,8 @@ ANALYSIS_FOLDER_NAME = analysis
 ANALYSIS_FOLDER = $(ANALYSIS_FOLDER_NAME)/
 TYPEGRAPH_FOLDER_NAME = TypeDependencyGraphs
 TYPEGRAPH_FOLDER = $(ANALYSIS_FOLDER)$(TYPEGRAPH_FOLDER_NAME)/
+CLASSINST_GRAPH_FOLDER_NAME = packagegraphs
+CLASSINST_GRAPH_FOLDER = $(ANALYSIS_FOLDER)DataTable/$(CLASSINST_GRAPH_FOLDER_NAME)/
 DEPLOY_FOLDER_NAME = deploy
 DEPLOY_FOLDER = $(DEPLOY_FOLDER_NAME)/
 DEPLOY_CODE_PATH_KV_SEP = :
@@ -208,16 +210,22 @@ traceygraph: graphmod $(TEST_EXAMPLES)
 	done
 	@echo Created traceability graphs
 
+# Generate data table and dot graphs in two different forms.
 analysis: graphmod
 	- rm -rf "$(ANALYSIS_FOLDER)"
 	@mkdir -p "$(ANALYSIS_FOLDER)"
 	cd $(SCRIPT_FOLDER) && stack exec -- runghc DataTableGen.hs
 	cd $(SCRIPT_FOLDER) && stack exec -- runghc TypeGraphGen.hs
-	@echo Making dependency graphs
+	@echo Making dependency graphs. This may take a few minutes.
 	@cd $(TYPEGRAPH_FOLDER) && for pack in $(ANALYSIS_PACKAGES); do \
-		dot -Tpdf $$pack.dot > "./$$pack.pdf" ; \
+		dot -Tsvg $$pack.dot > "./$$pack.svg" ; \
+		circo -Tsvg $$pack.dot > "./circo_$$pack.svg" ; \
 	done
-	@echo Done dependency graphs
+	@cd $(CLASSINST_GRAPH_FOLDER) && for pack in $(PACKAGES); do \
+		dot -Tsvg $$pack.dot > "./$$pack.svg" ; \
+		circo -Tsvg $$pack.dot > "./circo_$$pack.svg" ; \
+	done
+	@echo Done dependency graphs.
 
 # Use a 'local' HLint installation, using HLint from the current stack repo
 hlint: check_stack

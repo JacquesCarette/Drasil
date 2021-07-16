@@ -29,3 +29,4 @@ spaceToCodeType (S.Actor s)     = [Object s]
 spaceToCodeType (S.DiscreteD _) = map List (spaceToCodeType S.Rational)
 spaceToCodeType (S.DiscreteS _) = map List (spaceToCodeType S.String)
 spaceToCodeType S.Void          = [Void]
+spaceToCodeType (S.Mapping i t) = undefined -- TODO: this needs to be a powerset? [Func (map spaceToCodeType i) (spaceToCodeType t)]

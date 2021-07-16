@@ -14,7 +14,7 @@ import Language.Drasil.Chunk.Quantity (QuantityDict, mkQuant, mkQuant', qw)
 import Language.Drasil.Expr.Display (defines)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Expr.Math (sy)
-import Language.Drasil.NounPhrase (NP)
+import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.Stages (Stage)
@@ -23,10 +23,10 @@ import Language.Drasil.UID (UID)
 
 -- | A QDefinition is a 'QuantityDict' with a defining expression ('Expr'), a definition ('Sentence'), and a domain (['UID']).
 data QDefinition = EC
-  { _qua :: QuantityDict
+  { _qua   :: QuantityDict
   , _defn' :: Sentence
   , _equat :: Expr
-  , cd :: [UID]
+  , cd     :: [UID]
   }
 makeLenses ''QDefinition
 

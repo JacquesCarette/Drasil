@@ -4,6 +4,7 @@ module Theory.Drasil.ModelKinds (
     deModel, equationalConstraints, equationalModel, equationalRealm, othModel,
     deModel', equationalConstraints', equationalModel', equationalRealm', othModel',
     equationalModelU, equationalModelN, equationalRealmU, equationalRealmN,
+    functionalModel, functionalModel',
     setMk, elimMk, lensMk, getEqModQds
   ) where
 
@@ -12,6 +13,7 @@ import Data.Maybe (mapMaybe)
 
 import Language.Drasil (NamedIdea(..), NP, QDefinition, HasUID(..),
   RelationConcept, ConceptDomain(..), Definition(..), Idea(..), Display(..), UID)
+import Language.Drasil.Chunk.Function
 import Theory.Drasil.ConstraintSet (ConstraintSet)
 import Theory.Drasil.MultiDefn (MultiDefn)
 
@@ -26,6 +28,7 @@ data ModelKinds = DEModel RelationConcept
                 | EquationalConstraints ConstraintSet
                 | EquationalModel QDefinition
                 | EquationalRealm MultiDefn
+                | FunctionalModel FuncDefn
                 | OthModel RelationConcept
 
 makeLenses ''ModelKinds
@@ -79,6 +82,14 @@ equationalRealm u n md = MK (EquationalRealm md) u n
 equationalRealm' :: MultiDefn -> ModelKind
 equationalRealm' md = MK (EquationalRealm md) (md ^. uid) (md ^. term)
 
+-- | Smart constructor for 'FunctionalModel's
+functionalModel :: UID -> NP -> FuncDefn -> ModelKind
+functionalModel u n fd = MK (FunctionalModel fd) u n
+
+-- | Smart constructor for 'FunctionalModel's
+functionalModel' :: FuncDefn -> ModelKind
+functionalModel' fd = MK (FunctionalModel fd) (fd ^. uid) (fd ^. term)
+
 -- | Smart constructor for 'EquationalRealm's
 equationalRealmU :: UID -> MultiDefn -> ModelKind
 equationalRealmU u md = MK (EquationalRealm md) u (md ^. term)
@@ -96,17 +107,19 @@ othModel' :: RelationConcept -> ModelKind
 othModel' rc = MK (OthModel rc) (rc ^. uid) (rc ^. term)
 
 -- | Finds the 'UID' of the 'ModelKinds'.
-instance HasUID        ModelKinds where uid        = lensMk uid uid uid uid
+instance HasUID        ModelKinds where uid        = lensMk uid uid uid uid uid
 -- | Finds the term ('NP') of the 'ModelKinds'.
-instance NamedIdea     ModelKinds where term       = lensMk term term term term
+instance NamedIdea     ModelKinds where term       = lensMk term term term term term
 -- | Finds the idea of the 'ModelKinds'.
-instance Idea          ModelKinds where getA       = elimMk (to getA) (to getA) (to getA) (to getA)
+instance Idea          ModelKinds where getA       = elimMk (to getA) (to getA) (to getA) (to getA) (to getA)
 -- | Finds the definition of the 'ModelKinds'.
-instance Definition    ModelKinds where defn       = lensMk defn defn defn defn
+instance Definition    ModelKinds where defn       = lensMk defn defn defn defn defn
 -- | Finds the domain of the 'ModelKinds'.
-instance ConceptDomain ModelKinds where cdom       = elimMk (to cdom) (to cdom) (to cdom) (to cdom)
+instance ConceptDomain ModelKinds where cdom       = elimMk (to cdom) (to cdom) (to cdom) (to cdom) (to cdom)
 -- | Rewrites the underlying model using DisplayExpr
-instance Display       ModelKinds where toDispExpr = elimMk (to toDispExpr) (to toDispExpr) (to toDispExpr) (to toDispExpr)
+instance Display       ModelKinds where toDispExpr = elimMk (to toDispExpr) (to toDispExpr) (to toDispExpr) (to toDispExpr) (to toDispExpr)
+
+-- TODO: 5 equal inputs in each function! A true beauty! (sarcasm). Can we fix it?
 
 -- TODO: implement MayHaveUnit for ModelKinds once we've sufficiently removed OthModels & RelationConcepts (else we'd be breaking too much of `stable`)
 
@@ -125,28 +138,41 @@ instance Display       ModelKind where toDispExpr = toDispExpr . (^. mk)
 
 
 -- | Retrieve internal data from ModelKinds
-elimMk :: Getter RelationConcept a -> Getter ConstraintSet a -> Getter QDefinition a -> Getter MultiDefn a -> ModelKinds -> a
-elimMk f _ _ _ (DEModel q)               = q ^. f
-elimMk _ f _ _ (EquationalConstraints q) = q ^. f
-elimMk _ _ f _ (EquationalModel q)       = q ^. f
-elimMk _ _ _ f (EquationalRealm q)       = q ^. f
-elimMk f _ _ _ (OthModel q)              = q ^. f
+elimMk :: Getter RelationConcept a -> Getter ConstraintSet a
+  -> Getter QDefinition a -> Getter MultiDefn a
+  -> Getter FuncDefn a
+  -> ModelKinds -> a
+elimMk f _ _ _ _ (DEModel q)               = q ^. f
+elimMk _ f _ _ _ (EquationalConstraints q) = q ^. f
+elimMk _ _ f _ _ (EquationalModel q)       = q ^. f
+elimMk _ _ _ f _ (EquationalRealm q)       = q ^. f
+elimMk _ _ _ _ f (FunctionalModel q)       = q ^. f
+elimMk f _ _ _ _ (OthModel q)              = q ^. f
 
 -- | Map into internal representations of ModelKinds
-setMk :: ModelKinds -> Setter' RelationConcept a -> Setter' ConstraintSet a -> Setter' QDefinition a -> Setter' MultiDefn a -> a -> ModelKinds
-setMk (DEModel q)               f _ _ _ x = DEModel               $ set f x q
-setMk (EquationalConstraints q) _ f _ _ x = EquationalConstraints $ set f x q
-setMk (EquationalModel q)       _ _ f _ x = EquationalModel       $ set f x q
-setMk (EquationalRealm q)       _ _ _ f x = EquationalRealm       $ set f x q
-setMk (OthModel q)              f _ _ _ x = OthModel              $ set f x q
+setMk :: ModelKinds
+  -> Setter' RelationConcept a -> Setter' ConstraintSet a
+  -> Setter' QDefinition a -> Setter' MultiDefn a
+  -> Setter' FuncDefn a
+  -> a -> ModelKinds
+setMk (DEModel q)               f _ _ _ _ x = DEModel               $ set f x q
+setMk (EquationalConstraints q) _ f _ _ _ x = EquationalConstraints $ set f x q
+setMk (EquationalModel q)       _ _ f _ _ x = EquationalModel       $ set f x q
+setMk (EquationalRealm q)       _ _ _ f _ x = EquationalRealm       $ set f x q
+setMk (FunctionalModel q)       _ _ _ _ f x = FunctionalModel       $ set f x q
+setMk (OthModel q)              f _ _ _ _ x = OthModel              $ set f x q
 
 -- | Make a 'Lens' for 'ModelKinds'.
-lensMk :: forall a. Lens' RelationConcept a -> Lens' ConstraintSet a -> Lens' QDefinition a -> Lens' MultiDefn a -> Lens' ModelKinds a
-lensMk lr lcs lq lqd = lens g s
+lensMk :: forall a.
+     Lens' RelationConcept a -> Lens' ConstraintSet a 
+  -> Lens' QDefinition a -> Lens' MultiDefn a
+  -> Lens' FuncDefn a
+  -> Lens' ModelKinds a
+lensMk lr lcs lq lmd lfd = lens g s
     where g :: ModelKinds -> a
-          g mk_ = elimMk lr lcs lq lqd mk_
+          g mk_ = elimMk lr lcs lq lmd lfd mk_
           s :: ModelKinds -> a -> ModelKinds
-          s mk_ x = setMk mk_ lr lcs lq lqd x
+          s mk_ x = setMk mk_ lr lcs lq lmd lfd x
 
 -- | Extract a list of 'QDefinition's from a list of 'ModelKinds'.
 getEqModQds :: [ModelKind] -> [QDefinition]

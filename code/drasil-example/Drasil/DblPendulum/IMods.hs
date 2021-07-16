@@ -4,7 +4,7 @@ module Drasil.DblPendulum.IMods (iMods, angularDisplacementIM, iModRefs) where
 import Prelude hiding (cos, sin)
 
 import Language.Drasil
-import Theory.Drasil (InstanceModel, imNoRefs, qwC, othModel')
+import Theory.Drasil
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -20,19 +20,28 @@ import Data.Drasil.Concepts.Physics (pendulum, motion, shm)
 import Data.Drasil.Theories.Physics (newtonSLR)
 import Drasil.DblPendulum.GenDefs (angFrequencyGD)
 
+import Language.Drasil.Chunk.Function
+
 
 iMods :: [InstanceModel]
 iMods = [angularDisplacementIM]
 
 ---
 angularDisplacementIM :: InstanceModel
-angularDisplacementIM = imNoRefs (othModel' angularDisplacementRC)
+angularDisplacementIM = imNoRefs (functionalModel' angDispFD)
   [qwC lenRod $ UpFrom (Exc, exactDbl 0)
   ,qwC initialPendAngle $ UpFrom (Exc, exactDbl 0)
   , qwC gravitationalAccel $ UpFrom (Exc, exactDbl 0)]
   (qw pendDisplacementAngle) [UpFrom (Exc, exactDbl 0)]
   (Just angularDisplacementDeriv) "calOfAngularDisplacement" [angularDispConstraintNote]
 
+-- TODO: is the `qw pendDisplacementAngle` something we can remove entirely?
+
+angDispFD :: FuncDefn
+angDispFD = mkFuncDefn pendDisplacementAngle (nounPhraseSP "calculation of angular displacement") EmptyS (unit pendDisplacementAngle) [time] angDispExpr
+
+angDispExpr :: Expr
+angDispExpr = sy initialPendAngle `mulRe` cos (sy angularFrequency `mulRe` sy time)
 
 angularDisplacementRC :: RelationConcept
 angularDisplacementRC = makeRC "angularDisplacementRC" (nounPhraseSP "calculation of angular displacement")

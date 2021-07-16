@@ -21,6 +21,7 @@ module Theory.Drasil (
   , deModel, equationalConstraints, equationalModel, equationalRealm, othModel
   , deModel', equationalConstraints', equationalModel', equationalRealm', othModel'
   , equationalModelU, equationalModelN, equationalRealmU, equationalRealmN
+  , functionalModel, functionalModel'
   -- InstanceModel
   , InstanceModel
   , im, imNoDeriv, imNoRefs, imNoDerivNoRefs

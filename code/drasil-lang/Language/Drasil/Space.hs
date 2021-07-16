@@ -1,7 +1,7 @@
 {-# LANGUAGE GADTs #-}
 module Language.Drasil.Space
   (Space(..), DomainDesc(..), RealInterval(..), RTopology(..), Inclusive(..),
-  getActorName, getInnerSpace) where
+  getActorName, getInnerSpace, mkPrimitiveMapping) where
 
 import Language.Drasil.Symbol (Symbol)
 
@@ -25,8 +25,19 @@ data Space =
   | Actor String
   | DiscreteD [Double]
   | DiscreteS [String] --ex. let Meal = {"breakfast", "lunch", "dinner"}
+  | Mapping [Space] Space -- TODO: this one shouldn't be exposed directly, only through a smart constructor
   | Void
   deriving (Eq, Show)
+
+mkPrimitiveMapping :: [Space] -> Space -> Space
+mkPrimitiveMapping _   (Mapping _ _) = error "Target must be basic"
+mkPrimitiveMapping ins trg
+  | any isMapping ins                = error "All inputs must be basic"
+  | otherwise                        = Mapping ins trg
+
+isMapping :: Space -> Bool
+isMapping (Mapping _ _) = True
+isMapping _             = False
 
 -- The 'spaces' below are all good.
 

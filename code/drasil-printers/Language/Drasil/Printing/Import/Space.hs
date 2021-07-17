@@ -25,4 +25,4 @@ space _  (Actor s)     = P.Ident s
 space sm (DiscreteD l) = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map (flip expr sm . dbl) l -- [Double]
 space _  (DiscreteS l) = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map P.Str l --ex. let Meal = {"breakfast", "lunch", "dinner"}
 space _  Void          = error "Void not translated"
-space sm (Mapping _ t) = space sm t -- TODO: Fix this. Should have arrows and such, leaving it like this atm
+space sm (Mapping i t) = P.Row $ intersperse (P.MO P.Cross) (map (space sm) i) ++ [P.MO P.RArrow, space sm t]

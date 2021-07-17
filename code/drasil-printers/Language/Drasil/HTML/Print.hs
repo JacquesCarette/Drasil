@@ -22,11 +22,7 @@ import Language.Drasil.Config (StyleGuide(APA, MLA, Chicago), bibStyleH)
 import Language.Drasil.Printing.Import (makeDocument)
 import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),  
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, Fence(Curly, Paren, Abs, Norm),
-  Ops(Prod, Inte, Mul, Summ, Or, Add, And, Subt, Iff, Impl, GEq, LEq, Lt, Gt, NEq, Eq,
-  Dot, Cross, Neg, Exp, Not, Dim, Arctan, Arccos, Arcsin, Cot, Csc, Sec, Tan, 
-  Cos, Sin, Log, Ln, Prime, Comma, Boolean, 
-  Real, Rational, Natural, Integer, IsIn, Point, Perc), 
-  Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:)),
+  Ops(..), Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:)),
   Spacing(Thin), Fonts(Bold, Emph), OverSymb(Hat), Label,
   LinkType(Internal, Cite2, External))
 import Language.Drasil.Printing.Citation (CiteField(Year, Number, Volume, Title, Author, 
@@ -209,6 +205,8 @@ pOps Inte     = "&int;"
 pOps Prod     = "&prod;"
 pOps Point    = "."
 pOps Perc     = "%"
+pOps LArrow   = " &larr; "
+pOps RArrow   = " &rarr; "
 
 -- | Allows for open/closed variants of parenthesis, curly brackets, absolute value symbols, and normal symbols.
 fence :: OpenClose -> Fence -> String

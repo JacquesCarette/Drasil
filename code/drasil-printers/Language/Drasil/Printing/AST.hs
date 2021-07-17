@@ -49,7 +49,7 @@ infixr 5 :+:
 -- | Redefine the 'Sentence' type from Language.Drasil to be more suitable to printing.
 data Spec = E Expr                   -- ^ Holds an expression.
           | S String                 -- ^ Holds a String.
-          | Spec :+: Spec            -- ^ Concatination.
+          | Spec :+: Spec            -- ^ Concatenation.
           | Sp Special               -- ^ Special characters.
           | Ref LinkType String Spec -- ^ Holds the actual reference of form 'LinkType', reference address, and display name
           | EmptyS                   -- ^ Empty sentence.

@@ -8,7 +8,7 @@ module Language.Drasil.Chunk.Function (
 import Control.Lens ((^.), view, makeLenses)
 
 import Language.Drasil.Chunk.UnitDefn (unitWrapper, IsUnit, MayHaveUnit(..))
-import Language.Drasil.Classes.Core ( HasSymbol(..), HasUID(..) )
+import Language.Drasil.Classes.Core (HasSymbol(..), HasUID(..))
 import Language.Drasil.Classes (ConceptDomain(..), Display(..), DefiningExpr(..),
   Quantity, Definition(..), HasSpace(..), Idea(..), NamedIdea(..))
 import Language.Drasil.Chunk.Quantity (mkQuant', QuantityDict)

@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt,
-  fromEqnSt', equat, mkQDefSt, mkQuantDef, mkQuantDef', ec) where
+  fromEqnSt', mkQDefSt, mkQuantDef, mkQuantDef', ec) where
 
 import Control.Lens ((^.), makeLenses, view)
 import Language.Drasil.Chunk.UnitDefn (unitWrapper, MayHaveUnit(getUnit), UnitDefn)

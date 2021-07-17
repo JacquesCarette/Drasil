@@ -12,8 +12,6 @@ import qualified Utils.Drasil.NounPhrase as NP
 import Data.Drasil.Quantities.Physics (gravitationalAccel,
          angularAccel, momentOfInertia,
          time, angularDisplacement, angularFrequency, torque, angularDisplacement, time)
---import Data.Drasil.Theories.Physics (newtonSL)
-import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Concepts.Math (constraint, equation, amplitude, iAngle, angle)
 import Data.Drasil.Concepts.Physics (pendulum, motion, shm)
 import Data.Drasil.Theories.Physics (newtonSLR)
@@ -33,8 +31,6 @@ angularDisplacementIM = imNoRefs angularDisplacementMK
   , qwC gravitationalAccel $ UpFrom (Exc, exactDbl 0)]
   (qw pendDisplacementAngle) [UpFrom (Exc, exactDbl 0)]
   (Just angularDisplacementDeriv) "calOfAngularDisplacement" [angularDispConstraintNote]
-
--- TODO: is the `qw pendDisplacementAngle` something we can remove entirely?
 
 angularDisplacementMK :: ModelKind 
 angularDisplacementMK = functionalModel "angularDisplacementIM"

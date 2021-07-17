@@ -75,7 +75,7 @@ module Language.Drasil (
   , cuc, cvc, constrained', cuc', cuc'', constrainedNRV'
   , cnstrw, cnstrw'
   -- Chunk.Eq
-  , QDefinition, fromEqn, fromEqn', fromEqnSt, fromEqnSt', equat
+  , QDefinition, fromEqn, fromEqn', fromEqnSt, fromEqnSt'
   , mkQDefSt, mkQuantDef, mkQuantDef', ec
   -- Chunk.Function
   , FuncDefn, mkFuncDefn, mkFuncDefn', mkFuncDefnByQ
@@ -256,7 +256,7 @@ import Language.Drasil.Constraint (physc, sfwrc, isPhysC, isSfwrC,
   Constraint(..), ConstraintE, ConstraintReason(..))
 import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt, 
-  fromEqnSt', equat, mkQDefSt, mkQuantDef, mkQuantDef', ec) -- TODO: remove 'equat' -- replace with `defnExpr` wherever used?
+  fromEqnSt', mkQDefSt, mkQuantDef, mkQuantDef', ec)
 import Language.Drasil.Chunk.Function (FuncDefn, mkFuncDefn, mkFuncDefn', mkFuncDefnByQ)
 import Language.Drasil.Chunk.NamedArgument (NamedArgument, narg)
 import Language.Drasil.Chunk.NamedIdea

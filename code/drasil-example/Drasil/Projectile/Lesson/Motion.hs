@@ -1,11 +1,13 @@
 module Drasil.Projectile.Lesson.Motion where
 
+import Data.List
+
 import qualified Drasil.DocLang.Notebook as NB (summary, hormotion, vermotion)
 
 import Data.Drasil.Concepts.Physics (motion, acceleration, velocity, force, time,
   constAccel, horizontalMotion, verticalMotion)
 import Data.Drasil.Units.Physics (accelU)
-import Data.Drasil.Concepts.Math (direction, xDir, yAxis)
+import Data.Drasil.Concepts.Math (xDir, yAxis)
 import Drasil.Projectile.Concepts (projectile, projMotion)
 import Drasil.Projectile.Expressions (lcrectVel, lcrectPos, lcrectNoTime, horMotionEqn1, horMotionEqn2,
   verMotionEqn1, verMotionEqn2, verMotionEqn3)
@@ -18,12 +20,6 @@ import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 import Data.Drasil.SI_Units (s_2)
-
-import qualified Drasil.Projectile.Expressions as E (speed', scalarPos', rectNoTime)
-
--- ****ADD figure
--- Note: define a combinator to avoid repetition.
--- grab embedded symbols from Drasil
 
 motionContextP1, motionContextP2 :: Contents
 motionContextP1
@@ -45,9 +41,9 @@ motionContextP1
 --
 motionContextP2
   = foldlSP_
-      [S "The equations for rectilinear kinematics given above (ref) are in one dimension.",
+      [S "The equations for rectilinear kinematics given above", refS lcrectVel, S "are in one dimension.",
        S "These equations can be applied for both the", phrase verticalMotion `S.andThe`
-       phrase horizontalMotion, S ", as follows:"]
+       phrase horizontalMotion :+: S ", as follows:"]
 
 horMotion, verMotion, summary :: Section
 horMotion = NB.hormotion [intro, equations, concl] []
@@ -55,7 +51,7 @@ horMotion = NB.hormotion [intro, equations, concl] []
                   S "For", phrase projMotion +:+ S "the", phrase acceleration, 
                   S "in the horizontal direction is and equal to zero" +:+. 
                   sParen(eS (sy QP.xAccel $= (exactDbl 0))), motionSent]
-        equations = foldlSP_ $ weave [equationsSents, map eS horMotionEqns]
+        equations = foldlSP_ $ intersperse (S ",") (weave [equationsSents, map eS horMotionEqns])
         concl = foldlSP [
                   S "Since the", phrase acceleration, S "in the" +:+ phrase xDir, 
                   sParen (eS (sy QP.xAccel)), S "is zero, the horizontal component of ", phrase velocity,

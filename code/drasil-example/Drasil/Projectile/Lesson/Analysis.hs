@@ -6,13 +6,13 @@ import Data.Drasil.Concepts.Documentation (coordinate)
 import Data.Drasil.Concepts.Math (component, direction, equation)
 import Data.Drasil.Concepts.Physics (acceleration, gravity, velocity, position, motion)
 
-import qualified Data.Drasil.Quantities.Physics as QP (ixVel, iyVel, xVel, yVel)
+import qualified Data.Drasil.Quantities.Physics as QP (yVel)
 
-import Drasil.Projectile.Concepts (projectile, projMotion)
-import Drasil.Projectile.Expressions (horMotionEqn1, horMotionEqn2, verMotionEqn1, verMotionEqn2, verMotionEqn3)
+import Drasil.Projectile.Concepts (projectile)
+import Drasil.Projectile.Expressions (horMotionEqn1, horMotionEqn2)
 import Language.Drasil
 import Language.Drasil.ShortHands
-import Utils.Drasil (foldlSP, foldlSP_, foldlSent, enumBulletU)
+import Utils.Drasil
 
 import qualified Utils.Drasil.Sentence as S
 
@@ -22,7 +22,7 @@ kinematicEq = NB.kinematic [kinematicContext] []
 horMotionAna = NB.hormotion [horMotionContext] []
 verMotionAna = NB.vermotion [verMotionContext] []
 
-coorSystContext, kinematicContext :: Contents
+coorSystContext, kinematicContext, horMotionContext, verMotionContext :: Contents
 coorSystContext = enumBulletU $ map foldlSent 
   [[S "Establish the fixed", P lX `sC` P lY, phrase coordinate +:+. S "axes and sketch the trajectory of the particle",
     S "Between any *two points* on the path specify the given problem data and the *three unknowns*.",

@@ -5,15 +5,15 @@ import Language.Drasil
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
-  _datadefs, _configFiles, _defSequence, _inputs, _kind, 
+  _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, 
   _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
 
 -- **** Add export parameters in a module
 import Drasil.DocumentLanguage.Notebook.DocumentLanguage (mkDoc)
-import Drasil.DocumentLanguage.Notebook.NBDecl (NBDecl, NbSection(Bibliography, IntroSec, BodySec, SmmrySec))
-import Drasil.DocumentLanguage.Notebook.Core(IntroSec(..), BodySec(..), BodySub(..), SmmrySec(..))
+import Drasil.DocumentLanguage.Notebook.NBDecl (NBDecl, NbSection(Bibliography, IntroSec, BodySec))
+import Drasil.DocumentLanguage.Notebook.Core(IntroSec(..), BodySec(..), BodySub(..))
 
 import Data.Drasil.Concepts.Documentation (doccon, doccon')
 import Data.Drasil.Concepts.Math (mathcon)
@@ -30,7 +30,7 @@ import Drasil.Projectile.Expressions (eqnRefs)
 import Drasil.Projectile.Lesson.IntroSection (introContext, reasonList, overviewParagraph)
 import Drasil.Projectile.Lesson.Review (reviewContent)
 import Drasil.Projectile.Lesson.Motion (motionContextP1, figCSandA, figRefs,
-  motionContextP2, horMotion, verMotion, summary, foot)
+  motionContextP2, horMotion, verMotion, summary)
 import Drasil.Projectile.Lesson.Analysis (coorSyst, kinematicEq, horMotionAna, verMotionAna)
 import Drasil.Projectile.Lesson.Example(expIntro)
 
@@ -61,6 +61,7 @@ si = SI {
   _purpose     = [],
   _quants      = [] :: [QuantityDict],
   _concepts    = [] :: [DefinedQuantityDict],
+  _instModels  = [],
   _datadefs    = [],
   _configFiles  = [],
   _inputs      = [] :: [QuantityDict],
@@ -95,4 +96,4 @@ mAndaintro = foldlSP
   [S "Free-flight", phrase projMotion, S "problems can be solved using the following procedure"]
 
 allRefs :: [Reference]
-allRefs = nub (figRefs ++ eqnRefs)
+allRefs = nub (figRefs ++ eqnRefs) 

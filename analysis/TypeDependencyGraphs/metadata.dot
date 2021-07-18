@@ -1,2 +1,4 @@
+digraph alltypes {
 	subgraph domains {
 	}
+}

@@ -17,10 +17,17 @@ gen :: DocSpec -> Document -> PrintingInformation -> IO ()
 -- | Generates traceability graphs as .dot files.
 genDot :: SystemInformation -> IO ()
 
--- | Calls the code generator
+-- | Calls the code generator.
 genCode :: Choices -> CodeSpec -> IO ()
+
+-- | Document types include Software Requirements Specification, MG, MIS,
+--   and Website. The first three will generate as TeX files while the
+--   Website generates as HTML.
 data DocType
 SRS :: DocType
 Website :: DocType
+
+-- | Document specifications. Holds the type of document (<a>DocType</a>)
+--   and its name (<a>Filename</a>).
 data DocSpec
 DocSpec :: DocType -> Filename -> DocSpec

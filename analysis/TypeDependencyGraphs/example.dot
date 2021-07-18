@@ -19,6 +19,8 @@ digraph alltypes {
 	}
 	subgraph main {
 	}
+	subgraph references {
+	}
 	subgraph requirements {
 	}
 	subgraph unitals {

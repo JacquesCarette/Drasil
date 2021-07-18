@@ -1,0 +1,6 @@
+digraph modelkind{
+ModelKind -> ModelKinds;
+ModelKind -> UID;
+ModelKind -> NP;
+ModelKind	[shape=oval, color=cyan3, label=ModelKind];
+}

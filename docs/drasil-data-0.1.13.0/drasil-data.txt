@@ -89,6 +89,7 @@ parnasClements1986 :: Citation
 smithLai2005 :: Citation
 lineSource :: Citation
 pointSource :: Citation
+hibbeler2004 :: Citation
 dampingSource :: Citation
 accelerationWiki :: Citation
 velocityWiki :: Citation
@@ -642,6 +643,7 @@ kinematics :: ConceptChunk
 frequency :: ConceptChunk
 period :: ConceptChunk
 motion :: ConceptChunk
+chgMomentum :: ConceptChunk
 oneD :: CI
 twoD :: CI
 threeD :: CI
@@ -756,6 +758,7 @@ tension :: UnitalChunk
 angularFrequency :: UnitalChunk
 period :: UnitalChunk
 frequency :: UnitalChunk
+chgMomentum :: UnitalChunk
 constant :: Symbol
 final :: Symbol
 initial :: Symbol

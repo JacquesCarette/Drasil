@@ -10,12 +10,48 @@
 @version 0.1.1.0
 
 module Data.Drasil.Domains
+
+-- | For ideas, concepts, or terms related to Computer Science.
+--   
+--   Various domains that are used in Drasil. May have an abbreviation.
 compScience :: IdeaDict
+
+-- | For ideas, concepts, or terms related to Software Engineering.
+--   
+--   Various domains that are used in Drasil. May have an abbreviation.
 softEng :: IdeaDict
+
+-- | For ideas, concepts, or terms related to Mathematics.
+--   
+--   Various domains that are used in Drasil. May have an abbreviation.
 mathematics :: IdeaDict
+
+-- | For ideas, concepts, or terms related to Programming Languages.
+--   
+--   Various domains that are used in Drasil. May have an abbreviation.
 progLanguage :: IdeaDict
+
+-- | For ideas, concepts, or terms related to Physics.
+--   
+--   Various domains that are used in Drasil. May have an abbreviation.
 physics :: IdeaDict
+
+-- | For ideas, concepts, or terms related to Civil Engineering.
+--   
+--   Various domains that are used in Drasil. May have an abbreviation.
 civilEng :: IdeaDict
+
+-- | For ideas, concepts, or terms related to Material Engineering.
+--   
+--   Various domains that are used in Drasil. May have an abbreviation.
 materialEng :: IdeaDict
+
+-- | For ideas, concepts, or terms related to Documents.
+--   
+--   Various domains that are used in Drasil. May have an abbreviation.
 documentc :: IdeaDict
+
+-- | For ideas, concepts, or terms related to Knowledge Management.
+--   
+--   Various domains that are used in Drasil. May have an abbreviation.
 knowledgemng :: IdeaDict

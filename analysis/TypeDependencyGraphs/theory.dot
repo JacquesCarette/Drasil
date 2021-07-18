@@ -28,8 +28,7 @@ digraph alltypes {
 	}
 	subgraph gendefn {
 		subgraph gendefn{
-		GenDefn -> UID;
-		GenDefn -> ModelKinds;
+		GenDefn -> ModelKind;
 		GenDefn -> MaybeUnitDefn;
 		GenDefn -> MaybeDerivation;
 		GenDefn -> Reference;
@@ -41,8 +40,7 @@ digraph alltypes {
 	}
 	subgraph intancemodels {
 		subgraph instancemodel{
-		InstanceModel -> ModelKinds;
-		InstanceModel -> NP;
+		InstanceModel -> ModelKind;
 		InstanceModel -> Inputs;
 		InstanceModel -> Output;
 		InstanceModel -> Reference;
@@ -70,6 +68,12 @@ digraph alltypes {
 		}
 	}
 	subgraph modelkinds {
+		subgraph modelkind{
+		ModelKind -> ModelKinds;
+		ModelKind -> UID;
+		ModelKind -> NP;
+		ModelKind	[shape=oval, color=cyan3, label=ModelKind];
+		}
 		subgraph modelkinds{
 		ModelKinds -> RelationConcept;
 		ModelKinds -> ConstraintSet;
@@ -95,11 +99,11 @@ digraph alltypes {
 	}
 	subgraph teoryh {
 		subgraph theorymodel{
-		TheoryModel -> UID;
-		TheoryModel -> ConceptChunk;
+		TheoryModel -> ModelKind;
 		TheoryModel -> TheoryModel;
 		TheoryModel -> SpaceDefn;
 		TheoryModel -> QuantityDict;
+		TheoryModel -> ConceptChunk;
 		TheoryModel -> QDefinition;
 		TheoryModel -> DisplayExpr;
 		TheoryModel -> Reference;

@@ -1,6 +1,5 @@
 digraph gendefn{
-GenDefn -> UID;
-GenDefn -> ModelKinds;
+GenDefn -> ModelKind;
 GenDefn -> MaybeUnitDefn;
 GenDefn -> MaybeDerivation;
 GenDefn -> Reference;

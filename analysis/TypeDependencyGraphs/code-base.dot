@@ -1,3 +1,4 @@
+digraph alltypes {
 	subgraph codebaes {
 		subgraph varorfunc{
 		VarOrFunc -> QuantityDict;
@@ -89,3 +90,4 @@
 	}
 	subgraph codeexpr {
 	}
+}

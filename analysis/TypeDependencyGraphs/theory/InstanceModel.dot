@@ -1,6 +1,5 @@
 digraph instancemodel{
-InstanceModel -> ModelKinds;
-InstanceModel -> NP;
+InstanceModel -> ModelKind;
 InstanceModel -> Inputs;
 InstanceModel -> Output;
 InstanceModel -> Reference;

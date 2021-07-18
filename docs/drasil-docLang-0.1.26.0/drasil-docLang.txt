@@ -729,10 +729,4 @@ egetDocDesc :: DocDesc -> [DisplayExpr]
 
 -- | Creates a traceability map from document sections.
 generateTraceMap :: [DocSection] -> TraceMap
-
--- | Makes a reference label for a soultion statement.
-solutionLabel :: Reference
-
--- | Makes a reference label for a characteristics statement.
-characteristicsLabel :: Reference
 secRefs :: [Reference]

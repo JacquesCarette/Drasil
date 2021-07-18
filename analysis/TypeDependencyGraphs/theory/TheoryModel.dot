@@ -1,9 +1,9 @@
 digraph theorymodel{
-TheoryModel -> UID;
-TheoryModel -> ConceptChunk;
+TheoryModel -> ModelKind;
 TheoryModel -> TheoryModel;
 TheoryModel -> SpaceDefn;
 TheoryModel -> QuantityDict;
+TheoryModel -> ConceptChunk;
 TheoryModel -> QDefinition;
 TheoryModel -> DisplayExpr;
 TheoryModel -> Reference;

@@ -120,6 +120,9 @@ instDoc :: [String] -> Doc
 --   combined into a list of triplets, and then each printed on a new line.
 extLibSec :: [(String, String)] -> [String] -> Doc
 
+-- | End section.
+endNote :: [String] -> Doc
+
 -- | Data is either linear or not.
 data Linearity
 Linear :: Linearity

@@ -278,17 +278,6 @@ valsOfAuxConsLabel :: Reference
 -- | Collections all <a>Section</a> <a>Reference</a>s.
 sectionReferences :: [Reference]
 
-module Drasil.DocumentLanguage.Labels
-
--- | Makes a reference label for a goal statement.
-goalStmtLabel :: Reference
-
--- | Makes a reference label for a soultion statement.
-solutionLabel :: Reference
-
--- | Makes a reference label for a characteristics statement.
-characteristicsLabel :: Reference
-
 module Drasil.DocumentLanguage.RefHelpers
 
 -- | A database that contains <a>TheoryModel</a>s, <a>GenDefn</a>s,
@@ -1805,10 +1794,4 @@ egetDocDesc :: DocDesc -> [DisplayExpr]
 
 -- | Creates a traceability map from document sections.
 generateTraceMap :: [DocSection] -> TraceMap
-
--- | Makes a reference label for a soultion statement.
-solutionLabel :: Reference
-
--- | Makes a reference label for a characteristics statement.
-characteristicsLabel :: Reference
 secRefs :: [Reference]

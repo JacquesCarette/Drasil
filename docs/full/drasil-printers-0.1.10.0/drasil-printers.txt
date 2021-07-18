@@ -232,6 +232,9 @@ regularSec :: Doc -> Doc -> Doc
 --   configuration files.
 instDoc :: [String] -> Doc
 
+-- | End section.
+endNote :: [String] -> Doc
+
 module Language.Drasil.Printing.AST
 
 -- | Different types of links for referencing. May be internal, a citation,
@@ -1467,6 +1470,9 @@ instDoc :: [String] -> Doc
 --   pairs and a list of the corresponding version numbers, these are first
 --   combined into a list of triplets, and then each printed on a new line.
 extLibSec :: [(String, String)] -> [String] -> Doc
+
+-- | End section.
+endNote :: [String] -> Doc
 
 -- | Data is either linear or not.
 data Linearity

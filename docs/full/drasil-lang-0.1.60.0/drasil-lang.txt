@@ -2550,10 +2550,6 @@ makeFigRef :: String -> Reference
 --   shortname for the section.
 makeSecRef :: String -> Sentence -> Reference
 
--- | Create a reference for a list. Takes in the name of the list and a
---   shortname for the list.
-makeLstRef :: String -> Sentence -> Reference
-
 -- | Create a reference for a <a>URI</a>.
 makeURI :: UID -> String -> ShortName -> Reference
 instance Language.Drasil.Classes.Core.HasUID Language.Drasil.Document.Section
@@ -5277,10 +5273,6 @@ makeFigRef :: String -> Reference
 -- | Create a reference for a section. Takes in the name of a section and a
 --   shortname for the section.
 makeSecRef :: String -> Sentence -> Reference
-
--- | Create a reference for a list. Takes in the name of the list and a
---   shortname for the list.
-makeLstRef :: String -> Sentence -> Reference
 
 -- | Create a reference for a <a>URI</a>.
 makeURI :: UID -> String -> ShortName -> Reference

@@ -177,6 +177,14 @@ instance Language.Drasil.Classes.Definition Theory.Drasil.MultiDefn.DefiningExpr
 
 module Theory.Drasil.ModelKinds
 
+-- | <a>ModelKinds</a> carrier, used to carry commonly overwritten
+--   information from the IMs<i>TMs</i>GDs.
+data ModelKind
+MK :: ModelKinds -> UID -> NP -> ModelKind
+[_mk] :: ModelKind -> ModelKinds
+[_mkUid] :: ModelKind -> UID
+[_mkTerm] :: ModelKind -> NP
+
 -- | Models can be of different kinds:
 --   
 --   <ul>
@@ -200,6 +208,55 @@ EquationalModel :: QDefinition -> ModelKinds
 EquationalRealm :: MultiDefn -> ModelKinds
 OthModel :: RelationConcept -> ModelKinds
 
+-- | Smart constructor for <a>DEModel</a>s
+deModel :: UID -> NP -> RelationConcept -> ModelKind
+
+-- | Smart constructor for <a>EquationalConstraints</a>
+equationalConstraints :: UID -> NP -> ConstraintSet -> ModelKind
+
+-- | Smart constructor for <a>EquationalModel</a>s
+equationalModel :: UID -> NP -> QDefinition -> ModelKind
+
+-- | Smart constructor for <a>EquationalRealm</a>s
+equationalRealm :: UID -> NP -> MultiDefn -> ModelKind
+
+-- | Smart constructor for <a>OthModel</a>s
+othModel :: UID -> NP -> RelationConcept -> ModelKind
+
+-- | Smart constructor for <a>DEModel</a>s, deriving UID+Term from the
+--   <a>RelationConcept</a>
+deModel' :: RelationConcept -> ModelKind
+
+-- | Smart constructor for <a>EquationalConstraints</a>, deriving UID+Term
+--   from the <a>ConstraintSet</a>
+equationalConstraints' :: ConstraintSet -> ModelKind
+
+-- | Smart constructor for <a>EquationalModel</a>s, deriving UID+Term from
+--   the <a>QDefinition</a>
+equationalModel' :: QDefinition -> ModelKind
+
+-- | Smart constructor for <a>EquationalRealm</a>s
+equationalRealm' :: MultiDefn -> ModelKind
+
+-- | Smart constructor for <a>OthModel</a>s, deriving UID+Term from the
+--   <a>RelationConcept</a>
+othModel' :: RelationConcept -> ModelKind
+
+-- | Smart constructor for <a>EquationalModel</a>s, deriving Term from the
+--   <a>QDefinition</a>
+equationalModelU :: UID -> QDefinition -> ModelKind
+
+-- | Smart constructor for <a>EquationalModel</a>s, deriving UID from the
+--   <a>QDefinition</a>
+equationalModelN :: NP -> QDefinition -> ModelKind
+
+-- | Smart constructor for <a>EquationalRealm</a>s
+equationalRealmU :: UID -> MultiDefn -> ModelKind
+
+-- | Smart constructor for <a>EquationalRealm</a>s, deriving UID from the
+--   <a>MultiDefn</a>
+equationalRealmN :: NP -> MultiDefn -> ModelKind
+
 -- | Map into internal representations of ModelKinds
 setMk :: ModelKinds -> Setter' RelationConcept a -> Setter' ConstraintSet a -> Setter' QDefinition a -> Setter' MultiDefn a -> a -> ModelKinds
 
@@ -211,13 +268,19 @@ lensMk :: forall a. Lens' RelationConcept a -> Lens' ConstraintSet a -> Lens' QD
 
 -- | Extract a list of <a>QDefinition</a>s from a list of
 --   <a>ModelKinds</a>.
-getEqModQds :: [ModelKinds] -> [QDefinition]
+getEqModQds :: [ModelKind] -> [QDefinition]
 instance Language.Drasil.Classes.Core.HasUID Theory.Drasil.ModelKinds.ModelKinds
 instance Language.Drasil.Classes.NamedIdea Theory.Drasil.ModelKinds.ModelKinds
 instance Language.Drasil.Classes.Idea Theory.Drasil.ModelKinds.ModelKinds
 instance Language.Drasil.Classes.Definition Theory.Drasil.ModelKinds.ModelKinds
 instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.ModelKinds.ModelKinds
 instance Language.Drasil.DisplayClasses.Display Theory.Drasil.ModelKinds.ModelKinds
+instance Language.Drasil.Classes.Core.HasUID Theory.Drasil.ModelKinds.ModelKind
+instance Language.Drasil.Classes.NamedIdea Theory.Drasil.ModelKinds.ModelKind
+instance Language.Drasil.Classes.Idea Theory.Drasil.ModelKinds.ModelKind
+instance Language.Drasil.Classes.Definition Theory.Drasil.ModelKinds.ModelKind
+instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.ModelKinds.ModelKind
+instance Language.Drasil.DisplayClasses.Display Theory.Drasil.ModelKinds.ModelKind
 
 module Theory.Drasil.InstanceModel
 
@@ -228,32 +291,19 @@ module Theory.Drasil.InstanceModel
 data InstanceModel
 
 -- | Smart constructor for instance models with everything defined.
-im :: ModelKinds -> Inputs -> Output -> OutputConstraints -> [Reference] -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
-
--- | Smart constructor for instance models with no derivation.
-imNoDeriv :: ModelKinds -> Inputs -> Output -> OutputConstraints -> [Reference] -> String -> [Sentence] -> InstanceModel
-
--- | Smart constructor for instance models with no references.
-imNoRefs :: ModelKinds -> Inputs -> Output -> OutputConstraints -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
-
--- | Smart constructor for instance models with no derivations or
---   references.
-imNoDerivNoRefs :: ModelKinds -> Inputs -> Output -> OutputConstraints -> String -> [Sentence] -> InstanceModel
-
--- | Smart constructor for instance models with everything defined.
-im' :: ModelKinds -> NP -> Inputs -> Output -> OutputConstraints -> [Reference] -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
+im :: ModelKind -> Inputs -> Output -> OutputConstraints -> [Reference] -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
 
 -- | Smart constructor for instance models with a custom term, and no
 --   derivation.
-imNoDeriv' :: ModelKinds -> NP -> Inputs -> Output -> OutputConstraints -> [Reference] -> String -> [Sentence] -> InstanceModel
+imNoDeriv :: ModelKind -> Inputs -> Output -> OutputConstraints -> [Reference] -> String -> [Sentence] -> InstanceModel
 
 -- | Smart constructor for instance models with a custom term, and no
 --   references.
-imNoRefs' :: ModelKinds -> NP -> Inputs -> Output -> OutputConstraints -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
+imNoRefs :: ModelKind -> Inputs -> Output -> OutputConstraints -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
 
 -- | Smart constructor for instance models with a custom term, and no
 --   derivations or references.
-imNoDerivNoRefs' :: ModelKinds -> NP -> Inputs -> Output -> OutputConstraints -> String -> [Sentence] -> InstanceModel
+imNoDerivNoRefs :: ModelKind -> Inputs -> Output -> OutputConstraints -> String -> [Sentence] -> InstanceModel
 
 -- | Grab all related <a>QDefinition</a>s from a list of instance models.
 getEqModQdsFromIm :: [InstanceModel] -> [QDefinition]
@@ -285,22 +335,15 @@ instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Theory.Drasil.InstanceModel.
 
 module Theory.Drasil.GenDefn
 
--- | A general definition is a <tt>ModelKind</tt> that may have units, a
+-- | A general definition is a <a>ModelKind</a> that may have units, a
 --   derivation, references, a shortname, a reference address, and notes.
 data GenDefn
 
--- | Smart constructor for general definitions derived from ModelKinds.
-gd :: IsUnit u => ModelKinds -> Maybe u -> Maybe Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
-
--- | Smart constructor for general definitions with no references, derived
---   from ModelKinds.
-gdNoRefs :: IsUnit u => ModelKinds -> Maybe u -> Maybe Derivation -> String -> [Sentence] -> GenDefn
-
 -- | Smart constructor for general definitions.
-gd' :: IsUnit u => UID -> ModelKinds -> Maybe u -> Maybe Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
+gd :: IsUnit u => ModelKind -> Maybe u -> Maybe Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
 
 -- | Smart constructor for general definitions with no references.
-gdNoRefs' :: IsUnit u => UID -> ModelKinds -> Maybe u -> Maybe Derivation -> String -> [Sentence] -> GenDefn
+gdNoRefs :: IsUnit u => ModelKind -> Maybe u -> Maybe Derivation -> String -> [Sentence] -> GenDefn
 
 -- | Grab all related <tt>QDefinitions</tt> from a list of general
 --   definitions.
@@ -355,19 +398,13 @@ defined_fun :: Theory t => Lens' t [QDefinition]
 --   are ever defined.
 data TheoryModel
 
--- | Constructor for theory models.
-tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKinds -> [q] -> [c] -> [QDefinition] -> [DisplayExpr] -> [QDefinition] -> [Reference] -> String -> [Sentence] -> TheoryModel
-
--- | Constructor for theory models with no references.
-tmNoRefs :: (Quantity q, MayHaveUnit q, Concept c) => ModelKinds -> [q] -> [c] -> [QDefinition] -> [DisplayExpr] -> [QDefinition] -> String -> [Sentence] -> TheoryModel
-
 -- | Constructor for theory models. Must have a source. Uses the shortname
 --   of the reference address.
-tm' :: (Quantity q, MayHaveUnit q, Concept c) => UID -> ModelKinds -> [q] -> [c] -> [QDefinition] -> [DisplayExpr] -> [QDefinition] -> [Reference] -> String -> [Sentence] -> TheoryModel
+tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind -> [q] -> [c] -> [QDefinition] -> [DisplayExpr] -> [QDefinition] -> [Reference] -> String -> [Sentence] -> TheoryModel
 
 -- | Constructor for theory models. Uses the shortname of the reference
 --   address.
-tmNoRefs' :: (Quantity q, MayHaveUnit q, Concept c) => UID -> ModelKinds -> [q] -> [c] -> [QDefinition] -> [DisplayExpr] -> [QDefinition] -> String -> [Sentence] -> TheoryModel
+tmNoRefs :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind -> [q] -> [c] -> [QDefinition] -> [DisplayExpr] -> [QDefinition] -> String -> [Sentence] -> TheoryModel
 instance Language.Drasil.Classes.Core.HasUID Theory.Drasil.Theory.TheoryModel
 instance Language.Drasil.Classes.NamedIdea Theory.Drasil.Theory.TheoryModel
 instance Language.Drasil.Classes.Idea Theory.Drasil.Theory.TheoryModel
@@ -421,22 +458,15 @@ ddNoRefs :: QDefinition -> Maybe Derivation -> String -> [Sentence] -> DataDefin
 -- | Extracts the <a>QDefinition</a> from a <a>DataDefinition</a>.
 qdFromDD :: DataDefinition -> QDefinition
 
--- | A general definition is a <tt>ModelKind</tt> that may have units, a
+-- | A general definition is a <a>ModelKind</a> that may have units, a
 --   derivation, references, a shortname, a reference address, and notes.
 data GenDefn
 
--- | Smart constructor for general definitions derived from ModelKinds.
-gd :: IsUnit u => ModelKinds -> Maybe u -> Maybe Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
-
--- | Smart constructor for general definitions with no references, derived
---   from ModelKinds.
-gdNoRefs :: IsUnit u => ModelKinds -> Maybe u -> Maybe Derivation -> String -> [Sentence] -> GenDefn
-
 -- | Smart constructor for general definitions.
-gd' :: IsUnit u => UID -> ModelKinds -> Maybe u -> Maybe Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
+gd :: IsUnit u => ModelKind -> Maybe u -> Maybe Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
 
 -- | Smart constructor for general definitions with no references.
-gdNoRefs' :: IsUnit u => UID -> ModelKinds -> Maybe u -> Maybe Derivation -> String -> [Sentence] -> GenDefn
+gdNoRefs :: IsUnit u => ModelKind -> Maybe u -> Maybe Derivation -> String -> [Sentence] -> GenDefn
 
 -- | Grab all related <tt>QDefinitions</tt> from a list of general
 --   definitions.
@@ -469,32 +499,62 @@ multiDefnGenQD :: MultiDefn -> DefiningExpr -> QDefinition
 --   UID)
 multiDefnGenQDByUID :: MultiDefn -> UID -> QDefinition
 
--- | Models can be of different kinds:
---   
---   <ul>
---   <li><a>DEModel</a>s represent differential equations as
---   <a>RelationConcept</a>s</li>
---   <li><tt>EquationalConstraint</tt>s represent invariants that will hold
---   in a system of equations.</li>
---   <li><a>EquationalModel</a>s represent quantities that are calculated
---   via a single definition/<a>QDefinition</a>.</li>
---   <li><a>EquationalRealm</a>s represent MultiDefns; quantities that may
---   be calculated using any one of many <tt>DefiningExpr</tt>s (e.g., 'x =
---   A = ... = Z')</li>
---   <li><a>OthModel</a>s are placeholders for models. No new
---   <a>OthModel</a>s should be created, they should be using one of the
---   other kinds.</li>
---   </ul>
-data ModelKinds
-DEModel :: RelationConcept -> ModelKinds
-EquationalConstraints :: ConstraintSet -> ModelKinds
-EquationalModel :: QDefinition -> ModelKinds
-EquationalRealm :: MultiDefn -> ModelKinds
-OthModel :: RelationConcept -> ModelKinds
+-- | <a>ModelKinds</a> carrier, used to carry commonly overwritten
+--   information from the IMs<i>TMs</i>GDs.
+data ModelKind
+MK :: ModelKinds -> UID -> NP -> ModelKind
+[_mk] :: ModelKind -> ModelKinds
+[_mkUid] :: ModelKind -> UID
+[_mkTerm] :: ModelKind -> NP
 
--- | Extract a list of <a>QDefinition</a>s from a list of
---   <a>ModelKinds</a>.
-getEqModQds :: [ModelKinds] -> [QDefinition]
+-- | Smart constructor for <a>DEModel</a>s
+deModel :: UID -> NP -> RelationConcept -> ModelKind
+
+-- | Smart constructor for <a>EquationalConstraints</a>
+equationalConstraints :: UID -> NP -> ConstraintSet -> ModelKind
+
+-- | Smart constructor for <a>EquationalModel</a>s
+equationalModel :: UID -> NP -> QDefinition -> ModelKind
+
+-- | Smart constructor for <a>EquationalRealm</a>s
+equationalRealm :: UID -> NP -> MultiDefn -> ModelKind
+
+-- | Smart constructor for <a>OthModel</a>s
+othModel :: UID -> NP -> RelationConcept -> ModelKind
+
+-- | Smart constructor for <a>DEModel</a>s, deriving UID+Term from the
+--   <a>RelationConcept</a>
+deModel' :: RelationConcept -> ModelKind
+
+-- | Smart constructor for <a>EquationalConstraints</a>, deriving UID+Term
+--   from the <a>ConstraintSet</a>
+equationalConstraints' :: ConstraintSet -> ModelKind
+
+-- | Smart constructor for <a>EquationalModel</a>s, deriving UID+Term from
+--   the <a>QDefinition</a>
+equationalModel' :: QDefinition -> ModelKind
+
+-- | Smart constructor for <a>EquationalRealm</a>s
+equationalRealm' :: MultiDefn -> ModelKind
+
+-- | Smart constructor for <a>OthModel</a>s, deriving UID+Term from the
+--   <a>RelationConcept</a>
+othModel' :: RelationConcept -> ModelKind
+
+-- | Smart constructor for <a>EquationalModel</a>s, deriving Term from the
+--   <a>QDefinition</a>
+equationalModelU :: UID -> QDefinition -> ModelKind
+
+-- | Smart constructor for <a>EquationalModel</a>s, deriving UID from the
+--   <a>QDefinition</a>
+equationalModelN :: NP -> QDefinition -> ModelKind
+
+-- | Smart constructor for <a>EquationalRealm</a>s
+equationalRealmU :: UID -> MultiDefn -> ModelKind
+
+-- | Smart constructor for <a>EquationalRealm</a>s, deriving UID from the
+--   <a>MultiDefn</a>
+equationalRealmN :: NP -> MultiDefn -> ModelKind
 
 -- | An instance model is a ModelKind that may have specific inputs,
 --   outputs, and output constraints. It also has attributes like
@@ -503,32 +563,19 @@ getEqModQds :: [ModelKinds] -> [QDefinition]
 data InstanceModel
 
 -- | Smart constructor for instance models with everything defined.
-im :: ModelKinds -> Inputs -> Output -> OutputConstraints -> [Reference] -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
-
--- | Smart constructor for instance models with no derivation.
-imNoDeriv :: ModelKinds -> Inputs -> Output -> OutputConstraints -> [Reference] -> String -> [Sentence] -> InstanceModel
-
--- | Smart constructor for instance models with no references.
-imNoRefs :: ModelKinds -> Inputs -> Output -> OutputConstraints -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
-
--- | Smart constructor for instance models with no derivations or
---   references.
-imNoDerivNoRefs :: ModelKinds -> Inputs -> Output -> OutputConstraints -> String -> [Sentence] -> InstanceModel
-
--- | Smart constructor for instance models with everything defined.
-im' :: ModelKinds -> NP -> Inputs -> Output -> OutputConstraints -> [Reference] -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
+im :: ModelKind -> Inputs -> Output -> OutputConstraints -> [Reference] -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
 
 -- | Smart constructor for instance models with a custom term, and no
 --   derivation.
-imNoDeriv' :: ModelKinds -> NP -> Inputs -> Output -> OutputConstraints -> [Reference] -> String -> [Sentence] -> InstanceModel
+imNoDeriv :: ModelKind -> Inputs -> Output -> OutputConstraints -> [Reference] -> String -> [Sentence] -> InstanceModel
 
 -- | Smart constructor for instance models with a custom term, and no
 --   references.
-imNoRefs' :: ModelKinds -> NP -> Inputs -> Output -> OutputConstraints -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
+imNoRefs :: ModelKind -> Inputs -> Output -> OutputConstraints -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
 
 -- | Smart constructor for instance models with a custom term, and no
 --   derivations or references.
-imNoDerivNoRefs' :: ModelKinds -> NP -> Inputs -> Output -> OutputConstraints -> String -> [Sentence] -> InstanceModel
+imNoDerivNoRefs :: ModelKind -> Inputs -> Output -> OutputConstraints -> String -> [Sentence] -> InstanceModel
 
 -- | For building a quantity with no constraint.
 qwUC :: (Quantity q, MayHaveUnit q) => q -> Input
@@ -572,16 +619,10 @@ defined_fun :: Theory t => Lens' t [QDefinition]
 --   are ever defined.
 data TheoryModel
 
--- | Constructor for theory models.
-tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKinds -> [q] -> [c] -> [QDefinition] -> [DisplayExpr] -> [QDefinition] -> [Reference] -> String -> [Sentence] -> TheoryModel
-
--- | Constructor for theory models with no references.
-tmNoRefs :: (Quantity q, MayHaveUnit q, Concept c) => ModelKinds -> [q] -> [c] -> [QDefinition] -> [DisplayExpr] -> [QDefinition] -> String -> [Sentence] -> TheoryModel
-
 -- | Constructor for theory models. Must have a source. Uses the shortname
 --   of the reference address.
-tm' :: (Quantity q, MayHaveUnit q, Concept c) => UID -> ModelKinds -> [q] -> [c] -> [QDefinition] -> [DisplayExpr] -> [QDefinition] -> [Reference] -> String -> [Sentence] -> TheoryModel
+tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind -> [q] -> [c] -> [QDefinition] -> [DisplayExpr] -> [QDefinition] -> [Reference] -> String -> [Sentence] -> TheoryModel
 
 -- | Constructor for theory models. Uses the shortname of the reference
 --   address.
-tmNoRefs' :: (Quantity q, MayHaveUnit q, Concept c) => UID -> ModelKinds -> [q] -> [c] -> [QDefinition] -> [DisplayExpr] -> [QDefinition] -> String -> [Sentence] -> TheoryModel
+tmNoRefs :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind -> [q] -> [c] -> [QDefinition] -> [DisplayExpr] -> [QDefinition] -> String -> [Sentence] -> TheoryModel

@@ -915,6 +915,10 @@ onThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 --   (phrase t2)
 onThePS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
+-- | Same as <a>onThe</a>, except plural case is (plural t1) S.onThe
+--   (plural t2)
+onThePP :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
 -- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
 --   "in the" between their terms. Plural case is <tt>(phrase t1) "in the"
 --   (plural t2)</tt>.
@@ -924,6 +928,11 @@ inThe :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 --   "in the" between their terms. Plural case is <tt>(plural t1) "in the"
 --   (phrase t2)</tt>.
 inThePS :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+
+-- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
+--   "in the" between their terms. Plural case is <tt>(plural t1) "in the"
+--   (plural t2)</tt>.
+inThePP :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 
 -- | Creates a <a>NP</a> by combining two <a>NamedIdea</a>s with the words
 --   "is the" between their terms. Plural case is <tt>(phrase t1) "is the"

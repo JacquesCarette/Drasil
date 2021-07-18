@@ -10,29 +10,36 @@
 @version 0.1.3.0
 
 
--- | Defines output formats for the different documents we can generate
+-- | Defines output formats for the different documents we can generate.
 module Language.Drasil.Output.Formats
 
 -- | When choosing your document, you must specify the filename for the
---   generated output (specified <i>without</i> a file extension)
+--   generated output (specified <i>without</i> a file extension).
 type Filename = String
+
+-- | Document types include Software Requirements Specification, MG, MIS,
+--   and Website. The first three will generate as TeX files while the
+--   Website generates as HTML.
 data DocType
 SRS :: DocType
 MG :: DocType
 MIS :: DocType
 Website :: DocType
+
+-- | Document specifications. Holds the type of document (<a>DocType</a>)
+--   and its name (<a>Filename</a>).
 data DocSpec
 DocSpec :: DocType -> Filename -> DocSpec
 
--- | LaTeX helper
+-- | LaTeX helper.
 data DocClass
 DocClass :: Maybe String -> String -> DocClass
 
--- | LaTeX helper for adding packages
+-- | LaTeX helper for adding packages. Wraps a list of package names.
 newtype UsePackages
 UsePackages :: [String] -> UsePackages
 
--- | LaTeX helper
+-- | LaTeX helper.
 data ExDoc
 ExDoc :: Maybe String -> String -> ExDoc
 instance Build.Drasil.Make.Import.RuleTransformer Language.Drasil.Output.Formats.DocSpec
@@ -46,10 +53,17 @@ gen :: DocSpec -> Document -> PrintingInformation -> IO ()
 -- | Generates traceability graphs as .dot files.
 genDot :: SystemInformation -> IO ()
 
--- | Calls the code generator
+-- | Calls the code generator.
 genCode :: Choices -> CodeSpec -> IO ()
+
+-- | Document types include Software Requirements Specification, MG, MIS,
+--   and Website. The first three will generate as TeX files while the
+--   Website generates as HTML.
 data DocType
 SRS :: DocType
 Website :: DocType
+
+-- | Document specifications. Holds the type of document (<a>DocType</a>)
+--   and its name (<a>Filename</a>).
 data DocSpec
 DocSpec :: DocType -> Filename -> DocSpec

@@ -25,7 +25,7 @@ import GOOL.Drasil (unJC, unPC, unCSC, unCPPC, unSC)
 gen :: DocSpec -> Document -> PrintingInformation -> IO ()
 gen ds fn sm = prnt sm ds fn
 
--- | Generate the output artifacts (TeX+Makefile or HTML)
+-- | Generate the output artifacts (TeX+Makefile or HTML).
 prnt :: PrintingInformation -> DocSpec -> Document -> IO ()
 prnt sm dt@(DocSpec Website fn) body =
   do prntDoc dt body sm
@@ -36,7 +36,7 @@ prnt sm dt@(DocSpec _ _) body =
   do prntDoc dt body sm
      prntMake dt
 
--- | Helper for writing the documents (TeX / HTML) to file
+-- | Helper for writing the documents (TeX / HTML) to file.
 prntDoc :: DocSpec -> Document -> PrintingInformation -> IO ()
 prntDoc (DocSpec dt fn) = prntDoc' dt fn (fmt dt)
   where fmt SRS = TeX
@@ -44,6 +44,8 @@ prntDoc (DocSpec dt fn) = prntDoc' dt fn (fmt dt)
         fmt MIS = TeX
         fmt Website = HTML
 
+-- | Helper that takes the directory, document name, format of documents,
+-- document information and printing information. Then generates the document file.
 prntDoc' :: Show a => a -> String -> Format -> Document -> PrintingInformation -> IO ()
 prntDoc' dt' fn format body' sm = do
   createDirectoryIfMissing False $ show dt'
@@ -54,14 +56,14 @@ prntDoc' dt' fn format body' sm = do
         getExt HTML = ".html"
         getExt _    = error "we can only write TeX/HTML (for now)"
 
--- | Helper for writing the Makefile(s)
+-- | Helper for writing the Makefile(s).
 prntMake :: DocSpec -> IO ()
 prntMake ds@(DocSpec dt _) =
   do outh <- openFile (show dt ++ "/Makefile") WriteMode
      hPutStrLn outh $ render $ genMake [ds]
      hClose outh
 
--- | Renders the documents
+-- | Renders the documents.
 writeDoc :: PrintingInformation -> Format -> Filename -> Document -> Doc
 writeDoc s TeX  _  doc = genTeX doc s
 writeDoc s HTML fn doc = genHTML s fn doc
@@ -74,7 +76,7 @@ genDot si = do
     outputDot "TraceyGraph" gi
     return mempty
 
--- | Calls the code generator
+-- | Calls the code generator.
 genCode :: Choices -> CodeSpec -> IO ()
 genCode chs spec = do 
   workingDir <- getCurrentDirectory

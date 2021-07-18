@@ -585,19 +585,22 @@ intrSlcDerivEqn = inxi intNormForce $=
 
 --------------------------------------------------------------------------
 crtSlpId :: InstanceModel
-crtSlpId = imNoDeriv (othModel' crtSlpIdRC) [qwUC slopeDist, qwUC slopeHght, qwUC waterDist,
+crtSlpId = imNoDeriv crtSlpIdMK [qwUC slopeDist, qwUC slopeHght, qwUC waterDist,
   qwUC waterHght, qwUC effCohesion, qwUC fricAngle, qwUC dryWeight, qwUC satWeight,
   qwUC waterWeight, qwUC constF] (qw fsMin) [] [ref li2010] "crtSlpId"
   [crtSlpIdDesc]
 
-crtSlpIdRC :: RelationConcept
-crtSlpIdRC = makeRC "crtSlpIdRC" (nounPhraseSP "critical slip surface identification")
-  crtSlpIdDesc crtSlpIdRel -- crtSlpIdL
+crtSlpIdMK :: ModelKind
+crtSlpIdMK = equationalModel "crtSlpIdIM"
+  (nounPhraseSP "critical slip surface identification") crtSlpIdQD
+
+crtSlpIdQD :: QDefinition
+crtSlpIdQD = mkQuantDef fsMin crtSlpIdExpr
 
 -- FIXME: horrible hack. This is short an argument... that was never defined!
 -- FIXME: critCoords should also be an output
-crtSlpIdRel :: Relation
-crtSlpIdRel = sy fsMin $= apply minFunction [sy slopeDist,
+crtSlpIdExpr :: Expr
+crtSlpIdExpr = apply minFunction [sy slopeDist,
   sy slopeHght, sy waterDist, sy waterHght, sy effCohesion, sy fricAngle,
   sy dryWeight, sy satWeight, sy waterWeight, sy constF]
 

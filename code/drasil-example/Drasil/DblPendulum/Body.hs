@@ -11,6 +11,7 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   _quants, _sys, _sysinfodb, _usedinfodb)
 import Utils.Drasil
 import Utils.Drasil.Concepts
+import Data.Drasil.Concepts.Education (undergradCalculus, undergradPhysics, educon)
 import qualified Utils.Drasil.NounPhrase as NP
 import qualified Utils.Drasil.Sentence as S
 
@@ -29,7 +30,7 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   DerivationDisplay(ShowDerivation),
   DocSection(AuxConstntSec, Bibliography, IntroSec, RefSec, ReqrmntSec, SSDSec, TraceabilitySec),
   Emphasis(Bold), Field(..), Fields, InclUnits(IncludeUnits),
-  IntroSec(..), IntroSub(IPurpose, IScope), ProblemDescription(PDProg), PDSub(..),
+  IntroSec(..), IntroSub(IPurpose, IScope, IChar), ProblemDescription(PDProg), PDSub(..),
   RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl,
   SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
   TConvention(..), TSIntro(..), TraceabilitySec(TraceabilityProg),
@@ -37,7 +38,7 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   secRefs, fillTraceSI)
 
 import Drasil.DblPendulum.Figures (figMotion, figRefs)
-import Data.Drasil.Concepts.Math (mathcon, cartesian)
+import Data.Drasil.Concepts.Math (mathcon, cartesian, ode, mathcon')
 import Data.Drasil.Quantities.Math (unitVect, unitVectj)
 import Drasil.DblPendulum.Assumptions (assumptions, assumpRefs)
 import Drasil.DblPendulum.Concepts (rod, concepts, pendMotion)
@@ -71,7 +72,8 @@ mkSRS = [RefSec $      --This creates the Reference section of the SRS
   IntroSec $            -- This adds an introduction with an overview of the sub-sections
     IntroProg justification (phrase pendulumTitle) -- This adds an introductory blob before the overview paragraph above.
       [IPurpose $ purpDoc pendulumTitle Verbose,
-       IScope scope],                            -- This section add a Scope section with the content of 'scope' constructor.
+       IScope scope,
+       IChar [] charsOfReader []],                            -- This section add a Scope section with the content of 'scope' constructor.
   SSDSec $ 
     SSDProg                               -- This adds a Specific system description section and an introductory blob.
       [ SSDProblem $ PDProg prob []                --  This adds a is used to define the problem your system will solve
@@ -111,6 +113,13 @@ scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)),
   sParen (getAcc twoD), phrase pendMotion, phrase problem,
                    S "with various initial conditions"]
 
+----------------------------------------------
+-- 2.3 : Characteristics of Intended Reader --
+----------------------------------------------
+
+charsOfReader :: [Sentence]
+charsOfReader = [phrase undergradPhysics, phrase undergradCalculus, plural ode]
+
 pendulumTitle :: CI
 pendulumTitle = commonIdeaWithDict "pendulumTitle" (pn "Pendulum") "Pendulum" [physics]
 
@@ -139,9 +148,9 @@ symbMap :: ChunkDB
 symbMap = cdb (map qw iMods ++ map qw symbols)
   (nw newtonSLR : nw pendulumTitle : nw mass : nw len : nw kilogram : nw inValue : nw newton : nw degree : nw radian
     : nw unitVect : nw unitVectj : [nw errMsg, nw program] ++ map nw symbols ++
-   map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon  ++ map nw physicCon' ++
+   map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw physicCon' ++
    map nw physicscon ++ concepts ++ map nw physicalcon ++ map nw acronyms ++ map nw symbols ++ map nw [metre, hertz] ++
-   [nw algorithm])
+   [nw algorithm] ++ map nw educon)
   (map cw iMods ++ srsDomains) (map unitWrapper [metre, second, newton, kilogram, degree, radian, hertz]) dataDefs
   iMods genDefns tMods concIns [] [] allRefs
 

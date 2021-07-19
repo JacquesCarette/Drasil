@@ -132,7 +132,7 @@ module Language.Drasil (
   , HasContents(accessContents)
   , RawContent(..)
   , mkFig
-  , makeTabRef, makeFigRef, makeSecRef, makeLstRef, makeURI
+  , makeTabRef, makeFigRef, makeSecRef, makeURI
   -- Space
   , Space(..) , RealInterval(..), Inclusive(..), RTopology(..)
   , DomainDesc(AllDD, BoundedDD), getActorName, getInnerSpace
@@ -214,7 +214,7 @@ import Language.Drasil.Expr.Display
 import Language.Drasil.Document (section, fig, figWithWidth
   , Section(..), SecCons(..) , llcc, ulcc, Document(..)
   , mkParagraph, mkFig, mkRawLC, extractSection
-  , makeTabRef, makeFigRef, makeSecRef, makeLstRef, makeURI)
+  , makeTabRef, makeFigRef, makeSecRef, makeURI)
 import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), DType(..)
   , RawContent(..), ListTuple, MaxWidthPercent
   , HasContents(accessContents)

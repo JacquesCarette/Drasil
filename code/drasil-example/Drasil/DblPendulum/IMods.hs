@@ -4,8 +4,7 @@ module Drasil.DblPendulum.IMods (iMods, angularDisplacementIM, iModRefs) where
 import Prelude hiding (cos, sin)
 
 import Language.Drasil
-import Theory.Drasil (InstanceModel, imNoRefs, qwC, ModelKinds (OthModel))
-  --imNoDerivNoRefs, )
+import Theory.Drasil (InstanceModel, imNoRefs, qwC, othModel')
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -27,7 +26,7 @@ iMods = [angularDisplacementIM]
 
 ---
 angularDisplacementIM :: InstanceModel
-angularDisplacementIM = imNoRefs (OthModel angularDisplacementRC)
+angularDisplacementIM = imNoRefs (othModel' angularDisplacementRC)
   [qwC lenRod $ UpFrom (Exc, exactDbl 0)
   ,qwC initialPendAngle $ UpFrom (Exc, exactDbl 0)
   , qwC gravitationalAccel $ UpFrom (Exc, exactDbl 0)]
@@ -52,7 +51,7 @@ angularDisplacementDerivSent1, angularDisplacementDerivSent2, angularDisplacemen
 
 angularDisplacementDerivSent1 = foldlSentCol [S "When", phraseNP (the pendulum) `S.is` S "displaced to an", phrase iAngle `S.and_` S "released" `sC`
                                        phraseNP (the pendulum), S "swings back and forth with periodic" +:+. phrase motion,
-                                       S "By applying", phrase newtonSLR `S.in_` refS newtonSLR `sC`
+                                       S "By applying", namedRef newtonSLR (phrase newtonSLR) `sC`
                                        phraseNP (NP.the (equation `of_` motion) `NP.for` the pendulum), S "may be obtained"]
        
  

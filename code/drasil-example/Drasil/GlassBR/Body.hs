@@ -20,7 +20,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl, SSDSec(..), SSDSub(..),
   SolChSpec(..), StkhldrSec(..), StkhldrSub(Client, Cstmr),
   TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, TSPurpose),
-  Verbosity(Verbose), auxSpecSent, characteristicsLabel, intro, mkDoc,
+  Verbosity(Verbose), auxSpecSent, intro, mkDoc,
   termDefnF', tsymb, traceMatStandard, purpDoc, getTraceConfigUID,
   secRefs, fillTraceSI)
 
@@ -279,8 +279,8 @@ sysCtxUsrResp = [S "Provide the" +:+ plural inDatum +:+ S "related to the" +:+
   phraseNP (glaSlab `and_` blastTy) `sC` S "ensuring no errors in the" +:+
   plural datum +:+. S "entry",
   S "Ensure that consistent units are used for" +:+. pluralNP (combineNINI input_ variable),
-  S "Ensure required" +:+ pluralNP (combineNINI software assumption) +:+
-    sParen (refS $ SRS.assumpt ([]::[Contents]) ([]::[Section]))
+  S "Ensure required" +:+ 
+  namedRef (SRS.assumpt [] []) (pluralNP (combineNINI software assumption))
     +:+ S "are appropriate for any particular" +:+
     phrase problem +:+ S "input to the" +:+. phrase software]
 
@@ -302,7 +302,7 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
 {--User Characteristics--}
 
 userCharacteristicsIntro :: Contents
-userCharacteristicsIntro = LlC $ enumBullet characteristicsLabel $ map foldlSent
+userCharacteristicsIntro = enumBulletU $ map foldlSent
   [[S "The end user of GlassBR is expected to have completed at least the",
     S "equivalent of the second year of an undergraduate degree in civil engineering or structural engineering"],
   [S "The end user is expected to have an understanding of theory behind glass",

@@ -1,5 +1,5 @@
 digraph uncertainchunk{
 UncertainChunk -> ConstrainedChunk;
 UncertainChunk -> Uncertainty;
-UncertainChunk	[shape=oval, color=cyan3, label=UncertainChunk];
+UncertainChunk	[shape=oval, color=cyan3, label="UncertainChunk"];
 }

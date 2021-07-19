@@ -2,5 +2,5 @@ digraph conceptinstance{
 ConceptInstance -> ConceptChunk;
 ConceptInstance -> String;
 ConceptInstance -> ShortName;
-ConceptInstance	[shape=oval, color=cyan3, label=ConceptInstance];
+ConceptInstance	[shape=oval, color=cyan3, label="ConceptInstance"];
 }

@@ -1,4 +1,4 @@
 digraph statevarpythoncode{
 StateVarPythonCode -> Doc;
-StateVarPythonCode	[shape=oval, color=red2, label=StateVarPythonCode];
+StateVarPythonCode	[shape=oval, color=red2, label="StateVarPythonCode"];
 }

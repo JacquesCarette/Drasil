@@ -1,4 +1,4 @@
 digraph auxhelperpythonproject{
 AuxHelperPythonProject -> Doc;
-AuxHelperPythonProject	[shape=oval, color=red2, label=AuxHelperPythonProject];
+AuxHelperPythonProject	[shape=oval, color=red2, label="AuxHelperPythonProject"];
 }

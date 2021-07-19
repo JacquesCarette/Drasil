@@ -6,5 +6,5 @@ DataDefinition -> MaybeDerivation;
 DataDefinition -> ShortName;
 DataDefinition -> String;
 DataDefinition -> Sentence;
-DataDefinition	[shape=oval, color=cyan3, label=DataDefinition];
+DataDefinition	[shape=oval, color=cyan3, label="DataDefinition"];
 }

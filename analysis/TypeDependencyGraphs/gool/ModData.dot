@@ -1,5 +1,5 @@
 digraph moddata{
 ModData -> String;
 ModData -> Doc;
-ModData	[shape=oval, color=cyan3, label=ModData];
+ModData	[shape=oval, color=cyan3, label="ModData"];
 }

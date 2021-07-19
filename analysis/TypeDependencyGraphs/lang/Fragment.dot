@@ -1,4 +1,4 @@
 digraph fragment{
 Fragment -> String;
-Fragment	[shape=oval, color=red2, label=Fragment];
+Fragment	[shape=oval, color=red2, label="Fragment"];
 }

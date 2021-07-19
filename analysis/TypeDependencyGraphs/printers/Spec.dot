@@ -1,4 +1,4 @@
 digraph spec{
 Spec -> Expr;
-Spec	[shape=oval, color=darkviolet, label=Spec];
+Spec	[shape=oval, color=darkviolet, label="Spec"];
 }

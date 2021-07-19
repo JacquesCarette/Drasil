@@ -1,4 +1,4 @@
 digraph sclassa{
 SClassa -> CSaClassa;
-SClassa	[shape=oval, color=red2, label=SClassa];
+SClassa	[shape=oval, color=red2, label="SClassa"];
 }

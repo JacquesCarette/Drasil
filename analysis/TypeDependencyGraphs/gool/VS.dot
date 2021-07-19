@@ -1,4 +1,4 @@
 digraph vs{
 VS -> StateValueState;
-VS	[shape=oval, color=red2, label=VS];
+VS	[shape=oval, color=red2, label="VS"];
 }

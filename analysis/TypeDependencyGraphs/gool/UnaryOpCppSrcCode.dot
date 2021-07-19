@@ -1,4 +1,4 @@
 digraph unaryopcppsrccode{
 UnaryOpCppSrcCode -> OpData;
-UnaryOpCppSrcCode	[shape=oval, color=red2, label=UnaryOpCppSrcCode];
+UnaryOpCppSrcCode	[shape=oval, color=red2, label="UnaryOpCppSrcCode"];
 }

@@ -1,4 +1,4 @@
 digraph importcsharpcode{
 ImportCSharpCode -> Doc;
-ImportCSharpCode	[shape=oval, color=red2, label=ImportCSharpCode];
+ImportCSharpCode	[shape=oval, color=red2, label="ImportCSharpCode"];
 }

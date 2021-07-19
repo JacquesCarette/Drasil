@@ -2,5 +2,5 @@ digraph definingexpr{
 DefiningExpr -> UID;
 DefiningExpr -> Sentence;
 DefiningExpr -> Expr;
-DefiningExpr	[shape=oval, color=cyan3, label=DefiningExpr];
+DefiningExpr	[shape=oval, color=cyan3, label="DefiningExpr"];
 }

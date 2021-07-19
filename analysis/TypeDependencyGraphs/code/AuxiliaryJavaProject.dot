@@ -1,4 +1,4 @@
 digraph auxiliaryjavaproject{
 AuxiliaryJavaProject -> AuxData;
-AuxiliaryJavaProject	[shape=oval, color=red2, label=AuxiliaryJavaProject];
+AuxiliaryJavaProject	[shape=oval, color=red2, label="AuxiliaryJavaProject"];
 }

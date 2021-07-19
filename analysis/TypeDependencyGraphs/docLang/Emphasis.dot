@@ -1,3 +1,3 @@
 digraph emphasis{
-Emphasis	[shape=oval, color=darkviolet, label=Emphasis];
+Emphasis	[shape=oval, color=darkviolet, label="Emphasis"];
 }

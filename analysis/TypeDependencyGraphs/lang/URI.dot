@@ -5,5 +5,5 @@ URI -> Path;
 URI -> Query;
 URI -> Fragment;
 URI -> String;
-URI	[shape=oval, color=darkviolet, label=URI];
+URI	[shape=oval, color=darkviolet, label="URI"];
 }

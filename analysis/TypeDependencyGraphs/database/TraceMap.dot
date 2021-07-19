@@ -1,4 +1,4 @@
 digraph tracemap{
 TraceMap -> MapUIDUID;
-TraceMap	[shape=oval, color=red2, label=TraceMap];
+TraceMap	[shape=oval, color=red2, label="TraceMap"];
 }

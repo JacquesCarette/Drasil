@@ -1,4 +1,4 @@
 digraph posctorcallr{
 PosCtorCallr -> VSTyperSValuerSValuer;
-PosCtorCallr	[shape=oval, color=red2, label=PosCtorCallr];
+PosCtorCallr	[shape=oval, color=red2, label="PosCtorCallr"];
 }

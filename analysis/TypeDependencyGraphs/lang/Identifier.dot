@@ -1,4 +1,4 @@
 digraph identifier{
 Identifier -> String;
-Identifier	[shape=oval, color=red2, label=Identifier];
+Identifier	[shape=oval, color=red2, label="Identifier"];
 }

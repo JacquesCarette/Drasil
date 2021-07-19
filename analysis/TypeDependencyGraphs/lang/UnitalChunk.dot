@@ -1,5 +1,5 @@
 digraph unitalchunk{
 UnitalChunk -> DefinedQuantityDict;
 UnitalChunk -> UnitDefn;
-UnitalChunk	[shape=oval, color=cyan3, label=UnitalChunk];
+UnitalChunk	[shape=oval, color=cyan3, label="UnitalChunk"];
 }

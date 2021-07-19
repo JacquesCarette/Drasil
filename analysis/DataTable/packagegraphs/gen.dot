@@ -1,0 +1,11 @@
+digraph gen{
+DocType	[shape=oval, color=turquoise4, label="DocType"];
+DocSpec	[shape=oval, color=turquoise4, label="DocSpec"];
+DocClass	[shape=oval, color=turquoise4, label="DocClass"];
+ExDoc	[shape=oval, color=turquoise4, label="ExDoc"];
+UsePackages	[shape=oval, color=turquoise4, label="UsePackages"];
+RuleTransformer	[shape=oval, color=pink, label="RuleTransformer"];
+Show	[shape=oval, color=pink, label="Show"];
+DocSpec -> RuleTransformer;
+DocType -> Show;
+}

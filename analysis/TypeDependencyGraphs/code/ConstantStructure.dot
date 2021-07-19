@@ -1,3 +1,3 @@
 digraph constantstructure{
-ConstantStructure	[shape=oval, color=darkviolet, label=ConstantStructure];
+ConstantStructure	[shape=oval, color=darkviolet, label="ConstantStructure"];
 }

@@ -1,4 +1,4 @@
 digraph d{
 D -> Doc;
-D	[shape=oval, color=red2, label=D];
+D	[shape=oval, color=red2, label="D"];
 }

@@ -1,0 +1,6 @@
+digraph utils{
+EnumType	[shape=oval, color=turquoise4, label="EnumType"];
+WrapType	[shape=oval, color=turquoise4, label="WrapType"];
+SepType	[shape=oval, color=turquoise4, label="SepType"];
+FoldType	[shape=oval, color=turquoise4, label="FoldType"];
+}

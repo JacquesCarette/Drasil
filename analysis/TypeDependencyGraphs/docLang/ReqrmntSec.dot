@@ -1,4 +1,4 @@
 digraph reqrmntsec{
 ReqrmntSec -> ReqsSub;
-ReqrmntSec	[shape=oval, color=darkgreen, label=ReqrmntSec];
+ReqrmntSec	[shape=oval, color=darkgreen, label="ReqrmntSec"];
 }

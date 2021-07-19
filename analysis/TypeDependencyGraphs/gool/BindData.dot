@@ -1,5 +1,5 @@
 digraph binddata{
 BindData -> Binding;
 BindData -> Doc;
-BindData	[shape=oval, color=cyan3, label=BindData];
+BindData	[shape=oval, color=cyan3, label="BindData"];
 }

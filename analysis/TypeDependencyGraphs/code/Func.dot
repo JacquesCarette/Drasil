@@ -5,5 +5,5 @@ Func -> Name;
 Func -> Description;
 Func -> DataDesc;
 Func -> Func;
-Func	[shape=oval, color=darkviolet, label=Func];
+Func	[shape=oval, color=darkviolet, label="Func"];
 }

@@ -1,4 +1,4 @@
 digraph lbl{
 Lbl -> Sentence;
-Lbl	[shape=oval, color=red2, label=Lbl];
+Lbl	[shape=oval, color=red2, label="Lbl"];
 }

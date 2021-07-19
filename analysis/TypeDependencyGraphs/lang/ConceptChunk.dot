@@ -2,5 +2,5 @@ digraph conceptchunk{
 ConceptChunk -> IdeaDict;
 ConceptChunk -> Sentence;
 ConceptChunk -> UID;
-ConceptChunk	[shape=oval, color=cyan3, label=ConceptChunk];
+ConceptChunk	[shape=oval, color=cyan3, label="ConceptChunk"];
 }

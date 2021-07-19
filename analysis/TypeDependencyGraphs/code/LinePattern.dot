@@ -1,4 +1,4 @@
 digraph linepattern{
 LinePattern -> DataItem;
-LinePattern	[shape=oval, color=darkviolet, label=LinePattern];
+LinePattern	[shape=oval, color=darkviolet, label="LinePattern"];
 }

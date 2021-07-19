@@ -1,4 +1,4 @@
 digraph commandfragment{
 CommandFragment -> MakeString;
-CommandFragment	[shape=oval, color=red2, label=CommandFragment];
+CommandFragment	[shape=oval, color=red2, label="CommandFragment"];
 }

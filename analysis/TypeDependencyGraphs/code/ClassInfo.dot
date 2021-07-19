@@ -1,5 +1,5 @@
 digraph classinfo{
 ClassInfo -> MethodInfo;
 ClassInfo -> String;
-ClassInfo	[shape=oval, color=darkviolet, label=ClassInfo];
+ClassInfo	[shape=oval, color=darkviolet, label="ClassInfo"];
 }

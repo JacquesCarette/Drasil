@@ -1,4 +1,4 @@
 digraph programcppsrccode{
 ProgramCppSrcCode -> ProgData;
-ProgramCppSrcCode	[shape=oval, color=red2, label=ProgramCppSrcCode];
+ProgramCppSrcCode	[shape=oval, color=red2, label="ProgramCppSrcCode"];
 }

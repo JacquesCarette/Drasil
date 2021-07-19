@@ -1,4 +1,4 @@
 digraph people{
 People -> Person;
-People	[shape=oval, color=red2, label=People];
+People	[shape=oval, color=red2, label="People"];
 }

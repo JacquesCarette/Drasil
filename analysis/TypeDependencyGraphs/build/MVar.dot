@@ -1,5 +1,5 @@
 digraph mvar{
 MVar -> VarName;
 MVar -> VarVal;
-MVar	[shape=oval, color=darkviolet, label=MVar];
+MVar	[shape=oval, color=darkviolet, label="MVar"];
 }

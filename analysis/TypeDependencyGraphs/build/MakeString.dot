@@ -1,4 +1,4 @@
 digraph makestring{
 MakeString -> String;
-MakeString	[shape=oval, color=darkviolet, label=MakeString];
+MakeString	[shape=oval, color=darkviolet, label="MakeString"];
 }

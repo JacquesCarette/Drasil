@@ -9,19 +9,19 @@ digraph alltypes {
 	}
 	subgraph fold {
 		subgraph enumtype{
-		EnumType	[shape=oval, color=darkviolet, label=EnumType];
+		EnumType	[shape=oval, color=darkviolet, label="EnumType"];
 		}
 		subgraph wraptype{
-		WrapType	[shape=oval, color=darkviolet, label=WrapType];
+		WrapType	[shape=oval, color=darkviolet, label="WrapType"];
 		}
 		subgraph septype{
-		SepType	[shape=oval, color=darkviolet, label=SepType];
+		SepType	[shape=oval, color=darkviolet, label="SepType"];
 		}
 		subgraph foldtype{
 		FoldType -> SepType;
 		FoldType -> FoldType;
 		FoldType -> Sentence;
-		FoldType	[shape=oval, color=darkviolet, label=FoldType];
+		FoldType	[shape=oval, color=darkviolet, label="FoldType"];
 		}
 	}
 	subgraph litss {

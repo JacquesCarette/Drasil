@@ -1,4 +1,4 @@
 digraph need{
 Need -> CodeVarChunk;
-Need	[shape=oval, color=red2, label=Need];
+Need	[shape=oval, color=red2, label="Need"];
 }

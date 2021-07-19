@@ -1,4 +1,4 @@
 digraph statementswiftcode{
 StatementSwiftCode -> DocTerminator;
-StatementSwiftCode	[shape=oval, color=red2, label=StatementSwiftCode];
+StatementSwiftCode	[shape=oval, color=red2, label="StatementSwiftCode"];
 }

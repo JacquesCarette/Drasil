@@ -1,4 +1,4 @@
 digraph author{
 Author -> Sentence;
-Author	[shape=oval, color=red2, label=Author];
+Author	[shape=oval, color=red2, label="Author"];
 }

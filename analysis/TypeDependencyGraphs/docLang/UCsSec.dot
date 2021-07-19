@@ -1,4 +1,4 @@
 digraph ucssec{
 UCsSec -> ConceptInstance;
-UCsSec	[shape=oval, color=darkgreen, label=UCsSec];
+UCsSec	[shape=oval, color=darkgreen, label="UCsSec"];
 }

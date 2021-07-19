@@ -5,30 +5,30 @@ digraph alltypes {
 		Rule -> Dependencies;
 		Rule -> Type;
 		Rule -> Command;
-		Rule	[shape=oval, color=darkviolet, label=Rule];
+		Rule	[shape=oval, color=darkviolet, label="Rule"];
 		}
 		subgraph command{
 		Command -> MakeString;
 		Command -> CommandOpts;
-		Command	[shape=oval, color=darkviolet, label=Command];
+		Command	[shape=oval, color=darkviolet, label="Command"];
 		}
 		subgraph commandopts{
-		CommandOpts	[shape=oval, color=darkviolet, label=CommandOpts];
+		CommandOpts	[shape=oval, color=darkviolet, label="CommandOpts"];
 		}
 		subgraph type{
-		Type	[shape=oval, color=darkviolet, label=Type];
+		Type	[shape=oval, color=darkviolet, label="Type"];
 		}
 		subgraph makefile{
 		Makefile -> Rule;
-		Makefile	[shape=oval, color=darkgreen, label=Makefile];
+		Makefile	[shape=oval, color=darkgreen, label="Makefile"];
 		}
 		subgraph target{
 		Target -> MakeString;
-		Target	[shape=oval, color=red2, label=Target];
+		Target	[shape=oval, color=red2, label="Target"];
 		}
 		subgraph dependencies{
 		Dependencies -> Target;
-		Dependencies	[shape=oval, color=red2, label=Dependencies];
+		Dependencies	[shape=oval, color=red2, label="Dependencies"];
 		}
 	}
 	subgraph helpers {
@@ -38,20 +38,20 @@ digraph alltypes {
 	subgraph makestring {
 		subgraph makestring{
 		MakeString -> String;
-		MakeString	[shape=oval, color=darkviolet, label=MakeString];
+		MakeString	[shape=oval, color=darkviolet, label="MakeString"];
 		}
 		subgraph mvar{
 		MVar -> VarName;
 		MVar -> VarVal;
-		MVar	[shape=oval, color=darkviolet, label=MVar];
+		MVar	[shape=oval, color=darkviolet, label="MVar"];
 		}
 		subgraph varname{
 		VarName -> String;
-		VarName	[shape=oval, color=red2, label=VarName];
+		VarName	[shape=oval, color=red2, label="VarName"];
 		}
 		subgraph varval{
 		VarVal -> String;
-		VarVal	[shape=oval, color=red2, label=VarVal];
+		VarVal	[shape=oval, color=red2, label="VarVal"];
 		}
 	}
 	subgraph print {

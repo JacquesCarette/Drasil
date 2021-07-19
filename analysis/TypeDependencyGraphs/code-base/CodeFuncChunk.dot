@@ -1,4 +1,4 @@
 digraph codefuncchunk{
 CodeFuncChunk -> CodeChunk;
-CodeFuncChunk	[shape=oval, color=darkgreen, label=CodeFuncChunk];
+CodeFuncChunk	[shape=oval, color=darkgreen, label="CodeFuncChunk"];
 }

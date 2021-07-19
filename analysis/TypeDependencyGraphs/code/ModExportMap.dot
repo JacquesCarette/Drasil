@@ -1,4 +1,4 @@
 digraph modexportmap{
 ModExportMap -> MapStringString;
-ModExportMap	[shape=oval, color=red2, label=ModExportMap];
+ModExportMap	[shape=oval, color=red2, label="ModExportMap"];
 }

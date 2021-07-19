@@ -1,4 +1,4 @@
 digraph parameterpythoncode{
 ParameterPythonCode -> ParamData;
-ParameterPythonCode	[shape=oval, color=red2, label=ParameterPythonCode];
+ParameterPythonCode	[shape=oval, color=red2, label="ParameterPythonCode"];
 }

@@ -1,0 +1,6 @@
+digraph database{
+ChunkDB	[shape=oval, color=turquoise4, label="ChunkDB"];
+SystemInformation	[shape=oval, color=turquoise4, label="SystemInformation"];
+Block	[shape=oval, color=turquoise4, label="Block"];
+ReferenceDB	[shape=oval, color=turquoise4, label="ReferenceDB"];
+}

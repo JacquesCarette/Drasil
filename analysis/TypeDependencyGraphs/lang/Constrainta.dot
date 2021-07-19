@@ -5,5 +5,5 @@ Constrainta -> a;
 Constrainta -> Constraint;
 Constrainta -> Expr;
 Constrainta -> ConstraintE;
-Constrainta	[shape=oval, color=darkviolet, label=Constrainta];
+Constrainta	[shape=oval, color=darkviolet, label="Constrainta"];
 }

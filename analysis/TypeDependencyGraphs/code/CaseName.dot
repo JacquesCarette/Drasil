@@ -1,4 +1,4 @@
 digraph casename{
 CaseName -> String;
-CaseName	[shape=oval, color=red2, label=CaseName];
+CaseName	[shape=oval, color=red2, label="CaseName"];
 }

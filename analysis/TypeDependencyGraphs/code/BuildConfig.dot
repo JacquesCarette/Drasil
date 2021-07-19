@@ -1,3 +1,3 @@
 digraph buildconfig{
-BuildConfig	[shape=oval, color=darkviolet, label=BuildConfig];
+BuildConfig	[shape=oval, color=darkviolet, label="BuildConfig"];
 }

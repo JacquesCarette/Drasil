@@ -2,5 +2,5 @@ digraph unitsymbol{
 UnitSymbol -> USymb;
 UnitSymbol -> UDefn;
 UnitSymbol -> UnitSymbol;
-UnitSymbol	[shape=oval, color=darkviolet, label=UnitSymbol];
+UnitSymbol	[shape=oval, color=darkviolet, label="UnitSymbol"];
 }

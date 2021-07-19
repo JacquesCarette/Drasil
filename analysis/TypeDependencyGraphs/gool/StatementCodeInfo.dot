@@ -1,3 +1,3 @@
 digraph statementcodeinfo{
-StatementCodeInfo	[shape=oval, color=red2, label=StatementCodeInfo];
+StatementCodeInfo	[shape=oval, color=red2, label="StatementCodeInfo"];
 }

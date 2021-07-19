@@ -1,4 +1,4 @@
 digraph classinfofill{
 ClassInfoFill -> MethodInfoFill;
-ClassInfoFill	[shape=oval, color=darkviolet, label=ClassInfoFill];
+ClassInfoFill	[shape=oval, color=darkviolet, label="ClassInfoFill"];
 }

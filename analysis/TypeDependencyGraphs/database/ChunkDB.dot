@@ -13,5 +13,5 @@ ChunkDB -> ConceptInstanceMap;
 ChunkDB -> SectionMap;
 ChunkDB -> LabelledContentMap;
 ChunkDB -> ReferenceMap;
-ChunkDB	[shape=oval, color=cyan3, label=ChunkDB];
+ChunkDB	[shape=oval, color=cyan3, label="ChunkDB"];
 }

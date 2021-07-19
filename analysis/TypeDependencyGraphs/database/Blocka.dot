@@ -2,5 +2,5 @@ digraph blocka{
 Blocka -> a;
 Blocka -> SystemInformation;
 Blocka -> BibRef;
-Blocka	[shape=oval, color=darkviolet, label=Blocka];
+Blocka	[shape=oval, color=darkviolet, label="Blocka"];
 }

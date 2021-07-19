@@ -5,5 +5,5 @@ ReqsSub -> ReqsSub;
 ReqsSub -> SystemInformation;
 ReqsSub -> SRSDecl;
 ReqsSub -> DocDesc;
-ReqsSub	[shape=oval, color=darkviolet, label=ReqsSub];
+ReqsSub	[shape=oval, color=darkviolet, label="ReqsSub"];
 }

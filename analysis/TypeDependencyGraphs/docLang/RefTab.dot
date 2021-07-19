@@ -5,5 +5,5 @@ RefTab -> UnitDefn;
 RefTab -> LabelledContent;
 RefTab -> TSIntro;
 RefTab -> LFunc;
-RefTab	[shape=oval, color=darkviolet, label=RefTab];
+RefTab	[shape=oval, color=darkviolet, label="RefTab"];
 }

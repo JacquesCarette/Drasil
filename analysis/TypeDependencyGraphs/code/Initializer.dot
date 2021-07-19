@@ -1,4 +1,4 @@
 digraph initializer{
 Initializer -> CodeVarChunkCodeExpr;
-Initializer	[shape=oval, color=red2, label=Initializer];
+Initializer	[shape=oval, color=red2, label="Initializer"];
 }

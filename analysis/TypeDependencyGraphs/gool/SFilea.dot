@@ -1,4 +1,4 @@
 digraph sfilea{
 SFilea -> FSaFilea;
-SFilea	[shape=oval, color=red2, label=SFilea];
+SFilea	[shape=oval, color=red2, label="SFilea"];
 }

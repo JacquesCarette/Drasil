@@ -1,4 +1,4 @@
 digraph topic{
 Topic -> IdeaDict;
-Topic	[shape=oval, color=red2, label=Topic];
+Topic	[shape=oval, color=red2, label="Topic"];
 }

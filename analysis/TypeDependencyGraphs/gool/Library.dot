@@ -1,4 +1,4 @@
 digraph library{
 Library -> String;
-Library	[shape=oval, color=red2, label=Library];
+Library	[shape=oval, color=red2, label="Library"];
 }

@@ -1,4 +1,4 @@
 digraph svaluea{
 SValuea -> VSaValuea;
-SValuea	[shape=oval, color=red2, label=SValuea];
+SValuea	[shape=oval, color=red2, label="SValuea"];
 }

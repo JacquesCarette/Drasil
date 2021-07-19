@@ -1,4 +1,4 @@
 digraph builddependencies{
 BuildDependencies -> BuildName;
-BuildDependencies	[shape=oval, color=darkviolet, label=BuildDependencies];
+BuildDependencies	[shape=oval, color=darkviolet, label="BuildDependencies"];
 }

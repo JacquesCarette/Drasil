@@ -5,5 +5,5 @@ MethodInfo -> Step;
 MethodInfo -> CodeFuncChunk;
 MethodInfo -> Maybe;
 MethodInfo -> NonEmpty;
-MethodInfo	[shape=oval, color=darkviolet, label=MethodInfo];
+MethodInfo	[shape=oval, color=darkviolet, label="MethodInfo"];
 }

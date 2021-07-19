@@ -1,5 +1,5 @@
 digraph auxconstntsec{
 AuxConstntSec -> CI;
 AuxConstntSec -> QDefinition;
-AuxConstntSec	[shape=oval, color=darkviolet, label=AuxConstntSec];
+AuxConstntSec	[shape=oval, color=darkviolet, label="AuxConstntSec"];
 }

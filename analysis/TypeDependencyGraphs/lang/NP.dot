@@ -1,5 +1,5 @@
 digraph np{
 NP -> String;
 NP -> PluralRule;
-NP	[shape=oval, color=darkviolet, label=NP];
+NP	[shape=oval, color=darkviolet, label="NP"];
 }

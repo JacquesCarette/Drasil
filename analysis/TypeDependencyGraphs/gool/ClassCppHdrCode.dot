@@ -1,4 +1,4 @@
 digraph classcpphdrcode{
 ClassCppHdrCode -> Doc;
-ClassCppHdrCode	[shape=oval, color=red2, label=ClassCppHdrCode];
+ClassCppHdrCode	[shape=oval, color=red2, label="ClassCppHdrCode"];
 }

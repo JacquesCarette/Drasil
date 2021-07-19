@@ -22,5 +22,5 @@ Expr -> VVVBinOp;
 Expr -> VVNBinOp;
 Expr -> DomainDesc;
 Expr -> RealInterval;
-Expr	[shape=oval, color=darkviolet, label=Expr];
+Expr	[shape=oval, color=darkviolet, label="Expr"];
 }

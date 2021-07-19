@@ -17,73 +17,73 @@ digraph alltypes {
 		ChunkDB -> SectionMap;
 		ChunkDB -> LabelledContentMap;
 		ChunkDB -> ReferenceMap;
-		ChunkDB	[shape=oval, color=cyan3, label=ChunkDB];
+		ChunkDB	[shape=oval, color=cyan3, label="ChunkDB"];
 		}
 		subgraph umapa{
 		UMapa -> MapUIDaInt;
-		UMapa	[shape=oval, color=red2, label=UMapa];
+		UMapa	[shape=oval, color=red2, label="UMapa"];
 		}
 		subgraph symbolmap{
 		SymbolMap -> UMapQuantityDict;
-		SymbolMap	[shape=oval, color=red2, label=SymbolMap];
+		SymbolMap	[shape=oval, color=red2, label="SymbolMap"];
 		}
 		subgraph conceptmap{
 		ConceptMap -> UMapConceptChunk;
-		ConceptMap	[shape=oval, color=red2, label=ConceptMap];
+		ConceptMap	[shape=oval, color=red2, label="ConceptMap"];
 		}
 		subgraph unitmap{
 		UnitMap -> UMapUnitDefn;
-		UnitMap	[shape=oval, color=red2, label=UnitMap];
+		UnitMap	[shape=oval, color=red2, label="UnitMap"];
 		}
 		subgraph termmap{
 		TermMap -> UMapIdeaDict;
-		TermMap	[shape=oval, color=red2, label=TermMap];
+		TermMap	[shape=oval, color=red2, label="TermMap"];
 		}
 		subgraph tracemap{
 		TraceMap -> MapUIDUID;
-		TraceMap	[shape=oval, color=red2, label=TraceMap];
+		TraceMap	[shape=oval, color=red2, label="TraceMap"];
 		}
 		subgraph refbymap{
 		RefbyMap -> MapUIDUID;
-		RefbyMap	[shape=oval, color=red2, label=RefbyMap];
+		RefbyMap	[shape=oval, color=red2, label="RefbyMap"];
 		}
 		subgraph datadefnmap{
 		DatadefnMap -> UMapDataDefinition;
-		DatadefnMap	[shape=oval, color=red2, label=DatadefnMap];
+		DatadefnMap	[shape=oval, color=red2, label="DatadefnMap"];
 		}
 		subgraph insmodelmap{
 		InsModelMap -> UMapInstanceModel;
-		InsModelMap	[shape=oval, color=red2, label=InsModelMap];
+		InsModelMap	[shape=oval, color=red2, label="InsModelMap"];
 		}
 		subgraph gendefmap{
 		GendefMap -> UMapGenDefn;
-		GendefMap	[shape=oval, color=red2, label=GendefMap];
+		GendefMap	[shape=oval, color=red2, label="GendefMap"];
 		}
 		subgraph theorymodelmap{
 		TheoryModelMap -> UMapTheoryModel;
-		TheoryModelMap	[shape=oval, color=red2, label=TheoryModelMap];
+		TheoryModelMap	[shape=oval, color=red2, label="TheoryModelMap"];
 		}
 		subgraph conceptinstancemap{
 		ConceptInstanceMap -> UMapConceptInstance;
-		ConceptInstanceMap	[shape=oval, color=red2, label=ConceptInstanceMap];
+		ConceptInstanceMap	[shape=oval, color=red2, label="ConceptInstanceMap"];
 		}
 		subgraph sectionmap{
 		SectionMap -> UMapSection;
-		SectionMap	[shape=oval, color=red2, label=SectionMap];
+		SectionMap	[shape=oval, color=red2, label="SectionMap"];
 		}
 		subgraph labelledcontentmap{
 		LabelledContentMap -> UMapLabelledContent;
-		LabelledContentMap	[shape=oval, color=red2, label=LabelledContentMap];
+		LabelledContentMap	[shape=oval, color=red2, label="LabelledContentMap"];
 		}
 		subgraph referencemap{
 		ReferenceMap -> UMapReference;
-		ReferenceMap	[shape=oval, color=red2, label=ReferenceMap];
+		ReferenceMap	[shape=oval, color=red2, label="ReferenceMap"];
 		}
 	}
 	subgraph syteminformations {
 		subgraph referencedb{
 		ReferenceDB -> ConceptMap;
-		ReferenceDB	[shape=oval, color=cyan3, label=ReferenceDB];
+		ReferenceDB	[shape=oval, color=cyan3, label="ReferenceDB"];
 		}
 		subgraph systeminformation{
 		SystemInformation -> CommonIdea;
@@ -92,25 +92,25 @@ digraph alltypes {
 		SystemInformation -> b;
 		SystemInformation -> HasName;
 		SystemInformation -> c;
-		SystemInformation	[shape=oval, color=darkviolet, label=SystemInformation];
+		SystemInformation	[shape=oval, color=darkviolet, label="SystemInformation"];
 		}
 		subgraph blocka{
 		Blocka -> a;
 		Blocka -> SystemInformation;
 		Blocka -> BibRef;
-		Blocka	[shape=oval, color=darkviolet, label=Blocka];
+		Blocka	[shape=oval, color=darkviolet, label="Blocka"];
 		}
 		subgraph refmapa{
 		RefMapa -> MapUIDaInt;
-		RefMapa	[shape=oval, color=red2, label=RefMapa];
+		RefMapa	[shape=oval, color=red2, label="RefMapa"];
 		}
 		subgraph bibmap{
 		BibMap -> RefMapCitation;
-		BibMap	[shape=oval, color=red2, label=BibMap];
+		BibMap	[shape=oval, color=red2, label="BibMap"];
 		}
 		subgraph conceptmap{
 		ConceptMap -> RefMapConceptInstance;
-		ConceptMap	[shape=oval, color=red2, label=ConceptMap];
+		ConceptMap	[shape=oval, color=red2, label="ConceptMap"];
 		}
 	}
 	subgraph drails {

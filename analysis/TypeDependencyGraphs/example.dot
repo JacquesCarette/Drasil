@@ -90,11 +90,11 @@ digraph alltypes {
 	subgraph unitals {
 		subgraph glasstype{
 		GlassType -> IntegerCI;
-		GlassType	[shape=oval, color=red2, label=GlassType];
+		GlassType	[shape=oval, color=red2, label="GlassType"];
 		}
 		subgraph glassthickness{
 		GlassThickness -> DoubleDouble;
-		GlassThickness	[shape=oval, color=red2, label=GlassThickness];
+		GlassThickness	[shape=oval, color=red2, label="GlassThickness"];
 		}
 	}
 	subgraph units {
@@ -248,7 +248,7 @@ digraph alltypes {
 		PhaseChange -> PhaseChange;
 		PhaseChange -> Sentence;
 		PhaseChange -> TheoryModel;
-		PhaseChange	[shape=oval, color=darkviolet, label=PhaseChange];
+		PhaseChange	[shape=oval, color=darkviolet, label="PhaseChange"];
 		}
 	}
 	subgraph unitals {

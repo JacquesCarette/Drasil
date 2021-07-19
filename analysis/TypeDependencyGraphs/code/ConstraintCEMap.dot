@@ -1,4 +1,4 @@
 digraph constraintcemap{
 ConstraintCEMap -> MapUIDConstraintCE;
-ConstraintCEMap	[shape=oval, color=red2, label=ConstraintCEMap];
+ConstraintCEMap	[shape=oval, color=red2, label="ConstraintCEMap"];
 }

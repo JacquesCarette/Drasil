@@ -8,5 +8,5 @@ PDSub -> Idea;
 PDSub -> a;
 PDSub -> LabelledContent;
 PDSub -> Contents;
-PDSub	[shape=oval, color=darkviolet, label=PDSub];
+PDSub	[shape=oval, color=darkviolet, label="PDSub"];
 }

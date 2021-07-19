@@ -1,3 +1,3 @@
 digraph odemethod{
-ODEMethod	[shape=oval, color=darkviolet, label=ODEMethod];
+ODEMethod	[shape=oval, color=darkviolet, label="ODEMethod"];
 }

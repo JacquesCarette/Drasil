@@ -1,4 +1,4 @@
 digraph namedargsr{
 NamedArgsr -> SVariablerSValuer;
-NamedArgsr	[shape=oval, color=red2, label=NamedArgsr];
+NamedArgsr	[shape=oval, color=red2, label="NamedArgsr"];
 }

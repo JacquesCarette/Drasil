@@ -1,5 +1,5 @@
 digraph paramdata{
 ParamData -> VarData;
 ParamData -> Doc;
-ParamData	[shape=oval, color=cyan3, label=ParamData];
+ParamData	[shape=oval, color=cyan3, label="ParamData"];
 }

@@ -1,4 +1,4 @@
 digraph auxiliarypythonproject{
 AuxiliaryPythonProject -> AuxData;
-AuxiliaryPythonProject	[shape=oval, color=red2, label=AuxiliaryPythonProject];
+AuxiliaryPythonProject	[shape=oval, color=red2, label="AuxiliaryPythonProject"];
 }

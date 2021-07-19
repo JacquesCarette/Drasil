@@ -1,5 +1,5 @@
 digraph decref{
 DecRef -> Reference;
 DecRef -> RefInfo;
-DecRef	[shape=oval, color=cyan3, label=DecRef];
+DecRef	[shape=oval, color=cyan3, label="DecRef"];
 }

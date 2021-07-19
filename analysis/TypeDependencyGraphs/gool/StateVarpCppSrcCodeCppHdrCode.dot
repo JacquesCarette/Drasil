@@ -1,4 +1,4 @@
 digraph statevarpcppsrccodecpphdrcode{
 StateVarpCppSrcCodeCppHdrCode -> StateVarData;
-StateVarpCppSrcCodeCppHdrCode	[shape=oval, color=red2, label=StateVarpCppSrcCodeCppHdrCode];
+StateVarpCppSrcCodeCppHdrCode	[shape=oval, color=red2, label="StateVarpCppSrcCodeCppHdrCode"];
 }

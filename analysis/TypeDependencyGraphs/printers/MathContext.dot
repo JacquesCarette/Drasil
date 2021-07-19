@@ -1,3 +1,3 @@
 digraph mathcontext{
-MathContext	[shape=oval, color=darkviolet, label=MathContext];
+MathContext	[shape=oval, color=darkviolet, label="MathContext"];
 }

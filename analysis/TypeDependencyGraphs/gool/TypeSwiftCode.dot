@@ -1,4 +1,4 @@
 digraph typeswiftcode{
 TypeSwiftCode -> TypeData;
-TypeSwiftCode	[shape=oval, color=red2, label=TypeSwiftCode];
+TypeSwiftCode	[shape=oval, color=red2, label="TypeSwiftCode"];
 }

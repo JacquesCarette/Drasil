@@ -1,4 +1,4 @@
 digraph hp{
 HP -> Spec;
-HP	[shape=oval, color=darkviolet, label=HP];
+HP	[shape=oval, color=darkviolet, label="HP"];
 }

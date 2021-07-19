@@ -3,5 +3,5 @@ TraceConfig -> UID;
 TraceConfig -> Sentence;
 TraceConfig -> TraceViewCat;
 TraceConfig -> TraceConfig;
-TraceConfig	[shape=oval, color=darkviolet, label=TraceConfig];
+TraceConfig	[shape=oval, color=darkviolet, label="TraceConfig"];
 }

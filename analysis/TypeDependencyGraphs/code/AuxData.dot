@@ -1,5 +1,5 @@
 digraph auxdata{
 AuxData -> FilePath;
 AuxData -> Doc;
-AuxData	[shape=oval, color=cyan3, label=AuxData];
+AuxData	[shape=oval, color=cyan3, label="AuxData"];
 }

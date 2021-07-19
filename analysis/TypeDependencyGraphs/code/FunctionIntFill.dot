@@ -1,4 +1,4 @@
 digraph functionintfill{
 FunctionIntFill -> ArgumentFill;
-FunctionIntFill	[shape=oval, color=darkgreen, label=FunctionIntFill];
+FunctionIntFill	[shape=oval, color=darkgreen, label="FunctionIntFill"];
 }

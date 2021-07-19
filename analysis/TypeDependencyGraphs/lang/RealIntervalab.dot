@@ -3,5 +3,5 @@ RealIntervalab -> Inclusive;
 RealIntervalab -> a;
 RealIntervalab -> b;
 RealIntervalab -> RealInterval;
-RealIntervalab	[shape=oval, color=darkviolet, label=RealIntervalab];
+RealIntervalab	[shape=oval, color=darkviolet, label="RealIntervalab"];
 }

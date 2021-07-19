@@ -1,5 +1,5 @@
 digraph introsec{
 IntroSec -> Sentence;
 IntroSec -> IntroSub;
-IntroSec	[shape=oval, color=darkviolet, label=IntroSec];
+IntroSec	[shape=oval, color=darkviolet, label="IntroSec"];
 }

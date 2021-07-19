@@ -1,4 +1,4 @@
 digraph genstate{
 GenState -> StateDrasilState;
-GenState	[shape=oval, color=red2, label=GenState];
+GenState	[shape=oval, color=red2, label="GenState"];
 }

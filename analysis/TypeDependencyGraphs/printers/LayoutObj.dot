@@ -4,5 +4,5 @@ LayoutObj -> Spec;
 LayoutObj -> Label;
 LayoutObj -> Bool;
 LayoutObj -> Caption;
-LayoutObj	[shape=oval, color=darkviolet, label=LayoutObj];
+LayoutObj	[shape=oval, color=darkviolet, label="LayoutObj"];
 }

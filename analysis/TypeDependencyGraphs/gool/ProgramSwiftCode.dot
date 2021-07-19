@@ -1,4 +1,4 @@
 digraph programswiftcode{
 ProgramSwiftCode -> ProgData;
-ProgramSwiftCode	[shape=oval, color=red2, label=ProgramSwiftCode];
+ProgramSwiftCode	[shape=oval, color=red2, label="ProgramSwiftCode"];
 }

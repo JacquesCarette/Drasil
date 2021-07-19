@@ -1,4 +1,4 @@
 digraph mixedctorcallr{
 MixedCtorCallr -> VSTyperSValuerNamedArgsrSValuer;
-MixedCtorCallr	[shape=oval, color=red2, label=MixedCtorCallr];
+MixedCtorCallr	[shape=oval, color=red2, label="MixedCtorCallr"];
 }

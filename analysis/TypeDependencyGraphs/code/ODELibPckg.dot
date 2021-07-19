@@ -5,5 +5,5 @@ ODELibPckg -> ExternalLibrary;
 ODELibPckg -> ODEInfoExternalLibraryCall;
 ODELibPckg -> MaybeFilePath;
 ODELibPckg -> Lang;
-ODELibPckg	[shape=oval, color=cyan3, label=ODELibPckg];
+ODELibPckg	[shape=oval, color=cyan3, label="ODELibPckg"];
 }

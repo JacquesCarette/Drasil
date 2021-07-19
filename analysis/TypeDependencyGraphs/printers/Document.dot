@@ -2,5 +2,5 @@ digraph document{
 Document -> Title;
 Document -> Author;
 Document -> LayoutObj;
-Document	[shape=oval, color=darkviolet, label=Document];
+Document	[shape=oval, color=darkviolet, label="Document"];
 }

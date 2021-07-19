@@ -1,4 +1,4 @@
 digraph interpreteroption{
 InterpreterOption -> String;
-InterpreterOption	[shape=oval, color=red2, label=InterpreterOption];
+InterpreterOption	[shape=oval, color=red2, label="InterpreterOption"];
 }

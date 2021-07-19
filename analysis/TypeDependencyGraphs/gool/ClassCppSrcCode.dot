@@ -1,4 +1,4 @@
 digraph classcppsrccode{
 ClassCppSrcCode -> Doc;
-ClassCppSrcCode	[shape=oval, color=red2, label=ClassCppSrcCode];
+ClassCppSrcCode	[shape=oval, color=red2, label="ClassCppSrcCode"];
 }

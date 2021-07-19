@@ -1,4 +1,4 @@
 digraph inoutcallr{
 InOutCallr -> LabelSValuerSVariablerSVariabler;
-InOutCallr	[shape=oval, color=red2, label=InOutCallr];
+InOutCallr	[shape=oval, color=red2, label="InOutCallr"];
 }

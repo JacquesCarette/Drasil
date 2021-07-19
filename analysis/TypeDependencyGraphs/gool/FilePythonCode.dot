@@ -1,4 +1,4 @@
 digraph filepythoncode{
 FilePythonCode -> FileData;
-FilePythonCode	[shape=oval, color=red2, label=FilePythonCode];
+FilePythonCode	[shape=oval, color=red2, label="FilePythonCode"];
 }

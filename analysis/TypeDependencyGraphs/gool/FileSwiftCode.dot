@@ -1,4 +1,4 @@
 digraph fileswiftcode{
 FileSwiftCode -> FileData;
-FileSwiftCode	[shape=oval, color=red2, label=FileSwiftCode];
+FileSwiftCode	[shape=oval, color=red2, label="FileSwiftCode"];
 }

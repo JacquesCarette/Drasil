@@ -1,5 +1,5 @@
 digraph docconfig{
 DocConfig -> String;
 DocConfig -> Bool;
-DocConfig	[shape=oval, color=cyan3, label=DocConfig];
+DocConfig	[shape=oval, color=cyan3, label="DocConfig"];
 }

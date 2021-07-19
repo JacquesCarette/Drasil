@@ -1,3 +1,3 @@
 digraph dtype{
-DType	[shape=oval, color=darkviolet, label=DType];
+DType	[shape=oval, color=darkviolet, label="DType"];
 }

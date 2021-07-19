@@ -4,5 +4,5 @@ StepFill -> NonEmpty;
 StepFill -> CodeExpr;
 StepFill -> StepFill;
 StepFill -> CodeVarChunk;
-StepFill	[shape=oval, color=darkviolet, label=StepFill];
+StepFill	[shape=oval, color=darkviolet, label="StepFill"];
 }

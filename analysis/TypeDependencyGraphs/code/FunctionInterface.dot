@@ -6,5 +6,5 @@ FunctionInterface -> CodeFuncChunk;
 FunctionInterface -> Argument;
 FunctionInterface -> Maybe;
 FunctionInterface -> Result;
-FunctionInterface	[shape=oval, color=darkviolet, label=FunctionInterface];
+FunctionInterface	[shape=oval, color=darkviolet, label="FunctionInterface"];
 }

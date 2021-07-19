@@ -1,4 +1,4 @@
 digraph printhtml{
 PrintHTML -> String;
-PrintHTML	[shape=oval, color=darkgreen, label=PrintHTML];
+PrintHTML	[shape=oval, color=darkgreen, label="PrintHTML"];
 }

@@ -1,5 +1,5 @@
 digraph statevariable{
 StateVariable -> ScopeTag;
 StateVariable -> CodeVarChunk;
-StateVariable	[shape=oval, color=cyan3, label=StateVariable];
+StateVariable	[shape=oval, color=cyan3, label="StateVariable"];
 }

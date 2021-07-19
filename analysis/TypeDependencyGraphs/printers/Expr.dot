@@ -3,5 +3,5 @@ Expr -> Double;
 Expr -> Integer;
 Expr -> String;
 Expr -> ExprExpr;
-Expr	[shape=oval, color=darkviolet, label=Expr];
+Expr	[shape=oval, color=darkviolet, label="Expr"];
 }

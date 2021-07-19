@@ -1,4 +1,4 @@
 digraph gsdsec{
 GSDSec -> GSDSub;
-GSDSec	[shape=oval, color=darkgreen, label=GSDSec];
+GSDSec	[shape=oval, color=darkgreen, label="GSDSec"];
 }

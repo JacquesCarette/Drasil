@@ -1,4 +1,4 @@
 digraph langvers{
 LangVers -> String;
-LangVers	[shape=oval, color=red2, label=LangVers];
+LangVers	[shape=oval, color=red2, label="LangVers"];
 }

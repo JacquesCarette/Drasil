@@ -11,5 +11,5 @@ CodeSpec -> Const;
 CodeSpec -> ConstantMap;
 CodeSpec -> Mod;
 CodeSpec -> ChunkDB;
-CodeSpec	[shape=oval, color=cyan3, label=CodeSpec];
+CodeSpec	[shape=oval, color=cyan3, label="CodeSpec"];
 }

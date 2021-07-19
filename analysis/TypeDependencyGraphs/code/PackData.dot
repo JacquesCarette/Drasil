@@ -1,5 +1,5 @@
 digraph packdata{
 PackData -> ProgData;
 PackData -> AuxData;
-PackData	[shape=oval, color=cyan3, label=PackData];
+PackData	[shape=oval, color=cyan3, label="PackData"];
 }

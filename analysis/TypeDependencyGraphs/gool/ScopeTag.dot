@@ -1,3 +1,3 @@
 digraph scopetag{
-ScopeTag	[shape=oval, color=darkviolet, label=ScopeTag];
+ScopeTag	[shape=oval, color=darkviolet, label="ScopeTag"];
 }

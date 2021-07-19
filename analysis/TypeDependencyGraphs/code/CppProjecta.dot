@@ -1,4 +1,4 @@
 digraph cppprojecta{
 CppProjecta -> a;
-CppProjecta	[shape=oval, color=darkgreen, label=CppProjecta];
+CppProjecta	[shape=oval, color=darkgreen, label="CppProjecta"];
 }

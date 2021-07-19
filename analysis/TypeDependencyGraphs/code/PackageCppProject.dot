@@ -1,4 +1,4 @@
 digraph packagecppproject{
 PackageCppProject -> PackData;
-PackageCppProject	[shape=oval, color=red2, label=PackageCppProject];
+PackageCppProject	[shape=oval, color=red2, label="PackageCppProject"];
 }

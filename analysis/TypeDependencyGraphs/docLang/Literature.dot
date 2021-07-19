@@ -1,4 +1,4 @@
 digraph literature{
 Literature -> Topic;
-Literature	[shape=oval, color=darkviolet, label=Literature];
+Literature	[shape=oval, color=darkviolet, label="Literature"];
 }

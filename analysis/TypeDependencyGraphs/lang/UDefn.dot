@@ -1,4 +1,4 @@
 digraph udefn{
 UDefn -> USymb;
-UDefn	[shape=oval, color=darkviolet, label=UDefn];
+UDefn	[shape=oval, color=darkviolet, label="UDefn"];
 }

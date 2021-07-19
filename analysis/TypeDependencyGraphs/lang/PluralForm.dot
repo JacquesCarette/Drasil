@@ -1,4 +1,4 @@
 digraph pluralform{
 PluralForm -> Sentence;
-PluralForm	[shape=oval, color=red2, label=PluralForm];
+PluralForm	[shape=oval, color=red2, label="PluralForm"];
 }

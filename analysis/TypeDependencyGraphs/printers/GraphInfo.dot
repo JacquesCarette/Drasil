@@ -1,5 +1,5 @@
 digraph graphinfo{
 GraphInfo -> NodeFamily;
 GraphInfo -> UID;
-GraphInfo	[shape=oval, color=cyan3, label=GraphInfo];
+GraphInfo	[shape=oval, color=cyan3, label="GraphInfo"];
 }

@@ -17,12 +17,12 @@ digraph alltypes {
 		DocSection -> AuxConstntSec;
 		DocSection -> AppndxSec;
 		DocSection -> OffShelfSolnsSec;
-		DocSection	[shape=oval, color=darkviolet, label=DocSection];
+		DocSection	[shape=oval, color=darkviolet, label="DocSection"];
 		}
 		subgraph refsec{
 		RefSec -> Contents;
 		RefSec -> RefTab;
-		RefSec	[shape=oval, color=darkviolet, label=RefSec];
+		RefSec	[shape=oval, color=darkviolet, label="RefSec"];
 		}
 		subgraph reftab{
 		RefTab -> RefTab;
@@ -31,66 +31,66 @@ digraph alltypes {
 		RefTab -> LabelledContent;
 		RefTab -> TSIntro;
 		RefTab -> LFunc;
-		RefTab	[shape=oval, color=darkviolet, label=RefTab];
+		RefTab	[shape=oval, color=darkviolet, label="RefTab"];
 		}
 		subgraph tsintro{
 		TSIntro -> TConvention;
-		TSIntro	[shape=oval, color=darkviolet, label=TSIntro];
+		TSIntro	[shape=oval, color=darkviolet, label="TSIntro"];
 		}
 		subgraph tconvention{
 		TConvention -> Emphasis;
-		TConvention	[shape=oval, color=darkviolet, label=TConvention];
+		TConvention	[shape=oval, color=darkviolet, label="TConvention"];
 		}
 		subgraph emphasis{
-		Emphasis	[shape=oval, color=darkviolet, label=Emphasis];
+		Emphasis	[shape=oval, color=darkviolet, label="Emphasis"];
 		}
 		subgraph literature{
 		Literature -> Topic;
-		Literature	[shape=oval, color=darkviolet, label=Literature];
+		Literature	[shape=oval, color=darkviolet, label="Literature"];
 		}
 		subgraph tuintro{
-		TUIntro	[shape=oval, color=darkviolet, label=TUIntro];
+		TUIntro	[shape=oval, color=darkviolet, label="TUIntro"];
 		}
 		subgraph lfunc{
 		LFunc -> LFunc;
 		LFunc -> DefinedQuantityDict;
-		LFunc	[shape=oval, color=darkviolet, label=LFunc];
+		LFunc	[shape=oval, color=darkviolet, label="LFunc"];
 		}
 		subgraph introsec{
 		IntroSec -> Sentence;
 		IntroSec -> IntroSub;
-		IntroSec	[shape=oval, color=darkviolet, label=IntroSec];
+		IntroSec	[shape=oval, color=darkviolet, label="IntroSec"];
 		}
 		subgraph introsub{
 		IntroSub -> Sentence;
 		IntroSub -> IntroSub;
 		IntroSub -> CI;
 		IntroSub -> Section;
-		IntroSub	[shape=oval, color=darkviolet, label=IntroSub];
+		IntroSub	[shape=oval, color=darkviolet, label="IntroSub"];
 		}
 		subgraph stkhldrsub{
 		StkhldrSub -> CI;
 		StkhldrSub -> Sentence;
 		StkhldrSub -> StkhldrSub;
-		StkhldrSub	[shape=oval, color=darkviolet, label=StkhldrSub];
+		StkhldrSub	[shape=oval, color=darkviolet, label="StkhldrSub"];
 		}
 		subgraph gsdsub{
 		GSDSub -> Contents;
 		GSDSub -> GSDSub;
-		GSDSub	[shape=oval, color=darkviolet, label=GSDSub];
+		GSDSub	[shape=oval, color=darkviolet, label="GSDSub"];
 		}
 		subgraph ssdsub{
 		SSDSub -> ProblemDescription;
 		SSDSub -> SSDSub;
 		SSDSub -> SolChSpec;
-		SSDSub	[shape=oval, color=darkviolet, label=SSDSub];
+		SSDSub	[shape=oval, color=darkviolet, label="SSDSub"];
 		}
 		subgraph problemdescription{
 		ProblemDescription -> Sentence;
 		ProblemDescription -> Section;
 		ProblemDescription -> PDSub;
 		ProblemDescription -> ProblemDescription;
-		ProblemDescription	[shape=oval, color=darkviolet, label=ProblemDescription];
+		ProblemDescription	[shape=oval, color=darkviolet, label="ProblemDescription"];
 		}
 		subgraph pdsub{
 		PDSub -> Concept;
@@ -103,12 +103,12 @@ digraph alltypes {
 		PDSub -> LabelledContent;
 		PDSub -> Contents;
 		PDSub -> ConceptInstance;
-		PDSub	[shape=oval, color=darkviolet, label=PDSub];
+		PDSub	[shape=oval, color=darkviolet, label="PDSub"];
 		}
 		subgraph solchspec{
 		SolChSpec -> SCSSub;
 		SolChSpec -> SolChSpec;
-		SolChSpec	[shape=oval, color=darkviolet, label=SolChSpec];
+		SolChSpec	[shape=oval, color=darkviolet, label="SolChSpec"];
 		}
 		subgraph scssub{
 		SCSSub -> ConceptInstance;
@@ -119,100 +119,100 @@ digraph alltypes {
 		SCSSub -> GenDefn;
 		SCSSub -> DerivationDisplay;
 		SCSSub -> DataDefinition;
-		SCSSub	[shape=oval, color=darkviolet, label=SCSSub];
+		SCSSub	[shape=oval, color=darkviolet, label="SCSSub"];
 		}
 		subgraph derivationdisplay{
-		DerivationDisplay	[shape=oval, color=darkviolet, label=DerivationDisplay];
+		DerivationDisplay	[shape=oval, color=darkviolet, label="DerivationDisplay"];
 		}
 		subgraph reqssub{
 		ReqsSub -> ConceptInstance;
 		ReqsSub -> LabelledContent;
 		ReqsSub -> ReqsSub;
-		ReqsSub	[shape=oval, color=darkviolet, label=ReqsSub];
+		ReqsSub	[shape=oval, color=darkviolet, label="ReqsSub"];
 		}
 		subgraph traceconfig{
 		TraceConfig -> UID;
 		TraceConfig -> Sentence;
 		TraceConfig -> TraceViewCat;
 		TraceConfig -> TraceConfig;
-		TraceConfig	[shape=oval, color=darkviolet, label=TraceConfig];
+		TraceConfig	[shape=oval, color=darkviolet, label="TraceConfig"];
 		}
 		subgraph auxconstntsec{
 		AuxConstntSec -> CI;
 		AuxConstntSec -> QDefinition;
-		AuxConstntSec	[shape=oval, color=darkviolet, label=AuxConstntSec];
+		AuxConstntSec	[shape=oval, color=darkviolet, label="AuxConstntSec"];
 		}
 		subgraph appndxsec{
-		AppndxSec	[shape=oval, color=darkgreen, label=AppndxSec];
+		AppndxSec	[shape=oval, color=darkgreen, label="AppndxSec"];
 		}
 		subgraph stkhldrsec{
 		StkhldrSec -> StkhldrSub;
-		StkhldrSec	[shape=oval, color=darkgreen, label=StkhldrSec];
+		StkhldrSec	[shape=oval, color=darkgreen, label="StkhldrSec"];
 		}
 		subgraph gsdsec{
 		GSDSec -> GSDSub;
-		GSDSec	[shape=oval, color=darkgreen, label=GSDSec];
+		GSDSec	[shape=oval, color=darkgreen, label="GSDSec"];
 		}
 		subgraph ssdsec{
 		SSDSec -> SSDSub;
-		SSDSec	[shape=oval, color=darkgreen, label=SSDSec];
+		SSDSec	[shape=oval, color=darkgreen, label="SSDSec"];
 		}
 		subgraph reqrmntsec{
 		ReqrmntSec -> ReqsSub;
-		ReqrmntSec	[shape=oval, color=darkgreen, label=ReqrmntSec];
+		ReqrmntSec	[shape=oval, color=darkgreen, label="ReqrmntSec"];
 		}
 		subgraph lcssec{
 		LCsSec -> ConceptInstance;
-		LCsSec	[shape=oval, color=darkgreen, label=LCsSec];
+		LCsSec	[shape=oval, color=darkgreen, label="LCsSec"];
 		}
 		subgraph ucssec{
 		UCsSec -> ConceptInstance;
-		UCsSec	[shape=oval, color=darkgreen, label=UCsSec];
+		UCsSec	[shape=oval, color=darkgreen, label="UCsSec"];
 		}
 		subgraph traceabilitysec{
 		TraceabilitySec -> TraceConfig;
-		TraceabilitySec	[shape=oval, color=darkgreen, label=TraceabilitySec];
+		TraceabilitySec	[shape=oval, color=darkgreen, label="TraceabilitySec"];
 		}
 		subgraph offshelfsolnssec{
 		OffShelfSolnsSec -> Contents;
-		OffShelfSolnsSec	[shape=oval, color=darkgreen, label=OffShelfSolnsSec];
+		OffShelfSolnsSec	[shape=oval, color=darkgreen, label="OffShelfSolnsSec"];
 		}
 		subgraph system{
 		System -> Sentence;
-		System	[shape=oval, color=red2, label=System];
+		System	[shape=oval, color=red2, label="System"];
 		}
 		subgraph dockind{
 		DocKind -> Sentence;
-		DocKind	[shape=oval, color=red2, label=DocKind];
+		DocKind	[shape=oval, color=red2, label="DocKind"];
 		}
 		subgraph docdesc{
 		DocDesc -> DocSection;
-		DocDesc	[shape=oval, color=red2, label=DocDesc];
+		DocDesc	[shape=oval, color=red2, label="DocDesc"];
 		}
 		subgraph topic{
 		Topic -> IdeaDict;
-		Topic	[shape=oval, color=red2, label=Topic];
+		Topic	[shape=oval, color=red2, label="Topic"];
 		}
 	}
 	subgraph definitions {
 		subgraph field{
 		Field -> Verbosity;
 		Field -> InclUnits;
-		Field	[shape=oval, color=darkviolet, label=Field];
+		Field	[shape=oval, color=darkviolet, label="Field"];
 		}
 		subgraph verbosity{
-		Verbosity	[shape=oval, color=darkviolet, label=Verbosity];
+		Verbosity	[shape=oval, color=darkviolet, label="Verbosity"];
 		}
 		subgraph inclunits{
-		InclUnits	[shape=oval, color=darkviolet, label=InclUnits];
+		InclUnits	[shape=oval, color=darkviolet, label="InclUnits"];
 		}
 		subgraph fields{
 		Fields -> Field;
-		Fields	[shape=oval, color=red2, label=Fields];
+		Fields	[shape=oval, color=red2, label="Fields"];
 		}
 		subgraph modrow{
 		ModRow -> StringContents;
-		ModRow	[shape=oval, color=red2, label=ModRow];
+		ModRow	[shape=oval, color=red2, label="ModRow"];
 		}
 	}
 	subgraph refhelpers {
@@ -221,7 +221,7 @@ digraph alltypes {
 		ModelDB -> RefMapGenDefn;
 		ModelDB -> RefMapDataDefinition;
 		ModelDB -> RefMapInstanceModel;
-		ModelDB	[shape=oval, color=cyan3, label=ModelDB];
+		ModelDB	[shape=oval, color=cyan3, label="ModelDB"];
 		}
 	}
 	subgraph traceabilitygraph {
@@ -229,7 +229,7 @@ digraph alltypes {
 	subgraph traceabilitymatrix {
 		subgraph traceviewcat{
 		TraceViewCat -> UIDChunkDBUID;
-		TraceViewCat	[shape=oval, color=red2, label=TraceViewCat];
+		TraceViewCat	[shape=oval, color=red2, label="TraceViewCat"];
 		}
 	}
 	subgraph units {
@@ -260,20 +260,20 @@ digraph alltypes {
 	}
 	subgraph docdecl {
 		subgraph docsection{
-		DocSection	[shape=oval, color=darkviolet, label=DocSection];
+		DocSection	[shape=oval, color=darkviolet, label="DocSection"];
 		}
 		subgraph ssdsub{
 		SSDSub -> ProblemDescription;
 		SSDSub -> SSDSub;
 		SSDSub -> SolChSpec;
-		SSDSub	[shape=oval, color=darkviolet, label=SSDSub];
+		SSDSub	[shape=oval, color=darkviolet, label="SSDSub"];
 		}
 		subgraph problemdescription{
 		ProblemDescription -> Sentence;
 		ProblemDescription -> Section;
 		ProblemDescription -> PDSub;
 		ProblemDescription -> ProblemDescription;
-		ProblemDescription	[shape=oval, color=darkviolet, label=ProblemDescription];
+		ProblemDescription	[shape=oval, color=darkviolet, label="ProblemDescription"];
 		}
 		subgraph pdsub{
 		PDSub -> Concept;
@@ -285,12 +285,12 @@ digraph alltypes {
 		PDSub -> a;
 		PDSub -> LabelledContent;
 		PDSub -> Contents;
-		PDSub	[shape=oval, color=darkviolet, label=PDSub];
+		PDSub	[shape=oval, color=darkviolet, label="PDSub"];
 		}
 		subgraph solchspec{
 		SolChSpec -> SCSSub;
 		SolChSpec -> SolChSpec;
-		SolChSpec	[shape=oval, color=darkviolet, label=SolChSpec];
+		SolChSpec	[shape=oval, color=darkviolet, label="SolChSpec"];
 		}
 		subgraph scssub{
 		SCSSub -> SCSSub;
@@ -304,7 +304,7 @@ digraph alltypes {
 		SCSSub -> HasReasVal;
 		SCSSub -> MayHaveUnit;
 		SCSSub -> Contents;
-		SCSSub	[shape=oval, color=darkviolet, label=SCSSub];
+		SCSSub	[shape=oval, color=darkviolet, label="SCSSub"];
 		}
 		subgraph reqssub{
 		ReqsSub -> Sentence;
@@ -313,19 +313,19 @@ digraph alltypes {
 		ReqsSub -> SystemInformation;
 		ReqsSub -> SRSDecl;
 		ReqsSub -> DocDesc;
-		ReqsSub	[shape=oval, color=darkviolet, label=ReqsSub];
+		ReqsSub	[shape=oval, color=darkviolet, label="ReqsSub"];
 		}
 		subgraph ssdsec{
 		SSDSec -> SSDSub;
-		SSDSec	[shape=oval, color=darkgreen, label=SSDSec];
+		SSDSec	[shape=oval, color=darkgreen, label="SSDSec"];
 		}
 		subgraph reqrmntsec{
 		ReqrmntSec -> ReqsSub;
-		ReqrmntSec	[shape=oval, color=darkgreen, label=ReqrmntSec];
+		ReqrmntSec	[shape=oval, color=darkgreen, label="ReqrmntSec"];
 		}
 		subgraph srsdecl{
 		SRSDecl -> DocSection;
-		SRSDecl	[shape=oval, color=red2, label=SRSDecl];
+		SRSDecl	[shape=oval, color=red2, label="SRSDecl"];
 		}
 	}
 	subgraph doclang {

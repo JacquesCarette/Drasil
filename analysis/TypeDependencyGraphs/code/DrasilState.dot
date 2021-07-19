@@ -22,5 +22,5 @@ DrasilState -> ModExportMap;
 DrasilState -> ClassDefinitionMap;
 DrasilState -> Doc;
 DrasilState -> Space;
-DrasilState	[shape=oval, color=cyan3, label=DrasilState];
+DrasilState	[shape=oval, color=cyan3, label="DrasilState"];
 }

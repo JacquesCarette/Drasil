@@ -1,4 +1,4 @@
 digraph height{
 Height -> Float;
-Height	[shape=oval, color=red2, label=Height];
+Height	[shape=oval, color=red2, label="Height"];
 }

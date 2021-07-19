@@ -1,4 +1,4 @@
 digraph pairstatespa{
 PairStatespa -> StatespCppSrcCodeCppHdrCodea;
-PairStatespa	[shape=oval, color=red2, label=PairStatespa];
+PairStatespa	[shape=oval, color=red2, label="PairStatespa"];
 }

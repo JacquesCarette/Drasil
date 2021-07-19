@@ -1,4 +1,4 @@
 digraph title{
 Title -> Spec;
-Title	[shape=oval, color=red2, label=Title];
+Title	[shape=oval, color=red2, label="Title"];
 }

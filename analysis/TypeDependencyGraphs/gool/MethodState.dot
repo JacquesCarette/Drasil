@@ -6,5 +6,5 @@ MethodState -> ExceptionType;
 MethodState -> QualifiedName;
 MethodState -> ScopeTag;
 MethodState -> Index;
-MethodState	[shape=oval, color=cyan3, label=MethodState];
+MethodState	[shape=oval, color=cyan3, label="MethodState"];
 }

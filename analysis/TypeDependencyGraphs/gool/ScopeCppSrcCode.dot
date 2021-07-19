@@ -1,4 +1,4 @@
 digraph scopecppsrccode{
 ScopeCppSrcCode -> DocScopeTag;
-ScopeCppSrcCode	[shape=oval, color=red2, label=ScopeCppSrcCode];
+ScopeCppSrcCode	[shape=oval, color=red2, label="ScopeCppSrcCode"];
 }

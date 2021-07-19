@@ -5,5 +5,5 @@ FileState -> FileType;
 FileState -> Bool;
 FileState -> ClassName;
 FileState -> Doc;
-FileState	[shape=oval, color=cyan3, label=FileState];
+FileState	[shape=oval, color=cyan3, label="FileState"];
 }

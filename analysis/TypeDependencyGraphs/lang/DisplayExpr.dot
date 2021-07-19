@@ -4,5 +4,5 @@ DisplayExpr -> DisplayExpr;
 DisplayExpr -> Space;
 DisplayExpr -> DisplayBinOp;
 DisplayExpr -> DisplayAssocBinOp;
-DisplayExpr	[shape=oval, color=darkviolet, label=DisplayExpr];
+DisplayExpr	[shape=oval, color=darkviolet, label="DisplayExpr"];
 }

@@ -1,4 +1,4 @@
 digraph importcppsrccode{
 ImportCppSrcCode -> Doc;
-ImportCppSrcCode	[shape=oval, color=red2, label=ImportCppSrcCode];
+ImportCppSrcCode	[shape=oval, color=red2, label="ImportCppSrcCode"];
 }

@@ -1,5 +1,5 @@
 digraph lbltype{
 LblType -> IRefProg;
 LblType -> String;
-LblType	[shape=oval, color=darkviolet, label=LblType];
+LblType	[shape=oval, color=darkviolet, label="LblType"];
 }

@@ -1,4 +1,4 @@
 digraph seperator{
 Seperator -> Doc;
-Seperator	[shape=oval, color=red2, label=Seperator];
+Seperator	[shape=oval, color=red2, label="Seperator"];
 }

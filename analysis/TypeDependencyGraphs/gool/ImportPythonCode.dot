@@ -1,4 +1,4 @@
 digraph importpythoncode{
 ImportPythonCode -> Doc;
-ImportPythonCode	[shape=oval, color=red2, label=ImportPythonCode];
+ImportPythonCode	[shape=oval, color=red2, label="ImportPythonCode"];
 }

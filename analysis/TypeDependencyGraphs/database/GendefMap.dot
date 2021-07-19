@@ -1,4 +1,4 @@
 digraph gendefmap{
 GendefMap -> UMapGenDefn;
-GendefMap	[shape=oval, color=red2, label=GendefMap];
+GendefMap	[shape=oval, color=red2, label="GendefMap"];
 }

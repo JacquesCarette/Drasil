@@ -1,4 +1,4 @@
 digraph conceptc{
 Conceptc -> IdeacDefinitioncConceptDomainc;
-Conceptc	[shape=oval, color=red2, label=Conceptc];
+Conceptc	[shape=oval, color=red2, label="Conceptc"];
 }

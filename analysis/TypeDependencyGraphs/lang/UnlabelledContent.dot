@@ -1,4 +1,4 @@
 digraph unlabelledcontent{
 UnlabelledContent -> RawContent;
-UnlabelledContent	[shape=oval, color=darkgreen, label=UnlabelledContent];
+UnlabelledContent	[shape=oval, color=darkgreen, label="UnlabelledContent"];
 }

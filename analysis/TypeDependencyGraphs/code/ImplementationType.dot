@@ -1,3 +1,3 @@
 digraph implementationtype{
-ImplementationType	[shape=oval, color=darkviolet, label=ImplementationType];
+ImplementationType	[shape=oval, color=darkviolet, label="ImplementationType"];
 }

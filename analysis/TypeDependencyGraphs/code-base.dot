@@ -3,16 +3,16 @@ digraph alltypes {
 		subgraph varorfunc{
 		VarOrFunc -> QuantityDict;
 		VarOrFunc -> VarOrFunc;
-		VarOrFunc	[shape=oval, color=cyan3, label=VarOrFunc];
+		VarOrFunc	[shape=oval, color=cyan3, label="VarOrFunc"];
 		}
 		subgraph codevarchunk{
 		CodeVarChunk -> CodeChunk;
 		CodeVarChunk -> MaybeCodeChunk;
-		CodeVarChunk	[shape=oval, color=cyan3, label=CodeVarChunk];
+		CodeVarChunk	[shape=oval, color=cyan3, label="CodeVarChunk"];
 		}
 		subgraph codefuncchunk{
 		CodeFuncChunk -> CodeChunk;
-		CodeFuncChunk	[shape=oval, color=darkgreen, label=CodeFuncChunk];
+		CodeFuncChunk	[shape=oval, color=darkgreen, label="CodeFuncChunk"];
 		}
 	}
 	subgraph convert {
@@ -25,43 +25,43 @@ digraph alltypes {
 	}
 	subgraph expr {
 		subgraph arithbinop{
-		ArithBinOp	[shape=oval, color=darkviolet, label=ArithBinOp];
+		ArithBinOp	[shape=oval, color=darkviolet, label="ArithBinOp"];
 		}
 		subgraph eqbinop{
-		EqBinOp	[shape=oval, color=darkviolet, label=EqBinOp];
+		EqBinOp	[shape=oval, color=darkviolet, label="EqBinOp"];
 		}
 		subgraph boolbinop{
-		BoolBinOp	[shape=oval, color=darkviolet, label=BoolBinOp];
+		BoolBinOp	[shape=oval, color=darkviolet, label="BoolBinOp"];
 		}
 		subgraph labinop{
-		LABinOp	[shape=oval, color=darkviolet, label=LABinOp];
+		LABinOp	[shape=oval, color=darkviolet, label="LABinOp"];
 		}
 		subgraph ordbinop{
-		OrdBinOp	[shape=oval, color=darkviolet, label=OrdBinOp];
+		OrdBinOp	[shape=oval, color=darkviolet, label="OrdBinOp"];
 		}
 		subgraph vvvbinop{
-		VVVBinOp	[shape=oval, color=darkviolet, label=VVVBinOp];
+		VVVBinOp	[shape=oval, color=darkviolet, label="VVVBinOp"];
 		}
 		subgraph vvnbinop{
-		VVNBinOp	[shape=oval, color=darkviolet, label=VVNBinOp];
+		VVNBinOp	[shape=oval, color=darkviolet, label="VVNBinOp"];
 		}
 		subgraph assocarithoper{
-		AssocArithOper	[shape=oval, color=darkviolet, label=AssocArithOper];
+		AssocArithOper	[shape=oval, color=darkviolet, label="AssocArithOper"];
 		}
 		subgraph assocbooloper{
-		AssocBoolOper	[shape=oval, color=darkviolet, label=AssocBoolOper];
+		AssocBoolOper	[shape=oval, color=darkviolet, label="AssocBoolOper"];
 		}
 		subgraph ufunc{
-		UFunc	[shape=oval, color=darkviolet, label=UFunc];
+		UFunc	[shape=oval, color=darkviolet, label="UFunc"];
 		}
 		subgraph ufuncb{
-		UFuncB	[shape=oval, color=darkviolet, label=UFuncB];
+		UFuncB	[shape=oval, color=darkviolet, label="UFuncB"];
 		}
 		subgraph ufuncvv{
-		UFuncVV	[shape=oval, color=darkviolet, label=UFuncVV];
+		UFuncVV	[shape=oval, color=darkviolet, label="UFuncVV"];
 		}
 		subgraph ufuncvn{
-		UFuncVN	[shape=oval, color=darkviolet, label=UFuncVN];
+		UFuncVN	[shape=oval, color=darkviolet, label="UFuncVN"];
 		}
 		subgraph codeexpr{
 		CodeExpr -> Double;
@@ -85,7 +85,7 @@ digraph alltypes {
 		CodeExpr -> VVNBinOp;
 		CodeExpr -> DomainDesc;
 		CodeExpr -> RealInterval;
-		CodeExpr	[shape=oval, color=darkviolet, label=CodeExpr];
+		CodeExpr	[shape=oval, color=darkviolet, label="CodeExpr"];
 		}
 	}
 	subgraph codeexpr {

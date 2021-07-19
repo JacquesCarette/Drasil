@@ -1,4 +1,4 @@
 digraph variableswiftcode{
 VariableSwiftCode -> VarData;
-VariableSwiftCode	[shape=oval, color=red2, label=VariableSwiftCode];
+VariableSwiftCode	[shape=oval, color=red2, label="VariableSwiftCode"];
 }

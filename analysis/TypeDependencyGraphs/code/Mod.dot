@@ -5,5 +5,5 @@ Mod -> Import;
 Mod -> Class;
 Mod -> Func;
 Mod -> Mod;
-Mod	[shape=oval, color=darkviolet, label=Mod];
+Mod	[shape=oval, color=darkviolet, label="Mod"];
 }

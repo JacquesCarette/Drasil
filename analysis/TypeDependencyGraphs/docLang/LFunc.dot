@@ -1,5 +1,5 @@
 digraph lfunc{
 LFunc -> LFunc;
 LFunc -> DefinedQuantityDict;
-LFunc	[shape=oval, color=darkviolet, label=LFunc];
+LFunc	[shape=oval, color=darkviolet, label="LFunc"];
 }

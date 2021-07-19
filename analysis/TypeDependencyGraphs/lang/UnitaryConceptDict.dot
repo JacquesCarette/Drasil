@@ -2,5 +2,5 @@ digraph unitaryconceptdict{
 UnitaryConceptDict -> UnitaryChunk;
 UnitaryConceptDict -> Sentence;
 UnitaryConceptDict -> UID;
-UnitaryConceptDict	[shape=oval, color=cyan3, label=UnitaryConceptDict];
+UnitaryConceptDict	[shape=oval, color=cyan3, label="UnitaryConceptDict"];
 }

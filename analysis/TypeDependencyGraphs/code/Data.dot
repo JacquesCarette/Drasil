@@ -1,4 +1,4 @@
 digraph data{
 Data -> DataItem;
-Data	[shape=oval, color=darkviolet, label=Data];
+Data	[shape=oval, color=darkviolet, label="Data"];
 }

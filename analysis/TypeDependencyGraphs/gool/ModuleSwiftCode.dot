@@ -1,4 +1,4 @@
 digraph moduleswiftcode{
 ModuleSwiftCode -> ModData;
-ModuleSwiftCode	[shape=oval, color=red2, label=ModuleSwiftCode];
+ModuleSwiftCode	[shape=oval, color=red2, label="ModuleSwiftCode"];
 }

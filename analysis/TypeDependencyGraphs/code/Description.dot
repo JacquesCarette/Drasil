@@ -1,4 +1,4 @@
 digraph description{
 Description -> String;
-Description	[shape=oval, color=red2, label=Description];
+Description	[shape=oval, color=red2, label="Description"];
 }

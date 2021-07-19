@@ -1,4 +1,4 @@
 digraph exceptiontype{
 ExceptionType -> String;
-ExceptionType	[shape=oval, color=darkviolet, label=ExceptionType];
+ExceptionType	[shape=oval, color=darkviolet, label="ExceptionType"];
 }

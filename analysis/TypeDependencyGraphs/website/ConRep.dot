@@ -1,3 +1,3 @@
 digraph conrep{
-ConRep	[shape=oval, color=darkviolet, label=ConRep];
+ConRep	[shape=oval, color=darkviolet, label="ConRep"];
 }

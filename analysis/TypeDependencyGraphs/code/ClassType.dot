@@ -5,5 +5,5 @@ ClassType -> ClassType;
 ClassType -> Name;
 ClassType -> Maybe;
 ClassType -> Description;
-ClassType	[shape=oval, color=darkviolet, label=ClassType];
+ClassType	[shape=oval, color=darkviolet, label="ClassType"];
 }

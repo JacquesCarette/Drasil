@@ -1,4 +1,4 @@
 digraph smethoda{
 SMethoda -> MSaMethoda;
-SMethoda	[shape=oval, color=red2, label=SMethoda];
+SMethoda	[shape=oval, color=red2, label="SMethoda"];
 }

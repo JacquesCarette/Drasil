@@ -1,4 +1,4 @@
 digraph parametercppsrccode{
 ParameterCppSrcCode -> ParamData;
-ParameterCppSrcCode	[shape=oval, color=red2, label=ParameterCppSrcCode];
+ParameterCppSrcCode	[shape=oval, color=red2, label="ParameterCppSrcCode"];
 }

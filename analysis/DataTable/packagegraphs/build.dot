@@ -1,0 +1,14 @@
+digraph build{
+Rule	[shape=oval, color=turquoise4, label="Rule"];
+Command	[shape=oval, color=turquoise4, label="Command"];
+CommandOpts	[shape=oval, color=turquoise4, label="CommandOpts"];
+Type	[shape=oval, color=turquoise4, label="Type"];
+Makefile	[shape=oval, color=turquoise4, label="Makefile"];
+MakeString	[shape=oval, color=turquoise4, label="MakeString"];
+MVar	[shape=oval, color=turquoise4, label="MVar"];
+Semigroup	[shape=oval, color=pink, label="Semigroup"];
+Monoid	[shape=oval, color=pink, label="Monoid"];
+RuleTransformer	[shape=oval, color=magenta, label="RuleTransformer"];
+MakeString -> Semigroup;
+MakeString -> Monoid;
+}

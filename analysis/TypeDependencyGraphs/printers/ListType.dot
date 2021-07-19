@@ -2,5 +2,5 @@ digraph listtype{
 ListType -> ItemTypeMaybe;
 ListType -> Label;
 ListType -> TitleItemTypeMaybe;
-ListType	[shape=oval, color=darkviolet, label=ListType];
+ListType	[shape=oval, color=darkviolet, label="ListType"];
 }

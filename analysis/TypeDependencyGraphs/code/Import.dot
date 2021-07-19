@@ -1,4 +1,4 @@
 digraph import{
 Import -> String;
-Import	[shape=oval, color=red2, label=Import];
+Import	[shape=oval, color=red2, label="Import"];
 }

@@ -1,4 +1,4 @@
 digraph statementcppsrccode{
 StatementCppSrcCode -> DocTerminator;
-StatementCppSrcCode	[shape=oval, color=red2, label=StatementCppSrcCode];
+StatementCppSrcCode	[shape=oval, color=red2, label="StatementCppSrcCode"];
 }

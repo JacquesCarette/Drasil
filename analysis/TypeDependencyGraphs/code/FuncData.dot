@@ -3,5 +3,5 @@ FuncData -> Name;
 FuncData -> Description;
 FuncData -> DataDesc;
 FuncData -> FuncData;
-FuncData	[shape=oval, color=darkviolet, label=FuncData];
+FuncData	[shape=oval, color=darkviolet, label="FuncData"];
 }

@@ -2,5 +2,5 @@ digraph runnable{
 Runnable -> BuildName;
 Runnable -> NameOpts;
 Runnable -> RunType;
-Runnable	[shape=oval, color=darkviolet, label=Runnable];
+Runnable	[shape=oval, color=darkviolet, label="Runnable"];
 }

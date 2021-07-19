@@ -1,4 +1,4 @@
 digraph msstatementa{
 MSStatementa -> MSaStatementa;
-MSStatementa	[shape=oval, color=red2, label=MSStatementa];
+MSStatementa	[shape=oval, color=red2, label="MSStatementa"];
 }

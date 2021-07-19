@@ -1,4 +1,4 @@
 digraph blockpcppsrccodecpphdrcode{
 BlockpCppSrcCodeCppHdrCode -> Doc;
-BlockpCppSrcCodeCppHdrCode	[shape=oval, color=red2, label=BlockpCppSrcCodeCppHdrCode];
+BlockpCppSrcCodeCppHdrCode	[shape=oval, color=red2, label="BlockpCppSrcCodeCppHdrCode"];
 }

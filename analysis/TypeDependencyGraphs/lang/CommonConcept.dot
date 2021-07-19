@@ -1,5 +1,5 @@
 digraph commonconcept{
 CommonConcept -> CI;
 CommonConcept -> Sentence;
-CommonConcept	[shape=oval, color=cyan3, label=CommonConcept];
+CommonConcept	[shape=oval, color=cyan3, label="CommonConcept"];
 }

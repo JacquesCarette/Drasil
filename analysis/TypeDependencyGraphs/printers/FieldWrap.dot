@@ -3,5 +3,5 @@ FieldWrap -> String;
 FieldWrap -> FieldWrap;
 FieldWrap -> Spec;
 FieldWrap -> D;
-FieldWrap	[shape=oval, color=darkviolet, label=FieldWrap];
+FieldWrap	[shape=oval, color=darkviolet, label="FieldWrap"];
 }

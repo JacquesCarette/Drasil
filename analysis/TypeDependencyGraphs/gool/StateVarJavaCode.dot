@@ -1,4 +1,4 @@
 digraph statevarjavacode{
 StateVarJavaCode -> Doc;
-StateVarJavaCode	[shape=oval, color=red2, label=StateVarJavaCode];
+StateVarJavaCode	[shape=oval, color=red2, label="StateVarJavaCode"];
 }

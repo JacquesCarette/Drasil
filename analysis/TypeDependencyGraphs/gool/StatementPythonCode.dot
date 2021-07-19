@@ -1,4 +1,4 @@
 digraph statementpythoncode{
 StatementPythonCode -> DocTerminator;
-StatementPythonCode	[shape=oval, color=red2, label=StatementPythonCode];
+StatementPythonCode	[shape=oval, color=red2, label="StatementPythonCode"];
 }

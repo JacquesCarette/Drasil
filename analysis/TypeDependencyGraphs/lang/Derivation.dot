@@ -1,5 +1,5 @@
 digraph derivation{
 Derivation -> Sentence;
 Derivation -> Derivation;
-Derivation	[shape=oval, color=darkviolet, label=Derivation];
+Derivation	[shape=oval, color=darkviolet, label="Derivation"];
 }

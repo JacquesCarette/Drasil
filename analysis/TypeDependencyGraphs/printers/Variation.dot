@@ -1,5 +1,5 @@
 digraph variation{
 Variation -> String;
 Variation -> Doc;
-Variation	[shape=oval, color=darkviolet, label=Variation];
+Variation	[shape=oval, color=darkviolet, label="Variation"];
 }

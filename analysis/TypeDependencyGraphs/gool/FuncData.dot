@@ -1,5 +1,5 @@
 digraph funcdata{
 FuncData -> TypeData;
 FuncData -> Doc;
-FuncData	[shape=oval, color=cyan3, label=FuncData];
+FuncData	[shape=oval, color=cyan3, label="FuncData"];
 }

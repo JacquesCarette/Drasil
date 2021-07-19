@@ -1,5 +1,5 @@
 digraph constraintset{
 ConstraintSet -> ConceptChunk;
 ConstraintSet -> NonEmptyExpr;
-ConstraintSet	[shape=oval, color=cyan3, label=ConstraintSet];
+ConstraintSet	[shape=oval, color=cyan3, label="ConstraintSet"];
 }

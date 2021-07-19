@@ -1,5 +1,5 @@
 digraph field{
 Field -> Verbosity;
 Field -> InclUnits;
-Field	[shape=oval, color=darkviolet, label=Field];
+Field	[shape=oval, color=darkviolet, label="Field"];
 }

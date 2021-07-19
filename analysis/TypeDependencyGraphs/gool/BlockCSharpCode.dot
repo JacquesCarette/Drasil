@@ -1,4 +1,4 @@
 digraph blockcsharpcode{
 BlockCSharpCode -> Doc;
-BlockCSharpCode	[shape=oval, color=red2, label=BlockCSharpCode];
+BlockCSharpCode	[shape=oval, color=red2, label="BlockCSharpCode"];
 }

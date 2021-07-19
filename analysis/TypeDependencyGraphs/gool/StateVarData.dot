@@ -1,5 +1,5 @@
 digraph statevardata{
 StateVarData -> ScopeTag;
 StateVarData -> Doc;
-StateVarData	[shape=oval, color=cyan3, label=StateVarData];
+StateVarData	[shape=oval, color=cyan3, label="StateVarData"];
 }

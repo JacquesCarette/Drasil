@@ -1,4 +1,4 @@
 digraph modulecsharpcode{
 ModuleCSharpCode -> ModData;
-ModuleCSharpCode	[shape=oval, color=red2, label=ModuleCSharpCode];
+ModuleCSharpCode	[shape=oval, color=red2, label="ModuleCSharpCode"];
 }

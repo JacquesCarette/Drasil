@@ -1,4 +1,4 @@
 digraph index{
 Index -> Integer;
-Index	[shape=oval, color=red2, label=Index];
+Index	[shape=oval, color=red2, label="Index"];
 }

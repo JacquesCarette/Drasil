@@ -1,4 +1,4 @@
 digraph msparametera{
 MSParametera -> MSaParametera;
-MSParametera	[shape=oval, color=red2, label=MSParametera];
+MSParametera	[shape=oval, color=red2, label="MSParametera"];
 }

@@ -1,4 +1,4 @@
 digraph classdef{
 ClassDef -> StringString;
-ClassDef	[shape=oval, color=red2, label=ClassDef];
+ClassDef	[shape=oval, color=red2, label="ClassDef"];
 }

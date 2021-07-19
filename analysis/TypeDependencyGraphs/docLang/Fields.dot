@@ -1,4 +1,4 @@
 digraph fields{
 Fields -> Field;
-Fields	[shape=oval, color=red2, label=Fields];
+Fields	[shape=oval, color=red2, label="Fields"];
 }

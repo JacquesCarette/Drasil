@@ -20,5 +20,5 @@ CodeExpr -> VVVBinOp;
 CodeExpr -> VVNBinOp;
 CodeExpr -> DomainDesc;
 CodeExpr -> RealInterval;
-CodeExpr	[shape=oval, color=darkviolet, label=CodeExpr];
+CodeExpr	[shape=oval, color=darkviolet, label="CodeExpr"];
 }

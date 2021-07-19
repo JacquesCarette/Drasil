@@ -1,4 +1,4 @@
 digraph auxhelperjavaproject{
 AuxHelperJavaProject -> Doc;
-AuxHelperJavaProject	[shape=oval, color=red2, label=AuxHelperJavaProject];
+AuxHelperJavaProject	[shape=oval, color=red2, label="AuxHelperJavaProject"];
 }

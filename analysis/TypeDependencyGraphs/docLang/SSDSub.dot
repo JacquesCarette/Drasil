@@ -2,5 +2,5 @@ digraph ssdsub{
 SSDSub -> ProblemDescription;
 SSDSub -> SSDSub;
 SSDSub -> SolChSpec;
-SSDSub	[shape=oval, color=darkviolet, label=SSDSub];
+SSDSub	[shape=oval, color=darkviolet, label="SSDSub"];
 }

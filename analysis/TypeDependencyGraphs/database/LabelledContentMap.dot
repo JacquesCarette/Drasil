@@ -1,4 +1,4 @@
 digraph labelledcontentmap{
 LabelledContentMap -> UMapLabelledContent;
-LabelledContentMap	[shape=oval, color=red2, label=LabelledContentMap];
+LabelledContentMap	[shape=oval, color=red2, label="LabelledContentMap"];
 }

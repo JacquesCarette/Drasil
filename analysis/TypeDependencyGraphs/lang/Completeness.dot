@@ -1,3 +1,3 @@
 digraph completeness{
-Completeness	[shape=oval, color=darkviolet, label=Completeness];
+Completeness	[shape=oval, color=darkviolet, label="Completeness"];
 }

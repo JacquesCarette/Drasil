@@ -1,5 +1,5 @@
 digraph parameter{
 Parameter -> ParameterChunk;
 Parameter -> Space;
-Parameter	[shape=oval, color=darkviolet, label=Parameter];
+Parameter	[shape=oval, color=darkviolet, label="Parameter"];
 }

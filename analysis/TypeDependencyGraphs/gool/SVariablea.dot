@@ -1,4 +1,4 @@
 digraph svariablea{
 SVariablea -> VSaVariablea;
-SVariablea	[shape=oval, color=red2, label=SVariablea];
+SVariablea	[shape=oval, color=red2, label="SVariablea"];
 }

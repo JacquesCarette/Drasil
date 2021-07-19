@@ -1,4 +1,4 @@
 digraph swiftprojecta{
 SwiftProjecta -> a;
-SwiftProjecta	[shape=oval, color=darkgreen, label=SwiftProjecta];
+SwiftProjecta	[shape=oval, color=darkgreen, label="SwiftProjecta"];
 }

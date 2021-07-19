@@ -1,4 +1,4 @@
 digraph valuecppsrccode{
 ValueCppSrcCode -> ValData;
-ValueCppSrcCode	[shape=oval, color=red2, label=ValueCppSrcCode];
+ValueCppSrcCode	[shape=oval, color=red2, label="ValueCppSrcCode"];
 }

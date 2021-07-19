@@ -1,4 +1,4 @@
 digraph statementcsharpcode{
 StatementCSharpCode -> DocTerminator;
-StatementCSharpCode	[shape=oval, color=red2, label=StatementCSharpCode];
+StatementCSharpCode	[shape=oval, color=red2, label="StatementCSharpCode"];
 }

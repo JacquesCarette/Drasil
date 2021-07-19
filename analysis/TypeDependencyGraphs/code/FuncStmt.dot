@@ -3,5 +3,5 @@ FuncStmt -> CodeVarChunk;
 FuncStmt -> CodeExpr;
 FuncStmt -> FuncStmt;
 FuncStmt -> Integer;
-FuncStmt	[shape=oval, color=darkviolet, label=FuncStmt];
+FuncStmt	[shape=oval, color=darkviolet, label="FuncStmt"];
 }

@@ -1,4 +1,4 @@
 digraph makefile{
 Makefile -> Rule;
-Makefile	[shape=oval, color=darkgreen, label=Makefile];
+Makefile	[shape=oval, color=darkgreen, label="Makefile"];
 }

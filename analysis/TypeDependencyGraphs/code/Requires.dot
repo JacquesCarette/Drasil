@@ -1,4 +1,4 @@
 digraph requires{
 Requires -> String;
-Requires	[shape=oval, color=red2, label=Requires];
+Requires	[shape=oval, color=red2, label="Requires"];
 }

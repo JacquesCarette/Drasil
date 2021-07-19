@@ -1,4 +1,4 @@
 digraph offshelfsolnssec{
 OffShelfSolnsSec -> Contents;
-OffShelfSolnsSec	[shape=oval, color=darkgreen, label=OffShelfSolnsSec];
+OffShelfSolnsSec	[shape=oval, color=darkgreen, label="OffShelfSolnsSec"];
 }

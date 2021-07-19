@@ -1,4 +1,4 @@
 digraph variablecpphdrcode{
 VariableCppHdrCode -> VarData;
-VariableCppHdrCode	[shape=oval, color=red2, label=VariableCppHdrCode];
+VariableCppHdrCode	[shape=oval, color=red2, label="VariableCppHdrCode"];
 }

@@ -3,5 +3,5 @@ ModelKinds -> RelationConcept;
 ModelKinds -> ConstraintSet;
 ModelKinds -> QDefinition;
 ModelKinds -> MultiDefn;
-ModelKinds	[shape=oval, color=darkviolet, label=ModelKinds];
+ModelKinds	[shape=oval, color=darkviolet, label="ModelKinds"];
 }

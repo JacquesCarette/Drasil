@@ -3,5 +3,5 @@ IntroSub -> Sentence;
 IntroSub -> IntroSub;
 IntroSub -> CI;
 IntroSub -> Section;
-IntroSub	[shape=oval, color=darkviolet, label=IntroSub];
+IntroSub	[shape=oval, color=darkviolet, label="IntroSub"];
 }

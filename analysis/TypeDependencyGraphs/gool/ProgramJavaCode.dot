@@ -1,4 +1,4 @@
 digraph programjavacode{
 ProgramJavaCode -> ProgData;
-ProgramJavaCode	[shape=oval, color=red2, label=ProgramJavaCode];
+ProgramJavaCode	[shape=oval, color=red2, label="ProgramJavaCode"];
 }

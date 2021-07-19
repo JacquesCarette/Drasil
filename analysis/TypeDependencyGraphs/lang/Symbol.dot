@@ -4,5 +4,5 @@ Symbol -> Int;
 Symbol -> Special;
 Symbol -> Decoration;
 Symbol -> Symbol;
-Symbol	[shape=oval, color=darkviolet, label=Symbol];
+Symbol	[shape=oval, color=darkviolet, label="Symbol"];
 }

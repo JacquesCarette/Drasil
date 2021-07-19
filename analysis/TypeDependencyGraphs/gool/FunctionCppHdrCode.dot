@@ -1,4 +1,4 @@
 digraph functioncpphdrcode{
 FunctionCppHdrCode -> FuncData;
-FunctionCppHdrCode	[shape=oval, color=red2, label=FunctionCppHdrCode];
+FunctionCppHdrCode	[shape=oval, color=red2, label="FunctionCppHdrCode"];
 }

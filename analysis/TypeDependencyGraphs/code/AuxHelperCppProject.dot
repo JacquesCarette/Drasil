@@ -1,4 +1,4 @@
 digraph auxhelpercppproject{
 AuxHelperCppProject -> Doc;
-AuxHelperCppProject	[shape=oval, color=red2, label=AuxHelperCppProject];
+AuxHelperCppProject	[shape=oval, color=red2, label="AuxHelperCppProject"];
 }

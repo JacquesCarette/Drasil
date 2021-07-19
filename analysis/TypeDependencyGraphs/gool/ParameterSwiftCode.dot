@@ -1,4 +1,4 @@
 digraph parameterswiftcode{
 ParameterSwiftCode -> ParamData;
-ParameterSwiftCode	[shape=oval, color=red2, label=ParameterSwiftCode];
+ParameterSwiftCode	[shape=oval, color=red2, label="ParameterSwiftCode"];
 }

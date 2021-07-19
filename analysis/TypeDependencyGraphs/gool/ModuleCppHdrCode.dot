@@ -1,4 +1,4 @@
 digraph modulecpphdrcode{
 ModuleCppHdrCode -> ModData;
-ModuleCppHdrCode	[shape=oval, color=red2, label=ModuleCppHdrCode];
+ModuleCppHdrCode	[shape=oval, color=red2, label="ModuleCppHdrCode"];
 }

@@ -1,4 +1,4 @@
 digraph dependencies{
 Dependencies -> Target;
-Dependencies	[shape=oval, color=red2, label=Dependencies];
+Dependencies	[shape=oval, color=red2, label="Dependencies"];
 }

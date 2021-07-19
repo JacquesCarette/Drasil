@@ -1,4 +1,4 @@
 digraph variablecsharpcode{
 VariableCSharpCode -> VarData;
-VariableCSharpCode	[shape=oval, color=red2, label=VariableCSharpCode];
+VariableCSharpCode	[shape=oval, color=red2, label="VariableCSharpCode"];
 }

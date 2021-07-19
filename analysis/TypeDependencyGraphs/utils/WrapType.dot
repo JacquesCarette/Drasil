@@ -1,3 +1,3 @@
 digraph wraptype{
-WrapType	[shape=oval, color=darkviolet, label=WrapType];
+WrapType	[shape=oval, color=darkviolet, label="WrapType"];
 }

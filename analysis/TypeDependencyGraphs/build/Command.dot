@@ -1,5 +1,5 @@
 digraph command{
 Command -> MakeString;
 Command -> CommandOpts;
-Command	[shape=oval, color=darkviolet, label=Command];
+Command	[shape=oval, color=darkviolet, label="Command"];
 }

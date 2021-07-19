@@ -7,5 +7,5 @@ InstanceModel -> MaybeDerivation;
 InstanceModel -> ShortName;
 InstanceModel -> String;
 InstanceModel -> Sentence;
-InstanceModel	[shape=oval, color=cyan3, label=InstanceModel];
+InstanceModel	[shape=oval, color=cyan3, label="InstanceModel"];
 }

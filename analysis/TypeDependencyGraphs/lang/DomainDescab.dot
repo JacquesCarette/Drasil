@@ -4,5 +4,5 @@ DomainDescab -> RTopology;
 DomainDescab -> a;
 DomainDescab -> b;
 DomainDescab -> DomainDesc;
-DomainDescab	[shape=oval, color=darkviolet, label=DomainDescab];
+DomainDescab	[shape=oval, color=darkviolet, label="DomainDescab"];
 }

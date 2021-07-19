@@ -1,4 +1,4 @@
 digraph bodyswiftcode{
 BodySwiftCode -> Doc;
-BodySwiftCode	[shape=oval, color=red2, label=BodySwiftCode];
+BodySwiftCode	[shape=oval, color=red2, label="BodySwiftCode"];
 }

@@ -5,5 +5,5 @@ SystemInformation -> Idea;
 SystemInformation -> b;
 SystemInformation -> HasName;
 SystemInformation -> c;
-SystemInformation	[shape=oval, color=darkviolet, label=SystemInformation];
+SystemInformation	[shape=oval, color=darkviolet, label="SystemInformation"];
 }

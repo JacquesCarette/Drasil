@@ -1,3 +1,3 @@
 digraph verbosity{
-Verbosity	[shape=oval, color=darkviolet, label=Verbosity];
+Verbosity	[shape=oval, color=darkviolet, label="Verbosity"];
 }

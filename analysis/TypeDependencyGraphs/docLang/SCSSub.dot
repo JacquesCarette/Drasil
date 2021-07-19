@@ -10,5 +10,5 @@ SCSSub -> Constrained;
 SCSSub -> HasReasVal;
 SCSSub -> MayHaveUnit;
 SCSSub -> Contents;
-SCSSub	[shape=oval, color=darkviolet, label=SCSSub];
+SCSSub	[shape=oval, color=darkviolet, label="SCSSub"];
 }

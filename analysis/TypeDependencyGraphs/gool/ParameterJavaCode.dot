@@ -1,4 +1,4 @@
 digraph parameterjavacode{
 ParameterJavaCode -> ParamData;
-ParameterJavaCode	[shape=oval, color=red2, label=ParameterJavaCode];
+ParameterJavaCode	[shape=oval, color=red2, label="ParameterJavaCode"];
 }

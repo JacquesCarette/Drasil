@@ -1,4 +1,4 @@
 digraph header{
 Header -> Sentence;
-Header	[shape=oval, color=red2, label=Header];
+Header	[shape=oval, color=red2, label="Header"];
 }

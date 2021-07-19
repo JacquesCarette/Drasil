@@ -1,4 +1,4 @@
 digraph optimizechoice{
 OptimizeChoice -> Doc;
-OptimizeChoice	[shape=oval, color=red2, label=OptimizeChoice];
+OptimizeChoice	[shape=oval, color=red2, label="OptimizeChoice"];
 }

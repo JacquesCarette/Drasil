@@ -1,4 +1,4 @@
 digraph typejavacode{
 TypeJavaCode -> TypeData;
-TypeJavaCode	[shape=oval, color=red2, label=TypeJavaCode];
+TypeJavaCode	[shape=oval, color=red2, label="TypeJavaCode"];
 }

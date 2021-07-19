@@ -1,4 +1,4 @@
 digraph binaryopcppsrccode{
 BinaryOpCppSrcCode -> OpData;
-BinaryOpCppSrcCode	[shape=oval, color=red2, label=BinaryOpCppSrcCode];
+BinaryOpCppSrcCode	[shape=oval, color=red2, label="BinaryOpCppSrcCode"];
 }

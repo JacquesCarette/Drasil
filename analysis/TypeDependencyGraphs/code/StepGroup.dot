@@ -1,4 +1,4 @@
 digraph stepgroup{
 StepGroup -> NonEmptyStep;
-StepGroup	[shape=oval, color=red2, label=StepGroup];
+StepGroup	[shape=oval, color=red2, label="StepGroup"];
 }

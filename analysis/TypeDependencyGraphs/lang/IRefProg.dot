@@ -1,4 +1,4 @@
 digraph irefprog{
 IRefProg -> UID;
-IRefProg	[shape=oval, color=darkviolet, label=IRefProg];
+IRefProg	[shape=oval, color=darkviolet, label="IRefProg"];
 }

@@ -1,3 +1,3 @@
 digraph ordbinop{
-OrdBinOp	[shape=oval, color=darkviolet, label=OrdBinOp];
+OrdBinOp	[shape=oval, color=darkviolet, label="OrdBinOp"];
 }

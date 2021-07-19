@@ -1,4 +1,4 @@
 digraph importjavacode{
 ImportJavaCode -> Doc;
-ImportJavaCode	[shape=oval, color=red2, label=ImportJavaCode];
+ImportJavaCode	[shape=oval, color=red2, label="ImportJavaCode"];
 }

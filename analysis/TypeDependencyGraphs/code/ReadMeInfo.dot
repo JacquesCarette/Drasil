@@ -7,5 +7,5 @@ ReadMeInfo -> Name;
 ReadMeInfo -> FilePath;
 ReadMeInfo -> Contributor;
 ReadMeInfo -> CaseName;
-ReadMeInfo	[shape=oval, color=cyan3, label=ReadMeInfo];
+ReadMeInfo	[shape=oval, color=cyan3, label="ReadMeInfo"];
 }

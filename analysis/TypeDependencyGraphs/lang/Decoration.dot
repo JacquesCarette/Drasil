@@ -1,3 +1,3 @@
 digraph decoration{
-Decoration	[shape=oval, color=darkviolet, label=Decoration];
+Decoration	[shape=oval, color=darkviolet, label="Decoration"];
 }

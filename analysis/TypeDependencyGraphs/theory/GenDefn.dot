@@ -6,5 +6,5 @@ GenDefn -> DecRef;
 GenDefn -> ShortName;
 GenDefn -> String;
 GenDefn -> Sentence;
-GenDefn	[shape=oval, color=cyan3, label=GenDefn];
+GenDefn	[shape=oval, color=cyan3, label="GenDefn"];
 }

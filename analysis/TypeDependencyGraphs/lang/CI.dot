@@ -2,5 +2,5 @@ digraph ci{
 CI -> UID;
 CI -> NP;
 CI -> String;
-CI	[shape=oval, color=cyan3, label=CI];
+CI	[shape=oval, color=cyan3, label="CI"];
 }

@@ -1,4 +1,4 @@
 digraph functionswiftcode{
 FunctionSwiftCode -> FuncData;
-FunctionSwiftCode	[shape=oval, color=red2, label=FunctionSwiftCode];
+FunctionSwiftCode	[shape=oval, color=red2, label="FunctionSwiftCode"];
 }

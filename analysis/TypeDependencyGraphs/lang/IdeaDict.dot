@@ -1,5 +1,5 @@
 digraph ideadict{
 IdeaDict -> NamedChunk;
 IdeaDict -> MaybeString;
-IdeaDict	[shape=oval, color=cyan3, label=IdeaDict];
+IdeaDict	[shape=oval, color=cyan3, label="IdeaDict"];
 }

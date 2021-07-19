@@ -1,4 +1,4 @@
 digraph blockjavacode{
 BlockJavaCode -> Doc;
-BlockJavaCode	[shape=oval, color=red2, label=BlockJavaCode];
+BlockJavaCode	[shape=oval, color=red2, label="BlockJavaCode"];
 }

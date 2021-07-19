@@ -3,5 +3,5 @@ Rule -> Target;
 Rule -> Dependencies;
 Rule -> Type;
 Rule -> Command;
-Rule	[shape=oval, color=darkviolet, label=Rule];
+Rule	[shape=oval, color=darkviolet, label="Rule"];
 }

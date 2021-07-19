@@ -3,5 +3,5 @@ Document -> Title;
 Document -> Author;
 Document -> ShowTableOfContents;
 Document -> Section;
-Document	[shape=oval, color=darkviolet, label=Document];
+Document	[shape=oval, color=darkviolet, label="Document"];
 }

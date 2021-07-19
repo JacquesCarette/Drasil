@@ -1,4 +1,4 @@
 digraph glassthickness{
 GlassThickness -> DoubleDouble;
-GlassThickness	[shape=oval, color=red2, label=GlassThickness];
+GlassThickness	[shape=oval, color=red2, label="GlassThickness"];
 }

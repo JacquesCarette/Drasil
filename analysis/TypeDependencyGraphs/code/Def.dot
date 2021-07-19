@@ -1,4 +1,4 @@
 digraph def{
 Def -> CodeDefinition;
-Def	[shape=oval, color=red2, label=Def];
+Def	[shape=oval, color=red2, label="Def"];
 }

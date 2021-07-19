@@ -1,4 +1,4 @@
 digraph constraintce{
 ConstraintCE -> ConstraintCodeExpr;
-ConstraintCE	[shape=oval, color=red2, label=ConstraintCE];
+ConstraintCE	[shape=oval, color=red2, label="ConstraintCE"];
 }

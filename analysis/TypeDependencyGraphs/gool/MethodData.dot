@@ -1,4 +1,4 @@
 digraph methoddata{
 MethodData -> Doc;
-MethodData	[shape=oval, color=darkgreen, label=MethodData];
+MethodData	[shape=oval, color=darkgreen, label="MethodData"];
 }

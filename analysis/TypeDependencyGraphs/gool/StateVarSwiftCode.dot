@@ -1,4 +1,4 @@
 digraph statevarswiftcode{
 StateVarSwiftCode -> Doc;
-StateVarSwiftCode	[shape=oval, color=red2, label=StateVarSwiftCode];
+StateVarSwiftCode	[shape=oval, color=red2, label="StateVarSwiftCode"];
 }

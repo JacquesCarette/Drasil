@@ -1,4 +1,4 @@
 digraph username{
 Username -> String;
-Username	[shape=oval, color=red2, label=Username];
+Username	[shape=oval, color=red2, label="Username"];
 }

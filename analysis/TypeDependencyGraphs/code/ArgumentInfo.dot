@@ -10,5 +10,5 @@ ArgumentInfo -> Requires;
 ArgumentInfo -> Description;
 ArgumentInfo -> ClassInfo;
 ArgumentInfo -> NonEmpty;
-ArgumentInfo	[shape=oval, color=darkviolet, label=ArgumentInfo];
+ArgumentInfo	[shape=oval, color=darkviolet, label="ArgumentInfo"];
 }

@@ -1,4 +1,4 @@
 digraph statevarcppsrccode{
 StateVarCppSrcCode -> StateVarData;
-StateVarCppSrcCode	[shape=oval, color=red2, label=StateVarCppSrcCode];
+StateVarCppSrcCode	[shape=oval, color=red2, label="StateVarCppSrcCode"];
 }

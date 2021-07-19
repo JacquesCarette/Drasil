@@ -1,4 +1,4 @@
 digraph poscallr{
 PosCallr -> LabelVSTyperSValuerSValuer;
-PosCallr	[shape=oval, color=red2, label=PosCallr];
+PosCallr	[shape=oval, color=red2, label="PosCallr"];
 }

@@ -1,4 +1,4 @@
 digraph filecsharpcode{
 FileCSharpCode -> FileData;
-FileCSharpCode	[shape=oval, color=red2, label=FileCSharpCode];
+FileCSharpCode	[shape=oval, color=red2, label="FileCSharpCode"];
 }

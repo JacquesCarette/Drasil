@@ -1,4 +1,4 @@
 digraph permanencepcppsrccodecpphdrcode{
 PermanencepCppSrcCodeCppHdrCode -> BindData;
-PermanencepCppSrcCodeCppHdrCode	[shape=oval, color=red2, label=PermanencepCppSrcCodeCppHdrCode];
+PermanencepCppSrcCodeCppHdrCode	[shape=oval, color=red2, label="PermanencepCppSrcCodeCppHdrCode"];
 }

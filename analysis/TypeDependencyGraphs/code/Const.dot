@@ -1,4 +1,4 @@
 digraph const{
 Const -> CodeDefinition;
-Const	[shape=oval, color=red2, label=Const];
+Const	[shape=oval, color=red2, label="Const"];
 }

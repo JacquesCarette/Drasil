@@ -1,4 +1,4 @@
 digraph modulepythoncode{
 ModulePythonCode -> ModData;
-ModulePythonCode	[shape=oval, color=red2, label=ModulePythonCode];
+ModulePythonCode	[shape=oval, color=red2, label="ModulePythonCode"];
 }

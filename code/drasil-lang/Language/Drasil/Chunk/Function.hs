@@ -39,7 +39,7 @@ instance Idea          FuncDefn where getA = getA . (^. qua)
 -- | Finds the output 'Space' of the 'FuncDefn'.
 instance HasSpace      FuncDefn where typ = spc
 -- | Finds the 'Symbol' of the function.
-instance HasSymbol     FuncDefn where symbol = symbol . (^. qua)  -- TODO: what should the symbol be? "F(X,Y,Z)" or just "F"? Leaving as "F" for now since we match stable
+instance HasSymbol     FuncDefn where symbol = symbol . (^. qua)
 -- | Finds the definition of the 'FuncDefn'.
 instance Definition    FuncDefn where defn = defn'
 -- | 'FuncDefn's have a 'Quantity'.

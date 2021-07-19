@@ -32,7 +32,7 @@ data SpaceDefn -- FIXME: This should be defined.
 --      * defq - definitions ('QDefinition's),
 --      * invs - invariants ('DisplayExpr's),
 --      * dfun - defined functions ('QDefinition's),
---      * ref - accompanying references ('Reference's),
+--      * ref - accompanying references ('DecRef's),
 --      * lb - a label ('SpaceDefn'),
 --      * ra - reference address ('SpaceDefn'),
 --      * notes - additional notes ('Sentence's).
@@ -48,7 +48,7 @@ data TheoryModel = TM
   , _defq  :: [QDefinition]
   , _invs  :: [DisplayExpr]
   , _dfun  :: [QDefinition]
-  , _rf    :: [Reference]
+  , _rf    :: [DecRef]
   ,  lb    :: ShortName
   ,  ra    :: String
   , _notes :: [Sentence]
@@ -63,8 +63,10 @@ instance NamedIdea          TheoryModel where term = mk . term
 instance Idea               TheoryModel where getA = getA . view mk
 -- | Finds the definition of the 'ConceptChunk' contained in a 'TheoryModel'.
 instance Definition         TheoryModel where defn = mk . defn
--- | Finds 'Reference's contained in the 'TheoryModel'.
-instance HasReference       TheoryModel where getReferences = rf
+{-- | Finds 'Reference's contained in the 'TheoryModel'.
+instance HasReference       TheoryModel where getReferences l = map ref $ rf l-}
+-- | Finds 'DecRef's contained in the 'TheoryModel'.
+instance HasDecRef          TheoryModel where getDecRefs = rf
 -- | Finds the domain of the 'ConceptChunk' contained in a 'TheoryModel'.
 instance ConceptDomain      TheoryModel where cdom = cdom . view mk
 -- | Finds any additional notes for the 'TheoryModel'.
@@ -86,13 +88,13 @@ instance Theory             TheoryModel where
 -- | Finds the 'ShortName' of the 'TheoryModel'.
 instance HasShortName       TheoryModel where shortname = lb
 -- | Finds the reference address of the 'TheoryModel'.
-instance HasRefAddress      TheoryModel where getRefAdd = ra
+instance HasRefAddress      TheoryModel where getRefAdd l = RP (prepend $ abrv l) (ra l)
 -- | Finds the idea of a 'TheoryModel' (abbreviation).
 instance CommonIdea         TheoryModel where abrv _ = abrv thModel
 -- | Finds the reference address of a 'TheoryModel'.
 instance Referable TheoryModel where
-  refAdd      = getRefAdd
-  renderRef l = RP (prepend $ abrv l) (getRefAdd l)
+  refAdd      = ra
+  renderRef l = RP (prepend $ abrv l) (refAdd l)
 
 -- TODO: Theory Models should generally be using their own UID, instead of
 --       having their UIDs derived by the model kind.
@@ -104,7 +106,7 @@ instance Referable TheoryModel where
 -- | Constructor for theory models. Must have a source. Uses the shortname of the reference address.
 tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind ->
     [q] -> [c] -> [QDefinition] ->
-    [DisplayExpr] -> [QDefinition] -> [Reference] ->
+    [DisplayExpr] -> [QDefinition] -> [DecRef] ->
     String -> [Sentence] -> TheoryModel
 tm mkind _ _ _  _   _   [] _   = error $ "Source field of " ++ (mkind ^. uid) ++ " is empty"
 tm mkind q c dq inv dfn r  lbe = 

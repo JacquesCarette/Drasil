@@ -7,7 +7,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts, _constants,
   _constraints, _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, 
-  _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
+  _outputs, _quants, _sys, _sysinfodb, _usedinfodb, _folderPath)
 import Theory.Drasil (GenDefn, InstanceModel)
 import Utils.Drasil
 import Utils.Drasil.Concepts
@@ -24,7 +24,7 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocSection (..),
   SSDSec(..), InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg), GSDSec(..), GSDSub(..),
   ProblemDescription(PDProg), PDSub(..), intro, mkDoc, fillTraceSI, tsymb'', traceMatStandard, purpDoc, getTraceConfigUID,
-  secRefs)
+  secRefs, traceyGraphGetRefs)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
@@ -85,6 +85,9 @@ printSetting = PI symbMap Equational defaultConfiguration
 resourcePath :: String
 resourcePath = "../../../datafiles/SWHS/"
 
+directoryName :: FilePath
+directoryName = "SWHS"
+
 units :: [UnitDefn]
 units = map unitWrapper [metre, kilogram, second] ++ 
   map unitWrapper [centigrade, joule, watt]
@@ -101,6 +104,7 @@ si = SI {
   _instModels  = [], -- FIXME; empty _instModels
   _datadefs    = SWHS.dataDefs,
   _configFiles = [],
+  _folderPath  = directoryName,
   _inputs      = inputs,
   _outputs     = map qw outputs,
   _defSequence = [] :: [Block QDefinition],
@@ -612,7 +616,7 @@ propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)"
 ----------------------------
 bodyRefs :: [Reference]
 bodyRefs = [ref sysCntxtFig, ref figTank]
-  ++ map ref concIns ++ map ref section ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+  ++ map ref concIns ++ map ref section ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ traceyGraphGetRefs "SWHS"
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ goalRefs ++ dataDefRefs ++ genDefRefs

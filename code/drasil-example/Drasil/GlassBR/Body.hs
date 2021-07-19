@@ -8,7 +8,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
   _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, 
-  _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
+  _outputs, _quants, _sys, _sysinfodb, _usedinfodb, _folderPath)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -22,7 +22,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, TSPurpose),
   Verbosity(Verbose), auxSpecSent, intro, mkDoc,
   termDefnF', tsymb, traceMatStandard, purpDoc, getTraceConfigUID,
-  secRefs, fillTraceSI)
+  secRefs, fillTraceSI, traceyGraphGetRefs)
 
 import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
 
@@ -74,6 +74,9 @@ srs = mkDoc mkSRS  (S.forGen titleize phrase) si
 fullSI :: SystemInformation
 fullSI = fillTraceSI mkSRS si
 
+directoryName :: FilePath
+directoryName = "GlassBR"
+
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
 
@@ -88,6 +91,7 @@ si = SI {
   _instModels  = iMods,
   _datadefs    = GB.dataDefs,
   _configFiles = configFp,
+  _folderPath  = directoryName,
   _inputs      = inputs,
   _outputs     = outputs,
   _defSequence = qDefns,
@@ -387,7 +391,7 @@ blstRskInvWGlassSlab = phrase blastRisk +:+ S "involved with the" +:+
 bodyRefs :: [Reference]
 bodyRefs = map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si)
   ++ map ref [sysCtxFig, demandVsSDFig, dimlessloadVsARFig]
-  ++ map ref concIns ++ map ref section ++ map ref labCon
+  ++ map ref concIns ++ map ref section ++ map ref labCon ++ traceyGraphGetRefs directoryName
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ goalRefs ++ dataDefRefs

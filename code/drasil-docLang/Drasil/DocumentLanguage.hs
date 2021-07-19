@@ -26,7 +26,7 @@ import Language.Drasil.Display (compsy)
 import Utils.Drasil
 
 import Database.Drasil(ChunkDB, SystemInformation(SI), _authors, _kind,
-  _quants, _sys, _sysinfodb, _usedinfodb, ccss, ccss', citeDB, collectUnits,
+  _quants, _sys, _folderPath, _sysinfodb, _usedinfodb, ccss, ccss', citeDB, collectUnits,
   conceptinsTable, generateRefbyMap, idMap, refbyTable, termTable, traceTable)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
@@ -48,8 +48,9 @@ import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
   propCorSolF, solutionCharSpecIntro, specSysDescr, termDefnF, thModF)
 import qualified Drasil.Sections.Stakeholders as Stk (stakeholderIntro,
   tClientF, tCustomerF)
-import qualified Drasil.DocumentLanguage.TraceabilityMatrix as TM (traceMGF,
+import qualified Drasil.DocumentLanguage.TraceabilityMatrix as TM (
   generateTraceTableView)
+import qualified Drasil.DocumentLanguage.TraceabilityGraph as TG (traceMGF)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
   software, unlikelyChg, tOfSymb, tOfUnit)
@@ -65,17 +66,10 @@ import qualified Data.Map as Map (elems, toList)
 mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
 mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
   Document (nw kind `comb` nw sys) (foldlList Comma List $ map (S . name) authors) (findToC l) $
-  mkSections (fillTraceMaps l (fillReqs l si)) l where
+  mkSections (fillTraceSI dd si) l where
     l = mkDocDesc si dd
 
------ Helpers to complete the SystemInformation database. Primarily for traceability. -----
--- I think these should eventually be moved to a different file and then imported here.
--- It's currently a minor hack for the traceability graphs, but it might enable
--- us to add universal information (such as doccon) to the database without
--- the user needing to (see #2675). Or should each example already have a complete SystemInformation before
--- going to this step?
-
--- Helper, testing needed for .dot graphs?
+-- | Helper for filling in the traceability matrix and graph information into the system.
 fillTraceSI :: SRSDecl -> SystemInformation -> SystemInformation
 fillTraceSI dd si = fillTraceMaps l $ fillReqs l si
   where
@@ -374,9 +368,10 @@ mkUCsSec (UCsProg c) = SRS.unlikeChg (intro : mkEnumSimpleD c) []
 
 -- | Helper for making the Traceability Matrices and Graphs section.
 mkTraceabilitySec :: TraceabilitySec -> SystemInformation -> Section
-mkTraceabilitySec (TraceabilityProg progs) si = TM.traceMGF trace
+mkTraceabilitySec (TraceabilityProg progs) si = TG.traceMGF trace
   (map (\(TraceConfig _ pre _ _ _) -> foldlList Comma List pre) progs)
-  (map LlC trace) [] where
+  (map LlC trace) (_folderPath si) []
+  where
   trace = map (\(TraceConfig u _ desc rows cols) -> TM.generateTraceTableView
     u desc rows cols si) progs
 

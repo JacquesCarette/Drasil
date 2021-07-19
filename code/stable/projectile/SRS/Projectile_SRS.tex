@@ -13,6 +13,7 @@
 \usepackage{caption}
 \usepackage{enumitem}
 \usepackage{graphics}
+\usepackage{svg}
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
 \usepackage{url}
@@ -1062,7 +1063,7 @@ The purpose of the traceability matrices is to provide easy references on what h
 \hyperref[gravAccelValue]{A:gravAccelValue} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \bottomrule
-\caption{Traceability Matrix Showing the Connections Between Assumptions dependence of each other.}
+\caption{Traceability Matrix Showing the Connections Between Assumptions and Other Assumptions}
 \label{Table:TraceMatAvsA}
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l}
@@ -1189,6 +1190,52 @@ The purpose of the traceability matrices is to provide easy references on what h
 \caption{Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}
 \label{Table:TraceMatAllvsR}
 \end{longtable}
+The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceGraphAvsA]{Fig:TraceGraphAvsA} shows the dependencies of assumptions on the assumptions. \hyperref[Figure:TraceGraphAvsAll]{Fig:TraceGraphAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Figure:TraceGraphRefvsRef]{Fig:TraceGraphRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. \hyperref[Figure:TraceGraphAllvsR]{Fig:TraceGraphAllvsR} shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models. \hyperref[Figure:TraceGraphAllvsAll]{Fig:TraceGraphAllvsAll} shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.
+
+\begin{figure}
+\begin{center}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../../traceygraphs/Projectile/avsa}
+\caption{TraceGraphAvsA}
+\label{Figure:TraceGraphAvsA}
+\end{center}
+\end{figure}
+\begin{figure}
+\begin{center}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../../traceygraphs/Projectile/avsall}
+\caption{TraceGraphAvsAll}
+\label{Figure:TraceGraphAvsAll}
+\end{center}
+\end{figure}
+\begin{figure}
+\begin{center}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../../traceygraphs/Projectile/refvsref}
+\caption{TraceGraphRefvsRef}
+\label{Figure:TraceGraphRefvsRef}
+\end{center}
+\end{figure}
+\begin{figure}
+\begin{center}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../../traceygraphs/Projectile/allvsr}
+\caption{TraceGraphAllvsR}
+\label{Figure:TraceGraphAllvsR}
+\end{center}
+\end{figure}
+\begin{figure}
+\begin{center}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../../traceygraphs/Projectile/allvsall}
+\caption{TraceGraphAllvsAll}
+\label{Figure:TraceGraphAllvsAll}
+\end{center}
+\end{figure}
+For convenience, the following graphs can be found at the links below:
+
+\begin{itemize}
+\item{\hyperref{../../../traceygraphs/Projectile/avsa.svg}{}{}{TraceGraphAvsA}}
+\item{\hyperref{../../../traceygraphs/Projectile/avsall.svg}{}{}{TraceGraphAvsAll}}
+\item{\hyperref{../../../traceygraphs/Projectile/refvsref.svg}{}{}{TraceGraphRefvsRef}}
+\item{\hyperref{../../../traceygraphs/Projectile/allvsr.svg}{}{}{TraceGraphAllvsR}}
+\item{\hyperref{../../../traceygraphs/Projectile/allvsall.svg}{}{}{TraceGraphAllvsAll}}
+\end{itemize}
 \section{Values of Auxiliary Constants}
 \label{Sec:AuxConstants}
 This section contains the standard values that are used for calculations in Projectile.

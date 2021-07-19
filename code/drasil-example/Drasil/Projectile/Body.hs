@@ -6,7 +6,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
   _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, 
-  _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
+  _outputs, _quants, _sys, _sysinfodb, _usedinfodb, _folderPath)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.NounPhrase as NP
@@ -21,7 +21,7 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
   TConvention(..), TSIntro(..), TraceabilitySec(TraceabilityProg),
   Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, getTraceConfigUID,
-  secRefs, fillTraceSI)
+  secRefs, fillTraceSI, traceyGraphGetRefs)
 
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
@@ -67,6 +67,9 @@ fullSI = fillTraceSI mkSRS si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
+
+directoryName :: FilePath
+directoryName = "Projectile"
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,
@@ -129,6 +132,7 @@ si = SI {
   _instModels  = iMods,
   _datadefs    = dataDefs,
   _configFiles = [],
+  _folderPath  = directoryName,
   _inputs      = inputs,
   _outputs     = outputs,
   _defSequence = [] :: [Block QDefinition],
@@ -227,7 +231,7 @@ acronyms = [oneD, twoD, assumption, dataDefn, genDefn, goalStmt, inModel,
 
 -- References --
 bodyRefs :: [Reference]
-bodyRefs = map ref tMods ++ map ref concIns ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+bodyRefs = map ref tMods ++ map ref concIns ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ traceyGraphGetRefs directoryName
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ figRefs ++ goalRefs ++ dataDefRefs ++ genDefRefs

@@ -17,7 +17,7 @@ import Database.Drasil
        (Block, ChunkDB, ReferenceDB, SystemInformation(SI), _authors, _concepts,
         _configFiles, _constants, _constraints, _datadefs, _defSequence,
         _inputs, _kind, _outputs, _purpose, _quants, _sys, _instModels,
-        _sysinfodb, _usedinfodb, cdb, rdb, refdb)
+        _sysinfodb, _usedinfodb, cdb, rdb, refdb, _folderPath)
 import Drasil.DocLang
        (DerivationDisplay(..),
         DocSection(Bibliography, GSDSec, IntroSec, LCsSec, RefSec, ReqrmntSec,
@@ -28,7 +28,7 @@ import Drasil.DocLang
         SRSDecl, SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec),
         SolChSpec(SCSProg), TSIntro(..), TraceabilitySec(TraceabilityProg),
         Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, getTraceConfigUID,
-        secRefs, fillTraceSI)
+        secRefs, fillTraceSI, traceyGraphGetRefs)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 
 import Language.Drasil
@@ -69,6 +69,9 @@ fullSI = fillTraceSI mkSRS si
 
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
+
+directoryName :: FilePath
+directoryName = "PDController"
 
 mkSRS :: SRSDecl
 mkSRS
@@ -117,7 +120,7 @@ si
        _purpose = [], _quants = symbolsAll,
        _concepts = [] :: [DefinedQuantityDict],
        _datadefs = dataDefinitions, _instModels = [],
-       _configFiles = [], _inputs = inputs, _outputs = outputs,
+       _configFiles = [], _folderPath = directoryName, _inputs = inputs, _outputs = outputs,
        _defSequence = [] :: [Block QDefinition],
        _constraints = map cnstrw inpConstrained, _constants = pidConstants,
        _sysinfodb = symbMap, _usedinfodb = usedDB, refdb = refDB}
@@ -182,7 +185,7 @@ stdFields
 
 -- References --
 bodyRefs :: [Reference]
-bodyRefs = map ref conceptInstances ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+bodyRefs = map ref conceptInstances ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ traceyGraphGetRefs directoryName
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ sysDescRefs ++ dataDefRefs ++ genDefRefs

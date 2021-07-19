@@ -4,7 +4,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
   rdb, refdb, _authors, _concepts, _constants, _constraints, _purpose,
   _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, _outputs, _quants, 
-  _sys, _sysinfodb, _usedinfodb)
+  _sys, _sysinfodb, _usedinfodb, _folderPath)
 import Language.Drasil hiding (C)
 
 import Drasil.Website.Introduction
@@ -51,6 +51,7 @@ si fl = SI {
     _instModels  = [], -- :: [InstanceModel],
     _datadefs    = [], -- :: [DataDefinition],
     _configFiles = [],
+    _folderPath  = "",
     _inputs      = [] :: [QuantityDict],
     _outputs     = [] :: [QuantityDict],
     _defSequence = [] :: [Block QDefinition],

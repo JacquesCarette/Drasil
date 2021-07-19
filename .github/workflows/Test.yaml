@@ -73,3 +73,5 @@ jobs:
         run: make analysis
       - name: "Graphs"
         run: make graphs
+      - name: "Website"
+        run: make website

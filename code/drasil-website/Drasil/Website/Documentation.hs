@@ -18,8 +18,8 @@ haddockDocsTitle = S "Haddock Documentation"
 haddockDocsDesc path = S "The current" +:+ namedRef (docsRef path) (S "Haddock documentation") +:+ S "for the Drasil framework. A variant with" +:+ namedRef (fullDocsRef path) (S "fully exposed modules") +:+ S "is also available."
 docsPath = "index.html"
 fullDocsPath = "full/index.html"
-docsRef path = Reference "haddockDocs" (URI (path ++ docsPath)) (shortname' $ S "HaddockDocs") None
-fullDocsRef path = Reference "fullHaddockDocs" (URI (path ++ fullDocsPath)) (shortname' $ S "fullHaddockDocs") None
+docsRef path = Reference "haddockDocs" (URI (path ++ docsPath)) (shortname' $ S "HaddockDocs")
+fullDocsRef path = Reference "fullHaddockDocs" (URI (path ++ fullDocsPath)) (shortname' $ S "fullHaddockDocs")
 
 docsSecRef :: Reference
 docsSecRef = makeSecRef "Documentation" $ S "Documentation"

@@ -32,6 +32,7 @@ data Package = AMSMath      -- ^ Improves information structure for mathematical
              | FontSpec     -- ^ For utf-8 encoding in lualatex.
              | Unicode      -- ^ For unicode-math in lualatex.
              | EnumItem     -- ^ Contol basic list environments.
+             | SVG          -- ^ For rendering svg diagrams.
              deriving Eq
 
 -- | Adds a 'Package' to the LaTeX document.
@@ -61,6 +62,7 @@ addPackage URL       = usepackage "url"
 addPackage FontSpec  = usepackage "fontspec"
 addPackage Unicode   = usepackage "unicode-math"
 addPackage EnumItem  = usepackage "enumitem"
+addPackage SVG       = usepackage "svg"
 
 -- | Common LaTeX commands.
 data Def = Bibliography
@@ -108,7 +110,7 @@ parseDoc los' =
       let pp = concatMap fst res1 in
       let dd = concatMap snd res1 in
       (Tabu:LongTable:BookTabs:pp,SymbDescriptionP1:SymbDescriptionP2:TabuLine:dd)
-    parseDoc' Figure{}     = ([Graphics,Caption],[])
+    parseDoc' Figure{}     = ([Graphics,Caption, SVG],[])
     parseDoc' Graph{}      = ([Caption,Tikz,Dot2Tex,AdjustBox],[])
     parseDoc' Bib{}        = ([FileContents,BibLaTeX,URL],[Bibliography])
     parseDoc' Header{}     = ([], [])

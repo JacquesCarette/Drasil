@@ -128,21 +128,21 @@ projectileCase5Dox   = ["cpp", "csharp", "java", "python"]
 
 -- Make references for each of the generated SRS files
 getHTMLRef, getPDFRef :: FilePath -> String -> Reference
-getHTMLRef path ex = Reference ("htmlRef" ++ ex) (URI (getHTMLPath path ex)) (shortname' $ S ("htmlRef" ++ ex)) None
-getPDFRef path ex = Reference ("pdfRef" ++ ex) (URI (getPDFPath path ex)) (shortname' $ S ("pdfRef" ++ ex)) None
+getHTMLRef path ex = Reference ("htmlRef" ++ ex) (URI (getHTMLPath path ex)) (shortname' $ S ("htmlRef" ++ ex))
+getPDFRef path ex = Reference ("pdfRef" ++ ex) (URI (getPDFPath path ex)) (shortname' $ S ("pdfRef" ++ ex))
 getHTMLPath, getPDFPath :: FilePath -> String -> FilePath
 getHTMLPath path ex = path ++ ex ++ "/srs/" ++ ex ++ "_SRS.html"
 getPDFPath path ex = path ++ ex ++ "/srs/" ++ ex ++ "_SRS.pdf"
 
 -- Make display names and references for generated code and docs
 getCodeRef, getDoxRef :: FilePath -> String -> String -> (Sentence, Reference)
-getCodeRef path ex lang = (S ("[" ++ convertlang ++ "]"), Reference ("codeRef" ++ ex ++ lang) (URI (getCodePath path ex lang)) (shortname' $ S ("codeRef" ++ ex ++ lang)) None)
+getCodeRef path ex lang = (S ("[" ++ convertlang ++ "]"), Reference ("codeRef" ++ ex ++ lang) (URI (getCodePath path ex lang)) (shortname' $ S ("codeRef" ++ ex ++ lang)))
   where
     convertlang
       | lang == "cpp" = "C++"
       | lang == "csharp" = "C Sharp" -- Drasil printers dont like the # symbol, so we use the full word.
       | otherwise = (toUpper.head) lang : tail lang
-getDoxRef path ex lang = (S ("[" ++ convertlang lang ++ "]"), Reference ("doxRef" ++ ex ++ lang) (URI (getDoxPath path ex lang)) (shortname' $ S ("doxRef" ++ ex ++ lang)) None)
+getDoxRef path ex lang = (S ("[" ++ convertlang lang ++ "]"), Reference ("doxRef" ++ ex ++ lang) (URI (getDoxPath path ex lang)) (shortname' $ S ("doxRef" ++ ex ++ lang)))
   where
     convertlang l
       | l == "cpp" = "C++"

@@ -29,7 +29,7 @@ pbIsSafe :: InstanceModel
 pbIsSafe = imNoDeriv (equationalModelN (nounPhraseSP "Safety Req-Pb") pbIsSafeQD)
   [qwC probBr $ UpFrom (Exc, exactDbl 0), qwC pbTol $ UpFrom (Exc, exactDbl 0)]
   (qw isSafePb) []
-  [ref astm2009] "isSafePb"
+  [dRef astm2009] "isSafePb"
   [pbIsSafeDesc, probBRRef, pbTolUsr]
 
 
@@ -42,7 +42,7 @@ lrIsSafe :: InstanceModel
 lrIsSafe = imNoDeriv (equationalModelN (nounPhraseSP "Safety Req-LR") lrIsSafeQD)
   [qwC lRe $ UpFrom (Exc, exactDbl 0), qwC demand $ UpFrom (Exc, exactDbl 0)]
   (qw isSafeLR) []
-  [ref astm2009] "isSafeLR"
+  [dRef astm2009] "isSafeLR"
   [lrIsSafeDesc, capRef, qRef] 
 
 lrIsSafeQD :: QDefinition 

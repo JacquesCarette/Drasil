@@ -33,6 +33,7 @@ data SystemInformation where
   , _instModels  :: [InstanceModel]
   , _datadefs    :: [DataDefinition]
   , _configFiles :: [String]
+  , _folderPath  :: FilePath
   , _inputs      :: [h]
   , _outputs     :: [i]
   , _defSequence :: [Block QDefinition]

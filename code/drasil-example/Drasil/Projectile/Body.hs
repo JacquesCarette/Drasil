@@ -14,7 +14,7 @@ import qualified Utils.Drasil.Sentence as S
 
 import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   DerivationDisplay(ShowDerivation),
-  DocSection(AuxConstntSec, Bibliography, IntroSec, RefSec, ReqrmntSec, SSDSec, TraceabilitySec),
+  DocSection(AuxConstntSec, Bibliography, IntroSec, RefSec, ReqrmntSec, SSDSec, TableOfContents, TraceabilitySec),
   Emphasis(Bold), Field(..), Fields, InclUnits(IncludeUnits),
   IntroSec(IntroProg), IntroSub(IScope), ProblemDescription(PDProg), PDSub(..),
   RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl,
@@ -72,7 +72,7 @@ directoryName :: FilePath
 directoryName = "Projectile"
 
 mkSRS :: SRSDecl
-mkSRS = [
+mkSRS = [TableOfContents,
   RefSec $
     RefProg intro
       [ TUnits

@@ -1,4 +1,5 @@
 # Build LaTeX files
+
 if [ -z "$EDIR" ]; then
   echo "Missing EDIR."
   exit 1

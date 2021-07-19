@@ -18,7 +18,7 @@ module Drasil.DocLang (
   ModelDB, ddRefDB, mdb,
   -- DocumentLanguage.TraceabilityMatrix
   -- DocumentLanguage.TraceabilityGraph
-  mkGraphInfo,
+  mkGraphInfo, traceyGraphGetRefs,
   -- Sections.AuxiliaryConstants
   tableOfConstants,
   -- Sections.GeneralSystDesc
@@ -43,8 +43,6 @@ module Drasil.DocLang (
   getDocDesc, egetDocDesc,
   -- Tracetable
   generateTraceMap,
-  -- Labels
-  solutionLabel, characteristicsLabel,
   -- References
   secRefs
 ) where 
@@ -63,7 +61,7 @@ import Drasil.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(Include
   Verbosity(..), ddefn)
 import Drasil.DocumentLanguage.RefHelpers (ModelDB, ddRefDB, mdb)
 --import Drasil.DocumentLanguage.TraceabilityMatrix
-import Drasil.DocumentLanguage.TraceabilityGraph (mkGraphInfo)
+import Drasil.DocumentLanguage.TraceabilityGraph (mkGraphInfo, traceyGraphGetRefs)
 import Drasil.Sections.AuxiliaryConstants (tableOfConstants)
 --import Drasil.Sections.GeneralSystDesc
 import Drasil.Sections.Introduction (purpDoc)
@@ -79,5 +77,4 @@ import Drasil.Sections.TraceabilityMandGs (traceMatStandard, traceMatOtherReq)
 import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
 import Drasil.TraceTable (generateTraceMap)
 -- Commented out modules aren't used - uncomment if this changes
-import Drasil.DocumentLanguage.Labels (solutionLabel, characteristicsLabel)
 import Drasil.DocLang.References (secRefs)

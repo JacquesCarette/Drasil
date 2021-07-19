@@ -4,7 +4,7 @@ module Drasil.GamePhysics.GenDefs (generalDefns, accelGravityGD, impulseGD, genD
 import Language.Drasil
 import Utils.Drasil
 import qualified Utils.Drasil.Sentence as S
-import Theory.Drasil (GenDefn, gd, ModelKinds (EquationalModel))
+import Theory.Drasil (GenDefn, gd, equationalModel')
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
  gravitationalAccel, gravitationalConst, restitutionCoef, impulseS, force,
  fOfGravity)
@@ -62,8 +62,8 @@ conservationOfMomentDeriv = foldlSent [S "When bodies collide, they exert",
 
 --------------------------Acceleration due to gravity----------------------------
 accelGravityGD :: GenDefn
-accelGravityGD = gd (EquationalModel accelGravityQD) (getUnit QP.acceleration) (Just accelGravityDeriv)
-   [accelGravitySrc] "accelGravity" [accelGravityDesc]
+accelGravityGD = gd (equationalModel' accelGravityQD) (getUnit QP.acceleration) (Just accelGravityDeriv)
+   [dRef accelGravitySrc] "accelGravity" [accelGravityDesc]
 
 accelGravityQD :: QDefinition
 accelGravityQD = mkQuantDef' QP.gravitationalAccel (nounPhraseSP "Acceleration due to gravity") accelGravityExpr
@@ -92,7 +92,7 @@ accelGravityDerivSentences = map foldlSentCol [accelGravityDerivSentence1,
  accelGravityDerivSentence5]
 
 accelGravityDerivSentence1 :: [Sentence]
-accelGravityDerivSentence1 = [S "From Newton's law of universal gravitation", sParen(refS newtonLUG), S "we have"]
+accelGravityDerivSentence1 = [S "From", namedRef newtonLUG (S "Newton's law of universal gravitation") `sC` S "we have"]
 
 
 accelGravityDerivSentence2 :: [Sentence]
@@ -146,8 +146,8 @@ accelGravityDerivEqns = [accelGravityDerivEqn1, accelGravityDerivEqn2, accelGrav
 ----------------------------Impulse for Collision--------------------------------------------
 
 impulseGD :: GenDefn
-impulseGD = gd (EquationalModel impulseQD) (getUnit QP.impulseS) Nothing
-  [impulseSrc] "impulse" [rigidTwoDAssump, rightHandAssump, collisionAssump]
+impulseGD = gd (equationalModel' impulseQD) (getUnit QP.impulseS) Nothing
+  [dRef impulseSrc] "impulse" [rigidTwoDAssump, rightHandAssump, collisionAssump]
 
 impulseQD :: QDefinition
 impulseQD = mkQuantDef' QP.impulseS (nounPhraseSP "Impulse for Collision") impulseExpr

@@ -2,7 +2,7 @@ module Drasil.SWHS.IMods (iMods, eBalanceOnWtr, eBalanceOnWtrDerivDesc1,
   eBalanceOnWtrDerivDesc3, eBalanceOnPCM, heatEInWtr, heatEInPCM, instModIntro, iModRefs) where
 
 import Language.Drasil
-import Theory.Drasil (InstanceModel, im, imNoDeriv, qwUC, qwC, ModelKinds (DEModel, OthModel))
+import Theory.Drasil (InstanceModel, im, imNoDeriv, qwUC, qwC, deModel', othModel')
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.NounPhrase as NP
@@ -39,14 +39,14 @@ iMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 -- IM1 --
 ---------
 eBalanceOnWtr :: InstanceModel
-eBalanceOnWtr = im (DEModel eBalanceOnWtrRC)
+eBalanceOnWtr = im (deModel' eBalanceOnWtrRC)
   [qwUC wMass ,qwUC htCapW, qwUC coilHTC, qwUC pcmSA, qwUC pcmHTC, qwUC coilSA
   ,qwUC tempPCM, qwUC timeFinal, qwC tempC $ UpFrom (Exc, sy tempInit)
   ,qwUC tempInit]
   -- [sy tempInit $< sy tempC] 
   (qw tempW) []
   -- [0 $<= sy time $<= sy timeFinal]
-  [ref koothoor2013] (Just eBalanceOnWtrDeriv) "eBalanceOnWtr" balWtrDesc
+  [dRef koothoor2013] (Just eBalanceOnWtrDeriv) "eBalanceOnWtr" balWtrDesc
 
 eBalanceOnWtrRC :: RelationConcept
 eBalanceOnWtrRC = makeRC "eBalanceOnWtrRC" (nounPhraseSP $ "Energy balance on " ++
@@ -188,11 +188,11 @@ eBalanceOnWtrDerivEqnsIM1 = [eBalanceOnWtrDerivEqn1, eBalanceOnWtrDerivEqn2,
 -- IM2 --
 ---------
 eBalanceOnPCM :: InstanceModel
-eBalanceOnPCM = im (DEModel eBalanceOnPCMRC) [qwC tempMeltP $ UpFrom (Exc, sy tempInit)
+eBalanceOnPCM = im (deModel' eBalanceOnPCMRC) [qwC tempMeltP $ UpFrom (Exc, sy tempInit)
   , qwUC timeFinal, qwUC tempInit, qwUC pcmSA
   , qwUC pcmHTC, qwUC pcmMass, qwUC htCapSP, qwUC htCapLP]
   (qw tempPCM) []
-  [ref koothoor2013] (Just eBalanceOnPCMDeriv) "eBalanceOnPCM" balPCMNotes
+  [dRef koothoor2013] (Just eBalanceOnPCMDeriv) "eBalanceOnPCM" balPCMNotes
 
 eBalanceOnPCMRC :: RelationConcept
 eBalanceOnPCMRC = makeRC "eBalanceOnPCMRC" (nounPhraseSP
@@ -316,9 +316,9 @@ eBalanceOnPCMDerivEqnsIM2 = [eBalanceOnPCMEqn1, eBalanceOnPCMEqn2,
 -- IM3 --
 ---------
 heatEInWtr :: InstanceModel
-heatEInWtr = imNoDeriv (OthModel heatEInWtrRC)
+heatEInWtr = imNoDeriv (othModel'  heatEInWtrRC)
   [qwUC tempInit, qwUC wMass, qwUC htCapW, qwUC wMass]
-  (qw watE) [] [ref koothoor2013]
+  (qw watE) [] [dRef koothoor2013]
   "heatEInWtr" htWtrNotes
 
 heatEInWtrRC :: RelationConcept
@@ -343,11 +343,11 @@ htWtrNotes = map foldlSent [
 -- IM4 --
 ---------
 heatEInPCM :: InstanceModel
-heatEInPCM = imNoDeriv (DEModel heatEInPCMRC) [qwC tempMeltP $ UpFrom (Exc, sy tempInit)
+heatEInPCM = imNoDeriv (deModel' heatEInPCMRC) [qwC tempMeltP $ UpFrom (Exc, sy tempInit)
   , qwUC timeFinal, qwUC tempInit, qwUC pcmSA, qwUC pcmHTC
   , qwUC pcmMass, qwUC htCapSP, qwUC htCapLP, qwUC tempPCM, qwUC htFusion, qwUC tInitMelt]
   (qw pcmE)
-  [] [ref koothoor2013]
+  [] [dRef koothoor2013]
   "heatEInPCM" htPCMNotes
 
 heatEInPCMRC :: RelationConcept

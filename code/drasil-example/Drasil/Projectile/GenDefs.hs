@@ -3,7 +3,7 @@ module Drasil.Projectile.GenDefs (genDefns, posVecGD, genDefRefs) where
 
 import Prelude hiding (cos, sin)
 import Language.Drasil
-import Theory.Drasil (GenDefn, TheoryModel, gd, gdNoRefs, ModelKinds(EquationalModel))
+import Theory.Drasil (GenDefn, TheoryModel, gd, gdNoRefs, equationalModel')
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -23,7 +23,7 @@ import Drasil.Projectile.Concepts (rectVel)
 import qualified Drasil.Projectile.Expressions as E (speed', rectVelDerivEqn1, rectVelDerivEqn2,
   scalarPos', rectPosDerivEqn1, rectPosDerivEqn2, rectPosDerivEqn3, velVecExpr, posVecExpr,
   positionXY, velocityXY, accelerationXY, constAccelXY)
-import Drasil.Projectile.References (hibbeler2004)
+import Data.Drasil.Citations (hibbeler2004)
 import Drasil.Projectile.Unitals (projSpeed)
 
 genDefns :: [GenDefn]
@@ -31,8 +31,8 @@ genDefns = [rectVelGD, rectPosGD, velVecGD, posVecGD]
 
 ----------
 rectVelGD :: GenDefn
-rectVelGD = gd (EquationalModel rectVelQD) (getUnit projSpeed) (Just rectVelDeriv)
-  [refInfo hibbeler2004 $ Page [8]] "rectVel" [{-Notes-}]
+rectVelGD = gd (equationalModel' rectVelQD) (getUnit projSpeed) (Just rectVelDeriv)
+  [dRefInfo hibbeler2004 $ Page [8]] "rectVel" [{-Notes-}]
 
 rectVelQD :: QDefinition 
 rectVelQD = mkQuantDef' projSpeed (nounPhraseSent $ foldlSent_ 
@@ -56,8 +56,8 @@ rectVelDerivEqns = map eS [E.rectVelDerivEqn1, E.rectVelDerivEqn2]
 
 ----------
 rectPosGD :: GenDefn
-rectPosGD = gd (EquationalModel rectPosQD) (getUnit scalarPos) (Just rectPosDeriv)
-  [refInfo hibbeler2004 $ Page [8]] "rectPos" [{-Notes-}]
+rectPosGD = gd (equationalModel' rectPosQD) (getUnit scalarPos) (Just rectPosDeriv)
+  [dRefInfo hibbeler2004 $ Page [8]] "rectPos" [{-Notes-}]
 
 rectPosQD :: QDefinition
 rectPosQD = mkQuantDef' scalarPos (nounPhraseSent $ foldlSent_ 
@@ -80,7 +80,7 @@ rectPosDerivEqns = [E.rectPosDerivEqn1, E.rectPosDerivEqn2, E.rectPosDerivEqn3, 
 
 ----------
 velVecGD :: GenDefn
-velVecGD = gdNoRefs (EquationalModel velVecQD) (getUnit velocity)
+velVecGD = gdNoRefs (equationalModel' velVecQD) (getUnit velocity)
            (Just velVecDeriv) "velVec" [{-Notes-}]
 
 velVecQD :: QDefinition 
@@ -97,7 +97,7 @@ velVecDerivSent = vecDeriv [(velocity, E.velocityXY), (acceleration, E.accelerat
 
 ----------
 posVecGD :: GenDefn
-posVecGD = gdNoRefs (EquationalModel posVecQD) (getUnit position) 
+posVecGD = gdNoRefs (equationalModel' posVecQD) (getUnit position) 
            (Just posVecDeriv) "posVec" [{-Notes-}]
 
 posVecQD :: QDefinition

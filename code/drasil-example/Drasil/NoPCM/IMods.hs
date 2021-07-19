@@ -1,7 +1,7 @@
 module Drasil.NoPCM.IMods (eBalanceOnWtr, iMods, instModIntro, iModRefs) where
 
 import Language.Drasil
-import Theory.Drasil (InstanceModel, im, qwC, qwUC, ModelKinds (DEModel))
+import Theory.Drasil (InstanceModel, im, qwC, qwUC, deModel')
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -33,12 +33,12 @@ iMods = [eBalanceOnWtr, heatEInWtr]
 ---------
 -- FIXME: comment on reference?
 eBalanceOnWtr :: InstanceModel
-eBalanceOnWtr = im (DEModel eBalanceOnWtrRC)
+eBalanceOnWtr = im (deModel' eBalanceOnWtrRC)
   [qwC tempC $ UpFrom (Inc, sy tempInit)
   , qwUC tempInit, qwUC timeFinal, qwUC coilSA, qwUC coilHTC, qwUC htCapW, qwUC wMass]
   (qw tempW) []
   --Tw(0) cannot be presented, there is one more constraint Tw(0) = Tinit
-  [refInfo koothoor2013 $ RefNote "with PCM removed"]
+  [dRefInfo koothoor2013 $ RefNote "with PCM removed"]
   (Just eBalanceOnWtrDeriv) "eBalanceOnWtr" balWtrNotes
 
 eBalanceOnWtrRC :: RelationConcept

@@ -16,6 +16,11 @@ if [ -z "$GRAPH_FOLDER" ]; then
   exit 1
 fi
 
+if [ -z "$TRACEY_GRAPHS_FOLDER" ]; then
+  echo "Missing TRACEY_GRAPHS_FOLDER."
+  exit 1
+fi
+
 if [ -z "$MULTI_SRC_DIRS" ]; then
   echo "Missing MULTI_SRC_DIRS."
   exit 1
@@ -133,6 +138,11 @@ copy_analysis() {
   cp -r "$CUR_DIR$ANALYSIS_FOLDER". "$ANALYSIS_FOLDER"
 }
 
+copy_traceygraphs() {
+  rm -rf "$TRACEY_GRAPHS_FOLDER"
+  cp -r "$CUR_DIR$TRACEY_GRAPHS_FOLDER". "$TRACEY_GRAPHS_FOLDER"
+}
+
 copy_website() {
   cd "$CUR_DIR$DEPLOY_FOLDER"
   cp -r "$CUR_DIR"drasil-website/Website/. .
@@ -149,5 +159,6 @@ copy_datafiles
 copy_examples
 copy_images
 copy_analysis
+copy_traceygraphs
 copy_website
 cd "$CUR_DIR"

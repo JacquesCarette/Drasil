@@ -14,7 +14,8 @@ import Drasil.GamePhysics.Assumptions (assumpOT, assumpOD, assumpAD, assumpCT, a
 import Drasil.GamePhysics.References (chaslesWiki)
 import Drasil.GamePhysics.Unitals (initRelVel, massj, mTot, normalVect,
   posCM, posj, velB, velO, rOB, finRelVel,
-  velAP, velBP, rRot, velo_1, velo_2, timeT, time_1, time_2)
+  velAP, velBP, rRot, velo_1, velo_2, timeT, time_1, time_2, massj,
+   mTot, normalVect, velo_1, velo_2)
 
 import Data.Drasil.Concepts.Math (rightHand)
 import Data.Drasil.Concepts.Physics (rigidBody, twoD)
@@ -192,7 +193,7 @@ dd7descr = (QP.angularAccel ^. term) +:+ S "of a" +:+
 
 ------------------------DD9 Chasles Theorem----------------------------------
 chaslesDD :: DataDefinition
-chaslesDD = dd chasles [ref chaslesWiki] Nothing "chaslesThm" 
+chaslesDD = dd chasles [dRef chaslesWiki] Nothing "chaslesThm" 
   [chaslesThmNote, rigidBodyAssump]
 
 chasles :: QDefinition

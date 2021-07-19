@@ -4,7 +4,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
   rdb, refdb, _authors, _concepts, _constants, _constraints, _purpose,
   _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, _outputs, _quants, 
-  _sys, _sysinfodb, _usedinfodb)
+  _sys, _sysinfodb, _usedinfodb, _folderPath)
 import Language.Drasil hiding (C)
 
 import Drasil.Website.Introduction
@@ -22,8 +22,8 @@ printSetting fl = PI (symbMap fl) Equational defaultConfiguration
 -- Instead of being an SRSDecl, this takes the folder locations and generates the document from there.
 mkWebsite :: FolderLocation -> Document
 mkWebsite fl =
-    --Document   Title          author  (hack for now to show up in proper spot)      [Section]
-    Document (S websiteTitle) (namedRef gitHubRef (S "Link to GitHub Repository")) $ sections fl
+    --Document  -- Title  --  author  (hack for now to show up in proper spot) -- no table of contents -- [Section]
+    Document (S websiteTitle) (namedRef gitHubRef (S "Link to GitHub Repository")) NoToC $ sections fl
 
 -- Folder locations based on environment variables (using getEnv on Main.hs)
 data FolderLocation = Folder {
@@ -51,6 +51,7 @@ si fl = SI {
     _instModels  = [], -- :: [InstanceModel],
     _datadefs    = [], -- :: [DataDefinition],
     _configFiles = [],
+    _folderPath  = "",
     _inputs      = [] :: [QuantityDict],
     _outputs     = [] :: [QuantityDict],
     _defSequence = [] :: [Block QDefinition],
@@ -109,7 +110,7 @@ imageRef = makeFigRef "Drasil"
 
 -- Used for the repository link.
 gitHubRef :: Reference
-gitHubRef = Reference "gitHubRepo" (URI gitHubInfoURL) (shortname' $ S "gitHubRepo") None
+gitHubRef = Reference "gitHubRepo" (URI gitHubInfoURL) (shortname' $ S "gitHubRepo")
 
 -- Hardcoded info for the title, URL, and image path.
 websiteTitle :: String

@@ -8,6 +8,7 @@ import Language.Drasil (MaxWidthPercent)
 import Language.Drasil.Config (numberedSections, hyperSettings)
 import qualified Language.Drasil.Printing.Helpers as H
 import Language.Drasil.TeX.Monad (PrintLaTeX(PL), D, MathContext(Math), ($+$))
+import Data.List (isSuffixOf)
 
 --import Language.Drasil.Config (numberedSections, hyperSettings)
 --import Language.Drasil.Document (MaxWidthPercent)
@@ -165,8 +166,11 @@ usepackage = command "usepackage"
 
 -- | Include graphics with a given max width percentage.
 includegraphics :: MaxWidthPercent -> String -> D
-includegraphics n = command1p "includegraphics" ("width=" ++ per n ++ "\\textwidth")
+includegraphics n fp 
+  | ".svg" `isSuffixOf` fp = command1p "includesvg" ("width=" ++ per n ++ "\\textwidth, inkscapelatex = false") fpNoSvg -- in order to use inkscape to render svgs, there can't be a file type appended
+  | otherwise = command1p "includegraphics" ("width=" ++ per n ++ "\\textwidth") fp -- still need a case for normal images
   where
+    fpNoSvg = take (length fp - 4) fp
     per 100 = ""
     per wp  = show (wp / 100)
 

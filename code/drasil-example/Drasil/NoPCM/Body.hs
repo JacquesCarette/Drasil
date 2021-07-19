@@ -6,7 +6,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts,
   _constants, _constraints, _datadefs, _instModels, _configFiles, _defSequence,
-  _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
+  _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb, _folderPath)
 import Theory.Drasil (TheoryModel)
 import Utils.Drasil
 import Utils.Drasil.Concepts
@@ -52,7 +52,7 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg), DerivationDisplay(..),
   ReqrmntSec(..), ReqsSub(..), SCSSub(..), SolChSpec(..), SRSDecl, SSDSec(..),
   SSDSub(..), TraceabilitySec(TraceabilityProg), Verbosity(Verbose),
   TSIntro(SymbOrder, SymbConvention, TSPurpose, VectorUnits), intro, mkDoc,
-  tsymb, traceMatStandard, purpDoc, getTraceConfigUID, secRefs, fillTraceSI)
+  tsymb, traceMatStandard, purpDoc, getTraceConfigUID, secRefs, fillTraceSI, traceyGraphGetRefs)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
@@ -93,6 +93,9 @@ fullSI = fillTraceSI mkSRS si
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
 
+directoryName :: FilePath
+directoryName = "NoPCM"
+
 resourcePath :: String
 resourcePath = "../../../datafiles/NoPCM/"
 
@@ -129,7 +132,8 @@ concepts = map ucw [density, tau, inSA, outSA,
 --------------------------------
 
 mkSRS :: SRSDecl
-mkSRS = [RefSec $ RefProg intro
+mkSRS = [TableOfContents,
+  RefSec $ RefProg intro
   [TUnits,
   tsymb [TSPurpose, SymbConvention [Lit $ nw htTrans, Doc' $ nw progName], SymbOrder, VectorUnits],
   TAandA],
@@ -199,6 +203,7 @@ si = SI {
   _instModels  = NoPCM.iMods,
   _datadefs    = NoPCM.dataDefs,
   _configFiles = [],
+  _folderPath  = directoryName,
   _inputs      = inputs ++ [qw watE], --inputs ++ outputs?
   _outputs     = map qw [tempW, watE],     --outputs
   _defSequence = [(\x -> Parallel (head x) (tail x)) qDefs],
@@ -373,8 +378,9 @@ dataConstListOut = [tempW, watE]
 bodyRefs :: [Reference]
 bodyRefs = ref figTank: ref sysCntxtFig:
   map ref concIns ++ map ref section ++ map ref labCon 
-  ++ map ref tMods ++ concatMap (^. getReferences) tMods --needs the references hidden in the tmodel.
+  ++ map ref tMods ++ concatMap (\x -> map ref $ x ^. getDecRefs) tMods --needs the references hidden in the tmodels.
   ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+  ++ traceyGraphGetRefs directoryName
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ dataDefRefs ++ genDefRefs++ goalRefs

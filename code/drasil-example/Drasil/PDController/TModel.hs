@@ -8,7 +8,7 @@ import Drasil.PDController.Concepts
 import Drasil.PDController.References
 import Language.Drasil
 import qualified Language.Drasil as DrasilLang
-import Theory.Drasil (TheoryModel, tm, ModelKinds(OthModel))
+import Theory.Drasil (TheoryModel, tm, othModel')
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -20,14 +20,14 @@ theoreticalModels = [tmLaplace, tmInvLaplace, tmSOSystem]
 
 tmLaplace :: TheoryModel
 tmLaplace
-  = tm (OthModel laplaceRC)
+  = tm (othModel' laplaceRC)
       [qw qdLaplaceTransform, qw qdFreqDomain, qw time, qw qdPosInf,
        qw qdFxnTDomain]
       ([] :: [ConceptChunk])
       []
       [toDispExpr laplaceRel]
       []
-      [ref laplaceWiki]
+      [dRef laplaceWiki]
       "laplaceTransform"
       [laplaceDesc]
 
@@ -52,14 +52,14 @@ laplaceDesc
 
 tmInvLaplace :: TheoryModel
 tmInvLaplace
-  = tm (OthModel invlaplaceRC)
+  = tm (othModel' invlaplaceRC)
       [qw qdLaplaceTransform, qw qdFreqDomain, qw time, qw qdPosInf,
        qw qdFxnTDomain]
       ([] :: [ConceptChunk])
       []
       [toDispExpr invLaplaceRel]
       []
-      [ref laplaceWiki]
+      [dRef laplaceWiki]
       "invLaplaceTransform"
       [invLaplaceDesc]
 
@@ -82,13 +82,13 @@ invLaplaceDesc
 
 tmSOSystem :: TheoryModel
 tmSOSystem
-  = tm (OthModel tmSOSystemRC)
+  = tm (othModel' tmSOSystemRC)
       [qw mass, qw qdDampingCoeff, qw qdStiffnessCoeff, qw qdFreqDomain]
       ([] :: [ConceptChunk])
       []
       [toDispExpr soSystemRel]
       []
-      [ref abbasi2015]
+      [dRef abbasi2015]
       "tmSOSystem"
       [soSystemDesc]
 

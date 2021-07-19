@@ -7,7 +7,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts, _constants,
   _constraints, _datadefs, _instModels, _configFiles, _defSequence, _inputs,
-  _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
+  _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb, _folderPath)
 import Theory.Drasil (qdFromDD)
 
 import Prelude hiding (sin, cos, tan)
@@ -23,17 +23,17 @@ import Drasil.DocLang (DocSection(..), IntroSec(..), IntroSub(..),
   SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
   ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
   PDSub(..), intro, mkDoc, tsymb'', traceMatStandard, purpDoc, getTraceConfigUID,
-  secRefs, fillTraceSI)
+  secRefs, fillTraceSI, traceyGraphGetRefs)
 
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
 
 import Data.Drasil.Concepts.Documentation as Doc (analysis, assumption,
-  constant, constraint, document, effect, endUser, environment,
+  constant, document, effect, endUser, environment,
   input_, interest, loss, method_, organization,
   physical, physics, problem, software,
   softwareSys, srsDomains, symbol_, sysCont, system,
-  template, type_, user, value, variable, doccon, doccon')
+  template, type_, user, value, variable, doccon, doccon', datumConstraint)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.TheoryConcepts as Doc (inModel)
 import Data.Drasil.Concepts.Education (solidMechanics, undergraduate, educon)
@@ -84,6 +84,9 @@ fullSI = fillTraceSI mkSRS si
 resourcePath :: String
 resourcePath = "../../../datafiles/SSP/"
 
+directoryName :: FilePath
+directoryName = "SSP"
+
 si :: SystemInformation
 si = SI {
   _sys         = ssp, 
@@ -95,6 +98,7 @@ si = SI {
   _instModels  = SSP.iMods,
   _datadefs    = SSP.dataDefs,
   _configFiles = [],
+  _folderPath  = directoryName,
   _inputs      = map qw inputs,
   _outputs     = map qw outputs,
   _defSequence = [(\x -> Parallel (head x) (tail x)) $ map qdFromDD SSP.dataDefs],
@@ -106,7 +110,8 @@ si = SI {
 }
   
 mkSRS :: SRSDecl
-mkSRS = [RefSec $ RefProg intro
+mkSRS = [TableOfContents,
+  RefSec $ RefProg intro
   [TUnits, tsymb'' tableOfSymbIntro TAD, TAandA],
   IntroSec $ IntroProg startIntro kSent
     [ IPurpose $ purpDoc ssp Verbose
@@ -277,9 +282,8 @@ sysCtxUsrResp = [S "Provide" +:+ phraseNP (the input_) +:+ S "data related to" +
   S "ensuring conformation to" +:+ phrase input_ +:+ S "data format" +:+
   S "required by" +:+ short ssp,
   S "Ensure that consistent units are used for" +:+ pluralNP (combineNINI input_ variable),
-  S "Ensure required" +:+ pluralNP (combineNINI software assumption) +:+ sParen ( 
-  refS $ SRS.assumpt ([]::[Contents]) ([]::[Section])) +:+ S "are" +:+ 
-  S "appropriate for the" +:+ phrase problem +:+ S "to which the" +:+ 
+  S "Ensure required" +:+ namedRef (SRS.assumpt [] []) (pluralNP (combineNINI software assumption)) 
+  +:+ S "are" +:+ S "appropriate for the" +:+ phrase problem +:+ S "to which the" +:+ 
   phrase user +:+ S "is applying the" +:+ phrase software]
   
 sysCtxSysResp :: [Sentence]
@@ -287,7 +291,7 @@ sysCtxSysResp = [S "Detect data" +:+ phrase type_ +:+ S "mismatch, such as" +:+
   S "a string of characters" +:+ phrase input_ +:+ S "instead of a floating" +:+
   S "point" +:+ phrase number,
   S "Verify that the" +:+ plural input_ +:+ S "satisfy the required" +:+
-  phrase physical `S.and_` S "other data" +:+ plural constraint +:+ sParen (refS $ SRS.datCon ([]::[Contents]) ([]::[Section])),
+  phrase physical `S.and_` S "other" +:+ namedRef (SRS.datCon [] []) (plural datumConstraint),
   S "Identify the" +:+ phrase crtSlpSrf +:+ S "within the possible" +:+
   phrase input_ +:+ S "range",
   S "Find the" +:+ phrase fsConcept +:+ S "for the" +:+ phrase slope,
@@ -450,7 +454,7 @@ slopeVert = verticesConst $ phrase slope
 
 -- References --
 bodyRefs :: [Reference]
-bodyRefs = ref sysCtxFig1: map ref concIns ++ map ref section ++ map ref labCon ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si)
+bodyRefs = ref sysCtxFig1: map ref concIns ++ map ref section ++ map ref labCon ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ traceyGraphGetRefs directoryName
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ goalRefs ++ SSP.dataDefRefs ++ genDefRefs

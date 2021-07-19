@@ -8,7 +8,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
   _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, 
-  _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
+  _outputs, _quants, _sys, _sysinfodb, _usedinfodb, _folderPath)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -20,9 +20,9 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl, SSDSec(..), SSDSub(..),
   SolChSpec(..), StkhldrSec(..), StkhldrSub(Client, Cstmr),
   TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, TSPurpose),
-  Verbosity(Verbose), auxSpecSent, characteristicsLabel, intro, mkDoc,
+  Verbosity(Verbose), auxSpecSent, intro, mkDoc,
   termDefnF', tsymb, traceMatStandard, purpDoc, getTraceConfigUID,
-  secRefs, fillTraceSI)
+  secRefs, fillTraceSI, traceyGraphGetRefs)
 
 import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
 
@@ -74,6 +74,9 @@ srs = mkDoc mkSRS  (S.forGen titleize phrase) si
 fullSI :: SystemInformation
 fullSI = fillTraceSI mkSRS si
 
+directoryName :: FilePath
+directoryName = "GlassBR"
+
 printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
 
@@ -88,6 +91,7 @@ si = SI {
   _instModels  = iMods,
   _datadefs    = GB.dataDefs,
   _configFiles = configFp,
+  _folderPath  = directoryName,
   _inputs      = inputs,
   _outputs     = outputs,
   _defSequence = qDefns,
@@ -100,7 +104,8 @@ si = SI {
   --FIXME: All named ideas, not just acronyms.
 
 mkSRS :: SRSDecl
-mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
+mkSRS = [TableOfContents,
+  RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
   IntroSec $
     IntroProg (startIntro software blstRskInvWGlassSlab glassBR)
       (short glassBR)
@@ -279,8 +284,8 @@ sysCtxUsrResp = [S "Provide the" +:+ plural inDatum +:+ S "related to the" +:+
   phraseNP (glaSlab `and_` blastTy) `sC` S "ensuring no errors in the" +:+
   plural datum +:+. S "entry",
   S "Ensure that consistent units are used for" +:+. pluralNP (combineNINI input_ variable),
-  S "Ensure required" +:+ pluralNP (combineNINI software assumption) +:+
-    sParen (refS $ SRS.assumpt ([]::[Contents]) ([]::[Section]))
+  S "Ensure required" +:+ 
+  namedRef (SRS.assumpt [] []) (pluralNP (combineNINI software assumption))
     +:+ S "are appropriate for any particular" +:+
     phrase problem +:+ S "input to the" +:+. phrase software]
 
@@ -302,7 +307,7 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
 {--User Characteristics--}
 
 userCharacteristicsIntro :: Contents
-userCharacteristicsIntro = LlC $ enumBullet characteristicsLabel $ map foldlSent
+userCharacteristicsIntro = enumBulletU $ map foldlSent
   [[S "The end user of GlassBR is expected to have completed at least the",
     S "equivalent of the second year of an undergraduate degree in civil engineering or structural engineering"],
   [S "The end user is expected to have an understanding of theory behind glass",
@@ -386,7 +391,7 @@ blstRskInvWGlassSlab = phrase blastRisk +:+ S "involved with the" +:+
 bodyRefs :: [Reference]
 bodyRefs = map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si)
   ++ map ref [sysCtxFig, demandVsSDFig, dimlessloadVsARFig]
-  ++ map ref concIns ++ map ref section ++ map ref labCon
+  ++ map ref concIns ++ map ref section ++ map ref labCon ++ traceyGraphGetRefs directoryName
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ goalRefs ++ dataDefRefs

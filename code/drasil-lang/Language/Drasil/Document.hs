@@ -5,9 +5,8 @@ module Language.Drasil.Document where
 import Language.Drasil.Classes.Core (HasUID(uid), getRefAdd, HasRefAddress(getRefAdd), Referable(refAdd, renderRef))
 import Language.Drasil.Classes.Core2 (HasShortName(shortname))
 import Language.Drasil.Document.Core
-import Language.Drasil.Label.Type (prepend, LblType(RP, URI))
+import Language.Drasil.Label.Type (prepend, LblType(RP, URI), getAdd)
 import Language.Drasil.Misc (repUnd)
-import Language.Drasil.RefProg (RefInfo(None))
 import Language.Drasil.Reference (Reference(Reference))
 import Language.Drasil.Sentence (Sentence(..))
 import Language.Drasil.ShortName (ShortName, shortname')
@@ -40,14 +39,28 @@ instance HasUID        Section where uid = lab . uid
 instance HasShortName  Section where shortname = shortname . view lab
 -- | Finds the reference information of a 'Section'.
 instance Referable Section where
-  refAdd    (Section _ _ lb ) = getRefAdd lb
-  renderRef (Section _ _ lb)  = RP (prepend "Sec") (getRefAdd lb)
+  refAdd     = getAdd . getRefAdd . view lab
+  renderRef (Section _ _ lb)  = RP (prepend "Sec") (getAdd $ getRefAdd lb)
 -- | Finds the reference address of a 'Section'.
-instance HasRefAddress Section where getRefAdd = getRefAdd . view lab
+instance HasRefAddress Section where getRefAdd (Section _ _ lb) = RP (prepend "Sec") (getAdd $ getRefAdd lb)
 
 -- | A Document has a Title ('Sentence'), Author(s) ('Sentence'), and 'Section's
 -- which hold the contents of the document.
-data Document = Document Title Author [Section]
+data Document = Document Title Author ShowTableOfContents [Section]
+
+-- | Determines whether or not the table of contents appears on the generated artifacts.
+data ShowTableOfContents = ToC | NoToC
+
+-- Medium hack for now. This function is unable to tell if the section
+-- is for a table of contents, as that doesn't appear until docLang.
+-- This function is needed by the TeX printer, as TeX carries its own form of creating
+-- a table of contents. However, the printer package is compiled before the docLang one.
+-- | Manually removes the first section of a document (table of contents section).
+checkToC :: Document -> Document
+checkToC (Document t a toC sc) = 
+  case toC of
+    ToC -> Document t a toC $ drop 1 sc
+    _   -> Document t a toC sc
 
 -- | Smart constructor for labelled content chunks.
 llcc :: Reference -> RawContent -> LabelledContent
@@ -61,6 +74,7 @@ ulcc = UnlblC
 -- | Smart constructor that wraps 'UnlabelledContent' into 'Contents'.
 mkParagraph :: Sentence -> Contents
 mkParagraph x = UlC $ ulcc $ Paragraph x
+
 -- | Smart constructor that wraps 'LabelledContent' into 'Contents'.
 mkFig :: Reference -> RawContent -> Contents
 mkFig x y = LlC $ llcc x y
@@ -82,7 +96,7 @@ section title intro secs = Section title (map Con intro ++ map Sub secs)
 
 -- | Smart constructor for retrieving the contents ('Section's) from a 'Document'.
 extractSection :: Document -> [Section]
-extractSection (Document _ _ sec) = concatMap getSec sec
+extractSection (Document _ _ _ sec) = concatMap getSec sec
 
 -- | Smart constructor for retrieving the subsections ('Section's) within a 'Section'.
 getSec :: Section -> [Section]
@@ -106,22 +120,17 @@ figWithWidth = Figure
 -- These should eventually either disappear, or at least move out to docLang
 -- | Create a reference for a table. Takes in the name of a table (which will also be used for its shortname).
 makeTabRef :: String -> Reference
-makeTabRef rs = Reference rs (RP (prepend "Tab") ("Table:" ++ repUnd rs)) (shortname' (S rs)) None
+makeTabRef rs = Reference rs (RP (prepend "Tab") ("Table:" ++ repUnd rs)) (shortname' (S rs))
 
 -- | Create a reference for a figure. Takes in the name of a figure (which will also be used for its shortname).
 makeFigRef :: String -> Reference
-makeFigRef rs = Reference rs (RP (prepend "Fig") ("Figure:" ++ repUnd rs)) (shortname' (S rs)) None
+makeFigRef rs = Reference rs (RP (prepend "Fig") ("Figure:" ++ repUnd rs)) (shortname' (S rs))
 
 -- | Create a reference for a section. Takes in the name of a section and a shortname for the section.
 makeSecRef :: String -> Sentence -> Reference
 makeSecRef r s = Reference (r ++ "Label") (RP (prepend "Sec") ("Sec:" ++ repUnd r))
-  (shortname' s) None
-
--- | Create a reference for a list. Takes in the name of the list and a shortname for the list.
-makeLstRef :: String -> Sentence -> Reference
-makeLstRef r s = Reference (r ++ "Label") (RP (prepend "Lst") ("Lst:" ++ repUnd r))
-  (shortname' s) None
+  (shortname' s)
 
 -- | Create a reference for a 'URI'.
 makeURI :: UID -> String -> ShortName -> Reference
-makeURI u r s = Reference u (URI r) s None
+makeURI u r = Reference u (URI r)

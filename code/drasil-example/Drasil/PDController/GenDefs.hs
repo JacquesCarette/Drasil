@@ -23,7 +23,7 @@ genDefns = [gdPowerPlant]
 gdPowerPlant :: GenDefn
 gdPowerPlant
   = gd (othModel' gdPowerPlantRC) (Nothing :: Maybe UnitDefn) Nothing
-      [ref pidWiki, ref abbasi2015]
+      [dRef pidWiki, dRef abbasi2015]
       "gdPowerPlant"
       [gdPowerPlantNote]
 

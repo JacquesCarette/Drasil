@@ -129,7 +129,8 @@ concepts = map ucw [density, tau, inSA, outSA,
 --------------------------------
 
 mkSRS :: SRSDecl
-mkSRS = [RefSec $ RefProg intro
+mkSRS = [TableOfContents,
+  RefSec $ RefProg intro
   [TUnits,
   tsymb [TSPurpose, SymbConvention [Lit $ nw htTrans, Doc' $ nw progName], SymbOrder, VectorUnits],
   TAandA],

@@ -130,7 +130,8 @@ refDB :: ReferenceDB
 refDB = rdb citations concIns
 
 mkSRS :: SRSDecl
-mkSRS = [RefSec $ RefProg intro [
+mkSRS = [TableOfContents,
+  RefSec $ RefProg intro [
     TUnits,
     tsymb'' tSymbIntro $ TermExcept [uNormalVect],
     TAandA],

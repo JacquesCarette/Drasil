@@ -106,7 +106,8 @@ si = SI {
 }
   
 mkSRS :: SRSDecl
-mkSRS = [RefSec $ RefProg intro
+mkSRS = [TableOfContents,
+  RefSec $ RefProg intro
   [TUnits, tsymb'' tableOfSymbIntro TAD, TAandA],
   IntroSec $ IntroProg startIntro kSent
     [ IPurpose $ purpDoc ssp Verbose

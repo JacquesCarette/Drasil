@@ -100,7 +100,8 @@ si = SI {
   --FIXME: All named ideas, not just acronyms.
 
 mkSRS :: SRSDecl
-mkSRS = [RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
+mkSRS = [TableOfContents,
+  RefSec $ RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA],
   IntroSec $
     IntroProg (startIntro software blstRskInvWGlassSlab glassBR)
       (short glassBR)

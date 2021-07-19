@@ -1,4 +1,3 @@
 digraph docsection{
-DocSection -> RefSec;
 DocSection	[shape=oval, color=darkviolet, label=DocSection];
 }

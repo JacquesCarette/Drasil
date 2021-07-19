@@ -61,13 +61,13 @@ data ConstraintSet
 mkConstraintSet :: ConceptChunk -> NonEmpty Relation -> ConstraintSet
 
 -- | A data definition is a <a>QDefinition</a> that may have additional
---   notes: the scope, any references, maybe a derivation, a label
---   (<a>ShortName</a>), a reference address, and other notes
---   (<a>Sentence</a>s).
+--   notes: the scope, any references (as <a>DecRef</a>s), maybe a
+--   derivation, a label (<a>ShortName</a>), a reference address, and other
+--   notes (<a>Sentence</a>s).
 data DataDefinition
 
 -- | Smart constructor for data definitions.
-dd :: QDefinition -> [Reference] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
+dd :: QDefinition -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
 
 -- | Smart constructor for data definitions with no references.
 ddNoRefs :: QDefinition -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
@@ -76,11 +76,12 @@ ddNoRefs :: QDefinition -> Maybe Derivation -> String -> [Sentence] -> DataDefin
 qdFromDD :: DataDefinition -> QDefinition
 
 -- | A general definition is a <a>ModelKind</a> that may have units, a
---   derivation, references, a shortname, a reference address, and notes.
+--   derivation, references (as <a>DecRef</a>s), a shortname, a reference
+--   address, and notes.
 data GenDefn
 
 -- | Smart constructor for general definitions.
-gd :: IsUnit u => ModelKind -> Maybe u -> Maybe Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
+gd :: IsUnit u => ModelKind -> Maybe u -> Maybe Derivation -> [DecRef] -> String -> [Sentence] -> GenDefn
 
 -- | Smart constructor for general definitions with no references.
 gdNoRefs :: IsUnit u => ModelKind -> Maybe u -> Maybe Derivation -> String -> [Sentence] -> GenDefn
@@ -180,11 +181,11 @@ equationalRealmN :: NP -> MultiDefn -> ModelKind
 data InstanceModel
 
 -- | Smart constructor for instance models with everything defined.
-im :: ModelKind -> Inputs -> Output -> OutputConstraints -> [Reference] -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
+im :: ModelKind -> Inputs -> Output -> OutputConstraints -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
 
 -- | Smart constructor for instance models with a custom term, and no
 --   derivation.
-imNoDeriv :: ModelKind -> Inputs -> Output -> OutputConstraints -> [Reference] -> String -> [Sentence] -> InstanceModel
+imNoDeriv :: ModelKind -> Inputs -> Output -> OutputConstraints -> [DecRef] -> String -> [Sentence] -> InstanceModel
 
 -- | Smart constructor for instance models with a custom term, and no
 --   references.
@@ -226,7 +227,7 @@ defined_fun :: Theory t => Lens' t [QDefinition]
 --   <li>defq - definitions (<a>QDefinition</a>s),</li>
 --   <li>invs - invariants (<a>DisplayExpr</a>s),</li>
 --   <li>dfun - defined functions (<a>QDefinition</a>s),</li>
---   <li>ref - accompanying references (<a>Reference</a>s),</li>
+--   <li>ref - accompanying references (<a>DecRef</a>s),</li>
 --   <li>lb - a label (<a>SpaceDefn</a>),</li>
 --   <li>ra - reference address (<a>SpaceDefn</a>),</li>
 --   <li>notes - additional notes (<a>Sentence</a>s).</li>
@@ -238,7 +239,7 @@ data TheoryModel
 
 -- | Constructor for theory models. Must have a source. Uses the shortname
 --   of the reference address.
-tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind -> [q] -> [c] -> [QDefinition] -> [DisplayExpr] -> [QDefinition] -> [Reference] -> String -> [Sentence] -> TheoryModel
+tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind -> [q] -> [c] -> [QDefinition] -> [DisplayExpr] -> [QDefinition] -> [DecRef] -> String -> [Sentence] -> TheoryModel
 
 -- | Constructor for theory models. Uses the shortname of the reference
 --   address.

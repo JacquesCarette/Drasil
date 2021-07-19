@@ -2,7 +2,7 @@ digraph gendefn{
 GenDefn -> ModelKind;
 GenDefn -> MaybeUnitDefn;
 GenDefn -> MaybeDerivation;
-GenDefn -> Reference;
+GenDefn -> DecRef;
 GenDefn -> ShortName;
 GenDefn -> String;
 GenDefn -> Sentence;

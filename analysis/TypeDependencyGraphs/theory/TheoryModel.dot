@@ -6,7 +6,7 @@ TheoryModel -> QuantityDict;
 TheoryModel -> ConceptChunk;
 TheoryModel -> QDefinition;
 TheoryModel -> DisplayExpr;
-TheoryModel -> Reference;
+TheoryModel -> DecRef;
 TheoryModel -> ShortName;
 TheoryModel -> String;
 TheoryModel -> Sentence;

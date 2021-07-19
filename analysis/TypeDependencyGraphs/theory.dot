@@ -14,7 +14,7 @@ digraph alltypes {
 		subgraph datadefinition{
 		DataDefinition -> QDefinition;
 		DataDefinition -> ScopeType;
-		DataDefinition -> Reference;
+		DataDefinition -> DecRef;
 		DataDefinition -> MaybeDerivation;
 		DataDefinition -> ShortName;
 		DataDefinition -> String;
@@ -31,7 +31,7 @@ digraph alltypes {
 		GenDefn -> ModelKind;
 		GenDefn -> MaybeUnitDefn;
 		GenDefn -> MaybeDerivation;
-		GenDefn -> Reference;
+		GenDefn -> DecRef;
 		GenDefn -> ShortName;
 		GenDefn -> String;
 		GenDefn -> Sentence;
@@ -43,7 +43,7 @@ digraph alltypes {
 		InstanceModel -> ModelKind;
 		InstanceModel -> Inputs;
 		InstanceModel -> Output;
-		InstanceModel -> Reference;
+		InstanceModel -> DecRef;
 		InstanceModel -> MaybeDerivation;
 		InstanceModel -> ShortName;
 		InstanceModel -> String;
@@ -106,7 +106,7 @@ digraph alltypes {
 		TheoryModel -> ConceptChunk;
 		TheoryModel -> QDefinition;
 		TheoryModel -> DisplayExpr;
-		TheoryModel -> Reference;
+		TheoryModel -> DecRef;
 		TheoryModel -> ShortName;
 		TheoryModel -> String;
 		TheoryModel -> Sentence;

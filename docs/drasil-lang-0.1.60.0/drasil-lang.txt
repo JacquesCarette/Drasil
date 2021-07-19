@@ -1086,7 +1086,7 @@ uid :: HasUID c => Lens' c UID
 class HasRefAddress b
 
 -- | Provides the ability to hold a reference address.
-getRefAdd :: HasRefAddress b => b -> String
+getRefAdd :: HasRefAddress b => b -> LblType
 
 -- | A HasSymbol is anything which has a <a>Symbol</a>.
 class HasSymbol c
@@ -1095,7 +1095,7 @@ class HasSymbol c
 symbol :: HasSymbol c => c -> Stage -> Symbol
 
 -- | Members of this class have the ability to be referenced.
-class HasUID s => Referable s
+class (HasUID s, HasRefAddress s) => Referable s
 
 -- | The referencing address (what we're linking to). Only visible in the
 --   source (tex/html).
@@ -1146,6 +1146,12 @@ class HasReference c
 
 -- | Provides a <tt>Lens</tt> to the <a>Reference</a>s.
 getReferences :: HasReference c => Lens' c [Reference]
+
+-- | A class that contains a list of decorated references (<a>DecRef</a>s).
+class HasDecRef c
+
+-- | Provides a <tt>Lens</tt> to the <a>DecRef</a>s.
+getDecRefs :: HasDecRef c => Lens' c [DecRef]
 
 -- | A <a>Quantity</a> that could have a reasonable value.
 class HasReasVal c
@@ -1869,6 +1875,14 @@ CapF :: TermCapitalization
 CapW :: TermCapitalization
 NoCap :: TermCapitalization
 
+-- | Holds any extra information needed for a <tt>Reference</tt>, be it an
+--   equation, pages, a note, or nothing.
+data RefInfo
+None :: RefInfo
+Equation :: [Int] -> RefInfo
+Page :: [Int] -> RefInfo
+RefNote :: String -> RefInfo
+
 -- | Helper for concatenating two <a>Sentence</a>s with a space between
 --   them.
 (+:+) :: Sentence -> Sentence -> Sentence
@@ -2108,7 +2122,13 @@ nounPhraseSent :: Sentence -> NP
 -- | A Document has a Title (<a>Sentence</a>), Author(s) (<a>Sentence</a>),
 --   and <a>Section</a>s which hold the contents of the document.
 data Document
-Document :: Title -> Author -> [Section] -> Document
+Document :: Title -> Author -> ShowTableOfContents -> [Section] -> Document
+
+-- | Determines whether or not the table of contents appears on the
+--   generated artifacts.
+data ShowTableOfContents
+ToC :: ShowTableOfContents
+NoToC :: ShowTableOfContents
 
 -- | Types of definitions (general, instance, theory, or data).
 data DType
@@ -2187,6 +2207,10 @@ mkParagraph :: Sentence -> Contents
 -- | Smart constructor similar to <a>llcc</a>, but takes in
 --   <a>RawContent</a> first.
 mkRawLC :: RawContent -> Reference -> LabelledContent
+
+-- | Manually removes the first section of a document (table of contents
+--   section).
+checkToC :: Document -> Document
 
 -- | Smart constructor for labelled content chunks.
 llcc :: Reference -> RawContent -> LabelledContent
@@ -2468,46 +2492,47 @@ label :: String -> Symbol
 -- | Variable smart constructor, requires non-empty variables
 variable :: String -> Symbol
 
--- | Holds any extra information needed for a <tt>Reference</tt>, be it an
---   equation, pages, a note, or nothing.
-data RefInfo
-None :: RefInfo
-Equation :: [Int] -> RefInfo
-Page :: [Int] -> RefInfo
-RefNote :: String -> RefInfo
-
 -- | A Reference contains the identifier (<a>UID</a>), a reference address
 --   (<a>LblType</a>), a human-readable shortname (<a>ShortName</a>), and
 --   any extra information about the reference (<a>RefInfo</a>).
 data Reference
-Reference :: UID -> LblType -> ShortName -> RefInfo -> Reference
+Reference :: UID -> LblType -> ShortName -> Reference
 
--- | Projector function that creates a <a>Reference</a> from something
---   <a>Referable</a>.
-ref :: (Referable r, HasShortName r) => r -> Reference
-
--- | Projector function that creates a <a>Reference</a> from something
---   <a>Referable</a>. Also accepts <a>RefInfo</a>.
-refInfo :: (Referable r, HasShortName r) => r -> RefInfo -> Reference
+-- | Finds the reference information of a <a>Reference</a>.
+--   
+--   Projector function that creates a <a>Reference</a> from something
+--   <tt>Referable</tt>.
+ref :: (HasUID r, HasRefAddress r, HasShortName r) => r -> Reference
 
 -- | Takes the reference <a>UID</a> and wraps it into a <a>Sentence</a>.
-refS :: (Referable r, HasShortName r) => r -> Sentence
+refS :: (HasUID r, HasRefAddress r, HasShortName r) => r -> Sentence
 
 -- | Takes a <a>Reference</a> with a name to be displayed and wraps it into
 --   a <a>Sentence</a>. Does not overwrite the shortname contained in the
 --   reference, but will only display as the given <a>Sentence</a>.
-namedRef :: (Referable r, HasShortName r) => r -> Sentence -> Sentence
+namedRef :: (HasUID r, HasRefAddress r, HasShortName r) => r -> Sentence -> Sentence
 
 -- | Takes a <a>Reference</a> with additional display info. Uses the
 --   internal shortname for its display name.
-complexRef :: (Referable r, HasShortName r) => r -> RefInfo -> Sentence
+complexRef :: (HasUID r, HasRefAddress r, HasShortName r) => r -> RefInfo -> Sentence
 
 -- | Takes a <a>Reference</a> with a name to be displayed and any
 --   additional information and wraps it into a <a>Sentence</a>. Does not
 --   overwrite the shortname contained in the reference, but will only
 --   display as the given <a>Sentence</a> along with the given
 --   <a>RefInfo</a>.
-namedComplexRef :: (Referable r, HasShortName r) => r -> Sentence -> RefInfo -> Sentence
+namedComplexRef :: (HasUID r, HasRefAddress r, HasShortName r) => r -> Sentence -> RefInfo -> Sentence
+
+-- | For holding a <a>Reference</a> that is decorated with extra
+--   information (ex. page numbers, equation sources, etc.).
+data DecRef
+
+-- | For creating a decorated reference (<a>DecRef</a>) with extra
+--   reference information (<a>RefInfo</a>).
+dRefInfo :: (HasUID r, HasRefAddress r, HasShortName r) => r -> RefInfo -> DecRef
+
+-- | Same as <a>ref</a>, but for <a>DecRef</a> instead of <a>Reference</a>.
+dRef :: (HasUID r, HasRefAddress r, HasShortName r) => r -> DecRef
 
 -- | Retrieves the <a>String</a> contained in a <a>LblType</a>.
 getAdd :: LblType -> String

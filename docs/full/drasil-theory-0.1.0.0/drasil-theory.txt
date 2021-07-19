@@ -87,26 +87,26 @@ Local :: Scope -> ScopeType
 Global :: ScopeType
 
 -- | A data definition is a <a>QDefinition</a> that may have additional
---   notes: the scope, any references, maybe a derivation, a label
---   (<a>ShortName</a>), a reference address, and other notes
---   (<a>Sentence</a>s).
+--   notes: the scope, any references (as <a>DecRef</a>s), maybe a
+--   derivation, a label (<a>ShortName</a>), a reference address, and other
+--   notes (<a>Sentence</a>s).
 data DataDefinition
-DatDef :: QDefinition -> ScopeType -> [Reference] -> Maybe Derivation -> ShortName -> String -> [Sentence] -> DataDefinition
+DatDef :: QDefinition -> ScopeType -> [DecRef] -> Maybe Derivation -> ShortName -> String -> [Sentence] -> DataDefinition
 [_qd] :: DataDefinition -> QDefinition
 [_scp] :: DataDefinition -> ScopeType
-[_rf] :: DataDefinition -> [Reference]
+[_rf] :: DataDefinition -> [DecRef]
 [_deri] :: DataDefinition -> Maybe Derivation
 [lbl] :: DataDefinition -> ShortName
 [ra] :: DataDefinition -> String
 [_notes] :: DataDefinition -> [Sentence]
 scp :: Lens' DataDefinition ScopeType
-rf :: Lens' DataDefinition [Reference]
+rf :: Lens' DataDefinition [DecRef]
 qd :: Lens' DataDefinition QDefinition
 notes :: Lens' DataDefinition [Sentence]
 deri :: Lens' DataDefinition (Maybe Derivation)
 
 -- | Smart constructor for data definitions.
-dd :: QDefinition -> [Reference] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
+dd :: QDefinition -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
 
 -- | Smart constructor for data definitions with no references.
 ddNoRefs :: QDefinition -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
@@ -121,7 +121,7 @@ instance Language.Drasil.Classes.Core.HasSymbol Theory.Drasil.DataDefinition.Dat
 instance Language.Drasil.Classes.Quantity Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Classes.DefiningExpr Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.DisplayClasses.Display Theory.Drasil.DataDefinition.DataDefinition
-instance Language.Drasil.Classes.HasReference Theory.Drasil.DataDefinition.DataDefinition
+instance Language.Drasil.Classes.HasDecRef Theory.Drasil.DataDefinition.DataDefinition
 instance GHC.Classes.Eq Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Classes.HasDerivation Theory.Drasil.DataDefinition.DataDefinition
 instance Language.Drasil.Classes.HasAdditionalNotes Theory.Drasil.DataDefinition.DataDefinition
@@ -291,11 +291,11 @@ module Theory.Drasil.InstanceModel
 data InstanceModel
 
 -- | Smart constructor for instance models with everything defined.
-im :: ModelKind -> Inputs -> Output -> OutputConstraints -> [Reference] -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
+im :: ModelKind -> Inputs -> Output -> OutputConstraints -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
 
 -- | Smart constructor for instance models with a custom term, and no
 --   derivation.
-imNoDeriv :: ModelKind -> Inputs -> Output -> OutputConstraints -> [Reference] -> String -> [Sentence] -> InstanceModel
+imNoDeriv :: ModelKind -> Inputs -> Output -> OutputConstraints -> [DecRef] -> String -> [Sentence] -> InstanceModel
 
 -- | Smart constructor for instance models with a custom term, and no
 --   references.
@@ -320,7 +320,7 @@ instance Language.Drasil.Classes.Definition Theory.Drasil.InstanceModel.Instance
 instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.DisplayClasses.Display Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Classes.HasDerivation Theory.Drasil.InstanceModel.InstanceModel
-instance Language.Drasil.Classes.HasReference Theory.Drasil.InstanceModel.InstanceModel
+instance Language.Drasil.Classes.HasDecRef Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Classes.Core2.HasShortName Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Classes.Core.HasRefAddress Theory.Drasil.InstanceModel.InstanceModel
 instance Language.Drasil.Classes.HasAdditionalNotes Theory.Drasil.InstanceModel.InstanceModel
@@ -336,11 +336,12 @@ instance Language.Drasil.Chunk.UnitDefn.MayHaveUnit Theory.Drasil.InstanceModel.
 module Theory.Drasil.GenDefn
 
 -- | A general definition is a <a>ModelKind</a> that may have units, a
---   derivation, references, a shortname, a reference address, and notes.
+--   derivation, references (as <a>DecRef</a>s), a shortname, a reference
+--   address, and notes.
 data GenDefn
 
 -- | Smart constructor for general definitions.
-gd :: IsUnit u => ModelKind -> Maybe u -> Maybe Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
+gd :: IsUnit u => ModelKind -> Maybe u -> Maybe Derivation -> [DecRef] -> String -> [Sentence] -> GenDefn
 
 -- | Smart constructor for general definitions with no references.
 gdNoRefs :: IsUnit u => ModelKind -> Maybe u -> Maybe Derivation -> String -> [Sentence] -> GenDefn
@@ -355,7 +356,7 @@ instance Language.Drasil.Classes.Definition Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.DisplayClasses.Display Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.Classes.HasDerivation Theory.Drasil.GenDefn.GenDefn
-instance Language.Drasil.Classes.HasReference Theory.Drasil.GenDefn.GenDefn
+instance Language.Drasil.Classes.HasDecRef Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.Classes.Core2.HasShortName Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.Classes.Core.HasRefAddress Theory.Drasil.GenDefn.GenDefn
 instance Language.Drasil.Classes.HasAdditionalNotes Theory.Drasil.GenDefn.GenDefn
@@ -388,7 +389,7 @@ defined_fun :: Theory t => Lens' t [QDefinition]
 --   <li>defq - definitions (<a>QDefinition</a>s),</li>
 --   <li>invs - invariants (<a>DisplayExpr</a>s),</li>
 --   <li>dfun - defined functions (<a>QDefinition</a>s),</li>
---   <li>ref - accompanying references (<a>Reference</a>s),</li>
+--   <li>ref - accompanying references (<a>DecRef</a>s),</li>
 --   <li>lb - a label (<a>SpaceDefn</a>),</li>
 --   <li>ra - reference address (<a>SpaceDefn</a>),</li>
 --   <li>notes - additional notes (<a>Sentence</a>s).</li>
@@ -400,7 +401,7 @@ data TheoryModel
 
 -- | Constructor for theory models. Must have a source. Uses the shortname
 --   of the reference address.
-tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind -> [q] -> [c] -> [QDefinition] -> [DisplayExpr] -> [QDefinition] -> [Reference] -> String -> [Sentence] -> TheoryModel
+tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind -> [q] -> [c] -> [QDefinition] -> [DisplayExpr] -> [QDefinition] -> [DecRef] -> String -> [Sentence] -> TheoryModel
 
 -- | Constructor for theory models. Uses the shortname of the reference
 --   address.
@@ -409,7 +410,7 @@ instance Language.Drasil.Classes.Core.HasUID Theory.Drasil.Theory.TheoryModel
 instance Language.Drasil.Classes.NamedIdea Theory.Drasil.Theory.TheoryModel
 instance Language.Drasil.Classes.Idea Theory.Drasil.Theory.TheoryModel
 instance Language.Drasil.Classes.Definition Theory.Drasil.Theory.TheoryModel
-instance Language.Drasil.Classes.HasReference Theory.Drasil.Theory.TheoryModel
+instance Language.Drasil.Classes.HasDecRef Theory.Drasil.Theory.TheoryModel
 instance Language.Drasil.Classes.ConceptDomain Theory.Drasil.Theory.TheoryModel
 instance Language.Drasil.Classes.HasAdditionalNotes Theory.Drasil.Theory.TheoryModel
 instance Theory.Drasil.Theory.Theory Theory.Drasil.Theory.TheoryModel
@@ -444,13 +445,13 @@ data ConstraintSet
 mkConstraintSet :: ConceptChunk -> NonEmpty Relation -> ConstraintSet
 
 -- | A data definition is a <a>QDefinition</a> that may have additional
---   notes: the scope, any references, maybe a derivation, a label
---   (<a>ShortName</a>), a reference address, and other notes
---   (<a>Sentence</a>s).
+--   notes: the scope, any references (as <a>DecRef</a>s), maybe a
+--   derivation, a label (<a>ShortName</a>), a reference address, and other
+--   notes (<a>Sentence</a>s).
 data DataDefinition
 
 -- | Smart constructor for data definitions.
-dd :: QDefinition -> [Reference] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
+dd :: QDefinition -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
 
 -- | Smart constructor for data definitions with no references.
 ddNoRefs :: QDefinition -> Maybe Derivation -> String -> [Sentence] -> DataDefinition
@@ -459,11 +460,12 @@ ddNoRefs :: QDefinition -> Maybe Derivation -> String -> [Sentence] -> DataDefin
 qdFromDD :: DataDefinition -> QDefinition
 
 -- | A general definition is a <a>ModelKind</a> that may have units, a
---   derivation, references, a shortname, a reference address, and notes.
+--   derivation, references (as <a>DecRef</a>s), a shortname, a reference
+--   address, and notes.
 data GenDefn
 
 -- | Smart constructor for general definitions.
-gd :: IsUnit u => ModelKind -> Maybe u -> Maybe Derivation -> [Reference] -> String -> [Sentence] -> GenDefn
+gd :: IsUnit u => ModelKind -> Maybe u -> Maybe Derivation -> [DecRef] -> String -> [Sentence] -> GenDefn
 
 -- | Smart constructor for general definitions with no references.
 gdNoRefs :: IsUnit u => ModelKind -> Maybe u -> Maybe Derivation -> String -> [Sentence] -> GenDefn
@@ -563,11 +565,11 @@ equationalRealmN :: NP -> MultiDefn -> ModelKind
 data InstanceModel
 
 -- | Smart constructor for instance models with everything defined.
-im :: ModelKind -> Inputs -> Output -> OutputConstraints -> [Reference] -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
+im :: ModelKind -> Inputs -> Output -> OutputConstraints -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
 
 -- | Smart constructor for instance models with a custom term, and no
 --   derivation.
-imNoDeriv :: ModelKind -> Inputs -> Output -> OutputConstraints -> [Reference] -> String -> [Sentence] -> InstanceModel
+imNoDeriv :: ModelKind -> Inputs -> Output -> OutputConstraints -> [DecRef] -> String -> [Sentence] -> InstanceModel
 
 -- | Smart constructor for instance models with a custom term, and no
 --   references.
@@ -609,7 +611,7 @@ defined_fun :: Theory t => Lens' t [QDefinition]
 --   <li>defq - definitions (<a>QDefinition</a>s),</li>
 --   <li>invs - invariants (<a>DisplayExpr</a>s),</li>
 --   <li>dfun - defined functions (<a>QDefinition</a>s),</li>
---   <li>ref - accompanying references (<a>Reference</a>s),</li>
+--   <li>ref - accompanying references (<a>DecRef</a>s),</li>
 --   <li>lb - a label (<a>SpaceDefn</a>),</li>
 --   <li>ra - reference address (<a>SpaceDefn</a>),</li>
 --   <li>notes - additional notes (<a>Sentence</a>s).</li>
@@ -621,7 +623,7 @@ data TheoryModel
 
 -- | Constructor for theory models. Must have a source. Uses the shortname
 --   of the reference address.
-tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind -> [q] -> [c] -> [QDefinition] -> [DisplayExpr] -> [QDefinition] -> [Reference] -> String -> [Sentence] -> TheoryModel
+tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind -> [q] -> [c] -> [QDefinition] -> [DisplayExpr] -> [QDefinition] -> [DecRef] -> String -> [Sentence] -> TheoryModel
 
 -- | Constructor for theory models. Uses the shortname of the reference
 --   address.

@@ -187,6 +187,7 @@ typUnc :: CI
 sec :: CI
 softReqSpec :: NP
 abbreviation :: NamedChunk
+acronym :: NamedChunk
 analysis :: NamedChunk
 appendix :: NamedChunk
 aspect :: NamedChunk
@@ -318,7 +319,7 @@ corSol :: NamedChunk
 orgOfDoc :: NamedChunk
 propOfCorSol :: NamedChunk
 prpsOfDoc :: NamedChunk
-refmat :: NamedChunk
+refMat :: NamedChunk
 reqInput :: NamedChunk
 scpOfReq :: NamedChunk
 tAuxConsts :: NamedChunk
@@ -327,6 +328,7 @@ tOfUnit :: NamedChunk
 termAndDef :: NamedChunk
 traceyMandG :: NamedChunk
 vav :: NamedChunk
+tOfCont :: NamedChunk
 scpOfTheProj :: (NamedChunk -> Sentence) -> NamedChunk
 designDoc :: NamedChunk
 fullForm :: NamedChunk

@@ -389,6 +389,13 @@ digraph alltypes {
 		ConstraintE	[shape=oval, color=red2, label=ConstraintE];
 		}
 	}
+	subgraph decoratedreference {
+		subgraph decref{
+		DecRef -> Reference;
+		DecRef -> RefInfo;
+		DecRef	[shape=oval, color=cyan3, label=DecRef];
+		}
+	}
 	subgraph derivation {
 		subgraph derivation{
 		Derivation -> Sentence;
@@ -433,11 +440,13 @@ digraph alltypes {
 		subgraph document{
 		Document -> Title;
 		Document -> Author;
+		Document -> ShowTableOfContents;
 		Document -> Section;
-		Document -> Reference;
-		Document -> RawContent;
-		Document -> LabelledContent;
 		Document	[shape=oval, color=darkviolet, label=Document];
+		}
+		subgraph showtableofcontents{
+		ShowTableOfContents -> Document;
+		ShowTableOfContents	[shape=oval, color=darkviolet, label=ShowTableOfContents];
 		}
 	}
 	subgraph expr {
@@ -547,19 +556,11 @@ digraph alltypes {
 		People	[shape=oval, color=red2, label=People];
 		}
 	}
-	subgraph refprog {
-		subgraph refinfo{
-		RefInfo -> Int;
-		RefInfo -> String;
-		RefInfo	[shape=oval, color=darkviolet, label=RefInfo];
-		}
-	}
 	subgraph reference {
 		subgraph reference{
 		Reference -> UID;
 		Reference -> LblType;
 		Reference -> ShortName;
-		Reference -> RefInfo;
 		Reference	[shape=oval, color=cyan3, label=Reference];
 		}
 	}
@@ -569,6 +570,11 @@ digraph alltypes {
 		}
 		subgraph termcapitalization{
 		TermCapitalization	[shape=oval, color=darkviolet, label=TermCapitalization];
+		}
+		subgraph refinfo{
+		RefInfo -> Int;
+		RefInfo -> String;
+		RefInfo	[shape=oval, color=darkviolet, label=RefInfo];
 		}
 		subgraph sentence{
 		Sentence -> SentenceStyle;
@@ -1803,6 +1809,8 @@ digraph alltypes {
 	}
 	subgraph tableofabbandacronyms {
 	}
+	subgraph tableofcontents {
+	}
 	subgraph tableofsymbols {
 	}
 	subgraph tableofunits {
@@ -1811,7 +1819,6 @@ digraph alltypes {
 	}
 	subgraph docdecl {
 		subgraph docsection{
-		DocSection -> RefSec;
 		DocSection	[shape=oval, color=darkviolet, label=DocSection];
 		}
 		subgraph ssdsub{
@@ -2229,7 +2236,7 @@ digraph alltypes {
 		subgraph datadefinition{
 		DataDefinition -> QDefinition;
 		DataDefinition -> ScopeType;
-		DataDefinition -> Reference;
+		DataDefinition -> DecRef;
 		DataDefinition -> MaybeDerivation;
 		DataDefinition -> ShortName;
 		DataDefinition -> String;
@@ -2246,7 +2253,7 @@ digraph alltypes {
 		GenDefn -> ModelKind;
 		GenDefn -> MaybeUnitDefn;
 		GenDefn -> MaybeDerivation;
-		GenDefn -> Reference;
+		GenDefn -> DecRef;
 		GenDefn -> ShortName;
 		GenDefn -> String;
 		GenDefn -> Sentence;
@@ -2258,7 +2265,7 @@ digraph alltypes {
 		InstanceModel -> ModelKind;
 		InstanceModel -> Inputs;
 		InstanceModel -> Output;
-		InstanceModel -> Reference;
+		InstanceModel -> DecRef;
 		InstanceModel -> MaybeDerivation;
 		InstanceModel -> ShortName;
 		InstanceModel -> String;
@@ -2321,7 +2328,7 @@ digraph alltypes {
 		TheoryModel -> ConceptChunk;
 		TheoryModel -> QDefinition;
 		TheoryModel -> DisplayExpr;
-		TheoryModel -> Reference;
+		TheoryModel -> DecRef;
 		TheoryModel -> ShortName;
 		TheoryModel -> String;
 		TheoryModel -> Sentence;

@@ -168,7 +168,7 @@ data ReferenceDB
 -- | Data structure for holding all of the requisite information about a
 --   system to be used in artifact generation.
 data SystemInformation
-[SI] :: (CommonIdea a, Idea a, Idea b, HasName c, Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => {_sys :: a, _kind :: b, _authors :: [c], _purpose :: d, _quants :: [e], _concepts :: [f], _instModels :: [InstanceModel], _datadefs :: [DataDefinition], _configFiles :: [String], _inputs :: [h], _outputs :: [i], _defSequence :: [Block QDefinition], _constraints :: [j], _constants :: [QDefinition], _sysinfodb :: ChunkDB, _usedinfodb :: ChunkDB, refdb :: ReferenceDB} -> SystemInformation
+[SI] :: (CommonIdea a, Idea a, Idea b, HasName c, Quantity e, Eq e, MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f, Quantity h, MayHaveUnit h, Quantity i, MayHaveUnit i, HasUID j, Constrained j) => {_sys :: a, _kind :: b, _authors :: [c], _purpose :: d, _quants :: [e], _concepts :: [f], _instModels :: [InstanceModel], _datadefs :: [DataDefinition], _configFiles :: [String], _folderPath :: FilePath, _inputs :: [h], _outputs :: [i], _defSequence :: [Block QDefinition], _constraints :: [j], _constants :: [QDefinition], _sysinfodb :: ChunkDB, _usedinfodb :: ChunkDB, refdb :: ReferenceDB} -> SystemInformation
 
 -- | Helper for extracting a bibliography from the system information.
 citeDB :: SystemInformation -> BibRef

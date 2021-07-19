@@ -250,6 +250,8 @@ digraph alltypes {
 	}
 	subgraph tableofabbandacronyms {
 	}
+	subgraph tableofcontents {
+	}
 	subgraph tableofsymbols {
 	}
 	subgraph tableofunits {
@@ -258,7 +260,6 @@ digraph alltypes {
 	}
 	subgraph docdecl {
 		subgraph docsection{
-		DocSection -> RefSec;
 		DocSection	[shape=oval, color=darkviolet, label=DocSection];
 		}
 		subgraph ssdsub{

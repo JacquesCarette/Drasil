@@ -15,13 +15,13 @@
 </span><span id="line-14"></span><span>  </span><span class="hs-glyph">|</span><span> </span><span id="Global"><span class="annot"><a href="Theory.Drasil.DataDefinition.html#Global"><span class="hs-identifier hs-var">Global</span></a></span></span><span>      </span><span class="hs-comment">-- ^ Visible everywhere.</span><span>
 </span><span id="line-15"></span><span>
 </span><span id="line-16"></span><span class="hs-comment">-- | A data definition is a 'QDefinition' that may have additional notes: </span><span>
-</span><span id="line-17"></span><span class="hs-comment">-- the scope, any references, maybe a derivation, a label ('ShortName'), a reference address, and other notes ('Sentence's).</span><span>
+</span><span id="line-17"></span><span class="hs-comment">-- the scope, any references (as 'DecRef's), maybe a derivation, a label ('ShortName'), a reference address, and other notes ('Sentence's).</span><span>
 </span><span id="line-18"></span><span class="hs-keyword">data</span><span> </span><span id="DataDefinition"><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-var">DataDefinition</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span id="DatDef"><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DatDef"><span class="hs-identifier hs-var">DatDef</span></a></span></span><span> </span><span class="hs-special">{</span><span> </span><span id="_qd"><span class="annot"><span class="annottext">DataDefinition -&gt; QDefinition
 </span><a href="Theory.Drasil.DataDefinition.html#_qd"><span class="hs-identifier hs-var hs-var">_qd</span></a></span></span><span>    </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
 </span><span id="line-19"></span><span>                             </span><span class="hs-special">,</span><span> </span><span id="_scp"><span class="annot"><span class="annottext">DataDefinition -&gt; ScopeType
 </span><a href="Theory.Drasil.DataDefinition.html#_scp"><span class="hs-identifier hs-var hs-var">_scp</span></a></span></span><span>   </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#ScopeType"><span class="hs-identifier hs-type">ScopeType</span></a></span><span>
-</span><span id="line-20"></span><span>                             </span><span class="hs-special">,</span><span> </span><span id="_rf"><span class="annot"><span class="annottext">DataDefinition -&gt; [Reference]
-</span><a href="Theory.Drasil.DataDefinition.html#_rf"><span class="hs-identifier hs-var hs-var">_rf</span></a></span></span><span>   </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span class="hs-special">]</span><span>
+</span><span id="line-20"></span><span>                             </span><span class="hs-special">,</span><span> </span><span id="_rf"><span class="annot"><span class="annottext">DataDefinition -&gt; [DecRef]
+</span><a href="Theory.Drasil.DataDefinition.html#_rf"><span class="hs-identifier hs-var hs-var">_rf</span></a></span></span><span>    </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DecRef</span></span><span class="hs-special">]</span><span>
 </span><span id="line-21"></span><span>                             </span><span class="hs-special">,</span><span> </span><span id="_deri"><span class="annot"><span class="annottext">DataDefinition -&gt; Maybe Derivation
 </span><a href="Theory.Drasil.DataDefinition.html#_deri"><span class="hs-identifier hs-var hs-var">_deri</span></a></span></span><span>  </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span>
 </span><span id="line-22"></span><span>                             </span><span class="hs-special">,</span><span> </span><span id="lbl"><span class="annot"><span class="annottext">DataDefinition -&gt; ShortName
@@ -34,7 +34,7 @@
 </span><span id="line-26"></span><span id="scp"><span id="rf"><span id="qd"><span id="notes"><span id="deri"><span class="hs-identifier">makeLenses</span><span> </span><span class="hs-special">''</span><span class="hs-identifier">DataDefinition</span></span></span></span></span></span><span>
 </span><span id="line-27"></span><span>
 </span><span id="line-28"></span><span class="hs-comment">-- | Finds the 'UID' of a 'DataDefinition'.</span><span>
-</span><span id="line-29"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span>             </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138383"><span class="annot"><span class="annottext">uid :: (UID -&gt; f UID) -&gt; DataDefinition -&gt; f DataDefinition
+</span><span id="line-29"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasUID</span></span><span>             </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138993"><span class="annot"><span class="annottext">uid :: (UID -&gt; f UID) -&gt; DataDefinition -&gt; f DataDefinition
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">uid</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(QDefinition -&gt; f QDefinition)
 -&gt; DataDefinition -&gt; f DataDefinition
 Lens' DataDefinition QDefinition
@@ -49,7 +49,7 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall c. HasUID c =&gt; Lens' c UID
 </span><span class="hs-identifier hs-var">uid</span></span><span>
 </span><span id="line-30"></span><span class="hs-comment">-- | Finds the term ('NP') of the 'QDefinition' used to make the 'DataDefinition'.</span><span>
-</span><span id="line-31"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span>          </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138377"><span class="annot"><span class="annottext">term :: (NP -&gt; f NP) -&gt; DataDefinition -&gt; f DataDefinition
+</span><span id="line-31"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedIdea</span></span><span>          </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138987"><span class="annot"><span class="annottext">term :: (NP -&gt; f NP) -&gt; DataDefinition -&gt; f DataDefinition
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">term</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(QDefinition -&gt; f QDefinition)
 -&gt; DataDefinition -&gt; f DataDefinition
 Lens' DataDefinition QDefinition
@@ -64,21 +64,21 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall c. NamedIdea c =&gt; Lens' c NP
 </span><span class="hs-identifier hs-var">term</span></span><span>
 </span><span id="line-32"></span><span class="hs-comment">-- | Finds the idea contained in the 'QDefinition' used to make the 'DataDefinition'.</span><span>
-</span><span id="line-33"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span>               </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138372"><span class="annot"><span class="annottext">getA :: DataDefinition -&gt; Maybe UID
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">getA</span></span></span><span> </span><span id="local-6989586621679138370"><span class="annot"><span class="annottext">c :: DataDefinition
-</span><a href="#local-6989586621679138370"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QDefinition -&gt; Maybe UID
+</span><span id="line-33"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Idea</span></span><span>               </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138982"><span class="annot"><span class="annottext">getA :: DataDefinition -&gt; Maybe UID
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">getA</span></span></span><span> </span><span id="local-6989586621679138980"><span class="annot"><span class="annottext">c :: DataDefinition
+</span><a href="#local-6989586621679138980"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QDefinition -&gt; Maybe UID
 forall c. Idea c =&gt; c -&gt; Maybe UID
 </span><span class="hs-identifier hs-var">getA</span></span><span> </span><span class="annot"><span class="annottext">(QDefinition -&gt; Maybe UID) -&gt; QDefinition -&gt; Maybe UID
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
-</span><a href="#local-6989586621679138370"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">DataDefinition
+</span><a href="#local-6989586621679138980"><span class="hs-identifier hs-var">c</span></a></span><span> </span><span class="annot"><span class="annottext">DataDefinition
 -&gt; Getting QDefinition DataDefinition QDefinition -&gt; QDefinition
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting QDefinition DataDefinition QDefinition
 Lens' DataDefinition QDefinition
 </span><a href="Theory.Drasil.DataDefinition.html#qd"><span class="hs-identifier hs-var">qd</span></a></span><span>
 </span><span id="line-34"></span><span class="hs-comment">-- | Finds the Space of the 'QDefinition' used to make the 'DataDefinition'.</span><span>
-</span><span id="line-35"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasSpace</span></span><span>           </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138367"><span class="annot"><span class="annottext">typ :: (Space -&gt; f Space) -&gt; DataDefinition -&gt; f DataDefinition
+</span><span id="line-35"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasSpace</span></span><span>           </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138977"><span class="annot"><span class="annottext">typ :: (Space -&gt; f Space) -&gt; DataDefinition -&gt; f DataDefinition
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">typ</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(QDefinition -&gt; f QDefinition)
 -&gt; DataDefinition -&gt; f DataDefinition
 Lens' DataDefinition QDefinition
@@ -93,12 +93,12 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall c. HasSpace c =&gt; Lens' c Space
 </span><span class="hs-identifier hs-var">typ</span></span><span>
 </span><span id="line-36"></span><span class="hs-comment">-- | Finds the Symbol of the 'QDefinition' used to make the 'DataDefinition'.</span><span>
-</span><span id="line-37"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasSymbol</span></span><span>          </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138363"><span class="annot"><span class="annottext">symbol :: DataDefinition -&gt; Stage -&gt; Symbol
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">symbol</span></span></span><span> </span><span id="local-6989586621679138361"><span class="annot"><span class="annottext">e :: DataDefinition
-</span><a href="#local-6989586621679138361"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QDefinition -&gt; Stage -&gt; Symbol
+</span><span id="line-37"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasSymbol</span></span><span>          </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138973"><span class="annot"><span class="annottext">symbol :: DataDefinition -&gt; Stage -&gt; Symbol
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">symbol</span></span></span><span> </span><span id="local-6989586621679138971"><span class="annot"><span class="annottext">e :: DataDefinition
+</span><a href="#local-6989586621679138971"><span class="hs-identifier hs-var">e</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QDefinition -&gt; Stage -&gt; Symbol
 forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
 </span><span class="hs-identifier hs-var">symbol</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DataDefinition
-</span><a href="#local-6989586621679138361"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="annot"><span class="annottext">DataDefinition
+</span><a href="#local-6989586621679138971"><span class="hs-identifier hs-var">e</span></a></span><span> </span><span class="annot"><span class="annottext">DataDefinition
 -&gt; Getting QDefinition DataDefinition QDefinition -&gt; QDefinition
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting QDefinition DataDefinition QDefinition
@@ -107,7 +107,7 @@ Lens' DataDefinition QDefinition
 </span><span id="line-38"></span><span class="hs-comment">-- | 'DataDefinition's have a 'Quantity'.</span><span>
 </span><span id="line-39"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Quantity</span></span><span>           </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span>
 </span><span id="line-40"></span><span class="hs-comment">-- | Finds the defining expression of the 'QDefinition' used to make the 'DataDefinition'.</span><span>
-</span><span id="line-41"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DefiningExpr</span></span><span>       </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138354"><span class="annot"><span class="annottext">defnExpr :: (Expr -&gt; f Expr) -&gt; DataDefinition -&gt; f DataDefinition
+</span><span id="line-41"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DefiningExpr</span></span><span>       </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138964"><span class="annot"><span class="annottext">defnExpr :: (Expr -&gt; f Expr) -&gt; DataDefinition -&gt; f DataDefinition
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">defnExpr</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(QDefinition -&gt; f QDefinition)
 -&gt; DataDefinition -&gt; f DataDefinition
 Lens' DataDefinition QDefinition
@@ -122,57 +122,57 @@ forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 forall c. DefiningExpr c =&gt; Lens' c Expr
 </span><span class="hs-identifier hs-var">defnExpr</span></span><span>
 </span><span id="line-42"></span><span class="hs-comment">-- | Converts the defining expression of a 'DataDefinition' into the display language.</span><span>
-</span><span id="line-43"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Display</span></span><span>            </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138350"><span class="annot"><span class="annottext">toDispExpr :: DataDefinition -&gt; DisplayExpr
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">toDispExpr</span></span></span><span> </span><span id="local-6989586621679138348"><span class="annot"><span class="annottext">d :: DataDefinition
-</span><a href="#local-6989586621679138348"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; DisplayExpr
+</span><span id="line-43"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Display</span></span><span>            </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138960"><span class="annot"><span class="annottext">toDispExpr :: DataDefinition -&gt; DisplayExpr
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">toDispExpr</span></span></span><span> </span><span id="local-6989586621679138958"><span class="annot"><span class="annottext">d :: DataDefinition
+</span><a href="#local-6989586621679138958"><span class="hs-identifier hs-var">d</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; DisplayExpr
 forall a b. (Display a, Display b) =&gt; a -&gt; b -&gt; DisplayExpr
 </span><span class="hs-identifier hs-var">defines</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DataDefinition -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
-</span><a href="#local-6989586621679138348"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DataDefinition
-</span><a href="#local-6989586621679138348"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; Getting Expr DataDefinition Expr -&gt; Expr
+</span><a href="#local-6989586621679138958"><span class="hs-identifier hs-var">d</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DataDefinition
+</span><a href="#local-6989586621679138958"><span class="hs-identifier hs-var">d</span></a></span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; Getting Expr DataDefinition Expr -&gt; Expr
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting Expr DataDefinition Expr
 forall c. DefiningExpr c =&gt; Lens' c Expr
 </span><span class="hs-identifier hs-var">defnExpr</span></span><span class="hs-special">)</span><span>
-</span><span id="line-44"></span><span class="hs-comment">-- | Finds 'Reference's contained in the 'DataDefinition'.</span><span>
-</span><span id="line-45"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasReference</span></span><span>       </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138343"><span class="annot"><span class="annottext">getReferences :: ([Reference] -&gt; f [Reference])
--&gt; DataDefinition -&gt; f DataDefinition
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">getReferences</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([Reference] -&gt; f [Reference])
--&gt; DataDefinition -&gt; f DataDefinition
-Lens' DataDefinition [Reference]
+</span><span id="line-44"></span><span class="hs-comment">{-- Finds 'Reference's contained in the 'DataDefinition'.
+instance HasReference       DataDefinition where getReferences = rf-}</span><span>
+</span><span id="line-46"></span><span class="hs-comment">-- | Finds 'DecRef's contained in the 'DataDefinition'.</span><span>
+</span><span id="line-47"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasDecRef</span></span><span>          </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138953"><span class="annot"><span class="annottext">getDecRefs :: ([DecRef] -&gt; f [DecRef]) -&gt; DataDefinition -&gt; f DataDefinition
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">getDecRefs</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([DecRef] -&gt; f [DecRef]) -&gt; DataDefinition -&gt; f DataDefinition
+Lens' DataDefinition [DecRef]
 </span><a href="Theory.Drasil.DataDefinition.html#rf"><span class="hs-identifier hs-var">rf</span></a></span><span>
-</span><span id="line-46"></span><span class="hs-comment">-- | Equal if 'UID's are equal.</span><span>
-</span><span id="line-47"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679138339"><span class="annot"><span class="hs-identifier hs-type">Eq</span></span><span>                 </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138337"><span class="annot"><span class="annottext">a :: DataDefinition
-</span><a href="#local-6989586621679138337"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679138336"><span class="annot"><span class="annottext">== :: DataDefinition -&gt; DataDefinition -&gt; Bool
-</span><span class="hs-operator hs-var hs-var hs-var hs-var">==</span></span></span><span> </span><span id="local-6989586621679138335"><span class="annot"><span class="annottext">b :: DataDefinition
-</span><a href="#local-6989586621679138335"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DataDefinition
-</span><a href="#local-6989586621679138337"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; Getting UID DataDefinition UID -&gt; UID
+</span><span id="line-48"></span><span class="hs-comment">-- | Equal if 'UID's are equal.</span><span>
+</span><span id="line-49"></span><span class="hs-keyword">instance</span><span> </span><span id="local-6989586621679138949"><span class="annot"><span class="hs-identifier hs-type">Eq</span></span><span>                 </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138947"><span class="annot"><span class="annottext">a :: DataDefinition
+</span><a href="#local-6989586621679138947"><span class="hs-identifier hs-var">a</span></a></span></span><span> </span><span id="local-6989586621679138946"><span class="annot"><span class="annottext">== :: DataDefinition -&gt; DataDefinition -&gt; Bool
+</span><span class="hs-operator hs-var hs-var hs-var hs-var">==</span></span></span><span> </span><span id="local-6989586621679138945"><span class="annot"><span class="annottext">b :: DataDefinition
+</span><a href="#local-6989586621679138945"><span class="hs-identifier hs-var">b</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DataDefinition
+</span><a href="#local-6989586621679138947"><span class="hs-identifier hs-var">a</span></a></span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; Getting UID DataDefinition UID -&gt; UID
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting UID DataDefinition UID
 forall c. HasUID c =&gt; Lens' c UID
 </span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; Bool
 forall a. Eq a =&gt; a -&gt; a -&gt; Bool
 </span><span class="hs-operator hs-var">==</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DataDefinition
-</span><a href="#local-6989586621679138335"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; Getting UID DataDefinition UID -&gt; UID
+</span><a href="#local-6989586621679138945"><span class="hs-identifier hs-var">b</span></a></span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; Getting UID DataDefinition UID -&gt; UID
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting UID DataDefinition UID
 forall c. HasUID c =&gt; Lens' c UID
 </span><span class="hs-identifier hs-var">uid</span></span><span class="hs-special">)</span><span>
-</span><span id="line-48"></span><span class="hs-comment">-- | Finds the derivation of the 'DataDefinition'. May contain Nothing.</span><span>
-</span><span id="line-49"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasDerivation</span></span><span>      </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138332"><span class="annot"><span class="annottext">derivations :: (Maybe Derivation -&gt; f (Maybe Derivation))
+</span><span id="line-50"></span><span class="hs-comment">-- | Finds the derivation of the 'DataDefinition'. May contain Nothing.</span><span>
+</span><span id="line-51"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasDerivation</span></span><span>      </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138942"><span class="annot"><span class="annottext">derivations :: (Maybe Derivation -&gt; f (Maybe Derivation))
 -&gt; DataDefinition -&gt; f DataDefinition
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">derivations</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Maybe Derivation -&gt; f (Maybe Derivation))
 -&gt; DataDefinition -&gt; f DataDefinition
 Lens' DataDefinition (Maybe Derivation)
 </span><a href="Theory.Drasil.DataDefinition.html#deri"><span class="hs-identifier hs-var">deri</span></a></span><span>
-</span><span id="line-50"></span><span class="hs-comment">-- | Finds any additional notes for the 'DataDefinition'.</span><span>
-</span><span id="line-51"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasAdditionalNotes</span></span><span> </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138328"><span class="annot"><span class="annottext">getNotes :: ([Sentence] -&gt; f [Sentence]) -&gt; DataDefinition -&gt; f DataDefinition
+</span><span id="line-52"></span><span class="hs-comment">-- | Finds any additional notes for the 'DataDefinition'.</span><span>
+</span><span id="line-53"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasAdditionalNotes</span></span><span> </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138938"><span class="annot"><span class="annottext">getNotes :: ([Sentence] -&gt; f [Sentence]) -&gt; DataDefinition -&gt; f DataDefinition
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">getNotes</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; f [Sentence]) -&gt; DataDefinition -&gt; f DataDefinition
 Lens' DataDefinition [Sentence]
 </span><a href="Theory.Drasil.DataDefinition.html#notes"><span class="hs-identifier hs-var">notes</span></a></span><span>
-</span><span id="line-52"></span><span class="hs-comment">-- | Finds the units of the 'QDefinition' used to make the 'DataDefinition'.</span><span>
-</span><span id="line-53"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MayHaveUnit</span></span><span>        </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138324"><span class="annot"><span class="annottext">getUnit :: DataDefinition -&gt; Maybe UnitDefn
+</span><span id="line-54"></span><span class="hs-comment">-- | Finds the units of the 'QDefinition' used to make the 'DataDefinition'.</span><span>
+</span><span id="line-55"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">MayHaveUnit</span></span><span>        </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138934"><span class="annot"><span class="annottext">getUnit :: DataDefinition -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">getUnit</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QDefinition -&gt; Maybe UnitDefn
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">(QDefinition -&gt; Maybe UnitDefn)
@@ -186,56 +186,64 @@ forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
 </span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting QDefinition DataDefinition QDefinition
 Lens' DataDefinition QDefinition
 </span><a href="Theory.Drasil.DataDefinition.html#qd"><span class="hs-identifier hs-var">qd</span></a></span><span> </span><span>
-</span><span id="line-54"></span><span class="hs-comment">-- | Finds the 'ShortName' of the 'DataDefinition'.</span><span>
-</span><span id="line-55"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasShortName</span></span><span>       </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138320"><span class="annot"><span class="annottext">shortname :: DataDefinition -&gt; ShortName
+</span><span id="line-56"></span><span class="hs-comment">-- | Finds the 'ShortName' of the 'DataDefinition'.</span><span>
+</span><span id="line-57"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasShortName</span></span><span>       </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138930"><span class="annot"><span class="annottext">shortname :: DataDefinition -&gt; ShortName
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">shortname</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; ShortName
 </span><a href="Theory.Drasil.DataDefinition.html#lbl"><span class="hs-identifier hs-var hs-var">lbl</span></a></span><span>
-</span><span id="line-56"></span><span class="hs-comment">-- | Finds the reference address of a 'DataDefinition'.</span><span>
-</span><span id="line-57"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasRefAddress</span></span><span>      </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138316"><span class="annot"><span class="annottext">getRefAdd :: DataDefinition -&gt; UID
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">getRefAdd</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; UID
-</span><a href="Theory.Drasil.DataDefinition.html#ra"><span class="hs-identifier hs-var hs-var">ra</span></a></span><span>
-</span><span id="line-58"></span><span class="hs-comment">-- | Finds the domain of the 'QDefinition' used to make the 'DataDefinition'.</span><span>
-</span><span id="line-59"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptDomain</span></span><span>      </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138312"><span class="annot"><span class="annottext">cdom :: DataDefinition -&gt; [UID]
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">cdom</span></span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI -&gt; [UID]
-forall c. ConceptDomain c =&gt; c -&gt; [UID]
-</span><span class="hs-identifier hs-var">cdom</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="Data.Drasil.TheoryConcepts.html#dataDefn"><span class="hs-identifier hs-var">dataDefn</span></a></span><span>
-</span><span id="line-60"></span><span class="hs-comment">-- | Finds the idea of a 'DataDefinition' (abbreviation).</span><span>
-</span><span id="line-61"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CommonIdea</span></span><span>         </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138307"><span class="annot"><span class="annottext">abrv :: DataDefinition -&gt; UID
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">abrv</span></span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI -&gt; UID
-forall c. CommonIdea c =&gt; c -&gt; UID
-</span><span class="hs-identifier hs-var">abrv</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><a href="Data.Drasil.TheoryConcepts.html#dataDefn"><span class="hs-identifier hs-var">dataDefn</span></a></span><span>
-</span><span id="line-62"></span><span class="hs-comment">-- | Finds the reference address of a 'DataDefinition'.</span><span>
-</span><span id="line-63"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Referable</span></span><span>          </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-64"></span><span>  </span><span id="local-6989586621679138301"><span class="annot"><span class="annottext">refAdd :: DataDefinition -&gt; UID
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">refAdd</span></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; UID
-forall b. HasRefAddress b =&gt; b -&gt; UID
-</span><span class="hs-identifier hs-var">getRefAdd</span></span><span>
-</span><span id="line-65"></span><span>  </span><span id="local-6989586621679138299"><span class="annot"><span class="annottext">renderRef :: DataDefinition -&gt; LblType
-</span><span class="hs-identifier hs-var hs-var hs-var hs-var">renderRef</span></span></span><span> </span><span id="local-6989586621679138297"><span class="annot"><span class="annottext">l :: DataDefinition
-</span><a href="#local-6989586621679138297"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IRefProg -&gt; UID -&gt; LblType
+</span><span id="line-58"></span><span class="hs-comment">-- | Finds the reference address of a 'DataDefinition'.</span><span>
+</span><span id="line-59"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">HasRefAddress</span></span><span>      </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138926"><span class="annot"><span class="annottext">getRefAdd :: DataDefinition -&gt; LblType
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">getRefAdd</span></span></span><span> </span><span id="local-6989586621679138924"><span class="annot"><span class="annottext">l :: DataDefinition
+</span><a href="#local-6989586621679138924"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IRefProg -&gt; UID -&gt; LblType
 </span><span class="hs-identifier hs-var">RP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UID -&gt; IRefProg
 </span><span class="hs-identifier hs-var">prepend</span></span><span> </span><span class="annot"><span class="annottext">(UID -&gt; IRefProg) -&gt; UID -&gt; IRefProg
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; UID
 forall c. CommonIdea c =&gt; c -&gt; UID
 </span><span class="hs-identifier hs-var">abrv</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
-</span><a href="#local-6989586621679138297"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DataDefinition -&gt; UID
-forall b. HasRefAddress b =&gt; b -&gt; UID
-</span><span class="hs-identifier hs-var">getRefAdd</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
-</span><a href="#local-6989586621679138297"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-66"></span><span>
-</span><span id="line-67"></span><span class="hs-comment">-- | Smart constructor for data definitions.</span><span>
-</span><span id="line-68"></span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#dd"><span class="hs-identifier hs-type">dd</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span>
-</span><span id="line-69"></span><span id="dd"><span class="annot"><span class="annottext">dd :: QDefinition
--&gt; [Reference]
+</span><a href="#local-6989586621679138924"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DataDefinition -&gt; UID
+</span><a href="Theory.Drasil.DataDefinition.html#ra"><span class="hs-identifier hs-var hs-var">ra</span></a></span><span> </span><span class="annot"><span class="annottext">DataDefinition
+</span><a href="#local-6989586621679138924"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-60"></span><span class="hs-comment">-- | Finds the domain of the 'QDefinition' used to make the 'DataDefinition'.</span><span>
+</span><span id="line-61"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptDomain</span></span><span>      </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138918"><span class="annot"><span class="annottext">cdom :: DataDefinition -&gt; [UID]
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">cdom</span></span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI -&gt; [UID]
+forall c. ConceptDomain c =&gt; c -&gt; [UID]
+</span><span class="hs-identifier hs-var">cdom</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><a href="Data.Drasil.TheoryConcepts.html#dataDefn"><span class="hs-identifier hs-var">dataDefn</span></a></span><span>
+</span><span id="line-62"></span><span class="hs-comment">-- | Finds the idea of a 'DataDefinition' (abbreviation).</span><span>
+</span><span id="line-63"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CommonIdea</span></span><span>         </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679138913"><span class="annot"><span class="annottext">abrv :: DataDefinition -&gt; UID
+</span><a href="#local-6989586621679138913"><span class="hs-identifier hs-var hs-var hs-var hs-var">abrv</span></a></span></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI -&gt; UID
+forall c. CommonIdea c =&gt; c -&gt; UID
+</span><span class="hs-identifier hs-var">abrv</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><a href="Data.Drasil.TheoryConcepts.html#dataDefn"><span class="hs-identifier hs-var">dataDefn</span></a></span><span>
+</span><span id="line-64"></span><span class="hs-comment">-- | Finds the reference address of a 'DataDefinition'.</span><span>
+</span><span id="line-65"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Referable</span></span><span>          </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-66"></span><span>  </span><span id="local-6989586621679138907"><span class="annot"><span class="annottext">refAdd :: DataDefinition -&gt; UID
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">refAdd</span></span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; UID
+</span><a href="Theory.Drasil.DataDefinition.html#ra"><span class="hs-identifier hs-var hs-var">ra</span></a></span><span>
+</span><span id="line-67"></span><span>  </span><span id="local-6989586621679138905"><span class="annot"><span class="annottext">renderRef :: DataDefinition -&gt; LblType
+</span><span class="hs-identifier hs-var hs-var hs-var hs-var">renderRef</span></span></span><span> </span><span id="local-6989586621679138903"><span class="annot"><span class="annottext">l :: DataDefinition
+</span><a href="#local-6989586621679138903"><span class="hs-identifier hs-var">l</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">IRefProg -&gt; UID -&gt; LblType
+</span><span class="hs-identifier hs-var">RP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UID -&gt; IRefProg
+</span><span class="hs-identifier hs-var">prepend</span></span><span> </span><span class="annot"><span class="annottext">(UID -&gt; IRefProg) -&gt; UID -&gt; IRefProg
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; UID
+forall c. CommonIdea c =&gt; c -&gt; UID
+</span><span class="hs-identifier hs-var">abrv</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
+</span><a href="#local-6989586621679138903"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DataDefinition -&gt; UID
+forall s. Referable s =&gt; s -&gt; UID
+</span><span class="hs-identifier hs-var">refAdd</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition
+</span><a href="#local-6989586621679138903"><span class="hs-identifier hs-var">l</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-68"></span><span>
+</span><span id="line-69"></span><span class="hs-comment">-- | Smart constructor for data definitions.</span><span>
+</span><span id="line-70"></span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#dd"><span class="hs-identifier hs-type">dd</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DecRef</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span>
+</span><span id="line-71"></span><span id="dd"><span class="annot"><span class="annottext">dd :: QDefinition
+-&gt; [DecRef]
 -&gt; Maybe Derivation
 -&gt; UID
 -&gt; [Sentence]
 -&gt; DataDefinition
-</span><a href="Theory.Drasil.DataDefinition.html#dd"><span class="hs-identifier hs-var hs-var">dd</span></a></span></span><span> </span><span id="local-6989586621679138293"><span class="annot"><span class="annottext">q :: QDefinition
-</span><a href="#local-6989586621679138293"><span class="hs-identifier hs-var">q</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>   </span><span class="hs-identifier">_</span><span>   </span><span class="hs-identifier">_</span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID -&gt; [Sentence] -&gt; DataDefinition
+</span><a href="Theory.Drasil.DataDefinition.html#dd"><span class="hs-identifier hs-var hs-var">dd</span></a></span></span><span> </span><span id="local-6989586621679138901"><span class="annot"><span class="annottext">q :: QDefinition
+</span><a href="#local-6989586621679138901"><span class="hs-identifier hs-var">q</span></a></span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span>   </span><span class="hs-identifier">_</span><span>   </span><span class="hs-identifier">_</span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UID -&gt; [Sentence] -&gt; DataDefinition
 forall a. HasCallStack =&gt; UID -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="annottext">(UID -&gt; [Sentence] -&gt; DataDefinition)
 -&gt; UID -&gt; [Sentence] -&gt; DataDefinition
@@ -243,76 +251,76 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Source field of &quot;</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; UID
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
-</span><a href="#local-6989586621679138293"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">QDefinition -&gt; Getting UID QDefinition UID -&gt; UID
+</span><a href="#local-6989586621679138901"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">QDefinition -&gt; Getting UID QDefinition UID -&gt; UID
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting UID QDefinition UID
 forall c. HasUID c =&gt; Lens' c UID
 </span><span class="hs-identifier hs-var">uid</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; UID -&gt; UID
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot; is empty&quot;</span></span><span>
-</span><span id="line-70"></span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#dd"><span class="hs-identifier hs-var">dd</span></a></span><span> </span><span id="local-6989586621679138291"><span class="annot"><span class="annottext">q :: QDefinition
-</span><a href="#local-6989586621679138291"><span class="hs-identifier hs-var">q</span></a></span></span><span> </span><span id="local-6989586621679138290"><span class="annot"><span class="annottext">refs :: [Reference]
-</span><a href="#local-6989586621679138290"><span class="hs-identifier hs-var">refs</span></a></span></span><span> </span><span id="local-6989586621679138289"><span class="annot"><span class="annottext">der :: Maybe Derivation
-</span><a href="#local-6989586621679138289"><span class="hs-identifier hs-var">der</span></a></span></span><span> </span><span id="local-6989586621679138288"><span class="annot"><span class="annottext">sn :: UID
-</span><a href="#local-6989586621679138288"><span class="hs-identifier hs-var">sn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><span id="line-72"></span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#dd"><span class="hs-identifier hs-var">dd</span></a></span><span> </span><span id="local-6989586621679138899"><span class="annot"><span class="annottext">q :: QDefinition
+</span><a href="#local-6989586621679138899"><span class="hs-identifier hs-var">q</span></a></span></span><span> </span><span id="local-6989586621679138898"><span class="annot"><span class="annottext">refs :: [DecRef]
+</span><a href="#local-6989586621679138898"><span class="hs-identifier hs-var">refs</span></a></span></span><span> </span><span id="local-6989586621679138897"><span class="annot"><span class="annottext">der :: Maybe Derivation
+</span><a href="#local-6989586621679138897"><span class="hs-identifier hs-var">der</span></a></span></span><span> </span><span id="local-6989586621679138896"><span class="annot"><span class="annottext">sn :: UID
+</span><a href="#local-6989586621679138896"><span class="hs-identifier hs-var">sn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QDefinition
 -&gt; ScopeType
--&gt; [Reference]
+-&gt; [DecRef]
 -&gt; Maybe Derivation
 -&gt; ShortName
 -&gt; UID
 -&gt; [Sentence]
 -&gt; DataDefinition
 </span><a href="Theory.Drasil.DataDefinition.html#DatDef"><span class="hs-identifier hs-var">DatDef</span></a></span><span> </span><span class="annot"><span class="annottext">QDefinition
-</span><a href="#local-6989586621679138291"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">ScopeType
-</span><a href="Theory.Drasil.DataDefinition.html#Global"><span class="hs-identifier hs-var">Global</span></a></span><span> </span><span class="annot"><span class="annottext">[Reference]
-</span><a href="#local-6989586621679138290"><span class="hs-identifier hs-var">refs</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
-</span><a href="#local-6989586621679138289"><span class="hs-identifier hs-var">der</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; ShortName
+</span><a href="#local-6989586621679138899"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">ScopeType
+</span><a href="Theory.Drasil.DataDefinition.html#Global"><span class="hs-identifier hs-var">Global</span></a></span><span> </span><span class="annot"><span class="annottext">[DecRef]
+</span><a href="#local-6989586621679138898"><span class="hs-identifier hs-var">refs</span></a></span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
+</span><a href="#local-6989586621679138897"><span class="hs-identifier hs-var">der</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; ShortName
 </span><span class="hs-identifier hs-var">shortname'</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; ShortName) -&gt; Sentence -&gt; ShortName
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679138288"><span class="hs-identifier hs-var">sn</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; UID -&gt; UID
+</span><a href="#local-6989586621679138896"><span class="hs-identifier hs-var">sn</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; UID -&gt; UID
 forall c. CommonIdea c =&gt; c -&gt; UID -&gt; UID
 </span><span class="hs-identifier hs-var">prependAbrv</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Data.Drasil.TheoryConcepts.html#dataDefn"><span class="hs-identifier hs-var">dataDefn</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679138288"><span class="hs-identifier hs-var">sn</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-71"></span><span>
-</span><span id="line-72"></span><span class="hs-comment">-- | Smart constructor for data definitions with no references.</span><span>
-</span><span id="line-73"></span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#ddNoRefs"><span class="hs-identifier hs-type">ddNoRefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span>
-</span><span id="line-74"></span><span id="ddNoRefs"><span class="annot"><span class="annottext">ddNoRefs :: QDefinition
+</span><a href="#local-6989586621679138896"><span class="hs-identifier hs-var">sn</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-73"></span><span>
+</span><span id="line-74"></span><span class="hs-comment">-- | Smart constructor for data definitions with no references.</span><span>
+</span><span id="line-75"></span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#ddNoRefs"><span class="hs-identifier hs-type">ddNoRefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">Derivation</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span>
+</span><span id="line-76"></span><span id="ddNoRefs"><span class="annot"><span class="annottext">ddNoRefs :: QDefinition
 -&gt; Maybe Derivation -&gt; UID -&gt; [Sentence] -&gt; DataDefinition
-</span><a href="Theory.Drasil.DataDefinition.html#ddNoRefs"><span class="hs-identifier hs-var hs-var">ddNoRefs</span></a></span></span><span> </span><span id="local-6989586621679138283"><span class="annot"><span class="annottext">q :: QDefinition
-</span><a href="#local-6989586621679138283"><span class="hs-identifier hs-var">q</span></a></span></span><span> </span><span id="local-6989586621679138282"><span class="annot"><span class="annottext">der :: Maybe Derivation
-</span><a href="#local-6989586621679138282"><span class="hs-identifier hs-var">der</span></a></span></span><span> </span><span id="local-6989586621679138281"><span class="annot"><span class="annottext">sn :: UID
-</span><a href="#local-6989586621679138281"><span class="hs-identifier hs-var">sn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Theory.Drasil.DataDefinition.html#ddNoRefs"><span class="hs-identifier hs-var hs-var">ddNoRefs</span></a></span></span><span> </span><span id="local-6989586621679138891"><span class="annot"><span class="annottext">q :: QDefinition
+</span><a href="#local-6989586621679138891"><span class="hs-identifier hs-var">q</span></a></span></span><span> </span><span id="local-6989586621679138890"><span class="annot"><span class="annottext">der :: Maybe Derivation
+</span><a href="#local-6989586621679138890"><span class="hs-identifier hs-var">der</span></a></span></span><span> </span><span id="local-6989586621679138889"><span class="annot"><span class="annottext">sn :: UID
+</span><a href="#local-6989586621679138889"><span class="hs-identifier hs-var">sn</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QDefinition
 -&gt; ScopeType
--&gt; [Reference]
+-&gt; [DecRef]
 -&gt; Maybe Derivation
 -&gt; ShortName
 -&gt; UID
 -&gt; [Sentence]
 -&gt; DataDefinition
 </span><a href="Theory.Drasil.DataDefinition.html#DatDef"><span class="hs-identifier hs-var">DatDef</span></a></span><span> </span><span class="annot"><span class="annottext">QDefinition
-</span><a href="#local-6989586621679138283"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">ScopeType
+</span><a href="#local-6989586621679138891"><span class="hs-identifier hs-var">q</span></a></span><span> </span><span class="annot"><span class="annottext">ScopeType
 </span><a href="Theory.Drasil.DataDefinition.html#Global"><span class="hs-identifier hs-var">Global</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Maybe Derivation
-</span><a href="#local-6989586621679138282"><span class="hs-identifier hs-var">der</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; ShortName
+</span><a href="#local-6989586621679138890"><span class="hs-identifier hs-var">der</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; ShortName
 </span><span class="hs-identifier hs-var">shortname'</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; ShortName) -&gt; Sentence -&gt; ShortName
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">UID -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679138281"><span class="hs-identifier hs-var">sn</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; UID -&gt; UID
+</span><a href="#local-6989586621679138889"><span class="hs-identifier hs-var">sn</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; UID -&gt; UID
 forall c. CommonIdea c =&gt; c -&gt; UID -&gt; UID
 </span><span class="hs-identifier hs-var">prependAbrv</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Data.Drasil.TheoryConcepts.html#dataDefn"><span class="hs-identifier hs-var">dataDefn</span></a></span><span> </span><span class="annot"><span class="annottext">UID
-</span><a href="#local-6989586621679138281"><span class="hs-identifier hs-var">sn</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-75"></span><span>
-</span><span id="line-76"></span><span class="hs-comment">-- | Extracts the 'QDefinition' from a 'DataDefinition'.</span><span>
-</span><span id="line-77"></span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#qdFromDD"><span class="hs-identifier hs-type">qdFromDD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
-</span><span id="line-78"></span><span id="qdFromDD"><span class="annot"><span class="annottext">qdFromDD :: DataDefinition -&gt; QDefinition
+</span><a href="#local-6989586621679138889"><span class="hs-identifier hs-var">sn</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-77"></span><span>
+</span><span id="line-78"></span><span class="hs-comment">-- | Extracts the 'QDefinition' from a 'DataDefinition'.</span><span>
+</span><span id="line-79"></span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#qdFromDD"><span class="hs-identifier hs-type">qdFromDD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Theory.Drasil.DataDefinition.html#DataDefinition"><span class="hs-identifier hs-type">DataDefinition</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
+</span><span id="line-80"></span><span id="qdFromDD"><span class="annot"><span class="annottext">qdFromDD :: DataDefinition -&gt; QDefinition
 </span><a href="Theory.Drasil.DataDefinition.html#qdFromDD"><span class="hs-identifier hs-var hs-var">qdFromDD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DataDefinition
 -&gt; Getting QDefinition DataDefinition QDefinition -&gt; QDefinition
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting QDefinition DataDefinition QDefinition
 Lens' DataDefinition QDefinition
 </span><a href="Theory.Drasil.DataDefinition.html#qd"><span class="hs-identifier hs-var">qd</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-79"></span></pre></body></html>
+</span><span id="line-81"></span></pre></body></html>

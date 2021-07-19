@@ -2,7 +2,7 @@ digraph instancemodel{
 InstanceModel -> ModelKind;
 InstanceModel -> Inputs;
 InstanceModel -> Output;
-InstanceModel -> Reference;
+InstanceModel -> DecRef;
 InstanceModel -> MaybeDerivation;
 InstanceModel -> ShortName;
 InstanceModel -> String;

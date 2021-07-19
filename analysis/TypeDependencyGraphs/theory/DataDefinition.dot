@@ -1,7 +1,7 @@
 digraph datadefinition{
 DataDefinition -> QDefinition;
 DataDefinition -> ScopeType;
-DataDefinition -> Reference;
+DataDefinition -> DecRef;
 DataDefinition -> MaybeDerivation;
 DataDefinition -> ShortName;
 DataDefinition -> String;

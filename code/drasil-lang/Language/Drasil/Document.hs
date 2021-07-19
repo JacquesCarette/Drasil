@@ -46,7 +46,21 @@ instance HasRefAddress Section where getRefAdd (Section _ _ lb) = RP (prepend "S
 
 -- | A Document has a Title ('Sentence'), Author(s) ('Sentence'), and 'Section's
 -- which hold the contents of the document.
-data Document = Document Title Author [Section]
+data Document = Document Title Author ShowTableOfContents [Section]
+
+-- | Determines whether or not the table of contents appears on the generated artifacts.
+data ShowTableOfContents = ToC | NoToC
+
+-- Medium hack for now. This function is unable to tell if the section
+-- is for a table of contents, as that doesn't appear until docLang.
+-- This function is needed by the TeX printer, as TeX carries its own form of creating
+-- a table of contents. However, the printer package is compiled before the docLang one.
+-- | Manually removes the first section of a document (table of contents section).
+checkToC :: Document -> Document
+checkToC (Document t a toC sc) = 
+  case toC of
+    ToC -> Document t a toC $ drop 1 sc
+    _   -> Document t a toC sc
 
 -- | Smart constructor for labelled content chunks.
 llcc :: Reference -> RawContent -> LabelledContent
@@ -60,6 +74,7 @@ ulcc = UnlblC
 -- | Smart constructor that wraps 'UnlabelledContent' into 'Contents'.
 mkParagraph :: Sentence -> Contents
 mkParagraph x = UlC $ ulcc $ Paragraph x
+
 -- | Smart constructor that wraps 'LabelledContent' into 'Contents'.
 mkFig :: Reference -> RawContent -> Contents
 mkFig x y = LlC $ llcc x y
@@ -81,7 +96,7 @@ section title intro secs = Section title (map Con intro ++ map Sub secs)
 
 -- | Smart constructor for retrieving the contents ('Section's) from a 'Document'.
 extractSection :: Document -> [Section]
-extractSection (Document _ _ sec) = concatMap getSec sec
+extractSection (Document _ _ _ sec) = concatMap getSec sec
 
 -- | Smart constructor for retrieving the subsections ('Section's) within a 'Section'.
 getSec :: Section -> [Section]

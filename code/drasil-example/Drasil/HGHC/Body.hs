@@ -3,8 +3,8 @@ module Drasil.HGHC.Body (srs, si, symbMap, printSetting, fullSI) where
 import Data.List (nub)
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 import Drasil.DocLang (DocSection(RefSec, SSDSec), Literature(Lit, Manual), 
-    RefSec(..), RefTab(TUnits), TSIntro(SymbConvention, TSPurpose), SRSDecl, 
-    intro, mkDoc, tsymb, InclUnits(IncludeUnits), Verbosity(Verbose),
+    RefSec(..), RefTab(TUnits), DocSection(TableOfContents), TSIntro(SymbConvention, TSPurpose),
+    SRSDecl, intro, mkDoc, tsymb, InclUnits(IncludeUnits), Verbosity(Verbose),
     Field(DefiningEquation, Description, Label, Symbol, Units), SolChSpec(SCSProg), 
     SCSSub(DDs), DerivationDisplay(HideDerivation), SSDSub(SSDSolChSpec), 
     SSDSec(SSDProg), traceMatStandard, getTraceConfigUID, secRefs, fillTraceSI)
@@ -55,7 +55,8 @@ si = SI {
 }
   
 mkSRS :: SRSDecl
-mkSRS = [RefSec $
+mkSRS = [TableOfContents,
+    RefSec $
     RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit $ nw nuclearPhys, Manual $ nw fp]]],
     SSDSec $ SSDProg [
       SSDSolChSpec $ SCSProg [

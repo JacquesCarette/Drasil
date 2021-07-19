@@ -70,7 +70,8 @@ resourcePath :: String
 resourcePath = "../../../datafiles/GamePhysics/"
 
 mkSRS :: SRSDecl
-mkSRS = [RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
+mkSRS = [TableOfContents,
+  RefSec $ RefProg intro [TUnits, tsymb tableOfSymbols, TAandA],
   IntroSec $ IntroProg para1_introduction_intro (short gamePhysics)
   [IPurpose $ purpDoc gamePhysics Verbose,
    IScope scope,

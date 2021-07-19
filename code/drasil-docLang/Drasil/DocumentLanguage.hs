@@ -1,3 +1,4 @@
+{-# Language TupleSections #-}
 ---------------------------------------------------------------------------
 -- | Start the process of moving away from Document as the main internal
 -- representation of information, to something more informative.
@@ -28,12 +29,14 @@ import Database.Drasil(ChunkDB, SystemInformation(SI), _authors, _kind,
   _quants, _sys, _sysinfodb, _usedinfodb, ccss, ccss', citeDB, collectUnits,
   conceptinsTable, generateRefbyMap, idMap, refbyTable, termTable, traceTable)
 
-import Drasil.Sections.TableOfAbbAndAcronyms (tableOfAbbAndAcronyms)
+import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
+import Drasil.Sections.TableOfContents (toToC)
 import Drasil.Sections.TableOfSymbols (table, symbTableRef)
 import Drasil.Sections.TableOfUnits (tOfUnitDesc, tOfUnitSIName, unitTableRef)
 import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn,
   genSysDes, inModel, likeChg, unlikeChg, probDesc, reference, solCharSpec,
-  stakeholder, thModel, tOfSymb, tOfUnit, userChar, offShelfSol)
+  stakeholder, thModel, tOfCont, tOfSymb, tOfUnit, userChar, offShelfSol, refMat,
+  tOfAbbAcc)
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysIntro,
   systCon, usrCharsF, sysContxt)
@@ -48,31 +51,35 @@ import qualified Drasil.Sections.Stakeholders as Stk (stakeholderIntro,
 import qualified Drasil.DocumentLanguage.TraceabilityMatrix as TM (traceMGF,
   generateTraceTableView)
 
-import Data.Drasil.Concepts.Documentation (likelyChg, refmat, section_,
-  software, unlikelyChg) 
-import qualified Data.Drasil.Concepts.Documentation as Doc (tOfSymb, tOfUnit)
+import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
+  software, unlikelyChg, tOfSymb, tOfUnit)
+
 
 import Control.Lens ((^.), over, set)
 import Data.Function (on)
 import Data.List (nub, sortBy, sortOn)
 import qualified Data.Map as Map (elems, toList)
 
+----- Gather all information necessary to create a document -----
 -- | Creates a document from a document description, a title combinator function, and system information.
 mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
 mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
-  Document (nw kind `comb` nw sys) (foldlList Comma List $ map (S . name) authors) $
+  Document (nw kind `comb` nw sys) (foldlList Comma List $ map (S . name) authors) (findToC l) $
   mkSections (fillTraceMaps l (fillReqs l si)) l where
     l = mkDocDesc si dd
+
+----- Helpers to complete the SystemInformation database. Primarily for traceability. -----
+-- I think these should eventually be moved to a different file and then imported here.
+-- It's currently a minor hack for the traceability graphs, but it might enable
+-- us to add universal information (such as doccon) to the database without
+-- the user needing to (see #2675). Or should each example already have a complete SystemInformation before
+-- going to this step?
 
 -- Helper, testing needed for .dot graphs?
 fillTraceSI :: SRSDecl -> SystemInformation -> SystemInformation
 fillTraceSI dd si = fillTraceMaps l $ fillReqs l si
   where
     l = mkDocDesc si dd
-
--- | Constructs the unit definitions ('UnitDefn's) found in the document description ('DocDesc') from a database ('ChunkDB').
-extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
-extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb
 
 -- | Fills in the traceabiliy matrix and graphs section of the system information using the document description.
 fillTraceMaps :: DocDesc -> SystemInformation -> SystemInformation
@@ -91,11 +98,25 @@ fillReqs (ReqrmntSec (ReqsProg x):_) si@SI{_sysinfodb = db} = genReqs x
     genReqs (_:xs) = genReqs xs
 fillReqs (_:xs) si = fillReqs xs si
 
+-- | Constructs the unit definitions ('UnitDefn's) found in the document description ('DocDesc') from a database ('ChunkDB').
+extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
+extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb
+
+-- Find more concise way to do this
+-- | Finds whether the Table of Contents is in a SRSDecl.
+findToC :: [DocSection] -> ShowTableOfContents
+findToC [] = NoToC
+findToC (TableOfContents:_) = ToC
+findToC (_:dds) = findToC dds
+
+----- Section creators -----
+
 -- | Helper for creating the different document sections.
 mkSections :: SystemInformation -> DocDesc -> [Section]
 mkSections si dd = map doit dd
   where
     doit :: DocSection -> Section
+    doit TableOfContents      = mkToC dd
     doit (RefSec rs)          = mkRefSec si dd rs
     doit (IntroSec is)        = mkIntroSec si is
     doit (StkhldrSec sts)     = mkStkhldrSec sts
@@ -110,11 +131,16 @@ mkSections si dd = map doit dd
     doit (AppndxSec a)        = mkAppndxSec a
     doit (OffShelfSolnsSec o) = mkOffShelfSolnSec o
 
+-- | Helper for making the Table of Contents section.
+mkToC :: DocDesc -> Section
+mkToC dd = SRS.tOfCont [intro, UlC $ ulcc $ Enumeration $ Bullet $ map ((, Nothing) . toToC) dd] []
+  where
+    intro = mkParagraph $ S "An outline of all sections included in this SRS is recorded here for easy reference."
 
 -- | Helper for creating the reference section and subsections.
+-- Includes Table of Symbols, Units and Abbreviations and Acronyms.
 mkRefSec :: SystemInformation -> DocDesc -> RefSec -> Section
-mkRefSec si dd (RefProg c l) = section (titleize refmat) [c]
-  (map (mkSubRef si) l) (makeSecRef "RefMat" $ titleize refmat) -- DO NOT CHANGE LABEL OR THINGS WILL BREAK -- see Language.Drasil.Document.Extract
+mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
   where
     mkSubRef :: SystemInformation -> RefTab -> Section
     mkSubRef si' TUnits = mkSubRef si' $ TUnits' defaultTUI tOfUnitSIName
@@ -137,7 +163,7 @@ mkRefSec si dd (RefProg c l) = section (titleize refmat) [c]
     mkSubRef SI {_sysinfodb = cdb} (TSymb' f con) =
       mkTSymb (ccss (getDocDesc dd) (egetDocDesc dd) cdb) f con
     mkSubRef SI {_usedinfodb = db} TAandA =
-      tableOfAbbAndAcronyms $ nub $ map fst $ Map.elems $ termTable db
+      SRS.tOfAbbAcc [LlC $ tableAbbAccGen $ nub $ map fst $ Map.elems $ termTable db] []
 
 -- | Table of units constructors.
 tunit, tunit' :: [TUIntro] -> RefTab
@@ -333,16 +359,16 @@ mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
 -- | Helper for making the Likely Changes section.
 mkLCsSec :: LCsSec -> Section
 mkLCsSec (LCsProg c) = SRS.likeChg (intro : mkEnumSimpleD c) []
-  where intro = foldlSP [S "This", phrase section_, S "lists the",
-                plural likelyChg, S "to be made to the", phrase software]
+  where intro = foldlSP [S "This", phrase Doc.section_, S "lists the",
+                plural Doc.likelyChg, S "to be made to the", phrase Doc.software]
 
 {--}
 
 -- | Helper for making the Unikely Changes section.
 mkUCsSec :: UCsSec -> Section
 mkUCsSec (UCsProg c) = SRS.unlikeChg (intro : mkEnumSimpleD c) []
-  where intro = foldlSP [S "This", phrase section_, S "lists the",
-                plural unlikelyChg, S "to be made to the", phrase software]
+  where intro = foldlSP [S "This", phrase Doc.section_, S "lists the",
+                plural Doc.unlikelyChg, S "to be made to the", phrase Doc.software]
 
 {--}
 
@@ -380,6 +406,6 @@ mkAppndxSec (AppndxProg cs) = SRS.appendix cs []
 
 {--}
 
--- | Helper to get part of the system information as an 'IdeaDict'.
+-- | Helper to get the program name as an 'IdeaDict'.
 siSys :: SystemInformation -> IdeaDict
 siSys SI {_sys = sys} = nw sys

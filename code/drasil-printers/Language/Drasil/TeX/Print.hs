@@ -43,15 +43,18 @@ import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 -- | Generates a LaTeX document.
 genTeX :: L.Document -> PrintingInformation -> TP.Doc
-genTeX doc sm = runPrint (buildStd sm $ I.makeDocument sm doc) Text
+genTeX doc@(L.Document _ _ toC _) sm = 
+  runPrint (buildStd sm toC $ I.makeDocument sm $ L.checkToC doc) Text
 
 -- | Helper to build the document.
-buildStd :: PrintingInformation -> Document -> D
-buildStd sm (Document t a c) =
+buildStd :: PrintingInformation -> L.ShowTableOfContents -> Document -> D
+buildStd sm toC (Document t a c) =
   genPreamble c %%
   title (spec t) %%
   author (spec a) %%
-  document (maketitle %% maketoc %% newpage %% print sm c)
+  case toC of 
+    L.ToC -> document (maketitle %% maketoc %% newpage %% print sm c) -- includes ToC generation
+    _ -> document (maketitle %% newpage %% print sm c) -- omits ToC generation
 
 -- clean until here; lo needs its sub-functions fixed first though
 -- | Helper for converting layout objects into a more printable form.

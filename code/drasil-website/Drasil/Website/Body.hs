@@ -22,8 +22,8 @@ printSetting fl = PI (symbMap fl) Equational defaultConfiguration
 -- Instead of being an SRSDecl, this takes the folder locations and generates the document from there.
 mkWebsite :: FolderLocation -> Document
 mkWebsite fl =
-    --Document   Title          author  (hack for now to show up in proper spot)      [Section]
-    Document (S websiteTitle) (namedRef gitHubRef (S "Link to GitHub Repository")) $ sections fl
+    --Document  -- Title  --  author  (hack for now to show up in proper spot) -- no table of contents -- [Section]
+    Document (S websiteTitle) (namedRef gitHubRef (S "Link to GitHub Repository")) NoToC $ sections fl
 
 -- Folder locations based on environment variables (using getEnv on Main.hs)
 data FolderLocation = Folder {

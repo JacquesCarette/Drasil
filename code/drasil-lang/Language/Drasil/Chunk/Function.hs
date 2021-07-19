@@ -19,7 +19,7 @@ import Language.Drasil.Space (mkPrimitiveMapping, Space)
 import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.UID (UID)
 
--- TODO: Should we have named arguments for functions? Probably in CodeExpr, but don't think so in Expr. Perhaps the FCalls need to be different!
+-- TODO: Should we have named arguments for functions? Probably in CodeExpr, but I don't think so in Expr. Perhaps the FCalls need to be different!
 data FuncDefn = FD {
   _qua    :: QuantityDict,
   _inputs :: [UID],
@@ -30,17 +30,29 @@ data FuncDefn = FD {
 }
 makeLenses ''FuncDefn
 
+-- | Finds the 'UID' of an 'FuncDefn'.
 instance HasUID        FuncDefn where uid = qua . uid
+-- | Finds the term ('NP') of the 'FuncDefn'.
 instance NamedIdea     FuncDefn where term = qua . term
+-- | Finds the idea contained in the 'FuncDefn'.
 instance Idea          FuncDefn where getA = getA . (^. qua)
+-- | Finds the output 'Space' of the 'FuncDefn'.
 instance HasSpace      FuncDefn where typ = spc
+-- | Finds the 'Symbol' of the function.
 instance HasSymbol     FuncDefn where symbol = symbol . (^. qua)  -- TODO: what should the symbol be? "F(X,Y,Z)" or just "F"? Leaving as "F" for now since we match stable
+-- | Finds the definition of the 'FuncDefn'.
 instance Definition    FuncDefn where defn = defn'
+-- | 'FuncDefn's have a 'Quantity'.
 instance Quantity      FuncDefn where
+-- | 'FuncDefn's are expressions defining values.
 instance DefiningExpr  FuncDefn where defnExpr = ex
+-- | Equal if 'UID's are equal.
 instance Eq            FuncDefn where a == b = (a ^. uid) == (b ^. uid)
+-- | Finds the units of the 'QuantityDict' used to make the 'FuncDefn'.
 instance MayHaveUnit   FuncDefn where getUnit = getUnit . view qua
+-- | Finds the domain of the 'FuncDefn'.
 instance ConceptDomain FuncDefn where cdom = cd
+-- | Converts the 'FuncDefn's related expression into the display language.
 instance Display       FuncDefn where
   toDispExpr q = defines (FCall (q ^. uid) (map C $ q ^. inputs) []) (q ^. defnExpr)
 

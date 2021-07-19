@@ -51,7 +51,7 @@ angularDisplacementDerivSent1, angularDisplacementDerivSent2, angularDisplacemen
   angularDisplacementDerivSent4, angularDisplacementDerivSent5 :: Sentence
 angularDisplacementDerivSent1 = foldlSentCol [S "When", phraseNP (the pendulum) `S.is` S "displaced to an", phrase iAngle `S.and_` S "released" `sC`
                                        phraseNP (the pendulum), S "swings back and forth with periodic" +:+. phrase motion,
-                                       S "By applying", phrase newtonSLR `S.in_` refS newtonSLR `sC`
+                                       S "By applying", namedRef newtonSLR (phrase newtonSLR) `sC`
                                        phraseNP (NP.the (equation `of_` motion) `NP.for` the pendulum), S "may be obtained"]
 angularDisplacementDerivSent2 = foldlSentCol [S "Where", ch torque `S.denotes` phrase torque `sC`
                                     ch momentOfInertia `S.denotes` phrase momentOfInertia `S.and_` ch angularAccel `S.denotes`

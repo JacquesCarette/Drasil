@@ -44,6 +44,7 @@ genHTML :: PrintingInformation -> String -> L.Document -> Doc
 genHTML sm fn doc = build fn (makeDocument sm doc)
 --         ^^ -- should really be of type Filename, but that's not in scope
 
+-- HTML printer doesn't need to know if there is a table of contents or not.
 -- | Build the HTML Document, called by 'genHTML'.
 build :: String -> Document -> Doc
 build fn (Document t a c) =

@@ -24,16 +24,16 @@ import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (mass, len, physicalcon)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains, problem, analysis)
-import Data.Drasil.Concepts.Computation (inValue)
+import Data.Drasil.Concepts.Computation (inValue, algorithm)
 import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   DerivationDisplay(ShowDerivation),
-  DocSection(AuxConstntSec, Bibliography, IntroSec, RefSec, ReqrmntSec, SSDSec, TraceabilitySec),
+  DocSection(TableOfContents, AuxConstntSec, Bibliography, IntroSec, RefSec, ReqrmntSec, SSDSec, TraceabilitySec),
   Emphasis(Bold), Field(..), Fields, InclUnits(IncludeUnits),
-  IntroSec(..), IntroSub(IScope), ProblemDescription(PDProg), PDSub(..),
+  IntroSec(..), IntroSub(IPurpose, IScope), ProblemDescription(PDProg), PDSub(..),
   RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl,
   SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
   TConvention(..), TSIntro(..), TraceabilitySec(TraceabilityProg),
-  Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, getTraceConfigUID,
+  Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, purpDoc, getTraceConfigUID,
   secRefs, fillTraceSI)
 
 import Drasil.DblPendulum.Figures (figMotion, figRefs)
@@ -48,8 +48,7 @@ import Drasil.DblPendulum.GenDefs (genDefns, genDefRefs)
 import Drasil.DblPendulum.Unitals (symbols, inputs, outputs,
   inConstraints, outConstraints, acronyms)
 import Drasil.DblPendulum.Requirements (funcReqs, nonFuncReqs, reqRefs)
-import Data.Drasil.Citations (cartesianWiki, accelerationWiki, velocityWiki)
-import Drasil.Projectile.References (hibbeler2004)
+import Drasil.DblPendulum.References (citations, citeRefs)
 
 
 srs :: Document
@@ -62,7 +61,8 @@ printSetting :: PrintingInformation
 printSetting = PI symbMap Equational defaultConfiguration
 
 mkSRS :: SRSDecl
-mkSRS = [RefSec $      --This creates the Reference section of the SRS
+mkSRS = [TableOfContents, -- This creates the Table of Contents
+  RefSec $      --This creates the Reference section of the SRS
     RefProg intro      -- This add the introduction blob to the reference section  
       [ TUnits         -- Adds table of unit section with a table frame
       , tsymb [TSPurpose, TypogConvention [Vector Bold], SymbOrder, VectorUnits] -- Adds table of symbol section with a table frame
@@ -71,7 +71,8 @@ mkSRS = [RefSec $      --This creates the Reference section of the SRS
       ],
   IntroSec $            -- This adds an introduction with an overview of the sub-sections
     IntroProg justification (phrase pendulumTitle) -- This adds an introductory blob before the overview paragraph above.
-      [IScope scope],                            -- This section add a Scope section with the content of 'scope' constructor.
+      [IPurpose $ purpDoc pendulumTitle Verbose,
+       IScope scope],                            -- This section add a Scope section with the content of 'scope' constructor.
   SSDSec $ 
     SSDProg                               -- This adds a Specific system description section and an introductory blob.
       [ SSDProblem $ PDProg prob []                --  This adds a is used to define the problem your system will solve
@@ -107,7 +108,7 @@ justification = foldlSent [ atStartNP (a_ pendulum), S "consists" `S.of_` phrase
                             `the_ofThe` pendulum), (S "to exhibit its chaotic characteristics" !.),
                             atStartNP (the program), S "documented here is called", phrase pendulumTitle]
 scope :: Sentence
-scope = foldlSent [phraseNP (NP.the (analysis `ofA` twoD)), 
+scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)), 
   sParen (getAcc twoD), phrase pendMotion, phrase problem,
                    S "with various initial conditions"]
 
@@ -119,7 +120,7 @@ si = SI {
   _sys         = pendulumTitle, 
   _kind        = Doc.srs,
   _authors     = [olu],
-  _purpose     = [],
+  _purpose     = purpDoc pendulumTitle Verbose,
   _quants      = symbols,
   _concepts    = [] :: [DefinedQuantityDict],
   _instModels  = iMods,
@@ -140,7 +141,8 @@ symbMap = cdb (map qw iMods ++ map qw symbols)
   (nw newtonSLR : nw pendulumTitle : nw mass : nw len : nw kilogram : nw inValue : nw newton : nw degree : nw radian
     : nw unitVect : nw unitVectj : [nw errMsg, nw program] ++ map nw symbols ++
    map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon  ++ map nw physicCon' ++
-   map nw physicscon ++ concepts ++ map nw physicalcon ++ map nw acronyms ++ map nw symbols ++ map nw [metre, hertz])
+   map nw physicscon ++ concepts ++ map nw physicalcon ++ map nw acronyms ++ map nw symbols ++ map nw [metre, hertz] ++
+   [nw algorithm])
   (map cw iMods ++ srsDomains) (map unitWrapper [metre, second, newton, kilogram, degree, radian, hertz]) dataDefs
   iMods genDefns tMods concIns [] [] allRefs
 
@@ -154,9 +156,6 @@ stdFields = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, 
 
 refDB :: ReferenceDB
 refDB = rdb citations concIns
-
-citations :: BibRef
-citations = [accelerationWiki, velocityWiki, hibbeler2004, cartesianWiki]
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ funcReqs ++ nonFuncReqs
@@ -187,10 +186,6 @@ tMods = [accelerationTM, velocityTM, newtonSL, newtonSLR]
 
 physSystParts :: [Sentence]
 physSystParts = map ((!.) . atStartNP) [the rod, the mass]
-
--- References --
-citeRefs :: [Reference]
-citeRefs = map ref citations
 
 tModRefs :: [Reference]
 tModRefs = map ref tMods

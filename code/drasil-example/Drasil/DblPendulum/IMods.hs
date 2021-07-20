@@ -33,11 +33,11 @@ angularDisplacementIM = imNoRefs angularDisplacementMK
   (Just angularDisplacementDeriv) "calOfAngularDisplacement" [angularDispConstraintNote]
 
 angularDisplacementMK :: ModelKind 
-angularDisplacementMK = functionalModel "angularDisplacementIM"
+angularDisplacementMK = equationalModel "angularDisplacementIM"
   (nounPhraseSP "calculation of angular displacement") angularDisplacementFD
 
-angularDisplacementFD :: FuncDefn
-angularDisplacementFD = mkFuncDefnByQ pendDisplacementAngle
+angularDisplacementFD :: QDefinition
+angularDisplacementFD = mkFuncDefByQ pendDisplacementAngle
   [time] angularDisplacementExpr
 
 angularDisplacementDeriv :: Derivation

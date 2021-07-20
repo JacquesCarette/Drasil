@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 85838fd49d806d03d6d9c4a6bd40bb3f9773d19d9c5dc75e5f9441790ddd19bc
+-- hash: 7efb9af780244c5f972dabd01e4b811da9e609bb280f9394e90015997f864967
 
 name:           drasil-lang
 version:        0.1.60.0
@@ -34,7 +34,6 @@ library
       Language.Drasil.Chunk.Constrained
       Language.Drasil.Chunk.DefinedQuantity
       Language.Drasil.Chunk.Eq
-      Language.Drasil.Chunk.Function
       Language.Drasil.Chunk.NamedArgument
       Language.Drasil.Chunk.NamedIdea
       Language.Drasil.Chunk.Quantity

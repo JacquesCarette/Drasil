@@ -32,7 +32,7 @@ import Data.Drasil.Concepts.Documentation (assumption, column, constraint, corSo
 import qualified Data.Drasil.Concepts.Documentation as DCD (sec)
 import Data.Drasil.Concepts.Math (equation, parameter)
 import Data.Drasil.TheoryConcepts (inModel, thModel, dataDefn, genDefn)
-import Database.Drasil(SystemInformation(SI))
+import Database.Drasil(SystemInformation)
 import Drasil.DocumentLanguage.Definitions (helperRefs)
 import qualified Drasil.DocLang.SRS as SRS
 

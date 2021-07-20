@@ -8,10 +8,11 @@ import Drasil.TraceTable (generateTraceMap)
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccRef)
 import Drasil.Sections.TableOfSymbols (symbTableRef)
 import Drasil.Sections.TableOfUnits (unitTableRef)
-import Drasil.Sections.TraceabilityMandGs (traceMatAssumpAssump, traceMatAssumpOther, traceMatRefinement)
+import Drasil.Sections.TraceabilityMandGs (traceMatAssumpAssump, traceMatAssumpOther, traceMatRefinement, traceMatStandard)
 import Drasil.Sections.Requirements (reqInputsRef)
 import Drasil.Sections.AuxiliaryConstants (tableOfConstantsRef)
 import Drasil.Sections.SpecificSystemDescription (tInDataCstRef, tOutDataCstRef)
+import Drasil.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs)
 
 import Language.Drasil
 import Database.Drasil
@@ -63,7 +64,7 @@ fillReferences si = si2
     si2 = set sysinfodb chkdb2 si
     chkdb = si ^. sysinfodb
     rfdb = refdb si
-    chkdb2 = set refTable (idMap $ nub (secRefs ++ map ref cites ++ map ref conins ++ map ref ddefs ++ map ref gdefs ++ map ref imods ++ map ref tmods ++ map ref concIns ++ map ref secs ++ map ref lblCon ++ refs)) chkdb 
+    chkdb2 = set refTable (idMap $ nub (map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ traceyGraphGetRefs (si ^. folderPath) ++ secRefs ++ map ref cites ++ map ref conins ++ map ref ddefs ++ map ref gdefs ++ map ref imods ++ map ref tmods ++ map ref concIns ++ map ref secs ++ map ref lblCon ++ refs)) chkdb 
     ddefs   = map (fst.snd) $ Map.assocs $ chkdb ^. dataDefnTable
     gdefs   = map (fst.snd) $ Map.assocs $ chkdb ^. gendefTable
     imods   = map (fst.snd) $ Map.assocs $ chkdb ^. insmodelTable

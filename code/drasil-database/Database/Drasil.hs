@@ -12,7 +12,7 @@ module Database.Drasil (
   , ccss, ccss', combine, getIdeaDict, vars
   -- SystemInformation
   , Block(Parallel), RefMap, ReferenceDB, SystemInformation(..), citeDB, rdb, simpleMap
-  , citationDB, conceptDB, sysinfodb
+  , citationDB, conceptDB, sysinfodb, folderPath
 ) where
 
 import Database.Drasil.ChunkDB

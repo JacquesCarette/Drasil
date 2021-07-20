@@ -27,7 +27,7 @@ data Space =
   | Actor String
   | DiscreteD [Double]
   | DiscreteS [String] --ex. let Meal = {"breakfast", "lunch", "dinner"}
-  | Mapping (NE.NonEmpty Primitive) Primitive
+  | Function (NE.NonEmpty Primitive) Primitive
   | Void
   deriving (Eq, Show)
 
@@ -35,7 +35,7 @@ type Primitive = Space
 
 mkFunction :: [Primitive] -> Primitive -> Space
 mkFunction []  = error "Function space creation requires at least 1 input Space"
-mkFunction ins = Mapping (NE.fromList ins)
+mkFunction ins = Function (NE.fromList ins)
 
 -- The 'spaces' below are all good.
 

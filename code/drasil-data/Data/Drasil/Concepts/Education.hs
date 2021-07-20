@@ -11,7 +11,7 @@ educon = [calculus, civil, degree_, engineering, structural, mechanics,
   undergraduate, highSchool, physical_, chemistry, undergradDegree,
   scndYrCalculus, solidMechanics, secondYear, structuralEng,
   structuralMechanics, civilEng, highSchoolCalculus, highSchoolPhysics,
-  undergradCalculus, undergradPhysics, frstYr, physChem]
+  frstYr, physChem]
 
 calculus, civil, degree_, engineering, structural, mechanics,
   undergraduate, highSchool, physical_, chemistry :: NamedChunk
@@ -29,14 +29,12 @@ physical_     = nc "physical"       (cn'  "physical"     )--FIXME: Adjective
 
 undergradDegree, scndYrCalculus, solidMechanics, secondYear, structuralEng,
   structuralMechanics, civilEng, highSchoolCalculus, highSchoolPhysics,
-  undergradCalculus, undergradPhysics, frstYr, physChem :: NamedChunk
+  frstYr, physChem :: NamedChunk
 
 civilEng            = compoundNC civil engineering
 physChem            = compoundNC physical_ chemistry
 highSchoolCalculus  = compoundNC highSchool calculus
 highSchoolPhysics   = compoundNC highSchool physics
-undergradCalculus   = compoundNC undergraduate calculus
-undergradPhysics    = compoundNC undergraduate physics
 scndYrCalculus      = compoundNC secondYear calculus
 frstYr              = compoundNC first year
 secondYear          = compoundNC second_ year

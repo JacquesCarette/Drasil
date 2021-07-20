@@ -1157,6 +1157,27 @@ tInDataCstRef :: Reference
 -- | Input/Output Data Constraint Table references.
 tOutDataCstRef :: Reference
 
+-- | Helper for making a <a>ConceptInstance</a> with a reference to the
+--   system information. Used to find where a particular assumption is
+--   referenced.
+helperCI :: ConceptInstance -> SystemInformation -> ConceptInstance
+
+-- | Section stubs for implicit referencing of different models and
+--   definitions.
+tmStub :: Section
+
+-- | Section stubs for implicit referencing of different models and
+--   definitions.
+ddStub :: Section
+
+-- | Section stubs for implicit referencing of different models and
+--   definitions.
+imStub :: Section
+
+-- | Section stubs for implicit referencing of different models and
+--   definitions.
+pdStub :: Section
+
 module Drasil.ExtractDocDesc
 
 -- | Extracts <a>Sentence</a>s from a document description.
@@ -1197,6 +1218,9 @@ module Drasil.Sections.TableOfContents
 --   Contents.
 toToC :: DocSection -> ItemType
 
+-- | Finds whether the Table of Contents is in a SRSDecl.
+findToC :: [DocSection] -> ShowTableOfContents
+
 module Drasil.Sections.TableOfSymbols
 
 -- | Table of Symbols creation function. Takes in a <a>Stage</a>,
@@ -1207,6 +1231,24 @@ table :: (Quantity s, MayHaveUnit s) => Stage -> [s] -> (s -> Sentence) -> Label
 
 -- | Makes a reference to the Table of Symbols.
 symbTableRef :: Reference
+
+-- | Default is term and given introduction.
+--   
+--   Table of symbols constructor.
+tsymb :: [TSIntro] -> RefTab
+
+-- | Similar to <a>tsymb</a>, but has a default Defn for the LFunc type.
+--   Still has a given introduction.
+--   
+--   Table of symbols constructor.
+tsymb' :: [TSIntro] -> RefTab
+
+-- | Table of symbols constructor. Takes a custom function and
+--   introduction.
+tsymb'' :: [TSIntro] -> LFunc -> RefTab
+
+-- | Table of symbols introduction builder. Used by <tt>mkRefSec</tt>.
+tsIntro :: [TSIntro] -> Contents
 
 module Drasil.Sections.TableOfUnits
 
@@ -1219,6 +1261,23 @@ tOfUnitSIName :: IsUnit s => [s] -> LabelledContent
 
 -- | Makes a reference to the Table of Units.
 unitTableRef :: Reference
+
+-- | Table of units with an SI Name.
+--   
+--   Table of units constructors.
+tunit :: [TUIntro] -> RefTab
+
+-- | Table of units with SI name in the description column.
+--   
+--   Table of units constructors.
+tunit' :: [TUIntro] -> RefTab
+
+-- | Table of units introduction builder. Used by <tt>mkRefSec</tt>.
+tuIntro :: [TUIntro] -> Contents
+
+-- | Default table of units intro that contains the system, derivation, and
+--   purpose.
+defaultTUI :: [TUIntro]
 
 module Drasil.Sections.TraceabilityMandGs
 
@@ -1409,9 +1468,6 @@ fillReqs :: DocDesc -> SystemInformation -> SystemInformation
 --   (<a>ChunkDB</a>).
 extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
 
--- | Finds whether the Table of Contents is in a SRSDecl.
-findToC :: [DocSection] -> ShowTableOfContents
-
 -- | Helper for creating the different document sections.
 mkSections :: SystemInformation -> DocDesc -> [Section]
 
@@ -1422,58 +1478,8 @@ mkToC :: DocDesc -> Section
 --   Table of Symbols, Units and Abbreviations and Acronyms.
 mkRefSec :: SystemInformation -> DocDesc -> RefSec -> Section
 
--- | Table of units with an SI Name.
---   
---   Table of units constructors.
-tunit :: [TUIntro] -> RefTab
-
--- | Table of units with SI name in the description column.
---   
---   Table of units constructors.
-tunit' :: [TUIntro] -> RefTab
-
 -- | Helper for creating the table of symbols.
 mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) => [e] -> LFunc -> [TSIntro] -> Section
-
--- | Default is term and given introduction.
---   
---   Table of symbols constructor.
-tsymb :: [TSIntro] -> RefTab
-
--- | Similar to <a>tsymb</a>, but has a default Defn for the LFunc type.
---   Still has a given introduction.
---   
---   Table of symbols constructor.
-tsymb' :: [TSIntro] -> RefTab
-
--- | Table of symbols constructor. Takes a custom function and
---   introduction.
-tsymb'' :: [TSIntro] -> LFunc -> RefTab
-
--- | Table of symbols introduction builder. Used by <a>mkRefSec</a>.
-tsIntro :: [TSIntro] -> Contents
-
--- | Table of symbols intro writer. Translates a <a>TSIntro</a> to a list
---   in a <a>Sentence</a>.
-tsI :: TSIntro -> Sentence
-
--- | Typographic convention writer. Translates a list of typographic
---   conventions (<a>TConvention</a>s) to a <a>Sentence</a>.
-typogConvention :: [TConvention] -> Sentence
-
--- | Symbolic convention writer.
-symbConvention :: [Literature] -> Sentence
-
--- | Table of units introduction builder. Used by <a>mkRefSec</a>.
-tuIntro :: [TUIntro] -> Contents
-
--- | Table of units introduction writer. Translates a <a>TUIntro</a> to a
---   <a>Sentence</a>.
-tuI :: TUIntro -> Sentence
-
--- | Default table of units intro that contains the system, derivation, and
---   purpose.
-defaultTUI :: [TUIntro]
 
 -- | Makes the Introduction section into a <a>Section</a>.
 mkIntroSec :: SystemInformation -> IntroSec -> Section
@@ -1493,26 +1499,6 @@ mkSSDProb :: SystemInformation -> ProblemDescription -> Section
 -- | Helper for making the Solution Characteristics Specification section.
 mkSolChSpec :: SystemInformation -> SolChSpec -> Section
 
--- | Helper for making a <a>ConceptInstance</a> with a reference to the
---   system information.
-helperCI :: ConceptInstance -> SystemInformation -> ConceptInstance
-
--- | Section stubs for implicit referencing of different models and
---   definitions.
-tmStub :: Section
-
--- | Section stubs for implicit referencing of different models and
---   definitions.
-ddStub :: Section
-
--- | Section stubs for implicit referencing of different models and
---   definitions.
-imStub :: Section
-
--- | Section stubs for implicit referencing of different models and
---   definitions.
-pdStub :: Section
-
 -- | Helper for making the Requirements section.
 mkReqrmntSec :: ReqrmntSec -> Section
 
@@ -1531,14 +1517,11 @@ mkOffShelfSolnSec :: OffShelfSolnsSec -> Section
 -- | Helper for making the Values of Auxiliary Constants section.
 mkAuxConsSec :: AuxConstntSec -> Section
 
--- | Helper for making the Bibliography section.
+-- | Helper for making the References section.
 mkBib :: BibRef -> Section
 
 -- | Helper for making the Appendix section.
 mkAppndxSec :: AppndxSec -> Section
-
--- | Helper to get the program name as an <a>IdeaDict</a>.
-siSys :: SystemInformation -> IdeaDict
 
 module Drasil.DocLang
 
@@ -1671,25 +1654,6 @@ data SolChSpec
 -- | Creates a document from a document description, a title combinator
 --   function, and system information.
 mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
-
--- | Default is term and given introduction.
---   
---   Table of symbols constructor.
-tsymb :: [TSIntro] -> RefTab
-
--- | Table of symbols constructor. Takes a custom function and
---   introduction.
-tsymb'' :: [TSIntro] -> LFunc -> RefTab
-
--- | Table of units with an SI Name.
---   
---   Table of units constructors.
-tunit :: [TUIntro] -> RefTab
-
--- | Table of units with SI name in the description column.
---   
---   Table of units constructors.
-tunit' :: [TUIntro] -> RefTab
 
 -- | Helper for filling in the traceability matrix and graph information
 --   into the system.
@@ -1966,8 +1930,27 @@ tableAbbAccRef :: Reference
 -- | Makes a reference to the Table of Symbols.
 symbTableRef :: Reference
 
+-- | Default is term and given introduction.
+--   
+--   Table of symbols constructor.
+tsymb :: [TSIntro] -> RefTab
+
+-- | Table of symbols constructor. Takes a custom function and
+--   introduction.
+tsymb'' :: [TSIntro] -> LFunc -> RefTab
+
 -- | Makes a reference to the Table of Units.
 unitTableRef :: Reference
+
+-- | Table of units with an SI Name.
+--   
+--   Table of units constructors.
+tunit :: [TUIntro] -> RefTab
+
+-- | Table of units with SI name in the description column.
+--   
+--   Table of units constructors.
+tunit' :: [TUIntro] -> RefTab
 
 -- | Contains traceability matrix assumptions, other assumptions,
 --   refinement, and other requirements.

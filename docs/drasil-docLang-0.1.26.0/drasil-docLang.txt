@@ -602,25 +602,6 @@ data SolChSpec
 --   function, and system information.
 mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
 
--- | Default is term and given introduction.
---   
---   Table of symbols constructor.
-tsymb :: [TSIntro] -> RefTab
-
--- | Table of symbols constructor. Takes a custom function and
---   introduction.
-tsymb'' :: [TSIntro] -> LFunc -> RefTab
-
--- | Table of units with an SI Name.
---   
---   Table of units constructors.
-tunit :: [TUIntro] -> RefTab
-
--- | Table of units with SI name in the description column.
---   
---   Table of units constructors.
-tunit' :: [TUIntro] -> RefTab
-
 -- | Helper for filling in the traceability matrix and graph information
 --   into the system.
 fillTraceSI :: SRSDecl -> SystemInformation -> SystemInformation
@@ -896,8 +877,27 @@ tableAbbAccRef :: Reference
 -- | Makes a reference to the Table of Symbols.
 symbTableRef :: Reference
 
+-- | Default is term and given introduction.
+--   
+--   Table of symbols constructor.
+tsymb :: [TSIntro] -> RefTab
+
+-- | Table of symbols constructor. Takes a custom function and
+--   introduction.
+tsymb'' :: [TSIntro] -> LFunc -> RefTab
+
 -- | Makes a reference to the Table of Units.
 unitTableRef :: Reference
+
+-- | Table of units with an SI Name.
+--   
+--   Table of units constructors.
+tunit :: [TUIntro] -> RefTab
+
+-- | Table of units with SI name in the description column.
+--   
+--   Table of units constructors.
+tunit' :: [TUIntro] -> RefTab
 
 -- | Contains traceability matrix assumptions, other assumptions,
 --   refinement, and other requirements.

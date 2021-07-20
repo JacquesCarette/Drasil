@@ -17,10 +17,7 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat),
   ListType(Ordered, Unordered, Desc, Definitions, Simple), 
   Spec(Quote, EmptyS, Ref, S, Sp, HARDNL, E, (:+:)), 
   Fence(Norm, Abs, Curly, Paren), Expr, 
-  Ops(Inte, Prod, Summ, Mul, Add, Or, And, Subt, Iff, LEq, GEq, 
-  NEq, Eq, Gt, Lt, Impl, Dot, Cross, Neg, Exp, Dim, Not, Arctan, Arccos, Arcsin,
-  Cot, Csc, Sec, Tan, Cos, Sin, Log, Ln, Prime, Comma, Boolean, Real, Natural, 
-  Rational, Integer, IsIn, Point, Perc), Spacing(Thin), Fonts(Emph, Bold), 
+  Ops(..), Spacing(Thin), Fonts(Emph, Bold), 
   Expr(..), OverSymb(Hat), Label,
   LinkType(Internal, Cite2, External))
 import Language.Drasil.Printing.Citation (HP(Verb, URL), CiteField(HowPublished, 
@@ -182,6 +179,8 @@ pOps Prod     = command0 "displaystyle" <> command0 "prod"
 pOps Inte     = texSym "int"
 pOps Point    = pure $ text "."
 pOps Perc     = texSym "%"
+pOps LArrow   = commandD "leftarrow" empty
+pOps RArrow   = commandD "rightarrow" empty
 
 -- | Prints fencing notation ("(),{},|,||").
 fence :: OpenClose -> Fence -> D

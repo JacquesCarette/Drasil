@@ -114,20 +114,20 @@ mkFuncDef0 f n s u is e = EC
   (mkQuant' (f ^. uid) n Nothing (mkFunction (map (^. typ) is) (f ^. typ)) (symbol f) u)
   s (map (^. uid) is) e []
 
--- | Create 'QDefinition' function with a symbol, name, term, list of inputs, resultant units, and a defining Expr
+-- | Create a 'QDefinition' function with a symbol, name, term, list of inputs, resultant units, and a defining Expr
 mkFuncDef :: (HasUID f, HasSymbol f, HasSpace f,
                HasUID i, HasSymbol i, HasSpace i,
                IsUnit u) =>
   f -> NP -> Sentence -> u -> [i] -> Expr -> QDefinition
 mkFuncDef f n s u = mkFuncDef0 f n s (Just $ unitWrapper u)
 
--- | Create 'QDefinition' function with a symbol, name, term, list of inputs, and a defining Expr
+-- | Create a 'QDefinition' function with a symbol, name, term, list of inputs, and a defining Expr
 mkFuncDef' :: (HasUID f, HasSymbol f, HasSpace f,
                 HasUID i, HasSymbol i, HasSpace i) =>
   f -> NP -> Sentence -> [i] -> Expr -> QDefinition
 mkFuncDef' f n s = mkFuncDef0 f n s Nothing
 
--- | Create 'QDefinition' functions using a symbol, list of inputs, and a defining Expr
+-- | Create a 'QDefinition' functions using a symbol, list of inputs, and a defining Expr
 mkFuncDefByQ :: (Quantity c, MayHaveUnit c, HasSpace c,
                   Quantity i, HasSpace i) =>
   c -> [i] -> Expr -> QDefinition

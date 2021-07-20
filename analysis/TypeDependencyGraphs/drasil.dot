@@ -72,8 +72,8 @@ digraph alltypes {
 		subgraph qdefinition{
 		QDefinition -> QuantityDict;
 		QDefinition -> Sentence;
-		QDefinition -> Expr;
 		QDefinition -> UID;
+		QDefinition -> Expr;
 		QDefinition	[shape=oval, color=cyan3, label="QDefinition"];
 		}
 	}
@@ -619,6 +619,10 @@ digraph alltypes {
 		RealIntervalab -> b;
 		RealIntervalab -> RealInterval;
 		RealIntervalab	[shape=oval, color=darkviolet, label="RealIntervalab"];
+		}
+		subgraph primitive{
+		Primitive -> Space;
+		Primitive	[shape=oval, color=red2, label="Primitive"];
 		}
 	}
 	subgraph stages {
@@ -1992,7 +1996,7 @@ digraph alltypes {
 		Expr -> Double;
 		Expr -> Integer;
 		Expr -> String;
-		Expr -> ExprExpr;
+		Expr -> Expr;
 		Expr	[shape=oval, color=darkviolet, label="Expr"];
 		}
 		subgraph spec{
@@ -2000,9 +2004,10 @@ digraph alltypes {
 		Spec	[shape=oval, color=darkviolet, label="Spec"];
 		}
 		subgraph listtype{
-		ListType -> ItemTypeMaybe;
+		ListType -> ItemType;
+		ListType -> Maybe;
 		ListType -> Label;
-		ListType -> TitleItemTypeMaybe;
+		ListType -> Title;
 		ListType	[shape=oval, color=darkviolet, label="ListType"];
 		}
 		subgraph itemtype{

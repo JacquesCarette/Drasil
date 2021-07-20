@@ -2,6 +2,6 @@ digraph expr{
 Expr -> Double;
 Expr -> Integer;
 Expr -> String;
-Expr -> ExprExpr;
+Expr -> Expr;
 Expr	[shape=oval, color=darkviolet, label="Expr"];
 }

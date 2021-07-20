@@ -72,8 +72,8 @@ digraph alltypes {
 		subgraph qdefinition{
 		QDefinition -> QuantityDict;
 		QDefinition -> Sentence;
-		QDefinition -> Expr;
 		QDefinition -> UID;
+		QDefinition -> Expr;
 		QDefinition	[shape=oval, color=cyan3, label="QDefinition"];
 		}
 	}
@@ -619,6 +619,10 @@ digraph alltypes {
 		RealIntervalab -> b;
 		RealIntervalab -> RealInterval;
 		RealIntervalab	[shape=oval, color=darkviolet, label="RealIntervalab"];
+		}
+		subgraph primitive{
+		Primitive -> Space;
+		Primitive	[shape=oval, color=red2, label="Primitive"];
 		}
 	}
 	subgraph stages {

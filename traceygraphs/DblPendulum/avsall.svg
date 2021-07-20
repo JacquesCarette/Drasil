@@ -141,9 +141,9 @@
 <polygon fill="palegreen" stroke="black" points="3451,-36 3326,-36 3326,0 3451,0 3451,-36"/>
 <text text-anchor="middle" x="3388.5" y="-14.3" font-family="Times,serif" font-size="14.00">GD:periodPend</text>
 </g>
-<!-- angularDisplacementRC -->
+<!-- angularDisplacementIM -->
 <g id="node23" class="node">
-<title>angularDisplacementRC</title>
+<title>angularDisplacementIM</title>
 <polygon fill="#fff68f" stroke="black" points="3700,-36 3469,-36 3469,0 3700,0 3700,-36"/>
 <text text-anchor="middle" x="3584.5" y="-14.3" font-family="Times,serif" font-size="14.00">IM:calOfAngularDisplacement</text>
 </g>

@@ -96,7 +96,7 @@ digraph alltypes {
 		Expr -> Double;
 		Expr -> Integer;
 		Expr -> String;
-		Expr -> ExprExpr;
+		Expr -> Expr;
 		Expr	[shape=oval, color=darkviolet, label="Expr"];
 		}
 		subgraph spec{
@@ -104,9 +104,10 @@ digraph alltypes {
 		Spec	[shape=oval, color=darkviolet, label="Spec"];
 		}
 		subgraph listtype{
-		ListType -> ItemTypeMaybe;
+		ListType -> ItemType;
+		ListType -> Maybe;
 		ListType -> Label;
-		ListType -> TitleItemTypeMaybe;
+		ListType -> Title;
 		ListType	[shape=oval, color=darkviolet, label="ListType"];
 		}
 		subgraph itemtype{

@@ -120,10 +120,6 @@ multiDefnGenQDByUID :: MultiDefn -> UID -> QDefinition
 -- | <a>ModelKinds</a> carrier, used to carry commonly overwritten
 --   information from the IMs<i>TMs</i>GDs.
 data ModelKind
-MK :: ModelKinds -> UID -> NP -> ModelKind
-[_mk] :: ModelKind -> ModelKinds
-[_mkUid] :: ModelKind -> UID
-[_mkTerm] :: ModelKind -> NP
 
 -- | Smart constructor for <a>DEModel</a>s
 deModel :: UID -> NP -> RelationConcept -> ModelKind
@@ -152,7 +148,8 @@ equationalConstraints' :: ConstraintSet -> ModelKind
 --   the <a>QDefinition</a>
 equationalModel' :: QDefinition -> ModelKind
 
--- | Smart constructor for <a>EquationalRealm</a>s
+-- | Smart constructor for <a>EquationalRealm</a>s, deriving UID+Term from
+--   the <a>MultiDefn</a>
 equationalRealm' :: MultiDefn -> ModelKind
 
 -- | Smart constructor for <a>OthModel</a>s, deriving UID+Term from the

@@ -93,21 +93,21 @@
 <path fill="none" stroke="black" d="M359.53,-90C368.49,-90 377.46,-90 386.42,-90"/>
 <polygon fill="black" stroke="black" points="386.54,-93.5 396.54,-90 386.54,-86.5 386.54,-93.5"/>
 </g>
-<!-- angularDisplacementRC -->
+<!-- angularDisplacementIM -->
 <g id="node7" class="node">
-<title>angularDisplacementRC</title>
+<title>angularDisplacementIM</title>
 <polygon fill="#fff68f" stroke="black" points="652.5,-180 421.5,-180 421.5,-144 652.5,-144 652.5,-180"/>
 <text text-anchor="middle" x="537" y="-158.3" font-family="Times,serif" font-size="14.00">IM:calOfAngularDisplacement</text>
 </g>
-<!-- angularDisplacementRC&#45;&gt;angFrequencyGD -->
+<!-- angularDisplacementIM&#45;&gt;angFrequencyGD -->
 <g id="edge10" class="edge">
-<title>angularDisplacementRC&#45;&gt;angFrequencyGD</title>
+<title>angularDisplacementIM&#45;&gt;angFrequencyGD</title>
 <path fill="none" stroke="black" d="M523.16,-143.7C516.51,-135.39 508.42,-125.28 501.11,-116.14"/>
 <polygon fill="black" stroke="black" points="503.66,-113.73 494.68,-108.1 498.2,-118.1 503.66,-113.73"/>
 </g>
-<!-- angularDisplacementRC&#45;&gt;newtonSLR -->
+<!-- angularDisplacementIM&#45;&gt;newtonSLR -->
 <g id="edge9" class="edge">
-<title>angularDisplacementRC&#45;&gt;newtonSLR</title>
+<title>angularDisplacementIM&#45;&gt;newtonSLR</title>
 <path fill="none" stroke="black" d="M550.27,-143.92C557.78,-133.81 567.03,-120.56 574,-108 585.16,-87.89 595.25,-63.84 602.22,-45.81"/>
 <polygon fill="black" stroke="black" points="605.59,-46.81 605.86,-36.22 599.04,-44.33 605.59,-46.81"/>
 </g>

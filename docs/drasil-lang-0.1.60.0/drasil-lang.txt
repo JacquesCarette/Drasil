@@ -1421,7 +1421,6 @@ fromEqnSt :: IsUnit u => String -> NP -> Sentence -> (Stage -> Symbol) -> Space 
 
 -- | Same as <a>fromEqn</a>, but symbol depends on stage and has no units.
 fromEqnSt' :: String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> Expr -> QDefinition
-equat :: Lens' QDefinition Expr
 
 -- | Wrapper for fromEqnSt and fromEqnSt'
 mkQDefSt :: UID -> NP -> Sentence -> (Stage -> Symbol) -> Space -> Maybe UnitDefn -> Expr -> QDefinition
@@ -1437,6 +1436,18 @@ mkQuantDef' :: (Quantity c, MayHaveUnit c) => c -> NP -> Expr -> QDefinition
 -- | Smart constructor for QDefinitions. Requires a quantity and its
 --   defining equation.
 ec :: (Quantity c, MayHaveUnit c) => c -> Expr -> QDefinition
+
+-- | Create a <a>QDefinition</a> function with a symbol, name, term, list
+--   of inputs, resultant units, and a defining Expr
+mkFuncDef :: (HasUID f, HasSymbol f, HasSpace f, HasUID i, HasSymbol i, HasSpace i, IsUnit u) => f -> NP -> Sentence -> u -> [i] -> Expr -> QDefinition
+
+-- | Create a <a>QDefinition</a> function with a symbol, name, term, list
+--   of inputs, and a defining Expr
+mkFuncDef' :: (HasUID f, HasSymbol f, HasSpace f, HasUID i, HasSymbol i, HasSpace i) => f -> NP -> Sentence -> [i] -> Expr -> QDefinition
+
+-- | Create a <a>QDefinition</a> functions using a symbol, list of inputs,
+--   and a defining Expr
+mkFuncDefByQ :: (Quantity c, MayHaveUnit c, HasSpace c, Quantity i, HasSpace i) => c -> [i] -> Expr -> QDefinition
 
 -- | QuantityDict is a combination of an <a>IdeaDict</a> with a quantity.
 --   Contains an <a>IdeaDict</a>, <a>Space</a>, a function from
@@ -2311,6 +2322,7 @@ Array :: Space -> Space
 Actor :: String -> Space
 DiscreteD :: [Double] -> Space
 DiscreteS :: [String] -> Space
+Function :: NonEmpty Primitive -> Primitive -> Space
 Void :: Space
 
 -- | A RealInterval is a subset of <a>Real</a> (as a <a>Space</a>). These

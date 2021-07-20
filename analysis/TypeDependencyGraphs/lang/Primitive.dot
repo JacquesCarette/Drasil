@@ -1,0 +1,4 @@
+digraph primitive{
+Primitive -> Space;
+Primitive	[shape=oval, color=red2, label="Primitive"];
+}

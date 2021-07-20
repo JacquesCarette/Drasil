@@ -290,6 +290,8 @@ Inte :: Ops
 Prod :: Ops
 Point :: Ops
 Perc :: Ops
+LArrow :: Ops
+RArrow :: Ops
 
 -- | Holds the type of "text fencing" ("(), {}, |, ||").
 data Fence
@@ -358,7 +360,7 @@ Sqrt :: Expr -> Expr
 -- | Holds the <a>Spacing</a>.
 Spc :: Spacing -> Expr
 
--- | Redefine the <a>Sentence</a> type from Language.Drasil to be more
+-- | Redefine the <tt>Sentence</tt> type from Language.Drasil to be more
 --   suitable to printing.
 data Spec
 
@@ -368,7 +370,7 @@ E :: Expr -> Spec
 -- | Holds a String.
 S :: String -> Spec
 
--- | Concatination.
+-- | Concatenation.
 (:+:) :: Spec -> Spec -> Spec
 
 -- | Special characters.

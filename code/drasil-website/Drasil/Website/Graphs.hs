@@ -26,7 +26,7 @@ folderList' :: FilePath -> [ItemType]
 folderList' path = map Flat (zipWith (\x y -> namedRef y (S x)) drasilFolders $ drasilDepGraphRefs path)
 
 graphSecRef :: Reference
-graphSecRef = makeSecRef "Dependency Graphs" $ S "Dependency Graphs"
+graphSecRef = makeSecRef "DependencyGraphs" $ S "Dependency Graphs"
 
 graphRefs :: FilePath -> [Reference]
 graphRefs path = [graphSecRef, ref $ graphSec path] ++ drasilDepGraphRefs path

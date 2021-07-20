@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # For examples that generate code, walk through their generated source code folders,
 # and build them all.
 # For use with `make X_code` & `make code`.

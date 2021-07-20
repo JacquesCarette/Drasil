@@ -1,6 +1,6 @@
 # For documentation on how to add to this, see Issue #1371
 
-SHELL=/bin/bash
+SHELL = /usr/bin/env bash
 
 # List of all known packages
 PACKAGES = lang utils build gool code theory database printers gen data docLang example
@@ -143,10 +143,10 @@ debug: test
 
 # sanity check -- are we using the right stack version?
 check_stack:
-	 @MIN_STACK_VER="$(MIN_STACK_VER)" CACHED_MSV_FILE="$(CACHED_MSV_FILE)" "$(SHELL)" "$(SCRIPT_FOLDER)"check_stack.sh
+	 @MIN_STACK_VER="$(MIN_STACK_VER)" CACHED_MSV_FILE="$(CACHED_MSV_FILE)" $(SHELL) "$(SCRIPT_FOLDER)check_stack.sh"
 
 check_dot:
-	@BIN=dot DOWNLOAD_LOCATION=https://www.graphviz.org/download/ "$(SHELL)" "$(SCRIPT_FOLDER)"check_binary.sh
+	@BIN="dot" DOWNLOAD_LOCATION="https://www.graphviz.org/download/" $(SHELL) "$(SCRIPT_FOLDER)check_binary.sh"
 
 packages: $(BUILD_PACKAGES)
 
@@ -190,7 +190,7 @@ test: $(TEST_EXAMPLES)
 	@echo ----------------------------
 	@echo Make complete, checking logs
 	@echo ----------------------------
-	@LOG_FOLDER="$(LOG_FOLDER)" LOG_SUFFIX="$(LOG_SUFFIX)" NOISY=$(NOISY) "$(SHELL)" "$(SCRIPT_FOLDER)"log_check.sh
+	@LOG_FOLDER="$(LOG_FOLDER)" LOG_SUFFIX="$(LOG_SUFFIX)" NOISY=$(NOISY) $(SHELL) "$(SCRIPT_FOLDER)log_check.sh"
 
 prog: $(GEN_EXAMPLES)
 
@@ -205,7 +205,7 @@ graphmod: check_stack
 
 $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod check_dot
 	@mkdir -p "$(GRAPH_FOLDER)"
-	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tpdf > "$(GRAPH_FOLDER)drasil-$*".pdf
+	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tpdf > "$(GRAPH_FOLDER)drasil-$*.pdf"
 
 graphs: $(GRAPH_PACKAGES)
 ###
@@ -242,7 +242,7 @@ docs: check_stack
 %$(TEX_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
 %$(TEX_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 $(filter %$(TEX_E_SUFFIX), $(TEX_EXAMPLES)): %$(TEX_E_SUFFIX): %$(GEN_E_SUFFIX)
-	EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" SUMMARIZE_TEX=$(SUMMARIZE_TEX) MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"tex_build.sh
+	EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" SUMMARIZE_TEX=$(SUMMARIZE_TEX) MAKE="$(MAKE)" $(SHELL) "$(SCRIPT_FOLDER)tex_build.sh"
 
 tex: $(TEX_EXAMPLES)
 
@@ -252,11 +252,11 @@ $(filter %$(CODE_E_SUFFIX), $(CODE_EXAMPLES)): %$(CODE_E_SUFFIX): %$(GEN_E_SUFFI
 	@DF_DIR="$(DF_DIR)" EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" \
 	EXAMPLE_CODE_SUBFOLDER="$(EXAMPLE_CODE_SUBFOLDER)" \
 	MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" TARGET=$(TARGET) \
-	MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"code_build.sh
+	MAKE="$(MAKE)" $(SHELL) "$(SCRIPT_FOLDER)code_build.sh"
 
 $(GOOLTEST): $(GOOLTEST)$(GEN_E_SUFFIX)
 	@EDIR="$(GOOLTEST_DIR)" BUILD_FOLDER="$(BUILD_FOLDER)" TARGET=$(TARGET) \
-	MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"gooltest_build.sh
+	MAKE="$(MAKE)" $(SHELL) "$(SCRIPT_FOLDER)gooltest_build.sh"
 
 code: $(CODE_EXAMPLES) $(GOOLTEST)
 
@@ -268,7 +268,7 @@ doxygen: $(CODE_EXAMPLES)
 $(filter %$(DCP_E_SUFFIX), $(DCP_EXAMPLES)): %$(DCP_E_SUFFIX):
 	@EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" EXAMPLE_CODE_SUBFOLDER="$(EXAMPLE_CODE_SUBFOLDER)" EXAMPLE=$* \
 	MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" DEPLOY_CODE_PATH_KV_SEP="$(DEPLOY_CODE_PATH_KV_SEP)" \
-	"$(SHELL)" "$(SCRIPT_FOLDER)"code_path.sh
+	$(SHELL) "$(SCRIPT_FOLDER)code_path.sh"
 
 deploy_code_path: $(DCP_EXAMPLES)
 
@@ -277,7 +277,7 @@ deploy_lite:
 	@BUILD_FOLDER="$(BUILD_FOLDER)" DEPLOY_FOLDER="$(DEPLOY_FOLDER)" GRAPH_FOLDER="$(GRAPH_FOLDER)" \
 	EXAMPLE_DIRS="$(EXAMPLE_DIRS)" MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" ANALYSIS_FOLDER="$(ANALYSIS_FOLDER)" \
 	TRACEY_GRAPHS_FOLDER="$(TRACEY_GRAPHS_FOLDER)" DEPLOY_CODE_PATH_KV_SEP="$(DEPLOY_CODE_PATH_KV_SEP)" \
-	MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"deploy_stage.sh
+	MAKE="$(MAKE)" $(SHELL) "$(SCRIPT_FOLDER)deploy_stage.sh"
 
 website:
 	stack install drasil-website

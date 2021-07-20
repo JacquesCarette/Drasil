@@ -8,7 +8,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
   _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, _outputs,
-  _quants, _sys, _sysinfodb, _usedinfodb, _folderPath)
+  _quants, _sys, _sysinfodb, sysinfodb, _usedinfodb, _folderPath)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.NounPhrase as NP
@@ -34,7 +34,7 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
   TConvention(..), TSIntro(..), TraceabilitySec(TraceabilityProg),
   Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, purpDoc, getTraceConfigUID,
-  secRefs, fillTraceSI, traceyGraphGetRefs)
+  fillcdbSRS, traceyGraphGetRefs)
 
 import Drasil.DblPendulum.Figures (figMotion, figRefs)
 import Data.Drasil.Concepts.Math (mathcon, cartesian)
@@ -50,15 +50,17 @@ import Drasil.DblPendulum.Unitals (symbols, inputs, outputs,
 import Drasil.DblPendulum.Requirements (funcReqs, nonFuncReqs, reqRefs)
 import Drasil.DblPendulum.References (citations, citeRefs)
 
+import Control.Lens ((^.))
+
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
 fullSI :: SystemInformation
-fullSI = fillTraceSI mkSRS si
+fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
-printSetting = PI symbMap Equational defaultConfiguration
+printSetting = PI (fullSI ^. sysinfodb) Equational defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents, -- This creates the Table of Contents
@@ -200,4 +202,4 @@ bodyRefs = map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ map r
 
 allRefs :: [Reference]
 allRefs = nub (assumpRefs ++ bodyRefs ++ figRefs ++ goalRefs ++ dataDefRefs ++ genDefRefs
-  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs)
+  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs)

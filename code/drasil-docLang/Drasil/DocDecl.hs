@@ -88,9 +88,9 @@ newtype ReqrmntSec = ReqsProg [ReqsSub]
 
 -- | Requirements subsections.
 data ReqsSub where
-  -- | Functional requirements. 'LabelledContent' for tables (includes introduction).
+  -- | Functional requirements. 'LabelledContent' for tables (includes input values).
   FReqsSub    :: Sentence -> [LabelledContent] -> ReqsSub
-  -- | Functional requirements. 'LabelledContent' for tables (no introduction).
+  -- | Functional requirements. 'LabelledContent' for tables (no input values).
   FReqsSub'   :: [LabelledContent] -> ReqsSub
   -- | Non-Functional requirements.
   NonFReqsSub :: ReqsSub

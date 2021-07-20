@@ -18,7 +18,6 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
 import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
   gdefn, tmodel, helperRefs)
 import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
-import Drasil.TraceTable (generateTraceMap)
 
 import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
                                              -- Vector - Name conflict (defined in file)
@@ -27,7 +26,7 @@ import Utils.Drasil
 
 import Database.Drasil(ChunkDB, SystemInformation(SI), _authors, _kind,
   _quants, _sys, _folderPath, _sysinfodb, _usedinfodb, ccss, ccss', citeDB, collectUnits,
-  conceptinsTable, generateRefbyMap, idMap, refbyTable, termTable, traceTable)
+  termTable)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
 import Drasil.Sections.TableOfContents (toToC)
@@ -37,6 +36,7 @@ import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn,
   genSysDes, inModel, likeChg, unlikeChg, probDesc, reference, solCharSpec,
   stakeholder, thModel, tOfCont, tOfSymb, tOfUnit, userChar, offShelfSol, refMat,
   tOfAbbAcc)
+import Drasil.DocLang.References (fillcdbSRS)
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysIntro,
   systCon, usrCharsF, sysContxt)
@@ -56,41 +56,19 @@ import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
   software, unlikelyChg, tOfSymb, tOfUnit)
 
 
-import Control.Lens ((^.), over, set)
+import Control.Lens ((^.), over)
 import Data.Function (on)
-import Data.List (nub, sortBy, sortOn)
-import qualified Data.Map as Map (elems, toList)
+import Data.List (nub, sortBy)
+import qualified Data.Map as Map (elems)
 
 ----- Gather all information necessary to create a document -----
 -- | Creates a document from a document description, a title combinator function, and system information.
 mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
 mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
   Document (nw kind `comb` nw sys) (foldlList Comma List $ map (S . name) authors) (findToC l) $
-  mkSections (fillTraceSI dd si) l where
-    l = mkDocDesc si dd
-
--- | Helper for filling in the traceability matrix and graph information into the system.
-fillTraceSI :: SRSDecl -> SystemInformation -> SystemInformation
-fillTraceSI dd si = fillTraceMaps l $ fillReqs l si
-  where
-    l = mkDocDesc si dd
-
--- | Fills in the traceabiliy matrix and graphs section of the system information using the document description.
-fillTraceMaps :: DocDesc -> SystemInformation -> SystemInformation
-fillTraceMaps dd si@SI{_sysinfodb = db} = si {_sysinfodb =
-  set refbyTable (generateRefbyMap tdb) $ set traceTable tdb db} where
-  tdb = generateTraceMap dd
-
--- | Fills in the requirements section of the system information using the document description.
-fillReqs :: DocDesc -> SystemInformation -> SystemInformation
-fillReqs [] si = si
-fillReqs (ReqrmntSec (ReqsProg x):_) si@SI{_sysinfodb = db} = genReqs x
-  where
-    genReqs [] = si
-    genReqs (FReqsSub c _:_) = si {_sysinfodb = set conceptinsTable newCI db} where
-        newCI = idMap $ nub $ c ++ map fst (sortOn snd $ map snd $ Map.toList $ db ^. conceptinsTable)
-    genReqs (_:xs) = genReqs xs
-fillReqs (_:xs) si = fillReqs xs si
+  mkSections fullSI l where
+    fullSI = fillcdbSRS dd si
+    l = mkDocDesc fullSI dd
 
 -- | Constructs the unit definitions ('UnitDefn's) found in the document description ('DocDesc') from a database ('ChunkDB').
 extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]

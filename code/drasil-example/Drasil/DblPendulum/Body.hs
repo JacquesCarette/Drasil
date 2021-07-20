@@ -11,7 +11,7 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   _quants, _sys, _sysinfodb, _usedinfodb)
 import Utils.Drasil
 import Utils.Drasil.Concepts
-import Data.Drasil.Concepts.Education (undergradCalculus, undergradPhysics, educon)
+import Data.Drasil.Concepts.Education (calculus, undergraduate, educon)
 import qualified Utils.Drasil.NounPhrase as NP
 import qualified Utils.Drasil.Sentence as S
 
@@ -23,7 +23,7 @@ import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM, newto
 import Data.Drasil.Domains (physics) 
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (mass, len, physicalcon)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
+import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics)
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains, problem, analysis)
 import Data.Drasil.Concepts.Computation (inValue, algorithm)
 import Drasil.DocLang (AuxConstntSec(AuxConsProg),
@@ -119,7 +119,9 @@ scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)),
 ----------------------------------------------
 
 charsOfReader :: [Sentence]
-charsOfReader = [phrase undergradPhysics, phrase undergradCalculus, plural ode]
+charsOfReader = [phrase undergraduate +:+ S "level 2" +:+ phrase Doc.physics,
+                 phrase undergraduate +:+ S "level 1" +:+ phrase calculus,
+                 plural ode]
 
 pendulumTitle :: CI
 pendulumTitle = commonIdeaWithDict "pendulumTitle" (pn "Pendulum") "Pendulum" [physics]

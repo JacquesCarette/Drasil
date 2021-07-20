@@ -9,6 +9,7 @@ import qualified Language.Drasil as S (Space(..))
 import GOOL.Drasil (CodeType(..))
 
 import Text.PrettyPrint.HughesPJ (Doc)
+import Data.List.NonEmpty (toList)
 
 -- | Represents the generated code as a list of file names and rendered code pairs.
 newtype Code = Code { unCode :: [(FilePath, Doc)]}
@@ -31,4 +32,4 @@ spaceToCodeType (S.DiscreteS _) = map List (spaceToCodeType S.String)
 spaceToCodeType S.Void          = [Void]
 spaceToCodeType (S.Mapping i t) = [Func is ts | is <- ins, ts <- trgs]
     where trgs = spaceToCodeType t
-          ins  = map spaceToCodeType i
+          ins  = map spaceToCodeType (toList i)

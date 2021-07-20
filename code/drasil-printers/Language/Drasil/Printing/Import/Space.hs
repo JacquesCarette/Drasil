@@ -8,6 +8,7 @@ import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 import Language.Drasil.Printing.Import.Expr (expr)
 
 import Data.List (intersperse)
+import Data.List.NonEmpty (toList)
 
 -- | Render a 'Space'.
 space :: PrintingInformation -> Space -> P.Expr
@@ -25,4 +26,6 @@ space _  (Actor s)     = P.Ident s
 space sm (DiscreteD l) = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map (flip expr sm . dbl) l -- [Double]
 space _  (DiscreteS l) = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map P.Str l --ex. let Meal = {"breakfast", "lunch", "dinner"}
 space _  Void          = error "Void not translated"
-space sm (Mapping i t) = P.Row $ intersperse (P.MO P.Cross) (map (space sm) i) ++ [P.MO P.RArrow, space sm t]
+space sm (Mapping i t) = P.Row $
+  intersperse (P.MO P.Cross) (map (space sm) $ toList i) ++  -- AxBxC...xY
+  [P.MO P.RArrow, space sm t]                                -- -> Z

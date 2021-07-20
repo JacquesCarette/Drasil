@@ -15,7 +15,7 @@ import Language.Drasil.Chunk.Quantity (mkQuant', QuantityDict)
 import Language.Drasil.Expr.Display (defines)
 import Language.Drasil.Expr (Expr(FCall, C))
 import Language.Drasil.NounPhrase.Core (NP)
-import Language.Drasil.Space (mkPrimitiveMapping, Space)
+import Language.Drasil.Space (mkFunction, Space)
 import Language.Drasil.Sentence (Sentence(EmptyS))
 import Language.Drasil.UID (UID)
 
@@ -63,7 +63,7 @@ mkFuncDefn0 :: (HasUID f, HasSymbol f, HasSpace f,
 mkFuncDefn0 f n s u is e = FD
   (mkQuant' (f ^. uid) n Nothing (f ^. typ) (symbol f) u)
   (map (^. uid) is) s e
-  (mkPrimitiveMapping (map (^. typ) is) (f ^. typ)) []
+  (mkFunction (map (^. typ) is) (f ^. typ)) []
 
 -- | Create 'FuncDefn' with a symbol, name, term, list of inputs, resultant units, and a defining Expr
 mkFuncDefn :: (HasUID f, HasSymbol f, HasSpace f,

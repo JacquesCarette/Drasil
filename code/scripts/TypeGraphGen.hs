@@ -15,6 +15,7 @@ import SourceCodeReaderTypes as SCRT (extractEntryData, EntryData(..),
   DataDeclRecord(..), DataDeclConstruct(..), NewtypeDecl(..), TypeDecl(..))
 import Data.List.Split (splitOn)
 import Data.Char (toLower)
+import DataPrinters.Dot
 
 type EntryString = String
 type Colour = String
@@ -220,28 +221,6 @@ mkGraphTOutputSub typeGraph td = do
     mapM_ (hPutStrLn typeGraph) $ makeEdgesSub (tdName td) (tdContent td)
     hPutStrLn typeGraph $ makeNodesSub "red2" $ tdName td
     hPutStrLn typeGraph "\t\t}"
-
-------------------
--- Graph-related functions
-------------------
-
--- Creates an edge between a type and its dependency
-makeEdgesDi :: String -> [String] -> [String]
-makeEdgesDi _ [] = []
-makeEdgesDi nm (c:cs) = (nm ++ " -> " ++ c ++ ";"): makeEdgesDi nm cs
-
--- Creates an edge between a type and its dependency (indented for subgraphs)
-makeEdgesSub :: String -> [String] -> [String]
-makeEdgesSub _ [] = []
-makeEdgesSub nm (c:cs) = ("\t\t" ++ nm ++ " -> " ++ c ++ ";"): makeEdgesSub nm cs
-
--- Creates a node based on the kind of datatype
-makeNodesDi :: Colour -> String -> String
-makeNodesDi c nm = nm ++ "\t[shape=oval, color=" ++ c ++ ", label=" ++ nm ++ "];"
-
--- Creates a node based on the kind of datatype (indented for subgraphs)
-makeNodesSub :: Colour -> String -> String
-makeNodesSub c nm = "\t\t" ++ nm ++ "\t[shape=oval, color=" ++ c ++ ", label=" ++ nm ++ "];"
 
 ----------
 -- Organizing data functions, getting data from files

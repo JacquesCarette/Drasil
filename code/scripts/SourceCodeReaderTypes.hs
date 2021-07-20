@@ -17,6 +17,10 @@ type DataName = String
 type NewtypeName = String
 type TypeName = String
 
+------------
+-- Main function and datatypes for creating a .dot graph of the type dependencies in Drasil
+-----------
+
 -- purposefully use different type names even though they will end up in the same form (for now)
 data DataDeclRecord = DDR { ddrName :: DataName                       -- this can actually be any kind of type, but use DataName for clarity (same with below)
                           , ddrContent :: [DataName]} deriving (Show) -- same with this
@@ -30,7 +34,7 @@ data TypeDecl = TD { tdName :: TypeName
 
 -- new EntryData data type with strict fields to enforce strict file reading
 data EntryData = EntryData { dRNs :: ![DataDeclRecord]    -- Record datatypes will be shown differently on a dot graph
-                           , dCNs :: ![DataDeclConstruct] -- compared to datatypes that use constructors.
+                           , dCNs :: ![DataDeclConstruct] -- compared to these datatypes that use constructors.
                            , ntNs :: ![NewtypeDecl]       -- Newtypes will be recorded as records (usually only wrap one other type)
                            , tNs :: ![TypeDecl]} deriving (Show) -- Types are usually synonyms of other types, so act like Record datatypes but in a different colour.
 
@@ -53,11 +57,7 @@ extractEntryData fileName filePath = do
   -- returns all types within a file
   return EntryData {dRNs=dataDeclRec,dCNs=dataDeclConst,ntNs=newtypeDecl,tNs=typeDecl}
 
--- strips leading and trailing whitespace from strings
-stripWS :: String -> String
-stripWS = T.unpack . T.strip . T.pack
-
----TODO: use map for most of these, I just need to visualize what is happening for now.
+---TODO: use map/filter/fold for most of these, I just need to visualize what is happening for now.
 
 --------
 -- Initial Filters (In order of use)
@@ -319,8 +319,12 @@ filterQualifiedTypes :: String -> String
 filterQualifiedTypes l = if '.' `elem` l then drop (fromJust (elemIndex '.' l)+1) l else l -- get rid of types that are made from qualified imports
 
 ---------
--- Other functions
+-- Other helper functions
 ---------
+
+-- strips leading and trailing whitespace from strings
+stripWS :: String -> String
+stripWS = T.unpack . T.strip . T.pack
 
 -- enforces strict file reading; files can be closed to avoid memory exhaustion
 forceRead :: [a0] -> ()

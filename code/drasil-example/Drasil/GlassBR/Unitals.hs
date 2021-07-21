@@ -101,7 +101,7 @@ tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
   (variable "TNT") Real
   [ gtZeroConstr ] (exactDbl 1) defaultUncrt
 
-standOffDist = uq (constrained' (dqd sD (variable "SD") Real metre)
+standOffDist = uq (constrained' (ucs' sD (variable "SD") Real metre)
   [ gtZeroConstr,
     sfwrc $ Bounded (Inc, sy sdMin) (Inc, sy sdMax)] (exactDbl 45)) defaultUncrt
 

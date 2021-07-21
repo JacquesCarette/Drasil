@@ -26,9 +26,9 @@ import Data.Drasil.Domains (physics)
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (mass, len, physicalcon)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variable)
-import Data.Drasil.Concepts.Documentation (assumption, condition, endUser, environment, datum,
-  input_, interface, output_, problem, product_, physical, sysCont, software, softwareConstraint,
-  softwareSys, srsDomains, system, sysCont, user, doccon, doccon', analysis)
+import Data.Drasil.Concepts.Documentation (assumption, condition, endUser, environment, datum, document,
+  input_, interface, output_, organization, problem, product_, physical, sysCont, software, softwareConstraint,
+  softwareSys, srsDomains, system, sysCont, template, user, doccon, doccon', analysis)
 
 import Data.Drasil.Concepts.Computation (inDatum, compcon, inValue, algorithm)
 import Drasil.DocLang (AuxConstntSec(AuxConsProg),
@@ -82,7 +82,8 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
     IntroProg justification (phrase pendulumTitle) -- This adds an introductory blob before the overview paragraph above.
       [IPurpose $ purpDoc pendulumTitle Verbose,
        IScope scope,
-       IChar [] charsOfReader []],
+       IChar [] charsOfReader [],
+       IOrgSec organizationOfDocumentsIntro inModel (SRS.inModel [] []) EmptyS],
   GSDSec $ 
     GSDProg [
       SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
@@ -182,7 +183,7 @@ symbMap = cdb (map qw iMods ++ map qw symbols)
     : nw unitVect : nw unitVectj : [nw errMsg, nw program] ++ map nw symbols ++
    map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw physicCon' ++
    map nw physicscon ++ concepts ++ map nw physicalcon ++ map nw acronyms ++ map nw symbols ++ map nw [metre, hertz] ++
-   [nw algorithm] ++ map nw compcon ++ map nw educon)
+   [nw algorithm] ++ map nw compcon ++ map nw educon ++ map nw prodtcon)
   (map cw iMods ++ srsDomains) (map unitWrapper [metre, second, newton, kilogram, degree, radian, hertz]) dataDefs
   iMods genDefns tMods concIns [] [] allRefs
 

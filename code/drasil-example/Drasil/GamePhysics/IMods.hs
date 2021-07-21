@@ -123,7 +123,7 @@ rotMotDerivEqns = map eS [rotMotExprDeriv1, toDispExpr rotMotQD]
 {-- 2D Collision --}
 
 col2D :: InstanceModel
-col2D = imNoDerivNoRefs (othModel' col2DRC)
+col2D = imNoDerivNoRefs (equationalModel "col2DIM" col2DNP col2DFD)
   [qwC time $ UpFrom (Exc, exactDbl 0)
   ,qwC impulseS $ UpFrom (Exc, exactDbl 0)
   ,qwC massA $ UpFrom (Exc, exactDbl 0)
@@ -135,14 +135,14 @@ col2D = imNoDerivNoRefs (othModel' col2DRC)
   [col2DOutputs, rigidTwoDAssump, rightHandAssump, collisionAssump,
     noDampConsAssumps, impulseNote]
 
-col2DRC :: RelationConcept
-col2DRC = makeRC "col2DRC" col2DNP EmptyS col2DRel
+col2DFD :: QDefinition
+col2DFD = mkFuncDefByQ velA [timeC] col2DExpr
 
 col2DNP :: NP
 col2DNP =  nounPhraseSP "Collisions on 2D rigid bodies"
 
-col2DRel {-, im3Rel2, im3Rel3, im3Rel4 -} :: Relation -- FIXME: add proper equation
-col2DRel = apply1 velA timeC $= apply1 velA time `addRe`
+col2DExpr {-, im3Rel2, im3Rel3, im3Rel4 -} :: Expr -- FIXME: add proper equation
+col2DExpr = apply1 velA time `addRe`
   ((sy impulseS $/ sy massA) `mulRe` sy normalVect)
 
 

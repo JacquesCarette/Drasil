@@ -63,9 +63,9 @@
 <path fill="none" stroke="black" d="M918.3,-71.7C927.1,-63.14 937.88,-52.66 947.5,-43.3"/>
 <polygon fill="black" stroke="black" points="950.18,-45.58 954.91,-36.1 945.3,-40.57 950.18,-45.58"/>
 </g>
-<!-- nwtnCoolingRC -->
+<!-- nwtnCoolingTM -->
 <g id="node7" class="node">
-<title>nwtnCoolingRC</title>
+<title>nwtnCoolingTM</title>
 <polygon fill="pink" stroke="black" points="1413.5,-108 1279.5,-108 1279.5,-72 1413.5,-72 1413.5,-108"/>
 <text text-anchor="middle" x="1346.5" y="-86.3" font-family="Times,serif" font-size="14.00">TM:nwtnCooling</text>
 </g>
@@ -75,9 +75,9 @@
 <polygon fill="mistyrose" stroke="black" points="1410.5,-36 1282.5,-36 1282.5,0 1410.5,0 1410.5,-36"/>
 <text text-anchor="middle" x="1346.5" y="-14.3" font-family="Times,serif" font-size="14.00">A:assumpHTCC</text>
 </g>
-<!-- nwtnCoolingRC&#45;&gt;assumpHTCC -->
+<!-- nwtnCoolingTM&#45;&gt;assumpHTCC -->
 <g id="edge4" class="edge">
-<title>nwtnCoolingRC&#45;&gt;assumpHTCC</title>
+<title>nwtnCoolingTM&#45;&gt;assumpHTCC</title>
 <path fill="none" stroke="black" d="M1346.5,-71.7C1346.5,-63.98 1346.5,-54.71 1346.5,-46.11"/>
 <polygon fill="black" stroke="black" points="1350,-46.1 1346.5,-36.1 1343,-46.1 1350,-46.1"/>
 </g>
@@ -189,15 +189,15 @@
 <path fill="none" stroke="black" d="M600.76,-71.7C611.59,-62.88 624.92,-52.03 636.66,-42.47"/>
 <polygon fill="black" stroke="black" points="638.94,-45.13 644.49,-36.1 634.52,-39.7 638.94,-45.13"/>
 </g>
-<!-- heatEInWtrRC -->
+<!-- heatEInWtrIM -->
 <g id="node19" class="node">
-<title>heatEInWtrRC</title>
+<title>heatEInWtrIM</title>
 <polygon fill="#fff68f" stroke="black" points="1261.5,-108 1137.5,-108 1137.5,-72 1261.5,-72 1261.5,-108"/>
 <text text-anchor="middle" x="1199.5" y="-86.3" font-family="Times,serif" font-size="14.00">IM:heatEInWtr</text>
 </g>
-<!-- heatEInWtrRC&#45;&gt;assumpWAL -->
+<!-- heatEInWtrIM&#45;&gt;assumpWAL -->
 <g id="edge13" class="edge">
-<title>heatEInWtrRC&#45;&gt;assumpWAL</title>
+<title>heatEInWtrIM&#45;&gt;assumpWAL</title>
 <path fill="none" stroke="black" d="M1144.26,-71.97C1112.13,-62.06 1071.45,-49.51 1037.75,-39.12"/>
 <polygon fill="black" stroke="black" points="1038.58,-35.71 1027.99,-36.11 1036.51,-42.4 1038.58,-35.71"/>
 </g>
@@ -207,9 +207,9 @@
 <polygon fill="mistyrose" stroke="black" points="1256.5,-36 1142.5,-36 1142.5,0 1256.5,0 1256.5,-36"/>
 <text text-anchor="middle" x="1199.5" y="-14.3" font-family="Times,serif" font-size="14.00">A:assumpAPT</text>
 </g>
-<!-- heatEInWtrRC&#45;&gt;assumpAPT -->
+<!-- heatEInWtrIM&#45;&gt;assumpAPT -->
 <g id="edge14" class="edge">
-<title>heatEInWtrRC&#45;&gt;assumpAPT</title>
+<title>heatEInWtrIM&#45;&gt;assumpAPT</title>
 <path fill="none" stroke="black" d="M1199.5,-71.7C1199.5,-63.98 1199.5,-54.71 1199.5,-46.11"/>
 <polygon fill="black" stroke="black" points="1203,-46.1 1199.5,-36.1 1196,-46.1 1203,-46.1"/>
 </g>

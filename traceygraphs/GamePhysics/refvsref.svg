@@ -153,15 +153,15 @@
 <path fill="none" stroke="black" d="M1053.66,-152.18C1079.85,-144.74 1111.35,-131.42 1130.5,-108 1144.61,-90.75 1148.94,-65.48 1149.98,-46.27"/>
 <polygon fill="black" stroke="black" points="1153.49,-46.13 1150.27,-36.04 1146.49,-45.94 1153.49,-46.13"/>
 </g>
-<!-- col2DRC -->
+<!-- col2DIM -->
 <g id="node14" class="node">
-<title>col2DRC</title>
+<title>col2DIM</title>
 <polygon fill="#fff68f" stroke="black" points="692,-180 611,-180 611,-144 692,-144 692,-180"/>
 <text text-anchor="middle" x="651.5" y="-158.3" font-family="Times,serif" font-size="14.00">IM:col2D</text>
 </g>
-<!-- col2DRC&#45;&gt;p_CM -->
+<!-- col2DIM&#45;&gt;p_CM -->
 <g id="edge12" class="edge">
-<title>col2DRC&#45;&gt;p_CM</title>
+<title>col2DIM&#45;&gt;p_CM</title>
 <path fill="none" stroke="black" d="M635.93,-143.7C628.3,-135.22 618.98,-124.86 610.62,-115.58"/>
 <polygon fill="black" stroke="black" points="613.19,-113.2 603.89,-108.1 607.98,-117.88 613.19,-113.2"/>
 </g>
@@ -171,9 +171,9 @@
 <polygon fill="palegreen" stroke="black" points="765.5,-108 665.5,-108 665.5,-72 765.5,-72 765.5,-108"/>
 <text text-anchor="middle" x="715.5" y="-86.3" font-family="Times,serif" font-size="14.00">GD:impulse</text>
 </g>
-<!-- col2DRC&#45;&gt;impulseS -->
+<!-- col2DIM&#45;&gt;impulseS -->
 <g id="edge13" class="edge">
-<title>col2DRC&#45;&gt;impulseS</title>
+<title>col2DIM&#45;&gt;impulseS</title>
 <path fill="none" stroke="black" d="M667.32,-143.7C675.07,-135.22 684.54,-124.86 693.02,-115.58"/>
 <polygon fill="black" stroke="black" points="695.7,-117.85 699.86,-108.1 690.53,-113.12 695.7,-117.85"/>
 </g>

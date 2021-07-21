@@ -75,15 +75,15 @@
 <path fill="none" stroke="black" d="M1527.74,-73.54C1524.8,-72.95 1521.87,-72.43 1519,-72 1033.85,1.33 900.83,-89.26 409.64,-36.07"/>
 <polygon fill="black" stroke="black" points="409.77,-32.56 399.44,-34.95 409,-39.52 409.77,-32.56"/>
 </g>
-<!-- heatEInWtrRC -->
+<!-- heatEInWtrIM -->
 <g id="node7" class="node">
-<title>heatEInWtrRC</title>
+<title>heatEInWtrIM</title>
 <polygon fill="#fff68f" stroke="black" points="1482,-36 1358,-36 1358,0 1482,0 1482,-36"/>
 <text text-anchor="middle" x="1420" y="-14.3" font-family="Times,serif" font-size="14.00">IM:heatEInWtr</text>
 </g>
-<!-- findMass&#45;&gt;heatEInWtrRC -->
+<!-- findMass&#45;&gt;heatEInWtrIM -->
 <g id="edge6" class="edge">
-<title>findMass&#45;&gt;heatEInWtrRC</title>
+<title>findMass&#45;&gt;heatEInWtrIM</title>
 <path fill="none" stroke="black" d="M1541.61,-71.88C1519.61,-62.31 1491.99,-50.3 1468.64,-40.15"/>
 <polygon fill="black" stroke="black" points="1469.82,-36.85 1459.26,-36.07 1467.03,-43.27 1469.82,-36.85"/>
 </g>
@@ -207,9 +207,9 @@
 <polygon fill="ivory" stroke="black" points="1509.5,-108 1228.5,-108 1228.5,-72 1509.5,-72 1509.5,-108"/>
 <text text-anchor="middle" x="1369" y="-86.3" font-family="Times,serif" font-size="14.00">FR:calcChgHeatEnergyWtrOverTime</text>
 </g>
-<!-- calcChgHeatEnergyWtrOverTime&#45;&gt;heatEInWtrRC -->
+<!-- calcChgHeatEnergyWtrOverTime&#45;&gt;heatEInWtrIM -->
 <g id="edge17" class="edge">
-<title>calcChgHeatEnergyWtrOverTime&#45;&gt;heatEInWtrRC</title>
+<title>calcChgHeatEnergyWtrOverTime&#45;&gt;heatEInWtrIM</title>
 <path fill="none" stroke="black" d="M1381.61,-71.7C1387.6,-63.47 1394.88,-53.48 1401.48,-44.42"/>
 <polygon fill="black" stroke="black" points="1404.48,-46.25 1407.54,-36.1 1398.82,-42.13 1404.48,-46.25"/>
 </g>
@@ -399,15 +399,15 @@
 <polygon fill="pink" stroke="black" points="5479.5,-108 5374.5,-108 5374.5,-72 5479.5,-72 5479.5,-108"/>
 <text text-anchor="middle" x="5427" y="-86.3" font-family="Times,serif" font-size="14.00">TM:sensHtE</text>
 </g>
-<!-- latentHtERC -->
+<!-- latentHtETM -->
 <g id="node46" class="node">
-<title>latentHtERC</title>
+<title>latentHtETM</title>
 <polygon fill="pink" stroke="black" points="5612.5,-108 5497.5,-108 5497.5,-72 5612.5,-72 5612.5,-108"/>
 <text text-anchor="middle" x="5555" y="-86.3" font-family="Times,serif" font-size="14.00">TM:latentHtE</text>
 </g>
-<!-- nwtnCoolingRC -->
+<!-- nwtnCoolingTM -->
 <g id="node47" class="node">
-<title>nwtnCoolingRC</title>
+<title>nwtnCoolingTM</title>
 <polygon fill="pink" stroke="black" points="5765,-108 5631,-108 5631,-72 5765,-72 5765,-108"/>
 <text text-anchor="middle" x="5698" y="-86.3" font-family="Times,serif" font-size="14.00">TM:nwtnCooling</text>
 </g>

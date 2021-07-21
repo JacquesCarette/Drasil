@@ -99,27 +99,27 @@
 <polygon fill="pink" stroke="black" points="1604.5,-180 1499.5,-180 1499.5,-144 1604.5,-144 1604.5,-180"/>
 <text text-anchor="middle" x="1552" y="-158.3" font-family="Times,serif" font-size="14.00">TM:sensHtE</text>
 </g>
-<!-- latentHtERC -->
+<!-- latentHtETM -->
 <g id="node11" class="node">
-<title>latentHtERC</title>
+<title>latentHtETM</title>
 <polygon fill="pink" stroke="black" points="652.5,-180 537.5,-180 537.5,-144 652.5,-144 652.5,-180"/>
 <text text-anchor="middle" x="595" y="-158.3" font-family="Times,serif" font-size="14.00">TM:latentHtE</text>
 </g>
-<!-- sensHeat&#45;&gt;latentHtERC -->
+<!-- sensHeat&#45;&gt;latentHtETM -->
 <g id="edge6" class="edge">
-<title>sensHeat&#45;&gt;latentHtERC</title>
+<title>sensHeat&#45;&gt;latentHtETM</title>
 <path fill="none" stroke="black" d="M1521.69,-180.14C1508.2,-187.2 1491.81,-194.44 1476,-198 1342.66,-227.98 997.36,-207.19 861,-198 793.19,-193.43 716.3,-182.38 662.69,-173.72"/>
 <polygon fill="black" stroke="black" points="663.06,-170.24 652.63,-172.08 661.93,-177.14 663.06,-170.24"/>
 </g>
-<!-- latentHtERC&#45;&gt;meltFrac -->
+<!-- latentHtETM&#45;&gt;meltFrac -->
 <g id="edge7" class="edge">
-<title>latentHtERC&#45;&gt;meltFrac</title>
+<title>latentHtETM&#45;&gt;meltFrac</title>
 <path fill="none" stroke="black" d="M586.6,-143.7C582.73,-135.73 578.05,-126.1 573.76,-117.26"/>
 <polygon fill="black" stroke="black" points="576.83,-115.57 569.31,-108.1 570.53,-118.63 576.83,-115.57"/>
 </g>
-<!-- nwtnCoolingRC -->
+<!-- nwtnCoolingTM -->
 <g id="node12" class="node">
-<title>nwtnCoolingRC</title>
+<title>nwtnCoolingTM</title>
 <polygon fill="pink" stroke="black" points="2023,-180 1889,-180 1889,-144 2023,-144 2023,-180"/>
 <text text-anchor="middle" x="1956" y="-158.3" font-family="Times,serif" font-size="14.00">TM:nwtnCooling</text>
 </g>
@@ -129,9 +129,9 @@
 <polygon fill="mistyrose" stroke="black" points="2077,-36 1949,-36 1949,0 2077,0 2077,-36"/>
 <text text-anchor="middle" x="2013" y="-14.3" font-family="Times,serif" font-size="14.00">A:assumpHTCC</text>
 </g>
-<!-- nwtnCoolingRC&#45;&gt;assumpHTCC -->
+<!-- nwtnCoolingTM&#45;&gt;assumpHTCC -->
 <g id="edge8" class="edge">
-<title>nwtnCoolingRC&#45;&gt;assumpHTCC</title>
+<title>nwtnCoolingTM&#45;&gt;assumpHTCC</title>
 <path fill="none" stroke="black" d="M1958.18,-143.68C1960.92,-125.29 1966.59,-95.69 1977,-72 1981.19,-62.48 1987.12,-52.84 1992.96,-44.44"/>
 <polygon fill="black" stroke="black" points="1995.9,-46.35 1998.94,-36.2 1990.24,-42.24 1995.9,-46.35"/>
 </g>
@@ -207,9 +207,9 @@
 <polygon fill="palegreen" stroke="black" points="2557.5,-252 2358.5,-252 2358.5,-216 2557.5,-216 2557.5,-252"/>
 <text text-anchor="middle" x="2458" y="-230.3" font-family="Times,serif" font-size="14.00">GD:htFluxWaterFromCoil</text>
 </g>
-<!-- htFluxC&#45;&gt;nwtnCoolingRC -->
+<!-- htFluxC&#45;&gt;nwtnCoolingTM -->
 <g id="edge17" class="edge">
-<title>htFluxC&#45;&gt;nwtnCoolingRC</title>
+<title>htFluxC&#45;&gt;nwtnCoolingTM</title>
 <path fill="none" stroke="black" d="M2358.22,-219.09C2262.64,-205.76 2120.43,-185.93 2033.2,-173.77"/>
 <polygon fill="black" stroke="black" points="2033.5,-170.27 2023.11,-172.36 2032.53,-177.21 2033.5,-170.27"/>
 </g>
@@ -243,9 +243,9 @@
 <polygon fill="palegreen" stroke="black" points="2023,-252 1817,-252 1817,-216 2023,-216 2023,-252"/>
 <text text-anchor="middle" x="1920" y="-230.3" font-family="Times,serif" font-size="14.00">GD:htFluxPCMFromWater</text>
 </g>
-<!-- htFluxP&#45;&gt;nwtnCoolingRC -->
+<!-- htFluxP&#45;&gt;nwtnCoolingTM -->
 <g id="edge19" class="edge">
-<title>htFluxP&#45;&gt;nwtnCoolingRC</title>
+<title>htFluxP&#45;&gt;nwtnCoolingTM</title>
 <path fill="none" stroke="black" d="M1928.9,-215.7C1933,-207.73 1937.95,-198.1 1942.49,-189.26"/>
 <polygon fill="black" stroke="black" points="1945.74,-190.6 1947.2,-180.1 1939.52,-187.4 1945.74,-190.6"/>
 </g>
@@ -543,9 +543,9 @@
 <path fill="none" stroke="black" d="M905.9,-303.83C1001.75,-300.81 1184.6,-290.07 1335,-252 1398.07,-236.03 1466.94,-205.33 1509.8,-184.5"/>
 <polygon fill="black" stroke="black" points="1511.37,-187.63 1518.81,-180.09 1508.29,-181.35 1511.37,-187.63"/>
 </g>
-<!-- heatEInPCMRC&#45;&gt;latentHtERC -->
+<!-- heatEInPCMRC&#45;&gt;latentHtETM -->
 <g id="edge57" class="edge">
-<title>heatEInPCMRC&#45;&gt;latentHtERC</title>
+<title>heatEInPCMRC&#45;&gt;latentHtETM</title>
 <path fill="none" stroke="black" d="M782.57,-287.94C756.72,-279.06 726.38,-266.92 701,-252 670.14,-233.86 639.3,-206.7 618.91,-187.15"/>
 <polygon fill="black" stroke="black" points="621.24,-184.53 611.63,-180.07 616.36,-189.55 621.24,-184.53"/>
 </g>
@@ -561,27 +561,27 @@
 <path fill="none" stroke="black" d="M830.04,-287.79C803.27,-243.31 724.87,-124.31 624,-72 520.12,-18.13 476.53,-55.56 356.91,-35.99"/>
 <polygon fill="black" stroke="black" points="357.47,-32.54 347.02,-34.27 356.28,-39.43 357.47,-32.54"/>
 </g>
-<!-- heatEInWtrRC -->
+<!-- heatEInWtrIM -->
 <g id="node39" class="node">
-<title>heatEInWtrRC</title>
+<title>heatEInWtrIM</title>
 <polygon fill="#fff68f" stroke="black" points="1829,-324 1705,-324 1705,-288 1829,-288 1829,-324"/>
 <text text-anchor="middle" x="1767" y="-302.3" font-family="Times,serif" font-size="14.00">IM:heatEInWtr</text>
 </g>
-<!-- heatEInWtrRC&#45;&gt;sensHeat -->
+<!-- heatEInWtrIM&#45;&gt;sensHeat -->
 <g id="edge52" class="edge">
-<title>heatEInWtrRC&#45;&gt;sensHeat</title>
+<title>heatEInWtrIM&#45;&gt;sensHeat</title>
 <path fill="none" stroke="black" d="M1704.77,-291.41C1676.71,-283.2 1644.27,-270.61 1619,-252 1596.28,-235.27 1577.69,-208.7 1565.91,-188.94"/>
 <polygon fill="black" stroke="black" points="1568.86,-187.05 1560.84,-180.14 1562.8,-190.55 1568.86,-187.05"/>
 </g>
-<!-- heatEInWtrRC&#45;&gt;assumpWAL -->
+<!-- heatEInWtrIM&#45;&gt;assumpWAL -->
 <g id="edge50" class="edge">
-<title>heatEInWtrRC&#45;&gt;assumpWAL</title>
+<title>heatEInWtrIM&#45;&gt;assumpWAL</title>
 <path fill="none" stroke="black" d="M1768.06,-287.97C1770.72,-241.12 1776.47,-111.24 1761,-72 1756.9,-61.6 1749.78,-51.9 1742.3,-43.71"/>
 <polygon fill="black" stroke="black" points="1744.61,-41.06 1735.12,-36.36 1739.6,-45.96 1744.61,-41.06"/>
 </g>
-<!-- heatEInWtrRC&#45;&gt;assumpAPT -->
+<!-- heatEInWtrIM&#45;&gt;assumpAPT -->
 <g id="edge51" class="edge">
-<title>heatEInWtrRC&#45;&gt;assumpAPT</title>
+<title>heatEInWtrIM&#45;&gt;assumpAPT</title>
 <path fill="none" stroke="black" d="M1829.18,-301.02C1898.89,-295.17 2005.65,-281.54 2032,-252 2085.43,-192.09 2002.12,-138.56 2047,-72 2056.41,-58.05 2070.64,-47.59 2085.61,-39.82"/>
 <polygon fill="black" stroke="black" points="2087.49,-42.8 2094.99,-35.32 2084.46,-36.49 2087.49,-42.8"/>
 </g>
@@ -621,9 +621,9 @@
 <path fill="none" stroke="black" d="M2154.73,-361.57C2151.79,-360.98 2148.87,-360.45 2146,-360 1906.43,-322.79 1156.89,-310.77 915.63,-307.82"/>
 <polygon fill="black" stroke="black" points="915.59,-304.32 905.55,-307.69 915.51,-311.31 915.59,-304.32"/>
 </g>
-<!-- findMass&#45;&gt;heatEInWtrRC -->
+<!-- findMass&#45;&gt;heatEInWtrIM -->
 <g id="edge63" class="edge">
-<title>findMass&#45;&gt;heatEInWtrRC</title>
+<title>findMass&#45;&gt;heatEInWtrIM</title>
 <path fill="none" stroke="black" d="M2154.67,-361.91C2151.75,-361.23 2148.84,-360.59 2146,-360 2040.13,-338.18 1915.75,-322.69 1839.15,-314.29"/>
 <polygon fill="black" stroke="black" points="1839.45,-310.8 1829.13,-313.21 1838.69,-317.76 1839.45,-310.8"/>
 </g>
@@ -723,9 +723,9 @@
 <polygon fill="ivory" stroke="black" points="1907.5,-396 1626.5,-396 1626.5,-360 1907.5,-360 1907.5,-396"/>
 <text text-anchor="middle" x="1767" y="-374.3" font-family="Times,serif" font-size="14.00">FR:calcChgHeatEnergyWtrOverTime</text>
 </g>
-<!-- calcChgHeatEnergyWtrOverTime&#45;&gt;heatEInWtrRC -->
+<!-- calcChgHeatEnergyWtrOverTime&#45;&gt;heatEInWtrIM -->
 <g id="edge74" class="edge">
-<title>calcChgHeatEnergyWtrOverTime&#45;&gt;heatEInWtrRC</title>
+<title>calcChgHeatEnergyWtrOverTime&#45;&gt;heatEInWtrIM</title>
 <path fill="none" stroke="black" d="M1767,-359.7C1767,-351.98 1767,-342.71 1767,-334.11"/>
 <polygon fill="black" stroke="black" points="1770.5,-334.1 1767,-324.1 1763.5,-334.1 1770.5,-334.1"/>
 </g>

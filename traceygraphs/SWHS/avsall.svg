@@ -45,9 +45,9 @@
 <path fill="none" stroke="black" d="M257,-71.7C257,-63.98 257,-54.71 257,-46.11"/>
 <polygon fill="black" stroke="black" points="260.5,-46.1 257,-36.1 253.5,-46.1 260.5,-46.1"/>
 </g>
-<!-- nwtnCoolingRC -->
+<!-- nwtnCoolingTM -->
 <g id="node5" class="node">
-<title>nwtnCoolingRC</title>
+<title>nwtnCoolingTM</title>
 <polygon fill="pink" stroke="black" points="476,-108 342,-108 342,-72 476,-72 476,-108"/>
 <text text-anchor="middle" x="409" y="-86.3" font-family="Times,serif" font-size="14.00">TM:nwtnCooling</text>
 </g>
@@ -57,9 +57,9 @@
 <polygon fill="mistyrose" stroke="black" points="473,-36 345,-36 345,0 473,0 473,-36"/>
 <text text-anchor="middle" x="409" y="-14.3" font-family="Times,serif" font-size="14.00">A:assumpHTCC</text>
 </g>
-<!-- nwtnCoolingRC&#45;&gt;assumpHTCC -->
+<!-- nwtnCoolingTM&#45;&gt;assumpHTCC -->
 <g id="edge3" class="edge">
-<title>nwtnCoolingRC&#45;&gt;assumpHTCC</title>
+<title>nwtnCoolingTM&#45;&gt;assumpHTCC</title>
 <path fill="none" stroke="black" d="M409,-71.7C409,-63.98 409,-54.71 409,-46.11"/>
 <polygon fill="black" stroke="black" points="412.5,-46.1 409,-36.1 405.5,-46.1 412.5,-46.1"/>
 </g>
@@ -333,21 +333,21 @@
 <path fill="none" stroke="black" d="M1325.44,-73.05C1328.33,-72.66 1331.19,-72.31 1334,-72 1827.5,-17.31 1960.68,-99.89 2456.72,-36"/>
 <polygon fill="black" stroke="black" points="2457.17,-39.47 2466.64,-34.71 2456.27,-32.53 2457.17,-39.47"/>
 </g>
-<!-- heatEInWtrRC -->
+<!-- heatEInWtrIM -->
 <g id="node29" class="node">
-<title>heatEInWtrRC</title>
+<title>heatEInWtrIM</title>
 <polygon fill="#fff68f" stroke="black" points="2399,-108 2275,-108 2275,-72 2399,-72 2399,-108"/>
 <text text-anchor="middle" x="2337" y="-86.3" font-family="Times,serif" font-size="14.00">IM:heatEInWtr</text>
 </g>
-<!-- heatEInWtrRC&#45;&gt;assumpWAL -->
+<!-- heatEInWtrIM&#45;&gt;assumpWAL -->
 <g id="edge27" class="edge">
-<title>heatEInWtrRC&#45;&gt;assumpWAL</title>
+<title>heatEInWtrIM&#45;&gt;assumpWAL</title>
 <path fill="none" stroke="black" d="M2350.1,-71.7C2356.39,-63.39 2364.05,-53.28 2370.96,-44.14"/>
 <polygon fill="black" stroke="black" points="2373.8,-46.19 2377.05,-36.1 2368.22,-41.96 2373.8,-46.19"/>
 </g>
-<!-- heatEInWtrRC&#45;&gt;assumpAPT -->
+<!-- heatEInWtrIM&#45;&gt;assumpAPT -->
 <g id="edge28" class="edge">
-<title>heatEInWtrRC&#45;&gt;assumpAPT</title>
+<title>heatEInWtrIM&#45;&gt;assumpAPT</title>
 <path fill="none" stroke="black" d="M2316.98,-71.7C2306.87,-62.97 2294.46,-52.24 2283.48,-42.75"/>
 <polygon fill="black" stroke="black" points="2285.65,-39.99 2275.79,-36.1 2281.07,-45.29 2285.65,-39.99"/>
 </g>
@@ -543,9 +543,9 @@
 <polygon fill="pink" stroke="black" points="4926.5,-108 4821.5,-108 4821.5,-72 4926.5,-72 4926.5,-108"/>
 <text text-anchor="middle" x="4874" y="-86.3" font-family="Times,serif" font-size="14.00">TM:sensHtE</text>
 </g>
-<!-- latentHtERC -->
+<!-- latentHtETM -->
 <g id="node50" class="node">
-<title>latentHtERC</title>
+<title>latentHtETM</title>
 <polygon fill="pink" stroke="black" points="5059.5,-108 4944.5,-108 4944.5,-72 5059.5,-72 5059.5,-108"/>
 <text text-anchor="middle" x="5002" y="-86.3" font-family="Times,serif" font-size="14.00">TM:latentHtE</text>
 </g>

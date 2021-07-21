@@ -189,9 +189,9 @@
 <polygon fill="#fff68f" stroke="black" points="4159,-36 4069,-36 4069,0 4159,0 4159,-36"/>
 <text text-anchor="middle" x="4114" y="-14.3" font-family="Times,serif" font-size="14.00">IM:rotMot</text>
 </g>
-<!-- col2DRC -->
+<!-- col2DIM -->
 <g id="node31" class="node">
-<title>col2DRC</title>
+<title>col2DIM</title>
 <polygon fill="#fff68f" stroke="black" points="4258.5,-36 4177.5,-36 4177.5,0 4258.5,0 4258.5,-36"/>
 <text text-anchor="middle" x="4218" y="-14.3" font-family="Times,serif" font-size="14.00">IM:col2D</text>
 </g>

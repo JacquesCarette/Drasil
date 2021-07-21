@@ -123,15 +123,15 @@
 <polygon fill="ivory" stroke="black" points="1106,-108 825,-108 825,-72 1106,-72 1106,-108"/>
 <text text-anchor="middle" x="965.5" y="-86.3" font-family="Times,serif" font-size="14.00">FR:calcChgHeatEnergyWtrOverTime</text>
 </g>
-<!-- heatEInWtrRC -->
+<!-- heatEInWtrIM -->
 <g id="node11" class="node">
-<title>heatEInWtrRC</title>
+<title>heatEInWtrIM</title>
 <polygon fill="#fff68f" stroke="black" points="1027.5,-36 903.5,-36 903.5,0 1027.5,0 1027.5,-36"/>
 <text text-anchor="middle" x="965.5" y="-14.3" font-family="Times,serif" font-size="14.00">IM:heatEInWtr</text>
 </g>
-<!-- calcChgHeatEnergyWtrOverTime&#45;&gt;heatEInWtrRC -->
+<!-- calcChgHeatEnergyWtrOverTime&#45;&gt;heatEInWtrIM -->
 <g id="edge10" class="edge">
-<title>calcChgHeatEnergyWtrOverTime&#45;&gt;heatEInWtrRC</title>
+<title>calcChgHeatEnergyWtrOverTime&#45;&gt;heatEInWtrIM</title>
 <path fill="none" stroke="black" d="M965.5,-71.7C965.5,-63.98 965.5,-54.71 965.5,-46.11"/>
 <polygon fill="black" stroke="black" points="969,-46.1 965.5,-36.1 962,-46.1 969,-46.1"/>
 </g>
@@ -231,9 +231,9 @@
 <polygon fill="pink" stroke="black" points="3492,-108 3387,-108 3387,-72 3492,-72 3492,-108"/>
 <text text-anchor="middle" x="3439.5" y="-86.3" font-family="Times,serif" font-size="14.00">TM:sensHtE</text>
 </g>
-<!-- nwtnCoolingRC -->
+<!-- nwtnCoolingTM -->
 <g id="node28" class="node">
-<title>nwtnCoolingRC</title>
+<title>nwtnCoolingTM</title>
 <polygon fill="pink" stroke="black" points="3644.5,-108 3510.5,-108 3510.5,-72 3644.5,-72 3644.5,-108"/>
 <text text-anchor="middle" x="3577.5" y="-86.3" font-family="Times,serif" font-size="14.00">TM:nwtnCooling</text>
 </g>

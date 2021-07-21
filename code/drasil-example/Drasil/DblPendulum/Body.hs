@@ -2,7 +2,7 @@
 module Drasil.DblPendulum.Body where
 
 import Data.List (nub)
-import Language.Drasil
+import Language.Drasil hiding (organization, section)
 import Theory.Drasil (TheoryModel)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
@@ -17,23 +17,25 @@ import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.People (olu)
 import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian, hertz)
+import Data.Drasil.Software.Products (prodtcon, sciCompS)
 import Data.Drasil.Concepts.Software (program, errMsg)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum, twoD, motion)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM, newtonSLR)
+import Data.Drasil.TheoryConcepts (inModel)
 import Data.Drasil.Domains (physics) 
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (mass, len, physicalcon)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variable)
-import Data.Drasil.Concepts.Documentation (assumption, condition, endUser, environment, datum,
-  input_, interface, output_, problem, product_, physical, sysCont, software, softwareConstraint,
-  softwareSys, srsDomains, system, sysCont, user, doccon, doccon', analysis)
+import Data.Drasil.Concepts.Documentation (assumption, condition, endUser, environment, datum, document,
+  input_, interface, output_, organization, problem, product_, physical, sysCont, software, softwareConstraint,
+  softwareSys, srsDomains, system, sysCont, template, user, doccon, doccon', analysis)
 
 import Data.Drasil.Concepts.Computation (inDatum, compcon, inValue, algorithm)
 import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   DerivationDisplay(ShowDerivation),
   DocSection(..),
   Emphasis(Bold), Field(..), Fields, InclUnits(IncludeUnits),
-  IntroSec(..), IntroSub(IPurpose, IScope, IChar), ProblemDescription(PDProg), PDSub(..),
+  IntroSec(..), IntroSub(IPurpose, IScope, IChar, IOrgSec), ProblemDescription(PDProg), PDSub(..),
   RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl,
   SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
   TConvention(..), TSIntro(..), TraceabilitySec(TraceabilityProg), GSDSec(..), GSDSub(..),
@@ -52,7 +54,7 @@ import Drasil.DblPendulum.GenDefs (genDefns, genDefRefs)
 import Drasil.DblPendulum.Unitals (symbols, inputs, outputs,
   inConstraints, outConstraints, acronyms)
 import Drasil.DblPendulum.Requirements (funcReqs, nonFuncReqs, reqRefs)
-import Drasil.DblPendulum.References (citations, citeRefs)
+import Drasil.DblPendulum.References (citations, koothoor2013, smithLai2005, citeRefs)
 
 
 srs :: Document
@@ -80,7 +82,8 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
     IntroProg justification (phrase pendulumTitle) -- This adds an introductory blob before the overview paragraph above.
       [IPurpose $ purpDoc pendulumTitle Verbose,
        IScope scope,
-       IChar [] charsOfReader []],
+       IChar [] charsOfReader [],
+       IOrgSec organizationOfDocumentsIntro inModel (SRS.inModel [] []) EmptyS],
   GSDSec $ 
     GSDProg [
       SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
@@ -134,6 +137,17 @@ charsOfReader = [phrase undergraduate +:+ S "level 2" +:+ phrase Doc.physics,
                  phrase undergraduate +:+ S "level 1" +:+ phrase calculus,
                  plural ode]
 
+-------------------------------------
+-- 2.3 : Organization of Documents --
+-------------------------------------
+
+organizationOfDocumentsIntro :: Sentence
+organizationOfDocumentsIntro = foldlSent 
+  [atStartNP (the organization), S "of this", phrase document, 
+  S "follows the", phrase template, S "for an", getAcc Doc.srs, S "for", 
+  phrase sciCompS, S "proposed by", refS koothoor2013 `S.and_`
+  refS smithLai2005]
+
 pendulumTitle :: CI
 pendulumTitle = commonIdeaWithDict "pendulumTitle" (pn "Pendulum") "Pendulum" [physics]
 
@@ -169,7 +183,7 @@ symbMap = cdb (map qw iMods ++ map qw symbols)
     : nw unitVect : nw unitVectj : [nw errMsg, nw program] ++ map nw symbols ++
    map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw physicCon' ++
    map nw physicscon ++ concepts ++ map nw physicalcon ++ map nw acronyms ++ map nw symbols ++ map nw [metre, hertz] ++
-   [nw algorithm] ++ map nw compcon ++ map nw educon)
+   [nw algorithm] ++ map nw compcon ++ map nw educon ++ map nw prodtcon)
   (map cw iMods ++ srsDomains) (map unitWrapper [metre, second, newton, kilogram, degree, radian, hertz]) dataDefs
   iMods genDefns tMods concIns [] [] allRefs
 

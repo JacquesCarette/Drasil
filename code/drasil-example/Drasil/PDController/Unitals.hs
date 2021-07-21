@@ -90,14 +90,14 @@ ipSetPtUnc = uq ipSetPt defaultUncrt
 qdSetPointTD = qw ipSetPt
 
 ipStepTime
-  = constrained' (dqd stepTime symTStep Real second)
+  = constrained' (ucs' stepTime symTStep Real second)
       [physc $ Bounded (Inc, frac 1 100) (Exc, sy ipSimTime)]
       (dbl 0.01)
 ipStepTimeUnc = uq ipStepTime defaultUncrt
 qdStepTime = qw ipStepTime
 
 ipSimTime
-  = constrained' (dqd simulationTime symTSim Real second)
+  = constrained' (ucs' simulationTime symTSim Real second)
       [physc $ Bounded (Inc, exactDbl 1) (Inc, exactDbl 60)]
       (exactDbl 10)
 ipSimTimeUnc = uq ipSimTime defaultUncrt

@@ -6,8 +6,9 @@ import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil
 import Control.Lens ((^.))
-import Theory.Drasil (TheoryModel, tm, othModel', equationalModel',
-  equationalConstraints', ConstraintSet, mkConstraintSet)
+import Theory.Drasil (ConstraintSet, mkConstraintSet,
+  TheoryModel, tm, equationalModel', equationalConstraints',
+  ModelKind, equationalModel)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
@@ -129,17 +130,19 @@ sensHtEdesc = foldlSent [
 -- Theoretical Model 3 --
 -------------------------
 latentHtE :: TheoryModel
-latentHtE = tm (othModel' latentHtERC)
+latentHtE = tm latentHtEMK
   [qw latentHeat, qw time, qw tau] ([] :: [ConceptChunk])
-  [] [toDispExpr latHtEEqn] [] [dRef latHtESrc] "latentHtE" latentHtENotes
+  [] [toDispExpr latentHtEFD] [] [dRef latHtESrc] "latentHtE" latentHtENotes
 
-latentHtERC :: RelationConcept
-latentHtERC = makeRC "latentHtERC"
-  (nounPhraseSP "Latent heat energy") (latentHeat ^. defn) latHtEEqn
+latentHtEMK :: ModelKind
+latentHtEMK = equationalModel "latentHtETM"
+  (nounPhraseSP "Latent heat energy") latentHtEFD
 
-latHtEEqn :: Relation
-latHtEEqn = apply1 latentHeat time $=
-  defint (eqSymb tau) (exactDbl 0) (sy time) (deriv (apply1 latentHeat tau) tau)
+latentHtEFD :: QDefinition
+latentHtEFD = mkFuncDefByQ latentHeat [time] latentHtEExpr
+
+latentHtEExpr :: Expr
+latentHtEExpr = defint (eqSymb tau) (exactDbl 0) (sy time) (deriv (apply1 latentHeat tau) tau)
 
 -- Integrals need dTau at end
 
@@ -151,7 +154,7 @@ latentHtENotes :: [Sentence]
 latentHtENotes = map foldlSent [
   [ch latentHeat `S.isThe` S "change" `S.in_` phrase thermalEnergy,
    sParen (phrase latentHeat +:+ phrase energy)],
-  [eS latHtEEqn `S.isThe` phrase rOfChng `S.of_` ch latentHeat `S.wrt` 
+  [eS latentHtEFD `S.isThe` phrase rOfChng `S.of_` ch latentHeat `S.wrt` 
    phrase time, ch tau],
   [ch time `S.isThe` phrase time, S "elapsed" `sC` S "as long as the",
    phrase phaseChange, S "is not complete"],
@@ -163,17 +166,20 @@ latentHtENotes = map foldlSent [
 -- Theoretical Model 4 --
 -------------------------
 nwtnCooling :: TheoryModel
-nwtnCooling = tm (othModel' nwtnCoolingRC)
+nwtnCooling = tm nwtnCoolingMK
   [qw latentHeat, qw time, qw htTransCoeff, qw deltaT] ([] :: [ConceptChunk])
-  [] [toDispExpr nwtnCoolingEqn] [] [dRefInfo incroperaEtAl2007 $ Page [8]]
+  [] [toDispExpr nwtnCoolingFD] [] [dRefInfo incroperaEtAl2007 $ Page [8]]
   "nwtnCooling" nwtnCoolingNotes
 
-nwtnCoolingRC :: RelationConcept
-nwtnCoolingRC = makeRC "nwtnCoolingRC" (nounPhraseSP "Newton's law of cooling")
-  EmptyS nwtnCoolingEqn -- nwtnCoolingL
+nwtnCoolingMK :: ModelKind
+nwtnCoolingMK = equationalModel "nwtnCoolingTM"
+  (nounPhraseSP "Newton's law of cooling") nwtnCoolingFD
 
-nwtnCoolingEqn :: Relation
-nwtnCoolingEqn = apply1 htFlux time $= sy htTransCoeff `mulRe` apply1 deltaT time
+nwtnCoolingFD :: QDefinition
+nwtnCoolingFD = mkFuncDefByQ htFlux [time] nwtnCoolingExpr
+
+nwtnCoolingExpr :: Expr
+nwtnCoolingExpr = sy htTransCoeff `mulRe` apply1 deltaT time
 
 nwtnCoolingNotes :: [Sentence]
 nwtnCoolingNotes = map foldlSent [

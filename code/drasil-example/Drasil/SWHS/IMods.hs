@@ -2,7 +2,8 @@ module Drasil.SWHS.IMods (iMods, eBalanceOnWtr, eBalanceOnWtrDerivDesc1,
   eBalanceOnWtrDerivDesc3, eBalanceOnPCM, heatEInWtr, heatEInPCM, instModIntro, iModRefs) where
 
 import Language.Drasil
-import Theory.Drasil (InstanceModel, im, imNoDeriv, qwUC, qwC, deModel', othModel')
+import Theory.Drasil (InstanceModel, im, imNoDeriv, qwC, qwUC, deModel',
+  equationalModel, ModelKind)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.NounPhrase as NP
@@ -316,17 +317,20 @@ eBalanceOnPCMDerivEqnsIM2 = [eBalanceOnPCMEqn1, eBalanceOnPCMEqn2,
 -- IM3 --
 ---------
 heatEInWtr :: InstanceModel
-heatEInWtr = imNoDeriv (othModel'  heatEInWtrRC)
+heatEInWtr = imNoDeriv heatEInWtrMK
   [qwUC tempInit, qwUC wMass, qwUC htCapW, qwUC wMass]
   (qw watE) [] [dRef koothoor2013]
   "heatEInWtr" htWtrNotes
 
-heatEInWtrRC :: RelationConcept
-heatEInWtrRC = makeRC "heatEInWtrRC" (nounPhraseSP "Heat energy in the water")
-  (watE ^. defn) htWtrRel -- heatEInWtrL
+heatEInWtrMK :: ModelKind
+heatEInWtrMK = equationalModel "heatEInWtrIM"
+  (nounPhraseSP "Heat energy in the water") heatEInWtrFD
 
-htWtrRel :: Relation
-htWtrRel = apply1 watE time $= sy htCapW `mulRe` sy wMass `mulRe`
+heatEInWtrFD :: QDefinition
+heatEInWtrFD = mkFuncDefByQ watE [time] htWtrExpr
+
+htWtrExpr :: Expr
+htWtrExpr = sy htCapW `mulRe` sy wMass `mulRe`
   (apply1 tempW time $- sy tempInit)
 
 htWtrNotes :: [Sentence]

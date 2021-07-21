@@ -2,7 +2,7 @@ digraph refvsref {
 	wVol -> tankVol;
 	rocTempSimpRC -> consThermECS;
 	rocTempSimpRC -> rocTempSimpRC;
-	htFluxC -> nwtnCoolingRC;
+	htFluxC -> nwtnCoolingTM;
 	eBalanceOnWtrRC -> tauW;
 	eBalanceOnWtrRC -> rocTempSimpRC;
 	eBalanceOnWtrRC -> htFluxC;
@@ -21,11 +21,11 @@ digraph refvsref {
 
 	consThermECS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];
 	sensHeat	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:sensHtE"];
-	nwtnCoolingRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:nwtnCooling"];
+	nwtnCoolingTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:nwtnCooling"];
 
 	subgraph TM {
 	rank="same"
-	{consThermECS, sensHeat, nwtnCoolingRC}
+	{consThermECS, sensHeat, nwtnCoolingTM}
 	}
 
 	rocTempSimpRC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rocTempSimp"];

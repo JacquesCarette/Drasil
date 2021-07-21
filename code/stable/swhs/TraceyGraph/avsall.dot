@@ -1,7 +1,7 @@
 digraph avsall {
 	wVol -> assumpVCN;
 	consThermECS -> assumpTEO;
-	nwtnCoolingRC -> assumpHTCC;
+	nwtnCoolingTM -> assumpHTCC;
 	rocTempSimpRC -> assumpCWTAT;
 	rocTempSimpRC -> assumpTPCAV;
 	rocTempSimpRC -> assumpDWPCoV;
@@ -86,11 +86,11 @@ digraph avsall {
 	consThermECS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];
 	sensHeat	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:sensHtE"];
 	latentHtETM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:latentHtE"];
-	nwtnCoolingRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:nwtnCooling"];
+	nwtnCoolingTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:nwtnCooling"];
 
 	subgraph TM {
 	rank="same"
-	{consThermECS, sensHeat, latentHtETM, nwtnCoolingRC}
+	{consThermECS, sensHeat, latentHtETM, nwtnCoolingTM}
 	}
 
 	rocTempSimpRC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rocTempSimp"];

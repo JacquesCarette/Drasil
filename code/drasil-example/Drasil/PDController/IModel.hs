@@ -112,7 +112,3 @@ derivEqn4
       ((exactDbl 1 `addRe` sy qdDerivGain) `mulRe` deriv (sy qdProcessVariableTD) time)
       `addRe` ((exactDbl 20 `addRe` sy qdPropGain) `mulRe` sy qdProcessVariableTD)
       $- (sy qdSetPointTD `mulRe` sy qdPropGain) $= exactDbl 0
-
--- References -- 
-iModRefs :: [Reference]
-iModRefs = map ref instanceModels

@@ -1,4 +1,4 @@
-module Drasil.GlassBR.IMods (symb, iMods, pbIsSafe, lrIsSafe, instModIntro, iModRefs) where
+module Drasil.GlassBR.IMods (symb, iMods, pbIsSafe, lrIsSafe, instModIntro) where
 
 import Prelude hiding (exp)
 import Language.Drasil
@@ -73,7 +73,3 @@ pbIsSafeDesc = iModDesc isSafePb
 
 probBRRef :: Sentence
 probBRRef = definedIn probOfBreak
-
--- References -- 
-iModRefs :: [Reference]
-iModRefs = ref willBreakGS: map ref iMods

@@ -44,7 +44,3 @@ morgenstern1965 = cArticle [nrMorgenstern, vePrice]
   "The analysis of the stability of general slip surfaces"
   "Géotechnique" 1965 [month Jan, pages [79..93], number 15]
   "morgenstern1965"
-
--- References --
-citeRefs :: [Reference]
-citeRefs = map ref citations

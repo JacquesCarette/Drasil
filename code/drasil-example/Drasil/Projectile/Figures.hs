@@ -1,4 +1,4 @@
-module Drasil.Projectile.Figures (figLaunch, figRefs) where
+module Drasil.Projectile.Figures (figLaunch) where
 
 import Language.Drasil
 import Utils.Drasil.Concepts (the)
@@ -11,7 +11,3 @@ resourcePath = "../../../datafiles/Projectile/"
 figLaunch :: LabelledContent
 figLaunch = llcc (makeFigRef "Launch") $ figWithWidth (atStartNP (the physicalSystem))
   (resourcePath ++ "Launch.jpg") 70
-
--- References --
-figRefs :: [Reference]
-figRefs = [ref figLaunch]

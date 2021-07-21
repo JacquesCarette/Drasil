@@ -111,7 +111,3 @@ ddCtrlNote
          S "and de-coupled", fromSource aDecoupled,
          S "form of the PD equation is",
          S "used in this document"]
-
--- References --
-dataDefRefs :: [Reference]
-dataDefRefs = map ref dataDefinitions

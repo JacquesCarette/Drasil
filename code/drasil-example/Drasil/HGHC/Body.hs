@@ -1,13 +1,12 @@
 module Drasil.HGHC.Body (srs, si, symbMap, printSetting, fullSI) where
 
-import Data.List (nub)
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 import Drasil.DocLang (DocSection(RefSec, SSDSec), Literature(Lit, Manual), 
     RefSec(..), RefTab(TUnits), DocSection(TableOfContents), TSIntro(SymbConvention, TSPurpose),
     SRSDecl, intro, mkDoc, tsymb, InclUnits(IncludeUnits), Verbosity(Verbose),
     Field(DefiningEquation, Description, Label, Symbol, Units), SolChSpec(SCSProg), 
     SCSSub(DDs), DerivationDisplay(HideDerivation), SSDSub(SSDSolChSpec), 
-    SSDSec(SSDProg), traceMatStandard, getTraceConfigUID, secRefs, fillcdbSRS, traceyGraphGetRefs)
+    SSDSec(SSDProg), fillcdbSRS)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
 import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
   rdb, refdb, _authors, _concepts, _constants, _constraints, _purpose,
@@ -16,7 +15,7 @@ import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
 import qualified Utils.Drasil.Sentence as S
 
 import Drasil.HGHC.HeatTransfer (fp, hghc, dataDefs, htInputs, htOutputs, 
-    nuclearPhys, symbols, htTransCladCoolDD, htTransCladFuelDD)
+    nuclearPhys, symbols)
 
 import Data.Drasil.SI_Units (siUnits, fundamentals, derived, degree)
 import Data.Drasil.People (spencerSmith)
@@ -72,18 +71,8 @@ symbMap :: ChunkDB
 symbMap = cdb symbols (map nw symbols ++ map nw doccon ++ map nw fundamentals ++ map nw derived
   ++ [nw fp, nw nuclearPhys, nw hghc, nw degree] ++ map nw doccon' ++ map nw mathcon)
   ([] :: [ConceptChunk])-- FIXME: Fill in concepts
-  siUnits dataDefs [] [] [] [] [] [] allRefs
+  siUnits dataDefs [] [] [] [] [] [] []
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols)
            ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
-
--- References --
-bodyRefs :: [Reference]
-bodyRefs = map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ traceyGraphGetRefs directoryName
-
-dataDefRefs :: [Reference]
-dataDefRefs = map ref [htTransCladCoolDD, htTransCladFuelDD]
-
-allRefs :: [Reference]
-allRefs = [] --nub (bodyRefs ++ dataDefRefs ++ secRefs)

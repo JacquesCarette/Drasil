@@ -1,5 +1,5 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.GamePhysics.GenDefs (generalDefns, accelGravityGD, impulseGD, genDefRefs) where
+module Drasil.GamePhysics.GenDefs (generalDefns, accelGravityGD, impulseGD) where
 
 import Language.Drasil
 import Utils.Drasil
@@ -162,7 +162,3 @@ impulseExpr = (neg (exactDbl 1 `addRe` sy QP.restitutionCoef) `mulRe` sy initRel
 impulseSrc :: Reference
 impulseSrc = makeURI "impulseSrc" "http://www.chrishecker.com/images/e/e7/Gdmphys3.pdf" $
   shortname' $ S "Impulse for Collision Ref"
-
--- References --
-genDefRefs :: [Reference]
-genDefRefs = map ref generalDefns ++ map ref [impulseSrc, accelGravitySrc]

@@ -21,7 +21,3 @@ likeChgPPDesc
       [atStartNP (the mass) `sC` phraseNP (ccDampingCoeff `andThe` ccStiffCoeff),
        S "may be changed to be supplied by the user", 
        fromSources [aMass, aDampingCoeff, aStiffnessCoeff]]
-
--- References --
-chgRefs :: [Reference]
-chgRefs = map ref likelyChgs

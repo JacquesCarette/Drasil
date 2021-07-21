@@ -1,6 +1,5 @@
 module Drasil.PDController.Body (pidODEInfo, printSetting, si, srs, fullSI) where
 
-import Data.List (nub)
 import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.Concepts.Math (mathcon, mathcon', ode)
@@ -27,8 +26,7 @@ import Drasil.DocLang
         RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..),
         SRSDecl, SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec),
         SolChSpec(SCSProg), TSIntro(..), TraceabilitySec(TraceabilityProg),
-        Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, getTraceConfigUID,
-        secRefs, fillcdbSRS, traceyGraphGetRefs)
+        Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, fillcdbSRS)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 
 import Language.Drasil
@@ -36,26 +34,26 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, 
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import qualified Utils.Drasil.Sentence as S
 
-import Drasil.PDController.Assumptions (assumptions, assumpRefs)
-import Drasil.PDController.Changes (likelyChgs, chgRefs)
+import Drasil.PDController.Assumptions (assumptions)
+import Drasil.PDController.Changes (likelyChgs)
 import Drasil.PDController.Concepts (acronyms, pidControllerSystem,
   pidC, concepts, defs)
-import Drasil.PDController.DataDefs (dataDefinitions, dataDefRefs)
-import Drasil.PDController.GenDefs (genDefns, genDefRefs)
+import Drasil.PDController.DataDefs (dataDefinitions)
+import Drasil.PDController.GenDefs (genDefns)
 import Drasil.PDController.GenSysDesc
        (gsdSysContextFig, gsdSysContextList, gsdSysContextP1, gsdSysContextP2,
-        gsduserCharacteristics, figRefs)
-import Drasil.PDController.IModel (instanceModels, imPD, iModRefs)
+        gsduserCharacteristics)
+import Drasil.PDController.IModel (instanceModels, imPD)
 import Drasil.PDController.IntroSection
        (introDocOrg, introPara, introPurposeOfDoc, introUserChar1,
         introUserChar2, introscopeOfReq)
-import Drasil.PDController.References (citations, citeRefs)
-import Drasil.PDController.Requirements (funcReqs, nonfuncReqs, reqRefs)
+import Drasil.PDController.References (citations)
+import Drasil.PDController.Requirements (funcReqs, nonfuncReqs)
 import Drasil.PDController.SpSysDesc
-       (goals, sysFigure, sysGoalInput, sysParts, sysProblemDesc, sysDescRefs)
-import Drasil.PDController.TModel (theoreticalModels, tModRefs)
+       (goals, sysFigure, sysGoalInput, sysParts, sysProblemDesc)
+import Drasil.PDController.TModel (theoreticalModels)
 import Drasil.PDController.Unitals (symbols, inputs, outputs, inputsUC,
-  inpConstrained, pidConstants, pidDqdConstants )
+  inpConstrained, pidConstants, pidDqdConstants)
 import Drasil.PDController.ODEs (pidODEInfo)
 
 naveen :: Person
@@ -157,7 +155,7 @@ symbMap
       conceptInstances
       ([] :: [Section])
       ([] :: [LabelledContent])
-      allRefs
+      ([] :: [Reference])
 
 usedDB :: ChunkDB
 usedDB
@@ -182,12 +180,3 @@ conceptInstances = assumptions ++ goals ++ funcReqs ++ nonfuncReqs ++ likelyChgs
 stdFields :: Fields
 stdFields
   = [DefiningEquation, Description Verbose IncludeUnits, Notes, Source, RefBy]
-
--- References --
-bodyRefs :: [Reference]
-bodyRefs = map ref conceptInstances ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ traceyGraphGetRefs directoryName
-
-allRefs :: [Reference]
-allRefs = figRefs -- nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ sysDescRefs ++ dataDefRefs ++ genDefRefs
-  -- ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs)
-

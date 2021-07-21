@@ -1,7 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.Projectile.Assumptions (accelYGravity, accelXZero, cartSyst,
   assumptions, constAccel, gravAccelValue, launchOrigin, pointMass, 
-  posXDirection, targetXAxis, timeStartZero, twoDMotion, yAxisGravity, assumpRefs) where
+  posXDirection, targetXAxis, timeStartZero, twoDMotion, yAxisGravity) where
 
 import Language.Drasil
 import Utils.Drasil
@@ -94,7 +94,3 @@ gravAccelValueDesc :: Sentence
 gravAccelValueDesc = atStartNP (the acceleration) +:+ S "due to" +:+
   phrase gravity +:+ S "is assumed to have the" +:+ phrase value +:+ 
   S "provided in the section for" +:+. namedRef (SRS.valsOfAuxCons [] []) (titleize consVals)
-
--- References --
-assumpRefs :: [Reference]
-assumpRefs = map ref assumptions

@@ -1,4 +1,4 @@
-module Drasil.GlassBR.TMods (tMods, pbIsSafe, lrIsSafe, tModRefs) where
+module Drasil.GlassBR.TMods (tMods, pbIsSafe, lrIsSafe) where
 
 import Language.Drasil
 import Theory.Drasil (TheoryModel, tm, equationalModel')
@@ -52,7 +52,3 @@ pbIsSafeDesc = tModDesc isSafeProb
 
 tModDesc :: QuantityDict -> Sentence
 tModDesc main = S "If" +:+. (ch main `sC` S "the structure is considered safe")
-
--- References --
-tModRefs :: [Reference]
-tModRefs = map ref tMods

@@ -3,7 +3,6 @@ module Drasil.PDController.Requirements where
 
 import Data.Drasil.Concepts.Documentation (funcReqDom, nonFuncReqDom, datumConstraint)
 
-import Drasil.DocLang (inReq)
 import Drasil.DocLang.SRS (datCon)
 
 import Drasil.PDController.Concepts
@@ -77,9 +76,3 @@ verifiability
       (S "The code shall be verifiable against a Verification and Validation plan" !.)
       "Verifiable"
       nonFuncReqDom
-
--- References --
-reqRefs :: [Reference]
-reqRefs = ref (datCon ([]::[Contents]) ([]::[Section])): 
-  map ref ([inReq EmptyS] ++ funcReqs ++ nonfuncReqs)
-

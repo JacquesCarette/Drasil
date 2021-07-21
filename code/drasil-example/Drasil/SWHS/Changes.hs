@@ -1,5 +1,5 @@
 module Drasil.SWHS.Changes (likelyChgs, likeChgTCVOD, likeChgTCVOL,
-  likeChgTLH, unlikelyChgs, chgRefs) where
+  likeChgTLH, unlikelyChgs) where
 
 import Language.Drasil
 import Utils.Drasil
@@ -83,8 +83,3 @@ unlikeChgNGS = cic "unlikeChgNGS" (
   foldlSent [chgsStart assumpNGSP (S "Is used for the derivation of"), refS eBalanceOnPCM,
   S "and for the equation given by", refS heatEInPCM, S "to be valid"] )
   "No-Gaseous-State" unlikeChgDom
-
--- References --
-chgRefs :: [Reference]
-chgRefs = map ref (likelyChgs ++ unlikelyChgs)
-  ++ map ref [heatEInPCM, eBalanceOnPCM, eBalanceOnWtr]

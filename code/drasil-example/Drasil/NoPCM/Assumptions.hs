@@ -81,7 +81,3 @@ assumpS13 =
 
 assumpAPT = cic "assumpAPT" assumpS13
   "Atmospheric-Pressure-Tank" assumpDom
-
--- References --
-assumpRefs :: [Reference]
-assumpRefs = map ref assumptions

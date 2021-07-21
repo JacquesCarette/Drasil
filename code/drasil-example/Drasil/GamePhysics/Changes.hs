@@ -1,5 +1,5 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs, chgRefs) where
+module Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs) where
 
 --A list of likely and unlikely changes for GamePhysics
 
@@ -66,7 +66,3 @@ ucORB = cic "ucORB" unlikelyChangesStmt4 "Objects-Rigid-Bodies" unlikeChgDom
   
 unlikelyChgs :: [ConceptInstance]
 unlikelyChgs = [ucSRB, ucEI, ucCCS, ucORB]
-
--- References --
-chgRefs :: [Reference]
-chgRefs = map ref (likelyChgs ++ unlikelyChgs)

@@ -1,4 +1,4 @@
-module Drasil.Projectile.Goals (goals, goalRefs) where
+module Drasil.Projectile.Goals (goals) where
 
 import Language.Drasil
 
@@ -13,7 +13,3 @@ targetHit :: ConceptInstance
 targetHit = cic "targetHit" 
   (S "Determine if the" +:+ phrase projectile +:+ S "hits the" +:+. phrase target)
   "targetHit" goalStmtDom
-
--- References --
-goalRefs :: [Reference]
-goalRefs = map ref goals

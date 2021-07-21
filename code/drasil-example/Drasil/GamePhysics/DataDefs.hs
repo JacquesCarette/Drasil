@@ -1,7 +1,7 @@
 module Drasil.GamePhysics.DataDefs (dataDefs, ctrOfMassDD, linDispDD, linVelDD,
   linAccDD, angDispDD, angVelDD, angAccelDD, torqueDD, kEnergyDD,
   coeffRestitutionDD, reVelInCollDD, impulseVDD, momentOfInertiaDD,
-  collisionAssump, rightHandAssump, rigidTwoDAssump, potEnergyDD, dataDefRefs) where
+  collisionAssump, rightHandAssump, rigidTwoDAssump, potEnergyDD,) where
 
 import Language.Drasil
 import Theory.Drasil (DataDefinition, dd, ddNoRefs)
@@ -355,7 +355,3 @@ rightHandAssump = S "A" +:+ phrase rightHand `S.is` S "used" +:+. fromSource ass
 rigidBodyAssump = S "All bodies are assumed to be rigid" +:+. fromSource assumpOT
 rigidTwoDAssump = foldlSent [S "All bodies are assumed to be rigid",
   fromSource assumpOT `S.and_` phrase twoD, fromSource assumpOD]
-
--- References --
-dataDefRefs :: [Reference]
-dataDefRefs = map ref dataDefs

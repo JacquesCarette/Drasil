@@ -2,7 +2,6 @@
 module Drasil.GlassBR.Body where
 
 import Control.Lens ((^.))
-import Data.List (nub)
 import Language.Drasil hiding (organization, section, variable)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
 import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI),
@@ -21,8 +20,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   SolChSpec(..), StkhldrSec(..), StkhldrSub(Client, Cstmr),
   TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, TSPurpose),
   Verbosity(Verbose), auxSpecSent, intro, mkDoc,
-  termDefnF', tsymb, traceMatStandard, purpDoc, getTraceConfigUID,
-  secRefs, fillcdbSRS, traceyGraphGetRefs)
+  termDefnF', tsymb, traceMatStandard, purpDoc, fillcdbSRS)
 
 import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
 
@@ -50,19 +48,19 @@ import Data.Drasil.People (mCampidelli, nikitha, spencerSmith)
 import Data.Drasil.SI_Units (kilogram, metre, newton, pascal, second, fundamentals,
   derived)
 
-import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions, assumpRefs)
-import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs, chgRefs)
+import Drasil.GlassBR.Assumptions (assumptionConstants, assumptions)
+import Drasil.GlassBR.Changes (likelyChgs, unlikelyChgs)
 import Drasil.GlassBR.Concepts (acronyms, blastRisk, glaPlane, glaSlab, glassBR, 
   ptOfExplsn, con, con', glass)
-import Drasil.GlassBR.DataDefs (qDefns, configFp, dataDefRefs)
+import Drasil.GlassBR.DataDefs (qDefns, configFp)
 import qualified Drasil.GlassBR.DataDefs as GB (dataDefs)
 import Drasil.GlassBR.Figures
-import Drasil.GlassBR.Goals (goals, goalRefs)
-import Drasil.GlassBR.IMods (symb, iMods, instModIntro, iModRefs)
-import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations, rbrtsn2012, citeRefs)
-import Drasil.GlassBR.Requirements (funcReqs, inReqDesc, funcReqsTables, nonfuncReqs, reqRefs)
+import Drasil.GlassBR.Goals (goals)
+import Drasil.GlassBR.IMods (symb, iMods, instModIntro)
+import Drasil.GlassBR.References (astm2009, astm2012, astm2016, citations, rbrtsn2012)
+import Drasil.GlassBR.Requirements (funcReqs, inReqDesc, funcReqsTables, nonfuncReqs)
 import Drasil.GlassBR.Symbols (symbolsForTable, thisSymbols)
-import Drasil.GlassBR.TMods (tMods, tModRefs)
+import Drasil.GlassBR.TMods (tMods)
 import Drasil.GlassBR.Unitals (blast, blastTy, bomb, explosion, constants,
   constrained, inputDataConstraints, inputs, outputs, specParamVals, glassTy,
   glassTypes, glBreakage, lateralLoad, load, loadTypes, pbTol, probBr, stressDistFac, probBreak,
@@ -388,10 +386,5 @@ blstRskInvWGlassSlab = phrase blastRisk +:+ S "involved with the" +:+
   phrase glaSlab
 
 -- References --
-bodyRefs :: [Reference]
-bodyRefs = map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si)
-  ++ map ref concIns ++ map ref section ++ map ref labCon ++ traceyGraphGetRefs directoryName
-
 allRefs :: [Reference]
-allRefs = map ref [sysCtxFig, demandVsSDFig, dimlessloadVsARFig] ++ figRefs ++ citeRefs --nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ goalRefs ++ dataDefRefs
-  -- ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs)
+allRefs = map ref [astm2009, astm2016] -- FIXME: should be automatically included since citations are in the ReferenceDB.

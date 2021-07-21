@@ -1,4 +1,4 @@
-module Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, inReqDesc, nonfuncReqs, reqRefs) where
+module Drasil.GlassBR.Requirements (funcReqs, funcReqsTables, inReqDesc, nonfuncReqs) where
 
 import Control.Lens ((^.))
 
@@ -128,13 +128,4 @@ maintainable = cic "maintainable" (foldlSent [
 portable :: ConceptInstance
 portable = cic "portable" (foldlSent [
   atStartNP (the code), S "is able to be run in different", plural environment])
-  "Portable" nonFuncReqDom
-
--- References --
-reqRefs :: [Reference]
-reqRefs = map ref funcReqsTables
-  ++ map ref [datCon ([]::[Contents]) ([]::[Section]), propCorSol [] []]
-  ++ map ref ([inReq EmptyS] ++ funcReqs ++ nonfuncReqs) ++ map ref [pbIsSafe, lrIsSafe]
-  ++ map ref [loadDF, hFromt, glaTyFac, standOffDis, aspRat]
-  ++ map ref [risk, strDisFac, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac, hFromt, aspRat]
-  
+  "Portable" nonFuncReqDom  

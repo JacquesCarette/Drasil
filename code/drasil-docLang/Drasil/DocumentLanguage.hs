@@ -27,7 +27,7 @@ import Utils.Drasil
 import Database.Drasil(ChunkDB, SystemInformation(SI), _authors, _kind,
   _quants, _sys, _folderPath, _sysinfodb, _usedinfodb, ccss, ccss', citeDB, collectUnits,
   termTable, conceptinsTable, idMap, refbyTable, conceptDB,
-  citationDB, refTable, labelledcontentTable, sectionTable, theoryModelTable,
+  refTable, labelledcontentTable, sectionTable, theoryModelTable,
   insmodelTable, gendefTable, dataDefnTable, folderPath, refdb, sysinfodb, traceTable,
   generateRefbyMap)
 
@@ -110,7 +110,7 @@ fillReferences dd si = si2
     concIns = map (fst.snd) $ Map.assocs $ chkdb ^. conceptinsTable
     secs    = map (fst.snd) $ Map.assocs $ chkdb ^. sectionTable
     lblCon  = map (fst.snd) $ Map.assocs $ chkdb ^. labelledcontentTable
-    cites   = map (fst.snd) $ Map.assocs $ rfdb  ^. citationDB
+    cites   = citeDB si -- map (fst.snd) $ Map.assocs $ rfdb  ^. citationDB
     conins  = map (fst.snd) $ Map.assocs $ rfdb  ^. conceptDB
     -- search the old reference table just in case the user wants to manually add in some references
     refs    = map (fst.snd) $ Map.assocs $ chkdb ^. refTable

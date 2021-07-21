@@ -188,6 +188,12 @@ The scope of the requirements includes the analysis of a two-dimensional (2D) pe
 \label{Sec:ReaderChars}
 Reviewers of this documentation should have an understanding of undergraduate level 2 physics, undergraduate level 1 calculus, and ordinary differential equations. The users of Pendulum can have a lower level of expertise, as explained in \hyperref[Sec:UserChars]{Sec:User Characteristics}.
 
+\subsection{Organization of Document}
+\label{Sec:DocOrg}
+The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{koothoor2013} and \cite{smithLai2005}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the \hyperref[Sec:IMs]{instance models} and trace back to find any additional information they require.
+
+The \hyperref[Sec:GoalStmt]{goal statements} are refined to the theoretical models and the \hyperref[Sec:TMs]{theoretical models} to the \hyperref[Sec:IMs]{instance models}.
+
 \section{Specific System Description}
 \label{Sec:SpecSystDesc}
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
@@ -1375,6 +1381,12 @@ author={Hibbeler, R. C.},
 title={Engineering Mechanics: Dynamics},
 publisher={Pearson Prentice Hall},
 year={2004}}
+@mastersthesis{koothoor2013,
+author={Koothoor, Nirmitha},
+title={A document drive approach to certifying scientific computing software},
+school={McMaster University},
+year={2013},
+address={Hamilton, ON, Canada}}
 @article{parnasClements1986,
 author={Parnas, David L. and Clements, P. C.},
 title={A rational design process: How and why to fake it},
@@ -1385,6 +1397,15 @@ volume={12},
 number={2},
 pages={251--257},
 address={Washington, USA}}
+@inproceedings{smithLai2005,
+author={Smith, W. Spencer and Lai, Lei},
+title={A new requirements template for scientific computing},
+booktitle={Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05},
+year={2005},
+editor={Agerfalk, PJ and Kraiem, N. and Ralyte, J.},
+address={Paris, France},
+pages={107--121},
+note={In conjunction with 13th IEEE International Requirements Engineering Conference,}}
 @misc{accelerationWiki,
 author={Wikipedia Contributors},
 title={Acceleration},

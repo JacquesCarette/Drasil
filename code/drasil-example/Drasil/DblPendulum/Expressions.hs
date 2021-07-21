@@ -9,7 +9,7 @@ import Data.Drasil.Quantities.Physics(xPos, yPos, velocity, angularVelocity, xVe
     momentOfInertia, period, position)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import qualified Data.Drasil.Quantities.Math as QM (pi_)
-import Drasil.DblPendulum.Unitals (lenRod, pendDisplacementAngle)
+import Drasil.DblPendulum.Unitals (lenRod, pendDisplacementAngle, initialPendAngle)
 
 -- Velocity IX/IY
 velocityIXExpr, velocityIYExpr :: Expr
@@ -87,3 +87,21 @@ periodPendDerivEqns = [periodPendDerivEqn1, periodPendDerivEqn2]
 periodPendDerivEqn1, periodPendDerivEqn2 :: Expr
 periodPendDerivEqn1 = sy angularFrequency $= sqrt (sy gravitationalAccel $/ sy lenRod)
 periodPendDerivEqn2 = sy period $= exactDbl 2 `mulRe` sy QM.pi_ `mulRe` sqrt (sy lenRod $/ sy gravitationalAccel)
+
+-- Angular Displacement
+angularDisplacementExpr :: Expr
+angularDisplacementExpr = sy initialPendAngle `mulRe` cos (sy angularFrequency `mulRe` sy time)
+
+angularDisplacementDerivEqns :: [Expr]
+angularDisplacementDerivEqns = [angularDisplacementDerivEqn1, angularDisplacementDerivEqn2, angularDisplacementDerivEqn3,
+                                 angularDisplacementDerivEqn4, angularDisplacementDerivEqn5]
+
+angularDisplacementDerivEqn1, angularDisplacementDerivEqn2, angularDisplacementDerivEqn3,
+ angularDisplacementDerivEqn4, angularDisplacementDerivEqn5 :: Expr
+angularDisplacementDerivEqn1 = sy torque $= sy momentOfInertia `mulRe` sy angularAccel
+angularDisplacementDerivEqn2 = neg (sy mass `mulRe` sy gravitationalAccel `mulRe` sin (sy pendDisplacementAngle) `mulRe` sy lenRod) $= (sy mass `mulRe` square (sy lenRod))
+                                `mulRe` deriv (deriv (sy pendDisplacementAngle) time) time
+angularDisplacementDerivEqn3 = deriv (deriv (sy pendDisplacementAngle) time) time `addRe` ((sy gravitationalAccel $/ sy lenRod) `mulRe` sin (sy pendDisplacementAngle)) $= exactDbl 0
+angularDisplacementDerivEqn4 = deriv (deriv (sy pendDisplacementAngle) time) time `addRe` ((sy gravitationalAccel $/ sy lenRod) `mulRe` sy pendDisplacementAngle) $= exactDbl 0
+angularDisplacementDerivEqn5 = apply1 pendDisplacementAngle time $= sy initialPendAngle `mulRe` cos ( sy angularFrequency `mulRe` sy time)
+

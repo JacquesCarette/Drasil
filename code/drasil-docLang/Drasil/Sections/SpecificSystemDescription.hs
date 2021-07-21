@@ -13,6 +13,8 @@ module Drasil.Sections.SpecificSystemDescription
   , datConF
   , inDataConstTbl, outDataConstTbl, propCorSolF, auxSpecSent
   , tInDataCstRef, tOutDataCstRef
+  , helperCI
+  , tmStub, ddStub, imStub, pdStub
   ) where
 
 import Language.Drasil hiding (variable)
@@ -29,12 +31,12 @@ import Data.Drasil.Concepts.Documentation (assumption, column, constraint, corSo
   symbol_, system, theory, typUnc, uncertainty, user, value, variable, table_, problemDescription)
 import qualified Data.Drasil.Concepts.Documentation as DCD (sec)
 import Data.Drasil.Concepts.Math (equation, parameter)
-
 import Data.Drasil.TheoryConcepts (inModel, thModel, dataDefn, genDefn)
-
+import Database.Drasil(SystemInformation)
+import Drasil.DocumentLanguage.Definitions (helperRefs)
 import qualified Drasil.DocLang.SRS as SRS
 
-import Control.Lens ((^.))
+import Control.Lens ((^.), over)
 import Data.Maybe
 
 -- Takes the system and subsections.
@@ -263,3 +265,18 @@ propsIntro = foldlSP_ [outputTableSent, physConsSent]
 outputTableSent :: Sentence
 outputTableSent = foldlSent [S "The", namedRef (outDataConstTbl ([] :: [UncertQ])) $ titleize' datumConstraint +:+ titleize table_, S "shows the",
   pluralNP (datumConstraint `onThePS` output_), plural variable]
+
+-- | Helper for making a 'ConceptInstance' with a reference to the system information.
+-- Used to find where a particular assumption is referenced.
+helperCI :: ConceptInstance -> SystemInformation -> ConceptInstance
+helperCI a c = over defn (\x -> foldlSent_ [x, refby $ helperRefs a c]) a
+  where
+    refby EmptyS = EmptyS
+    refby sent   = sParen $ S "RefBy:" +:+. sent
+
+-- | Section stubs for implicit referencing of different models and definitions.
+tmStub, ddStub, imStub, pdStub :: Section
+tmStub = SRS.thModel   [] []
+ddStub = SRS.dataDefn  [] []
+imStub = SRS.inModel   [] []
+pdStub = SRS.probDesc  [] []

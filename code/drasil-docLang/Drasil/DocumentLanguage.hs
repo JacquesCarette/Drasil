@@ -10,18 +10,17 @@ module Drasil.DocumentLanguage where
 import Drasil.DocDecl (SRSDecl, mkDocDesc)
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   DerivationDisplay(..), DocDesc, DocSection(..), OffShelfSolnsSec(..), GSDSec(..),
-  GSDSub(..), IntroSec(..), IntroSub(..), LCsSec(..), LFunc(..), Literature(..),
+  GSDSub(..), IntroSec(..), IntroSub(..), LCsSec(..), LFunc(..),
   PDSub(..), ProblemDescription(..), RefSec(..), RefTab(..), ReqrmntSec(..),
   ReqsSub(..), SCSSub(..), StkhldrSec(..), StkhldrSub(..), SolChSpec(..),
-  SSDSec(..), SSDSub(..), TConvention(..), TraceabilitySec(..), TraceConfig(..),
-  TSIntro(..), TUIntro(..), UCsSec(..))
+  SSDSec(..), SSDSub(..), TraceabilitySec(..), TraceConfig(..),
+  TSIntro(..), UCsSec(..))
 import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
-  gdefn, tmodel, helperRefs)
+  gdefn, tmodel)
 import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
 import Drasil.TraceTable (generateTraceMap)
 
-import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
-                                             -- Vector - Name conflict (defined in file)
+import Language.Drasil
 import Language.Drasil.Display (compsy)
 import Utils.Drasil
 
@@ -30,12 +29,12 @@ import Database.Drasil(ChunkDB, SystemInformation(SI), _authors, _kind,
   conceptinsTable, generateRefbyMap, idMap, refbyTable, termTable, traceTable)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
-import Drasil.Sections.TableOfContents (toToC)
-import Drasil.Sections.TableOfSymbols (table, symbTableRef)
-import Drasil.Sections.TableOfUnits (tOfUnitDesc, tOfUnitSIName, unitTableRef)
-import qualified Drasil.DocLang.SRS as SRS (appendix, dataDefn, genDefn,
-  genSysDes, inModel, likeChg, unlikeChg, probDesc, reference, solCharSpec,
-  stakeholder, thModel, tOfCont, tOfSymb, tOfUnit, userChar, offShelfSol, refMat,
+import Drasil.Sections.TableOfContents (toToC, findToC)
+import Drasil.Sections.TableOfSymbols (table, tsIntro)
+import Drasil.Sections.TableOfUnits (tOfUnitSIName, tuIntro, defaultTUI)
+import qualified Drasil.DocLang.SRS as SRS (appendix, genDefn,
+  genSysDes, likeChg, unlikeChg, reference, solCharSpec,
+  stakeholder, tOfCont, tOfSymb, tOfUnit, userChar, offShelfSol, refMat,
   tOfAbbAcc)
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysIntro,
@@ -45,7 +44,8 @@ import qualified Drasil.Sections.Introduction as Intro (charIntRdrF,
 import qualified Drasil.Sections.Requirements as R (reqF, fReqF, nfReqF)
 import qualified Drasil.Sections.SpecificSystemDescription as SSD (assumpF,
   datConF, dataDefnF, genDefnF, goalStmtF, inModelF, physSystDesc, probDescF,
-  propCorSolF, solutionCharSpecIntro, specSysDescr, termDefnF, thModF)
+  propCorSolF, solutionCharSpecIntro, specSysDescr, termDefnF, thModF, helperCI,
+  tmStub, ddStub, imStub, pdStub)
 import qualified Drasil.Sections.Stakeholders as Stk (stakeholderIntro,
   tClientF, tCustomerF)
 import qualified Drasil.DocumentLanguage.TraceabilityMatrix as TM (
@@ -53,10 +53,10 @@ import qualified Drasil.DocumentLanguage.TraceabilityMatrix as TM (
 import qualified Drasil.DocumentLanguage.TraceabilityGraph as TG (traceMGF)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
-  software, unlikelyChg, tOfSymb, tOfUnit)
+  software, unlikelyChg)
 
 
-import Control.Lens ((^.), over, set)
+import Control.Lens ((^.), set)
 import Data.Function (on)
 import Data.List (nub, sortBy, sortOn)
 import qualified Data.Map as Map (elems, toList)
@@ -96,13 +96,6 @@ fillReqs (_:xs) si = fillReqs xs si
 extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]
 extractUnits dd cdb = collectUnits cdb $ ccss' (getDocDesc dd) (egetDocDesc dd) cdb
 
--- Find more concise way to do this
--- | Finds whether the Table of Contents is in a SRSDecl.
-findToC :: [DocSection] -> ShowTableOfContents
-findToC [] = NoToC
-findToC (TableOfContents:_) = ToC
-findToC (_:dds) = findToC dds
-
 ----- Section creators -----
 
 -- | Helper for creating the different document sections.
@@ -125,11 +118,15 @@ mkSections si dd = map doit dd
     doit (AppndxSec a)        = mkAppndxSec a
     doit (OffShelfSolnsSec o) = mkOffShelfSolnSec o
 
+{--}
+
 -- | Helper for making the Table of Contents section.
 mkToC :: DocDesc -> Section
 mkToC dd = SRS.tOfCont [intro, UlC $ ulcc $ Enumeration $ Bullet $ map ((, Nothing) . toToC) dd] []
   where
     intro = mkParagraph $ S "An outline of all sections included in this SRS is recorded here for easy reference."
+
+{--}
 
 -- | Helper for creating the reference section and subsections.
 -- Includes Table of Symbols, Units and Abbreviations and Acronyms.
@@ -159,13 +156,6 @@ mkRefSec si dd (RefProg c l) = SRS.refMat [c] (map (mkSubRef si) l)
     mkSubRef SI {_usedinfodb = db} TAandA =
       SRS.tOfAbbAcc [LlC $ tableAbbAccGen $ nub $ map fst $ Map.elems $ termTable db] []
 
--- | Table of units constructors.
-tunit, tunit' :: [TUIntro] -> RefTab
--- | Table of units with an SI Name.
-tunit  t = TUnits' t tOfUnitSIName
--- | Table of units with SI name in the description column.
-tunit' t = TUnits' t tOfUnitDesc
-
 -- | Helper for creating the table of symbols.
 mkTSymb :: (Quantity e, Concept e, Eq e, MayHaveUnit e) =>
   [e] -> LFunc -> [TSIntro] -> Section
@@ -183,67 +173,7 @@ mkTSymb v f c = SRS.tOfSymb [tsIntro c,
           atStart x else capSent (x ^. defn)
         lf TAD = \tDef -> titleize tDef +: EmptyS +:+. capSent (tDef ^. defn)
 
--- | Table of symbols constructor.
-tsymb, tsymb' :: [TSIntro] -> RefTab
--- | Default is term and given introduction.
-tsymb = TSymb
--- | Similar to 'tsymb', but has a default Defn for the LFunc type. Still has a given introduction.
-tsymb' = TSymb' Defn
-
--- | Table of symbols constructor. Takes a custom function and introduction.
-tsymb'' :: [TSIntro] -> LFunc -> RefTab
-tsymb'' intro lfunc = TSymb' lfunc intro
-
--- | Table of symbols introduction builder. Used by 'mkRefSec'.
-tsIntro :: [TSIntro] -> Contents
-tsIntro x = mkParagraph $ foldr ((+:+) . tsI) EmptyS x
-
--- | Table of symbols intro writer. Translates a 'TSIntro' to a list in a 'Sentence'.
-tsI :: TSIntro -> Sentence
-tsI (TypogConvention ts) = typogConvention ts
-tsI SymbOrder = S "The symbols are listed in alphabetical order."
-tsI (SymbConvention ls) = symbConvention ls
-tsI TSPurpose = S "The symbols used in this document are summarized in the" +:+
-  namedRef symbTableRef (titleize' Doc.tOfSymb) +:+. S "along with their units"
-tsI VectorUnits = S "For vector quantities, the units shown are for each component of the vector."
-
--- | Typographic convention writer. Translates a list of typographic conventions ('TConvention's)
--- to a 'Sentence'.
-typogConvention :: [TConvention] -> Sentence
-typogConvention [] = error "No arguments given for typographic conventions"
-typogConvention ts = S "Throughout the document," +:+. foldlList Comma List (map tcon ts)
-  where tcon (Vector emph) = S ("symbols in " ++ show emph ++
-                                " will represent vectors, and scalars otherwise")
-        tcon (Verb s) = s
-
--- | Symbolic convention writer.
-symbConvention :: [Literature] -> Sentence
-symbConvention [] = error "Attempting to reference no literature for SymbConvention"
-symbConvention scs = S "The choice of symbols was made to be consistent with the" +:+.
-                      makeSentence (map scon scs)
-  where makeSentence [x,y] = x +:+ S "and with" +:+ y
-        makeSentence xs    = foldlList Comma List xs
-        scon (Lit x)       = phrase x +:+ S "literature"
-        scon (Doc x)       = S "existing documentation for" +:+ phrase x
-        scon (Doc' x)      = S "existing documentation for" +:+ plural x
-        scon (Manual x)    = S "that used in the" +:+ phrase x +:+ S "manual"
-
--- | Table of units introduction builder. Used by 'mkRefSec'.
-tuIntro :: [TUIntro] -> Contents
-tuIntro x = mkParagraph $ foldr ((+:+) . tuI) EmptyS x
-
--- | Table of units introduction writer. Translates a 'TUIntro' to a 'Sentence'.
-tuI :: TUIntro -> Sentence
-tuI System  = 
-  S "The unit system used throughout is SI (Système International d'Unités)."
-tuI TUPurpose = 
-  S "For each unit" `sC` S "the" +:+ namedRef unitTableRef (titleize' Doc.tOfUnit) +:+. S "lists the symbol, a description and the SI name"
-tuI Derived = 
-  S "In addition to the basic units, several derived units are also used."
-
--- | Default table of units intro that contains the system, derivation, and purpose.
-defaultTUI :: [TUIntro]
-defaultTUI = [System, Derived, TUPurpose]
+{--}
 
 -- | Makes the Introduction section into a 'Section'.
 mkIntroSec :: SystemInformation -> IntroSec -> Section
@@ -258,6 +188,8 @@ mkIntroSec si (IntroProg probIntro progDefn l) =
     mkSubIntro _ (IOrgSec i b s t) = Intro.orgSec i b s t
     -- FIXME: s should be "looked up" using "b" once we have all sections being generated
 
+{--}
+
 -- | Helper for making the Stakeholders section.
 mkStkhldrSec :: StkhldrSec -> Section
 mkStkhldrSec (StkhldrProg l) = SRS.stakeholder [Stk.stakeholderIntro] $ map mkSubs l
@@ -265,6 +197,8 @@ mkStkhldrSec (StkhldrProg l) = SRS.stakeholder [Stk.stakeholderIntro] $ map mkSu
     mkSubs :: StkhldrSub -> Section
     mkSubs (Client kWrd details) = Stk.tClientF kWrd details
     mkSubs (Cstmr kWrd)          = Stk.tCustomerF kWrd
+
+{--}
 
 -- | Helper for making the General System Description section.
 mkGSDSec :: GSDSec -> Section
@@ -274,6 +208,8 @@ mkGSDSec (GSDProg l) = SRS.genSysDes [GSD.genSysIntro] $ map mkSubs l
      mkSubs (SysCntxt cs)            = GSD.sysContxt cs
      mkSubs (UsrChars intro)         = GSD.usrCharsF intro
      mkSubs (SystCons cntnts subsec) = GSD.systCon cntnts subsec
+
+{--}
 
 -- | Helper for making the Specific System Description section.
 mkSSDSec :: SystemInformation -> SSDSec -> Section
@@ -294,7 +230,7 @@ mkSSDProb _ (PDProg prob subSec subPD) = SSD.probDescF prob (subSec ++ map mkSub
 -- | Helper for making the Solution Characteristics Specification section.
 mkSolChSpec :: SystemInformation -> SolChSpec -> Section
 mkSolChSpec si (SCSProg l) =
-  SRS.solCharSpec [SSD.solutionCharSpecIntro (siSys si) imStub] $
+  SRS.solCharSpec [SSD.solutionCharSpecIntro (siSys si) SSD.imStub] $
     map (mkSubSCS si) l
   where
     mkSubSCS :: SystemInformation -> SCSSub -> Section
@@ -313,31 +249,19 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS si' (GDs intro fields gs' _) =
       SSD.genDefnF $ map mkParagraph intro ++ map (LlC . gdefn fields si') gs'
     mkSubSCS si' (IMs intro fields ims ShowDerivation) =
-      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $ map mkParagraph intro ++
+      SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub (SRS.genDefn [] []) $ map mkParagraph intro ++
       concatMap (\x -> [LlC $ instanceModel fields si' x, derivation x]) ims
     mkSubSCS si' (IMs intro fields ims _) =
-      SSD.inModelF pdStub ddStub tmStub (SRS.genDefn [] []) $ map mkParagraph intro ++
+      SSD.inModelF SSD.pdStub SSD.ddStub SSD.tmStub (SRS.genDefn [] []) $ map mkParagraph intro ++
       map (LlC . instanceModel fields si') ims
     mkSubSCS si' (Assumptions ci) =
-      SSD.assumpF $ mkEnumSimpleD $ map (`helperCI` si') ci
+      SSD.assumpF $ mkEnumSimpleD $ map (`SSD.helperCI` si') ci
     mkSubSCS _ (Constraints end cs)  = SSD.datConF end cs
     mkSubSCS _ (CorrSolnPpties c cs) = SSD.propCorSolF c cs
-
--- | Helper for making a 'ConceptInstance' with a reference to the system information.
-helperCI :: ConceptInstance -> SystemInformation -> ConceptInstance
-helperCI a c = over defn (\x -> foldlSent_ [x, refby $ helperRefs a c]) a
-  where
-    refby EmptyS = EmptyS
-    refby sent   = sParen $ S "RefBy:" +:+. sent
+    siSys :: SystemInformation -> IdeaDict
+    siSys SI {_sys = sys} = nw sys
 
 {--}
-
--- | Section stubs for implicit referencing of different models and definitions.
-tmStub, ddStub, imStub, pdStub :: Section
-tmStub = SRS.thModel   [] []
-ddStub = SRS.dataDefn  [] []
-imStub = SRS.inModel   [] []
-pdStub = SRS.probDesc  [] []
 
 -- | Helper for making the Requirements section.
 mkReqrmntSec :: ReqrmntSec -> Section
@@ -389,7 +313,7 @@ mkAuxConsSec (AuxConsProg key listOfCons) = AC.valsOfAuxConstantsF key $ sortByS
 
 {--}
 
--- | Helper for making the Bibliography section.
+-- | Helper for making the References section.
 mkBib :: BibRef -> Section
 mkBib bib = SRS.reference [UlC $ ulcc (Bib bib)] []
 
@@ -398,9 +322,3 @@ mkBib bib = SRS.reference [UlC $ ulcc (Bib bib)] []
 -- | Helper for making the Appendix section.
 mkAppndxSec :: AppndxSec -> Section
 mkAppndxSec (AppndxProg cs) = SRS.appendix cs []
-
-{--}
-
--- | Helper to get the program name as an 'IdeaDict'.
-siSys :: SystemInformation -> IdeaDict
-siSys SI {_sys = sys} = nw sys

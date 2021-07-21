@@ -1,7 +1,9 @@
 {-# LANGUAGE GADTs #-}
 module Language.Drasil.Space
   (Space(..), DomainDesc(..), RealInterval(..), RTopology(..), Inclusive(..),
-  getActorName, getInnerSpace) where
+  getActorName, getInnerSpace, mkFunction) where
+
+import qualified Data.List.NonEmpty as NE
 
 import Language.Drasil.Symbol (Symbol)
 
@@ -25,8 +27,15 @@ data Space =
   | Actor String
   | DiscreteD [Double]
   | DiscreteS [String] --ex. let Meal = {"breakfast", "lunch", "dinner"}
+  | Function (NE.NonEmpty Primitive) Primitive
   | Void
   deriving (Eq, Show)
+
+type Primitive = Space
+
+mkFunction :: [Primitive] -> Primitive -> Space
+mkFunction []  = error "Function space creation requires at least 1 input Space"
+mkFunction ins = Function (NE.fromList ins)
 
 -- The 'spaces' below are all good.
 

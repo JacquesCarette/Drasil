@@ -14,7 +14,7 @@ caseStudyRefs :: [Reference]
 caseStudyRefs = [caseStudySecRef, ref caseStudySec, ref caseStudyTabRef]
 
 caseStudySecRef :: Reference
-caseStudySecRef = makeSecRef "Case Study" $ S "Case Study"
+caseStudySecRef = makeSecRef "CaseStudy" $ S "Case Study"
 
 caseStudiesTitle, caseStudiesDesc :: String
 caseStudiesTitle = "Case Studies"

@@ -17,7 +17,7 @@ module Theory.Drasil (
   , mkMultiDefn, mkMultiDefnForQuant, mkDefiningExpr
   , multiDefnGenQD, multiDefnGenQDByUID
   -- ModelKinds
-  , ModelKind(..)
+  , ModelKind
   , deModel, equationalConstraints, equationalModel, equationalRealm, othModel
   , deModel', equationalConstraints', equationalModel', equationalRealm', othModel'
   , equationalModelU, equationalModelN, equationalRealmU, equationalRealmN
@@ -31,10 +31,20 @@ module Theory.Drasil (
 ) where
 
 import Theory.Drasil.Classes (HasInputs(..), HasOutput(..))
-import Theory.Drasil.ConstraintSet
+import Theory.Drasil.ConstraintSet (ConstraintSet, mkConstraintSet)
 import Theory.Drasil.DataDefinition (DataDefinition, dd, ddNoRefs, qdFromDD)
-import Theory.Drasil.GenDefn
-import Theory.Drasil.ModelKinds
-import Theory.Drasil.InstanceModel
-import Theory.Drasil.MultiDefn
-import Theory.Drasil.Theory
+import Theory.Drasil.GenDefn (GenDefn, gd, gdNoRefs, getEqModQdsFromGd)
+import Theory.Drasil.ModelKinds (ModelKind,
+  deModel', deModel,
+  equationalConstraints, equationalConstraints',
+  equationalModel, equationalModel', equationalModelN, equationalModelU,
+  equationalRealm, equationalRealm', equationalRealmN, equationalRealmU,
+  othModel, othModel')
+import Theory.Drasil.InstanceModel (InstanceModel,
+  im, imNoDeriv, imNoRefs, imNoDerivNoRefs,
+  qwUC, qwC,
+  getEqModQdsFromIm)
+import Theory.Drasil.MultiDefn (MultiDefn, DefiningExpr,
+  mkDefiningExpr, mkMultiDefn,
+  mkMultiDefnForQuant, multiDefnGenQD, multiDefnGenQDByUID)
+import Theory.Drasil.Theory (tm, tmNoRefs, Theory(..), TheoryModel)

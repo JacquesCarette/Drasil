@@ -64,6 +64,8 @@ CODE_E_SUFFIX = _code
 DCP_E_SUFFIX = _deploy_code_path
 STABILIZE_E_SUFFIX = _stabilize
 BC_E_SUFFIX = _build_clean
+NO_GRAPH_SUFFIX = _no_graph
+NO_GRAPH_TEST_SUFFIX = $(NO_GRAPH_SUFFIX)_diff
 
 GEN_EXAMPLES = $(addsuffix $(GEN_E_SUFFIX), $(EXAMPLES) $(GOOLTEST))
 TEST_EXAMPLES =  $(addsuffix $(TEST_E_SUFFIX), $(EXAMPLES) $(GOOLTEST))
@@ -72,6 +74,8 @@ CODE_EXAMPLES = $(addsuffix $(CODE_E_SUFFIX), $(SRC_EXAMPLES))
 DCP_EXAMPLES = $(addsuffix $(DCP_E_SUFFIX), $(EXAMPLES))
 STABILIZE_EXAMPLES = $(addsuffix $(STABILIZE_E_SUFFIX), $(EXAMPLES))
 BC_EXAMPLES = $(addsuffix $(BC_E_SUFFIX), $(EXAMPLES))
+NO_GRAPH_EXAMPLES = $(addsuffix $(NO_GRAPH_SUFFIX), $(EXAMPLES) $(GOOLTEST))
+NO_GRAPH_TEST_EXAMPLES = $(addsuffix $(NO_GRAPH_TEST_SUFFIX), $(EXAMPLES) $(GOOLTEST))
 
 EXAMPLE_GEN_TARGET = GEN TEST TEX CODE DCP
 
@@ -154,8 +158,8 @@ packages: $(BUILD_PACKAGES)
 $(filter %$(BUILD_P_SUFFIX), $(BUILD_PACKAGES)): %$(BUILD_P_SUFFIX): check_stack
 	stack install $(stackArgs) "drasil-$*"
 
-%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
-%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
+%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(NO_GRAPH_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
+%$(GEN_E_SUFFIX) %$(TEST_E_SUFFIX) %$(STABILIZE_E_SUFFIX) %$(BC_E_SUFFIX) %$(NO_GRAPH_SUFFIX): EDIR=$($(EXAMPLE)_DIR)
 
 # individual example runs. Creates traceability graphs for each example run.
 %$(GEN_E_SUFFIX): EEXE=$($(EXAMPLE)_EXE)
@@ -170,6 +174,17 @@ $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX): example$(BUILD_P_
 			dot -Tsvg $$graph.dot > "../../../$(TRACEY_GRAPHS_FOLDER)$(EDIR)/$$graph.svg" ; \
 		done ; \
 	fi ; \
+
+# individual example builds (no generated graphs)
+%$(NO_GRAPH_SUFFIX): EEXE=$($(EXAMPLE)_EXE)
+$(filter %$(NO_GRAPH_SUFFIX), $(NO_GRAPH_EXAMPLES)): %$(NO_GRAPH_SUFFIX): example$(BUILD_P_SUFFIX)
+	@mkdir -p "$(BUILD_FOLDER)$(EDIR)"
+	cd "$(BUILD_FOLDER)$(EDIR)" && stack exec -- "$(EEXE)" $(EXECARGS)
+
+# individual example tests (no generated graphs)
+$(filter %$(NO_GRAPH_TEST_SUFFIX), $(NO_GRAPH_TEST_EXAMPLES)): %$(NO_GRAPH_TEST_SUFFIX): $(CLEAN_GF_PREFIX)$(LOG_FOLDER_NAME) %$(NO_GRAPH_SUFFIX)
+	@mkdir -p "$(LOG_FOLDER)"
+	- $(DIFF) "$(STABLE_FOLDER)$*/" "$(BUILD_FOLDER)$(EDIR)/" > "$(LOG_FOLDER)$(EDIR)$(LOG_SUFFIX)" 2>&1
 
 # individual example build cleans
 $(filter %$(BC_E_SUFFIX), $(BC_EXAMPLES)): %$(BC_E_SUFFIX):
@@ -194,19 +209,32 @@ test: $(TEST_EXAMPLES)
 
 prog: $(GEN_EXAMPLES)
 
+# overwrite examples in stable with currently generated ones
 stabilize: $(STABILIZE_EXAMPLES)
 	@echo ----------------------------
 	@echo Stabilized all examples
 	@echo ----------------------------
 
+# run all examples without generating graphs
+nographs: nographstest
+
+# run example tests (no graphs)
+nographstest: $(NO_GRAPH_TEST_EXAMPLES)
+	@echo ----------------------------
+	@echo Make complete, checking logs
+	@echo ----------------------------
+	@LOG_FOLDER="$(LOG_FOLDER)" LOG_SUFFIX="$(LOG_SUFFIX)" NOISY=$(NOISY) "$(SHELL)" "$(SCRIPT_FOLDER)"log_check.sh
+
 # generate pretty dot graphs too
 graphmod: check_stack
 	stack install dotgen graphmod
 
+# individual package module dependency graphs
 $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod check_dot
 	@mkdir -p "$(GRAPH_FOLDER)"
 	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tpdf > "$(GRAPH_FOLDER)drasil-$*".pdf
 
+# generate module dependency graphs
 graphs: $(GRAPH_PACKAGES)
 ###
 
@@ -310,4 +338,4 @@ clean_artifacts cleanArtifacts: $(CLEAN_FOLDERS)
 clean: clean_artifacts
 	- stack clean
 
-.PHONY: clean clean_artifacts cleanArtifacts code hlint hot_hlint analysis tex doc debug prog test graphs graphmod check_stack graphs website deploy_code_path deploy deploy_lite all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)
+.PHONY: clean clean_artifacts cleanArtifacts code hlint hot_hlint analysis tex doc debug prog test graphs graphmod check_stack nographs graphs website deploy_code_path deploy deploy_lite all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)

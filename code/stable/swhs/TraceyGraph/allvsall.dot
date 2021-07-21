@@ -4,8 +4,8 @@ digraph allvsall {
 	wVol -> tankVol;
 	meltFrac -> htFusion;
 	consThermECS -> assumpTEO;
-	sensHeat -> latentHtEIM;
-	latentHtEIM -> meltFrac;
+	sensHeat -> latentHtETM;
+	latentHtETM -> meltFrac;
 	nwtnCoolingRC -> assumpHTCC;
 	rocTempSimpRC -> assumpCWTAT;
 	rocTempSimpRC -> assumpTPCAV;
@@ -55,7 +55,7 @@ digraph allvsall {
 	heatEInPCMRC -> assumpNGSP;
 	heatEInPCMRC -> htFusion;
 	heatEInPCMRC -> sensHeat;
-	heatEInPCMRC -> latentHtEIM;
+	heatEInPCMRC -> latentHtETM;
 	findMass -> wMass;
 	findMass -> wVol;
 	findMass -> tankVol;
@@ -136,12 +136,12 @@ digraph allvsall {
 
 	consThermECS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];
 	sensHeat	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:sensHtE"];
-	latentHtEIM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:latentHtE"];
+	latentHtETM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:latentHtE"];
 	nwtnCoolingRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:nwtnCooling"];
 
 	subgraph TM {
 	rank="same"
-	{consThermECS, sensHeat, latentHtEIM, nwtnCoolingRC}
+	{consThermECS, sensHeat, latentHtETM, nwtnCoolingRC}
 	}
 
 	rocTempSimpRC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rocTempSimp"];

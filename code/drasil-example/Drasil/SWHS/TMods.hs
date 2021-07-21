@@ -134,7 +134,7 @@ latentHtE = tm latentHtEMK
   [] [toDispExpr latentHtEFD] [] [dRef latHtESrc] "latentHtE" latentHtENotes
 
 latentHtEMK :: ModelKind
-latentHtEMK = equationalModel "latentHtEIM"
+latentHtEMK = equationalModel "latentHtETM"
   (nounPhraseSP "Latent heat energy") latentHtEFD
 
 latentHtEFD :: QDefinition

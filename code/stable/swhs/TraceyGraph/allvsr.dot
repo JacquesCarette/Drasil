@@ -4,7 +4,7 @@ digraph allvsr {
 	findMass -> tankVol;
 	findMass -> eBalanceOnWtrRC;
 	findMass -> eBalanceOnPCMRC;
-	findMass -> heatEInWtrRC;
+	findMass -> heatEInWtrIM;
 	findMass -> heatEInPCMRC;
 	findMass -> inputValues;
 	outputInputDerivVals -> tauW;
@@ -15,7 +15,7 @@ digraph allvsr {
 	outputInputDerivVals -> findMass;
 	calcTempWtrOverTime -> eBalanceOnWtrRC;
 	calcTempPCMOverTime -> eBalanceOnPCMRC;
-	calcChgHeatEnergyWtrOverTime -> heatEInWtrRC;
+	calcChgHeatEnergyWtrOverTime -> heatEInWtrIM;
 	calcChgHeatEnergyPCMOverTime -> heatEInPCMRC;
 	calcPCMMeltBegin -> eBalanceOnPCMRC;
 	calcPCMMeltEnd -> eBalanceOnPCMRC;
@@ -84,12 +84,12 @@ digraph allvsr {
 
 	eBalanceOnWtrRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnWtr"];
 	eBalanceOnPCMRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnPCM"];
-	heatEInWtrRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInWtr"];
+	heatEInWtrIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInWtr"];
 	heatEInPCMRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInPCM"];
 
 	subgraph IM {
 	rank="same"
-	{eBalanceOnWtrRC, eBalanceOnPCMRC, heatEInWtrRC, heatEInPCMRC}
+	{eBalanceOnWtrRC, eBalanceOnPCMRC, heatEInWtrIM, heatEInPCMRC}
 	}
 
 	inputValues	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputValues"];

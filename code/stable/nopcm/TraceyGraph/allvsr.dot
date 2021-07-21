@@ -8,7 +8,7 @@ digraph allvsr {
 	outputInputDerivVals -> inputInitVals;
 	outputInputDerivVals -> findMass;
 	calcTempWtrOverTime -> eBalanceOnWtrRC;
-	calcChgHeatEnergyWtrOverTime -> heatEInWtrRC;
+	calcChgHeatEnergyWtrOverTime -> heatEInWtrIM;
 
 
 	assumpTEO	[shape=box, color=black, style=filled, fillcolor=mistyrose, label="A:assumpTEO"];
@@ -59,11 +59,11 @@ digraph allvsr {
 	}
 
 	eBalanceOnWtrRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnWtr"];
-	heatEInWtrRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInWtr"];
+	heatEInWtrIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInWtr"];
 
 	subgraph IM {
 	rank="same"
-	{eBalanceOnWtrRC, heatEInWtrRC}
+	{eBalanceOnWtrRC, heatEInWtrIM}
 	}
 
 	inputInitVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputInitVals"];

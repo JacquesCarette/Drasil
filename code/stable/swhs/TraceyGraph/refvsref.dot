@@ -21,7 +21,7 @@ digraph refvsref {
 	eBalanceOnPCMRC -> htFluxP;
 	eBalanceOnPCMRC -> eBalanceOnWtrRC;
 	eBalanceOnPCMRC -> heatEInPCMRC;
-	heatEInWtrRC -> sensHeat;
+	heatEInWtrIM -> sensHeat;
 	heatEInPCMRC -> htFusion;
 	heatEInPCMRC -> sensHeat;
 	heatEInPCMRC -> latentHtERC;
@@ -64,12 +64,12 @@ digraph refvsref {
 
 	eBalanceOnWtrRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnWtr"];
 	eBalanceOnPCMRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnPCM"];
-	heatEInWtrRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInWtr"];
+	heatEInWtrIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInWtr"];
 	heatEInPCMRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInPCM"];
 
 	subgraph IM {
 	rank="same"
-	{eBalanceOnWtrRC, eBalanceOnPCMRC, heatEInWtrRC, heatEInPCMRC}
+	{eBalanceOnWtrRC, eBalanceOnPCMRC, heatEInWtrIM, heatEInPCMRC}
 	}
 
 }

@@ -4,11 +4,7 @@ module Drasil.DocLang (
   PDSub(..), ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..),
   SolChSpec(..),
   -- DocumentLanguage
-<<<<<<< HEAD
-  mkDoc, tsymb, tsymb'', tunit, tunit', fillTraceSI, fillcdbSRS,
-=======
-  mkDoc, fillTraceSI,
->>>>>>> master
+  mkDoc, fillTraceSI, fillcdbSRS,
   -- DocumentLanguage.Core
   AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), Emphasis(..),
   OffShelfSolnsSec(..), GSDSec(..), GSDSub(UsrChars, SystCons, SysCntxt),
@@ -54,7 +50,7 @@ module Drasil.DocLang (
 import Drasil.DocDecl (SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
   PDSub(..), ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..),
   SolChSpec(..))
-import Drasil.DocumentLanguage (mkDoc)
+import Drasil.DocumentLanguage (mkDoc, fillTraceSI, fillcdbSRS)
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   DerivationDisplay(..), Emphasis(..), OffShelfSolnsSec(..), GSDSec(..),
   GSDSub(UsrChars, SystCons, SysCntxt), IntroSec(..), IntroSub(..), LFunc(..),
@@ -81,4 +77,4 @@ import Drasil.Sections.TraceabilityMandGs (traceMatStandard, traceMatOtherReq)
 import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
 import Drasil.TraceTable (generateTraceMap)
 -- Commented out modules aren't used - uncomment if this changes
-import Drasil.DocLang.References (secRefs, fillTraceSI, fillcdbSRS)
+import Drasil.DocLang.References (secRefs)

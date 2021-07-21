@@ -3,7 +3,7 @@ module Drasil.SWHS.Body where
 
 import Data.List (nub)
 import Language.Drasil hiding (organization, section, variable)
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
 import Database.Drasil (Block, ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts, _constants,
   _constraints, _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, 
@@ -23,7 +23,7 @@ import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocSection (..),
   ReqrmntSec(..), ReqsSub(..), SRSDecl, SSDSub(..), SolChSpec (SCSProg),
   SSDSec(..), InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
   TraceabilitySec(TraceabilityProg), GSDSec(..), GSDSub(..),
-  ProblemDescription(PDProg), PDSub(..), intro, mkDoc, fillTraceSI, tsymb'', traceMatStandard, purpDoc, getTraceConfigUID,
+  ProblemDescription(PDProg), PDSub(..), intro, mkDoc, fillcdbSRS, tsymb'', traceMatStandard, purpDoc, getTraceConfigUID,
   secRefs, traceyGraphGetRefs)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 
@@ -77,10 +77,10 @@ srs :: Document
 srs = mkDoc mkSRS S.forT si
 
 fullSI :: SystemInformation
-fullSI = fillTraceSI mkSRS si
+fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
-printSetting = PI symbMap Equational defaultConfiguration
+printSetting = piSys fullSI Equational defaultConfiguration
 
 resourcePath :: String
 resourcePath = "../../../datafiles/SWHS/"
@@ -615,9 +615,9 @@ propCorSolDeriv5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)"
 -- Section 9 : References --
 ----------------------------
 bodyRefs :: [Reference]
-bodyRefs = [ref sysCntxtFig, ref figTank]
-  ++ map ref concIns ++ map ref section ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ traceyGraphGetRefs "SWHS"
+bodyRefs =
+  map ref concIns ++ map ref section ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ traceyGraphGetRefs "SWHS"
 
 allRefs :: [Reference]
-allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ goalRefs ++ dataDefRefs ++ genDefRefs
-  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs)
+allRefs = [ref sysCntxtFig, ref figTank]-- nub (assumpRefs ++ bodyRefs ++ chgRefs ++ goalRefs ++ dataDefRefs ++ genDefRefs
+ -- ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs)

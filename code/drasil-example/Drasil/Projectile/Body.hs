@@ -2,7 +2,7 @@ module Drasil.Projectile.Body (printSetting, si, srs, projectileTitle, fullSI) w
 
 import Data.List (nub)
 import Language.Drasil
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
 import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
   _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, 
@@ -21,7 +21,7 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
   TConvention(..), TSIntro(..), TraceabilitySec(TraceabilityProg),
   Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, getTraceConfigUID,
-  secRefs, fillTraceSI, traceyGraphGetRefs)
+  secRefs, fillcdbSRS, traceyGraphGetRefs)
 
 import Data.Drasil.Concepts.Computation (inValue)
 import Data.Drasil.Concepts.Documentation (analysis, doccon, doccon', physics,
@@ -63,10 +63,10 @@ srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
 fullSI :: SystemInformation
-fullSI = fillTraceSI mkSRS si
+fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
-printSetting = PI symbMap Equational defaultConfiguration
+printSetting = piSys fullSI Equational defaultConfiguration
 
 directoryName :: FilePath
 directoryName = "Projectile"
@@ -234,6 +234,6 @@ bodyRefs :: [Reference]
 bodyRefs = map ref tMods ++ map ref concIns ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ traceyGraphGetRefs directoryName
 
 allRefs :: [Reference]
-allRefs = nub (assumpRefs ++ bodyRefs ++ figRefs ++ goalRefs ++ dataDefRefs ++ genDefRefs
-  ++ iModRefs ++ citeRefs ++ reqRefs ++ secRefs)
+allRefs = figRefs --nub (assumpRefs ++ bodyRefs ++  ++ goalRefs ++ dataDefRefs ++ genDefRefs
+  -- ++ iModRefs ++ citeRefs ++ reqRefs ++ secRefs)
 

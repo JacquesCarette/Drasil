@@ -28,11 +28,11 @@ import Drasil.DocLang
         SRSDecl, SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec),
         SolChSpec(SCSProg), TSIntro(..), TraceabilitySec(TraceabilityProg),
         Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, getTraceConfigUID,
-        secRefs, fillTraceSI, traceyGraphGetRefs)
+        secRefs, fillcdbSRS, traceyGraphGetRefs)
 import qualified Drasil.DocLang.SRS as SRS (inModel)
 
 import Language.Drasil
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import qualified Utils.Drasil.Sentence as S
 
@@ -65,10 +65,10 @@ srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
 fullSI :: SystemInformation
-fullSI = fillTraceSI mkSRS si
+fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
-printSetting = PI symbMap Equational defaultConfiguration
+printSetting = piSys fullSI Equational defaultConfiguration
 
 directoryName :: FilePath
 directoryName = "PDController"
@@ -188,6 +188,6 @@ bodyRefs :: [Reference]
 bodyRefs = map ref conceptInstances ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ traceyGraphGetRefs directoryName
 
 allRefs :: [Reference]
-allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ sysDescRefs ++ dataDefRefs ++ genDefRefs
-  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs)
+allRefs = figRefs -- nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ sysDescRefs ++ dataDefRefs ++ genDefRefs
+  -- ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs)
 

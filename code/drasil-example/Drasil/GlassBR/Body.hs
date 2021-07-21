@@ -4,7 +4,7 @@ module Drasil.GlassBR.Body where
 import Control.Lens ((^.))
 import Data.List (nub)
 import Language.Drasil hiding (organization, section, variable)
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
 import Database.Drasil (ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
   _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, 
@@ -22,7 +22,7 @@ import Drasil.DocLang (AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..),
   TraceabilitySec(TraceabilityProg), TSIntro(SymbOrder, TSPurpose),
   Verbosity(Verbose), auxSpecSent, intro, mkDoc,
   termDefnF', tsymb, traceMatStandard, purpDoc, getTraceConfigUID,
-  secRefs, fillTraceSI, traceyGraphGetRefs)
+  secRefs, fillcdbSRS, traceyGraphGetRefs)
 
 import qualified Drasil.DocLang.SRS as SRS (reference, assumpt, inModel)
 
@@ -72,13 +72,13 @@ srs :: Document
 srs = mkDoc mkSRS  (S.forGen titleize phrase) si
 
 fullSI :: SystemInformation
-fullSI = fillTraceSI mkSRS si
+fullSI = fillcdbSRS mkSRS si
 
 directoryName :: FilePath
 directoryName = "GlassBR"
 
 printSetting :: PrintingInformation
-printSetting = PI symbMap Equational defaultConfiguration
+printSetting = piSys fullSI Equational defaultConfiguration
 
 si :: SystemInformation
 si = SI {
@@ -390,9 +390,8 @@ blstRskInvWGlassSlab = phrase blastRisk +:+ S "involved with the" +:+
 -- References --
 bodyRefs :: [Reference]
 bodyRefs = map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si)
-  ++ map ref [sysCtxFig, demandVsSDFig, dimlessloadVsARFig]
   ++ map ref concIns ++ map ref section ++ map ref labCon ++ traceyGraphGetRefs directoryName
 
 allRefs :: [Reference]
-allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ goalRefs ++ dataDefRefs
-  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs)
+allRefs = map ref [sysCtxFig, demandVsSDFig, dimlessloadVsARFig] ++ figRefs ++ citeRefs --nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ goalRefs ++ dataDefRefs
+  -- ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs)

@@ -7,8 +7,8 @@ import Drasil.DocLang (DocSection(RefSec, SSDSec), Literature(Lit, Manual),
     SRSDecl, intro, mkDoc, tsymb, InclUnits(IncludeUnits), Verbosity(Verbose),
     Field(DefiningEquation, Description, Label, Symbol, Units), SolChSpec(SCSProg), 
     SCSSub(DDs), DerivationDisplay(HideDerivation), SSDSub(SSDSolChSpec), 
-    SSDSec(SSDProg), traceMatStandard, getTraceConfigUID, secRefs, fillTraceSI, traceyGraphGetRefs)
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+    SSDSec(SSDProg), traceMatStandard, getTraceConfigUID, secRefs, fillcdbSRS, traceyGraphGetRefs)
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
 import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
   rdb, refdb, _authors, _concepts, _constants, _constraints, _purpose,
   _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, _outputs, _quants, 
@@ -28,10 +28,10 @@ srs :: Document
 srs = mkDoc mkSRS S.forT si
 
 fullSI :: SystemInformation
-fullSI = fillTraceSI mkSRS si
+fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
-printSetting = PI symbMap Equational defaultConfiguration
+printSetting = piSys fullSI Equational defaultConfiguration
 
 directoryName :: FilePath
 directoryName = "HGHC"
@@ -86,4 +86,4 @@ dataDefRefs :: [Reference]
 dataDefRefs = map ref [htTransCladCoolDD, htTransCladFuelDD]
 
 allRefs :: [Reference]
-allRefs = nub (bodyRefs ++ dataDefRefs ++ secRefs)
+allRefs = [] --nub (bodyRefs ++ dataDefRefs ++ secRefs)

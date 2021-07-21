@@ -5,7 +5,3 @@ import Data.Drasil.Citations (cartesianWiki, accelerationWiki, velocityWiki, par
 
 citations :: BibRef
 citations = [accelerationWiki, velocityWiki, hibbeler2004, cartesianWiki, parnasClements1986]
-
--- References --
-citeRefs :: [Reference]
-citeRefs = map ref citations

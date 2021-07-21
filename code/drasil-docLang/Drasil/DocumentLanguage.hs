@@ -14,10 +14,11 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   PDSub(..), ProblemDescription(..), RefSec(..), RefTab(..), ReqrmntSec(..),
   ReqsSub(..), SCSSub(..), StkhldrSec(..), StkhldrSub(..), SolChSpec(..),
   SSDSec(..), SSDSub(..), TraceabilitySec(..), TraceConfig(..),
-  TSIntro(..), UCsSec(..))
+  TSIntro(..), UCsSec(..), getTraceConfigUID)
 import Drasil.DocumentLanguage.Definitions (ddefn, derivation, instanceModel,
   gdefn, tmodel)
 import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
+import Drasil.TraceTable (generateTraceMap)
 
 import Language.Drasil
 import Language.Drasil.Display (compsy)
@@ -25,7 +26,10 @@ import Utils.Drasil
 
 import Database.Drasil(ChunkDB, SystemInformation(SI), _authors, _kind,
   _quants, _sys, _folderPath, _sysinfodb, _usedinfodb, ccss, ccss', citeDB, collectUnits,
-  termTable)
+  termTable, conceptinsTable, idMap, refbyTable, conceptDB,
+  citationDB, refTable, labelledcontentTable, sectionTable, theoryModelTable,
+  insmodelTable, gendefTable, dataDefnTable, folderPath, refdb, sysinfodb, traceTable,
+  generateRefbyMap)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
 import Drasil.Sections.TableOfContents (toToC, findToC)
@@ -35,7 +39,7 @@ import qualified Drasil.DocLang.SRS as SRS (appendix, genDefn,
   genSysDes, likeChg, unlikeChg, reference, solCharSpec,
   stakeholder, tOfCont, tOfSymb, tOfUnit, userChar, offShelfSol, refMat,
   tOfAbbAcc)
-import Drasil.DocLang.References (fillcdbSRS)
+import Drasil.DocLang.References (secRefs)
 import qualified Drasil.Sections.AuxiliaryConstants as AC (valsOfAuxConstantsF)
 import qualified Drasil.Sections.GeneralSystDesc as GSD (genSysIntro,
   systCon, usrCharsF, sysContxt)
@@ -51,15 +55,17 @@ import qualified Drasil.Sections.Stakeholders as Stk (stakeholderIntro,
 import qualified Drasil.DocumentLanguage.TraceabilityMatrix as TM (
   generateTraceTableView)
 import qualified Drasil.DocumentLanguage.TraceabilityGraph as TG (traceMGF)
+import Drasil.DocumentLanguage.TraceabilityGraph (traceyGraphGetRefs)
+import Drasil.Sections.TraceabilityMandGs (traceMatStandard)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
   software, unlikelyChg)
 
 
-import Control.Lens ((^.))
+import Control.Lens ((^.), set)
 import Data.Function (on)
-import Data.List (nub, sortBy)
-import qualified Data.Map as Map (elems)
+import Data.List (nub, sortBy, sortOn)
+import qualified Data.Map as Map (elems, toList, assocs)
 
 ----- Gather all information necessary to create a document -----
 -- | Creates a document from a document description, a title combinator function, and system information.
@@ -69,6 +75,90 @@ mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
   mkSections fullSI l where
     fullSI = fillcdbSRS dd si
     l = mkDocDesc fullSI dd
+
+-- Assuming ChunkDB with no traces and minimal/no references, fill in for rest of system information.
+fillcdbSRS :: SRSDecl -> SystemInformation -> SystemInformation
+fillcdbSRS srsDec si = fillReferences srsDec $ fillTraceSI srsDec si
+
+{-Don't want to manually add concepts here, Drasil should do it automatically. Perhaps through traversal?
+fillConcepts :: SystemInformation -> SystemInformation
+fillConcepts si = si2
+  where
+    si2 = set sysinfodb chkdb2 si
+    chkdb = si ^. sysinfodb
+    tmtbl = termTable chkdb
+    chkdb2 = chkdb{termTable = termMap $ nub (map nw doccon ++ map nw doccon' ++ map nw softwarecon ++ map nw physicCon ++ map nw physicCon' ++ map nw physicalcon ++ map nw educon ++ map nw mathcon ++ map nw mathcon' ++ map nw compcon ++ map nw compcon' ++ map nw solidcon ++ map nw thermocon ++ (map (fst.snd) $ Map.assocs tmtbl))}
+-}
+
+-- | Takes in existing information from the Chunk database to construct a database of references.
+fillReferences :: SRSDecl -> SystemInformation -> SystemInformation
+fillReferences dd si = si2
+  where
+    -- get old chunk database + ref database
+    chkdb = si ^. sysinfodb
+    rfdb = refdb si
+    -- convert SRSDecl into a list of sections (to easily get at all the references used in the SRS)
+    allSections = mkSections si $ mkDocDesc si dd
+    -- get refs from SRSDecl. Should include all section labels and labelled content.
+    refsFromSRS = concatMap findAllRefs allSections
+    -- get refs from the stuff already inside the chunk database
+    inRefs = concatMap dRefToRef ddefs ++ concatMap dRefToRef gdefs ++ concatMap dRefToRef imods ++ concatMap dRefToRef tmods
+    ddefs   = map (fst.snd) $ Map.assocs $ chkdb ^. dataDefnTable
+    gdefs   = map (fst.snd) $ Map.assocs $ chkdb ^. gendefTable
+    imods   = map (fst.snd) $ Map.assocs $ chkdb ^. insmodelTable
+    tmods   = map (fst.snd) $ Map.assocs $ chkdb ^. theoryModelTable
+    concIns = map (fst.snd) $ Map.assocs $ chkdb ^. conceptinsTable
+    secs    = map (fst.snd) $ Map.assocs $ chkdb ^. sectionTable
+    lblCon  = map (fst.snd) $ Map.assocs $ chkdb ^. labelledcontentTable
+    cites   = map (fst.snd) $ Map.assocs $ rfdb  ^. citationDB
+    conins  = map (fst.snd) $ Map.assocs $ rfdb  ^. conceptDB
+    -- search the old reference table just in case the user wants to manually add in some references
+    refs    = map (fst.snd) $ Map.assocs $ chkdb ^. refTable
+    -- set new reference table in the chunk database
+    chkdb2 = set refTable (idMap $ nub $ refsFromSRS ++ inRefs
+      ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ secRefs -- secRefs can be removed once #946 is complete
+      ++ traceyGraphGetRefs (si ^. folderPath) ++ map ref cites
+      ++ map ref conins ++ map ref ddefs ++ map ref gdefs ++ map ref imods
+      ++ map ref tmods ++ map ref concIns ++ map ref secs ++ map ref lblCon
+      ++ refs) chkdb
+    -- set new chunk database into system information
+    si2 = set sysinfodb chkdb2 si
+
+-- | Helper that gets references from definitions and models.
+dRefToRef :: HasDecRef a => a -> [Reference]
+dRefToRef r = map ref $ r ^. getDecRefs
+
+-- | Recursively find all references in a section (meant for getting at 'LabelledContent').
+findAllRefs :: Section -> [Reference]
+findAllRefs (Section _ cs r) = r: concatMap findRefSecCons cs
+  where
+    findRefSecCons :: SecCons -> [Reference]
+    findRefSecCons (Sub s) = findAllRefs s
+    findRefSecCons (Con (LlC (LblC rf _))) = [rf]
+    findRefSecCons _ = []
+
+-- | Helper for filling in the traceability matrix and graph information into the system.
+fillTraceSI :: SRSDecl -> SystemInformation -> SystemInformation
+fillTraceSI dd si = fillTraceMaps l $ fillReqs l si
+  where
+    l = mkDocDesc si dd
+
+-- | Fills in the traceabiliy matrix and graphs section of the system information using the document description.
+fillTraceMaps :: DocDesc -> SystemInformation -> SystemInformation
+fillTraceMaps dd si@SI{_sysinfodb = db} = si {_sysinfodb =
+  set refbyTable (generateRefbyMap tdb) $ set traceTable tdb db} where
+  tdb = generateTraceMap dd
+
+-- | Fills in the requirements section of the system information using the document description.
+fillReqs :: DocDesc -> SystemInformation -> SystemInformation
+fillReqs [] si = si
+fillReqs (ReqrmntSec (ReqsProg x):_) si@SI{_sysinfodb = db} = genReqs x
+  where
+    genReqs [] = si
+    genReqs (FReqsSub c _:_) = si {_sysinfodb = set conceptinsTable newCI db} where
+        newCI = idMap $ nub $ c ++ map fst (sortOn snd $ map snd $ Map.toList $ db ^. conceptinsTable)
+    genReqs (_:xs) = genReqs xs
+fillReqs (_:xs) si = fillReqs xs si
 
 -- | Constructs the unit definitions ('UnitDefn's) found in the document description ('DocDesc') from a database ('ChunkDB').
 extractUnits :: DocDesc -> ChunkDB -> [UnitDefn]

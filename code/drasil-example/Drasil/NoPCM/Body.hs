@@ -2,7 +2,7 @@ module Drasil.NoPCM.Body (si, srs, printSetting, noPCMODEInfo, fullSI) where
 
 import Control.Lens ((^.))
 import Language.Drasil hiding (section)
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts,
   _constants, _constraints, _datadefs, _instModels, _configFiles, _defSequence,
@@ -52,7 +52,7 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg), DerivationDisplay(..),
   ReqrmntSec(..), ReqsSub(..), SCSSub(..), SolChSpec(..), SRSDecl, SSDSec(..),
   SSDSub(..), TraceabilitySec(TraceabilityProg), Verbosity(Verbose),
   TSIntro(SymbOrder, SymbConvention, TSPurpose, VectorUnits), intro, mkDoc,
-  tsymb, traceMatStandard, purpDoc, getTraceConfigUID, secRefs, fillTraceSI, traceyGraphGetRefs)
+  tsymb, traceMatStandard, purpDoc, getTraceConfigUID, secRefs, fillcdbSRS, traceyGraphGetRefs)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
@@ -88,10 +88,10 @@ srs :: Document
 srs = mkDoc mkSRS S.forT si
 
 fullSI :: SystemInformation
-fullSI = fillTraceSI mkSRS si
+fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
-printSetting = PI symbMap Equational defaultConfiguration
+printSetting = piSys fullSI Equational defaultConfiguration
 
 directoryName :: FilePath
 directoryName = "NoPCM"
@@ -383,5 +383,5 @@ bodyRefs = ref figTank: ref sysCntxtFig:
   ++ traceyGraphGetRefs directoryName
 
 allRefs :: [Reference]
-allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ dataDefRefs ++ genDefRefs++ goalRefs
-  ++ iModRefs ++ citeRefs ++ reqRefs ++ secRefs)
+allRefs = [ref figTank, ref sysCntxtFig] -- ub (assumpRefs ++ bodyRefs ++ chgRefs ++ dataDefRefs ++ genDefRefs++ goalRefs
+  -- ++ iModRefs ++ citeRefs ++ reqRefs ++ secRefs)

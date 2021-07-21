@@ -1,7 +1,6 @@
 module Drasil.DblPendulum.Requirements where
 
 import Language.Drasil
-import Drasil.DocLang (inReq)
 import Drasil.DocLang.SRS (datCon, propCorSol)
 import Utils.Drasil
 import Utils.Drasil.Concepts
@@ -62,7 +61,3 @@ portable :: ConceptInstance
 portable = cic "portable" (foldlSent [
   atStartNP (the code), S "is able to be run in different", plural environment])
   "Portable" nonFuncReqDom
- 
--- References --
-reqRefs :: [Reference]
-reqRefs = map ref ([inReq EmptyS] ++ funcReqs ++ nonFuncReqs)

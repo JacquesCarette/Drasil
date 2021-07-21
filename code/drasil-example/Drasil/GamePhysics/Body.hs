@@ -2,11 +2,11 @@ module Drasil.GamePhysics.Body where
 
 import Data.List (nub)
 import Language.Drasil hiding (organization, section)
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, _datadefs,
   _instModels, _configFiles, _defSequence, _inputs, _kind, _outputs, _quants, 
-  _sys, _sysinfodb, _usedinfodb, _folderPath)
+  _sys, _sysinfodb, _usedinfodb, _folderPath, sysinfodb)
 import Theory.Drasil (qdFromDD)
 import Utils.Drasil
 import Utils.Drasil.Concepts
@@ -18,7 +18,7 @@ import Drasil.DocLang (DerivationDisplay(..), DocSection(..), Emphasis(..),
   OffShelfSolnsSec(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
   ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
   PDSub(..), intro, mkDoc, tsymb, traceMatStandard, purpDoc, getTraceConfigUID,
-  secRefs, fillTraceSI, traceyGraphGetRefs)
+  secRefs, fillcdbSRS, traceyGraphGetRefs)
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
@@ -57,14 +57,16 @@ import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
   inputSymbols, outputSymbols, inputConstraints, defSymbols)
 import Drasil.GamePhysics.GenDefs (generalDefns, genDefRefs)
 
+import Control.Lens ((^.))
+
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize short) si
 
 fullSI :: SystemInformation
-fullSI = fillTraceSI mkSRS si
+fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
-printSetting = PI symbMap Equational defaultConfiguration
+printSetting = piSys fullSI Equational defaultConfiguration
 
 resourcePath :: String
 resourcePath = "../../../datafiles/GamePhysics/"
@@ -451,9 +453,5 @@ offShelfSols3DList = enumBulletU [
 -- To be added --
 
 -- References --
-bodyRefs :: [Reference]
-bodyRefs = ref sysCtxFig1: map ref concIns ++ map ref section ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ traceyGraphGetRefs directoryName
-
 allRefs :: [Reference]
-allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ goalRefs ++ dataDefRefs ++ genDefRefs
-  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs)
+allRefs = [ref sysCtxFig1]

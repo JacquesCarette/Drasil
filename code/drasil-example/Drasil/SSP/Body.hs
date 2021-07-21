@@ -3,7 +3,7 @@ module Drasil.SSP.Body (srs, si, symbMap, printSetting, fullSI) where
 
 import Data.List (nub)
 import Language.Drasil hiding (Verb, number, organization, section, variable)
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts, _constants,
   _constraints, _datadefs, _instModels, _configFiles, _defSequence, _inputs,
@@ -23,7 +23,7 @@ import Drasil.DocLang (DocSection(..), IntroSec(..), IntroSub(..),
   SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
   ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
   PDSub(..), intro, mkDoc, tsymb'', traceMatStandard, purpDoc, getTraceConfigUID,
-  secRefs, fillTraceSI, traceyGraphGetRefs)
+  secRefs, fillcdbSRS, traceyGraphGetRefs)
 
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
@@ -76,10 +76,10 @@ srs :: Document
 srs = mkDoc mkSRS S.forT si
 
 printSetting :: PrintingInformation
-printSetting = PI symbMap Equational defaultConfiguration
+printSetting = piSys fullSI Equational defaultConfiguration
 
 fullSI :: SystemInformation
-fullSI = fillTraceSI mkSRS si
+fullSI = fillcdbSRS mkSRS si
 
 resourcePath :: String
 resourcePath = "../../../datafiles/SSP/"
@@ -454,8 +454,8 @@ slopeVert = verticesConst $ phrase slope
 
 -- References --
 bodyRefs :: [Reference]
-bodyRefs = ref sysCtxFig1: map ref concIns ++ map ref section ++ map ref labCon ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ traceyGraphGetRefs directoryName
+bodyRefs =  map ref concIns ++ map ref section ++ map ref labCon ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ traceyGraphGetRefs directoryName
 
 allRefs :: [Reference]
-allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ goalRefs ++ SSP.dataDefRefs ++ genDefRefs
-  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs)
+allRefs = ref sysCtxFig1:figRefs-- nub (assumpRefs ++ bodyRefs ++ chgRefs ++  ++ goalRefs ++ SSP.dataDefRefs ++ genDefRefs
+ -- ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs)

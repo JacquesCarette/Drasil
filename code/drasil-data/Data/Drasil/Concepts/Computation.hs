@@ -18,9 +18,6 @@ relTolerance = dcc "relTolerance"   (cn' "Relative tolerance") " maximum amount 
 modCalcDesc :: Sentence -> ConceptChunk
 modCalcDesc = dccWDS "modCalcDesc" (cn' "calculation")
 
-compcon' :: [ConceptChunk]
-compcon' = [algorithm, absTolerance, relTolerance]
-
 compcon :: [NamedChunk]
 compcon = [application, computer, structure, dataStruct, dataStruct', dataType, dataType', 
   inDatum, outDatum, inParam, inVar, inValue, inQty, computerLiteracy, computerApp]

@@ -153,7 +153,7 @@ symbMap = cdb thisSymbols (map nw acronyms ++ map nw thisSymbols ++ map nw con
   map nw fundamentals ++ map nw derived ++ map nw physicalcon)
   (map cw symb ++ terms ++ Doc.srsDomains) (map unitWrapper [metre, second, kilogram]
   ++ map unitWrapper [pascal, newton]) GB.dataDefs iMods [] tMods concIns section
-  labCon allRefs
+  labCon []
 
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ likelyChgs ++ unlikelyChgs ++ funcReqs ++ nonfuncReqs
@@ -384,7 +384,3 @@ appdxIntro = foldlSP [
 blstRskInvWGlassSlab :: Sentence
 blstRskInvWGlassSlab = phrase blastRisk +:+ S "involved with the" +:+
   phrase glaSlab
-
--- References --
-allRefs :: [Reference]
-allRefs = map ref [astm2009, astm2016] -- FIXME: should be automatically included since citations are in the ReferenceDB.

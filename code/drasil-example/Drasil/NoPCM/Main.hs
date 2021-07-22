@@ -11,10 +11,10 @@ import Language.Drasil.Generate (gen, genCode, genDot, DocType(SRS, Website), Do
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODEPckg, osloPckg, 
   apacheODEPckg, odeintPckg)
 
-import Drasil.NoPCM.Body (si, srs, printSetting, noPCMODEInfo, fullSI)
+import Drasil.NoPCM.Body (srs, printSetting, noPCMODEInfo, fullSI)
 
 code :: CodeSpec
-code = codeSpec si choices []
+code = codeSpec fullSI choices []
 -- Sub interpolation mod into list when possible
 
 choices :: Choices

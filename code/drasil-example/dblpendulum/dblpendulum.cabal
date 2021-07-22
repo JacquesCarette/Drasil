@@ -4,9 +4,9 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: fb37e2e0958811e541d0b5b3108e24d820288a67c5a3c244455ccb7aad406a19
+-- hash: f698c56edba5897067fa264c151cee788984c1a98dffc1a8222e5315dc9b4004
 
-name:           libtemplate
+name:           dblpendulum
 version:        0.1.24.0
 synopsis:       A framework for code and document generation for scientific software - Example SubPackage
 description:    Please see the README on GitHub at <https://github.com/JacquesCarette/Drasil#readme>
@@ -22,9 +22,18 @@ source-repository head
 
 library
   exposed-modules:
-      Drasil.Template.Body
-  other-modules:
-      Paths_libtemplate
+      Drasil.DblPendulum.Assumptions
+      Drasil.DblPendulum.Body
+      Drasil.DblPendulum.Concepts
+      Drasil.DblPendulum.DataDefs
+      Drasil.DblPendulum.Expressions
+      Drasil.DblPendulum.Figures
+      Drasil.DblPendulum.GenDefs
+      Drasil.DblPendulum.Goals
+      Drasil.DblPendulum.IMods
+      Drasil.DblPendulum.References
+      Drasil.DblPendulum.Requirements
+      Drasil.DblPendulum.Unitals
   hs-source-dirs:
       lib
   build-depends:
@@ -43,17 +52,21 @@ library
     , drasil-theory
     , drasil-utils
     , lens
+  if false
+    other-modules:
+        Paths_dblpendulum
   default-language: Haskell2010
 
-executable template
+executable dblpendulum
   main-is: Main.hs
   other-modules:
-      Paths_libtemplate
+      Paths_dblpendulum
   hs-source-dirs:
       app
   ghc-options: -Wall -Wredundant-constraints -threaded -O2 -main-is Main
   build-depends:
       base >=4.7 && <5
+    , dblpendulum
     , directory
     , drasil-code
     , drasil-code-base
@@ -68,5 +81,4 @@ executable template
     , drasil-theory
     , drasil-utils
     , lens
-    , libtemplate
   default-language: Haskell2010

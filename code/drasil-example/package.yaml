@@ -50,23 +50,6 @@ executables:
     - Drasil.Projectile.Requirements
     - Drasil.Projectile.Unitals
 
-  dblpendulum:
-    main: Drasil.DblPendulum.Main
-    source-dirs: ./
-    other-modules:
-    - Drasil.DblPendulum.Assumptions
-    - Drasil.DblPendulum.Body
-    - Drasil.DblPendulum.Concepts
-    - Drasil.DblPendulum.DataDefs
-    - Drasil.DblPendulum.Expressions
-    - Drasil.DblPendulum.Figures
-    - Drasil.DblPendulum.GenDefs
-    - Drasil.DblPendulum.Goals
-    - Drasil.DblPendulum.IMods
-    - Drasil.DblPendulum.Requirements
-    - Drasil.DblPendulum.Unitals
-    - Drasil.DblPendulum.References
-
   gamephysics:
     main: Drasil.GamePhysics.Main
     source-dirs: ./

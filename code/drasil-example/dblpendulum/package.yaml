@@ -1,4 +1,4 @@
-name:                template
+name:                dblpendulum
 version:             0.1.24.0
 author:              "Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith"
 maintainer:          "Jacques Carette"
@@ -30,10 +30,10 @@ library:
   source-dirs: lib
   when:
   - condition: false
-    other-modules: Paths_template
+    other-modules: Paths_dblpendulum
 
 executables:
-  template:
+  dblpendulum:
     main: Main
     source-dirs: app 
     ghc-options:
@@ -42,4 +42,4 @@ executables:
     - -threaded
     - -O2
     dependencies:
-    - template
+    - dblpendulum

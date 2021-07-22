@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: feb6691ab6ccf6e29dc85c537bac59de7bbd07c0911fe6edfa2bcf5c077a73b0
+-- hash: f74301db08362f8e6b93a0371cdda03494c469d2f354ae11df1b36dd93ad508d
 
 name:           drasil-example
 version:        0.1.24.0
@@ -19,42 +19,6 @@ build-type:     Simple
 source-repository head
   type: git
   location: https://github.com/JacquesCarette/Drasil
-
-executable dblpendulum
-  main-is: Drasil/DblPendulum/Main.hs
-  other-modules:
-      Drasil.DblPendulum.Assumptions
-      Drasil.DblPendulum.Body
-      Drasil.DblPendulum.Concepts
-      Drasil.DblPendulum.DataDefs
-      Drasil.DblPendulum.Expressions
-      Drasil.DblPendulum.Figures
-      Drasil.DblPendulum.GenDefs
-      Drasil.DblPendulum.Goals
-      Drasil.DblPendulum.IMods
-      Drasil.DblPendulum.Requirements
-      Drasil.DblPendulum.Unitals
-      Drasil.DblPendulum.References
-  hs-source-dirs:
-      ./
-  ghc-options: -Wall -Wredundant-constraints -threaded -O2 -main-is Drasil.DblPendulum.Main
-  build-depends:
-      base >=4.7 && <5
-    , directory
-    , drasil-code
-    , drasil-code-base
-    , drasil-data
-    , drasil-database
-    , drasil-docLang
-    , drasil-gen
-    , drasil-gool
-    , drasil-lang
-    , drasil-metadata
-    , drasil-printers
-    , drasil-theory
-    , drasil-utils
-    , lens
-  default-language: Haskell2010
 
 executable gamephysics
   main-is: Drasil/GamePhysics/Main.hs

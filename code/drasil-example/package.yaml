@@ -198,9 +198,3 @@ executables:
     - Drasil.SWHS.Requirements
     - Drasil.SWHS.TMods
     - Drasil.SWHS.Unitals
-
-  template:
-    main: Drasil.Template.Main
-    source-dirs: ./
-    other-modules:
-    - Drasil.Template.Body

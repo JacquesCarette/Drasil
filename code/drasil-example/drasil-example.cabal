@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0441af470644ec87332f4fa16e5733d66f4013462ebb6a89fb11f204383bade1
+-- hash: feb6691ab6ccf6e29dc85c537bac59de7bbd07c0911fe6edfa2bcf5c077a73b0
 
 name:           drasil-example
 version:        0.1.24.0
@@ -339,31 +339,6 @@ executable swhs
   hs-source-dirs:
       ./
   ghc-options: -Wall -Wredundant-constraints -threaded -O2 -main-is Drasil.SWHS.Main
-  build-depends:
-      base >=4.7 && <5
-    , directory
-    , drasil-code
-    , drasil-code-base
-    , drasil-data
-    , drasil-database
-    , drasil-docLang
-    , drasil-gen
-    , drasil-gool
-    , drasil-lang
-    , drasil-metadata
-    , drasil-printers
-    , drasil-theory
-    , drasil-utils
-    , lens
-  default-language: Haskell2010
-
-executable template
-  main-is: Drasil/Template/Main.hs
-  other-modules:
-      Drasil.Template.Body
-  hs-source-dirs:
-      ./
-  ghc-options: -Wall -Wredundant-constraints -threaded -O2 -main-is Drasil.Template.Main
   build-depends:
       base >=4.7 && <5
     , directory

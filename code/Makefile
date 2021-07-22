@@ -2,6 +2,10 @@
 
 SHELL=/bin/bash
 
+#--------------------------------------------#
+#--- Package variables for use in targets ---#
+#--------------------------------------------#
+
 # List of all known packages
 PACKAGES = lang utils build gool code theory database printers gen data docLang
 
@@ -17,7 +21,9 @@ ANALYSIS_PACKAGES = drasil $(PACKAGES)
 
 PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 
-#####
+#--------------------------------------------#
+#--- Example variables for use in targets ---#
+#--------------------------------------------#
 
 # Current list of examples
 SRC_EXAMPLES = glassbr nopcm projectile
@@ -85,7 +91,9 @@ CLEAN_FOLDERS = $(addprefix $(CLEAN_GF_PREFIX), $(GENNED_FOLDERS))
 
 ALL_EXPANDED_TARGETS = $(foreach P, $(PACKAGE_GEN_TARGET), $($(P)_PACKAGES)) $(foreach E, $(EXAMPLE_GEN_TARGET), $($(E)_EXAMPLES)) $(CLEAN_FOLDERS)
 
-#####
+#-------------------------------#
+#--- Variables/Configuration ---#
+#-------------------------------#
 
 # make variables/configuration
 DIFF = diff --strip-trailing-cr -r -X ../.gitignore -x '*.txt'
@@ -158,11 +166,11 @@ debug: test
 #### Initial checks ####
 # -------------------- #
 
-# sanity check -- are we using the right stack version?
+# Sanity check -- are we using the right stack version?
 check_stack:
 	 @MIN_STACK_VER="$(MIN_STACK_VER)" CACHED_MSV_FILE="$(CACHED_MSV_FILE)" "$(SHELL)" "$(SCRIPT_FOLDER)"check_stack.sh
 
-# download the most recent version of graphviz.
+# Download the most recent version of graphviz.
 check_dot:
 	@BIN=dot DOWNLOAD_LOCATION=https://www.graphviz.org/download/ "$(SHELL)" "$(SCRIPT_FOLDER)"check_binary.sh
 

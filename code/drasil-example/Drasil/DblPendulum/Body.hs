@@ -1,7 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.DblPendulum.Body where
 
-import Language.Drasil
+import Language.Drasil hiding (organization, section)
 import Theory.Drasil (TheoryModel)
 import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
 import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
@@ -10,34 +10,39 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   _quants, _sys, _sysinfodb, _usedinfodb, _folderPath)
 import Utils.Drasil
 import Utils.Drasil.Concepts
-import Data.Drasil.Concepts.Education (calculus, undergraduate, educon)
+import Data.Drasil.Concepts.Education (highSchoolPhysics, highSchoolCalculus, calculus, undergraduate, educon, )
 import qualified Utils.Drasil.NounPhrase as NP
 import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.People (olu)
 import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian, hertz)
+import Data.Drasil.Software.Products (prodtcon, sciCompS)
 import Data.Drasil.Concepts.Software (program, errMsg)
 import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum, twoD, motion)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM, newtonSLR)
+import Data.Drasil.TheoryConcepts (inModel)
 import Data.Drasil.Domains (physics) 
 import Data.Drasil.Quantities.Physics (physicscon)
 import Data.Drasil.Concepts.PhysicalProperties (mass, len, physicalcon)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics)
-import Data.Drasil.Concepts.Documentation (doccon, doccon', srsDomains, problem, analysis)
-import Data.Drasil.Concepts.Computation (inValue, algorithm)
+import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variable)
+import Data.Drasil.Concepts.Documentation (assumption, condition, endUser, environment, datum, document,
+  input_, interface, output_, organization, problem, product_, physical, sysCont, software, softwareConstraint,
+  softwareSys, srsDomains, system, sysCont, template, user, doccon, doccon', analysis)
+
+import Data.Drasil.Concepts.Computation (inDatum, compcon, inValue, algorithm)
 import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   DerivationDisplay(ShowDerivation),
-  DocSection(TableOfContents, AuxConstntSec, Bibliography, IntroSec, RefSec, ReqrmntSec, SSDSec, TraceabilitySec),
+  DocSection(..),
   Emphasis(Bold), Field(..), Fields, InclUnits(IncludeUnits),
-  IntroSec(..), IntroSub(IPurpose, IScope, IChar), ProblemDescription(PDProg), PDSub(..),
+  IntroSec(..), IntroSub(IPurpose, IScope, IChar, IOrgSec), ProblemDescription(PDProg), PDSub(..),
   RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl,
   SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
-  TConvention(..), TSIntro(..), TraceabilitySec(TraceabilityProg),
-  Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, purpDoc,
-  fillcdbSRS)
+  TConvention(..), TSIntro(..), TraceabilitySec(TraceabilityProg), GSDSec(..), GSDSub(..),
+  Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, purpDoc, fillcdbSRS)
 
+import qualified Drasil.DocLang.SRS as SRS
 import Drasil.DblPendulum.Figures (figMotion)
-import Data.Drasil.Concepts.Math (mathcon, cartesian, ode, mathcon')
+import Data.Drasil.Concepts.Math (mathcon, cartesian, ode, mathcon', graph)
 import Data.Drasil.Quantities.Math (unitVect, unitVectj)
 import Drasil.DblPendulum.Assumptions (assumptions)
 import Drasil.DblPendulum.Concepts (rod, concepts, pendMotion)
@@ -48,7 +53,7 @@ import Drasil.DblPendulum.GenDefs (genDefns)
 import Drasil.DblPendulum.Unitals (symbols, inputs, outputs,
   inConstraints, outConstraints, acronyms)
 import Drasil.DblPendulum.Requirements (funcReqs, nonFuncReqs)
-import Drasil.DblPendulum.References (citations)
+import Drasil.DblPendulum.References (citations, koothoor2013, smithLai2005)
 
 
 srs :: Document
@@ -59,6 +64,9 @@ fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
+
+resourcePath :: String
+resourcePath = "../../../datafiles/DblPendulum/"
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents, -- This creates the Table of Contents
@@ -73,7 +81,13 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
     IntroProg justification (phrase pendulumTitle) -- This adds an introductory blob before the overview paragraph above.
       [IPurpose $ purpDoc pendulumTitle Verbose,
        IScope scope,
-       IChar [] charsOfReader []],                            -- This section add a Scope section with the content of 'scope' constructor.
+       IChar [] charsOfReader [],
+       IOrgSec organizationOfDocumentsIntro inModel (SRS.inModel [] []) EmptyS],
+  GSDSec $ 
+    GSDProg [
+      SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
+      UsrChars [userCharacteristicsIntro], 
+      SystCons [] []],                            -- This section add a Scope section with the content of 'scope' constructor.
   SSDSec $ 
     SSDProg                               -- This adds a Specific system description section and an introductory blob.
       [ SSDProblem $ PDProg prob []                --  This adds a is used to define the problem your system will solve
@@ -122,6 +136,17 @@ charsOfReader = [phrase undergraduate +:+ S "level 2" +:+ phrase Doc.physics,
                  phrase undergraduate +:+ S "level 1" +:+ phrase calculus,
                  plural ode]
 
+-------------------------------------
+-- 2.3 : Organization of Documents --
+-------------------------------------
+
+organizationOfDocumentsIntro :: Sentence
+organizationOfDocumentsIntro = foldlSent 
+  [atStartNP (the organization), S "of this", phrase document, 
+  S "follows the", phrase template, S "for an", getAcc Doc.srs, S "for", 
+  phrase sciCompS, S "proposed by", refS koothoor2013 `S.and_`
+  refS smithLai2005]
+
 pendulumTitle :: CI
 pendulumTitle = commonIdeaWithDict "pendulumTitle" (pn "Pendulum") "Pendulum" [physics]
 
@@ -157,7 +182,7 @@ symbMap = cdb (map qw iMods ++ map qw symbols)
     : nw unitVect : nw unitVectj : [nw errMsg, nw program] ++ map nw symbols ++
    map nw doccon ++ map nw doccon' ++ map nw physicCon ++ map nw mathcon ++ map nw mathcon' ++ map nw physicCon' ++
    map nw physicscon ++ concepts ++ map nw physicalcon ++ map nw acronyms ++ map nw symbols ++ map nw [metre, hertz] ++
-   [nw algorithm] ++ map nw educon)
+   [nw algorithm] ++ map nw compcon ++ map nw educon ++ map nw prodtcon)
   (map cw iMods ++ srsDomains) (map unitWrapper [metre, second, newton, kilogram, degree, radian, hertz]) dataDefs
   iMods genDefns tMods concIns [] [] ([] :: [Reference])
 
@@ -175,6 +200,73 @@ refDB = rdb citations concIns
 concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ funcReqs ++ nonFuncReqs
 -- ++ likelyChgs ++ unlikelyChgs
+
+--------------------------------------------
+-- Section 3: GENERAL SYSTEM DESCRIPTION --
+--------------------------------------------
+--------------------------
+-- 3.1 : System Context --
+--------------------------
+
+sysCtxIntro :: Contents
+sysCtxIntro = foldlSP
+  [refS sysCtxFig1, S "shows the" +:+. phrase sysCont,
+   S "A circle represents an entity external to the", phrase software
+   `sC` phraseNP (the user), S "in this case. A rectangle represents the",
+   phrase softwareSys, S "itself", sParen (short pendulumTitle) +:+. EmptyS,
+   S "Arrows are used to show the data flow between the", phraseNP (system
+   `andIts` environment)]
+
+sysCtxFig1 :: LabelledContent
+sysCtxFig1 = llcc (makeFigRef "sysCtxDiag") $ fig (titleize sysCont) 
+  (resourcePath ++ "SystemContextFigure.png")
+
+sysCtxDesc :: Contents
+sysCtxDesc = foldlSPCol [S "The interaction between the", phraseNP (product_
+   `andThe` user), S "is through an application programming" +:+.
+   phrase interface, S "The responsibilities of the", phraseNP (user 
+   `andThe` system), S "are as follows"]
+
+sysCtxUsrResp :: [Sentence]
+sysCtxUsrResp = [S "Provide initial" +:+ pluralNP (condition `ofThePS`
+  physical) +:+ S "state of the" +:+ phrase motion +:+ S "and the" +:+ plural inDatum +:+ S "related to the" +:+
+  phrase pendulumTitle `sC` S "ensuring no errors in the" +:+
+  plural datum +:+. S "entry",
+  S "Ensure that consistent units are used for" +:+. pluralNP (combineNINI input_ Doc.variable),
+  S "Ensure required" +:+
+  namedRef (SRS.assumpt ([]::[Contents]) ([]::[Section])) (phrase software +:+ plural assumption) +:+
+  S "are appropriate for any particular" +:+
+  phrase problem +:+ S "input to the" +:+. phrase software]
+
+sysCtxSysResp :: [Sentence]
+sysCtxSysResp = [S "Detect data type mismatch, such as a string of characters" +:+
+  phrase input_ +:+. S "instead of a floating point number",
+  S "Determine if the" +:+ plural input_ +:+ S "satisfy the required" +:+.
+  pluralNP (physical `and_` softwareConstraint),
+  S "Calculate the required" +:+. plural output_, 
+  S "Generate the required" +:+. plural graph]
+
+sysCtxResp :: [Sentence]
+sysCtxResp = [titleize user +:+ S "Responsibilities",
+  short pendulumTitle +:+ S "Responsibilities"]
+
+sysCtxList :: Contents
+sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
+  map bulletFlat [sysCtxUsrResp, sysCtxSysResp]
+
+--------------------------------
+-- 3.2 : User Characteristics --
+--------------------------------
+
+userCharacteristicsIntro :: Contents
+userCharacteristicsIntro = foldlSP
+  [S "The", phrase endUser `S.of_` short pendulumTitle,
+   S "should have an understanding of", 
+   phrase highSchoolPhysics `sC` phrase highSchoolCalculus `S.and_` plural ode]
+
+-------------------------------
+-- 3.3 : System Constraints  --
+-------------------------------
 
 ------------------------------------
 --Problem Description
@@ -201,4 +293,3 @@ tMods = [accelerationTM, velocityTM, newtonSL, newtonSLR]
 
 physSystParts :: [Sentence]
 physSystParts = map ((!.) . atStartNP) [the rod, the mass]
-

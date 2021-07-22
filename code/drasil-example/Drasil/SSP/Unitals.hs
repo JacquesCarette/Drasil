@@ -187,10 +187,10 @@ fsMin = dqd' (dcc "fsMin" (cn "minimum factor of safety")
 -- Once things are converted to the new style of instance models, this will
 -- be removed/fixed.
 
-coords = constrainedNRV' (dqd' (dccWDS "(x,y)" (cn "cartesian position coordinates")
+coords = constrainedNRV' (makeUCWDS "(x,y)" (cn "cartesian position coordinates")
   (P lY +:+ S "is considered parallel to the direction of the force of" +:+
-   phrase gravity `S.and_` P lX +:+ S "is considered perpendicular to" +:+ P lY))
-  (const lCoords) Real (Just metre)) []
+   phrase gravity `S.and_` P lX +:+ S "is considered perpendicular to" +:+ P lY)
+  lCoords metre) []
 
 ---------------------------
 -- START OF UNITALCHUNKS --

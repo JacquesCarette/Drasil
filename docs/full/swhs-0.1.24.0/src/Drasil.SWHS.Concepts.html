@@ -1,0 +1,238 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.SWHS.Concepts</span><span> </span><span class="hs-keyword">where</span><span> </span><span class="hs-comment">--all of this file is exported</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Lens</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-operator">(^.)</span></span><span class="hs-special">)</span><span>
+</span><span id="line-4"></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.Concepts</span></span><span>
+</span><span id="line-7"></span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">assumption</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">goalStmt</span></span><span class="hs-special">,</span><span>
+</span><span id="line-9"></span><span>  </span><span class="annot"><span class="hs-identifier">likelyChg</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">physSyst</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">requirement</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">srs</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">typUnc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">unlikelyChg</span></span><span class="hs-special">)</span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">ode</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">parameter</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">rightSide</span></span><span class="hs-special">)</span><span>
+</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Domains</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">materialEng</span></span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.TheoryConcepts</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">dataDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">genDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">inModel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">thModel</span></span><span class="hs-special">)</span><span>
+</span><span id="line-13"></span><span>
+</span><span id="line-14"></span><span class="annot"><a href="Drasil.SWHS.Concepts.html#con"><span class="hs-identifier hs-type">con</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-15"></span><span id="con"><span class="annot"><span class="annottext">con :: [ConceptChunk]
+</span><a href="Drasil.SWHS.Concepts.html#con"><span class="hs-identifier hs-var hs-var">con</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#charging"><span class="hs-identifier hs-var">charging</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#coil"><span class="hs-identifier hs-var">coil</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#discharging"><span class="hs-identifier hs-var">discharging</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#gaussDiv"><span class="hs-identifier hs-var">gaussDiv</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-16"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#perfectInsul"><span class="hs-identifier hs-var">perfectInsul</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#phaseChangeMaterial"><span class="hs-identifier hs-var">phaseChangeMaterial</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#tank"><span class="hs-identifier hs-var">tank</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-17"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#tankPCM"><span class="hs-identifier hs-var">tankPCM</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#transient"><span class="hs-identifier hs-var">transient</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#water"><span class="hs-identifier hs-var">water</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#sWHT"><span class="hs-identifier hs-var">sWHT</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#tankParam"><span class="hs-identifier hs-var">tankParam</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-18"></span><span>
+</span><span id="line-19"></span><span class="hs-comment">---Acronyms---</span><span>
+</span><span id="line-20"></span><span class="annot"><a href="Drasil.SWHS.Concepts.html#acronyms"><span class="hs-identifier hs-type">acronyms</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span class="hs-special">]</span><span>
+</span><span id="line-21"></span><span id="acronyms"><span class="annot"><span class="annottext">acronyms :: [CI]
+</span><a href="Drasil.SWHS.Concepts.html#acronyms"><span class="hs-identifier hs-var hs-var">acronyms</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">assumption</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">dataDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">genDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">goalStmt</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">inModel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">likelyChg</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">ode</span></span><span class="hs-special">,</span><span>
+</span><span id="line-22"></span><span>  </span><span class="annot"><span class="annottext">CI
+</span><a href="Drasil.SWHS.Concepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">physSyst</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">requirement</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">srs</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">thModel</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">typUnc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">unlikelyChg</span></span><span class="hs-special">]</span><span>
+</span><span id="line-23"></span><span>
+</span><span id="line-24"></span><span class="annot"><a href="Drasil.SWHS.Concepts.html#acronymsFull"><span class="hs-identifier hs-type">acronymsFull</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span class="hs-special">]</span><span>
+</span><span id="line-25"></span><span id="acronymsFull"><span class="annot"><span class="annottext">acronymsFull :: [CI]
+</span><a href="Drasil.SWHS.Concepts.html#acronymsFull"><span class="hs-identifier hs-var hs-var">acronymsFull</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[CI]
+</span><a href="Drasil.SWHS.Concepts.html#acronyms"><span class="hs-identifier hs-var">acronyms</span></a></span><span> </span><span class="annot"><span class="annottext">[CI] -&gt; [CI] -&gt; [CI]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">CI
+</span><a href="Drasil.SWHS.Concepts.html#phsChgMtrl"><span class="hs-identifier hs-var">phsChgMtrl</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">rightSide</span></span><span class="hs-special">]</span><span>
+</span><span id="line-26"></span><span>
+</span><span id="line-27"></span><span class="annot"><a href="Drasil.SWHS.Concepts.html#phsChgMtrl"><span class="hs-identifier hs-type">phsChgMtrl</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Concepts.html#progName"><span class="hs-identifier hs-type">progName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CI</span></span><span>
+</span><span id="line-28"></span><span>
+</span><span id="line-29"></span><span id="phsChgMtrl"><span class="annot"><span class="annottext">phsChgMtrl :: CI
+</span><a href="Drasil.SWHS.Concepts.html#phsChgMtrl"><span class="hs-identifier hs-var hs-var">phsChgMtrl</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; [IdeaDict] -&gt; CI
+</span><span class="hs-identifier hs-var">commonIdeaWithDict</span></span><span> </span><span class="annot"><span class="hs-string">&quot;phsChgMtrl&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; String -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhrase</span></span><span> </span><span class="annot"><span class="hs-string">&quot;phase change material&quot;</span></span><span>
+</span><span id="line-30"></span><span>  </span><span class="annot"><span class="hs-string">&quot;phase change materials&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;PCM&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">IdeaDict
+</span><span class="hs-identifier hs-var">materialEng</span></span><span class="hs-special">]</span><span>
+</span><span id="line-31"></span><span>
+</span><span id="line-32"></span><span id="progName"><span class="annot"><span class="annottext">progName :: CI
+</span><a href="Drasil.SWHS.Concepts.html#progName"><span class="hs-identifier hs-var hs-var">progName</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; [IdeaDict] -&gt; CI
+</span><span class="hs-identifier hs-var">commonIdeaWithDict</span></span><span> </span><span class="annot"><span class="hs-string">&quot;swhsName&quot;</span></span><span>   </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; String -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhrase</span></span><span> </span><span class="annot"><span class="hs-string">&quot;solar water heating system&quot;</span></span><span>
+</span><span id="line-33"></span><span>  </span><span class="annot"><span class="hs-string">&quot;solar water heating systems&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;SWHS&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">IdeaDict
+</span><span class="hs-identifier hs-var">materialEng</span></span><span class="hs-special">]</span><span>
+</span><span id="line-34"></span><span>
+</span><span id="line-35"></span><span class="annot"><a href="Drasil.SWHS.Concepts.html#full"><span class="hs-identifier hs-type">full</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedChunk</span></span><span>
+</span><span id="line-36"></span><span id="full"><span class="annot"><span class="annottext">full :: NamedChunk
+</span><a href="Drasil.SWHS.Concepts.html#full"><span class="hs-identifier hs-var hs-var">full</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; NamedChunk
+</span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;full&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI
+</span><a href="Drasil.SWHS.Concepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span> </span><span class="annot"><span class="annottext">CI -&gt; CI -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`with`</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><a href="Drasil.SWHS.Concepts.html#phsChgMtrl"><span class="hs-identifier hs-var">phsChgMtrl</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-37"></span><span class="hs-comment">-- I want to include SI as an acronym, but I can't find a way for the</span><span>
+</span><span id="line-38"></span><span class="hs-comment">-- description to have accents when using dcc.</span><span>
+</span><span id="line-39"></span><span>
+</span><span id="line-40"></span><span class="hs-comment">---ConceptChunks---</span><span>
+</span><span id="line-41"></span><span>
+</span><span id="line-42"></span><span class="annot"><a href="Drasil.SWHS.Concepts.html#charging"><span class="hs-identifier hs-type">charging</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Concepts.html#coil"><span class="hs-identifier hs-type">coil</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Concepts.html#discharging"><span class="hs-identifier hs-type">discharging</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Concepts.html#gaussDiv"><span class="hs-identifier hs-type">gaussDiv</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-43"></span><span>  </span><span class="annot"><a href="Drasil.SWHS.Concepts.html#perfectInsul"><span class="hs-identifier hs-type">perfectInsul</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Concepts.html#phaseChangeMaterial"><span class="hs-identifier hs-type">phaseChangeMaterial</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Concepts.html#tank"><span class="hs-identifier hs-type">tank</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-44"></span><span>  </span><span class="annot"><a href="Drasil.SWHS.Concepts.html#tankPCM"><span class="hs-identifier hs-type">tankPCM</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Concepts.html#transient"><span class="hs-identifier hs-type">transient</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Concepts.html#water"><span class="hs-identifier hs-type">water</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Concepts.html#sWHT"><span class="hs-identifier hs-type">sWHT</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Concepts.html#tankParam"><span class="hs-identifier hs-type">tankParam</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
+</span><span id="line-45"></span><span>
+</span><span id="line-46"></span><span id="charging"><span class="annot"><span class="annottext">charging :: ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#charging"><span class="hs-identifier hs-var hs-var">charging</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;charging&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;charging&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;charging of the tank&quot;</span></span><span>
+</span><span id="line-47"></span><span>
+</span><span id="line-48"></span><span id="coil"><span class="annot"><span class="annottext">coil :: ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#coil"><span class="hs-identifier hs-var hs-var">coil</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;coil&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;heating coil&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-49"></span><span>  </span><span class="annot"><span class="hs-string">&quot;coil in tank that heats by absorbing solar energy&quot;</span></span><span>
+</span><span id="line-50"></span><span>
+</span><span id="line-51"></span><span id="discharging"><span class="annot"><span class="annottext">discharging :: ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#discharging"><span class="hs-identifier hs-var hs-var">discharging</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;discharging&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;discharging&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-52"></span><span>  </span><span class="annot"><span class="hs-string">&quot;discharging of the tank&quot;</span></span><span>
+</span><span id="line-53"></span><span>
+</span><span id="line-54"></span><span id="transient"><span class="annot"><span class="annottext">transient :: ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#transient"><span class="hs-identifier hs-var hs-var">transient</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;transient&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;transient&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;changing with time&quot;</span></span><span>
+</span><span id="line-55"></span><span>
+</span><span id="line-56"></span><span id="gaussDiv"><span class="annot"><span class="annottext">gaussDiv :: ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#gaussDiv"><span class="hs-identifier hs-var hs-var">gaussDiv</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;gaussDiv&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;gauss's divergence theorem&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-57"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="hs-string">&quot;a result that relates the flow of a vector field through a surface&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span>
+</span><span id="line-58"></span><span>  </span><span class="annot"><span class="hs-string">&quot;to the behavior of the vector field inside the surface&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-59"></span><span class="hs-comment">--TODO: Physical property.</span><span>
+</span><span id="line-60"></span><span>
+</span><span id="line-61"></span><span id="perfectInsul"><span class="annot"><span class="annottext">perfectInsul :: ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#perfectInsul"><span class="hs-identifier hs-var hs-var">perfectInsul</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;perfectInsul&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;perfectly insulated&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-62"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="hs-string">&quot;describes the property of a material not allowing&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span>
+</span><span id="line-63"></span><span>  </span><span class="annot"><span class="hs-string">&quot;heat transfer through its boundaries&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-64"></span><span>
+</span><span id="line-65"></span><span id="phaseChangeMaterial"><span class="annot"><span class="annottext">phaseChangeMaterial :: ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#phaseChangeMaterial"><span class="hs-identifier hs-var hs-var">phaseChangeMaterial</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;pcm&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI
+</span><a href="Drasil.SWHS.Concepts.html#phsChgMtrl"><span class="hs-identifier hs-var">phsChgMtrl</span></a></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Getting NP CI NP -&gt; NP
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting NP CI NP
+forall c. NamedIdea c =&gt; Lens' c NP
+</span><span class="hs-identifier hs-var">term</span></span><span class="hs-special">)</span><span>
+</span><span id="line-66"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="hs-string">&quot;a substance that uses phase changes (such as melting) to absorb or &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span>
+</span><span id="line-67"></span><span>  </span><span class="annot"><span class="hs-string">&quot;release large amounts of heat at a constant temperature&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-68"></span><span>  </span><span>
+</span><span id="line-69"></span><span id="tankParam"><span class="annot"><span class="annottext">tankParam :: ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#tankParam"><span class="hs-identifier hs-var hs-var">tankParam</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;tankParam&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; NP -&gt; NP
+</span><span class="hs-identifier hs-var">compoundPhrase'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#tank"><span class="hs-identifier hs-var">tank</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Getting NP ConceptChunk NP -&gt; NP
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting NP ConceptChunk NP
+forall c. NamedIdea c =&gt; Lens' c NP
+</span><span class="hs-identifier hs-var">term</span></span><span class="hs-special">)</span><span>
+</span><span id="line-70"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">parameter</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Getting NP ConceptChunk NP -&gt; NP
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting NP ConceptChunk NP
+forall c. NamedIdea c =&gt; Lens' c NP
+</span><span class="hs-identifier hs-var">term</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-71"></span><span>  </span><span class="annot"><span class="hs-string">&quot;values associated with the tank&quot;</span></span><span>
+</span><span id="line-72"></span><span>
+</span><span id="line-73"></span><span id="tank"><span class="annot"><span class="annottext">tank :: ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#tank"><span class="hs-identifier hs-var hs-var">tank</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;tank&quot;</span></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;tank&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;enclosure containing some kind of substance&quot;</span></span><span>
+</span><span id="line-74"></span><span id="sWHT"><span class="annot"><span class="annottext">sWHT :: ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#sWHT"><span class="hs-identifier hs-var hs-var">sWHT</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;sWHT&quot;</span></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;solar water heating tank&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;solar water heating tank&quot;</span></span><span>
+</span><span id="line-75"></span><span id="water"><span class="annot"><span class="annottext">water :: ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#water"><span class="hs-identifier hs-var hs-var">water</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;water&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">cn'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;water&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;the liquid with which the tank is filled&quot;</span></span><span>
+</span><span id="line-76"></span><span>
+</span><span id="line-77"></span><span id="tankPCM"><span class="annot"><span class="annottext">tankPCM :: ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#tankPCM"><span class="hs-identifier hs-var hs-var">tankPCM</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;tankPCM&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence
+-&gt; Sentence -&gt; CapitalizationRule -&gt; CapitalizationRule -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhrase''</span></span><span>
+</span><span id="line-78"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#sWHT"><span class="hs-identifier hs-var">sWHT</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;incorporating&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall c. (Idea c, HasUID c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><a href="Drasil.SWHS.Concepts.html#phsChgMtrl"><span class="hs-identifier hs-var">phsChgMtrl</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-79"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#sWHT"><span class="hs-identifier hs-var">sWHT</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;incorporating&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall c. (Idea c, HasUID c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><a href="Drasil.SWHS.Concepts.html#phsChgMtrl"><span class="hs-identifier hs-var">phsChgMtrl</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-80"></span><span>  </span><span class="annot"><span class="annottext">CapitalizationRule
+</span><span class="hs-identifier hs-var">CapFirst</span></span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
+</span><span class="hs-identifier hs-var">CapWords</span></span><span class="hs-special">)</span><span>
+</span><span id="line-81"></span><span>  </span><span class="annot"><span class="hs-string">&quot;solar water heating tank incorporating phase change material&quot;</span></span><span>
+</span><span id="line-82"></span><span>
+</span><span id="line-83"></span><span class="annot"><a href="Drasil.SWHS.Concepts.html#swhsPCM"><span class="hs-identifier hs-type">swhsPCM</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CommonConcept</span></span><span>
+</span><span id="line-84"></span><span class="hs-comment">-- Nounphrase'' hack to get nounPhraseSP words to accept</span><span>
+</span><span id="line-85"></span><span class="hs-comment">-- nounPhrases instead of strings</span><span>
+</span><span id="line-86"></span><span class="hs-comment">-- Another capitalization hack.</span><span>
+</span><span id="line-87"></span><span id="swhsPCM"><span class="annot"><span class="annottext">swhsPCM :: CommonConcept
+</span><a href="Drasil.SWHS.Concepts.html#swhsPCM"><span class="hs-identifier hs-var hs-var">swhsPCM</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; String -&gt; CommonConcept
+</span><span class="hs-identifier hs-var">dcc'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;swhsPCM&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence
+-&gt; Sentence -&gt; CapitalizationRule -&gt; CapitalizationRule -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhrase''</span></span><span>
+</span><span id="line-88"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;solar water heating systems&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;incorporating&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall c. (Idea c, HasUID c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><a href="Drasil.SWHS.Concepts.html#phsChgMtrl"><span class="hs-identifier hs-var">phsChgMtrl</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-89"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;solar water heating systems&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;incorporating&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall c. (Idea c, HasUID c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><a href="Drasil.SWHS.Concepts.html#phsChgMtrl"><span class="hs-identifier hs-var">phsChgMtrl</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-90"></span><span>  </span><span class="annot"><span class="annottext">CapitalizationRule
+</span><span class="hs-identifier hs-var">CapFirst</span></span><span> </span><span class="annot"><span class="annottext">CapitalizationRule
+</span><span class="hs-identifier hs-var">CapWords</span></span><span class="hs-special">)</span><span>
+</span><span id="line-91"></span><span>  </span><span class="annot"><span class="hs-string">&quot;solar water heating systems incorporating phase change material&quot;</span></span><span>
+</span><span id="line-92"></span><span>  </span><span class="annot"><span class="hs-string">&quot;SWHS&quot;</span></span><span>
+</span><span id="line-93"></span></pre></body></html>

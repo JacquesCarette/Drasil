@@ -1,0 +1,674 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.PDController.Unitals</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Constraints</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">gtZeroConstr</span></span><span class="hs-special">)</span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.SI_Units</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">second</span></span><span class="hs-special">)</span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.Concepts</span></span><span>
+</span><span id="line-7"></span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.PDController.Concepts.html"><span class="hs-identifier">Drasil.PDController.Concepts</span></a></span><span>
+</span><span id="line-9"></span><span>
+</span><span id="line-10"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#syms"><span class="hs-identifier hs-type">syms</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#symFS"><span class="hs-identifier hs-type">symFS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#symFt"><span class="hs-identifier hs-type">symFt</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#symnegInf"><span class="hs-identifier hs-type">symnegInf</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#symposInf"><span class="hs-identifier hs-type">symposInf</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#syminvLaplace"><span class="hs-identifier hs-type">syminvLaplace</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#symKd"><span class="hs-identifier hs-type">symKd</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#symKp"><span class="hs-identifier hs-type">symKp</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-11"></span><span>       </span><span class="annot"><a href="Drasil.PDController.Unitals.html#symYT"><span class="hs-identifier hs-type">symYT</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#symYS"><span class="hs-identifier hs-type">symYS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#symYrT"><span class="hs-identifier hs-type">symYrT</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#symYrS"><span class="hs-identifier hs-type">symYrS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#symET"><span class="hs-identifier hs-type">symET</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#symES"><span class="hs-identifier hs-type">symES</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#symPS"><span class="hs-identifier hs-type">symPS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#symDS"><span class="hs-identifier hs-type">symDS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#symHS"><span class="hs-identifier hs-type">symHS</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-12"></span><span>       </span><span class="annot"><a href="Drasil.PDController.Unitals.html#symCT"><span class="hs-identifier hs-type">symCT</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#symCS"><span class="hs-identifier hs-type">symCS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#symTStep"><span class="hs-identifier hs-type">symTStep</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#symTSim"><span class="hs-identifier hs-type">symTSim</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#symAbsTol"><span class="hs-identifier hs-type">symAbsTol</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#symRelTol"><span class="hs-identifier hs-type">symRelTol</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-13"></span><span>       </span><span class="annot"><a href="Drasil.PDController.Unitals.html#symDampingCoeff"><span class="hs-identifier hs-type">symDampingCoeff</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#symStifnessCoeff"><span class="hs-identifier hs-type">symStifnessCoeff</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Symbol</span></span><span>
+</span><span id="line-14"></span><span>
+</span><span id="line-15"></span><span id="symnegInf"><span class="annot"><span class="annottext">symnegInf :: Symbol
+</span><a href="Drasil.PDController.Unitals.html#symnegInf"><span class="hs-identifier hs-var hs-var">symnegInf</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;-&#8734;&quot;</span></span><span>
+</span><span id="line-16"></span><span id="symposInf"><span class="annot"><span class="annottext">symposInf :: Symbol
+</span><a href="Drasil.PDController.Unitals.html#symposInf"><span class="hs-identifier hs-var hs-var">symposInf</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;&#8734;&quot;</span></span><span>
+</span><span id="line-17"></span><span id="symFS"><span class="annot"><span class="annottext">symFS :: Symbol
+</span><a href="Drasil.PDController.Unitals.html#symFS"><span class="hs-identifier hs-var hs-var">symFS</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;F&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Symbol -&gt; Symbol) -&gt; Symbol -&gt; Symbol
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;s&quot;</span></span><span>
+</span><span id="line-18"></span><span id="syminvLaplace"><span class="annot"><span class="annottext">syminvLaplace :: Symbol
+</span><a href="Drasil.PDController.Unitals.html#syminvLaplace"><span class="hs-identifier hs-var hs-var">syminvLaplace</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;L&#8315;&#185;[F(s)]&quot;</span></span><span>
+</span><span id="line-19"></span><span id="syms"><span class="annot"><span class="annottext">syms :: Symbol
+</span><a href="Drasil.PDController.Unitals.html#syms"><span class="hs-identifier hs-var hs-var">syms</span></a></span></span><span>             </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;s&quot;</span></span><span>
+</span><span id="line-20"></span><span id="symFt"><span class="annot"><span class="annottext">symFt :: Symbol
+</span><a href="Drasil.PDController.Unitals.html#symFt"><span class="hs-identifier hs-var hs-var">symFt</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;f&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Symbol -&gt; Symbol) -&gt; Symbol -&gt; Symbol
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;t&quot;</span></span><span>
+</span><span id="line-21"></span><span id="symKd"><span class="annot"><span class="annottext">symKd :: Symbol
+</span><a href="Drasil.PDController.Unitals.html#symKd"><span class="hs-identifier hs-var hs-var">symKd</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;K&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Symbol -&gt; Symbol) -&gt; Symbol -&gt; Symbol
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;d&quot;</span></span><span>
+</span><span id="line-22"></span><span id="symKp"><span class="annot"><span class="annottext">symKp :: Symbol
+</span><a href="Drasil.PDController.Unitals.html#symKp"><span class="hs-identifier hs-var hs-var">symKp</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;K&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Symbol -&gt; Symbol) -&gt; Symbol -&gt; Symbol
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;p&quot;</span></span><span>
+</span><span id="line-23"></span><span id="symYrT"><span class="annot"><span class="annottext">symYrT :: Symbol
+</span><a href="Drasil.PDController.Unitals.html#symYrT"><span class="hs-identifier hs-var hs-var">symYrT</span></a></span></span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;r&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Symbol -&gt; Symbol) -&gt; Symbol -&gt; Symbol
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;t&quot;</span></span><span>
+</span><span id="line-24"></span><span id="symYrS"><span class="annot"><span class="annottext">symYrS :: Symbol
+</span><a href="Drasil.PDController.Unitals.html#symYrS"><span class="hs-identifier hs-var hs-var">symYrS</span></a></span></span><span>           </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;R&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Symbol -&gt; Symbol) -&gt; Symbol -&gt; Symbol
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;s&quot;</span></span><span>
+</span><span id="line-25"></span><span id="symYT"><span class="annot"><span class="annottext">symYT :: Symbol
+</span><a href="Drasil.PDController.Unitals.html#symYT"><span class="hs-identifier hs-var hs-var">symYT</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;y&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Symbol -&gt; Symbol) -&gt; Symbol -&gt; Symbol
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;t&quot;</span></span><span>
+</span><span id="line-26"></span><span id="symYS"><span class="annot"><span class="annottext">symYS :: Symbol
+</span><a href="Drasil.PDController.Unitals.html#symYS"><span class="hs-identifier hs-var hs-var">symYS</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Y&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Symbol -&gt; Symbol) -&gt; Symbol -&gt; Symbol
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;s&quot;</span></span><span>
+</span><span id="line-27"></span><span id="symET"><span class="annot"><span class="annottext">symET :: Symbol
+</span><a href="Drasil.PDController.Unitals.html#symET"><span class="hs-identifier hs-var hs-var">symET</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;e&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Symbol -&gt; Symbol) -&gt; Symbol -&gt; Symbol
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;t&quot;</span></span><span>
+</span><span id="line-28"></span><span id="symES"><span class="annot"><span class="annottext">symES :: Symbol
+</span><a href="Drasil.PDController.Unitals.html#symES"><span class="hs-identifier hs-var hs-var">symES</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;E&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Symbol -&gt; Symbol) -&gt; Symbol -&gt; Symbol
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;s&quot;</span></span><span>
+</span><span id="line-29"></span><span id="symPS"><span class="annot"><span class="annottext">symPS :: Symbol
+</span><a href="Drasil.PDController.Unitals.html#symPS"><span class="hs-identifier hs-var hs-var">symPS</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;P&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Symbol -&gt; Symbol) -&gt; Symbol -&gt; Symbol
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;s&quot;</span></span><span>
+</span><span id="line-30"></span><span id="symDS"><span class="annot"><span class="annottext">symDS :: Symbol
+</span><a href="Drasil.PDController.Unitals.html#symDS"><span class="hs-identifier hs-var hs-var">symDS</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;D&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Symbol -&gt; Symbol) -&gt; Symbol -&gt; Symbol
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;s&quot;</span></span><span>
+</span><span id="line-31"></span><span id="symHS"><span class="annot"><span class="annottext">symHS :: Symbol
+</span><a href="Drasil.PDController.Unitals.html#symHS"><span class="hs-identifier hs-var hs-var">symHS</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;H&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Symbol -&gt; Symbol) -&gt; Symbol -&gt; Symbol
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;s&quot;</span></span><span>
+</span><span id="line-32"></span><span id="symCT"><span class="annot"><span class="annottext">symCT :: Symbol
+</span><a href="Drasil.PDController.Unitals.html#symCT"><span class="hs-identifier hs-var hs-var">symCT</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;c&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Symbol -&gt; Symbol) -&gt; Symbol -&gt; Symbol
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;t&quot;</span></span><span>
+</span><span id="line-33"></span><span id="symCS"><span class="annot"><span class="annottext">symCS :: Symbol
+</span><a href="Drasil.PDController.Unitals.html#symCS"><span class="hs-identifier hs-var hs-var">symCS</span></a></span></span><span>            </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;C&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Symbol -&gt; Symbol) -&gt; Symbol -&gt; Symbol
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;s&quot;</span></span><span>
+</span><span id="line-34"></span><span id="symTStep"><span class="annot"><span class="annottext">symTStep :: Symbol
+</span><a href="Drasil.PDController.Unitals.html#symTStep"><span class="hs-identifier hs-var hs-var">symTStep</span></a></span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;t&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Symbol -&gt; Symbol) -&gt; Symbol -&gt; Symbol
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;step&quot;</span></span><span>
+</span><span id="line-35"></span><span id="symTSim"><span class="annot"><span class="annottext">symTSim :: Symbol
+</span><a href="Drasil.PDController.Unitals.html#symTSim"><span class="hs-identifier hs-var hs-var">symTSim</span></a></span></span><span>          </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;t&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(Symbol -&gt; Symbol) -&gt; Symbol -&gt; Symbol
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-keyword hs-var">label</span></span><span> </span><span class="annot"><span class="hs-string">&quot;sim&quot;</span></span><span>
+</span><span id="line-36"></span><span id="symAbsTol"><span class="annot"><span class="annottext">symAbsTol :: Symbol
+</span><a href="Drasil.PDController.Unitals.html#symAbsTol"><span class="hs-identifier hs-var hs-var">symAbsTol</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;AbsTol&quot;</span></span><span>
+</span><span id="line-37"></span><span id="symRelTol"><span class="annot"><span class="annottext">symRelTol :: Symbol
+</span><a href="Drasil.PDController.Unitals.html#symRelTol"><span class="hs-identifier hs-var hs-var">symRelTol</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;RelTol&quot;</span></span><span>
+</span><span id="line-38"></span><span id="symDampingCoeff"><span class="annot"><span class="annottext">symDampingCoeff :: Symbol
+</span><a href="Drasil.PDController.Unitals.html#symDampingCoeff"><span class="hs-identifier hs-var hs-var">symDampingCoeff</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;c&quot;</span></span><span>
+</span><span id="line-39"></span><span id="symStifnessCoeff"><span class="annot"><span class="annottext">symStifnessCoeff :: Symbol
+</span><a href="Drasil.PDController.Unitals.html#symStifnessCoeff"><span class="hs-identifier hs-var hs-var">symStifnessCoeff</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Symbol
+</span><span class="hs-identifier hs-var">variable</span></span><span> </span><span class="annot"><span class="hs-string">&quot;k&quot;</span></span><span>
+</span><span id="line-40"></span><span>
+</span><span id="line-41"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#symbols"><span class="hs-identifier hs-type">symbols</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-42"></span><span id="symbols"><span class="annot"><span class="annottext">symbols :: [QuantityDict]
+</span><a href="Drasil.PDController.Unitals.html#symbols"><span class="hs-identifier hs-var hs-var">symbols</span></a></span></span><span>
+</span><span id="line-43"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdLaplaceTransform"><span class="hs-identifier hs-var">qdLaplaceTransform</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdFreqDomain"><span class="hs-identifier hs-var">qdFreqDomain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdFxnTDomain"><span class="hs-identifier hs-var">qdFxnTDomain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdNegInf"><span class="hs-identifier hs-var">qdNegInf</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdPosInf"><span class="hs-identifier hs-var">qdPosInf</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-44"></span><span>     </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdInvLaplaceTransform"><span class="hs-identifier hs-var">qdInvLaplaceTransform</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdPropGain"><span class="hs-identifier hs-var">qdPropGain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdDerivGain"><span class="hs-identifier hs-var">qdDerivGain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdSetPointTD"><span class="hs-identifier hs-var">qdSetPointTD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdSetPointFD"><span class="hs-identifier hs-var">qdSetPointFD</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-45"></span><span>     </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdProcessVariableTD"><span class="hs-identifier hs-var">qdProcessVariableTD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdProcessVariableFD"><span class="hs-identifier hs-var">qdProcessVariableFD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdProcessErrorTD"><span class="hs-identifier hs-var">qdProcessErrorTD</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-46"></span><span>     </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdProcessErrorFD"><span class="hs-identifier hs-var">qdProcessErrorFD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdDerivativeControlFD"><span class="hs-identifier hs-var">qdDerivativeControlFD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdPropControlFD"><span class="hs-identifier hs-var">qdPropControlFD</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-47"></span><span>     </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdTransferFunctionFD"><span class="hs-identifier hs-var">qdTransferFunctionFD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdCtrlVarTD"><span class="hs-identifier hs-var">qdCtrlVarTD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdCtrlVarFD"><span class="hs-identifier hs-var">qdCtrlVarFD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdStepTime"><span class="hs-identifier hs-var">qdStepTime</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdSimTime"><span class="hs-identifier hs-var">qdSimTime</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-48"></span><span>     </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdDampingCoeff"><span class="hs-identifier hs-var">qdDampingCoeff</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdStiffnessCoeff"><span class="hs-identifier hs-var">qdStiffnessCoeff</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-49"></span><span>
+</span><span id="line-50"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdLaplaceTransform"><span class="hs-identifier hs-type">qdLaplaceTransform</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdFreqDomain"><span class="hs-identifier hs-type">qdFreqDomain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdFxnTDomain"><span class="hs-identifier hs-type">qdFxnTDomain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdNegInf"><span class="hs-identifier hs-type">qdNegInf</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdPosInf"><span class="hs-identifier hs-type">qdPosInf</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-51"></span><span>                    </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdInvLaplaceTransform"><span class="hs-identifier hs-type">qdInvLaplaceTransform</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdPropGain"><span class="hs-identifier hs-type">qdPropGain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdDerivGain"><span class="hs-identifier hs-type">qdDerivGain</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-52"></span><span>                    </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdSetPointTD"><span class="hs-identifier hs-type">qdSetPointTD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdSetPointFD"><span class="hs-identifier hs-type">qdSetPointFD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdProcessVariableTD"><span class="hs-identifier hs-type">qdProcessVariableTD</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-53"></span><span>                    </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdProcessVariableFD"><span class="hs-identifier hs-type">qdProcessVariableFD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdProcessErrorTD"><span class="hs-identifier hs-type">qdProcessErrorTD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdProcessErrorFD"><span class="hs-identifier hs-type">qdProcessErrorFD</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-54"></span><span>                    </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdPropControlFD"><span class="hs-identifier hs-type">qdPropControlFD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdDerivativeControlFD"><span class="hs-identifier hs-type">qdDerivativeControlFD</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-55"></span><span>                    </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdTransferFunctionFD"><span class="hs-identifier hs-type">qdTransferFunctionFD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdCtrlVarFD"><span class="hs-identifier hs-type">qdCtrlVarFD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdCtrlVarTD"><span class="hs-identifier hs-type">qdCtrlVarTD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdStepTime"><span class="hs-identifier hs-type">qdStepTime</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-56"></span><span>                    </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdSimTime"><span class="hs-identifier hs-type">qdSimTime</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdDampingCoeff"><span class="hs-identifier hs-type">qdDampingCoeff</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#qdStiffnessCoeff"><span class="hs-identifier hs-type">qdStiffnessCoeff</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span>
+</span><span id="line-57"></span><span>
+</span><span id="line-58"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#inputs"><span class="hs-identifier hs-type">inputs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-59"></span><span id="inputs"><span class="annot"><span class="annottext">inputs :: [QuantityDict]
+</span><a href="Drasil.PDController.Unitals.html#inputs"><span class="hs-identifier hs-var hs-var">inputs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdSetPointTD"><span class="hs-identifier hs-var">qdSetPointTD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdDerivGain"><span class="hs-identifier hs-var">qdDerivGain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdPropGain"><span class="hs-identifier hs-var">qdPropGain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdStepTime"><span class="hs-identifier hs-var">qdStepTime</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdSimTime"><span class="hs-identifier hs-var">qdSimTime</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-60"></span><span>
+</span><span id="line-61"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#outputs"><span class="hs-identifier hs-type">outputs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-62"></span><span id="outputs"><span class="annot"><span class="annottext">outputs :: [QuantityDict]
+</span><a href="Drasil.PDController.Unitals.html#outputs"><span class="hs-identifier hs-var hs-var">outputs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdProcessVariableTD"><span class="hs-identifier hs-var">qdProcessVariableTD</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-63"></span><span>
+</span><span id="line-64"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#inputsUC"><span class="hs-identifier hs-type">inputsUC</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span class="hs-special">]</span><span>
+</span><span id="line-65"></span><span id="inputsUC"><span class="annot"><span class="annottext">inputsUC :: [UncertQ]
+</span><a href="Drasil.PDController.Unitals.html#inputsUC"><span class="hs-identifier hs-var hs-var">inputsUC</span></a></span></span><span>
+</span><span id="line-66"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UncertQ
+</span><a href="Drasil.PDController.Unitals.html#ipSetPtUnc"><span class="hs-identifier hs-var">ipSetPtUnc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><a href="Drasil.PDController.Unitals.html#ipPropGainUnc"><span class="hs-identifier hs-var">ipPropGainUnc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><a href="Drasil.PDController.Unitals.html#ipDerGainUnc"><span class="hs-identifier hs-var">ipDerGainUnc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><a href="Drasil.PDController.Unitals.html#ipStepTimeUnc"><span class="hs-identifier hs-var">ipStepTimeUnc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><a href="Drasil.PDController.Unitals.html#ipSimTimeUnc"><span class="hs-identifier hs-var">ipSimTimeUnc</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-67"></span><span>
+</span><span id="line-68"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#inpConstrained"><span class="hs-identifier hs-type">inpConstrained</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConstrConcept</span></span><span class="hs-special">]</span><span>
+</span><span id="line-69"></span><span id="inpConstrained"><span class="annot"><span class="annottext">inpConstrained :: [ConstrConcept]
+</span><a href="Drasil.PDController.Unitals.html#inpConstrained"><span class="hs-identifier hs-var hs-var">inpConstrained</span></a></span></span><span>
+</span><span id="line-70"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.PDController.Unitals.html#ipPropGain"><span class="hs-identifier hs-var">ipPropGain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.PDController.Unitals.html#ipDerivGain"><span class="hs-identifier hs-var">ipDerivGain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.PDController.Unitals.html#ipSetPt"><span class="hs-identifier hs-var">ipSetPt</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.PDController.Unitals.html#ipStepTime"><span class="hs-identifier hs-var">ipStepTime</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.PDController.Unitals.html#ipSimTime"><span class="hs-identifier hs-var">ipSimTime</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.PDController.Unitals.html#opProcessVariable"><span class="hs-identifier hs-var">opProcessVariable</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-71"></span><span>
+</span><span id="line-72"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#ipPropGain"><span class="hs-identifier hs-type">ipPropGain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#ipDerivGain"><span class="hs-identifier hs-type">ipDerivGain</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#ipSetPt"><span class="hs-identifier hs-type">ipSetPt</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#ipStepTime"><span class="hs-identifier hs-type">ipStepTime</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#ipSimTime"><span class="hs-identifier hs-type">ipSimTime</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#opProcessVariable"><span class="hs-identifier hs-type">opProcessVariable</span></a></span><span> </span><span class="hs-glyph">::</span><span>
+</span><span id="line-73"></span><span>            </span><span class="annot"><span class="hs-identifier hs-type">ConstrConcept</span></span><span>
+</span><span id="line-74"></span><span>
+</span><span id="line-75"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#ipSetPtUnc"><span class="hs-identifier hs-type">ipSetPtUnc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#ipPropGainUnc"><span class="hs-identifier hs-type">ipPropGainUnc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#ipDerGainUnc"><span class="hs-identifier hs-type">ipDerGainUnc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#ipStepTimeUnc"><span class="hs-identifier hs-type">ipStepTimeUnc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#ipSimTimeUnc"><span class="hs-identifier hs-type">ipSimTimeUnc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span>
+</span><span id="line-76"></span><span>
+</span><span id="line-77"></span><span id="ipPropGain"><span class="annot"><span class="annottext">ipPropGain :: ConstrConcept
+</span><a href="Drasil.PDController.Unitals.html#ipPropGain"><span class="hs-identifier hs-var hs-var">ipPropGain</span></a></span></span><span>
+</span><span id="line-78"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
+forall c.
+(Concept c, MayHaveUnit c, Quantity c) =&gt;
+c -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
+</span><span class="hs-identifier hs-var">constrained'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; DefinedQuantityDict
+</span><span class="hs-identifier hs-var">dqdNoUnit</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#propGain"><span class="hs-identifier hs-var">propGain</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.PDController.Unitals.html#symKp"><span class="hs-identifier hs-var">symKp</span></a></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstraintE
+</span><span class="hs-identifier hs-var">gtZeroConstr</span></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">20</span></span><span class="hs-special">)</span><span>
+</span><span id="line-79"></span><span id="ipPropGainUnc"><span class="annot"><span class="annottext">ipPropGainUnc :: UncertQ
+</span><a href="Drasil.PDController.Unitals.html#ipPropGainUnc"><span class="hs-identifier hs-var hs-var">ipPropGainUnc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Uncertainty -&gt; UncertQ
+forall c.
+(Quantity c, Constrained c, Concept c, HasReasVal c,
+ MayHaveUnit c) =&gt;
+c -&gt; Uncertainty -&gt; UncertQ
+</span><span class="hs-identifier hs-var">uq</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.PDController.Unitals.html#ipPropGain"><span class="hs-identifier hs-var">ipPropGain</span></a></span><span> </span><span class="annot"><span class="annottext">Uncertainty
+</span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
+</span><span id="line-80"></span><span id="qdPropGain"><span class="annot"><span class="annottext">qdPropGain :: QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdPropGain"><span class="hs-identifier hs-var hs-var">qdPropGain</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.PDController.Unitals.html#ipPropGain"><span class="hs-identifier hs-var">ipPropGain</span></a></span><span>
+</span><span id="line-81"></span><span>
+</span><span id="line-82"></span><span id="ipDerivGain"><span class="annot"><span class="annottext">ipDerivGain :: ConstrConcept
+</span><a href="Drasil.PDController.Unitals.html#ipDerivGain"><span class="hs-identifier hs-var hs-var">ipDerivGain</span></a></span></span><span>
+</span><span id="line-83"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
+forall c.
+(Concept c, MayHaveUnit c, Quantity c) =&gt;
+c -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
+</span><span class="hs-identifier hs-var">constrained'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; DefinedQuantityDict
+</span><span class="hs-identifier hs-var">dqdNoUnit</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#derGain"><span class="hs-identifier hs-var">derGain</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.PDController.Unitals.html#symKd"><span class="hs-identifier hs-var">symKd</span></a></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
+</span><span class="hs-identifier hs-var">physc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+-&gt; RealInterval Expr Expr -&gt; ConstraintE
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; RealInterval Expr Expr
+forall b a. (Inclusive, b) -&gt; RealInterval a b
+</span><span class="hs-identifier hs-var">UpFrom</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
+</span><span class="hs-identifier hs-var">Inc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><span id="line-84"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">)</span><span>
+</span><span id="line-85"></span><span id="ipDerGainUnc"><span class="annot"><span class="annottext">ipDerGainUnc :: UncertQ
+</span><a href="Drasil.PDController.Unitals.html#ipDerGainUnc"><span class="hs-identifier hs-var hs-var">ipDerGainUnc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Uncertainty -&gt; UncertQ
+forall c.
+(Quantity c, Constrained c, Concept c, HasReasVal c,
+ MayHaveUnit c) =&gt;
+c -&gt; Uncertainty -&gt; UncertQ
+</span><span class="hs-identifier hs-var">uq</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.PDController.Unitals.html#ipDerivGain"><span class="hs-identifier hs-var">ipDerivGain</span></a></span><span> </span><span class="annot"><span class="annottext">Uncertainty
+</span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
+</span><span id="line-86"></span><span id="qdDerivGain"><span class="annot"><span class="annottext">qdDerivGain :: QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdDerivGain"><span class="hs-identifier hs-var hs-var">qdDerivGain</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.PDController.Unitals.html#ipDerivGain"><span class="hs-identifier hs-var">ipDerivGain</span></a></span><span>
+</span><span id="line-87"></span><span>
+</span><span id="line-88"></span><span id="ipSetPt"><span class="annot"><span class="annottext">ipSetPt :: ConstrConcept
+</span><a href="Drasil.PDController.Unitals.html#ipSetPt"><span class="hs-identifier hs-var hs-var">ipSetPt</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
+forall c.
+(Concept c, MayHaveUnit c, Quantity c) =&gt;
+c -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
+</span><span class="hs-identifier hs-var">constrained'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; DefinedQuantityDict
+</span><span class="hs-identifier hs-var">dqdNoUnit</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#setPoint"><span class="hs-identifier hs-var">setPoint</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.PDController.Unitals.html#symYrT"><span class="hs-identifier hs-var">symYrT</span></a></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstraintE
+</span><span class="hs-identifier hs-var">gtZeroConstr</span></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">)</span><span>
+</span><span id="line-89"></span><span id="ipSetPtUnc"><span class="annot"><span class="annottext">ipSetPtUnc :: UncertQ
+</span><a href="Drasil.PDController.Unitals.html#ipSetPtUnc"><span class="hs-identifier hs-var hs-var">ipSetPtUnc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Uncertainty -&gt; UncertQ
+forall c.
+(Quantity c, Constrained c, Concept c, HasReasVal c,
+ MayHaveUnit c) =&gt;
+c -&gt; Uncertainty -&gt; UncertQ
+</span><span class="hs-identifier hs-var">uq</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.PDController.Unitals.html#ipSetPt"><span class="hs-identifier hs-var">ipSetPt</span></a></span><span> </span><span class="annot"><span class="annottext">Uncertainty
+</span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
+</span><span id="line-90"></span><span id="qdSetPointTD"><span class="annot"><span class="annottext">qdSetPointTD :: QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdSetPointTD"><span class="hs-identifier hs-var hs-var">qdSetPointTD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.PDController.Unitals.html#ipSetPt"><span class="hs-identifier hs-var">ipSetPt</span></a></span><span>
+</span><span id="line-91"></span><span>
+</span><span id="line-92"></span><span id="ipStepTime"><span class="annot"><span class="annottext">ipStepTime :: ConstrConcept
+</span><a href="Drasil.PDController.Unitals.html#ipStepTime"><span class="hs-identifier hs-var hs-var">ipStepTime</span></a></span></span><span>
+</span><span id="line-93"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
+forall c.
+(Concept c, MayHaveUnit c, Quantity c) =&gt;
+c -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
+</span><span class="hs-identifier hs-var">constrained'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
+(Concept c, IsUnit u) =&gt;
+c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">ucs'</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#stepTime"><span class="hs-identifier hs-var">stepTime</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.PDController.Unitals.html#symTStep"><span class="hs-identifier hs-var">symTStep</span></a></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><span class="hs-identifier hs-var">second</span></span><span class="hs-special">)</span><span>
+</span><span id="line-94"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
+</span><span class="hs-identifier hs-var">physc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+-&gt; RealInterval Expr Expr -&gt; ConstraintE
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
+forall a b. (Inclusive, a) -&gt; (Inclusive, b) -&gt; RealInterval a b
+</span><span class="hs-identifier hs-var">Bounded</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
+</span><span class="hs-identifier hs-var">Inc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Expr
+</span><span class="hs-identifier hs-var">frac</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span> </span><span class="annot"><span class="hs-number">100</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
+</span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.PDController.Unitals.html#ipSimTime"><span class="hs-identifier hs-var">ipSimTime</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><span id="line-95"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Expr
+</span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="hs-number">0.01</span></span><span class="hs-special">)</span><span>
+</span><span id="line-96"></span><span id="ipStepTimeUnc"><span class="annot"><span class="annottext">ipStepTimeUnc :: UncertQ
+</span><a href="Drasil.PDController.Unitals.html#ipStepTimeUnc"><span class="hs-identifier hs-var hs-var">ipStepTimeUnc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Uncertainty -&gt; UncertQ
+forall c.
+(Quantity c, Constrained c, Concept c, HasReasVal c,
+ MayHaveUnit c) =&gt;
+c -&gt; Uncertainty -&gt; UncertQ
+</span><span class="hs-identifier hs-var">uq</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.PDController.Unitals.html#ipStepTime"><span class="hs-identifier hs-var">ipStepTime</span></a></span><span> </span><span class="annot"><span class="annottext">Uncertainty
+</span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
+</span><span id="line-97"></span><span id="qdStepTime"><span class="annot"><span class="annottext">qdStepTime :: QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdStepTime"><span class="hs-identifier hs-var hs-var">qdStepTime</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.PDController.Unitals.html#ipStepTime"><span class="hs-identifier hs-var">ipStepTime</span></a></span><span>
+</span><span id="line-98"></span><span>
+</span><span id="line-99"></span><span id="ipSimTime"><span class="annot"><span class="annottext">ipSimTime :: ConstrConcept
+</span><a href="Drasil.PDController.Unitals.html#ipSimTime"><span class="hs-identifier hs-var hs-var">ipSimTime</span></a></span></span><span>
+</span><span id="line-100"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
+forall c.
+(Concept c, MayHaveUnit c, Quantity c) =&gt;
+c -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
+</span><span class="hs-identifier hs-var">constrained'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; UnitDefn -&gt; UnitalChunk
+forall c u.
+(Concept c, IsUnit u) =&gt;
+c -&gt; Symbol -&gt; Space -&gt; u -&gt; UnitalChunk
+</span><span class="hs-identifier hs-var">ucs'</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#simulationTime"><span class="hs-identifier hs-var">simulationTime</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.PDController.Unitals.html#symTSim"><span class="hs-identifier hs-var">symTSim</span></a></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><span class="hs-identifier hs-var">second</span></span><span class="hs-special">)</span><span>
+</span><span id="line-101"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
+</span><span class="hs-identifier hs-var">physc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+-&gt; RealInterval Expr Expr -&gt; ConstraintE
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
+forall a b. (Inclusive, a) -&gt; (Inclusive, b) -&gt; RealInterval a b
+</span><span class="hs-identifier hs-var">Bounded</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
+</span><span class="hs-identifier hs-var">Inc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
+</span><span class="hs-identifier hs-var">Inc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">60</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><span id="line-102"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">10</span></span><span class="hs-special">)</span><span>
+</span><span id="line-103"></span><span id="ipSimTimeUnc"><span class="annot"><span class="annottext">ipSimTimeUnc :: UncertQ
+</span><a href="Drasil.PDController.Unitals.html#ipSimTimeUnc"><span class="hs-identifier hs-var hs-var">ipSimTimeUnc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Uncertainty -&gt; UncertQ
+forall c.
+(Quantity c, Constrained c, Concept c, HasReasVal c,
+ MayHaveUnit c) =&gt;
+c -&gt; Uncertainty -&gt; UncertQ
+</span><span class="hs-identifier hs-var">uq</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.PDController.Unitals.html#ipSimTime"><span class="hs-identifier hs-var">ipSimTime</span></a></span><span> </span><span class="annot"><span class="annottext">Uncertainty
+</span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
+</span><span id="line-104"></span><span id="qdSimTime"><span class="annot"><span class="annottext">qdSimTime :: QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdSimTime"><span class="hs-identifier hs-var hs-var">qdSimTime</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.PDController.Unitals.html#ipSimTime"><span class="hs-identifier hs-var">ipSimTime</span></a></span><span>
+</span><span id="line-105"></span><span>
+</span><span id="line-106"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#odeAbsTolConst"><span class="hs-identifier hs-type">odeAbsTolConst</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#odeRelTolConst"><span class="hs-identifier hs-type">odeRelTolConst</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
+</span><span id="line-107"></span><span>
+</span><span id="line-108"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#dqdAbsTol"><span class="hs-identifier hs-type">dqdAbsTol</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.Unitals.html#dqdRelTol"><span class="hs-identifier hs-type">dqdRelTol</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span>
+</span><span id="line-109"></span><span>
+</span><span id="line-110"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#pidConstants"><span class="hs-identifier hs-type">pidConstants</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span class="hs-special">]</span><span>
+</span><span id="line-111"></span><span id="pidConstants"><span class="annot"><span class="annottext">pidConstants :: [QDefinition]
+</span><a href="Drasil.PDController.Unitals.html#pidConstants"><span class="hs-identifier hs-var hs-var">pidConstants</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.PDController.Unitals.html#odeAbsTolConst"><span class="hs-identifier hs-var">odeAbsTolConst</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.PDController.Unitals.html#odeRelTolConst"><span class="hs-identifier hs-var">odeRelTolConst</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-112"></span><span>
+</span><span id="line-113"></span><span class="annot"><a href="Drasil.PDController.Unitals.html#pidDqdConstants"><span class="hs-identifier hs-type">pidDqdConstants</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-114"></span><span id="pidDqdConstants"><span class="annot"><span class="annottext">pidDqdConstants :: [DefinedQuantityDict]
+</span><a href="Drasil.PDController.Unitals.html#pidDqdConstants"><span class="hs-identifier hs-var hs-var">pidDqdConstants</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdAbsTol"><span class="hs-identifier hs-var">dqdAbsTol</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdRelTol"><span class="hs-identifier hs-var">dqdRelTol</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-115"></span><span>
+</span><span id="line-116"></span><span id="dqdAbsTol"><span class="annot"><span class="annottext">dqdAbsTol :: DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdAbsTol"><span class="hs-identifier hs-var hs-var">dqdAbsTol</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; DefinedQuantityDict
+</span><span class="hs-identifier hs-var">dqdNoUnit</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#ccAbsTolerance"><span class="hs-identifier hs-var">ccAbsTolerance</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.PDController.Unitals.html#symAbsTol"><span class="hs-identifier hs-var">symAbsTol</span></a></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span>
+</span><span id="line-117"></span><span id="dqdRelTol"><span class="annot"><span class="annottext">dqdRelTol :: DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdRelTol"><span class="hs-identifier hs-var hs-var">dqdRelTol</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; DefinedQuantityDict
+</span><span class="hs-identifier hs-var">dqdNoUnit</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#ccRelTolerance"><span class="hs-identifier hs-var">ccRelTolerance</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.PDController.Unitals.html#symRelTol"><span class="hs-identifier hs-var">symRelTol</span></a></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span>
+</span><span id="line-118"></span><span>
+</span><span id="line-119"></span><span id="odeAbsTolConst"><span class="annot"><span class="annottext">odeAbsTolConst :: QDefinition
+</span><a href="Drasil.PDController.Unitals.html#odeAbsTolConst"><span class="hs-identifier hs-var hs-var">odeAbsTolConst</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr -&gt; QDefinition
+forall c. (Quantity c, MayHaveUnit c) =&gt; c -&gt; Expr -&gt; QDefinition
+</span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdAbsTol"><span class="hs-identifier hs-var">dqdAbsTol</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Expr
+</span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="hs-number">1.0e-10</span></span><span class="hs-special">)</span><span>
+</span><span id="line-120"></span><span id="odeRelTolConst"><span class="annot"><span class="annottext">odeRelTolConst :: QDefinition
+</span><a href="Drasil.PDController.Unitals.html#odeRelTolConst"><span class="hs-identifier hs-var hs-var">odeRelTolConst</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr -&gt; QDefinition
+forall c. (Quantity c, MayHaveUnit c) =&gt; c -&gt; Expr -&gt; QDefinition
+</span><span class="hs-identifier hs-var">mkQuantDef</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
+</span><a href="Drasil.PDController.Unitals.html#dqdRelTol"><span class="hs-identifier hs-var">dqdRelTol</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Double -&gt; Expr
+</span><span class="hs-identifier hs-var">dbl</span></span><span> </span><span class="annot"><span class="hs-number">1.0e-10</span></span><span class="hs-special">)</span><span>
+</span><span id="line-121"></span><span>
+</span><span id="line-122"></span><span id="opProcessVariable"><span class="annot"><span class="annottext">opProcessVariable :: ConstrConcept
+</span><a href="Drasil.PDController.Unitals.html#opProcessVariable"><span class="hs-identifier hs-var hs-var">opProcessVariable</span></a></span></span><span>
+</span><span id="line-123"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
+forall c.
+(Concept c, MayHaveUnit c, Quantity c) =&gt;
+c -&gt; [ConstraintE] -&gt; Expr -&gt; ConstrConcept
+</span><span class="hs-identifier hs-var">constrained'</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; Symbol -&gt; Space -&gt; DefinedQuantityDict
+</span><span class="hs-identifier hs-var">dqdNoUnit</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#processVariable"><span class="hs-identifier hs-var">processVariable</span></a></span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.PDController.Unitals.html#symYT"><span class="hs-identifier hs-var">symYT</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Space -&gt; Space
+</span><span class="hs-identifier hs-var">Vect</span></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Rational</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-124"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConstraintE
+</span><span class="hs-identifier hs-var">gtZeroConstr</span></span><span class="hs-special">]</span><span>
+</span><span id="line-125"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">)</span><span>
+</span><span id="line-126"></span><span id="qdProcessVariableTD"><span class="annot"><span class="annottext">qdProcessVariableTD :: QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdProcessVariableTD"><span class="hs-identifier hs-var hs-var">qdProcessVariableTD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.PDController.Unitals.html#opProcessVariable"><span class="hs-identifier hs-var">opProcessVariable</span></a></span><span>
+</span><span id="line-127"></span><span>
+</span><span id="line-128"></span><span id="qdSetPointFD"><span class="annot"><span class="annottext">qdSetPointFD :: QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdSetPointFD"><span class="hs-identifier hs-var hs-var">qdSetPointFD</span></a></span></span><span>
+</span><span id="line-129"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; Space -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">vc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;qdSetPointFD&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#setPoint"><span class="hs-identifier hs-var">setPoint</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`inThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#ccFrequencyDomain"><span class="hs-identifier hs-var">ccFrequencyDomain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.PDController.Unitals.html#symYrS"><span class="hs-identifier hs-var">symYrS</span></a></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span>
+</span><span id="line-130"></span><span>
+</span><span id="line-131"></span><span id="qdProcessVariableFD"><span class="annot"><span class="annottext">qdProcessVariableFD :: QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdProcessVariableFD"><span class="hs-identifier hs-var hs-var">qdProcessVariableFD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; Space -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">vc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;qdProcessVariableFD&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#processVariable"><span class="hs-identifier hs-var">processVariable</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`inThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#ccFrequencyDomain"><span class="hs-identifier hs-var">ccFrequencyDomain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.PDController.Unitals.html#symYS"><span class="hs-identifier hs-var">symYS</span></a></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span>
+</span><span id="line-132"></span><span>
+</span><span id="line-133"></span><span id="qdProcessErrorTD"><span class="annot"><span class="annottext">qdProcessErrorTD :: QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdProcessErrorTD"><span class="hs-identifier hs-var hs-var">qdProcessErrorTD</span></a></span></span><span>
+</span><span id="line-134"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; Space -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">vc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;qdProcessErrorTD&quot;</span></span><span>
+</span><span id="line-135"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Process Error in the time domain&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-136"></span><span>      </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.PDController.Unitals.html#symET"><span class="hs-identifier hs-var">symET</span></a></span><span>
+</span><span id="line-137"></span><span>      </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span>
+</span><span id="line-138"></span><span>
+</span><span id="line-139"></span><span id="qdProcessErrorFD"><span class="annot"><span class="annottext">qdProcessErrorFD :: QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdProcessErrorFD"><span class="hs-identifier hs-var hs-var">qdProcessErrorFD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; Space -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">vc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;qdProcessErrorFD&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#processError"><span class="hs-identifier hs-var">processError</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`inThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#ccFrequencyDomain"><span class="hs-identifier hs-var">ccFrequencyDomain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.PDController.Unitals.html#symES"><span class="hs-identifier hs-var">symES</span></a></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span>
+</span><span id="line-140"></span><span>
+</span><span id="line-141"></span><span id="qdPropControlFD"><span class="annot"><span class="annottext">qdPropControlFD :: QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdPropControlFD"><span class="hs-identifier hs-var hs-var">qdPropControlFD</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; Space -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">vc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;qdPropControlFD&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#propControl"><span class="hs-identifier hs-var">propControl</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`inThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#ccFrequencyDomain"><span class="hs-identifier hs-var">ccFrequencyDomain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.PDController.Unitals.html#symPS"><span class="hs-identifier hs-var">symPS</span></a></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span>
+</span><span id="line-142"></span><span>
+</span><span id="line-143"></span><span id="qdDerivativeControlFD"><span class="annot"><span class="annottext">qdDerivativeControlFD :: QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdDerivativeControlFD"><span class="hs-identifier hs-var hs-var">qdDerivativeControlFD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; Space -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">vc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;qdDerivativeControlFD&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#derControl"><span class="hs-identifier hs-var">derControl</span></a></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`inThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#ccFrequencyDomain"><span class="hs-identifier hs-var">ccFrequencyDomain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.PDController.Unitals.html#symDS"><span class="hs-identifier hs-var">symDS</span></a></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span>
+</span><span id="line-144"></span><span>
+</span><span id="line-145"></span><span id="qdTransferFunctionFD"><span class="annot"><span class="annottext">qdTransferFunctionFD :: QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdTransferFunctionFD"><span class="hs-identifier hs-var hs-var">qdTransferFunctionFD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; Space -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">vc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;qdTransferFunctionFD&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#ccTransferFxn"><span class="hs-identifier hs-var">ccTransferFxn</span></a></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`inThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#ccFrequencyDomain"><span class="hs-identifier hs-var">ccFrequencyDomain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.PDController.Unitals.html#symHS"><span class="hs-identifier hs-var">symHS</span></a></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span>
+</span><span id="line-146"></span><span>
+</span><span id="line-147"></span><span id="qdCtrlVarTD"><span class="annot"><span class="annottext">qdCtrlVarTD :: QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdCtrlVarTD"><span class="hs-identifier hs-var hs-var">qdCtrlVarTD</span></a></span></span><span>
+</span><span id="line-148"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; Space -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">vc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;qdCtrlVarTD&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Control Variable in the time domain&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-149"></span><span>      </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.PDController.Unitals.html#symCT"><span class="hs-identifier hs-var">symCT</span></a></span><span>
+</span><span id="line-150"></span><span>      </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span>
+</span><span id="line-151"></span><span>
+</span><span id="line-152"></span><span id="qdCtrlVarFD"><span class="annot"><span class="annottext">qdCtrlVarFD :: QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdCtrlVarFD"><span class="hs-identifier hs-var hs-var">qdCtrlVarFD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; Space -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">vc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;qdCtrlVarFD&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#controlVariable"><span class="hs-identifier hs-var">controlVariable</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`inThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#ccFrequencyDomain"><span class="hs-identifier hs-var">ccFrequencyDomain</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.PDController.Unitals.html#symCS"><span class="hs-identifier hs-var">symCS</span></a></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span>
+</span><span id="line-153"></span><span>
+</span><span id="line-154"></span><span id="qdLaplaceTransform"><span class="annot"><span class="annottext">qdLaplaceTransform :: QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdLaplaceTransform"><span class="hs-identifier hs-var hs-var">qdLaplaceTransform</span></a></span></span><span>
+</span><span id="line-155"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; Space -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">vc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;qLaplaceTransform&quot;</span></span><span>
+</span><span id="line-156"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Laplace Transform of a function&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-157"></span><span>      </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.PDController.Unitals.html#symFS"><span class="hs-identifier hs-var">symFS</span></a></span><span>
+</span><span id="line-158"></span><span>      </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span>
+</span><span id="line-159"></span><span>
+</span><span id="line-160"></span><span id="qdFreqDomain"><span class="annot"><span class="annottext">qdFreqDomain :: QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdFreqDomain"><span class="hs-identifier hs-var hs-var">qdFreqDomain</span></a></span></span><span>
+</span><span id="line-161"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; Space -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">vc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;qFreqDomain&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Complex frequency-domain parameter&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-162"></span><span>      </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.PDController.Unitals.html#syms"><span class="hs-identifier hs-var">syms</span></a></span><span>
+</span><span id="line-163"></span><span>      </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span>
+</span><span id="line-164"></span><span>      </span><span>
+</span><span id="line-165"></span><span id="qdFxnTDomain"><span class="annot"><span class="annottext">qdFxnTDomain :: QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdFxnTDomain"><span class="hs-identifier hs-var hs-var">qdFxnTDomain</span></a></span></span><span>
+</span><span id="line-166"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; Space -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">vc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;qdFxnTDomain&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Function in the time domain&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.PDController.Unitals.html#symFt"><span class="hs-identifier hs-var">symFt</span></a></span><span>
+</span><span id="line-167"></span><span>      </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span>
+</span><span id="line-168"></span><span>
+</span><span id="line-169"></span><span id="qdNegInf"><span class="annot"><span class="annottext">qdNegInf :: QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdNegInf"><span class="hs-identifier hs-var hs-var">qdNegInf</span></a></span></span><span>
+</span><span id="line-170"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; Space -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">vc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;qdNegInf&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Negative Infinity&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.PDController.Unitals.html#symnegInf"><span class="hs-identifier hs-var">symnegInf</span></a></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span>
+</span><span id="line-171"></span><span>
+</span><span id="line-172"></span><span id="qdPosInf"><span class="annot"><span class="annottext">qdPosInf :: QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdPosInf"><span class="hs-identifier hs-var hs-var">qdPosInf</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; Space -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">vc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;qdPosInf&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Infinity&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.PDController.Unitals.html#symposInf"><span class="hs-identifier hs-var">symposInf</span></a></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span>
+</span><span id="line-173"></span><span>
+</span><span id="line-174"></span><span id="qdInvLaplaceTransform"><span class="annot"><span class="annottext">qdInvLaplaceTransform :: QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdInvLaplaceTransform"><span class="hs-identifier hs-var hs-var">qdInvLaplaceTransform</span></a></span></span><span>
+</span><span id="line-175"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; Space -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">vc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;qInvLaplaceTransform&quot;</span></span><span>
+</span><span id="line-176"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Inverse Laplace Transform of a function&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-177"></span><span>      </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.PDController.Unitals.html#syminvLaplace"><span class="hs-identifier hs-var">syminvLaplace</span></a></span><span>
+</span><span id="line-178"></span><span>      </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span>
+</span><span id="line-179"></span><span>
+</span><span id="line-180"></span><span id="qdDampingCoeff"><span class="annot"><span class="annottext">qdDampingCoeff :: QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdDampingCoeff"><span class="hs-identifier hs-var hs-var">qdDampingCoeff</span></a></span></span><span>
+</span><span id="line-181"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Symbol -&gt; Space -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">vc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;qdDampingCoeff&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Damping coefficient of the spring&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-182"></span><span>      </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.PDController.Unitals.html#symDampingCoeff"><span class="hs-identifier hs-var">symDampingCoeff</span></a></span><span>
+</span><span id="line-183"></span><span>      </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span>
+</span><span id="line-184"></span><span>
+</span><span id="line-185"></span><span id="qdStiffnessCoeff"><span class="annot"><span class="annottext">qdStiffnessCoeff :: QuantityDict
+</span><a href="Drasil.PDController.Unitals.html#qdStiffnessCoeff"><span class="hs-identifier hs-var hs-var">qdStiffnessCoeff</span></a></span></span><span>
+</span><span id="line-186"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+-&gt; NP
+-&gt; Symbol
+-&gt; Space
+-&gt; Maybe UnitDefn
+-&gt; Maybe String
+-&gt; QuantityDict
+</span><span class="hs-identifier hs-var">mkQuant</span></span><span> </span><span class="annot"><span class="hs-string">&quot;qdTimeConst&quot;</span></span><span>
+</span><span id="line-187"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Stiffness coefficient of the spring&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-188"></span><span>      </span><span class="annot"><span class="annottext">Symbol
+</span><a href="Drasil.PDController.Unitals.html#symStifnessCoeff"><span class="hs-identifier hs-var">symStifnessCoeff</span></a></span><span>
+</span><span id="line-189"></span><span>      </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span>
+</span><span id="line-190"></span><span>      </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitDefn -&gt; Maybe UnitDefn
+forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><span class="hs-identifier hs-var">second</span></span><span class="hs-special">)</span><span>
+</span><span id="line-191"></span><span>      </span><span class="annot"><span class="annottext">Maybe String
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-192"></span></pre></body></html>

@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.Projectile.Goals</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Projectile.Goals.html#goals"><span class="hs-identifier">goals</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-4"></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">goalStmtDom</span></span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html"><span class="hs-identifier">Drasil.Projectile.Concepts</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.Projectile.Concepts.html#projectile"><span class="hs-identifier">projectile</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html#target"><span class="hs-identifier">target</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-8"></span><span>
+</span><span id="line-9"></span><span class="annot"><a href="Drasil.Projectile.Goals.html#goals"><span class="hs-identifier hs-type">goals</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span>
+</span><span id="line-10"></span><span id="goals"><span class="annot"><span class="annottext">goals :: [ConceptInstance]
+</span><a href="Drasil.Projectile.Goals.html#goals"><span class="hs-identifier hs-var hs-var">goals</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.Projectile.Goals.html#targetHit"><span class="hs-identifier hs-var">targetHit</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-11"></span><span>
+</span><span id="line-12"></span><span class="annot"><a href="Drasil.Projectile.Goals.html#targetHit"><span class="hs-identifier hs-type">targetHit</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-13"></span><span id="targetHit"><span class="annot"><span class="annottext">targetHit :: ConceptInstance
+</span><a href="Drasil.Projectile.Goals.html#targetHit"><span class="hs-identifier hs-var hs-var">targetHit</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;targetHit&quot;</span></span><span> </span><span>
+</span><span id="line-14"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Determine if the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.Projectile.Concepts.html#projectile"><span class="hs-identifier hs-var">projectile</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;hits the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.Projectile.Concepts.html#target"><span class="hs-identifier hs-var">target</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-15"></span><span>  </span><span class="annot"><span class="hs-string">&quot;targetHit&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">goalStmtDom</span></span></pre></body></html>

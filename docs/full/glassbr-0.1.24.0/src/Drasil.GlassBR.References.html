@@ -1,0 +1,107 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.GlassBR.References</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-4"></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Citations</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">campidelli</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">koothoor2013</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">smithLai2005</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">parnasClements1986</span></span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.People</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">jRobertson</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">jmBracci</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">sRobertson</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">tlKohutek</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">wlBeason</span></span><span class="hs-special">)</span><span>
+</span><span id="line-7"></span><span>
+</span><span id="line-8"></span><span class="annot"><a href="Drasil.GlassBR.References.html#rbrtsn2012"><span class="hs-identifier hs-type">rbrtsn2012</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.References.html#astm2009"><span class="hs-identifier hs-type">astm2009</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.References.html#astm2016"><span class="hs-identifier hs-type">astm2016</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.References.html#astm2012"><span class="hs-identifier hs-type">astm2012</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.References.html#beasonEtAl1998"><span class="hs-identifier hs-type">beasonEtAl1998</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Citation</span></span><span>
+</span><span id="line-9"></span><span>
+</span><span id="line-10"></span><span class="annot"><a href="Drasil.GlassBR.References.html#citations"><span class="hs-identifier hs-type">citations</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">BibRef</span></span><span>
+</span><span id="line-11"></span><span id="citations"><span class="annot"><span class="annottext">citations :: BibRef
+</span><a href="Drasil.GlassBR.References.html#citations"><span class="hs-identifier hs-var hs-var">citations</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation
+</span><span class="hs-identifier hs-var">campidelli</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
+</span><span class="hs-identifier hs-var">koothoor2013</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
+</span><span class="hs-identifier hs-var">smithLai2005</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
+</span><a href="Drasil.GlassBR.References.html#rbrtsn2012"><span class="hs-identifier hs-var">rbrtsn2012</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
+</span><a href="Drasil.GlassBR.References.html#astm2009"><span class="hs-identifier hs-var">astm2009</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
+</span><a href="Drasil.GlassBR.References.html#astm2016"><span class="hs-identifier hs-var">astm2016</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-12"></span><span>  </span><span class="annot"><span class="annottext">Citation
+</span><a href="Drasil.GlassBR.References.html#astm2012"><span class="hs-identifier hs-var">astm2012</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
+</span><a href="Drasil.GlassBR.References.html#beasonEtAl1998"><span class="hs-identifier hs-var">beasonEtAl1998</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
+</span><span class="hs-identifier hs-var">parnasClements1986</span></span><span class="hs-special">]</span><span>
+</span><span id="line-13"></span><span>
+</span><span id="line-14"></span><span id="rbrtsn2012"><span class="annot"><span class="annottext">rbrtsn2012 :: Citation
+</span><a href="Drasil.GlassBR.References.html#rbrtsn2012"><span class="hs-identifier hs-var hs-var">rbrtsn2012</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[CiteField] -&gt; String -&gt; Citation
+</span><span class="hs-identifier hs-var">cMisc</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">People -&gt; CiteField
+</span><span class="hs-identifier hs-var">author</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">jRobertson</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">sRobertson</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span class="hs-identifier hs-var">title</span></span><span>
+</span><span id="line-15"></span><span>  </span><span class="annot"><span class="hs-string">&quot;Volere requirements specification template edition 16&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-16"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span class="hs-identifier hs-var">howPublishedU</span></span><span> </span><span class="annot"><span class="hs-string">&quot;https://pdfs.semanticscholar.org/cf57/27a59801086cbd3d14e587e09880561dbe22.pdf&quot;</span></span><span>
+</span><span id="line-17"></span><span>  </span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int -&gt; CiteField
+</span><span class="hs-identifier hs-var">year</span></span><span> </span><span class="annot"><span class="hs-number">2012</span></span><span class="hs-special">]</span><span>
+</span><span id="line-18"></span><span>  </span><span class="annot"><span class="hs-string">&quot;rbrtsn2012&quot;</span></span><span>
+</span><span id="line-19"></span><span>
+</span><span id="line-20"></span><span id="astm2009"><span class="annot"><span class="annottext">astm2009 :: Citation
+</span><a href="Drasil.GlassBR.References.html#astm2009"><span class="hs-identifier hs-var hs-var">astm2009</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[CiteField] -&gt; String -&gt; Citation
+</span><span class="hs-identifier hs-var">cMisc</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">People -&gt; CiteField
+</span><span class="hs-identifier hs-var">author</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Person
+</span><span class="hs-identifier hs-var">mononym</span></span><span> </span><span class="annot"><span class="hs-string">&quot;ASTM&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-21"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span class="hs-identifier hs-var">title</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Standard Practice for Determining Load Resistance of Glass in Buildings&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-22"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span class="hs-identifier hs-var">publisher</span></span><span> </span><span class="annot"><span class="hs-string">&quot;ASTM International&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-23"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span class="hs-identifier hs-var">bookTitle</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Standard E1300-09a&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-24"></span><span>  </span><span class="annot"><span class="annottext">Int -&gt; CiteField
+</span><span class="hs-identifier hs-var">year</span></span><span> </span><span class="annot"><span class="hs-number">2009</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span class="hs-identifier hs-var">howPublishedU</span></span><span> </span><span class="annot"><span class="hs-string">&quot;https://www.astm.org&quot;</span></span><span class="hs-special">]</span><span>
+</span><span id="line-25"></span><span>  </span><span class="annot"><span class="hs-string">&quot;astm2009&quot;</span></span><span>
+</span><span id="line-26"></span><span>
+</span><span id="line-27"></span><span id="astm2016"><span class="annot"><span class="annottext">astm2016 :: Citation
+</span><a href="Drasil.GlassBR.References.html#astm2016"><span class="hs-identifier hs-var hs-var">astm2016</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[CiteField] -&gt; String -&gt; Citation
+</span><span class="hs-identifier hs-var">cMisc</span></span><span>
+</span><span id="line-28"></span><span>  </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">People -&gt; CiteField
+</span><span class="hs-identifier hs-var">author</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Person
+</span><span class="hs-identifier hs-var">mononym</span></span><span> </span><span class="annot"><span class="hs-string">&quot;ASTM&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-29"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span class="hs-identifier hs-var">title</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Standard specification for Flat Glass&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-30"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span class="hs-identifier hs-var">publisher</span></span><span> </span><span class="annot"><span class="hs-string">&quot;ASTM International&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-31"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span class="hs-identifier hs-var">address</span></span><span> </span><span class="annot"><span class="hs-string">&quot;West Conshohocken, PA&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-32"></span><span>  </span><span class="annot"><span class="annottext">Int -&gt; CiteField
+</span><span class="hs-identifier hs-var">year</span></span><span> </span><span class="annot"><span class="hs-number">2016</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span class="hs-identifier hs-var">howPublishedU</span></span><span> </span><span class="annot"><span class="hs-string">&quot;https://doi.org/10.1520/C1036-16&quot;</span></span><span class="hs-special">]</span><span>
+</span><span id="line-33"></span><span>  </span><span class="annot"><span class="hs-string">&quot;astm2016&quot;</span></span><span>
+</span><span id="line-34"></span><span>
+</span><span id="line-35"></span><span id="astm2012"><span class="annot"><span class="annottext">astm2012 :: Citation
+</span><a href="Drasil.GlassBR.References.html#astm2012"><span class="hs-identifier hs-var hs-var">astm2012</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[CiteField] -&gt; String -&gt; Citation
+</span><span class="hs-identifier hs-var">cMisc</span></span><span>
+</span><span id="line-36"></span><span>  </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">People -&gt; CiteField
+</span><span class="hs-identifier hs-var">author</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Person
+</span><span class="hs-identifier hs-var">mononym</span></span><span> </span><span class="annot"><span class="hs-string">&quot;ASTM&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-37"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span class="hs-identifier hs-var">title</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Standard Specification for Heat-Strengthened and Fully Tempered Flat Glass&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-38"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span class="hs-identifier hs-var">publisher</span></span><span> </span><span class="annot"><span class="hs-string">&quot;ASTM International&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-39"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span class="hs-identifier hs-var">address</span></span><span> </span><span class="annot"><span class="hs-string">&quot;West Conshohocken, PA&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-40"></span><span>  </span><span class="annot"><span class="annottext">Int -&gt; CiteField
+</span><span class="hs-identifier hs-var">year</span></span><span> </span><span class="annot"><span class="hs-number">2012</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span class="hs-identifier hs-var">howPublishedU</span></span><span> </span><span class="annot"><span class="hs-string">&quot;https://doi.org/10.1520/C1048-12E01&quot;</span></span><span class="hs-special">]</span><span>
+</span><span id="line-41"></span><span>  </span><span class="annot"><span class="hs-string">&quot;astm2012&quot;</span></span><span>
+</span><span id="line-42"></span><span>
+</span><span id="line-43"></span><span id="beasonEtAl1998"><span class="annot"><span class="annottext">beasonEtAl1998 :: Citation
+</span><a href="Drasil.GlassBR.References.html#beasonEtAl1998"><span class="hs-identifier hs-var hs-var">beasonEtAl1998</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[CiteField] -&gt; String -&gt; Citation
+</span><span class="hs-identifier hs-var">cMisc</span></span><span>
+</span><span id="line-44"></span><span>  </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">People -&gt; CiteField
+</span><span class="hs-identifier hs-var">author</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">wlBeason</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">tlKohutek</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">jmBracci</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-45"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span class="hs-identifier hs-var">title</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Basis for ASTME E 1300 Annealed Glass Thickness Selection Charts&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-46"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span class="hs-identifier hs-var">bookTitle</span></span><span> </span><span class="annot"><span class="hs-string">&quot;ASCE Library&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-47"></span><span>  </span><span class="annot"><span class="annottext">Month -&gt; CiteField
+</span><span class="hs-identifier hs-var">month</span></span><span> </span><span class="annot"><span class="annottext">Month
+</span><span class="hs-identifier hs-var">Feb</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int -&gt; CiteField
+</span><span class="hs-identifier hs-var">year</span></span><span> </span><span class="annot"><span class="hs-number">1998</span></span><span class="hs-special">,</span><span>
+</span><span id="line-48"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span class="hs-identifier hs-var">howPublishedU</span></span><span> </span><span class="annot"><span class="hs-string">&quot;https://doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)&quot;</span></span><span class="hs-special">]</span><span>
+</span><span id="line-49"></span><span>  </span><span class="annot"><span class="hs-string">&quot;beasonEtAl1998&quot;</span></span><span>
+</span><span id="line-50"></span></pre></body></html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.PDController.GenSysDesc</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span>
+</span><span id="line-4"></span><span>       </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">environment</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">software</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">softwareSys</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">sysCont</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">system</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">user</span></span><span class="hs-special">)</span><span>
+</span><span id="line-5"></span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.PDController.Concepts.html"><span class="hs-identifier">Drasil.PDController.Concepts</span></a></span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil</span></span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.Concepts</span></span><span>
+</span><span id="line-10"></span><span>
+</span><span id="line-11"></span><span class="annot"><a href="Drasil.PDController.GenSysDesc.html#gsdSysContextFig"><span class="hs-identifier hs-type">gsdSysContextFig</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span><span>
+</span><span id="line-12"></span><span id="gsdSysContextFig"><span class="annot"><span class="annottext">gsdSysContextFig :: LabelledContent
+</span><a href="Drasil.PDController.GenSysDesc.html#gsdSysContextFig"><span class="hs-identifier hs-var hs-var">gsdSysContextFig</span></a></span></span><span>
+</span><span id="line-13"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; RawContent -&gt; LabelledContent
+</span><span class="hs-identifier hs-var">llcc</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Reference
+</span><span class="hs-identifier hs-var">makeFigRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;systemContextDiag&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; LabelledContent) -&gt; RawContent -&gt; LabelledContent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span>
+</span><span id="line-14"></span><span>      </span><span class="annot"><span class="annottext">Lbl -&gt; String -&gt; RawContent
+</span><span class="hs-identifier hs-var">fig</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Lbl
+forall n. NamedIdea n =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">sysCont</span></span><span class="hs-special">)</span><span>
+</span><span id="line-15"></span><span>        </span><span class="annot"><span class="hs-string">&quot;../../../datafiles/PDController/Fig_SystemContext.png&quot;</span></span><span>
+</span><span id="line-16"></span><span>
+</span><span id="line-17"></span><span class="annot"><a href="Drasil.PDController.GenSysDesc.html#gsdSysContextP1"><span class="hs-identifier hs-type">gsdSysContextP1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.PDController.GenSysDesc.html#gsdSysContextP2"><span class="hs-identifier hs-type">gsdSysContextP2</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
+</span><span id="line-18"></span><span id="gsdSysContextP1"><span class="annot"><span class="annottext">gsdSysContextP1 :: Contents
+</span><a href="Drasil.PDController.GenSysDesc.html#gsdSysContextP1"><span class="hs-identifier hs-var hs-var">gsdSysContextP1</span></a></span></span><span>
+</span><span id="line-19"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Lbl] -&gt; Contents
+</span><span class="hs-identifier hs-var">foldlSP</span></span><span>
+</span><span id="line-20"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">LabelledContent -&gt; Lbl
+forall r. (HasUID r, HasRefAddress r, HasShortName r) =&gt; r -&gt; Lbl
+</span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">LabelledContent
+</span><a href="Drasil.PDController.GenSysDesc.html#gsdSysContextFig"><span class="hs-identifier hs-var">gsdSysContextFig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Lbl
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;shows the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Lbl
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">sysCont</span></span><span class="hs-special">,</span><span>
+</span><span id="line-21"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Lbl
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The circle represents an external entity outside the&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-22"></span><span>         </span><span class="annot"><span class="annottext">NamedChunk -&gt; Lbl
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">software</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Lbl
+forall n. NounPhrase n =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">user</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Lbl
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;in this case&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-23"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Lbl
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The rectangle represents the&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-24"></span><span>        </span><span class="annot"><span class="annottext">NamedChunk -&gt; Lbl
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">softwareSys</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Lbl
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;itself&quot;</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Lbl
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#pidC"><span class="hs-identifier hs-var">pidC</span></a></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Lbl
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;in this case&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-25"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Lbl
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Arrows are used to show the data flow between the&quot;</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-26"></span><span>        </span><span class="annot"><span class="annottext">NP -&gt; Lbl
+forall n. NounPhrase n =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">system</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; NamedChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`andIts`</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">environment</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><span id="line-27"></span><span>
+</span><span id="line-28"></span><span id="gsdSysContextP2"><span class="annot"><span class="annottext">gsdSysContextP2 :: Contents
+</span><a href="Drasil.PDController.GenSysDesc.html#gsdSysContextP2"><span class="hs-identifier hs-var hs-var">gsdSysContextP2</span></a></span></span><span>
+</span><span id="line-29"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Lbl] -&gt; Contents
+</span><span class="hs-identifier hs-var">foldlSPCol</span></span><span>
+</span><span id="line-30"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk -&gt; Lbl
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#pidC"><span class="hs-identifier hs-var">pidC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Lbl
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is self-contained. The only external interaction is&quot;</span></span><span>
+</span><span id="line-31"></span><span>         </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Lbl
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;with the user&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-32"></span><span>       </span><span class="annot"><span class="annottext">String -&gt; Lbl
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The responsibilities of the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Lbl
+forall n. NounPhrase n =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">user</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; NamedChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`andThe`</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">system</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-33"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Lbl
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;are as follows&quot;</span></span><span class="hs-special">]</span><span>
+</span><span id="line-34"></span><span>
+</span><span id="line-35"></span><span class="annot"><a href="Drasil.PDController.GenSysDesc.html#gsdTitle"><span class="hs-identifier hs-type">gsdTitle</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-36"></span><span id="gsdTitle"><span class="annot"><span class="annottext">gsdTitle :: [Lbl]
+</span><a href="Drasil.PDController.GenSysDesc.html#gsdTitle"><span class="hs-identifier hs-var hs-var">gsdTitle</span></a></span></span><span>
+</span><span id="line-37"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NamedChunk -&gt; Lbl
+forall n. NamedIdea n =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">user</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Lbl
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Responsibilities&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-38"></span><span>     </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Lbl
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#pidC"><span class="hs-identifier hs-var">pidC</span></a></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Lbl
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Responsibilities&quot;</span></span><span class="hs-special">]</span><span>
+</span><span id="line-39"></span><span>
+</span><span id="line-40"></span><span class="annot"><a href="Drasil.PDController.GenSysDesc.html#gsdUsrResp"><span class="hs-identifier hs-type">gsdUsrResp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-41"></span><span id="gsdUsrResp"><span class="annot"><span class="annottext">gsdUsrResp :: [Lbl]
+</span><a href="Drasil.PDController.GenSysDesc.html#gsdUsrResp"><span class="hs-identifier hs-var hs-var">gsdUsrResp</span></a></span></span><span>
+</span><span id="line-42"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Lbl
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Feed inputs to the model&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-43"></span><span>     </span><span class="annot"><span class="annottext">String -&gt; Lbl
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Review the response of the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Lbl
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#powerPlant"><span class="hs-identifier hs-var">powerPlant</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-44"></span><span>     </span><span class="annot"><span class="annottext">String -&gt; Lbl
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Tune the controller gains&quot;</span></span><span class="hs-special">]</span><span>
+</span><span id="line-45"></span><span>
+</span><span id="line-46"></span><span class="annot"><a href="Drasil.PDController.GenSysDesc.html#gsdSysResp"><span class="hs-identifier hs-type">gsdSysResp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-47"></span><span id="gsdSysResp"><span class="annot"><span class="annottext">gsdSysResp :: [Lbl]
+</span><a href="Drasil.PDController.GenSysDesc.html#gsdSysResp"><span class="hs-identifier hs-var hs-var">gsdSysResp</span></a></span></span><span>
+</span><span id="line-48"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Lbl
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Check the validity of the inputs&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-49"></span><span>     </span><span class="annot"><span class="annottext">String -&gt; Lbl
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Calculate the outputs of the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Lbl
+forall n. NounPhrase n =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#pidC"><span class="hs-identifier hs-var">pidC</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`and_`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#powerPlant"><span class="hs-identifier hs-var">powerPlant</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><span id="line-50"></span><span>
+</span><span id="line-51"></span><span class="annot"><a href="Drasil.PDController.GenSysDesc.html#gsdSysContextList"><span class="hs-identifier hs-type">gsdSysContextList</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
+</span><span id="line-52"></span><span id="gsdSysContextList"><span class="annot"><span class="annottext">gsdSysContextList :: Contents
+</span><a href="Drasil.PDController.GenSysDesc.html#gsdSysContextList"><span class="hs-identifier hs-var hs-var">gsdSysContextList</span></a></span></span><span>
+</span><span id="line-53"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnlabelledContent -&gt; Contents
+</span><span class="hs-identifier hs-var">UlC</span></span><span> </span><span class="annot"><span class="annottext">(UnlabelledContent -&gt; Contents) -&gt; UnlabelledContent -&gt; Contents
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span>
+</span><span id="line-54"></span><span>      </span><span class="annot"><span class="annottext">RawContent -&gt; UnlabelledContent
+</span><span class="hs-identifier hs-var">ulcc</span></span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; UnlabelledContent)
+-&gt; RawContent -&gt; UnlabelledContent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span>
+</span><span id="line-55"></span><span>        </span><span class="annot"><span class="annottext">ListType -&gt; RawContent
+</span><span class="hs-identifier hs-var">Enumeration</span></span><span> </span><span class="annot"><span class="annottext">(ListType -&gt; RawContent) -&gt; ListType -&gt; RawContent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span>
+</span><span id="line-56"></span><span>          </span><span class="annot"><span class="annottext">[Lbl] -&gt; [ListType] -&gt; ListType
+</span><span class="hs-identifier hs-var">bulletNested</span></span><span> </span><span class="annot"><span class="annottext">[Lbl]
+</span><a href="Drasil.PDController.GenSysDesc.html#gsdTitle"><span class="hs-identifier hs-var">gsdTitle</span></a></span><span> </span><span class="annot"><span class="annottext">([ListType] -&gt; ListType) -&gt; [ListType] -&gt; ListType
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">([Lbl] -&gt; ListType) -&gt; [[Lbl]] -&gt; [ListType]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">[Lbl] -&gt; ListType
+</span><span class="hs-identifier hs-var">bulletFlat</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Lbl]
+</span><a href="Drasil.PDController.GenSysDesc.html#gsdUsrResp"><span class="hs-identifier hs-var">gsdUsrResp</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Lbl]
+</span><a href="Drasil.PDController.GenSysDesc.html#gsdSysResp"><span class="hs-identifier hs-var">gsdSysResp</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-57"></span><span>
+</span><span id="line-58"></span><span class="annot"><a href="Drasil.PDController.GenSysDesc.html#gsduserCharacteristics"><span class="hs-identifier hs-type">gsduserCharacteristics</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
+</span><span id="line-59"></span><span id="gsduserCharacteristics"><span class="annot"><span class="annottext">gsduserCharacteristics :: Contents
+</span><a href="Drasil.PDController.GenSysDesc.html#gsduserCharacteristics"><span class="hs-identifier hs-var hs-var">gsduserCharacteristics</span></a></span></span><span>
+</span><span id="line-60"></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Lbl] -&gt; Contents
+</span><span class="hs-identifier hs-var">foldlSP</span></span><span>
+</span><span id="line-61"></span><span>      </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Lbl
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The end-user of&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Lbl
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.PDController.Concepts.html#pidC"><span class="hs-identifier hs-var">pidC</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-62"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Lbl
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is expected to have taken a course on Control Systems at an&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-63"></span><span>         </span><span class="annot"><span class="annottext">String -&gt; Lbl
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;undergraduate level&quot;</span></span><span class="hs-special">]</span></pre></body></html>

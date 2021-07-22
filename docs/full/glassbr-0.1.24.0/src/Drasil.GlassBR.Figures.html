@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.GlassBR.Figures</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Control.Lens</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-operator">(^.)</span></span><span class="hs-special">)</span><span>
+</span><span id="line-4"></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil</span></span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.Concepts</span></span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.Sentence</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
+</span><span id="line-9"></span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">assumption</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">item</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">physicalSystem</span></span><span class="hs-special">,</span><span>
+</span><span id="line-11"></span><span>  </span><span class="annot"><span class="hs-identifier">requirement</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">section_</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">sysCont</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">traceyMatrix</span></span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html"><span class="hs-identifier">Drasil.GlassBR.Concepts</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#aR"><span class="hs-identifier">aR</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Concepts.html#stdOffDist"><span class="hs-identifier">stdOffDist</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html"><span class="hs-identifier">Drasil.GlassBR.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#aspectRatio"><span class="hs-identifier">aspectRatio</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#charWeight"><span class="hs-identifier">charWeight</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#demand"><span class="hs-identifier">demand</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#demandq"><span class="hs-identifier">demandq</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-15"></span><span>  </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#dimlessLoad"><span class="hs-identifier">dimlessLoad</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#lateralLoad"><span class="hs-identifier">lateralLoad</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#sD"><span class="hs-identifier">sD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Unitals.html#stressDistFac"><span class="hs-identifier">stressDistFac</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-16"></span><span>
+</span><span id="line-17"></span><span class="annot"><a href="Drasil.GlassBR.Figures.html#resourcePath"><span class="hs-identifier hs-type">resourcePath</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-18"></span><span id="resourcePath"><span class="annot"><span class="annottext">resourcePath :: String
+</span><a href="Drasil.GlassBR.Figures.html#resourcePath"><span class="hs-identifier hs-var hs-var">resourcePath</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;../../../datafiles/GlassBR/&quot;</span></span><span>
+</span><span id="line-19"></span><span>
+</span><span id="line-20"></span><span class="annot"><a href="Drasil.GlassBR.Figures.html#sysCtxFig"><span class="hs-identifier hs-type">sysCtxFig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Figures.html#physSystFig"><span class="hs-identifier hs-type">physSystFig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Figures.html#traceItemSecsFig"><span class="hs-identifier hs-type">traceItemSecsFig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Figures.html#traceReqsItemsFig"><span class="hs-identifier hs-type">traceReqsItemsFig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Figures.html#traceAssumpsOthersFig"><span class="hs-identifier hs-type">traceAssumpsOthersFig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Figures.html#demandVsSDFig"><span class="hs-identifier hs-type">demandVsSDFig</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Figures.html#dimlessloadVsARFig"><span class="hs-identifier hs-type">dimlessloadVsARFig</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">LabelledContent</span></span><span>
+</span><span id="line-21"></span><span>
+</span><span id="line-22"></span><span id="sysCtxFig"><span class="annot"><span class="annottext">sysCtxFig :: LabelledContent
+</span><a href="Drasil.GlassBR.Figures.html#sysCtxFig"><span class="hs-identifier hs-var hs-var">sysCtxFig</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; RawContent -&gt; LabelledContent
+</span><span class="hs-identifier hs-var">llcc</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Reference
+</span><span class="hs-identifier hs-var">makeFigRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;sysCtxDiag&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; LabelledContent) -&gt; RawContent -&gt; LabelledContent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span>
+</span><span id="line-23"></span><span>  </span><span class="annot"><span class="annottext">Lbl -&gt; String -&gt; RawContent
+</span><span class="hs-identifier hs-var">fig</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Lbl
+forall n. NamedIdea n =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">sysCont</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
+</span><a href="Drasil.GlassBR.Figures.html#resourcePath"><span class="hs-identifier hs-var">resourcePath</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;SystemContextFigure.png&quot;</span></span><span class="hs-special">)</span><span> </span><span>
+</span><span id="line-24"></span><span>
+</span><span id="line-25"></span><span id="physSystFig"><span class="annot"><span class="annottext">physSystFig :: LabelledContent
+</span><a href="Drasil.GlassBR.Figures.html#physSystFig"><span class="hs-identifier hs-var hs-var">physSystFig</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; RawContent -&gt; LabelledContent
+</span><span class="hs-identifier hs-var">llcc</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Reference
+</span><span class="hs-identifier hs-var">makeFigRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;physSystImage&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; LabelledContent) -&gt; RawContent -&gt; LabelledContent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; String -&gt; MaxWidthPercent -&gt; RawContent
+</span><span class="hs-identifier hs-var">figWithWidth</span></span><span> </span><span>
+</span><span id="line-26"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Lbl
+forall n. NounPhrase n =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="annot"><span class="annottext">(NP -&gt; Lbl) -&gt; NP -&gt; Lbl
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">physicalSystem</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
+</span><a href="Drasil.GlassBR.Figures.html#resourcePath"><span class="hs-identifier hs-var">resourcePath</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;physicalsystimage.png&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-number">30</span></span><span>
+</span><span id="line-27"></span><span>
+</span><span id="line-28"></span><span id="traceItemSecsFig"><span class="annot"><span class="annottext">traceItemSecsFig :: LabelledContent
+</span><a href="Drasil.GlassBR.Figures.html#traceItemSecsFig"><span class="hs-identifier hs-var hs-var">traceItemSecsFig</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; RawContent -&gt; LabelledContent
+</span><span class="hs-identifier hs-var">llcc</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Reference
+</span><span class="hs-identifier hs-var">makeFigRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;TraceyItemSecs&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; LabelledContent) -&gt; RawContent -&gt; LabelledContent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; String -&gt; RawContent
+</span><span class="hs-identifier hs-var">fig</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Lbl -&gt; Lbl
+forall c. NamedIdea c =&gt; c -&gt; Lbl -&gt; Lbl
+</span><span class="hs-identifier hs-var">showingCxnBw</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">traceyMatrix</span></span><span> </span><span class="annot"><span class="annottext">(Lbl -&gt; Lbl) -&gt; Lbl -&gt; Lbl
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span>
+</span><span id="line-29"></span><span>  </span><span class="annot"><span class="annottext">NamedChunk -&gt; Lbl
+forall n. NamedIdea n =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">item</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Lbl
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;of Different&quot;</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Lbl
+forall n. NamedIdea n =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">section_</span></span><span class="hs-special">)</span><span>
+</span><span id="line-30"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
+</span><a href="Drasil.GlassBR.Figures.html#resourcePath"><span class="hs-identifier hs-var">resourcePath</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Trace.png&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-31"></span><span>
+</span><span id="line-32"></span><span id="traceReqsItemsFig"><span class="annot"><span class="annottext">traceReqsItemsFig :: LabelledContent
+</span><a href="Drasil.GlassBR.Figures.html#traceReqsItemsFig"><span class="hs-identifier hs-var hs-var">traceReqsItemsFig</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; RawContent -&gt; LabelledContent
+</span><span class="hs-identifier hs-var">llcc</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Reference
+</span><span class="hs-identifier hs-var">makeFigRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;TraceyReqsItems&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; LabelledContent) -&gt; RawContent -&gt; LabelledContent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; String -&gt; RawContent
+</span><span class="hs-identifier hs-var">fig</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Lbl -&gt; Lbl
+forall c. NamedIdea c =&gt; c -&gt; Lbl -&gt; Lbl
+</span><span class="hs-identifier hs-var">showingCxnBw</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">traceyMatrix</span></span><span> </span><span class="annot"><span class="annottext">(Lbl -&gt; Lbl) -&gt; Lbl -&gt; Lbl
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span>
+</span><span id="line-33"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; Lbl
+forall n. NamedIdea n =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">requirement</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Lbl
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Other&quot;</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Lbl
+forall n. NamedIdea n =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">item</span></span><span class="hs-special">)</span><span>
+</span><span id="line-34"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
+</span><a href="Drasil.GlassBR.Figures.html#resourcePath"><span class="hs-identifier hs-var">resourcePath</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;RTrace.png&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-35"></span><span>
+</span><span id="line-36"></span><span id="traceAssumpsOthersFig"><span class="annot"><span class="annottext">traceAssumpsOthersFig :: LabelledContent
+</span><a href="Drasil.GlassBR.Figures.html#traceAssumpsOthersFig"><span class="hs-identifier hs-var hs-var">traceAssumpsOthersFig</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; RawContent -&gt; LabelledContent
+</span><span class="hs-identifier hs-var">llcc</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Reference
+</span><span class="hs-identifier hs-var">makeFigRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;TraceyAssumpsOthers&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; LabelledContent) -&gt; RawContent -&gt; LabelledContent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; String -&gt; RawContent
+</span><span class="hs-identifier hs-var">fig</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; Lbl -&gt; Lbl
+forall c. NamedIdea c =&gt; c -&gt; Lbl -&gt; Lbl
+</span><span class="hs-identifier hs-var">showingCxnBw</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">traceyMatrix</span></span><span> </span><span class="annot"><span class="annottext">(Lbl -&gt; Lbl) -&gt; Lbl -&gt; Lbl
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span>
+</span><span id="line-37"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; Lbl
+forall n. NamedIdea n =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">assumption</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Lbl
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Other&quot;</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Lbl
+forall n. NamedIdea n =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">titleize'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">item</span></span><span class="hs-special">)</span><span>
+</span><span id="line-38"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
+</span><a href="Drasil.GlassBR.Figures.html#resourcePath"><span class="hs-identifier hs-var">resourcePath</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;ATrace.png&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-39"></span><span>
+</span><span id="line-40"></span><span id="demandVsSDFig"><span class="annot"><span class="annottext">demandVsSDFig :: LabelledContent
+</span><a href="Drasil.GlassBR.Figures.html#demandVsSDFig"><span class="hs-identifier hs-var hs-var">demandVsSDFig</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; RawContent -&gt; LabelledContent
+</span><span class="hs-identifier hs-var">llcc</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Reference
+</span><span class="hs-identifier hs-var">makeFigRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;demandVSsod&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; LabelledContent) -&gt; RawContent -&gt; LabelledContent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; String -&gt; RawContent
+</span><span class="hs-identifier hs-var">fig</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.GlassBR.Unitals.html#demandq"><span class="hs-identifier hs-var">demandq</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Getting Lbl ConceptChunk Lbl -&gt; Lbl
+forall s a. s -&gt; Getting a s a -&gt; a
+</span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting Lbl ConceptChunk Lbl
+forall c. Definition c =&gt; Lens' c Lbl
+</span><span class="hs-identifier hs-var">defn</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">+:+</span></span><span>
+</span><span id="line-41"></span><span>  </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl
+</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Lbl
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Lbl
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GlassBR.Unitals.html#demand"><span class="hs-identifier hs-var">demand</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">`S.versus`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Lbl
+forall n. NamedIdea n =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">atStart</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.GlassBR.Unitals.html#sD"><span class="hs-identifier hs-var">sD</span></a></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl
+</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Lbl
+</span><span class="hs-identifier hs-var">getAcc</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><a href="Drasil.GlassBR.Concepts.html#stdOffDist"><span class="hs-identifier hs-var">stdOffDist</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-42"></span><span>  </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">`S.versus`</span></span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Lbl
+forall n. NamedIdea n =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">atStart</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><a href="Drasil.GlassBR.Unitals.html#charWeight"><span class="hs-identifier hs-var">charWeight</span></a></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl
+</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ -&gt; Lbl
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Lbl
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><a href="Drasil.GlassBR.Unitals.html#charWeight"><span class="hs-identifier hs-var">charWeight</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-43"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
+</span><a href="Drasil.GlassBR.Figures.html#resourcePath"><span class="hs-identifier hs-var">resourcePath</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;ASTM_F2248-09.png&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-44"></span><span>
+</span><span id="line-45"></span><span id="dimlessloadVsARFig"><span class="annot"><span class="annottext">dimlessloadVsARFig :: LabelledContent
+</span><a href="Drasil.GlassBR.Figures.html#dimlessloadVsARFig"><span class="hs-identifier hs-var hs-var">dimlessloadVsARFig</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; RawContent -&gt; LabelledContent
+</span><span class="hs-identifier hs-var">llcc</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Reference
+</span><span class="hs-identifier hs-var">makeFigRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;dimlessloadVSaspect&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; LabelledContent) -&gt; RawContent -&gt; LabelledContent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; String -&gt; RawContent
+</span><span class="hs-identifier hs-var">fig</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Lbl
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Non dimensional&quot;</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">+:+</span></span><span>
+</span><span id="line-46"></span><span>  </span><span class="annot"><span class="annottext">NamedChunk -&gt; Lbl
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.GlassBR.Unitals.html#lateralLoad"><span class="hs-identifier hs-var">lateralLoad</span></a></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl
+</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QuantityDict -&gt; Lbl
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Lbl
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.GlassBR.Unitals.html#dimlessLoad"><span class="hs-identifier hs-var">dimlessLoad</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-47"></span><span>  </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">`S.versus`</span></span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Lbl
+forall n. NamedIdea n =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><a href="Drasil.GlassBR.Unitals.html#aspectRatio"><span class="hs-identifier hs-var">aspectRatio</span></a></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl
+</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Lbl
+</span><span class="hs-identifier hs-var">getAcc</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><a href="Drasil.GlassBR.Concepts.html#aR"><span class="hs-identifier hs-var">aR</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-48"></span><span>  </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">`S.versus`</span></span><span> </span><span class="annot"><span class="annottext">ConstrainedChunk -&gt; Lbl
+forall n. NamedIdea n =&gt; n -&gt; Lbl
+</span><span class="hs-identifier hs-var">atStart</span></span><span> </span><span class="annot"><span class="annottext">ConstrainedChunk
+</span><a href="Drasil.GlassBR.Unitals.html#stressDistFac"><span class="hs-identifier hs-var">stressDistFac</span></a></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl -&gt; Lbl
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">Lbl -&gt; Lbl
+</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrainedChunk -&gt; Lbl
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Lbl
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">ConstrainedChunk
+</span><a href="Drasil.GlassBR.Unitals.html#stressDistFac"><span class="hs-identifier hs-var">stressDistFac</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-49"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String
+</span><a href="Drasil.GlassBR.Figures.html#resourcePath"><span class="hs-identifier hs-var">resourcePath</span></a></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;ASTM_F2248-09_BeasonEtAl.png&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-50"></span></pre></body></html>

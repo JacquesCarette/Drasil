@@ -1,0 +1,267 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.Projectile.Concepts</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil</span></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.Concepts</span></span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.Sentence</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
+</span><span id="line-7"></span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">constant</span></span><span class="hs-special">)</span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">angle</span></span><span class="hs-special">)</span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">position</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">speed</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">motion</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">distance</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">iSpeed</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">time</span></span><span class="hs-special">,</span><span>
+</span><span id="line-11"></span><span>  </span><span class="annot"><span class="hs-identifier">rectilinear</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">velocity</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">acceleration</span></span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span><span>
+</span><span id="line-13"></span><span class="annot"><a href="Drasil.Projectile.Concepts.html#concepts"><span class="hs-identifier hs-type">concepts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">IdeaDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-14"></span><span id="concepts"><span class="annot"><span class="annottext">concepts :: [IdeaDict]
+</span><a href="Drasil.Projectile.Concepts.html#concepts"><span class="hs-identifier hs-var hs-var">concepts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; IdeaDict
+forall c. Idea c =&gt; c -&gt; IdeaDict
+</span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#projMotion"><span class="hs-identifier hs-var">projMotion</span></a></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; [IdeaDict] -&gt; [IdeaDict]
+forall a. a -&gt; [a] -&gt; [a]
+</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">(NamedChunk -&gt; IdeaDict) -&gt; [NamedChunk] -&gt; [IdeaDict]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; IdeaDict
+forall c. Idea c =&gt; c -&gt; IdeaDict
+</span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#landingPosNC"><span class="hs-identifier hs-var">landingPosNC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#launchNC"><span class="hs-identifier hs-var">launchNC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#launchAngleNC"><span class="hs-identifier hs-var">launchAngleNC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#launchSpeedNC"><span class="hs-identifier hs-var">launchSpeedNC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#offsetNC"><span class="hs-identifier hs-var">offsetNC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#targetPosNC"><span class="hs-identifier hs-var">targetPosNC</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-15"></span><span>  </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#rectVel"><span class="hs-identifier hs-var">rectVel</span></a></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(ConceptChunk -&gt; IdeaDict) -&gt; [ConceptChunk] -&gt; [IdeaDict]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; IdeaDict
+forall c. Idea c =&gt; c -&gt; IdeaDict
+</span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">[ConceptChunk]
+</span><a href="Drasil.Projectile.Concepts.html#defs"><span class="hs-identifier hs-var">defs</span></a></span><span>
+</span><span id="line-16"></span><span>
+</span><span id="line-17"></span><span class="annot"><a href="Drasil.Projectile.Concepts.html#durationNC"><span class="hs-identifier hs-type">durationNC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html#flightDurNC"><span class="hs-identifier hs-type">flightDurNC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html#landingPosNC"><span class="hs-identifier hs-type">landingPosNC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html#launchNC"><span class="hs-identifier hs-type">launchNC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html#launchAngleNC"><span class="hs-identifier hs-type">launchAngleNC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html#launchSpeedNC"><span class="hs-identifier hs-type">launchSpeedNC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html#offsetNC"><span class="hs-identifier hs-type">offsetNC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html#targetPosNC"><span class="hs-identifier hs-type">targetPosNC</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-18"></span><span>  </span><span class="annot"><a href="Drasil.Projectile.Concepts.html#rectVel"><span class="hs-identifier hs-type">rectVel</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedChunk</span></span><span>
+</span><span id="line-19"></span><span id="durationNC"><span class="annot"><span class="annottext">durationNC :: NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#durationNC"><span class="hs-identifier hs-var hs-var">durationNC</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; NamedChunk
+</span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;duration&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;duration&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-20"></span><span id="launchNC"><span class="annot"><span class="annottext">launchNC :: NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#launchNC"><span class="hs-identifier hs-var hs-var">launchNC</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; NamedChunk
+</span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;launch&quot;</span></span><span>   </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;launch&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-21"></span><span id="offsetNC"><span class="annot"><span class="annottext">offsetNC :: NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#offsetNC"><span class="hs-identifier hs-var hs-var">offsetNC</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; NamedChunk
+</span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;offset&quot;</span></span><span>   </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSent</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; NP) -&gt; Sentence -&gt; NP
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;distance between the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#targetPosNC"><span class="hs-identifier hs-var">targetPosNC</span></a></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; NamedChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`andThe`</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#landingPosNC"><span class="hs-identifier hs-var">landingPosNC</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-22"></span><span>
+</span><span id="line-23"></span><span id="flightDurNC"><span class="annot"><span class="annottext">flightDurNC :: NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#flightDurNC"><span class="hs-identifier hs-var hs-var">flightDurNC</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; NamedChunk -&gt; NamedChunk
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; NamedChunk
+</span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; NamedChunk
+</span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;flight&quot;</span></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;flight&quot;</span></span><span> </span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#durationNC"><span class="hs-identifier hs-var">durationNC</span></a></span><span>
+</span><span id="line-24"></span><span id="landingPosNC"><span class="annot"><span class="annottext">landingPosNC :: NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#landingPosNC"><span class="hs-identifier hs-var hs-var">landingPosNC</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; ConceptChunk -&gt; NamedChunk
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; NamedChunk
+</span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP -&gt; NamedChunk
+</span><span class="hs-identifier hs-var">nc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;landing&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;landing&quot;</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">position</span></span><span>
+</span><span id="line-25"></span><span id="launchAngleNC"><span class="annot"><span class="annottext">launchAngleNC :: NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#launchAngleNC"><span class="hs-identifier hs-var hs-var">launchAngleNC</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; ConceptChunk -&gt; NamedChunk
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; NamedChunk
+</span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#launchNC"><span class="hs-identifier hs-var">launchNC</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">angle</span></span><span>
+</span><span id="line-26"></span><span id="launchSpeedNC"><span class="annot"><span class="annottext">launchSpeedNC :: NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#launchSpeedNC"><span class="hs-identifier hs-var hs-var">launchSpeedNC</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; ConceptChunk -&gt; NamedChunk
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; NamedChunk
+</span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#launchNC"><span class="hs-identifier hs-var">launchNC</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">speed</span></span><span>
+</span><span id="line-27"></span><span id="targetPosNC"><span class="annot"><span class="annottext">targetPosNC :: NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#targetPosNC"><span class="hs-identifier hs-var hs-var">targetPosNC</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NamedChunk
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; NamedChunk
+</span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.Projectile.Concepts.html#target"><span class="hs-identifier hs-var">target</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">position</span></span><span>
+</span><span id="line-28"></span><span id="rectVel"><span class="annot"><span class="annottext">rectVel :: NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#rectVel"><span class="hs-identifier hs-var hs-var">rectVel</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NamedChunk
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; NamedChunk
+</span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">rectilinear</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">velocity</span></span><span>
+</span><span id="line-29"></span><span>
+</span><span id="line-30"></span><span class="annot"><a href="Drasil.Projectile.Concepts.html#projMotion"><span class="hs-identifier hs-type">projMotion</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">NamedChunk</span></span><span>
+</span><span id="line-31"></span><span id="projMotion"><span class="annot"><span class="annottext">projMotion :: NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#projMotion"><span class="hs-identifier hs-var hs-var">projMotion</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NamedChunk
+forall a b. (NamedIdea a, NamedIdea b) =&gt; a -&gt; b -&gt; NamedChunk
+</span><span class="hs-identifier hs-var">compoundNC</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.Projectile.Concepts.html#projectile"><span class="hs-identifier hs-var">projectile</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">motion</span></span><span>
+</span><span id="line-32"></span><span class="hs-comment">---</span><span>
+</span><span id="line-33"></span><span>
+</span><span id="line-34"></span><span class="annot"><a href="Drasil.Projectile.Concepts.html#defs"><span class="hs-identifier hs-type">defs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-35"></span><span id="defs"><span class="annot"><span class="annottext">defs :: [ConceptChunk]
+</span><a href="Drasil.Projectile.Concepts.html#defs"><span class="hs-identifier hs-var hs-var">defs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.Projectile.Concepts.html#launcher"><span class="hs-identifier hs-var">launcher</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.Projectile.Concepts.html#projectile"><span class="hs-identifier hs-var">projectile</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.Projectile.Concepts.html#target"><span class="hs-identifier hs-var">target</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.Projectile.Concepts.html#projSpeed"><span class="hs-identifier hs-var">projSpeed</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-36"></span><span>
+</span><span id="line-37"></span><span class="annot"><a href="Drasil.Projectile.Concepts.html#launcher"><span class="hs-identifier hs-type">launcher</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html#projectile"><span class="hs-identifier hs-type">projectile</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html#target"><span class="hs-identifier hs-type">target</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html#projSpeed"><span class="hs-identifier hs-type">projSpeed</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
+</span><span id="line-38"></span><span id="launcher"><span class="annot"><span class="annottext">launcher :: ConceptChunk
+</span><a href="Drasil.Projectile.Concepts.html#launcher"><span class="hs-identifier hs-var hs-var">launcher</span></a></span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;launcher&quot;</span></span><span>   </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;launcher&quot;</span></span><span class="hs-special">)</span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="hs-string">&quot;where the projectile is launched from &quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span>
+</span><span id="line-39"></span><span>                                                          </span><span class="annot"><span class="hs-string">&quot;and the device that does the launching&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-40"></span><span id="projectile"><span class="annot"><span class="annottext">projectile :: ConceptChunk
+</span><a href="Drasil.Projectile.Concepts.html#projectile"><span class="hs-identifier hs-var hs-var">projectile</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;projectile&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;projectile&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;the object to be launched at the target&quot;</span></span><span>
+</span><span id="line-41"></span><span id="target"><span class="annot"><span class="annottext">target :: ConceptChunk
+</span><a href="Drasil.Projectile.Concepts.html#target"><span class="hs-identifier hs-var hs-var">target</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; String -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">dcc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;target&quot;</span></span><span>     </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;target&quot;</span></span><span class="hs-special">)</span><span>     </span><span class="annot"><span class="hs-string">&quot;where the projectile should be launched to&quot;</span></span><span>
+</span><span id="line-42"></span><span>
+</span><span id="line-43"></span><span id="projSpeed"><span class="annot"><span class="annottext">projSpeed :: ConceptChunk
+</span><a href="Drasil.Projectile.Concepts.html#projSpeed"><span class="hs-identifier hs-var hs-var">projSpeed</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; NP -&gt; Sentence -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">dccWDS</span></span><span> </span><span class="annot"><span class="hs-string">&quot;projSpeed&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;1D speed&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;1D speed under&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">constant</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">acceleration</span></span><span class="hs-special">)</span><span>
+</span><span id="line-44"></span><span>
+</span><span id="line-45"></span><span class="annot"><a href="Drasil.Projectile.Concepts.html#landPos"><span class="hs-identifier hs-type">landPos</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html#launAngle"><span class="hs-identifier hs-type">launAngle</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html#launSpeed"><span class="hs-identifier hs-type">launSpeed</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html#offset"><span class="hs-identifier hs-type">offset</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html#targPos"><span class="hs-identifier hs-type">targPos</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Projectile.Concepts.html#flightDur"><span class="hs-identifier hs-type">flightDur</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span>
+</span><span id="line-46"></span><span id="landPos"><span class="annot"><span class="annottext">landPos :: ConceptChunk
+</span><a href="Drasil.Projectile.Concepts.html#landPos"><span class="hs-identifier hs-var hs-var">landPos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence -&gt; ConceptChunk
+forall c. Idea c =&gt; c -&gt; Sentence -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">cc'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#landingPosNC"><span class="hs-identifier hs-var">landingPosNC</span></a></span><span>
+</span><span id="line-47"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent_</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">distance</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.fromThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.Projectile.Concepts.html#launcher"><span class="hs-identifier hs-var">launcher</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.toThe`</span></span><span>
+</span><span id="line-48"></span><span>            </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;final&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">position</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`ofThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.Projectile.Concepts.html#projectile"><span class="hs-identifier hs-var">projectile</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><span id="line-49"></span><span>
+</span><span id="line-50"></span><span id="launAngle"><span class="annot"><span class="annottext">launAngle :: ConceptChunk
+</span><a href="Drasil.Projectile.Concepts.html#launAngle"><span class="hs-identifier hs-var hs-var">launAngle</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence -&gt; ConceptChunk
+forall c. Idea c =&gt; c -&gt; Sentence -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">cc'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#launchAngleNC"><span class="hs-identifier hs-var">launchAngleNC</span></a></span><span>
+</span><span id="line-51"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent_</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">angle</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;between the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.Projectile.Concepts.html#launcher"><span class="hs-identifier hs-var">launcher</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;a straight line&quot;</span></span><span>
+</span><span id="line-52"></span><span>             </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.fromThe`</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.Projectile.Concepts.html#launcher"><span class="hs-identifier hs-var">launcher</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`toThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.Projectile.Concepts.html#target"><span class="hs-identifier hs-var">target</span></a></span><span class="hs-special">)</span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><span id="line-53"></span><span>
+</span><span id="line-54"></span><span id="launSpeed"><span class="annot"><span class="annottext">launSpeed :: ConceptChunk
+</span><a href="Drasil.Projectile.Concepts.html#launSpeed"><span class="hs-identifier hs-var hs-var">launSpeed</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence -&gt; ConceptChunk
+forall c. Idea c =&gt; c -&gt; Sentence -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">cc'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#launchSpeedNC"><span class="hs-identifier hs-var">launchSpeedNC</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">iSpeed</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`the_ofThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.Projectile.Concepts.html#projectile"><span class="hs-identifier hs-var">projectile</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;when launched&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-55"></span><span id="offset"><span class="annot"><span class="annottext">offset :: ConceptChunk
+</span><a href="Drasil.Projectile.Concepts.html#offset"><span class="hs-identifier hs-var hs-var">offset</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence -&gt; ConceptChunk
+forall c. Idea c =&gt; c -&gt; Sentence -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">cc'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#offsetNC"><span class="hs-identifier hs-var">offsetNC</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;the offset between the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#targetPosNC"><span class="hs-identifier hs-var">targetPosNC</span></a></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; NamedChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`andThe`</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#landingPosNC"><span class="hs-identifier hs-var">landingPosNC</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-56"></span><span id="targPos"><span class="annot"><span class="annottext">targPos :: ConceptChunk
+</span><a href="Drasil.Projectile.Concepts.html#targPos"><span class="hs-identifier hs-var hs-var">targPos</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence -&gt; ConceptChunk
+forall c. Idea c =&gt; c -&gt; Sentence -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">cc'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#targetPosNC"><span class="hs-identifier hs-var">targetPosNC</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">distance</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.fromThe`</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.Projectile.Concepts.html#launcher"><span class="hs-identifier hs-var">launcher</span></a></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`toThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.Projectile.Concepts.html#target"><span class="hs-identifier hs-var">target</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-57"></span><span id="flightDur"><span class="annot"><span class="annottext">flightDur :: ConceptChunk
+</span><a href="Drasil.Projectile.Concepts.html#flightDur"><span class="hs-identifier hs-var hs-var">flightDur</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence -&gt; ConceptChunk
+forall c. Idea c =&gt; c -&gt; Sentence -&gt; ConceptChunk
+</span><span class="hs-identifier hs-var">cc'</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><a href="Drasil.Projectile.Concepts.html#flightDurNC"><span class="hs-identifier hs-var">flightDurNC</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent_</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">time</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;when the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.Projectile.Concepts.html#projectile"><span class="hs-identifier hs-var">projectile</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;lands&quot;</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><span id="line-58"></span><span>
+</span><span id="line-59"></span></pre></body></html>

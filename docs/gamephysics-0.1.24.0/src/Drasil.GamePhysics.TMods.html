@@ -1,0 +1,433 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE PostfixOperators #-}</span><span>
+</span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.GamePhysics.TMods</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GamePhysics.TMods.html#tMods"><span class="hs-identifier">tMods</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">newtonSL</span></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.TMods.html#newtonSLR"><span class="hs-identifier">newtonSLR</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.TMods.html#newtonTL"><span class="hs-identifier">newtonTL</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.TMods.html#newtonLUG"><span class="hs-identifier">newtonLUG</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-3"></span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Data.List.NonEmpty</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">NE</span></span><span>
+</span><span id="line-5"></span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Theory.Drasil</span></span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil</span></span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.Sentence</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
+</span><span id="line-10"></span><span>
+</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html"><span class="hs-identifier">Drasil.GamePhysics.Assumptions</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GamePhysics.Assumptions.html#assumpOD"><span class="hs-identifier">assumpOD</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html"><span class="hs-identifier">Drasil.GamePhysics.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#dispNorm"><span class="hs-identifier">dispNorm</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#dVect"><span class="hs-identifier">dVect</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#force_1"><span class="hs-identifier">force_1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#force_2"><span class="hs-identifier">force_2</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-13"></span><span>  </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#mass_1"><span class="hs-identifier">mass_1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#mass_2"><span class="hs-identifier">mass_2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#sqrDist"><span class="hs-identifier">sqrDist</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GamePhysics.Unitals.html#distMass"><span class="hs-identifier">distMass</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-14"></span><span>
+</span><span id="line-15"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">constant</span></span><span class="hs-special">)</span><span>
+</span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">rigidBody</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">twoD</span></span><span class="hs-special">)</span><span>
+</span><span id="line-17"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.PhysicalProperties</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">mass</span></span><span class="hs-special">)</span><span>
+</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">angularAccel</span></span><span class="hs-special">,</span><span>
+</span><span id="line-19"></span><span>  </span><span class="annot"><span class="hs-identifier">force</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">gravitationalConst</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">momentOfInertia</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">torque</span></span><span class="hs-special">)</span><span>
+</span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Theories.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">newtonSL</span></span><span class="hs-special">)</span><span>
+</span><span id="line-21"></span><span>
+</span><span id="line-22"></span><span class="hs-comment">----- Theoretical Models -----</span><span>
+</span><span id="line-23"></span><span>
+</span><span id="line-24"></span><span class="annot"><a href="Drasil.GamePhysics.TMods.html#tMods"><span class="hs-identifier hs-type">tMods</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">TheoryModel</span></span><span class="hs-special">]</span><span>
+</span><span id="line-25"></span><span id="tMods"><span class="annot"><span class="annottext">tMods :: [TheoryModel]
+</span><a href="Drasil.GamePhysics.TMods.html#tMods"><span class="hs-identifier hs-var hs-var">tMods</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TheoryModel
+</span><span class="hs-identifier hs-var">newtonSL</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TheoryModel
+</span><a href="Drasil.GamePhysics.TMods.html#newtonTL"><span class="hs-identifier hs-var">newtonTL</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TheoryModel
+</span><a href="Drasil.GamePhysics.TMods.html#newtonLUG"><span class="hs-identifier hs-var">newtonLUG</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TheoryModel
+</span><a href="Drasil.GamePhysics.TMods.html#newtonSLR"><span class="hs-identifier hs-var">newtonSLR</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-26"></span><span>
+</span><span id="line-27"></span><span class="hs-comment">-- T1 : Newton's second law of motion --</span><span>
+</span><span id="line-28"></span><span>
+</span><span id="line-29"></span><span class="hs-comment">-- T2 : Newton's third law of motion --</span><span>
+</span><span id="line-30"></span><span>
+</span><span id="line-31"></span><span class="annot"><a href="Drasil.GamePhysics.TMods.html#newtonTL"><span class="hs-identifier hs-type">newtonTL</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">TheoryModel</span></span><span>
+</span><span id="line-32"></span><span id="newtonTL"><span class="annot"><span class="annottext">newtonTL :: TheoryModel
+</span><a href="Drasil.GamePhysics.TMods.html#newtonTL"><span class="hs-identifier hs-var hs-var">newtonTL</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind
+-&gt; [QuantityDict]
+-&gt; [ConceptChunk]
+-&gt; [QDefinition]
+-&gt; [DisplayExpr]
+-&gt; [QDefinition]
+-&gt; String
+-&gt; [Sentence]
+-&gt; TheoryModel
+forall q c.
+(Quantity q, MayHaveUnit q, Concept c) =&gt;
+ModelKind
+-&gt; [q]
+-&gt; [c]
+-&gt; [QDefinition]
+-&gt; [DisplayExpr]
+-&gt; [QDefinition]
+-&gt; String
+-&gt; [Sentence]
+-&gt; TheoryModel
+</span><span class="hs-identifier hs-var">tmNoRefs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QDefinition -&gt; ModelKind
+</span><span class="hs-identifier hs-var">equationalModel'</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.GamePhysics.TMods.html#newtonTLQD"><span class="hs-identifier hs-var">newtonTLQD</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#force_1"><span class="hs-identifier hs-var">force_1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#force_2"><span class="hs-identifier hs-var">force_2</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-33"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.GamePhysics.TMods.html#newtonTLQD"><span class="hs-identifier hs-var">newtonTLQD</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-string">&quot;NewtonThirdLawMot&quot;</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.GamePhysics.TMods.html#newtonTLNote"><span class="hs-identifier hs-var">newtonTLNote</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-34"></span><span>
+</span><span id="line-35"></span><span class="annot"><a href="Drasil.GamePhysics.TMods.html#newtonTLQD"><span class="hs-identifier hs-type">newtonTLQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
+</span><span id="line-36"></span><span id="newtonTLQD"><span class="annot"><span class="annottext">newtonTLQD :: QDefinition
+</span><a href="Drasil.GamePhysics.TMods.html#newtonTLQD"><span class="hs-identifier hs-var hs-var">newtonTLQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP -&gt; Expr -&gt; QDefinition
+forall c.
+(Quantity c, MayHaveUnit c) =&gt;
+c -&gt; NP -&gt; Expr -&gt; QDefinition
+</span><span class="hs-identifier hs-var">mkQuantDef'</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#force_1"><span class="hs-identifier hs-var">force_1</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Newton's third law of motion&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.GamePhysics.TMods.html#newtonTLExpr"><span class="hs-identifier hs-var">newtonTLExpr</span></a></span><span>
+</span><span id="line-37"></span><span>
+</span><span id="line-38"></span><span class="annot"><a href="Drasil.GamePhysics.TMods.html#newtonTLExpr"><span class="hs-identifier hs-type">newtonTLExpr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
+</span><span id="line-39"></span><span id="newtonTLExpr"><span class="annot"><span class="annottext">newtonTLExpr :: Expr
+</span><a href="Drasil.GamePhysics.TMods.html#newtonTLExpr"><span class="hs-identifier hs-var hs-var">newtonTLExpr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
+</span><span class="hs-identifier hs-var">neg</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#force_2"><span class="hs-identifier hs-var">force_2</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-40"></span><span>
+</span><span id="line-41"></span><span class="annot"><a href="Drasil.GamePhysics.TMods.html#newtonTLNote"><span class="hs-identifier hs-type">newtonTLNote</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-42"></span><span id="newtonTLNote"><span class="annot"><span class="annottext">newtonTLNote :: Sentence
+</span><a href="Drasil.GamePhysics.TMods.html#newtonTLNote"><span class="hs-identifier hs-var hs-var">newtonTLNote</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Every action has an equal and opposite reaction&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">!.</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-43"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;In other words, the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#force_1"><span class="hs-identifier hs-var">force_1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;exerted on the second&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-44"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">rigidBody</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;by the first is equal in magnitude and in the opposite direction&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.toThe`</span></span><span>
+</span><span id="line-45"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#force_2"><span class="hs-identifier hs-var">force_2</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;exerted on the first&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">rigidBody</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;by the second&quot;</span></span><span class="hs-special">]</span><span>
+</span><span id="line-46"></span><span>
+</span><span id="line-47"></span><span class="hs-comment">-- T3 : Newton's law of universal gravitation --</span><span>
+</span><span id="line-48"></span><span>
+</span><span id="line-49"></span><span class="hs-comment">-- FIXME: Missing ConceptDomain!</span><span>
+</span><span id="line-50"></span><span class="annot"><a href="Drasil.GamePhysics.TMods.html#newtonLUGModel"><span class="hs-identifier hs-type">newtonLUGModel</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ModelKind</span></span><span>
+</span><span id="line-51"></span><span id="newtonLUGModel"><span class="annot"><span class="annottext">newtonLUGModel :: ModelKind
+</span><a href="Drasil.GamePhysics.TMods.html#newtonLUGModel"><span class="hs-identifier hs-var hs-var">newtonLUGModel</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">MultiDefn -&gt; ModelKind
+</span><span class="hs-identifier hs-var">equationalRealm'</span></span><span> </span><span class="annot"><span class="annottext">(MultiDefn -&gt; ModelKind) -&gt; MultiDefn -&gt; ModelKind
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Sentence -&gt; NonEmpty DefiningExpr -&gt; MultiDefn
+</span><span class="hs-identifier hs-var">mkMultiDefnForQuant</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
+</span><a href="Drasil.GamePhysics.TMods.html#newtonForceQuant"><span class="hs-identifier hs-var">newtonForceQuant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">(NonEmpty DefiningExpr -&gt; MultiDefn)
+-&gt; NonEmpty DefiningExpr -&gt; MultiDefn
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[DefiningExpr] -&gt; NonEmpty DefiningExpr
+forall a. [a] -&gt; NonEmpty a
+</span><span class="hs-identifier hs-var">NE.fromList</span></span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-52"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; Sentence -&gt; Expr -&gt; DefiningExpr
+</span><span class="hs-identifier hs-var">mkDefiningExpr</span></span><span> </span><span class="annot"><span class="hs-string">&quot;newtonLUGviaDeriv&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">gravitationalConst</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#mass_1"><span class="hs-identifier hs-var">mass_1</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#mass_2"><span class="hs-identifier hs-var">mass_2</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
+</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#dispNorm"><span class="hs-identifier hs-var">dispNorm</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#dVect"><span class="hs-identifier hs-var">dVect</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-53"></span><span>    </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; Sentence -&gt; Expr -&gt; DefiningExpr
+</span><span class="hs-identifier hs-var">mkDefiningExpr</span></span><span> </span><span class="annot"><span class="hs-string">&quot;newtonLUGviaForm&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">gravitationalConst</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#mass_1"><span class="hs-identifier hs-var">mass_1</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#mass_2"><span class="hs-identifier hs-var">mass_2</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
+</span><span class="hs-identifier hs-var">square</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#dispNorm"><span class="hs-identifier hs-var">dispNorm</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#distMass"><span class="hs-identifier hs-var">distMass</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">$/</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#dispNorm"><span class="hs-identifier hs-var">dispNorm</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><span id="line-54"></span><span>  </span><span class="hs-special">]</span><span>
+</span><span id="line-55"></span><span>
+</span><span id="line-56"></span><span class="annot"><a href="Drasil.GamePhysics.TMods.html#newtonLUG"><span class="hs-identifier hs-type">newtonLUG</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">TheoryModel</span></span><span>
+</span><span id="line-57"></span><span id="newtonLUG"><span class="annot"><span class="annottext">newtonLUG :: TheoryModel
+</span><a href="Drasil.GamePhysics.TMods.html#newtonLUG"><span class="hs-identifier hs-var hs-var">newtonLUG</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind
+-&gt; [QuantityDict]
+-&gt; [ConceptChunk]
+-&gt; [QDefinition]
+-&gt; [DisplayExpr]
+-&gt; [QDefinition]
+-&gt; String
+-&gt; [Sentence]
+-&gt; TheoryModel
+forall q c.
+(Quantity q, MayHaveUnit q, Concept c) =&gt;
+ModelKind
+-&gt; [q]
+-&gt; [c]
+-&gt; [QDefinition]
+-&gt; [DisplayExpr]
+-&gt; [QDefinition]
+-&gt; String
+-&gt; [Sentence]
+-&gt; TheoryModel
+</span><span class="hs-identifier hs-var">tmNoRefs</span></span><span> </span><span class="annot"><span class="annottext">ModelKind
+</span><a href="Drasil.GamePhysics.TMods.html#newtonLUGModel"><span class="hs-identifier hs-var">newtonLUGModel</span></a></span><span>
+</span><span id="line-58"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">gravitationalConst</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#mass_1"><span class="hs-identifier hs-var">mass_1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#mass_2"><span class="hs-identifier hs-var">mass_2</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-59"></span><span>  </span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#dispNorm"><span class="hs-identifier hs-var">dispNorm</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#dVect"><span class="hs-identifier hs-var">dVect</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#distMass"><span class="hs-identifier hs-var">distMass</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><span id="line-60"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ModelKind -&gt; DisplayExpr
+forall c. Display c =&gt; c -&gt; DisplayExpr
+</span><span class="hs-identifier hs-var">toDispExpr</span></span><span> </span><span class="annot"><span class="annottext">ModelKind
+</span><a href="Drasil.GamePhysics.TMods.html#newtonLUGModel"><span class="hs-identifier hs-var">newtonLUGModel</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-string">&quot;UniversalGravLaw&quot;</span></span><span> </span><span class="annot"><span class="annottext">[Sentence]
+</span><a href="Drasil.GamePhysics.TMods.html#newtonLUGNotes"><span class="hs-identifier hs-var">newtonLUGNotes</span></a></span><span>
+</span><span id="line-61"></span><span>
+</span><span id="line-62"></span><span class="annot"><a href="Drasil.GamePhysics.TMods.html#newtonForceQuant"><span class="hs-identifier hs-type">newtonForceQuant</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span>
+</span><span id="line-63"></span><span id="newtonForceQuant"><span class="annot"><span class="annottext">newtonForceQuant :: QuantityDict
+</span><a href="Drasil.GamePhysics.TMods.html#newtonForceQuant"><span class="hs-identifier hs-var hs-var">newtonForceQuant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+-&gt; NP
+-&gt; Maybe String
+-&gt; Space
+-&gt; (Stage -&gt; Symbol)
+-&gt; Maybe UnitDefn
+-&gt; QuantityDict
+</span><span class="hs-identifier hs-var">mkQuant'</span></span><span> </span><span class="annot"><span class="hs-string">&quot;force&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Newton's law of universal gravitation&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Maybe String
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Stage -&gt; Symbol
+forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
+</span><span class="hs-identifier hs-var">symbol</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Maybe UnitDefn
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-64"></span><span>
+</span><span id="line-65"></span><span class="hs-comment">-- Can't include fractions within a sentence (in the part where 'r denotes the</span><span>
+</span><span id="line-66"></span><span class="hs-comment">-- unit displacement vector, equivalent to r/||r||' (line 184)). Changed to a</span><span>
+</span><span id="line-67"></span><span class="hs-comment">-- verbal description instead.</span><span>
+</span><span id="line-68"></span><span>
+</span><span id="line-69"></span><span class="hs-comment">-- Can't properly include the gravitational constant in a sentence (in the last</span><span>
+</span><span id="line-70"></span><span class="hs-comment">-- sentence, supposed to include &quot;6.673 `mulRe` 10^{-11} m/kgs^2&quot; (line 187)).</span><span>
+</span><span id="line-71"></span><span>
+</span><span id="line-72"></span><span class="annot"><a href="Drasil.GamePhysics.TMods.html#newtonLUGNotes"><span class="hs-identifier hs-type">newtonLUGNotes</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-73"></span><span id="newtonLUGNotes"><span class="annot"><span class="annottext">newtonLUGNotes :: [Sentence]
+</span><a href="Drasil.GamePhysics.TMods.html#newtonLUGNotes"><span class="hs-identifier hs-var hs-var">newtonLUGNotes</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; Sentence) -&gt; [[Sentence]] -&gt; [Sentence]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-74"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Two&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">rigidBody</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.inThe`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;universe attract each other with a&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-75"></span><span>   </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall a. Quantity a =&gt; a -&gt; Sentence
+</span><span class="hs-identifier hs-var">getTandS</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;that is directly proportional to the product of their&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-76"></span><span>   </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">mass</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#mass_1"><span class="hs-identifier hs-var">mass_1</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#mass_2"><span class="hs-identifier hs-var">mass_2</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.and_`</span></span><span>
+</span><span id="line-77"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;inversely proportional&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.toThe`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall a. Quantity a =&gt; a -&gt; Sentence
+</span><span class="hs-identifier hs-var">getTandS</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><a href="Drasil.GamePhysics.Unitals.html#sqrDist"><span class="hs-identifier hs-var">sqrDist</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;between them&quot;</span></span><span class="hs-special">]</span><span class="hs-special">]</span><span>
+</span><span id="line-78"></span><span>
+</span><span id="line-79"></span><span class="hs-comment">-- T4 : Newton's second law for rotational motion --</span><span>
+</span><span id="line-80"></span><span>
+</span><span id="line-81"></span><span class="annot"><a href="Drasil.GamePhysics.TMods.html#newtonSLR"><span class="hs-identifier hs-type">newtonSLR</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">TheoryModel</span></span><span>
+</span><span id="line-82"></span><span id="newtonSLR"><span class="annot"><span class="annottext">newtonSLR :: TheoryModel
+</span><a href="Drasil.GamePhysics.TMods.html#newtonSLR"><span class="hs-identifier hs-var hs-var">newtonSLR</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind
+-&gt; [QuantityDict]
+-&gt; [ConceptChunk]
+-&gt; [QDefinition]
+-&gt; [DisplayExpr]
+-&gt; [QDefinition]
+-&gt; String
+-&gt; [Sentence]
+-&gt; TheoryModel
+forall q c.
+(Quantity q, MayHaveUnit q, Concept c) =&gt;
+ModelKind
+-&gt; [q]
+-&gt; [c]
+-&gt; [QDefinition]
+-&gt; [DisplayExpr]
+-&gt; [QDefinition]
+-&gt; String
+-&gt; [Sentence]
+-&gt; TheoryModel
+</span><span class="hs-identifier hs-var">tmNoRefs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; QDefinition -&gt; ModelKind
+</span><span class="hs-identifier hs-var">equationalModelU</span></span><span> </span><span class="annot"><span class="hs-string">&quot;newtonSLR&quot;</span></span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.GamePhysics.TMods.html#newtonSLRQD"><span class="hs-identifier hs-var">newtonSLRQD</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-83"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">torque</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">momentOfInertia</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">angularAccel</span></span><span class="hs-special">]</span><span>
+</span><span id="line-84"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition
+</span><a href="Drasil.GamePhysics.TMods.html#newtonSLRQD"><span class="hs-identifier hs-var">newtonSLRQD</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-string">&quot;NewtonSecLawRotMot&quot;</span></span><span> </span><span class="annot"><span class="annottext">[Sentence]
+</span><a href="Drasil.GamePhysics.TMods.html#newtonSLRNotes"><span class="hs-identifier hs-var">newtonSLRNotes</span></a></span><span>
+</span><span id="line-85"></span><span>
+</span><span id="line-86"></span><span class="annot"><a href="Drasil.GamePhysics.TMods.html#newtonSLRQD"><span class="hs-identifier hs-type">newtonSLRQD</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span>
+</span><span id="line-87"></span><span id="newtonSLRQD"><span class="annot"><span class="annottext">newtonSLRQD :: QDefinition
+</span><a href="Drasil.GamePhysics.TMods.html#newtonSLRQD"><span class="hs-identifier hs-var hs-var">newtonSLRQD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; NP -&gt; Expr -&gt; QDefinition
+forall c.
+(Quantity c, MayHaveUnit c) =&gt;
+c -&gt; NP -&gt; Expr -&gt; QDefinition
+</span><span class="hs-identifier hs-var">mkQuantDef'</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">torque</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Newton's second law for rotational motion&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr
+</span><a href="Drasil.GamePhysics.TMods.html#newtonSLRExpr"><span class="hs-identifier hs-var">newtonSLRExpr</span></a></span><span>
+</span><span id="line-88"></span><span>
+</span><span id="line-89"></span><span class="annot"><a href="Drasil.GamePhysics.TMods.html#newtonSLRExpr"><span class="hs-identifier hs-type">newtonSLRExpr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Relation</span></span><span>
+</span><span id="line-90"></span><span id="newtonSLRExpr"><span class="annot"><span class="annottext">newtonSLRExpr :: Expr
+</span><a href="Drasil.GamePhysics.TMods.html#newtonSLRExpr"><span class="hs-identifier hs-var hs-var">newtonSLRExpr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">momentOfInertia</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
+</span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">angularAccel</span></span><span>
+</span><span id="line-91"></span><span>
+</span><span id="line-92"></span><span class="annot"><a href="Drasil.GamePhysics.TMods.html#newtonSLRNotes"><span class="hs-identifier hs-type">newtonSLRNotes</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-93"></span><span id="newtonSLRNotes"><span class="annot"><span class="annottext">newtonSLRNotes :: [Sentence]
+</span><a href="Drasil.GamePhysics.TMods.html#newtonSLRNotes"><span class="hs-identifier hs-var hs-var">newtonSLRNotes</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; Sentence) -&gt; [[Sentence]] -&gt; [Sentence]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span>
+</span><span id="line-94"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The net&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall a. Quantity a =&gt; a -&gt; Sentence
+</span><span class="hs-identifier hs-var">getTandS</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">torque</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;on a&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">rigidBody</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.is`</span></span><span>
+</span><span id="line-95"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;proportional to its&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall a. Quantity a =&gt; a -&gt; Sentence
+</span><span class="hs-identifier hs-var">getTandS</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">angularAccel</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;where&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-96"></span><span>   </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">ch</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">momentOfInertia</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;denotes&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">momentOfInertia</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.the_ofThe`</span></span><span>
+</span><span id="line-97"></span><span>   </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">rigidBody</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;as the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">constant</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.of_`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;proportionality&quot;</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
+</span><span id="line-98"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;We also assume that all&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">rigidBody</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;involved&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.are`</span></span><span>
+</span><span id="line-99"></span><span>   </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">twoD</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
+forall r. (Referable r, HasShortName r) =&gt; r -&gt; Sentence
+</span><span class="hs-identifier hs-var">fromSource</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.GamePhysics.Assumptions.html#assumpOD"><span class="hs-identifier hs-var">assumpOD</span></a></span><span class="hs-special">]</span><span class="hs-special">]</span><span>
+</span><span id="line-100"></span></pre></body></html>

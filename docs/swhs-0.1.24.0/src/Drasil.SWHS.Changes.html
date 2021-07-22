@@ -1,0 +1,322 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.SWHS.Changes</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHS.Changes.html#likelyChgs"><span class="hs-identifier">likelyChgs</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Changes.html#likeChgTCVOD"><span class="hs-identifier">likeChgTCVOD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Changes.html#likeChgTCVOL"><span class="hs-identifier">likeChgTCVOL</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-2"></span><span>  </span><span class="annot"><a href="Drasil.SWHS.Changes.html#likeChgTLH"><span class="hs-identifier">likeChgTLH</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Changes.html#unlikelyChgs"><span class="hs-identifier">unlikelyChgs</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-3"></span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil</span></span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.Concepts</span></span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.Sentence</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
+</span><span id="line-8"></span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">assumption</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">value</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">simulation</span></span><span class="hs-special">,</span><span>
+</span><span id="line-10"></span><span>  </span><span class="annot"><span class="hs-identifier">model</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">likeChgDom</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">unlikeChgDom</span></span><span class="hs-special">)</span><span>
+</span><span id="line-11"></span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHS.Concepts.html"><span class="hs-identifier">Drasil.SWHS.Concepts</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHS.Concepts.html#tank"><span class="hs-identifier">tank</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Concepts.html#phsChgMtrl"><span class="hs-identifier">phsChgMtrl</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Concepts.html#water"><span class="hs-identifier">water</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html"><span class="hs-identifier">Drasil.SWHS.Unitals</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHS.Unitals.html#tempInit"><span class="hs-identifier">tempInit</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#tempC"><span class="hs-identifier">tempC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Unitals.html#tempPCM"><span class="hs-identifier">tempPCM</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-14"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHS.Assumptions.html"><span class="hs-identifier">Drasil.SWHS.Assumptions</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHS.Assumptions.html#assumpTPCAV"><span class="hs-identifier">assumpTPCAV</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Assumptions.html#assumpTHCCoT"><span class="hs-identifier">assumpTHCCoT</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Assumptions.html#assumpTHCCoL"><span class="hs-identifier">assumpTHCCoL</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-15"></span><span>  </span><span class="annot"><a href="Drasil.SWHS.Assumptions.html#assumpCTNOD"><span class="hs-identifier">assumpCTNOD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Assumptions.html#assumpSITWP"><span class="hs-identifier">assumpSITWP</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Assumptions.html#assumpWAL"><span class="hs-identifier">assumpWAL</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Assumptions.html#assumpPIT"><span class="hs-identifier">assumpPIT</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Assumptions.html#assumpNIHGBWP"><span class="hs-identifier">assumpNIHGBWP</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Assumptions.html#assumpNGSP"><span class="hs-identifier">assumpNGSP</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-16"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.SWHS.IMods.html"><span class="hs-identifier">Drasil.SWHS.IMods</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SWHS.IMods.html#eBalanceOnWtr"><span class="hs-identifier">eBalanceOnWtr</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.IMods.html#eBalanceOnPCM"><span class="hs-identifier">eBalanceOnPCM</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.IMods.html#heatEInPCM"><span class="hs-identifier">heatEInPCM</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-17"></span><span>
+</span><span id="line-18"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Thermodynamics</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">CT</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">heat</span></span><span class="hs-special">,</span><span>
+</span><span id="line-19"></span><span>  </span><span class="annot"><span class="hs-identifier">thermalConductor</span></span><span class="hs-special">)</span><span>
+</span><span id="line-20"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">energy</span></span><span class="hs-special">)</span><span>
+</span><span id="line-21"></span><span>
+</span><span id="line-22"></span><span class="hs-comment">--------------------------------</span><span>
+</span><span id="line-23"></span><span class="hs-comment">-- Section 6 : LIKELY CHANGES --</span><span>
+</span><span id="line-24"></span><span class="hs-comment">--------------------------------</span><span>
+</span><span id="line-25"></span><span>
+</span><span id="line-26"></span><span class="annot"><a href="Drasil.SWHS.Changes.html#likelyChgs"><span class="hs-identifier hs-type">likelyChgs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span>
+</span><span id="line-27"></span><span id="likelyChgs"><span class="annot"><span class="annottext">likelyChgs :: [ConceptInstance]
+</span><a href="Drasil.SWHS.Changes.html#likelyChgs"><span class="hs-identifier hs-var hs-var">likelyChgs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SWHS.Changes.html#likeChgUTP"><span class="hs-identifier hs-var">likeChgUTP</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SWHS.Changes.html#likeChgTCVOD"><span class="hs-identifier hs-var">likeChgTCVOD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SWHS.Changes.html#likeChgTCVOL"><span class="hs-identifier hs-var">likeChgTCVOL</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SWHS.Changes.html#likeChgDT"><span class="hs-identifier hs-var">likeChgDT</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SWHS.Changes.html#likeChgDITPW"><span class="hs-identifier hs-var">likeChgDITPW</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-28"></span><span>  </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SWHS.Changes.html#likeChgTLH"><span class="hs-identifier hs-var">likeChgTLH</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-29"></span><span>
+</span><span id="line-30"></span><span class="annot"><a href="Drasil.SWHS.Changes.html#likeChgUTP"><span class="hs-identifier hs-type">likeChgUTP</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Changes.html#likeChgTCVOD"><span class="hs-identifier hs-type">likeChgTCVOD</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Changes.html#likeChgTCVOL"><span class="hs-identifier hs-type">likeChgTCVOL</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Changes.html#likeChgDT"><span class="hs-identifier hs-type">likeChgDT</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Changes.html#likeChgDITPW"><span class="hs-identifier hs-type">likeChgDITPW</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-31"></span><span>  </span><span class="annot"><a href="Drasil.SWHS.Changes.html#likeChgTLH"><span class="hs-identifier hs-type">likeChgTLH</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-32"></span><span>
+</span><span id="line-33"></span><span id="likeChgUTP"><span class="annot"><span class="annottext">likeChgUTP :: ConceptInstance
+</span><a href="Drasil.SWHS.Changes.html#likeChgUTP"><span class="hs-identifier hs-var hs-var">likeChgUTP</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;likeChgUTP&quot;</span></span><span> </span><span class="hs-special">(</span><span>
+</span><span id="line-34"></span><span>  </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence -&gt; Sentence
+forall x.
+(HasShortName x, Referable x) =&gt;
+x -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">chgsStart</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SWHS.Assumptions.html#assumpTPCAV"><span class="hs-identifier hs-var">assumpTPCAV</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall c. (Idea c, HasUID c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><a href="Drasil.SWHS.Concepts.html#phsChgMtrl"><span class="hs-identifier hs-var">phsChgMtrl</span></a></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is actually a poor&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-35"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">CT.thermalConductor</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;so the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">assumption</span></span><span class="hs-special">,</span><span>
+</span><span id="line-36"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;of uniform&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConstrConcept
+</span><a href="Drasil.SWHS.Unitals.html#tempPCM"><span class="hs-identifier hs-var">tempPCM</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is not likely&quot;</span></span><span class="hs-special">]</span><span> </span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;Uniform-Temperature-PCM&quot;</span></span><span>
+</span><span id="line-37"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">likeChgDom</span></span><span>
+</span><span id="line-38"></span><span class="hs-comment">--</span><span>
+</span><span id="line-39"></span><span id="likeChgTCVOD"><span class="annot"><span class="annottext">likeChgTCVOD :: ConceptInstance
+</span><a href="Drasil.SWHS.Changes.html#likeChgTCVOD"><span class="hs-identifier hs-var hs-var">likeChgTCVOD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;likeChgTCVOD&quot;</span></span><span> </span><span class="hs-special">(</span><span>
+</span><span id="line-40"></span><span>  </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence -&gt; Sentence
+forall x.
+(HasShortName x, Referable x) =&gt;
+x -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">chgsStart</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SWHS.Assumptions.html#assumpTHCCoT"><span class="hs-identifier hs-var">assumpTHCCoT</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The&quot;</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><a href="Drasil.SWHS.Unitals.html#tempC"><span class="hs-identifier hs-var">tempC</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;will change over&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-41"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;course&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.the_ofThe`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;day, depending&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;on the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">energy</span></span><span class="hs-special">,</span><span>
+</span><span id="line-42"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;received from the sun&quot;</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;Temperature-Coil-Variable-Over-Day&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">likeChgDom</span></span><span>
+</span><span id="line-43"></span><span class="hs-comment">--</span><span>
+</span><span id="line-44"></span><span id="likeChgTCVOL"><span class="annot"><span class="annottext">likeChgTCVOL :: ConceptInstance
+</span><a href="Drasil.SWHS.Changes.html#likeChgTCVOL"><span class="hs-identifier hs-var hs-var">likeChgTCVOL</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;likeChgTCVOL&quot;</span></span><span> </span><span class="hs-special">(</span><span>
+</span><span id="line-45"></span><span>  </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence -&gt; Sentence
+forall x.
+(HasShortName x, Referable x) =&gt;
+x -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">chgsStart</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SWHS.Assumptions.html#assumpTHCCoL"><span class="hs-identifier hs-var">assumpTHCCoL</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The&quot;</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><a href="Drasil.SWHS.Unitals.html#tempC"><span class="hs-identifier hs-var">tempC</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-46"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;will actually change along its length as the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#water"><span class="hs-identifier hs-var">water</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-47"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;within it cools&quot;</span></span><span class="hs-special">]</span><span> </span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;Temperature-Coil-Variable-Over-Length&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">likeChgDom</span></span><span>
+</span><span id="line-48"></span><span class="hs-comment">--</span><span>
+</span><span id="line-49"></span><span id="likeChgDT"><span class="annot"><span class="annottext">likeChgDT :: ConceptInstance
+</span><a href="Drasil.SWHS.Changes.html#likeChgDT"><span class="hs-identifier hs-var hs-var">likeChgDT</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;likeChgDT&quot;</span></span><span> </span><span class="hs-special">(</span><span>
+</span><span id="line-50"></span><span>  </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence -&gt; Sentence
+forall x.
+(HasShortName x, Referable x) =&gt;
+x -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">chgsStart</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SWHS.Assumptions.html#assumpCTNOD"><span class="hs-identifier hs-var">assumpCTNOD</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The&quot;</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">model</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;currently only&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-51"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;accounts for charging of the tank. A more complete&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">model</span></span><span class="hs-special">,</span><span>
+</span><span id="line-52"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;would also account for discharging of the tank&quot;</span></span><span class="hs-special">]</span><span> </span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;Discharging-Tank&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">likeChgDom</span></span><span>
+</span><span id="line-53"></span><span class="hs-comment">--</span><span>
+</span><span id="line-54"></span><span id="likeChgDITPW"><span class="annot"><span class="annottext">likeChgDITPW :: ConceptInstance
+</span><a href="Drasil.SWHS.Changes.html#likeChgDITPW"><span class="hs-identifier hs-var hs-var">likeChgDITPW</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;likeChgDITPW&quot;</span></span><span> </span><span class="hs-special">(</span><span>
+</span><span id="line-55"></span><span>  </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence -&gt; Sentence
+forall x.
+(HasShortName x, Referable x) =&gt;
+x -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">chgsStart</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SWHS.Assumptions.html#assumpSITWP"><span class="hs-identifier hs-var">assumpSITWP</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;To add more flexibility to the&quot;</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-56"></span><span>  </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">simulation</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UncertQ
+</span><a href="Drasil.SWHS.Unitals.html#tempInit"><span class="hs-identifier hs-var">tempInit</span></a></span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`the_ofThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#water"><span class="hs-identifier hs-var">water</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.andThe`</span></span><span>
+</span><span id="line-57"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall c. (Idea c, HasUID c) =&gt; c -&gt; Sentence
+</span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><a href="Drasil.SWHS.Concepts.html#phsChgMtrl"><span class="hs-identifier hs-var">phsChgMtrl</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;could be allowed to have different&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-58"></span><span>  </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">value</span></span><span class="hs-special">]</span><span> </span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;Different-Initial-Temps-PCM-Water&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">likeChgDom</span></span><span>
+</span><span id="line-59"></span><span class="hs-comment">--</span><span>
+</span><span id="line-60"></span><span id="likeChgTLH"><span class="annot"><span class="annottext">likeChgTLH :: ConceptInstance
+</span><a href="Drasil.SWHS.Changes.html#likeChgTLH"><span class="hs-identifier hs-var hs-var">likeChgTLH</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;likeChgTLH&quot;</span></span><span> </span><span class="hs-special">(</span><span>
+</span><span id="line-61"></span><span>  </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence -&gt; Sentence
+forall x.
+(HasShortName x, Referable x) =&gt;
+x -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">chgsStart</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SWHS.Assumptions.html#assumpPIT"><span class="hs-identifier hs-var">assumpPIT</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Any real&quot;</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#tank"><span class="hs-identifier hs-var">tank</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;cannot&quot;</span></span><span class="hs-special">,</span><span>
+</span><span id="line-62"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;be perfectly insulated and will lose&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">CT.heat</span></span><span class="hs-special">]</span><span> </span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;Tank-Lose-Heat&quot;</span></span><span>
+</span><span id="line-63"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">likeChgDom</span></span><span>
+</span><span id="line-64"></span><span>
+</span><span id="line-65"></span><span class="hs-comment">-- List structure same in all examples.</span><span>
+</span><span id="line-66"></span><span>
+</span><span id="line-67"></span><span class="annot"><a href="Drasil.SWHS.Changes.html#unlikelyChgs"><span class="hs-identifier hs-type">unlikelyChgs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span>
+</span><span id="line-68"></span><span id="unlikelyChgs"><span class="annot"><span class="annottext">unlikelyChgs :: [ConceptInstance]
+</span><a href="Drasil.SWHS.Changes.html#unlikelyChgs"><span class="hs-identifier hs-var hs-var">unlikelyChgs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SWHS.Changes.html#unlikeChgWPFS"><span class="hs-identifier hs-var">unlikeChgWPFS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SWHS.Changes.html#unlikeChgNIHG"><span class="hs-identifier hs-var">unlikeChgNIHG</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SWHS.Changes.html#unlikeChgNGS"><span class="hs-identifier hs-var">unlikeChgNGS</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-69"></span><span>
+</span><span id="line-70"></span><span class="annot"><a href="Drasil.SWHS.Changes.html#unlikeChgWPFS"><span class="hs-identifier hs-type">unlikeChgWPFS</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Changes.html#unlikeChgNIHG"><span class="hs-identifier hs-type">unlikeChgNIHG</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SWHS.Changes.html#unlikeChgNGS"><span class="hs-identifier hs-type">unlikeChgNGS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span>
+</span><span id="line-71"></span><span id="unlikeChgWPFS"><span class="annot"><span class="annottext">unlikeChgWPFS :: ConceptInstance
+</span><a href="Drasil.SWHS.Changes.html#unlikeChgWPFS"><span class="hs-identifier hs-var hs-var">unlikeChgWPFS</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;unlikeChgWPFS&quot;</span></span><span> </span><span class="hs-special">(</span><span>
+</span><span id="line-72"></span><span>  </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; Sentence
+</span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SWHS.Assumptions.html#assumpWAL"><span class="hs-identifier hs-var">assumpWAL</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence -&gt; Sentence
+forall x.
+(HasShortName x, Referable x) =&gt;
+x -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">chgsStart</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SWHS.Assumptions.html#assumpNGSP"><span class="hs-identifier hs-var">assumpNGSP</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;It is unlikely for the change of&quot;</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-73"></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><a href="Drasil.SWHS.Concepts.html#water"><span class="hs-identifier hs-var">water</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;from liquid to a solid or the state change of the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><a href="Drasil.SWHS.Concepts.html#phsChgMtrl"><span class="hs-identifier hs-var">phsChgMtrl</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-74"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;from a liquid to a gas to be considered&quot;</span></span><span class="hs-special">]</span><span> </span><span class="hs-special">)</span><span> </span><span class="annot"><span class="hs-string">&quot;Water-PCM-Fixed-States&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">unlikeChgDom</span></span><span>
+</span><span id="line-75"></span><span>
+</span><span id="line-76"></span><span>
+</span><span id="line-77"></span><span id="unlikeChgNIHG"><span class="annot"><span class="annottext">unlikeChgNIHG :: ConceptInstance
+</span><a href="Drasil.SWHS.Changes.html#unlikeChgNIHG"><span class="hs-identifier hs-var hs-var">unlikeChgNIHG</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;unlikeChgNIHG&quot;</span></span><span> </span><span class="hs-special">(</span><span>
+</span><span id="line-78"></span><span>  </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence -&gt; Sentence
+forall x.
+(HasShortName x, Referable x) =&gt;
+x -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">chgsStart</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SWHS.Assumptions.html#assumpNIHGBWP"><span class="hs-identifier hs-var">assumpNIHGBWP</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Is used for the derivations of&quot;</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
+</span><span id="line-79"></span><span>  </span><span class="annot"><span class="annottext">InstanceModel -&gt; Sentence
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; Sentence
+</span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel
+</span><a href="Drasil.SWHS.IMods.html#eBalanceOnWtr"><span class="hs-identifier hs-var">eBalanceOnWtr</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.and_`</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel -&gt; Sentence
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; Sentence
+</span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel
+</span><a href="Drasil.SWHS.IMods.html#eBalanceOnPCM"><span class="hs-identifier hs-var">eBalanceOnPCM</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-80"></span><span>  </span><span class="annot"><span class="hs-string">&quot;No-Internal-Heat-Generation&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">unlikeChgDom</span></span><span>
+</span><span id="line-81"></span><span>
+</span><span id="line-82"></span><span id="unlikeChgNGS"><span class="annot"><span class="annottext">unlikeChgNGS :: ConceptInstance
+</span><a href="Drasil.SWHS.Changes.html#unlikeChgNGS"><span class="hs-identifier hs-var hs-var">unlikeChgNGS</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;unlikeChgNGS&quot;</span></span><span> </span><span class="hs-special">(</span><span>
+</span><span id="line-83"></span><span>  </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence -&gt; Sentence
+forall x.
+(HasShortName x, Referable x) =&gt;
+x -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">chgsStart</span></span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SWHS.Assumptions.html#assumpNGSP"><span class="hs-identifier hs-var">assumpNGSP</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Is used for the derivation of&quot;</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">InstanceModel -&gt; Sentence
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; Sentence
+</span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel
+</span><a href="Drasil.SWHS.IMods.html#eBalanceOnPCM"><span class="hs-identifier hs-var">eBalanceOnPCM</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-84"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;and for the equation given by&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">InstanceModel -&gt; Sentence
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; Sentence
+</span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel
+</span><a href="Drasil.SWHS.IMods.html#heatEInPCM"><span class="hs-identifier hs-var">heatEInPCM</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;to be valid&quot;</span></span><span class="hs-special">]</span><span> </span><span class="hs-special">)</span><span>
+</span><span id="line-85"></span><span>  </span><span class="annot"><span class="hs-string">&quot;No-Gaseous-State&quot;</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">unlikeChgDom</span></span><span>
+</span><span id="line-86"></span></pre></body></html>

@@ -3524,6 +3524,8 @@ digraph alltypes {
 	}
 	subgraph drails {
 	}
+	subgraph main {
+	}
 	subgraph asumptionss {
 	}
 	subgraph body {
@@ -3542,13 +3544,13 @@ digraph alltypes {
 	}
 	subgraph imods {
 	}
-	subgraph main {
-	}
 	subgraph references {
 	}
 	subgraph requirements {
 	}
 	subgraph unitals {
+	}
+	subgraph main {
 	}
 	subgraph arbiter {
 	}
@@ -3574,8 +3576,6 @@ digraph alltypes {
 	}
 	subgraph imods {
 	}
-	subgraph main {
-	}
 	subgraph references {
 	}
 	subgraph requirements {
@@ -3583,6 +3583,8 @@ digraph alltypes {
 	subgraph tmods {
 	}
 	subgraph unitals {
+	}
+	subgraph main {
 	}
 	subgraph asumptionss {
 	}
@@ -3599,8 +3601,6 @@ digraph alltypes {
 	subgraph goals {
 	}
 	subgraph imods {
-	}
-	subgraph main {
 	}
 	subgraph moduledefs {
 	}
@@ -3624,6 +3624,8 @@ digraph alltypes {
 	}
 	subgraph units {
 	}
+	subgraph main {
+	}
 	subgraph body {
 	}
 	subgraph heattranfers {
@@ -3646,8 +3648,6 @@ digraph alltypes {
 	}
 	subgraph imods {
 	}
-	subgraph main {
-	}
 	subgraph odes {
 	}
 	subgraph references {
@@ -3655,6 +3655,8 @@ digraph alltypes {
 	subgraph requirements {
 	}
 	subgraph unitals {
+	}
+	subgraph main {
 	}
 	subgraph asumptionss {
 	}
@@ -3674,8 +3676,6 @@ digraph alltypes {
 	}
 	subgraph introsection {
 	}
-	subgraph main {
-	}
 	subgraph odes {
 	}
 	subgraph references {
@@ -3687,6 +3687,8 @@ digraph alltypes {
 	subgraph tmodel {
 	}
 	subgraph unitals {
+	}
+	subgraph main {
 	}
 	subgraph asumptionss {
 	}
@@ -3706,13 +3708,13 @@ digraph alltypes {
 	}
 	subgraph imods {
 	}
-	subgraph main {
-	}
 	subgraph references {
 	}
 	subgraph requirements {
 	}
 	subgraph unitals {
+	}
+	subgraph main {
 	}
 	subgraph asumptionss {
 	}
@@ -3734,8 +3736,6 @@ digraph alltypes {
 	}
 	subgraph imods {
 	}
-	subgraph main {
-	}
 	subgraph references {
 	}
 	subgraph requirements {
@@ -3743,6 +3743,8 @@ digraph alltypes {
 	subgraph tmods {
 	}
 	subgraph unitals {
+	}
+	subgraph main {
 	}
 	subgraph asumptionss {
 	}
@@ -3762,8 +3764,6 @@ digraph alltypes {
 	}
 	subgraph imods {
 	}
-	subgraph main {
-	}
 	subgraph references {
 	}
 	subgraph requirements {
@@ -3778,9 +3778,9 @@ digraph alltypes {
 	}
 	subgraph unitals {
 	}
-	subgraph body {
-	}
 	subgraph main {
+	}
+	subgraph body {
 	}
 	subgraph formats {
 		subgraph doctype{

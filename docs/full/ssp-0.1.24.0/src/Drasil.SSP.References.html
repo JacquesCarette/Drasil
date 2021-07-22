@@ -1,0 +1,119 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.SSP.References</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-4"></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Citations</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">jnlCGJ</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">koothoor2013</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">parnasClements1986</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">smithLai2005</span></span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.People</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">bKarchewski</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">cfLee</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">dgFredlund</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">dStolle</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">dyZhu</span></span><span class="hs-special">,</span><span>
+</span><span id="line-7"></span><span>  </span><span class="annot"><span class="hs-identifier">grChen</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">jKrahn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">pGuo</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">pjCleall</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">qhQian</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ssLing</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">tltZhan</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">yCLi</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ymChen</span></span><span class="hs-special">,</span><span>
+</span><span id="line-8"></span><span>  </span><span class="annot"><span class="hs-identifier">rHuston</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">hJosephs</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">nrMorgenstern</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">vePrice</span></span><span class="hs-special">)</span><span>
+</span><span id="line-9"></span><span>
+</span><span id="line-10"></span><span class="annot"><a href="Drasil.SSP.References.html#citations"><span class="hs-identifier hs-type">citations</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">BibRef</span></span><span>
+</span><span id="line-11"></span><span id="citations"><span class="annot"><span class="annottext">citations :: BibRef
+</span><a href="Drasil.SSP.References.html#citations"><span class="hs-identifier hs-var hs-var">citations</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Citation
+</span><a href="Drasil.SSP.References.html#chen2005"><span class="hs-identifier hs-var">chen2005</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
+</span><span class="hs-identifier hs-var">parnasClements1986</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
+</span><span class="hs-identifier hs-var">koothoor2013</span></span><span class="hs-special">,</span><span>
+</span><span id="line-12"></span><span>  </span><span class="annot"><span class="annottext">Citation
+</span><a href="Drasil.SSP.References.html#fredlund1977"><span class="hs-identifier hs-var">fredlund1977</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
+</span><span class="hs-identifier hs-var">smithLai2005</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
+</span><a href="Drasil.SSP.References.html#li2010"><span class="hs-identifier hs-var">li2010</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
+</span><a href="Drasil.SSP.References.html#karchewski2012"><span class="hs-identifier hs-var">karchewski2012</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation
+</span><a href="Drasil.SSP.References.html#huston2008"><span class="hs-identifier hs-var">huston2008</span></a></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-13"></span><span>  </span><span class="annot"><span class="annottext">Citation
+</span><a href="Drasil.SSP.References.html#morgenstern1965"><span class="hs-identifier hs-var">morgenstern1965</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-14"></span><span>
+</span><span id="line-15"></span><span class="annot"><a href="Drasil.SSP.References.html#chen2005"><span class="hs-identifier hs-type">chen2005</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.References.html#fredlund1977"><span class="hs-identifier hs-type">fredlund1977</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.References.html#li2010"><span class="hs-identifier hs-type">li2010</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.References.html#karchewski2012"><span class="hs-identifier hs-type">karchewski2012</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SSP.References.html#huston2008"><span class="hs-identifier hs-type">huston2008</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-16"></span><span>  </span><span class="annot"><a href="Drasil.SSP.References.html#morgenstern1965"><span class="hs-identifier hs-type">morgenstern1965</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Citation</span></span><span>
+</span><span id="line-17"></span><span class="hs-comment">--See Language.Drasil.People for all person constructors</span><span>
+</span><span id="line-18"></span><span id="chen2005"><span class="annot"><span class="annottext">chen2005 :: Citation
+</span><a href="Drasil.SSP.References.html#chen2005"><span class="hs-identifier hs-var hs-var">chen2005</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">People
+-&gt; String -&gt; String -&gt; Int -&gt; [CiteField] -&gt; String -&gt; Citation
+</span><span class="hs-identifier hs-var">cArticle</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">qhQian</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">dyZhu</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">cfLee</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">grChen</span></span><span class="hs-special">]</span><span>
+</span><span id="line-19"></span><span>  </span><span class="annot"><span class="hs-string">&quot;A concise algorithm for computing the factor of safety using the morgenstern price method&quot;</span></span><span>
+</span><span id="line-20"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span class="hs-identifier hs-var">jnlCGJ</span></span><span> </span><span class="annot"><span class="hs-number">2005</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Month -&gt; CiteField
+</span><span class="hs-identifier hs-var">month</span></span><span> </span><span class="annot"><span class="annottext">Month
+</span><span class="hs-identifier hs-var">Feb</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int -&gt; CiteField
+</span><span class="hs-identifier hs-var">volume</span></span><span> </span><span class="annot"><span class="hs-number">42</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int -&gt; CiteField
+</span><span class="hs-identifier hs-var">number</span></span><span> </span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Int] -&gt; CiteField
+</span><span class="hs-identifier hs-var">pages</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-number">272</span></span><span class="hs-glyph">..</span><span class="annot"><span class="hs-number">278</span></span><span class="hs-special">]</span><span class="hs-special">]</span><span>
+</span><span id="line-21"></span><span>  </span><span class="annot"><span class="hs-string">&quot;chen2005&quot;</span></span><span>
+</span><span id="line-22"></span><span>
+</span><span id="line-23"></span><span id="fredlund1977"><span class="annot"><span class="annottext">fredlund1977 :: Citation
+</span><a href="Drasil.SSP.References.html#fredlund1977"><span class="hs-identifier hs-var hs-var">fredlund1977</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">People
+-&gt; String -&gt; String -&gt; Int -&gt; [CiteField] -&gt; String -&gt; Citation
+</span><span class="hs-identifier hs-var">cArticle</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">dgFredlund</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">jKrahn</span></span><span class="hs-special">]</span><span>
+</span><span id="line-24"></span><span>  </span><span class="annot"><span class="hs-string">&quot;Comparison of slope stability methods of analysis&quot;</span></span><span>
+</span><span id="line-25"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span class="hs-identifier hs-var">jnlCGJ</span></span><span> </span><span class="annot"><span class="hs-number">1977</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Month -&gt; CiteField
+</span><span class="hs-identifier hs-var">month</span></span><span> </span><span class="annot"><span class="annottext">Month
+</span><span class="hs-identifier hs-var">Apr</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Int] -&gt; CiteField
+</span><span class="hs-identifier hs-var">pages</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-number">429</span></span><span class="hs-glyph">..</span><span class="annot"><span class="hs-number">439</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int -&gt; CiteField
+</span><span class="hs-identifier hs-var">volume</span></span><span> </span><span class="annot"><span class="hs-number">14</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int -&gt; CiteField
+</span><span class="hs-identifier hs-var">number</span></span><span> </span><span class="annot"><span class="hs-number">3</span></span><span class="hs-special">]</span><span>
+</span><span id="line-26"></span><span>  </span><span class="annot"><span class="hs-string">&quot;fredlund1977&quot;</span></span><span>
+</span><span id="line-27"></span><span>
+</span><span id="line-28"></span><span id="li2010"><span class="annot"><span class="annottext">li2010 :: Citation
+</span><a href="Drasil.SSP.References.html#li2010"><span class="hs-identifier hs-var hs-var">li2010</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">People
+-&gt; String -&gt; String -&gt; Int -&gt; [CiteField] -&gt; String -&gt; Citation
+</span><span class="hs-identifier hs-var">cArticle</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">yCLi</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">ymChen</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">tltZhan</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">ssLing</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">pjCleall</span></span><span class="hs-special">]</span><span>
+</span><span id="line-29"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="hs-string">&quot;An efficient approach for locating the critical slip surface in&quot;</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; String -&gt; String
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span>
+</span><span id="line-30"></span><span>  </span><span class="annot"><span class="hs-string">&quot; slope stability analyses using a real-coded genetic algorithm&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-31"></span><span>  </span><span class="annot"><span class="annottext">String
+</span><span class="hs-identifier hs-var">jnlCGJ</span></span><span> </span><span class="annot"><span class="hs-number">2010</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Month -&gt; CiteField
+</span><span class="hs-identifier hs-var">month</span></span><span> </span><span class="annot"><span class="annottext">Month
+</span><span class="hs-identifier hs-var">Jun</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Int] -&gt; CiteField
+</span><span class="hs-identifier hs-var">pages</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-number">806</span></span><span class="hs-glyph">..</span><span class="annot"><span class="hs-number">820</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int -&gt; CiteField
+</span><span class="hs-identifier hs-var">volume</span></span><span> </span><span class="annot"><span class="hs-number">47</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int -&gt; CiteField
+</span><span class="hs-identifier hs-var">number</span></span><span> </span><span class="annot"><span class="hs-number">7</span></span><span class="hs-special">]</span><span>
+</span><span id="line-32"></span><span>  </span><span class="annot"><span class="hs-string">&quot;li2010&quot;</span></span><span>
+</span><span id="line-33"></span><span>
+</span><span id="line-34"></span><span id="karchewski2012"><span class="annot"><span class="annottext">karchewski2012 :: Citation
+</span><a href="Drasil.SSP.References.html#karchewski2012"><span class="hs-identifier hs-var hs-var">karchewski2012</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">People
+-&gt; String -&gt; String -&gt; Int -&gt; [CiteField] -&gt; String -&gt; Citation
+</span><span class="hs-identifier hs-var">cInProceedings</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">bKarchewski</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">pGuo</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">dStolle</span></span><span class="hs-special">]</span><span>
+</span><span id="line-35"></span><span>  </span><span class="annot"><span class="hs-string">&quot;Influence of inherent anisotropy of soil strength on limit equilibrium slope stability analysis&quot;</span></span><span>
+</span><span id="line-36"></span><span>  </span><span class="annot"><span class="hs-string">&quot;Proceedings of the 65th annual Canadian GeoTechnical Conference&quot;</span></span><span> </span><span class="annot"><span class="hs-number">2012</span></span><span> </span><span>
+</span><span id="line-37"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span class="hs-identifier hs-var">address</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Winnipeg, MB, Canada&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; CiteField
+</span><span class="hs-identifier hs-var">organization</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Canadian Geotechnical Society&quot;</span></span><span class="hs-special">]</span><span> </span><span>
+</span><span id="line-38"></span><span>  </span><span class="annot"><span class="hs-string">&quot;karchewski2012&quot;</span></span><span>
+</span><span id="line-39"></span><span>
+</span><span id="line-40"></span><span id="huston2008"><span class="annot"><span class="annottext">huston2008 :: Citation
+</span><a href="Drasil.SSP.References.html#huston2008"><span class="hs-identifier hs-var hs-var">huston2008</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">People
+-&gt; String -&gt; String -&gt; Int -&gt; [CiteField] -&gt; String -&gt; Citation
+</span><span class="hs-identifier hs-var">cBookA</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">rHuston</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">hJosephs</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-string">&quot;Practical stress analysis in engineering design&quot;</span></span><span>
+</span><span id="line-41"></span><span>  </span><span class="annot"><span class="hs-string">&quot;CRC Press&quot;</span></span><span> </span><span class="annot"><span class="hs-number">2008</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Int -&gt; CiteField
+</span><span class="hs-identifier hs-var">edition</span></span><span> </span><span class="annot"><span class="hs-number">3</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="hs-string">&quot;huston2008&quot;</span></span><span>
+</span><span id="line-42"></span><span>
+</span><span id="line-43"></span><span id="morgenstern1965"><span class="annot"><span class="annottext">morgenstern1965 :: Citation
+</span><a href="Drasil.SSP.References.html#morgenstern1965"><span class="hs-identifier hs-var hs-var">morgenstern1965</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">People
+-&gt; String -&gt; String -&gt; Int -&gt; [CiteField] -&gt; String -&gt; Citation
+</span><span class="hs-identifier hs-var">cArticle</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">nrMorgenstern</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Person
+</span><span class="hs-identifier hs-var">vePrice</span></span><span class="hs-special">]</span><span>
+</span><span id="line-44"></span><span>  </span><span class="annot"><span class="hs-string">&quot;The analysis of the stability of general slip surfaces&quot;</span></span><span>
+</span><span id="line-45"></span><span>  </span><span class="annot"><span class="hs-string">&quot;G&#233;otechnique&quot;</span></span><span> </span><span class="annot"><span class="hs-number">1965</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Month -&gt; CiteField
+</span><span class="hs-identifier hs-var">month</span></span><span> </span><span class="annot"><span class="annottext">Month
+</span><span class="hs-identifier hs-var">Jan</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Int] -&gt; CiteField
+</span><span class="hs-identifier hs-var">pages</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-number">79</span></span><span class="hs-glyph">..</span><span class="annot"><span class="hs-number">93</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Int -&gt; CiteField
+</span><span class="hs-identifier hs-var">number</span></span><span> </span><span class="annot"><span class="hs-number">15</span></span><span class="hs-special">]</span><span>
+</span><span id="line-46"></span><span>  </span><span class="annot"><span class="hs-string">&quot;morgenstern1965&quot;</span></span></pre></body></html>

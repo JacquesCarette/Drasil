@@ -1,0 +1,118 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.NoPCM.Unitals</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-4"></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.SI_Units</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">centigrade</span></span><span class="hs-special">)</span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Quantities.Thermodynamics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">temp</span></span><span class="hs-special">)</span><span>
+</span><span id="line-7"></span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.SWHS.Unitals</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">absTol</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">arMax</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">arMin</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">coilHTC</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">coilHTCMax</span></span><span class="hs-special">,</span><span>
+</span><span id="line-9"></span><span>  </span><span class="annot"><span class="hs-identifier">coilHTCMin</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">coilSA</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">coilSAMax</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">diam</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">htCapW</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">htCapWMax</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">htCapWMin</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">lInit</span></span><span class="hs-special">,</span><span>
+</span><span id="line-10"></span><span>  </span><span class="annot"><span class="hs-identifier">relTol</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">tankLength</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">tankLengthMax</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">tankLengthMin</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">tempC</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">timeFinal</span></span><span class="hs-special">,</span><span>
+</span><span id="line-11"></span><span>  </span><span class="annot"><span class="hs-identifier">timeFinalMax</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">timeStep</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">wDensity</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">wDensityMax</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">wDensityMin</span></span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span><span>
+</span><span id="line-13"></span><span class="annot"><a href="Drasil.NoPCM.Unitals.html#inputs"><span class="hs-identifier hs-type">inputs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QuantityDict</span></span><span class="hs-special">]</span><span>
+</span><span id="line-14"></span><span id="inputs"><span class="annot"><span class="annottext">inputs :: [QuantityDict]
+</span><a href="Drasil.NoPCM.Unitals.html#inputs"><span class="hs-identifier hs-var hs-var">inputs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UncertQ -&gt; QuantityDict) -&gt; [UncertQ] -&gt; [QuantityDict]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UncertQ -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">[UncertQ]
+</span><a href="Drasil.NoPCM.Unitals.html#constrained"><span class="hs-identifier hs-var">constrained</span></a></span><span> </span><span class="annot"><span class="annottext">[QuantityDict] -&gt; [QuantityDict] -&gt; [QuantityDict]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(UncertainChunk -&gt; QuantityDict)
+-&gt; [UncertainChunk] -&gt; [QuantityDict]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UncertainChunk -&gt; QuantityDict
+forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
+</span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">[UncertainChunk]
+</span><a href="Drasil.NoPCM.Unitals.html#unconstrained"><span class="hs-identifier hs-var">unconstrained</span></a></span><span>
+</span><span id="line-15"></span><span>
+</span><span id="line-16"></span><span class="annot"><a href="Drasil.NoPCM.Unitals.html#unconstrained"><span class="hs-identifier hs-type">unconstrained</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertainChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-17"></span><span id="unconstrained"><span class="annot"><span class="annottext">unconstrained :: [UncertainChunk]
+</span><a href="Drasil.NoPCM.Unitals.html#unconstrained"><span class="hs-identifier hs-var hs-var">unconstrained</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UncertainChunk
+</span><span class="hs-identifier hs-var">absTol</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertainChunk
+</span><span class="hs-identifier hs-var">relTol</span></span><span class="hs-special">]</span><span>
+</span><span id="line-18"></span><span>
+</span><span id="line-19"></span><span class="annot"><a href="Drasil.NoPCM.Unitals.html#constrained"><span class="hs-identifier hs-type">constrained</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span class="hs-special">]</span><span>
+</span><span id="line-20"></span><span id="constrained"><span class="annot"><span class="annottext">constrained :: [UncertQ]
+</span><a href="Drasil.NoPCM.Unitals.html#constrained"><span class="hs-identifier hs-var hs-var">constrained</span></a></span></span><span> </span><span class="hs-glyph">=</span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">coilSA</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">htCapW</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">coilHTC</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><a href="Drasil.NoPCM.Unitals.html#tempInit"><span class="hs-identifier hs-var">tempInit</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-21"></span><span>  </span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">timeFinal</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">tankLength</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">tempC</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">timeStep</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">wDensity</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UncertQ
+</span><span class="hs-identifier hs-var">diam</span></span><span class="hs-special">]</span><span>
+</span><span id="line-22"></span><span>  </span><span class="hs-comment">-- w_E, temp_W</span><span>
+</span><span id="line-23"></span><span>
+</span><span id="line-24"></span><span class="annot"><a href="Drasil.NoPCM.Unitals.html#tempInit"><span class="hs-identifier hs-type">tempInit</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">UncertQ</span></span><span>
+</span><span id="line-25"></span><span id="tempInit"><span class="annot"><span class="annottext">tempInit :: UncertQ
+</span><a href="Drasil.NoPCM.Unitals.html#tempInit"><span class="hs-identifier hs-var hs-var">tempInit</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+-&gt; NP
+-&gt; String
+-&gt; Symbol
+-&gt; UnitDefn
+-&gt; Space
+-&gt; [ConstraintE]
+-&gt; Expr
+-&gt; Uncertainty
+-&gt; UncertQ
+forall u.
+IsUnit u =&gt;
+String
+-&gt; NP
+-&gt; String
+-&gt; Symbol
+-&gt; u
+-&gt; Space
+-&gt; [ConstraintE]
+-&gt; Expr
+-&gt; Uncertainty
+-&gt; UncertQ
+</span><span class="hs-identifier hs-var">uqc</span></span><span> </span><span class="annot"><span class="hs-string">&quot;tempInit&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; NP
+</span><span class="hs-identifier hs-var">nounPhraseSP</span></span><span> </span><span class="annot"><span class="hs-string">&quot;initial temperature&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-26"></span><span>  </span><span class="annot"><span class="hs-string">&quot;the temperature at the beginning of the simulation&quot;</span></span><span>
+</span><span id="line-27"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Symbol -&gt; Symbol -&gt; Symbol
+</span><span class="hs-identifier hs-var">sub</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Symbol
+forall q. HasSymbol q =&gt; q -&gt; Symbol
+</span><span class="hs-identifier hs-var">eqSymb</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
+</span><span class="hs-identifier hs-var">temp</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Symbol
+</span><span class="hs-identifier hs-var">lInit</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">UnitDefn
+</span><span class="hs-identifier hs-var">centigrade</span></span><span> </span><span class="annot"><span class="annottext">Space
+</span><span class="hs-identifier hs-var">Real</span></span><span>
+</span><span id="line-28"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">RealInterval Expr Expr -&gt; ConstraintE
+</span><span class="hs-identifier hs-var">physc</span></span><span> </span><span class="annot"><span class="annottext">(RealInterval Expr Expr -&gt; ConstraintE)
+-&gt; RealInterval Expr Expr -&gt; ConstraintE
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Inclusive, Expr) -&gt; (Inclusive, Expr) -&gt; RealInterval Expr Expr
+forall a b. (Inclusive, a) -&gt; (Inclusive, b) -&gt; RealInterval a b
+</span><span class="hs-identifier hs-var">Bounded</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
+</span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">0</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Inclusive
+</span><span class="hs-identifier hs-var">Exc</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">100</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
+</span><span class="hs-identifier hs-var">exactDbl</span></span><span> </span><span class="annot"><span class="hs-number">40</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Uncertainty
+</span><span class="hs-identifier hs-var">defaultUncrt</span></span><span>
+</span><span id="line-29"></span><span>
+</span><span id="line-30"></span><span class="annot"><a href="Drasil.NoPCM.Unitals.html#specParamValList"><span class="hs-identifier hs-type">specParamValList</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span class="hs-special">]</span><span>
+</span><span id="line-31"></span><span id="specParamValList"><span class="annot"><span class="annottext">specParamValList :: [QDefinition]
+</span><a href="Drasil.NoPCM.Unitals.html#specParamValList"><span class="hs-identifier hs-var hs-var">specParamValList</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">QDefinition
+</span><span class="hs-identifier hs-var">tankLengthMin</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><span class="hs-identifier hs-var">tankLengthMax</span></span><span class="hs-special">,</span><span>
+</span><span id="line-32"></span><span>  </span><span class="annot"><span class="annottext">QDefinition
+</span><span class="hs-identifier hs-var">wDensityMin</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><span class="hs-identifier hs-var">wDensityMax</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><span class="hs-identifier hs-var">coilSAMax</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><span class="hs-identifier hs-var">htCapWMin</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><span class="hs-identifier hs-var">htCapWMax</span></span><span class="hs-special">,</span><span> </span><span>
+</span><span id="line-33"></span><span>  </span><span class="annot"><span class="annottext">QDefinition
+</span><span class="hs-identifier hs-var">coilHTCMin</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><span class="hs-identifier hs-var">coilHTCMax</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><span class="hs-identifier hs-var">timeFinalMax</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><span class="hs-identifier hs-var">arMin</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">QDefinition
+</span><span class="hs-identifier hs-var">arMax</span></span><span class="hs-special">]</span><span>
+</span><span id="line-34"></span></pre></body></html>

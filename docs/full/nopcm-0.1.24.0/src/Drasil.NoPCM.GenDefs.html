@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.NoPCM.GenDefs</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.NoPCM.GenDefs.html#rocTempSimp"><span class="hs-identifier">rocTempSimp</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.NoPCM.GenDefs.html#genDefs"><span class="hs-identifier">genDefs</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-2"></span><span>
+</span><span id="line-3"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-4"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Theory.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">GenDefn</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">gdNoRefs</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">othModel'</span></span><span class="hs-special">)</span><span>
+</span><span id="line-5"></span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><a href="Drasil.NoPCM.Assumptions.html"><span class="hs-identifier">Drasil.NoPCM.Assumptions</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.NoPCM.Assumptions.html#assumpDWCoW"><span class="hs-identifier">assumpDWCoW</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.NoPCM.Assumptions.html#assumpSHECoW"><span class="hs-identifier">assumpSHECoW</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.SWHS.Assumptions</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">assumpCWTAT</span></span><span class="hs-special">)</span><span>
+</span><span id="line-8"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.SWHS.GenDefs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">htFluxWaterFromCoil</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">rocTempSimpRC</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">rocTempSimpDeriv</span></span><span class="hs-special">)</span><span>
+</span><span id="line-9"></span><span>
+</span><span id="line-10"></span><span class="annot"><a href="Drasil.NoPCM.GenDefs.html#genDefs"><span class="hs-identifier hs-type">genDefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span class="hs-special">]</span><span>
+</span><span id="line-11"></span><span id="genDefs"><span class="annot"><span class="annottext">genDefs :: [GenDefn]
+</span><a href="Drasil.NoPCM.GenDefs.html#genDefs"><span class="hs-identifier hs-var hs-var">genDefs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">GenDefn
+</span><a href="Drasil.NoPCM.GenDefs.html#rocTempSimp"><span class="hs-identifier hs-var">rocTempSimp</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">GenDefn
+</span><span class="hs-identifier hs-var">htFluxWaterFromCoil</span></span><span class="hs-special">]</span><span> </span><span>
+</span><span id="line-12"></span><span>
+</span><span id="line-13"></span><span class="annot"><a href="Drasil.NoPCM.GenDefs.html#rocTempSimp"><span class="hs-identifier hs-type">rocTempSimp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">GenDefn</span></span><span>
+</span><span id="line-14"></span><span id="rocTempSimp"><span class="annot"><span class="annottext">rocTempSimp :: GenDefn
+</span><a href="Drasil.NoPCM.GenDefs.html#rocTempSimp"><span class="hs-identifier hs-var hs-var">rocTempSimp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ModelKind
+-&gt; Maybe UnitDefn
+-&gt; Maybe Derivation
+-&gt; String
+-&gt; [Sentence]
+-&gt; GenDefn
+forall u.
+IsUnit u =&gt;
+ModelKind
+-&gt; Maybe u -&gt; Maybe Derivation -&gt; String -&gt; [Sentence] -&gt; GenDefn
+</span><span class="hs-identifier hs-var">gdNoRefs</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">RelationConcept -&gt; ModelKind
+</span><span class="hs-identifier hs-var">othModel'</span></span><span> </span><span class="annot"><span class="annottext">RelationConcept
+</span><span class="hs-identifier hs-var">rocTempSimpRC</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Maybe UnitDefn
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Maybe</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span class="hs-special">)</span><span>
+</span><span id="line-15"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Derivation -&gt; Maybe Derivation
+forall a. a -&gt; Maybe a
+</span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">(Derivation -&gt; Maybe Derivation) -&gt; Derivation -&gt; Maybe Derivation
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; [ConceptInstance] -&gt; Derivation
+</span><span class="hs-identifier hs-var">rocTempSimpDeriv</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptInstance
+</span><span class="hs-identifier hs-var">assumpCWTAT</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.NoPCM.Assumptions.html#assumpDWCoW"><span class="hs-identifier hs-var">assumpDWCoW</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.NoPCM.Assumptions.html#assumpSHECoW"><span class="hs-identifier hs-var">assumpSHECoW</span></a></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><span id="line-16"></span><span>  </span><span class="annot"><span class="hs-string">&quot;rocTempSimp&quot;</span></span><span> </span><span class="hs-special">[</span><span class="hs-comment">{-Notes-}</span><span class="hs-special">]</span><span>
+</span><span id="line-17"></span></pre></body></html>

@@ -21,7 +21,7 @@ PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 
 # Current list of examples
 SRC_EXAMPLES = glassbr nopcm projectile
-EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template dblpendulum pdController
+EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template dblpendulum pdcontroller
 GOOLTEST = gooltest
 
 # where they live
@@ -54,7 +54,7 @@ PROJECTILE_EXE = projectile
 TEMPLATE_EXE = template
 GOOLTEST_EXE = codegenTest
 DBLPENDULUM_EXE = dblpendulum
-PDCONTROLLER_EXE = pdController
+PDCONTROLLER_EXE = pdcontroller
 
 # and the associated per-example information generated
 GEN_E_SUFFIX = _gen

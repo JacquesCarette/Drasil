@@ -1,4 +1,4 @@
-module Drasil.Template.Main (main) where
+module Main (main) where
 
 import GHC.IO.Encoding
 

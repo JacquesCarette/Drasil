@@ -3,7 +3,7 @@
 SHELL=/bin/bash
 
 # List of all known packages
-PACKAGES = lang utils build gool code theory database printers gen data docLang example
+PACKAGES = lang utils build gool code theory database printers gen data docLang
 
 # and associated package-level suffixes
 BUILD_P_SUFFIX = _build
@@ -22,7 +22,7 @@ PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 # Current list of examples
 SRC_EXAMPLES = glassbr nopcm projectile
 EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template dblpendulum pdcontroller
-GOOLTEST = gooltest
+GOOLTEST = codegenTest
 
 # where they live
 HGHC_DIR  = HGHC
@@ -67,8 +67,8 @@ BC_E_SUFFIX = _build_clean
 TRACE_GRAPH_SUFFIX = _trace_graph
 
 # add example names with the appropriate suffixes to create per-example targets
-GEN_EXAMPLES = $(addsuffix $(GEN_E_SUFFIX), $(EXAMPLES) $(GOOLTEST))
-TEST_EXAMPLES =  $(addsuffix $(TEST_E_SUFFIX), $(EXAMPLES) $(GOOLTEST))
+GEN_EXAMPLES = $(addsuffix $(GEN_E_SUFFIX), $(EXAMPLES))
+TEST_EXAMPLES =  $(addsuffix $(TEST_E_SUFFIX), $(EXAMPLES))
 TEX_EXAMPLES = $(addsuffix $(TEX_E_SUFFIX), $(EXAMPLES))
 CODE_EXAMPLES = $(addsuffix $(CODE_E_SUFFIX), $(SRC_EXAMPLES))
 DCP_EXAMPLES = $(addsuffix $(DCP_E_SUFFIX), $(EXAMPLES))
@@ -224,7 +224,8 @@ $(filter %$(BUILD_P_SUFFIX), $(BUILD_PACKAGES)): %$(BUILD_P_SUFFIX): check_stack
 # Specific example targets will have the name exampleName_gen.
 # Alternatively, you can run an example by running `stack exec exampleName`.
 %$(GEN_E_SUFFIX): EEXE=$($(EXAMPLE)_EXE)
-$(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX): example$(BUILD_P_SUFFIX)
+$(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX):
+	stack install $(stackArgs) "$(EEXE)"
 	@mkdir -p "$(BUILD_FOLDER)$(EDIR)"
 	cd "$(BUILD_FOLDER)$(EDIR)" && stack exec -- "$(EEXE)" $(EXECARGS)
 	
@@ -232,7 +233,8 @@ $(filter %$(GEN_E_SUFFIX), $(GEN_EXAMPLES)): %$(GEN_E_SUFFIX): example$(BUILD_P_
 # for each example run. Needs Graphviz to run. Graphs generate in svg, pdf, and png formats.
 # Specific example targets will have the name exampleName_trace_graph.
 %$(TRACE_GRAPH_SUFFIX): EEXE=$($(EXAMPLE)_EXE)
-$(filter %$(TRACE_GRAPH_SUFFIX), $(TRACE_GRAPH_EXAMPLES)): %$(TRACE_GRAPH_SUFFIX): example$(BUILD_P_SUFFIX) graphmod
+$(filter %$(TRACE_GRAPH_SUFFIX), $(TRACE_GRAPH_EXAMPLES)): %$(TRACE_GRAPH_SUFFIX): graphmod
+	stack install $(stackArgs) "$(EEXE)"
 	@mkdir -p "$(BUILD_FOLDER)$(EDIR)"
 	cd "$(BUILD_FOLDER)$(EDIR)" && stack exec -- "$(EEXE)" $(EXECARGS)
 	@mkdir -p "$(TRACEY_GRAPHS_FOLDER)$(EDIR)"

@@ -47,3 +47,6 @@ executables:
     - -O2
     dependencies:
     - gamephysics
+    when:
+    - condition: false
+      other-modules: Paths_gamephysics

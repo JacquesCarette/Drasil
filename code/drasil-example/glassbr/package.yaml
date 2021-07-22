@@ -43,3 +43,6 @@ executables:
     - -O2
     dependencies:
     - glassbr
+    when:
+    - condition: false
+      other-modules: Paths_glassbr

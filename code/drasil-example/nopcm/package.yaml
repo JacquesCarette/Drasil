@@ -44,3 +44,6 @@ executables:
     - -O2
     dependencies:
     - nopcm
+    when:
+    - condition: false
+      other-modules: Paths_nopcm

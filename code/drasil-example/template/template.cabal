@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.2.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 437f6e0edc90926da6af24f454ae2d4706f8c46912f787abb3fccf87e6d3ae39
+-- hash: 8114128b7b94ef816648c06e63c90c114302e7be40c04987659cb5b4a10b0a0c
 
 name:           template
 version:        0.1.24.0
@@ -48,8 +48,6 @@ library
 
 executable template
   main-is: Main.hs
-  other-modules:
-      Paths_template
   hs-source-dirs:
       app
   ghc-options: -Wall -Wredundant-constraints -threaded -O2 -main-is Main
@@ -70,4 +68,7 @@ executable template
     , drasil-utils
     , lens
     , template
+  if false
+    other-modules:
+        Paths_template
   default-language: Haskell2010

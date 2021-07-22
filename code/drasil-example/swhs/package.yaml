@@ -43,3 +43,6 @@ executables:
     - -O2
     dependencies:
     - swhs
+    when:
+    - condition: false
+      other-modules: Paths_swhs

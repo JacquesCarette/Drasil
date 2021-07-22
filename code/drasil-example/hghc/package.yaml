@@ -43,3 +43,6 @@ executables:
     - -O2
     dependencies:
     - hghc
+    when:
+    - condition: false
+      other-modules: Paths_hghc

@@ -43,3 +43,6 @@ executables:
     - -O2
     dependencies:
     - ssp
+    when:
+    - condition: false
+      other-modules: Paths_ssp

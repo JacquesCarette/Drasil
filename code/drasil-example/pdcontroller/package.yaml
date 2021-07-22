@@ -43,3 +43,6 @@ executables:
     - -O2
     dependencies:
     - pdcontroller
+    when:
+    - condition: false
+      other-modules: Paths_pdcontroller

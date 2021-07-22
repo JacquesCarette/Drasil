@@ -43,3 +43,6 @@ executables:
     - -O2
     dependencies:
     - projectile
+    when:
+    - condition: false
+      other-modules: Paths_projectile

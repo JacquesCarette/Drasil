@@ -43,3 +43,6 @@ executables:
     - -O2
     dependencies:
     - dblpendulum
+    when:
+    - condition: false
+      other-modules: Paths_dblpendulum

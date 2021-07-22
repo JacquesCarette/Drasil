@@ -43,3 +43,6 @@ executables:
     - -O2
     dependencies:
     - template
+    when:
+    - condition: false
+      other-modules: Paths_template

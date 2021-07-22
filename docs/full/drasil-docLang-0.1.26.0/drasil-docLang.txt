@@ -1073,11 +1073,11 @@ ReqsProg :: [ReqsSub] -> ReqrmntSec
 data ReqsSub
 
 -- | Functional requirements. <a>LabelledContent</a> for tables (includes
---   introduction).
+--   input values).
 [FReqsSub] :: Sentence -> [LabelledContent] -> ReqsSub
 
--- | Functional requirements. <a>LabelledContent</a> for tables (no
---   introduction).
+-- | Functional requirements. <a>LabelledContent</a> for tables (no input
+--   values).
 [FReqsSub'] :: [LabelledContent] -> ReqsSub
 
 -- | Non-Functional requirements.
@@ -1430,6 +1430,9 @@ resourcePath :: String
 folderList' :: [ItemType]
 
 module Drasil.DocLang.References
+
+-- | All section references used in creating a Software Requirements
+--   Specification (SRS).
 secRefs :: [Reference]
 
 module Drasil.TraceTable
@@ -1450,6 +1453,18 @@ module Drasil.DocumentLanguage
 -- | Creates a document from a document description, a title combinator
 --   function, and system information.
 mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
+fillcdbSRS :: SRSDecl -> SystemInformation -> SystemInformation
+
+-- | Takes in existing information from the Chunk database to construct a
+--   database of references.
+fillReferences :: SRSDecl -> SystemInformation -> SystemInformation
+
+-- | Helper that gets references from definitions and models.
+dRefToRef :: HasDecRef a => a -> [Reference]
+
+-- | Recursively find all references in a section (meant for getting at
+--   <a>LabelledContent</a>).
+findAllRefs :: Section -> [Reference]
 
 -- | Helper for filling in the traceability matrix and graph information
 --   into the system.
@@ -1583,11 +1598,11 @@ ReqsProg :: [ReqsSub] -> ReqrmntSec
 data ReqsSub
 
 -- | Functional requirements. <a>LabelledContent</a> for tables (includes
---   introduction).
+--   input values).
 [FReqsSub] :: Sentence -> [LabelledContent] -> ReqsSub
 
--- | Functional requirements. <a>LabelledContent</a> for tables (no
---   introduction).
+-- | Functional requirements. <a>LabelledContent</a> for tables (no input
+--   values).
 [FReqsSub'] :: [LabelledContent] -> ReqsSub
 
 -- | Non-Functional requirements.
@@ -1658,6 +1673,7 @@ mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> D
 -- | Helper for filling in the traceability matrix and graph information
 --   into the system.
 fillTraceSI :: SRSDecl -> SystemInformation -> SystemInformation
+fillcdbSRS :: SRSDecl -> SystemInformation -> SystemInformation
 
 -- | Appendix section.
 newtype AppndxSec
@@ -1969,4 +1985,7 @@ egetDocDesc :: DocDesc -> [DisplayExpr]
 
 -- | Creates a traceability map from document sections.
 generateTraceMap :: [DocSection] -> TraceMap
+
+-- | All section references used in creating a Software Requirements
+--   Specification (SRS).
 secRefs :: [Reference]

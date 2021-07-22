@@ -899,6 +899,10 @@ stg :: Lens' PrintingInformation Stage
 configuration :: Lens' PrintingInformation PrintingConfiguration
 ckdb :: Lens' PrintingInformation ChunkDB
 
+-- | Builds a document's printing information based on the system
+--   information.
+piSys :: SystemInformation -> Stage -> PrintingConfiguration -> PrintingInformation
+
 -- | Default configuration is for engineering.
 defaultConfiguration :: PrintingConfiguration
 instance Language.Drasil.Printing.PrintingInformation.HasPrintingOptions Language.Drasil.Printing.PrintingInformation.PrintingInformation
@@ -1506,6 +1510,10 @@ PI :: ChunkDB -> Stage -> PrintingConfiguration -> PrintingInformation
 [_ckdb] :: PrintingInformation -> ChunkDB
 [_stg] :: PrintingInformation -> Stage
 [_configuration] :: PrintingInformation -> PrintingConfiguration
+
+-- | Builds a document's printing information based on the system
+--   information.
+piSys :: SystemInformation -> Stage -> PrintingConfiguration -> PrintingInformation
 
 -- | Able to be printed.
 class HasPrintingOptions c

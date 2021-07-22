@@ -85,6 +85,9 @@ generateRefbyMap :: TraceMap -> RefbyMap
 --   that has a <a>UID</a>.
 idMap :: HasUID a => [a] -> Map UID (a, Int)
 
+-- | Smart constructor for a <a>TermMap</a>.
+termMap :: Idea c => [c] -> TermMap
+
 -- | Looks up a <a>UID</a> in the instance model table. If nothing is
 --   found, an error is thrown.
 insmodelLookup :: UID -> InsModelMap -> InstanceModel
@@ -193,6 +196,21 @@ type RefMap a = Map UID (a, Int)
 --   <a>UID</a>.
 simpleMap :: HasUID a => [a] -> RefMap a
 conceptDB :: Lens' ReferenceDB ConceptMap
+instModels :: Lens' SystemInformation [InstanceModel]
+datadefs :: Lens' SystemInformation [DataDefinition]
+configFiles :: Lens' SystemInformation [String]
+folderPath :: Lens' SystemInformation FilePath
+
+-- | Provides a <tt>Lens</tt> that holds a <a>QuantityDict</a> and maybe
+--   constraints.
+inputs :: HasInputs c => Lens' c [(QuantityDict, Maybe (RealInterval Expr Expr))]
+defSequence :: Lens' SystemInformation [Block QDefinition]
+
+-- | Provides a <tt>Lens</tt> to the <tt>Constraint</tt>s.
+constraints :: Constrained c => Lens' c [ConstraintE]
+constants :: Lens' SystemInformation [QDefinition]
+sysinfodb :: Lens' SystemInformation ChunkDB
+usedinfodb :: Lens' SystemInformation ChunkDB
 
 module Database.Drasil
 
@@ -274,6 +292,9 @@ refTable :: Lens' ChunkDB ReferenceMap
 -- | General smart constructor for making a <a>UMap</a> out of anything
 --   that has a <a>UID</a>.
 idMap :: HasUID a => [a] -> Map UID (a, Int)
+
+-- | Smart constructor for a <a>TermMap</a>.
+termMap :: Idea c => [c] -> TermMap
 
 -- | Looks up a <a>UID</a> in the instance model table. If nothing is
 --   found, an error is thrown.
@@ -365,3 +386,7 @@ rdb :: BibRef -> [ConceptInstance] -> ReferenceDB
 -- | Constructor that makes a <a>RefMap</a> from things that have a
 --   <a>UID</a>.
 simpleMap :: HasUID a => [a] -> RefMap a
+citationDB :: Lens' ReferenceDB BibMap
+conceptDB :: Lens' ReferenceDB ConceptMap
+sysinfodb :: Lens' SystemInformation ChunkDB
+folderPath :: Lens' SystemInformation FilePath

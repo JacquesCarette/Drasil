@@ -90,6 +90,9 @@ refTable :: Lens' ChunkDB ReferenceMap
 --   that has a <a>UID</a>.
 idMap :: HasUID a => [a] -> Map UID (a, Int)
 
+-- | Smart constructor for a <a>TermMap</a>.
+termMap :: Idea c => [c] -> TermMap
+
 -- | Looks up a <a>UID</a> in the instance model table. If nothing is
 --   found, an error is thrown.
 insmodelLookup :: UID -> InsModelMap -> InstanceModel
@@ -180,3 +183,7 @@ rdb :: BibRef -> [ConceptInstance] -> ReferenceDB
 -- | Constructor that makes a <a>RefMap</a> from things that have a
 --   <a>UID</a>.
 simpleMap :: HasUID a => [a] -> RefMap a
+citationDB :: Lens' ReferenceDB BibMap
+conceptDB :: Lens' ReferenceDB ConceptMap
+sysinfodb :: Lens' SystemInformation ChunkDB
+folderPath :: Lens' SystemInformation FilePath

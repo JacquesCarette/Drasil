@@ -530,11 +530,11 @@ ReqsProg :: [ReqsSub] -> ReqrmntSec
 data ReqsSub
 
 -- | Functional requirements. <a>LabelledContent</a> for tables (includes
---   introduction).
+--   input values).
 [FReqsSub] :: Sentence -> [LabelledContent] -> ReqsSub
 
--- | Functional requirements. <a>LabelledContent</a> for tables (no
---   introduction).
+-- | Functional requirements. <a>LabelledContent</a> for tables (no input
+--   values).
 [FReqsSub'] :: [LabelledContent] -> ReqsSub
 
 -- | Non-Functional requirements.
@@ -605,6 +605,7 @@ mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> D
 -- | Helper for filling in the traceability matrix and graph information
 --   into the system.
 fillTraceSI :: SRSDecl -> SystemInformation -> SystemInformation
+fillcdbSRS :: SRSDecl -> SystemInformation -> SystemInformation
 
 -- | Appendix section.
 newtype AppndxSec
@@ -916,4 +917,7 @@ egetDocDesc :: DocDesc -> [DisplayExpr]
 
 -- | Creates a traceability map from document sections.
 generateTraceMap :: [DocSection] -> TraceMap
+
+-- | All section references used in creating a Software Requirements
+--   Specification (SRS).
 secRefs :: [Reference]

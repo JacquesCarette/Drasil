@@ -1,5 +1,5 @@
 module Drasil.GamePhysics.References (chaslesWiki, citations, koothoor2013,
-  smithLai2005, citeRefs) where
+  smithLai2005) where
 
 import Language.Drasil
 
@@ -42,6 +42,3 @@ sciComp2013 = cArticle
   "PLoS Biol" 2013
   [volume 12, number 1] "sciComp2013"
 
--- References --
-citeRefs :: [Reference]
-citeRefs = map ref citations

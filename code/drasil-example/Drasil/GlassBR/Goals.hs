@@ -1,4 +1,4 @@
-module Drasil.GlassBR.Goals (goals, willBreakGS, goalRefs) where
+module Drasil.GlassBR.Goals (goals, willBreakGS) where
 
 import Language.Drasil
 import Utils.Drasil
@@ -19,7 +19,3 @@ willBreakGS = cic "willBreakGS" (foldlSent [S "Analyze" `S.and_`
   S "to withstand the", phrase explosion `S.of_` S "a certain", phrase degree_',
   S "which is calculated based on", phrase userInput])
   "Predict-Glass-Withstands-Explosion" goalStmtDom
-
--- References --
-goalRefs :: [Reference]
-goalRefs = map ref goals

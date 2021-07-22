@@ -1,6 +1,6 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.DblPendulum.Assumptions (pend2DMotion, cartCoord, cartCoordRight,
-  yAxisDir, startOrigin, assumptions, assumpRefs) where
+  yAxisDir, startOrigin, assumptions) where
     
 import Language.Drasil
 import Utils.Drasil.Concepts
@@ -38,7 +38,3 @@ yAxisDirDesc = atStartNP (direction `the_ofThe` yAxis) `S.is` S "directed opposi
 
 startOriginDesc :: Sentence
 startOriginDesc = atStartNP (the pendulum) `S.is` S "attached" `S.toThe` (phrase origin !.)
-
--- References --
-assumpRefs :: [Reference]
-assumpRefs = map ref assumptions

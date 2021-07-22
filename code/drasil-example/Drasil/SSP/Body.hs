@@ -1,9 +1,8 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.SSP.Body (srs, si, symbMap, printSetting, fullSI) where
 
-import Data.List (nub)
 import Language.Drasil hiding (Verb, number, organization, section, variable)
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts, _constants,
   _constraints, _datadefs, _instModels, _configFiles, _defSequence, _inputs,
@@ -22,8 +21,8 @@ import Drasil.DocLang (DocSection(..), IntroSec(..), IntroSub(..),
   Verbosity(..), InclUnits(..), DerivationDisplay(..), SolChSpec(..),
   SCSSub(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
   ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
-  PDSub(..), intro, mkDoc, tsymb'', traceMatStandard, purpDoc, getTraceConfigUID,
-  secRefs, fillTraceSI, traceyGraphGetRefs)
+  PDSub(..), intro, mkDoc, tsymb'', traceMatStandard, purpDoc,
+  fillcdbSRS)
 
 import qualified Drasil.DocLang.SRS as SRS (inModel, assumpt,
   genDefn, dataDefn, datCon)
@@ -53,20 +52,19 @@ import Data.Drasil.People (brooks, henryFrankis)
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
 import Data.Drasil.SI_Units (degree, metre, newton, pascal, kilogram, second, derived, fundamentals)
 
-import Drasil.SSP.Assumptions (assumptions, assumpRefs)
-import Drasil.SSP.Changes (likelyChgs, unlikelyChgs, chgRefs)
-import qualified Drasil.SSP.DataDefs as SSP (dataDefs, dataDefRefs)
+import Drasil.SSP.Assumptions (assumptions)
+import Drasil.SSP.Changes (likelyChgs, unlikelyChgs)
+import qualified Drasil.SSP.DataDefs as SSP (dataDefs)
 import Drasil.SSP.Defs (acronyms, crtSlpSrf, defs, defs', effFandS, factor, fsConcept,
   intrslce, layer, morPrice, mtrlPrpty, plnStrn, slice, slip, slope, slpSrf, soil,
   soilLyr, soilMechanics, soilPrpty, ssa, ssp, stabAnalysis, waterTable)
-import Drasil.SSP.Figures (figRefs)
-import Drasil.SSP.GenDefs (generalDefinitions, genDefRefs)
-import Drasil.SSP.Goals (goals, goalRefs)
-import Drasil.SSP.IMods (instModIntro, iModRefs)
+import Drasil.SSP.GenDefs (generalDefinitions)
+import Drasil.SSP.Goals (goals)
+import Drasil.SSP.IMods (instModIntro)
 import qualified Drasil.SSP.IMods as SSP (iMods)
-import Drasil.SSP.References (citations, morgenstern1965, citeRefs)
-import Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs, reqRefs)
-import Drasil.SSP.TMods (tMods, tModRefs)
+import Drasil.SSP.References (citations, morgenstern1965)
+import Drasil.SSP.Requirements (funcReqs, funcReqTables, nonFuncReqs)
+import Drasil.SSP.TMods (tMods)
 import Drasil.SSP.Unitals (constrained, effCohesion, fricAngle, fs, index,
   inputs, inputsWUncrtn, outputs, symbols)
 
@@ -76,10 +74,10 @@ srs :: Document
 srs = mkDoc mkSRS S.forT si
 
 printSetting :: PrintingInformation
-printSetting = PI symbMap Equational defaultConfiguration
+printSetting = piSys fullSI Equational defaultConfiguration
 
 fullSI :: SystemInformation
-fullSI = fillTraceSI mkSRS si
+fullSI = fillcdbSRS mkSRS si
 
 resourcePath :: String
 resourcePath = "../../../datafiles/SSP/"
@@ -178,7 +176,7 @@ symbMap = cdb (map qw SSP.iMods ++ map qw symbols) (map nw symbols
   ++ map nw doccon' ++ map nw derived ++ map nw fundamentals ++ map nw educon
   ++ map nw compcon ++ [nw algorithm, nw ssp] ++ map nw units)
   (map cw SSP.iMods ++ map cw symbols ++ srsDomains) units SSP.dataDefs SSP.iMods
-  generalDefinitions tMods concIns section labCon allRefs
+  generalDefinitions tMods concIns section labCon []
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronyms)
@@ -451,11 +449,3 @@ slopeVert = verticesConst $ phrase slope
 
 -- SECTION 7 --
 -- Table of aux consts is automatically generated
-
--- References --
-bodyRefs :: [Reference]
-bodyRefs = ref sysCtxFig1: map ref concIns ++ map ref section ++ map ref labCon ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ traceyGraphGetRefs directoryName
-
-allRefs :: [Reference]
-allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ figRefs ++ goalRefs ++ SSP.dataDefRefs ++ genDefRefs
-  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs)

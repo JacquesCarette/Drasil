@@ -1,4 +1,4 @@
-module Drasil.NoPCM.IMods (eBalanceOnWtr, iMods, instModIntro, iModRefs) where
+module Drasil.NoPCM.IMods (eBalanceOnWtr, iMods, instModIntro) where
 
 import Language.Drasil
 import Theory.Drasil (InstanceModel, im, qwC, qwUC, deModel')
@@ -104,8 +104,3 @@ instModIntro :: Sentence
 instModIntro = foldlSent [atStartNP (the goal), refS waterTempGS,
   S "is met by", refS eBalanceOnWtr `S.andThe` phrase goal,
   refS waterEnergyGS, S "is met by", refS heatEInWtr]
-
--- References -- 
-iModRefs :: [Reference]
-iModRefs = ref koothoor2013: ref htFluxWaterFromCoil: ref balanceDecayRate: map ref [eBalanceOnWtr, heatEInWtr] ++ 
-  map ref [waterTempGS, waterEnergyGS]

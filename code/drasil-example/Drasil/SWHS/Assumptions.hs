@@ -147,7 +147,3 @@ assumpS20 = foldlSent [
 --- Again, list structure is same between all examples.
 -- Can booktabs colored links be used? The box links completely cover nearby
 -- punctuation.
-
--- References --
-assumpRefs :: [Reference]
-assumpRefs = ref assumpSITWP: map ref assumptions

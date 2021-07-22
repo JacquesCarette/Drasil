@@ -47,8 +47,3 @@ dimlessloadVsARFig = llcc (makeFigRef "dimlessloadVSaspect") $ fig (S "Non dimen
   `S.versus` titleize aspectRatio +:+ sParen (getAcc aR)
   `S.versus` atStart stressDistFac +:+ sParen (ch stressDistFac))
   (resourcePath ++ "ASTM_F2248-09_BeasonEtAl.png")
-
--- References --
-figRefs :: [Reference]
-figRefs = map ref [sysCtxFig, physSystFig, traceItemSecsFig,
-  traceReqsItemsFig, traceAssumpsOthersFig, demandVsSDFig, dimlessloadVsARFig]

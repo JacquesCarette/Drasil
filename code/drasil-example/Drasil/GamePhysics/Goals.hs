@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.Goals (goals, linearGS, angularGS, goalRefs) where
+module Drasil.GamePhysics.Goals (goals, linearGS, angularGS) where
 
 import Language.Drasil
 import Utils.Drasil
@@ -24,7 +24,3 @@ goalStatementStruct outputs condition1 condition2 = foldlSent
   [ S "Determine", condition1, listOfOutputs, S "over a period of",
   phrase time, condition2]
   where listOfOutputs       = foldlList Comma List $ map plural outputs
-
--- References --
-goalRefs :: [Reference]
-goalRefs = map ref goals

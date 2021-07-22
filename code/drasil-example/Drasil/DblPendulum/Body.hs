@@ -1,10 +1,9 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.DblPendulum.Body where
 
-import Data.List (nub)
 import Language.Drasil hiding (organization, section)
 import Theory.Drasil (TheoryModel)
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
 import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
   _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, _outputs,
@@ -39,32 +38,32 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl,
   SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
   TConvention(..), TSIntro(..), TraceabilitySec(TraceabilityProg), GSDSec(..), GSDSub(..),
-  Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, purpDoc, getTraceConfigUID,
-  secRefs, fillTraceSI, traceyGraphGetRefs)
+  Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, purpDoc, fillcdbSRS)
+
 import qualified Drasil.DocLang.SRS as SRS
-import Drasil.DblPendulum.Figures (figMotion, figRefs)
+import Drasil.DblPendulum.Figures (figMotion)
 import Data.Drasil.Concepts.Math (mathcon, cartesian, ode, mathcon', graph)
 import Data.Drasil.Quantities.Math (unitVect, unitVectj)
-import Drasil.DblPendulum.Assumptions (assumptions, assumpRefs)
+import Drasil.DblPendulum.Assumptions (assumptions)
 import Drasil.DblPendulum.Concepts (rod, concepts, pendMotion)
-import Drasil.DblPendulum.Goals (goals, goalsInputs, goalRefs)
-import Drasil.DblPendulum.DataDefs (dataDefs, dataDefRefs)
-import Drasil.DblPendulum.IMods (iMods, iModRefs)
-import Drasil.DblPendulum.GenDefs (genDefns, genDefRefs)
+import Drasil.DblPendulum.Goals (goals, goalsInputs)
+import Drasil.DblPendulum.DataDefs (dataDefs)
+import Drasil.DblPendulum.IMods (iMods)
+import Drasil.DblPendulum.GenDefs (genDefns)
 import Drasil.DblPendulum.Unitals (symbols, inputs, outputs,
   inConstraints, outConstraints, acronyms)
-import Drasil.DblPendulum.Requirements (funcReqs, nonFuncReqs, reqRefs)
-import Drasil.DblPendulum.References (citations, koothoor2013, smithLai2005, citeRefs)
+import Drasil.DblPendulum.Requirements (funcReqs, nonFuncReqs)
+import Drasil.DblPendulum.References (citations, koothoor2013, smithLai2005)
 
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
 fullSI :: SystemInformation
-fullSI = fillTraceSI mkSRS si
+fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
-printSetting = PI symbMap Equational defaultConfiguration
+printSetting = piSys fullSI Equational defaultConfiguration
 
 resourcePath :: String
 resourcePath = "../../../datafiles/DblPendulum/"
@@ -185,7 +184,7 @@ symbMap = cdb (map qw iMods ++ map qw symbols)
    map nw physicscon ++ concepts ++ map nw physicalcon ++ map nw acronyms ++ map nw symbols ++ map nw [metre, hertz] ++
    [nw algorithm] ++ map nw compcon ++ map nw educon ++ map nw prodtcon)
   (map cw iMods ++ srsDomains) (map unitWrapper [metre, second, newton, kilogram, degree, radian, hertz]) dataDefs
-  iMods genDefns tMods concIns [] [] allRefs
+  iMods genDefns tMods concIns [] [] ([] :: [Reference])
 
 
 usedDB :: ChunkDB
@@ -294,13 +293,3 @@ tMods = [accelerationTM, velocityTM, newtonSL, newtonSLR]
 
 physSystParts :: [Sentence]
 physSystParts = map ((!.) . atStartNP) [the rod, the mass]
-
-tModRefs :: [Reference]
-tModRefs = map ref tMods
-
-bodyRefs :: [Reference]
-bodyRefs = ref sysCtxFig1: map ref concIns ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ map ref concIns ++ traceyGraphGetRefs directoryName
-
-allRefs :: [Reference]
-allRefs = nub (assumpRefs ++ bodyRefs ++ figRefs ++ goalRefs ++ dataDefRefs ++ genDefRefs
-  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs)

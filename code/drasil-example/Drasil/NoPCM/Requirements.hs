@@ -1,4 +1,4 @@
-module Drasil.NoPCM.Requirements (funcReqs, inputInitValsTable, reqRefs) where
+module Drasil.NoPCM.Requirements (funcReqs, inputInitValsTable) where
 
 import Language.Drasil
 import Drasil.DocLang (mkInputPropsTable)
@@ -57,7 +57,3 @@ funcReqs = [inputInitVals, findMass, checkWithPhysConsts,
 -------------------------------------------
 
 --imports from SWHS
-
---References--
-reqRefs :: [Reference]
-reqRefs = ref inputInitValsTable : map ref funcReqs

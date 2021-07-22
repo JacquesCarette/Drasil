@@ -1,8 +1,7 @@
 module Drasil.GamePhysics.Body where
 
-import Data.List (nub)
 import Language.Drasil hiding (organization, section)
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, _datadefs,
   _instModels, _configFiles, _defSequence, _inputs, _kind, _outputs, _quants, 
@@ -17,8 +16,8 @@ import Drasil.DocLang (DerivationDisplay(..), DocSection(..), Emphasis(..),
   SolChSpec(SCSProg), TConvention(..), TSIntro(..), Verbosity(Verbose),
   OffShelfSolnsSec(..), GSDSec(..), GSDSub(..), TraceabilitySec(TraceabilityProg),
   ReqrmntSec(..), ReqsSub(..), AuxConstntSec(..), ProblemDescription(PDProg),
-  PDSub(..), intro, mkDoc, tsymb, traceMatStandard, purpDoc, getTraceConfigUID,
-  secRefs, fillTraceSI, traceyGraphGetRefs)
+  PDSub(..), intro, mkDoc, tsymb, traceMatStandard, purpDoc,
+  fillcdbSRS)
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Documentation as Doc (assumption, concept,
@@ -44,27 +43,27 @@ import qualified Data.Drasil.Concepts.Math as CM (cartesian, equation, law,
   mathcon, mathcon', rightHand, line, point)
 import qualified Data.Drasil.Quantities.Physics as QP (force, time)
 
-import Drasil.GamePhysics.Assumptions (assumptions, assumpRefs)
-import Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs, chgRefs)
+import Drasil.GamePhysics.Assumptions (assumptions)
+import Drasil.GamePhysics.Changes (likelyChgs, unlikelyChgs)
 import Drasil.GamePhysics.Concepts (gamePhysics, acronyms, threeD, twoD)
-import Drasil.GamePhysics.DataDefs (dataDefs, dataDefRefs)
-import Drasil.GamePhysics.Goals (goals, goalRefs)
-import Drasil.GamePhysics.IMods (iMods, instModIntro, iModRefs)
-import Drasil.GamePhysics.References (citations, koothoor2013, smithLai2005, citeRefs)
-import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, reqRefs)
-import Drasil.GamePhysics.TMods (tMods, tModRefs)
+import Drasil.GamePhysics.DataDefs (dataDefs)
+import Drasil.GamePhysics.Goals (goals)
+import Drasil.GamePhysics.IMods (iMods, instModIntro)
+import Drasil.GamePhysics.References (citations, koothoor2013, smithLai2005)
+import Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs)
+import Drasil.GamePhysics.TMods (tMods)
 import Drasil.GamePhysics.Unitals (symbolsAll, outputConstraints,
   inputSymbols, outputSymbols, inputConstraints, defSymbols)
-import Drasil.GamePhysics.GenDefs (generalDefns, genDefRefs)
+import Drasil.GamePhysics.GenDefs (generalDefns)
 
 srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize short) si
 
 fullSI :: SystemInformation
-fullSI = fillTraceSI mkSRS si
+fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
-printSetting = PI symbMap Equational defaultConfiguration
+printSetting = piSys fullSI Equational defaultConfiguration
 
 resourcePath :: String
 resourcePath = "../../../datafiles/GamePhysics/"
@@ -164,7 +163,7 @@ symbMap = cdb (map qw iMods ++ map qw symbolsAll) (map nw symbolsAll
   ++ map nw CP.physicCon ++ map nw educon ++ [nw algorithm] ++ map nw derived
   ++ map nw fundamentals ++ map nw CM.mathcon ++ map nw CM.mathcon') 
   (map cw defSymbols ++ srsDomains ++ map cw iMods) units dataDefs
-  iMods generalDefns tMods concIns section [] allRefs
+  iMods generalDefns tMods concIns section [] []
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbolsAll ++ map nw acronyms)
@@ -449,11 +448,3 @@ offShelfSols3DList = enumBulletU [
 -- REFERENCES --
 ----------------
 -- To be added --
-
--- References --
-bodyRefs :: [Reference]
-bodyRefs = ref sysCtxFig1: map ref concIns ++ map ref section ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ traceyGraphGetRefs directoryName
-
-allRefs :: [Reference]
-allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ goalRefs ++ dataDefRefs ++ genDefRefs
-  ++ iModRefs ++ tModRefs ++ citeRefs ++ reqRefs ++ secRefs)

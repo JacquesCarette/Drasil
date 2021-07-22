@@ -1,5 +1,5 @@
 module Drasil.DblPendulum.DataDefs (dataDefs, positionIY, positionIX, angFrequencyDD,
-         frequencyDD, periodSHMDD, dataDefRefs) where
+         frequencyDD, periodSHMDD) where
 
 import Prelude hiding (sin, cos, sqrt)
 import Language.Drasil
@@ -93,7 +93,3 @@ periodSHMDDEqn = recip_ $ sy QP.frequency
 
 periodSHMRef :: Sentence
 periodSHMRef = ch QP.period `S.is` S "from" +:+ refS frequencyDD
-
--- References --
-dataDefRefs :: [Reference]
-dataDefRefs = map ref dataDefs

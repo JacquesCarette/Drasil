@@ -10,10 +10,10 @@ import GHC.IO.Encoding
 --   Visibility(..), defaultChoices)
 import Language.Drasil.Generate (gen, genDot, DocType(SRS, Website), DocSpec(DocSpec))
 
-import Drasil.SSP.Body (srs, printSetting, fullSI) -- si
+import Drasil.SSP.Body (srs, printSetting, fullSI)
 
 -- code :: CodeSpec
--- code = codeSpec si choices []
+-- code = codeSpec fullSI choices []
 
 -- choices :: Choices
 -- choices = defaultChoices {

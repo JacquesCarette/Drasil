@@ -4,7 +4,7 @@ import GHC.IO.Encoding (setLocaleEncoding, utf8)
 
 import Data.Drasil.ExternalLibraries.ODELibraries (scipyODELSodaPkg)
 
-import Drasil.PDController.Body (pidODEInfo, printSetting, si, srs, fullSI)
+import Drasil.PDController.Body (pidODEInfo, printSetting, srs, fullSI)
 
 import Language.Drasil.Code
        (AuxFile(..), Choices(..), CodeSpec, Comments(..), ConstantRepr(..),
@@ -15,7 +15,7 @@ import Language.Drasil.Code
 import Language.Drasil.Generate (gen, genCode, genDot, DocSpec(DocSpec), DocType(SRS, Website))
 
 codeSpecs :: CodeSpec
-codeSpecs = codeSpec si codeChoices []
+codeSpecs = codeSpec fullSI codeChoices []
 
 codeChoices :: Choices
 codeChoices

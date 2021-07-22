@@ -16,7 +16,7 @@ import GOOL.Drasil (CodeType(..))
 
 import Data.Drasil.Quantities.Math (piConst)
 
-import Drasil.Projectile.Body (printSetting, si, srs, projectileTitle, fullSI)
+import Drasil.Projectile.Body (printSetting, srs, projectileTitle, fullSI)
 
 import Data.List (intercalate)
 
@@ -38,7 +38,7 @@ genCodeWithChoices (c:cs) = let dir = codedDirName (getAccStr projectileTitle) c
     workingDir <- getCurrentDirectory
     createDirectoryIfMissing False dir
     setCurrentDirectory dir
-    genCode c (codeSpec si c [])
+    genCode c (codeSpec fullSI c [])
     setCurrentDirectory workingDir
     genCodeWithChoices cs
 

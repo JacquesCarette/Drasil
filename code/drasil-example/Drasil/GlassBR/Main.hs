@@ -9,11 +9,11 @@ import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..),
   defaultChoices)
 import Language.Drasil.Generate (gen, genCode, genDot, DocSpec(DocSpec), DocType(SRS, Website))
 
-import Drasil.GlassBR.Body (si, srs, printSetting, fullSI)
+import Drasil.GlassBR.Body (srs, printSetting, fullSI)
 import Drasil.GlassBR.ModuleDefs (allMods)
 
 code :: CodeSpec
-code = codeSpec si choices allMods
+code = codeSpec fullSI choices allMods
 
 choices :: Choices
 choices = defaultChoices {

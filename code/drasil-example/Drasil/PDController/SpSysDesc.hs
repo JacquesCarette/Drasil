@@ -43,7 +43,3 @@ sysProcessVariable
             S "over time"])
       "Process-Variable"
       goalStmtDom
-
-sysDescRefs :: [Reference]
-sysDescRefs = ref sysFigure: map ref goals
-

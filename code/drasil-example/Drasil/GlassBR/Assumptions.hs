@@ -1,6 +1,6 @@
 module Drasil.GlassBR.Assumptions (assumpGT, assumpGC, assumpES, assumpSV,
   assumpGL, assumpBC, assumpRT, assumpLDFC, assumptionConstants,
-  assumptions, assumpRefs) where
+  assumptions) where
 
 import Language.Drasil hiding (organization)
 import qualified Drasil.DocLang.SRS as SRS (valsOfAuxCons)
@@ -88,7 +88,3 @@ ldfConstantDesc mainConcept = foldlSent [S "With", phrase reference, S "to",
   refS assumpSV `sC` phraseNP (NP.the (value `of_`
   mainConcept)), sParen (ch mainConcept) `S.is` phraseNP (a_ constant)
   `S.in_` short glassBR]
-
--- References --
-assumpRefs :: [Reference]
-assumpRefs = ref (SRS.valsOfAuxCons ([]::[Contents]) ([]::[Section])) : map ref assumptions

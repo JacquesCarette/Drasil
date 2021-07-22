@@ -53,7 +53,3 @@ gdPowerPlantNote
          S "by applying the", atStart ccLaplaceTransform +:+. fromSource tmLaplace,
        S "Additionally, there are no external disturbances to the power plant",
          fromSource aExtDisturb]
-
--- References --
-genDefRefs :: [Reference]
-genDefRefs = map ref genDefns

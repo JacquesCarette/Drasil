@@ -1,8 +1,7 @@
 module Drasil.NoPCM.Body (si, srs, printSetting, noPCMODEInfo, fullSI) where
 
-import Control.Lens ((^.))
 import Language.Drasil hiding (section)
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts,
   _constants, _constraints, _datadefs, _instModels, _configFiles, _defSequence,
@@ -14,7 +13,7 @@ import qualified Utils.Drasil.Sentence as S
 
 import Language.Drasil.Code (quantvar, listToArray)
 
-import Data.List ((\\), nub)
+import Data.List ((\\))
 import Data.Drasil.People (thulasi)
 
 import Data.Drasil.Concepts.Computation (algorithm, inValue)
@@ -52,7 +51,7 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg), DerivationDisplay(..),
   ReqrmntSec(..), ReqsSub(..), SCSSub(..), SolChSpec(..), SRSDecl, SSDSec(..),
   SSDSub(..), TraceabilitySec(TraceabilityProg), Verbosity(Verbose),
   TSIntro(SymbOrder, SymbConvention, TSPurpose, VectorUnits), intro, mkDoc,
-  tsymb, traceMatStandard, purpDoc, getTraceConfigUID, secRefs, fillTraceSI, traceyGraphGetRefs)
+  tsymb, traceMatStandard, purpDoc, fillcdbSRS)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
@@ -70,17 +69,17 @@ import Drasil.SWHS.Unitals (coilSAMax, deltaT, htFluxC, htFluxIn,
   wMass, wVol, unitalChuncks, absTol, relTol)
 
 import Drasil.NoPCM.Assumptions
-import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs, chgRefs)
-import Drasil.NoPCM.DataDefs (qDefs, dataDefRefs)
+import Drasil.NoPCM.Changes (likelyChgs, unlikelyChgs)
+import Drasil.NoPCM.DataDefs (qDefs)
 import qualified Drasil.NoPCM.DataDefs as NoPCM (dataDefs)
 import Drasil.NoPCM.Definitions (srsSWHS, htTrans)
-import Drasil.NoPCM.GenDefs (genDefs, genDefRefs)
-import Drasil.NoPCM.Goals (goals, goalRefs)
-import Drasil.NoPCM.IMods (eBalanceOnWtr, instModIntro, iModRefs)
+import Drasil.NoPCM.GenDefs (genDefs)
+import Drasil.NoPCM.Goals (goals)
+import Drasil.NoPCM.IMods (eBalanceOnWtr, instModIntro)
 import qualified Drasil.NoPCM.IMods as NoPCM (iMods)
 import Drasil.NoPCM.ODEs
-import Drasil.NoPCM.Requirements (funcReqs, inputInitValsTable, reqRefs)
-import Drasil.NoPCM.References (citations, citeRefs)
+import Drasil.NoPCM.Requirements (funcReqs, inputInitValsTable)
+import Drasil.NoPCM.References (citations)
 import Drasil.NoPCM.Unitals (inputs, constrained, unconstrained,
   specParamValList)
 
@@ -88,10 +87,10 @@ srs :: Document
 srs = mkDoc mkSRS S.forT si
 
 fullSI :: SystemInformation
-fullSI = fillTraceSI mkSRS si
+fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
-printSetting = PI symbMap Equational defaultConfiguration
+printSetting = piSys fullSI Equational defaultConfiguration
 
 directoryName :: FilePath
 directoryName = "NoPCM"
@@ -225,7 +224,7 @@ symbMap = cdb symbolsAll (map nw symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srsSWHS, nw algorithm, nw inValue, nw htTrans]
   ++ map nw [absTol, relTol] ++ [nw materialProprty])
   (map cw symbols ++ srsDomains) units NoPCM.dataDefs NoPCM.iMods genDefs
-  tMods concIns section labCon allRefs
+  tMods concIns section labCon []
 
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw symbols ++ map nw acronyms)
@@ -375,13 +374,3 @@ dataConstListOut = [tempW, watE]
 ------------
 --REFERENCES
 ------------
-bodyRefs :: [Reference]
-bodyRefs = ref figTank: ref sysCntxtFig:
-  map ref concIns ++ map ref section ++ map ref labCon 
-  ++ map ref tMods ++ concatMap (\x -> map ref $ x ^. getDecRefs) tMods --needs the references hidden in the tmodels.
-  ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si)
-  ++ traceyGraphGetRefs directoryName
-
-allRefs :: [Reference]
-allRefs = nub (assumpRefs ++ bodyRefs ++ chgRefs ++ dataDefRefs ++ genDefRefs++ goalRefs
-  ++ iModRefs ++ citeRefs ++ reqRefs ++ secRefs)

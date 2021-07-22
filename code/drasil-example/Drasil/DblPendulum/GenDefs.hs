@@ -1,7 +1,7 @@
 {-# LANGUAGE PostfixOperators #-}
 module Drasil.DblPendulum.GenDefs (genDefns, velocityIXGD, velocityIYGD,
          accelerationIXGD, accelerationIYGD, hForceOnPendulumGD, vForceOnPendulumGD,
-         angFrequencyGD, periodPend, genDefRefs) where
+         angFrequencyGD, periodPend) where
 
 import Prelude hiding (cos, sin, sqrt)
 import qualified Data.List.NonEmpty as NE
@@ -244,7 +244,3 @@ periodPendDerivSent2 =  S "Therefore from the data definition of the" +:+ phrase
 periodPendNotes :: Sentence
 periodPendNotes = atStartNP (NP.the (frequency `and_` period)) +:+ S "are defined in the data definitions for" +:+ namedRef frequencyDD (phrase frequencyDD) `S.and_`
         namedRef periodSHMDD (phrase periodSHMDD) +:+ S "respectively"
-
--- References --
-genDefRefs :: [Reference]
-genDefRefs = map ref genDefns

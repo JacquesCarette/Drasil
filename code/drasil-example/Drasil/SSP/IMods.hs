@@ -666,7 +666,3 @@ instModIntro2 = foldlSent [titleizeNP (the morPrice),
   atStartNP (the force), S "equilibrium", plural equation, S "can be modified",
   S "to be expressed only in terms of known", phrase physical, plural value `sC`
   S "as done in", refS resShearWOGD `S.and_` refS mobShearWOGD]
-
--- References -- 
-iModRefs :: [Reference]
-iModRefs = map ref iMods

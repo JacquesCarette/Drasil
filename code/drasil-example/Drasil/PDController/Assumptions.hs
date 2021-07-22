@@ -118,7 +118,3 @@ aStiffnessCoeffDesc
        S "of the spring in the mass-spring-damper system",
        sParen (refS aPwrPlant), 
        S "is assumed to be 20"]
-
--- References --
-assumpRefs :: [Reference]
-assumpRefs = map ref assumptions

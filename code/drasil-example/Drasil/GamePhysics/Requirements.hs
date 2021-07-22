@@ -1,12 +1,11 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs, reqRefs) where
+module Drasil.GamePhysics.Requirements (funcReqs, nonfuncReqs) where
 
 import Language.Drasil hiding (organization)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 
-import Drasil.DocLang (inReq)
 import qualified Drasil.DocLang.SRS as SRS (solCharSpec)
 import Data.Drasil.Concepts.Documentation as Doc (body, funcReqDom, input_, 
   nonFuncReqDom, output_, physicalConstraint, physicalSim, property, solutionCharSpec)
@@ -138,6 +137,3 @@ maintainability = cic "maintainability" (foldlSent [
   addPercent (10 :: Integer), S "percent of the original development time"
   ]) "Maintainability" nonFuncReqDom
 
--- References --
-reqRefs :: [Reference]
-reqRefs = map ref ([inReq EmptyS] ++ funcReqs ++ nonfuncReqs)

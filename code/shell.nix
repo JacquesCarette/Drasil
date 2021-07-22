@@ -1,3 +1,6 @@
+# Drasil development requirements
+# Installs everything except `Latin Modern` and `Latin Modern Math` font families.
+
 { pkgs ? import (builtins.fetchGit {
     name = "pinned-pkgs";   # Pinned at around ~Stack v2.5.1                       
     url = "https://github.com/NixOS/nixpkgs/";                       
@@ -20,11 +23,10 @@ pkgs.mkShell {
     # Stack is our full Haskell toolchain manager
     stack
 
-    # Misc. tools that will help
-    ripgrep
+    # Makefile processor
     gnumake
     
-    # Printing-related required (TeX + Graphs/Analysis)
+    # Printing-related requirements (TeX + Graphs/Analysis)
     graphviz
     inkscape
     imagemagick
@@ -38,8 +40,9 @@ pkgs.mkShell {
     py-with-deps   #  Python + dependencies for examples
   ];
 
+  # NOTE: If fonts are ever allowed here, we will want them.
   # # Font requirements for TeX compilation
-  # fonts.fonts = with pkgs; [
+  # fonts = with pkgs; [
   #   lmodern # Latin Modern Font
   #   lmmath  # Latin Modern Math Font
   # ];

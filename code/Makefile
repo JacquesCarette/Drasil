@@ -415,4 +415,4 @@ clean_artifacts cleanArtifacts: $(CLEAN_FOLDERS)
 clean: clean_artifacts
 	- stack clean
 
-.PHONY: clean clean_artifacts cleanArtifacts gool code hlint hot_hlint analysis tex doc debug prog test graphs graphmod check_stack nographs graphs website deploy_code_path deploy deploy_lite all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)
+.PHONY: clean clean_artifacts cleanArtifacts gool code hlint hot_hlint analysis tex doc debug test graphs graphmod check_stack nographs graphs website deploy_code_path deploy deploy_lite all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)

@@ -77,8 +77,8 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
       --introductory blob (TSPurpose), TypogConvention, bolds vector parameters (Vector Bold), orders the symbol, and adds units to symbols 
       , TAandA         -- Add table of abbreviation and acronym section
       ],
-  IntroSec $            -- This adds an introduction with an overview of the sub-sections
-    IntroProg justification (phrase pendulumTitle) -- This adds an introductory blob before the overview paragraph above.
+  IntroSec $
+    IntroProg justification (phrase pendulumTitle)
       [IPurpose $ purpDoc pendulumTitle Verbose,
        IScope scope,
        IChar [] charsOfReader [],
@@ -87,16 +87,16 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
     GSDProg [
       SysCntxt [sysCtxIntro, LlC sysCtxFig1, sysCtxDesc, sysCtxList],
       UsrChars [userCharacteristicsIntro], 
-      SystCons [] []],                            -- This section add a Scope section with the content of 'scope' constructor.
+      SystCons [] []],                            
   SSDSec $ 
-    SSDProg                               -- This adds a Specific system description section and an introductory blob.
+    SSDProg
       [ SSDProblem $ PDProg prob []                --  This adds a is used to define the problem your system will solve
         [ TermsAndDefs Nothing terms               -- This is used to define the terms to be defined in terminology sub section
       , PhySysDesc pendulumTitle physSystParts figMotion [] -- This defines the Physicalsystem sub-section, define the parts
                                                           -- of the system using physSysParts, figMotion is a function in figures for the image
       , Goals goalsInputs] -- This adds a goals section and goals input is defined for the preample of the goal.
       , SSDSolChSpec $ SCSProg --This creates the solution characteristics section with a preamble
-        [ Assumptions -- This adds the assumption section
+        [ Assumptions
         , TMs [] (Label : stdFields)
         , GDs [] ([Label, Units] ++ stdFields) ShowDerivation
         , DDs [] ([Label, Symbol, Units] ++ stdFields) ShowDerivation
@@ -114,38 +114,6 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
      AuxConsProg pendulumTitle [],  --Adds Auxilliary constraint section
   Bibliography                    -- Adds reference section
   ]
-
-justification :: Sentence
-justification = foldlSent [ atStartNP (a_ pendulum), S "consists" `S.of_` phrase mass, 
-                            S "attached to the end" `S.ofA` phrase rod `S.andIts` S "moving curve" `S.is`
-                            (S "highly sensitive to initial conditions" !.), S "Therefore" `sC`
-                            S "it is useful to have a", phrase program, S "to simulate", phraseNP (motion
-                            `the_ofThe` pendulum), (S "to exhibit its chaotic characteristics" !.),
-                            atStartNP (the program), S "documented here is called", phrase pendulumTitle]
-scope :: Sentence
-scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)), 
-  sParen (getAcc twoD), phrase pendMotion, phrase problem,
-                   S "with various initial conditions"]
-
-----------------------------------------------
--- 2.3 : Characteristics of Intended Reader --
-----------------------------------------------
-
-charsOfReader :: [Sentence]
-charsOfReader = [phrase undergraduate +:+ S "level 2" +:+ phrase Doc.physics,
-                 phrase undergraduate +:+ S "level 1" +:+ phrase calculus,
-                 plural ode]
-
--------------------------------------
--- 2.3 : Organization of Documents --
--------------------------------------
-
-organizationOfDocumentsIntro :: Sentence
-organizationOfDocumentsIntro = foldlSent 
-  [atStartNP (the organization), S "of this", phrase document, 
-  S "follows the", phrase template, S "for an", getAcc Doc.srs, S "for", 
-  phrase sciCompS, S "proposed by", refS koothoor2013 `S.and_`
-  refS smithLai2005]
 
 pendulumTitle :: CI
 pendulumTitle = commonIdeaWithDict "pendulumTitle" (pn "Pendulum") "Pendulum" [physics]
@@ -186,7 +154,6 @@ symbMap = cdb (map qw iMods ++ map qw symbols)
   (map cw iMods ++ srsDomains) (map unitWrapper [metre, second, newton, kilogram, degree, radian, hertz]) dataDefs
   iMods genDefns tMods concIns [] [] ([] :: [Reference])
 
-
 usedDB :: ChunkDB
 usedDB = cdb ([] :: [QuantityDict]) (map nw acronyms ++ map nw symbols) ([] :: [ConceptChunk])
   ([] :: [UnitDefn]) [] [] [] [] [] [] [] ([] :: [Reference])
@@ -201,13 +168,58 @@ concIns :: [ConceptInstance]
 concIns = assumptions ++ goals ++ funcReqs ++ nonFuncReqs
 -- ++ likelyChgs ++ unlikelyChgs
 
+
+------------------------------
+-- Section : INTRODUCTION --
+------------------------------
+justification :: Sentence
+justification = foldlSent [ atStartNP (a_ pendulum), S "consists" `S.of_` phrase mass, 
+                            S "attached to the end" `S.ofA` phrase rod `S.andIts` S "moving curve" `S.is`
+                            (S "highly sensitive to initial conditions" !.), S "Therefore" `sC`
+                            S "it is useful to have a", phrase program, S "to simulate", phraseNP (motion
+                            `the_ofThe` pendulum), (S "to exhibit its chaotic characteristics" !.),
+                            atStartNP (the program), S "documented here is called", phrase pendulumTitle]
+
+-------------------------------
+-- 2.1 : Purpose of Document --
+-------------------------------
+-- Purpose of Document automatically generated in IPurpose
+
+---------------------------------
+-- 2.2 : Scope of Requirements --
+---------------------------------
+scope :: Sentence
+scope = foldlSent_ [phraseNP (NP.the (analysis `ofA` twoD)), 
+  sParen (getAcc twoD), phrase pendMotion, phrase problem,
+                   S "with various initial conditions"]
+
+----------------------------------------------
+-- 2.3 : Characteristics of Intended Reader --
+----------------------------------------------
+charsOfReader :: [Sentence]
+charsOfReader = [phrase undergraduate +:+ S "level 2" +:+ phrase Doc.physics,
+                 phrase undergraduate +:+ S "level 1" +:+ phrase calculus,
+                 plural ode]
+
+-------------------------------------
+-- 2.4 : Organization of Documents --
+-------------------------------------
+organizationOfDocumentsIntro :: Sentence
+organizationOfDocumentsIntro = foldlSent 
+  [atStartNP (the organization), S "of this", phrase document, 
+  S "follows the", phrase template, S "for an", getAcc Doc.srs, S "for", 
+  phrase sciCompS, S "proposed by", refS koothoor2013 `S.and_`
+  refS smithLai2005]
+
+
 --------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
 --------------------------------------------
+-- Description of Genreal System automatically generated in GSDProg
+
 --------------------------
 -- 3.1 : System Context --
 --------------------------
-
 sysCtxIntro :: Contents
 sysCtxIntro = foldlSP
   [refS sysCtxFig1, S "shows the" +:+. phrase sysCont,
@@ -257,7 +269,6 @@ sysCtxList = UlC $ ulcc $ Enumeration $ bulletNested sysCtxResp $
 --------------------------------
 -- 3.2 : User Characteristics --
 --------------------------------
-
 userCharacteristicsIntro :: Contents
 userCharacteristicsIntro = foldlSP
   [S "The", phrase endUser `S.of_` short pendulumTitle,
@@ -267,29 +278,108 @@ userCharacteristicsIntro = foldlSP
 -------------------------------
 -- 3.3 : System Constraints  --
 -------------------------------
+-- System Constraints automatically generated in SystCons
 
-------------------------------------
---Problem Description
-------------------------------------
 
+--------------------------------------------
+-- Section 4: Specific System Description --
+--------------------------------------------
+-- Description of Specific System automatically generated in SSDProg
+
+-------------------------------
+-- 4.1 : System Constraints  --
+-------------------------------
 prob :: Sentence
 prob = foldlSent_ [ S "efficiently and correctly to predict the", phraseNP (motion `ofA`  
                    pendulum)]
 
 ---------------------------------
--- Terminology and Definitions --
+-- 4.1.1 Terminology and Definitions --
 ---------------------------------
-
 terms :: [ConceptChunk]
 terms = [gravity, cartesian]
 
 tMods :: [TheoryModel]
 tMods = [accelerationTM, velocityTM, newtonSL, newtonSLR]
 
-
--- ---------------------------------
--- -- Physical System Description --
--- ---------------------------------
-
+-----------------------------------
+-- 4.1.2 Physical System Description --
+-----------------------------------
 physSystParts :: [Sentence]
 physSystParts = map ((!.) . atStartNP) [the rod, the mass]
+
+-----------------------------
+-- 4.1.3 : Goal Statements --
+-----------------------------
+
+--------------------------------------------------
+-- 4.2 : Solution Characteristics Specification --
+--------------------------------------------------
+
+-------------------------
+-- 4.2.1 : Assumptions --
+-------------------------
+-- Assumptions defined in Assumptions
+
+--------------------------------
+-- 4.2.2 : Theoretical Models --
+--------------------------------
+-- Theoretical Models defined in TMs
+
+---------------------------------
+-- 4.2.3 : General Definitions --
+---------------------------------
+-- General Definitions defined in GDs
+
+------------------------------
+-- 4.2.4 : Data Definitions --
+------------------------------
+-- Data Definitions defined in DDs
+
+-----------------------------
+-- 4.2.5 : Instance Models --
+-----------------------------
+-- Instance Models defined in IMs
+
+-----------------------------
+-- 4.2.6 : Data Constraints --
+-----------------------------
+-- Data Constraints defined in Constraints
+
+-----------------------------
+-- 4.2.7 : Properties of a Correct Solution --
+-----------------------------
+-- Properties of a Correct Solution defined in CorrSolnPpties
+
+------------------------------
+-- SECTION 5 : REQUIREMENTS --
+------------------------------
+-- in Requirements.hs
+
+-----------------------------------
+-- 5.1 : Functional Requirements --
+-----------------------------------
+
+--------------------------------------
+-- 5.2 : Nonfunctional Requirements --
+--------------------------------------
+
+--------------------------------
+-- SECTION 6 : LIKELY CHANGES --
+--------------------------------
+
+--------------------------------
+-- SECTION 6b : UNLIKELY CHANGES --
+--------------------------------
+
+--------------------------------------------------
+-- Section 7 : TRACEABILITY MATRICES AND GRAPHS --
+--------------------------------------------------
+
+-------------------------------------------------
+-- Section 8 :  Specification Parameter Values --
+-------------------------------------------------
+
+----------------------------
+-- Section 9 : References --
+----------------------------

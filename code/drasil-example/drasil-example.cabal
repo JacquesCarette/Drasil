@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0441af470644ec87332f4fa16e5733d66f4013462ebb6a89fb11f204383bade1
+-- hash: ccc0c29eeb2d7221093ea8bb91d4bbb826b20e83ca7cbead4aea611dccd08871
 
 name:           drasil-example
 version:        0.1.24.0
@@ -264,6 +264,41 @@ executable projectile
   hs-source-dirs:
       ./
   ghc-options: -Wall -Wredundant-constraints -threaded -O2 -main-is Drasil.Projectile.Main
+  build-depends:
+      base >=4.7 && <5
+    , directory
+    , drasil-code
+    , drasil-code-base
+    , drasil-data
+    , drasil-database
+    , drasil-docLang
+    , drasil-gen
+    , drasil-gool
+    , drasil-lang
+    , drasil-metadata
+    , drasil-printers
+    , drasil-theory
+    , drasil-utils
+    , lens
+  default-language: Haskell2010
+
+executable sglpendulum
+  main-is: Drasil/SglPendulum/Main.hs
+  other-modules:
+      Drasil.SglPendulum.Assumptions
+      Drasil.SglPendulum.Body
+      Drasil.SglPendulum.DataDefs
+      Drasil.SglPendulum.Expressions
+      Drasil.SglPendulum.Figures
+      Drasil.SglPendulum.GenDefs
+      Drasil.SglPendulum.Goals
+      Drasil.SglPendulum.IMods
+      Drasil.SglPendulum.Requirements
+      Drasil.SglPendulum.Unitals
+      Drasil.SglPendulum.References
+  hs-source-dirs:
+      ./
+  ghc-options: -Wall -Wredundant-constraints -threaded -O2 -main-is Drasil.SglPendulum.Main
   build-depends:
       base >=4.7 && <5
     , directory

@@ -67,6 +67,22 @@ executables:
     - Drasil.DblPendulum.Unitals
     - Drasil.DblPendulum.References
 
+  sglpendulum:
+    main: Drasil.SglPendulum.Main
+    source-dirs: ./
+    other-modules:
+    - Drasil.SglPendulum.Assumptions
+    - Drasil.SglPendulum.Body
+    - Drasil.SglPendulum.DataDefs
+    - Drasil.SglPendulum.Expressions
+    - Drasil.SglPendulum.Figures
+    - Drasil.SglPendulum.GenDefs
+    - Drasil.SglPendulum.Goals
+    - Drasil.SglPendulum.IMods
+    - Drasil.SglPendulum.Requirements
+    - Drasil.SglPendulum.Unitals
+    - Drasil.SglPendulum.References
+
   gamephysics:
     main: Drasil.GamePhysics.Main
     source-dirs: ./

@@ -44,6 +44,8 @@ import Drasil.DblPendulum.Body (justification, charsOfReader, organizationOfDocu
   physSystParts, sysCtxIntro, sysCtxDesc, sysCtxFig1,
   sysCtxList, userCharacteristicsIntro)
 import Drasil.DblPendulum.Concepts (concepts, pendMotion, progName)
+import Drasil.DblPendulum.Requirements (nonFuncReqs)
+import Drasil.DblPendulum.Unitals (symbols, acronyms)
 
 import Drasil.SglPendulum.Figures (figMotion)
 import Drasil.SglPendulum.Assumptions (assumptions)
@@ -51,9 +53,9 @@ import Drasil.SglPendulum.Goals (goals, goalsInputs)
 import Drasil.SglPendulum.DataDefs (dataDefs)
 import Drasil.SglPendulum.IMods (iMods)
 import Drasil.SglPendulum.GenDefs (genDefns)
-import Drasil.SglPendulum.Unitals (symbols, inputs, outputs,
-  inConstraints, outConstraints, acronyms)
-import Drasil.SglPendulum.Requirements (funcReqs, nonFuncReqs)
+import Drasil.SglPendulum.Unitals (inputs, outputs,
+  inConstraints, outConstraints)
+import Drasil.SglPendulum.Requirements (funcReqs)
 import Drasil.SglPendulum.References (citations)
 
 

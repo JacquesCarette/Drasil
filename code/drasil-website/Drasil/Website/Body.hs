@@ -8,12 +8,11 @@ import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
 import Language.Drasil hiding (C)
 
 import Drasil.Website.Introduction
-import Drasil.Website.CaseStudy (caseStudyRefs, caseStudySec)
+import Drasil.Website.CaseStudy
 import Drasil.Website.Example
 import Drasil.Website.Documentation
 import Drasil.Website.Analysis
 import Drasil.Website.Graphs
-
 
 -- Printing info to get document to generate. Takes in the 'FolderLocation'.
 printSetting :: FolderLocation -> PrintingInformation
@@ -70,8 +69,11 @@ sections fl = [headerSec, introSec (ref caseStudySec) (ref $ docsSec $ docsRt fl
 
 -- symbMap needed for references to work
 symbMap :: FolderLocation -> ChunkDB
-symbMap fl = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict])
+symbMap fl = cdb ([] :: [QuantityDict]) (map nw [webName, web] ++ map getSysName allExampleSI)
   ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] $ allRefs fl
+
+getSysName :: SystemInformation -> IdeaDict
+getSysName SI{_sys = nm} = nw nm 
 
 -- needed for si to work
 usedDB :: ChunkDB

@@ -18,7 +18,13 @@ import qualified Drasil.Projectile.Body as Projectile (fullSI)
 import qualified Drasil.SSP.Body as SSP (fullSI)
 import qualified Drasil.SWHS.Body as SWHS (fullSI)
 import qualified Drasil.Template.Body as Template (fullSI)
-import qualified Drasil.DblPendulum.Main as DblPendulum
+
+-- import choices for code generation
+import qualified Drasil.GlassBR.Choices as GlassBR (choices)
+import qualified Drasil.NoPCM.Choices as NoPCM (choices)
+import qualified Drasil.PDController.Choices as PDController (codeChoices)
+import qualified Drasil.Projectile.Choices as Projectile (codedDirName, choiceCombos)
+-- the other examples currently do not generate any code.
 
 
 --------------------------
@@ -99,6 +105,25 @@ exampleDoxRefs path =[[(pendulum, [])],
                  [(template, [])]]
 
 --example names, maybe make a unique type to accept fields of documents, gen code, and doxygen?
+pendulum, gamePhys, glassBR, hghc, noPCM, pdController, projectile, ssp, swhs, template :: String
+projectileC1, projectileC2, projectileC3, projectileC4, projectileC5 :: String
+pendulum = "DblPendulum"
+gamePhys = "GamePhysics"
+glassBR = "GlassBR"
+hghc = "HGHC"
+noPCM = "NoPCM"
+pdController = "PDController"
+projectile = "Projectile"
+projectileC1 = "Projectile_C_P_NoLB_U_V_D"
+projectileC2 = "Projectile_S_L_NoL_U_U_V_F"
+projectileC3 = "Projectile_U_P_L_B_B_C_D"
+projectileC4 = "Projectile_U_P_NoL_U_WI_V_D"
+projectileC5 = "Projectile_U_P_L_B_WI_V_F"
+ssp = "SSP"
+swhs = "SWHS"
+template = "Template"
+
+{--example names, maybe make a unique type to accept fields of documents, gen code, and doxygen?
 pendulum, gamePhys, glassBR, hghc, noPCM, pdController, projectile, ssp, swhs, template :: SystemInformation
 projectileC1, projectileC2, projectileC3, projectileC4, projectileC5 :: String
 pendulum = DblPendulum.fullSI
@@ -115,7 +140,7 @@ projectileC4 = "Projectile_U_P_NoL_U_WI_V_D"
 projectileC5 = "Projectile_U_P_L_B_WI_V_F"
 ssp = SSP.fullSI
 swhs = SWHS.fullSI
-template = Template.fullSI
+template = Template.fullSI-}
 
 -- list that states what languages the generated code/doxygen docs exist in.
 glassBRCode, glassBRDox, noPCMCode, noPCMDox, pdControllerCode, pdControllerDox, projectileCase1Code, projectileCase2Code,

@@ -1,11 +1,41 @@
-module Drasil.Website.CaseStudy (caseStudySec, caseStudyRefs) where
+module Drasil.Website.CaseStudy (caseStudySec, caseStudyRefs, allExampleSI) where
 
-import Language.Drasil hiding (C)
+import Language.Drasil hiding (E)
+import Language.Drasil.Code
+import Database.Drasil
+import GOOL.Drasil (CodeType(..))
 
+import qualified Drasil.DblPendulum.Body as DblPendulum (fullSI)
+import qualified Drasil.GamePhysics.Body as GamePhysics (fullSI)
+import qualified Drasil.GlassBR.Body as GlassBR (fullSI)
+import qualified Drasil.HGHC.Body as HGHC (fullSI)
+import qualified Drasil.NoPCM.Body as NoPCM (fullSI)
+import qualified Drasil.PDController.Body as PDController (fullSI)
+import qualified Drasil.Projectile.Body as Projectile (fullSI)
+import qualified Drasil.SSP.Body as SSP (fullSI)
+import qualified Drasil.SWHS.Body as SWHS (fullSI)
+import qualified Drasil.Template.Body as Template (fullSI)
+
+-- import choices for code generation
+import qualified Drasil.GlassBR.Choices as GlassBR (choices)
+import qualified Drasil.NoPCM.Choices as NoPCM (choices)
+import qualified Drasil.PDController.Choices as PDController (codeChoices)
+import qualified Drasil.Projectile.Choices as Projectile (codedDirName, choiceCombos)
+-- the other examples currently do not generate any code.
 
 -----------------------------
 -- Case Studies Section
 -----------------------------
+allExamples :: [SystemInformation] -> [[Choices]] -> [Example]
+allExamples = zipWith E
+
+allExampleSI :: [SystemInformation]
+allExampleSI = [DblPendulum.fullSI, GamePhysics.fullSI, GlassBR.fullSI, HGHC.fullSI, NoPCM.fullSI, PDController.fullSI, Projectile.fullSI, SSP.fullSI, SWHS.fullSI, Template.fullSI]
+
+-- fill in when examples gain choices
+-- needs to be of this form since projectile comes with a list of choice combos
+allExampleChoices :: [[Choices]]
+allExampleChoices = [[], [], [GlassBR.choices], [], [NoPCM.choices], [PDController.codeChoices], Projectile.choiceCombos, [], [], []]
 
 caseStudySec :: Section
 caseStudySec = section (S caseStudiesTitle) [mkParagraph $ S caseStudiesDesc, mkFig caseStudyTabRef mkCaseTable, UlC $ ulcc caseStudyLegend] [] caseStudySecRef
@@ -14,7 +44,7 @@ caseStudyRefs :: [Reference]
 caseStudyRefs = [caseStudySecRef, ref caseStudySec, ref caseStudyTabRef]
 
 caseStudySecRef :: Reference
-caseStudySecRef = makeSecRef "CaseStudy" $ S "Case Study"
+caseStudySecRef = makeSecRef "CaseStudy" $ S caseStudyTitle
 
 caseStudiesTitle, caseStudiesDesc :: String
 caseStudiesTitle = "Case Studies"
@@ -25,13 +55,74 @@ caseStudiesDesc = "Drasil allows some design decisions to be made by the user wh
 
 -- case studies table
 mkCaseTable :: RawContent
-mkCaseTable = Table headerRow tableBody EmptyS False
+mkCaseTable = Table headerRow (tableBody $ concatMap mkCaseStudy $ allExamples allExampleSI allExampleChoices)  EmptyS False
 
 headerRow :: [Sentence]
-headerRow = map S ["Case Study", modularityTitle, implementTypeTitle, loggingTitle, inStructTitle, conStructTitle, conRepTitle, realNumRepTitle]
+headerRow = map S [caseStudyTitle, modularityTitle, implementTypeTitle, loggingTitle, inStructTitle, conStructTitle, conRepTitle, realNumRepTitle]
 
-tableBody :: [[Sentence]]
-tableBody = mkTable [\(CS x _ _ _ _ _ _ _) -> S x,
+tableBody :: [CaseStudy] -> [[Sentence]]
+tableBody = map displayCS
+
+displayCS :: CaseStudy -> [Sentence]
+displayCS CS{progName = nm,
+  choicesCS = Choices{
+    modularity=md,
+    impType=imp,
+    logging = lg,
+    inputStructure=instr,
+    constStructure=constr,
+    constRepr=conRep,
+    spaceMatch=realNum
+    }} = [nm, getMod md, getImp imp, getLog lg, getInstr instr, getConstr constr, getConRep conRep, getRealNum $ realNum Real]
+
+
+mkCaseStudy :: Example -> [CaseStudy]
+mkCaseStudy E{choicesE = []} = []
+mkCaseStudy E{sysInfoE = si@SI{_sys = sys}, choicesE = [x]} = [CS{sysInfoCS = si, progName = S $ abrv sys, choicesCS = x}]
+mkCaseStudy E{sysInfoE = si@SI{_sys = sys}, choicesE = xs} = map (\x -> CS{sysInfoCS = si, progName = S $ Projectile.codedDirName (abrv sys) x, choicesCS = x}) xs
+
+getMod :: Modularity -> Sentence
+getMod Unmodular = S "U"
+getMod (Modular Combined) = S "C"
+getMod (Modular Separated) = S "S"
+
+getImp :: ImplementationType -> Sentence
+getImp Program = S "P"
+getImp Library = S "L"
+
+getLog :: [Logging] -> Sentence
+getLog [] = S "NoL"
+getLog _ = S "L"
+
+getInstr :: Structure -> Sentence
+getInstr Bundled = S "B"
+getInstr Unbundled = S "U"
+
+getConstr :: ConstantStructure -> Sentence
+getConstr Inline = S "I"
+getConstr WithInputs = S "WI"
+getConstr (Store Bundled) = S "B"
+getConstr (Store Unbundled) = S "U"
+
+getConRep :: ConstantRepr -> Sentence
+getConRep Var = S "V"
+getConRep Const = S "C"
+
+getRealNum :: [CodeType] -> Sentence
+getRealNum (Double:_) = S "D"
+getRealNum (Float:_) = S "F"
+getRealNum _ = error "This shouldn't happen. Make sure Real numbers have a preferred type"
+
+
+data Example = E { sysInfoE :: SystemInformation,
+                   choicesE :: [Choices]}
+
+data CaseStudy = CS { sysInfoCS :: SystemInformation,
+                      progName :: Sentence,
+                      choicesCS :: Choices}
+
+
+{-[\(CS x _ _ _ _ _ _ _) -> S x,
                      \(CS _ x _ _ _ _ _ _) -> S $ show x,
                      \(CS _ _ x _ _ _ _ _) -> S $ show x,
                      \(CS _ _ _ x _ _ _ _) -> S $ show x,
@@ -39,12 +130,12 @@ tableBody = mkTable [\(CS x _ _ _ _ _ _ _) -> S x,
                      \(CS _ _ _ _ _ x _ _) -> S $ show x,
                      \(CS _ _ _ _ _ _ x _) -> S $ show x,
                      \(CS _ _ _ _ _ _ _ x) -> S $ show x]
-                     [glassBRCase, noPCMCase, pdControllerCase, projectileCase1, projectileCase2, projectileCase3, projectileCase4, projectileCase5]
+                     [glassBRCase, noPCMCase, pdControllerCase, projectileCase1, projectileCase2, projectileCase3, projectileCase4, projectileCase5]-}
 
 caseStudyTabRef :: Reference
 caseStudyTabRef = makeTabRef "CaseStudy"
 
-type Name = String
+{-type Name = String
 -- Modularity of the code
 data Modularity = CMod | SMod | UMod
 data ImplementType = LIm | PIm
@@ -72,10 +163,10 @@ instance Show InStruct where
   show UIn = "U"
 
 -- Holds all required information for an entry on the case study table
-data CaseStudy = CS Name Modularity ImplementType Logging InStruct ConStruct ConRep RealNumRep
+data CaseStudy = CS {name :: Name, mod :: Modularity, implement :: ImplementType, log :: Logging, instr :: InStruct, constr :: ConStruct, conrep :: ConRep, realNum :: RealNumRep}-}
 
 -- Entries in the table for each case study
-glassBRCase, noPCMCase, pdControllerCase, projectileCase1, projectileCase2,
+{-glassBRCase, noPCMCase, pdControllerCase, projectileCase1, projectileCase2,
   projectileCase3, projectileCase4, projectileCase5 :: CaseStudy
 
 glassBRCase      = CS "GlassBR"                     SMod PIm L   BIn I  C D
@@ -85,10 +176,10 @@ projectileCase1  = CS "Projectile_C_P_NoL_B_U_V_D"  CMod PIm NoL BIn U  V D
 projectileCase2  = CS "Projectile_S_L_NoL_U_U_V_F"  SMod LIm NoL UIn U  V F
 projectileCase3  = CS "Projectile_U_P_L_B_B_C_D"    UMod PIm L   BIn B  C D
 projectileCase4  = CS "Projectile_U_P_NoL_U_WI_V_D" UMod PIm NoL UIn WI V D
-projectileCase5  = CS "Projectile_U_P_L_B_WI_V_F"   UMod PIm L   BIn WI V F
+projectileCase5  = CS "Projectile_U_P_L_B_WI_V_F"   UMod PIm L   BIn WI V F-}
 
 -- case studies symbol legend
-modularityTitle, implementTypeTitle, loggingTitle, inStructTitle, conStructTitle,
+caseStudyTitle, modularityTitle, implementTypeTitle, loggingTitle, inStructTitle, conStructTitle,
   conRepTitle, realNumRepTitle :: String
 modPt1, modPt2, modPt3, implementPt1, implementPt2,
   logPt1, logPt2, inStructPt1, inStructPt2, conStructPt1, conStructPt2, conStructPt3,
@@ -130,6 +221,7 @@ legendConts = map (map S) [[modPt1, modPt2, modPt3],
                            [conRepPt1, conRepPt2],
                            [realNumRepPt1, realNumRepPt2]]
 
+caseStudyTitle = "Case Study"
 modularityTitle = "Modularity"
 implementTypeTitle = "Implementation Type"
 loggingTitle = "Logging"

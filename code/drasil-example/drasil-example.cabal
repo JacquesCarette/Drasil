@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: ccc0c29eeb2d7221093ea8bb91d4bbb826b20e83ca7cbead4aea611dccd08871
+-- hash: b0f884ec6b9bc5676865b734618c340801181158051b77d5edf03153c0ef488e
 
 name:           drasil-example
 version:        0.1.24.0
@@ -296,6 +296,18 @@ executable sglpendulum
       Drasil.SglPendulum.Requirements
       Drasil.SglPendulum.Unitals
       Drasil.SglPendulum.References
+      Drasil.DblPendulum.Assumptions
+      Drasil.DblPendulum.Body
+      Drasil.DblPendulum.Concepts
+      Drasil.DblPendulum.DataDefs
+      Drasil.DblPendulum.Expressions
+      Drasil.DblPendulum.Figures
+      Drasil.DblPendulum.GenDefs
+      Drasil.DblPendulum.Goals
+      Drasil.DblPendulum.IMods
+      Drasil.DblPendulum.Requirements
+      Drasil.DblPendulum.Unitals
+      Drasil.DblPendulum.References
   hs-source-dirs:
       ./
   ghc-options: -Wall -Wredundant-constraints -threaded -O2 -main-is Drasil.SglPendulum.Main

@@ -193,6 +193,30 @@ digraph alltypes {
 	}
 	subgraph asumptionss {
 	}
+	subgraph body {
+	}
+	subgraph datadefs {
+	}
+	subgraph expresionss {
+	}
+	subgraph figures {
+	}
+	subgraph gendefs {
+	}
+	subgraph goals {
+	}
+	subgraph imods {
+	}
+	subgraph references {
+	}
+	subgraph requirements {
+	}
+	subgraph unitals {
+	}
+	subgraph main {
+	}
+	subgraph asumptionss {
+	}
 	subgraph baicexprss {
 	}
 	subgraph body {

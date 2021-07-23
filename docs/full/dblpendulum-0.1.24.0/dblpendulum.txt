@@ -23,6 +23,7 @@ horizontalForce :: NamedChunk
 verticalForce :: NamedChunk
 defs :: [ConceptChunk]
 arcLen :: ConceptChunk
+progName :: CI
 
 module Drasil.DblPendulum.Assumptions
 pend2DMotion :: ConceptInstance
@@ -146,7 +147,6 @@ fullSI :: SystemInformation
 printSetting :: PrintingInformation
 resourcePath :: String
 mkSRS :: SRSDecl
-pendulumTitle :: CI
 directoryName :: FilePath
 si :: SystemInformation
 symbMap :: ChunkDB

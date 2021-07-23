@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-pragma">{-# LANGUAGE PostfixOperators #-}</span><span>
+</span><span id="line-2"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.SglPendulum.Assumptions</span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Drasil.SglPendulum.Assumptions.html#pend2DMotion"><span class="hs-identifier">pend2DMotion</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.Assumptions.html#cartCoord"><span class="hs-identifier">cartCoord</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.Assumptions.html#cartCoordRight"><span class="hs-identifier">cartCoordRight</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-3"></span><span>  </span><span class="annot"><a href="Drasil.SglPendulum.Assumptions.html#yAxisDir"><span class="hs-identifier">yAxisDir</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.Assumptions.html#startOrigin"><span class="hs-identifier">startOrigin</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.Assumptions.html#assumptions"><span class="hs-identifier">assumptions</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-4"></span><span>    </span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-6"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.Concepts</span></span><span>
+</span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="hs-keyword">qualified</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.Sentence</span></span><span> </span><span class="hs-keyword">as</span><span> </span><span class="annot"><span class="hs-identifier">S</span></span><span>
+</span><span id="line-8"></span><span>
+</span><span id="line-9"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Documentation</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">assumpDom</span></span><span class="hs-special">)</span><span> </span><span>
+</span><span id="line-10"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Math</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">cartesian</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">xAxis</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">yAxis</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">direction</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">origin</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">positive</span></span><span class="hs-special">)</span><span>
+</span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Physics</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">gravity</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">twoD</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">pendulum</span></span><span class="hs-special">)</span><span>
+</span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Drasil.DblPendulum.Concepts</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">pendMotion</span></span><span class="hs-special">)</span><span>
+</span><span id="line-13"></span><span>
+</span><span id="line-14"></span><span>
+</span><span id="line-15"></span><span class="annot"><a href="Drasil.SglPendulum.Assumptions.html#assumptions"><span class="hs-identifier hs-type">assumptions</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span>
+</span><span id="line-16"></span><span id="assumptions"><span class="annot"><span class="annottext">assumptions :: [ConceptInstance]
+</span><a href="Drasil.SglPendulum.Assumptions.html#assumptions"><span class="hs-identifier hs-var hs-var">assumptions</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SglPendulum.Assumptions.html#pend2DMotion"><span class="hs-identifier hs-var">pend2DMotion</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SglPendulum.Assumptions.html#cartCoord"><span class="hs-identifier hs-var">cartCoord</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SglPendulum.Assumptions.html#cartCoordRight"><span class="hs-identifier hs-var">cartCoordRight</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SglPendulum.Assumptions.html#yAxisDir"><span class="hs-identifier hs-var">yAxisDir</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptInstance
+</span><a href="Drasil.SglPendulum.Assumptions.html#startOrigin"><span class="hs-identifier hs-var">startOrigin</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-17"></span><span>
+</span><span id="line-18"></span><span class="annot"><a href="Drasil.SglPendulum.Assumptions.html#pend2DMotion"><span class="hs-identifier hs-type">pend2DMotion</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.Assumptions.html#cartCoord"><span class="hs-identifier hs-type">cartCoord</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.Assumptions.html#cartCoordRight"><span class="hs-identifier hs-type">cartCoordRight</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.Assumptions.html#yAxisDir"><span class="hs-identifier hs-type">yAxisDir</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.SglPendulum.Assumptions.html#startOrigin"><span class="hs-identifier hs-type">startOrigin</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span> </span><span>
+</span><span id="line-19"></span><span>
+</span><span id="line-20"></span><span id="pend2DMotion"><span class="annot"><span class="annottext">pend2DMotion :: ConceptInstance
+</span><a href="Drasil.SglPendulum.Assumptions.html#pend2DMotion"><span class="hs-identifier hs-var hs-var">pend2DMotion</span></a></span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;pend2DMotion&quot;</span></span><span>      </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.Assumptions.html#pend2DMotionDesc"><span class="hs-identifier hs-var">pend2DMotionDesc</span></a></span><span>    </span><span class="annot"><span class="hs-string">&quot;pend2DMotion&quot;</span></span><span>    </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">assumpDom</span></span><span>
+</span><span id="line-21"></span><span id="cartCoord"><span class="annot"><span class="annottext">cartCoord :: ConceptInstance
+</span><a href="Drasil.SglPendulum.Assumptions.html#cartCoord"><span class="hs-identifier hs-var hs-var">cartCoord</span></a></span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;cartCoord&quot;</span></span><span>         </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.Assumptions.html#cartCoordDesc"><span class="hs-identifier hs-var">cartCoordDesc</span></a></span><span>       </span><span class="annot"><span class="hs-string">&quot;cartCoord&quot;</span></span><span>       </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">assumpDom</span></span><span>
+</span><span id="line-22"></span><span id="cartCoordRight"><span class="annot"><span class="annottext">cartCoordRight :: ConceptInstance
+</span><a href="Drasil.SglPendulum.Assumptions.html#cartCoordRight"><span class="hs-identifier hs-var hs-var">cartCoordRight</span></a></span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;cartCoordRight&quot;</span></span><span>    </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.Assumptions.html#cartCoordRightDesc"><span class="hs-identifier hs-var">cartCoordRightDesc</span></a></span><span>  </span><span class="annot"><span class="hs-string">&quot;cartCoordRight&quot;</span></span><span>  </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">assumpDom</span></span><span>
+</span><span id="line-23"></span><span id="yAxisDir"><span class="annot"><span class="annottext">yAxisDir :: ConceptInstance
+</span><a href="Drasil.SglPendulum.Assumptions.html#yAxisDir"><span class="hs-identifier hs-var hs-var">yAxisDir</span></a></span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;yAxisDir&quot;</span></span><span>          </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.Assumptions.html#yAxisDirDesc"><span class="hs-identifier hs-var">yAxisDirDesc</span></a></span><span>        </span><span class="annot"><span class="hs-string">&quot;yAxisDir&quot;</span></span><span>        </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">assumpDom</span></span><span>
+</span><span id="line-24"></span><span id="startOrigin"><span class="annot"><span class="annottext">startOrigin :: ConceptInstance
+</span><a href="Drasil.SglPendulum.Assumptions.html#startOrigin"><span class="hs-identifier hs-var hs-var">startOrigin</span></a></span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence -&gt; String -&gt; ConceptChunk -&gt; ConceptInstance
+forall c.
+Concept c =&gt;
+String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
+</span><span class="hs-identifier hs-var">cic</span></span><span> </span><span class="annot"><span class="hs-string">&quot;startOrigin&quot;</span></span><span>       </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.SglPendulum.Assumptions.html#startOriginDesc"><span class="hs-identifier hs-var">startOriginDesc</span></a></span><span>     </span><span class="annot"><span class="hs-string">&quot;startOrigin&quot;</span></span><span>     </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">assumpDom</span></span><span>
+</span><span id="line-25"></span><span>
+</span><span id="line-26"></span><span class="annot"><a href="Drasil.SglPendulum.Assumptions.html#pend2DMotionDesc"><span class="hs-identifier hs-type">pend2DMotionDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-27"></span><span id="pend2DMotionDesc"><span class="annot"><span class="annottext">pend2DMotionDesc :: Sentence
+</span><a href="Drasil.SglPendulum.Assumptions.html#pend2DMotionDesc"><span class="hs-identifier hs-var hs-var">pend2DMotionDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
+</span><span class="hs-identifier hs-var">pendMotion</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">twoD</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
+</span><span class="hs-identifier hs-var">getAcc</span></span><span> </span><span class="annot"><span class="annottext">CI
+</span><span class="hs-identifier hs-var">twoD</span></span><span class="hs-special">)</span><span>
+</span><span id="line-28"></span><span>
+</span><span id="line-29"></span><span class="annot"><a href="Drasil.SglPendulum.Assumptions.html#cartCoordDesc"><span class="hs-identifier hs-type">cartCoordDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-30"></span><span id="cartCoordDesc"><span class="annot"><span class="annottext">cartCoordDesc :: Sentence
+</span><a href="Drasil.SglPendulum.Assumptions.html#cartCoordDesc"><span class="hs-identifier hs-var hs-var">cartCoordDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">a_</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">cartesian</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;used&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">!.</span></span><span class="hs-special">)</span><span>
+</span><span id="line-31"></span><span>
+</span><span id="line-32"></span><span class="annot"><a href="Drasil.SglPendulum.Assumptions.html#cartCoordRightDesc"><span class="hs-identifier hs-type">cartCoordRightDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-33"></span><span id="cartCoordRightDesc"><span class="annot"><span class="annottext">cartCoordRightDesc :: Sentence
+</span><a href="Drasil.SglPendulum.Assumptions.html#cartCoordRightDesc"><span class="hs-identifier hs-var hs-var">cartCoordRightDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">cartesian</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;right-handed where&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span>
+</span><span id="line-34"></span><span>    </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP -&gt; NP
+forall c. NamedIdea c =&gt; c -&gt; NP -&gt; NP
+</span><span class="hs-identifier hs-var">combineNINP</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">positive</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">xAxis</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`and_`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">yAxis</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;point right up&quot;</span></span><span>
+</span><span id="line-35"></span><span>
+</span><span id="line-36"></span><span class="annot"><a href="Drasil.SglPendulum.Assumptions.html#yAxisDirDesc"><span class="hs-identifier hs-type">yAxisDirDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-37"></span><span id="yAxisDirDesc"><span class="annot"><span class="annottext">yAxisDirDesc :: Sentence
+</span><a href="Drasil.SglPendulum.Assumptions.html#yAxisDirDesc"><span class="hs-identifier hs-var hs-var">yAxisDirDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">direction</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
+forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
+</span><span class="hs-operator hs-var">`the_ofThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">yAxis</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;directed opposite to&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">gravity</span></span><span>
+</span><span id="line-38"></span><span>
+</span><span id="line-39"></span><span class="annot"><a href="Drasil.SglPendulum.Assumptions.html#startOriginDesc"><span class="hs-identifier hs-type">startOriginDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-40"></span><span id="startOriginDesc"><span class="annot"><span class="annottext">startOriginDesc :: Sentence
+</span><a href="Drasil.SglPendulum.Assumptions.html#startOriginDesc"><span class="hs-identifier hs-var hs-var">startOriginDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+forall n. NounPhrase n =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
+forall t. NamedIdea t =&gt; t -&gt; NP
+</span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">pendulum</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.is`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;attached&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.toThe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
+forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
+</span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span class="hs-identifier hs-var">origin</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">!.</span></span><span class="hs-special">)</span></pre></body></html>

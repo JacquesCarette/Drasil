@@ -120,7 +120,7 @@ $m$ & Mass & ${\text{kg}}$
 \\
 ${m_{\text{W}}}$ & Mass of water & ${\text{kg}}$
 \\
-$\mathbf{\hat{n}}$ & Normal vector & --
+$\symbf{\hat{n}}$ & Normal vector & --
 \\
 $q$ & Heat flux & $\frac{\text{W}}{\text{m}^{2}}$
 \\
@@ -130,7 +130,7 @@ ${q_{\text{in}}}$ & Heat flux input & $\frac{\text{W}}{\text{m}^{2}}$
 \\
 ${q_{\text{out}}}$ & Heat flux output & $\frac{\text{W}}{\text{m}^{2}}$
 \\
-$\mathbf{q}$ & Thermal flux vector & $\frac{\text{W}}{\text{m}^{2}}$
+$\symbf{q}$ & Thermal flux vector & $\frac{\text{W}}{\text{m}^{2}}$
 \\
 ${R_{\text{tol}}}$ & Relative tolerance & --
 \\
@@ -365,12 +365,12 @@ Label & Conservation of thermal energy
         
 \\ \midrule \\
 Equation & \begin{displaymath}
-           -∇\cdot{}\mathbf{q}+g=ρ C \frac{\,\partial{}T}{\,\partial{}t}
+           -∇\cdot{}\symbf{q}+g=ρ C \frac{\,\partial{}T}{\,\partial{}t}
            \end{displaymath}
 \\ \midrule \\
 Description & \begin{symbDescription}
               \item{$∇$ is the gradient (Unitless)}
-              \item{$\mathbf{q}$ is the thermal flux vector ($\frac{\text{W}}{\text{m}^{2}}$)}
+              \item{$\symbf{q}$ is the thermal flux vector ($\frac{\text{W}}{\text{m}^{2}}$)}
               \item{$g$ is the volumetric heat generation per unit volume ($\frac{\text{W}}{\text{m}^{3}}$)}
               \item{$ρ$ is the density ($\frac{\text{kg}}{\text{m}^{3}}$)}
               \item{$C$ is the specific heat capacity ($\frac{\text{J}}{\text{kg}{}^{\circ}\text{C}}$)}
@@ -506,12 +506,12 @@ RefBy & \hyperref[GD:rocTempSimp]{GD:rocTempSimp} and \hyperref[IM:eBalanceOnWtr
 Integrating \hyperref[TM:consThermE]{TM:consThermE} over a volume ($V$), we have:
 
 \begin{displaymath}
--\int_{V}{∇\cdot{}\mathbf{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV
+-\int_{V}{∇\cdot{}\symbf{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV
 \end{displaymath}
-Applying Gauss's Divergence Theorem to the first term over the surface $S$ of the volume, with $\mathbf{q}$ as the thermal flux vector for the surface and $\mathbf{\hat{n}}$ as a unit outward normal vector for a surface:
+Applying Gauss's Divergence Theorem to the first term over the surface $S$ of the volume, with $\symbf{q}$ as the thermal flux vector for the surface and $\symbf{\hat{n}}$ as a unit outward normal vector for a surface:
 
 \begin{displaymath}
--\int_{S}{\mathbf{q}\cdot{}\mathbf{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV
+-\int_{S}{\symbf{q}\cdot{}\symbf{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{ρ C \frac{\,\partial{}T}{\,\partial{}t}}\,dV
 \end{displaymath}
 We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then Equation (1) can be written as:
 

@@ -1,6 +1,7 @@
 module Drasil.DblPendulum.Concepts where
 
 import Language.Drasil
+import Data.Drasil.Domains (physics) 
 import Data.Drasil.Theories.Physics (newtonSLRQD)
 
 --below imports needed compoundNC part to work
@@ -35,6 +36,5 @@ defs = [arcLen]
 arcLen :: ConceptChunk
 arcLen = dcc "arc length" (nounPhraseSP "arc length") "the distance between two points on a curve"
 
-
-
-
+progName :: CI
+progName = commonIdeaWithDict "pendulumTitle" (pn "Pendulum") "Pendulum" [physics]

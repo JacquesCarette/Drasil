@@ -1,10 +1,24 @@
+{-# LANGUAGE PackageImports #-}
 module Drasil.Website.Example (exampleSec, exampleRefs)where
 
 import Data.List (zipWith4, isPrefixOf)
 import Language.Drasil hiding (C)
+import Database.Drasil (SystemInformation(..))
 import Utils.Drasil
 import Data.Char (toUpper, toLower)
 import qualified Data.List.Split as L
+
+import qualified Drasil.DblPendulum.Body as DblPendulum (fullSI)
+import qualified Drasil.GamePhysics.Body as GamePhysics (fullSI)
+import qualified Drasil.GlassBR.Body as GlassBR (fullSI)
+import qualified Drasil.HGHC.Body as HGHC (fullSI)
+import qualified Drasil.NoPCM.Body as NoPCM (fullSI)
+import qualified Drasil.PDController.Body as PDController (fullSI)
+import qualified Drasil.Projectile.Body as Projectile (fullSI)
+import qualified Drasil.SSP.Body as SSP (fullSI)
+import qualified Drasil.SWHS.Body as SWHS (fullSI)
+import qualified Drasil.Template.Body as Template (fullSI)
+import qualified Drasil.DblPendulum.Main as DblPendulum
 
 
 --------------------------
@@ -60,7 +74,7 @@ exampleCodeRefs path =[[(pendulum, [])],
                   [(glassBR, map (getCodeRef path $ map toLower glassBR) glassBRCode)],
                   [(hghc, [])],
                   [(noPCM, map (getCodeRef path $map toLower noPCM) noPCMCode)],
-                  [(pdController, map (getCodeRef path $ map toLower pdController) pdControllerCode)], -- capitalization is not all lowercase, so manually put in folder name for now.
+                  [(pdController, map (getCodeRef path $ map toLower pdController) pdControllerCode)],
                   [(projectileC1, map (getCodeRef path (map toLower projectile ++ "/" ++ projectileC1)) projectileCase1Code),
                   (projectileC2, map (getCodeRef path (map toLower projectile ++ "/" ++ projectileC2)) projectileCase2Code),
                   (projectileC3, map (getCodeRef path (map toLower projectile ++ "/" ++ projectileC3)) projectileCase3Code),
@@ -85,24 +99,23 @@ exampleDoxRefs path =[[(pendulum, [])],
                  [(template, [])]]
 
 --example names, maybe make a unique type to accept fields of documents, gen code, and doxygen?
-pendulum, gamePhys, glassBR, hghc, noPCM, pdController, projectile, projectileC1,
-  projectileC2, projectileC3, projectileC4, projectileC5, ssp, swhs, template :: String
-
-pendulum = "DblPendulum"
-gamePhys = "GamePhysics"
-glassBR = "GlassBR"
-hghc = "HGHC"
-noPCM = "NoPCM"
-pdController = "PDController"
-projectile = "Projectile"
-projectileC1 = "Projectile_C_P_NoL_B_U_V_D"
+pendulum, gamePhys, glassBR, hghc, noPCM, pdController, projectile, ssp, swhs, template :: SystemInformation
+projectileC1, projectileC2, projectileC3, projectileC4, projectileC5 :: String
+pendulum = DblPendulum.fullSI
+gamePhys = GamePhysics.fullSI
+glassBR = GlassBR.fullSI
+hghc = HGHC.fullSI
+noPCM = NoPCM.fullSI
+pdController = PDController.fullSI
+projectile = Projectile.fullSI
+projectileC1 = "Projectile_C_P_NoLB_U_V_D"
 projectileC2 = "Projectile_S_L_NoL_U_U_V_F"
 projectileC3 = "Projectile_U_P_L_B_B_C_D"
 projectileC4 = "Projectile_U_P_NoL_U_WI_V_D"
 projectileC5 = "Projectile_U_P_L_B_WI_V_F"
-ssp = "SSP"
-swhs = "SWHS"
-template = "Template"
+ssp = SSP.fullSI
+swhs = SWHS.fullSI
+template = Template.fullSI
 
 -- list that states what languages the generated code/doxygen docs exist in.
 glassBRCode, glassBRDox, noPCMCode, noPCMDox, pdControllerCode, pdControllerDox, projectileCase1Code, projectileCase2Code,

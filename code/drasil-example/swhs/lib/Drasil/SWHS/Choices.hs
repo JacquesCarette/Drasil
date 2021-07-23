@@ -1,4 +1,4 @@
-module Drasil.SWHS.Generate (generate) where
+module Drasil.SWHS.Choices where
 
 -- import Language.Drasil (QDefinition)
 -- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
@@ -6,9 +6,8 @@ module Drasil.SWHS.Generate (generate) where
 --   Modularity(..), Structure(..), ConstantStructure(..), 
 --   ConstantRepr(..), InputModule(..), matchConcepts, AuxFile(..), 
 --   Visibility(..), defaultChoices)
-import Language.Drasil.Generate (gen, genDot, DocType(SRS, Website), DocSpec(DocSpec))
+-- import Drasil.SWHS.Body (fullSI)
 
-import Drasil.SWHS.Body (srs, printSetting, fullSI)
 
 -- code :: CodeSpec
 -- code = codeSpec fullSI choices []
@@ -31,11 +30,3 @@ import Drasil.SWHS.Body (srs, printSetting, fullSI)
 --   auxFiles = [SampleInput "../../datafiles/SWHS/sampleInput.txt"]
 -- }
 
-generate :: IO ()
-generate = do
-  gen (DocSpec SRS "SWHS_SRS")     srs printSetting
-  gen (DocSpec Website "SWHS_SRS") srs printSetting
-  genDot fullSI
-  -- When ready to generate code from SWHS, uncomment this file
-  -- genCode choices code
-       

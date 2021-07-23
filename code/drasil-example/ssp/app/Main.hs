@@ -1,38 +1,9 @@
 module Main (main) where
 
 import GHC.IO.Encoding
-
--- import Language.Drasil (QDefinition)
--- import Language.Drasil.Code (Choices(..), CodeSpec, codeSpec, Comments(..), 
---   Verbosity(..), ConstraintBehaviour(..), ImplementationType(..), Lang(..), 
---   Modularity(..), Structure(..), ConstantStructure(..), 
---   ConstantRepr(..), InputModule(..), matchConcepts, AuxFile(..), 
---   Visibility(..), defaultChoices)
 import Language.Drasil.Generate (gen, genDot, DocType(SRS, Website), DocSpec(DocSpec))
-
 import Drasil.SSP.Body (srs, printSetting, fullSI)
-
--- code :: CodeSpec
--- code = codeSpec fullSI choices []
-
--- choices :: Choices
--- choices = defaultChoices {
---   lang = [Python, Cpp, CSharp, Java],
---   modularity = Modular Combined,
---   impType = Program,
---   logFile = "log.txt",
---   logging = [],         -- LogVar, LogFunc
---   comments = [],    -- CommentFunc, CommentClass, CommentMod
---   doxVerbosity = Quiet, -- Verbose, Quiet
---   dates = Hide,      -- Show, Hide
---   onSfwrConstraint = Warning,  -- Warning, Exception
---   onPhysConstraint = Warning,  -- Warning, Exception
---   inputStructure = Unbundled,    -- Unbundled, Bundled
---   constStructure = Inline,   -- Inline, WithInputs, Store Structure
---   constRepr = Const,    -- Var, Const
---   conceptMatch = matchConcepts ([] :: [QDefinition]) [],
---   auxFiles = [SampleInput "../../datafiles/SSP/sampleInput.txt"]
--- }
+-- import Drasil.SSP.Choices
        
 main :: IO ()            
 main = do
@@ -40,5 +11,5 @@ main = do
   gen (DocSpec Website "SSP_SRS") srs printSetting
   gen (DocSpec SRS "SSP_SRS")     srs printSetting
   genDot fullSI
-  -- for when we can generate code again, uncomment this file
+  -- for when we can generate code again, uncomment this file and Choices.hs
   --genCode choices code

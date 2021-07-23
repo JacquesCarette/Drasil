@@ -28,6 +28,16 @@ dependencies:
 - drasil-printers
 - drasil-theory
 - drasil-utils
+- dblpendulum
+- gamephysics
+- glassbr
+- hghc
+- nopcm
+- pdcontroller
+- projectile
+- ssp
+- swhs
+- template
 
 ghc-options:
 - -Wall

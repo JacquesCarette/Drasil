@@ -61,7 +61,7 @@ exampleCodeRefs path =[[(sglPendulum, [])],
                   [(glassBR, map (getCodeRef path $ map toLower glassBR) glassBRCode)],
                   [(hghc, [])],
                   [(noPCM, map (getCodeRef path $map toLower noPCM) noPCMCode)],
-                  [(pdController, map (getCodeRef path "pdController") pdControllerCode)], -- capitalization is not all lowercase, so manually put in folder name for now.
+                  [(pdController, map (getCodeRef path $ map toLower pdController) pdControllerCode)], -- capitalization is not all lowercase, so manually put in folder name for now.
                   [(projectileC1, map (getCodeRef path (map toLower projectile ++ "/" ++ projectileC1)) projectileCase1Code),
                   (projectileC2, map (getCodeRef path (map toLower projectile ++ "/" ++ projectileC2)) projectileCase2Code),
                   (projectileC3, map (getCodeRef path (map toLower projectile ++ "/" ++ projectileC3)) projectileCase3Code),

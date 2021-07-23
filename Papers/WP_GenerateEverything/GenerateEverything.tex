@@ -237,12 +237,12 @@ softifacts.
 A multitude of ideas, old and new, have influenced us. They appear
 indirectly in our work; we use the conceptual aspects, and not the
 associated technologies (when they exist). The technologies we do use
-more directly are in Section~\ref{ch:techniques}.
+are in Section~\ref{ch:techniques}.
 
 We do not always use the original conceptualization of the work, but
 a modern re-interpretation, incorporation various ``lessons learned''
-through years of use. For length, we outline our take-away, and refer the
-reader to the original literature for the initial view of the ideas.
+through years of use. To keep things short, we outline our take-away, and refer
+the reader to the original literature for the initial view of the ideas.
 
 \section{Re-organizing artifacts}
 
@@ -257,13 +257,69 @@ acceptable. This directly clashes with the desire to inform the
 human reader of the code as to the \emph{underlying story} that forms the
 backbone of why the code is written the way it is.
 
-% first, some pointform notes, which will later be filled-in
+Thus the fundamental ideas of literate programming are:
+\begin{enumerate}
+\item The idea of not writing the eventual artifacts directly,
+\item Of being able to ``chunk up'' pieces of code in arbitrary
+ways,
+\item Of writing a program to explicitly weave together the chunks
+into a final program.
+\end{enumerate}
+In the end, two artifacts are generated: a human-readable ``story'' that
+is nicely typeset, that follows a logical flow amenable to human understanding,
+and a piece of code.
 
-\begin{itemize}
-\item literate programming
-\item org-mode
-\item Jupyter notebooks
-\end{itemize}
+Not all literate programming tools actually support all these features.
+For example \emph{literate Haskell} only keeps the feature of nice typesetting,
+completely dropping the $3$ main ideas above!
+
+The next source of idea is \emph{org-mode}\cite{org-mode}. A shallow view
+is that org-mode is an Emacs major mode for plain text markup%
+\footnote{taken literally from \url{https://orgmode.org}.}
+\emph{and much more}.  It is that ``and much more'' which is of interest
+here. Amongst other features, Org-mode lets you write documents that mixes many
+different languages together. It also allows you to run certain code blocks
+and insert their results into the document itself. And, like literate
+programming, it also allows the export of both nice documents
+(via \LaTeX) and code (via a tangling process). The paper
+\textit{A Computing Environment for Literate Programming and
+Reproducible Research}\cite{SchulteEtAl2012} further describes the features
+and process. The possibilities are quite extensive.
+
+A slightly different take on similar ideas is offered by
+\emph{Jupyter notebooks} and 
+\emph{JupyterLab}\footnote{\url{https://jupyter.org}}. To quote the
+developers' own descriptions:
+
+\begin{quote}
+The Jupyter Notebook is an open-source web application that allows you to
+create and share documents that contain live code, equations, visualizations
+and narrative text. Uses include: data cleaning and transformation, numerical
+simulation, statistical modeling, data visualization, machine learning, and
+much more.
+\end{quote}
+\noindent and
+\begin{quote}
+JupyterLab is a web-based interactive development environment for Jupyter
+notebooks, code, and data. JupyterLab is flexible: configure and arrange the
+user interface to support a wide range of workflows in data science, scientific
+computing, and machine learning. JupyterLab is extensible and modular: write
+plugins that add new components and integrate with existing ones.
+\end{quote}
+The principal difference is that the main interface is a web page
+which is furthermore \emph{very interactive}. It is also multi-lingual.
+The weaving and tangling features, while somewhat present, are de-emphasized
+over interactivity. The all-in-one interactive document is the most
+important element.  The feature set is very appealing, and contributes greatly
+to its success.
+
+\paragraph{Commentary:} The main weakness in all of these approaches is
+that they are all centered on a single-document idea. The information
+contained in the document itself is not re-usable. So while all three
+ideas are a definite improvement over more traditional means of doing
+development, it is still not enough. Furthermore, all three approaches
+still involve hand-writing a lot of code, even though that code is
+somewhat liberated from the strictures imposed by the languages themselves.
 
 \section{The rest}
 \begin{itemize}

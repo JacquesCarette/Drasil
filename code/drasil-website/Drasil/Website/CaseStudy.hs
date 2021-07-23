@@ -26,16 +26,6 @@ import qualified Drasil.Projectile.Choices as Projectile (codedDirName, choiceCo
 -----------------------------
 -- Case Studies Section
 -----------------------------
-allExamples :: [SystemInformation] -> [[Choices]] -> [Example]
-allExamples = zipWith E
-
-allExampleSI :: [SystemInformation]
-allExampleSI = [DblPendulum.fullSI, GamePhysics.fullSI, GlassBR.fullSI, HGHC.fullSI, NoPCM.fullSI, PDController.fullSI, Projectile.fullSI, SSP.fullSI, SWHS.fullSI, Template.fullSI]
-
--- fill in when examples gain choices
--- needs to be of this form since projectile comes with a list of choice combos
-allExampleChoices :: [[Choices]]
-allExampleChoices = [[], [], [GlassBR.choices], [], [NoPCM.choices], [PDController.codeChoices], Projectile.choiceCombos, [], [], []]
 
 caseStudySec :: Section
 caseStudySec = section (S caseStudiesTitle) [mkParagraph $ S caseStudiesDesc, mkFig caseStudyTabRef mkCaseTable, UlC $ ulcc caseStudyLegend] [] caseStudySecRef
@@ -53,16 +43,65 @@ caseStudiesDesc = "Drasil allows some design decisions to be made by the user wh
   \study, followed by a guide giving the meaning of the short-forms used in the \
   \table:"
 
--- case studies table
 mkCaseTable :: RawContent
 mkCaseTable = Table headerRow (tableBody $ concatMap mkCaseStudy $ allExamples allExampleSI allExampleChoices)  EmptyS False
 
+caseStudyTabRef :: Reference
+caseStudyTabRef = makeTabRef "CaseStudy"
+
+----- First Gather all SystemInformation and Choices from each example.
+
+-- | Records example system information.
+allExampleSI :: [SystemInformation]
+allExampleSI = [DblPendulum.fullSI, GamePhysics.fullSI, GlassBR.fullSI, HGHC.fullSI, NoPCM.fullSI, PDController.fullSI, Projectile.fullSI, SSP.fullSI, SWHS.fullSI, Template.fullSI]
+
+-- TODO: Automate this somehow. It seems a little too hard-coded.
+-- To developer: Fill this list in when more examples can run code. The list
+-- needs to be of this form since projectile comes with a list of choice combos.
+-- | Records example choices. The order of the list must match up with
+-- that in `allExampleSI`, or the Case Studies Table will be incorrect.
+allExampleChoices :: [[Choices]]
+allExampleChoices = [[], [], [GlassBR.choices], [], [NoPCM.choices], [PDController.codeChoices], Projectile.choiceCombos, [], [], []]
+
+-- | Each Example gets placed in here.
+data Example = E { sysInfoE :: SystemInformation,
+                   choicesE :: [Choices]}
+
+-- | Zip system info and choices from the examples.
+allExamples :: [SystemInformation] -> [[Choices]] -> [Example]
+allExamples = zipWith E
+
+----- Then convert each example into its own case study. -----
+
+-- | Holds individual case studies. System info may not be needed,
+-- but it is still nice to keep around for now.
+data CaseStudy = CS { sysInfoCS :: SystemInformation,
+                      progName :: Sentence,
+                      choicesCS :: Choices}
+
+-- | Converts a list of examples into a list of CaseStudies. 
+-- Currently, projectile is the only one that has more than one set of choices,
+-- so we take the naming scheme from there.
+mkCaseStudy :: Example -> [CaseStudy]
+mkCaseStudy E{choicesE = []} = []
+mkCaseStudy E{sysInfoE = si@SI{_sys = sys}, choicesE = [x]} = [CS{sysInfoCS = si, progName = S $ abrv sys, choicesCS = x}]
+mkCaseStudy E{sysInfoE = si@SI{_sys = sys}, choicesE = xs} = map (\x -> CS{sysInfoCS = si, progName = S $ Projectile.codedDirName (abrv sys) x, choicesCS = x}) xs
+
+----- After, convert each case study into a table to display. -----
+
+--- We first need the helper functions to convert Choices into a displayable format (as a Sentence).
+--- Those are defined in the section below to reduce clutter.
+--- Then we make the header row, table body, and helper for the table body functions.
+
+-- | Hardcoded header row for the Case studies table
 headerRow :: [Sentence]
 headerRow = map S [caseStudyTitle, modularityTitle, implementTypeTitle, loggingTitle, inStructTitle, conStructTitle, conRepTitle, realNumRepTitle]
 
+-- | Creates the case study table body.
 tableBody :: [CaseStudy] -> [[Sentence]]
 tableBody = map displayCS
 
+-- | Converts a case study into a table row for easy display.
 displayCS :: CaseStudy -> [Sentence]
 displayCS CS{progName = nm,
   choicesCS = Choices{
@@ -75,11 +114,107 @@ displayCS CS{progName = nm,
     spaceMatch=realNum
     }} = [nm, getMod md, getImp imp, getLog lg, getInstr instr, getConstr constr, getConRep conRep, getRealNum $ realNum Real]
 
+--- Next, we need the legend to explain the Case Studies Table.
+--- These functions are essentially hard-coded and also defined below.
 
-mkCaseStudy :: Example -> [CaseStudy]
-mkCaseStudy E{choicesE = []} = []
-mkCaseStudy E{sysInfoE = si@SI{_sys = sys}, choicesE = [x]} = [CS{sysInfoCS = si, progName = S $ abrv sys, choicesCS = x}]
-mkCaseStudy E{sysInfoE = si@SI{_sys = sys}, choicesE = xs} = map (\x -> CS{sysInfoCS = si, progName = S $ Projectile.codedDirName (abrv sys) x, choicesCS = x}) xs
+-- | Each entry for the case studies table legend.
+-- The title should be the same as the header.
+data CSLegend = CSL {
+  ttle :: String, -- String for now, should eventually move to at least a Sentence
+  symbAndDefs :: [(String, String)]
+}
+
+---------------------------------------------------------------
+-- Below functions create the legend for the Case Studies Table
+---------------------------------------------------------------
+
+-- | Make the legend for the case study table as a list.
+caseStudyLegend :: RawContent
+caseStudyLegend = Enumeration $ Bullet $ zip (map mkLegendListFunc legendEntries) $ repeat Nothing
+
+mkLegendListFunc :: CSLegend -> ItemType
+mkLegendListFunc csleg = Nested (S $ ttle csleg) $ Bullet $ zip (map mkTandDSent $ symbAndDefs csleg) $ repeat Nothing
+
+-- Should eventually take Sentences instead of Strings. Converts into the format of "symbol - definition".
+mkTandDSent :: (String, String) -> ItemType
+mkTandDSent (sym,def) = Flat $ S sym +:+ S "-" +:+ S def
+
+
+--- Case Study Table Headers
+
+caseStudyTitle, modularityTitle, implementTypeTitle, loggingTitle, inStructTitle, conStructTitle,
+  conRepTitle, realNumRepTitle :: String
+
+caseStudyTitle = "Case Study"
+modularityTitle = "Modularity"
+implementTypeTitle = "Implementation Type"
+loggingTitle = "Logging"
+inStructTitle = "Input Structure"
+conStructTitle = "Constant Structure"
+conRepTitle = "Constant Representation"
+realNumRepTitle = "Real Number Representation"
+
+--- Case study legend entries
+
+legendEntries :: [CSLegend]
+legendEntries = [modularityLegend, implementationTypeLegend, loggingLegend, inputStrLegend, conStrLegend, conRepLegend, realNumRepLegend]
+
+modularityLegend :: CSLegend
+modularityLegend = CSL{
+  ttle = modularityTitle,
+  symbAndDefs = [ ("U", "Unmodular"),
+                  ("C", "Modular with Combined input module"),
+                  ("S", "Modular with Separated input module")]
+}
+
+implementationTypeLegend :: CSLegend
+implementationTypeLegend = CSL {
+  ttle = implementTypeTitle,
+  symbAndDefs = [ ("P", "Program"),
+                  ("L", "Library")]
+}
+
+loggingLegend :: CSLegend
+loggingLegend = CSL {
+  ttle = inStructTitle,
+  symbAndDefs = [ ("NoL", "No Logging statements"),
+                  ("L", "Logging statements included")]
+}
+
+inputStrLegend :: CSLegend
+inputStrLegend = CSL {
+  ttle = loggingTitle,
+  symbAndDefs = [ ("B", "Inputs are Bundled in a class"),
+                  ("U", "Inputs are Unbundled")]
+}
+
+conStrLegend :: CSLegend
+conStrLegend = CSL {
+  ttle = conStructTitle,
+  symbAndDefs = [ ("I", "Constant values are Inlined"),
+                  ("WI", "Constants are stored With the Inputs"),
+                  ("B", "Constants are stored in variables that are Bundled in a class"),
+                  ("U", "Constants are stored in variables that are Unbundled")]
+}
+
+conRepLegend :: CSLegend
+conRepLegend = CSL {
+  ttle = conRepTitle,
+  symbAndDefs = [ ("V", "Constants are stored as Variables"),
+                  ("C", "Constants are stored as Constants")]
+}
+
+realNumRepLegend :: CSLegend
+realNumRepLegend = CSL {
+  ttle = realNumRepTitle,
+  symbAndDefs = [ ("D", "Real numbers are represented as Doubles"),
+                  ("F", "Real numbers are represented as Floats")]
+}
+
+
+--------------------------------------------------------
+-- Helper functions to create the case study table rows.
+--------------------------------------------------------
 
 getMod :: Modularity -> Sentence
 getMod Unmodular = S "U"
@@ -112,161 +247,3 @@ getRealNum :: [CodeType] -> Sentence
 getRealNum (Double:_) = S "D"
 getRealNum (Float:_) = S "F"
 getRealNum _ = error "This shouldn't happen. Make sure Real numbers have a preferred type"
-
-
-data Example = E { sysInfoE :: SystemInformation,
-                   choicesE :: [Choices]}
-
-data CaseStudy = CS { sysInfoCS :: SystemInformation,
-                      progName :: Sentence,
-                      choicesCS :: Choices}
-
-
-{-[\(CS x _ _ _ _ _ _ _) -> S x,
-                     \(CS _ x _ _ _ _ _ _) -> S $ show x,
-                     \(CS _ _ x _ _ _ _ _) -> S $ show x,
-                     \(CS _ _ _ x _ _ _ _) -> S $ show x,
-                     \(CS _ _ _ _ x _ _ _) -> S $ show x,
-                     \(CS _ _ _ _ _ x _ _) -> S $ show x,
-                     \(CS _ _ _ _ _ _ x _) -> S $ show x,
-                     \(CS _ _ _ _ _ _ _ x) -> S $ show x]
-                     [glassBRCase, noPCMCase, pdControllerCase, projectileCase1, projectileCase2, projectileCase3, projectileCase4, projectileCase5]-}
-
-caseStudyTabRef :: Reference
-caseStudyTabRef = makeTabRef "CaseStudy"
-
-{-type Name = String
--- Modularity of the code
-data Modularity = CMod | SMod | UMod
-data ImplementType = LIm | PIm
-data Logging = L | NoL deriving (Show)
--- Input Structure
-data InStruct = BIn | UIn
---Constant structure
-data ConStruct = B | I | U | WI deriving (Show)
--- Constant number representation
-data ConRep = C | V deriving (Show)
--- Real number representation
-data RealNumRep = D | F deriving (Show)
-
-instance Show Modularity where
-  show CMod = "C"
-  show SMod = "S"
-  show UMod = "U"
-
-instance Show ImplementType where
-  show LIm = "L"
-  show PIm = "P"
-
-instance Show InStruct where
-  show BIn = "B"
-  show UIn = "U"
-
--- Holds all required information for an entry on the case study table
-data CaseStudy = CS {name :: Name, mod :: Modularity, implement :: ImplementType, log :: Logging, instr :: InStruct, constr :: ConStruct, conrep :: ConRep, realNum :: RealNumRep}-}
-
--- Entries in the table for each case study
-{-glassBRCase, noPCMCase, pdControllerCase, projectileCase1, projectileCase2,
-  projectileCase3, projectileCase4, projectileCase5 :: CaseStudy
-
-glassBRCase      = CS "GlassBR"                     SMod PIm L   BIn I  C D
-noPCMCase        = CS "NoPCM"                       CMod PIm NoL UIn B  C D
-pdControllerCase = CS "PDController"                CMod PIm NoL UIn B  C D
-projectileCase1  = CS "Projectile_C_P_NoL_B_U_V_D"  CMod PIm NoL BIn U  V D
-projectileCase2  = CS "Projectile_S_L_NoL_U_U_V_F"  SMod LIm NoL UIn U  V F
-projectileCase3  = CS "Projectile_U_P_L_B_B_C_D"    UMod PIm L   BIn B  C D
-projectileCase4  = CS "Projectile_U_P_NoL_U_WI_V_D" UMod PIm NoL UIn WI V D
-projectileCase5  = CS "Projectile_U_P_L_B_WI_V_F"   UMod PIm L   BIn WI V F-}
-
--- case studies symbol legend
-caseStudyTitle, modularityTitle, implementTypeTitle, loggingTitle, inStructTitle, conStructTitle,
-  conRepTitle, realNumRepTitle :: String
-modPt1, modPt2, modPt3, implementPt1, implementPt2,
-  logPt1, logPt2, inStructPt1, inStructPt2, conStructPt1, conStructPt2, conStructPt3,
-  conStructPt4, conRepPt1, conRepPt2, realNumRepPt1, realNumRepPt2 :: String
-modSymbPt1, modSymbPt2, modSymbPt3, implementSymbPt1, implementSymbPt2,
-  logSymbPt1, logSymbPt2, inStructSymbPt1, inStructSymbPt2, conStructSymbPt1, conStructSymbPt2, conStructSymbPt3,
-  conStructSymbPt4, conRepSymbPt1, conRepSymbPt2, realNumRepSymbPt1, realNumRepSymbPt2 :: String
-
-caseStudyLegend :: RawContent
-caseStudyLegend = Enumeration caseStudyList
-
-caseStudyList :: ListType
-caseStudyList = Bullet $ zip (zipWith3 mkLegendListFunc legendTitles legendSymbs legendConts) $ repeat Nothing
-
-mkLegendListFunc :: Sentence -> [Sentence] -> [Sentence] -> ItemType
-mkLegendListFunc t symbs conts = Nested t $ Bullet $ zip (zipWith mkTandDSent symbs conts) $ repeat Nothing
-
-mkTandDSent :: Sentence -> Sentence -> ItemType
-mkTandDSent s def = Flat $ s +:+ S "-" +:+ def
-
-legendTitles :: [Sentence]
-legendTitles = map S [modularityTitle, implementTypeTitle, loggingTitle, inStructTitle, conStructTitle, conRepTitle, realNumRepTitle]
-
-legendSymbs :: [[Sentence]]
-legendSymbs = map (map S) [[modSymbPt1, modSymbPt2, modSymbPt3],
-                           [implementSymbPt1, implementSymbPt2],
-                           [logSymbPt1, logSymbPt2],
-                           [inStructSymbPt1, inStructSymbPt2],
-                           [conStructSymbPt1, conStructSymbPt2, conStructSymbPt3, conStructSymbPt4],
-                           [conRepSymbPt1, conRepSymbPt2],
-                           [realNumRepSymbPt1, realNumRepSymbPt2]]
-
-legendConts :: [[Sentence]]
-legendConts = map (map S) [[modPt1, modPt2, modPt3],
-                           [implementPt1, implementPt2],
-                           [logPt1, logPt2],
-                           [inStructPt1, inStructPt2],
-                           [conStructPt1, conStructPt2, conStructPt3, conStructPt4],
-                           [conRepPt1, conRepPt2],
-                           [realNumRepPt1, realNumRepPt2]]
-
-caseStudyTitle = "Case Study"
-modularityTitle = "Modularity"
-implementTypeTitle = "Implementation Type"
-loggingTitle = "Logging"
-inStructTitle = "Input Structure"
-conStructTitle = "Constant Structure"
-conRepTitle = "Constant Representation"
-realNumRepTitle = "Real Number Representation"
-
-modPt1 = "Unmodular"
-modPt2 = "Modular with Combined input module"
-modPt3 = "Modular with Separated input module"
-modSymbPt1 = "U"
-modSymbPt2 = "C"
-modSymbPt3 = "S"
-
-implementPt1 = "Program"
-implementPt2 = "Library"
-implementSymbPt1 = "P"
-implementSymbPt2 = "L"
-
-logPt1 = "No Logging statements"
-logPt2 = "Logging statements included"
-logSymbPt1 = "NoL"
-logSymbPt2 = "L"
-
-inStructPt1 = "Inputs are Bundled in a class"
-inStructPt2 = "Inputs are Unbundled"
-inStructSymbPt1 = "B"
-inStructSymbPt2 = "U"
-
-conStructPt1 = "Constant values are Inlined"
-conStructPt2 = "Constants are stored With the Inputs"
-conStructPt3 = "Constants are stored in variables that are Bundled in a class"
-conStructPt4 = "Constants are stored in variables that are Unbundled"
-conStructSymbPt1 = "I"
-conStructSymbPt2 = "WI"
-conStructSymbPt3 = "B"
-conStructSymbPt4 = "U"
-
-conRepPt1 = "Constants are stored as Variables"
-conRepPt2 = "Constants are stored as Constants"
-conRepSymbPt1 = "V"
-conRepSymbPt2 = "C"
-
-realNumRepPt1 = "Real numbers are represented as Doubles"
-realNumRepPt2 = "Real numbers are represented as Floats"
-realNumRepSymbPt1 = "D"
-realNumRepSymbPt2 = "F"

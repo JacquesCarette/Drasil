@@ -6,6 +6,7 @@ import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
   _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, _outputs, _quants, 
   _sys, _sysinfodb, _usedinfodb, _folderPath)
 import Language.Drasil hiding (C)
+import Drasil.DocLang (findAllRefs)
 
 import Drasil.Website.Introduction
 import Drasil.Website.CaseStudy
@@ -85,6 +86,7 @@ allRefs :: FolderLocation -> [Reference]
 allRefs fl = [headerSecRef, imageRef, gitHubRef] ++ map ref (sections fl) 
   ++ introRefs (ref caseStudySec) (ref $ docsSec $ docsRt fl) (ref $ graphSec $ graphRt fl) 
   ++ caseStudyRefs ++ exampleRefs (repoRt fl) (exRt fl) ++ docRefs (docsRt fl) ++ analysisRefs (analysisRt fl) ++ graphRefs (graphRt fl)
+  ++ concatMap findAllRefs (sections fl)
 
 -- Each section needs its own reference. Start with the header section.
 headerSecRef :: Reference

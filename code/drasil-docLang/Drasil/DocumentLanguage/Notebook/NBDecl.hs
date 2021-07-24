@@ -1,7 +1,7 @@
 module Drasil.DocumentLanguage.Notebook.NBDecl where
 
 import qualified Drasil.DocumentLanguage.Notebook.Core as NB (AppndxSec(..), NBDesc, DocSection(..), 
-  IntroSec(..), IntroSub(..), BodySec(..), BodySub(..), SmmrySec(..))
+  IntroSec(..), BodySec(..), SmmrySec(..))
 
 import Database.Drasil (SystemInformation(SI), _inputs, _sysinfodb)
 

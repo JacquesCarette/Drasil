@@ -2,10 +2,9 @@ module Language.Drasil.JSON.Helpers where
 
 import Prelude hiding ((<>))
 import Text.PrettyPrint (Doc, text, empty, (<>), vcat, hcat, nest)
-import Utils.Drasil (replace)
 import Data.List (intersperse)
 import Data.List.Split (splitOn)
-import Text.JSON
+import qualified Text.JSON as J (encode)
 
 import Language.Drasil (MaxWidthPercent)
 import Language.Drasil.HTML.Helpers (img)
@@ -35,7 +34,7 @@ ul       = wrap "ul"
 table    = wrap "table"
 
 nbformat :: Doc -> Doc
-nbformat s = text $ ("    " ++ encode ((show s) ++ "\n") ++ ",")
+nbformat s = text $ ("    " ++ J.encode ((show s) ++ "\n") ++ ",")
 
 wrap :: String -> [String] -> Doc -> Doc
 wrap a = wrapGen' vcat Class a empty
@@ -132,4 +131,3 @@ makeMetadata = vcat [
   text " \"nbformat\": 4,", 
   text " \"nbformat_minor\": 4" 
   ]
-

@@ -5,7 +5,7 @@ module Utils.Drasil.Misc (addPercent, bulletFlat, bulletNested, checkValidStr,
   itemRefToSent, makeListRef, makeTMatrix, maybeChanged, maybeExpanded,
   maybeWOVerb, mkEnumAbbrevList, mkTableFromColumns, noRefs, refineChain,
   showingCxnBw, sortBySymbol, sortBySymbolTuple, substitute, tAndDOnly,
-  tAndDWAcc, tAndDWSym, typUncr, underConsidertn, unwrap, weave, zipSentList, fterms, replace) where
+  tAndDWAcc, tAndDWSym, typUncr, underConsidertn, unwrap, weave, zipSentList, fterms) where
 
 import Language.Drasil
 import Language.Drasil.Display
@@ -240,41 +240,3 @@ checkValidStr s (x:xs)
 -- @compoundPhrase (t1 ^. term) (t2 ^. term)@.
 fterms :: (NamedIdea c, NamedIdea d) => (NP -> NP -> t) -> c -> d -> t
 fterms f a b = f (a ^. term) (b ^. term)
-
--- | Given a list and a replacement list, replaces each occurance of the search
--- list with the replacement list in the operation list.
-replace :: Eq a => [a] -> [a] -> [a] -> [a]
-replace old new l = join new . split old $ l
-
--- | Given a delimiter and a list of items (or strings), join the items by using the delimiter.
-join :: [a] -> [[a]] -> [a]
-join delim l = concat (intersperse delim l)
-
--- | Similar to Data.List.break, but performs the test on the entire remaining
--- list instead of just one element.
-
-breakList :: ([a] -> Bool) -> [a] -> ([a], [a])
-breakList func = spanList (not . func)
-
--- | Given a delimiter and a list (or string), split into components.
-split :: Eq a => [a] -> [a] -> [[a]]
-split _ [] = []
-split delim str =
-    let (firstline, remainder) = breakList (isPrefixOf delim) str
-        in
-        firstline : case remainder of
-                                   [] -> []
-                                   x -> if x == delim
-                                        then [] : []
-                                        else split delim
-                                                 (drop (length delim) x)
-
--- | Similar to Data.List.span, but performs the test on the entire remaining
--- list instead of just one element.
-spanList :: ([a] -> Bool) -> [a] -> ([a], [a])
-spanList _ [] = ([],[])
-spanList func list@(x:xs) =
-    if func list
-       then (x:ys,zs)
-       else ([],list)
-    where (ys,zs) = spanList func xs

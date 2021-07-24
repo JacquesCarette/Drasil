@@ -21,8 +21,7 @@ data IntroSec = IntroProg [Contents] [IntroSub]
 
 -- | Introduction subsections
 data IntroSub where
-  IPurpose :: [Sentence] -> IntroSub -- **maybe change to [Contents]
-  IScope   :: Sentence -> IntroSub
+  IPurpose :: [Sentence] -> IntroSub -- **maybe change to [Contents]  
 
 {--}
 
@@ -32,7 +31,7 @@ data BodySub where
   Review       :: [Contents] -> BodySub
   MainIdea     :: [Contents] -> [Section] -> BodySub
   MethsAndAnls :: [Contents] -> [Section] -> BodySub
-  Example      :: [Contents] -> [Cell] -> BodySub
+  Example      :: [Contents] -> [Section] -> BodySub
   
 {--}
 
@@ -65,7 +64,6 @@ instance Multiplate DLPlate where
     intro (IntroProg c progs) = IntroProg c <$>
       traverse (introSub p) progs
     intro' (IPurpose s) = pure $ IPurpose s
-    intro' (IScope s) = pure $ IScope s
     body (BodyProg progs) = BodyProg <$> traverse (bodySub p) progs
     body' (Review c) = pure $ Review c
     body' (MainIdea c s) = pure $ MainIdea c s

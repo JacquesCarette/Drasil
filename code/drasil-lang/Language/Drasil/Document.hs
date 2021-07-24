@@ -19,7 +19,6 @@ import Control.Lens (makeLenses, view)
 -- are standard layout objects (see 'Contents').
 data SecCons = Sub Section
              | Con Contents
-             | Cel Cell
 
 -- | Sections have a title ('Sentence'), a list of contents ('SecCons')
 -- and a shortname ('Reference').
@@ -28,15 +27,15 @@ data Section = Section
              , cons :: [SecCons]
              , _lab :: Reference
              }
-
-data Cell = Cell  
-          { ttle  :: Title
-          , conts :: [Contents]
-          , _lbl  :: Reference
-          }
-
 makeLenses ''Section
-makeLenses ''Cell  
+
+{-
+data Section = Section Title [ContType] Reference
+data ContType = 
+     SubSec Depth Title [ContType] Reference
+   | Cont Depth Contents
+   | Cell Depth Title [Contents] Reference    
+-}
 
 -- | Finds the 'UID' of a 'Section'.
 instance HasUID        Section where uid = lab . uid
@@ -86,10 +85,6 @@ mkRawLC x lb = llcc lb x
 -- (ie. paragraphs, tables, etc.), a list of subsections, and a shortname ('Reference').
 section :: Sentence -> [Contents] -> [Section] -> Reference -> Section
 section title intro secs = Section title (map Con intro ++ map Sub secs)
-
--- | Smart constructor for creating 'Section' with cell blocks
-cell :: Sentence -> [Contents] -> [Cell] -> Reference -> Section
-cell title intro cells = Section title (map Con intro ++ map Cel cells)
 
 -- | Smart constructor for retrieving the contents ('Section's) from a 'Document'.
 extractSection :: Document -> [Section]

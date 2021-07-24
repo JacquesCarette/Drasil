@@ -120,12 +120,12 @@ module Language.Drasil (
   , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1
   , titleizeNP, titleizeNP', nounPhrase'', nounPhraseSP, nounPhraseSent
   -- Document
-  , Document(..), DocType(..), DType(..), Section(..), Cell(..), Contents(..)
+  , Document(..), DocType(..), DType(..), Section(..), Contents(..)
   , SecCons(..), ListType(..), ItemType(..), ListTuple
   , LabelledContent(..), UnlabelledContent(..), extractSection
   , mkParagraph, mkRawLC
   , llcc, ulcc
-  , section, cell, fig, figWithWidth
+  , section, fig, figWithWidth
   , MaxWidthPercent
   , HasContents(accessContents)
   , RawContent(..)
@@ -209,8 +209,8 @@ import Language.Drasil.Expr.Math (abs_, neg, log, ln, sin, cos, tan, sqrt, sec,
           sy, deriv, pderiv,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, intAll)
 import Language.Drasil.Expr.Display
-import Language.Drasil.Document (section, cell, fig, figWithWidth
-  , Section(..), Cell(..), SecCons(..) , llcc, ulcc, Document(..), DocType(..)
+import Language.Drasil.Document (section, fig, figWithWidth
+  , Section(..), SecCons(..) , llcc, ulcc, Document(..), DocType(..)
   , mkParagraph, mkFig, mkRawLC, extractSection
   , makeTabRef, makeFigRef, makeSecRef, makeLstRef, makeEqnRef, makeURI)
 import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), DType(..)

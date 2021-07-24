@@ -4,8 +4,8 @@ import Language.Drasil
 import qualified Utils.Drasil.Sentence as S (forTPS)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (notebook, introduction, 
-  prpsOfDoc, review, body, mainIdea, procForAnls, summary, methAndAnls,method_, 
-  coordinateSystem, example, result, appendix, reference)
+  prpsOfDoc, review, body, mainIdea, procForAnls, summary, methAndAnls, coordinateSystem, 
+  example, appendix, reference)
 import qualified Data.Drasil.Concepts.Physics as P (motion, horizontalMotion, verticalMotion, kinematics)
 
 -- | Notebook constructor. 
@@ -13,7 +13,8 @@ import qualified Data.Drasil.Concepts.Physics as P (motion, horizontalMotion, ve
 doc :: NamedIdea c => c -> Sentence -> [Section] -> Document
 doc  sys = Document (Doc.notebook `S.forTPS` sys)
 
-intro, prpsOfDoc, body, review, procForAnls, summary, appendix, reference :: [Contents] -> [Section] -> Section
+intro, prpsOfDoc, body, review, mainIdea, motion, hormotion, vermotion, methAndAnls,
+  coorSyst, kinematic, procForAnls, summary, appendix, reference, example :: [Contents] -> [Section] -> Section
   
 intro       cs ss = section (titleize Doc.introduction)      cs ss introLabel
 prpsOfDoc   cs ss = section (titleize Doc.prpsOfDoc)         cs ss docPurposeLabel
@@ -27,7 +28,6 @@ hormotion   cs ss = section (titleize P.horizontalMotion)    cs ss hormotionLabe
 vermotion   cs ss = section (titleize P.verticalMotion)      cs ss vermotionLabel
 
 methAndAnls cs ss = section (titleize' Doc.methAndAnls)      cs ss methsAndanlsLabel
---method      cs ss = section (titleize Doc.method_)           cs ss "Method"
 
 summary     cs ss = section (titleize Doc.summary)           cs ss summaryLabel
 
@@ -35,24 +35,20 @@ procForAnls cs ss = section  (titleize Doc.procForAnls)      cs ss anlsProcLabel
 coorSyst    cs ss = section  (titleize Doc.coordinateSystem) cs ss coorSystLabel
 kinematic   cs ss = section  (titleize P.kinematics)         cs ss kinematicLabel
 
---result      cs ss = section (titleize Doc.result)            cs ss "Result"
-
 appendix    cs ss = section (titleize Doc.appendix)          cs ss appendixLabel
 
-reference   cs ss = section  (titleize' Doc.reference)        cs ss referenceLabel
-
-example :: [Contents] -> [Cell] -> Section
-example cs cls = cell (titleize Doc.example)           cs cls exampleLabel
+reference   cs ss = section (titleize' Doc.reference)        cs ss referenceLabel
+example     cs ss = section (titleize Doc.example)           cs ss exampleLabel
 
 --Labels--
 sectionReferences :: [Reference]
 sectionReferences = [introLabel, docPurposeLabel, methsAndanlsLabel, referenceLabel,
   bodyLabel, reviewLabel, mainIdeaLabel, motionLabel, hormotionLabel, vermotionLabel, 
-  appendixLabel, coorSystLabel, kinematicLabel, summaryLabel, anlsProcLabel]
+  appendixLabel, coorSystLabel, kinematicLabel, summaryLabel, anlsProcLabel, exampleLabel]
 
 introLabel, docPurposeLabel, methsAndanlsLabel, referenceLabel, bodyLabel,
   reviewLabel, mainIdeaLabel, motionLabel, hormotionLabel, vermotionLabel, 
-  appendixLabel, coorSystLabel, kinematicLabel, summaryLabel, anlsProcLabel :: Reference
+  appendixLabel, coorSystLabel, kinematicLabel, summaryLabel, anlsProcLabel, exampleLabel :: Reference
 introLabel          = makeSecRef "Intro"            $ titleize Doc.introduction
 docPurposeLabel     = makeSecRef "DocPurpose"       $ titleize Doc.prpsOfDoc
 methsAndanlsLabel   = makeSecRef "MethsAndAnls"     $ titleize' Doc.methAndAnls

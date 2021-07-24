@@ -19,7 +19,7 @@ module Utils.Drasil (
   itemRefToSent, makeListRef, makeTMatrix, maybeChanged, maybeExpanded,
   maybeWOVerb, mkEnumAbbrevList, mkTableFromColumns, noRefs, refineChain,
   showingCxnBw, sortBySymbol, sortBySymbolTuple, substitute, tAndDOnly,
-  tAndDWAcc, tAndDWSym, typUncr, underConsidertn, unwrap, weave, zipSentList, fterms, replace
+  tAndDWAcc, tAndDWSym, typUncr, underConsidertn, unwrap, weave, zipSentList, fterms
   -- Concepts
   --and_, and_', andRT, compoundNC, compoundNC', compoundNC'', compoundNC''',
   --compoundNCP1, compoundNCPlPh, for, for', of_, of_',

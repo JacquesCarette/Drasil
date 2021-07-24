@@ -6,8 +6,6 @@ import Text.PrettyPrint hiding (Str)
 import Numeric (showEFloat)
 import Utils.Drasil (checkValidStr, numList)
 
-import Data.Drasil.Concepts.Documentation (srs)
-
 import qualified Language.Drasil as L (People, Person, 
   CitationKind(Misc, Book, MThesis, PhDThesis, Article), 
   DType(Data, Theory, Instance, General), DocType(SRS), MaxWidthPercent,
@@ -47,7 +45,7 @@ data OpenClose = Open | Close
 
 -- | Generate an HTML document from a Drasil 'Document'.
 genHTML :: PrintingInformation -> String -> L.Document -> Doc
-genHTML sm fn doc = build fn (makeDocument sm doc L.SRS)
+genHTML sm fn doc = build fn (makeDocument sm doc)
 --         ^^ -- should really be of type Filename, but that's not in scope
 
 -- | Build the HTML Document, called by 'genHTML'.

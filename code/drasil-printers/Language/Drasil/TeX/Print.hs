@@ -12,8 +12,6 @@ import qualified Language.Drasil as L
 import qualified Language.Drasil.Display as LD
 import Utils.Drasil (checkValidStr, foldNums)
 
-import Data.Drasil.Concepts.Documentation (srs)
-
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT, bibFname)
 import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat), 
   ListType(Ordered, Unordered, Desc, Definitions, Simple), 
@@ -45,7 +43,7 @@ import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 -- | Generates a LaTeX document.
 genTeX :: L.Document -> PrintingInformation -> TP.Doc
-genTeX doc sm = runPrint (buildStd sm $ (I.makeDocument sm doc L.SRS)) Text
+genTeX doc sm = runPrint (buildStd sm $ (I.makeDocument sm doc)) Text
 
 -- | Helper to build the document.
 buildStd :: PrintingInformation -> Document -> D

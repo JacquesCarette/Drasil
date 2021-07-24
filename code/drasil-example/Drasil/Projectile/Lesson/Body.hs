@@ -32,7 +32,6 @@ import Drasil.Projectile.Lesson.Review (reviewContent)
 import Drasil.Projectile.Lesson.Motion (motionContextP1, figCSandA, figRefs,
   motionContextP2, horMotion, verMotion, summary)
 import Drasil.Projectile.Lesson.Analysis (coorSyst, kinematicEq, horMotionAna, verMotionAna)
-import Drasil.Projectile.Lesson.Example(expIntro)
 
 nb :: Document
 nb = mkDoc mkNB (S.forGen titleize phrase) si
@@ -48,8 +47,7 @@ mkNB = [
        BodyProg
          [Review reviewContent,
           MainIdea [motionContextP1, LlC figCSandA, motionContextP2] [horMotion, verMotion, summary],
-          MethsAndAnls [mAndaintro] [coorSyst, kinematicEq, horMotionAna, verMotionAna],
-          Example [expIntro] []],
+          MethsAndAnls [mAndaintro] [coorSyst, kinematicEq, horMotionAna, verMotionAna]],
   Bibliography
   ]
 

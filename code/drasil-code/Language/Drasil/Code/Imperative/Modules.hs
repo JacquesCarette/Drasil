@@ -51,7 +51,7 @@ import GOOL.Drasil (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement,
   ScopeSym(..), MethodSym(..), StateVarSym(..), pubDVar, convType, ScopeTag(..))
 
 import Prelude hiding (print)
-import Data.List (intersperse, intercalate, partition)
+import Data.List (intersperse, partition)
 import Data.Map ((!), elems, member)
 import qualified Data.Map as Map (lookup, filter)
 import Data.Maybe (maybeToList, catMaybes)
@@ -396,10 +396,6 @@ printConstraint c = do
       printConstraint' (Range _ (UpFrom (_, e))) = do
         lb <- convExpr e
         return $ [printStr "above ", print lb] ++ printExpr e db ++ [printStrLn "."]
-      printConstraint' (EnumeratedReal _ ds) = return [
-        printStrLn $ "one of: " ++ intercalate ", " (map show ds)]
-      printConstraint' (EnumeratedStr _ ss) = return [
-        printStrLn $ "one of: " ++ intercalate ", " ss]
   printConstraint' c
 
 -- | Don't print expressions that are just literals, because that would be 

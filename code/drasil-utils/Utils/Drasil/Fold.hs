@@ -28,8 +28,6 @@ foldConstraints _ [] = EmptyS
 foldConstraints c e  = E $ andDEs $ map constraintToExpr e
   where
     constraintToExpr (Range _ ri)         = toDispExpr $ realInterval c ri
-    constraintToExpr (EnumeratedReal _ l) = isIn (sy c) (spaceDE $ DiscreteD l)
-    constraintToExpr (EnumeratedStr _ l)  = isIn (sy c) (spaceDE $ DiscreteS l)
 
 {--** Sentence Folding **--}
 -- | Partial function application of foldle for sentences specifically. folds with spaces and adds "." at the end.

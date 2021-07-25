@@ -11,6 +11,85 @@
       <h1>Software Requirements Specification for Pendulum</h1>
     </div>
     <div class="author"><h2>Olu Owojaiye</h2></div>
+    <div id="Sec:ToC">
+      <div class="section">
+        <h1>Table of Contents</h1>
+        <p class="paragraph">
+          An outline of all sections included in this SRS is recorded here for easy reference.
+        </p>
+        <ul class="list">
+          <li><a href=#Sec:ToC>Table of Contents</a></li>
+          <li>
+            <a href=#Sec:RefMat>Reference Material</a>
+            <ul class="list">
+              <li><a href=#Sec:ToU>Table of Units</a></li>
+              <li><a href=#Sec:ToS>Table of Symbols</a></li>
+              <li><a href=#Sec:TAbbAcc>Abbreviations and Acronyms</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href=#Sec:Intro>Introduction</a>
+            <ul class="list">
+              <li><a href=#Sec:DocPurpose>Purpose of Document</a></li>
+              <li><a href=#Sec:ReqsScope>Scope of Requirements</a></li>
+              <li>
+                <a href=#Sec:ReaderChars>Characteristics of the Intended Reader</a>
+              </li>
+              <li><a href=#Sec:DocOrg>Organization of Document</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href=#Sec:GenSysDesc>General System Description</a>
+            <ul class="list">
+              <li><a href=#Sec:SysContext>System Context</a></li>
+              <li><a href=#Sec:UserChars>User Characteristics</a></li>
+              <li><a href=#Sec:SysConstraints>System Constraints</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href=#Sec:SpecSystDesc>Specific System Description</a>
+            <ul class="list">
+              <li>
+                <a href=#Sec:ProbDesc>Problem Description</a>
+                <ul class="list">
+                  <li><a href=#Sec:TermDefs>Terminology and Definitions</a></li>
+                  <li><a href=#Sec:PhysSyst>Physical System Description</a></li>
+                  <li><a href=#Sec:GoalStmt>Goal Statements</a></li>
+                </ul>
+              </li>
+              <li>
+                <a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>
+                <ul class="list">
+                  <li><a href=#Sec:Assumps>Assumptions</a></li>
+                  <li><a href=#Sec:TMs>Theoretical Models</a></li>
+                  <li><a href=#Sec:GDs>General Definitions</a></li>
+                  <li><a href=#Sec:DDs>Data Definitions</a></li>
+                  <li><a href=#Sec:IMs>Instance Models</a></li>
+                  <li><a href=#Sec:DataConstraints>Data Constraints</a></li>
+                  <li>
+                    <a href=#Sec:CorSolProps>Properties of a Correct Solution</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href=#Sec:Requirements>Requirements</a>
+            <ul class="list">
+              <li><a href=#Sec:FRs>Functional Requirements</a></li>
+              <li><a href=#Sec:NFRs>Non-Functional Requirements</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href=#Sec:TraceMatrices>Traceability Matrices and Graphs</a>
+          </li>
+          <li>
+            <a href=#Sec:AuxConstants>Values of Auxiliary Constants</a>
+          </li>
+          <li><a href=#Sec:References>References</a></li>
+        </ul>
+      </div>
+    </div>
     <div id="Sec:RefMat">
       <div class="section">
         <h1>Reference Material</h1>
@@ -21,7 +100,7 @@
           <div class="subsection">
             <h2>Table of Units</h2>
             <p class="paragraph">
-              The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, <a href=#Table:ToU>Tab:ToU</a> lists the symbol, a description and the SI name.
+              The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the <a href=#Table:ToU>Table of Units</a> lists the symbol, a description and the SI name.
             </p>
             <div id="Table:ToU">
               <table class="table">
@@ -74,7 +153,7 @@
           <div class="subsection">
             <h2>Table of Symbols</h2>
             <p class="paragraph">
-              The symbols used in this document are summarized in <a href=#Table:ToS>Tab:ToS</a> along with their units. Throughout the document, symbols in bold will represent vectors, and scalars otherwise. The symbols are listed in alphabetical order. For vector quantities, the units shown are for each component of the vector.
+              The symbols used in this document are summarized in the <a href=#Table:ToS>Table of Symbols</a> along with their units. Throughout the document, symbols in bold will represent vectors, and scalars otherwise. The symbols are listed in alphabetical order. For vector quantities, the units shown are for each component of the vector.
             </p>
             <div id="Table:ToS">
               <table class="table">
@@ -120,7 +199,7 @@
                 </tr>
                 <tr>
                   <td><em><b>i&#770;</b></em></td>
-                  <td>Unit Vector</td>
+                  <td>Unit vector</td>
                   <td>--</td>
                 </tr>
                 <tr>
@@ -190,12 +269,12 @@
                 </tr>
                 <tr>
                   <td><em>α</em></td>
-                  <td>Angular Acceleration</td>
+                  <td>Angular acceleration</td>
                   <td><em>\(\frac{\text{rad}}{\text{s}^{2}}\)</em></td>
                 </tr>
                 <tr>
                   <td><em>θ</em></td>
-                  <td>Angular Displacement</td>
+                  <td>Angular displacement</td>
                   <td><em>rad</em></td>
                 </tr>
                 <tr>
@@ -225,7 +304,7 @@
                 </tr>
                 <tr>
                   <td><em>ω</em></td>
-                  <td>Angular Velocity</td>
+                  <td>Angular velocity</td>
                   <td><em>\(\frac{\text{rad}}{\text{s}}\)</em></td>
                 </tr>
               </table>
@@ -297,17 +376,113 @@
       <div class="section">
         <h1>Introduction</h1>
         <p class="paragraph">
-          A pendulum consists of mass attached to the end of a rod and its moving curve is highly sensitive to initial conditions. Therefore, it is useful to have a program to simulate the motion of the pendulum to exhibit its chaotic characteristics. The program documented here is called pendulum.
+          A pendulum consists of mass attached to the end of a rod and its moving curve is highly sensitive to initial conditions. Therefore, it is useful to have a program to simulate the motion of the pendulum to exhibit its chaotic characteristics. The program documented here is called Pendulum.
         </p>
         <p class="paragraph">
           The following section provides an overview of the Software Requirements Specification (SRS) for Pendulum. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
         </p>
+        <div id="Sec:DocPurpose">
+          <div class="subsection">
+            <h2>Purpose of Document</h2>
+            <p class="paragraph">
+              The primary purpose of this document is to record the requirements of the Pendulum. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of Pendulum. With the exception of <a href=#Sec:SysConstraints>system constraints</a>, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
+            </p>
+            <p class="paragraph">
+              This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
+            </p>
+          </div>
+        </div>
         <div id="Sec:ReqsScope">
           <div class="subsection">
             <h2>Scope of Requirements</h2>
             <p class="paragraph">
-              The scope of the requirements includes the analysis of a two-dimensional (2D) pendulum motion problem with various initial conditions..
+              The scope of the requirements includes the analysis of a two-dimensional (2D) pendulum motion problem with various initial conditions.
             </p>
+          </div>
+        </div>
+        <div id="Sec:ReaderChars">
+          <div class="subsection">
+            <h2>Characteristics of the Intended Reader</h2>
+            <p class="paragraph">
+              Reviewers of this documentation should have an understanding of undergraduate level 2 physics, undergraduate level 1 calculus, and ordinary differential equations. The users of Pendulum can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
+            </p>
+          </div>
+        </div>
+        <div id="Sec:DocOrg">
+          <div class="subsection">
+            <h2>Organization of Document</h2>
+            <p class="paragraph">
+              The organization of this document follows the template for an SRS for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a> and <a href=#smithLai2005>smithLai2005</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the <a href=#Sec:IMs>instance models</a> and trace back to find any additional information they require.
+            </p>
+            <p class="paragraph">
+              The <a href=#Sec:GoalStmt>goal statements</a> are refined to the theoretical models and the <a href=#Sec:TMs>theoretical models</a> to the <a href=#Sec:IMs>instance models</a>.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="Sec:GenSysDesc">
+      <div class="section">
+        <h1>General System Description</h1>
+        <p class="paragraph">
+          This section provides general information about the system. It identifies the interfaces between the system and its environment, describes the user characteristics, and lists the system constraints.
+        </p>
+        <div id="Sec:SysContext">
+          <div class="subsection">
+            <h2>System Context</h2>
+            <p class="paragraph">
+              <a href=#Figure:sysCtxDiag>Fig:sysCtxDiag</a> shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (Pendulum). Arrows are used to show the data flow between the system and its environment.
+            </p>
+            <div id="Figure:sysCtxDiag">
+              <figure>
+                <img src="../../../datafiles/DblPendulum/SystemContextFigure.png" alt="System Context" >
+                <figcaption>System Context</figcaption>
+              </figure>
+            </div>
+            <p class="paragraph">
+              The interaction between the product and the user is through an application programming interface. The responsibilities of the user and the system are as follows:
+            </p>
+            <ul class="list">
+              <li>
+                User Responsibilities
+                <ul class="list">
+                  <li>
+                    Provide initial conditions of the physical state of the motion and the input data related to the Pendulum, ensuring no errors in the data entry.
+                  </li>
+                  <li>Ensure that consistent units are used for input variables.</li>
+                  <li>
+                    Ensure required <a href=#Sec:Assumps>software assumptions</a> are appropriate for any particular problem input to the software.
+                  </li>
+                </ul>
+              </li>
+              <li>
+                Pendulum Responsibilities
+                <ul class="list">
+                  <li>
+                    Detect data type mismatch, such as a string of characters input instead of a floating point number.
+                  </li>
+                  <li>
+                    Determine if the inputs satisfy the required physical and software constraints.
+                  </li>
+                  <li>Calculate the required outputs.</li>
+                  <li>Generate the required graphs.</li>
+                </ul>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div id="Sec:UserChars">
+          <div class="subsection">
+            <h2>User Characteristics</h2>
+            <p class="paragraph">
+              The end user of Pendulum should have an understanding of high school physics, high school calculus and ordinary differential equations.
+            </p>
+          </div>
+        </div>
+        <div id="Sec:SysConstraints">
+          <div class="subsection">
+            <h2>System Constraints</h2>
+            <p class="paragraph">There are no system constraints.</p>
           </div>
         </div>
       </div>
@@ -344,7 +519,7 @@
               <div class="subsubsection">
                 <h3>Physical System Description</h3>
                 <p class="paragraph">
-                  The physical system of Pendulum, as shown in <a href=#Figure:pendulum>Fig:pendulum</a>, includes the following elements:
+                  The physical system of Pendulum, as shown in the <a href=#Figure:pendulum>Fig:pendulum</a> below, includes the following elements:
                 </p>
                 <div class="list">
                   <p>PS1: The rod.</p>
@@ -379,7 +554,7 @@
           <div class="subsection">
             <h2>Solution Characteristics Specification</h2>
             <p class="paragraph">
-              The instance models that govern Pendulum are presented in <a href=#Sec:IMs>Sec:Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+              The instance models that govern Pendulum are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
             </p>
             <div id="Sec:Assumps">
               <div class="subsubsection">
@@ -434,7 +609,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\mathbf{a}=\frac{\,d\mathbf{v}}{\,dt}\]</td>
+                      <td>\[\symbf{a}=\frac{\,d\symbf{v}}{\,dt}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -476,7 +651,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\mathbf{v}=\frac{\,d\mathbf{p}}{\,dt}\]</td>
+                      <td>\[\symbf{v}=\frac{\,d\symbf{p}}{\,dt}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -514,7 +689,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\mathbf{F}=m \mathbf{a}\]</td>
+                      <td>\[\symbf{F}=m \symbf{a}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -560,7 +735,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\mathbf{τ}=\mathbf{I} α\]</td>
+                      <td>\[\symbf{τ}=\symbf{I} α\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -669,7 +844,7 @@
                     <p class="paragraph">
                       At a given point in time, velocity may be defined as
                     </p>
-                    \[\mathbf{v}=\frac{\,d\mathbf{p}}{\,dt}\]
+                    \[\symbf{v}=\frac{\,d\symbf{p}}{\,dt}\]
                     <p class="paragraph">We also know the horizontal position</p>
                     \[{p_{\text{x}}}={L_{\text{rod}}} \sin\left({θ_{p}}\right)\]
                     <p class="paragraph">Applying this,</p>
@@ -745,7 +920,7 @@
                     <p class="paragraph">
                       At a given point in time, velocity may be defined as
                     </p>
-                    \[\mathbf{v}=\frac{\,d\mathbf{p}}{\,dt}\]
+                    \[\symbf{v}=\frac{\,d\symbf{p}}{\,dt}\]
                     <p class="paragraph">We also know the vertical position</p>
                     \[{p_{\text{y}}}=-{L_{\text{rod}}} \cos\left({θ_{p}}\right)\]
                     <p class="paragraph">Applying this again,</p>
@@ -823,7 +998,7 @@
                       Detailed derivation of the <em>x</em>-component of acceleration:
                     </h4>
                     <p class="paragraph">Our acceleration is:</p>
-                    \[\mathbf{a}=\frac{\,d\mathbf{v}}{\,dt}\]
+                    \[\symbf{a}=\frac{\,d\symbf{v}}{\,dt}\]
                     <p class="paragraph">
                       Earlier, we found the horizontal velocity to be
                     </p>
@@ -902,7 +1077,7 @@
                       Detailed derivation of the <em>y</em>-component of acceleration:
                     </h4>
                     <p class="paragraph">Our acceleration is:</p>
-                    \[\mathbf{a}=\frac{\,d\mathbf{v}}{\,dt}\]
+                    \[\symbf{a}=\frac{\,d\symbf{v}}{\,dt}\]
                     <p class="paragraph">
                       Earlier, we found the vertical velocity to be
                     </p>
@@ -934,7 +1109,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\mathbf{F}=m {a_{\text{x}}}=-\mathbf{T} \sin\left({θ_{p}}\right)\]
+                        \[\symbf{F}=m {a_{\text{x}}}=-\symbf{T} \sin\left({θ_{p}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -966,7 +1141,7 @@
                 <div id="GD:hForceOnPendulumDeriv">
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of force on the pendulum:</h4>
-                    \[\mathbf{F}=m {a_{\text{x}}}=-\mathbf{T} \sin\left({θ_{p}}\right)\]
+                    \[\symbf{F}=m {a_{\text{x}}}=-\symbf{T} \sin\left({θ_{p}}\right)\]
                   </div>
                 </div>
                 <div id="GD:vForceOnPendulum">
@@ -986,7 +1161,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\mathbf{F}=m {a_{\text{y}}}=\mathbf{T} \cos\left({θ_{p}}\right)-m \mathbf{g}\]
+                        \[\symbf{F}=m {a_{\text{y}}}=\symbf{T} \cos\left({θ_{p}}\right)-m \symbf{g}\]
                       </td>
                     </tr>
                     <tr>
@@ -1021,7 +1196,7 @@
                 <div id="GD:vForceOnPendulumDeriv">
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of force on the pendulum:</h4>
-                    \[\mathbf{F}=m {a_{\text{y}}}=\mathbf{T} \cos\left({θ_{p}}\right)-m \mathbf{g}\]
+                    \[\symbf{F}=m {a_{\text{y}}}=\symbf{T} \cos\left({θ_{p}}\right)-m \symbf{g}\]
                   </div>
                 </div>
                 <div id="GD:angFrequencyGD">
@@ -1042,7 +1217,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[Ω=\sqrt{\frac{\mathbf{g}}{{L_{\text{rod}}}}}\]</td>
+                      <td>\[Ω=\sqrt{\frac{\symbf{g}}{{L_{\text{rod}}}}}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1088,25 +1263,25 @@
                     <p class="paragraph">
                       Consider the torque on a pendulum defined in <a href=#TM:NewtonSecLawRotMot>TM:NewtonSecLawRotMot</a>. The force providing the restoring torque is the component of weight of the pendulum bob that acts along the arc length. The torque is the length of the string <em>L<sub>rod</sub></em> multiplied by the component of the net force that is perpendicular to the radius of the arc. The minus sign indicates the torque acts in the opposite direction of the angular displacement:
                     </p>
-                    \[\mathbf{τ}=-{L_{\text{rod}}} m \mathbf{g} \sin\left({θ_{p}}\right)\]
+                    \[\symbf{τ}=-{L_{\text{rod}}} m \symbf{g} \sin\left({θ_{p}}\right)\]
                     <p class="paragraph">So then</p>
-                    \[\mathbf{I} α=-{L_{\text{rod}}} m \mathbf{g} \sin\left({θ_{p}}\right)\]
+                    \[\symbf{I} α=-{L_{\text{rod}}} m \symbf{g} \sin\left({θ_{p}}\right)\]
                     <p class="paragraph">Therefore,</p>
-                    \[\mathbf{I} \frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-{L_{\text{rod}}} m \mathbf{g} \sin\left({θ_{p}}\right)\]
+                    \[\symbf{I} \frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-{L_{\text{rod}}} m \symbf{g} \sin\left({θ_{p}}\right)\]
                     <p class="paragraph">Substituting for <em><b>I</b></em></p>
-                    \[m {L_{\text{rod}}}^{2} \frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-{L_{\text{rod}}} m \mathbf{g} \sin\left({θ_{p}}\right)\]
+                    \[m {L_{\text{rod}}}^{2} \frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-{L_{\text{rod}}} m \symbf{g} \sin\left({θ_{p}}\right)\]
                     <p class="paragraph">
                       Crossing out <em>m</em> and <em>L<sub>rod</sub></em> we have
                     </p>
-                    \[\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-\left(\frac{\mathbf{g}}{{L_{\text{rod}}}}\right) \sin\left({θ_{p}}\right)\]
+                    \[\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-\left(\frac{\symbf{g}}{{L_{\text{rod}}}}\right) \sin\left({θ_{p}}\right)\]
                     <p class="paragraph">
                       For small angles, we approximate sin <em>θ<sub>p</sub></em> to <em>θ<sub>p</sub></em>
                     </p>
-                    \[\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-\left(\frac{\mathbf{g}}{{L_{\text{rod}}}}\right) {θ_{p}}\]
+                    \[\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}=-\left(\frac{\symbf{g}}{{L_{\text{rod}}}}\right) {θ_{p}}\]
                     <p class="paragraph">
                       Because this equation, has the same form as the equation for simple harmonic motion the solution is easy to find.  The angular frequency
                     </p>
-                    \[Ω=\sqrt{\frac{\mathbf{g}}{{L_{\text{rod}}}}}\]
+                    \[Ω=\sqrt{\frac{\symbf{g}}{{L_{\text{rod}}}}}\]
                   </div>
                 </div>
                 <div id="GD:periodPend">
@@ -1125,7 +1300,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[T=2 π \sqrt{\frac{{L_{\text{rod}}}}{\mathbf{g}}}\]</td>
+                      <td>\[T=2 π \sqrt{\frac{{L_{\text{rod}}}}{\symbf{g}}}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1148,7 +1323,7 @@
                       <th>Notes</th>
                       <td>
                         <p class="paragraph">
-                          The frequency and period are defined in <a href=#DD:frequencyDD>DD:frequencyDD</a> <a href=#DD:periodSHMDD>DD:periodSHMDD</a> respectively
+                          The frequency and period are defined in the data definitions for <a href=#DD:frequencyDD>frequency</a> and <a href=#DD:periodSHMDD>period</a> respectively
                         </p>
                       </td>
                     </tr>
@@ -1166,13 +1341,13 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of the period of the pendulum:</h4>
                     <p class="paragraph">
-                      The period of the pendulum can be defined from <a href=#GD:angFrequencyGD>GD:angFrequencyGD</a> equation
+                      The period of the pendulum can be defined from the general definition for the equation of <a href=#GD:angFrequencyGD>angular frequency</a>
                     </p>
-                    \[Ω=\sqrt{\frac{\mathbf{g}}{{L_{\text{rod}}}}}\]
+                    \[Ω=\sqrt{\frac{\symbf{g}}{{L_{\text{rod}}}}}\]
                     <p class="paragraph">
-                      Therefore from the equation <a href=#DD:angFrequencyDD>DD:angFrequencyDD</a>, we have
+                      Therefore from the data definition of the equation for <a href=#DD:angFrequencyDD>angular frequency</a>, we have
                     </p>
-                    \[T=2 π \sqrt{\frac{{L_{\text{rod}}}}{\mathbf{g}}}\]
+                    \[T=2 π \sqrt{\frac{{L_{\text{rod}}}}{\symbf{g}}}\]
                   </div>
                 </div>
               </div>
@@ -1484,7 +1659,7 @@
               <div class="subsubsection">
                 <h3>Instance Models</h3>
                 <p class="paragraph">
-                  This section transforms the problem defined in <a href=#Sec:ProbDesc>Sec:Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Sec:Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Sec:Theoretical Models</a> and <a href=#Sec:GDs>Sec:General Definitions</a>.
+                  This section transforms the problem defined in the <a href=#Sec:ProbDesc>problem description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in the <a href=#Sec:DDs>data definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>theoretical models</a> and <a href=#Sec:GDs>general definitions</a>.
                 </p>
                 <div id="IM:calOfAngularDisplacement">
                   <table class="idefn">
@@ -1515,7 +1690,7 @@
                       <td>
                         \[{L_{\text{rod}}}\gt{}0\]
                         \[{θ_{i}}\gt{}0\]
-                        \[\mathbf{g}\gt{}0\]
+                        \[\symbf{g}\gt{}0\]
                       </td>
                     </tr>
                     <tr>
@@ -1567,19 +1742,19 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of angular displacement:</h4>
                     <p class="paragraph">
-                      When the pendulum is displaced to an initial angle and released, the pendulum swings back and forth with periodic motion. By applying Newton's second law for rotational motion in <a href=#TM:NewtonSecLawRotMot>TM:NewtonSecLawRotMot</a>, the equation of motion for the pendulum may be obtained:
+                      When the pendulum is displaced to an initial angle and released, the pendulum swings back and forth with periodic motion. By applying <a href=#TM:NewtonSecLawRotMot>Newton's second law for rotational motion</a>, the equation of motion for the pendulum may be obtained:
                     </p>
-                    \[\mathbf{τ}=\mathbf{I} α\]
+                    \[\symbf{τ}=\symbf{I} α\]
                     <p class="paragraph">
                       Where <em><b>τ</b></em> denotes the torque, <em><b>I</b></em> denotes the moment of inertia and <em>α</em> denotes the angular acceleration. This implies:
                     </p>
-                    \[-m \mathbf{g} \sin\left({θ_{p}}\right) {L_{\text{rod}}}=m {L_{\text{rod}}}^{2} \frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}\]
+                    \[-m \symbf{g} \sin\left({θ_{p}}\right) {L_{\text{rod}}}=m {L_{\text{rod}}}^{2} \frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}\]
                     <p class="paragraph">And rearranged as:</p>
-                    \[\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}+\frac{\mathbf{g}}{{L_{\text{rod}}}} \sin\left({θ_{p}}\right)=0\]
+                    \[\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}+\frac{\symbf{g}}{{L_{\text{rod}}}} \sin\left({θ_{p}}\right)=0\]
                     <p class="paragraph">
                       If the amplitude of angular displacement is small enough, we can approximate <em>sin(θ<sub>p</sub>) = θ<sub>p</sub></em> for the purpose of a simple pendulum at very small angles. Then the equation of motion reduces to the equation of simple harmonic motion:
                     </p>
-                    \[\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}+\frac{\mathbf{g}}{{L_{\text{rod}}}} {θ_{p}}=0\]
+                    \[\frac{\,d\frac{\,d{θ_{p}}}{\,dt}}{\,dt}+\frac{\symbf{g}}{{L_{\text{rod}}}} {θ_{p}}=0\]
                     <p class="paragraph">Thus the simple harmonic motion is:</p>
                     \[{θ_{p}}\left(t\right)={θ_{i}} \cos\left(Ω t\right)\]
                   </div>
@@ -1590,7 +1765,7 @@
               <div class="subsubsection">
                 <h3>Data Constraints</h3>
                 <p class="paragraph">
-                  <a href=#Table:InDataConstraints>Tab:InDataConstraints</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+                  The <a href=#Table:InDataConstraints>Data Constraints Table</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
                 </p>
                 <div id="Table:InDataConstraints">
                   <table class="table">
@@ -1621,7 +1796,7 @@
               <div class="subsubsection">
                 <h3>Properties of a Correct Solution</h3>
                 <p class="paragraph">
-                  <a href=#Table:OutDataConstraints>Tab:OutDataConstraints</a> shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
+                  The <a href=#Table:OutDataConstraints>Data Constraints Table</a> shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
                 </p>
                 <div id="Table:OutDataConstraints">
                   <table class="table">
@@ -1666,7 +1841,7 @@
               </p>
               <p>
                 <div id="verifyInptVals">
-                  Verify-Input-Values: Check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataConstraints>Sec:Data Constraints</a>. If any of the input values are out of bounds, an error message is displayed and the calculations stop.
+                  Verify-Input-Values: Check the entered input values to ensure that they do not exceed the <a href=#Sec:DataConstraints>data constraints</a>. If any of the input values are out of bounds, an error message is displayed and the calculations stop.
                 </div>
               </p>
               <p>
@@ -1699,7 +1874,7 @@
                 </tr>
                 <tr>
                   <td><em>α</em></td>
-                  <td>Angular Acceleration</td>
+                  <td>Angular acceleration</td>
                   <td><em>\(\frac{\text{rad}}{\text{s}^{2}}\)</em></td>
                 </tr>
                 <tr>
@@ -1728,7 +1903,7 @@
             <div class="list">
               <p>
                 <div id="correct">
-                  Correct: The outputs of the code have the properties described in <a href=#Sec:CorSolProps>Sec:Properties of a Correct Solution</a>.
+                  Correct: The outputs of the code have the <a href=#Sec:CorSolProps>properties of a correct solution</a>.
                 </div>
               </p>
               <p>
@@ -1799,7 +1974,7 @@
             </tr>
           </table>
           <p class="caption">
-            Traceability Matrix Showing the Connections Between Assumptions dependence of each other.
+            Traceability Matrix Showing the Connections Between Assumptions and Other Assumptions
           </p>
         </div>
         <div id="Table:TraceMatAvsAll">
@@ -2652,6 +2827,59 @@
             Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items
           </p>
         </div>
+        <p class="paragraph">
+          The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href=#Figure:TraceGraphAvsA>Fig:TraceGraphAvsA</a> shows the dependencies of assumptions on the assumptions. <a href=#Figure:TraceGraphAvsAll>Fig:TraceGraphAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href=#Figure:TraceGraphRefvsRef>Fig:TraceGraphRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. <a href=#Figure:TraceGraphAllvsR>Fig:TraceGraphAllvsR</a> shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models. <a href=#Figure:TraceGraphAllvsAll>Fig:TraceGraphAllvsAll</a> shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.
+        </p>
+        <div id="Figure:TraceGraphAvsA">
+          <figure>
+            <img src="../../../traceygraphs/DblPendulum/avsa.svg" alt="TraceGraphAvsA" >
+            <figcaption>TraceGraphAvsA</figcaption>
+          </figure>
+        </div>
+        <div id="Figure:TraceGraphAvsAll">
+          <figure>
+            <img src="../../../traceygraphs/DblPendulum/avsall.svg" alt="TraceGraphAvsAll" >
+            <figcaption>TraceGraphAvsAll</figcaption>
+          </figure>
+        </div>
+        <div id="Figure:TraceGraphRefvsRef">
+          <figure>
+            <img src="../../../traceygraphs/DblPendulum/refvsref.svg" alt="TraceGraphRefvsRef" >
+            <figcaption>TraceGraphRefvsRef</figcaption>
+          </figure>
+        </div>
+        <div id="Figure:TraceGraphAllvsR">
+          <figure>
+            <img src="../../../traceygraphs/DblPendulum/allvsr.svg" alt="TraceGraphAllvsR" >
+            <figcaption>TraceGraphAllvsR</figcaption>
+          </figure>
+        </div>
+        <div id="Figure:TraceGraphAllvsAll">
+          <figure>
+            <img src="../../../traceygraphs/DblPendulum/allvsall.svg" alt="TraceGraphAllvsAll" >
+            <figcaption>TraceGraphAllvsAll</figcaption>
+          </figure>
+        </div>
+        <p class="paragraph">
+          For convenience, the following graphs can be found at the links below:
+        </p>
+        <ul class="list">
+          <li>
+            <a href="../../../traceygraphs/DblPendulum/avsa.svg">TraceGraphAvsA</a>
+          </li>
+          <li>
+            <a href="../../../traceygraphs/DblPendulum/avsall.svg">TraceGraphAvsAll</a>
+          </li>
+          <li>
+            <a href="../../../traceygraphs/DblPendulum/refvsref.svg">TraceGraphRefvsRef</a>
+          </li>
+          <li>
+            <a href="../../../traceygraphs/DblPendulum/allvsr.svg">TraceGraphAllvsR</a>
+          </li>
+          <li>
+            <a href="../../../traceygraphs/DblPendulum/allvsall.svg">TraceGraphAllvsAll</a>
+          </li>
+        </ul>
       </div>
     </div>
     <div id="Sec:AuxConstants">
@@ -2670,18 +2898,33 @@
             </div>
           </li>
           <li>
+            <div id="koothoor2013">
+              [2]: Koothoor, Nirmitha. <em>A document drive approach to certifying scientific computing software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
+            </div>
+          </li>
+          <li>
+            <div id="parnasClements1986">
+              [3]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
+            </div>
+          </li>
+          <li>
+            <div id="smithLai2005">
+              [4]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
+            </div>
+          </li>
+          <li>
             <div id="accelerationWiki">
-              [2]: Wikipedia Contributors. <em>Acceleration</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Acceleration">https://en.wikipedia.org/wiki/Acceleration</a>.
+              [5]: Wikipedia Contributors. <em>Acceleration</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Acceleration">https://en.wikipedia.org/wiki/Acceleration</a>.
             </div>
           </li>
           <li>
             <div id="cartesianWiki">
-              [3]: Wikipedia Contributors. <em>Cartesian coordinate system</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Cartesian_coordinate_system">https://en.wikipedia.org/wiki/Cartesian_coordinate_system</a>.
+              [6]: Wikipedia Contributors. <em>Cartesian coordinate system</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Cartesian_coordinate_system">https://en.wikipedia.org/wiki/Cartesian_coordinate_system</a>.
             </div>
           </li>
           <li>
             <div id="velocityWiki">
-              [4]: Wikipedia Contributors. <em>Velocity</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Velocity">https://en.wikipedia.org/wiki/Velocity</a>.
+              [7]: Wikipedia Contributors. <em>Velocity</em>. June, 2019. <a href="https://en.wikipedia.org/wiki/Velocity">https://en.wikipedia.org/wiki/Velocity</a>.
             </div>
           </li>
         </ul>

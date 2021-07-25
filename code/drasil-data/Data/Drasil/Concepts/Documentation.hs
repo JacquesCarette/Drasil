@@ -11,7 +11,7 @@ import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 import Control.Lens ((^.))
 
 doccon :: [NamedChunk]
-doccon = [abbAcc, abbreviation, analysis, appendix, aspect, body, charOfIR, characteristic,
+doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body, charOfIR, characteristic,
   class_, client, code, column, company, component, concept, condition, connection,
   consVals, constant, constraint, consumer, content, context, coordinate, coordinateSystem, 
   corSol, customer, datum, datumConstraint, decision, definition, dependency, description,
@@ -25,13 +25,13 @@ doccon = [abbAcc, abbreviation, analysis, appendix, aspect, body, charOfIR, char
   organization, output_, physical, physicalConstraint, physicalProperty, physicalSim,
   physicalSystem, physics, plan, practice, priority, problem, problemDescription, procedure,
   prodUCTable, productUC, product_, project, procForAnls, propOfCorSol, property, prpsOfDoc,
-  purpose, quantity, realtime, review, reference, refmat, requirement_, response, result,
+  purpose, quantity, realtime, review, reference, refMat, reqInput, requirement_, response, result,
   reviewer, safety, safetyReq, scenario, scope, scpOfReq, scpOfTheProjS, second_,
   section_, simulation, software, softwareConstraint, softwareDoc, softwareReq,
   softwareSys, softwareVAV, softwareVerif, solution, solutionCharSpec,
   solutionCharacteristic, summary, source, specific, specification, specificsystemdescription,
   stakeholder, standard, statement, symbol_, sysCont, system, systemConstraint,
-  systemdescription, tAuxConsts, tOfSymb, tOfUnit, inDatumConstraint, outDatumConstraint,
+  systemdescription, tAuxConsts, tOfCont, tOfSymb, tOfUnit, inDatumConstraint, outDatumConstraint,
   table_, task, template, termAndDef, term_,
   terminology, theory, traceyGraph, traceyMandG, traceyMatrix, type_, uncertCol,
   uncertainty, useCase, useCaseTable, user, userCharacteristic, userInput,
@@ -45,18 +45,18 @@ assumption, desSpec, goalStmt, dataConst, likelyChg, unlikelyChg, physSyst, requ
   mg, mis, notApp, srs, typUnc, sec, notebook :: CI
 
 softReqSpec :: NP
-softReqSpec = compoundPhraseP1 (softwareReq ^. term) (specification ^. term)
+softReqSpec = fterms compoundPhraseP1 softwareReq specification
 
 ------------------------------------------------------------------------------------------------------------------------------
 -- | CI       |                  |    uid      |         term                                   | abbreviation | ConceptDomain
 ------------------------------------------------------------------------------------------------------------------------------
 assumption  = commonIdeaWithDict "assumption"  (cn' "assumption")                                    "A"       [softEng]
-desSpec     = commonIdeaWithDict "desSpec"     (fterms compoundPhrase design specification)          "DS"      [softEng]
-goalStmt    = commonIdeaWithDict "goalStmt"    (fterms compoundPhrase goal statement)                "GS"      [softEng]
+desSpec     = commonIdeaWithDict "desSpec"     (combineNINI design specification)                    "DS"      [softEng]
+goalStmt    = commonIdeaWithDict "goalStmt"    (combineNINI goal statement)                          "GS"      [softEng]
 dataConst   = commonIdeaWithDict "dataConst"   (cn' "data constraint")                               "DC"      [softEng]
 likelyChg   = commonIdeaWithDict "likelyChg"   (cn' "likely change")                                 "LC"      [softEng]
 unlikelyChg = commonIdeaWithDict "unlikelyChg" (cn' "unlikely change")                               "UC"      [softEng]
-physSyst    = commonIdeaWithDict "physSyst"    (fterms compoundPhrase physicalSystem description)    "PS"      [softEng]
+physSyst    = commonIdeaWithDict "physSyst"    (combineNINI physicalSystem description)              "PS"      [softEng]
 requirement = commonIdeaWithDict "requirement" (cn' "requirement")                                   "R"       [softEng]
 mis         = commonIdeaWithDict "mis"         (fterms compoundPhrase moduleInterface specification) "MIS"     [softEng]
 mg          = commonIdeaWithDict "mg"          (fterms compoundPhrase module_ guide)                 "MG"      [softEng]
@@ -70,7 +70,7 @@ notebook    = commonIdeaWithDict "notebook"    (cn' "notebook")                 
 
 -- concepts relating to the templates and their contents
 
-abbreviation, analysis, appendix, aspect, body, characteristic, class_, client, 
+abbreviation, acronym, analysis, appendix, aspect, body, characteristic, class_, client, 
   code, column, company, component, concept, condition, connection, constant,
   constraint, consumer, content, context, coordinate, customer, datum, decision, 
   definition, dependency, description, design, document, documentation, effect, 
@@ -88,6 +88,7 @@ abbreviation, analysis, appendix, aspect, body, characteristic, class_, client,
   value, variable, video, verification, year :: NamedChunk
 
 abbreviation    = nc "abbreviation"   (cn'    "abbreviation"       )
+acronym         = nc "acronym"        (cn'    "acronym"            )
 analysis        = nc "analysis"       (cnIS   "analysis"           )
 appendix        = nc "appendix"       (cnICES "appendix"           )
 aspect          = nc "aspect"         (cn'    "aspect"             )
@@ -220,25 +221,26 @@ scpOfTheProjS   = nc "scpOfTheProj"   (cn'    "scope of the project") -- tempora
 
 
 abbAcc, charOfIR, consVals, corSol, methAndAnls, orgOfDoc, procForAnls, propOfCorSol, prpsOfDoc, 
-  refmat, reqInput, scpOfReq, tAuxConsts, tOfSymb, tOfUnit,
-  termAndDef, traceyMandG, vav :: NamedChunk
+  refMat, reqInput, scpOfReq, tAuxConsts, tOfSymb, tOfUnit,
+  termAndDef, traceyMandG, vav, tOfCont :: NamedChunk
 
-abbAcc              = nc "TAbbAcc"            (cn "abbreviations and acronyms")
+abbAcc              = nc "TAbbAcc"            (abbreviation `and_PP` acronym)
 consVals            = nc "consVals"           (cn "values of auxiliary constants")
 corSol              = nc "corSol"             (cn' "correct solution")
-charOfIR            = nc "charOfIR"           (characteristic `of_TPS` intReader)
+charOfIR            = nc "charOfIR"           (characteristic `ofThePS` intReader)
 methAndAnls         = nc "methAndAnls"        (method_ `and_` analysis)
 orgOfDoc            = nc "orgOfDoc"           (organization `of_` document)
 procForAnls         = nc "procForAnls"        (procedure `for` analysis)
-propOfCorSol        = nc "propOfCorSol"       (property `ofATPS` corSol)
+propOfCorSol        = nc "propOfCorSol"       (property `ofAPS` corSol)
 prpsOfDoc           = nc "prpsOfDoc"          (purpose `of_` document)
-refmat              = nc "refmat"             (cn' "reference material")
+refMat              = nc "refMat"             (cn' "reference material")
 reqInput            = nc "ReqInputs"          (cn' "required input")
-scpOfReq            = nc "scpOfReq"           (scope `of_TSP` requirement)
+scpOfReq            = nc "scpOfReq"           (scope `of_` requirement)
 tAuxConsts          = nc "TAuxConsts"         (cn' "auxiliary constant")
-termAndDef          = nc "termAndDef"         (terminology `and_TSP` definition)
-tOfSymb             = nc "tOfSymb"            (table_ `of_TSP` symbol_)
-tOfUnit             = nc "tOfUnit"            (table_ `of_TSP` unit_)
+termAndDef          = nc "termAndDef"         (terminology `and_` definition)
+tOfCont             = nc "tOfCont"            (table_ `of_` content)
+tOfSymb             = nc "tOfSymb"            (table_ `of_` symbol_)
+tOfUnit             = nc "tOfUnit"            (table_ `of_` unit_)
 inDatumConstraint   = nc "InDataConstraints"  (cn' "input data constraint") -- should be moved below
 outDatumConstraint  = nc "OutDataConstraints" (cn' "output data constraint")
 traceyMandG         = nc "traceyMandG"        (and_TGen titleize' titleize' traceyMatrix graph)

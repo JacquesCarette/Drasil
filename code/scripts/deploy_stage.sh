@@ -1,3 +1,6 @@
+# Get all files ready for deploy. Checks if website files exist,
+# and then copies each file to a deploy folder.
+
 if [ -z "$DEPLOY_FOLDER" ]; then
   echo "Need DEPLOY_FOLDER to know where to stage deploy."
   exit 1
@@ -10,6 +13,11 @@ fi
 
 if [ -z "$GRAPH_FOLDER" ]; then
   echo "Missing GRAPH_FOLDER."
+  exit 1
+fi
+
+if [ -z "$TRACEY_GRAPHS_FOLDER" ]; then
+  echo "Missing TRACEY_GRAPHS_FOLDER."
   exit 1
 fi
 
@@ -121,7 +129,7 @@ copy_images() {
     rm -rf "$CUR_DIR"deploy/images
   fi
   mkdir -p "$CUR_DIR"deploy/images
-  cp -r "$CUR_DIR"website/images/* "$CUR_DIR"deploy/images
+  cp -r "$CUR_DIR"drasil-website/WebInfo/images/* "$CUR_DIR"deploy/images
   
 }
 
@@ -130,17 +138,14 @@ copy_analysis() {
   cp -r "$CUR_DIR$ANALYSIS_FOLDER". "$ANALYSIS_FOLDER"
 }
 
-build_website() {
-  cd "$CUR_DIR"website
-  make DEPLOY_FOLDER="$CUR_DIR$DEPLOY_FOLDER" DOCS_FOLDER="$DOC_DEST" DOX_FOLDER="$DOX_DEST" EXAMPLES_FOLDER="$EXAMPLE_DEST" \
-  SRS_FOLDER_FRAG="$SRS_DEST" GRAPH_FOLDER="$GRAPH_FOLDER"
-  RET=$?
-  if [ $RET != 0 ]; then
-    echo "Build Failed. Bailing."
-    exit 1
-  fi
+copy_traceygraphs() {
+  rm -rf "$TRACEY_GRAPHS_FOLDER"
+  cp -r "$CUR_DIR$TRACEY_GRAPHS_FOLDER". "$TRACEY_GRAPHS_FOLDER"
+}
+
+copy_website() {
   cd "$CUR_DIR$DEPLOY_FOLDER"
-  cp -r "$CUR_DIR"website/_site/. .
+  cp -r "$CUR_DIR"drasil-website/Website/. .
 
   # src stubs were consumed by site generator; safe to delete those.
   rm "$EXAMPLE_DEST"*/src
@@ -154,5 +159,6 @@ copy_datafiles
 copy_examples
 copy_images
 copy_analysis
-build_website
+copy_traceygraphs
+copy_website
 cd "$CUR_DIR"

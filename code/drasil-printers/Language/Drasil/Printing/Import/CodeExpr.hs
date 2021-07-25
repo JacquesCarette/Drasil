@@ -1,7 +1,7 @@
 module Language.Drasil.Printing.Import.CodeExpr (codeExpr) where
 
-import Language.Drasil (DerivType(..), DomainDesc(..), Inclusive(..),
-  RTopology(..), RealInterval(..), UID, Special(..) )
+import Language.Drasil (DomainDesc(..), Inclusive(..),
+  RTopology(..), RealInterval(..), UID )
 import Language.Drasil.Display (Symbol(..))
 import Language.Drasil.CodeExpr (dbl)
 import Language.Drasil.Code.Expr.Development
@@ -42,7 +42,7 @@ neg' (AssocA MulRe _)       = True
 neg' (LABinaryOp Index _ _) = True
 neg' (UnaryOp _ _)          = True
 neg' (UnaryOpB _ _)         = True
-neg' (UnaryOpVec _ _)       = True
+neg' (UnaryOpVV _ _)        = True
 neg' (C _)                  = True
 neg' _                      = False
 
@@ -122,14 +122,6 @@ codeExpr (AssocA AddI l)          sm = assocExpr P.Add (precA AddI) l sm
 codeExpr (AssocA AddRe l)         sm = assocExpr P.Add (precA AddRe) l sm
 codeExpr (AssocA MulI l)          sm = P.Row $ mulExpr l MulI sm
 codeExpr (AssocA MulRe l)         sm = P.Row $ mulExpr l MulRe sm
-codeExpr (Deriv Part a b)         sm =
-  P.Div (P.Row [P.Spc P.Thin, P.Spec Partial, codeExpr a sm])
-        (P.Row [P.Spc P.Thin, P.Spec Partial,
-                symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b])
-codeExpr (Deriv Total a b)        sm =
-  P.Div (P.Row [P.Spc P.Thin, P.Ident "d", codeExpr a sm])
-        (P.Row [P.Spc P.Thin, P.Ident "d",
-                symbol $ lookupC (sm ^. stg) (sm ^. ckdb) b])
 codeExpr (C c)                    sm = symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c
 codeExpr (FCall f [x] [])         sm =
   P.Row [symbol $ lookupC (sm ^. stg) (sm ^. ckdb) f, parens $ codeExpr x sm]
@@ -158,10 +150,11 @@ codeExpr (UnaryOp Arctan u)       sm = mkCall sm P.Arctan u
 codeExpr (UnaryOp Exp u)          sm = P.Row [P.MO P.Exp, P.Sup $ codeExpr u sm]
 codeExpr (UnaryOp Abs u)          sm = P.Fenced P.Abs P.Abs $ codeExpr u sm
 codeExpr (UnaryOpB Not u)         sm = P.Row [P.MO P.Not, codeExpr u sm]
-codeExpr (UnaryOpVec Norm u)      sm = P.Fenced P.Norm P.Norm $ codeExpr u sm
-codeExpr (UnaryOpVec Dim u)       sm = mkCall sm P.Dim u
+codeExpr (UnaryOpVN Norm u)       sm = P.Fenced P.Norm P.Norm $ codeExpr u sm
+codeExpr (UnaryOpVN Dim u)        sm = mkCall sm P.Dim u
 codeExpr (UnaryOp Sqrt u)         sm = P.Sqrt $ codeExpr u sm
 codeExpr (UnaryOp Neg u)          sm = neg sm u
+codeExpr (UnaryOpVV NegV u)       sm = neg sm u
 codeExpr (ArithBinaryOp Frac a b) sm = P.Div (codeExpr a sm) (codeExpr b sm)
 codeExpr (ArithBinaryOp Pow a b)  sm = pow sm a b
 codeExpr (ArithBinaryOp Subt a b) sm = P.Row [codeExpr a sm, P.MO P.Subt, codeExpr b sm]

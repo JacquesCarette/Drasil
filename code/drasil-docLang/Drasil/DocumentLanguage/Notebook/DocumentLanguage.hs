@@ -1,8 +1,8 @@
 module Drasil.DocumentLanguage.Notebook.DocumentLanguage where
 
 import Drasil.DocumentLanguage.Notebook.NBDecl (NBDecl, mkNBDesc)
-import Drasil.DocumentLanguage.Notebook.Core (AppndxSec(..), NBDesc, DocSection(..), 
-  IntroSec(..), IntroSub(..), BodySec(..), BodySub(..), SmmrySec(..))
+import Drasil.DocumentLanguage.Notebook.Core (ApndxSec(..), NBDesc, DocSection(..), 
+  IntrodSec(..), IntrodSub(..), BodySec(..), BodySub(..), SmmrySec(..))
 
 import Language.Drasil
 
@@ -14,10 +14,10 @@ import qualified Drasil.DocLang.Notebook as NB (appendix, body, reference, summa
 import qualified Drasil.NBSections.Introduction as Intro (introductionSection, purposeOfDoc)
 import qualified Drasil.NBSections.Body as Body (reviewSec, mainIdeaSec, mthdAndanls, exampleSec)
 
--- | Creates a document from a document description and system information
-mkDoc :: NBDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
-mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
-  Document (nw kind `comb` nw sys) (foldlList Comma List $ map (S . name) authors) $
+-- | Creates a notebook from a document description and system information
+mkNb :: NBDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
+mkNb dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
+  Notebook (nw kind `comb` nw sys) (foldlList Comma List $ map (S . name) authors) $
   mkSections si l where
     l = mkNBDesc si dd
 
@@ -26,21 +26,20 @@ mkSections :: SystemInformation -> NBDesc -> [Section]
 mkSections si dd = map doit dd
   where
     doit :: DocSection -> Section
-    doit (IntroSec is)       = mkIntroSec si is
+    doit (IntrodSec is)      = mkIntroSec si is
     doit (BodySec bs)        = mkBodySec bs
     doit (SmmrySec ss)       = mkSmmrySec ss
-    doit Bibliography        = mkBib (citeDB si)
-    doit (AppndxSec a)       = mkAppndxSec a
+    doit BibSec              = mkBib (citeDB si)
+    doit (ApndxSec a)        = mkAppndxSec a
 
-
+-- Add more intro subsections
 -- | Helper for making the 'Introduction' section
--- **** Add intro subsections
-mkIntroSec :: SystemInformation -> IntroSec -> Section
-mkIntroSec si (IntroProg probIntro l) =
+mkIntroSec :: SystemInformation -> IntrodSec -> Section
+mkIntroSec si (IntrodProg probIntro l) =
   Intro.introductionSection probIntro $ map (mkSubIntro si) l
   where
-    mkSubIntro :: SystemInformation -> IntroSub -> Section
-    mkSubIntro _ (IPurpose intro) = Intro.purposeOfDoc intro
+    mkSubIntro :: SystemInformation -> IntrodSub -> Section
+    mkSubIntro _ (InPurpose intro) = Intro.purposeOfDoc intro
 
 -- | Helper for making the 'Body' section
 mkBodySec :: BodySec -> Section
@@ -61,7 +60,7 @@ mkBib :: BibRef -> Section
 mkBib bib = NB.reference [UlC $ ulcc (Bib bib)] []
 
 -- | Helper for making the 'Appendix' section
-mkAppndxSec :: AppndxSec -> Section
-mkAppndxSec (AppndxProg cs) = NB.appendix cs []
+mkAppndxSec :: ApndxSec -> Section
+mkAppndxSec (ApndxProg cs) = NB.appendix cs []
 
     

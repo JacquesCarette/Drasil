@@ -17,10 +17,7 @@ import Language.Drasil.Printing.AST (Spec, ItemType(Nested, Flat),
   ListType(Ordered, Unordered, Desc, Definitions, Simple), 
   Spec(Quote, EmptyS, Ref, S, Sp, HARDNL, E, (:+:)), 
   Fence(Norm, Abs, Curly, Paren), Expr, 
-  Ops(Inte, Prod, Summ, Mul, Add, Or, And, Subt, Iff, LEq, GEq, 
-  NEq, Eq, Gt, Lt, Impl, Dot, Cross, Neg, Exp, Dim, Not, Arctan, Arccos, Arcsin,
-  Cot, Csc, Sec, Tan, Cos, Sin, Log, Ln, Prime, Comma, Boolean, Real, Natural, 
-  Rational, Integer, IsIn, Point, Perc), Spacing(Thin), Fonts(Emph, Bold), 
+  Ops(..), Spacing(Thin), Fonts(Emph, Bold), 
   Expr(..), OverSymb(Hat), Label,
   LinkType(Internal, Cite2, External))
 import Language.Drasil.Printing.Citation (HP(Verb, URL), CiteField(HowPublished, 
@@ -43,15 +40,18 @@ import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 
 -- | Generates a LaTeX document.
 genTeX :: L.Document -> PrintingInformation -> TP.Doc
-genTeX doc sm = runPrint (buildStd sm $ (I.makeDocument sm doc)) Text
+genTeX doc@(L.Document _ _ toC _) sm = 
+  runPrint (buildStd sm toC $ I.makeDocument sm $ L.checkToC doc) Text
 
 -- | Helper to build the document.
-buildStd :: PrintingInformation -> Document -> D
-buildStd sm (Document t a c) =
+buildStd :: PrintingInformation -> L.ShowTableOfContents -> Document -> D
+buildStd sm toC (Document t a c) =
   genPreamble c %%
   title (spec t) %%
   author (spec a) %%
-  document (maketitle %% maketoc %% newpage %% print sm c)
+  case toC of 
+    L.ToC -> document (maketitle %% maketoc %% newpage %% print sm c) -- includes ToC generation
+    _ -> document (maketitle %% newpage %% print sm c) -- omits ToC generation
 
 -- clean until here; lo needs its sub-functions fixed first though
 -- | Helper for converting layout objects into a more printable form.
@@ -96,7 +96,7 @@ symbol LD.Empty                    = empty
 -- | Converts a decorated symbol into a printable document form.
 sFormat :: L.Decoration -> L.Symbol -> D
 sFormat LD.Hat    s = commandD "hat" (symbol s)
-sFormat LD.Vector s = commandD "mathbf" (symbol s)
+sFormat LD.Vector s = commandD "symbf" (symbol s)
 sFormat LD.Prime  s = symbol s <> pure (text "'")
 
 -- | Determine wether braces and brackets are opening or closing.
@@ -126,7 +126,7 @@ pExpr (Sup e)        = pure hat    <> br (pExpr e)
 pExpr (Over Hat s)   = commandD "hat" (pExpr s)
 pExpr (MO o)         = pOps o
 pExpr (Fenced l r m) = fence Open l <> pExpr m <> fence Close r
-pExpr (Font Bold e)  = commandD "mathbf" (pExpr e)
+pExpr (Font Bold e)  = commandD "symbf" (pExpr e)
 pExpr (Font Emph e)  = pExpr e -- Emph is ignored here because we're in Math mode
 pExpr (Spc Thin)     = pure . text $ "\\,"
 pExpr (Sqrt e)       = commandD "sqrt" (pExpr e)
@@ -179,6 +179,8 @@ pOps Prod     = command0 "displaystyle" <> command0 "prod"
 pOps Inte     = texSym "int"
 pOps Point    = pure $ text "."
 pOps Perc     = texSym "%"
+pOps LArrow   = commandD "leftarrow" empty
+pOps RArrow   = commandD "rightarrow" empty
 
 -- | Prints fencing notation ("(),{},|,||").
 fence :: OpenClose -> Fence -> D

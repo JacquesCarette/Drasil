@@ -1,4 +1,6 @@
-module SourceCodeReaderTypes (extractEntryData, EntryData(..), DataDeclRecord(..), DataDeclConstruct(..), NewtypeDecl(..), TypeDecl(..)) where
+-- | Source code reader for type dependency graphs of all Drasil types.
+module SourceCodeReaderTypes (extractEntryData, EntryData(..), DataDeclRecord(..),
+ DataDeclConstruct(..), NewtypeDecl(..), TypeDecl(..)) where
 
 import Data.List
 import System.IO
@@ -15,6 +17,10 @@ type DataName = String
 type NewtypeName = String
 type TypeName = String
 
+------------
+-- Main function and datatypes for creating a .dot graph of the type dependencies in Drasil
+-----------
+
 -- purposefully use different type names even though they will end up in the same form (for now)
 data DataDeclRecord = DDR { ddrName :: DataName                       -- this can actually be any kind of type, but use DataName for clarity (same with below)
                           , ddrContent :: [DataName]} deriving (Show) -- same with this
@@ -28,7 +34,7 @@ data TypeDecl = TD { tdName :: TypeName
 
 -- new EntryData data type with strict fields to enforce strict file reading
 data EntryData = EntryData { dRNs :: ![DataDeclRecord]    -- Record datatypes will be shown differently on a dot graph
-                           , dCNs :: ![DataDeclConstruct] -- compared to datatypes that use constructors.
+                           , dCNs :: ![DataDeclConstruct] -- compared to these datatypes that use constructors.
                            , ntNs :: ![NewtypeDecl]       -- Newtypes will be recorded as records (usually only wrap one other type)
                            , tNs :: ![TypeDecl]} deriving (Show) -- Types are usually synonyms of other types, so act like Record datatypes but in a different colour.
 
@@ -51,11 +57,7 @@ extractEntryData fileName filePath = do
   -- returns all types within a file
   return EntryData {dRNs=dataDeclRec,dCNs=dataDeclConst,ntNs=newtypeDecl,tNs=typeDecl}
 
--- strips leading and trailing whitespace from strings
-stripWS :: String -> String
-stripWS = T.unpack . T.strip . T.pack
-
----TODO: use map for most of these, I just need to visualize what is happening for now.
+---TODO: use map/filter/fold for most of these, I just need to visualize what is happening for now.
 
 --------
 -- Initial Filters (In order of use)
@@ -79,7 +81,7 @@ filterEmptyS = filter (/= "")
 
 -- for those few cases of data declarations that start the actual data declaration on a new line after the "=" sign.
 removeNewlineEqual :: [String] -> [String]
-removeNewlineEqual = filterNewline prefixCheck (\_ -> True)
+removeNewlineEqual = filterNewline prefixCheck (const True)
   where
     prefixCheck l = ("data " `isPrefixOf` l || "type " `isPrefixOf` l || "newtype " `isPrefixOf` l) && "=" `isSuffixOf` l
 
@@ -91,7 +93,7 @@ removeNewlineBrace = filterNewline prefixCheck (isInfixOf "{")
 
 -- for those few cases of data declarations that use constructors with guards on a newline.
 removeNewlineGuard :: [String] -> [String]
-removeNewlineGuard = filterNewline (\_ -> True) (isPrefixOf "|") 
+removeNewlineGuard = filterNewline (const True) (isPrefixOf "|") 
 
 -- Gets rid of automatically derived instances since we only care about type dependencies.
 removeDeriving :: [String] -> [String]
@@ -196,12 +198,12 @@ useConstructFormRec _ ls = ls
 -- Instead of separating records by newline (which are not guarenteed),
 -- use commas (which will always be there for a record with more than one field).
 removeNewlineComma :: [String] -> [String]
-removeNewlineComma = filterNewline (\_ -> True) (isPrefixOf ",")
+removeNewlineComma = filterNewline (const True) (isPrefixOf ",")
 
 -- filter through records of the form rec :: Type1 -> f Type2. Only accepts the first type though, so this will eventually need to be changed
 filterFuncForm :: String -> String
 filterFuncForm l 
-  | "->" `isInfixOf` l = unwords $ filter (\x -> isUpper $ head x) $ nub $ words l
+  | "->" `isInfixOf` l = unwords $ filter (isUpper . head) $ nub $ words l
   | otherwise = l
 
 -- Take a list of data declarations for records and get the name of the datatype itself and all dependencies of that datatype.
@@ -209,7 +211,7 @@ sortDataRec :: [String] -> [(String, [String])]
 sortDataRec = map (\l -> (head $ typeContents l, typeDependencies l))
   where
     typeContents l = map stripWS $ L.splitOn "=" $ l \\ "data "
-    typeDependencies l = map filterFuncForm $ map stripWS $ concatMap (tail . L.splitOn "::") $ L.splitOn "," $ concat $ tail $ typeContents l
+    typeDependencies l = map (filterFuncForm . stripWS) $ concatMap (tail . L.splitOn "::") $ L.splitOn "," $ concat $ tail $ typeContents l
 
 -- Record a datatype and its dependencies. For record types using the @data@ declaration syntax.
 getDataContainedRec :: [(String, [String])] -> [DataDeclRecord]
@@ -251,11 +253,11 @@ getDataContainedConst = map (\l -> DDC {ddcName = filterName $ fst l, ddcContent
 
 -- Newtypes can be defined similar to records. Only includes those record-style declarations.
 isNewtypeRec :: [String] -> [String]
-isNewtypeRec = filter (\x -> isInfixOf "{" x && isPrefixOf "newtype " x)
+isNewtypeRec = filter (\x -> "{" `isInfixOf` x && "newtype " `isPrefixOf` x)
 
 -- Newtypes are often defined using constructors (they don't use @{@).
 isNewtypeConst :: [String] -> [String]
-isNewtypeConst = filter (\x -> not (isInfixOf "{" x) && isPrefixOf "newtype " x)
+isNewtypeConst = filter (\x -> not ("{" `isInfixOf` x) && "newtype " `isPrefixOf` x)
 
 -- Sorts a datatype and its dependencies. For record-style @newtype@ declaration syntax.
 sortNewtypesR :: [String] -> [(String, [String])]
@@ -304,7 +306,7 @@ filterName = filterPrimeTypes . filterQualifiedTypes . filterInvalidChars
 
 -- These characters should either not appear in a .dot file (eg. gets rid of list types), or does some extra cleanup that the general sort functions did not catch.
 filterInvalidChars :: String -> String
-filterInvalidChars = filter (\l -> not (l `elem` invalidChars))
+filterInvalidChars = filter (`notElem` invalidChars)
   where
     invalidChars = "[]!} (){->,$" --the space being here is kind of a hack (as a result of uncommon type syntax not caught by the above sorters), but it allows the .dot files to compile for now
 
@@ -317,8 +319,12 @@ filterQualifiedTypes :: String -> String
 filterQualifiedTypes l = if '.' `elem` l then drop (fromJust (elemIndex '.' l)+1) l else l -- get rid of types that are made from qualified imports
 
 ---------
--- Other functions
+-- Other helper functions
 ---------
+
+-- strips leading and trailing whitespace from strings
+stripWS :: String -> String
+stripWS = T.unpack . T.strip . T.pack
 
 -- enforces strict file reading; files can be closed to avoid memory exhaustion
 forceRead :: [a0] -> ()

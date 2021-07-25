@@ -13,7 +13,6 @@ import Data.List (nub)
 eNames :: CodeExpr -> [String]
 eNames (AssocA _ l)          = concatMap eNames l
 eNames (AssocB _ l)          = concatMap eNames l
-eNames (Deriv _ a b)         = b : eNames a
 eNames (C c)                 = [c]
 eNames Int{}                 = []
 eNames Dbl{}                 = []
@@ -30,7 +29,8 @@ eNames (Field o f)           = [o, f]
 eNames (Case _ ls)           = concatMap (eNames . fst) ls ++ concatMap (eNames . snd) ls
 eNames (UnaryOp _ u)         = eNames u
 eNames (UnaryOpB _ u)        = eNames u
-eNames (UnaryOpVec _ u)      = eNames u
+eNames (UnaryOpVV _ u)       = eNames u
+eNames (UnaryOpVN _ u)       = eNames u
 eNames (ArithBinaryOp _ a b) = eNames a ++ eNames b
 eNames (BoolBinaryOp _ a b)  = eNames a ++ eNames b
 eNames (EqBinaryOp _ a b)    = eNames a ++ eNames b
@@ -54,7 +54,6 @@ eNamesRI (UpFrom (_, il))         = eNames il
 eNames' :: CodeExpr -> [String]
 eNames' (AssocA _ l)          = concatMap eNames' l
 eNames' (AssocB _ l)          = concatMap eNames' l
-eNames' (Deriv _ a b)         = b : eNames' a
 eNames' (C c)                 = [c]
 eNames' Int{}                 = []
 eNames' Dbl{}                 = []
@@ -72,7 +71,8 @@ eNames' (Case _ ls)           = concatMap (eNames' . fst) ls ++
                                concatMap (eNames' . snd) ls
 eNames' (UnaryOp _ u)         = eNames' u
 eNames' (UnaryOpB _ u)        = eNames' u
-eNames' (UnaryOpVec _ u)      = eNames' u
+eNames' (UnaryOpVV _ u)       = eNames' u
+eNames' (UnaryOpVN _ u)       = eNames' u
 eNames' (ArithBinaryOp _ a b) = eNames' a ++ eNames' b
 eNames' (BoolBinaryOp _ a b)  = eNames' a ++ eNames' b
 eNames' (EqBinaryOp _ a b)    = eNames' a ++ eNames' b

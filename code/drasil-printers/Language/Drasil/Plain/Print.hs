@@ -159,6 +159,8 @@ opsDoc Inte = text "integral "
 opsDoc Prod = text "product "
 opsDoc Point = text "."
 opsDoc Perc = text "%"
+opsDoc LArrow = text " <- "
+opsDoc RArrow = text " -> "
 
 -- | Helper for printing the left side of some characters "(, {, \\|, |".
 fenceDocL :: Fence -> Doc

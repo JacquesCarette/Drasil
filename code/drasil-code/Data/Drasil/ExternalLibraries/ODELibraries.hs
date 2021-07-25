@@ -598,7 +598,6 @@ modifiedODESyst sufx info = map replaceDepVar (odeSyst info)
                            | otherwise               = cc
     replaceDepVar (AssocA a es)           = AssocA a (map replaceDepVar es)
     replaceDepVar (AssocB b es)           = AssocB b (map replaceDepVar es)
-    replaceDepVar (Deriv dt e u)          = Deriv dt (replaceDepVar e) u
     replaceDepVar (FCall u es nes)        = FCall u (map replaceDepVar es)
       (map (over _2 replaceDepVar) nes)
     replaceDepVar (New u es nes)          = New u (map replaceDepVar es)
@@ -609,7 +608,8 @@ modifiedODESyst sufx info = map replaceDepVar (odeSyst info)
     replaceDepVar (Matrix es)             = Matrix $ map (map replaceDepVar) es
     replaceDepVar (UnaryOp u e)           = UnaryOp u $ replaceDepVar e
     replaceDepVar (UnaryOpB u e)          = UnaryOpB u $ replaceDepVar e
-    replaceDepVar (UnaryOpVec u e)        = UnaryOpVec u $ replaceDepVar e
+    replaceDepVar (UnaryOpVV u e)         = UnaryOpVV u $ replaceDepVar e
+    replaceDepVar (UnaryOpVN u e)         = UnaryOpVN u $ replaceDepVar e
     replaceDepVar (ArithBinaryOp b e1 e2) = ArithBinaryOp b
       (replaceDepVar e1) (replaceDepVar e2)
     replaceDepVar (BoolBinaryOp b e1 e2)  = BoolBinaryOp b

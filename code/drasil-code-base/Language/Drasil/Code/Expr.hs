@@ -2,7 +2,7 @@
 
 module Language.Drasil.Code.Expr where
 
-import Language.Drasil (UID, DomainDesc, Completeness, DerivType, RealInterval)
+import Language.Drasil (UID, DomainDesc, Completeness, RealInterval)
 
 -- Binary functions
 
@@ -48,12 +48,16 @@ data UFunc = Abs | Log | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin
   | Arccos | Arctan | Exp | Sqrt | Neg
   deriving Eq
 
--- | Negation operator (not).
+-- | @Bool -> Bool@ operators.
 data UFuncB = Not
   deriving Eq
 
--- | Data for vectors (normal, dimensions).
-data UFuncVec = Norm | Dim
+-- | @Vector -> Vector@ operators.
+data UFuncVV = NegV
+  deriving Eq
+
+-- | @Vector -> Number@ operators.
+data UFuncVN = Norm | Dim
   deriving Eq
 
 -- | A one-to-one clone of Expr, with extra OO/code-related functionality.
@@ -68,14 +72,10 @@ data CodeExpr where
   Str      :: String -> CodeExpr
   -- | Turns two integers into a fraction (or percent).
   Perc     :: Integer -> Integer -> CodeExpr
-  -- | Takes an associative aritmetic operator with a list of expressions.
+  -- | Takes an associative arithmetic operator with a list of expressions.
   AssocA   :: AssocArithOper -> [CodeExpr] -> CodeExpr
   -- | Takes an associative boolean operator with a list of expressions.
   AssocB   :: AssocBoolOper  -> [CodeExpr] -> CodeExpr
-  -- | Derivative syntax is:
-  --   Type ('Part'ial or 'Total') -> principal part of change -> with respect to
-  --   For example: Deriv Part y x1 would be (dy/dx1).
-  Deriv    :: DerivType -> CodeExpr -> UID -> CodeExpr
   -- | C stands for "Chunk", for referring to a chunk in an expression.
   --   Implicitly assumes that the chunk has a symbol.
   C        :: UID -> CodeExpr
@@ -105,10 +105,12 @@ data CodeExpr where
   
   -- | Unary operation for most functions (eg. sin, cos, log, etc.).
   UnaryOp       :: UFunc -> CodeExpr -> CodeExpr
-  -- | Unary operation for negation.
+  -- | Unary operation for @Bool -> Bool@ operations.
   UnaryOpB      :: UFuncB -> CodeExpr -> CodeExpr
-  -- | Unary operation for vectors (holds whether a vector is normal or used for dimensions).
-  UnaryOpVec    :: UFuncVec -> CodeExpr -> CodeExpr
+  -- | Unary operation for @Vector -> Vector@ operations.
+  UnaryOpVV     :: UFuncVV -> CodeExpr -> CodeExpr
+  -- | Unary operation for @Vector -> Number@ operations.
+  UnaryOpVN     :: UFuncVN -> CodeExpr -> CodeExpr
 
   -- | Binary operator for arithmetic between expressions (fractional, power, and subtraction).
   ArithBinaryOp :: ArithBinOp -> CodeExpr -> CodeExpr -> CodeExpr

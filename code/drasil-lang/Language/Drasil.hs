@@ -1,14 +1,15 @@
 {- re-exports modules to simplify external use.-}
 module Language.Drasil (
   -- Expr
-  Expr(..), UFunc(..), UFuncB, UFuncVec
+  Expr(..), UFunc(..), UFuncB, UFuncVV, UFuncVN
   , ArithBinOp, BoolBinOp, EqBinOp, LABinOp, OrdBinOp, VVVBinOp, VVNBinOp
   , AssocArithOper(..), AssocBoolOper(..)
   , DerivType(..), Completeness(..), Relation
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   , ($-), ($/), addI, addRe, mulI, mulRe
   -- Expr.Math
-  , abs_, neg, log, ln, abs, sin, cos, tan, sec, csc, cot, arcsin, arccos, arctan, exp
+  , abs_, neg, negVec, log, ln, abs
+  , sin, cos, tan, sec, csc, cot, arcsin, arccos, arctan, exp
   , sqrt, euclidean, norm, not_
   , square, half, oneHalf, oneThird, recip_
   , dim, idx, int, dbl, exactDbl, frac, str, perc, completeCase, incompleteCase
@@ -40,6 +41,7 @@ module Language.Drasil (
   , HasSpace(typ)
   , HasUnitSymbol(usymb)
   , HasReference(getReferences)
+  , HasDecRef(getDecRefs)
   , HasReasVal(reasVal)
   , HasDerivation(derivations)
   , Idea(getA)
@@ -67,15 +69,16 @@ module Language.Drasil (
   , NamedChunk, short, nc, IdeaDict , mkIdea
   , nw -- bad name (historical)
   -- Constraint
-  , physc, sfwrc, enumc , isPhysC, isSfwrC
+  , physc, sfwrc, isPhysC, isSfwrC
   , Constraint(..), ConstraintE, ConstraintReason(..)
   -- Chunk.Constrained
   , ConstrainedChunk(..), ConstrConcept(..)
   , cuc, cvc, constrained', cuc', cuc'', constrainedNRV'
   , cnstrw, cnstrw'
   -- Chunk.Eq
-  , QDefinition, fromEqn, fromEqn', fromEqnSt, fromEqnSt', equat
+  , QDefinition, fromEqn, fromEqn', fromEqnSt, fromEqnSt'
   , mkQDefSt, mkQuantDef, mkQuantDef', ec
+  , mkFuncDef, mkFuncDef', mkFuncDefByQ
   -- Chunk.Quantity
   , QuantityDict, qw, mkQuant, mkQuant', codeVC, implVar, implVar', dcc, dcc', 
     dccWDS, dccWDS', vc, vc'', vcSt, vcUnit, ccs, cc, cc', cic
@@ -100,7 +103,7 @@ module Language.Drasil (
   --Citations
   , Citation, EntryID, BibRef
   , citeID, citeKind
-    -- Citation smart constructors
+  -- Citation smart constructors
   , cArticle, cBookA, cBookE, cBooklet
   , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
   , cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis
@@ -108,7 +111,7 @@ module Language.Drasil (
   -- Chunk.Citation
   , HasCitation(getCitations)
   -- Sentence
-  , Sentence(..), SentenceStyle(..), (+:+), (+:+.), (+:), (!.), capSent
+  , Sentence(..), SentenceStyle(..), TermCapitalization(..), RefInfo(..), (+:+), (+:+.), (+:), (!.), capSent
   , ch, eS, sC, sDash, sParen  
   -- Sentence.Extract
   , sdep, shortdep
@@ -120,17 +123,17 @@ module Language.Drasil (
   , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1
   , titleizeNP, titleizeNP', nounPhrase'', nounPhraseSP, nounPhraseSent
   -- Document
-  , Document(..), DocType(..), DType(..), Section(..), Contents(..)
-  , SecCons(..), ListType(..), ItemType(..), ListTuple
+  , Document(..), ShowTableOfContents(..), DType(..), Section(..)
+  , Contents(..), SecCons(..), ListType(..), ItemType(..), ListTuple
   , LabelledContent(..), UnlabelledContent(..), extractSection
-  , mkParagraph, mkRawLC
+  , mkParagraph, mkRawLC, checkToC
   , llcc, ulcc
   , section, fig, figWithWidth
   , MaxWidthPercent
   , HasContents(accessContents)
   , RawContent(..)
   , mkFig
-  , makeTabRef, makeFigRef, makeSecRef, makeLstRef, makeEqnRef, makeURI
+  , makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI
   -- Space
   , Space(..) , RealInterval(..), Inclusive(..), RTopology(..)
   , DomainDesc(AllDD, BoundedDD), getActorName, getInnerSpace
@@ -148,10 +151,10 @@ module Language.Drasil (
   , eqSymb, codeSymb, hasStageSymbol
   , autoStage, hat, prime, staged, sub, subStr, sup , unicodeConv, upperLeft, vec
   , label, variable
-  -- RefProg
-  , RefInfo(..)
   -- Reference
-  , Reference(..), ref, refInfo, refS, namedRef, complexRef, namedComplexRef
+  , Reference(..), ref, refS, namedRef, complexRef, namedComplexRef
+  -- Decorated Reference
+  , DecRef(refInfo), dRefInfo, dRef
   -- Label.Type
   , getAdd, prepend
   , LblType(RP, Citation, URI), IRefProg(..)
@@ -192,13 +195,13 @@ module Language.Drasil (
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 import Language.Drasil.DisplayExpr
-import Language.Drasil.Expr (Expr(..), UFunc(..), UFuncB, UFuncVec,
+import Language.Drasil.Expr (Expr(..), UFunc(..), UFuncB, UFuncVV, UFuncVN,
           ArithBinOp, BoolBinOp, EqBinOp, LABinOp, OrdBinOp, VVVBinOp, VVNBinOp,
           AssocArithOper(..), AssocBoolOper(..), 
           DerivType(..), Completeness(..), Relation,
           ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.),
           ($-), ($/), addI, addRe, mulI, mulRe)
-import Language.Drasil.Expr.Math (abs_, neg, log, ln, sin, cos, tan, sqrt, sec, 
+import Language.Drasil.Expr.Math (abs_, neg, negVec, log, ln, sin, cos, tan, sqrt, sec, 
           csc, cot, arcsin, arccos, arctan, exp,
           dim, norm, not_, idx, int, dbl, exactDbl, frac, str, perc,
           square, half, oneHalf, oneThird, recip_,
@@ -210,9 +213,9 @@ import Language.Drasil.Expr.Math (abs_, neg, log, ln, sin, cos, tan, sqrt, sec,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, intAll)
 import Language.Drasil.Expr.Display
 import Language.Drasil.Document (section, fig, figWithWidth
-  , Section(..), SecCons(..) , llcc, ulcc, Document(..), DocType(..)
-  , mkParagraph, mkFig, mkRawLC, extractSection
-  , makeTabRef, makeFigRef, makeSecRef, makeLstRef, makeEqnRef, makeURI)
+  , Section(..), SecCons(..) , llcc, ulcc, Document(..)
+  , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC, extractSection
+  , makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI)
 import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), DType(..)
   , RawContent(..), ListTuple, MaxWidthPercent
   , HasContents(accessContents)
@@ -226,7 +229,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasUnitSymbol(usymb),
   IsUnit(getUnits), CommonIdea(abrv), HasAdditionalNotes(getNotes), Constrained(constraints), 
   HasReasVal(reasVal), HasDerivation(derivations), 
-  HasReference(getReferences), HasSpace(typ),
+  HasReference(getReferences), HasDecRef(getDecRefs), HasSpace(typ),
   DefiningExpr(defnExpr), Quantity, HasUncertainty(unc), Callable, 
   IsArgumentName, Display(..))
 import Language.Drasil.Classes.Citations (HasFields(getFields))
@@ -249,11 +252,12 @@ import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Concept.Core (sDom) -- exported for drasil-database FIXME: move to development package?
 import Language.Drasil.Chunk.Constrained
-import Language.Drasil.Constraint (physc, sfwrc, enumc, isPhysC, isSfwrC,
+import Language.Drasil.Constraint (physc, sfwrc, isPhysC, isSfwrC,
   Constraint(..), ConstraintE, ConstraintReason(..))
 import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt, 
-  fromEqnSt', equat, mkQDefSt, mkQuantDef, mkQuantDef', ec)
+  fromEqnSt', mkQDefSt, mkQuantDef, mkQuantDef', ec,
+  mkFuncDef, mkFuncDef', mkFuncDefByQ)
 import Language.Drasil.Chunk.NamedArgument (NamedArgument, narg)
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
@@ -278,11 +282,11 @@ import Language.Drasil.NounPhrase
 import Language.Drasil.ShortName (ShortName, shortname', getSentSN)
 import Language.Drasil.Space (Space(..), RealInterval(..), Inclusive(..), 
   RTopology(..), DomainDesc(AllDD, BoundedDD), getActorName, getInnerSpace)
-import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), (+:+),
+import Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), TermCapitalization(..), RefInfo(..), (+:+),
   (+:+.), (+:), (!.), capSent, ch, eS, sC, sDash, sParen)
 import Language.Drasil.Sentence.Extract (sdep, shortdep) -- exported for drasil-database FIXME: move to development package?
-import Language.Drasil.RefProg (RefInfo(..))
-import Language.Drasil.Reference (Reference(..), namedRef, refInfo, complexRef, namedComplexRef, ref, refS)
+import Language.Drasil.Reference (Reference(..), namedRef, complexRef, namedComplexRef, ref, refS)
+import Language.Drasil.DecoratedReference(DecRef(refInfo), dRefInfo, dRef)
 import Language.Drasil.Symbol (Decoration, Symbol)
 import Language.Drasil.Symbol.Helpers (eqSymb, codeSymb, hasStageSymbol, 
   autoStage, hat, prime, staged, sub, subStr, sup, unicodeConv, upperLeft, vec,

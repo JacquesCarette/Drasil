@@ -10,7 +10,6 @@ import Language.Drasil.Classes.Core (HasUID(uid))
 import Language.Drasil.Classes (NamedIdea(term), Idea)
 import Language.Drasil.Sentence ((+:+), Sentence((:+:), S), sParen, sentenceTerm,
   sentencePlural, sentenceShort)
-import Language.Drasil.Chunk.Concept.Core(ConceptChunk)
 import qualified Language.Drasil.NounPhrase as NP
 
 -- | Get short form (if it exists), else get term of an 'Idea'.

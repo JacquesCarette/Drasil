@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 4c719f59c76c87bd6a1ae7b403d6c14b74815fe17ed3aaf281bea44336aa47ad
+-- hash: fe66c4b11d92501c2adab1036382b014dc26f4f75e59de0d616624526ade42e2
 
 name:           drasil-docLang
 version:        0.1.26.0
@@ -26,19 +26,18 @@ library
       Drasil.DocLang.SRS
       Drasil.DocLang.Notebook
       Drasil.DocumentLanguage.Units
-      -- **TODO: hide nb related modules 
-      Drasil.DocumentLanguage.Notebook.Core
-      Drasil.DocumentLanguage.Notebook.DocumentLanguage
-      Drasil.DocumentLanguage.Notebook.NBDecl
+      Drasil.DocumentLanguage.TraceabilityGraph
   other-modules:
       Drasil.DocDecl
       Drasil.DocLang.References
       Drasil.DocumentLanguage
       Drasil.DocumentLanguage.Core
       Drasil.DocumentLanguage.Definitions
-      Drasil.DocumentLanguage.Labels
       Drasil.DocumentLanguage.RefHelpers
       Drasil.DocumentLanguage.TraceabilityMatrix
+      Drasil.DocumentLanguage.Notebook.Core
+      Drasil.DocumentLanguage.Notebook.DocumentLanguage
+      Drasil.DocumentLanguage.Notebook.NBDecl
       Drasil.ExtractDocDesc
       Drasil.NBSections.Body
       Drasil.NBSections.Introduction
@@ -50,6 +49,7 @@ library
       Drasil.Sections.SpecificSystemDescription
       Drasil.Sections.Stakeholders
       Drasil.Sections.TableOfAbbAndAcronyms
+      Drasil.Sections.TableOfContents
       Drasil.Sections.TableOfSymbols
       Drasil.Sections.TableOfUnits
       Drasil.Sections.TraceabilityMandGs

@@ -1,14 +1,13 @@
 {-# LANGUAGE GADTs, PostfixOperators #-}
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
 -- | Contains Sentences and helpers
-module Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), (+:+),
+module Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), RefInfo(..), (+:+),
   (+:+.), (+:), (!.), capSent, ch, eS, sC, sDash, sentencePlural, sentenceShort,
-  sentenceSymb, sentenceTerm, sParen) where
+  sentenceSymb, sentenceTerm, sParen, TermCapitalization(..)) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
 import Language.Drasil.DisplayExpr (DisplayExpr(..))
 import Language.Drasil.DisplayClasses (Display(toDispExpr))
-import Language.Drasil.RefProg (RefInfo)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.UID (UID)
@@ -17,12 +16,23 @@ import Control.Lens ((^.))
 
 import Data.Char (toUpper)
 
--- | Used in 'Ch' constructor to determine the state of a 'Sentence'
--- (can record whether something is in plural form, a symbol, a singular term, or in short form).
+-- | Used in 'Ch' constructor to determine the state of a term
+-- (can record whether something is in plural form, a singular term, or in short form).
 data SentenceStyle = PluralTerm
-                   | SymbolStyle
                    | TermStyle
                    | ShortStyle
+
+-- | Used in 'Ch' constructor to determine the capitalization of a term.
+-- CapF is for capitalizing the first word from the 'UID' of the given term.
+-- CapW is for capitalizing all words from the 'UID' of the given term.
+-- Mirrors 'CapFirst' and 'CapWords' from 'CapitalizationRule'.
+data TermCapitalization = CapF | CapW | NoCap
+
+-- | Holds any extra information needed for a 'Reference', be it an equation, pages, a note, or nothing.
+data RefInfo = None
+             | Equation [Int]
+             | Page [Int]
+             | RefNote String
 
 -- | For writing 'Sentence's via combining smaller elements.
 -- 'Sentence's are made up of some known vocabulary of things:
@@ -34,8 +44,11 @@ data SentenceStyle = PluralTerm
 --     * references to specific layout objects
 infixr 5 :+:
 data Sentence where
-  -- | Among other things, Ch allows Sentences to hold plural forms of 'NounPhrase's and 'NamedIdea's.
-  Ch    :: SentenceStyle -> UID -> Sentence
+  -- | Ch looks up the term for a given 'UID' and displays the term with a given 'SentenceStyle' and 'CapitalizationRule'.
+  -- This allows Sentences to hold plural forms of 'NounPhrase's and 'NamedIdea's.
+  Ch    :: SentenceStyle -> TermCapitalization -> UID -> Sentence
+  -- | A branch of Ch dedicated to SymbolStyle only.
+  SyCh  :: UID -> Sentence
   -- | Converts a unit symbol into a usable Sentence form.
   Sy    :: USymb -> Sentence
   -- | Constructor for 'String's, used often for descriptions in Chunks.
@@ -61,7 +74,7 @@ eS = E . toDispExpr
 -- The HasSymbol is redundant, but on purpose
 -- | Gets a symbol and places it in a 'Sentence'.
 ch :: (HasUID c, HasSymbol c) => c -> Sentence
-ch x = Ch SymbolStyle (x ^. uid)
+ch x = SyCh (x ^. uid)
 
 -- | Sentences can be concatenated.
 instance Semigroup Sentence where
@@ -75,13 +88,13 @@ instance Monoid Sentence where
 -- | Smart constructors for turning a 'UID' into a 'Sentence'.
 sentencePlural, sentenceShort, sentenceSymb, sentenceTerm :: UID -> Sentence
 -- | Gets plural term of 'UID'.
-sentencePlural = Ch PluralTerm
+sentencePlural = Ch PluralTerm NoCap
 -- | Gets short form of 'UID'.
-sentenceShort  = Ch ShortStyle
+sentenceShort  = Ch ShortStyle NoCap
 -- | Gets symbol form of 'UID'.
-sentenceSymb   = Ch SymbolStyle
+sentenceSymb   = SyCh
 -- | Gets singular form of 'UID'.
-sentenceTerm   = Ch TermStyle
+sentenceTerm   = Ch TermStyle NoCap
 
 -- | Helper for wrapping 'Sentence's in parentheses.
 sParen :: Sentence -> Sentence

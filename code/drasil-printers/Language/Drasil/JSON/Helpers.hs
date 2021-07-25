@@ -1,7 +1,7 @@
 module Language.Drasil.JSON.Helpers where
 
 import Prelude hiding ((<>))
-import Text.PrettyPrint (Doc, text, empty, (<>), vcat, hcat, nest)
+import Text.PrettyPrint (Doc, text, empty, (<>), vcat, hcat)
 import Data.List (intersperse)
 import Data.List.Split (splitOn)
 import qualified Text.JSON as J (encode)
@@ -60,7 +60,7 @@ refwrap :: Doc -> Doc -> Doc
 refwrap = flip (wrapGen' vcat Id "div") [""]
 
 refID :: Doc -> Doc 
-refID id = nbformat $ text "<a id=\"" <> id <> text "\"></a>"
+refID i = nbformat $ text "<a id=\"" <> i <> text "\"></a>"
 
 -- | Helper for setting up links to references
 reflink :: String -> Doc -> Doc

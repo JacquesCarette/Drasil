@@ -6,9 +6,9 @@ import Numeric (showEFloat)
 import Utils.Drasil (checkValidStr)
 
 import qualified Language.Drasil as L (DType(Data, Theory, Instance, General), 
-  DocType(Notebook), MaxWidthPercent, Document, special)
+  MaxWidthPercent, Document, special)
 
-import Language.Drasil.Printing.Import (makeNotebook)
+import Language.Drasil.Printing.Import (makeDocument)
 import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),  
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, 
   Ops(Prod, Inte, Mul, Summ, Or, Add, And, Subt, Iff, Impl, GEq, LEq, Lt, Gt, NEq, Eq,
@@ -32,7 +32,7 @@ import Language.Drasil.JSON.Helpers (makeMetadata, h, stripnewLine, nbformat,
  tr, td, image, li, pa, ba, table, refwrap, refID, reflink, reflinkURI)
 
 genJSON :: PrintingInformation -> L.Document -> Doc
-genJSON sm doc = build (makeNotebook sm doc)
+genJSON sm doc = build (makeDocument sm doc)
 
 -- | Build the JSON Document, called by genJSON
 build :: Document -> Doc

@@ -3,6 +3,7 @@ module Drasil.Sections.Requirements (fReqF, fullReqs, fullTables, inReq, inTable
 
 import Language.Drasil
 import Utils.Drasil
+import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Documentation (description, funcReqDom,
@@ -12,6 +13,7 @@ import Data.Drasil.Concepts.Math (unit_)
 
 import qualified Drasil.DocLang.SRS as SRS
 import Drasil.DocumentLanguage.Units (toSentence)
+import Data.List (nub)
 
 import Control.Lens ((^.))
 import Data.Bifunctor (bimap)
@@ -22,7 +24,7 @@ reqF = SRS.require [reqIntro]
 
 -- | Prepends a 'ConceptInstance' referencing an input-value table to a list of other 'ConceptInstance's.
 fullReqs :: (Quantity i, MayHaveUnit i) => [i] -> Sentence -> [ConceptInstance] -> [ConceptInstance]
-fullReqs i d r = inReq (inReqDesc (inTable i) d) : r-- ++ [outReq (outReqDesc outTable)]
+fullReqs i d r = nub $ inReq (inReqDesc (inTable i) d) : r-- ++ [outReq (outReqDesc outTable)]
 
 -- | Prepends given LabelledContent to an input-value table.
 fullTables :: (Quantity i, MayHaveUnit i) => [i] -> [LabelledContent] -> [LabelledContent]
@@ -62,12 +64,12 @@ reqIntroStart = foldlSent_ [S "This", phrase section_, S "provides"]
 
 -- | General 'Sentence' for use in the Functional Requirements subsection introduction.
 frReqIntroBody :: Sentence
-frReqIntroBody = foldlSent_ [S "the", plural functionalRequirement `sC`
+frReqIntroBody = foldlSent_ [pluralNP (the functionalRequirement) `sC`
   S "the tasks and behaviours that the", phrase software, S "is expected to complete"]
 
 -- | General 'Sentence' for use in the Non-Functional Requirements subsection introduction.
 nfrReqIntroBody :: Sentence
-nfrReqIntroBody = foldlSent_ [S "the", plural nonfunctionalRequirement `sC`
+nfrReqIntroBody = foldlSent_ [pluralNP (the nonfunctionalRequirement) `sC`
   S "the qualities that the", phrase software, S "is expected to exhibit"]
 
 -- | Generalized Requirements section introduction.

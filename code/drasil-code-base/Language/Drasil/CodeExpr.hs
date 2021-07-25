@@ -118,11 +118,11 @@ exp = UnaryOp Exp
 
 -- | Smart constructor for calculating the dimension of a vector.
 dim :: CodeExpr -> CodeExpr
-dim = UnaryOpVec Dim
+dim = UnaryOpVN Dim
 
 -- | Smart constructor for calculating the normal form of a vector.
 norm :: CodeExpr -> CodeExpr
-norm = UnaryOpVec Norm
+norm = UnaryOpVN Norm
 
 -- | Smart constructor for applying logical negation to an expression.
 not_ :: CodeExpr -> CodeExpr
@@ -227,8 +227,10 @@ addI l r = AssocA AddI [l, r]
 
 -- | Add two expressions (Real numbers).
 addRe :: CodeExpr -> CodeExpr -> CodeExpr
-addRe l (Int 0) = l
-addRe (Int 0) r = r
+addRe l (Dbl 0)      = l
+addRe (Dbl 0) r      = r
+addRe l (ExactDbl 0) = l
+addRe (ExactDbl 0) r = r
 addRe (AssocA AddRe l) (AssocA AddRe r) = AssocA AddRe (l ++ r)
 addRe (AssocA AddRe l) r = AssocA AddRe (l ++ [r])
 addRe l (AssocA AddRe r) = AssocA AddRe (l : r)
@@ -236,6 +238,8 @@ addRe l r = AssocA AddRe [l, r]
 
 -- | Multiply two expressions (Integers).
 mulI :: CodeExpr -> CodeExpr -> CodeExpr
+mulI l (Int 1) = l
+mulI (Int 1) r = r
 mulI (AssocA MulI l) (AssocA MulI r) = AssocA MulI (l ++ r)
 mulI (AssocA MulI l) r = AssocA MulI (l ++ [r])
 mulI l (AssocA MulI r) = AssocA MulI (l : r)
@@ -243,6 +247,10 @@ mulI l r = AssocA MulI [l, r]
 
 -- | Multiply two expressions (Real numbers).
 mulRe :: CodeExpr -> CodeExpr -> CodeExpr
+mulRe l (Dbl 1)      = l
+mulRe (Dbl 1) r      = r
+mulRe l (ExactDbl 1) = l
+mulRe (ExactDbl 1) r = r
 mulRe (AssocA MulRe l) (AssocA MulRe r) = AssocA MulRe (l ++ r)
 mulRe (AssocA MulRe l) r = AssocA MulRe (l ++ [r])
 mulRe l (AssocA MulRe r) = AssocA MulRe (l : r)

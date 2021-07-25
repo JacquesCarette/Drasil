@@ -1,17 +1,16 @@
 module Drasil.DocLang.Notebook where
 
 import Language.Drasil
-import qualified Utils.Drasil.Sentence as S (forTPS)
 
-import qualified Data.Drasil.Concepts.Documentation as Doc (notebook, introduction, 
-  prpsOfDoc, review, body, mainIdea, procForAnls, summary, methAndAnls, coordinateSystem, 
+import qualified Data.Drasil.Concepts.Documentation as Doc (introduction, prpsOfDoc, 
+  review, body, mainIdea, procForAnls, summary, methAndAnls, coordinateSystem, 
   example, appendix, reference)
 import qualified Data.Drasil.Concepts.Physics as P (motion, horizontalMotion, verticalMotion, kinematics)
 
 -- | Notebook constructor. 
 -- Create the notebook from given system name, authors, and sections
-doc :: NamedIdea c => c -> Sentence -> [Section] -> Document
-doc  sys = Document (Doc.notebook `S.forTPS` sys)
+--doc :: NamedIdea c => c -> Sentence -> [Section] -> Document
+--doc  sys = Document (Doc.notebook `S.forTPS` sys)
 
 intro, prpsOfDoc, body, review, mainIdea, motion, hormotion, vermotion, methAndAnls,
   coorSyst, kinematic, procForAnls, summary, appendix, reference, example :: [Contents] -> [Section] -> Section

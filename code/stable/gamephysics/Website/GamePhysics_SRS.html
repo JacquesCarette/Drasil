@@ -13,6 +13,87 @@
     <div class="author">
       <h2>Alex Halliwushka, Luthfi Mawarid, and Olu Owojaiye</h2>
     </div>
+    <div id="Sec:ToC">
+      <div class="section">
+        <h1>Table of Contents</h1>
+        <p class="paragraph">
+          An outline of all sections included in this SRS is recorded here for easy reference.
+        </p>
+        <ul class="list">
+          <li><a href=#Sec:ToC>Table of Contents</a></li>
+          <li>
+            <a href=#Sec:RefMat>Reference Material</a>
+            <ul class="list">
+              <li><a href=#Sec:ToU>Table of Units</a></li>
+              <li><a href=#Sec:ToS>Table of Symbols</a></li>
+              <li><a href=#Sec:TAbbAcc>Abbreviations and Acronyms</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href=#Sec:Intro>Introduction</a>
+            <ul class="list">
+              <li><a href=#Sec:DocPurpose>Purpose of Document</a></li>
+              <li><a href=#Sec:ReqsScope>Scope of Requirements</a></li>
+              <li>
+                <a href=#Sec:ReaderChars>Characteristics of the Intended Reader</a>
+              </li>
+              <li><a href=#Sec:DocOrg>Organization of Document</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href=#Sec:GenSysDesc>General System Description</a>
+            <ul class="list">
+              <li><a href=#Sec:SysContext>System Context</a></li>
+              <li><a href=#Sec:UserChars>User Characteristics</a></li>
+              <li><a href=#Sec:SysConstraints>System Constraints</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href=#Sec:SpecSystDesc>Specific System Description</a>
+            <ul class="list">
+              <li>
+                <a href=#Sec:ProbDesc>Problem Description</a>
+                <ul class="list">
+                  <li><a href=#Sec:TermDefs>Terminology and Definitions</a></li>
+                  <li><a href=#Sec:GoalStmt>Goal Statements</a></li>
+                </ul>
+              </li>
+              <li>
+                <a href=#Sec:SolCharSpec>Solution Characteristics Specification</a>
+                <ul class="list">
+                  <li><a href=#Sec:Assumps>Assumptions</a></li>
+                  <li><a href=#Sec:TMs>Theoretical Models</a></li>
+                  <li><a href=#Sec:GDs>General Definitions</a></li>
+                  <li><a href=#Sec:DDs>Data Definitions</a></li>
+                  <li><a href=#Sec:IMs>Instance Models</a></li>
+                  <li><a href=#Sec:DataConstraints>Data Constraints</a></li>
+                  <li>
+                    <a href=#Sec:CorSolProps>Properties of a Correct Solution</a>
+                  </li>
+                </ul>
+              </li>
+            </ul>
+          </li>
+          <li>
+            <a href=#Sec:Requirements>Requirements</a>
+            <ul class="list">
+              <li><a href=#Sec:FRs>Functional Requirements</a></li>
+              <li><a href=#Sec:NFRs>Non-Functional Requirements</a></li>
+            </ul>
+          </li>
+          <li><a href=#Sec:LCs>Likely Changes</a></li>
+          <li><a href=#Sec:UCs>Unlikely Changes</a></li>
+          <li><a href=#Sec:offShelfSolns>Off-The-Shelf Solutions</a></li>
+          <li>
+            <a href=#Sec:TraceMatrices>Traceability Matrices and Graphs</a>
+          </li>
+          <li>
+            <a href=#Sec:AuxConstants>Values of Auxiliary Constants</a>
+          </li>
+          <li><a href=#Sec:References>References</a></li>
+        </ul>
+      </div>
+    </div>
     <div id="Sec:RefMat">
       <div class="section">
         <h1>Reference Material</h1>
@@ -23,7 +104,7 @@
           <div class="subsection">
             <h2>Table of Units</h2>
             <p class="paragraph">
-              The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, <a href=#Table:ToU>Tab:ToU</a> lists the symbol, a description and the SI name.
+              The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the <a href=#Table:ToU>Table of Units</a> lists the symbol, a description and the SI name.
             </p>
             <div id="Table:ToU">
               <table class="table">
@@ -71,7 +152,7 @@
           <div class="subsection">
             <h2>Table of Symbols</h2>
             <p class="paragraph">
-              The symbols used in this document are summarized in <a href=#Table:ToS>Tab:ToS</a> along with their units. Throughout the document, symbols in bold will represent vectors, and scalars otherwise. The symbols are listed in alphabetical order. For vector quantities, the units shown are for each component of the vector.
+              The symbols used in this document are summarized in the <a href=#Table:ToS>Table of Symbols</a> along with their units. Throughout the document, symbols in bold will represent vectors, and scalars otherwise. The symbols are listed in alphabetical order. For vector quantities, the units shown are for each component of the vector.
             </p>
             <div id="Table:ToS">
               <table class="table">
@@ -87,7 +168,7 @@
                 </tr>
                 <tr>
                   <td><em><b>a</b>(t)</em></td>
-                  <td>Linear Acceleration</td>
+                  <td>Linear acceleration</td>
                   <td><em>\(\frac{\text{m}}{\text{s}^{2}}\)</em></td>
                 </tr>
                 <tr>
@@ -236,7 +317,7 @@
                 </tr>
                 <tr>
                   <td><em><b>n</b></em></td>
-                  <td>Collision Normal Vector</td>
+                  <td>Collision normal vector</td>
                   <td><em>m</em></td>
                 </tr>
                 <tr>
@@ -281,7 +362,7 @@
                 </tr>
                 <tr>
                   <td><em><b>u</b>(t)</em></td>
-                  <td>Linear Displacement</td>
+                  <td>Linear displacement</td>
                   <td><em>m</em></td>
                 </tr>
                 <tr>
@@ -301,7 +382,7 @@
                 </tr>
                 <tr>
                   <td><em><b>v</b>(t)</em></td>
-                  <td>Linear Velocity</td>
+                  <td>Linear velocity</td>
                   <td><em>\(\frac{\text{m}}{\text{s}}\)</em></td>
                 </tr>
                 <tr>
@@ -363,7 +444,7 @@
                 </tr>
                 <tr>
                   <td><em>||<b>n</b>||</em></td>
-                  <td>Length of the Normal Vector</td>
+                  <td>Length of the normal vector</td>
                   <td><em>m</em></td>
                 </tr>
                 <tr>
@@ -387,12 +468,17 @@
                 </tr>
                 <tr>
                   <td><em>α</em></td>
-                  <td>Angular Acceleration</td>
+                  <td>Angular acceleration</td>
+                  <td><em>\(\frac{\text{rad}}{\text{s}^{2}}\)</em></td>
+                </tr>
+                <tr>
+                  <td><em>α<sub>j</sub></em></td>
+                  <td>Force on the rotational motion of a set of 2D rigid body</td>
                   <td><em>\(\frac{\text{rad}}{\text{s}^{2}}\)</em></td>
                 </tr>
                 <tr>
                   <td><em>θ</em></td>
-                  <td>Angular Displacement</td>
+                  <td>Angular displacement</td>
                   <td><em>rad</em></td>
                 </tr>
                 <tr>
@@ -407,7 +493,7 @@
                 </tr>
                 <tr>
                   <td><em>ω</em></td>
-                  <td>Angular Velocity</td>
+                  <td>Angular velocity</td>
                   <td><em>\(\frac{\text{rad}}{\text{s}}\)</em></td>
                 </tr>
                 <tr>
@@ -530,7 +616,7 @@
         </div>
         <div id="Sec:ReaderChars">
           <div class="subsection">
-            <h2>Characteristics of Intended Reader</h2>
+            <h2>Characteristics of the Intended Reader</h2>
             <p class="paragraph">
               Reviewers of this documentation should have an understanding of rigid body dynamics and high school calculus. The users of Game Physics can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
             </p>
@@ -581,7 +667,7 @@
                     Ensure application programming interface use complies with the user guide.
                   </li>
                   <li>
-                    Ensure required software assumptions (<a href=#Sec:Assumps>Sec:Assumptions</a>) are appropriate for any particular problem the software addresses.
+                    Ensure required <a href=#Sec:Assumps>software assumptions</a> are appropriate for any particular problem the software addresses.
                   </li>
                 </ul>
               </li>
@@ -589,7 +675,7 @@
                 Game Physics Responsibilities
                 <ul class="list">
                   <li>
-                    Determine if the inputs and simulation state satisfy the required physical and system constraints (<a href=#Sec:DataConstraints>Sec:Data Constraints</a>).
+                    Determine if the inputs and simulation state satisfy the required <a href=#Sec:DataConstraints>physical and system constraints</a>.
                   </li>
                   <li>
                     Calculate the new state of all rigid bodies within the simulation at each simulation step.
@@ -628,7 +714,7 @@
           <div class="subsection">
             <h2>Problem Description</h2>
             <p class="paragraph">
-              A system is needed to create a simple, lightweight, fast, and portable 2D rigid body physics library, which will allow for more accessible game development and the production of higher quality products. Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality physics libraries available to be used for consumer products (<a href=#Sec:offShelfSolns>Sec:Off-The-Shelf Solutions</a>).
+              A system is needed to create a simple, lightweight, fast, and portable 2D rigid body physics library, which will allow for more accessible game development and the production of higher quality products. Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality <a href=#Sec:offShelfSolns>physics libraries</a> available to be used for consumer products.
             </p>
             <div id="Sec:TermDefs">
               <div class="subsubsection">
@@ -690,7 +776,7 @@
           <div class="subsection">
             <h2>Solution Characteristics Specification</h2>
             <p class="paragraph">
-              The instance models that govern Game Physics are presented in <a href=#Sec:IMs>Sec:Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+              The instance models that govern Game Physics are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
             </p>
             <div id="Sec:Assumps">
               <div class="subsubsection">
@@ -701,12 +787,12 @@
                 <div class="list">
                   <p>
                     <div id="assumpOT">
-                      objectTy: All objects are rigid bodies. (RefBy: <a href=#DD:chaslesThm>DD:chaslesThm</a>, <a href=#DD:reVeInColl>DD:reVeInColl</a>, <a href=#IM:transMot>IM:transMot</a>, <a href=#IM:rotMot>IM:rotMot</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#DD:ctrOfMass>DD:ctrOfMass</a>, <a href=#DD:momentOfInertia>DD:momentOfInertia</a>, <a href=#DD:linVel>DD:linVel</a>, <a href=#DD:linDisp>DD:linDisp</a>, <a href=#DD:linAcc>DD:linAcc</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, <a href=#DD:impulseV>DD:impulseV</a>, <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, <a href=#DD:angVel>DD:angVel</a>, <a href=#DD:angDisp>DD:angDisp</a>, and <a href=#DD:angAccel>DD:angAccel</a>.)
+                      objectTy: All objects are rigid bodies. (RefBy: <a href=#DD:chaslesThm>DD:chaslesThm</a>, <a href=#DD:reVeInColl>DD:reVeInColl</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#DD:ctrOfMass>DD:ctrOfMass</a>, <a href=#DD:momentOfInertia>DD:momentOfInertia</a>, <a href=#DD:linVel>DD:linVel</a>, <a href=#DD:linDisp>DD:linDisp</a>, <a href=#DD:linAcc>DD:linAcc</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, <a href=#DD:impulseV>DD:impulseV</a>, <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, <a href=#DD:angVel>DD:angVel</a>, <a href=#DD:angDisp>DD:angDisp</a>, <a href=#DD:angAccel>DD:angAccel</a>, <a href=#IM:rotMot>IM:rotMot</a>, and <a href=#IM:transMot>IM:transMot</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpOD">
-                      objectDimension: All objects are 2D. (RefBy: <a href=#IM:transMot>IM:transMot</a>, <a href=#IM:rotMot>IM:rotMot</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#TM:NewtonSecLawRotMot>TM:NewtonSecLawRotMot</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, <a href=#DD:angVel>DD:angVel</a>, <a href=#DD:angDisp>DD:angDisp</a>, and <a href=#DD:angAccel>DD:angAccel</a>.)
+                      objectDimension: All objects are 2D. (RefBy: <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#TM:NewtonSecLawRotMot>TM:NewtonSecLawRotMot</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, <a href=#DD:angVel>DD:angVel</a>, <a href=#DD:angDisp>DD:angDisp</a>, <a href=#DD:angAccel>DD:angAccel</a>, <a href=#IM:rotMot>IM:rotMot</a>, and <a href=#IM:transMot>IM:transMot</a>.)
                     </div>
                   </p>
                   <p>
@@ -716,7 +802,7 @@
                   </p>
                   <p>
                     <div id="assumpAD">
-                      axesDefined: The axes are defined using right-handed coordinate system. (RefBy: <a href=#IM:rotMot>IM:rotMot</a>, <a href=#GD:impulse>GD:impulse</a>, and <a href=#IM:col2D>IM:col2D</a>.)
+                      axesDefined: The axes are defined using right-handed coordinate system. (RefBy: <a href=#GD:impulse>GD:impulse</a>, <a href=#IM:col2D>IM:col2D</a>, and <a href=#IM:rotMot>IM:rotMot</a>.)
                     </div>
                   </p>
                   <p>
@@ -726,12 +812,12 @@
                   </p>
                   <p>
                     <div id="assumpDI">
-                      dampingInvolvement: There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: <a href=#IM:transMot>IM:transMot</a>, <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#lcID>LC:Include-Dampening</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, and <a href=#IM:col2D>IM:col2D</a>.)
+                      dampingInvolvement: There is no damping involved throughout the simulation and this implies that there are no friction forces. (RefBy: <a href=#DD:potEnergy>DD:potEnergy</a>, <a href=#lcID>LC:Include-Dampening</a>, <a href=#DD:kEnergy>DD:kEnergy</a>, <a href=#IM:col2D>IM:col2D</a>, and <a href=#IM:transMot>IM:transMot</a>.)
                     </div>
                   </p>
                   <p>
                     <div id="assumpCAJI">
-                      constraintsAndJointsInvolvement: There are no constraints and joints involved throughout the simulation. (RefBy: <a href=#IM:transMot>IM:transMot</a>, <a href=#lcIJC>LC:Include-Joints-Constraints</a>, and <a href=#IM:col2D>IM:col2D</a>.)
+                      constraintsAndJointsInvolvement: There are no constraints and joints involved throughout the simulation. (RefBy: <a href=#lcIJC>LC:Include-Joints-Constraints</a>, <a href=#IM:col2D>IM:col2D</a>, and <a href=#IM:transMot>IM:transMot</a>.)
                     </div>
                   </p>
                 </div>
@@ -755,7 +841,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\mathbf{F}=m \mathbf{a}\]</td>
+                      <td>\[\symbf{F}=m \symbf{a}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -801,7 +887,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[{\mathbf{F}_{1}}=-{\mathbf{F}_{2}}\]</td>
+                      <td>\[{\symbf{F}_{1}}=-{\symbf{F}_{2}}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -849,7 +935,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\mathbf{F}=G \frac{{m_{1}} {m_{2}}}{\text{||}\mathbf{d}\text{||}^{2}} \mathbf{\hat{d}}=G \frac{{m_{1}} {m_{2}}}{\text{||}\mathbf{d}\text{||}^{2}} \frac{\mathbf{d}}{\text{||}\mathbf{d}\text{||}}\]
+                        \[\symbf{F}=G \frac{{m_{1}} {m_{2}}}{\text{||}\symbf{d}\text{||}^{2}} \symbf{\hat{d}}=G \frac{{m_{1}} {m_{2}}}{\text{||}\symbf{d}\text{||}^{2}} \frac{\symbf{d}}{\text{||}\symbf{d}\text{||}}\]
                       </td>
                     </tr>
                     <tr>
@@ -914,7 +1000,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\mathbf{τ}=\mathbf{I} α\]</td>
+                      <td>\[\symbf{τ}=\symbf{I} α\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -978,7 +1064,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\mathbf{g}=-\frac{G M}{\text{||}\mathbf{d}\text{||}^{2}} \mathbf{\hat{d}}\]
+                        \[\symbf{g}=-\frac{G M}{\text{||}\symbf{d}\text{||}^{2}} \symbf{\hat{d}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1031,25 +1117,25 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of gravitational acceleration:</h4>
                     <p class="paragraph">
-                      From Newton's law of universal gravitation (<a href=#TM:UniversalGravLaw>TM:UniversalGravLaw</a>) we have:
+                      From <a href=#TM:UniversalGravLaw>Newton's law of universal gravitation</a>, we have:
                     </p>
-                    \[\mathbf{F}=\frac{G {m_{1}} {m_{2}}}{{\text{||}\mathbf{d}\text{||}^{2}}} \mathbf{\hat{d}}\]
+                    \[\symbf{F}=\frac{G {m_{1}} {m_{2}}}{{\text{||}\symbf{d}\text{||}^{2}}} \symbf{\hat{d}}\]
                     <p class="paragraph">
                       The above equation governs the gravitational attraction between two bodies. Suppose that one of the bodies is significantly more massive than the other, so that we concern ourselves with the force the massive body exerts on the lighter body. Further, suppose that the Cartesian coordinate system is chosen such that this force acts on a line which lies along one of the principal axes. Then our unit vector directed from the center of the large mass to the center of the smaller mass <em><b>d&#770;</b></em> for the x or y axes is:
                     </p>
-                    \[\mathbf{\hat{d}}=\frac{\mathbf{d}}{\text{||}\mathbf{d}\text{||}}\]
+                    \[\symbf{\hat{d}}=\frac{\symbf{d}}{\text{||}\symbf{d}\text{||}}\]
                     <p class="paragraph">
                       Given the above assumptions, let <em>M</em> and <em>m</em> be the mass of the massive and light body respectively. Equating <em><b>F</b></em> above with Newton's second law for the force experienced by the light body, we get:
                     </p>
-                    \[{\mathbf{F}_{\mathbf{g}}}=G \frac{M m}{{\text{||}\mathbf{d}\text{||}^{2}}} \mathbf{\hat{d}}=m \mathbf{g}\]
+                    \[{\symbf{F}_{\symbf{g}}}=G \frac{M m}{{\text{||}\symbf{d}\text{||}^{2}}} \symbf{\hat{d}}=m \symbf{g}\]
                     <p class="paragraph">
                       where <em><b>g</b></em> is the gravitational acceleration. Dividing the above equation by <em>m</em>,  we have:
                     </p>
-                    \[G \frac{M}{{\text{||}\mathbf{d}\text{||}^{2}}} \mathbf{\hat{d}}=\mathbf{g}\]
+                    \[G \frac{M}{{\text{||}\symbf{d}\text{||}^{2}}} \symbf{\hat{d}}=\symbf{g}\]
                     <p class="paragraph">
                       and thus the negative sign indicates that the force is an attractive force:
                     </p>
-                    \[\mathbf{g}=-G \frac{M}{{\text{||}\mathbf{d}\text{||}^{2}}} \mathbf{\hat{d}}\]
+                    \[\symbf{g}=-G \frac{M}{{\text{||}\symbf{d}\text{||}^{2}}} \symbf{\hat{d}}\]
                   </div>
                 </div>
                 <div id="GD:impulse">
@@ -1069,7 +1155,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[j=\frac{-\left(1+{C_{\text{R}}}\right) {{\mathbf{v}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\mathbf{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right) \text{||}\mathbf{n}\text{||}^{2}+\frac{\text{||}{\mathbf{u}_{\text{A}\text{P}}}\text{*}\mathbf{n}\text{||}^{2}}{{\mathbf{I}_{\text{A}}}}+\frac{\text{||}{\mathbf{u}_{\text{B}\text{P}}}\text{*}\mathbf{n}\text{||}^{2}}{{\mathbf{I}_{\text{B}}}}}\]
+                        \[j=\frac{-\left(1+{C_{\text{R}}}\right) {{\symbf{v}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\symbf{n}}{\left(\frac{1}{{m_{\text{A}}}}+\frac{1}{{m_{\text{B}}}}\right) \text{||}\symbf{n}\text{||}^{2}+\frac{\text{||}{\symbf{u}_{\text{A}\text{P}}}\text{*}\symbf{n}\text{||}^{2}}{{\symbf{I}_{\text{A}}}}+\frac{\text{||}{\symbf{u}_{\text{B}\text{P}}}\text{*}\symbf{n}\text{||}^{2}}{{\symbf{I}_{\text{B}}}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1168,7 +1254,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{\mathbf{p}_{\text{CM}}}=\frac{\displaystyle\sum{{m_{j}} {\mathbf{p}_{j}}}}{{m_{T}}}\]
+                        \[{\symbf{p}_{\text{CM}}}=\frac{\displaystyle\sum{{m_{j}} {\symbf{p}_{j}}}}{{m_{T}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1206,7 +1292,7 @@
                       <th>RefBy</th>
                       <td>
                         <p class="paragraph">
-                          <a href=#IM:transMot>IM:transMot</a> and <a href=#IM:col2D>IM:col2D</a>
+                          <a href=#IM:col2D>IM:col2D</a> and <a href=#IM:transMot>IM:transMot</a>
                         </p>
                       </td>
                     </tr>
@@ -1221,7 +1307,7 @@
                     </tr>
                     <tr>
                       <th>Label</th>
-                      <td><p class="paragraph">Linear Displacement</p></td>
+                      <td><p class="paragraph">Linear displacement</p></td>
                     </tr>
                     <tr>
                       <th>Symbol</th>
@@ -1234,7 +1320,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\mathbf{u}\text{(}t\text{)}=\frac{\,d\mathbf{p}\left(t\right)}{\,dt}\]
+                        \[\symbf{u}\text{(}t\text{)}=\frac{\,d\symbf{p}\left(t\right)}{\,dt}\]
                       </td>
                     </tr>
                     <tr>
@@ -1278,7 +1364,7 @@
                     </tr>
                     <tr>
                       <th>Label</th>
-                      <td><p class="paragraph">Linear Velocity</p></td>
+                      <td><p class="paragraph">Linear velocity</p></td>
                     </tr>
                     <tr>
                       <th>Symbol</th>
@@ -1293,7 +1379,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\mathbf{v}\text{(}t\text{)}=\frac{\,d\mathbf{u}\left(t\right)}{\,dt}\]
+                        \[\symbf{v}\text{(}t\text{)}=\frac{\,d\symbf{u}\left(t\right)}{\,dt}\]
                       </td>
                     </tr>
                     <tr>
@@ -1337,7 +1423,7 @@
                     </tr>
                     <tr>
                       <th>Label</th>
-                      <td><p class="paragraph">Linear Acceleration</p></td>
+                      <td><p class="paragraph">Linear acceleration</p></td>
                     </tr>
                     <tr>
                       <th>Symbol</th>
@@ -1352,7 +1438,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[\mathbf{a}\text{(}t\text{)}=\frac{\,d\mathbf{v}\left(t\right)}{\,dt}\]
+                        \[\symbf{a}\text{(}t\text{)}=\frac{\,d\symbf{v}\left(t\right)}{\,dt}\]
                       </td>
                     </tr>
                     <tr>
@@ -1398,7 +1484,7 @@
                     </tr>
                     <tr>
                       <th>Label</th>
-                      <td><p class="paragraph">Angular Displacement</p></td>
+                      <td><p class="paragraph">Angular displacement</p></td>
                     </tr>
                     <tr>
                       <th>Symbol</th>
@@ -1449,7 +1535,7 @@
                     </tr>
                     <tr>
                       <th>Label</th>
-                      <td><p class="paragraph">Angular Velocity</p></td>
+                      <td><p class="paragraph">Angular velocity</p></td>
                     </tr>
                     <tr>
                       <th>Symbol</th>
@@ -1504,7 +1590,7 @@
                     </tr>
                     <tr>
                       <th>Label</th>
-                      <td><p class="paragraph">Angular Acceleration</p></td>
+                      <td><p class="paragraph">Angular acceleration</p></td>
                     </tr>
                     <tr>
                       <th>Symbol</th>
@@ -1578,7 +1664,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{\mathbf{v}_{\text{B}}}={\mathbf{v}_{\text{O}}}+ω\times{\mathbf{u}_{\text{O}\text{B}}}\]
+                        \[{\symbf{v}_{\text{B}}}={\symbf{v}_{\text{O}}}+ω\times{\symbf{u}_{\text{O}\text{B}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1644,7 +1730,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\mathbf{τ}=\mathbf{r}\times\mathbf{F}\]</td>
+                      <td>\[\symbf{τ}=\symbf{r}\times\symbf{F}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1695,7 +1781,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[KE=m \frac{\mathbf{v}^{2}}{2}\]</td>
+                      <td>\[KE=m \frac{\symbf{v}^{2}}{2}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1755,7 +1841,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{C_{\text{R}}}=-\left(\frac{{{\mathbf{v}_{\text{f}}}^{\text{A}\text{B}}}\cdot{}\mathbf{n}}{{{\mathbf{v}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\mathbf{n}}\right)\]
+                        \[{C_{\text{R}}}=-\left(\frac{{{\symbf{v}_{\text{f}}}^{\text{A}\text{B}}}\cdot{}\symbf{n}}{{{\symbf{v}_{\text{i}}}^{\text{A}\text{B}}}\cdot{}\symbf{n}}\right)\]
                       </td>
                     </tr>
                     <tr>
@@ -1825,7 +1911,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{{\mathbf{v}_{\text{i}}}^{\text{A}\text{B}}}={\mathbf{v}^{\text{A}\text{P}}}-{\mathbf{v}^{\text{B}\text{P}}}\]
+                        \[{{\symbf{v}_{\text{i}}}^{\text{A}\text{B}}}={\symbf{v}^{\text{A}\text{P}}}-{\symbf{v}^{\text{B}\text{P}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -1886,7 +1972,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\mathbf{J}=m Δ\mathbf{v}\]</td>
+                      <td>\[\symbf{J}=m Δ\symbf{v}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -1925,11 +2011,11 @@
                   <div class="subsubsubsection">
                     <h4>Detailed derivation of impulse (vector):</h4>
                     <p class="paragraph">Newton's second law of motion states:</p>
-                    \[\mathbf{F}=m \mathbf{a}=m \frac{\,d\mathbf{v}}{\,dt}\]
+                    \[\symbf{F}=m \symbf{a}=m \frac{\,d\symbf{v}}{\,dt}\]
                     <p class="paragraph">Rearranging:</p>
-                    \[\int_{{t_{1}}}^{{t_{2}}}{\mathbf{F}}\,dt=m \left(\int_{{\mathbf{v}_{1}}}^{{\mathbf{v}_{2}}}{1}\,d\mathbf{v}\right)\]
+                    \[\int_{{t_{1}}}^{{t_{2}}}{\symbf{F}}\,dt=m \left(\int_{{\symbf{v}_{1}}}^{{\symbf{v}_{2}}}{1}\,d\symbf{v}\right)\]
                     <p class="paragraph">Integrating the right hand side:</p>
-                    \[\int_{{t_{1}}}^{{t_{2}}}{\mathbf{F}}\,dt=m {\mathbf{v}_{2}}-m {\mathbf{v}_{1}}=m Δ\mathbf{v}\]
+                    \[\int_{{t_{1}}}^{{t_{2}}}{\symbf{F}}\,dt=m {\symbf{v}_{2}}-m {\symbf{v}_{1}}=m Δ\symbf{v}\]
                   </div>
                 </div>
                 <div id="DD:potEnergy">
@@ -1952,7 +2038,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[PE=m \mathbf{g} h\]</td>
+                      <td>\[PE=m \symbf{g} h\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -2012,7 +2098,7 @@
                     </tr>
                     <tr>
                       <th>Equation</th>
-                      <td>\[\mathbf{I}=\displaystyle\sum{{m_{j}} {d_{j}}^{2}}\]</td>
+                      <td>\[\symbf{I}=\displaystyle\sum{{m_{j}} {d_{j}}^{2}}\]</td>
                     </tr>
                     <tr>
                       <th>Description</th>
@@ -2058,7 +2144,7 @@
               <div class="subsubsection">
                 <h3>Instance Models</h3>
                 <p class="paragraph">
-                  This section transforms the problem defined in <a href=#Sec:ProbDesc>Sec:Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Sec:Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Sec:Theoretical Models</a> and <a href=#Sec:GDs>Sec:General Definitions</a>.
+                  This section transforms the problem defined in the <a href=#Sec:ProbDesc>problem description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in the <a href=#Sec:DDs>data definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>theoretical models</a> and <a href=#Sec:GDs>general definitions</a>.
                 </p>
                 <p class="paragraph">
                   The goal <a href=#linearGS>GS:Determine-Linear-Properties</a> is met by <a href=#IM:transMot>IM:transMot</a> and <a href=#IM:col2D>IM:col2D</a>. The goal <a href=#angularGS>GS:Determine-Angular-Properties</a> is met by <a href=#IM:rotMot>IM:rotMot</a> and <a href=#IM:col2D>IM:col2D</a>.
@@ -2092,10 +2178,10 @@
                     <tr>
                       <th>Input Constraints</th>
                       <td>
-                        \[{\mathbf{v}_{j}}\gt{}0\]
+                        \[{\symbf{v}_{j}}\gt{}0\]
                         \[t\gt{}0\]
-                        \[\mathbf{g}\gt{}0\]
-                        \[{\mathbf{F}_{j}}\gt{}0\]
+                        \[\symbf{g}\gt{}0\]
+                        \[{\symbf{F}_{j}}\gt{}0\]
                         \[{m_{j}}\gt{}0\]
                       </td>
                     </tr>
@@ -2106,7 +2192,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{\mathbf{a}_{j}}=\frac{\,d{\mathbf{v}_{j}}\left(t\right)}{\,dt}=\mathbf{g}+\frac{{\mathbf{F}_{j}}\left(t\right)}{{m_{j}}}\]
+                        \[{\symbf{a}_{j}}=\symbf{g}+\frac{{\symbf{F}_{j}}\left(t\right)}{{m_{j}}}\]
                       </td>
                     </tr>
                     <tr>
@@ -2114,11 +2200,7 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em><b>a</b><sub>j</sub></em> is the j-th body's acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
-                          </li>
-                          <li><em>t</em> is the time (<em>s</em>)</li>
-                          <li>
-                            <em><b>v</b><sub>j</sub></em> is the velocity of the j-th body's velocity (<em>\(\frac{\text{m}}{\text{s}}\)</em>)
+                            <em><b>a</b><sub>j</sub></em> is the force on the translational motion of a set of 2D rigid bodies (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
                           </li>
                           <li>
                             <em><b>g</b></em> is the gravitational acceleration (<em>\(\frac{\text{m}}{\text{s}^{2}}\)</em>)
@@ -2126,6 +2208,7 @@
                           <li>
                             <em><b>F</b><sub>j</sub></em> is the force applied to the j-th body at time t (<em>N</em>)
                           </li>
+                          <li><em>t</em> is the time (<em>s</em>)</li>
                           <li>
                             <em>m<sub>j</sub></em> is the mass of the j-th particle (<em>kg</em>)
                           </li>
@@ -2159,7 +2242,19 @@
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph"></p>
+                <div id="IM:transMotDeriv">
+                  <div class="subsubsubsection">
+                    <h4>
+                      Detailed derivation of force on the translational motion of a set of 2D rigid bodies:
+                    </h4>
+                    <p class="paragraph">
+                      We may calculate the total acceleration of rigid body <em>j</em> by calculating the derivative of it's velocity with respect to time (from <a href=#DD:linAcc>DD:linAcc</a>).
+                    </p>
+                    \[{α_{j}}=\frac{\,d{\symbf{v}_{j}}\left(t\right)}{\,dt}\]
+                    <p class="paragraph">Performing the derivative, we obtain:</p>
+                    \[{\symbf{a}_{j}}=\symbf{g}+\frac{{\symbf{F}_{j}}\left(t\right)}{{m_{j}}}\]
+                  </div>
+                </div>
                 <div id="IM:rotMot">
                   <table class="idefn">
                     <tr>
@@ -2184,25 +2279,25 @@
                     </tr>
                     <tr>
                       <th>Output</th>
-                      <td><p class="paragraph"><em>α</em></p></td>
+                      <td><p class="paragraph"><em>α<sub>j</sub></em></p></td>
                     </tr>
                     <tr>
                       <th>Input Constraints</th>
                       <td>
                         \[ω\gt{}0\]
                         \[t\gt{}0\]
-                        \[{\mathbf{τ}_{j}}\gt{}0\]
-                        \[\mathbf{I}\gt{}0\]
+                        \[{\symbf{τ}_{j}}\gt{}0\]
+                        \[\symbf{I}\gt{}0\]
                       </td>
                     </tr>
                     <tr>
                       <th>Output Constraints</th>
-                      <td>\[α\gt{}0\]</td>
+                      <td>\[{α_{j}}\gt{}0\]</td>
                     </tr>
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[α=\frac{\,dω\left(t\right)}{\,dt}=\frac{{\mathbf{τ}_{j}}\left(t\right)}{\mathbf{I}}\]
+                        \[{α_{j}}=\frac{{\symbf{τ}_{j}}\left(t\right)}{\symbf{I}}\]
                       </td>
                     </tr>
                     <tr>
@@ -2210,15 +2305,12 @@
                       <td>
                         <ul class="hide-list-style-no-indent">
                           <li>
-                            <em>α</em> is the angular acceleration (<em>\(\frac{\text{rad}}{\text{s}^{2}}\)</em>)
-                          </li>
-                          <li><em>t</em> is the time (<em>s</em>)</li>
-                          <li>
-                            <em>ω</em> is the angular velocity (<em>\(\frac{\text{rad}}{\text{s}}\)</em>)
+                            <em>α<sub>j</sub></em> is the Force on the rotational motion of a set of 2D rigid body (<em>\(\frac{\text{rad}}{\text{s}^{2}}\)</em>)
                           </li>
                           <li>
                             <em><b>τ</b><sub>j</sub></em> is the torque applied to the j-th body (<em>Nm</em>)
                           </li>
+                          <li><em>t</em> is the time (<em>s</em>)</li>
                           <li>
                             <em><b>I</b></em> is the moment of inertia (<em>kgm<sup>2</sup></em>)
                           </li>
@@ -2249,7 +2341,19 @@
                     </tr>
                   </table>
                 </div>
-                <p class="paragraph"></p>
+                <div id="IM:rotMotDeriv">
+                  <div class="subsubsubsection">
+                    <h4>
+                      Detailed derivation of Force on the rotational motion of a set of 2D rigid body:
+                    </h4>
+                    <p class="paragraph">
+                      We may calculate the total angular acceleration of rigid body <em>j</em> by calculating the derivative of its angular velocity with respect to time (from <a href=#DD:angAccel>DD:angAccel</a>).
+                    </p>
+                    \[{α_{j}}=\frac{\,dω\left(t\right)}{\,dt}\]
+                    <p class="paragraph">Performing the derivative, we obtain:</p>
+                    \[{α_{j}}=\frac{{\symbf{τ}_{j}}\left(t\right)}{\symbf{I}}\]
+                  </div>
+                </div>
                 <div id="IM:col2D">
                   <table class="idefn">
                     <tr>
@@ -2278,7 +2382,7 @@
                         \[t\gt{}0\]
                         \[j\gt{}0\]
                         \[{m_{\text{A}}}\gt{}0\]
-                        \[\mathbf{n}\gt{}0\]
+                        \[\symbf{n}\gt{}0\]
                       </td>
                     </tr>
                     <tr>
@@ -2288,7 +2392,7 @@
                     <tr>
                       <th>Equation</th>
                       <td>
-                        \[{\mathbf{v}_{\text{A}}}\left({t_{\text{c}}}\right)={\mathbf{v}_{\text{A}}}\left(t\right)+\frac{j}{{m_{\text{A}}}} \mathbf{n}\]
+                        \[{\symbf{v}_{\text{A}}}\left({t_{\text{c}}}\right)={\symbf{v}_{\text{A}}}\left(t\right)+\frac{j}{{m_{\text{A}}}} \symbf{n}\]
                       </td>
                     </tr>
                     <tr>
@@ -2352,7 +2456,7 @@
               <div class="subsubsection">
                 <h3>Data Constraints</h3>
                 <p class="paragraph">
-                  <a href=#Table:InDataConstraints>Tab:InDataConstraints</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+                  The <a href=#Table:InDataConstraints>Data Constraints Table</a> shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
                 </p>
                 <div id="Table:InDataConstraints">
                   <table class="table">
@@ -2455,7 +2559,7 @@
               <div class="subsubsection">
                 <h3>Properties of a Correct Solution</h3>
                 <p class="paragraph">
-                  <a href=#Table:OutDataConstraints>Tab:OutDataConstraints</a> shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
+                  The <a href=#Table:OutDataConstraints>Data Constraints Table</a> shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
                 </p>
                 <div id="Table:OutDataConstraints">
                   <table class="table">
@@ -2503,7 +2607,7 @@
               </p>
               <p>
                 <div id="verifyPhysCons">
-                  Verify-Physical_Constraints: Verify that the inputs satisfy the required physical constraints from <a href=#Sec:SolCharSpec>Sec:Solution Characteristics Specification</a>.
+                  Verify-Physical_Constraints: Verify that the inputs satisfy the required physical constraints from the <a href=#Sec:SolCharSpec>solution characteristics specification</a>.
                 </div>
               </p>
               <p>
@@ -2630,7 +2734,7 @@
       <div class="section">
         <h1>Off-The-Shelf Solutions</h1>
         <p class="paragraph">
-          As mentioned in <a href=#Sec:ProbDesc>Sec:Problem Description</a>, there already exist free open source game physics libraries. Similar 2D physics libraries are:
+          As mentioned in the <a href=#Sec:ProbDesc>problem description</a>, there already exist free open source game physics libraries. Similar 2D physics libraries are:
         </p>
         <ul class="list">
           <li>Box2D: http://box2d.org/</li>
@@ -2736,7 +2840,7 @@
             </tr>
           </table>
           <p class="caption">
-            Traceability Matrix Showing the Connections Between Assumptions dependence of each other.
+            Traceability Matrix Showing the Connections Between Assumptions and Other Assumptions
           </p>
         </div>
         <div id="Table:TraceMatAvsAll">
@@ -4553,6 +4657,59 @@
             Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items
           </p>
         </div>
+        <p class="paragraph">
+          The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href=#Figure:TraceGraphAvsA>Fig:TraceGraphAvsA</a> shows the dependencies of assumptions on the assumptions. <a href=#Figure:TraceGraphAvsAll>Fig:TraceGraphAvsAll</a> shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. <a href=#Figure:TraceGraphRefvsRef>Fig:TraceGraphRefvsRef</a> shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. <a href=#Figure:TraceGraphAllvsR>Fig:TraceGraphAllvsR</a> shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models. <a href=#Figure:TraceGraphAllvsAll>Fig:TraceGraphAllvsAll</a> shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.
+        </p>
+        <div id="Figure:TraceGraphAvsA">
+          <figure>
+            <img src="../../../traceygraphs/GamePhysics/avsa.svg" alt="TraceGraphAvsA" >
+            <figcaption>TraceGraphAvsA</figcaption>
+          </figure>
+        </div>
+        <div id="Figure:TraceGraphAvsAll">
+          <figure>
+            <img src="../../../traceygraphs/GamePhysics/avsall.svg" alt="TraceGraphAvsAll" >
+            <figcaption>TraceGraphAvsAll</figcaption>
+          </figure>
+        </div>
+        <div id="Figure:TraceGraphRefvsRef">
+          <figure>
+            <img src="../../../traceygraphs/GamePhysics/refvsref.svg" alt="TraceGraphRefvsRef" >
+            <figcaption>TraceGraphRefvsRef</figcaption>
+          </figure>
+        </div>
+        <div id="Figure:TraceGraphAllvsR">
+          <figure>
+            <img src="../../../traceygraphs/GamePhysics/allvsr.svg" alt="TraceGraphAllvsR" >
+            <figcaption>TraceGraphAllvsR</figcaption>
+          </figure>
+        </div>
+        <div id="Figure:TraceGraphAllvsAll">
+          <figure>
+            <img src="../../../traceygraphs/GamePhysics/allvsall.svg" alt="TraceGraphAllvsAll" >
+            <figcaption>TraceGraphAllvsAll</figcaption>
+          </figure>
+        </div>
+        <p class="paragraph">
+          For convenience, the following graphs can be found at the links below:
+        </p>
+        <ul class="list">
+          <li>
+            <a href="../../../traceygraphs/GamePhysics/avsa.svg">TraceGraphAvsA</a>
+          </li>
+          <li>
+            <a href="../../../traceygraphs/GamePhysics/avsall.svg">TraceGraphAvsAll</a>
+          </li>
+          <li>
+            <a href="../../../traceygraphs/GamePhysics/refvsref.svg">TraceGraphRefvsRef</a>
+          </li>
+          <li>
+            <a href="../../../traceygraphs/GamePhysics/allvsr.svg">TraceGraphAllvsR</a>
+          </li>
+          <li>
+            <a href="../../../traceygraphs/GamePhysics/allvsall.svg">TraceGraphAllvsAll</a>
+          </li>
+        </ul>
       </div>
     </div>
     <div id="Sec:AuxConstants">

@@ -295,9 +295,6 @@ prob = foldlSent_ [ S "efficiently and correctly to predict the", phraseNP (moti
 terms :: [ConceptChunk]
 terms = [gravity, cartesian]
 
-tMods :: [TheoryModel]
-tMods = [accelerationTM, velocityTM, newtonSL, newtonSLR]
-
 -----------------------------------
 -- 4.1.2 Physical System Description --
 -----------------------------------
@@ -321,6 +318,8 @@ physSystParts = map ((!.) . atStartNP) [the rod, the mass]
 -- 4.2.2 : Theoretical Models --
 --------------------------------
 -- Theoretical Models defined in TMs
+tMods :: [TheoryModel]
+tMods = [accelerationTM, velocityTM, newtonSL, newtonSLR]
 
 ---------------------------------
 -- 4.2.3 : General Definitions --

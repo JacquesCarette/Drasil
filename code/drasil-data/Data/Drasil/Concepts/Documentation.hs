@@ -227,7 +227,7 @@ abbAcc, charOfIR, consVals, corSol, methAndAnls, orgOfDoc, procForAnls, propOfCo
 abbAcc              = nc "TAbbAcc"            (abbreviation `and_PP` acronym)
 consVals            = nc "consVals"           (cn "values of auxiliary constants")
 corSol              = nc "corSol"             (cn' "correct solution")
-charOfIR            = nc "charOfIR"           (characteristic `ofThePS` intReader)
+charOfIR            = nc "charOfIR"           (characteristic `of_PS` intReader)
 methAndAnls         = nc "methAndAnls"        (method_ `and_` analysis)
 orgOfDoc            = nc "orgOfDoc"           (organization `of_` document)
 procForAnls         = nc "procForAnls"        (procedure `for` analysis)

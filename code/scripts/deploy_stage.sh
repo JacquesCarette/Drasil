@@ -145,7 +145,7 @@ copy_traceygraphs() {
 
 copy_website() {
   cd "$CUR_DIR$DEPLOY_FOLDER"
-  cp -r "$CUR_DIR"drasil-website/Website/. .
+  cp -r "$CUR_DIR$WEBSITE_FOLDER". .
 
   # src stubs were consumed by site generator; safe to delete those.
   rm "$EXAMPLE_DEST"*/src

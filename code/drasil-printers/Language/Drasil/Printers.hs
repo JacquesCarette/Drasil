@@ -18,7 +18,7 @@ module Language.Drasil.Printers (
   -- TeX
   -- Print
   , genTeX
-  , PrintingInformation(..)
+  , PrintingInformation(..) , piSys
   , HasPrintingOptions (..)
   , Notation(..)
   , defaultConfiguration
@@ -34,5 +34,5 @@ import Language.Drasil.Plain.Print (Linearity(..), sentenceDoc, exprDoc,
   codeExprDoc, symbolDoc, unitDoc)
 import Language.Drasil.TeX.Print (genTeX)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation(..),
-  HasPrintingOptions(..), Notation(..), defaultConfiguration)
+  HasPrintingOptions(..), Notation(..), defaultConfiguration, piSys)
 import Language.Drasil.DOT.Print (outputDot, GraphInfo(..), NodeFamily(..))

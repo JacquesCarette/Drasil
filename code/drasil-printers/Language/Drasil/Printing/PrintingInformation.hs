@@ -2,9 +2,9 @@
 
 module Language.Drasil.Printing.PrintingInformation where
 
-import Control.Lens (makeLenses, Lens')
+import Control.Lens (makeLenses, Lens', (^.))
 
-import Database.Drasil (ChunkDB)
+import Database.Drasil (ChunkDB, SystemInformation, sysinfodb)
 
 import Language.Drasil (Stage(..))
 
@@ -34,6 +34,10 @@ makeLenses ''PrintingInformation
 
 -- | Finds the notation used for the 'PrintingConfiguration' within the 'PrintingInformation'.
 instance HasPrintingOptions  PrintingInformation where getSetting  = configuration . getSetting
+
+-- | Builds a document's printing information based on the system information.
+piSys :: SystemInformation -> Stage -> PrintingConfiguration -> PrintingInformation
+piSys si = PI (si ^. sysinfodb)
 
 -- | Default configuration is for engineering.
 defaultConfiguration :: PrintingConfiguration

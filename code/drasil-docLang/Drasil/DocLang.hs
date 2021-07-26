@@ -4,7 +4,7 @@ module Drasil.DocLang (
   PDSub(..), ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..),
   SolChSpec(..),
   -- DocumentLanguage
-  mkDoc, tsymb, tsymb'', tunit, tunit', fillTraceSI, -- need for testing dot gen
+  mkDoc, fillTraceSI, fillcdbSRS,
   -- DocumentLanguage.Core
   AppndxSec(..), AuxConstntSec(..), DerivationDisplay(..), Emphasis(..),
   OffShelfSolnsSec(..), GSDSec(..), GSDSub(UsrChars, SystCons, SysCntxt),
@@ -34,9 +34,9 @@ module Drasil.DocLang (
   -- Sections.TableOfAbbAndAcronyms
   tableAbbAccRef,
   -- Sections.TableOfSymbols
-  symbTableRef,
+  symbTableRef, tsymb, tsymb'',
   -- Sections.TableOfUnits
-  unitTableRef,
+  unitTableRef, tunit, tunit',
   -- Sections.TraceabilityMandGs
   traceMatStandard, traceMatOtherReq,
   -- ExtractDocDesc
@@ -50,7 +50,7 @@ module Drasil.DocLang (
 import Drasil.DocDecl (SRSDecl, DocSection(..), ReqrmntSec(..), ReqsSub(..),
   PDSub(..), ProblemDescription(..), SSDSec(..), SSDSub(..), SCSSub(..),
   SolChSpec(..))
-import Drasil.DocumentLanguage (mkDoc, tsymb, tsymb'', tunit, tunit', fillTraceSI) -- fillTraceSI needed for testing
+import Drasil.DocumentLanguage (mkDoc, fillTraceSI, fillcdbSRS)
 import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   DerivationDisplay(..), Emphasis(..), OffShelfSolnsSec(..), GSDSec(..),
   GSDSub(UsrChars, SystCons, SysCntxt), IntroSec(..), IntroSub(..), LFunc(..),
@@ -71,8 +71,8 @@ import Drasil.Sections.Requirements (inReq, inTable, mkInputPropsTable,
 import Drasil.Sections.SpecificSystemDescription (auxSpecSent, termDefnF', inDataConstTbl, outDataConstTbl)
 --import Drasil.Sections.Stakeholders
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccRef)
-import Drasil.Sections.TableOfSymbols (symbTableRef)
-import Drasil.Sections.TableOfUnits (unitTableRef)
+import Drasil.Sections.TableOfSymbols (symbTableRef, tsymb, tsymb'')
+import Drasil.Sections.TableOfUnits (unitTableRef, tunit, tunit')
 import Drasil.Sections.TraceabilityMandGs (traceMatStandard, traceMatOtherReq)
 import Drasil.ExtractDocDesc (getDocDesc, egetDocDesc)
 import Drasil.TraceTable (generateTraceMap)

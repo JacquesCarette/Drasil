@@ -52,15 +52,16 @@ exampleTitles, exampleDescs :: [String]
 -- Sorts the references for mkCodeList.
 exampleCodeRefs, exampleDoxRefs :: FilePath -> [[(String, [(Sentence, Reference)])]]
 -- example titles
-exampleTitles = [pendulum, gamePhys, glassBR, hghc, noPCM, pdController, projectile, ssp, swhs, template]
+exampleTitles = [sglPendulum, dblPendulum, gamePhys, glassBR, hghc, noPCM, pdController, projectile, ssp, swhs, template]
 -- example descriptions (used in the list of examples)
-exampleDescs = [pendulumDesc, gamePhysDesc, glassBRDesc, hghcDesc, noPCMDesc, pdControllerDesc, projectileDesc, sspDesc, swhsDesc, templateDesc]
-exampleCodeRefs path =[[(pendulum, [])],
+exampleDescs = [sglPendulumDesc, dblPendulumDesc, gamePhysDesc, glassBRDesc, hghcDesc, noPCMDesc, pdControllerDesc, projectileDesc, sspDesc, swhsDesc, templateDesc]
+exampleCodeRefs path =[[(sglPendulum, [])],
+                  [(dblPendulum, [])],
                   [(gamePhys, [])],
                   [(glassBR, map (getCodeRef path $ map toLower glassBR) glassBRCode)],
                   [(hghc, [])],
                   [(noPCM, map (getCodeRef path $map toLower noPCM) noPCMCode)],
-                  [(pdController, map (getCodeRef path $ map toLower pdController) pdControllerCode)],
+                  [(pdController, map (getCodeRef path $ map toLower pdController) pdControllerCode)], -- capitalization is not all lowercase, so manually put in folder name for now.
                   [(projectileC1, map (getCodeRef path (map toLower projectile ++ "/" ++ projectileC1)) projectileCase1Code),
                   (projectileC2, map (getCodeRef path (map toLower projectile ++ "/" ++ projectileC2)) projectileCase2Code),
                   (projectileC3, map (getCodeRef path (map toLower projectile ++ "/" ++ projectileC3)) projectileCase3Code),
@@ -69,7 +70,8 @@ exampleCodeRefs path =[[(pendulum, [])],
                   [(ssp, [])],
                   [(swhs, [])],
                   [(template, [])]]
-exampleDoxRefs path =[[(pendulum, [])],
+exampleDoxRefs path =[[(sglPendulum, [])],
+                 [(dblPendulum, [])],
                  [(gamePhys, [])],
                  [(glassBR, map (getDoxRef path glassBR) glassBRDox)],
                  [(hghc, [])],
@@ -85,10 +87,11 @@ exampleDoxRefs path =[[(pendulum, [])],
                  [(template, [])]]
 
 --example names, maybe make a unique type to accept fields of documents, gen code, and doxygen?
-pendulum, gamePhys, glassBR, hghc, noPCM, pdController, projectile, projectileC1,
+sglPendulum, dblPendulum, gamePhys, glassBR, hghc, noPCM, pdController, projectile, projectileC1,
   projectileC2, projectileC3, projectileC4, projectileC5, ssp, swhs, template :: String
 
-pendulum = "DblPendulum"
+sglPendulum = "DblPendulum"
+dblPendulum = "DblPendulum"
 gamePhys = "GamePhysics"
 glassBR = "GlassBR"
 hghc = "HGHC"
@@ -155,10 +158,11 @@ getCodePath path ex lang = path ++ "code/stable/" ++ ex ++ "/src/" ++ lang -- ne
 getDoxPath path ex lang = path ++ ex ++ "/doxygen/" ++ lang ++ "/index.html" -- need example path
 
 -- Project descriptions
-pendulumDesc, gamePhysDesc, glassBRDesc, hghcDesc, noPCMDesc, pdControllerDesc,
+sglPendulumDesc, dblPendulumDesc, gamePhysDesc, glassBRDesc, hghcDesc, noPCMDesc, pdControllerDesc,
   projectileDesc, sspDesc, swhsDesc, templateDesc :: String
 
-pendulumDesc = ""
+sglPendulumDesc = "describes the motion of a single pendulum in 2-D dimension."
+dblPendulumDesc = "describes the motion of a double pendulum in 2-D dimension."
 gamePhysDesc = "describes the modeling of an open source 2D rigid body physics library used for games."
 glassBRDesc = "predicts whether a given glass slab is likely to resist a specified blast."
 hghcDesc = "describes heat transfer coefficients related to clad."

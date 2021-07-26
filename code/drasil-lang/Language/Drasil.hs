@@ -76,8 +76,9 @@ module Language.Drasil (
   , cuc, cvc, constrained', cuc', cuc'', constrainedNRV'
   , cnstrw, cnstrw'
   -- Chunk.Eq
-  , QDefinition, fromEqn, fromEqn', fromEqnSt, fromEqnSt', equat
+  , QDefinition, fromEqn, fromEqn', fromEqnSt, fromEqnSt'
   , mkQDefSt, mkQuantDef, mkQuantDef', ec
+  , mkFuncDef, mkFuncDef', mkFuncDefByQ
   -- Chunk.Quantity
   , QuantityDict, qw, mkQuant, mkQuant', codeVC, implVar, implVar', dcc, dcc', 
     dccWDS, dccWDS', vc, vc'', vcSt, vcUnit, ccs, cc, cc', cic
@@ -102,7 +103,7 @@ module Language.Drasil (
   --Citations
   , Citation, EntryID, BibRef
   , citeID, citeKind
-    -- Citation smart constructors
+  -- Citation smart constructors
   , cArticle, cBookA, cBookE, cBooklet
   , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
   , cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis
@@ -255,7 +256,8 @@ import Language.Drasil.Constraint (physc, sfwrc, isPhysC, isSfwrC,
   Constraint(..), ConstraintE, ConstraintReason(..))
 import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt, 
-  fromEqnSt', equat, mkQDefSt, mkQuantDef, mkQuantDef', ec)
+  fromEqnSt', mkQDefSt, mkQuantDef, mkQuantDef', ec,
+  mkFuncDef, mkFuncDef', mkFuncDefByQ)
 import Language.Drasil.Chunk.NamedArgument (NamedArgument, narg)
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity

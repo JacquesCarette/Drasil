@@ -11,7 +11,7 @@ import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), UnitDefn, unitWrapp
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Stages (Stage)
-import Language.Drasil.NounPhrase (NP)
+import Language.Drasil.NounPhrase.Core (NP)
 
 import Control.Lens ((^.), makeLenses)
 

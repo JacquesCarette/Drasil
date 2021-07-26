@@ -55,11 +55,11 @@ digraph allvsr {
 
 	accj	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:transMot"];
 	angAccj	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:rotMot"];
-	col2DRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:col2D"];
+	col2DIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:col2D"];
 
 	subgraph IM {
 	rank="same"
-	{accj, angAccj, col2DRC}
+	{accj, angAccj, col2DIM}
 	}
 
 	simSpace	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:simSpace"];

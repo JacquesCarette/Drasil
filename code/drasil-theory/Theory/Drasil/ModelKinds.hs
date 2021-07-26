@@ -21,6 +21,7 @@ import Theory.Drasil.MultiDefn (MultiDefn)
 --     * 'EquationalConstraint's represent invariants that will hold in a system of equations.
 --     * 'EquationalModel's represent quantities that are calculated via a single definition/'QDefinition'.
 --     * 'EquationalRealm's represent MultiDefns; quantities that may be calculated using any one of many 'DefiningExpr's (e.g., 'x = A = ... = Z')
+--     * 'FunctionalModel's represent quantity-resulting function definitions.
 --     * 'OthModel's are placeholders for models. No new 'OthModel's should be created, they should be using one of the other kinds.
 data ModelKinds = DEModel RelationConcept
                 | EquationalConstraints ConstraintSet
@@ -75,7 +76,7 @@ equationalModelN n qd = MK (EquationalModel qd) (qd ^. uid) n
 equationalRealm :: UID -> NP -> MultiDefn -> ModelKind
 equationalRealm u n md = MK (EquationalRealm md) u n
 
--- | Smart constructor for 'EquationalRealm's
+-- | Smart constructor for 'EquationalRealm's, deriving UID+Term from the 'MultiDefn'
 equationalRealm' :: MultiDefn -> ModelKind
 equationalRealm' md = MK (EquationalRealm md) (md ^. uid) (md ^. term)
 
@@ -125,7 +126,9 @@ instance Display       ModelKind where toDispExpr = toDispExpr . (^. mk)
 
 
 -- | Retrieve internal data from ModelKinds
-elimMk :: Getter RelationConcept a -> Getter ConstraintSet a -> Getter QDefinition a -> Getter MultiDefn a -> ModelKinds -> a
+elimMk :: Getter RelationConcept a -> Getter ConstraintSet a
+  -> Getter QDefinition a -> Getter MultiDefn a
+  -> ModelKinds -> a
 elimMk f _ _ _ (DEModel q)               = q ^. f
 elimMk _ f _ _ (EquationalConstraints q) = q ^. f
 elimMk _ _ f _ (EquationalModel q)       = q ^. f
@@ -133,7 +136,10 @@ elimMk _ _ _ f (EquationalRealm q)       = q ^. f
 elimMk f _ _ _ (OthModel q)              = q ^. f
 
 -- | Map into internal representations of ModelKinds
-setMk :: ModelKinds -> Setter' RelationConcept a -> Setter' ConstraintSet a -> Setter' QDefinition a -> Setter' MultiDefn a -> a -> ModelKinds
+setMk :: ModelKinds
+  -> Setter' RelationConcept a -> Setter' ConstraintSet a
+  -> Setter' QDefinition a -> Setter' MultiDefn a
+  -> a -> ModelKinds
 setMk (DEModel q)               f _ _ _ x = DEModel               $ set f x q
 setMk (EquationalConstraints q) _ f _ _ x = EquationalConstraints $ set f x q
 setMk (EquationalModel q)       _ _ f _ x = EquationalModel       $ set f x q
@@ -141,12 +147,15 @@ setMk (EquationalRealm q)       _ _ _ f x = EquationalRealm       $ set f x q
 setMk (OthModel q)              f _ _ _ x = OthModel              $ set f x q
 
 -- | Make a 'Lens' for 'ModelKinds'.
-lensMk :: forall a. Lens' RelationConcept a -> Lens' ConstraintSet a -> Lens' QDefinition a -> Lens' MultiDefn a -> Lens' ModelKinds a
-lensMk lr lcs lq lqd = lens g s
+lensMk :: forall a.
+     Lens' RelationConcept a -> Lens' ConstraintSet a 
+  -> Lens' QDefinition a -> Lens' MultiDefn a
+  -> Lens' ModelKinds a
+lensMk lr lcs lq lmd = lens g s
     where g :: ModelKinds -> a
-          g mk_ = elimMk lr lcs lq lqd mk_
+          g mk_ = elimMk lr lcs lq lmd mk_
           s :: ModelKinds -> a -> ModelKinds
-          s mk_ x = setMk mk_ lr lcs lq lqd x
+          s mk_ x = setMk mk_ lr lcs lq lmd x
 
 -- | Extract a list of 'QDefinition's from a list of 'ModelKinds'.
 getEqModQds :: [ModelKind] -> [QDefinition]

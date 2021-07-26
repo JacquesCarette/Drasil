@@ -2,7 +2,7 @@ digraph avsall {
 	wVol -> assumpVCN;
 	consThermECS -> assumpTEO;
 	sensHeat -> assumpWAL;
-	nwtnCoolingRC -> assumpHTCC;
+	nwtnCoolingTM -> assumpHTCC;
 	rocTempSimpRC -> assumpCWTAT;
 	rocTempSimpRC -> assumpDWCoW;
 	rocTempSimpRC -> assumpSHECoW;
@@ -11,8 +11,8 @@ digraph avsall {
 	eBalanceOnWtrRC -> assumpWAL;
 	eBalanceOnWtrRC -> assumpPIT;
 	eBalanceOnWtrRC -> assumpNIHGBW;
-	heatEInWtrRC -> assumpWAL;
-	heatEInWtrRC -> assumpAPT;
+	heatEInWtrIM -> assumpWAL;
+	heatEInWtrIM -> assumpAPT;
 	likeChgTCVOD -> assumpTHCCoT;
 	likeChgTCVOL -> assumpTHCCoL;
 	likeChgDT -> assumpCTNTD;
@@ -53,11 +53,11 @@ digraph avsall {
 
 	consThermECS	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:consThermE"];
 	sensHeat	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:sensHtE"];
-	nwtnCoolingRC	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:nwtnCooling"];
+	nwtnCoolingTM	[shape=box, color=black, style=filled, fillcolor=pink, label="TM:nwtnCooling"];
 
 	subgraph TM {
 	rank="same"
-	{consThermECS, sensHeat, nwtnCoolingRC}
+	{consThermECS, sensHeat, nwtnCoolingTM}
 	}
 
 	rocTempSimpRC	[shape=box, color=black, style=filled, fillcolor=palegreen, label="GD:rocTempSimp"];
@@ -69,11 +69,11 @@ digraph avsall {
 	}
 
 	eBalanceOnWtrRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:eBalanceOnWtr"];
-	heatEInWtrRC	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInWtr"];
+	heatEInWtrIM	[shape=box, color=black, style=filled, fillcolor=khaki1, label="IM:heatEInWtr"];
 
 	subgraph IM {
 	rank="same"
-	{eBalanceOnWtrRC, heatEInWtrRC}
+	{eBalanceOnWtrRC, heatEInWtrIM}
 	}
 
 	inputInitVals	[shape=box, color=black, style=filled, fillcolor=ivory, label="FR:inputInitVals"];

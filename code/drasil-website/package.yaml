@@ -30,6 +30,7 @@ dependencies:
 - drasil-printers
 - drasil-theory
 - drasil-utils
+- sglpendulum
 - dblpendulum
 - gamephysics
 - glassbr

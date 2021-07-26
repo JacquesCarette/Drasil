@@ -3,11 +3,12 @@ module Drasil.Website.Example (exampleSec, exampleRefs)where
 
 import Data.List (zipWith4, isPrefixOf)
 import Language.Drasil hiding (C)
-import Database.Drasil (SystemInformation(..))
+--import Database.Drasil (SystemInformation(..))
 import Utils.Drasil
 import Data.Char (toUpper, toLower)
 import qualified Data.List.Split as L
 
+{-
 import qualified Drasil.DblPendulum.Body as DblPendulum (fullSI)
 import qualified Drasil.GamePhysics.Body as GamePhysics (fullSI)
 import qualified Drasil.GlassBR.Body as GlassBR (fullSI)
@@ -25,7 +26,7 @@ import qualified Drasil.NoPCM.Choices as NoPCM (choices)
 import qualified Drasil.PDController.Choices as PDController (codeChoices)
 import qualified Drasil.Projectile.Choices as Projectile (codedDirName, choiceCombos)
 -- the other examples currently do not generate any code.
-
+-}
 
 --------------------------
 -- Examples Section
@@ -72,10 +73,10 @@ exampleTitles, exampleDescs :: [String]
 -- Sorts the references for mkCodeList.
 exampleCodeRefs, exampleDoxRefs :: FilePath -> [[(String, [(Sentence, Reference)])]]
 -- example titles
-exampleTitles = [sglPendulum, dblPendulum, gamePhys, glassBR, hghc, noPCM, pdController, projectile, ssp, swhs, template]
+exampleTitles = [dblPendulum, gamePhys, glassBR, hghc, noPCM, pdController, projectile, sglPendulum, ssp, swhs, template]
 -- example descriptions (used in the list of examples)
-exampleDescs = [sglPendulumDesc, dblPendulumDesc, gamePhysDesc, glassBRDesc, hghcDesc, noPCMDesc, pdControllerDesc, projectileDesc, sspDesc, swhsDesc, templateDesc]
-exampleCodeRefs path =[[(sglPendulum, [])],
+exampleDescs = [dblPendulumDesc, gamePhysDesc, glassBRDesc, hghcDesc, noPCMDesc, pdControllerDesc, projectileDesc, sglPendulumDesc, sspDesc, swhsDesc, templateDesc]
+exampleCodeRefs path =[
                   [(dblPendulum, [])],
                   [(gamePhys, [])],
                   [(glassBR, map (getCodeRef path $ map toLower glassBR) glassBRCode)],
@@ -87,10 +88,11 @@ exampleCodeRefs path =[[(sglPendulum, [])],
                   (projectileC3, map (getCodeRef path (map toLower projectile ++ "/" ++ projectileC3)) projectileCase3Code),
                   (projectileC4, map (getCodeRef path (map toLower projectile ++ "/" ++ projectileC4)) projectileCase4Code),
                   (projectileC5, map (getCodeRef path (map toLower projectile ++ "/" ++ projectileC5)) projectileCase5Code)],
+                  [(sglPendulum, [])],
                   [(ssp, [])],
                   [(swhs, [])],
                   [(template, [])]]
-exampleDoxRefs path =[[(sglPendulum, [])],
+exampleDoxRefs path =[
                  [(dblPendulum, [])],
                  [(gamePhys, [])],
                  [(glassBR, map (getDoxRef path glassBR) glassBRDox)],
@@ -102,6 +104,7 @@ exampleDoxRefs path =[[(sglPendulum, [])],
                  (projectileC3, map (\x -> getDoxRef path projectile (projectileC3 ++ "/" ++ x)) projectileCase3Dox),
                  (projectileC4, map (\x -> getDoxRef path projectile (projectileC4 ++ "/" ++ x)) projectileCase4Dox),
                  (projectileC5, map (\x -> getDoxRef path projectile (projectileC5 ++ "/" ++ x)) projectileCase5Dox)],
+                 [(sglPendulum, [])],
                  [(ssp, [])],
                  [(swhs, [])],
                  [(template, [])]]
@@ -110,7 +113,7 @@ exampleDoxRefs path =[[(sglPendulum, [])],
 sglPendulum, dblPendulum, gamePhys, glassBR, hghc, noPCM, pdController, projectile, projectileC1,
   projectileC2, projectileC3, projectileC4, projectileC5, ssp, swhs, template :: String
 
-sglPendulum = "DblPendulum"
+sglPendulum = "SglPendulum"
 dblPendulum = "DblPendulum"
 gamePhys = "GamePhysics"
 glassBR = "GlassBR"

@@ -12,6 +12,7 @@ import qualified Drasil.HGHC.Body as HGHC (fullSI)
 import qualified Drasil.NoPCM.Body as NoPCM (fullSI)
 import qualified Drasil.PDController.Body as PDController (fullSI)
 import qualified Drasil.Projectile.Body as Projectile (fullSI)
+import qualified Drasil.SglPendulum.Body as SglPendulum (fullSI)
 import qualified Drasil.SSP.Body as SSP (fullSI)
 import qualified Drasil.SWHS.Body as SWHS (fullSI)
 import qualified Drasil.Template.Body as Template (fullSI)
@@ -53,7 +54,7 @@ caseStudyTabRef = makeTabRef "CaseStudy"
 
 -- | Records example system information.
 allExampleSI :: [SystemInformation]
-allExampleSI = [DblPendulum.fullSI, GamePhysics.fullSI, GlassBR.fullSI, HGHC.fullSI, NoPCM.fullSI, PDController.fullSI, Projectile.fullSI, SSP.fullSI, SWHS.fullSI, Template.fullSI]
+allExampleSI = [DblPendulum.fullSI, GamePhysics.fullSI, GlassBR.fullSI, HGHC.fullSI, NoPCM.fullSI, PDController.fullSI, Projectile.fullSI, SglPendulum.fullSI, SSP.fullSI, SWHS.fullSI, Template.fullSI]
 
 -- TODO: Automate this somehow. It seems a little too hard-coded.
 -- To developer: Fill this list in when more examples can run code. The list
@@ -61,7 +62,7 @@ allExampleSI = [DblPendulum.fullSI, GamePhysics.fullSI, GlassBR.fullSI, HGHC.ful
 -- | Records example choices. The order of the list must match up with
 -- that in `allExampleSI`, or the Case Studies Table will be incorrect.
 allExampleChoices :: [[Choices]]
-allExampleChoices = [[], [], [GlassBR.choices], [], [NoPCM.choices], [PDController.codeChoices], Projectile.choiceCombos, [], [], []]
+allExampleChoices = [[], [], [GlassBR.choices], [], [NoPCM.choices], [PDController.codeChoices], Projectile.choiceCombos, [], [], [], []]
 
 -- | Each Example gets placed in here.
 data Example = E { sysInfoE :: SystemInformation,
@@ -246,4 +247,4 @@ getConRep Const = S "C"
 getRealNum :: [CodeType] -> Sentence
 getRealNum (Double:_) = S "D"
 getRealNum (Float:_) = S "F"
-getRealNum _ = error "This shouldn't happen. Make sure Real numbers have a preferred type"
+getRealNum _ = error "This shouldn't happen. Make sure Real numbers have a preferred type."

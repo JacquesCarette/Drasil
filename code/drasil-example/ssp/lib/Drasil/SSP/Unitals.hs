@@ -342,11 +342,11 @@ baseWthX = makeUCWDS "b_i" (cn "base width of slices")
 
 baseLngth = uc' "l_b,i" (cn "total base lengths of slices") 
   "the lengths of each slice in the direction parallel to the slope of the base"
-  (sub (vec lEll) lB) metre
+  (sub (vec cL) lB) metre
 
 surfLngth = uc' "l_s,i" (cn "surface lengths of slices")
   "the lengths of each slice in the direction parallel to the slope of the surface"
-  (sub (vec lEll) lS) metre
+  (sub (vec cL) lS) metre
 
 midpntHght = makeUCWDS "h_i" (nounPhraseSent $ phrase yDir +:+ S "heights of slices")
   (S "the heights" `S.inThe` phrase yDir +:+ S "from the base of each slice" `S.toThe`

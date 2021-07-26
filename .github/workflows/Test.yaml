@@ -60,7 +60,7 @@ jobs:
       - name: "Build"
         run: make code stackArgs="--no-terminal" GHCFLAGS="-Werror"
       - name: "Stable"
-        run: make stackArgs="--no-terminal" NOISY=yes GHCFLAGS="-Werror"
+        run: make stackArgs="--no-terminal" GHCFLAGS="-Werror" NOISY=yes
       - name: "TeX"
         run: make tex SUMMARIZE_TEX=yes
       - name: "Code"

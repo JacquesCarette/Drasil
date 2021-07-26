@@ -7,7 +7,7 @@ SHELL=/bin/bash
 #--------------------------------------------#
 
 # List of all known packages
-PACKAGES = lang utils build gool code theory database printers gen data docLang
+PACKAGES = lang metadata code-base code docLang printers build theory gool data database example gen utils website
 
 # and associated package-level suffixes
 BUILD_P_SUFFIX = _build
@@ -295,6 +295,7 @@ graphs: $(GRAPH_PACKAGES)
 $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod check_dot
 	@mkdir -p "$(GRAPH_FOLDER)"
 	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tpdf > "$(GRAPH_FOLDER)drasil-$*".pdf
+	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tsvg > "$(GRAPH_FOLDER)drasil-$*".svg
 
 # Generate a data table to analyze Drasil's class, datatype, and instance structures.
 # Dot graphs are currently generated for datatypes and class instance structures.

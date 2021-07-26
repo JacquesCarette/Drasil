@@ -6,7 +6,7 @@ if [ -z "$DEPLOY_FOLDER" ]; then
   exit 1
 fi
 
-if [-z "$WEBSITE_FOLDER"]; then
+if [ -z "$WEBSITE_FOLDER" ]; then
   echo "Missing WEBSITE_FOLDER. Run make website."
   exit 1
 fi

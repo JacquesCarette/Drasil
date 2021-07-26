@@ -87,7 +87,7 @@ module Language.Drasil (
   , uncrtnw
   -- Chunk.Unital
   , UnitalChunk(..), makeUCWDS
-  , uc, uc', ucStaged, ucs, ucs', ucsWS
+  , uc, uc', ucStaged, ucs, ucs', ucsWS, ucuc
   -- Chunk.Unitary
   , Unitary(..), UnitaryChunk, unitary, unitary', mkUnitary, unit_symb
   -- Chunk.Relation
@@ -190,7 +190,7 @@ module Language.Drasil (
   , scale, shift
   , derUC, derUC', derUC''
   , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
-  , unitWrapper, getCu, MayHaveUnit(getUnit)
+  , unitWrapper, getCu, MayHaveUnit(getUnit), HasUnit(findUnit)
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
@@ -264,7 +264,7 @@ import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC, addRelToCC)
 import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, uc, uc', 
-  ucStaged, ucs, ucs', ucsWS)
+  ucStaged, ucs, ucs', ucsWS, ucuc)
 import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.UnitaryConcept
 import Language.Drasil.Data.Citation(CiteField(..), HP(..), CitationKind(..) -- for Printing
@@ -309,4 +309,4 @@ import Language.Drasil.Chunk.UnitDefn (UnitDefn(..)
   , scale, shift
   , derUC, derUC', derUC''
   , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
-  , makeDerU, unitWrapper, getCu, MayHaveUnit(getUnit))
+  , makeDerU, unitWrapper, getCu, MayHaveUnit(getUnit), HasUnit(findUnit))

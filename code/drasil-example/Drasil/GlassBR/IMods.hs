@@ -19,9 +19,9 @@ import Data.Drasil.Concepts.Documentation (goal)
 iMods :: [InstanceModel]
 iMods = [pbIsSafe, lrIsSafe]
 
-symb :: [DefinedQuantityDict]
-symb = map dqdWr [plateLen, plateWidth, charWeight, standOffDist] ++ 
-  [dqdQd (qw calofDemand) demandq]
+symb :: [UnitalChunk]
+symb = map ucuc [plateLen, plateWidth, charWeight, standOffDist] -- ++
+ -- [dqdQd (qw calofDemand) demandq]
 
 {--}
 

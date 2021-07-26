@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqdNoUnit, dqd',
-  dqdQd, dqdWr) where
+  dqdQd, dqdWr, dqdWr') where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept, Display(..),
@@ -8,7 +8,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept, Display(..
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.Chunk.UnitDefn (UnitDefn, unitWrapper,
-  MayHaveUnit(getUnit))
+  MayHaveUnit(getUnit), HasUnit(findUnit))
 import Language.Drasil.Space (Space)
 import Language.Drasil.Stages (Stage)
 import Language.Drasil.Symbol (Symbol)
@@ -62,6 +62,9 @@ dqd' = DQD
 -- | When the input already has all the necessary information. A 'projection' operator from some a type with instances of listed classes to a 'DefinedQuantityDict'.
 dqdWr :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
 dqdWr c = DQD (cw c) (symbol c) (c ^. typ) (getUnit c)
+
+dqdWr' :: (Quantity c, Concept c, HasUnit c) => c -> DefinedQuantityDict
+dqdWr' c = DQD (cw c) (symbol c) (c ^. typ) (Just $ findUnit c)
 
 -- | When we want to merge a quantity and a concept. This is suspicious.
 dqdQd :: (Quantity c, MayHaveUnit c) => c -> ConceptChunk -> DefinedQuantityDict

@@ -39,11 +39,12 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
 import qualified Drasil.DocLang.SRS as SRS
 import Data.Drasil.Concepts.Math (mathcon, cartesian, mathcon')
 import Data.Drasil.Quantities.Math (unitVect, unitVectj)
+import Data.Drasil.Domains (physics)
 
 import Drasil.DblPendulum.Body (justification, charsOfReader, organizationOfDocumentsIntro,
   physSystParts, sysCtxIntro, sysCtxDesc, sysCtxFig1,
   sysCtxList, userCharacteristicsIntro)
-import Drasil.DblPendulum.Concepts (concepts, pendMotion, progName)
+import Drasil.DblPendulum.Concepts (concepts, pendMotion)
 import Drasil.DblPendulum.Requirements (nonFuncReqs)
 import Drasil.DblPendulum.Unitals (symbols, acronyms)
 
@@ -121,6 +122,9 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
 -- Folder name. Used in traceability graphs.
 directoryName :: FilePath
 directoryName = "SglPendulum"
+
+progName :: CI
+progName = commonIdeaWithDict "pendulumTitle" (pn "Pendulum") "SglPendulum" [physics]
 
 si :: SystemInformation
 si = SI {

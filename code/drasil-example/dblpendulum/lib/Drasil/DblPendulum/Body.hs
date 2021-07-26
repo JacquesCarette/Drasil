@@ -44,7 +44,7 @@ import Drasil.DblPendulum.Figures (figMotion)
 import Data.Drasil.Concepts.Math (mathcon, cartesian, ode, mathcon', graph)
 import Data.Drasil.Quantities.Math (unitVect, unitVectj)
 import Drasil.DblPendulum.Assumptions (assumptions)
-import Drasil.DblPendulum.Concepts (rod, concepts, pendMotion, progName)
+import Drasil.DblPendulum.Concepts (rod, concepts, pendMotion, progName, firstRod, secondRod, firstMass, secondMass)
 import Drasil.DblPendulum.Goals (goals, goalsInputs)
 import Drasil.DblPendulum.DataDefs (dataDefs)
 import Drasil.DblPendulum.IMods (iMods)
@@ -299,7 +299,7 @@ terms = [gravity, cartesian]
 -- 4.1.2 Physical System Description --
 -----------------------------------
 physSystParts :: [Sentence]
-physSystParts = map ((!.) . atStartNP) [the rod, the mass]
+physSystParts = map ((!.) . atStartNP) [the firstRod, the secondRod, the firstMass, the secondMass]
 
 -----------------------------
 -- 4.1.3 : Goal Statements --

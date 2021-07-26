@@ -7,7 +7,7 @@ SHELL=/bin/bash
 #--------------------------------------------#
 
 # List of all known packages
-PACKAGES = lang metadata code-base code docLang printers build theory gool data database example gen utils website
+PACKAGES = lang metadata code-base code docLang printers build theory gool data database gen utils website
 
 # and associated package-level suffixes
 BUILD_P_SUFFIX = _build

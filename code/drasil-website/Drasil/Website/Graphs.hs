@@ -6,6 +6,9 @@ import Language.Drasil
 -- Dependency Graphs Section
 ----------------------------------
 
+-- TODO: Should this be moved to a new Analysis section (along with the Data Table?)
+
+-- | Creates the Package Dependency Graphs section
 graphSec :: FilePath -> [String] -> Section
 graphSec path pkgs = section packDepGraphTitle 
   (mkParagraph (S graphSecIntro) : displayGraphs ++ listOfLinkedGraphs) [] graphSecRef

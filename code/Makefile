@@ -26,8 +26,8 @@ PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 #--------------------------------------------#
 
 # Current list of examples
-SRC_EXAMPLES = glassbr nopcm projectile
-EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template dblpendulum sglpendulum pdcontroller
+SRC_EXAMPLES = glassbr nopcm projectile pdcontroller
+EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template dblpendulum sglpendulum 
 GOOLTEST = codegenTest
 
 # where they live
@@ -388,6 +388,7 @@ website:
 	SRS_FOLDER_FRAG="srs/" \
 	GRAPH_FOLDER="$(GRAPH_FOLDER)" \
 	ANALYSIS_FOLDER="$(ANALYSIS_FOLDER)" \
+	PACKAGES="$(PACKAGES)" \
 	stack exec website
 
 # Deploys the Drasil website. Called by the deploy target. 

@@ -37,6 +37,7 @@ data FolderLocation = Folder {
     ,   repoRt :: FilePath
     ,   buildNum :: FilePath
     ,   buildPth :: FilePath
+    ,   packages :: [String]
     }
 
 -- System information. This probably isn't needed right now since it is really only used in SRS declarations.
@@ -48,8 +49,8 @@ si fl = SI {
     _quants      = [] :: [QuantityDict],
     _purpose     = [],
     _concepts    = [] :: [UnitaryConceptDict],
-    _instModels  = [], -- :: [InstanceModel],
-    _datadefs    = [], -- :: [DataDefinition],
+    _instModels  = [],
+    _datadefs    = [],
     _configFiles = [],
     _folderPath  = "",
     _inputs      = [] :: [QuantityDict],
@@ -65,8 +66,8 @@ si fl = SI {
 -- Puts all the sections in order. Basically the website version of the SRS declaration.
 sections :: FolderLocation -> [Section]
 -- Section Title [SecCons] Reference
-sections fl = [headerSec, introSec (ref caseStudySec) (ref $ docsSec $ docsRt fl) (ref $ graphSec $ graphRt fl), 
-  caseStudySec, exampleSec (repoRt fl) (exRt fl), docsSec (docsRt fl), analysisSec (analysisRt fl), graphSec $ graphRt fl]
+sections fl = [headerSec, introSec (ref caseStudySec) (ref $ docsSec $ docsRt fl) (ref $ graphSec (graphRt fl) $ packages fl), 
+  caseStudySec, exampleSec (repoRt fl) (exRt fl), docsSec (docsRt fl), analysisSec (analysisRt fl), graphSec (graphRt fl) $ packages fl]
 
 -- symbMap needed for references to work
 symbMap :: FolderLocation -> ChunkDB
@@ -84,8 +85,8 @@ usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict])
 -- Holds all references and links used in the website.
 allRefs :: FolderLocation -> [Reference]
 allRefs fl = [headerSecRef, imageRef, gitHubRef] ++ map ref (sections fl) 
-  ++ introRefs (ref caseStudySec) (ref $ docsSec $ docsRt fl) (ref $ graphSec $ graphRt fl) 
-  ++ caseStudyRefs ++ exampleRefs (repoRt fl) (exRt fl) ++ docRefs (docsRt fl) ++ analysisRefs (analysisRt fl) ++ graphRefs (graphRt fl)
+  ++ introRefs (ref caseStudySec) (ref $ docsSec $ docsRt fl) (ref $ graphSec (graphRt fl) $ packages fl) 
+  ++ caseStudyRefs ++ exampleRefs (repoRt fl) (exRt fl) ++ docRefs (docsRt fl) ++ analysisRefs (analysisRt fl) ++ graphRefs (graphRt fl) (packages fl)
   ++ concatMap findAllRefs (sections fl)
 
 -- Each section needs its own reference. Start with the header section.

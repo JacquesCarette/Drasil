@@ -1,28 +1,12 @@
-module Drasil.Website.CaseStudy (caseStudySec, caseStudyRefs, allExampleSI) where
+module Drasil.Website.CaseStudy (caseStudySec, caseStudyRefs) where
 
 import Language.Drasil hiding (E)
 import Language.Drasil.Code
 import Database.Drasil
 import GOOL.Drasil (CodeType(..))
 
-import qualified Drasil.DblPendulum.Body as DblPendulum (fullSI)
-import qualified Drasil.GamePhysics.Body as GamePhysics (fullSI)
-import qualified Drasil.GlassBR.Body as GlassBR (fullSI)
-import qualified Drasil.HGHC.Body as HGHC (fullSI)
-import qualified Drasil.NoPCM.Body as NoPCM (fullSI)
-import qualified Drasil.PDController.Body as PDController (fullSI)
-import qualified Drasil.Projectile.Body as Projectile (fullSI)
-import qualified Drasil.SglPendulum.Body as SglPendulum (fullSI)
-import qualified Drasil.SSP.Body as SSP (fullSI)
-import qualified Drasil.SWHS.Body as SWHS (fullSI)
-import qualified Drasil.Template.Body as Template (fullSI)
-
--- import choices for code generation
-import qualified Drasil.GlassBR.Choices as GlassBR (choices)
-import qualified Drasil.NoPCM.Choices as NoPCM (choices)
-import qualified Drasil.PDController.Choices as PDController (codeChoices)
-import qualified Drasil.Projectile.Choices as Projectile (codedDirName, choiceCombos)
--- the other examples currently do not generate any code.
+import Drasil.Website.Example (examples, Example(..))
+import qualified Drasil.Projectile.Choices as Projectile (codedDirName)
 
 -----------------------------
 -- Case Studies Section
@@ -45,34 +29,12 @@ caseStudiesDesc = "Drasil allows some design decisions to be made by the user wh
   \table:"
 
 mkCaseTable :: RawContent
-mkCaseTable = Table headerRow (tableBody $ concatMap mkCaseStudy $ allExamples allExampleSI allExampleChoices)  EmptyS False
+mkCaseTable = Table headerRow (tableBody $ concatMap mkCaseStudy $ examples "" "")  EmptyS False
 
 caseStudyTabRef :: Reference
 caseStudyTabRef = makeTabRef "CaseStudy"
 
------ First Gather all SystemInformation and Choices from each example.
-
--- | Records example system information.
-allExampleSI :: [SystemInformation]
-allExampleSI = [DblPendulum.fullSI, GamePhysics.fullSI, GlassBR.fullSI, HGHC.fullSI, NoPCM.fullSI, PDController.fullSI, Projectile.fullSI, SglPendulum.fullSI, SSP.fullSI, SWHS.fullSI, Template.fullSI]
-
--- TODO: Automate this somehow. It seems a little too hard-coded.
--- To developer: Fill this list in when more examples can run code. The list
--- needs to be of this form since projectile comes with a list of choice combos.
--- | Records example choices. The order of the list must match up with
--- that in `allExampleSI`, or the Case Studies Table will be incorrect.
-allExampleChoices :: [[Choices]]
-allExampleChoices = [[], [], [GlassBR.choices], [], [NoPCM.choices], [PDController.codeChoices], Projectile.choiceCombos, [], [], [], []]
-
--- | Each Example gets placed in here.
-data Example = E { sysInfoE :: SystemInformation,
-                   choicesE :: [Choices]}
-
--- | Zip system info and choices from the examples.
-allExamples :: [SystemInformation] -> [[Choices]] -> [Example]
-allExamples = zipWith E
-
------ Then convert each example into its own case study. -----
+----- After taking the information about the examples from Example.h, convert each example into its own case study. -----
 
 -- | Holds individual case studies. System info may not be needed,
 -- but it is still nice to keep around for now.

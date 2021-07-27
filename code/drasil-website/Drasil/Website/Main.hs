@@ -18,6 +18,7 @@ main = do
   --doxDir <- getEnv "DOX_FOLDER"
   graphRoot <- getEnv "GRAPH_FOLDER"
   analysisRoot <- getEnv "ANALYSIS_FOLDER"
+  listOfPackages <- getEnv "PACKAGES"
 
   -- Env variables relating to variables exposed on CI.
   -- Because we want to be able to test site building locally, we fill in these stubs with
@@ -36,7 +37,8 @@ main = do
       allFolders = Folder {depL = deployLocation, docsRt = docsRoot,
         exRt = exampleRoot, graphRt = graphRoot,
         analysisRt = analysisRoot, repoRt = repoCommitRoot, 
-        buildNum = buildNumber, buildPth = buildPath}
+        buildNum = buildNumber, buildPth = buildPath,
+        packages = map ("drasil-" ++) $ words listOfPackages}
 
   -- generate the html document/website.
   setLocaleEncoding utf8

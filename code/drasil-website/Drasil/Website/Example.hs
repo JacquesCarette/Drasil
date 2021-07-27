@@ -1,4 +1,4 @@
-module Drasil.Website.Example (exampleSec, exampleRefs)where
+module Drasil.Website.Example (exampleSec, exampleRefs, examples, Example(..), allExampleSI)where
 
 import Language.Drasil hiding (C, E)
 import Database.Drasil (SystemInformation(..))
@@ -29,6 +29,7 @@ import qualified Drasil.Projectile.Choices as Projectile (codedDirName, choiceCo
 -- This may contain some repeated stuff from case studies, but I think this might hold more info, so we could define everything here and then import to CaseStudy.hs
 
 ----- First gather all information needed to create an example. This includes system information, descriptions, and choices.
+----- These will also be exported for use in CaseStudy.hs.
 -- | Each Example gets placed in here.
 data Example = E {
   sysInfoE :: SystemInformation,
@@ -168,40 +169,54 @@ convertLang Swift = "swift"
 
 -- | Generate a reference towards the code folder. Uses 'getCodePath' to find the code path.
 getCodeRef :: Example -> Lang -> String -> Reference
--- We don't have to worry about the case of empty list, since that was checked in an earlier function.
+-- We don't have to worry about the case of empty list when pattern matching
+-- since that was checked in an earlier function.
+--
 -- Pattern matches so that examples that only have a single set of choices will be referenced one way.
-getCodeRef ex@E{sysInfoE=SI{_sys = sys}, choicesE = [_]} l _ = 
-  Reference ("codeRef" ++ sysName ++ programLang) (URI $ getCodePath (srsPath ex) sysName programLang) $ shortname' $ S $ "codeRef" ++ sysName ++ programLang
+getCodeRef ex@E{sysInfoE=SI{_sys = sys}, choicesE = chcs} l verName = 
+  Reference refUID refURI refShortNm
   where
-    sysName = map toLower $ filter (not.isSpace) $ abrv sys
-    programLang = convertLang l
--- And all the other Examples must have more than one set of choices, so reference a different way.
-getCodeRef ex@E{sysInfoE=SI{_sys = sys}} l verName = 
-  Reference ("codeRef" ++ sysName ++ programLang) (URI $ getCodePath (srsPath ex) sysName programLang) $ shortname' $ S $ "codeRef" ++ sysName ++ programLang
-  where
-    sysName = map toLower (filter (not.isSpace) $ abrv sys) ++ "/" ++ verName
+    -- Append system name and program language to ensure a unique id for each.
+    refUID = "codeRef" ++ sysName ++ programLang
+    -- Finds the folder path that holds code for the respective program and system.
+    refURI = URI $ getCodePath (srsPath ex) sysName programLang
+    -- Shortname is the same as the UID, just converted to a Sentence.
+    refShortNm = shortname' $ S refUID
+
+    -- System name, different between one set of choices and multiple sets.
+    sysName = case chcs of 
+      [_] -> map toLower $ filter (not.isSpace) $ abrv sys
+      _   -> map toLower (filter (not.isSpace) $ abrv sys) ++ "/" ++ verName
+    -- Program language converted for use in file folder navigation.
     programLang = convertLang l
 
 -- | Similar to 'getCodeRef', but gets the doxygen references and uses 'getDoxRef' instead.
 getDoxRef :: Example -> Lang -> String -> Reference
-getDoxRef ex@E{sysInfoE=SI{_sys = sys}, choicesE = [_]} l _ = 
-  Reference ("doxRef" ++ sysName ++ programLang) (URI $ getDoxPath (doxPath ex) sysName programLang) $ shortname' $ S $ "doxRef" ++ sysName ++ programLang
+getDoxRef ex@E{sysInfoE=SI{_sys = sys}, choicesE = chcs} l verName = 
+  Reference refUID refURI refShortNm
   where
+    refUID = "doxRef" ++ sysName ++ programLang
+    refURI = URI $ getDoxPath (doxPath ex) sysName programLang
+    refShortNm = shortname' $ S refUID
+
     sysName = filter (not.isSpace) $ abrv sys
-    programLang = convertLang l
-getDoxRef ex@E{sysInfoE=SI{_sys = sys}} l verName = 
-  Reference ("doxRef" ++ sysName ++ programLang) (URI $ getDoxPath (doxPath ex) sysName programLang) $ shortname' $ S $ "doxRef" ++ sysName ++ programLang
-  where
-    sysName = filter (not.isSpace) (abrv sys)
-    -- Append version name to program language since the organization of folders follows this way.
-    programLang = verName ++ "/" ++ convertLang l
+    -- Here is the only difference from getCodeRef. When there is more than one set of choices,
+    -- we append version name to program language since the organization of folders follows this way.
+    programLang = case chcs of 
+      [_] -> convertLang l
+      _   -> verName ++ "/" ++ convertLang l
 
 -- | Make references for each of the generated SRS files.
 getHTMLRef, getPDFRef :: FilePath -> String -> Reference
-getHTMLRef path ex = Reference ("htmlRef" ++ ex) (URI (getHTMLPath path ex)) (shortname' $ S ("htmlRef" ++ ex))
-getPDFRef path ex = Reference ("pdfRef" ++ ex) (URI (getPDFPath path ex)) (shortname' $ S ("pdfRef" ++ ex))
+getHTMLRef path ex = Reference refUID (URI $ getHTMLPath path ex) $ shortname' $ S refUID
+  where
+    refUID = "htmlRef" ++ ex
+getPDFRef path ex = Reference refUID (URI $ getPDFPath path ex) $ shortname' $ S refUID
+  where
+    refUID = "pdfRef" ++ ex
 
--- | Get the paths of where each reference exist for SRS files.
+-- | Get the paths of where each reference exist for SRS files. Some example abbreviations have spaces,
+-- so we just filter those out.
 getHTMLPath, getPDFPath :: FilePath -> String -> FilePath
 getHTMLPath path ex = path ++ filter (not.isSpace) ex ++ "/srs/" ++ filter (not.isSpace) ex ++ "_SRS.html"
 getPDFPath path ex = path ++ filter (not.isSpace) ex ++ "/srs/" ++ filter (not.isSpace) ex ++ "_SRS.pdf"
@@ -222,6 +237,7 @@ exampleRefs p1 p2 = [exampleSecRef, ref $ exampleSec p1 p2] ++
   map (getHTMLRef p2 . getAbrv) (examples p1 p2) ++ map (getPDFRef p2 . getAbrv) (examples p1 p2)
 
 -- | Helpers to pull code and doxygen references from an example.
+-- Creates a reference for every possible choice in every possible language.
 getCodeRefDB, getDoxRefDB :: Example -> [Reference]
 getCodeRefDB ex = concatMap (\x -> map (\y -> getCodeRef ex y $ verName x) $ lang x) $ choicesE ex
   where

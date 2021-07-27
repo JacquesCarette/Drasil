@@ -10,32 +10,32 @@ import Data.Bifunctor (Bifunctor(bimap, second))
 import Language.Drasil.Code.Expr
 
 -- | Render an algebraic expression into our code expression language
-expr :: L.Expr -> CodeExpr
-expr (L.Dbl d) = Dbl d
-expr (L.Int i) = Int i
-expr (L.ExactDbl i) = ExactDbl i
-expr (L.Str s) = Str s
-expr (L.Perc n d) = Perc n d
-expr (L.AssocA ao es) = AssocA (assocArithOp ao) $ map expr es
-expr (L.AssocB bo es) = AssocB (assocBoolOp bo) $ map expr es
-expr (L.C u) = C u
-expr (L.FCall u es ns) = FCall u (map expr es) (map (second expr) ns)
-expr (L.Case c es) = Case c $ map (bimap expr expr) es
-expr (L.Matrix es) = Matrix $ map (map expr) es
-expr (L.UnaryOp uo e) = UnaryOp (uFunc uo) (expr e)
-expr (L.UnaryOpB uo e) = UnaryOpB (uFuncB uo) (expr e)
-expr (L.UnaryOpVV uo e) = UnaryOpVV (uFuncVV uo) (expr e)
-expr (L.UnaryOpVN uo e) = UnaryOpVN (uFuncVN uo) (expr e)
-expr (L.ArithBinaryOp bo l r) = ArithBinaryOp (arithBinOp bo) (expr l) (expr r)
-expr (L.BoolBinaryOp bo l r) = BoolBinaryOp (boolBinOp bo) (expr l) (expr r)
-expr (L.EqBinaryOp bo l r) = EqBinaryOp (eqBinOp bo) (expr l) (expr r)
-expr (L.LABinaryOp bo l r) = LABinaryOp (laBinOp bo) (expr l) (expr r)
-expr (L.OrdBinaryOp bo l r) = OrdBinaryOp (ordBinOp bo) (expr l) (expr r)
-expr (L.VVVBinaryOp bo l r) = VVVBinaryOp (vvvBinOp bo) (expr l) (expr r)
-expr (L.VVNBinaryOp bo l r) = VVNBinaryOp (vvnBinOp bo) (expr l) (expr r)
-expr (L.Operator aao dd e) = Operator (assocArithOp aao) (renderDomainDesc dd) (expr e)
-expr (L.RealI u ri) = RealI u (realInterval ri)
-expr L.Deriv {} = error "Expr's Deriv is not convertible to the language of CodeExpr"
+expr :: LD.Expr -> CodeExpr
+expr (LD.Dbl d) = Dbl d
+expr (LD.Int i) = Int i
+expr (LD.ExactDbl i) = ExactDbl i
+expr (LD.Str s) = Str s
+expr (LD.Perc n d) = Perc n d
+expr (LD.AssocA ao es) = AssocA (assocArithOp ao) $ map expr es
+expr (LD.AssocB bo es) = AssocB (assocBoolOp bo) $ map expr es
+expr (LD.C u) = C u
+expr (LD.FCall u es ns) = FCall u (map expr es) (map (second expr) ns)
+expr (LD.Case c es) = Case c $ map (bimap expr expr) es
+expr (LD.Matrix es) = Matrix $ map (map expr) es
+expr (LD.UnaryOp uo e) = UnaryOp (uFunc uo) (expr e)
+expr (LD.UnaryOpB uo e) = UnaryOpB (uFuncB uo) (expr e)
+expr (LD.UnaryOpVV uo e) = UnaryOpVV (uFuncVV uo) (expr e)
+expr (LD.UnaryOpVN uo e) = UnaryOpVN (uFuncVN uo) (expr e)
+expr (LD.ArithBinaryOp bo l r) = ArithBinaryOp (arithBinOp bo) (expr l) (expr r)
+expr (LD.BoolBinaryOp bo l r) = BoolBinaryOp (boolBinOp bo) (expr l) (expr r)
+expr (LD.EqBinaryOp bo l r) = EqBinaryOp (eqBinOp bo) (expr l) (expr r)
+expr (LD.LABinaryOp bo l r) = LABinaryOp (laBinOp bo) (expr l) (expr r)
+expr (LD.OrdBinaryOp bo l r) = OrdBinaryOp (ordBinOp bo) (expr l) (expr r)
+expr (LD.VVVBinaryOp bo l r) = VVVBinaryOp (vvvBinOp bo) (expr l) (expr r)
+expr (LD.VVNBinaryOp bo l r) = VVNBinaryOp (vvnBinOp bo) (expr l) (expr r)
+expr (LD.Operator aao dd e) = Operator (assocArithOp aao) (renderDomainDesc dd) (expr e)
+expr (LD.RealI u ri) = RealI u (realInterval ri)
+expr  LD.Deriv {} = error "Expr's Deriv is not convertible to the language of CodeExpr"
 
 -- | Convert 'RealInterval Expr Expr's into 'RealInterval CodeExpr CodeExpr's.
 realInterval :: L.RealInterval L.Expr L.Expr -> L.RealInterval CodeExpr CodeExpr
@@ -52,67 +52,67 @@ renderDomainDesc :: L.DomainDesc L.Expr L.Expr -> L.DomainDesc CodeExpr CodeExpr
 renderDomainDesc (L.BoundedDD s t l r) = L.BoundedDD s t (expr l) (expr r)
 renderDomainDesc (L.AllDD s t) = L.AllDD s t
 
-arithBinOp :: L.ArithBinOp -> ArithBinOp
+arithBinOp :: LD.ArithBinOp -> ArithBinOp
 arithBinOp LD.Frac = Frac
 arithBinOp LD.Pow = Pow
 arithBinOp LD.Subt = Subt
 
-eqBinOp :: L.EqBinOp -> EqBinOp
+eqBinOp :: LD.EqBinOp -> EqBinOp
 eqBinOp LD.Eq = Eq
 eqBinOp LD.NEq = NEq
 
-boolBinOp :: L.BoolBinOp -> BoolBinOp
+boolBinOp :: LD.BoolBinOp -> BoolBinOp
 boolBinOp LD.Impl = Impl
 boolBinOp LD.Iff = Iff
 
-laBinOp :: L.LABinOp -> LABinOp
+laBinOp :: LD.LABinOp -> LABinOp
 laBinOp LD.Index = Index
 
-ordBinOp :: L.OrdBinOp -> OrdBinOp
+ordBinOp :: LD.OrdBinOp -> OrdBinOp
 ordBinOp LD.Lt  = Lt
 ordBinOp LD.Gt  = Gt
 ordBinOp LD.LEq = LEq
 ordBinOp LD.GEq = GEq
 
-vvvBinOp :: L.VVVBinOp -> VVVBinOp
+vvvBinOp :: LD.VVVBinOp -> VVVBinOp
 vvvBinOp LD.Cross = Cross
 
-vvnBinOp :: L.VVNBinOp -> VVNBinOp
+vvnBinOp :: LD.VVNBinOp -> VVNBinOp
 vvnBinOp LD.Dot = Dot
 
-assocArithOp :: L.AssocArithOper -> AssocArithOper
-assocArithOp L.AddI = AddI -- TODO: These L.'s should be exported through L.D.Development
-assocArithOp L.AddRe = AddRe
-assocArithOp L.MulI = MulI
-assocArithOp L.MulRe = MulRe
+assocArithOp :: LD.AssocArithOper -> AssocArithOper
+assocArithOp LD.AddI = AddI -- TODO: These L.'s should be exported through L.D.Development
+assocArithOp LD.AddRe = AddRe
+assocArithOp LD.MulI = MulI
+assocArithOp LD.MulRe = MulRe
 
-assocBoolOp :: L.AssocBoolOper -> AssocBoolOper
-assocBoolOp L.And = And -- TODO: These L.'s should be exported through L.D.Development
-assocBoolOp L.Or = Or
+assocBoolOp :: LD.AssocBoolOper -> AssocBoolOper
+assocBoolOp LD.And = And -- TODO: These L.'s should be exported through L.D.Development
+assocBoolOp LD.Or = Or
 
-uFunc :: L.UFunc -> UFunc
-uFunc L.Abs = Abs -- TODO: These L.'s should be exported through L.D.Development
-uFunc L.Log = Log
-uFunc L.Ln = Ln
-uFunc L.Sin = Sin
-uFunc L.Cos = Cos
-uFunc L.Tan = Tan
-uFunc L.Sec = Sec
-uFunc L.Csc = Csc
-uFunc L.Cot = Cot
-uFunc L.Arcsin = Arcsin
-uFunc L.Arccos = Arccos
-uFunc L.Arctan = Arctan
-uFunc L.Exp = Exp
-uFunc L.Sqrt = Sqrt
-uFunc L.Neg = Neg
+uFunc :: LD.UFunc -> UFunc
+uFunc LD.Abs = Abs -- TODO: These L.'s should be exported through L.D.Development
+uFunc LD.Log = Log
+uFunc LD.Ln = Ln
+uFunc LD.Sin = Sin
+uFunc LD.Cos = Cos
+uFunc LD.Tan = Tan
+uFunc LD.Sec = Sec
+uFunc LD.Csc = Csc
+uFunc LD.Cot = Cot
+uFunc LD.Arcsin = Arcsin
+uFunc LD.Arccos = Arccos
+uFunc LD.Arctan = Arctan
+uFunc LD.Exp = Exp
+uFunc LD.Sqrt = Sqrt
+uFunc LD.Neg = Neg
 
-uFuncB :: L.UFuncB -> UFuncB
+uFuncB :: LD.UFuncB -> UFuncB
 uFuncB LD.Not = Not
 
-uFuncVV :: L.UFuncVV -> UFuncVV
+uFuncVV :: LD.UFuncVV -> UFuncVV
 uFuncVV LD.NegV = NegV
 
-uFuncVN :: L.UFuncVN -> UFuncVN
+uFuncVN :: LD.UFuncVN -> UFuncVN
 uFuncVN LD.Norm = Norm
 uFuncVN LD.Dim = Dim

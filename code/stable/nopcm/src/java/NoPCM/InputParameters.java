@@ -1,4 +1,4 @@
-package SWHS;
+package NoPCM;
 
 /** \file InputParameters.java
     \author Thulasi Jegatheesan

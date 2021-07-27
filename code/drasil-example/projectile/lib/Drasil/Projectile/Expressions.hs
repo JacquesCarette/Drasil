@@ -38,9 +38,9 @@ offset' = sy landPos $- sy targPos
 
 message :: Expr
 message = completeCase [case1, case2, case3]
-  where case1 = (Str "The target was hit.",        abs_ (sy offset $/ sy targPos) $< sy tol)
-        case2 = (Str "The projectile fell short.", sy offset $< exactDbl 0)
-        case3 = (Str "The projectile went long.",  sy offset $> exactDbl 0)
+  where case1 = (str "The target was hit.",        abs_ (sy offset $/ sy targPos) $< sy tol)
+        case2 = (str "The projectile fell short.", sy offset $< exactDbl 0)
+        case3 = (str "The projectile went long.",  sy offset $> exactDbl 0)
 
 --
 speed' :: Expr

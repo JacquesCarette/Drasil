@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.2.
+-- This file has been generated from package.yaml by hpack version 0.33.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 33f9fa53466fc6be733513be20f9edbc9e70198cdcb353a1710db84a91586a92
+-- hash: 393a8b7d38767f74653e0650020ff9feaf2ea9203417f5f36760bdd66b63ea91
 
 name:           ssp
 version:        0.1.24.0
@@ -26,6 +26,7 @@ library
       Drasil.SSP.BasicExprs
       Drasil.SSP.Body
       Drasil.SSP.Changes
+      Drasil.SSP.Choices
       Drasil.SSP.DataDefs
       Drasil.SSP.Defs
       Drasil.SSP.Figures

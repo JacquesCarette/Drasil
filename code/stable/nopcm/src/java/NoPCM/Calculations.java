@@ -1,4 +1,4 @@
-package SWHS;
+package NoPCM;
 
 /** \file Calculations.java
     \author Thulasi Jegatheesan

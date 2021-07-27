@@ -58,7 +58,9 @@ tiny_diff | HGHC toy example
 ssp_diff | Slope Stability Analysis
 nopcm_diff | minimal SWHS example, with PCM removed
 projectile_diff | Projectile motion analysis
-pdcontroller_diff | Proportional Derivative controller 
+pdcontroller_diff | Proportional Derivative controller
+dblpendulum_diff | Double Pendulum
+sglpendulum_diff | Single Pendulum
 
 ## Running the Example(s)
 
@@ -77,6 +79,8 @@ ssp | Slope Stability Analysis (SSP)
 nopcm | SWHS without PCM (NoPCM)
 projectile | Projectile motion analysis
 pdcontroller | Proportional Derivative Controller
+dblpendulum | Double Pendulum
+sglpendulum | Single Pendulum
 
 This runs the examples manually from the .stack-work folder after building, and the generated docs will
 appear in this folder (i.e. in the SRS and Website folders). Due to this placement, these generated

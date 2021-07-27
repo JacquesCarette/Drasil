@@ -55,6 +55,7 @@ deNames' (AlgebraicExpr e)  = eNames e
 deNames' (SpaceExpr _)      = []
 deNames' (BinOp _ l r)      = deNames l ++ deNames r
 deNames' (AssocBinOp _ des) = concatMap deNames des
+-- deNames' (ForAll _ _)       = deNames _
 
 -- | Generic traverse of all positions that could lead to 'eNames' without
 -- functions.  FIXME : this should really be done via post-facto filtering, but

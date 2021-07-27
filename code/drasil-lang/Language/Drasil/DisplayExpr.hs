@@ -10,8 +10,11 @@ import Language.Drasil.Space (Space)
 data DisplayBinOp = Defines | IsIn
   deriving (Eq, Show)
 
+-- TODO: 'DAnd' shouldn't exist because it's redundant. When we convert the DisplayExpr into
+--       another encoding, we will likely get rid of it.
+
 -- | Associative Binary Display Operations.
-data DisplayAssocBinOp = And | Equivalence
+data DisplayAssocBinOp = DAnd | Equivalence
   deriving (Eq, Show)
 
 -- | A variant of the expression language that allows for extensions of Expr

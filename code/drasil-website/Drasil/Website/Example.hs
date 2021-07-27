@@ -1,6 +1,6 @@
 module Drasil.Website.Example (exampleSec, exampleRefs, examples, Example(..), allExampleSI)where
 
-import Language.Drasil hiding (C, E)
+import Language.Drasil hiding (E)
 import Database.Drasil (SystemInformation(..))
 import Language.Drasil.Code (Choices(..), Lang(..))
 import Utils.Drasil

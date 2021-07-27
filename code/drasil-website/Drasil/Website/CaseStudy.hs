@@ -12,26 +12,34 @@ import qualified Drasil.Projectile.Choices as Projectile (codedDirName)
 -- Case Studies Section
 -----------------------------
 
+-- | Creates the Case Study Section.
 caseStudySec :: Section
 caseStudySec = section (S caseStudiesTitle) [mkParagraph $ S caseStudiesDesc, mkFig caseStudyTabRef mkCaseTable, mkParagraph $ S legendIntro, UlC $ ulcc caseStudyLegend] [] caseStudySecRef
 
+-- | Gathers all references used in this file.
 caseStudyRefs :: [Reference]
 caseStudyRefs = [caseStudySecRef, ref caseStudySec, ref caseStudyTabRef]
 
+-- | Case study section reference.
 caseStudySecRef :: Reference
 caseStudySecRef = makeSecRef "CaseStudy" $ S caseStudyTitle
 
 caseStudiesTitle, caseStudiesDesc, legendIntro :: String
+-- | Section title.
 caseStudiesTitle = "Case Studies"
+-- | Section description.
 caseStudiesDesc = "Drasil allows some design decisions to be made by the user when generating \
   \code. The table below summarizes the design decisions made for each case \
   \study, followed by a guide giving the meaning of the short-forms used in the \
   \table:"
+-- | Introduce the Case Study Table Legend as a list.
 legendIntro = "The legend for the Case Studies Table is listed below according to column header:"
 
+-- | Creates the Case Study Table
 mkCaseTable :: RawContent
 mkCaseTable = Table headerRow (tableBody $ concatMap mkCaseStudy $ examples "" "")  EmptyS False
 
+-- | Case Study Table Reference.
 caseStudyTabRef :: Reference
 caseStudyTabRef = makeTabRef "CaseStudy"
 
@@ -96,16 +104,15 @@ data CSLegend = CSL {
 caseStudyLegend :: RawContent
 caseStudyLegend = Enumeration $ Bullet $ zip (map mkLegendListFunc legendEntries) $ repeat Nothing
 
+-- | Helper to convert the Case Study legends into list items.
 mkLegendListFunc :: CSLegend -> ItemType
 mkLegendListFunc csleg = Nested (S $ ttle csleg) $ Bullet $ zip (map mkTandDSent $ symbAndDefs csleg) $ repeat Nothing
 
--- Should eventually take Sentences instead of Strings. Converts into the format of "symbol - definition".
+-- | Should eventually take Sentences instead of Strings. Converts into the format of "symbol - definition".
 mkTandDSent :: (String, String) -> ItemType
 mkTandDSent (sym,def) = Flat $ S sym +:+ S "-" +:+ S def
 
-
---- Case Study Table Headers
-
+-- | Case Study Table column headers.
 caseStudyTitle, modularityTitle, implementTypeTitle, loggingTitle, inStructTitle, conStructTitle,
   conRepTitle, realNumRepTitle :: String
 
@@ -118,11 +125,11 @@ conStructTitle = "Constant Structure"
 conRepTitle = "Constant Representation"
 realNumRepTitle = "Real Number Representation"
 
---- Case study legend entries
-
+-- | Case study legend entries.
 legendEntries :: [CSLegend]
 legendEntries = [modularityLegend, implementationTypeLegend, loggingLegend, inputStrLegend, conStrLegend, conRepLegend, realNumRepLegend]
 
+-- | Modularity or Separation of software.
 modularityLegend :: CSLegend
 modularityLegend = CSL{
   ttle = modularityTitle,
@@ -131,6 +138,7 @@ modularityLegend = CSL{
                   ("S", "Modular with Separated input module")]
 }
 
+-- | Software implementation type.
 implementationTypeLegend :: CSLegend
 implementationTypeLegend = CSL {
   ttle = implementTypeTitle,
@@ -138,6 +146,7 @@ implementationTypeLegend = CSL {
                   ("L", "Library")]
 }
 
+-- | Compiler logging statements.
 loggingLegend :: CSLegend
 loggingLegend = CSL {
   ttle = inStructTitle,
@@ -145,6 +154,7 @@ loggingLegend = CSL {
                   ("L", "Logging statements included")]
 }
 
+-- | Input value structure.
 inputStrLegend :: CSLegend
 inputStrLegend = CSL {
   ttle = loggingTitle,
@@ -152,6 +162,7 @@ inputStrLegend = CSL {
                   ("U", "Inputs are Unbundled")]
 }
 
+-- | Constant value structure.
 conStrLegend :: CSLegend
 conStrLegend = CSL {
   ttle = conStructTitle,
@@ -161,6 +172,7 @@ conStrLegend = CSL {
                   ("U", "Constants are stored in variables that are Unbundled")]
 }
 
+-- | Constant value representation.
 conRepLegend :: CSLegend
 conRepLegend = CSL {
   ttle = conRepTitle,
@@ -168,6 +180,7 @@ conRepLegend = CSL {
                   ("C", "Constants are stored as Constants")]
 }
 
+-- | Real number representation.
 realNumRepLegend :: CSLegend
 realNumRepLegend = CSL {
   ttle = realNumRepTitle,

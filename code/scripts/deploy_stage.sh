@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Get all files ready for deploy. Checks if website files exist,
 # and then copies each file to a deploy folder.
 

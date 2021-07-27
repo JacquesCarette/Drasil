@@ -93,7 +93,7 @@ loadDF = dd loadDFQD [dRef astm2009] Nothing "loadDurFactor"
 strDisFacEq :: Expr
 -- strDisFacEq = apply (sy stressDistFac)
 --   [sy dimlessLoad, sy aspectRatio]
-strDisFacEq = apply (asVC' interpZ) [Str "SDF.txt", sy aspectRatio, sy dimlessLoad]
+strDisFacEq = apply (asVC' interpZ) [str "SDF.txt", sy aspectRatio, sy dimlessLoad]
 
 strDisFacQD :: QDefinition
 strDisFacQD = mkQuantDef stressDistFac strDisFacEq
@@ -147,7 +147,7 @@ dimLL = dd dimLLQD [dRef astm2009, dRefInfo campidelli $ Equation [7]] Nothing "
 
 tolPreEq :: Expr
 --tolPreEq = apply (sy tolLoad) [sy sdfTol, (sy plateLen) / (sy plateWidth)]
-tolPreEq = apply (asVC' interpY) [Str "SDF.txt", sy aspectRatio, sy sdfTol]
+tolPreEq = apply (asVC' interpY) [str "SDF.txt", sy aspectRatio, sy sdfTol]
 
 tolPreQD :: QDefinition
 tolPreQD = mkQuantDef tolLoad tolPreEq
@@ -227,7 +227,7 @@ calofCapacity = dd calofCapacityQD [dRef astm2009] Nothing "calofCapacity"
 
 --DD15--
 calofDemandEq :: Expr
-calofDemandEq = apply (asVC' interpY) [Str "TSD.txt", sy standOffDist, sy eqTNTWeight]
+calofDemandEq = apply (asVC' interpY) [str "TSD.txt", sy standOffDist, sy eqTNTWeight]
 
 calofDemandQD :: QDefinition
 calofDemandQD = mkQuantDef demand calofDemandEq

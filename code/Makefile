@@ -1,6 +1,6 @@
 # For documentation on how to add to this, see Issue #1371
 
-SHELL=/bin/bash
+SHELL = bash
 
 #--------------------------------------------#
 #--- Package variables for use in targets ---#
@@ -141,9 +141,7 @@ PROFALL = --executable-profiling --library-profiling
 PROFEXEC = +RTS -xc -P
 
 # GHC build options
-ifndef GHCTHREADS
-override GHCTHREADS = 2
-endif
+GHCTHREADS ?= 2
 
 override GHCFLAGS += -Wall -j$(GHCTHREADS)
 override stackArgs += --ghc-options="$(GHCFLAGS)"
@@ -170,11 +168,11 @@ debug: test
 
 # Sanity check -- are we using the right stack version?
 check_stack:
-	 @MIN_STACK_VER="$(MIN_STACK_VER)" CACHED_MSV_FILE="$(CACHED_MSV_FILE)" "$(SHELL)" "$(SCRIPT_FOLDER)"check_stack.sh
+	@MIN_STACK_VER="$(MIN_STACK_VER)" CACHED_MSV_FILE="$(CACHED_MSV_FILE)" "$(SHELL)" "$(SCRIPT_FOLDER)check_stack.sh"
 
 # Download the most recent version of graphviz.
 check_dot:
-	@BIN=dot DOWNLOAD_LOCATION=https://www.graphviz.org/download/ "$(SHELL)" "$(SCRIPT_FOLDER)"check_binary.sh
+	@BIN="dot" DOWNLOAD_LOCATION="https://www.graphviz.org/download/" "$(SHELL)" "$(SCRIPT_FOLDER)check_binary.sh"
 
 # Check that we can generate dot graphs.
 graphmod: check_stack
@@ -202,7 +200,7 @@ test: $(TEST_EXAMPLES)
 	@echo ----------------------------
 	@echo Make complete, checking logs
 	@echo ----------------------------
-	@LOG_FOLDER="$(LOG_FOLDER)" LOG_SUFFIX="$(LOG_SUFFIX)" NOISY=$(NOISY) "$(SHELL)" "$(SCRIPT_FOLDER)"log_check.sh
+	@LOG_FOLDER="$(LOG_FOLDER)" LOG_SUFFIX="$(LOG_SUFFIX)" NOISY=$(NOISY) "$(SHELL)" "$(SCRIPT_FOLDER)log_check.sh"
 
 # First build all the Drasil packages, run all examples (no traceability graphs),
 # and then overwrite contents in the stable folder with currently generated ones.
@@ -294,9 +292,9 @@ graphs: $(GRAPH_PACKAGES)
 # Generate individual package module dependency graphs.
 $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod check_dot
 	@mkdir -p "$(GRAPH_FOLDER)"
-	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tpdf > "$(GRAPH_FOLDER)drasil-$*".pdf
-	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tsvg > "$(GRAPH_FOLDER)drasil-$*".svg
-	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tpng > "$(GRAPH_FOLDER)drasil-$*".png
+	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tpdf > "$(GRAPH_FOLDER)drasil-$*.pdf"
+	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tsvg > "$(GRAPH_FOLDER)drasil-$*.svg"
+	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tpng > "$(GRAPH_FOLDER)drasil-$*.png"
 
 # Generate a data table to analyze Drasil's class, datatype, and instance structures.
 # Dot graphs are currently generated for datatypes and class instance structures.
@@ -346,12 +344,12 @@ $(filter %$(CODE_E_SUFFIX), $(CODE_EXAMPLES)): %$(CODE_E_SUFFIX): %$(GEN_E_SUFFI
 	@DF_DIR="$(DF_DIR)" EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" \
 	EXAMPLE_CODE_SUBFOLDER="$(EXAMPLE_CODE_SUBFOLDER)" \
 	MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" TARGET=$(TARGET) \
-	MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"code_build.sh
+	MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)code_build.sh"
 
 # GOOL testing for examples that generate code.
 $(GOOLTEST): $(GOOLTEST)$(GEN_E_SUFFIX)
 	@EDIR="$(GOOLTEST_DIR)" BUILD_FOLDER="$(BUILD_FOLDER)" TARGET=$(TARGET) \
-	MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)"gooltest_build.sh
+	MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)gooltest_build.sh"
 
 # Generate code from examples and test each one.
 gool: $(CODE_EXAMPLES) $(GOOLTEST)
@@ -367,7 +365,7 @@ doxygen: $(CODE_EXAMPLES)
 $(filter %$(DCP_E_SUFFIX), $(DCP_EXAMPLES)): %$(DCP_E_SUFFIX):
 	@EDIR="$(EDIR)" BUILD_FOLDER="$(BUILD_FOLDER)" EXAMPLE_CODE_SUBFOLDER="$(EXAMPLE_CODE_SUBFOLDER)" EXAMPLE=$* \
 	MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" DEPLOY_CODE_PATH_KV_SEP="$(DEPLOY_CODE_PATH_KV_SEP)" \
-	"$(SHELL)" "$(SCRIPT_FOLDER)"code_path.sh
+	"$(SHELL)" "$(SCRIPT_FOLDER)code_path.sh"
 
 # Find all code file paths for all examples.
 deploy_code_path: $(DCP_EXAMPLES)

@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.2.
+-- This file has been generated from package.yaml by hpack version 0.33.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: c3856ef30ff8d54faf6687dae0499e95774be0c3de81a40708338aea7a375e67
+-- hash: 35c3ad3f2e7fab9aeb616d5df2f57c0d42ce3b1b9759898a97cbed916aad6ca1
 
 name:           glassbr
 version:        0.1.24.0
@@ -25,6 +25,7 @@ library
       Drasil.GlassBR.Assumptions
       Drasil.GlassBR.Body
       Drasil.GlassBR.Changes
+      Drasil.GlassBR.Choices
       Drasil.GlassBR.Concepts
       Drasil.GlassBR.DataDefs
       Drasil.GlassBR.Figures

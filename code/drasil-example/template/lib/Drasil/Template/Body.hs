@@ -1,7 +1,7 @@
 module Drasil.Template.Body where
 
 import Language.Drasil
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
+import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
 import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
   _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, _outputs, 
@@ -9,7 +9,7 @@ import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 import qualified Utils.Drasil.Sentence as S
 
-import Drasil.DocLang (SRSDecl, mkDoc, fillTraceSI)
+import Drasil.DocLang (SRSDecl, mkDoc, fillcdbSRS)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 
@@ -17,10 +17,10 @@ srs :: Document
 srs = mkDoc mkSRS (S.forGen titleize phrase) si
 
 fullSI :: SystemInformation
-fullSI = fillTraceSI mkSRS si
+fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
-printSetting = PI symbMap Equational defaultConfiguration
+printSetting = piSys fullSI Equational defaultConfiguration
 
 mkSRS :: SRSDecl
 mkSRS = []

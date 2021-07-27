@@ -1,4 +1,4 @@
-package SWHS;
+package NoPCM;
 
 /** \file OutputFormat.java
     \author Thulasi Jegatheesan

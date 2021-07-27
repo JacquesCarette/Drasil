@@ -9,4 +9,4 @@ htTrans = nc "heat transfer" (cn "heat transfer") --Not really a nounphase,
 
 srsSWHS :: CommonConcept -- Used to make the title of the paper
 srsSWHS = dcc' "srsSWHS" (nounPhraseSP "Solar Water Heating Systems")
-  "SWHS" "SWHS"
+  "SWHS" "NoPCM"

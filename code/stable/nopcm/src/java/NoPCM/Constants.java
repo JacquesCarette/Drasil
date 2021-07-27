@@ -1,4 +1,4 @@
-package SWHS;
+package NoPCM;
 
 /** \file Constants.java
     \author Thulasi Jegatheesan

@@ -6,14 +6,14 @@ import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
   _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, _outputs, _quants, 
   _sys, _sysinfodb, _usedinfodb, _folderPath)
 import Language.Drasil hiding (C)
+import Drasil.DocLang (findAllRefs)
 
 import Drasil.Website.Introduction
-import Drasil.Website.CaseStudy (caseStudyRefs, caseStudySec)
+import Drasil.Website.CaseStudy
 import Drasil.Website.Example
 import Drasil.Website.Documentation
 import Drasil.Website.Analysis
 import Drasil.Website.Graphs
-
 
 -- Printing info to get document to generate. Takes in the 'FolderLocation'.
 printSetting :: FolderLocation -> PrintingInformation
@@ -70,8 +70,11 @@ sections fl = [headerSec, introSec (ref caseStudySec) (ref $ docsSec $ docsRt fl
 
 -- symbMap needed for references to work
 symbMap :: FolderLocation -> ChunkDB
-symbMap fl = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict])
+symbMap fl = cdb ([] :: [QuantityDict]) (map nw [webName, web] ++ map getSysName allExampleSI)
   ([] :: [ConceptChunk]) ([] :: [UnitDefn]) [] [] [] [] [] [] [] $ allRefs fl
+
+getSysName :: SystemInformation -> IdeaDict
+getSysName SI{_sys = nm} = nw nm 
 
 -- needed for si to work
 usedDB :: ChunkDB
@@ -83,6 +86,7 @@ allRefs :: FolderLocation -> [Reference]
 allRefs fl = [headerSecRef, imageRef, gitHubRef] ++ map ref (sections fl) 
   ++ introRefs (ref caseStudySec) (ref $ docsSec $ docsRt fl) (ref $ graphSec $ graphRt fl) 
   ++ caseStudyRefs ++ exampleRefs (repoRt fl) (exRt fl) ++ docRefs (docsRt fl) ++ analysisRefs (analysisRt fl) ++ graphRefs (graphRt fl)
+  ++ concatMap findAllRefs (sections fl)
 
 -- Each section needs its own reference. Start with the header section.
 headerSecRef :: Reference

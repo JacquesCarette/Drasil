@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.2.
+-- This file has been generated from package.yaml by hpack version 0.33.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: c9123ca8ecb6001dfa0c779cf5f7a22cf789110bd7654e3a49a37b5b16b06bed
+-- hash: f5507ce93a084558ac160239a9d4f98fb69c3caa98e84a36258cdefffa36fc51
 
 name:           swhs
 version:        0.1.24.0
@@ -25,10 +25,10 @@ library
       Drasil.SWHS.Assumptions
       Drasil.SWHS.Body
       Drasil.SWHS.Changes
+      Drasil.SWHS.Choices
       Drasil.SWHS.Concepts
       Drasil.SWHS.DataDefs
       Drasil.SWHS.GenDefs
-      Drasil.SWHS.Generate
       Drasil.SWHS.Goals
       Drasil.SWHS.IMods
       Drasil.SWHS.References

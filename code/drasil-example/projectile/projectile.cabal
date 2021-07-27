@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.2.
+-- This file has been generated from package.yaml by hpack version 0.33.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 78a16c56aca485619974a0bf2251b39c0234640b544cee9142b2969f83a23b9d
+-- hash: 5ee063f9beedaeaedc61e787e4741a70b5b7a3103451c639a02768b92f1d5cbc
 
 name:           projectile
 version:        0.1.24.0
@@ -24,6 +24,7 @@ library
   exposed-modules:
       Drasil.Projectile.Assumptions
       Drasil.Projectile.Body
+      Drasil.Projectile.Choices
       Drasil.Projectile.Concepts
       Drasil.Projectile.DataDefs
       Drasil.Projectile.Expressions

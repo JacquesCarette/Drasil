@@ -13,7 +13,7 @@ import qualified Drasil.Projectile.Choices as Projectile (codedDirName)
 -----------------------------
 
 caseStudySec :: Section
-caseStudySec = section (S caseStudiesTitle) [mkParagraph $ S caseStudiesDesc, mkFig caseStudyTabRef mkCaseTable, UlC $ ulcc caseStudyLegend] [] caseStudySecRef
+caseStudySec = section (S caseStudiesTitle) [mkParagraph $ S caseStudiesDesc, mkFig caseStudyTabRef mkCaseTable, mkParagraph $ S legendIntro, UlC $ ulcc caseStudyLegend] [] caseStudySecRef
 
 caseStudyRefs :: [Reference]
 caseStudyRefs = [caseStudySecRef, ref caseStudySec, ref caseStudyTabRef]
@@ -21,12 +21,13 @@ caseStudyRefs = [caseStudySecRef, ref caseStudySec, ref caseStudyTabRef]
 caseStudySecRef :: Reference
 caseStudySecRef = makeSecRef "CaseStudy" $ S caseStudyTitle
 
-caseStudiesTitle, caseStudiesDesc :: String
+caseStudiesTitle, caseStudiesDesc, legendIntro :: String
 caseStudiesTitle = "Case Studies"
 caseStudiesDesc = "Drasil allows some design decisions to be made by the user when generating \
   \code. The table below summarizes the design decisions made for each case \
   \study, followed by a guide giving the meaning of the short-forms used in the \
   \table:"
+legendIntro = "The legend for the Case Studies Table is listed below according to column header:"
 
 mkCaseTable :: RawContent
 mkCaseTable = Table headerRow (tableBody $ concatMap mkCaseStudy $ examples "" "")  EmptyS False

@@ -2,8 +2,7 @@ module Drasil.DblPendulum.Concepts where
 
 import Language.Drasil
 import Data.Drasil.Domains (physics)
-import Data.Drasil.Concepts.Documentation (first, second_)
-import Data.Drasil.Concepts.PhysicalProperties (mass)
+import Data.Drasil.Concepts.Documentation (first, second_, object)
 import Data.Drasil.Theories.Physics (newtonSLRQD)
 
 --below imports needed compoundNC part to work
@@ -14,7 +13,7 @@ import Data.Drasil.Concepts.Physics (pendulum, motion, position, velocity, force
 concepts :: [IdeaDict]
 concepts = nw newtonSLRQD : map nw [rod, horizontal, vertical,
   pendMotion, horizontalPos, verticalPos, horizontalVel,
-  verticalVel, horizontalForce, verticalForce, firstRod, secondRod, firstMass, secondMass] 
+  verticalVel, horizontalForce, verticalForce, firstRod, secondRod, firstObject, secondObject] 
   ++ map nw defs
 
 rod, horizontal, vertical :: NamedChunk
@@ -23,7 +22,7 @@ horizontal = nc "horizontal" (cn "horizontal")
 vertical = nc "vertical" (cn "vertical") 
 
 pendMotion, horizontalPos, verticalPos, horizontalVel, verticalVel, horizontalForce, verticalForce, 
-  firstRod, secondRod, firstMass, secondMass:: NamedChunk
+  firstRod, secondRod, firstObject, secondObject:: NamedChunk
 pendMotion = compoundNC pendulum motion
 horizontalPos = compoundNC horizontal position
 verticalPos = compoundNC vertical position
@@ -33,8 +32,8 @@ horizontalForce = compoundNC horizontal force
 verticalForce = compoundNC vertical force
 firstRod = compoundNC first rod
 secondRod = compoundNC second_ rod
-firstMass = compoundNC first mass
-secondMass = compoundNC second_ mass
+firstObject = compoundNC first object
+secondObject = compoundNC second_ object
 
 defs :: [ConceptChunk]
 defs = [arcLen]

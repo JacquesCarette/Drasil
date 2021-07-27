@@ -44,12 +44,12 @@ import Drasil.DblPendulum.Figures (figMotion)
 import Data.Drasil.Concepts.Math (mathcon, cartesian, ode, mathcon', graph)
 import Data.Drasil.Quantities.Math (unitVect, unitVectj)
 import Drasil.DblPendulum.Assumptions (assumptions)
-import Drasil.DblPendulum.Concepts (rod, concepts, pendMotion, progName, firstRod, secondRod, firstMass, secondMass)
+import Drasil.DblPendulum.Concepts (rod, concepts, pendMotion, progName, firstRod, secondRod, firstObject, secondObject)
 import Drasil.DblPendulum.Goals (goals, goalsInputs)
 import Drasil.DblPendulum.DataDefs (dataDefs)
 import Drasil.DblPendulum.IMods (iMods)
 import Drasil.DblPendulum.GenDefs (genDefns)
-import Drasil.DblPendulum.Unitals (lenRod_1, lenRod_2, mass_1, mass_2, symbols, inputs, outputs,
+import Drasil.DblPendulum.Unitals (lenRod_1, lenRod_2, symbols, inputs, outputs,
   inConstraints, outConstraints, acronyms)
 import Drasil.DblPendulum.Requirements (funcReqs, nonFuncReqs)
 import Drasil.DblPendulum.References (citations, koothoor2013, smithLai2005)
@@ -302,8 +302,8 @@ physSystParts :: [Sentence]
 physSystParts = map (!.)
   [atStartNP (the firstRod) +:+ sParen (S "with" +:+ getTandS lenRod_1),
    atStartNP (the secondRod) +:+ sParen (S "with" +:+ getTandS lenRod_2),
-   atStartNP (the firstMass) +:+ sParen (S "with" +:+ getTandS mass_1),
-   atStartNP (the secondMass) +:+ sParen (S "with" +:+ getTandS mass_2)]
+   atStartNP (the firstObject),
+   atStartNP (the secondObject)]
 
 -----------------------------
 -- 4.1.3 : Goal Statements --

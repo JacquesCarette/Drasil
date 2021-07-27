@@ -8,8 +8,7 @@ import qualified Utils.Drasil.NounPhrase as NP
 import Data.Drasil.Constraints (gtZeroConstr)
 
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
-import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst, object,
-        requirement, srs, typUnc)
+import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst, requirement, srs, typUnc)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
 import Data.Drasil.SI_Units (metre, degree, radian, kilogram)
 import qualified Data.Drasil.Quantities.Physics as QP (position, ixPos, xPos, force, velocity,
@@ -19,7 +18,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (position, ixPos, xPos, fo
 import Data.Drasil.Concepts.Physics (pendulum, twoD)
 import Data.Drasil.Concepts.Math as CM (angle, iAngle)
 import Data.Drasil.Quantities.Math as QM (unitVect, unitVectj, pi_)
-import Drasil.DblPendulum.Concepts (rod)
+import Drasil.DblPendulum.Concepts (rod, firstRod, secondRod, firstObject, secondObject)
 
 
 symbols:: [QuantityDict]
@@ -39,13 +38,13 @@ units :: [UnitaryConceptDict]
 units = map ucw unitalChunks
 
 unitalChunks :: [UnitalChunk]
-unitalChunks = [lenRod, lenRod_1, lenRod_2, mass_1, mass_2, QPP.mass, QP.force, QP.ixPos, QP.xPos, QP.yPos,
+unitalChunks = [lenRod, lenRod_1, lenRod_2, massObj_1, massObj_2, QPP.mass, QP.force, QP.ixPos, QP.xPos, QP.yPos,
    QP.angularVelocity, QP.angularAccel, QP.gravitationalAccel, QP.tension, QP.acceleration,
    QP.yAccel, QP.xAccel, QP.yVel, QP.xVel, QP.iyPos, QP.time, QP.velocity, QP.position, QP.torque,
    QP.momentOfInertia, QP.angularDisplacement, QP.angularVelocity, initialPendAngle,
    QP.angularFrequency, QP.frequency, QP.period, pendDisplacementAngle]
 
-lenRod, lenRod_1, lenRod_2, mass_1, mass_2, pendDisplacementAngle, initialPendAngle :: UnitalChunk
+lenRod, lenRod_1, lenRod_2, massObj_1, massObj_2, pendDisplacementAngle, initialPendAngle :: UnitalChunk
 
 -- fix me, replace lenRod with lenOne
 lenRod = makeUCWDS "l_rod" (cn "length of the rod")
@@ -53,19 +52,19 @@ lenRod = makeUCWDS "l_rod" (cn "length of the rod")
         (sub cL lRod) metre
 
 lenRod_1 = makeUCWDS "l_1" (cn "length of the rod")
-        (phraseNP (len `the_ofThe` rod))
+        (phraseNP (len `the_ofThe` firstRod))
         (sub cL label1) metre
 
 lenRod_2 = makeUCWDS "l_2" (cn "length of the rod")
-        (phraseNP (len `the_ofThe` rod))
+        (phraseNP (len `the_ofThe` secondRod))
         (sub cL label2) metre
 
-mass_1 = makeUCWDS "m_1" (cn "mass of the object")
-        (phraseNP (mass `the_ofThe` object))
+massObj_1 = makeUCWDS "m_1" (cn "mass of the object")
+        (phraseNP (mass `the_ofThe` firstObject))
         (sub lM label1) kilogram
 
-mass_2 = makeUCWDS "m_2" (cn "mass of the object")
-        (phraseNP (mass `the_ofThe` object))
+massObj_2 = makeUCWDS "m_2" (cn "mass of the object")
+        (phraseNP (mass `the_ofThe` secondObject))
         (sub lM label2) kilogram
 
 pendDisplacementAngle = makeUCWDS "pendDisplacementAngle" (cn "displacement angle of the pendulum")

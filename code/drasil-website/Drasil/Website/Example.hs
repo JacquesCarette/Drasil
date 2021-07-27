@@ -1,11 +1,32 @@
+{-# LANGUAGE PackageImports #-}
 module Drasil.Website.Example (exampleSec, exampleRefs)where
 
 import Data.List (zipWith4, isPrefixOf)
 import Language.Drasil hiding (C)
+--import Database.Drasil (SystemInformation(..))
 import Utils.Drasil
 import Data.Char (toUpper, toLower)
 import qualified Data.List.Split as L
 
+{-
+import qualified Drasil.DblPendulum.Body as DblPendulum (fullSI)
+import qualified Drasil.GamePhysics.Body as GamePhysics (fullSI)
+import qualified Drasil.GlassBR.Body as GlassBR (fullSI)
+import qualified Drasil.HGHC.Body as HGHC (fullSI)
+import qualified Drasil.NoPCM.Body as NoPCM (fullSI)
+import qualified Drasil.PDController.Body as PDController (fullSI)
+import qualified Drasil.Projectile.Body as Projectile (fullSI)
+import qualified Drasil.SSP.Body as SSP (fullSI)
+import qualified Drasil.SWHS.Body as SWHS (fullSI)
+import qualified Drasil.Template.Body as Template (fullSI)
+
+-- import choices for code generation
+import qualified Drasil.GlassBR.Choices as GlassBR (choices)
+import qualified Drasil.NoPCM.Choices as NoPCM (choices)
+import qualified Drasil.PDController.Choices as PDController (codeChoices)
+import qualified Drasil.Projectile.Choices as Projectile (codedDirName, choiceCombos)
+-- the other examples currently do not generate any code.
+-}
 
 --------------------------
 -- Examples Section
@@ -52,25 +73,26 @@ exampleTitles, exampleDescs :: [String]
 -- Sorts the references for mkCodeList.
 exampleCodeRefs, exampleDoxRefs :: FilePath -> [[(String, [(Sentence, Reference)])]]
 -- example titles
-exampleTitles = [sglPendulum, dblPendulum, gamePhys, glassBR, hghc, noPCM, pdController, projectile, ssp, swhs, template]
+exampleTitles = [dblPendulum, gamePhys, glassBR, hghc, noPCM, pdController, projectile, sglPendulum, ssp, swhs, template]
 -- example descriptions (used in the list of examples)
-exampleDescs = [sglPendulumDesc, dblPendulumDesc, gamePhysDesc, glassBRDesc, hghcDesc, noPCMDesc, pdControllerDesc, projectileDesc, sspDesc, swhsDesc, templateDesc]
-exampleCodeRefs path =[[(sglPendulum, [])],
+exampleDescs = [dblPendulumDesc, gamePhysDesc, glassBRDesc, hghcDesc, noPCMDesc, pdControllerDesc, projectileDesc, sglPendulumDesc, sspDesc, swhsDesc, templateDesc]
+exampleCodeRefs path =[
                   [(dblPendulum, [])],
                   [(gamePhys, [])],
                   [(glassBR, map (getCodeRef path $ map toLower glassBR) glassBRCode)],
                   [(hghc, [])],
                   [(noPCM, map (getCodeRef path $map toLower noPCM) noPCMCode)],
-                  [(pdController, map (getCodeRef path $ map toLower pdController) pdControllerCode)], -- capitalization is not all lowercase, so manually put in folder name for now.
+                  [(pdController, map (getCodeRef path $ map toLower pdController) pdControllerCode)],
                   [(projectileC1, map (getCodeRef path (map toLower projectile ++ "/" ++ projectileC1)) projectileCase1Code),
                   (projectileC2, map (getCodeRef path (map toLower projectile ++ "/" ++ projectileC2)) projectileCase2Code),
                   (projectileC3, map (getCodeRef path (map toLower projectile ++ "/" ++ projectileC3)) projectileCase3Code),
                   (projectileC4, map (getCodeRef path (map toLower projectile ++ "/" ++ projectileC4)) projectileCase4Code),
                   (projectileC5, map (getCodeRef path (map toLower projectile ++ "/" ++ projectileC5)) projectileCase5Code)],
+                  [(sglPendulum, [])],
                   [(ssp, [])],
                   [(swhs, [])],
                   [(template, [])]]
-exampleDoxRefs path =[[(sglPendulum, [])],
+exampleDoxRefs path =[
                  [(dblPendulum, [])],
                  [(gamePhys, [])],
                  [(glassBR, map (getDoxRef path glassBR) glassBRDox)],
@@ -82,6 +104,7 @@ exampleDoxRefs path =[[(sglPendulum, [])],
                  (projectileC3, map (\x -> getDoxRef path projectile (projectileC3 ++ "/" ++ x)) projectileCase3Dox),
                  (projectileC4, map (\x -> getDoxRef path projectile (projectileC4 ++ "/" ++ x)) projectileCase4Dox),
                  (projectileC5, map (\x -> getDoxRef path projectile (projectileC5 ++ "/" ++ x)) projectileCase5Dox)],
+                 [(sglPendulum, [])],
                  [(ssp, [])],
                  [(swhs, [])],
                  [(template, [])]]
@@ -90,7 +113,7 @@ exampleDoxRefs path =[[(sglPendulum, [])],
 sglPendulum, dblPendulum, gamePhys, glassBR, hghc, noPCM, pdController, projectile, projectileC1,
   projectileC2, projectileC3, projectileC4, projectileC5, ssp, swhs, template :: String
 
-sglPendulum = "DblPendulum"
+sglPendulum = "SglPendulum"
 dblPendulum = "DblPendulum"
 gamePhys = "GamePhysics"
 glassBR = "GlassBR"
@@ -98,7 +121,7 @@ hghc = "HGHC"
 noPCM = "NoPCM"
 pdController = "PDController"
 projectile = "Projectile"
-projectileC1 = "Projectile_C_P_NoL_B_U_V_D"
+projectileC1 = "Projectile_C_P_NoLB_U_V_D"
 projectileC2 = "Projectile_S_L_NoL_U_U_V_F"
 projectileC3 = "Projectile_U_P_L_B_B_C_D"
 projectileC4 = "Projectile_U_P_NoL_U_WI_V_D"
@@ -106,6 +129,25 @@ projectileC5 = "Projectile_U_P_L_B_WI_V_F"
 ssp = "SSP"
 swhs = "SWHS"
 template = "Template"
+
+{--example names, maybe make a unique type to accept fields of documents, gen code, and doxygen?
+pendulum, gamePhys, glassBR, hghc, noPCM, pdController, projectile, ssp, swhs, template :: SystemInformation
+projectileC1, projectileC2, projectileC3, projectileC4, projectileC5 :: String
+pendulum = DblPendulum.fullSI
+gamePhys = GamePhysics.fullSI
+glassBR = GlassBR.fullSI
+hghc = HGHC.fullSI
+noPCM = NoPCM.fullSI
+pdController = PDController.fullSI
+projectile = Projectile.fullSI
+projectileC1 = "Projectile_C_P_NoLB_U_V_D"
+projectileC2 = "Projectile_S_L_NoL_U_U_V_F"
+projectileC3 = "Projectile_U_P_L_B_B_C_D"
+projectileC4 = "Projectile_U_P_NoL_U_WI_V_D"
+projectileC5 = "Projectile_U_P_L_B_WI_V_F"
+ssp = SSP.fullSI
+swhs = SWHS.fullSI
+template = Template.fullSI-}
 
 -- list that states what languages the generated code/doxygen docs exist in.
 glassBRCode, glassBRDox, noPCMCode, noPCMDox, pdControllerCode, pdControllerDox, projectileCase1Code, projectileCase2Code,

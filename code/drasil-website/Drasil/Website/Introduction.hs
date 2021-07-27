@@ -20,7 +20,7 @@ introParagraph1 = S "Drasil is a framework for generating all of the software ar
 
 introParagraph2 :: Reference -> Reference -> Reference -> Sentence
 introParagraph2 caseStudySecRef docsRef graphSecRef = S "This webpage is designed to contain the most up to date" +:+
-  foldlList Comma List (zipWith (\x y -> namedRef x (S y)) [caseStudySecRef, docsRef, graphSecRef] ["case study artifacts", "Haddock documentation", "package dependency graphs"]) --foldlList "," List [caseStudy, haddockDocs, packDepGraph] 
+  foldlList Comma List (zipWith (\x y -> namedRef x (S y)) [caseStudySecRef, docsRef, graphSecRef] ["case study artifacts", "Haddock documentation", "package dependency graphs"])
   +:+ S "from the Drasil repository. \
   \The case study artifacts include the Software Requirements Specification (SRS) for the case study, \
   \which specifies what the program sets out to achieve. \

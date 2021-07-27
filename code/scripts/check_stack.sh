@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Ensure Stack version is at least our designated minimum, caching the stack
 # version so we don't need to do this too often.
 

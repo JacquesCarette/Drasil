@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: b5d32202f308c3d7fbaa9a9e2f1d930b665d1fce6bd45dec4fa0537538132612
+-- hash: 431d1929e007619bddbe2637228fac55863afdc916407ad83b8b42d1452e3a7a
 
 name:           drasil-website
 version:        0.1.0.0
@@ -35,15 +35,28 @@ executable website
   ghc-options: -Wall -Wredundant-constraints -threaded -main-is Drasil.Website.Main
   build-depends:
       base >=4.7 && <5
+    , dblpendulum
     , directory
+    , drasil-code
     , drasil-data
     , drasil-database
     , drasil-docLang
     , drasil-gen
+    , drasil-gool
     , drasil-lang
     , drasil-printers
     , drasil-theory
     , drasil-utils
+    , gamephysics
+    , glassbr
+    , hghc
     , lens
+    , nopcm
+    , pdcontroller
+    , projectile
+    , sglpendulum
     , split
+    , ssp
+    , swhs
+    , template
   default-language: Haskell2010

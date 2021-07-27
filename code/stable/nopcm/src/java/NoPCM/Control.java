@@ -1,4 +1,4 @@
-package SWHS;
+package NoPCM;
 
 /** \file Control.java
     \author Thulasi Jegatheesan

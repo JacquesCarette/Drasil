@@ -23,11 +23,24 @@ dependencies:
 - drasil-data
 - drasil-database
 - drasil-docLang
+- drasil-code
+- drasil-gool
 - drasil-gen
 - drasil-lang
 - drasil-printers
 - drasil-theory
 - drasil-utils
+- sglpendulum
+- dblpendulum
+- gamephysics
+- glassbr
+- hghc
+- nopcm
+- pdcontroller
+- projectile
+- ssp
+- swhs
+- template
 
 ghc-options:
 - -Wall

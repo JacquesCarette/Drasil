@@ -161,8 +161,8 @@ SUMMARIZE_TEX=no
 all: test
 
 # Run `test` target with better debugging tools.
-debug: stackArgs+=$(PROFALL) 
-debug: EXECARGS+=$(PROFEXEC) 
+debug: stackArgs+=$(PROFALL)
+debug: EXECARGS+=$(PROFEXEC)
 debug: test
 
 #### Initial checks ####
@@ -296,6 +296,7 @@ $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod ch
 	@mkdir -p "$(GRAPH_FOLDER)"
 	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tpdf > "$(GRAPH_FOLDER)drasil-$*".pdf
 	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tsvg > "$(GRAPH_FOLDER)drasil-$*".svg
+	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tpng > "$(GRAPH_FOLDER)drasil-$*".png
 
 # Generate a data table to analyze Drasil's class, datatype, and instance structures.
 # Dot graphs are currently generated for datatypes and class instance structures.

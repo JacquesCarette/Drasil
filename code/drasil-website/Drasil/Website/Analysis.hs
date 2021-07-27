@@ -6,13 +6,15 @@ import Language.Drasil
 -- Analysis Section
 --------------------
 
--- | Creates the Analysis of Drasil Section
-analysisSec :: FilePath -> Section
-analysisSec path = section drasilAnalysisTitle [mkParagraph $ analysisIntro path] [] analysisSecRef
+-- | Creates the Analysis of Drasil Section.
+analysisSec :: FilePath -> [String] -> Section
+analysisSec path pkgs = section drasilAnalysisTitle [mkParagraph $ analysisIntro path] [] analysisSecRef
 
+-- | Analysis section title.
 drasilAnalysisTitle :: Sentence
 drasilAnalysisTitle = S "Analysis of Drasil"
 
+-- | Analysis section introduction. Also introduces the Data Table.
 analysisIntro :: FilePath -> Sentence
 analysisIntro path = S "This section contains an graphs and tables that may be used to analyze the \
   \structure of the Drasil framework. Here, we will explore the relationship between data types, \
@@ -27,18 +29,20 @@ analysisIntro path = S "This section contains an graphs and tables that may be u
   \'YYYY' symbolizes the file location of where that particular data type is an instance of a particular class. \
   \There is also a" +:+ namedRef (dataTableCSVRef path) (S "downloadable version") +:+ S "of the Data Table available as a .csv file."
 
-dataTableDesc :: FilePath -> Sentence
-dataTableDesc path = S "Here is the updated" +:+ namedRef (dataTableHTMLRef path)
-  (S "Data Table") +:+ S "for the Drasil framework. There is also a" +:+
-  namedRef (dataTableCSVRef path) (S "downloadable version") +:+ S "(csv format)."
-
-dataTableHTMLPath, dataTableCSVPath :: FilePath
-dataTableHTMLPath = "DataTable/DataTable.html"
-dataTableCSVPath = "DataTable/DataTable.csv"
-
+-- | Data table references.
 dataTableHTMLRef, dataTableCSVRef :: FilePath -> Reference
-dataTableHTMLRef path = Reference "dataTableHTML" (URI $ path ++ dataTableHTMLPath) (shortname' $ S "dataTableHTML")
-dataTableCSVRef path = Reference "dataTableCSV" (URI $ path ++ dataTableCSVPath) (shortname' $ S "dataTableCSV")
+dataTableHTMLRef path = Reference "dataTableHTML" (URI $ path ++ "DataTable/DataTable.html") (shortname' $ S "dataTableHTML")
+dataTableCSVRef path = Reference "dataTableCSV" (URI $ path ++ "DataTable/DataTable.csv") (shortname' $ S "dataTableCSV")
+
+typeGraphTable :: FilePath -> [String] -> [[Sentence]]
+typeGraphTable path pkgs = [S "Drasil Package", S "Data Type Structure", S "Data Type Structure", S "Class and Data Type Structure", S "Class and Data Type Structure"]
+    : map (typeGraphTable' path) pkgs
+
+typeGraphTable' :: FilePath -> String -> [Sentence]
+typeGraphTable' path pkg = [S pkg, namedRef (getDataTypeRef "dot" path pkg) (S "Dot Graph"), namedRef _ (S "Circo Graph"), namedRef _ (S "Dot Graph"), namedRef _ (S "Circo Graph")]
+
+getDataTypeRef :: String -> FilePath -> String
+getDataTypeRef sufx
 
 -- | Analysis section reference
 analysisSecRef :: Reference

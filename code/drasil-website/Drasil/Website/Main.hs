@@ -38,7 +38,10 @@ main = do
         exRt = exampleRoot, graphRt = graphRoot,
         analysisRt = analysisRoot, repoRt = repoCommitRoot, 
         buildNum = buildNumber, buildPth = buildPath,
-        packages = map ("drasil-" ++) $ words listOfPackages}
+        packages = map ("drasil-" ++) $ words listOfPackages ++ "example" 
+        -- manually add example because it's not actually a package anymore,
+        -- but the analysis scripts work nonetheless, so we display it here.
+        }
 
   -- generate the html document/website.
   setLocaleEncoding utf8

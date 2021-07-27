@@ -533,108 +533,8 @@ IsIn :: DisplayBinOp
 
 -- | Associative Binary Display Operations.
 data DisplayAssocBinOp
-And :: DisplayAssocBinOp
+DAnd :: DisplayAssocBinOp
 Equivalence :: DisplayAssocBinOp
-
--- | <tt>Bool -&gt; Bool</tt> operators.
-data UFuncB
-Not :: UFuncB
-
--- | <tt>Vector -&gt; Vector</tt> operators.
-data UFuncVV
-NegV :: UFuncVV
-
--- | <tt>Vector -&gt; Number</tt> operators.
-data UFuncVN
-Norm :: UFuncVN
-Dim :: UFuncVN
-
--- | Arithmetic operators (fractional, power, and subtraction).
-data ArithBinOp
-Frac :: ArithBinOp
-Pow :: ArithBinOp
-Subt :: ArithBinOp
-
--- | Conditional and Biconditional operators (Expressions can imply one
---   another, or exist if and only if another expression exists).
-data BoolBinOp
-Impl :: BoolBinOp
-Iff :: BoolBinOp
-
--- | Equality operators (equal or not equal).
-data EqBinOp
-Eq :: EqBinOp
-NEq :: EqBinOp
-
--- | Index operator.
-data LABinOp
-Index :: LABinOp
-
--- | Ordered binary operators (less than, greater than, less than or equal
---   to, greater than or equal to).
-data OrdBinOp
-Lt :: OrdBinOp
-Gt :: OrdBinOp
-LEq :: OrdBinOp
-GEq :: OrdBinOp
-
--- | <tt>Vector x Vector -&gt; Vector</tt> binary operations (cross
---   product).
-data VVVBinOp
-Cross :: VVVBinOp
-
--- | <tt>Vector x Vector -&gt; Number</tt> binary operations (dot product).
-data VVNBinOp
-Dot :: VVNBinOp
-
--- | Get dependencies from an equation.
-eDep :: Expr -> [String]
-
--- | Generic traverse of all expressions that could lead to names.
-eNames :: Expr -> [String]
-
--- | Generic traverse of all positions that could lead to <a>eNames</a>
---   without functions. FIXME : this should really be done via post-facto
---   filtering, but right now the information needed to do this is not
---   available!
-eNames' :: Expr -> [String]
-
--- | Generic traversal of everything that could come from an interval to
---   names (similar to <a>eNames</a>).
-eNamesRI :: RealInterval Expr Expr -> [String]
-
--- | Get dependencies from display expressions.
-deDep :: DisplayExpr -> [String]
-
--- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
---   a <tt>Symbol</tt>.
-sdep :: Sentence -> [UID]
-
--- | Generic traverse of all positions that could lead to <i>reference</i>
---   <a>UID</a>s from <a>Sentence</a>s.
-lnames :: Sentence -> [UID]
-
--- | Get <i>reference</i> <a>UID</a>s from <a>Sentence</a>s.
-lnames' :: [Sentence] -> [UID]
-
--- | precA - precedence for arithmetic-related Binary-Associative
---   (Commutative) operators.
-precA :: AssocArithOper -> Int
-
--- | precB - precedence for boolean-related Binary-Associative
---   (Commutative) operators.
-precB :: AssocBoolOper -> Int
-
--- | eprec - <a>Expression</a> precedence.
-eprec :: Expr -> Int
-
--- | dePrec - "Display Expression" precedence.
-dePrec :: DisplayExpr -> Int
-
--- | dePrecAssoc - precedence for associative binary operators.
-dePrecAssoc :: DisplayAssocBinOp -> Int
-
-module Language.Drasil
 
 -- | Drasil expressions.
 data Expr
@@ -751,6 +651,139 @@ Neg :: UFunc
 
 -- | <tt>Bool -&gt; Bool</tt> operators.
 data UFuncB
+Not :: UFuncB
+
+-- | <tt>Vector -&gt; Vector</tt> operators.
+data UFuncVV
+NegV :: UFuncVV
+
+-- | <tt>Vector -&gt; Number</tt> operators.
+data UFuncVN
+Norm :: UFuncVN
+Dim :: UFuncVN
+
+-- | Arithmetic operators (fractional, power, and subtraction).
+data ArithBinOp
+Frac :: ArithBinOp
+Pow :: ArithBinOp
+Subt :: ArithBinOp
+
+-- | Conditional and Biconditional operators (Expressions can imply one
+--   another, or exist if and only if another expression exists).
+data BoolBinOp
+Impl :: BoolBinOp
+Iff :: BoolBinOp
+
+-- | Equality operators (equal or not equal).
+data EqBinOp
+Eq :: EqBinOp
+NEq :: EqBinOp
+
+-- | Index operator.
+data LABinOp
+Index :: LABinOp
+
+-- | Ordered binary operators (less than, greater than, less than or equal
+--   to, greater than or equal to).
+data OrdBinOp
+Lt :: OrdBinOp
+Gt :: OrdBinOp
+LEq :: OrdBinOp
+GEq :: OrdBinOp
+
+-- | <tt>Vector x Vector -&gt; Vector</tt> binary operations (cross
+--   product).
+data VVVBinOp
+Cross :: VVVBinOp
+
+-- | <tt>Vector x Vector -&gt; Number</tt> binary operations (dot product).
+data VVNBinOp
+Dot :: VVNBinOp
+
+-- | Associative operators (adding and multiplication). Also specifies
+--   whether it is for integers or for real numbers.
+data AssocArithOper
+AddI :: AssocArithOper
+AddRe :: AssocArithOper
+MulI :: AssocArithOper
+MulRe :: AssocArithOper
+
+-- | Associative boolean operators (and, or).
+data AssocBoolOper
+And :: AssocBoolOper
+Or :: AssocBoolOper
+
+-- | Determines the type of the derivative (either a partial derivative or
+--   a total derivative).
+data DerivType
+Part :: DerivType
+Total :: DerivType
+
+-- | For case expressions (either complete or incomplete).
+data Completeness
+Complete :: Completeness
+Incomplete :: Completeness
+
+-- | A relation is just an expression (<a>Expr</a>).
+type Relation = Expr
+
+-- | Get dependencies from an equation.
+eDep :: Expr -> [String]
+
+-- | Generic traverse of all expressions that could lead to names.
+eNames :: Expr -> [String]
+
+-- | Generic traverse of all positions that could lead to <a>eNames</a>
+--   without functions. FIXME : this should really be done via post-facto
+--   filtering, but right now the information needed to do this is not
+--   available!
+eNames' :: Expr -> [String]
+
+-- | Generic traversal of everything that could come from an interval to
+--   names (similar to <a>eNames</a>).
+eNamesRI :: RealInterval Expr Expr -> [String]
+
+-- | Get dependencies from display expressions.
+deDep :: DisplayExpr -> [String]
+
+-- | This is to collect <i>symbolic</i> <a>UID</a>s that are printed out as
+--   a <tt>Symbol</tt>.
+sdep :: Sentence -> [UID]
+
+-- | Generic traverse of all positions that could lead to <i>reference</i>
+--   <a>UID</a>s from <a>Sentence</a>s.
+lnames :: Sentence -> [UID]
+
+-- | Get <i>reference</i> <a>UID</a>s from <a>Sentence</a>s.
+lnames' :: [Sentence] -> [UID]
+
+-- | precA - precedence for arithmetic-related Binary-Associative
+--   (Commutative) operators.
+precA :: AssocArithOper -> Int
+
+-- | precB - precedence for boolean-related Binary-Associative
+--   (Commutative) operators.
+precB :: AssocBoolOper -> Int
+
+-- | eprec - <a>Expression</a> precedence.
+eprec :: Expr -> Int
+
+-- | dePrec - "Display Expression" precedence.
+dePrec :: DisplayExpr -> Int
+
+-- | dePrecAssoc - precedence for associative binary operators.
+dePrecAssoc :: DisplayAssocBinOp -> Int
+
+module Language.Drasil
+
+-- | Drasil expressions.
+data Expr
+
+-- | Unary functions (abs, log, ln, sin, etc.).
+data UFunc
+
+-- | <tt>Bool -&gt; Bool</tt> operators.
+data UFuncB
 
 -- | <tt>Vector -&gt; Vector</tt> operators.
 data UFuncVV
@@ -785,26 +818,16 @@ data VVNBinOp
 -- | Associative operators (adding and multiplication). Also specifies
 --   whether it is for integers or for real numbers.
 data AssocArithOper
-AddI :: AssocArithOper
-AddRe :: AssocArithOper
-MulI :: AssocArithOper
-MulRe :: AssocArithOper
 
 -- | Associative boolean operators (and, or).
 data AssocBoolOper
-And :: AssocBoolOper
-Or :: AssocBoolOper
 
 -- | Determines the type of the derivative (either a partial derivative or
 --   a total derivative).
 data DerivType
-Part :: DerivType
-Total :: DerivType
 
 -- | For case expressions (either complete or incomplete).
 data Completeness
-Complete :: Completeness
-Incomplete :: Completeness
 
 -- | A relation is just an expression (<a>Expr</a>).
 type Relation = Expr

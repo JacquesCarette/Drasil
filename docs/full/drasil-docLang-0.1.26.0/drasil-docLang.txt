@@ -1675,6 +1675,10 @@ mkDoc :: SRSDecl -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> D
 fillTraceSI :: SRSDecl -> SystemInformation -> SystemInformation
 fillcdbSRS :: SRSDecl -> SystemInformation -> SystemInformation
 
+-- | Recursively find all references in a section (meant for getting at
+--   <a>LabelledContent</a>).
+findAllRefs :: Section -> [Reference]
+
 -- | Appendix section.
 newtype AppndxSec
 AppndxProg :: [Contents] -> AppndxSec

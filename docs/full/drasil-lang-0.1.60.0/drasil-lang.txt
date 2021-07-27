@@ -829,7 +829,7 @@ IsIn :: DisplayBinOp
 
 -- | Associative Binary Display Operations.
 data DisplayAssocBinOp
-And :: DisplayAssocBinOp
+DAnd :: DisplayAssocBinOp
 Equivalence :: DisplayAssocBinOp
 instance GHC.Show.Show Language.Drasil.DisplayExpr.DisplayAssocBinOp
 instance GHC.Classes.Eq Language.Drasil.DisplayExpr.DisplayAssocBinOp
@@ -2099,8 +2099,121 @@ IsIn :: DisplayBinOp
 
 -- | Associative Binary Display Operations.
 data DisplayAssocBinOp
-And :: DisplayAssocBinOp
+DAnd :: DisplayAssocBinOp
 Equivalence :: DisplayAssocBinOp
+
+-- | Drasil expressions.
+data Expr
+
+-- | Turns a decimal value (<a>Double</a>) into an expression.
+[Dbl] :: Double -> Expr
+
+-- | Turns an integer into an expression.
+[Int] :: Integer -> Expr
+
+-- | Represents decimal values that are exact as integers.
+[ExactDbl] :: Integer -> Expr
+
+-- | Turns a string into an expression.
+[Str] :: String -> Expr
+
+-- | Turns two integers into a fraction (or percent).
+[Perc] :: Integer -> Integer -> Expr
+
+-- | Takes an associative arithmetic operator with a list of expressions.
+[AssocA] :: AssocArithOper -> [Expr] -> Expr
+
+-- | Takes an associative boolean operator with a list of expressions.
+[AssocB] :: AssocBoolOper -> [Expr] -> Expr
+
+-- | Derivative syntax is: Type (<a>Part</a>ial or <a>Total</a>) -&gt;
+--   principal part of change -&gt; with respect to For example: Deriv Part
+--   y x1 would be (dy/dx1).
+[Deriv] :: DerivType -> Expr -> UID -> Expr
+
+-- | C stands for <a>Chunk</a>, for referring to a chunk in an expression.
+--   Implicitly assumes that the chunk has a symbol.
+[C] :: UID -> Expr
+
+-- | A function call accepts a list of parameters and a list of named
+--   parameters. For example
+--   
+--   <ul>
+--   <li>F(x) is (FCall F [x] []).</li>
+--   <li>F(x,y) would be (FCall F [x,y]).</li>
+--   <li>F(x,n=y) would be (FCall F [x] [(n,y)]).</li>
+--   </ul>
+[FCall] :: UID -> [Expr] -> [(UID, Expr)] -> Expr
+
+-- | For multi-case expressions, each pair represents one case.
+[Case] :: Completeness -> [(Expr, Relation)] -> Expr
+
+-- | Represents a matrix of expressions.
+[Matrix] :: [[Expr]] -> Expr
+
+-- | Unary operation for most functions (eg. sin, cos, log, etc.).
+[UnaryOp] :: UFunc -> Expr -> Expr
+
+-- | Unary operation for <tt>Bool -&gt; Bool</tt> operations.
+[UnaryOpB] :: UFuncB -> Expr -> Expr
+
+-- | Unary operation for <tt>Vector -&gt; Vector</tt> operations.
+[UnaryOpVV] :: UFuncVV -> Expr -> Expr
+
+-- | Unary operation for <tt>Vector -&gt; Number</tt> operations.
+[UnaryOpVN] :: UFuncVN -> Expr -> Expr
+
+-- | Binary operator for arithmetic between expressions (fractional, power,
+--   and subtraction).
+[ArithBinaryOp] :: ArithBinOp -> Expr -> Expr -> Expr
+
+-- | Binary operator for boolean operators (implies, iff).
+[BoolBinaryOp] :: BoolBinOp -> Expr -> Expr -> Expr
+
+-- | Binary operator for equality between expressions.
+[EqBinaryOp] :: EqBinOp -> Expr -> Expr -> Expr
+
+-- | Binary operator for indexing two expressions.
+[LABinaryOp] :: LABinOp -> Expr -> Expr -> Expr
+
+-- | Binary operator for ordering expressions (less than, greater than,
+--   etc.).
+[OrdBinaryOp] :: OrdBinOp -> Expr -> Expr -> Expr
+
+-- | Binary operator for <tt>Vector x Vector -&gt; Vector</tt> operations
+--   (cross product).
+[VVVBinaryOp] :: VVVBinOp -> Expr -> Expr -> Expr
+
+-- | Binary operator for <tt>Vector x Vector -&gt; Number</tt> operations
+--   (dot product).
+[VVNBinaryOp] :: VVNBinOp -> Expr -> Expr -> Expr
+
+-- | Operators are generalized arithmetic operators over a
+--   <a>DomainDesc</a> of an <a>Expr</a>. Could be called BigOp. ex:
+--   Summation is represented via <tt>Add</tt> over a discrete domain.
+[Operator] :: AssocArithOper -> DomainDesc Expr Expr -> Expr -> Expr
+
+-- | A different kind of <tt>IsIn</tt>. A <a>UID</a> is an element of an
+--   interval.
+[RealI] :: UID -> RealInterval Expr Expr -> Expr
+
+-- | Unary functions (abs, log, ln, sin, etc.).
+data UFunc
+Abs :: UFunc
+Log :: UFunc
+Ln :: UFunc
+Sin :: UFunc
+Cos :: UFunc
+Tan :: UFunc
+Sec :: UFunc
+Csc :: UFunc
+Cot :: UFunc
+Arcsin :: UFunc
+Arccos :: UFunc
+Arctan :: UFunc
+Exp :: UFunc
+Sqrt :: UFunc
+Neg :: UFunc
 
 -- | <tt>Bool -&gt; Bool</tt> operators.
 data UFuncB
@@ -2152,6 +2265,33 @@ Cross :: VVVBinOp
 -- | <tt>Vector x Vector -&gt; Number</tt> binary operations (dot product).
 data VVNBinOp
 Dot :: VVNBinOp
+
+-- | Associative operators (adding and multiplication). Also specifies
+--   whether it is for integers or for real numbers.
+data AssocArithOper
+AddI :: AssocArithOper
+AddRe :: AssocArithOper
+MulI :: AssocArithOper
+MulRe :: AssocArithOper
+
+-- | Associative boolean operators (and, or).
+data AssocBoolOper
+And :: AssocBoolOper
+Or :: AssocBoolOper
+
+-- | Determines the type of the derivative (either a partial derivative or
+--   a total derivative).
+data DerivType
+Part :: DerivType
+Total :: DerivType
+
+-- | For case expressions (either complete or incomplete).
+data Completeness
+Complete :: Completeness
+Incomplete :: Completeness
+
+-- | A relation is just an expression (<a>Expr</a>).
+type Relation = Expr
 
 -- | Get dependencies from an equation.
 eDep :: Expr -> [String]
@@ -3692,115 +3832,8 @@ module Language.Drasil
 -- | Drasil expressions.
 data Expr
 
--- | Turns a decimal value (<a>Double</a>) into an expression.
-[Dbl] :: Double -> Expr
-
--- | Turns an integer into an expression.
-[Int] :: Integer -> Expr
-
--- | Represents decimal values that are exact as integers.
-[ExactDbl] :: Integer -> Expr
-
--- | Turns a string into an expression.
-[Str] :: String -> Expr
-
--- | Turns two integers into a fraction (or percent).
-[Perc] :: Integer -> Integer -> Expr
-
--- | Takes an associative arithmetic operator with a list of expressions.
-[AssocA] :: AssocArithOper -> [Expr] -> Expr
-
--- | Takes an associative boolean operator with a list of expressions.
-[AssocB] :: AssocBoolOper -> [Expr] -> Expr
-
--- | Derivative syntax is: Type (<a>Part</a>ial or <a>Total</a>) -&gt;
---   principal part of change -&gt; with respect to For example: Deriv Part
---   y x1 would be (dy/dx1).
-[Deriv] :: DerivType -> Expr -> UID -> Expr
-
--- | C stands for <a>Chunk</a>, for referring to a chunk in an expression.
---   Implicitly assumes that the chunk has a symbol.
-[C] :: UID -> Expr
-
--- | A function call accepts a list of parameters and a list of named
---   parameters. For example
---   
---   <ul>
---   <li>F(x) is (FCall F [x] []).</li>
---   <li>F(x,y) would be (FCall F [x,y]).</li>
---   <li>F(x,n=y) would be (FCall F [x] [(n,y)]).</li>
---   </ul>
-[FCall] :: UID -> [Expr] -> [(UID, Expr)] -> Expr
-
--- | For multi-case expressions, each pair represents one case.
-[Case] :: Completeness -> [(Expr, Relation)] -> Expr
-
--- | Represents a matrix of expressions.
-[Matrix] :: [[Expr]] -> Expr
-
--- | Unary operation for most functions (eg. sin, cos, log, etc.).
-[UnaryOp] :: UFunc -> Expr -> Expr
-
--- | Unary operation for <tt>Bool -&gt; Bool</tt> operations.
-[UnaryOpB] :: UFuncB -> Expr -> Expr
-
--- | Unary operation for <tt>Vector -&gt; Vector</tt> operations.
-[UnaryOpVV] :: UFuncVV -> Expr -> Expr
-
--- | Unary operation for <tt>Vector -&gt; Number</tt> operations.
-[UnaryOpVN] :: UFuncVN -> Expr -> Expr
-
--- | Binary operator for arithmetic between expressions (fractional, power,
---   and subtraction).
-[ArithBinaryOp] :: ArithBinOp -> Expr -> Expr -> Expr
-
--- | Binary operator for boolean operators (implies, iff).
-[BoolBinaryOp] :: BoolBinOp -> Expr -> Expr -> Expr
-
--- | Binary operator for equality between expressions.
-[EqBinaryOp] :: EqBinOp -> Expr -> Expr -> Expr
-
--- | Binary operator for indexing two expressions.
-[LABinaryOp] :: LABinOp -> Expr -> Expr -> Expr
-
--- | Binary operator for ordering expressions (less than, greater than,
---   etc.).
-[OrdBinaryOp] :: OrdBinOp -> Expr -> Expr -> Expr
-
--- | Binary operator for <tt>Vector x Vector -&gt; Vector</tt> operations
---   (cross product).
-[VVVBinaryOp] :: VVVBinOp -> Expr -> Expr -> Expr
-
--- | Binary operator for <tt>Vector x Vector -&gt; Number</tt> operations
---   (dot product).
-[VVNBinaryOp] :: VVNBinOp -> Expr -> Expr -> Expr
-
--- | Operators are generalized arithmetic operators over a
---   <a>DomainDesc</a> of an <a>Expr</a>. Could be called BigOp. ex:
---   Summation is represented via <tt>Add</tt> over a discrete domain.
-[Operator] :: AssocArithOper -> DomainDesc Expr Expr -> Expr -> Expr
-
--- | A different kind of <tt>IsIn</tt>. A <a>UID</a> is an element of an
---   interval.
-[RealI] :: UID -> RealInterval Expr Expr -> Expr
-
 -- | Unary functions (abs, log, ln, sin, etc.).
 data UFunc
-Abs :: UFunc
-Log :: UFunc
-Ln :: UFunc
-Sin :: UFunc
-Cos :: UFunc
-Tan :: UFunc
-Sec :: UFunc
-Csc :: UFunc
-Cot :: UFunc
-Arcsin :: UFunc
-Arccos :: UFunc
-Arctan :: UFunc
-Exp :: UFunc
-Sqrt :: UFunc
-Neg :: UFunc
 
 -- | <tt>Bool -&gt; Bool</tt> operators.
 data UFuncB
@@ -3838,26 +3871,16 @@ data VVNBinOp
 -- | Associative operators (adding and multiplication). Also specifies
 --   whether it is for integers or for real numbers.
 data AssocArithOper
-AddI :: AssocArithOper
-AddRe :: AssocArithOper
-MulI :: AssocArithOper
-MulRe :: AssocArithOper
 
 -- | Associative boolean operators (and, or).
 data AssocBoolOper
-And :: AssocBoolOper
-Or :: AssocBoolOper
 
 -- | Determines the type of the derivative (either a partial derivative or
 --   a total derivative).
 data DerivType
-Part :: DerivType
-Total :: DerivType
 
 -- | For case expressions (either complete or incomplete).
 data Completeness
-Complete :: Completeness
-Incomplete :: Completeness
 
 -- | A relation is just an expression (<a>Expr</a>).
 type Relation = Expr

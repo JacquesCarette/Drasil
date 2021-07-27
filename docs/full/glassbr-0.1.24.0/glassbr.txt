@@ -288,3 +288,7 @@ physSystParts :: [Sentence]
 goalInputs :: [Sentence]
 appdxIntro :: Contents
 blstRskInvWGlassSlab :: Sentence
+
+module Drasil.GlassBR.Choices
+code :: CodeSpec
+choices :: Choices

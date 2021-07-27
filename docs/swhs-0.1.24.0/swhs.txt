@@ -9,6 +9,8 @@
 @package swhs
 @version 0.1.24.0
 
+module Drasil.SWHS.Choices
+
 module Drasil.SWHS.Concepts
 con :: [ConceptChunk]
 acronyms :: [CI]
@@ -348,6 +350,3 @@ propCorSolDeriv2 :: Contents
 propCorSolDeriv3 :: NamedIdea a => a -> UnitalChunk -> CI -> ConceptChunk -> Contents
 propCorSolDeriv4 :: Contents
 propCorSolDeriv5 :: ConceptChunk -> CI -> CI -> Contents
-
-module Drasil.SWHS.Generate
-generate :: IO ()

@@ -128,3 +128,17 @@ si :: SystemInformation
 srs :: Document
 projectileTitle :: CI
 fullSI :: SystemInformation
+
+module Drasil.Projectile.Choices
+genCodeWithChoices :: [Choices] -> IO ()
+codedDirName :: String -> Choices -> String
+codedMod :: Modularity -> String
+codedImpTp :: ImplementationType -> String
+codedLog :: [Logging] -> String
+codedStruct :: Structure -> String
+codedConStruct :: ConstantStructure -> String
+codedConRepr :: ConstantRepr -> String
+codedSpaceMatch :: SpaceMatch -> String
+choiceCombos :: [Choices]
+matchToFloats :: SpaceMatch
+baseChoices :: Choices

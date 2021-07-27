@@ -78,3 +78,7 @@ srs :: Document
 printSetting :: PrintingInformation
 noPCMODEInfo :: ODEInfo
 fullSI :: SystemInformation
+
+module Drasil.NoPCM.Choices
+code :: CodeSpec
+choices :: Choices

@@ -1,0 +1,5 @@
+digraph example{
+Example -> SystemInformation;
+Example -> Choices;
+Example	[shape=oval, color=cyan3, label="Example"];
+}

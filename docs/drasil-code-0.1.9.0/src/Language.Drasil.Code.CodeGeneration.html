@@ -19,9 +19,9 @@
 </span><span id="line-19"></span><span class="hs-comment">-- | Makes code from 'FileData' ('FilePath's with module data) and 'AuxData' ('FilePath's with auxiliary document information).</span><span>
 </span><span id="line-20"></span><span class="annot"><a href="Language.Drasil.Code.CodeGeneration.html#makeCode"><span class="hs-identifier hs-type">makeCode</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">FileData</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><a href="Language.Drasil.Code.Imperative.GOOL.Data.html#AuxData"><span class="hs-identifier hs-type">AuxData</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Code.html#Code"><span class="hs-identifier hs-type">Code</span></a></span><span>
 </span><span id="line-21"></span><span id="makeCode"><span class="annot"><span class="annottext">makeCode :: [FileData] -&gt; [AuxData] -&gt; Code
-</span><a href="Language.Drasil.Code.CodeGeneration.html#makeCode"><span class="hs-identifier hs-var hs-var">makeCode</span></a></span></span><span> </span><span id="local-6989586621679322014"><span class="annot"><span class="annottext">files :: [FileData]
-</span><a href="#local-6989586621679322014"><span class="hs-identifier hs-var">files</span></a></span></span><span> </span><span id="local-6989586621679322013"><span class="annot"><span class="annottext">aux :: [AuxData]
-</span><a href="#local-6989586621679322013"><span class="hs-identifier hs-var">aux</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[(FilePath, Doc)] -&gt; Code
+</span><a href="Language.Drasil.Code.CodeGeneration.html#makeCode"><span class="hs-identifier hs-var hs-var">makeCode</span></a></span></span><span> </span><span id="local-6989586621679322024"><span class="annot"><span class="annottext">files :: [FileData]
+</span><a href="#local-6989586621679322024"><span class="hs-identifier hs-var">files</span></a></span></span><span> </span><span id="local-6989586621679322023"><span class="annot"><span class="annottext">aux :: [AuxData]
+</span><a href="#local-6989586621679322023"><span class="hs-identifier hs-var">aux</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[(FilePath, Doc)] -&gt; Code
 </span><a href="Language.Drasil.Code.Code.html#Code"><span class="hs-identifier hs-var">Code</span></a></span><span> </span><span class="annot"><span class="annottext">([(FilePath, Doc)] -&gt; Code) -&gt; [(FilePath, Doc)] -&gt; Code
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[FilePath] -&gt; [Doc] -&gt; [(FilePath, Doc)]
@@ -30,13 +30,13 @@ forall a b. [a] -&gt; [b] -&gt; [(a, b)]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">FileData -&gt; FilePath
 </span><span class="hs-identifier hs-var hs-var">filePath</span></span><span> </span><span class="annot"><span class="annottext">[FileData]
-</span><a href="#local-6989586621679322014"><span class="hs-identifier hs-var">files</span></a></span><span> </span><span class="annot"><span class="annottext">[FilePath] -&gt; [FilePath] -&gt; [FilePath]
+</span><a href="#local-6989586621679322024"><span class="hs-identifier hs-var">files</span></a></span><span> </span><span class="annot"><span class="annottext">[FilePath] -&gt; [FilePath] -&gt; [FilePath]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(AuxData -&gt; FilePath) -&gt; [AuxData] -&gt; [FilePath]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">AuxData -&gt; FilePath
 </span><a href="Language.Drasil.Code.Imperative.GOOL.Data.html#auxFilePath"><span class="hs-identifier hs-var hs-var">auxFilePath</span></a></span><span> </span><span class="annot"><span class="annottext">[AuxData]
-</span><a href="#local-6989586621679322013"><span class="hs-identifier hs-var">aux</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679322023"><span class="hs-identifier hs-var">aux</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-22"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(FileData -&gt; Doc) -&gt; [FileData] -&gt; [Doc]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ModData -&gt; Doc
@@ -44,13 +44,13 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
 </span><span class="hs-operator hs-var">.</span></span><span> </span><span class="annot"><span class="annottext">FileData -&gt; ModData
 </span><span class="hs-identifier hs-var hs-var">fileMod</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[FileData]
-</span><a href="#local-6989586621679322014"><span class="hs-identifier hs-var">files</span></a></span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; [Doc] -&gt; [Doc]
+</span><a href="#local-6989586621679322024"><span class="hs-identifier hs-var">files</span></a></span><span> </span><span class="annot"><span class="annottext">[Doc] -&gt; [Doc] -&gt; [Doc]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(AuxData -&gt; Doc) -&gt; [AuxData] -&gt; [Doc]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">AuxData -&gt; Doc
 </span><a href="Language.Drasil.Code.Imperative.GOOL.Data.html#auxDoc"><span class="hs-identifier hs-var hs-var">auxDoc</span></a></span><span> </span><span class="annot"><span class="annottext">[AuxData]
-</span><a href="#local-6989586621679322013"><span class="hs-identifier hs-var">aux</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679322023"><span class="hs-identifier hs-var">aux</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-23"></span><span>
 </span><span id="line-24"></span><span class="hs-comment">------------------</span><span>
 </span><span id="line-25"></span><span class="hs-comment">-- IO Functions --</span><span>
@@ -59,37 +59,37 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span id="line-28"></span><span class="hs-comment">-- | Creates the requested 'Code' by producing files.</span><span>
 </span><span id="line-29"></span><span class="annot"><a href="Language.Drasil.Code.CodeGeneration.html#createCodeFiles"><span class="hs-identifier hs-type">createCodeFiles</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><a href="Language.Drasil.Code.Code.html#Code"><span class="hs-identifier hs-type">Code</span></a></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- [(FilePath, Doc)] -&gt; IO ()</span><span>
 </span><span id="line-30"></span><span id="createCodeFiles"><span class="annot"><span class="annottext">createCodeFiles :: Code -&gt; IO ()
-</span><a href="Language.Drasil.Code.CodeGeneration.html#createCodeFiles"><span class="hs-identifier hs-var hs-var">createCodeFiles</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Code.html#Code"><span class="hs-identifier hs-type">Code</span></a></span><span> </span><span id="local-6989586621679322006"><span class="annot"><span class="annottext">cs :: [(FilePath, Doc)]
-</span><a href="#local-6989586621679322006"><span class="hs-identifier hs-var">cs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((FilePath, Doc) -&gt; IO ()) -&gt; [(FilePath, Doc)] -&gt; IO ()
+</span><a href="Language.Drasil.Code.CodeGeneration.html#createCodeFiles"><span class="hs-identifier hs-var hs-var">createCodeFiles</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><a href="Language.Drasil.Code.Code.html#Code"><span class="hs-identifier hs-type">Code</span></a></span><span> </span><span id="local-6989586621679322016"><span class="annot"><span class="annottext">cs :: [(FilePath, Doc)]
+</span><a href="#local-6989586621679322016"><span class="hs-identifier hs-var">cs</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">((FilePath, Doc) -&gt; IO ()) -&gt; [(FilePath, Doc)] -&gt; IO ()
 forall (t :: * -&gt; *) (m :: * -&gt; *) a b.
 (Foldable t, Monad m) =&gt;
 (a -&gt; m b) -&gt; t a -&gt; m ()
 </span><span class="hs-identifier hs-var">mapM_</span></span><span> </span><span class="annot"><span class="annottext">(FilePath, Doc) -&gt; IO ()
 </span><a href="Language.Drasil.Code.CodeGeneration.html#createCodeFile"><span class="hs-identifier hs-var">createCodeFile</span></a></span><span> </span><span class="annot"><span class="annottext">[(FilePath, Doc)]
-</span><a href="#local-6989586621679322006"><span class="hs-identifier hs-var">cs</span></a></span><span>
+</span><a href="#local-6989586621679322016"><span class="hs-identifier hs-var">cs</span></a></span><span>
 </span><span id="line-31"></span><span>
 </span><span id="line-32"></span><span class="hs-comment">-- | Helper that uses pairs of 'Code' to create a file written with the given document at the given 'FilePath'.</span><span>
 </span><span id="line-33"></span><span class="annot"><a href="Language.Drasil.Code.CodeGeneration.html#createCodeFile"><span class="hs-identifier hs-type">createCodeFile</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Doc</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">IO</span></span><span> </span><span class="hs-special">(</span><span class="hs-special">)</span><span>
 </span><span id="line-34"></span><span id="createCodeFile"><span class="annot"><span class="annottext">createCodeFile :: (FilePath, Doc) -&gt; IO ()
-</span><a href="Language.Drasil.Code.CodeGeneration.html#createCodeFile"><span class="hs-identifier hs-var hs-var">createCodeFile</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679322003"><span class="annot"><span class="annottext">path :: FilePath
-</span><a href="#local-6989586621679322003"><span class="hs-identifier hs-var">path</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679322002"><span class="annot"><span class="annottext">code :: Doc
-</span><a href="#local-6989586621679322002"><span class="hs-identifier hs-var">code</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
+</span><a href="Language.Drasil.Code.CodeGeneration.html#createCodeFile"><span class="hs-identifier hs-var hs-var">createCodeFile</span></a></span></span><span> </span><span class="hs-special">(</span><span id="local-6989586621679322013"><span class="annot"><span class="annottext">path :: FilePath
+</span><a href="#local-6989586621679322013"><span class="hs-identifier hs-var">path</span></a></span></span><span class="hs-special">,</span><span> </span><span id="local-6989586621679322012"><span class="annot"><span class="annottext">code :: Doc
+</span><a href="#local-6989586621679322012"><span class="hs-identifier hs-var">code</span></a></span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-keyword">do</span><span>
 </span><span id="line-35"></span><span>  </span><span class="annot"><span class="annottext">Bool -&gt; FilePath -&gt; IO ()
 </span><span class="hs-identifier hs-var">createDirectoryIfMissing</span></span><span> </span><span class="annot"><span class="annottext">Bool
 </span><span class="hs-identifier hs-var">True</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; FilePath
 </span><span class="hs-identifier hs-var">takeDirectory</span></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679322003"><span class="hs-identifier hs-var">path</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-36"></span><span>  </span><span id="local-6989586621679322001"><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679322001"><span class="hs-identifier hs-var">h</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; IOMode -&gt; IO Handle
+</span><a href="#local-6989586621679322013"><span class="hs-identifier hs-var">path</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-36"></span><span>  </span><span id="local-6989586621679322011"><span class="annot"><span class="annottext">Handle
+</span><a href="#local-6989586621679322011"><span class="hs-identifier hs-var">h</span></a></span></span><span> </span><span class="hs-glyph">&lt;-</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; IOMode -&gt; IO Handle
 </span><span class="hs-identifier hs-var">openFile</span></span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="#local-6989586621679322003"><span class="hs-identifier hs-var">path</span></a></span><span> </span><span class="annot"><span class="annottext">IOMode
+</span><a href="#local-6989586621679322013"><span class="hs-identifier hs-var">path</span></a></span><span> </span><span class="annot"><span class="annottext">IOMode
 </span><span class="hs-identifier hs-var">WriteMode</span></span><span>
 </span><span id="line-37"></span><span>  </span><span class="annot"><span class="annottext">Handle -&gt; FilePath -&gt; IO ()
 </span><span class="hs-identifier hs-var">hPutStrLn</span></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679322001"><span class="hs-identifier hs-var">h</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Doc -&gt; FilePath
+</span><a href="#local-6989586621679322011"><span class="hs-identifier hs-var">h</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Doc -&gt; FilePath
 </span><span class="hs-identifier hs-var">render</span></span><span> </span><span class="annot"><span class="annottext">Doc
-</span><a href="#local-6989586621679322002"><span class="hs-identifier hs-var">code</span></a></span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679322012"><span class="hs-identifier hs-var">code</span></a></span><span class="hs-special">)</span><span>
 </span><span id="line-38"></span><span>  </span><span class="annot"><span class="annottext">Handle -&gt; IO ()
 </span><span class="hs-identifier hs-var">hClose</span></span><span> </span><span class="annot"><span class="annottext">Handle
-</span><a href="#local-6989586621679322001"><span class="hs-identifier hs-var">h</span></a></span><span>
+</span><a href="#local-6989586621679322011"><span class="hs-identifier hs-var">h</span></a></span><span>
 </span><span id="line-39"></span></pre></body></html>

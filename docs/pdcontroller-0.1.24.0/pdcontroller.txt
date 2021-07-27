@@ -262,3 +262,7 @@ printSetting :: PrintingInformation
 si :: SystemInformation
 srs :: Document
 fullSI :: SystemInformation
+
+module Drasil.PDController.Choices
+codeSpecs :: CodeSpec
+codeChoices :: Choices

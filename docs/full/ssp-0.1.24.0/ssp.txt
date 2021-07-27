@@ -9,6 +9,8 @@
 @package ssp
 @version 0.1.24.0
 
+module Drasil.SSP.Choices
+
 module Drasil.SSP.Defs
 acronyms :: [CI]
 ssp :: CI

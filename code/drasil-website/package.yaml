@@ -47,7 +47,21 @@ ghc-options:
 - -Wredundant-constraints
 - -threaded
 
+library:
+  source-dirs: ./
+  when:
+  - condition: false
+    other-modules: Paths_drasil_website
+
 executables:
   website:
     main: Drasil.Website.Main
     source-dirs: ./
+    ghc-options:
+    - -Wall
+    - -Wredundant-constraints
+    - -threaded
+    - -O2
+    when:
+    - condition: false
+      other-modules: Paths_drasil_website

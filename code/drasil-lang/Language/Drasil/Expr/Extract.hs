@@ -12,6 +12,7 @@ deNames (AlgebraicExpr e)  = eNames e
 deNames (SpaceExpr _)      = []
 deNames (BinOp _ l r)      = deNames l ++ deNames r
 deNames (AssocBinOp _ des) = concatMap deNames des
+-- deNames (ForAll _ _)       = deNames _
 
 -- | Generic traverse of all expressions that could lead to names.
 eNames :: Expr -> [String]
@@ -106,3 +107,4 @@ deDep (AlgebraicExpr e)  = eDep e
 deDep (SpaceExpr _)      = []
 deDep (BinOp _ l r)      = nub $ deDep l ++ deDep r
 deDep (AssocBinOp _ des) = nub $ concatMap deDep des 
+-- deDep (ForAll _ _)       = nub

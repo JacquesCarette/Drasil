@@ -34,5 +34,6 @@ dispExpr (AlgebraicExpr e)  sm = expr e sm
 dispExpr (SpaceExpr s)      sm = space sm s
 dispExpr (BinOp b l r)      sm = P.Row [dispExpr l sm, P.MO $ deBinOp b, dispExpr r sm]
 dispExpr (AssocBinOp b des) sm = P.Row $ intersperse (P.MO op) $ map (dispExpr' sm prec) des
+--dispExpr (ForAll _ _)       sm =
   where prec = dePrecAssoc b
         op   = deAssocBinOp b

@@ -35,6 +35,7 @@ assumptions :: [ConceptInstance]
 
 module Drasil.DblPendulum.Figures
 figMotion :: LabelledContent
+sysCtxFig1 :: LabelledContent
 
 module Drasil.DblPendulum.Goals
 goals :: [ConceptInstance]
@@ -145,7 +146,6 @@ module Drasil.DblPendulum.Body
 srs :: Document
 fullSI :: SystemInformation
 printSetting :: PrintingInformation
-resourcePath :: String
 mkSRS :: SRSDecl
 directoryName :: FilePath
 si :: SystemInformation
@@ -159,7 +159,6 @@ scope :: Sentence
 charsOfReader :: [Sentence]
 organizationOfDocumentsIntro :: Sentence
 sysCtxIntro :: Contents
-sysCtxFig1 :: LabelledContent
 sysCtxDesc :: Contents
 sysCtxUsrResp :: [Sentence]
 sysCtxSysResp :: [Sentence]

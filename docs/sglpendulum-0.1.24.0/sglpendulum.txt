@@ -19,6 +19,7 @@ assumptions :: [ConceptInstance]
 
 module Drasil.SglPendulum.Figures
 figMotion :: LabelledContent
+sysCtxFig1 :: LabelledContent
 
 module Drasil.SglPendulum.Goals
 goals :: [ConceptInstance]

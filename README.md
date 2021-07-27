@@ -54,7 +54,7 @@ Argument | Example
 gamephysics_diff | 2D Rigid Body Physics Library
 swhs_diff | Solar Water Heating System with PCM
 glassbr_diff | Glass-BR
-HGHC_diff | HGHC toy example
+hghc_diff | HGHC toy example
 ssp_diff | Slope Stability Analysis
 nopcm_diff | minimal SWHS example, with PCM removed
 projectile_diff | Projectile motion analysis
@@ -74,7 +74,7 @@ NAME | Example
 gamephysics | 2D Rigid Body Physics Library
 swhs | Solar Water Heating System with PCM (SWHS)
 glassbr | Glass-BR
-HGHC | HGHC toy example
+hghc | HGHC toy example
 ssp | Slope Stability Analysis (SSP)
 nopcm | SWHS without PCM (NoPCM)
 projectile | Projectile motion analysis

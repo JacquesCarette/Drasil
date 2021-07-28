@@ -3892,15 +3892,11 @@ digraph alltypes {
 	subgraph body {
 		subgraph folderlocation{
 		FolderLocation -> FilePath;
+		FolderLocation -> String;
 		FolderLocation	[shape=oval, color=cyan3, label="FolderLocation"];
 		}
 	}
 	subgraph caestudys {
-		subgraph example{
-		Example -> SystemInformation;
-		Example -> Choices;
-		Example	[shape=oval, color=cyan3, label="Example"];
-		}
 		subgraph casestudy{
 		CaseStudy -> SystemInformation;
 		CaseStudy -> Sentence;
@@ -3915,6 +3911,13 @@ digraph alltypes {
 	subgraph documentation {
 	}
 	subgraph example {
+		subgraph example{
+		Example -> SystemInformation;
+		Example -> Sentence;
+		Example -> Choices;
+		Example -> FilePath;
+		Example	[shape=oval, color=cyan3, label="Example"];
+		}
 	}
 	subgraph graphs {
 	}

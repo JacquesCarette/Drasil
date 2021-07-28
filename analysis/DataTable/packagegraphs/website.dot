@@ -1,6 +1,6 @@
 digraph website{
 FolderLocation	[shape=oval, color=turquoise4, label="FolderLocation"];
-Example	[shape=oval, color=turquoise4, label="Example"];
 CaseStudy	[shape=oval, color=turquoise4, label="CaseStudy"];
 CSLegend	[shape=oval, color=turquoise4, label="CSLegend"];
+Example	[shape=oval, color=turquoise4, label="Example"];
 }

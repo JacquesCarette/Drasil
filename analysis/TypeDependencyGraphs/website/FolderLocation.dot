@@ -1,4 +1,5 @@
 digraph folderlocation{
 FolderLocation -> FilePath;
+FolderLocation -> String;
 FolderLocation	[shape=oval, color=cyan3, label="FolderLocation"];
 }

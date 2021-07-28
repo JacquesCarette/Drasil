@@ -385,7 +385,7 @@
           <div class="subsection">
             <h2>Purpose of Document</h2>
             <p class="paragraph">
-              The primary purpose of this document is to record the requirements of the Pendulum. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of Pendulum. With the exception of <a href=#Sec:SysConstraints>system constraints</a>, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
+              The primary purpose of this document is to record the requirements of the Pendulum. Goals, assumptions, theoretical models, definitions, and other model derivation information are specified, allowing the reader to fully understand and verify the purpose and scientific basis of SglPendulum. With the exception of <a href=#Sec:SysConstraints>system constraints</a>, this SRS will remain abstract, describing what problem is being solved, but not how to solve it.
             </p>
             <p class="paragraph">
               This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out <a href=#parnasClements1986>parnasClements1986</a>, the most logical way to present the documentation is still to "fake" a rational design process.
@@ -404,7 +404,7 @@
           <div class="subsection">
             <h2>Characteristics of Intended Reader</h2>
             <p class="paragraph">
-              Reviewers of this documentation should have an understanding of undergraduate level 2 physics, undergraduate level 1 calculus, and ordinary differential equations. The users of Pendulum can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
+              Reviewers of this documentation should have an understanding of undergraduate level 2 physics, undergraduate level 1 calculus, and ordinary differential equations. The users of SglPendulum can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:User Characteristics</a>.
             </p>
           </div>
         </div>
@@ -431,7 +431,7 @@
           <div class="subsection">
             <h2>System Context</h2>
             <p class="paragraph">
-              <a href=#Figure:sysCtxDiag>Fig:sysCtxDiag</a> shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (Pendulum). Arrows are used to show the data flow between the system and its environment.
+              <a href=#Figure:sysCtxDiag>Fig:sysCtxDiag</a> shows the system context. A circle represents an entity external to the software, the user in this case. A rectangle represents the software system itself (SglPendulum). Arrows are used to show the data flow between the system and its environment.
             </p>
             <div id="Figure:sysCtxDiag">
               <figure>
@@ -456,7 +456,7 @@
                 </ul>
               </li>
               <li>
-                Pendulum Responsibilities
+                SglPendulum Responsibilities
                 <ul class="list">
                   <li>
                     Detect data type mismatch, such as a string of characters input instead of a floating point number.
@@ -475,7 +475,7 @@
           <div class="subsection">
             <h2>User Characteristics</h2>
             <p class="paragraph">
-              The end user of Pendulum should have an understanding of high school physics, high school calculus and ordinary differential equations.
+              The end user of SglPendulum should have an understanding of high school physics, high school calculus and ordinary differential equations.
             </p>
           </div>
         </div>
@@ -519,7 +519,7 @@
               <div class="subsubsection">
                 <h3>Physical System Description</h3>
                 <p class="paragraph">
-                  The physical system of Pendulum, as shown in <a href=#Figure:sglpendulum>Fig:sglpendulum</a>, includes the following elements:
+                  The physical system of SglPendulum, as shown in <a href=#Figure:sglpendulum>Fig:sglpendulum</a>, includes the following elements:
                 </p>
                 <div class="list">
                   <p>PS1: The rod.</p>
@@ -554,7 +554,7 @@
           <div class="subsection">
             <h2>Solution Characteristics Specification</h2>
             <p class="paragraph">
-              The instance models that govern Pendulum are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+              The instance models that govern SglPendulum are presented in the <a href=#Sec:IMs>Instance Model Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
             </p>
             <div id="Sec:Assumps">
               <div class="subsubsection">
@@ -595,7 +595,7 @@
               <div class="subsubsection">
                 <h3>Theoretical Models</h3>
                 <p class="paragraph">
-                  This section focuses on the general equations and laws that Pendulum is based on.
+                  This section focuses on the general equations and laws that SglPendulum is based on.
                 </p>
                 <div id="TM:acceleration">
                   <table class="tdefn">

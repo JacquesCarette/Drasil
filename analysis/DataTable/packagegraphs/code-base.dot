@@ -1,4 +1,4 @@
-digraph code-base{
+digraph code_base{
 VarOrFunc	[shape=oval, color=turquoise4, label="VarOrFunc"];
 CodeChunk	[shape=oval, color=turquoise4, label="CodeChunk"];
 CodeVarChunk	[shape=oval, color=turquoise4, label="CodeVarChunk"];

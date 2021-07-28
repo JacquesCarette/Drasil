@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 6b9218c9e8fd9565312795ebc8b2e4fac20d638e9f2d0ac4b601f233a0904a0f
+-- hash: e8447b7c35eef9862d93458c8bf856e3220871eaf2c3834fd2ed01a55aa743b9
 
 name:           drasil-website
 version:        0.1.0.0
@@ -27,10 +27,10 @@ library
       Drasil.Website.Documentation
       Drasil.Website.Example
       Drasil.Website.Introduction
-      Drasil.Website.Main
+  other-modules:
+      Paths_drasil_website
   hs-source-dirs:
-      ./
-  ghc-options: -Wall -Wredundant-constraints -threaded
+      lib
   build-depends:
       base >=4.7 && <5
     , dblpendulum
@@ -59,21 +59,16 @@ library
     , template
   if false
     other-modules:
-        Paths_drasil_website
+        Paths_website
   default-language: Haskell2010
 
 executable website
-  main-is: Drasil/Website/Main.hs
+  main-is: Main.hs
   other-modules:
-      Drasil.Website.Analysis
-      Drasil.Website.Body
-      Drasil.Website.CaseStudy
-      Drasil.Website.Documentation
-      Drasil.Website.Example
-      Drasil.Website.Introduction
+      Paths_drasil_website
   hs-source-dirs:
-      ./
-  ghc-options: -Wall -Wredundant-constraints -threaded -Wall -Wredundant-constraints -threaded -O2 -main-is Drasil.Website.Main
+      app
+  ghc-options: -Wall -Wredundant-constraints -threaded -O2 -main-is Main
   build-depends:
       base >=4.7 && <5
     , dblpendulum
@@ -100,7 +95,8 @@ executable website
     , ssp
     , swhs
     , template
+    , website
   if false
     other-modules:
-        Paths_drasil_website
+        Paths_website
   default-language: Haskell2010

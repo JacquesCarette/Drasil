@@ -5,7 +5,7 @@ module Language.Drasil.Chunk.Unital
 import Control.Lens (makeLenses, view, (^.))
 
 import Language.Drasil.Chunk.Concept (dcc, dccWDS,cw)
-import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd', dqdWr')
+import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd', tempdqdWr')
 import Language.Drasil.Chunk.Unitary (Unitary(..))
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Display(toDispExpr),
@@ -97,4 +97,4 @@ makeUCWDS nam trm desc sym un = UC (dqd (dccWDS nam trm desc) sym Real uu) uu
   where uu = unitWrapper un
 
 ucuc :: (Quantity c, Concept c, HasUnit c) => c -> UnitalChunk
-ucuc c = UC (dqdWr' c) (findUnit c)
+ucuc c = UC (tempdqdWr' c) (findUnit c)

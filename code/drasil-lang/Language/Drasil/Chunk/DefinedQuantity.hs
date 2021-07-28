@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqdNoUnit, dqd',
-  dqdQd, dqdWr, dqdWr') where
+  dqdQd, dqdWr, tempdqdWr') where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept, Display(..),
@@ -63,8 +63,9 @@ dqd' = DQD
 dqdWr :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
 dqdWr c = DQD (cw c) (symbol c) (c ^. typ) (getUnit c)
 
-dqdWr' :: (Quantity c, Concept c, HasUnit c) => c -> DefinedQuantityDict
-dqdWr' c = DQD (cw c) (symbol c) (c ^. typ) (Just $ findUnit c)
+-- | temporary constructor, not to be used outside drasil-lang.
+tempdqdWr' :: (Quantity c, Concept c, HasUnit c) => c -> DefinedQuantityDict
+tempdqdWr' c = DQD (cw c) (symbol c) (c ^. typ) (Just $ findUnit c)
 
 -- | When we want to merge a quantity and a concept. This is suspicious.
 dqdQd :: (Quantity c, MayHaveUnit c) => c -> ConceptChunk -> DefinedQuantityDict

@@ -26,7 +26,7 @@ import Data.Drasil.Concepts.PhysicalProperties (mass, len, physicalcon)
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs, physics, variable)
 import Data.Drasil.Concepts.Documentation (assumption, condition, endUser, environment, datum, document,
   input_, interface, output_, organization, problem, product_, physical, sysCont, software, softwareConstraint,
-  softwareSys, srsDomains, system, sysCont, template, user, doccon, doccon', analysis)
+  softwareSys, srsDomains, system, template, user, doccon, doccon', analysis)
 
 import Data.Drasil.Concepts.Computation (inDatum, compcon, inValue, algorithm)
 import Drasil.DocLang (AuxConstntSec(AuxConsProg),
@@ -40,7 +40,7 @@ import Drasil.DocLang (AuxConstntSec(AuxConsProg),
   Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, purpDoc, fillcdbSRS)
 
 import qualified Drasil.DocLang.SRS as SRS
-import Drasil.DblPendulum.Figures (figMotion)
+import Drasil.DblPendulum.Figures (figMotion, sysCtxFig1)
 import Data.Drasil.Concepts.Math (mathcon, cartesian, ode, mathcon', graph)
 import Data.Drasil.Quantities.Math (unitVect, unitVectj)
 import Drasil.DblPendulum.Assumptions (assumptions)
@@ -63,9 +63,6 @@ fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
-
-resourcePath :: String
-resourcePath = "../../../datafiles/DblPendulum/"
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents, -- This creates the Table of Contents
@@ -224,10 +221,6 @@ sysCtxIntro = foldlSP
    phrase softwareSys, S "itself", sParen (short progName) +:+. EmptyS,
    S "Arrows are used to show the data flow between the", phraseNP (system
    `andIts` environment)]
-
-sysCtxFig1 :: LabelledContent
-sysCtxFig1 = llcc (makeFigRef "sysCtxDiag") $ fig (titleize sysCont) 
-  (resourcePath ++ "SystemContextFigure.png")
 
 sysCtxDesc :: Contents
 sysCtxDesc = foldlSPCol [S "The interaction between the", phraseNP (product_

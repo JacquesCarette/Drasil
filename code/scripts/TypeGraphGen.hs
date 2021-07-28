@@ -183,7 +183,7 @@ mkGraphTOutput outputFilePath td = do
 -- Helper to create the drasil.dot graph file
 mkFullOutputSub :: Handle -> Entry -> IO ()
 mkFullOutputSub typeGraph entry = do
-    hPutStrLn typeGraph $ "\tsubgraph " ++ map toLower (fileName entry \\ ".hs") ++ " {"
+    hPutStrLn typeGraph $ "\tsubgraph " ++ replaceInvalidChars (map toLower $ fileName entry \\ ".hs") ++ " {"
     mapM_ (mkGraphDROutputSub typeGraph) $ dataTypeRecords entry
     mapM_ (mkGraphDCOutputSub typeGraph) $ dataTypeConstructors entry
     mapM_ (mkGraphNTOutputSub typeGraph) $ newtypes entry

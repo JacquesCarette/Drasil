@@ -1,14 +1,11 @@
-{-# LANGUAGE PackageImports #-}
-module Drasil.Website.Example (exampleSec, exampleRefs)where
+module Drasil.Website.Example (exampleSec, exampleRefs, examples, Example(..), allExampleSI)where
 
-import Data.List (zipWith4, isPrefixOf)
-import Language.Drasil hiding (C)
---import Database.Drasil (SystemInformation(..))
+import Language.Drasil hiding (E)
+import Database.Drasil (SystemInformation(..))
+import Language.Drasil.Code (Choices(..), Lang(..))
 import Utils.Drasil
-import Data.Char (toUpper, toLower)
-import qualified Data.List.Split as L
+import Data.Char (toLower, isSpace)
 
-{-
 import qualified Drasil.DblPendulum.Body as DblPendulum (fullSI)
 import qualified Drasil.GamePhysics.Body as GamePhysics (fullSI)
 import qualified Drasil.GlassBR.Body as GlassBR (fullSI)
@@ -16,9 +13,9 @@ import qualified Drasil.HGHC.Body as HGHC (fullSI)
 import qualified Drasil.NoPCM.Body as NoPCM (fullSI)
 import qualified Drasil.PDController.Body as PDController (fullSI)
 import qualified Drasil.Projectile.Body as Projectile (fullSI)
+import qualified Drasil.SglPendulum.Body as SglPendulum (fullSI)
 import qualified Drasil.SSP.Body as SSP (fullSI)
 import qualified Drasil.SWHS.Body as SWHS (fullSI)
-import qualified Drasil.Template.Body as Template (fullSI)
 
 -- import choices for code generation
 import qualified Drasil.GlassBR.Choices as GlassBR (choices)
@@ -26,204 +23,235 @@ import qualified Drasil.NoPCM.Choices as NoPCM (choices)
 import qualified Drasil.PDController.Choices as PDController (codeChoices)
 import qualified Drasil.Projectile.Choices as Projectile (codedDirName, choiceCombos)
 -- the other examples currently do not generate any code.
--}
 
---------------------------
--- Examples Section
---------------------------
+-----------------------------
+-- Gather Example Information
+-----------------------------
 
+----- First gather all information needed to create an example. This includes system information, descriptions, and choices.
+----- These will also be exported for use in CaseStudy.hs.
+
+-- | Each Example gets placed in here.
+data Example = E {
+  sysInfoE :: SystemInformation,
+  descE :: Sentence,
+  choicesE :: [Choices],
+  srsPath :: FilePath,
+  doxPath :: FilePath
+}
+-- TODO: Automate the gathering of system information, descriptions, and choices.
+
+-- | Records example system information.
+allExampleSI :: [SystemInformation]
+allExampleSI = [DblPendulum.fullSI, GamePhysics.fullSI, GlassBR.fullSI, HGHC.fullSI, NoPCM.fullSI, PDController.fullSI, Projectile.fullSI, SglPendulum.fullSI, SSP.fullSI, SWHS.fullSI]
+
+-- | Records example descriptions.
+allExampleDesc :: [Sentence]
+allExampleDesc = [dblPendulumDesc, gamePhysDesc, glassBRDesc, hghcDesc, noPCMDesc, pdControllerDesc, projectileDesc, sglPendulumDesc, sspDesc, swhsDesc]
+
+-- To developer: Fill this list in when more examples can run code. The list
+-- needs to be of this form since projectile comes with a list of choice combos.
+-- | Records example choices. The order of the list must match up with
+-- that in `allExampleSI`, or the Case Studies Table will be incorrect.
+allExampleChoices :: [[Choices]]
+allExampleChoices = [[], [], [GlassBR.choices], [], [NoPCM.choices], [PDController.codeChoices], Projectile.choiceCombos, [], [], []]
+
+-- | Combine system info, description, choices, and file paths into one nice package.
+allExamples :: [SystemInformation] -> [Sentence] -> [[Choices]] -> FilePath -> FilePath -> [Example]
+allExamples si desc choi srsP doxP = zipWith3 (\x y z -> E x y z srsP doxP) si desc choi
+
+-- | Calls 'allExamples' on 'allExampleSI', 'allExampleDesc', and 'allExampleChoices'.
+-- Can be considered a "default" version of 'allExamples'.
+examples :: FilePath -> FilePath -> [Example]
+examples = allExamples allExampleSI allExampleDesc allExampleChoices
+
+
+-------------------------------------------
+-- Functions to create the list of examples
+-------------------------------------------
+
+-- | Create the full list of examples.
+fullExList :: FilePath -> FilePath -> RawContent
+fullExList p1 p2 = Enumeration $ Bullet $ zip (allExampleList $ examples p1 p2) $ repeat Nothing
+
+-- | Create each example point and call 'individualExList' to do the rest.
+allExampleList :: [Example] -> [ItemType]
+allExampleList = map (\x -> Nested (nameAndDesc x) $ Bullet $ zip (individualExList x) $ repeat Nothing)
+  where
+    nameAndDesc E{sysInfoE = SI{_sys = sys}, descE = desc} = S (abrv sys) +:+ desc
+
+-- | Display the points for generated documents and call 'versionList' to display the code.
+individualExList :: Example -> [ItemType]
+-- No choices mean no generated code, so we do not need to display generated code and thus do not call versionList.
+individualExList E{sysInfoE = SI{_sys = sys}, choicesE = [], srsPath = srsP} = 
+  [Flat $ S (abrv sys ++ "_SRS") +:+ namedRef (getSRSRef srsP "html" $ abrv sys) (S "[HTML]") +:+ namedRef (getSRSRef srsP "pdf" $ abrv sys) (S "[PDF]")]
+-- Anything else means we need to display program information, so use versionList.
+individualExList ex@E{sysInfoE = SI{_sys = sys}, srsPath = srsP} = 
+  [Flat $ S (abrv sys ++ "_SRS") +:+ namedRef (getSRSRef srsP "html" $ abrv sys) (S "[HTML]") +:+ namedRef (getSRSRef srsP "pdf" $ abrv sys) (S "[PDF]"),
+  Nested (S generatedCodeTitle) $ Bullet $ zip (versionList getCodeRef ex) $ repeat Nothing,
+  Nested (S generatedCodeDocsTitle) $ Bullet $ zip (versionList getDoxRef noSwiftEx) $ repeat Nothing]
+    where
+      -- For now, swift does not generate any references using doxygen, so we pretend it doesn't exist in the doxygen list
+      noSwiftEx = ex {choicesE = map (\x -> x {lang = filter (/= Swift) $ lang x}) $ choicesE ex}
+
+-- | Takes a function that gets the needed references (either references for the code or doxygen references)
+-- and the example to create the list out of. For examples that have more than one version of generated code (more than one set of choices)
+-- like Projectile, we generate the code and doxygen references for each.
+versionList :: (Example -> Lang -> String -> Reference) -> Example -> [ItemType]
+versionList _ E{choicesE = []} = [] -- If the choices are empty, then we don't do anything. This pattern should never
+                                    -- match (this case should be caught in the function that calls this one),
+                                    -- but it is here just to be extra careful.
+versionList getRef ex@E{sysInfoE = SI{_sys = sys}, choicesE = chcs} =
+  map versionItem chcs 
+  where
+    -- Version item displays version name and appends the languages of generated code below.
+    versionItem chc = Flat $ S (verName chc) +:+ foldlSent_ (map (makeLangRef chc) $ lang chc)
+    -- Makes references to the generated languages and formats them nicely.
+    makeLangRef chc lng = namedRef (getRef ex lng $ verName chc) $ S $ "[" ++ showLang lng ++ "]"
+
+    -- Determine the version name based on the system name and if there is more than one set of choices.
+    verName chc = case chcs of
+      -- If there is one set of choices, then the program does not have multiple versions.
+      [_] -> abrv sys
+      -- If the above two don't match, we have more than one set of choices and must display every version.
+      _   -> Projectile.codedDirName (abrv sys) chc
+
+-- | Show function to display program languages to user.
+showLang :: Lang -> String
+showLang Cpp = "C++"
+showLang CSharp = "C Sharp" -- Drasil printers dont like # symbol, so use full word instead.
+showLang l = show l
+
+
+-----------------------------
+-- Examples Section Functions
+-----------------------------
+
+-- | Example section function generator. Makes a list of examples and generated artifacts.
 exampleSec :: FilePath -> FilePath -> Section
-exampleSec p1 p2 = section (S exampleTitle) [mkParagraph exampleIntro, UlC $ ulcc $ mkExampleList p1 p2] [] exampleSecRef
+exampleSec p1 p2 = section exampleTitle [mkParagraph exampleIntro, UlC $ ulcc $ fullExList p1 p2] [] exampleSecRef
 
-exampleTitle :: String
-exampleTitle = "Generated Examples"
+-- | Example section title.
+exampleTitle :: Sentence
+exampleTitle = S "Generated Examples"
 
+-- | Example section introduction.
 exampleIntro :: Sentence
 exampleIntro = S "Each of the case studies contain their own generated PDF and HTML reports," +:+
   S "and in some cases, their own generated code."
 
--- Put the list into RawContent form.
-mkExampleList :: FilePath -> FilePath -> RawContent
-mkExampleList p1 p2 = Enumeration $ exampleList p1 p2
-
--- Put the examples into a list.
-exampleList :: FilePath -> FilePath -> ListType
-exampleList repoPth exPth = Bullet $ zip (zipWith4 (mkExampleListFunc exPth) exampleTitles exampleDescs (exampleCodeRefs repoPth) (exampleDoxRefs exPth)) $ repeat Nothing
-
--- Organize the examples into a bulleted list.
-mkExampleListFunc :: FilePath -> String -> String -> [(String, [(Sentence, Reference)])] -> [(String, [(Sentence, Reference)])] -> ItemType
-mkExampleListFunc path exmpl desc codePth doxPth
-  | map (map snd . snd) codePth == [[]] && map (map snd . snd) doxPth == [[]] = Nested (S exmpl +:+ S desc) $ Bullet [(Flat (S (exmpl ++ "_SRS") +:+ namedRef (getHTMLRef path exmpl) (S "[HTML]") +:+ namedRef (getPDFRef path exmpl) (S "[PDF]")), Nothing)]
-  | map (map snd . snd) doxPth == [[]]                            = Nested (S exmpl +:+ S desc) $ Bullet $ zip [Flat $ S (exmpl ++ "_SRS") +:+ namedRef (getHTMLRef path exmpl) (S "[HTML]") +:+ namedRef (getPDFRef path exmpl) (S "[PDF]"),
-                                                                       Nested (S generatedCodeTitle) $ Bullet $ mkCodeList codePth] $ repeat Nothing
-  | otherwise                                         = Nested (S exmpl +:+ S desc) $ Bullet $ zip [Flat $ S (exmpl ++ "_SRS") +:+ namedRef (getHTMLRef path exmpl) (S "[HTML]") +:+ namedRef (getPDFRef path exmpl) (S "[PDF]"),
-                                                                       Nested (S generatedCodeTitle) $ Bullet $ mkCodeList codePth,
-                                                                       Nested (S generatedCodeDocsTitle) $ Bullet $ mkCodeList doxPth] $ repeat Nothing
-
--- References come in the form of [(Project version), [(Display name, Reference for generated code or documents)]]
-mkCodeList :: [(String, [(Sentence, Reference)])] -> [(ItemType, Maybe String)]
-mkCodeList = map
-      (\ r
-         -> (Flat
-               $ foldlSent_
-                   $ S (fst r) : map (uncurry (flip namedRef)) (snd r),
-             Nothing))
-
-exampleTitles, exampleDescs :: [String]
--- Sorts the references for mkCodeList.
-exampleCodeRefs, exampleDoxRefs :: FilePath -> [[(String, [(Sentence, Reference)])]]
--- example titles
-exampleTitles = [dblPendulum, gamePhys, glassBR, hghc, noPCM, pdController, projectile, sglPendulum, ssp, swhs, template]
--- example descriptions (used in the list of examples)
-exampleDescs = [dblPendulumDesc, gamePhysDesc, glassBRDesc, hghcDesc, noPCMDesc, pdControllerDesc, projectileDesc, sglPendulumDesc, sspDesc, swhsDesc, templateDesc]
-exampleCodeRefs path =[
-                  [(dblPendulum, [])],
-                  [(gamePhys, [])],
-                  [(glassBR, map (getCodeRef path $ map toLower glassBR) glassBRCode)],
-                  [(hghc, [])],
-                  [(noPCM, map (getCodeRef path $map toLower noPCM) noPCMCode)],
-                  [(pdController, map (getCodeRef path $ map toLower pdController) pdControllerCode)],
-                  [(projectileC1, map (getCodeRef path (map toLower projectile ++ "/" ++ projectileC1)) projectileCase1Code),
-                  (projectileC2, map (getCodeRef path (map toLower projectile ++ "/" ++ projectileC2)) projectileCase2Code),
-                  (projectileC3, map (getCodeRef path (map toLower projectile ++ "/" ++ projectileC3)) projectileCase3Code),
-                  (projectileC4, map (getCodeRef path (map toLower projectile ++ "/" ++ projectileC4)) projectileCase4Code),
-                  (projectileC5, map (getCodeRef path (map toLower projectile ++ "/" ++ projectileC5)) projectileCase5Code)],
-                  [(sglPendulum, [])],
-                  [(ssp, [])],
-                  [(swhs, [])],
-                  [(template, [])]]
-exampleDoxRefs path =[
-                 [(dblPendulum, [])],
-                 [(gamePhys, [])],
-                 [(glassBR, map (getDoxRef path glassBR) glassBRDox)],
-                 [(hghc, [])],
-                 [(noPCM, map (getDoxRef path noPCM) noPCMDox)],
-                 [(pdController, map (getDoxRef path pdController) pdControllerDox)],
-                 [(projectileC1, map (\x -> getDoxRef path projectile (projectileC1 ++ "/" ++ x)) projectileCase1Dox),
-                 (projectileC2, map (\x -> getDoxRef path projectile (projectileC2 ++ "/" ++ x)) projectileCase2Dox),
-                 (projectileC3, map (\x -> getDoxRef path projectile (projectileC3 ++ "/" ++ x)) projectileCase3Dox),
-                 (projectileC4, map (\x -> getDoxRef path projectile (projectileC4 ++ "/" ++ x)) projectileCase4Dox),
-                 (projectileC5, map (\x -> getDoxRef path projectile (projectileC5 ++ "/" ++ x)) projectileCase5Dox)],
-                 [(sglPendulum, [])],
-                 [(ssp, [])],
-                 [(swhs, [])],
-                 [(template, [])]]
-
---example names, maybe make a unique type to accept fields of documents, gen code, and doxygen?
-sglPendulum, dblPendulum, gamePhys, glassBR, hghc, noPCM, pdController, projectile, projectileC1,
-  projectileC2, projectileC3, projectileC4, projectileC5, ssp, swhs, template :: String
-
-sglPendulum = "SglPendulum"
-dblPendulum = "DblPendulum"
-gamePhys = "GamePhysics"
-glassBR = "GlassBR"
-hghc = "HGHC"
-noPCM = "NoPCM"
-pdController = "PDController"
-projectile = "Projectile"
-projectileC1 = "Projectile_C_P_NoLB_U_V_D"
-projectileC2 = "Projectile_S_L_NoL_U_U_V_F"
-projectileC3 = "Projectile_U_P_L_B_B_C_D"
-projectileC4 = "Projectile_U_P_NoL_U_WI_V_D"
-projectileC5 = "Projectile_U_P_L_B_WI_V_F"
-ssp = "SSP"
-swhs = "SWHS"
-template = "Template"
-
-{--example names, maybe make a unique type to accept fields of documents, gen code, and doxygen?
-pendulum, gamePhys, glassBR, hghc, noPCM, pdController, projectile, ssp, swhs, template :: SystemInformation
-projectileC1, projectileC2, projectileC3, projectileC4, projectileC5 :: String
-pendulum = DblPendulum.fullSI
-gamePhys = GamePhysics.fullSI
-glassBR = GlassBR.fullSI
-hghc = HGHC.fullSI
-noPCM = NoPCM.fullSI
-pdController = PDController.fullSI
-projectile = Projectile.fullSI
-projectileC1 = "Projectile_C_P_NoLB_U_V_D"
-projectileC2 = "Projectile_S_L_NoL_U_U_V_F"
-projectileC3 = "Projectile_U_P_L_B_B_C_D"
-projectileC4 = "Projectile_U_P_NoL_U_WI_V_D"
-projectileC5 = "Projectile_U_P_L_B_WI_V_F"
-ssp = SSP.fullSI
-swhs = SWHS.fullSI
-template = Template.fullSI-}
-
--- list that states what languages the generated code/doxygen docs exist in.
-glassBRCode, glassBRDox, noPCMCode, noPCMDox, pdControllerCode, pdControllerDox, projectileCase1Code, projectileCase2Code,
-  projectileCase3Code, projectileCase4Code, projectileCase5Code, projectileCase1Dox, projectileCase2Dox,
-  projectileCase3Dox, projectileCase4Dox, projectileCase5Dox :: [String]
-
-glassBRCode          = ["cpp", "csharp", "java", "python", "swift"]
-glassBRDox           = ["cpp", "csharp", "java", "python"]
-noPCMCode            = ["cpp", "csharp", "java", "python"]
-noPCMDox             = ["cpp", "csharp", "java", "python"]
-pdControllerCode     = ["python"]
-pdControllerDox      = []
-projectileCase1Code  = ["cpp", "csharp", "java", "python", "swift"]
-projectileCase2Code  = ["cpp", "csharp", "java", "python", "swift"]
-projectileCase3Code  = ["cpp", "csharp", "java", "python", "swift"]
-projectileCase4Code  = ["cpp", "csharp", "java", "python", "swift"]
-projectileCase5Code  = ["cpp", "csharp", "java", "python", "swift"]
-projectileCase1Dox   = ["cpp", "csharp", "java", "python"]
-projectileCase2Dox   = ["cpp", "csharp", "java", "python"]
-projectileCase3Dox   = ["cpp", "csharp", "java", "python"]
-projectileCase4Dox   = ["cpp", "csharp", "java", "python"]
-projectileCase5Dox   = ["cpp", "csharp", "java", "python"]
-
--- Make references for each of the generated SRS files
-getHTMLRef, getPDFRef :: FilePath -> String -> Reference
-getHTMLRef path ex = Reference ("htmlRef" ++ ex) (URI (getHTMLPath path ex)) (shortname' $ S ("htmlRef" ++ ex))
-getPDFRef path ex = Reference ("pdfRef" ++ ex) (URI (getPDFPath path ex)) (shortname' $ S ("pdfRef" ++ ex))
-getHTMLPath, getPDFPath :: FilePath -> String -> FilePath
-getHTMLPath path ex = path ++ ex ++ "/srs/" ++ ex ++ "_SRS.html"
-getPDFPath path ex = path ++ ex ++ "/srs/" ++ ex ++ "_SRS.pdf"
-
--- Make display names and references for generated code and docs
-getCodeRef, getDoxRef :: FilePath -> String -> String -> (Sentence, Reference)
-getCodeRef path ex lang = (S ("[" ++ convertlang ++ "]"), Reference ("codeRef" ++ ex ++ lang) (URI (getCodePath path ex lang)) (shortname' $ S ("codeRef" ++ ex ++ lang)))
-  where
-    convertlang
-      | lang == "cpp" = "C++"
-      | lang == "csharp" = "C Sharp" -- Drasil printers dont like the # symbol, so we use the full word.
-      | otherwise = (toUpper.head) lang : tail lang
-getDoxRef path ex lang = (S ("[" ++ convertlang lang ++ "]"), Reference ("doxRef" ++ ex ++ lang) (URI (getDoxPath path ex lang)) (shortname' $ S ("doxRef" ++ ex ++ lang)))
-  where
-    convertlang l
-      | l == "cpp" = "C++"
-      | l == "csharp" = "C Sharp"
-      | "Projectile" `isPrefixOf` l = convertlang $ concat $ tail $ L.splitOn "/" l
-      | otherwise = (toUpper.head) l : tail l
-getCodePath :: FilePath -> String -> String -> FilePath
-getDoxPath :: FilePath -> String -> String -> FilePath
-getCodePath path ex lang = path ++ "code/stable/" ++ ex ++ "/src/" ++ lang -- need repoCommit path
-getDoxPath path ex lang = path ++ ex ++ "/doxygen/" ++ lang ++ "/index.html" -- need example path
-
--- Project descriptions
+-- | Project descriptions.
 sglPendulumDesc, dblPendulumDesc, gamePhysDesc, glassBRDesc, hghcDesc, noPCMDesc, pdControllerDesc,
-  projectileDesc, sspDesc, swhsDesc, templateDesc :: String
+  projectileDesc, sspDesc, swhsDesc :: Sentence
 
-sglPendulumDesc = "describes the motion of a single pendulum in 2-D dimension."
-dblPendulumDesc = "describes the motion of a double pendulum in 2-D dimension."
-gamePhysDesc = "describes the modeling of an open source 2D rigid body physics library used for games."
-glassBRDesc = "predicts whether a given glass slab is likely to resist a specified blast."
-hghcDesc = "describes heat transfer coefficients related to clad."
-noPCMDesc = "describes the modelling of a solar water heating system without phase change material."
-pdControllerDesc = ""
-projectileDesc = "describes the motion of a projectile object in free space."
-sspDesc = "describes the requirements of a slope stability analysis program."
-swhsDesc = "describes the modelling of a solar water heating system with phase change material."
-templateDesc = "is an empty template document."
+dblPendulumDesc  = S "describes the motion of a double pendulum in 2D."
+gamePhysDesc     = S "describes the modeling of an open source 2D rigid body physics library used for games."
+glassBRDesc      = S "predicts whether a given glass slab is likely to resist a specified blast."
+hghcDesc         = S "describes heat transfer coefficients related to clad."
+noPCMDesc        = S "describes the modelling of a solar water heating system without phase change material."
+pdControllerDesc = S ""
+projectileDesc   = S "describes the motion of a projectile object in free space."
+sglPendulumDesc  = S "describes the motion of a single pendulum in 2D."
+sspDesc          = S "describes the requirements of a slope stability analysis program."
+swhsDesc         = S "describes the modelling of a solar water heating system with phase change material."
+-- templateDesc     = S "is an empty template document."
 
+-- | Example list titles.
 generatedCodeTitle, generatedCodeDocsTitle :: String
 generatedCodeTitle = "Generated Code:"
 generatedCodeDocsTitle = "Generated Code Documentation:"
 
+----------------------------------------------------------------------------
+-- Helper functions in getting References for SRS, code folders, and Doxygen
+----------------------------------------------------------------------------
+
+-- | Similar to 'showLang', but for use within Drasil for Referencing and UIDs.
+convertLang :: Lang -> String
+convertLang Cpp = "cpp"
+convertLang CSharp = "csharp"
+convertLang Java = "java"
+convertLang Python = "python"
+convertLang Swift = "swift"
+
+-- | Generate a reference towards the code folder. Uses 'getCodePath' to find the code path.
+getCodeRef :: Example -> Lang -> String -> Reference
+-- We don't have to worry about the case of empty list when pattern matching
+-- since that was checked in an earlier function.
+--
+-- Pattern matches so that examples that only have a single set of choices will be referenced one way.
+getCodeRef ex@E{sysInfoE=SI{_sys = sys}, choicesE = chcs} l verName = 
+  Reference refUID refURI refShortNm
+  where
+    -- Append system name and program language to ensure a unique id for each.
+    refUID = "codeRef" ++ sysName ++ programLang
+    -- Finds the folder path that holds code for the respective program and system.
+    refURI = URI $ getCodePath (srsPath ex) sysName programLang
+    -- Shortname is the same as the UID, just converted to a Sentence.
+    refShortNm = shortname' $ S refUID
+
+    -- System name, different between one set of choices and multiple sets.
+    sysName = case chcs of 
+      [_] -> map toLower $ filter (not.isSpace) $ abrv sys
+      _   -> map toLower (filter (not.isSpace) $ abrv sys) ++ "/" ++ verName
+    -- Program language converted for use in file folder navigation.
+    programLang = convertLang l
+
+-- | Similar to 'getCodeRef', but gets the doxygen references and uses 'getDoxRef' instead.
+getDoxRef :: Example -> Lang -> String -> Reference
+getDoxRef ex@E{sysInfoE=SI{_sys = sys}, choicesE = chcs} l verName = 
+  Reference refUID refURI refShortNm
+  where
+    refUID = "doxRef" ++ sysName ++ programLang
+    refURI = URI $ getDoxPath (doxPath ex) sysName programLang
+    refShortNm = shortname' $ S refUID
+
+    sysName = filter (not.isSpace) $ abrv sys
+    -- Here is the only difference from getCodeRef. When there is more than one set of choices,
+    -- we append version name to program language since the organization of folders follows this way.
+    programLang = case chcs of 
+      [_] -> convertLang l
+      _   -> verName ++ "/" ++ convertLang l
+
+-- | Make references for each of the generated SRS files.
+getSRSRef :: FilePath -> String -> String -> Reference
+getSRSRef path sufx ex = Reference refUID (URI $ getSRSPath path (map toLower sufx) ex) $ shortname' $ S refUID
+  where
+    refUID = map toLower sufx ++ "Ref" ++ ex
+
+-- | Get the paths of where each reference exist for SRS files. Some example abbreviations have spaces,
+-- so we just filter those out. The suffix should only be either html or pdf.
+getSRSPath :: FilePath -> String -> String -> FilePath
+getSRSPath path sufx ex = path ++ filter (not.isSpace) ex ++ "/srs/" ++ filter (not.isSpace) ex ++ "_SRS." ++ map toLower sufx
+
+-- | Get the file paths for generated code and doxygen locations.
+getCodePath, getDoxPath :: FilePath -> String -> String -> FilePath
+-- | Uses 'repoRt' path (srsPath in this module).
+getCodePath path ex programLang = path ++ "code/stable/" ++ filter (not.isSpace) ex ++ "/src/" ++ programLang -- need repoCommit path
+-- | Uses 'exRt' path (doxPath in this module).
+getDoxPath path ex programLang = path ++ filter (not.isSpace) ex ++ "/doxygen/" ++ programLang ++ "/index.html" -- need example path
+
+
+-- | Gather all references used in making the Examples section.
 exampleRefs :: FilePath -> FilePath -> [Reference]
 exampleRefs p1 p2 = [exampleSecRef, ref $ exampleSec p1 p2] ++
-  concatMap (concatMap (map snd. snd)) (exampleCodeRefs p1) ++
-  concatMap (concatMap (map snd. snd)) (exampleDoxRefs p2) ++
-  map (getHTMLRef p2) exampleTitles ++ map (getPDFRef p2) exampleTitles
+  concatMap getCodeRefDB (examples p1 p2) ++
+  concatMap getDoxRefDB (examples p1 p2) ++
+  map (getSRSRef p2 "html" . getAbrv) (examples p1 p2) ++ map (getSRSRef p2 "pdf" . getAbrv) (examples p1 p2)
 
+-- | Helpers to pull code and doxygen references from an example.
+-- Creates a reference for every possible choice in every possible language.
+getCodeRefDB, getDoxRefDB :: Example -> [Reference]
+getCodeRefDB ex = concatMap (\x -> map (\y -> getCodeRef ex y $ verName x) $ lang x) $ choicesE ex
+  where
+    verName z = Projectile.codedDirName (getAbrv ex) z
+getDoxRefDB ex = concatMap (\x -> map (\y -> getDoxRef ex y $ verName x) $ lang x) $ choicesE ex
+  where
+    verName z = Projectile.codedDirName (getAbrv ex) z
+
+-- | Helper to pull the system name (abbreviation) from an 'Example'.
+getAbrv :: Example -> String
+getAbrv E{sysInfoE = SI{_sys=sys}} = abrv sys
+
+-- | Example section reference.
 exampleSecRef :: Reference
 exampleSecRef = makeSecRef "Examples" $ S "Examples"

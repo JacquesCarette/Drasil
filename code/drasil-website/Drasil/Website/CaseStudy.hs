@@ -1,78 +1,49 @@
-module Drasil.Website.CaseStudy (caseStudySec, caseStudyRefs, allExampleSI) where
+module Drasil.Website.CaseStudy (caseStudySec, caseStudyRefs) where
 
 import Language.Drasil hiding (E)
 import Language.Drasil.Code
 import Database.Drasil
 import GOOL.Drasil (CodeType(..))
 
-import qualified Drasil.DblPendulum.Body as DblPendulum (fullSI)
-import qualified Drasil.GamePhysics.Body as GamePhysics (fullSI)
-import qualified Drasil.GlassBR.Body as GlassBR (fullSI)
-import qualified Drasil.HGHC.Body as HGHC (fullSI)
-import qualified Drasil.NoPCM.Body as NoPCM (fullSI)
-import qualified Drasil.PDController.Body as PDController (fullSI)
-import qualified Drasil.Projectile.Body as Projectile (fullSI)
-import qualified Drasil.SglPendulum.Body as SglPendulum (fullSI)
-import qualified Drasil.SSP.Body as SSP (fullSI)
-import qualified Drasil.SWHS.Body as SWHS (fullSI)
-import qualified Drasil.Template.Body as Template (fullSI)
-
--- import choices for code generation
-import qualified Drasil.GlassBR.Choices as GlassBR (choices)
-import qualified Drasil.NoPCM.Choices as NoPCM (choices)
-import qualified Drasil.PDController.Choices as PDController (codeChoices)
-import qualified Drasil.Projectile.Choices as Projectile (codedDirName, choiceCombos)
--- the other examples currently do not generate any code.
+import Drasil.Website.Example (examples, Example(..))
+import qualified Drasil.Projectile.Choices as Projectile (codedDirName)
 
 -----------------------------
 -- Case Studies Section
 -----------------------------
 
+-- | Creates the Case Study Section.
 caseStudySec :: Section
-caseStudySec = section (S caseStudiesTitle) [mkParagraph $ S caseStudiesDesc, mkFig caseStudyTabRef mkCaseTable, UlC $ ulcc caseStudyLegend] [] caseStudySecRef
+caseStudySec = section (S caseStudiesTitle) [mkParagraph $ S caseStudiesDesc, mkFig caseStudyTabRef mkCaseTable, mkParagraph $ S legendIntro, UlC $ ulcc caseStudyLegend] [] caseStudySecRef
 
+-- | Gathers all references used in this file.
 caseStudyRefs :: [Reference]
 caseStudyRefs = [caseStudySecRef, ref caseStudySec, ref caseStudyTabRef]
 
+-- | Case study section reference.
 caseStudySecRef :: Reference
 caseStudySecRef = makeSecRef "CaseStudy" $ S caseStudyTitle
 
-caseStudiesTitle, caseStudiesDesc :: String
+caseStudiesTitle, caseStudiesDesc, legendIntro :: String
+-- | Section title.
 caseStudiesTitle = "Case Studies"
+-- | Section description.
 caseStudiesDesc = "Drasil allows some design decisions to be made by the user when generating \
   \code. The table below summarizes the design decisions made for each case \
   \study, followed by a guide giving the meaning of the short-forms used in the \
   \table:"
+-- | Introduce the Case Study Table Legend as a list.
+legendIntro = "The legend for the Case Studies Table is listed below according to column header:"
 
+-- | Creates the Case Study Table
 mkCaseTable :: RawContent
-mkCaseTable = Table headerRow (tableBody $ concatMap mkCaseStudy $ allExamples allExampleSI allExampleChoices)  EmptyS False
+mkCaseTable = Table headerRow (tableBody $ concatMap mkCaseStudy $ examples "" "")  EmptyS False
 
+-- | Case Study Table Reference.
 caseStudyTabRef :: Reference
 caseStudyTabRef = makeTabRef "CaseStudy"
 
------ First Gather all SystemInformation and Choices from each example.
-
--- | Records example system information.
-allExampleSI :: [SystemInformation]
-allExampleSI = [DblPendulum.fullSI, GamePhysics.fullSI, GlassBR.fullSI, HGHC.fullSI, NoPCM.fullSI, PDController.fullSI, Projectile.fullSI, SglPendulum.fullSI, SSP.fullSI, SWHS.fullSI, Template.fullSI]
-
--- TODO: Automate this somehow. It seems a little too hard-coded.
--- To developer: Fill this list in when more examples can run code. The list
--- needs to be of this form since projectile comes with a list of choice combos.
--- | Records example choices. The order of the list must match up with
--- that in `allExampleSI`, or the Case Studies Table will be incorrect.
-allExampleChoices :: [[Choices]]
-allExampleChoices = [[], [], [GlassBR.choices], [], [NoPCM.choices], [PDController.codeChoices], Projectile.choiceCombos, [], [], [], []]
-
--- | Each Example gets placed in here.
-data Example = E { sysInfoE :: SystemInformation,
-                   choicesE :: [Choices]}
-
--- | Zip system info and choices from the examples.
-allExamples :: [SystemInformation] -> [[Choices]] -> [Example]
-allExamples = zipWith E
-
------ Then convert each example into its own case study. -----
+----- After taking the information about the examples from Example.h, convert each example into its own case study. -----
 
 -- | Holds individual case studies. System info may not be needed,
 -- but it is still nice to keep around for now.
@@ -133,16 +104,15 @@ data CSLegend = CSL {
 caseStudyLegend :: RawContent
 caseStudyLegend = Enumeration $ Bullet $ zip (map mkLegendListFunc legendEntries) $ repeat Nothing
 
+-- | Helper to convert the Case Study legends into list items.
 mkLegendListFunc :: CSLegend -> ItemType
 mkLegendListFunc csleg = Nested (S $ ttle csleg) $ Bullet $ zip (map mkTandDSent $ symbAndDefs csleg) $ repeat Nothing
 
--- Should eventually take Sentences instead of Strings. Converts into the format of "symbol - definition".
+-- | Should eventually take Sentences instead of Strings. Converts into the format of "symbol - definition".
 mkTandDSent :: (String, String) -> ItemType
 mkTandDSent (sym,def) = Flat $ S sym +:+ S "-" +:+ S def
 
-
---- Case Study Table Headers
-
+-- | Case Study Table column headers.
 caseStudyTitle, modularityTitle, implementTypeTitle, loggingTitle, inStructTitle, conStructTitle,
   conRepTitle, realNumRepTitle :: String
 
@@ -155,11 +125,11 @@ conStructTitle = "Constant Structure"
 conRepTitle = "Constant Representation"
 realNumRepTitle = "Real Number Representation"
 
---- Case study legend entries
-
+-- | Case study legend entries.
 legendEntries :: [CSLegend]
 legendEntries = [modularityLegend, implementationTypeLegend, loggingLegend, inputStrLegend, conStrLegend, conRepLegend, realNumRepLegend]
 
+-- | Modularity or Separation of software.
 modularityLegend :: CSLegend
 modularityLegend = CSL{
   ttle = modularityTitle,
@@ -168,6 +138,7 @@ modularityLegend = CSL{
                   ("S", "Modular with Separated input module")]
 }
 
+-- | Software implementation type.
 implementationTypeLegend :: CSLegend
 implementationTypeLegend = CSL {
   ttle = implementTypeTitle,
@@ -175,6 +146,7 @@ implementationTypeLegend = CSL {
                   ("L", "Library")]
 }
 
+-- | Compiler logging statements.
 loggingLegend :: CSLegend
 loggingLegend = CSL {
   ttle = inStructTitle,
@@ -182,6 +154,7 @@ loggingLegend = CSL {
                   ("L", "Logging statements included")]
 }
 
+-- | Input value structure.
 inputStrLegend :: CSLegend
 inputStrLegend = CSL {
   ttle = loggingTitle,
@@ -189,6 +162,7 @@ inputStrLegend = CSL {
                   ("U", "Inputs are Unbundled")]
 }
 
+-- | Constant value structure.
 conStrLegend :: CSLegend
 conStrLegend = CSL {
   ttle = conStructTitle,
@@ -198,6 +172,7 @@ conStrLegend = CSL {
                   ("U", "Constants are stored in variables that are Unbundled")]
 }
 
+-- | Constant value representation.
 conRepLegend :: CSLegend
 conRepLegend = CSL {
   ttle = conRepTitle,
@@ -205,6 +180,7 @@ conRepLegend = CSL {
                   ("C", "Constants are stored as Constants")]
 }
 
+-- | Real number representation.
 realNumRepLegend :: CSLegend
 realNumRepLegend = CSL {
   ttle = realNumRepTitle,

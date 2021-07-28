@@ -8,6 +8,11 @@ if [ -z "$DEPLOY_FOLDER" ]; then
   exit 1
 fi
 
+if [ -z "$WEBSITE_FOLDER" ]; then
+  echo "Missing WEBSITE_FOLDER. Run make website."
+  exit 1
+fi
+
 if [ -z "$BUILD_FOLDER" ]; then
   echo "Missing BUILD_FOLDER."
   exit 1
@@ -147,7 +152,7 @@ copy_traceygraphs() {
 
 copy_website() {
   cd "$CUR_DIR$DEPLOY_FOLDER"
-  cp -r "$CUR_DIR"drasil-website/Website/. .
+  cp -r "$CUR_DIR$WEBSITE_FOLDER". .
 
   # src stubs were consumed by site generator; safe to delete those.
   rm "$EXAMPLE_DEST"*/src

@@ -42,13 +42,12 @@ import Data.Drasil.Quantities.Math (unitVect, unitVectj)
 import Data.Drasil.Domains (physics)
 
 import Drasil.DblPendulum.Body (justification, charsOfReader, organizationOfDocumentsIntro,
-  physSystParts, sysCtxIntro, sysCtxDesc, sysCtxFig1,
-  sysCtxList, userCharacteristicsIntro)
+  physSystParts, sysCtxIntro, sysCtxDesc, sysCtxList, userCharacteristicsIntro)
 import Drasil.DblPendulum.Concepts (concepts, pendMotion)
 import Drasil.DblPendulum.Requirements (nonFuncReqs)
 import Drasil.DblPendulum.Unitals (symbols, acronyms)
 
-import Drasil.SglPendulum.Figures (figMotion)
+import Drasil.SglPendulum.Figures (figMotion, sysCtxFig1)
 import Drasil.SglPendulum.Assumptions (assumptions)
 import Drasil.SglPendulum.Goals (goals, goalsInputs)
 import Drasil.SglPendulum.DataDefs (dataDefs)

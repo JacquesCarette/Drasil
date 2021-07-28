@@ -7,7 +7,7 @@ module Language.Drasil.Chunk.UnitDefn (
   , derUC, derUC', derUC''
   , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
   , unitWrapper, getCu, MayHaveUnit(getUnit)
-  , IsUnit(getUnits), HasUnit(findUnit)
+  , IsUnit(getUnits), TempHasUnit(findUnit)
   ) where
 
 import Control.Lens ((^.), makeLenses, view)
@@ -56,7 +56,7 @@ instance IsUnit        UnitDefn where
 class MayHaveUnit u where
    getUnit :: u -> Maybe UnitDefn
 
-class HasUnit u where
+class TempHasUnit u where
    findUnit :: u -> UnitDefn
 
 -- | Takes a contributing unit (['UID']) and a symbol ('USymb').

@@ -10,7 +10,7 @@ import Language.Drasil.Chunk.Unitary (Unitary(..))
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Display(toDispExpr),
   Definition(defn), ConceptDomain(cdom), Concept, IsUnit, Quantity, HasSpace(typ))
-import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), HasUnit(findUnit),  UnitDefn, unitWrapper)
+import Language.Drasil.Chunk.UnitDefn (MayHaveUnit(getUnit), TempHasUnit(findUnit),  UnitDefn, unitWrapper)
 import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Symbol (Symbol)
@@ -46,7 +46,7 @@ instance Unitary       UnitalChunk where unit = view uni
 -- | Finds the units used to make the 'UnitalChunk'.
 instance MayHaveUnit   UnitalChunk where getUnit = Just . view uni
 -- | Finds the units used to make the 'UnitalChunk'.
-instance HasUnit       UnitalChunk where findUnit = view uni   
+instance TempHasUnit       UnitalChunk where findUnit = view uni   
 -- | Equal if 'UID's are equal.
 instance Eq            UnitalChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 -- | Convert the symbol of the 'UnitalChunk' to a 'DisplayExpr'.
@@ -96,5 +96,5 @@ makeUCWDS :: (IsUnit u) => String -> NP -> Sentence -> Symbol ->
 makeUCWDS nam trm desc sym un = UC (dqd (dccWDS nam trm desc) sym Real uu) uu
   where uu = unitWrapper un
 
-ucuc :: (Quantity c, Concept c, HasUnit c) => c -> UnitalChunk
+ucuc :: (Quantity c, Concept c, TempHasUnit c) => c -> UnitalChunk
 ucuc c = UC (tempdqdWr' c) (findUnit c)

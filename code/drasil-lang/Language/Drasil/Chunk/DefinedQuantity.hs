@@ -8,7 +8,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept, Display(..
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
 import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.Chunk.UnitDefn (UnitDefn, unitWrapper,
-  MayHaveUnit(getUnit), HasUnit(findUnit))
+  MayHaveUnit(getUnit), TempHasUnit(findUnit))
 import Language.Drasil.Space (Space)
 import Language.Drasil.Stages (Stage)
 import Language.Drasil.Symbol (Symbol)
@@ -64,7 +64,7 @@ dqdWr :: (Quantity c, Concept c, MayHaveUnit c) => c -> DefinedQuantityDict
 dqdWr c = DQD (cw c) (symbol c) (c ^. typ) (getUnit c)
 
 -- | temporary constructor, not to be used outside drasil-lang.
-tempdqdWr' :: (Quantity c, Concept c, HasUnit c) => c -> DefinedQuantityDict
+tempdqdWr' :: (Quantity c, Concept c, TempHasUnit c) => c -> DefinedQuantityDict
 tempdqdWr' c = DQD (cw c) (symbol c) (c ^. typ) (Just $ findUnit c)
 
 -- | When we want to merge a quantity and a concept. This is suspicious.

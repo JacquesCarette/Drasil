@@ -52,7 +52,6 @@ si fl = SI {
     _instModels  = [],
     _datadefs    = [],
     _configFiles = [],
-    _folderPath  = "",
     _inputs      = [] :: [QuantityDict],
     _outputs     = [] :: [QuantityDict],
     _defSequence = [] :: [Block QDefinition],

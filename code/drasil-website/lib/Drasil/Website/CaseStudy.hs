@@ -15,15 +15,11 @@ import qualified Drasil.Projectile.Choices as Projectile (codedDirName)
 
 -- | Creates the Case Study Section.
 caseStudySec :: Section
-caseStudySec = section (S caseStudiesTitle) [mkParagraph $ S caseStudiesDesc, mkFig caseStudyTabRef mkCaseTable, mkParagraph $ S legendIntro, UlC $ ulcc caseStudyLegend] [] caseStudySecRef
-
--- | Gathers all references used in this file.
-caseStudyRefs :: [Reference]
-caseStudyRefs = [caseStudySecRef, ref caseStudySec, ref caseStudyTabRef]
-
--- | Case study section reference.
-caseStudySecRef :: Reference
-caseStudySecRef = makeSecRef "CaseStudy" $ S caseStudyTitle
+caseStudySec = 
+  section (S caseStudiesTitle) -- Title
+  [mkParagraph $ S caseStudiesDesc, mkFig (makeTabRef "CaseStudy") mkCaseTable,
+    mkParagraph $ S legendIntro, UlC $ ulcc caseStudyLegend] -- Contents
+  [] $ makeSecRef "CaseStudy" $ S caseStudiesTitle -- Section Reference
 
 caseStudiesTitle, caseStudiesDesc, legendIntro :: String
 -- | Section title.
@@ -39,10 +35,6 @@ legendIntro = "The legend for the Case Studies Table is listed below according t
 -- | Creates the Case Study Table
 mkCaseTable :: RawContent
 mkCaseTable = Table headerRow (tableBody $ concatMap mkCaseStudy $ examples "" "")  EmptyS False
-
--- | Case Study Table Reference.
-caseStudyTabRef :: Reference
-caseStudyTabRef = makeTabRef "CaseStudy"
 
 -- * Manipulating info from 'Example' -> 'CaseStudy'
 --
@@ -201,8 +193,6 @@ realNumRepLegend = CSL {
   symbAndDefs = [ ("D", "Real numbers are represented as Doubles"),
                   ("F", "Real numbers are represented as Floats")]
 }
-
-
 
 -- * Helper functions to create the case study table rows.
 --

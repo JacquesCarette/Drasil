@@ -9,8 +9,8 @@ import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
 import Language.Drasil
 import Drasil.DocLang (findAllRefs)
 
-import Drasil.Website.Introduction (introSec, introRefs)
-import Drasil.Website.CaseStudy (caseStudySec, caseStudyRefs)
+import Drasil.Website.Introduction (introSec)
+import Drasil.Website.CaseStudy (caseStudySec)
 import Drasil.Website.Example (exampleSec, exampleRefs, allExampleSI)
 import Drasil.Website.Documentation (docsSec, docRefs)
 import Drasil.Website.Analysis (analysisSec, analysisRefs)
@@ -98,14 +98,11 @@ usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict])
 
 -- | Holds all references and links used in the website.
 allRefs :: FolderLocation -> [Reference]
-allRefs fl = [headerSecRef, imageRef, gitHubRef, wikiRef] ++ map ref (sections fl) 
-  ++ introRefs (ref caseStudySec) (ref $ docsSec $ docsRt fl) (ref $ analysisSec (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) $ packages fl) gitHubRef wikiRef
-  ++ caseStudyRefs ++ exampleRefs (repoRt fl) (exRt fl) ++ docRefs (docsRt fl) ++ analysisRefs (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) (packages fl)
+allRefs fl = [gitHubRef, wikiRef]
+  ++ exampleRefs (repoRt fl) (exRt fl) 
+  ++ docRefs (docsRt fl) 
+  ++ analysisRefs (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) (packages fl)
   ++ concatMap findAllRefs (sections fl)
-
--- | Each section needs its own reference. Start with the header section.
-headerSecRef :: Reference
-headerSecRef = makeSecRef "Header" $ S "Header"
 
 -- | Used for system name and kind inside of 'si'.
 webName, web :: CI
@@ -116,15 +113,14 @@ web = commonIdea "website" (cn "website") "web" []
 
 -- | Header section creator.
 headerSec :: Section
-headerSec = section EmptyS [LlC imageContent] [] headerSecRef
+headerSec = 
+  section EmptyS -- No title
+  [LlC imageContent] -- Contents
+  [] $ makeSecRef "Header" $ S "Header" -- Section reference
 
 -- | For the drasil tree image on the website.
 imageContent :: LabelledContent
-imageContent = llcc imageRef $ figWithWidth EmptyS imagePath 50
-
--- | 'LabelledContent' needs a reference. Treats the image like an SRS Figure.
-imageRef :: Reference
-imageRef = makeFigRef "Drasil"
+imageContent = llcc (makeFigRef "Drasil") $ figWithWidth EmptyS imagePath 50
 
 -- | Used for the repository link.
 gitHubRef :: Reference

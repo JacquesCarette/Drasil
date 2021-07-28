@@ -13,7 +13,7 @@ introSec :: Reference -> Reference -> Reference -> Reference -> Reference -> Sec
 introSec csRef docRef analysisSecRef repoRef wikiRef = 
   section (S "Introduction") -- Title
   (map mkParagraph [introParagraph1 repoRef wikiRef, introParagraph2 csRef docRef analysisSecRef]) -- Contents
-  [] introSecRef -- Reference
+  [] $ makeSecRef "Introduction" $ S "Introduction" -- Section reference
 
 -- | Paragraph to introduce Drasil and its goals.
 introParagraph1 :: Reference -> Reference -> Sentence
@@ -35,11 +35,3 @@ introParagraph2 caseStudySecRef docsRef analysisSecRef = S "This webpage is desi
   \The package dependency graphs shows the hierarchy of modules within each package."
   -- \The footer of this page contains the continuous integration build of the project, \
   -- \as well as the commit number that the build and artifacts are based off of.
-
--- | Section reference.
-introSecRef :: Reference
-introSecRef = makeSecRef "Introduction" $ S "Introduction"
-
--- | Gathers all references used in this file.
-introRefs :: Reference -> Reference -> Reference -> Reference -> Reference -> [Reference]
-introRefs csRef docRef analysisSecRef repoRef wikiRef = [introSecRef, ref $ introSec csRef docRef analysisSecRef repoRef wikiRef]

@@ -38,6 +38,8 @@ data FolderLocation = Folder {
     ,   buildNum :: FilePath
     ,   buildPth :: FilePath
     ,   packages :: [String]
+    ,   typeGraphFolder :: FilePath
+    ,   classInstFolder :: FilePath
     }
 
 -- System information. This probably isn't needed right now since it is really only used in SRS declarations.

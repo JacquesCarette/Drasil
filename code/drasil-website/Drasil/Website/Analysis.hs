@@ -38,11 +38,11 @@ typeGraphTable :: FilePath -> [String] -> [[Sentence]]
 typeGraphTable path pkgs = [S "Drasil Package", S "Data Type Structure", S "Data Type Structure", S "Class and Data Type Structure", S "Class and Data Type Structure"]
     : map (typeGraphTable' path) pkgs
 
-typeGraphTable' :: FilePath -> String -> [Sentence]
-typeGraphTable' path pkg = [S pkg, namedRef (getDataTypeRef "dot" path pkg) (S "Dot Graph"), namedRef _ (S "Circo Graph"), namedRef _ (S "Dot Graph"), namedRef _ (S "Circo Graph")]
+typeGraphTable' :: FilePath -> FilePath -> String -> [Sentence]
+typeGraphTable' typePath clsInstPath pkg = [S pkg, namedRef (getDataTypeRef "" typePath pkg) (S "Dot Graph"), namedRef (getDataTypeRef "circo_" typePath pkg) (S "Circo Graph"), namedRef (getDataTypeRef "" clsInstPath pkg) (S "Dot Graph"), namedRef (getDataTypeRef "circo_" clsInstPath pkg) (S "Circo Graph")]
 
-getDataTypeRef :: String -> FilePath -> String
-getDataTypeRef sufx
+getDataTypeRef :: String -> FilePath -> String -> Reference
+getDataTypeRef prfx path pkg = Reference (pkg ++ sufx ++ "graph") (URI $ path ++ prfx ++ pkg ++ ".svg") $ shortname' $ S $ pkg ++ sufx ++ "graph"
 
 -- | Analysis section reference
 analysisSecRef :: Reference

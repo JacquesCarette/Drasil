@@ -19,6 +19,8 @@ main = do
   graphRoot <- getEnv "GRAPH_FOLDER"
   analysisRoot <- getEnv "ANALYSIS_FOLDER"
   listOfPackages <- getEnv "PACKAGES"
+  typeGFolder <- getEnv "TYPEGRAPH_FOLDER"
+  classIFolder <- getEnv "CLASSINST_GRAPH_FOLDER"
 
   -- Env variables relating to variables exposed on CI.
   -- Because we want to be able to test site building locally, we fill in these stubs with
@@ -38,6 +40,7 @@ main = do
         exRt = exampleRoot, graphRt = graphRoot,
         analysisRt = analysisRoot, repoRt = repoCommitRoot, 
         buildNum = buildNumber, buildPth = buildPath,
+        typeGraphFolder = typeGFolder, classInstFolder = classIFolder,
         packages = map ("drasil-" ++) $ words listOfPackages ++ "example" 
         -- manually add example because it's not actually a package anymore,
         -- but the analysis scripts work nonetheless, so we display it here.

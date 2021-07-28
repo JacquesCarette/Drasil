@@ -390,6 +390,8 @@ website:
 	GRAPH_FOLDER="$(GRAPH_FOLDER)" \
 	ANALYSIS_FOLDER="$(ANALYSIS_FOLDER)" \
 	PACKAGES="$(PACKAGES)" \
+	TYPEGRAPH_FOLDER="$(TYPEGRAPH_FOLDER)" \
+	CLASSINST_GRAPH_FOLDER="$(CLASSINST_GRAPH_FOLDER)" \
 	stack exec website
 
 # Deploys the Drasil website. Called by the deploy target. 

@@ -147,7 +147,6 @@ srs :: Document
 fullSI :: SystemInformation
 printSetting :: PrintingInformation
 mkSRS :: SRSDecl
-directoryName :: FilePath
 si :: SystemInformation
 symbMap :: ChunkDB
 usedDB :: ChunkDB

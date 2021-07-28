@@ -10,14 +10,14 @@
 </span><span id="line-10"></span><span>
 </span><span id="line-11"></span><span class="annot"><a href="Drasil.SSP.BasicExprs.html#eqlExpr"><span class="hs-identifier hs-type">eqlExpr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
 </span><span id="line-12"></span><span id="eqlExpr"><span class="annot"><span class="annottext">eqlExpr :: (Expr -&gt; Expr) -&gt; (Expr -&gt; Expr) -&gt; (Expr -&gt; Expr -&gt; Expr) -&gt; Expr
-</span><a href="Drasil.SSP.BasicExprs.html#eqlExpr"><span class="hs-identifier hs-var hs-var">eqlExpr</span></a></span></span><span> </span><span id="local-6989586621679093896"><span class="annot"><span class="annottext">f1_ :: Expr -&gt; Expr
-</span><a href="#local-6989586621679093896"><span class="hs-identifier hs-var">f1_</span></a></span></span><span> </span><span id="local-6989586621679093895"><span class="annot"><span class="annottext">f2_ :: Expr -&gt; Expr
-</span><a href="#local-6989586621679093895"><span class="hs-identifier hs-var">f2_</span></a></span></span><span> </span><span id="local-6989586621679093894"><span class="annot"><span class="annottext">_e_ :: Expr -&gt; Expr -&gt; Expr
-</span><a href="#local-6989586621679093894"><span class="hs-identifier hs-var">_e_</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+</span><a href="Drasil.SSP.BasicExprs.html#eqlExpr"><span class="hs-identifier hs-var hs-var">eqlExpr</span></a></span></span><span> </span><span id="local-6989586621679093889"><span class="annot"><span class="annottext">f1_ :: Expr -&gt; Expr
+</span><a href="#local-6989586621679093889"><span class="hs-identifier hs-var">f1_</span></a></span></span><span> </span><span id="local-6989586621679093888"><span class="annot"><span class="annottext">f2_ :: Expr -&gt; Expr
+</span><a href="#local-6989586621679093888"><span class="hs-identifier hs-var">f2_</span></a></span></span><span> </span><span id="local-6989586621679093887"><span class="annot"><span class="annottext">_e_ :: Expr -&gt; Expr -&gt; Expr
+</span><a href="#local-6989586621679093887"><span class="hs-identifier hs-var">_e_</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#slcWght"><span class="hs-identifier hs-var">slcWght</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
-</span><a href="#local-6989586621679093894"><span class="hs-operator hs-var">`_e_`</span></a></span><span>
+</span><a href="#local-6989586621679093887"><span class="hs-operator hs-var">`_e_`</span></a></span><span>
 </span><span id="line-13"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -38,7 +38,7 @@ forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#impLoadAngle"><span class="hs-identifier hs-var">impLoadAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
-</span><a href="#local-6989586621679093896"><span class="hs-identifier hs-var">f1_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+</span><a href="#local-6989586621679093889"><span class="hs-identifier hs-var">f1_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseAngle"><span class="hs-identifier hs-var">baseAngle</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
@@ -90,21 +90,21 @@ forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#impLoadAngle"><span class="hs-identifier hs-var">impLoadAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
-</span><a href="#local-6989586621679093895"><span class="hs-identifier hs-var">f2_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+</span><a href="#local-6989586621679093888"><span class="hs-identifier hs-var">f2_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseAngle"><span class="hs-identifier hs-var">baseAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-19"></span><span>
 </span><span id="line-20"></span><span class="annot"><a href="Drasil.SSP.BasicExprs.html#eqlExprN"><span class="hs-identifier hs-type">eqlExprN</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
 </span><span id="line-21"></span><span id="eqlExprN"><span class="annot"><span class="annottext">eqlExprN :: (Expr -&gt; Expr) -&gt; (Expr -&gt; Expr) -&gt; (Expr -&gt; Expr -&gt; Expr) -&gt; Expr
-</span><a href="Drasil.SSP.BasicExprs.html#eqlExprN"><span class="hs-identifier hs-var hs-var">eqlExprN</span></a></span></span><span> </span><span id="local-6989586621679093885"><span class="annot"><span class="annottext">f1_ :: Expr -&gt; Expr
-</span><a href="#local-6989586621679093885"><span class="hs-identifier hs-var">f1_</span></a></span></span><span> </span><span id="local-6989586621679093884"><span class="annot"><span class="annottext">f2_ :: Expr -&gt; Expr
-</span><a href="#local-6989586621679093884"><span class="hs-identifier hs-var">f2_</span></a></span></span><span> </span><span id="local-6989586621679093883"><span class="annot"><span class="annottext">_e_ :: Expr -&gt; Expr -&gt; Expr
-</span><a href="#local-6989586621679093883"><span class="hs-identifier hs-var">_e_</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+</span><a href="Drasil.SSP.BasicExprs.html#eqlExprN"><span class="hs-identifier hs-var hs-var">eqlExprN</span></a></span></span><span> </span><span id="local-6989586621679093878"><span class="annot"><span class="annottext">f1_ :: Expr -&gt; Expr
+</span><a href="#local-6989586621679093878"><span class="hs-identifier hs-var">f1_</span></a></span></span><span> </span><span id="local-6989586621679093877"><span class="annot"><span class="annottext">f2_ :: Expr -&gt; Expr
+</span><a href="#local-6989586621679093877"><span class="hs-identifier hs-var">f2_</span></a></span></span><span> </span><span id="local-6989586621679093876"><span class="annot"><span class="annottext">_e_ :: Expr -&gt; Expr -&gt; Expr
+</span><a href="#local-6989586621679093876"><span class="hs-identifier hs-var">_e_</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#slcWght"><span class="hs-identifier hs-var">slcWght</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
-</span><a href="#local-6989586621679093883"><span class="hs-operator hs-var">`_e_`</span></a></span><span>
+</span><a href="#local-6989586621679093876"><span class="hs-operator hs-var">`_e_`</span></a></span><span>
 </span><span id="line-22"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -125,7 +125,7 @@ forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#impLoadAngle"><span class="hs-identifier hs-var">impLoadAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
-</span><a href="#local-6989586621679093885"><span class="hs-identifier hs-var">f1_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+</span><a href="#local-6989586621679093878"><span class="hs-identifier hs-var">f1_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseAngle"><span class="hs-identifier hs-var">baseAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
@@ -177,21 +177,21 @@ forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#impLoadAngle"><span class="hs-identifier hs-var">impLoadAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
-</span><a href="#local-6989586621679093884"><span class="hs-identifier hs-var">f2_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+</span><a href="#local-6989586621679093877"><span class="hs-identifier hs-var">f2_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseAngle"><span class="hs-identifier hs-var">baseAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-28"></span><span>
 </span><span id="line-29"></span><span class="annot"><a href="Drasil.SSP.BasicExprs.html#eqlExprSepG"><span class="hs-identifier hs-type">eqlExprSepG</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
 </span><span id="line-30"></span><span id="eqlExprSepG"><span class="annot"><span class="annottext">eqlExprSepG :: (Expr -&gt; Expr) -&gt; (Expr -&gt; Expr) -&gt; (Expr -&gt; Expr -&gt; Expr) -&gt; Expr
-</span><a href="Drasil.SSP.BasicExprs.html#eqlExprSepG"><span class="hs-identifier hs-var hs-var">eqlExprSepG</span></a></span></span><span> </span><span id="local-6989586621679093881"><span class="annot"><span class="annottext">f1_ :: Expr -&gt; Expr
-</span><a href="#local-6989586621679093881"><span class="hs-identifier hs-var">f1_</span></a></span></span><span> </span><span id="local-6989586621679093880"><span class="annot"><span class="annottext">f2_ :: Expr -&gt; Expr
-</span><a href="#local-6989586621679093880"><span class="hs-identifier hs-var">f2_</span></a></span></span><span> </span><span id="local-6989586621679093879"><span class="annot"><span class="annottext">_e_ :: Expr -&gt; Expr -&gt; Expr
-</span><a href="#local-6989586621679093879"><span class="hs-identifier hs-var">_e_</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+</span><a href="Drasil.SSP.BasicExprs.html#eqlExprSepG"><span class="hs-identifier hs-var hs-var">eqlExprSepG</span></a></span></span><span> </span><span id="local-6989586621679093874"><span class="annot"><span class="annottext">f1_ :: Expr -&gt; Expr
+</span><a href="#local-6989586621679093874"><span class="hs-identifier hs-var">f1_</span></a></span></span><span> </span><span id="local-6989586621679093873"><span class="annot"><span class="annottext">f2_ :: Expr -&gt; Expr
+</span><a href="#local-6989586621679093873"><span class="hs-identifier hs-var">f2_</span></a></span></span><span> </span><span id="local-6989586621679093872"><span class="annot"><span class="annottext">_e_ :: Expr -&gt; Expr -&gt; Expr
+</span><a href="#local-6989586621679093872"><span class="hs-identifier hs-var">_e_</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#slcWght"><span class="hs-identifier hs-var">slcWght</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
-</span><a href="#local-6989586621679093879"><span class="hs-operator hs-var">`_e_`</span></a></span><span>
+</span><a href="#local-6989586621679093872"><span class="hs-operator hs-var">`_e_`</span></a></span><span>
 </span><span id="line-31"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -212,7 +212,7 @@ forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#impLoadAngle"><span class="hs-identifier hs-var">impLoadAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
-</span><a href="#local-6989586621679093881"><span class="hs-identifier hs-var">f1_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+</span><a href="#local-6989586621679093874"><span class="hs-identifier hs-var">f1_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseAngle"><span class="hs-identifier hs-var">baseAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
@@ -255,7 +255,7 @@ forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#impLoadAngle"><span class="hs-identifier hs-var">impLoadAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
-</span><a href="#local-6989586621679093880"><span class="hs-identifier hs-var">f2_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+</span><a href="#local-6989586621679093873"><span class="hs-identifier hs-var">f2_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseAngle"><span class="hs-identifier hs-var">baseAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
@@ -270,21 +270,21 @@ forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxiM1"><span class="hs-identifier hs-var">inxiM1</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#intNormForce"><span class="hs-identifier hs-var">intNormForce</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
-</span><a href="#local-6989586621679093880"><span class="hs-identifier hs-var">f2_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+</span><a href="#local-6989586621679093873"><span class="hs-identifier hs-var">f2_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseAngle"><span class="hs-identifier hs-var">baseAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-37"></span><span>
 </span><span id="line-38"></span><span class="annot"><a href="Drasil.SSP.BasicExprs.html#eqlExprNSepG"><span class="hs-identifier hs-type">eqlExprNSepG</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
 </span><span id="line-39"></span><span id="eqlExprNSepG"><span class="annot"><span class="annottext">eqlExprNSepG :: (Expr -&gt; Expr) -&gt; (Expr -&gt; Expr) -&gt; (Expr -&gt; Expr -&gt; Expr) -&gt; Expr
-</span><a href="Drasil.SSP.BasicExprs.html#eqlExprNSepG"><span class="hs-identifier hs-var hs-var">eqlExprNSepG</span></a></span></span><span> </span><span id="local-6989586621679093877"><span class="annot"><span class="annottext">f1_ :: Expr -&gt; Expr
-</span><a href="#local-6989586621679093877"><span class="hs-identifier hs-var">f1_</span></a></span></span><span> </span><span id="local-6989586621679093876"><span class="annot"><span class="annottext">f2_ :: Expr -&gt; Expr
-</span><a href="#local-6989586621679093876"><span class="hs-identifier hs-var">f2_</span></a></span></span><span> </span><span id="local-6989586621679093875"><span class="annot"><span class="annottext">_e_ :: Expr -&gt; Expr -&gt; Expr
-</span><a href="#local-6989586621679093875"><span class="hs-identifier hs-var">_e_</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+</span><a href="Drasil.SSP.BasicExprs.html#eqlExprNSepG"><span class="hs-identifier hs-var hs-var">eqlExprNSepG</span></a></span></span><span> </span><span id="local-6989586621679093870"><span class="annot"><span class="annottext">f1_ :: Expr -&gt; Expr
+</span><a href="#local-6989586621679093870"><span class="hs-identifier hs-var">f1_</span></a></span></span><span> </span><span id="local-6989586621679093869"><span class="annot"><span class="annottext">f2_ :: Expr -&gt; Expr
+</span><a href="#local-6989586621679093869"><span class="hs-identifier hs-var">f2_</span></a></span></span><span> </span><span id="local-6989586621679093868"><span class="annot"><span class="annottext">_e_ :: Expr -&gt; Expr -&gt; Expr
+</span><a href="#local-6989586621679093868"><span class="hs-identifier hs-var">_e_</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#slcWght"><span class="hs-identifier hs-var">slcWght</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
-</span><a href="#local-6989586621679093875"><span class="hs-operator hs-var">`_e_`</span></a></span><span>
+</span><a href="#local-6989586621679093868"><span class="hs-operator hs-var">`_e_`</span></a></span><span>
 </span><span id="line-40"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -305,7 +305,7 @@ forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#impLoadAngle"><span class="hs-identifier hs-var">impLoadAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
-</span><a href="#local-6989586621679093877"><span class="hs-identifier hs-var">f1_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+</span><a href="#local-6989586621679093870"><span class="hs-identifier hs-var">f1_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseAngle"><span class="hs-identifier hs-var">baseAngle</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
@@ -348,7 +348,7 @@ forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#impLoadAngle"><span class="hs-identifier hs-var">impLoadAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
-</span><a href="#local-6989586621679093876"><span class="hs-identifier hs-var">f2_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+</span><a href="#local-6989586621679093869"><span class="hs-identifier hs-var">f2_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseAngle"><span class="hs-identifier hs-var">baseAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
@@ -363,21 +363,21 @@ forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxiM1"><span class="hs-identifier hs-var">inxiM1</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#intNormForce"><span class="hs-identifier hs-var">intNormForce</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
-</span><a href="#local-6989586621679093876"><span class="hs-identifier hs-var">f2_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+</span><a href="#local-6989586621679093869"><span class="hs-identifier hs-var">f2_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseAngle"><span class="hs-identifier hs-var">baseAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-46"></span><span>
 </span><span id="line-47"></span><span class="annot"><a href="Drasil.SSP.BasicExprs.html#eqlExprNoKQ"><span class="hs-identifier hs-type">eqlExprNoKQ</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
 </span><span id="line-48"></span><span id="eqlExprNoKQ"><span class="annot"><span class="annottext">eqlExprNoKQ :: (Expr -&gt; Expr) -&gt; (Expr -&gt; Expr) -&gt; (Expr -&gt; Expr -&gt; Expr) -&gt; Expr
-</span><a href="Drasil.SSP.BasicExprs.html#eqlExprNoKQ"><span class="hs-identifier hs-var hs-var">eqlExprNoKQ</span></a></span></span><span> </span><span id="local-6989586621679093873"><span class="annot"><span class="annottext">f1_ :: Expr -&gt; Expr
-</span><a href="#local-6989586621679093873"><span class="hs-identifier hs-var">f1_</span></a></span></span><span> </span><span id="local-6989586621679093872"><span class="annot"><span class="annottext">f2_ :: Expr -&gt; Expr
-</span><a href="#local-6989586621679093872"><span class="hs-identifier hs-var">f2_</span></a></span></span><span> </span><span id="local-6989586621679093871"><span class="annot"><span class="annottext">_e_ :: Expr -&gt; Expr -&gt; Expr
-</span><a href="#local-6989586621679093871"><span class="hs-identifier hs-var">_e_</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+</span><a href="Drasil.SSP.BasicExprs.html#eqlExprNoKQ"><span class="hs-identifier hs-var hs-var">eqlExprNoKQ</span></a></span></span><span> </span><span id="local-6989586621679093866"><span class="annot"><span class="annottext">f1_ :: Expr -&gt; Expr
+</span><a href="#local-6989586621679093866"><span class="hs-identifier hs-var">f1_</span></a></span></span><span> </span><span id="local-6989586621679093865"><span class="annot"><span class="annottext">f2_ :: Expr -&gt; Expr
+</span><a href="#local-6989586621679093865"><span class="hs-identifier hs-var">f2_</span></a></span></span><span> </span><span id="local-6989586621679093864"><span class="annot"><span class="annottext">_e_ :: Expr -&gt; Expr -&gt; Expr
+</span><a href="#local-6989586621679093864"><span class="hs-identifier hs-var">_e_</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#slcWght"><span class="hs-identifier hs-var">slcWght</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
-</span><a href="#local-6989586621679093871"><span class="hs-operator hs-var">`_e_`</span></a></span><span>
+</span><a href="#local-6989586621679093864"><span class="hs-operator hs-var">`_e_`</span></a></span><span>
 </span><span id="line-49"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -388,7 +388,7 @@ forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#surfAngle"><span class="hs-identifier hs-var">surfAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
-</span><a href="#local-6989586621679093873"><span class="hs-identifier hs-var">f1_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+</span><a href="#local-6989586621679093866"><span class="hs-identifier hs-var">f1_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseAngle"><span class="hs-identifier hs-var">baseAngle</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
@@ -413,7 +413,7 @@ forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#surfAngle"><span class="hs-identifier hs-var">surfAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
-</span><a href="#local-6989586621679093872"><span class="hs-identifier hs-var">f2_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+</span><a href="#local-6989586621679093865"><span class="hs-identifier hs-var">f2_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseAngle"><span class="hs-identifier hs-var">baseAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
@@ -428,21 +428,21 @@ forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxiM1"><span class="hs-identifier hs-var">inxiM1</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#intNormForce"><span class="hs-identifier hs-var">intNormForce</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
-</span><a href="#local-6989586621679093872"><span class="hs-identifier hs-var">f2_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+</span><a href="#local-6989586621679093865"><span class="hs-identifier hs-var">f2_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseAngle"><span class="hs-identifier hs-var">baseAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-53"></span><span>
 </span><span id="line-54"></span><span class="annot"><a href="Drasil.SSP.BasicExprs.html#eqlExprNNoKQ"><span class="hs-identifier hs-type">eqlExprNNoKQ</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
 </span><span id="line-55"></span><span id="eqlExprNNoKQ"><span class="annot"><span class="annottext">eqlExprNNoKQ :: (Expr -&gt; Expr) -&gt; (Expr -&gt; Expr) -&gt; (Expr -&gt; Expr -&gt; Expr) -&gt; Expr
-</span><a href="Drasil.SSP.BasicExprs.html#eqlExprNNoKQ"><span class="hs-identifier hs-var hs-var">eqlExprNNoKQ</span></a></span></span><span> </span><span id="local-6989586621679093869"><span class="annot"><span class="annottext">f1_ :: Expr -&gt; Expr
-</span><a href="#local-6989586621679093869"><span class="hs-identifier hs-var">f1_</span></a></span></span><span> </span><span id="local-6989586621679093868"><span class="annot"><span class="annottext">f2_ :: Expr -&gt; Expr
-</span><a href="#local-6989586621679093868"><span class="hs-identifier hs-var">f2_</span></a></span></span><span> </span><span id="local-6989586621679093867"><span class="annot"><span class="annottext">_e_ :: Expr -&gt; Expr -&gt; Expr
-</span><a href="#local-6989586621679093867"><span class="hs-identifier hs-var">_e_</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+</span><a href="Drasil.SSP.BasicExprs.html#eqlExprNNoKQ"><span class="hs-identifier hs-var hs-var">eqlExprNNoKQ</span></a></span></span><span> </span><span id="local-6989586621679093862"><span class="annot"><span class="annottext">f1_ :: Expr -&gt; Expr
+</span><a href="#local-6989586621679093862"><span class="hs-identifier hs-var">f1_</span></a></span></span><span> </span><span id="local-6989586621679093861"><span class="annot"><span class="annottext">f2_ :: Expr -&gt; Expr
+</span><a href="#local-6989586621679093861"><span class="hs-identifier hs-var">f2_</span></a></span></span><span> </span><span id="local-6989586621679093860"><span class="annot"><span class="annottext">_e_ :: Expr -&gt; Expr -&gt; Expr
+</span><a href="#local-6989586621679093860"><span class="hs-identifier hs-var">_e_</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#slcWght"><span class="hs-identifier hs-var">slcWght</span></a></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
-</span><a href="#local-6989586621679093867"><span class="hs-operator hs-var">`_e_`</span></a></span><span>
+</span><a href="#local-6989586621679093860"><span class="hs-operator hs-var">`_e_`</span></a></span><span>
 </span><span id="line-56"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -453,7 +453,7 @@ forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#surfAngle"><span class="hs-identifier hs-var">surfAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
-</span><a href="#local-6989586621679093869"><span class="hs-identifier hs-var">f1_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+</span><a href="#local-6989586621679093862"><span class="hs-identifier hs-var">f1_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseAngle"><span class="hs-identifier hs-var">baseAngle</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
@@ -478,7 +478,7 @@ forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#surfAngle"><span class="hs-identifier hs-var">surfAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
-</span><a href="#local-6989586621679093868"><span class="hs-identifier hs-var">f2_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+</span><a href="#local-6989586621679093861"><span class="hs-identifier hs-var">f2_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseAngle"><span class="hs-identifier hs-var">baseAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
@@ -493,28 +493,28 @@ forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxiM1"><span class="hs-identifier hs-var">inxiM1</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#intNormForce"><span class="hs-identifier hs-var">intNormForce</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr
-</span><a href="#local-6989586621679093868"><span class="hs-identifier hs-var">f2_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
+</span><a href="#local-6989586621679093861"><span class="hs-identifier hs-var">f2_</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseAngle"><span class="hs-identifier hs-var">baseAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-60"></span><span>
 </span><span id="line-61"></span><span class="annot"><a href="Drasil.SSP.BasicExprs.html#sliceExpr"><span class="hs-identifier hs-type">sliceExpr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Integer</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
 </span><span id="line-62"></span><span id="sliceExpr"><span class="annot"><span class="annottext">sliceExpr :: Integer -&gt; Expr
-</span><a href="Drasil.SSP.BasicExprs.html#sliceExpr"><span class="hs-identifier hs-var hs-var">sliceExpr</span></a></span></span><span> </span><span id="local-6989586621679093865"><span class="annot"><span class="annottext">n :: Integer
-</span><a href="#local-6989586621679093865"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><a href="Drasil.SSP.BasicExprs.html#sliceExpr"><span class="hs-identifier hs-var hs-var">sliceExpr</span></a></span></span><span> </span><span id="local-6989586621679093858"><span class="annot"><span class="annottext">n :: Integer
+</span><a href="#local-6989586621679093858"><span class="hs-identifier hs-var">n</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-identifier hs-var">idx</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#intNormForce"><span class="hs-identifier hs-var">intNormForce</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><span class="hs-identifier hs-var">int</span></span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679093865"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><a href="#local-6989586621679093858"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-identifier hs-var">idx</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr
 forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#shrResC"><span class="hs-identifier hs-var">shrResC</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><span class="hs-identifier hs-var">int</span></span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679093865"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><a href="#local-6989586621679093858"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-operator hs-var">$=</span></span><span>
 </span><span id="line-63"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-identifier hs-var">idx</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr
@@ -522,7 +522,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#mobShrC"><span class="hs-identifier hs-var">mobShrC</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><span class="hs-identifier hs-var">int</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679093865"><span class="hs-identifier hs-var">n</span></a></span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Integer
+</span><a href="#local-6989586621679093858"><span class="hs-identifier hs-var">n</span></a></span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Integer
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
@@ -531,7 +531,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#intNormForce"><span class="hs-identifier hs-var">intNormForce</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><span class="hs-identifier hs-var">int</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679093865"><span class="hs-identifier hs-var">n</span></a></span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Integer
+</span><a href="#local-6989586621679093858"><span class="hs-identifier hs-var">n</span></a></span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Integer
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-operator hs-var">`mulRe`</span></span><span>
@@ -541,7 +541,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict
 </span><a href="Drasil.SSP.Unitals.html#shrResC"><span class="hs-identifier hs-var">shrResC</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><span class="hs-identifier hs-var">int</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679093865"><span class="hs-identifier hs-var">n</span></a></span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Integer
+</span><a href="#local-6989586621679093858"><span class="hs-identifier hs-var">n</span></a></span><span class="annot"><span class="annottext">Integer -&gt; Integer -&gt; Integer
 forall a. Num a =&gt; a -&gt; a -&gt; a
 </span><span class="hs-glyph hs-var">-</span></span><span class="annot"><span class="hs-number">1</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-operator hs-var">`addRe`</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConstrConcept -&gt; Expr
@@ -554,7 +554,7 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#shearFNoIntsl"><span class="hs-identifier hs-var">shearFNoIntsl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><span class="hs-identifier hs-var">int</span></span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679093865"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
+</span><a href="#local-6989586621679093858"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-operator hs-var">$-</span></span><span>
 </span><span id="line-65"></span><span>  </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
 </span><span class="hs-identifier hs-var">idx</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
@@ -562,12 +562,12 @@ forall c. (HasUID c, HasSymbol c) =&gt; c -&gt; Expr
 </span><span class="hs-identifier hs-var">sy</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#shearRNoIntsl"><span class="hs-identifier hs-var">shearRNoIntsl</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Integer -&gt; Expr
 </span><span class="hs-identifier hs-var">int</span></span><span> </span><span class="annot"><span class="annottext">Integer
-</span><a href="#local-6989586621679093865"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
+</span><a href="#local-6989586621679093858"><span class="hs-identifier hs-var">n</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span>
 </span><span id="line-66"></span><span>
 </span><span id="line-67"></span><span class="annot"><a href="Drasil.SSP.BasicExprs.html#momExpr"><span class="hs-identifier hs-type">momExpr</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
 </span><span id="line-68"></span><span id="momExpr"><span class="annot"><span class="annottext">momExpr :: (Expr -&gt; Expr -&gt; Expr) -&gt; Expr
-</span><a href="Drasil.SSP.BasicExprs.html#momExpr"><span class="hs-identifier hs-var hs-var">momExpr</span></a></span></span><span> </span><span id="local-6989586621679093860"><span class="annot"><span class="annottext">_e_ :: Expr -&gt; Expr -&gt; Expr
-</span><a href="#local-6989586621679093860"><span class="hs-identifier hs-var">_e_</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Expr -&gt; Expr
+</span><a href="Drasil.SSP.BasicExprs.html#momExpr"><span class="hs-identifier hs-var hs-var">momExpr</span></a></span></span><span> </span><span id="local-6989586621679093853"><span class="annot"><span class="annottext">_e_ :: Expr -&gt; Expr -&gt; Expr
+</span><a href="#local-6989586621679093853"><span class="hs-identifier hs-var">_e_</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Expr -&gt; Expr
 </span><span class="hs-identifier hs-var">neg</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -649,7 +649,7 @@ forall e. Quantity e =&gt; e -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseAngle"><span class="hs-identifier hs-var">baseAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
-</span><a href="#local-6989586621679093860"><span class="hs-operator hs-var">`_e_`</span></a></span><span>
+</span><a href="#local-6989586621679093853"><span class="hs-operator hs-var">`_e_`</span></a></span><span>
 </span><span id="line-74"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Expr -&gt; Expr
 </span><span class="hs-identifier hs-var">half</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Expr -&gt; Expr
 </span><span class="hs-identifier hs-var">neg</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; Expr
@@ -695,8 +695,8 @@ forall e. Quantity e =&gt; e -&gt; Expr
 </span><span id="line-77"></span><span>
 </span><span id="line-78"></span><span class="annot"><a href="Drasil.SSP.BasicExprs.html#momExprNoKQ"><span class="hs-identifier hs-type">momExprNoKQ</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span class="hs-special">)</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Expr</span></span><span>
 </span><span id="line-79"></span><span id="momExprNoKQ"><span class="annot"><span class="annottext">momExprNoKQ :: (Expr -&gt; Expr -&gt; Expr) -&gt; Expr
-</span><a href="Drasil.SSP.BasicExprs.html#momExprNoKQ"><span class="hs-identifier hs-var hs-var">momExprNoKQ</span></a></span></span><span> </span><span id="local-6989586621679093855"><span class="annot"><span class="annottext">_e_ :: Expr -&gt; Expr -&gt; Expr
-</span><a href="#local-6989586621679093855"><span class="hs-identifier hs-var">_e_</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Expr -&gt; Expr
+</span><a href="Drasil.SSP.BasicExprs.html#momExprNoKQ"><span class="hs-identifier hs-var hs-var">momExprNoKQ</span></a></span></span><span> </span><span id="local-6989586621679093848"><span class="annot"><span class="annottext">_e_ :: Expr -&gt; Expr -&gt; Expr
+</span><a href="#local-6989586621679093848"><span class="hs-identifier hs-var">_e_</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Expr -&gt; Expr
 </span><span class="hs-identifier hs-var">neg</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
@@ -778,7 +778,7 @@ forall e. Quantity e =&gt; e -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><a href="Drasil.SSP.Unitals.html#baseAngle"><span class="hs-identifier hs-var">baseAngle</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Expr -&gt; Expr -&gt; Expr
-</span><a href="#local-6989586621679093855"><span class="hs-operator hs-var">`_e_`</span></a></span><span>
+</span><a href="#local-6989586621679093848"><span class="hs-operator hs-var">`_e_`</span></a></span><span>
 </span><span id="line-85"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">UnitalChunk -&gt; Expr
 forall e. Quantity e =&gt; e -&gt; Expr
 </span><a href="Drasil.SSP.Unitals.html#inxi"><span class="hs-identifier hs-var">inxi</span></a></span><span> </span><span class="annot"><span class="annottext">UnitalChunk

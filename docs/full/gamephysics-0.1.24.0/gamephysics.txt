@@ -207,7 +207,6 @@ printSetting :: PrintingInformation
 resourcePath :: String
 mkSRS :: SRSDecl
 si :: SystemInformation
-directoryName :: FilePath
 concIns :: [ConceptInstance]
 section :: [Section]
 stdFields :: Fields

@@ -77,8 +77,8 @@ String -&gt; Sentence -&gt; String -&gt; c -&gt; ConceptInstance
 </span><span id="line-35"></span><span class="annot"><a href="Drasil.GlassBR.Changes.html#varValsOfmkEDesc"><span class="hs-identifier hs-type">varValsOfmkEDesc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Changes.html#accMoreThanSingleLiteDesc"><span class="hs-identifier hs-type">accMoreThanSingleLiteDesc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Changes.html#accMoreBoundaryConditionsDesc"><span class="hs-identifier hs-type">accMoreBoundaryConditionsDesc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.GlassBR.Changes.html#considerMoreThanFlexGlassDesc"><span class="hs-identifier hs-type">considerMoreThanFlexGlassDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
 </span><span id="line-36"></span><span>
 </span><span id="line-37"></span><span id="calcInternalBlastRiskDesc"><span class="annot"><span class="annottext">calcInternalBlastRiskDesc :: NamedChunk -&gt; Sentence
-</span><a href="Drasil.GlassBR.Changes.html#calcInternalBlastRiskDesc"><span class="hs-identifier hs-var hs-var">calcInternalBlastRiskDesc</span></a></span></span><span> </span><span id="local-6989586621679115985"><span class="annot"><span class="annottext">mainConcept :: NamedChunk
-</span><a href="#local-6989586621679115985"><span class="hs-identifier hs-var">mainConcept</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
+</span><a href="Drasil.GlassBR.Changes.html#calcInternalBlastRiskDesc"><span class="hs-identifier hs-var hs-var">calcInternalBlastRiskDesc</span></a></span></span><span> </span><span id="local-6989586621679115979"><span class="annot"><span class="annottext">mainConcept :: NamedChunk
+</span><a href="#local-6989586621679115979"><span class="hs-identifier hs-var">mainConcept</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptInstance -&gt; Sentence -&gt; Sentence
 forall x.
 (HasShortName x, Referable x) =&gt;
@@ -95,7 +95,7 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span id="line-39"></span><span>  </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
-</span><a href="#local-6989586621679115985"><span class="hs-identifier hs-var">mainConcept</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
+</span><a href="#local-6989586621679115979"><span class="hs-identifier hs-var">mainConcept</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;In the future,&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
@@ -104,7 +104,7 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;can be added for the internal&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
-</span><a href="#local-6989586621679115985"><span class="hs-identifier hs-var">mainConcept</span></a></span><span class="hs-special">]</span><span>
+</span><a href="#local-6989586621679115979"><span class="hs-identifier hs-var">mainConcept</span></a></span><span class="hs-special">]</span><span>
 </span><span id="line-41"></span><span>
 </span><span id="line-42"></span><span id="varValsOfmkEDesc"><span class="annot"><span class="annottext">varValsOfmkEDesc :: Sentence
 </span><a href="Drasil.GlassBR.Changes.html#varValsOfmkEDesc"><span class="hs-identifier hs-var hs-var">varValsOfmkEDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence

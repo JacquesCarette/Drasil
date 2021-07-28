@@ -7,7 +7,7 @@
 </span><span id="line-7"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Database.Drasil</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">Block</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ChunkDB</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">ReferenceDB</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">SystemInformation</span></span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">SI</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
 </span><span id="line-8"></span><span>  </span><span class="annot"><span class="hs-identifier">cdb</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">rdb</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">refdb</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">_authors</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">_purpose</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">_concepts</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">_constants</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">_constraints</span></span><span class="hs-special">,</span><span> </span><span>
 </span><span id="line-9"></span><span>  </span><span class="annot"><span class="hs-identifier">_datadefs</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">_instModels</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">_configFiles</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">_defSequence</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">_inputs</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">_kind</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">_outputs</span></span><span class="hs-special">,</span><span>
-</span><span id="line-10"></span><span>  </span><span class="annot"><span class="hs-identifier">_quants</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">_sys</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">_sysinfodb</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">_usedinfodb</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">_folderPath</span></span><span class="hs-special">)</span><span>
+</span><span id="line-10"></span><span>  </span><span class="annot"><span class="hs-identifier">_quants</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">_sys</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">_sysinfodb</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">_usedinfodb</span></span><span class="hs-special">)</span><span>
 </span><span id="line-11"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil</span></span><span>
 </span><span id="line-12"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Utils.Drasil.Concepts</span></span><span>
 </span><span id="line-13"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Data.Drasil.Concepts.Education</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier">highSchoolPhysics</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">highSchoolCalculus</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">calculus</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">undergraduate</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="hs-identifier">educon</span></span><span class="hs-special">,</span><span> </span><span class="hs-special">)</span><span>
@@ -280,13 +280,8 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-identifier hs-var">Bibliography</span></span><span>                    </span><span class="hs-comment">-- Adds reference section</span><span>
 </span><span id="line-112"></span><span>  </span><span class="hs-special">]</span><span>
 </span><span id="line-113"></span><span>
-</span><span id="line-114"></span><span class="hs-comment">-- Folder name. Used in traceability graphs.</span><span>
-</span><span id="line-115"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#directoryName"><span class="hs-identifier hs-type">directoryName</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span>
-</span><span id="line-116"></span><span id="directoryName"><span class="annot"><span class="annottext">directoryName :: FilePath
-</span><a href="Drasil.DblPendulum.Body.html#directoryName"><span class="hs-identifier hs-var hs-var">directoryName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;DblPendulum&quot;</span></span><span>
-</span><span id="line-117"></span><span>
-</span><span id="line-118"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#si"><span class="hs-identifier hs-type">si</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SystemInformation</span></span><span>
-</span><span id="line-119"></span><span id="si"><span class="annot"><span class="annottext">si :: SystemInformation
+</span><span id="line-114"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#si"><span class="hs-identifier hs-type">si</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SystemInformation</span></span><span>
+</span><span id="line-115"></span><span id="si"><span class="annot"><span class="annottext">si :: SystemInformation
 </span><a href="Drasil.DblPendulum.Body.html#si"><span class="hs-identifier hs-var hs-var">si</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">SI :: forall a b c e f h i j d.
 (CommonIdea a, Idea a, Idea b, HasName c, Quantity e, Eq e,
  MayHaveUnit e, Quantity f, MayHaveUnit f, Concept f, Eq f,
@@ -300,8 +295,7 @@ a
 -&gt; [f]
 -&gt; [InstanceModel]
 -&gt; [DataDefinition]
--&gt; [FilePath]
--&gt; FilePath
+-&gt; [String]
 -&gt; [h]
 -&gt; [i]
 -&gt; [Block QDefinition]
@@ -312,62 +306,59 @@ a
 -&gt; ReferenceDB
 -&gt; SystemInformation
 </span><span class="hs-identifier hs-type hs-type">SI</span></span><span> </span><span class="hs-special">{</span><span>
-</span><span id="line-120"></span><span>  </span><span class="annot"><span class="annottext">_sys :: CI
+</span><span id="line-116"></span><span>  </span><span class="annot"><span class="annottext">_sys :: CI
 </span><span class="hs-identifier hs-var">_sys</span></span><span>         </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.DblPendulum.Concepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-121"></span><span>  </span><span class="annot"><span class="annottext">_kind :: CI
+</span><span id="line-117"></span><span>  </span><span class="annot"><span class="annottext">_kind :: CI
 </span><span class="hs-identifier hs-var">_kind</span></span><span>        </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">Doc.srs</span></span><span class="hs-special">,</span><span>
-</span><span id="line-122"></span><span>  </span><span class="annot"><span class="annottext">_authors :: [Person]
+</span><span id="line-118"></span><span>  </span><span class="annot"><span class="annottext">_authors :: [Person]
 </span><span class="hs-identifier hs-var">_authors</span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Person
 </span><span class="hs-identifier hs-var">olu</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-123"></span><span>  </span><span class="annot"><span class="annottext">_purpose :: [Sentence]
+</span><span id="line-119"></span><span>  </span><span class="annot"><span class="annottext">_purpose :: [Sentence]
 </span><span class="hs-identifier hs-var">_purpose</span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Verbosity -&gt; [Sentence]
 </span><span class="hs-identifier hs-var">purpDoc</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.DblPendulum.Concepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span> </span><span class="annot"><span class="annottext">Verbosity
 </span><span class="hs-identifier hs-var">Verbose</span></span><span class="hs-special">,</span><span>
-</span><span id="line-124"></span><span>  </span><span class="annot"><span class="annottext">_quants :: [QuantityDict]
+</span><span id="line-120"></span><span>  </span><span class="annot"><span class="annottext">_quants :: [QuantityDict]
 </span><span class="hs-identifier hs-var">_quants</span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 </span><a href="Drasil.DblPendulum.Unitals.html#symbols"><span class="hs-identifier hs-var">symbols</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-125"></span><span>  </span><span class="annot"><span class="annottext">_concepts :: [DefinedQuantityDict]
+</span><span id="line-121"></span><span>  </span><span class="annot"><span class="annottext">_concepts :: [DefinedQuantityDict]
 </span><span class="hs-identifier hs-var">_concepts</span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">DefinedQuantityDict</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-126"></span><span>  </span><span class="annot"><span class="annottext">_instModels :: [InstanceModel]
+</span><span id="line-122"></span><span>  </span><span class="annot"><span class="annottext">_instModels :: [InstanceModel]
 </span><span class="hs-identifier hs-var">_instModels</span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[InstanceModel]
 </span><a href="Drasil.DblPendulum.IMods.html#iMods"><span class="hs-identifier hs-var">iMods</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-127"></span><span>  </span><span class="annot"><span class="annottext">_datadefs :: [DataDefinition]
+</span><span id="line-123"></span><span>  </span><span class="annot"><span class="annottext">_datadefs :: [DataDefinition]
 </span><span class="hs-identifier hs-var">_datadefs</span></span><span>    </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DataDefinition]
 </span><a href="Drasil.DblPendulum.DataDefs.html#dataDefs"><span class="hs-identifier hs-var">dataDefs</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-128"></span><span>  </span><span class="annot"><span class="annottext">_configFiles :: [FilePath]
+</span><span id="line-124"></span><span>  </span><span class="annot"><span class="annottext">_configFiles :: [String]
 </span><span class="hs-identifier hs-var">_configFiles</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-129"></span><span>  </span><span class="annot"><span class="annottext">_folderPath :: FilePath
-</span><span class="hs-identifier hs-var">_folderPath</span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath
-</span><a href="Drasil.DblPendulum.Body.html#directoryName"><span class="hs-identifier hs-var">directoryName</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-130"></span><span>  </span><span class="annot"><span class="annottext">_inputs :: [QuantityDict]
+</span><span id="line-125"></span><span>  </span><span class="annot"><span class="annottext">_inputs :: [QuantityDict]
 </span><span class="hs-identifier hs-var">_inputs</span></span><span>      </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 </span><a href="Drasil.DblPendulum.Unitals.html#inputs"><span class="hs-identifier hs-var">inputs</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-131"></span><span>  </span><span class="annot"><span class="annottext">_outputs :: [QuantityDict]
+</span><span id="line-126"></span><span>  </span><span class="annot"><span class="annottext">_outputs :: [QuantityDict]
 </span><span class="hs-identifier hs-var">_outputs</span></span><span>     </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 </span><a href="Drasil.DblPendulum.Unitals.html#outputs"><span class="hs-identifier hs-var">outputs</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-132"></span><span>  </span><span class="annot"><span class="annottext">_defSequence :: [Block QDefinition]
+</span><span id="line-127"></span><span>  </span><span class="annot"><span class="annottext">_defSequence :: [Block QDefinition]
 </span><span class="hs-identifier hs-var">_defSequence</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Block</span></span><span> </span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-133"></span><span>  </span><span class="annot"><span class="annottext">_constraints :: [UncertQ]
+</span><span id="line-128"></span><span>  </span><span class="annot"><span class="annottext">_constraints :: [UncertQ]
 </span><span class="hs-identifier hs-var">_constraints</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[UncertQ]
 </span><a href="Drasil.DblPendulum.Unitals.html#inConstraints"><span class="hs-identifier hs-var">inConstraints</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-134"></span><span>  </span><span class="annot"><span class="annottext">_constants :: [QDefinition]
+</span><span id="line-129"></span><span>  </span><span class="annot"><span class="annottext">_constants :: [QDefinition]
 </span><span class="hs-identifier hs-var">_constants</span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">QDefinition</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
-</span><span id="line-135"></span><span>  </span><span class="annot"><span class="annottext">_sysinfodb :: ChunkDB
+</span><span id="line-130"></span><span>  </span><span class="annot"><span class="annottext">_sysinfodb :: ChunkDB
 </span><span class="hs-identifier hs-var">_sysinfodb</span></span><span>   </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
 </span><a href="Drasil.DblPendulum.Body.html#symbMap"><span class="hs-identifier hs-var">symbMap</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-136"></span><span>  </span><span class="annot"><span class="annottext">_usedinfodb :: ChunkDB
+</span><span id="line-131"></span><span>  </span><span class="annot"><span class="annottext">_usedinfodb :: ChunkDB
 </span><span class="hs-identifier hs-var">_usedinfodb</span></span><span>  </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ChunkDB
 </span><a href="Drasil.DblPendulum.Body.html#usedDB"><span class="hs-identifier hs-var">usedDB</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-137"></span><span>   </span><span class="annot"><span class="annottext">refdb :: ReferenceDB
+</span><span id="line-132"></span><span>   </span><span class="annot"><span class="annottext">refdb :: ReferenceDB
 </span><span class="hs-identifier hs-var">refdb</span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ReferenceDB
 </span><a href="Drasil.DblPendulum.Body.html#refDB"><span class="hs-identifier hs-var">refDB</span></a></span><span>
-</span><span id="line-138"></span><span class="hs-special">}</span><span>
-</span><span id="line-139"></span><span>
-</span><span id="line-140"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#symbMap"><span class="hs-identifier hs-type">symbMap</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span>
-</span><span id="line-141"></span><span id="symbMap"><span class="annot"><span class="annottext">symbMap :: ChunkDB
+</span><span id="line-133"></span><span class="hs-special">}</span><span>
+</span><span id="line-134"></span><span>
+</span><span id="line-135"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#symbMap"><span class="hs-identifier hs-type">symbMap</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span>
+</span><span id="line-136"></span><span id="symbMap"><span class="annot"><span class="annottext">symbMap :: ChunkDB
 </span><a href="Drasil.DblPendulum.Body.html#symbMap"><span class="hs-identifier hs-var hs-var">symbMap</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 -&gt; [IdeaDict]
 -&gt; [ConceptChunk]
@@ -410,7 +401,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">qw</span></span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 </span><a href="Drasil.DblPendulum.Unitals.html#symbols"><span class="hs-identifier hs-var">symbols</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-142"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">TheoryModel -&gt; IdeaDict
+</span><span id="line-137"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">TheoryModel -&gt; IdeaDict
 forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">TheoryModel
 </span><span class="hs-identifier hs-var">newtonSLR</span></span><span> </span><span class="annot"><span class="annottext">IdeaDict -&gt; [IdeaDict] -&gt; [IdeaDict]
@@ -454,7 +445,7 @@ forall a. a -&gt; [a] -&gt; [a]
 forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">radian</span></span><span>
-</span><span id="line-143"></span><span>    </span><span class="annot"><span class="annottext">IdeaDict -&gt; [IdeaDict] -&gt; [IdeaDict]
+</span><span id="line-138"></span><span>    </span><span class="annot"><span class="annottext">IdeaDict -&gt; [IdeaDict] -&gt; [IdeaDict]
 forall a. a -&gt; [a] -&gt; [a]
 </span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">DefinedQuantityDict -&gt; IdeaDict
 forall c. Idea c =&gt; c -&gt; IdeaDict
@@ -482,7 +473,7 @@ forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><a href="Drasil.DblPendulum.Unitals.html#symbols"><span class="hs-identifier hs-var">symbols</span></a></span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-144"></span><span>   </span><span class="annot"><span class="annottext">(NamedChunk -&gt; IdeaDict) -&gt; [NamedChunk] -&gt; [IdeaDict]
+</span><span id="line-139"></span><span>   </span><span class="annot"><span class="annottext">(NamedChunk -&gt; IdeaDict) -&gt; [NamedChunk] -&gt; [IdeaDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; IdeaDict
 forall c. Idea c =&gt; c -&gt; IdeaDict
@@ -525,7 +516,7 @@ forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">physicCon'</span></span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-145"></span><span>   </span><span class="annot"><span class="annottext">(UnitalChunk -&gt; IdeaDict) -&gt; [UnitalChunk] -&gt; [IdeaDict]
+</span><span id="line-140"></span><span>   </span><span class="annot"><span class="annottext">(UnitalChunk -&gt; IdeaDict) -&gt; [UnitalChunk] -&gt; [IdeaDict]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk -&gt; IdeaDict
 forall c. Idea c =&gt; c -&gt; IdeaDict
@@ -565,7 +556,7 @@ forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">hertz</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span>
-</span><span id="line-146"></span><span>   </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk -&gt; IdeaDict
+</span><span id="line-141"></span><span>   </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk -&gt; IdeaDict
 forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">algorithm</span></span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">[IdeaDict] -&gt; [IdeaDict] -&gt; [IdeaDict]
@@ -590,7 +581,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">[NamedChunk]
 </span><span class="hs-identifier hs-var">prodtcon</span></span><span class="hs-special">)</span><span>
-</span><span id="line-147"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(InstanceModel -&gt; ConceptChunk)
+</span><span id="line-142"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(InstanceModel -&gt; ConceptChunk)
 -&gt; [InstanceModel] -&gt; [ConceptChunk]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">InstanceModel -&gt; ConceptChunk
@@ -612,14 +603,14 @@ forall u. IsUnit u =&gt; u -&gt; UnitDefn
 </span><span class="hs-identifier hs-var">radian</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">UnitDefn
 </span><span class="hs-identifier hs-var">hertz</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[DataDefinition]
 </span><a href="Drasil.DblPendulum.DataDefs.html#dataDefs"><span class="hs-identifier hs-var">dataDefs</span></a></span><span>
-</span><span id="line-148"></span><span>  </span><span class="annot"><span class="annottext">[InstanceModel]
+</span><span id="line-143"></span><span>  </span><span class="annot"><span class="annottext">[InstanceModel]
 </span><a href="Drasil.DblPendulum.IMods.html#iMods"><span class="hs-identifier hs-var">iMods</span></a></span><span> </span><span class="annot"><span class="annottext">[GenDefn]
 </span><a href="Drasil.DblPendulum.GenDefs.html#genDefns"><span class="hs-identifier hs-var">genDefns</span></a></span><span> </span><span class="annot"><span class="annottext">[TheoryModel]
 </span><a href="Drasil.DblPendulum.Body.html#tMods"><span class="hs-identifier hs-var">tMods</span></a></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance]
 </span><a href="Drasil.DblPendulum.Body.html#concIns"><span class="hs-identifier hs-var">concIns</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-149"></span><span>
-</span><span id="line-150"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#usedDB"><span class="hs-identifier hs-type">usedDB</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span>
-</span><span id="line-151"></span><span id="usedDB"><span class="annot"><span class="annottext">usedDB :: ChunkDB
+</span><span id="line-144"></span><span>
+</span><span id="line-145"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#usedDB"><span class="hs-identifier hs-type">usedDB</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ChunkDB</span></span><span>
+</span><span id="line-146"></span><span id="usedDB"><span class="annot"><span class="annottext">usedDB :: ChunkDB
 </span><a href="Drasil.DblPendulum.Body.html#usedDB"><span class="hs-identifier hs-var hs-var">usedDB</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 -&gt; [IdeaDict]
 -&gt; [ConceptChunk]
@@ -661,10 +652,10 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">nw</span></span><span> </span><span class="annot"><span class="annottext">[QuantityDict]
 </span><a href="Drasil.DblPendulum.Unitals.html#symbols"><span class="hs-identifier hs-var">symbols</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-152"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
-</span><span id="line-153"></span><span>
-</span><span id="line-154"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#stdFields"><span class="hs-identifier hs-type">stdFields</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Fields</span></span><span>
-</span><span id="line-155"></span><span id="stdFields"><span class="annot"><span class="annottext">stdFields :: Fields
+</span><span id="line-147"></span><span>  </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-special">(</span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span class="hs-special">]</span><span class="hs-special">)</span><span>
+</span><span id="line-148"></span><span>
+</span><span id="line-149"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#stdFields"><span class="hs-identifier hs-type">stdFields</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Fields</span></span><span>
+</span><span id="line-150"></span><span id="stdFields"><span class="annot"><span class="annottext">stdFields :: Fields
 </span><a href="Drasil.DblPendulum.Body.html#stdFields"><span class="hs-identifier hs-var hs-var">stdFields</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Field
 </span><span class="hs-identifier hs-var">DefiningEquation</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Verbosity -&gt; InclUnits -&gt; Field
 </span><span class="hs-identifier hs-var">Description</span></span><span> </span><span class="annot"><span class="annottext">Verbosity
@@ -673,16 +664,16 @@ forall c. Idea c =&gt; c -&gt; IdeaDict
 </span><span class="hs-identifier hs-var">Notes</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Field
 </span><span class="hs-identifier hs-var">Source</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Field
 </span><span class="hs-identifier hs-var">RefBy</span></span><span class="hs-special">]</span><span>
-</span><span id="line-156"></span><span>
-</span><span id="line-157"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#refDB"><span class="hs-identifier hs-type">refDB</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ReferenceDB</span></span><span>
-</span><span id="line-158"></span><span id="refDB"><span class="annot"><span class="annottext">refDB :: ReferenceDB
+</span><span id="line-151"></span><span>
+</span><span id="line-152"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#refDB"><span class="hs-identifier hs-type">refDB</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">ReferenceDB</span></span><span>
+</span><span id="line-153"></span><span id="refDB"><span class="annot"><span class="annottext">refDB :: ReferenceDB
 </span><a href="Drasil.DblPendulum.Body.html#refDB"><span class="hs-identifier hs-var hs-var">refDB</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">BibRef -&gt; [ConceptInstance] -&gt; ReferenceDB
 </span><span class="hs-identifier hs-var">rdb</span></span><span> </span><span class="annot"><span class="annottext">BibRef
 </span><a href="Drasil.DblPendulum.References.html#citations"><span class="hs-identifier hs-var">citations</span></a></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance]
 </span><a href="Drasil.DblPendulum.Body.html#concIns"><span class="hs-identifier hs-var">concIns</span></a></span><span>
-</span><span id="line-159"></span><span>
-</span><span id="line-160"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#concIns"><span class="hs-identifier hs-type">concIns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span>
-</span><span id="line-161"></span><span id="concIns"><span class="annot"><span class="annottext">concIns :: [ConceptInstance]
+</span><span id="line-154"></span><span>
+</span><span id="line-155"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#concIns"><span class="hs-identifier hs-type">concIns</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptInstance</span></span><span class="hs-special">]</span><span>
+</span><span id="line-156"></span><span id="concIns"><span class="annot"><span class="annottext">concIns :: [ConceptInstance]
 </span><a href="Drasil.DblPendulum.Body.html#concIns"><span class="hs-identifier hs-var hs-var">concIns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[ConceptInstance]
 </span><a href="Drasil.DblPendulum.Assumptions.html#assumptions"><span class="hs-identifier hs-var">assumptions</span></a></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance] -&gt; [ConceptInstance] -&gt; [ConceptInstance]
 forall a. [a] -&gt; [a] -&gt; [a]
@@ -694,76 +685,76 @@ forall a. [a] -&gt; [a] -&gt; [a]
 forall a. [a] -&gt; [a] -&gt; [a]
 </span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[ConceptInstance]
 </span><a href="Drasil.DblPendulum.Requirements.html#nonFuncReqs"><span class="hs-identifier hs-var">nonFuncReqs</span></a></span><span>
-</span><span id="line-162"></span><span class="hs-comment">-- ++ likelyChgs ++ unlikelyChgs</span><span>
-</span><span id="line-163"></span><span>
-</span><span id="line-164"></span><span>
-</span><span id="line-165"></span><span class="hs-comment">------------------------------</span><span>
-</span><span id="line-166"></span><span class="hs-comment">-- Section : INTRODUCTION --</span><span>
-</span><span id="line-167"></span><span class="hs-comment">------------------------------</span><span>
-</span><span id="line-168"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#justification"><span class="hs-identifier hs-type">justification</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-169"></span><span id="justification"><span class="annot"><span class="annottext">justification :: Sentence
+</span><span id="line-157"></span><span class="hs-comment">-- ++ likelyChgs ++ unlikelyChgs</span><span>
+</span><span id="line-158"></span><span>
+</span><span id="line-159"></span><span>
+</span><span id="line-160"></span><span class="hs-comment">------------------------------</span><span>
+</span><span id="line-161"></span><span class="hs-comment">-- Section : INTRODUCTION --</span><span>
+</span><span id="line-162"></span><span class="hs-comment">------------------------------</span><span>
+</span><span id="line-163"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#justification"><span class="hs-identifier hs-type">justification</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-164"></span><span id="justification"><span class="annot"><span class="annottext">justification :: Sentence
 </span><a href="Drasil.DblPendulum.Body.html#justification"><span class="hs-identifier hs-var hs-var">justification</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
 forall c. NamedIdea c =&gt; c -&gt; NP
 </span><span class="hs-identifier hs-var">a_</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">pendulum</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">pendulum</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;consists&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.of_`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">mass</span></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-170"></span><span>                            </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span id="line-165"></span><span>                            </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;attached to the end&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.ofA`</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><a href="Drasil.DblPendulum.Concepts.html#rod"><span class="hs-identifier hs-var">rod</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">`S.andIts`</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-operator hs-var">`S.andIts`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;moving curve&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.is`</span></span><span>
-</span><span id="line-171"></span><span>                            </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span id="line-166"></span><span>                            </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;highly sensitive to initial conditions&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">!.</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-operator hs-var">!.</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Therefore&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span>
-</span><span id="line-172"></span><span>                            </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span id="line-167"></span><span>                            </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;it is useful to have a&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">program</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">program</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;to simulate&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">motion</span></span><span>
-</span><span id="line-173"></span><span>                            </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
+</span><span id="line-168"></span><span>                            </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`the_ofThe`</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">pendulum</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">pendulum</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;to exhibit its chaotic characteristics&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">!.</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-174"></span><span>                            </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><span id="line-169"></span><span>                            </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk -&gt; NP
 forall c. NamedIdea c =&gt; c -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
-</span><span class="hs-identifier hs-var">program</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">program</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;documented here is called&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.DblPendulum.Concepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-170"></span><span>
+</span><span id="line-171"></span><span class="hs-comment">-------------------------------</span><span>
+</span><span id="line-172"></span><span class="hs-comment">-- 2.1 : Purpose of Document --</span><span>
+</span><span id="line-173"></span><span class="hs-comment">-------------------------------</span><span>
+</span><span id="line-174"></span><span class="hs-comment">-- Purpose of Document automatically generated in IPurpose</span><span>
 </span><span id="line-175"></span><span>
-</span><span id="line-176"></span><span class="hs-comment">-------------------------------</span><span>
-</span><span id="line-177"></span><span class="hs-comment">-- 2.1 : Purpose of Document --</span><span>
-</span><span id="line-178"></span><span class="hs-comment">-------------------------------</span><span>
-</span><span id="line-179"></span><span class="hs-comment">-- Purpose of Document automatically generated in IPurpose</span><span>
-</span><span id="line-180"></span><span>
-</span><span id="line-181"></span><span class="hs-comment">---------------------------------</span><span>
-</span><span id="line-182"></span><span class="hs-comment">-- 2.2 : Scope of Requirements --</span><span>
-</span><span id="line-183"></span><span class="hs-comment">---------------------------------</span><span>
-</span><span id="line-184"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#scope"><span class="hs-identifier hs-type">scope</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-185"></span><span id="scope"><span class="annot"><span class="annottext">scope :: Sentence
+</span><span id="line-176"></span><span class="hs-comment">---------------------------------</span><span>
+</span><span id="line-177"></span><span class="hs-comment">-- 2.2 : Scope of Requirements --</span><span>
+</span><span id="line-178"></span><span class="hs-comment">---------------------------------</span><span>
+</span><span id="line-179"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#scope"><span class="hs-identifier hs-type">scope</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-180"></span><span id="scope"><span class="annot"><span class="annottext">scope :: Sentence
 </span><a href="Drasil.DblPendulum.Body.html#scope"><span class="hs-identifier hs-var hs-var">scope</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent_</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -773,7 +764,7 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`ofA`</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">twoD</span></span><span class="hs-special">)</span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-186"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
+</span><span id="line-181"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
 </span><span class="hs-identifier hs-var">getAcc</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">twoD</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
@@ -783,69 +774,69 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">problem</span></span><span class="hs-special">,</span><span>
-</span><span id="line-187"></span><span>                   </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span id="line-182"></span><span>                   </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;with various initial conditions&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-188"></span><span>
-</span><span id="line-189"></span><span class="hs-comment">----------------------------------------------</span><span>
-</span><span id="line-190"></span><span class="hs-comment">-- 2.3 : Characteristics of Intended Reader --</span><span>
-</span><span id="line-191"></span><span class="hs-comment">----------------------------------------------</span><span>
-</span><span id="line-192"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#charsOfReader"><span class="hs-identifier hs-type">charsOfReader</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
-</span><span id="line-193"></span><span id="charsOfReader"><span class="annot"><span class="annottext">charsOfReader :: [Sentence]
+</span><span id="line-183"></span><span>
+</span><span id="line-184"></span><span class="hs-comment">----------------------------------------------</span><span>
+</span><span id="line-185"></span><span class="hs-comment">-- 2.3 : Characteristics of Intended Reader --</span><span>
+</span><span id="line-186"></span><span class="hs-comment">----------------------------------------------</span><span>
+</span><span id="line-187"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#charsOfReader"><span class="hs-identifier hs-type">charsOfReader</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-188"></span><span id="charsOfReader"><span class="annot"><span class="annottext">charsOfReader :: [Sentence]
 </span><a href="Drasil.DblPendulum.Body.html#charsOfReader"><span class="hs-identifier hs-var hs-var">charsOfReader</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">undergraduate</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;level 2&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">Doc.physics</span></span><span class="hs-special">,</span><span>
-</span><span id="line-194"></span><span>                 </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+</span><span id="line-189"></span><span>                 </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">undergraduate</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;level 1&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">calculus</span></span><span class="hs-special">,</span><span>
-</span><span id="line-195"></span><span>                 </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+</span><span id="line-190"></span><span>                 </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">ode</span></span><span class="hs-special">]</span><span>
-</span><span id="line-196"></span><span>
-</span><span id="line-197"></span><span class="hs-comment">-------------------------------------</span><span>
-</span><span id="line-198"></span><span class="hs-comment">-- 2.4 : Organization of Documents --</span><span>
-</span><span id="line-199"></span><span class="hs-comment">-------------------------------------</span><span>
-</span><span id="line-200"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#organizationOfDocumentsIntro"><span class="hs-identifier hs-type">organizationOfDocumentsIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-201"></span><span id="organizationOfDocumentsIntro"><span class="annot"><span class="annottext">organizationOfDocumentsIntro :: Sentence
+</span><span id="line-191"></span><span>
+</span><span id="line-192"></span><span class="hs-comment">-------------------------------------</span><span>
+</span><span id="line-193"></span><span class="hs-comment">-- 2.4 : Organization of Documents --</span><span>
+</span><span id="line-194"></span><span class="hs-comment">-------------------------------------</span><span>
+</span><span id="line-195"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#organizationOfDocumentsIntro"><span class="hs-identifier hs-type">organizationOfDocumentsIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-196"></span><span id="organizationOfDocumentsIntro"><span class="annot"><span class="annottext">organizationOfDocumentsIntro :: Sentence
 </span><a href="Drasil.DblPendulum.Body.html#organizationOfDocumentsIntro"><span class="hs-identifier hs-var hs-var">organizationOfDocumentsIntro</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
 </span><span class="hs-identifier hs-var">foldlSent</span></span><span> </span><span>
-</span><span id="line-202"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><span id="line-197"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">atStartNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; NP
 forall c. NamedIdea c =&gt; c -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
-</span><span class="hs-identifier hs-var">organization</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">organization</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;of this&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">document</span></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-203"></span><span>  </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span id="line-198"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;follows the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
-</span><span class="hs-identifier hs-var">template</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">template</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;for an&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 </span><span class="hs-identifier hs-var">getAcc</span></span><span> </span><span class="annot"><span class="annottext">CI
-</span><span class="hs-identifier hs-var">Doc.srs</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">Doc.srs</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;for&quot;</span></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-204"></span><span>  </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+</span><span id="line-199"></span><span>  </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
-</span><span class="hs-identifier hs-var">sciCompS</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">sciCompS</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;proposed by&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Citation -&gt; Sentence
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
@@ -853,54 +844,54 @@ r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">Citation
 </span><span class="hs-identifier hs-var">koothoor2013</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`S.and_`</span></span><span>
-</span><span id="line-205"></span><span>  </span><span class="annot"><span class="annottext">Citation -&gt; Sentence
+</span><span id="line-200"></span><span>  </span><span class="annot"><span class="annottext">Citation -&gt; Sentence
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">Citation
 </span><span class="hs-identifier hs-var">smithLai2005</span></span><span class="hs-special">]</span><span>
-</span><span id="line-206"></span><span>
+</span><span id="line-201"></span><span>
+</span><span id="line-202"></span><span>
+</span><span id="line-203"></span><span class="hs-comment">--------------------------------------------</span><span>
+</span><span id="line-204"></span><span class="hs-comment">-- Section 3: GENERAL SYSTEM DESCRIPTION --</span><span>
+</span><span id="line-205"></span><span class="hs-comment">--------------------------------------------</span><span>
+</span><span id="line-206"></span><span class="hs-comment">-- Description of Genreal System automatically generated in GSDProg</span><span>
 </span><span id="line-207"></span><span>
-</span><span id="line-208"></span><span class="hs-comment">--------------------------------------------</span><span>
-</span><span id="line-209"></span><span class="hs-comment">-- Section 3: GENERAL SYSTEM DESCRIPTION --</span><span>
-</span><span id="line-210"></span><span class="hs-comment">--------------------------------------------</span><span>
-</span><span id="line-211"></span><span class="hs-comment">-- Description of Genreal System automatically generated in GSDProg</span><span>
-</span><span id="line-212"></span><span>
-</span><span id="line-213"></span><span class="hs-comment">--------------------------</span><span>
-</span><span id="line-214"></span><span class="hs-comment">-- 3.1 : System Context --</span><span>
-</span><span id="line-215"></span><span class="hs-comment">--------------------------</span><span>
-</span><span id="line-216"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#sysCtxIntro"><span class="hs-identifier hs-type">sysCtxIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
-</span><span id="line-217"></span><span id="sysCtxIntro"><span class="annot"><span class="annottext">sysCtxIntro :: Contents
+</span><span id="line-208"></span><span class="hs-comment">--------------------------</span><span>
+</span><span id="line-209"></span><span class="hs-comment">-- 3.1 : System Context --</span><span>
+</span><span id="line-210"></span><span class="hs-comment">--------------------------</span><span>
+</span><span id="line-211"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#sysCtxIntro"><span class="hs-identifier hs-type">sysCtxIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
+</span><span id="line-212"></span><span id="sysCtxIntro"><span class="annot"><span class="annottext">sysCtxIntro :: Contents
 </span><a href="Drasil.DblPendulum.Body.html#sysCtxIntro"><span class="hs-identifier hs-var hs-var">sysCtxIntro</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
 </span><span class="hs-identifier hs-var">foldlSP</span></span><span>
-</span><span id="line-218"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">LabelledContent -&gt; Sentence
+</span><span id="line-213"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">LabelledContent -&gt; Sentence
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence
 </span><span class="hs-identifier hs-var">refS</span></span><span> </span><span class="annot"><span class="annottext">LabelledContent
-</span><a href="Drasil.DblPendulum.Figures.html#sysCtxFig1"><span class="hs-identifier hs-var">sysCtxFig1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><a href="Drasil.DblPendulum.Figures.html#sysCtxFig1"><span class="hs-identifier hs-var">sysCtxFig1</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;shows the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">sysCont</span></span><span class="hs-special">,</span><span>
-</span><span id="line-219"></span><span>   </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span id="line-214"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;A circle represents an entity external to the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">software</span></span><span>
-</span><span id="line-220"></span><span>   </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span id="line-215"></span><span>   </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk -&gt; NP
 forall c. NamedIdea c =&gt; c -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
-</span><span class="hs-identifier hs-var">user</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">user</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;in this case. A rectangle represents the&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-221"></span><span>   </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+</span><span id="line-216"></span><span>   </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
-</span><span class="hs-identifier hs-var">softwareSys</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">softwareSys</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;itself&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
 </span><span class="hs-identifier hs-var">sParen</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall c. (Idea c, HasUID c) =&gt; c -&gt; Sentence
@@ -908,47 +899,47 @@ forall c. (Idea c, HasUID c) =&gt; c -&gt; Sentence
 </span><a href="Drasil.DblPendulum.Concepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span class="hs-special">,</span><span>
-</span><span id="line-222"></span><span>   </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span id="line-217"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Arrows are used to show the data flow between the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">system</span></span><span>
-</span><span id="line-223"></span><span>   </span><span class="annot"><span class="annottext">NamedChunk -&gt; NamedChunk -&gt; NP
+</span><span id="line-218"></span><span>   </span><span class="annot"><span class="annottext">NamedChunk -&gt; NamedChunk -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`andIts`</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">environment</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-224"></span><span>
-</span><span id="line-225"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#sysCtxDesc"><span class="hs-identifier hs-type">sysCtxDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
-</span><span id="line-226"></span><span id="sysCtxDesc"><span class="annot"><span class="annottext">sysCtxDesc :: Contents
+</span><span id="line-219"></span><span>
+</span><span id="line-220"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#sysCtxDesc"><span class="hs-identifier hs-type">sysCtxDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
+</span><span id="line-221"></span><span id="sysCtxDesc"><span class="annot"><span class="annottext">sysCtxDesc :: Contents
 </span><a href="Drasil.DblPendulum.Body.html#sysCtxDesc"><span class="hs-identifier hs-var hs-var">sysCtxDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
-</span><span class="hs-identifier hs-var">foldlSPCol</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSPCol</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The interaction between the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">product_</span></span><span>
-</span><span id="line-227"></span><span>   </span><span class="annot"><span class="annottext">NamedChunk -&gt; NamedChunk -&gt; NP
+</span><span id="line-222"></span><span>   </span><span class="annot"><span class="annottext">NamedChunk -&gt; NamedChunk -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`andThe`</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
-</span><span class="hs-identifier hs-var">user</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">user</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is through an application programming&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span>
-</span><span id="line-228"></span><span>   </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+</span><span id="line-223"></span><span>   </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
-</span><span class="hs-identifier hs-var">interface</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">interface</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The responsibilities of the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">user</span></span><span> </span><span>
-</span><span id="line-229"></span><span>   </span><span class="annot"><span class="annottext">NamedChunk -&gt; NamedChunk -&gt; NP
+</span><span id="line-224"></span><span>   </span><span class="annot"><span class="annottext">NamedChunk -&gt; NamedChunk -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`andThe`</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
-</span><span class="hs-identifier hs-var">system</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">system</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;are as follows&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-230"></span><span>
-</span><span id="line-231"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#sysCtxUsrResp"><span class="hs-identifier hs-type">sysCtxUsrResp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
-</span><span id="line-232"></span><span id="sysCtxUsrResp"><span class="annot"><span class="annottext">sysCtxUsrResp :: [Sentence]
-</span><a href="Drasil.DblPendulum.Body.html#sysCtxUsrResp"><span class="hs-identifier hs-var hs-var">sysCtxUsrResp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span id="line-225"></span><span>
+</span><span id="line-226"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#sysCtxUsrResp"><span class="hs-identifier hs-type">sysCtxUsrResp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-227"></span><span id="sysCtxUsrResp"><span class="annot"><span class="annottext">sysCtxUsrResp :: [Sentence]
+</span><a href="Drasil.DblPendulum.Body.html#sysCtxUsrResp"><span class="hs-identifier hs-var hs-var">sysCtxUsrResp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Provide initial&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -956,37 +947,37 @@ forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">condition</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; NamedChunk -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`ofThePS`</span></span><span>
-</span><span id="line-233"></span><span>  </span><span class="annot"><span class="annottext">NamedChunk
+</span><span id="line-228"></span><span>  </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">physical</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;state of the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">motion</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;and the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">inDatum</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;related to the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-234"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+</span><span id="line-229"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.DblPendulum.Concepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-operator hs-var">`sC`</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;ensuring no errors in the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-235"></span><span>  </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+</span><span id="line-230"></span><span>  </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">datum</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;entry&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-236"></span><span>  </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span id="line-231"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Ensure that consistent units are used for&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
@@ -995,10 +986,10 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-identifier hs-var">combineNINI</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">input_</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">Doc.variable</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-237"></span><span>  </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span id="line-232"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Ensure required&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-238"></span><span>  </span><span class="annot"><span class="annottext">Section -&gt; Sentence -&gt; Sentence
+</span><span id="line-233"></span><span>  </span><span class="annot"><span class="annottext">Section -&gt; Sentence -&gt; Sentence
 forall r.
 (HasUID r, HasRefAddress r, HasShortName r) =&gt;
 r -&gt; Sentence -&gt; Sentence
@@ -1012,77 +1003,77 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">assumption</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-239"></span><span>  </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span id="line-234"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;are appropriate for any particular&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-240"></span><span>  </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+</span><span id="line-235"></span><span>  </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">problem</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;input to the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">software</span></span><span class="hs-special">]</span><span>
-</span><span id="line-241"></span><span>
-</span><span id="line-242"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#sysCtxSysResp"><span class="hs-identifier hs-type">sysCtxSysResp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
-</span><span id="line-243"></span><span id="sysCtxSysResp"><span class="annot"><span class="annottext">sysCtxSysResp :: [Sentence]
-</span><a href="Drasil.DblPendulum.Body.html#sysCtxSysResp"><span class="hs-identifier hs-var hs-var">sysCtxSysResp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span id="line-236"></span><span>
+</span><span id="line-237"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#sysCtxSysResp"><span class="hs-identifier hs-type">sysCtxSysResp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-238"></span><span id="sysCtxSysResp"><span class="annot"><span class="annottext">sysCtxSysResp :: [Sentence]
+</span><a href="Drasil.DblPendulum.Body.html#sysCtxSysResp"><span class="hs-identifier hs-var hs-var">sysCtxSysResp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Detect data type mismatch, such as a string of characters&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span>
-</span><span id="line-244"></span><span>  </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+</span><span id="line-239"></span><span>  </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">input_</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;instead of a floating point number&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-245"></span><span>  </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span id="line-240"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Determine if the&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">input_</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;satisfy the required&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span>
-</span><span id="line-246"></span><span>  </span><span class="annot"><span class="annottext">NP -&gt; Sentence
+</span><span id="line-241"></span><span>  </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">pluralNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">physical</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; NamedChunk -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`and_`</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">softwareConstraint</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span>
-</span><span id="line-247"></span><span>  </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span id="line-242"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Calculate the required&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">output_</span></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-248"></span><span>  </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span id="line-243"></span><span>  </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Generate the required&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
 </span><span class="hs-operator hs-var">+:+.</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">graph</span></span><span class="hs-special">]</span><span>
-</span><span id="line-249"></span><span>
-</span><span id="line-250"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#sysCtxResp"><span class="hs-identifier hs-type">sysCtxResp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
-</span><span id="line-251"></span><span id="sysCtxResp"><span class="annot"><span class="annottext">sysCtxResp :: [Sentence]
+</span><span id="line-244"></span><span>
+</span><span id="line-245"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#sysCtxResp"><span class="hs-identifier hs-type">sysCtxResp</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-246"></span><span id="sysCtxResp"><span class="annot"><span class="annottext">sysCtxResp :: [Sentence]
 </span><a href="Drasil.DblPendulum.Body.html#sysCtxResp"><span class="hs-identifier hs-var hs-var">sysCtxResp</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
 forall n. NamedIdea n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">titleize</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">user</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Responsibilities&quot;</span></span><span class="hs-special">,</span><span>
-</span><span id="line-252"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; Sentence
+</span><span id="line-247"></span><span>  </span><span class="annot"><span class="annottext">CI -&gt; Sentence
 forall c. (Idea c, HasUID c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.DblPendulum.Concepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
-</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Responsibilities&quot;</span></span><span class="hs-special">]</span><span>
-</span><span id="line-253"></span><span>
-</span><span id="line-254"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#sysCtxList"><span class="hs-identifier hs-type">sysCtxList</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
-</span><span id="line-255"></span><span id="sysCtxList"><span class="annot"><span class="annottext">sysCtxList :: Contents
+</span><span id="line-248"></span><span>
+</span><span id="line-249"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#sysCtxList"><span class="hs-identifier hs-type">sysCtxList</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
+</span><span id="line-250"></span><span id="sysCtxList"><span class="annot"><span class="annottext">sysCtxList :: Contents
 </span><a href="Drasil.DblPendulum.Body.html#sysCtxList"><span class="hs-identifier hs-var hs-var">sysCtxList</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">UnlabelledContent -&gt; Contents
 </span><span class="hs-identifier hs-var">UlC</span></span><span> </span><span class="annot"><span class="annottext">(UnlabelledContent -&gt; Contents) -&gt; UnlabelledContent -&gt; Contents
 forall a b. (a -&gt; b) -&gt; a -&gt; b
@@ -1098,21 +1089,21 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="Drasil.DblPendulum.Body.html#sysCtxResp"><span class="hs-identifier hs-var">sysCtxResp</span></a></span><span> </span><span class="annot"><span class="annottext">([ListType] -&gt; ListType) -&gt; [ListType] -&gt; ListType
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span>
-</span><span id="line-256"></span><span>  </span><span class="annot"><span class="annottext">([Sentence] -&gt; ListType) -&gt; [[Sentence]] -&gt; [ListType]
+</span><span id="line-251"></span><span>  </span><span class="annot"><span class="annottext">([Sentence] -&gt; ListType) -&gt; [[Sentence]] -&gt; [ListType]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; ListType
 </span><span class="hs-identifier hs-var">bulletFlat</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Drasil.DblPendulum.Body.html#sysCtxUsrResp"><span class="hs-identifier hs-var">sysCtxUsrResp</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[Sentence]
 </span><a href="Drasil.DblPendulum.Body.html#sysCtxSysResp"><span class="hs-identifier hs-var">sysCtxSysResp</span></a></span><span class="hs-special">]</span><span>
-</span><span id="line-257"></span><span>
-</span><span id="line-258"></span><span class="hs-comment">--------------------------------</span><span>
-</span><span id="line-259"></span><span class="hs-comment">-- 3.2 : User Characteristics --</span><span>
-</span><span id="line-260"></span><span class="hs-comment">--------------------------------</span><span>
-</span><span id="line-261"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#userCharacteristicsIntro"><span class="hs-identifier hs-type">userCharacteristicsIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
-</span><span id="line-262"></span><span id="userCharacteristicsIntro"><span class="annot"><span class="annottext">userCharacteristicsIntro :: Contents
+</span><span id="line-252"></span><span>
+</span><span id="line-253"></span><span class="hs-comment">--------------------------------</span><span>
+</span><span id="line-254"></span><span class="hs-comment">-- 3.2 : User Characteristics --</span><span>
+</span><span id="line-255"></span><span class="hs-comment">--------------------------------</span><span>
+</span><span id="line-256"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#userCharacteristicsIntro"><span class="hs-identifier hs-type">userCharacteristicsIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
+</span><span id="line-257"></span><span id="userCharacteristicsIntro"><span class="annot"><span class="annottext">userCharacteristicsIntro :: Contents
 </span><a href="Drasil.DblPendulum.Body.html#userCharacteristicsIntro"><span class="hs-identifier hs-var hs-var">userCharacteristicsIntro</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Contents
 </span><span class="hs-identifier hs-var">foldlSP</span></span><span>
-</span><span id="line-263"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span id="line-258"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
@@ -1121,9 +1112,9 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 forall c. (Idea c, HasUID c) =&gt; c -&gt; Sentence
 </span><span class="hs-identifier hs-var">short</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><a href="Drasil.DblPendulum.Concepts.html#progName"><span class="hs-identifier hs-var">progName</span></a></span><span class="hs-special">,</span><span>
-</span><span id="line-264"></span><span>   </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span id="line-259"></span><span>   </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;should have an understanding of&quot;</span></span><span class="hs-special">,</span><span> </span><span>
-</span><span id="line-265"></span><span>   </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
+</span><span id="line-260"></span><span>   </span><span class="annot"><span class="annottext">NamedChunk -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phrase</span></span><span> </span><span class="annot"><span class="annottext">NamedChunk
 </span><span class="hs-identifier hs-var">highSchoolPhysics</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
@@ -1135,56 +1126,56 @@ forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 forall n. (HasUID n, NamedIdea n) =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">plural</span></span><span> </span><span class="annot"><span class="annottext">CI
 </span><span class="hs-identifier hs-var">ode</span></span><span class="hs-special">]</span><span>
+</span><span id="line-261"></span><span>
+</span><span id="line-262"></span><span class="hs-comment">-------------------------------</span><span>
+</span><span id="line-263"></span><span class="hs-comment">-- 3.3 : System Constraints  --</span><span>
+</span><span id="line-264"></span><span class="hs-comment">-------------------------------</span><span>
+</span><span id="line-265"></span><span class="hs-comment">-- System Constraints automatically generated in SystCons</span><span>
 </span><span id="line-266"></span><span>
-</span><span id="line-267"></span><span class="hs-comment">-------------------------------</span><span>
-</span><span id="line-268"></span><span class="hs-comment">-- 3.3 : System Constraints  --</span><span>
-</span><span id="line-269"></span><span class="hs-comment">-------------------------------</span><span>
-</span><span id="line-270"></span><span class="hs-comment">-- System Constraints automatically generated in SystCons</span><span>
-</span><span id="line-271"></span><span>
+</span><span id="line-267"></span><span>
+</span><span id="line-268"></span><span class="hs-comment">--------------------------------------------</span><span>
+</span><span id="line-269"></span><span class="hs-comment">-- Section 4: Specific System Description --</span><span>
+</span><span id="line-270"></span><span class="hs-comment">--------------------------------------------</span><span>
+</span><span id="line-271"></span><span class="hs-comment">-- Description of Specific System automatically generated in SSDProg</span><span>
 </span><span id="line-272"></span><span>
-</span><span id="line-273"></span><span class="hs-comment">--------------------------------------------</span><span>
-</span><span id="line-274"></span><span class="hs-comment">-- Section 4: Specific System Description --</span><span>
-</span><span id="line-275"></span><span class="hs-comment">--------------------------------------------</span><span>
-</span><span id="line-276"></span><span class="hs-comment">-- Description of Specific System automatically generated in SSDProg</span><span>
-</span><span id="line-277"></span><span>
-</span><span id="line-278"></span><span class="hs-comment">-------------------------------</span><span>
-</span><span id="line-279"></span><span class="hs-comment">-- 4.1 : System Constraints  --</span><span>
-</span><span id="line-280"></span><span class="hs-comment">-------------------------------</span><span>
-</span><span id="line-281"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#prob"><span class="hs-identifier hs-type">prob</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
-</span><span id="line-282"></span><span id="prob"><span class="annot"><span class="annottext">prob :: Sentence
+</span><span id="line-273"></span><span class="hs-comment">-------------------------------</span><span>
+</span><span id="line-274"></span><span class="hs-comment">-- 4.1 : System Constraints  --</span><span>
+</span><span id="line-275"></span><span class="hs-comment">-------------------------------</span><span>
+</span><span id="line-276"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#prob"><span class="hs-identifier hs-type">prob</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-277"></span><span id="prob"><span class="annot"><span class="annottext">prob :: Sentence
 </span><a href="Drasil.DblPendulum.Body.html#prob"><span class="hs-identifier hs-var hs-var">prob</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; Sentence
-</span><span class="hs-identifier hs-var">foldlSent_</span></span><span> </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">foldlSent_</span></span><span> </span><span class="hs-special">[</span><span> </span><span class="annot"><span class="annottext">String -&gt; Sentence
 </span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;efficiently and correctly to predict the&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">NP -&gt; Sentence
 forall n. NounPhrase n =&gt; n -&gt; Sentence
 </span><span class="hs-identifier hs-var">phraseNP</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">motion</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk -&gt; ConceptChunk -&gt; NP
 forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; NP
 </span><span class="hs-operator hs-var">`ofA`</span></span><span>  </span><span>
-</span><span id="line-283"></span><span>                   </span><span class="annot"><span class="annottext">ConceptChunk
+</span><span id="line-278"></span><span>                   </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">pendulum</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
-</span><span id="line-284"></span><span>
-</span><span id="line-285"></span><span class="hs-comment">---------------------------------</span><span>
-</span><span id="line-286"></span><span class="hs-comment">-- 4.1.1 Terminology and Definitions --</span><span>
-</span><span id="line-287"></span><span class="hs-comment">---------------------------------</span><span>
-</span><span id="line-288"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#terms"><span class="hs-identifier hs-type">terms</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span>
-</span><span id="line-289"></span><span id="terms"><span class="annot"><span class="annottext">terms :: [ConceptChunk]
+</span><span id="line-279"></span><span>
+</span><span id="line-280"></span><span class="hs-comment">---------------------------------</span><span>
+</span><span id="line-281"></span><span class="hs-comment">-- 4.1.1 Terminology and Definitions --</span><span>
+</span><span id="line-282"></span><span class="hs-comment">---------------------------------</span><span>
+</span><span id="line-283"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#terms"><span class="hs-identifier hs-type">terms</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ConceptChunk</span></span><span class="hs-special">]</span><span>
+</span><span id="line-284"></span><span id="terms"><span class="annot"><span class="annottext">terms :: [ConceptChunk]
 </span><a href="Drasil.DblPendulum.Body.html#terms"><span class="hs-identifier hs-var hs-var">terms</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">gravity</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">cartesian</span></span><span class="hs-special">]</span><span>
-</span><span id="line-290"></span><span>
-</span><span id="line-291"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#tMods"><span class="hs-identifier hs-type">tMods</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">TheoryModel</span></span><span class="hs-special">]</span><span>
-</span><span id="line-292"></span><span id="tMods"><span class="annot"><span class="annottext">tMods :: [TheoryModel]
+</span><span id="line-285"></span><span>
+</span><span id="line-286"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#tMods"><span class="hs-identifier hs-type">tMods</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">TheoryModel</span></span><span class="hs-special">]</span><span>
+</span><span id="line-287"></span><span id="tMods"><span class="annot"><span class="annottext">tMods :: [TheoryModel]
 </span><a href="Drasil.DblPendulum.Body.html#tMods"><span class="hs-identifier hs-var hs-var">tMods</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TheoryModel
 </span><span class="hs-identifier hs-var">accelerationTM</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TheoryModel
 </span><span class="hs-identifier hs-var">velocityTM</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TheoryModel
 </span><span class="hs-identifier hs-var">newtonSL</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">TheoryModel
 </span><span class="hs-identifier hs-var">newtonSLR</span></span><span class="hs-special">]</span><span>
-</span><span id="line-293"></span><span>
-</span><span id="line-294"></span><span class="hs-comment">-----------------------------------</span><span>
-</span><span id="line-295"></span><span class="hs-comment">-- 4.1.2 Physical System Description --</span><span>
-</span><span id="line-296"></span><span class="hs-comment">-----------------------------------</span><span>
-</span><span id="line-297"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#physSystParts"><span class="hs-identifier hs-type">physSystParts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
-</span><span id="line-298"></span><span id="physSystParts"><span class="annot"><span class="annottext">physSystParts :: [Sentence]
+</span><span id="line-288"></span><span>
+</span><span id="line-289"></span><span class="hs-comment">-----------------------------------</span><span>
+</span><span id="line-290"></span><span class="hs-comment">-- 4.1.2 Physical System Description --</span><span>
+</span><span id="line-291"></span><span class="hs-comment">-----------------------------------</span><span>
+</span><span id="line-292"></span><span class="annot"><a href="Drasil.DblPendulum.Body.html#physSystParts"><span class="hs-identifier hs-type">physSystParts</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-293"></span><span id="physSystParts"><span class="annot"><span class="annottext">physSystParts :: [Sentence]
 </span><a href="Drasil.DblPendulum.Body.html#physSystParts"><span class="hs-identifier hs-var hs-var">physSystParts</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(NP -&gt; Sentence) -&gt; [NP] -&gt; [Sentence]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; Sentence
@@ -1199,80 +1190,80 @@ forall c. NamedIdea c =&gt; c -&gt; NP
 forall c. NamedIdea c =&gt; c -&gt; NP
 </span><span class="hs-identifier hs-var">the</span></span><span> </span><span class="annot"><span class="annottext">ConceptChunk
 </span><span class="hs-identifier hs-var">mass</span></span><span class="hs-special">]</span><span>
-</span><span id="line-299"></span><span>
-</span><span id="line-300"></span><span class="hs-comment">-----------------------------</span><span>
-</span><span id="line-301"></span><span class="hs-comment">-- 4.1.3 : Goal Statements --</span><span>
-</span><span id="line-302"></span><span class="hs-comment">-----------------------------</span><span>
-</span><span id="line-303"></span><span>
-</span><span id="line-304"></span><span class="hs-comment">--------------------------------------------------</span><span>
-</span><span id="line-305"></span><span class="hs-comment">-- 4.2 : Solution Characteristics Specification --</span><span>
-</span><span id="line-306"></span><span class="hs-comment">--------------------------------------------------</span><span>
+</span><span id="line-294"></span><span>
+</span><span id="line-295"></span><span class="hs-comment">-----------------------------</span><span>
+</span><span id="line-296"></span><span class="hs-comment">-- 4.1.3 : Goal Statements --</span><span>
+</span><span id="line-297"></span><span class="hs-comment">-----------------------------</span><span>
+</span><span id="line-298"></span><span>
+</span><span id="line-299"></span><span class="hs-comment">--------------------------------------------------</span><span>
+</span><span id="line-300"></span><span class="hs-comment">-- 4.2 : Solution Characteristics Specification --</span><span>
+</span><span id="line-301"></span><span class="hs-comment">--------------------------------------------------</span><span>
+</span><span id="line-302"></span><span>
+</span><span id="line-303"></span><span class="hs-comment">-------------------------</span><span>
+</span><span id="line-304"></span><span class="hs-comment">-- 4.2.1 : Assumptions --</span><span>
+</span><span id="line-305"></span><span class="hs-comment">-------------------------</span><span>
+</span><span id="line-306"></span><span class="hs-comment">-- Assumptions defined in Assumptions</span><span>
 </span><span id="line-307"></span><span>
-</span><span id="line-308"></span><span class="hs-comment">-------------------------</span><span>
-</span><span id="line-309"></span><span class="hs-comment">-- 4.2.1 : Assumptions --</span><span>
-</span><span id="line-310"></span><span class="hs-comment">-------------------------</span><span>
-</span><span id="line-311"></span><span class="hs-comment">-- Assumptions defined in Assumptions</span><span>
+</span><span id="line-308"></span><span class="hs-comment">--------------------------------</span><span>
+</span><span id="line-309"></span><span class="hs-comment">-- 4.2.2 : Theoretical Models --</span><span>
+</span><span id="line-310"></span><span class="hs-comment">--------------------------------</span><span>
+</span><span id="line-311"></span><span class="hs-comment">-- Theoretical Models defined in TMs</span><span>
 </span><span id="line-312"></span><span>
-</span><span id="line-313"></span><span class="hs-comment">--------------------------------</span><span>
-</span><span id="line-314"></span><span class="hs-comment">-- 4.2.2 : Theoretical Models --</span><span>
-</span><span id="line-315"></span><span class="hs-comment">--------------------------------</span><span>
-</span><span id="line-316"></span><span class="hs-comment">-- Theoretical Models defined in TMs</span><span>
+</span><span id="line-313"></span><span class="hs-comment">---------------------------------</span><span>
+</span><span id="line-314"></span><span class="hs-comment">-- 4.2.3 : General Definitions --</span><span>
+</span><span id="line-315"></span><span class="hs-comment">---------------------------------</span><span>
+</span><span id="line-316"></span><span class="hs-comment">-- General Definitions defined in GDs</span><span>
 </span><span id="line-317"></span><span>
-</span><span id="line-318"></span><span class="hs-comment">---------------------------------</span><span>
-</span><span id="line-319"></span><span class="hs-comment">-- 4.2.3 : General Definitions --</span><span>
-</span><span id="line-320"></span><span class="hs-comment">---------------------------------</span><span>
-</span><span id="line-321"></span><span class="hs-comment">-- General Definitions defined in GDs</span><span>
+</span><span id="line-318"></span><span class="hs-comment">------------------------------</span><span>
+</span><span id="line-319"></span><span class="hs-comment">-- 4.2.4 : Data Definitions --</span><span>
+</span><span id="line-320"></span><span class="hs-comment">------------------------------</span><span>
+</span><span id="line-321"></span><span class="hs-comment">-- Data Definitions defined in DDs</span><span>
 </span><span id="line-322"></span><span>
-</span><span id="line-323"></span><span class="hs-comment">------------------------------</span><span>
-</span><span id="line-324"></span><span class="hs-comment">-- 4.2.4 : Data Definitions --</span><span>
-</span><span id="line-325"></span><span class="hs-comment">------------------------------</span><span>
-</span><span id="line-326"></span><span class="hs-comment">-- Data Definitions defined in DDs</span><span>
+</span><span id="line-323"></span><span class="hs-comment">-----------------------------</span><span>
+</span><span id="line-324"></span><span class="hs-comment">-- 4.2.5 : Instance Models --</span><span>
+</span><span id="line-325"></span><span class="hs-comment">-----------------------------</span><span>
+</span><span id="line-326"></span><span class="hs-comment">-- Instance Models defined in IMs</span><span>
 </span><span id="line-327"></span><span>
 </span><span id="line-328"></span><span class="hs-comment">-----------------------------</span><span>
-</span><span id="line-329"></span><span class="hs-comment">-- 4.2.5 : Instance Models --</span><span>
+</span><span id="line-329"></span><span class="hs-comment">-- 4.2.6 : Data Constraints --</span><span>
 </span><span id="line-330"></span><span class="hs-comment">-----------------------------</span><span>
-</span><span id="line-331"></span><span class="hs-comment">-- Instance Models defined in IMs</span><span>
+</span><span id="line-331"></span><span class="hs-comment">-- Data Constraints defined in Constraints</span><span>
 </span><span id="line-332"></span><span>
 </span><span id="line-333"></span><span class="hs-comment">-----------------------------</span><span>
-</span><span id="line-334"></span><span class="hs-comment">-- 4.2.6 : Data Constraints --</span><span>
+</span><span id="line-334"></span><span class="hs-comment">-- 4.2.7 : Properties of a Correct Solution --</span><span>
 </span><span id="line-335"></span><span class="hs-comment">-----------------------------</span><span>
-</span><span id="line-336"></span><span class="hs-comment">-- Data Constraints defined in Constraints</span><span>
+</span><span id="line-336"></span><span class="hs-comment">-- Properties of a Correct Solution defined in CorrSolnPpties</span><span>
 </span><span id="line-337"></span><span>
-</span><span id="line-338"></span><span class="hs-comment">-----------------------------</span><span>
-</span><span id="line-339"></span><span class="hs-comment">-- 4.2.7 : Properties of a Correct Solution --</span><span>
-</span><span id="line-340"></span><span class="hs-comment">-----------------------------</span><span>
-</span><span id="line-341"></span><span class="hs-comment">-- Properties of a Correct Solution defined in CorrSolnPpties</span><span>
+</span><span id="line-338"></span><span class="hs-comment">------------------------------</span><span>
+</span><span id="line-339"></span><span class="hs-comment">-- SECTION 5 : REQUIREMENTS --</span><span>
+</span><span id="line-340"></span><span class="hs-comment">------------------------------</span><span>
+</span><span id="line-341"></span><span class="hs-comment">-- in Requirements.hs</span><span>
 </span><span id="line-342"></span><span>
-</span><span id="line-343"></span><span class="hs-comment">------------------------------</span><span>
-</span><span id="line-344"></span><span class="hs-comment">-- SECTION 5 : REQUIREMENTS --</span><span>
-</span><span id="line-345"></span><span class="hs-comment">------------------------------</span><span>
-</span><span id="line-346"></span><span class="hs-comment">-- in Requirements.hs</span><span>
-</span><span id="line-347"></span><span>
-</span><span id="line-348"></span><span class="hs-comment">-----------------------------------</span><span>
-</span><span id="line-349"></span><span class="hs-comment">-- 5.1 : Functional Requirements --</span><span>
-</span><span id="line-350"></span><span class="hs-comment">-----------------------------------</span><span>
-</span><span id="line-351"></span><span>
-</span><span id="line-352"></span><span class="hs-comment">--------------------------------------</span><span>
-</span><span id="line-353"></span><span class="hs-comment">-- 5.2 : Nonfunctional Requirements --</span><span>
-</span><span id="line-354"></span><span class="hs-comment">--------------------------------------</span><span>
-</span><span id="line-355"></span><span>
-</span><span id="line-356"></span><span class="hs-comment">--------------------------------</span><span>
-</span><span id="line-357"></span><span class="hs-comment">-- SECTION 6 : LIKELY CHANGES --</span><span>
-</span><span id="line-358"></span><span class="hs-comment">--------------------------------</span><span>
-</span><span id="line-359"></span><span>
-</span><span id="line-360"></span><span class="hs-comment">--------------------------------</span><span>
-</span><span id="line-361"></span><span class="hs-comment">-- SECTION 6b : UNLIKELY CHANGES --</span><span>
-</span><span id="line-362"></span><span class="hs-comment">--------------------------------</span><span>
-</span><span id="line-363"></span><span>
-</span><span id="line-364"></span><span class="hs-comment">--------------------------------------------------</span><span>
-</span><span id="line-365"></span><span class="hs-comment">-- Section 7 : TRACEABILITY MATRICES AND GRAPHS --</span><span>
-</span><span id="line-366"></span><span class="hs-comment">--------------------------------------------------</span><span>
-</span><span id="line-367"></span><span>
-</span><span id="line-368"></span><span class="hs-comment">-------------------------------------------------</span><span>
-</span><span id="line-369"></span><span class="hs-comment">-- Section 8 :  Specification Parameter Values --</span><span>
-</span><span id="line-370"></span><span class="hs-comment">-------------------------------------------------</span><span>
-</span><span id="line-371"></span><span>
-</span><span id="line-372"></span><span class="hs-comment">----------------------------</span><span>
-</span><span id="line-373"></span><span class="hs-comment">-- Section 9 : References --</span><span>
-</span><span id="line-374"></span><span class="hs-comment">----------------------------</span><span>
-</span><span id="line-375"></span></pre></body></html>
+</span><span id="line-343"></span><span class="hs-comment">-----------------------------------</span><span>
+</span><span id="line-344"></span><span class="hs-comment">-- 5.1 : Functional Requirements --</span><span>
+</span><span id="line-345"></span><span class="hs-comment">-----------------------------------</span><span>
+</span><span id="line-346"></span><span>
+</span><span id="line-347"></span><span class="hs-comment">--------------------------------------</span><span>
+</span><span id="line-348"></span><span class="hs-comment">-- 5.2 : Nonfunctional Requirements --</span><span>
+</span><span id="line-349"></span><span class="hs-comment">--------------------------------------</span><span>
+</span><span id="line-350"></span><span>
+</span><span id="line-351"></span><span class="hs-comment">--------------------------------</span><span>
+</span><span id="line-352"></span><span class="hs-comment">-- SECTION 6 : LIKELY CHANGES --</span><span>
+</span><span id="line-353"></span><span class="hs-comment">--------------------------------</span><span>
+</span><span id="line-354"></span><span>
+</span><span id="line-355"></span><span class="hs-comment">--------------------------------</span><span>
+</span><span id="line-356"></span><span class="hs-comment">-- SECTION 6b : UNLIKELY CHANGES --</span><span>
+</span><span id="line-357"></span><span class="hs-comment">--------------------------------</span><span>
+</span><span id="line-358"></span><span>
+</span><span id="line-359"></span><span class="hs-comment">--------------------------------------------------</span><span>
+</span><span id="line-360"></span><span class="hs-comment">-- Section 7 : TRACEABILITY MATRICES AND GRAPHS --</span><span>
+</span><span id="line-361"></span><span class="hs-comment">--------------------------------------------------</span><span>
+</span><span id="line-362"></span><span>
+</span><span id="line-363"></span><span class="hs-comment">-------------------------------------------------</span><span>
+</span><span id="line-364"></span><span class="hs-comment">-- Section 8 :  Specification Parameter Values --</span><span>
+</span><span id="line-365"></span><span class="hs-comment">-------------------------------------------------</span><span>
+</span><span id="line-366"></span><span>
+</span><span id="line-367"></span><span class="hs-comment">----------------------------</span><span>
+</span><span id="line-368"></span><span class="hs-comment">-- Section 9 : References --</span><span>
+</span><span id="line-369"></span><span class="hs-comment">----------------------------</span><span>
+</span><span id="line-370"></span></pre></body></html>

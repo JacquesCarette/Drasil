@@ -18,7 +18,7 @@
 </span><span id="line-18"></span><span>
 </span><span id="line-19"></span><span class="hs-comment">-- | Finds the code name of a 'CodeChunk'.</span><span>
 </span><span id="line-20"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeIdea</span></span><span>    </span><span class="annot"><span class="hs-identifier hs-type">CodeChunk</span></span><span> </span><span class="hs-keyword">where</span><span>
-</span><span id="line-21"></span><span>  </span><span id="local-6989586621679321402"><span class="annot"><span class="annottext">codeName :: CodeChunk -&gt; String
+</span><span id="line-21"></span><span>  </span><span id="local-6989586621679321395"><span class="annot"><span class="annottext">codeName :: CodeChunk -&gt; String
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">codeName</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Doc -&gt; String
 </span><span class="hs-identifier hs-var">render</span></span><span> </span><span class="annot"><span class="annottext">(Doc -&gt; String) -&gt; (CodeChunk -&gt; Doc) -&gt; CodeChunk -&gt; String
 forall b c a. (b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; c
@@ -36,15 +36,15 @@ forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
 </span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting QuantityDict CodeChunk QuantityDict
 Lens' CodeChunk QuantityDict
 </span><span class="hs-identifier hs-var">qc</span></span><span>
-</span><span id="line-22"></span><span>  </span><span id="local-6989586621679321398"><span class="annot"><span class="annottext">codeChunk :: CodeChunk -&gt; CodeChunk
+</span><span id="line-22"></span><span>  </span><span id="local-6989586621679321391"><span class="annot"><span class="annottext">codeChunk :: CodeChunk -&gt; CodeChunk
 </span><span class="hs-identifier hs-var hs-var hs-var hs-var">codeChunk</span></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeChunk -&gt; CodeChunk
 forall a. a -&gt; a
 </span><span class="hs-identifier hs-var">id</span></span><span>
 </span><span id="line-23"></span><span>
 </span><span id="line-24"></span><span class="hs-comment">-- | Finds the code name and 'CodeChunk' within a 'CodeVarChunk'.</span><span>
 </span><span id="line-25"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeIdea</span></span><span>    </span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span> </span><span class="hs-keyword">where</span><span> </span><span>
-</span><span id="line-26"></span><span>  </span><span id="local-6989586621679321393"><span class="annot"><span class="annottext">codeName :: CodeVarChunk -&gt; String
-</span><a href="#local-6989586621679321393"><span class="hs-identifier hs-var hs-var hs-var hs-var">codeName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeChunk -&gt; String
+</span><span id="line-26"></span><span>  </span><span id="local-6989586621679321386"><span class="annot"><span class="annottext">codeName :: CodeVarChunk -&gt; String
+</span><a href="#local-6989586621679321386"><span class="hs-identifier hs-var hs-var hs-var hs-var">codeName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeChunk -&gt; String
 forall c. CodeIdea c =&gt; c -&gt; String
 </span><span class="hs-identifier hs-var">codeName</span></span><span> </span><span class="annot"><span class="annottext">(CodeChunk -&gt; String)
 -&gt; (CodeVarChunk -&gt; CodeChunk) -&gt; CodeVarChunk -&gt; String
@@ -55,9 +55,9 @@ forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
 </span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting CodeChunk CodeVarChunk CodeChunk
 Lens' CodeVarChunk CodeChunk
 </span><span class="hs-identifier hs-var">ccv</span></span><span>
-</span><span id="line-27"></span><span>  </span><span id="local-6989586621679321391"><span class="annot"><span class="annottext">codeChunk :: CodeVarChunk -&gt; CodeChunk
-</span><a href="#local-6989586621679321391"><span class="hs-identifier hs-var hs-var hs-var hs-var">codeChunk</span></a></span></span><span> </span><span id="local-6989586621679321390"><span class="annot"><span class="annottext">c :: CodeVarChunk
-</span><a href="#local-6989586621679321390"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; VarOrFunc -&gt; CodeChunk
+</span><span id="line-27"></span><span>  </span><span id="local-6989586621679321384"><span class="annot"><span class="annottext">codeChunk :: CodeVarChunk -&gt; CodeChunk
+</span><a href="#local-6989586621679321384"><span class="hs-identifier hs-var hs-var hs-var hs-var">codeChunk</span></a></span></span><span> </span><span id="local-6989586621679321383"><span class="annot"><span class="annottext">c :: CodeVarChunk
+</span><a href="#local-6989586621679321383"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; VarOrFunc -&gt; CodeChunk
 </span><span class="hs-identifier hs-var">CodeC</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Getting QuantityDict CodeChunk QuantityDict
 -&gt; CodeChunk -&gt; QuantityDict
 forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
@@ -71,13 +71,13 @@ forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
 </span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting CodeChunk CodeVarChunk CodeChunk
 Lens' CodeVarChunk CodeChunk
 </span><span class="hs-identifier hs-var">ccv</span></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679321390"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">VarOrFunc
+</span><a href="#local-6989586621679321383"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">VarOrFunc
 </span><span class="hs-identifier hs-var">Var</span></span><span>
 </span><span id="line-28"></span><span>
 </span><span id="line-29"></span><span class="hs-comment">-- | Finds the code name and 'CodeChunk' within a 'CodeFuncChunk'.</span><span>
 </span><span id="line-30"></span><span class="hs-keyword">instance</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeIdea</span></span><span>    </span><span class="annot"><span class="hs-identifier hs-type">CodeFuncChunk</span></span><span> </span><span class="hs-keyword">where</span><span> </span><span>
-</span><span id="line-31"></span><span>  </span><span id="local-6989586621679321385"><span class="annot"><span class="annottext">codeName :: CodeFuncChunk -&gt; String
-</span><a href="#local-6989586621679321385"><span class="hs-identifier hs-var hs-var hs-var hs-var">codeName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeChunk -&gt; String
+</span><span id="line-31"></span><span>  </span><span id="local-6989586621679321378"><span class="annot"><span class="annottext">codeName :: CodeFuncChunk -&gt; String
+</span><a href="#local-6989586621679321378"><span class="hs-identifier hs-var hs-var hs-var hs-var">codeName</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeChunk -&gt; String
 forall c. CodeIdea c =&gt; c -&gt; String
 </span><span class="hs-identifier hs-var">codeName</span></span><span> </span><span class="annot"><span class="annottext">(CodeChunk -&gt; String)
 -&gt; (CodeFuncChunk -&gt; CodeChunk) -&gt; CodeFuncChunk -&gt; String
@@ -88,9 +88,9 @@ forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
 </span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting CodeChunk CodeFuncChunk CodeChunk
 Iso' CodeFuncChunk CodeChunk
 </span><span class="hs-identifier hs-var">ccf</span></span><span>
-</span><span id="line-32"></span><span>  </span><span id="local-6989586621679321383"><span class="annot"><span class="annottext">codeChunk :: CodeFuncChunk -&gt; CodeChunk
-</span><a href="#local-6989586621679321383"><span class="hs-identifier hs-var hs-var hs-var hs-var">codeChunk</span></a></span></span><span> </span><span id="local-6989586621679321382"><span class="annot"><span class="annottext">c :: CodeFuncChunk
-</span><a href="#local-6989586621679321382"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; VarOrFunc -&gt; CodeChunk
+</span><span id="line-32"></span><span>  </span><span id="local-6989586621679321376"><span class="annot"><span class="annottext">codeChunk :: CodeFuncChunk -&gt; CodeChunk
+</span><a href="#local-6989586621679321376"><span class="hs-identifier hs-var hs-var hs-var hs-var">codeChunk</span></a></span></span><span> </span><span id="local-6989586621679321375"><span class="annot"><span class="annottext">c :: CodeFuncChunk
+</span><a href="#local-6989586621679321375"><span class="hs-identifier hs-var">c</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; VarOrFunc -&gt; CodeChunk
 </span><span class="hs-identifier hs-var">CodeC</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Getting QuantityDict CodeChunk QuantityDict
 -&gt; CodeChunk -&gt; QuantityDict
 forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
@@ -104,36 +104,36 @@ forall s (m :: * -&gt; *) a. MonadReader s m =&gt; Getting a s a -&gt; m a
 </span><span class="hs-identifier hs-var">view</span></span><span> </span><span class="annot"><span class="annottext">Getting CodeChunk CodeFuncChunk CodeChunk
 Iso' CodeFuncChunk CodeChunk
 </span><span class="hs-identifier hs-var">ccf</span></span><span> </span><span class="annot"><span class="annottext">CodeFuncChunk
-</span><a href="#local-6989586621679321382"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">VarOrFunc
+</span><a href="#local-6989586621679321375"><span class="hs-identifier hs-var">c</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">VarOrFunc
 </span><span class="hs-identifier hs-var">Func</span></span><span>
 </span><span id="line-33"></span><span>
 </span><span id="line-34"></span><span class="hs-comment">-- | Combine an Object-type 'CodeChunk' with another 'CodeChunk' to create a new </span><span>
 </span><span id="line-35"></span><span class="hs-comment">-- 'CodeChunk' which represents a field of the first. ex. @ccObjVar obj f = obj.f@.</span><span>
 </span><span id="line-36"></span><span class="annot"><a href="Language.Drasil.Chunk.Code.html#ccObjVar"><span class="hs-identifier hs-type">ccObjVar</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">CodeVarChunk</span></span><span>
 </span><span id="line-37"></span><span id="ccObjVar"><span class="annot"><span class="annottext">ccObjVar :: CodeVarChunk -&gt; CodeVarChunk -&gt; CodeVarChunk
-</span><a href="Language.Drasil.Chunk.Code.html#ccObjVar"><span class="hs-identifier hs-var hs-var">ccObjVar</span></a></span></span><span> </span><span id="local-6989586621679321380"><span class="annot"><span class="annottext">c1 :: CodeVarChunk
-</span><a href="#local-6989586621679321380"><span class="hs-identifier hs-var">c1</span></a></span></span><span> </span><span id="local-6989586621679321379"><span class="annot"><span class="annottext">c2 :: CodeVarChunk
-</span><a href="#local-6989586621679321379"><span class="hs-identifier hs-var">c2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Space -&gt; CodeVarChunk
-</span><a href="#local-6989586621679321378"><span class="hs-identifier hs-var">checkObj</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679321380"><span class="hs-identifier hs-var">c1</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Getting Space CodeVarChunk Space -&gt; Space
+</span><a href="Language.Drasil.Chunk.Code.html#ccObjVar"><span class="hs-identifier hs-var hs-var">ccObjVar</span></a></span></span><span> </span><span id="local-6989586621679321373"><span class="annot"><span class="annottext">c1 :: CodeVarChunk
+</span><a href="#local-6989586621679321373"><span class="hs-identifier hs-var">c1</span></a></span></span><span> </span><span id="local-6989586621679321372"><span class="annot"><span class="annottext">c2 :: CodeVarChunk
+</span><a href="#local-6989586621679321372"><span class="hs-identifier hs-var">c2</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">Space -&gt; CodeVarChunk
+</span><a href="#local-6989586621679321371"><span class="hs-identifier hs-var">checkObj</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk
+</span><a href="#local-6989586621679321373"><span class="hs-identifier hs-var">c1</span></a></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; Getting Space CodeVarChunk Space -&gt; Space
 forall s a. s -&gt; Getting a s a -&gt; a
 </span><span class="hs-operator hs-var">^.</span></span><span> </span><span class="annot"><span class="annottext">Getting Space CodeVarChunk Space
 forall c. HasSpace c =&gt; Lens' c Space
 </span><span class="hs-identifier hs-var">typ</span></span><span class="hs-special">)</span><span>
-</span><span id="line-38"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679321378"><span class="annot"><span class="annottext">checkObj :: Space -&gt; CodeVarChunk
-</span><a href="#local-6989586621679321378"><span class="hs-identifier hs-var hs-var">checkObj</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Actor</span></span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeChunk -&gt; Maybe CodeChunk -&gt; CodeVarChunk
+</span><span id="line-38"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679321371"><span class="annot"><span class="annottext">checkObj :: Space -&gt; CodeVarChunk
+</span><a href="#local-6989586621679321371"><span class="hs-identifier hs-var hs-var">checkObj</span></a></span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-identifier hs-type">Actor</span></span><span> </span><span class="hs-identifier">_</span><span class="hs-special">)</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">CodeChunk -&gt; Maybe CodeChunk -&gt; CodeVarChunk
 </span><span class="hs-identifier hs-var">CodeVC</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeVarChunk -&gt; CodeChunk
 forall c. CodeIdea c =&gt; c -&gt; CodeChunk
 </span><span class="hs-identifier hs-var">codeChunk</span></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679321379"><span class="hs-identifier hs-var">c2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeChunk -&gt; Maybe CodeChunk
+</span><a href="#local-6989586621679321372"><span class="hs-identifier hs-var">c2</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">CodeChunk -&gt; Maybe CodeChunk
 forall a. a -&gt; Maybe a
 </span><span class="hs-identifier hs-var">Just</span></span><span> </span><span class="annot"><span class="annottext">(CodeChunk -&gt; Maybe CodeChunk) -&gt; CodeChunk -&gt; Maybe CodeChunk
 forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk -&gt; CodeChunk
 forall c. CodeIdea c =&gt; c -&gt; CodeChunk
 </span><span class="hs-identifier hs-var">codeChunk</span></span><span> </span><span class="annot"><span class="annottext">CodeVarChunk
-</span><a href="#local-6989586621679321380"><span class="hs-identifier hs-var">c1</span></a></span><span class="hs-special">)</span><span>
-</span><span id="line-39"></span><span>        </span><span class="annot"><a href="#local-6989586621679321378"><span class="hs-identifier hs-var">checkObj</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; CodeVarChunk
+</span><a href="#local-6989586621679321373"><span class="hs-identifier hs-var">c1</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-39"></span><span>        </span><span class="annot"><a href="#local-6989586621679321371"><span class="hs-identifier hs-var">checkObj</span></a></span><span> </span><span class="hs-identifier">_</span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String -&gt; CodeVarChunk
 forall a. HasCallStack =&gt; String -&gt; a
 </span><span class="hs-identifier hs-var">error</span></span><span> </span><span class="annot"><span class="hs-string">&quot;First CodeChunk passed to ccObjVar must have Actor space&quot;</span></span><span>
 </span><span id="line-40"></span></pre></body></html>

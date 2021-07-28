@@ -132,7 +132,6 @@ fullSI :: SystemInformation
 printSetting :: PrintingInformation
 resourcePath :: String
 mkSRS :: SRSDecl
-directoryName :: FilePath
 progName :: CI
 si :: SystemInformation
 symbMap :: ChunkDB

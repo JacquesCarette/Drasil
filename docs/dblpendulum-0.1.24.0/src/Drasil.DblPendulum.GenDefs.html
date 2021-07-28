@@ -561,11 +561,11 @@ forall a. a -&gt; Maybe a
 </span><span id="line-156"></span><span id="hForceOnPendulumMD"><span class="annot"><span class="annottext">hForceOnPendulumMD :: MultiDefn
 </span><a href="Drasil.DblPendulum.GenDefs.html#hForceOnPendulumMD"><span class="hs-identifier hs-var hs-var">hForceOnPendulumMD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Sentence -&gt; NonEmpty DefiningExpr -&gt; MultiDefn
 </span><span class="hs-identifier hs-var">mkMultiDefnForQuant</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="#local-6989586621679083130"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679083123"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">NonEmpty DefiningExpr
-</span><a href="#local-6989586621679083128"><span class="hs-identifier hs-var">defns</span></a></span><span>
-</span><span id="line-157"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679083130"><span class="annot"><span class="annottext">quant :: QuantityDict
-</span><a href="#local-6989586621679083130"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679083121"><span class="hs-identifier hs-var">defns</span></a></span><span>
+</span><span id="line-157"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679083123"><span class="annot"><span class="annottext">quant :: QuantityDict
+</span><a href="#local-6989586621679083123"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
 -&gt; NP
 -&gt; Maybe String
 -&gt; Space
@@ -587,8 +587,8 @@ forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span>
-</span><span id="line-159"></span><span>          </span><span id="local-6989586621679083128"><span class="annot"><span class="annottext">defns :: NonEmpty DefiningExpr
-</span><a href="#local-6989586621679083128"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr] -&gt; NonEmpty DefiningExpr
+</span><span id="line-159"></span><span>          </span><span id="local-6989586621679083121"><span class="annot"><span class="annottext">defns :: NonEmpty DefiningExpr
+</span><a href="#local-6989586621679083121"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr] -&gt; NonEmpty DefiningExpr
 forall a. [a] -&gt; NonEmpty a
 </span><span class="hs-identifier hs-var">NE.fromList</span></span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-160"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; Sentence -&gt; Expr -&gt; DefiningExpr
@@ -645,11 +645,11 @@ forall a. a -&gt; Maybe a
 </span><span id="line-175"></span><span id="vForceOnPendulumMD"><span class="annot"><span class="annottext">vForceOnPendulumMD :: MultiDefn
 </span><a href="Drasil.DblPendulum.GenDefs.html#vForceOnPendulumMD"><span class="hs-identifier hs-var hs-var">vForceOnPendulumMD</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">QuantityDict -&gt; Sentence -&gt; NonEmpty DefiningExpr -&gt; MultiDefn
 </span><span class="hs-identifier hs-var">mkMultiDefnForQuant</span></span><span> </span><span class="annot"><span class="annottext">QuantityDict
-</span><a href="#local-6989586621679083118"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="#local-6989586621679083111"><span class="hs-identifier hs-var">quant</span></a></span><span> </span><span class="annot"><span class="annottext">Sentence
 </span><span class="hs-identifier hs-var">EmptyS</span></span><span> </span><span class="annot"><span class="annottext">NonEmpty DefiningExpr
-</span><a href="#local-6989586621679083117"><span class="hs-identifier hs-var">defns</span></a></span><span>
-</span><span id="line-176"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679083118"><span class="annot"><span class="annottext">quant :: QuantityDict
-</span><a href="#local-6989586621679083118"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
+</span><a href="#local-6989586621679083110"><span class="hs-identifier hs-var">defns</span></a></span><span>
+</span><span id="line-176"></span><span>    </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679083111"><span class="annot"><span class="annottext">quant :: QuantityDict
+</span><a href="#local-6989586621679083111"><span class="hs-identifier hs-var hs-var">quant</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">String
 -&gt; NP
 -&gt; Maybe String
 -&gt; Space
@@ -671,8 +671,8 @@ forall c. HasSymbol c =&gt; c -&gt; Stage -&gt; Symbol
 forall u. MayHaveUnit u =&gt; u -&gt; Maybe UnitDefn
 </span><span class="hs-identifier hs-var">getUnit</span></span><span> </span><span class="annot"><span class="annottext">UnitalChunk
 </span><span class="hs-identifier hs-var">force</span></span><span class="hs-special">)</span><span>
-</span><span id="line-178"></span><span>          </span><span id="local-6989586621679083117"><span class="annot"><span class="annottext">defns :: NonEmpty DefiningExpr
-</span><a href="#local-6989586621679083117"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr] -&gt; NonEmpty DefiningExpr
+</span><span id="line-178"></span><span>          </span><span id="local-6989586621679083110"><span class="annot"><span class="annottext">defns :: NonEmpty DefiningExpr
+</span><a href="#local-6989586621679083110"><span class="hs-identifier hs-var hs-var">defns</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[DefiningExpr] -&gt; NonEmpty DefiningExpr
 forall a. [a] -&gt; NonEmpty a
 </span><span class="hs-identifier hs-var">NE.fromList</span></span><span> </span><span class="hs-special">[</span><span>
 </span><span id="line-179"></span><span>                    </span><span class="annot"><span class="annottext">String -&gt; [String] -&gt; Sentence -&gt; Expr -&gt; DefiningExpr

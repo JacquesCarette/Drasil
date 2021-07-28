@@ -1,6 +1,6 @@
 -- | Performs IO actions to get file path information
 -- and then generate an updated Drasil website.
-module Drasil.Website.Main where
+module Main where
 
 import GHC.IO.Encoding
 import Language.Drasil.Generate (gen, DocSpec(DocSpec), DocType(Website))

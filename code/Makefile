@@ -380,7 +380,7 @@ deploy_code_path: $(DCP_EXAMPLES)
 # First builds all Drasil packages, and then executes the drasil-website.
 # For more information, see the *.hs files in the drasil-website folder.
 website:
-	stack install drasil-website
+	stack install $(stackArgs) "drasil-website"
 	CUR_DIR="$(PWD)/" \
 	DEPLOY_FOLDER="$(CUR_DIR)$(DEPLOY_FOLDER)"  \
 	DOCS_FOLDER="$(DOCS_FOLDER)" \

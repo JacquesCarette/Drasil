@@ -190,7 +190,7 @@ module Language.Drasil (
   , scale, shift
   , derUC, derUC', derUC''
   , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
-  , unitWrapper, getCu, MayHaveUnit(getUnit), HasUnit(findUnit)
+  , unitWrapper, getCu, MayHaveUnit(getUnit),
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
@@ -309,4 +309,4 @@ import Language.Drasil.Chunk.UnitDefn (UnitDefn(..)
   , scale, shift
   , derUC, derUC', derUC''
   , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
-  , makeDerU, unitWrapper, getCu, MayHaveUnit(getUnit), HasUnit(findUnit))
+  , makeDerU, unitWrapper, getCu, MayHaveUnit(getUnit))

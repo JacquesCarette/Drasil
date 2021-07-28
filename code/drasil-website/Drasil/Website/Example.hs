@@ -139,8 +139,12 @@ exampleTitle = S "Generated Examples"
 
 -- | Example section introduction.
 exampleIntro :: Sentence
-exampleIntro = S "Each of the case studies contain their own generated PDF and HTML reports," +:+
-  S "and in some cases, their own generated code."
+exampleIntro = S "The development of Drasil follows an example-driven approach, \
+  \with a current focus on creating Software Requirement Specifications (SRS). \
+  \More specifically, Drasil's knowledge of the domain of Physics has seen significant growth \
+  \through the creation of these examples, ranging from mechanics to thermodynamics. Each of the case studies \
+  \implemented in Drasil contain their own generated PDF and HTML reports, and in some cases, \
+  \their own generated code to solve the problem defined in their respective SRS documents."
 
 -- | Project descriptions.
 sglPendulumDesc, dblPendulumDesc, gamePhysDesc, glassBRDesc, hghcDesc, noPCMDesc, pdControllerDesc,

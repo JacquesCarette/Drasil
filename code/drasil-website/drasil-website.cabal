@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: e8447b7c35eef9862d93458c8bf856e3220871eaf2c3834fd2ed01a55aa743b9
+-- hash: e312bb570e5ee0785f2d8618f136cebe49b8de9ce28c6a5d0211bba250f7b619
 
 name:           drasil-website
 version:        0.1.0.0
@@ -83,6 +83,7 @@ executable website
     , drasil-printers
     , drasil-theory
     , drasil-utils
+    , drasil-website
     , gamephysics
     , glassbr
     , hghc
@@ -95,7 +96,6 @@ executable website
     , ssp
     , swhs
     , template
-    , website
   if false
     other-modules:
         Paths_website

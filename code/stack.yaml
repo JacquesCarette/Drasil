@@ -50,7 +50,7 @@ packages:
 - drasil-data/
 - drasil-docLang/
 - drasil-metadata/
-- drasil-website/website/
+- drasil-website/
 - drasil-example/dblpendulum/
 - drasil-example/sglpendulum/
 - drasil-example/gamephysics/

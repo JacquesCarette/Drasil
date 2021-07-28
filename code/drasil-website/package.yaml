@@ -51,7 +51,7 @@ executables:
     - -threaded
     - -O2
     dependencies:
-    - website
+    - drasil-website
     when:
     - condition: false
       other-modules: Paths_website

@@ -4,7 +4,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration)
 import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
   rdb, refdb, _authors, _concepts, _constants, _constraints, _purpose,
   _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, _outputs, _quants, 
-  _sys, _sysinfodb, _usedinfodb, _folderPath)
+  _sys, _sysinfodb, _usedinfodb)
 import Language.Drasil
 import Drasil.DocLang (findAllRefs)
 

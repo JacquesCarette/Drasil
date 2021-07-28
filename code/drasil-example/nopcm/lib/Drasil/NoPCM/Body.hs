@@ -5,7 +5,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, 
 import Database.Drasil (Block(Parallel), ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts,
   _constants, _constraints, _datadefs, _instModels, _configFiles, _defSequence,
-  _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb, _folderPath)
+  _inputs, _kind, _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (TheoryModel)
 import Utils.Drasil
 import Utils.Drasil.Concepts
@@ -91,9 +91,6 @@ fullSI = fillcdbSRS mkSRS si
 
 printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
-
-directoryName :: FilePath
-directoryName = "NoPCM"
 
 resourcePath :: String
 resourcePath = "../../../datafiles/NoPCM/"
@@ -202,7 +199,6 @@ si = SI {
   _instModels  = NoPCM.iMods,
   _datadefs    = NoPCM.dataDefs,
   _configFiles = [],
-  _folderPath  = directoryName,
   _inputs      = inputs ++ [qw watE], --inputs ++ outputs?
   _outputs     = map qw [tempW, watE],     --outputs
   _defSequence = [(\x -> Parallel (head x) (tail x)) qDefs],

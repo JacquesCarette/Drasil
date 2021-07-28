@@ -25,10 +25,10 @@ import Language.Drasil.Display (compsy)
 import Utils.Drasil
 
 import Database.Drasil(ChunkDB, SystemInformation(SI), _authors, _kind,
-  _quants, _sys, _folderPath, _sysinfodb, _usedinfodb, ccss, ccss', citeDB, collectUnits,
+  _quants, _sys, _sysinfodb, _usedinfodb, ccss, ccss', citeDB, collectUnits,
   termTable, conceptinsTable, idMap, refbyTable, conceptDB,
   refTable, labelledcontentTable, sectionTable, theoryModelTable,
-  insmodelTable, gendefTable, dataDefnTable, folderPath, refdb, sysinfodb, traceTable,
+  insmodelTable, gendefTable, dataDefnTable, refdb, sysinfodb, traceTable,
   generateRefbyMap)
 
 import Drasil.Sections.TableOfAbbAndAcronyms (tableAbbAccGen)
@@ -61,11 +61,11 @@ import Drasil.Sections.TraceabilityMandGs (traceMatStandard)
 import qualified Data.Drasil.Concepts.Documentation as Doc (likelyChg, section_,
   software, unlikelyChg)
 
-
 import Control.Lens ((^.), set)
 import Data.Function (on)
 import Data.List (nub, sortBy, sortOn)
 import qualified Data.Map as Map (elems, toList, assocs)
+import Data.Char (isSpace)
 
 ----- Gather all information necessary to create a document -----
 -- | Creates a document from a document description, a title combinator function, and system information.
@@ -92,7 +92,7 @@ fillConcepts si = si2
 
 -- | Takes in existing information from the Chunk database to construct a database of references.
 fillReferences :: SRSDecl -> SystemInformation -> SystemInformation
-fillReferences dd si = si2
+fillReferences dd si@SI{_sys = sys} = si2
   where
     -- get old chunk database + ref database
     chkdb = si ^. sysinfodb
@@ -117,7 +117,7 @@ fillReferences dd si = si2
     -- set new reference table in the chunk database
     chkdb2 = set refTable (idMap $ nub $ refsFromSRS ++ inRefs
       ++ map (ref.makeTabRef.getTraceConfigUID) (traceMatStandard si) ++ secRefs -- secRefs can be removed once #946 is complete
-      ++ traceyGraphGetRefs (si ^. folderPath) ++ map ref cites
+      ++ traceyGraphGetRefs (filter (not.isSpace) $ abrv sys) ++ map ref cites
       ++ map ref conins ++ map ref ddefs ++ map ref gdefs ++ map ref imods
       ++ map ref tmods ++ map ref concIns ++ map ref secs ++ map ref lblCon
       ++ refs) chkdb
@@ -360,9 +360,9 @@ mkUCsSec (UCsProg c) = SRS.unlikeChg (intro : mkEnumSimpleD c) []
 
 -- | Helper for making the Traceability Matrices and Graphs section.
 mkTraceabilitySec :: TraceabilitySec -> SystemInformation -> Section
-mkTraceabilitySec (TraceabilityProg progs) si = TG.traceMGF trace
+mkTraceabilitySec (TraceabilityProg progs) si@SI{_sys = sys} = TG.traceMGF trace
   (map (\(TraceConfig _ pre _ _ _) -> foldlList Comma List pre) progs)
-  (map LlC trace) (_folderPath si) []
+  (map LlC trace) (filter (not.isSpace) $ abrv sys) []
   where
   trace = map (\(TraceConfig u _ desc rows cols) -> TM.generateTraceTableView
     u desc rows cols si) progs

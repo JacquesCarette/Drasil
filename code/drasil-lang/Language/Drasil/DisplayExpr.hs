@@ -22,4 +22,4 @@ data DisplayExpr where
     SpaceExpr     :: Space -> DisplayExpr
     BinOp         :: DisplayBinOp -> DisplayExpr -> DisplayExpr -> DisplayExpr
     AssocBinOp    :: DisplayAssocBinOp -> [DisplayExpr] -> DisplayExpr
-    ForAll        :: UID -> Space -> DisplayExpr
+    ForAll        :: UID -> Space -> DisplayExpr -> DisplayExpr

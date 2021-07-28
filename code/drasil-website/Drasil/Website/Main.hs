@@ -1,3 +1,5 @@
+-- | Performs IO actions to get file path information
+-- and then generate an updated Drasil website.
 module Drasil.Website.Main where
 
 import GHC.IO.Encoding
@@ -6,7 +8,8 @@ import Drasil.Website.Body (mkWebsite, printSetting, FolderLocation(..))
 import System.Environment (getEnv, lookupEnv)
 import Data.Maybe (fromMaybe)
 
-
+-- | Collect environment variables, place them in 'FolderLocation',
+-- and generate the Drasil website.
 main :: IO()
 main = do
   -- Require the Makefile (or deploy script as it will usually be) to feed locations for where to find certain
@@ -19,6 +22,8 @@ main = do
   graphRoot <- getEnv "GRAPH_FOLDER"
   analysisRoot <- getEnv "ANALYSIS_FOLDER"
   listOfPackages <- getEnv "PACKAGES"
+  typeGFolder <- getEnv "TYPEGRAPH_FOLDER"
+  classIFolder <- getEnv "CLASSINST_GRAPH_FOLDER"
 
   -- Env variables relating to variables exposed on CI.
   -- Because we want to be able to test site building locally, we fill in these stubs with
@@ -38,7 +43,11 @@ main = do
         exRt = exampleRoot, graphRt = graphRoot,
         analysisRt = analysisRoot, repoRt = repoCommitRoot, 
         buildNum = buildNumber, buildPth = buildPath,
-        packages = map ("drasil-" ++) $ words listOfPackages}
+        typeGraphFolder = typeGFolder, classInstFolder = classIFolder,
+        packages = words listOfPackages ++ ["example"]
+        -- manually add example because it's not actually a package anymore,
+        -- but the analysis scripts work nonetheless, so we display it here.
+        }
 
   -- generate the html document/website.
   setLocaleEncoding utf8

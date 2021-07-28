@@ -1,3 +1,4 @@
+{-# LANGUAGE PostfixOperators #-}
 module Drasil.Website.Introduction (introSec, introRefs) where
 
 import Language.Drasil
@@ -8,16 +9,17 @@ import Utils.Drasil
 -----------------------
 
 -- | Creates the introduction section.
-introSec ::  Reference -> Reference -> Reference -> Section
-introSec r1 r2 r3 = section (S "Introduction") (map mkParagraph [introParagraph1, introParagraph2 r1 r2 r3]) [] introSecRef
+introSec :: Reference -> Reference -> Reference -> Reference -> Reference -> Section
+introSec csRef docRef graphRef repoRef wikiRef = section (S "Introduction") (map mkParagraph [introParagraph1 repoRef wikiRef, introParagraph2 csRef docRef graphRef]) [] introSecRef
 
 -- | Paragraph to introduce Drasil and its goals.
-introParagraph1 :: Sentence
-introParagraph1 = S "Drasil is a framework for generating all of the software artifacts from a stable knowledge base, \
+introParagraph1 :: Reference -> Reference -> Sentence
+introParagraph1 repoRef wikiRef = S "Drasil is a framework for generating all of the software artifacts from a stable knowledge base, \
   \focusing currently on scientific software. The main goals are to reduce knowledge duplication and \
   \improve traceability. The artifacts are generated from a common knowledge-base using recipes \
   \written in a Domain-Specific Language (DSL). These recipes allow us to specify which pieces of \
-  \knowledge should be used in which artifacts, how to transform them, and more."
+  \knowledge should be used in which artifacts, how to transform them, and more. For more information on the design, documentation, \
+  \useage, and specifics of Drasil, please visit the" +:+ namedRef repoRef (S "GitHub repository") +:+ S "or the" +:+ (namedRef wikiRef (S "GitHub Wiki") !.)
 
 -- | Paragraph to describe the layout of the Drasil website.
 introParagraph2 :: Reference -> Reference -> Reference -> Sentence
@@ -36,5 +38,5 @@ introSecRef :: Reference
 introSecRef = makeSecRef "Introduction" $ S "Introduction"
 
 -- | Gathers all references used in this file.
-introRefs :: Reference -> Reference -> Reference -> [Reference]
-introRefs r1 r2 r3 = [introSecRef, ref $ introSec r1 r2 r3]
+introRefs :: Reference -> Reference -> Reference -> Reference -> Reference -> [Reference]
+introRefs csRef docRef graphRef repoRef wikiRef = [introSecRef, ref $ introSec csRef docRef graphRef repoRef wikiRef]

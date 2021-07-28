@@ -41,7 +41,7 @@ main = do
         analysisRt = analysisRoot, repoRt = repoCommitRoot, 
         buildNum = buildNumber, buildPth = buildPath,
         typeGraphFolder = typeGFolder, classInstFolder = classIFolder,
-        packages = map ("drasil-" ++) $ words listOfPackages ++ "example" 
+        packages = words listOfPackages ++ ["example"]
         -- manually add example because it's not actually a package anymore,
         -- but the analysis scripts work nonetheless, so we display it here.
         }

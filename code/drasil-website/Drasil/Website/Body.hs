@@ -68,8 +68,8 @@ si fl = SI {
 -- Puts all the sections in order. Basically the website version of the SRS declaration.
 sections :: FolderLocation -> [Section]
 -- Section Title [SecCons] Reference
-sections fl = [headerSec, introSec (ref caseStudySec) (ref $ docsSec $ docsRt fl) (ref $ graphSec (graphRt fl) $ packages fl), 
-  caseStudySec, exampleSec (repoRt fl) (exRt fl), docsSec (docsRt fl), analysisSec (analysisRt fl), graphSec (graphRt fl) $ packages fl,
+sections fl = [headerSec, introSec (ref caseStudySec) (ref $ docsSec $ docsRt fl) (ref $ graphSec (graphRt fl) $ map ("drasil-" ++) $ packages fl) gitHubRef wikiRef, 
+  caseStudySec, exampleSec (repoRt fl) (exRt fl), docsSec (docsRt fl), analysisSec (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) $ packages fl, graphSec (graphRt fl) $ map ("drasil-" ++) $ packages fl,
   footer fl]
 
 -- symbMap needed for references to work
@@ -87,9 +87,9 @@ usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict])
 
 -- Holds all references and links used in the website.
 allRefs :: FolderLocation -> [Reference]
-allRefs fl = [headerSecRef, imageRef, gitHubRef] ++ map ref (sections fl) 
-  ++ introRefs (ref caseStudySec) (ref $ docsSec $ docsRt fl) (ref $ graphSec (graphRt fl) $ packages fl) 
-  ++ caseStudyRefs ++ exampleRefs (repoRt fl) (exRt fl) ++ docRefs (docsRt fl) ++ analysisRefs (analysisRt fl) ++ graphRefs (graphRt fl) (packages fl)
+allRefs fl = [headerSecRef, imageRef, gitHubRef, wikiRef] ++ map ref (sections fl) 
+  ++ introRefs (ref caseStudySec) (ref $ docsSec $ docsRt fl) (ref $ graphSec (graphRt fl) $ map ("drasil-" ++) $ packages fl) gitHubRef wikiRef
+  ++ caseStudyRefs ++ exampleRefs (repoRt fl) (exRt fl) ++ docRefs (docsRt fl) ++ analysisRefs (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (packages fl) ++ graphRefs (graphRt fl) (map ("drasil-" ++) $ packages fl)
   ++ concatMap findAllRefs (sections fl)
 
 -- Each section needs its own reference. Start with the header section.
@@ -119,6 +119,8 @@ imageRef = makeFigRef "Drasil"
 -- Used for the repository link.
 gitHubRef :: Reference
 gitHubRef = Reference "gitHubRepo" (URI gitHubInfoURL) (shortname' $ S "gitHubRepo")
+wikiRef :: Reference
+wikiRef = Reference "gitHubWiki" (URI $ gitHubInfoURL ++ "/wiki") (shortname' $ S "gitHubWiki")
 
 -- Hardcoded info for the title, URL, and image path.
 websiteTitle :: String

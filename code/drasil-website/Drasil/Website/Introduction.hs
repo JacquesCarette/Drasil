@@ -10,7 +10,10 @@ import Utils.Drasil
 
 -- | Creates the introduction section.
 introSec :: Reference -> Reference -> Reference -> Reference -> Reference -> Section
-introSec csRef docRef graphRef repoRef wikiRef = section (S "Introduction") (map mkParagraph [introParagraph1 repoRef wikiRef, introParagraph2 csRef docRef graphRef]) [] introSecRef
+introSec csRef docRef analysisSecRef repoRef wikiRef = 
+  section (S "Introduction") -- Title
+  (map mkParagraph [introParagraph1 repoRef wikiRef, introParagraph2 csRef docRef analysisSecRef]) -- Contents
+  [] introSecRef -- Reference
 
 -- | Paragraph to introduce Drasil and its goals.
 introParagraph1 :: Reference -> Reference -> Sentence
@@ -23,8 +26,8 @@ introParagraph1 repoRef wikiRef = S "Drasil is a framework for generating all of
 
 -- | Paragraph to describe the layout of the Drasil website.
 introParagraph2 :: Reference -> Reference -> Reference -> Sentence
-introParagraph2 caseStudySecRef docsRef graphSecRef = S "This webpage is designed to contain the most up to date" +:+
-  foldlList Comma List (zipWith (\x y -> namedRef x (S y)) [caseStudySecRef, docsRef, graphSecRef] ["case study artifacts", "Haddock documentation", "package dependency graphs"])
+introParagraph2 caseStudySecRef docsRef analysisSecRef = S "This webpage is designed to contain the most up to date" +:+
+  foldlList Comma List (zipWith (\x y -> namedRef x (S y)) [caseStudySecRef, docsRef, analysisSecRef] ["case study artifacts", "Haddock documentation", "Drasil analysis"])
   +:+ S "from the Drasil repository. \
   \The case study artifacts include the Software Requirements Specification (SRS) for each case study, \
   \which specifies what the program sets out to achieve. \
@@ -39,4 +42,4 @@ introSecRef = makeSecRef "Introduction" $ S "Introduction"
 
 -- | Gathers all references used in this file.
 introRefs :: Reference -> Reference -> Reference -> Reference -> Reference -> [Reference]
-introRefs csRef docRef graphRef repoRef wikiRef = [introSecRef, ref $ introSec csRef docRef graphRef repoRef wikiRef]
+introRefs csRef docRef analysisSecRef repoRef wikiRef = [introSecRef, ref $ introSec csRef docRef analysisSecRef repoRef wikiRef]

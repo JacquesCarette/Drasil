@@ -13,7 +13,6 @@ import Drasil.Website.CaseStudy
 import Drasil.Website.Example
 import Drasil.Website.Documentation
 import Drasil.Website.Analysis
-import Drasil.Website.Graphs
 
 -- Printing info to get document to generate. Takes in the 'FolderLocation'.
 printSetting :: FolderLocation -> PrintingInformation
@@ -68,8 +67,8 @@ si fl = SI {
 -- Puts all the sections in order. Basically the website version of the SRS declaration.
 sections :: FolderLocation -> [Section]
 -- Section Title [SecCons] Reference
-sections fl = [headerSec, introSec (ref caseStudySec) (ref $ docsSec $ docsRt fl) (ref $ graphSec (graphRt fl) $ map ("drasil-" ++) $ packages fl) gitHubRef wikiRef, 
-  caseStudySec, exampleSec (repoRt fl) (exRt fl), docsSec (docsRt fl), analysisSec (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) $ packages fl, graphSec (graphRt fl) $ map ("drasil-" ++) $ packages fl,
+sections fl = [headerSec, introSec (ref caseStudySec) (ref $ docsSec $ docsRt fl) (ref $ analysisSec (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) $ packages fl) gitHubRef wikiRef, 
+  caseStudySec, exampleSec (repoRt fl) (exRt fl), docsSec (docsRt fl), analysisSec (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) $ packages fl,
   footer fl]
 
 -- symbMap needed for references to work
@@ -88,8 +87,8 @@ usedDB = cdb ([] :: [QuantityDict]) ([] :: [IdeaDict])
 -- Holds all references and links used in the website.
 allRefs :: FolderLocation -> [Reference]
 allRefs fl = [headerSecRef, imageRef, gitHubRef, wikiRef] ++ map ref (sections fl) 
-  ++ introRefs (ref caseStudySec) (ref $ docsSec $ docsRt fl) (ref $ graphSec (graphRt fl) $ map ("drasil-" ++) $ packages fl) gitHubRef wikiRef
-  ++ caseStudyRefs ++ exampleRefs (repoRt fl) (exRt fl) ++ docRefs (docsRt fl) ++ analysisRefs (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (packages fl) ++ graphRefs (graphRt fl) (map ("drasil-" ++) $ packages fl)
+  ++ introRefs (ref caseStudySec) (ref $ docsSec $ docsRt fl) (ref $ analysisSec (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) $ packages fl) gitHubRef wikiRef
+  ++ caseStudyRefs ++ exampleRefs (repoRt fl) (exRt fl) ++ docRefs (docsRt fl) ++ analysisRefs (analysisRt fl) (typeGraphFolder fl) (classInstFolder fl) (graphRt fl) (packages fl)
   ++ concatMap findAllRefs (sections fl)
 
 -- Each section needs its own reference. Start with the header section.

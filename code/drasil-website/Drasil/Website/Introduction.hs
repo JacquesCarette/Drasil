@@ -1,12 +1,12 @@
 {-# LANGUAGE PostfixOperators #-}
-module Drasil.Website.Introduction (introSec, introRefs) where
+-- | Introduce the Drasil website.
+module Drasil.Website.Introduction where
 
 import Language.Drasil
 import Utils.Drasil
 
------------------------
--- Introduction Section
------------------------
+
+-- * Introduction Section
 
 -- | Creates the introduction section.
 introSec :: Reference -> Reference -> Reference -> Reference -> Reference -> Section

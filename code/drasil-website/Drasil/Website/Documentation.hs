@@ -1,10 +1,10 @@
-module Drasil.Website.Documentation (docsSec, docRefs) where
+-- | Display Drasil documentation nicely for the website.
+module Drasil.Website.Documentation where
 
 import Language.Drasil
 
--------------------------------------------
---Haddock Documentation for Drasil Section
--------------------------------------------
+
+-- * Haddock Documentation for Drasil Section
 
 -- | Creates the Haddock documentation for all of Drasil.
 docsSec :: FilePath -> Section

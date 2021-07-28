@@ -1,3 +1,5 @@
+-- | Performs IO actions to get file path information
+-- and then generate an updated Drasil website.
 module Drasil.Website.Main where
 
 import GHC.IO.Encoding
@@ -6,7 +8,8 @@ import Drasil.Website.Body (mkWebsite, printSetting, FolderLocation(..))
 import System.Environment (getEnv, lookupEnv)
 import Data.Maybe (fromMaybe)
 
-
+-- | Collect environment variables, place them in 'FolderLocation',
+-- and generate the Drasil website.
 main :: IO()
 main = do
   -- Require the Makefile (or deploy script as it will usually be) to feed locations for where to find certain

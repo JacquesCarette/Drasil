@@ -1,5 +1,5 @@
 -- | Source code reader for type dependency graphs of all Drasil types.
-module SourceCodeReaderTypes (extractEntryData, EntryData(..), DataDeclRecord(..),
+module SourceCodeReaderT (extractEntryData, EntryData(..), DataDeclRecord(..),
  DataDeclConstruct(..), NewtypeDecl(..), TypeDecl(..)) where
 
 import Data.List

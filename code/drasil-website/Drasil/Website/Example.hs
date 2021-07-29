@@ -221,14 +221,14 @@ getSRSRef path sufx ex = Reference refUID (URI $ getSRSPath path (map toLower su
 -- | Get the paths of where each reference exist for SRS files. Some example abbreviations have spaces,
 -- so we just filter those out. The suffix should only be either html or pdf.
 getSRSPath :: FilePath -> String -> String -> FilePath
-getSRSPath path sufx ex = path ++ filter (not.isSpace) ex ++ "/srs/" ++ filter (not.isSpace) ex ++ "_SRS." ++ map toLower sufx
+getSRSPath path sufx ex = path ++ map toLower (filter (not.isSpace) ex) ++ "/srs/" ++ filter (not.isSpace) ex ++ "_SRS." ++ map toLower sufx
 
 -- | Get the file paths for generated code and doxygen locations.
 getCodePath, getDoxPath :: FilePath -> String -> String -> FilePath
 -- | Uses 'repoRt' path (srsPath in this module).
-getCodePath path ex programLang = path ++ "code/stable/" ++ filter (not.isSpace) ex ++ "/src/" ++ programLang -- need repoCommit path
+getCodePath path ex programLang = path ++ "code/stable/" ++ map toLower (filter (not.isSpace) ex) ++ "/src/" ++ programLang -- need repoCommit path
 -- | Uses 'exRt' path (doxPath in this module).
-getDoxPath path ex programLang = path ++ filter (not.isSpace) ex ++ "/doxygen/" ++ programLang ++ "/index.html" -- need example path
+getDoxPath path ex programLang = path ++ map toLower (filter (not.isSpace) ex) ++ "/doxygen/" ++ programLang ++ "/index.html" -- need example path
 
 
 -- | Gather all references used in making the Examples section.

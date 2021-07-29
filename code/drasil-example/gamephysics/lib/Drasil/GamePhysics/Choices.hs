@@ -27,6 +27,6 @@ module Drasil.GamePhysics.Choices where
 --   constStructure   = Inline,
 --   constRepr        = Const,
 --   conceptMatch     = matchConcepts ([] :: [QDefinition]) [],
---   auxFiles         = [SampleInput "../../datafiles/GamePhysics/sampleInput.txt"]
+--   auxFiles         = [SampleInput "../../datafiles/gamephysics/sampleInput.txt"]
 -- }       
        

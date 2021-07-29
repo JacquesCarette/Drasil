@@ -1,6 +1,6 @@
 -- FIXME: use real parser (Low Priority; see line 119)
--- | Creates a .csv table and an HTML table of all the types, classes, and instances in Drasil.
-module TypeGraphGen (main) where
+-- | Creates graphs showing the dependency of one type upon another.
+module TypeDepGen (main) where
 
 import Data.List
 import Data.Maybe
@@ -11,7 +11,7 @@ import Control.Monad
 import qualified Data.Map as Map
 import qualified DirectoryController as DC (createFolder, createFile, finder, 
   getDirectories, DrasilPack, FileName, FolderName, File(..), Folder(..))
-import SourceCodeReaderTypes as SCRT (extractEntryData, EntryData(..), 
+import SourceCodeReaderT as SCRT (extractEntryData, EntryData(..), 
   DataDeclRecord(..), DataDeclConstruct(..), NewtypeDecl(..), TypeDecl(..))
 import Data.List.Split (splitOn)
 import Data.Char (toLower)

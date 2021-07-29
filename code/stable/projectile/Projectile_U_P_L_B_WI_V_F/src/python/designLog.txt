@@ -11,7 +11,7 @@ Dox Verbosity selected as Quiet.
 Dates selected as Hide.
 Log File Name selected as log.txt.
 Logging selected as LogVar LogFunc.
-Auxiliary Files selected as SampleInput ../../../datafiles/Projectile/sampleInput.txt ReadME.
+Auxiliary Files selected as SampleInput ../../../datafiles/projectile/sampleInput.txt ReadME.
 Code Concept pi selected as Pi.
 Language Python does not support code type Float, chosen as the match for the Real space. Trying next choice.
 Successfully matched Real with Double.

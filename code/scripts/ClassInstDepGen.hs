@@ -2,7 +2,7 @@
 -- | Data table generator. Uses information from SourceCodeReader.hs 
 -- to organize all types, classes, and instances in Drasil.
 -- Generates a .csv file and an HTML table with this information.
-module DataTableGen (main) where
+module ClassInstDepGen (main) where
 
 import Data.List
 import Data.Maybe
@@ -13,7 +13,7 @@ import Control.Monad
 import qualified Data.Map as Map
 import qualified DirectoryController as DC (createFolder, createFile, finder, 
   getDirectories, DrasilPack, FileName, FolderName, File(..), Folder(..))
-import SourceCodeReader as SCR (extractEntryData, EntryData(..))
+import SourceCodeReaderCI as SCR (extractEntryData, EntryData(..))
 import Data.List.Split (splitOn)
 import DataPrinters.Dot
 import DataPrinters.HTML
@@ -107,7 +107,7 @@ main = do
   scriptsDirectory <- getCurrentDirectory
   -- obtains code directory and output directory filepaths
   let codeDirectory = takeDirectory scriptsDirectory
-      outputDirectory = codeDirectory ++ "/analysis/DataTable"
+      outputDirectory = codeDirectory ++ "/analysis/ClassInstDep"
 
   -- gets names + filepaths of all drasil- packages/directories
   drctyList <- DC.getDirectories codeDirectory "drasil-"

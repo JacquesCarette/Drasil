@@ -31,18 +31,18 @@ EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template dblpendulum sglpen
 GOOLTEST = codegenTest
 
 # where they live
-HGHC_DIR  = HGHC
-GLASSBR_DIR = GlassBR
-NOPCM_DIR = NoPCM
-SWHS_DIR  = SWHS
-SSP_DIR   = SSP
-GAMEPHYSICS_DIR  = GamePhysics
-PROJECTILE_DIR = Projectile
-TEMPLATE_DIR = Template
-GOOLTEST_DIR = GOOLTest
-DBLPENDULUM_DIR = DblPendulum
-SGLPENDULUM_DIR = SglPendulum
-PDCONTROLLER_DIR = PDController
+HGHC_DIR  = hghc
+GLASSBR_DIR = glassbr
+NOPCM_DIR = nopcm
+SWHS_DIR  = swhs
+SSP_DIR   = ssp
+GAMEPHYSICS_DIR  = gamephysics
+PROJECTILE_DIR = projectile
+TEMPLATE_DIR = template
+GOOLTEST_DIR = gooltest
+DBLPENDULUM_DIR = dblpendulum
+SGLPENDULUM_DIR = sglpendulum
+PDCONTROLLER_DIR = pdcontroller
 
 MULTI_SRC_DIRS = $(PROJECTILE_DIR) # Directories for examples with multiple src versions
 
@@ -118,7 +118,7 @@ ANALYSIS_FOLDER = $(ANALYSIS_FOLDER_NAME)/
 TYPEGRAPH_FOLDER_NAME = TypeDependencyGraphs
 TYPEGRAPH_FOLDER = $(ANALYSIS_FOLDER)$(TYPEGRAPH_FOLDER_NAME)/
 CLASSINST_GRAPH_FOLDER_NAME = packagegraphs
-CLASSINST_GRAPH_FOLDER = $(ANALYSIS_FOLDER)DataTable/$(CLASSINST_GRAPH_FOLDER_NAME)/
+CLASSINST_GRAPH_FOLDER = $(ANALYSIS_FOLDER)ClassInstDep/$(CLASSINST_GRAPH_FOLDER_NAME)/
 DEPLOY_FOLDER_NAME = deploy
 DEPLOY_FOLDER = $(DEPLOY_FOLDER_NAME)/
 DEPLOY_CODE_PATH_KV_SEP = :
@@ -303,8 +303,8 @@ $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod ch
 analysis: graphmod
 	- rm -rf "$(ANALYSIS_FOLDER)"
 	@mkdir -p "$(ANALYSIS_FOLDER)"
-	cd $(SCRIPT_FOLDER) && stack exec -- runghc DataTableGen.hs
-	cd $(SCRIPT_FOLDER) && stack exec -- runghc TypeGraphGen.hs
+	cd $(SCRIPT_FOLDER) && stack exec -- runghc ClassInstDepGen.hs
+	cd $(SCRIPT_FOLDER) && stack exec -- runghc TypeDepGen.hs
 	@echo Making dependency graphs. This may take a few minutes.
 	@cd $(TYPEGRAPH_FOLDER) && for pack in $(ANALYSIS_PACKAGES); do \
 		dot -Tsvg $$pack.dot > "./$$pack.svg" ; \

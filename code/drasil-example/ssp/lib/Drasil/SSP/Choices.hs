@@ -27,5 +27,5 @@ module Drasil.SSP.Choices where
 --   constStructure = Inline,   -- Inline, WithInputs, Store Structure
 --   constRepr = Const,    -- Var, Const
 --   conceptMatch = matchConcepts ([] :: [QDefinition]) [],
---   auxFiles = [SampleInput "../../datafiles/SSP/sampleInput.txt"]
+--   auxFiles = [SampleInput "../../datafiles/ssp/sampleInput.txt"]
 -- }

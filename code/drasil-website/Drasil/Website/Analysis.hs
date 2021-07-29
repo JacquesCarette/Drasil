@@ -11,15 +11,12 @@ analysisSec path = section drasilDataTableTitle [mkParagraph $ dataTableDesc pat
 
 drasilDataTableTitle :: Sentence
 dataTableDesc :: FilePath -> Sentence
-dataTableHTMLPath, dataTableCSVPath :: FilePath
 dataTableHTMLRef, dataTableCSVRef :: FilePath -> Reference
 
 drasilDataTableTitle = S "Drasil Data Table"
 dataTableDesc path = S "Here is the updated" +:+ namedRef (dataTableHTMLRef path) (S "Data Table") +:+ S "for the Drasil framework. There is also a" +:+ namedRef (dataTableCSVRef path) (S "downloadable version") +:+ S "(csv format)."
-dataTableHTMLPath = "DataTable/DataTable.html"
-dataTableCSVPath = "DataTable/DataTable.csv"
-dataTableHTMLRef path = Reference "dataTableHTML" (URI (path ++ dataTableHTMLPath)) (shortname' $ S "dataTableHTML")
-dataTableCSVRef path = Reference "dataTableCSV" (URI (path ++ dataTableCSVPath)) (shortname' $ S "dataTableCSV")
+dataTableHTMLRef path = Reference "dataTableHTML" (URI (path ++ "ClassInstDep/DataTable.html")) (shortname' $ S "dataTableHTML")
+dataTableCSVRef path = Reference "dataTableCSV" (URI (path ++ "ClassInstDep/DataTable.csv")) (shortname' $ S "dataTableCSV")
 
 analysisSecRef :: Reference
 analysisSecRef = makeSecRef "Analysis" $ S "Analysis"

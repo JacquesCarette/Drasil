@@ -23,7 +23,7 @@ sysFigure :: LabelledContent
 sysFigure
   = llcc (makeFigRef "pidSysDiagram") $
       figWithWidth (atStartNP $ the physicalSystem)
-        "../../../datafiles/PDController/Fig_PDController.png"
+        "../../../datafiles/pdcontroller/Fig_PDController.png"
         70
 
 sysGoalInput :: [Sentence]

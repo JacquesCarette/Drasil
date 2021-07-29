@@ -27,6 +27,6 @@ module Drasil.SWHS.Choices where
 --   constStructure = Inline,   -- Inline, WithInputs, Store Structure
 --   constRepr = Const,      -- Var, Const
 --   conceptMatch = matchConcepts ([] :: [QDefinition]) [],
---   auxFiles = [SampleInput "../../datafiles/SWHS/sampleInput.txt"]
+--   auxFiles = [SampleInput "../../datafiles/swhs/sampleInput.txt"]
 -- }
 

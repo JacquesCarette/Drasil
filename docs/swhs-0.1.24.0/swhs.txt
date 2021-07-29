@@ -304,7 +304,6 @@ srs :: Document
 fullSI :: SystemInformation
 printSetting :: PrintingInformation
 resourcePath :: String
-directoryName :: FilePath
 units :: [UnitDefn]
 si :: SystemInformation
 symbMap :: ChunkDB

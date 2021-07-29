@@ -17,13 +17,12 @@ module Language.Drasil.Output.Formats
 --   generated output (specified <i>without</i> a file extension).
 type Filename = String
 
--- | Document types include Software Requirements Specification, MG, MIS,
---   and Website. The first three will generate as TeX files while the
---   Website generates as HTML.
+-- | Document types include Software Requirements Specification and
+--   Website. Choosing SRS will generate both TeX and HTML files, while
+--   Website generates only as HTML. This also determines what folders the
+--   generated files will be placed into.
 data DocType
 SRS :: DocType
-MG :: DocType
-MIS :: DocType
 Website :: DocType
 
 -- | Document specifications. Holds the type of document (<a>DocType</a>)
@@ -56,9 +55,10 @@ genDot :: SystemInformation -> IO ()
 -- | Calls the code generator.
 genCode :: Choices -> CodeSpec -> IO ()
 
--- | Document types include Software Requirements Specification, MG, MIS,
---   and Website. The first three will generate as TeX files while the
---   Website generates as HTML.
+-- | Document types include Software Requirements Specification and
+--   Website. Choosing SRS will generate both TeX and HTML files, while
+--   Website generates only as HTML. This also determines what folders the
+--   generated files will be placed into.
 data DocType
 SRS :: DocType
 Website :: DocType

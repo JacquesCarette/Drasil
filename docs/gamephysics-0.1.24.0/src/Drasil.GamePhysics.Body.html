@@ -92,7 +92,7 @@ forall c. (Idea c, HasUID c) =&gt; c -&gt; Sentence
 </span><span id="line-67"></span><span>
 </span><span id="line-68"></span><span class="annot"><a href="Drasil.GamePhysics.Body.html#resourcePath"><span class="hs-identifier hs-type">resourcePath</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-69"></span><span id="resourcePath"><span class="annot"><span class="annottext">resourcePath :: String
-</span><a href="Drasil.GamePhysics.Body.html#resourcePath"><span class="hs-identifier hs-var hs-var">resourcePath</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;../../../datafiles/GamePhysics/&quot;</span></span><span>
+</span><a href="Drasil.GamePhysics.Body.html#resourcePath"><span class="hs-identifier hs-var hs-var">resourcePath</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;../../../../datafiles/gamephysics/&quot;</span></span><span>
 </span><span id="line-70"></span><span>
 </span><span id="line-71"></span><span class="annot"><a href="Drasil.GamePhysics.Body.html#mkSRS"><span class="hs-identifier hs-type">mkSRS</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">SRSDecl</span></span><span>
 </span><span id="line-72"></span><span id="mkSRS"><span class="annot"><span class="annottext">mkSRS :: SRSDecl
@@ -106,7 +106,7 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><span class="hs-identifier hs-var">intro</span></span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">RefTab
 </span><span class="hs-identifier hs-var">TUnits</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[TSIntro] -&gt; RefTab
 </span><span class="hs-identifier hs-var">tsymb</span></span><span> </span><span class="annot"><span class="annottext">[TSIntro]
-</span><a href="#local-6989586621679087594"><span class="hs-identifier hs-var">tableOfSymbols</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">RefTab
+</span><a href="#local-6989586621679087593"><span class="hs-identifier hs-var">tableOfSymbols</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">RefTab
 </span><span class="hs-identifier hs-var">TAandA</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-74"></span><span>  </span><span class="annot"><span class="annottext">IntroSec -&gt; DocSection
 </span><span class="hs-identifier hs-var">IntroSec</span></span><span> </span><span class="annot"><span class="annottext">(IntroSec -&gt; DocSection) -&gt; IntroSec -&gt; DocSection
@@ -300,8 +300,8 @@ forall a b. (a -&gt; b) -&gt; a -&gt; b
 </span><a href="Drasil.GamePhysics.Concepts.html#gamePhysics"><span class="hs-identifier hs-var">gamePhysics</span></a></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-107"></span><span>    </span><span class="annot"><span class="annottext">DocSection
 </span><span class="hs-identifier hs-var">Bibliography</span></span><span class="hs-special">]</span><span>
-</span><span id="line-108"></span><span>      </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679087594"><span class="annot"><span class="annottext">tableOfSymbols :: [TSIntro]
-</span><a href="#local-6989586621679087594"><span class="hs-identifier hs-var hs-var">tableOfSymbols</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TSIntro
+</span><span id="line-108"></span><span>      </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679087593"><span class="annot"><span class="annottext">tableOfSymbols :: [TSIntro]
+</span><a href="#local-6989586621679087593"><span class="hs-identifier hs-var hs-var">tableOfSymbols</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">TSIntro
 </span><span class="hs-identifier hs-var">TSPurpose</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">[TConvention] -&gt; TSIntro
 </span><span class="hs-identifier hs-var">TypogConvention</span></span><span class="hs-special">[</span><span class="annot"><span class="annottext">Emphasis -&gt; TConvention
 </span><span class="hs-identifier hs-var">Vector</span></span><span> </span><span class="annot"><span class="annottext">Emphasis
@@ -380,7 +380,7 @@ forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">QDefinition -&gt; [QDefinition] -&gt; Block QDefinition
 forall a. a -&gt; [a] -&gt; Block a
 </span><span class="hs-operator hs-var">`Parallel`</span></span><span> </span><span class="hs-special">[</span><span class="hs-special">]</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[QDefinition]
-</span><a href="#local-6989586621679087521"><span class="hs-identifier hs-var">qDefs</span></a></span><span class="hs-special">,</span><span>
+</span><a href="#local-6989586621679087520"><span class="hs-identifier hs-var">qDefs</span></a></span><span class="hs-special">,</span><span>
 </span><span id="line-128"></span><span>  </span><span class="annot"><span class="annottext">_constraints :: [UncertQ]
 </span><span class="hs-identifier hs-var">_constraints</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">[UncertQ]
 </span><a href="Drasil.GamePhysics.Unitals.html#inputConstraints"><span class="hs-identifier hs-var">inputConstraints</span></a></span><span class="hs-special">,</span><span>
@@ -396,8 +396,8 @@ forall a. a -&gt; [a] -&gt; Block a
 </span><span class="hs-identifier hs-var">refdb</span></span><span>       </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ReferenceDB
 </span><a href="Drasil.GamePhysics.Body.html#refDB"><span class="hs-identifier hs-var">refDB</span></a></span><span>
 </span><span id="line-133"></span><span class="hs-special">}</span><span>
-</span><span id="line-134"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679087521"><span class="annot"><span class="annottext">qDefs :: [QDefinition]
-</span><a href="#local-6989586621679087521"><span class="hs-identifier hs-var hs-var">qDefs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(DataDefinition -&gt; QDefinition)
+</span><span id="line-134"></span><span>  </span><span class="hs-keyword">where</span><span> </span><span id="local-6989586621679087520"><span class="annot"><span class="annottext">qDefs :: [QDefinition]
+</span><a href="#local-6989586621679087520"><span class="hs-identifier hs-var hs-var">qDefs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(DataDefinition -&gt; QDefinition)
 -&gt; [DataDefinition] -&gt; [QDefinition]
 forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
 </span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">DataDefinition -&gt; QDefinition

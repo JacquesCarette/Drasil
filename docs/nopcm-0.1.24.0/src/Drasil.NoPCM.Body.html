@@ -113,7 +113,7 @@ forall c d. (NamedIdea c, NamedIdea d) =&gt; c -&gt; d -&gt; Sentence
 </span><span id="line-94"></span><span>
 </span><span id="line-95"></span><span class="annot"><a href="Drasil.NoPCM.Body.html#resourcePath"><span class="hs-identifier hs-type">resourcePath</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
 </span><span id="line-96"></span><span id="resourcePath"><span class="annot"><span class="annottext">resourcePath :: String
-</span><a href="Drasil.NoPCM.Body.html#resourcePath"><span class="hs-identifier hs-var hs-var">resourcePath</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;../../../datafiles/NoPCM/&quot;</span></span><span>
+</span><a href="Drasil.NoPCM.Body.html#resourcePath"><span class="hs-identifier hs-var hs-var">resourcePath</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;../../../../datafiles/nopcm/&quot;</span></span><span>
 </span><span id="line-97"></span><span>
 </span><span id="line-98"></span><span class="hs-comment">-- This defines the standard concepts used throughout the document</span><span>
 </span><span id="line-99"></span><span class="annot"><a href="Drasil.NoPCM.Body.html#units"><span class="hs-identifier hs-type">units</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">UnitDefn</span></span><span class="hs-special">]</span><span>
@@ -663,16 +663,16 @@ forall q. (Quantity q, MayHaveUnit q) =&gt; q -&gt; QuantityDict
 </span><span class="hs-identifier hs-var">tempW</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">ConstrConcept
 </span><span class="hs-identifier hs-var">watE</span></span><span class="hs-special">]</span><span class="hs-special">,</span><span>     </span><span class="hs-comment">--outputs</span><span>
 </span><span id="line-204"></span><span>  </span><span class="annot"><span class="annottext">_defSequence :: [Block QDefinition]
-</span><span class="hs-identifier hs-var">_defSequence</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679104573"><span class="annot"><span class="annottext">x :: [QDefinition]
-</span><a href="#local-6989586621679104573"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">QDefinition -&gt; [QDefinition] -&gt; Block QDefinition
+</span><span class="hs-identifier hs-var">_defSequence</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679104568"><span class="annot"><span class="annottext">x :: [QDefinition]
+</span><a href="#local-6989586621679104568"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">QDefinition -&gt; [QDefinition] -&gt; Block QDefinition
 forall a. a -&gt; [a] -&gt; Block a
 </span><span class="hs-identifier hs-var">Parallel</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[QDefinition] -&gt; QDefinition
 forall a. [a] -&gt; a
 </span><span class="hs-identifier hs-var">head</span></span><span> </span><span class="annot"><span class="annottext">[QDefinition]
-</span><a href="#local-6989586621679104573"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[QDefinition] -&gt; [QDefinition]
+</span><a href="#local-6989586621679104568"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">[QDefinition] -&gt; [QDefinition]
 forall a. [a] -&gt; [a]
 </span><span class="hs-identifier hs-var">tail</span></span><span> </span><span class="annot"><span class="annottext">[QDefinition]
-</span><a href="#local-6989586621679104573"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[QDefinition]
+</span><a href="#local-6989586621679104568"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[QDefinition]
 </span><a href="Drasil.NoPCM.DataDefs.html#qDefs"><span class="hs-identifier hs-var">qDefs</span></a></span><span class="hs-special">]</span><span class="hs-special">,</span><span>
 </span><span id="line-205"></span><span>  </span><span class="annot"><span class="annottext">_constraints :: [ConstrainedChunk]
 </span><span class="hs-identifier hs-var">_constraints</span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(UncertQ -&gt; ConstrainedChunk) -&gt; [UncertQ] -&gt; [ConstrainedChunk]

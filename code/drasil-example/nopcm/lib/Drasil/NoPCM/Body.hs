@@ -93,7 +93,7 @@ printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
 
 resourcePath :: String
-resourcePath = "../../../datafiles/NoPCM/"
+resourcePath = "../../../../datafiles/NoPCM/"
 
 -- This defines the standard concepts used throughout the document
 units :: [UnitDefn]

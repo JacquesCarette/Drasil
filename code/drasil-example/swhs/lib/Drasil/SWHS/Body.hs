@@ -80,7 +80,7 @@ printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
 
 resourcePath :: String
-resourcePath = "../../../datafiles/SWHS/"
+resourcePath = "../../../../datafiles/SWHS/"
 
 directoryName :: FilePath
 directoryName = "SWHS"

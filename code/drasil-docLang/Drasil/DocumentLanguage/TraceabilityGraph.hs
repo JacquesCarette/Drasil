@@ -182,7 +182,7 @@ traceyGraphPath ex f = resourcePath ++ concat (words ex) ++ "/" ++ f ++ ".svg"
 
 -- | Traceability graphs reference path.
 resourcePath :: String
-resourcePath = "../../../traceygraphs/"
+resourcePath = "../../../../traceygraphs/"
 
 -- | Helper to create a list of traceability graph references.
 folderList' :: [ItemType]

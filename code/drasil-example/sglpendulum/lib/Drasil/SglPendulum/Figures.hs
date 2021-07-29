@@ -6,7 +6,7 @@ import Utils.Drasil.Concepts
 import Data.Drasil.Concepts.Documentation (physicalSystem, sysCont)
 
 resourcePath :: String
-resourcePath = "../../../datafiles/SglPendulum/"
+resourcePath = "../../../../datafiles/SglPendulum/"
 
 figMotion :: LabelledContent
 figMotion = llcc (makeFigRef "sglpendulum") $ figWithWidth (atStartNP (the physicalSystem))

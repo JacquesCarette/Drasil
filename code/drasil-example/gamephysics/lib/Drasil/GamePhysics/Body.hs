@@ -66,7 +66,7 @@ printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
 
 resourcePath :: String
-resourcePath = "../../../datafiles/GamePhysics/"
+resourcePath = "../../../../datafiles/GamePhysics/"
 
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents,

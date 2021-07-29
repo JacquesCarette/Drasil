@@ -3887,6 +3887,8 @@ digraph alltypes {
 	}
 	subgraph drails {
 	}
+	subgraph main {
+	}
 	subgraph analyiss {
 	}
 	subgraph body {
@@ -3919,10 +3921,6 @@ digraph alltypes {
 		Example	[shape=oval, color=cyan3, label="Example"];
 		}
 	}
-	subgraph graphs {
-	}
 	subgraph introduction {
-	}
-	subgraph main {
 	}
 }

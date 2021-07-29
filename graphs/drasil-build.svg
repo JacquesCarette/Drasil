@@ -30,56 +30,56 @@
 <!-- u5 -->
 <g id="node2" class="node">
 <title>u5</title>
-<ellipse fill="#ffffbb" stroke="black" cx="133.89" cy="-181" rx="133.78" ry="18"/>
-<text text-anchor="middle" x="133.89" y="-177.3" font-family="Times,serif" font-size="14.00">Build.Drasil.Make.Helpers</text>
-</g>
-<!-- u2 -->
-<g id="node5" class="node">
-<title>u2</title>
 <ellipse fill="#ffffbb" stroke="black" cx="273.89" cy="-101" rx="115.88" ry="18"/>
 <text text-anchor="middle" x="273.89" y="-97.3" font-family="Times,serif" font-size="14.00">Build.Drasil.Make.AST</text>
-</g>
-<!-- u5&#45;&gt;u2 -->
-<g id="edge6" class="edge">
-<title>u5&#45;&gt;u2</title>
-<path fill="none" stroke="black" d="M163.92,-163.27C184.82,-151.62 212.88,-135.99 235.42,-123.43"/>
-<polygon fill="black" stroke="black" points="237.35,-126.36 244.38,-118.44 233.95,-120.25 237.35,-126.36"/>
-</g>
-<!-- u4&#45;&gt;u5 -->
-<g id="edge5" class="edge">
-<title>u4&#45;&gt;u5</title>
-<path fill="none" stroke="black" d="M244.2,-243.46C223.46,-231.9 195.56,-216.36 173,-203.79"/>
-<polygon fill="black" stroke="black" points="174.46,-200.6 164.02,-198.79 171.05,-206.71 174.46,-200.6"/>
 </g>
 <!-- u3 -->
 <g id="node4" class="node">
 <title>u3</title>
-<ellipse fill="#ffffbb" stroke="black" cx="414.89" cy="-181" rx="128.88" ry="18"/>
-<text text-anchor="middle" x="414.89" y="-177.3" font-family="Times,serif" font-size="14.00">Build.Drasil.Make.Import</text>
+<ellipse fill="#ffffbb" stroke="black" cx="273.89" cy="-20" rx="151.37" ry="18"/>
+<text text-anchor="middle" x="273.89" y="-16.3" font-family="Times,serif" font-size="14.00">Build.Drasil.Make.MakeString</text>
 </g>
-<!-- u4&#45;&gt;u3 -->
-<g id="edge4" class="edge">
-<title>u4&#45;&gt;u3</title>
-<path fill="none" stroke="black" d="M303.79,-243.46C324.91,-231.77 353.42,-216.01 376.26,-203.37"/>
-<polygon fill="black" stroke="black" points="377.97,-206.42 385.03,-198.52 374.58,-200.3 377.97,-206.42"/>
+<!-- u5&#45;&gt;u3 -->
+<g id="edge6" class="edge">
+<title>u5&#45;&gt;u3</title>
+<path fill="none" stroke="black" d="M273.89,-82.86C273.89,-72.71 273.89,-59.63 273.89,-48.12"/>
+<polygon fill="black" stroke="black" points="277.39,-48.11 273.89,-38.11 270.39,-48.11 277.39,-48.11"/>
 </g>
-<!-- u3&#45;&gt;u2 -->
-<g id="edge3" class="edge">
-<title>u3&#45;&gt;u2</title>
-<path fill="none" stroke="black" d="M384.99,-163.46C363.86,-151.77 335.36,-136.01 312.52,-123.37"/>
-<polygon fill="black" stroke="black" points="314.19,-120.3 303.75,-118.52 310.8,-126.42 314.19,-120.3"/>
+<!-- u2 -->
+<g id="node5" class="node">
+<title>u2</title>
+<ellipse fill="#ffffbb" stroke="black" cx="133.89" cy="-181" rx="133.78" ry="18"/>
+<text text-anchor="middle" x="133.89" y="-177.3" font-family="Times,serif" font-size="14.00">Build.Drasil.Make.Helpers</text>
+</g>
+<!-- u4&#45;&gt;u2 -->
+<g id="edge5" class="edge">
+<title>u4&#45;&gt;u2</title>
+<path fill="none" stroke="black" d="M244.2,-243.46C223.46,-231.9 195.56,-216.36 173,-203.79"/>
+<polygon fill="black" stroke="black" points="174.46,-200.6 164.02,-198.79 171.05,-206.71 174.46,-200.6"/>
 </g>
 <!-- u1 -->
 <g id="node6" class="node">
 <title>u1</title>
-<ellipse fill="#ffffbb" stroke="black" cx="273.89" cy="-20" rx="151.37" ry="18"/>
-<text text-anchor="middle" x="273.89" y="-16.3" font-family="Times,serif" font-size="14.00">Build.Drasil.Make.MakeString</text>
+<ellipse fill="#ffffbb" stroke="black" cx="414.89" cy="-181" rx="128.88" ry="18"/>
+<text text-anchor="middle" x="414.89" y="-177.3" font-family="Times,serif" font-size="14.00">Build.Drasil.Make.Import</text>
 </g>
-<!-- u2&#45;&gt;u1 -->
+<!-- u4&#45;&gt;u1 -->
+<g id="edge4" class="edge">
+<title>u4&#45;&gt;u1</title>
+<path fill="none" stroke="black" d="M303.79,-243.46C324.91,-231.77 353.42,-216.01 376.26,-203.37"/>
+<polygon fill="black" stroke="black" points="377.97,-206.42 385.03,-198.52 374.58,-200.3 377.97,-206.42"/>
+</g>
+<!-- u2&#45;&gt;u5 -->
+<g id="edge3" class="edge">
+<title>u2&#45;&gt;u5</title>
+<path fill="none" stroke="black" d="M163.92,-163.27C184.82,-151.62 212.88,-135.99 235.42,-123.43"/>
+<polygon fill="black" stroke="black" points="237.35,-126.36 244.38,-118.44 233.95,-120.25 237.35,-126.36"/>
+</g>
+<!-- u1&#45;&gt;u5 -->
 <g id="edge2" class="edge">
-<title>u2&#45;&gt;u1</title>
-<path fill="none" stroke="black" d="M273.89,-82.86C273.89,-72.71 273.89,-59.63 273.89,-48.12"/>
-<polygon fill="black" stroke="black" points="277.39,-48.11 273.89,-38.11 270.39,-48.11 277.39,-48.11"/>
+<title>u1&#45;&gt;u5</title>
+<path fill="none" stroke="black" d="M384.99,-163.46C363.86,-151.77 335.36,-136.01 312.52,-123.37"/>
+<polygon fill="black" stroke="black" points="314.19,-120.3 303.75,-118.52 310.8,-126.42 314.19,-120.3"/>
 </g>
 </g>
 </svg>

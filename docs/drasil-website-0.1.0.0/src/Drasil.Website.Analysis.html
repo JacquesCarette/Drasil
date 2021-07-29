@@ -1,0 +1,697 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><link rel="stylesheet" type="text/css" href="style.css" /><script type="text/javascript" src="highlight.js"></script></head><body><pre><span class="hs-comment">-- | Contains all the information needed about the structure</span><span>
+</span><span id="line-2"></span><span class="hs-comment">-- of the Drasil framework to be displayed on the Drasil website.</span><span>
+</span><span id="line-3"></span><span class="hs-keyword">module</span><span> </span><span class="hs-identifier">Drasil.Website.Analysis</span><span> </span><span class="hs-keyword">where</span><span>
+</span><span id="line-4"></span><span>
+</span><span id="line-5"></span><span class="hs-keyword">import</span><span> </span><span class="annot"><span class="hs-identifier">Language.Drasil</span></span><span>
+</span><span id="line-6"></span><span>
+</span><span id="line-7"></span><span>
+</span><span id="line-8"></span><span class="hs-comment">-- * Analysis Section</span><span>
+</span><span id="line-9"></span><span class="hs-comment">--</span><span>
+</span><span id="line-10"></span><span class="hs-comment">-- $analysis</span><span>
+</span><span id="line-11"></span><span class="hs-comment">--</span><span>
+</span><span id="line-12"></span><span class="hs-comment">-- Holds functions that are made for the Analysis section of the Drasil Website,</span><span>
+</span><span id="line-13"></span><span class="hs-comment">-- including the section creator functions, title &amp; introduction, and references.</span><span>
+</span><span id="line-14"></span><span>
+</span><span id="line-15"></span><span>
+</span><span id="line-16"></span><span class="hs-comment">-- | Creates the Analysis of Drasil Section. This section is split into the following sub-sections:</span><span>
+</span><span id="line-17"></span><span class="hs-comment">--</span><span>
+</span><span id="line-18"></span><span class="hs-comment">--    * Data Table (spreadsheet that contains all the information about classes, types, and instances)</span><span>
+</span><span id="line-19"></span><span class="hs-comment">--    * Type Graphs (graphs showing type dependencies)</span><span>
+</span><span id="line-20"></span><span class="hs-comment">--    * Class Instance Graphs (graphs showing the relationships between types and classes, taken from Data Table)</span><span>
+</span><span id="line-21"></span><span class="hs-comment">--    * Package Dependency Graphs (structure of modules within each @drasil-@ package)</span><span>
+</span><span id="line-22"></span><span class="annot"><a href="Drasil.Website.Analysis.html#analysisSec"><span class="hs-identifier hs-type">analysisSec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-23"></span><span id="analysisSec"><span class="annot"><span class="annottext">analysisSec :: FilePath
+-&gt; FilePath -&gt; FilePath -&gt; FilePath -&gt; [FilePath] -&gt; Section
+</span><a href="Drasil.Website.Analysis.html#analysisSec"><span class="hs-identifier hs-var hs-var">analysisSec</span></a></span></span><span> </span><span id="local-6989586621679105616"><span class="annot"><span class="annottext">analysisPath :: FilePath
+</span><a href="#local-6989586621679105616"><span class="hs-identifier hs-var">analysisPath</span></a></span></span><span> </span><span id="local-6989586621679105615"><span class="annot"><span class="annottext">typePath :: FilePath
+</span><a href="#local-6989586621679105615"><span class="hs-identifier hs-var">typePath</span></a></span></span><span> </span><span id="local-6989586621679105614"><span class="annot"><span class="annottext">clsIPath :: FilePath
+</span><a href="#local-6989586621679105614"><span class="hs-identifier hs-var">clsIPath</span></a></span></span><span> </span><span id="local-6989586621679105613"><span class="annot"><span class="annottext">graphPath :: FilePath
+</span><a href="#local-6989586621679105613"><span class="hs-identifier hs-var">graphPath</span></a></span></span><span> </span><span id="local-6989586621679105612"><span class="annot"><span class="annottext">pkgs :: [FilePath]
+</span><a href="#local-6989586621679105612"><span class="hs-identifier hs-var">pkgs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><span id="line-24"></span><span>    </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.Website.Analysis.html#drasilAnalysisTitle"><span class="hs-identifier hs-var">drasilAnalysisTitle</span></a></span><span> </span><span class="hs-comment">-- Section title</span><span>
+</span><span id="line-25"></span><span>    </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence -&gt; Contents
+</span><span class="hs-identifier hs-var">mkParagraph</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.Website.Analysis.html#analysisIntro"><span class="hs-identifier hs-var">analysisIntro</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-comment">-- Section introduction</span><span>
+</span><span id="line-26"></span><span>    </span><span class="hs-special">[</span><span class="annot"><span class="annottext">FilePath -&gt; Section
+</span><a href="Drasil.Website.Analysis.html#dataTableSec"><span class="hs-identifier hs-var">dataTableSec</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105616"><span class="hs-identifier hs-var">analysisPath</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; [FilePath] -&gt; Section
+</span><a href="Drasil.Website.Analysis.html#tableOfGraphsSec"><span class="hs-identifier hs-var">tableOfGraphsSec</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105615"><span class="hs-identifier hs-var">typePath</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105614"><span class="hs-identifier hs-var">clsIPath</span></a></span><span> </span><span class="annot"><span class="annottext">[FilePath]
+</span><a href="#local-6989586621679105612"><span class="hs-identifier hs-var">pkgs</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-27"></span><span>      </span><span class="annot"><span class="annottext">FilePath -&gt; [FilePath] -&gt; Section
+</span><a href="Drasil.Website.Analysis.html#graphSec"><span class="hs-identifier hs-var">graphSec</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105613"><span class="hs-identifier hs-var">graphPath</span></a></span><span> </span><span class="annot"><span class="annottext">([FilePath] -&gt; Section) -&gt; [FilePath] -&gt; Section
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(FilePath -&gt; FilePath) -&gt; [FilePath] -&gt; [FilePath]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-string">&quot;drasil-&quot;</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[FilePath]
+</span><a href="#local-6989586621679105612"><span class="hs-identifier hs-var">pkgs</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-comment">-- Subsections</span><span>
+</span><span id="line-28"></span><span>    </span><span class="annot"><span class="annottext">(Reference -&gt; Section) -&gt; Reference -&gt; Section
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Analysis&quot;</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Analysis&quot;</span></span><span> </span><span class="hs-comment">-- Section Reference</span><span>
+</span><span id="line-29"></span><span>
+</span><span id="line-30"></span><span class="hs-comment">-- | Analysis section title.</span><span>
+</span><span id="line-31"></span><span class="annot"><a href="Drasil.Website.Analysis.html#drasilAnalysisTitle"><span class="hs-identifier hs-type">drasilAnalysisTitle</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-32"></span><span id="drasilAnalysisTitle"><span class="annot"><span class="annottext">drasilAnalysisTitle :: Sentence
+</span><a href="Drasil.Website.Analysis.html#drasilAnalysisTitle"><span class="hs-identifier hs-var hs-var">drasilAnalysisTitle</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Analysis of Drasil&quot;</span></span><span>
+</span><span id="line-33"></span><span>
+</span><span id="line-34"></span><span class="hs-comment">-- | Analysis section introduction.</span><span>
+</span><span id="line-35"></span><span class="annot"><a href="Drasil.Website.Analysis.html#analysisIntro"><span class="hs-identifier hs-type">analysisIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-36"></span><span id="analysisIntro"><span class="annot"><span class="annottext">analysisIntro :: Sentence
+</span><a href="Drasil.Website.Analysis.html#analysisIntro"><span class="hs-identifier hs-var hs-var">analysisIntro</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;This section contains an graphs and tables that may be used to analyze the \
+  \structure of the Drasil framework. Here, we will explore the relationship between data types, \
+  \classes, and instances of those classes within Drasil, as well as the structure of individual \
+  \Drasil packages.&quot;</span></span><span>
+</span><span id="line-40"></span><span>
+</span><span id="line-41"></span><span class="hs-comment">-- | Gathers all references used in this file.</span><span>
+</span><span id="line-42"></span><span class="annot"><a href="Drasil.Website.Analysis.html#analysisRefs"><span class="hs-identifier hs-type">analysisRefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span class="hs-special">]</span><span>
+</span><span id="line-43"></span><span id="analysisRefs"><span class="annot"><span class="annottext">analysisRefs :: FilePath
+-&gt; FilePath -&gt; FilePath -&gt; FilePath -&gt; [FilePath] -&gt; [Reference]
+</span><a href="Drasil.Website.Analysis.html#analysisRefs"><span class="hs-identifier hs-var hs-var">analysisRefs</span></a></span></span><span> </span><span id="local-6989586621679105601"><span class="annot"><span class="annottext">analysisPath :: FilePath
+</span><a href="#local-6989586621679105601"><span class="hs-identifier hs-var">analysisPath</span></a></span></span><span> </span><span id="local-6989586621679105600"><span class="annot"><span class="annottext">typePath :: FilePath
+</span><a href="#local-6989586621679105600"><span class="hs-identifier hs-var">typePath</span></a></span></span><span> </span><span id="local-6989586621679105599"><span class="annot"><span class="annottext">clsIPath :: FilePath
+</span><a href="#local-6989586621679105599"><span class="hs-identifier hs-var">clsIPath</span></a></span></span><span> </span><span id="local-6989586621679105598"><span class="annot"><span class="annottext">graphPath :: FilePath
+</span><a href="#local-6989586621679105598"><span class="hs-identifier hs-var">graphPath</span></a></span></span><span> </span><span id="local-6989586621679105597"><span class="annot"><span class="annottext">pkgs :: [FilePath]
+</span><a href="#local-6989586621679105597"><span class="hs-identifier hs-var">pkgs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><span id="line-44"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">FilePath -&gt; Reference
+</span><a href="Drasil.Website.Analysis.html#dataTableHTMLRef"><span class="hs-identifier hs-var">dataTableHTMLRef</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105601"><span class="hs-identifier hs-var">analysisPath</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Reference
+</span><a href="Drasil.Website.Analysis.html#dataTableCSVRef"><span class="hs-identifier hs-var">dataTableCSVRef</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105601"><span class="hs-identifier hs-var">analysisPath</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-45"></span><span>  </span><span class="annot"><span class="annottext">[Reference] -&gt; [Reference] -&gt; [Reference]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(FilePath -&gt; Reference) -&gt; [FilePath] -&gt; [Reference]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath -&gt; FilePath -&gt; Reference
+</span><a href="Drasil.Website.Analysis.html#getGraphsInTableRef"><span class="hs-identifier hs-var">getGraphsInTableRef</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;datatype&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105600"><span class="hs-identifier hs-var">typePath</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[FilePath]
+</span><a href="#local-6989586621679105597"><span class="hs-identifier hs-var">pkgs</span></a></span><span>
+</span><span id="line-46"></span><span>  </span><span class="annot"><span class="annottext">[Reference] -&gt; [Reference] -&gt; [Reference]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(FilePath -&gt; Reference) -&gt; [FilePath] -&gt; [Reference]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath -&gt; FilePath -&gt; Reference
+</span><a href="Drasil.Website.Analysis.html#getGraphsInTableRef"><span class="hs-identifier hs-var">getGraphsInTableRef</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;classInst&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105599"><span class="hs-identifier hs-var">clsIPath</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[FilePath]
+</span><a href="#local-6989586621679105597"><span class="hs-identifier hs-var">pkgs</span></a></span><span>
+</span><span id="line-47"></span><span>  </span><span class="annot"><span class="annottext">[Reference] -&gt; [Reference] -&gt; [Reference]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(FilePath -&gt; Reference) -&gt; [FilePath] -&gt; [Reference]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath -&gt; FilePath -&gt; Reference
+</span><a href="Drasil.Website.Analysis.html#getGraphsInTableRef"><span class="hs-identifier hs-var">getGraphsInTableRef</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;datatype&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;circo_&quot;</span></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105600"><span class="hs-identifier hs-var">typePath</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[FilePath]
+</span><a href="#local-6989586621679105597"><span class="hs-identifier hs-var">pkgs</span></a></span><span>
+</span><span id="line-48"></span><span>  </span><span class="annot"><span class="annottext">[Reference] -&gt; [Reference] -&gt; [Reference]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">(FilePath -&gt; Reference) -&gt; [FilePath] -&gt; [Reference]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath -&gt; FilePath -&gt; Reference
+</span><a href="Drasil.Website.Analysis.html#getGraphsInTableRef"><span class="hs-identifier hs-var">getGraphsInTableRef</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;classInst&quot;</span></span><span> </span><span class="annot"><span class="hs-string">&quot;circo_&quot;</span></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105599"><span class="hs-identifier hs-var">clsIPath</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[FilePath]
+</span><a href="#local-6989586621679105597"><span class="hs-identifier hs-var">pkgs</span></a></span><span>
+</span><span id="line-49"></span><span>  </span><span class="annot"><span class="annottext">[Reference] -&gt; [Reference] -&gt; [Reference]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; [FilePath] -&gt; [Reference]
+</span><a href="Drasil.Website.Analysis.html#drasilDepGraphRefs"><span class="hs-identifier hs-var">drasilDepGraphRefs</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105598"><span class="hs-identifier hs-var">graphPath</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">(FilePath -&gt; FilePath) -&gt; [FilePath] -&gt; [FilePath]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="hs-string">&quot;drasil-&quot;</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[FilePath]
+</span><a href="#local-6989586621679105597"><span class="hs-identifier hs-var">pkgs</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-50"></span><span>
+</span><span id="line-51"></span><span class="hs-comment">-- * Data Table Subsection (Intersections of Types and Classes)</span><span>
+</span><span id="line-52"></span><span class="hs-comment">--</span><span>
+</span><span id="line-53"></span><span class="hs-comment">-- $dataTable</span><span>
+</span><span id="line-54"></span><span class="hs-comment">--</span><span>
+</span><span id="line-55"></span><span class="hs-comment">-- Contains a large spreadsheet of all the types, classes, and class instances in Drasil,</span><span>
+</span><span id="line-56"></span><span class="hs-comment">-- as well as the packages in which they are defined or used.</span><span>
+</span><span id="line-57"></span><span>
+</span><span id="line-58"></span><span class="hs-comment">-- | Data Table subsection.</span><span>
+</span><span id="line-59"></span><span class="annot"><a href="Drasil.Website.Analysis.html#dataTableSec"><span class="hs-identifier hs-type">dataTableSec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-60"></span><span id="dataTableSec"><span class="annot"><span class="annottext">dataTableSec :: FilePath -&gt; Section
+</span><a href="Drasil.Website.Analysis.html#dataTableSec"><span class="hs-identifier hs-var hs-var">dataTableSec</span></a></span></span><span> </span><span id="local-6989586621679105592"><span class="annot"><span class="annottext">path :: FilePath
+</span><a href="#local-6989586621679105592"><span class="hs-identifier hs-var">path</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><span id="line-61"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.Website.Analysis.html#dataTableTitle"><span class="hs-identifier hs-var">dataTableTitle</span></a></span><span> </span><span class="hs-comment">-- Title</span><span>
+</span><span id="line-62"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence -&gt; Contents
+</span><span class="hs-identifier hs-var">mkParagraph</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Contents) -&gt; Sentence -&gt; Contents
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><a href="Drasil.Website.Analysis.html#dataTableDesc"><span class="hs-identifier hs-var">dataTableDesc</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105592"><span class="hs-identifier hs-var">path</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-comment">-- Contents</span><span>
+</span><span id="line-63"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">(Reference -&gt; Section) -&gt; Reference -&gt; Section
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;DataTable&quot;</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;DataTable&quot;</span></span><span> </span><span class="hs-comment">-- Section reference</span><span>
+</span><span id="line-64"></span><span>
+</span><span id="line-65"></span><span class="hs-comment">-- | Data Table subsection title.</span><span>
+</span><span id="line-66"></span><span class="annot"><a href="Drasil.Website.Analysis.html#dataTableTitle"><span class="hs-identifier hs-type">dataTableTitle</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-67"></span><span id="dataTableTitle"><span class="annot"><span class="annottext">dataTableTitle :: Sentence
+</span><a href="Drasil.Website.Analysis.html#dataTableTitle"><span class="hs-identifier hs-var hs-var">dataTableTitle</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Intersections of Types and Classes&quot;</span></span><span>
+</span><span id="line-68"></span><span>
+</span><span id="line-69"></span><span class="hs-comment">-- | Data table description. Explains the purpose, organization,</span><span>
+</span><span id="line-70"></span><span class="hs-comment">-- and links to a downloadable version.</span><span>
+</span><span id="line-71"></span><span class="annot"><a href="Drasil.Website.Analysis.html#dataTableDesc"><span class="hs-identifier hs-type">dataTableDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-72"></span><span id="dataTableDesc"><span class="annot"><span class="annottext">dataTableDesc :: FilePath -&gt; Sentence
+</span><a href="Drasil.Website.Analysis.html#dataTableDesc"><span class="hs-identifier hs-var hs-var">dataTableDesc</span></a></span></span><span> </span><span id="local-6989586621679105589"><span class="annot"><span class="annottext">path :: FilePath
+</span><a href="#local-6989586621679105589"><span class="hs-identifier hs-var">path</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;This&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">Reference -&gt; Sentence -&gt; Sentence
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">namedRef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; Reference
+</span><a href="Drasil.Website.Analysis.html#dataTableHTMLRef"><span class="hs-identifier hs-var">dataTableHTMLRef</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105589"><span class="hs-identifier hs-var">path</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Data Table&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span>
+</span><span id="line-73"></span><span>  </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is generated by Drasil to keep track of all the different types, classes, and where they intersect through instances. \
+  \The rows are organized in order of Drasil packages, modules, and data types. \
+  \The data types are further separated by their composition; those labelled \
+  \Data Type are completely new types created and used in Drasil, while Newtype Types are \
+  \type synonyms. All of the classes in Drasil are defined as \
+  \column headers, starting from Haskell-native classes like Eq and going through every \
+  \unique Drasil-defined class. A box marked with \
+  \'YYYY' symbolizes the file location of where that particular data type is an instance of a particular class. \
+  \There is also a&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">Reference -&gt; Sentence -&gt; Sentence
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">namedRef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; Reference
+</span><a href="Drasil.Website.Analysis.html#dataTableCSVRef"><span class="hs-identifier hs-var">dataTableCSVRef</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105589"><span class="hs-identifier hs-var">path</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;downloadable version&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;of the Data Table available as a .csv file.&quot;</span></span><span>
+</span><span id="line-82"></span><span>
+</span><span id="line-83"></span><span class="hs-comment">-- | Data table references.</span><span>
+</span><span id="line-84"></span><span class="annot"><a href="Drasil.Website.Analysis.html#dataTableHTMLRef"><span class="hs-identifier hs-type">dataTableHTMLRef</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><a href="Drasil.Website.Analysis.html#dataTableCSVRef"><span class="hs-identifier hs-type">dataTableCSVRef</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span>
+</span><span id="line-85"></span><span class="hs-comment">-- | HTML table.</span><span>
+</span><span id="line-86"></span><span id="dataTableHTMLRef"><span class="annot"><span class="annottext">dataTableHTMLRef :: FilePath -&gt; Reference
+</span><a href="Drasil.Website.Analysis.html#dataTableHTMLRef"><span class="hs-identifier hs-var hs-var">dataTableHTMLRef</span></a></span></span><span> </span><span id="local-6989586621679105586"><span class="annot"><span class="annottext">path :: FilePath
+</span><a href="#local-6989586621679105586"><span class="hs-identifier hs-var">path</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; LblType -&gt; ShortName -&gt; Reference
+</span><span class="hs-identifier hs-var">Reference</span></span><span> </span><span class="annot"><span class="hs-string">&quot;dataTableHTML&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; LblType
+</span><span class="hs-identifier hs-var">URI</span></span><span> </span><span class="annot"><span class="annottext">(FilePath -&gt; LblType) -&gt; FilePath -&gt; LblType
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105586"><span class="hs-identifier hs-var">path</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;DataTable/DataTable.html&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; ShortName
+</span><span class="hs-identifier hs-var">shortname'</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; ShortName) -&gt; Sentence -&gt; ShortName
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;dataTableHTML&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-87"></span><span class="hs-comment">-- | Downloadable .csv file.</span><span>
+</span><span id="line-88"></span><span id="dataTableCSVRef"><span class="annot"><span class="annottext">dataTableCSVRef :: FilePath -&gt; Reference
+</span><a href="Drasil.Website.Analysis.html#dataTableCSVRef"><span class="hs-identifier hs-var hs-var">dataTableCSVRef</span></a></span></span><span> </span><span id="local-6989586621679105582"><span class="annot"><span class="annottext">path :: FilePath
+</span><a href="#local-6989586621679105582"><span class="hs-identifier hs-var">path</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; LblType -&gt; ShortName -&gt; Reference
+</span><span class="hs-identifier hs-var">Reference</span></span><span> </span><span class="annot"><span class="hs-string">&quot;dataTableCSV&quot;</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; LblType
+</span><span class="hs-identifier hs-var">URI</span></span><span> </span><span class="annot"><span class="annottext">(FilePath -&gt; LblType) -&gt; FilePath -&gt; LblType
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105582"><span class="hs-identifier hs-var">path</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;DataTable/DataTable.csv&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; ShortName
+</span><span class="hs-identifier hs-var">shortname'</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; ShortName) -&gt; Sentence -&gt; ShortName
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;dataTableCSV&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-89"></span><span>
+</span><span id="line-90"></span><span class="hs-comment">-- * Table of Graphs Subsection</span><span>
+</span><span id="line-91"></span><span class="hs-comment">--</span><span>
+</span><span id="line-92"></span><span class="hs-comment">-- $tableOfGraphs</span><span>
+</span><span id="line-93"></span><span class="hs-comment">--</span><span>
+</span><span id="line-94"></span><span class="hs-comment">-- Generates two tables linked to all the generated dot graphs of Drasil.</span><span>
+</span><span id="line-95"></span><span class="hs-comment">-- The first table only shows the relationship between types, while</span><span>
+</span><span id="line-96"></span><span class="hs-comment">-- the second table shows the relationship between types and classes.</span><span>
+</span><span id="line-97"></span><span>
+</span><span id="line-98"></span><span class="hs-comment">-- | Table of Graphs section. Contains a table for Type dependencies and Class-Instance relations.</span><span>
+</span><span id="line-99"></span><span class="annot"><a href="Drasil.Website.Analysis.html#tableOfGraphsSec"><span class="hs-identifier hs-type">tableOfGraphsSec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-100"></span><span id="tableOfGraphsSec"><span class="annot"><span class="annottext">tableOfGraphsSec :: FilePath -&gt; FilePath -&gt; [FilePath] -&gt; Section
+</span><a href="Drasil.Website.Analysis.html#tableOfGraphsSec"><span class="hs-identifier hs-var hs-var">tableOfGraphsSec</span></a></span></span><span> </span><span id="local-6989586621679105581"><span class="annot"><span class="annottext">typePath :: FilePath
+</span><a href="#local-6989586621679105581"><span class="hs-identifier hs-var">typePath</span></a></span></span><span> </span><span id="local-6989586621679105580"><span class="annot"><span class="annottext">clsIPath :: FilePath
+</span><a href="#local-6989586621679105580"><span class="hs-identifier hs-var">clsIPath</span></a></span></span><span> </span><span id="local-6989586621679105579"><span class="annot"><span class="annottext">pkgs :: [FilePath]
+</span><a href="#local-6989586621679105579"><span class="hs-identifier hs-var">pkgs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><span id="line-101"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.Website.Analysis.html#tableOfGraphsTitle"><span class="hs-identifier hs-var">tableOfGraphsTitle</span></a></span><span> </span><span class="hs-comment">-- Title</span><span>
+</span><span id="line-102"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">Sentence -&gt; Contents
+</span><span class="hs-identifier hs-var">mkParagraph</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.Website.Analysis.html#tableOfTypeGraphsDesc"><span class="hs-identifier hs-var">tableOfTypeGraphsDesc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; [FilePath] -&gt; Contents
+</span><a href="Drasil.Website.Analysis.html#mkTypeGraphTable"><span class="hs-identifier hs-var">mkTypeGraphTable</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105581"><span class="hs-identifier hs-var">typePath</span></a></span><span> </span><span class="annot"><span class="annottext">[FilePath]
+</span><a href="#local-6989586621679105579"><span class="hs-identifier hs-var">pkgs</span></a></span><span class="hs-special">,</span><span>
+</span><span id="line-103"></span><span>    </span><span class="annot"><span class="annottext">Sentence -&gt; Contents
+</span><span class="hs-identifier hs-var">mkParagraph</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.Website.Analysis.html#tableOfClassIGraphsDesc"><span class="hs-identifier hs-var">tableOfClassIGraphsDesc</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; [FilePath] -&gt; Contents
+</span><a href="Drasil.Website.Analysis.html#mkClassInstTable"><span class="hs-identifier hs-var">mkClassInstTable</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105580"><span class="hs-identifier hs-var">clsIPath</span></a></span><span> </span><span class="annot"><span class="annottext">[FilePath]
+</span><a href="#local-6989586621679105579"><span class="hs-identifier hs-var">pkgs</span></a></span><span class="hs-special">]</span><span> </span><span class="hs-comment">-- Contents</span><span>
+</span><span id="line-104"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">(Reference -&gt; Section) -&gt; Reference -&gt; Section
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;TypeAndClassGraphs&quot;</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;TypeAndClassGraphs&quot;</span></span><span> </span><span class="hs-comment">-- Section reference</span><span>
+</span><span id="line-105"></span><span>
+</span><span id="line-106"></span><span class="hs-comment">-- | Table of Graphs title.</span><span>
+</span><span id="line-107"></span><span class="annot"><a href="Drasil.Website.Analysis.html#tableOfGraphsTitle"><span class="hs-identifier hs-type">tableOfGraphsTitle</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-108"></span><span id="tableOfGraphsTitle"><span class="annot"><span class="annottext">tableOfGraphsTitle :: Sentence
+</span><a href="Drasil.Website.Analysis.html#tableOfGraphsTitle"><span class="hs-identifier hs-var hs-var">tableOfGraphsTitle</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Table of Graphs&quot;</span></span><span>
+</span><span id="line-109"></span><span>
+</span><span id="line-110"></span><span class="hs-comment">-- | Helper to create a graph table based on the kind</span><span>
+</span><span id="line-111"></span><span class="hs-comment">-- (either &quot;datatype&quot; or &quot;classInst&quot;), path, and packages.</span><span>
+</span><span id="line-112"></span><span class="annot"><a href="Drasil.Website.Analysis.html#graphTable"><span class="hs-identifier hs-type">graphTable</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span class="hs-special">]</span><span>
+</span><span id="line-113"></span><span id="graphTable"><span class="annot"><span class="annottext">graphTable :: FilePath -&gt; FilePath -&gt; [FilePath] -&gt; [[Sentence]]
+</span><a href="Drasil.Website.Analysis.html#graphTable"><span class="hs-identifier hs-var hs-var">graphTable</span></a></span></span><span> </span><span id="local-6989586621679105572"><span class="annot"><span class="annottext">knd :: FilePath
+</span><a href="#local-6989586621679105572"><span class="hs-identifier hs-var">knd</span></a></span></span><span> </span><span id="local-6989586621679105571"><span class="annot"><span class="annottext">path :: FilePath
+</span><a href="#local-6989586621679105571"><span class="hs-identifier hs-var">path</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(FilePath -&gt; [Sentence]) -&gt; [FilePath] -&gt; [[Sentence]]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath -&gt; [Sentence]
+</span><a href="Drasil.Website.Analysis.html#graphTableEntry"><span class="hs-identifier hs-var">graphTableEntry</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105572"><span class="hs-identifier hs-var">knd</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105571"><span class="hs-identifier hs-var">path</span></a></span><span class="hs-special">)</span><span>
+</span><span id="line-114"></span><span>
+</span><span id="line-115"></span><span class="hs-comment">-- | Helper to create a row in a graph table. Based on the kind of table we want,</span><span>
+</span><span id="line-116"></span><span class="hs-comment">-- the file path to that graph, and the package name.</span><span>
+</span><span id="line-117"></span><span class="annot"><a href="Drasil.Website.Analysis.html#graphTableEntry"><span class="hs-identifier hs-type">graphTableEntry</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span class="hs-special">]</span><span>
+</span><span id="line-118"></span><span id="graphTableEntry"><span class="annot"><span class="annottext">graphTableEntry :: FilePath -&gt; FilePath -&gt; FilePath -&gt; [Sentence]
+</span><a href="Drasil.Website.Analysis.html#graphTableEntry"><span class="hs-identifier hs-var hs-var">graphTableEntry</span></a></span></span><span> </span><span id="local-6989586621679105569"><span class="annot"><span class="annottext">knd :: FilePath
+</span><a href="#local-6989586621679105569"><span class="hs-identifier hs-var">knd</span></a></span></span><span> </span><span id="local-6989586621679105568"><span class="annot"><span class="annottext">path :: FilePath
+</span><a href="#local-6989586621679105568"><span class="hs-identifier hs-var">path</span></a></span></span><span> </span><span id="local-6989586621679105567"><span class="annot"><span class="annottext">pkg :: FilePath
+</span><a href="#local-6989586621679105567"><span class="hs-identifier hs-var">pkg</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105567"><span class="hs-identifier hs-var">pkg</span></a></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; Sentence -&gt; Sentence
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">namedRef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath -&gt; FilePath -&gt; Reference
+</span><a href="Drasil.Website.Analysis.html#getGraphsInTableRef"><span class="hs-identifier hs-var">getGraphsInTableRef</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105569"><span class="hs-identifier hs-var">knd</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;&quot;</span></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105568"><span class="hs-identifier hs-var">path</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105567"><span class="hs-identifier hs-var">pkg</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Dot Graph&quot;</span></span><span class="hs-special">)</span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">Reference -&gt; Sentence -&gt; Sentence
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">namedRef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath -&gt; FilePath -&gt; Reference
+</span><a href="Drasil.Website.Analysis.html#getGraphsInTableRef"><span class="hs-identifier hs-var">getGraphsInTableRef</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105569"><span class="hs-identifier hs-var">knd</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;circo_&quot;</span></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105568"><span class="hs-identifier hs-var">path</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105567"><span class="hs-identifier hs-var">pkg</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Circo Graph&quot;</span></span><span class="hs-special">)</span><span class="hs-special">]</span><span>
+</span><span id="line-119"></span><span>
+</span><span id="line-120"></span><span class="hs-comment">-- | Helper to create a reference that points to the graph specified by its kind</span><span>
+</span><span id="line-121"></span><span class="hs-comment">-- (either &quot;datatype&quot; or &quot;classInst&quot;), prefix (either an empty string or &quot;circo_&quot;), file path</span><span>
+</span><span id="line-122"></span><span class="hs-comment">-- to the graph folder, and package name.</span><span>
+</span><span id="line-123"></span><span class="annot"><a href="Drasil.Website.Analysis.html#getGraphsInTableRef"><span class="hs-identifier hs-type">getGraphsInTableRef</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span>
+</span><span id="line-124"></span><span id="getGraphsInTableRef"><span class="annot"><span class="annottext">getGraphsInTableRef :: FilePath -&gt; FilePath -&gt; FilePath -&gt; FilePath -&gt; Reference
+</span><a href="Drasil.Website.Analysis.html#getGraphsInTableRef"><span class="hs-identifier hs-var hs-var">getGraphsInTableRef</span></a></span></span><span> </span><span id="local-6989586621679105566"><span class="annot"><span class="annottext">knd :: FilePath
+</span><a href="#local-6989586621679105566"><span class="hs-identifier hs-var">knd</span></a></span></span><span> </span><span id="local-6989586621679105565"><span class="annot"><span class="annottext">prfx :: FilePath
+</span><a href="#local-6989586621679105565"><span class="hs-identifier hs-var">prfx</span></a></span></span><span> </span><span id="local-6989586621679105564"><span class="annot"><span class="annottext">path :: FilePath
+</span><a href="#local-6989586621679105564"><span class="hs-identifier hs-var">path</span></a></span></span><span> </span><span id="local-6989586621679105563"><span class="annot"><span class="annottext">pkg :: FilePath
+</span><a href="#local-6989586621679105563"><span class="hs-identifier hs-var">pkg</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; LblType -&gt; ShortName -&gt; Reference
+</span><span class="hs-identifier hs-var">Reference</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105566"><span class="hs-identifier hs-var">knd</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105563"><span class="hs-identifier hs-var">pkg</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105565"><span class="hs-identifier hs-var">prfx</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;graph&quot;</span></span><span class="hs-special">)</span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; LblType
+</span><span class="hs-identifier hs-var">URI</span></span><span> </span><span class="annot"><span class="annottext">(FilePath -&gt; LblType) -&gt; FilePath -&gt; LblType
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105564"><span class="hs-identifier hs-var">path</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105565"><span class="hs-identifier hs-var">prfx</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105563"><span class="hs-identifier hs-var">pkg</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.svg&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(ShortName -&gt; Reference) -&gt; ShortName -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; ShortName
+</span><span class="hs-identifier hs-var">shortname'</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; ShortName) -&gt; Sentence -&gt; ShortName
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">(FilePath -&gt; Sentence) -&gt; FilePath -&gt; Sentence
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105563"><span class="hs-identifier hs-var">pkg</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105565"><span class="hs-identifier hs-var">prfx</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;graph&quot;</span></span><span>
+</span><span id="line-125"></span><span>
+</span><span id="line-126"></span><span class="hs-comment">-- ** Table of Type Graphs</span><span>
+</span><span id="line-127"></span><span>
+</span><span id="line-128"></span><span class="hs-comment">-- | Type dependency table description. Includes information about the colour scheme and what the graph actually means.</span><span>
+</span><span id="line-129"></span><span class="annot"><a href="Drasil.Website.Analysis.html#tableOfTypeGraphsDesc"><span class="hs-identifier hs-type">tableOfTypeGraphsDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-130"></span><span id="tableOfTypeGraphsDesc"><span class="annot"><span class="annottext">tableOfTypeGraphsDesc :: Sentence
+</span><a href="Drasil.Website.Analysis.html#tableOfTypeGraphsDesc"><span class="hs-identifier hs-var hs-var">tableOfTypeGraphsDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;The following&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">Reference -&gt; Sentence -&gt; Sentence
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">namedRef</span></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.Website.Analysis.html#tableTypeGraphRef"><span class="hs-identifier hs-var">tableTypeGraphRef</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Table of Type Graphs&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is another artifact generated by Drasil. \
+  \These graphs explore the dependency of data types upon each other. For more convenient viewing, the graphs have been generated using both the dot \
+  \algorithm (left side) and the circo algorithm (right side). These graphs include record-defined types, newtype wrappers, \
+  \and data types built from other other types. For these graphs, a node with a black outline signifies that the type is not defined in that package, \
+  \but still used in the creation of other types (this includes Haskell-native types since we do not redefine those). A red outline signifies \
+  \that the type was created using Haskell's 'type' syntax, while dark green means the type was made using 'newtype' syntax. A purple border shows \
+  \that the type uses constructor syntax and cyan is used for types written with record syntax. The arrow starts from the base types at the tip and \
+  \follows through so that dependent types are placed at the tail. Usually, this means that those types at the tail may contain the type at the tip of the arrow.&quot;</span></span><span>
+</span><span id="line-138"></span><span>
+</span><span id="line-139"></span><span class="hs-comment">-- | Creates a table that links to all generated type graphs.</span><span>
+</span><span id="line-140"></span><span class="annot"><a href="Drasil.Website.Analysis.html#mkTypeGraphTable"><span class="hs-identifier hs-type">mkTypeGraphTable</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
+</span><span id="line-141"></span><span id="mkTypeGraphTable"><span class="annot"><span class="annottext">mkTypeGraphTable :: FilePath -&gt; [FilePath] -&gt; Contents
+</span><a href="Drasil.Website.Analysis.html#mkTypeGraphTable"><span class="hs-identifier hs-var hs-var">mkTypeGraphTable</span></a></span></span><span> </span><span id="local-6989586621679105561"><span class="annot"><span class="annottext">typePath :: FilePath
+</span><a href="#local-6989586621679105561"><span class="hs-identifier hs-var">typePath</span></a></span></span><span> </span><span id="local-6989586621679105560"><span class="annot"><span class="annottext">pkgs :: [FilePath]
+</span><a href="#local-6989586621679105560"><span class="hs-identifier hs-var">pkgs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">LabelledContent -&gt; Contents
+</span><span class="hs-identifier hs-var">LlC</span></span><span> </span><span class="annot"><span class="annottext">(LabelledContent -&gt; Contents) -&gt; LabelledContent -&gt; Contents
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Reference -&gt; RawContent -&gt; LabelledContent
+</span><span class="hs-identifier hs-var">llcc</span></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.Website.Analysis.html#tableTypeGraphRef"><span class="hs-identifier hs-var">tableTypeGraphRef</span></a></span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; LabelledContent) -&gt; RawContent -&gt; LabelledContent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [[Sentence]] -&gt; Sentence -&gt; Bool -&gt; RawContent
+</span><span class="hs-identifier hs-var">Table</span></span><span> </span><span>
+</span><span id="line-142"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Drasil Package&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Generated using Dot algorithm&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Generated using Circo algorithm&quot;</span></span><span class="hs-special">]</span><span> </span><span class="hs-comment">-- Header row</span><span>
+</span><span id="line-143"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; [FilePath] -&gt; [[Sentence]]
+</span><a href="Drasil.Website.Analysis.html#graphTable"><span class="hs-identifier hs-var">graphTable</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;datatype&quot;</span></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105561"><span class="hs-identifier hs-var">typePath</span></a></span><span> </span><span class="annot"><span class="annottext">[FilePath]
+</span><a href="#local-6989586621679105560"><span class="hs-identifier hs-var">pkgs</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- Create the body of the table</span><span>
+</span><span id="line-144"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Type Graphs&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">True</span></span><span> </span><span class="hs-comment">-- Label the table</span><span>
+</span><span id="line-145"></span><span>
+</span><span id="line-146"></span><span class="hs-comment">-- | Type graph table reference.</span><span>
+</span><span id="line-147"></span><span class="annot"><a href="Drasil.Website.Analysis.html#tableTypeGraphRef"><span class="hs-identifier hs-type">tableTypeGraphRef</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span>
+</span><span id="line-148"></span><span id="tableTypeGraphRef"><span class="annot"><span class="annottext">tableTypeGraphRef :: Reference
+</span><a href="Drasil.Website.Analysis.html#tableTypeGraphRef"><span class="hs-identifier hs-var hs-var">tableTypeGraphRef</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Reference
+</span><span class="hs-identifier hs-var">makeTabRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;TypeGraphs&quot;</span></span><span>
+</span><span id="line-149"></span><span>
+</span><span id="line-150"></span><span class="hs-comment">-- ** Table of Class-Instance Graphs</span><span>
+</span><span id="line-151"></span><span>
+</span><span id="line-152"></span><span class="hs-comment">-- | Class-Instance table description. Includes information about the colour scheme and what the graph actually means.</span><span>
+</span><span id="line-153"></span><span class="annot"><a href="Drasil.Website.Analysis.html#tableOfClassIGraphsDesc"><span class="hs-identifier hs-type">tableOfClassIGraphsDesc</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-154"></span><span id="tableOfClassIGraphsDesc"><span class="annot"><span class="annottext">tableOfClassIGraphsDesc :: Sentence
+</span><a href="Drasil.Website.Analysis.html#tableOfClassIGraphsDesc"><span class="hs-identifier hs-var hs-var">tableOfClassIGraphsDesc</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;This&quot;</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">Reference -&gt; Sentence -&gt; Sentence
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">namedRef</span></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.Website.Analysis.html#classIGraphRef"><span class="hs-identifier hs-var">classIGraphRef</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Table of Class Instance Graphs&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; Sentence -&gt; Sentence
+</span><span class="hs-operator hs-var">+:+</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;is similar in nature to the table above, where \
+  \the generated graphs are rendered using two different algorithms. These graphs aim to look at the structure of classes, data types, and the interactions \
+  \between those two. Specifically, each arrow represents the given type as an instance of a given class. The tip of the arrow points to the class, and the \
+  \tail specifies the type that is an instance of the tip's class. For clarity in analyzing the structure, classes defined in the graph's package are coloured magenta, \
+  \classes that are used but not defined in the package are rendered pink (includes Haskell-native classes), and data types are rendered with a turquoise border.&quot;</span></span><span>
+</span><span id="line-159"></span><span>
+</span><span id="line-160"></span><span class="hs-comment">-- | Creates a table that links to all generated class-instance graphs.</span><span>
+</span><span id="line-161"></span><span class="annot"><a href="Drasil.Website.Analysis.html#mkClassInstTable"><span class="hs-identifier hs-type">mkClassInstTable</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
+</span><span id="line-162"></span><span id="mkClassInstTable"><span class="annot"><span class="annottext">mkClassInstTable :: FilePath -&gt; [FilePath] -&gt; Contents
+</span><a href="Drasil.Website.Analysis.html#mkClassInstTable"><span class="hs-identifier hs-var hs-var">mkClassInstTable</span></a></span></span><span> </span><span id="local-6989586621679105554"><span class="annot"><span class="annottext">clsInstPath :: FilePath
+</span><a href="#local-6989586621679105554"><span class="hs-identifier hs-var">clsInstPath</span></a></span></span><span> </span><span id="local-6989586621679105553"><span class="annot"><span class="annottext">pkgs :: [FilePath]
+</span><a href="#local-6989586621679105553"><span class="hs-identifier hs-var">pkgs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">LabelledContent -&gt; Contents
+</span><span class="hs-identifier hs-var">LlC</span></span><span> </span><span class="annot"><span class="annottext">(LabelledContent -&gt; Contents) -&gt; LabelledContent -&gt; Contents
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Reference -&gt; RawContent -&gt; LabelledContent
+</span><span class="hs-identifier hs-var">llcc</span></span><span> </span><span class="annot"><span class="annottext">Reference
+</span><a href="Drasil.Website.Analysis.html#classIGraphRef"><span class="hs-identifier hs-var">classIGraphRef</span></a></span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; LabelledContent) -&gt; RawContent -&gt; LabelledContent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[Sentence] -&gt; [[Sentence]] -&gt; Sentence -&gt; Bool -&gt; RawContent
+</span><span class="hs-identifier hs-var">Table</span></span><span> </span><span>
+</span><span id="line-163"></span><span>  </span><span class="hs-special">[</span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Drasil Package&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Generated using Dot algorithm&quot;</span></span><span class="hs-special">,</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Generated using Circo algorithm&quot;</span></span><span class="hs-special">]</span><span> </span><span class="hs-comment">-- Header row</span><span>
+</span><span id="line-164"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; [FilePath] -&gt; [[Sentence]]
+</span><a href="Drasil.Website.Analysis.html#graphTable"><span class="hs-identifier hs-var">graphTable</span></a></span><span> </span><span class="annot"><span class="hs-string">&quot;classInst&quot;</span></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105554"><span class="hs-identifier hs-var">clsInstPath</span></a></span><span> </span><span class="annot"><span class="annottext">[FilePath]
+</span><a href="#local-6989586621679105553"><span class="hs-identifier hs-var">pkgs</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- Create the body of the table</span><span>
+</span><span id="line-165"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Class Instance Graphs&quot;</span></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Bool
+</span><span class="hs-identifier hs-var">True</span></span><span> </span><span class="hs-comment">-- Label the table</span><span>
+</span><span id="line-166"></span><span>
+</span><span id="line-167"></span><span class="hs-comment">-- | Class-instance table reference.</span><span>
+</span><span id="line-168"></span><span class="annot"><a href="Drasil.Website.Analysis.html#classIGraphRef"><span class="hs-identifier hs-type">classIGraphRef</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span>
+</span><span id="line-169"></span><span id="classIGraphRef"><span class="annot"><span class="annottext">classIGraphRef :: Reference
+</span><a href="Drasil.Website.Analysis.html#classIGraphRef"><span class="hs-identifier hs-var hs-var">classIGraphRef</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Reference
+</span><span class="hs-identifier hs-var">makeTabRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;ClassInstGraphs&quot;</span></span><span>
+</span><span id="line-170"></span><span>
+</span><span id="line-171"></span><span class="hs-comment">-- * Dependency Graphs Subsection</span><span>
+</span><span id="line-172"></span><span class="hs-comment">--</span><span>
+</span><span id="line-173"></span><span class="hs-comment">-- $depGraphsSubSection</span><span>
+</span><span id="line-174"></span><span class="hs-comment">--</span><span>
+</span><span id="line-175"></span><span class="hs-comment">-- Links all the generated module dependency graphs, and gives an example</span><span>
+</span><span id="line-176"></span><span class="hs-comment">-- to show what these graphs mean and represent. These graphs show the</span><span>
+</span><span id="line-177"></span><span class="hs-comment">-- structure of modules within a given package.</span><span>
+</span><span id="line-178"></span><span>
+</span><span id="line-179"></span><span class="hs-comment">-- | Creates the Package Dependency Graphs section.</span><span>
+</span><span id="line-180"></span><span class="annot"><a href="Drasil.Website.Analysis.html#graphSec"><span class="hs-identifier hs-type">graphSec</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Section</span></span><span>
+</span><span id="line-181"></span><span id="graphSec"><span class="annot"><span class="annottext">graphSec :: FilePath -&gt; [FilePath] -&gt; Section
+</span><a href="Drasil.Website.Analysis.html#graphSec"><span class="hs-identifier hs-var hs-var">graphSec</span></a></span></span><span> </span><span id="local-6989586621679105552"><span class="annot"><span class="annottext">path :: FilePath
+</span><a href="#local-6989586621679105552"><span class="hs-identifier hs-var">path</span></a></span></span><span> </span><span id="local-6989586621679105551"><span class="annot"><span class="annottext">pkgs :: [FilePath]
+</span><a href="#local-6989586621679105551"><span class="hs-identifier hs-var">pkgs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span>
+</span><span id="line-182"></span><span>  </span><span class="annot"><span class="annottext">Sentence -&gt; [Contents] -&gt; [Section] -&gt; Reference -&gt; Section
+</span><span class="hs-identifier hs-var">section</span></span><span> </span><span class="annot"><span class="annottext">Sentence
+</span><a href="Drasil.Website.Analysis.html#packDepGraphTitle"><span class="hs-identifier hs-var">packDepGraphTitle</span></a></span><span> </span><span class="hs-comment">-- Title</span><span>
+</span><span id="line-183"></span><span>  </span><span class="hs-special">(</span><span class="annot"><span class="annottext">Sentence -&gt; Contents
+</span><span class="hs-identifier hs-var">mkParagraph</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="Drasil.Website.Analysis.html#graphSecIntro"><span class="hs-identifier hs-var">graphSecIntro</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">Contents -&gt; [Contents] -&gt; [Contents]
+forall a. a -&gt; [a] -&gt; [a]
+</span><span class="hs-glyph hs-var">:</span></span><span> </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679105548"><span class="hs-identifier hs-var">displayGraphs</span></a></span><span> </span><span class="annot"><span class="annottext">[Contents] -&gt; [Contents] -&gt; [Contents]
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">[Contents]
+</span><a href="#local-6989586621679105547"><span class="hs-identifier hs-var">listOfLinkedGraphs</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-comment">-- Contents</span><span>
+</span><span id="line-184"></span><span>  </span><span class="hs-special">[</span><span class="hs-special">]</span><span> </span><span class="annot"><span class="annottext">(Reference -&gt; Section) -&gt; Reference -&gt; Section
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence -&gt; Reference
+</span><span class="hs-identifier hs-var">makeSecRef</span></span><span> </span><span class="annot"><span class="hs-string">&quot;DependencyGraphs&quot;</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; Reference) -&gt; Sentence -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Dependency Graphs&quot;</span></span><span> </span><span class="hs-comment">-- Section Reference</span><span>
+</span><span id="line-185"></span><span>  </span><span class="hs-keyword">where</span><span>
+</span><span id="line-186"></span><span>    </span><span class="hs-comment">-- may want to display more graphs later, but for now we only display the &quot;drasil-website&quot;</span><span>
+</span><span id="line-187"></span><span>    </span><span class="hs-comment">-- package dependencies. If you change this, you should also change the introduction.</span><span>
+</span><span id="line-188"></span><span>    </span><span id="local-6989586621679105548"><span class="annot"><span class="annottext">displayGraphs :: [Contents]
+</span><a href="#local-6989586621679105548"><span class="hs-identifier hs-var hs-var">displayGraphs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(FilePath -&gt; Contents) -&gt; [FilePath] -&gt; [Contents]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; Contents
+</span><a href="Drasil.Website.Analysis.html#dependencyGraphs"><span class="hs-identifier hs-var">dependencyGraphs</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105552"><span class="hs-identifier hs-var">path</span></a></span><span class="hs-special">)</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-string">&quot;drasil-website&quot;</span></span><span class="hs-special">]</span><span>
+</span><span id="line-189"></span><span>    </span><span class="hs-comment">-- these graphs are listed at the bottom of the Drasil website. They are links to the</span><span>
+</span><span id="line-190"></span><span>    </span><span class="hs-comment">-- pdf versions of the package dependency graphs.</span><span>
+</span><span id="line-191"></span><span>    </span><span id="local-6989586621679105547"><span class="annot"><span class="annottext">listOfLinkedGraphs :: [Contents]
+</span><a href="#local-6989586621679105547"><span class="hs-identifier hs-var hs-var">listOfLinkedGraphs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="annottext">UnlabelledContent -&gt; Contents
+</span><span class="hs-identifier hs-var">UlC</span></span><span> </span><span class="annot"><span class="annottext">(UnlabelledContent -&gt; Contents) -&gt; UnlabelledContent -&gt; Contents
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">RawContent -&gt; UnlabelledContent
+</span><span class="hs-identifier hs-var">ulcc</span></span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; UnlabelledContent)
+-&gt; RawContent -&gt; UnlabelledContent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; [FilePath] -&gt; RawContent
+</span><a href="Drasil.Website.Analysis.html#folderList"><span class="hs-identifier hs-var">folderList</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105552"><span class="hs-identifier hs-var">path</span></a></span><span> </span><span class="annot"><span class="annottext">[FilePath]
+</span><a href="#local-6989586621679105551"><span class="hs-identifier hs-var">pkgs</span></a></span><span class="hs-special">]</span><span>
+</span><span id="line-192"></span><span>
+</span><span id="line-193"></span><span class="hs-comment">-- | Package Dependency Graphs section title.</span><span>
+</span><span id="line-194"></span><span class="annot"><a href="Drasil.Website.Analysis.html#packDepGraphTitle"><span class="hs-identifier hs-type">packDepGraphTitle</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Sentence</span></span><span>
+</span><span id="line-195"></span><span id="packDepGraphTitle"><span class="annot"><span class="annottext">packDepGraphTitle :: Sentence
+</span><a href="Drasil.Website.Analysis.html#packDepGraphTitle"><span class="hs-identifier hs-var hs-var">packDepGraphTitle</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Package Dependency Graphs&quot;</span></span><span>
+</span><span id="line-196"></span><span>
+</span><span id="line-197"></span><span class="hs-comment">-- | Introduces the package dependency graphs.</span><span>
+</span><span id="line-198"></span><span class="annot"><a href="Drasil.Website.Analysis.html#graphSecIntro"><span class="hs-identifier hs-type">graphSecIntro</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-199"></span><span id="graphSecIntro"><span class="annot"><span class="annottext">graphSecIntro :: FilePath
+</span><a href="Drasil.Website.Analysis.html#graphSecIntro"><span class="hs-identifier hs-var hs-var">graphSecIntro</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="hs-string">&quot;The below list contains all of the different packages used to build the Drasil Framework. \
+  \Each package and its dependencies are displayed in the form of a graph, with the tail of the arrow being the dependent module, \
+  \and the tip of the arrow being the base module. In other words, the tip builds off of (or relies on) the tail to work. \
+  \Links are available to a pdf version of each package's dependency graph at the bottom. For example, the graph for the website package \
+  \is shown below. Each section is made from different modules that come together under the Drasil.Website.Body module and then \
+  \are generated by Drasil.Website.Main. This result shows that the package structure has a pyramid-like hierarchy.&quot;</span></span><span>
+</span><span id="line-205"></span><span>
+</span><span id="line-206"></span><span class="hs-comment">-- | Function to create displayable versions of the graphs.</span><span>
+</span><span id="line-207"></span><span class="annot"><a href="Drasil.Website.Analysis.html#dependencyGraphs"><span class="hs-identifier hs-type">dependencyGraphs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">Contents</span></span><span>
+</span><span id="line-208"></span><span id="dependencyGraphs"><span class="annot"><span class="annottext">dependencyGraphs :: FilePath -&gt; FilePath -&gt; Contents
+</span><a href="Drasil.Website.Analysis.html#dependencyGraphs"><span class="hs-identifier hs-var hs-var">dependencyGraphs</span></a></span></span><span> </span><span id="local-6989586621679105542"><span class="annot"><span class="annottext">path :: FilePath
+</span><a href="#local-6989586621679105542"><span class="hs-identifier hs-var">path</span></a></span></span><span> </span><span id="local-6989586621679105541"><span class="annot"><span class="annottext">pkg :: FilePath
+</span><a href="#local-6989586621679105541"><span class="hs-identifier hs-var">pkg</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">LabelledContent -&gt; Contents
+</span><span class="hs-identifier hs-var">LlC</span></span><span> </span><span class="annot"><span class="annottext">(LabelledContent -&gt; Contents) -&gt; LabelledContent -&gt; Contents
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Reference -&gt; RawContent -&gt; LabelledContent
+</span><span class="hs-identifier hs-var">llcc</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; Reference
+</span><span class="hs-identifier hs-var">makeFigRef</span></span><span> </span><span class="annot"><span class="annottext">(FilePath -&gt; Reference) -&gt; FilePath -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Figure&quot;</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105541"><span class="hs-identifier hs-var">pkg</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(RawContent -&gt; LabelledContent) -&gt; RawContent -&gt; LabelledContent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; FilePath -&gt; RawContent
+</span><span class="hs-identifier hs-var">fig</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">(FilePath -&gt; Sentence) -&gt; FilePath -&gt; Sentence
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="hs-string">&quot;Package: &quot;</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105541"><span class="hs-identifier hs-var">pkg</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(FilePath -&gt; RawContent) -&gt; FilePath -&gt; RawContent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+</span><a href="Drasil.Website.Analysis.html#drasilDisplayDepGraphPath"><span class="hs-identifier hs-var">drasilDisplayDepGraphPath</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105542"><span class="hs-identifier hs-var">path</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105541"><span class="hs-identifier hs-var">pkg</span></a></span><span>
+</span><span id="line-209"></span><span>
+</span><span id="line-210"></span><span class="hs-comment">-- | Function to get the paths of graphs we want to display on the website.</span><span>
+</span><span id="line-211"></span><span class="annot"><a href="Drasil.Website.Analysis.html#drasilDisplayDepGraphPath"><span class="hs-identifier hs-type">drasilDisplayDepGraphPath</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span>
+</span><span id="line-212"></span><span id="drasilDisplayDepGraphPath"><span class="annot"><span class="annottext">drasilDisplayDepGraphPath :: FilePath -&gt; FilePath -&gt; FilePath
+</span><a href="Drasil.Website.Analysis.html#drasilDisplayDepGraphPath"><span class="hs-identifier hs-var hs-var">drasilDisplayDepGraphPath</span></a></span></span><span> </span><span id="local-6989586621679105537"><span class="annot"><span class="annottext">path :: FilePath
+</span><a href="#local-6989586621679105537"><span class="hs-identifier hs-var">path</span></a></span></span><span> </span><span id="local-6989586621679105536"><span class="annot"><span class="annottext">fldr :: FilePath
+</span><a href="#local-6989586621679105536"><span class="hs-identifier hs-var">fldr</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105537"><span class="hs-identifier hs-var">path</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105536"><span class="hs-identifier hs-var">fldr</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.png&quot;</span></span><span> </span><span class="hs-comment">-- for some reason, svg doesn't show up on generated website, so use png for now</span><span>
+</span><span id="line-213"></span><span>
+</span><span id="line-214"></span><span class="hs-comment">-- | Gets all the paths to the pdf graphs from a given list of packages.</span><span>
+</span><span id="line-215"></span><span class="annot"><a href="Drasil.Website.Analysis.html#drasilDepGraphPathsPDF"><span class="hs-identifier hs-type">drasilDepGraphPathsPDF</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span>
+</span><span id="line-216"></span><span id="drasilDepGraphPathsPDF"><span class="annot"><span class="annottext">drasilDepGraphPathsPDF :: FilePath -&gt; [FilePath] -&gt; [FilePath]
+</span><a href="Drasil.Website.Analysis.html#drasilDepGraphPathsPDF"><span class="hs-identifier hs-var hs-var">drasilDepGraphPathsPDF</span></a></span></span><span> </span><span id="local-6989586621679105534"><span class="annot"><span class="annottext">path :: FilePath
+</span><a href="#local-6989586621679105534"><span class="hs-identifier hs-var">path</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(FilePath -&gt; FilePath) -&gt; [FilePath] -&gt; [FilePath]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679105533"><span class="annot"><span class="annottext">x :: FilePath
+</span><a href="#local-6989586621679105533"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105534"><span class="hs-identifier hs-var">path</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105533"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; FilePath -&gt; FilePath
+forall a. [a] -&gt; [a] -&gt; [a]
+</span><span class="hs-operator hs-var">++</span></span><span> </span><span class="annot"><span class="hs-string">&quot;.pdf&quot;</span></span><span class="hs-special">)</span><span>
+</span><span id="line-217"></span><span>
+</span><span id="line-218"></span><span class="hs-comment">-- | Create References to display as links for the dependency graph pdfs.</span><span>
+</span><span id="line-219"></span><span class="annot"><a href="Drasil.Website.Analysis.html#drasilDepGraphRefs"><span class="hs-identifier hs-type">drasilDepGraphRefs</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">Reference</span></span><span class="hs-special">]</span><span>
+</span><span id="line-220"></span><span id="drasilDepGraphRefs"><span class="annot"><span class="annottext">drasilDepGraphRefs :: FilePath -&gt; [FilePath] -&gt; [Reference]
+</span><a href="Drasil.Website.Analysis.html#drasilDepGraphRefs"><span class="hs-identifier hs-var hs-var">drasilDepGraphRefs</span></a></span></span><span> </span><span id="local-6989586621679105532"><span class="annot"><span class="annottext">path :: FilePath
+</span><a href="#local-6989586621679105532"><span class="hs-identifier hs-var">path</span></a></span></span><span> </span><span id="local-6989586621679105531"><span class="annot"><span class="annottext">pkgs :: [FilePath]
+</span><a href="#local-6989586621679105531"><span class="hs-identifier hs-var">pkgs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(FilePath -&gt; FilePath -&gt; Reference)
+-&gt; [FilePath] -&gt; [FilePath] -&gt; [Reference]
+forall a b c. (a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt; [c]
+</span><span class="hs-identifier hs-var">zipWith</span></span><span> </span><span class="hs-special">(</span><span class="hs-glyph">\</span><span id="local-6989586621679105529"><span class="annot"><span class="annottext">x :: FilePath
+</span><a href="#local-6989586621679105529"><span class="hs-identifier hs-var">x</span></a></span></span><span> </span><span id="local-6989586621679105528"><span class="annot"><span class="annottext">y :: FilePath
+</span><a href="#local-6989586621679105528"><span class="hs-identifier hs-var">y</span></a></span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; LblType -&gt; ShortName -&gt; Reference
+</span><span class="hs-identifier hs-var">Reference</span></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105529"><span class="hs-identifier hs-var">x</span></a></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; LblType
+</span><span class="hs-identifier hs-var">URI</span></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105528"><span class="hs-identifier hs-var">y</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">(ShortName -&gt; Reference) -&gt; ShortName -&gt; Reference
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; ShortName
+</span><span class="hs-identifier hs-var">shortname'</span></span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; ShortName) -&gt; Sentence -&gt; ShortName
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105529"><span class="hs-identifier hs-var">x</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">[FilePath]
+</span><a href="#local-6989586621679105531"><span class="hs-identifier hs-var">pkgs</span></a></span><span> </span><span class="annot"><span class="annottext">([FilePath] -&gt; [Reference]) -&gt; [FilePath] -&gt; [Reference]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; [FilePath] -&gt; [FilePath]
+</span><a href="Drasil.Website.Analysis.html#drasilDepGraphPathsPDF"><span class="hs-identifier hs-var">drasilDepGraphPathsPDF</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105532"><span class="hs-identifier hs-var">path</span></a></span><span> </span><span class="annot"><span class="annottext">[FilePath]
+</span><a href="#local-6989586621679105531"><span class="hs-identifier hs-var">pkgs</span></a></span><span>
+</span><span id="line-221"></span><span>
+</span><span id="line-222"></span><span class="hs-comment">-- | Create the list of folders with the links to dependency graph pdfs.</span><span>
+</span><span id="line-223"></span><span class="annot"><a href="Drasil.Website.Analysis.html#folderList"><span class="hs-identifier hs-type">folderList</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="annot"><span class="hs-identifier hs-type">RawContent</span></span><span>
+</span><span id="line-224"></span><span id="folderList"><span class="annot"><span class="annottext">folderList :: FilePath -&gt; [FilePath] -&gt; RawContent
+</span><a href="Drasil.Website.Analysis.html#folderList"><span class="hs-identifier hs-var hs-var">folderList</span></a></span></span><span> </span><span id="local-6989586621679105527"><span class="annot"><span class="annottext">path :: FilePath
+</span><a href="#local-6989586621679105527"><span class="hs-identifier hs-var">path</span></a></span></span><span> </span><span id="local-6989586621679105526"><span class="annot"><span class="annottext">pkgs :: [FilePath]
+</span><a href="#local-6989586621679105526"><span class="hs-identifier hs-var">pkgs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">ListType -&gt; RawContent
+</span><span class="hs-identifier hs-var">Enumeration</span></span><span> </span><span class="annot"><span class="annottext">(ListType -&gt; RawContent) -&gt; ListType -&gt; RawContent
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[(ItemType, Maybe FilePath)] -&gt; ListType
+</span><span class="hs-identifier hs-var">Bullet</span></span><span> </span><span class="annot"><span class="annottext">([(ItemType, Maybe FilePath)] -&gt; ListType)
+-&gt; [(ItemType, Maybe FilePath)] -&gt; ListType
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">[ItemType] -&gt; [Maybe FilePath] -&gt; [(ItemType, Maybe FilePath)]
+forall a b. [a] -&gt; [b] -&gt; [(a, b)]
+</span><span class="hs-identifier hs-var">zip</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; [FilePath] -&gt; [ItemType]
+</span><a href="Drasil.Website.Analysis.html#folderListItems"><span class="hs-identifier hs-var">folderListItems</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105527"><span class="hs-identifier hs-var">path</span></a></span><span> </span><span class="annot"><span class="annottext">[FilePath]
+</span><a href="#local-6989586621679105526"><span class="hs-identifier hs-var">pkgs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([Maybe FilePath] -&gt; [(ItemType, Maybe FilePath)])
+-&gt; [Maybe FilePath] -&gt; [(ItemType, Maybe FilePath)]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">Maybe FilePath -&gt; [Maybe FilePath]
+forall a. a -&gt; [a]
+</span><span class="hs-identifier hs-var">repeat</span></span><span> </span><span class="annot"><span class="annottext">Maybe FilePath
+forall a. Maybe a
+</span><span class="hs-identifier hs-var">Nothing</span></span><span>
+</span><span id="line-225"></span><span>
+</span><span id="line-226"></span><span class="hs-comment">-- | Helper to create the list items for dependency graph pdfs.</span><span>
+</span><span id="line-227"></span><span class="annot"><a href="Drasil.Website.Analysis.html#folderListItems"><span class="hs-identifier hs-type">folderListItems</span></a></span><span> </span><span class="hs-glyph">::</span><span> </span><span class="annot"><span class="hs-identifier hs-type">FilePath</span></span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">String</span></span><span class="hs-special">]</span><span> </span><span class="hs-glyph">-&gt;</span><span> </span><span class="hs-special">[</span><span class="annot"><span class="hs-identifier hs-type">ItemType</span></span><span class="hs-special">]</span><span>
+</span><span id="line-228"></span><span id="folderListItems"><span class="annot"><span class="annottext">folderListItems :: FilePath -&gt; [FilePath] -&gt; [ItemType]
+</span><a href="Drasil.Website.Analysis.html#folderListItems"><span class="hs-identifier hs-var hs-var">folderListItems</span></a></span></span><span> </span><span id="local-6989586621679105521"><span class="annot"><span class="annottext">path :: FilePath
+</span><a href="#local-6989586621679105521"><span class="hs-identifier hs-var">path</span></a></span></span><span> </span><span id="local-6989586621679105520"><span class="annot"><span class="annottext">pkgs :: [FilePath]
+</span><a href="#local-6989586621679105520"><span class="hs-identifier hs-var">pkgs</span></a></span></span><span> </span><span class="hs-glyph">=</span><span> </span><span class="annot"><span class="annottext">(Sentence -&gt; ItemType) -&gt; [Sentence] -&gt; [ItemType]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">Sentence -&gt; ItemType
+</span><span class="hs-identifier hs-var">Flat</span></span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; [ItemType]) -&gt; [Sentence] -&gt; [ItemType]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(Reference -&gt; Sentence -&gt; Sentence)
+-&gt; [Reference] -&gt; [Sentence] -&gt; [Sentence]
+forall a b c. (a -&gt; b -&gt; c) -&gt; [a] -&gt; [b] -&gt; [c]
+</span><span class="hs-identifier hs-var">zipWith</span></span><span> </span><span class="annot"><span class="annottext">Reference -&gt; Sentence -&gt; Sentence
+forall r.
+(HasUID r, HasRefAddress r, HasShortName r) =&gt;
+r -&gt; Sentence -&gt; Sentence
+</span><span class="hs-identifier hs-var">namedRef</span></span><span> </span><span class="hs-special">(</span><span class="annot"><span class="annottext">FilePath -&gt; [FilePath] -&gt; [Reference]
+</span><a href="Drasil.Website.Analysis.html#drasilDepGraphRefs"><span class="hs-identifier hs-var">drasilDepGraphRefs</span></a></span><span> </span><span class="annot"><span class="annottext">FilePath
+</span><a href="#local-6989586621679105521"><span class="hs-identifier hs-var">path</span></a></span><span> </span><span class="annot"><span class="annottext">[FilePath]
+</span><a href="#local-6989586621679105520"><span class="hs-identifier hs-var">pkgs</span></a></span><span class="hs-special">)</span><span> </span><span class="annot"><span class="annottext">([Sentence] -&gt; [Sentence]) -&gt; [Sentence] -&gt; [Sentence]
+forall a b. (a -&gt; b) -&gt; a -&gt; b
+</span><span class="hs-operator hs-var">$</span></span><span> </span><span class="annot"><span class="annottext">(FilePath -&gt; Sentence) -&gt; [FilePath] -&gt; [Sentence]
+forall a b. (a -&gt; b) -&gt; [a] -&gt; [b]
+</span><span class="hs-identifier hs-var">map</span></span><span> </span><span class="annot"><span class="annottext">FilePath -&gt; Sentence
+</span><span class="hs-identifier hs-var">S</span></span><span> </span><span class="annot"><span class="annottext">[FilePath]
+</span><a href="#local-6989586621679105520"><span class="hs-identifier hs-var">pkgs</span></a></span><span>
+</span><span id="line-229"></span></pre></body></html>

@@ -233,7 +233,7 @@ getSRSPath path sufx ex = path ++ map toLower (filter (not.isSpace) ex) ++ "/srs
 -- | Get the file paths for generated code and doxygen locations.
 getCodePath, getDoxPath :: FilePath -> String -> String -> FilePath
 -- | Uses 'repoRt' path (codePath in this module).
-getCodePath path ex programLang = path ++ "code/stable/" ++ filter (not.isSpace) ex ++ "/src/" ++ programLang -- need repoCommit path
+getCodePath path ex programLang = path ++ "code/stable/" ++ map toLower (filter (not.isSpace) ex) ++ "/src/" ++ programLang -- need repoCommit path
 -- | Uses 'exRt' path (srsDoxPath in this module).
 getDoxPath path ex programLang = path ++ map toLower (filter (not.isSpace) ex) ++ "/doxygen/" ++ programLang ++ "/index.html" -- need example path
 

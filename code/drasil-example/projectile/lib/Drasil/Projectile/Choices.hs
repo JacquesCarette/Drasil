@@ -20,7 +20,7 @@ import Data.Char (toLower)
 
 genCodeWithChoices :: [Choices] -> IO ()
 genCodeWithChoices [] = return ()
-genCodeWithChoices (c:cs) = let dir = codedDirName (getSysName fullSI) c
+genCodeWithChoices (c:cs) = let dir = map toLower $ codedDirName (getSysName fullSI) c
                                 getSysName SI{_sys = sysName} = abrv sysName
   in do
     workingDir <- getCurrentDirectory
@@ -39,7 +39,7 @@ codedDirName n Choices {
   constStructure = cs,
   constRepr = cr,
   spaceMatch = sm} = 
-  map toLower $ intercalate "_" [n, codedMod m, codedImpTp it, codedLog l, codedStruct is, 
+  intercalate "_" [n, codedMod m, codedImpTp it, codedLog l, codedStruct is, 
     codedConStruct cs, codedConRepr cr, codedSpaceMatch sm]
   
 codedMod :: Modularity -> String

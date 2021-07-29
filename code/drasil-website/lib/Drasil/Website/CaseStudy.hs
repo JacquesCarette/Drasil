@@ -1,4 +1,6 @@
-module Drasil.Website.CaseStudy (caseStudySec, caseStudyRefs) where
+-- | Case Studies table for the different choices available when generating code from Drasil.
+-- To be used in the Drasil website.
+module Drasil.Website.CaseStudy where
 
 import Language.Drasil hiding (E)
 import Language.Drasil.Code
@@ -8,9 +10,8 @@ import GOOL.Drasil (CodeType(..))
 import Drasil.Website.Example (examples, Example(..))
 import qualified Drasil.Projectile.Choices as Projectile (codedDirName)
 
------------------------------
--- Case Studies Section
------------------------------
+
+-- * Case Studies Section
 
 -- | Creates the Case Study Section.
 caseStudySec :: Section
@@ -43,13 +44,22 @@ mkCaseTable = Table headerRow (tableBody $ concatMap mkCaseStudy $ examples "" "
 caseStudyTabRef :: Reference
 caseStudyTabRef = makeTabRef "CaseStudy"
 
------ After taking the information about the examples from Example.h, convert each example into its own case study. -----
+-- * Manipulating info from 'Example' -> 'CaseStudy'
+--
+-- $ExampleToCaseStudy
+--
+-- After taking the information about the examples from Example.hs,
+-- convert each example into its own case study.
 
 -- | Holds individual case studies. System info may not be needed,
 -- but it is still nice to keep around for now.
-data CaseStudy = CS { sysInfoCS :: SystemInformation,
-                      progName :: Sentence,
-                      choicesCS :: Choices}
+data CaseStudy = CS { 
+  -- | Each case study needs a name, so use system information. 
+  sysInfoCS :: SystemInformation,
+  -- | A case study may have different program names for the same example (ex. Projectile).
+  progName :: Sentence,
+  -- | Each case study has code that is generated from a set of choices.
+  choicesCS :: Choices}
 
 -- | Converts a list of examples into a list of CaseStudies. 
 -- Currently, projectile is the only one that has more than one set of choices,
@@ -59,11 +69,13 @@ mkCaseStudy E{choicesE = []} = []
 mkCaseStudy E{sysInfoE = si@SI{_sys = sys}, choicesE = [x]} = [CS{sysInfoCS = si, progName = S $ abrv sys, choicesCS = x}]
 mkCaseStudy E{sysInfoE = si@SI{_sys = sys}, choicesE = xs} = map (\x -> CS{sysInfoCS = si, progName = S $ Projectile.codedDirName (abrv sys) x, choicesCS = x}) xs
 
------ After, convert each case study into a table to display. -----
-
---- We first need the helper functions to convert Choices into a displayable format (as a Sentence).
---- Those are defined in the section below to reduce clutter.
---- Then we make the header row, table body, and helper for the table body functions.
+-- * Display 'CaseStudy' Information as a Table
+--
+-- $CaseStudy
+--
+-- We first need the helper functions to convert 'Choices' into a displayable format (as a 'Sentence').
+-- Those are defined in the section below to reduce clutter.
+-- Then we make the header row, table body, and helper for the table body functions.
 
 -- | Hardcoded header row for the Case studies table
 headerRow :: [Sentence]
@@ -86,19 +98,21 @@ displayCS CS{progName = nm,
     spaceMatch=realNum
     }} = [nm, getMod md, getImp imp, getLog lg, getInstr instr, getConstr constr, getConRep conRep, getRealNum $ realNum Real]
 
---- Next, we need the legend to explain the Case Studies Table.
---- These functions are essentially hard-coded and also defined below.
+-- * Case Studies Table Legend
+--
+-- $CSLegend
+--
+-- Next, we need the legend to explain the Case Studies Table.
+-- These functions are essentially hard-coded and also defined below.
 
 -- | Each entry for the case studies table legend.
 -- The title should be the same as the header.
 data CSLegend = CSL {
+  -- | Legend title.
   ttle :: String, -- String for now, should eventually move to at least a Sentence
+  -- | Legend symbols along with their respective definitions.
   symbAndDefs :: [(String, String)]
 }
-
----------------------------------------------------------------
--- Below functions create the legend for the Case Studies Table
----------------------------------------------------------------
 
 -- | Make the legend for the case study table as a list.
 caseStudyLegend :: RawContent
@@ -189,9 +203,13 @@ realNumRepLegend = CSL {
 }
 
 
---------------------------------------------------------
--- Helper functions to create the case study table rows.
---------------------------------------------------------
+
+-- * Helper functions to create the case study table rows.
+--
+-- $helpCSRow
+--
+-- These functions act like a version of 'show' for each
+-- different type of 'Choices', but tweaked to fit inside a table.
 
 getMod :: Modularity -> Sentence
 getMod Unmodular = S "U"

@@ -1,4 +1,5 @@
-module Drasil.Website.Example (exampleSec, exampleRefs, examples, Example(..), allExampleSI)where
+-- | Create the list of Generated Examples for the Drasil website.
+module Drasil.Website.Example where
 
 import Language.Drasil hiding (E)
 import Database.Drasil (SystemInformation(..))
@@ -24,19 +25,26 @@ import qualified Drasil.PDController.Choices as PDController (codeChoices)
 import qualified Drasil.Projectile.Choices as Projectile (codedDirName, choiceCombos)
 -- the other examples currently do not generate any code.
 
------------------------------
--- Gather Example Information
------------------------------
 
------ First gather all information needed to create an example. This includes system information, descriptions, and choices.
------ These will also be exported for use in CaseStudy.hs.
+-- * Gather Example Information
+--
+-- $example
+--
+-- First gather all information needed to create an example. This includes system information, descriptions, and choices.
+-- These will also be exported for use in CaseStudy.hs.
 
 -- | Each Example gets placed in here.
 data Example = E {
+  -- | Example system information. Used to get the system name and abbreviation.
   sysInfoE :: SystemInformation,
+  -- | System description. Currently hard-coded.
   descE :: Sentence,
+  -- | Some examples have generated code with specific choices.
+  -- They may also have more than one set of choices, so we need a list.
   choicesE :: [Choices],
+  -- | Generated documents & code path.
   srsPath :: FilePath,
+  -- | Generated doxygen path
   doxPath :: FilePath
 }
 -- TODO: Automate the gathering of system information, descriptions, and choices.
@@ -65,10 +73,7 @@ allExamples si desc choi srsP doxP = zipWith3 (\x y z -> E x y z srsP doxP) si d
 examples :: FilePath -> FilePath -> [Example]
 examples = allExamples allExampleSI allExampleDesc allExampleChoices
 
-
--------------------------------------------
--- Functions to create the list of examples
--------------------------------------------
+-- * Functions to create the list of examples
 
 -- | Create the full list of examples.
 fullExList :: FilePath -> FilePath -> RawContent
@@ -122,10 +127,7 @@ showLang Cpp = "C++"
 showLang CSharp = "C Sharp" -- Drasil printers dont like # symbol, so use full word instead.
 showLang l = show l
 
-
------------------------------
--- Examples Section Functions
------------------------------
+-- * Examples Section Functions
 
 -- | Example section function generator. Makes a list of examples and generated artifacts.
 exampleSec :: FilePath -> FilePath -> Section
@@ -137,8 +139,12 @@ exampleTitle = S "Generated Examples"
 
 -- | Example section introduction.
 exampleIntro :: Sentence
-exampleIntro = S "Each of the case studies contain their own generated PDF and HTML reports," +:+
-  S "and in some cases, their own generated code."
+exampleIntro = S "The development of Drasil follows an example-driven approach, \
+  \with a current focus on creating Software Requirement Specifications (SRS). \
+  \More specifically, Drasil's knowledge of the domain of Physics has seen significant growth \
+  \through the creation of these examples, ranging from mechanics to thermodynamics. Each of the case studies \
+  \implemented in Drasil contain their own generated PDF and HTML reports, and in some cases, \
+  \their own generated code to solve the problem defined in their respective SRS documents."
 
 -- | Project descriptions.
 sglPendulumDesc, dblPendulumDesc, gamePhysDesc, glassBRDesc, hghcDesc, noPCMDesc, pdControllerDesc,
@@ -161,9 +167,7 @@ generatedCodeTitle, generatedCodeDocsTitle :: String
 generatedCodeTitle = "Generated Code:"
 generatedCodeDocsTitle = "Generated Code Documentation:"
 
-----------------------------------------------------------------------------
--- Helper functions in getting References for SRS, code folders, and Doxygen
-----------------------------------------------------------------------------
+-- * Helper functions in getting References for SRS, code folders, and Doxygen
 
 -- | Similar to 'showLang', but for use within Drasil for Referencing and UIDs.
 convertLang :: Lang -> String
@@ -229,7 +233,6 @@ getCodePath, getDoxPath :: FilePath -> String -> String -> FilePath
 getCodePath path ex programLang = path ++ "code/stable/" ++ filter (not.isSpace) ex ++ "/src/" ++ programLang -- need repoCommit path
 -- | Uses 'exRt' path (doxPath in this module).
 getDoxPath path ex programLang = path ++ filter (not.isSpace) ex ++ "/doxygen/" ++ programLang ++ "/index.html" -- need example path
-
 
 -- | Gather all references used in making the Examples section.
 exampleRefs :: FilePath -> FilePath -> [Reference]

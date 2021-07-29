@@ -299,18 +299,21 @@ $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod ch
 # Generate a data table to analyze Drasil's class, datatype, and instance structures.
 # Dot graphs are currently generated for datatypes and class instance structures.
 # They are made using the default dot algorithm and the circo algorithm for options
-# and viewability.
+# and viewability. We also add example to these variables so that we can still
+# make the graphs for that folder (although it's technically not a package itself).
+ANALYSIS_PACKAGES_E = $(ANALYSIS_PACKAGES) example
+PACKAGES_E = $(PACKAGES) example
 analysis: graphmod
 	- rm -rf "$(ANALYSIS_FOLDER)"
 	@mkdir -p "$(ANALYSIS_FOLDER)"
 	cd $(SCRIPT_FOLDER) && stack exec -- runghc DataTableGen.hs
 	cd $(SCRIPT_FOLDER) && stack exec -- runghc TypeGraphGen.hs
 	@echo Making dependency graphs. This may take a few minutes.
-	@cd $(TYPEGRAPH_FOLDER) && for pack in $(ANALYSIS_PACKAGES); do \
+	@cd $(TYPEGRAPH_FOLDER) && for pack in $(ANALYSIS_PACKAGES_E); do \
 		dot -Tsvg $$pack.dot > "./$$pack.svg" ; \
 		circo -Tsvg $$pack.dot > "./circo_$$pack.svg" ; \
 	done
-	@cd $(CLASSINST_GRAPH_FOLDER) && for pack in $(PACKAGES); do \
+	@cd $(CLASSINST_GRAPH_FOLDER) && for pack in $(PACKAGES_E); do \
 		dot -Tsvg $$pack.dot > "./$$pack.svg" ; \
 		circo -Tsvg $$pack.dot > "./circo_$$pack.svg" ; \
 	done
@@ -377,7 +380,7 @@ deploy_code_path: $(DCP_EXAMPLES)
 # First builds all Drasil packages, and then executes the drasil-website.
 # For more information, see the *.hs files in the drasil-website folder.
 website:
-	stack install drasil-website
+	stack install $(stackArgs) "drasil-website"
 	CUR_DIR="$(PWD)/" \
 	DEPLOY_FOLDER="$(CUR_DIR)$(DEPLOY_FOLDER)"  \
 	DOCS_FOLDER="$(DOCS_FOLDER)" \
@@ -387,6 +390,8 @@ website:
 	GRAPH_FOLDER="$(GRAPH_FOLDER)" \
 	ANALYSIS_FOLDER="$(ANALYSIS_FOLDER)" \
 	PACKAGES="$(PACKAGES)" \
+	TYPEGRAPH_FOLDER="$(TYPEGRAPH_FOLDER)" \
+	CLASSINST_GRAPH_FOLDER="$(CLASSINST_GRAPH_FOLDER)" \
 	stack exec website
 
 # Deploys the Drasil website. Called by the deploy target. 

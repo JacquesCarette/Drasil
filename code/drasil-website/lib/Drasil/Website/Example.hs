@@ -217,7 +217,7 @@ getDoxRef ex@E{sysInfoE=SI{_sys = sys}, choicesE = chcs} l verName =
     -- we append version name to program language since the organization of folders follows this way.
     programLang = case chcs of 
       [_] -> convertLang l
-      _   -> verName ++ "/" ++ convertLang l
+      _   -> map toLower verName ++ "/" ++ convertLang l
 
 -- | Make references for each of the generated SRS files.
 getSRSRef :: FilePath -> String -> String -> Reference

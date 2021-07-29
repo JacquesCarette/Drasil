@@ -36,4 +36,4 @@ dispExpr (BinOp b l r)      sm = P.Row [dispExpr l sm, P.MO $ deBinOp b, dispExp
 dispExpr (AssocBinOp b des) sm = P.Row $ intersperse (P.MO op) $ map (dispExpr' sm prec) des
   where prec = dePrecAssoc  b
         op   = deAssocBinOp b
--- dispExpr (ForAll u _ des)   sm = _        
+dispExpr (ForAll u _ des)   sm = P.Row [dispExpr des sm] 

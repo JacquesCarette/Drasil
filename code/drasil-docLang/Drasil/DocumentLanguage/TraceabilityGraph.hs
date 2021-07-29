@@ -183,7 +183,7 @@ traceyGraphPath ex f = resourcePath ++ map toLower (filter (not.isSpace) ex) ++ 
 
 -- | Traceability graphs reference path.
 resourcePath :: String
-resourcePath = "../../../traceygraphs/"
+resourcePath = "../../../../traceygraphs/"
 
 -- | Helper to create a list of traceability graph references.
 folderList' :: [ItemType]

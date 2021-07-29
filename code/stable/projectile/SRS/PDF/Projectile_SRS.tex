@@ -1,0 +1,1289 @@
+\documentclass[12pt]{article}
+\usepackage{fontspec}
+\usepackage{fullpage}
+\usepackage{hyperref}
+\hypersetup{bookmarks=true,colorlinks=true,linkcolor=red,citecolor=blue,filecolor=magenta,urlcolor=cyan}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{unicode-math}
+\usepackage{tabu}
+\usepackage{longtable}
+\usepackage{booktabs}
+\usepackage{caption}
+\usepackage{enumitem}
+\usepackage{graphics}
+\usepackage{svg}
+\usepackage{filecontents}
+\usepackage[backend=bibtex]{biblatex}
+\usepackage{url}
+\setmathfont{Latin Modern Math}
+\newcommand{\gt}{\ensuremath >}
+\newcommand{\lt}{\ensuremath <}
+\global\tabulinesep=1mm
+\newlist{symbDescription}{description}{1}
+\setlist[symbDescription]{noitemsep, topsep=0pt, parsep=0pt, partopsep=0pt}
+\bibliography{bibfile}
+\title{Software Requirements Specification for Projectile}
+\author{Samuel J. Crawford, Brooks MacLachlan, and W. Spencer Smith}
+\begin{document}
+\maketitle
+\tableofcontents
+\newpage
+\section{Reference Material}
+\label{Sec:RefMat}
+This section records information for easy reference.
+
+\subsection{Table of Units}
+\label{Sec:ToU}
+The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the \hyperref[Table:ToU]{Table of Units} lists the symbol, a description and the SI name.
+
+\begin{longtable}{l l l}
+\toprule
+\textbf{Symbol} & \textbf{Description} & \textbf{SI Name}
+\\
+\midrule
+\endhead
+${\text{m}}$ & length & metre
+\\
+${\text{rad}}$ & angle & radian
+\\
+${\text{s}}$ & time & second
+\\
+\bottomrule
+\caption{Table of Units}
+\label{Table:ToU}
+\end{longtable}
+\subsection{Table of Symbols}
+\label{Sec:ToS}
+The symbols used in this document are summarized in the \hyperref[Table:ToS]{Table of Symbols} along with their units. Throughout the document, symbols in bold will represent vectors, and scalars otherwise. The symbols are listed in alphabetical order. For vector quantities, the units shown are for each component of the vector.
+
+\begin{longtabu}{l X[l] l}
+\toprule
+\textbf{Symbol} & \textbf{Description} & \textbf{Units}
+\\
+\midrule
+\endhead
+$a$ & Scalar acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+\\
+${a^{c}}$ & Constant acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+\\
+${a_{\text{x}}}$ & $x$-component of acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+\\
+${{a_{\text{x}}}^{\text{c}}}$ & $x$-component of constant acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+\\
+${a_{\text{y}}}$ & $y$-component of acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+\\
+${{a_{\text{y}}}^{\text{c}}}$ & $y$-component of constant acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+\\
+$\symbf{a}$ & Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+\\
+${\symbf{a}^{\text{c}}}$ & Constant acceleration vector & $\frac{\text{m}}{\text{s}^{2}}$
+\\
+${d_{\text{offset}}}$ & Distance between the target position and the landing position & ${\text{m}}$
+\\
+$\symbf{g}$ & Gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+\\
+$p$ & Scalar position & ${\text{m}}$
+\\
+${p^{\text{i}}}$ & Initial position & ${\text{m}}$
+\\
+${p_{\text{land}}}$ & Landing position & ${\text{m}}$
+\\
+${p_{\text{target}}}$ & Target position & ${\text{m}}$
+\\
+${p_{\text{x}}}$ & $x$-component of position & ${\text{m}}$
+\\
+${{p_{\text{x}}}^{\text{i}}}$ & $x$-component of initial position & ${\text{m}}$
+\\
+${p_{\text{y}}}$ & $y$-component of position & ${\text{m}}$
+\\
+${{p_{\text{y}}}^{\text{i}}}$ & $y$-component of initial position & ${\text{m}}$
+\\
+$\symbf{p}$ & Position & ${\text{m}}$
+\\
+$s$ & Output message as a string & --
+\\
+$t$ & Time & ${\text{s}}$
+\\
+${t_{\text{flight}}}$ & Flight duration & ${\text{s}}$
+\\
+$v$ & Speed & $\frac{\text{m}}{\text{s}}$
+\\
+${v^{\text{i}}}$ & Initial speed & $\frac{\text{m}}{\text{s}}$
+\\
+${v_{\text{launch}}}$ & Launch speed & $\frac{\text{m}}{\text{s}}$
+\\
+${v_{\text{x}}}$ & $x$-component of velocity & $\frac{\text{m}}{\text{s}}$
+\\
+${{v_{\text{x}}}^{\text{i}}}$ & $x$-component of initial velocity & $\frac{\text{m}}{\text{s}}$
+\\
+${v_{\text{y}}}$ & $y$-component of velocity & $\frac{\text{m}}{\text{s}}$
+\\
+${{v_{\text{y}}}^{\text{i}}}$ & $y$-component of initial velocity & $\frac{\text{m}}{\text{s}}$
+\\
+$\symbf{v}$ & Velocity & $\frac{\text{m}}{\text{s}}$
+\\
+$\symbf{v}\text{(}t\text{)}$ & 1D speed & $\frac{\text{m}}{\text{s}}$
+\\
+${\symbf{v}^{\text{i}}}$ & Initial velocity & $\frac{\text{m}}{\text{s}}$
+\\
+$ε$ & Hit tolerance & --
+\\
+$θ$ & Launch angle & ${\text{rad}}$
+\\
+$π$ & Ratio of circumference to diameter for any circle & --
+\\
+\bottomrule
+\caption{Table of Symbols}
+\label{Table:ToS}
+\end{longtabu}
+\subsection{Abbreviations and Acronyms}
+\label{Sec:TAbbAcc}
+\begin{longtable}{l l}
+\toprule
+\textbf{Abbreviation} & \textbf{Full Form}
+\\
+\midrule
+\endhead
+1D & One-Dimensional
+\\
+2D & Two-Dimensional
+\\
+A & Assumption
+\\
+DD & Data Definition
+\\
+GD & General Definition
+\\
+GS & Goal Statement
+\\
+IM & Instance Model
+\\
+PS & Physical System Description
+\\
+R & Requirement
+\\
+SRS & Software Requirements Specification
+\\
+TM & Theoretical Model
+\\
+Uncert. & Typical Uncertainty
+\\
+\bottomrule
+\caption{Abbreviations and Acronyms}
+\label{Table:TAbbAcc}
+\end{longtable}
+\section{Introduction}
+\label{Sec:Intro}
+Projectile motion is a common problem in physics. Therefore, it is useful to have a program to solve and model these types of problems. The program documented here is called Projectile.
+
+The following section provides an overview of the Software Requirements Specification (SRS) for Projectile. This section explains the purpose of this document, the scope of the requirements, the characteristics of the intended reader, and the organization of the document.
+
+\subsection{Scope of Requirements}
+\label{Sec:ReqsScope}
+The scope of the requirements includes the analysis of a two-dimensional (2D) projectile motion problem with constant acceleration.
+
+\section{Specific System Description}
+\label{Sec:SpecSystDesc}
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used.
+
+\subsection{Problem Description}
+\label{Sec:ProbDesc}
+A system is needed to efficiently and correctly predict the landing position of a projectile.
+
+\subsubsection{Terminology and Definitions}
+\label{Sec:TermDefs}
+This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
+
+\begin{itemize}
+\item{Launcher: Where the projectile is launched from and the device that does the launching.}
+\item{Projectile: The object to be launched at the target.}
+\item{Target: Where the projectile should be launched to.}
+\item{Gravity: The force that attracts one physical body with mass to another.}
+\item{Cartesian coordinate system: A coordinate system that specifies each point uniquely in a plane by a set of numerical coordinates, which are the signed distances to the point from two fixed perpendicular oriented lines, measured in the same unit of length (from \cite{cartesianWiki}).}
+\item{Rectilinear: Occuring in one dimension.}
+\end{itemize}
+\subsubsection{Physical System Description}
+\label{Sec:PhysSyst}
+The physical system of Projectile, as shown in \hyperref[Figure:Launch]{Fig:Launch}, includes the following elements:
+
+\begin{itemize}
+\item[PS1:]{The launcher.}
+\item[PS2:]{The projectile (with initial velocity ${\symbf{v}^{\text{i}}}$ and launch angle $θ$).}
+\item[PS3:]{The target.}
+\end{itemize}
+\begin{figure}
+\begin{center}
+\includegraphics[width=0.7\textwidth]{../../../../datafiles/projectile/Launch.jpg}
+\caption{The physical system}
+\label{Figure:Launch}
+\end{center}
+\end{figure}
+\subsubsection{Goal Statements}
+\label{Sec:GoalStmt}
+Given the initial velocity vector of the projectile, the goal statements are:
+
+\begin{itemize}
+\item[targetHit:\phantomsection\label{targetHit}]{Determine if the projectile hits the target.}
+\end{itemize}
+\subsection{Solution Characteristics Specification}
+\label{Sec:SolCharSpec}
+The instance models that govern Projectile are presented in the \hyperref[Sec:IMs]{Instance Model Section}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+
+\subsubsection{Assumptions}
+\label{Sec:Assumps}
+This section simplifies the original problem and helps in developing the theoretical models by filling in the missing information for the physical system. The assumptions refine the scope by providing more detail.
+
+\begin{itemize}
+\item[twoDMotion:\phantomsection\label{twoDMotion}]{The projectile motion is two-dimensional (2D). (RefBy: \hyperref[GD:velVec]{GD:velVec} and \hyperref[GD:posVec]{GD:posVec}.)}
+\item[cartSyst:\phantomsection\label{cartSyst}]{A Cartesian coordinate system is used (from \hyperref[neglectCurv]{A:neglectCurv}). (RefBy: \hyperref[GD:velVec]{GD:velVec} and \hyperref[GD:posVec]{GD:posVec}.)}
+\item[yAxisGravity:\phantomsection\label{yAxisGravity}]{The direction of the $y$-axis is directed opposite to gravity. (RefBy: \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}, \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}, and \hyperref[accelYGravity]{A:accelYGravity}.)}
+\item[launchOrigin:\phantomsection\label{launchOrigin}]{The launcher is coincident with the origin. (RefBy: \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist} and \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}.)}
+\item[targetXAxis:\phantomsection\label{targetXAxis}]{The target lies on the $x$-axis (from \hyperref[neglectCurv]{A:neglectCurv}). (RefBy: \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}.)}
+\item[posXDirection:\phantomsection\label{posXDirection}]{The positive $x$-direction is from the launcher to the target. (RefBy: \hyperref[IM:offsetIM]{IM:offsetIM}, \hyperref[IM:messageIM]{IM:messageIM}, \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}, and \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}.)}
+\item[constAccel:\phantomsection\label{constAccel}]{The acceleration is constant (from \hyperref[accelXZero]{A:accelXZero}, \hyperref[accelYGravity]{A:accelYGravity}, \hyperref[neglectDrag]{A:neglectDrag}, and \hyperref[freeFlight]{A:freeFlight}). (RefBy: \hyperref[GD:velVec]{GD:velVec} and \hyperref[GD:posVec]{GD:posVec}.)}
+\item[accelXZero:\phantomsection\label{accelXZero}]{The acceleration in the $x$-direction is zero. (RefBy: \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist} and \hyperref[constAccel]{A:constAccel}.)}
+\item[accelYGravity:\phantomsection\label{accelYGravity}]{The acceleration in the $y$-direction is the acceleration due to gravity (from \hyperref[yAxisGravity]{A:yAxisGravity}). (RefBy: \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime} and \hyperref[constAccel]{A:constAccel}.)}
+\item[neglectDrag:\phantomsection\label{neglectDrag}]{Air drag is neglected. (RefBy: \hyperref[constAccel]{A:constAccel}.)}
+\item[pointMass:\phantomsection\label{pointMass}]{The size and shape of the projectile are negligible, so that it can be modelled as a point mass. (RefBy: \hyperref[GD:rectPos]{GD:rectPos} and \hyperref[GD:rectVel]{GD:rectVel}.)}
+\item[freeFlight:\phantomsection\label{freeFlight}]{The flight is free; there are no collisions during the trajectory of the projectile. (RefBy: \hyperref[constAccel]{A:constAccel}.)}
+\item[neglectCurv:\phantomsection\label{neglectCurv}]{The distance is small enough that the curvature of the Earth can be neglected. (RefBy: \hyperref[targetXAxis]{A:targetXAxis} and \hyperref[cartSyst]{A:cartSyst}.)}
+\item[timeStartZero:\phantomsection\label{timeStartZero}]{Time starts at zero. (RefBy: \hyperref[GD:velVec]{GD:velVec}, \hyperref[GD:rectPos]{GD:rectPos}, \hyperref[GD:rectVel]{GD:rectVel}, \hyperref[GD:posVec]{GD:posVec}, and \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}.)}
+\item[gravAccelValue:\phantomsection\label{gravAccelValue}]{The acceleration due to gravity is assumed to have the value provided in the section for \hyperref[Sec:AuxConstants]{Values of Auxiliary Constants}. (RefBy: \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist} and \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}.)}
+\end{itemize}
+\subsubsection{Theoretical Models}
+\label{Sec:TMs}
+This section focuses on the general equations and laws that Projectile is based on.
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{TM:acceleration}
+\phantomsection 
+\label{TM:acceleration}
+\\ \midrule \\
+Label & Acceleration
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \symbf{a}=\frac{\,d\symbf{v}}{\,dt}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\symbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$t$ is the time (${\text{s}}$)}
+              \item{$\symbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & \cite{accelerationWiki}
+         
+\\ \midrule \\
+RefBy & \hyperref[GD:rectVel]{GD:rectVel}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{TM:velocity}
+\phantomsection 
+\label{TM:velocity}
+\\ \midrule \\
+Label & Velocity
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \symbf{v}=\frac{\,d\symbf{p}}{\,dt}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\symbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$t$ is the time (${\text{s}}$)}
+              \item{$\symbf{p}$ is the position (${\text{m}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & \cite{velocityWiki}
+         
+\\ \midrule \\
+RefBy & \hyperref[GD:rectPos]{GD:rectPos}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+\subsubsection{General Definitions}
+\label{Sec:GDs}
+This section collects the laws and equations that will be used to build the instance models.
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{GD:rectVel}
+\phantomsection 
+\label{GD:rectVel}
+\\ \midrule \\
+Label & Rectilinear (1D) velocity as a function of time for constant acceleration
+        
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \symbf{v}\text{(}t\text{)}={v^{\text{i}}}+{a^{c}} t
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\symbf{v}\text{(}t\text{)}$ is the 1D speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{${v^{\text{i}}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{${a^{c}}$ is the constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$t$ is the time (${\text{s}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & \cite[(pg. 8)]{hibbeler2004}
+         
+\\ \midrule \\
+RefBy & \hyperref[GD:velVec]{GD:velVec} and \hyperref[GD:rectPos]{GD:rectPos}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+\paragraph{Detailed derivation of rectilinear velocity:}
+\label{GD:rectVelDeriv}
+Assume we have rectilinear motion of a particle (of negligible size and shape, from \hyperref[pointMass]{A:pointMass}); that is, motion in a straight line. The velocity is $v$ and the acceleration is $a$. The motion in \hyperref[TM:acceleration]{TM:acceleration} is now one-dimensional with a constant acceleration, represented by ${a^{c}}$. The initial velocity (at $t=0$, from \hyperref[timeStartZero]{A:timeStartZero}) is represented by ${v^{\text{i}}}$. From \hyperref[TM:acceleration]{TM:acceleration}, using the above symbols we have:
+
+\begin{displaymath}
+{a^{c}}=\frac{\,dv}{\,dt}
+\end{displaymath}
+Rearranging and integrating, we have:
+
+\begin{displaymath}
+\int_{{v^{\text{i}}}}^{v}{1}\,dv=\int_{0}^{t}{{a^{c}}}\,dt
+\end{displaymath}
+Performing the integration, we have the required equation:
+
+\begin{displaymath}
+\symbf{v}\text{(}t\text{)}={v^{\text{i}}}+{a^{c}} t
+\end{displaymath}
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{GD:rectPos}
+\phantomsection 
+\label{GD:rectPos}
+\\ \midrule \\
+Label & Rectilinear (1D) position as a function of time for constant acceleration
+        
+\\ \midrule \\
+Units & ${\text{m}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           p={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$p$ is the scalar position (${\text{m}}$)}
+              \item{${p^{\text{i}}}$ is the initial position (${\text{m}}$)}
+              \item{${v^{\text{i}}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{$t$ is the time (${\text{s}}$)}
+              \item{${a^{c}}$ is the constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & \cite[(pg. 8)]{hibbeler2004}
+         
+\\ \midrule \\
+RefBy & \hyperref[GD:posVec]{GD:posVec}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+\paragraph{Detailed derivation of rectilinear position:}
+\label{GD:rectPosDeriv}
+Assume we have rectilinear motion of a particle (of negligible size and shape, from \hyperref[pointMass]{A:pointMass}); that is, motion in a straight line. The position is $p$ and the velocity is $v$. The motion in \hyperref[TM:velocity]{TM:velocity} is now one-dimensional. The initial position (at $t=0$, from \hyperref[timeStartZero]{A:timeStartZero}) is represented by ${p^{\text{i}}}$. From \hyperref[TM:velocity]{TM:velocity}, using the above symbols we have:
+
+\begin{displaymath}
+v=\frac{\,dp}{\,dt}
+\end{displaymath}
+Rearranging and integrating, we have:
+
+\begin{displaymath}
+\int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{v}\,dt
+\end{displaymath}
+From \hyperref[GD:rectVel]{GD:rectVel}, we can replace $v$:
+
+\begin{displaymath}
+\int_{{p^{\text{i}}}}^{p}{1}\,dp=\int_{0}^{t}{{v^{\text{i}}}+{a^{c}} t}\,dt
+\end{displaymath}
+Performing the integration, we have the required equation:
+
+\begin{displaymath}
+p={p^{\text{i}}}+{v^{\text{i}}} t+\frac{{a^{c}} t^{2}}{2}
+\end{displaymath}
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{GD:velVec}
+\phantomsection 
+\label{GD:velVec}
+\\ \midrule \\
+Label & Velocity vector as a function of time for 2D motion under constant acceleration
+        
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \symbf{v}=\begin{bmatrix}
+                     {{v_{\text{x}}}^{\text{i}}}+{{a_{\text{x}}}^{\text{c}}} t\\
+                     {{v_{\text{y}}}^{\text{i}}}+{{a_{\text{y}}}^{\text{c}}} t
+                     \end{bmatrix}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\symbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{${{v_{\text{x}}}^{\text{i}}}$ is the $x$-component of initial velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{${{a_{\text{x}}}^{\text{c}}}$ is the $x$-component of constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{$t$ is the time (${\text{s}}$)}
+              \item{${{v_{\text{y}}}^{\text{i}}}$ is the $y$-component of initial velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{${{a_{\text{y}}}^{\text{c}}}$ is the $y$-component of constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & 
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+\paragraph{Detailed derivation of velocity vector:}
+\label{GD:velVecDeriv}
+For a two-dimensional Cartesian coordinate system (\hyperref[twoDMotion]{A:twoDMotion} and \hyperref[cartSyst]{A:cartSyst}), we can represent the velocity vector as $\symbf{v}=\begin{bmatrix}
+                                                                                                                                                                                {v_{\text{x}}}\\
+                                                                                                                                                                                {v_{\text{y}}}
+                                                                                                                                                                                \end{bmatrix}$ and the acceleration vector as $\symbf{a}=\begin{bmatrix}
+                                                                                                                                                                                                                                         {a_{\text{x}}}\\
+                                                                                                                                                                                                                                         {a_{\text{y}}}
+                                                                                                                                                                                                                                         \end{bmatrix}$. The acceleration is assumed to be constant (\hyperref[constAccel]{A:constAccel}) and the constant acceleration vector is represented as ${\symbf{a}^{\text{c}}}=\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                                                                                                                         {{a_{\text{x}}}^{\text{c}}}\\
+                                                                                                                                                                                                                                                                                                                                                                                                                         {{a_{\text{y}}}^{\text{c}}}
+                                                                                                                                                                                                                                                                                                                                                                                                                         \end{bmatrix}$. The initial velocity (at $t=0$, from \hyperref[timeStartZero]{A:timeStartZero}) is represented by ${\symbf{v}^{\text{i}}}=\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   {{v_{\text{x}}}^{\text{i}}}\\
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   {{v_{\text{y}}}^{\text{i}}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   \end{bmatrix}$. Since we have a Cartesian coordinate system, \hyperref[GD:rectVel]{GD:rectVel} can be applied to each coordinate of the velocity vector to yield the required equation:
+
+\begin{displaymath}
+\symbf{v}=\begin{bmatrix}
+          {{v_{\text{x}}}^{\text{i}}}+{{a_{\text{x}}}^{\text{c}}} t\\
+          {{v_{\text{y}}}^{\text{i}}}+{{a_{\text{y}}}^{\text{c}}} t
+          \end{bmatrix}
+\end{displaymath}
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{GD:posVec}
+\phantomsection 
+\label{GD:posVec}
+\\ \midrule \\
+Label & Position vector as a function of time for 2D motion under constant acceleration
+        
+\\ \midrule \\
+Units & ${\text{m}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           \symbf{p}=\begin{bmatrix}
+                     {{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}} t+\frac{{{a_{\text{x}}}^{\text{c}}} t^{2}}{2}\\
+                     {{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}} t+\frac{{{a_{\text{y}}}^{\text{c}}} t^{2}}{2}
+                     \end{bmatrix}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$\symbf{p}$ is the position (${\text{m}}$)}
+              \item{${{p_{\text{x}}}^{\text{i}}}$ is the $x$-component of initial position (${\text{m}}$)}
+              \item{${{v_{\text{x}}}^{\text{i}}}$ is the $x$-component of initial velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{$t$ is the time (${\text{s}}$)}
+              \item{${{a_{\text{x}}}^{\text{c}}}$ is the $x$-component of constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \item{${{p_{\text{y}}}^{\text{i}}}$ is the $y$-component of initial position (${\text{m}}$)}
+              \item{${{v_{\text{y}}}^{\text{i}}}$ is the $y$-component of initial velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{${{a_{\text{y}}}^{\text{c}}}$ is the $y$-component of constant acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist} and \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+\paragraph{Detailed derivation of position vector:}
+\label{GD:posVecDeriv}
+For a two-dimensional Cartesian coordinate system (\hyperref[twoDMotion]{A:twoDMotion} and \hyperref[cartSyst]{A:cartSyst}), we can represent the position vector as $\symbf{p}=\begin{bmatrix}
+                                                                                                                                                                                {p_{\text{x}}}\\
+                                                                                                                                                                                {p_{\text{y}}}
+                                                                                                                                                                                \end{bmatrix}$, the velocity vector as $\symbf{v}=\begin{bmatrix}
+                                                                                                                                                                                                                                  {v_{\text{x}}}\\
+                                                                                                                                                                                                                                  {v_{\text{y}}}
+                                                                                                                                                                                                                                  \end{bmatrix}$, and the acceleration vector as $\symbf{a}=\begin{bmatrix}
+                                                                                                                                                                                                                                                                                            {a_{\text{x}}}\\
+                                                                                                                                                                                                                                                                                            {a_{\text{y}}}
+                                                                                                                                                                                                                                                                                            \end{bmatrix}$. The acceleration is assumed to be constant (\hyperref[constAccel]{A:constAccel}) and the constant acceleration vector is represented as ${\symbf{a}^{\text{c}}}=\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            {{a_{\text{x}}}^{\text{c}}}\\
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            {{a_{\text{y}}}^{\text{c}}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                            \end{bmatrix}$. The initial velocity (at $t=0$, from \hyperref[timeStartZero]{A:timeStartZero}) is represented by ${\symbf{v}^{\text{i}}}=\begin{bmatrix}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      {{v_{\text{x}}}^{\text{i}}}\\
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      {{v_{\text{y}}}^{\text{i}}}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      \end{bmatrix}$. Since we have a Cartesian coordinate system, \hyperref[GD:rectPos]{GD:rectPos} can be applied to each coordinate of the position vector to yield the required equation:
+
+\begin{displaymath}
+\symbf{p}=\begin{bmatrix}
+          {{p_{\text{x}}}^{\text{i}}}+{{v_{\text{x}}}^{\text{i}}} t+\frac{{{a_{\text{x}}}^{\text{c}}} t^{2}}{2}\\
+          {{p_{\text{y}}}^{\text{i}}}+{{v_{\text{y}}}^{\text{i}}} t+\frac{{{a_{\text{y}}}^{\text{c}}} t^{2}}{2}
+          \end{bmatrix}
+\end{displaymath}
+\subsubsection{Data Definitions}
+\label{Sec:DDs}
+This section collects and defines all the data needed to build the instance models.
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:vecMag}
+\phantomsection 
+\label{DD:vecMag}
+\\ \midrule \\
+Label & Speed
+        
+\\ \midrule \\
+Symbol & $v$
+         
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           v=\|\symbf{v}\|
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$v$ is the speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{$\symbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & For a given velocity vector $\symbf{v}$, the magnitude of the vector ($\|\symbf{v}\|$) is the scalar called speed.
+        
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[DD:speedIY]{DD:speedIY} and \hyperref[DD:speedIX]{DD:speedIX}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:speedIX}
+\phantomsection 
+\label{DD:speedIX}
+\\ \midrule \\
+Label & $x$-component of initial velocity
+        
+\\ \midrule \\
+Symbol & ${{v_{\text{x}}}^{\text{i}}}$
+         
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {{v_{\text{x}}}^{\text{i}}}={v^{\text{i}}} \cos\left(θ\right)
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${{v_{\text{x}}}^{\text{i}}}$ is the $x$-component of initial velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{${v^{\text{i}}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{$θ$ is the launch angle (${\text{rad}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & ${v^{\text{i}}}$ is from \hyperref[DD:vecMag]{DD:vecMag}.
+        
+        $θ$ is shown in \hyperref[Figure:Launch]{Fig:Launch}.
+        
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:speedIY}
+\phantomsection 
+\label{DD:speedIY}
+\\ \midrule \\
+Label & $y$-component of initial velocity
+        
+\\ \midrule \\
+Symbol & ${{v_{\text{y}}}^{\text{i}}}$
+         
+\\ \midrule \\
+Units & $\frac{\text{m}}{\text{s}}$
+        
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {{v_{\text{y}}}^{\text{i}}}={v^{\text{i}}} \sin\left(θ\right)
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${{v_{\text{y}}}^{\text{i}}}$ is the $y$-component of initial velocity ($\frac{\text{m}}{\text{s}}$)}
+              \item{${v^{\text{i}}}$ is the initial speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{$θ$ is the launch angle (${\text{rad}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & ${v^{\text{i}}}$ is from \hyperref[DD:vecMag]{DD:vecMag}.
+        
+        $θ$ is shown in \hyperref[Figure:Launch]{Fig:Launch}.
+        
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
+\subsubsection{Instance Models}
+\label{Sec:IMs}
+This section transforms the problem defined in the \hyperref[Sec:ProbDesc]{problem description} into one which is expressed in mathematical terms. It uses concrete symbols defined in the \hyperref[Sec:DDs]{data definitions} to replace the abstract symbols in the models identified in \hyperref[Sec:TMs]{theoretical models} and \hyperref[Sec:GDs]{general definitions}.
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{IM:calOfLandingTime}
+\phantomsection 
+\label{IM:calOfLandingTime}
+\\ \midrule \\
+Label & Calculation of landing time
+        
+\\ \midrule \\
+Input & ${v_{\text{launch}}}$, $θ$
+        
+\\ \midrule \\
+Output & ${t_{\text{flight}}}$
+         
+\\ \midrule \\
+Input Constraints & \begin{displaymath}
+                    {v_{\text{launch}}}\gt{}0
+                    \end{displaymath}
+                    \begin{displaymath}
+                    0\lt{}θ\lt{}\frac{π}{2}
+                    \end{displaymath}
+\\ \midrule \\
+Output Constraints & \begin{displaymath}
+                     {t_{\text{flight}}}\gt{}0
+                     \end{displaymath}
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{\symbf{g}}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${t_{\text{flight}}}$ is the flight duration (${\text{s}}$)}
+              \item{${v_{\text{launch}}}$ is the launch speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{$θ$ is the launch angle (${\text{rad}}$)}
+              \item{$\symbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & The constraint $0\lt{}θ\lt{}\frac{π}{2}$ is from \hyperref[posXDirection]{A:posXDirection} and \hyperref[yAxisGravity]{A:yAxisGravity}, and is shown in \hyperref[Figure:Launch]{Fig:Launch}.
+        
+        $\symbf{g}$ is defined in \hyperref[gravAccelValue]{A:gravAccelValue}.
+        
+        The constraint ${t_{\text{flight}}}\gt{}0$ is from \hyperref[timeStartZero]{A:timeStartZero}.
+        
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist} and \hyperref[calcValues]{FR:Calculate-Values}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+\paragraph{Detailed derivation of flight duration:}
+\label{IM:calOfLandingTimeDeriv}
+We know that ${{p_{\text{y}}}^{\text{i}}}=0$ (\hyperref[launchOrigin]{A:launchOrigin}) and ${{a_{\text{y}}}^{\text{c}}}=-\symbf{g}$ (\hyperref[accelYGravity]{A:accelYGravity}). Substituting these values into the y-direction of \hyperref[GD:posVec]{GD:posVec} gives us:
+
+\begin{displaymath}
+{p_{\text{y}}}={{v_{\text{y}}}^{\text{i}}} t-\frac{\symbf{g} t^{2}}{2}
+\end{displaymath}
+To find the time that the projectile lands, we want to find the $t$ value (${t_{\text{flight}}}$) where ${p_{\text{y}}}=0$ (since the target is on the $x$-axis from \hyperref[targetXAxis]{A:targetXAxis}). From the equation above we get:
+
+\begin{displaymath}
+{{v_{\text{y}}}^{\text{i}}} {t_{\text{flight}}}-\frac{\symbf{g} {t_{\text{flight}}}^{2}}{2}=0
+\end{displaymath}
+Dividing by ${t_{\text{flight}}}$ (with the constraint ${t_{\text{flight}}}\gt{}0$) gives us:
+
+\begin{displaymath}
+{{v_{\text{y}}}^{\text{i}}}-\frac{\symbf{g} {t_{\text{flight}}}}{2}=0
+\end{displaymath}
+Solving for ${t_{\text{flight}}}$ gives us:
+
+\begin{displaymath}
+{t_{\text{flight}}}=\frac{2 {{v_{\text{y}}}^{\text{i}}}}{\symbf{g}}
+\end{displaymath}
+From \hyperref[DD:speedIY]{DD:speedIY} (with ${v^{\text{i}}}={v_{\text{launch}}}$) we can replace ${{v_{\text{y}}}^{\text{i}}}$:
+
+\begin{displaymath}
+{t_{\text{flight}}}=\frac{2 {v_{\text{launch}}} \sin\left(θ\right)}{\symbf{g}}
+\end{displaymath}
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{IM:calOfLandingDist}
+\phantomsection 
+\label{IM:calOfLandingDist}
+\\ \midrule \\
+Label & Calculation of landing position
+        
+\\ \midrule \\
+Input & ${v_{\text{launch}}}$, $θ$
+        
+\\ \midrule \\
+Output & ${p_{\text{land}}}$
+         
+\\ \midrule \\
+Input Constraints & \begin{displaymath}
+                    {v_{\text{launch}}}\gt{}0
+                    \end{displaymath}
+                    \begin{displaymath}
+                    0\lt{}θ\lt{}\frac{π}{2}
+                    \end{displaymath}
+\\ \midrule \\
+Output Constraints & \begin{displaymath}
+                     {p_{\text{land}}}\gt{}0
+                     \end{displaymath}
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{\symbf{g}}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${p_{\text{land}}}$ is the landing position (${\text{m}}$)}
+              \item{${v_{\text{launch}}}$ is the launch speed ($\frac{\text{m}}{\text{s}}$)}
+              \item{$θ$ is the launch angle (${\text{rad}}$)}
+              \item{$\symbf{g}$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & The constraint $0\lt{}θ\lt{}\frac{π}{2}$ is from \hyperref[posXDirection]{A:posXDirection} and \hyperref[yAxisGravity]{A:yAxisGravity}, and is shown in \hyperref[Figure:Launch]{Fig:Launch}.
+        
+        $\symbf{g}$ is defined in \hyperref[gravAccelValue]{A:gravAccelValue}.
+        
+        The constraint ${p_{\text{land}}}\gt{}0$ is from \hyperref[posXDirection]{A:posXDirection}.
+        
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[IM:offsetIM]{IM:offsetIM} and \hyperref[calcValues]{FR:Calculate-Values}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+\paragraph{Detailed derivation of landing position:}
+\label{IM:calOfLandingDistDeriv}
+We know that ${{p_{\text{x}}}^{\text{i}}}=0$ (\hyperref[launchOrigin]{A:launchOrigin}) and ${{a_{\text{x}}}^{\text{c}}}=0$ (\hyperref[accelXZero]{A:accelXZero}). Substituting these values into the x-direction of \hyperref[GD:posVec]{GD:posVec} gives us:
+
+\begin{displaymath}
+{p_{\text{x}}}={{v_{\text{x}}}^{\text{i}}} t
+\end{displaymath}
+To find the landing position, we want to find the ${p_{\text{x}}}$ value (${p_{\text{land}}}$) at flight duration (from \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}):
+
+\begin{displaymath}
+{p_{\text{land}}}=\frac{{{v_{\text{x}}}^{\text{i}}}\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{\symbf{g}}
+\end{displaymath}
+From \hyperref[DD:speedIX]{DD:speedIX} (with ${v^{\text{i}}}={v_{\text{launch}}}$) we can replace ${{v_{\text{x}}}^{\text{i}}}$:
+
+\begin{displaymath}
+{p_{\text{land}}}=\frac{{v_{\text{launch}}} \cos\left(θ\right)\cdot{}2 {v_{\text{launch}}} \sin\left(θ\right)}{\symbf{g}}
+\end{displaymath}
+Rearranging this gives us the required equation:
+
+\begin{displaymath}
+{p_{\text{land}}}=\frac{2 {v_{\text{launch}}}^{2} \sin\left(θ\right) \cos\left(θ\right)}{\symbf{g}}
+\end{displaymath}
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{IM:offsetIM}
+\phantomsection 
+\label{IM:offsetIM}
+\\ \midrule \\
+Label & Offset
+        
+\\ \midrule \\
+Input & ${p_{\text{land}}}$, ${p_{\text{target}}}$
+        
+\\ \midrule \\
+Output & ${d_{\text{offset}}}$
+         
+\\ \midrule \\
+Input Constraints & \begin{displaymath}
+                    {p_{\text{land}}}\gt{}0
+                    \end{displaymath}
+                    \begin{displaymath}
+                    {p_{\text{target}}}\gt{}0
+                    \end{displaymath}
+\\ \midrule \\
+Output Constraints & 
+\\ \midrule \\
+Equation & \begin{displaymath}
+           {d_{\text{offset}}}={p_{\text{land}}}-{p_{\text{target}}}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{${d_{\text{offset}}}$ is the distance between the target position and the landing position (${\text{m}}$)}
+              \item{${p_{\text{land}}}$ is the landing position (${\text{m}}$)}
+              \item{${p_{\text{target}}}$ is the target position (${\text{m}}$)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & ${p_{\text{land}}}$ is from \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}.
+        
+        The constraints ${p_{\text{land}}}\gt{}0$ and ${p_{\text{target}}}\gt{}0$ are from \hyperref[posXDirection]{A:posXDirection}.
+        
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[outputValues]{FR:Output-Values}, \hyperref[IM:messageIM]{IM:messageIM}, and \hyperref[calcValues]{FR:Calculate-Values}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
+\vspace{\baselineskip}
+\noindent
+\begin{minipage}{\textwidth}
+\begin{tabular}{>{\raggedright}p{0.13\textwidth}>{\raggedright\arraybackslash}p{0.82\textwidth}}
+\toprule \textbf{Refname} & \textbf{IM:messageIM}
+\phantomsection 
+\label{IM:messageIM}
+\\ \midrule \\
+Label & Output message
+        
+\\ \midrule \\
+Input & ${d_{\text{offset}}}$, ${p_{\text{target}}}$
+        
+\\ \midrule \\
+Output & $s$
+         
+\\ \midrule \\
+Input Constraints & \begin{displaymath}
+                    {d_{\text{offset}}}\gt{}-{p_{\text{land}}}
+                    \end{displaymath}
+                    \begin{displaymath}
+                    {p_{\text{target}}}\gt{}0
+                    \end{displaymath}
+\\ \midrule \\
+Output Constraints & 
+\\ \midrule \\
+Equation & \begin{displaymath}
+           s=\begin{cases}
+             \text{``The target was hit.''}, & |\frac{{d_{\text{offset}}}}{{p_{\text{target}}}}|\lt{}ε\\
+             \text{``The projectile fell short.''}, & {d_{\text{offset}}}\lt{}0\\
+             \text{``The projectile went long.''}, & {d_{\text{offset}}}\gt{}0
+             \end{cases}
+           \end{displaymath}
+\\ \midrule \\
+Description & \begin{symbDescription}
+              \item{$s$ is the output message as a string (Unitless)}
+              \item{${d_{\text{offset}}}$ is the distance between the target position and the landing position (${\text{m}}$)}
+              \item{${p_{\text{target}}}$ is the target position (${\text{m}}$)}
+              \item{$ε$ is the hit tolerance (Unitless)}
+              \end{symbDescription}
+\\ \midrule \\
+Notes & ${d_{\text{offset}}}$ is from \hyperref[IM:offsetIM]{IM:offsetIM}.
+        
+        The constraint ${p_{\text{target}}}\gt{}0$ is from \hyperref[posXDirection]{A:posXDirection}.
+        
+        The constraint ${d_{\text{offset}}}\gt{}-{p_{\text{land}}}$ is from the fact that ${p_{\text{land}}}\gt{}0$, from \hyperref[posXDirection]{A:posXDirection}.
+        
+        $ε$ is defined in \hyperref[Sec:AuxConstants]{Sec:Values of Auxiliary Constants}.
+        
+\\ \midrule \\
+Source & --
+         
+\\ \midrule \\
+RefBy & \hyperref[outputValues]{FR:Output-Values} and \hyperref[calcValues]{FR:Calculate-Values}
+        
+\\ \bottomrule
+\end{tabular}
+\end{minipage}
+
+\subsubsection{Data Constraints}
+\label{Sec:DataConstraints}
+The \hyperref[Table:InDataConstraints]{Data Constraints Table} shows the data constraints on the input variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+
+\begin{longtable}{l l l l}
+\toprule
+\textbf{Var} & \textbf{Physical Constraints} & \textbf{Typical Value} & \textbf{Uncert.}
+\\
+\midrule
+\endhead
+${p_{\text{target}}}$ & ${p_{\text{target}}}\gt{}0$ & $1000$ ${\text{m}}$ & 10$\%$
+\\
+${v_{\text{launch}}}$ & ${v_{\text{launch}}}\gt{}0$ & $100$ $\frac{\text{m}}{\text{s}}$ & 10$\%$
+\\
+$θ$ & $0\lt{}θ\lt{}\frac{π}{2}$ & $\frac{π}{4}$ ${\text{rad}}$ & 10$\%$
+\\
+\bottomrule
+\caption{Input Data Constraints}
+\label{Table:InDataConstraints}
+\end{longtable}
+\subsubsection{Properties of a Correct Solution}
+\label{Sec:CorSolProps}
+The \hyperref[Table:OutDataConstraints]{Data Constraints Table} shows the data constraints on the output variables. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable.
+
+\begin{longtable}{l l}
+\toprule
+\textbf{Var} & \textbf{Physical Constraints}
+\\
+\midrule
+\endhead
+${p_{\text{land}}}$ & ${p_{\text{land}}}\gt{}0$
+\\
+${d_{\text{offset}}}$ & ${d_{\text{offset}}}\gt{}-{p_{\text{land}}}$
+\\
+\bottomrule
+\caption{Output Data Constraints}
+\label{Table:OutDataConstraints}
+\end{longtable}
+\section{Requirements}
+\label{Sec:Requirements}
+This section provides the functional requirements, the tasks and behaviours that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
+
+\subsection{Functional Requirements}
+\label{Sec:FRs}
+This section provides the functional requirements, the tasks and behaviours that the software is expected to complete.
+
+\begin{itemize}
+\item[Input-Values:\phantomsection\label{inputValues}]{Input the values from \hyperref[Table:ReqInputs]{Tab:ReqInputs}.}
+\item[Verify-Input-Values:\phantomsection\label{verifyInVals}]{Check the entered input values to ensure that they do not exceed the \hyperref[Sec:DataConstraints]{data constraints}. If any of the input values are out of bounds, an error message is displayed and the calculations stop.}
+\item[Calculate-Values:\phantomsection\label{calcValues}]{Calculate the following values: ${t_{\text{flight}}}$ (from \hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}), ${p_{\text{land}}}$ (from \hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}), ${d_{\text{offset}}}$ (from \hyperref[IM:offsetIM]{IM:offsetIM}), and $s$ (from \hyperref[IM:messageIM]{IM:messageIM}).}
+\item[Output-Values:\phantomsection\label{outputValues}]{Output $s$ (from \hyperref[IM:messageIM]{IM:messageIM}) and ${d_{\text{offset}}}$ (from \hyperref[IM:offsetIM]{IM:offsetIM}).}
+\end{itemize}
+\begin{longtable}{l l l}
+\toprule
+\textbf{Symbol} & \textbf{Description} & \textbf{Units}
+\\
+\midrule
+\endhead
+${p_{\text{target}}}$ & Target position & ${\text{m}}$
+\\
+${v_{\text{launch}}}$ & Launch speed & $\frac{\text{m}}{\text{s}}$
+\\
+$θ$ & Launch angle & ${\text{rad}}$
+\\
+\bottomrule
+\caption{Required Inputs following \hyperref[inputValues]{FR:Input-Values}}
+\label{Table:ReqInputs}
+\end{longtable}
+\subsection{Non-Functional Requirements}
+\label{Sec:NFRs}
+This section provides the non-functional requirements, the qualities that the software is expected to exhibit.
+
+\begin{itemize}
+\item[Correct:\phantomsection\label{correct}]{The outputs of the code have the properties described in \hyperref[Sec:CorSolProps]{Properties of a Correct Solution}.}
+\item[Verifiable:\phantomsection\label{verifiable}]{The code is tested with complete verification and validation plan.}
+\item[Understandable:\phantomsection\label{understandable}]{The code is modularized with complete module guide and module interface specification.}
+\item[Reusable:\phantomsection\label{reusable}]{The code is modularized.}
+\item[Maintainable:\phantomsection\label{maintainable}]{The traceability between requirements, assumptions, theoretical models, general definitions, data definitions, instance models, likely changes, unlikely changes, and modules is completely recorded in traceability matrices in the SRS and module guide.}
+\item[Portable:\phantomsection\label{portable}]{The code is able to be run in different environments.}
+\end{itemize}
+\section{Traceability Matrices and Graphs}
+\label{Sec:TraceMatrices}
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. \hyperref[Table:TraceMatAvsA]{Tab:TraceMatAvsA} shows the dependencies of assumptions on the assumptions. \hyperref[Table:TraceMatAvsAll]{Tab:TraceMatAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Table:TraceMatRefvsRef]{Tab:TraceMatRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. \hyperref[Table:TraceMatAllvsR]{Tab:TraceMatAllvsR} shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models.
+
+\begin{longtable}{l l l l l l l l l l l l l l l l}
+\toprule
+\textbf{} & \textbf{\hyperref[twoDMotion]{A:twoDMotion}} & \textbf{\hyperref[cartSyst]{A:cartSyst}} & \textbf{\hyperref[yAxisGravity]{A:yAxisGravity}} & \textbf{\hyperref[launchOrigin]{A:launchOrigin}} & \textbf{\hyperref[targetXAxis]{A:targetXAxis}} & \textbf{\hyperref[posXDirection]{A:posXDirection}} & \textbf{\hyperref[constAccel]{A:constAccel}} & \textbf{\hyperref[accelXZero]{A:accelXZero}} & \textbf{\hyperref[accelYGravity]{A:accelYGravity}} & \textbf{\hyperref[neglectDrag]{A:neglectDrag}} & \textbf{\hyperref[pointMass]{A:pointMass}} & \textbf{\hyperref[freeFlight]{A:freeFlight}} & \textbf{\hyperref[neglectCurv]{A:neglectCurv}} & \textbf{\hyperref[timeStartZero]{A:timeStartZero}} & \textbf{\hyperref[gravAccelValue]{A:gravAccelValue}}
+\\
+\midrule
+\endhead
+\hyperref[twoDMotion]{A:twoDMotion} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[cartSyst]{A:cartSyst} &  &  &  &  &  &  &  &  &  &  &  &  & X &  & 
+\\
+\hyperref[yAxisGravity]{A:yAxisGravity} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[launchOrigin]{A:launchOrigin} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[targetXAxis]{A:targetXAxis} &  &  &  &  &  &  &  &  &  &  &  &  & X &  & 
+\\
+\hyperref[posXDirection]{A:posXDirection} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[constAccel]{A:constAccel} &  &  &  &  &  &  &  & X & X & X &  & X &  &  & 
+\\
+\hyperref[accelXZero]{A:accelXZero} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[accelYGravity]{A:accelYGravity} &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[neglectDrag]{A:neglectDrag} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[pointMass]{A:pointMass} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[freeFlight]{A:freeFlight} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[neglectCurv]{A:neglectCurv} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[timeStartZero]{A:timeStartZero} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[gravAccelValue]{A:gravAccelValue} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\bottomrule
+\caption{Traceability Matrix Showing the Connections Between Assumptions and Other Assumptions}
+\label{Table:TraceMatAvsA}
+\end{longtable}
+\begin{longtable}{l l l l l l l l l l l l l l l l}
+\toprule
+\textbf{} & \textbf{\hyperref[twoDMotion]{A:twoDMotion}} & \textbf{\hyperref[cartSyst]{A:cartSyst}} & \textbf{\hyperref[yAxisGravity]{A:yAxisGravity}} & \textbf{\hyperref[launchOrigin]{A:launchOrigin}} & \textbf{\hyperref[targetXAxis]{A:targetXAxis}} & \textbf{\hyperref[posXDirection]{A:posXDirection}} & \textbf{\hyperref[constAccel]{A:constAccel}} & \textbf{\hyperref[accelXZero]{A:accelXZero}} & \textbf{\hyperref[accelYGravity]{A:accelYGravity}} & \textbf{\hyperref[neglectDrag]{A:neglectDrag}} & \textbf{\hyperref[pointMass]{A:pointMass}} & \textbf{\hyperref[freeFlight]{A:freeFlight}} & \textbf{\hyperref[neglectCurv]{A:neglectCurv}} & \textbf{\hyperref[timeStartZero]{A:timeStartZero}} & \textbf{\hyperref[gravAccelValue]{A:gravAccelValue}}
+\\
+\midrule
+\endhead
+\hyperref[DD:vecMag]{DD:vecMag} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:speedIX]{DD:speedIX} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:speedIY]{DD:speedIY} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[TM:acceleration]{TM:acceleration} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[TM:velocity]{TM:velocity} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[GD:rectVel]{GD:rectVel} &  &  &  &  &  &  &  &  &  &  & X &  &  & X & 
+\\
+\hyperref[GD:rectPos]{GD:rectPos} &  &  &  &  &  &  &  &  &  &  & X &  &  & X & 
+\\
+\hyperref[GD:velVec]{GD:velVec} & X & X &  &  &  &  & X &  &  &  &  &  &  & X & 
+\\
+\hyperref[GD:posVec]{GD:posVec} & X & X &  &  &  &  & X &  &  &  &  &  &  & X & 
+\\
+\hyperref[IM:calOfLandingTime]{IM:calOfLandingTime} &  &  & X & X & X & X &  &  & X &  &  &  &  & X & X
+\\
+\hyperref[IM:calOfLandingDist]{IM:calOfLandingDist} &  &  & X & X &  & X &  & X &  &  &  &  &  &  & X
+\\
+\hyperref[IM:offsetIM]{IM:offsetIM} &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[IM:messageIM]{IM:messageIM} &  &  &  &  &  & X &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[verifyInVals]{FR:Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[calcValues]{FR:Calculate-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[correct]{NFR:Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[verifiable]{NFR:Verifiable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[understandable]{NFR:Understandable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[reusable]{NFR:Reusable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[maintainable]{NFR:Maintainable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[portable]{NFR:Portable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\bottomrule
+\caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
+\label{Table:TraceMatAvsAll}
+\end{longtable}
+\begin{longtable}{l l l l l l l l l l l l l l}
+\toprule
+\textbf{} & \textbf{\hyperref[DD:vecMag]{DD:vecMag}} & \textbf{\hyperref[DD:speedIX]{DD:speedIX}} & \textbf{\hyperref[DD:speedIY]{DD:speedIY}} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[GD:rectVel]{GD:rectVel}} & \textbf{\hyperref[GD:rectPos]{GD:rectPos}} & \textbf{\hyperref[GD:velVec]{GD:velVec}} & \textbf{\hyperref[GD:posVec]{GD:posVec}} & \textbf{\hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}} & \textbf{\hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}} & \textbf{\hyperref[IM:offsetIM]{IM:offsetIM}} & \textbf{\hyperref[IM:messageIM]{IM:messageIM}}
+\\
+\midrule
+\endhead
+\hyperref[DD:vecMag]{DD:vecMag} &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:speedIX]{DD:speedIX} & X &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[DD:speedIY]{DD:speedIY} & X &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[TM:acceleration]{TM:acceleration} &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[TM:velocity]{TM:velocity} &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[GD:rectVel]{GD:rectVel} &  &  &  & X &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[GD:rectPos]{GD:rectPos} &  &  &  &  & X & X &  &  &  &  &  &  & 
+\\
+\hyperref[GD:velVec]{GD:velVec} &  &  &  &  &  & X &  &  &  &  &  &  & 
+\\
+\hyperref[GD:posVec]{GD:posVec} &  &  &  &  &  &  & X &  &  &  &  &  & 
+\\
+\hyperref[IM:calOfLandingTime]{IM:calOfLandingTime} &  &  & X &  &  &  &  &  & X &  &  &  & 
+\\
+\hyperref[IM:calOfLandingDist]{IM:calOfLandingDist} &  & X &  &  &  &  &  &  & X & X &  &  & 
+\\
+\hyperref[IM:offsetIM]{IM:offsetIM} &  &  &  &  &  &  &  &  &  &  & X &  & 
+\\
+\hyperref[IM:messageIM]{IM:messageIM} &  &  &  &  &  &  &  &  &  &  &  & X & 
+\\
+\bottomrule
+\caption{Traceability Matrix Showing the Connections Between Items and Other Sections}
+\label{Table:TraceMatRefvsRef}
+\end{longtable}
+\begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l}
+\toprule
+\textbf{} & \textbf{\hyperref[DD:vecMag]{DD:vecMag}} & \textbf{\hyperref[DD:speedIX]{DD:speedIX}} & \textbf{\hyperref[DD:speedIY]{DD:speedIY}} & \textbf{\hyperref[TM:acceleration]{TM:acceleration}} & \textbf{\hyperref[TM:velocity]{TM:velocity}} & \textbf{\hyperref[GD:rectVel]{GD:rectVel}} & \textbf{\hyperref[GD:rectPos]{GD:rectPos}} & \textbf{\hyperref[GD:velVec]{GD:velVec}} & \textbf{\hyperref[GD:posVec]{GD:posVec}} & \textbf{\hyperref[IM:calOfLandingTime]{IM:calOfLandingTime}} & \textbf{\hyperref[IM:calOfLandingDist]{IM:calOfLandingDist}} & \textbf{\hyperref[IM:offsetIM]{IM:offsetIM}} & \textbf{\hyperref[IM:messageIM]{IM:messageIM}} & \textbf{\hyperref[inputValues]{FR:Input-Values}} & \textbf{\hyperref[verifyInVals]{FR:Verify-Input-Values}} & \textbf{\hyperref[calcValues]{FR:Calculate-Values}} & \textbf{\hyperref[outputValues]{FR:Output-Values}} & \textbf{\hyperref[correct]{NFR:Correct}} & \textbf{\hyperref[verifiable]{NFR:Verifiable}} & \textbf{\hyperref[understandable]{NFR:Understandable}} & \textbf{\hyperref[reusable]{NFR:Reusable}} & \textbf{\hyperref[maintainable]{NFR:Maintainable}} & \textbf{\hyperref[portable]{NFR:Portable}}
+\\
+\midrule
+\endhead
+\hyperref[targetHit]{GS:targetHit} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[inputValues]{FR:Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[verifyInVals]{FR:Verify-Input-Values} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[calcValues]{FR:Calculate-Values} &  &  &  &  &  &  &  &  &  & X & X & X & X &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[outputValues]{FR:Output-Values} &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[correct]{NFR:Correct} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[verifiable]{NFR:Verifiable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[understandable]{NFR:Understandable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[reusable]{NFR:Reusable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[maintainable]{NFR:Maintainable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\hyperref[portable]{NFR:Portable} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+\bottomrule
+\caption{Traceability Matrix Showing the Connections Between Requirements, Goal Statements and Other Items}
+\label{Table:TraceMatAllvsR}
+\end{longtable}
+The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. \hyperref[Figure:TraceGraphAvsA]{Fig:TraceGraphAvsA} shows the dependencies of assumptions on the assumptions. \hyperref[Figure:TraceGraphAvsAll]{Fig:TraceGraphAvsAll} shows the dependencies of data definitions, theoretical models, general definitions, instance models, requirements, likely changes, and unlikely changes on the assumptions. \hyperref[Figure:TraceGraphRefvsRef]{Fig:TraceGraphRefvsRef} shows the dependencies of data definitions, theoretical models, general definitions, and instance models with each other. \hyperref[Figure:TraceGraphAllvsR]{Fig:TraceGraphAllvsR} shows the dependencies of requirements, goal statements on the data definitions, theoretical models, general definitions, and instance models. \hyperref[Figure:TraceGraphAllvsAll]{Fig:TraceGraphAllvsAll} shows the dependencies of dependencies of assumptions, models, definitions, requirements, goals, and changes with each other.
+
+\begin{figure}
+\begin{center}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/projectile/avsa}
+\caption{TraceGraphAvsA}
+\label{Figure:TraceGraphAvsA}
+\end{center}
+\end{figure}
+\begin{figure}
+\begin{center}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/projectile/avsall}
+\caption{TraceGraphAvsAll}
+\label{Figure:TraceGraphAvsAll}
+\end{center}
+\end{figure}
+\begin{figure}
+\begin{center}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/projectile/refvsref}
+\caption{TraceGraphRefvsRef}
+\label{Figure:TraceGraphRefvsRef}
+\end{center}
+\end{figure}
+\begin{figure}
+\begin{center}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/projectile/allvsr}
+\caption{TraceGraphAllvsR}
+\label{Figure:TraceGraphAllvsR}
+\end{center}
+\end{figure}
+\begin{figure}
+\begin{center}
+\includesvg[width=\textwidth, inkscapelatex = false]{../../../../traceygraphs/projectile/allvsall}
+\caption{TraceGraphAllvsAll}
+\label{Figure:TraceGraphAllvsAll}
+\end{center}
+\end{figure}
+For convenience, the following graphs can be found at the links below:
+
+\begin{itemize}
+\item{\hyperref{../../../../traceygraphs/projectile/avsa.svg}{}{}{TraceGraphAvsA}}
+\item{\hyperref{../../../../traceygraphs/projectile/avsall.svg}{}{}{TraceGraphAvsAll}}
+\item{\hyperref{../../../../traceygraphs/projectile/refvsref.svg}{}{}{TraceGraphRefvsRef}}
+\item{\hyperref{../../../../traceygraphs/projectile/allvsr.svg}{}{}{TraceGraphAllvsR}}
+\item{\hyperref{../../../../traceygraphs/projectile/allvsall.svg}{}{}{TraceGraphAllvsAll}}
+\end{itemize}
+\section{Values of Auxiliary Constants}
+\label{Sec:AuxConstants}
+This section contains the standard values that are used for calculations in Projectile.
+
+\begin{longtable}{l l l l}
+\toprule
+\textbf{Symbol} & \textbf{Description} & \textbf{Value} & \textbf{Unit}
+\\
+\midrule
+\endhead
+$\symbf{g}$ & gravitational acceleration & $9.8$ & $\frac{\text{m}}{\text{s}^{2}}$
+\\
+$ε$ & hit tolerance & $2.0\%$ & --
+\\
+$π$ & ratio of circumference to diameter for any circle & $3.14159265$ & --
+\\
+\bottomrule
+\caption{Auxiliary Constants}
+\label{Table:TAuxConsts}
+\end{longtable}
+\section{References}
+\label{Sec:References}
+\begin{filecontents*}{bibfile.bib}
+@book{hibbeler2004,
+author={Hibbeler, R. C.},
+title={Engineering Mechanics: Dynamics},
+publisher={Pearson Prentice Hall},
+year={2004}}
+@misc{accelerationWiki,
+author={Wikipedia Contributors},
+title={Acceleration},
+howpublished={\url{https://en.wikipedia.org/wiki/Acceleration}},
+month=jun,
+year={2019}}
+@misc{cartesianWiki,
+author={Wikipedia Contributors},
+title={Cartesian coordinate system},
+howpublished={\url{https://en.wikipedia.org/wiki/Cartesian\_coordinate\_system}},
+month=jun,
+year={2019}}
+@misc{velocityWiki,
+author={Wikipedia Contributors},
+title={Velocity},
+howpublished={\url{https://en.wikipedia.org/wiki/Velocity}},
+month=jun,
+year={2019}}
+\end{filecontents*}
+\nocite{*}
+\bibstyle{ieeetr}
+\printbibliography[heading=none]
+\end{document}

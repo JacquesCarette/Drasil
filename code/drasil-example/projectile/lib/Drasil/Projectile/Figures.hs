@@ -6,7 +6,7 @@ import Utils.Drasil.Concepts (the)
 import Data.Drasil.Concepts.Documentation (physicalSystem)
 
 resourcePath :: String
-resourcePath = "../../../datafiles/projectile/"
+resourcePath = "../../../../datafiles/projectile/"
 
 figLaunch :: LabelledContent
 figLaunch = llcc (makeFigRef "Launch") $ figWithWidth (atStartNP (the physicalSystem))

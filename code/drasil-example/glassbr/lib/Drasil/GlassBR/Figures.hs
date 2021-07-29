@@ -15,7 +15,7 @@ import Drasil.GlassBR.Unitals (aspectRatio, charWeight, demand, demandq,
   dimlessLoad, lateralLoad, sD, stressDistFac)
 
 resourcePath :: String
-resourcePath = "../../../datafiles/glassbr/"
+resourcePath = "../../../../datafiles/glassbr/"
 
 sysCtxFig, physSystFig, traceItemSecsFig, traceReqsItemsFig, traceAssumpsOthersFig, demandVsSDFig, dimlessloadVsARFig :: LabelledContent
 

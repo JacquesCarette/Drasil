@@ -83,9 +83,9 @@ dataTableDesc path = S "This" +:+ namedRef (dataTableHTMLRef path) (S "Data Tabl
 -- | Data table references.
 dataTableHTMLRef, dataTableCSVRef :: FilePath -> Reference
 -- | HTML table.
-dataTableHTMLRef path = Reference "dataTableHTML" (URI $ path ++ "DataTable/DataTable.html") (shortname' $ S "dataTableHTML")
+dataTableHTMLRef path = Reference "dataTableHTML" (URI $ path ++ "ClassInstDep/DataTable.html") (shortname' $ S "dataTableHTML")
 -- | Downloadable .csv file.
-dataTableCSVRef path = Reference "dataTableCSV" (URI $ path ++ "DataTable/DataTable.csv") (shortname' $ S "dataTableCSV")
+dataTableCSVRef path = Reference "dataTableCSV" (URI $ path ++ "ClassInstDep/DataTable.csv") (shortname' $ S "dataTableCSV")
 
 -- * Table of Graphs Subsection
 --

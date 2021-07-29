@@ -11,4 +11,4 @@ figForceActing = llcc (makeFigRef "ForceDiagram") $
   phrase slice) (resourcePath ++ "ForceDiagram.png")
 
 resourcePath :: String
-resourcePath = "../../../datafiles/SSP/"
+resourcePath = "../../../datafiles/ssp/"

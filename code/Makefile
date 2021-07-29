@@ -8,6 +8,7 @@ SHELL = bash
 
 # List of all known packages
 PACKAGES = lang metadata code-base code docLang printers build theory gool data database gen utils website
+PACKAGES_E = $(PACKAGES) example
 
 # and associated package-level suffixes
 BUILD_P_SUFFIX = _build
@@ -16,8 +17,8 @@ GRAPH_P_SUFFIX = _graph
 
 BUILD_PACKAGES = $(addsuffix $(BUILD_P_SUFFIX), $(PACKAGES))
 DOC_PACKAGES = $(addsuffix $(DOC_P_SUFFIX), $(PACKAGES))
-GRAPH_PACKAGES = $(addsuffix $(GRAPH_P_SUFFIX), $(PACKAGES))
-ANALYSIS_PACKAGES = drasil $(PACKAGES) 
+GRAPH_PACKAGES = $(addsuffix $(GRAPH_P_SUFFIX), $(PACKAGES_E)) 
+ANALYSIS_PACKAGES = drasil $(PACKAGES_E)
 
 PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 
@@ -31,18 +32,18 @@ EXAMPLES = $(SRC_EXAMPLES) hghc swhs ssp gamephysics template dblpendulum sglpen
 GOOLTEST = codegenTest
 
 # where they live
-HGHC_DIR  = HGHC
-GLASSBR_DIR = GlassBR
-NOPCM_DIR = NoPCM
-SWHS_DIR  = SWHS
-SSP_DIR   = SSP
-GAMEPHYSICS_DIR  = GamePhysics
-PROJECTILE_DIR = Projectile
-TEMPLATE_DIR = Template
-GOOLTEST_DIR = GOOLTest
-DBLPENDULUM_DIR = DblPendulum
-SGLPENDULUM_DIR = SglPendulum
-PDCONTROLLER_DIR = PDController
+HGHC_DIR  = hghc
+GLASSBR_DIR = glassbr
+NOPCM_DIR = nopcm
+SWHS_DIR  = swhs
+SSP_DIR   = ssp
+GAMEPHYSICS_DIR  = gamephysics
+PROJECTILE_DIR = projectile
+TEMPLATE_DIR = template
+GOOLTEST_DIR = gooltest
+DBLPENDULUM_DIR = dblpendulum
+SGLPENDULUM_DIR = sglpendulum
+PDCONTROLLER_DIR = pdcontroller
 
 MULTI_SRC_DIRS = $(PROJECTILE_DIR) # Directories for examples with multiple src versions
 
@@ -118,7 +119,7 @@ ANALYSIS_FOLDER = $(ANALYSIS_FOLDER_NAME)/
 TYPEGRAPH_FOLDER_NAME = TypeDependencyGraphs
 TYPEGRAPH_FOLDER = $(ANALYSIS_FOLDER)$(TYPEGRAPH_FOLDER_NAME)/
 CLASSINST_GRAPH_FOLDER_NAME = packagegraphs
-CLASSINST_GRAPH_FOLDER = $(ANALYSIS_FOLDER)DataTable/$(CLASSINST_GRAPH_FOLDER_NAME)/
+CLASSINST_GRAPH_FOLDER = $(ANALYSIS_FOLDER)ClassInstDep/$(CLASSINST_GRAPH_FOLDER_NAME)/
 DEPLOY_FOLDER_NAME = deploy
 DEPLOY_FOLDER = $(DEPLOY_FOLDER_NAME)/
 DEPLOY_CODE_PATH_KV_SEP = :
@@ -301,15 +302,13 @@ $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod ch
 # They are made using the default dot algorithm and the circo algorithm for options
 # and viewability. We also add example to these variables so that we can still
 # make the graphs for that folder (although it's technically not a package itself).
-ANALYSIS_PACKAGES_E = $(ANALYSIS_PACKAGES) example
-PACKAGES_E = $(PACKAGES) example
 analysis: graphmod
 	- rm -rf "$(ANALYSIS_FOLDER)"
 	@mkdir -p "$(ANALYSIS_FOLDER)"
-	cd $(SCRIPT_FOLDER) && stack exec -- runghc DataTableGen.hs
-	cd $(SCRIPT_FOLDER) && stack exec -- runghc TypeGraphGen.hs
+	cd $(SCRIPT_FOLDER) && stack exec -- runghc ClassInstDepGen.hs
+	cd $(SCRIPT_FOLDER) && stack exec -- runghc TypeDepGen.hs
 	@echo Making dependency graphs. This may take a few minutes.
-	@cd $(TYPEGRAPH_FOLDER) && for pack in $(ANALYSIS_PACKAGES_E); do \
+	@cd $(TYPEGRAPH_FOLDER) && for pack in $(ANALYSIS_PACKAGES); do \
 		dot -Tsvg $$pack.dot > "./$$pack.svg" ; \
 		circo -Tsvg $$pack.dot > "./circo_$$pack.svg" ; \
 	done

@@ -80,10 +80,7 @@ printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
 
 resourcePath :: String
-resourcePath = "../../../datafiles/SWHS/"
-
-directoryName :: FilePath
-directoryName = "SWHS"
+resourcePath = "../../../datafiles/swhs/"
 
 units :: [UnitDefn]
 units = map unitWrapper [metre, kilogram, second] ++ 

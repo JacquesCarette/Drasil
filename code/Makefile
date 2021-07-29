@@ -8,6 +8,7 @@ SHELL = bash
 
 # List of all known packages
 PACKAGES = lang metadata code-base code docLang printers build theory gool data database gen utils website
+PACKAGES_E = $(PACKAGES) example
 
 # and associated package-level suffixes
 BUILD_P_SUFFIX = _build
@@ -16,8 +17,8 @@ GRAPH_P_SUFFIX = _graph
 
 BUILD_PACKAGES = $(addsuffix $(BUILD_P_SUFFIX), $(PACKAGES))
 DOC_PACKAGES = $(addsuffix $(DOC_P_SUFFIX), $(PACKAGES))
-GRAPH_PACKAGES = $(addsuffix $(GRAPH_P_SUFFIX), $(PACKAGES))
-ANALYSIS_PACKAGES = drasil $(PACKAGES) 
+GRAPH_PACKAGES = $(addsuffix $(GRAPH_P_SUFFIX), $(PACKAGES_E)) 
+ANALYSIS_PACKAGES = drasil $(PACKAGES_E)
 
 PACKAGE_GEN_TARGET = BUILD DOC GRAPH
 
@@ -301,15 +302,13 @@ $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod ch
 # They are made using the default dot algorithm and the circo algorithm for options
 # and viewability. We also add example to these variables so that we can still
 # make the graphs for that folder (although it's technically not a package itself).
-ANALYSIS_PACKAGES_E = $(ANALYSIS_PACKAGES) example
-PACKAGES_E = $(PACKAGES) example
 analysis: graphmod
 	- rm -rf "$(ANALYSIS_FOLDER)"
 	@mkdir -p "$(ANALYSIS_FOLDER)"
 	cd $(SCRIPT_FOLDER) && stack exec -- runghc ClassInstDepGen.hs
 	cd $(SCRIPT_FOLDER) && stack exec -- runghc TypeDepGen.hs
 	@echo Making dependency graphs. This may take a few minutes.
-	@cd $(TYPEGRAPH_FOLDER) && for pack in $(ANALYSIS_PACKAGES_E); do \
+	@cd $(TYPEGRAPH_FOLDER) && for pack in $(ANALYSIS_PACKAGES); do \
 		dot -Tsvg $$pack.dot > "./$$pack.svg" ; \
 		circo -Tsvg $$pack.dot > "./circo_$$pack.svg" ; \
 	done

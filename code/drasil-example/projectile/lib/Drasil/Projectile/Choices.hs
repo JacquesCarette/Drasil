@@ -16,6 +16,7 @@ import Database.Drasil (SystemInformation(SI,_sys))
 import Data.List (intercalate)
 import System.Directory (createDirectoryIfMissing, getCurrentDirectory, 
   setCurrentDirectory)
+import Data.Char (toLower)
 
 genCodeWithChoices :: [Choices] -> IO ()
 genCodeWithChoices [] = return ()
@@ -38,7 +39,7 @@ codedDirName n Choices {
   constStructure = cs,
   constRepr = cr,
   spaceMatch = sm} = 
-  intercalate "_" [n, codedMod m, codedImpTp it, codedLog l, codedStruct is, 
+  map toLower $ intercalate "_" [n, codedMod m, codedImpTp it, codedLog l, codedStruct is, 
     codedConStruct cs, codedConRepr cr, codedSpaceMatch sm]
   
 codedMod :: Modularity -> String

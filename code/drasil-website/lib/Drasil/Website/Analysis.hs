@@ -25,7 +25,7 @@ analysisSec analysisPath typePath clsIPath graphPath pkgs =
     [mkParagraph analysisIntro] -- Section introduction
     [dataTableSec analysisPath, tableOfGraphsSec typePath clsIPath pkgs,
       graphSec graphPath $ map ("drasil-" ++) pkgs] -- Subsections
-    analysisSecRef -- Section Reference
+    $ makeSecRef "Analysis" $ S "Analysis" -- Section Reference
 
 -- | Analysis section title.
 drasilAnalysisTitle :: Sentence
@@ -38,17 +38,15 @@ analysisIntro = S "This section contains an graphs and tables that may be used t
   \classes, and instances of those classes within Drasil, as well as the structure of individual \
   \Drasil packages."
 
--- | Analysis section reference.
-analysisSecRef :: Reference
-analysisSecRef = makeSecRef "Analysis" $ S "Analysis"
-
 -- | Gathers all references used in this file.
 analysisRefs :: FilePath -> FilePath -> FilePath -> FilePath -> [String] -> [Reference]
-analysisRefs analysisPath typePath clsIPath graphPath pkgs = [analysisSecRef, dataTableHTMLRef analysisPath,
-  dataTableCSVRef analysisPath, ref $ analysisSec analysisPath typePath clsIPath graphPath pkgs]
-  ++ map (getGraphsInTableRef "datatype" "" typePath) pkgs ++ map (getGraphsInTableRef "classInst" "" clsIPath) pkgs
-  ++ map (getGraphsInTableRef "datatype" "circo_" typePath) pkgs ++ map (getGraphsInTableRef "classInst" "circo_" clsIPath) pkgs
-  ++ graphRefs graphPath (map ("drasil-" ++) pkgs)
+analysisRefs analysisPath typePath clsIPath graphPath pkgs = 
+  [dataTableHTMLRef analysisPath, dataTableCSVRef analysisPath]
+  ++ map (getGraphsInTableRef "datatype" "" typePath) pkgs
+  ++ map (getGraphsInTableRef "classInst" "" clsIPath) pkgs
+  ++ map (getGraphsInTableRef "datatype" "circo_" typePath) pkgs
+  ++ map (getGraphsInTableRef "classInst" "circo_" clsIPath) pkgs
+  ++ drasilDepGraphRefs graphPath (map ("drasil-" ++) pkgs)
 
 -- * Data Table Subsection (Intersections of Types and Classes)
 --
@@ -59,7 +57,10 @@ analysisRefs analysisPath typePath clsIPath graphPath pkgs = [analysisSecRef, da
 
 -- | Data Table subsection.
 dataTableSec :: FilePath -> Section
-dataTableSec path = section dataTableTitle [mkParagraph $ dataTableDesc path] [] $ makeSecRef "DataTable" $ S "DataTable"
+dataTableSec path = 
+  section dataTableTitle -- Title
+  [mkParagraph $ dataTableDesc path] -- Contents
+  [] $ makeSecRef "DataTable" $ S "DataTable" -- Section reference
 
 -- | Data Table subsection title.
 dataTableTitle :: Sentence
@@ -96,7 +97,11 @@ dataTableCSVRef path = Reference "dataTableCSV" (URI $ path ++ "DataTable/DataTa
 
 -- | Table of Graphs section. Contains a table for Type dependencies and Class-Instance relations.
 tableOfGraphsSec :: FilePath -> FilePath -> [String] -> Section
-tableOfGraphsSec typePath clsIPath pkgs = section tableOfGraphsTitle [mkParagraph tableOfTypeGraphsDesc, mkTypeGraphTable typePath pkgs, mkParagraph tableOfClassIGraphsDesc, mkClassInstTable clsIPath pkgs] [] $ makeSecRef "TypeAndClassGraphs" $ S "TypeAndClassGraphs"
+tableOfGraphsSec typePath clsIPath pkgs = 
+  section tableOfGraphsTitle -- Title
+  [mkParagraph tableOfTypeGraphsDesc, mkTypeGraphTable typePath pkgs,
+    mkParagraph tableOfClassIGraphsDesc, mkClassInstTable clsIPath pkgs] -- Contents
+  [] $ makeSecRef "TypeAndClassGraphs" $ S "TypeAndClassGraphs" -- Section reference
 
 -- | Table of Graphs title.
 tableOfGraphsTitle :: Sentence
@@ -173,8 +178,10 @@ classIGraphRef = makeTabRef "ClassInstGraphs"
 
 -- | Creates the Package Dependency Graphs section.
 graphSec :: FilePath -> [String] -> Section
-graphSec path pkgs = section packDepGraphTitle 
-  (mkParagraph (S graphSecIntro) : displayGraphs ++ listOfLinkedGraphs) [] graphSecRef
+graphSec path pkgs = 
+  section packDepGraphTitle -- Title
+  (mkParagraph (S graphSecIntro) : displayGraphs ++ listOfLinkedGraphs) -- Contents
+  [] $ makeSecRef "DependencyGraphs" $ S "Dependency Graphs" -- Section Reference
   where
     -- may want to display more graphs later, but for now we only display the "drasil-website"
     -- package dependencies. If you change this, you should also change the introduction.
@@ -219,12 +226,3 @@ folderList path pkgs = Enumeration $ Bullet $ zip (folderListItems path pkgs) $ 
 -- | Helper to create the list items for dependency graph pdfs.
 folderListItems :: FilePath -> [String] -> [ItemType]
 folderListItems path pkgs = map Flat $ zipWith namedRef (drasilDepGraphRefs path pkgs) $ map S pkgs
-
--- | Create section reference for Package Dependency Graphs.
-graphSecRef :: Reference
-graphSecRef = makeSecRef "DependencyGraphs" $ S "Dependency Graphs"
-
--- | All references used in the Package Dependency Graphs subsection.
-graphRefs :: FilePath -> [String] -> [Reference]
-graphRefs path pkgs = [graphSecRef, ref $ graphSec path pkgs] ++ drasilDepGraphRefs path pkgs
-

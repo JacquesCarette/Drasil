@@ -7,7 +7,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, 
 import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
   cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
   _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, _outputs,
-  _quants, _sys, _sysinfodb, _usedinfodb, _folderPath)
+  _quants, _sys, _sysinfodb, _usedinfodb)
 import Utils.Drasil
 import Utils.Drasil.Concepts
 import Data.Drasil.Concepts.Education (educon)
@@ -118,10 +118,6 @@ mkSRS = [TableOfContents, -- This creates the Table of Contents
   Bibliography                    -- Adds reference section
   ]
 
--- Folder name. Used in traceability graphs.
-directoryName :: FilePath
-directoryName = "SglPendulum"
-
 progName :: CI
 progName = commonIdeaWithDict "pendulumTitle" (pn "Pendulum") "SglPendulum" [physics]
 
@@ -136,7 +132,6 @@ si = SI {
   _instModels  = iMods,
   _datadefs    = dataDefs,
   _configFiles = [],
-  _folderPath  = directoryName,
   _inputs      = inputs,
   _outputs     = outputs,
   _defSequence = [] :: [Block QDefinition],

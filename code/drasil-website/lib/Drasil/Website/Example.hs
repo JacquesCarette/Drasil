@@ -1,4 +1,5 @@
-module Drasil.Website.Example (exampleSec, exampleRefs, examples, Example(..), allExampleSI)where
+-- | Create the list of Generated Examples for the Drasil website.
+module Drasil.Website.Example where
 
 import Language.Drasil hiding (E)
 import Database.Drasil (SystemInformation(..))
@@ -24,20 +25,27 @@ import qualified Drasil.PDController.Choices as PDController (codeChoices)
 import qualified Drasil.Projectile.Choices as Projectile (codedDirName, choiceCombos)
 -- the other examples currently do not generate any code.
 
------------------------------
--- Gather Example Information
------------------------------
 
------ First gather all information needed to create an example. This includes system information, descriptions, and choices.
------ These will also be exported for use in CaseStudy.hs.
+-- * Gather Example Information
+--
+-- $example
+--
+-- First gather all information needed to create an example. This includes system information, descriptions, and choices.
+-- These will also be exported for use in CaseStudy.hs.
 
 -- | Each Example gets placed in here.
 data Example = E {
+  -- | Example system information. Used to get the system name and abbreviation.
   sysInfoE :: SystemInformation,
+  -- | System description. Currently hard-coded.
   descE :: Sentence,
+  -- | Some examples have generated code with specific choices.
+  -- They may also have more than one set of choices, so we need a list.
   choicesE :: [Choices],
-  srsPath :: FilePath,
-  doxPath :: FilePath
+  -- | Generated code path.
+  codePath :: FilePath,
+  -- | Generated documents & doxygen path
+  srsDoxPath :: FilePath
 }
 -- TODO: Automate the gathering of system information, descriptions, and choices.
 
@@ -65,14 +73,11 @@ allExamples si desc choi srsP doxP = zipWith3 (\x y z -> E x y z srsP doxP) si d
 examples :: FilePath -> FilePath -> [Example]
 examples = allExamples allExampleSI allExampleDesc allExampleChoices
 
-
--------------------------------------------
--- Functions to create the list of examples
--------------------------------------------
+-- * Functions to create the list of examples
 
 -- | Create the full list of examples.
 fullExList :: FilePath -> FilePath -> RawContent
-fullExList p1 p2 = Enumeration $ Bullet $ zip (allExampleList $ examples p1 p2) $ repeat Nothing
+fullExList codePth srsDoxPth = Enumeration $ Bullet $ zip (allExampleList $ examples codePth srsDoxPth) $ repeat Nothing
 
 -- | Create each example point and call 'individualExList' to do the rest.
 allExampleList :: [Example] -> [ItemType]
@@ -83,10 +88,10 @@ allExampleList = map (\x -> Nested (nameAndDesc x) $ Bullet $ zip (individualExL
 -- | Display the points for generated documents and call 'versionList' to display the code.
 individualExList :: Example -> [ItemType]
 -- No choices mean no generated code, so we do not need to display generated code and thus do not call versionList.
-individualExList E{sysInfoE = SI{_sys = sys}, choicesE = [], srsPath = srsP} = 
+individualExList E{sysInfoE = SI{_sys = sys}, choicesE = [], codePath = srsP} = 
   [Flat $ S (abrv sys ++ "_SRS") +:+ namedRef (getSRSRef srsP "html" $ abrv sys) (S "[HTML]") +:+ namedRef (getSRSRef srsP "pdf" $ abrv sys) (S "[PDF]")]
 -- Anything else means we need to display program information, so use versionList.
-individualExList ex@E{sysInfoE = SI{_sys = sys}, srsPath = srsP} = 
+individualExList ex@E{sysInfoE = SI{_sys = sys}, codePath = srsP} = 
   [Flat $ S (abrv sys ++ "_SRS") +:+ namedRef (getSRSRef srsP "html" $ abrv sys) (S "[HTML]") +:+ namedRef (getSRSRef srsP "pdf" $ abrv sys) (S "[PDF]"),
   Nested (S generatedCodeTitle) $ Bullet $ zip (versionList getCodeRef ex) $ repeat Nothing,
   Nested (S generatedCodeDocsTitle) $ Bullet $ zip (versionList getDoxRef noSwiftEx) $ repeat Nothing]
@@ -122,14 +127,14 @@ showLang Cpp = "C++"
 showLang CSharp = "C Sharp" -- Drasil printers dont like # symbol, so use full word instead.
 showLang l = show l
 
-
------------------------------
--- Examples Section Functions
------------------------------
+-- * Examples Section Functions
 
 -- | Example section function generator. Makes a list of examples and generated artifacts.
 exampleSec :: FilePath -> FilePath -> Section
-exampleSec p1 p2 = section exampleTitle [mkParagraph exampleIntro, UlC $ ulcc $ fullExList p1 p2] [] exampleSecRef
+exampleSec codePth srsDoxPth = 
+  section exampleTitle -- Title
+  [mkParagraph exampleIntro, UlC $ ulcc $ fullExList codePth srsDoxPth] -- Contents
+  [] $ makeSecRef "Examples" $ S "Examples" -- Section reference
 
 -- | Example section title.
 exampleTitle :: Sentence
@@ -137,8 +142,12 @@ exampleTitle = S "Generated Examples"
 
 -- | Example section introduction.
 exampleIntro :: Sentence
-exampleIntro = S "Each of the case studies contain their own generated PDF and HTML reports," +:+
-  S "and in some cases, their own generated code."
+exampleIntro = S "The development of Drasil follows an example-driven approach, \
+  \with a current focus on creating Software Requirement Specifications (SRS). \
+  \More specifically, Drasil's knowledge of the domain of Physics has seen significant growth \
+  \through the creation of these examples, ranging from mechanics to thermodynamics. Each of the case studies \
+  \implemented in Drasil contain their own generated PDF and HTML reports, and in some cases, \
+  \their own generated code to solve the problem defined in their respective SRS documents."
 
 -- | Project descriptions.
 sglPendulumDesc, dblPendulumDesc, gamePhysDesc, glassBRDesc, hghcDesc, noPCMDesc, pdControllerDesc,
@@ -161,9 +170,7 @@ generatedCodeTitle, generatedCodeDocsTitle :: String
 generatedCodeTitle = "Generated Code:"
 generatedCodeDocsTitle = "Generated Code Documentation:"
 
-----------------------------------------------------------------------------
--- Helper functions in getting References for SRS, code folders, and Doxygen
-----------------------------------------------------------------------------
+-- * Helper functions in getting References for SRS, code folders, and Doxygen
 
 -- | Similar to 'showLang', but for use within Drasil for Referencing and UIDs.
 convertLang :: Lang -> String
@@ -185,7 +192,7 @@ getCodeRef ex@E{sysInfoE=SI{_sys = sys}, choicesE = chcs} l verName =
     -- Append system name and program language to ensure a unique id for each.
     refUID = "codeRef" ++ sysName ++ programLang
     -- Finds the folder path that holds code for the respective program and system.
-    refURI = URI $ getCodePath (srsPath ex) sysName programLang
+    refURI = URI $ getCodePath (codePath ex) sysName programLang
     -- Shortname is the same as the UID, just converted to a Sentence.
     refShortNm = shortname' $ S refUID
 
@@ -202,7 +209,7 @@ getDoxRef ex@E{sysInfoE=SI{_sys = sys}, choicesE = chcs} l verName =
   Reference refUID refURI refShortNm
   where
     refUID = "doxRef" ++ sysName ++ programLang
-    refURI = URI $ getDoxPath (doxPath ex) sysName programLang
+    refURI = URI $ getDoxPath (srsDoxPath ex) sysName programLang
     refShortNm = shortname' $ S refUID
 
     sysName = filter (not.isSpace) $ abrv sys
@@ -225,18 +232,16 @@ getSRSPath path sufx ex = path ++ map toLower (filter (not.isSpace) ex) ++ "/srs
 
 -- | Get the file paths for generated code and doxygen locations.
 getCodePath, getDoxPath :: FilePath -> String -> String -> FilePath
--- | Uses 'repoRt' path (srsPath in this module).
+-- | Uses 'repoRt' path (codePath in this module).
 getCodePath path ex programLang = path ++ "code/stable/" ++ map toLower (filter (not.isSpace) ex) ++ "/src/" ++ programLang -- need repoCommit path
--- | Uses 'exRt' path (doxPath in this module).
+-- | Uses 'exRt' path (srsDoxPath in this module).
 getDoxPath path ex programLang = path ++ map toLower (filter (not.isSpace) ex) ++ "/doxygen/" ++ programLang ++ "/index.html" -- need example path
-
 
 -- | Gather all references used in making the Examples section.
 exampleRefs :: FilePath -> FilePath -> [Reference]
-exampleRefs p1 p2 = [exampleSecRef, ref $ exampleSec p1 p2] ++
-  concatMap getCodeRefDB (examples p1 p2) ++
-  concatMap getDoxRefDB (examples p1 p2) ++
-  map (getSRSRef p2 "html" . getAbrv) (examples p1 p2) ++ map (getSRSRef p2 "pdf" . getAbrv) (examples p1 p2)
+exampleRefs codePth srsDoxPth = concatMap getCodeRefDB (examples codePth srsDoxPth) ++
+  concatMap getDoxRefDB (examples codePth srsDoxPth) ++
+  map (getSRSRef srsDoxPth "html" . getAbrv) (examples codePth srsDoxPth) ++ map (getSRSRef srsDoxPth "pdf" . getAbrv) (examples codePth srsDoxPth)
 
 -- | Helpers to pull code and doxygen references from an example.
 -- Creates a reference for every possible choice in every possible language.
@@ -251,7 +256,3 @@ getDoxRefDB ex = concatMap (\x -> map (\y -> getDoxRef ex y $ verName x) $ lang 
 -- | Helper to pull the system name (abbreviation) from an 'Example'.
 getAbrv :: Example -> String
 getAbrv E{sysInfoE = SI{_sys=sys}} = abrv sys
-
--- | Example section reference.
-exampleSecRef :: Reference
-exampleSecRef = makeSecRef "Examples" $ S "Examples"

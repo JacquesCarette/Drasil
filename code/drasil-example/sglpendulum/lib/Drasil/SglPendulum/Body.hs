@@ -68,9 +68,6 @@ fullSI = fillcdbSRS mkSRS si
 printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
 
-resourcePath :: String
-resourcePath = "../../../datafiles/SglPendulum/"
-
 mkSRS :: SRSDecl
 mkSRS = [TableOfContents, -- This creates the Table of Contents
   RefSec $      --This creates the Reference section of the SRS

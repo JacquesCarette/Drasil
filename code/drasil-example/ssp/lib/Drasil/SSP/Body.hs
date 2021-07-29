@@ -80,7 +80,7 @@ fullSI :: SystemInformation
 fullSI = fillcdbSRS mkSRS si
 
 resourcePath :: String
-resourcePath = "../../../../datafiles/SSP/"
+resourcePath = "../../../../datafiles/ssp/"
 
 si :: SystemInformation
 si = SI {

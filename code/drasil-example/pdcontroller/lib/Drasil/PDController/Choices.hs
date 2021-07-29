@@ -22,6 +22,6 @@ codeChoices
                    constRepr = Const,
                    auxFiles =
                      [SampleInput
-                        "../../datafiles/PDController/sampleInput.txt",
+                        "../../datafiles/pdcontroller/sampleInput.txt",
                       ReadME],
                    odeLib = [scipyODELSodaPkg], odes = [pidODEInfo]}

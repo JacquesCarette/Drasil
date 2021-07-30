@@ -27,9 +27,9 @@ import Drasil.DblPendulum.DataDefs (frequencyDD, periodSHMDD, angFrequencyDD)
 
 -- import Drasil.Projectile.Assumptions (cartSyst, constAccel, pointMass, timeStartZero, twoDMotion)
 import qualified Drasil.DblPendulum.Expressions as E
-import Drasil.DblPendulum.Unitals (lenRod, pendDisplacementAngle)
+import Drasil.DblPendulum.Unitals (lenRod, pendDisplacementAngle, lenRod_1, lenRod_2)
 import Drasil.DblPendulum.Concepts (arcLen, horizontalPos,
-    verticalPos, horizontalVel, verticalVel, horizontalForce, verticalForce)
+    verticalPos, horizontalVel, verticalVel, horizontalForce, verticalForce, firstObject, secondObject)
 
 genDefns :: [GenDefn]
 genDefns = [velocityIXGD, velocityIYGD, accelerationIXGD, accelerationIYGD,
@@ -40,21 +40,23 @@ genDefns = [velocityIXGD, velocityIYGD, accelerationIXGD, accelerationIYGD,
 velocityIXGD :: GenDefn
 velocityIXGD = gdNoRefs (equationalModel' velocityIXQD) (getUnit velocity)
            (Just velocityIXDeriv) "velocityIX" [{-Notes-}]
+-- general definiton block, with equation, unit, refinement explanation
 
 velocityIXQD :: QDefinition
-velocityIXQD = mkQuantDef' xVel (the xComp `NP.of_` (velocity `ofThe` pendulum))
-    E.velocityIXExpr
+velocityIXQD = mkQuantDef' xVel (the xComp `NP.of_` (velocity `ofThe` firstObject)) -- label
+    E.velocityIXExpr -- equation
 
 velocityIXDeriv :: Derivation
 velocityIXDeriv = mkDerivName (phraseNP (NP.the (xComp `of_` velocity))) (weave [velocityIXDerivSents, velocityIXDerivEqns])
+-- title paragraph and weave the explained words and refined equation
 
 velocityIXDerivSents :: [Sentence]
 velocityIXDerivSents = [velocityIDerivSent1,velocityIXDerivSent2,velocityIXDerivSent3,velocityIXDerivSent4,
-                            velocityIXDerivSent5]
+                            velocityIXDerivSent5] -- words used to explain the equation refinement
 
 velocityIXDerivEqns :: [Sentence]
 velocityIXDerivEqns = map eS [E.velocityIDerivEqn1, E.velocityIXDerivEqn2,
-    E.velocityIXDerivEqn3, E.velocityIXDerivEqn4] ++ [eS velocityIXQD]
+    E.velocityIXDerivEqn3, E.velocityIXDerivEqn4] ++ [eS velocityIXQD] -- refinement equation after explained words
 
 velocityIDerivSent1, velocityIXDerivSent2, velocityIXDerivSent3,
     velocityIXDerivSent4, velocityIXDerivSent5 :: Sentence
@@ -63,7 +65,7 @@ velocityIDerivSent1, velocityIXDerivSent2, velocityIXDerivSent3,
 velocityIDerivSent1 = S "At a given point in time" `sC` phrase velocity +:+ S "may be defined as"
 velocityIXDerivSent2 = S "We also know the" +:+ phrase horizontalPos
 velocityIXDerivSent3 = S "Applying this,"
-velocityIXDerivSent4 = eS lenRod `S.is` S "constant" `S.wrt` S  "time, so"
+velocityIXDerivSent4 = eS lenRod_1 `S.is` S "constant" `S.wrt` S  "time, so"
 velocityIXDerivSent5 = S "Therefore, using the chain rule,"
 
 ---------------------

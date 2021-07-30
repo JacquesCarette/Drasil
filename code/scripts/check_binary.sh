@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Check if a command exists on the machine, or suggest a way to obtain the command.
 # Works for general commands, but exclusively used for binary checking for Drasil.
 

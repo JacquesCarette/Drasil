@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: b5d32202f308c3d7fbaa9a9e2f1d930b665d1fce6bd45dec4fa0537538132612
+-- hash: 1d266c620be3bf750325deb2cb0daf8896966d8d683a0138b19a35f49ee4fdb9
 
 name:           drasil-website
 version:        0.1.0.0
@@ -19,31 +19,78 @@ source-repository head
   type: git
   location: https://github.com/JacquesCarette/Drasil
 
-executable website
-  main-is: Drasil/Website/Main.hs
-  other-modules:
+library
+  exposed-modules:
       Drasil.Website.Analysis
       Drasil.Website.Body
       Drasil.Website.CaseStudy
       Drasil.Website.Documentation
       Drasil.Website.Example
-      Drasil.Website.Graphs
       Drasil.Website.Introduction
+  other-modules:
       Paths_drasil_website
   hs-source-dirs:
-      ./
-  ghc-options: -Wall -Wredundant-constraints -threaded -main-is Drasil.Website.Main
+      lib
   build-depends:
       base >=4.7 && <5
+    , dblpendulum
     , directory
+    , drasil-code
     , drasil-data
     , drasil-database
     , drasil-docLang
     , drasil-gen
+    , drasil-gool
     , drasil-lang
     , drasil-printers
     , drasil-theory
     , drasil-utils
+    , gamephysics
+    , glassbr
+    , hghc
     , lens
+    , nopcm
+    , pdcontroller
+    , projectile
+    , sglpendulum
     , split
+    , ssp
+    , swhs
+    , template
+  default-language: Haskell2010
+
+executable website
+  main-is: Main.hs
+  other-modules:
+      Paths_drasil_website
+  hs-source-dirs:
+      app
+  ghc-options: -Wall -Wredundant-constraints -threaded -O2 -main-is Main
+  build-depends:
+      base >=4.7 && <5
+    , dblpendulum
+    , directory
+    , drasil-code
+    , drasil-data
+    , drasil-database
+    , drasil-docLang
+    , drasil-gen
+    , drasil-gool
+    , drasil-lang
+    , drasil-printers
+    , drasil-theory
+    , drasil-utils
+    , drasil-website
+    , gamephysics
+    , glassbr
+    , hghc
+    , lens
+    , nopcm
+    , pdcontroller
+    , projectile
+    , sglpendulum
+    , split
+    , ssp
+    , swhs
+    , template
   default-language: Haskell2010

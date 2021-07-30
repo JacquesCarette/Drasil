@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.4.
+-- This file has been generated from package.yaml by hpack version 0.33.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 5890ecf04ea2ba8986ba1b3dfe861dcc393c46783e805cfa67d0dbd8e70d09c4
+-- hash: 6afb02eb1bedc2c0cf95057fe76d2d5717762421143645feefea481040693bf9
 
 name:           gamephysics
 version:        0.1.24.0
@@ -25,6 +25,7 @@ library
       Drasil.GamePhysics.Assumptions
       Drasil.GamePhysics.Body
       Drasil.GamePhysics.Changes
+      Drasil.GamePhysics.Choices
       Drasil.GamePhysics.Concepts
       Drasil.GamePhysics.DataDefs
       Drasil.GamePhysics.Expressions

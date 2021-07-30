@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.4.
+-- This file has been generated from package.yaml by hpack version 0.33.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 250a79da260cb45bbe2ee229a9ed3744761ad4d8804ecff6b99336e2ff2d7a22
+-- hash: 9b3f4a49cb221893ac53bcd1c6df107bdb116e278a797863e63a633d9924c84a
 
 name:           nopcm
 version:        0.1.24.0
@@ -25,6 +25,7 @@ library
       Drasil.NoPCM.Assumptions
       Drasil.NoPCM.Body
       Drasil.NoPCM.Changes
+      Drasil.NoPCM.Choices
       Drasil.NoPCM.DataDefs
       Drasil.NoPCM.Definitions
       Drasil.NoPCM.GenDefs

@@ -2,11 +2,10 @@ module Language.Drasil.Printing.Import.Expr (expr) where
 
 import Language.Drasil hiding (neg, sec, symbol, isIn)
 import Language.Drasil.Display (Symbol(..))
-import Language.Drasil.Development (UFuncB(..), UFuncVV(..), UFuncVN(..)
-  , ArithBinOp(..), BoolBinOp(..), EqBinOp(..), LABinOp(..)
-  , OrdBinOp(..), VVNBinOp(..), VVVBinOp(..)
-  , precA, precB, eprec
-  )
+import Language.Drasil.Development (ArithBinOp(..), AssocArithOper(..),
+  AssocBoolOper(..), BoolBinOp(..), DerivType(..), EqBinOp(..), Expr(..),
+  LABinOp(..), OrdBinOp(..), UFunc(..), UFuncB(..), UFuncVN(..), UFuncVV(..),
+  VVNBinOp(..), VVVBinOp(..), eprec, precA, precB)
 
 import qualified Language.Drasil.Printing.AST as P
 import Language.Drasil.Printing.PrintingInformation (HasPrintingOptions(..),

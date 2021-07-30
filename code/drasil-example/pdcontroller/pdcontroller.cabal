@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.4.
+-- This file has been generated from package.yaml by hpack version 0.33.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 25763693f340c9bbc1382567e79b1b27004709c6252ff399570b09889fee4e07
+-- hash: 08ccf53062f0756b2f945d94a5663c4e70470b19420d8796a33346037478d5c1
 
 name:           pdcontroller
 version:        0.1.24.0
@@ -25,6 +25,7 @@ library
       Drasil.PDController.Assumptions
       Drasil.PDController.Body
       Drasil.PDController.Changes
+      Drasil.PDController.Choices
       Drasil.PDController.Concepts
       Drasil.PDController.DataDefs
       Drasil.PDController.GenDefs

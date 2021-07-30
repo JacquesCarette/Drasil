@@ -1,10 +1,11 @@
 {- re-exports modules to simplify external use.-}
 module Language.Drasil (
   -- Expr
-  Expr(..), UFunc(..), UFuncB, UFuncVV, UFuncVN
+    Expr
+  , UFunc, UFuncB, UFuncVV, UFuncVN
   , ArithBinOp, BoolBinOp, EqBinOp, LABinOp, OrdBinOp, VVVBinOp, VVNBinOp
-  , AssocArithOper(..), AssocBoolOper(..)
-  , DerivType(..), Completeness(..), Relation
+  , AssocArithOper, AssocBoolOper
+  , DerivType, Completeness, Relation
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   , ($-), ($/), addI, addRe, mulI, mulRe
   -- Expr.Math

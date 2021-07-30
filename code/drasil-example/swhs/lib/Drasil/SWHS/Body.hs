@@ -6,7 +6,7 @@ import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, 
 import Database.Drasil (Block, ChunkDB, ReferenceDB,
   SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts, _constants,
   _constraints, _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, 
-  _outputs, _quants, _sys, _sysinfodb, _usedinfodb, _folderPath)
+  _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
 import Theory.Drasil (GenDefn, InstanceModel)
 import Utils.Drasil
 import Utils.Drasil.Concepts
@@ -80,10 +80,7 @@ printSetting :: PrintingInformation
 printSetting = piSys fullSI Equational defaultConfiguration
 
 resourcePath :: String
-resourcePath = "../../../datafiles/SWHS/"
-
-directoryName :: FilePath
-directoryName = "SWHS"
+resourcePath = "../../../../datafiles/swhs/"
 
 units :: [UnitDefn]
 units = map unitWrapper [metre, kilogram, second] ++ 
@@ -101,7 +98,6 @@ si = SI {
   _instModels  = [], -- FIXME; empty _instModels
   _datadefs    = SWHS.dataDefs,
   _configFiles = [],
-  _folderPath  = directoryName,
   _inputs      = inputs,
   _outputs     = map qw outputs,
   _defSequence = [] :: [Block QDefinition],

@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.34.4.
+-- This file has been generated from package.yaml by hpack version 0.33.0.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 443cfa89c91b59a37d24b5fd65517d9c0bb80dc2b03828907bbbf795b44cbc04
+-- hash: a3b918b82cd3d98b865278b9d6ae5775b7066f96aa4a06b4e387bf616b80ea50
 
 name:           hghc
 version:        0.1.24.0
@@ -23,6 +23,7 @@ source-repository head
 library
   exposed-modules:
       Drasil.HGHC.Body
+      Drasil.HGHC.Choices
       Drasil.HGHC.HeatTransfer
   hs-source-dirs:
       lib

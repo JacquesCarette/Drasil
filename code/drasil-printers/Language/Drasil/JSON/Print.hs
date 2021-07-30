@@ -11,12 +11,8 @@ import qualified Language.Drasil as L (DType(Data, Theory, Instance, General),
 import Language.Drasil.Printing.Import (makeDocument)
 import Language.Drasil.Printing.AST (Spec, ItemType(Flat, Nested),  
   ListType(Ordered, Unordered, Definitions, Desc, Simple), Expr, 
-  Ops(Prod, Inte, Mul, Summ, Or, Add, And, Subt, Iff, Impl, GEq, LEq, Lt, Gt, NEq, Eq,
-  Dot, Cross, Neg, Exp, Not, Dim, Arctan, Arccos, Arcsin, Cot, Csc, Sec, Tan, 
-  Cos, Sin, Log, Ln, Prime, Comma, Boolean, Real, Rational, Natural, Integer, IsIn, Point, Perc),
-  Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:)),
-  Spacing(Thin), Fonts(Bold, Emph), OverSymb(Hat), Label,
-  LinkType(Internal, Cite2, External))
+  Ops(..), Expr(..), Spec(Quote, EmptyS, Ref, HARDNL, Sp, S, E, (:+:)),
+  Fonts(Bold), OverSymb(Hat), Label, LinkType(Internal, Cite2, External))
 import Language.Drasil.Printing.Citation (BibRef)
 import Language.Drasil.Printing.LayoutObj (Document(Document), LayoutObj(..))
 import Language.Drasil.Printing.Helpers (sqbrac)
@@ -175,6 +171,8 @@ pOps Inte     = "&int;"
 pOps Prod     = "&prod;"
 pOps Point    = "."
 pOps Perc     = "%"
+pOps LArrow   = " &larr; "
+pOps RArrow   = " &rarr; "
 
 
 -- | Renders HTML table, called by 'printLO'

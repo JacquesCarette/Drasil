@@ -68,6 +68,7 @@ instance Multiplate DLPlate where
     body' (Review c) = pure $ Review c
     body' (MainIdea c s) = pure $ MainIdea c s
     body' (MethsAndAnls c s) = pure $ MethsAndAnls c s
+    body' (Example c s) = pure $ Example c s
     smry (SmmryProg con) = pure $ SmmryProg con 
     aps (ApndxProg con) = pure $ ApndxProg con
   mkPlate b = DLPlate (b docSec) (b introdSec) (b introdSub) (b bodySec)

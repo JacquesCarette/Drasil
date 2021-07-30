@@ -20,8 +20,8 @@ module Language.Drasil (
   , sy -- old "Chunk" constructor C
   , apply, apply1, apply2, applyWithNamedArgs
   , cross, m2x2, vec2D, dgnl2x2
-  -- DisplayExpr
-  , DisplayExpr
+  -- ModelExpr
+  , ModelExpr
   , defines, spaceDE, isIn, andDEs, equivDEs
   -- all the stuff from Unicode
   , Special(..), RenderSpecial(..)
@@ -195,7 +195,6 @@ module Language.Drasil (
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
-import Language.Drasil.DisplayExpr
 import Language.Drasil.Expr (Expr(..), UFunc(..), UFuncB, UFuncVV, UFuncVN,
           ArithBinOp, BoolBinOp, EqBinOp, LABinOp, OrdBinOp, VVVBinOp, VVNBinOp,
           AssocArithOper(..), AssocBoolOper(..), 
@@ -212,7 +211,8 @@ import Language.Drasil.Expr.Math (abs_, neg, negVec, log, ln, sin, cos, tan, sqr
           apply, apply1, apply2, applyWithNamedArgs,
           sy, deriv, pderiv,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, intAll)
-import Language.Drasil.Expr.Display
+import Language.Drasil.ModelExpr (ModelExpr)
+import Language.Drasil.ModelExpr.Display (defines, spaceDE, isIn, andDEs, equivDEs)
 import Language.Drasil.Document (section, fig, figWithWidth
   , Section(..), SecCons(..) , llcc, ulcc, Document(..)
   , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC

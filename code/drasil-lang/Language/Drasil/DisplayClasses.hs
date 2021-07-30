@@ -1,16 +1,20 @@
 module Language.Drasil.DisplayClasses where
 
-import Language.Drasil.DisplayExpr (DisplayExpr(AlgebraicExpr))
+import Language.Drasil.ModelExpr (ModelExpr)
 import Language.Drasil.Expr (Expr)
+
+-- TODO: Rename file.
+-- TODO: Rename toDispExpr
 
 -- | Data that can convert into a Displayable 'Expr'.
 class Display c where
-  toDispExpr :: c -> DisplayExpr
+  toDispExpr :: c -> ModelExpr
 
 -- | Basic wrapping in 'AlgebraicExpr'.
 instance Display Expr where
-  toDispExpr = AlgebraicExpr
+  toDispExpr = undefined
+-- TODO: Implement `Display Expr` properly
 
--- | No change, it's already a 'DisplayExpr'.
-instance Display DisplayExpr where
+-- | No change, it's already a 'ModelExpr'.
+instance Display ModelExpr where
   toDispExpr = id

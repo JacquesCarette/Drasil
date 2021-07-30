@@ -6,7 +6,7 @@ module Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), RefInfo(..), (
   sentenceSymb, sentenceTerm, sParen, TermCapitalization(..)) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
-import Language.Drasil.DisplayExpr (DisplayExpr(..))
+import Language.Drasil.ModelExpr (ModelExpr)
 import Language.Drasil.DisplayClasses (Display(toDispExpr))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UnitLang (USymb)
@@ -56,7 +56,7 @@ data Sentence where
   -- | Converts the graphical representation of a symbol into a usable Sentence form.
   P     :: Symbol -> Sentence       -- should not be used in examples?
   -- | Lifts an expression into a Sentence.
-  E     :: DisplayExpr -> Sentence
+  E     :: ModelExpr -> Sentence
   -- | Takes a 'UID' to a reference, a display name ('Sentence'), and any additional reference display information ('RefInfo'). Resolves the reference later (similar to Ch).
   Ref   :: UID -> Sentence -> RefInfo -> Sentence
   -- | Adds quotation marks around a Sentence.

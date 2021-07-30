@@ -1,7 +1,6 @@
 module Language.Drasil.Printing.Import.DisplayExpr (dispExpr) where
 
-import Language.Drasil.Development (dePrec, dePrecAssoc, DisplayExpr(..),
-  DisplayBinOp(..), DisplayAssocBinOp(Equivalence))
+import Language.Drasil.Development
 
 import qualified Language.Drasil.Printing.AST as P
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
@@ -25,7 +24,7 @@ deBinOp Defines = P.Eq
 
 -- | Convert 'DisplayAssocBinOp's into the operators of the AST language.
 deAssocBinOp :: DisplayAssocBinOp -> P.Ops
-deAssocBinOp Equivalence = P.Eq 
+deAssocBinOp Equivalence = P.Eq
 deAssocBinOp _           = P.And
 
 -- | Translate DisplayExprs to printable layout AST.

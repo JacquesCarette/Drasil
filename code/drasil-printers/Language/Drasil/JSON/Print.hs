@@ -283,7 +283,7 @@ makeFigure r c f wp = refID r $$ image f c wp
 
 -- | Renders assumptions, requirements, likely changes
 makeRefList :: Doc -> Doc -> Doc -> Doc
-makeRefList a l i = refID l $$ (nbformat (i <> text ": " <> a))
+makeRefList a l i = refID l $$ nbformat (i <> text ": " <> a)
 
 makeBib :: BibRef -> Doc
 makeBib = vcat .

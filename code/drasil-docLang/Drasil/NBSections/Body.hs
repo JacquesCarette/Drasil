@@ -13,12 +13,12 @@ reviewSec cs = NB.review cs []
 
 -- Main Idea
 mainIdeaSec :: [Contents] -> [Section] -> Section
-mainIdeaSec a subSec = NB.mainIdea a subSec
+mainIdeaSec = NB.mainIdea
 
 -- Method and Analysis
 mthdAndanls :: [Contents] -> [Section] -> Section
-mthdAndanls a subSec = NB.methAndAnls a subSec
+mthdAndanls = NB.methAndAnls
 
 -- Example
 exampleSec :: [Contents] -> [Section] -> Section
-exampleSec cs cls = NB.example cs cls 
+exampleSec = NB.example

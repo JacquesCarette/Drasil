@@ -56,8 +56,8 @@ build (Document t a c) =
 
 -- Helper for building markdown cells
 markdownB, markdownE :: Doc
-markdownB = text $ "  {\n   \"cell_type\": \"markdown\",\n   \"metadata\": {},\n   \"source\": [" 
-markdownE = text $ "    \"\\n\"\n   ]\n  },"
+markdownB = text "  {\n   \"cell_type\": \"markdown\",\n   \"metadata\": {},\n   \"source\": [" 
+markdownE = text "    \"\\n\"\n   ]\n  },"
 
 -- Helper for rendering a D from Latex print
 printMath :: D -> Doc
@@ -194,7 +194,7 @@ makeRows = foldr (($$) . makeColumns) empty
 
 makeColumns, makeHeaderCols :: [Spec] -> Doc
 -- | Helper for creating table header row (each of the column header cells)
-makeHeaderCols l = nbformat (text $ header) $$ nbformat (text $ genMDtable ++ "|")
+makeHeaderCols l = nbformat (text header) $$ nbformat (text $ genMDtable ++ "|")
   where header = show(text "|" <> hcat(punctuate (text "|") (map pSpec l)) <> text "|")        
         c = count '|' header
         hl = ""
@@ -206,7 +206,7 @@ makeColumns ls = nbformat (text "|" <> hcat(punctuate (text "|") (map pSpec ls))
 count :: Char -> String -> Int
 count _ [] = 0
 count c (x:xs) 
-  | c == x = 1 + (count c xs)
+  | c == x = 1 + count c xs
   | otherwise = count c xs
 
 {-htmlway
@@ -253,7 +253,7 @@ makeDRows ((f,d):ps) = tr (nbformat (th (text f)) $$ td (vcat $ map printLO d)) 
 -- | Renders lists
 makeList :: ListType -> Bool -> Doc -- FIXME: ref id's should be folded into the li
 makeList (Simple items) _      = vcat $ 
-  map (\(b,e,l) -> mlref l $ (nbformat $ pSpec b <> text ": " <> sItem e) $$ nbformat empty) items
+  map (\(b,e,l) -> mlref l $ nbformat (pSpec b <> text ": " <> sItem e) $$ nbformat empty) items
 makeList (Desc items) bl       = vcat $ 
   map (\(b,e,l) -> pa $ mlref l $ ba $ pSpec b <> text ": " <> pItem e bl) items
 makeList (Ordered items) bl    = vcat $ map (\(i,l) -> mlref l $ pItem i bl) items
@@ -279,11 +279,11 @@ sItem (Nested s l) = vcat [pSpec s, makeList l False]
 
 -- | Renders figures in HTML
 makeFigure :: Doc -> Doc -> Doc -> L.MaxWidthPercent -> Doc
-makeFigure r c f wp = refID r $$ (image f c wp)
+makeFigure r c f wp = refID r $$ image f c wp
 
 -- | Renders assumptions, requirements, likely changes
 makeRefList :: Doc -> Doc -> Doc -> Doc
-makeRefList a l i = refID l $$ (nbformat $ (i <> text ": " <> a))
+makeRefList a l i = refID l $$ (nbformat (i <> text ": " <> a))
 
 makeBib :: BibRef -> Doc
 makeBib = vcat .

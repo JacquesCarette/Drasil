@@ -1,4 +1,4 @@
-module Drasil.DocumentLanguage.Notebook.DocumentLanguage where
+module Drasil.DocumentLanguage.Notebook.DocumentLanguage(mkNb) where
 
 import Drasil.DocumentLanguage.Notebook.NBDecl (NBDecl, mkNBDesc)
 import Drasil.DocumentLanguage.Notebook.Core (ApndxSec(..), NBDesc, DocSection(..), 
@@ -22,8 +22,9 @@ mkNb dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
     l = mkNBDesc si dd
 
 -- | Helper for creating the notebook sections
+-- Add NBDesc for references
 mkSections :: SystemInformation -> NBDesc -> [Section]
-mkSections si dd = map doit dd
+mkSections si = map doit  
   where
     doit :: DocSection -> Section
     doit (IntrodSec is)      = mkIntroSec si is

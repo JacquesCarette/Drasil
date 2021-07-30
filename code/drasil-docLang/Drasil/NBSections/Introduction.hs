@@ -8,7 +8,7 @@ import qualified Drasil.DocLang.Notebook as NB (intro, prpsOfDoc)
 -- programDefinition  - Sentence definition of the specific example
 -- **** programDefinition : maybe just topic 
 introductionSection :: [Contents] -> [Section] -> Section
-introductionSection problemIntroduction = NB.intro problemIntroduction
+introductionSection = NB.intro 
 
 -- | Constructor for purpose of document subsection
 -- purposeOfProgramParagraph - a sentence explaining the purpose of the document

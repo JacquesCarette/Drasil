@@ -34,7 +34,7 @@ ul       = wrap "ul"
 table    = wrap "table"
 
 nbformat :: Doc -> Doc
-nbformat s = text $ ("    " ++ J.encode ((show s) ++ "\n") ++ ",")
+nbformat s = text ("    " ++ J.encode (show s ++ "\n") ++ ",")
 
 wrap :: String -> [String] -> Doc -> Doc
 wrap a = wrapGen' vcat Class a empty
@@ -102,7 +102,7 @@ jf s = text $ replace "`" "\'" (formatter s)
 -}
 
 stripnewLine :: String -> Doc
-stripnewLine s = hcat (map text (splitOn ("\n") s))
+stripnewLine s = hcat (map text (splitOn "\n" s))
 --filter (`notElem` "\n" )
 
 makeMetadata :: Doc  

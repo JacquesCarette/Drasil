@@ -28,7 +28,7 @@ motionContextP1
         S "is often studied in terms of its rectangular components, since the",
         phrasePoss projectile, phrase acceleration +:+. S "always acts in the vertical direciton",
        S "To illustrate the kinematic analysis, consider a ", phrase projectile,
-         S "launched at point", sParen (eS (sy QP.ixDist) `sC` (eS (sy QP.iyDist))),
+         S "launched at point", sParen (eS (sy QP.ixDist) `sC` eS (sy QP.iyDist)),
          S "as shown in" +:+. refS figCSandA,
        S "The path is defined in the", P lX `sDash` P lY, S "plane such that the initial", 
          phrase velocity, S "is", eS (sy QP.iSpeed) :+: S ", having components", 
@@ -50,7 +50,7 @@ horMotion = NB.hormotion [intro, equations, concl] []
   where intro = foldlSP_ [
                   S "For", phrase projMotion +:+ S "the", phrase acceleration, 
                   S "in the horizontal direction is and equal to zero" +:+. 
-                  sParen(eS (sy QP.xAccel $= (exactDbl 0))), motionSent]
+                  sParen(eS (sy QP.xAccel $= exactDbl 0)), motionSent]
         equations = foldlSP_ $ intersperse (S ",") (weave [equationsSents, map eS horMotionEqns])
         concl = foldlSP [
                   S "Since the", phrase acceleration, S "in the" +:+ phrase xDir, 
@@ -61,7 +61,7 @@ horMotion = NB.hormotion [intro, equations, concl] []
 verMotion = NB.vermotion [intro, equations, concl] []
   where intro = foldlSP_ [
                   S "Since the positive", phrase yAxis, S "is directed upward, the", phrase acceleration,
-                  S "in the vertical direction is" +:+. (eS (sy QP.yAccel $= neg (sy QP.gravitationalAccel))), motionSent]
+                  S "in the vertical direction is" +:+. eS (sy QP.yAccel $= neg (sy QP.gravitationalAccel)), motionSent]
         equations = foldlSP_ $ weave [equationsSents, map eS verMotionEqns]
         concl = foldlSP [
                   S "Recall that the last equation can be formulated on the basis of eliminating the",

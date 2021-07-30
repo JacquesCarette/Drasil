@@ -31,16 +31,17 @@ data Section = Section
              , _lab :: Reference
              }
 makeLenses ''Section
-                
 
 {-
-data Section = Section Title [ContType] Reference
-data ContType = 
-     SubSec Depth Title [ContType] Reference
-   | Cont Depth Contents
-   | Cell Depth Title [Contents] Reference    
--}
+data Section = Section
+             { depth  :: Depth
+             , header :: SecHeader 
+             , cons   :: Content
+             }
 
+data SecHeader = SecHeader Title Reference
+data Content   = Content   Contents
+-} 
 -- | Finds the 'UID' of a 'Section'.
 instance HasUID        Section where uid = lab . uid
 -- | Finds the short name of a 'Section'.
@@ -68,11 +69,13 @@ data ShowTableOfContents = ToC | NoToC
 -- This function is needed by the TeX printer, as TeX carries its own form of creating
 -- a table of contents. However, the printer package is compiled before the docLang one.
 -- | Manually removes the first section of a document (table of contents section).
+-- temp fix for Notebook (see if we need this in notebook later)
 checkToC :: Document -> Document
 checkToC (Document t a toC sc) = 
   case toC of
     ToC -> Document t a toC $ drop 1 sc
     _   -> Document t a toC sc
+checkToC (Notebook t a sc) = Notebook t a sc
 
 -- | Smart constructor for labelled content chunks.
 llcc :: Reference -> RawContent -> LabelledContent
@@ -109,6 +112,7 @@ section title intro secs = Section title (map Con intro ++ map Sub secs)
 -- | Smart constructor for retrieving the contents ('Section's) from a 'Document'.
 extractSection :: Document -> [Section]
 extractSection (Document _ _ _ sec) = concatMap getSec sec
+extractSection (Notebook _ _ sec)   = concatMap getSec sec
 
 -- | Smart constructor for retrieving the subsections ('Section's) within a 'Section'.
 getSec :: Section -> [Section]

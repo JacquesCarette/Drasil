@@ -1,4 +1,4 @@
-module Language.Drasil.Generate (gen, genDot, genCode, DocType(SRS, Website), DocSpec(DocSpec)) where
+module Language.Drasil.Generate (gen, genDot, genCode, DocType(SRS, Website), DocSpec(DocSpec), Format(TeX, HTML)) where
 
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (Doc, render)
@@ -30,17 +30,24 @@ prnt :: PrintingInformation -> DocSpec -> Document -> IO ()
 prnt sm dt@(DocSpec Website fn) body =
   do prntDoc dt body sm
      prntCSS Website fn body
-prnt sm dt@(DocSpec docType fn) body =
-  do prntDoc dt body sm
-     prntMake dt
-     prntCSS docType fn body
+prnt sm dt@(DocSpec (SRS (x:xs)) fn) body = 
+  do prntDoc (DocSpec (SRS [x]) fn) body sm
+     prntAuxFiles
+     prnt sm (DocSpec (SRS xs) fn) body
+  where
+    prntAuxFiles = case x of
+      TeX  -> prntMake dt
+      HTML -> prntCSS (SRS []) fn body
+      _ -> mempty
+prnt _ (DocSpec _ _) _ = mempty
+  
 
 -- | Helper for writing the documents (TeX / HTML) to file.
 prntDoc :: DocSpec -> Document -> PrintingInformation -> IO ()
 prntDoc (DocSpec Website fn) d pinfo = prntDoc' "Website" fn HTML d pinfo
-prntDoc (DocSpec SRS fn) d pinfo = 
-  do prntDoc' "SRS/HTML" fn HTML d pinfo
-     prntDoc' "SRS/PDF" fn TeX d pinfo
+prntDoc (DocSpec (SRS [HTML]) fn) d pinfo = prntDoc' "SRS/HTML" fn HTML d pinfo
+prntDoc (DocSpec (SRS [TeX]) fn) d pinfo = prntDoc' "SRS/PDF" fn TeX d pinfo
+prntDoc (DocSpec _ _) _ _ = error "Something is wrong in prntDoc. This should not happen."
 
 -- | Helper that takes the directory name, document name, format of documents,
 -- document information and printing information. Then generates the document file.
@@ -70,7 +77,7 @@ prntCSS docType fn body = do
   hClose outh2
   where
     getFD Website = "Website/"
-    getFD SRS = "SRS/HTML/"
+    getFD (SRS _) = "SRS/HTML/"
 
 -- | Renders the documents.
 writeDoc :: PrintingInformation -> Format -> Filename -> Document -> Doc

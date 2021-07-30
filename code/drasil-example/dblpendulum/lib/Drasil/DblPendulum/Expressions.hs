@@ -14,20 +14,20 @@ import Drasil.DblPendulum.Unitals (lenRod, lenRod_1, lenRod_2, angularVel_1, ang
     pendDisplacementAngle, initialPendAngle, )
 
 -- Velocity IX/IY First Object
-velocityIXExpr, velocityIYExpr :: Expr
-velocityIXExpr = sy angularVel_1 `mulRe` sy lenRod_1 `mulRe` cos (sy pendDisAngle_1)
-velocityIYExpr = sy angularVel_1 `mulRe` sy lenRod_1 `mulRe` sin (sy pendDisAngle_1)
+velocityIXExpr_1, velocityIYExpr_1 :: Expr
+velocityIXExpr_1 = sy angularVel_1 `mulRe` sy lenRod_1 `mulRe` cos (sy pendDisAngle_1)
+velocityIYExpr_1 = sy angularVel_1 `mulRe` sy lenRod_1 `mulRe` sin (sy pendDisAngle_1)
 
-velocityIDerivEqn1, velocityIXDerivEqn2, velocityIXDerivEqn3, velocityIXDerivEqn4 :: Expr
-velocityIDerivEqn1 = sy velocity $= deriv (sy position) time
-velocityIXDerivEqn2 = sy xPos $= sy lenRod_1 `mulRe` sin (sy pendDisAngle_1)
-velocityIXDerivEqn3 = sy xVel $= deriv (sy lenRod_1 `mulRe` sin (sy pendDisAngle_1)) time
-velocityIXDerivEqn4 = sy xVel $= sy lenRod_1 `mulRe` deriv (sin (sy pendDisAngle_1)) time
+velocityIDerivEqn1_1, velocityIXDerivEqn2_1, velocityIXDerivEqn3_1, velocityIXDerivEqn4_1 :: Expr
+velocityIDerivEqn1_1 = sy velocity $= deriv (sy position) time
+velocityIXDerivEqn2_1 = sy xPos $= sy lenRod_1 `mulRe` sin (sy pendDisAngle_1)
+velocityIXDerivEqn3_1 = sy xVel $= deriv (sy lenRod_1 `mulRe` sin (sy pendDisAngle_1)) time
+velocityIXDerivEqn4_1 = sy xVel $= sy lenRod_1 `mulRe` deriv (sin (sy pendDisAngle_1)) time
 
-velocityIYDerivEqn2,velocityIYDerivEqn3,velocityIYDerivEqn4 :: Expr
-velocityIYDerivEqn2 = sy yPos $= neg (sy lenRod_1 `mulRe` cos (sy pendDisAngle_1))
-velocityIYDerivEqn3 = sy yVel $= neg (deriv (sy lenRod_1 `mulRe` cos (sy pendDisAngle_1)) time)
-velocityIYDerivEqn4 = sy yVel $= neg (sy lenRod_1 `mulRe` deriv (cos (sy pendDisAngle_1)) time)
+velocityIYDerivEqn2_1,velocityIYDerivEqn3_1,velocityIYDerivEqn4_1 :: Expr
+velocityIYDerivEqn2_1 = sy yPos $= neg (sy lenRod_1 `mulRe` cos (sy pendDisAngle_1))
+velocityIYDerivEqn3_1 = sy yVel $= neg (deriv (sy lenRod_1 `mulRe` cos (sy pendDisAngle_1)) time)
+velocityIYDerivEqn4_1 = sy yVel $= neg (sy lenRod_1 `mulRe` deriv (cos (sy pendDisAngle_1)) time)
 
 -- Velocity IX/IY Second Object
 

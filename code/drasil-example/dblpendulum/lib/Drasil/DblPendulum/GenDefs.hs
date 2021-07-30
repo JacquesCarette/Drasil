@@ -44,7 +44,7 @@ velocityIXGD = gdNoRefs (equationalModel' velocityIXQD) (getUnit velocity)
 
 velocityIXQD :: QDefinition
 velocityIXQD = mkQuantDef' xVel (the xComp `NP.of_` (velocity `ofThe` firstObject)) -- label
-    E.velocityIXExpr -- equation
+    E.velocityIXExpr_1 -- equation
 
 velocityIXDeriv :: Derivation
 velocityIXDeriv = mkDerivName (phraseNP (NP.the (xComp `of_` velocity))) (weave [velocityIXDerivSents, velocityIXDerivEqns])
@@ -55,8 +55,8 @@ velocityIXDerivSents = [velocityIDerivSent1,velocityIXDerivSent2,velocityIXDeriv
                             velocityIXDerivSent5] -- words used to explain the equation refinement
 
 velocityIXDerivEqns :: [Sentence]
-velocityIXDerivEqns = map eS [E.velocityIDerivEqn1, E.velocityIXDerivEqn2,
-    E.velocityIXDerivEqn3, E.velocityIXDerivEqn4] ++ [eS velocityIXQD] -- refinement equation after explained words
+velocityIXDerivEqns = map eS [E.velocityIDerivEqn1_1, E.velocityIXDerivEqn2_1,
+    E.velocityIXDerivEqn3_1, E.velocityIXDerivEqn4_1] ++ [eS velocityIXQD] -- refinement equation after explained words
 
 velocityIDerivSent1, velocityIXDerivSent2, velocityIXDerivSent3,
     velocityIXDerivSent4, velocityIXDerivSent5 :: Sentence
@@ -74,7 +74,7 @@ velocityIYGD = gdNoRefs (equationalModel' velocityIYQD) (getUnit velocity)
            (Just velocityIYDeriv) "velocityIY" [{-Notes-}]
 
 velocityIYQD :: QDefinition
-velocityIYQD = mkQuantDef' yVel (the yComp `NP.of_` (velocity `ofThe` pendulum)) E.velocityIYExpr
+velocityIYQD = mkQuantDef' yVel (the yComp `NP.of_` (velocity `ofThe` pendulum)) E.velocityIYExpr_1
  
 velocityIYDeriv :: Derivation
 velocityIYDeriv = mkDerivName (phraseNP (NP.the (yComp `of_` velocity))) (weave [velocityIYDerivSents, velocityIYDerivEqns])
@@ -85,8 +85,8 @@ velocityIYDerivSents = [velocityIDerivSent1, velocityIYDerivSent2,
                         velocityIYDerivSent5, velocityIYDerivSent5]
 
 velocityIYDerivEqns :: [Sentence]
-velocityIYDerivEqns = map eS [E.velocityIDerivEqn1, E.velocityIYDerivEqn2,
-    E.velocityIYDerivEqn3, E.velocityIYDerivEqn4] ++ [eS velocityIYQD]
+velocityIYDerivEqns = map eS [E.velocityIDerivEqn1_1, E.velocityIYDerivEqn2_1,
+    E.velocityIYDerivEqn3_1, E.velocityIYDerivEqn4_1] ++ [eS velocityIYQD]
 
 velocityIYDerivSent2,velocityIYDerivSent3,velocityIYDerivSent4,velocityIYDerivSent5 :: Sentence
 velocityIYDerivSent2 = S "We also know the" +:+ phrase verticalPos

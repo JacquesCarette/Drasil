@@ -9,9 +9,7 @@ import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 import Language.Drasil.Printing.Import.Expr (expr)
 import Language.Drasil.Printing.Import.Helpers (parens)
 import Language.Drasil.Printing.Import.Space (space)
-
 import Data.List (intersperse)
-
 
 -- | Helper that adds parenthesis to a display expression where appropriate.
 dispExpr' :: PrintingInformation -> Int -> DisplayExpr -> P.Expr
@@ -36,4 +34,4 @@ dispExpr (BinOp b l r)      sm = P.Row [dispExpr l sm, P.MO $ deBinOp b, dispExp
 dispExpr (AssocBinOp b des) sm = P.Row $ intersperse (P.MO op) $ map (dispExpr' sm prec) des
   where prec = dePrecAssoc  b
         op   = deAssocBinOp b
-dispExpr (ForAll u _ des)   sm = P.Row [dispExpr des sm] 
+dispExpr (ForAll c s de)    sm = P.Row [P.MO P.ForAll, symbol $ lookupC (sm ^. stg) (sm ^. ckdb) c, P.MO P.IsIn, space sm s, P.MO P.Dot, dispExpr de sm ]

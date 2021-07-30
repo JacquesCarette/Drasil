@@ -2,11 +2,8 @@
 module Drasil.SWHS.Body where
 
 import Language.Drasil hiding (organization, section, variable)
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
-import Database.Drasil (Block, ChunkDB, ReferenceDB,
-  SystemInformation(SI), cdb, rdb, refdb, _authors, _purpose, _concepts, _constants,
-  _constraints, _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, 
-  _outputs, _quants, _sys, _sysinfodb, _usedinfodb)
+import Drasil.SRSDocument
+import qualified Drasil.DocLang.SRS as SRS (inModel)
 import Theory.Drasil (GenDefn, InstanceModel)
 import Utils.Drasil
 import Utils.Drasil.Concepts
@@ -14,16 +11,6 @@ import qualified Utils.Drasil.NounPhrase as NP
 import qualified Utils.Drasil.Sentence as S
 
 import Control.Lens ((^.))
-
-import Drasil.DocLang (AuxConstntSec (AuxConsProg), DocSection (..),
-  Field(..), Fields, LFunc(TermExcept), Literature(Doc', Lit), IntroSec(IntroProg),
-  IntroSub(IChar, IOrgSec, IPurpose, IScope), RefSec (RefProg), 
-  RefTab (TAandA, TUnits), TSIntro(SymbConvention, SymbOrder, TSPurpose, VectorUnits),
-  ReqrmntSec(..), ReqsSub(..), SRSDecl, SSDSub(..), SolChSpec (SCSProg),
-  SSDSec(..), InclUnits(..), DerivationDisplay(..), SCSSub(..), Verbosity(..),
-  TraceabilitySec(TraceabilityProg), GSDSec(..), GSDSub(..),
-  ProblemDescription(PDProg), PDSub(..), intro, mkDoc, fillcdbSRS, tsymb'', traceMatStandard, purpDoc)
-import qualified Drasil.DocLang.SRS as SRS (inModel)
 
 import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
 import Data.Drasil.TheoryConcepts as Doc (inModel)

@@ -11,7 +11,6 @@ module Drasil.DocLang (
   IntroSec(..), IntroSub(..), LFunc(..), Literature(Doc', Lit,Manual),
   RefSec(..), RefTab(..), StkhldrSec(..), StkhldrSub(Client, Cstmr),
   TConvention(..), TraceabilitySec(TraceabilityProg), TSIntro(..), TUIntro(..),
-  getTraceConfigUID,
   -- DocumentLanguage.Definitions
   Field(..), Fields, InclUnits(IncludeUnits), Verbosity(..), ddefn,
   -- DocumentLanguage.RefHelpers 
@@ -56,7 +55,7 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   GSDSub(UsrChars, SystCons, SysCntxt), IntroSec(..), IntroSub(..), LFunc(..),
   Literature(Doc', Lit,Manual), RefSec(..), RefTab(..), StkhldrSec(..),
   StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg),
-  TSIntro(..), TUIntro(..), getTraceConfigUID)
+  TSIntro(..), TUIntro(..))
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(IncludeUnits),
   Verbosity(..), ddefn)
 import Drasil.DocumentLanguage.RefHelpers (ModelDB, ddRefDB, mdb)

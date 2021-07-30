@@ -3,43 +3,30 @@ module Drasil.SglPendulum.Body where
 
 import Language.Drasil hiding (organization, section)
 import Theory.Drasil (TheoryModel)
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
-import Database.Drasil (Block, ChunkDB, ReferenceDB, SystemInformation(SI),
-  cdb, rdb, refdb, _authors, _purpose, _concepts, _constants, _constraints, 
-  _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, _outputs,
-  _quants, _sys, _sysinfodb, _usedinfodb)
+import Drasil.SRSDocument
+import qualified Drasil.DocLang.SRS as SRS
 import Utils.Drasil
 import Utils.Drasil.Concepts
-import Data.Drasil.Concepts.Education (educon)
 import qualified Utils.Drasil.NounPhrase as NP
 import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.People (olu)
 import Data.Drasil.SI_Units (metre, second, newton, kilogram, degree, radian, hertz)
-import Data.Drasil.Software.Products (prodtcon)
-import Data.Drasil.Concepts.Software (program, errMsg)
+import Data.Drasil.Concepts.Computation (compcon, inValue, algorithm)
+import Data.Drasil.Concepts.Documentation (problem, srsDomains, doccon, doccon', analysis)
+import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
+import Data.Drasil.Concepts.Education (educon)
+import Data.Drasil.Concepts.Math (mathcon, cartesian, mathcon')
 import Data.Drasil.Concepts.Physics (gravity, physicCon, physicCon', pendulum, twoD, motion)
+import Data.Drasil.Concepts.PhysicalProperties (mass, len, physicalcon)
+import Data.Drasil.Concepts.Software (program, errMsg)
+import Data.Drasil.Domains (physics)
+import Data.Drasil.Software.Products (prodtcon)
 import Data.Drasil.Theories.Physics (newtonSL, accelerationTM, velocityTM, newtonSLR)
 import Data.Drasil.TheoryConcepts (inModel)
-import Data.Drasil.Quantities.Physics (physicscon)
-import Data.Drasil.Concepts.PhysicalProperties (mass, len, physicalcon)
-import qualified Data.Drasil.Concepts.Documentation as Doc (srs)
-import Data.Drasil.Concepts.Documentation (problem, srsDomains, doccon, doccon', analysis)
-import Data.Drasil.Concepts.Computation (compcon, inValue, algorithm)
-import Drasil.DocLang (AuxConstntSec(AuxConsProg),
-  DerivationDisplay(ShowDerivation),
-  DocSection(..),
-  Emphasis(Bold), Field(..), Fields, InclUnits(IncludeUnits),
-  IntroSec(..), IntroSub(IPurpose, IScope, IChar, IOrgSec), ProblemDescription(PDProg), PDSub(..),
-  RefSec(..), RefTab(..), ReqrmntSec(..), ReqsSub(..), SCSSub(..), SRSDecl,
-  SSDSec(..), SSDSub(SSDProblem, SSDSolChSpec), SolChSpec(SCSProg),
-  TConvention(..), TSIntro(..), TraceabilitySec(TraceabilityProg), GSDSec(..), GSDSub(..),
-  Verbosity(Verbose), intro, mkDoc, traceMatStandard, tsymb, purpDoc, fillcdbSRS)
-
-import qualified Drasil.DocLang.SRS as SRS
-import Data.Drasil.Concepts.Math (mathcon, cartesian, mathcon')
 import Data.Drasil.Quantities.Math (unitVect, unitVectj)
-import Data.Drasil.Domains (physics)
+import Data.Drasil.Quantities.Physics (physicscon)
+
 
 import Drasil.DblPendulum.Body (justification, charsOfReader, organizationOfDocumentsIntro,
   physSystParts, sysCtxIntro, sysCtxDesc, sysCtxList, userCharacteristicsIntro)

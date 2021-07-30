@@ -76,7 +76,8 @@ mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
     fullSI = fillcdbSRS dd si
     l = mkDocDesc fullSI dd
 
--- Assuming ChunkDB with no traces and minimal/no references, fill in for rest of system information.
+-- | Assuming a given 'ChunkDB' with no traces and minimal/no references, fill in for rest of system information.
+-- Currently fills in references and traceability matrix information.
 fillcdbSRS :: SRSDecl -> SystemInformation -> SystemInformation
 fillcdbSRS srsDec si = fillReferences srsDec $ fillTraceSI srsDec si
 

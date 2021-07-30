@@ -1,17 +1,7 @@
 module Drasil.HGHC.Body (srs, si, symbMap, printSetting, fullSI) where
 
 import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
-import Drasil.DocLang (DocSection(RefSec, SSDSec), Literature(Lit, Manual), 
-    RefSec(..), RefTab(TUnits), DocSection(TableOfContents), TSIntro(SymbConvention, TSPurpose),
-    SRSDecl, intro, mkDoc, tsymb, InclUnits(IncludeUnits), Verbosity(Verbose),
-    Field(DefiningEquation, Description, Label, Symbol, Units), SolChSpec(SCSProg), 
-    SCSSub(DDs), DerivationDisplay(HideDerivation), SSDSub(SSDSolChSpec), 
-    SSDSec(SSDProg), fillcdbSRS)
-import Language.Drasil.Printers (PrintingInformation(..), defaultConfiguration, piSys)
-import Database.Drasil (Block, ChunkDB, SystemInformation(SI), cdb,
-  rdb, refdb, _authors, _concepts, _constants, _constraints, _purpose,
-  _datadefs, _instModels, _configFiles, _defSequence, _inputs, _kind, _outputs, _quants, 
-  _sys, _sysinfodb, _usedinfodb)
+import Drasil.SRSDocument
 import qualified Utils.Drasil.Sentence as S
 
 import Drasil.HGHC.HeatTransfer (fp, hghc, dataDefs, htInputs, htOutputs, 

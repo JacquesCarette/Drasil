@@ -19,7 +19,7 @@ import qualified Utils.Drasil.NounPhrase as NP
 import Data.Drasil.Concepts.Math (xComp, yComp, equation, component, direction, angle)
 import Data.Drasil.Quantities.Physics (velocity, acceleration, force,
     momentOfInertia, torque, angularDisplacement, angularFrequency,
-    frequency, period, xAccel, xVel, yAccel, yVel)
+    frequency, period, xAccel, yAccel)
 import Data.Drasil.Concepts.Physics (pendulum, weight, shm)
 import Data.Drasil.Quantities.PhysicalProperties (mass, len)
 import Data.Drasil.Theories.Physics (newtonSLR)
@@ -27,14 +27,13 @@ import Drasil.DblPendulum.DataDefs (frequencyDD, periodSHMDD, angFrequencyDD)
 
 -- import Drasil.Projectile.Assumptions (cartSyst, constAccel, pointMass, timeStartZero, twoDMotion)
 import qualified Drasil.DblPendulum.Expressions as E
-import Drasil.DblPendulum.Unitals (lenRod, pendDisplacementAngle, lenRod_1, lenRod_2)
+import Drasil.DblPendulum.Unitals (lenRod, pendDisplacementAngle, lenRod_1, lenRod_2, xVel_1, xVel_2, yVel_1, yVel_2)
 import Drasil.DblPendulum.Concepts (arcLen, horizontalPos,
     verticalPos, horizontalVel, verticalVel, horizontalForce, verticalForce, firstObject, secondObject)
 
 genDefns :: [GenDefn]
 genDefns = [velocityIXGD, velocityIYGD, accelerationIXGD, accelerationIYGD,
        hForceOnPendulumGD, vForceOnPendulumGD, angFrequencyGD, periodPend]
-
 
 ---------------------
 velocityIXGD :: GenDefn
@@ -43,7 +42,7 @@ velocityIXGD = gdNoRefs (equationalModel' velocityIXQD) (getUnit velocity)
 -- general definiton block, with equation, unit, refinement explanation
 
 velocityIXQD :: QDefinition
-velocityIXQD = mkQuantDef' xVel (the xComp `NP.of_` (velocity `ofThe` firstObject)) -- label
+velocityIXQD = mkQuantDef' xVel_1 (the xComp `NP.of_` (velocity `ofThe` firstObject)) -- label
     E.velocityIXExpr_1 -- equation
 
 velocityIXDeriv :: Derivation
@@ -74,7 +73,7 @@ velocityIYGD = gdNoRefs (equationalModel' velocityIYQD) (getUnit velocity)
            (Just velocityIYDeriv) "velocityIY" [{-Notes-}]
 
 velocityIYQD :: QDefinition
-velocityIYQD = mkQuantDef' yVel (the yComp `NP.of_` (velocity `ofThe` pendulum)) E.velocityIYExpr_1
+velocityIYQD = mkQuantDef' yVel_1 (the yComp `NP.of_` (velocity `ofThe` pendulum)) E.velocityIYExpr_1
  
 velocityIYDeriv :: Derivation
 velocityIYDeriv = mkDerivName (phraseNP (NP.the (yComp `of_` velocity))) (weave [velocityIYDerivSents, velocityIYDerivEqns])

@@ -48,10 +48,20 @@ packages:
 - drasil-printers/
 - drasil-gen/
 - drasil-data/
-- drasil-example/
 - drasil-docLang/
 - drasil-metadata/
 - drasil-website/
+- drasil-example/dblpendulum/
+- drasil-example/sglpendulum/
+- drasil-example/gamephysics/
+- drasil-example/glassbr/
+- drasil-example/hghc/
+- drasil-example/nopcm/
+- drasil-example/pdcontroller/
+- drasil-example/projectile/
+- drasil-example/ssp/
+- drasil-example/swhs/
+- drasil-example/template/
 
 # Dependency packages to be pulled from upstream that are not in the resolver
 # (e.g., acme-missiles-0.3)

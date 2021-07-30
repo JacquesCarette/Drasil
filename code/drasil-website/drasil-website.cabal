@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: b5d32202f308c3d7fbaa9a9e2f1d930b665d1fce6bd45dec4fa0537538132612
+-- hash: e312bb570e5ee0785f2d8618f136cebe49b8de9ce28c6a5d0211bba250f7b619
 
 name:           drasil-website
 version:        0.1.0.0
@@ -19,31 +19,84 @@ source-repository head
   type: git
   location: https://github.com/JacquesCarette/Drasil
 
-executable website
-  main-is: Drasil/Website/Main.hs
-  other-modules:
+library
+  exposed-modules:
       Drasil.Website.Analysis
       Drasil.Website.Body
       Drasil.Website.CaseStudy
       Drasil.Website.Documentation
       Drasil.Website.Example
-      Drasil.Website.Graphs
       Drasil.Website.Introduction
+  other-modules:
       Paths_drasil_website
   hs-source-dirs:
-      ./
-  ghc-options: -Wall -Wredundant-constraints -threaded -main-is Drasil.Website.Main
+      lib
   build-depends:
       base >=4.7 && <5
+    , dblpendulum
     , directory
+    , drasil-code
     , drasil-data
     , drasil-database
     , drasil-docLang
     , drasil-gen
+    , drasil-gool
     , drasil-lang
     , drasil-printers
     , drasil-theory
     , drasil-utils
+    , gamephysics
+    , glassbr
+    , hghc
     , lens
+    , nopcm
+    , pdcontroller
+    , projectile
+    , sglpendulum
     , split
+    , ssp
+    , swhs
+    , template
+  if false
+    other-modules:
+        Paths_website
+  default-language: Haskell2010
+
+executable website
+  main-is: Main.hs
+  other-modules:
+      Paths_drasil_website
+  hs-source-dirs:
+      app
+  ghc-options: -Wall -Wredundant-constraints -threaded -O2 -main-is Main
+  build-depends:
+      base >=4.7 && <5
+    , dblpendulum
+    , directory
+    , drasil-code
+    , drasil-data
+    , drasil-database
+    , drasil-docLang
+    , drasil-gen
+    , drasil-gool
+    , drasil-lang
+    , drasil-printers
+    , drasil-theory
+    , drasil-utils
+    , drasil-website
+    , gamephysics
+    , glassbr
+    , hghc
+    , lens
+    , nopcm
+    , pdcontroller
+    , projectile
+    , sglpendulum
+    , split
+    , ssp
+    , swhs
+    , template
+  if false
+    other-modules:
+        Paths_website
   default-language: Haskell2010

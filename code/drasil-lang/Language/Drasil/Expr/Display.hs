@@ -35,7 +35,7 @@ assocSanitize b (de:des) = de : assocSanitize b des
 
 -- | Binary associative "And".
 andDEs :: Display d => [d] -> DisplayExpr
-andDEs = assocCreate And
+andDEs = assocCreate DAnd
 
 -- | Binary associative "Equivalence".
 equivDEs :: Display a => [a] -> DisplayExpr

@@ -13,13 +13,13 @@ else
     endif
 endif
 
-build: SWHS$(TARGET_EXTENSION)
+build: NoPCM$(TARGET_EXTENSION)
 
-SWHS$(TARGET_EXTENSION): Control.cs InputParameters.cs Constants.cs Calculations.cs OutputFormat.cs
-	$(CSC) -out:SWHS$(TARGET_EXTENSION) -r:Microsoft.Research.Oslo.dll Control.cs InputParameters.cs Constants.cs Calculations.cs OutputFormat.cs
+NoPCM$(TARGET_EXTENSION): Control.cs InputParameters.cs Constants.cs Calculations.cs OutputFormat.cs
+	$(CSC) -out:NoPCM$(TARGET_EXTENSION) -r:Microsoft.Research.Oslo.dll Control.cs InputParameters.cs Constants.cs Calculations.cs OutputFormat.cs
 
 run: build
-	./SWHS$(TARGET_EXTENSION) $(RUNARGS)
+	./NoPCM$(TARGET_EXTENSION) $(RUNARGS)
 
 doc: doxConfig Control.cs InputParameters.cs Constants.cs Calculations.cs OutputFormat.cs
 	doxygen doxConfig

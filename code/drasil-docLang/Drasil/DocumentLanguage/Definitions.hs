@@ -88,7 +88,7 @@ nonEmpty :: b -> ([a] -> b) -> [a] -> b
 nonEmpty def _ [] = def
 nonEmpty _   f xs = f xs
 
-tmDispExprs :: TheoryModel -> [DisplayExpr]
+tmDispExprs :: TheoryModel -> [ModelExpr]
 tmDispExprs t = map toDispExpr (t ^. defined_quant) ++ t ^. invariants
 
 -- | Create the fields for a model from a relation concept (used by 'tmodel').
@@ -143,7 +143,7 @@ mkDDField _ _ l _ = error $ "Label " ++ show l ++ " not supported " ++
 
 -- | Creates the description field for 'Contents' (if necessary) using the given verbosity and
 -- including or ignoring units for a model/general definition.
-buildDescription :: Verbosity -> InclUnits -> DisplayExpr -> SystemInformation -> [Contents] ->
+buildDescription :: Verbosity -> InclUnits -> ModelExpr -> SystemInformation -> [Contents] ->
   [Contents]
 buildDescription Succinct _ _ _ _ = []
 buildDescription Verbose u e m cs = (UlC . ulcc .

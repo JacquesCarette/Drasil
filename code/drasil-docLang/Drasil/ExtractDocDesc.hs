@@ -43,7 +43,7 @@ secConPlate mCon mSec = preorderFold $ purePlate {
 }
 
 -- | Creates a section plate for expressions.
-exprPlate :: DLPlate (Constant [DisplayExpr])
+exprPlate :: DLPlate (Constant [ModelExpr])
 exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (concatMap egetCon')
   (concatMap egetSec) `appendPlate` (preorderFold $ purePlate {
   scsSub = Constant <$> \case
@@ -54,16 +54,16 @@ exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (conca
     _ -> [],
   auxConsSec = Constant <$> \(AuxConsProg _ qdef) -> go qdef
   }) where
-      go :: Display a => [a] -> [DisplayExpr]
+      go :: Display a => [a] -> [ModelExpr]
       go = map toDispExpr
-      goTM :: [TheoryModel] -> [DisplayExpr]
+      goTM :: [TheoryModel] -> [ModelExpr]
       goTM = concatMap (\x -> go (x ^. defined_quant)
                            ++ x ^. invariants
                            ++ go (map (^. defnExpr) (x ^. defined_quant ++ x ^. defined_fun))
                            ++ goTM (x ^. valid_context))
 
 -- | Converts a 'Sentence' into a list of expressions. If the 'Sentence' cant be translated, returns an empty list.
-sentToExp :: Sentence -> [DisplayExpr]
+sentToExp :: Sentence -> [ModelExpr]
 sentToExp ((:+:) s1 s2) = sentToExp s1 ++ sentToExp s2
 sentToExp (E e) = [e]
 sentToExp _ = []
@@ -73,24 +73,24 @@ fmGetDocDesc :: DLPlate (Constant [a]) -> DocDesc -> [a]
 fmGetDocDesc p = concatMap (foldFor docSec p)
 
 -- | Extracts expressions from the document description ('DocDesc') and default 'DLPlate'.
-egetDocDesc :: DocDesc -> [DisplayExpr]
+egetDocDesc :: DocDesc -> [ModelExpr]
 egetDocDesc = fmGetDocDesc exprPlate
 
 -- | Extracts expressions from a 'Section'.
-egetSec :: Section -> [DisplayExpr]
+egetSec :: Section -> [ModelExpr]
 egetSec (Section _ sc _ ) = concatMap egetSecCon sc
 
 -- | Extracts expressions from section contents.
-egetSecCon :: SecCons -> [DisplayExpr]
+egetSecCon :: SecCons -> [ModelExpr]
 egetSecCon (Sub s) = egetSec s
 egetSecCon (Con c) = egetCon' c
 
 -- | Extracts expressions from something that has contents.
-egetCon' :: HasContents a => a -> [DisplayExpr]
+egetCon' :: HasContents a => a -> [ModelExpr]
 egetCon' = egetCon . (^. accessContents)
 
 -- | Extracts expressions from raw contents.
-egetCon :: RawContent -> [DisplayExpr]
+egetCon :: RawContent -> [ModelExpr]
 egetCon (EqnBlock e) = [e]
 egetCon (Defini _ []) = []
 egetCon (Defini dt (hd:tl)) = concatMap egetCon' (snd hd) ++ egetCon (Defini dt tl)

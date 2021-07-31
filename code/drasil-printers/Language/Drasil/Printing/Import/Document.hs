@@ -8,7 +8,7 @@ import qualified Language.Drasil.Printing.LayoutObj as T
 import Language.Drasil.Printing.PrintingInformation
   (PrintingInformation)
 
-import Language.Drasil.Printing.Import.DisplayExpr (dispExpr)
+import Language.Drasil.Printing.Import.ModelExpr (modelExpr)
 import Language.Drasil.Printing.Import.Sentence (spec)
 
 import Control.Lens ((^.))
@@ -50,7 +50,7 @@ layLabelled sm x@(LblC _ (Table hdr lls t b)) = T.Table ["table"]
   (P.S $ getAdd $ getRefAdd x)
   b (spec sm t)
 layLabelled sm x@(LblC _ (EqnBlock c))          = T.HDiv ["equation"]
-  [T.EqnBlock (P.E (dispExpr c sm))]
+  [T.EqnBlock (P.E (modelExpr c sm))]
   (P.S $ getAdd $ getRefAdd x)
 layLabelled sm x@(LblC _ (Figure c f wp))     = T.Figure
   (P.S $ getAdd $ getRefAdd x)
@@ -75,7 +75,7 @@ layUnlabelled :: PrintingInformation -> RawContent -> T.LayoutObj
 layUnlabelled sm (Table hdr lls t b) = T.Table ["table"]
   (map (spec sm) hdr : map (map (spec sm)) lls) (P.S "nolabel0") b (spec sm t)
 layUnlabelled sm (Paragraph c)    = T.Paragraph (spec sm c)
-layUnlabelled sm (EqnBlock c)     = T.HDiv ["equation"] [T.EqnBlock (P.E (dispExpr c sm))] P.EmptyS
+layUnlabelled sm (EqnBlock c)     = T.HDiv ["equation"] [T.EqnBlock (P.E (modelExpr c sm))] P.EmptyS
 layUnlabelled sm (DerivBlock h d) = T.HDiv ["subsubsubsection"]
   (T.Header 3 (spec sm h) refr : map (layUnlabelled sm) d) refr
   where refr = P.S "nolabel1"

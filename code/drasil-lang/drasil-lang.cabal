@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: ebea5a5675b922c9a426539dbac63ddf5aeb893d11d25f19e1cd8bcd5836cff2
+-- hash: d202fae0fd00c62f9056c03b6f8e725f3d031233ff597400be9b150201660529
 
 name:           drasil-lang
 version:        0.1.60.0
@@ -26,6 +26,7 @@ library
       Language.Drasil.Development
       Language.Drasil.Display
       Language.Drasil.ShortHands
+      Language.Drasil.ModelExpr.Development
   other-modules:
       Language.Drasil.Chunk.Citation
       Language.Drasil.Chunk.CommonIdea
@@ -64,6 +65,7 @@ library
       Language.Drasil.Label.Type
       Language.Drasil.Misc
       Language.Drasil.ModelExpr
+      Language.Drasil.ModelExpr.Convert
       Language.Drasil.ModelExpr.Display
       Language.Drasil.ModelExpr.Extract
       Language.Drasil.ModelExpr.Math

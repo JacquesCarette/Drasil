@@ -1,11 +1,11 @@
 module Language.Drasil.Printing.Import (
-  expr, codeExpr, dispExpr,
+  expr, codeExpr, modelExpr,
   space, spec, symbol,
   makeDocument
 ) where
 
 import Language.Drasil.Printing.Import.CodeExpr (codeExpr)
-import Language.Drasil.Printing.Import.DisplayExpr (dispExpr)
+import Language.Drasil.Printing.Import.ModelExpr (modelExpr)
 import Language.Drasil.Printing.Import.Document (makeDocument)
 import Language.Drasil.Printing.Import.Expr (expr)
 import Language.Drasil.Printing.Import.Sentence (spec)

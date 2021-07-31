@@ -8,7 +8,7 @@ import qualified Language.Drasil.Printing.AST as P
 import Language.Drasil.Printing.PrintingInformation
   (PrintingInformation, ckdb, stg)
 
-import Language.Drasil.Printing.Import.DisplayExpr (dispExpr)
+import Language.Drasil.Printing.Import.ModelExpr (modelExpr)
 import Language.Drasil.Printing.Import.Helpers
   (lookupC, lookupT, lookupS, lookupP)
 import Language.Drasil.Printing.Import.Symbol (symbol, pUnit)
@@ -52,7 +52,7 @@ spec sm (Ref u dName notes) =
       P.Ref P.External    ra (spec sm dName)
 spec sm (Quote q)          = P.Quote $ spec sm q
 spec _  EmptyS             = P.EmptyS
-spec sm (E e)              = P.E $ dispExpr e sm
+spec sm (E e)              = P.E $ modelExpr e sm
 
 -- | Renders the shortname of a reference/domain.
 renderShortName :: ChunkDB -> IRefProg -> ShortName -> Sentence

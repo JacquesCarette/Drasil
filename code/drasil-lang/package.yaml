@@ -26,6 +26,7 @@ library:
   - Language.Drasil.Development
   - Language.Drasil.Display
   - Language.Drasil.ShortHands
+  - Language.Drasil.ModelExpr.Development
   when:
   - condition: false
     other-modules: Paths_drasil_lang

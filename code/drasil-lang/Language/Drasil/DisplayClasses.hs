@@ -13,7 +13,6 @@ class Display c where
 -- | Basic wrapping in 'AlgebraicExpr'.
 instance Display Expr where
   toDispExpr = undefined
--- TODO: Implement `Display Expr` properly
 
 -- | No change, it's already a 'ModelExpr'.
 instance Display ModelExpr where

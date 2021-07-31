@@ -78,6 +78,7 @@ prntCSS docType fn body = do
   where
     getFD Website = "Website/"
     getFD SRS = "SRS/HTML/"
+    getFD _ = ""
 
 -- | Renders the documents.
 writeDoc :: PrintingInformation -> Format -> Filename -> Document -> Doc

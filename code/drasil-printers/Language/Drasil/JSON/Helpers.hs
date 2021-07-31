@@ -81,12 +81,14 @@ image f c wp =
   nbformat $ img [("src", f), ("alt", c), ("width", text $ show wp ++ "%")]]
 
 h :: Int -> Doc
-h n       | n < 1  = error "Illegal header (too small)"
-          | n == 1 = text "# "
-          | n == 2 = text "## "
-          | n == 3 = text "### "
-          | n == 4 = text "#### "
-          | n > 4  = error "Illegal header (too large)"
+h n       | n < 1 = error "Illegal header (too small)"
+          | n > 4 = error "Illegal header (too large)"          
+          | otherwise = text (hash n)
+              where hash 1 = "# "
+                    hash 2 = "## "
+                    hash 3 = "### "
+                    hash 4 = "#### "
+                    hash _ = "Illegal header"
 
 {- Will delete it after checking encode works well
 -- JSON formatter

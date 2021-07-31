@@ -195,8 +195,9 @@ makeColumns, makeHeaderCols :: [Spec] -> Doc
 makeHeaderCols l = nbformat (text header) $$ nbformat (text $ genMDtable ++ "|")
   where header = show(text "|" <> hcat(punctuate (text "|") (map pSpec l)) <> text "|")        
         c = count '|' header
-        hl = ""
-        genMDtable = concat [hl ++ "|:--- " | i <- [1..c-1]]
+        genMDtable = concat (replicate (c-1) "|:--- ")
+
+        --genMDtable = concat [hl ++ "|:--- " | i <- [1..c-1]]
 
 -- | Helper for creating table columns
 makeColumns ls = nbformat (text "|" <> hcat(punctuate (text "|") (map pSpec ls)) <> text "|")

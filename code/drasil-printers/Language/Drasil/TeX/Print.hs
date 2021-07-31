@@ -42,6 +42,7 @@ import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 genTeX :: L.Document -> PrintingInformation -> TP.Doc
 genTeX doc@(L.Document _ _ toC _) sm = 
   runPrint (buildStd sm toC $ I.makeDocument sm $ L.checkToC doc) Text
+genTeX (L.Notebook _ _ _) _ = TP.empty
 
 -- | Helper to build the document.
 buildStd :: PrintingInformation -> L.ShowTableOfContents -> Document -> D
@@ -70,6 +71,7 @@ lo (Graph ps w h c l)    _  = toText $ makeGraph
   (pure $ text $ maybe "" (\x -> "text width = " ++ show x ++ "em ,") w)
   (pure $ text $ maybe "" (\x -> "minimum height = " ++ show x ++ "em, ") h)
   (spec c) (spec l)
+lo (Cell _) _               = empty
 
 -- | Converts layout objects into a document form.
 print :: PrintingInformation -> [LayoutObj] -> D

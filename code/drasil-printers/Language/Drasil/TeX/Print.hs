@@ -42,7 +42,7 @@ import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 genTeX :: L.Document -> PrintingInformation -> TP.Doc
 genTeX doc@(L.Document _ _ toC _) sm = 
   runPrint (buildStd sm toC $ I.makeDocument sm $ L.checkToC doc) Text
-genTeX (L.Notebook _ _ _) _ = TP.empty
+genTeX L.Notebook{} _ = TP.empty
 
 -- | Helper to build the document.
 buildStd :: PrintingInformation -> L.ShowTableOfContents -> Document -> D

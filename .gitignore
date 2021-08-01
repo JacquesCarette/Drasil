@@ -8,7 +8,7 @@ desktop.ini
 .vscode
 
 # Drasil/Haskell
-.cabal
+*.cabal
 .cabal-sandbox
 .hsenv
 .stack-work

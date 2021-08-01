@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: fe66c4b11d92501c2adab1036382b014dc26f4f75e59de0d616624526ade42e2
+-- hash: 85bdab1013a6307522fc7f71a7f5a8b989efdaa003e7282e1a07b36934e5c2ce
 
 name:           drasil-docLang
 version:        0.1.26.0
@@ -64,7 +64,4 @@ library
     , multiplate
     , pretty
     , transformers
-  if false
-    other-modules:
-        Paths_drasil_docLang
   default-language: Haskell2010

@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: f5507ce93a084558ac160239a9d4f98fb69c3caa98e84a36258cdefffa36fc51
+-- hash: baafb0e81cde8e92f87ab7cfca4f10161b1b925278f9619916021b763d915931
 
 name:           swhs
 version:        0.1.24.0
@@ -53,9 +53,6 @@ library
     , drasil-theory
     , drasil-utils
     , lens
-  if false
-    other-modules:
-        Paths_swhs
   default-language: Haskell2010
 
 executable swhs
@@ -80,7 +77,4 @@ executable swhs
     , drasil-utils
     , lens
     , swhs
-  if false
-    other-modules:
-        Paths_swhs
   default-language: Haskell2010

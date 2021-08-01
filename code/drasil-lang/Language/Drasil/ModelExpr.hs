@@ -5,7 +5,7 @@ module Language.Drasil.ModelExpr where
 
 import Prelude hiding (sqrt)
 
-import Language.Drasil.Expr (Completeness)
+import Language.Drasil.Expr (Completeness, DerivType)
 import Language.Drasil.Space (Space, DomainDesc, RealInterval)
 import Language.Drasil.UID (UID)
 
@@ -236,10 +236,6 @@ a $|| b = AssocB Or  [a, b]
 
 -- | The variable type is just a renamed 'String'.
 type Variable = String
-
--- | Determines the type of the derivative (either a partial derivative or a total derivative).
-data DerivType = Part | Total
-  deriving Eq
 
 -- instance Num Expr where
 --   (Int 0)        + b              = b

@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 393a8b7d38767f74653e0650020ff9feaf2ea9203417f5f36760bdd66b63ea91
+-- hash: 9ac57ef97394de738bf8809ad303dc77b9afb122edcae3c81bcfb7e109e46704
 
 name:           ssp
 version:        0.1.24.0
@@ -55,9 +55,6 @@ library
     , drasil-theory
     , drasil-utils
     , lens
-  if false
-    other-modules:
-        Paths_ssp
   default-language: Haskell2010
 
 executable ssp
@@ -82,7 +79,4 @@ executable ssp
     , drasil-utils
     , lens
     , ssp
-  if false
-    other-modules:
-        Paths_ssp
   default-language: Haskell2010

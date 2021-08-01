@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0dd9fde4f89672bbe70c8eca46b3a48a24eee7b694c162b92500da74aa418b6f
+-- hash: dc86f399244555f7402b73b5fcd9468f79f0c92cb84286bb76289fcad3ddd8f2
 
 name:           drasil-printers
 version:        0.1.10.0
@@ -65,7 +65,4 @@ library
     , drasil-utils
     , lens
     , pretty
-  if false
-    other-modules:
-        Paths_drasil_printers
   default-language: Haskell2010

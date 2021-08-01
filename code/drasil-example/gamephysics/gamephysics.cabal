@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 6afb02eb1bedc2c0cf95057fe76d2d5717762421143645feefea481040693bf9
+-- hash: 96f2e240afb9834e9918c9a587712db318fca4f58602b8e7ae96b08efa9dd633
 
 name:           gamephysics
 version:        0.1.24.0
@@ -54,12 +54,6 @@ library
     , drasil-theory
     , drasil-utils
     , lens
-  if false
-    other-modules:
-        Paths_gamephysics
-        Drasil.GamePhysics.GDefs
-        Drasil.GamePhysics.DesignDec.Arbiter
-        Drasil.GamePhysics.DesignDec.Vector
   default-language: Haskell2010
 
 executable gamephysics
@@ -84,7 +78,4 @@ executable gamephysics
     , drasil-utils
     , gamephysics
     , lens
-  if false
-    other-modules:
-        Paths_gamephysics
   default-language: Haskell2010

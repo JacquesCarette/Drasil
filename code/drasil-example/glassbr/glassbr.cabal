@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 35c3ad3f2e7fab9aeb616d5df2f57c0d42ce3b1b9759898a97cbed916aad6ca1
+-- hash: c59fcd6390b9c442532131eb05ad12e70cc4de1054be69bc060dce5b1de36324
 
 name:           glassbr
 version:        0.1.24.0
@@ -56,9 +56,6 @@ library
     , drasil-theory
     , drasil-utils
     , lens
-  if false
-    other-modules:
-        Paths_glassbr
   default-language: Haskell2010
 
 executable glassbr
@@ -83,7 +80,4 @@ executable glassbr
     , drasil-utils
     , glassbr
     , lens
-  if false
-    other-modules:
-        Paths_glassbr
   default-language: Haskell2010

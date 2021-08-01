@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 5ee063f9beedaeaedc61e787e4741a70b5b7a3103451c639a02768b92f1d5cbc
+-- hash: af77146b47d4a7580738d248167c951303a0f8622ad4f3550f38c36b4f678465
 
 name:           projectile
 version:        0.1.24.0
@@ -53,9 +53,6 @@ library
     , drasil-theory
     , drasil-utils
     , lens
-  if false
-    other-modules:
-        Paths_projectile
   default-language: Haskell2010
 
 executable projectile
@@ -80,7 +77,4 @@ executable projectile
     , drasil-utils
     , lens
     , projectile
-  if false
-    other-modules:
-        Paths_projectile
   default-language: Haskell2010

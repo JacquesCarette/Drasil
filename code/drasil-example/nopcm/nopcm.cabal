@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 9b3f4a49cb221893ac53bcd1c6df107bdb116e278a797863e63a633d9924c84a
+-- hash: 1922da7f73000f896cf1a882661e3809649cae1029abfe0f3b4d6cb882802f3d
 
 name:           nopcm
 version:        0.1.24.0
@@ -54,9 +54,6 @@ library
     , drasil-utils
     , lens
     , swhs
-  if false
-    other-modules:
-        Paths_nopcm
   default-language: Haskell2010
 
 executable nopcm
@@ -82,7 +79,4 @@ executable nopcm
     , lens
     , nopcm
     , swhs
-  if false
-    other-modules:
-        Paths_nopcm
   default-language: Haskell2010

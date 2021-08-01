@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 08ccf53062f0756b2f945d94a5663c4e70470b19420d8796a33346037478d5c1
+-- hash: 824dc816e107e04158534b90e2abcae9f79e0929c246c0132146ff9ad9116e4d
 
 name:           pdcontroller
 version:        0.1.24.0
@@ -56,9 +56,6 @@ library
     , drasil-theory
     , drasil-utils
     , lens
-  if false
-    other-modules:
-        Paths_pdcontroller
   default-language: Haskell2010
 
 executable pdcontroller
@@ -83,7 +80,4 @@ executable pdcontroller
     , drasil-utils
     , lens
     , pdcontroller
-  if false
-    other-modules:
-        Paths_pdcontroller
   default-language: Haskell2010

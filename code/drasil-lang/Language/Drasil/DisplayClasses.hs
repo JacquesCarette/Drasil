@@ -1,7 +1,8 @@
 module Language.Drasil.DisplayClasses where
 
-import Language.Drasil.ModelExpr (ModelExpr)
 import Language.Drasil.Expr (Expr)
+import Language.Drasil.ModelExpr (ModelExpr)
+import Language.Drasil.ModelExpr.Development (expr)
 
 -- TODO: Rename file.
 -- TODO: Rename toDispExpr
@@ -12,7 +13,7 @@ class Display c where
 
 -- | Basic wrapping in 'AlgebraicExpr'.
 instance Display Expr where
-  toDispExpr = undefined
+  toDispExpr = expr
 
 -- | No change, it's already a 'ModelExpr'.
 instance Display ModelExpr where

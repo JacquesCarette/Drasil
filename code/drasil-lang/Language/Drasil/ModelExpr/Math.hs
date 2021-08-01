@@ -3,8 +3,8 @@ module Language.Drasil.ModelExpr.Math where
 
 import Prelude hiding (sqrt)
 import Control.Lens ((^.))
-import Language.Drasil.Expr (Completeness(..))
-import Language.Drasil.ModelExpr (ModelExpr(..), DerivType(..), ($^), ($/), AssocArithOper(..),
+import Language.Drasil.Expr (Completeness(..), DerivType(..))
+import Language.Drasil.ModelExpr (ModelExpr(..), ($^), ($/), AssocArithOper(..),
   LABinOp(..), VVVBinOp(..), UFunc(..), UFuncB(..), UFuncVN(..), UFuncVV(..), addRe)
 import Language.Drasil.Space (RTopology(..), DomainDesc(..), RealInterval)
 import Language.Drasil.Symbol (Symbol)

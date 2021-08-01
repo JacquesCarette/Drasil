@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 3b1d8ea759ca1ab1df473f1d7bffbce2a0416d2c25fc17c264f45a54240fb15e
+-- hash: 520f51449b07e35f03bc1a19a1553a4c56234f8d633999a1ff86e9af60fe0451
 
 name:           dblpendulum
 version:        0.1.24.0
@@ -52,9 +52,6 @@ library
     , drasil-theory
     , drasil-utils
     , lens
-  if false
-    other-modules:
-        Paths_dblpendulum
   default-language: Haskell2010
 
 executable dblpendulum
@@ -79,7 +76,4 @@ executable dblpendulum
     , drasil-theory
     , drasil-utils
     , lens
-  if false
-    other-modules:
-        Paths_dblpendulum
   default-language: Haskell2010

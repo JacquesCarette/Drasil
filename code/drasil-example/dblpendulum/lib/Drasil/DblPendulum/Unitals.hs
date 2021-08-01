@@ -52,7 +52,7 @@ unitalChunks = [lenRod,
 
 lenRod, lenRod_1, lenRod_2, massObj_1, massObj_2, angularVel_1, angularVel_2, 
   pendDisAngle_1, pendDisAngle_2, pendDisplacementAngle, initialPendAngle,
-  xVel_1, yVel_1, xVel_2, yVel_2,
+  xVel_1, yVel_1, xVel_2, yVel_2, xPos_1, xPos_2, yPos_1, yPos_2,
   initPendAngle_1, initPendAngle_2 :: UnitalChunk
 
 -- Fix me, replace lenRod with lenOne
@@ -76,6 +76,22 @@ massObj_2 = makeUCWDS "m_2" (nounPhraseSent $ phraseNP (mass `the_ofThe` secondO
         (S "The" +:+ phraseNP (mass `the_ofThe` secondObject))
         (sub lM label2) kilogram
 
+xPos_1 = makeUCWDS "p_x1" (nounPhraseSent $ phraseNP (QP.position `the_ofThe` firstObject))
+        (S "The" +:+ phraseNP (QP.position `the_ofThe` firstObject) `S.inThe` phrase CM.xDir)
+        (sub lP (Concat [labelx, label1])) metre
+
+xPos_2 = makeUCWDS "p_x2" (nounPhraseSent $ phraseNP (QP.position `the_ofThe` secondObject))
+        (S "The" +:+ phraseNP (QP.position `the_ofThe` secondObject) `S.inThe` phrase CM.xDir)
+        (sub lP (Concat [labelx, label2])) metre
+
+yPos_1 = makeUCWDS "p_y1" (nounPhraseSent $ phraseNP (QP.position `the_ofThe` firstObject))
+        (S "The" +:+ phraseNP (QP.position `the_ofThe` firstObject) `S.inThe` phrase CM.yDir)
+        (sub lP (Concat [labely, label1])) metre
+
+yPos_2 = makeUCWDS "p_y2" (nounPhraseSent $ phraseNP (QP.position `the_ofThe` secondObject))
+        (S "The" +:+ phraseNP (QP.position `the_ofThe` secondObject) `S.inThe` phrase CM.yDir)
+        (sub lP (Concat [labely, label2])) metre
+
 xVel_1 = makeUCWDS "v_x1" (nounPhraseSent $ phraseNP (angularVelocity `the_ofThe` firstObject))
         (S "The" +:+ phraseNP (angularVelocity `the_ofThe` firstObject) `S.inThe` phrase CM.xDir)
         (sub lV (Concat [labelx, label1])) velU
@@ -91,8 +107,6 @@ yVel_1 = makeUCWDS "v_y1" (nounPhraseSent $ phraseNP (angularVelocity `the_ofThe
 yVel_2 = makeUCWDS "v_y2" (nounPhraseSent $ phraseNP (angularVelocity `the_ofThe` secondObject))
         (S "The" +:+ phraseNP (angularVelocity `the_ofThe` secondObject) `S.inThe` phrase CM.yDir)
         (sub lV (Concat [labely, label2])) velU
-
--- xVel_1 = uc QP.xVel (sub lV  label1) velU
 
 angularVel_1 = makeUCWDS "w_1" (nounPhraseSent $ phraseNP (angularVelocity `the_ofThe` firstObject))
         (S "The" +:+ phraseNP (angularVelocity `the_ofThe` firstObject))

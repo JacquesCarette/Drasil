@@ -19,18 +19,32 @@ velIXExpr_1 = sy angularVel_1 `mulRe` sy lenRod_1 `mulRe` cos (sy pendDisAngle_1
 velIYExpr_1 = sy angularVel_1 `mulRe` sy lenRod_1 `mulRe` sin (sy pendDisAngle_1)
 
 velIXDerivEqn1_1, velIXDerivEqn2_1, velIXDerivEqn3_1, velIXDerivEqn4_1 :: Expr
-velIXDerivEqn1_1 = sy velocity $= deriv (sy position) time
+velIXDerivEqn1_1 = sy xVel_1 $= deriv (sy position) time
 velIXDerivEqn2_1 = sy xPos $= sy lenRod_1 `mulRe` sin (sy pendDisAngle_1)
 velIXDerivEqn3_1 = sy xVel_1 $= deriv (sy lenRod_1 `mulRe` sin (sy pendDisAngle_1)) time
 velIXDerivEqn4_1 = sy xVel_1 $= sy lenRod_1 `mulRe` deriv (sin (sy pendDisAngle_1)) time
 
-velIYDerivEqn2_1,velIYDerivEqn3_1,velIYDerivEqn4_1 :: Expr
+velIYDerivEqn1_1, velIYDerivEqn2_1,velIYDerivEqn3_1,velIYDerivEqn4_1 :: Expr
+velIYDerivEqn1_1 = sy xVel_2 $= deriv (sy position) time
 velIYDerivEqn2_1 = sy yPos $= neg (sy lenRod_1 `mulRe` cos (sy pendDisAngle_1))
 velIYDerivEqn3_1 = sy yVel_1 $= neg (deriv (sy lenRod_1 `mulRe` cos (sy pendDisAngle_1)) time)
 velIYDerivEqn4_1 = sy yVel_1 $= neg (sy lenRod_1 `mulRe` deriv (cos (sy pendDisAngle_1)) time)
 
 -- Velocity IX/IY Second Object
+-- velIXExpr_2, velIYExpr_2 :: Expr
+-- velIXExpr_2 = velIXExpr_1 `addRe` sy angularVel_2 `mulRe` sy lenRod_2 `mulRe` cos (sy pendDisAngle_2)
+-- velIYExpr_2 = velIYExpr_1 `addRe` sy angularVel_2 `mulRe` sy lenRod_2 `mulRe` sin (sy pendDisAngle_2)
 
+-- velIDerivEqn1_2, velIXDerivEqn2_2, velIXDerivEqn3_2, velIXDerivEqn4_2 :: Expr
+-- velIDerivEqn1_2 = sy xVel_2 $= deriv (sy position) time
+-- velIXDerivEqn2_2 = sy xPos $= sy lenRod_2 `mulRe` sin (sy pendDisAngle_2)
+-- velIXDerivEqn3_2 = sy xVel_2 $= deriv (sy lenRod_2 `mulRe` sin (sy pendDisAngle_2)) time
+-- velIXDerivEqn4_2 = sy xVel_2 $= sy lenRod_2 `mulRe` deriv (sin (sy pendDisAngle_2)) time
+
+-- velIYDerivEqn2_2,velIYDerivEqn3_2,velIYDerivEqn4_2 :: Expr
+-- velIYDerivEqn2_2 = sy yPos $= neg (sy lenRod_2 `mulRe` cos (sy pendDisAngle_2))
+-- velIYDerivEqn3_2 = sy yVel_2 $= neg (deriv (sy lenRod_2 `mulRe` cos (sy pendDisAngle_2)) time)
+-- velIYDerivEqn4_2 = sy yVel_2 $= neg (sy lenRod_2 `mulRe` deriv (cos (sy pendDisAngle_2)) time)
 
 -- Acceleration IX/IY First Object
 accelerationIXExpr, accelerationIYExpr :: Expr

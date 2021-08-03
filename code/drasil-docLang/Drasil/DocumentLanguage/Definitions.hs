@@ -89,14 +89,14 @@ nonEmpty def _ [] = def
 nonEmpty _   f xs = f xs
 
 tmDispExprs :: TheoryModel -> [ModelExpr]
-tmDispExprs t = map toDispExpr (t ^. defined_quant) ++ t ^. invariants
+tmDispExprs t = map express (t ^. defined_quant) ++ t ^. invariants
 
 -- | Create the fields for a model from a relation concept (used by 'tmodel').
 mkTMField :: TheoryModel -> SystemInformation -> Field -> ModRow -> ModRow
 mkTMField t _ l@Label fs  = (show l, [mkParagraph $ atStart t]) : fs
 mkTMField t _ l@DefiningEquation fs = (show l, map unlbldExpr $ tmDispExprs t) : fs
 mkTMField t m l@(Description v u) fs = (show l,
-  foldr ((\x -> buildDescription v u x m) . toDispExpr) [] $ tmDispExprs t) : fs
+  foldr ((\x -> buildDescription v u x m) . express) [] $ tmDispExprs t) : fs
 mkTMField t m l@RefBy fs = (show l, [mkParagraph $ helperRefs t m]) : fs --FIXME: fill this in
 mkTMField t _ l@Source fs = (show l, helperSources $ t ^. getDecRefs) : fs
 mkTMField t _ l@Notes fs =
@@ -155,7 +155,7 @@ buildDDescription' :: Verbosity -> InclUnits -> DataDefinition -> SystemInformat
   [Contents]
 buildDDescription' Succinct u d _ = [UlC . ulcc . Enumeration $ Definitions [firstPair' u d]]
 buildDDescription' Verbose u d m = [UlC . ulcc . Enumeration $ Definitions $
-  firstPair' u d : descPairs u (flip vars (_sysinfodb m) $ toDispExpr $ d ^. defnExpr)]
+  firstPair' u d : descPairs u (flip vars (_sysinfodb m) $ express $ d ^. defnExpr)]
 
 -- | Create the fields for a general definition from a 'GenDefn' chunk.
 mkGDField :: GenDefn -> SystemInformation -> Field -> ModRow -> ModRow
@@ -164,7 +164,7 @@ mkGDField g _ l@Units fs =
   maybe fs (\udef -> (show l, [mkParagraph . Sy $ usymb udef]) : fs) (getUnit g)
 mkGDField g _ l@DefiningEquation fs = (show l, [unlbldExpr g]) : fs
 mkGDField g m l@(Description v u) fs = (show l,
-  buildDescription v u (toDispExpr g) m []) : fs
+  buildDescription v u (express g) m []) : fs
 mkGDField g m l@RefBy fs = (show l, [mkParagraph $ helperRefs g m]) : fs --FIXME: fill this in
 mkGDField g _ l@Source fs = (show l, helperSources $ g ^. getDecRefs) : fs
 mkGDField g _ l@Notes fs = nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (g ^. getNotes)
@@ -175,7 +175,7 @@ mkIMField :: InstanceModel -> SystemInformation -> Field -> ModRow -> ModRow
 mkIMField i _ l@Label fs  = (show l, [mkParagraph $ atStart i]) : fs
 mkIMField i _ l@DefiningEquation fs = (show l, [unlbldExpr i]) : fs
 mkIMField i m l@(Description v u) fs = (show l,
-  foldr (\x -> buildDescription v u x m) [] [toDispExpr i]) : fs
+  foldr (\x -> buildDescription v u x m) [] [express i]) : fs
 mkIMField i m l@RefBy fs = (show l, [mkParagraph $ helperRefs i m]) : fs --FIXME: fill this in
 mkIMField i _ l@Source fs = (show l, helperSources $ i ^. getDecRefs) : fs
 mkIMField i _ l@Output fs = (show l, [mkParagraph x]) : fs
@@ -187,9 +187,9 @@ mkIMField i _ l@Input fs =
   where (x:xs) = map (P . eqSymb . fst) $ i ^. inputs
 mkIMField i _ l@InConstraints fs  =
   let ll = mapMaybe (\(x,y) -> y >>= (\z -> Just (x, z))) (i ^. inputs) in
-  (show l, foldr ((:) . UlC . ulcc . EqnBlock . toDispExpr . uncurry realInterval) [] ll) : fs
+  (show l, foldr ((:) . UlC . ulcc . EqnBlock . express . uncurry realInterval) [] ll) : fs
 mkIMField i _ l@OutConstraints fs =
-  (show l, foldr ((:) . UlC . ulcc . EqnBlock . toDispExpr . realInterval (i ^. output)) []
+  (show l, foldr ((:) . UlC . ulcc . EqnBlock . express . realInterval (i ^. output)) []
     (i ^. out_constraints)) : fs
 mkIMField i _ l@Notes fs =
   nonEmpty fs (\ss -> (show l, map mkParagraph ss) : fs) (i ^. getNotes)

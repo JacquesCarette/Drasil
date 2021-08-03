@@ -50,7 +50,7 @@ factOfSafetyExpr = sy resistiveShear $/ sy mobilizedShear
 equilibrium :: TheoryModel
 equilibrium = tm (equationalConstraints' equilibriumCS)
   [qw fx] ([] :: [ConceptChunk])
-  [] (map toDispExpr equilibriumRels) [] [dRef fredlund1977] "equilibrium" [eqDesc]
+  [] (map express equilibriumRels) [] [dRef fredlund1977] "equilibrium" [eqDesc]
 
 ------------------------------------  
 

@@ -53,7 +53,7 @@ module Language.Drasil (
   , CommonIdea(abrv)
   , Constrained(constraints)
   , DefiningExpr(defnExpr)
-  , Display(toDispExpr)
+  , Express(express)
   , HasUncertainty(unc)
   , Quantity
   , Callable
@@ -232,7 +232,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   HasReasVal(reasVal), HasDerivation(derivations), 
   HasReference(getReferences), HasDecRef(getDecRefs), HasSpace(typ),
   DefiningExpr(defnExpr), Quantity, HasUncertainty(unc), Callable, 
-  IsArgumentName, Display(..))
+  IsArgumentName, Express(..))
 import Language.Drasil.Classes.Citations (HasFields(getFields))
 import Language.Drasil.Classes.Document (HasCitation(getCitations))
 import Language.Drasil.Derivation (Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader)

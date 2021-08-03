@@ -37,7 +37,7 @@ eqN :: Int -> Sentence
 eqN n = S "Equation" +:+ sParen (S $ show n)
 
 -- | Takes an expression and a 'Referable' and outputs as a Sentence "expression (source)".
-eqnWSource :: (Display e, Referable r, HasShortName r) => e -> r -> Sentence
+eqnWSource :: (Express e, Referable r, HasShortName r) => e -> r -> Sentence
 eqnWSource a b = eS a +:+ sParen (refS b)
 
 -- | Takes a 'Referable' source and a 'UnitalChunk' and outputs as a 'Sentence': "From @source@ we can replace @symbol@:".

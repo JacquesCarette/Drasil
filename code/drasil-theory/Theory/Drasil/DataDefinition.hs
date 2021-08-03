@@ -39,8 +39,8 @@ instance HasSymbol          DataDefinition where symbol e = symbol (e ^. qd)
 instance Quantity           DataDefinition where 
 -- | Finds the defining expression of the 'QDefinition' used to make the 'DataDefinition'.
 instance DefiningExpr       DataDefinition where defnExpr = qd . defnExpr
--- | Converts the defining expression of a 'DataDefinition' into the display language.
-instance Display            DataDefinition where toDispExpr d = defines (sy d) (d ^. defnExpr)
+-- | Converts the defining expression of a 'DataDefinition' into the model expression language.
+instance Express            DataDefinition where express d = defines (sy d) (d ^. defnExpr)
 {-- Finds 'Reference's contained in the 'DataDefinition'.
 instance HasReference       DataDefinition where getReferences = rf-}
 -- | Finds 'DecRef's contained in the 'DataDefinition'.

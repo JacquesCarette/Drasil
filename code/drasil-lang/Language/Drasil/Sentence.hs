@@ -7,7 +7,7 @@ module Language.Drasil.Sentence (Sentence(..), SentenceStyle(..), RefInfo(..), (
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
 import Language.Drasil.ModelExpr (ModelExpr)
-import Language.Drasil.DisplayClasses (Display(toDispExpr))
+import Language.Drasil.ExprClasses (Express(express))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.UID (UID)
@@ -68,8 +68,8 @@ data Sentence where
   -- | Empty Sentence.
   EmptyS :: Sentence
 
-eS :: Display d => d -> Sentence
-eS = E . toDispExpr
+eS :: Express t => t -> Sentence
+eS = E . express
 
 -- The HasSymbol is redundant, but on purpose
 -- | Gets a symbol and places it in a 'Sentence'.

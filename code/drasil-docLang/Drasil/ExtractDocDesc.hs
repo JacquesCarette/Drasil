@@ -54,8 +54,8 @@ exprPlate = sentencePlate (concatMap sentToExp) `appendPlate` secConPlate (conca
     _ -> [],
   auxConsSec = Constant <$> \(AuxConsProg _ qdef) -> go qdef
   }) where
-      go :: Display a => [a] -> [ModelExpr]
-      go = map toDispExpr
+      go :: Express a => [a] -> [ModelExpr]
+      go = map express
       goTM :: [TheoryModel] -> [ModelExpr]
       goTM = concatMap (\x -> go (x ^. defined_quant)
                            ++ x ^. invariants

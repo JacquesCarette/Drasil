@@ -13,7 +13,7 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   ConceptDomain(cdom), Express(express))
 import Language.Drasil.Chunk.Quantity (QuantityDict, mkQuant, mkQuant', qw)
 
-import Language.Drasil.ModelExpr.Display (defines)
+import Language.Drasil.ModelExpr.Math (defines)
 import Language.Drasil.Expr (Expr(FCall, C))
 import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.NounPhrase.Core (NP)

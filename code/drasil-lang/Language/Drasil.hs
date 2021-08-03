@@ -212,7 +212,7 @@ import Language.Drasil.Expr.Math (abs_, neg, negVec, log, ln, sin, cos, tan, sqr
           sy, deriv, pderiv,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, intAll)
 import Language.Drasil.ModelExpr (ModelExpr)
-import Language.Drasil.ModelExpr.Display (defines, space, isIn, andDEs, equivDEs)
+import Language.Drasil.ModelExpr.Math (defines, space, isIn, andDEs, equivDEs)
 import Language.Drasil.Document (section, fig, figWithWidth
   , Section(..), SecCons(..) , llcc, ulcc, Document(..)
   , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC

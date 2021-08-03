@@ -1,14 +1,22 @@
-{- re-exports modules to simplify external use.-}
+-- | The Drasil language, including expressions, chunks, sentences, references,
+-- classes, datatypes, and generally useful functions. Re-exports modules to simplify external use.
 module Language.Drasil (
-  -- Expr
-    Expr
+  -- * The Drasil Expression Language
+  -- | Encodes mathematical and display related expressions.
+  -- To see the code-related expressions, look in @drasil-code@.
+
+  -- ** "Language.Drasil.Expr"
+  -- | Defines the expression types and common operators.
+  Expr
   , UFunc, UFuncB, UFuncVV, UFuncVN
   , ArithBinOp, BoolBinOp, EqBinOp, LABinOp, OrdBinOp, VVVBinOp, VVNBinOp
   , AssocArithOper, AssocBoolOper
   , DerivType, Completeness, Relation
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   , ($-), ($/), addI, addRe, mulI, mulRe
-  -- Expr.Math
+  -- ** "Language.Drasil.Expr.Math"
+  -- | Defines math-related expression functions, ranging from trigonometric
+  -- functions to matrix manipulation.
   , abs_, neg, negVec, log, ln, abs
   , sin, cos, tan, sec, csc, cot, arcsin, arccos, arctan, exp
   , sqrt, euclidean, norm, not_
@@ -20,23 +28,32 @@ module Language.Drasil (
   , sy -- old "Chunk" constructor C
   , apply, apply1, apply2, applyWithNamedArgs
   , cross, m2x2, vec2D, dgnl2x2
-  -- DisplayExpr
+  -- ** "Language.Drasil.Expr.Display"
+  -- | Defines display-related expression functions. Used in models.
   , DisplayExpr
   , defines, spaceDE, isIn, andDEs, equivDEs
-  -- all the stuff from Unicode
+  -- ** "Language.Drasil.Unicode"
+  -- | Some expressions need special unicode characters.
   , Special(..), RenderSpecial(..)
-  -- UID
-  , UID
-  -- Classes.Core
+  -- * The Drasil Language (Information Encoding)
+  -- | This is the basis of the Drasil language for encoding information.
+  -- Every chunk used in Drasil is defined here, along with some classes
+  -- that help us to use these chunks.
+
+  -- ** Drasil Classes
+  -- | Contains many of the classes used in Drasil, along with their methods.
+
+  -- Language.Drasil.Classes.Core
   , HasUID(uid)
   , HasRefAddress(getRefAdd)
   , HasSymbol(symbol)
   , Referable(..)
-  -- Classes.Core2
+  -- Language.Drasil.Classes.Core2
   , HasShortName(shortname)
-  -- Classes.Document
+  -- Language.Drasil.Classes.Document
+  , HasCitation(getCitations)
   , HasFields(getFields)
-  -- Classes
+  -- Language.Drasil.Classes
   , NamedIdea(term)
   , HasAdditionalNotes(getNotes)
   , HasSpace(typ)
@@ -58,119 +75,92 @@ module Language.Drasil (
   , Quantity
   , Callable
   , IsArgumentName
-  -- Chunk.Concept
-  , cw , ConceptChunk , CommonConcept, ConceptInstance
-  -- Chunk.Concept.Core
-  , sDom
-  -- Chunk.CommonIdea
-  , commonIdea, CI, getAcc, getAccStr, commonIdeaWithDict, prependAbrv
-  -- Chunk.NamedArgument
-  , NamedArgument, narg
-  -- Chunk.NamedIdea
-  , NamedChunk, short, nc, IdeaDict , mkIdea
+  -- ** Drasil Types
+  -- | Contains helper functions and smart constructors for each type.
+  -- Similar types are grouped together.
+  
+  -- *** Basic types
+  , UID
+  -- Language.Drasil.Chunk.NamedIdea
+  , NamedChunk, nc, IdeaDict , mkIdea
   , nw -- bad name (historical)
-  -- Constraint
-  , physc, sfwrc, isPhysC, isSfwrC
-  , Constraint(..), ConstraintE, ConstraintReason(..)
-  -- Chunk.Constrained
-  , ConstrainedChunk(..), ConstrConcept(..)
-  , cuc, cvc, constrained', cuc', cuc'', constrainedNRV'
-  , cnstrw, cnstrw'
-  -- Chunk.Eq
+  -- Language.Drasil.Chunk.CommonIdea
+  , CI, commonIdea, getAcc, getAccStr, commonIdeaWithDict, prependAbrv
+  -- *** Concepts
+
+  -- Language.Drasil.Chunk.Concept.Core
+  , ConceptChunk, CommonConcept, ConceptInstance, sDom
+  -- Language.Drasil.Chunk.Concept
+  , dcc, dcc', dccWDS, dccWDS', cc, cc', ccs, cw, cic
+  -- Language.Drasil.Chunk.Relation
+  , RelationConcept, makeRC, addRelToCC
+  -- *** Quantities and Units
+
+  -- Language.Drasil.Chunk.Quantity
+  , QuantityDict, qw, mkQuant, mkQuant', codeVC, implVar, implVar'
+  , vc, vc'', vcSt, vcUnit
+  -- Language.Drasil.Chunk.NamedArgument
+  , NamedArgument, narg
+  -- Language.Drasil.Chunk.Eq
   , QDefinition, fromEqn, fromEqn', fromEqnSt, fromEqnSt'
   , mkQDefSt, mkQuantDef, mkQuantDef', ec
   , mkFuncDef, mkFuncDef', mkFuncDefByQ
-  -- Chunk.Quantity
-  , QuantityDict, qw, mkQuant, mkQuant', codeVC, implVar, implVar', dcc, dcc', 
-    dccWDS, dccWDS', vc, vc'', vcSt, vcUnit, ccs, cc, cc', cic
-  -- Chunk.UncertainQuantity
-  , UncertainChunk(..), UncertQ, uq, uqc, uqcND, uncrtnChunk, uvc
-  , uncrtnw
-  -- Chunk.Unital
+  -- Language.Drasil.Chunk.Unitary
+  , Unitary(..), UnitaryChunk, unitary, unitary', mkUnitary, unit_symb
+  -- Language.Drasil.Chunk.UnitaryConcept
+  , UnitaryConceptDict, ucw
+  -- Language.Drasil.Chunk.DefinedQuantity
+  , DefinedQuantityDict, dqd, dqd', dqdNoUnit, dqdQd, dqdWr
+  -- Language.Drasil.Chunk.Unital
   , UnitalChunk(..), makeUCWDS
   , uc, uc', ucStaged, ucs, ucs', ucsWS
-  -- Chunk.Unitary
-  , Unitary(..), UnitaryChunk, unitary, unitary', mkUnitary, unit_symb
-  -- Chunk.Relation
-  , RelationConcept, makeRC, addRelToCC
-  --Chunk.DefinedQuantity
-  , DefinedQuantityDict, dqd, dqd', dqdNoUnit, dqdQd, dqdWr
-  -- Chunk.UnitaryConcept
-  , ucw, UnitaryConceptDict
-  -- Derivation
-  , Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader
-  -- ShortName
-  , ShortName, shortname', getSentSN
-  --Citations
-  , Citation, EntryID, BibRef
+  -- *** "Language.Drasil.Chunk.UnitDefn"
+  , UnitDefn(..)
+  , fromUDefn, unitCon, makeDerU
+  , (^:), (/:), (*:), (*$), (/$), (^$), newUnit
+  , scale, shift
+  , derUC, derUC', derUC''
+  , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
+  , unitWrapper, getCu, MayHaveUnit(getUnit)
+  -- *** Constrained and Uncertain values
+
+  -- Language.Drasil.Constraint
+  , ConstraintReason(..), Constraint(..), ConstraintE
+  , physc, sfwrc, isPhysC, isSfwrC
+  -- Language.Drasil.Chunk.Constrained
+  , ConstrainedChunk(..), ConstrConcept(..)
+  , cuc, cvc, constrained', cuc', cuc'', constrainedNRV'
+  , cnstrw, cnstrw'
+  -- Language.Drasil.Chunk.UncertainQuantity
+  , UncertainChunk(..), UncertQ, uq, uqc, uqcND, uncrtnChunk, uvc
+  , uncrtnw
+  -- Language.Drasil.Uncertainty.Core
+  , Uncertainty, uncty
+  -- Language.Drasil.Uncertainty
+  , defaultUncrt, uncVal, uncPrec, exact
+  -- ** Referencing
+
+  -- Language.Drasil.Label.Type
+  , getAdd, prepend
+  , LblType(RP, Citation, URI), IRefProg(..)
+  -- Language.Drasil.Reference
+  , Reference(..), ref, refS, namedRef, complexRef, namedComplexRef
+  -- Language.Drasil.Decorated Reference
+  , DecRef(refInfo), dRefInfo, dRef
+  -- *** Citations
+
+  -- Language.Drasil.Chunk.Citation
+  , EntryID, Citation, BibRef
+  -- accessors
   , citeID, citeKind
-  -- Citation smart constructors
+  -- smart constructors
   , cArticle, cBookA, cBookE, cBooklet
   , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
   , cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis
   , cProceedings, cTechReport, cUnpublished
-  -- Chunk.Citation
-  , HasCitation(getCitations)
-  -- Sentence
-  , Sentence(..), SentenceStyle(..), TermCapitalization(..), RefInfo(..), (+:+), (+:+.), (+:), (!.), capSent
-  , ch, eS, sC, sDash, sParen  
-  -- Sentence.Extract
-  , sdep, shortdep
-  -- NounPhrase
-  , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
-  , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase'
-  , CapitalizationRule(..), atStartNP, atStartNP'
-  , PluralRule(..)
-  , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1
-  , titleizeNP, titleizeNP', nounPhrase'', nounPhraseSP, nounPhraseSent
-  -- Document
-  , Document(..), ShowTableOfContents(..), DType(..), Section(..), Contents(..)
-  , SecCons(..), ListType(..), ItemType(..), ListTuple
-  , LabelledContent(..), UnlabelledContent(..), extractSection
-  , mkParagraph, mkRawLC, checkToC
-  , llcc, ulcc
-  , section, fig, figWithWidth
-  , MaxWidthPercent
-  , HasContents(accessContents)
-  , RawContent(..)
-  , mkFig
-  , makeTabRef, makeFigRef, makeSecRef, makeURI
-  -- Space
-  , Space(..) , RealInterval(..), Inclusive(..), RTopology(..)
-  , DomainDesc(AllDD, BoundedDD), getActorName, getInnerSpace
-  -- Symbol
-  , Decoration, Symbol
-  -- Misc
-  , mkTable
-  -- People
-  , People, Person, person, HasName, name, person', personWM
-  , personWM', mononym, nameStr, rendPersLFM, rendPersLFM', rendPersLFM''
-  , comparePeople
-  -- Stages
-  , Stage(Equational,Implementation)
-  -- Symbol.Helpers
-  , eqSymb, codeSymb, hasStageSymbol
-  , autoStage, hat, prime, staged, sub, subStr, sup , unicodeConv, upperLeft, vec
-  , label, variable
-  -- Reference
-  , Reference(..), ref, refS, namedRef, complexRef, namedComplexRef
-  -- Decorated Reference
-  , DecRef(refInfo), dRefInfo, dRef
-  -- Label.Type
-  , getAdd, prepend
-  , LblType(RP, Citation, URI), IRefProg(..)
-  -- Development.Sentence
-  , introduceAbb, phrase, plural, phrasePoss, pluralPoss, atStart, atStart'
-  , titleize, titleize'
-  -- Uncertainty.Core
-  , Uncertainty, uncty
-  -- Uncertainty
-  , defaultUncrt, uncVal, uncPrec, exact
-  -- UnitLang
-  , USymb(US)
-  -- Data.Date
+  -- Language.Drasil.Data.Date
   , Month(..)
-  -- Data.Citation ; should be moved to Language.Drasil.Development
+  -- Language.Drasil.Data.Citation; should be moved to Language.Drasil.Development
   , CiteField(..), HP(..), CitationKind(..)
     -- CiteFields smart constructors
       -- People -> CiteField
@@ -184,14 +174,67 @@ module Language.Drasil (
   , pages
       -- Month -> CiteField
   , month
-  -- Chunk.UnitDefn
-  , UnitDefn(..)
-  , fromUDefn, unitCon, makeDerU
-  , (^:), (/:), (*:), (*$), (/$), (^$), newUnit
-  , scale, shift
-  , derUC, derUC', derUC''
-  , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
-  , unitWrapper, getCu, MayHaveUnit(getUnit)
+  -- Language.Drasil.People
+  , People, Person, person, HasName, name, person', personWM
+  , personWM', mononym, nameStr, rendPersLFM, rendPersLFM', rendPersLFM''
+  , comparePeople
+  -- * Sentences in Drasil
+  -- | Things like expressions and terms are displayed by using 'Sentence's.
+  -- We also use 'NounPhrase's to record the proper pluralization and capitalization of terms.
+
+  -- Language.Drasil.Sentence
+  , Sentence(..), SentenceStyle(..), TermCapitalization(..), RefInfo(..), (+:+), (+:+.), (+:), (!.), capSent
+  , ch, eS, sC, sDash, sParen  
+  -- Language.Drasil.Sentence.Extract
+  , sdep, shortdep
+  -- Language.Drasil.NounPhrase
+  , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
+  , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase'
+  , CapitalizationRule(..), atStartNP, atStartNP'
+  , PluralRule(..)
+  , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1
+  , titleizeNP, titleizeNP', nounPhrase'', nounPhraseSP, nounPhraseSent
+  -- Language.Drasil.Development.Sentence
+  , introduceAbb, phrase, plural, phrasePoss, pluralPoss, atStart, atStart'
+  , titleize, titleize', short
+  -- Language.Drasil.ShortName
+  , ShortName, shortname', getSentSN
+  -- Language.Drasil.Derivation
+  , Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader
+  -- * Drasil Basic Document Language
+  -- | Holds all the types and helper functions needed especially in @drasil-docLang@
+
+  -- Language.Drasil.Document
+  , Document(..), ShowTableOfContents(..), DType(..), Section(..), Contents(..)
+  , SecCons(..), ListType(..), ItemType(..), ListTuple
+  , LabelledContent(..), UnlabelledContent(..), extractSection
+  , mkParagraph, mkRawLC, checkToC
+  , llcc, ulcc
+  , section, fig, figWithWidth
+  , MaxWidthPercent
+  , HasContents(accessContents)
+  , RawContent(..)
+  , mkFig
+  , makeTabRef, makeFigRef, makeSecRef, makeURI
+
+  -- * Symbols, Stages, Spaces
+  -- | Used for rendering mathematical symbols in Drasil.
+
+  -- Language.Drasil.Space
+  , Space(..) , RealInterval(..), Inclusive(..), RTopology(..)
+  , DomainDesc(AllDD, BoundedDD), getActorName, getInnerSpace
+  -- Language.Drasil.Symbol
+  , Decoration, Symbol
+  -- Language.Drasil.UnitLang
+  , USymb(US)
+  -- Language.Drasil.Misc
+  , mkTable
+  -- Language.Drasil.Stages
+  , Stage(Equational,Implementation)
+  -- Language.Drasil.Symbol.Helpers
+  , eqSymb, codeSymb, hasStageSymbol
+  , autoStage, hat, prime, staged, sub, subStr, sup , unicodeConv, upperLeft, vec
+  , label, variable
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)

@@ -25,7 +25,7 @@ instance NamedIdea NamedChunk where term = np
 instance Idea      NamedChunk where getA _ = Nothing
   
 -- | 'NamedChunk' constructor, takes a 'UID' and a term.
-nc :: String -> NP -> NamedChunk
+nc :: UID -> NP -> NamedChunk
 nc = NC
 
 -- | 'IdeaDict' is the canonical dictionary associated to 'Idea'.
@@ -45,7 +45,7 @@ instance Idea      IdeaDict where getA = mabbr
   
 -- | 'IdeaDict' constructor, takes a 'UID', 'NP', and 
 -- an abbreviation in the form of 'Maybe' 'String'
-mkIdea :: String -> NP -> Maybe String -> IdeaDict
+mkIdea :: UID -> NP -> Maybe String -> IdeaDict
 mkIdea s np' = IdeaDict (nc s np')
 
 -- | Historical name: nw comes from 'named wrapped' from when

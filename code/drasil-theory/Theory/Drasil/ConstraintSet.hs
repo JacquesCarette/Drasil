@@ -27,7 +27,7 @@ instance ConceptDomain ConstraintSet where cdom  = cdom . (^. con)
 -- | The complete 'ModelExpr' of a ConstraintSet is the logical conjunction of
 --   all the underlying relations (e.g., `a $&& b $&& ... $&& z`).
 instance Express       ConstraintSet where
-    express = andDEs . map express . NE.toList . (^. invs)
+    express = andMEs . map express . NE.toList . (^. invs)
 
 -- | Smart constructor for building ConstraintSets
 mkConstraintSet :: ConceptChunk -> NE.NonEmpty Relation -> ConstraintSet

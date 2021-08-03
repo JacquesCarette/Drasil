@@ -233,7 +233,6 @@ isIn :: Express a => a -> ModelExpr -> ModelExpr
 isIn a s@(Spc _) = SpaceBinaryOp IsIn (express a) s
 isIn _ _         = error "isIn target must be a Space"
 
-
 -- | Helper for creating new smart constructors for Associative Binary
 --   operations that require at least 1 expression.
 assocCreate :: Express d => AssocBoolOper -> [d] -> ModelExpr
@@ -250,11 +249,11 @@ assocSanitize b (it@(AssocB c des):r)
 assocSanitize b (de:des) = de : assocSanitize b des
 
 -- | Binary associative "And".
-andDEs :: Express d => [d] -> ModelExpr
-andDEs = assocCreate And
+andMEs :: Express d => [d] -> ModelExpr
+andMEs = assocCreate And
 
 -- | Binary associative "Equivalence".
-equivDEs :: Express a => [a] -> ModelExpr
-equivDEs des
+equivMEs :: Express a => [a] -> ModelExpr
+equivMEs des
   | length des >= 2 = assocCreate Equivalence des
   | otherwise       = error $ "Need at least 2 expressions to create " ++ show Equivalence

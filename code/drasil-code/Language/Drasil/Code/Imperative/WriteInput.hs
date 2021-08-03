@@ -4,7 +4,7 @@ module Language.Drasil.Code.Imperative.WriteInput (
   
 import Utils.Drasil (blank)
 import Database.Drasil (ChunkDB)
-import Language.Drasil
+import Language.Drasil hiding (space)
 import Language.Drasil.Code.DataDesc (DataDesc, Data(..), Delim, 
   LinePattern(..), getDataInputs, isJunk)
 import Language.Drasil.Development (Expr(Matrix))

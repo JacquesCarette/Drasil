@@ -216,12 +216,12 @@ getTandS a = phrase a +:+ ch a
 -- | Produces a 'Sentence' that displays the constraints in a set {}.
 displayStrConstrntsAsSet :: Quantity a => a -> [String] -> Sentence
 displayStrConstrntsAsSet sym listOfVals = eS $ 
-  isIn (sy sym) (spaceDE $ DiscreteS listOfVals)
+  isIn (sy sym) (space $ DiscreteS listOfVals)
 
 -- | Produces a 'Sentence' that displays the constraints in a set {}.
 displayDblConstrntsAsSet :: Quantity a => a -> [Double] -> Sentence
 displayDblConstrntsAsSet sym listOfVals = eS $ 
-  isIn (sy sym) (spaceDE $ DiscreteD listOfVals)
+  isIn (sy sym) (space $ DiscreteD listOfVals)
 
 -- | Output is of the form "@reference - sentence@".
 chgsStart :: (HasShortName x, Referable x) => x -> Sentence -> Sentence

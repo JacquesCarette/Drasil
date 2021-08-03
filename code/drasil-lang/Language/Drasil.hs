@@ -22,7 +22,7 @@ module Language.Drasil (
   , cross, m2x2, vec2D, dgnl2x2
   -- ModelExpr
   , ModelExpr
-  , defines, spaceDE, isIn, andDEs, equivDEs
+  , defines, space, isIn, andDEs, equivDEs
   -- all the stuff from Unicode
   , Special(..), RenderSpecial(..)
   -- UID
@@ -212,7 +212,7 @@ import Language.Drasil.Expr.Math (abs_, neg, negVec, log, ln, sin, cos, tan, sqr
           sy, deriv, pderiv,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, intAll)
 import Language.Drasil.ModelExpr (ModelExpr)
-import Language.Drasil.ModelExpr.Display (defines, spaceDE, isIn, andDEs, equivDEs)
+import Language.Drasil.ModelExpr.Display (defines, space, isIn, andDEs, equivDEs)
 import Language.Drasil.Document (section, fig, figWithWidth
   , Section(..), SecCons(..) , llcc, ulcc, Document(..)
   , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC

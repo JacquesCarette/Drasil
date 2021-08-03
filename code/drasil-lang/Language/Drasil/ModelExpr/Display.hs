@@ -1,5 +1,5 @@
 {-# LANGUAGE NoMonomorphismRestriction #-}
-module Language.Drasil.ModelExpr.Display (defines, spaceDE, isIn, andDEs, equivDEs) where
+module Language.Drasil.ModelExpr.Display (defines, space, isIn, andDEs, equivDEs) where
 
 import Language.Drasil.ExprClasses (Express(..))
 import Language.Drasil.ModelExpr
@@ -10,8 +10,8 @@ defines :: (Express a, Express b) => a -> b -> ModelExpr
 defines a b = StatBinaryOp Defines (express a) (express b)
 
 -- | Bring a Space into the ModelExpr.
-spaceDE :: Space -> ModelExpr
-spaceDE = Spc
+space :: Space -> ModelExpr
+space = Spc
 
 isIn :: Express a => a -> ModelExpr -> ModelExpr
 isIn a s@(Spc _) = SpaceBinaryOp IsIn (express a) s

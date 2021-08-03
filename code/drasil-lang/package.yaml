@@ -24,6 +24,7 @@ library:
   exposed-modules:
   - Language.Drasil
   - Language.Drasil.Development
+  - Language.Drasil.Display
   - Language.Drasil.ShortHands
   when:
   - condition: false

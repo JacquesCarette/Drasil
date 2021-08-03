@@ -1,9 +1,14 @@
+#!/usr/bin/env bash
+
+# Deploy script. Calls target deploy_lite from code/Makefile
+
 SOURCE_BRANCH="master"
 DEPLOY_BRANCH="gh-pages"
 DEPLOY_FOLDER="deploy/"
 BUILD_NUMBER_FILE=".build-num"
 COMMIT_HASH_FILE=".commit-hash"
 
+# Usually only deploy from master branch.
 if [ "$GITHUB_REF" != "refs/heads/$SOURCE_BRANCH" ]; then
   echo "Only perform deploys for $SOURCE_BRANCH (attempted on: $GITHUB_REF)."
   echo "Skipping."

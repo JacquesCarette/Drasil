@@ -26,12 +26,14 @@ import Data.List (intercalate)
 import Prelude hiding (break,print,sin,cos,tan,floor,(<>))
 import Text.PrettyPrint.HughesPJ (Doc)
 
+-- | Name options for Java files.
 jNameOpts :: NameOpts
 jNameOpts = NameOpts {
   packSep = ".",
   includeExt = False
 }
 
+-- | Holds a Java project.
 newtype JavaProject a = JP {unJP :: a}
 
 instance Functor JavaProject where
@@ -67,6 +69,7 @@ instance AuxiliarySym JavaProject where
   auxHelperDoc = unJP
   auxFromData fp d = return $ ad fp d
 
+-- | Create a build configuration for Java files. Takes in 'FilePath's and the type of implementation.
 jBuildConfig :: [FilePath] -> ImplementationType -> Maybe BuildConfig
 jBuildConfig fs Program = buildSingle (\i _ -> [asFragment "javac" : map 
   asFragment (classPath fs) ++ i]) (withExt (inCodePackage mainModule) 
@@ -76,10 +79,12 @@ jBuildConfig fs Library = buildAllAdditionalName (\i o a ->
     map asFragment ["jar", "-cvf"] ++ [o, a]]) 
   (BWithExt BPackName $ OtherExt $ asFragment ".jar") BPackName
 
+-- | Default runnable information for Java files.
 jRunnable :: [FilePath] -> Maybe Runnable
 jRunnable fs = interp (flip withExt ".class" $ inCodePackage mainModule) 
   jNameOpts "java" (classPath fs)
 
+-- | Helper for formating file paths for use in 'jBuildConfig'.
 classPath :: [FilePath] -> [String]
 classPath fs = if null fs then [] else 
   ["-cp", "\"" ++ intercalate ":" (fs ++ ["."]) ++ "\""]

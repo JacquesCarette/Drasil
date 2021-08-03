@@ -3,8 +3,7 @@ module Drasil.DocumentLanguage.Core where
 
 import Drasil.DocumentLanguage.Definitions (Fields)
 import Drasil.DocumentLanguage.TraceabilityMatrix (TraceViewCat)
-import Language.Drasil hiding (Manual, Vector, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
-                                                     -- Vector - Name conflict (defined in file)
+import Language.Drasil hiding (Manual, Verb) -- Manual - Citation name conflict. FIXME: Move to different namespace
 import Theory.Drasil (DataDefinition, GenDefn, InstanceModel, TheoryModel)
 
 
@@ -21,7 +20,8 @@ type DocDesc = [DocSection]
 
 -- | Document sections are either Reference, Introduction, or Specific
 -- System Description sections (for now!).
-data DocSection = RefSec RefSec
+data DocSection = TableOfContents
+                | RefSec RefSec
                 | IntroSec IntroSec
                 | StkhldrSec StkhldrSec
                 | GSDSec GSDSec
@@ -136,7 +136,7 @@ data GSDSub where
   SysCntxt   :: [Contents] -> GSDSub --FIXME: partially automate
   -- | User characteristics.
   UsrChars   :: [Contents] -> GSDSub 
-  -- | Systen constraints.
+  -- | System constraints.
   SystCons   :: [Contents] -> [Section] -> GSDSub 
 
 {--}
@@ -223,6 +223,9 @@ newtype TraceabilitySec = TraceabilityProg [TraceConfig]
 -- | Traceability Matices and Graphs configurations.
 data TraceConfig = TraceConfig UID [Sentence] Sentence [TraceViewCat] [TraceViewCat]
 
+getTraceConfigUID :: TraceConfig -> UID
+getTraceConfigUID (TraceConfig a _ _ _ _) = a
+
 {--}
 
 -- | Off-The-Shelf Solutions section.
@@ -269,6 +272,7 @@ data DLPlate f = DLPlate {
 instance Multiplate DLPlate where
   multiplate p = DLPlate ds res intro intro' stk stk' gs gs' ss ss' pd pd' sc
     rs rs' lcp ucp ts es acs aps where
+    ds TableOfContents = pure TableOfContents
     ds (RefSec x) = RefSec <$> refSec p x
     ds (IntroSec x) = IntroSec <$> introSec p x
     ds (StkhldrSec x) = StkhldrSec <$> stkSec p x

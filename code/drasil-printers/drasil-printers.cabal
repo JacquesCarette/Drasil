@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: d16a8ade5934f82bf4fb426cd06188cc156bc02fc55bab96b822df4c13c051df
+-- hash: 84cabb3dd8367aba28df9320c3a57d5950a91246673b91b1c9bd6d0a9aecfaaa
 
 name:           drasil-printers
 version:        0.1.10.0
@@ -25,18 +25,26 @@ library
       Language.Drasil.Printers
   other-modules:
       Language.Drasil.Config
+      Language.Drasil.DOT.Print
       Language.Drasil.Format
       Language.Drasil.HTML.CSS
       Language.Drasil.HTML.Helpers
       Language.Drasil.HTML.Monad
       Language.Drasil.HTML.Print
       Language.Drasil.Markdown.CreateMd
-      Language.Drasil.Plain.Helpers
       Language.Drasil.Plain.Print
       Language.Drasil.Printing.AST
       Language.Drasil.Printing.Citation
       Language.Drasil.Printing.Helpers
       Language.Drasil.Printing.Import
+      Language.Drasil.Printing.Import.CodeExpr
+      Language.Drasil.Printing.Import.DisplayExpr
+      Language.Drasil.Printing.Import.Document
+      Language.Drasil.Printing.Import.Expr
+      Language.Drasil.Printing.Import.Helpers
+      Language.Drasil.Printing.Import.Sentence
+      Language.Drasil.Printing.Import.Space
+      Language.Drasil.Printing.Import.Symbol
       Language.Drasil.Printing.LayoutObj
       Language.Drasil.Printing.PrintingInformation
       Language.Drasil.TeX.Helpers
@@ -48,6 +56,10 @@ library
   ghc-options: -Wall -Wredundant-constraints
   build-depends:
       base >=4.7 && <5
+    , containers
+    , directory
+    , drasil-code-base
+    , drasil-data
     , drasil-database
     , drasil-lang
     , drasil-utils

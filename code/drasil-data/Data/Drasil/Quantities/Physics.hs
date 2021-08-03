@@ -1,6 +1,7 @@
 module Data.Drasil.Quantities.Physics where
 
 import Language.Drasil
+import Language.Drasil.Display
 import Language.Drasil.ShortHands
 import qualified Data.Drasil.Concepts.Physics as CP (acceleration, angAccel,
   angDisp, angVelo, chgInVelocity, constAccel, constAccelV, displacement,
@@ -9,14 +10,14 @@ import qualified Data.Drasil.Concepts.Physics as CP (acceleration, angAccel,
   kEnergy, linAccel, linDisp, linVelo, momentOfInertia, position, potEnergy,
   pressure, restitutionCoef, scalarAccel, scalarPos, speed, time, torque,
   velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel,
-  yDist, yPos, yVel, momentum, moment, fOfGravity, positionVec, tension, angFreq, period, frequency)
+  yDist, yPos, yVel, momentum, moment, fOfGravity, positionVec, tension, angFreq, period, frequency, chgMomentum)
 
 import Data.Drasil.SI_Units (joule, metre, newton, pascal, radian, second, hertz)
 import Data.Drasil.Units.Physics (accelU, angAccelU, angVelU, gravConstU, 
     impulseU, momtInertU, torqueU, velU)
 
 restitutionCoef :: DefinedQuantityDict
-restitutionCoef = dqdNoUnit CP.restitutionCoef (sub cC (Label "R")) Real
+restitutionCoef = dqdNoUnit CP.restitutionCoef (sub cC (label "R")) Real
 
 physicscon :: [UnitalChunk]
 physicscon = [acceleration, angularAccel, angularDisplacement, angularVelocity,
@@ -27,7 +28,7 @@ physicscon = [acceleration, angularAccel, angularDisplacement, angularVelocity,
   potEnergy, pressure, scalarAccel, scalarPos, speed, time, torque, velocity,
   weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
   yPos, yVel,momentum, moment, moment2D, fOfGravity, positionVec, tension,
-  angularFrequency, period, frequency]
+  angularFrequency, period, frequency, chgMomentum]
 
 acceleration, angularAccel, angularDisplacement, angularVelocity, chgInVelocity,
   constAccel, constAccelV, displacement, distance, energy, fSpeed, fVel, force,
@@ -36,7 +37,7 @@ acceleration, angularAccel, angularDisplacement, angularVelocity, chgInVelocity,
   linearVelocity, momentOfInertia, position, potEnergy, pressure, scalarAccel,
   scalarPos, speed, time, torque, velocity, weight, xAccel, xConstAccel, xDist,
   xPos, xVel, yAccel, yConstAccel, yDist, yPos, yVel, momentum, moment, moment2D,
-  fOfGravity, positionVec, tension, angularFrequency, period, frequency :: UnitalChunk
+  fOfGravity, positionVec, tension, angularFrequency, period, frequency, chgMomentum :: UnitalChunk
 
 
 acceleration         = uc CP.acceleration (vec lA) accelU
@@ -57,10 +58,11 @@ height               = uc CP.height lH metre
 impulseS             = uc CP.impulseS lJ impulseU
 impulseV             = uc CP.impulseV (vec cJ) impulseU
 kEnergy              = uc CP.kEnergy  (Concat [cK, cE]) joule
-linearAccel          = uc CP.linAccel (Concat [vec lA, Label "(", lT, Label ")"]) accelU
-linearDisplacement   = uc CP.linDisp  (Concat [vec lU, Label "(", lT, Label ")"]) metre
-linearVelocity       = uc CP.linVelo  (Concat [vec lV, Label "(", lT, Label ")"]) velU
+linearAccel          = uc CP.linAccel (Concat [vec lA, label "(", lT, label ")"]) accelU
+linearDisplacement   = uc CP.linDisp  (Concat [vec lU, label "(", lT, label ")"]) metre
+linearVelocity       = uc CP.linVelo  (Concat [vec lV, label "(", lT, label ")"]) velU
 momentOfInertia      = uc CP.momentOfInertia (vec cI) momtInertU
+chgMomentum          = uc CP.chgMomentum (Concat [cDelta,vec cP]) impulseU
 momentum             = uc CP.momentum (vec cP) impulseU
 moment               = uc CP.moment   (vec cM) torqueU
 moment2D             = uc CP.moment   cM       torqueU
@@ -113,19 +115,19 @@ xConstAccel = uc CP.xConstAccel (sup (subX lA) constant) accelU
 yConstAccel = uc CP.yConstAccel (sup (subY lA) constant) accelU
 
 constant, final, initial :: Symbol
-constant = Label "c"
-final    = Label "f"
-initial  = Label "i"
+constant = label "c"
+final    = label "f"
+initial  = label "i"
 
 -- Helpers for common modifiers
 subMax, subMin, subX, subY, subZ, supMax, supMin :: Symbol -> Symbol
-subMax s = sub s (Label "max")
-subMin s = sub s (Label "min")
-subX   s = sub s (Label "x")
-subY   s = sub s (Label "y")
-subZ   s = sub s (Label "z")
-supMax s = sup s (Label "max")
-supMin s = sup s (Label "min")
+subMax s = sub s (label "max")
+subMin s = sub s (label "min")
+subX   s = sub s (label "x")
+subY   s = sub s (label "y")
+subZ   s = sub s (label "z")
+supMax s = sup s (label "max")
+supMin s = sup s (label "min")
 
 ---------------Constants-----------------------------
 

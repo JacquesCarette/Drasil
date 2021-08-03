@@ -1,3 +1,4 @@
+{-# LANGUAGE PostfixOperators #-}
 module Drasil.Sections.Introduction (orgSec, introductionSection, purposeOfDoc, scopeOfRequirements, 
   charIntRdrF, purpDoc) where
 
@@ -6,6 +7,7 @@ import qualified Drasil.DocLang.SRS as SRS (intro, prpsOfDoc, scpOfReq,
   charOfIR, orgOfDoc, goalStmt, thModel, inModel, sysCon)
 import Drasil.DocumentLanguage.Definitions(Verbosity(..))
 import Utils.Drasil
+import Utils.Drasil.Concepts
 import qualified Utils.Drasil.Sentence as S
 
 import Data.Drasil.Concepts.Computation (algorithm)
@@ -26,18 +28,18 @@ import Data.Drasil.Citations (parnasClements1986)
 developmentProcessParagraph :: Sentence
 developmentProcessParagraph = foldlSent [S "This", phrase document, 
   S "will be used as a starting point for subsequent development", 
-  S "phases, including writing the", phrase desSpec, S "and the", 
-  phrase softwareVAV, S "plan. The", phrase designDoc, S "will show how the", 
+  S "phases, including writing the", phraseNP (desSpec `andThe` softwareVAV) +:+.
+  S "plan", atStartNP (the designDoc), S "will show how the", 
   plural requirement, S "are to be realized, including", plural decision, 
   S "on the numerical", plural algorithm, S "and programming" +:+. 
   phrase environment, S "The", phrase vavPlan, 
   S "will show the steps that will be used to increase confidence in the",
-  phrase softwareDoc, S "and the" +:+. phrase implementation, S "Although",
+  (phraseNP (softwareDoc `andThe` implementation) !.), S "Although",
   S "the", short srs, S "fits in a series of", plural document, 
   S "that follow the so-called waterfall", phrase model `sC` 
   S "the actual development process is not constrained", 
   S "in any way. Even when the waterfall model is not followed, as",
-  S "Parnas and Clements point out", makeCiteS parnasClements1986 `sC`
+  S "Parnas and Clements point out", refS parnasClements1986 `sC`
   S "the most logical way to present the", phrase documentation,
   S "is still to", Quote (S "fake"), S "a rational", phrase design,
   S "process"]
@@ -81,7 +83,7 @@ purpDocPara1 proName = foldlSent [S "The primary purpose of this", phrase docume
   phrase information, S "are specified" `sC` S "allowing the reader to fully",
   S "understand" `S.and_` S "verify the", phrase purpose `S.and_` S "scientific",
   S "basis of" +:+. short proName, S "With the exception of", 
-  plural systemConstraint, S "in", makeRef2S (SRS.sysCon [] []) `sC` S "this",
+  namedRef (SRS.sysCon [] []) (plural systemConstraint) `sC` S "this",
   short Doc.srs, S "will remain abstract, describing what", phrase problem,
   S "is being solved, but not how to solve it"] 
 
@@ -128,9 +130,9 @@ intReaderIntro :: (Idea a) => a -> [Sentence] -> [Sentence] -> [Sentence] ->
 intReaderIntro progName assumed topic asset sectionRef = 
   [foldlSP [S "Reviewers of this", phrase documentation,
   S "should have an understanding of" +:+.
-  foldlList Comma List (assumed ++ topic), assetSent, S "The",
-  plural user `S.of_` short progName, S "can have a lower level" `S.of_`
-  S "expertise, as explained" `S.in_` makeRef2S sectionRef]]
+  foldlList Comma List (assumed ++ topic), assetSent,
+  atStartNP' (the user) `S.of_` short progName, S "can have a lower level" `S.of_`
+  S "expertise, as explained" `S.in_` refS sectionRef]]
   where
     assetSent = case asset of
       [] -> EmptyS
@@ -150,7 +152,7 @@ orgIntro intro bottom bottomSec trailingSentence = [foldlSP [
   intro, S "The presentation follows the standard pattern of presenting" +:+.
   foldlList Comma List (map plural [nw Doc.goal, nw theory, nw definition, nw assumption]),
   S "For readers that would like a more bottom up approach" `sC`
-  S "they can start reading the", plural bottom `S.in_` makeRef2S bottomSec `S.and_`
+  S "they can start reading the", namedRef bottomSec (plural bottom)`S.and_`
   S "trace back to find any additional information they require"],
   folder [refineChain (zip [goalStmt, thModel, inModel]
          [SRS.goalStmt [] [], SRS.thModel [] [], SRS.inModel [] []]), trailingSentence]]

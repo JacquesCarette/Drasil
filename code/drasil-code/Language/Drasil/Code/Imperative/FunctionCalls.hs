@@ -23,7 +23,7 @@ import Data.Maybe (catMaybes)
 import Control.Applicative ((<|>))
 import Control.Monad.State (get)
 
--- Generates calls to all of the input-related functions. First is the call to 
+-- | Generates calls to all of the input-related functions. First is the call to 
 -- the function for reading inputs, then the function for calculating derived 
 -- inputs, then the function for checking input constraints.
 getAllInputCalls :: (OOProg r) => GenState [MSStatement r]
@@ -33,21 +33,21 @@ getAllInputCalls = do
   ic <- getConstraintCall
   return $ catMaybes [gi, dv, ic]
 
--- Generates a call to the function for reading inputs from a file
+-- | Generates a call to the function for reading inputs from a file.
 getInputCall :: (OOProg r) => GenState (Maybe (MSStatement r))
 getInputCall = getInOutCall "get_input" getInputFormatIns getInputFormatOuts
 
--- Generates a call to the function for calculating derived inputs
+-- | Generates a call to the function for calculating derived inputs.
 getDerivedCall :: (OOProg r) => GenState (Maybe (MSStatement r))
 getDerivedCall = getInOutCall "derived_values" getDerivedIns getDerivedOuts
 
--- Generates a call to the function for checking constraints on the input
+-- | Generates a call to the function for checking constraints on the input.
 getConstraintCall :: (OOProg r) => GenState (Maybe (MSStatement r))
 getConstraintCall = do
   val <- getFuncCall "input_constraints" void getConstraintParams
   return $ fmap valStmt val
 
--- Generates a call to a calculation function, given the CodeDefinition for the 
+-- | Generates a call to a calculation function, given the 'CodeDefinition' for the 
 -- value being calculated.
 getCalcCall :: (OOProg r) => CodeDefinition -> GenState (Maybe (MSStatement r))
 getCalcCall c = do
@@ -57,13 +57,13 @@ getCalcCall c = do
   l <- maybeLog v
   return $ fmap (multi . (: l) . varDecDef v) val
 
--- Generates a call to the function for printing outputs.
+-- | Generates a call to the function for printing outputs.
 getOutputCall :: (OOProg r) => GenState (Maybe (MSStatement r))
 getOutputCall = do
   val <- getFuncCall "write_output" void getOutputParams
   return $ fmap valStmt val
 
--- Generates a function call given the name, return type, and arguments to 
+-- | Generates a function call given the name, return type, and arguments to 
 -- the function.
 getFuncCall :: (OOProg r) => Name -> VSType r -> 
   GenState [CodeVarChunk] -> GenState (Maybe (SValue r))
@@ -77,7 +77,7 @@ getFuncCall n t funcPs = do
         return $ Just val
   getFuncCall' mm
 
--- Generates a function call given the name, inputs, and outputs for the 
+-- | Generates a function call given the name, inputs, and outputs for the
 -- function.
 getInOutCall :: (OOProg r) => Name -> GenState [CodeVarChunk] -> 
   GenState [CodeVarChunk] -> GenState (Maybe (MSStatement r))
@@ -94,12 +94,12 @@ getInOutCall n inFunc outFunc = do
         return $ Just stmt
   getInOutCall' mm
   
--- Gets the name of the module containing the function being called
--- If the function is not in either module export map or class definition map, 
---   return Nothing
--- If the function is not in module export map but is in class definition map, 
--- that means it is a private function, so return Nothing unless it is in the 
--- current class
+-- | Gets the name of the module containing the function being called.
+-- If the function is not in either the module export map or class definition map, 
+--   return 'Nothing'.
+-- If the function is not in module export map but is in the class definition map, 
+-- that means it is a private function, so return 'Nothing' unless it is in the 
+-- current class.
 getCall :: Name -> GenState (Maybe Name)
 getCall n = do
   g <- get

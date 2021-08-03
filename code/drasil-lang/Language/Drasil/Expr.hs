@@ -4,11 +4,8 @@ module Language.Drasil.Expr where
 
 import Prelude hiding (sqrt)
 
-import Language.Drasil.Space (Space(..), DomainDesc, RealInterval)
+import Language.Drasil.Space (DomainDesc, RealInterval)
 import Language.Drasil.UID (UID)
-
--- FIXME: Haddock open issue #43 seems to make it so GADT constructors cannot
--- be documented properly
 
 -- | A relation is just an expression ('Expr').
 type Relation = Expr
@@ -18,9 +15,6 @@ infixl 7 $/
 infixr 4 $=
 infixr 9 $&&
 infixr 9 $||
-
--- Known math functions.
--- TODO: Move the below to a separate file somehow. How to go about it?
 
 -- Binary functions
 
@@ -66,12 +60,16 @@ data UFunc = Abs | Log | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin
   | Arccos | Arctan | Exp | Sqrt | Neg
   deriving Eq
 
--- | Negation operator (not).
+-- | @Bool -> Bool@ operators.
 data UFuncB = Not
   deriving Eq
 
--- | Data for vectors (normal, dimensions).
-data UFuncVec = Norm | Dim
+-- | @Vector -> Vector@ operators.
+data UFuncVV = NegV
+  deriving Eq
+
+-- | @Vector -> Number@ operators.
+data UFuncVN = Norm | Dim
   deriving Eq
 
 -- | For case expressions (either complete or incomplete).
@@ -90,7 +88,7 @@ data Expr where
   Str      :: String -> Expr
   -- | Turns two integers into a fraction (or percent).
   Perc     :: Integer -> Integer -> Expr
-  -- | Takes an associative aritmetic operator with a list of expressions.
+  -- | Takes an associative arithmetic operator with a list of expressions.
   AssocA   :: AssocArithOper -> [Expr] -> Expr
   -- | Takes an associative boolean operator with a list of expressions.
   AssocB   :: AssocBoolOper  -> [Expr] -> Expr
@@ -108,18 +106,6 @@ data Expr where
   --   * F(x,y) would be (FCall F [x,y]).
   --   * F(x,n=y) would be (FCall F [x] [(n,y)]).
   FCall    :: UID -> [Expr] -> [(UID, Expr)] -> Expr
-  -- | Actor creation given 'UID', parameters, and named parameters.
-  New      :: UID -> [Expr] -> [(UID, Expr)] -> Expr
-  -- | Message an actor:
-  --
-  --   * 1st 'UID' is the actor,
-  --   * 2nd 'UID' is the method.
-  Message  :: UID -> UID -> [Expr] -> [(UID, Expr)] -> Expr
-  -- | Access a field of an actor:
-  --
-  --   * 1st 'UID' is the actor,
-  --   * 2nd 'UID' is the field.
-  Field    :: UID -> UID -> Expr
   -- | For multi-case expressions, each pair represents one case.
   Case     :: Completeness -> [(Expr,Relation)] -> Expr
   -- | Represents a matrix of expressions.
@@ -127,10 +113,12 @@ data Expr where
   
   -- | Unary operation for most functions (eg. sin, cos, log, etc.).
   UnaryOp       :: UFunc -> Expr -> Expr
-  -- | Unary operation for negation.
+  -- | Unary operation for @Bool -> Bool@ operations.
   UnaryOpB      :: UFuncB -> Expr -> Expr
-  -- | Unary operation for vectors (holds whether a vector is normal or used for dimensions).
-  UnaryOpVec    :: UFuncVec -> Expr -> Expr
+  -- | Unary operation for @Vector -> Vector@ operations.
+  UnaryOpVV     :: UFuncVV -> Expr -> Expr
+  -- | Unary operation for @Vector -> Number@ operations.
+  UnaryOpVN     :: UFuncVN -> Expr -> Expr
 
   -- | Binary operator for arithmetic between expressions (fractional, power, and subtraction).
   ArithBinaryOp :: ArithBinOp -> Expr -> Expr -> Expr
@@ -151,8 +139,6 @@ data Expr where
   --   of an 'Expr'.  Could be called BigOp.
   --   ex: Summation is represented via 'Add' over a discrete domain.
   Operator :: AssocArithOper -> DomainDesc Expr Expr -> Expr -> Expr
-  -- | The expression is an element of a space.
-  IsIn     :: Expr -> Space -> Expr
   -- | A different kind of 'IsIn'. A 'UID' is an element of an interval.
   RealI    :: UID -> RealInterval Expr Expr -> Expr
 
@@ -189,8 +175,10 @@ addI l r = AssocA AddI [l, r]
 
 -- | Add two expressions (Real numbers).
 addRe :: Expr -> Expr -> Expr
-addRe l (Int 0) = l
-addRe (Int 0) r = r
+addRe l (Dbl 0)      = l
+addRe (Dbl 0) r      = r
+addRe l (ExactDbl 0) = l
+addRe (ExactDbl 0) r = r
 addRe (AssocA AddRe l) (AssocA AddRe r) = AssocA AddRe (l ++ r)
 addRe (AssocA AddRe l) r = AssocA AddRe (l ++ [r])
 addRe l (AssocA AddRe r) = AssocA AddRe (l : r)
@@ -198,6 +186,8 @@ addRe l r = AssocA AddRe [l, r]
 
 -- | Multiply two expressions (Integers).
 mulI :: Expr -> Expr -> Expr
+mulI l (Int 1) = l
+mulI (Int 1) r = r
 mulI (AssocA MulI l) (AssocA MulI r) = AssocA MulI (l ++ r)
 mulI (AssocA MulI l) r = AssocA MulI (l ++ [r])
 mulI l (AssocA MulI r) = AssocA MulI (l : r)
@@ -205,6 +195,10 @@ mulI l r = AssocA MulI [l, r]
 
 -- | Multiply two expressions (Real numbers).
 mulRe :: Expr -> Expr -> Expr
+mulRe l (Dbl 1)      = l
+mulRe (Dbl 1) r      = r
+mulRe l (ExactDbl 1) = l
+mulRe (ExactDbl 1) r = r
 mulRe (AssocA MulRe l) (AssocA MulRe r) = AssocA MulRe (l ++ r)
 mulRe (AssocA MulRe l) r = AssocA MulRe (l ++ [r])
 mulRe l (AssocA MulRe r) = AssocA MulRe (l : r)
@@ -226,9 +220,9 @@ mulRe l r = AssocA MulRe [l, r]
 
 ($&&), ($||) :: Expr -> Expr -> Expr
 -- | Smart constructor for the boolean /and/ operator.
-a $&& b = AssocB And [a,b]
+a $&& b = AssocB And [a, b]
 -- | Smart constructor for the boolean /or/ operator.
-a $|| b = AssocB Or  [a,b]
+a $|| b = AssocB Or  [a, b]
 
 -- | The variable type is just a renamed 'String'.
 type Variable = String
@@ -270,10 +264,10 @@ instance Eq Expr where
   C a                 == C b                 =   a == b
   FCall a b c         == FCall d e f         =   a == d && b == e && c == f
   Case a b            == Case c d            =   a == c && b == d 
-  IsIn a b            == IsIn c d            =   a == c && b == d
   UnaryOp a b         == UnaryOp c d         =   a == c && b == d
   UnaryOpB a b        == UnaryOpB c d        =   a == c && b == d
-  UnaryOpVec a b      == UnaryOpVec c d      =   a == c && b == d
+  UnaryOpVV a b       == UnaryOpVV c d       =   a == c && b == d
+  UnaryOpVN a b       == UnaryOpVN c d       =   a == c && b == d
   ArithBinaryOp o a b == ArithBinaryOp p c d =   o == p && a == c && b == d
   BoolBinaryOp o a b  == BoolBinaryOp p c d  =   o == p && a == c && b == d
   EqBinaryOp o a b    == EqBinaryOp p c d    =   o == p && a == c && b == d
@@ -282,6 +276,7 @@ instance Eq Expr where
   VVVBinaryOp o a b   == VVVBinaryOp p c d   =   o == p && a == c && b == d
   VVNBinaryOp o a b   == VVNBinaryOp p c d   =   o == p && a == c && b == d
   _                   == _                   =   False
+-- ^ TODO: This needs to add more equality checks
 
 -- instance Fractional Expr where
 --   a / b = ArithBinaryOp Frac a b

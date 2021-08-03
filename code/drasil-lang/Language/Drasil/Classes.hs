@@ -6,6 +6,7 @@ module Language.Drasil.Classes (
   , HasSpace(typ)
   , HasUnitSymbol(usymb)
   , HasReference(getReferences)
+  , HasDecRef(getDecRefs)
   , HasReasVal(reasVal)
   , HasDerivation(derivations)
   , HasAdditionalNotes(getNotes)
@@ -13,13 +14,12 @@ module Language.Drasil.Classes (
   , Definition(defn)
   , ConceptDomain(cdom)
   , Constrained(constraints)
-  , ExprRelat(relat)
   , CommonIdea(abrv)
   , DefiningExpr(defnExpr)
+  , Display(toDispExpr)
   , Quantity
   , HasUncertainty(unc)
   , Concept
-  , Referable(refAdd, renderRef)
   , Callable
   , IsArgumentName
 
@@ -32,13 +32,14 @@ module Language.Drasil.Classes (
 -- also helps with cycles...
 import Language.Drasil.Classes.Core
 
-import Language.Drasil.Constraint (Constraint)
+import Language.Drasil.Constraint (ConstraintE)
 import Language.Drasil.Derivation (Derivation)
-import Language.Drasil.UnitLang(UDefn, USymb)
-import Language.Drasil.Expr (Expr, Relation)
-import Language.Drasil.Label.Type (LblType)
+import Language.Drasil.UnitLang (UDefn, USymb)
+import Language.Drasil.DisplayClasses (Display(toDispExpr))
+import Language.Drasil.Expr (Expr)
 import Language.Drasil.NounPhrase.Core (NP)
-import Language.Drasil.RefProg (Reference)
+import Language.Drasil.Reference (Reference)
+import Language.Drasil.DecoratedReference(DecRef)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
@@ -91,6 +92,11 @@ class HasReference c where
   -- | Provides a 'Lens' to the 'Reference's.
   getReferences :: Lens' c [Reference]
 
+-- | A class that contains a list of decorated references ('DecRef's).
+class HasDecRef c where
+  -- | Provides a 'Lens' to the 'DecRef's.
+  getDecRefs :: Lens' c [DecRef]
+
 -- | A class that might have a 'Derivation'.
 class HasDerivation c where
   -- | Provides a 'Lens' to a possible derivation.
@@ -106,7 +112,7 @@ class NamedIdea c => CommonIdea c where
 -- It does not enforce 'Quantity' at this point.
 class Constrained c where
   -- | Provides a 'Lens' to the 'Constraint's.
-  constraints :: Lens' c [Constraint]
+  constraints :: Lens' c [ConstraintE]
 
 -- | A 'Quantity' that could have a reasonable value.
 class HasReasVal c where
@@ -130,14 +136,6 @@ class (Idea c, HasSpace c, HasSymbol c) => Quantity c where
 class HasUncertainty c where
   -- | Provides the 'Lens' to an 'Uncertainty'.
   unc  :: Lens' c Uncertainty
-
--- | Members of this class have the ability to be referenced.
-class HasUID s => Referable s where
-  -- | The referencing address (what we're linking to).
-  -- Only visible in the source (tex/html).
-  refAdd    :: s -> String 
-  -- | Alternate form of reference.
-  renderRef :: s -> LblType 
 
 -- | Some chunks can be called like functions.
 class (HasSymbol c) => Callable c
@@ -164,14 +162,9 @@ class UnitEq u where
   uniteq :: Lens' u UDefn
 
 -----------------------------------------------------
--- TODO: It is ok to be able to view a (defining?) 'Relation', but not necessarily
--- to 'set' it,  as it might just not be settable. So Getter it is.
--- | Has a function that turns into a 'Relation'.
-class ExprRelat c where
-  -- | Holds a relation.
-  relat :: c -> Relation
 
--- This is the 'correct' version of ExprRelat.
+-- TODO: I think that this DefiningExpr is missing a "what it defines" component...
+--       It's also only used for CodeDefinitions, QDefinitions, and DataDefinitions (food for thought on naming if we want to add ^)
 -- | A better version of 'ExprRelat' that holds an 'Expr'.
 class DefiningExpr c where
   -- | Provides a 'Lens' to the expression.

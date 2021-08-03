@@ -21,6 +21,7 @@ dist
 *.chs.h
 .drasil-min-stack-ver
 stack.yaml.lock
+.hlint*
 
 # Drasil supported programming languages
 __pycache__
@@ -35,14 +36,14 @@ code/build
 code/docs
 code/deploy
 code/graphs
+code/traceygraphs
 code/logs
 code/stable/*/src/*/html
 code/stable/*/src/*/latex
 */Projectile/output.txt
 
 # Website
-code/website/_cache
-code/website/_site
+code/Website
 
 # PDF generation, TeX caches, and misc. file types
 *.aux

@@ -22,14 +22,14 @@ physicsTMs :: [TheoryModel]
 physicsTMs = [newtonSL]
 
 newtonSL :: TheoryModel
-newtonSL = tmNoRefs' "newtonSL" (EquationalModel newtonSLQD)
+newtonSL = tmNoRefs (equationalModelU "newtonSL" newtonSLQD)
   [qw QP.force, qw QPP.mass, qw QP.acceleration] ([] :: [ConceptChunk])
-  [] [relat newtonSLQD] [] "NewtonSecLawMot" [newtonSLDesc]
+  [newtonSLQD] [] [] "NewtonSecLawMot" [newtonSLDesc]
 
 --
 
 weightGD :: GenDefn
-weightGD = gd (EquationalModel weightQD) (getUnit QP.weight) (Just weightDeriv) [weightSrc] 
+weightGD = gd (equationalModel' weightQD) (getUnit QP.weight) (Just weightDeriv) [dRef weightSrc] 
   "weight" [{-Notes-}]
 
 weightQD :: QDefinition
@@ -37,7 +37,7 @@ weightQD = mkQuantDef' QP.weight (nounPhraseSP "weight") weightEqn
 
 weightSrc :: Reference
 weightSrc = makeURI "weightSrc" "https://en.wikipedia.org/wiki/Weight" $
-  shortname' "Definition of Weight"
+  shortname' $ S "Definition of Weight"
 
 weightDeriv :: Derivation
 weightDeriv = mkDerivName (phrase QP.weight) $ weave [weightDerivSentences, weightDerivEqns]
@@ -46,7 +46,7 @@ weightDerivSentences, weightDerivEqns :: [Sentence]
 weightDerivSentences = map foldlSentCol [weightDerivAccelSentence, 
   weightDerivNewtonSentence, weightDerivReplaceMassSentence, 
   weightDerivSpecWeightSentence]
-weightDerivEqns = map E [weightDerivAccelEqn, weightDerivNewtonEqn, 
+weightDerivEqns = map eS [weightDerivAccelEqn, weightDerivNewtonEqn, 
   weightDerivReplaceMassEqn, weightDerivSpecWeightEqn]
 
 weightDerivAccelSentence :: [Sentence]
@@ -58,7 +58,7 @@ weightDerivNewtonSentence :: [Sentence]
 weightDerivNewtonSentence = [S "Since there is only one non-zero", 
   phrase vector, phrase component `sC` S "the scalar", phrase value, 
   ch QP.weight, S "will be used for the" +:+. phrase QP.weight,
-  S "In this scenario" `sC` phrase newtonSL, S "from", makeRef2S newtonSL, 
+  S "In this scenario" `sC` phrase newtonSL, S "from", refS newtonSL, 
   S "can be expressed as"]
 
 weightDerivReplaceMassSentence :: [Sentence]
@@ -73,15 +73,15 @@ weightDerivSpecWeightSentence = [S "Substituting", phrase QPP.specWeight,
 --
 
 hsPressureGD :: GenDefn
-hsPressureGD = gd (EquationalModel hsPressureQD) (getUnit QP.pressure) Nothing
-  [hsPressureSrc] "hsPressure" [hsPressureNotes]
+hsPressureGD = gd (equationalModel' hsPressureQD) (getUnit QP.pressure) Nothing
+  [dRef hsPressureSrc] "hsPressure" [hsPressureNotes]
 
 hsPressureQD :: QDefinition
 hsPressureQD = mkQuantDef' QP.pressure (nounPhraseSP "hydrostatic pressure") hsPressureEqn
 
 hsPressureSrc :: Reference
 hsPressureSrc = makeURI "hsPressureSrc" "https://en.wikipedia.org/wiki/Pressure" $
-  shortname' "Definition of Pressure"
+  shortname' $ S "Definition of Pressure"
 
 hsPressureNotes :: Sentence
 hsPressureNotes = S "This" +:+ phrase equation +:+ S "is derived from" +:+
@@ -111,7 +111,7 @@ vecMagQD = mkQuantDef QP.speed speedEqn
 
 magNote :: Sentence
 magNote = foldlSent [S "For a given", phrase QP.velocity, S "vector", ch QP.velocity `sC`
-  S "the magnitude of the vector", sParen (E speedEqn) `S.isThe`
+  S "the magnitude of the vector", sParen (eS speedEqn) `S.isThe`
   S "scalar called", phrase QP.speed]
 
 vecMag :: DataDefinition
@@ -119,9 +119,9 @@ vecMag = ddNoRefs vecMagQD Nothing "vecMag" [magNote]
 
 --
 newtonSLR :: TheoryModel
-newtonSLR = tmNoRefs' "newtonSLR" (EquationalModel newtonSLRQD)
+newtonSLR = tmNoRefs (equationalModelU "newtonSLR" newtonSLRQD)
   [qw QP.torque, qw QP.momentOfInertia, qw QP.angularAccel] 
-  ([] :: [ConceptChunk]) [] [relat newtonSLRQD] [] "NewtonSecLawRotMot" newtonSLRNotes
+  ([] :: [ConceptChunk]) [newtonSLRQD] [] [] "NewtonSecLawRotMot" newtonSLRNotes
 
 newtonSLRQD :: QDefinition
 newtonSLRQD = mkQuantDef' QP.torque (nounPhraseSP "Newton's second law for rotational motion") newtonSLRExpr
@@ -138,13 +138,13 @@ newtonSLRNotes = map foldlSent [
 --
 
 accelerationTM :: TheoryModel
-accelerationTM = tm' "accelerationTM" (EquationalModel accelerationQD)
-  [qw QP.acceleration, qw QP.velocity, qw QP.time] ([] :: [ConceptChunk]) [] [relat accelerationQD] []
-  [makeCite accelerationWiki] "acceleration" []
+accelerationTM = tm (equationalModelU "accelerationTM" accelerationQD)
+  [qw QP.acceleration, qw QP.velocity, qw QP.time] ([] :: [ConceptChunk]) [accelerationQD] [] []
+  [dRef accelerationWiki] "acceleration" []
 
 ----------
 
 velocityTM :: TheoryModel
-velocityTM = tm' "velocityTM" (EquationalModel velocityQD)
-  [qw QP.velocity, qw QP.position, qw QP.time] ([] :: [ConceptChunk]) [] [relat velocityQD] []
-  [makeCite velocityWiki] "velocity" []
+velocityTM = tm (equationalModelU "velocityTM" velocityQD)
+  [qw QP.velocity, qw QP.position, qw QP.time] ([] :: [ConceptChunk]) [velocityQD] [] []
+  [dRef velocityWiki] "velocity" []

@@ -3,10 +3,10 @@ module Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqdNoUni
   dqdQd, dqdWr) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
-import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept,
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA), Concept, Display(..),
   Definition(defn), ConceptDomain(cdom), HasSpace(typ), IsUnit, Quantity)
 import Language.Drasil.Chunk.Concept (ConceptChunk, cw)
-
+import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.Chunk.UnitDefn (UnitDefn, unitWrapper,
   MayHaveUnit(getUnit))
 import Language.Drasil.Space (Space)
@@ -24,26 +24,28 @@ data DefinedQuantityDict = DQD { _con :: ConceptChunk
   
 makeLenses ''DefinedQuantityDict
 
+-- | Finds the 'UID' of the 'ConceptChunk' used to make the 'DefinedQuantityDict'.
 instance HasUID        DefinedQuantityDict where uid = con . uid
--- ^ Finds the 'UID' of the 'ConceptChunk' used to make the 'DefinedQuantityDict'.
+-- | Equal if 'UID's are equal.
 instance Eq            DefinedQuantityDict where a == b = (a ^. uid) == (b ^. uid)
--- ^ Equal if 'UID's are equal.
+-- | Finds the term ('NP') of the 'ConceptChunk' used to make the 'DefinedQuantityDict'.
 instance NamedIdea     DefinedQuantityDict where term = con . term
--- ^ Finds the term ('NP') of the 'ConceptChunk' used to make the 'DefinedQuantityDict'.
+-- | Finds the idea contained in the 'ConceptChunk' used to make the 'DefinedQuantityDict'.
 instance Idea          DefinedQuantityDict where getA = getA . view con
--- ^ Finds the idea contained in the 'ConceptChunk' used to make the 'DefinedQuantityDict'.
+-- | Finds the definition contained in the 'ConceptChunk' used to make the 'DefinedQuantityDict'.
 instance Definition    DefinedQuantityDict where defn = con . defn
--- ^ Finds the definition contained in the 'ConceptChunk' used to make the 'DefinedQuantityDict'.
+-- | Finds the domain of the 'ConceptChunk' used to make the 'DefinedQuantityDict'.
 instance ConceptDomain DefinedQuantityDict where cdom = cdom . view con
--- ^ Finds the domain of the 'ConceptChunk' used to make the 'DefinedQuantityDict'.
+-- | Finds the 'Space' of the 'DefinedQuantityDict'.
 instance HasSpace      DefinedQuantityDict where typ = spa
--- ^ Finds the 'Space' of the 'DefinedQuantityDict'.
+-- | Finds the 'Stage' -> 'Symbol' of the 'DefinedQuantityDict'.
 instance HasSymbol     DefinedQuantityDict where symbol = view symb
--- ^ Finds the 'Stage' -> 'Symbol' of the 'DefinedQuantityDict'.
+-- | 'DefinedQuantityDict's have a 'Quantity'. 
 instance Quantity      DefinedQuantityDict where
--- ^ 'DefinedQuantityDict's have a 'Quantity'. 
+-- | Finds the units of the 'DefinedQuantityDict'.
 instance MayHaveUnit   DefinedQuantityDict where getUnit = view unit'
--- ^ Finds the units of the 'DefinedQuantityDict'.
+-- | Convert the symbol of the 'DefinedQuantityDict' to a 'DisplayExpr'.
+instance Display       DefinedQuantityDict where toDispExpr = toDispExpr . sy
 
 -- | Smart constructor that creates a DefinedQuantityDict with a 'ConceptChunk', a 'Symbol' independent of 'Stage', a 'Space', and a unit.
 dqd :: (IsUnit u) => ConceptChunk -> Symbol -> Space -> u -> DefinedQuantityDict

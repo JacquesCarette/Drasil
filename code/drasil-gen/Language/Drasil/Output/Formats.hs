@@ -1,4 +1,4 @@
--- | Defines output formats for the different documents we can generate
+-- | Defines output formats for the different documents we can generate.
 module Language.Drasil.Output.Formats where
 
 import Data.Char (toLower)
@@ -6,13 +6,18 @@ import Build.Drasil ((+:+), Command, makeS, mkCheckedCommand, mkCommand, mkFreeV
   mkFile, mkRule, RuleTransformer(makeRule))
 
 -- | When choosing your document, you must specify the filename for
--- the generated output (specified /without/ a file extension)
+-- the generated output (specified /without/ a file extension).
 type Filename = String
 
-data DocType = SRS | MG | MIS | Website
+-- | Document types include Software Requirements Specification and Website.
+-- Choosing SRS will generate both TeX and HTML files, while Website generates only as HTML.
+-- This also determines what folders the generated files will be placed into.
+data DocType = SRS | Website
 
+-- | Document specifications. Holds the type of document ('DocType') and its name ('Filename').
 data DocSpec = DocSpec DocType Filename
 
+-- | Allows the creation of Makefiles for documents that use LaTeX.
 instance RuleTransformer DocSpec where
   makeRule (DocSpec Website _) = []
   makeRule (DocSpec dt fn) = [
@@ -24,15 +29,14 @@ instance RuleTransformer DocSpec where
         bibtex = mkCommand . (+:+) (makeS "bibtex" +:+ mkFreeVar "BIBTEXFLAGS") . makeS
         pdfName = makeS $ fn ++ ".pdf"
 
+-- | Shows the different types of documents.
 instance Show DocType where
   show SRS      = "SRS"
-  show MG       = "MG"
-  show MIS      = "MIS"
   show Website  = "Website"
              
--- | LaTeX helper
+-- | LaTeX helper.
 data DocClass = DocClass (Maybe String) String
--- | LaTeX helper for adding packages
+-- | LaTeX helper for adding packages. Wraps a list of package names.
 newtype UsePackages = UsePackages [String] -- Package name list
--- | LaTeX helper
+-- | LaTeX helper.
 data ExDoc = ExDoc (Maybe String) String

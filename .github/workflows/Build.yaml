@@ -24,7 +24,7 @@ jobs:
       - name: "Update apt package list"
         run: sudo apt-get update
       - name: "Install system requirements"
-        run: sudo apt-get install -y libgmp-dev python3 graphviz doxygen fonts-lmodern texlive-bibtex-extra texlive-latex-extra texlive-science texlive-xetex texlive-luatex g++ default-jdk mono-devel
+        run: sudo apt-get install -y libgmp-dev python3 graphviz doxygen fonts-lmodern texlive-bibtex-extra texlive-latex-extra texlive-science texlive-xetex texlive-luatex g++ default-jdk mono-devel inkscape
       - name: "Install Stack"
         uses: haskell/actions/setup@v1
         with:
@@ -49,13 +49,13 @@ jobs:
           echo "$HOME/.local/bin" >> $GITHUB_PATH
           echo "$HOME/.swift/usr/bin" >> $GITHUB_PATH
       - name: "HLint"
-        run: curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
+        run: make hot_hlint
       - name: "Install dependencies"
         run: stack --no-terminal test --bench --only-dependencies
       - name: "Build"
-        run: make prog stackArgs="--no-terminal" GHCFLAGS="-Werror"
+        run: make code stackArgs="--no-terminal" GHCFLAGS="-Werror"
       - name: "Stable"
-        run: make stackArgs="--no-terminal" NOISY=yes
+        run: make stackArgs="--no-terminal" GHCFLAGS="-Werror" NOISY=yes
       - name: "TeX"
         run: make tex SUMMARIZE_TEX=yes
       - name: "Code"
@@ -70,6 +70,7 @@ jobs:
         run: make analysis
       - name: "Build website"
         run: |
+          make website
           LABEL_FILE=/tmp/ci_build_failures \
             MANAGED_LABEL_FILE=/tmp/ci_managed_labels \
             ALL_FUNCTIONS_FILE=$(mktemp) \

@@ -4,6 +4,7 @@ module Data.Drasil.Concepts.Physics where
 import Language.Drasil
 import qualified Utils.Drasil.Sentence as S
 import Utils.Drasil
+import Utils.Drasil.Concepts
 
 import Data.Drasil.Domains (mathematics, physics)
 import Data.Drasil.Concepts.Documentation (property, value)
@@ -23,7 +24,7 @@ physicCon = [acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVe
   momentOfInertia, position, potEnergy, pressure, restitutionCoef, rectilinear,
   rigidBody, scalarAccel, scalarPos, shm, space, speed, stiffCoeff, strain, stress, tension,
   time, torque, velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel,
-  yAccel, yConstAccel, yDist, yPos, yVel, momentum, moment, fOfGravity, positionVec,
+  yAccel, yConstAccel, yDist, yPos, yVel, momentum, chgMomentum, moment, fOfGravity, positionVec,
   pendulum, body, kinematics, frequency, period, motion]
 
 physicCon' :: [CI]
@@ -39,7 +40,7 @@ acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVelocity, cohes
   space, speed, stiffCoeff, strain, stress, tension, time, torque, velocity, weight,
   xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
   yPos, yVel, momentum, moment, fOfGravity, positionVec, pendulum, body,
-  kinematics, frequency, period, motion :: ConceptChunk
+  kinematics, frequency, period, motion, chgMomentum :: ConceptChunk
 
 oneD, twoD, threeD :: CI
 oneD   = commonIdeaWithDict "oneD"   (cn "one-dimensional")   "1D" [mathematics, physics]
@@ -54,6 +55,8 @@ body = dccWDS "body" (cnIES "body")
   (S "an object with" +:+ phrase QPP.mass)
 chgInVelocity = dccWDS "chgInVelocity" (cn "change in velocity")
   (S "the" +:+ phrase chgInVelocity `S.of_` S "a" +:+ phrase rigidBody)
+chgMomentum = dccWDS "chgMomentum" (cn' "change in momentum")
+  (S "The rate of change of a body's" +:+ phrase impulseV)  
 collision = dcc "collision" (cn' "collision")
   "an encounter between particles resulting in an exchange or transformation of energy"
 cohesion = dccWDS "cohesion" (cn "cohesion")
@@ -62,7 +65,7 @@ compression = dccWDS "compression" (cn' "compression")
   (S "a" +:+ phrase stress +:+ S "that causes displacement of the body towards its center")
 damping = dccWDS "damping" (pn' "damping")
   $ S "an influence within or upon an oscillatory system that has the effect of reducing," +:+
-  S "restricting or preventing its oscillations" +:+ sParen (S "from" +:+ makeRef2S dampingSource)
+  S "restricting or preventing its oscillations" +:+ fromSource dampingSource
 dampingCoeff = dcc "dampingCoeff" (cn' "damping coefficient")
  "Quantity that characterizes a second order system's oscillatory response"
 displacement = dccWDS "displacement" (cn' "displacement")
@@ -197,19 +200,20 @@ yConstAccel = dccWDS "yConstAccel" (nounPhraseSent $ phrase yComp `S.of_` phrase
 
 
 --FIXME: COMBINATION HACK (for all below)
-angDisp = dcc "angularDisplacement" (fterms compoundPhrase' angular displacement)
+--FIXME: should use compoundPhrase instead? Or better yet, use combineNINI instead of interacting with the terms directly?
+angDisp = dcc "angularDisplacement" (combineNINI angular displacement)
   "the angle through which an object moves on a circular path"
-angVelo = dcc "angularVelocity" (fterms compoundPhrase' angular velocity)
+angVelo = dcc "angularVelocity" (combineNINI angular velocity)
   "the rate of change of angular position of a rotating body"
-angAccel = dcc "angularAcceleration" (fterms compoundPhrase' angular acceleration)
+angAccel = dcc "angularAcceleration" (combineNINI angular acceleration)
   "the rate of change of angular velocity"
 constAccel = dcc "constantAcceleration" (cn "constant acceleration")
   "a one-dimensional acceleration that is constant"
-linDisp = dcc "linearDisplacement" (fterms compoundPhrase' linear displacement) 
+linDisp = dcc "linearDisplacement" (combineNINI linear displacement) 
   "movement in one direction along a single axis"
-linVelo = dcc "linearVelocity" (fterms compoundPhrase' linear velocity) 
+linVelo = dcc "linearVelocity" (combineNINI linear velocity) 
   "the speed of a moving object, dependent on the perspective taken"
-linAccel = dcc "linearAcceleration" (fterms compoundPhrase' linear acceleration) 
+linAccel = dcc "linearAcceleration" (combineNINI linear acceleration) 
   "the rate of change of velocity without a change in direction"
 
 -- The following feel like they're missing something/need to be more

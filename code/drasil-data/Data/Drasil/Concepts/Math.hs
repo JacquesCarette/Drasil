@@ -34,7 +34,7 @@ calculation = dcc "calculation"  (cn' "calculation")             "a mathematical
 cartesian   = dccWDS "cartesian" (pn' "Cartesian coordinate system") $ S "a coordinate system that specifies each point uniquely in a plane by a set" `S.of_`
                                                                   S "numerical coordinates, which are the signed distances to the point from" +:+
                                                                   S "two fixed perpendicular oriented lines, measured in the same unit of length" +:+
-                                                                  sParen (S "from" +:+ makeRef2S cartesianWiki)
+                                                                  fromSource cartesianWiki
 centre       = dcc "centre"       (cn' "centre")                  "the middle point of an object"
 change       = dcc "change"       (cn' "change")                  "Difference between relative start and end states of an object"
 component    = dcc "component"    (nounPhrase "component" "components") ("The scalar quantity defining the contribution " ++
@@ -52,7 +52,7 @@ laplaceTransform = dcc "laplaceTransform" (cn' "laplace transform") ("An integra
                                                                      "(often time) to a function of a complex variable s (complex frequency)")
 law          = dcc "law"          (cn' "law")                     "a generalization based on a fact or event perceived to be recurrent"
 line         = dccWDS "line"      (pn' "line")                    $ S "An interval between two points" +:+
-                                                                  sParen (S "from" +:+ makeRef2S lineSource)
+                                                                  fromSource lineSource
 matrix       = dcc "matrix"       (cnICES "matrix")               ("A rectangular array of quantities or expressions in rows and columns that" ++
                                                                  "is treated as a single entity and manipulated according to particular rules")
 norm        = dcc "norm"         (cn' "norm")                    "the positive length or size of a vector"
@@ -69,7 +69,7 @@ negInf       = dcc "NegInf"       (cn' "Negative Infinity")      "Opposite of po
 positive     = dcc "positive"     (cn' "positive")               "greater than zero"
 negative     = dcc "negative"     (cn' "negative")               "less than zero"
 point        = dccWDS "point"     (pn' "point")                   $ S "An exact location, it has no size, only position" +:+
-                                                                  sParen (S "from" +:+ makeRef2S pointSource)
+                                                                  fromSource pointSource
 probability  = dcc "probability"  (cnIES "probability")          "The likelihood of an event to occur"
 rate         = dcc "rate"         (cn' "rate")                   "Ratio that compares two quantities having different units of measure"
 rightHand    = dcc "rightHand"    (cn' "right-handed coordinate system")  "A coordinate system where the positive z-axis comes out of the screen."
@@ -105,9 +105,10 @@ leftSide  = commonIdeaWithDict "leftSide"  (nounPhrase "left hand side"  "left h
 rightSide = commonIdeaWithDict "rightSide" (nounPhrase "right hand side" "right hand sides") "RHS" [mathematics]
 
 --FIXME: COMBINATION HACK (all below)
-euclidN = dcc "euclidNorm"    (fterms compoundPhrase' euclidSpace norm) "euclidean norm"
-normalV = dcc "normal vector" (fterms compoundPhrase' normal vector) "unit outward normal vector for a surface"
-perpV   = dcc "perp_vect"     (fterms compoundPhrase' perp vector) "vector perpendicular or 90 degrees to another vector"
+-- do we really need fterms here? Would combineNINI work?
+euclidN = dcc "euclidNorm"    (combineNINI euclidSpace norm) "euclidean norm"
+normalV = dcc "normal vector" (combineNINI normal vector) "unit outward normal vector for a surface"
+perpV   = dcc "perp_vect"     (combineNINI perp vector) "vector perpendicular or 90 degrees to another vector"
 rOfChng = dcc "rOfChng"       (rate `of_` change) "ratio between a change in one variable relative to a corresponding change in another"
-surArea = dcc "surArea"       (fterms compoundPhrase' surface area) "a measure of the total area that the surface of the object occupies"
-unitV   = dcc "unit_vect"     (fterms compoundPhrase' unit_ vector) "a vector that has a magnitude of one"
+surArea = dcc "surArea"       (combineNINI surface area) "a measure of the total area that the surface of the object occupies"
+unitV   = dcc "unit_vect"     (combineNINI unit_ vector) "a vector that has a magnitude of one"

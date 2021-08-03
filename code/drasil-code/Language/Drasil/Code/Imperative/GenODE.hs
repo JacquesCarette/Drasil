@@ -14,14 +14,15 @@ import Language.Drasil.Data.ODELibPckg (ODELibPckg(..))
 
 import Control.Monad.State (State, modify)
 
+-- | Holds the generation information for an ordinary differential equation.
 type ODEGenInfo = (Maybe FilePath, [(Name, ExtLibState)], (Name,Version))
 
--- Chooses the first ODELibPckg from the list specified by the user that is 
--- compatible with the current target Lang. 
--- Interprets the ExternalLibrary and ExternalLibraryCall for the selected 
--- ODELibPckg by concretizing the ExternalLibraryCall with each of the ODEInfos
--- chooseODELib' is keeps a read only preference list and a currently considered
--- preference list (which can change), this facilitates the firstChoiceODELib check
+-- | Chooses the first 'ODELibPckg' from the list specified by the user that is
+-- compatible with the current target 'Lang'.
+-- Interprets the ExternalLibrary and ExternalLibraryCall for the selected
+-- 'ODELibPckg' by concretizing the ExternalLibraryCall with each of the 'ODEInfo's
+-- The internal helper chooseODELib' keeps a read only preference list and a currently considered
+-- preference list (which can change), this facilitates the 'firstChoiceODELib' check.
 chooseODELib :: Lang -> [ODELibPckg] -> [ODEInfo] -> State [Sentence] ODEGenInfo
 chooseODELib _ _ [] = return (Nothing, [], ("",""))
 chooseODELib l olps odes = chooseODELib' olps olps
@@ -36,14 +37,14 @@ chooseODELib l olps odes = chooseODELib' olps olps
                 (libName o, libVers o)) 
           else modify (++ [incompatibleLib l o]) >> chooseODELib' prefLibList os
 
--- Defines a design log message based on an incompatibility between the given 
--- Lang and chosen ODELibPckg.
+-- | Defines a design log message based on an incompatibility between the given 
+-- 'Lang' and chosen 'ODELibPckg'.
 incompatibleLib :: Lang -> ODELibPckg -> Sentence
 incompatibleLib lng lib = S $ "Language " ++ show lng ++ " is not " ++ 
   "compatible with chosen library " ++ libName lib ++ ", trying next choice." 
 
--- Defines a design log message if the first choice ODE Library, which is the head of
--- the preference list that the user selected, is compatible with the given Lang.
+-- | Defines a design log message if the first choice ODE Library, which is the head of
+-- the preference list that the user selected, is compatible with the given 'Lang'.
 firstChoiceODELib :: [ODELibPckg] -> ODELibPckg -> Sentence
 firstChoiceODELib prefer olp =  if libName (head prefer) == libName olp  then 
   S "Successfully selected first choice ODE Library package" +:+. S (libName olp)  

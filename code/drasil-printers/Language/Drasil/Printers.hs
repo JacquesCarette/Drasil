@@ -1,6 +1,8 @@
 module Language.Drasil.Printers (
   -- Format 
     Format(TeX, HTML)
+  -- DOT
+  , outputDot, GraphInfo(..), NodeFamily(..)
   -- HTML
     -- Helpers
   , makeCSS
@@ -8,18 +10,17 @@ module Language.Drasil.Printers (
   , genHTML
   -- Markdown
     --createMd
-  , makeMd, introInfo, verInfo, unsupOS, regularSec, instDoc, extLibSec
+  , makeMd, introInfo, verInfo, unsupOS, regularSec, instDoc, extLibSec, endNote
   -- Plain
-    -- Helpers
-  , toPlainName
-    -- Print
-  , Linearity(..), sentenceDoc, exprDoc, symbolDoc, unitDoc
+  -- Print
+  , Linearity(..)
+  , sentenceDoc, exprDoc, codeExprDoc, symbolDoc, unitDoc
   -- TeX
-    -- Print
+  -- Print
   , genTeX
-  , PrintingInformation(..)
+  , PrintingInformation(..) , piSys
   , HasPrintingOptions (..)
-  , Notation(Scientific, Engineering)
+  , Notation(..)
   , defaultConfiguration
   )
   where
@@ -27,11 +28,11 @@ module Language.Drasil.Printers (
 import Language.Drasil.Format (Format(TeX, HTML))
 import Language.Drasil.HTML.CSS (makeCSS)
 import Language.Drasil.HTML.Print (genHTML)
-import Language.Drasil.Markdown.CreateMd (makeMd, introInfo, verInfo, unsupOS, extLibSec, 
-  instDoc, regularSec)
-import Language.Drasil.Plain.Helpers (toPlainName)
-import Language.Drasil.Plain.Print (Linearity(..), sentenceDoc, exprDoc, 
-  symbolDoc, unitDoc)
+import Language.Drasil.Markdown.CreateMd (makeMd, introInfo, verInfo, unsupOS,
+  extLibSec, instDoc, regularSec, endNote)
+import Language.Drasil.Plain.Print (Linearity(..), sentenceDoc, exprDoc,
+  codeExprDoc, symbolDoc, unitDoc)
 import Language.Drasil.TeX.Print (genTeX)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation(..),
-  HasPrintingOptions(..), Notation(Scientific, Engineering), defaultConfiguration)
+  HasPrintingOptions(..), Notation(..), defaultConfiguration, piSys)
+import Language.Drasil.DOT.Print (outputDot, GraphInfo(..), NodeFamily(..))

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: ef3d221e344d6b4913db63661032e6a726132b5f039fb4119c05d54692b53eb6
+-- hash: a9e8a6e77090d66e0a22230d9efe96e0e3a1ef9b1fb869049cece8949f482c2a
 
 name:           drasil-code
 version:        0.1.9.0
@@ -27,6 +27,7 @@ library
   other-modules:
       Language.Drasil.Chunk.Code
       Language.Drasil.Chunk.CodeDefinition
+      Language.Drasil.Chunk.ConstraintMap
       Language.Drasil.Chunk.Parameter
       Language.Drasil.Code.Code
       Language.Drasil.Code.CodeQuantityDicts
@@ -68,7 +69,6 @@ library
       Language.Drasil.Data.ODEInfo
       Language.Drasil.Data.ODELibPckg
       Language.Drasil.Choices
-      Language.Drasil.CodeExpr
       Language.Drasil.CodeSpec
       Language.Drasil.Mod
   hs-source-dirs:
@@ -79,6 +79,7 @@ library
     , containers
     , directory
     , drasil-build
+    , drasil-code-base
     , drasil-database
     , drasil-gool
     , drasil-lang
@@ -95,7 +96,8 @@ library
         Paths_drasil_code
   default-language: Haskell2010
 
-executable codegenTest
+test-suite codegenTest
+  type: exitcode-stdio-1.0
   main-is: Test/Main.hs
   other-modules:
       Test.FileTests
@@ -106,6 +108,7 @@ executable codegenTest
       Language.Drasil.Code
       Language.Drasil.Chunk.Code
       Language.Drasil.Chunk.CodeDefinition
+      Language.Drasil.Chunk.ConstraintMap
       Language.Drasil.Chunk.Parameter
       Language.Drasil.Code.Code
       Language.Drasil.Code.CodeQuantityDicts
@@ -147,7 +150,6 @@ executable codegenTest
       Language.Drasil.Data.ODEInfo
       Language.Drasil.Data.ODELibPckg
       Language.Drasil.Choices
-      Language.Drasil.CodeExpr
       Language.Drasil.CodeSpec
       Language.Drasil.Mod
   hs-source-dirs:
@@ -159,6 +161,7 @@ executable codegenTest
     , directory
     , drasil-build
     , drasil-code
+    , drasil-code-base
     , drasil-database
     , drasil-gool
     , drasil-lang

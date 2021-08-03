@@ -42,7 +42,7 @@ dccWDS' i t d a = ComConDict (commonIdea i t a []) d
 cc :: Idea c => c -> String -> ConceptChunk
 cc n d = ConDict (nw n) (S d) []
 
--- | Same as cc, except definition is a 'Sentence'.
+-- | Same as 'cc', except definition is a 'Sentence'.
 cc' :: Idea c => c -> Sentence -> ConceptChunk
 cc' n d = ConDict (nw n) d []
 
@@ -58,4 +58,4 @@ cw c = ConDict (nw c) (c ^. defn) (cdom c)
 -- Reference Address ('String'), a definition ('Sentence'), 
 -- a short name ('String'), and a domain (or explicit tagging).
 cic :: Concept c => String -> Sentence -> String -> c -> ConceptInstance
-cic u d sn dom = ConInst (ccs (nc u $ pn sn) d [dom]) u $ shortname' sn
+cic u d sn dom = ConInst (ccs (nc u $ pn sn) d [dom]) u $ shortname' (S sn)

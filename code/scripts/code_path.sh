@@ -1,3 +1,9 @@
+#!/usr/bin/env bash
+
+# Grab list of all generated source code folders for an example.
+# List items are of the form: "EXAMPLE:code/stable/EXAMPLE/src/".
+# For use with `make deploy_code_path` & `make X_deploy_code_path`.
+
 if [ -z "$EDIR" ]; then
   echo "Missing EDIR."
   exit 1

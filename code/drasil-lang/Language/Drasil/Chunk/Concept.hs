@@ -24,7 +24,7 @@ dcc :: String -> NP -> String -> ConceptChunk
 dcc i ter des = ConDict (mkIdea i ter Nothing) (S des) []
 -- ^ Concept domain tagging is not yet implemented in this constructor.
 
--- | Identical to 'dcc', but takes an abbreviation ('String').
+-- | Identical to 'dcc', but takes an abbreviation ('String') and returns a 'CommonConcept' instead.
 dcc' :: String -> NP -> String -> String -> CommonConcept
 dcc' i t d a = ComConDict (commonIdea i t a []) (S d)
 
@@ -32,8 +32,8 @@ dcc' i t d a = ComConDict (commonIdea i t a []) (S d)
 dccWDS :: String -> NP -> Sentence -> ConceptChunk
 dccWDS i t d = ConDict (mkIdea i t Nothing) d []
 
--- | Similar to 'dcc', except the definition is a 'Sentence' and takes
--- an abbreviation ('String').
+-- | Similar to 'dcc', except the definition is a 'Sentence', takes
+-- an abbreviation ('String') and returns a 'CommonConcept' instead.
 dccWDS' :: String -> NP -> Sentence -> String -> CommonConcept
 dccWDS' i t d a = ComConDict (commonIdea i t a []) d
 

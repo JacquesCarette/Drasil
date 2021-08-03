@@ -9,7 +9,8 @@ import Language.Drasil.Chunk.UnitDefn(MayHaveUnit(getUnit))
 
 import Control.Lens ((^.), makeLenses, view)
 
--- | Any quantity can be a named argument (wrapper for 'QuantityDict')
+-- | Any quantity can be a named argument (wrapper for 'QuantityDict'),
+-- but with more of a focus on generating code arguments.
 newtype NamedArgument = NA {_qtd :: QuantityDict}
 makeLenses ''NamedArgument
 

@@ -24,6 +24,8 @@ import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UID (UID)
 
 -- | A QDefinition is a 'QuantityDict' with a defining expression ('Expr'), a definition ('Sentence'), and a domain (['UID']).
+-- This chunk now contains almost enough information to generate code, definitions, and models.
+-- Used for high-level quantities with equations and inputs.
 data QDefinition = EC
   { _qua    :: QuantityDict
   , _defn'  :: Sentence

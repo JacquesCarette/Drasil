@@ -1,4 +1,5 @@
 {-# Language TemplateHaskell #-}
+-- | Contains the common idea type and respective constructors.
 module Language.Drasil.Chunk.CommonIdea
   (CI, commonIdea, getAcc, getAccStr, commonIdeaWithDict, prependAbrv) where
 
@@ -15,6 +16,10 @@ import Control.Lens (makeLenses, (^.), view)
 
 -- | The common idea (with 'NounPhrase') data type. It must have a 'UID',
 -- 'NounPhrase' for its term, an abbreviation ('String'), and a domain (['UID']).
+-- It is similar to 'NamedChunk' and 'IdeaDict' in the sense that these are for things worth naming,
+-- but this type also carries an abbreviation and related domains of knowledge.
+--
+-- Ex. The term "Operating System" has the abbreviation "OS" and comes from the domain of computer science.
 data CI = CI { _cid :: UID, _ni :: NP, _ab :: String, cdom' :: [UID]}
 makeLenses ''CI
 

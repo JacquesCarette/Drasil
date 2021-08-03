@@ -24,6 +24,9 @@ import Language.Drasil.Symbol (Symbol)
 
 -- | ConstrainedChunks are symbolic quantities ('QuantityDict')
 -- with 'Constraint's and maybe a typical value ('Maybe' 'Expr').
+--
+-- Ex. Measuring the length of a pendulum would have some reasonable value (between 1 cm and 2 m)
+-- and the constraint that the length cannot be a negative value.
 data ConstrainedChunk = ConstrainedChunk { _qd     :: QuantityDict
                                          , _constr :: [ConstraintE]
                                          , _reasV  :: Maybe Expr
@@ -66,6 +69,10 @@ cnstrw c = ConstrainedChunk (qw c) (c ^. constraints) (c ^. reasVal)
 
 -- | ConstrConcepts are conceptual symbolic quantities ('DefinedQuantityDict')
 -- with 'Constraint's and maybe a reasonable value (no units!).
+-- Similar to 'ConstrainedChunk' but includes a definition and domain. 
+--
+-- Ex. Measuring the length of a pendulum arm could be a concept that has some reasonable value
+-- (between 1 cm and 2 m) and the constraint that the length cannot be a negative value.
 data ConstrConcept = ConstrConcept { _defq    :: DefinedQuantityDict
                                    , _constr' :: [ConstraintE]
                                    , _reasV'  :: Maybe Expr

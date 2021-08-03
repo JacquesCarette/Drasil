@@ -9,9 +9,12 @@ import Control.Lens ((^.), makeLenses)
 import Language.Drasil.NounPhrase (NP)
 
 -- === DATA TYPES/INSTANCES === --
--- | Note that a 'NamedChunk' does not have an acronym/abbreviation
+-- | Used for anything worth naming. Note that a 'NamedChunk' does not have an acronym/abbreviation
 -- as that's a 'CommonIdea', which has its own representation. Contains
--- a 'UID' and a term ('NP').
+-- a 'UID' and a term that we can capitalize or pluralize ('NP').
+--
+-- Ex. Anything worth naming must start out somewhere. Before we can assign equations
+-- and values and symbols to something like the arm of a pendulum, we must first give it a name. 
 data NamedChunk = NC {_uu :: UID, _np :: NP}
 makeLenses ''NamedChunk
 
@@ -28,9 +31,11 @@ instance Idea      NamedChunk where getA _ = Nothing
 nc :: UID -> NP -> NamedChunk
 nc = NC
 
--- | 'IdeaDict' is the canonical dictionary associated to 'Idea'.
--- Contains a 'NamedChunk' and maybe an abbreviation ('String').
 -- Don't export the record accessors.
+-- | 'IdeaDict' is the canonical dictionary associated to an 'Idea'.
+-- Contains a 'NamedChunk' that could have an abbreviation ('Maybe' 'String').
+--
+-- Ex. The project name "Double Pendulum" may have the abbreviation "DblPendulum".
 data IdeaDict = IdeaDict { _nc' :: NamedChunk, mabbr :: Maybe String }
 makeLenses ''IdeaDict
 

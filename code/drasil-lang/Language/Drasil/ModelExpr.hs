@@ -52,7 +52,7 @@ data AssocArithOper = AddI | AddRe | MulI | MulRe
 
 -- | Associative boolean operators (and, or).
 data AssocBoolOper = And | Or | Equivalence
-  deriving Eq
+  deriving (Eq, Show)
 
 -- | Unary functions (abs, log, ln, sin, etc.).
 data UFunc = Abs | Log | Ln | Sin | Cos | Tan | Sec | Csc | Cot | Arcsin

@@ -20,9 +20,9 @@ isIn _ _         = error "isIn target must be a Space"
 -- | Helper for creating new smart constructors for Associative Binary
 --   operations that require at least 1 expression.
 assocCreate :: Display d => AssocBoolOper -> [d] -> ModelExpr
-assocCreate _ [] = error "Need at least 1 expression to create associative operation"  -- TODO: show the operation instead
-assocCreate _ [x] = toDispExpr x
-assocCreate b des = AssocB b $ assocSanitize b $ map toDispExpr des
+assocCreate abo [] = error $ "Need at least 1 expression to create " ++ show abo
+assocCreate _ [x]  = toDispExpr x
+assocCreate b des  = AssocB b $ assocSanitize b $ map toDispExpr des
 
 -- | Helper for associative operations, removes embedded variants of the same kind
 assocSanitize :: AssocBoolOper -> [ModelExpr] -> [ModelExpr]
@@ -40,4 +40,4 @@ andDEs = assocCreate And
 equivDEs :: Display a => [a] -> ModelExpr
 equivDEs des
   | length des >= 2 = assocCreate Equivalence des
-  | otherwise       = error "Need at least 2 expressions to create Equivalence"
+  | otherwise       = error $ "Need at least 2 expressions to create " ++ show Equivalence

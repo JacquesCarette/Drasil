@@ -45,11 +45,13 @@ DBLPENDULUM_DIR = dblpendulum
 SGLPENDULUM_DIR = sglpendulum
 PDCONTROLLER_DIR = pdcontroller
 
-MULTI_SRC_DIRS = $(PROJECTILE_DIR) # Directories for examples with multiple src versions
+# Directories for examples with multiple src versions
+MULTI_SRC_DIRS = $(PROJECTILE_DIR)
 
+# All example directories
 EXAMPLE_DIRS = $(MULTI_SRC_DIRS) $(HGHC_DIR) $(GLASSBR_DIR) $(NOPCM_DIR) \
   $(SWHS_DIR) $(SSP_DIR) $(GAMEPHYSICS_DIR) $(DBLPENDULUM_DIR) $(SGLPENDULUM_DIR)\
-  $(PDCONTROLLER_DIR) # All example directories
+  $(PDCONTROLLER_DIR)
 
 # and the name of their executables
 HGHC_EXE  = hghc
@@ -134,7 +136,7 @@ WEBSITE_FOLDER_NAME = Website
 WEBSITE_FOLDER = $(WEBSITE_FOLDER_NAME)/
 
 #####################################
-#### `make` command line options ####
+#--- `make` command line options ---#
 #####################################
 
 # GHC debug options
@@ -152,23 +154,24 @@ NOISY=no
 SUMMARIZE_TEX=no
 
 ########################
-#### Actual targets ####
+#--- Actual targets ---#
 ########################
 
 # Default `make` will just run examples and test them against stable.
 # See `test` target for more details.
-all: test
+all:     ## Run examples and test against stable.
+	test
 
 # Run `test` target with better debugging tools.
 debug: stackArgs+=$(PROFALL)
 debug: EXECARGS+=$(PROFEXEC)
 debug: test
 
-#### Initial checks ####
-# -------------------- #
+#--- Initial checks ---#
+#----------------------#
 
 # Sanity check -- are we using the right stack version?
-check_stack:
+check_stack:  ## Check that we are using the right stack version.
 	@MIN_STACK_VER="$(MIN_STACK_VER)" CACHED_MSV_FILE="$(CACHED_MSV_FILE)" "$(SHELL)" "$(SCRIPT_FOLDER)check_stack.sh"
 
 # Download the most recent version of graphviz.
@@ -183,8 +186,8 @@ graphmod: check_stack
 #--- Targets for building, running, or testing examples ---#
 #----------------------------------------------------------#
 
-#### Targets that affect all packages/examples ####
-# ----------------------------------------------- #
+#--- Targets that affect all packages/examples ---#
+#-------------------------------------------------#
 
 # Build all the Drasil packages.
 code: $(BUILD_PACKAGES)
@@ -215,8 +218,8 @@ stabilize: $(STABILIZE_EXAMPLES)
 # then make pdfs from the generated TeX files.
 tex: $(TEX_EXAMPLES)
 
-#### Targets that are used for individual packages/examples ####
-# ------------------------------------------------------------ #
+#--- Targets that are used for individual packages/examples ---#
+#--------------------------------------------------------------#
 # Use filter to make a target for every package (second argument of filter)
 # with an appended suffix (first argument of filter).
 
@@ -287,8 +290,8 @@ $(filter %$(TEX_E_SUFFIX), $(TEX_EXAMPLES)): %$(TEX_E_SUFFIX): %$(TRACE_GRAPH_SU
 #--- Generate analysis of module, class, datatype, and class instance structure ---#
 #----------------------------------------------------------------------------------#
 
-# Generate all module dependency graphs.
-graphs: $(GRAPH_PACKAGES)
+graphs: ## Generate all module dependency graphs.
+	$(GRAPH_PACKAGES)
 
 # Generate individual package module dependency graphs.
 $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod check_dot
@@ -297,12 +300,13 @@ $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod ch
 	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tsvg > "$(GRAPH_FOLDER)drasil-$*.svg"
 	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tpng > "$(GRAPH_FOLDER)drasil-$*.png"
 
-# Generate a data table to analyze Drasil's class, datatype, and instance structures.
-# Dot graphs are currently generated for datatypes and class instance structures.
-# They are made using the default dot algorithm and the circo algorithm for options
-# and viewability. We also add example to these variables so that we can still
-# make the graphs for that folder (although it's technically not a package itself).
-analysis: graphmod
+
+analysis: ## Generate a data table to analyze Drasil's class, datatype, and instance structures.
+          ## Dot graphs are currently generated for datatypes and class instance structures.
+          ## They are made using the default dot algorithm and the circo algorithm for options
+          ## and viewability. We also add example to these variables so that we can still
+          ## make the graphs for that folder (although it's technically not a package itself).
+	graphmod
 	- rm -rf "$(ANALYSIS_FOLDER)"
 	@mkdir -p "$(ANALYSIS_FOLDER)"
 	cd $(SCRIPT_FOLDER) && stack exec -- runghc ClassInstDepGen.hs
@@ -322,8 +326,9 @@ analysis: graphmod
 #--- HLint and Haddock Documentation ---#
 #---------------------------------------#
 
-# Use a 'local' HLint installation, using HLint from the current stack repo
-hlint: check_stack
+
+hlint: ## HLint through the drasil packages. Uses a local HLint installation.
+	check_stack
 	stack install hlint
 	hlint .
 
@@ -430,4 +435,11 @@ clean_artifacts cleanArtifacts: $(CLEAN_FOLDERS)
 clean: clean_artifacts
 	- stack clean
 
-.PHONY: clean clean_artifacts cleanArtifacts gool code hlint hot_hlint analysis tex doc debug test graphs graphmod check_stack nographs graphs website deploy_code_path deploy deploy_lite all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)
+#--------------------------#
+#--- Help & Information ---#
+#--------------------------#
+
+help:  ## This help command.
+	sed -ne '/@sed/!s/## //p' $(MAKEFILE_LIST)
+
+.PHONY: help clean clean_artifacts cleanArtifacts gool code hlint hot_hlint analysis tex doc debug test graphs graphmod check_stack nographs graphs website deploy_code_path deploy deploy_lite all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)

@@ -16,8 +16,8 @@ import Control.Lens (makeLenses, view)
 
 -- | Section Contents are split into subsections or contents, where contents
 -- are standard layout objects (see 'Contents').
-data SecCons = Sub   Section
-             | Con   Contents
+data SecCons = Sub Section
+             | Con Contents
 
 data Partition = Sections
                 | Part
@@ -31,8 +31,17 @@ data Section = Section
              , _lab :: Reference
              }
 makeLenses ''Section
-                
 
+{-
+data Section = Section
+             { depth  :: Depth
+             , header :: SecHeader 
+             , cons   :: Content
+             }
+
+data SecHeader = SecHeader Title Reference
+data Content   = Content   Contents
+-} 
 -- | Finds the 'UID' of a 'Section'.
 instance HasUID        Section where uid = lab . uid
 -- | Finds the short name of a 'Section'.
@@ -47,6 +56,10 @@ instance HasRefAddress Section where getRefAdd (Section _ _ lb) = RP (prepend "S
 -- | A Document has a Title ('Sentence'), Author(s) ('Sentence'), and 'Section's
 -- which hold the contents of the document.
 data Document = Document Title Author ShowTableOfContents [Section]
+              | Notebook Title Author [Section]
+
+-- Temporarily data type for 'notebook' document, might be extended or use 'Document' instead
+--data Notebook = Notebook Title Author [Section]
 
 -- | Determines whether or not the table of contents appears on the generated artifacts.
 data ShowTableOfContents = ToC | NoToC
@@ -56,11 +69,13 @@ data ShowTableOfContents = ToC | NoToC
 -- This function is needed by the TeX printer, as TeX carries its own form of creating
 -- a table of contents. However, the printer package is compiled before the docLang one.
 -- | Manually removes the first section of a document (table of contents section).
+-- temp fix for Notebook (see if we need this in notebook later)
 checkToC :: Document -> Document
 checkToC (Document t a toC sc) = 
   case toC of
     ToC -> Document t a toC $ drop 1 sc
     _   -> Document t a toC sc
+checkToC (Notebook t a sc) = Notebook t a sc
 
 -- | Smart constructor for labelled content chunks.
 llcc :: Reference -> RawContent -> LabelledContent
@@ -97,6 +112,7 @@ section title intro secs = Section title (map Con intro ++ map Sub secs)
 -- | Smart constructor for retrieving the contents ('Section's) from a 'Document'.
 extractSection :: Document -> [Section]
 extractSection (Document _ _ _ sec) = concatMap getSec sec
+extractSection (Notebook _ _ sec)   = concatMap getSec sec
 
 -- | Smart constructor for retrieving the subsections ('Section's) within a 'Section'.
 getSec :: Section -> [Section]
@@ -130,6 +146,10 @@ makeFigRef rs = Reference rs (RP (prepend "Fig") ("Figure:" ++ repUnd rs)) (shor
 makeSecRef :: String -> Sentence -> Reference
 makeSecRef r s = Reference (r ++ "Label") (RP (prepend "Sec") ("Sec:" ++ repUnd r))
   (shortname' s)
+
+-- | Create a reference for a equation. Takes in the name of the equation and a shortname for the equation.
+makeEqnRef :: String -> Reference
+makeEqnRef rs = Reference rs (RP (prepend "Eqn") ("Equation:" ++ repUnd rs)) (shortname' (S rs))
 
 -- | Create a reference for a 'URI'.
 makeURI :: UID -> String -> ShortName -> Reference

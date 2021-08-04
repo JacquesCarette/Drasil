@@ -20,14 +20,14 @@ velIXExpr_1, velIYExpr_1 :: Expr
 velIXExpr_1 = sy angularVel_1 `mulRe` sy lenRod_1 `mulRe` cos (sy pendDisAngle_1)
 velIYExpr_1 = sy angularVel_1 `mulRe` (positionIXDD_1 ^. defnExpr)
 
-velIXDerivEqn1_1, velIXDerivEqn2_1, velIXDerivEqn3_1, velIXDerivEqn4_1 :: Expr
-velIXDerivEqn1_1 = sy xVel_1 $= positionGDD ^. defnExpr
+velIXDerivEqn1, velIXDerivEqn2_1, velIXDerivEqn3_1, velIXDerivEqn4_1 :: Expr
+velIXDerivEqn1 = sy xVel_1 $= positionGDD ^. defnExpr
 velIXDerivEqn2_1 = sy xPos_1 $= positionIXDD_1 ^. defnExpr
 velIXDerivEqn3_1 = sy xVel_1 $= deriv (positionIXDD_1 ^. defnExpr) time
 velIXDerivEqn4_1 = sy xVel_1 $= sy lenRod_1 `mulRe` deriv (sin (sy pendDisAngle_1)) time
 
-velIYDerivEqn1_1, velIYDerivEqn2_1,velIYDerivEqn3_1,velIYDerivEqn4_1 :: Expr
-velIYDerivEqn1_1 = sy xVel_2 $= positionGDD ^. defnExpr
+velIYDerivEqn1, velIYDerivEqn2_1,velIYDerivEqn3_1,velIYDerivEqn4_1 :: Expr
+velIYDerivEqn1 = sy xVel_2 $= positionGDD ^. defnExpr
 velIYDerivEqn2_1 = sy yPos_1 $= positionIYDD_1 ^. defnExpr
 velIYDerivEqn3_1 = sy yVel_1 $= neg (deriv (sy lenRod_1 `mulRe` cos (sy pendDisAngle_1)) time)
 velIYDerivEqn4_1 = sy yVel_1 $= neg (sy lenRod_1 `mulRe` deriv (cos (sy pendDisAngle_1)) time)
@@ -37,8 +37,7 @@ velIXExpr_2, velIYExpr_2 :: Expr
 velIXExpr_2 = sy xVel_1 `addRe` (sy angularVel_2 `mulRe` sy lenRod_2 `mulRe` cos (sy pendDisAngle_2))
 velIYExpr_2 = sy yVel_1 `addRe` (sy angularVel_2 `mulRe` sy lenRod_2 `mulRe` sin (sy pendDisAngle_2))
 
-velIXDerivEqn1_2, velIXDerivEqn2_2, velIXDerivEqn3_2 :: Expr
-velIXDerivEqn1_2 = sy xVel_2 $= positionGDD ^. defnExpr
+velIXDerivEqn2_2, velIXDerivEqn3_2 :: Expr
 velIXDerivEqn2_2 = sy xPos_2 $= positionIXDD_2 ^. defnExpr
 velIXDerivEqn3_2 = sy xVel_2 $= deriv (positionIXDD_2 ^. defnExpr) time
 

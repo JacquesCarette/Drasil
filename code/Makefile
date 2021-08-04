@@ -159,8 +159,7 @@ SUMMARIZE_TEX=no
 
 # Default `make` will just run examples and test them against stable.
 # See `test` target for more details.
-all:     ## Run examples and test against stable.
-	test
+all: test ## Run examples and test against stable.
 
 # Run `test` target with better debugging tools.
 debug: stackArgs+=$(PROFALL)
@@ -290,9 +289,8 @@ $(filter %$(TEX_E_SUFFIX), $(TEX_EXAMPLES)): %$(TEX_E_SUFFIX): %$(TRACE_GRAPH_SU
 #--- Generate analysis of module, class, datatype, and class instance structure ---#
 #----------------------------------------------------------------------------------#
 
-graphs: ## Generate all module dependency graphs.
-	$(GRAPH_PACKAGES)
-
+graphs: $(GRAPH_PACKAGES) ## Generate all module dependency graphs.
+	
 # Generate individual package module dependency graphs.
 $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod check_dot
 	@mkdir -p "$(GRAPH_FOLDER)"
@@ -301,12 +299,11 @@ $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod ch
 	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tpng > "$(GRAPH_FOLDER)drasil-$*.png"
 
 
-analysis: ## Generate a data table to analyze Drasil's class, datatype, and instance structures.
+analysis: graphmod ## Generate a data table to analyze Drasil's class, datatype, and instance structures.
           ## Dot graphs are currently generated for datatypes and class instance structures.
           ## They are made using the default dot algorithm and the circo algorithm for options
           ## and viewability. We also add example to these variables so that we can still
           ## make the graphs for that folder (although it's technically not a package itself).
-	graphmod
 	- rm -rf "$(ANALYSIS_FOLDER)"
 	@mkdir -p "$(ANALYSIS_FOLDER)"
 	cd $(SCRIPT_FOLDER) && stack exec -- runghc ClassInstDepGen.hs
@@ -326,18 +323,14 @@ analysis: ## Generate a data table to analyze Drasil's class, datatype, and inst
 #--- HLint and Haddock Documentation ---#
 #---------------------------------------#
 
-
-hlint: ## HLint through the drasil packages. Uses a local HLint installation.
-	check_stack
+hlint: check_stack ## Run HLint through the drasil packages. Uses a local HLint installation.
 	stack install hlint
 	hlint .
 
-# Use the latest HLint version, downloading the binary each time
-hot_hlint:
+hot_hlint: ## Run HLint through the drasil packages. Uses the latest HLint version, downloading the binary each time.
 	curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
 
-# Create Haddock documentation of all Drasil modules.
-docs: check_stack
+docs: check_stack ## Create Haddock documentation of all Drasil modules.
 	DOCS_FOLDER="$(DOCS_FOLDER)" GHC_FLAGS="$(GHCFLAGS)" sh scripts/make_docs.sh
 
 #----------------------------#
@@ -358,12 +351,11 @@ $(GOOLTEST): $(GOOLTEST)$(GEN_E_SUFFIX)
 	@EDIR="$(GOOLTEST_DIR)" BUILD_FOLDER="$(BUILD_FOLDER)" TARGET=$(TARGET) \
 	MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)gooltest_build.sh"
 
-# Generate code from examples and test each one.
-gool: $(CODE_EXAMPLES) $(GOOLTEST)
+gool: $(CODE_EXAMPLES) ## Generate code from examples and test each one.
 
-# Generate doxygen documentation for all examples.
 doxygen: TARGET=doc
-doxygen: $(CODE_EXAMPLES)
+doxygen: $(CODE_EXAMPLES) ## Generate doxygen documentation for all examples.
+	
 
 # Find all the code file paths within an example.
 # Targets are of the form exampleName_deploy_code_path.

@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 574e6ef62c182c12ec20972ef023715d04031184646dd9bc18044908d3b486a3
+-- hash: 8114128b7b94ef816648c06e63c90c114302e7be40c04987659cb5b4a10b0a0c
 
 name:           template
 version:        0.1.24.0
@@ -41,6 +41,9 @@ library
     , drasil-theory
     , drasil-utils
     , lens
+  if false
+    other-modules:
+        Paths_template
   default-language: Haskell2010
 
 executable template
@@ -65,4 +68,7 @@ executable template
     , drasil-utils
     , lens
     , template
+  if false
+    other-modules:
+        Paths_template
   default-language: Haskell2010

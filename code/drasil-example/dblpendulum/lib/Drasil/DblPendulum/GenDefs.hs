@@ -32,7 +32,7 @@ import Drasil.DblPendulum.Concepts (arcLen, horizontalPos,
     verticalPos, horizontalVel, verticalVel, horizontalForce, verticalForce, firstObject, secondObject)
 
 genDefns :: [GenDefn]
-genDefns = [velIXGD_1, velIYGD_1, velIXGD_2, accelerationIXGD, accelerationIYGD,
+genDefns = [velIXGD_1, velIYGD_1, velIXGD_2, velIYGD_2, accelerationIXGD, accelerationIYGD,
        hForceOnPendulumGD, vForceOnPendulumGD, angFrequencyGD, periodPend]
 
 -----------------------------------------------
@@ -55,7 +55,7 @@ velIXDerivSents_1 = [velDerivSent1,velIXDerivSent2_1,velIXDerivSent3_1,velIXDeri
 -- words used to explain the equation refinement
 
 velIXDerivEqns_1 :: [Sentence]
-velIXDerivEqns_1 = map eS [E.velIXDerivEqn1_1, E.velIXDerivEqn2_1,
+velIXDerivEqns_1 = map eS [E.velIXDerivEqn1, E.velIXDerivEqn2_1,
     E.velIXDerivEqn3_1, E.velIXDerivEqn4_1] ++ [eS velIXQD_1] -- refinement equation after explained words
 
 velDerivSent1, velIXDerivSent2_1, velIXDerivSent3_1, velIXDerivSent4_1, velIXDerivSent5_1 :: Sentence
@@ -82,7 +82,7 @@ velIYDerivSents_1 :: [Sentence]
 velIYDerivSents_1 = [velDerivSent1, velIYDerivSent2_1, velIYDerivSent3_1, velIYDerivSent4_1, velIYDerivSent5_1]
 
 velIYDerivEqns_1 :: [Sentence]
-velIYDerivEqns_1 = map eS [E.velIYDerivEqn1_1, E.velIYDerivEqn2_1,
+velIYDerivEqns_1 = map eS [E.velIYDerivEqn1, E.velIYDerivEqn2_1,
     E.velIYDerivEqn3_1, E.velIYDerivEqn4_1] ++ [eS velIYQD_1]
 
 velIYDerivSent2_1, velIYDerivSent3_1, velIYDerivSent4_1, velIYDerivSent5_1 :: Sentence
@@ -95,29 +95,47 @@ velIYDerivSent5_1 = S "Therefore, using the chain rule,"
 -- Velocity in X Dirction in the Second Object--
 ------------------------------------------------
 velIXGD_2 :: GenDefn
-velIXGD_2 = gdNoRefs (equationalModel' velIXQD_2) (getUnit velocity)
-           (Just velIXDeriv_2) "velocityIX2" [{-Notes-}]
--- general definiton block, with equation, unit, refinement explanation
+velIXGD_2 = gdNoRefs (equationalModel' velIXQD_2) (getUnit velocity) (Just velIXDeriv_2) "velocityIX2" [{-Notes-}]
 
 velIXQD_2 :: QDefinition
-velIXQD_2 = mkQuantDef' xVel_2 (the xComp `NP.of_` (velocity `ofThe` secondObject)) E.velIXExpr_2 -- lable and equation
+velIXQD_2 = mkQuantDef' xVel_2 (the xComp `NP.of_` (velocity `ofThe` secondObject)) E.velIXExpr_2
 
 velIXDeriv_2 :: Derivation
 velIXDeriv_2 = mkDerivName (phraseNP (NP.the (xComp `of_` velocity))) (weave [velIXDerivSents_2, velIXDerivEqns_2])
--- title paragraph and weave the explained words and refined equation
 
 velIXDerivSents_2 :: [Sentence]
 velIXDerivSents_2 = [velDerivSent1,velIXDerivSent2_2,velIXDerivSent3_2,velIXDerivSent4_2]
--- words used to explain the equation refinement
 
 velIXDerivEqns_2 :: [Sentence]
-velIXDerivEqns_2 = map eS [E.velIXDerivEqn1_2, E.velIXDerivEqn2_2,
-    E.velIXDerivEqn3_2] ++ [eS velIXQD_2] -- refinement equation after explained words
+velIXDerivEqns_2 = map eS [E.velIXDerivEqn1, E.velIXDerivEqn2_2, E.velIXDerivEqn3_2] ++ [eS velIXQD_2] 
 
 velIXDerivSent2_2, velIXDerivSent3_2, velIXDerivSent4_2 :: Sentence
 velIXDerivSent2_2 = S "We also know the" +:+ phrase horizontalPos
 velIXDerivSent3_2 = S "Applying this,"
 velIXDerivSent4_2 = S "Therefore, using the chain rule,"
+
+------------------------------------------------
+-- Velocity in Y Dirction in the Second Object--
+------------------------------------------------
+velIYGD_2 :: GenDefn
+velIYGD_2 = gdNoRefs (equationalModel' velIYQD_2) (getUnit velocity) (Just velIYDeriv_2) "velocityIY2" [{-Notes-}]
+
+velIYQD_2 :: QDefinition
+velIYQD_2 = mkQuantDef' yVel_2 (the yComp `NP.of_` (velocity `ofThe` secondObject)) E.velIYExpr_2
+
+velIYDeriv_2 :: Derivation
+velIYDeriv_2 = mkDerivName (phraseNP (NP.the (yComp `of_` velocity))) (weave [velIYDerivSents_2, velIYDerivEqns_2])
+
+velIYDerivSents_2 :: [Sentence]
+velIYDerivSents_2 = [velDerivSent1,velIYDerivSent2_2,velIYDerivSent3_2,velIYDerivSent4_2]
+
+velIYDerivEqns_2 :: [Sentence]
+velIYDerivEqns_2 = map eS [E.velIYDerivEqn1, E.velIYDerivEqn2_2, E.velIYDerivEqn3_2] ++ [eS velIYQD_2]
+
+velIYDerivSent2_2, velIYDerivSent3_2, velIYDerivSent4_2 :: Sentence
+velIYDerivSent2_2 = S "We also know the" +:+ phrase verticalPos
+velIYDerivSent3_2 = S "Applying this,"
+velIYDerivSent4_2 = S "Therefore, using the chain rule,"
 
 -----------------------
 accelerationIXGD :: GenDefn

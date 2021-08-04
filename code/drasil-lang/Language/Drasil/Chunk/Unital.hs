@@ -18,8 +18,11 @@ import Language.Drasil.Space (Space(..))
 import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.Stages (Stage)
 
--- | UnitalChunks are concepts with quantities and a unit definition.
+-- | Similar to a `DefinedQuantityDict`, UnitalChunks are concepts
+-- with quantities that must have a unit definition.
 -- Contains 'DefinedQuantityDict's and a 'UnitDefn'.
+--
+-- Ex. A pendulum arm is a tangible object with a symbol (l) and units (cm, m, etc.).
 data UnitalChunk = UC { _defq' :: DefinedQuantityDict
                       , _uni :: UnitDefn
                       }

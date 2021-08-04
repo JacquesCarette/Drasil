@@ -12,6 +12,8 @@ import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
 
 -- | Contains a 'UnitaryChunk', a definition, and a list of related 'UID's.
+--
+-- Ex. A pendulum arm is an idea associated with a symbol (l) and units (cm, m, etc.).
 data UnitaryConceptDict = UCC { _unitary :: UnitaryChunk
                               , _defn' :: Sentence
                               , cdom' :: [UID]

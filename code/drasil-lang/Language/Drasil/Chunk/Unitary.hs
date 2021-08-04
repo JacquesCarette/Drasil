@@ -19,7 +19,9 @@ import Control.Lens ((^.), makeLenses)
 class (Quantity c) => Unitary c where
   unit :: c -> UnitDefn
 
--- | UnitaryChunks are 'Unitary's with 'Symbols'. Contains a 'QuantityDict' and a 'UnitDefn'.
+-- | UnitaryChunks are for ideas with quantities that must have units. Contains a 'QuantityDict' and a 'UnitDefn'.
+--
+-- Ex. A pendulum arm is an idea associated with a symbol (l) and units (cm, m, etc.).
 data UnitaryChunk = UC { _quant :: QuantityDict
                        , _un :: UnitDefn
                        }

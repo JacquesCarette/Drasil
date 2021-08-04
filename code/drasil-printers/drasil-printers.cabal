@@ -31,6 +31,8 @@ library
       Language.Drasil.HTML.Helpers
       Language.Drasil.HTML.Monad
       Language.Drasil.HTML.Print
+      Language.Drasil.JSON.Helpers
+      Language.Drasil.JSON.Print
       Language.Drasil.Markdown.CreateMd
       Language.Drasil.Plain.Print
       Language.Drasil.Printing.AST
@@ -63,8 +65,11 @@ library
     , drasil-database
     , drasil-lang
     , drasil-utils
+    , drasil-data
     , lens
     , pretty
+    , split
+    , json
   if false
     other-modules:
         Paths_drasil_printers

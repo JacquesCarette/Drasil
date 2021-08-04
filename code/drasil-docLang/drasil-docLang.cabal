@@ -24,6 +24,7 @@ library
   exposed-modules:
       Drasil.DocLang
       Drasil.DocLang.SRS
+      Drasil.DocLang.Notebook
       Drasil.DocumentLanguage.Units
       Drasil.DocumentLanguage.TraceabilityGraph
   other-modules:
@@ -34,7 +35,12 @@ library
       Drasil.DocumentLanguage.Definitions
       Drasil.DocumentLanguage.RefHelpers
       Drasil.DocumentLanguage.TraceabilityMatrix
+      Drasil.DocumentLanguage.Notebook.Core
+      Drasil.DocumentLanguage.Notebook.DocumentLanguage
+      Drasil.DocumentLanguage.Notebook.NBDecl
       Drasil.ExtractDocDesc
+      Drasil.NBSections.Body
+      Drasil.NBSections.Introduction
       Drasil.Sections.AuxiliaryConstants
       Drasil.Sections.GeneralSystDesc
       Drasil.Sections.Introduction

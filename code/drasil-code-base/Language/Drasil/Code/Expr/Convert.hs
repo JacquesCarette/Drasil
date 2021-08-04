@@ -9,7 +9,7 @@ import Data.Bifunctor (Bifunctor(bimap, second))
 
 import Language.Drasil.Code.Expr
 
--- | Render an algebraic expression into our code expression language
+-- | Render an algebraic expression into our code expression language.
 expr :: LD.Expr -> CodeExpr
 expr (LD.Dbl d) = Dbl d
 expr (LD.Int i) = Int i
@@ -37,13 +37,13 @@ expr (LD.Operator aao dd e) = Operator (assocArithOp aao) (renderDomainDesc dd) 
 expr (LD.RealI u ri) = RealI u (realInterval ri)
 expr  LD.Deriv {} = error "Expr's Deriv is not convertible to the language of CodeExpr"
 
--- | Convert 'RealInterval Expr Expr's into 'RealInterval CodeExpr CodeExpr's.
+-- | Convert 'RealInterval' 'Expr' 'Expr's into 'RealInterval' 'CodeExpr' 'CodeExpr's.
 realInterval :: L.RealInterval L.Expr L.Expr -> L.RealInterval CodeExpr CodeExpr
 realInterval (L.Bounded (il, el) (ir, er)) = L.Bounded (il, expr el) (ir, expr er)
 realInterval (L.UpTo (i, e)) = L.UpTo (i, expr e)
 realInterval (L.UpFrom (i, e)) = L.UpFrom (i, expr e)
 
--- | Convert 'Constraint Expr's into 'Constraint CodeExpr's.
+-- | Convert constrained expressions ('ConstraintE') into 'Constraint''CodeExpr's.
 constraint :: L.ConstraintE -> L.Constraint CodeExpr
 constraint (L.Range r ri) = L.Range r (realInterval ri)
 

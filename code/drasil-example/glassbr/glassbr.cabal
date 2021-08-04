@@ -56,9 +56,6 @@ library
     , drasil-theory
     , drasil-utils
     , lens
-  if false
-    other-modules:
-        Paths_glassbr
   default-language: Haskell2010
 
 executable glassbr
@@ -83,7 +80,4 @@ executable glassbr
     , drasil-utils
     , glassbr
     , lens
-  if false
-    other-modules:
-        Paths_glassbr
   default-language: Haskell2010

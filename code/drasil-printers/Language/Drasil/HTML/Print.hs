@@ -1,4 +1,4 @@
-module Language.Drasil.HTML.Print(genHTML) where
+module Language.Drasil.HTML.Print(genHTML, renderCite, OpenClose(Open, Close), fence) where
 
 import Prelude hiding (print, (<>))
 import Data.List (sortBy)
@@ -8,7 +8,7 @@ import Utils.Drasil (checkValidStr, numList)
 
 import qualified Language.Drasil as L (People, Person, 
   CitationKind(Misc, Book, MThesis, PhDThesis, Article), 
-  DType(Data, Theory, Instance, General), MaxWidthPercent,
+  DType(Data, Theory, Instance, General),MaxWidthPercent,
   Document, nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special)
 
 import Language.Drasil.HTML.Monad (unPH)
@@ -85,6 +85,7 @@ printLO (List t)               = makeList t
 printLO (Figure r c f wp)      = makeFigure (pSpec r) (pSpec c) (text f) wp
 printLO (Bib bib)              = makeBib bib
 printLO Graph{}                = empty -- FIXME
+printLO Cell{}                 = empty
 
 
 -- | Called by build, uses 'printLO' to render the layout

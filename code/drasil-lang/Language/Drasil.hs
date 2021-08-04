@@ -205,8 +205,8 @@ module Language.Drasil (
   -- | Holds all the types and helper functions needed especially in @drasil-docLang@
 
   -- Language.Drasil.Document
-  , Document(..), ShowTableOfContents(..), DType(..), Section(..), Contents(..)
-  , SecCons(..), ListType(..), ItemType(..), ListTuple
+  , Document(..), ShowTableOfContents(..), DType(..), Section(..)
+  , Contents(..), SecCons(..), ListType(..), ItemType(..), ListTuple
   , LabelledContent(..), UnlabelledContent(..), extractSection
   , mkParagraph, mkRawLC, checkToC
   , llcc, ulcc
@@ -215,8 +215,7 @@ module Language.Drasil (
   , HasContents(accessContents)
   , RawContent(..)
   , mkFig
-  , makeTabRef, makeFigRef, makeSecRef, makeURI
-
+  , makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI
   -- * Symbols, Stages, Spaces
   -- | Used for rendering mathematical symbols in Drasil.
 
@@ -258,8 +257,8 @@ import Language.Drasil.Expr.Math (abs_, neg, negVec, log, ln, sin, cos, tan, sqr
 import Language.Drasil.Expr.Display
 import Language.Drasil.Document (section, fig, figWithWidth
   , Section(..), SecCons(..) , llcc, ulcc, Document(..)
-  , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC
-  , extractSection, makeTabRef, makeFigRef, makeSecRef, makeURI)
+  , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC, extractSection
+  , makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI)
 import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), DType(..)
   , RawContent(..), ListTuple, MaxWidthPercent
   , HasContents(accessContents)

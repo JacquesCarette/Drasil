@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 7efb9af780244c5f972dabd01e4b811da9e609bb280f9394e90015997f864967
+-- hash: 8dd15af6f44348c74b942005d78a3bd18a07c42be82f774f4ebabb4b86c9eff4
 
 name:           drasil-lang
 version:        0.1.60.0
@@ -90,7 +90,4 @@ library
     , lens
     , split
     , unicode-names >=3.2.0.0
-  if false
-    other-modules:
-        Paths_drasil_lang
   default-language: Haskell2010

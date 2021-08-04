@@ -54,12 +54,6 @@ library
     , drasil-theory
     , drasil-utils
     , lens
-  if false
-    other-modules:
-        Paths_gamephysics
-        Drasil.GamePhysics.GDefs
-        Drasil.GamePhysics.DesignDec.Arbiter
-        Drasil.GamePhysics.DesignDec.Vector
   default-language: Haskell2010
 
 executable gamephysics
@@ -84,7 +78,4 @@ executable gamephysics
     , drasil-utils
     , gamephysics
     , lens
-  if false
-    other-modules:
-        Paths_gamephysics
   default-language: Haskell2010

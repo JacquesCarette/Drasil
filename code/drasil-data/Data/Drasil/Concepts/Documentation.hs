@@ -13,23 +13,23 @@ import Control.Lens ((^.))
 doccon :: [NamedChunk]
 doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body, charOfIR, characteristic,
   class_, client, code, column, company, component, concept, condition, connection,
-  consVals, constant, constraint, consumer, content, context, coordinate, corSol,
-  customer, datum, datumConstraint, decision, definition, dependency, description,
+  consVals, constant, constraint, consumer, content, context, coordinate, coordinateSystem, 
+  corSol, customer, datum, datumConstraint, decision, definition, dependency, description,
   design, designDoc, document, documentation, effect, element, emphasis, endUser,
-  environment, failure, figure, first, form, full, fullForm, functional,
-  functionalRequirement, game, general, generalSystemDescription, goal, guide,
+  environment, example, failure, figure, first, form, full, fullForm, functional,
+  functionalRequirement, game, general, generalSystemDescription, goal, guide, 
   implementation, indPRCase, individual, information, input_, instance_, intReader,
   interest, interface, introduction, issue, item, label, library, limitation,
-  literacy, loss, material_, message, method_, model, module_, name_, nonfunctional,
-  nonfunctionalRequirement, object, offShelf, offShelfSolution, open, orgOfDoc,
+  literacy, loss, material_, mainIdea, message, method_, methAndAnls, model, module_, name_, 
+  nonfunctional, nonfunctionalRequirement, object, offShelf, offShelfSolution, open, orgOfDoc,
   organization, output_, physical, physicalConstraint, physicalProperty, physicalSim,
-  physicalSystem, physics, plan, practice, priority, problem, problemDescription,
-  prodUCTable, productUC, product_, project, propOfCorSol, property, prpsOfDoc,
-  purpose, quantity, realtime, reference, refMat, reqInput, requirement_, response, result,
+  physicalSystem, physics, plan, practice, priority, problem, problemDescription, procedure,
+  prodUCTable, productUC, product_, project, procForAnls, propOfCorSol, property, prpsOfDoc,
+  purpose, quantity, realtime, review, reference, refMat, reqInput, requirement_, response, result,
   reviewer, safety, safetyReq, scenario, scope, scpOfReq, scpOfTheProjS, second_,
   section_, simulation, software, softwareConstraint, softwareDoc, softwareReq,
   softwareSys, softwareVAV, softwareVerif, solution, solutionCharSpec,
-  solutionCharacteristic, source, specific, specification, specificsystemdescription,
+  solutionCharacteristic, summary, source, specific, specification, specificsystemdescription,
   stakeholder, standard, statement, symbol_, sysCont, system, systemConstraint,
   systemdescription, tAuxConsts, tOfCont, tOfSymb, tOfUnit, inDatumConstraint, outDatumConstraint,
   table_, task, template, termAndDef, term_,
@@ -39,10 +39,10 @@ doccon = [abbAcc, abbreviation, acronym, analysis, appendix, aspect, body, charO
 
 doccon' :: [CI]
 doccon' = [assumption, dataConst, dataDefn, desSpec, genDefn, goalStmt, inModel,
-  likelyChg, mg, mis, notApp, physSyst, requirement, srs, thModel, typUnc, unlikelyChg]
+  likelyChg, mg, mis, notApp, physSyst, requirement, srs, thModel, typUnc, unlikelyChg, notebook]
 
 assumption, desSpec, goalStmt, dataConst, likelyChg, unlikelyChg, physSyst, requirement,
-  mg, mis, notApp, srs, typUnc, sec :: CI
+  mg, mis, notApp, srs, typUnc, sec, notebook :: CI
 
 softReqSpec :: NP
 softReqSpec = fterms compoundPhraseP1 softwareReq specification
@@ -64,6 +64,7 @@ notApp      = commonIdea         "notApp"      (nounPhraseSP "not applicable")  
 typUnc      = commonIdeaWithDict "typUnc"      (cn' "typical uncertainty")                           "Uncert." [softEng]
 sec         = commonIdeaWithDict "section"     (cn' "section")                                       "Sec"     [documentc]
 srs         = commonIdeaWithDict "srs"         softReqSpec                                           "SRS"     [softEng]
+notebook    = commonIdeaWithDict "notebook"    (cn' "notebook")                                      "NB"      [softEng]
 
 ---------------------------------------------------------------------
 
@@ -73,15 +74,15 @@ abbreviation, acronym, analysis, appendix, aspect, body, characteristic, class_,
   code, column, company, component, concept, condition, connection, constant,
   constraint, consumer, content, context, coordinate, customer, datum, decision, 
   definition, dependency, description, design, document, documentation, effect, 
-  element, emphasis, endUser, environment, failure, figure, first, form, full, 
+  element, emphasis, endUser, environment, example, failure, figure, first, form, full, 
   functional, game, general, goal, guide, implementation, individual, information, 
   interest, interface, input_, instance_, intReader, introduction, issue, item, 
-  loss, label, library, limitation, literacy, material_, message, method_, module_,
+  loss, label, library, limitation, literacy, material_, mainIdea, message, method_, module_,
   model, name_, nonfunctional, object, offShelf, open, organization, output_,
-  physics, physical, plan, practice, priority, problem, product_, project,
-  property, purpose, quantity, realtime, reference, requirement_, response, 
+  physics, physical, plan, practice, priority, problem, procedure, product_, project,
+  property, purpose, quantity, realtime, review, reference, requirement_, response, 
   result, reviewer, safety, scope, scpOfTheProjS, second_, section_, scenario,
-  source, simulation, software, solution, specific, specification, stakeholder,
+  source, simulation, software, solution, summary, specific, specification, stakeholder,
   standard, statement, symbol_, system, table_, task, template, term_, terminology,
   theory, traceyGraph, traceyMatrix, type_, uncertainty, user, useCase, validation,
   value, variable, video, verification, year :: NamedChunk
@@ -122,6 +123,7 @@ element         = nc "element"        (cn'    "element"            )
 emphasis        = nc "emphasis"       (cnIS   "emphasis"           )
 endUser         = nc "end user"       (cn'    "end user"           )
 environment     = nc "environment"    (cn'    "environment"        ) -- Is this term in the right spot?
+example         = nc "example"        (cn'    "example"            )
 failure         = nc "failure"        (cn'    "failure"            )
 figure          = nc "figure"         (cn'    "figure"             )
 first           = nc "first"          (cn'    "first"              ) --Does it make sense for this to be here?
@@ -149,6 +151,7 @@ limitation      = nc "limitation"     (cn'    "limitation"         )
 literacy        = nc "literacy"       (cnIES  "literacy"           )
 loss            = nc "loss"           (cn'''  "loss"               )
 material_       = nc "material"       (cn'    "material"           )
+mainIdea        = nc "mainIdea"       (cn'    "main idea"          )
 message         = nc "message"        (cn'    "message"            )
 method_         = nc "method"         (cn'    "method"             )
 module_         = nc "module"         (cn'    "module"             )
@@ -166,12 +169,14 @@ plan            = nc "plan"           (cn'    "plan"               )
 practice        = nc "practice"       (cn'    "practice"           )
 priority        = nc "priority"       (cnIES  "priority"           )
 problem         = nc "problem"        (cn'    "problem"            )
+procedure       = nc "procedure"      (cn'    "procedure"          )
 product_        = nc "product"        (cn'    "product"            )
 project         = nc "project"        (cn'    "project"            )
 property        = nc "property"       (cnIES  "property"           )
 purpose         = nc "purpose"        (cn'    "purpose"            )
 quantity        = nc "quantity"       (cnIES  "quantity"           ) --general enough to be in documentaion.hs?
 realtime        = nc "real-time"      (cn'    "real-time"          )
+review          = nc "review"         (cn'    "review"             )
 reference       = nc "reference"      (cn'    "reference"          )
 requirement_    = nc "requirement"    (cn'    "requirement"        ) --FIXME: Eventually only have one requirement
 response        = nc "response"       (cn'    "response"           )
@@ -186,6 +191,7 @@ source          = nc "source"         (cn'    "source"             )
 simulation      = nc "simulation"     (cn'    "simulation"         )
 solution        = nc "solution"       (cn'    "solution"           )
 software        = nc "software"       (cn     "software"           )
+summary         = nc "summary"        (cnIES  "summary"            )
 specific        = nc "specific"       (cn'    "specific"           ) --FIXME: Adjective
 specification   = nc "specification"  (cn'    "specification"      )
 stakeholder     = nc "stakeholder"    (cn'    "stakeholder"        )
@@ -214,15 +220,17 @@ year            = nc "year"           (cn'    "year"               )
 scpOfTheProjS   = nc "scpOfTheProj"   (cn'    "scope of the project") -- temporary generated for test
 
 
-abbAcc, charOfIR, consVals, corSol, orgOfDoc, propOfCorSol, prpsOfDoc, refMat,
-  reqInput, scpOfReq, tAuxConsts, tOfSymb, tOfUnit,
+abbAcc, charOfIR, consVals, corSol, methAndAnls, orgOfDoc, procForAnls, propOfCorSol, prpsOfDoc, 
+  refMat, reqInput, scpOfReq, tAuxConsts, tOfSymb, tOfUnit,
   termAndDef, traceyMandG, vav, tOfCont :: NamedChunk
 
 abbAcc              = nc "TAbbAcc"            (abbreviation `and_PP` acronym)
 consVals            = nc "consVals"           (cn "values of auxiliary constants")
 corSol              = nc "corSol"             (cn' "correct solution")
 charOfIR            = nc "charOfIR"           (characteristic `of_PS` intReader)
+methAndAnls         = nc "methAndAnls"        (method_ `and_` analysis)
 orgOfDoc            = nc "orgOfDoc"           (organization `of_` document)
+procForAnls         = nc "procForAnls"        (procedure `for` analysis)
 propOfCorSol        = nc "propOfCorSol"       (property `ofAPS` corSol)
 prpsOfDoc           = nc "prpsOfDoc"          (purpose `of_` document)
 refMat              = nc "refMat"             (cn' "reference material")
@@ -246,12 +254,13 @@ scpOfTheProj oper = nc "scpOfTheProj" (scope `of_NINP` theGen oper project) -- r
 designDoc, fullForm, generalSystemDescription, moduleInterface, indPRCase,
   physicalConstraint, physicalSystem, problemDescription, prodUCTable,
   specificsystemdescription, systemdescription, systemConstraint, sysCont,
-  userCharacteristic, datumConstraint, inDatumConstraint, outDatumConstraint, functionalRequirement,
-  nonfunctionalRequirement, safetyReq, softwareConstraint, softwareDoc,
-  softwareReq, softwareSys, softwareVerif, softwareVAV, solutionCharSpec,
-  solutionCharacteristic, offShelfSolution, physicalSim, productUC, 
-  useCaseTable, physicalProperty, vavPlan, uncertCol, userInput :: NamedChunk
+  userCharacteristic, coordinateSystem, datumConstraint, inDatumConstraint, 
+  outDatumConstraint, functionalRequirement, nonfunctionalRequirement, safetyReq, 
+  softwareConstraint, softwareDoc, softwareReq, softwareSys, softwareVerif, 
+  softwareVAV, solutionCharSpec, solutionCharacteristic, offShelfSolution, 
+  physicalSim, productUC, useCaseTable, physicalProperty, vavPlan, uncertCol, userInput :: NamedChunk
  
+coordinateSystem             = compoundNC coordinate system
 datumConstraint              = compoundNCPP datum constraint
 designDoc                    = compoundNC design document
 fullForm                     = compoundNC full form

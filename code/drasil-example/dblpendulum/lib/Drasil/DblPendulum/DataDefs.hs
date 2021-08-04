@@ -9,7 +9,7 @@ import Theory.Drasil (DataDefinition, ddNoRefs)
 import Drasil.DblPendulum.Figures (figMotion)
 import qualified Data.Drasil.Quantities.Physics as QP (ixPos, iyPos,
       frequency, period, angularFrequency)
-import Drasil.DblPendulum.Unitals (lenRod, pendDisAngle_1, pendDisAngle_2, lenRod_1, lenRod_2, ixPos_1, ixPos_2, iyPos_1, iyPos_2)
+import Drasil.DblPendulum.Unitals (lenRod, pendDisAngle_1, pendDisAngle_2, lenRod_1, lenRod_2, xPos_1, yPos_1, xPos_2, yPos_2)
 --import Data.Drasil.Concepts.Physics (pendulum)
 import qualified Data.Drasil.Quantities.Math as QM (pi_)
 import Drasil.DblPendulum.Concepts (horizontalPos, verticalPos)
@@ -39,16 +39,16 @@ positionIXDD_1 :: DataDefinition
 positionIXDD_1 = ddNoRefs positionIXQD_1 Nothing "positionIX1DD" [positionIXRef_1, positionIXFigRef_1]
 
 positionIXQD_1 :: QDefinition
-positionIXQD_1 = mkQuantDef ixPos_1 positionIXEqn_1
+positionIXQD_1 = mkQuantDef xPos_1 positionIXEqn_1
 
 positionIXEqn_1 :: Expr
 positionIXEqn_1 = sy lenRod_1 `mulRe` sin (sy pendDisAngle_1)
 
 positionIXFigRef_1 :: Sentence
-positionIXFigRef_1 = ch ixPos_1 `S.is` S "shown in" +:+. refS figMotion
+positionIXFigRef_1 = ch xPos_1 `S.is` S "shown in" +:+. refS figMotion
 
 positionIXRef_1 :: Sentence
-positionIXRef_1 = ch ixPos_1 `S.isThe` phrase horizontalPos
+positionIXRef_1 = ch xPos_1 `S.isThe` phrase horizontalPos
 
 -----------------------------------------------
 -- Position in Y Dirction in the First Object--
@@ -57,16 +57,16 @@ positionIYDD_1 :: DataDefinition
 positionIYDD_1 = ddNoRefs positionIYQD_1 Nothing "positionIY1DD" [positionIYRef_1, positionIYFigRef_1]
 
 positionIYQD_1 :: QDefinition
-positionIYQD_1 = mkQuantDef iyPos_1 positionIYEqn_1
+positionIYQD_1 = mkQuantDef yPos_1 positionIYEqn_1
 
 positionIYEqn_1 :: Expr
 positionIYEqn_1 = neg (sy lenRod_1 `mulRe` cos (sy pendDisAngle_1))
 
 positionIYFigRef_1 :: Sentence
-positionIYFigRef_1 = ch iyPos_1 `S.is` S "shown in" +:+. refS figMotion
+positionIYFigRef_1 = ch yPos_1 `S.is` S "shown in" +:+. refS figMotion
 
 positionIYRef_1 :: Sentence
-positionIYRef_1 = ch iyPos_1 `S.isThe` phrase verticalPos
+positionIYRef_1 = ch yPos_1 `S.isThe` phrase verticalPos
 
 -----------------------------------------------
 -- Position in X Dirction in the Second Object--
@@ -75,16 +75,16 @@ positionIXDD_2 :: DataDefinition
 positionIXDD_2 = ddNoRefs positionIXQD_2 Nothing "positionIX2DD" [positionIXRef_2, positionIXFigRef_2]
 
 positionIXQD_2 :: QDefinition
-positionIXQD_2 = mkQuantDef ixPos_2 positionIXEqn_2
+positionIXQD_2 = mkQuantDef xPos_2 positionIXEqn_2
 
 positionIXEqn_2 :: Expr
-positionIXEqn_2 = positionIXEqn_1 `addRe` (sy lenRod_2 `mulRe` sin (sy pendDisAngle_2))
+positionIXEqn_2 = sy positionIXDD_1 `addRe` (sy lenRod_2 `mulRe` sin (sy pendDisAngle_2))
 
 positionIXFigRef_2 :: Sentence
-positionIXFigRef_2 = ch ixPos_2 `S.is` S "shown in" +:+. refS figMotion
+positionIXFigRef_2 = ch xPos_2 `S.is` S "shown in" +:+. refS figMotion
 
 positionIXRef_2 :: Sentence
-positionIXRef_2 = ch ixPos_2 `S.isThe` phrase horizontalPos
+positionIXRef_2 = ch xPos_2 `S.isThe` phrase horizontalPos
 
 -----------------------------------------------
 -- Position in Y Dirction in the Second Object--
@@ -93,16 +93,16 @@ positionIYDD_2 :: DataDefinition
 positionIYDD_2 = ddNoRefs positionIYQD_2 Nothing "positionIY2DD" [positionIYRef_2, positionIYFigRef_2]
 
 positionIYQD_2 :: QDefinition
-positionIYQD_2 = mkQuantDef iyPos_2 positionIYEqn_2
+positionIYQD_2 = mkQuantDef yPos_2 positionIYEqn_2
 
 positionIYEqn_2 :: Expr
-positionIYEqn_2 = positionIYEqn_1 `addRe` neg (sy lenRod_2 `mulRe` cos (sy pendDisAngle_2))
+positionIYEqn_2 = sy positionIYDD_1 `addRe` neg (sy lenRod_2 `mulRe` cos (sy pendDisAngle_2))
 
 positionIYFigRef_2 :: Sentence
-positionIYFigRef_2 = ch iyPos_2 `S.is` S "shown in" +:+. refS figMotion
+positionIYFigRef_2 = ch yPos_2 `S.is` S "shown in" +:+. refS figMotion
 
 positionIYRef_2 :: Sentence
-positionIYRef_2 = ch iyPos_2 `S.isThe` phrase verticalPos
+positionIYRef_2 = ch yPos_2 `S.isThe` phrase verticalPos
 
 ------------------------------------------------------
 frequencyDD :: DataDefinition

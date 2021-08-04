@@ -20,6 +20,8 @@ dependencies:
 - drasil-database
 - drasil-lang
 - drasil-utils
+- json
+- split
 
 ghc-options:
 - -Wall

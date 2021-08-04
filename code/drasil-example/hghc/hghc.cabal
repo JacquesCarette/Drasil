@@ -43,9 +43,6 @@ library
     , drasil-theory
     , drasil-utils
     , lens
-  if false
-    other-modules:
-        Paths_hghc
   default-language: Haskell2010
 
 executable hghc
@@ -70,7 +67,4 @@ executable hghc
     , drasil-utils
     , hghc
     , lens
-  if false
-    other-modules:
-        Paths_hghc
   default-language: Haskell2010

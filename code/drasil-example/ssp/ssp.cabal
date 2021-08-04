@@ -55,9 +55,6 @@ library
     , drasil-theory
     , drasil-utils
     , lens
-  if false
-    other-modules:
-        Paths_ssp
   default-language: Haskell2010
 
 executable ssp
@@ -82,7 +79,4 @@ executable ssp
     , drasil-utils
     , lens
     , ssp
-  if false
-    other-modules:
-        Paths_ssp
   default-language: Haskell2010

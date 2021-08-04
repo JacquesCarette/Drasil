@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: f73a7f9ee123e2b82735ca8671f5ce4c96cd02b4779a5204c039e983a75f7b66
+-- hash: 370baa8390f07d8aa7cded3e27d44be4c7cef7551501cdbdcb1d186075e28292
 
 name:           drasil-metadata
 version:        0.1.1.0
@@ -29,7 +29,4 @@ library
   build-depends:
       base >=4.7 && <5
     , drasil-lang
-  if false
-    other-modules:
-        Paths_drasil_metadata
   default-language: Haskell2010

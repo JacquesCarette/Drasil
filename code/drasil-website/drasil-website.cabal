@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: e312bb570e5ee0785f2d8618f136cebe49b8de9ce28c6a5d0211bba250f7b619
+-- hash: 1d266c620be3bf750325deb2cb0daf8896966d8d683a0138b19a35f49ee4fdb9
 
 name:           drasil-website
 version:        0.1.0.0
@@ -57,9 +57,6 @@ library
     , ssp
     , swhs
     , template
-  if false
-    other-modules:
-        Paths_website
   default-language: Haskell2010
 
 executable website
@@ -96,7 +93,4 @@ executable website
     , ssp
     , swhs
     , template
-  if false
-    other-modules:
-        Paths_website
   default-language: Haskell2010

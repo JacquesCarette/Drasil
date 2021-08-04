@@ -1,5 +1,10 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Language.Drasil.Chunk.NamedIdea (NamedChunk, nc, IdeaDict, nw, mkIdea) where
+-- | The lowest level of chunks in Drasil. It all starts with an identifier and a term.
+module Language.Drasil.Chunk.NamedIdea (
+  -- * Chunk Types
+  NamedChunk, IdeaDict,
+  -- * Constructors
+  nc, nw, mkIdea) where
 
 import Language.Drasil.UID (UID)
 import Language.Drasil.Classes.Core (HasUID(uid))

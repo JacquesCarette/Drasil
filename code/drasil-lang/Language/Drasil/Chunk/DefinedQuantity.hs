@@ -1,5 +1,10 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqdNoUnit, dqd',
+-- | Contains types that define quantities from concepts. Similar to 'QuantityDict'.
+module Language.Drasil.Chunk.DefinedQuantity (
+  -- * Chunk Type
+  DefinedQuantityDict,
+  -- * Constructors
+  dqd, dqdNoUnit, dqd',
   dqdQd, dqdWr) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))

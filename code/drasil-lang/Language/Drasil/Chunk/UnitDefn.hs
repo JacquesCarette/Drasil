@@ -1,13 +1,22 @@
 {-# Language TemplateHaskell #-}
+-- | For defining units built from a concept.
 module Language.Drasil.Chunk.UnitDefn (
-    UnitDefn(..)
-  , fromUDefn, unitCon, makeDerU
-  , (^:), (/:), (*:), (*$), (/$),(^$), newUnit
-  , scale, shift
-  , derUC, derUC', derUC''
-  , fund, fund', compUnitDefn, derCUC, derCUC', derCUC''
-  , unitWrapper, getCu, MayHaveUnit(getUnit)
-  , IsUnit(getUnits)
+  -- * Classes
+  MayHaveUnit(getUnit),
+  IsUnit(getUnits),
+  -- * Chunk Type
+  UnitDefn(..),
+  -- * Constructors
+  makeDerU, newUnit,
+  derUC, derUC', derUC'',
+  fund, fund', derCUC, derCUC', derCUC'',
+  unitWrapper,
+  -- * Unit Combinators ('UnitEquation's)
+  (^:), (/:), (*:), (*$), (/$),(^$),
+  -- * Unit Relation Functions
+  scale, shift,
+  -- * Helpers
+  fromUDefn, unitCon, getCu, compUnitDefn
   ) where
 
 import Control.Lens ((^.), makeLenses, view)

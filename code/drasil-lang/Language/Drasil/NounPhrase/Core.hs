@@ -1,4 +1,7 @@
-module Language.Drasil.NounPhrase.Core (CapitalizationRule(..), NP(..),
+-- | Noun phrases are used to hold terms with knowledge of proper capitalization and pluralization.
+module Language.Drasil.NounPhrase.Core (
+  -- * Types
+  CapitalizationRule(..), NP(..),
   PluralForm, PluralRule(..)) where
 
 import Language.Drasil.Sentence (Sentence)

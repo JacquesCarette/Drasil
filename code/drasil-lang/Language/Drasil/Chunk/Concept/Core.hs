@@ -72,10 +72,12 @@ instance CommonIdea    CommonConcept where abrv = abrv . view comm
 instance ConceptDomain CommonConcept where cdom = cdom . view comm 
 
 -- | Contains a 'ConceptChunk', reference address, and a 'ShortName'.
--- It is a concept that can be referred to. Often used in Goal Statements, Assumptions, Requirements, etc.
+-- It is a concept that can be referred to, or rather, a instance of where a concept is applied.
+-- Often used in Goal Statements, Assumptions, Requirements, etc.
 --
 -- Ex. Something like the assumption that gravity is 9.81 m/s. When we write our equations,
--- we can then link this assumption so that we do not have to derive that assumption to verify our work.
+-- we can then link this assumption so that we do not have to explicitly define
+-- that assumption when needed to verify our work.
 data ConceptInstance = ConInst { _cc :: ConceptChunk , ra :: String, shnm :: ShortName}
 makeLenses ''ConceptInstance
 

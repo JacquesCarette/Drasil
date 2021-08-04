@@ -1,5 +1,10 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Chunk.UnitaryConcept (ucw, UnitaryConceptDict) where
+-- | Adds concepts to a quantitative idea with units.
+module Language.Drasil.Chunk.UnitaryConcept (
+  -- * Chunk Type
+  UnitaryConceptDict,
+  -- * Constructor
+  ucw) where
 
 import Control.Lens ((^.), makeLenses)
 

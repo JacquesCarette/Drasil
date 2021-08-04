@@ -1,5 +1,10 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Language.Drasil.Chunk.NamedArgument (NamedArgument(..), narg) where
+-- | Named arguments used in generating code.
+module Language.Drasil.Chunk.NamedArgument (
+  -- * Chunk Type
+  NamedArgument(..),
+  -- * Constructor
+  narg) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA), HasSpace(typ), 

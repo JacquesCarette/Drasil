@@ -1,3 +1,4 @@
+-- | Display-related expression classes.
 module Language.Drasil.DisplayClasses where
 
 import Language.Drasil.DisplayExpr (DisplayExpr(AlgebraicExpr))

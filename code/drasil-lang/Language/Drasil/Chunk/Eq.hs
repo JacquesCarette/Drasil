@@ -1,6 +1,11 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
-module Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqnSt,
+-- | Contains chunks related to adding an expression to a quantitative concept. 
+module Language.Drasil.Chunk.Eq (
+  -- * Chunk Type
+  QDefinition,
+  -- * Constructor
+  fromEqn, fromEqn', fromEqnSt,
   fromEqnSt', mkQDefSt, mkQuantDef, mkQuantDef', ec,
   mkFuncDef, mkFuncDef', mkFuncDefByQ) where
 

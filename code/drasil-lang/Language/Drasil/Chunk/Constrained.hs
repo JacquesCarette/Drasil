@@ -1,6 +1,12 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Chunk.Constrained (ConstrainedChunk(..), ConstrConcept(..),
-  cnstrw, cnstrw', constrained', constrainedNRV', cuc, cuc', cuc'', cvc) where
+-- | Add constraints and a reasonable value to chunks that are quantities.
+module Language.Drasil.Chunk.Constrained (
+  -- * Constrained Chunks
+  -- ** From an Idea
+  ConstrainedChunk(..), cuc, cvc, cnstrw,
+  -- ** From a Concept
+  ConstrConcept(..),
+  cnstrw', constrained', constrainedNRV', cuc', cuc'') where
 
 import Control.Lens ((^.), makeLenses, view)
 

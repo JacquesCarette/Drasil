@@ -1,15 +1,15 @@
 {-# Language TemplateHaskell #-}
 -- | Defines the chunk type to hold citations.
 module Language.Drasil.Chunk.Citation (
-    -- * Types
-    Citation, BibRef, EntryID
-    -- * Accessors
-  , citeID, citeKind
-    -- * Citation smart constructors
-  , cArticle, cBookA, cBookE, cBooklet
-  , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
-  , cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis
-  , cProceedings, cTechReport, cUnpublished
+  -- * Types
+  Citation, BibRef, EntryID,
+  -- * Accessors
+  citeID, citeKind,
+  -- * Citation smart constructors
+  cArticle, cBookA, cBookE, cBooklet,
+  cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP,
+  cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis,
+  cProceedings, cTechReport, cUnpublished
   ) where
 
 import Language.Drasil.People (People)

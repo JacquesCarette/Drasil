@@ -1,7 +1,12 @@
 {-# Language TemplateHaskell #-}
 -- | Contains the common idea type and respective constructors.
-module Language.Drasil.Chunk.CommonIdea
-  (CI, commonIdea, getAcc, getAccStr, commonIdeaWithDict, prependAbrv) where
+module Language.Drasil.Chunk.CommonIdea (
+  -- * Common Idea datatype
+  CI, 
+  -- * Constructors
+  commonIdea, commonIdeaWithDict,
+  -- * Functions
+  getAcc, getAccStr, prependAbrv) where
 
 import Language.Drasil.Chunk.NamedIdea (IdeaDict)
 import Language.Drasil.Classes.Core (HasUID(uid))

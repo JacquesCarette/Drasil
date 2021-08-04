@@ -1,5 +1,10 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.DecoratedReference (DecRef(..), dRef, dRefInfo) where
+-- | References that have extra information.
+module Language.Drasil.DecoratedReference (
+  -- * Type
+  DecRef(..),
+  -- * Constructors
+  dRef, dRefInfo) where
 
 import Language.Drasil.Sentence (RefInfo(..))
 import Language.Drasil.Reference (Reference, ref)
@@ -10,8 +15,8 @@ import Control.Lens ((^.), makeLenses)
 
 -- | For holding a 'Reference' that is decorated with extra information (ex. page numbers, equation sources, etc.).
 data DecRef = DR {
-    _rf :: Reference,
-    refInfo :: RefInfo
+  _rf :: Reference,
+  refInfo :: RefInfo
 }
 makeLenses ''DecRef
 

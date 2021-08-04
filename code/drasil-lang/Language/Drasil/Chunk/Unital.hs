@@ -1,6 +1,10 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Language.Drasil.Chunk.Unital 
-  ( UnitalChunk(..) , makeUCWDS , uc , uc' , ucStaged, ucs , ucs', ucsWS) where
+-- | Defines chunks to add units to a quantity. Similar to 'UnitaryChunk'.
+module Language.Drasil.Chunk.Unital (
+  -- * Chunk Type
+  UnitalChunk(..),
+  -- * Constructors
+  makeUCWDS , uc , uc' , ucStaged, ucs , ucs', ucsWS) where
 
 import Control.Lens (makeLenses, view, (^.))
 

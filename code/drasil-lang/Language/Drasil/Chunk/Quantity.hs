@@ -1,5 +1,10 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Language.Drasil.Chunk.Quantity (QuantityDict, codeVC, implVar, implVar', 
+-- | Defines chunks that add quantities to an idea. Similar to 'DefinedQuantityDict'.
+module Language.Drasil.Chunk.Quantity (
+  -- * Chunk Type
+  QuantityDict,
+  -- * Constructors
+  codeVC, implVar, implVar', 
   mkQuant, mkQuant', qw, vc, vc'', vcSt, vcUnit) where
 
 import Control.Lens ((^.),makeLenses,view)

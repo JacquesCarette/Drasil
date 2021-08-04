@@ -1,8 +1,11 @@
 {-# Language TemplateHaskell #-}
-
-module Language.Drasil.Chunk.UncertainQuantity 
-  ( UncertQ, UncertainChunk(..) , uq, uqc
-  , uqcND, uncrtnChunk, uvc, uncrtnw) where
+-- | For adding an uncertainty value to quantities with constraints.
+module Language.Drasil.Chunk.UncertainQuantity (
+  -- * Chunk Types
+  UncertQ, UncertainChunk(..),
+  -- * Constructors
+  uq, uqc,
+  uqcND, uncrtnChunk, uvc, uncrtnw) where
  
 import Language.Drasil.Chunk.DefinedQuantity (dqdWr)
 import Language.Drasil.Chunk.Constrained (ConstrConcept(..), ConstrainedChunk, cuc', cnstrw, cvc)

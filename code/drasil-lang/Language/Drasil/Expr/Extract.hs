@@ -1,3 +1,4 @@
+-- | Extract UIDs from an expression so that they can be looked up in the chunk database and rendered.
 module Language.Drasil.Expr.Extract where
 
 import Data.List (nub)

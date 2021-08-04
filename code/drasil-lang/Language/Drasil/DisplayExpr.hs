@@ -1,5 +1,5 @@
 {-# LANGUAGE GADTs #-}
-
+-- | Display related expression language types.
 module Language.Drasil.DisplayExpr (DisplayExpr(..),
   DisplayBinOp(..), DisplayAssocBinOp(..)) where
 

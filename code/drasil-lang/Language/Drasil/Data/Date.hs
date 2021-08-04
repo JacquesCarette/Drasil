@@ -2,7 +2,7 @@
 -- This should, in time, be switched out in favour of a proper package
 -- designed to handle all the complexities of dates.
 module Language.Drasil.Data.Date
-  ( -- Types
+  ( -- * Type
     Month(..)
   ) where
 

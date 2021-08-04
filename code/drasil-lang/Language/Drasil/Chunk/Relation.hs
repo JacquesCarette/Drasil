@@ -1,5 +1,10 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Language.Drasil.Chunk.Relation (RelationConcept, makeRC, addRelToCC) where
+-- | For adding a relation (expression) to a concept.
+module Language.Drasil.Chunk.Relation (
+  -- * Chunk Type
+  RelationConcept,
+  -- * Constructors
+  makeRC, addRelToCC) where
 
 import Control.Lens (makeLenses, (^.), view, set)
 

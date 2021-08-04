@@ -1,5 +1,5 @@
 {-# Language TemplateHaskell #-}
--- | Document Description Language
+-- | Document Description Language.
 module Language.Drasil.Document where
 
 import Language.Drasil.Classes.Core (HasUID(uid), getRefAdd, HasRefAddress(getRefAdd), Referable(refAdd, renderRef))
@@ -13,6 +13,8 @@ import Language.Drasil.ShortName (ShortName, shortname')
 import Language.Drasil.UID (UID)
 
 import Control.Lens (makeLenses, view)
+
+-- * Section Types
 
 -- | Section Contents are split into subsections or contents, where contents
 -- are standard layout objects (see 'Contents').
@@ -77,6 +79,8 @@ checkToC (Document t a toC sc) =
     _   -> Document t a toC sc
 checkToC (Notebook t a sc) = Notebook t a sc
 
+-- * Content Constructors
+
 -- | Smart constructor for labelled content chunks.
 llcc :: Reference -> RawContent -> LabelledContent
 llcc = LblC
@@ -100,9 +104,11 @@ mkRawLC :: RawContent -> Reference -> LabelledContent
 mkRawLC x lb = llcc lb x
 
 ---------------------------------------------------------------------------
+-- * Section Constructors
+
 -- smart constructors and combinators for making instances of the above
--- data types.  Over time, the types should no longer be exported, and
--- only these used
+-- data types. Over time, the types should no longer be exported, and
+-- only these used.
 
 -- | Smart constructor for creating 'Section's with a title ('Sentence'), introductory contents
 -- (ie. paragraphs, tables, etc.), a list of subsections, and a shortname ('Reference').
@@ -132,6 +138,8 @@ figWithWidth :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
 figWithWidth = Figure
 
 ---------------------------------------------------------------------------
+-- * Reference Constructors
+
 -- FIXME: horrible hacks.
 -- These should eventually either disappear, or at least move out to docLang
 -- | Create a reference for a table. Takes in the name of a table (which will also be used for its shortname).

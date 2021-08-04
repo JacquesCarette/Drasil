@@ -1,6 +1,10 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Language.Drasil.Chunk.Unitary (Unitary(..), UnitaryChunk, mkUnitary,
-  unitary, unitary', unit_symb) where
+-- | Defines chunks to add units to a quantity. Similar to 'UnitalChunk'.
+module Language.Drasil.Chunk.Unitary (
+  -- * Chunk Types
+  Unitary(..), UnitaryChunk,
+  -- * Constructors
+  mkUnitary, unitary, unitary', unit_symb) where
 
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),

@@ -1,4 +1,4 @@
-module Drasil.DblPendulum.DataDefs (dataDefs, positionGDD, positionIYDD_1, positionIXDD_1, positionIXDD_2, positionIYDD_2, 
+module Drasil.DblPendulum.DataDefs (dataDefs, positionGDD, positionYDD_1, positionXDD_1, positionXDD_2, positionYDD_2, 
       angFrequencyDD, frequencyDD, periodSHMDD) where
 
 import Prelude hiding (sin, cos, sqrt)
@@ -17,7 +17,7 @@ import Data.Drasil.Quantities.Physics (velocity, position, time)
 
 
 dataDefs :: [DataDefinition]
-dataDefs = [positionGDD, positionIXDD_1, positionIYDD_1, positionIXDD_2, positionIYDD_2,
+dataDefs = [positionGDD, positionXDD_1, positionYDD_1, positionXDD_2, positionYDD_2,
   frequencyDD, angFrequencyDD, periodSHMDD]
 
 ------------------------
@@ -35,74 +35,74 @@ positionGEqn = deriv (sy position) time
 -----------------------------------------------
 -- Position in X Dirction in the First Object--
 -----------------------------------------------
-positionIXDD_1 :: DataDefinition
-positionIXDD_1 = ddNoRefs positionIXQD_1 Nothing "positionIX1DD" [positionIXRef_1, positionIXFigRef_1]
+positionXDD_1 :: DataDefinition
+positionXDD_1 = ddNoRefs positionXQD_1 Nothing "positionX1DD" [positionXRef_1, positionXFigRef_1]
 
-positionIXQD_1 :: QDefinition
-positionIXQD_1 = mkQuantDef xPos_1 positionIXEqn_1
+positionXQD_1 :: QDefinition
+positionXQD_1 = mkQuantDef xPos_1 positionXEqn_1
 
-positionIXEqn_1 :: Expr
-positionIXEqn_1 = sy lenRod_1 `mulRe` sin (sy pendDisAngle_1)
+positionXEqn_1 :: Expr
+positionXEqn_1 = sy lenRod_1 `mulRe` sin (sy pendDisAngle_1)
 
-positionIXFigRef_1 :: Sentence
-positionIXFigRef_1 = ch xPos_1 `S.is` S "shown in" +:+. refS figMotion
+positionXFigRef_1 :: Sentence
+positionXFigRef_1 = ch xPos_1 `S.is` S "shown in" +:+. refS figMotion
 
-positionIXRef_1 :: Sentence
-positionIXRef_1 = ch xPos_1 `S.isThe` phrase horizontalPos
+positionXRef_1 :: Sentence
+positionXRef_1 = ch xPos_1 `S.isThe` phrase horizontalPos
 
 -----------------------------------------------
 -- Position in Y Dirction in the First Object--
 -----------------------------------------------
-positionIYDD_1 :: DataDefinition
-positionIYDD_1 = ddNoRefs positionIYQD_1 Nothing "positionIY1DD" [positionIYRef_1, positionIYFigRef_1]
+positionYDD_1 :: DataDefinition
+positionYDD_1 = ddNoRefs positionYQD_1 Nothing "positionY1DD" [positionYRef_1, positionYFigRef_1]
 
-positionIYQD_1 :: QDefinition
-positionIYQD_1 = mkQuantDef yPos_1 positionIYEqn_1
+positionYQD_1 :: QDefinition
+positionYQD_1 = mkQuantDef yPos_1 positionYEqn_1
 
-positionIYEqn_1 :: Expr
-positionIYEqn_1 = neg (sy lenRod_1 `mulRe` cos (sy pendDisAngle_1))
+positionYEqn_1 :: Expr
+positionYEqn_1 = neg (sy lenRod_1 `mulRe` cos (sy pendDisAngle_1))
 
-positionIYFigRef_1 :: Sentence
-positionIYFigRef_1 = ch yPos_1 `S.is` S "shown in" +:+. refS figMotion
+positionYFigRef_1 :: Sentence
+positionYFigRef_1 = ch yPos_1 `S.is` S "shown in" +:+. refS figMotion
 
-positionIYRef_1 :: Sentence
-positionIYRef_1 = ch yPos_1 `S.isThe` phrase verticalPos
+positionYRef_1 :: Sentence
+positionYRef_1 = ch yPos_1 `S.isThe` phrase verticalPos
 
 -----------------------------------------------
 -- Position in X Dirction in the Second Object--
 -----------------------------------------------
-positionIXDD_2 :: DataDefinition
-positionIXDD_2 = ddNoRefs positionIXQD_2 Nothing "positionIX2DD" [positionIXRef_2, positionIXFigRef_2]
+positionXDD_2 :: DataDefinition
+positionXDD_2 = ddNoRefs positionXQD_2 Nothing "positionX2DD" [positionXRef_2, positionXFigRef_2]
 
-positionIXQD_2 :: QDefinition
-positionIXQD_2 = mkQuantDef xPos_2 positionIXEqn_2
+positionXQD_2 :: QDefinition
+positionXQD_2 = mkQuantDef xPos_2 positionXEqn_2
 
-positionIXEqn_2 :: Expr
-positionIXEqn_2 = sy positionIXDD_1 `addRe` (sy lenRod_2 `mulRe` sin (sy pendDisAngle_2))
+positionXEqn_2 :: Expr
+positionXEqn_2 = sy positionXDD_1 `addRe` (sy lenRod_2 `mulRe` sin (sy pendDisAngle_2))
 
-positionIXFigRef_2 :: Sentence
-positionIXFigRef_2 = ch xPos_2 `S.is` S "shown in" +:+. refS figMotion
+positionXFigRef_2 :: Sentence
+positionXFigRef_2 = ch xPos_2 `S.is` S "shown in" +:+. refS figMotion
 
-positionIXRef_2 :: Sentence
-positionIXRef_2 = ch xPos_2 `S.isThe` phrase horizontalPos
+positionXRef_2 :: Sentence
+positionXRef_2 = ch xPos_2 `S.isThe` phrase horizontalPos
 
 -----------------------------------------------
 -- Position in Y Dirction in the Second Object--
 -----------------------------------------------
-positionIYDD_2 :: DataDefinition
-positionIYDD_2 = ddNoRefs positionIYQD_2 Nothing "positionIY2DD" [positionIYRef_2, positionIYFigRef_2]
+positionYDD_2 :: DataDefinition
+positionYDD_2 = ddNoRefs positionYQD_2 Nothing "positionY2DD" [positionYRef_2, positionYFigRef_2]
 
-positionIYQD_2 :: QDefinition
-positionIYQD_2 = mkQuantDef yPos_2 positionIYEqn_2
+positionYQD_2 :: QDefinition
+positionYQD_2 = mkQuantDef yPos_2 positionYEqn_2
 
-positionIYEqn_2 :: Expr
-positionIYEqn_2 = sy positionIYDD_1 `addRe` neg (sy lenRod_2 `mulRe` cos (sy pendDisAngle_2))
+positionYEqn_2 :: Expr
+positionYEqn_2 = sy positionYDD_1 `addRe` neg (sy lenRod_2 `mulRe` cos (sy pendDisAngle_2))
 
-positionIYFigRef_2 :: Sentence
-positionIYFigRef_2 = ch yPos_2 `S.is` S "shown in" +:+. refS figMotion
+positionYFigRef_2 :: Sentence
+positionYFigRef_2 = ch yPos_2 `S.is` S "shown in" +:+. refS figMotion
 
-positionIYRef_2 :: Sentence
-positionIYRef_2 = ch yPos_2 `S.isThe` phrase verticalPos
+positionYRef_2 :: Sentence
+positionYRef_2 = ch yPos_2 `S.isThe` phrase verticalPos
 
 ------------------------------------------------------
 frequencyDD :: DataDefinition

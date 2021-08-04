@@ -7,10 +7,11 @@ module Drasil.Projectile.Expressions where
 import Prelude hiding (cos, sin)
 
 import Language.Drasil
+import Utils.Drasil
 import qualified Data.Drasil.Quantities.Physics as QP (iSpeed,
   constAccel, xConstAccel, yConstAccel, ixPos, iyPos)
-import Data.Drasil.Quantities.Physics (gravitationalAccelConst, ixVel, iyVel, xPos, yPos, time,
-  iPos, scalarPos, xVel, yVel, xAccel, yAccel, position, velocity, acceleration,
+import Data.Drasil.Quantities.Physics (gravitationalAccelConst, gravitationalAccel, 
+  ixVel, iyVel, xPos, yPos, time, iPos, scalarPos, xVel, yVel, xAccel, yAccel, position, velocity, acceleration,
   constAccelV, speed)
 
 import Drasil.Projectile.Unitals (launAngle, launSpeed, targPos, tol, landPos, flightDur, offset)
@@ -54,6 +55,9 @@ rectVelDerivEqn2 = defint (eqSymb speed) (sy QP.iSpeed) (sy speed) (exactDbl 1) 
 scalarPos' :: Expr
 scalarPos' = sy iPos `addRe` (sy QP.iSpeed `mulRe` sy time `addRe` half (sy QP.constAccel `mulRe` square (sy time)))
 
+rectNoTime :: Expr
+rectNoTime = square (sy speed) $= square (sy QP.iSpeed) `addRe` (exactDbl 2 `mulRe` sy QP.constAccel `mulRe` (sy scalarPos $- sy iPos))
+
 rectPosDerivEqn1, rectPosDerivEqn2, rectPosDerivEqn3 :: Expr
 rectPosDerivEqn1 = sy speed $= deriv (sy scalarPos) time
 rectPosDerivEqn2 = defint (eqSymb scalarPos) (sy iPos) (sy scalarPos) (exactDbl 1) $=
@@ -77,3 +81,22 @@ positionXY     = sy position     $= vec2D (sy xPos)           (sy yPos)
 velocityXY     = sy velocity     $= vec2D (sy xVel)           (sy yVel)
 accelerationXY = sy acceleration $= vec2D (sy xAccel)         (sy yAccel)
 constAccelXY   = sy constAccelV  $= vec2D (sy QP.xConstAccel) (sy QP.yConstAccel)
+
+-- Expressions for lesson
+lcrectVel, lcrectPos, lcrectNoTime :: LabelledContent
+lcrectVel = lbldExpr (sy speed $= speed') (makeEqnRef "rectVel")
+lcrectPos = lbldExpr (sy scalarPos $= scalarPos') (makeEqnRef "rectPos")
+lcrectNoTime = lbldExpr rectNoTime (makeEqnRef "rectNoTime")
+
+horMotionEqn1, horMotionEqn2 :: Expr
+horMotionEqn1 = sy xVel $= sy ixVel
+horMotionEqn2 = sy xPos $= sy QP.ixPos `addRe` (sy ixVel `mulRe` sy time)
+
+verMotionEqn1, verMotionEqn2, verMotionEqn3 :: Expr
+verMotionEqn1 = sy yVel $= sy iyVel $- (sy gravitationalAccel `mulRe` sy time)
+verMotionEqn2 = sy yPos $= sy QP.iyPos `addRe` (sy iyVel `mulRe` sy time) $- (sy gravitationalAccel `mulRe` square (sy time) $/ exactDbl 2)
+verMotionEqn3 = square (sy yVel) $= square (sy iyVel) $- exactDbl 2 `mulRe` sy gravitationalAccel `mulRe` (sy yPos $- sy QP.iyPos) 
+
+-- References --
+eqnRefs :: [Reference]
+eqnRefs = [ref lcrectVel, ref lcrectPos, ref lcrectNoTime]

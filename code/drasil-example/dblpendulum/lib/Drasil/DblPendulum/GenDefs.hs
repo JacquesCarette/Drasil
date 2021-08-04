@@ -23,7 +23,7 @@ import Data.Drasil.Quantities.Physics (velocity, acceleration, force,
 import Data.Drasil.Concepts.Physics (pendulum, weight, shm)
 import Data.Drasil.Quantities.PhysicalProperties (mass, len)
 import Data.Drasil.Theories.Physics (newtonSLR)
-import Drasil.DblPendulum.DataDefs (frequencyDD, periodSHMDD, angFrequencyDD)
+import Drasil.DblPendulum.DataDefs (positionGDD, frequencyDD, periodSHMDD, angFrequencyDD)
 
 -- import Drasil.Projectile.Assumptions (cartSyst, constAccel, pointMass, timeStartZero, twoDMotion)
 import qualified Drasil.DblPendulum.Expressions as E
@@ -32,7 +32,7 @@ import Drasil.DblPendulum.Concepts (arcLen, horizontalPos,
     verticalPos, horizontalVel, verticalVel, horizontalForce, verticalForce, firstObject, secondObject)
 
 genDefns :: [GenDefn]
-genDefns = [velIXGD_1, velIYGD_1, accelerationIXGD, accelerationIYGD,
+genDefns = [velIXGD_1, velIYGD_1, velIXGD_2, accelerationIXGD, accelerationIYGD,
        hForceOnPendulumGD, vForceOnPendulumGD, angFrequencyGD, periodPend]
 
 -----------------------------------------------
@@ -51,16 +51,15 @@ velIXDeriv_1 = mkDerivName (phraseNP (NP.the (xComp `of_` velocity))) (weave [ve
 -- title paragraph and weave the explained words and refined equation
 
 velIXDerivSents_1 :: [Sentence]
-velIXDerivSents_1 = [velIXDerivSent1_1,velIXDerivSent2_1,velIXDerivSent3_1,velIXDerivSent4_1, velIXDerivSent5_1]
+velIXDerivSents_1 = [velDerivSent1,velIXDerivSent2_1,velIXDerivSent3_1,velIXDerivSent4_1, velIXDerivSent5_1]
 -- words used to explain the equation refinement
 
 velIXDerivEqns_1 :: [Sentence]
 velIXDerivEqns_1 = map eS [E.velIXDerivEqn1_1, E.velIXDerivEqn2_1,
     E.velIXDerivEqn3_1, E.velIXDerivEqn4_1] ++ [eS velIXQD_1] -- refinement equation after explained words
 
-velIXDerivSent1_1, velIXDerivSent2_1, velIXDerivSent3_1,
-    velIXDerivSent4_1, velIXDerivSent5_1 :: Sentence
-velIXDerivSent1_1 = S "At a given point in time" `sC` phrase velocity +:+ S "may be defined as"
+velDerivSent1, velIXDerivSent2_1, velIXDerivSent3_1, velIXDerivSent4_1, velIXDerivSent5_1 :: Sentence
+velDerivSent1 = S "At a given point in time" `sC` phrase velocity `S.is` definedIn'' positionGDD
 velIXDerivSent2_1 = S "We also know the" +:+ phrase horizontalPos
 velIXDerivSent3_1 = S "Applying this,"
 velIXDerivSent4_1 = eS lenRod_1 `S.is` S "constant" `S.wrt` S  "time, so"
@@ -74,13 +73,13 @@ velIYGD_1 = gdNoRefs (equationalModel' velIYQD_1) (getUnit velocity)
            (Just velIYDeriv_1) "velocityIY1" [{-Notes-}]
 
 velIYQD_1 :: QDefinition
-velIYQD_1 = mkQuantDef' yVel_1 (the yComp `NP.of_` (velocity `ofThe` pendulum)) E.velIYExpr_1
+velIYQD_1 = mkQuantDef' yVel_1 (the yComp `NP.of_` (velocity `ofThe` firstObject)) E.velIYExpr_1
  
 velIYDeriv_1 :: Derivation
 velIYDeriv_1 = mkDerivName (phraseNP (NP.the (yComp `of_` velocity))) (weave [velIYDerivSents_1, velIYDerivEqns_1])
 
 velIYDerivSents_1 :: [Sentence]
-velIYDerivSents_1 = [velIXDerivSent1_1, velIYDerivSent2_1, velIYDerivSent3_1, velIYDerivSent4_1, velIYDerivSent5_1]
+velIYDerivSents_1 = [velDerivSent1, velIYDerivSent2_1, velIYDerivSent3_1, velIYDerivSent4_1, velIYDerivSent5_1]
 
 velIYDerivEqns_1 :: [Sentence]
 velIYDerivEqns_1 = map eS [E.velIYDerivEqn1_1, E.velIYDerivEqn2_1,
@@ -89,9 +88,36 @@ velIYDerivEqns_1 = map eS [E.velIYDerivEqn1_1, E.velIYDerivEqn2_1,
 velIYDerivSent2_1, velIYDerivSent3_1, velIYDerivSent4_1, velIYDerivSent5_1 :: Sentence
 velIYDerivSent2_1 = S "We also know the" +:+ phrase verticalPos
 velIYDerivSent3_1 = S "Applying this again,"
-velIYDerivSent4_1 = eS lenRod `S.is` S "constant" `S.wrt` S "time, so"
+velIYDerivSent4_1 = eS lenRod_1 `S.is` S "constant" `S.wrt` S "time, so"
 velIYDerivSent5_1 = S "Therefore, using the chain rule,"
 
+------------------------------------------------
+-- Velocity in X Dirction in the Second Object--
+------------------------------------------------
+velIXGD_2 :: GenDefn
+velIXGD_2 = gdNoRefs (equationalModel' velIXQD_2) (getUnit velocity)
+           (Just velIXDeriv_2) "velocityIX2" [{-Notes-}]
+-- general definiton block, with equation, unit, refinement explanation
+
+velIXQD_2 :: QDefinition
+velIXQD_2 = mkQuantDef' xVel_2 (the xComp `NP.of_` (velocity `ofThe` secondObject)) E.velIXExpr_2 -- lable and equation
+
+velIXDeriv_2 :: Derivation
+velIXDeriv_2 = mkDerivName (phraseNP (NP.the (xComp `of_` velocity))) (weave [velIXDerivSents_2, velIXDerivEqns_2])
+-- title paragraph and weave the explained words and refined equation
+
+velIXDerivSents_2 :: [Sentence]
+velIXDerivSents_2 = [velDerivSent1,velIXDerivSent2_2,velIXDerivSent3_2,velIXDerivSent4_2]
+-- words used to explain the equation refinement
+
+velIXDerivEqns_2 :: [Sentence]
+velIXDerivEqns_2 = map eS [E.velIXDerivEqn1_2, E.velIXDerivEqn2_2,
+    E.velIXDerivEqn3_2] ++ [eS velIXQD_2] -- refinement equation after explained words
+
+velIXDerivSent2_2, velIXDerivSent3_2, velIXDerivSent4_2 :: Sentence
+velIXDerivSent2_2 = S "We also know the" +:+ phrase horizontalPos
+velIXDerivSent3_2 = S "Applying this,"
+velIXDerivSent4_2 = S "Therefore, using the chain rule,"
 
 -----------------------
 accelerationIXGD :: GenDefn

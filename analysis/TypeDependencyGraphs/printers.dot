@@ -44,6 +44,19 @@ digraph alltypes {
 		OpenClose	[shape=oval, color=darkviolet, label="OpenClose"];
 		}
 	}
+	subgraph helpers {
+		subgraph variation{
+		Variation -> td;
+		Variation -> figure;
+		Variation -> li;
+		Variation -> pa;
+		Variation -> ba;
+		Variation -> Doc;
+		Variation	[shape=oval, color=darkviolet, label="Variation"];
+		}
+	}
+	subgraph print {
+	}
 	subgraph createmd {
 		subgraph seperator{
 		Seperator -> Doc;

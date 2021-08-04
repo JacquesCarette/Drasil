@@ -4,6 +4,7 @@ GraphInfo	[shape=oval, color=turquoise4, label="GraphInfo"];
 Variation	[shape=oval, color=turquoise4, label="Variation"];
 PrintHTML	[shape=oval, color=turquoise4, label="PrintHTML"];
 OpenClose	[shape=oval, color=turquoise4, label="OpenClose"];
+Variation	[shape=oval, color=turquoise4, label="Variation"];
 Linearity	[shape=oval, color=turquoise4, label="Linearity"];
 LinkType	[shape=oval, color=turquoise4, label="LinkType"];
 Ops	[shape=oval, color=turquoise4, label="Ops"];

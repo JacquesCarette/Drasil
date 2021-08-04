@@ -185,6 +185,7 @@ notApp :: CI
 srs :: CI
 typUnc :: CI
 sec :: CI
+notebook :: CI
 softReqSpec :: NP
 abbreviation :: NamedChunk
 acronym :: NamedChunk
@@ -222,6 +223,7 @@ element :: NamedChunk
 emphasis :: NamedChunk
 endUser :: NamedChunk
 environment :: NamedChunk
+example :: NamedChunk
 failure :: NamedChunk
 figure :: NamedChunk
 first :: NamedChunk
@@ -249,6 +251,7 @@ library :: NamedChunk
 limitation :: NamedChunk
 literacy :: NamedChunk
 material_ :: NamedChunk
+mainIdea :: NamedChunk
 message :: NamedChunk
 method_ :: NamedChunk
 module_ :: NamedChunk
@@ -266,12 +269,14 @@ plan :: NamedChunk
 practice :: NamedChunk
 priority :: NamedChunk
 problem :: NamedChunk
+procedure :: NamedChunk
 product_ :: NamedChunk
 project :: NamedChunk
 property :: NamedChunk
 purpose :: NamedChunk
 quantity :: NamedChunk
 realtime :: NamedChunk
+review :: NamedChunk
 reference :: NamedChunk
 requirement_ :: NamedChunk
 response :: NamedChunk
@@ -287,6 +292,7 @@ source :: NamedChunk
 simulation :: NamedChunk
 software :: NamedChunk
 solution :: NamedChunk
+summary :: NamedChunk
 specific :: NamedChunk
 specification :: NamedChunk
 stakeholder :: NamedChunk
@@ -316,7 +322,9 @@ abbAcc :: NamedChunk
 charOfIR :: NamedChunk
 consVals :: NamedChunk
 corSol :: NamedChunk
+methAndAnls :: NamedChunk
 orgOfDoc :: NamedChunk
+procForAnls :: NamedChunk
 propOfCorSol :: NamedChunk
 prpsOfDoc :: NamedChunk
 refMat :: NamedChunk
@@ -344,6 +352,7 @@ systemdescription :: NamedChunk
 systemConstraint :: NamedChunk
 sysCont :: NamedChunk
 userCharacteristic :: NamedChunk
+coordinateSystem :: NamedChunk
 datumConstraint :: NamedChunk
 inDatumConstraint :: NamedChunk
 outDatumConstraint :: NamedChunk
@@ -645,6 +654,8 @@ kinematics :: ConceptChunk
 frequency :: ConceptChunk
 period :: ConceptChunk
 motion :: ConceptChunk
+horizontalMotion :: ConceptChunk
+verticalMotion :: ConceptChunk
 chgMomentum :: ConceptChunk
 oneD :: CI
 twoD :: CI
@@ -744,6 +755,8 @@ weight :: UnitalChunk
 xAccel :: UnitalChunk
 xConstAccel :: UnitalChunk
 xDist :: UnitalChunk
+ixDist :: UnitalChunk
+iyDist :: UnitalChunk
 xPos :: UnitalChunk
 xVel :: UnitalChunk
 yAccel :: UnitalChunk

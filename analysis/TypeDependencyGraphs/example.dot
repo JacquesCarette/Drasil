@@ -175,6 +175,18 @@ digraph alltypes {
 	}
 	subgraph main {
 	}
+	subgraph analyiss {
+	}
+	subgraph body {
+	}
+	subgraph introsection {
+	}
+	subgraph main {
+	}
+	subgraph motion {
+	}
+	subgraph review {
+	}
 	subgraph asumptionss {
 	}
 	subgraph body {

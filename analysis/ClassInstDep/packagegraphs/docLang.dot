@@ -1,5 +1,14 @@
 digraph docLang{
 DocSection	[shape=oval, color=turquoise4, label="DocSection"];
+IntrodSec	[shape=oval, color=turquoise4, label="IntrodSec"];
+IntrodSub	[shape=oval, color=turquoise4, label="IntrodSub"];
+BodySub	[shape=oval, color=turquoise4, label="BodySub"];
+DLPlate	[shape=oval, color=turquoise4, label="DLPlate"];
+BodySec	[shape=oval, color=turquoise4, label="BodySec"];
+SmmrySec	[shape=oval, color=turquoise4, label="SmmrySec"];
+ApndxSec	[shape=oval, color=turquoise4, label="ApndxSec"];
+NbSection	[shape=oval, color=turquoise4, label="NbSection"];
+DocSection	[shape=oval, color=turquoise4, label="DocSection"];
 RefSec	[shape=oval, color=turquoise4, label="RefSec"];
 RefTab	[shape=oval, color=turquoise4, label="RefTab"];
 TSIntro	[shape=oval, color=turquoise4, label="TSIntro"];
@@ -44,9 +53,11 @@ SCSSub	[shape=oval, color=turquoise4, label="SCSSub"];
 ReqsSub	[shape=oval, color=turquoise4, label="ReqsSub"];
 SSDSec	[shape=oval, color=turquoise4, label="SSDSec"];
 ReqrmntSec	[shape=oval, color=turquoise4, label="ReqrmntSec"];
+Multiplate	[shape=oval, color=pink, label="Multiplate"];
 Show	[shape=oval, color=pink, label="Show"];
 Multiplate	[shape=oval, color=pink, label="Multiplate"];
 Show	[shape=oval, color=pink, label="Show"];
+DLPlate -> Multiplate;
 Emphasis -> Show;
 DLPlate -> Multiplate;
 Field -> Show;

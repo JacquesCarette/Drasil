@@ -2589,7 +2589,8 @@ Figure :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
 Bib :: BibRef -> RawContent
 
 -- | Contain a graph with coordinates (<a>Sentence</a>s), maybe a width and
---   height, and a label (<a>Sentence</a>). TODO: Fill this one in.
+--   height, and a label (<a>Sentence</a>). | CodeBlock CodeExpr -- ^ Block
+--   for codes TODO: Fill this one in.
 Graph :: [(Sentence, Sentence)] -> Maybe Width -> Maybe Height -> Lbl -> RawContent
 
 -- | An identifier is just a <a>String</a>.
@@ -2652,6 +2653,7 @@ lab :: Lens' Section Reference
 --   and <a>Section</a>s which hold the contents of the document.
 data Document
 Document :: Title -> Author -> ShowTableOfContents -> [Section] -> Document
+Notebook :: Title -> Author -> [Section] -> Document
 
 -- | Determines whether or not the table of contents appears on the
 --   generated artifacts.
@@ -2660,7 +2662,8 @@ ToC :: ShowTableOfContents
 NoToC :: ShowTableOfContents
 
 -- | Manually removes the first section of a document (table of contents
---   section).
+--   section). temp fix for Notebook (see if we need this in notebook
+--   later)
 checkToC :: Document -> Document
 
 -- | Smart constructor for labelled content chunks.
@@ -2716,6 +2719,10 @@ makeFigRef :: String -> Reference
 -- | Create a reference for a section. Takes in the name of a section and a
 --   shortname for the section.
 makeSecRef :: String -> Sentence -> Reference
+
+-- | Create a reference for a equation. Takes in the name of the equation
+--   and a shortname for the equation.
+makeEqnRef :: String -> Reference
 
 -- | Create a reference for a <a>URI</a>.
 makeURI :: UID -> String -> ShortName -> Reference
@@ -5210,6 +5217,7 @@ nounPhraseSent :: Sentence -> NP
 --   and <a>Section</a>s which hold the contents of the document.
 data Document
 Document :: Title -> Author -> ShowTableOfContents -> [Section] -> Document
+Notebook :: Title -> Author -> [Section] -> Document
 
 -- | Determines whether or not the table of contents appears on the
 --   generated artifacts.
@@ -5296,7 +5304,8 @@ mkParagraph :: Sentence -> Contents
 mkRawLC :: RawContent -> Reference -> LabelledContent
 
 -- | Manually removes the first section of a document (table of contents
---   section).
+--   section). temp fix for Notebook (see if we need this in notebook
+--   later)
 checkToC :: Document -> Document
 
 -- | Smart constructor for labelled content chunks.
@@ -5357,7 +5366,8 @@ Figure :: Lbl -> Filepath -> MaxWidthPercent -> RawContent
 Bib :: BibRef -> RawContent
 
 -- | Contain a graph with coordinates (<a>Sentence</a>s), maybe a width and
---   height, and a label (<a>Sentence</a>). TODO: Fill this one in.
+--   height, and a label (<a>Sentence</a>). | CodeBlock CodeExpr -- ^ Block
+--   for codes TODO: Fill this one in.
 Graph :: [(Sentence, Sentence)] -> Maybe Width -> Maybe Height -> Lbl -> RawContent
 
 -- | Smart constructor that wraps <a>LabelledContent</a> into
@@ -5375,6 +5385,10 @@ makeFigRef :: String -> Reference
 -- | Create a reference for a section. Takes in the name of a section and a
 --   shortname for the section.
 makeSecRef :: String -> Sentence -> Reference
+
+-- | Create a reference for a equation. Takes in the name of the equation
+--   and a shortname for the equation.
+makeEqnRef :: String -> Reference
 
 -- | Create a reference for a <a>URI</a>.
 makeURI :: UID -> String -> ShortName -> Reference

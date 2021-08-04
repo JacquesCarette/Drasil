@@ -16,7 +16,7 @@
 <text text-anchor="middle" x="773.59" y="-4479.05" font-family="Times,serif" font-size="14.00">ConceptChunk</text>
 </g>
 <!-- Eq -->
-<g id="node91" class="node">
+<g id="node93" class="node">
 <title>Eq</title>
 <ellipse fill="none" stroke="pink" cx="1515.35" cy="-4887.79" rx="27" ry="18"/>
 <text text-anchor="middle" x="1515.35" y="-4884.09" font-family="Times,serif" font-size="14.00">Eq</text>
@@ -28,7 +28,7 @@
 <polygon fill="black" stroke="black" points="1484.01,-4874.66 1494.46,-4876.38 1487.36,-4868.51 1484.01,-4874.66"/>
 </g>
 <!-- HasUID -->
-<g id="node92" class="node">
+<g id="node94" class="node">
 <title>HasUID</title>
 <ellipse fill="none" stroke="magenta" cx="87.46" cy="-2980.35" rx="47.39" ry="18"/>
 <text text-anchor="middle" x="87.46" y="-2976.65" font-family="Times,serif" font-size="14.00">HasUID</text>
@@ -40,7 +40,7 @@
 <polygon fill="black" stroke="black" points="103.08,-3006.13 95.75,-2998.49 96.72,-3009.04 103.08,-3006.13"/>
 </g>
 <!-- NamedIdea -->
-<g id="node93" class="node">
+<g id="node95" class="node">
 <title>NamedIdea</title>
 <ellipse fill="none" stroke="magenta" cx="2635.5" cy="-4887.79" rx="63.89" ry="18"/>
 <text text-anchor="middle" x="2635.5" y="-4884.09" font-family="Times,serif" font-size="14.00">NamedIdea</text>
@@ -52,7 +52,7 @@
 <polygon fill="black" stroke="black" points="2574.09,-4878.01 2584.6,-4876.71 2575.58,-4871.17 2574.09,-4878.01"/>
 </g>
 <!-- Idea -->
-<g id="node94" class="node">
+<g id="node96" class="node">
 <title>Idea</title>
 <ellipse fill="none" stroke="magenta" cx="3150.21" cy="-4652.73" rx="30.59" ry="18"/>
 <text text-anchor="middle" x="3150.21" y="-4649.03" font-family="Times,serif" font-size="14.00">Idea</text>
@@ -64,7 +64,7 @@
 <polygon fill="black" stroke="black" points="3109.64,-4653.34 3119.86,-4650.56 3110.14,-4646.36 3109.64,-4653.34"/>
 </g>
 <!-- Definition -->
-<g id="node95" class="node">
+<g id="node97" class="node">
 <title>Definition</title>
 <ellipse fill="none" stroke="magenta" cx="1000.65" cy="-4652.73" rx="55.79" ry="18"/>
 <text text-anchor="middle" x="1000.65" y="-4649.03" font-family="Times,serif" font-size="14.00">Definition</text>
@@ -76,7 +76,7 @@
 <polygon fill="black" stroke="black" points="968.14,-4632.76 978.24,-4635.95 972.33,-4627.16 968.14,-4632.76"/>
 </g>
 <!-- ConceptDomain -->
-<g id="node96" class="node">
+<g id="node98" class="node">
 <title>ConceptDomain</title>
 <ellipse fill="none" stroke="magenta" cx="403.04" cy="-4055.12" rx="84.49" ry="18"/>
 <text text-anchor="middle" x="403.04" y="-4051.42" font-family="Times,serif" font-size="14.00">ConceptDomain</text>
@@ -130,7 +130,7 @@
 <polygon fill="black" stroke="black" points="385.31,-4029.95 393.17,-4037.05 391.45,-4026.59 385.31,-4029.95"/>
 </g>
 <!-- CommonIdea -->
-<g id="node97" class="node">
+<g id="node99" class="node">
 <title>CommonIdea</title>
 <ellipse fill="none" stroke="magenta" cx="167.99" cy="-3540.42" rx="71.49" ry="18"/>
 <text text-anchor="middle" x="167.99" y="-3536.72" font-family="Times,serif" font-size="14.00">CommonIdea</text>
@@ -184,7 +184,7 @@
 <polygon fill="black" stroke="black" points="393.56,-4027.99 399.11,-4037.02 400.4,-4026.5 393.56,-4027.99"/>
 </g>
 <!-- HasShortName -->
-<g id="node98" class="node">
+<g id="node100" class="node">
 <title>HasShortName</title>
 <ellipse fill="none" stroke="magenta" cx="403.04" cy="-1905.57" rx="81.79" ry="18"/>
 <text text-anchor="middle" x="403.04" y="-1901.87" font-family="Times,serif" font-size="14.00">HasShortName</text>
@@ -196,7 +196,7 @@
 <polygon fill="black" stroke="black" points="396.11,-1934.16 396.33,-1923.57 389.56,-1931.71 396.11,-1934.16"/>
 </g>
 <!-- HasRefAddress -->
-<g id="node99" class="node">
+<g id="node101" class="node">
 <title>HasRefAddress</title>
 <ellipse fill="none" stroke="magenta" cx="773.59" cy="-1477.94" rx="81.79" ry="18"/>
 <text text-anchor="middle" x="773.59" y="-1474.24" font-family="Times,serif" font-size="14.00">HasRefAddress</text>
@@ -208,7 +208,7 @@
 <polygon fill="black" stroke="black" points="761.88,-1506.68 763.6,-1496.23 755.73,-1503.33 761.88,-1506.68"/>
 </g>
 <!-- Referable -->
-<g id="node100" class="node">
+<g id="node102" class="node">
 <title>Referable</title>
 <ellipse fill="none" stroke="magenta" cx="1515.35" cy="-1072.9" rx="55.79" ry="18"/>
 <text text-anchor="middle" x="1515.35" y="-1069.2" font-family="Times,serif" font-size="14.00">Referable</text>
@@ -250,7 +250,7 @@
 <polygon fill="black" stroke="black" points="1470.58,-1093.34 1478.73,-1086.56 1468.14,-1086.78 1470.58,-1093.34"/>
 </g>
 <!-- HasFields -->
-<g id="node101" class="node">
+<g id="node103" class="node">
 <title>HasFields</title>
 <ellipse fill="none" stroke="magenta" cx="841.29" cy="-277.95" rx="57.39" ry="18"/>
 <text text-anchor="middle" x="841.29" y="-274.25" font-family="Times,serif" font-size="14.00">HasFields</text>
@@ -328,7 +328,7 @@
 <polygon fill="black" stroke="black" points="3146.71,-4624.35 3150.21,-4634.35 3153.71,-4624.35 3146.71,-4624.35"/>
 </g>
 <!-- HasSpace -->
-<g id="node102" class="node">
+<g id="node104" class="node">
 <title>HasSpace</title>
 <ellipse fill="none" stroke="magenta" cx="4043.16" cy="-2697.43" rx="56.59" ry="18"/>
 <text text-anchor="middle" x="4043.16" y="-2693.73" font-family="Times,serif" font-size="14.00">HasSpace</text>
@@ -340,7 +340,7 @@
 <polygon fill="black" stroke="black" points="4023.19,-2672.82 4031.54,-2679.34 4029.08,-2669.04 4023.19,-2672.82"/>
 </g>
 <!-- HasSymbol -->
-<g id="node103" class="node">
+<g id="node105" class="node">
 <title>HasSymbol</title>
 <ellipse fill="none" stroke="magenta" cx="3883.75" cy="-2154.51" rx="63.89" ry="18"/>
 <text text-anchor="middle" x="3883.75" y="-2150.81" font-family="Times,serif" font-size="14.00">HasSymbol</text>
@@ -352,7 +352,7 @@
 <polygon fill="black" stroke="black" points="3859.35,-2131.7 3868.54,-2136.97 3864.64,-2127.12 3859.35,-2131.7"/>
 </g>
 <!-- Quantity -->
-<g id="node104" class="node">
+<g id="node106" class="node">
 <title>Quantity</title>
 <ellipse fill="none" stroke="magenta" cx="3577.83" cy="-1678.5" rx="51.19" ry="18"/>
 <text text-anchor="middle" x="3577.83" y="-1674.8" font-family="Times,serif" font-size="14.00">Quantity</text>
@@ -364,7 +364,7 @@
 <polygon fill="black" stroke="black" points="3548.51,-1657.72 3558.36,-1661.63 3553.09,-1652.43 3548.51,-1657.72"/>
 </g>
 <!-- Constrained -->
-<g id="node105" class="node">
+<g id="node107" class="node">
 <title>Constrained</title>
 <ellipse fill="none" stroke="magenta" cx="2635.5" cy="-1072.9" rx="67.69" ry="18"/>
 <text text-anchor="middle" x="2635.5" y="-1069.2" font-family="Times,serif" font-size="14.00">Constrained</text>
@@ -376,7 +376,7 @@
 <polygon fill="black" stroke="black" points="2680.43,-1089.57 2669.88,-1088.6 2677.53,-1095.94 2680.43,-1089.57"/>
 </g>
 <!-- HasReasVal -->
-<g id="node106" class="node">
+<g id="node108" class="node">
 <title>HasReasVal</title>
 <ellipse fill="none" stroke="magenta" cx="2358.35" cy="-1012.61" rx="65.79" ry="18"/>
 <text text-anchor="middle" x="2358.35" y="-1008.91" font-family="Times,serif" font-size="14.00">HasReasVal</text>
@@ -388,7 +388,7 @@
 <polygon fill="black" stroke="black" points="2408.27,-1027.5 2397.68,-1027.28 2405.83,-1034.06 2408.27,-1027.5"/>
 </g>
 <!-- MayHaveUnit -->
-<g id="node107" class="node">
+<g id="node109" class="node">
 <title>MayHaveUnit</title>
 <ellipse fill="none" stroke="magenta" cx="3377.27" cy="-1477.94" rx="75.29" ry="18"/>
 <text text-anchor="middle" x="3377.27" y="-1474.24" font-family="Times,serif" font-size="14.00">MayHaveUnit</text>
@@ -478,7 +478,7 @@
 <polygon fill="black" stroke="black" points="3401.98,-1501.11 3392.79,-1495.85 3396.69,-1505.7 3401.98,-1501.11"/>
 </g>
 <!-- Display -->
-<g id="node108" class="node">
+<g id="node110" class="node">
 <title>Display</title>
 <ellipse fill="none" stroke="magenta" cx="3577.83" cy="-4282.19" rx="45.49" ry="18"/>
 <text text-anchor="middle" x="3577.83" y="-4278.49" font-family="Times,serif" font-size="14.00">Display</text>
@@ -634,7 +634,7 @@
 <polygon fill="black" stroke="black" points="3556.26,-4308.71 3560.85,-4299.17 3551.31,-4303.76 3556.26,-4308.71"/>
 </g>
 <!-- DefiningExpr -->
-<g id="node109" class="node">
+<g id="node111" class="node">
 <title>DefiningExpr</title>
 <ellipse fill="none" stroke="magenta" cx="3471.66" cy="-4591.69" rx="72.29" ry="18"/>
 <text text-anchor="middle" x="3471.66" y="-4587.99" font-family="Times,serif" font-size="14.00">DefiningExpr</text>
@@ -700,7 +700,7 @@
 <polygon fill="black" stroke="black" points="3392.89,-1503.71 3385.55,-1496.07 3386.52,-1506.62 3392.89,-1503.71"/>
 </g>
 <!-- IsArgumentName -->
-<g id="node110" class="node">
+<g id="node112" class="node">
 <title>IsArgumentName</title>
 <ellipse fill="none" stroke="magenta" cx="4228.34" cy="-2980.35" rx="92.88" ry="18"/>
 <text text-anchor="middle" x="4228.34" y="-2976.65" font-family="Times,serif" font-size="14.00">IsArgumentName</text>
@@ -946,7 +946,7 @@
 <polygon fill="black" stroke="black" points="3340.6,-1458.53 3350.9,-1460.99 3344.38,-1452.64 3340.6,-1458.53"/>
 </g>
 <!-- HasUncertainty -->
-<g id="node111" class="node">
+<g id="node113" class="node">
 <title>HasUncertainty</title>
 <ellipse fill="none" stroke="magenta" cx="2075.43" cy="-992.38" rx="84.49" ry="18"/>
 <text text-anchor="middle" x="2075.43" y="-988.68" font-family="Times,serif" font-size="14.00">HasUncertainty</text>
@@ -1090,7 +1090,7 @@
 <polygon fill="black" stroke="black" points="425.35,-4079.08 416.55,-4073.17 419.75,-4083.27 425.35,-4079.08"/>
 </g>
 <!-- HasUnitSymbol -->
-<g id="node112" class="node">
+<g id="node114" class="node">
 <title>HasUnitSymbol</title>
 <ellipse fill="none" stroke="magenta" cx="503.28" cy="-4437.83" rx="83.69" ry="18"/>
 <text text-anchor="middle" x="503.28" y="-4434.13" font-family="Times,serif" font-size="14.00">HasUnitSymbol</text>
@@ -1102,7 +1102,7 @@
 <polygon fill="black" stroke="black" points="512.3,-4409.15 511.4,-4419.71 518.69,-4412.01 512.3,-4409.15"/>
 </g>
 <!-- IsUnit -->
-<g id="node113" class="node">
+<g id="node115" class="node">
 <title>IsUnit</title>
 <ellipse fill="none" stroke="magenta" cx="231.45" cy="-4275.3" rx="39.79" ry="18"/>
 <text text-anchor="middle" x="231.45" y="-4271.6" font-family="Times,serif" font-size="14.00">IsUnit</text>
@@ -1198,7 +1198,7 @@
 <polygon fill="black" stroke="black" points="3594.07,-4254.66 3590.88,-4264.76 3599.67,-4258.86 3594.07,-4254.66"/>
 </g>
 <!-- Unitary -->
-<g id="node114" class="node">
+<g id="node116" class="node">
 <title>Unitary</title>
 <ellipse fill="none" stroke="magenta" cx="3982.87" cy="-3540.42" rx="46.29" ry="18"/>
 <text text-anchor="middle" x="3982.87" y="-3536.72" font-family="Times,serif" font-size="14.00">Unitary</text>
@@ -1338,50 +1338,50 @@
 <!-- CiteField -->
 <g id="node22" class="node">
 <title>CiteField</title>
-<ellipse fill="none" stroke="#00868b" cx="2295.43" cy="-2614.35" rx="53.09" ry="18"/>
-<text text-anchor="middle" x="2295.43" y="-2610.65" font-family="Times,serif" font-size="14.00">CiteField</text>
+<ellipse fill="none" stroke="#00868b" cx="2257.43" cy="-2512.35" rx="53.09" ry="18"/>
+<text text-anchor="middle" x="2257.43" y="-2508.65" font-family="Times,serif" font-size="14.00">CiteField</text>
 </g>
 <!-- HP -->
 <g id="node23" class="node">
 <title>HP</title>
-<ellipse fill="none" stroke="#00868b" cx="2564.43" cy="-1788.35" rx="27" ry="18"/>
-<text text-anchor="middle" x="2564.43" y="-1784.65" font-family="Times,serif" font-size="14.00">HP</text>
+<ellipse fill="none" stroke="#00868b" cx="2579.43" cy="-1758.35" rx="27" ry="18"/>
+<text text-anchor="middle" x="2579.43" y="-1754.65" font-family="Times,serif" font-size="14.00">HP</text>
 </g>
 <!-- CitationKind -->
 <g id="node24" class="node">
 <title>CitationKind</title>
-<ellipse fill="none" stroke="#00868b" cx="1545.43" cy="-2968.35" rx="69.59" ry="18"/>
-<text text-anchor="middle" x="1545.43" y="-2964.65" font-family="Times,serif" font-size="14.00">CitationKind</text>
+<ellipse fill="none" stroke="#00868b" cx="2622.43" cy="-2860.35" rx="69.59" ry="18"/>
+<text text-anchor="middle" x="2622.43" y="-2856.65" font-family="Times,serif" font-size="14.00">CitationKind</text>
 </g>
 <!-- Month -->
 <g id="node25" class="node">
 <title>Month</title>
-<ellipse fill="none" stroke="#00868b" cx="1811.34" cy="-2909.35" rx="40.89" ry="18"/>
-<text text-anchor="middle" x="1811.34" y="-2905.65" font-family="Times,serif" font-size="14.00">Month</text>
+<ellipse fill="none" stroke="#00868b" cx="1781.34" cy="-2918.35" rx="40.89" ry="18"/>
+<text text-anchor="middle" x="1781.34" y="-2914.65" font-family="Times,serif" font-size="14.00">Month</text>
 </g>
 <!-- Show -->
-<g id="node115" class="node">
+<g id="node117" class="node">
 <title>Show</title>
-<ellipse fill="none" stroke="pink" cx="1960.68" cy="-2909.35" rx="36.29" ry="18"/>
-<text text-anchor="middle" x="1960.68" y="-2905.65" font-family="Times,serif" font-size="14.00">Show</text>
+<ellipse fill="none" stroke="pink" cx="1930.68" cy="-2918.35" rx="36.29" ry="18"/>
+<text text-anchor="middle" x="1930.68" y="-2914.65" font-family="Times,serif" font-size="14.00">Show</text>
 </g>
 <!-- Month&#45;&gt;Show -->
 <g id="edge177" class="edge">
 <title>Month&#45;&gt;Show</title>
-<path fill="none" stroke="black" d="M1852.54,-2909.35C1871.65,-2909.35 1894.46,-2909.35 1914.19,-2909.35"/>
-<polygon fill="black" stroke="black" points="1914.19,-2912.85 1924.19,-2909.35 1914.19,-2905.85 1914.19,-2912.85"/>
+<path fill="none" stroke="black" d="M1822.54,-2918.35C1841.65,-2918.35 1864.46,-2918.35 1884.19,-2918.35"/>
+<polygon fill="black" stroke="black" points="1884.19,-2921.85 1894.19,-2918.35 1884.19,-2914.85 1884.19,-2921.85"/>
 </g>
 <!-- ListType -->
 <g id="node26" class="node">
 <title>ListType</title>
-<ellipse fill="none" stroke="#00868b" cx="1526.43" cy="-1965.35" rx="50.89" ry="18"/>
-<text text-anchor="middle" x="1526.43" y="-1961.65" font-family="Times,serif" font-size="14.00">ListType</text>
+<ellipse fill="none" stroke="#00868b" cx="2487.43" cy="-2048.35" rx="50.89" ry="18"/>
+<text text-anchor="middle" x="2487.43" y="-2044.65" font-family="Times,serif" font-size="14.00">ListType</text>
 </g>
 <!-- ItemType -->
 <g id="node27" class="node">
 <title>ItemType</title>
-<ellipse fill="none" stroke="#00868b" cx="2061.43" cy="-2555.35" rx="54.69" ry="18"/>
-<text text-anchor="middle" x="2061.43" y="-2551.65" font-family="Times,serif" font-size="14.00">ItemType</text>
+<ellipse fill="none" stroke="#00868b" cx="1505.43" cy="-2918.35" rx="54.69" ry="18"/>
+<text text-anchor="middle" x="1505.43" y="-2914.65" font-family="Times,serif" font-size="14.00">ItemType</text>
 </g>
 <!-- Contents -->
 <g id="node28" class="node">
@@ -1390,7 +1390,7 @@
 <text text-anchor="middle" x="52.65" y="-274.87" font-family="Times,serif" font-size="14.00">Contents</text>
 </g>
 <!-- HasContents -->
-<g id="node116" class="node">
+<g id="node118" class="node">
 <title>HasContents</title>
 <ellipse fill="none" stroke="magenta" cx="255.37" cy="-148.29" rx="70.69" ry="18"/>
 <text text-anchor="middle" x="255.37" y="-144.59" font-family="Times,serif" font-size="14.00">HasContents</text>
@@ -1404,14 +1404,14 @@
 <!-- DType -->
 <g id="node29" class="node">
 <title>DType</title>
-<ellipse fill="none" stroke="#00868b" cx="1869.43" cy="-1729.35" rx="40.09" ry="18"/>
-<text text-anchor="middle" x="1869.43" y="-1725.65" font-family="Times,serif" font-size="14.00">DType</text>
+<ellipse fill="none" stroke="#00868b" cx="1374.43" cy="-1700.35" rx="40.09" ry="18"/>
+<text text-anchor="middle" x="1374.43" y="-1696.65" font-family="Times,serif" font-size="14.00">DType</text>
 </g>
 <!-- RawContent -->
 <g id="node30" class="node">
 <title>RawContent</title>
-<ellipse fill="none" stroke="#00868b" cx="1543.43" cy="-3263.35" rx="67.69" ry="18"/>
-<text text-anchor="middle" x="1543.43" y="-3259.65" font-family="Times,serif" font-size="14.00">RawContent</text>
+<ellipse fill="none" stroke="#00868b" cx="2504.43" cy="-3324.35" rx="67.69" ry="18"/>
+<text text-anchor="middle" x="2504.43" y="-3320.65" font-family="Times,serif" font-size="14.00">RawContent</text>
 </g>
 <!-- LabelledContent -->
 <g id="node31" class="node">
@@ -1464,86 +1464,86 @@
 <!-- LblType -->
 <g id="node33" class="node">
 <title>LblType</title>
-<ellipse fill="none" stroke="#00868b" cx="2526.43" cy="-3322.35" rx="48.19" ry="18"/>
-<text text-anchor="middle" x="2526.43" y="-3318.65" font-family="Times,serif" font-size="14.00">LblType</text>
+<ellipse fill="none" stroke="#00868b" cx="2426.43" cy="-1642.35" rx="48.19" ry="18"/>
+<text text-anchor="middle" x="2426.43" y="-1638.65" font-family="Times,serif" font-size="14.00">LblType</text>
 </g>
 <!-- IRefProg -->
 <g id="node34" class="node">
 <title>IRefProg</title>
-<ellipse fill="none" stroke="#00868b" cx="2353.43" cy="-2201.35" rx="51.99" ry="18"/>
-<text text-anchor="middle" x="2353.43" y="-2197.65" font-family="Times,serif" font-size="14.00">IRefProg</text>
+<ellipse fill="none" stroke="#00868b" cx="2720.43" cy="-2106.35" rx="51.99" ry="18"/>
+<text text-anchor="middle" x="2720.43" y="-2102.65" font-family="Times,serif" font-size="14.00">IRefProg</text>
 </g>
 <!-- CapitalizationRule -->
 <g id="node35" class="node">
 <title>CapitalizationRule</title>
-<ellipse fill="none" stroke="#00868b" cx="1925.43" cy="-2260.35" rx="96.38" ry="18"/>
-<text text-anchor="middle" x="1925.43" y="-2256.65" font-family="Times,serif" font-size="14.00">CapitalizationRule</text>
+<ellipse fill="none" stroke="#00868b" cx="2010.43" cy="-2802.35" rx="96.38" ry="18"/>
+<text text-anchor="middle" x="2010.43" y="-2798.65" font-family="Times,serif" font-size="14.00">CapitalizationRule</text>
 </g>
 <!-- PluralRule -->
 <g id="node36" class="node">
 <title>PluralRule</title>
-<ellipse fill="none" stroke="#00868b" cx="2361.43" cy="-1670.35" rx="59.59" ry="18"/>
-<text text-anchor="middle" x="2361.43" y="-1666.65" font-family="Times,serif" font-size="14.00">PluralRule</text>
+<ellipse fill="none" stroke="#00868b" cx="1278.43" cy="-2744.35" rx="59.59" ry="18"/>
+<text text-anchor="middle" x="1278.43" y="-2740.65" font-family="Times,serif" font-size="14.00">PluralRule</text>
 </g>
 <!-- NP -->
 <g id="node37" class="node">
 <title>NP</title>
-<ellipse fill="none" stroke="#00868b" cx="1856.83" cy="-2673.35" rx="27" ry="18"/>
-<text text-anchor="middle" x="1856.83" y="-2669.65" font-family="Times,serif" font-size="14.00">NP</text>
+<ellipse fill="none" stroke="#00868b" cx="1825.83" cy="-2628.35" rx="27" ry="18"/>
+<text text-anchor="middle" x="1825.83" y="-2624.65" font-family="Times,serif" font-size="14.00">NP</text>
 </g>
 <!-- NounPhrase -->
-<g id="node126" class="node">
+<g id="node128" class="node">
 <title>NounPhrase</title>
-<ellipse fill="none" stroke="magenta" cx="2023.43" cy="-2673.35" rx="67.69" ry="18"/>
-<text text-anchor="middle" x="2023.43" y="-2669.65" font-family="Times,serif" font-size="14.00">NounPhrase</text>
+<ellipse fill="none" stroke="magenta" cx="1992.43" cy="-2628.35" rx="67.69" ry="18"/>
+<text text-anchor="middle" x="1992.43" y="-2624.65" font-family="Times,serif" font-size="14.00">NounPhrase</text>
 </g>
 <!-- NP&#45;&gt;NounPhrase -->
 <g id="edge196" class="edge">
 <title>NP&#45;&gt;NounPhrase</title>
-<path fill="none" stroke="black" d="M1883.97,-2673.35C1900.84,-2673.35 1923.47,-2673.35 1945.58,-2673.35"/>
-<polygon fill="black" stroke="black" points="1945.68,-2676.85 1955.67,-2673.35 1945.67,-2669.85 1945.68,-2676.85"/>
+<path fill="none" stroke="black" d="M1852.97,-2628.35C1869.84,-2628.35 1892.47,-2628.35 1914.58,-2628.35"/>
+<polygon fill="black" stroke="black" points="1914.68,-2631.85 1924.67,-2628.35 1914.67,-2624.85 1914.68,-2631.85"/>
 </g>
 <!-- URI -->
 <g id="node38" class="node">
 <title>URI</title>
-<ellipse fill="none" stroke="#00868b" cx="1386.43" cy="-2437.35" rx="28.7" ry="18"/>
-<text text-anchor="middle" x="1386.43" y="-2433.65" font-family="Times,serif" font-size="14.00">URI</text>
+<ellipse fill="none" stroke="#00868b" cx="2987.43" cy="-3440.35" rx="28.7" ry="18"/>
+<text text-anchor="middle" x="2987.43" y="-3436.65" font-family="Times,serif" font-size="14.00">URI</text>
 </g>
 <!-- Scheme -->
 <g id="node39" class="node">
 <title>Scheme</title>
-<ellipse fill="none" stroke="#00868b" cx="1404.43" cy="-1729.35" rx="47.39" ry="18"/>
-<text text-anchor="middle" x="1404.43" y="-1725.65" font-family="Times,serif" font-size="14.00">Scheme</text>
+<ellipse fill="none" stroke="#00868b" cx="2483.43" cy="-3440.35" rx="47.39" ry="18"/>
+<text text-anchor="middle" x="2483.43" y="-3436.65" font-family="Times,serif" font-size="14.00">Scheme</text>
 </g>
 <!-- Authority -->
 <g id="node40" class="node">
 <title>Authority</title>
-<ellipse fill="none" stroke="#00868b" cx="1943.43" cy="-2142.35" rx="54.69" ry="18"/>
-<text text-anchor="middle" x="1943.43" y="-2138.65" font-family="Times,serif" font-size="14.00">Authority</text>
+<ellipse fill="none" stroke="#00868b" cx="1273.43" cy="-1816.35" rx="54.69" ry="18"/>
+<text text-anchor="middle" x="1273.43" y="-1812.65" font-family="Times,serif" font-size="14.00">Authority</text>
 </g>
 <!-- Port -->
 <g id="node41" class="node">
 <title>Port</title>
-<ellipse fill="none" stroke="#00868b" cx="1447.43" cy="-1611.35" rx="30.59" ry="18"/>
-<text text-anchor="middle" x="1447.43" y="-1607.65" font-family="Times,serif" font-size="14.00">Port</text>
+<ellipse fill="none" stroke="#00868b" cx="1191.43" cy="-3150.35" rx="30.59" ry="18"/>
+<text text-anchor="middle" x="1191.43" y="-3146.65" font-family="Times,serif" font-size="14.00">Port</text>
 </g>
 <!-- Uncertainty -->
 <g id="node42" class="node">
 <title>Uncertainty</title>
-<ellipse fill="none" stroke="#00868b" cx="2485.43" cy="-3440.35" rx="66.09" ry="18"/>
-<text text-anchor="middle" x="2485.43" y="-3436.65" font-family="Times,serif" font-size="14.00">Uncertainty</text>
+<ellipse fill="none" stroke="#00868b" cx="2212.43" cy="-1526.35" rx="66.09" ry="18"/>
+<text text-anchor="middle" x="2212.43" y="-1522.65" font-family="Times,serif" font-size="14.00">Uncertainty</text>
 </g>
 <!-- ConstraintReason -->
 <g id="node43" class="node">
 <title>ConstraintReason</title>
-<ellipse fill="none" stroke="#00868b" cx="2454.43" cy="-1906.35" rx="93.68" ry="18"/>
-<text text-anchor="middle" x="2454.43" y="-1902.65" font-family="Times,serif" font-size="14.00">ConstraintReason</text>
+<ellipse fill="none" stroke="#00868b" cx="1892.43" cy="-2338.35" rx="93.68" ry="18"/>
+<text text-anchor="middle" x="1892.43" y="-2334.65" font-family="Times,serif" font-size="14.00">ConstraintReason</text>
 </g>
 <!-- Constraint -->
 <g id="node44" class="node">
 <title>Constraint</title>
-<ellipse fill="none" stroke="#00868b" cx="1299.43" cy="-1847.35" rx="59.59" ry="18"/>
-<text text-anchor="middle" x="1299.43" y="-1843.65" font-family="Times,serif" font-size="14.00">Constraint</text>
+<ellipse fill="none" stroke="#00868b" cx="1220.43" cy="-2918.35" rx="59.59" ry="18"/>
+<text text-anchor="middle" x="1220.43" y="-2914.65" font-family="Times,serif" font-size="14.00">Constraint</text>
 </g>
 <!-- DecRef -->
 <g id="node45" class="node">
@@ -1578,20 +1578,20 @@
 <!-- Derivation -->
 <g id="node46" class="node">
 <title>Derivation</title>
-<ellipse fill="none" stroke="#00868b" cx="1240.43" cy="-1965.35" rx="59.59" ry="18"/>
-<text text-anchor="middle" x="1240.43" y="-1961.65" font-family="Times,serif" font-size="14.00">Derivation</text>
+<ellipse fill="none" stroke="#00868b" cx="1162.43" cy="-2106.35" rx="59.59" ry="18"/>
+<text text-anchor="middle" x="1162.43" y="-2102.65" font-family="Times,serif" font-size="14.00">Derivation</text>
 </g>
 <!-- DisplayBinOp -->
 <g id="node47" class="node">
 <title>DisplayBinOp</title>
-<ellipse fill="none" stroke="#00868b" cx="2198.43" cy="-1493.35" rx="74.19" ry="18"/>
-<text text-anchor="middle" x="2198.43" y="-1489.65" font-family="Times,serif" font-size="14.00">DisplayBinOp</text>
+<ellipse fill="none" stroke="#00868b" cx="1118.43" cy="-2222.35" rx="74.19" ry="18"/>
+<text text-anchor="middle" x="1118.43" y="-2218.65" font-family="Times,serif" font-size="14.00">DisplayBinOp</text>
 </g>
 <!-- DisplayAssocBinOp -->
 <g id="node48" class="node">
 <title>DisplayAssocBinOp</title>
-<ellipse fill="none" stroke="#00868b" cx="1340.43" cy="-2555.35" rx="100.98" ry="18"/>
-<text text-anchor="middle" x="1340.43" y="-2551.65" font-family="Times,serif" font-size="14.00">DisplayAssocBinOp</text>
+<ellipse fill="none" stroke="#00868b" cx="1957.43" cy="-3266.35" rx="100.98" ry="18"/>
+<text text-anchor="middle" x="1957.43" y="-3262.65" font-family="Times,serif" font-size="14.00">DisplayAssocBinOp</text>
 </g>
 <!-- DisplayExpr -->
 <g id="node49" class="node">
@@ -1608,14 +1608,14 @@
 <!-- SecCons -->
 <g id="node50" class="node">
 <title>SecCons</title>
-<ellipse fill="none" stroke="#00868b" cx="3000.43" cy="-3440.35" rx="50.09" ry="18"/>
-<text text-anchor="middle" x="3000.43" y="-3436.65" font-family="Times,serif" font-size="14.00">SecCons</text>
+<ellipse fill="none" stroke="#00868b" cx="2776.43" cy="-1932.35" rx="50.09" ry="18"/>
+<text text-anchor="middle" x="2776.43" y="-1928.65" font-family="Times,serif" font-size="14.00">SecCons</text>
 </g>
 <!-- Partition -->
 <g id="node51" class="node">
 <title>Partition</title>
-<ellipse fill="none" stroke="#00868b" cx="2706.43" cy="-2142.35" rx="51.19" ry="18"/>
-<text text-anchor="middle" x="2706.43" y="-2138.65" font-family="Times,serif" font-size="14.00">Partition</text>
+<ellipse fill="none" stroke="#00868b" cx="1617.43" cy="-2454.35" rx="51.19" ry="18"/>
+<text text-anchor="middle" x="1617.43" y="-2450.65" font-family="Times,serif" font-size="14.00">Partition</text>
 </g>
 <!-- Section -->
 <g id="node52" class="node">
@@ -1647,104 +1647,116 @@
 <path fill="none" stroke="black" d="M597.26,-1662.92C726.2,-1580.06 1331.32,-1191.18 1481.54,-1094.64"/>
 <polygon fill="black" stroke="black" points="1483.44,-1097.57 1489.96,-1089.22 1479.66,-1091.68 1483.44,-1097.57"/>
 </g>
-<!-- Document -->
+<!-- SecHeader -->
 <g id="node53" class="node">
+<title>SecHeader</title>
+<ellipse fill="none" stroke="#00868b" cx="2208.43" cy="-3730.35" rx="61.99" ry="18"/>
+<text text-anchor="middle" x="2208.43" y="-3726.65" font-family="Times,serif" font-size="14.00">SecHeader</text>
+</g>
+<!-- Content -->
+<g id="node54" class="node">
+<title>Content</title>
+<ellipse fill="none" stroke="#00868b" cx="2136.43" cy="-1410.35" rx="48.19" ry="18"/>
+<text text-anchor="middle" x="2136.43" y="-1406.65" font-family="Times,serif" font-size="14.00">Content</text>
+</g>
+<!-- Document -->
+<g id="node55" class="node">
 <title>Document</title>
-<ellipse fill="none" stroke="#00868b" cx="1179.43" cy="-2142.35" rx="57.69" ry="18"/>
-<text text-anchor="middle" x="1179.43" y="-2138.65" font-family="Times,serif" font-size="14.00">Document</text>
+<ellipse fill="none" stroke="#00868b" cx="1450.43" cy="-3730.35" rx="57.69" ry="18"/>
+<text text-anchor="middle" x="1450.43" y="-3726.65" font-family="Times,serif" font-size="14.00">Document</text>
 </g>
 <!-- ShowTableOfContents -->
-<g id="node54" class="node">
+<g id="node56" class="node">
 <title>ShowTableOfContents</title>
-<ellipse fill="none" stroke="#00868b" cx="1943.43" cy="-2378.35" rx="113.98" ry="18"/>
-<text text-anchor="middle" x="1943.43" y="-2374.65" font-family="Times,serif" font-size="14.00">ShowTableOfContents</text>
+<ellipse fill="none" stroke="#00868b" cx="2434.43" cy="-1874.35" rx="113.98" ry="18"/>
+<text text-anchor="middle" x="2434.43" y="-1870.65" font-family="Times,serif" font-size="14.00">ShowTableOfContents</text>
 </g>
 <!-- ArithBinOp -->
-<g id="node55" class="node">
+<g id="node57" class="node">
 <title>ArithBinOp</title>
-<ellipse fill="none" stroke="#00868b" cx="1833.43" cy="-3617.35" rx="63.09" ry="18"/>
-<text text-anchor="middle" x="1833.43" y="-3613.65" font-family="Times,serif" font-size="14.00">ArithBinOp</text>
+<ellipse fill="none" stroke="#00868b" cx="991.43" cy="-2338.35" rx="63.09" ry="18"/>
+<text text-anchor="middle" x="991.43" y="-2334.65" font-family="Times,serif" font-size="14.00">ArithBinOp</text>
 </g>
 <!-- EqBinOp -->
-<g id="node56" class="node">
+<g id="node58" class="node">
 <title>EqBinOp</title>
-<ellipse fill="none" stroke="#00868b" cx="2766.43" cy="-1965.35" rx="51.99" ry="18"/>
-<text text-anchor="middle" x="2766.43" y="-1961.65" font-family="Times,serif" font-size="14.00">EqBinOp</text>
+<ellipse fill="none" stroke="#00868b" cx="1618.43" cy="-2338.35" rx="51.99" ry="18"/>
+<text text-anchor="middle" x="1618.43" y="-2334.65" font-family="Times,serif" font-size="14.00">EqBinOp</text>
 </g>
 <!-- BoolBinOp -->
-<g id="node57" class="node">
+<g id="node59" class="node">
 <title>BoolBinOp</title>
-<ellipse fill="none" stroke="#00868b" cx="1063.43" cy="-2260.35" rx="59.59" ry="18"/>
-<text text-anchor="middle" x="1063.43" y="-2256.65" font-family="Times,serif" font-size="14.00">BoolBinOp</text>
+<ellipse fill="none" stroke="#00868b" cx="3192.43" cy="-1236.35" rx="59.59" ry="18"/>
+<text text-anchor="middle" x="3192.43" y="-1232.65" font-family="Times,serif" font-size="14.00">BoolBinOp</text>
 </g>
 <!-- LABinOp -->
-<g id="node58" class="node">
+<g id="node60" class="node">
 <title>LABinOp</title>
-<ellipse fill="none" stroke="#00868b" cx="1645.43" cy="-2437.35" rx="51.99" ry="18"/>
-<text text-anchor="middle" x="1645.43" y="-2433.65" font-family="Times,serif" font-size="14.00">LABinOp</text>
+<ellipse fill="none" stroke="#00868b" cx="1560.43" cy="-2686.35" rx="51.99" ry="18"/>
+<text text-anchor="middle" x="1560.43" y="-2682.65" font-family="Times,serif" font-size="14.00">LABinOp</text>
 </g>
 <!-- OrdBinOp -->
-<g id="node59" class="node">
+<g id="node61" class="node">
 <title>OrdBinOp</title>
-<ellipse fill="none" stroke="#00868b" cx="2240.43" cy="-3735.35" rx="57.39" ry="18"/>
-<text text-anchor="middle" x="2240.43" y="-3731.65" font-family="Times,serif" font-size="14.00">OrdBinOp</text>
+<ellipse fill="none" stroke="#00868b" cx="2551.43" cy="-3788.35" rx="57.39" ry="18"/>
+<text text-anchor="middle" x="2551.43" y="-3784.65" font-family="Times,serif" font-size="14.00">OrdBinOp</text>
 </g>
 <!-- VVVBinOp -->
-<g id="node60" class="node">
+<g id="node62" class="node">
 <title>VVVBinOp</title>
-<ellipse fill="none" stroke="#00868b" cx="3126.43" cy="-1198.35" rx="58.49" ry="18"/>
-<text text-anchor="middle" x="3126.43" y="-1194.65" font-family="Times,serif" font-size="14.00">VVVBinOp</text>
+<ellipse fill="none" stroke="#00868b" cx="3132.43" cy="-1120.35" rx="58.49" ry="18"/>
+<text text-anchor="middle" x="3132.43" y="-1116.65" font-family="Times,serif" font-size="14.00">VVVBinOp</text>
 </g>
 <!-- VVNBinOp -->
-<g id="node61" class="node">
+<g id="node63" class="node">
 <title>VVNBinOp</title>
-<ellipse fill="none" stroke="#00868b" cx="3364.43" cy="-1198.35" rx="59.59" ry="18"/>
-<text text-anchor="middle" x="3364.43" y="-1194.65" font-family="Times,serif" font-size="14.00">VVNBinOp</text>
+<ellipse fill="none" stroke="#00868b" cx="3366.43" cy="-1120.35" rx="59.59" ry="18"/>
+<text text-anchor="middle" x="3366.43" y="-1116.65" font-family="Times,serif" font-size="14.00">VVNBinOp</text>
 </g>
 <!-- AssocArithOper -->
-<g id="node62" class="node">
+<g id="node64" class="node">
 <title>AssocArithOper</title>
-<ellipse fill="none" stroke="#00868b" cx="2679.43" cy="-2850.35" rx="83.39" ry="18"/>
-<text text-anchor="middle" x="2679.43" y="-2846.65" font-family="Times,serif" font-size="14.00">AssocArithOper</text>
+<ellipse fill="none" stroke="#00868b" cx="1475.43" cy="-3208.35" rx="83.39" ry="18"/>
+<text text-anchor="middle" x="1475.43" y="-3204.65" font-family="Times,serif" font-size="14.00">AssocArithOper</text>
 </g>
 <!-- AssocBoolOper -->
-<g id="node63" class="node">
+<g id="node65" class="node">
 <title>AssocBoolOper</title>
-<ellipse fill="none" stroke="#00868b" cx="2500.43" cy="-2024.35" rx="80.69" ry="18"/>
-<text text-anchor="middle" x="2500.43" y="-2020.65" font-family="Times,serif" font-size="14.00">AssocBoolOper</text>
+<ellipse fill="none" stroke="#00868b" cx="1879.43" cy="-2222.35" rx="80.69" ry="18"/>
+<text text-anchor="middle" x="1879.43" y="-2218.65" font-family="Times,serif" font-size="14.00">AssocBoolOper</text>
 </g>
 <!-- UFunc -->
-<g id="node64" class="node">
+<g id="node66" class="node">
 <title>UFunc</title>
-<ellipse fill="none" stroke="#00868b" cx="1222.43" cy="-3204.35" rx="41.69" ry="18"/>
-<text text-anchor="middle" x="1222.43" y="-3200.65" font-family="Times,serif" font-size="14.00">UFunc</text>
+<ellipse fill="none" stroke="#00868b" cx="3406.43" cy="-1294.35" rx="41.69" ry="18"/>
+<text text-anchor="middle" x="3406.43" y="-1290.65" font-family="Times,serif" font-size="14.00">UFunc</text>
 </g>
 <!-- UFuncB -->
-<g id="node65" class="node">
+<g id="node67" class="node">
 <title>UFuncB</title>
-<ellipse fill="none" stroke="#00868b" cx="2998.43" cy="-3558.35" rx="48.19" ry="18"/>
-<text text-anchor="middle" x="2998.43" y="-3554.65" font-family="Times,serif" font-size="14.00">UFuncB</text>
+<ellipse fill="none" stroke="#00868b" cx="2948.43" cy="-3730.35" rx="48.19" ry="18"/>
+<text text-anchor="middle" x="2948.43" y="-3726.65" font-family="Times,serif" font-size="14.00">UFuncB</text>
 </g>
 <!-- UFuncVV -->
-<g id="node66" class="node">
+<g id="node68" class="node">
 <title>UFuncVV</title>
-<ellipse fill="none" stroke="#00868b" cx="2709.43" cy="-3145.35" rx="53.89" ry="18"/>
-<text text-anchor="middle" x="2709.43" y="-3141.65" font-family="Times,serif" font-size="14.00">UFuncVV</text>
+<ellipse fill="none" stroke="#00868b" cx="1504.43" cy="-1932.35" rx="53.89" ry="18"/>
+<text text-anchor="middle" x="1504.43" y="-1928.65" font-family="Times,serif" font-size="14.00">UFuncVV</text>
 </g>
 <!-- UFuncVN -->
-<g id="node67" class="node">
+<g id="node69" class="node">
 <title>UFuncVN</title>
-<ellipse fill="none" stroke="#00868b" cx="1059.43" cy="-1198.35" rx="55.79" ry="18"/>
-<text text-anchor="middle" x="1059.43" y="-1194.65" font-family="Times,serif" font-size="14.00">UFuncVN</text>
+<ellipse fill="none" stroke="#00868b" cx="3594.43" cy="-1120.35" rx="55.79" ry="18"/>
+<text text-anchor="middle" x="3594.43" y="-1116.65" font-family="Times,serif" font-size="14.00">UFuncVN</text>
 </g>
 <!-- Completeness -->
-<g id="node68" class="node">
+<g id="node70" class="node">
 <title>Completeness</title>
-<ellipse fill="none" stroke="#00868b" cx="3616.43" cy="-1139.35" rx="76.09" ry="18"/>
-<text text-anchor="middle" x="3616.43" y="-1135.65" font-family="Times,serif" font-size="14.00">Completeness</text>
+<ellipse fill="none" stroke="#00868b" cx="830.43" cy="-2454.35" rx="76.09" ry="18"/>
+<text text-anchor="middle" x="830.43" y="-2450.65" font-family="Times,serif" font-size="14.00">Completeness</text>
 </g>
 <!-- Expr -->
-<g id="node69" class="node">
+<g id="node71" class="node">
 <title>Expr</title>
 <ellipse fill="none" stroke="#00868b" cx="1792.51" cy="-4948.08" rx="33.29" ry="18"/>
 <text text-anchor="middle" x="1792.51" y="-4944.38" font-family="Times,serif" font-size="14.00">Expr</text>
@@ -1762,37 +1774,37 @@
 <polygon fill="black" stroke="black" points="3536.44,-4301.36 3544.59,-4294.59 3534,-4294.8 3536.44,-4301.36"/>
 </g>
 <!-- DerivType -->
-<g id="node70" class="node">
+<g id="node72" class="node">
 <title>DerivType</title>
-<ellipse fill="none" stroke="#00868b" cx="2595.43" cy="-3853.35" rx="58.49" ry="18"/>
-<text text-anchor="middle" x="2595.43" y="-3849.65" font-family="Times,serif" font-size="14.00">DerivType</text>
+<ellipse fill="none" stroke="#00868b" cx="812.43" cy="-1236.35" rx="58.49" ry="18"/>
+<text text-anchor="middle" x="812.43" y="-1232.65" font-family="Times,serif" font-size="14.00">DerivType</text>
 </g>
 <!-- Person -->
-<g id="node71" class="node">
+<g id="node73" class="node">
 <title>Person</title>
-<ellipse fill="none" stroke="#00868b" cx="1871.53" cy="-3322.35" rx="42.49" ry="18"/>
-<text text-anchor="middle" x="1871.53" y="-3318.65" font-family="Times,serif" font-size="14.00">Person</text>
+<ellipse fill="none" stroke="#00868b" cx="1724.53" cy="-3614.35" rx="42.49" ry="18"/>
+<text text-anchor="middle" x="1724.53" y="-3610.65" font-family="Times,serif" font-size="14.00">Person</text>
 </g>
 <!-- HasName -->
-<g id="node127" class="node">
+<g id="node129" class="node">
 <title>HasName</title>
-<ellipse fill="none" stroke="magenta" cx="2041.67" cy="-3322.35" rx="55.79" ry="18"/>
-<text text-anchor="middle" x="2041.67" y="-3318.65" font-family="Times,serif" font-size="14.00">HasName</text>
+<ellipse fill="none" stroke="magenta" cx="1894.67" cy="-3614.35" rx="55.79" ry="18"/>
+<text text-anchor="middle" x="1894.67" y="-3610.65" font-family="Times,serif" font-size="14.00">HasName</text>
 </g>
 <!-- Person&#45;&gt;HasName -->
 <g id="edge197" class="edge">
 <title>Person&#45;&gt;HasName</title>
-<path fill="none" stroke="black" d="M1914.03,-3322.35C1932.64,-3322.35 1954.91,-3322.35 1975.6,-3322.35"/>
-<polygon fill="black" stroke="black" points="1975.61,-3325.85 1985.61,-3322.35 1975.61,-3318.85 1975.61,-3325.85"/>
+<path fill="none" stroke="black" d="M1767.03,-3614.35C1785.64,-3614.35 1807.91,-3614.35 1828.6,-3614.35"/>
+<polygon fill="black" stroke="black" points="1828.61,-3617.85 1838.61,-3614.35 1828.61,-3610.85 1828.61,-3617.85"/>
 </g>
 <!-- Conv -->
-<g id="node72" class="node">
+<g id="node74" class="node">
 <title>Conv</title>
-<ellipse fill="none" stroke="#00868b" cx="2099.43" cy="-1375.35" rx="34.39" ry="18"/>
-<text text-anchor="middle" x="2099.43" y="-1371.65" font-family="Times,serif" font-size="14.00">Conv</text>
+<ellipse fill="none" stroke="#00868b" cx="962.43" cy="-1874.35" rx="34.39" ry="18"/>
+<text text-anchor="middle" x="962.43" y="-1870.65" font-family="Times,serif" font-size="14.00">Conv</text>
 </g>
 <!-- Reference -->
-<g id="node73" class="node">
+<g id="node75" class="node">
 <title>Reference</title>
 <ellipse fill="none" stroke="#00868b" cx="267.11" cy="-2154.51" rx="57.69" ry="18"/>
 <text text-anchor="middle" x="267.11" y="-2150.81" font-family="Times,serif" font-size="14.00">Reference</text>
@@ -1822,196 +1834,196 @@
 <polygon fill="black" stroke="black" points="757.01,-1505.92 760.2,-1495.81 751.41,-1501.72 757.01,-1505.92"/>
 </g>
 <!-- SentenceStyle -->
-<g id="node74" class="node">
+<g id="node76" class="node">
 <title>SentenceStyle</title>
-<ellipse fill="none" stroke="#00868b" cx="2201.43" cy="-3853.35" rx="77.19" ry="18"/>
-<text text-anchor="middle" x="2201.43" y="-3849.65" font-family="Times,serif" font-size="14.00">SentenceStyle</text>
+<ellipse fill="none" stroke="#00868b" cx="1063.43" cy="-1120.35" rx="77.19" ry="18"/>
+<text text-anchor="middle" x="1063.43" y="-1116.65" font-family="Times,serif" font-size="14.00">SentenceStyle</text>
 </g>
 <!-- TermCapitalization -->
-<g id="node75" class="node">
+<g id="node77" class="node">
 <title>TermCapitalization</title>
-<ellipse fill="none" stroke="#00868b" cx="1279.43" cy="-2791.35" rx="98.58" ry="18"/>
-<text text-anchor="middle" x="1279.43" y="-2787.65" font-family="Times,serif" font-size="14.00">TermCapitalization</text>
+<ellipse fill="none" stroke="#00868b" cx="1317.43" cy="-2512.35" rx="98.58" ry="18"/>
+<text text-anchor="middle" x="1317.43" y="-2508.65" font-family="Times,serif" font-size="14.00">TermCapitalization</text>
 </g>
 <!-- RefInfo -->
-<g id="node76" class="node">
+<g id="node78" class="node">
 <title>RefInfo</title>
-<ellipse fill="none" stroke="#00868b" cx="2640.43" cy="-3676.35" rx="44.39" ry="18"/>
-<text text-anchor="middle" x="2640.43" y="-3672.65" font-family="Times,serif" font-size="14.00">RefInfo</text>
+<ellipse fill="none" stroke="#00868b" cx="914.43" cy="-2686.35" rx="44.39" ry="18"/>
+<text text-anchor="middle" x="914.43" y="-2682.65" font-family="Times,serif" font-size="14.00">RefInfo</text>
 </g>
 <!-- Sentence -->
-<g id="node77" class="node">
+<g id="node79" class="node">
 <title>Sentence</title>
-<ellipse fill="none" stroke="#00868b" cx="3549.43" cy="-1256.89" rx="53.89" ry="18"/>
-<text text-anchor="middle" x="3549.43" y="-1253.19" font-family="Times,serif" font-size="14.00">Sentence</text>
+<ellipse fill="none" stroke="#00868b" cx="3550.43" cy="-1235.89" rx="53.89" ry="18"/>
+<text text-anchor="middle" x="3550.43" y="-1232.19" font-family="Times,serif" font-size="14.00">Sentence</text>
 </g>
 <!-- Semigroup -->
-<g id="node117" class="node">
+<g id="node119" class="node">
 <title>Semigroup</title>
-<ellipse fill="none" stroke="pink" cx="3424.98" cy="-1381.35" rx="61.99" ry="18"/>
-<text text-anchor="middle" x="3424.98" y="-1377.65" font-family="Times,serif" font-size="14.00">Semigroup</text>
+<ellipse fill="none" stroke="pink" cx="3425.98" cy="-1360.35" rx="61.99" ry="18"/>
+<text text-anchor="middle" x="3425.98" y="-1356.65" font-family="Times,serif" font-size="14.00">Semigroup</text>
 </g>
 <!-- Sentence&#45;&gt;Semigroup -->
 <g id="edge202" class="edge">
 <title>Sentence&#45;&gt;Semigroup</title>
-<path fill="none" stroke="black" d="M3532.12,-1274.2C3510.7,-1295.62 3474.05,-1332.27 3449.68,-1356.65"/>
-<polygon fill="black" stroke="black" points="3447.13,-1354.24 3442.54,-1363.79 3452.08,-1359.19 3447.13,-1354.24"/>
+<path fill="none" stroke="black" d="M3533.12,-1253.2C3511.7,-1274.62 3475.05,-1311.27 3450.68,-1335.65"/>
+<polygon fill="black" stroke="black" points="3448.13,-1333.24 3443.54,-1342.79 3453.08,-1338.19 3448.13,-1333.24"/>
 </g>
 <!-- Monoid -->
-<g id="node118" class="node">
+<g id="node120" class="node">
 <title>Monoid</title>
-<ellipse fill="none" stroke="pink" cx="3673.88" cy="-1381.35" rx="45.49" ry="18"/>
-<text text-anchor="middle" x="3673.88" y="-1377.65" font-family="Times,serif" font-size="14.00">Monoid</text>
+<ellipse fill="none" stroke="pink" cx="3674.88" cy="-1360.35" rx="45.49" ry="18"/>
+<text text-anchor="middle" x="3674.88" y="-1356.65" font-family="Times,serif" font-size="14.00">Monoid</text>
 </g>
 <!-- Sentence&#45;&gt;Monoid -->
 <g id="edge203" class="edge">
 <title>Sentence&#45;&gt;Monoid</title>
-<path fill="none" stroke="black" d="M3566.73,-1274.2C3588.4,-1295.87 3625.63,-1333.1 3650,-1357.47"/>
-<polygon fill="black" stroke="black" points="3647.57,-1359.99 3657.12,-1364.59 3652.52,-1355.04 3647.57,-1359.99"/>
+<path fill="none" stroke="black" d="M3567.73,-1253.2C3589.4,-1274.87 3626.63,-1312.1 3651,-1336.47"/>
+<polygon fill="black" stroke="black" points="3648.57,-1338.99 3658.12,-1343.59 3653.52,-1334.04 3648.57,-1338.99"/>
 </g>
 <!-- ShortName -->
-<g id="node78" class="node">
+<g id="node80" class="node">
 <title>ShortName</title>
-<ellipse fill="none" stroke="#00868b" cx="890.43" cy="-2378.35" rx="63.89" ry="18"/>
-<text text-anchor="middle" x="890.43" y="-2374.65" font-family="Times,serif" font-size="14.00">ShortName</text>
+<ellipse fill="none" stroke="#00868b" cx="2848.43" cy="-1062.35" rx="63.89" ry="18"/>
+<text text-anchor="middle" x="2848.43" y="-1058.65" font-family="Times,serif" font-size="14.00">ShortName</text>
 </g>
 <!-- Space -->
-<g id="node79" class="node">
+<g id="node81" class="node">
 <title>Space</title>
-<ellipse fill="none" stroke="#00868b" cx="1454.43" cy="-3735.35" rx="38.19" ry="18"/>
-<text text-anchor="middle" x="1454.43" y="-3731.65" font-family="Times,serif" font-size="14.00">Space</text>
+<ellipse fill="none" stroke="#00868b" cx="2184.43" cy="-3846.35" rx="38.19" ry="18"/>
+<text text-anchor="middle" x="2184.43" y="-3842.65" font-family="Times,serif" font-size="14.00">Space</text>
 </g>
 <!-- RTopology -->
-<g id="node80" class="node">
+<g id="node82" class="node">
 <title>RTopology</title>
-<ellipse fill="none" stroke="#00868b" cx="2950.43" cy="-1080.35" rx="59.29" ry="18"/>
-<text text-anchor="middle" x="2950.43" y="-1076.65" font-family="Times,serif" font-size="14.00">RTopology</text>
+<ellipse fill="none" stroke="#00868b" cx="755.43" cy="-1352.35" rx="59.29" ry="18"/>
+<text text-anchor="middle" x="755.43" y="-1348.65" font-family="Times,serif" font-size="14.00">RTopology</text>
 </g>
 <!-- DomainDesc -->
-<g id="node81" class="node">
+<g id="node83" class="node">
 <title>DomainDesc</title>
-<ellipse fill="none" stroke="#00868b" cx="3196.43" cy="-1080.35" rx="68.79" ry="18"/>
-<text text-anchor="middle" x="3196.43" y="-1076.65" font-family="Times,serif" font-size="14.00">DomainDesc</text>
+<ellipse fill="none" stroke="#00868b" cx="1345.43" cy="-1062.35" rx="68.79" ry="18"/>
+<text text-anchor="middle" x="1345.43" y="-1058.65" font-family="Times,serif" font-size="14.00">DomainDesc</text>
 </g>
 <!-- Inclusive -->
-<g id="node82" class="node">
+<g id="node84" class="node">
 <title>Inclusive</title>
-<ellipse fill="none" stroke="#00868b" cx="1586.43" cy="-2732.35" rx="51.99" ry="18"/>
-<text text-anchor="middle" x="1586.43" y="-2728.65" font-family="Times,serif" font-size="14.00">Inclusive</text>
+<ellipse fill="none" stroke="#00868b" cx="1850.43" cy="-1816.35" rx="51.99" ry="18"/>
+<text text-anchor="middle" x="1850.43" y="-1812.65" font-family="Times,serif" font-size="14.00">Inclusive</text>
 </g>
 <!-- RealInterval -->
-<g id="node83" class="node">
+<g id="node85" class="node">
 <title>RealInterval</title>
-<ellipse fill="none" stroke="#00868b" cx="953.43" cy="-1080.35" rx="67.69" ry="18"/>
-<text text-anchor="middle" x="953.43" y="-1076.65" font-family="Times,serif" font-size="14.00">RealInterval</text>
+<ellipse fill="none" stroke="#00868b" cx="2620.43" cy="-1004.35" rx="67.69" ry="18"/>
+<text text-anchor="middle" x="2620.43" y="-1000.65" font-family="Times,serif" font-size="14.00">RealInterval</text>
 </g>
 <!-- Stage -->
-<g id="node84" class="node">
+<g id="node86" class="node">
 <title>Stage</title>
-<ellipse fill="none" stroke="#00868b" cx="2106.77" cy="-2909.35" rx="37.89" ry="18"/>
-<text text-anchor="middle" x="2106.77" y="-2905.65" font-family="Times,serif" font-size="14.00">Stage</text>
+<ellipse fill="none" stroke="#00868b" cx="2076.77" cy="-2918.35" rx="37.89" ry="18"/>
+<text text-anchor="middle" x="2076.77" y="-2914.65" font-family="Times,serif" font-size="14.00">Stage</text>
 </g>
 <!-- Stage&#45;&gt;Show -->
 <g id="edge204" class="edge">
 <title>Stage&#45;&gt;Show</title>
-<path fill="none" stroke="black" d="M2068.77,-2909.35C2049.98,-2909.35 2027.13,-2909.35 2007.29,-2909.35"/>
-<polygon fill="black" stroke="black" points="2007.23,-2905.85 1997.23,-2909.35 2007.23,-2912.85 2007.23,-2905.85"/>
+<path fill="none" stroke="black" d="M2038.77,-2918.35C2019.98,-2918.35 1997.13,-2918.35 1977.29,-2918.35"/>
+<polygon fill="black" stroke="black" points="1977.23,-2914.85 1967.23,-2918.35 1977.23,-2921.85 1977.23,-2914.85"/>
 </g>
 <!-- Decoration -->
-<g id="node85" class="node">
+<g id="node87" class="node">
 <title>Decoration</title>
-<ellipse fill="none" stroke="#00868b" cx="3425.43" cy="-1021.35" rx="61.99" ry="18"/>
-<text text-anchor="middle" x="3425.43" y="-1017.65" font-family="Times,serif" font-size="14.00">Decoration</text>
+<ellipse fill="none" stroke="#00868b" cx="3078.43" cy="-1004.35" rx="61.99" ry="18"/>
+<text text-anchor="middle" x="3078.43" y="-1000.65" font-family="Times,serif" font-size="14.00">Decoration</text>
 </g>
 <!-- Symbol -->
-<g id="node86" class="node">
+<g id="node88" class="node">
 <title>Symbol</title>
-<ellipse fill="none" stroke="#00868b" cx="3549.43" cy="-1505.8" rx="45.49" ry="18"/>
-<text text-anchor="middle" x="3549.43" y="-1502.1" font-family="Times,serif" font-size="14.00">Symbol</text>
+<ellipse fill="none" stroke="#00868b" cx="3550.43" cy="-1484.8" rx="45.49" ry="18"/>
+<text text-anchor="middle" x="3550.43" y="-1481.1" font-family="Times,serif" font-size="14.00">Symbol</text>
 </g>
 <!-- Symbol&#45;&gt;Semigroup -->
 <g id="edge205" class="edge">
 <title>Symbol&#45;&gt;Semigroup</title>
-<path fill="none" stroke="black" d="M3532.64,-1489.01C3511.24,-1467.61 3474.06,-1430.43 3449.48,-1405.85"/>
-<polygon fill="black" stroke="black" points="3451.84,-1403.26 3442.29,-1398.66 3446.89,-1408.21 3451.84,-1403.26"/>
+<path fill="none" stroke="black" d="M3533.64,-1468.01C3512.24,-1446.61 3475.06,-1409.43 3450.48,-1384.85"/>
+<polygon fill="black" stroke="black" points="3452.84,-1382.26 3443.29,-1377.66 3447.89,-1387.21 3452.84,-1382.26"/>
 </g>
 <!-- Symbol&#45;&gt;Monoid -->
 <g id="edge206" class="edge">
 <title>Symbol&#45;&gt;Monoid</title>
-<path fill="none" stroke="black" d="M3566.21,-1489.01C3587.74,-1467.49 3625.22,-1430.01 3649.79,-1405.44"/>
-<polygon fill="black" stroke="black" points="3652.37,-1407.81 3656.97,-1398.26 3647.42,-1402.86 3652.37,-1407.81"/>
+<path fill="none" stroke="black" d="M3567.21,-1468.01C3588.74,-1446.49 3626.22,-1409.01 3650.79,-1384.44"/>
+<polygon fill="black" stroke="black" points="3653.37,-1386.81 3657.97,-1377.26 3648.42,-1381.86 3653.37,-1386.81"/>
 </g>
 <!-- Special -->
-<g id="node87" class="node">
+<g id="node89" class="node">
 <title>Special</title>
-<ellipse fill="none" stroke="#00868b" cx="988.43" cy="-2673.35" rx="44.39" ry="18"/>
-<text text-anchor="middle" x="988.43" y="-2669.65" font-family="Times,serif" font-size="14.00">Special</text>
+<ellipse fill="none" stroke="#00868b" cx="1378.43" cy="-3962.35" rx="44.39" ry="18"/>
+<text text-anchor="middle" x="1378.43" y="-3958.65" font-family="Times,serif" font-size="14.00">Special</text>
 </g>
 <!-- UDefn -->
-<g id="node88" class="node">
+<g id="node90" class="node">
 <title>UDefn</title>
-<ellipse fill="none" stroke="#00868b" cx="1338.43" cy="-1080.35" rx="40.09" ry="18"/>
-<text text-anchor="middle" x="1338.43" y="-1076.65" font-family="Times,serif" font-size="14.00">UDefn</text>
+<ellipse fill="none" stroke="#00868b" cx="678.43" cy="-2570.35" rx="40.09" ry="18"/>
+<text text-anchor="middle" x="678.43" y="-2566.65" font-family="Times,serif" font-size="14.00">UDefn</text>
 </g>
 <!-- UnitSymbol -->
-<g id="node89" class="node">
+<g id="node91" class="node">
 <title>UnitSymbol</title>
-<ellipse fill="none" stroke="#00868b" cx="3665.43" cy="-1021.35" rx="65.79" ry="18"/>
-<text text-anchor="middle" x="3665.43" y="-1017.65" font-family="Times,serif" font-size="14.00">UnitSymbol</text>
+<ellipse fill="none" stroke="#00868b" cx="3314.43" cy="-1004.35" rx="65.79" ry="18"/>
+<text text-anchor="middle" x="3314.43" y="-1000.65" font-family="Times,serif" font-size="14.00">UnitSymbol</text>
 </g>
 <!-- USymb -->
-<g id="node90" class="node">
+<g id="node92" class="node">
 <title>USymb</title>
-<ellipse fill="none" stroke="#00868b" cx="1343.43" cy="-3971.35" rx="44.69" ry="18"/>
-<text text-anchor="middle" x="1343.43" y="-3967.65" font-family="Times,serif" font-size="14.00">USymb</text>
+<ellipse fill="none" stroke="#00868b" cx="683.43" cy="-1004.35" rx="44.69" ry="18"/>
+<text text-anchor="middle" x="683.43" y="-1000.65" font-family="Times,serif" font-size="14.00">USymb</text>
 </g>
 <!-- HasCitation -->
-<g id="node119" class="node">
+<g id="node121" class="node">
 <title>HasCitation</title>
-<ellipse fill="none" stroke="magenta" cx="3724.43" cy="-1611.35" rx="65.79" ry="18"/>
-<text text-anchor="middle" x="3724.43" y="-1607.65" font-family="Times,serif" font-size="14.00">HasCitation</text>
+<ellipse fill="none" stroke="magenta" cx="3546.43" cy="-1004.35" rx="65.79" ry="18"/>
+<text text-anchor="middle" x="3546.43" y="-1000.65" font-family="Times,serif" font-size="14.00">HasCitation</text>
 </g>
 <!-- HasAdditionalNotes -->
-<g id="node120" class="node">
+<g id="node122" class="node">
 <title>HasAdditionalNotes</title>
-<ellipse fill="none" stroke="magenta" cx="1224.43" cy="-2968.35" rx="103.18" ry="18"/>
-<text text-anchor="middle" x="1224.43" y="-2964.65" font-family="Times,serif" font-size="14.00">HasAdditionalNotes</text>
+<ellipse fill="none" stroke="magenta" cx="1205.43" cy="-1990.35" rx="103.18" ry="18"/>
+<text text-anchor="middle" x="1205.43" y="-1986.65" font-family="Times,serif" font-size="14.00">HasAdditionalNotes</text>
 </g>
 <!-- HasReference -->
-<g id="node121" class="node">
+<g id="node123" class="node">
 <title>HasReference</title>
-<ellipse fill="none" stroke="magenta" cx="783.43" cy="-1375.35" rx="75.29" ry="18"/>
-<text text-anchor="middle" x="783.43" y="-1371.65" font-family="Times,serif" font-size="14.00">HasReference</text>
+<ellipse fill="none" stroke="magenta" cx="713.43" cy="-1120.35" rx="75.29" ry="18"/>
+<text text-anchor="middle" x="713.43" y="-1116.65" font-family="Times,serif" font-size="14.00">HasReference</text>
 </g>
 <!-- HasDecRef -->
-<g id="node122" class="node">
+<g id="node124" class="node">
 <title>HasDecRef</title>
-<ellipse fill="none" stroke="magenta" cx="770.43" cy="-1257.35" rx="61.99" ry="18"/>
-<text text-anchor="middle" x="770.43" y="-1253.65" font-family="Times,serif" font-size="14.00">HasDecRef</text>
+<ellipse fill="none" stroke="magenta" cx="990.43" cy="-1004.35" rx="61.99" ry="18"/>
+<text text-anchor="middle" x="990.43" y="-1000.65" font-family="Times,serif" font-size="14.00">HasDecRef</text>
 </g>
 <!-- HasDerivation -->
-<g id="node123" class="node">
+<g id="node125" class="node">
 <title>HasDerivation</title>
-<ellipse fill="none" stroke="magenta" cx="2614.43" cy="-962.35" rx="77.19" ry="18"/>
-<text text-anchor="middle" x="2614.43" y="-958.65" font-family="Times,serif" font-size="14.00">HasDerivation</text>
+<ellipse fill="none" stroke="magenta" cx="1585.43" cy="-1004.35" rx="77.19" ry="18"/>
+<text text-anchor="middle" x="1585.43" y="-1000.65" font-family="Times,serif" font-size="14.00">HasDerivation</text>
 </g>
 <!-- Callable -->
-<g id="node124" class="node">
+<g id="node126" class="node">
 <title>Callable</title>
-<ellipse fill="none" stroke="magenta" cx="756.43" cy="-2496.35" rx="48.19" ry="18"/>
-<text text-anchor="middle" x="756.43" y="-2492.65" font-family="Times,serif" font-size="14.00">Callable</text>
+<ellipse fill="none" stroke="magenta" cx="2832.43" cy="-946.35" rx="48.19" ry="18"/>
+<text text-anchor="middle" x="2832.43" y="-942.65" font-family="Times,serif" font-size="14.00">Callable</text>
 </g>
 <!-- UnitEq -->
-<g id="node125" class="node">
+<g id="node127" class="node">
 <title>UnitEq</title>
-<ellipse fill="none" stroke="magenta" cx="3053.43" cy="-962.35" rx="44.39" ry="18"/>
-<text text-anchor="middle" x="3053.43" y="-958.65" font-family="Times,serif" font-size="14.00">UnitEq</text>
+<ellipse fill="none" stroke="magenta" cx="3756.43" cy="-946.35" rx="44.39" ry="18"/>
+<text text-anchor="middle" x="3756.43" y="-942.65" font-family="Times,serif" font-size="14.00">UnitEq</text>
 </g>
 <!-- RenderSpecial -->
-<g id="node128" class="node">
+<g id="node130" class="node">
 <title>RenderSpecial</title>
-<ellipse fill="none" stroke="magenta" cx="2851.43" cy="-962.35" rx="77.99" ry="18"/>
-<text text-anchor="middle" x="2851.43" y="-958.65" font-family="Times,serif" font-size="14.00">RenderSpecial</text>
+<ellipse fill="none" stroke="magenta" cx="2340.43" cy="-946.35" rx="77.99" ry="18"/>
+<text text-anchor="middle" x="2340.43" y="-942.65" font-family="Times,serif" font-size="14.00">RenderSpecial</text>
 </g>
 </g>
 </svg>

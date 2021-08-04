@@ -432,10 +432,25 @@ digraph alltypes {
 		Section -> Reference;
 		Section	[shape=oval, color=cyan3, label="Section"];
 		}
+		subgraph section{
+		Section -> Depth;
+		Section -> SecHeader;
+		Section -> Content;
+		Section	[shape=oval, color=cyan3, label="Section"];
+		}
 		subgraph seccons{
 		SecCons -> Section;
 		SecCons -> Contents;
 		SecCons	[shape=oval, color=darkviolet, label="SecCons"];
+		}
+		subgraph secheader{
+		SecHeader -> Title;
+		SecHeader -> Reference;
+		SecHeader	[shape=oval, color=darkviolet, label="SecHeader"];
+		}
+		subgraph content{
+		Content -> Contents;
+		Content	[shape=oval, color=darkviolet, label="Content"];
 		}
 		subgraph document{
 		Document -> Title;

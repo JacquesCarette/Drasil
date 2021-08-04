@@ -1,4 +1,9 @@
-module Language.Drasil.Symbol (Decoration(..), Symbol(..), compsy) where
+-- | Drasil uses symbols in expressions and sentences.
+module Language.Drasil.Symbol (
+  -- * Types
+  Decoration(..), Symbol(..),
+  -- * Ordering Function
+  compsy) where
 
 import Language.Drasil.Unicode(Special)
 

@@ -5,8 +5,10 @@ module Language.Drasil (
   -- | Encodes mathematical and display related expressions.
   -- To see the code-related expressions, look in @drasil-code@.
 
-  -- ** "Language.Drasil.Expr"
+  -- ** Base Expression Language
   -- | Defines the expression types and common operators.
+  
+  -- Language.Drasil.Expr
   Expr
   , UFunc, UFuncB, UFuncVV, UFuncVN
   , ArithBinOp, BoolBinOp, EqBinOp, LABinOp, OrdBinOp, VVVBinOp, VVNBinOp
@@ -14,9 +16,11 @@ module Language.Drasil (
   , DerivType, Completeness, Relation
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   , ($-), ($/), addI, addRe, mulI, mulRe
-  -- ** "Language.Drasil.Expr.Math"
+  -- ** Math Functions
   -- | Defines math-related expression functions, ranging from trigonometric
   -- functions to matrix manipulation.
+
+  -- Language.Drasil.Expr.Math
   , abs_, neg, negVec, log, ln, abs
   , sin, cos, tan, sec, csc, cot, arcsin, arccos, arctan, exp
   , sqrt, euclidean, norm, not_
@@ -28,19 +32,23 @@ module Language.Drasil (
   , sy -- old "Chunk" constructor C
   , apply, apply1, apply2, applyWithNamedArgs
   , cross, m2x2, vec2D, dgnl2x2
-  -- ** "Language.Drasil.Expr.Display"
+  -- ** Expression Display Language 
   -- | Defines display-related expression functions. Used in models.
+
+  -- Language.Drasil.Expr.Display
   , DisplayExpr
   , defines, spaceDE, isIn, andDEs, equivDEs
-  -- ** "Language.Drasil.Unicode"
+  -- ** Unicode symbols
   -- | Some expressions need special unicode characters.
+
+  -- Language.Drasil.Unicode
   , Special(..), RenderSpecial(..)
   -- * The Drasil Language (Information Encoding)
   -- | This is the basis of the Drasil language for encoding information.
   -- Every chunk used in Drasil is defined here, along with some classes
   -- that help us to use these chunks.
 
-  -- ** Drasil Classes
+  -- ** Classes
   -- | Contains many of the classes used in Drasil, along with their methods.
 
   -- Language.Drasil.Classes.Core
@@ -75,7 +83,7 @@ module Language.Drasil (
   , Quantity
   , Callable
   , IsArgumentName
-  -- ** Drasil Types
+  -- ** Types
   -- | Contains helper functions and smart constructors for each type.
   -- Similar types are grouped together.
   
@@ -178,7 +186,7 @@ module Language.Drasil (
   , People, Person, person, HasName, name, person', personWM
   , personWM', mononym, nameStr, rendPersLFM, rendPersLFM', rendPersLFM''
   , comparePeople
-  -- * Sentences in Drasil
+  -- * Sentences
   -- | Things like expressions and terms are displayed by using 'Sentence's.
   -- We also use 'NounPhrase's to record the proper pluralization and capitalization of terms.
 
@@ -201,7 +209,7 @@ module Language.Drasil (
   , ShortName, shortname', getSentSN
   -- Language.Drasil.Derivation
   , Derivation(Derivation), mkDeriv, mkDerivName, mkDerivNoHeader
-  -- * Drasil Basic Document Language
+  -- * Basic Document Language
   -- | Holds all the types and helper functions needed especially in @drasil-docLang@
 
   -- Language.Drasil.Document

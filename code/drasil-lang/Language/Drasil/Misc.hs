@@ -1,4 +1,4 @@
--- | A collection of |String|-handling routines as well as one for making 'tables'
+-- | A collection of 'String'-handling routines as well as one for making tables.
 module Language.Drasil.Misc(mkTable, noSpaces, repUnd) where
 
 {- |
@@ -26,7 +26,7 @@ noSpaces s
   | ' ' `notElem` s = s
   | otherwise          = error "String has at least one space in it."
 
--- | Replace underscores in a string with '.'.
+-- | Replace underscores in a string with periods (@.@).
 repUnd :: String -> String
 repUnd = map rep
   where

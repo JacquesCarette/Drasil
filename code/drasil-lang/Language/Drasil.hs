@@ -124,8 +124,8 @@ module Language.Drasil (
   , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', compoundPhraseP1
   , titleizeNP, titleizeNP', nounPhrase'', nounPhraseSP, nounPhraseSent
   -- Document
-  , Document(..), ShowTableOfContents(..), DType(..), Section(..), Contents(..)
-  , SecCons(..), ListType(..), ItemType(..), ListTuple
+  , Document(..), ShowTableOfContents(..), DType(..), Section(..)
+  , Contents(..), SecCons(..), ListType(..), ItemType(..), ListTuple
   , LabelledContent(..), UnlabelledContent(..), extractSection
   , mkParagraph, mkRawLC, checkToC
   , llcc, ulcc
@@ -134,7 +134,7 @@ module Language.Drasil (
   , HasContents(accessContents)
   , RawContent(..)
   , mkFig
-  , makeTabRef, makeFigRef, makeSecRef, makeURI
+  , makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI
   -- Space
   , Space(..) , RealInterval(..), Inclusive(..), RTopology(..)
   , DomainDesc(AllDD, BoundedDD), getActorName, getInnerSpace
@@ -215,8 +215,8 @@ import Language.Drasil.ModelExpr (ModelExpr)
 import Language.Drasil.ModelExpr.Math (defines, space, isIn, andMEs, equivMEs)
 import Language.Drasil.Document (section, fig, figWithWidth
   , Section(..), SecCons(..) , llcc, ulcc, Document(..)
-  , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC
-  , extractSection, makeTabRef, makeFigRef, makeSecRef, makeURI)
+  , mkParagraph, mkFig, mkRawLC, ShowTableOfContents(..), checkToC, extractSection
+  , makeTabRef, makeFigRef, makeSecRef, makeEqnRef, makeURI)
 import Language.Drasil.Document.Core (Contents(..), ListType(..), ItemType(..), DType(..)
   , RawContent(..), ListTuple, MaxWidthPercent
   , HasContents(accessContents)

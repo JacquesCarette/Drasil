@@ -67,6 +67,7 @@ data RawContent =
   | Figure Lbl Filepath MaxWidthPercent      -- ^ For creating figures in a document. Should use relative file path.
   | Bib BibRef                               -- ^ Grants the ability to reference something.
   | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Lbl -- ^ Contain a graph with coordinates ('Sentence's), maybe a width and height, and a label ('Sentence').
+ -- | CodeBlock CodeExpr                       -- ^ Block for codes
                -- TODO: Fill this one in.
 
 -- | An identifier is just a 'String'.

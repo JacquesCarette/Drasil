@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 665703361e2d1a5ab7122a8c6e242d1d5b362f973065a7457f6c6d94b86de938
+-- hash: a7879ce173e2804fcece57ce44146271e467d4b694c4b5c48c48493f1872fcd9
 
 name:           sglpendulum
 version:        0.1.24.0
@@ -52,9 +52,6 @@ library
     , drasil-theory
     , drasil-utils
     , lens
-  if false
-    other-modules:
-        Paths_sglpendulum
   default-language: Haskell2010
 
 executable sglpendulum
@@ -80,7 +77,4 @@ executable sglpendulum
     , drasil-utils
     , lens
     , sglpendulum
-  if false
-    other-modules:
-        Paths_sglpendulum
   default-language: Haskell2010

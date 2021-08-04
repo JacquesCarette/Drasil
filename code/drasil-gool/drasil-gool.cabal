@@ -1,10 +1,10 @@
 cabal-version: 1.12
 
--- This file has been generated from package.yaml by hpack version 0.33.0.
+-- This file has been generated from package.yaml by hpack version 0.34.4.
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 5a0b328c117c3657697e6ee4a86bb584ebf63d0093089238a1af21efccbe1d7d
+-- hash: b50167303011b51439c63e82f32b892383c88df03cd411736d518646165521aa
 
 name:           drasil-gool
 version:        0.1.1.0
@@ -56,7 +56,4 @@ library
     , lens
     , mtl
     , pretty
-  if false
-    other-modules:
-        Paths_drasil_gool
   default-language: Haskell2010

@@ -11,6 +11,12 @@ module Drasil.DocLang (
   IntroSec(..), IntroSub(..), LFunc(..), Literature(Doc', Lit,Manual),
   RefSec(..), RefTab(..), StkhldrSec(..), StkhldrSub(Client, Cstmr),
   TConvention(..), TraceabilitySec(TraceabilityProg), TSIntro(..), TUIntro(..),
+  -- NBDecl
+  NBDecl, NbSection(BibSec, IntrodSec, BodySec),
+  -- DocumentLanguage.Notebook.Core
+  IntrodSec(..), IntrodSub(..), BodySec(..), BodySub(..), SmmrySec(..), ApndxSec(..),
+  -- DocumentLanguage.Notebook.DocumentLanguage
+  mkNb,
   -- DocumentLanguage.Definitions
   Field(..), Fields, InclUnits(IncludeUnits), Verbosity(..), ddefn,
   -- DocumentLanguage.RefHelpers 
@@ -56,6 +62,10 @@ import Drasil.DocumentLanguage.Core (AppndxSec(..), AuxConstntSec(..),
   Literature(Doc', Lit,Manual), RefSec(..), RefTab(..), StkhldrSec(..),
   StkhldrSub(Client, Cstmr), TConvention(..), TraceabilitySec(TraceabilityProg),
   TSIntro(..), TUIntro(..))
+import Drasil.DocumentLanguage.Notebook.Core (IntrodSec(..), IntrodSub(..), BodySec(..), 
+  BodySub(..), ApndxSec(..), SmmrySec(..))
+import Drasil.DocumentLanguage.Notebook.DocumentLanguage (mkNb)
+import Drasil.DocumentLanguage.Notebook.NBDecl (NBDecl, NbSection(BibSec, IntrodSec, BodySec))
 import Drasil.DocumentLanguage.Definitions (Field(..), Fields, InclUnits(IncludeUnits),
   Verbosity(..), ddefn)
 import Drasil.DocumentLanguage.RefHelpers (ModelDB, ddRefDB, mdb)

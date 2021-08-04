@@ -23,7 +23,8 @@ import Data.Drasil.Quantities.Physics (velocity, acceleration, force,
 import Data.Drasil.Concepts.Physics (pendulum, weight, shm)
 import Data.Drasil.Quantities.PhysicalProperties (mass, len)
 import Data.Drasil.Theories.Physics (newtonSLR)
-import Drasil.DblPendulum.DataDefs (positionGDD, frequencyDD, periodSHMDD, angFrequencyDD)
+import Drasil.DblPendulum.DataDefs (positionGDD, frequencyDD, periodSHMDD, angFrequencyDD,
+    positionIXDD_1, positionIYDD_1, positionIXDD_2, positionIYDD_2)
 
 -- import Drasil.Projectile.Assumptions (cartSyst, constAccel, pointMass, timeStartZero, twoDMotion)
 import qualified Drasil.DblPendulum.Expressions as E
@@ -60,7 +61,7 @@ velIXDerivEqns_1 = map eS [E.velIXDerivEqn1, E.velIXDerivEqn2_1,
 
 velDerivSent1, velIXDerivSent2_1, velIXDerivSent3_1, velIXDerivSent4_1, velIXDerivSent5_1 :: Sentence
 velDerivSent1 = S "At a given point in time" `sC` phrase velocity `S.is` definedIn'' positionGDD
-velIXDerivSent2_1 = S "We also know the" +:+ phrase horizontalPos
+velIXDerivSent2_1 = S "We also know the" +:+ phrase horizontalPos +:+ S "that" `S.is` definedIn'' positionIXDD_1
 velIXDerivSent3_1 = S "Applying this,"
 velIXDerivSent4_1 = eS lenRod_1 `S.is` S "constant" `S.wrt` S  "time, so"
 velIXDerivSent5_1 = S "Therefore, using the chain rule,"
@@ -86,7 +87,7 @@ velIYDerivEqns_1 = map eS [E.velIYDerivEqn1, E.velIYDerivEqn2_1,
     E.velIYDerivEqn3_1, E.velIYDerivEqn4_1] ++ [eS velIYQD_1]
 
 velIYDerivSent2_1, velIYDerivSent3_1, velIYDerivSent4_1, velIYDerivSent5_1 :: Sentence
-velIYDerivSent2_1 = S "We also know the" +:+ phrase verticalPos
+velIYDerivSent2_1 = S "We also know the" +:+ phrase verticalPos +:+ S "that" `S.is` definedIn'' positionIYDD_1
 velIYDerivSent3_1 = S "Applying this again,"
 velIYDerivSent4_1 = eS lenRod_1 `S.is` S "constant" `S.wrt` S "time, so"
 velIYDerivSent5_1 = S "Therefore, using the chain rule,"
@@ -110,7 +111,7 @@ velIXDerivEqns_2 :: [Sentence]
 velIXDerivEqns_2 = map eS [E.velIXDerivEqn1, E.velIXDerivEqn2_2, E.velIXDerivEqn3_2] ++ [eS velIXQD_2] 
 
 velIXDerivSent2_2, velIXDerivSent3_2, velIXDerivSent4_2 :: Sentence
-velIXDerivSent2_2 = S "We also know the" +:+ phrase horizontalPos
+velIXDerivSent2_2 = S "We also know the" +:+ phrase horizontalPos +:+ S "that" `S.is` definedIn'' positionIXDD_2
 velIXDerivSent3_2 = S "Applying this,"
 velIXDerivSent4_2 = S "Therefore, using the chain rule,"
 
@@ -133,7 +134,7 @@ velIYDerivEqns_2 :: [Sentence]
 velIYDerivEqns_2 = map eS [E.velIYDerivEqn1, E.velIYDerivEqn2_2, E.velIYDerivEqn3_2] ++ [eS velIYQD_2]
 
 velIYDerivSent2_2, velIYDerivSent3_2, velIYDerivSent4_2 :: Sentence
-velIYDerivSent2_2 = S "We also know the" +:+ phrase verticalPos
+velIYDerivSent2_2 = S "We also know the" +:+ phrase verticalPos +:+ S "that" `S.is` definedIn'' positionIYDD_2
 velIYDerivSent3_2 = S "Applying this,"
 velIYDerivSent4_2 = S "Therefore, using the chain rule,"
 

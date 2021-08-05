@@ -9,10 +9,11 @@ import Data.Drasil.Quantities.Physics(xPos, yPos, velocity, angularVelocity,
     momentOfInertia, period, position)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import qualified Data.Drasil.Quantities.Math as QM (pi_)
-import Drasil.DblPendulum.DataDefs (positionXDD_1, positionYDD_1, positionXDD_2, positionYDD_2, positionGDD)
+import Drasil.DblPendulum.DataDefs (positionXDD_1, positionYDD_1, positionXDD_2, positionYDD_2, positionGDD, accelGDD)
 import Drasil.DblPendulum.Unitals (lenRod_1, lenRod_2, angularVel_1, angularVel_2,
     pendDisAngle_2, xVel_1, xVel_2, yVel_1, yVel_2, xPos_1, xPos_2, yPos_1,
-    yPos_2, pendDisAngle_1, initialPendAngle)
+    yPos_2, xAccel_1, yAccel_1, xAccel_2, yAccel_2, pendDisAngle_1, initialPendAngle, angularAccel_1,
+    angularAccel_2)
 import Control.Lens ((^.))
 
 -- Velocity X/Y First Object
@@ -20,14 +21,13 @@ velXExpr_1, velYExpr_1 :: Expr
 velXExpr_1 = sy angularVel_1 `mulRe` sy lenRod_1 `mulRe` cos (sy pendDisAngle_1)
 velYExpr_1 = sy angularVel_1 `mulRe` (positionXDD_1 ^. defnExpr)
 
-velXDerivEqn1, velXDerivEqn2_1, velXDerivEqn3_1, velXDerivEqn4_1 :: Expr
-velXDerivEqn1 = sy xVel_1 $= positionGDD ^. defnExpr
+velDerivEqn1, velXDerivEqn2_1, velXDerivEqn3_1, velXDerivEqn4_1 :: Expr
+velDerivEqn1 = sy velocity $= positionGDD ^. defnExpr
 velXDerivEqn2_1 = sy xPos_1 $= positionXDD_1 ^. defnExpr
 velXDerivEqn3_1 = sy xVel_1 $= deriv (positionXDD_1 ^. defnExpr) time
 velXDerivEqn4_1 = sy xVel_1 $= sy lenRod_1 `mulRe` deriv (sin (sy pendDisAngle_1)) time
 
-velYDerivEqn1, velYDerivEqn2_1,velYDerivEqn3_1,velYDerivEqn4_1 :: Expr
-velYDerivEqn1 = sy xVel_2 $= positionGDD ^. defnExpr
+velYDerivEqn2_1,velYDerivEqn3_1,velYDerivEqn4_1 :: Expr
 velYDerivEqn2_1 = sy yPos_1 $= positionYDD_1 ^. defnExpr
 velYDerivEqn3_1 = sy yVel_1 $= neg (deriv (sy lenRod_1 `mulRe` cos (sy pendDisAngle_1)) time)
 velYDerivEqn4_1 = sy yVel_1 $= neg (sy lenRod_1 `mulRe` deriv (cos (sy pendDisAngle_1)) time)
@@ -48,31 +48,43 @@ velYDerivEqn3_2 = sy yVel_2 $= neg (deriv (positionYDD_2 ^. defnExpr) time)
 -- Acceleration X/Y First Object
 accelXExpr_1, accelYExpr_1 :: Expr
 accelXExpr_1 = neg (square (sy angularVel_1) `mulRe` sy lenRod_1 `mulRe` sin (sy pendDisAngle_1))
-                `addRe` (sy angularAccel `mulRe` sy lenRod_1 `mulRe` cos (sy pendDisAngle_1))
+                `addRe` (sy angularAccel_1 `mulRe` sy lenRod_1 `mulRe` cos (sy pendDisAngle_1))
 accelYExpr_1 = (square (sy angularVel_1) `mulRe` sy lenRod_1 `mulRe` cos (sy pendDisAngle_1))
-                `addRe` (sy angularAccel `mulRe` sy lenRod_1 `mulRe` sin (sy pendDisAngle_1))
+                `addRe` (sy angularAccel_1 `mulRe` sy lenRod_1 `mulRe` sin (sy pendDisAngle_1))
 
-accelDerivEqn1_1, accelXDerivEqn3_1, accelXDerivEqn4_1 :: Expr
-accelDerivEqn1_1 = sy acceleration $= deriv (sy velocity) time 
-accelXDerivEqn3_1 = sy xAccel $= deriv (sy angularVel_1 `mulRe` sy lenRod_1 `mulRe` cos (sy pendDisAngle_1)) time
-accelXDerivEqn4_1 = sy xAccel $= deriv (sy angularVel_1) time `mulRe` sy lenRod_1 `mulRe` cos (sy pendDisAngle_1)
+accelDerivEqn1, accelXDerivEqn3_1, accelXDerivEqn4_1 :: Expr
+accelDerivEqn1 = sy acceleration $= accelGDD ^. defnExpr
+accelXDerivEqn3_1 = sy xAccel_1 $= deriv (sy angularVel_1 `mulRe` sy lenRod_1 `mulRe` cos (sy pendDisAngle_1)) time
+accelXDerivEqn4_1 = sy xAccel_1 $= deriv (sy angularVel_1) time `mulRe` sy lenRod_1 `mulRe` cos (sy pendDisAngle_1)
                     $- (sy angularVel_1 `mulRe` sy lenRod_1 `mulRe` sin (sy pendDisAngle_1) `mulRe` deriv (sy pendDisAngle_1) time)
 
 accelYDerivEqn3_1, accelYDerivEqn4_1 :: Expr
-accelYDerivEqn3_1 = sy yAccel $= deriv (sy angularVel_1 `mulRe` sy lenRod_1 `mulRe` sin (sy pendDisAngle_1)) time
-accelYDerivEqn4_1 = sy yAccel $= deriv (sy angularVel_1) time `mulRe` sy lenRod_1 `mulRe` sin (sy pendDisAngle_1)
+accelYDerivEqn3_1 = sy yAccel_1  $= deriv (sy angularVel_1 `mulRe` sy lenRod_1 `mulRe` sin (sy pendDisAngle_1)) time
+accelYDerivEqn4_1 = sy yAccel_1 $= deriv (sy angularVel_1) time `mulRe` sy lenRod_1 `mulRe` sin (sy pendDisAngle_1)
                     `addRe` (sy angularVel_1 `mulRe` sy lenRod_1 `mulRe` cos (sy pendDisAngle_1) `mulRe` deriv (sy pendDisAngle_1) time)
 
 -- Acceleration X/Y Second Object
+accelXExpr_2, accelYExpr_2 :: Expr
+accelXExpr_2 = sy xAccel_1 `addRe`
+                neg (square (sy angularVel_2) `mulRe` sy lenRod_2 `mulRe` sin (sy pendDisAngle_2))
+                `addRe` (sy angularAccel_2 `mulRe` sy lenRod_2 `mulRe` cos (sy pendDisAngle_2))
+accelYExpr_2 = sy yAccel_1 `addRe`
+                (square (sy angularVel_2) `mulRe` sy lenRod_2 `mulRe` cos (sy pendDisAngle_2))
+                `addRe` (sy angularAccel_2 `mulRe` sy lenRod_2 `mulRe` sin (sy pendDisAngle_2))
 
+accelXDerivEqn3_2 :: Expr
+accelXDerivEqn3_2 = sy xAccel_2 $= deriv velXExpr_2 time
+
+accelYDerivEqn3_2 :: Expr
+accelYDerivEqn3_2 = sy yAccel_2  $= deriv velYExpr_2 time
 
 -- Horizontal/Vertical force acting on the first object
 hForceOnPendulumViaComponent, hForceOnPendulumViaAngle :: Expr
-hForceOnPendulumViaComponent = sy mass `mulRe` sy xAccel
+hForceOnPendulumViaComponent = sy mass `mulRe` sy xAccel_1
 hForceOnPendulumViaAngle = neg (sy tension `mulRe` sin (sy pendDisAngle_1))
 
 vForceOnPendulumViaComponent, vForceOnPendulumViaAngle :: Expr
-vForceOnPendulumViaComponent = sy mass `mulRe` sy yAccel
+vForceOnPendulumViaComponent = sy mass `mulRe` sy yAccel_1
 vForceOnPendulumViaAngle = sy tension `mulRe` cos (sy pendDisAngle_1)
                             $- (sy mass `mulRe` sy gravitationalAccel)
 

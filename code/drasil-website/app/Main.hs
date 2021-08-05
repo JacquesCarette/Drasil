@@ -3,7 +3,7 @@
 module Main where
 
 import GHC.IO.Encoding
-import Language.Drasil.Generate (gen, DocSpec(DocSpec), DocType(Website))
+import Language.Drasil.Generate (gen, DocSpec(DocSpec), DocType(Website), Format(..), DebugOption(..), docChoices)
 import Drasil.Website.Body (mkWebsite, printSetting, FolderLocation(..))
 import System.Environment (getEnv, lookupEnv)
 import Data.Maybe (fromMaybe)
@@ -51,4 +51,4 @@ main = do
 
   -- generate the html document/website.
   setLocaleEncoding utf8
-  gen (DocSpec Website "index") (mkWebsite allFolders) (printSetting allFolders)
+  gen (DocSpec (docChoices Website [HTML] NoDebug) "index") (mkWebsite allFolders) (printSetting allFolders)

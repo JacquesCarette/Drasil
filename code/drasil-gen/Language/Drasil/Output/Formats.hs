@@ -28,8 +28,8 @@ data DocSpec = DocSpec DocChoices Filename
 
 -- | Allows the creation of Makefiles for documents that use LaTeX.
 instance RuleTransformer DocSpec where
-  makeRule (DocSpec Website _) = []
-  makeRule (DocSpec dt fn) = [
+  makeRule (DocSpec (DC Website _ _) _) = []
+  makeRule (DocSpec (DC dt _ _) fn) = [
     mkRule (makeS $ map toLower $ show dt) [pdfName] [],
     mkFile pdfName [makeS $ fn ++ ".tex"] $
       map ($ fn) [lualatex, bibtex, lualatex, lualatex]] where

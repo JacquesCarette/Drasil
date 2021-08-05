@@ -428,9 +428,10 @@ HELP_FUN = \
 	print"$$_:\n", map"  $$_->[0]".(" "x(20-length($$_->[0])))."$$_->[1]\n",\
 	@{$$help{$$_}},"\n" for keys %help; \
 
-# This help command uses a perl script. Documented comments may only be one line
-# and must start with "##". We can also categorize our targets by using an "@" symbol.
-help:  ##@Help This help command.
+# This help target uses a perl script found from https://stackoverflow.com/questions/8889035/how-to-document-a-makefile.
+# Documented comments may only be one line and must start with "##".
+# We can also categorize our targets by using an "@" symbol.
+help:  ##@Help Show this help.
 	@perl -e '$(HELP_FUN)' $(MAKEFILE_LIST)
 	@echo "Build-specific targets where X is a drasil package name. Run \"make help_packages\" to see a list of possible packages:"
 	@echo "  X$(BUILD_P_SUFFIX)             Builds a given \"drasil-\" package."

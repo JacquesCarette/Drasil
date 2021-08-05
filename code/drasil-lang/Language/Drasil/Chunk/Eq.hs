@@ -11,7 +11,6 @@ import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol(symbol))
 import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   IsUnit, DefiningExpr(defnExpr), Definition(defn), Quantity, HasSpace(typ),
   ConceptDomain(cdom), Display(toDispExpr))
-import Language.Drasil.Chunk.Quantity (QuantityDict, mkQuant, mkQuant', qw)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd')
 import Language.Drasil.Chunk.Concept (cc')
 import Language.Drasil.Chunk.NamedIdea (mkIdea, nw)

@@ -12,6 +12,9 @@ import Language.Drasil.Classes (NamedIdea(term), Idea(getA),
   IsUnit, DefiningExpr(defnExpr), Definition(defn), Quantity, HasSpace(typ),
   ConceptDomain(cdom), Display(toDispExpr))
 import Language.Drasil.Chunk.Quantity (QuantityDict, mkQuant, mkQuant', qw)
+import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, dqd, dqd')
+import Language.Drasil.Chunk.Concept (cc')
+import Language.Drasil.Chunk.NamedIdea (mkIdea, nw)
 
 import Language.Drasil.Expr.Display (defines)
 import Language.Drasil.Expr (Expr(FCall, C))
@@ -25,11 +28,9 @@ import Language.Drasil.UID (UID)
 
 -- | A QDefinition is a 'QuantityDict' with a defining expression ('Expr'), a definition ('Sentence'), and a domain (['UID']).
 data QDefinition = EC
-  { _qua    :: QuantityDict
-  , _defn'  :: Sentence
+  { _qua    :: DefinedQuantityDict
   , _inputs :: [UID]
   , _equat  :: Expr
-  , cd      :: [UID]
   }
 makeLenses ''QDefinition
 
@@ -44,7 +45,7 @@ instance HasSpace      QDefinition where typ = qua . typ
 -- | Finds the 'Symbol' of the 'QuantityDict' used to make the 'QDefinition'.
 instance HasSymbol     QDefinition where symbol = symbol . (^. qua)
 -- | Finds the definition of 'QDefinition'.
-instance Definition    QDefinition where defn = defn'
+instance Definition    QDefinition where defn = qua . defn
 -- | 'QDefinition's have a 'Quantity'.
 instance Quantity      QDefinition where
 -- | Finds the defining expression of 'QDefinition'.
@@ -61,30 +62,30 @@ instance Display       QDefinition where
         [] -> defines (sy q)
         is -> defines (FCall (q ^. uid) (map C is) [])
 -- | Finds the domain of a 'QDefinition'.
-instance ConceptDomain QDefinition where cdom = cd
+instance ConceptDomain QDefinition where cdom = cdom . view qua
 
 -- | Create a 'QDefinition' with a 'UID', term ('NP'), definition ('Sentence'), 'Symbol',
 -- 'Space', unit, and defining expression.
-fromEqn :: IsUnit u => String -> NP -> Sentence -> Symbol -> Space -> u -> Expr -> QDefinition
-fromEqn nm desc def symb sp un expr =
-  EC (mkQuant nm desc symb sp (Just $ unitWrapper un) Nothing) def [] expr []
+fromEqn :: IsUnit u => UID -> NP -> Sentence -> Symbol -> Space -> u -> Expr -> QDefinition
+fromEqn nm desc def symb sp un =
+  EC (dqd (cc' (mkIdea nm desc Nothing) def) symb sp un) []
 
 -- | Same as 'fromEqn', but has no units.
 fromEqn' :: String -> NP -> Sentence -> Symbol -> Space -> Expr -> QDefinition
-fromEqn' nm desc def symb sp expr =
-  EC (mkQuant nm desc symb sp Nothing Nothing) def [] expr []
+fromEqn' nm desc def symb sp =
+  EC (dqd' (cc' (mkIdea nm desc Nothing) def) (const symb) sp Nothing) []
 
 -- | Same as 'fromEqn', but symbol depends on stage.
 fromEqnSt :: IsUnit u => String -> NP -> Sentence -> (Stage -> Symbol) ->
   Space -> u -> Expr -> QDefinition
-fromEqnSt nm desc def symb sp un expr =
-  EC (mkQuant' nm desc Nothing sp symb (Just $ unitWrapper un)) def [] expr []
+fromEqnSt nm desc def symb sp un =
+  EC (dqd' (cc' (mkIdea nm desc Nothing) def) symb sp (Just $ unitWrapper un)) []
 
 -- | Same as 'fromEqn', but symbol depends on stage and has no units.
 fromEqnSt' :: String -> NP -> Sentence -> (Stage -> Symbol) -> Space -> Expr ->
   QDefinition
-fromEqnSt' nm desc def symb sp expr =
-  EC (mkQuant' nm desc Nothing sp symb Nothing) def [] expr []
+fromEqnSt' nm desc def symb sp =
+  EC (dqd' (cc' (mkIdea nm desc Nothing) def) symb sp Nothing) []
 
 -- | Wrapper for fromEqnSt and fromEqnSt'
 mkQDefSt :: UID -> NP -> Sentence -> (Stage -> Symbol) -> Space ->
@@ -104,15 +105,15 @@ mkQuantDef' c t = mkQDefSt (c ^. uid) t EmptyS (symbol c) (c ^. typ) (getUnit c)
 -- | Smart constructor for QDefinitions. Requires a quantity and its defining 
 -- equation. 
 ec :: (Quantity c, MayHaveUnit c) => c -> Expr -> QDefinition
-ec c eqn = EC (qw c) EmptyS [] eqn []
+ec c = EC (dqd' (cc' (nw c) EmptyS) (symbol c) (c ^. typ) (getUnit c)) []
 
 -- | Factored version of 'QDefinition' functions
 mkFuncDef0 :: (HasUID f, HasSymbol f, HasSpace f,
                 HasUID i, HasSymbol i, HasSpace i) =>
   f -> NP -> Sentence -> Maybe UnitDefn -> [i] -> Expr -> QDefinition
-mkFuncDef0 f n s u is e = EC
-  (mkQuant' (f ^. uid) n Nothing (mkFunction (map (^. typ) is) (f ^. typ)) (symbol f) u)
-  s (map (^. uid) is) e []
+mkFuncDef0 f n s u is =
+  EC (dqd' (cc' (mkIdea (f ^. uid) n Nothing) s) (symbol f)
+    (mkFunction (map (^. typ) is) (f ^. typ)) u) (map (^. uid) is)
 
 -- | Create a 'QDefinition' function with a symbol, name, term, list of inputs, resultant units, and a defining Expr
 mkFuncDef :: (HasUID f, HasSymbol f, HasSpace f,

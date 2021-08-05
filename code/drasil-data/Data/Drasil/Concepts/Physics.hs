@@ -25,7 +25,7 @@ physicCon = [acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVe
   rigidBody, scalarAccel, scalarPos, shm, space, speed, stiffCoeff, strain, stress, tension,
   time, torque, velocity, weight, xAccel, xConstAccel, xDist, xPos, xVel,
   yAccel, yConstAccel, yDist, yPos, yVel, momentum, chgMomentum, moment, fOfGravity, positionVec,
-  pendulum, body, kinematics, frequency, period, motion]
+  pendulum, body, kinematics, frequency, period, motion, horizontalMotion, verticalMotion]
 
 physicCon' :: [CI]
 physicCon' = [oneD, twoD, threeD]
@@ -40,7 +40,7 @@ acceleration, angAccel, angDisp, angVelo, angFreq, angular, chgInVelocity, cohes
   space, speed, stiffCoeff, strain, stress, tension, time, torque, velocity, weight,
   xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
   yPos, yVel, momentum, moment, fOfGravity, positionVec, pendulum, body,
-  kinematics, frequency, period, motion, chgMomentum :: ConceptChunk
+  kinematics, frequency, period, motion, horizontalMotion, verticalMotion, chgMomentum :: ConceptChunk
 
 oneD, twoD, threeD :: CI
 oneD   = commonIdeaWithDict "oneD"   (cn "one-dimensional")   "1D" [mathematics, physics]
@@ -95,6 +95,8 @@ gravitationalConst = dcc "gravitationalConst" (cn "gravitational constant")
   "the empirical physical constant used to show the force between two objects caused by gravity"
 height = dccWDS "height" (cn' "height")
   (S "the" +:+ phrase distance +:+ S "above a reference point for a point of interest")
+horizontalMotion = dccWDS "horizontalMotion" (cn "horizontal motion")
+  (S "the result of the tendency of any object in motion to remain in motion at constant velocity")
 isotropy = dccWDS "isotropy" (cn "isotropy")
   (S "a condition where the" +:+ phrase value `S.of_` S "a" +:+ phrase property `S.is`
    S "independent of the direction in which it is measured")
@@ -162,6 +164,8 @@ torque = dcc "torque" (cn' "torque")
   "a twisting force that tends to cause rotation"
 velocity = dccWDS "velocity" (cnIES "velocity")
   (S "the rate of change of a body's" +:+ phrase position)
+verticalMotion = dccWDS "verticalMotion" (cn "vertical motion")
+  (S " the movement of the object against the gravitational pull")
 weight = dcc "weight" (cn' "weight")
   "the gravitational force acting on an object"
 

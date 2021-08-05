@@ -13,7 +13,7 @@ type Filename = String
 -- | Document types include Software Requirements Specification and Website.
 -- Choosing SRS will generate both TeX and HTML files, while Website generates only as HTML.
 -- This also determines what folders the generated files will be placed into.
-data DocType = SRS [Format] | Website
+data DocType = SRS | Website | Jupyter
 
 -- | Document specifications. Holds the type of document ('DocType') and its name ('Filename').
 data DocSpec = DocSpec DocType Filename
@@ -32,7 +32,8 @@ instance RuleTransformer DocSpec where
 
 -- | Shows the different types of documents.
 instance Show DocType where
-  show (SRS _)     = "SRS"
+  show Jupyter  = "Jupyter"
+  show SRS      = "SRS"
   show Website  = "Website"
              
 -- | LaTeX helper.

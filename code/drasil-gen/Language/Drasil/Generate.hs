@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 module Language.Drasil.Generate (gen, genDot, genCode, DocType(SRS, Website), DocSpec(DocSpec), Format(TeX, HTML)) where
+=======
+module Language.Drasil.Generate (gen, genDot, genCode, DocType(SRS, Website, Jupyter), DocSpec(DocSpec)) where
+>>>>>>> master
 
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (Doc, render)
@@ -12,12 +16,12 @@ import Build.Drasil (genMake)
 import Language.Drasil
 import Drasil.DocLang (mkGraphInfo)
 import Database.Drasil (SystemInformation)
-import Language.Drasil.Printers (Format(TeX, HTML), 
- makeCSS, genHTML, genTeX, PrintingInformation, outputDot)
+import Language.Drasil.Printers (Format(TeX, HTML, JSON), 
+ makeCSS, genHTML, genTeX, genJSON, PrintingInformation, outputDot)
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
   Lang(..), getSampleData, readWithDataDesc, sampleInputDD, 
   unPP, unJP, unCSP, unCPPP, unSP)
-import Language.Drasil.Output.Formats( DocType(SRS, Website), Filename, DocSpec(DocSpec))
+import Language.Drasil.Output.Formats(DocType(SRS, Website, Jupyter), Filename, DocSpec(DocSpec))
 
 import GOOL.Drasil (unJC, unPC, unCSC, unCPPC, unSC)
 
@@ -30,7 +34,7 @@ prnt :: PrintingInformation -> DocSpec -> Document -> IO ()
 prnt sm dt@(DocSpec Website fn) body =
   do prntDoc dt body sm
      prntCSS Website fn body
-prnt sm dt@(DocSpec (SRS (x:xs)) fn) body = 
+{-prnt sm dt@(DocSpec (SRS (x:xs)) fn) body = 
   do prntDoc (DocSpec (SRS [x]) fn) body sm
      prntAuxFiles
      prnt sm (DocSpec (SRS xs) fn) body
@@ -39,15 +43,26 @@ prnt sm dt@(DocSpec (SRS (x:xs)) fn) body =
       TeX  -> prntMake dt
       HTML -> prntCSS (SRS []) fn body
       _ -> mempty
-prnt _ (DocSpec _ _) _ = mempty
-  
+prnt _ (DocSpec _ _) _ = mempty-}
+prnt sm dt@(DocSpec Jupyter _) body =
+  do prntDoc dt body sm
+prnt sm dt@(DocSpec docType fn) body =
+  do prntDoc dt body sm
+     prntMake dt
+     prntCSS docType fn body
 
 -- | Helper for writing the documents (TeX / HTML) to file.
 prntDoc :: DocSpec -> Document -> PrintingInformation -> IO ()
+
 prntDoc (DocSpec Website fn) d pinfo = prntDoc' "Website" fn HTML d pinfo
-prntDoc (DocSpec (SRS [HTML]) fn) d pinfo = prntDoc' "SRS/HTML" fn HTML d pinfo
-prntDoc (DocSpec (SRS [TeX]) fn) d pinfo = prntDoc' "SRS/PDF" fn TeX d pinfo
-prntDoc (DocSpec _ _) _ _ = error "Something is wrong in prntDoc. This should not happen."
+--prntDoc (DocSpec (SRS [HTML]) fn) d pinfo = prntDoc' "SRS/HTML" fn HTML d pinfo
+--prntDoc (DocSpec (SRS [TeX]) fn) d pinfo = prntDoc' "SRS/PDF" fn TeX d pinfo
+--prntDoc (DocSpec _ _) _ _ = error "Something is wrong in prntDoc. This should not happen."
+prntDoc (DocSpec Jupyter fn) d pinfo = prntDoc' "Jupyter" fn JSON d pinfo
+prntDoc (DocSpec SRS fn) d pinfo = 
+  do prntDoc' "SRS/HTML" fn HTML d pinfo
+     prntDoc' "SRS/PDF" fn TeX d pinfo
+
 
 -- | Helper that takes the directory name, document name, format of documents,
 -- document information and printing information. Then generates the document file.
@@ -59,6 +74,7 @@ prntDoc' dt' fn format body' sm = do
   hClose outh
   where getExt TeX  = ".tex"
         getExt HTML = ".html"
+        getExt JSON = ".ipynb"
         getExt _    = error "we can only write TeX/HTML (for now)"
 
 -- | Helper for writing the Makefile(s).
@@ -77,12 +93,18 @@ prntCSS docType fn body = do
   hClose outh2
   where
     getFD Website = "Website/"
+<<<<<<< HEAD
     getFD (SRS _) = "SRS/HTML/"
+=======
+    getFD SRS = "SRS/HTML/"
+    getFD _ = ""
+>>>>>>> master
 
 -- | Renders the documents.
 writeDoc :: PrintingInformation -> Format -> Filename -> Document -> Doc
 writeDoc s TeX  _  doc = genTeX doc s
 writeDoc s HTML fn doc = genHTML s fn doc
+writeDoc s JSON _ doc  = genJSON s doc
 writeDoc _    _  _   _ = error "we can only write TeX/HTML (for now)"
 
 -- | Generates traceability graphs as .dot files.

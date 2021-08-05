@@ -21,6 +21,8 @@ module Language.Drasil.Printers (
   -- Jupyter
     -- Print 
   , genJSON
+  -- Log
+  , printAllChunkUIDs
   , PrintingInformation(..) , piSys
   , HasPrintingOptions (..)
   , Notation(..)
@@ -40,3 +42,4 @@ import Language.Drasil.TeX.Print (genTeX)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation(..),
   HasPrintingOptions(..), Notation(..), defaultConfiguration, piSys)
 import Language.Drasil.DOT.Print (outputDot, GraphInfo(..), NodeFamily(..))
+import Language.Drasil.Log.Print (printAllChunkUIDs)

@@ -1,4 +1,4 @@
-module Language.Drasil.Generate (gen, genDot, genCode, DocType(..), DocSpec(DocSpec), Format(TeX, HTML), DocChoices(DC), docChoices) where
+module Language.Drasil.Generate (gen, genDot, genCode, genLog, DocType(..), DocSpec(DocSpec), Format(TeX, HTML), DocChoices(DC), docChoices) where
 
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (Doc, render)
@@ -13,7 +13,7 @@ import Language.Drasil
 import Drasil.DocLang (mkGraphInfo)
 import Database.Drasil (SystemInformation)
 import Language.Drasil.Printers (Format(TeX, HTML, JSON), 
- makeCSS, genHTML, genTeX, genJSON, PrintingInformation, outputDot)
+ makeCSS, genHTML, genTeX, genJSON, PrintingInformation, outputDot, printAllChunkUIDs)
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
   Lang(..), getSampleData, readWithDataDesc, sampleInputDD, 
   unPP, unJP, unCSP, unCPPP, unSP)
@@ -87,6 +87,10 @@ genDot si = do
     let gi = mkGraphInfo si
     outputDot "TraceyGraph" gi
     return mempty
+
+-- | Generates debugging logs to show all of the UIDs used in an example.
+genLog :: SystemInformation -> IO ()
+genLog = printAllChunkUIDs
 
 -- | Calls the code generator.
 genCode :: Choices -> CodeSpec -> IO ()

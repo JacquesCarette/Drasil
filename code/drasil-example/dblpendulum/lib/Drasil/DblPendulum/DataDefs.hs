@@ -1,5 +1,5 @@
 module Drasil.DblPendulum.DataDefs (dataDefs, positionGDD, positionYDD_1, positionXDD_1, positionXDD_2, positionYDD_2, 
-      angFrequencyDD, frequencyDD, periodSHMDD) where
+      accelGDD, angFrequencyDD, frequencyDD, periodSHMDD) where
 
 import Prelude hiding (sin, cos, sqrt)
 import Language.Drasil
@@ -13,12 +13,12 @@ import Drasil.DblPendulum.Unitals (lenRod, pendDisAngle_1, pendDisAngle_2, lenRo
 --import Data.Drasil.Concepts.Physics (pendulum)
 import qualified Data.Drasil.Quantities.Math as QM (pi_)
 import Drasil.DblPendulum.Concepts (horizontalPos, verticalPos)
-import Data.Drasil.Quantities.Physics (velocity, position, time)
+import Data.Drasil.Quantities.Physics (velocity, position, time, acceleration)
 
 
 dataDefs :: [DataDefinition]
-dataDefs = [positionGDD, positionXDD_1, positionYDD_1, positionXDD_2, positionYDD_2,
-  frequencyDD, angFrequencyDD, periodSHMDD]
+dataDefs = [positionGDD, positionXDD_1, positionYDD_1, positionXDD_2, positionYDD_2, 
+  accelGDD, frequencyDD, angFrequencyDD, periodSHMDD]
 
 ------------------------
 -- Position in General--
@@ -103,6 +103,18 @@ positionYFigRef_2 = ch yPos_2 `S.is` S "shown in" +:+. refS figMotion
 
 positionYRef_2 :: Sentence
 positionYRef_2 = ch yPos_2 `S.isThe` phrase verticalPos
+
+---------------------------
+-- Accleartion in General--
+---------------------------
+accelGDD :: DataDefinition
+accelGDD = ddNoRefs accelGQD Nothing "accelerationGDD" []
+
+accelGQD :: QDefinition
+accelGQD = mkQuantDef acceleration accelGEqn
+
+accelGEqn :: Expr
+accelGEqn = deriv (sy velocity) time 
 
 ------------------------------------------------------
 frequencyDD :: DataDefinition

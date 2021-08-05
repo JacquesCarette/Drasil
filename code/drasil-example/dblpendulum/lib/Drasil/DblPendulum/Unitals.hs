@@ -20,8 +20,7 @@ import Data.Drasil.Concepts.Physics (pendulum, twoD)
 import Data.Drasil.Concepts.Math as CM (angle, iAngle, xDir, yDir)
 import Data.Drasil.Quantities.Math as QM (unitVect, unitVectj, pi_)
 import Drasil.DblPendulum.Concepts (rod, firstRod, secondRod, firstObject, secondObject)
-import Data.Drasil.Units.Physics (angVelU, velU)
-import Data.Drasil.Quantities.Physics (angularVelocity, ixPos, iyPos)
+import Data.Drasil.Units.Physics (velU, accelU, angVelU, angAccelU)
 
 
 symbols:: [QuantityDict]
@@ -44,7 +43,8 @@ unitalChunks :: [UnitalChunk]
 unitalChunks = [lenRod, 
   lenRod_1, lenRod_2, massObj_1, massObj_2, angularVel_1, angularVel_2,
   pendDisAngle_1, pendDisAngle_2, xVel_1, xVel_2, yVel_1, yVel_2,
-  xPos_1, xPos_2, yPos_1, yPos_2,
+  xPos_1, xPos_2, yPos_1, yPos_2, xAccel_1, yAccel_1, xAccel_2, yAccel_2,
+  angularAccel_1, angularAccel_2,
   initPendAngle_1, initPendAngle_2,
   QPP.mass, QP.force, QP.ixPos, QP.xPos, QP.yPos,
   QP.angularVelocity, QP.angularAccel, QP.gravitationalAccel, QP.tension, QP.acceleration,
@@ -54,7 +54,9 @@ unitalChunks = [lenRod,
 
 lenRod, lenRod_1, lenRod_2, massObj_1, massObj_2, angularVel_1, angularVel_2, 
   pendDisAngle_1, pendDisAngle_2, pendDisplacementAngle, initialPendAngle,
-  xVel_1, yVel_1, xVel_2, yVel_2, xPos_1, xPos_2, yPos_1, yPos_2,
+  xPos_1, xPos_2, yPos_1, yPos_2, xVel_1, yVel_1, xVel_2, yVel_2, xAccel_1,
+  yAccel_1, xAccel_2, yAccel_2,
+  angularAccel_1, angularAccel_2,
   initPendAngle_1, initPendAngle_2 :: UnitalChunk
 
 -- Fix me, replace lenRod with lenOne
@@ -94,21 +96,45 @@ yPos_2 = makeUCWDS "p_y2" (nounPhraseSent $ phraseNP (QP.position `the_ofThe` se
         (S "The" +:+ phraseNP (QP.position `the_ofThe` secondObject) `S.inThe` phrase CM.yDir)
         (sub lP (Concat [labely, label2])) metre
 
-xVel_1 = makeUCWDS "v_x1" (nounPhraseSent $ phraseNP (angularVelocity `the_ofThe` firstObject))
-        (S "The" +:+ phraseNP (angularVelocity `the_ofThe` firstObject) `S.inThe` phrase CM.xDir)
+xVel_1 = makeUCWDS "v_x1" (nounPhraseSent $ phraseNP (QP.angularVelocity `the_ofThe` firstObject))
+        (S "The" +:+ phraseNP (QP.angularVelocity `the_ofThe` firstObject) `S.inThe` phrase CM.xDir)
         (sub lV (Concat [labelx, label1])) velU
 
-xVel_2 = makeUCWDS "v_x2" (nounPhraseSent $ phraseNP (angularVelocity `the_ofThe` secondObject))
-        (S "The" +:+ phraseNP (angularVelocity `the_ofThe` secondObject) `S.inThe` phrase CM.xDir)
+xVel_2 = makeUCWDS "v_x2" (nounPhraseSent $ phraseNP (QP.angularVelocity `the_ofThe` secondObject))
+        (S "The" +:+ phraseNP (QP.angularVelocity `the_ofThe` secondObject) `S.inThe` phrase CM.xDir)
         (sub lV (Concat [labelx, label2])) velU
 
-yVel_1 = makeUCWDS "v_y1" (nounPhraseSent $ phraseNP (angularVelocity `the_ofThe` firstObject))
-        (S "The" +:+ phraseNP (angularVelocity `the_ofThe` firstObject) `S.inThe` phrase CM.yDir)
+yVel_1 = makeUCWDS "v_y1" (nounPhraseSent $ phraseNP (QP.angularVelocity `the_ofThe` firstObject))
+        (S "The" +:+ phraseNP (QP.angularVelocity `the_ofThe` firstObject) `S.inThe` phrase CM.yDir)
         (sub lV (Concat [labely, label1])) velU
 
-yVel_2 = makeUCWDS "v_y2" (nounPhraseSent $ phraseNP (angularVelocity `the_ofThe` secondObject))
-        (S "The" +:+ phraseNP (angularVelocity `the_ofThe` secondObject) `S.inThe` phrase CM.yDir)
+yVel_2 = makeUCWDS "v_y2" (nounPhraseSent $ phraseNP (QP.angularVelocity `the_ofThe` secondObject))
+        (S "The" +:+ phraseNP (QP.angularVelocity `the_ofThe` secondObject) `S.inThe` phrase CM.yDir)
         (sub lV (Concat [labely, label2])) velU
+
+xAccel_1 = makeUCWDS "a_x1" (nounPhraseSent $ phraseNP (QP.acceleration `the_ofThe` firstObject))
+        (S "The" +:+ phraseNP (QP.acceleration `the_ofThe` firstObject) `S.inThe` phrase CM.xDir)
+        (sub lA (Concat [labelx, label1])) accelU
+
+yAccel_1 = makeUCWDS "a_y1" (nounPhraseSent $ phraseNP (QP.acceleration `the_ofThe` firstObject))
+        (S "The" +:+ phraseNP (QP.acceleration `the_ofThe` firstObject) `S.inThe` phrase CM.yDir)
+        (sub lA (Concat [labely, label1])) accelU
+
+xAccel_2 = makeUCWDS "a_x2" (nounPhraseSent $ phraseNP (QP.acceleration `the_ofThe` secondObject))
+        (S "The" +:+ phraseNP (QP.acceleration `the_ofThe` secondObject) `S.inThe` phrase CM.xDir)
+        (sub lA (Concat [labelx, label2])) accelU
+
+yAccel_2 = makeUCWDS "a_y2" (nounPhraseSent $ phraseNP (QP.acceleration `the_ofThe` secondObject))
+        (S "The" +:+ phraseNP (QP.acceleration `the_ofThe` secondObject) `S.inThe` phrase CM.yDir)
+        (sub lA (Concat [labely, label2])) accelU
+
+angularAccel_1 = makeUCWDS "alpha_x1" (nounPhraseSent $ phraseNP (QP.angularAccel `the_ofThe` firstObject))
+        (S "The" +:+ phraseNP (QP.angularAccel `the_ofThe` firstObject) `S.inThe` phrase CM.xDir)
+        (sub lAlpha label1) angAccelU
+
+angularAccel_2 = makeUCWDS "alpha_y1" (nounPhraseSent $ phraseNP (QP.angularAccel `the_ofThe` firstObject))
+        (S "The" +:+ phraseNP (QP.angularAccel `the_ofThe` firstObject) `S.inThe` phrase CM.yDir)
+        (sub lAlpha label2) angAccelU
 
 -- ixPos_1 = makeUCWDS "p_x1i" (nounPhraseSent $ phraseNP (ixPos `the_ofThe` firstObject))
 --         (S "The" +:+ phraseNP (ixPos `the_ofThe` firstObject) `S.inThe` phrase CM.xDir)
@@ -126,12 +152,12 @@ yVel_2 = makeUCWDS "v_y2" (nounPhraseSent $ phraseNP (angularVelocity `the_ofThe
 --         (S "The" +:+ phraseNP (iyPos `the_ofThe` secondObject) `S.inThe` phrase CM.yDir)
 --         (sup(sub lP (Concat [labely, label2])) initial) metre
 
-angularVel_1 = makeUCWDS "w_1" (nounPhraseSent $ phraseNP (angularVelocity `the_ofThe` firstObject))
-        (S "The" +:+ phraseNP (angularVelocity `the_ofThe` firstObject))
+angularVel_1 = makeUCWDS "w_1" (nounPhraseSent $ phraseNP (QP.angularVelocity `the_ofThe` firstObject))
+        (S "The" +:+ phraseNP (QP.angularVelocity `the_ofThe` firstObject))
         (sub lW label1) angVelU
 
-angularVel_2 = makeUCWDS "w_2" (nounPhraseSent $ phraseNP (angularVelocity `the_ofThe` secondObject))
-        (S "The" +:+ phraseNP (angularVelocity `the_ofThe` secondObject))
+angularVel_2 = makeUCWDS "w_2" (nounPhraseSent $ phraseNP (QP.angularVelocity `the_ofThe` secondObject))
+        (S "The" +:+ phraseNP (QP.angularVelocity `the_ofThe` secondObject))
         (sub lW label2) angVelU
 
 pendDisAngle_1 = makeUCWDS "theta_p1" (nounPhraseSent $ phraseNP (angle `the_ofThe` firstRod))

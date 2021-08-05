@@ -161,24 +161,22 @@ SUMMARIZE_TEX=no
 # See `test` target for more details.
 all: test ## Run examples and test against stable.
 
-# Run `test` target with better debugging tools.
+
 debug: stackArgs+=$(PROFALL)
 debug: EXECARGS+=$(PROFEXEC)
-debug: test
+debug: test ## Run test target with better debugging tools.
 
 #--- Initial checks ---#
 #----------------------#
 
 # Sanity check -- are we using the right stack version?
-check_stack:  ## Check that we are using the right stack version.
+check_stack: ##@Checks Check that we are using the right stack version.
 	@MIN_STACK_VER="$(MIN_STACK_VER)" CACHED_MSV_FILE="$(CACHED_MSV_FILE)" "$(SHELL)" "$(SCRIPT_FOLDER)check_stack.sh"
 
-# Download the most recent version of graphviz.
-check_dot:
+check_dot: ##@Checks Download the most recent version of graphviz.
 	@BIN="dot" DOWNLOAD_LOCATION="https://www.graphviz.org/download/" "$(SHELL)" "$(SCRIPT_FOLDER)check_binary.sh"
 
-# Check that we can generate dot graphs.
-graphmod: check_stack
+graphmod: check_stack ##@Checks Check that we can generate dot graphs.
 	stack install dotgen graphmod
 
 #----------------------------------------------------------#
@@ -189,17 +187,17 @@ graphmod: check_stack
 #-------------------------------------------------#
 
 # Build all the Drasil packages.
-code: $(BUILD_PACKAGES)
+code: $(BUILD_PACKAGES) ##@Examples Build all Drasil packages.
 
 # First build all the Drasil packages, then run all examples (no traceability graphs).
-examples: $(GEN_EXAMPLES)
+examples: $(GEN_EXAMPLES) ##@Examples Run all examples (no traceability graphs).
 
 # First build all the Drasil packages, then run all examples and generate graphs for them.
-tracegraphs: $(TRACE_GRAPH_EXAMPLES)
+tracegraphs: $(TRACE_GRAPH_EXAMPLES) ##@Examples Run examples with traceability graphs.
 
 # First build all the Drasil packages, run all examples (no traceability graphs),
 # and then test the generated contents with those in the stable folder.
-test: $(TEST_EXAMPLES)
+test: $(TEST_EXAMPLES) ##@Examples Run all examples and compare against the stable folder examples.
 	@echo ----------------------------
 	@echo Make complete, checking logs
 	@echo ----------------------------
@@ -207,15 +205,14 @@ test: $(TEST_EXAMPLES)
 
 # First build all the Drasil packages, run all examples (no traceability graphs),
 # and then overwrite contents in the stable folder with currently generated ones.
-stabilize: $(STABILIZE_EXAMPLES)
+stabilize: $(STABILIZE_EXAMPLES) ##@Examples Overwrites the stable folder with up-to-date artifacts.
 	@echo ----------------------------
 	@echo Stabilized all examples
 	@echo ----------------------------
 
-# Generate all example pdfs. Needs Graphviz to work.
 # First builds all Drasil packages, runs examples with dot graphs,
 # then make pdfs from the generated TeX files.
-tex: $(TEX_EXAMPLES)
+tex: $(TEX_EXAMPLES) ##@Examples Generate all example pdfs. Needs Graphviz to work.
 
 #--- Targets that are used for individual packages/examples ---#
 #--------------------------------------------------------------#
@@ -289,7 +286,7 @@ $(filter %$(TEX_E_SUFFIX), $(TEX_EXAMPLES)): %$(TEX_E_SUFFIX): %$(TRACE_GRAPH_SU
 #--- Generate analysis of module, class, datatype, and class instance structure ---#
 #----------------------------------------------------------------------------------#
 
-graphs: $(GRAPH_PACKAGES) ## Generate all module dependency graphs.
+graphs: $(GRAPH_PACKAGES) ##@Analysis Generate all module dependency graphs.
 	
 # Generate individual package module dependency graphs.
 $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod check_dot
@@ -298,12 +295,11 @@ $(filter %$(GRAPH_P_SUFFIX), $(GRAPH_PACKAGES)): %$(GRAPH_P_SUFFIX): graphmod ch
 	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tsvg > "$(GRAPH_FOLDER)drasil-$*.svg"
 	find "drasil-$*" -name '*.hs' -print | grep -v stack | xargs stack exec -- graphmod -q -p --no-cluster | dot -Tpng > "$(GRAPH_FOLDER)drasil-$*.png"
 
-
-analysis: graphmod ## Generate a data table to analyze Drasil's class, datatype, and instance structures.
-          ## Dot graphs are currently generated for datatypes and class instance structures.
-          ## They are made using the default dot algorithm and the circo algorithm for options
-          ## and viewability. We also add example to these variables so that we can still
-          ## make the graphs for that folder (although it's technically not a package itself).
+# Dot graphs are currently generated for datatypes and class instance structures.
+# They are made using the default dot algorithm and the circo algorithm for options
+# and viewability. We also add example to these variables so that we can still
+# make the graphs for that folder (although it's technically not a package itself).
+analysis: graphmod ##@Analysis Generate a table and some graphs to analyze Drasil's class, datatype, and instance structures.
 	- rm -rf "$(ANALYSIS_FOLDER)"
 	@mkdir -p "$(ANALYSIS_FOLDER)"
 	cd $(SCRIPT_FOLDER) && stack exec -- runghc ClassInstDepGen.hs
@@ -323,14 +319,14 @@ analysis: graphmod ## Generate a data table to analyze Drasil's class, datatype,
 #--- HLint and Haddock Documentation ---#
 #---------------------------------------#
 
-hlint: check_stack ## Run HLint through the drasil packages. Uses a local HLint installation.
+hlint: check_stack ##@HLint Run HLint through the drasil packages. Uses a local HLint installation.
 	stack install hlint
 	hlint .
 
-hot_hlint: ## Run HLint through the drasil packages. Uses the latest HLint version, downloading the binary each time.
+hot_hlint: ##@HLint Run HLint through the drasil packages. Uses the latest HLint version, downloading the binary each time.
 	curl --max-time 60 -sSL https://raw.github.com/ndmitchell/hlint/master/misc/run.sh | sh -s .
 
-docs: check_stack ## Create Haddock documentation of all Drasil modules.
+docs: check_stack ##@Documentation Create Haddock documentation of all Drasil modules.
 	DOCS_FOLDER="$(DOCS_FOLDER)" GHC_FLAGS="$(GHCFLAGS)" sh scripts/make_docs.sh
 
 #----------------------------#
@@ -351,12 +347,11 @@ $(GOOLTEST): $(GOOLTEST)$(GEN_E_SUFFIX)
 	@EDIR="$(GOOLTEST_DIR)" BUILD_FOLDER="$(BUILD_FOLDER)" TARGET=$(TARGET) \
 	MAKE="$(MAKE)" "$(SHELL)" "$(SCRIPT_FOLDER)gooltest_build.sh"
 
-gool: $(CODE_EXAMPLES) ## Generate code from examples and test each one.
+gool: $(CODE_EXAMPLES) ##@GOOL Generate code from examples and test each one.
 
 doxygen: TARGET=doc
-doxygen: $(CODE_EXAMPLES) ## Generate doxygen documentation for all examples.
+doxygen: $(CODE_EXAMPLES) ##@GOOL Generate doxygen documentation for all examples.
 	
-
 # Find all the code file paths within an example.
 # Targets are of the form exampleName_deploy_code_path.
 %$(DCP_E_SUFFIX): EXAMPLE=$(shell echo $* | tr a-z A-Z)
@@ -366,16 +361,14 @@ $(filter %$(DCP_E_SUFFIX), $(DCP_EXAMPLES)): %$(DCP_E_SUFFIX):
 	MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" DEPLOY_CODE_PATH_KV_SEP="$(DEPLOY_CODE_PATH_KV_SEP)" \
 	"$(SHELL)" "$(SCRIPT_FOLDER)code_path.sh"
 
-# Find all code file paths for all examples.
-deploy_code_path: $(DCP_EXAMPLES)
+deploy_code_path: $(DCP_EXAMPLES) ##@GOOL Find all code file paths for all examples.
 
 #--------------------------------#
 #--- Deploy & website targets ---#
 #--------------------------------#
 
-# First builds all Drasil packages, and then executes the drasil-website.
 # For more information, see the *.hs files in the drasil-website folder.
-website:
+website: ##@Deploy First builds all Drasil packages, and then executes the drasil-website.
 	stack install $(stackArgs) "drasil-website"
 	CUR_DIR="$(PWD)/" \
 	DEPLOY_FOLDER="$(CUR_DIR)$(DEPLOY_FOLDER)"  \
@@ -390,12 +383,12 @@ website:
 	CLASSINST_GRAPH_FOLDER="$(CLASSINST_GRAPH_FOLDER)" \
 	stack exec website
 
-# Deploys the Drasil website. Called by the deploy target. 
+# Deploys the Drasil website. Called by the deploy target.
 # If you have all the necessary generated targets listed
 # in `deploy`, then this will skip the re-generation of 
 # those files. Currently, the deploy_stage.sh script does
 # not work for Windows Git Bash users.
-deploy_lite:
+deploy_lite: ##@Deploy Deploy the Drasil website without regenerating artifacts. For local development.
 	@mkdir -p "$(DEPLOY_FOLDER)"
 	@BUILD_FOLDER="$(BUILD_FOLDER)" DEPLOY_FOLDER="$(DEPLOY_FOLDER)" GRAPH_FOLDER="$(GRAPH_FOLDER)" \
 	EXAMPLE_DIRS="$(EXAMPLE_DIRS)" MULTI_SRC_DIRS="$(MULTI_SRC_DIRS)" ANALYSIS_FOLDER="$(ANALYSIS_FOLDER)" \
@@ -408,7 +401,7 @@ deploy_lite:
 # files appear newer and thus PDF's are regenerated. If you want to "just generate the structure,
 # everything exists," (or you've run `deploy` once already) then `deploy_lite` does just that and is
 # what `deploy.bash` calls. 
-deploy: analysis graphs docs tex doxygen website
+deploy: analysis graphs docs tex doxygen website ##@Deploy Generates all artifacts and the Drasil website locally.
 	"$(MAKE)" deploy_lite
 
 #-----------------------#
@@ -419,19 +412,53 @@ deploy: analysis graphs docs tex doxygen website
 $(filter $(CLEAN_GF_PREFIX)%, $(CLEAN_FOLDERS)): $(CLEAN_GF_PREFIX)%:
 	- rm -rf "./$*/"
 
-# Remove generated artifacts & folders.
-clean_artifacts cleanArtifacts: $(CLEAN_FOLDERS)
+clean_artifacts cleanArtifacts: $(CLEAN_FOLDERS) ##@Cleaning Remove generated artifacts & folders.
 	- rm -f "$(CACHED_MSV_FILE)"
 
-# Fully clean all generated builds, artifacts, & folders.
-clean: clean_artifacts
+clean: clean_artifacts ##@Cleaning Fully clean all generated builds, artifacts, & folders.
 	- stack clean
 
 #--------------------------#
 #--- Help & Information ---#
 #--------------------------#
 
-help:  ## This help command.
-	sed -ne '/@sed/!s/## //p' $(MAKEFILE_LIST)
+HELP_FUN = \
+	%help; while(<>){push@{$$help{$$2//'options'}},[$$1,$$3] \
+	if/^([\w-_]+)\s*:.*\#\#(?:@(\w+))?\s(.*)$$/}; \
+	print"$$_:\n", map"  $$_->[0]".(" "x(20-length($$_->[0])))."$$_->[1]\n",\
+	@{$$help{$$_}},"\n" for keys %help; \
+
+# This help command uses a perl script. Documented comments may only be one line
+# and must start with "##". We can also categorize our targets by using an "@" symbol.
+help:  ##@Help This help command.
+	@perl -e '$(HELP_FUN)' $(MAKEFILE_LIST)
+	@echo "Build-specific targets where X is a drasil package name. Run \"make help_packages\" to see a list of possible packages:"
+	@echo "  X$(BUILD_P_SUFFIX)             Builds a given \"drasil-\" package."
+	@echo "  X$(DOC_P_SUFFIX)               Currently unused."
+	@echo "  X$(GRAPH_P_SUFFIX)             Creates a package dependency graph."
+	@echo ""
+	@echo "Example-specific targets where X is the example. Run \"make help_examples\" to see a list of possible examples:"
+	@echo "  X$(GEN_E_SUFFIX)               Generate individual example in HTML and LaTeX format."
+	@echo "  X$(TEST_E_SUFFIX)              Generate individual example and create a comparison against stable in the log folder."
+	@echo "  X$(STABILIZE_E_SUFFIX)         Generate individual example and overwrite the contents of stable with the new version."
+	@echo "  X$(TEX_E_SUFFIX)               Generate individual example as a PDF (from LaTeX files)."
+	@echo "  X$(TRACE_GRAPH_SUFFIX)       Generate individual example in HTML and LaTeX format with traceability graphs filled in."
+	@echo "  X$(BC_E_SUFFIX)       Remove specific example from the build folder."
+	@echo "  X$(CODE_E_SUFFIX)              Generate individual example code."
+	@echo "  X$(DCP_E_SUFFIX)  Get all generated code file paths in the example."
+	@echo ""
+	@echo "To get started with Drasil, try running \"make\"."
+
+help_examples: ##@Help Lists all examples.
+	@echo "A list of examples currently in Drasil:"
+	@for example in $(EXAMPLES); do \
+		echo "  $$example"; \
+	done
+
+help_packages: ##@Help Lists all packages.
+	@echo "A list of packages currently in Drasil:"
+	@for package in $(PACKAGES); do \
+		echo "  $$package"; \
+	done
 
 .PHONY: help clean clean_artifacts cleanArtifacts gool code hlint hot_hlint analysis tex doc debug test graphs graphmod check_stack nographs graphs website deploy_code_path deploy deploy_lite all $(GOOLTEST) $(ALL_EXPANDED_TARGETS)

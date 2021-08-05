@@ -4,15 +4,13 @@ import Language.Drasil.Development (dePrec, dePrecAssoc, DisplayExpr(..),
   DisplayBinOp(..), DisplayAssocBinOp(Equivalence))
 
 import qualified Language.Drasil.Printing.AST as P
-import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
+import Language.Drasil.Printing.PrintingInformation (PrintingInformation, ckdb, stg)
 
 import Language.Drasil.Printing.Import.Expr (expr)
-import Language.Drasil.Printing.Import.Helpers (parens)
 import Language.Drasil.Printing.Import.Space (space)
 import Data.List (intersperse)
 import Control.Lens ((^.))
-import Language.Drasil.Printing.PrintingInformation (ckdb, stg)
-import Language.Drasil.Printing.Import.Helpers (lookupC)
+import Language.Drasil.Printing.Import.Helpers (lookupC, parens)
 import Language.Drasil.Printing.Import.Symbol (symbol)
 
 -- | Helper that adds parenthesis to a display expression where appropriate.

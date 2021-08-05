@@ -105,7 +105,7 @@ dePrec (AlgebraicExpr e) = eprec e
 dePrec (SpaceExpr _)     = 170
 dePrec (BinOp b _ _)     = dePrecB b
 dePrec (AssocBinOp b _)  = dePrecAssoc b
-dePrec (ForAll _ _ _)      = 130
+dePrec (ForAll {})      = 130
 
 -- | dePrecB - precedence for binary operators.
 dePrecB :: DisplayBinOp -> Int

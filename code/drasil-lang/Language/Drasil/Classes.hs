@@ -1,5 +1,6 @@
 {-# Language TypeFamilies, ConstraintKinds #-}
 -- | Defining all the classes which represent knowledge-about-knowledge
+{-# LANGUAGE ConstrainedClassMethods #-}
 module Language.Drasil.Classes (
   -- the classes
     NamedIdea(term)
@@ -45,7 +46,7 @@ import Language.Drasil.Sentence (Sentence)
 import Language.Drasil.UID (UID)
 import Language.Drasil.Uncertainty.Core (Uncertainty)
 
-import Control.Lens (Lens')
+import Control.Lens (Lens', Contravariant)
 
 -- | A NamedIdea is a 'term' that we've identified (has a 'UID') as 
 -- being worthy of naming.
@@ -166,9 +167,13 @@ class UnitEq u where
 -- TODO: I think that this DefiningExpr is missing a "what it defines" component...
 --       It's also only used for CodeDefinitions, QDefinitions, and DataDefinitions (food for thought on naming if we want to add ^)
 -- | A better version of 'ExprRelat' that holds an 'Expr'.
+-- class DefiningExpr c where
+--   -- | Provides a 'Lens' to the expression.
+--   defnExpr :: Express e => Lens' c e
+
 class DefiningExpr c where
   -- | Provides a 'Lens' to the expression.
-  defnExpr :: Lens' c Expr
+  defnExpr :: (Express e {-, Contravariant c-}) => Lens' (c e) e
 
 -- | Members must have a named argument.
 class (HasSymbol c) => IsArgumentName c where

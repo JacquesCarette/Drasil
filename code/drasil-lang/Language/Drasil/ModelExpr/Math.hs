@@ -221,9 +221,9 @@ sy x = C (x ^. uid)
 
 -- This also wants a symbol constraint.
 -- | Gets the derivative of an 'ModelExpr' with respect to a 'Symbol'.
-deriv, pderiv :: (HasUID c, HasSymbol c) => ModelExpr -> c -> ModelExpr
-deriv e c = Deriv Total e (c^.uid)
-pderiv e c = Deriv Part e (c^.uid)
+deriv, pderiv :: (HasUID c, HasSymbol c, Express e) => e -> c -> ModelExpr
+deriv e c = Deriv Total (express e) (c ^. uid)
+pderiv e c = Deriv Part (express e) (c ^. uid)
 
 -- | One expression is "defined" by another.
 defines :: (Express a, Express b) => a -> b -> ModelExpr

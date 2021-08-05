@@ -79,7 +79,6 @@ eprec Perc{}                 = 500
 eprec (AssocA op _)          = precA op
 eprec (AssocB op _)          = precB op
 eprec C{}                    = 500
-eprec Deriv{}                = prec2Arith Frac
 eprec FCall{}                = 210
 eprec Case{}                 = 200
 eprec Matrix{}               = 220

@@ -4,8 +4,9 @@ module Language.Drasil.Expr.Math where
 import Prelude hiding (sqrt)
 import Control.Lens ((^.))
 import Language.Drasil.Symbol (Symbol)
-import Language.Drasil.Expr (Expr(..), Relation, DerivType(..), ($^), ($/), AssocArithOper(..),
-  LABinOp(..), VVVBinOp(..), UFunc(..), UFuncB(..), UFuncVN(..), UFuncVV(..), Completeness(..), addRe)
+import Language.Drasil.Expr (Expr(..), Relation, ($^), ($/), AssocArithOper(..),
+  LABinOp(..), VVVBinOp(..), UFunc(..), UFuncB(..), UFuncVN(..), UFuncVV(..),
+  Completeness(..), addRe)
 import Language.Drasil.Space (RTopology(..), DomainDesc(..), RealInterval)
 import Language.Drasil.Classes.Core (HasUID(uid), HasSymbol)
 import Language.Drasil.Classes (IsArgumentName)
@@ -211,9 +212,3 @@ applyWithNamedArgs f ps ns = FCall (f ^. uid) ps (zip (map ((^. uid) . fst) ns)
 -- | Get an 'Expr' from a 'Symbol'.
 sy :: (HasUID c, HasSymbol c) => c -> Expr
 sy x = C (x ^. uid)
-
--- This also wants a symbol constraint.
--- | Gets the derivative of an 'Expr' with respect to a 'Symbol'.
-deriv, pderiv :: (HasUID c, HasSymbol c) => Expr -> c -> Expr
-deriv e c = Deriv Total e (c^.uid)
-pderiv e c = Deriv Part e (c^.uid)

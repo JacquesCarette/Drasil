@@ -18,7 +18,7 @@ import Data.Drasil.Concepts.Documentation (body, constant)
 
 newtonSLEqn, weightEqn, weightDerivAccelEqn, weightDerivNewtonEqn, weightDerivReplaceMassEqn,
   weightDerivSpecWeightEqn,
-  hsPressureEqn, speedEqn, velocityEqn, accelerationEqn  :: Relation
+  hsPressureEqn, speedEqn :: Relation
 
 newtonSLEqn               = sy QPP.mass `mulRe` sy QP.acceleration
 
@@ -32,6 +32,8 @@ weightDerivAccelEqn       = sy QP.acceleration $= vec2D (exactDbl 0) (mulRe (sy 
 hsPressureEqn             = sy QPP.specWeight `mulRe` sy QP.height
 
 speedEqn                  = norm (sy QP.velocity)
+
+velocityEqn, accelerationEqn :: ModelExpr
 velocityEqn               = deriv (sy QP.position) QP.time
 accelerationEqn           = deriv (sy QP.velocity) QP.time
 

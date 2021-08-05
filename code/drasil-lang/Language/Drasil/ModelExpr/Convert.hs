@@ -79,7 +79,6 @@ expr (E.Str s) = Str s
 expr (E.Perc n d) = Perc n d
 expr (E.AssocA ao es) = AssocA (assocArithOper ao) $ map expr es
 expr (E.AssocB bo es) = AssocB (assocBoolOper bo) $ map expr es
-expr (E.Deriv dt e u) = Deriv dt (expr e) u
 expr (E.C u) = C u
 expr (E.FCall u es nes) = FCall u (map expr es) (map (second expr) nes)
 expr (E.Case c ces) = Case c (map (bimap expr expr) ces)

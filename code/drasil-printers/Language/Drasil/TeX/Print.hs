@@ -181,8 +181,9 @@ pOps Prod     = command0 "displaystyle" <> command0 "prod"
 pOps Inte     = texSym "int"
 pOps Point    = pure $ text "."
 pOps Perc     = texSym "%"
-pOps LArrow   = commandD "leftarrow" empty
+pOps LArrow   = commandD "leftarrow"  empty
 pOps RArrow   = commandD "rightarrow" empty
+pOps ForAll   = commandD "ForAll"     empty
 
 -- | Prints fencing notation ("(),{},|,||").
 fence :: OpenClose -> Fence -> D

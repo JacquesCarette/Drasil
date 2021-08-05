@@ -15,8 +15,16 @@ type Filename = String
 -- This also determines what folders the generated files will be placed into.
 data DocType = SRS | Website | Jupyter
 
+data DebugOption = Debug | NoDebug
+
+data DocChoices = DC {
+  doctype :: DocType,
+  format :: [Format],
+  debugOption :: DebugOption
+}
+
 -- | Document specifications. Holds the type of document ('DocType') and its name ('Filename').
-data DocSpec = DocSpec DocType Filename
+data DocSpec = DocSpec DocChoices Filename
 
 -- | Allows the creation of Makefiles for documents that use LaTeX.
 instance RuleTransformer DocSpec where

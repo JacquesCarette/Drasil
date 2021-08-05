@@ -1,4 +1,4 @@
-module Language.Drasil.Generate (gen, genDot, genCode, DocType(..), DocSpec(DocSpec), Format(TeX, HTML), DocChoices(DC), DebugOption(..), docChoices) where
+module Language.Drasil.Generate (gen, genDot, genCode, DocType(..), DocSpec(DocSpec), Format(TeX, HTML), DocChoices(DC), docChoices) where
 
 import System.IO (hClose, hPutStrLn, openFile, IOMode(WriteMode))
 import Text.PrettyPrint.HughesPJ (Doc, render)
@@ -17,7 +17,7 @@ import Language.Drasil.Printers (Format(TeX, HTML, JSON),
 import Language.Drasil.Code (generator, generateCode, Choices(..), CodeSpec(..),
   Lang(..), getSampleData, readWithDataDesc, sampleInputDD, 
   unPP, unJP, unCSP, unCPPP, unSP)
-import Language.Drasil.Output.Formats(DocType(SRS, Website, Jupyter), Filename, DocSpec(DocSpec), DocChoices(DC), DebugOption(..))
+import Language.Drasil.Output.Formats(DocType(SRS, Website, Jupyter), Filename, DocSpec(DocSpec), DocChoices(DC))
 
 import GOOL.Drasil (unJC, unPC, unCSC, unCPPC, unSC)
 
@@ -28,11 +28,10 @@ gen ds fn sm = prnt sm ds fn
 -- TODO: Include Jupyter into the SRS setup.
 -- | Generate the output artifacts (TeX+Makefile or HTML).
 prnt :: PrintingInformation -> DocSpec -> Document -> IO ()
-prnt sm (DocSpec (DC Jupyter _ _) fn) body =
+prnt sm (DocSpec (DC Jupyter _) fn) body =
   do prntDoc body sm fn Jupyter JSON
-prnt sm (DocSpec (DC dtype fmts dbugOp) fn) body =
-  do prntDebug dbugOp body sm
-     mapM_ (prntDoc body sm fn dtype) fmts
+prnt sm (DocSpec (DC dtype fmts) fn) body =
+  do mapM_ (prntDoc body sm fn dtype) fmts
 
 -- | Helper for writing the documents (TeX / HTML) to file.
 prntDoc :: Document -> PrintingInformation -> String -> DocType -> Format -> IO ()
@@ -42,7 +41,7 @@ prntDoc d pinfo fn dtype fmt =
     HTML -> do prntDoc' (show dtype ++ "/HTML") fn HTML d pinfo
                prntCSS dtype fn d
     TeX -> do prntDoc' (show dtype ++ "/PDF") fn TeX d pinfo
-              prntMake $ DocSpec (DC dtype [] NoDebug) fn
+              prntMake $ DocSpec (DC dtype []) fn
     _ -> mempty
 
 -- | Helper that takes the directory name, document name, format of documents,
@@ -60,7 +59,7 @@ prntDoc' dt' fn format body' sm = do
 
 -- | Helper for writing the Makefile(s).
 prntMake :: DocSpec -> IO ()
-prntMake ds@(DocSpec (DC dt _ _) _) =
+prntMake ds@(DocSpec (DC dt _) _) =
   do outh <- openFile (show dt ++ "/PDF/Makefile") WriteMode
      hPutStrLn outh $ render $ genMake [ds]
      hClose outh
@@ -89,10 +88,6 @@ genDot si = do
     outputDot "TraceyGraph" gi
     return mempty
 
--- | Currently does nothing. Sets up option for creating a log as per #2759.
-prntDebug :: DebugOption -> Document -> PrintingInformation -> IO ()
-prntDebug _ _ _ = mempty
-
 -- | Calls the code generator.
 genCode :: Choices -> CodeSpec -> IO ()
 genCode chs spec = do 
@@ -113,5 +108,5 @@ genCode chs spec = do
   setCurrentDirectory workingDir
 
 -- | Constructor for users to choose their document options
-docChoices :: DocType -> [Format] -> DebugOption -> DocChoices
+docChoices :: DocType -> [Format] -> DocChoices
 docChoices = DC

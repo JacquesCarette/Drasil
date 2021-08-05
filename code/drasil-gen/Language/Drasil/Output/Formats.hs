@@ -15,12 +15,10 @@ type Filename = String
 -- This also determines what folders the generated files will be placed into.
 data DocType = SRS | Website | Jupyter
 
-data DebugOption = Debug | NoDebug
-
+-- | Document choices include the type of document as well as the file formats we want to generate as.
 data DocChoices = DC {
   doctype :: DocType,
-  format :: [Format],
-  debugOption :: DebugOption
+  format :: [Format]
 }
 
 -- | Document specifications. Holds the type of document ('DocType') and its name ('Filename').
@@ -28,8 +26,8 @@ data DocSpec = DocSpec DocChoices Filename
 
 -- | Allows the creation of Makefiles for documents that use LaTeX.
 instance RuleTransformer DocSpec where
-  makeRule (DocSpec (DC Website _ _) _) = []
-  makeRule (DocSpec (DC dt _ _) fn) = [
+  makeRule (DocSpec (DC Website _) _) = []
+  makeRule (DocSpec (DC dt _) fn) = [
     mkRule (makeS $ map toLower $ show dt) [pdfName] [],
     mkFile pdfName [makeS $ fn ++ ".tex"] $
       map ($ fn) [lualatex, bibtex, lualatex, lualatex]] where

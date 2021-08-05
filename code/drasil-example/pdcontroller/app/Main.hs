@@ -3,12 +3,12 @@ module Main (main) where
 import GHC.IO.Encoding (setLocaleEncoding, utf8)
 import Drasil.PDController.Body (printSetting, srs, fullSI)
 import Drasil.PDController.Choices (codeChoices, codeSpecs)
-import Language.Drasil.Generate (gen, genCode, genDot, DocSpec(DocSpec), DocType(SRS), Format(..), DebugOption(..), docChoices)
+import Language.Drasil.Generate (gen, genCode, genDot, DocSpec(DocSpec), DocType(SRS), Format(..), docChoices)
 
 
 main :: IO ()
 main = do
   setLocaleEncoding utf8
-  gen (DocSpec (docChoices SRS [HTML, TeX] NoDebug) "PDController_SRS") srs printSetting
+  gen (DocSpec (docChoices SRS [HTML, TeX]) "PDController_SRS") srs printSetting
   genCode codeChoices codeSpecs
   genDot fullSI

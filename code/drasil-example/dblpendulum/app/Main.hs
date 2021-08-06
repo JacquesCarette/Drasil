@@ -11,4 +11,4 @@ main = do
   setLocaleEncoding utf8
   gen (DocSpec (docChoices SRS [HTML, TeX]) "DblPendulum_SRS") srs printSetting
   genDot fullSI
-  genLog fullSI
+  genLog fullSI printSetting

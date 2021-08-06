@@ -84,13 +84,17 @@ writeDoc _    _  _   _ = error "we can only write TeX/HTML (for now)"
 -- | Generates traceability graphs as .dot files.
 genDot :: SystemInformation -> IO ()
 genDot si = do
+    workingDir <- getCurrentDirectory
     let gi = mkGraphInfo si
     outputDot "TraceyGraph" gi
-    return mempty
+    setCurrentDirectory workingDir
 
 -- | Generates debugging logs to show all of the UIDs used in an example.
-genLog :: SystemInformation -> IO ()
-genLog = printAllChunkUIDs
+genLog :: SystemInformation -> PrintingInformation -> IO ()
+genLog si pinfo = do
+  workingDir <- getCurrentDirectory
+  printAllChunkUIDs si pinfo
+  setCurrentDirectory workingDir
 
 -- | Calls the code generator.
 genCode :: Choices -> CodeSpec -> IO ()

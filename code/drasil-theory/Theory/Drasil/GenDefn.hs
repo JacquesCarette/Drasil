@@ -10,7 +10,7 @@ import Control.Lens ((^.), view, makeLenses)
 
 -- | A general definition is a 'ModelKind' that may have units, a derivation,
 -- references (as 'DecRef's), a shortname, a reference address, and notes.
-data GenDefn = GD { _mk    :: ModelKind
+data GenDefn = GD { _mk    :: ModelKind ModelExpr
                   , gdUnit :: Maybe UnitDefn -- TODO: Should be derived from the ModelKinds
                   , _deri  :: Maybe Derivation
                   , _rf    :: [DecRef]
@@ -54,18 +54,18 @@ instance Referable          GenDefn where
   renderRef l = RP (prepend $ abrv l) (refAdd l)
 
 -- | Smart constructor for general definitions.
-gd :: IsUnit u => ModelKind -> Maybe u ->
+gd :: IsUnit u => ModelKind ModelExpr -> Maybe u ->
   Maybe Derivation -> [DecRef] -> String -> [Sentence] -> GenDefn
 gd mkind _   _     []   _  = error $ "Source field of " ++ (mkind ^. uid) ++ " is empty"
 gd mkind u derivs refs sn_ = 
   GD mkind (fmap unitWrapper u) derivs refs (shortname' $ S sn_) (prependAbrv genDefn sn_)
 
 -- | Smart constructor for general definitions with no references.
-gdNoRefs :: IsUnit u => ModelKind -> Maybe u ->
+gdNoRefs :: IsUnit u => ModelKind ModelExpr -> Maybe u ->
   Maybe Derivation -> String -> [Sentence] -> GenDefn
 gdNoRefs mkind u derivs sn_ = 
   GD mkind (fmap unitWrapper u) derivs [] (shortname' $ S sn_) (prependAbrv genDefn sn_)
 
 -- | Grab all related 'QDefinitions' from a list of general definitions.
-getEqModQdsFromGd :: [GenDefn] -> [QDefinition]
+getEqModQdsFromGd :: [GenDefn] -> [QDefinition ModelExpr]
 getEqModQdsFromGd = getEqModQds . map _mk

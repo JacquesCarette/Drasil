@@ -20,7 +20,7 @@ type OutputConstraints = [RealInterval Expr Expr]
 
 -- | An instance model is a ModelKind that may have specific inputs, outputs, and output
 -- constraints. It also has attributes like references, derivation, labels ('ShortName'), reference address, and notes.
-data InstanceModel = IM { _mk       :: ModelKind
+data InstanceModel = IM { _mk       :: ModelKind Expr
                         , _imInputs :: Inputs
                         , _imOutput :: (Output, OutputConstraints)
                         , _rf       :: [DecRef]
@@ -78,27 +78,27 @@ instance HasSpace           InstanceModel where typ = output . typ
 instance MayHaveUnit        InstanceModel where getUnit = getUnit . view output
 
 -- | Smart constructor for instance models with everything defined.
-im :: ModelKind -> Inputs -> Output -> 
+im :: ModelKind Expr -> Inputs -> Output -> 
   OutputConstraints -> [DecRef] -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
 im mkind _  _ _  [] _  _  = error $ "Source field of " ++ mkind ^. uid ++ " is empty"
 im mkind i o oc r der sn = 
   IM mkind i (o, oc) r der (shortname' $ S sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models with a custom term, and no derivation.
-imNoDeriv :: ModelKind -> Inputs -> Output -> 
+imNoDeriv :: ModelKind Expr -> Inputs -> Output -> 
   OutputConstraints -> [DecRef] -> String -> [Sentence] -> InstanceModel
 imNoDeriv mkind _ _ _  [] _  = error $ "Source field of " ++ mkind ^. uid ++ " is empty"
 imNoDeriv mkind i o oc r  sn =
   IM mkind i (o, oc) r Nothing (shortname' $ S sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models with a custom term, and no references.
-imNoRefs :: ModelKind -> Inputs -> Output -> 
+imNoRefs :: ModelKind Expr -> Inputs -> Output -> 
   OutputConstraints -> Maybe Derivation -> String -> [Sentence] -> InstanceModel
 imNoRefs mkind i o oc der sn = 
   IM mkind i (o, oc) [] der (shortname' $ S sn) (prependAbrv inModel sn)
 
 -- | Smart constructor for instance models with a custom term, and no derivations or references.
-imNoDerivNoRefs :: ModelKind -> Inputs -> Output -> 
+imNoDerivNoRefs :: ModelKind Expr -> Inputs -> Output -> 
   OutputConstraints -> String -> [Sentence] -> InstanceModel
 imNoDerivNoRefs mkind i o oc sn = 
   IM mkind i (o, oc) [] Nothing (shortname' $ S sn) (prependAbrv inModel sn)
@@ -112,5 +112,5 @@ qwC :: (Quantity q, MayHaveUnit q) => q -> RealInterval Expr Expr -> Input
 qwC x y = (qw x, Just y)
 
 -- | Grab all related 'QDefinition's from a list of instance models.
-getEqModQdsFromIm :: [InstanceModel] -> [QDefinition]
+getEqModQdsFromIm :: [InstanceModel] -> [QDefinition Expr]
 getEqModQdsFromIm ims = getEqModQds (map _mk ims)

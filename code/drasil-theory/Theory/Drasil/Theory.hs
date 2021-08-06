@@ -1,4 +1,4 @@
-{-# Language TemplateHaskell #-}
+{-# Language TemplateHaskell, RankNTypes #-}
 module Theory.Drasil.Theory (Theory(..), TheoryModel, tm, tmNoRefs) where
 
 import Control.Lens (Lens', view, makeLenses, (^.))
@@ -15,9 +15,9 @@ class Theory t where
   spaces        :: Lens' t [SpaceDefn]
   quantities    :: Lens' t [QuantityDict]
   operations    :: Lens' t [ConceptChunk] -- FIXME: Should not be Concept
-  defined_quant :: Lens' t [QDefinition]
+  defined_quant :: Lens' t [QDefinition ModelExpr]
   invariants    :: Lens' t [ModelExpr]
-  defined_fun   :: Lens' t [QDefinition]
+  defined_fun   :: Lens' t [QDefinition ModelExpr]
 
 data SpaceDefn -- FIXME: This should be defined.
 
@@ -40,14 +40,14 @@ data SpaceDefn -- FIXME: This should be defined.
 -- Right now, neither the definition context (vctx) nor the
 -- spaces (spc) are ever defined.
 data TheoryModel = TM 
-  { _mk    :: ModelKind
+  { _mk    :: ModelKind ModelExpr
   , _vctx  :: [TheoryModel]
   , _spc   :: [SpaceDefn]
   , _quan  :: [QuantityDict]
   , _ops   :: [ConceptChunk]
-  , _defq  :: [QDefinition]
+  , _defq  :: [QDefinition ModelExpr]
   , _invs  :: [ModelExpr]
-  , _dfun  :: [QDefinition]
+  , _dfun  :: [QDefinition ModelExpr]
   , _rf    :: [DecRef]
   ,  lb    :: ShortName
   ,  ra    :: String
@@ -104,9 +104,9 @@ instance Referable TheoryModel where
 -- This should likely be re-arranged somehow. Especially since since of the arguments
 -- have the same type!
 -- | Constructor for theory models. Must have a source. Uses the shortname of the reference address.
-tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind ->
-    [q] -> [c] -> [QDefinition] ->
-    [ModelExpr] -> [QDefinition] -> [DecRef] ->
+tm :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind ModelExpr ->
+    [q] -> [c] -> [QDefinition ModelExpr] ->
+    [ModelExpr] -> [QDefinition ModelExpr] -> [DecRef] ->
     String -> [Sentence] -> TheoryModel
 tm mkind _ _ _  _   _   [] _   = error $ "Source field of " ++ (mkind ^. uid) ++ " is empty"
 tm mkind q c dq inv dfn r  lbe = 
@@ -114,8 +114,8 @@ tm mkind q c dq inv dfn r  lbe =
       (prependAbrv thModel lbe)
 
 -- | Constructor for theory models. Uses the shortname of the reference address.
-tmNoRefs :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind ->
-    [q] -> [c] -> [QDefinition] -> [ModelExpr] -> [QDefinition] -> 
+tmNoRefs :: (Quantity q, MayHaveUnit q, Concept c) => ModelKind ModelExpr ->
+    [q] -> [c] -> [QDefinition ModelExpr] -> [ModelExpr] -> [QDefinition ModelExpr] -> 
     String -> [Sentence] -> TheoryModel
 tmNoRefs mkind q c dq inv dfn lbe = 
   TM mkind [] [] (map qw q) (map cw c) dq inv dfn [] (shortname' $ S lbe)

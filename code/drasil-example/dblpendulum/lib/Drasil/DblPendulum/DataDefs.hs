@@ -1,5 +1,5 @@
 module Drasil.DblPendulum.DataDefs (dataDefs, positionGDD, positionYDD_1, positionXDD_1, positionXDD_2, positionYDD_2, 
-      accelGDD, angFrequencyDD, frequencyDD, periodSHMDD) where
+      accelGDD, forceGDD, angFrequencyDD, frequencyDD, periodSHMDD) where
 
 import Prelude hiding (sin, cos, sqrt)
 import Language.Drasil
@@ -13,12 +13,13 @@ import Drasil.DblPendulum.Unitals (lenRod, pendDisAngle_1, pendDisAngle_2, lenRo
 --import Data.Drasil.Concepts.Physics (pendulum)
 import qualified Data.Drasil.Quantities.Math as QM (pi_)
 import Drasil.DblPendulum.Concepts (horizontalPos, verticalPos)
-import Data.Drasil.Quantities.Physics (velocity, position, time, acceleration)
+import Data.Drasil.Quantities.Physics (velocity, position, time, acceleration, force)
+import Data.Drasil.Quantities.PhysicalProperties (mass)
 
 
 dataDefs :: [DataDefinition]
 dataDefs = [positionGDD, positionXDD_1, positionYDD_1, positionXDD_2, positionYDD_2, 
-  accelGDD, frequencyDD, angFrequencyDD, periodSHMDD]
+  accelGDD, forceGDD, frequencyDD, angFrequencyDD, periodSHMDD]
 
 ------------------------
 -- Position in General--
@@ -115,6 +116,18 @@ accelGQD = mkQuantDef acceleration accelGEqn
 
 accelGEqn :: Expr
 accelGEqn = deriv (sy velocity) time 
+
+---------------------------
+-- Force in General--
+---------------------------
+forceGDD :: DataDefinition
+forceGDD = ddNoRefs forceGQD Nothing "forceGDD" []
+
+forceGQD :: QDefinition
+forceGQD = mkQuantDef force forceGEqn
+
+forceGEqn :: Expr
+forceGEqn = sy mass `mulRe` sy acceleration
 
 ------------------------------------------------------
 frequencyDD :: DataDefinition

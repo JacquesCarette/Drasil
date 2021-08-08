@@ -11,7 +11,7 @@ import Data.Drasil.Constraints (gtZeroConstr)
 import Data.Drasil.TheoryConcepts (dataDefn, genDefn, inModel, thModel)
 import Data.Drasil.Concepts.Documentation (assumption, goalStmt, physSyst, requirement, srs, typUnc)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (len, mass)
-import Data.Drasil.SI_Units (metre, degree, radian, kilogram)
+import Data.Drasil.SI_Units (metre, degree, radian, kilogram, newton)
 import qualified Data.Drasil.Quantities.Physics as QP (position, ixPos, xPos, force, velocity,
   angularVelocity, angularAccel, gravitationalAccel, tension, acceleration, yAccel,
   xAccel, yVel, xVel, iyPos, yPos, time, torque, momentOfInertia, angularDisplacement,
@@ -44,7 +44,7 @@ unitalChunks = [lenRod,
   lenRod_1, lenRod_2, massObj_1, massObj_2, angularVel_1, angularVel_2,
   pendDisAngle_1, pendDisAngle_2, xVel_1, xVel_2, yVel_1, yVel_2,
   xPos_1, xPos_2, yPos_1, yPos_2, xAccel_1, yAccel_1, xAccel_2, yAccel_2,
-  angularAccel_1, angularAccel_2,
+  angularAccel_1, angularAccel_2, tension_1, tension_2,
   initPendAngle_1, initPendAngle_2,
   QPP.mass, QP.force, QP.ixPos, QP.xPos, QP.yPos,
   QP.angularVelocity, QP.angularAccel, QP.gravitationalAccel, QP.tension, QP.acceleration,
@@ -56,7 +56,7 @@ lenRod, lenRod_1, lenRod_2, massObj_1, massObj_2, angularVel_1, angularVel_2,
   pendDisAngle_1, pendDisAngle_2, pendDisplacementAngle, initialPendAngle,
   xPos_1, xPos_2, yPos_1, yPos_2, xVel_1, yVel_1, xVel_2, yVel_2, xAccel_1,
   yAccel_1, xAccel_2, yAccel_2,
-  angularAccel_1, angularAccel_2,
+  angularAccel_1, angularAccel_2, tension_1, tension_2,
   initPendAngle_1, initPendAngle_2 :: UnitalChunk
 
 -- Fix me, replace lenRod with lenOne
@@ -132,9 +132,17 @@ angularAccel_1 = makeUCWDS "alpha_x1" (nounPhraseSent $ phraseNP (QP.angularAcce
         (S "The" +:+ phraseNP (QP.angularAccel `the_ofThe` firstObject) `S.inThe` phrase CM.xDir)
         (sub lAlpha label1) angAccelU
 
-angularAccel_2 = makeUCWDS "alpha_y1" (nounPhraseSent $ phraseNP (QP.angularAccel `the_ofThe` firstObject))
-        (S "The" +:+ phraseNP (QP.angularAccel `the_ofThe` firstObject) `S.inThe` phrase CM.yDir)
+angularAccel_2 = makeUCWDS "alpha_y1" (nounPhraseSent $ phraseNP (QP.angularAccel `the_ofThe` secondObject))
+        (S "The" +:+ phraseNP (QP.angularAccel `the_ofThe` secondObject) `S.inThe` phrase CM.yDir)
         (sub lAlpha label2) angAccelU
+
+tension_1 = makeUCWDS "T_1" (nounPhraseSent $ phraseNP (QP.tension `the_ofThe` firstObject))
+        (S "The" +:+ phraseNP (QP.tension `the_ofThe` firstObject))
+        (sub (vec cT) label1) newton
+
+tension_2 = makeUCWDS "T_2" (nounPhraseSent $ phraseNP (QP.tension `the_ofThe` secondObject))
+        (S "The" +:+ phraseNP (QP.tension `the_ofThe` secondObject))
+        (sub (vec cT) label2) newton
 
 -- ixPos_1 = makeUCWDS "p_x1i" (nounPhraseSent $ phraseNP (ixPos `the_ofThe` firstObject))
 --         (S "The" +:+ phraseNP (ixPos `the_ofThe` firstObject) `S.inThe` phrase CM.xDir)

@@ -22,7 +22,7 @@ module Language.Drasil.Printers (
     -- Print 
   , genJSON
   -- Log
-  , printAllChunkUIDs
+  , printAllDebugInfo
   , PrintingInformation(..) , piSys
   , HasPrintingOptions (..)
   , Notation(..)
@@ -42,4 +42,4 @@ import Language.Drasil.TeX.Print (genTeX)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation(..),
   HasPrintingOptions(..), Notation(..), defaultConfiguration, piSys)
 import Language.Drasil.DOT.Print (outputDot, GraphInfo(..), NodeFamily(..))
-import Language.Drasil.Log.Print (printAllChunkUIDs)
+import Language.Drasil.Log.Print (printAllDebugInfo)

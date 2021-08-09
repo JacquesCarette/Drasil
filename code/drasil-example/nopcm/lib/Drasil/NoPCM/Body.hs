@@ -60,7 +60,7 @@ import Drasil.SWHS.Body (charsOfReader, dataContMid, introEnd, introStart,
   orgDocIntro, physSyst1, physSyst2, sysCntxtDesc, sysCntxtFig,
   systContRespBullets, sysCntxtRespIntro, userChars)
 import Drasil.SWHS.Changes (likeChgTCVOD, likeChgTCVOL, likeChgTLH)
-import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, water, con)
+import Drasil.SWHS.Concepts (acronyms, coil, progName, sWHT, tank, transient, water, con, phsChgMtrl)
 import Drasil.SWHS.Requirements (nfRequirements)
 import Drasil.SWHS.TMods (PhaseChange(Liquid), consThermE, nwtnCooling, sensHtETemplate)
 import Drasil.SWHS.Unitals (coilSAMax, deltaT, htFluxC, htFluxIn,
@@ -218,7 +218,7 @@ symbMap = cdb symbolsAll (map nw symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' ++ map nw mathcon ++ map nw mathcon'
   ++ map nw specParamValList ++ map nw fundamentals ++ map nw educon ++ map nw derived
   ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srsSWHS, nw algorithm, nw inValue, nw htTrans]
-  ++ map nw [absTol, relTol] ++ [nw materialProprty])
+  ++ map nw [absTol, relTol] ++ [nw materialProprty] ++ [nw phsChgMtrl])
   (map cw symbols ++ srsDomains) units NoPCM.dataDefs NoPCM.iMods genDefs
   tMods concIns section labCon []
 

@@ -3,52 +3,28 @@ module Language.Drasil.Log.Print where
 import Language.Drasil hiding (symbol)
 import qualified Language.Drasil as L (symbol)
 import Database.Drasil
---import System.IO
---import System.Directory
+import Utils.Drasil (stringList)
+
 import qualified Data.Map as Map
 import Control.Lens ((^.), view)
 import Data.List (nub, sort, sortBy)
-import Text.PrettyPrint.HughesPJ
-import Language.Drasil.Plain.Print
---import Language.Drasil.Printing.Import
-import Language.Drasil.Printing.PrintingInformation
-import Prelude hiding ((<>))
 import Data.Maybe (fromMaybe)
---import Control.Monad (replicateM_)
-import Utils.Drasil (stringList)
 import Data.Bifunctor (second)
 import Data.Function (on)
--- import Theory.Drasil
 
-{-printAllChunkUIDs :: SystemInformation -> PrintingInformation -> IO ()
-printAllChunkUIDs pinfo = do
+import Text.PrettyPrint.HughesPJ
+import Language.Drasil.Plain.Print
+import Language.Drasil.Printing.PrintingInformation
+import Prelude hiding ((<>))
 
-  cdbSection handle mkTableReferencedChunks pinfo
-  cdbSection handle mkTableDepChunks pinfo
-  cdbSection handle mkTableDepReffedChunks pinfo
-
-  cdbSection handle mkTableSymb pinfo
-  cdbSection handle mkTableOfTerms pinfo
-  cdbSection handle mkTableConcepts pinfo
-  cdbSection handle mkTableUnitDefn pinfo
-  cdbSection handle mkTableDataDef pinfo
-  cdbSection handle mkTableGenDef pinfo
-  cdbSection handle mkTableTMod pinfo
-  cdbSection handle mkTableIMod pinfo
-  cdbSection handle mkTableCI pinfo
-  cdbSection handle mkTableSec pinfo
-  cdbSection handle mkTableLC pinfo
-  cdbSection handle mkTableRef pinfo
-
-  cdbSection handle (renderUsedUIDs . mkListShowUsedUIDs) pinfo
-  hClose handle-}
-
+-- | Gathers all printing functions and creates the debugging tables from them.
 printAllDebugInfo :: PrintingInformation -> [Doc]
 printAllDebugInfo pinfo = map (cdbSection . ($ pinfo)) [mkTableReferencedChunks, mkTableDepChunks, mkTableDepReffedChunks,
   mkTableSymb, mkTableOfTerms, mkTableConcepts, mkTableUnitDefn,
   mkTableDataDef, mkTableGenDef, mkTableTMod, mkTableIMod, mkTableCI,
   mkTableSec, mkTableLC, mkTableRef, renderUsedUIDs . mkListShowUsedUIDs]
 
+-- | Debugging table separator.
 cdbSection :: Doc -> Doc
 cdbSection dd = text (replicate 100 '#' ++ "\n") $$ dd $$ text "\n"
 
@@ -83,6 +59,10 @@ mkListShowUsedUIDs PI{_ckdb = db} = sortBy (compare `on` fst) $ map (second stri
   map (\x -> (fst x, ["LabelledContent"])) (Map.assocs $ db ^. labelledcontentTable) ++
   map (\x -> (fst x, ["Reference"])) (Map.assocs $ db ^. refTable)
 
+-- | General function to make the debugging tables. Takes in printing information, a function
+-- that extracts a certain field from the printing information, a title, three column headers,
+-- and three functions that sort the data from the printing information field into the 
+-- required display formats (often 'UID's, terms, shortnames, definitions, etc.).
 mkTableFromLenses :: PrintingInformation -> (ChunkDB -> UMap a)
   -> String -> String -> String -> String -> (a -> Doc) -> (a -> Doc) -> (a -> Doc) -> Doc
 mkTableFromLenses PI{_ckdb = db} tableLens ttle h1 h2 h3 l1 l2 l3 =
@@ -95,6 +75,7 @@ mkTableFromLenses PI{_ckdb = db} tableLens ttle h1 h2 h3 l1 l2 l3 =
     chunks = map (fst.snd) (Map.assocs $ tableLens db)
     nestNum = 30
 
+-- | Makes a table with all symbolic quantities in the SRS.
 mkTableSymb :: PrintingInformation -> Doc
 mkTableSymb pinfo = mkTableFromLenses pinfo symbolTable
   "Symbol Chunks" "UID" "Term" "Symbol"
@@ -102,6 +83,7 @@ mkTableSymb pinfo = mkTableFromLenses pinfo symbolTable
         (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
           (symbolDoc . flip L.symbol (pinfo ^. stg))
 
+-- | Makes a table with terms in the SRS.
 mkTableOfTerms :: PrintingInformation -> Doc
 mkTableOfTerms pinfo = mkTableFromLenses pinfo termTable
   "Term Chunks" "UID" "Term" "Abbreviation"
@@ -109,6 +91,7 @@ mkTableOfTerms pinfo = mkTableFromLenses pinfo termTable
       (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
         (text . fromMaybe "" . getA)
 
+-- | Makes a table with all concepts in the SRS.
 mkTableConcepts :: PrintingInformation -> Doc
 mkTableConcepts pinfo = mkTableFromLenses pinfo defTable
   "Concepts" "UID" "Term" "Definition"
@@ -116,6 +99,7 @@ mkTableConcepts pinfo = mkTableFromLenses pinfo defTable
       (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
         (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Linear . view defn)
 
+-- | Makes a table with all units used in the SRS.
 mkTableUnitDefn :: PrintingInformation -> Doc
 mkTableUnitDefn pinfo = mkTableFromLenses pinfo (view unitTable)
   "Unit Definitions" "UID" "Term" "Unit Symbol"
@@ -123,6 +107,7 @@ mkTableUnitDefn pinfo = mkTableFromLenses pinfo (view unitTable)
       (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
         (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Linear . Sy . usymb)
 
+-- | Makes a table with all data definitions in the SRS.
 mkTableDataDef :: PrintingInformation -> Doc
 mkTableDataDef pinfo = mkTableFromLenses pinfo (view dataDefnTable)
   "Data Definitions" "UID" "Term" "Symbol"
@@ -130,6 +115,7 @@ mkTableDataDef pinfo = mkTableFromLenses pinfo (view dataDefnTable)
       (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
         (symbolDoc . flip L.symbol (pinfo ^. stg))
 
+-- | Makes a table with all general definitions in the SRS.
 mkTableGenDef :: PrintingInformation -> Doc
 mkTableGenDef pinfo = mkTableFromLenses pinfo (view gendefTable)
   "General Definitions" "UID" "Term" "Definition"
@@ -137,6 +123,7 @@ mkTableGenDef pinfo = mkTableFromLenses pinfo (view gendefTable)
       (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
         (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Linear . view defn)
 
+-- | Makes a table with all theoretical models in the SRS.
 mkTableTMod :: PrintingInformation -> Doc
 mkTableTMod pinfo = mkTableFromLenses pinfo (view theoryModelTable)
   "Theory Models" "UID" "Term" "Definition"
@@ -144,6 +131,7 @@ mkTableTMod pinfo = mkTableFromLenses pinfo (view theoryModelTable)
       (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
         (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Linear . view defn)
 
+-- | Makes a table with all instance models in the SRS.
 mkTableIMod :: PrintingInformation -> Doc
 mkTableIMod pinfo = mkTableFromLenses pinfo (view insmodelTable)
   "Instance Models" "UID" "Term" "Definition"
@@ -151,6 +139,7 @@ mkTableIMod pinfo = mkTableFromLenses pinfo (view insmodelTable)
       (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
         (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Linear . view defn)
 
+-- | Makes a table with all concept instances in the SRS.
 mkTableCI :: PrintingInformation -> Doc
 mkTableCI pinfo = mkTableFromLenses pinfo (view conceptinsTable)
   "ConceptInstance" "UID" "Term" "ShortName"
@@ -158,6 +147,7 @@ mkTableCI pinfo = mkTableFromLenses pinfo (view conceptinsTable)
       (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . phraseNP . view term)
         (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Linear . getSentSN . shortname)
 
+-- | Makes a table with all sections in the SRS.
 mkTableSec :: PrintingInformation -> Doc
 mkTableSec pinfo = mkTableFromLenses pinfo (view sectionTable)
   "Sections" "UID" "Title" "ShortName"
@@ -165,6 +155,7 @@ mkTableSec pinfo = mkTableFromLenses pinfo (view sectionTable)
       (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Nonlinear . tle)
         (sentenceDoc (pinfo ^. ckdb) (pinfo ^. stg) Linear . getSentSN . shortname)
 
+-- | Makes a table with all labelled content in the SRS.
 mkTableLC :: PrintingInformation -> Doc
 mkTableLC pinfo = mkTableFromLenses pinfo (view labelledcontentTable)
   "LabelledContent" "UID" "ShortName" "Type of Content"
@@ -183,6 +174,7 @@ mkTableLC pinfo = mkTableFromLenses pinfo (view labelledcontentTable)
     getContConst Bib{} = "Bibliography"
     getContConst Graph{} = "Graph"
 
+-- | Makes a table with all references in the SRS.
 mkTableRef :: PrintingInformation -> Doc
 mkTableRef pinfo = mkTableFromLenses pinfo (view refTable)
   "Reference" "UID" "Reference Address" "ShortName"
@@ -196,7 +188,6 @@ mkTableDepChunks PI{_ckdb = db} = text "Dependent Chunks (the chunks on the left
   $$ header (text "UID" $$ nest nestNum (text "Dependent UIDs"))
   $$ vcat (map testIndepLayout traceMapUIDs)
   where
-    -- uidList = mkListAll db
     testIndepLayout :: (UID, [UID]) -> Doc
     testIndepLayout (x, ys) = text x $$ nest nestNum (text $ show ys)
     traceMapUIDs :: [(UID, [UID])]
@@ -210,7 +201,6 @@ mkTableReferencedChunks PI{_ckdb = db} = text "Referenced Chunks (other chunks b
   $$ header (text "UID" $$ nest nestNum (text "UIDs that use the left UID"))
   $$ vcat (map testIsolateLayout refbyUIDs)
   where
-    -- uidList = mkListAll db
     testIsolateLayout :: (UID, [UID]) -> Doc
     testIsolateLayout (x, ys) = text x $$ nest nestNum (text $ show ys)
     refbyUIDs :: [(UID, [UID])]

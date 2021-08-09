@@ -90,7 +90,7 @@ genDot si = do
     outputDot "TraceyGraph" gi
     setCurrentDirectory workingDir
 
--- | Generates debugging logs to show all of the UIDs used in an example.
+-- | Generates debugging logs to show all of the 'UID's used in an example.
 genLog :: SystemInformation -> PrintingInformation -> IO ()
 genLog SI{_sys = sysName} pinfo = do
   workingDir <- getCurrentDirectory

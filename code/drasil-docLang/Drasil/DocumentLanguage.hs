@@ -26,8 +26,8 @@ import Utils.Drasil
 
 import Database.Drasil(ChunkDB, SystemInformation(SI), _authors, _kind,
   _quants, _sys, _sysinfodb, _usedinfodb, ccss, ccss', citeDB, collectUnits,
-  termTable, conceptinsTable, idMap, refbyTable, conceptDB,
-  refTable, labelledcontentTable, sectionTable, theoryModelTable,
+  termTable, conceptinsTable, idMap, termMap, refbyTable, conceptDB,
+  refTable, labelledcontentTable, sectionTable, theoryModelTable, defTable, symbolTable,
   insmodelTable, gendefTable, dataDefnTable, refdb, sysinfodb, traceTable,
   generateRefbyMap)
 
@@ -76,9 +76,9 @@ mkDoc dd comb si@SI {_sys = sys, _kind = kind, _authors = authors} =
     fullSI = fillcdbSRS dd si
     l = mkDocDesc fullSI dd
 
--- Assuming ChunkDB with no traces and minimal/no references, fill in for rest of system information.
+-- | Assuming ChunkDB with no traces and minimal/no references, fill in for rest of system information.
 fillcdbSRS :: SRSDecl -> SystemInformation -> SystemInformation
-fillcdbSRS srsDec si = fillSecAndLC srsDec $ fillReferences srsDec $ fillTraceSI srsDec si
+fillcdbSRS srsDec si = fillSecAndLC srsDec $ fillReferences srsDec $ fillTraceSI srsDec $ fillTermMap si
 
 {-Don't want to manually add concepts here, Drasil should do it automatically. Perhaps through traversal?
 fillConcepts :: SystemInformation -> SystemInformation
@@ -89,6 +89,29 @@ fillConcepts si = si2
     tmtbl = termTable chkdb
     chkdb2 = chkdb{termTable = termMap $ nub (map nw doccon ++ map nw doccon' ++ map nw softwarecon ++ map nw physicCon ++ map nw physicCon' ++ map nw physicalcon ++ map nw educon ++ map nw mathcon ++ map nw mathcon' ++ map nw compcon ++ map nw compcon' ++ map nw solidcon ++ map nw thermocon ++ (map (fst.snd) $ Map.assocs tmtbl))}
 -}
+
+-- | Fill in term map from all concepts and quantities.
+fillTermMap :: SystemInformation -> SystemInformation
+fillTermMap si = si2
+  where
+    -- Get current contents of si
+    chkdb = si ^. sysinfodb
+    -- extract everything that could possibly lead to an 'IdeaDict'
+    symbs    = map (fst.snd) $ Map.assocs $ symbolTable chkdb
+    trms     = map (fst.snd) $ Map.assocs $ termTable chkdb
+    concepts = map (fst.snd) $ Map.assocs $ defTable chkdb
+
+    ddefs   = map (fst.snd) $ Map.assocs $ chkdb ^. dataDefnTable
+    gdefs   = map (fst.snd) $ Map.assocs $ chkdb ^. gendefTable
+    imods   = map (fst.snd) $ Map.assocs $ chkdb ^. insmodelTable
+    tmods   = map (fst.snd) $ Map.assocs $ chkdb ^. theoryModelTable
+    concIns = map (fst.snd) $ Map.assocs $ chkdb ^. conceptinsTable
+    -- fill in the appropriate chunkdb field
+    chkdb2 = chkdb {termTable = termMap $ nub $ map nw symbs ++ map nw trms
+      ++ map nw concepts ++ map nw ddefs ++ map nw gdefs ++ map nw imods
+      ++ map nw tmods ++ map nw concIns}
+    -- return the filled in system information
+    si2 = set sysinfodb chkdb2 si
 
 -- | Fill in the 'Section's and 'LabelledContent' maps of the 'ChunkDB' from the 'SRSDecl'.
 fillSecAndLC :: SRSDecl -> SystemInformation -> SystemInformation

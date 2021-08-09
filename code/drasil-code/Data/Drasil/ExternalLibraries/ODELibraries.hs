@@ -1,13 +1,6 @@
--- | Define and collect information about ODEs and ODE solvers from various libraries.
 module Data.Drasil.ExternalLibraries.ODELibraries (
-  -- * SciPy Library (Python)
-  scipyODEPckg, scipyODESymbols, scipyODELSodaPkg,
-  -- * Oslo Library (C#)
-  osloPckg, osloSymbols, arrayVecDepVar,
-  -- * Apache Commons (Java)
-  apacheODEPckg, apacheODESymbols, 
-  -- * Odeint (C++)
-  odeintPckg, odeintSymbols
+  scipyODEPckg, scipyODESymbols, osloPckg, osloSymbols, arrayVecDepVar,
+  apacheODEPckg, apacheODESymbols, odeintPckg, odeintSymbols, scipyODELSodaPkg
 ) where
 
 import Language.Drasil (HasSymbol(symbol), HasUID(uid), MayHaveUnit(getUnit),
@@ -42,9 +35,8 @@ import Language.Drasil.Code.Expr.Development
 
 import Control.Lens ((^.), _1, _2, over)
 
--- SciPy Library (Python)
+-- SciPy -- 
 
--- | [SciPy](https://www.scipy.org/) ODE library package.
 scipyODEPckg :: ODELibPckg
 scipyODEPckg = mkODELibNoPath "SciPy" "1.4.1" scipyODE scipyCall [Python]
 
@@ -82,7 +74,7 @@ scipyCall info = externalLibCall [
         solveMethodFill = callStepFill $ libCallFill $ map basicArgFill
           [absTol $ odeOpts info, relTol $ odeOpts info]
 
--- | This package solves a system of ODEs using the scipy odeint method.
+-- This package solves a system of ODE using the scipy odeint method.
 -- The odeint method solves the ode using the LSoda solver.
 scipyODELSodaPkg :: ODELibPckg
 scipyODELSodaPkg = mkODELibNoPath "SciPy" "1.4.1" scipyLSodaODE scipyLSodaCall [Python]
@@ -132,7 +124,6 @@ odeT, numpyArrayT :: Space
 odeT = Actor "ode"
 numpyArrayT = Actor "numpyArray"
 
--- | Collects variables needed for SciPy's ODEs as 'QuantityDict's.
 scipyODESymbols :: [QuantityDict]
 scipyODESymbols = map qw [mthdArg, atolArg, rtolArg]
   ++ map qw [r, t, y, xAxis, ut, transpose]
@@ -195,9 +186,8 @@ odeintFunc = quantfunc $ implVar "odeint_scipy" (nounPhrase
   "method that solves a system of ODE using lsoda from the FORTRAN library odepack.")
   (Array Real) (label "odeint")
 
--- Oslo Library (C#)
+-- Oslo (C#) --
 
--- | [Oslo](https://www.microsoft.com/en-us/research/project/open-solving-library-for-odes/) ODE library package.
 osloPckg :: ODELibPckg
 osloPckg = mkODELib "OSLO" "1.2" oslo osloCall "Microsoft.Research.Oslo.dll" [CSharp]
 
@@ -240,7 +230,6 @@ optT = Actor "Options"
 osloImport :: String
 osloImport = "Microsoft.Research.Oslo"
 
--- | Collects variables needed for Oslo's ODEs as 'QuantityDict's.
 osloSymbols :: [QuantityDict]
 osloSymbols = map qw [initv, opts, aTol, rTol, sol, points, sp, x] ++
   map qw [fOslo, options, vector, rk547m, gearBDF, solveFromToStep]
@@ -297,17 +286,16 @@ vecDepVar info = quantvar $ implVar (dv ^. uid) (dv ^. term) vecT
   (sub (symbol dv Implementation) (label "vec"))
   where dv = depVar info
 
--- Hack required because 
--- | Oslo's Vector type behaves like an array, so needs to
+-- Hack required because Oslo's Vector type behaves like an array, so needs to
 -- be represented as one or else will hit type errors in GOOL.
 arrayVecDepVar :: ODEInfo -> CodeVarChunk
 arrayVecDepVar info = quantvar $ implVar (dv ^. uid ++ "vec") (dv ^. term)
   (dv ^. typ) (sub (symbol dv Implementation) (label "vec"))
   where dv = listToArray $ depVar info
 
--- Apache Commons (Java)
 
--- | [Apache Commons](https://commons.apache.org/) ODE library package.
+-- Apache (Java) --
+
 apacheODEPckg :: ODELibPckg
 apacheODEPckg = mkODELib "Apache" "3.6.1" apacheODE apacheODECall
   "lib/commons-math3-3.6.1.jar" [Java]
@@ -385,7 +373,6 @@ si = "StepInterpolator"
 siImp = apacheImport ++ sampling ++ "." ++ si
 fode = "FirstOrderDifferentialEquations"
 
--- | Collects variables needed for Apache's ODEs as 'QuantityDict's.
 apacheODESymbols :: [QuantityDict]
 apacheODESymbols = map qw [it, currVals, stepHandler, t0, y0, t, interpolator,
   isLast, curr, ode] ++ map qw [adamsC, dp54C, stepHandlerCtor, addStepHandler,
@@ -455,9 +442,8 @@ computeDerivatives = quantfunc $ implVar "computeDerivatives_apache" (nounPhrase
   "method encoding an ODE system" "methods encoding an ODE system")
   Void (label "computeDerivatives")
 
--- odeint (C++)
+-- odeint (C++) --
 
--- | [odeint](https://headmyshoulder.github.io/odeint-v2/) ODE library package.
 odeintPckg :: ODELibPckg
 odeintPckg = mkODELib "odeint" "v2" odeint odeintCall "." [Cpp]
 
@@ -517,7 +503,6 @@ adamsBash = odeNameSpace ++ "adams_bashforth<3,vector<double>>"
 popT :: Space
 popT = Actor "Populate"
 
--- | Collects variables needed for odeint's ODEs as 'QuantityDict's.
 odeintSymbols :: [QuantityDict]
 odeintSymbols = map qw [odeintCurrVals, rk, stepper, pop, t, y, ode] ++ map qw
   [rkdp5C, makeControlled, adamsBashC, integrateConst, odeCtor, odeOp, popCtor,
@@ -570,49 +555,42 @@ popOp = quantfunc $ implVar "pop_operator_odeint" (nounPhrase
   "methods defining override for calling Populate object") Void
   (label "operator()")
 
--- 'CodeChunk's used in multiple external ODE libraries
+-- CodeChunks used in multiple external libraries --
 
 ode, t, y :: CodeVarChunk
--- | ODE object & definition.
 ode = quantvar $ implVar "ode_obj" (nounPhrase
   "object representing an ODE system" "objects representing an ODE system")
   odeObj (label "ode")
--- | Independent variable in an ODE.
 t = quantvar $ implVar "t_ode" (nounPhrase
   "current independent variable value in ODE solution"
   "current independent variable value in ODE solution")
   Real (label "t")
--- | Dependent variable in an ODE.
 y = quantvar $ implVar "y_ode" (nounPhrase
   "current dependent variable value in ODE solution"
   "current dependent variable value in ODE solution")
   (Vect Real) (label "y")
 
--- | ODE object constructor.
 odeCtor :: CodeFuncChunk
 odeCtor = quantfunc $ implVar "ODE_constructor" (nounPhrase
   "constructor for ODE object" "constructors for ODE object") odeObj
   (label "ODE")
 
--- | ODE object.
 odeObj :: Space
 odeObj = Actor "ODE"
 
--- | ODE method unavailable message.
 odeMethodUnavailable :: String
 odeMethodUnavailable = "Chosen ODE solving method is not available" ++
           " in chosen ODE solving library"
 
--- | Change in @X@ chunk constructor (where @X@ is a given argument).
 diffCodeChunk :: CodeVarChunk -> CodeVarChunk
 diffCodeChunk c = quantvar $ implVar' ("d" ++ c ^. uid)
   (compoundPhrase (nounPhraseSP "change in") (c ^. term)) (getA c) (c ^. typ)
   (Concat [label "d", symbol c Implementation]) (getUnit c)
 
 -- FIXME: This is surely a hack, but I can't think of a better way right now.
--- | Some libraries use an array instead of a list to internally represent the ODE.
+-- Some libraries use an array instead of a list to internally represent the ODE
 -- So we need a way to switch the dependent variable from list to array,
--- and the array version must have a distinct UID so it can be stored in the DB.
+-- and the array version must have a distinct UID so it can be stored in the DB
 modifiedODESyst :: String -> ODEInfo -> [CodeExpr]
 modifiedODESyst sufx info = map replaceDepVar (odeSyst info)
   where

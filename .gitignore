@@ -8,7 +8,6 @@ desktop.ini
 .vscode
 
 # Drasil/Haskell
-*.cabal
 .cabal-sandbox
 .hsenv
 .stack-work
@@ -44,7 +43,7 @@ code/stable/*/src/*/latex
 */Projectile/output.txt
 
 # Website
-code/Website
+code/drasil-website/Website
 
 # PDF generation, TeX caches, and misc. file types
 *.aux

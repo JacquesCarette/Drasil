@@ -1,7 +1,4 @@
-#!/usr/bin/env bash
-
 # Deploy script. Calls target deploy_lite from code/Makefile
-
 SOURCE_BRANCH="master"
 DEPLOY_BRANCH="gh-pages"
 DEPLOY_FOLDER="deploy/"

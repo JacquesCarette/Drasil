@@ -1,4 +1,4 @@
-module Language.Drasil.HTML.Print(genHTML, renderCite, OpenClose(Open, Close), fence) where
+module Language.Drasil.HTML.Print(genHTML) where
 
 import Prelude hiding (print, (<>))
 import Data.List (sortBy)
@@ -8,7 +8,7 @@ import Utils.Drasil (checkValidStr, numList)
 
 import qualified Language.Drasil as L (People, Person, 
   CitationKind(Misc, Book, MThesis, PhDThesis, Article), 
-  DType(Data, Theory, Instance, General),MaxWidthPercent,
+  DType(Data, Theory, Instance, General), MaxWidthPercent,
   Document, nameStr, rendPersLFM, rendPersLFM', rendPersLFM'', special)
 
 import Language.Drasil.HTML.Monad (unPH)
@@ -44,24 +44,6 @@ genHTML :: PrintingInformation -> String -> L.Document -> Doc
 genHTML sm fn doc = build fn (makeDocument sm doc)
 --         ^^ -- should really be of type Filename, but that's not in scope
 
--- | Variable to include MathJax in our HTML files so we can render equations in LaTeX.
-mathJaxScript :: Doc
-mathJaxScript =
-  vcat [text "<script>",
-        text "MathJax = {",
-        text "  loader: {load: ['[tex]/textmacros', 'output/chtml']},",
-        text "  tex: {",
-        text "    packages: {'[+]': ['textmacros']}",
-        text "  },",
-        text "  svg: {",
-        text "    fontCache: 'global'",
-        text "  }",
-        text "};",
-        text "</script>",
-        text "<script type=\"text/javascript\" id=\"MathJax-script\" async",
-        text " src=\"https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js\">",
-        text "</script>"]
-
 -- HTML printer doesn't need to know if there is a table of contents or not.
 -- | Build the HTML Document, called by 'genHTML'.
 build :: String -> Document -> Doc
@@ -69,7 +51,9 @@ build fn (Document t a c) =
   text "<!DOCTYPE html>" $$
   html (headTag (linkCSS fn $$ title (titleSpec t) $$
   text "<meta charset=\"utf-8\">" $$
-  mathJaxScript) $$
+  text ("<script type=\"text/javascript\" async " ++
+  "src=\"https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/latest.js?config=TeX-MML-AM_CHTML\">" ++
+  "</script>")) $$
   body (articleTitle (pSpec t) $$ author (pSpec a)
   $$ print c
   ))
@@ -101,7 +85,6 @@ printLO (List t)               = makeList t
 printLO (Figure r c f wp)      = makeFigure (pSpec r) (pSpec c) (text f) wp
 printLO (Bib bib)              = makeBib bib
 printLO Graph{}                = empty -- FIXME
-printLO Cell{}                 = empty
 
 
 -- | Called by build, uses 'printLO' to render the layout

@@ -1,6 +1,6 @@
 module Language.Drasil.Printers (
   -- Format 
-    Format(TeX, HTML, JSON)
+    Format(TeX, HTML)
   -- DOT
   , outputDot, GraphInfo(..), NodeFamily(..)
   -- HTML
@@ -18,25 +18,21 @@ module Language.Drasil.Printers (
   -- TeX
   -- Print
   , genTeX
-  -- Jupyter
-    -- Print 
-  , genJSON
-  , PrintingInformation(..) , piSys
+  , PrintingInformation(..)
   , HasPrintingOptions (..)
   , Notation(..)
   , defaultConfiguration
   )
   where
 
-import Language.Drasil.Format (Format(TeX, HTML,JSON))
+import Language.Drasil.Format (Format(TeX, HTML))
 import Language.Drasil.HTML.CSS (makeCSS)
 import Language.Drasil.HTML.Print (genHTML)
-import Language.Drasil.JSON.Print (genJSON)
 import Language.Drasil.Markdown.CreateMd (makeMd, introInfo, verInfo, unsupOS,
   extLibSec, instDoc, regularSec, endNote)
 import Language.Drasil.Plain.Print (Linearity(..), sentenceDoc, exprDoc,
   codeExprDoc, symbolDoc, unitDoc)
 import Language.Drasil.TeX.Print (genTeX)
 import Language.Drasil.Printing.PrintingInformation (PrintingInformation(..),
-  HasPrintingOptions(..), Notation(..), defaultConfiguration, piSys)
+  HasPrintingOptions(..), Notation(..), defaultConfiguration)
 import Language.Drasil.DOT.Print (outputDot, GraphInfo(..), NodeFamily(..))

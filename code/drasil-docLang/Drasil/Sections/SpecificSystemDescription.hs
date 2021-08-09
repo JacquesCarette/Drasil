@@ -81,7 +81,7 @@ termDefnF' end otherContents = SRS.termAndDefn (intro : otherContents) []
 physSystDesc :: Idea a => a -> [Sentence] -> LabelledContent -> [Contents] -> Section
 physSystDesc progName parts fg other = SRS.physSyst (intro : bullets : LlC fg : other) []
   where intro = mkParagraph $ foldlSentCol [atStartNP (the physicalSystem) `S.of_` short progName `sC`
-                S "as shown in", refS fg `sC` S "includes the following", plural element]
+                S "as shown in the", refS fg, S "below" `sC` S "includes the following", plural element]
         bullets = enumSimpleU 1 (short physSyst) parts
 
 -- | General constructor for the Goal Statement section. Takes the given inputs ('Sentence's) and the descriptions ('Contents').

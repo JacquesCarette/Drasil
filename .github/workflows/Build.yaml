@@ -53,9 +53,9 @@ jobs:
       - name: "Install dependencies"
         run: stack --no-terminal test --bench --only-dependencies
       - name: "Build"
-        run: make code stackArgs="--no-terminal" GHCFLAGS="-Werror"
+        run: make prog stackArgs="--no-terminal" GHCFLAGS="-Werror"
       - name: "Stable"
-        run: make stackArgs="--no-terminal" GHCFLAGS="-Werror" NOISY=yes
+        run: make stackArgs="--no-terminal" NOISY=yes
       - name: "TeX"
         run: make tex SUMMARIZE_TEX=yes
       - name: "Code"

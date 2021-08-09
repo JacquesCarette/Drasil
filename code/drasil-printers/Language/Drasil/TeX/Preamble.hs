@@ -117,4 +117,3 @@ parseDoc los' =
     parseDoc' Paragraph{}  = ([], [])
     parseDoc' List{}       = ([EnumItem], [])
     parseDoc' EqnBlock{}   = ([], [])
-    parseDoc' Cell{}       = ([], [])

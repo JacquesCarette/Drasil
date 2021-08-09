@@ -26,7 +26,7 @@ physicscon = [acceleration, angularAccel, angularDisplacement, angularVelocity,
   iSpeed, iVel, impulseS, impulseV, ixPos, ixVel, iyPos, iyVel, kEnergy,
   linearAccel, linearDisplacement, linearVelocity, momentOfInertia, position,
   potEnergy, pressure, scalarAccel, scalarPos, speed, time, torque, velocity,
-  weight, xAccel, xConstAccel, xDist, ixDist, iyDist, xPos, xVel, yAccel, yConstAccel, yDist,
+  weight, xAccel, xConstAccel, xDist, xPos, xVel, yAccel, yConstAccel, yDist,
   yPos, yVel,momentum, moment, moment2D, fOfGravity, positionVec, tension,
   angularFrequency, period, frequency, chgMomentum]
 
@@ -36,9 +36,8 @@ acceleration, angularAccel, angularDisplacement, angularVelocity, chgInVelocity,
   impulseV, ixPos, ixVel, iyPos, iyVel, kEnergy, linearAccel, linearDisplacement,
   linearVelocity, momentOfInertia, position, potEnergy, pressure, scalarAccel,
   scalarPos, speed, time, torque, velocity, weight, xAccel, xConstAccel, xDist,
-  ixDist, iyDist, xPos, xVel, yAccel, yConstAccel, yDist, yPos, yVel, momentum, 
-  moment, moment2D, fOfGravity, positionVec, tension, angularFrequency, period, 
-  frequency, chgMomentum :: UnitalChunk
+  xPos, xVel, yAccel, yConstAccel, yDist, yPos, yVel, momentum, moment, moment2D,
+  fOfGravity, positionVec, tension, angularFrequency, period, frequency, chgMomentum :: UnitalChunk
 
 
 acceleration         = uc CP.acceleration (vec lA) accelU
@@ -89,9 +88,6 @@ fOfGravity           = uc CP.fOfGravity (sub (vec cF) (vec lG)) newton
 
 xDist = uc CP.xDist (subX lR) metre
 yDist = uc CP.yDist (subY lR) metre
-
-ixDist = uc CP.xDist (sup lX initial) metre
-iyDist = uc CP.yDist (sup lY initial) metre
 
 iPos = uc CP.iPos (sup lP initial) metre
 xPos = uc CP.xPos (subX lP) metre

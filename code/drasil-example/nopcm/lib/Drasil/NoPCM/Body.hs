@@ -217,8 +217,8 @@ symbMap = cdb symbolsAll (map nw symbols ++ map nw acronyms ++ map nw thermocon
   ++ map nw physicscon ++ map nw doccon ++ map nw softwarecon ++ map nw doccon' ++ map nw con
   ++ map nw prodtcon ++ map nw physicCon ++ map nw physicCon' ++ map nw mathcon ++ map nw mathcon'
   ++ map nw specParamValList ++ map nw fundamentals ++ map nw educon ++ map nw derived
-  ++ map nw physicalcon ++ map nw unitalChuncks ++ [nw srsSWHS, nw algorithm, nw inValue, nw htTrans]
-  ++ map nw [absTol, relTol] ++ [nw materialProprty] ++ [nw phsChgMtrl])
+  ++ map nw physicalcon ++ map nw unitalChuncks ++ map nw [absTol, relTol]
+  ++ [nw srsSWHS, nw algorithm, nw inValue, nw htTrans, nw materialProprty, nw phsChgMtrl])
   (map cw symbols ++ srsDomains) units NoPCM.dataDefs NoPCM.iMods genDefs
   tMods concIns section labCon []
 

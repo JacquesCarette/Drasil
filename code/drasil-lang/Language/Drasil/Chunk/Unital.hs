@@ -96,5 +96,5 @@ makeUCWDS :: (IsUnit u) => String -> NP -> Sentence -> Symbol ->
 makeUCWDS nam trm desc sym un = UC (dqd (dccWDS nam trm desc) sym Real uu) uu
   where uu = unitWrapper un
 
-ucuc :: (Quantity c, Concept c, TempHasUnit c) => c -> UnitalChunk
-ucuc c = UC (tempdqdWr' c) (findUnit c)
+ucuc :: (Quantity c, Concept c, MayHaveUnit c) => c -> UnitDefn -> UnitalChunk
+ucuc c = UC (tempdqdWr' c) 

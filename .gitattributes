@@ -4,8 +4,8 @@
 People/** linguist-documentation
 Presentations/** linguist-documentation
 code/stable/** linguist-generated
-code/datafiles/NoPCM/cpp/** linguist-vendored
-code/datafiles/NoPCM/csharp/** linguist-vendored
-code/datafiles/NoPCM/java/** linguist-vendored
+code/datafiles/nopcm/cpp/** linguist-vendored
+code/datafiles/nopcm/csharp/** linguist-vendored
+code/datafiles/nopcm/java/** linguist-vendored
 doc/** linguist-documentation
 notes/** linguist-documentation

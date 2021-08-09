@@ -42,6 +42,7 @@ import Language.Drasil.Printing.PrintingInformation (PrintingInformation)
 genTeX :: L.Document -> PrintingInformation -> TP.Doc
 genTeX doc@(L.Document _ _ toC _) sm = 
   runPrint (buildStd sm toC $ I.makeDocument sm $ L.checkToC doc) Text
+genTeX L.Notebook{} _ = TP.empty
 
 -- | Helper to build the document.
 buildStd :: PrintingInformation -> L.ShowTableOfContents -> Document -> D
@@ -70,6 +71,7 @@ lo (Graph ps w h c l)    _  = toText $ makeGraph
   (pure $ text $ maybe "" (\x -> "text width = " ++ show x ++ "em ,") w)
   (pure $ text $ maybe "" (\x -> "minimum height = " ++ show x ++ "em, ") h)
   (spec c) (spec l)
+lo (Cell _) _               = empty
 
 -- | Converts layout objects into a document form.
 print :: PrintingInformation -> [LayoutObj] -> D
@@ -96,7 +98,7 @@ symbol LD.Empty                    = empty
 -- | Converts a decorated symbol into a printable document form.
 sFormat :: L.Decoration -> L.Symbol -> D
 sFormat LD.Hat    s = commandD "hat" (symbol s)
-sFormat LD.Vector s = commandD "mathbf" (symbol s)
+sFormat LD.Vector s = commandD "symbf" (symbol s)
 sFormat LD.Prime  s = symbol s <> pure (text "'")
 
 -- | Determine wether braces and brackets are opening or closing.
@@ -126,7 +128,7 @@ pExpr (Sup e)        = pure hat    <> br (pExpr e)
 pExpr (Over Hat s)   = commandD "hat" (pExpr s)
 pExpr (MO o)         = pOps o
 pExpr (Fenced l r m) = fence Open l <> pExpr m <> fence Close r
-pExpr (Font Bold e)  = commandD "mathbf" (pExpr e)
+pExpr (Font Bold e)  = commandD "symbf" (pExpr e)
 pExpr (Font Emph e)  = pExpr e -- Emph is ignored here because we're in Math mode
 pExpr (Spc Thin)     = pure . text $ "\\,"
 pExpr (Sqrt e)       = commandD "sqrt" (pExpr e)

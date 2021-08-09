@@ -5,7 +5,7 @@ module Language.Drasil.Code.Imperative.Modules (
 ) where
 
 import Language.Drasil (Constraint(..), RealInterval(..),
-  Completeness(..), HasUID(uid), Stage(..))
+  HasUID(uid), Stage(..))
 import Database.Drasil (ChunkDB)
 import Language.Drasil.Code.Expr.Development
 import Language.Drasil.Code.Imperative.Comments (getComment)
@@ -40,6 +40,7 @@ import Language.Drasil.Choices (Comments(..), ConstantStructure(..),
   ConstantRepr(..), ConstraintBehaviour(..), ImplementationType(..), 
   InputModule(..), Logging(..), Structure(..), hasSampleInput)
 import Language.Drasil.CodeSpec (CodeSpec(..))
+import Language.Drasil.Development (Completeness(..))
 import Language.Drasil.Printers (Linearity(Linear), codeExprDoc)
 
 import GOOL.Drasil (SFile, MSBody, MSBlock, SVariable, SValue, MSStatement, 

@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Build LaTeX files
 
 if [ -z "$EDIR" ]; then
@@ -22,7 +24,7 @@ fi
 
 GEN_NAME_SUFFIX=_SRS
 
-cd "$BUILD_FOLDER$EDIR"/SRS/
+cd "$BUILD_FOLDER$EDIR"/SRS/PDF
 "$MAKE" TEXFLAGS="-interaction=$IMODE --shell-escape" BIBTEXFLAGS="$BIFLAGS"
 RET=$?
 

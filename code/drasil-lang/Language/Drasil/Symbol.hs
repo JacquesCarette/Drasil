@@ -6,7 +6,7 @@ import Data.Char (toLower)
 
 -- | Decorations on symbols/characters such as hats or Vector representations
 -- (determines bolding, italics, etc).
-data Decoration = Hat | Vector | Prime deriving (Eq, Ord)
+data Decoration = Hat | Vector | Prime | Delta | Magnitude deriving (Eq, Ord)
 
 -- | A 'Symbol' is actually going to be a graphical description of what
 -- gets rendered as a (unique) symbol.  This is actually NOT based on
@@ -17,7 +17,7 @@ data Decoration = Hat | Vector | Prime deriving (Eq, Ord)
 --     * @'Variable'@ (string such as "x" that represent a value that can vary) 
 --     * @'Label'@ (strings such as "max" or "target" that represent a single idea)
 --     * @'Special'@ characters (ex. unicode)
---     * @Decorated@ symbols
+--     * @Decorated@ symbols using 'Atop'
 --     * @Concatenations@ of symbols, including subscripts and superscripts
 --     * @'Empty'@! (this is to give this a monoid-like flavour)
 data Symbol =
@@ -72,14 +72,14 @@ complsy (x : xs) (y : ys) = compsy x y `mappend` complsy xs ys
 -- final velocity between points `A` and `B`. In these cases, the sorting of `v_f^{AB}` should be
 -- following `v_f` as it is logical to place it with its parent concept.
 compsy :: Symbol -> Symbol -> Ordering
-compsy (Concat (Variable "Δ" : x)) y =
+{-compsy (Concat (Variable "Δ" : x)) y =
   case compsy (Concat x) y of
     EQ -> GT
     other -> other
 compsy a (Concat (Variable "Δ" : y)) =
   case compsy a (Concat y) of
     EQ -> LT
-    other -> other
+    other -> other-}
 compsy (Concat x) (Concat y) = complsy x y
 compsy (Concat a) b = complsy a [b]
 compsy b (Concat a) = complsy [b] a

@@ -33,6 +33,7 @@ data MultiDefn e = MultiDefn {
     _qd    :: QuantityDict,                             -- ^ Underlying quantity it defines
     _rDesc :: Sentence,                                 -- ^ Defining description/statement
     _rvs   :: Express e => NE.NonEmpty (DefiningExpr e) -- ^ All possible/omitted ways we can define the related quantity
+           -- TODO: Why is this above constraint redundant according to the smart constructors?
 }
 makeLenses ''MultiDefn
 

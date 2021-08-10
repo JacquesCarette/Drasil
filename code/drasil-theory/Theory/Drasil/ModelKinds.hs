@@ -64,7 +64,7 @@ equationalModel :: Express e => UID -> NP -> QDefinition e -> ModelKind e
 equationalModel u n qd = MK (EquationalModel qd) u n
 
 -- | Smart constructor for 'EquationalModel's, deriving UID+Term from the 'QDefinition'
-equationalModel' :: Express e =>  QDefinition e -> ModelKind e
+equationalModel' :: Express e => QDefinition e -> ModelKind e
 equationalModel' qd = MK (EquationalModel qd) (qd ^. uid) (qd ^. term)
 
 -- | Smart constructor for 'EquationalModel's, deriving Term from the 'QDefinition'

@@ -16,11 +16,12 @@ import Data.Drasil.Concepts.Documentation (body, constant)
 ------------------------------------------------------------------------------------------------------
 -- The equations
 
-newtonSLEqn, weightEqn, weightDerivAccelEqn, weightDerivNewtonEqn, weightDerivReplaceMassEqn,
+weightEqn, weightDerivAccelEqn, weightDerivNewtonEqn, weightDerivReplaceMassEqn,
   weightDerivSpecWeightEqn,
   hsPressureEqn, speedEqn :: Relation
 
-newtonSLEqn               = sy QPP.mass `mulRe` sy QP.acceleration
+newtonSLEqn :: ModelExpr
+newtonSLEqn               = express $ sy QPP.mass `mulRe` sy QP.acceleration
 
 weightEqn                 = sy QPP.vol `mulRe` sy QPP.specWeight
 weightDerivNewtonEqn      = sy QP.weight $= mulRe (sy QPP.mass) (sy QP.gravitationalAccel)
@@ -40,13 +41,13 @@ accelerationEqn           = deriv (sy QP.velocity) QP.time
 ------------------------------------------------------------------------------------------------------
 -- The concepts
 
-accelerationQD :: QDefinition
+accelerationQD :: QDefinition ModelExpr
 accelerationQD = mkQuantDef QP.acceleration accelerationEqn
 
-velocityQD :: QDefinition
+velocityQD :: QDefinition ModelExpr
 velocityQD = mkQuantDef QP.velocity velocityEqn
 
-newtonSLQD :: QDefinition
+newtonSLQD :: QDefinition ModelExpr
 newtonSLQD = fromEqn' "force" (nounPhraseSP "Newton's second law of motion")
   newtonSLDesc (eqSymb QP.force) Real newtonSLEqn
 

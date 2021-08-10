@@ -32,8 +32,8 @@ weightGD :: GenDefn
 weightGD = gd (equationalModel' weightQD) (getUnit QP.weight) (Just weightDeriv) [dRef weightSrc] 
   "weight" [{-Notes-}]
 
-weightQD :: QDefinition
-weightQD = mkQuantDef' QP.weight (nounPhraseSP "weight") weightEqn
+weightQD :: QDefinition ModelExpr
+weightQD = mkQuantDef' QP.weight (nounPhraseSP "weight") $ express weightEqn
 
 weightSrc :: Reference
 weightSrc = makeURI "weightSrc" "https://en.wikipedia.org/wiki/Weight" $
@@ -76,8 +76,8 @@ hsPressureGD :: GenDefn
 hsPressureGD = gd (equationalModel' hsPressureQD) (getUnit QP.pressure) Nothing
   [dRef hsPressureSrc] "hsPressure" [hsPressureNotes]
 
-hsPressureQD :: QDefinition
-hsPressureQD = mkQuantDef' QP.pressure (nounPhraseSP "hydrostatic pressure") hsPressureEqn
+hsPressureQD :: QDefinition ModelExpr
+hsPressureQD = mkQuantDef' QP.pressure (nounPhraseSP "hydrostatic pressure") $ express hsPressureEqn
 
 hsPressureSrc :: Reference
 hsPressureSrc = makeURI "hsPressureSrc" "https://en.wikipedia.org/wiki/Pressure" $
@@ -90,10 +90,10 @@ hsPressureNotes = S "This" +:+ phrase equation +:+ S "is derived from" +:+
 
 --
 
-torqueDD :: DataDefinition
+torqueDD :: DataDefinition Expr
 torqueDD = ddNoRefs torque Nothing "torque" [torqueDesc] 
 
-torque :: QDefinition
+torque :: QDefinition Expr
 torque = mkQuantDef QP.torque torqueEqn
 
 torqueEqn :: Expr
@@ -106,7 +106,7 @@ torqueDesc = foldlSent [S "The", phrase torque,
 
 --
 
-vecMagQD :: QDefinition
+vecMagQD :: QDefinition Expr
 vecMagQD = mkQuantDef QP.speed speedEqn
 
 magNote :: Sentence
@@ -114,7 +114,7 @@ magNote = foldlSent [S "For a given", phrase QP.velocity, S "vector", ch QP.velo
   S "the magnitude of the vector", sParen (eS speedEqn) `S.isThe`
   S "scalar called", phrase QP.speed]
 
-vecMag :: DataDefinition
+vecMag :: DataDefinition Expr
 vecMag = ddNoRefs vecMagQD Nothing "vecMag" [magNote]
 
 --
@@ -123,8 +123,8 @@ newtonSLR = tmNoRefs (equationalModelU "newtonSLR" newtonSLRQD)
   [qw QP.torque, qw QP.momentOfInertia, qw QP.angularAccel] 
   ([] :: [ConceptChunk]) [newtonSLRQD] [] [] "NewtonSecLawRotMot" newtonSLRNotes
 
-newtonSLRQD :: QDefinition
-newtonSLRQD = mkQuantDef' QP.torque (nounPhraseSP "Newton's second law for rotational motion") newtonSLRExpr
+newtonSLRQD :: QDefinition ModelExpr
+newtonSLRQD = mkQuantDef' QP.torque (nounPhraseSP "Newton's second law for rotational motion") $ express newtonSLRExpr
 
 newtonSLRExpr :: Expr
 newtonSLRExpr = sy QP.momentOfInertia `mulRe` sy QP.angularAccel

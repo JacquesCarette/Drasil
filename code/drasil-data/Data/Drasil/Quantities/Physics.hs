@@ -135,9 +135,9 @@ supMin s = sup s (label "min")
 
 ---------------Constants-----------------------------
 
-gravitationalConstValue :: QDefinition
+gravitationalConstValue :: QDefinition Expr
 gravitationalConstValue = mkQuantDef gravitationalConst (dbl 6.6743E-11)
 --(dbl 6.673 * 10E-11)
 --(dbl 0.00000000006673)
-gravitationalAccelConst :: QDefinition
+gravitationalAccelConst :: QDefinition Expr
 gravitationalAccelConst = mkQuantDef gravitationalAccel (dbl 9.8)

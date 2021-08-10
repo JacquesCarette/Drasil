@@ -12,8 +12,8 @@ import Data.Drasil.Concepts.Documentation (assumption, assumpDom, chgProbDom,
   goalStmt, goalStmtDom, requirement, reqDom, item, section_, likelyChg,
   unlikelyChg)
 import qualified Data.Drasil.TheoryConcepts as Doc (genDefn, dataDefn, inModel, thModel)
-import Database.Drasil(SystemInformation, _sysinfodb, gendefTable, dataDefnTable,
-  insmodelTable, theoryModelTable)
+import Database.Drasil(SystemInformation, _sysinfodb, gendefTable, eDataDefnTable,
+  meDataDefnTable, insmodelTable, theoryModelTable)
 import Language.Drasil
 import Utils.Drasil.Concepts
 
@@ -25,27 +25,36 @@ generateTraceTable = generateTraceTableView "Tracey"
 -- | Traceabiliy viewing everything. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvEverything :: TraceViewCat
 tvEverything = flip (const id)
+
 -- | Traceabiliy viewing assumptions. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvAssumps :: TraceViewCat
 tvAssumps = traceViewCC assumpDom
+
+-- TODO: What about ModelExprs?
 -- | Traceabiliy viewing data definitions. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvDataDefns :: TraceViewCat
-tvDataDefns = traceView dataDefnTable
+tvDataDefns = traceView eDataDefnTable
+
 -- | Traceabiliy viewing general definitions. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvGenDefns :: TraceViewCat
 tvGenDefns = traceView gendefTable
+
 -- | Traceabiliy viewing theory models. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvTheoryModels :: TraceViewCat
 tvTheoryModels = traceView theoryModelTable
+
 -- | Traceabiliy viewing instance models. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvInsModels :: TraceViewCat
 tvInsModels = traceView insmodelTable
+
 -- | Traceabiliy viewing goals. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvGoals :: TraceViewCat
 tvGoals = traceViewCC goalStmtDom
+
 -- | Traceabiliy viewing requirements. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvReqs :: TraceViewCat
 tvReqs = traceViewCC reqDom
+
 -- | Traceabiliy viewing changes. Takes a 'UID' and a 'ChunkDB'. Returns a list of 'UID's.
 tvChanges :: TraceViewCat
 tvChanges = traceViewCC chgProbDom

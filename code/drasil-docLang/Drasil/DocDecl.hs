@@ -11,7 +11,7 @@ import qualified Drasil.DocumentLanguage.Core as DL (DocSection(..), RefSec(..),
 import Drasil.Sections.Requirements (fullReqs, fullTables)
 
 import Database.Drasil (ChunkDB, SystemInformation(SI), UMap, asOrderedList,
-  _inputs, _sysinfodb, conceptinsTable, dataDefnTable, gendefTable,
+  _inputs, _sysinfodb, conceptinsTable, eDataDefnTable, meDataDefnTable, gendefTable,
   insmodelTable, theoryModelTable)
 import Language.Drasil hiding (sec)
 
@@ -128,7 +128,7 @@ mkDocDesc SI{_inputs = is, _sysinfodb = db} = map sec where
   scsSub Assumptions = DL.Assumptions $ fromConcInsDB assumpDom
   scsSub (TMs s f) = DL.TMs s f $ allInDB theoryModelTable
   scsSub (GDs s f dd) = DL.GDs s f (allInDB gendefTable) dd
-  scsSub (DDs s f dd) = DL.DDs s f (allInDB dataDefnTable) dd
+  scsSub (DDs s f dd) = DL.DDs s f (allInDB eDataDefnTable) dd -- TODO: What about the ModelExpr ones?
   scsSub (IMs s f dd) = DL.IMs s f (allInDB insmodelTable) dd
   scsSub (Constraints s c) = DL.Constraints s c
   scsSub (CorrSolnPpties c cs) = DL.CorrSolnPpties c cs

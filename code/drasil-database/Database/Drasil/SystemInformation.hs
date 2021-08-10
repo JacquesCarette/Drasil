@@ -33,13 +33,13 @@ data SystemInformation where
   , _quants      :: [e]
   , _concepts    :: [f]
   , _instModels  :: [InstanceModel]
-  , _datadefs    :: [DataDefinition]
+  , _datadefs    :: [DataDefinition Expr]
   , _configFiles :: [String]
   , _inputs      :: [h]
   , _outputs     :: [i]
-  , _defSequence :: [Block QDefinition]
+  , _defSequence :: [Block (QDefinition Expr)]
   , _constraints :: [j] --TODO: Add SymbolMap OR enough info to gen SymbolMap
-  , _constants   :: [QDefinition]
+  , _constants   :: [QDefinition Expr]
   , _sysinfodb   :: ChunkDB
   , _usedinfodb  :: ChunkDB
   , refdb        :: ReferenceDB

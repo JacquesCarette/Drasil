@@ -11,7 +11,7 @@ import Control.Lens ((^.))
 
 import Language.Drasil
 import Database.Drasil (SystemInformation, _sysinfodb, citeDB, conceptinsLookup,
-  conceptinsTable, dataDefnTable, datadefnLookup, gendefLookup, gendefTable,
+  conceptinsTable, eDataDefnTable, meDataDefnTable, datadefnLookup, gendefLookup, gendefTable,
   insmodelLookup, insmodelTable, labelledconLookup, labelledcontentTable,
   refbyLookup, refbyTable, sectionLookup, sectionTable, theoryModelLookup,
   theoryModelTable, vars)
@@ -54,7 +54,7 @@ tmodel fs m t = mkRawLC (Defini Theory (foldr (mkTMField t m) [] fs)) (ref t)
 
 -- | Create a data definition using a list of fields, a database of symbols, and a
 -- 'QDefinition' (called automatically by 'SCSSub' program).
-ddefn :: Fields -> SystemInformation -> DataDefinition -> LabelledContent
+ddefn :: Express e => Fields -> SystemInformation -> DataDefinition e -> LabelledContent
 ddefn fs m d = mkRawLC (Defini Data (foldr (mkDDField d m) [] fs)) (ref d)
 
 -- | Create a general definition using a list of fields, database of symbols,
@@ -112,7 +112,8 @@ helperRefs t s = foldlList Comma List $ map (`helpToRefField` s) $ nub $
 -- | Creates a reference as a 'Sentence' by finding if the 'UID' is in one of the possible data sets contained in the 'SystemInformation' database.
 helpToRefField :: UID -> SystemInformation -> Sentence
 helpToRefField t si
-  | Just _ <- lookupIndex t (s ^. dataDefnTable)        = refS $ datadefnLookup    t (s ^. dataDefnTable)
+  | Just _ <- lookupIndex t (s ^. eDataDefnTable)       = refS $ datadefnLookup    t (s ^. eDataDefnTable)
+  | Just _ <- lookupIndex t (s ^. meDataDefnTable)      = refS $ datadefnLookup    t (s ^. meDataDefnTable)
   | Just _ <- lookupIndex t (s ^. insmodelTable)        = refS $ insmodelLookup    t (s ^. insmodelTable)
   | Just _ <- lookupIndex t (s ^. gendefTable)          = refS $ gendefLookup      t (s ^. gendefTable)
   | Just _ <- lookupIndex t (s ^. theoryModelTable)     = refS $ theoryModelLookup t (s ^. theoryModelTable)
@@ -129,7 +130,7 @@ helperSources [] = [mkParagraph $ S "--"]
 helperSources rs  = [mkParagraph $ foldlList Comma List $ map (\r -> Ref (r ^. uid) EmptyS $ refInfo r) rs]
 
 -- | Creates the fields for a definition from a 'QDefinition' (used by 'ddefn').
-mkDDField :: DataDefinition -> SystemInformation -> Field -> ModRow -> ModRow
+mkDDField :: Express e => DataDefinition e -> SystemInformation -> Field -> ModRow -> ModRow
 mkDDField d _ l@Label fs = (show l, [mkParagraph $ atStart d]) : fs
 mkDDField d _ l@Symbol fs = (show l, [mkParagraph . P $ eqSymb d]) : fs
 mkDDField d _ l@Units fs = (show l, [mkParagraph $ toSentenceUnitless d]) : fs
@@ -151,7 +152,7 @@ buildDescription Verbose u e m cs = (UlC . ulcc .
 
 -- | Similar to 'buildDescription' except it takes a 'DataDefinition' that is included as the 'firstPair'' in ['Contents'] (independent of verbosity).
 -- The 'Verbose' case also includes more details about the 'DataDefinition' expressions.
-buildDDescription' :: Verbosity -> InclUnits -> DataDefinition -> SystemInformation ->
+buildDDescription' :: Express e => Verbosity -> InclUnits -> DataDefinition e -> SystemInformation ->
   [Contents]
 buildDDescription' Succinct u d _ = [UlC . ulcc . Enumeration $ Definitions [firstPair' u d]]
 buildDDescription' Verbose u d m = [UlC . ulcc . Enumeration $ Definitions $
@@ -198,7 +199,7 @@ mkIMField _ _ l _ = error $ "Label " ++ show l ++ " not supported " ++
 
 -- | Used for making definitions. The first pair is the symbol of the quantity we are
 -- defining.
-firstPair' :: InclUnits -> DataDefinition -> ListTuple
+firstPair' :: Express e => InclUnits -> DataDefinition e -> ListTuple
 firstPair' IgnoreUnits d  = (P $ eqSymb d, Flat $ phrase d, Nothing)
 firstPair' IncludeUnits d =
   (P $ eqSymb d, Flat $ phrase d +:+ sParen (toSentenceUnitless d), Nothing)

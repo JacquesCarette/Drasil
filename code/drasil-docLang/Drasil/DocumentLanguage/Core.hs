@@ -178,7 +178,7 @@ data SCSSub where
   -- | General Definitions.
   GDs            :: [Sentence] -> Fields  -> [GenDefn] -> DerivationDisplay -> SCSSub
   -- | Data Definitions.
-  DDs            :: [Sentence] -> Fields  -> [DataDefinition] -> DerivationDisplay -> SCSSub -- (FIXME: Need DD intro).
+  DDs            :: Express e => [Sentence] -> Fields  -> [DataDefinition e] -> DerivationDisplay -> SCSSub -- (FIXME: Need DD intro).
   -- | Instance Models.
   IMs            :: [Sentence] -> Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
   -- | Constraints.
@@ -234,7 +234,7 @@ newtype OffShelfSolnsSec = OffShelfSolnsProg [Contents]
 {--}
 
 -- | Values of Auxiliary Constants section.
-data AuxConstntSec = AuxConsProg CI [QDefinition]
+data AuxConstntSec = AuxConsProg CI [QDefinition Expr]
 
 {--}
 

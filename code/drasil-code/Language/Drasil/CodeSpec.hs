@@ -147,8 +147,8 @@ asVC' (FData (FuncData n _ _))     = vc n (nounPhraseSP n) (Variable n) Real
 -- | Determines the derived inputs, which can be immediately calculated from the 
 -- knowns (inputs and constants). If there are DDs, the derived inputs will 
 -- come from those. If there are none, then the 'QDefinition's are used instead.
-getDerivedInputs :: [DataDefinition] -> [Input] -> [Const] ->
-  ChunkDB -> [QDefinition]
+getDerivedInputs :: [DataDefinition Expr] -> [Input] -> [Const] ->
+  ChunkDB -> [QDefinition Expr]
 getDerivedInputs ddefs ins cnsts sm =
   filter ((`subsetOf` refSet) . flip codevars sm . expr . (^. defnExpr)) (map qdFromDD ddefs)
   where refSet = ins ++ map quantvar cnsts

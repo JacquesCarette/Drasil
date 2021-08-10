@@ -52,11 +52,11 @@ instance DefiningCodeExpr CodeDefinition where codeExpr = def
 --       CodeExprs inputs.
 
 -- | Constructs a 'CodeDefinition' where the underlying 'CodeChunk' is for a function.
-qtoc :: (Quantity q, DefiningExpr q, MayHaveUnit q) => q -> CodeDefinition
+qtoc :: (Quantity (q Expr), MayHaveUnit (q Expr), DefiningExpr q) => q Expr -> CodeDefinition
 qtoc q = CD (codeChunk $ quantfunc q) (expr $ q ^. defnExpr) [] Definition
 
 -- | Constructs a 'CodeDefinition' where the underlying 'CodeChunk' is for a variable.
-qtov :: QDefinition -> CodeDefinition
+qtov :: QDefinition Expr -> CodeDefinition
 qtov q = CD (codeChunk $ quantvar q) (expr $ q ^. defnExpr) [] Definition
 
 -- | Constructs a 'CodeDefinition' for an ODE.

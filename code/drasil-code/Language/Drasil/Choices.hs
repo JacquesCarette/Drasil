@@ -268,7 +268,8 @@ defaultChoices = Choices {
   inputStructure = Bundled,
   constStructure = Inline,
   constRepr = Const,
-  conceptMatch = matchConcepts ([] :: [(QDefinition, [CodeConcept])]),
+  -- TODO: What is this?
+  conceptMatch = matchConcepts ([] :: [(QDefinition Expr, [CodeConcept])]),
   spaceMatch = spaceToCodeType, 
   auxFiles = [ReadME],
   odeLib = [],
